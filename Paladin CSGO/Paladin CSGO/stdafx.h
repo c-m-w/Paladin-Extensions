@@ -1,0 +1,15 @@
+#pragma once
+#include "targetver.h"
+#include <stdio.h>
+#include <tchar.h>
+#include "Windows.h"
+#include <tlhelp32.h>
+#include <iostream>
+#include <thread>
+#include <atomic>
+#include <ctime>
+#include "config.h"
+#include "memory.h"
+#include "standard.h"
+#include "debug.h"
+#include <string>
