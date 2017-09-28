@@ -11,6 +11,9 @@ public:
     static void error2() {
         MessageBox(nullptr, "Fatal Error 2: Module Wrapping\nAre you running the cheat as admin?", "bhopfu1's Multihack", MB_ICONERROR | MB_OK);
     }
+    static void error3() {
+        MessageBox(nullptr, "Fatal Error 3: Subscription Time\nDid you renew your subscription?", "bhopfu1's Multihack", MB_ICONERROR | MB_OK);
+    }
     // Warnings
     // game instance
     static void warning1() {

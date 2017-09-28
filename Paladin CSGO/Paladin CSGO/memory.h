@@ -22,10 +22,10 @@ class memory: public config {
     DWORD offsetHits = 0x3344;
     DWORD offsetShotFired = 0xA2A0;
     DWORD offsetViewPunch = 0x301C;
-    DWORD offsetLocalPlayerLocation = 0x134;
-    DWORD offsetLocalPlayerHeadDisplace = 0x104;
+    DWORD offsetPlayerLocation = 0x134;
     DWORD offsetEntities = 0x4A8C02C;
-    std::atomic<DWORD> offsetEntityBone = 0x2698;
+    //DWORD entityBone;
+    //DWORD offsetEntityBone = 0x2698;
     DWORD localPlayer;
     DWORD clientState;
     DWORD entityEnemy;

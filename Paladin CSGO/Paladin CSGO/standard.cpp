@@ -5,8 +5,7 @@ standard::standard() {
     PROCESSENTRY32 instanceEntry;
     Process32First(instanceSnap, &instanceEntry);
     do {
-        if (!_stricmp(instanceEntry.szExeFile, "CSGO Cheat.exe")) {
-            // ENTER cheat exe name
+        if (!_stricmp(instanceEntry.szExeFile, "Paladin CSGO.exe")) {
             multi += 1;
         }
     } while (Process32Next(instanceSnap, &instanceEntry));
@@ -29,29 +28,46 @@ standard::standard() {
     z(1);
     MoveWindow(GetConsoleWindow(), 300, 300, 339, 279, false); // window size -> 30x50
 }
-void standard::forCheck(const TCHAR * owner) {
-    for (auto x = 1; x < 256; x++) {
-        if (owner[x - 1] && owner[x] != currentUser[x]) {
-            checkfor--;
+bool standard::forCheck(const user owner) const {
+    for (auto x = 0; x < 256; x++) {
+        if (owner.username[x] && owner.username[x] != currentUser.username[x]) {
+            return false;
         }
     }
-}
-bool standard::ownerCheck() {
-    GetUserName(currentUser, &size);
-    forCheck(owner4);
-    if (checkfor == 3) {
-        forCheck(owner3);
-    }
-    if (checkfor == 2) {
-        forCheck(owner2);
-    }
-    if (checkfor == 1) {
-        forCheck(owner1);
-    }
-    if (!checkfor) {
-        return false;
-    }
     return true;
+}
+void standard::getOwners() {
+    owners[0].username = "bhopfu1";
+    owners[0].hardware = 12 * 856;
+    owners[0].expire = sep1 + 1 * days;
+    owners[1].username = "Lucas";
+    owners[1].hardware = 8 * 0;
+    owners[1].expire = sep1 + 365 * days;
+    // TODO GET OTHER OWNERS
+}
+int standard::ownerCheck() {
+    if (sep1 > time(nullptr) && time(nullptr) - sep1 > days) { // TODO REPLACE SEP1 WITH TIME OF SERVER. JUST CHECK IF IT'S WITHIN 24 HOURS
+        return 0;
+    }
+    GetUserName(currentUser.username, &size);
+    getOwners();
+    int temp;
+    for (auto x = 0; x <= 51; x++) {
+        if (owners[x].username && forCheck(owners[x])) {
+            temp = x;
+        } else {
+            return 0;
+        }
+    }
+    GetSystemInfo(&currentUserHardware);
+    currentUser.hardware = currentUserHardware.dwNumberOfProcessors * currentUserHardware.dwProcessorType;
+    if (currentUser.hardware != owners[temp].hardware) {
+        return 0;
+    }
+    if (currentUser.expire < time(nullptr)) {
+        return -1;
+    }
+    return 1;
 }
 void standard::force() const {
     while (!multi) {

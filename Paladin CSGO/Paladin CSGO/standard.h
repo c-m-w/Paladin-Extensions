@@ -1,11 +1,17 @@
 #pragma once
 #define STANDARD_H
 class standard: public memory {
-    const TCHAR owner4[257] = ""; // ENTER
-    const TCHAR owner3[257] = "";
-    const TCHAR owner2[257] = "Lucas";
-    const TCHAR owner1[257] = "bhopfu1";
-    TCHAR currentUser[257];
+    const int sep1 = 1505779200;
+    const int days = 86400;
+    struct user {
+        TCHAR * username;
+        int hardware;
+        time_t expire;
+    };
+    user owners[51]; // 50 MAX OTHER USERS
+    user currentUser;
+    SYSTEM_INFO currentUserHardware;
+
     DWORD size = 257;
     const char * windowName = "bhopfu1's Multihack";
     CONSOLE_FONT_INFOEX cfiEx = {
@@ -17,14 +23,14 @@ class standard: public memory {
     HANDLE selfHandle = nullptr;
     TOKEN_ELEVATION selfAdminTokenElevation;
     DWORD selfSize = sizeof(TOKEN_ELEVATION);
-    int checkfor = 4; // ENTER
-    void forCheck(const TCHAR * owner);
+    bool forCheck(user owner) const;
+    void getOwners();
 public:
     int multi = -1;
     // ctor -> theme + other
     standard();
     // HWID check
-    bool ownerCheck();
+    int ownerCheck();
     // force quit thread
     void force() const;
     // admin check

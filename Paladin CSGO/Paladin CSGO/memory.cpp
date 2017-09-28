@@ -99,10 +99,8 @@ void memory::initialize(const DWORD_PTR clientModule, const DWORD_PTR engineModu
     convertMouse = .022f * sens * (static_cast<float>(winSens) / 10.f);
     offsetViewPunch += localPlayer;
     offsetShotFired += localPlayer;
-    offsetLocalPlayerLocation += localPlayer;
-    offsetLocalPlayerHeadDisplace += localPlayer;
+    offsetPlayerLocation += localPlayer;
     offsetEntities += clientModule;
-    aimBone._My_val *= 0x30;
 }
 BOOL memory::patternCompare(BYTE * data, BYTE * mask, char * szMask) {
     for (; *szMask; ++szMask, ++data, ++mask)
@@ -268,9 +266,9 @@ void memory::rcs() {
                         ((rcsYMin + static_cast<float>(rand()) / static_cast<float>(RAND_MAX / (rcsYMax - rcsYMin))) * (temp.y * 2.f) / convertMouse),
                         0
                     });
-                    if (inCross & isSlow || inCross & isTrigSlow & GetAsyncKeyState(keyTrig)) {
-                        rcsTo._My_val.x *= 2.f;
-                        rcsTo._My_val.y *= 2.f;
+                    if (wasInCross) {
+                        rcsTo.store({ rcsTo._My_val.x * slowFactor,
+                        rcsTo._My_val.y * slowFactor });
                     }
                     // rounding
                     if (rcsTo._My_val.x > 0) {
@@ -294,11 +292,10 @@ void memory::rcs() {
                         }
                     } else {
                         mouse_event(MOUSEEVENTF_MOVE, mouseRcs._My_val.x, mouseRcs._My_val.y, 0, 0);
-                        z(1);
                     }
                     // readjustment
-                    if (shotFired % 7 == 0 && isSmooth) {
-                        mouse_event(MOUSEEVENTF_MOVE, smoothing / 2, smoothing / 2, 0, 0);
+                    if (shotFired % 10 == 0 && isSmooth) {
+                        mouse_event(MOUSEEVENTF_MOVE, smoothing, smoothing, 0, 0);
                     }
                     // storing
                     viewPunchPrevious.store(viewPunchCurrent);
@@ -320,41 +317,63 @@ void memory::aim() {
         while (connection == 6) {
             if (GetAsyncKeyState(keyAim)) {
                 rpm<int>(offsetCrosshair, inCross);
-                if (inCross) {
+                if (0 < inCross && inCross < 64) {
+                    rpm<DWORD>(offsetEntities + (inCross + 1) * 0x10, entityEnemy);
+                    rpm<vector>(entityEnemy + 0x134, enemyBone);
+                    rpm<vector>(offsetPlayerLocation, localPlayerLocation);
+                    localPlayerView.store({
+                        localPlayerLocation.x, localPlayerLocation.y, localPlayerLocation.z
+                    });
+                    const vector temp {
+                        localPlayerView._My_val.x - enemyBone.x, localPlayerView._My_val.y - enemyBone.y, localPlayerView._My_val.z - enemyBone.z + aimDisplace
+                    };
+
+                    //
                     //
                     // TODO
                     //
-                    rpm<DWORD>(offsetEntities + (inCross - 1) * 0x10, entityEnemy);
-                    rpm<DWORD>(entityEnemy + offsetEntityBone, offsetEntityBone._My_val);
-                    rpm<float>(offsetEntityBone._My_val + aimBone._My_val + 0xC, enemyBone.x);
-                    rpm<float>(offsetEntityBone._My_val + aimBone._My_val + 0x1C, enemyBone.y);
-                    rpm<float>(offsetEntityBone._My_val + aimBone._My_val + 0x2C, enemyBone.z);
-                    enemyBone.z -= 64;
+                    //
+                  
+                    const double hypotu = sqrt(temp.x*temp.x + temp.y*temp.y);
+
+                    std::cout << "ANG X: " << float(atanf(temp.z / hypotu)) * 57.295779513082f << "\n";
+                    std::cout << "ANG Y: " << float(atanf(temp.y / temp.x)) * 57.295779513082f << "\n";
+                    
+                    aimTo.store({
+                        atanf((temp.z -64) / sqrt(pow(temp.x, 2) + pow(temp.y, 2))) * (180.0f / pi) / convertMouse,
+                        atanf(temp.y / temp.x) * (180.0f / pi) / convertMouse
+                    });
+
                     //
                     //
+                    // TODO
                     //
-                    rpm<vector>(offsetLocalPlayerLocation, localPlayerLocation);
-                    rpm<vector>(offsetLocalPlayerHeadDisplace, localPlayerHeadDisplace);
-                    localPlayerView._My_val.x = localPlayerLocation.x - localPlayerHeadDisplace.x;
-                    localPlayerView._My_val.y = localPlayerLocation.y - localPlayerHeadDisplace.y;
-                    localPlayerView._My_val.z = localPlayerLocation.z - localPlayerHeadDisplace.z;
-                    const vector temp {
-                        localPlayerView._My_val.x - enemyBone.x, localPlayerView._My_val.y - enemyBone.y, localPlayerView._My_val.z - enemyBone.z
-                    };
-                    aimTo._My_val.x = asinf((temp.z - aimDisplace) / sqrt(pow(temp.x, 2) + pow(temp.y, 2)) * (180.0f / pi)) / convertMouse;
-                    aimTo._My_val.y = -atanf(temp.y / temp.x * (180.0f / pi)) / convertMouse;
+                    //
+
+
+
+
+
                     if (wasInCross) {
-                        aimTo._My_val.x *= 2;
-                        aimTo._My_val.y *= 2;
+                        aimTo.store({
+                            aimTo._My_val.x * slowFactor,
+                            aimTo._My_val.y * slowFactor
+                        });
                     }
                     if (aimTo._My_val.x > 0) {
-                        aimTo._My_val.x += 1;
+                        aimTo.store({
+                            aimTo._My_val.x + 1
+                        });
                     }
                     if (aimTo._My_val.y > 0) {
-                        aimTo._My_val.y += 1;
+                        aimTo.store({
+                            aimTo._My_val.y + 1
+                        });
                     }
-                    mouseAim._My_val.x = static_cast<int>(aimOver * aimTo._My_val.x - rcsTo._My_val.y);
-                    mouseAim._My_val.y = static_cast<int>(aimOver * aimTo._My_val.y - rcsTo._My_val.x);
+                    mouseAim.store({
+                        static_cast<int>(aimOver * aimTo._My_val.y - rcsTo._My_val.y),
+                        static_cast<int>(aimOver * aimTo._My_val.x - rcsTo._My_val.x)
+                    });
                     const auto smoothing = rand() % (smoothFactorMax - smoothFactorMin) + smoothFactorMin;
                     if (isSmooth) {
                         for (auto smooth = 0; smooth < smoothing; smooth++) {

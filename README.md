@@ -5,23 +5,27 @@ CHEATS BY BHOPFU1 & NOSPREAD:
 ## TODO
 
 ##### Open
-- [ ] Menu
+- [ ] Menu/C# Config Editor (?) [main]
+- [ ] Convert to injectable dll for other 32bit process [main]
 - [ ] Create injector
-- [ ] Inject into other process
+- [ ] Add Timeout [class memory, config]
 
 ##### bhopfu1
 - [ ] Fix Aimbot reading enemy bone [class memory]
-- [ ] Add Timeout [class memory, config]
+- [ ] #define MIN_JUMP_TIME        0.500    // Minimum amount of air-time for a jump to count.
 
 ##### NoSpread
 - [ ] Finish Pattern Scanning (sigs) [class memory]
 - [ ] Cloud Config (?) [server]
-- [ ] Time Sync For Limited Time Use [server]
-- [ ] Version Check
+- [ ] Time Sync For Limited Time Use [server, class standard -> ownercheck]
+- [ ] Version Check [server, class config]
+- [ ] HWID Compare [server, class standard -> ownercheck]
 
 # Features:
 
-- [x] Key Binds
+- Config File
+- HWID Bound
+- Key Binds
   - Exit
   - Reload
   - Aimbot
@@ -49,4 +53,3 @@ CHEATS BY BHOPFU1 & NOSPREAD:
   - Slow Trigger
   - Randomized First Shot Delay
   - Randomized Following Shot Delay
-- [x] Config File

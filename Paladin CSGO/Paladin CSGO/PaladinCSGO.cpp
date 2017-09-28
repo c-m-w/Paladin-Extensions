@@ -1,8 +1,5 @@
 #include "stdafx.h"
 class standard;
-class config;
-class stdory;
-class debug;
 void main() {
     debug out(true); // ENTER to debug
     auto dbg = &out;
@@ -29,6 +26,10 @@ void main() {
         }
     } catch (int error) {
         std->quit = error;
+        return;
+    }
+    if (std->ownerCheck() == -1) {
+        dbg->error3();
         return;
     }
     dbg->owner();
