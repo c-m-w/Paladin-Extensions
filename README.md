@@ -2,7 +2,9 @@
 CHEATS BY BHOPFU1 & NOSPREAD:
 1. CSGO External
 
-## TODO
+# TODO
+
+## CSGO
 
 ##### Open
 - [ ] Menu/C# Config Editor (?) [main]
@@ -20,6 +22,17 @@ CHEATS BY BHOPFU1 & NOSPREAD:
 - [ ] Time Sync For Limited Time Use [server, class standard -> ownercheck]
 - [ ] Version Check [server, class config]
 - [ ] HWID Compare [server, class standard -> ownercheck]
+
+## CONFIG EDITOR
+
+##### Open
+- [ ] Get Key Pressed for Key Binds
+
+##### bhopfu1
+- [ ] Finish Menu
+
+##### NoSpread
+- [ ] Drag&Drop config to window -> import
 
 # Features:
 

@@ -168,7 +168,7 @@ bool config::readConfig() {
                 bhopNextDelay = 1;
             }
             if (bhopDirection != (1 | -1)) {
-                bhopDirection = 1;
+                bhopDirection = -1;
             }
             if (keyBhop <= 0) {
                 keyBhop = VK_XBUTTON1;
