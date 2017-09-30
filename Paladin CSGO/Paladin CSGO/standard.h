@@ -1,7 +1,7 @@
 #pragma once
 #define STANDARD_H
 class standard: public memory {
-    const int sep1 = 1505779200;
+    const int oct1 = 150841200;
     const int days = 86400;
     struct user {
         TCHAR * username;
@@ -26,7 +26,7 @@ class standard: public memory {
     bool forCheck(user owner) const;
     void getOwners();
 public:
-    int multi = -1;
+    int multi = 0;
     // ctor -> theme + other
     standard();
     // HWID check

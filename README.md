@@ -1,6 +1,8 @@
 # Paladin
 CHEATS BY BHOPFU1 & NOSPREAD:
-1. CSGO External
+1. Manual Map Injector
+2. Config Editor
+3. CSGO Internal/External
 
 # TODO
 
@@ -8,13 +10,12 @@ CHEATS BY BHOPFU1 & NOSPREAD:
 
 ##### Open
 - [ ] Menu/C# Config Editor (?) [main]
-- [ ] Convert to injectable dll for other 32bit process [main]
-- [ ] Create injector
-- [ ] Add Timeout [class memory, config]
+- [ ] Convert to injectable dll for other 32bit process [main] {ONCE INJECTOR IS DONE}
 
 ##### bhopfu1
-- [ ] Fix Aimbot reading enemy bone [class memory]
-- [ ] #define MIN_JUMP_TIME        0.500    // Minimum amount of air-time for a jump to count.
+- [ ] Fix Aimbot [class memory] {W2S}
+- [ ] Anti-SMAC Bhop [class memory] {#define MIN_JUMP_TIME 0.500 // Minimum amount of air-time for a jump to count.}
+- [ ] Add Timeout (?) [class memory, config] {msdn.microsoft.com/en-us/library/vs/alm/dd798681(v=vs.85).aspx}
 
 ##### NoSpread
 - [ ] Finish Pattern Scanning (sigs) [class memory]
@@ -23,9 +24,19 @@ CHEATS BY BHOPFU1 & NOSPREAD:
 - [ ] Version Check [server, class config]
 - [ ] HWID Compare [server, class standard -> ownercheck]
 
+## INJECTOR
+
+##### Open
+- [ ] Start
+
+##### bhopfu1
+
+##### NoSpread
+
 ## CONFIG EDITOR
 
 ##### Open
+- [ ] Make ready for other cheats
 - [ ] Get Key Pressed for Key Binds
 
 ##### bhopfu1

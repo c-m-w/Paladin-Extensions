@@ -7,7 +7,7 @@ void main() {
     standard all;
     auto std = &all;
     try {
-        if (std->multi > 0) {
+        if (std->multi > 1) {
             dbg->notice1();
             throw 2;
         }
@@ -15,21 +15,19 @@ void main() {
         std->quit = error;
         return;
     }
-    if (std->multi != -1) {
-        dbg->notice1();
-    }
     dbg->done();
     try {
-        if (!std->ownerCheck()) {
+        const auto own = std->ownerCheck();
+        if (!own) {
             dbg->notOwner();
             throw 0;
         }
+        if (own == -1) {
+            dbg->error3();
+            return;
+        }
     } catch (int error) {
         std->quit = error;
-        return;
-    }
-    if (std->ownerCheck() == -1) {
-        dbg->error3();
         return;
     }
     dbg->owner();

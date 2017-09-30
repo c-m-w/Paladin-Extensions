@@ -32,38 +32,43 @@ bool standard::forCheck(const user owner) const {
     for (auto x = 0; x < 256; x++) {
         if (owner.username[x] && owner.username[x] != currentUser.username[x]) {
             return false;
+        } 
+        if (!owner.username[x]) {
+            break;
         }
     }
     return true;
 }
 void standard::getOwners() {
     owners[0].username = "bhopfu1";
-    owners[0].hardware = 12 * 856;
-    owners[0].expire = sep1 + 1 * days;
+    owners[0].hardware = 12 * 586;
+    owners[0].expire = oct1 + 365 * days;
     owners[1].username = "Lucas";
-    owners[1].hardware = 8 * 0;
-    owners[1].expire = sep1 + 365 * days;
-    // TODO GET OTHER OWNERS
+    owners[1].hardware = 0 * 0; // ENTER Lucas HARDWARE ID
+    owners[1].expire = oct1 + 365 * days;
+    // TODO GET OTHER OWNERS FROM SERVER
 }
 int standard::ownerCheck() {
-    if (sep1 > time(nullptr) && time(nullptr) - sep1 > days) { // TODO REPLACE SEP1 WITH TIME OF SERVER. JUST CHECK IF IT'S WITHIN 24 HOURS
+    if (oct1 > time(nullptr) && oct1 - time(nullptr) > days) { // TODO REPLACE OCT1 WITH TIME OF SERVER IN THIS LINE ONLY
         return 0;
     }
     GetUserName(currentUser.username, &size);
     getOwners();
-    int temp;
-    for (auto x = 0; x <= 51; x++) {
+    int x;
+    for (x = 0; x <= 51; x++) {
         if (owners[x].username && forCheck(owners[x])) {
-            temp = x;
-        } else {
+            break;
+        }
+        if (x == 51) {
             return 0;
         }
     }
     GetSystemInfo(&currentUserHardware);
     currentUser.hardware = currentUserHardware.dwNumberOfProcessors * currentUserHardware.dwProcessorType;
-    if (currentUser.hardware != owners[temp].hardware) {
+    if (currentUser.hardware != owners[x].hardware) {
         return 0;
     }
+    currentUser.expire = owners[x].expire;
     if (currentUser.expire < time(nullptr)) {
         return -1;
     }
