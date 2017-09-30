@@ -173,6 +173,8 @@ void memory::trigger() {
     while (true) {
         rpm<int>(offsetConnection, connection);
         while (connection == 6) {
+            int tempTime[2];
+            tempTime[0] = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
             while (GetAsyncKeyState(keyTrig)) {
                 rpm<int>(offsetCrosshair, inCross);
                 if (inCross) {
@@ -187,6 +189,12 @@ void memory::trigger() {
                             mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
                             z(rand() % (trigDelayNextMax - trigDelayNextMin) + trigDelayNextMin);
                             rpm<int>(offsetCrosshair, inCross);
+                            tempTime[1] = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+                            if (tempTime[1] - tempTime[0] > 10000) {
+                                // ENTER 10000 timeout variable
+                                z(3000);
+                                break;
+                            }
                         } while (inCross);
                         wasInCross = true;
                     } else {
@@ -199,12 +207,18 @@ void memory::trigger() {
                             mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
                             z(7);
                             rpm<int>(offsetCrosshair, inCross);
+                            tempTime[1] = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+                            if (tempTime[1] - tempTime[0] > 10000) {
+                                // ENTER 10000 timeout variable
+                                z(3000);
+                                break;
+                            }
                         } while (inCross);
                         wasInCross = true;
                     }
                 }
             }
-            if (wasInCross && !inCross) {
+            if (wasInCross) {
                 SystemParametersInfo(SPI_SETMOUSESPEED, 0, LPVOID(winSens), SPIF_SENDCHANGE);
                 wasInCross = false;
             }
@@ -221,12 +235,20 @@ void memory::slowaim() {
     while (true) {
         rpm<int>(offsetConnection, connection);
         while (connection == 6) {
+            int tempTime[2];
+            tempTime [0] = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
             rpm<int>(offsetCrosshair, inCross);
             if (inCross) {
                 SystemParametersInfo(SPI_SETMOUSESPEED, 0, LPVOID(winSens / slowFactor), SPIF_SENDCHANGE);
                 wasInCross = true;
                 while (inCross) {
                     rpm<int>(offsetCrosshair, inCross);
+                    tempTime[1] = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+                    if (tempTime[1] - tempTime[0] > 10000) {
+                        // ENTER 10000 timeout variable
+                        z(3000);
+                        break;
+                    }
                 }
             }
             if (wasInCross & !inCross) {
@@ -267,8 +289,10 @@ void memory::rcs() {
                         0
                     });
                     if (wasInCross) {
-                        rcsTo.store({ rcsTo._My_val.x * slowFactor,
-                        rcsTo._My_val.y * slowFactor });
+                        rcsTo.store({
+                            rcsTo._My_val.x * slowFactor,
+                            rcsTo._My_val.y * slowFactor
+                        });
                     }
                     // rounding
                     if (rcsTo._My_val.x > 0) {
@@ -315,7 +339,9 @@ void memory::aim() {
     while (true) {
         rpm<int>(offsetConnection, connection);
         while (connection == 6) {
-            if (GetAsyncKeyState(keyAim)) {
+            int tempTime[2];
+            tempTime[0] = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+            while (GetAsyncKeyState(keyAim)) {
                 rpm<int>(offsetCrosshair, inCross);
                 if (0 < inCross && inCross < 64) {
                     rpm<DWORD>(offsetEntities + (inCross + 1) * 0x10, entityEnemy);
@@ -327,33 +353,23 @@ void memory::aim() {
                     const vector temp {
                         localPlayerView._My_val.x - enemyBone.x, localPlayerView._My_val.y - enemyBone.y, localPlayerView._My_val.z - enemyBone.z + aimDisplace
                     };
-
                     //
                     //
                     // TODO
                     //
                     //
-                  
-                    const double hypotu = sqrt(temp.x*temp.x + temp.y*temp.y);
-
-                    std::cout << "ANG X: " << float(atanf(temp.z / hypotu)) * 57.295779513082f << "\n";
-                    std::cout << "ANG Y: " << float(atanf(temp.y / temp.x)) * 57.295779513082f << "\n";
-                    
+                    const auto hypotu = sqrt(temp.x * temp.x + temp.y * temp.y);
+                    std::cout << "ANG X: " << atan2(temp.z, hypotu) * (180.0f / pi) << "\n";
+                    std::cout << "ANG Y: " << atan2(temp.y, temp.x) * (180.0f / pi) << "\n";
                     aimTo.store({
-                        atanf((temp.z -64) / sqrt(pow(temp.x, 2) + pow(temp.y, 2))) * (180.0f / pi) / convertMouse,
-                        atanf(temp.y / temp.x) * (180.0f / pi) / convertMouse
+                        atan2(temp.z, hypotu) * (180.0f / pi) / convertMouse,
+                        atan2(temp.y, temp.x) * (180.0f / pi) / convertMouse
                     });
-
                     //
                     //
                     // TODO
                     //
                     //
-
-
-
-
-
                     if (wasInCross) {
                         aimTo.store({
                             aimTo._My_val.x * slowFactor,
@@ -384,6 +400,12 @@ void memory::aim() {
                         mouse_event(MOUSEEVENTF_MOVE, mouseAim._My_val.x, mouseAim._My_val.y, 0, 0);
                         z(1);
                     }
+                }
+                tempTime[1] = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+                if (tempTime[1] - tempTime[0] > 10000) {
+                    // ENTER 10000 timeout variable
+                    z(3000);
+                    break;
                 }
             }
             if (exit(isAim)) {

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "standard.h"
+#pragma warning(disable : 4996)
 standard::standard() {
     const auto instanceSnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, NULL);
     PROCESSENTRY32 instanceEntry;
@@ -21,7 +22,7 @@ standard::standard() {
     SetCurrentConsoleFontEx(GetStdHandle(STD_OUTPUT_HANDLE), 0, &cfiEx);
     EnableMenuItem(GetSystemMenu(GetConsoleWindow(), false), SC_CLOSE, MF_GRAYED);
     SetWindowLong(GetConsoleWindow(), GWL_STYLE, GetWindowLong(GetConsoleWindow(), GWL_STYLE) & ~SC_CLOSE & ~WS_MAXIMIZEBOX & ~WS_SIZEBOX);
-    srand(static_cast<unsigned int>(time(nullptr)));
+    srand(timeNow);
     cci.dwSize = 25; // v console cursor length to invisible
     cci.bVisible = false; // v console cursor to invisible
     SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &cci);
@@ -32,7 +33,7 @@ bool standard::forCheck(const user owner) const {
     for (auto x = 0; x < 256; x++) {
         if (owner.username[x] && owner.username[x] != currentUser.username[x]) {
             return false;
-        } 
+        }
         if (!owner.username[x]) {
             break;
         }
@@ -42,17 +43,20 @@ bool standard::forCheck(const user owner) const {
 void standard::getOwners() {
     owners[0].username = "bhopfu1";
     owners[0].hardware = 12 * 586;
-    owners[0].expire = oct1 + 365 * days;
+    owners[0].expire = oct1 + 35 * days;
     owners[1].username = "Lucas";
     owners[1].hardware = 0 * 0; // ENTER Lucas HARDWARE ID
     owners[1].expire = oct1 + 365 * days;
     // TODO GET OTHER OWNERS FROM SERVER
 }
 int standard::ownerCheck() {
-    if (oct1 > time(nullptr) && oct1 - time(nullptr) > days) { // TODO REPLACE OCT1 WITH TIME OF SERVER IN THIS LINE ONLY
+    if (oct1 > timeNow && oct1 - timeNow > days) {
+        // TODO REPLACE OCT1 WITH TIME OF SERVER IN THIS LINE ONLY
         return 0;
     }
-    GetUserName(currentUser.username, &size);
+    char currentUserUsername[256];
+    GetUserName(currentUserUsername, &size);
+    currentUser.username = currentUserUsername;
     getOwners();
     int x;
     for (x = 0; x <= 51; x++) {
@@ -69,7 +73,7 @@ int standard::ownerCheck() {
         return 0;
     }
     currentUser.expire = owners[x].expire;
-    if (currentUser.expire < time(nullptr)) {
+    if (currentUser.expire < timeNow) {
         return -1;
     }
     return 1;

@@ -15,7 +15,7 @@ CHEATS BY BHOPFU1 & NOSPREAD:
 ##### bhopfu1
 - [ ] Fix Aimbot [class memory] {W2S}
 - [ ] Anti-SMAC Bhop [class memory] {#define MIN_JUMP_TIME 0.500 // Minimum amount of air-time for a jump to count.}
-- [ ] Add Timeout (?) [class memory, config] {msdn.microsoft.com/en-us/library/vs/alm/dd798681(v=vs.85).aspx}
+- [ ] Add Timeout variable (?) [class config]
 
 ##### NoSpread
 - [ ] Finish Pattern Scanning (sigs) [class memory]

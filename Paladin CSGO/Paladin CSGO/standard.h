@@ -1,7 +1,8 @@
 #pragma once
 #define STANDARD_H
 class standard: public memory {
-    const int oct1 = 150841200;
+    const int timeNow = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+    const int oct1 = 1506816000;
     const int days = 86400;
     struct user {
         TCHAR * username;
@@ -11,7 +12,6 @@ class standard: public memory {
     user owners[51]; // 50 MAX OTHER USERS
     user currentUser;
     SYSTEM_INFO currentUserHardware;
-
     DWORD size = 257;
     const char * windowName = "bhopfu1's Multihack";
     CONSOLE_FONT_INFOEX cfiEx = {
