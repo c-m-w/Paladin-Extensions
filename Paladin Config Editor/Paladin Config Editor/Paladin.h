@@ -52,7 +52,7 @@ namespace PaladinConfigEditor {
     private: System::Windows::Forms::TabPage^  misc;
     private: System::Windows::Forms::TabPage^  aimrcs;
     private: System::Windows::Forms::TabPage^  trig;
-    private: System::Windows::Forms::TabPage^  setting;
+
     private: System::Windows::Forms::ToolTip^  tooltips;
     private: System::Windows::Forms::Panel^  HitSound_p;
 
@@ -66,7 +66,8 @@ namespace PaladinConfigEditor {
     private: System::Windows::Forms::TrackBar^  hitsound_freq_s;
 
     private: System::Windows::Forms::TrackBar^  hitsound_dur_s;
-    private: System::Windows::Forms::Panel^  panel1;
+    private: System::Windows::Forms::Panel^  key_panel;
+
     private: System::Windows::Forms::Label^  keyexit_L;
     private: System::Windows::Forms::Label^  keybind_l;
     private: System::Windows::Forms::TrackBar^  smooth_min_s;
@@ -126,11 +127,14 @@ namespace PaladinConfigEditor {
     private: System::Windows::Forms::TrackBar^  trackBar3;
     private: System::Windows::Forms::Label^  label1;
     private: System::Windows::Forms::CheckBox^  checkBox1;
-    private: System::Windows::Forms::ComboBox^  comboBox1;
-    private: System::Windows::Forms::Button^  button3;
-    private: System::Windows::Forms::Button^  button2;
-    private: System::Windows::Forms::Button^  button1;
+
+
+
+
     private: System::Windows::Forms::SaveFileDialog^  saveFileDialog1;
+private: System::Windows::Forms::Button^  button1;
+private: System::Windows::Forms::Button^  button4;
+
 
 
 
@@ -164,7 +168,12 @@ namespace PaladinConfigEditor {
             System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(Paladin::typeid));
             this->Tabs = (gcnew System::Windows::Forms::TabControl());
             this->keys = (gcnew System::Windows::Forms::TabPage());
-            this->panel1 = (gcnew System::Windows::Forms::Panel());
+            this->key_panel = (gcnew System::Windows::Forms::Panel());
+            this->bhopKeyButton = (gcnew System::Windows::Forms::Button());
+            this->trigKeyButton = (gcnew System::Windows::Forms::Button());
+            this->aimKeyButton = (gcnew System::Windows::Forms::Button());
+            this->reloadKeyButton = (gcnew System::Windows::Forms::Button());
+            this->exitKeyButton = (gcnew System::Windows::Forms::Button());
             this->bhop_L = (gcnew System::Windows::Forms::Label());
             this->trig_L = (gcnew System::Windows::Forms::Label());
             this->aim_L = (gcnew System::Windows::Forms::Label());
@@ -173,10 +182,13 @@ namespace PaladinConfigEditor {
             this->keybind_l = (gcnew System::Windows::Forms::Label());
             this->misc = (gcnew System::Windows::Forms::TabPage());
             this->slow_p = (gcnew System::Windows::Forms::Panel());
+            this->slowfac_l = (gcnew System::Windows::Forms::Label());
             this->slowfactor = (gcnew System::Windows::Forms::TrackBar());
             this->slowaim_l = (gcnew System::Windows::Forms::Label());
             this->slow_enabled = (gcnew System::Windows::Forms::CheckBox());
             this->bunny_p = (gcnew System::Windows::Forms::Panel());
+            this->hitchance_l = (gcnew System::Windows::Forms::Label());
+            this->next_jump_l = (gcnew System::Windows::Forms::Label());
             this->scroll_down = (gcnew System::Windows::Forms::RadioButton());
             this->scroll_up = (gcnew System::Windows::Forms::RadioButton());
             this->next_delay_jump = (gcnew System::Windows::Forms::TrackBar());
@@ -184,51 +196,40 @@ namespace PaladinConfigEditor {
             this->bunny_L = (gcnew System::Windows::Forms::Label());
             this->enabled_bhop = (gcnew System::Windows::Forms::CheckBox());
             this->smooth_p = (gcnew System::Windows::Forms::Panel());
+            this->smooth_max_l = (gcnew System::Windows::Forms::Label());
+            this->smooth_min_l = (gcnew System::Windows::Forms::Label());
             this->smooth_min_s = (gcnew System::Windows::Forms::TrackBar());
             this->smooth_max_s = (gcnew System::Windows::Forms::TrackBar());
             this->smooth_l = (gcnew System::Windows::Forms::Label());
             this->enabled_smooth = (gcnew System::Windows::Forms::CheckBox());
             this->HitSound_p = (gcnew System::Windows::Forms::Panel());
+            this->hitsound_freq_l = (gcnew System::Windows::Forms::Label());
+            this->hitsoud_dur_l = (gcnew System::Windows::Forms::Label());
             this->hitsound_freq_s = (gcnew System::Windows::Forms::TrackBar());
             this->hitsound_dur_s = (gcnew System::Windows::Forms::TrackBar());
             this->HitSound_L = (gcnew System::Windows::Forms::Label());
             this->enabled_hit = (gcnew System::Windows::Forms::CheckBox());
             this->aimrcs = (gcnew System::Windows::Forms::TabPage());
             this->panel2 = (gcnew System::Windows::Forms::Panel());
+            this->bone_tb = (gcnew System::Windows::Forms::TextBox());
             this->trackBar2 = (gcnew System::Windows::Forms::TrackBar());
             this->displace_aim = (gcnew System::Windows::Forms::TrackBar());
             this->aim_le = (gcnew System::Windows::Forms::Label());
             this->enable_aim = (gcnew System::Windows::Forms::CheckBox());
             this->trig = (gcnew System::Windows::Forms::TabPage());
-            this->setting = (gcnew System::Windows::Forms::TabPage());
-            this->tooltips = (gcnew System::Windows::Forms::ToolTip(this->components));
-            this->exitKeyButton = (gcnew System::Windows::Forms::Button());
-            this->reloadKeyButton = (gcnew System::Windows::Forms::Button());
-            this->aimKeyButton = (gcnew System::Windows::Forms::Button());
-            this->trigKeyButton = (gcnew System::Windows::Forms::Button());
-            this->bhopKeyButton = (gcnew System::Windows::Forms::Button());
-            this->hitsoud_dur_l = (gcnew System::Windows::Forms::Label());
-            this->hitsound_freq_l = (gcnew System::Windows::Forms::Label());
-            this->smooth_min_l = (gcnew System::Windows::Forms::Label());
-            this->smooth_max_l = (gcnew System::Windows::Forms::Label());
-            this->next_jump_l = (gcnew System::Windows::Forms::Label());
-            this->hitchance_l = (gcnew System::Windows::Forms::Label());
-            this->slowfac_l = (gcnew System::Windows::Forms::Label());
-            this->bone_tb = (gcnew System::Windows::Forms::TextBox());
-            this->button1 = (gcnew System::Windows::Forms::Button());
-            this->button2 = (gcnew System::Windows::Forms::Button());
-            this->button3 = (gcnew System::Windows::Forms::Button());
-            this->saveFileDialog1 = (gcnew System::Windows::Forms::SaveFileDialog());
-            this->comboBox1 = (gcnew System::Windows::Forms::ComboBox());
-            this->label1 = (gcnew System::Windows::Forms::Label());
-            this->checkBox1 = (gcnew System::Windows::Forms::CheckBox());
             this->panel3 = (gcnew System::Windows::Forms::Panel());
             this->textBox1 = (gcnew System::Windows::Forms::TextBox());
             this->trackBar1 = (gcnew System::Windows::Forms::TrackBar());
             this->trackBar3 = (gcnew System::Windows::Forms::TrackBar());
+            this->label1 = (gcnew System::Windows::Forms::Label());
+            this->checkBox1 = (gcnew System::Windows::Forms::CheckBox());
+            this->tooltips = (gcnew System::Windows::Forms::ToolTip(this->components));
+            this->saveFileDialog1 = (gcnew System::Windows::Forms::SaveFileDialog());
+            this->button1 = (gcnew System::Windows::Forms::Button());
+            this->button4 = (gcnew System::Windows::Forms::Button());
             this->Tabs->SuspendLayout();
             this->keys->SuspendLayout();
-            this->panel1->SuspendLayout();
+            this->key_panel->SuspendLayout();
             this->misc->SuspendLayout();
             this->slow_p->SuspendLayout();
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->slowfactor))->BeginInit();
@@ -246,7 +247,6 @@ namespace PaladinConfigEditor {
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar2))->BeginInit();
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->displace_aim))->BeginInit();
             this->trig->SuspendLayout();
-            this->setting->SuspendLayout();
             this->panel3->SuspendLayout();
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar1))->BeginInit();
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar3))->BeginInit();
@@ -258,7 +258,6 @@ namespace PaladinConfigEditor {
             this->Tabs->Controls->Add(this->misc);
             this->Tabs->Controls->Add(this->aimrcs);
             this->Tabs->Controls->Add(this->trig);
-            this->Tabs->Controls->Add(this->setting);
             this->Tabs->Location = System::Drawing::Point(12, 12);
             this->Tabs->Name = L"Tabs";
             this->Tabs->SelectedIndex = 0;
@@ -268,7 +267,7 @@ namespace PaladinConfigEditor {
             // 
             // keys
             // 
-            this->keys->Controls->Add(this->panel1);
+            this->keys->Controls->Add(this->key_panel);
             this->keys->Location = System::Drawing::Point(4, 22);
             this->keys->Name = L"keys";
             this->keys->Padding = System::Windows::Forms::Padding(3);
@@ -277,26 +276,73 @@ namespace PaladinConfigEditor {
             this->keys->Text = L"Key Binds";
             this->keys->UseVisualStyleBackColor = true;
             // 
-            // panel1
+            // key_panel
             // 
-            this->panel1->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(32)), static_cast<System::Int32>(static_cast<System::Byte>(32)),
+            this->key_panel->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(32)), static_cast<System::Int32>(static_cast<System::Byte>(32)),
                 static_cast<System::Int32>(static_cast<System::Byte>(32)));
-            this->panel1->BorderStyle = System::Windows::Forms::BorderStyle::Fixed3D;
-            this->panel1->Controls->Add(this->bhopKeyButton);
-            this->panel1->Controls->Add(this->trigKeyButton);
-            this->panel1->Controls->Add(this->aimKeyButton);
-            this->panel1->Controls->Add(this->reloadKeyButton);
-            this->panel1->Controls->Add(this->exitKeyButton);
-            this->panel1->Controls->Add(this->bhop_L);
-            this->panel1->Controls->Add(this->trig_L);
-            this->panel1->Controls->Add(this->aim_L);
-            this->panel1->Controls->Add(this->reload_L);
-            this->panel1->Controls->Add(this->keyexit_L);
-            this->panel1->Controls->Add(this->keybind_l);
-            this->panel1->Location = System::Drawing::Point(6, 6);
-            this->panel1->Name = L"panel1";
-            this->panel1->Size = System::Drawing::Size(440, 199);
-            this->panel1->TabIndex = 1;
+            this->key_panel->BorderStyle = System::Windows::Forms::BorderStyle::Fixed3D;
+            this->key_panel->Controls->Add(this->button1);
+            this->key_panel->Controls->Add(this->button4);
+            this->key_panel->Controls->Add(this->bhopKeyButton);
+            this->key_panel->Controls->Add(this->trigKeyButton);
+            this->key_panel->Controls->Add(this->aimKeyButton);
+            this->key_panel->Controls->Add(this->reloadKeyButton);
+            this->key_panel->Controls->Add(this->exitKeyButton);
+            this->key_panel->Controls->Add(this->bhop_L);
+            this->key_panel->Controls->Add(this->trig_L);
+            this->key_panel->Controls->Add(this->aim_L);
+            this->key_panel->Controls->Add(this->reload_L);
+            this->key_panel->Controls->Add(this->keyexit_L);
+            this->key_panel->Controls->Add(this->keybind_l);
+            this->key_panel->Location = System::Drawing::Point(6, 6);
+            this->key_panel->Name = L"key_panel";
+            this->key_panel->Size = System::Drawing::Size(440, 199);
+            this->key_panel->TabIndex = 1;
+            // 
+            // bhopKeyButton
+            // 
+            this->bhopKeyButton->Location = System::Drawing::Point(157, 137);
+            this->bhopKeyButton->Name = L"bhopKeyButton";
+            this->bhopKeyButton->Size = System::Drawing::Size(275, 23);
+            this->bhopKeyButton->TabIndex = 11;
+            this->bhopKeyButton->Text = L"Click to bind a key (Current: 0)";
+            this->bhopKeyButton->UseVisualStyleBackColor = true;
+            // 
+            // trigKeyButton
+            // 
+            this->trigKeyButton->Location = System::Drawing::Point(157, 109);
+            this->trigKeyButton->Name = L"trigKeyButton";
+            this->trigKeyButton->Size = System::Drawing::Size(275, 23);
+            this->trigKeyButton->TabIndex = 10;
+            this->trigKeyButton->Text = L"Click to bind a key (Current: 0)";
+            this->trigKeyButton->UseVisualStyleBackColor = true;
+            // 
+            // aimKeyButton
+            // 
+            this->aimKeyButton->Location = System::Drawing::Point(157, 80);
+            this->aimKeyButton->Name = L"aimKeyButton";
+            this->aimKeyButton->Size = System::Drawing::Size(275, 23);
+            this->aimKeyButton->TabIndex = 9;
+            this->aimKeyButton->Text = L"Click to bind a key (Current: 0)";
+            this->aimKeyButton->UseVisualStyleBackColor = true;
+            // 
+            // reloadKeyButton
+            // 
+            this->reloadKeyButton->Location = System::Drawing::Point(157, 52);
+            this->reloadKeyButton->Name = L"reloadKeyButton";
+            this->reloadKeyButton->Size = System::Drawing::Size(275, 23);
+            this->reloadKeyButton->TabIndex = 8;
+            this->reloadKeyButton->Text = L"Click to bind a key (Current: 0)";
+            this->reloadKeyButton->UseVisualStyleBackColor = true;
+            // 
+            // exitKeyButton
+            // 
+            this->exitKeyButton->Location = System::Drawing::Point(157, 23);
+            this->exitKeyButton->Name = L"exitKeyButton";
+            this->exitKeyButton->Size = System::Drawing::Size(275, 23);
+            this->exitKeyButton->TabIndex = 7;
+            this->exitKeyButton->Text = L"Click to bind a key (Current: 0)";
+            this->exitKeyButton->UseVisualStyleBackColor = true;
             // 
             // bhop_L
             // 
@@ -346,7 +392,7 @@ namespace PaladinConfigEditor {
             // keybind_l
             // 
             this->keybind_l->AutoSize = true;
-            this->keybind_l->Location = System::Drawing::Point(3, 0);
+            this->keybind_l->Location = System::Drawing::Point(3, 3);
             this->keybind_l->Name = L"keybind_l";
             this->keybind_l->Size = System::Drawing::Size(57, 13);
             this->keybind_l->TabIndex = 1;
@@ -379,6 +425,15 @@ namespace PaladinConfigEditor {
             this->slow_p->Name = L"slow_p";
             this->slow_p->Size = System::Drawing::Size(217, 96);
             this->slow_p->TabIndex = 7;
+            // 
+            // slowfac_l
+            // 
+            this->slowfac_l->AutoSize = true;
+            this->slowfac_l->Location = System::Drawing::Point(8, 73);
+            this->slowfac_l->Name = L"slowfac_l";
+            this->slowfac_l->Size = System::Drawing::Size(32, 13);
+            this->slowfac_l->TabIndex = 6;
+            this->slowfac_l->Text = L"1/2 x";
             // 
             // slowfactor
             // 
@@ -427,6 +482,24 @@ namespace PaladinConfigEditor {
             this->bunny_p->Name = L"bunny_p";
             this->bunny_p->Size = System::Drawing::Size(217, 96);
             this->bunny_p->TabIndex = 7;
+            // 
+            // hitchance_l
+            // 
+            this->hitchance_l->AutoSize = true;
+            this->hitchance_l->Location = System::Drawing::Point(82, 73);
+            this->hitchance_l->Name = L"hitchance_l";
+            this->hitchance_l->Size = System::Drawing::Size(33, 13);
+            this->hitchance_l->TabIndex = 9;
+            this->hitchance_l->Text = L"70 %";
+            // 
+            // next_jump_l
+            // 
+            this->next_jump_l->AutoSize = true;
+            this->next_jump_l->Location = System::Drawing::Point(82, 30);
+            this->next_jump_l->Name = L"next_jump_l";
+            this->next_jump_l->Size = System::Drawing::Size(35, 13);
+            this->next_jump_l->TabIndex = 8;
+            this->next_jump_l->Text = L"20 ms";
             // 
             // scroll_down
             // 
@@ -511,6 +584,24 @@ namespace PaladinConfigEditor {
             this->smooth_p->Size = System::Drawing::Size(217, 96);
             this->smooth_p->TabIndex = 1;
             // 
+            // smooth_max_l
+            // 
+            this->smooth_max_l->AutoSize = true;
+            this->smooth_max_l->Location = System::Drawing::Point(8, 73);
+            this->smooth_max_l->Name = L"smooth_max_l";
+            this->smooth_max_l->Size = System::Drawing::Size(28, 13);
+            this->smooth_max_l->TabIndex = 7;
+            this->smooth_max_l->Text = L"10 x";
+            // 
+            // smooth_min_l
+            // 
+            this->smooth_min_l->AutoSize = true;
+            this->smooth_min_l->Location = System::Drawing::Point(82, 30);
+            this->smooth_min_l->Name = L"smooth_min_l";
+            this->smooth_min_l->Size = System::Drawing::Size(22, 13);
+            this->smooth_min_l->TabIndex = 6;
+            this->smooth_min_l->Text = L"7 x";
+            // 
             // smooth_min_s
             // 
             this->smooth_min_s->Location = System::Drawing::Point(77, 4);
@@ -566,6 +657,24 @@ namespace PaladinConfigEditor {
             this->HitSound_p->Name = L"HitSound_p";
             this->HitSound_p->Size = System::Drawing::Size(217, 96);
             this->HitSound_p->TabIndex = 0;
+            // 
+            // hitsound_freq_l
+            // 
+            this->hitsound_freq_l->AutoSize = true;
+            this->hitsound_freq_l->Location = System::Drawing::Point(8, 73);
+            this->hitsound_freq_l->Name = L"hitsound_freq_l";
+            this->hitsound_freq_l->Size = System::Drawing::Size(39, 13);
+            this->hitsound_freq_l->TabIndex = 5;
+            this->hitsound_freq_l->Text = L"300 hz";
+            // 
+            // hitsoud_dur_l
+            // 
+            this->hitsoud_dur_l->AutoSize = true;
+            this->hitsoud_dur_l->Location = System::Drawing::Point(82, 30);
+            this->hitsoud_dur_l->Name = L"hitsoud_dur_l";
+            this->hitsoud_dur_l->Size = System::Drawing::Size(35, 13);
+            this->hitsoud_dur_l->TabIndex = 4;
+            this->hitsoud_dur_l->Text = L"50 ms";
             // 
             // hitsound_freq_s
             // 
@@ -635,6 +744,17 @@ namespace PaladinConfigEditor {
             this->panel2->Size = System::Drawing::Size(217, 199);
             this->panel2->TabIndex = 1;
             // 
+            // bone_tb
+            // 
+            this->bone_tb->Location = System::Drawing::Point(10, 43);
+            this->bone_tb->MaxLength = 2;
+            this->bone_tb->Name = L"bone_tb";
+            this->bone_tb->Size = System::Drawing::Size(193, 21);
+            this->bone_tb->TabIndex = 5;
+            this->bone_tb->Text = L"8";
+            this->bone_tb->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
+            this->tooltips->SetToolTip(this->bone_tb, L"Bone to aim to");
+            // 
             // trackBar2
             // 
             this->trackBar2->Location = System::Drawing::Point(3, 147);
@@ -685,196 +805,6 @@ namespace PaladinConfigEditor {
             this->trig->Text = L"Triggerbot";
             this->trig->UseVisualStyleBackColor = true;
             // 
-            // setting
-            // 
-            this->setting->Controls->Add(this->comboBox1);
-            this->setting->Controls->Add(this->button3);
-            this->setting->Controls->Add(this->button2);
-            this->setting->Controls->Add(this->button1);
-            this->setting->Location = System::Drawing::Point(4, 22);
-            this->setting->Name = L"setting";
-            this->setting->Size = System::Drawing::Size(452, 211);
-            this->setting->TabIndex = 4;
-            this->setting->Text = L"Settings";
-            this->setting->UseVisualStyleBackColor = true;
-            // 
-            // tooltips
-            // 
-            this->tooltips->ShowAlways = true;
-            // 
-            // exitKeyButton
-            // 
-            this->exitKeyButton->Location = System::Drawing::Point(127, 23);
-            this->exitKeyButton->Name = L"exitKeyButton";
-            this->exitKeyButton->Size = System::Drawing::Size(182, 23);
-            this->exitKeyButton->TabIndex = 7;
-            this->exitKeyButton->Text = L"Click to bind a key (Current: 0)";
-            this->exitKeyButton->UseVisualStyleBackColor = true;
-            // 
-            // reloadKeyButton
-            // 
-            this->reloadKeyButton->Location = System::Drawing::Point(127, 52);
-            this->reloadKeyButton->Name = L"reloadKeyButton";
-            this->reloadKeyButton->Size = System::Drawing::Size(182, 23);
-            this->reloadKeyButton->TabIndex = 8;
-            this->reloadKeyButton->Text = L"Click to bind a key (Current: 0)";
-            this->reloadKeyButton->UseVisualStyleBackColor = true;
-            // 
-            // aimKeyButton
-            // 
-            this->aimKeyButton->Location = System::Drawing::Point(127, 80);
-            this->aimKeyButton->Name = L"aimKeyButton";
-            this->aimKeyButton->Size = System::Drawing::Size(182, 23);
-            this->aimKeyButton->TabIndex = 9;
-            this->aimKeyButton->Text = L"Click to bind a key (Current: 0)";
-            this->aimKeyButton->UseVisualStyleBackColor = true;
-            // 
-            // trigKeyButton
-            // 
-            this->trigKeyButton->Location = System::Drawing::Point(127, 109);
-            this->trigKeyButton->Name = L"trigKeyButton";
-            this->trigKeyButton->Size = System::Drawing::Size(182, 23);
-            this->trigKeyButton->TabIndex = 10;
-            this->trigKeyButton->Text = L"Click to bind a key (Current: 0)";
-            this->trigKeyButton->UseVisualStyleBackColor = true;
-            // 
-            // bhopKeyButton
-            // 
-            this->bhopKeyButton->Location = System::Drawing::Point(127, 137);
-            this->bhopKeyButton->Name = L"bhopKeyButton";
-            this->bhopKeyButton->Size = System::Drawing::Size(182, 23);
-            this->bhopKeyButton->TabIndex = 11;
-            this->bhopKeyButton->Text = L"Click to bind a key (Current: 0)";
-            this->bhopKeyButton->UseVisualStyleBackColor = true;
-            // 
-            // hitsoud_dur_l
-            // 
-            this->hitsoud_dur_l->AutoSize = true;
-            this->hitsoud_dur_l->Location = System::Drawing::Point(82, 30);
-            this->hitsoud_dur_l->Name = L"hitsoud_dur_l";
-            this->hitsoud_dur_l->Size = System::Drawing::Size(35, 13);
-            this->hitsoud_dur_l->TabIndex = 4;
-            this->hitsoud_dur_l->Text = L"50 ms";
-            // 
-            // hitsound_freq_l
-            // 
-            this->hitsound_freq_l->AutoSize = true;
-            this->hitsound_freq_l->Location = System::Drawing::Point(8, 73);
-            this->hitsound_freq_l->Name = L"hitsound_freq_l";
-            this->hitsound_freq_l->Size = System::Drawing::Size(39, 13);
-            this->hitsound_freq_l->TabIndex = 5;
-            this->hitsound_freq_l->Text = L"300 hz";
-            // 
-            // smooth_min_l
-            // 
-            this->smooth_min_l->AutoSize = true;
-            this->smooth_min_l->Location = System::Drawing::Point(82, 30);
-            this->smooth_min_l->Name = L"smooth_min_l";
-            this->smooth_min_l->Size = System::Drawing::Size(22, 13);
-            this->smooth_min_l->TabIndex = 6;
-            this->smooth_min_l->Text = L"7 x";
-            // 
-            // smooth_max_l
-            // 
-            this->smooth_max_l->AutoSize = true;
-            this->smooth_max_l->Location = System::Drawing::Point(8, 73);
-            this->smooth_max_l->Name = L"smooth_max_l";
-            this->smooth_max_l->Size = System::Drawing::Size(28, 13);
-            this->smooth_max_l->TabIndex = 7;
-            this->smooth_max_l->Text = L"10 x";
-            // 
-            // next_jump_l
-            // 
-            this->next_jump_l->AutoSize = true;
-            this->next_jump_l->Location = System::Drawing::Point(82, 30);
-            this->next_jump_l->Name = L"next_jump_l";
-            this->next_jump_l->Size = System::Drawing::Size(35, 13);
-            this->next_jump_l->TabIndex = 8;
-            this->next_jump_l->Text = L"20 ms";
-            // 
-            // hitchance_l
-            // 
-            this->hitchance_l->AutoSize = true;
-            this->hitchance_l->Location = System::Drawing::Point(82, 73);
-            this->hitchance_l->Name = L"hitchance_l";
-            this->hitchance_l->Size = System::Drawing::Size(33, 13);
-            this->hitchance_l->TabIndex = 9;
-            this->hitchance_l->Text = L"70 %";
-            // 
-            // slowfac_l
-            // 
-            this->slowfac_l->AutoSize = true;
-            this->slowfac_l->Location = System::Drawing::Point(8, 73);
-            this->slowfac_l->Name = L"slowfac_l";
-            this->slowfac_l->Size = System::Drawing::Size(32, 13);
-            this->slowfac_l->TabIndex = 6;
-            this->slowfac_l->Text = L"1/2 x";
-            // 
-            // bone_tb
-            // 
-            this->bone_tb->Location = System::Drawing::Point(10, 43);
-            this->bone_tb->MaxLength = 2;
-            this->bone_tb->Name = L"bone_tb";
-            this->bone_tb->Size = System::Drawing::Size(193, 21);
-            this->bone_tb->TabIndex = 5;
-            this->bone_tb->Text = L"8";
-            this->bone_tb->TextAlign = System::Windows::Forms::HorizontalAlignment::Center;
-            this->tooltips->SetToolTip(this->bone_tb, L"Bone to aim to");
-            // 
-            // button1
-            // 
-            this->button1->Location = System::Drawing::Point(30, 119);
-            this->button1->Name = L"button1";
-            this->button1->Size = System::Drawing::Size(75, 23);
-            this->button1->TabIndex = 0;
-            this->button1->Text = L"new";
-            this->button1->UseVisualStyleBackColor = true;
-            // 
-            // button2
-            // 
-            this->button2->Location = System::Drawing::Point(112, 119);
-            this->button2->Name = L"button2";
-            this->button2->Size = System::Drawing::Size(75, 23);
-            this->button2->TabIndex = 1;
-            this->button2->Text = L"save";
-            this->button2->UseVisualStyleBackColor = true;
-            // 
-            // button3
-            // 
-            this->button3->Location = System::Drawing::Point(194, 118);
-            this->button3->Name = L"button3";
-            this->button3->Size = System::Drawing::Size(75, 23);
-            this->button3->TabIndex = 2;
-            this->button3->Text = L"load";
-            this->button3->UseVisualStyleBackColor = true;
-            // 
-            // comboBox1
-            // 
-            this->comboBox1->FormattingEnabled = true;
-            this->comboBox1->Location = System::Drawing::Point(30, 92);
-            this->comboBox1->Name = L"comboBox1";
-            this->comboBox1->Size = System::Drawing::Size(121, 21);
-            this->comboBox1->TabIndex = 3;
-            // 
-            // label1
-            // 
-            this->label1->AutoSize = true;
-            this->label1->Location = System::Drawing::Point(4, 4);
-            this->label1->Name = L"label1";
-            this->label1->Size = System::Drawing::Size(40, 13);
-            this->label1->TabIndex = 1;
-            this->label1->Text = L"Aimbot";
-            // 
-            // checkBox1
-            // 
-            this->checkBox1->AutoSize = true;
-            this->checkBox1->Location = System::Drawing::Point(7, 20);
-            this->checkBox1->Name = L"checkBox1";
-            this->checkBox1->Size = System::Drawing::Size(64, 17);
-            this->checkBox1->TabIndex = 0;
-            this->checkBox1->Text = L"Enabled";
-            this->checkBox1->UseVisualStyleBackColor = true;
-            // 
             // panel3
             // 
             this->panel3->BackColor = System::Drawing::Color::FromArgb(static_cast<System::Int32>(static_cast<System::Byte>(32)), static_cast<System::Int32>(static_cast<System::Byte>(32)),
@@ -922,6 +852,47 @@ namespace PaladinConfigEditor {
             this->trackBar3->TabIndex = 3;
             this->tooltips->SetToolTip(this->trackBar3, L"Vertical Displacement for Aimbot");
             // 
+            // label1
+            // 
+            this->label1->AutoSize = true;
+            this->label1->Location = System::Drawing::Point(4, 4);
+            this->label1->Name = L"label1";
+            this->label1->Size = System::Drawing::Size(40, 13);
+            this->label1->TabIndex = 1;
+            this->label1->Text = L"Aimbot";
+            // 
+            // checkBox1
+            // 
+            this->checkBox1->AutoSize = true;
+            this->checkBox1->Location = System::Drawing::Point(7, 20);
+            this->checkBox1->Name = L"checkBox1";
+            this->checkBox1->Size = System::Drawing::Size(64, 17);
+            this->checkBox1->TabIndex = 0;
+            this->checkBox1->Text = L"Enabled";
+            this->checkBox1->UseVisualStyleBackColor = true;
+            // 
+            // tooltips
+            // 
+            this->tooltips->ShowAlways = true;
+            // 
+            // button1
+            // 
+            this->button1->Location = System::Drawing::Point(357, 168);
+            this->button1->Name = L"button1";
+            this->button1->Size = System::Drawing::Size(75, 23);
+            this->button1->TabIndex = 13;
+            this->button1->Text = L"Undo";
+            this->button1->UseVisualStyleBackColor = true;
+            // 
+            // button4
+            // 
+            this->button4->Location = System::Drawing::Point(276, 168);
+            this->button4->Name = L"button4";
+            this->button4->Size = System::Drawing::Size(75, 23);
+            this->button4->TabIndex = 12;
+            this->button4->Text = L"Save";
+            this->button4->UseVisualStyleBackColor = true;
+            // 
             // Paladin
             // 
             this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
@@ -938,8 +909,8 @@ namespace PaladinConfigEditor {
             this->Text = L"Paladin";
             this->Tabs->ResumeLayout(false);
             this->keys->ResumeLayout(false);
-            this->panel1->ResumeLayout(false);
-            this->panel1->PerformLayout();
+            this->key_panel->ResumeLayout(false);
+            this->key_panel->PerformLayout();
             this->misc->ResumeLayout(false);
             this->slow_p->ResumeLayout(false);
             this->slow_p->PerformLayout();
@@ -962,7 +933,6 @@ namespace PaladinConfigEditor {
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar2))->EndInit();
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->displace_aim))->EndInit();
             this->trig->ResumeLayout(false);
-            this->setting->ResumeLayout(false);
             this->panel3->ResumeLayout(false);
             this->panel3->PerformLayout();
             (cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->trackBar1))->EndInit();

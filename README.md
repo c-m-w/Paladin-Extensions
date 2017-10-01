@@ -6,24 +6,6 @@ CHEATS BY BHOPFU1 & NOSPREAD:
 
 # TODO
 
-## CSGO
-
-##### Open
-- [ ] Menu/C# Config Editor (?) [main]
-- [ ] Convert to injectable dll for other 32bit process [main] {ONCE INJECTOR IS DONE}
-
-##### bhopfu1
-- [ ] Fix Aimbot [class memory] {W2S}
-- [ ] Anti-SMAC Bhop [class memory] {#define MIN_JUMP_TIME 0.500 // Minimum amount of air-time for a jump to count.}
-- [ ] Add Timeout variable (?) [class config]
-
-##### NoSpread
-- [ ] Finish Pattern Scanning (sigs) [class memory]
-- [ ] Cloud Config (?) [server]
-- [ ] Time Sync For Limited Time Use [server, class standard -> ownercheck]
-- [ ] Version Check [server, class config]
-- [ ] HWID Compare [server, class standard -> ownercheck]
-
 ## INJECTOR
 
 ##### Open
@@ -33,17 +15,32 @@ CHEATS BY BHOPFU1 & NOSPREAD:
 
 ##### NoSpread
 
+## CSGO
+
+##### Open
+- [ ] Convert to injectable dll for other 32bit process [main] {ONCE INJECTOR IS DONE}
+
+##### bhopfu1
+- [ ] Fix Aimbot [class memory] {W2S}
+- [ ] Anti-SMAC Bhop [class memory] {#define MIN_JUMP_TIME 0.500 // Minimum amount of air-time for a jump to count.}
+
+##### NoSpread
+- [ ] Finish Pattern Scanning (sigs) [class memory]
+- [ ] Time Sync For Limited Time Use [server, class standard -> ownercheck]
+- [ ] Version Check [server, class config]
+- [ ] HWID Compare [server, class standard -> ownercheck]
+
 ## CONFIG EDITOR
 
 ##### Open
-- [ ] Make ready for other cheats
 - [ ] Get Key Pressed for Key Binds
+- [ ] Save
 
 ##### bhopfu1
 - [ ] Finish Menu
 
 ##### NoSpread
-- [ ] Drag&Drop config to window -> import
+- [ ] Drag&Drop config to window -> import {There is a property to enable it, just catch the event under events}
 
 # Features:
 

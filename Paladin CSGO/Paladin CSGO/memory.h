@@ -1,13 +1,13 @@
 #pragma once
 #define MEMORY_H
 class memory: public config {
+    const float pi = 3.14159265358979323846f;
     struct vector {
         float x, y, z;
     };
     struct coordinate {
         int x, y;
     };
-    const float pi = 3.14159265358979323846f;
     HANDLE snapHandle;
     PROCESSENTRY32 processEntry;
     MODULEENTRY32 moduleEntry;
@@ -24,15 +24,13 @@ class memory: public config {
     DWORD offsetViewPunch = 0x301C;
     DWORD offsetPlayerLocation = 0x134;
     DWORD offsetEntities = 0x4A8C02C;
-    //DWORD entityBone;
-    //DWORD offsetEntityBone = 0x2698;
     DWORD localPlayer;
     DWORD clientState;
     DWORD entityEnemy;
     vector enemyBone;
     vector viewPunchCurrent;
+    vector viewPunchPrevious;
     vector localPlayerLocation;
-    vector localPlayerHeadDisplace;
     int flag;
     int inCross;
     int winSens;
@@ -42,14 +40,12 @@ class memory: public config {
     bool wasInCross = false;
     float sens;
     float convertMouse;
+    coordinate screen;
+    coordinate mouseAim;
+    coordinate mouseRcs;
     std::atomic<int> shotFiredPrevious;
     std::atomic<vector> aimTo;
     std::atomic<vector> rcsTo;
-    std::atomic<vector> localPlayerView;
-    std::atomic<vector> viewPunchPrevious;
-    std::atomic<coordinate> screen;
-    std::atomic<coordinate> mouseAim;
-    std::atomic<coordinate> mouseRcs;
     // read process memory 
     template<class size> void rpm(DWORD read, size & write);
     // write process memory

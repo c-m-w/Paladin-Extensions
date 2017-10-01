@@ -1,5 +1,4 @@
 #include "stdafx.h"
-class standard;
 void main() {
     debug out(true); // ENTER to debug
     auto dbg = &out;
@@ -158,7 +157,7 @@ reload:
             tAim.join();
             tHit.join();
             for (auto x = 0; x <= 30; x++) {
-                std::cout << "\n";
+                std::cout << '\n';
             }
             dbg->reset();
             goto reset;
@@ -192,7 +191,7 @@ reload:
                     tAim.join();
                     tHit.join();
                     for (auto x = 0; x <= 30; x++) {
-                        std::cout << "\n";
+                        std::cout << '\n';
                     }
                     dbg->reset();
                     goto reset;

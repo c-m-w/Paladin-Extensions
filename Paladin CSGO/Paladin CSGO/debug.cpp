@@ -5,7 +5,7 @@ debug::debug(const bool toDebug) {
     if (toDebug && wantDebug) {
         AllocConsole();
         for (auto x = 1; x <= 30; x++) {
-            std::cout << "\n";
+            std::cout << '\n';
         }
     } else {
         FreeConsole();

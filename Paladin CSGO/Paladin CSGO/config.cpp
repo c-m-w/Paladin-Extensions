@@ -73,6 +73,7 @@ bool config::loadConfig() {
         writeConfig<int>("Smoothing", "Factor Maximum", smoothFactorMax);
         writeConfig<bool>("Slow Aim", "Enabled", isSlow);
         writeConfig<int>("Slow Aim", "Slowing Factor", slowFactor);
+        writeConfig<int>("Slow Aim", "Timeout", slowTimeout);
         writeConfig<bool>("Bunny Hop", "Enabled", isBhop);
         writeConfig<float>("Bunny Hop", "Hit Chance", bhopHitchance);
         writeConfig<int>("Bunny Hop", "Following Jump Delay", bhopNextDelay);
@@ -81,6 +82,7 @@ bool config::loadConfig() {
         writeConfig<int>("Aimbot", "Target Bone", aimBone);
         writeConfig<float>("Aimbot", "Targetting Displacement", aimDisplace);
         writeConfig<float>("Aimbot", "Over Compensation", aimOver);
+        writeConfig<int>("Aimbot", "Timeout", aimTimeout);
         writeConfig<bool>("Recoil Control", "Enabled", isRcs);
         writeConfig<int>("Recoil Control", "Ignore Shot Count", rcsIgnoreShots);
         writeConfig<float>("Recoil Control", "Minimum X Compensation", rcsXMin);
@@ -94,6 +96,7 @@ bool config::loadConfig() {
         writeConfig<int>("Triggerbot", "Maximum First Shot Delay", trigDelayMax);
         writeConfig<int>("Triggerbot", "Minimum Following Shot Delay", trigDelayNextMin);
         writeConfig<int>("Triggerbot", "Maximum Following Shot Delay", trigDelayNextMax);
+        writeConfig<int>("Triggerbot", "Timeout", trigTimeout);
         writeConfig<int>("Debug", "Quit Reason", quit);
         writeConfig<float>("Debug", "Version", version);
         return false;
@@ -104,40 +107,43 @@ bool config::readConfig() {
     float cfgver;
     readConfig<float>("Debug", "Version", cfgver);
     if (cfgver == version) {
-        readConfig<std::atomic<int>>("Key Binds", "Terminate", keyExit);
-        readConfig<std::atomic<int>>("Key Binds", "Reload Config", keyReload);
-        readConfig<std::atomic<int>>("Key Binds", "Aimbot", keyAim);
-        readConfig<std::atomic<int>>("Key Binds", "Triggerbot", keyTrig);
-        readConfig<std::atomic<int>>("Key Binds", "Bunny Hop", keyBhop);
-        readConfig<std::atomic<bool>>("Hit Sound", "Enabled", isHits);
-        readConfig<std::atomic<int>>("Hit Sound", "Pitch", hitsPitch);
-        readConfig<std::atomic<int>>("Hit Sound", "Duration", hitsTime);
-        readConfig<std::atomic<bool>>("Smoothing", "Enabled", isSmooth);
-        readConfig<std::atomic<int>>("Smoothing", "Factor Minimum", smoothFactorMin);
-        readConfig<std::atomic<int>>("Smoothing", "Factor Maximum", smoothFactorMax);
-        readConfig<std::atomic<bool>>("Slow Aim", "Enabled", isSlow);
-        readConfig<std::atomic<int>>("Slow Aim", "Slowing Factor", slowFactor);
-        readConfig<std::atomic<bool>>("Bunny Hop", "Enabled", isBhop);
-        readConfig<std::atomic<float>>("Bunny Hop", "Hit Chance", bhopHitchance);
-        readConfig<std::atomic<int>>("Bunny Hop", "Following Jump Delay", bhopNextDelay);
-        readConfig<std::atomic<int>>("Bunny Hop", "Direction", bhopDirection);
-        readConfig<std::atomic<bool>>("Aimbot", "Enabled", isAim);
-        readConfig<std::atomic<int>>("Aimbot", "Target Bone", aimBone);
-        readConfig<std::atomic<float>>("Aimbot", "Targetting Displacement", aimDisplace);
-        readConfig<std::atomic<float>>("Aimbot", "Over Compensation", aimOver);
-        readConfig<std::atomic<bool>>("Recoil Control", "Enabled", isRcs);
-        readConfig<std::atomic<int>>("Recoil Control", "Ignore Shot Count", rcsIgnoreShots);
-        readConfig<std::atomic<float>>("Recoil Control", "Minimum X Compensation", rcsXMin);
-        readConfig<std::atomic<float>>("Recoil Control", "Maximum X Compensation", rcsXMax);
-        readConfig<std::atomic<float>>("Recoil Control", "Minimum Y Compensation", rcsYMin);
-        readConfig<std::atomic<float>>("Recoil Control", "Maximum Y Compensation", rcsYMax);
-        readConfig<std::atomic<bool>>("Triggerbot", "Enabled", isTrig);
-        readConfig<std::atomic<bool>>("Triggerbot", "Slowed Trigger", isTrigSlow);
-        readConfig<std::atomic<bool>>("Triggerbot", "Delay Enabled", isTrigDelay);
-        readConfig<std::atomic<int>>("Triggerbot", "Minimum First Shot Delay", trigDelayMin);
-        readConfig<std::atomic<int>>("Triggerbot", "Maximum First Shot Delay", trigDelayMax);
-        readConfig<std::atomic<int>>("Triggerbot", "Minimum Following Shot Delay", trigDelayNextMin);
-        readConfig<std::atomic<int>>("Triggerbot", "Maximum Following Shot Delay", trigDelayNextMax);
+        readConfig<int>("Key Binds", "Terminate", keyExit);
+        readConfig<int>("Key Binds", "Reload Config", keyReload);
+        readConfig<int>("Key Binds", "Aimbot", keyAim);
+        readConfig<int>("Key Binds", "Triggerbot", keyTrig);
+        readConfig<int>("Key Binds", "Bunny Hop", keyBhop);
+        readConfig<bool>("Hit Sound", "Enabled", isHits);
+        readConfig<int>("Hit Sound", "Pitch", hitsPitch);
+        readConfig<int>("Hit Sound", "Duration", hitsTime);
+        readConfig<bool>("Smoothing", "Enabled", isSmooth);
+        readConfig<int>("Smoothing", "Factor Minimum", smoothFactorMin);
+        readConfig<int>("Smoothing", "Factor Maximum", smoothFactorMax);
+        readConfig<bool>("Slow Aim", "Enabled", isSlow);
+        readConfig<int>("Slow Aim", "Slowing Factor", slowFactor);
+        readConfig<int>("Slow Aim", "Timeout", slowTimeout);
+        readConfig<bool>("Bunny Hop", "Enabled", isBhop);
+        readConfig<float>("Bunny Hop", "Hit Chance", bhopHitchance);
+        readConfig<int>("Bunny Hop", "Following Jump Delay", bhopNextDelay);
+        readConfig<int>("Bunny Hop", "Direction", bhopDirection);
+        readConfig<bool>("Aimbot", "Enabled", isAim);
+        readConfig<int>("Aimbot", "Target Bone", aimBone);
+        readConfig<float>("Aimbot", "Targetting Displacement", aimDisplace);
+        readConfig<float>("Aimbot", "Over Compensation", aimOver);
+        readConfig<int>("Aimbot", "Timeout", aimTimeout);
+        readConfig<bool>("Recoil Control", "Enabled", isRcs);
+        readConfig<int>("Recoil Control", "Ignore Shot Count", rcsIgnoreShots);
+        readConfig<float>("Recoil Control", "Minimum X Compensation", rcsXMin);
+        readConfig<float>("Recoil Control", "Maximum X Compensation", rcsXMax);
+        readConfig<float>("Recoil Control", "Minimum Y Compensation", rcsYMin);
+        readConfig<float>("Recoil Control", "Maximum Y Compensation", rcsYMax);
+        readConfig<bool>("Triggerbot", "Enabled", isTrig);
+        readConfig<bool>("Triggerbot", "Slowed Trigger", isTrigSlow);
+        readConfig<bool>("Triggerbot", "Delay Enabled", isTrigDelay);
+        readConfig<int>("Triggerbot", "Minimum First Shot Delay", trigDelayMin);
+        readConfig<int>("Triggerbot", "Maximum First Shot Delay", trigDelayMax);
+        readConfig<int>("Triggerbot", "Minimum Following Shot Delay", trigDelayNextMin);
+        readConfig<int>("Triggerbot", "Maximum Following Shot Delay", trigDelayNextMax);
+        readConfig<int>("Triggerbot", "Timeout", trigTimeout);
         if (keyExit <= 0) {
             keyExit = VK_F4;
         }
@@ -157,7 +163,7 @@ bool config::readConfig() {
                 smoothFactorMin = 0;
             }
             if (smoothFactorMin > smoothFactorMax) {
-                smoothFactorMax = smoothFactorMin._My_val;
+                smoothFactorMax = smoothFactorMin;
             }
         }
         if (isBhop) {
@@ -176,13 +182,13 @@ bool config::readConfig() {
         }
         if (isTrig) {
             if (trigDelayMax < trigDelayMin) {
-                trigDelayMax = trigDelayMin._My_val;
+                trigDelayMax = trigDelayMin;
             }
             if (trigDelayNextMin < 7) {
                 trigDelayNextMin = 7;
             }
             if (trigDelayNextMax < trigDelayNextMin) {
-                trigDelayNextMax = trigDelayNextMin._My_val;
+                trigDelayNextMax = trigDelayNextMin;
             }
             if (trigDelayNextMin < 7) {
                 trigDelayNextMin = 7;
@@ -204,13 +210,13 @@ bool config::readConfig() {
                 rcsXMin = 0.f;
             }
             if (rcsXMax < rcsXMin) {
-                rcsXMax = rcsXMin._My_val;
+                rcsXMax = rcsXMin;
             }
             if (rcsYMin < 0.f) {
                 rcsYMin = 0.f;
             }
             if (rcsYMax < rcsYMin) {
-                rcsYMax = rcsYMin._My_val;
+                rcsYMax = rcsYMin;
             }
         }
         if (isAim) {
