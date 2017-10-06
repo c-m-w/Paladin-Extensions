@@ -12,25 +12,30 @@ class memory: public config {
     PROCESSENTRY32 processEntry;
     MODULEENTRY32 moduleEntry;
     DWORD access;
-    DWORD pointerLocalPlayer = 0xAAEC3C;
-    DWORD pointerClientState = 0x5A4344;
+    DWORD pointerLocalPlayer = 0xAAFC3C;
+    DWORD pointerClientState = 0x5A5344;
     DWORD offsetConnection = 0x108;
     DWORD offsetCrosshair = 0xB294;
     DWORD offsetFlag = 0x100;
-    DWORD offsetSensitivity = 0xAB433C;
+    DWORD offsetSensitivity = 0xAB533C;
     DWORD offsetSensitivityPtr = offsetSensitivity - 0x2C;
     DWORD offsetHits = 0x3344;
     DWORD offsetShotFired = 0xA2A0;
+    DWORD offsetViewAngle = 0x4D10;
     DWORD offsetViewPunch = 0x301C;
     DWORD offsetPlayerLocation = 0x134;
-    DWORD offsetEntities = 0x4A8C02C;
+    DWORD offsetPlayerView = 0x104;
+    DWORD offsetEntities = 0x4A8D05C;
     DWORD localPlayer;
     DWORD clientState;
-    DWORD entityEnemy;
-    vector enemyBone;
+    DWORD enemyPlayer;
+    vector viewAngle;
     vector viewPunchCurrent;
     vector viewPunchPrevious;
+    vector enemyPlayerLocation;
     vector localPlayerLocation;
+    vector enemyPlayerDisplace;
+    vector localPlayerDisplace;
     int flag;
     int inCross;
     int winSens;
@@ -44,8 +49,6 @@ class memory: public config {
     coordinate mouseAim;
     coordinate mouseRcs;
     std::atomic<int> shotFiredPrevious;
-    std::atomic<vector> aimTo;
-    std::atomic<vector> rcsTo;
     // read process memory 
     template<class size> void rpm(DWORD read, size & write);
     // write process memory

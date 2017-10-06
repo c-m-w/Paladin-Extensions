@@ -19,8 +19,10 @@ CHEATS BY BHOPFU1 & NOSPREAD:
 
 ##### Open
 - [ ] Convert to injectable dll for other 32bit process [main] {ONCE INJECTOR IS DONE}
+- [ ] Make overlay thing for ESP
 
 ##### bhopfu1
+- [ ] Force Close key when Reconnect/Reset
 - [ ] Fix Aimbot [class memory] {W2S}
 - [ ] Anti-SMAC Bhop [class memory] {#define MIN_JUMP_TIME 0.500 // Minimum amount of air-time for a jump to count.}
 

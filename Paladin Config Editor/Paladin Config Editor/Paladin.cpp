@@ -1,8 +1,6 @@
 #include "Paladin.h"
-[STAThreadAttribute]
-void Main(array<String^>^ args) {
+int main() {
     Application::EnableVisualStyles();
-    Application::SetCompatibleTextRenderingDefault(false);
-    PaladinConfigEditor::Paladin form;
-    Application::Run(%form);
+    PaladinConfigEditor::Paladin formPaladin;
+    Application::Run(%formPaladin);
 }

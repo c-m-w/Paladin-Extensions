@@ -14,6 +14,7 @@ config::config() {
     smoothFactorMax = 10;
     isSlow = true;
     slowFactor = 2;
+    slowTimeout = 1500;
     isBhop = true;
     bhopHitchance = 100.f;
     bhopNextDelay = 20;
@@ -22,6 +23,7 @@ config::config() {
     aimBone = 8;
     aimDisplace = 0.f;
     aimOver = 1.1f;
+    aimTimeout = 1500;
     isRcs = true;
     rcsIgnoreShots = 1;
     rcsXMin = 0.9f;
@@ -35,6 +37,7 @@ config::config() {
     trigDelayMax = 20;
     trigDelayNextMin = 7;
     trigDelayNextMax = 10;
+    trigTimeout = 1500;
 }
 template<class size> void config::readConfig(char * setting, char * subsetting, size & status) {
     char temp[255];
@@ -170,8 +173,8 @@ bool config::readConfig() {
             if (bhopHitchance < 0.f || bhopHitchance > 100.f) {
                 bhopHitchance = 100.f;
             }
-            if (bhopNextDelay < 1) {
-                bhopNextDelay = 1;
+            if (bhopNextDelay < 7) {
+                bhopNextDelay = 7;
             }
             if (bhopDirection != (1 | -1)) {
                 bhopDirection = -1;

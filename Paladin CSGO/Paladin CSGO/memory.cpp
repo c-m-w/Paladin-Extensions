@@ -1,7 +1,8 @@
 #include "stdafx.h"
 #include "memory.h"
 // ReSharper disable once CppPossiblyUninitializedMember
-memory::memory() {}
+memory::memory() {
+}
 void memory::z(const int z) {
     std::this_thread::sleep_for(std::chrono::milliseconds(z));
 }
@@ -27,7 +28,7 @@ got_handle:
 DWORD_PTR memory::moduleWrapping(TCHAR * moduleName) {
     if (!FindWindowA(nullptr, gameName)) {
         do {
-            z(12000);
+            z(15000);
         } while (!FindWindowA(nullptr, gameName));
     }
     do {
@@ -65,10 +66,12 @@ void memory::initialize(const DWORD_PTR clientModule, const DWORD_PTR engineModu
     pointerClientState += engineModule;
     rpm<DWORD>(pointerClientState, clientState);
     offsetConnection += clientState;
-    do {
+    rpm<int>(offsetConnection, connection);
+    z(1500);
+    while (connection != 6 || GetForegroundWindow() != FindWindowA(nullptr, gameName)) {
+        z(3500);
         rpm<int>(offsetConnection, connection);
-        z(1);
-    } while (connection != 6);
+    }
     WINDOWINFO info;
     GetWindowInfo(FindWindowA(nullptr, gameName), &info);
     if (info.dwExStyle & WS_EX_TOPMOST) {
@@ -99,6 +102,7 @@ void memory::initialize(const DWORD_PTR clientModule, const DWORD_PTR engineModu
     offsetShotFired += localPlayer;
     offsetPlayerLocation += localPlayer;
     offsetEntities += clientModule;
+    offsetViewAngle += clientState;
 }
 BOOL memory::patternCompare(BYTE * data, BYTE * mask, char * szMask) {
     for (; *szMask; ++szMask, ++data, ++mask)
@@ -152,9 +156,16 @@ void memory::bhop() {
                     if (bhopHitchance >= static_cast<float>(rand()) / static_cast<float>(RAND_MAX / 100.f)) {
                         mouse_event(MOUSEEVENTF_WHEEL, 0, 0, WHEEL_DELTA * bhopDirection, 0);
                         z(bhopNextDelay);
+                        for (auto x = 0; x < rand() % 7; x++) {
+                            mouse_event(MOUSEEVENTF_WHEEL, 0, 0, WHEEL_DELTA * bhopDirection, 0);
+                            z(7);
+                        }
                     } else {
-                        z(bhopNextDelay * 7);
-                        mouse_event(MOUSEEVENTF_WHEEL, 0, 0, WHEEL_DELTA * bhopDirection, 0);
+                        z(bhopNextDelay);
+                        for (auto x = 0; x < rand() % 7; x++) {
+                            mouse_event(MOUSEEVENTF_WHEEL, 0, 0, WHEEL_DELTA * bhopDirection, 0);
+                            z(7);
+                        }
                     }
                 }
             }
@@ -192,6 +203,9 @@ void memory::trigger() {
                                 z(trigTimeout);
                                 break;
                             }
+                            if (!GetAsyncKeyState(keyTrig)) {
+                                break;
+                            }
                         } while (inCross);
                         wasInCross = true;
                     } else {
@@ -207,6 +221,9 @@ void memory::trigger() {
                             tempTime[1] = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
                             if (tempTime[1] - tempTime[0] > trigTimeout) {
                                 z(trigTimeout);
+                                break;
+                            }
+                            if (!GetAsyncKeyState(keyTrig)) {
                                 break;
                             }
                         } while (inCross);
@@ -263,41 +280,40 @@ void memory::rcs() {
     while (true) {
         rpm<int>(offsetConnection, connection);
         while (connection == 6) {
-            rcsTo.store({
-                0, 0, 0
-            });
-            viewPunchPrevious = {
-                0, 0, 0
-            };
+            viewPunchPrevious = {0, 0, 0};
             shotFiredPrevious = 0;
             while (GetAsyncKeyState(VK_LBUTTON)) {
                 rpm<int>(offsetShotFired, shotFired);
                 if (shotFired > rcsIgnoreShots && shotFired > shotFiredPrevious) {
                     rpm<vector>(offsetViewPunch, viewPunchCurrent);
                     // math
-                    const vector temp {viewPunchCurrent.x - viewPunchPrevious.x, viewPunchPrevious.y - viewPunchCurrent.y, 0};
-                    rcsTo = {((rcsXMin + static_cast<float>(rand()) / static_cast<float>(RAND_MAX / (rcsXMax - rcsXMin))) * (temp.x * 2.f) / convertMouse), ((rcsYMin + static_cast<float>(rand()) / static_cast<float>(RAND_MAX / (rcsYMax - rcsYMin))) * (temp.y * 2.f) / convertMouse), 0};
+                    vector temp {viewPunchCurrent.x - viewPunchPrevious.x, viewPunchPrevious.y - viewPunchCurrent.y};
+                    temp = {((rcsXMin + static_cast<float>(rand()) / static_cast<float>(RAND_MAX / (rcsXMax - rcsXMin))) * (temp.x * 2.f)), ((rcsYMin + static_cast<float>(rand()) / static_cast<float>(RAND_MAX / (rcsYMax - rcsYMin))) * (temp.y * 2.f)), 0};
                     if (wasInCross) {
-                        rcsTo = {rcsTo._My_val.x * slowFactor, rcsTo._My_val.y * slowFactor, 0};
+                        temp = { temp.x * slowFactor, temp.y * slowFactor, 0};
                     }
+                    temp = { temp.x / convertMouse, temp.y / convertMouse, 0};
                     // rounding
-                    if (rcsTo._My_val.x > 0) {
-                        rcsTo = {rcsTo._My_val.x + 1, rcsTo._My_val.y,0};
-                    } else if (rcsTo._My_val.x < 0) {
-                        rcsTo = {rcsTo._My_val.x - 1, rcsTo._My_val.y, 0};
+                    if (temp.x > 0) {
+                        temp = { temp.x + 1, temp.y,0};
+                    } else if (temp.x < 0) {
+                        temp = { temp.x - 1, temp.y, 0};
                     }
-                    if (rcsTo._My_val.y > 0) {
-                        rcsTo = {rcsTo._My_val.x, rcsTo._My_val.y + 1, 0};
-                    } else if (rcsTo._My_val.y < 0) {
-                        rcsTo = {rcsTo._My_val.x, rcsTo._My_val.y - 1, 0};
+                    if (temp.y > 0) {
+                        temp = { temp.x, temp.y + 1, 0};
+                    } else if (temp.y < 0) {
+                        temp = { temp.x, temp.y - 1, 0};
                     }
-                    mouseRcs = {-static_cast<int>(rcsTo._My_val.y), -static_cast<int>(rcsTo._My_val.x)};
+                    mouseRcs = {-static_cast<int>(temp.y), -static_cast<int>(temp.x)};
                     // smoothing
                     const auto smoothing = rand() % (smoothFactorMax - smoothFactorMin) + smoothFactorMin;
                     if (isSmooth) {
                         for (auto smooth = 0; smooth < smoothing; smooth++) {
                             mouse_event(MOUSEEVENTF_MOVE, mouseRcs.x / smoothing, mouseRcs.y / smoothing, 0, 0);
                             z(smoothFactorMin);
+                            if (!GetAsyncKeyState(VK_LBUTTON)) {
+                                break;
+                            }
                         }
                     } else {
                         mouse_event(MOUSEEVENTF_MOVE, mouseRcs.x, mouseRcs.y, 0, 0);
@@ -329,51 +345,73 @@ void memory::aim() {
             while (GetAsyncKeyState(keyAim)) {
                 rpm<int>(offsetCrosshair, inCross);
                 if (0 < inCross && inCross < 64) {
-                    rpm<DWORD>(offsetEntities + (inCross + 1) * 0x10, entityEnemy);
-                    rpm<vector>(entityEnemy + 0x134, enemyBone);
+                    rpm<DWORD>(offsetEntities + (inCross - 1) * 0x10, enemyPlayer);
+                    rpm<vector>(enemyPlayer + 0x134, enemyPlayerLocation);
                     rpm<vector>(offsetPlayerLocation, localPlayerLocation);
-                    const vector temp = {
-                        localPlayerLocation.x - enemyBone.x, localPlayerLocation.y - enemyBone.y, localPlayerLocation.z - enemyBone.z + aimDisplace
-                    };
-                    //
-                    //
-                    // TODO
-                    //
-                    //
-                    const auto hypotu = sqrt(temp.x * temp.x + temp.y * temp.y);
-                    std::cout << "ANG X: " << atan2(temp.z, hypotu) * (180.0f / pi) << '\n';
-                    std::cout << "ANG Y: " << atan2(temp.y, temp.x) * (180.0f / pi) << '\n';
-                    aimTo.store({
-                        atan2(temp.z, hypotu) * (180.0f / pi) / convertMouse,
-                        atan2(temp.y, temp.x) * (180.0f / pi) / convertMouse
-                    });
-                    //
-                    //
-                    // TODO
-                    //
-                    //
-                    if (aimTo._My_val.x > 0) {
-                        aimTo = {aimTo._My_val.x + 1, aimTo._My_val.y,0};
-                    } else if (aimTo._My_val.x < 0) {
-                        aimTo = {aimTo._My_val.x - 1, aimTo._My_val.y, 0};
+                    rpm<vector>(localPlayer + offsetPlayerView, localPlayerDisplace);
+                    rpm<vector>(enemyPlayer + offsetPlayerView, enemyPlayerDisplace);
+                    rpm<vector>(offsetViewAngle, viewAngle);
+                    rpm<vector>(offsetViewPunch, viewPunchCurrent);
+                    const vector del = {localPlayerLocation.x - enemyPlayerLocation.x, localPlayerLocation.y - enemyPlayerLocation.y, localPlayerLocation.z + localPlayerDisplace.z - enemyPlayerLocation.z - enemyPlayerDisplace.z + aimDisplace};
+                    vector temp = {0, 0, 0};
+                    // math
+                    if (!del.x && !del.y) {
+                        if (del.z > 0) {
+                            temp.y = -89;
+                        } else {
+                            temp.y = 89;
+                        }
+                    } else {
+                        const auto hypot = sqrt(del.x * del.x + del.y * del.y);
+                        temp.y = atan2(del.z, hypot) * (180.f / pi);
+                        temp.x = atan2(del.y, del.x) * (180.f / pi) + 180;
                     }
-                    if (aimTo._My_val.y > 0) {
-                        aimTo = {rcsTo._My_val.x, aimTo._My_val.y + 1, 0};
-                    } else if (aimTo._My_val.y < 0) {
-                        aimTo = {aimTo._My_val.x, aimTo._My_val.y - 1, 0};
+                    // clamping
+                    if (temp.y > 89) {
+                        temp.y = 89;
+                    } else if (temp.y < -89) {
+                        temp.y = -89;
                     }
-                    mouseAim = {
-                        static_cast<int>(aimOver * aimTo._My_val.y - rcsTo._My_val.y),
-                        static_cast<int>(aimOver * aimTo._My_val.x - rcsTo._My_val.x)
-                    };
+                    while (temp.x < -180) {
+                        temp.x += 360;
+                    }
+                    while (temp.x > 180) {
+                        temp.x -= 360;
+                    }
+                    // change in angle
+                    temp.x = (viewAngle.y - temp.x - viewPunchCurrent.y) / convertMouse;
+                    temp.y = (viewAngle.x - temp.y - viewPunchCurrent.x) / convertMouse;
+                    if (wasInCross) {
+                        temp.x *= 2;
+                        temp.y *= 2;
+                    }
+                    // rounding
+                    mouseAim = { static_cast<int>(aimOver * temp.x), -static_cast<int>(aimOver * temp.y) };
+                    if (mouseAim.x > 0) {
+                        mouseAim = { mouseAim.x + 1, mouseAim.y };
+                    }
+                    else if (mouseAim.x < 0) {
+                        mouseAim = { mouseAim.x - 1, mouseAim.y };
+                    }
+                    if (mouseAim.y > 0) {
+                        mouseAim = { mouseAim.x, mouseAim.y + 1 };
+                    }
+                    else if (mouseAim.y < 0) {
+                        mouseAim = { mouseAim.x, mouseAim.y - 1 };
+                    }
+                    // smoothing
                     const auto smoothing = rand() % (smoothFactorMax - smoothFactorMin) + smoothFactorMin;
                     if (isSmooth) {
                         for (auto smooth = 0; smooth < smoothing; smooth++) {
                             mouse_event(MOUSEEVENTF_MOVE, mouseAim.x / smoothing, mouseAim.y / smoothing, 0, 0);
                             z(smoothFactorMin);
+                            if (!GetAsyncKeyState(VK_LBUTTON)) {
+                                break;
+                            }
                         }
                     } else {
                         mouse_event(MOUSEEVENTF_MOVE, mouseAim.x, mouseAim.y, 0, 0);
+                        z(5);
                     }
                 }
                 tempTime[1] = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();

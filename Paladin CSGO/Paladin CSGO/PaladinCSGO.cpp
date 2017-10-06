@@ -178,6 +178,7 @@ reload:
         }
         std->z(1);
         if (std->connection != 6) {
+            // ENTER
             while (std->connection != 6) {
                 if (!FindWindowA(nullptr, std->gameName)) {
                     dbg->warning1();

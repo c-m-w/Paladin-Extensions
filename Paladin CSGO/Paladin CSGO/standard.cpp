@@ -105,4 +105,5 @@ int standard::killAc(const LPCSTR acName, const char acExe) {
     }
     return -1;
 }
-standard::~standard() {}
+standard::~standard() {
+}
