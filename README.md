@@ -1,5 +1,5 @@
 # Paladin
-CHEATS BY BHOPFU1 & NOSPREAD:
+CHEATS BY BHOPFU1:
 1. Manual Map Injector
 2. Config Editor
 3. CSGO Internal/External
@@ -13,36 +13,36 @@ CHEATS BY BHOPFU1 & NOSPREAD:
 
 ##### bhopfu1
 
-##### NoSpread
+##### 
 
 ## CSGO
 
 ##### Open
 - [ ] Convert to injectable dll for other 32bit process [main] {ONCE INJECTOR IS DONE}
 - [ ] Make overlay thing for ESP
+- [ ] Finish Pattern Scanning (sigs) [class memory]
+- [ ] Time Sync For Limited Time Use [server, class standard -> ownercheck]
+- [ ] Version Check [server, class config]
+- [ ] HWID Compare [server, class standard -> ownercheck]
 
 ##### bhopfu1
 - [ ] Force Close key when Reconnect/Reset
 - [ ] Fix Aimbot [class memory] {W2S}
 - [ ] Anti-SMAC Bhop [class memory] {#define MIN_JUMP_TIME 0.500 // Minimum amount of air-time for a jump to count.}
 
-##### NoSpread
-- [ ] Finish Pattern Scanning (sigs) [class memory]
-- [ ] Time Sync For Limited Time Use [server, class standard -> ownercheck]
-- [ ] Version Check [server, class config]
-- [ ] HWID Compare [server, class standard -> ownercheck]
+##### 
 
 ## CONFIG EDITOR
 
 ##### Open
 - [ ] Get Key Pressed for Key Binds
 - [ ] Save
+- [ ] Drag&Drop config to window -> import {There is a property to enable it, just catch the event under events}
 
 ##### bhopfu1
 - [ ] Finish Menu
 
-##### NoSpread
-- [ ] Drag&Drop config to window -> import {There is a property to enable it, just catch the event under events}
+##### 
 
 # Features:
 

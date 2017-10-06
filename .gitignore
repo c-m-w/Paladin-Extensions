@@ -46,7 +46,6 @@ artifacts/
 *.pidb
 *.svclog
 *.scc
-_Chutzpah*
 ipch/
 *.aps
 *.ncb
