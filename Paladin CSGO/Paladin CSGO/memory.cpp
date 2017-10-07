@@ -15,7 +15,7 @@ failed:
     }
     Process32First(snapHandle, &processEntry);
     do {
-        if (!_stricmp(processEntry.szExeFile, gameExe)) {
+        if (!_stricmp(processEntry.szExeFile, gameExe) && FindWindowA(nullptr, gameName)) {
             gameHandle = OpenProcess(access, false, processEntry.th32ProcessID);
             goto got_handle;
         }
@@ -26,11 +26,6 @@ got_handle:
     return true;
 }
 DWORD_PTR memory::moduleWrapping(TCHAR * moduleName) {
-    if (!FindWindowA(nullptr, gameName)) {
-        do {
-            z(15000);
-        } while (!FindWindowA(nullptr, gameName));
-    }
     do {
         snapHandle = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, processEntry.th32ProcessID);
         z(1);
@@ -290,33 +285,41 @@ void memory::rcs() {
                     vector temp {viewPunchCurrent.x - viewPunchPrevious.x, viewPunchPrevious.y - viewPunchCurrent.y};
                     temp = {((rcsXMin + static_cast<float>(rand()) / static_cast<float>(RAND_MAX / (rcsXMax - rcsXMin))) * (temp.x * 2.f)), ((rcsYMin + static_cast<float>(rand()) / static_cast<float>(RAND_MAX / (rcsYMax - rcsYMin))) * (temp.y * 2.f)), 0};
                     if (wasInCross) {
-                        temp = { temp.x * slowFactor, temp.y * slowFactor, 0};
+                        temp = {temp.x * slowFactor, temp.y * slowFactor, 0};
                     }
-                    temp = { temp.x / convertMouse, temp.y / convertMouse, 0};
+                    temp = {temp.x / convertMouse, temp.y / convertMouse, 0};
                     // rounding
                     if (temp.x > 0) {
-                        temp = { temp.x + 1, temp.y,0};
+                        temp = {temp.x + 1, temp.y,0};
                     } else if (temp.x < 0) {
-                        temp = { temp.x - 1, temp.y, 0};
+                        temp = {temp.x - 1, temp.y, 0};
                     }
                     if (temp.y > 0) {
-                        temp = { temp.x, temp.y + 1, 0};
+                        temp = {temp.x, temp.y + 1, 0};
                     } else if (temp.y < 0) {
-                        temp = { temp.x, temp.y - 1, 0};
+                        temp = {temp.x, temp.y - 1, 0};
                     }
                     mouseRcs = {-static_cast<int>(temp.y), -static_cast<int>(temp.x)};
                     // smoothing
                     const auto smoothing = rand() % (smoothFactorMax - smoothFactorMin) + smoothFactorMin;
-                    if (isSmooth) {
-                        for (auto smooth = 0; smooth < smoothing; smooth++) {
-                            mouse_event(MOUSEEVENTF_MOVE, mouseRcs.x / smoothing, mouseRcs.y / smoothing, 0, 0);
-                            z(smoothFactorMin);
-                            if (!GetAsyncKeyState(VK_LBUTTON)) {
-                                break;
+                    if (mouseRcs.x || mouseRcs.y) {
+                        if (isSmooth) {
+                            for (auto smooth = 0; smooth < smoothing; smooth++) {
+                                mouse_event(MOUSEEVENTF_MOVE, mouseRcs.x / smoothing, mouseRcs.y / smoothing, 0, 0);
+                                z(smoothFactorMin);
+                                if (!GetAsyncKeyState(VK_LBUTTON)) {
+                                    break;
+                                }
                             }
+                            if (mouseRcs.x >= smoothing) {
+                                mouse_event(MOUSEEVENTF_MOVE, smoothing, 0, 0, 0);
+                            }
+                            if (mouseRcs.y >= smoothing) {
+                                mouse_event(MOUSEEVENTF_MOVE, 0, smoothing, 0, 0);
+                            }
+                        } else {
+                            mouse_event(MOUSEEVENTF_MOVE, mouseRcs.x, mouseRcs.y, 0, 0);
                         }
-                    } else {
-                        mouse_event(MOUSEEVENTF_MOVE, mouseRcs.x, mouseRcs.y, 0, 0);
                     }
                     // readjustment
                     if (shotFired % 10 == 0 && isSmooth) {
@@ -379,39 +382,45 @@ void memory::aim() {
                         temp.x -= 360;
                     }
                     // change in angle
-                    temp.x = (viewAngle.y - temp.x - viewPunchCurrent.y) / convertMouse;
-                    temp.y = (viewAngle.x - temp.y - viewPunchCurrent.x) / convertMouse;
+                    temp.x = (viewAngle.y - viewPunchCurrent.y - temp.x) / convertMouse;
+                    temp.y = (viewAngle.x - viewPunchCurrent.x - temp.y) / convertMouse;
                     if (wasInCross) {
                         temp.x *= 2;
                         temp.y *= 2;
                     }
                     // rounding
-                    mouseAim = { static_cast<int>(aimOver * temp.x), -static_cast<int>(aimOver * temp.y) };
+                    mouseAim = {static_cast<int>(aimOver * temp.x), -static_cast<int>(aimOver * temp.y)};
                     if (mouseAim.x > 0) {
-                        mouseAim = { mouseAim.x + 1, mouseAim.y };
-                    }
-                    else if (mouseAim.x < 0) {
-                        mouseAim = { mouseAim.x - 1, mouseAim.y };
+                        mouseAim = {mouseAim.x + 1, mouseAim.y};
+                    } else if (mouseAim.x < 0) {
+                        mouseAim = {mouseAim.x - 1, mouseAim.y};
                     }
                     if (mouseAim.y > 0) {
-                        mouseAim = { mouseAim.x, mouseAim.y + 1 };
-                    }
-                    else if (mouseAim.y < 0) {
-                        mouseAim = { mouseAim.x, mouseAim.y - 1 };
+                        mouseAim = {mouseAim.x, mouseAim.y + 1};
+                    } else if (mouseAim.y < 0) {
+                        mouseAim = {mouseAim.x, mouseAim.y - 1};
                     }
                     // smoothing
                     const auto smoothing = rand() % (smoothFactorMax - smoothFactorMin) + smoothFactorMin;
-                    if (isSmooth) {
-                        for (auto smooth = 0; smooth < smoothing; smooth++) {
-                            mouse_event(MOUSEEVENTF_MOVE, mouseAim.x / smoothing, mouseAim.y / smoothing, 0, 0);
-                            z(smoothFactorMin);
-                            if (!GetAsyncKeyState(VK_LBUTTON)) {
-                                break;
+                    if (mouseAim.x || mouseAim.y) {
+                        if (isSmooth) {
+                            for (auto smooth = 0; smooth < smoothing; smooth++) {
+                                mouse_event(MOUSEEVENTF_MOVE, mouseAim.x / smoothing, mouseAim.y / smoothing, 0, 0);
+                                z(smoothFactorMin);
+                                if (!GetAsyncKeyState(VK_LBUTTON)) {
+                                    break;
+                                }
                             }
+                            if (mouseAim.x >= smoothing) {
+                                mouse_event(MOUSEEVENTF_MOVE, smoothing, 0, 0, 0);
+                            }
+                            if (mouseAim.y >= smoothing) {
+                                mouse_event(MOUSEEVENTF_MOVE, 0, smoothing, 0, 0);
+                            }
+                        } else {
+                            mouse_event(MOUSEEVENTF_MOVE, mouseAim.x, mouseAim.y, 0, 0);
+                            z(1);
                         }
-                    } else {
-                        mouse_event(MOUSEEVENTF_MOVE, mouseAim.x, mouseAim.y, 0, 0);
-                        z(5);
                     }
                 }
                 tempTime[1] = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();

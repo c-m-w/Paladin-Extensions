@@ -13,7 +13,7 @@ CHEATS BY BHOPFU1:
 
 ##### bhopfu1
 
-##### 
+##### trannygranny
 
 ## CSGO
 
@@ -30,7 +30,7 @@ CHEATS BY BHOPFU1:
 - [ ] Fix Aimbot [class memory] {W2S}
 - [ ] Anti-SMAC Bhop [class memory] {#define MIN_JUMP_TIME 0.500 // Minimum amount of air-time for a jump to count.}
 
-##### 
+##### trannygranny
 
 ## CONFIG EDITOR
 
@@ -42,7 +42,7 @@ CHEATS BY BHOPFU1:
 ##### bhopfu1
 - [ ] Finish Menu
 
-##### 
+##### trannygranny
 
 # Features:
 
