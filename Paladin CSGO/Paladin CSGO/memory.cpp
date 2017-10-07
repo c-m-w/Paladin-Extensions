@@ -26,6 +26,9 @@ got_handle:
     return true;
 }
 DWORD_PTR memory::moduleWrapping(TCHAR * moduleName) {
+    int tempTime[2];
+    tempTime[0] = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+    retry:
     do {
         snapHandle = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, processEntry.th32ProcessID);
         z(1);
@@ -41,7 +44,11 @@ DWORD_PTR memory::moduleWrapping(TCHAR * moduleName) {
         }
     } while (Module32Next(snapHandle, &moduleEntry));
     CloseHandle(snapHandle);
-    goto failed;
+    if (tempTime[1] - tempTime[0] > 10000) {
+        tempTime[1] = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+        goto failed;
+    }
+    goto retry;
 wrapped:
     CloseHandle(snapHandle);
     return DWORD_PTR(moduleEntry.modBaseAddr);
