@@ -61,6 +61,7 @@ CHEATS BY BHOPFU1:
   - Randomized Smooth Factor
 - [x] Slow Aim
   - Slow Factor
+  - Timeout
 - [x] Bunny Hop
   - Hit chance
   - Following Jump Delay
@@ -69,6 +70,7 @@ CHEATS BY BHOPFU1:
   - Target Bone
   - Target Bone Displacement
   - Target Overaim
+  - Timeout
 - [x] RCS
   - Ignore Shot Count
   - Randomized X & Y
@@ -76,3 +78,4 @@ CHEATS BY BHOPFU1:
   - Slow Trigger
   - Randomized First Shot Delay
   - Randomized Following Shot Delay
+  - Timeout
