@@ -8,6 +8,7 @@ class standard: public memory {
         TCHAR * username;
         int hardware;
         time_t expire;
+        bool exist;
     };
     user owners[51]; // 50 MAX OTHER USERS
     user currentUser;

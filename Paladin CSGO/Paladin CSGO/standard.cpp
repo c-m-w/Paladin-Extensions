@@ -43,10 +43,12 @@ bool standard::forCheck(const user owner) const {
 void standard::getOwners() {
     owners[0].username = "bhopfu1";
     owners[0].hardware = 12 * 4095;
-    owners[0].expire = oct1 + 35 * days;
+    owners[0].expire = oct1 + 365 * days;
+    owners[0].exist = true;
     owners[1].username = "Cole White";
     owners[1].hardware = 4 * 15;
     owners[1].expire = oct1 + 365 * days;
+    owners[1].exist = true;
     // TODO GET OTHER OWNERS FROM SERVER
 }
 int standard::ownerCheck() {
@@ -60,15 +62,16 @@ int standard::ownerCheck() {
     getOwners();
     int x;
     for (x = 0; x <= 51; x++) {
-        if (owners[x].username && forCheck(owners[x])) {
-            break;
-        }
-        if (x == 51) {
+        if (owners[x].exist) {
+            if (owners[x].username && forCheck(owners[x])) {
+                break;
+            }
+        } else {
             return 0;
         }
     }
     GetSystemInfo(&currentUserHardware);
-    currentUser.hardware = currentUserHardware.dwActiveProcessorMask * currentUserHardware.dwProcessorType;
+    currentUser.hardware = currentUserHardware.dwActiveProcessorMask * currentUserHardware.dwNumberOfProcessors;
     if (currentUser.hardware != owners[x].hardware) {
         return 0;
     }
