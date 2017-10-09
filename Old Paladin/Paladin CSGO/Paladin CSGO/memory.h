@@ -1,7 +1,7 @@
 #pragma once
 #define MEMORY_H
 class memory: public config {
-    const float pi = 3.14159265358979323846f;
+    const float pi = 3.141593f;
     struct vector {
         float x, y, z;
     };
