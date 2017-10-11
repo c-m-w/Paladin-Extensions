@@ -3,6 +3,7 @@
 *.userosscache
 *.sln.docstates
 *.userprefs
+[Oo]ld/
 [Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/
