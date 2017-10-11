@@ -26,18 +26,6 @@
 
 ##### John
 
-## CONFIG EDITOR
-
-##### Open
-
-##### Jeremy
-
-##### Cole
-
-##### Mike
-
-##### John
-
 # Features:
 
 - Cheat Mode
