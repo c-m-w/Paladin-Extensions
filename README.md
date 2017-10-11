@@ -1,6 +1,4 @@
 # Paladin
-1. Manual Map Injector
-2. CSGO Internal/External
 
 # TODO
 
@@ -8,31 +6,37 @@
 
 ##### Open
 
-##### bhopfu1
+##### Jeremy
 
-##### trannygranny
+##### Cole
 
-##### atleast3characterslong
+##### Mike
+
+##### John
 
 ## CSGO
 
 ##### Open
 
-##### bhopfu1
+##### Jeremy
 
-##### trannygranny
+##### Cole
 
-##### atleast3characterslong
+##### Mike
+
+##### John
 
 ## CONFIG EDITOR
 
 ##### Open
 
-##### bhopfu1
+##### Jeremy
 
-##### trannygranny
+##### Cole
 
-##### atleast3characterslong
+##### Mike
+
+##### John
 
 # Features:
 
