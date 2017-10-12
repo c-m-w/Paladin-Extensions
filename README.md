@@ -1,36 +1,28 @@
 # Paladin
+Programs by Jeremy, Mike, Hunter, John, and Cole.
+- Injector
+- CSGO Internal/External
 
-# TODO
-
-## INJECTOR
-
+## INJECTOR TODO
 ##### Open
-
+- Start
 ##### Jeremy
-
-##### Cole
-
 ##### Mike
-
+##### Hunter
 ##### John
-
-## CSGO
-
-##### Open
-
-##### Jeremy
-
 ##### Cole
 
+## CSGO TODO
+##### Open
+##### Jeremy
 ##### MiKe
--ImGui (debug tab for debug build)
-
--Web app for web interface with normal app
-
+- ImGui (debug tab for debug build)
+- Web app for web interface with normal app
+##### Hunter
 ##### John
+##### Cole
 
 # Features:
-
 - Cheat Mode
   - RPM + Windows Only
   - RPM + WPM Only
