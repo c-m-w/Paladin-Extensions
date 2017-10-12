@@ -1,8 +1,6 @@
 # Paladin
-Programs by Jeremy, Mike, Hunter, John, and Cole.
 - Injector
 - CSGO Internal/External
-
 ## INJECTOR TODO
 ##### Open
 - Start
@@ -15,10 +13,10 @@ Programs by Jeremy, Mike, Hunter, John, and Cole.
 ## CSGO TODO
 ##### Open
 ##### Jeremy
-##### MiKe
-- ImGui (debug tab for debug build)
+##### Mike
 - Web app for web interface with normal app
 ##### Hunter
+- ImGui (debug tab for debug build)
 ##### John
 ##### Cole
 
