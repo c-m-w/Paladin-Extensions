@@ -1,6 +1,7 @@
 # Paladin
 - Injector
 - CSGO Internal/External
+
 ## INJECTOR TODO
 ##### Open
 - Start
@@ -21,10 +22,7 @@
 ##### Cole
 
 # Features:
-- Cheat Mode
-  - RPM + Windows Only
-  - RPM + WPM Only
-- Aim Assist
+- Combat
   - [ ] Aimbot
     - Attack Teammates
     - BSilent (new psilent idea i have, always does psilent even if out of fov)
