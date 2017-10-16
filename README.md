@@ -37,6 +37,7 @@
     - FOV/Crosshair
     - Timeout
 	- HP / Distance / FOV Priority
+    - Backtrack
   - [ ] Recoil Control
     - Only When Firing
     - Scale Pitch & Yaw
