@@ -10,7 +10,7 @@ public:
 private:
 	bool EnemyOnly; //Don't glow teammates
 
-	bool Spotted; //Only glow when enemy is visible
+	bool GlowSpotted; //Only glow when enemy is visible
 
 	bool GlowHP; //Make glow color change based on HP
 	
@@ -24,7 +24,7 @@ private:
 private:
 	int ChamMode; //0 - Flat, 1 - Full, 2 - Wire, 3 - Point
 	
-	bool Spotted; //Only cham visible parts of enemy
+	bool ChamSpotted; //Only cham visible parts of enemy
 
 	bool ChamHP; //Make cham color change based on HP
 
