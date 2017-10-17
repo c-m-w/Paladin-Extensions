@@ -1,44 +1,37 @@
 #pragma once
-
-//ToDo: Add color options, maybe have a seperate dedicated class for colors?
-class ESP
-{
+struct color {
+    int r, g, b, a;
+};
+class esp {
 public:
-	ESP(); //Might not need later on
-
-//Glow stuff
+    esp(); //Might not need later on
+    //Glow stuff
 private:
-	bool EnemyOnly; //Don't glow teammates
-
-	bool GlowSpotted; //Only glow when enemy is visible
-
-	bool GlowHP; //Make glow color change based on HP
-	
-	bool GlowWeapons; //Make weapons glow
-	bool GlowNades; //Make grenades glow (account for active/dropped nades)
-	bool GlowKits; //Make kits glow
-	bool GlowHostages; //Make hostages glow
-	bool GlowBomb; //Make C4 glow (dropped and planted)
-
-//Cham stuff
+    bool glowEnemyOnly; //Don't glow teammates
+    bool glowSpotted; //Only glow when enemy is visible
+    bool glowHp; //Make glow color change based on HP
+    color glowColor;
+    bool glowWeapons; //Make weapons glow
+    bool glowNades; //Make grenades glow (account for active/dropped nades)
+    bool glowKits; //Make kits glow
+    bool glowHostages; //Make hostages glow
+    bool glowBomb; //Make C4 glow (dropped and planted)
+    //Cham stuff
 private:
-	int ChamMode; //0 - Flat, 1 - Full, 2 - Wire, 3 - Point
-	
-	bool ChamSpotted; //Only cham visible parts of enemy
-
-	bool ChamHP; //Make cham color change based on HP
-
-//Radar
+    bool chamEnemyOnly; //Don't cham teammates
+    bool chamMode; //0 - Normal Colorized, 1 - Flat Colorized
+    bool chamSpotted; //Only cham visible parts of enemy
+    bool chamHp; //Make cham color change based on HP
+    color chamColor;
+    //Radar
 private:
-	bool RadarActive; //Gee I wonder
-	int RadarMode; //0 - Ingame, 1 - Window
-
-//Sonar
+    bool radarActive; //Gee I wonder
+    bool radarMode; //0 - Cirlce, 1 - Square
+    //Sonar
 private:
-	bool SonarActive; //What a mystery
-
-	int SonarSpeed; //Speed of scan line
-	int Frequency; //How often it goes by
-	int SonarMaxDist; //How far sonar will scan
-	int CurveFactor; //?????
+    bool sonarActive; //What a mystery
+    int sonarSpeed; //Speed of scan line
+    int sonarFrequency; //How often it goes by
+    int sonarMaxDist; //How far sonar will scan
+    int curveFactor; //?????
 };

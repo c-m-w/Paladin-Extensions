@@ -1,6 +1,11 @@
 #pragma once
-
-#include "Legitbot.h"
+#include <Windows.h>
+#include <TlHelp32.h>
+#include <iostream>
+#include <thread>
+#include <atomic>
+#include <ctime>
+#include "Aimbot.h"
 #include "Trigger.h"
 #include "RCS.h"
 #include "ESP.h"

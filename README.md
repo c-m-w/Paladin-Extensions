@@ -14,12 +14,15 @@
 ## CSGO TODO
 ##### Open
 ##### Jeremy
+- Finish Base
+- Rework base to match feature list better(?)
 ##### Mike
-- Base
+- Finish Base
 - Web app for web interface with normal app
 ##### Hunter
-- ImGui (debug tab for debug build)
+- ImGui (+ debug tab for debug build)
 ##### John
+- Find as many features as possible externally
 ##### Cole
 
 # Features:

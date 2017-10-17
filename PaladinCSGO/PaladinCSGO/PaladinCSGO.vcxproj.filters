@@ -38,7 +38,7 @@
     <ClInclude Include="main.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Legitbot.h">
+    <ClInclude Include="Aimbot.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
