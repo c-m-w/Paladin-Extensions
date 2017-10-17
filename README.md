@@ -62,7 +62,7 @@
   - [ ] Chams
     - Flat White [bool]
     - RGBA [int]
-    - Through Walls
+    - Through Walls [bool]
 	- HP [bool]
   - [ ] Hit Sound
     - Pitch & Duration [int]
@@ -88,5 +88,5 @@
   - [ ] Viewmodel FOV Changer
   - [ ] Auto Pistol
   - [ ] Auto Jump
-    - Following Minimum Delay
+    - Following Minimum Delay [int]
   - [ ] Edge Jump
