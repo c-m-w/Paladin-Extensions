@@ -1,11 +1,16 @@
 #pragma once
-struct color {
+
+struct color 
+{
     int r, g, b, a;
 };
-class esp {
+
+class esp 
+{
 public:
     esp(); //Might not need later on
-    //Glow stuff
+
+//Glow stuff
 private:
     bool glowEnemyOnly; //Don't glow teammates
     bool glowSpotted; //Only glow when enemy is visible
@@ -16,18 +21,21 @@ private:
     bool glowKits; //Make kits glow
     bool glowHostages; //Make hostages glow
     bool glowBomb; //Make C4 glow (dropped and planted)
-    //Cham stuff
+
+//Cham stuff
 private:
     bool chamEnemyOnly; //Don't cham teammates
     bool chamMode; //0 - Normal Colorized, 1 - Flat Colorized
     bool chamSpotted; //Only cham visible parts of enemy
     bool chamHp; //Make cham color change based on HP
     color chamColor;
-    //Radar
+
+//Radar
 private:
     bool radarActive; //Gee I wonder
     bool radarMode; //0 - Cirlce, 1 - Square
-    //Sonar
+
+//Sonar
 private:
     bool sonarActive; //What a mystery
     int sonarSpeed; //Speed of scan line

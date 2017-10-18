@@ -1,15 +1,20 @@
 #pragma once
+
 //Aimbot target selection priority
-enum priority {
+enum priority 
+{
     kill = 0,
     damage = 1,
     health = 2,
     distance = 3
 };
-class aimbot {
+
+class aimbot 
+{
 public:
     //Placeholder, we might not need a constructor later on
     aimbot();
+
 private:
     bool attackTeam; //Attack teammates
     bool spotted; //Only shoot enemies you can see

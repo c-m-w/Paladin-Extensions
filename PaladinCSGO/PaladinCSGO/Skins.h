@@ -1,5 +1,6 @@
 #pragma once
-struct weaponSkin {
+struct weaponSkin 
+{
     int id; //Skin ID
     float wear; //Not actual name but rather value
     int statTrak; //Tracks ur stats mate
@@ -7,10 +8,13 @@ struct weaponSkin {
     //std::string Name; //Ideally you'd use one of these bad boys but w/e
     int seed; //Have fun figuring this shit out
 };
-class skinChanger {
+
+class skinChanger 
+{
 public:
     skinChanger(); //How do I inject an mp3 file into counterstrike??
-    //Skins
+
+//Skins
 private:
     weaponSkin primary;
     weaponSkin secondary;
