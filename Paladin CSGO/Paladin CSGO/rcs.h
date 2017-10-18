@@ -1,7 +1,8 @@
 #pragma once
 class rcs {
 public:
-    rcs(); //Temporary placeholder, might not need it later on
+    rcs();
+    ~rcs();
 private:
     bool onShoot; //Only compensate for recoil when shooting
     float pitchScale, yawScale; //How much recoil to compensate for recoil/yaw (mind the roll)

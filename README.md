@@ -1,5 +1,5 @@
 # Paladin
-- Injector
+- Thread Hijack Injector
 - CSGO Internal/External
 
 ## INJECTOR TODO
@@ -14,16 +14,17 @@
 ## CSGO TODO
 ##### Open
 ##### Jeremy
-- Finish Base
-- Rework base to match feature list better(?)
 ##### Mike
-- Finish Base
-- Web app for web interface with normal app
+- Finish Base (Inheritence where required)
+- Web app for web interface with normal app(?)
 ##### Hunter
 - ImGui (+ debug tab for debug build)
 ##### John
-- Find as many features as possible externally
+- Find as many features as externally possible
 ##### Cole
+- Finish Base
+  - Make rest of classes, keep format
+  - Merge things that don't need to be separate (Model FOV and View FOV, Auto Jump + Auto Shoot, etc.)
 
 # Features:
 - Combat
