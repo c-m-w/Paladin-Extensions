@@ -3,8 +3,13 @@
 class rcs 
 {
 public:
+<<<<<<< HEAD:PaladinCSGO/PaladinCSGO/RCS.h
     rcs(); //Temporary placeholder, might not need it later on
 
+=======
+    rcs();
+    ~rcs();
+>>>>>>> ee3a7866ef14639ec735cc8a6942a47e618ff85d:Paladin CSGO/Paladin CSGO/rcs.h
 private:
     bool onShoot; //Only compensate for recoil when shooting
     float pitchScale, yawScale; //How much recoil to compensate for recoil/yaw (mind the roll)
