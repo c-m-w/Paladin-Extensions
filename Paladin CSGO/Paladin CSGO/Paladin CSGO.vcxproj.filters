@@ -66,6 +66,33 @@
     <ClInclude Include="glow.h">
       <Filter>Header Files\Features\Awareness</Filter>
     </ClInclude>
+    <ClInclude Include="trigger.h">
+      <Filter>Header Files\Features\Combat</Filter>
+    </ClInclude>
+    <ClInclude Include="slowaim.h">
+      <Filter>Header Files\Features\Combat</Filter>
+    </ClInclude>
+    <ClInclude Include="chams.h">
+      <Filter>Header Files\Features\Awareness</Filter>
+    </ClInclude>
+    <ClInclude Include="hitsound.h">
+      <Filter>Header Files\Features\Awareness</Filter>
+    </ClInclude>
+    <ClInclude Include="radar.h">
+      <Filter>Header Files\Features\Awareness</Filter>
+    </ClInclude>
+    <ClInclude Include="lessflash.h">
+      <Filter>Header Files\Features\Awareness</Filter>
+    </ClInclude>
+    <ClInclude Include="sonar.h">
+      <Filter>Header Files\Features\Awareness</Filter>
+    </ClInclude>
+    <ClInclude Include="fov.h">
+      <Filter>Header Files\Features\Miscellaneous</Filter>
+    </ClInclude>
+    <ClInclude Include="automation.h">
+      <Filter>Header Files\Features\Miscellaneous</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -88,6 +115,33 @@
     </ClCompile>
     <ClCompile Include="glow.cpp">
       <Filter>Source Files\Features\Awareness</Filter>
+    </ClCompile>
+    <ClCompile Include="trigger.cpp">
+      <Filter>Source Files\Features\Combat</Filter>
+    </ClCompile>
+    <ClCompile Include="slowaim.cpp">
+      <Filter>Source Files\Features\Combat</Filter>
+    </ClCompile>
+    <ClCompile Include="hitsound.cpp">
+      <Filter>Source Files\Features\Awareness</Filter>
+    </ClCompile>
+    <ClCompile Include="chams.cpp">
+      <Filter>Source Files\Features\Awareness</Filter>
+    </ClCompile>
+    <ClCompile Include="radar.cpp">
+      <Filter>Source Files\Features\Awareness</Filter>
+    </ClCompile>
+    <ClCompile Include="lessflash.cpp">
+      <Filter>Source Files\Features\Awareness</Filter>
+    </ClCompile>
+    <ClCompile Include="sonar.cpp">
+      <Filter>Source Files\Features\Awareness</Filter>
+    </ClCompile>
+    <ClCompile Include="fov.cpp">
+      <Filter>Source Files\Features\Miscellaneous</Filter>
+    </ClCompile>
+    <ClCompile Include="automation.cpp">
+      <Filter>Source Files\Features\Miscellaneous</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -141,21 +141,39 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="aim.cpp" />
+    <ClCompile Include="automation.cpp" />
+    <ClCompile Include="chams.cpp" />
     <ClCompile Include="config.cpp" />
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="fov.cpp" />
     <ClCompile Include="glow.cpp" />
+    <ClCompile Include="hitsound.cpp" />
+    <ClCompile Include="lessflash.cpp" />
     <ClCompile Include="memory.cpp" />
     <ClCompile Include="menu.cpp" />
+    <ClCompile Include="radar.cpp" />
     <ClCompile Include="rcs.cpp" />
+    <ClCompile Include="slowaim.cpp" />
+    <ClCompile Include="sonar.cpp" />
+    <ClCompile Include="trigger.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="aim.h" />
+    <ClInclude Include="automation.h" />
+    <ClInclude Include="chams.h" />
     <ClInclude Include="config.h" />
     <ClInclude Include="dllmain.h" />
+    <ClInclude Include="fov.h" />
     <ClInclude Include="glow.h" />
+    <ClInclude Include="hitsound.h" />
+    <ClInclude Include="lessflash.h" />
     <ClInclude Include="memory.h" />
     <ClInclude Include="menu.h" />
+    <ClInclude Include="radar.h" />
     <ClInclude Include="rcs.h" />
+    <ClInclude Include="slowaim.h" />
+    <ClInclude Include="sonar.h" />
+    <ClInclude Include="trigger.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
