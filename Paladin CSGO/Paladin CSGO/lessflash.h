@@ -1,4 +1,6 @@
 #pragma once
+#include "dllmain.h"
+
 class lessflash {
 public:
     lessflash();

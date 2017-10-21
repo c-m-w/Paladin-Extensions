@@ -93,6 +93,9 @@
     <ClInclude Include="automation.h">
       <Filter>Header Files\Features\Miscellaneous</Filter>
     </ClInclude>
+    <ClInclude Include="global.h">
+      <Filter>Header Files\Program</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">

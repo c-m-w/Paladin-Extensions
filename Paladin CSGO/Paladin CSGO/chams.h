@@ -1,7 +1,5 @@
 #pragma once
-struct color {
-    int r, g, b, a;
-};
+#include "dllmain.h"
 
 class chams {
 public:

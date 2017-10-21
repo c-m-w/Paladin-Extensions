@@ -1,14 +1,15 @@
 #include "dllmain.h"
-
-BOOL WINAPI dllmain(const HMODULE instanceSelf, const DWORD callReason, LPVOID none) {
-    if (callReason == DLL_PROCESS_ATTACH) {
-        DisableThreadLibraryCalls(instanceSelf);
+// todo debug stuff (maybe make class?)
+// todo hwid stuff (maybe make class?)
+BOOL WINAPI dllmain(HMODULE hSelf, const DWORD cReason, void*) {
+    if (cReason == DLL_PROCESS_ATTACH) {
+        DisableThreadLibraryCalls(hSelf);
 
         // TODO our enter stuff here
 
-    } else if (callReason == DLL_PROCESS_DETACH) {
+    } else if (cReason == DLL_PROCESS_DETACH) {
 
-        FreeLibraryAndExitThread(instanceSelf, quitReason); // TODO define quitReason in config, save quit reason to config
+        //FreeLibraryAndExitThread(instanceSelf, quitReason); // TODO define quitReason in config, save quit reason to config
 
     }
 

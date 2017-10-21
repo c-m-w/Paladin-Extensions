@@ -14,17 +14,25 @@
 ## CSGO TODO
 ##### Open
 ##### Jeremy
+- Rounding & Normalization
+- Debug Class
+- HWID Class
+- Config
+- Memory
+- Global
 ##### Mike
-- Finish Base (Inheritence where required)
+- Finish Base
+  - Restructure location for offsets & multiclassed functions in logical manner since they aren't required by all classes (e.g. rounding and clamping)
+  - Class Inheritance in logical manner
+  - Pattern Scanning + create area for offsets
 - Web app for web interface with normal app(?)
+- Call Reason Detatch
 ##### Hunter
 - ImGui (+ debug tab for debug build)
 ##### John
 - Find as many features as externally possible
 ##### Cole
-- Finish Base
-  - Make rest of classes, keep format
-  - Merge things that don't need to be separate (Model FOV and View FOV, Auto Jump + Auto Shoot, etc.)
+- Help Mike with restructure and inheritance by basing off of his code
 
 # Features:
 - Combat

@@ -1,4 +1,6 @@
 #pragma once
+#include "dllmain.h"
+
 class automation {
 public:
     automation();

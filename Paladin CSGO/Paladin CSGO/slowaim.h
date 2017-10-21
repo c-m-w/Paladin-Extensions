@@ -1,4 +1,5 @@
 #pragma once
+#include "dllmain.h"
 
 class slowaim {
 public:

@@ -164,6 +164,7 @@
     <ClInclude Include="config.h" />
     <ClInclude Include="dllmain.h" />
     <ClInclude Include="fov.h" />
+    <ClInclude Include="global.h" />
     <ClInclude Include="glow.h" />
     <ClInclude Include="hitsound.h" />
     <ClInclude Include="lessflash.h" />
