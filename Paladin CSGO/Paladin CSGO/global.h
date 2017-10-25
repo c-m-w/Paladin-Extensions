@@ -31,8 +31,6 @@ struct color {
 
 
 angle angleCurrent;
-bool normalize(angle & angleTo);
-bool round(angle & angleTo);
 
 inline bool normalize(angle & angle) {
     bool change = false;
