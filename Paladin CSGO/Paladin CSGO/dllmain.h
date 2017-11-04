@@ -7,6 +7,7 @@
 #include <ctime>
 // Program
 #include "global.h"
+#include "debug.h"
 #include "config.h"
 #include "memory.h"
 #include "menu.h"

@@ -96,6 +96,9 @@
     <ClInclude Include="global.h">
       <Filter>Header Files\Program</Filter>
     </ClInclude>
+    <ClInclude Include="debug.h">
+      <Filter>Header Files\Program</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -145,6 +148,9 @@
     </ClCompile>
     <ClCompile Include="automation.cpp">
       <Filter>Source Files\Features\Miscellaneous</Filter>
+    </ClCompile>
+    <ClCompile Include="debug.cpp">
+      <Filter>Source Files\Program</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

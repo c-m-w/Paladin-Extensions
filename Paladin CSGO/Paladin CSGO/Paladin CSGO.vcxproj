@@ -144,6 +144,7 @@
     <ClCompile Include="automation.cpp" />
     <ClCompile Include="chams.cpp" />
     <ClCompile Include="config.cpp" />
+    <ClCompile Include="debug.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="fov.cpp" />
     <ClCompile Include="glow.cpp" />
@@ -162,6 +163,7 @@
     <ClInclude Include="automation.h" />
     <ClInclude Include="chams.h" />
     <ClInclude Include="config.h" />
+    <ClInclude Include="debug.h" />
     <ClInclude Include="dllmain.h" />
     <ClInclude Include="fov.h" />
     <ClInclude Include="global.h" />
