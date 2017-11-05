@@ -4,7 +4,7 @@ void LogDebugMsg(DebugMessage dmType, unsigned short iLayer, char * cMessage, ..
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	if (hConsole != INVALID_HANDLE_VALUE) {
 		//Experimental output
-		for (unsigned i = 0; i < iLayer + 1; i++) {
+		for (unsigned i = 0; i < iLayer; ++i) {
 			printf("\t");
 		}
 		if (iLayer > 1) {

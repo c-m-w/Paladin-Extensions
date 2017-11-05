@@ -1,5 +1,5 @@
 #pragma once
-#include "..//dllmain.h"
+#include "..//global.h"
 #ifdef _DEBUG
 #define DEBUG LogDebugMsg
 #define LASTERR LogLastError
