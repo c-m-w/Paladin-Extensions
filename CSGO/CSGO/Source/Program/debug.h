@@ -1,5 +1,5 @@
 #pragma once
-#include "..//global.h"
+#include "../global.h"
 #ifdef _DEBUG
 #define DEBUG LogDebugMsg
 #define LASTERR LogLastError

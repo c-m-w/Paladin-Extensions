@@ -21,11 +21,18 @@
   <ItemGroup>
     <ClInclude Include="Source\dllmain.h" />
     <ClInclude Include="Source\global.h" />
+    <ClInclude Include="Source\Program\config.h" />
     <ClInclude Include="Source\Program\debug.h" />
+    <ClInclude Include="Source\Program\memory.h" />
+    <ClInclude Include="Source\Program\menu.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\dllmain.cpp" />
+    <ClCompile Include="Source\global.cpp" />
+    <ClCompile Include="Source\Program\config.cpp" />
     <ClCompile Include="Source\Program\debug.cpp" />
+    <ClCompile Include="Source\Program\memory.cpp" />
+    <ClCompile Include="Source\Program\menu.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
