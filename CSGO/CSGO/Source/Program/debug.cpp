@@ -1,6 +1,7 @@
 #include "debug.h"
 
 void LogDebugMsg(DebugMessage dmType, unsigned short iLayer, char * cMessage, ...) {
+	cMessage += '\n';
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	if (hConsole != INVALID_HANDLE_VALUE) {
 		//Experimental output

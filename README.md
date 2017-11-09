@@ -15,11 +15,16 @@
 ##### Open
 ##### Jeremy
 - Finish Base
-  - 
 ##### Mike
+- Clean up Base
+- Menu
+- Config
 ##### Hunter
+- Menu
 ##### John
 ##### Cole
+- Clean up Base
+  - Move all hInline declarations into cpp
 
 # Features:
 - Combat
@@ -83,6 +88,7 @@
 	- StatTrak [int]
 	- Name [string]
 	- Seed [int]
+	- Shows in real inventory
   - [ ] FOV Changer
   - [ ] Viewmodel FOV Changer
   - [ ] Auto Pistol

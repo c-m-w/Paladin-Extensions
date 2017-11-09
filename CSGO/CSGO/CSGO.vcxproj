@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClInclude Include="Source\dllmain.h" />
     <ClInclude Include="Source\global.h" />
+    <ClInclude Include="Source\Miscellaneous\Automation.h" />
     <ClInclude Include="Source\Program\config.h" />
     <ClInclude Include="Source\Program\debug.h" />
     <ClInclude Include="Source\Program\memory.h" />
@@ -29,6 +30,7 @@
   <ItemGroup>
     <ClCompile Include="Source\dllmain.cpp" />
     <ClCompile Include="Source\global.cpp" />
+    <ClCompile Include="Source\Miscellaneous\Automation.cpp" />
     <ClCompile Include="Source\Program\config.cpp" />
     <ClCompile Include="Source\Program\debug.cpp" />
     <ClCompile Include="Source\Program\memory.cpp" />
@@ -46,7 +48,7 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>

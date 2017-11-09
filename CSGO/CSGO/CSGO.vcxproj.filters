@@ -33,6 +33,9 @@
     <ClInclude Include="Source\Program\memory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Miscellaneous\Automation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Program\debug.cpp">
@@ -51,6 +54,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\Program\menu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Miscellaneous\Automation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
