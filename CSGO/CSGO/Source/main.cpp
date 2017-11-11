@@ -15,18 +15,20 @@ void CleanUp()
 			t.join();
 }
 
-void Panic(const int code)
+void Panic()
 {
 	CleanUp();
-	FreeLibraryAndExitThread(hInst, code);
+	FreeLibraryAndExitThread(hInst, 0);
 }
 
 void Cheat()
 {
+
 #ifndef _DEBUG
 	AllocConsole();
 #endif
 	Wait(5000);
+
 	//Make threads, add them to threads vector, return this function (close if error)
 }
 

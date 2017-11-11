@@ -7,7 +7,7 @@
 
 #define PI 3.141593f
 
-void Panic(int code);
+void Panic();
 
 #include "Program/debug.h"
 #include "Program/global.h"
