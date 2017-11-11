@@ -86,5 +86,5 @@ void MemoryManager::InitializeAddresses()
 	iForceJump += dwClientBase;
 	dwLocalPlayer += dwClientBase;
 	Read(dwLocalPlayer);
-	lp_iFlags += dwLocalPlayer;
+	lp_iFlags += dwLocalPlayer.loc;
 }

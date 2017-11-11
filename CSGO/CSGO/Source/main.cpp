@@ -6,7 +6,7 @@
  * 2 -> called for blacklisted reason
  */
 
-void cleanup() 
+void CleanUp() 
 {
 	bExitState = true;
 
@@ -15,29 +15,33 @@ void cleanup()
 			t.join();
 }
 
-void panic(int code)
+void Panic(const int code)
 {
-	cleanup();
+	CleanUp();
 	FreeLibraryAndExitThread(hInst, code);
 }
 
-void cheat()
+void Cheat()
 {
+#ifndef _DEBUG
+	AllocConsole();
+#endif
+	Wait(5000);
 	//Make threads, add them to threads vector, return this function (close if error)
 }
 
-BOOL WINAPI DllMain(HINSTANCE hinstDll, DWORD fdwReason, LPVOID lpvReserved) 
+BOOL WINAPI DllMain(const HINSTANCE hinstDll, const DWORD fdwReason, LPVOID lpvReserved) 
 {
 	switch (fdwReason) 
 	{
 		case DLL_PROCESS_ATTACH:
 			DisableThreadLibraryCalls(hinstDll);
 			hInst = hinstDll;
-			CreateThread(nullptr, 0, (LPTHREAD_START_ROUTINE)cheat, NULL, 0, nullptr);
+			CreateThread(nullptr, 0, LPTHREAD_START_ROUTINE(Cheat), nullptr, 0, nullptr);
 			break;
 
 		case DLL_PROCESS_DETACH:
-			cleanup();
+			CleanUp();
 			break;
 	}
 	return true;

@@ -4,8 +4,8 @@ extern HINSTANCE hInst;
 extern std::atomic<bool> bExitState;
 extern std::vector<std::thread> threads;
 
-inline void Wait(const unsigned int z);
-inline unsigned int GetTime();
+void Wait(const unsigned int z);
+unsigned int GetTime();
 
 struct Angle 
 {
