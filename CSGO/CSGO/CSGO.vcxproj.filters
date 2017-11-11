@@ -18,9 +18,6 @@
     <ClInclude Include="Source\Program\debug.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\dllmain.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Program\menu.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -33,12 +30,18 @@
     <ClInclude Include="Source\Miscellaneous\Automation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\main.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Program\global.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Program\singletons.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Program\debug.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\dllmain.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\Program\config.cpp">
@@ -51,6 +54,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\Miscellaneous\Automation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Program\global.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Program\singletons.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

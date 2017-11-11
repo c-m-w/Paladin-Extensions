@@ -1,31 +1,22 @@
 #pragma once
 #include <Windows.h>
-#include <thread>
 #include <TlHelp32.h>
+#include <thread>
 #include <atomic>
+#include <vector>
+
 #define PI 3.141593f
-std::atomic<bool> bExitState;
 
-
-inline void Wait(const unsigned int z) {
-	std::this_thread::sleep_for(std::chrono::milliseconds(z));
-}
-
-inline unsigned int GetTime() {
-	return static_cast<unsigned int>(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count());
-}
+void panic(int code);
 
 #include "Program/debug.h"
+#include "Program/global.h"
 #include "Program/memory.h"
-MemoryManager mem;
 #include "Program/menu.h"
 #include "Program/config.h"
-
+#include "Program/singletons.h" //Might be useful to put before config (and maybe menu)
 
 #include "Miscellaneous/Automation.h"
-
-
-
 
 /* Conventions:
 * Start everything with a capital

@@ -1,19 +1,21 @@
 #pragma once
-#include "../dllmain.h"
+
 #ifdef _DEBUG
-#define DEBUG LogDebugMsg
-#define LASTERR LogLastError
+	#define DEBUG LogDebugMsg
+	#define LASTERR LogLastError
 #else
-#define DEBUG
-#define LASTERR
+	#define DEBUG
+	#define LASTERR
 #endif
-enum DebugMessage {
-	SCS = 0,
-	DBG = 1,
-	WRN = 2,
-	ERR = 3,
-	LER = 4
+
+enum DebugMessage 
+{
+	SCS = 0,	//Success
+	DBG = 1,	//Debug
+	WRN = 2,	//Warning
+	ERR = 3,	//Error
+	LER = 4		//Last Error (Windows)
 };
 
-void LogDebugMsg(DebugMessage dmType, unsigned short iLayer, char * cMessage, ...);
-void LogLastError(unsigned int layer);
+void LogDebugMsg(DebugMessage type, char *msg, ...);
+void LogLastError();

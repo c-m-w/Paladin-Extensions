@@ -1,7 +1,7 @@
 #pragma once
-#include "../dllmain.h"
 
-class Automation {
+class Automation 
+{
 public:
 	static void AutoJump();
 };
