@@ -1,6 +1,6 @@
 #include "memory.h"
+
 MemoryManager::MemoryManager() {
-	
 }
 
 MemoryManager::~MemoryManager() {

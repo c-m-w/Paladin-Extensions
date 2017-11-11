@@ -1,56 +1,108 @@
 #pragma once
-#include "../global.h"
+#include "../dllmain.h"
 
 template<typename value> struct Address {
-	DWORD off; // offset
-	value val; // value
-	template<typename datatype> Address<datatype> operator+(Address<datatype> const & rhs) {
+	const DWORD off; // offset
+	std::atomic<DWORD> loc = off; // location
+	std::atomic<value> val = NULL; // value
+
+	// operator overloading
+
+	template<typename datatype> Address<datatype> operator+(const Address<datatype> & rvalue) {
 		// self addition
-		Address<datatype> sum;
-		sum.off = off + rhs.off;
-		sum.val = val + rhs.val;
-		return sum;
+		loc += rvalue.off;
+		val += rvalue.val;
+		return *this;
 	}
 
-	template<typename datatype> Address<datatype> operator-(Address<datatype> const & rhs) {
+	template<typename datatype> Address<datatype> operator-(const Address<datatype> & rvalue) {
 		// self subtraction
-		Address<datatype> sum;
-		sum.off = off - rhs.off;
-		sum.val = val - rhs.val;
-		return sum;
+		loc -= rvalue.off;
+		val -= rvalue.val;
+		return *this;
 	}
 
-	template<typename datatype> Address<datatype> operator+(const DWORD rhs) {
+	template<typename datatype> Address<datatype> & operator=(const Address<datatype> & rvalue) {
+		// self assignment
+		loc = rvalue.loc;
+		val = rvalue.val;
+		return *this;
+	}
+
+	template<typename datatype> Address<datatype> & operator+=(const Address<datatype> & rvalue) {
+		// self addition assignment
+		loc += rvalue.off;
+		val += rvalue.val;
+		return *this;
+	}
+
+	template<typename datatype> Address<datatype> & operator-=(const Address<datatype> & rvalue) {
+		// self subtraction assignment
+		loc -= rvalue.off;
+		val -= rvalue.val;
+		return *this;
+	}
+
+	template<typename datatype> Address<datatype> operator+(const DWORD & rvalue) {
 		// address addition
-		Address<datatype> sum;
-		sum.off = off + rhs;
-		sum.val = val;
-		return sum;
+		loc += rvalue;
+		return *this;
 	}
 
-	template<typename datatype> Address<datatype> operator-(const DWORD rhs) {
+	template<typename datatype> Address<datatype> operator-(const DWORD & rvalue) {
 		// address subtraction
-		Address<datatype> sum;
-		sum.off = off - rhs;
-		sum.val = val;
-		return sum;
+		loc -= rvalue;
+		return *this;
 	}
 
-	template<typename datatype> Address<datatype> operator+(const datatype rhs) {
+	template<typename datatype> Address<datatype> & operator=(const DWORD & rvalue) {
+		// address assignment
+		loc = rvalue;
+		return *this;
+	}
+
+	template<typename datatype> Address<datatype> & operator+=(const DWORD & rvalue) {
+		// address addition assignment
+		loc += rvalue;
+		return *this;
+	}
+
+	template<typename datatype> Address<datatype> & operator-=(const DWORD & rvalue) {
+		// address subtraction assignment
+		loc -= rvalue;
+		return *this;
+	}
+
+	template<typename datatype> Address<datatype> operator+(const datatype & rvalue) {
 		// value addition
-		Address<datatype> sum;
-		sum.off = off;
-		sum.val = val + rhs;
-		return sum;
+		val += rvalue;
+		return *this;
 	}
 
-	template<typename datatype> Address<datatype> operator-(const datatype rhs) {
+	template<typename datatype> Address<datatype> operator-(const datatype & rvalue) {
 		// value subtraction
-		Address<datatype> sum;
-		sum.off = off;
-		sum.val = val - rhs;
-		return sum;
+		val -= rvalue;
+		return *this;
 	}
+
+	template<typename datatype> Address<datatype> & operator=(const datatype & rvalue) {
+		// value assignment
+		val = rvalue;
+		return *this;
+	}
+
+	template<typename datatype> Address<datatype> & operator+=(const datatype & rvalue) {
+		// value addition assignment
+		val += rvalue;
+		return *this;
+	}
+
+	template<typename datatype> Address<datatype> & operator-=(const datatype & rvalue) {
+		// value subtraction assignment
+		val -= rvalue;
+		return *this;
+	}
+
 };
 
 struct Angle {
@@ -83,8 +135,8 @@ class MemoryManager {
 	DWORD dwProcessId = NULL;
 	HANDLE hGame = nullptr;
 public:
-	DWORD_PTR dwClientBase = NULL;
-	DWORD_PTR dwEngineBase = NULL;
+	DWORD dwClientBase = NULL;
+	DWORD dwEngineBase = NULL;
 
 	bool AttachToGame() {
 		LogDebugMsg(DBG, 1, "Searching for CSGO");
@@ -92,7 +144,6 @@ public:
 			Wait(1000);
 		}
 		LogDebugMsg(DBG, 1, "Found CSGO");
-
 		LogDebugMsg(DBG, 1, "Opening handle");
 		hGame = OpenProcess(PROCESS_VM_READ | PROCESS_VM_WRITE, false, dwProcessId);
 		if (!hGame) {
@@ -101,22 +152,13 @@ public:
 		}
 		LogDebugMsg(SCS, 1, "Handle created!");
 		LogDebugMsg(DBG, 1, "Walking modules");
-		unsigned int startTime = GetTimeMs();
-
-
-
-
-
-
-
-
-
-
+		unsigned int startTime = GetTime();
 		HANDLE hSnapshot;
 		unsigned short walkCount = 0;
-		while (12000 < GetTimeMs() - startTime) {
+		while (12000 < GetTime() - startTime) {
 			walkCount++;
-			LogDebugMsg(DBG, 1, "Walk " + walkCount);
+			char out[6] = { 'W','a','l','k',' ', walkCount};
+			LogDebugMsg(DBG, 1, out);
 			LogDebugMsg(DBG, 1, "Enumerating modules");
 			do {
 				SetLastError(0);
@@ -132,43 +174,47 @@ public:
 			if (Module32First(hSnapshot, &me)) {
 				do {
 					if (!_stricmp(me.szModule, "client.dll")) {
-						dwClientBase = DWORD_PTR(me.modBaseAddr);
-					}
-					else if (!_stricmp(me.szModule, "engine.dll")) {
-						dwEngineBase = DWORD_PTR(me.modBaseAddr);
+						dwClientBase = DWORD(me.modBaseAddr);
+					} else if (!_stricmp(me.szModule, "engine.dll")) {
+						dwEngineBase = DWORD(me.modBaseAddr);
 					}
 				} while (Module32Next(hSnapshot, &me) || !dwClientBase && !dwEngineBase);
 				CloseHandle(hSnapshot);
 			}
 			if (!dwClientBase || !dwEngineBase) {
-				LogDebugMsg(WRN, 1, "Failed " + walkCount + " walk!");
+				char fail[14] = { 'F','a','i','l','e','d',' ',walkCount, ' ','w','a','l','k','!'};
+				LogDebugMsg(WRN, 1, fail);
 				Wait(1000);
 				continue;
 			}
 			LogDebugMsg(SCS, 1, "Found module locations!");
 			return true;
 		}
-		LogDebugMsg(ERR, 1, "Quit trying to walk after " + walkCount + " walks! (Timeout)");
+		char quit[49] = { 'Q','u','i','t',' ','t','r','y','i','n','g',' ' // TODO Mike: append these character bits
+			,'t','o',' ','w','a','l','k',' ','a','f','t','e','r',' ', walkCount,
+			'w','a','l','k','s','!',' ','(','T','i','m','e','o','u','t',')'};
+		LogDebugMsg(ERR, 1, quit);
 		return false;
-
-
-
 	}
 
-
-
-
-
-
-
-	template<class datatype> bool Read(Address<datatype> adrRead) {
-		return ReadProcessMemory(hGame, LPVOID(adrRead.off), &adrRead.val, sizeof(datatype), nullptr);
+	template<class datatype> bool Read(Address<datatype> & adrRead) {
+		return ReadProcessMemory(hGame, LPVOID(adrRead.loc), &adrRead.val, sizeof(datatype), nullptr);
 	}
 
-	template<class datatype> bool Write(Address<datatype> adrWrite) {
-		return WriteProcessMemory(hGame, LPVOID(adrWrite.off), &adrWrite.val, sizeof(datatype), nullptr);
+	template<class datatype> bool Write(Address<datatype> & adrWrite) {
+		return WriteProcessMemory(hGame, LPVOID(adrWrite.loc), &adrWrite.val, sizeof(datatype), nullptr);
 	}
 
+	Address<DWORD> dwLocalPlayer = {0xAAFD7C};
+	Address<int> lp_iFlags = {0x100};
+	Address<int> iForceJump = {0x4F2419C};
+
+	void InitializeAddresses() {
+		iForceJump += dwClientBase;
+		dwLocalPlayer += dwClientBase;
+		Read(dwLocalPlayer);
+		lp_iFlags += dwLocalPlayer;
+	}
 
 	MemoryManager();
 	~MemoryManager();

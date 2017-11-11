@@ -20,7 +20,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\dllmain.h" />
-    <ClInclude Include="Source\global.h" />
     <ClInclude Include="Source\Miscellaneous\Automation.h" />
     <ClInclude Include="Source\Program\config.h" />
     <ClInclude Include="Source\Program\debug.h" />
@@ -29,7 +28,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\dllmain.cpp" />
-    <ClCompile Include="Source\global.cpp" />
     <ClCompile Include="Source\Miscellaneous\Automation.cpp" />
     <ClCompile Include="Source\Program\config.cpp" />
     <ClCompile Include="Source\Program\debug.cpp" />

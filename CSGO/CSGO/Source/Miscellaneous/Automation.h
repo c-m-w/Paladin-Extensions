@@ -1,7 +1,7 @@
 #pragma once
-#include "../global.h"
+#include "../dllmain.h"
 
 class Automation {
-	MemoryManager mem;
-
+public:
+	static void AutoJump();
 };

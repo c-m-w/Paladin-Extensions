@@ -1,2 +1,2 @@
 #pragma once
-#include "../global.h"
+#include "../dllmain.h"

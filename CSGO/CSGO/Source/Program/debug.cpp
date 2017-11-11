@@ -56,7 +56,7 @@ void LogLastError(unsigned int iLayer) {
 		return;
 	}
 	LPSTR errorString = nullptr;
-	if (!FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, error, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), LPWSTR(&errorString), 0, nullptr)) {
+	if (!FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, error, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), LPSTR(&errorString), 0, nullptr)) {
 		LogDebugMsg(LER, iLayer, "[0x%08lu] - Unable to retrieve error description\n", error);
 	} else {
 		LogDebugMsg(LER, iLayer, "[0x%08lu] - %s\n", error, errorString);
