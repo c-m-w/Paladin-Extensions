@@ -24,7 +24,7 @@ void Panic()
 void Cheat()
 {
 
-#ifndef _DEBUG
+#ifdef _DEBUG
 	AllocConsole();
 #endif
 	Wait(5000);
