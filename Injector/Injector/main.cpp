@@ -151,6 +151,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 					char path[MAX_PATH + 1] = { '\0' };
 
 					OPENFILENAME ofn;
+					ZeroMemory(&ofn, sizeof(OPENFILENAME));
 
 					ofn.lStructSize = sizeof(OPENFILENAME);
 					ofn.hwndOwner = hwnd;
@@ -223,9 +224,11 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 					for (int i = 0; i < ListView_GetItemCount(hDllList); i++)
 					{
 						char dll [274] = { '\0' };
-						ListView_GetItemText(hDllList, i, 0, dll, sizeof(dll));
-						//StandardInject(dll, targetID);
-						MessageBox(hwnd, dll, "DLL Path", MB_OK); //dbg
+						ListView_GetItemText(hDllList, i, 1, dll, sizeof(dll));
+						if (StandardInject(dll, targetID))
+							MessageBox(hwnd, "Injected successfully.", "Success", MB_OK);
+						else
+							MessageBox(hwnd, "Unable to inject.", "Error", MB_OK);
 					}
 				}break;
 			}break;
