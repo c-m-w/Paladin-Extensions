@@ -4,9 +4,9 @@
 
 ## INJECTOR TODO
 ##### Open
-- Start
 ##### Jeremy
 ##### Mike
+- [...]
 ##### Hunter
 ##### John
 ##### Cole
@@ -15,16 +15,16 @@
 ##### Open
 ##### Jeremy
 - Finish Base
+- Everything else
 ##### Mike
-- Clean up Base
+- Help finish Base
 - Menu
 - Config
 ##### Hunter
 - Menu
 ##### John
+- Features
 ##### Cole
-- Clean up Base
-  - Move all hInline declarations into cpp
 
 # Features:
 - Combat
@@ -92,6 +92,6 @@
   - [ ] FOV Changer
   - [ ] Viewmodel FOV Changer
   - [ ] Auto Pistol
-  - [ ] Auto Jump
+  - [x] Auto Jump
     - Following Minimum Delay [int]
   - [ ] Edge Jump
