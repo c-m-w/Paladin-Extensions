@@ -2,67 +2,17 @@
 
 template<typename datatype> struct Address {
 	std::atomic<DWORD> loc = NULL; // location
+	std::atomic<DWORD> ptr = NULL; // thisptr
 	std::atomic<datatype> val = NULL; // value
 
-	template<typename rdatatype> Address<datatype> operator+(const rdatatype & rvalue) {
-		if (typeid(DWORD) == typeid(rdatatype)) {
-			loc += rvalue;
-		}
-		if (typeid(datatype) == typeid(rdatatype)) {
-			val += rvalue;
-		}
-		return *this;
-	}
-
-	template<typename rdatatype> Address<datatype> operator-(const rdatatype & rvalue) {
-		if (typeid(DWORD) == typeid(rdatatype)) {
-			loc -= rvalue;
-		}
-		if (typeid(datatype) == typeid(rdatatype)) {
-			val -= rvalue;
-		}
-		return *this;
-	}
-
-	template<typename rdatatype> Address<datatype> & operator=(const rdatatype & rvalue) {
-		if (typeid(DWORD) == typeid(rdatatype)) {
-			loc = rvalue;
-		}
-		if (typeid(datatype) == typeid(rdatatype)) {
-			val = rvalue;
-		}
-		return *this;
-	}
-
-	template<typename rdatatype> Address<datatype> & operator+=(const rdatatype & rvalue) {
-		if (typeid(DWORD) == typeid(rdatatype)) {
-			loc += rvalue;
-		}
-		if (typeid(datatype) == typeid(rdatatype)) {
-			val += rvalue;
-		}
-		return *this;
-	}
-
-	template<typename rdatatype> Address<datatype> & operator-=(const rdatatype & rvalue) {
-		if (typeid(DWORD) == typeid(rdatatype)) {
-			loc -= rvalue;
-		}
-		if (typeid(datatype) == typeid(rdatatype)) {
-			val -= rvalue;
-		}
-		return *this;
-	}
+	template<typename rdatatype> Address<datatype> operator+(const rdatatype & rvalue);
+	template<typename rdatatype> Address<datatype> operator-(const rdatatype & rvalue);
+	template<typename rdatatype> Address<datatype> & operator=(const rdatatype & rvalue);
+	template<typename rdatatype> Address<datatype> & operator+=(const rdatatype & rvalue);
+	template<typename rdatatype> Address<datatype> & operator-=(const rdatatype & rvalue);
 };
 
 class MemoryManager {
-public:
-	MemoryManager();
-	~MemoryManager();
-	bool AttachToGame();
-	void InitializeAddresses();
-
-private:
 	DWORD dwProcessId = NULL;
 	HANDLE hGame = nullptr;
 
@@ -70,16 +20,19 @@ public:
 	DWORD dwClientBase = NULL;
 	DWORD dwEngineBase = NULL;
 
-	template<class datatype> bool Read(Address<datatype> & adrRead) {
-		return ReadProcessMemory(hGame, LPVOID(adrRead.loc._My_val), &adrRead.val, sizeof(datatype), nullptr);
-	}
+	template<class datatype> bool Read(Address<datatype> & adrRead);
+	template<class datatype> bool Write(Address<datatype> & adrWrite);
 
-	template<class datatype> bool Write(Address<datatype> & adrWrite) {
-		return WriteProcessMemory(hGame, LPVOID(adrWrite.loc._My_val), &adrWrite.val, sizeof(datatype), nullptr);
-	}
-
+	Address<float> fSensitivity = { 0xAB547C, 0xAB5450 };
+	Address<int> uiForceJump = {0x4F2419C};
+	Address<int> uiForceAttack = {0x2ECF46C};
 	Address<DWORD> dwLocalPlayer = {0xAAFD7C};
 	Address<int> lp_iFlags = {0x100};
-	Address<int> iForceJump = {0x4F2419C};
+
+	bool AttachToGame();
+	void InitializeAddresses();
+
+	MemoryManager();
+	~MemoryManager();
 
 };

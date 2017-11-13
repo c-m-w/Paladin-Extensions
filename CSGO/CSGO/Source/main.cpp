@@ -8,7 +8,11 @@
 
 void CleanUp() {
 	bExitState = true;
-	for (auto & t : threads) if (t.joinable()) t.join();
+	for (auto & t : threads) {
+		if (t.joinable()) {
+			t.join();
+		}
+	}
 }
 
 void Panic() {

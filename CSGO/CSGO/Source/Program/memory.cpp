@@ -1,25 +1,95 @@
 #include "../main.h"
 
+template<typename datatype> template<typename rdatatype> Address<datatype> Address<datatype>::operator+(const rdatatype & rvalue) {
+	if (typeid(DWORD) == typeid(rdatatype)) {
+		loc += rvalue;
+	}
+	if (typeid(datatype) == typeid(rdatatype)) {
+		val += rvalue;
+	}
+	return *this;
+}
+
+template<typename datatype> template<typename rdatatype> Address<datatype> Address<datatype>::operator-(const rdatatype & rvalue) {
+	if (typeid(DWORD) == typeid(rdatatype)) {
+		loc -= rvalue;
+	}
+	if (typeid(datatype) == typeid(rdatatype)) {
+		val -= rvalue;
+	}
+	return *this;
+}
+
+template<typename datatype> template<typename rdatatype> Address<datatype> & Address<datatype>::operator=(const rdatatype & rvalue) {
+	if (typeid(DWORD) == typeid(rdatatype)) {
+		loc = rvalue;
+	}
+	if (typeid(datatype) == typeid(rdatatype)) {
+		val = rvalue;
+	}
+	return *this;
+}
+
+template<typename datatype> template<typename rdatatype> Address<datatype> & Address<datatype>::operator+=(const rdatatype & rvalue) {
+	if (typeid(DWORD) == typeid(rdatatype)) {
+		loc += rvalue;
+	}
+	if (typeid(datatype) == typeid(rdatatype)) {
+		val += rvalue;
+	}
+	return *this;
+}
+
+template<typename datatype> template<typename rdatatype> Address<datatype> & Address<datatype>::operator-=(const rdatatype & rvalue) {
+	if (typeid(DWORD) == typeid(rdatatype)) {
+		loc -= rvalue;
+	}
+	if (typeid(datatype) == typeid(rdatatype)) {
+		val -= rvalue;
+	}
+	return *this;
+}
+
+template<class datatype> bool MemoryManager::Read(Address<datatype> & adrRead) {
+	if (adrRead.ptr) {
+		DWORD dwXor;
+		bool bSuccess = ReadProcessMemory(hGame, LPVOID(adrRead.loc._My_val), &dwXor, sizeof(DWORD), nullptr);
+		adrRead.val = *reinterpret_cast<datatype*>(dwXor ^ adrRead.ptr);
+		return bSuccess;
+	}
+	return ReadProcessMemory(hGame, LPVOID(adrRead.loc._My_val), &adrRead.val, sizeof(datatype), nullptr);
+}
+
+template<class datatype> bool MemoryManager::Write(Address<datatype> & adrWrite) {
+	if (adrWrite.ptr) {
+		DWORD dwXor = *reinterpret_cast<DWORD*>(&adrWrite.val) ^ adrWrite.ptr;
+		return ReadProcessMemory(hGame, LPVOID(adrWrite.loc._My_val), &dwXor, sizeof(DWORD), nullptr);
+	}
+	return WriteProcessMemory(hGame, LPVOID(adrWrite.loc._My_val), &adrWrite.val, sizeof(datatype), nullptr);
+}
+
 MemoryManager::MemoryManager() {
 }
 
 MemoryManager::~MemoryManager() {
-	if (hGame != nullptr || hGame != INVALID_HANDLE_VALUE) CloseHandle(hGame);
+	if (hGame != nullptr || hGame != INVALID_HANDLE_VALUE) {
+		CloseHandle(hGame);
+	}
 }
 
 bool MemoryManager::AttachToGame() {
-	while (!GetWindowThreadProcessId(FindWindowA(nullptr, "Counter-Strike: Global Offensive"), &this->dwProcessId)) {
+	while (!GetWindowThreadProcessId(FindWindowA(nullptr, "Counter-Strike: Global Offensive"), &dwProcessId)) {
 		LogDebugMsg(DBG, "Searching for CSGO");
 		Wait(1000);
 	}
-	this->hGame = OpenProcess(PROCESS_VM_READ | PROCESS_VM_WRITE | PROCESS_VM_OPERATION, false, this->dwProcessId);
-	if (!this->hGame) {
+	hGame = OpenProcess(PROCESS_VM_READ | PROCESS_VM_WRITE | PROCESS_VM_OPERATION, false, dwProcessId);
+	if (!hGame) {
 		LogDebugMsg(ERR, "Invalid game handle");
 		return false;
 	}
 	LogDebugMsg(SCS, "Attached to game");
 	HANDLE hSnapshot;
-	for (int i = 0; i < 5; i++, Wait(2000)) {
+	for (int ui = 0; ui < 5; ui++, Wait(2000)) {
 		do {
 			SetLastError(0);
 			hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, dwProcessId);
@@ -34,28 +104,34 @@ bool MemoryManager::AttachToGame() {
 		me.dwSize = sizeof(MODULEENTRY32);
 		if (Module32First(hSnapshot, &me)) {
 			do {
-				if (!_stricmp(me.szModule, "client.dll")) this->dwClientBase = DWORD(me.modBaseAddr);
-				else if (!_stricmp(me.szModule, "engine.dll")) this->dwEngineBase = DWORD(me.modBaseAddr);
+				if (!_stricmp(me.szModule, "client.dll")) {
+					dwClientBase = DWORD(me.modBaseAddr);
+				} else if (!_stricmp(me.szModule, "engine.dll")) {
+					dwEngineBase = DWORD(me.modBaseAddr);
+				}
 			} while (Module32Next(hSnapshot, &me));
 			CloseHandle(hSnapshot);
 		}
-		if (this->dwClientBase && this->dwEngineBase) {
+		if (dwClientBase && dwEngineBase) {
 			LogDebugMsg(SCS, "Modules found");
-			LogDebugMsg(SCS, "Client.dll: 0x%p", this->dwClientBase);
-			LogDebugMsg(SCS, "Engine.dll: 0x%p", this->dwEngineBase);
+			LogDebugMsg(SCS, "Client.dll: 0x%p", dwClientBase);
+			LogDebugMsg(SCS, "Engine.dll: 0x%p", dwEngineBase);
 			return true;
 		}
 		LogDebugMsg(DBG, "Modules not found, retrying");
-		LogDebugMsg(DBG, "Client.dll: 0x%p", this->dwClientBase);
-		LogDebugMsg(DBG, "Engine.dll: 0x%p", this->dwEngineBase);
+		LogDebugMsg(DBG, "Client.dll: 0x%p", dwClientBase);
+		LogDebugMsg(DBG, "Engine.dll: 0x%p", dwEngineBase);
 	}
 	LogDebugMsg(ERR, "Unable to get modules");
 	return false;
 }
 
 void MemoryManager::InitializeAddresses() {
-	iForceJump += dwClientBase;
+	uiForceJump += dwClientBase;
+	uiForceAttack += dwClientBase;
+
 	dwLocalPlayer += dwClientBase;
 	Read(dwLocalPlayer);
 	lp_iFlags += dwLocalPlayer.loc;
+
 }

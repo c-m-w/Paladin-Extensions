@@ -39,6 +39,12 @@
     <ClInclude Include="Source\Program\singletons.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Features\features.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Features\Miscellaneous\Automation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Program\debug.cpp">
@@ -63,6 +69,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\Program\singletons.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Features\features.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Features\Miscellaneous\Automation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

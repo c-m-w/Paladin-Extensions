@@ -7,8 +7,6 @@
 
 #define PI 3.141593f
 
-void Panic();
-
 #include "Program/debug.h"
 #include "Program/global.h"
 #include "Program/memory.h"
@@ -16,7 +14,9 @@ void Panic();
 #include "Program/config.h"
 #include "Program/singletons.h" //Might be useful to put before config (and maybe menu)
 
-#include "Miscellaneous/Automation.h"
+#include "Features/features.h"
+
+#include "Features/Miscellaneous/Automation.h"
 
 /* Conventions:
 * Start everything with a capital

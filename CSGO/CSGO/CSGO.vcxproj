@@ -19,6 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Features\features.h" />
+    <ClInclude Include="Source\Features\Miscellaneous\Automation.h" />
     <ClInclude Include="Source\main.h" />
     <ClInclude Include="Source\Miscellaneous\Automation.h" />
     <ClInclude Include="Source\Program\config.h" />
@@ -29,6 +31,8 @@
     <ClInclude Include="Source\Program\singletons.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Features\features.cpp" />
+    <ClCompile Include="Source\Features\Miscellaneous\Automation.cpp" />
     <ClCompile Include="Source\main.cpp" />
     <ClCompile Include="Source\Miscellaneous\Automation.cpp" />
     <ClCompile Include="Source\Program\config.cpp" />
