@@ -1,7 +1,6 @@
 #pragma once
 
-template<typename datatype> struct Address 
-{
+template<typename datatype> struct Address {
 	std::atomic<DWORD> loc = NULL; // location
 	std::atomic<datatype> val = NULL; // value
 
@@ -14,6 +13,7 @@ template<typename datatype> struct Address
 		}
 		return *this;
 	}
+
 	template<typename rdatatype> Address<datatype> operator-(const rdatatype & rvalue) {
 		if (typeid(DWORD) == typeid(rdatatype)) {
 			loc -= rvalue;
@@ -23,6 +23,7 @@ template<typename datatype> struct Address
 		}
 		return *this;
 	}
+
 	template<typename rdatatype> Address<datatype> & operator=(const rdatatype & rvalue) {
 		if (typeid(DWORD) == typeid(rdatatype)) {
 			loc = rvalue;
@@ -54,8 +55,7 @@ template<typename datatype> struct Address
 	}
 };
 
-class MemoryManager 
-{
+class MemoryManager {
 public:
 	MemoryManager();
 	~MemoryManager();

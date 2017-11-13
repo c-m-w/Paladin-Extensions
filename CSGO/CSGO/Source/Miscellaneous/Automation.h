@@ -1,7 +1,6 @@
 #pragma once
 
-class Automation 
-{
+class Automation {
 public:
 	static void AutoJump();
 };

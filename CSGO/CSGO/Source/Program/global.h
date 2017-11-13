@@ -7,23 +7,19 @@ extern std::vector<std::thread> threads;
 void Wait(const unsigned int z);
 unsigned int GetTime();
 
-struct Angle 
-{
+struct Angle {
 	float pitch, yaw, roll; // y, x, z
 };
 
-struct Coordinate 
-{
+struct Coordinate {
 	float x, y, z;
 };
 
-struct Color 
-{
+struct Color {
 	unsigned __int8 r, g, b, a;
 };
 
-enum WeaponType 
-{
+enum WeaponType {
 	KNIFE,
 	PISTOL,
 	SMG,
