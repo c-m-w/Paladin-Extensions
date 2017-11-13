@@ -1,13 +1,13 @@
 #include "../main.h"
 
 void Jump(const Keystroke kType) {
-	mem.uiForceJump = kType;
-	mem.Write(mem.uiForceJump);
+	mem.ksForceJump = kType;
+	mem.Write(mem.ksForceJump);
 }
 
 void Attack(const Keystroke kType) {
-	mem.uiForceAttack = kType;
-	mem.Write(mem.uiForceAttack);
+	mem.ksForceAttack = kType;
+	mem.Write(mem.ksForceAttack);
 }
 
 float GetSensitivity() {

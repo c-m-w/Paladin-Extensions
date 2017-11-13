@@ -1,7 +1,7 @@
 #include "../main.h"
 
 HINSTANCE hInst = nullptr;
-std::atomic<bool> bExitState;
+std::atomic<bool> bExitState = false;
 std::vector<std::thread> threads;
 
 void Wait(const unsigned int z) {

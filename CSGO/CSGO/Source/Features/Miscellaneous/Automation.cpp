@@ -1,8 +1,8 @@
 #include "../../main.h"
 
 void Automation::AutoJump() {
-	mem.Read(mem.uiForceJump);
-	if (mem.uiForceJump.val == 5) {
+	mem.Read(mem.ksForceJump);
+	if (mem.ksForceJump.val == PRESS) {
 		Jump(RELEASE);
 	}
 	mem.Read(mem.lp_iFlags);

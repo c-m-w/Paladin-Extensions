@@ -127,8 +127,8 @@ bool MemoryManager::AttachToGame() {
 }
 
 void MemoryManager::InitializeAddresses() {
-	uiForceJump += dwClientBase;
-	uiForceAttack += dwClientBase;
+	ksForceJump += dwClientBase;
+	ksForceAttack += dwClientBase;
 
 	dwLocalPlayer += dwClientBase;
 	Read(dwLocalPlayer);
