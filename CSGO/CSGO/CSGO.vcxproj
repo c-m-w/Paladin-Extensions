@@ -19,28 +19,24 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\Features\features.h" />
-    <ClInclude Include="Source\Features\Miscellaneous\Automation.h" />
+    <ClInclude Include="Source\Features\engine.h" />
+    <ClInclude Include="Source\Features\Miscellaneous\automation.h" />
     <ClInclude Include="Source\main.h" />
-    <ClInclude Include="Source\Miscellaneous\Automation.h" />
     <ClInclude Include="Source\Program\config.h" />
     <ClInclude Include="Source\Program\debug.h" />
     <ClInclude Include="Source\Program\global.h" />
     <ClInclude Include="Source\Program\memory.h" />
-    <ClInclude Include="Source\Program\menu.h" />
-    <ClInclude Include="Source\Program\singletons.h" />
+    <ClInclude Include="Source\Program\interface.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\Features\features.cpp" />
-    <ClCompile Include="Source\Features\Miscellaneous\Automation.cpp" />
+    <ClCompile Include="Source\Features\engine.cpp" />
+    <ClCompile Include="Source\Features\Miscellaneous\automation.cpp" />
     <ClCompile Include="Source\main.cpp" />
-    <ClCompile Include="Source\Miscellaneous\Automation.cpp" />
     <ClCompile Include="Source\Program\config.cpp" />
     <ClCompile Include="Source\Program\debug.cpp" />
     <ClCompile Include="Source\Program\global.cpp" />
     <ClCompile Include="Source\Program\memory.cpp" />
-    <ClCompile Include="Source\Program\menu.cpp" />
-    <ClCompile Include="Source\Program\singletons.cpp" />
+    <ClCompile Include="Source\Program\interface.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

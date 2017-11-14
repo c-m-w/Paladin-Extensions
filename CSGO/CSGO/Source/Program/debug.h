@@ -16,5 +16,5 @@ enum DebugMessage {
 	LER = 4 //Last Error (Windows)
 };
 
-void LogDebugMsg(DebugMessage type, char * msg, ...);
+void LogDebugMsg(DebugMessage type, char *msg, ...);
 void LogLastError();

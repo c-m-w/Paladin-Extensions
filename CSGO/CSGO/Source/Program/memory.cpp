@@ -1,6 +1,6 @@
 #include "../main.h"
 
-template<typename datatype> template<typename rdatatype> Address<datatype> Address<datatype>::operator+(const rdatatype & rvalue) {
+template<typename datatype> template<typename rdatatype> Address<datatype> Address<datatype>::operator+(const rdatatype &rvalue) {
 	if (typeid(DWORD) == typeid(rdatatype)) {
 		loc += rvalue;
 	}
@@ -10,7 +10,7 @@ template<typename datatype> template<typename rdatatype> Address<datatype> Addre
 	return *this;
 }
 
-template<typename datatype> template<typename rdatatype> Address<datatype> Address<datatype>::operator-(const rdatatype & rvalue) {
+template<typename datatype> template<typename rdatatype> Address<datatype> Address<datatype>::operator-(const rdatatype &rvalue) {
 	if (typeid(DWORD) == typeid(rdatatype)) {
 		loc -= rvalue;
 	}
@@ -20,7 +20,7 @@ template<typename datatype> template<typename rdatatype> Address<datatype> Addre
 	return *this;
 }
 
-template<typename datatype> template<typename rdatatype> Address<datatype> & Address<datatype>::operator=(const rdatatype & rvalue) {
+template<typename datatype> template<typename rdatatype> Address<datatype> &Address<datatype>::operator=(const rdatatype &rvalue) {
 	if (typeid(DWORD) == typeid(rdatatype)) {
 		loc = rvalue;
 	}
@@ -30,7 +30,7 @@ template<typename datatype> template<typename rdatatype> Address<datatype> & Add
 	return *this;
 }
 
-template<typename datatype> template<typename rdatatype> Address<datatype> & Address<datatype>::operator+=(const rdatatype & rvalue) {
+template<typename datatype> template<typename rdatatype> Address<datatype> &Address<datatype>::operator+=(const rdatatype &rvalue) {
 	if (typeid(DWORD) == typeid(rdatatype)) {
 		loc += rvalue;
 	}
@@ -40,7 +40,7 @@ template<typename datatype> template<typename rdatatype> Address<datatype> & Add
 	return *this;
 }
 
-template<typename datatype> template<typename rdatatype> Address<datatype> & Address<datatype>::operator-=(const rdatatype & rvalue) {
+template<typename datatype> template<typename rdatatype> Address<datatype> &Address<datatype>::operator-=(const rdatatype &rvalue) {
 	if (typeid(DWORD) == typeid(rdatatype)) {
 		loc -= rvalue;
 	}
@@ -50,7 +50,7 @@ template<typename datatype> template<typename rdatatype> Address<datatype> & Add
 	return *this;
 }
 
-template<class datatype> bool MemoryManager::Read(Address<datatype> & adrRead) {
+template<class datatype> bool MemoryManager::Read(Address<datatype> &adrRead) {
 	if (adrRead.ptr) {
 		DWORD dwXor;
 		bool bSuccess = ReadProcessMemory(hGame, LPVOID(adrRead.loc._My_val), &dwXor, sizeof(DWORD), nullptr);
@@ -60,7 +60,7 @@ template<class datatype> bool MemoryManager::Read(Address<datatype> & adrRead) {
 	return ReadProcessMemory(hGame, LPVOID(adrRead.loc._My_val), &adrRead.val, sizeof(datatype), nullptr);
 }
 
-template<class datatype> bool MemoryManager::Write(Address<datatype> & adrWrite) {
+template<class datatype> bool MemoryManager::Write(Address<datatype> &adrWrite) {
 	if (adrWrite.ptr) {
 		DWORD dwXor = *reinterpret_cast<DWORD*>(&adrWrite.val) ^ adrWrite.ptr;
 		return ReadProcessMemory(hGame, LPVOID(adrWrite.loc._My_val), &dwXor, sizeof(DWORD), nullptr);
@@ -129,9 +129,7 @@ bool MemoryManager::AttachToGame() {
 void MemoryManager::InitializeAddresses() {
 	ksForceJump += dwClientBase;
 	ksForceAttack += dwClientBase;
-
 	dwLocalPlayer += dwClientBase;
 	Read(dwLocalPlayer);
 	lp_iFlags += dwLocalPlayer.loc;
-
 }

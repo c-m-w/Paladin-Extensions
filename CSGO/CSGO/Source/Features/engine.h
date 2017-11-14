@@ -4,6 +4,7 @@ enum Keystroke {
 	PRESS = 5,
 	SCROLL = 6
 };
+
 void Jump(const Keystroke ksType);
 void Attack(const Keystroke ksType);
 float GetSensitivity();

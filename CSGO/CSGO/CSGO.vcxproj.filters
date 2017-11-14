@@ -18,16 +18,7 @@
     <ClInclude Include="Source\Program\debug.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Program\menu.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Program\config.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Program\memory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Miscellaneous\Automation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\main.h">
@@ -36,13 +27,16 @@
     <ClInclude Include="Source\Program\global.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Program\singletons.h">
+    <ClInclude Include="Source\Features\engine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Features\features.h">
+    <ClInclude Include="Source\Features\Miscellaneous\automation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Features\Miscellaneous\Automation.h">
+    <ClInclude Include="Source\Program\memory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Program\interface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -53,28 +47,22 @@
     <ClCompile Include="Source\Program\config.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Program\memory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Program\menu.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Miscellaneous\Automation.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\Program\global.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Program\singletons.cpp">
+    <ClCompile Include="Source\Features\engine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Features\features.cpp">
+    <ClCompile Include="Source\Features\Miscellaneous\automation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Features\Miscellaneous\Automation.cpp">
+    <ClCompile Include="Source\Program\memory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Program\interface.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

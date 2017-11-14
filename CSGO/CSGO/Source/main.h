@@ -5,18 +5,19 @@
 #include <atomic>
 #include <vector>
 
-#define PI 3.141593f
-
 #include "Program/debug.h"
 #include "Program/global.h"
-#include "Program/memory.h"
-#include "Program/menu.h"
 #include "Program/config.h"
-#include "Program/singletons.h" //Might be useful to put before config (and maybe menu)
+Config cfg;
+#include "Program/interface.h"
+Interface men;
+#include "Program/memory.h"
+MemoryManager mem;
 
-#include "Features/features.h"
+#include "Features/engine.h"
 
-#include "Features/Miscellaneous/Automation.h"
+#include "Features/Miscellaneous/automation.h"
+Automation aut;
 
 /* Conventions:
 * Start everything with a capital

@@ -1,6 +1,6 @@
 #include "../main.h"
 
-void LogDebugMsg(DebugMessage type, char * msg, ...) {
+void LogDebugMsg(DebugMessage type, char *msg, ...) {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	if (hConsole != INVALID_HANDLE_VALUE) {
 		switch (type) {
@@ -49,8 +49,7 @@ void LogLastError() {
 	LPSTR errorString = nullptr;
 	if (!FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, error, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), LPSTR(&errorString), 0, nullptr)) {
 		LogDebugMsg(LER, "[0x%08lu] - Unable to retrieve error description", error);
-	}
-	else {
+	} else {
 		LogDebugMsg(LER, "[0x%08lu] - %s", error, errorString);
 	}
 	LocalFree(errorString);

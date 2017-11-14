@@ -13,13 +13,14 @@
 
 ## CSGO TODO
 ##### Open
+- Traced Ray Triggerbot (https://www.unknowncheats.me/forum/counterstrike-global-offensive/136361-external-ray-tracing-ray-aabb.html)
+- Config
 ##### Jeremy
 - Finish Base
 - Everything else
 ##### Mike
 - Help finish Base
 - Menu
-- Config
 ##### Hunter
 - Menu
 ##### John
