@@ -6,10 +6,16 @@
  * 2 -> called for blacklisted reason
  * 3 -> panic termination called
  */
+Global gbl;
+Config cfg;
+Interface men;
+MemoryManager mem;
+Engine eng;
+Automation aut;
 
 void CleanUp() {
-	bExitState = true;
-	for (auto &t : threads) {
+	gbl.bExitState = true;
+	for (auto &t : gbl.threads) {
 		if (t.joinable()) {
 			t.join();
 		}
@@ -25,7 +31,7 @@ void Panic() {
 	FreeConsole();
 #endif
 	cfg.uiQuitReason = 3;
-	FreeLibraryAndExitThread(hInst, cfg.uiQuitReason);
+	FreeLibraryAndExitThread(gbl.hInst, cfg.uiQuitReason);
 }
 
 void Cheat() {
@@ -47,7 +53,7 @@ void Cheat() {
 	cci.dwSize = 25;
 	cci.bVisible = false;
 	SetConsoleCursorInfo(hConsole, &cci);
-	Wait(1);
+	gbl.Wait(1);
 	SetConsoleTextAttribute(hConsole, 15);
 	printf("[DBG] ");
 	SetConsoleTextAttribute(hConsole, 7);
@@ -60,7 +66,7 @@ BOOL WINAPI DllMain(const HINSTANCE hInstDll, const DWORD fdwReason, LPVOID lpvR
 	switch (fdwReason) {
 		case DLL_PROCESS_ATTACH:
 			DisableThreadLibraryCalls(hInstDll);
-			hInst = hInstDll;
+			gbl.hInst = hInstDll;
 			CreateThread(nullptr, 0, LPTHREAD_START_ROUTINE(Cheat), nullptr, 0, nullptr);
 			break;
 		case DLL_PROCESS_DETACH:

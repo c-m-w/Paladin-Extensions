@@ -1,20 +1,23 @@
 #pragma once
 
 class Config {
-	struct Version {
-		unsigned short major;
-		unsigned short minor;
-		bool operator==(const Version &rvalue) const;
-	};
-
 	char cfgPath[255];
 	// read from config
-	template<class datatype> void Read(char *setting, char *subsetting, datatype &status);
+	void Read(char *setting, char *subsetting, bool &status);
+	void Read(char *setting, char *subsetting, int &status);
+	void Read(char *setting, char *subsetting, float &status);
+	void Read(char *setting, char *subsetting, double &status);
+	void Read(char *setting, char *subsetting, std::string &status);
 	// write to config
-	template<class datatype> void Write(char *setting, char *subsetting, datatype status);
+	void Write(char *setting, char *subsetting, bool status);
+	void Write(char *setting, char *subsetting, int status);
+	void Write(char *setting, char *subsetting, float status);
+	void Write(char *setting, char *subsetting, double status);
+	void Write(char *setting, char *subsetting, std::string status);
+
 public:
-	Version vVersion = {1, 0};
-	unsigned short uiQuitReason = -1;
+	std::string sVersion = "1.0";
+	unsigned short uiQuitReason = 0;
 
 #ifdef _DEBUG
 	bool bCheckForAnticheat = false;
@@ -27,7 +30,7 @@ public:
 	int uiReloadKey;
 
 	Config();
-	// open config, return false & create if doesn't exist
+	// open config, create if doesn't exist
 	bool LoadConfig();
 	// read loaded config, replace impossible values
 	bool ReadConfig();

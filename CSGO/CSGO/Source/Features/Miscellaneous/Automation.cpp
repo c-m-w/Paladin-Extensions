@@ -2,18 +2,18 @@
 
 void Automation::AutoJump() {
 	mem.Read(mem.ksForceJump);
-	if (mem.ksForceJump.val == PRESS) {
-		Jump(RELEASE);
+	if (mem.ksForceJump.val == eng.PRESS) {
+		eng.Jump(eng.RELEASE);
 	}
 	mem.Read(mem.lp_iFlags);
 	switch (mem.lp_iFlags.val) {
 		case 257:
-			Jump(SCROLL);
+			eng.Jump(eng.SCROLL);
 		case 261:
-			Jump(SCROLL);
+			eng.Jump(eng.SCROLL);
 		case 263:
-			Jump(SCROLL);
+			eng.Jump(eng.SCROLL);
 		default:
-			Wait(1);
+			gbl.Wait(1);
 	}
 }

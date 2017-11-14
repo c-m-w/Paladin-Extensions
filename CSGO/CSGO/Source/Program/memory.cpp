@@ -80,7 +80,7 @@ MemoryManager::~MemoryManager() {
 bool MemoryManager::AttachToGame() {
 	while (!GetWindowThreadProcessId(FindWindowA(nullptr, "Counter-Strike: Global Offensive"), &dwProcessId)) {
 		LogDebugMsg(DBG, "Searching for CSGO");
-		Wait(1000);
+		gbl.Wait(1000);
 	}
 	hGame = OpenProcess(PROCESS_VM_READ | PROCESS_VM_WRITE | PROCESS_VM_OPERATION, false, dwProcessId);
 	if (!hGame) {
@@ -89,11 +89,11 @@ bool MemoryManager::AttachToGame() {
 	}
 	LogDebugMsg(SCS, "Attached to game");
 	HANDLE hSnapshot;
-	for (int ui = 0; ui < 5; ui++, Wait(2000)) {
+	for (int ui = 0; ui < 5; ui++, gbl.Wait(2000)) {
 		do {
 			SetLastError(0);
 			hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, dwProcessId);
-			Wait(10);
+			gbl.Wait(10);
 		} while (hSnapshot == INVALID_HANDLE_VALUE || GetLastError() == ERROR_BAD_LENGTH);
 		if (hSnapshot == INVALID_HANDLE_VALUE) {
 			LogDebugMsg(ERR, "Invalid module snapshot");

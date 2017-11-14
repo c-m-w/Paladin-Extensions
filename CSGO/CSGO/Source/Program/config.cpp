@@ -1,10 +1,69 @@
 #include "../main.h"
 
-bool Config::Version::operator==(const Version &rvalue) const {
-	if (major == rvalue.major && minor == rvalue.minor) {
-		return true;
+void Config::Read(char *setting, char *subsetting, bool &status) {
+	double temp = status;
+	Read(setting, subsetting, temp);
+	status = bool(temp);
+}
+
+void Config::Read(char *setting, char *subsetting, int &status) {
+	double temp = status;
+	Read(setting, subsetting, temp);
+	status = int(temp);
+}
+
+void Config::Read(char *setting, char *subsetting, float &status) {
+	double temp = status;
+	Read(setting, subsetting, temp);
+	status = float(temp);
+}
+
+void Config::Read(char *setting, char *subsetting, double &status) {
+	char *temp = nullptr;
+	if (!WritePrivateProfileStringA(setting, subsetting, temp, cfgPath)) {
+		LogDebugMsg(WRN, "Failed to write %s, %s to config!", setting, subsetting);
 	}
-	return false;
+	status = atof(temp);
+}
+
+void Config::Read(char *setting, char *subsetting, std::string &status) {
+	char *temp = nullptr;
+	if (!WritePrivateProfileStringA(setting, subsetting, temp, cfgPath)) {
+		LogDebugMsg(WRN, "Failed to write %s, %s to config!", setting, subsetting);
+	}
+	status = temp;
+}
+
+void Config::Write(char *setting, char *subsetting, bool status) {
+	int temp = (int)status;
+	Write(setting, subsetting, temp);
+}
+
+void Config::Write(char *setting, char *subsetting, int status) {
+	char *temp = nullptr;
+	sprintf_s(temp, 255, "%d", status);
+	if (!WritePrivateProfileStringA(setting, subsetting, temp, cfgPath)) {
+		LogDebugMsg(WRN, "Failed to write %s, %s to config!", setting, subsetting);
+	}
+}
+
+void Config::Write(char *setting, char *subsetting, float status) {
+	double temp = double(status);
+	Write(setting, subsetting, temp);
+}
+
+void Config::Write(char *setting, char *subsetting, double status) {
+	char *temp = nullptr;
+	sprintf_s(temp, 255, "%2f", status);
+	if (!WritePrivateProfileStringA(setting, subsetting, temp, cfgPath)) {
+		LogDebugMsg(WRN, "Failed to write %s, %s to config!", setting, subsetting);
+	}
+}
+
+void Config::Write(char *setting, char *subsetting, std::string status) {
+	if (!WritePrivateProfileStringA(setting, subsetting, status.c_str(), cfgPath)) {
+		LogDebugMsg(WRN, "Failed to write %s, %s to config!", setting, subsetting);
+	}
 }
 
 Config::Config() {
@@ -12,57 +71,28 @@ Config::Config() {
 	uiReloadKey = VK_F5;
 }
 
-template<class datatype> void Config::Read(char *setting, char *subsetting, datatype &status) {
-	char temp[255];
-	if (!GetPrivateProfileStringA(setting, subsetting, nullptr, temp, 255, cfgPath)) {
-		LogDebugMsg(WRN, "Failed to read %s, %s from config!", setting, subsetting);
-	}
-	if (typeid(datatype) == typeid(Version)) {
-		sprintf_s(status, "%f", temp);
-		return;
-	}
-	status = datatype(atof(temp));
-}
-
-template<class datatype> void Config::Write(char *setting, char *subsetting, datatype status) {
-	char temp[255];
-	if (typeid(datatype) == typeid(bool) || typeid(datatype) == typeid(int)) {
-		sprintf_s(temp, "%i", status);
-	} else if (typeid(datatype) == typeid(float) || typeid(datatype) == typeid(double)) {
-		sprintf_s(temp, "%2f", status);
-	} else if (typeid(datatype) == typeid(Version)) {
-		Version x = { status };
-		sprintf_s(temp, "%i.%i", x.major, x.minor);
-	} else {
-		LogDebugMsg(WRN, "Failed to write %s, %s to config! Unexpected datatype!", setting, subsetting);
-		return;
-	}
-	WritePrivateProfileStringA(setting, subsetting, temp, cfgPath);
-}
-
 bool Config::LoadConfig() {
 	char tempChar[MAX_PATH];
 	GetModuleFileName(nullptr, tempChar, MAX_PATH);
-	memset(cfgPath, 0, 255);
+	memset(cfgPath, 0, MAX_PATH);
 	strcpy_s(cfgPath, std::string(tempChar).substr(NULL, std::string(tempChar).find_last_of("/\\") + 1).c_str());
 	strcat_s(cfgPath, "config.txt");
 	struct stat buffer;
 	if (stat(cfgPath, &buffer)) {
-		Write<Version>("Info", "Version", vVersion);
-		Write<int>("Key Binds", "Terminate", uiExitKey);
-		Write<int>("Key Binds", "Reload Config", uiReloadKey);
+		Write("Info", "Version", sVersion);
+		Write("Key Binds", "Terminate", uiExitKey);
+		Write("Key Binds", "Reload Config", uiReloadKey);
 		return false;
 	}
 	return true;
 }
 
 bool Config::ReadConfig() {
-	// if config version doesnt match cheat version, say error
-	Version vConfig;
-	Read<Version>("Info", "Version", vConfig);
-	if (vVersion == vConfig) {
-		Read<int>("Key Binds", "Terminate", uiExitKey);
-		Read<int>("Key Binds", "Reload Config", uiReloadKey);
+	std::string sConfig;
+	Read("Info", "Version", sConfig);
+	if (sVersion == sConfig) {
+		Read("Key Binds", "Terminate", uiExitKey);
+		Read("Key Binds", "Reload Config", uiReloadKey);
 	} else {
 		// set defaults
 		uiExitKey = VK_F4;
@@ -81,5 +111,5 @@ bool Config::ReadConfig() {
 }
 
 Config::~Config() {
-	Write<int>("Info", "Quit Reason", uiQuitReason);
+	Write("Info", "Quit Reason", uiQuitReason);
 }

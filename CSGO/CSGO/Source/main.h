@@ -3,21 +3,24 @@
 #include <TlHelp32.h>
 #include <thread>
 #include <atomic>
+#include <string>
 #include <vector>
 
 #include "Program/debug.h"
 #include "Program/global.h"
+extern Global gbl;
 #include "Program/config.h"
-Config cfg;
+extern Config cfg;
 #include "Program/interface.h"
-Interface men;
+extern Interface men;
 #include "Program/memory.h"
-MemoryManager mem;
+extern MemoryManager mem;
 
 #include "Features/engine.h"
+extern Engine eng;
 
 #include "Features/Miscellaneous/automation.h"
-Automation aut;
+extern Automation aut;
 
 /* Conventions:
 * Start everything with a capital
