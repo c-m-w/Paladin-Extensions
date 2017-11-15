@@ -14,3 +14,4 @@ public:
 	static float GetSensitivity();
 	static void SetSensitivity(const float fSensitivity);
 };
+extern Engine eng;

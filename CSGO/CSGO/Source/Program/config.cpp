@@ -113,3 +113,4 @@ bool Config::ReadConfig() {
 Config::~Config() {
 	Write("Info", "Quit Reason", uiQuitReason);
 }
+Config cfg;

@@ -8,19 +8,13 @@
 
 #include "Program/debug.h"
 #include "Program/global.h"
-Global gbl;
 #include "Program/config.h"
-Config cfg;
 #include "Program/interface.h"
-Interface mnu;
 #include "Program/memory.h"
-MemoryManager mem;
 
 #include "Features/engine.h"
-Engine eng;
 
 #include "Features/Miscellaneous/automation.h"
-Automation aut;
 
 /* Conventions:
 * Start everything with a capital

@@ -130,3 +130,5 @@ void MemoryManager::InitializeAddresses() {
 	Read(dwLocalPlayer);
 	lp_iFlags += dwLocalPlayer.loc;
 }
+
+MemoryManager mem;

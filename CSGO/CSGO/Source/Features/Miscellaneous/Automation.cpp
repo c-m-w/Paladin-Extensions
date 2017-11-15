@@ -17,3 +17,4 @@ void Automation::AutoJump() {
 			gbl.Wait(1);
 	}
 }
+Automation *aut;

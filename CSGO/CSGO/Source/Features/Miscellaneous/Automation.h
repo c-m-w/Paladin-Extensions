@@ -5,3 +5,4 @@ class Automation {
 public:
 	static void AutoJump();
 };
+extern Automation *aut;

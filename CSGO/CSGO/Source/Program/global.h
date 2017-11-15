@@ -37,3 +37,4 @@ public:
 		UNKNOWN
 	};
 };
+extern Global gbl;

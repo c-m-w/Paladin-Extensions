@@ -19,3 +19,6 @@ void Engine::SetSensitivity(const float fSensitivity) {
 	mem.fSensitivity = fSensitivity;
 	mem.Write(mem.fSensitivity);
 }
+
+Engine eng;
+

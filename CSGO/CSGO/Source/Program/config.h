@@ -38,3 +38,4 @@ public:
 	// set quit reason
 	~Config();
 };
+extern Config cfg;
