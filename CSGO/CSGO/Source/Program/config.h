@@ -1,8 +1,7 @@
 #pragma once
 #include "../main.h"
 
-struct version 
-{
+struct version {
 	uint8_t lower;
 	uint8_t upper;
 };
@@ -24,7 +23,6 @@ class Config {
 
 public:
 	std::string sVersion = "1.0";
-	//version sVersion = { 1, 0 };
 	unsigned short uiQuitReason = 0;
 
 #ifdef _DEBUG

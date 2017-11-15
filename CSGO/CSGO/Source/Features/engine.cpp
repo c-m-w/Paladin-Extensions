@@ -2,23 +2,22 @@
 
 Engine eng;
 
-void Engine::Jump(const Keystroke kType) {
-	mem.ksForceJump = kType;
-	mem.Write(mem.ksForceJump);
+void Engine::Jump(Keystroke kType) {
+	ksForceJump = kType;
+	mem.Write(ksForceJump);
 }
 
-void Engine::Attack(const Keystroke kType) {
-	mem.ksForceAttack = kType;
-	mem.Write(mem.ksForceAttack);
+void Engine::Attack(Keystroke kType) {
+	Addresses::ksForceAttack = kType;
+	mem.Write(ksForceAttack);
 }
 
 float Engine::GetSensitivity() {
-	mem.Read(mem.fSensitivity);
-	return mem.fSensitivity.val;
+	mem.Read(fSensitivity);
+	return fSensitivity.val;
 }
 
-void Engine::SetSensitivity(const float fSensitivity) {
-	mem.fSensitivity = fSensitivity;
-	mem.Write(mem.fSensitivity);
+void Engine::SetSensitivity(float fSensitivityNew) {
+	fSensitivity = fSensitivityNew;
+	mem.Write(fSensitivity);
 }
-

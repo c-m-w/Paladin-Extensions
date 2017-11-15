@@ -4,7 +4,7 @@ HINSTANCE hInst = nullptr;
 std::atomic<bool> bExitState = false;
 std::vector<std::thread> threads;
 
-void Wait(const unsigned int z) {
+void Wait(unsigned int z) {
 	std::this_thread::sleep_for(std::chrono::milliseconds(z));
 }
 

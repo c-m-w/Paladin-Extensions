@@ -53,7 +53,7 @@ void Cheat() {
 	// todo make our threads
 }
 
-BOOL WINAPI DllMain(const HINSTANCE hInstDll, const DWORD fdwReason, LPVOID lpvReserved) {
+BOOL WINAPI DllMain(HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpvReserved) {
 	switch (fdwReason) {
 		case DLL_PROCESS_ATTACH:
 			DisableThreadLibraryCalls(hInstDll);

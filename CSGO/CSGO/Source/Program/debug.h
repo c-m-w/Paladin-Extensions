@@ -2,8 +2,8 @@
 #include "../main.h"
 
 #ifdef _DEBUG
-	#define DEBUG LogDebugMsg
-	#define LASTERR LogLastError
+#define DEBUG LogDebugMsg
+#define LASTERR LogLastError
 #else
 	#define DEBUG
 	#define LASTERR
@@ -14,7 +14,7 @@ enum DebugMessage {
 	DBG = 1, //Debug
 	WRN = 2, //Warning
 	ERR = 3, //Error
-	LER = 4  //Last Error (Windows)
+	LER = 4 //Last Error (Windows)
 };
 
 void LogDebugMsg(DebugMessage type, char *msg, ...);

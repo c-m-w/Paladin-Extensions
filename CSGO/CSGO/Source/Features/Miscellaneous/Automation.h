@@ -3,7 +3,7 @@
 
 class Automation {
 public:
-	static void AutoJump();
+	void AutoJump();
 };
 
 extern Automation aut;
