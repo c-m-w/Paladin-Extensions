@@ -8,19 +8,19 @@
 
 #include "Program/debug.h"
 #include "Program/global.h"
-extern Global gbl;
+Global gbl;
 #include "Program/config.h"
-extern Config cfg;
+Config cfg;
 #include "Program/interface.h"
-extern Interface men;
+Interface mnu;
 #include "Program/memory.h"
-extern MemoryManager mem;
+MemoryManager mem;
 
 #include "Features/engine.h"
-extern Engine eng;
+Engine eng;
 
 #include "Features/Miscellaneous/automation.h"
-extern Automation aut;
+Automation aut;
 
 /* Conventions:
 * Start everything with a capital

@@ -1,5 +1,5 @@
 #pragma once
-
+#include "../main.h"
 #define PI 3.141593f
 
 class Global {

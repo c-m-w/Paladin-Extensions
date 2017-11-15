@@ -6,12 +6,6 @@
  * 2 -> called for blacklisted reason
  * 3 -> panic termination called
  */
-Global gbl;
-Config cfg;
-Interface men;
-MemoryManager mem;
-Engine eng;
-Automation aut;
 
 void CleanUp() {
 	gbl.bExitState = true;

@@ -1,4 +1,5 @@
 #pragma once
+#include "../main.h"
 
 #ifdef _DEBUG
 #define DEBUG LogDebugMsg
@@ -13,7 +14,7 @@ enum DebugMessage {
 	DBG = 1, //Debug
 	WRN = 2, //Warning
 	ERR = 3, //Error
-	LER = 4 //Last Error (Windows)
+	LER = 4  //Last Error (Windows)
 };
 
 void LogDebugMsg(DebugMessage type, char *msg, ...);

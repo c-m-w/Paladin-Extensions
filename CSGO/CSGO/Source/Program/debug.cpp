@@ -1,4 +1,4 @@
-#include "../main.h"
+#include "debug.h"
 
 void LogDebugMsg(DebugMessage type, char *msg, ...) {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);

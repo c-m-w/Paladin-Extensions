@@ -1,4 +1,4 @@
-#include "../main.h"
+#include "memory.h"
 
 template<typename datatype> template<typename rdatatype> Address<datatype> Address<datatype>::operator+(const rdatatype &rvalue) {
 	if (typeid(DWORD) == typeid(rdatatype)) {
@@ -66,9 +66,6 @@ template<class datatype> bool MemoryManager::Write(Address<datatype> &adrWrite) 
 		return ReadProcessMemory(hGame, LPVOID(adrWrite.loc._My_val), &dwXor, sizeof(DWORD), nullptr);
 	}
 	return WriteProcessMemory(hGame, LPVOID(adrWrite.loc._My_val), &adrWrite.val, sizeof(datatype), nullptr);
-}
-
-MemoryManager::MemoryManager() {
 }
 
 MemoryManager::~MemoryManager() {

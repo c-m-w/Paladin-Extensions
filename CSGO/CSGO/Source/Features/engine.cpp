@@ -1,4 +1,4 @@
-#include "../main.h"
+#include "engine.h"
 
 void Engine::Jump(const Keystroke kType) {
 	mem.ksForceJump = kType;
@@ -16,6 +16,6 @@ float Engine::GetSensitivity() {
 }
 
 void Engine::SetSensitivity(const float fSensitivity) {
-	mem.fSensitivity.val = fSensitivity;
+	mem.fSensitivity = fSensitivity;
 	mem.Write(mem.fSensitivity);
 }

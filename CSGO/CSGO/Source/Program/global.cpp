@@ -1,4 +1,4 @@
-#include "../main.h"
+#include "global.h"
 
 void Global::Wait(const unsigned int z) {
 	std::this_thread::sleep_for(std::chrono::milliseconds(z));

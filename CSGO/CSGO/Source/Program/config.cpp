@@ -1,4 +1,4 @@
-#include "../main.h"
+#include "config.h"
 
 void Config::Read(char *setting, char *subsetting, bool &status) {
 	double temp = status;

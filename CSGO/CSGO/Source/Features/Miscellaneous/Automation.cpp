@@ -1,4 +1,4 @@
-#include "../../main.h"
+#include "automation.h"
 
 void Automation::AutoJump() {
 	mem.Read(mem.ksForceJump);

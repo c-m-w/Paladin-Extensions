@@ -1,4 +1,5 @@
 #pragma once
+#include "../main.h"
 
 template<typename datatype> struct Address {
 	std::atomic<DWORD> loc = NULL; // location
@@ -33,8 +34,6 @@ public:
 
 	template<class datatype> bool Read(Address<datatype> &adrRead);
 	template<class datatype> bool Write(Address<datatype> &adrWrite);
-
-	MemoryManager();
 	~MemoryManager();
 
 };
