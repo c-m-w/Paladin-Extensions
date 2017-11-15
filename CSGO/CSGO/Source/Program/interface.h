@@ -3,4 +3,3 @@
 
 class Interface {
 };
-extern Interface mnu;

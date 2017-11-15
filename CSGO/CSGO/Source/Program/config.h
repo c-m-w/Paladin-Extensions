@@ -1,6 +1,5 @@
 #pragma once
 #include "../main.h"
-
 class Config {
 	char cfgPath[255];
 	// read from config
@@ -38,4 +37,3 @@ public:
 	// set quit reason
 	~Config();
 };
-extern Config cfg;

@@ -37,4 +37,3 @@ public:
 	~MemoryManager();
 
 };
-extern MemoryManager mem;
