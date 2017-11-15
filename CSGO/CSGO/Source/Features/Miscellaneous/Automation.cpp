@@ -14,7 +14,8 @@ void Automation::AutoJump() {
 		case 263:
 			eng.Jump(eng.SCROLL);
 		default:
-			gbl.Wait(1);
+			Wait(1);
 	}
 }
-Automation *aut;
+
+Automation aut;

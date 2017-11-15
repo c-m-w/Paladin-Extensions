@@ -1,5 +1,7 @@
 #include "config.h"
 
+Config cfg;
+
 void Config::Read(char *setting, char *subsetting, bool &status) {
 	double temp = status;
 	Read(setting, subsetting, temp);

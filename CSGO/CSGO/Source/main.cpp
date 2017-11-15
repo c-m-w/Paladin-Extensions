@@ -8,8 +8,8 @@
  */
 
 void CleanUp() {
-	gbl.bExitState = true;
-	for (auto &t : gbl.threads) {
+	bExitState = true;
+	for (auto &t : threads) {
 		if (t.joinable()) {
 			t.join();
 		}
@@ -21,11 +21,8 @@ void CleanUp() {
 
 void Panic() {
 	CleanUp();
-#ifdef _DEBUG
-	FreeConsole();
-#endif
 	cfg.uiQuitReason = 3;
-	FreeLibraryAndExitThread(gbl.hInst, cfg.uiQuitReason);
+	FreeLibraryAndExitThread(hInst, cfg.uiQuitReason);
 }
 
 void Cheat() {
@@ -47,7 +44,7 @@ void Cheat() {
 	cci.dwSize = 25;
 	cci.bVisible = false;
 	SetConsoleCursorInfo(hConsole, &cci);
-	gbl.Wait(1);
+	Wait(1);
 	SetConsoleTextAttribute(hConsole, 15);
 	printf("[DBG] ");
 	SetConsoleTextAttribute(hConsole, 7);
@@ -60,7 +57,7 @@ BOOL WINAPI DllMain(const HINSTANCE hInstDll, const DWORD fdwReason, LPVOID lpvR
 	switch (fdwReason) {
 		case DLL_PROCESS_ATTACH:
 			DisableThreadLibraryCalls(hInstDll);
-			gbl.hInst = hInstDll;
+			hInst = hInstDll;
 			CreateThread(nullptr, 0, LPTHREAD_START_ROUTINE(Cheat), nullptr, 0, nullptr);
 			break;
 		case DLL_PROCESS_DETACH:

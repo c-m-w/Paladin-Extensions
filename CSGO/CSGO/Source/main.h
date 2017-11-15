@@ -7,9 +7,9 @@
 #include <vector>
 
 #include "Program/debug.h"
-#include "Program/global.h"
 #include "Program/config.h"
-#include "Program/interface.h"
+#include "Program/global.h"
+#include "Program/interface.h" //AKA MENU BECAUSE FUCK YOUR NAMING CONVENTIONS LOL
 #include "Program/memory.h"
 
 #include "Features/engine.h"

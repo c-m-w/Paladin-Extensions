@@ -1,5 +1,7 @@
 #include "engine.h"
 
+Engine eng;
+
 void Engine::Jump(const Keystroke kType) {
 	mem.ksForceJump = kType;
 	mem.Write(mem.ksForceJump);

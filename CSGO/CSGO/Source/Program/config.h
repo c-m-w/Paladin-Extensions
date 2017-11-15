@@ -1,5 +1,12 @@
 #pragma once
 #include "../main.h"
+
+struct version 
+{
+	uint8_t lower;
+	uint8_t upper;
+};
+
 class Config {
 	char cfgPath[255];
 	// read from config
@@ -17,6 +24,7 @@ class Config {
 
 public:
 	std::string sVersion = "1.0";
+	//version sVersion = { 1, 0 };
 	unsigned short uiQuitReason = 0;
 
 #ifdef _DEBUG
@@ -37,3 +45,5 @@ public:
 	// set quit reason
 	~Config();
 };
+
+extern Config cfg;

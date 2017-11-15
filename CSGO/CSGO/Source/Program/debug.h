@@ -2,8 +2,8 @@
 #include "../main.h"
 
 #ifdef _DEBUG
-#define DEBUG LogDebugMsg
-#define LASTERR LogLastError
+	#define DEBUG LogDebugMsg
+	#define LASTERR LogLastError
 #else
 	#define DEBUG
 	#define LASTERR
