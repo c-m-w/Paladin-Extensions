@@ -37,7 +37,7 @@ template<typename datatype> struct Address {
 		if (typeid(DWORD) == typeid(rdatatype)) {
 			loc += rvalue;
 		} else if (typeid(datatype) == typeid(rdatatype)) {
-			val += rvalue;
+			val._My_val += rvalue;
 		}
 		return *this;
 	}
@@ -46,7 +46,7 @@ template<typename datatype> struct Address {
 		if (typeid(DWORD) == typeid(rdatatype)) {
 			loc -= rvalue;
 		} else if (typeid(datatype) == typeid(rdatatype)) {
-			val -= rvalue;
+			val._My_val -= rvalue;
 		}
 		return *this;
 	}
@@ -79,18 +79,17 @@ template<typename datatype> struct Address {
 };
 
 namespace Addresses {
-	// global Engine addresses
-	// Engine pointer addresses
-	Address<DWORD> dwClientState = {0x5A783C};
-	Address<int> cs_soState = {0x108};
-	// global Client addresses
-	Address<int> ksForceJump = {0x4F2419C};
-	Address<int> ksForceAttack = {0x2ECF46C};
-	Address<float> fSensitivity = {0xAB547C, 0xAB5450};
-	// Client pointer addresses
-	Address<DWORD> dwLocalPlayer = {0xAAFD7C};
-	Address<int> lp_uiFlags = {0x100};
-	Address<int> lp_uiTotalHits = {0xBA94};
+
+	extern Address<DWORD> dwClientState;
+	extern Address<int> cs_soState;
+
+	extern Address<int> ksForceJump;
+	extern Address<int> ksForceAttack;
+	extern Address<float> fSensitivity;
+
+	extern Address<DWORD> dwLocalPlayer;
+	extern Address<int> lp_uiFlags;
+	extern Address<int> lp_uiTotalHits;
 }
 
 using namespace Addresses;

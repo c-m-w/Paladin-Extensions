@@ -77,7 +77,7 @@ void Cheat() {
 	mem.InitializeAddresses();
 	// Todo make our threads here
 	// General format for cheat threads:
-	threads.push_back(std::thread(Feature(cfg.bAutoJumpState, cfg.uiAutoJumpKey, &aut.AutoJump)));
+	//threads.push_back(std::thread(Feature(cfg.bAutoJumpState, cfg.uiAutoJumpKey, &aut.AutoJump)));
 }
 
 BOOL WINAPI DllMain(HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpvReserved) {

@@ -3,8 +3,8 @@
 
 class Engine {
 public:
-	void Jump(Keystroke ksType);
-	void Attack(Keystroke ksType);
+	void Jump(int ksType);
+	void Attack(int ksType);
 	float GetSensitivity();
 	void SetSensitivity(float fSensitivity);
 };

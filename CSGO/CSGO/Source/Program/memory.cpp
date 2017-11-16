@@ -1,5 +1,20 @@
 #include "memory.h"
 
+namespace Addresses {
+	// global Engine addresses
+	// Engine pointer addresses
+	Address<DWORD> dwClientState = {0x5A783C};
+	Address<int> cs_soState = {0x108};
+	// global Client addresses
+	Address<int> ksForceJump = {0x4F2419C};
+	Address<int> ksForceAttack = {0x2ECF46C};
+	Address<float> fSensitivity = {0xAB547C, 0xAB5450};
+	// Client pointer addresses
+	Address<DWORD> dwLocalPlayer = {0xAAFD7C};
+	Address<int> lp_uiFlags = {0x100};
+	Address<int> lp_uiTotalHits = {0xBA94};
+}
+
 MemoryManager mem;
 
 MemoryManager::~MemoryManager() {
