@@ -1,11 +1,24 @@
 #include "main.h"
 
-/* Key:
- * 0 -> successfully exited
- * 1 -> initial library loading failed
- * 2 -> called for blacklisted reason
- * 3 -> panic termination called
- */
+enum QuitReasons {
+	QUIT_REASON_UNKNOWN = -1,
+	QUIT_REASON_SUCCESS,
+	QUIT_REASON_LOADLIBRARY_ERROR,
+	QUIT_REASON_BLACKLISTED_CALL,
+	QUIT_REASON_PANIC
+};
+
+void Feature(bool bFeatureState, int uiFeatureKey, void (*Feature)()) {
+	while (bFeatureState) {
+		if (bExitState) {
+			return;
+		}
+		if (GetAsyncKeyState(uiFeatureKey)) {
+			Feature();
+		}
+		Wait(10);
+	}
+}
 
 void CleanUp() {
 	bExitState = true;
@@ -21,7 +34,7 @@ void CleanUp() {
 
 void Panic() {
 	CleanUp();
-	cfg.uiQuitReason = 3;
+	cfg.uiQuitReason = QUIT_REASON_PANIC;
 	FreeLibraryAndExitThread(hInst, cfg.uiQuitReason);
 }
 
@@ -50,7 +63,21 @@ void Cheat() {
 	SetConsoleTextAttribute(hConsole, 7);
 	printf("Paladin Debug Interface Setup\n");
 #endif
-	// todo make our threads
+	if (!cfg.LoadConfig()) {
+		MessageBox(nullptr, "Warning 3: Config File -> Using Defaults\nIs there a config file?", "Paladin CSGO", MB_ICONWARNING | MB_OK);
+	}
+	if (!cfg.ReadConfig()) {
+		MessageBox(nullptr, "Warning 4: Config File -> Using Defaults\nIs the config file formatted for this version?", "Paladin CSGO", MB_ICONWARNING | MB_OK);
+	}
+	// Todo call Menu here
+	if (!mem.AttachToGame()) {
+		MessageBox(nullptr, "Fatal Error 1: Game Attach\nAre you running the cheat as admin?", "Paladin CSGO", MB_ICONERROR | MB_OK);
+		return;
+	}
+	mem.InitializeAddresses();
+	// Todo make our threads here
+	// General format for cheat threads:
+	threads.push_back(std::thread(Feature(cfg.bAutoJumpState, cfg.uiAutoJumpKey, &aut.AutoJump)));
 }
 
 BOOL WINAPI DllMain(HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpvReserved) {
@@ -64,7 +91,7 @@ BOOL WINAPI DllMain(HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpvReserved) {
 			CleanUp();
 			break;
 		default:
-			return true;
+			return QUIT_REASON_BLACKLISTED_CALL;
 	}
-	return false;
+	return QUIT_REASON_SUCCESS;
 }

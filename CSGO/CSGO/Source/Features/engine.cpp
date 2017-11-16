@@ -8,7 +8,7 @@ void Engine::Jump(Keystroke kType) {
 }
 
 void Engine::Attack(Keystroke kType) {
-	Addresses::ksForceAttack = kType;
+	ksForceAttack = kType;
 	mem.Write(ksForceAttack);
 }
 

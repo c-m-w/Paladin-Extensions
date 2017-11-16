@@ -17,9 +17,15 @@
 - Config
 ##### Jeremy
 - Finish Base
+- HWID
+- Check for multiple instances
+- Admin Check
+- Anticheat Check
+- Features
 - Everything else
 ##### Mike
 - Help finish Base
+- Cheat Threads
 - Menu
 ##### Hunter
 - Menu

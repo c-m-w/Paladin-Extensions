@@ -9,60 +9,91 @@ template<typename datatype> struct Address {
 	template<typename rdatatype> Address<datatype> operator+(const rdatatype &rvalue) {
 		if (typeid(DWORD) == typeid(rdatatype)) {
 			loc += rvalue;
-		}
-		if (typeid(datatype) == typeid(rdatatype)) {
+		} else if (typeid(datatype) == typeid(rdatatype)) {
 			val += rvalue;
 		}
 		return *this;
 	}
+
 	template<typename rdatatype> Address<datatype> operator-(const rdatatype &rvalue) {
 		if (typeid(DWORD) == typeid(rdatatype)) {
 			loc -= rvalue;
-		}
-		if (typeid(datatype) == typeid(rdatatype)) {
+		} else if (typeid(datatype) == typeid(rdatatype)) {
 			val -= rvalue;
 		}
 		return *this;
 	}
+
 	template<typename rdatatype> Address<datatype> &operator=(const rdatatype &rvalue) {
 		if (typeid(DWORD) == typeid(rdatatype)) {
 			loc = rvalue;
-		}
-		if (typeid(datatype) == typeid(rdatatype)) {
+		} else if (typeid(datatype) == typeid(rdatatype)) {
 			val = rvalue;
 		}
 		return *this;
 	}
+
 	template<typename rdatatype> Address<datatype> &operator+=(const rdatatype &rvalue) {
 		if (typeid(DWORD) == typeid(rdatatype)) {
 			loc += rvalue;
-		}
-		if (typeid(datatype) == typeid(rdatatype)) {
+		} else if (typeid(datatype) == typeid(rdatatype)) {
 			val += rvalue;
 		}
 		return *this;
 	}
+
 	template<typename rdatatype> Address<datatype> &operator-=(const rdatatype &rvalue) {
 		if (typeid(DWORD) == typeid(rdatatype)) {
 			loc -= rvalue;
-		}
-		if (typeid(datatype) == typeid(rdatatype)) {
+		} else if (typeid(datatype) == typeid(rdatatype)) {
 			val -= rvalue;
 		}
 		return *this;
 	}
+
+	template<typename rdatatype> bool operator==(const rdatatype &rvalue) {
+		if (typeid(DWORD) == typeid(rdatatype)) {
+			if (loc == rvalue) {
+				return true;
+			}
+		} else if (typeid(datatype) == typeid(rdatatype)) {
+			if (val == rvalue) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	template<typename rdatatype> bool operator!=(const rdatatype &rvalue) {
+		if (typeid(DWORD) == typeid(rdatatype)) {
+			if (loc != rvalue) {
+				return true;
+			}
+		} else if (typeid(datatype) == typeid(rdatatype)) {
+			if (val != rvalue) {
+				return true;
+			}
+		}
+		return false;
+	}
 };
 
 namespace Addresses {
-	// global addresses
-	Address<Keystroke> ksForceJump = { 0x4F2419C };
-	Address<Keystroke> ksForceAttack = { 0x2ECF46C };
-	Address<float> fSensitivity = { 0xAB547C, 0xAB5450 };
-	// pointer addresses
-	Address<DWORD> dwLocalPlayer = { 0xAAFD7C };
-	Address<int> lp_iFlags = { 0x100 };
-	Address<int> lp_uiTotalHits = { 0xBA94 };
+	// global Engine addresses
+	// Engine pointer addresses
+	Address<DWORD> dwClientState = {0x5A783C};
+	Address<int> cs_soState = {0x108};
+	// global Client addresses
+	Address<int> ksForceJump = {0x4F2419C};
+	Address<int> ksForceAttack = {0x2ECF46C};
+	Address<float> fSensitivity = {0xAB547C, 0xAB5450};
+	// Client pointer addresses
+	Address<DWORD> dwLocalPlayer = {0xAAFD7C};
+	Address<int> lp_uiFlags = {0x100};
+	Address<int> lp_uiTotalHits = {0xBA94};
 }
+
+using namespace Addresses;
 
 class MemoryManager {
 	DWORD dwProcessId = NULL;
@@ -85,6 +116,7 @@ public:
 		}
 		return ReadProcessMemory(hGame, LPVOID(adrRead.loc._My_val), &adrRead.val, sizeof(datatype), nullptr);
 	}
+
 	template<class datatype> bool Write(Address<datatype> &adrWrite) {
 		if (adrWrite.ptr) {
 			DWORD dwXor = *reinterpret_cast<DWORD*>(&adrWrite.val) ^ adrWrite.ptr;
@@ -92,6 +124,7 @@ public:
 		}
 		return WriteProcessMemory(hGame, LPVOID(adrWrite.loc._My_val), &adrWrite.val, sizeof(datatype), nullptr);
 	}
+
 	~MemoryManager();
 
 };

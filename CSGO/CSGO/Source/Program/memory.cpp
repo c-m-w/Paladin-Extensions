@@ -58,9 +58,20 @@ bool MemoryManager::AttachToGame() {
 }
 
 void MemoryManager::InitializeAddresses() {
+	LogDebugMsg(DBG, "Initializing addresses");
+	dwClientState += dwEngineBase;
+	Read(dwClientState);
+	cs_soState += dwClientState.loc;
 	ksForceJump += dwClientBase;
 	ksForceAttack += dwClientBase;
+	fSensitivity += dwClientBase;
+	LogDebugMsg(DBG, "Waiting for server connection to complete address initialization");
+	do {
+		Read(cs_soState);
+	} while (cs_soState != SIGN_ON_STATE_FULL);
 	dwLocalPlayer += dwClientBase;
 	Read(dwLocalPlayer);
-	lp_iFlags += dwLocalPlayer.loc;
+	lp_uiFlags += dwLocalPlayer.loc;
+	lp_uiTotalHits += dwLocalPlayer.loc;
+	LogDebugMsg(SCS, "Initialized addresses");
 }

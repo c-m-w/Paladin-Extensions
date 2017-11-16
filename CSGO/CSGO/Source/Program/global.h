@@ -14,12 +14,22 @@ struct Angle {
 	float pitch, yaw, roll; // y, x, z
 };
 
+struct Color {
+	unsigned __int8 r, g, b, a;
+};
+
 struct Coordinate {
 	float x, y, z;
 };
 
-struct Color {
-	unsigned __int8 r, g, b, a;
+enum SignOnState {
+	SIGN_ON_STATE_CHALLENGE = 1,
+	SIGN_ON_STATE_CONNECTED,
+	SIGN_ON_STATE_NEW,
+	SIGN_ON_STATE_PRESPAWN,
+	SIGN_ON_STATE_SPAWNED,
+	SIGN_ON_STATE_FULL,
+	SIGN_ON_STATE_CHANGELEVEL
 };
 
 enum Keystroke {
@@ -29,8 +39,7 @@ enum Keystroke {
 };
 
 enum Weapons {
-	NONE,
-	DEAGLE,
+	DEAGLE = 1,
 	ELITE,
 	FIVESEVEN,
 	GLOCK,

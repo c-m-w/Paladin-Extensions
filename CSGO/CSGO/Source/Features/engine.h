@@ -1,6 +1,6 @@
 #pragma once
 #include "../main.h"
-using namespace Addresses;
+
 class Engine {
 public:
 	void Jump(Keystroke ksType);

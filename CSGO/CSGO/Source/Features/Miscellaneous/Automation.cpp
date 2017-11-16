@@ -1,18 +1,16 @@
 #include "automation.h"
 
 void Automation::AutoJump() {
-	mem.Read(mem.ksForceJump);
-	if (mem.ksForceJump.val == eng.PRESS) {
-		eng.Jump(eng.RELEASE);
+	mem.Read(ksForceJump);
+	if (ksForceJump == PRESS) {
+		eng.Jump(RELEASE);
 	}
-	mem.Read(mem.lp_iFlags);
-	switch (mem.lp_iFlags.val) {
+	mem.Read(lp_uiFlags);
+	switch (lp_uiFlags.val) {
 		case 257:
-			eng.Jump(eng.SCROLL);
 		case 261:
-			eng.Jump(eng.SCROLL);
 		case 263:
-			eng.Jump(eng.SCROLL);
+			eng.Jump(SCROLL);
 		default:
 			Wait(1);
 	}

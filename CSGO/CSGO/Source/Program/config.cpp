@@ -69,8 +69,12 @@ void Config::Write(char *setting, char *subsetting, std::string status) {
 }
 
 Config::Config() {
+	sVersion = "1.0";
+	uiQuitReason = -1;
 	uiExitKey = VK_F4;
 	uiReloadKey = VK_F5;
+	uiAutoJumpKey = VK_XBUTTON1;
+	bAutoJumpState = true;
 }
 
 bool Config::LoadConfig() {
@@ -82,8 +86,11 @@ bool Config::LoadConfig() {
 	struct stat buffer;
 	if (stat(cfgPath, &buffer)) {
 		Write("Info", "Version", sVersion);
+		Write("Info", "Quit Reason", uiQuitReason);
 		Write("Key Binds", "Terminate", uiExitKey);
 		Write("Key Binds", "Reload Config", uiReloadKey);
+		Write("Key Binds", "Auto Jump", uiAutoJumpKey);
+		Write("Auto Jump", "Enabled", bAutoJumpState);
 		return false;
 	}
 	return true;
@@ -95,10 +102,14 @@ bool Config::ReadConfig() {
 	if (sVersion == sConfig) {
 		Read("Key Binds", "Terminate", uiExitKey);
 		Read("Key Binds", "Reload Config", uiReloadKey);
+		Read("Key Binds", "Auto Jump", uiAutoJumpKey);
+		Read("Auto Jump", "Enabled", bAutoJumpState);
 	} else {
 		// set defaults
 		uiExitKey = VK_F4;
 		uiReloadKey = VK_F5;
+		uiAutoJumpKey = VK_XBUTTON1;
+		bAutoJumpState = true;
 		return false;
 	}
 	if (!uiExitKey) {
@@ -107,6 +118,10 @@ bool Config::ReadConfig() {
 	}
 	if (!uiReloadKey) {
 		uiReloadKey = VK_F5;
+		return false;
+	}
+	if (!uiAutoJumpKey) {
+		uiAutoJumpKey = VK_XBUTTON1;
 		return false;
 	}
 	return true;

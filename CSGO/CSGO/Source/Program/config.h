@@ -22,8 +22,8 @@ class Config {
 	void Write(char *setting, char *subsetting, std::string status);
 
 public:
-	std::string sVersion = "1.0";
-	unsigned short uiQuitReason = 0;
+	std::string sVersion;
+	unsigned short uiQuitReason;
 
 #ifdef _DEBUG
 	bool bCheckForAnticheat = false;
@@ -34,6 +34,10 @@ public:
 	// Keys
 	int uiExitKey;
 	int uiReloadKey;
+	int uiAutoJumpKey;
+
+	// Feature Toggles
+	bool bAutoJumpState;
 
 	Config();
 	// open config, create if doesn't exist
