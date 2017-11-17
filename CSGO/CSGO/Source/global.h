@@ -1,5 +1,5 @@
 #pragma once
-#include "../main.h"
+#include "main.h"
 
 #define PI 3.141593f
 #define FLAG_ON_GROUND (1 << 0)

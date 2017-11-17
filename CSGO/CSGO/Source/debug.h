@@ -1,5 +1,5 @@
 #pragma once
-#include "../main.h"
+#include "main.h"
 
 #ifdef _DEBUG
 #define DEBUG LogDebugMsg

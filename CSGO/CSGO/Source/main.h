@@ -6,14 +6,15 @@
 #include <string>
 #include <vector>
 
-#include "Program/debug.h"
-#include "Program/global.h"
+#include "debug.h"
+#include "global.h"
+
+#include "Program/general.h"
 #include "Program/config.h"
 #include "Program/interface.h"
 #include "Program/memory.h"
 
 #include "Features/engine.h"
-
 #include "Features/Miscellaneous/automation.h"
 
 /* Conventions:

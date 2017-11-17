@@ -6,31 +6,30 @@
 ##### Open
 ##### Jeremy
 ##### Mike
-- [...]
+- Add multiple injection methods [++]
 ##### Hunter
 ##### John
 ##### Cole
 
 ## CSGO TODO
 ##### Open
-- Traced Ray Triggerbot (https://www.unknowncheats.me/forum/counterstrike-global-offensive/136361-external-ray-tracing-ray-aabb.html)
-- Config
+- Trace Ray (https://www.unknowncheats.me/forum/counterstrike-global-offensive/136361-external-ray-tracing-ray-aabb.html) [Engine]
 ##### Jeremy
-- Finish Base
-- HWID
-- Check for multiple instances
-- Admin Check
-- Anticheat Check
-- Features
-- Everything else
+- Finish Base [++]
+- HWID [General]
+- Check for multiple instances [General]
+- Admin Check [General]
+- Anticheat Check [General]
+- Features [Engine ++]
+- Everything else [++]
 ##### Mike
-- Help finish Base
-- Cheat Threads
-- Menu
+- Help finish Base [++]
+- Cheat Threads [Main]
+- Menu [Interface]
 ##### Hunter
-- Menu
+- Menu [Interface]
 ##### John
-- Features
+- Features [Engine ++]
 ##### Cole
 
 # Features:
@@ -38,10 +37,10 @@
   - [ ] Aimbot
     - Attack Teammates [bool]
     - BSilent (new psilent idea i have, always does psilent even if out of fov) [bool]
-	- Spotted [bool]
+	- Spotted Only vs Vis Check Only [bool]
 	- Overaim [float]
-	- Vertical Displacement [int]
-    - Smoothness based on denominating factor [int]
+	- Vertical Displacement [float]
+    - Smoothness [int]
     - Hitbox/Bone [int/string to int]
     - Curve [float]
     - FOV/Crosshair [float&bool]
