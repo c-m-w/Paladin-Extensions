@@ -126,6 +126,10 @@ bool Debug::Init()
 
 void Debug::LogDebugMsg(DebugMessage type, char *msg, ...) 
 {
+#ifndef m_DEBUG
+	return;
+#endif
+
 	if (!initialized)
 		return;
 
@@ -189,6 +193,10 @@ void Debug::LogDebugMsg(DebugMessage type, char *msg, ...)
 // Look up errors here: https://msdn.microsoft.com/en-us/library/windows/desktop/ms681381(v=vs.85).aspx
 void Debug::LogLastErrorA() 
 {
+#ifndef m_DEBUG
+	return;
+#endif
+
 	if (!initialized)
 		return;
 
@@ -205,6 +213,10 @@ void Debug::LogLastErrorA()
 
 void Debug::LogLastErrorB()
 {
+#ifndef m_DEBUG
+	return;
+#endif
+
 	DWORD error = GetLastError();
 	LPSTR errorString = nullptr;
 	char cBuffer[2048] = { '\0' };
