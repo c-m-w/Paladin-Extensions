@@ -4,15 +4,15 @@ namespace Addresses {
 	// global Engine addresses
 	// Engine pointer addresses
 	Address<DWORD> dwClientState = {0x5A783C};
-	Address<int> cs_soState = {0x108};
+	Address<uint8> cs_soState = {0x108};
 	// global Client addresses
-	Address<int> ksForceJump = {0x4F2419C};
-	Address<int> ksForceAttack = {0x2ECF46C};
-	Address<float> fSensitivity = {0xAB547C, 0xAB5450};
+	Address<uint8> ksForceJump = {0x4F2419C};
+	Address<uint8> ksForceAttack = {0x2ECF46C};
+	Address<float> flSensitivity = {0xAB547C, 0xAB5450};
 	// Client pointer addresses
 	Address<DWORD> dwLocalPlayer = {0xAAFD7C};
-	Address<int> lp_uiFlags = {0x100};
-	Address<int> lp_uiTotalHits = {0xBA94};
+	Address<frame> lp_fFlags = {0x100};
+	Address<total> lp_totalHitsOnServer = {0xBA94};
 }
 
 MemoryManager mem;
@@ -79,14 +79,14 @@ void MemoryManager::InitializeAddresses() {
 	cs_soState += dwClientState.loc;
 	ksForceJump += dwClientBase;
 	ksForceAttack += dwClientBase;
-	fSensitivity += dwClientBase;
+	flSensitivity += dwClientBase;
 	LogDebugMsg(DBG, "Waiting for server connection to complete address initialization");
 	do {
 		Read(cs_soState);
-	} while (cs_soState != SIGN_ON_STATE_FULL);
+	} while (cs_soState != SIGNONSTATE_FULL);
 	dwLocalPlayer += dwClientBase;
 	Read(dwLocalPlayer);
-	lp_uiFlags += dwLocalPlayer.loc;
-	lp_uiTotalHits += dwLocalPlayer.loc;
+	lp_fFlags += dwLocalPlayer.loc;
+	lp_totalHitsOnServer += dwLocalPlayer.loc;
 	LogDebugMsg(SCS, "Initialized addresses");
 }

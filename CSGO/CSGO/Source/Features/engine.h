@@ -1,5 +1,5 @@
 #pragma once
-#include "../main.h"
+#include "../Program/memory.h"
 
 class Engine {
 public:

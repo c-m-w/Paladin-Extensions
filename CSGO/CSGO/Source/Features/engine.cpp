@@ -13,11 +13,11 @@ void Engine::Attack(int kType) {
 }
 
 float Engine::GetSensitivity() {
-	mem.Read(fSensitivity);
-	return fSensitivity.val;
+	mem.Read(flSensitivity);
+	return flSensitivity.val;
 }
 
 void Engine::SetSensitivity(float fSensitivityNew) {
-	fSensitivity = fSensitivityNew;
-	mem.Write(fSensitivity);
+	flSensitivity = fSensitivityNew;
+	mem.Write(flSensitivity);
 }
