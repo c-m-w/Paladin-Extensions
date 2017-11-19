@@ -1,9 +1,9 @@
 #pragma once
-#include "../main.h"
+#include "general.h"
 
 struct version {
-	uint8_t lower;
-	uint8_t upper;
+	uint8 lower;
+	uint8 upper;
 };
 
 class Config {

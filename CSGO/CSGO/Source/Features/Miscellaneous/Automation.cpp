@@ -5,8 +5,8 @@ void Automation::AutoJump() {
 	if (ksForceJump == PRESS) {
 		eng.Jump(RELEASE);
 	}
-	mem.Read(lp_uiFlags);
-	if (lp_uiFlags.val & FLAG_ON_GROUND) {
+	mem.Read(lp_fFlags);
+	if (lp_fFlags.val & FL_ONGROUND) {
 		eng.Jump(SCROLL);
 	} else {
 		Wait(1);

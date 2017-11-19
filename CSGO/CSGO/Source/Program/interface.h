@@ -1,5 +1,5 @@
 #pragma once
-#include "../main.h"
+#include "config.h"
 
 class Interface {
 };
