@@ -98,6 +98,7 @@
   - [ ] FOV Changer
   - [ ] Viewmodel FOV Changer
   - [ ] Auto Pistol
+  - [ ] Auto Jump-Throw
   - [x] Auto Jump
     - Following Minimum Delay [int]
   - [ ] Edge Jump

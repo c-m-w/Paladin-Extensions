@@ -28,41 +28,41 @@ struct Coordinate {
 #define FL_ONGROUND (1 << 0) // At rest / on the ground
 #define FL_DUCKING (1 << 1)  // Player flag -- Player is fully crouched
 
-enum MoveType {
-	MOVETYPE_NONE, // never moves
-	MOVETYPE_WALK = 2, // Player only - moving on the ground
-	MOVETYPE_NOCLIP = 8, // No gravity, no collisions, still do velocity/avelocity
-	MOVETYPE_LADDER, // Used by players only when going onto a ladder
-	MOVETYPE_OBSERVER, // Observer movement, depends on player's observer mode
+enum class MoveType {
+	NONE, // never moves
+	WALK = 2, // Player only - moving on the ground
+	NOCLIP = 8, // No gravity, no collisions, still do velocity/avelocity
+	LADDER, // Used by players only when going onto a ladder
+	OBSERVER, // Observer movement, depends on player's observer mode
 };
 
-enum SignOnState {
-	SIGNONSTATE_CONNECTED = 2,
-	SIGNONSTATE_SPAWNED = 5,
-	SIGNONSTATE_FULL,
-	SIGNONSTATE_CHANGELEVEL
+enum class SignOnState {
+	CONNECTED = 2,
+	SPAWNED = 5,
+	FULL,
+	CHANGELEVEL
 };
 
-enum Keystroke {
+enum class Keystroke {
 	RELEASE = 4,
 	PRESS = 5,
 	SCROLL = 6
 };
 
-enum LifeState {
-	LIFESTATE_ALIVE,
-	LIFESTATE_KILLCAM,
-	LIFESTATE_DEAD
+enum class LifeState {
+	ALIVE,
+	KILLCAM,
+	DEAD
 };
 
-enum Team {
-	TEAM_NONE = 0,
-	TEAM_SPECTATOR = 1,
-	TEAM_TERRORISTS = 2,
-	TEAM_COUNTERTERRORISTS = 3
+enum class Team {
+	NONE = 0,
+	SPECTATOR = 1,
+	TERRORISTS = 2,
+	COUNTERTERRORISTS = 3
 };
 
-enum WeaponType {
+enum class WeaponType {
 	KNIVES,
 	PISTOLS,
 	SMGS,
@@ -74,59 +74,59 @@ enum WeaponType {
 	GRENADES = 9
 };
 
-enum Weapon {
-	WEAPON_DEAGLE = 1,
-	WEAPON_ELITE,
-	WEAPON_FIVESEVEN,
-	WEAPON_GLOCK,
-	WEAPON_AK47 = 7,
-	WEAPON_AUG,
-	WEAPON_AWP,
-	WEAPON_FAMAS,
-	WEAPON_G3SG1,
-	WEAPON_GALILAR = 13,
-	WEAPON_M249,
-	WEAPON_M4A1 = 16,
-	WEAPON_MAC10,
-	WEAPON_P90 = 19,
-	WEAPON_UMP45 = 24,
-	WEAPON_XM1014,
-	WEAPON_BIZON,
-	WEAPON_MAG7,
-	WEAPON_NEGEV,
-	WEAPON_SAWEDOFF,
-	WEAPON_TEC9,
-	WEAPON_TASER,
-	WEAPON_HKP2000,
-	WEAPON_MP7,
-	WEAPON_MP9,
-	WEAPON_NOVA,
-	WEAPON_P250,
-	WEAPON_SCAR20 = 38,
-	WEAPON_SG556,
-	WEAPON_SSG08,
-	WEAPON_KNIFEGG,
-	WEAPON_KNIFE,
-	WEAPON_FLASHBANG,
-	WEAPON_HEGRENADE,
-	WEAPON_SMOKEGRENADE,
-	WEAPON_MOLOTOV,
-	WEAPON_DECOY,
-	WEAPON_INCGRENADE,
-	WEAPON_C4,
-	WEAPON_KNIFE_T = 59,
-	WEAPON_M4A1_SILENCER,
-	WEAPON_USP_SILENCER,
-	WEAPON_CZ75A = 63,
-	WEAPON_REVOLVER,
-	WEAPON_KNIFE_BAYONET = 500,
-	WEAPON_KNIFE_FLIP = 505,
-	WEAPON_KNIFE_GUT,
-	WEAPON_KNIFE_KARAMBIT,
-	WEAPON_KNIFE_M9_BAYONET,
-	WEAPON_KNIFE_TACTICAL,
-	WEAPON_KNIFE_FALCHION = 512,
-	WEAPON_KNIFE_BOWIE = 514,
-	WEAPON_KNIFE_BUTTERFLY,
-	WEAPON_KNIFE_PUSH
+enum class Weapon {
+	DEAGLE = 1,
+	ELITE,
+	FIVESEVEN,
+	GLOCK,
+	AK47 = 7,
+	AUG,
+	AWP,
+	FAMAS,
+	G3SG1,
+	GALILAR = 13,
+	M249,
+	M4A1 = 16,
+	MAC10,
+	P90 = 19,
+	UMP45 = 24,
+	XM1014,
+	BIZON,
+	MAG7,
+	NEGEV,
+	SAWEDOFF,
+	TEC9,
+	TASER,
+	HKP2000,
+	MP7,
+	MP9,
+	NOVA,
+	P250,
+	SCAR20 = 38,
+	SG556,
+	SSG08,
+	KNIFEGG,
+	KNIFE,
+	FLASHBANG,
+	HEGRENADE,
+	SMOKEGRENADE,
+	MOLOTOV,
+	DECOY,
+	INCGRENADE,
+	C4,
+	KNIFE_T = 59,
+	M4A1_SILENCER,
+	USP_SILENCER,
+	CZ75A = 63,
+	REVOLVER,
+	KNIFE_BAYONET = 500,
+	KNIFE_FLIP = 505,
+	KNIFE_GUT,
+	KNIFE_KARAMBIT,
+	KNIFE_M9_BAYONET,
+	KNIFE_TACTICAL,
+	KNIFE_FALCHION = 512,
+	KNIFE_BOWIE = 514,
+	KNIFE_BUTTERFLY,
+	KNIFE_PUSH
 };

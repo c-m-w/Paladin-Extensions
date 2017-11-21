@@ -1,22 +1,32 @@
 #include "main.h"
 
-enum QuitReasons {
-	QUIT_REASON_UNKNOWN = -1,
-	QUIT_REASON_SUCCESS,
-	QUIT_REASON_LOADLIBRARY_ERROR,
-	QUIT_REASON_BLACKLISTED_CALL,
-	QUIT_REASON_PANIC
+enum class QuitReasons {
+	UNKNOWN = -1,
+	SUCCESS,
+	LOADLIBRARY_ERROR,
+	BLACKLISTED_CALL,
+	PANIC
 };
 
-void Feature(bool bFeatureState, int uiFeatureKey, void (*Feature)()) {
+void Feature(bool bFeatureState, void (*Feature)(), int uiFeatureKey) {
 	while (bFeatureState) {
 		if (bExitState) {
 			return;
 		}
 		if (GetAsyncKeyState(uiFeatureKey)) {
 			Feature();
+		} else {
+			Wait(10);
 		}
-		Wait(10);
+	}
+}
+
+void Feature(bool bFeatureState, void (*Feature)()) {
+	while (bFeatureState) {
+		if (bExitState) {
+			return;
+		}
+		Feature();
 	}
 }
 
@@ -34,7 +44,7 @@ void CleanUp() {
 
 void Panic() {
 	CleanUp();
-	cfg.uiQuitReason = QUIT_REASON_PANIC;
+	cfg.uiQuitReason = int(QuitReasons::PANIC);
 	FreeLibraryAndExitThread(hInst, cfg.uiQuitReason);
 }
 
@@ -63,6 +73,21 @@ void Cheat() {
 	SetConsoleTextAttribute(hConsole, 7);
 	printf("Paladin Debug Interface Setup\n");
 #endif
+	if (!all.GetElevationState()) {
+		MessageBox(nullptr, "Warning 1: Elevation Token State -> No access\nDid you run the middleman as admin?", "Paladin CSGO", MB_ICONWARNING | MB_OK);
+	}
+	uint8 kacCSGO = all.KillAnticheat("Counter-Strike: Global Offensive", *"csgo.exe");
+	if (kacCSGO != 0) {
+		if (kacCSGO == 1) {
+			MessageBox(nullptr, "Warning 2: Anticheat -> Terminated\nDid you leave CSGO open during injection?", "Paladin CSGO", MB_ICONWARNING | MB_OK);
+		}
+		if (all.KillAnticheat("Steam", *"steam.exe") == 1) {
+			MessageBox(nullptr, "Warning 2: Anticheat -> Terminated\nDid you leave Steam open during injection?", "Paladin CSGO", MB_ICONWARNING | MB_OK);
+		}
+	} else {
+		MessageBox(nullptr, "Fatal Error 1: Elevation Token State -> No anticheat termination access\nDid you run the middleman as admin?", "Paladin CSGO", MB_ICONERROR | MB_OK);
+		CleanUp();
+	}
 	if (!cfg.LoadConfig()) {
 		MessageBox(nullptr, "Warning 3: Config File -> Using Defaults\nIs there a config file?", "Paladin CSGO", MB_ICONWARNING | MB_OK);
 	}
@@ -71,8 +96,8 @@ void Cheat() {
 	}
 	// Todo call Menu here
 	if (!mem.AttachToGame()) {
-		MessageBox(nullptr, "Fatal Error 1: Game Attach\nAre you running the cheat as admin?", "Paladin CSGO", MB_ICONERROR | MB_OK);
-		return;
+		MessageBox(nullptr, "Fatal Error 2: Game Attach\nAre you running the cheat as admin?", "Paladin CSGO", MB_ICONERROR | MB_OK);
+		CleanUp();
 	}
 	mem.InitializeAddresses();
 	// Todo make our threads here
@@ -91,7 +116,7 @@ BOOL WINAPI DllMain(HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpvReserved) {
 			CleanUp();
 			break;
 		default:
-			return QUIT_REASON_BLACKLISTED_CALL;
+			return int(QuitReasons::BLACKLISTED_CALL);
 	}
-	return QUIT_REASON_SUCCESS;
+	return int(QuitReasons::SUCCESS);
 }

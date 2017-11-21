@@ -83,7 +83,7 @@ void MemoryManager::InitializeAddresses() {
 	LogDebugMsg(DBG, "Waiting for server connection to complete address initialization");
 	do {
 		Read(cs_soState);
-	} while (cs_soState != SIGNONSTATE_FULL);
+	} while (cs_soState != SignOnState::FULL);
 	dwLocalPlayer += dwClientBase;
 	Read(dwLocalPlayer);
 	lp_fFlags += dwLocalPlayer.loc;

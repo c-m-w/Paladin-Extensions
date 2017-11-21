@@ -8,18 +8,18 @@ template<typename datatype> struct Address {
 
 	template<typename rdatatype> Address<datatype> operator+(const rdatatype &rvalue) {
 		if (typeid(DWORD) == typeid(rdatatype)) {
-			loc += rvalue;
+			loc += DWORD(rvalue);
 		} else if (typeid(datatype) == typeid(rdatatype)) {
-			val += rvalue;
+			val += datatype(rvalue);
 		}
 		return *this;
 	}
 
 	template<typename rdatatype> Address<datatype> operator-(const rdatatype &rvalue) {
 		if (typeid(DWORD) == typeid(rdatatype)) {
-			loc -= rvalue;
+			loc -= DWORD(rvalue);
 		} else if (typeid(datatype) == typeid(rdatatype)) {
-			val -= rvalue;
+			val -= datatype(rvalue);
 		}
 		return *this;
 	}
@@ -28,14 +28,14 @@ template<typename datatype> struct Address {
 		if (typeid(DWORD) == typeid(rdatatype)) {
 			loc = DWORD(rvalue);
 		} else if (typeid(datatype) == typeid(rdatatype)) {
-			val = rvalue;
+			val = datatype(rvalue);
 		}
 		return *this;
 	}
 
 	template<typename rdatatype> Address<datatype> &operator+=(const rdatatype &rvalue) {
 		if (typeid(DWORD) == typeid(rdatatype)) {
-			loc += rvalue;
+			loc += DWORD(rvalue);
 		} else if (typeid(datatype) == typeid(rdatatype)) {
 			val += datatype(rvalue);
 		}
@@ -44,20 +44,20 @@ template<typename datatype> struct Address {
 
 	template<typename rdatatype> Address<datatype> &operator-=(const rdatatype &rvalue) {
 		if (typeid(DWORD) == typeid(rdatatype)) {
-			loc -= rvalue;
+			loc -= DWORD(rvalue);
 		} else if (typeid(datatype) == typeid(rdatatype)) {
-			val -= rvalue;
+			val -= datatype(rvalue);
 		}
 		return *this;
 	}
 
 	template<typename rdatatype> bool operator==(const rdatatype &rvalue) {
 		if (typeid(DWORD) == typeid(rdatatype)) {
-			if (loc == rvalue) {
+			if (loc == DWORD(rvalue)) {
 				return true;
 			}
 		} else if (typeid(datatype) == typeid(rdatatype)) {
-			if (val == rvalue) {
+			if (val == datatype(rvalue)) {
 				return true;
 			}
 		}
@@ -66,11 +66,11 @@ template<typename datatype> struct Address {
 
 	template<typename rdatatype> bool operator!=(const rdatatype &rvalue) {
 		if (typeid(DWORD) == typeid(rdatatype)) {
-			if (loc != rvalue) {
+			if (loc != DWORD(rvalue)) {
 				return true;
 			}
 		} else if (typeid(datatype) == typeid(rdatatype)) {
-			if (val != rvalue) {
+			if (val != datatype(rvalue)) {
 				return true;
 			}
 		}
