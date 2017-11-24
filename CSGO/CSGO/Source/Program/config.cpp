@@ -2,78 +2,12 @@
 
 Config cfg;
 
-void Config::Read(char *setting, char *subsetting, bool &status) {
-	double temp = status;
-	Read(setting, subsetting, temp);
-	status = bool(temp);
-}
-
-void Config::Read(char *setting, char *subsetting, int &status) {
-	double temp = status;
-	Read(setting, subsetting, temp);
-	status = int(temp);
-}
-
-void Config::Read(char *setting, char *subsetting, float &status) {
-	double temp = status;
-	Read(setting, subsetting, temp);
-	status = float(temp);
-}
-
-void Config::Read(char *setting, char *subsetting, double &status) {
-	char *temp = nullptr;
-	if (!WritePrivateProfileStringA(setting, subsetting, temp, cfgPath)) {
-		LogDebugMsg(WRN, "Failed to write %s, %s to config!", setting, subsetting);
-	}
-	status = atof(temp);
-}
-
-void Config::Read(char *setting, char *subsetting, std::string &status) {
-	char *temp = nullptr;
-	if (!WritePrivateProfileStringA(setting, subsetting, temp, cfgPath)) {
-		LogDebugMsg(WRN, "Failed to write %s, %s to config!", setting, subsetting);
-	}
-	status = temp;
-}
-
-void Config::Write(char *setting, char *subsetting, bool status) {
-	int temp = (int)status;
-	Write(setting, subsetting, temp);
-}
-
-void Config::Write(char *setting, char *subsetting, int status) {
-	char *temp = nullptr;
-	sprintf_s(temp, 255, "%d", status);
-	if (!WritePrivateProfileStringA(setting, subsetting, temp, cfgPath)) {
-		LogDebugMsg(WRN, "Failed to write %s, %s to config!", setting, subsetting);
-	}
-}
-
-void Config::Write(char *setting, char *subsetting, float status) {
-	double temp = double(status);
-	Write(setting, subsetting, temp);
-}
-
-void Config::Write(char *setting, char *subsetting, double status) {
-	char *temp = nullptr;
-	sprintf_s(temp, 255, "%2f", status);
-	if (!WritePrivateProfileStringA(setting, subsetting, temp, cfgPath)) {
-		LogDebugMsg(WRN, "Failed to write %s, %s to config!", setting, subsetting);
-	}
-}
-
-void Config::Write(char *setting, char *subsetting, std::string status) {
-	if (!WritePrivateProfileStringA(setting, subsetting, status.c_str(), cfgPath)) {
-		LogDebugMsg(WRN, "Failed to write %s, %s to config!", setting, subsetting);
-	}
-}
-
 Config::Config() {
-	sVersion = "1.0";
+	strVersion = {1, 0};
 	uiQuitReason = -1;
-	uiExitKey = VK_F4;
-	uiReloadKey = VK_F5;
-	uiAutoJumpKey = VK_XBUTTON1;
+	iExitKey = VK_F4;
+	iReloadKey = VK_F5;
+	iAutoJumpKey = VK_XBUTTON1;
 	bAutoJumpState = true;
 }
 
@@ -85,11 +19,11 @@ bool Config::LoadConfig() {
 	strcat_s(cfgPath, "config.txt");
 	struct stat buffer;
 	if (stat(cfgPath, &buffer)) {
-		Write("Info", "Version", sVersion);
+		Write("Info", "Version", strVersion);
 		Write("Info", "Quit Reason", uiQuitReason);
-		Write("Key Binds", "Terminate", uiExitKey);
-		Write("Key Binds", "Reload Config", uiReloadKey);
-		Write("Key Binds", "Auto Jump", uiAutoJumpKey);
+		Write("Key Binds", "Terminate", iExitKey);
+		Write("Key Binds", "Reload Config", iReloadKey);
+		Write("Key Binds", "Auto Jump", iAutoJumpKey);
 		Write("Auto Jump", "Enabled", bAutoJumpState);
 		return false;
 	}
@@ -97,33 +31,24 @@ bool Config::LoadConfig() {
 }
 
 bool Config::ReadConfig() {
-	std::string sConfig;
+	version sConfig;
 	Read("Info", "Version", sConfig);
-	if (sVersion == sConfig) {
-		Read("Key Binds", "Terminate", uiExitKey);
-		Read("Key Binds", "Reload Config", uiReloadKey);
-		Read("Key Binds", "Auto Jump", uiAutoJumpKey);
+	if (strVersion == sConfig) {
+		Read("Key Binds", "Terminate", iExitKey);
+		Read("Key Binds", "Reload Config", iReloadKey);
+		Read("Key Binds", "Auto Jump", iAutoJumpKey);
 		Read("Auto Jump", "Enabled", bAutoJumpState);
 	} else {
 		// set defaults
-		uiExitKey = VK_F4;
-		uiReloadKey = VK_F5;
-		uiAutoJumpKey = VK_XBUTTON1;
+		iExitKey = VK_F4;
+		iReloadKey = VK_F5;
+		iAutoJumpKey = VK_XBUTTON1;
 		bAutoJumpState = true;
 		return false;
 	}
-	if (!uiExitKey) {
-		uiExitKey = VK_F4;
-		return false;
-	}
-	if (!uiReloadKey) {
-		uiReloadKey = VK_F5;
-		return false;
-	}
-	if (!uiAutoJumpKey) {
-		uiAutoJumpKey = VK_XBUTTON1;
-		return false;
-	}
+	Limit(iExitKey, VK_F4, MAXINT);
+	Limit(iReloadKey, VK_F5, MAXINT);
+	Limit(iAutoJumpKey, VK_XBUTTON1, MAXINT);
 	return true;
 }
 

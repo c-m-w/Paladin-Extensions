@@ -2,28 +2,38 @@
 #include "general.h"
 
 struct version {
-	uint8 lower;
-	uint8 upper;
+	uint8 upper, lower;
+
+	bool operator==(const version &rhs) {
+		if (upper == rhs.upper && lower == rhs.lower) {
+			return true;
+		}
+		return false;
+	}
 };
 
 class Config {
 	char cfgPath[255];
 	// read from config
-	void Read(char *setting, char *subsetting, bool &status);
-	void Read(char *setting, char *subsetting, int &status);
-	void Read(char *setting, char *subsetting, float &status);
-	void Read(char *setting, char *subsetting, double &status);
-	void Read(char *setting, char *subsetting, std::string &status);
+	template<typename datatype> void Read(char *cSetting, char *cSubSetting, datatype &Status) {
+	}
+
 	// write to config
-	void Write(char *setting, char *subsetting, bool status);
-	void Write(char *setting, char *subsetting, int status);
-	void Write(char *setting, char *subsetting, float status);
-	void Write(char *setting, char *subsetting, double status);
-	void Write(char *setting, char *subsetting, std::string status);
+	template<typename datatype> void Write(char *cSetting, char *cSubSetting, datatype Status) {
+	}
+
+	// force input within limits
+	template<typename datatype> void Limit(datatype &Status, datatype Minimum, datatype Maximum) {
+		if (Minimum > Status) {
+			Status = Minimum;
+		} else if (Status > Maximum) {
+			Status = Maximum;
+		}
+	}
 
 public:
-	std::string sVersion;
-	unsigned short uiQuitReason;
+	version strVersion;
+	long uiQuitReason;
 
 #ifdef _DEBUG
 	bool bCheckForAnticheat = false;
@@ -32,9 +42,9 @@ public:
 #endif
 
 	// Keys
-	int uiExitKey;
-	int uiReloadKey;
-	int uiAutoJumpKey;
+	int iExitKey;
+	int iReloadKey;
+	int iAutoJumpKey;
 
 	// Feature Toggles
 	bool bAutoJumpState;

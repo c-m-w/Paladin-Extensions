@@ -6,7 +6,7 @@ public:
 	void Jump(int ksType);
 	void Attack(int ksType);
 	float GetSensitivity();
-	void SetSensitivity(float fSensitivity);
+	void SetSensitivity(float flSensitivity);
 };
 
 extern Engine eng;

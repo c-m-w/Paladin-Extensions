@@ -17,7 +17,7 @@ float Engine::GetSensitivity() {
 	return flSensitivity.val;
 }
 
-void Engine::SetSensitivity(float fSensitivityNew) {
-	flSensitivity = fSensitivityNew;
+void Engine::SetSensitivity(float flSensitivityNew) {
+	flSensitivity = flSensitivityNew;
 	mem.Write(flSensitivity);
 }

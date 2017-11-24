@@ -8,7 +8,7 @@ extern std::vector<std::thread> threads;
 void Wait(unsigned int z);
 unsigned int GetTime();
 
-typedef unsigned long frame;
+typedef unsigned int frame;
 typedef unsigned short total;
 typedef unsigned __int8 uint8;
 

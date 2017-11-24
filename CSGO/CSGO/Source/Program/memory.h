@@ -6,75 +6,89 @@ template<typename datatype> struct Address {
 	DWORD ptr = NULL; // this ptr
 	datatype val = NULL; // value
 
-	template<typename rdatatype> Address<datatype> operator+(const rdatatype &rvalue) {
+	template<typename rdatatype> Address<datatype> operator+(const rdatatype &rhs) {
 		if (typeid(DWORD) == typeid(rdatatype)) {
-			loc += DWORD(rvalue);
+			loc += DWORD(rhs);
 		} else if (typeid(datatype) == typeid(rdatatype)) {
-			val += datatype(rvalue);
+			val += datatype(rhs);
 		}
 		return *this;
 	}
 
-	template<typename rdatatype> Address<datatype> operator-(const rdatatype &rvalue) {
+	template<typename rdatatype> Address<datatype> operator-(const rdatatype &rhs) {
 		if (typeid(DWORD) == typeid(rdatatype)) {
-			loc -= DWORD(rvalue);
+			loc -= DWORD(rhs);
 		} else if (typeid(datatype) == typeid(rdatatype)) {
-			val -= datatype(rvalue);
+			val -= datatype(rhs);
 		}
 		return *this;
 	}
 
-	template<typename rdatatype> Address<datatype> &operator=(const rdatatype &rvalue) {
+	template<typename rdatatype> Address<datatype> &operator=(const rdatatype &rhs) {
 		if (typeid(DWORD) == typeid(rdatatype)) {
-			loc = DWORD(rvalue);
+			loc = DWORD(rhs);
 		} else if (typeid(datatype) == typeid(rdatatype)) {
-			val = datatype(rvalue);
+			val = datatype(rhs);
 		}
 		return *this;
 	}
 
-	template<typename rdatatype> Address<datatype> &operator+=(const rdatatype &rvalue) {
+	template<typename rdatatype> Address<datatype> &operator+=(const rdatatype &rhs) {
 		if (typeid(DWORD) == typeid(rdatatype)) {
-			loc += DWORD(rvalue);
+			loc += DWORD(rhs);
 		} else if (typeid(datatype) == typeid(rdatatype)) {
-			val += datatype(rvalue);
+			val += datatype(rhs);
 		}
 		return *this;
 	}
 
-	template<typename rdatatype> Address<datatype> &operator-=(const rdatatype &rvalue) {
+	template<typename rdatatype> Address<datatype> &operator-=(const rdatatype &rhs) {
 		if (typeid(DWORD) == typeid(rdatatype)) {
-			loc -= DWORD(rvalue);
+			loc -= DWORD(rhs);
 		} else if (typeid(datatype) == typeid(rdatatype)) {
-			val -= datatype(rvalue);
+			val -= datatype(rhs);
 		}
 		return *this;
 	}
 
-	template<typename rdatatype> bool operator==(const rdatatype &rvalue) {
+	template<typename rdatatype> bool operator==(const rdatatype &rhs) {
 		if (typeid(DWORD) == typeid(rdatatype)) {
-			if (loc == DWORD(rvalue)) {
+			if (loc == DWORD(rhs)) {
 				return true;
 			}
 		} else if (typeid(datatype) == typeid(rdatatype)) {
-			if (val == datatype(rvalue)) {
+			if (val == datatype(rhs)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	template<typename rdatatype> bool operator!=(const rdatatype &rhs) {
+		if (typeid(DWORD) == typeid(rdatatype)) {
+			if (loc != DWORD(rhs)) {
+				return true;
+			}
+		} else if (typeid(datatype) == typeid(rdatatype)) {
+			if (val != datatype(rhs)) {
 				return true;
 			}
 		}
 		return false;
 	}
 
-	template<typename rdatatype> bool operator!=(const rdatatype &rvalue) {
-		if (typeid(DWORD) == typeid(rdatatype)) {
-			if (loc != DWORD(rvalue)) {
-				return true;
-			}
-		} else if (typeid(datatype) == typeid(rdatatype)) {
-			if (val != datatype(rvalue)) {
-				return true;
-			}
+	template<typename rdatatype> datatype operator&(const rdatatype &rhs) {
+		if (typeid(datatype) == typeid(rdatatype)) {
+			return val & datatype(rhs);
 		}
-		return false;
+		return 0;
+	}
+
+	template<typename rdatatype> datatype operator|(const rdatatype &rhs) {
+		if (typeid(datatype) == typeid(rdatatype)) {
+			return val | datatype(rhs);
+		}
+		return 0;
 	}
 };
 
@@ -107,25 +121,30 @@ public:
 	void InitializeAddresses();
 
 	template<class datatype> bool Read(Address<datatype> &adrRead) {
-		if (adrRead.ptr) {
-			DWORD dwXor;
-			bool bSuccess = ReadProcessMemory(hGame, LPVOID(adrRead.loc), &dwXor, sizeof(DWORD), nullptr);
-			adrRead.val = *reinterpret_cast<datatype*>(dwXor ^ adrRead.ptr);
-			return bSuccess;
+		if (adrRead.loc != 0) {
+			if (adrRead.ptr) {
+				DWORD dwXor;
+				bool bSuccess = ReadProcessMemory(hGame, LPVOID(adrRead.loc), &dwXor, sizeof(DWORD), nullptr);
+				adrRead.val = *reinterpret_cast<datatype*>(dwXor ^ adrRead.ptr);
+				return bSuccess;
+			}
+			return ReadProcessMemory(hGame, LPVOID(adrRead.loc), &adrRead.val, sizeof(datatype), nullptr);
 		}
-		return ReadProcessMemory(hGame, LPVOID(adrRead.loc), &adrRead.val, sizeof(datatype), nullptr);
+		return false;
 	}
 
 	template<class datatype> bool Write(Address<datatype> &adrWrite) {
-		if (adrWrite.ptr) {
-			DWORD dwXor = *reinterpret_cast<DWORD*>(&adrWrite.val) ^ adrWrite.ptr;
-			return ReadProcessMemory(hGame, LPVOID(adrWrite.loc), &dwXor, sizeof(DWORD), nullptr);
+		if (adrWrite.loc != 0) {
+			if (adrWrite.ptr) {
+				DWORD dwXor = *reinterpret_cast<DWORD*>(&adrWrite.val) ^ adrWrite.ptr;
+				return ReadProcessMemory(hGame, LPVOID(adrWrite.loc), &dwXor, sizeof(DWORD), nullptr);
+			}
+			return WriteProcessMemory(hGame, LPVOID(adrWrite.loc), &adrWrite.val, sizeof(datatype), nullptr);
 		}
-		return WriteProcessMemory(hGame, LPVOID(adrWrite.loc), &adrWrite.val, sizeof(datatype), nullptr);
+		return false;
 	}
 
 	~MemoryManager();
-
 };
 
 extern MemoryManager mem;

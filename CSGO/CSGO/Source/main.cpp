@@ -13,7 +13,7 @@ void Feature(bool bFeatureState, void (*Feature)(), int uiFeatureKey) {
 		if (bExitState) {
 			return;
 		}
-		if (GetAsyncKeyState(uiFeatureKey)) {
+		if (GetAsyncKeyState(uiFeatureKey) & 1) {
 			Feature();
 		} else {
 			Wait(10);
@@ -76,17 +76,19 @@ void Cheat() {
 	if (!all.GetElevationState()) {
 		MessageBox(nullptr, "Warning 1: Elevation Token State -> No access\nDid you run the middleman as admin?", "Paladin CSGO", MB_ICONWARNING | MB_OK);
 	}
-	uint8 kacCSGO = all.KillAnticheat("Counter-Strike: Global Offensive", *"csgo.exe");
-	if (kacCSGO != 0) {
-		if (kacCSGO == 1) {
-			MessageBox(nullptr, "Warning 2: Anticheat -> Terminated\nDid you leave CSGO open during injection?", "Paladin CSGO", MB_ICONWARNING | MB_OK);
+	if (cfg.bCheckForAnticheat) {
+		uint8 kacCSGO = all.KillAnticheat("Counter-Strike: Global Offensive", *"csgo.exe");
+		if (kacCSGO != 0) {
+			if (kacCSGO == 1) {
+				MessageBox(nullptr, "Warning 2: Anticheat -> Terminated\nDid you leave CSGO open during injection?", "Paladin CSGO", MB_ICONWARNING | MB_OK);
+			}
+			if (all.KillAnticheat("Steam", *"steam.exe") == 1) {
+				MessageBox(nullptr, "Warning 2: Anticheat -> Terminated\nDid you leave Steam open during injection?", "Paladin CSGO", MB_ICONWARNING | MB_OK);
+			}
+		} else {
+			MessageBox(nullptr, "Fatal Error 1: Elevation Token State -> No anticheat termination access\nDid you run the middleman as admin?", "Paladin CSGO", MB_ICONERROR | MB_OK);
+			CleanUp();
 		}
-		if (all.KillAnticheat("Steam", *"steam.exe") == 1) {
-			MessageBox(nullptr, "Warning 2: Anticheat -> Terminated\nDid you leave Steam open during injection?", "Paladin CSGO", MB_ICONWARNING | MB_OK);
-		}
-	} else {
-		MessageBox(nullptr, "Fatal Error 1: Elevation Token State -> No anticheat termination access\nDid you run the middleman as admin?", "Paladin CSGO", MB_ICONERROR | MB_OK);
-		CleanUp();
 	}
 	if (!cfg.LoadConfig()) {
 		MessageBox(nullptr, "Warning 3: Config File -> Using Defaults\nIs there a config file?", "Paladin CSGO", MB_ICONWARNING | MB_OK);
@@ -102,7 +104,7 @@ void Cheat() {
 	mem.InitializeAddresses();
 	// Todo make our threads here
 	// General format for cheat threads:
-	//threads.push_back(std::thread(Feature(cfg.bAutoJumpState, cfg.uiAutoJumpKey, &aut.AutoJump)));
+	//threads.push_back(std::thread(Feature(cfg.bAutoJumpState, cfg.iAutoJumpKey, &aut.AutoJump)));
 }
 
 BOOL WINAPI DllMain(HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpvReserved) {
@@ -110,7 +112,7 @@ BOOL WINAPI DllMain(HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpvReserved) {
 		case DLL_PROCESS_ATTACH:
 			DisableThreadLibraryCalls(hInstDll);
 			hInst = hInstDll;
-			CreateThread(nullptr, 0, LPTHREAD_START_ROUTINE(Cheat), nullptr, 0, nullptr);
+			// TODO CREATE THREAD FOR Cheat();
 			break;
 		case DLL_PROCESS_DETACH:
 			CleanUp();
