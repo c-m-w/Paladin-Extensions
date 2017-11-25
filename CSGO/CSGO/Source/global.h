@@ -1,5 +1,5 @@
 #pragma once
-#include "debug.h"
+#include "includes.h"
 
 extern HINSTANCE hInst;
 extern std::atomic<bool> bExitState;

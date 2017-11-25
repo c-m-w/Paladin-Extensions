@@ -1,5 +1,5 @@
 #pragma once
-#include "interface.h"
+#include "../includes.h"
 
 template<typename datatype> struct Address {
 	DWORD loc = NULL; // location
@@ -52,7 +52,7 @@ template<typename datatype> struct Address {
 	}
 
 	template<typename rdatatype> bool operator==(const rdatatype &rhs) {
-		if (typeid(DWORD) == typeid(rdatatype)) {
+		if (typeid(DWORD) == typeid(rdatatype) && typeid(DWORD) != typeid(datatype)) {
 			if (loc == DWORD(rhs)) {
 				return true;
 			}
@@ -65,7 +65,7 @@ template<typename datatype> struct Address {
 	}
 
 	template<typename rdatatype> bool operator!=(const rdatatype &rhs) {
-		if (typeid(DWORD) == typeid(rdatatype)) {
+		if (typeid(DWORD) == typeid(rdatatype) && typeid(DWORD) != typeid(datatype)) {
 			if (loc != DWORD(rhs)) {
 				return true;
 			}

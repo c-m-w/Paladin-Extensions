@@ -21,7 +21,6 @@
   <ItemGroup>
     <ClInclude Include="Source\debug.h" />
     <ClInclude Include="Source\Features\engine.h" />
-    <ClInclude Include="Source\Features\features.h" />
     <ClInclude Include="Source\Features\Miscellaneous\automation.h" />
     <ClInclude Include="Source\global.h" />
     <ClInclude Include="Source\includes.h" />

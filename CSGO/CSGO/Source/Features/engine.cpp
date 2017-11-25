@@ -2,12 +2,12 @@
 
 Engine eng;
 
-void Engine::Jump(int kType) {
+void Engine::Jump(Keystroke kType) {
 	ksForceJump = kType;
 	mem.Write(ksForceJump);
 }
 
-void Engine::Attack(int kType) {
+void Engine::Attack(Keystroke kType) {
 	ksForceAttack = kType;
 	mem.Write(ksForceAttack);
 }

@@ -1,5 +1,5 @@
 #pragma once
-#include "general.h"
+#include "../includes.h"
 
 struct version {
 	uint8 upper, lower;

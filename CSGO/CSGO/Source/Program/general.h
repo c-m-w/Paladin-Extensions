@@ -1,5 +1,5 @@
 #pragma once
-#include "../global.h"
+#include "../includes.h"
 
 class General {
 	uint8 uiElevationState = -1;

@@ -1,10 +1,10 @@
 #pragma once
-#include "../Program/memory.h"
+#include "../includes.h"
 
 class Engine {
 public:
-	void Jump(int ksType);
-	void Attack(int ksType);
+	void Jump(Keystroke ksType);
+	void Attack(Keystroke ksType);
 	float GetSensitivity();
 	void SetSensitivity(float flSensitivity);
 };
