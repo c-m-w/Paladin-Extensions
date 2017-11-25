@@ -105,5 +105,7 @@ void MemoryManager::InitializeAddresses()
 	Addresses::lp_fFlags += Addresses::dwLocalPlayer.loc;
 	Addresses::lp_totalHitsOnServer += Addresses::dwLocalPlayer.loc;
 
+	dbg->LogDebugMsg(DBG, "Client Base: %p", dwClientBase);
+
 	dbg->LogDebugMsg(SCS, "Initialized addresses");
 }
