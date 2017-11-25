@@ -141,14 +141,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="addresses.cpp" />
+    <ClCompile Include="autojump.cpp" />
     <ClCompile Include="debug.cpp" />
+    <ClCompile Include="engine.cpp" />
     <ClCompile Include="global.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="memory.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="addresses.h" />
+    <ClInclude Include="autojump.h" />
     <ClInclude Include="debug.h" />
+    <ClInclude Include="engine.h" />
     <ClInclude Include="global.h" />
     <ClInclude Include="main.h" />
+    <ClInclude Include="memory.h" />
+    <ClInclude Include="types.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

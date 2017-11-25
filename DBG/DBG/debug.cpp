@@ -2,11 +2,6 @@
 
 Debug *dbg = nullptr;
 
-Debug::Debug() 
-{
-	
-}
-
 Debug::~Debug()
 {
 #ifndef m_DEBUG

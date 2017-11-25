@@ -1,46 +1,63 @@
 #include "main.h"
 
-HINSTANCE hInst = nullptr;
-std::atomic<bool> bEjecting = false;
-std::atomic<bool> bExitState = false;
-std::vector<std::thread> threads;
-
-void Panic()
-{
-	FreeLibraryAndExitThread(hInst, 0);
-}
-
-void Cleanup(bool exit) 
-{
-	//Global flag for threads to stop
-	bExitState = true;
-
-	//Wait on each thread to exit
-	for (auto &t : threads)
-		if (t.joinable())
-			t.join();
-
-	//Free global object memory
-	if (dbg != nullptr)
-		delete dbg;
-
-	//If we want to exit and are not in the process of ejecting, create a new thread to unload and exit current thread
-	if (exit) 
-	{
-		if (!bEjecting) 
-		{
-			bEjecting = true;
-			CreateThread(NULL, NULL, (LPTHREAD_START_ROUTINE)Panic, NULL, NULL, NULL);
-		}
-	}
-}
-
-void Wait(unsigned int z) 
+void Wait(uint32_t z) 
 {
 	std::this_thread::sleep_for(std::chrono::milliseconds(z));
 }
 
 unsigned int GetTime()
 {
-	return static_cast<unsigned int>(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count());
+	return static_cast<uint32_t>(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count());
+}
+
+bool IsElevated() 
+{
+	bool ret = false;
+	HANDLE hToken = NULL;
+
+	if (OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &hToken))
+	{
+		TOKEN_ELEVATION elev;
+		DWORD cbSize = sizeof(TOKEN_ELEVATION);
+
+		if (GetTokenInformation(hToken, TokenElevation, &elev, sizeof(elev), &cbSize))
+			ret = elev.TokenIsElevated;
+	}
+
+	if (hToken)
+		CloseHandle(hToken);
+
+	return ret;
+}
+
+uint8_t KillAntiCheat(LPCSTR cstrAntiCheatName, char cAntiCheatExe) 
+{
+	dbg->LogDebugMsg(DBG, "Attempting to kill %s [%s]", cstrAntiCheatName, cAntiCheatExe);
+
+	if (!IsElevated()) 
+	{
+		dbg->LogDebugMsg(ERR, "Not running with admin permissions");
+		return -2;
+	}
+
+	if (FindWindowA(nullptr, cstrAntiCheatName)) 
+	{
+		dbg->LogDebugMsg(DBG, "Found %s", cstrAntiCheatName);
+
+		system("taskkill /F /T /IM " + cAntiCheatExe);
+
+		/*
+		//Check if process is still runnig, return 1 on running
+		dbg->LogDebugMsg(ERR, "Unable to kill %s", cstrAntiCheatName);
+		return 1;
+		*/
+
+		dbg->LogDebugMsg(SCS, "Successfully killed %s", cstrAntiCheatName);
+
+		return 0;
+	}
+
+	dbg->LogDebugMsg(DBG, "Unable to find %s [%s]", cstrAntiCheatName, cAntiCheatExe);
+
+	return -1; // No AntiCheat found
 }

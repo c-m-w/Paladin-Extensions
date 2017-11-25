@@ -21,7 +21,6 @@ enum ColorMode
 class Debug 
 {
 public:
-	Debug();
 	~Debug();
 
 private:
