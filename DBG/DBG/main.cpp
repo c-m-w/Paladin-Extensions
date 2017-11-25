@@ -8,7 +8,7 @@ std::vector<std::thread> threads;
 
 void Panic()
 {
-	Wait(1000);
+	Wait(2000);
 	FreeLibraryAndExitThread(hInst, 0);
 }
 

@@ -4,13 +4,13 @@ Engine *eng = nullptr;
 
 void Engine::Jump(int kType) 
 {
-	Addresses::ksForceJump = kType;
+	Addresses::ksForceJump.val = kType;
 	mem->Write(Addresses::ksForceJump);
 }
 
 void Engine::Attack(int kType)
 {
-	Addresses::ksForceAttack = kType;
+	Addresses::ksForceAttack.val = kType;
 	mem->Write(Addresses::ksForceAttack);
 }
 
@@ -22,6 +22,6 @@ float Engine::GetSensitivity()
 
 void Engine::SetSensitivity(float flSensitivityNew) 
 {
-	Addresses::flSensitivity = flSensitivityNew;
+	Addresses::flSensitivity.val = flSensitivityNew;
 	mem->Write(Addresses::flSensitivity);
 }

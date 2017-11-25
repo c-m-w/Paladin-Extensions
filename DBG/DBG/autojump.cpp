@@ -9,28 +9,23 @@ void Automation::AutoJump()
 		if (bExit) 
 			return;
 
-		if (GetAsyncKeyState(VK_SPACE) & 1) 
+		if (GetAsyncKeyState(VK_SPACE)) 
 		{
 			mem->Read(Addresses::ksForceJump);
 
+			/*
 			if (Addresses::ksForceJump == Keystroke::PRESS)
+				eng->Jump(int(Keystroke::RELEASE));
+			*/
+
+			if (Addresses::ksForceJump.val == 5)
 				eng->Jump(int(Keystroke::RELEASE));
 
 			mem->Read(Addresses::lp_fFlags);
-			
-			dbg->LogDebugMsg(DBG, "Local Player");
-			dbg->LogDebugMsg(DBG, "Loc: %p", Addresses::dwLocalPlayer.loc);
-			dbg->LogDebugMsg(DBG, "Ptr: %p", Addresses::dwLocalPlayer.ptr);
-			dbg->LogDebugMsg(DBG, "Val: %u", Addresses::dwLocalPlayer.val);
 
-			dbg->LogDebugMsg(DBG, "Flags");
-			dbg->LogDebugMsg(DBG, "Loc: %p", Addresses::lp_fFlags.loc);
-			dbg->LogDebugMsg(DBG, "Ptr: %p", Addresses::lp_fFlags.ptr);
-			dbg->LogDebugMsg(DBG, "Val: %u", Addresses::lp_fFlags.val);
-
-			if (Addresses::lp_fFlags & FL_ONGROUND) 
+			if (Addresses::lp_fFlags.val & FL_ONGROUND)
 				eng->Jump(int(Keystroke::SCROLL));
-			else 
+			else
 				Wait(1);
 		}
 		else 

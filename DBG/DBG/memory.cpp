@@ -102,10 +102,8 @@ void MemoryManager::InitializeAddresses()
 
 	Read(Addresses::dwLocalPlayer);
 
-	Addresses::lp_fFlags += Addresses::dwLocalPlayer.loc;
-	Addresses::lp_totalHitsOnServer += Addresses::dwLocalPlayer.loc;
-
-	dbg->LogDebugMsg(DBG, "Client Base: %p", dwClientBase);
+	Addresses::lp_fFlags += Addresses::dwLocalPlayer.val;
+	Addresses::lp_totalHitsOnServer += Addresses::dwLocalPlayer.val;
 
 	dbg->LogDebugMsg(SCS, "Initialized addresses");
 }

@@ -1,5 +1,11 @@
 #pragma once
 
+/*	ToDo
+ *	-Operator overloading for Pointer.val
+ *	-Fix equality and setting
+ *	-Fix ur operator overload paste
+ */
+
 #define _CRT_SECURE_NO_WARNINGS
 
 //Comment out for no debug console
