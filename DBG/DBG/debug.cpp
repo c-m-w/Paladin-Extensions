@@ -1,6 +1,6 @@
 #include "main.h"
-#include <iosfwd>
-Debug *dbg;
+
+Debug *dbg = nullptr;
 
 Debug::Debug() 
 {
@@ -82,7 +82,7 @@ bool Debug::Init()
 	if (!SetWindowLong(con, GWL_STYLE, conLong & ~SC_CLOSE & ~WS_MAXIMIZEBOX & ~WS_SIZEBOX))
 		return false;
 
-	if (!SetWindowLong(con, GWL_EXSTYLE, conExLong | WS_EX_TOOLWINDOW & ~WS_EX_CLIENTEDGE & ~WS_EX_WINDOWEDGE))
+	if (!SetWindowLong(con, GWL_EXSTYLE, conExLong | WS_EX_TOOLWINDOW | WS_EX_WINDOWEDGE & ~WS_EX_APPWINDOW & ~WS_EX_CLIENTEDGE & ~WS_EX_ACCEPTFILES))
 		return false;
 
 	//Set console font

@@ -1,36 +1,23 @@
 #include "main.h"
 
-void Cleanup() 
-{
-	//Global flag for threads to stop
-	bExitState = true;
-
-	//Wait on each thread to exit
-	for (auto &t : threads)
-		if (t.joinable())
-			t.join();
-
-	//Free global object memory
-	if (dbg != nullptr)
-		delete dbg;
-}
-
-void Panic() 
-{
-	Cleanup();
-	FreeLibraryAndExitThread(hInst, 0);
-}
-
 void Cheat() 
 {
 	//Init global pointers
 	dbg = new Debug;
 
-	//Initialize things
+	//Check for null pointers
+	if (dbg == nullptr) 
+	{
+		Cleanup();
+		return;
+	}
+
+	//Initialize console
 	if (!dbg->Init()) 
 	{
 		//Get last error to see what went wrong
 		dbg->LogLastErrorB();
+		Cleanup();
 		return;
 	}
 
@@ -59,7 +46,7 @@ void Cheat()
 	dbg->LogDebugMsg(ERR, "Error");
 	dbg->LogDebugMsg(LER, "Last Error");
 
-	Wait(5000);
+	system("PAUSE");
 
 	Panic();
 }

@@ -14,7 +14,5 @@
 #include <iostream>
 #include <io.h>
 
-void Panic();
-
 #include "debug.h"
 #include "global.h"
