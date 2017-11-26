@@ -5,6 +5,7 @@ template<typename datatype> struct Address {
 	DWORD loc = NULL; // location
 	DWORD ptr = NULL; // this ptr
 	datatype val = NULL; // value
+	// return datatype todo
 
 	template<typename rdatatype> Address<datatype> operator+(const rdatatype &rhs) {
 		if (typeid(DWORD) == typeid(rdatatype)) {

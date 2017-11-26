@@ -16,6 +16,7 @@ void Automation::AutoJump() {
 }
 
 void Automation::AutoJumpthrow() {
+	//alternative auto jump throw based on no key type, only if nade is out TODO
 	mem.Read(ksForceAttack);
 	if (ksForceAttack == Keystroke::RELEASE) {
 		eng.Attack(Keystroke::PRESS);

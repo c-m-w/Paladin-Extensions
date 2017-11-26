@@ -3,29 +3,45 @@
 General all;
 
 bool General::GetElevationState() {
-	HANDLE hSelf = nullptr;
+	HANDLE hTokenSelf;
 	TOKEN_ELEVATION teSelf;
 	DWORD dwReturnLength = sizeof(TOKEN_ELEVATION);
-	OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &hSelf);
-	if (GetTokenInformation(hSelf, TokenElevation, &teSelf, dwReturnLength, &dwReturnLength)) {
-		uiElevationState = bool(teSelf.TokenIsElevated);
+
+	if (OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &hTokenSelf) &&
+		GetTokenInformation(hTokenSelf, TokenElevation, &teSelf, dwReturnLength, &dwReturnLength)) {
+			uiElevationState = Elevation(bool(teSelf.TokenIsElevated));
 	} else {
-		uiElevationState = 0;
+		uiElevationState = NOT_ADMIN;
 	}
-	CloseHandle(hSelf);
+
+	CloseHandle(hTokenSelf);
 	return uiElevationState;
 }
 
+bool General::GetElevationState(HANDLE hTarget) {
+	HANDLE hTokenTarget;
+	TOKEN_ELEVATION teTarget;
+	DWORD dwReturnLength = sizeof(TOKEN_ELEVATION);
+
+	if (OpenProcessToken(hTarget, TOKEN_QUERY, &hTokenTarget) &&
+		GetTokenInformation(hTokenTarget, TokenElevation, &teTarget, dwReturnLength, &dwReturnLength)) {
+		CloseHandle(hTokenTarget);
+		return bool(teTarget.TokenIsElevated);
+	}
+	CloseHandle(hTokenTarget);
+	return NOT_ADMIN;
+}
+
 uint8 General::KillAnticheat(LPCSTR cstrAnticheatName, char cAnticheatExe) {
-	if (uiElevationState == -1) {
+	if (uiElevationState == UNTESTED) {
 		GetElevationState();
 	}
 	if (FindWindowA(nullptr, cstrAnticheatName)) {
-		if (uiElevationState == 1) {
+		if (uiElevationState == ADMIN) {
 			system("taskkill /F /T /IM " + cAnticheatExe);
-			return 1; // Anticheat Killed
+			return KILLED;
 		}
-		return 0; // Anticheat unkillable
+		return FAILED;
 	}
-	return -1; // No anticheat found
+	return NOT_FOUND;
 }
