@@ -7,6 +7,7 @@
 #pragma comment(lib, "Comdlg32.lib")
 #pragma comment(lib, "Ole32.lib")
 #pragma comment(lib, "Shlwapi.lib")
+#pragma comment(lib, "Shell32.lib")
 
 #include <Windows.h>
 #include <Windowsx.h>
@@ -14,6 +15,7 @@
 #include <Ole2.h>
 #include <shlobj.h>
 #include <Shlwapi.h>
+#include <Shellapi.h>
 #include <tlhelp32.h>
 #include <string>
 

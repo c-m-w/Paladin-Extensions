@@ -109,6 +109,8 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			lvc.pszText = "Path";
 			ListView_InsertColumn(hDllList, 1, &lvc);
 
+			DragAcceptFiles(hDllList, TRUE);
+
 			//Labels
 			hProcLbl = CreateWindowEx(NULL, "STATIC", "Process: ", WS_VISIBLE | WS_CHILD | SS_LEFT | SS_NOTIFY, 5, 210, 65, 25, hwnd, (HMENU)IC_LBL_PROC, hMainInst, NULL);
 			hProcInfoLbl = CreateWindowEx(NULL, "STATIC", "--", WS_VISIBLE | WS_CHILD | SS_LEFT | SS_NOTIFY, 65, 210, 250, 25, hwnd, (HMENU)IC_LBL_PROCINFO, hMainInst, NULL);
@@ -233,6 +235,73 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 				}break;
 			}break;
 		}break;
+
+		/*
+		case WM_DROPFILES: 
+		{
+			char path[MAX_PATH + 1] = { '\0' };
+			UINT uFile = 0;
+			HDROP hDrop = (HDROP)wParam;
+			uFile = DragQueryFile(hDrop, 0xFFFFFFFF, nullptr, NULL);
+
+			if (uFile == 0) 
+			{
+				MessageBox(hwnd, "Invalid file.", "Error", MB_OK);
+				break;
+			}
+			else if (uFile == 1)
+			{
+				//Check for file extension ending in .dll
+
+				path[0] = '\0';
+				DragQueryFile(hDrop, 0, path, MAX_PATH);
+				char file[MAX_PATH + 1] = { '\0' };
+
+				if (_splitpath_s(path, NULL, NULL, NULL, NULL, file, (MAX_PATH + 1), NULL, NULL))
+				{
+					MessageBox(hwnd, "Unable to add dll.", "Error", MB_OK);
+					break;
+				}
+
+				LVITEM   lvi = { 0 };
+
+				int item = ListView_GetItemCount(hDllList);
+
+				lvi.iItem = item;
+				ListView_InsertItem(hDllList, &lvi);
+				//ListView_SetItemText(hDllList, item, 0, file);
+				ListView_SetItemText(hDllList, item, 0, path);
+				ListView_SetItemText(hDllList, item, 1, path);
+			}
+
+			DragFinish(hDrop);
+		}break;
+		*/
+
+		case WM_DROPFILES: 
+		{
+			TCHAR lpszFile[MAX_PATH + 1] = { 0 };
+			UINT uFile = 0;
+			HDROP hDrop = (HDROP)wParam;
+			uFile = DragQueryFile(hDrop, 0xFFFFFFFF, nullptr, NULL);
+			if (uFile == 1) 
+			{
+				//MessageBox(hwnd, "Succ", "ess", MB_OK);
+				lpszFile[MAX_PATH] = '\0';
+				DragQueryFile(hDrop, 0, lpszFile, MAX_PATH);
+				//MessageBox(hwnd, lpszFile, "ess", MB_OK);
+				//SendMessage(hDllList, LB_ADDSTRING, 0, (LPARAM)lpszFile);
+
+				LVITEM   lvi = { 0 };
+				int item = ListView_GetItemCount(hDllList);
+				lvi.iItem = item;
+				ListView_InsertItem(hDllList, &lvi);
+				ListView_SetItemText(hDllList, item, 0, lpszFile);
+				ListView_SetItemText(hDllList, item, 1, lpszFile);
+			}
+			DragFinish(hDrop);
+		}
+		break;
 
 		case WM_CTLCOLORSTATIC:
 		{
@@ -428,6 +497,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	if (!hProcWnd)
 		return 1;
+
+	//Allow drops
+	DragAcceptFiles(hMainWnd, TRUE);
 
 	ShowWindow(hMainWnd, nCmdShow);
 	UpdateWindow(hMainWnd);
