@@ -33,9 +33,13 @@ bool MemoryManager::AttachToGame() {
 		LogDebugMsg(ERR, "Invalid game handle");
 		return false;
 	}
+	if (!all.GetElevationState() && all.GetElevationState() != all.GetElevationState(hGame)) {
+		LogDebugMsg(ERR, "No permissions");
+		return false;
+	}
 	LogDebugMsg(SCS, "Attached to game");
 	HANDLE hSnapshot;
-	for (int ui = 0; ui < 5; ui++, Wait(2000)) {
+	for (int n = 0; n < 5; n++, Wait(2000)) {
 		do {
 			SetLastError(0);
 			hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, dwProcessId);

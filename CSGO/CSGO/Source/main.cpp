@@ -8,13 +8,13 @@ enum class QuitReasons {
 	PANIC
 };
 
-void Feature(bool bFeatureState, void (*Feature)(), int uiFeatureKey) {
+void Feature(bool bFeatureState, void (*fnFeature)(), int iFeatureKey) {
 	while (bFeatureState) {
 		if (bExitState) {
 			return;
 		}
-		if (GetAsyncKeyState(uiFeatureKey) & 1) {
-			Feature();
+		if (GetAsyncKeyState(iFeatureKey) & 1) {
+			fnFeature();
 		} else {
 			Wait(10);
 		}
@@ -44,8 +44,8 @@ void CleanUp() {
 
 void Panic() {
 	CleanUp();
-	cfg.uiQuitReason = int(QuitReasons::PANIC);
-	FreeLibraryAndExitThread(hInst, cfg.uiQuitReason);
+	cfg.iQuitReason = int(QuitReasons::PANIC);
+	FreeLibraryAndExitThread(hInst, cfg.iQuitReason);
 }
 
 void Cheat() {

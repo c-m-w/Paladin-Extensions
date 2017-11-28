@@ -45,8 +45,8 @@ enum class SignOnState {
 
 enum class Keystroke {
 	RELEASE = 4,
-	PRESS = 5,
-	SCROLL = 6
+	PRESS,
+	SCROLL
 };
 
 enum class LifeState {
@@ -56,10 +56,10 @@ enum class LifeState {
 };
 
 enum class Team {
-	NONE = 0,
-	SPECTATOR = 1,
-	TERRORISTS = 2,
-	COUNTERTERRORISTS = 3
+	NONE,
+	SPECTATOR,
+	TERRORISTS,
+	COUNTERTERRORISTS
 };
 
 enum class WeaponType {

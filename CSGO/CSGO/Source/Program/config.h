@@ -33,7 +33,7 @@ class Config {
 
 public:
 	version strVersion;
-	long uiQuitReason;
+	int iQuitReason;
 
 #ifdef _DEBUG
 	bool bCheckForAnticheat = false;

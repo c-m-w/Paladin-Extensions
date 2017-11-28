@@ -6,8 +6,8 @@
 #include <string>
 #include <vector>
 
-#include "debug.h"
 #include "global.h"
+#include "debug.h"
 
 #include "Program/general.h"
 #include "Program/config.h"
