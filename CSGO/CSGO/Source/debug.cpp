@@ -1,8 +1,8 @@
 #include "debug.h"
-
+std::string strLog = "\0";
 void LogDebugMsg(DebugMessage type, char *msg, ...) {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-	if (hConsole != INVALID_HANDLE_VALUE) {
+	if (hConsole && hConsole != INVALID_HANDLE_VALUE) {
 		switch (type) {
 			case SCS:
 				SetConsoleTextAttribute(hConsole, 10);
@@ -36,6 +36,7 @@ void LogDebugMsg(DebugMessage type, char *msg, ...) {
 		vsnprintf(cBuffer, sizeof cBuffer, msg, vaList);
 		va_end(vaList);
 		printf(cBuffer);
+		strLog.append(cBuffer);
 	}
 }
 
@@ -52,5 +53,6 @@ void LogLastError() {
 	} else {
 		LogDebugMsg(LER, "[0x%08lu] - %s", error, errorString);
 	}
+	strLog.append(errorString);
 	LocalFree(errorString);
 }

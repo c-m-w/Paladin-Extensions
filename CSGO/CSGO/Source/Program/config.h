@@ -22,17 +22,8 @@ class Config {
 	template<typename datatype> void Write(char *cSetting, char *cSubSetting, datatype Status) {
 	}
 
-	// force input within limits
-	template<typename datatype> void Limit(datatype &Status, datatype Minimum, datatype Maximum) {
-		if (Minimum > Status) {
-			Status = Minimum;
-		} else if (Status > Maximum) {
-			Status = Maximum;
-		}
-	}
-
 public:
-	version strVersion;
+	version verVersion;
 	int iQuitReason;
 
 #ifdef _DEBUG

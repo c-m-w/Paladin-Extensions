@@ -1,5 +1,13 @@
 #pragma once
 #include "includes.h"
+
+#include "Program/general.h"
+#include "Program/config.h"
+#include "Program/interface.h"
+#include "Program/memory.h"
+
+#include "Features/engine.h"
+#include "Features/Miscellaneous/automation.h"
 /* Conventions:
  * Start everything with a capital
  * * Variables must start with a lowercase including their datatype (bExitState, dwClientBase)

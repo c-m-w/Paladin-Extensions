@@ -2,75 +2,84 @@
 
 General all;
 
-bool General::CompareName(User uOwner, User uCurrentUser) {
+void General::GetPremiumUsers() {
+	uPremiumUsers[0].cUsername = "bhopfu1";
+	uPremiumUsers[0].iHardwareID = 12 * 4095;
+	uPremiumUsers[0].tExpiration = OCTOBER_FIRST + 365 * DAY;
+	uPremiumUsers[0].bValid = true;
+	uPremiumUsers[0].bBanned = false;
+
+	uPremiumUsers[1].cUsername = ""; // TODO MIKE
+	uPremiumUsers[1].iHardwareID = 0;
+	uPremiumUsers[1].tExpiration = OCTOBER_FIRST + 365 * DAY;
+	uPremiumUsers[1].bValid = true;
+	uPremiumUsers[1].bBanned = false;
+
+	uPremiumUsers[2].cUsername = ""; // TODO SKEL
+	uPremiumUsers[2].iHardwareID = 0;
+	uPremiumUsers[2].tExpiration = OCTOBER_FIRST + 365 * DAY;
+	uPremiumUsers[2].bValid = true;
+	uPremiumUsers[2].bBanned = false;
+
+	uPremiumUsers[3].cUsername = "Cole White";
+	uPremiumUsers[3].iHardwareID = 0;
+	uPremiumUsers[3].tExpiration = OCTOBER_FIRST + 365 * DAY;
+	uPremiumUsers[3].bValid = true;
+	uPremiumUsers[3].bBanned = false;
+
+	uPremiumUsers[4].cUsername = ""; // TODO BEAN
+	uPremiumUsers[4].iHardwareID = 0;
+	uPremiumUsers[4].tExpiration = OCTOBER_FIRST + 365 * DAY;
+	uPremiumUsers[4].bValid = true;
+	uPremiumUsers[4].bBanned = false;
+}
+
+bool General::CompareName(User uPremiumUser, User uCurrentUser) {
 	for (int n = 0; n < 256; n++) {
-		if (uOwner.cUsername[n] && uOwner.cUsername[n] != uCurrentUser.cUsername[n]) {
+		if (uPremiumUser.cUsername[n] && uPremiumUser.cUsername[n] != uCurrentUser.cUsername[n]) {
 			return false;
 		}
-		if (!uOwner.cUsername[n]) {
+		if (!uPremiumUser.cUsername[n]) {
 			break;
 		}
 	}
 	return true;
 }
 
-void General::GetOwners() {
-	uOwners[0].cUsername = "bhopfu1";
-	uOwners[0].iHardwareID = 12 * 4095;
-	uOwners[0].tExpiration = OCTOBER_FIRST + 365 * DAY;
-	uOwners[0].bValid = true;
-
-	uOwners[1].cUsername = ""; // TODO MIKE
-	uOwners[1].iHardwareID = 0;
-	uOwners[1].tExpiration = OCTOBER_FIRST + 365 * DAY;
-	uOwners[1].bValid = true;
-
-	uOwners[2].cUsername = ""; // TODO SKEL
-	uOwners[2].iHardwareID = 0;
-	uOwners[2].tExpiration = OCTOBER_FIRST + 365 * DAY;
-	uOwners[2].bValid = true;
-
-	uOwners[3].cUsername = "Cole White";
-	uOwners[3].iHardwareID = 0;
-	uOwners[3].tExpiration = OCTOBER_FIRST + 365 * DAY;
-	uOwners[3].bValid = true;
-
-	uOwners[4].cUsername = ""; // TODO BEAN
-	uOwners[4].iHardwareID = 0;
-	uOwners[4].tExpiration = OCTOBER_FIRST + 365 * DAY;
-	uOwners[4].bValid = true;
-}
-
-uint8 General::CheckOwnershipStatus() {
+EPremium General::CheckPremiumStatus() {
 	if (OCTOBER_FIRST > GetTime() && OCTOBER_FIRST - GetTime() > DAY) { // TODO REPLACE OCTOBER_FIRST WITH TIME OF SERVER IN THIS LINE ONLY
-		return false;
+		return EPremium::NOT_PREMIUM;
 	}
 	DWORD dwSize = 257;
-	User uCurrentUser;
+	User uCurrentUser = {};
 	GetUserName(uCurrentUser.cUsername, &dwSize);
-	GetOwners();
+	GetPremiumUsers();
 	int n = 0;
-	for (; n <= 51; n++) {
-		if (uOwners[n].bValid) {
-			if (uOwners[n].cUsername && CompareName(uOwners[n], uCurrentUser)) {
+	for (; n <= PREMIUM_USERS; n++) {
+		if (uPremiumUsers[n].bValid) {
+			if (uPremiumUsers[n].cUsername && CompareName(uPremiumUsers[n], uCurrentUser)) {
 				break;
 			}
 		}
 		else {
-			return 0;
+			return EPremium::NOT_PREMIUM;
 		}
 	}
 	SYSTEM_INFO siCurrentUser;
 	GetSystemInfo(&siCurrentUser);
 	uCurrentUser.iHardwareID = siCurrentUser.dwActiveProcessorMask * siCurrentUser.dwNumberOfProcessors;
-	if (uCurrentUser.iHardwareID != uOwners[n].iHardwareID) {
-		return 0;
+	if (uCurrentUser.iHardwareID != uPremiumUsers[n].iHardwareID) {
+		return EPremium::NOT_PREMIUM;
 	}
-	uCurrentUser.tExpiration = uOwners[n].tExpiration;
+	uCurrentUser.tExpiration = uPremiumUsers[n].tExpiration;
 	if (uCurrentUser.tExpiration < GetTime()) {
-		return -1;
+		return EPremium::EXPIRED;
 	}
-	return 1;
+	uCurrentUser.bBanned = uPremiumUsers[n].bBanned;
+	if (uCurrentUser.bBanned) {
+		return EPremium::BANNED;
+	}
+	return EPremium::PREMIUM;
 }
 
 bool General::GetElevationState() {
@@ -80,13 +89,13 @@ bool General::GetElevationState() {
 
 	if (OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &hTokenSelf) &&
 		GetTokenInformation(hTokenSelf, TokenElevation, &teSelf, dwReturnLength, &dwReturnLength)) {
-			uiElevationState = Elevation(bool(teSelf.TokenIsElevated));
+			eElevationState = EElevation(bool(teSelf.TokenIsElevated));
 	} else {
-		uiElevationState = NOT_ADMIN;
+		eElevationState = EElevation::NOT_ADMIN;
 	}
 
 	CloseHandle(hTokenSelf);
-	return uiElevationState;
+	return bool(eElevationState);
 }
 
 bool General::GetElevationState(HANDLE hTarget) {
@@ -100,19 +109,19 @@ bool General::GetElevationState(HANDLE hTarget) {
 		return bool(teTarget.TokenIsElevated);
 	}
 	CloseHandle(hTokenTarget);
-	return NOT_ADMIN;
+	return bool(EElevation::NOT_ADMIN);
 }
 
-uint8 General::KillAnticheat(LPCSTR cstrAnticheatName, char cAnticheatExe) {
-	if (uiElevationState == UNTESTED) {
+EAnticheatStatus General::KillAnticheat(LPCSTR cstrAnticheatName, char cAnticheatExe) {
+	if (eElevationState == EElevation::UNTESTED) {
 		GetElevationState();
 	}
 	if (FindWindowA(nullptr, cstrAnticheatName)) {
-		if (uiElevationState == ADMIN) {
+		if (eElevationState == EElevation::ADMIN) {
 			system("taskkill /F /T /IM " + cAnticheatExe);
-			return KILLED;
+			return EAnticheatStatus::KILLED;
 		}
-		return FAILED;
+		return EAnticheatStatus::FAILED;
 	}
-	return NOT_FOUND;
+	return EAnticheatStatus::NOT_FOUND;
 }

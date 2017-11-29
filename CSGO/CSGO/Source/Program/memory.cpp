@@ -18,7 +18,7 @@ namespace Addresses {
 MemoryManager mem;
 
 MemoryManager::~MemoryManager() {
-	if (hGame != nullptr || hGame != INVALID_HANDLE_VALUE) {
+	if (hGame || hGame != INVALID_HANDLE_VALUE) {
 		CloseHandle(hGame);
 	}
 }
@@ -29,7 +29,7 @@ bool MemoryManager::AttachToGame() {
 		Wait(1000);
 	}
 	hGame = OpenProcess(PROCESS_VM_READ | PROCESS_VM_WRITE | PROCESS_VM_OPERATION, false, dwProcessId);
-	if (!hGame) {
+	if (!hGame || hGame == INVALID_HANDLE_VALUE) {
 		LogDebugMsg(ERR, "Invalid game handle");
 		return false;
 	}
@@ -45,7 +45,7 @@ bool MemoryManager::AttachToGame() {
 			hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, dwProcessId);
 			Wait(10);
 		} while (hSnapshot == INVALID_HANDLE_VALUE || GetLastError() == ERROR_BAD_LENGTH);
-		if (hSnapshot == INVALID_HANDLE_VALUE) {
+		if (hSnapshot == INVALID_HANDLE_VALUE || !hSnapshot) {
 			LogDebugMsg(ERR, "Invalid module snapshot");
 			return false;
 		}
@@ -87,7 +87,8 @@ void MemoryManager::InitializeAddresses() {
 	LogDebugMsg(DBG, "Waiting for server connection to complete address initialization");
 	do {
 		Read(cs_soState);
-	} while (cs_soState != SignOnState::FULL);
+		Wait(100);
+	} while (cs_soState != ESignOnState::FULL);
 	dwLocalPlayer += dwClientBase;
 	Read(dwLocalPlayer);
 	lp_fFlags += dwLocalPlayer.loc;

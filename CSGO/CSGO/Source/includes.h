@@ -8,11 +8,3 @@
 
 #include "global.h"
 #include "debug.h"
-
-#include "Program/general.h"
-#include "Program/config.h"
-#include "Program/interface.h"
-#include "Program/memory.h"
-
-#include "Features/engine.h"
-#include "Features/Miscellaneous/automation.h"

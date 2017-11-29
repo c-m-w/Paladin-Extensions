@@ -3,7 +3,7 @@
 Config cfg;
 
 Config::Config() {
-	strVersion = {1, 0};
+	verVersion = {1, 0};
 	iQuitReason = -1;
 	iExitKey = VK_F4;
 	iReloadKey = VK_F5;
@@ -19,21 +19,24 @@ bool Config::LoadConfig() {
 	strcat_s(cfgPath, "config.txt");
 	struct stat buffer;
 	if (stat(cfgPath, &buffer)) {
-		Write("Info", "Version", strVersion);
-		Write("Info", "Quit Reason", iQuitReason);
 		Write("Key Binds", "Terminate", iExitKey);
 		Write("Key Binds", "Reload Config", iReloadKey);
 		Write("Key Binds", "Auto Jump", iAutoJumpKey);
 		Write("Auto Jump", "Enabled", bAutoJumpState);
+		Write("Info", "Version", verVersion);
+		Write("Info", "Quit Reason", iQuitReason);
+#ifdef _DEBUG
+		Write("Info", "Log", strLog);
+#endif
 		return false;
 	}
 	return true;
 }
 
 bool Config::ReadConfig() {
-	version sConfig;
-	Read("Info", "Version", sConfig);
-	if (strVersion == sConfig) {
+	version verConfig;
+	Read("Info", "Version", verConfig);
+	if (verVersion == verConfig) {
 		Read("Key Binds", "Terminate", iExitKey);
 		Read("Key Binds", "Reload Config", iReloadKey);
 		Read("Key Binds", "Auto Jump", iAutoJumpKey);
@@ -54,4 +57,7 @@ bool Config::ReadConfig() {
 
 Config::~Config() {
 	Write("Info", "Quit Reason", iQuitReason);
+#ifdef _DEBUG
+	Write("Info", "Log", strLog);
+#endif
 }

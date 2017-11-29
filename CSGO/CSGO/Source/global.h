@@ -7,6 +7,57 @@ extern std::vector<std::thread> threads;
 
 void Wait(unsigned int z);
 unsigned int GetTime();
+template<typename datatype> void Limit(datatype &Status, datatype Minimum, datatype Maximum) {
+	if (Minimum > Status) {
+		Status = Minimum;
+	}
+	else if (Status > Maximum) {
+		Status = Maximum;
+	}
+}
+
+enum class EQuitReasons {
+	UNKNOWN = -1,
+	SUCCESS,
+	LOADLIBRARY_ERROR,
+	BLACKLISTED_CALL,
+	PANIC
+};
+enum class EPremium {
+	BANNED = -2,
+	EXPIRED = -1,
+	NOT_PREMIUM,
+	PREMIUM
+};
+enum class EElevation {
+	UNTESTED = -1,
+	NOT_ADMIN,
+	ADMIN
+};
+enum class EAnticheatStatus {
+	NOT_FOUND = -1,
+	FAILED,
+	KILLED
+};
+
+inline bool operator==(EAnticheatStatus lhs, int rhs) {
+	if (lhs == EAnticheatStatus::NOT_FOUND && rhs == -1) {
+		return true;
+	}
+	if (lhs == EAnticheatStatus::FAILED && !rhs) {
+		return true;
+	}
+	if (lhs == EAnticheatStatus::KILLED && rhs) {
+		return true;
+	}
+	return false;
+}
+
+inline bool operator!=(EAnticheatStatus lhs, int rhs) {
+	return !(lhs == rhs);
+}
+
+/// CSGO stuff
 
 typedef unsigned int frame;
 typedef unsigned short total;
@@ -28,7 +79,7 @@ struct Coordinate {
 #define FL_ONGROUND (1 << 0) // At rest / on the ground
 #define FL_DUCKING (1 << 1)  // Player flag -- Player is fully crouched
 
-enum class MoveType {
+enum class EMoveType {
 	NONE, // never moves
 	WALK = 2, // Player only - moving on the ground
 	NOCLIP = 8, // No gravity, no collisions, still do velocity/avelocity
@@ -36,33 +87,33 @@ enum class MoveType {
 	OBSERVER, // Observer movement, depends on player's observer mode
 };
 
-enum class SignOnState {
+enum class ESignOnState {
 	CONNECTED = 2,
 	SPAWNED = 5,
 	FULL,
 	CHANGELEVEL
 };
 
-enum class Keystroke {
+enum class EKeystroke {
 	RELEASE = 4,
 	PRESS,
 	SCROLL
 };
 
-enum class LifeState {
+enum class ELifeState {
 	ALIVE,
 	KILLCAM,
 	DEAD
 };
 
-enum class Team {
+enum class ETeam {
 	NONE,
 	SPECTATOR,
 	TERRORISTS,
 	COUNTERTERRORISTS
 };
 
-enum class WeaponType {
+enum class EWeaponType {
 	KNIVES,
 	PISTOLS,
 	SMGS,
@@ -74,7 +125,7 @@ enum class WeaponType {
 	GRENADES = 9
 };
 
-enum class Weapon {
+enum class EWeapon {
 	DEAGLE = 1,
 	ELITE,
 	FIVESEVEN,

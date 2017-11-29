@@ -1,13 +1,13 @@
 #pragma once
 #include "../includes.h"
+#include "general.h"
 
 template<typename datatype> struct Address {
 	DWORD loc = NULL; // location
 	DWORD ptr = NULL; // this ptr
 	datatype val = NULL; // value
-	// return datatype todo
 
-	template<typename rdatatype> Address<datatype> operator+(const rdatatype &rhs) {
+	template<typename rdatatype> Address<datatype> operator+(rdatatype rhs) {
 		if (typeid(DWORD) == typeid(rdatatype)) {
 			loc += DWORD(rhs);
 		} else if (typeid(datatype) == typeid(rdatatype)) {
@@ -16,7 +16,7 @@ template<typename datatype> struct Address {
 		return *this;
 	}
 
-	template<typename rdatatype> Address<datatype> operator-(const rdatatype &rhs) {
+	template<typename rdatatype> Address<datatype> operator-(rdatatype rhs) {
 		if (typeid(DWORD) == typeid(rdatatype)) {
 			loc -= DWORD(rhs);
 		} else if (typeid(datatype) == typeid(rdatatype)) {
@@ -25,7 +25,7 @@ template<typename datatype> struct Address {
 		return *this;
 	}
 
-	template<typename rdatatype> Address<datatype> &operator=(const rdatatype &rhs) {
+	template<typename rdatatype> Address<datatype> &operator=(rdatatype rhs) {
 		if (typeid(DWORD) == typeid(rdatatype)) {
 			loc = DWORD(rhs);
 		} else if (typeid(datatype) == typeid(rdatatype)) {
@@ -34,25 +34,15 @@ template<typename datatype> struct Address {
 		return *this;
 	}
 
-	template<typename rdatatype> Address<datatype> &operator+=(const rdatatype &rhs) {
-		if (typeid(DWORD) == typeid(rdatatype)) {
-			loc += DWORD(rhs);
-		} else if (typeid(datatype) == typeid(rdatatype)) {
-			val += datatype(rhs);
-		}
-		return *this;
+	template<typename rdatatype> Address<datatype> &operator+=(rdatatype rhs) {
+		return (*this + rhs); // TODO warning C4172
 	}
 
-	template<typename rdatatype> Address<datatype> &operator-=(const rdatatype &rhs) {
-		if (typeid(DWORD) == typeid(rdatatype)) {
-			loc -= DWORD(rhs);
-		} else if (typeid(datatype) == typeid(rdatatype)) {
-			val -= datatype(rhs);
-		}
-		return *this;
+	template<typename rdatatype> Address<datatype> &operator-=(rdatatype rhs) {
+		return (*this - rhs); // TODO warning C4172
 	}
 
-	template<typename rdatatype> bool operator==(const rdatatype &rhs) {
+	template<typename rdatatype> bool operator==(rdatatype rhs) {
 		if (typeid(DWORD) == typeid(rdatatype) && typeid(DWORD) != typeid(datatype)) {
 			if (loc == DWORD(rhs)) {
 				return true;
@@ -65,27 +55,18 @@ template<typename datatype> struct Address {
 		return false;
 	}
 
-	template<typename rdatatype> bool operator!=(const rdatatype &rhs) {
-		if (typeid(DWORD) == typeid(rdatatype) && typeid(DWORD) != typeid(datatype)) {
-			if (loc != DWORD(rhs)) {
-				return true;
-			}
-		} else if (typeid(datatype) == typeid(rdatatype)) {
-			if (val != datatype(rhs)) {
-				return true;
-			}
-		}
-		return false;
+	template<typename rdatatype> bool operator!=(rdatatype rhs) {
+		return !(*this == rhs);
 	}
 
-	template<typename rdatatype> datatype operator&(const rdatatype &rhs) {
+	template<typename rdatatype> datatype operator&(rdatatype rhs) {
 		if (typeid(datatype) == typeid(rdatatype)) {
 			return val & datatype(rhs);
 		}
 		return 0;
 	}
 
-	template<typename rdatatype> datatype operator|(const rdatatype &rhs) {
+	template<typename rdatatype> datatype operator|(rdatatype rhs) {
 		if (typeid(datatype) == typeid(rdatatype)) {
 			return val | datatype(rhs);
 		}
@@ -138,7 +119,7 @@ public:
 		if (adrWrite.loc != 0) {
 			if (adrWrite.ptr) {
 				DWORD dwXor = *reinterpret_cast<DWORD*>(&adrWrite.val) ^ adrWrite.ptr;
-				return ReadProcessMemory(hGame, LPVOID(adrWrite.loc), &dwXor, sizeof(DWORD), nullptr);
+				return WriteProcessMemory(hGame, LPVOID(adrWrite.loc), &dwXor, sizeof(DWORD), nullptr);
 			}
 			return WriteProcessMemory(hGame, LPVOID(adrWrite.loc), &adrWrite.val, sizeof(datatype), nullptr);
 		}

@@ -1,38 +1,28 @@
 #pragma once
 #include "../includes.h"
-
+#define PREMIUM_USERS 55
+#define OCTOBER_FIRST 15068160000
+#define DAY 864000
 
 class General {
-private:
-	const int OCTOBER_FIRST = 1506816000;
-	const int DAY = 86400;
 	struct User {
 		TCHAR *cUsername;
 		int iHardwareID;
 		time_t tExpiration;
 		bool bValid;
+		bool bBanned;
 	};
-	User uOwners[55];
-	bool CompareName(User uOwner, User uCurrentUser);
-	void GetOwners();
+	User uPremiumUsers[PREMIUM_USERS];
+	void GetPremiumUsers();
+	bool CompareName(User uPremiumUser, User uCurrentUser);
 public:
-	uint8 CheckOwnershipStatus();
-	enum Elevation {
-		UNTESTED = -1,
-		NOT_ADMIN,
-		ADMIN
-	};
+	EPremium CheckPremiumStatus();
 private:
-	enum AnticheatStatus {
-		NOT_FOUND = -1,
-		FAILED,
-		KILLED
-	};
-	Elevation uiElevationState = UNTESTED;
+	EElevation eElevationState = EElevation::UNTESTED;
 public:
 	bool GetElevationState();
 	bool GetElevationState(HANDLE hTarget);
-	uint8 KillAnticheat(LPCSTR cstrAnticheatName, char cAnticheatExe);
+	EAnticheatStatus KillAnticheat(LPCSTR cstrAnticheatName, char cAnticheatExe);
 };
 
 extern General all;

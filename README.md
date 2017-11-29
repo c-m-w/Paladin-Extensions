@@ -14,14 +14,15 @@
 ## CSGO TODO
 ##### Open
 - Trace Ray (https://www.unknowncheats.me/forum/counterstrike-global-offensive/136361-external-ray-tracing-ray-aabb.html) [Engine]
-##### Jeremy
-- Finish Base [++]
 - Create Cheat Thread [main]
+##### Jeremy
+- Move Log to C:/ Drive
+- Delete Cheat File if User NotFound/Banned
+- Better Jumpthrow
+
+- Finish Base [++]
 - Config [Config]
-- HWID [General]
 - Check for multiple instances [General]
-- Admin Check [General]
-- Anticheat Check [General]
 - Features [Engine ++]
 - Everything else [++]
 ##### Mike

@@ -1,13 +1,5 @@
 #include "main.h"
 
-enum class QuitReasons {
-	UNKNOWN = -1,
-	SUCCESS,
-	LOADLIBRARY_ERROR,
-	BLACKLISTED_CALL,
-	PANIC
-};
-
 void Feature(bool bFeatureState, void (*fnFeature)(), int iFeatureKey) {
 	while (bFeatureState) {
 		if (bExitState) {
@@ -44,7 +36,7 @@ void CleanUp() {
 
 void Panic() {
 	CleanUp();
-	cfg.iQuitReason = int(QuitReasons::PANIC);
+	cfg.iQuitReason = int(EQuitReasons::PANIC);
 	FreeLibraryAndExitThread(hInst, cfg.iQuitReason);
 }
 
@@ -70,14 +62,30 @@ void Cheat() {
 	Wait(1);
 	SetConsoleTextAttribute(hConsole, 15);
 	printf("[DBG] ");
+	strLog.append("\n[DBG] ");
 	SetConsoleTextAttribute(hConsole, 7);
 	printf("Paladin Debug Interface Setup\n");
+	strLog.append("Paladin Debug Interface Setup\n");
 #endif
+	EPremium uCurrentUserPremiumStatus = all.CheckPremiumStatus();
+	if (uCurrentUserPremiumStatus == EPremium::BANNED) {
+		//TODO BANNED  DELETE FILE
+		return;
+	}
+	if (uCurrentUserPremiumStatus == EPremium::NOT_PREMIUM) {
+		return;
+	}
+	if (uCurrentUserPremiumStatus == EPremium::EXPIRED) {
+		MessageBox(nullptr, "Notice 1: Premium Time Expired -> No access\nDid you renew your premium?", "Paladin CSGO", MB_ICONHAND | MB_OK);
+	}
+	if (uCurrentUserPremiumStatus == EPremium::PREMIUM) {
+		LogDebugMsg(SCS, "Authenticated!");
+	}
 	if (!all.GetElevationState()) {
 		MessageBox(nullptr, "Warning 1: Elevation Token State -> No access\nDid you run the middleman as admin?", "Paladin CSGO", MB_ICONWARNING | MB_OK);
 	}
 	if (cfg.bCheckForAnticheat) {
-		uint8 kacCSGO = all.KillAnticheat("Counter-Strike: Global Offensive", *"csgo.exe");
+		EAnticheatStatus kacCSGO = all.KillAnticheat("Counter-Strike: Global Offensive", *"csgo.exe");
 		if (kacCSGO != 0) {
 			if (kacCSGO == 1) {
 				MessageBox(nullptr, "Warning 2: Anticheat -> Terminated\nDid you leave CSGO open during injection?", "Paladin CSGO", MB_ICONWARNING | MB_OK);
@@ -118,7 +126,7 @@ BOOL WINAPI DllMain(HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpvReserved) {
 			CleanUp();
 			break;
 		default:
-			return int(QuitReasons::BLACKLISTED_CALL);
+			return int(EQuitReasons::BLACKLISTED_CALL);
 	}
-	return int(QuitReasons::SUCCESS);
+	return int(EQuitReasons::SUCCESS);
 }

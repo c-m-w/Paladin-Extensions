@@ -17,5 +17,7 @@ enum DebugMessage {
 	LER = 4 //Last Error (Windows)
 };
 
+extern std::string strLog;
+
 void LogDebugMsg(DebugMessage type, char *msg, ...);
 void LogLastError();

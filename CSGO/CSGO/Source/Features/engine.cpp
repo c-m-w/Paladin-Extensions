@@ -2,13 +2,13 @@
 
 Engine eng;
 
-void Engine::Jump(Keystroke kType) {
-	ksForceJump = kType;
+void Engine::Jump(EKeystroke ksType) {
+	ksForceJump = ksType;
 	mem.Write(ksForceJump);
 }
 
-void Engine::Attack(Keystroke kType) {
-	ksForceAttack = kType;
+void Engine::Attack(EKeystroke ksType) {
+	ksForceAttack = ksType;
 	mem.Write(ksForceAttack);
 }
 
