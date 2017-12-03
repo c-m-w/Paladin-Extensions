@@ -143,14 +143,8 @@ void Cheat()
 	dbg->LogDebugMsg(DBG, "Creating threads");
 
 	//Create feature threads
-	//std::function<void(Automation const&)> tdAutoJump = std::bind(&Automation::AutoJump, aut);
 	std::thread tAutoJump(FeatureA, true, 1, VK_SPACE, std::bind(&Automation::AutoJump, aut));
 	threads.push_back(std::move(tAutoJump));
-
-	/*
-	std::thread tAutoJump(&Automation::AutoJump, aut);
-	threads.push_back(std::move(tAutoJump));
-	*/
 
 	dbg->LogDebugMsg(SCS, "Threads created");
 
