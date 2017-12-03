@@ -8,8 +8,8 @@ namespace Addresses
 	Address<uint8_t> cs_soState			= { 0x108 };
 
 	// global Client addresses
-	Address<uint8_t> ksForceJump		= { 0x4F0ED94 };
-	Address<uint8_t> ksForceAttack		= { 0x2EB9EA0 };
+	Address<uint8_t> ksForceJump		= { 0x4F0ED64 };
+	Address<uint8_t> ksForceAttack		= { 0x2EB9EAC };
 	Address<float> flSensitivity		= { 0xAA04EC, 0xAA04C0 };
 
 	// Client pointer addresses

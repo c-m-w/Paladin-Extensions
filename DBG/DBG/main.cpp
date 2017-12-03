@@ -46,39 +46,28 @@ void Cleanup(bool exit)
 	}
 }
 
-void Feature(bool bFeatureState, uint32_t timeout, int uiFeatureKey, void(*Feature)())
+void FeatureA(bool bFeatureState, uint32_t timeout, int uiFeatureKey, std::function<void()> func)
 {
 	while (bFeatureState) 
 	{
 		if (bExit)
 			return;
 
-		if (GetAsyncKeyState(uiFeatureKey) & 1) 
-			Feature();
+		if (GetAsyncKeyState(uiFeatureKey))
+			func();
 		else
 			Wait(timeout);
 	}
 }
 
-void Feature(bool bFeatureState, uint32_t timeout, void(*Feature)())
+void FeatureB(bool bFeatureState, uint32_t timeout, std::function<void()> func)
 {
 	while (bFeatureState) 
 	{
 		if (bExit)
 			return;
 
-		Feature();
-		Wait(timeout);
-	}
-}
-
-void Feature(bool bFeatureState, uint32_t timeout)
-{
-	while (bFeatureState)
-	{
-		if (bExit)
-			return;
-
+		func();
 		Wait(timeout);
 	}
 }
@@ -154,8 +143,14 @@ void Cheat()
 	dbg->LogDebugMsg(DBG, "Creating threads");
 
 	//Create feature threads
+	//std::function<void(Automation const&)> tdAutoJump = std::bind(&Automation::AutoJump, aut);
+	std::thread tAutoJump(FeatureA, true, 1, VK_SPACE, std::bind(&Automation::AutoJump, aut));
+	threads.push_back(std::move(tAutoJump));
+
+	/*
 	std::thread tAutoJump(&Automation::AutoJump, aut);
 	threads.push_back(std::move(tAutoJump));
+	*/
 
 	dbg->LogDebugMsg(SCS, "Threads created");
 
