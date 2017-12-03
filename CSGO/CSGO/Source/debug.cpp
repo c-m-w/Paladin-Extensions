@@ -1,5 +1,8 @@
+#include "includes.h"
 #include "debug.h"
+
 std::string strLog = "\0";
+
 void LogDebugMsg(DebugMessage type, char *msg, ...) {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	if (hConsole && hConsole != INVALID_HANDLE_VALUE) {

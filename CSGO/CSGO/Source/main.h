@@ -8,6 +8,14 @@
 
 #include "Features/engine.h"
 #include "Features/Miscellaneous/automation.h"
+
+void Feature(bool, void (*)(), unsigned int);
+void Feature(bool, void (*)(), unsigned int, int);
+void CleanUp();
+void Panic();
+void Cheat();
+BOOL WINAPI DllMain(HINSTANCE, DWORD, LPVOID);
+
 /* Conventions:
  * Start everything with a capital
  * * Variables must start with a lowercase including their datatype (bExitState, dwClientBase)

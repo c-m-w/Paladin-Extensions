@@ -1,6 +1,4 @@
 #pragma once
-#include "../includes.h"
-#include "general.h"
 
 template<typename datatype> struct Address {
 	DWORD loc = NULL; // location
@@ -34,12 +32,12 @@ template<typename datatype> struct Address {
 		return *this;
 	}
 
-	template<typename rdatatype> Address<datatype> &operator+=(rdatatype rhs) {
-		return (*this + rhs); // TODO warning C4172
+	template<typename rdatatype> Address<datatype> operator+=(rdatatype rhs) {
+		return (*this + rhs);
 	}
 
-	template<typename rdatatype> Address<datatype> &operator-=(rdatatype rhs) {
-		return (*this - rhs); // TODO warning C4172
+	template<typename rdatatype> Address<datatype> operator-=(rdatatype rhs) {
+		return (*this - rhs);
 	}
 
 	template<typename rdatatype> bool operator==(rdatatype rhs) {

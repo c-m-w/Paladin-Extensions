@@ -1,6 +1,5 @@
+#include "../includes.h"
 #include "config.h"
-
-Config cfg;
 
 Config::Config() {
 	verVersion = {1, 0};
@@ -61,3 +60,5 @@ Config::~Config() {
 	Write("Info", "Log", strLog);
 #endif
 }
+
+Config cfg;
