@@ -1,3 +1,3 @@
-#include "interface.h"
+#include "../main.h"
 
 Interface mnu;

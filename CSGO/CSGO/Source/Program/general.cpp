@@ -1,6 +1,4 @@
-#include "general.h"
-
-General all;
+#include "../main.h"
 
 void General::GetPremiumUsers() {
 	uPremiumUsers[0].cUsername = "bhopfu1";
@@ -8,25 +6,21 @@ void General::GetPremiumUsers() {
 	uPremiumUsers[0].tExpiration = OCTOBER_FIRST + 365 * DAY;
 	uPremiumUsers[0].bValid = true;
 	uPremiumUsers[0].bBanned = false;
-
 	uPremiumUsers[1].cUsername = ""; // TODO MIKE
 	uPremiumUsers[1].iHardwareID = 0;
 	uPremiumUsers[1].tExpiration = OCTOBER_FIRST + 365 * DAY;
 	uPremiumUsers[1].bValid = true;
 	uPremiumUsers[1].bBanned = false;
-
 	uPremiumUsers[2].cUsername = ""; // TODO SKEL
 	uPremiumUsers[2].iHardwareID = 0;
 	uPremiumUsers[2].tExpiration = OCTOBER_FIRST + 365 * DAY;
 	uPremiumUsers[2].bValid = true;
 	uPremiumUsers[2].bBanned = false;
-
-	uPremiumUsers[3].cUsername = "Cole White";
+	uPremiumUsers[3].cUsername = ""; // TODO COLE
 	uPremiumUsers[3].iHardwareID = 0;
 	uPremiumUsers[3].tExpiration = OCTOBER_FIRST + 365 * DAY;
 	uPremiumUsers[3].bValid = true;
 	uPremiumUsers[3].bBanned = false;
-
 	uPremiumUsers[4].cUsername = ""; // TODO BEAN
 	uPremiumUsers[4].iHardwareID = 0;
 	uPremiumUsers[4].tExpiration = OCTOBER_FIRST + 365 * DAY;
@@ -47,7 +41,7 @@ bool General::CompareName(User uPremiumUser, User uCurrentUser) {
 }
 
 EPremium General::CheckPremiumStatus() {
-	if (OCTOBER_FIRST > GetTime() && OCTOBER_FIRST - GetTime() > DAY) { // TODO REPLACE OCTOBER_FIRST WITH TIME OF SERVER IN THIS LINE ONLY
+	if (OCTOBER_FIRST > GetTime() && OCTOBER_FIRST - GetTime() > DAY) {
 		return EPremium::NOT_PREMIUM;
 	}
 	DWORD dwSize = 257;
@@ -60,8 +54,7 @@ EPremium General::CheckPremiumStatus() {
 			if (uPremiumUsers[n].cUsername && CompareName(uPremiumUsers[n], uCurrentUser)) {
 				break;
 			}
-		}
-		else {
+		} else {
 			return EPremium::NOT_PREMIUM;
 		}
 	}
@@ -86,14 +79,12 @@ bool General::GetElevationState() {
 	HANDLE hTokenSelf;
 	TOKEN_ELEVATION teSelf;
 	DWORD dwReturnLength = sizeof(TOKEN_ELEVATION);
-
 	if (OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &hTokenSelf) &&
 		GetTokenInformation(hTokenSelf, TokenElevation, &teSelf, dwReturnLength, &dwReturnLength)) {
-			eElevationState = EElevation(bool(teSelf.TokenIsElevated));
+		eElevationState = EElevation(bool(teSelf.TokenIsElevated));
 	} else {
 		eElevationState = EElevation::NOT_ADMIN;
 	}
-
 	CloseHandle(hTokenSelf);
 	return bool(eElevationState);
 }
@@ -102,7 +93,6 @@ bool General::GetElevationState(HANDLE hTarget) {
 	HANDLE hTokenTarget;
 	TOKEN_ELEVATION teTarget;
 	DWORD dwReturnLength = sizeof(TOKEN_ELEVATION);
-
 	if (OpenProcessToken(hTarget, TOKEN_QUERY, &hTokenTarget) &&
 		GetTokenInformation(hTokenTarget, TokenElevation, &teTarget, dwReturnLength, &dwReturnLength)) {
 		CloseHandle(hTokenTarget);
@@ -125,3 +115,6 @@ EAnticheatStatus General::KillAnticheat(LPCSTR cstrAnticheatName, char cAntichea
 	}
 	return EAnticheatStatus::NOT_FOUND;
 }
+
+
+General all;

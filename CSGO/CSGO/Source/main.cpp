@@ -1,43 +1,26 @@
 #include "main.h"
 
-void Feature(bool bFeatureState, void (*fnFeature)(), int iFeatureKey) {
-	while (bFeatureState) {
-		if (bExitState) {
-			return;
-		}
-		if (GetAsyncKeyState(iFeatureKey) & 1) {
-			fnFeature();
-		} else {
-			Wait(10);
-		}
-	}
-}
+void Feature(bool, void(*)(), unsigned int);
+void Feature(bool, void(*)(), unsigned int, int);
+void CleanUp();
+void Panic();
+void Cheat();
+BOOL WINAPI DllMain(HINSTANCE, DWORD, LPVOID);
 
-void Feature(bool bFeatureState, void (*Feature)()) {
-	while (bFeatureState) {
-		if (bExitState) {
-			return;
-		}
-		Feature();
+BOOL WINAPI DllMain(HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpvReserved) {
+	switch (fdwReason) {
+		case DLL_PROCESS_ATTACH:
+			DisableThreadLibraryCalls(hInstDll);
+			hInst = hInstDll;
+			// TODO CREATE THREAD FOR Cheat();
+			break;
+		case DLL_PROCESS_DETACH:
+			CleanUp();
+			break;
+		default:
+			return int(EQuitReasons::BLACKLISTED_CALL);
 	}
-}
-
-void CleanUp() {
-	bExitState = true;
-	for (auto &t : threads) {
-		if (t.joinable()) {
-			t.join();
-		}
-	}
-#ifdef _DEBUG
-	FreeConsole();
-#endif
-}
-
-void Panic() {
-	CleanUp();
-	cfg.iQuitReason = int(EQuitReasons::PANIC);
-	FreeLibraryAndExitThread(hInst, cfg.iQuitReason);
+	return int(EQuitReasons::SUCCESS);
 }
 
 void Cheat() {
@@ -69,7 +52,7 @@ void Cheat() {
 #endif
 	EPremium uCurrentUserPremiumStatus = all.CheckPremiumStatus();
 	if (uCurrentUserPremiumStatus == EPremium::BANNED) {
-		//TODO BANNED  DELETE FILE
+		//TODO BANNED: DELETE FILE
 		return;
 	}
 	if (uCurrentUserPremiumStatus == EPremium::NOT_PREMIUM) {
@@ -86,11 +69,11 @@ void Cheat() {
 	}
 	if (cfg.bCheckForAnticheat) {
 		EAnticheatStatus kacCSGO = all.KillAnticheat("Counter-Strike: Global Offensive", *"csgo.exe");
-		if (kacCSGO != 0) {
-			if (kacCSGO == 1) {
+		if (kacCSGO != EAnticheatStatus::FAILED) {
+			if (kacCSGO == EAnticheatStatus::KILLED) {
 				MessageBox(nullptr, "Warning 2: Anticheat -> Terminated\nDid you leave CSGO open during injection?", "Paladin CSGO", MB_ICONWARNING | MB_OK);
 			}
-			if (all.KillAnticheat("Steam", *"steam.exe") == 1) {
+			if (all.KillAnticheat("Steam", *"steam.exe") == EAnticheatStatus::KILLED) {
 				MessageBox(nullptr, "Warning 2: Anticheat -> Terminated\nDid you leave Steam open during injection?", "Paladin CSGO", MB_ICONWARNING | MB_OK);
 			}
 		} else {
@@ -115,18 +98,43 @@ void Cheat() {
 	//threads.push_back(std::thread(Feature(cfg.bAutoJumpState, cfg.iAutoJumpKey, &aut.AutoJump)));
 }
 
-BOOL WINAPI DllMain(HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpvReserved) {
-	switch (fdwReason) {
-		case DLL_PROCESS_ATTACH:
-			DisableThreadLibraryCalls(hInstDll);
-			hInst = hInstDll;
-			// TODO CREATE THREAD FOR Cheat();
-			break;
-		case DLL_PROCESS_DETACH:
-			CleanUp();
-			break;
-		default:
-			return int(EQuitReasons::BLACKLISTED_CALL);
+void Panic() {
+	CleanUp();
+	cfg.iQuitReason = int(EQuitReasons::PANIC);
+	FreeLibraryAndExitThread(hInst, cfg.iQuitReason);
+}
+
+void CleanUp() {
+	bExitState = true;
+	for (auto &t : threads) {
+		if (t.joinable()) {
+			t.join();
+		}
 	}
-	return int(EQuitReasons::SUCCESS);
+#ifdef _DEBUG
+	FreeConsole();
+#endif
+}
+
+void Feature(bool bFeatureState, void (*fnFeature)(), unsigned int uiWait, int iFeatureKey) {
+	while (bFeatureState) {
+		if (bExitState) {
+			return;
+		}
+		if (GetAsyncKeyState(iFeatureKey) & 1) {
+			fnFeature();
+		} else {
+			Wait(uiWait);
+		}
+	}
+}
+
+void Feature(bool bFeatureState, void (*Feature)(), unsigned int uiWait) {
+	while (bFeatureState) {
+		if (bExitState) {
+			return;
+		}
+		Feature();
+		Wait(uiWait);
+	}
 }

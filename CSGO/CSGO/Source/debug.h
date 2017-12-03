@@ -1,5 +1,4 @@
 #pragma once
-#include "includes.h"
 
 #ifdef _DEBUG
 #define DEBUG LogDebugMsg
@@ -19,5 +18,5 @@ enum DebugMessage {
 
 extern std::string strLog;
 
-void LogDebugMsg(DebugMessage type, char *msg, ...);
+void LogDebugMsg(DebugMessage, char *, ...);
 void LogLastError();

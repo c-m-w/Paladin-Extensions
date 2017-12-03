@@ -1,4 +1,4 @@
-#include "memory.h"
+#include "../main.h"
 
 namespace Addresses {
 	// global Engine addresses
@@ -14,8 +14,6 @@ namespace Addresses {
 	Address<frame> lp_fFlags = {0x100};
 	Address<total> lp_totalHitsOnServer = {0xBA94};
 }
-
-MemoryManager mem;
 
 MemoryManager::~MemoryManager() {
 	if (hGame || hGame != INVALID_HANDLE_VALUE) {
@@ -43,7 +41,7 @@ bool MemoryManager::AttachToGame() {
 		do {
 			SetLastError(0);
 			hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, dwProcessId);
-			Wait(10);
+			Wait(1);
 		} while (hSnapshot == INVALID_HANDLE_VALUE || GetLastError() == ERROR_BAD_LENGTH);
 		if (hSnapshot == INVALID_HANDLE_VALUE || !hSnapshot) {
 			LogDebugMsg(ERR, "Invalid module snapshot");
@@ -87,7 +85,7 @@ void MemoryManager::InitializeAddresses() {
 	LogDebugMsg(DBG, "Waiting for server connection to complete address initialization");
 	do {
 		Read(cs_soState);
-		Wait(100);
+		Wait(1);
 	} while (cs_soState != ESignOnState::FULL);
 	dwLocalPlayer += dwClientBase;
 	Read(dwLocalPlayer);
@@ -95,3 +93,6 @@ void MemoryManager::InitializeAddresses() {
 	lp_totalHitsOnServer += dwLocalPlayer.loc;
 	LogDebugMsg(SCS, "Initialized addresses");
 }
+
+
+MemoryManager mem;

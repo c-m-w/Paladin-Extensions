@@ -1,6 +1,4 @@
-#include "engine.h"
-
-Engine eng;
+#include "../main.h"
 
 void Engine::Jump(EKeystroke ksType) {
 	ksForceJump = ksType;
@@ -21,3 +19,5 @@ void Engine::SetSensitivity(float flSensitivityNew) {
 	flSensitivity = flSensitivityNew;
 	mem.Write(flSensitivity);
 }
+
+Engine eng;

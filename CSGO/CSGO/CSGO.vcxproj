@@ -23,7 +23,6 @@
     <ClInclude Include="Source\Features\engine.h" />
     <ClInclude Include="Source\Features\Miscellaneous\automation.h" />
     <ClInclude Include="Source\global.h" />
-    <ClInclude Include="Source\includes.h" />
     <ClInclude Include="Source\main.h" />
     <ClInclude Include="Source\Program\config.h" />
     <ClInclude Include="Source\Program\general.h" />
