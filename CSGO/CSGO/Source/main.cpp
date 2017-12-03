@@ -1,5 +1,12 @@
 #include "main.h"
 
+void Feature(bool, void(*)(), unsigned int);
+void Feature(bool, void(*)(), unsigned int, int);
+void CleanUp();
+void Panic();
+void Cheat();
+BOOL WINAPI DllMain(HINSTANCE, DWORD, LPVOID);
+
 BOOL WINAPI DllMain(HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpvReserved) {
 	switch (fdwReason) {
 		case DLL_PROCESS_ATTACH:

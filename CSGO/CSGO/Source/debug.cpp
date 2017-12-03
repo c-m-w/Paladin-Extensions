@@ -1,5 +1,4 @@
-#include "includes.h"
-#include "debug.h"
+#include "main.h"
 
 std::string strLog = "\0";
 

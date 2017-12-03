@@ -1,5 +1,14 @@
 #pragma once
-#include "includes.h"
+#include <Windows.h>
+#include <TlHelp32.h>
+#include <thread>
+#include <atomic>
+#include <string>
+#include <vector>
+
+#include "global.h"
+#include "debug.h"
+
 
 #include "Program/general.h"
 #include "Program/config.h"
@@ -8,13 +17,6 @@
 
 #include "Features/engine.h"
 #include "Features/Miscellaneous/automation.h"
-
-void Feature(bool, void (*)(), unsigned int);
-void Feature(bool, void (*)(), unsigned int, int);
-void CleanUp();
-void Panic();
-void Cheat();
-BOOL WINAPI DllMain(HINSTANCE, DWORD, LPVOID);
 
 /* Conventions:
  * Start everything with a capital

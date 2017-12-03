@@ -1,5 +1,4 @@
-#include "includes.h"
-#include "global.h"
+#include "main.h"
 
 HINSTANCE hInst = nullptr;
 std::atomic<bool> bExitState = false;

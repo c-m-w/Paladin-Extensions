@@ -1,5 +1,3 @@
-#include "../includes.h"
-#include "config.h"
-#include "interface.h"
+#include "../main.h"
 
 Interface mnu;

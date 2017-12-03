@@ -1,5 +1,4 @@
-#include "../includes.h"
-#include "config.h"
+#include "../main.h"
 
 Config::Config() {
 	verVersion = {1, 0};

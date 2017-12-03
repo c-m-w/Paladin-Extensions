@@ -1,5 +1,4 @@
-#include "../includes.h"
-#include "general.h"
+#include "../main.h"
 
 void General::GetPremiumUsers() {
 	uPremiumUsers[0].cUsername = "bhopfu1";

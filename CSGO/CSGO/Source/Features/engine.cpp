@@ -1,6 +1,4 @@
-#include "../includes.h"
-#include "../Program/memory.h"
-#include "engine.h"
+#include "../main.h"
 
 void Engine::Jump(EKeystroke ksType) {
 	ksForceJump = ksType;
