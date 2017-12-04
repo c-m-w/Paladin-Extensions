@@ -123,28 +123,32 @@ void CleanUp() {
 }
 
 void Feature(bool bFeatureState, std::function<void()> fnFeature, unsigned int uiWait, int iFeatureKey) {
-	while (bFeatureState) {
-		if (bExitState) {
-			return;
-		}
-		if (GetAsyncKeyState(iFeatureKey)) {
-			fnFeature();
-		} else {
-			if (uiWait) {
-				Wait(uiWait);
+	while (!bExitState) {
+		while (bFeatureState) {
+			if (GetAsyncKeyState(iFeatureKey)) {
+				fnFeature();
+			} else {
+				if (uiWait) {
+					Wait(uiWait);
+				}
+			}
+			if (bExitState) {
+				return;
 			}
 		}
 	}
 }
 
 void Feature(bool bFeatureState, std::function<void()> fnFeature, unsigned int uiWait) {
-	while (bFeatureState) {
-		if (bExitState) {
-			return;
-		}
-		fnFeature();
-		if (uiWait) {
-			Wait(uiWait);
+	while (!bExitState) {
+		while (bFeatureState) {
+			fnFeature();
+			if (uiWait) {
+				Wait(uiWait);
+			}
+			if (bExitState) {
+				return;
+			}
 		}
 	}
 }
