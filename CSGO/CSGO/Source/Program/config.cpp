@@ -7,6 +7,8 @@ Config::Config() {
 	iReloadKey = VK_F5;
 	iAutoJumpKey = VK_XBUTTON1;
 	bAutoJumpState = true;
+	bHitSound = true;
+	strHitSoundLocation = "\0";
 }
 
 bool Config::LoadConfig() {
@@ -21,6 +23,8 @@ bool Config::LoadConfig() {
 		Write("Key Binds", "Reload Config", iReloadKey);
 		Write("Key Binds", "Auto Jump", iAutoJumpKey);
 		Write("Auto Jump", "Enabled", bAutoJumpState);
+		Write("Hit Sound", "Enabled", bHitSound);
+		Write("Hit Sound", "File Location", strHitSoundLocation);
 		Write("Info", "Version", verVersion);
 		Write("Info", "Quit Reason", iQuitReason);
 #ifdef _DEBUG
@@ -39,12 +43,16 @@ bool Config::ReadConfig() {
 		Read("Key Binds", "Reload Config", iReloadKey);
 		Read("Key Binds", "Auto Jump", iAutoJumpKey);
 		Read("Auto Jump", "Enabled", bAutoJumpState);
+		Read("Hit Sound", "Enabled", bHitSound);
+		Read("Hit Sound", "File Location", strHitSoundLocation);
 	} else {
 		// set defaults
 		iExitKey = VK_F4;
 		iReloadKey = VK_F5;
 		iAutoJumpKey = VK_XBUTTON1;
 		bAutoJumpState = true;
+		bHitSound = true;
+		strHitSoundLocation = "\0";
 		return false;
 	}
 	Limit(iExitKey, VK_F4, MAXINT);

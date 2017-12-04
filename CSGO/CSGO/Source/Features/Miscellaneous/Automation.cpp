@@ -2,16 +2,13 @@
 
 void Automation::AutoJump() {
 	mem.Read(ksForceJump);
-	if (ksForceJump == EKeystroke::PRESS) {
+	if (ksForceJump.val == EKeystroke::PRESS) {
 		eng.Jump(EKeystroke::RELEASE);
 	}
 	mem.Read(lp_fFlags);
-	if (lp_fFlags & FL_ONGROUND) {
+	if (lp_fFlags.val & FL_ONGROUND) {
 		eng.Jump(EKeystroke::SCROLL);
 	}
-}
-
-void Automation::AutoJumpthrow() {
 }
 
 Automation aut;

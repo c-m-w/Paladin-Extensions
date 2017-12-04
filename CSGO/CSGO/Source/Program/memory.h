@@ -3,84 +3,19 @@
 template<typename datatype> struct Address {
 	DWORD loc = NULL; // location
 	DWORD ptr = NULL; // this ptr
-	datatype val = NULL; // value
-
-	template<typename rdatatype> Address<datatype> operator+(rdatatype rhs) {
-		if (typeid(DWORD) == typeid(rdatatype)) {
-			loc += DWORD(rhs);
-		} else if (typeid(datatype) == typeid(rdatatype)) {
-			val += datatype(rhs);
-		}
-		return *this;
-	}
-
-	template<typename rdatatype> Address<datatype> operator-(rdatatype rhs) {
-		if (typeid(DWORD) == typeid(rdatatype)) {
-			loc -= DWORD(rhs);
-		} else if (typeid(datatype) == typeid(rdatatype)) {
-			val -= datatype(rhs);
-		}
-		return *this;
-	}
-
-	template<typename rdatatype> Address<datatype> &operator=(rdatatype rhs) {
-		if (typeid(DWORD) == typeid(rdatatype)) {
-			loc = DWORD(rhs);
-		} else if (typeid(datatype) == typeid(rdatatype)) {
-			val = datatype(rhs);
-		}
-		return *this;
-	}
-
-	template<typename rdatatype> Address<datatype> operator+=(rdatatype rhs) {
-		return (*this + rhs);
-	}
-
-	template<typename rdatatype> Address<datatype> operator-=(rdatatype rhs) {
-		return (*this - rhs);
-	}
-
-	template<typename rdatatype> bool operator==(rdatatype rhs) {
-		if (typeid(DWORD) == typeid(rdatatype) && typeid(DWORD) != typeid(datatype)) {
-			if (loc == DWORD(rhs)) {
-				return true;
-			}
-		} else if (typeid(datatype) == typeid(rdatatype)) {
-			if (val == datatype(rhs)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	template<typename rdatatype> bool operator!=(rdatatype rhs) {
-		return !(*this == rhs);
-	}
-
-	template<typename rdatatype> datatype operator&(rdatatype rhs) {
-		if (typeid(datatype) == typeid(rdatatype)) {
-			return val & datatype(rhs);
-		}
-		return 0;
-	}
-
-	template<typename rdatatype> datatype operator|(rdatatype rhs) {
-		if (typeid(datatype) == typeid(rdatatype)) {
-			return val | datatype(rhs);
-		}
-		return 0;
-	}
+	datatype val = datatype(NULL); // value
 };
 
 namespace Addresses {
-
+	// global Engine addresses
+	// Engine pointer addresses
 	extern Address<DWORD> dwClientState;
-	extern Address<uint8> cs_soState;
-
-	extern Address<uint8> ksForceJump;
-	extern Address<uint8> ksForceAttack;
+	extern Address<ESignOnState> cs_soState;
+	// global Client addresses
+	extern Address<EKeystroke> ksForceJump;
+	extern Address<EKeystroke> ksForceAttack;
 	extern Address<float> flSensitivity;
-
+	// Client pointer addresses
 	extern Address<DWORD> dwLocalPlayer;
 	extern Address<frame> lp_fFlags;
 	extern Address<total> lp_totalHitsOnServer;

@@ -8,16 +8,20 @@ void Cheat();
 
 BOOL WINAPI DllMain(HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpvReserved) {
 	switch (fdwReason) {
-		case DLL_PROCESS_ATTACH:
-			DisableThreadLibraryCalls(hInstDll);
+		case DLL_PROCESS_ATTACH: {
+			AllocConsole();
 			hInst = hInstDll;
-			CreateThread(nullptr, NULL, LPTHREAD_START_ROUTINE(Cheat), nullptr, NULL, nullptr);
+			DisableThreadLibraryCalls(hInstDll);
+			//CreateThread(0, 0, LPTHREAD_START_ROUTINE(Cheat), 0, 0, 0); TODO
 			break;
-		case DLL_PROCESS_DETACH:
+		}
+		case DLL_PROCESS_DETACH: {
 			CleanUp();
 			break;
-		default:
+		}
+		default: {
 			return BOOL(EQuitReasons::BLACKLISTED_CALL);
+		}
 	}
 	return BOOL(EQuitReasons::SUCCESS);
 }
@@ -92,16 +96,24 @@ void Cheat() {
 		CleanUp();
 	}
 	mem.InitializeAddresses();
+
 	// General format for cheat threads:
-	if (cfg.bAutoJumpState) {
-		std::function<void()> fnAutoJump = [&] {
-			aut.AutoJump();
-		};
-		std::thread tAutoJump([&]() {
-			Feature(cfg.bAutoJumpState, fnAutoJump, 1, cfg.iAutoJumpKey);
-		});
-		tThreads.push_back(move(tAutoJump));
-	}
+	// HitSound
+	std::function<void()> fnHitSound = [&] {
+		hit.PlaySoundOnHit();
+	};
+	std::thread tHitSound([&]() {
+		Feature(cfg.bHitSound, fnHitSound, 1);
+	});
+	tThreads.push_back(move(tHitSound));
+	// AutoJump
+	std::function<void()> fnAutoJump = [&] {
+		aut.AutoJump();
+	};
+	std::thread tAutoJump([&]() {
+		Feature(cfg.bAutoJumpState, fnAutoJump, 1, cfg.iAutoJumpKey);
+	});
+	tThreads.push_back(move(tAutoJump));
 }
 
 void Panic() {
@@ -136,6 +148,11 @@ void Feature(bool bFeatureState, std::function<void()> fnFeature, unsigned int u
 				return;
 			}
 		}
+		if (uiWait) {
+			Wait(uiWait);
+		} else {
+			Wait(1);
+		}
 	}
 }
 
@@ -149,6 +166,11 @@ void Feature(bool bFeatureState, std::function<void()> fnFeature, unsigned int u
 			if (bExitState) {
 				return;
 			}
+		}
+		if (uiWait) {
+			Wait(uiWait);
+		} else {
+			Wait(1);
 		}
 	}
 }

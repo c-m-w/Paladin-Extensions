@@ -37,7 +37,11 @@ public:
 	int iAutoJumpKey;
 
 	// Feature Toggles
+	bool bHitSound;
 	bool bAutoJumpState;
+
+	// Feature Settings
+	std::string strHitSoundLocation;
 
 	Config();
 	// open config, create if doesn't exist

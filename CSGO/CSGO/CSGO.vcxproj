@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\debug.h" />
+    <ClInclude Include="Source\Features\Awareness\hitsound.h" />
     <ClInclude Include="Source\Features\engine.h" />
     <ClInclude Include="Source\Features\Miscellaneous\automation.h" />
     <ClInclude Include="Source\global.h" />
@@ -31,6 +32,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\debug.cpp" />
+    <ClCompile Include="Source\Features\Awareness\hitsound.cpp" />
     <ClCompile Include="Source\Features\engine.cpp" />
     <ClCompile Include="Source\Features\Miscellaneous\automation.cpp" />
     <ClCompile Include="Source\global.cpp" />
