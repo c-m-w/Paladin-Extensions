@@ -12,7 +12,7 @@ Config::Config() {
 bool Config::LoadConfig() {
 	char tempChar[MAX_PATH];
 	GetModuleFileName(nullptr, tempChar, MAX_PATH);
-	memset(cfgPath, 0, MAX_PATH);
+	memset(cfgPath, NULL, MAX_PATH);
 	strcpy_s(cfgPath, std::string(tempChar).substr(NULL, std::string(tempChar).find_last_of("/\\") + 1).c_str());
 	strcat_s(cfgPath, "config.txt");
 	struct stat buffer;

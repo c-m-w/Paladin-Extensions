@@ -1,26 +1,25 @@
 #include "main.h"
 
-void Feature(bool, void(*)(), unsigned int);
-void Feature(bool, void(*)(), unsigned int, int);
+void Feature(bool, std::function<void()>, unsigned int);
+void Feature(bool, std::function<void()>, unsigned int, int);
 void CleanUp();
 void Panic();
 void Cheat();
-BOOL WINAPI DllMain(HINSTANCE, DWORD, LPVOID);
 
 BOOL WINAPI DllMain(HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpvReserved) {
 	switch (fdwReason) {
 		case DLL_PROCESS_ATTACH:
 			DisableThreadLibraryCalls(hInstDll);
 			hInst = hInstDll;
-			// TODO CREATE THREAD FOR Cheat();
+			CreateThread(nullptr, NULL, LPTHREAD_START_ROUTINE(Cheat), nullptr, NULL, nullptr);
 			break;
 		case DLL_PROCESS_DETACH:
 			CleanUp();
 			break;
 		default:
-			return int(EQuitReasons::BLACKLISTED_CALL);
+			return BOOL(EQuitReasons::BLACKLISTED_CALL);
 	}
-	return int(EQuitReasons::SUCCESS);
+	return BOOL(EQuitReasons::SUCCESS);
 }
 
 void Cheat() {
@@ -37,7 +36,7 @@ void Cheat() {
 	cfiEx.dwFontSize.X = 6;
 	cfiEx.dwFontSize.Y = 8;
 	wcscpy_s(cfiEx.FaceName, L"Terminal");
-	SetCurrentConsoleFontEx(hConsole, 0, &cfiEx);
+	SetCurrentConsoleFontEx(hConsole, NULL, &cfiEx);
 	CONSOLE_CURSOR_INFO cci;
 	cci.dwSize = 25;
 	cci.bVisible = false;
@@ -93,9 +92,16 @@ void Cheat() {
 		CleanUp();
 	}
 	mem.InitializeAddresses();
-	// Todo make our threads here
 	// General format for cheat threads:
-	//threads.push_back(std::thread(Feature(cfg.bAutoJumpState, cfg.iAutoJumpKey, &aut.AutoJump)));
+	if (cfg.bAutoJumpState) {
+		std::function<void()> fnAutoJump = [&] {
+			aut.AutoJump();
+		};
+		std::thread tAutoJump([&]() {
+			Feature(cfg.bAutoJumpState, fnAutoJump, 1, cfg.iAutoJumpKey);
+		});
+		tThreads.push_back(move(tAutoJump));
+	}
 }
 
 void Panic() {
@@ -106,7 +112,7 @@ void Panic() {
 
 void CleanUp() {
 	bExitState = true;
-	for (auto &t : threads) {
+	for (auto &t : tThreads) {
 		if (t.joinable()) {
 			t.join();
 		}
@@ -116,25 +122,29 @@ void CleanUp() {
 #endif
 }
 
-void Feature(bool bFeatureState, void (*fnFeature)(), unsigned int uiWait, int iFeatureKey) {
+void Feature(bool bFeatureState, std::function<void()> fnFeature, unsigned int uiWait, int iFeatureKey) {
 	while (bFeatureState) {
 		if (bExitState) {
 			return;
 		}
-		if (GetAsyncKeyState(iFeatureKey) & 1) {
+		if (GetAsyncKeyState(iFeatureKey)) {
 			fnFeature();
 		} else {
-			Wait(uiWait);
+			if (uiWait) {
+				Wait(uiWait);
+			}
 		}
 	}
 }
 
-void Feature(bool bFeatureState, void (*Feature)(), unsigned int uiWait) {
+void Feature(bool bFeatureState, std::function<void()> fnFeature, unsigned int uiWait) {
 	while (bFeatureState) {
 		if (bExitState) {
 			return;
 		}
-		Feature();
-		Wait(uiWait);
+		fnFeature();
+		if (uiWait) {
+			Wait(uiWait);
+		}
 	}
 }

@@ -4,7 +4,7 @@
 
 extern HINSTANCE hInst;
 extern std::atomic<bool> bExitState;
-extern std::vector<std::thread> threads;
+extern std::vector<std::thread> tThreads;
 
 void Wait(unsigned int);
 time_t GetTime();

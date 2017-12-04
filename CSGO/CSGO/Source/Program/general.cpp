@@ -116,5 +116,4 @@ EAnticheatStatus General::KillAnticheat(LPCSTR cstrAnticheatName, char cAntichea
 	return EAnticheatStatus::NOT_FOUND;
 }
 
-
 General all;

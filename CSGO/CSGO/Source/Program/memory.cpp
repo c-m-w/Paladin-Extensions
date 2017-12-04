@@ -39,7 +39,7 @@ bool MemoryManager::AttachToGame() {
 	HANDLE hSnapshot;
 	for (int n = 0; n < 5; n++, Wait(2000)) {
 		do {
-			SetLastError(0);
+			SetLastError(NULL);
 			hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, dwProcessId);
 			Wait(1);
 		} while (hSnapshot == INVALID_HANDLE_VALUE || GetLastError() == ERROR_BAD_LENGTH);
@@ -93,6 +93,5 @@ void MemoryManager::InitializeAddresses() {
 	lp_totalHitsOnServer += dwLocalPlayer.loc;
 	LogDebugMsg(SCS, "Initialized addresses");
 }
-
 
 MemoryManager mem;

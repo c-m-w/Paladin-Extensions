@@ -8,8 +8,6 @@ void Automation::AutoJump() {
 	mem.Read(lp_fFlags);
 	if (lp_fFlags & FL_ONGROUND) {
 		eng.Jump(EKeystroke::SCROLL);
-	} else {
-		Wait(1);
 	}
 }
 
