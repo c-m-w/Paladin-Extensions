@@ -1,9 +1,9 @@
 #pragma once
 
-class HitSound {
+class CHitSound {
 	total totalLastHits = 0;
 public:
 	void PlaySoundOnHit();
 };
 
-extern HitSound hit;
+extern CHitSound hit;

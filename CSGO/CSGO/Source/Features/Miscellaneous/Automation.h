@@ -1,8 +1,8 @@
 #pragma once
 
-class Automation {
+class CAutomation {
 public:
 	void AutoJump();
 };
 
-extern Automation aut;
+extern CAutomation aut;

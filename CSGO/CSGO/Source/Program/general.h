@@ -1,14 +1,14 @@
 #pragma once
 
-#define PREMIUM_USERS 55
-#define OCTOBER_FIRST time_t(15068160000)
-#define DAY time_t(864000)
+#define PREMIUM_USERS uint8(55)
+#define OCTOBER_FIRST std::chrono::duration_cast<std::chrono::milliseconds>(15068160000)
+#define DAY std::chrono::duration_cast<std::chrono::milliseconds>(8640000)
 
-class General {
+class CGeneral {
 	struct User {
-		TCHAR *cUsername;
+		LPSTR lpstrUsername;
 		int iHardwareID;
-		time_t tExpiration;
+		std::chrono::milliseconds tExpiration;
 		bool bValid;
 		bool bBanned;
 	};
@@ -26,4 +26,4 @@ public:
 	EAnticheatStatus KillAnticheat(LPCSTR, char);
 };
 
-extern General all;
+extern CGeneral all;

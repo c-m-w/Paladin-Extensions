@@ -8,27 +8,30 @@ void Cheat();
 
 BOOL WINAPI DllMain(HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpvReserved) {
 	switch (fdwReason) {
-		case DLL_PROCESS_ATTACH: {
-			AllocConsole();
+		case DLL_PROCESS_ATTACH:
 			hInst = hInstDll;
 			DisableThreadLibraryCalls(hInstDll);
-			//CreateThread(0, 0, LPTHREAD_START_ROUTINE(Cheat), 0, 0, 0); TODO
+			if (CreateThread(nullptr, 0, LPTHREAD_START_ROUTINE(Cheat), nullptr, 0, nullptr) == INVALID_HANDLE_VALUE) {
+				cfg.iQuitReason = EQuitReasons::LOAD_LIBRARY_ERROR;
+			} else {
+				cfg.iQuitReason = EQuitReasons::SUCCESS;
+			}
 			break;
-		}
-		case DLL_PROCESS_DETACH: {
+		case DLL_PROCESS_DETACH:
 			CleanUp();
 			break;
-		}
-		default: {
-			return BOOL(EQuitReasons::BLACKLISTED_CALL);
-		}
+		default:
+			cfg.iQuitReason = EQuitReasons::BLACKLISTED_CALL;
+			break;
 	}
-	return BOOL(EQuitReasons::SUCCESS);
+	return BOOL(cfg.iQuitReason);
 }
 
 void Cheat() {
 #ifdef _DEBUG
 	AllocConsole();
+	FILE *fTemp;
+	freopen_s(&fTemp, "CONOUT$", "w", stdout);
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	HWND hWndConsole = GetConsoleWindow();
 	SetConsoleTitle("Paladin CSGO");
@@ -45,7 +48,6 @@ void Cheat() {
 	cci.dwSize = 25;
 	cci.bVisible = false;
 	SetConsoleCursorInfo(hConsole, &cci);
-	Wait(1);
 	SetConsoleTextAttribute(hConsole, 15);
 	printf("[DBG] ");
 	strLog.append("\n[DBG] ");
@@ -56,13 +58,14 @@ void Cheat() {
 	EPremium uCurrentUserPremiumStatus = all.CheckPremiumStatus();
 	if (uCurrentUserPremiumStatus == EPremium::BANNED) {
 		//TODO BANNED: DELETE FILE
-		return;
+		CleanUp();
 	}
 	if (uCurrentUserPremiumStatus == EPremium::NOT_PREMIUM) {
-		return;
+		CleanUp();
 	}
 	if (uCurrentUserPremiumStatus == EPremium::EXPIRED) {
 		MessageBox(nullptr, "Notice 1: Premium Time Expired -> No access\nDid you renew your premium?", "Paladin CSGO", MB_ICONHAND | MB_OK);
+		return;
 	}
 	if (uCurrentUserPremiumStatus == EPremium::PREMIUM) {
 		LogDebugMsg(SCS, "Authenticated!");
@@ -96,9 +99,9 @@ void Cheat() {
 		CleanUp();
 	}
 	mem.InitializeAddresses();
-
-	// General format for cheat threads:
-	// HitSound
+	// CGeneral format for cheat threads:
+	// CHitSound
+	LogDebugMsg(DBG, "Initializing threads...");
 	std::function<void()> fnHitSound = [&] {
 		hit.PlaySoundOnHit();
 	};
@@ -114,15 +117,18 @@ void Cheat() {
 		Feature(cfg.bAutoJumpState, fnAutoJump, 1, cfg.iAutoJumpKey);
 	});
 	tThreads.push_back(move(tAutoJump));
+	LogDebugMsg(SCS, "Created threads");
 }
 
 void Panic() {
+	LogDebugMsg(WRN, "Panic called");
 	CleanUp();
-	cfg.iQuitReason = int(EQuitReasons::PANIC);
-	FreeLibraryAndExitThread(hInst, cfg.iQuitReason);
+	cfg.iQuitReason = EQuitReasons::PANIC;
+	FreeLibraryAndExitThread(hInst, DWORD(cfg.iQuitReason));
 }
 
 void CleanUp() {
+	LogDebugMsg(DBG, "Cleaning up");
 	bExitState = true;
 	for (auto &t : tThreads) {
 		if (t.joinable()) {

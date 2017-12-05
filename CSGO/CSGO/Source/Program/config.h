@@ -11,7 +11,7 @@ struct version {
 	}
 };
 
-class Config {
+class CConfig {
 	char cfgPath[255];
 	// read from config
 	template<typename datatype> void Read(char *cSetting, char *cSubSetting, datatype &Status) {
@@ -23,7 +23,7 @@ class Config {
 
 public:
 	version verVersion;
-	int iQuitReason;
+	EQuitReasons iQuitReason;
 
 #ifdef _DEBUG
 	bool bCheckForAnticheat = false;
@@ -43,13 +43,13 @@ public:
 	// Feature Settings
 	std::string strHitSoundLocation;
 
-	Config();
+	CConfig();
 	// open config, create if doesn't exist
 	bool LoadConfig();
 	// read loaded config, replace impossible values
 	bool ReadConfig();
 	// set quit reason
-	~Config();
+	~CConfig();
 };
 
-extern Config cfg;
+extern CConfig cfg;

@@ -19,28 +19,28 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\debug.h" />
-    <ClInclude Include="Source\Features\Awareness\hitsound.h" />
-    <ClInclude Include="Source\Features\engine.h" />
-    <ClInclude Include="Source\Features\Miscellaneous\automation.h" />
     <ClInclude Include="Source\global.h" />
-    <ClInclude Include="Source\main.h" />
-    <ClInclude Include="Source\Program\config.h" />
+    <ClInclude Include="Source\debug.h" />
     <ClInclude Include="Source\Program\general.h" />
-    <ClInclude Include="Source\Program\memory.h" />
+    <ClInclude Include="Source\Program\config.h" />
     <ClInclude Include="Source\Program\interface.h" />
+    <ClInclude Include="Source\Program\memory.h" />
+    <ClInclude Include="Source\Features\engine.h" />
+    <ClInclude Include="Source\Features\Awareness\hitsound.h" />
+    <ClInclude Include="Source\Features\Miscellaneous\automation.h" />
+    <ClInclude Include="Source\main.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\debug.cpp" />
-    <ClCompile Include="Source\Features\Awareness\hitsound.cpp" />
-    <ClCompile Include="Source\Features\engine.cpp" />
-    <ClCompile Include="Source\Features\Miscellaneous\automation.cpp" />
     <ClCompile Include="Source\global.cpp" />
-    <ClCompile Include="Source\main.cpp" />
-    <ClCompile Include="Source\Program\config.cpp" />
+    <ClCompile Include="Source\debug.cpp" />
     <ClCompile Include="Source\Program\general.cpp" />
-    <ClCompile Include="Source\Program\memory.cpp" />
+    <ClCompile Include="Source\Program\config.cpp" />
     <ClCompile Include="Source\Program\interface.cpp" />
+    <ClCompile Include="Source\Program\memory.cpp" />
+    <ClCompile Include="Source\Features\engine.cpp" />
+    <ClCompile Include="Source\Features\Awareness\hitsound.cpp" />
+    <ClCompile Include="Source\Features\Miscellaneous\automation.cpp" />
+    <ClCompile Include="Source\main.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
@@ -117,6 +117,7 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
+      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

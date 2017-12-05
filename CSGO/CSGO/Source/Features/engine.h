@@ -1,6 +1,6 @@
 #pragma once
 
-class Engine {
+class CEngine {
 public:
 	void Jump(EKeystroke);
 	void Attack(EKeystroke);
@@ -8,4 +8,4 @@ public:
 	void SetSensitivity(float);
 };
 
-extern Engine eng;
+extern CEngine eng;

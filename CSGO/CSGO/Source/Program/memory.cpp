@@ -1,8 +1,8 @@
 #include "../main.h"
 
 namespace Addresses {
-	// global Engine addresses
-	// Engine pointer addresses
+	// global CEngine addresses
+	// CEngine pointer addresses
 	Address<DWORD> dwClientState = {0x5A783C};
 	Address<ESignOnState> cs_soState = {0x108};
 	// global Client addresses
@@ -15,13 +15,13 @@ namespace Addresses {
 	Address<total> lp_totalHitsOnServer = {0xA2C8};
 }
 
-MemoryManager::~MemoryManager() {
+CMemoryManager::~CMemoryManager() {
 	if (hGame || hGame != INVALID_HANDLE_VALUE) {
 		CloseHandle(hGame);
 	}
 }
 
-bool MemoryManager::AttachToGame() {
+bool CMemoryManager::AttachToGame() {
 	while (!GetWindowThreadProcessId(FindWindowA(nullptr, "Counter-Strike: Global Offensive"), &dwProcessId)) {
 		LogDebugMsg(DBG, "Searching for CSGO");
 		Wait(1000);
@@ -74,7 +74,7 @@ bool MemoryManager::AttachToGame() {
 	return false;
 }
 
-void MemoryManager::InitializeAddresses() {
+void CMemoryManager::InitializeAddresses() {
 	LogDebugMsg(DBG, "Initializing addresses");
 	dwClientState.loc += dwEngineBase;
 	Read(dwClientState);
@@ -94,4 +94,4 @@ void MemoryManager::InitializeAddresses() {
 	LogDebugMsg(SCS, "Initialized addresses");
 }
 
-MemoryManager mem;
+CMemoryManager mem;

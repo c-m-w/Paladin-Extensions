@@ -7,7 +7,7 @@ extern std::atomic<bool> bExitState;
 extern std::vector<std::thread> tThreads;
 
 void Wait(unsigned int);
-time_t GetTime();
+std::chrono::milliseconds GetTime();
 
 template<typename datatype> void Limit(datatype &Status, datatype Minimum, datatype Maximum) {
 	if (Minimum > Status) {
@@ -19,8 +19,8 @@ template<typename datatype> void Limit(datatype &Status, datatype Minimum, datat
 
 enum class EQuitReasons {
 	UNKNOWN = -1,
+	LOAD_LIBRARY_ERROR,
 	SUCCESS,
-	LOADLIBRARY_ERROR,
 	BLACKLISTED_CALL,
 	PANIC
 };

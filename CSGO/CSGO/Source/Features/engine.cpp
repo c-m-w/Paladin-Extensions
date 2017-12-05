@@ -1,23 +1,23 @@
 #include "../main.h"
 
-void Engine::Jump(EKeystroke ksType) {
+void CEngine::Jump(EKeystroke ksType) {
 	ksForceJump.val = ksType;
 	mem.Write(ksForceJump);
 }
 
-void Engine::Attack(EKeystroke ksType) {
+void CEngine::Attack(EKeystroke ksType) {
 	ksForceAttack.val = ksType;
 	mem.Write(ksForceAttack);
 }
 
-float Engine::GetSensitivity() {
+float CEngine::GetSensitivity() {
 	mem.Read(flSensitivity);
 	return flSensitivity.val;
 }
 
-void Engine::SetSensitivity(float flSensitivityNew) {
+void CEngine::SetSensitivity(float flSensitivityNew) {
 	flSensitivity.val = flSensitivityNew;
 	mem.Write(flSensitivity);
 }
 
-Engine eng;
+CEngine eng;

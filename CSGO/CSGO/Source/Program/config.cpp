@@ -1,8 +1,8 @@
 #include "../main.h"
 
-Config::Config() {
+CConfig::CConfig() {
 	verVersion = {1, 0};
-	iQuitReason = -1;
+	iQuitReason = EQuitReasons::UNKNOWN;
 	iExitKey = VK_F4;
 	iReloadKey = VK_F5;
 	iAutoJumpKey = VK_XBUTTON1;
@@ -11,7 +11,7 @@ Config::Config() {
 	strHitSoundLocation = "\0";
 }
 
-bool Config::LoadConfig() {
+bool CConfig::LoadConfig() {
 	char tempChar[MAX_PATH];
 	GetModuleFileName(nullptr, tempChar, MAX_PATH);
 	memset(cfgPath, NULL, MAX_PATH);
@@ -35,7 +35,7 @@ bool Config::LoadConfig() {
 	return true;
 }
 
-bool Config::ReadConfig() {
+bool CConfig::ReadConfig() {
 	version verConfig;
 	Read("Info", "Version", verConfig);
 	if (verVersion == verConfig) {
@@ -61,11 +61,11 @@ bool Config::ReadConfig() {
 	return true;
 }
 
-Config::~Config() {
+CConfig::~CConfig() {
 	Write("Info", "Quit Reason", iQuitReason);
 #ifdef _DEBUG
 	Write("Info", "Log", strLog);
 #endif
 }
 
-Config cfg;
+CConfig cfg;

@@ -1,6 +1,6 @@
 #include "../../main.h"
 
-void HitSound::PlaySoundOnHit() {
+void CHitSound::PlaySoundOnHit() {
 	mem.Read(lp_totalHitsOnServer);
 	if (lp_totalHitsOnServer.val > totalLastHits) {
 		if (cfg.strHitSoundLocation == "\0") {
@@ -12,4 +12,4 @@ void HitSound::PlaySoundOnHit() {
 	}
 }
 
-HitSound hit;
+CHitSound hit;

@@ -1,6 +1,6 @@
 #include "../../main.h"
 
-void Automation::AutoJump() {
+void CAutomation::AutoJump() {
 	mem.Read(ksForceJump);
 	if (ksForceJump.val == EKeystroke::PRESS) {
 		eng.Jump(EKeystroke::RELEASE);
@@ -11,4 +11,4 @@ void Automation::AutoJump() {
 	}
 }
 
-Automation aut;
+CAutomation aut;

@@ -7,8 +7,8 @@ template<typename datatype> struct Address {
 };
 
 namespace Addresses {
-	// global Engine addresses
-	// Engine pointer addresses
+	// global CEngine addresses
+	// CEngine pointer addresses
 	extern Address<DWORD> dwClientState;
 	extern Address<ESignOnState> cs_soState;
 	// global Client addresses
@@ -23,7 +23,7 @@ namespace Addresses {
 
 using namespace Addresses;
 
-class MemoryManager {
+class CMemoryManager {
 	DWORD dwProcessId = NULL;
 	HANDLE hGame = nullptr;
 
@@ -59,7 +59,7 @@ public:
 		return false;
 	}
 
-	~MemoryManager();
+	~CMemoryManager();
 };
 
-extern MemoryManager mem;
+extern CMemoryManager mem;
