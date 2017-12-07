@@ -11,8 +11,12 @@ namespace Addresses {
 	Address<float> flSensitivity = {0xAB547C, 0xAB5450};
 	// Client pointer addresses
 	Address<DWORD> dwLocalPlayer = {0xAAFD7C};
+
 	Address<frame> lp_fFlags = {0x100};
 	Address<total> lp_totalHitsOnServer = {0xA2C8};
+
+	Address<handle> hActiveWeapon = {0x2EE8};
+	Address<float> flNextPrimaryAttack = {0x31D8};
 }
 
 CMemoryManager::~CMemoryManager() {
@@ -76,21 +80,13 @@ bool CMemoryManager::AttachToGame() {
 
 void CMemoryManager::InitializeAddresses() {
 	LogDebugMsg(DBG, "Initializing addresses");
+	// engine
 	dwClientState.loc += dwEngineBase;
-	Read(dwClientState);
-	cs_soState.loc += dwClientState.val;
+	// client
 	ksForceJump.loc += dwClientBase;
 	ksForceAttack.loc += dwClientBase;
 	flSensitivity.loc += dwClientBase;
-	LogDebugMsg(DBG, "Waiting for server connection to complete address initialization");
-	do {
-		Read(cs_soState);
-		Wait(1);
-	} while (cs_soState.val != ESignOnState::FULL);
 	dwLocalPlayer.loc += dwClientBase;
-	Read(dwLocalPlayer);
-	lp_fFlags.loc += dwLocalPlayer.val;
-	lp_totalHitsOnServer.loc += dwLocalPlayer.val;
 	LogDebugMsg(SCS, "Initialized addresses");
 }
 

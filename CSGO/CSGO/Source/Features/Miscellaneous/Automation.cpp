@@ -1,13 +1,13 @@
 #include "../../main.h"
 
 void CAutomation::AutoJump() {
-	mem.Read(ksForceJump);
+	eng.GetForceJump();
 	if (ksForceJump.val == EKeystroke::PRESS) {
-		eng.Jump(EKeystroke::RELEASE);
+		eng.ForceJump(EKeystroke::RELEASE);
 	}
-	mem.Read(lp_fFlags);
+	eng.GetLocalPlayerFlags();
 	if (lp_fFlags.val & FL_ONGROUND) {
-		eng.Jump(EKeystroke::SCROLL);
+		eng.ForceJump(EKeystroke::SCROLL);
 	}
 }
 

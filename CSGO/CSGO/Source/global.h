@@ -54,6 +54,7 @@ enum class EAnticheatStatus {
 typedef unsigned int frame;
 typedef unsigned short total;
 typedef unsigned __int8 uint8;
+typedef DWORD handle;
 
 struct Angle {
 	float pitch, yaw, roll; // y, x, z

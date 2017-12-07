@@ -2,8 +2,8 @@
 
 template<typename datatype> struct Address {
 	DWORD loc = 0; // location
-	datatype val = datatype(0); // value
 	DWORD ptr = 0; // this ptr
+	datatype val = datatype(0); // value
 };
 
 namespace Addresses {
@@ -17,8 +17,12 @@ namespace Addresses {
 	extern Address<float> flSensitivity;
 	// Client pointer addresses
 	extern Address<DWORD> dwLocalPlayer;
+
 	extern Address<frame> lp_fFlags;
 	extern Address<total> lp_totalHitsOnServer;
+
+	extern Address<handle> hActiveWeapon;
+	extern Address<float> flNextPrimaryAttack;
 }
 
 using namespace Addresses;
@@ -26,11 +30,10 @@ using namespace Addresses;
 class CMemoryManager {
 	DWORD dwProcessID = 0;
 	HANDLE hGame = nullptr;
-
-public:
 	DWORD dwClientBase = 0;
 	DWORD dwEngineBase = 0;
 
+public:
 	bool AttachToGame();
 
 	void InitializeAddresses();
