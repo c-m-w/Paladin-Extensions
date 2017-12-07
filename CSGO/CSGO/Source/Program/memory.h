@@ -20,6 +20,7 @@ namespace Addresses {
 
 	extern Address<frame> lp_fFlags;
 	extern Address<total> lp_totalHitsOnServer;
+	extern Address<float> lp_flFlashMaxAlpha;
 
 	extern Address<handle> hActiveWeapon;
 	extern Address<float> flNextPrimaryAttack;

@@ -49,6 +49,24 @@ total CEngine::GetLocalPlayerHitsOnServer() {
 	return lp_totalHitsOnServer.val;
 }
 
+float CEngine::GetFlashMaxAlpha() {
+	GetLocalPlayer();
+	if (lp_flFlashMaxAlpha.loc - dwLocalPlayer.val == 0) {
+		lp_flFlashMaxAlpha.loc += dwLocalPlayer.val;
+	}
+	mem.Read(lp_flFlashMaxAlpha);
+	return lp_flFlashMaxAlpha.val;
+}
+
+void CEngine::SetFlashMaxAlpha(float lp_flNewFlashMaxAlpha) {
+	GetLocalPlayer();
+	if (lp_flFlashMaxAlpha.loc - dwLocalPlayer.val == 0) {
+		lp_flFlashMaxAlpha.loc += dwLocalPlayer.val;
+	}
+	lp_flFlashMaxAlpha.val = lp_flNewFlashMaxAlpha;
+	mem.Write(lp_flFlashMaxAlpha);
+}
+
 void CEngine::ForceJump(EKeystroke ksType) {
 	GetForceJump();
 	ksForceJump.val = ksType;

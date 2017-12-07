@@ -45,6 +45,9 @@
     <ClInclude Include="Source\main.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Features\Awareness\noflash.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\global.cpp">
@@ -75,6 +78,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Features\Awareness\noflash.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

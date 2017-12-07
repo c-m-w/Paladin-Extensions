@@ -19,6 +19,8 @@ public:
 
 	frame GetLocalPlayerFlags();
 	total GetLocalPlayerHitsOnServer();
+	float GetFlashMaxAlpha();
+	void SetFlashMaxAlpha(float);
 
 	handle GetActiveWeapon();
 	float GetNextPrimaryAttack();
