@@ -15,6 +15,7 @@
 #include "Program/memory.h"
 
 #include "Features/engine.h"
+#include "Features/Awareness/noflash.h"
 #include "Features/Awareness/hitsound.h"
 #include "Features/Miscellaneous/automation.h"
 

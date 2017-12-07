@@ -14,6 +14,7 @@ namespace Addresses {
 
 	Address<frame> lp_fFlags = {0x100};
 	Address<total> lp_totalHitsOnServer = {0xA2C8};
+	Address<float> lp_flFlashMaxAlpha = {0xA2F4};
 
 	Address<handle> hActiveWeapon = {0x2EE8};
 	Address<float> flNextPrimaryAttack = {0x31D8};

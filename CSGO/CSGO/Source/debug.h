@@ -4,8 +4,8 @@
 #define DEBUG LogDebugMsg
 #define LASTERR LogLastError
 #else
-	#define DEBUG
-	#define LASTERR
+#define DEBUG
+#define LASTERR
 #endif
 
 enum DebugMessage {
