@@ -1,7 +1,7 @@
 #pragma once
 
 class CHitSound {
-	total totalLastHits = 0;
+	total totalPreviousHitsOnServer = 0;
 public:
 	void PlaySoundOnHit();
 };

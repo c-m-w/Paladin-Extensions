@@ -9,7 +9,7 @@ DWORD CEngine::GetClientState() {
 
 ESignOnState CEngine::GetClientStateSignOnState() {
 	GetClientState();
-	if (cs_soState.loc - dwClientState.val == 0) {
+	if (cs_soState.loc < dwClientState.val) {
 		cs_soState.loc += dwClientState.val;
 	}
 	mem.Read(dwClientState);
@@ -33,7 +33,7 @@ DWORD CEngine::GetLocalPlayer() {
 
 frame CEngine::GetLocalPlayerFlags() {
 	GetLocalPlayer();
-	if (lp_fFlags.loc - dwLocalPlayer.val == 0) {
+	if (lp_fFlags.loc < dwLocalPlayer.val) {
 		lp_fFlags.loc += dwLocalPlayer.val;
 	}
 	mem.Read(lp_fFlags);
@@ -42,7 +42,7 @@ frame CEngine::GetLocalPlayerFlags() {
 
 total CEngine::GetLocalPlayerHitsOnServer() {
 	GetLocalPlayer();
-	if (lp_totalHitsOnServer.loc - dwLocalPlayer.val == 0) {
+	if (lp_totalHitsOnServer.loc < dwLocalPlayer.val) {
 		lp_totalHitsOnServer.loc += dwLocalPlayer.val;
 	}
 	mem.Read(lp_totalHitsOnServer);
@@ -50,15 +50,17 @@ total CEngine::GetLocalPlayerHitsOnServer() {
 }
 
 void CEngine::ForceJump(EKeystroke ksType) {
-	GetForceJump();
-	ksForceJump.val = ksType;
-	mem.Write(ksForceJump);
+	if (GetForceJump() != ksType) {
+		ksForceJump.val = ksType;
+		mem.Write(ksForceJump);
+	}
 }
 
 void CEngine::ForceAttack(EKeystroke ksType) {
-	GetForceAttack();
-	ksForceAttack.val = ksType;
-	mem.Write(ksForceAttack);
+	if (GetForceAttack() != ksType) {
+		ksForceAttack.val = ksType;
+		mem.Write(ksForceAttack);
+	}
 }
 
 float CEngine::GetSensitivity() {
@@ -67,13 +69,15 @@ float CEngine::GetSensitivity() {
 }
 
 void CEngine::SetSensitivity(float flNewSensitivity) {
-	flSensitivity.val = flNewSensitivity;
-	mem.Write(flSensitivity);
+	if (GetSensitivity() != flNewSensitivity) {
+		flSensitivity.val = flNewSensitivity;
+		mem.Write(flSensitivity);
+	}
 }
 
 handle CEngine::GetActiveWeapon() {
 	GetLocalPlayer();
-	if (hActiveWeapon.loc - dwLocalPlayer.val == 0) {
+	if (hActiveWeapon.loc < dwLocalPlayer.val) {
 		hActiveWeapon.loc += dwLocalPlayer.val;
 	}
 	mem.Read(hActiveWeapon);
@@ -82,7 +86,7 @@ handle CEngine::GetActiveWeapon() {
 
 float CEngine::GetNextPrimaryAttack() {
 	GetActiveWeapon();
-	if (flNextPrimaryAttack.loc - hActiveWeapon.val == 0) {
+	if (flNextPrimaryAttack.loc < hActiveWeapon.val) {
 		flNextPrimaryAttack.loc += hActiveWeapon.val;
 	}
 	mem.Read(flNextPrimaryAttack);
