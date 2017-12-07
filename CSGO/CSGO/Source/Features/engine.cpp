@@ -51,7 +51,7 @@ total CEngine::GetLocalPlayerHitsOnServer() {
 
 float CEngine::GetFlashMaxAlpha() {
 	GetLocalPlayer();
-	if (lp_flFlashMaxAlpha.loc - dwLocalPlayer.val == 0) {
+	if (lp_flFlashMaxAlpha.loc < dwLocalPlayer.val) {
 		lp_flFlashMaxAlpha.loc += dwLocalPlayer.val;
 	}
 	mem.Read(lp_flFlashMaxAlpha);
@@ -59,12 +59,10 @@ float CEngine::GetFlashMaxAlpha() {
 }
 
 void CEngine::SetFlashMaxAlpha(float lp_flNewFlashMaxAlpha) {
-	GetLocalPlayer();
-	if (lp_flFlashMaxAlpha.loc - dwLocalPlayer.val == 0) {
-		lp_flFlashMaxAlpha.loc += dwLocalPlayer.val;
+	if (GetFlashMaxAlpha() != lp_flNewFlashMaxAlpha) {
+		lp_flFlashMaxAlpha.val = lp_flNewFlashMaxAlpha;
+		mem.Write(lp_flFlashMaxAlpha);
 	}
-	lp_flFlashMaxAlpha.val = lp_flNewFlashMaxAlpha;
-	mem.Write(lp_flFlashMaxAlpha);
 }
 
 void CEngine::ForceJump(EKeystroke ksType) {
