@@ -6,12 +6,15 @@ void CleanUp();
 void Panic();
 void Cheat();
 
+HANDLE hCheat;
+
 BOOL WINAPI DllMain(HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpvReserved) {
 	switch (fdwReason) {
 		case DLL_PROCESS_ATTACH:
 			hInst = hInstDll;
 			DisableThreadLibraryCalls(hInstDll);
-			if (CreateThread(nullptr, 0, LPTHREAD_START_ROUTINE(Cheat), nullptr, 0, nullptr) == INVALID_HANDLE_VALUE) {
+			hCheat = CreateThread(nullptr, 0, LPTHREAD_START_ROUTINE(Cheat), nullptr, 0, nullptr);
+			if (!hCheat || hCheat == INVALID_HANDLE_VALUE) {
 				cfg.iQuitReason = EQuitReasons::LOAD_LIBRARY_ERROR;
 			} else {
 				cfg.iQuitReason = EQuitReasons::SUCCESS;
@@ -43,7 +46,7 @@ void Cheat() {
 	cfiEx.dwFontSize.X = 6;
 	cfiEx.dwFontSize.Y = 8;
 	wcscpy_s(cfiEx.FaceName, L"Terminal");
-	SetCurrentConsoleFontEx(hConsole, NULL, &cfiEx);
+	SetCurrentConsoleFontEx(hConsole, 0, &cfiEx);
 	CONSOLE_CURSOR_INFO cci;
 	cci.dwSize = 25;
 	cci.bVisible = false;

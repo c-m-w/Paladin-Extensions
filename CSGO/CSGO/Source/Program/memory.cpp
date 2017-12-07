@@ -22,11 +22,11 @@ CMemoryManager::~CMemoryManager() {
 }
 
 bool CMemoryManager::AttachToGame() {
-	while (!GetWindowThreadProcessId(FindWindowA(nullptr, "Counter-Strike: Global Offensive"), &dwProcessId)) {
+	while (!GetWindowThreadProcessId(FindWindowA(nullptr, "Counter-Strike: Global Offensive"), &dwProcessID)) {
 		LogDebugMsg(DBG, "Searching for CSGO");
 		Wait(1000);
 	}
-	hGame = OpenProcess(PROCESS_VM_READ | PROCESS_VM_WRITE | PROCESS_VM_OPERATION, false, dwProcessId);
+	hGame = OpenProcess(PROCESS_VM_READ | PROCESS_VM_WRITE | PROCESS_VM_OPERATION, false, dwProcessID);
 	if (!hGame || hGame == INVALID_HANDLE_VALUE) {
 		LogDebugMsg(ERR, "Invalid game handle");
 		return false;
@@ -39,8 +39,8 @@ bool CMemoryManager::AttachToGame() {
 	HANDLE hSnapshot;
 	for (int n = 0; n < 5; n++, Wait(2000)) {
 		do {
-			SetLastError(NULL);
-			hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, dwProcessId);
+			SetLastError(0);
+			hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, dwProcessID);
 			Wait(1);
 		} while (hSnapshot == INVALID_HANDLE_VALUE || GetLastError() == ERROR_BAD_LENGTH);
 		if (hSnapshot == INVALID_HANDLE_VALUE || !hSnapshot) {

@@ -1,16 +1,16 @@
 #pragma once
 
 #define PREMIUM_USERS uint8(55)
-#define OCTOBER_FIRST std::chrono::duration_cast<std::chrono::milliseconds>(15068160000)
-#define DAY std::chrono::duration_cast<std::chrono::milliseconds>(8640000)
+#define OCTOBER_FIRST Time(15068160000)
+#define DAY Time(8640000)
 
 class CGeneral {
 	struct User {
-		LPSTR lpstrUsername;
-		int iHardwareID;
-		std::chrono::milliseconds tExpiration;
-		bool bValid;
-		bool bBanned;
+		LPSTR lpstrUsername = nullptr;
+		int iHardwareID = 0;
+		Time tExpiration = 0;
+		bool bValid = false;
+		bool bBanned = false;
 	};
 
 	User uPremiumUsers[PREMIUM_USERS];

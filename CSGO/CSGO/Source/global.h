@@ -2,12 +2,14 @@
 
 #define PI 3.141593f
 
+typedef long long Time;
+
 extern HINSTANCE hInst;
 extern std::atomic<bool> bExitState;
 extern std::vector<std::thread> tThreads;
 
 void Wait(unsigned int);
-std::chrono::milliseconds GetTime();
+Time GetTime();
 
 template<typename datatype> void Limit(datatype &Status, datatype Minimum, datatype Maximum) {
 	if (Minimum > Status) {
@@ -46,6 +48,9 @@ enum class EAnticheatStatus {
 
 /// CSGO stuff
 
+#define FL_ONGROUND (1 << 0) // At rest / on the ground
+#define FL_DUCKING (1 << 1)  // Player flag -- Player is fully crouched
+
 typedef unsigned int frame;
 typedef unsigned short total;
 typedef unsigned __int8 uint8;
@@ -61,9 +66,6 @@ struct Color {
 struct Coordinate {
 	float x, y, z;
 };
-
-#define FL_ONGROUND (1 << 0) // At rest / on the ground
-#define FL_DUCKING (1 << 1)  // Player flag -- Player is fully crouched
 
 enum class EMoveType {
 	NONE, // never moves

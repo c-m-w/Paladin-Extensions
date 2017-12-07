@@ -1,9 +1,9 @@
 #pragma once
 
 template<typename datatype> struct Address {
-	DWORD loc = NULL; // location
-	DWORD ptr = NULL; // this ptr
-	datatype val = datatype(NULL); // value
+	DWORD loc = 0; // location
+	datatype val = datatype(0); // value
+	DWORD ptr = 0; // this ptr
 };
 
 namespace Addresses {
@@ -24,12 +24,12 @@ namespace Addresses {
 using namespace Addresses;
 
 class CMemoryManager {
-	DWORD dwProcessId = NULL;
+	DWORD dwProcessID = 0;
 	HANDLE hGame = nullptr;
 
 public:
-	DWORD dwClientBase = NULL;
-	DWORD dwEngineBase = NULL;
+	DWORD dwClientBase = 0;
+	DWORD dwEngineBase = 0;
 
 	bool AttachToGame();
 
