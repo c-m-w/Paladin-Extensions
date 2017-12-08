@@ -3,12 +3,13 @@
 template<typename datatype> struct Address {
 	DWORD loc = 0; // location
 	DWORD ptr = 0; // this ptr
-	datatype val = datatype(0); // value
+	datatype val; // value
 };
 
 namespace Addresses {
 	// global CEngine addresses
 	// CEngine pointer addresses
+	extern Address<CGlobalVars> dwGlobalVars;
 	extern Address<DWORD> dwClientState;
 	extern Address<ESignOnState> cs_soState;
 	// global Client addresses
@@ -16,6 +17,7 @@ namespace Addresses {
 	extern Address<EKeystroke> ksForceAttack;
 	extern Address<float> flSensitivity;
 	// Client pointer addresses
+	extern Address<DWORD> dwEntityList;
 	extern Address<DWORD> dwLocalPlayer;
 
 	extern Address<frame> lp_fFlags;

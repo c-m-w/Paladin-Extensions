@@ -3,21 +3,23 @@
 namespace Addresses {
 	// global CEngine addresses
 	// CEngine pointer addresses
-	Address<DWORD> dwClientState = {0x5A783C};
-	Address<ESignOnState> cs_soState = {0x108};
+	Address<CGlobalVars> dwGlobalVars;
+	Address<DWORD> dwClientState;
+	Address<ESignOnState> cs_soState;
 	// global Client addresses
-	Address<EKeystroke> ksForceJump = {0x4F2419C};
-	Address<EKeystroke> ksForceAttack = {0x2ECF46C};
-	Address<float> flSensitivity = {0xAB547C, 0xAB5450};
+	Address<EKeystroke> ksForceJump;
+	Address<EKeystroke> ksForceAttack;
+	Address<float> flSensitivity;
 	// Client pointer addresses
-	Address<DWORD> dwLocalPlayer = {0xAAFD7C};
+	Address<DWORD> dwEntityList;
+	Address<DWORD> dwLocalPlayer;
 
-	Address<frame> lp_fFlags = {0x100};
-	Address<total> lp_totalHitsOnServer = {0xA2C8};
-	Address<float> lp_flFlashMaxAlpha = {0xA2F4};
+	Address<frame> lp_fFlags;
+	Address<total> lp_totalHitsOnServer;
+	Address<float> lp_flFlashMaxAlpha;
 
-	Address<handle> hActiveWeapon = {0x2EE8};
-	Address<float> flNextPrimaryAttack = {0x31D8};
+	Address<handle> hActiveWeapon;
+	Address<float> flNextPrimaryAttack;
 }
 
 CMemoryManager::~CMemoryManager() {
@@ -80,13 +82,35 @@ bool CMemoryManager::AttachToGame() {
 }
 
 void CMemoryManager::InitializeAddresses() {
-	LogDebugMsg(DBG, "Initializing addresses");
+LogDebugMsg(DBG, "Initializing addresses");
+	// global Engine addresses
+	dwGlobalVars = {0x57D550};
+	// Engine pointer addresses
+	dwClientState = {0x5A783C};
+	cs_soState = {0x108};
+	// global Client addresses
+	ksForceJump = {0x4F2419C};
+	ksForceAttack = {0x2ECF46C};
+	flSensitivity = {0xAB547C, 0xAB5450};
+	// Client pointer addresses
+	dwEntityList = {0x4A77AFC};
+	dwLocalPlayer = {0xAAFD7C};
+
+	lp_fFlags = {0x100};
+	lp_totalHitsOnServer = {0xA2C8};
+	lp_flFlashMaxAlpha = {0xA2F4};
+
+	hActiveWeapon = {0x2EE8};
+	flNextPrimaryAttack = {0x31D8};
+	LogDebugMsg(SCS, "Initialized bases");
 	// engine
+	dwGlobalVars.loc += dwEngineBase;
 	dwClientState.loc += dwEngineBase;
 	// client
 	ksForceJump.loc += dwClientBase;
 	ksForceAttack.loc += dwClientBase;
 	flSensitivity.loc += dwClientBase;
+	dwEntityList.loc += dwClientBase;
 	dwLocalPlayer.loc += dwClientBase;
 	LogDebugMsg(SCS, "Initialized addresses");
 }

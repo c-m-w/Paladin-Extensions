@@ -1,5 +1,26 @@
 #include "../main.h"
 
+CGlobalVars CEngine::GetGlobalVars() {
+	mem.Read(dwGlobalVars);
+	return dwGlobalVars.val;
+}
+
+float CEngine::GetCurTime() {
+	return GetGlobalVars().curtime;
+}
+
+int CEngine::GetMaxClients() {
+	return GetGlobalVars().maxClients;
+}
+
+int CEngine::GetTickCount() {
+	return GetGlobalVars().tickcount;
+}
+
+float CEngine::GetIntervalPerTick() {
+	return GetGlobalVars().interval_per_tick;
+}
+
 DWORD CEngine::GetClientState() {
 	if (!dwClientState.val) {
 		mem.Read(dwClientState);
@@ -100,13 +121,35 @@ handle CEngine::GetActiveWeapon() {
 	return hActiveWeapon.val;
 }
 
-float CEngine::GetNextPrimaryAttack() {
+int CEngine::GetActiveWeaponID() {
 	GetActiveWeapon();
-	if (flNextPrimaryAttack.loc < hActiveWeapon.val) {
-		flNextPrimaryAttack.loc += hActiveWeapon.val;
+	return hActiveWeapon.val & 0xFFF;
+}
+
+DWORD CEngine::GetActiveWeaponEntity() {
+	Address<DWORD> dwWeaponEntity = {dwEntityList.loc + (GetActiveWeaponID() - 1) * 0x10};
+	mem.Read(dwWeaponEntity);
+	return dwWeaponEntity.val;
+}
+
+float CEngine::GetNextPrimaryAttack() {
+	if (flNextPrimaryAttack.loc < GetActiveWeaponEntity()) {
+		flNextPrimaryAttack.loc += GetActiveWeaponEntity();
 	}
 	mem.Read(flNextPrimaryAttack);
+	flNextPrimaryAttack.val -= GetCurTime();
 	return flNextPrimaryAttack.val;
+}
+
+void CEngine::WaitTick() {
+	Wait(int(GetIntervalPerTick() * 1000.f));
+}
+
+void CEngine::WaitUntilNextTick() {
+	int iStartTick = GetTickCount();
+	while (iStartTick == GetTickCount()) {
+		Wait(1);
+	}
 }
 
 CEngine eng;

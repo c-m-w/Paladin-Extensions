@@ -68,6 +68,14 @@ struct Coordinate {
 	float x, y, z;
 };
 
+struct CGlobalVars {
+		float			realtime;
+		int				framecount;
+		float			absoluteframetime, curtime, frametime;
+		int				maxClients, tickcount;
+		float			interval_per_tick, interpolation_amount;
+};
+
 enum class EMoveType {
 	NONE, // never moves
 	WALK = 2, // Player only - moving on the ground
