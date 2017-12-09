@@ -23,6 +23,7 @@
 - Check for multiple instances [General]
 - Menu [Interface]
 ##### Mike
+- Pattern Scanning
 ##### Hunter
 - Menu [Interface]
 ##### John

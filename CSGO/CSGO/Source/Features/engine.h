@@ -2,12 +2,13 @@
 
 class CEngine {
 public:
+	// general
+	void WaitTicks(int);
+	Angle ClampAngle(Angle);
+	Angle WorldToScreen(Coordinate, Coordinate);
+
 	//engine
 	CGlobalVars GetGlobalVars();
-	float GetCurTime();
-	int GetMaxClients();
-	int GetTickCount();
-	float GetIntervalPerTick();
 
 	DWORD GetClientState();
 	ESignOnState GetClientStateSignOnState();
@@ -32,10 +33,6 @@ public:
 	int GetActiveWeaponID();
 	DWORD GetActiveWeaponEntity();
 	float GetNextPrimaryAttack();
-
-	// general
-	void WaitTick();
-	void WaitUntilNextTick();
 };
 
 extern CEngine eng;

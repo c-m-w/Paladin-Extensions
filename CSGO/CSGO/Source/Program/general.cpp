@@ -3,46 +3,52 @@
 void CGeneral::GetPremiumUsers() {
 	uPremiumUsers[0].lpstrUsername = "bhopfu1";
 	uPremiumUsers[0].iHardwareID = 12 * 4095;
-	uPremiumUsers[0].tExpiration = OCTOBER_FIRST + 365 * DAY;
+	uPremiumUsers[0].tExpiration = DECEMBER_FIRST + 365 * DAY;
 	uPremiumUsers[0].bValid = true;
 	uPremiumUsers[0].bBanned = false;
 	uPremiumUsers[1].lpstrUsername = ""; // TODO MIKE
 	uPremiumUsers[1].iHardwareID = 0;
-	uPremiumUsers[1].tExpiration = OCTOBER_FIRST + 365 * DAY;
+	uPremiumUsers[1].tExpiration = DECEMBER_FIRST + 365 * DAY;
 	uPremiumUsers[1].bValid = true;
 	uPremiumUsers[1].bBanned = false;
 	uPremiumUsers[2].lpstrUsername = ""; // TODO SKEL
 	uPremiumUsers[2].iHardwareID = 0;
-	uPremiumUsers[2].tExpiration = OCTOBER_FIRST + 365 * DAY;
+	uPremiumUsers[2].tExpiration = DECEMBER_FIRST + 365 * DAY;
 	uPremiumUsers[2].bValid = true;
 	uPremiumUsers[2].bBanned = false;
-	uPremiumUsers[3].lpstrUsername = ""; // TODO COLE
-	uPremiumUsers[3].iHardwareID = 0;
-	uPremiumUsers[3].tExpiration = OCTOBER_FIRST + 365 * DAY;
+	uPremiumUsers[3].lpstrUsername = "Cole";
+	uPremiumUsers[3].iHardwareID = 4 * 15;
+	uPremiumUsers[3].tExpiration = DECEMBER_FIRST + 365 * DAY;
 	uPremiumUsers[3].bValid = true;
 	uPremiumUsers[3].bBanned = false;
 	uPremiumUsers[4].lpstrUsername = ""; // TODO BEAN
 	uPremiumUsers[4].iHardwareID = 0;
-	uPremiumUsers[4].tExpiration = OCTOBER_FIRST + 365 * DAY;
+	uPremiumUsers[4].tExpiration = DECEMBER_FIRST + 365 * DAY;
 	uPremiumUsers[4].bValid = true;
 	uPremiumUsers[4].bBanned = false;
 }
 
 bool CGeneral::CompareName(User uPremiumUser, User uCurrentUser) {
 	for (int n = 0; n < 256; n++) {
-		if (uPremiumUser.lpstrUsername[n] && uPremiumUser.lpstrUsername[n] != uCurrentUser.lpstrUsername[n]) {
+		if (uPremiumUser.lpstrUsername[n] && !uCurrentUser.lpstrUsername[n]) {
 			return false;
 		}
-		if (!uPremiumUser.lpstrUsername[n]) {
+		if (!uPremiumUser.lpstrUsername[n] && uCurrentUser.lpstrUsername[n]) {
+			return false;
+		}
+		if (!uPremiumUser.lpstrUsername[n] && !uCurrentUser.lpstrUsername[n]) {
 			break;
+		}
+		if (uPremiumUser.lpstrUsername[n] != uCurrentUser.lpstrUsername[n]) {
+			return false;
 		}
 	}
 	return true;
 }
 
 EPremium CGeneral::CheckPremiumStatus() {
-	if (OCTOBER_FIRST > GetTime()) {
-		LogDebugMsg(ERR, "Date Mismatch: %i > %i", OCTOBER_FIRST, GetTime());
+	if (DECEMBER_FIRST > GetTime()) {
+		LogDebugMsg(ERR, "Date Mismatch: %i > %i", DECEMBER_FIRST, GetTime());
 		return EPremium::NOT_PREMIUM;
 	}
 	GetPremiumUsers();
@@ -51,7 +57,7 @@ EPremium CGeneral::CheckPremiumStatus() {
 	DWORD dwBufferSize = 257;
 	GetUserNameA(cBuffer, &dwBufferSize);
 	uCurrentUser.lpstrUsername = cBuffer;
-	LogDebugMsg(SCS, "Current User Username: %s", uCurrentUser.lpstrUsername);
+	LogDebugMsg(DBG, "Current User Username: %s", uCurrentUser.lpstrUsername);
 	int n = 0;
 	for (; n <= PREMIUM_USERS; n++) {
 		if (uPremiumUsers[n].bValid) {
@@ -63,17 +69,17 @@ EPremium CGeneral::CheckPremiumStatus() {
 			return EPremium::NOT_PREMIUM;
 		}
 	}
-	LogDebugMsg(SCS, "Current User Database ID: %i", n);
+	LogDebugMsg(DBG, "Current User Database ID: %i", n);
 	SYSTEM_INFO siCurrentUser;
 	GetSystemInfo(&siCurrentUser);
 	uCurrentUser.iHardwareID = siCurrentUser.dwActiveProcessorMask * siCurrentUser.dwNumberOfProcessors;
-	LogDebugMsg(ERR, "Current User HWID: %i", uCurrentUser.iHardwareID);
+	LogDebugMsg(DBG, "Current User HWID: %i", uCurrentUser.iHardwareID);
 	if (uCurrentUser.iHardwareID != uPremiumUsers[n].iHardwareID) {
 		LogDebugMsg(ERR, "HWID did not match any users in database");
 		return EPremium::NOT_PREMIUM;
 	}
 	uCurrentUser.tExpiration = uPremiumUsers[n].tExpiration;
-	LogDebugMsg(SCS, "Current User Premium Time: %i", uCurrentUser.tExpiration);
+	LogDebugMsg(DBG, "Current User Premium Time: %i", uCurrentUser.tExpiration);
 	if (uCurrentUser.tExpiration < GetTime()) {
 		LogDebugMsg(ERR, "%i < %i", uCurrentUser.tExpiration, GetTime());
 		LogDebugMsg(ERR, "User is out of premium");

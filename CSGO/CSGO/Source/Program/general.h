@@ -1,8 +1,8 @@
 #pragma once
 
 #define PREMIUM_USERS uint8(55)
-#define OCTOBER_FIRST Time(15068160000)
-#define DAY Time(8640000)
+#define DECEMBER_FIRST Time(1512086400000) // time since epoch in milliseconds to december first 2017
+#define DAY Time(8640000) // day in milliseconds
 
 class CGeneral {
 	struct User {

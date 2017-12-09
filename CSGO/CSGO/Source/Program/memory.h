@@ -24,8 +24,8 @@ namespace Addresses {
 	extern Address<total> lp_totalHitsOnServer;
 	extern Address<float> lp_flFlashMaxAlpha;
 
-	extern Address<handle> hActiveWeapon;
-	extern Address<float> flNextPrimaryAttack;
+	extern Address<handle> lp_hActiveWeapon;
+	extern Address<float> aw_flNextPrimaryAttack;
 }
 
 using namespace Addresses;
@@ -39,10 +39,13 @@ class CMemoryManager {
 public:
 	bool AttachToGame();
 
+	bool PatternCompare(); // todo
+	DWORD FindPattern();
+
 	void InitializeAddresses();
 
 	template<class datatype> bool Read(Address<datatype> &adrRead) {
-		if (adrRead.loc != 0) {
+		if (adrRead.loc) {
 			if (adrRead.ptr) {
 				DWORD dwXor;
 				bool bSuccess = ReadProcessMemory(hGame, LPVOID(adrRead.loc), &dwXor, sizeof(DWORD), nullptr);
@@ -55,7 +58,7 @@ public:
 	}
 
 	template<class datatype> bool Write(Address<datatype> &adrWrite) {
-		if (adrWrite.loc != 0) {
+		if (adrWrite.loc) {
 			if (adrWrite.ptr) {
 				DWORD dwXor = *reinterpret_cast<DWORD*>(&adrWrite.val) ^ adrWrite.ptr;
 				return WriteProcessMemory(hGame, LPVOID(adrWrite.loc), &dwXor, sizeof(DWORD), nullptr);

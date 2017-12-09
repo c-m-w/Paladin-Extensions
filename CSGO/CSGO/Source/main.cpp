@@ -1,7 +1,7 @@
 #include "main.h"
 
 void Feature(bool, std::function<void()>, unsigned int);
-void Feature(bool, std::function<void()>, unsigned int, int);
+void FeatureKeybound(bool, std::function<void()>, unsigned int, int);
 void CleanUp();
 void Panic();
 void Cheat();
@@ -61,10 +61,10 @@ void Cheat() {
 	EPremium uCurrentUserPremiumStatus = all.CheckPremiumStatus();
 	if (uCurrentUserPremiumStatus == EPremium::BANNED) {
 		//TODO BANNED: DELETE FILE
-		CleanUp();
+		return CleanUp();
 	}
 	if (uCurrentUserPremiumStatus == EPremium::NOT_PREMIUM) {
-		CleanUp();
+		return CleanUp();
 	}
 	if (uCurrentUserPremiumStatus == EPremium::EXPIRED) {
 		MessageBox(nullptr, "Notice 1: Premium Time Expired -> No access\nDid you renew your premium?", "Paladin CSGO", MB_ICONHAND | MB_OK);
@@ -87,7 +87,7 @@ void Cheat() {
 			}
 		} else {
 			MessageBox(nullptr, "Fatal Error 1: Elevation Token State -> No anticheat termination access\nDid you run the middleman as admin?", "Paladin CSGO", MB_ICONERROR | MB_OK);
-			CleanUp();
+			return CleanUp();
 		}
 	}
 	if (!cfg.LoadConfig()) {
@@ -99,26 +99,21 @@ void Cheat() {
 	// Todo call Menu here
 	if (!mem.AttachToGame()) {
 		MessageBox(nullptr, "Fatal Error 2: Game Attach\nAre you running the cheat as admin?", "Paladin CSGO", MB_ICONERROR | MB_OK);
-		CleanUp();
+		return CleanUp();
 	}
 	mem.InitializeAddresses();
-	// CGeneral format for cheat threads:
-	// CHitSound
 	LogDebugMsg(DBG, "Initializing threads...");
-	std::function<void()> fnHitSound = [&] {
-		hit.PlaySoundOnHit();
-	};
-	std::thread tHitSound([&]() {
-		Feature(cfg.bHitSound, fnHitSound, 1);
-	});
+	// general
+	std::thread tPanic(FeatureKeybound, true, std::bind(&Panic), 1, VK_F4);
+	tThreads.push_back(move(tPanic));
+	// awareness
+	std::thread tHitSound(FeatureKeybound, true, std::bind(&CHitSound::PlaySoundOnHit, aut), 1, VK_SPACE);
 	tThreads.push_back(move(tHitSound));
-	// AutoJump
-	std::function<void()> fnAutoJump = [&] {
-		aut.AutoJump();
-	};
-	std::thread tAutoJump([&]() {
-		Feature(cfg.bAutoJumpState, fnAutoJump, 1, cfg.iAutoJumpKey);
-	});
+	std::thread tNoFlash(FeatureKeybound, true, std::bind(&CNoFlash::NoFlash, aut), 1, VK_SPACE);
+	tThreads.push_back(move(tNoFlash));
+	// combat
+	// miscellaneous
+	std::thread tAutoJump(FeatureKeybound, true, std::bind(&CAutomation::AutoJump, aut), 1, VK_SPACE);
 	tThreads.push_back(move(tAutoJump));
 	LogDebugMsg(SCS, "Created threads");
 }
@@ -133,9 +128,9 @@ void Panic() {
 void CleanUp() {
 	LogDebugMsg(DBG, "Cleaning up");
 	bExitState = true;
-	for (auto &t : tThreads) {
-		if (t.joinable()) {
-			t.join();
+	for (auto &tThread : tThreads) {
+		if (tThread.joinable()) {
+			tThread.join();
 		}
 	}
 #ifdef _DEBUG
@@ -143,7 +138,7 @@ void CleanUp() {
 #endif
 }
 
-void Feature(bool bFeatureState, std::function<void()> fnFeature, unsigned int uiWait, int iFeatureKey) {
+void FeatureKeybound(bool bFeatureState, std::function<void()> fnFeature, unsigned int uiWait, int iFeatureKey) {
 	while (!bExitState) {
 		while (bFeatureState) {
 			if (GetAsyncKeyState(iFeatureKey)) {

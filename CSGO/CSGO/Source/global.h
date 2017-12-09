@@ -69,11 +69,11 @@ struct Coordinate {
 };
 
 struct CGlobalVars {
-		float			realtime;
-		int				framecount;
-		float			absoluteframetime, curtime, frametime;
-		int				maxClients, tickcount;
-		float			interval_per_tick, interpolation_amount;
+	float realtime;
+	int framecount;
+	float absoluteframetime, curtime, frametime;
+	int maxClients, tickcount;
+	float interval_per_tick, interpolation_amount;
 };
 
 enum class EMoveType {

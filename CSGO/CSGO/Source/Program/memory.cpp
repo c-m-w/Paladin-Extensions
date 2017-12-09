@@ -18,8 +18,8 @@ namespace Addresses {
 	Address<total> lp_totalHitsOnServer;
 	Address<float> lp_flFlashMaxAlpha;
 
-	Address<handle> hActiveWeapon;
-	Address<float> flNextPrimaryAttack;
+	Address<handle> lp_hActiveWeapon;
+	Address<float> aw_flNextPrimaryAttack;
 }
 
 CMemoryManager::~CMemoryManager() {
@@ -82,26 +82,24 @@ bool CMemoryManager::AttachToGame() {
 }
 
 void CMemoryManager::InitializeAddresses() {
-LogDebugMsg(DBG, "Initializing addresses");
+	LogDebugMsg(DBG, "Initializing addresses");
 	// global Engine addresses
 	dwGlobalVars = {0x57D550};
 	// Engine pointer addresses
-	dwClientState = {0x5A783C};
+	dwClientState = {0x57D84C};
 	cs_soState = {0x108};
 	// global Client addresses
-	ksForceJump = {0x4F2419C};
-	ksForceAttack = {0x2ECF46C};
-	flSensitivity = {0xAB547C, 0xAB5450};
+	ksForceJump = {0x4F0ED64};
+	ksForceAttack = {0x2EB9EAC};
+	flSensitivity = {0xAA04EC, 0xAA04C0};
 	// Client pointer addresses
 	dwEntityList = {0x4A77AFC};
-	dwLocalPlayer = {0xAAFD7C};
-
+	dwLocalPlayer = {0xA9ADEC};
 	lp_fFlags = {0x100};
 	lp_totalHitsOnServer = {0xA2C8};
 	lp_flFlashMaxAlpha = {0xA2F4};
-
-	hActiveWeapon = {0x2EE8};
-	flNextPrimaryAttack = {0x31D8};
+	lp_hActiveWeapon = {0x2EE8};
+	aw_flNextPrimaryAttack = {0x31D8};
 	LogDebugMsg(SCS, "Initialized bases");
 	// engine
 	dwGlobalVars.loc += dwEngineBase;
