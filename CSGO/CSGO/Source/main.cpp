@@ -104,16 +104,28 @@ void Cheat() {
 	mem.InitializeAddresses();
 	LogDebugMsg(DBG, "Initializing threads...");
 	// general
-	std::thread tPanic(FeatureKeybound, true, std::bind(&Panic), 1, VK_F4);
+	std::function<void()> fnPanic = [&] {
+		Panic();
+	};
+	std::thread tPanic(FeatureKeybound, true, fnPanic, 1, VK_F4);
 	tThreads.push_back(move(tPanic));
 	// awareness
-	std::thread tHitSound(FeatureKeybound, true, std::bind(&CHitSound::PlaySoundOnHit, aut), 1, VK_SPACE);
+	std::function<void()> fnHitSound = [&] {
+		hit.PlaySoundOnHit();
+	};
+	std::thread tHitSound(FeatureKeybound, true, fnHitSound, 1, VK_F4);
 	tThreads.push_back(move(tHitSound));
-	std::thread tNoFlash(FeatureKeybound, true, std::bind(&CNoFlash::NoFlash, aut), 1, VK_SPACE);
+	std::function<void()> fnNoFlash = [&] {
+		nof.NoFlash();
+	};
+	std::thread tNoFlash(FeatureKeybound, true, fnNoFlash, 1, VK_F4);
 	tThreads.push_back(move(tNoFlash));
 	// combat
 	// miscellaneous
-	std::thread tAutoJump(FeatureKeybound, true, std::bind(&CAutomation::AutoJump, aut), 1, VK_SPACE);
+	std::function<void()> fnAutoJump = [&] {
+		aut.AutoJump();
+	};
+	std::thread tAutoJump(FeatureKeybound, true, fnAutoJump, 1, VK_F4);
 	tThreads.push_back(move(tAutoJump));
 	LogDebugMsg(SCS, "Created threads");
 }

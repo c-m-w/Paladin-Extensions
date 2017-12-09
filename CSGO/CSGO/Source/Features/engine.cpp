@@ -27,10 +27,6 @@ Angle ClampAngle(Angle aToClamp) {
 	return aToClamp;
 }
 
-Angle CEngine::WorldToScreen(Coordinate cSelf, Coordinate cTarget) {
-	// TODO
-}
-
 CGlobalVars CEngine::GetGlobalVars() {
 	mem.Read(dwGlobalVars);
 	return dwGlobalVars.val;
