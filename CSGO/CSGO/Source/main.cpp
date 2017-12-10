@@ -1,31 +1,34 @@
 #include "main.h"
 
-void Feature(bool, std::function<void()>, unsigned int);
-void FeatureKeybound(bool, std::function<void()>, unsigned int, int);
+void Feature(bool, unsigned int, std::function<void()>);
+void Feature(bool, unsigned int, std::function<void()>, int);
 void CleanUp();
 void Panic();
 void Cheat();
 
-HANDLE hCheat;
-
 BOOL WINAPI DllMain(HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpvReserved) {
 	switch (fdwReason) {
-		case DLL_PROCESS_ATTACH:
+		case DLL_PROCESS_ATTACH: {
 			hInst = hInstDll;
 			DisableThreadLibraryCalls(hInstDll);
-			hCheat = CreateThread(nullptr, 0, LPTHREAD_START_ROUTINE(Cheat), nullptr, 0, nullptr);
-			if (!hCheat || hCheat == INVALID_HANDLE_VALUE) {
+			std::thread tCheat([&]() {
+				Cheat();
+			});
+			if (!tCheat.joinable()) {
 				cfg.iQuitReason = EQuitReasons::LOAD_LIBRARY_ERROR;
 			} else {
 				cfg.iQuitReason = EQuitReasons::SUCCESS;
 			}
 			break;
-		case DLL_PROCESS_DETACH:
+		}
+		case DLL_PROCESS_DETACH: {
 			CleanUp();
 			break;
-		default:
+		}
+		default: {
 			cfg.iQuitReason = EQuitReasons::BLACKLISTED_CALL;
 			break;
+		}
 	}
 	return BOOL(cfg.iQuitReason);
 }
@@ -104,28 +107,30 @@ void Cheat() {
 	mem.InitializeAddresses();
 	LogDebugMsg(DBG, "Initializing threads...");
 	// general
-	std::function<void()> fnPanic = [&] {
-		Panic();
-	};
-	std::thread tPanic(FeatureKeybound, true, fnPanic, 1, VK_F4);
+	std::thread tPanic([&]() {
+		Feature(true, 1, Panic, VK_F4);
+	});
 	tThreads.push_back(move(tPanic));
 	// awareness
-	std::function<void()> fnHitSound = [&] {
-		hit.PlaySoundOnHit();
-	};
-	std::thread tHitSound(FeatureKeybound, true, fnHitSound, 1, VK_F4);
+	std::thread tHitSound([&]() {
+		Feature(true, 1, [&] {
+			hit.PlaySoundOnHit();
+		}, VK_SPACE);
+	});
 	tThreads.push_back(move(tHitSound));
-	std::function<void()> fnNoFlash = [&] {
-		nof.NoFlash();
-	};
-	std::thread tNoFlash(FeatureKeybound, true, fnNoFlash, 1, VK_F4);
+	std::thread tNoFlash([&]() {
+		Feature(true, 1, [&] {
+			nof.NoFlash();
+		}, VK_SPACE);
+	});
 	tThreads.push_back(move(tNoFlash));
 	// combat
 	// miscellaneous
-	std::function<void()> fnAutoJump = [&] {
-		aut.AutoJump();
-	};
-	std::thread tAutoJump(FeatureKeybound, true, fnAutoJump, 1, VK_F4);
+	std::thread tAutoJump([&]() {
+		Feature(true, 1, [&] {
+			aut.AutoJump();
+		}, VK_SPACE);
+	});
 	tThreads.push_back(move(tAutoJump));
 	LogDebugMsg(SCS, "Created threads");
 }
@@ -150,7 +155,7 @@ void CleanUp() {
 #endif
 }
 
-void FeatureKeybound(bool bFeatureState, std::function<void()> fnFeature, unsigned int uiWait, int iFeatureKey) {
+void Feature(bool bFeatureState, unsigned int uiWait, std::function<void()> fnFeature, int iFeatureKey) {
 	while (!bExitState) {
 		while (bFeatureState) {
 			if (GetAsyncKeyState(iFeatureKey)) {
@@ -172,7 +177,7 @@ void FeatureKeybound(bool bFeatureState, std::function<void()> fnFeature, unsign
 	}
 }
 
-void Feature(bool bFeatureState, std::function<void()> fnFeature, unsigned int uiWait) {
+void Feature(bool bFeatureState, unsigned int uiWait, std::function<void()> fnFeature) {
 	while (!bExitState) {
 		while (bFeatureState) {
 			fnFeature();
