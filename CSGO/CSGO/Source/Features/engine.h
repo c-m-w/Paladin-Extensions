@@ -2,11 +2,6 @@
 
 class CEngine {
 public:
-	// general
-	void WaitTicks(int);
-	Angle ClampAngle(Angle);
-	Angle WorldToScreen(Coordinate, Coordinate);
-
 	//engine
 	CGlobalVars GetGlobalVars();
 
@@ -28,11 +23,17 @@ public:
 	total GetLocalPlayerHitsOnServer();
 	float GetFlashMaxAlpha();
 	void SetFlashMaxAlpha(float);
+	int GetFieldOfView();
+	void SetFieldOfView(int);
 
-	handle GetActiveWeapon();
-	int GetActiveWeaponID();
+	handle GetActiveWeaponHandle();
 	DWORD GetActiveWeaponEntity();
 	float GetNextPrimaryAttack();
+
+	// general
+	void WaitTicks(int);
+	Angle ClampAngle(Angle);
+	Angle WorldToScreen(Coordinate, Coordinate);
 };
 
 extern CEngine eng;

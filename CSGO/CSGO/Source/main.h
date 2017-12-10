@@ -18,6 +18,7 @@
 #include "Features/Awareness/noflash.h"
 #include "Features/Awareness/hitsound.h"
 #include "Features/Miscellaneous/automation.h"
+#include "Features/Miscellaneous/fov.h"
 
 /* Conventions:
  * Start everything with a capital

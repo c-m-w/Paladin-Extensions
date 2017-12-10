@@ -1,8 +1,9 @@
 #pragma once
 
 template<typename datatype> struct Address {
+	DWORD off = 0; // offset
+	DWORD ptr = 0; // thisptr
 	DWORD loc = 0; // location
-	DWORD ptr = 0; // this ptr
 	datatype val; // value
 };
 
@@ -23,6 +24,7 @@ namespace Addresses {
 	extern Address<frame> lp_fFlags;
 	extern Address<total> lp_totalHitsOnServer;
 	extern Address<float> lp_flFlashMaxAlpha;
+	extern Address<int> lp_iFOV;
 
 	extern Address<handle> lp_hActiveWeapon;
 	extern Address<float> aw_flNextPrimaryAttack;

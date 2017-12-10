@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Features\Awareness\noflash.h" />
+    <ClInclude Include="Source\Features\Miscellaneous\fov.h" />
     <ClInclude Include="Source\global.h" />
     <ClInclude Include="Source\debug.h" />
     <ClInclude Include="Source\Program\general.h" />
@@ -33,6 +34,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Features\Awareness\noflash.cpp" />
+    <ClCompile Include="Source\Features\Miscellaneous\fov.cpp" />
     <ClCompile Include="Source\global.cpp" />
     <ClCompile Include="Source\debug.cpp" />
     <ClCompile Include="Source\Program\general.cpp" />

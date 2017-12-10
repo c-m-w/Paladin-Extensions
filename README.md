@@ -13,18 +13,21 @@
 
 ## CSGO TODO
 ##### Open
-- Features [Engine ++]
-   - Trace Ray [Engine]
-- Define HWID for yourself in [General]!
+- Encrypt Strings
+- Trace Ray
 - Make configs
 ##### Jeremy
+- Fix GetGlobalVars
+- Game Closing
 - Move Log to C:/ Drive
-- Delete Cheat File if User NotFound/Banned
-- Check for multiple instances [General]
-- Menu [Interface]
+- Check for multiple instances
 ##### Mike
 - Pattern Scanning
+- Define HWID for yourself
 ##### Hunter
-- Menu [Interface]
+- Menu
+- Define HWID for yourself
 ##### John
+- Glow
+- Define HWID for yourself
 ##### Cole

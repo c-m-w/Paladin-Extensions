@@ -11,10 +11,8 @@ BOOL WINAPI DllMain(HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpvReserved) {
 		case DLL_PROCESS_ATTACH: {
 			hInst = hInstDll;
 			DisableThreadLibraryCalls(hInstDll);
-			std::thread tCheat([&]() {
-				Cheat();
-			});
-			if (!tCheat.joinable()) {
+			HANDLE hCheat = CreateThread(nullptr, 0, LPTHREAD_START_ROUTINE(Cheat), nullptr, 0, nullptr);
+			if (!hCheat || hCheat == INVALID_HANDLE_VALUE) {
 				cfg.iQuitReason = EQuitReasons::LOAD_LIBRARY_ERROR;
 			} else {
 				cfg.iQuitReason = EQuitReasons::SUCCESS;

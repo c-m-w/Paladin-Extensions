@@ -17,6 +17,7 @@ namespace Addresses {
 	Address<frame> lp_fFlags;
 	Address<total> lp_totalHitsOnServer;
 	Address<float> lp_flFlashMaxAlpha;
+	Address<int> lp_iFOV;
 
 	Address<handle> lp_hActiveWeapon;
 	Address<float> aw_flNextPrimaryAttack;
@@ -98,18 +99,19 @@ void CMemoryManager::InitializeAddresses() {
 	lp_fFlags = {0x100};
 	lp_totalHitsOnServer = {0xA2C8};
 	lp_flFlashMaxAlpha = {0xA2F4};
+	lp_iFOV = {0x31D8};
 	lp_hActiveWeapon = {0x2EE8};
-	aw_flNextPrimaryAttack = {0x31D8};
+	aw_flNextPrimaryAttack = {0x330C};
 	LogDebugMsg(SCS, "Initialized bases");
 	// engine
-	dwGlobalVars.loc += dwEngineBase;
-	dwClientState.loc += dwEngineBase;
+	dwGlobalVars.loc += dwEngineBase + dwGlobalVars.off;
+	dwClientState.loc += dwEngineBase + dwClientState.off;
 	// client
-	ksForceJump.loc += dwClientBase;
-	ksForceAttack.loc += dwClientBase;
-	flSensitivity.loc += dwClientBase;
-	dwEntityList.loc += dwClientBase;
-	dwLocalPlayer.loc += dwClientBase;
+	ksForceJump.loc += dwClientBase + ksForceJump.off;
+	ksForceAttack.loc += dwClientBase + ksForceAttack.off;
+	flSensitivity.loc += dwClientBase + flSensitivity.off;
+	dwEntityList.loc += dwClientBase + dwEntityList.off;
+	dwLocalPlayer.loc += dwClientBase + dwLocalPlayer.off;
 	LogDebugMsg(SCS, "Initialized addresses");
 }
 
