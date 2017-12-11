@@ -99,11 +99,11 @@ ETeam CEngine::GetTeam() {
 	return lp_tTeamNum.val;
 }
 
-void CEngine::SetTeam(ETeam lp_tNewTeamNum) {
-	if (GetTeam() != lp_tNewTeamNum) {
-		lp_tTeamNum.val = lp_tNewTeamNum;
-		mem.Write(lp_tTeamNum);
-	}
+EMoveType CEngine::GetMoveType() {
+	GetLocalPlayer();
+	lp_mMoveType.loc = dwLocalPlayer.val + lp_mMoveType.off;
+	mem.Read(lp_mMoveType);
+	return lp_mMoveType.val;
 }
 
 frame CEngine::GetFlags() {
@@ -213,7 +213,6 @@ Angle CEngine::VectorToAngle(Coordinate cOrigin, Coordinate cEndPoint) {
 		if (aReturn.yaw < 0) {
 			aReturn.yaw += 360;
 		}
-
 		float flTemp = sqrt(vDelta.dx * vDelta.dx + vDelta.dy * vDelta.dy);
 		aReturn.pitch = atan2(-vDelta.dz, flTemp) * 180 / PI;
 		if (aReturn.pitch < 0) {

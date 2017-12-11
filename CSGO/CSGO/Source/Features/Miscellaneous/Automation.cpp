@@ -10,7 +10,8 @@ void CAutomation::AutoJump() {
 }
 
 void CAutomation::AutoJumpThrow() {
-	if (/*eng.GetActiveWeaponID() == Grenade*/true) { // TODO
+	if (/*eng.GetActiveWeaponID() == Grenade*/true) {
+		// TODO
 		if (eng.GetForceAttack() == EKeystroke::PRESS) {
 			if (!(eng.GetFlags() & FL_ONGROUND)) {
 				eng.ForceAttack(EKeystroke::RELEASE);

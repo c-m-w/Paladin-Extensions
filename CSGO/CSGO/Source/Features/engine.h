@@ -22,7 +22,6 @@ public:
 	DWORD GetEntityBase(int);
 
 	ETeam GetEntityTeam(int);
-	void SetEntityTeam(int, ETeam);
 	bool GetEntitySpotted(int);
 	void SetEntitySpotted(int, bool);
 
@@ -30,7 +29,7 @@ public:
 	DWORD GetLocalPlayer();
 
 	ETeam GetTeam();
-	void SetTeam(ETeam);
+	EMoveType GetMoveType();
 	frame GetFlags();
 	total GetHitsOnServer();
 	float GetFlashMaxAlpha();

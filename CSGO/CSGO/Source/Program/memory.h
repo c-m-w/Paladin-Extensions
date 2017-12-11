@@ -25,6 +25,7 @@ namespace Addresses {
 	extern Address<DWORD> dwLocalPlayer;
 
 	extern Address<ETeam> lp_tTeamNum;
+	extern Address<EMoveType> lp_mMoveType;
 	extern Address<frame> lp_fFlags;
 	extern Address<total> lp_totalHitsOnServer;
 	extern Address<float> lp_flFlashMaxAlpha;

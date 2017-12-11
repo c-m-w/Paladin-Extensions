@@ -70,6 +70,7 @@ struct Coordinate {
 
 struct Vector {
 	float dx, dy, dz;
+
 	Vector(Coordinate cOrigin, Coordinate cEndPoint) {
 		dx = cEndPoint.x - cOrigin.x;
 		dy = cEndPoint.y - cOrigin.y;

@@ -1,6 +1,9 @@
 #pragma once
 
 class CFOV {
-    void FOV();
-    void WeaponFOV();
+public:
+	void FOV();
+	void WeaponFOV();
 };
+
+extern CFOV fov;
