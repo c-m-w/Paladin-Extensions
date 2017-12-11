@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClInclude Include="Source\Features\Awareness\noflash.h" />
     <ClInclude Include="Source\Features\Awareness\radar.h" />
+    <ClInclude Include="Source\Features\Combat\recoilcontrol.h" />
     <ClInclude Include="Source\Features\Miscellaneous\fov.h" />
     <ClInclude Include="Source\global.h" />
     <ClInclude Include="Source\debug.h" />
@@ -36,6 +37,7 @@
   <ItemGroup>
     <ClCompile Include="Source\Features\Awareness\noflash.cpp" />
     <ClCompile Include="Source\Features\Awareness\radar.cpp" />
+    <ClCompile Include="Source\Features\Combat\recoilcontrol.cpp" />
     <ClCompile Include="Source\Features\Miscellaneous\fov.cpp" />
     <ClCompile Include="Source\global.cpp" />
     <ClCompile Include="Source\debug.cpp" />

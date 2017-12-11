@@ -54,6 +54,9 @@
     <ClInclude Include="Source\Features\Awareness\radar.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Features\Combat\recoilcontrol.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\global.cpp">
@@ -77,9 +80,6 @@
     <ClCompile Include="Source\Features\engine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Features\Awareness\hitsound.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Features\Miscellaneous\automation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -93,6 +93,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\Features\Awareness\radar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Features\Awareness\hitsound.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Features\Combat\recoilcontrol.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

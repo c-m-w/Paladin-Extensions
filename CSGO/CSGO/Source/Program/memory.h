@@ -12,11 +12,12 @@ namespace Addresses {
 	// CEngine pointer addresses
 	extern Address<CGlobalVars> dwGlobalVars;
 	extern Address<DWORD> dwClientState;
-	extern Address<ESignOnState> cs_soState;
+	extern Address<ESignOnState> cs_soSignOnState;
+	extern Address<Angle> cs_aViewAngle;
 	// global Client addresses
-	extern Address<EKeystroke> ksForceJump;
-	extern Address<EKeystroke> ksForceAttack;
 	extern Address<float> flSensitivity;
+	extern Address<EKeystroke> ksForceAttack;
+	extern Address<EKeystroke> ksForceJump;
 	// Client pointer addresses
 	extern Address<DWORD> dwEntityList;
 	extern Address<ETeam> el_tTeamNum;
@@ -25,11 +26,12 @@ namespace Addresses {
 	extern Address<DWORD> dwLocalPlayer;
 
 	extern Address<ETeam> lp_tTeamNum;
-	extern Address<EMoveType> lp_mMoveType;
 	extern Address<frame> lp_fFlags;
+	extern Address<EMoveType> lp_mMoveType;
+	extern Address<Angle> lp_aAimPunch;
+	extern Address<int> lp_iFOV;
 	extern Address<total> lp_totalHitsOnServer;
 	extern Address<float> lp_flFlashMaxAlpha;
-	extern Address<int> lp_iFOV;
 
 	extern Address<handle> lp_hActiveWeapon;
 	extern Address<float> aw_flNextPrimaryAttack;
@@ -46,12 +48,11 @@ class CMemoryManager {
 public:
 	bool AttachToGame();
 
-	bool PatternCompare(); // todo
-	DWORD FindPattern(); // todo
+	DWORD FindPattern(BYTE * mask, char * szMask, const DWORD address, const DWORD length);
 
 	void InitializeAddresses();
 
-	template<class datatype> bool Read(Address<datatype> &adrRead) {
+	template<class datatype> bool Get(Address<datatype> &adrRead) {
 		if (adrRead.loc) {
 			if (adrRead.ptr) {
 				DWORD dwXor;
@@ -64,7 +65,7 @@ public:
 		return false;
 	}
 
-	template<class datatype> bool Write(Address<datatype> &adrWrite) {
+	template<class datatype> bool Set(Address<datatype> &adrWrite) {
 		if (adrWrite.loc) {
 			if (adrWrite.ptr) {
 				DWORD dwXor = *reinterpret_cast<DWORD*>(&adrWrite.val) ^ adrWrite.ptr;

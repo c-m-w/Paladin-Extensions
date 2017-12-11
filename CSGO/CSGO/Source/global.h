@@ -58,6 +58,8 @@ typedef DWORD handle;
 
 struct Angle {
 	float pitch, yaw, roll; // y, x, z
+	bool operator==(Angle rhs);
+	bool operator!=(Angle rhs);
 };
 
 struct Color {
@@ -71,11 +73,8 @@ struct Coordinate {
 struct Vector {
 	float dx, dy, dz;
 
-	Vector(Coordinate cOrigin, Coordinate cEndPoint) {
-		dx = cEndPoint.x - cOrigin.x;
-		dy = cEndPoint.y - cOrigin.y;
-		dz = cEndPoint.z - cOrigin.z;
-	}
+	Vector();
+	Vector(Coordinate cOrigin, Coordinate cEndPoint);
 };
 
 struct CGlobalVars {

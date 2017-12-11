@@ -18,6 +18,7 @@
 #include "Features/Awareness/hitsound.h"
 #include "Features/Awareness/noflash.h"
 #include "Features/Awareness/radar.h"
+#include "Features/Combat/recoilcontrol.h"
 #include "Features/Miscellaneous/automation.h"
 #include "Features/Miscellaneous/fov.h"
 

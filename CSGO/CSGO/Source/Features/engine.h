@@ -7,14 +7,15 @@ public:
 
 	// engine - clientstate
 	DWORD GetClientState();
-	ESignOnState GetClientStateSignOnState();
+	ESignOnState GetSignOnState();
+	Angle GetViewAngle();
+	void SetViewAngle(Angle);
 
 	// client - global
-	EKeystroke GetForceJump();
-	void ForceJump(EKeystroke);
 	EKeystroke GetForceAttack();
 	void ForceAttack(EKeystroke);
-
+	EKeystroke GetForceJump();
+	void ForceJump(EKeystroke);
 	float GetSensitivity();
 	void SetSensitivity(float);
 
@@ -29,13 +30,14 @@ public:
 	DWORD GetLocalPlayer();
 
 	ETeam GetTeam();
-	EMoveType GetMoveType();
 	frame GetFlags();
+	EMoveType GetMoveType();
+	Angle GetAimPunch();
+	int GetFieldOfView();
+	void SetFieldOfView(int);
 	total GetHitsOnServer();
 	float GetFlashMaxAlpha();
 	void SetFlashMaxAlpha(float);
-	int GetFieldOfView();
-	void SetFieldOfView(int);
 
 	handle GetActiveWeaponHandle();
 	DWORD GetActiveWeaponEntity();
@@ -44,6 +46,7 @@ public:
 	// general
 	void WaitTicks(int);
 	Angle ClampAngle(Angle);
+	Angle NormalizeAngle(Angle);
 	Angle VectorToAngle(Coordinate, Coordinate);
 };
 

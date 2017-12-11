@@ -139,6 +139,12 @@ void Cheat() {
 	});
 	tThreads.push_back(move(tRadar));
 	// combat
+	std::thread tRecoilControl([&]() {
+		Feature(true, 1, [&] {
+			rcs.RecoilControl();
+		}, VK_SPACE);
+	});
+	tThreads.push_back(move(tRecoilControl));
 	// miscellaneous
 	std::thread tAutoJump([&]() {
 		Feature(true, 1, [&] {
@@ -165,7 +171,7 @@ void Panic() {
 	LogDebugMsg(WRN, "Panic called");
 	cfg.iQuitReason = EQuitReasons::PANIC;
 	CleanUp();
-	FreeLibraryAndExitThread(hInst, 1);
+	FreeLibraryAndExitThread(hInst, 1); // TODO figure out how to not display ABORT message
 }
 
 void CleanUp() {

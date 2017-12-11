@@ -5,11 +5,12 @@ namespace Addresses {
 	// CEngine pointer addresses
 	Address<CGlobalVars> dwGlobalVars;
 	Address<DWORD> dwClientState;
-	Address<ESignOnState> cs_soState;
+	Address<ESignOnState> cs_soSignOnState;
+	Address<Angle> cs_aViewAngle;
 	// global Client addresses
-	Address<EKeystroke> ksForceJump;
-	Address<EKeystroke> ksForceAttack;
 	Address<float> flSensitivity;
+	Address<EKeystroke> ksForceAttack;
+	Address<EKeystroke> ksForceJump;
 	// Client pointer addresses
 	Address<DWORD> dwEntityList;
 	Address<ETeam> el_tTeamNum;
@@ -18,11 +19,12 @@ namespace Addresses {
 	Address<DWORD> dwLocalPlayer;
 
 	Address<ETeam> lp_tTeamNum;
-	Address<EMoveType> lp_mMoveType;
 	Address<frame> lp_fFlags;
+	Address<EMoveType> lp_mMoveType;
+	Address<Angle> lp_aAimPunch;
+	Address<int> lp_iFOV;
 	Address<total> lp_totalHitsOnServer;
 	Address<float> lp_flFlashMaxAlpha;
-	Address<int> lp_iFOV;
 
 	Address<handle> lp_hActiveWeapon;
 	Address<float> aw_flNextPrimaryAttack;
@@ -39,13 +41,13 @@ bool CMemoryManager::AttachToGame() {
 		LogDebugMsg(DBG, "Searching for CSGO");
 		Wait(1000);
 	}
+	if (!all.GetElevationState() && all.GetElevationState() != all.GetElevationState(hGame)) {
+		LogDebugMsg(ERR, "No permissions");
+		return false;
+	}
 	hGame = OpenProcess(PROCESS_VM_READ | PROCESS_VM_WRITE | PROCESS_VM_OPERATION, false, dwProcessID);
 	if (!hGame || hGame == INVALID_HANDLE_VALUE) {
 		LogDebugMsg(ERR, "Invalid game handle");
-		return false;
-	}
-	if (!all.GetElevationState() && all.GetElevationState() != all.GetElevationState(hGame)) {
-		LogDebugMsg(ERR, "No permissions");
 		return false;
 	}
 	LogDebugMsg(SCS, "Attached to game");
@@ -87,28 +89,55 @@ bool CMemoryManager::AttachToGame() {
 	return false;
 }
 
+DWORD CMemoryManager::FindPattern(BYTE * bMask, char * cMask, DWORD dwAddress, DWORD dwLength) {
+	DWORD dwDataLength = strlen(cMask);
+	BYTE * bData = new BYTE[dwDataLength + 1];
+	SIZE_T sRead;
+	for (DWORD i = 0; i < dwLength; i++) {
+		auto dwCurrentAddress = dwAddress + i;
+		bool bSuccess = ReadProcessMemory(hGame, LPVOID(dwCurrentAddress), bData, dwDataLength, &sRead);
+		if (!bSuccess || sRead == 0) {
+			continue;
+		}
+		while (*cMask) {
+			++cMask;
+			++bData;
+			++bMask;
+			if (*cMask == 'x' && *bData != *bMask) {
+				break;
+			}
+			delete[] bData;
+			return dwAddress + i;
+		}
+	}
+	delete[] bData;
+	return 0;
+}
+
 void CMemoryManager::InitializeAddresses() {
 	LogDebugMsg(DBG, "Initializing addresses");
 	// global Engine addresses
 	dwGlobalVars = {0x57D550};
 	// Engine pointer addresses
 	dwClientState = {0x57D84C};
-	cs_soState = {0x108};
+	cs_soSignOnState = {0x108};
+	cs_aViewAngle = {0x4D10};
 	// global Client addresses
-	ksForceJump = {0x4F0ED64};
+	flSensitivity = { 0xAA04EC, 0xAA04C0 };
 	ksForceAttack = {0x2EB9EAC};
-	flSensitivity = {0xAA04EC, 0xAA04C0};
+	ksForceJump = {0x4F0ED64};
 	// Client pointer addresses
 	dwEntityList = {0x4A77AFC};
 	el_tTeamNum = {0xF0};
 	el_bSpotted = {0x939};
 	dwLocalPlayer = {0xA9ADEC};
 	lp_tTeamNum = {0xF0};
-	lp_mMoveType = {0x258};
 	lp_fFlags = {0x100};
+	lp_mMoveType = {0x258};
+	lp_aAimPunch = {0x301C};
+	lp_iFOV = {0x330C};
 	lp_totalHitsOnServer = {0xA2C8};
 	lp_flFlashMaxAlpha = {0xA2F4};
-	lp_iFOV = {0x330C};
 	lp_hActiveWeapon = {0x2EE8};
 	aw_flNextPrimaryAttack = {0x31D8};
 	LogDebugMsg(SCS, "Initialized bases");
