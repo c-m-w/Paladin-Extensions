@@ -10,14 +10,14 @@ template<typename datatype> struct Address {
 namespace Addresses {
 	// global CEngine addresses
 	// CEngine pointer addresses
-	extern Address<CGlobalVars> dwGlobalVars;
+	extern Address<GlobalVars> dwGlobalVars;
 	extern Address<DWORD> dwClientState;
 	extern Address<ESignOnState> cs_soSignOnState;
-	extern Address<Angle> cs_aViewAngle;
+	extern Address<angle> cs_aViewAngle;
 	// global Client addresses
 	extern Address<float> flSensitivity;
-	extern Address<EKeystroke> ksForceAttack;
-	extern Address<EKeystroke> ksForceJump;
+	extern Address<frame> fForceAttack;
+	extern Address<frame> fForceJump;
 	// Client pointer addresses
 	extern Address<DWORD> dwEntityList;
 	extern Address<ETeam> el_tTeamNum;
@@ -28,7 +28,7 @@ namespace Addresses {
 	extern Address<ETeam> lp_tTeamNum;
 	extern Address<frame> lp_fFlags;
 	extern Address<EMoveType> lp_mMoveType;
-	extern Address<Angle> lp_aAimPunch;
+	extern Address<angle> lp_aAimPunch;
 	extern Address<int> lp_iFOV;
 	extern Address<total> lp_totalHitsOnServer;
 	extern Address<float> lp_flFlashMaxAlpha;

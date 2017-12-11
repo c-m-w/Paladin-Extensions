@@ -3,19 +3,19 @@
 class CEngine {
 public:
 	// engine - global
-	CGlobalVars GetGlobalVars();
+	GlobalVars GetGlobalVars();
 
 	// engine - clientstate
 	DWORD GetClientState();
 	ESignOnState GetSignOnState();
-	Angle GetViewAngle();
-	void SetViewAngle(Angle);
+	angle GetViewAngle();
+	void SetViewAngle(angle);
 
 	// client - global
-	EKeystroke GetForceAttack();
-	void ForceAttack(EKeystroke);
-	EKeystroke GetForceJump();
-	void ForceJump(EKeystroke);
+	frame GetForceAttack();
+	void ForceAttack(frame);
+	frame GetForceJump();
+	void ForceJump(frame);
 	float GetSensitivity();
 	void SetSensitivity(float);
 
@@ -32,7 +32,7 @@ public:
 	ETeam GetTeam();
 	frame GetFlags();
 	EMoveType GetMoveType();
-	Angle GetAimPunch();
+	angle GetAimPunch();
 	int GetFieldOfView();
 	void SetFieldOfView(int);
 	total GetHitsOnServer();
@@ -45,9 +45,9 @@ public:
 
 	// general
 	void WaitTicks(int);
-	Angle ClampAngle(Angle);
-	Angle NormalizeAngle(Angle);
-	Angle VectorToAngle(Coordinate, Coordinate);
+	angle ClampAngle(angle);
+	angle NormalizeAngle(angle);
+	angle VectorToAngle(coordinate, coordinate);
 };
 
 extern CEngine eng;

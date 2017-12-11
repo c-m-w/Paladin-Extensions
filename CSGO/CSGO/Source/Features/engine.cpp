@@ -1,6 +1,6 @@
 #include "../dllmain.h"
 
-CGlobalVars CEngine::GetGlobalVars() {
+GlobalVars CEngine::GetGlobalVars() {
 	mem.Get(dwGlobalVars);
 	return dwGlobalVars.val;
 }
@@ -17,41 +17,41 @@ ESignOnState CEngine::GetSignOnState() {
 	return cs_soSignOnState.val;
 }
 
-Angle CEngine::GetViewAngle() {
+angle CEngine::GetViewAngle() {
 	GetClientState();
 	cs_aViewAngle.loc = dwClientState.val + cs_aViewAngle.off;
 	mem.Get(cs_aViewAngle);
 	return cs_aViewAngle.val;
 }
 
-void CEngine::SetViewAngle(Angle cs_aNewViewAngle) {
+void CEngine::SetViewAngle(angle cs_aNewViewAngle) {
 	if (GetViewAngle() != cs_aNewViewAngle) {
 		cs_aViewAngle.val = cs_aNewViewAngle;
 		mem.Set(cs_aViewAngle);
 	}
 }
 
-EKeystroke CEngine::GetForceJump() {
-	mem.Get(ksForceJump);
-	return ksForceJump.val;
+frame CEngine::GetForceJump() {
+	mem.Get(fForceJump);
+	return fForceJump.val;
 }
 
-void CEngine::ForceJump(EKeystroke ksType) {
-	if (GetForceJump() != ksType) {
-		ksForceJump.val = ksType;
-		mem.Set(ksForceJump);
+void CEngine::ForceJump(frame ksType) {
+	if (GetForceJump() ^ ksType) {
+		fForceJump.val |= ksType;
+		mem.Set(fForceJump);
 	}
 }
 
-EKeystroke CEngine::GetForceAttack() {
-	mem.Get(ksForceAttack);
-	return ksForceAttack.val;
+frame CEngine::GetForceAttack() {
+	mem.Get(fForceAttack);
+	return fForceAttack.val;
 }
 
-void CEngine::ForceAttack(EKeystroke ksType) {
-	if (GetForceAttack() != ksType) {
-		ksForceAttack.val = ksType;
-		mem.Set(ksForceAttack);
+void CEngine::ForceAttack(frame ksType) {
+	if (GetForceAttack() ^ ksType) {
+		fForceAttack.val |= ksType;
+		mem.Set(fForceAttack);
 	}
 }
 
@@ -113,7 +113,7 @@ EMoveType CEngine::GetMoveType() {
 	return lp_mMoveType.val;
 }
 
-Angle CEngine::GetAimPunch() {
+angle CEngine::GetAimPunch() {
 	GetLocalPlayer();
 	lp_aAimPunch.loc = dwLocalPlayer.val + lp_aAimPunch.off;
 	mem.Get(lp_aAimPunch);
@@ -190,7 +190,7 @@ void CEngine::WaitTicks(int iTicksToWait) {
 	}
 }
 
-Angle CEngine::ClampAngle(Angle aToClamp) {
+angle CEngine::ClampAngle(angle aToClamp) {
 	if (aToClamp.pitch > 89) {
 		aToClamp.pitch = 89;
 	} else if (aToClamp.pitch < -89) {
@@ -210,15 +210,15 @@ Angle CEngine::ClampAngle(Angle aToClamp) {
 	return aToClamp;
 }
 
-Angle CEngine::NormalizeAngle(Angle aToNormalize) {
-	Angle aNewAngle;
+angle CEngine::NormalizeAngle(angle aToNormalize) {
+	angle aNewAngle;
 	// TODO cap 31 degrees per tick
 	return aNewAngle;
 }
 
-Angle CEngine::VectorToAngle(Coordinate cOrigin, Coordinate cEndPoint) {
-	Angle aReturn = {0,0,0};
-	Vector vDelta(cOrigin, cEndPoint);
+angle CEngine::VectorToAngle(coordinate cOrigin, coordinate cEndPoint) {
+	angle aReturn = {0,0,0};
+	vector vDelta(cOrigin, cEndPoint);
 	if (vDelta.dy == 0 && vDelta.dx == 0) {
 		aReturn.yaw = 0;
 		if (vDelta.dz > 0) {

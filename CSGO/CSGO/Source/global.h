@@ -50,34 +50,36 @@ enum class EAnticheatStatus {
 
 #define FL_ONGROUND (1 << 0) // At rest / on the ground
 #define FL_DUCKING (1 << 1)  // Player flag -- Player is fully crouched
+#define KS_TOGGLE (1 << 0)   // Holding down button
+#define KS_TICK (1 << 1)     // Input for one tick
 
 typedef unsigned int frame;
 typedef unsigned short total;
 typedef unsigned __int8 uint8;
 typedef DWORD handle;
 
-struct Angle {
+struct angle {
 	float pitch, yaw, roll; // y, x, z
-	bool operator==(Angle rhs);
-	bool operator!=(Angle rhs);
+	bool operator==(angle rhs);
+	bool operator!=(angle rhs);
 };
 
-struct Color {
+struct color {
 	uint8 r, g, b, a;
 };
 
-struct Coordinate {
+struct coordinate {
 	float x, y, z;
 };
 
-struct Vector {
+struct vector {
 	float dx, dy, dz;
 
-	Vector();
-	Vector(Coordinate cOrigin, Coordinate cEndPoint);
+	vector();
+	vector(coordinate cOrigin, coordinate cEndPoint);
 };
 
-struct CGlobalVars {
+struct GlobalVars {
 	float realtime;
 	int framecount;
 	float absoluteframetime;
@@ -103,12 +105,6 @@ enum class ESignOnState {
 	SPAWNED = 5,
 	FULL,
 	CHANGELEVEL
-};
-
-enum class EKeystroke {
-	RELEASE = 4,
-	PRESS,
-	SCROLL
 };
 
 enum class ELifeState {

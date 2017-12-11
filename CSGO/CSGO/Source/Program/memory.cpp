@@ -3,14 +3,14 @@
 namespace Addresses {
 	// global CEngine addresses
 	// CEngine pointer addresses
-	Address<CGlobalVars> dwGlobalVars;
+	Address<GlobalVars> dwGlobalVars;
 	Address<DWORD> dwClientState;
 	Address<ESignOnState> cs_soSignOnState;
-	Address<Angle> cs_aViewAngle;
+	Address<angle> cs_aViewAngle;
 	// global Client addresses
 	Address<float> flSensitivity;
-	Address<EKeystroke> ksForceAttack;
-	Address<EKeystroke> ksForceJump;
+	Address<frame> fForceAttack;
+	Address<frame> fForceJump;
 	// Client pointer addresses
 	Address<DWORD> dwEntityList;
 	Address<ETeam> el_tTeamNum;
@@ -21,7 +21,7 @@ namespace Addresses {
 	Address<ETeam> lp_tTeamNum;
 	Address<frame> lp_fFlags;
 	Address<EMoveType> lp_mMoveType;
-	Address<Angle> lp_aAimPunch;
+	Address<angle> lp_aAimPunch;
 	Address<int> lp_iFOV;
 	Address<total> lp_totalHitsOnServer;
 	Address<float> lp_flFlashMaxAlpha;
@@ -124,8 +124,8 @@ void CMemoryManager::InitializeAddresses() {
 	cs_aViewAngle = {0x4D10};
 	// global Client addresses
 	flSensitivity = { 0xAA04EC, 0xAA04C0 };
-	ksForceAttack = {0x2EB9EAC};
-	ksForceJump = {0x4F0ED64};
+	fForceAttack = {0x2EB9EAC};
+	fForceJump = {0x4F0ED64};
 	// Client pointer addresses
 	dwEntityList = {0x4A77AFC};
 	el_tTeamNum = {0xF0};
@@ -145,8 +145,8 @@ void CMemoryManager::InitializeAddresses() {
 	dwGlobalVars.loc += dwEngineBase + dwGlobalVars.off;
 	dwClientState.loc += dwEngineBase + dwClientState.off;
 	// client
-	ksForceJump.loc += dwClientBase + ksForceJump.off;
-	ksForceAttack.loc += dwClientBase + ksForceAttack.off;
+	fForceJump.loc += dwClientBase + fForceJump.off;
+	fForceAttack.loc += dwClientBase + fForceAttack.off;
 	flSensitivity.loc += dwClientBase + flSensitivity.off;
 	dwEntityList.loc += dwClientBase + dwEntityList.off;
 	dwLocalPlayer.loc += dwClientBase + dwLocalPlayer.off;
