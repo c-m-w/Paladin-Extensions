@@ -108,9 +108,9 @@ void CMemoryManager::InitializeAddresses() {
 	lp_fFlags = {0x100};
 	lp_totalHitsOnServer = {0xA2C8};
 	lp_flFlashMaxAlpha = {0xA2F4};
-	lp_iFOV = {0x31D8};
+	lp_iFOV = {0x330C};
 	lp_hActiveWeapon = {0x2EE8};
-	aw_flNextPrimaryAttack = {0x330C};
+	aw_flNextPrimaryAttack = {0x31D8};
 	LogDebugMsg(SCS, "Initialized bases");
 	// engine
 	dwGlobalVars.loc += dwEngineBase + dwGlobalVars.off;

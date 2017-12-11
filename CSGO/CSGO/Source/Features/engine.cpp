@@ -67,13 +67,6 @@ ETeam CEngine::GetEntityTeam(int iEntity) {
 	return el_tTeamNum.val;
 }
 
-void CEngine::SetEntityTeam(int iEntity, ETeam el_tNewTeamNum) {
-	if (GetEntityTeam(iEntity) != el_tNewTeamNum) {
-		el_tTeamNum.val = el_tNewTeamNum;
-		mem.Write(el_tTeamNum);
-	}
-}
-
 bool CEngine::GetEntitySpotted(int iEntity) {
 	el_bSpotted.loc = GetEntityBase(iEntity) + el_bSpotted.off;
 	mem.Read(el_bSpotted);
