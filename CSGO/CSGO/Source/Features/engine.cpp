@@ -31,18 +31,6 @@ void CEngine::SetViewAngle(angle cs_aNewViewAngle) {
 	}
 }
 
-frame CEngine::GetForceJump() {
-	mem.Get(fForceJump);
-	return fForceJump.val;
-}
-
-void CEngine::ForceJump(frame ksType) {
-	if (GetForceJump() ^ ksType) {
-		fForceJump.val |= ksType;
-		mem.Set(fForceJump);
-	}
-}
-
 frame CEngine::GetForceAttack() {
 	mem.Get(fForceAttack);
 	return fForceAttack.val;
@@ -52,6 +40,18 @@ void CEngine::ForceAttack(frame ksType) {
 	if (GetForceAttack() ^ ksType) {
 		fForceAttack.val |= ksType;
 		mem.Set(fForceAttack);
+	}
+}
+
+frame CEngine::GetForceJump() {
+	mem.Get(fForceJump);
+	return fForceJump.val;
+}
+
+void CEngine::ForceJump(frame ksType) {
+	if (GetForceJump() ^ ksType) {
+		fForceJump.val |= ksType;
+		mem.Set(fForceJump);
 	}
 }
 
@@ -106,6 +106,13 @@ ETeam CEngine::GetTeam() {
 	return lp_tTeamNum.val;
 }
 
+frame CEngine::GetFlags() {
+	GetLocalPlayer();
+	lp_fFlags.loc = dwLocalPlayer.val + lp_fFlags.off;
+	mem.Get(lp_fFlags);
+	return lp_fFlags.val;
+}
+
 EMoveType CEngine::GetMoveType() {
 	GetLocalPlayer();
 	lp_mMoveType.loc = dwLocalPlayer.val + lp_mMoveType.off;
@@ -120,11 +127,18 @@ angle CEngine::GetAimPunch() {
 	return lp_aAimPunch.val;
 }
 
-frame CEngine::GetFlags() {
+int CEngine::GetFieldOfView() {
 	GetLocalPlayer();
-	lp_fFlags.loc = dwLocalPlayer.val + lp_fFlags.off;
-	mem.Get(lp_fFlags);
-	return lp_fFlags.val;
+	lp_iFOV.loc = dwLocalPlayer.val + lp_iFOV.off;
+	mem.Get(lp_iFOV);
+	return lp_iFOV.val;
+}
+
+void CEngine::SetFieldOfView(int lp_iNewFOV) {
+	if (GetFieldOfView() != lp_iNewFOV) {
+		lp_iFOV.val = lp_iNewFOV;
+		mem.Set(lp_iFOV);
+	}
 }
 
 total CEngine::GetHitsOnServer() {
@@ -145,20 +159,6 @@ void CEngine::SetFlashMaxAlpha(float lp_flNewFlashMaxAlpha) {
 	if (GetFlashMaxAlpha() != lp_flNewFlashMaxAlpha) {
 		lp_flFlashMaxAlpha.val = lp_flNewFlashMaxAlpha;
 		mem.Set(lp_flFlashMaxAlpha);
-	}
-}
-
-int CEngine::GetFieldOfView() {
-	GetLocalPlayer();
-	lp_iFOV.loc = dwLocalPlayer.val + lp_iFOV.off;
-	mem.Get(lp_iFOV);
-	return lp_iFOV.val;
-}
-
-void CEngine::SetFieldOfView(int lp_iNewFOV) {
-	if (GetFieldOfView() != lp_iNewFOV) {
-		lp_iFOV.val = lp_iNewFOV;
-		mem.Set(lp_iFOV);
 	}
 }
 
