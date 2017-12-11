@@ -122,7 +122,6 @@ float CEngine::GetNextPrimaryAttack() {
 }
 
 void CEngine::WaitTicks(int iTicksToWait) {
-	//TODO
 	iTicksToWait += GetGlobalVars().tickcount;
 	while (iTicksToWait > GetGlobalVars().tickcount) {
 		Wait(1);

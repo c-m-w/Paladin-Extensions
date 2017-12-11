@@ -141,6 +141,12 @@ void Cheat() {
 		}, VK_SPACE);
 	});
 	tThreads.push_back(move(tAutoJump));
+	std::thread tAutoJumpThrow([&]() {
+		Feature(true, 1, [&] {
+			aut.AutoJumpThrow();
+		}, 'T');
+	});
+	tThreads.push_back(move(tAutoJumpThrow));
 	LogDebugMsg(SCS, "Created threads");
 }
 
