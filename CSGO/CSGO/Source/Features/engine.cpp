@@ -222,9 +222,9 @@ angle CEngine::VectorToAngle(coordinate cOrigin, coordinate cEndPoint) {
 	if (vDelta.dy == 0 && vDelta.dx == 0) {
 		aReturn.yaw = 0;
 		if (vDelta.dz > 0) {
-			aReturn.pitch = 89;
-		} else if (vDelta.dz > 0) {
-			aReturn.pitch = -89;
+			aReturn.pitch = 90;
+		} else if (vDelta.dz < 0) {
+			aReturn.pitch = -90;
 		} else {
 			aReturn.pitch = 0;
 		}
