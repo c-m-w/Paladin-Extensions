@@ -1,4 +1,4 @@
-#include "main.h"
+#include "dllmain.h"
 void Feature(bool, unsigned int, std::function<void()>);
 void Feature(bool, unsigned int, std::function<void()>, int);
 void CleanUp();
@@ -58,8 +58,8 @@ void Cheat() {
 	printf("Paladin Debug Interface Setup\n");
 	strLog.append("Paladin Debug Interface Setup\n");
 #endif
-	EPremium uCurrentUserPremiumStatus = all.CheckPremiumStatus();
 
+	EPremium uCurrentUserPremiumStatus = all.CheckPremiumStatus();
 	if (uCurrentUserPremiumStatus == EPremium::BANNED) {
 		//TODO BANNED: DELETE FILE
 		char cTemp[MAX_PATH];
@@ -81,6 +81,7 @@ void Cheat() {
 	if (uCurrentUserPremiumStatus == EPremium::PREMIUM) {
 		LogDebugMsg(SCS, "Authenticated!");
 	}
+
 	if (!all.GetElevationState()) {
 		MessageBox(nullptr, "Warning 1: Elevation Token State -> No access\nDid you run the middleman as admin?", "Paladin CSGO", MB_ICONWARNING | MB_OK);
 	}
@@ -99,19 +100,23 @@ void Cheat() {
 			return;
 		}
 	}
+
 	if (!cfg.LoadConfig()) {
 		MessageBox(nullptr, "Warning 3: Config File -> Using Defaults\nIs there a config file?", "Paladin CSGO", MB_ICONWARNING | MB_OK);
 	}
 	if (!cfg.ReadConfig()) {
 		MessageBox(nullptr, "Warning 4: Config File -> Using Defaults\nIs the config file formatted for this version?", "Paladin CSGO", MB_ICONWARNING | MB_OK);
 	}
+
 	// Todo call Menu here
+
 	if (!mem.AttachToGame()) {
 		MessageBox(nullptr, "Fatal Error 2: Game Attach\nAre you running the cheat as admin?", "Paladin CSGO", MB_ICONERROR | MB_OK);
 		CleanUp();
 		return;
 	}
 	mem.InitializeAddresses();
+
 	LogDebugMsg(DBG, "Initializing threads...");
 	// general
 	std::thread tPanic([&]() {
@@ -133,6 +138,12 @@ void Cheat() {
 		});
 	});
 	tThreads.push_back(move(tNoFlash));
+	std::thread tRadar([&]() {
+		Feature(true, 1, [&] {
+			rad.Radar();
+		});
+	});
+	tThreads.push_back(move(tRadar));
 	// combat
 	// miscellaneous
 	std::thread tAutoJump([&]() {

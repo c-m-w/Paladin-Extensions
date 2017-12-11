@@ -1,4 +1,4 @@
-#include "../main.h"
+#include "../dllmain.h"
 
 CGlobalVars CEngine::GetGlobalVars() {
 	mem.Read(dwGlobalVars);
@@ -22,9 +22,69 @@ EKeystroke CEngine::GetForceJump() {
 	return ksForceJump.val;
 }
 
+void CEngine::ForceJump(EKeystroke ksType) {
+	if (GetForceJump() != ksType) {
+		ksForceJump.val = ksType;
+		mem.Write(ksForceJump);
+	}
+}
+
 EKeystroke CEngine::GetForceAttack() {
 	mem.Read(ksForceAttack);
 	return ksForceAttack.val;
+}
+
+void CEngine::ForceAttack(EKeystroke ksType) {
+	if (GetForceAttack() != ksType) {
+		ksForceAttack.val = ksType;
+		mem.Write(ksForceAttack);
+	}
+}
+
+float CEngine::GetSensitivity() {
+	mem.Read(flSensitivity);
+	return flSensitivity.val;
+}
+
+void CEngine::SetSensitivity(float flNewSensitivity) {
+	if (GetSensitivity() != flNewSensitivity) {
+		flSensitivity.val = flNewSensitivity;
+		mem.Write(flSensitivity);
+	}
+}
+
+DWORD CEngine::GetEntityBase(int iEntity) {
+	DWORD dwOldEntityList = dwEntityList.loc;
+	dwEntityList.loc += (iEntity - 1) * 0x10;
+	mem.Read(dwEntityList);
+	dwEntityList.loc = dwOldEntityList;
+	return dwEntityList.val;
+}
+
+ETeam CEngine::GetEntityTeam(int iEntity) {
+	el_tTeamNum.loc = GetEntityBase(iEntity) + el_tTeamNum.off;
+	mem.Read(el_tTeamNum);
+	return el_tTeamNum.val;
+}
+
+void CEngine::SetEntityTeam(int iEntity, ETeam el_tNewTeamNum) {
+	if (GetEntityTeam(iEntity) != el_tNewTeamNum) {
+		el_tTeamNum.val = el_tNewTeamNum;
+		mem.Write(el_tTeamNum);
+	}
+}
+
+bool CEngine::GetEntitySpotted(int iEntity) {
+	el_bSpotted.loc = GetEntityBase(iEntity) + el_bSpotted.off;
+	mem.Read(el_bSpotted);
+	return el_bSpotted.val;
+}
+
+void CEngine::SetEntitySpotted(int iEntity, bool el_bNewSpotted) {
+	if (GetEntitySpotted(iEntity) != el_bNewSpotted) {
+		el_bSpotted.val = el_bNewSpotted;
+		mem.Write(el_bSpotted);
+	}
 }
 
 DWORD CEngine::GetLocalPlayer() {
@@ -32,14 +92,28 @@ DWORD CEngine::GetLocalPlayer() {
 	return dwLocalPlayer.val;
 }
 
-frame CEngine::GetLocalPlayerFlags() {
+ETeam CEngine::GetTeam() {
+	GetLocalPlayer();
+	lp_tTeamNum.loc = dwLocalPlayer.val + lp_tTeamNum.off;
+	mem.Read(lp_tTeamNum);
+	return lp_tTeamNum.val;
+}
+
+void CEngine::SetTeam(ETeam lp_tNewTeamNum) {
+	if (GetTeam() != lp_tNewTeamNum) {
+		lp_tTeamNum.val = lp_tNewTeamNum;
+		mem.Write(lp_tTeamNum);
+	}
+}
+
+frame CEngine::GetFlags() {
 	GetLocalPlayer();
 	lp_fFlags.loc = dwLocalPlayer.val + lp_fFlags.off;
 	mem.Read(lp_fFlags);
 	return lp_fFlags.val;
 }
 
-total CEngine::GetLocalPlayerHitsOnServer() {
+total CEngine::GetHitsOnServer() {
 	GetLocalPlayer();
 	lp_totalHitsOnServer.loc = dwLocalPlayer.val + lp_totalHitsOnServer.off;
 	mem.Read(lp_totalHitsOnServer);
@@ -71,32 +145,6 @@ void CEngine::SetFieldOfView(int lp_iNewFOV) {
 	if (GetFieldOfView() != lp_iNewFOV) {
 		lp_iFOV.val = lp_iNewFOV;
 		mem.Write(lp_iFOV);
-	}
-}
-
-void CEngine::ForceJump(EKeystroke ksType) {
-	if (GetForceJump() != ksType) {
-		ksForceJump.val = ksType;
-		mem.Write(ksForceJump);
-	}
-}
-
-void CEngine::ForceAttack(EKeystroke ksType) {
-	if (GetForceAttack() != ksType) {
-		ksForceAttack.val = ksType;
-		mem.Write(ksForceAttack);
-	}
-}
-
-float CEngine::GetSensitivity() {
-	mem.Read(flSensitivity);
-	return flSensitivity.val;
-}
-
-void CEngine::SetSensitivity(float flNewSensitivity) {
-	if (GetSensitivity() != flNewSensitivity) {
-		flSensitivity.val = flNewSensitivity;
-		mem.Write(flSensitivity);
 	}
 }
 

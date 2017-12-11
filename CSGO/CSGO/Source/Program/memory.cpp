@@ -1,4 +1,4 @@
-#include "../main.h"
+#include "../dllmain.h"
 
 namespace Addresses {
 	// global CEngine addresses
@@ -12,8 +12,12 @@ namespace Addresses {
 	Address<float> flSensitivity;
 	// Client pointer addresses
 	Address<DWORD> dwEntityList;
+	Address<ETeam> el_tTeamNum;
+	Address<bool> el_bSpotted;
+
 	Address<DWORD> dwLocalPlayer;
 
+	Address<ETeam> lp_tTeamNum;
 	Address<frame> lp_fFlags;
 	Address<total> lp_totalHitsOnServer;
 	Address<float> lp_flFlashMaxAlpha;
@@ -95,7 +99,10 @@ void CMemoryManager::InitializeAddresses() {
 	flSensitivity = {0xAA04EC, 0xAA04C0};
 	// Client pointer addresses
 	dwEntityList = {0x4A77AFC};
+	el_tTeamNum = { 0xF0 };
+	el_bSpotted = {0x939};
 	dwLocalPlayer = {0xA9ADEC};
+	lp_tTeamNum = { 0xF0 };
 	lp_fFlags = {0x100};
 	lp_totalHitsOnServer = {0xA2C8};
 	lp_flFlashMaxAlpha = {0xA2F4};

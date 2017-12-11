@@ -1,4 +1,4 @@
-#include "main.h"
+#include "dllmain.h"
 
 HINSTANCE hInst = nullptr;
 std::atomic<bool> bExitState = false;

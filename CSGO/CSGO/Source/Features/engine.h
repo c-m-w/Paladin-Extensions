@@ -2,13 +2,14 @@
 
 class CEngine {
 public:
-	//engine
+	// engine - global
 	CGlobalVars GetGlobalVars();
 
+	// engine - clientstate
 	DWORD GetClientState();
 	ESignOnState GetClientStateSignOnState();
 
-	//client
+	// client - global
 	EKeystroke GetForceJump();
 	void ForceJump(EKeystroke);
 	EKeystroke GetForceAttack();
@@ -17,10 +18,21 @@ public:
 	float GetSensitivity();
 	void SetSensitivity(float);
 
+	// client - entities
+	DWORD GetEntityBase(int);
+
+	ETeam GetEntityTeam(int);
+	void SetEntityTeam(int, ETeam);
+	bool GetEntitySpotted(int);
+	void SetEntitySpotted(int, bool);
+
+	// client - localplayer
 	DWORD GetLocalPlayer();
 
-	frame GetLocalPlayerFlags();
-	total GetLocalPlayerHitsOnServer();
+	ETeam GetTeam();
+	void SetTeam(ETeam);
+	frame GetFlags();
+	total GetHitsOnServer();
 	float GetFlashMaxAlpha();
 	void SetFlashMaxAlpha(float);
 	int GetFieldOfView();

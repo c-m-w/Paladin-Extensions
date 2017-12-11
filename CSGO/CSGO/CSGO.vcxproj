@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Features\Awareness\noflash.h" />
+    <ClInclude Include="Source\Features\Awareness\radar.h" />
     <ClInclude Include="Source\Features\Miscellaneous\fov.h" />
     <ClInclude Include="Source\global.h" />
     <ClInclude Include="Source\debug.h" />
@@ -30,10 +31,11 @@
     <ClInclude Include="Source\Features\engine.h" />
     <ClInclude Include="Source\Features\Awareness\hitsound.h" />
     <ClInclude Include="Source\Features\Miscellaneous\automation.h" />
-    <ClInclude Include="Source\main.h" />
+    <ClInclude Include="Source\dllmain.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Features\Awareness\noflash.cpp" />
+    <ClCompile Include="Source\Features\Awareness\radar.cpp" />
     <ClCompile Include="Source\Features\Miscellaneous\fov.cpp" />
     <ClCompile Include="Source\global.cpp" />
     <ClCompile Include="Source\debug.cpp" />
@@ -44,7 +46,7 @@
     <ClCompile Include="Source\Features\engine.cpp" />
     <ClCompile Include="Source\Features\Awareness\hitsound.cpp" />
     <ClCompile Include="Source\Features\Miscellaneous\automation.cpp" />
-    <ClCompile Include="Source\main.cpp" />
+    <ClCompile Include="Source\dllmain.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
@@ -122,6 +124,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
+      <AdditionalDependencies>Winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">

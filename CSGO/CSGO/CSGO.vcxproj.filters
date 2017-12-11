@@ -42,13 +42,16 @@
     <ClInclude Include="Source\Features\Miscellaneous\automation.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\main.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Features\Awareness\noflash.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\Features\Miscellaneous\fov.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\dllmain.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Features\Awareness\radar.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -80,13 +83,16 @@
     <ClCompile Include="Source\Features\Miscellaneous\automation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Features\Awareness\noflash.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\Features\Miscellaneous\fov.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\dllmain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Features\Awareness\radar.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

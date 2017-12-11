@@ -1,4 +1,4 @@
-#include "../../main.h"
+#include "../../dllmain.h"
 
 void CFOV::FOV() {
     eng.SetFieldOfView(120);

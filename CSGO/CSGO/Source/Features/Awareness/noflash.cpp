@@ -1,4 +1,4 @@
-#include "../../main.h"
+#include "../../dllmain.h"
 
 void CNoFlash::NoFlash() {
 	eng.SetFlashMaxAlpha(0);

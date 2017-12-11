@@ -1,4 +1,4 @@
-#include "../main.h"
+#include "../dllmain.h"
 
 void CGeneral::GetPremiumUsers() {
 	uPremiumUsers[0].lpstrUsername = "bhopfu1";

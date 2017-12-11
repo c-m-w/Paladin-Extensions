@@ -17,7 +17,6 @@
 - Trace Ray
 - Make configs
 ##### Jeremy
-- Fix GetGlobalVars
 - Game Closing
 - Move Log to C:/ Drive
 - Check for multiple instances

@@ -1,4 +1,4 @@
-#include "../main.h"
+#include "../dllmain.h"
 
 CConfig::CConfig() {
 	verVersion = {1, 0};

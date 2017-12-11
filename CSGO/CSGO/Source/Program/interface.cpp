@@ -1,3 +1,3 @@
-#include "../main.h"
+#include "../dllmain.h"
 
 CInterface mnu;

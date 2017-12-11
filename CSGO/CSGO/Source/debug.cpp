@@ -1,4 +1,4 @@
-#include "main.h"
+#include "dllmain.h"
 
 std::string strLog = "\0";
 

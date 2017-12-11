@@ -1,7 +1,7 @@
-#include "../../main.h"
+#include "../../dllmain.h"
 
 void CHitSound::PlaySoundOnHit() {
-	if (eng.GetLocalPlayerHitsOnServer() > totalPreviousHitsOnServer) {
+	if (eng.GetHitsOnServer() > totalPreviousHitsOnServer) {
 		totalPreviousHitsOnServer = lp_totalHitsOnServer.val;
 		if (cfg.strHitSoundLocation == "\0") {
 			Beep(750, 100);

@@ -19,8 +19,12 @@ namespace Addresses {
 	extern Address<float> flSensitivity;
 	// Client pointer addresses
 	extern Address<DWORD> dwEntityList;
+	extern Address<ETeam> el_tTeamNum;
+	extern Address<bool> el_bSpotted;
+
 	extern Address<DWORD> dwLocalPlayer;
 
+	extern Address<ETeam> lp_tTeamNum;
 	extern Address<frame> lp_fFlags;
 	extern Address<total> lp_totalHitsOnServer;
 	extern Address<float> lp_flFlashMaxAlpha;
