@@ -33,7 +33,7 @@ public:
 	// general
 	void WaitTicks(int);
 	Angle ClampAngle(Angle);
-	Angle WorldToScreen(Coordinate, Coordinate);
+	Angle VectorToAngle(Coordinate, Coordinate);
 };
 
 extern CEngine eng;

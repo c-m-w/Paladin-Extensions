@@ -122,13 +122,14 @@ float CEngine::GetNextPrimaryAttack() {
 }
 
 void CEngine::WaitTicks(int iTicksToWait) {
+	//TODO
 	iTicksToWait += GetGlobalVars().tickcount;
 	while (iTicksToWait > GetGlobalVars().tickcount) {
 		Wait(1);
 	}
 }
 
-Angle ClampAngle(Angle aToClamp) {
+Angle CEngine::ClampAngle(Angle aToClamp) {
 	if (aToClamp.pitch > 89) {
 		aToClamp.pitch = 89;
 	} else if (aToClamp.pitch < -89) {
@@ -146,6 +147,34 @@ Angle ClampAngle(Angle aToClamp) {
 		aToClamp.roll = -50;
 	}
 	return aToClamp;
+}
+
+Angle CEngine::VectorToAngle(Coordinate cOrigin, Coordinate cEndPoint) {
+	Angle aReturn = {0,0,0};
+	Vector vDelta(cOrigin, cEndPoint);
+	if (vDelta.dy == 0 && vDelta.dx == 0) {
+		aReturn.yaw = 0;
+		if (vDelta.dz > 0) {
+			aReturn.pitch = 89;
+		} else if (vDelta.dz > 0) {
+			aReturn.pitch = -89;
+		} else {
+			aReturn.pitch = 0;
+		}
+	} else {
+		aReturn.yaw = atan2(vDelta.dy, vDelta.dx) * 180 / PI;
+		if (aReturn.yaw < 0) {
+			aReturn.yaw += 360;
+		}
+
+		float flTemp = sqrt(vDelta.dx * vDelta.dx + vDelta.dy * vDelta.dy);
+		aReturn.pitch = atan2(-vDelta.dz, flTemp) * 180 / PI;
+		if (aReturn.pitch < 0) {
+			aReturn.pitch += 360;
+		}
+	}
+	ClampAngle(aReturn);
+	return aReturn;
 }
 
 CEngine eng;

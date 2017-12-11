@@ -1,5 +1,4 @@
 #include "main.h"
-
 void Feature(bool, unsigned int, std::function<void()>);
 void Feature(bool, unsigned int, std::function<void()>, int);
 void CleanUp();
@@ -60,15 +59,23 @@ void Cheat() {
 	strLog.append("Paladin Debug Interface Setup\n");
 #endif
 	EPremium uCurrentUserPremiumStatus = all.CheckPremiumStatus();
+
 	if (uCurrentUserPremiumStatus == EPremium::BANNED) {
 		//TODO BANNED: DELETE FILE
-		return CleanUp();
+		char cTemp[MAX_PATH];
+		GetModuleFileName(hInst, cTemp, MAX_PATH);
+		remove(std::string(cTemp).c_str());
+		LogLastError();
+		Panic();
+		return;
 	}
 	if (uCurrentUserPremiumStatus == EPremium::NOT_PREMIUM) {
-		return CleanUp();
+		CleanUp();
+		return;
 	}
 	if (uCurrentUserPremiumStatus == EPremium::EXPIRED) {
 		MessageBox(nullptr, "Notice 1: Premium Time Expired -> No access\nDid you renew your premium?", "Paladin CSGO", MB_ICONHAND | MB_OK);
+		CleanUp();
 		return;
 	}
 	if (uCurrentUserPremiumStatus == EPremium::PREMIUM) {
@@ -88,7 +95,8 @@ void Cheat() {
 			}
 		} else {
 			MessageBox(nullptr, "Fatal Error 1: Elevation Token State -> No anticheat termination access\nDid you run the middleman as admin?", "Paladin CSGO", MB_ICONERROR | MB_OK);
-			return CleanUp();
+			CleanUp();
+			return;
 		}
 	}
 	if (!cfg.LoadConfig()) {
@@ -100,26 +108,29 @@ void Cheat() {
 	// Todo call Menu here
 	if (!mem.AttachToGame()) {
 		MessageBox(nullptr, "Fatal Error 2: Game Attach\nAre you running the cheat as admin?", "Paladin CSGO", MB_ICONERROR | MB_OK);
-		return CleanUp();
+		CleanUp();
+		return;
 	}
 	mem.InitializeAddresses();
 	LogDebugMsg(DBG, "Initializing threads...");
 	// general
 	std::thread tPanic([&]() {
-		Feature(true, 1, Panic, VK_F4);
+		Feature(true, 1, [&] {
+			Panic();
+		}, VK_F4);
 	});
 	tThreads.push_back(move(tPanic));
 	// awareness
 	std::thread tHitSound([&]() {
 		Feature(true, 1, [&] {
 			hit.PlaySoundOnHit();
-		}, VK_SPACE);
+		});
 	});
 	tThreads.push_back(move(tHitSound));
 	std::thread tNoFlash([&]() {
 		Feature(true, 1, [&] {
 			nof.NoFlash();
-		}, VK_SPACE);
+		});
 	});
 	tThreads.push_back(move(tNoFlash));
 	// combat
@@ -135,9 +146,9 @@ void Cheat() {
 
 void Panic() {
 	LogDebugMsg(WRN, "Panic called");
-	CleanUp();
 	cfg.iQuitReason = EQuitReasons::PANIC;
-	FreeLibraryAndExitThread(hInst, DWORD(cfg.iQuitReason));
+	CleanUp();
+	FreeLibraryAndExitThread(hInst, 1);
 }
 
 void CleanUp() {
@@ -149,7 +160,7 @@ void CleanUp() {
 		}
 	}
 #ifdef _DEBUG
-	FreeConsole();
+	//FreeConsole();
 #endif
 }
 

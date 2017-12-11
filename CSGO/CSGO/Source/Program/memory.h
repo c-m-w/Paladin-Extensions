@@ -42,7 +42,7 @@ public:
 	bool AttachToGame();
 
 	bool PatternCompare(); // todo
-	DWORD FindPattern();
+	DWORD FindPattern(); // todo
 
 	void InitializeAddresses();
 

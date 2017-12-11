@@ -6,7 +6,7 @@ void CHitSound::PlaySoundOnHit() {
 		if (cfg.strHitSoundLocation == "\0") {
 			Beep(750, 100);
 		} else {
-			//TODO
+			PlaySound(cfg.strHitSoundLocation.c_str(), nullptr, SND_SYNC);
 		}
 	}
 }

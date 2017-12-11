@@ -68,6 +68,15 @@ struct Coordinate {
 	float x, y, z;
 };
 
+struct Vector {
+	float dx, dy, dz;
+	Vector(Coordinate cOrigin, Coordinate cEndPoint) {
+		dx = cEndPoint.x - cOrigin.x;
+		dy = cEndPoint.y - cOrigin.y;
+		dz = cEndPoint.z - cOrigin.z;
+	}
+};
+
 struct CGlobalVars {
 	float realtime;
 	int framecount;
