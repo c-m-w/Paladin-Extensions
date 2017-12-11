@@ -21,7 +21,7 @@ void CGeneral::GetPremiumUsers() {
 	uPremiumUsers[3].tExpiration = DECEMBER_FIRST + 365 * DAY;
 	uPremiumUsers[3].bValid = true;
 	uPremiumUsers[3].bBanned = false;
-	uPremiumUsers[4].lpstrUsername = ""; // TODO BEAN
+	uPremiumUsers[4].lpstrUsername = "Bean"; // TODO BEAN
 	uPremiumUsers[4].iHardwareID = 0;
 	uPremiumUsers[4].tExpiration = DECEMBER_FIRST + 365 * DAY;
 	uPremiumUsers[4].bValid = true;
