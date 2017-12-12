@@ -90,9 +90,9 @@ bool CMemoryManager::AttachToGame() {
 	return false;
 }
 
-DWORD CMemoryManager::FindPattern(BYTE * bMask, char * szMask, DWORD dwAddress, DWORD dwLength) {
+DWORD CMemoryManager::FindPattern(BYTE *bMask, char *szMask, DWORD dwAddress, DWORD dwLength) {
 	DWORD dwDataLength = strlen(szMask);
-	BYTE * bData = new BYTE[dwDataLength + 1];
+	BYTE *bData = new BYTE[dwDataLength + 1];
 	SIZE_T sRead;
 	for (DWORD dw = 0; dw < dwLength; dw++) {
 		auto dwCurrentAddress = dwAddress + dw;
@@ -124,7 +124,7 @@ void CMemoryManager::InitializeAddresses() {
 	cs_soSignOnState = {0x108};
 	cs_aViewAngle = {0x4D10};
 	// global Client addresses
-	flSensitivity = { 0xAA04EC, 0xAA04C0 };
+	flSensitivity = {0xAA04EC, 0xAA04C0};
 	fForceAttack = {0x2EB9EAC};
 	fForceJump = {0x4F0ED64};
 	// Client pointer addresses

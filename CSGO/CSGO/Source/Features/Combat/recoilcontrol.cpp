@@ -1,8 +1,10 @@
 #include "../../dllmain.h"
 
 void CRecoilControl::RecoilControl() {
-	// TODO save old view punch
-	eng.SetViewAngle(eng.NormalizeAngle(eng.GetViewAngle() - eng.GetAimPunch())); // TODO operator overloading
+	angle_t aCurrentAimPunch = eng.GetAimPunch() - aOldAimPunch;
+	eng.SetViewAngle(eng.NormalizeAngle(eng.GetViewAngle() + aCurrentAimPunch));
+	aOldAimPunch += aCurrentAimPunch;
+	eng.WaitTicks(1);
 }
 
 CRecoilControl rcs;

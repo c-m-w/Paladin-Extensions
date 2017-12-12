@@ -50,8 +50,8 @@ enum class EAnticheatStatus {
 
 #define FL_ONGROUND (1 << 0) // At rest / on the ground
 #define FL_DUCKING (1 << 1)  // Player flag -- Player is fully crouched
-#define KS_TOGGLE (1 << 0)   // Holding down button
-#define KS_TICK (1 << 1)     // Input for one tick
+#define KS_PRESS (1 << 0)    // +command
+#define KS_TICK (1 << 1)     // +command, tick, -command
 
 typedef unsigned int flag;
 typedef unsigned short total;

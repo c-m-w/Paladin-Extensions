@@ -3,6 +3,7 @@
 std::string strLog = "\0";
 
 void LogDebugMsg(EDebugMessage dmType, char *szMessage, ...) {
+	// TODO current time for aesthetics
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	if (hConsole && hConsole != INVALID_HANDLE_VALUE) {
 		switch (dmType) {

@@ -57,6 +57,7 @@ void Cheat() {
 	SetConsoleTextAttribute(hConsole, 7);
 	printf("Paladin Debug Interface Setup\n");
 	strLog.append("Paladin Debug Interface Setup\n");
+	LogLastError();
 #endif
 	EPremium uCurrentUserPremiumStatus = all.CheckPremiumStatus();
 	if (uCurrentUserPremiumStatus == EPremium::BANNED) {
@@ -111,6 +112,7 @@ void Cheat() {
 		return;
 	}
 	mem.InitializeAddresses();
+	LogLastError();
 	LogDebugMsg(DBG, "Initializing threads...");
 	// general
 	std::thread tPanic([&]() {
@@ -142,7 +144,7 @@ void Cheat() {
 	std::thread tRecoilControl([&]() {
 		Feature(true, 1, [&] {
 			rcs.RecoilControl();
-		}, VK_SPACE);
+		}, VK_LBUTTON);
 	});
 	tThreads.push_back(move(tRecoilControl));
 	// miscellaneous
@@ -152,18 +154,18 @@ void Cheat() {
 		}, VK_SPACE);
 	});
 	tThreads.push_back(move(tAutoJump));
-	std::thread tAutoJumpThrow([&]() {
+	std::thread tAutoNade([&]() {
 		Feature(true, 1, [&] {
-			aut.AutoJumpThrow();
-		}, 'T');
+			aut.AutoNade();
+		});
 	});
-	tThreads.push_back(move(tAutoJumpThrow));
-	std::thread tAutoPistol([&]() {
+	tThreads.push_back(move(tAutoNade));
+	std::thread tAutoShoot([&]() {
 		Feature(true, 1, [&] {
-			aut.AutoPistol();
+			aut.AutoShoot();
 		}, VK_LBUTTON);
 	});
-	tThreads.push_back(move(tAutoPistol));
+	tThreads.push_back(move(tAutoShoot));
 	std::thread tFOV([&]() {
 		Feature(true, 1, [&] {
 			fov.FOV();
@@ -171,6 +173,7 @@ void Cheat() {
 	});
 	tThreads.push_back(move(tFOV));
 	LogDebugMsg(SCS, "Created threads");
+	LogLastError();
 }
 
 void Panic() {

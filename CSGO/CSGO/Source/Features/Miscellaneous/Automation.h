@@ -3,8 +3,8 @@
 class CAutomation {
 public:
 	void AutoJump();
-	void AutoJumpThrow();
-	void AutoPistol();
+	void AutoNade();
+	void AutoShoot();
 };
 
 extern CAutomation aut;

@@ -37,12 +37,14 @@ angle_t angle_t::operator-(angle_t rhs) {
 	return *this;
 }
 
-angle_t & angle_t::operator+=(angle_t rhs) {
-	return *this + rhs;
+angle_t &angle_t::operator+=(angle_t rhs) {
+	*this = *this + rhs;
+	return *this;
 }
 
-angle_t & angle_t::operator-=(angle_t rhs) {
-	return *this - rhs;
+angle_t &angle_t::operator-=(angle_t rhs) {
+	*this = *this - rhs;
+	return *this;
 }
 
 vector_t::vector_t(coordinate_t cOrigin, coordinate_t cEndPoint) {

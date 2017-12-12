@@ -31,7 +31,7 @@ void CEngine::SetViewAngle(angle_t cs_aNewViewAngle) {
 
 flag CEngine::GetAttack() {
 	mem.Get(fForceAttack);
-	fForceAttack.val &= KS_TOGGLE | KS_TICK;
+	fForceAttack.val &= KS_PRESS | KS_TICK;
 	return fForceAttack.val;
 }
 
@@ -44,7 +44,7 @@ void CEngine::SetAttack(flag ksType) {
 
 flag CEngine::GetJump() {
 	mem.Get(fForceJump);
-	fForceJump.val &= KS_TOGGLE | KS_TICK;
+	fForceJump.val &= KS_PRESS | KS_TICK;
 	return fForceJump.val;
 }
 
