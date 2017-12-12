@@ -14,6 +14,7 @@
 ## CSGO TODO
 ##### Open
 - Encrypt Strings
+- Polymorphic Junk Code
 ##### Jeremy
 - Game Closing
 - Move Log to C:/ Drive
