@@ -56,13 +56,7 @@ void LogLastError( )
 		return;
 	}
 	LPSTR lpstrError = nullptr;
-	if ( !FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-	                     nullptr,
-	                     dwError,
-	                     MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-	                     LPSTR( &lpstrError ),
-	                     0,
-	                     nullptr ) )
+	if ( !FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, dwError, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), LPSTR( &lpstrError ), 0, nullptr ) )
 	{
 		LogDebugMsg( LER, "[0x%08lu] - Unable to retrieve error description", dwError );
 	}

@@ -163,60 +163,60 @@ void Cheat( )
 	tThreads.push_back( move( tHitSound ) );
 	std::thread tNoFlash( [&]( )
 	{
-		Feature( true,    1, [&]
-		         {
-			         nof.NoFlash( );
-		         } );
+		Feature( true, 1, [&]
+		{
+			nof.NoFlash( );
+		} );
 	} );
 	tThreads.push_back( move( tNoFlash ) );
 	std::thread tRadar( [&]( )
 	{
-		Feature( true,  1,  [&]
-		         {
-			         rad.Radar( );
-		         } );
+		Feature( true, 1, [&]
+		{
+			rad.Radar( );
+		} );
 	} );
 	tThreads.push_back( move( tRadar ) );
 	// combat
 	std::thread tRecoilControl( [&]( )
 	{
-		Feature( true, 1,  [&]
-		         {
-			         rcs.RecoilControl( );
-		         },  VK_LBUTTON );
+		Feature( true, 1, [&]
+		{
+			rcs.RecoilControl( );
+		}, VK_LBUTTON );
 	} );
 	tThreads.push_back( move( tRecoilControl ) );
 	// miscellaneous
 	std::thread tAutoJump( [&]( )
 	{
-		Feature( true, 1,  [&]
-		         {
-			         aut.AutoJump( );
-		         }, VK_SPACE );
+		Feature( true, 1, [&]
+		{
+			aut.AutoJump( );
+		}, VK_SPACE );
 	} );
 	tThreads.push_back( move( tAutoJump ) );
 	std::thread tAutoNade( [&]( )
 	{
-		Feature( true,  1,  [&]
-		         {
-			         aut.AutoNade( );
-		         } );
+		Feature( true, 1, [&]
+		{
+			aut.AutoNade( );
+		} );
 	} );
 	tThreads.push_back( move( tAutoNade ) );
 	std::thread tAutoShoot( [&]( )
 	{
-		Feature( true,   1,  [&]
-		         {
-			         aut.AutoShoot( );
-		         }, VK_LBUTTON );
+		Feature( true, 1, [&]
+		{
+			aut.AutoShoot( );
+		}, VK_LBUTTON );
 	} );
 	tThreads.push_back( move( tAutoShoot ) );
 	std::thread tFOV( [&]( )
 	{
-		Feature( true,  1, [&]
-		         {
-			         fov.FOV( );
-		         } );
+		Feature( true, 1, [&]
+		{
+			fov.FOV( );
+		} );
 	} );
 	tThreads.push_back( move( tFOV ) );
 	LogDebugMsg( SCS, "Created threads" );
@@ -243,9 +243,10 @@ void CleanUp( )
 		}
 	}
 #ifdef _DEBUG
-	//FreeConsole();
+	FreeConsole();
 #endif
 }
+
 // TODO better/remove waits, only add themm else not getasynckeystate
 void Feature( bool bFeatureState, unsigned int nWait, std::function< void( ) > fnFeature, int iFeatureKey )
 {
@@ -279,6 +280,7 @@ void Feature( bool bFeatureState, unsigned int nWait, std::function< void( ) > f
 		}
 	}
 }
+
 // TODO remove wait
 void Feature( bool bFeatureState, unsigned int nWait, std::function< void( ) > fnFeature )
 {

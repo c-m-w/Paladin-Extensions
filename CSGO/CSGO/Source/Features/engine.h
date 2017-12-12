@@ -1,4 +1,5 @@
 #pragma once
+#define RANDOM( x ) eng.GetGlobalVars().tickcount % x
 
 class CEngine
 {

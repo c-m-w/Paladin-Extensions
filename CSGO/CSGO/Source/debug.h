@@ -10,14 +10,10 @@
 
 enum EDebugMessage
 {
-	SCS = 0,
-	//Success
-	DBG = 1,
-	//Debug
-	WRN = 2,
-	//Warning
-	ERR = 3,
-	//Error
+	SCS = 0, // Success
+	DBG = 1, // Debug
+	WRN = 2, // Warning
+	ERR = 3, // Error
 	LER = 4 //Last Error (Windows)
 };
 

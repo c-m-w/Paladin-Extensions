@@ -35,7 +35,7 @@ enum class EQuitReasons
 enum class EPremium
 {
 	BANNED = -2,
-	EXPIRED = -1,
+	EXPIRED,
 	NOT_PREMIUM,
 	PREMIUM
 };
@@ -56,7 +56,7 @@ enum class EAnticheatStatus
 
 /// CSGO stuff
 
-#define MAX_ANGLE_DELTA sqrt(22.f * 22.f + 22.f * 22.f) // TODO
+#define MAX_ANGLE_DELTA 22.f
 #define FL_ONGROUND (1 << 0) // At rest / on the ground
 #define FL_DUCKING (1 << 1)  // Player flag -- Player is fully crouched
 #define KS_PRESS (1 << 0)    // +command
@@ -113,11 +113,10 @@ public:
 
 enum class EMoveType
 {
-	NONE,// never moves
-	WALK = 2,// Player only - moving on the ground
-	NOCLIP = 8,// No gravity, no collisions, still do velocity/avelocity
-	LADDER,// Used by players only when going onto a ladder
-	OBSERVER,// Observer movement, depends on player's observer mode
+	NONE,
+	WALK = 2,
+	NOCLIP = 8,
+	LADDER,
 };
 
 enum class ESignOnState

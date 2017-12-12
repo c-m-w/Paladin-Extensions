@@ -197,8 +197,7 @@ handle CEngine::GetActiveWeaponHandle( )
 
 DWORD CEngine::GetActiveWeaponEntity( )
 {
-	DWORD dwActiveWeaponEntityID = GetActiveWeaponHandle( ) & 0xFFF;
-	return GetEntityBase( dwActiveWeaponEntityID );
+	return GetEntityBase( GetActiveWeaponHandle( ) & 0xFFF );
 }
 
 EWeapon CEngine::GetActiveWeaponIndex( )
@@ -231,12 +230,14 @@ void CEngine::WaitTicks( int iTicksToWait )
 
 float CEngine::GetPixelToAngleYAW( )
 {
-	return 0.022f * GetSensitivity( ) * all.GetWindowsSensitivity( );
+	// TODO mouse accel?
+	return 0.022f * GetSensitivity( ) * all.GetWindowsSensitivity( ); // * ZOOM SENS IF ZOOMED
 }
 
 float CEngine::GetPixelToAnglePITCH( )
 {
-	return 0.022f * GetSensitivity( ) * all.GetWindowsSensitivity( );
+	// TODO mouse accel?
+	return 0.022f * GetSensitivity( ) * all.GetWindowsSensitivity( ); // * ZOOM SENS IF ZOOMED
 }
 
 angle_t CEngine::ClampAngle( angle_t aToClamp )
@@ -305,7 +306,7 @@ angle_t CEngine::NormalizeAngle( angle_t aDestination )
 
 angle_t CEngine::VectorToAngle( coordinate_t cOrigin, coordinate_t cDestination )
 {
-	angle_t aReturn = { 0,0,0 };
+	angle_t aReturn = { 0, 0, 0 };
 	vector_t vDelta( cOrigin, cDestination );
 	if ( vDelta.dy == 0 && vDelta.dx == 0 )
 	{
