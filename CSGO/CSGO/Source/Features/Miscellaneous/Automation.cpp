@@ -10,8 +10,12 @@ void CAutomation::AutoJump() {
 }
 
 void CAutomation::AutoJumpThrow() {
-	if (/*eng.GetActiveWeaponID() == Grenade*/true) {
-		// TODO
+	if (eng.GetActiveWeaponIndex() == EWeapon::FLASHBANG ||
+		eng.GetActiveWeaponIndex() == EWeapon::HEGRENADE ||
+		eng.GetActiveWeaponIndex() == EWeapon::SMOKEGRENADE ||
+		eng.GetActiveWeaponIndex() == EWeapon::MOLOTOV ||
+		eng.GetActiveWeaponIndex() == EWeapon::DECOY ||
+		eng.GetActiveWeaponIndex() == EWeapon::INCGRENADE){
 		if (eng.GetForceAttack() & KS_TOGGLE) {
 			if (eng.GetFlags() ^ FL_ONGROUND) {
 				eng.ForceAttack(!KS_TOGGLE);

@@ -165,9 +165,9 @@ DWORD CEngine::GetActiveWeaponEntity() {
 }
 
 EWeapon CEngine::GetActiveWeaponIndex() {
-	lp_iPlayerWeaponIndex.loc = GetActiveWeaponEntity() + lp_iPlayerWeaponIndex.off;
-	mem.Get(lp_iPlayerWeaponIndex);
-	return lp_iPlayerWeaponIndex.val;
+	lp_wpnPlayerWeaponIndex.loc = GetActiveWeaponEntity() + lp_wpnPlayerWeaponIndex.off;
+	mem.Get(lp_wpnPlayerWeaponIndex);
+	return lp_wpnPlayerWeaponIndex.val;
 }
 
 float CEngine::GetNextPrimaryAttack() {
