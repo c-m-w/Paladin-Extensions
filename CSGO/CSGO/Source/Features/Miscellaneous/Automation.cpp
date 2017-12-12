@@ -24,4 +24,24 @@ void CAutomation::AutoJumpThrow() {
 	}
 }
 
+void CAutomation::AutoPistol() {
+	if(eng.GetNextPrimaryAttack() == 0.0f &&
+		(eng.GetActiveWeaponIndex() == EWeapon::DEAGLE ||
+		eng.GetActiveWeaponIndex() == EWeapon::ELITE || 
+		eng.GetActiveWeaponIndex() == EWeapon::FIVESEVEN || 
+		eng.GetActiveWeaponIndex() == EWeapon::GLOCK ||
+		eng.GetActiveWeaponIndex() == EWeapon::TEC9 || 
+		eng.GetActiveWeaponIndex() == EWeapon::HKP2000 || 
+		eng.GetActiveWeaponIndex() == EWeapon::P250 || 
+		eng.GetActiveWeaponIndex() == EWeapon::USP_SILENCER || 
+		eng.GetActiveWeaponIndex() == EWeapon::CZ75A ||
+		eng.GetActiveWeaponIndex() == EWeapon::AWP || 
+		eng.GetActiveWeaponIndex() == EWeapon::SSG08)) {
+		eng.ForceAttack(KS_TICK);
+	} else {
+		eng.ForceAttack(~KS_TOGGLE);
+	}
+	eng.WaitTicks(1);
+}
+
 CAutomation aut;

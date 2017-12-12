@@ -158,6 +158,12 @@ void Cheat() {
 		}, 'T');
 	});
 	tThreads.push_back(move(tAutoJumpThrow));
+	std::thread tAutoPistol([&]() {
+		Feature(true, 1, [&] {
+			aut.AutoPistol();
+		}, VK_LBUTTON);
+	});
+	tThreads.push_back(move(tAutoJumpThrow));
 	std::thread tFOV([&]() {
 		Feature(true, 1, [&] {
 			fov.FOV();
