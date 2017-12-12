@@ -5,7 +5,20 @@ void CAutomation::AutoJump( )
 	if ( eng.GetFlags( ) & FL_ONGROUND )
 	{
 		eng.SetJump( KS_TICK );
+		// if ( FAKE SCROLL ) {
+		for ( int i = RANDOM(5); i < 7; i++ )
+		{
+			eng.WaitTicks( RANDOM(3) + 1 );
+			eng.SetJump( KS_TICK );
+		}
 	}
+		/*else if ( DIST FROM GROUND < 45 && DIST FROM GROUND > 0 )
+		{
+			if ( DIST FROM GROUND % 15 == 0 )
+			{
+				eng.SetJump( KS_TICK );
+			}
+		}*/
 	else
 	{
 		eng.SetJump( ~KS_PRESS );
