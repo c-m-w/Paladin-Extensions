@@ -39,6 +39,7 @@ public:
 	float GetFlashMaxAlpha();
 	void SetFlashMaxAlpha(float);
 
+	int GetActiveWeaponIndex();
 	handle GetActiveWeaponHandle();
 	DWORD GetActiveWeaponEntity();
 	float GetNextPrimaryAttack();
