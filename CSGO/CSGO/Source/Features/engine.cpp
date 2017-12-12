@@ -29,26 +29,28 @@ void CEngine::SetViewAngle(angle_t cs_aNewViewAngle) {
 	}
 }
 
-flag CEngine::GetForceAttack() {
+flag CEngine::GetAttack() {
 	mem.Get(fForceAttack);
+	fForceAttack.val &= KS_TOGGLE | KS_TICK;
 	return fForceAttack.val;
 }
 
-void CEngine::ForceAttack(flag ksType) {
-	if (GetForceAttack() ^ ksType) {
-		fForceAttack.val |= ksType;
+void CEngine::SetAttack(flag ksType) {
+	if (GetAttack() ^ ksType) {
+		fForceAttack.val ^= ksType;
 		mem.Set(fForceAttack);
 	}
 }
 
-flag CEngine::GetForceJump() {
+flag CEngine::GetJump() {
 	mem.Get(fForceJump);
+	fForceJump.val &= KS_TOGGLE | KS_TICK;
 	return fForceJump.val;
 }
 
-void CEngine::ForceJump(flag ksType) {
-	if (GetForceJump() ^ ksType) {
-		fForceJump.val |= ksType;
+void CEngine::SetJump(flag ksType) {
+	if (GetJump() ^ ksType) {
+		fForceJump.val ^= ksType;
 		mem.Set(fForceJump);
 	}
 }
@@ -106,6 +108,7 @@ ETeam CEngine::GetTeam() {
 flag CEngine::GetFlags() {
 	lp_fFlags.loc = GetLocalPlayer() + lp_fFlags.off;
 	mem.Get(lp_fFlags);
+	lp_fFlags.val &= FL_ONGROUND | FL_DUCKING;
 	return lp_fFlags.val;
 }
 

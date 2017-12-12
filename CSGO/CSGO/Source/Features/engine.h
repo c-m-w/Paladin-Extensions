@@ -12,10 +12,10 @@ public:
 	void SetViewAngle(angle_t);
 
 	// client - global
-	flag GetForceAttack();
-	void ForceAttack(flag);
-	flag GetForceJump();
-	void ForceJump(flag);
+	flag GetAttack();
+	void SetAttack(flag);
+	flag GetJump();
+	void SetJump(flag);
 	float GetSensitivity();
 	void SetSensitivity(float);
 

@@ -2,9 +2,9 @@
 
 void CAutomation::AutoJump() {
 	if (eng.GetFlags() & FL_ONGROUND) {
-		eng.ForceJump(KS_TICK);
+		eng.SetJump(KS_TICK);
 	} else {
-		eng.ForceJump(~KS_TOGGLE);
+		eng.SetJump(~KS_TOGGLE);
 	}
 	eng.WaitTicks(1);
 }
@@ -16,9 +16,9 @@ void CAutomation::AutoJumpThrow() {
 		eng.GetActiveWeaponIndex() == EWeapon::MOLOTOV ||
 		eng.GetActiveWeaponIndex() == EWeapon::DECOY ||
 		eng.GetActiveWeaponIndex() == EWeapon::INCGRENADE){
-		if (eng.GetForceAttack() & KS_TOGGLE) {
+		if (eng.GetAttack() & KS_TOGGLE) {
 			if (eng.GetFlags() ^ FL_ONGROUND) {
-				eng.ForceAttack(~KS_TOGGLE);
+				eng.SetAttack(~KS_TOGGLE);
 			}
 		}
 	}
@@ -37,9 +37,9 @@ void CAutomation::AutoPistol() {
 		eng.GetActiveWeaponIndex() == EWeapon::CZ75A ||
 		eng.GetActiveWeaponIndex() == EWeapon::AWP || 
 		eng.GetActiveWeaponIndex() == EWeapon::SSG08)) {
-		eng.ForceAttack(KS_TICK);
+		eng.SetAttack(KS_TICK);
 	} else {
-		eng.ForceAttack(~KS_TOGGLE);
+		eng.SetAttack(~KS_TOGGLE);
 	}
 	eng.WaitTicks(1);
 }
