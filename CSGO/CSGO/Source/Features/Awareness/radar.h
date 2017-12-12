@@ -1,8 +1,9 @@
 #pragma once
 
-class CRadar {
+class CRadar
+{
 public:
-	void Radar();
+	void Radar( );
 };
 
 extern CRadar rad;

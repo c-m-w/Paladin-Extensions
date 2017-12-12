@@ -1,8 +1,9 @@
 #pragma once
 
-class CNoFlash {
+class CNoFlash
+{
 public:
-	void NoFlash();
+	void NoFlash( );
 };
 
 extern CNoFlash nof;

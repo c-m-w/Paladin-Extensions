@@ -1,9 +1,10 @@
 #pragma once
 
-class CHitSound {
+class CHitSound
+{
 	total totalPreviousHitsOnServer = 0;
 public:
-	void PlaySoundOnHit();
+	void PlaySoundOnHit( );
 };
 
 extern CHitSound hit;

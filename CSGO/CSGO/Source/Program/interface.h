@@ -1,6 +1,6 @@
 #pragma once
 
-class CInterface {
-};
+class CInterface
+{};
 
 extern CInterface mnu;

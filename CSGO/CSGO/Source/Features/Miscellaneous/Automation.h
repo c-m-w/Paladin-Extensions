@@ -1,10 +1,11 @@
 #pragma once
 
-class CAutomation {
+class CAutomation
+{
 public:
-	void AutoJump();
-	void AutoNade();
-	void AutoShoot();
+	void AutoJump( );
+	void AutoNade( );
+	void AutoShoot( );
 };
 
 extern CAutomation aut;
