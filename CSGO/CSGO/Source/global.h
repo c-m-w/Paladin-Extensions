@@ -5,21 +5,26 @@
 typedef long long moment;
 
 extern HINSTANCE hInst;
-extern std::atomic<bool> bExitState;
-extern std::vector<std::thread> tThreads;
+extern std::atomic< bool > bExitState;
+extern std::vector< std::thread > tThreads;
 
-void Wait(unsigned int);
-moment GetTime();
+void Wait( unsigned int );
+moment GetTime( );
 
-template<typename datatype> void Limit(datatype &xStatus, datatype xMinimum, datatype xMaximum) {
-	if (xMinimum > xStatus) {
+template< typename datatype > void Limit( datatype &xStatus, datatype xMinimum, datatype xMaximum )
+{
+	if ( xMinimum > xStatus )
+	{
 		xStatus = xMinimum;
-	} else if (xStatus > xMaximum) {
+	}
+	else if ( xStatus > xMaximum )
+	{
 		xStatus = xMaximum;
 	}
 }
 
-enum class EQuitReasons {
+enum class EQuitReasons
+{
 	UNKNOWN = -1,
 	LOAD_LIBRARY_ERROR,
 	SUCCESS,
@@ -27,20 +32,23 @@ enum class EQuitReasons {
 	PANIC
 };
 
-enum class EPremium {
+enum class EPremium
+{
 	BANNED = -2,
 	EXPIRED = -1,
 	NOT_PREMIUM,
 	PREMIUM
 };
 
-enum class EElevation {
+enum class EElevation
+{
 	UNTESTED = -1,
 	NOT_ADMIN,
 	ADMIN
 };
 
-enum class EAnticheatStatus {
+enum class EAnticheatStatus
+{
 	NOT_FOUND = -1,
 	FAILED,
 	KILLED
@@ -48,6 +56,7 @@ enum class EAnticheatStatus {
 
 /// CSGO stuff
 
+#define MAX_ANGLE_DELTA sqrt(22.f * 22.f + 22.f * 22.f) // TODO
 #define FL_ONGROUND (1 << 0) // At rest / on the ground
 #define FL_DUCKING (1 << 1)  // Player flag -- Player is fully crouched
 #define KS_PRESS (1 << 0)    // +command
@@ -58,32 +67,37 @@ typedef unsigned short total;
 typedef unsigned __int8 uint8;
 typedef DWORD handle;
 
-struct angle_t {
+struct angle_t
+{
 	float pitch, yaw, roll; // y, x, z
-	bool operator==(angle_t rhs);
-	bool operator!=(angle_t rhs);
-	angle_t operator+(angle_t rhs);
-	angle_t operator-(angle_t rhs);
-	angle_t &operator+=(angle_t rhs);
-	angle_t &operator-=(angle_t rhs);
+	bool operator==( angle_t );
+	bool operator!=( angle_t );
+	angle_t operator+( angle_t );
+	angle_t operator-( angle_t );
+	angle_t &operator+=( angle_t );
+	angle_t &operator-=( angle_t );
 };
 
-struct color_t {
+struct color_t
+{
 	uint8 r, g, b, a;
 };
 
-struct coordinate_t {
+struct coordinate_t
+{
 	float x, y, z;
 };
 
-struct vector_t {
+struct vector_t
+{
 	float dx, dy, dz;
 
-	vector_t();
-	vector_t(coordinate_t cOrigin, coordinate_t cEndPoint);
+	vector_t( );
+	vector_t( coordinate_t, coordinate_t );
 };
 
-class CGlobalVars {
+class CGlobalVars
+{
 public:
 	float realtime;
 	int framecount;
@@ -97,35 +111,40 @@ public:
 	float interpolation_amount;
 };
 
-enum class EMoveType {
-	NONE, // never moves
-	WALK = 2, // Player only - moving on the ground
-	NOCLIP = 8, // No gravity, no collisions, still do velocity/avelocity
-	LADDER, // Used by players only when going onto a ladder
-	OBSERVER, // Observer movement, depends on player's observer mode
+enum class EMoveType
+{
+	NONE,// never moves
+	WALK = 2,// Player only - moving on the ground
+	NOCLIP = 8,// No gravity, no collisions, still do velocity/avelocity
+	LADDER,// Used by players only when going onto a ladder
+	OBSERVER,// Observer movement, depends on player's observer mode
 };
 
-enum class ESignOnState {
+enum class ESignOnState
+{
 	CONNECTED = 2,
 	SPAWNED = 5,
 	FULL,
 	CHANGELEVEL
 };
 
-enum class ELifeState {
+enum class ELifeState
+{
 	ALIVE,
 	KILLCAM,
 	DEAD
 };
 
-enum class ETeam {
+enum class ETeam
+{
 	NONE,
 	SPECTATOR,
 	TERRORISTS,
 	COUNTERTERRORISTS
 };
 
-enum class EWeaponType {
+enum class EWeaponType
+{
 	KNIVES,
 	PISTOLS,
 	SMGS,
@@ -137,7 +156,8 @@ enum class EWeaponType {
 	GRENADES = 9
 };
 
-enum class EWeapon {
+enum class EWeapon
+{
 	DEAGLE = 1,
 	ELITE,
 	FIVESEVEN,

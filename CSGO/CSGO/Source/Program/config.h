@@ -1,25 +1,29 @@
 #pragma once
 
-struct version_t {
+struct version_t
+{
 	uint8 upper, lower;
 
-	bool operator==(const version_t &rhs) {
-		if (upper == rhs.upper && lower == rhs.lower) {
+	bool operator==( const version_t &rhs )
+	{
+		if ( upper == rhs.upper && lower == rhs.lower )
+		{
 			return true;
 		}
 		return false;
 	}
 };
 
-class CConfig {
+class CConfig
+{
 	char cfgPath[255];
-	// read from config
-	template<typename datatype> void Read(char *szSetting, char *szSubSetting, datatype &xStatus) {
-	}
+	// read from config TODO
+	template< typename datatype > void Read( char *szSetting, char *szSubSetting, datatype &xStatus )
+	{ }
 
-	// write to config
-	template<typename datatype> void Write(char *szSetting, char *szSubSetting, datatype xStatus) {
-	}
+	// write to config TODO
+	template< typename datatype > void Write( char *szSetting, char *szSubSetting, datatype xStatus )
+	{ }
 
 public:
 	version_t verVersion;
@@ -31,7 +35,7 @@ public:
 	bool bCheckForAnticheat = true;
 #endif
 
-	// Keys
+	// Keys TODO rest of features
 	int iExitKey;
 	int iReloadKey;
 	int iAutoJumpKey;
@@ -43,13 +47,13 @@ public:
 	// Feature Settings
 	std::string strHitSoundLocation;
 
-	CConfig();
+	CConfig( );
 	// open config, create if doesn't exist
-	bool LoadConfig();
+	bool LoadConfig( );
 	// read loaded config, replace impossible values
-	bool ReadConfig();
+	bool ReadConfig( );
 	// set quit reason
-	~CConfig();
+	~CConfig( );
 };
 
 extern CConfig cfg;
