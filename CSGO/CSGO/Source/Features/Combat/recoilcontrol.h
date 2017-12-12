@@ -1,9 +1,10 @@
 #pragma once
 
-class CRecoilControl {
-	angle_t aOldAimPunch = {0,0,0};
+class CRecoilControl
+{
+	angle_t aOldAimPunch = { 0, 0, 0 };
 public:
-	void RecoilControl();
+	void RecoilControl( );
 };
 
 extern CRecoilControl rcs;
