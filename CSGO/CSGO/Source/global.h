@@ -2,20 +2,20 @@
 
 #define PI 3.141593f
 
-typedef long long Time;
+typedef long long moment;
 
 extern HINSTANCE hInst;
 extern std::atomic<bool> bExitState;
 extern std::vector<std::thread> tThreads;
 
 void Wait(unsigned int);
-Time GetTime();
+moment GetTime();
 
-template<typename datatype> void Limit(datatype &Status, datatype Minimum, datatype Maximum) {
-	if (Minimum > Status) {
-		Status = Minimum;
-	} else if (Status > Maximum) {
-		Status = Maximum;
+template<typename datatype> void Limit(datatype &xStatus, datatype xMinimum, datatype xMaximum) {
+	if (xMinimum > xStatus) {
+		xStatus = xMinimum;
+	} else if (xStatus > xMaximum) {
+		xStatus = xMaximum;
 	}
 }
 
@@ -53,33 +53,38 @@ enum class EAnticheatStatus {
 #define KS_TOGGLE (1 << 0)   // Holding down button
 #define KS_TICK (1 << 1)     // Input for one tick
 
-typedef unsigned int frame;
+typedef unsigned int flag;
 typedef unsigned short total;
 typedef unsigned __int8 uint8;
 typedef DWORD handle;
 
-struct angle {
+struct angle_t {
 	float pitch, yaw, roll; // y, x, z
-	bool operator==(angle rhs);
-	bool operator!=(angle rhs);
+	bool operator==(angle_t rhs);
+	bool operator!=(angle_t rhs);
+	angle_t operator+(angle_t rhs);
+	angle_t operator-(angle_t rhs);
+	angle_t &operator+=(angle_t rhs);
+	angle_t &operator-=(angle_t rhs);
 };
 
-struct color {
+struct color_t {
 	uint8 r, g, b, a;
 };
 
-struct coordinate {
+struct coordinate_t {
 	float x, y, z;
 };
 
-struct vector {
+struct vector_t {
 	float dx, dy, dz;
 
-	vector();
-	vector(coordinate cOrigin, coordinate cEndPoint);
+	vector_t();
+	vector_t(coordinate_t cOrigin, coordinate_t cEndPoint);
 };
 
-struct GlobalVars {
+class CGlobalVars {
+public:
 	float realtime;
 	int framecount;
 	float absoluteframetime;

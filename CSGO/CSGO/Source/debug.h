@@ -8,7 +8,7 @@
 #define LASTERR
 #endif
 
-enum DebugMessage {
+enum EDebugMessage {
 	SCS = 0, //Success
 	DBG = 1, //Debug
 	WRN = 2, //Warning
@@ -18,5 +18,5 @@ enum DebugMessage {
 
 extern std::string strLog;
 
-void LogDebugMsg(DebugMessage, char *, ...);
+void LogDebugMsg(EDebugMessage, char *, ...);
 void LogLastError();

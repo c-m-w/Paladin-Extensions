@@ -12,10 +12,10 @@ CConfig::CConfig() {
 }
 
 bool CConfig::LoadConfig() {
-	char cTemp[MAX_PATH];
-	GetModuleFileName(nullptr, cTemp, MAX_PATH);
+	char chTemp[MAX_PATH];
+	GetModuleFileName(nullptr, chTemp, MAX_PATH);
 	memset(cfgPath, 0, MAX_PATH);
-	strcpy_s(cfgPath, std::string(cTemp).substr(0, std::string(cTemp).find_last_of("/\\") + 1).c_str());
+	strcpy_s(cfgPath, std::string(chTemp).substr(0, std::string(chTemp).find_last_of("/\\") + 1).c_str());
 	strcat_s(cfgPath, "config.txt");
 	struct stat buffer;
 	if (stat(cfgPath, &buffer)) {
@@ -36,7 +36,7 @@ bool CConfig::LoadConfig() {
 }
 
 bool CConfig::ReadConfig() {
-	version verConfig;
+	version_t verConfig;
 	Read("Info", "Version", verConfig);
 	if (verVersion == verConfig) {
 		Read("Key Binds", "Terminate", iExitKey);

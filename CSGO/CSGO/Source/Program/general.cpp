@@ -28,18 +28,18 @@ void CGeneral::GetPremiumUsers() {
 	uPremiumUsers[4].bBanned = false;
 }
 
-bool CGeneral::CompareName(User uPremiumUser, User uCurrentUser) {
-	for (int n = 0; n < 256; n++) {
-		if (uPremiumUser.lpstrUsername[n] && !uCurrentUser.lpstrUsername[n]) {
+bool CGeneral::CompareName(user_t uPremiumUser, user_t uCurrentUser) {
+	for (int i = 0; i < 256; i++) {
+		if (uPremiumUser.lpstrUsername[i] && !uCurrentUser.lpstrUsername[i]) {
 			return false;
 		}
-		if (!uPremiumUser.lpstrUsername[n] && uCurrentUser.lpstrUsername[n]) {
+		if (!uPremiumUser.lpstrUsername[i] && uCurrentUser.lpstrUsername[i]) {
 			return false;
 		}
-		if (!uPremiumUser.lpstrUsername[n] && !uCurrentUser.lpstrUsername[n]) {
+		if (!uPremiumUser.lpstrUsername[i] && !uCurrentUser.lpstrUsername[i]) {
 			break;
 		}
-		if (uPremiumUser.lpstrUsername[n] != uCurrentUser.lpstrUsername[n]) {
+		if (uPremiumUser.lpstrUsername[i] != uCurrentUser.lpstrUsername[i]) {
 			return false;
 		}
 	}
@@ -52,16 +52,16 @@ EPremium CGeneral::CheckPremiumStatus() {
 		return EPremium::NOT_PREMIUM;
 	}
 	GetPremiumUsers();
-	User uCurrentUser;
-	char cBuffer[257];
+	user_t uCurrentUser;
+	char chBuffer[257];
 	DWORD dwBufferSize = 257;
-	GetUserNameA(cBuffer, &dwBufferSize);
-	uCurrentUser.lpstrUsername = cBuffer;
+	GetUserNameA(chBuffer, &dwBufferSize);
+	uCurrentUser.lpstrUsername = chBuffer;
 	LogDebugMsg(DBG, "Current User Username: %s", uCurrentUser.lpstrUsername);
-	int n = 0;
-	for (; n <= PREMIUM_USERS; n++) {
-		if (uPremiumUsers[n].bValid) {
-			if (uPremiumUsers[n].lpstrUsername && CompareName(uPremiumUsers[n], uCurrentUser)) {
+	int i = 0;
+	for (; i <= PREMIUM_USERS; i++) {
+		if (uPremiumUsers[i].bValid) {
+			if (uPremiumUsers[i].lpstrUsername && CompareName(uPremiumUsers[i], uCurrentUser)) {
 				break;
 			}
 		} else {
@@ -69,23 +69,23 @@ EPremium CGeneral::CheckPremiumStatus() {
 			return EPremium::NOT_PREMIUM;
 		}
 	}
-	LogDebugMsg(DBG, "Current User Database ID: %i", n);
+	LogDebugMsg(DBG, "Current User Database ID: %i", i);
 	SYSTEM_INFO siCurrentUser;
 	GetSystemInfo(&siCurrentUser);
 	uCurrentUser.iHardwareID = siCurrentUser.dwActiveProcessorMask * siCurrentUser.dwNumberOfProcessors;
 	LogDebugMsg(DBG, "Current User HWID: %i", uCurrentUser.iHardwareID);
-	if (uCurrentUser.iHardwareID != uPremiumUsers[n].iHardwareID) {
+	if (uCurrentUser.iHardwareID != uPremiumUsers[i].iHardwareID) {
 		LogDebugMsg(ERR, "HWID did not match any users in database");
 		return EPremium::NOT_PREMIUM;
 	}
-	uCurrentUser.tExpiration = uPremiumUsers[n].tExpiration;
+	uCurrentUser.tExpiration = uPremiumUsers[i].tExpiration;
 	LogDebugMsg(DBG, "Current User Premium Time: %i", uCurrentUser.tExpiration);
 	if (uCurrentUser.tExpiration < GetTime()) {
 		LogDebugMsg(ERR, "%i < %i", uCurrentUser.tExpiration, GetTime());
 		LogDebugMsg(ERR, "User is out of premium");
 		return EPremium::EXPIRED;
 	}
-	uCurrentUser.bBanned = uPremiumUsers[n].bBanned;
+	uCurrentUser.bBanned = uPremiumUsers[i].bBanned;
 	if (uCurrentUser.bBanned) {
 		LogDebugMsg(SCS, "User is banned");
 		return EPremium::BANNED;
@@ -94,40 +94,40 @@ EPremium CGeneral::CheckPremiumStatus() {
 	return EPremium::PREMIUM;
 }
 
-bool CGeneral::GetElevationState() {
+EElevation CGeneral::GetElevationState() {
 	HANDLE hTokenSelf;
 	TOKEN_ELEVATION teSelf;
 	DWORD dwReturnLength = sizeof(TOKEN_ELEVATION);
 	if (OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &hTokenSelf) &&
 		GetTokenInformation(hTokenSelf, TokenElevation, &teSelf, dwReturnLength, &dwReturnLength)) {
-		eElevationState = EElevation(bool(teSelf.TokenIsElevated));
+		eElevationState = EElevation(teSelf.TokenIsElevated);
 	} else {
 		eElevationState = EElevation::NOT_ADMIN;
 	}
 	CloseHandle(hTokenSelf);
-	return bool(eElevationState);
+	return eElevationState;
 }
 
-bool CGeneral::GetElevationState(HANDLE hTarget) {
+EElevation CGeneral::GetElevationState(HANDLE hTarget) {
 	HANDLE hTokenTarget;
 	TOKEN_ELEVATION teTarget;
 	DWORD dwReturnLength = sizeof(TOKEN_ELEVATION);
 	if (OpenProcessToken(hTarget, TOKEN_QUERY, &hTokenTarget) &&
 		GetTokenInformation(hTokenTarget, TokenElevation, &teTarget, dwReturnLength, &dwReturnLength)) {
 		CloseHandle(hTokenTarget);
-		return bool(teTarget.TokenIsElevated);
+		return EElevation(teTarget.TokenIsElevated);
 	}
 	CloseHandle(hTokenTarget);
-	return bool(EElevation::NOT_ADMIN);
+	return EElevation::NOT_ADMIN;
 }
 
-EAnticheatStatus CGeneral::KillAnticheat(LPCSTR cstrAnticheatName, char cAnticheatExe) {
+EAnticheatStatus CGeneral::KillAnticheat(LPCSTR cstrAnticheatName, char chAnticheatExe) {
 	if (eElevationState == EElevation::UNTESTED) {
 		GetElevationState();
 	}
 	if (FindWindowA(nullptr, cstrAnticheatName)) {
 		if (eElevationState == EElevation::ADMIN) {
-			system("taskkill /F /T /IM " + cAnticheatExe);
+			system("taskkill /F /T /IM " + chAnticheatExe);
 			LogDebugMsg(WRN, "Found anticheat %s open and terminated it", cstrAnticheatName);
 			return EAnticheatStatus::KILLED;
 		}

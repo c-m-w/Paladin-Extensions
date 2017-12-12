@@ -1,54 +1,54 @@
 #include "../dllmain.h"
 
-GlobalVars CEngine::GetGlobalVars() {
+CGlobalVars CEngine::GetGlobalVars() {
 	mem.Get(dwGlobalVars);
 	return dwGlobalVars.val;
 }
 
 DWORD CEngine::GetClientState() {
-	mem.Get(dwClientState);
-	return dwClientState.val;
+	mem.Get(pdwClientState);
+	return pdwClientState.val;
 }
 
 ESignOnState CEngine::GetSignOnState() {
 	GetClientState();
-	cs_soSignOnState.loc = dwClientState.val + cs_soSignOnState.off;
-	mem.Get(dwClientState);
+	cs_soSignOnState.loc = pdwClientState.val + cs_soSignOnState.off;
+	mem.Get(pdwClientState);
 	return cs_soSignOnState.val;
 }
 
-angle CEngine::GetViewAngle() {
+angle_t CEngine::GetViewAngle() {
 	GetClientState();
-	cs_aViewAngle.loc = dwClientState.val + cs_aViewAngle.off;
+	cs_aViewAngle.loc = pdwClientState.val + cs_aViewAngle.off;
 	mem.Get(cs_aViewAngle);
 	return cs_aViewAngle.val;
 }
 
-void CEngine::SetViewAngle(angle cs_aNewViewAngle) {
+void CEngine::SetViewAngle(angle_t cs_aNewViewAngle) {
 	if (GetViewAngle() != cs_aNewViewAngle) {
 		cs_aViewAngle.val = cs_aNewViewAngle;
 		mem.Set(cs_aViewAngle);
 	}
 }
 
-frame CEngine::GetForceAttack() {
+flag CEngine::GetForceAttack() {
 	mem.Get(fForceAttack);
 	return fForceAttack.val;
 }
 
-void CEngine::ForceAttack(frame ksType) {
+void CEngine::ForceAttack(flag ksType) {
 	if (GetForceAttack() ^ ksType) {
 		fForceAttack.val |= ksType;
 		mem.Set(fForceAttack);
 	}
 }
 
-frame CEngine::GetForceJump() {
+flag CEngine::GetForceJump() {
 	mem.Get(fForceJump);
 	return fForceJump.val;
 }
 
-void CEngine::ForceJump(frame ksType) {
+void CEngine::ForceJump(flag ksType) {
 	if (GetForceJump() ^ ksType) {
 		fForceJump.val |= ksType;
 		mem.Set(fForceJump);
@@ -68,11 +68,11 @@ void CEngine::SetSensitivity(float flNewSensitivity) {
 }
 
 DWORD CEngine::GetEntityBase(int iEntity) {
-	DWORD dwOldEntityList = dwEntityList.loc;
-	dwEntityList.loc += (iEntity - 1) * 0x10;
-	mem.Get(dwEntityList);
-	dwEntityList.loc = dwOldEntityList;
-	return dwEntityList.val;
+	DWORD dwOldEntityList = pdwEntityList.loc;
+	pdwEntityList.loc += (iEntity - 1) * 0x10;
+	mem.Get(pdwEntityList);
+	pdwEntityList.loc = dwOldEntityList;
+	return pdwEntityList.val;
 }
 
 ETeam CEngine::GetEntityTeam(int iEntity) {
@@ -95,41 +95,41 @@ void CEngine::SetEntitySpotted(int iEntity, bool el_bNewSpotted) {
 }
 
 DWORD CEngine::GetLocalPlayer() {
-	mem.Get(dwLocalPlayer);
-	return dwLocalPlayer.val;
+	mem.Get(pdwLocalPlayer);
+	return pdwLocalPlayer.val;
 }
 
 ETeam CEngine::GetTeam() {
 	GetLocalPlayer();
-	lp_tTeamNum.loc = dwLocalPlayer.val + lp_tTeamNum.off;
+	lp_tTeamNum.loc = pdwLocalPlayer.val + lp_tTeamNum.off;
 	mem.Get(lp_tTeamNum);
 	return lp_tTeamNum.val;
 }
 
-frame CEngine::GetFlags() {
+flag CEngine::GetFlags() {
 	GetLocalPlayer();
-	lp_fFlags.loc = dwLocalPlayer.val + lp_fFlags.off;
+	lp_fFlags.loc = pdwLocalPlayer.val + lp_fFlags.off;
 	mem.Get(lp_fFlags);
 	return lp_fFlags.val;
 }
 
 EMoveType CEngine::GetMoveType() {
 	GetLocalPlayer();
-	lp_mMoveType.loc = dwLocalPlayer.val + lp_mMoveType.off;
+	lp_mMoveType.loc = pdwLocalPlayer.val + lp_mMoveType.off;
 	mem.Get(lp_mMoveType);
 	return lp_mMoveType.val;
 }
 
-angle CEngine::GetAimPunch() {
+angle_t CEngine::GetAimPunch() {
 	GetLocalPlayer();
-	lp_aAimPunch.loc = dwLocalPlayer.val + lp_aAimPunch.off;
+	lp_aAimPunch.loc = pdwLocalPlayer.val + lp_aAimPunch.off;
 	mem.Get(lp_aAimPunch);
 	return lp_aAimPunch.val;
 }
 
 int CEngine::GetFieldOfView() {
 	GetLocalPlayer();
-	lp_iFOV.loc = dwLocalPlayer.val + lp_iFOV.off;
+	lp_iFOV.loc = pdwLocalPlayer.val + lp_iFOV.off;
 	mem.Get(lp_iFOV);
 	return lp_iFOV.val;
 }
@@ -143,14 +143,14 @@ void CEngine::SetFieldOfView(int lp_iNewFOV) {
 
 total CEngine::GetHitsOnServer() {
 	GetLocalPlayer();
-	lp_totalHitsOnServer.loc = dwLocalPlayer.val + lp_totalHitsOnServer.off;
+	lp_totalHitsOnServer.loc = pdwLocalPlayer.val + lp_totalHitsOnServer.off;
 	mem.Get(lp_totalHitsOnServer);
 	return lp_totalHitsOnServer.val;
 }
 
 float CEngine::GetFlashMaxAlpha() {
 	GetLocalPlayer();
-	lp_flFlashMaxAlpha.loc = dwLocalPlayer.val + lp_flFlashMaxAlpha.off;
+	lp_flFlashMaxAlpha.loc = pdwLocalPlayer.val + lp_flFlashMaxAlpha.off;
 	mem.Get(lp_flFlashMaxAlpha);
 	return lp_flFlashMaxAlpha.val;
 }
@@ -164,14 +164,14 @@ void CEngine::SetFlashMaxAlpha(float lp_flNewFlashMaxAlpha) {
 
 handle CEngine::GetActiveWeaponHandle() {
 	GetLocalPlayer();
-	lp_hActiveWeapon.loc = dwLocalPlayer.val + lp_hActiveWeapon.off;
+	lp_hActiveWeapon.loc = pdwLocalPlayer.val + lp_hActiveWeapon.off;
 	mem.Get(lp_hActiveWeapon);
 	return lp_hActiveWeapon.val;
 }
 
 DWORD CEngine::GetActiveWeaponEntity() {
 	DWORD dwActiveWeaponEntityID = GetActiveWeaponHandle() & 0xFFF;
-	Address<DWORD> dwWeaponEntity = {dwEntityList.loc + (dwActiveWeaponEntityID - 1) * 0x10};
+	address_t<DWORD> dwWeaponEntity = {pdwEntityList.loc + (dwActiveWeaponEntityID - 1) * 0x10};
 	mem.Get(dwWeaponEntity);
 	return dwWeaponEntity.val;
 }
@@ -190,7 +190,7 @@ void CEngine::WaitTicks(int iTicksToWait) {
 	}
 }
 
-angle CEngine::ClampAngle(angle aToClamp) {
+angle_t CEngine::ClampAngle(angle_t aToClamp) {
 	if (aToClamp.pitch > 89) {
 		aToClamp.pitch = 89;
 	} else if (aToClamp.pitch < -89) {
@@ -210,15 +210,15 @@ angle CEngine::ClampAngle(angle aToClamp) {
 	return aToClamp;
 }
 
-angle CEngine::NormalizeAngle(angle aToNormalize) {
-	angle aNewAngle;
+angle_t CEngine::NormalizeAngle(angle_t aToNormalize) {
+	angle_t aNewAngle = {};
 	// TODO cap 31 degrees per tick
 	return aNewAngle;
 }
 
-angle CEngine::VectorToAngle(coordinate cOrigin, coordinate cEndPoint) {
-	angle aReturn = {0,0,0};
-	vector vDelta(cOrigin, cEndPoint);
+angle_t CEngine::VectorToAngle(coordinate_t cOrigin, coordinate_t cEndPoint) {
+	angle_t aReturn = {0,0,0};
+	vector_t vDelta(cOrigin, cEndPoint);
 	if (vDelta.dy == 0 && vDelta.dx == 0) {
 		aReturn.yaw = 0;
 		if (vDelta.dz > 0) {

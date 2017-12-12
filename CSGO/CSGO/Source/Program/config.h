@@ -1,9 +1,9 @@
 #pragma once
 
-struct version {
+struct version_t {
 	uint8 upper, lower;
 
-	bool operator==(const version &rhs) {
+	bool operator==(const version_t &rhs) {
 		if (upper == rhs.upper && lower == rhs.lower) {
 			return true;
 		}
@@ -14,15 +14,15 @@ struct version {
 class CConfig {
 	char cfgPath[255];
 	// read from config
-	template<typename datatype> void Read(char *cSetting, char *cSubSetting, datatype &Status) {
+	template<typename datatype> void Read(char *szSetting, char *szSubSetting, datatype &xStatus) {
 	}
 
 	// write to config
-	template<typename datatype> void Write(char *cSetting, char *cSubSetting, datatype Status) {
+	template<typename datatype> void Write(char *szSetting, char *szSubSetting, datatype xStatus) {
 	}
 
 public:
-	version verVersion;
+	version_t verVersion;
 	EQuitReasons iQuitReason;
 
 #ifdef _DEBUG

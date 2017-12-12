@@ -61,9 +61,9 @@ void Cheat() {
 	EPremium uCurrentUserPremiumStatus = all.CheckPremiumStatus();
 	if (uCurrentUserPremiumStatus == EPremium::BANNED) {
 		//TODO BANNED: DELETE FILE
-		char cTemp[MAX_PATH];
-		GetModuleFileName(hInst, cTemp, MAX_PATH);
-		remove(std::string(cTemp).c_str());
+		char chTemp[MAX_PATH];
+		GetModuleFileName(hInst, chTemp, MAX_PATH);
+		remove(std::string(chTemp).c_str());
 		LogLastError();
 		Panic();
 		return;
@@ -80,7 +80,7 @@ void Cheat() {
 	if (uCurrentUserPremiumStatus == EPremium::PREMIUM) {
 		LogDebugMsg(SCS, "Authenticated!");
 	}
-	if (!all.GetElevationState()) {
+	if (all.GetElevationState() == EElevation::NOT_ADMIN) {
 		MessageBox(nullptr, "Warning 1: Elevation Token State -> No access\nDid you run the middleman as admin?", "Paladin CSGO", MB_ICONWARNING | MB_OK);
 	}
 	if (cfg.bCheckForAnticheat) {
@@ -187,41 +187,41 @@ void CleanUp() {
 #endif
 }
 
-void Feature(bool bFeatureState, unsigned int uiWait, std::function<void()> fnFeature, int iFeatureKey) {
+void Feature(bool bFeatureState, unsigned int nWait, std::function<void()> fnFeature, int iFeatureKey) {
 	while (!bExitState) {
 		while (bFeatureState) {
 			if (GetAsyncKeyState(iFeatureKey)) {
 				fnFeature();
 			} else {
-				if (uiWait) {
-					Wait(uiWait);
+				if (nWait) {
+					Wait(nWait);
 				}
 			}
 			if (bExitState) {
 				return;
 			}
 		}
-		if (uiWait) {
-			Wait(uiWait);
+		if (nWait) {
+			Wait(nWait);
 		} else {
 			Wait(1);
 		}
 	}
 }
 
-void Feature(bool bFeatureState, unsigned int uiWait, std::function<void()> fnFeature) {
+void Feature(bool bFeatureState, unsigned int nWait, std::function<void()> fnFeature) {
 	while (!bExitState) {
 		while (bFeatureState) {
 			fnFeature();
-			if (uiWait) {
-				Wait(uiWait);
+			if (nWait) {
+				Wait(nWait);
 			}
 			if (bExitState) {
 				return;
 			}
 		}
-		if (uiWait) {
-			Wait(uiWait);
+		if (nWait) {
+			Wait(nWait);
 		} else {
 			Wait(1);
 		}

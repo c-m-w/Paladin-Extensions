@@ -1,6 +1,6 @@
 #pragma once
 
-template<typename datatype> struct Address {
+template<typename datatype> struct address_t {
 	DWORD off = 0; // offset
 	DWORD ptr = 0; // thisptr
 	DWORD loc = 0; // location
@@ -10,31 +10,31 @@ template<typename datatype> struct Address {
 namespace Addresses {
 	// global CEngine addresses
 	// CEngine pointer addresses
-	extern Address<GlobalVars> dwGlobalVars;
-	extern Address<DWORD> dwClientState;
-	extern Address<ESignOnState> cs_soSignOnState;
-	extern Address<angle> cs_aViewAngle;
+	extern address_t<CGlobalVars> dwGlobalVars;
+	extern address_t<DWORD> pdwClientState;
+	extern address_t<ESignOnState> cs_soSignOnState;
+	extern address_t<angle_t> cs_aViewAngle;
 	// global Client addresses
-	extern Address<float> flSensitivity;
-	extern Address<frame> fForceAttack;
-	extern Address<frame> fForceJump;
+	extern address_t<float> flSensitivity;
+	extern address_t<flag> fForceAttack;
+	extern address_t<flag> fForceJump;
 	// Client pointer addresses
-	extern Address<DWORD> dwEntityList;
-	extern Address<ETeam> el_tTeamNum;
-	extern Address<bool> el_bSpotted;
+	extern address_t<DWORD> pdwEntityList;
+	extern address_t<ETeam> el_tTeamNum;
+	extern address_t<bool> el_bSpotted;
 
-	extern Address<DWORD> dwLocalPlayer;
+	extern address_t<DWORD> pdwLocalPlayer;
 
-	extern Address<ETeam> lp_tTeamNum;
-	extern Address<frame> lp_fFlags;
-	extern Address<EMoveType> lp_mMoveType;
-	extern Address<angle> lp_aAimPunch;
-	extern Address<int> lp_iFOV;
-	extern Address<total> lp_totalHitsOnServer;
-	extern Address<float> lp_flFlashMaxAlpha;
+	extern address_t<ETeam> lp_tTeamNum;
+	extern address_t<flag> lp_fFlags;
+	extern address_t<EMoveType> lp_mMoveType;
+	extern address_t<angle_t> lp_aAimPunch;
+	extern address_t<int> lp_iFOV;
+	extern address_t<total> lp_totalHitsOnServer;
+	extern address_t<float> lp_flFlashMaxAlpha;
 
-	extern Address<handle> lp_hActiveWeapon;
-	extern Address<float> aw_flNextPrimaryAttack;
+	extern address_t<handle> lp_hActiveWeapon;
+	extern address_t<float> aw_flNextPrimaryAttack;
 }
 
 using namespace Addresses;
@@ -48,11 +48,11 @@ class CMemoryManager {
 public:
 	bool AttachToGame();
 
-	DWORD FindPattern(BYTE * mask, char * szMask, const DWORD address, const DWORD length);
+	DWORD FindPattern(BYTE *, char *, DWORD, DWORD);
 
 	void InitializeAddresses();
 
-	template<class datatype> bool Get(Address<datatype> &adrRead) {
+	template<typename datatype> bool Get(address_t<datatype> &adrRead) {
 		if (adrRead.loc) {
 			if (adrRead.ptr) {
 				DWORD dwXor;
@@ -65,7 +65,7 @@ public:
 		return false;
 	}
 
-	template<class datatype> bool Set(Address<datatype> &adrWrite) {
+	template<typename datatype> bool Set(address_t<datatype> &adrWrite) {
 		if (adrWrite.loc) {
 			if (adrWrite.ptr) {
 				DWORD dwXor = *reinterpret_cast<DWORD*>(&adrWrite.val) ^ adrWrite.ptr;

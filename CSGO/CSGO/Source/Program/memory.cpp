@@ -3,31 +3,31 @@
 namespace Addresses {
 	// global CEngine addresses
 	// CEngine pointer addresses
-	Address<GlobalVars> dwGlobalVars;
-	Address<DWORD> dwClientState;
-	Address<ESignOnState> cs_soSignOnState;
-	Address<angle> cs_aViewAngle;
+	address_t<CGlobalVars> dwGlobalVars;
+	address_t<DWORD> pdwClientState;
+	address_t<ESignOnState> cs_soSignOnState;
+	address_t<angle_t> cs_aViewAngle;
 	// global Client addresses
-	Address<float> flSensitivity;
-	Address<frame> fForceAttack;
-	Address<frame> fForceJump;
+	address_t<float> flSensitivity;
+	address_t<flag> fForceAttack;
+	address_t<flag> fForceJump;
 	// Client pointer addresses
-	Address<DWORD> dwEntityList;
-	Address<ETeam> el_tTeamNum;
-	Address<bool> el_bSpotted;
+	address_t<DWORD> pdwEntityList;
+	address_t<ETeam> el_tTeamNum;
+	address_t<bool> el_bSpotted;
 
-	Address<DWORD> dwLocalPlayer;
+	address_t<DWORD> pdwLocalPlayer;
 
-	Address<ETeam> lp_tTeamNum;
-	Address<frame> lp_fFlags;
-	Address<EMoveType> lp_mMoveType;
-	Address<angle> lp_aAimPunch;
-	Address<int> lp_iFOV;
-	Address<total> lp_totalHitsOnServer;
-	Address<float> lp_flFlashMaxAlpha;
+	address_t<ETeam> lp_tTeamNum;
+	address_t<flag> lp_fFlags;
+	address_t<EMoveType> lp_mMoveType;
+	address_t<angle_t> lp_aAimPunch;
+	address_t<int> lp_iFOV;
+	address_t<total> lp_totalHitsOnServer;
+	address_t<float> lp_flFlashMaxAlpha;
 
-	Address<handle> lp_hActiveWeapon;
-	Address<float> aw_flNextPrimaryAttack;
+	address_t<handle> lp_hActiveWeapon;
+	address_t<float> aw_flNextPrimaryAttack;
 }
 
 CMemoryManager::~CMemoryManager() {
@@ -41,7 +41,7 @@ bool CMemoryManager::AttachToGame() {
 		LogDebugMsg(DBG, "Searching for CSGO");
 		Wait(1000);
 	}
-	if (!all.GetElevationState() && all.GetElevationState() != all.GetElevationState(hGame)) {
+	if (all.GetElevationState() != all.GetElevationState(hGame) && all.GetElevationState() != EElevation::ADMIN) {
 		LogDebugMsg(ERR, "No permissions");
 		return false;
 	}
@@ -52,7 +52,7 @@ bool CMemoryManager::AttachToGame() {
 	}
 	LogDebugMsg(SCS, "Attached to game");
 	HANDLE hSnapshot;
-	for (int n = 0; n < 5; n++, Wait(2000)) {
+	for (int i = 0; i < 5; i++, Wait(2000)) {
 		do {
 			SetLastError(0);
 			hSnapshot = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, dwProcessID);
@@ -89,25 +89,25 @@ bool CMemoryManager::AttachToGame() {
 	return false;
 }
 
-DWORD CMemoryManager::FindPattern(BYTE * bMask, char * cMask, DWORD dwAddress, DWORD dwLength) {
-	DWORD dwDataLength = strlen(cMask);
+DWORD CMemoryManager::FindPattern(BYTE * bMask, char * szMask, DWORD dwAddress, DWORD dwLength) {
+	DWORD dwDataLength = strlen(szMask);
 	BYTE * bData = new BYTE[dwDataLength + 1];
 	SIZE_T sRead;
-	for (DWORD i = 0; i < dwLength; i++) {
-		auto dwCurrentAddress = dwAddress + i;
+	for (DWORD dw = 0; dw < dwLength; dw++) {
+		auto dwCurrentAddress = dwAddress + dw;
 		bool bSuccess = ReadProcessMemory(hGame, LPVOID(dwCurrentAddress), bData, dwDataLength, &sRead);
 		if (!bSuccess || sRead == 0) {
 			continue;
 		}
-		while (*cMask) {
-			++cMask;
+		while (*szMask) {
+			++szMask;
 			++bData;
 			++bMask;
-			if (*cMask == 'x' && *bData != *bMask) {
+			if (*szMask == 'x' && *bData != *bMask) {
 				break;
 			}
 			delete[] bData;
-			return dwAddress + i;
+			return dwAddress + dw;
 		}
 	}
 	delete[] bData;
@@ -119,7 +119,7 @@ void CMemoryManager::InitializeAddresses() {
 	// global Engine addresses
 	dwGlobalVars = {0x57D550};
 	// Engine pointer addresses
-	dwClientState = {0x57D84C};
+	pdwClientState = {0x57D84C};
 	cs_soSignOnState = {0x108};
 	cs_aViewAngle = {0x4D10};
 	// global Client addresses
@@ -127,10 +127,10 @@ void CMemoryManager::InitializeAddresses() {
 	fForceAttack = {0x2EB9EAC};
 	fForceJump = {0x4F0ED64};
 	// Client pointer addresses
-	dwEntityList = {0x4A77AFC};
+	pdwEntityList = {0x4A77AFC};
 	el_tTeamNum = {0xF0};
 	el_bSpotted = {0x939};
-	dwLocalPlayer = {0xA9ADEC};
+	pdwLocalPlayer = {0xA9ADEC};
 	lp_tTeamNum = {0xF0};
 	lp_fFlags = {0x100};
 	lp_mMoveType = {0x258};
@@ -143,13 +143,13 @@ void CMemoryManager::InitializeAddresses() {
 	LogDebugMsg(SCS, "Initialized bases");
 	// engine
 	dwGlobalVars.loc += dwEngineBase + dwGlobalVars.off;
-	dwClientState.loc += dwEngineBase + dwClientState.off;
+	pdwClientState.loc += dwEngineBase + pdwClientState.off;
 	// client
 	fForceJump.loc += dwClientBase + fForceJump.off;
 	fForceAttack.loc += dwClientBase + fForceAttack.off;
 	flSensitivity.loc += dwClientBase + flSensitivity.off;
-	dwEntityList.loc += dwClientBase + dwEntityList.off;
-	dwLocalPlayer.loc += dwClientBase + dwLocalPlayer.off;
+	pdwEntityList.loc += dwClientBase + pdwEntityList.off;
+	pdwLocalPlayer.loc += dwClientBase + pdwLocalPlayer.off;
 	LogDebugMsg(SCS, "Initialized addresses");
 }
 

@@ -29,7 +29,7 @@
  * * * * NUMS ARE ALL CAPITALS
  * * * CClass
  * * * struct_t
- * * * typedef
+ * * * TYPEDEF
  * * * b bool/byte
  * * * f flag
  * * * i int
@@ -45,6 +45,7 @@
  * * * fn function
  * * * p pointer
  * * * lp long pointer
+ * * * x unknown
  * * Variables must also include their inheritance prefix with an underscore (lp_fFlags for frame Local Player Flags)
  * Every function should be a verb (get, set, clamp)
  * * Instead of Alive or IsAlive, do GetLifeState

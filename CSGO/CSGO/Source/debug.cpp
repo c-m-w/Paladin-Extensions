@@ -2,10 +2,10 @@
 
 std::string strLog = "\0";
 
-void LogDebugMsg(DebugMessage type, char *msg, ...) {
+void LogDebugMsg(EDebugMessage dmType, char *szMessage, ...) {
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	if (hConsole && hConsole != INVALID_HANDLE_VALUE) {
-		switch (type) {
+		switch (dmType) {
 			case SCS:
 				SetConsoleTextAttribute(hConsole, 10);
 				printf("\n[SCS] ");
@@ -32,29 +32,29 @@ void LogDebugMsg(DebugMessage type, char *msg, ...) {
 		}
 		SetConsoleTextAttribute(hConsole, 7);
 		//Ideally we want to dynamically allocate this, might do later (for now, stick to a max of 2047 data characters)
-		char cBuffer[2048] = {'\0'};
+		char chBuffer[2048] = {'\0'};
 		va_list vaList;
-		va_start(vaList, msg);
-		vsnprintf(cBuffer, sizeof cBuffer, msg, vaList);
+		va_start(vaList, szMessage);
+		vsnprintf(chBuffer, sizeof chBuffer, szMessage, vaList);
 		va_end(vaList);
-		printf(cBuffer);
-		strLog.append(cBuffer);
+		printf(chBuffer);
+		strLog.append(chBuffer);
 	}
 }
 
 // Look up errors here: https://msdn.microsoft.com/en-us/library/windows/desktop/ms681381(v=vs.85).aspx
 void LogLastError() {
-	DWORD error = GetLastError();
-	if (!error) {
+	DWORD dwError = GetLastError();
+	if (!dwError) {
 		LogDebugMsg(LER, "No error");
 		return;
 	}
-	LPSTR errorString = nullptr;
-	if (!FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, error, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), LPSTR(&errorString), 0, nullptr)) {
-		LogDebugMsg(LER, "[0x%08lu] - Unable to retrieve error description", error);
+	LPSTR lpstrError = nullptr;
+	if (!FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, dwError, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), LPSTR(&lpstrError), 0, nullptr)) {
+		LogDebugMsg(LER, "[0x%08lu] - Unable to retrieve error description", dwError);
 	} else {
-		LogDebugMsg(LER, "[0x%08lu] - %s", error, errorString);
+		LogDebugMsg(LER, "[0x%08lu] - %s", dwError, lpstrError);
 	}
-	strLog.append(errorString);
-	LocalFree(errorString);
+	strLog.append(lpstrError);
+	LocalFree(lpstrError);
 }
