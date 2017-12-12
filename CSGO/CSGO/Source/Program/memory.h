@@ -33,8 +33,8 @@ namespace Addresses {
 	extern address_t<total> lp_totalHitsOnServer;
 	extern address_t<float> lp_flFlashMaxAlpha;
 
-	extern address_t<int> lp_iPlayerWeaponIndex;
 	extern address_t<handle> lp_hActiveWeapon;
+	extern address_t<EWeapon> lp_wpnPlayerWeaponIndex;
 	extern address_t<float> aw_flNextPrimaryAttack;
 }
 

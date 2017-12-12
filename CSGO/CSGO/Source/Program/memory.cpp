@@ -26,8 +26,8 @@ namespace Addresses {
 	address_t<total> lp_totalHitsOnServer;
 	address_t<float> lp_flFlashMaxAlpha;
 
-	address_t<int> lp_iPlayerWeaponIndex;
 	address_t<handle> lp_hActiveWeapon;
+	address_t<EWeapon> lp_wpnPlayerWeaponIndex;
 	address_t<float> aw_flNextPrimaryAttack;
 }
 
@@ -139,7 +139,7 @@ void CMemoryManager::InitializeAddresses() {
 	lp_iFOV = {0x330C};
 	lp_totalHitsOnServer = {0xA2C8};
 	lp_flFlashMaxAlpha = {0xA2F4};
-	lp_iPlayerWeaponIndex = {0x5D38};
+	lp_wpnPlayerWeaponIndex = {0x5D38};
 	lp_hActiveWeapon = {0x2EE8};
 	aw_flNextPrimaryAttack = {0x31D8};
 	LogDebugMsg(SCS, "Initialized bases");

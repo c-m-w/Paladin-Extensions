@@ -159,15 +159,15 @@ handle CEngine::GetActiveWeaponHandle() {
 	return lp_hActiveWeapon.val;
 }
 
-int CEngine::GetActiveWeaponIndex() {
-	lp_iPlayerWeaponIndex.loc = lp_iPlayerWeaponIndex.off + GetActiveWeaponEntity();
-	mem.Get(lp_iPlayerWeaponIndex);
-	return lp_iPlayerWeaponIndex.val;
-}
-
 DWORD CEngine::GetActiveWeaponEntity() {
 	DWORD dwActiveWeaponEntityID = GetActiveWeaponHandle() & 0xFFF;
 	return GetEntityBase(dwActiveWeaponEntityID);
+}
+
+EWeapon CEngine::GetActiveWeaponIndex() {
+	lp_iPlayerWeaponIndex.loc = GetActiveWeaponEntity() + lp_iPlayerWeaponIndex.off;
+	mem.Get(lp_iPlayerWeaponIndex);
+	return lp_iPlayerWeaponIndex.val;
 }
 
 float CEngine::GetNextPrimaryAttack() {
