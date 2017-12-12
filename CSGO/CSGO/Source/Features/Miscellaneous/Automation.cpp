@@ -18,14 +18,14 @@ void CAutomation::AutoJumpThrow() {
 		eng.GetActiveWeaponIndex() == EWeapon::INCGRENADE){
 		if (eng.GetForceAttack() & KS_TOGGLE) {
 			if (eng.GetFlags() ^ FL_ONGROUND) {
-				eng.ForceAttack(!KS_TOGGLE);
+				eng.ForceAttack(~KS_TOGGLE);
 			}
 		}
 	}
 }
 
 void CAutomation::AutoPistol() {
-	if(eng.GetNextPrimaryAttack() == 0.0f &&
+	if(eng.GetNextPrimaryAttack() == 0.f &&
 		(eng.GetActiveWeaponIndex() == EWeapon::DEAGLE ||
 		eng.GetActiveWeaponIndex() == EWeapon::ELITE || 
 		eng.GetActiveWeaponIndex() == EWeapon::FIVESEVEN || 
