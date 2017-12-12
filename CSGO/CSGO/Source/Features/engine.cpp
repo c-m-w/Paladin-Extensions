@@ -159,6 +159,12 @@ handle CEngine::GetActiveWeaponHandle() {
 	return lp_hActiveWeapon.val;
 }
 
+int CEngine::GetActiveWeaponIndex() {
+	lp_iPlayerWeaponIndex.loc = lp_iPlayerWeaponIndex.off + GetActiveWeaponEntity();
+	mem.Get(lp_iPlayerWeaponIndex);
+	return lp_iPlayerWeaponIndex.val;
+}
+
 DWORD CEngine::GetActiveWeaponEntity() {
 	DWORD dwActiveWeaponEntityID = GetActiveWeaponHandle() & 0xFFF;
 	return GetEntityBase(dwActiveWeaponEntityID);
