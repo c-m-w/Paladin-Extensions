@@ -32,6 +32,7 @@ namespace Addresses
 	extern address_t< EMoveType > lp_mMoveType;
 	extern address_t< angle_t > lp_aAimPunch;
 	extern address_t< int > lp_iFOV;
+	extern address_t< int > lp_iShotsFired;
 	extern address_t< total > lp_totalHitsOnServer;
 	extern address_t< float > lp_flFlashMaxAlpha;
 
@@ -64,7 +65,8 @@ public:
 			{
 				DWORD dwXor;
 				bool bSuccess = ReadProcessMemory( hGame, LPVOID( adrRead.loc ), &dwXor, sizeof(DWORD), nullptr );
-				adrRead.val = *reinterpret_cast< datatype* >( dwXor ^ adrRead.ptr );
+				dwXor ^= adrRead.ptr;
+				adrRead.val = *reinterpret_cast< datatype* >( &dwXor );
 				return bSuccess;
 			}
 			return ReadProcessMemory( hGame, LPVOID( adrRead.loc ), &adrRead.val, sizeof(datatype), nullptr );

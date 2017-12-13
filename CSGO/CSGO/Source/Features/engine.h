@@ -1,5 +1,4 @@
 #pragma once
-#define RANDOM( x ) eng.GetGlobalVars().tickcount % x
 
 class CEngine
 {
@@ -37,6 +36,7 @@ public:
 	angle_t GetAimPunch( );
 	int GetFieldOfView( );
 	void SetFieldOfView( int );
+	int GetShotsFired( );
 	total GetHitsOnServer( );
 	float GetFlashMaxAlpha( );
 	void SetFlashMaxAlpha( float );

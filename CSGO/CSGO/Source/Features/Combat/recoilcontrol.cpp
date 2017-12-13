@@ -2,9 +2,16 @@
 
 void CRecoilControl::RecoilControl( )
 {
-	angle_t aCurrentAimPunch = eng.GetAimPunch( ) - aOldAimPunch;
-	eng.SetViewAngle( eng.GetViewAngle( ) + aCurrentAimPunch );
-	aOldAimPunch += aCurrentAimPunch;
+	if ( eng.GetShotsFired( ) > 1 && eng.GetNextPrimaryAttack( ) == 0.f )
+	{
+		angle_t aCurrentAimPunch = eng.GetAimPunch( ) - aOldAimPunch;
+		eng.SetViewAngle( eng.GetViewAngle( ) + aCurrentAimPunch );
+		aOldAimPunch = eng.GetAimPunch( );
+	}
+	else
+	{
+		aOldAimPunch = { 0, 0, 0 };
+	}
 	eng.WaitTicks( 1 );
 }
 

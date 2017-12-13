@@ -243,7 +243,7 @@ void CleanUp( )
 		}
 	}
 #ifdef _DEBUG
-	FreeConsole();
+	FreeConsole( );
 #endif
 }
 

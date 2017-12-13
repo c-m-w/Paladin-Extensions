@@ -165,6 +165,13 @@ void CEngine::SetFieldOfView( int lp_iNewFOV )
 	}
 }
 
+int CEngine::GetShotsFired( )
+{
+	lp_iShotsFired.loc = GetLocalPlayer( ) + lp_iShotsFired.off;
+	mem.Get( lp_iShotsFired );
+	return lp_iShotsFired.val;
+}
+
 total CEngine::GetHitsOnServer( )
 {
 	lp_totalHitsOnServer.loc = GetLocalPlayer( ) + lp_totalHitsOnServer.off;

@@ -24,6 +24,7 @@ namespace Addresses
 	address_t< EMoveType > lp_mMoveType;
 	address_t< angle_t > lp_aAimPunch;
 	address_t< int > lp_iFOV;
+	address_t< int > lp_iShotsFired;
 	address_t< total > lp_totalHitsOnServer;
 	address_t< float > lp_flFlashMaxAlpha;
 
@@ -159,6 +160,7 @@ void CMemoryManager::InitializeAddresses( )
 	lp_mMoveType = { 0x258 };
 	lp_aAimPunch = { 0x301C };
 	lp_iFOV = { 0x330C };
+	lp_iShotsFired = { 0xA2B0 };
 	lp_totalHitsOnServer = { 0xA2C8 };
 	lp_flFlashMaxAlpha = { 0xA2F4 };
 	lp_wpnPlayerWeaponIndex = { 0x5D38 };
@@ -166,14 +168,15 @@ void CMemoryManager::InitializeAddresses( )
 	aw_flNextPrimaryAttack = { 0x31D8 };
 	LogDebugMsg( SCS, "Initialized bases" );
 	// engine
-	dwGlobalVars.loc += dwEngineBase + dwGlobalVars.off;
-	pdwClientState.loc += dwEngineBase + pdwClientState.off;
+	dwGlobalVars.loc = dwEngineBase + dwGlobalVars.off;
+	pdwClientState.loc = dwEngineBase + pdwClientState.off;
 	// client
-	fForceJump.loc += dwClientBase + fForceJump.off;
-	fForceAttack.loc += dwClientBase + fForceAttack.off;
-	flSensitivity.loc += dwClientBase + flSensitivity.off;
-	pdwEntityList.loc += dwClientBase + pdwEntityList.off;
-	pdwLocalPlayer.loc += dwClientBase + pdwLocalPlayer.off;
+	fForceJump.loc = dwClientBase + fForceJump.off;
+	fForceAttack.loc = dwClientBase + fForceAttack.off;
+	flSensitivity.loc = dwClientBase + flSensitivity.off;
+	flSensitivity.ptr += dwClientBase;
+	pdwEntityList.loc = dwClientBase + pdwEntityList.off;
+	pdwLocalPlayer.loc = dwClientBase + pdwLocalPlayer.off;
 	LogDebugMsg( SCS, "Initialized addresses" );
 }
 
