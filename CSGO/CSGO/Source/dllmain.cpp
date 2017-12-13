@@ -169,14 +169,15 @@ void Cheat( )
 		} );
 	} );
 	tThreads.push_back( move( tNoFlash ) );
-	std::thread tRadar( [&]( )
+	//broke rn
+	/*std::thread tRadar( [&]( )
 	{
 		Feature( true, 1, [&]
 		{
 			rad.Radar( );
 		} );
 	} );
-	tThreads.push_back( move( tRadar ) );
+	tThreads.push_back( move( tRadar ) );*/
 	// combat
 	std::thread tRecoilControl( [&]( )
 	{
