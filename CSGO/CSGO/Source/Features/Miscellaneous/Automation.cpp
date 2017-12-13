@@ -12,13 +12,13 @@ void CAutomation::AutoJump( )
 		//		eng.SetJump( KS_TICK );
 		//	}
 	}
-	/*else if ( DIST FROM GROUND < 45 && DIST FROM GROUND > 0 )
-	{
-		if ( DIST FROM GROUND % 15 == 0 )
+		/*else if ( DIST FROM GROUND < 45 && DIST FROM GROUND > 0 )
 		{
-			eng.SetJump( KS_TICK );
-		}
-	}*/
+			if ( DIST FROM GROUND % 15 == 0 )
+			{
+				eng.SetJump( KS_TICK );
+			}
+		}*/
 	else
 	{
 		eng.SetJump( ~KS_PRESS );

@@ -8,7 +8,7 @@ void CRecoilControl::RecoilControl( )
 		eng.SetViewAngle( eng.GetViewAngle( ) + aCurrentAimPunch );
 		aOldAimPunch = eng.GetAimPunch( );
 	}
-	else if (eng.GetShotsFired() == 1)
+	else if ( eng.GetShotsFired( ) == 1 )
 	{
 		aOldAimPunch = { 0, 0, 0 };
 	}

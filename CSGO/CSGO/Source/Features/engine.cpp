@@ -38,15 +38,14 @@ void CEngine::SetViewAngle( angle_t cs_aNewViewAngle )
 flag CEngine::GetAttack( )
 {
 	mem.Get( fForceAttack );
-	fForceAttack.val &= KS_PRESS | KS_TICK;
 	return fForceAttack.val;
 }
 
 void CEngine::SetAttack( flag ksType )
 {
-	if ( GetAttack( ) ^ ksType )
+	if ( GetAttack( ) != KS_DEFAULT | ksType )
 	{
-		fForceAttack.val ^= ksType;
+		fForceAttack.val = KS_DEFAULT | ksType;
 		mem.Set( fForceAttack );
 	}
 }
@@ -54,15 +53,14 @@ void CEngine::SetAttack( flag ksType )
 flag CEngine::GetJump( )
 {
 	mem.Get( fForceJump );
-	fForceJump.val &= KS_PRESS | KS_TICK;
 	return fForceJump.val;
 }
 
 void CEngine::SetJump( flag ksType )
 {
-	if ( GetJump( ) ^ ksType )
+	if ( GetJump( ) != KS_DEFAULT | ksType )
 	{
-		fForceJump.val ^= ksType;
+		fForceJump.val ^= KS_DEFAULT | ksType;
 		mem.Set( fForceJump );
 	}
 }
@@ -131,7 +129,6 @@ flag CEngine::GetFlags( )
 {
 	lp_fFlags.loc = GetLocalPlayer( ) + lp_fFlags.off;
 	mem.Get( lp_fFlags );
-	lp_fFlags.val &= FL_ONGROUND | FL_DUCKING;
 	return lp_fFlags.val;
 }
 

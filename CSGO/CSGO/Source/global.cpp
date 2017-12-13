@@ -25,7 +25,7 @@ bool angle_t::operator==( angle_t rhs )
 
 bool angle_t::operator!=( angle_t rhs )
 {
-	if (pitch != rhs.pitch || yaw != rhs.yaw || roll != rhs.roll)
+	if ( pitch != rhs.pitch || yaw != rhs.yaw || roll != rhs.roll )
 	{
 		return true;
 	}

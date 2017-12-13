@@ -1,6 +1,6 @@
 #pragma once
 
-#define PI 3.141593f
+#define PI 3.1415926535897932384626f
 
 typedef long long moment;
 
@@ -56,11 +56,12 @@ enum class EAnticheatStatus
 
 /// CSGO stuff
 
-#define MAX_ANGLE_DELTA 22.f
+#define MAX_ANGLE_DELTA 22.f // Max angle delta per tick
 #define FL_ONGROUND (1 << 0) // At rest / on the ground
 #define FL_DUCKING (1 << 1)  // Player flag -- Player is fully crouched
-#define KS_PRESS (1 << 0)    // +command
-#define KS_TICK (1 << 1)     // +command, tick, -command
+#define KS_DEFAULT 0b100 // default command state
+#define KS_PRESS 0b1     // +command
+#define KS_TICK 0b10     // +command, tick, -command
 
 typedef unsigned int flag;
 typedef unsigned short total;
