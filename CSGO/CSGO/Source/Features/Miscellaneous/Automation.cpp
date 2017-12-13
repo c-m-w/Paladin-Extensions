@@ -48,7 +48,7 @@ void CAutomation::AutoNade( )
 
 void CAutomation::AutoShoot( )
 {
-	if ( eng.GetNextPrimaryAttack( ) == 0.f &&
+	if ( eng.GetNextPrimaryAttack( ) <= 0.f &&
 		( eng.GetActiveWeaponIndex( ) == EWeapon::DEAGLE ||
 			eng.GetActiveWeaponIndex( ) == EWeapon::ELITE ||
 			eng.GetActiveWeaponIndex( ) == EWeapon::FIVESEVEN ||

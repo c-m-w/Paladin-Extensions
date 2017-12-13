@@ -219,10 +219,6 @@ float CEngine::GetNextPrimaryAttack( )
 	aw_flNextPrimaryAttack.loc = GetActiveWeaponEntity( ) + aw_flNextPrimaryAttack.off;
 	mem.Get( aw_flNextPrimaryAttack );
 	aw_flNextPrimaryAttack.val -= GetGlobalVars( ).curtime;
-	if ( aw_flNextPrimaryAttack.val < 0.f )
-	{
-		aw_flNextPrimaryAttack.val = 0.f;
-	}
 	return aw_flNextPrimaryAttack.val;
 }
 
