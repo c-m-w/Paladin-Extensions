@@ -5,7 +5,7 @@
 typedef long long moment;
 
 extern HINSTANCE hInst;
-extern std::atomic< bool > bExitState;
+extern bool bExitState;
 extern std::vector< std::thread > tThreads;
 
 void Wait( unsigned int );

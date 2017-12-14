@@ -43,7 +43,7 @@ flag CEngine::GetAttack( )
 
 void CEngine::SetAttack( flag ksType )
 {
-	if ( GetAttack( ) != KS_DEFAULT | ksType )
+	if ( GetAttack( ) != (KS_DEFAULT | ksType) )
 	{
 		fForceAttack.val = KS_DEFAULT | ksType;
 		mem.Set( fForceAttack );
@@ -58,7 +58,7 @@ flag CEngine::GetJump( )
 
 void CEngine::SetJump( flag ksType )
 {
-	if ( GetJump( ) != KS_DEFAULT | ksType )
+	if ( GetJump( ) != (KS_DEFAULT | ksType) )
 	{
 		fForceJump.val = KS_DEFAULT | ksType;
 		mem.Set( fForceJump );

@@ -14,7 +14,7 @@ void CAutomation::AutoJump( )
 	}
 		/*else if ( DIST FROM GROUND < 45 && DIST FROM GROUND > 0 )
 		{
-			if ( DIST FROM GROUND % 15 == 0 )
+			if ( !( DIST FROM GROUND % 15 ) )
 			{
 				eng.SetJump( KS_TICK );
 			}

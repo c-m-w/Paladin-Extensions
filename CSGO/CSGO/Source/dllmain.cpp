@@ -148,6 +148,11 @@ void Cheat( )
 	}
 	mem.InitializeAddresses( );
 	LogLastError( );
+	LogDebugMsg( DBG, "Waiting for server connection..." );
+	while (eng.GetSignOnState( ) == ESignOnState::FULL )
+	{
+		Wait( 1000 );
+	}
 	LogDebugMsg( DBG, "Initializing threads..." );
 	// general
 	std::thread tPanic( [&]
@@ -175,25 +180,24 @@ void Cheat( )
 		} );
 	} );
 	tThreads.push_back( move( tNoFlash ) );
-	//broke rn
-	std::thread tRadar( [&]
+	// TODO
+	/*std::thread tRadar( [&]
 	{
-		Feature( true, 0, [&]
-		{
-			rad.Radar( );
-		} );
+	Feature( true, 0, [&]
+	{
+	rad.Radar( );
 	} );
-	tThreads.push_back( move( tRadar ) );
+	} );
+	tThreads.push_back( move( tRadar ) );*/
 	// combat
-	// TODO fix radar crashing
-	/*std::thread tRecoilControl( [&]
+	std::thread tRecoilControl( [&]
 	{
 		Feature( true, 1, [&]
 		{
 			rcs.RecoilControl( );
-		}, VK_LBUTTON );
+		} );
 	} );
-	tThreads.push_back( move( tRecoilControl ) );*/
+	tThreads.push_back( move( tRecoilControl ) );
 	// miscellaneous
 	std::thread tAutoJump( [&]
 	{
@@ -203,14 +207,15 @@ void Cheat( )
 		}, VK_SPACE );
 	} );
 	tThreads.push_back( move( tAutoJump ) );
-	std::thread tAutoNade( [&]
+	// TODO
+	/*std::thread tAutoNade( [&]
 	{
 		Feature( true, 0, [&]
 		{
 			aut.AutoNade( );
 		} );
 	} );
-	tThreads.push_back( move( tAutoNade ) );
+	tThreads.push_back( move( tAutoNade ) );*/
 	std::thread tAutoShoot( [&]
 	{
 		Feature( true, 0, [&]
@@ -219,7 +224,8 @@ void Cheat( )
 		}, VK_LBUTTON );
 	} );
 	tThreads.push_back( move( tAutoShoot ) );
-	std::thread tFOV( [&]
+	// TODO
+	/*std::thread tFOV( [&]
 	{
 		Feature( true, 0, [&]
 		{
@@ -234,12 +240,14 @@ void Cheat( )
 			fov.WeaponFOV( );
 		} );
 	} );
-	tThreads.push_back( move( tWeaponFOV ) );
+	tThreads.push_back( move( tWeaponFOV ) );*/
 	LogDebugMsg( SCS, "Created threads" );
 	LogLastError( );
-	do {
+	while ( FindWindowA( nullptr, "Counter-Strike: Global Offensive" ) || eng.GetSignOnState( ) == ESignOnState::FULL )
+	{
+		printf("\n%f",eng.GetNextPrimaryAttack(  ) );
 		Wait( 1000 );
-	} while ( FindWindowA( nullptr, "Counter-Strike: Global Offensive" ) );
+	}
 	CleanUp( );
 	Cheat( );
 }

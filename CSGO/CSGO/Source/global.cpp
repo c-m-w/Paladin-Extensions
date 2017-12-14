@@ -1,7 +1,7 @@
 #include "dllmain.h"
 
 HINSTANCE hInst = nullptr;
-std::atomic< bool > bExitState = false;
+bool bExitState = false;
 std::vector< std::thread > tThreads;
 
 void Wait( unsigned int nSleepTime )
