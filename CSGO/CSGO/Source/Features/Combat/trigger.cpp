@@ -2,7 +2,7 @@
 
 void CTrigger::Trigger( )
 {
-	// TODO
+	// TODO trigger
 	// int iDelay = int( 25.f - ( velodistaim * 25.f ) / ( maxvelodistaim ) );
 }
 

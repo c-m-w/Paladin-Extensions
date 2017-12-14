@@ -161,7 +161,7 @@ void Cheat( )
 	// awareness
 	std::thread tHitSound( [&]
 	{
-		Feature( true, 1, [&]
+		Feature( true, 0, [&]
 		{
 			hit.PlaySoundOnHit( );
 		} );
@@ -169,7 +169,7 @@ void Cheat( )
 	tThreads.push_back( move( tHitSound ) );
 	std::thread tNoFlash( [&]
 	{
-		Feature( true, 1, [&]
+		Feature( true, 0, [&]
 		{
 			nof.NoFlash( );
 		} );
@@ -178,25 +178,26 @@ void Cheat( )
 	//broke rn
 	std::thread tRadar( [&]
 	{
-		Feature( true, 1, [&]
+		Feature( true, 0, [&]
 		{
 			rad.Radar( );
 		} );
 	} );
 	tThreads.push_back( move( tRadar ) );
 	// combat
-	std::thread tRecoilControl( [&]
+	// TODO fix radar crashing
+	/*std::thread tRecoilControl( [&]
 	{
 		Feature( true, 1, [&]
 		{
 			rcs.RecoilControl( );
 		}, VK_LBUTTON );
 	} );
-	tThreads.push_back( move( tRecoilControl ) );
+	tThreads.push_back( move( tRecoilControl ) );*/
 	// miscellaneous
 	std::thread tAutoJump( [&]
 	{
-		Feature( true, 1, [&]
+		Feature( true, 0, [&]
 		{
 			aut.AutoJump( );
 		}, VK_SPACE );
@@ -204,7 +205,7 @@ void Cheat( )
 	tThreads.push_back( move( tAutoJump ) );
 	std::thread tAutoNade( [&]
 	{
-		Feature( true, 1, [&]
+		Feature( true, 0, [&]
 		{
 			aut.AutoNade( );
 		} );
@@ -212,7 +213,7 @@ void Cheat( )
 	tThreads.push_back( move( tAutoNade ) );
 	std::thread tAutoShoot( [&]
 	{
-		Feature( true, 1, [&]
+		Feature( true, 0, [&]
 		{
 			aut.AutoShoot( );
 		}, VK_LBUTTON );
@@ -220,17 +221,25 @@ void Cheat( )
 	tThreads.push_back( move( tAutoShoot ) );
 	std::thread tFOV( [&]
 	{
-		Feature( true, 1, [&]
+		Feature( true, 0, [&]
 		{
 			fov.FOV( );
 		} );
 	} );
 	tThreads.push_back( move( tFOV ) );
+	std::thread tWeaponFOV( [&]
+	{
+		Feature( true, 0, [&]
+		{
+			fov.WeaponFOV( );
+		} );
+	} );
+	tThreads.push_back( move( tWeaponFOV ) );
 	LogDebugMsg( SCS, "Created threads" );
 	LogLastError( );
 	do {
 		Wait( 1000 );
-	} while ( !FindWindowA( nullptr, "Counter-Strike: Global Offensive" ) );
+	} while ( FindWindowA( nullptr, "Counter-Strike: Global Offensive" ) );
 	CleanUp( );
 	Cheat( );
 }
@@ -256,64 +265,40 @@ void CleanUp( )
 	}
 }
 
-// TODO better/remove waits, only add themm else not getasynckeystate
 void Feature( bool bFeatureState, unsigned int nWait, std::function< void( ) > fnFeature, int iFeatureKey )
 {
-	while ( !bExitState )
+	while ( bFeatureState )
 	{
-		while ( bFeatureState )
+		if ( bFeatureState && GetAsyncKeyState( iFeatureKey ) )
 		{
-			if ( GetAsyncKeyState( iFeatureKey ) )
-			{
-				fnFeature( );
-			}
-			else
-			{
-				if ( nWait )
-				{
-					Wait( nWait );
-				}
-			}
-			if ( bExitState )
-			{
-				return;
-			}
+			fnFeature( );
 		}
-		if ( nWait )
+		else if ( nWait )
 		{
 			Wait( nWait );
 		}
-		else
+		if ( bExitState )
 		{
-			Wait( 1 );
+			return;
 		}
 	}
 }
 
-// TODO remove wait
 void Feature( bool bFeatureState, unsigned int nWait, std::function< void( ) > fnFeature )
 {
-	while ( !bExitState )
+	while ( bFeatureState )
 	{
-		while ( bFeatureState )
+		if ( bFeatureState )
 		{
 			fnFeature( );
-			if ( nWait )
-			{
-				Wait( nWait );
-			}
-			if ( bExitState )
-			{
-				return;
-			}
 		}
-		if ( nWait )
+		else if ( nWait )
 		{
 			Wait( nWait );
 		}
-		else
+		if ( bExitState )
 		{
-			Wait( 1 );
+			return;
 		}
 	}
 }

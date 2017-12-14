@@ -172,7 +172,7 @@ float CGeneral::GetWindowsSensitivity( )
 	{
 		return float( iWindowsSensitivity ) / 20.f;
 	}
-	return 1.f; // TODO
+	return 1.f;
 }
 
 CGeneral all;
