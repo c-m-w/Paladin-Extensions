@@ -77,6 +77,7 @@ struct angle_t
 	angle_t operator-( angle_t );
 	angle_t &operator+=( angle_t );
 	angle_t &operator-=( angle_t );
+	angle_t operator*=( float rhs );
 };
 
 struct color_t

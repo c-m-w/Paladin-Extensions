@@ -22,6 +22,7 @@ namespace Addresses
 	extern address_t< flag > fForceJump;
 	// Client pointer addresses
 	extern address_t< DWORD > pdwEntityList;
+	extern address_t< bool > el_bDormant;
 	extern address_t< ETeam > el_tTeamNum;
 	extern address_t< bool > el_bSpotted;
 
@@ -37,8 +38,9 @@ namespace Addresses
 	extern address_t< float > lp_flFlashMaxAlpha;
 
 	extern address_t< handle > lp_hActiveWeapon;
-	extern address_t< EWeapon > lp_wpnPlayerWeaponIndex;
+	extern address_t< int > aw_iZoomLevel;
 	extern address_t< float > aw_flNextPrimaryAttack;
+	extern address_t< EWeapon > aw_wpnPlayerWeaponIndex;
 }
 
 using namespace Addresses;

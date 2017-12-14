@@ -60,7 +60,7 @@ void CEngine::SetJump( flag ksType )
 {
 	if ( GetJump( ) != KS_DEFAULT | ksType )
 	{
-		fForceJump.val ^= KS_DEFAULT | ksType;
+		fForceJump.val = KS_DEFAULT | ksType;
 		mem.Set( fForceJump );
 	}
 }
@@ -94,6 +94,13 @@ ETeam CEngine::GetEntityTeam( int iEntity )
 	el_tTeamNum.loc = GetEntityBase( iEntity ) + el_tTeamNum.off;
 	mem.Get( el_tTeamNum );
 	return el_tTeamNum.val;
+}
+
+bool CEngine::GetEntityDormant( int iEntity )
+{
+	el_bDormant.loc = GetEntityBase( iEntity ) + el_bDormant.off;
+	mem.Get( el_bDormant );
+	return el_bDormant.val;
 }
 
 bool CEngine::GetEntitySpotted( int iEntity )
@@ -196,24 +203,27 @@ handle CEngine::GetActiveWeaponHandle( )
 {
 	lp_hActiveWeapon.loc = GetLocalPlayer( ) + lp_hActiveWeapon.off;
 	mem.Get( lp_hActiveWeapon );
+	lp_hActiveWeapon.val = GetEntityBase( lp_hActiveWeapon.val & 0xFFF );
 	return lp_hActiveWeapon.val;
 }
 
-DWORD CEngine::GetActiveWeaponEntity( )
+int CEngine::GetActiveWeaponZoomLevel( )
 {
-	return GetEntityBase( GetActiveWeaponHandle( ) & 0xFFF );
+	aw_iZoomLevel.loc = GetActiveWeaponHandle( ) + aw_iZoomLevel.off;
+	mem.Get( aw_iZoomLevel );
+	return aw_iZoomLevel.val;
 }
 
 EWeapon CEngine::GetActiveWeaponIndex( )
 {
-	lp_wpnPlayerWeaponIndex.loc = GetActiveWeaponEntity( ) + lp_wpnPlayerWeaponIndex.off;
-	mem.Get( lp_wpnPlayerWeaponIndex );
-	return lp_wpnPlayerWeaponIndex.val;
+	aw_wpnPlayerWeaponIndex.loc = GetActiveWeaponHandle( ) + aw_wpnPlayerWeaponIndex.off;
+	mem.Get( aw_wpnPlayerWeaponIndex );
+	return aw_wpnPlayerWeaponIndex.val;
 }
 
 float CEngine::GetNextPrimaryAttack( )
 {
-	aw_flNextPrimaryAttack.loc = GetActiveWeaponEntity( ) + aw_flNextPrimaryAttack.off;
+	aw_flNextPrimaryAttack.loc = GetActiveWeaponHandle( ) + aw_flNextPrimaryAttack.off;
 	mem.Get( aw_flNextPrimaryAttack );
 	aw_flNextPrimaryAttack.val -= GetGlobalVars( ).curtime;
 	return aw_flNextPrimaryAttack.val;
@@ -230,13 +240,11 @@ void CEngine::WaitTicks( int iTicksToWait )
 
 float CEngine::GetPixelToAngleYAW( )
 {
-	// TODO mouse accel?
 	return 0.022f * GetSensitivity( ) * all.GetWindowsSensitivity( ); // * ZOOM SENS IF ZOOMED
 }
 
 float CEngine::GetPixelToAnglePITCH( )
 {
-	// TODO mouse accel?
 	return 0.022f * GetSensitivity( ) * all.GetWindowsSensitivity( ); // * ZOOM SENS IF ZOOMED
 }
 

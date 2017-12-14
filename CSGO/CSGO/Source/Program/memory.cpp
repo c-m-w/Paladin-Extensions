@@ -14,6 +14,7 @@ namespace Addresses
 	address_t< flag > fForceJump;
 	// Client pointer addresses
 	address_t< DWORD > pdwEntityList;
+	address_t< bool > el_bDormant;
 	address_t< ETeam > el_tTeamNum;
 	address_t< bool > el_bSpotted;
 
@@ -29,8 +30,9 @@ namespace Addresses
 	address_t< float > lp_flFlashMaxAlpha;
 
 	address_t< handle > lp_hActiveWeapon;
-	address_t< EWeapon > lp_wpnPlayerWeaponIndex;
+	address_t< int > aw_iZoomLevel;
 	address_t< float > aw_flNextPrimaryAttack;
+	address_t< EWeapon > aw_wpnPlayerWeaponIndex;
 }
 
 CMemoryManager::~CMemoryManager( )
@@ -152,6 +154,7 @@ void CMemoryManager::InitializeAddresses( )
 	fForceJump = { 0x4F0ED64 };
 	// Client pointer addresses
 	pdwEntityList = { 0x4A77AFC };
+	el_bDormant = { 0xE9 };
 	el_tTeamNum = { 0xF0 };
 	el_bSpotted = { 0x939 };
 	pdwLocalPlayer = { 0xA9ADEC };
@@ -163,9 +166,10 @@ void CMemoryManager::InitializeAddresses( )
 	lp_iShotsFired = { 0xA2B0 };
 	lp_totalHitsOnServer = { 0xA2C8 };
 	lp_flFlashMaxAlpha = { 0xA2F4 };
-	lp_wpnPlayerWeaponIndex = { 0x5D38 };
 	lp_hActiveWeapon = { 0x2EE8 };
+	aw_iZoomLevel = { 0x3340 };
 	aw_flNextPrimaryAttack = { 0x31D8 };
+	aw_wpnPlayerWeaponIndex = { 0x5D38 };
 	LogDebugMsg( SCS, "Initialized bases" );
 	// engine
 	dwGlobalVars.loc = dwEngineBase + dwGlobalVars.off;

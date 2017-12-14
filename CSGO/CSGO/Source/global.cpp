@@ -60,6 +60,14 @@ angle_t &angle_t::operator-=( angle_t rhs )
 	return *this;
 }
 
+angle_t angle_t::operator*=( float rhs )
+{
+	pitch *= rhs;
+	yaw *= rhs;
+	roll *= rhs;
+	return *this;
+}
+
 vector_t::vector_t( )
 {
 	dx = 0;

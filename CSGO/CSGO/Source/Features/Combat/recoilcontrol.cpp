@@ -5,7 +5,8 @@ void CRecoilControl::RecoilControl( )
 	if ( eng.GetShotsFired( ) > 1 && eng.GetNextPrimaryAttack( ) <= 0.f )
 	{
 		angle_t aCurrentAimPunch = eng.GetAimPunch( ) - aOldAimPunch;
-		eng.SetViewAngle( eng.GetViewAngle( ) + aCurrentAimPunch );
+		aCurrentAimPunch *= 2.f;
+		eng.SetViewAngle( eng.GetViewAngle( ) - aCurrentAimPunch );
 		aOldAimPunch = eng.GetAimPunch( );
 	}
 	else if ( eng.GetShotsFired( ) == 1 )

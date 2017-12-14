@@ -24,6 +24,7 @@ public:
 	DWORD GetEntityBase( int );
 
 	ETeam GetEntityTeam( int );
+	bool GetEntityDormant( int );
 	bool GetEntitySpotted( int );
 	void SetEntitySpotted( int, bool );
 
@@ -42,9 +43,9 @@ public:
 	void SetFlashMaxAlpha( float );
 
 	handle GetActiveWeaponHandle( );
-	DWORD GetActiveWeaponEntity( );
-	EWeapon GetActiveWeaponIndex( );
+	int GetActiveWeaponZoomLevel( );
 	float GetNextPrimaryAttack( );
+	EWeapon GetActiveWeaponIndex( );
 
 	// general
 	void WaitTicks( int );
