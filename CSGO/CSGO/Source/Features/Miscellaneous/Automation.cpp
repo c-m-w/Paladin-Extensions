@@ -21,7 +21,7 @@ void CAutomation::AutoJump( )
 		}*/
 	else
 	{
-		eng.SetJump( ~KS_PRESS );
+		eng.SetJump( !KS_PRESS );
 	}
 	eng.WaitTicks( 1 );
 }
@@ -37,9 +37,9 @@ void CAutomation::AutoNade( )
 	{
 		if ( eng.GetAttack( ) & KS_PRESS )
 		{
-			if ( eng.GetFlags( ) & ~FL_ONGROUND )
+			if ( eng.GetFlags( ) & !FL_ONGROUND )
 			{
-				eng.SetAttack( ~KS_PRESS );
+				eng.SetAttack( !KS_PRESS );
 			}
 		}
 	}
@@ -65,7 +65,7 @@ void CAutomation::AutoShoot( )
 	}
 	else
 	{
-		eng.SetAttack( ~KS_PRESS );
+		eng.SetAttack( !KS_PRESS );
 	}
 	eng.WaitTicks( 1 );
 }

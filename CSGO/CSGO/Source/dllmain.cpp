@@ -11,8 +11,10 @@ BOOL WINAPI DllMain( HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpvReserved )
 	{
 		case DLL_PROCESS_ATTACH:
 		{
+#ifdef _DEBUG
+			AllocConsole( );
+#endif
 			hInst = hInstDll;
-			DisableThreadLibraryCalls( hInstDll );
 			HANDLE hCheat = CreateThread( nullptr, 0, LPTHREAD_START_ROUTINE( Cheat ), nullptr, 0, nullptr );
 			if ( !hCheat || hCheat == INVALID_HANDLE_VALUE )
 			{
@@ -22,11 +24,15 @@ BOOL WINAPI DllMain( HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpvReserved )
 			{
 				cfg.iQuitReason = EQuitReasons::SUCCESS;
 			}
+			DisableThreadLibraryCalls( hInstDll );
 			break;
 		}
 		case DLL_PROCESS_DETACH:
 		{
 			CleanUp( );
+#ifdef _DEBUG
+			FreeConsole( );
+#endif
 			break;
 		}
 		default:
@@ -41,8 +47,6 @@ BOOL WINAPI DllMain( HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpvReserved )
 void Cheat( )
 {
 #ifdef _DEBUG
-	AllocConsole( );
-
 	FILE *fTemp;
 	freopen_s( &fTemp, "CONOUT$", "w", stdout );
 
@@ -74,6 +78,8 @@ void Cheat( )
 	strLog.append( "Paladin Debug Interface Setup\n" );
 	LogLastError( );
 #endif
+
+	// TODO stop byte patching
 	EPremium uCurrentUserPremiumStatus = all.CheckPremiumStatus( );
 	if ( uCurrentUserPremiumStatus == EPremium::BANNED )
 	{
@@ -144,7 +150,7 @@ void Cheat( )
 	LogLastError( );
 	LogDebugMsg( DBG, "Initializing threads..." );
 	// general
-	std::thread tPanic( [&]( )
+	std::thread tPanic( [&]
 	{
 		Feature( true, 1, [&]
 		{
@@ -153,7 +159,7 @@ void Cheat( )
 	} );
 	tThreads.push_back( move( tPanic ) );
 	// awareness
-	std::thread tHitSound( [&]( )
+	std::thread tHitSound( [&]
 	{
 		Feature( true, 1, [&]
 		{
@@ -161,7 +167,7 @@ void Cheat( )
 		} );
 	} );
 	tThreads.push_back( move( tHitSound ) );
-	std::thread tNoFlash( [&]( )
+	std::thread tNoFlash( [&]
 	{
 		Feature( true, 1, [&]
 		{
@@ -170,16 +176,16 @@ void Cheat( )
 	} );
 	tThreads.push_back( move( tNoFlash ) );
 	//broke rn
-	/*std::thread tRadar( [&]( )
+	std::thread tRadar( [&]
 	{
 		Feature( true, 1, [&]
 		{
 			rad.Radar( );
 		} );
 	} );
-	tThreads.push_back( move( tRadar ) );*/
+	tThreads.push_back( move( tRadar ) );
 	// combat
-	std::thread tRecoilControl( [&]( )
+	std::thread tRecoilControl( [&]
 	{
 		Feature( true, 1, [&]
 		{
@@ -188,7 +194,7 @@ void Cheat( )
 	} );
 	tThreads.push_back( move( tRecoilControl ) );
 	// miscellaneous
-	std::thread tAutoJump( [&]( )
+	std::thread tAutoJump( [&]
 	{
 		Feature( true, 1, [&]
 		{
@@ -196,7 +202,7 @@ void Cheat( )
 		}, VK_SPACE );
 	} );
 	tThreads.push_back( move( tAutoJump ) );
-	std::thread tAutoNade( [&]( )
+	std::thread tAutoNade( [&]
 	{
 		Feature( true, 1, [&]
 		{
@@ -204,7 +210,7 @@ void Cheat( )
 		} );
 	} );
 	tThreads.push_back( move( tAutoNade ) );
-	std::thread tAutoShoot( [&]( )
+	std::thread tAutoShoot( [&]
 	{
 		Feature( true, 1, [&]
 		{
@@ -212,7 +218,7 @@ void Cheat( )
 		}, VK_LBUTTON );
 	} );
 	tThreads.push_back( move( tAutoShoot ) );
-	std::thread tFOV( [&]( )
+	std::thread tFOV( [&]
 	{
 		Feature( true, 1, [&]
 		{
@@ -222,6 +228,11 @@ void Cheat( )
 	tThreads.push_back( move( tFOV ) );
 	LogDebugMsg( SCS, "Created threads" );
 	LogLastError( );
+	do {
+		Wait( 1000 );
+	} while ( !FindWindowA( nullptr, "Counter-Strike: Global Offensive" ) );
+	CleanUp( );
+	Cheat( );
 }
 
 void Panic( )
@@ -229,7 +240,7 @@ void Panic( )
 	LogDebugMsg( WRN, "Panic called" );
 	cfg.iQuitReason = EQuitReasons::PANIC;
 	CleanUp( );
-	FreeLibraryAndExitThread( hInst, 1 ); // TODO figure out how to not display ABORT message
+	FreeLibraryAndExitThread( hInst, 0 ); // TODO figure out how to not display ABORT message
 }
 
 void CleanUp( )
@@ -243,9 +254,6 @@ void CleanUp( )
 			tThread.join( );
 		}
 	}
-#ifdef _DEBUG
-	FreeConsole( );
-#endif
 }
 
 // TODO better/remove waits, only add themm else not getasynckeystate

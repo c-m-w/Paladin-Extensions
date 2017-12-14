@@ -118,7 +118,7 @@ DWORD CMemoryManager::FindPattern( BYTE *bMask, char *szMask, DWORD dwAddress, D
 	{
 		auto dwCurrentAddress = dwAddress + dw;
 		bool bSuccess = ReadProcessMemory( hGame, LPVOID( dwCurrentAddress ), bData, dwDataLength, &sRead );
-		if ( !bSuccess || sRead == 0 )
+		if ( !bSuccess || !sRead )
 		{
 			continue;
 		}

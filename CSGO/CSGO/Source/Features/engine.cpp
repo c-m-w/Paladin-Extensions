@@ -226,6 +226,10 @@ float CEngine::GetNextPrimaryAttack( )
 	aw_flNextPrimaryAttack.loc = GetActiveWeaponHandle( ) + aw_flNextPrimaryAttack.off;
 	mem.Get( aw_flNextPrimaryAttack );
 	aw_flNextPrimaryAttack.val -= GetGlobalVars( ).curtime;
+	if ( aw_flNextPrimaryAttack.val < 0.f )
+	{
+		aw_flNextPrimaryAttack.val = 0.f;
+	}
 	return aw_flNextPrimaryAttack.val;
 }
 
@@ -281,7 +285,6 @@ angle_t CEngine::NormalizeAngle( angle_t aDestination )
 {
 	angle_t aNewAngle = aDestination - eng.GetViewAngle( );
 
-	// if aNewAngle.pitch > 22(?), aNewAngle.pitch = 22(?) TODO
 	float flAngleChange = sqrt( aNewAngle.pitch * aNewAngle.pitch + aNewAngle.yaw * aNewAngle.yaw );
 	if ( fabs( flAngleChange ) > MAX_ANGLE_DELTA )
 	{
@@ -316,7 +319,7 @@ angle_t CEngine::VectorToAngle( coordinate_t cOrigin, coordinate_t cDestination 
 {
 	angle_t aReturn = { 0, 0, 0 };
 	vector_t vDelta( cOrigin, cDestination );
-	if ( vDelta.dy == 0 && vDelta.dx == 0 )
+	if ( !vDelta.dy && !vDelta.dx )
 	{
 		aReturn.yaw = 0;
 		if ( vDelta.dz > 0 )

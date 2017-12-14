@@ -2,7 +2,7 @@
 
 void CFOV::FOV( )
 {
-	if ( eng.GetActiveWeaponZoomLevel( ) == 0 )
+	if ( !eng.GetActiveWeaponZoomLevel( ) )
 	{
 		eng.SetFieldOfView( 120 );
 	}
