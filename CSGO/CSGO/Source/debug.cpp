@@ -1,6 +1,6 @@
 #include "dllmain.h"
 
-std::string strLog = "\0";
+std::string strLog;
 
 void LogDebugMsg( EDebugMessage dmType, char *szMessage, ... )
 {
@@ -8,45 +8,31 @@ void LogDebugMsg( EDebugMessage dmType, char *szMessage, ... )
 	HANDLE hConsole = GetStdHandle( STD_OUTPUT_HANDLE );
 	if ( hConsole && hConsole != INVALID_HANDLE_VALUE )
 	{
-
-		auto t = time(nullptr);
-		auto tm = *localtime(&t);
-
-		std::ostringstream oss;
-		oss << std::put_time(&tm, "[%H:%M:%S - ");
-		auto str = oss.str();
-
 		switch ( dmType )
 		{
 			case SCS:
 				SetConsoleTextAttribute( hConsole, 10 );
-				printf( "%s", str.c_str(  ) );
-				printf( "SCS] " );
+				printf( "\n[SCS] " );
 				break;
 			case DBG:
 				SetConsoleTextAttribute( hConsole, 15 );
-				printf( "%s", str.c_str(  ) );
-				printf( "DBG] " );
+				printf( "\n[DBG] " );
 				break;
 			case WRN:
 				SetConsoleTextAttribute( hConsole, 14 );
-				printf( "%s", str.c_str(  ) );
-				printf( "WRN] " );
+				printf( "\n[WRN] " );
 				break;
 			case ERR:
 				SetConsoleTextAttribute( hConsole, 12 );
-				printf( "%s", str.c_str(  ) );
-				printf( "ERR] " );
+				printf( "\n[ERR] " );
 				break;
 			case LER:
 				SetConsoleTextAttribute( hConsole, 12 );
-				printf( "%s", str.c_str(  ) );
-				printf( "LER] " );
+				printf( "\n[LER] " );
 				break;
 			default:
 				SetConsoleTextAttribute( hConsole, 15 );
-				printf( "%s", str.c_str(  ) );
-				printf( "DBG] " );
+				printf( "\n[DBG] " );
 		}
 		SetConsoleTextAttribute( hConsole, 7 );
 		//Ideally we want to dynamically allocate this, might do later (for now, stick to a max of 2047 data characters)

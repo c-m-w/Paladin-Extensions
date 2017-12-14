@@ -71,8 +71,8 @@ void Cheat( )
 	SetConsoleCursorInfo( hConsole, &cci );
 	SetConsoleTextAttribute( hConsole, 15 );
 
-	printf( "[DBG] " );
-	strLog.append( "\n[DBG] " );
+	printf( "[OPN] " );
+	strLog.append( "[OPN] " );
 	SetConsoleTextAttribute( hConsole, 7 );
 	printf( "Paladin Debug Interface Setup\n" );
 	strLog.append( "Paladin Debug Interface Setup\n" );
