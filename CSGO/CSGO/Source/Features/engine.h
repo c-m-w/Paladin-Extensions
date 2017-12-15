@@ -5,6 +5,7 @@ class CEngine
 public:
 	// engine - global
 	CGlobalVars GetGlobalVars( );
+	void SetGlobalVars( CGlobalVars );
 
 	// engine - clientstate
 	DWORD GetClientState( );

@@ -71,6 +71,7 @@ typedef DWORD handle;
 struct angle_t
 {
 	float pitch, yaw, roll; // y, x, z
+
 	bool operator==( angle_t );
 	bool operator!=( angle_t );
 	angle_t operator+( angle_t );
@@ -111,6 +112,9 @@ public:
 	int tickcount;
 	float interval_per_tick;
 	float interpolation_amount;
+
+	bool operator==( CGlobalVars );
+	bool operator!=( CGlobalVars );
 };
 
 enum class EMoveType

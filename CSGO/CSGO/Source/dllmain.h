@@ -2,6 +2,7 @@
 
 #include <Windows.h>
 #include <TlHelp32.h>
+#include <limits>
 #include <thread>
 #include <string>
 #include <vector>
@@ -20,6 +21,7 @@
 #include "Features/Awareness/radar.h"
 #include "Features/Combat/recoilcontrol.h"
 #include "Features/Combat/trigger.h"
+#include "Features/Miscellaneous/airstuck.h"
 #include "Features/Miscellaneous/automation.h"
 #include "Features/Miscellaneous/fov.h"
 

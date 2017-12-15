@@ -2,8 +2,17 @@
 
 CGlobalVars CEngine::GetGlobalVars( )
 {
-	mem.Get( dwGlobalVars );
-	return dwGlobalVars.val;
+	mem.Get( gvGlobalVars );
+	return gvGlobalVars.val;
+}
+
+void CEngine::SetGlobalVars( CGlobalVars gvNewGlobalVars )
+{
+	if ( GetGlobalVars( ) != gvNewGlobalVars )
+	{
+		gvGlobalVars.val = gvNewGlobalVars;
+		mem.Set( gvGlobalVars );
+	}
 }
 
 DWORD CEngine::GetClientState( )
@@ -43,7 +52,7 @@ flag CEngine::GetAttack( )
 
 void CEngine::SetAttack( flag ksType )
 {
-	if ( GetAttack( ) != (KS_DEFAULT | ksType) )
+	if ( GetAttack( ) != ( KS_DEFAULT | ksType ) )
 	{
 		fForceAttack.val = KS_DEFAULT | ksType;
 		mem.Set( fForceAttack );
@@ -58,7 +67,7 @@ flag CEngine::GetJump( )
 
 void CEngine::SetJump( flag ksType )
 {
-	if ( GetJump( ) != (KS_DEFAULT | ksType) )
+	if ( GetJump( ) != ( KS_DEFAULT | ksType ) )
 	{
 		fForceJump.val = KS_DEFAULT | ksType;
 		mem.Set( fForceJump );

@@ -4,7 +4,7 @@ namespace Addresses
 {
 	// global CEngine addresses
 	// CEngine pointer addresses
-	address_t< CGlobalVars > dwGlobalVars;
+	address_t< CGlobalVars > gvGlobalVars;
 	address_t< DWORD > pdwClientState;
 	address_t< ESignOnState > cs_soSignOnState;
 	address_t< angle_t > cs_aViewAngle;
@@ -143,7 +143,7 @@ void CMemoryManager::InitializeAddresses( )
 {
 	LogDebugMsg( DBG, "Initializing addresses" );
 	// global Engine addresses
-	dwGlobalVars = { 0x57D550 };
+	gvGlobalVars = { 0x57D550 };
 	// Engine pointer addresses
 	pdwClientState = { 0x57D84C };
 	cs_soSignOnState = { 0x108 };
@@ -172,7 +172,7 @@ void CMemoryManager::InitializeAddresses( )
 	aw_wpnPlayerWeaponIndex = { 0x5D38 };
 	LogDebugMsg( SCS, "Initialized bases" );
 	// engine
-	dwGlobalVars.loc = dwEngineBase + dwGlobalVars.off;
+	gvGlobalVars.loc = dwEngineBase + gvGlobalVars.off;
 	pdwClientState.loc = dwEngineBase + pdwClientState.off;
 	// client
 	fForceJump.loc = dwClientBase + fForceJump.off;

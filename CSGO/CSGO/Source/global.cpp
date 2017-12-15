@@ -25,11 +25,11 @@ bool angle_t::operator==( angle_t rhs )
 
 bool angle_t::operator!=( angle_t rhs )
 {
-	if ( pitch != rhs.pitch || yaw != rhs.yaw || roll != rhs.roll )
+	if ( *this == rhs )
 	{
-		return true;
+		return false;
 	}
-	return false;
+	return true;
 }
 
 angle_t angle_t::operator+( angle_t rhs )
@@ -80,4 +80,25 @@ vector_t::vector_t( coordinate_t cOrigin, coordinate_t cDestination )
 	dx = cDestination.x - cOrigin.x;
 	dy = cDestination.y - cOrigin.y;
 	dz = cDestination.z - cOrigin.z;
+}
+
+bool CGlobalVars::operator==( CGlobalVars rhs )
+{
+	if ( realtime == rhs.realtime && framecount == rhs.framecount && absoluteframetime == rhs.absoluteframetime
+		&& absoluteframestarttimestddev == rhs.absoluteframestarttimestddev && curtime == rhs.curtime
+		&& frametime == rhs.frametime && maxClients == rhs.maxClients && tickcount == rhs.tickcount
+		&& interval_per_tick == rhs.interval_per_tick && interpolation_amount == rhs.interpolation_amount )
+	{
+		return true;
+	}
+	return false;
+}
+
+bool CGlobalVars::operator!=( CGlobalVars rhs )
+{
+	if ( *this == rhs )
+	{
+		return false;
+	}
+	return true;
 }

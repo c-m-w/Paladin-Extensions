@@ -12,7 +12,7 @@ namespace Addresses
 {
 	// global CEngine addresses
 	// CEngine pointer addresses
-	extern address_t< CGlobalVars > dwGlobalVars;
+	extern address_t< CGlobalVars > gvGlobalVars;
 	extern address_t< DWORD > pdwClientState;
 	extern address_t< ESignOnState > cs_soSignOnState;
 	extern address_t< angle_t > cs_aViewAngle;

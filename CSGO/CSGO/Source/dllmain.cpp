@@ -149,7 +149,7 @@ void Cheat( )
 	mem.InitializeAddresses( );
 	LogLastError( );
 	LogDebugMsg( DBG, "Waiting for server connection..." );
-	while (eng.GetSignOnState( ) == ESignOnState::FULL )
+	while ( eng.GetSignOnState( ) == ESignOnState::FULL )
 	{
 		Wait( 1000 );
 	}
@@ -199,6 +199,14 @@ void Cheat( )
 	} );
 	tThreads.push_back( move( tRecoilControl ) );
 	// miscellaneous
+	std::thread tAirStuck( [&]
+	{
+		Feature( true, 0, [&]
+		{
+			air.AirStuck( );
+		}, 'L' );
+	} );
+	tThreads.push_back( move( tAirStuck ) );
 	std::thread tAutoJump( [&]
 	{
 		Feature( true, 0, [&]
@@ -245,7 +253,7 @@ void Cheat( )
 	LogLastError( );
 	while ( FindWindowA( nullptr, "Counter-Strike: Global Offensive" ) || eng.GetSignOnState( ) == ESignOnState::FULL )
 	{
-		printf("\n%f",eng.GetNextPrimaryAttack(  ) );
+		printf( "\n%f", eng.GetNextPrimaryAttack( ) );
 		Wait( 1000 );
 	}
 	CleanUp( );

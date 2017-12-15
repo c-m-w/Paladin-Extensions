@@ -60,6 +60,9 @@
     <ClInclude Include="Source\Features\Combat\trigger.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Features\Miscellaneous\airstuck.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\global.cpp">
@@ -105,6 +108,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\Features\Combat\trigger.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Features\Miscellaneous\airstuck.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
