@@ -4,22 +4,24 @@ void CRecoilControl::RecoilControl( )
 {
 	if ( eng.GetShotsFired( ) > 1 ) // ignore shot count
 	{
-		printf( "\nShots Fired: %i", eng.GetShotsFired( ) );
-		printf( "\nTime to next shot: %f", eng.GetNextPrimaryAttack( ) );
 		if ( eng.GetNextPrimaryAttack( ) <= 0.f )
 		{
-			eng.WaitTicks( 1 );
-			Wait( 1 );
-			printf( "\nTime to next shot: %f", eng.GetNextPrimaryAttack( ) );
-
+			while ( eng.GetNextPrimaryAttack( ) <= 0.f )
+			{
+				Wait( 1 );
+			}
 			angle_t angCurrentAimPunch = eng.GetAimPunch( ) - angOldAimPunch;
 			angCurrentAimPunch *= 2.f; // rcs factor
 
-			for ( int iNextPrimaryAttack = eng.GetNextPrimaryAttack( ) * eng.GetGlobalVars( ).interval_per_tick; iNextPrimaryAttack > 0; iNextPrimaryAttack-- )
+			int iStartingShotsFired = eng.GetShotsFired( );
+			for ( int iNextPrimaryAttack = int( eng.GetNextPrimaryAttack( ) / eng.GetGlobalVars( ).interval_per_tick + 0.5f); iNextPrimaryAttack > 0; iNextPrimaryAttack-- )
 			{
-				printf( "\nRCS TickStep: %i", iNextPrimaryAttack );
-				eng.SetViewAngle( eng.GetViewAngle( ) - ( angCurrentAimPunch / ( float )iNextPrimaryAttack ) );
+				eng.SetViewAngle( eng.GetViewAngle( ) - angCurrentAimPunch );
 				eng.WaitTicks( 1 );
+				if ( eng.GetAttack( ) & ( FA_DEFAULT | FA_PRESS ) || iStartingShotsFired != eng.GetShotsFired( ) )
+				{
+					break;
+				}
 			}
 
 			angOldAimPunch = eng.GetAimPunch( );
@@ -29,7 +31,6 @@ void CRecoilControl::RecoilControl( )
 	{
 		angOldAimPunch = { 0, 0, 0 };
 	}
-	eng.WaitTicks( 1 );
 }
 
 CRecoilControl rcs;

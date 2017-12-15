@@ -37,7 +37,7 @@ angle_t CEngine::GetViewAngle( )
 
 void CEngine::SetViewAngle( angle_t angNewViewAngle )
 {
-	if ( GetViewAngle( ) != angNewViewAngle )
+	if ( GetViewAngle( ) != ClampAngle( NormalizeAngle( angNewViewAngle ) ) )
 	{
 		cs_aViewAngle.val = ClampAngle( NormalizeAngle( angNewViewAngle ) );
 		mem.Set( cs_aViewAngle );
@@ -244,9 +244,15 @@ float CEngine::GetNextPrimaryAttack( )
 void CEngine::WaitTicks( int iTicksToWait )
 {
 	iTicksToWait += GetGlobalVars( ).tickcount;
+	float flTimeWaited = 0.f;
 	while ( iTicksToWait > GetGlobalVars( ).tickcount )
 	{
 		Wait( 1 );
+		flTimeWaited += .001f;
+		if ( flTimeWaited > GetGlobalVars(  ).interval_per_tick )
+		{
+			break;
+		}
 	}
 }
 
@@ -283,32 +289,19 @@ angle_t CEngine::NormalizeAngle( angle_t angDestination )
 	angle_t angReturn = angDestination - eng.GetViewAngle( );
 
 	float flAngleChange = sqrt( angReturn.pitch * angReturn.pitch + angReturn.yaw * angReturn.yaw );
+
 	if ( fabs( flAngleChange ) > MAX_ANGLE_DELTA )
 	{
 		float flAngleScaleFactor = MAX_ANGLE_DELTA / fabs( flAngleChange );
 		angReturn.pitch *= flAngleScaleFactor;
 		angReturn.yaw *= flAngleScaleFactor;
 	}
-	if ( angReturn.yaw / GetPixelToAngleYAW( ) > GetPixelToAngleYAW( ) / 2 )
-	{
-		int i = int( angReturn.yaw / GetPixelToAngleYAW( ) + GetPixelToAngleYAW( ) );
-		angReturn.yaw = GetPixelToAngleYAW( ) * i;
-	}
-	else
-	{
-		int i = int( angReturn.yaw / GetPixelToAngleYAW( ) );
-		angReturn.yaw = GetPixelToAngleYAW( ) * i;
-	}
-	if ( angReturn.pitch / GetPixelToAnglePITCH( ) > GetPixelToAnglePITCH( ) / 2 )
-	{
-		int i = int( angReturn.pitch / GetPixelToAnglePITCH( ) + GetPixelToAnglePITCH( ) );
-		angReturn.pitch = GetPixelToAnglePITCH( ) * i;
-	}
-	else
-	{
-		int i = int( angReturn.pitch / GetPixelToAnglePITCH( ) );
-		angReturn.pitch = GetPixelToAnglePITCH( ) * i;
-	}
+
+	int i = int( angReturn.yaw / GetPixelToAngleYAW( ) + 0.4f );
+	angReturn.yaw = GetPixelToAngleYAW( ) * i;
+
+	i = int( angReturn.pitch / GetPixelToAnglePITCH( ) + 0.4f );
+	angReturn.pitch = GetPixelToAnglePITCH( ) * i;
 
 	angReturn += eng.GetViewAngle( );
 	angReturn.roll = eng.GetViewAngle( ).roll;
