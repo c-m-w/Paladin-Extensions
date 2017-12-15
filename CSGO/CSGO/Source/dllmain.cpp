@@ -3,9 +3,12 @@ void Feature( bool, unsigned int, std::function< void( ) > );
 void Feature( bool, unsigned int, std::function< void( ) >, int );
 void CleanUp( );
 void Panic( );
-void Cheat( );
+void CreateThreads( );
+bool GetPremium( );
+void SetDebug( );
+void CheatMain( );
 
-BOOL WINAPI DllMain( HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpvReserved )
+BOOL WINAPI DLLMain( HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpvReserved )
 {
 	switch ( fdwReason )
 	{
@@ -15,7 +18,7 @@ BOOL WINAPI DllMain( HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpvReserved )
 			AllocConsole( );
 #endif
 			hInst = hInstDll;
-			HANDLE hCheat = CreateThread( nullptr, 0, LPTHREAD_START_ROUTINE( Cheat ), nullptr, 0, nullptr );
+			HANDLE hCheat = CreateThread( nullptr, 0, LPTHREAD_START_ROUTINE( CheatMain ), nullptr, 0, nullptr );
 			if ( !hCheat || hCheat == INVALID_HANDLE_VALUE )
 			{
 				cfg.iQuitReason = EQuitReasons::LOAD_LIBRARY_ERROR;
@@ -44,72 +47,22 @@ BOOL WINAPI DllMain( HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpvReserved )
 	return BOOL( cfg.iQuitReason );
 }
 
-void Cheat( )
+void CheatMain( )
 {
 #ifdef _DEBUG
-	FILE *fTemp;
-	freopen_s( &fTemp, "CONOUT$", "w", stdout );
-
-	HANDLE hConsole = GetStdHandle( STD_OUTPUT_HANDLE );
-	HWND hWndConsole = GetConsoleWindow( );
-
-	SetConsoleTitle( "Paladin CSGO" );
-	MoveWindow( hWndConsole, 300, 300, 339, 279, false );
-	EnableMenuItem( GetSystemMenu( hWndConsole, false ), SC_CLOSE, MF_GRAYED );
-	SetWindowLong( hWndConsole, GWL_STYLE, GetWindowLong( hWndConsole, GWL_STYLE ) & ~SC_CLOSE & ~WS_MAXIMIZEBOX & ~WS_SIZEBOX );
-
-	CONSOLE_FONT_INFOEX cfiEx;
-	cfiEx.cbSize = sizeof(CONSOLE_FONT_INFOEX);
-	cfiEx.dwFontSize.X = 6;
-	cfiEx.dwFontSize.Y = 8;
-	wcscpy_s( cfiEx.FaceName, L"Terminal" );
-	SetCurrentConsoleFontEx( hConsole, 0, &cfiEx );
-
-	CONSOLE_CURSOR_INFO cci;
-	cci.dwSize = 25;
-	cci.bVisible = false;
-	SetConsoleCursorInfo( hConsole, &cci );
-	SetConsoleTextAttribute( hConsole, 15 );
-
-	printf( "[OPN] " );
-	strLog.append( "[OPN] " );
-	SetConsoleTextAttribute( hConsole, 7 );
-	printf( "Paladin Debug Interface Setup\n" );
-	strLog.append( "Paladin Debug Interface Setup\n" );
-	LogLastError( );
+	SetDebug( );
 #endif
 
-	// TODO stop byte patching
-	EPremium uCurrentUserPremiumStatus = all.CheckPremiumStatus( );
-	if ( uCurrentUserPremiumStatus == EPremium::BANNED )
+	if ( !GetPremium( ) )
 	{
-		//TODO BANNED: DELETE FILE
-		char chTemp[MAX_PATH];
-		GetModuleFileName( hInst, chTemp, MAX_PATH );
-		remove( std::string( chTemp ).c_str( ) );
-		LogLastError( );
-		Panic( );
 		return;
 	}
-	if ( uCurrentUserPremiumStatus == EPremium::NOT_PREMIUM )
-	{
-		CleanUp( );
-		return;
-	}
-	if ( uCurrentUserPremiumStatus == EPremium::EXPIRED )
-	{
-		MessageBox( nullptr, "Notice 1: Premium Time Expired -> No access\nDid you renew your premium?", "Paladin CSGO", MB_ICONHAND | MB_OK );
-		CleanUp( );
-		return;
-	}
-	if ( uCurrentUserPremiumStatus == EPremium::PREMIUM )
-	{
-		LogDebugMsg( SCS, "Authenticated!" );
-	}
+
 	if ( all.GetElevationState( ) == EElevation::NOT_ADMIN )
 	{
 		MessageBox( nullptr, "Warning 1: Elevation Token State -> No access\nDid you run the middleman as admin?", "Paladin CSGO", MB_ICONWARNING | MB_OK );
 	}
+	
 	if ( cfg.bCheckForAnticheat )
 	{
 		EAnticheatStatus kacCSGO = all.KillAnticheat( "Counter-Strike: Global Offensive", *"csgo.exe" );
@@ -131,6 +84,7 @@ void Cheat( )
 			return;
 		}
 	}
+
 	if ( !cfg.LoadConfig( ) )
 	{
 		MessageBox( nullptr, "Warning 3: Config File -> Using Defaults\nIs there a config file?", "Paladin CSGO", MB_ICONWARNING | MB_OK );
@@ -139,7 +93,9 @@ void Cheat( )
 	{
 		MessageBox( nullptr, "Warning 4: Config File -> Using Defaults\nIs the config file formatted for this version?", "Paladin CSGO", MB_ICONWARNING | MB_OK );
 	}
+
 	// TODO call Menu here
+	
 	if ( !mem.AttachToGame( ) )
 	{
 		MessageBox( nullptr, "Fatal Error 2: Game Attach\nAre you running the cheat as admin?", "Paladin CSGO", MB_ICONERROR | MB_OK );
@@ -148,33 +104,118 @@ void Cheat( )
 	}
 	mem.InitializeAddresses( );
 	LogLastError( );
+	
 	LogDebugMsg( DBG, "Waiting for server connection..." );
 	while ( eng.GetSignOnState( ) == ESignOnState::FULL )
 	{
 		Wait( 1000 );
 	}
-	LogDebugMsg( DBG, "Initializing threads..." );
-	// general
-	std::thread tPanic( [&]
+	
+	CreateThreads( );
+
+	while ( eng.GetSignOnState( ) == ESignOnState::FULL )
 	{
-		Feature( true, 1, [&]
+		Wait( 1000 );
+	}
+	CleanUp( );
+	CheatMain( );
+}
+
+void SetDebug( )
+{
+	FILE *fTemp;
+	freopen_s( &fTemp, "CONOUT$", "w", stdout );
+
+	HANDLE hConsole = GetStdHandle( STD_OUTPUT_HANDLE );
+	HWND hWndConsole = GetConsoleWindow( );
+
+	SetConsoleTitle( "Paladin CSGO" );
+	MoveWindow( hWndConsole, 300, 300, 339, 279, false );
+	EnableMenuItem( GetSystemMenu( hWndConsole, false ), SC_CLOSE, MF_GRAYED );
+	SetWindowLong( hWndConsole, GWL_STYLE, GetWindowLong( hWndConsole, GWL_STYLE ) & ~SC_CLOSE & ~WS_MAXIMIZEBOX & ~WS_SIZEBOX );
+
+	CONSOLE_FONT_INFOEX cfiEx;
+	cfiEx.cbSize = sizeof( CONSOLE_FONT_INFOEX );
+	cfiEx.dwFontSize.X = 6;
+	cfiEx.dwFontSize.Y = 8;
+	wcscpy_s( cfiEx.FaceName, L"Terminal" );
+	SetCurrentConsoleFontEx( hConsole, 0, &cfiEx );
+
+	CONSOLE_CURSOR_INFO cci;
+	cci.dwSize = 25;
+	cci.bVisible = false;
+	SetConsoleCursorInfo( hConsole, &cci );
+	SetConsoleTextAttribute( hConsole, 15 );
+
+	printf( "[OPN] " );
+	strLog.append( "[OPN] " );
+	SetConsoleTextAttribute( hConsole, 7 );
+	printf( "Paladin Debug Interface Setup\n" );
+	strLog.append( "Paladin Debug Interface Setup\n" );
+	LogLastError( );
+}
+
+bool GetPremium( )
+{
+	// TODO stop byte patching
+	EPremium uCurrentUserPremiumStatus = all.CheckPremiumStatus( );
+	if ( uCurrentUserPremiumStatus == EPremium::BANNED )
+	{
+		//TODO BANNED: DELETE FILE
+		char chTemp[ MAX_PATH ];
+		GetModuleFileName( hInst, chTemp, MAX_PATH );
+		remove( std::string( chTemp ).c_str( ) );
+		LogLastError( );
+		Panic( );
+		return false;
+	}
+	if ( uCurrentUserPremiumStatus == EPremium::NOT_PREMIUM )
+	{
+		CleanUp( );
+		return false;
+	}
+	if ( uCurrentUserPremiumStatus == EPremium::EXPIRED )
+	{
+		MessageBox( nullptr, "Notice 1: Premium Time Expired -> No access\nDid you renew your premium?", "Paladin CSGO", MB_ICONHAND | MB_OK );
+		CleanUp( );
+		return false;
+	}
+	if ( uCurrentUserPremiumStatus == EPremium::PREMIUM )
+	{
+		LogDebugMsg( SCS, "Authenticated!" );
+	}
+
+	return true;
+}
+
+void CreateThreads( )
+{
+	LogDebugMsg( DBG, "Initializing threads..." );
+	//
+	// general
+	//
+	std::thread tPanic( [ & ]
+	{
+		Feature( true, 1, [ & ]
 		{
 			Panic( );
 		}, VK_F4 );
 	} );
 	tThreads.push_back( move( tPanic ) );
+	//
 	// awareness
-	std::thread tHitSound( [&]
+	//
+	std::thread tHitSound( [ & ]
 	{
-		Feature( true, 0, [&]
+		Feature( true, 1, [ & ]
 		{
 			hit.PlaySoundOnHit( );
 		} );
 	} );
 	tThreads.push_back( move( tHitSound ) );
-	std::thread tNoFlash( [&]
+	std::thread tNoFlash( [ & ]
 	{
-		Feature( true, 0, [&]
+		Feature( true, 1, [ & ]
 		{
 			nof.NoFlash( );
 		} );
@@ -183,33 +224,37 @@ void Cheat( )
 	// TODO
 	/*std::thread tRadar( [&]
 	{
-	Feature( true, 0, [&]
+	Feature( true, 1, [&]
 	{
 	rad.Radar( );
 	} );
 	} );
 	tThreads.push_back( move( tRadar ) );*/
+	//
 	// combat
-	std::thread tRecoilControl( [&]
+	//
+	std::thread tRecoilControl( [ & ]
 	{
-		Feature( true, 1, [&]
+		Feature( true, 1, [ & ]
 		{
 			rcs.RecoilControl( );
 		} );
 	} );
 	tThreads.push_back( move( tRecoilControl ) );
+	//
 	// miscellaneous
-	std::thread tAirStuck( [&]
+	//
+	std::thread tAirStuck( [ & ]
 	{
-		Feature( true, 0, [&]
+		Feature( true, 1, [ & ]
 		{
 			air.AirStuck( );
 		}, 'L' );
 	} );
 	tThreads.push_back( move( tAirStuck ) );
-	std::thread tAutoJump( [&]
+	std::thread tAutoJump( [ & ]
 	{
-		Feature( true, 0, [&]
+		Feature( true, 1, [ & ]
 		{
 			aut.AutoJump( );
 		}, VK_SPACE );
@@ -218,15 +263,15 @@ void Cheat( )
 	// TODO
 	/*std::thread tAutoNade( [&]
 	{
-		Feature( true, 0, [&]
-		{
-			aut.AutoNade( );
-		} );
+	Feature( true, 1, [&]
+	{
+	aut.AutoNade( );
+	} );
 	} );
 	tThreads.push_back( move( tAutoNade ) );*/
-	std::thread tAutoShoot( [&]
+	std::thread tAutoShoot( [ & ]
 	{
-		Feature( true, 0, [&]
+		Feature( true, 1, [ & ]
 		{
 			aut.AutoShoot( );
 		}, VK_LBUTTON );
@@ -235,30 +280,23 @@ void Cheat( )
 	// TODO
 	/*std::thread tFOV( [&]
 	{
-		Feature( true, 0, [&]
-		{
-			fov.FOV( );
-		} );
+	Feature( true, 1, [&]
+	{
+	fov.FOV( );
+	} );
 	} );
 	tThreads.push_back( move( tFOV ) );*/
 	// TODO
 	/*std::thread tWeaponFOV( [&]
 	{
-		Feature( true, 0, [&]
-		{
-			fov.WeaponFOV( );
-		} );
+	Feature( true, 1, [&]
+	{
+	fov.WeaponFOV( );
+	} );
 	} );
 	tThreads.push_back( move( tWeaponFOV ) );*/
 	LogDebugMsg( SCS, "Created threads" );
 	LogLastError( );
-
-	while ( FindWindowA( nullptr, "Counter-Strike: Global Offensive" ) )
-	{
-		Wait( 1000 );
-	}
-	CleanUp( );
-	Cheat( );
 }
 
 void Panic( )
@@ -290,7 +328,7 @@ void Feature( bool bFeatureState, unsigned int nWait, std::function< void( ) > f
 		{
 			fnFeature( );
 		}
-		else if ( nWait )
+		else
 		{
 			Wait( nWait );
 		}
@@ -305,7 +343,7 @@ void Feature( bool bFeatureState, unsigned int nWait, std::function< void( ) > f
 		{
 			fnFeature( );
 		}
-		else if ( nWait )
+		else
 		{
 			Wait( nWait );
 		}
