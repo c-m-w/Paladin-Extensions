@@ -35,11 +35,11 @@ angle_t CEngine::GetViewAngle( )
 	return cs_aViewAngle.val;
 }
 
-void CEngine::SetViewAngle( angle_t cs_aNewViewAngle )
+void CEngine::SetViewAngle( angle_t angNewViewAngle )
 {
-	if ( GetViewAngle( ) != cs_aNewViewAngle )
+	if ( GetViewAngle( ) != angNewViewAngle )
 	{
-		cs_aViewAngle.val = ClampAngle( NormalizeAngle( cs_aNewViewAngle ) );
+		cs_aViewAngle.val = ClampAngle( NormalizeAngle( angNewViewAngle ) );
 		mem.Set( cs_aViewAngle );
 	}
 }
@@ -82,6 +82,7 @@ float CEngine::GetSensitivity( )
 
 void CEngine::SetSensitivity( float flNewSensitivity )
 {
+	Limit( flNewSensitivity, 0.f, 1000.f );
 	if ( GetSensitivity( ) != flNewSensitivity )
 	{
 		flSensitivity.val = flNewSensitivity;
@@ -105,26 +106,26 @@ ETeam CEngine::GetEntityTeam( int iEntity )
 	return el_tTeamNum.val;
 }
 
-bool CEngine::GetEntityDormant( int iEntity )
+bool CEngine::GetEntityDormancy( int iEntity )
 {
 	el_bDormant.loc = GetEntityBase( iEntity ) + el_bDormant.off;
 	mem.Get( el_bDormant );
 	return el_bDormant.val;
 }
 
-bool CEngine::GetEntitySpotted( int iEntity )
+bool CEngine::GetEntitySpottedState( int iEntity )
 {
-	el_bSpotted.loc = GetEntityBase( iEntity ) + el_bSpotted.off;
-	mem.Get( el_bSpotted );
-	return el_bSpotted.val;
+	el_bSpottedState.loc = GetEntityBase( iEntity ) + el_bSpottedState.off;
+	mem.Get( el_bSpottedState );
+	return el_bSpottedState.val;
 }
 
-void CEngine::SetEntitySpotted( int iEntity, bool el_bNewSpotted )
+void CEngine::SetEntitySpottedState( int iEntity, bool bNewSpottedState )
 {
-	if ( GetEntitySpotted( iEntity ) != el_bNewSpotted )
+	if ( GetEntitySpottedState( iEntity ) != bNewSpottedState )
 	{
-		el_bSpotted.val = el_bNewSpotted;
-		mem.Set( el_bSpotted );
+		el_bSpottedState.val = bNewSpottedState;
+		mem.Set( el_bSpottedState );
 	}
 }
 
@@ -169,11 +170,12 @@ int CEngine::GetFieldOfView( )
 	return lp_iFOV.val;
 }
 
-void CEngine::SetFieldOfView( int lp_iNewFOV )
+void CEngine::SetFieldOfView( int iNewFOV )
 {
-	if ( GetFieldOfView( ) != lp_iNewFOV )
+	Limit( iNewFOV, 0, 180 );
+	if ( GetFieldOfView( ) != iNewFOV )
 	{
-		lp_iFOV.val = lp_iNewFOV;
+		lp_iFOV.val = iNewFOV;
 		mem.Set( lp_iFOV );
 	}
 }
@@ -199,11 +201,12 @@ float CEngine::GetFlashMaxAlpha( )
 	return lp_flFlashMaxAlpha.val;
 }
 
-void CEngine::SetFlashMaxAlpha( float lp_flNewFlashMaxAlpha )
+void CEngine::SetFlashMaxAlpha( float flNewFlashMaxAlpha )
 {
-	if ( GetFlashMaxAlpha( ) != lp_flNewFlashMaxAlpha )
+	Limit( flNewFlashMaxAlpha, 0.f, 255.f );
+	if ( GetFlashMaxAlpha( ) != flNewFlashMaxAlpha )
 	{
-		lp_flFlashMaxAlpha.val = lp_flNewFlashMaxAlpha;
+		lp_flFlashMaxAlpha.val = flNewFlashMaxAlpha;
 		mem.Set( lp_flFlashMaxAlpha );
 	}
 }
@@ -235,10 +238,6 @@ float CEngine::GetNextPrimaryAttack( )
 	aw_flNextPrimaryAttack.loc = GetActiveWeaponHandle( ) + aw_flNextPrimaryAttack.off;
 	mem.Get( aw_flNextPrimaryAttack );
 	aw_flNextPrimaryAttack.val -= GetGlobalVars( ).curtime;
-	if ( aw_flNextPrimaryAttack.val < 0.f )
-	{
-		aw_flNextPrimaryAttack.val = 0.f;
-	}
 	return aw_flNextPrimaryAttack.val;
 }
 
@@ -261,105 +260,99 @@ float CEngine::GetPixelToAnglePITCH( )
 	return 0.022f * GetSensitivity( ) * all.GetWindowsSensitivity( ); // * ZOOM SENS IF ZOOMED
 }
 
-angle_t CEngine::ClampAngle( angle_t aToClamp )
+angle_t CEngine::ClampAngle( angle_t angToClamp )
 {
-	if ( aToClamp.pitch > 89 )
+	Limit( angToClamp.pitch, -89.f, 89.f );
+
+	while ( angToClamp.yaw < -180.f )
 	{
-		aToClamp.pitch = 89;
+		angToClamp.yaw += 360.f;
 	}
-	else if ( aToClamp.pitch < -89 )
+	while ( angToClamp.yaw > 180.f )
 	{
-		aToClamp.pitch = -89;
+		angToClamp.yaw -= 360.f;
 	}
-	while ( aToClamp.yaw < -180 )
-	{
-		aToClamp.yaw += 360;
-	}
-	while ( aToClamp.yaw > 180 )
-	{
-		aToClamp.yaw -= 360;
-	}
-	if ( aToClamp.roll > 50 )
-	{
-		aToClamp.roll = 50;
-	}
-	else if ( aToClamp.roll < -50 )
-	{
-		aToClamp.roll = -50;
-	}
-	return aToClamp;
+
+	Limit( angToClamp.roll, -50.f, 50.f );
+
+	return angToClamp;
 }
 
-angle_t CEngine::NormalizeAngle( angle_t aDestination )
+angle_t CEngine::NormalizeAngle( angle_t angDestination )
 {
-	angle_t aNewAngle = aDestination - eng.GetViewAngle( );
+	angle_t angReturn = angDestination - eng.GetViewAngle( );
 
-	float flAngleChange = sqrt( aNewAngle.pitch * aNewAngle.pitch + aNewAngle.yaw * aNewAngle.yaw );
+	float flAngleChange = sqrt( angReturn.pitch * angReturn.pitch + angReturn.yaw * angReturn.yaw );
 	if ( fabs( flAngleChange ) > MAX_ANGLE_DELTA )
 	{
 		float flAngleScaleFactor = MAX_ANGLE_DELTA / fabs( flAngleChange );
-		aNewAngle.pitch *= flAngleScaleFactor;
-		aNewAngle.yaw *= flAngleScaleFactor;
+		angReturn.pitch *= flAngleScaleFactor;
+		angReturn.yaw *= flAngleScaleFactor;
 	}
-	if ( aNewAngle.yaw / GetPixelToAngleYAW( ) > GetPixelToAngleYAW( ) / 2 )
+	if ( angReturn.yaw / GetPixelToAngleYAW( ) > GetPixelToAngleYAW( ) / 2 )
 	{
-		int i = int( aNewAngle.yaw / GetPixelToAngleYAW( ) + GetPixelToAngleYAW( ) );
-		aNewAngle.yaw = GetPixelToAngleYAW( ) * i;
+		int i = int( angReturn.yaw / GetPixelToAngleYAW( ) + GetPixelToAngleYAW( ) );
+		angReturn.yaw = GetPixelToAngleYAW( ) * i;
 	}
 	else
 	{
-		int i = int( aNewAngle.yaw / GetPixelToAngleYAW( ) );
-		aNewAngle.yaw = GetPixelToAngleYAW( ) * i;
+		int i = int( angReturn.yaw / GetPixelToAngleYAW( ) );
+		angReturn.yaw = GetPixelToAngleYAW( ) * i;
 	}
-	if ( aNewAngle.pitch / GetPixelToAnglePITCH( ) > GetPixelToAnglePITCH( ) / 2 )
+	if ( angReturn.pitch / GetPixelToAnglePITCH( ) > GetPixelToAnglePITCH( ) / 2 )
 	{
-		int i = int( aNewAngle.pitch / GetPixelToAnglePITCH( ) + GetPixelToAnglePITCH( ) );
-		aNewAngle.pitch = GetPixelToAnglePITCH( ) * i;
+		int i = int( angReturn.pitch / GetPixelToAnglePITCH( ) + GetPixelToAnglePITCH( ) );
+		angReturn.pitch = GetPixelToAnglePITCH( ) * i;
 	}
 	else
 	{
-		int i = int( aNewAngle.pitch / GetPixelToAnglePITCH( ) );
-		aNewAngle.pitch = GetPixelToAnglePITCH( ) * i;
+		int i = int( angReturn.pitch / GetPixelToAnglePITCH( ) );
+		angReturn.pitch = GetPixelToAnglePITCH( ) * i;
 	}
-	return aNewAngle + eng.GetViewAngle( );
+
+	angReturn += eng.GetViewAngle( );
+	angReturn.roll = eng.GetViewAngle( ).roll;
+
+	return angReturn;
 }
 
-angle_t CEngine::VectorToAngle( coordinate_t cOrigin, coordinate_t cDestination )
+angle_t CEngine::VectorToAngle( coordinate_t corOrigin, coordinate_t corDestination )
 {
-	angle_t aReturn = { 0, 0, 0 };
-	vector_t vDelta( cOrigin, cDestination );
+	angle_t angReturn = { 0, 0, 0 };
+	vector_t vDelta( corOrigin, corDestination );
 	if ( !vDelta.dy && !vDelta.dx )
 	{
-		aReturn.yaw = 0;
+		angReturn.yaw = 0;
 		if ( vDelta.dz > 0 )
 		{
-			aReturn.pitch = 90;
+			angReturn.pitch = 90;
 		}
 		else if ( vDelta.dz < 0 )
 		{
-			aReturn.pitch = -90;
+			angReturn.pitch = -90;
 		}
 		else
 		{
-			aReturn.pitch = 0;
+			angReturn.pitch = 0;
 		}
 	}
 	else
 	{
-		aReturn.yaw = atan2( vDelta.dy, vDelta.dx ) * 180 / PI;
-		if ( aReturn.yaw < 0 )
+		angReturn.yaw = atan2( vDelta.dy, vDelta.dx ) * 180 / PI;
+		if ( angReturn.yaw < 0 )
 		{
-			aReturn.yaw += 360;
+			angReturn.yaw += 360;
 		}
+
 		float flTemp = sqrt( vDelta.dx * vDelta.dx + vDelta.dy * vDelta.dy );
-		aReturn.pitch = atan2( -vDelta.dz, flTemp ) * 180 / PI;
-		if ( aReturn.pitch < 0 )
+		angReturn.pitch = atan2( -vDelta.dz, flTemp ) * 180 / PI;
+		if ( angReturn.pitch < 0 )
 		{
-			aReturn.pitch += 360;
+			angReturn.pitch += 360;
 		}
 	}
-	ClampAngle( aReturn );
-	return aReturn;
+	ClampAngle( angReturn );
+	return angReturn;
 }
 
 CEngine eng;

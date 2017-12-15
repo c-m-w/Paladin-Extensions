@@ -139,7 +139,7 @@ void Cheat( )
 	{
 		MessageBox( nullptr, "Warning 4: Config File -> Using Defaults\nIs the config file formatted for this version?", "Paladin CSGO", MB_ICONWARNING | MB_OK );
 	}
-	// Todo call Menu here
+	// TODO call Menu here
 	if ( !mem.AttachToGame( ) )
 	{
 		MessageBox( nullptr, "Fatal Error 2: Game Attach\nAre you running the cheat as admin?", "Paladin CSGO", MB_ICONERROR | MB_OK );
@@ -240,8 +240,9 @@ void Cheat( )
 			fov.FOV( );
 		} );
 	} );
-	tThreads.push_back( move( tFOV ) );
-	std::thread tWeaponFOV( [&]
+	tThreads.push_back( move( tFOV ) );*/
+	// TODO
+	/*std::thread tWeaponFOV( [&]
 	{
 		Feature( true, 0, [&]
 		{
@@ -251,9 +252,9 @@ void Cheat( )
 	tThreads.push_back( move( tWeaponFOV ) );*/
 	LogDebugMsg( SCS, "Created threads" );
 	LogLastError( );
-	while ( FindWindowA( nullptr, "Counter-Strike: Global Offensive" ) || eng.GetSignOnState( ) == ESignOnState::FULL )
+
+	while ( FindWindowA( nullptr, "Counter-Strike: Global Offensive" ) )
 	{
-		printf( "\n%f", eng.GetNextPrimaryAttack( ) );
 		Wait( 1000 );
 	}
 	CleanUp( );
@@ -283,7 +284,7 @@ void CleanUp( )
 
 void Feature( bool bFeatureState, unsigned int nWait, std::function< void( ) > fnFeature, int iFeatureKey )
 {
-	while ( bFeatureState )
+	while ( !bExitState )
 	{
 		if ( bFeatureState && GetAsyncKeyState( iFeatureKey ) )
 		{
@@ -293,16 +294,12 @@ void Feature( bool bFeatureState, unsigned int nWait, std::function< void( ) > f
 		{
 			Wait( nWait );
 		}
-		if ( bExitState )
-		{
-			return;
-		}
 	}
 }
 
 void Feature( bool bFeatureState, unsigned int nWait, std::function< void( ) > fnFeature )
 {
-	while ( bFeatureState )
+	while ( !bExitState )
 	{
 		if ( bFeatureState )
 		{
@@ -311,10 +308,6 @@ void Feature( bool bFeatureState, unsigned int nWait, std::function< void( ) > f
 		else if ( nWait )
 		{
 			Wait( nWait );
-		}
-		if ( bExitState )
-		{
-			return;
 		}
 	}
 }

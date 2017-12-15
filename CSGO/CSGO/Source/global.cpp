@@ -48,6 +48,22 @@ angle_t angle_t::operator-( angle_t rhs )
 	return *this;
 }
 
+angle_t angle_t::operator*( float rhs )
+{
+	pitch *= rhs;
+	yaw *= rhs;
+	roll *= rhs;
+	return *this;
+}
+
+angle_t angle_t::operator/( float rhs )
+{
+	pitch /= rhs;
+	yaw /= rhs;
+	roll /= rhs;
+	return *this;
+}
+
 angle_t &angle_t::operator+=( angle_t rhs )
 {
 	*this = *this + rhs;
@@ -60,11 +76,15 @@ angle_t &angle_t::operator-=( angle_t rhs )
 	return *this;
 }
 
+angle_t angle_t::operator/=( float rhs )
+{
+	*this = *this / rhs;
+	return *this;
+}
+
 angle_t angle_t::operator*=( float rhs )
 {
-	pitch *= rhs;
-	yaw *= rhs;
-	roll *= rhs;
+	*this = *this * rhs;
 	return *this;
 }
 
@@ -75,11 +95,11 @@ vector_t::vector_t( )
 	dz = 0;
 }
 
-vector_t::vector_t( coordinate_t cOrigin, coordinate_t cDestination )
+vector_t::vector_t( coordinate_t corOrigin, coordinate_t corDestination )
 {
-	dx = cDestination.x - cOrigin.x;
-	dy = cDestination.y - cOrigin.y;
-	dz = cDestination.z - cOrigin.z;
+	dx = corDestination.x - corOrigin.x;
+	dy = corDestination.y - corOrigin.y;
+	dz = corDestination.z - corOrigin.z;
 }
 
 bool CGlobalVars::operator==( CGlobalVars rhs )

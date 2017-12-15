@@ -16,7 +16,7 @@ namespace Addresses
 	address_t< DWORD > pdwEntityList;
 	address_t< bool > el_bDormant;
 	address_t< ETeam > el_tTeamNum;
-	address_t< bool > el_bSpotted;
+	address_t< bool > el_bSpottedState;
 
 	address_t< DWORD > pdwLocalPlayer;
 
@@ -156,7 +156,7 @@ void CMemoryManager::InitializeAddresses( )
 	pdwEntityList = { 0x4A77AFC };
 	el_bDormant = { 0xE9 };
 	el_tTeamNum = { 0xF0 };
-	el_bSpotted = { 0x939 };
+	el_bSpottedState = { 0x939 };
 	pdwLocalPlayer = { 0xA9ADEC };
 	lp_tTeamNum = { 0xF0 };
 	lp_fFlags = { 0x100 };

@@ -24,7 +24,7 @@ namespace Addresses
 	extern address_t< DWORD > pdwEntityList;
 	extern address_t< bool > el_bDormant;
 	extern address_t< ETeam > el_tTeamNum;
-	extern address_t< bool > el_bSpotted;
+	extern address_t< bool > el_bSpottedState;
 
 	extern address_t< DWORD > pdwLocalPlayer;
 

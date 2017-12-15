@@ -58,10 +58,10 @@ enum class EAnticheatStatus
 
 #define MAX_ANGLE_DELTA 22.f // Max angle delta per tick
 #define FL_ONGROUND (1 << 0) // At rest / on the ground
-#define FL_DUCKING (1 << 1)  // Player flag -- Player is fully crouched
+#define FL_DUCKING (1 << 1) // Player flag -- Player is fully crouched
 #define KS_DEFAULT 0b100 // default command state
-#define KS_PRESS 0b1     // +command
-#define KS_TICK 0b10     // +command, tick, -command
+#define KS_PRESS 0b1 // +command
+#define KS_TICK 0b10 // +command, tick, -command
 
 typedef unsigned int flag;
 typedef unsigned short total;
@@ -76,9 +76,12 @@ struct angle_t
 	bool operator!=( angle_t );
 	angle_t operator+( angle_t );
 	angle_t operator-( angle_t );
+	angle_t operator*( float rhs );
+	angle_t operator/( float rhs );
 	angle_t &operator+=( angle_t );
 	angle_t &operator-=( angle_t );
 	angle_t operator*=( float rhs );
+	angle_t operator/=( float rhs );
 };
 
 struct color_t
