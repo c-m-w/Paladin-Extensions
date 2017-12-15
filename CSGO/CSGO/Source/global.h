@@ -1,16 +1,19 @@
 #pragma once
 
+// defines
 #define PI 3.1415926535897932384626f
 
+// typedefs
 typedef long long moment;
 
+// global variables
 extern HINSTANCE hInst;
 extern bool bExitState;
 extern std::vector< std::thread > tThreads;
 
+// functions
 void Wait( unsigned int );
 moment GetTime( );
-
 template< typename datatype > void Limit( datatype &xStatus, datatype xMinimum, datatype xMaximum )
 {
 	if ( xMinimum > xStatus )
@@ -23,6 +26,7 @@ template< typename datatype > void Limit( datatype &xStatus, datatype xMinimum, 
 	}
 }
 
+// enums
 enum class EQuitReasons
 {
 	UNKNOWN = -1,
@@ -56,18 +60,21 @@ enum class EAnticheatStatus
 
 /// CSGO stuff
 
+// defines
 #define MAX_ANGLE_DELTA 22.f // Max angle delta per tick
 #define FL_ONGROUND (1 << 0) // At rest / on the ground
 #define FL_DUCKING (1 << 1) // Player flag -- Player is fully crouched
-#define KS_DEFAULT 0b100 // default command state
-#define KS_PRESS 0b1 // +command
-#define KS_TICK 0b10 // +command, tick, -command
+#define FA_DEFAULT 0b100 // default command state
+#define FA_PRESS 0b1 // +command
+#define FA_TICK 0b10 // +command, tick, -command
 
+// typedefs
 typedef unsigned int flag;
 typedef unsigned short total;
 typedef unsigned __int8 uint8;
-typedef DWORD handle;
+typedef unsigned long handle;
 
+// structs
 struct angle_t
 {
 	float pitch, yaw, roll; // y, x, z
@@ -102,6 +109,7 @@ struct vector_t
 	vector_t( coordinate_t, coordinate_t );
 };
 
+// classes
 class CGlobalVars
 {
 public:
@@ -120,6 +128,7 @@ public:
 	bool operator!=( CGlobalVars );
 };
 
+// enums
 enum class EMoveType
 {
 	NONE,
