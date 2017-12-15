@@ -206,7 +206,7 @@ void CreateThreads( )
 	//
 	std::thread tHitSound( [ & ]
 	{
-		Feature( true, 1, [ & ]
+		Feature( fset.bHitSoundState, 1, [ & ]
 		{
 			hit.PlaySoundOnHit( );
 		} );
@@ -214,7 +214,7 @@ void CreateThreads( )
 	tThreads.push_back( move( tHitSound ) );
 	std::thread tNoFlash( [ & ]
 	{
-		Feature( true, 1, [ & ]
+		Feature( fset.bNoFlashState, 1, [ & ]
 		{
 			nof.NoFlash( );
 		} );
@@ -223,7 +223,7 @@ void CreateThreads( )
 	// TODO
 	/*std::thread tRadar( [&]
 	{
-	Feature( true, 1, [&]
+	Feature( fset.bRadarState, 1, [&]
 	{
 	rad.Radar( );
 	} );
@@ -234,7 +234,7 @@ void CreateThreads( )
 	//
 	std::thread tRecoilControl( [ & ]
 	{
-		Feature( true, 1, [ & ]
+		Feature( fset.bRecoilControlState, 1, [ & ]
 		{
 			rcs.RecoilControl( );
 		} );
@@ -245,24 +245,24 @@ void CreateThreads( )
 	//
 	std::thread tAirStuck( [ & ]
 	{
-		Feature( true, 1, [ & ]
+		Feature( fset.bAirStuckState, 1, [ & ]
 		{
 			air.AirStuck( );
-		}, 'L' );
+		}, fset.iAirStuckKey );
 	} );
 	tThreads.push_back( move( tAirStuck ) );
 	std::thread tAutoJump( [ & ]
 	{
-		Feature( true, 1, [ & ]
+		Feature( fset.bAutoJumpState, 1, [ & ]
 		{
 			aut.AutoJump( );
-		}, VK_SPACE );
+		}, fset.iAutoJumpKey );
 	} );
 	tThreads.push_back( move( tAutoJump ) );
 	// TODO
 	/*std::thread tAutoNade( [&]
 	{
-	Feature( true, 1, [&]
+	Feature( fset.bAutoNadeState, 1, [&]
 	{
 	aut.AutoNade( );
 	} );
@@ -271,16 +271,16 @@ void CreateThreads( )
 	// TODO
 	/*std::thread tAutoShoot( [ & ]
 	{
-		Feature( true, 1, [ & ]
+		Feature( fset.bAutoShootState, 1, [ & ]
 		{
 			aut.AutoShoot( );
-		}, VK_LBUTTON );
+		}, fset.iAutoShootKey );
 	} );
 	tThreads.push_back( move( tAutoShoot ) );*/
 	// TODO
 	/*std::thread tFOV( [&]
 	{
-	Feature( true, 1, [&]
+	Feature( fset.bFOVState, 1, [&]
 	{
 	fov.FOV( );
 	} );
@@ -289,7 +289,7 @@ void CreateThreads( )
 	// TODO
 	/*std::thread tWeaponFOV( [&]
 	{
-	Feature( true, 1, [&]
+	Feature( fset.bWeaponFOVState, 1, [&]
 	{
 	fov.WeaponFOV( );
 	} );
