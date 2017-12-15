@@ -6,19 +6,15 @@ void Panic( );
 void CreateThreads( );
 bool GetPremium( );
 void SetDebug( );
-void CheatMain( );
 
-BOOL WINAPI DllMain( HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpvReserved )
+/*BOOL WINAPI DllMain( HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpvReserved )
 {
 	switch ( fdwReason )
 	{
 		case DLL_PROCESS_ATTACH:
 		{
-#ifdef _DEBUG
-			AllocConsole( );
-#endif
 			hInst = hInstDll;
-			HANDLE hCheat = CreateThread( nullptr, 0, LPTHREAD_START_ROUTINE( CheatMain ), nullptr, 0, nullptr );
+			HANDLE hCheat = CreateThread( nullptr, 0, LPTHREAD_START_ROUTINE( WinMain ), nullptr, 0, nullptr );
 			if ( !hCheat || hCheat == INVALID_HANDLE_VALUE )
 			{
 				cfg.iQuitReason = EQuitReasons::LOAD_LIBRARY_ERROR;
@@ -45,17 +41,18 @@ BOOL WINAPI DllMain( HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpvReserved )
 		}
 	}
 	return BOOL( cfg.iQuitReason );
-}
+}*/
 
-void CheatMain( )
+int CALLBACK WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow )
 {
 #ifdef _DEBUG
+	AllocConsole( );
 	SetDebug( );
 #endif
 
 	if ( !GetPremium( ) )
 	{
-		return;
+		return 0;
 	}
 
 	if ( all.GetElevationState( ) == EElevation::NOT_ADMIN )
@@ -81,7 +78,7 @@ void CheatMain( )
 		{
 			MessageBox( nullptr, "Fatal Error 1: Elevation Token State -> No anticheat termination access\nDid you run the middleman as admin?", "Paladin CSGO", MB_ICONERROR | MB_OK );
 			CleanUp( );
-			return;
+			return 0;
 		}
 	}
 
@@ -100,7 +97,7 @@ void CheatMain( )
 	{
 		MessageBox( nullptr, "Fatal Error 2: Game Attach\nAre you running the cheat as admin?", "Paladin CSGO", MB_ICONERROR | MB_OK );
 		CleanUp( );
-		return;
+		return 0;
 	}
 	mem.InitializeAddresses( );
 	LogLastError( );
@@ -119,8 +116,8 @@ void CheatMain( )
 	{
 		Wait( 1000 );
 	}
-	CleanUp( );
-	CheatMain( );
+	//CleanUp( );
+	//WinMain( hInstance, hPrevInstance, pCmdLine, nCmdShow );
 }
 
 void SetDebug( )
