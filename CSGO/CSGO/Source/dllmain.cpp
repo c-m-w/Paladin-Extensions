@@ -8,7 +8,7 @@ bool GetPremium( );
 void SetDebug( );
 void CheatMain( );
 
-BOOL WINAPI DLLMain( HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpvReserved )
+BOOL WINAPI DllMain( HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpvReserved )
 {
 	switch ( fdwReason )
 	{
@@ -105,15 +105,17 @@ void CheatMain( )
 	mem.InitializeAddresses( );
 	LogLastError( );
 	
-	LogDebugMsg( DBG, "Waiting for server connection..." );
-	while ( eng.GetSignOnState( ) == ESignOnState::FULL )
+	LogDebugMsg( DBG, "Waiting for server connection... " );
+	// TODO
+	/*while ( eng.GetSignOnState( ) != ESignOnState::FULL )
 	{
+		printf( "%i", int( eng.GetSignOnState( ) ) );
 		Wait( 1000 );
-	}
+	}*/
 	
 	CreateThreads( );
 
-	while ( eng.GetSignOnState( ) == ESignOnState::FULL )
+	while ( 1/*eng.GetSignOnState( ) == ESignOnState::FULL*/ )
 	{
 		Wait( 1000 );
 	}
@@ -129,17 +131,17 @@ void SetDebug( )
 	HANDLE hConsole = GetStdHandle( STD_OUTPUT_HANDLE );
 	HWND hWndConsole = GetConsoleWindow( );
 
-	SetConsoleTitle( "Paladin CSGO" );
-	MoveWindow( hWndConsole, 300, 300, 339, 279, false );
-	EnableMenuItem( GetSystemMenu( hWndConsole, false ), SC_CLOSE, MF_GRAYED );
-	SetWindowLong( hWndConsole, GWL_STYLE, GetWindowLong( hWndConsole, GWL_STYLE ) & ~SC_CLOSE & ~WS_MAXIMIZEBOX & ~WS_SIZEBOX );
-
 	CONSOLE_FONT_INFOEX cfiEx;
 	cfiEx.cbSize = sizeof( CONSOLE_FONT_INFOEX );
 	cfiEx.dwFontSize.X = 6;
 	cfiEx.dwFontSize.Y = 8;
 	wcscpy_s( cfiEx.FaceName, L"Terminal" );
 	SetCurrentConsoleFontEx( hConsole, 0, &cfiEx );
+
+	SetConsoleTitle( "Paladin CSGO" );
+	MoveWindow( hWndConsole, 300, 300, 339, 279, false );
+	EnableMenuItem( GetSystemMenu( hWndConsole, false ), SC_CLOSE, MF_GRAYED );
+	SetWindowLong( hWndConsole, GWL_STYLE, GetWindowLong( hWndConsole, GWL_STYLE ) & ~SC_CLOSE & ~WS_MAXIMIZEBOX & ~WS_SIZEBOX );
 
 	CONSOLE_CURSOR_INFO cci;
 	cci.dwSize = 25;
@@ -269,14 +271,15 @@ void CreateThreads( )
 	} );
 	} );
 	tThreads.push_back( move( tAutoNade ) );*/
-	std::thread tAutoShoot( [ & ]
+	// TODO
+	/*std::thread tAutoShoot( [ & ]
 	{
 		Feature( true, 1, [ & ]
 		{
 			aut.AutoShoot( );
 		}, VK_LBUTTON );
 	} );
-	tThreads.push_back( move( tAutoShoot ) );
+	tThreads.push_back( move( tAutoShoot ) );*/
 	// TODO
 	/*std::thread tFOV( [&]
 	{
