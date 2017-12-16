@@ -185,38 +185,3 @@ void CMemoryManager::InitializeAddresses( )
 }
 
 CMemoryManager mem;
-
-void CFeatureSettings::ResetSettings()
-{
-	bool bHitSoundState = false;
-
-	bool bNoFlashState = false;
-	float flNoFlashAlpha = 255.f;
-
-	bool bRadarState = false;
-
-	bool bRecoilControlState = false;
-	float flRecoilControlAccuracy_x = 100.f;
-	float flRecoilControlAccuracy_y = 100.f;
-	int iRecoilControlKey = 0;
-
-	bool bAirStuckState = false;
-	int iAirStuckKey = 0;
-
-	bool bAutoJumpState = false;
-	int iAutoJumpKey = 0;
-
-	bool bAutoNadeState = false;
-	int iAutoNadeKey = 0;
-
-	bool bAutoShootState = false;
-	int iAutoShootKey = 0;
-
-	bool bFOVState = false;
-	int iFOV = 90;
-
-	bool bWeaponFOVState = false;
-	int iWeaponFOV = 68;
-}
-
-CFeatureSettings fset;
