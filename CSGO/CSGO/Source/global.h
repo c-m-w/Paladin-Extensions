@@ -2,6 +2,7 @@
 
 // defines
 #define PI 3.1415926535897932384626f
+#define MILLISECONDS_PER_SECOND 1000.f
 
 // typedefs
 typedef long long moment;
@@ -14,6 +15,7 @@ extern std::vector< std::thread > tThreads;
 // functions
 void Wait( unsigned int );
 moment GetTime( );
+
 template< typename datatype > void Limit( datatype &xStatus, datatype xMinimum, datatype xMaximum )
 {
 	if ( xMinimum > xStatus )
@@ -67,6 +69,19 @@ enum class EAnticheatStatus
 #define FA_DEFAULT 0b100 // default command state
 #define FA_PRESS 0b1 // +command
 #define FA_TICK 0b10 // +command, tick, -command
+
+#define MAX_SENSITIVITY 1000.f
+#define MIN_SENSITIVITY 0.f
+#define MAX_FLASHALPHA 255.f
+#define MIN_FLASHALPHA 0.f
+#define MAX_FIELDOFVIEW 180
+#define MIN_FIELDOFVIEW 0
+#define MAX_PITCH 89.f
+#define MIN_PITCH -89.f
+#define MAX_YAW 180.f
+#define MIN_YAW -180.f
+#define MAX_ROLL 50.f
+#define MIN_ROLL 50.f
 
 // typedefs
 typedef unsigned int flag;

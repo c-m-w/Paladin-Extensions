@@ -82,7 +82,7 @@ float CEngine::GetSensitivity( )
 
 void CEngine::SetSensitivity( float flNewSensitivity )
 {
-	Limit( flNewSensitivity, 0.f, 1000.f );
+	Limit( flNewSensitivity, MIN_SENSITIVITY, MAX_SENSITIVITY );
 	if ( GetSensitivity( ) != flNewSensitivity )
 	{
 		flSensitivity.val = flNewSensitivity;
@@ -172,7 +172,7 @@ int CEngine::GetFieldOfView( )
 
 void CEngine::SetFieldOfView( int iNewFOV )
 {
-	Limit( iNewFOV, 0, 180 );
+	Limit( iNewFOV, MIN_FIELDOFVIEW, MAX_FIELDOFVIEW );
 	if ( GetFieldOfView( ) != iNewFOV )
 	{
 		lp_iFOV.val = iNewFOV;
@@ -203,7 +203,7 @@ float CEngine::GetFlashMaxAlpha( )
 
 void CEngine::SetFlashMaxAlpha( float flNewFlashMaxAlpha )
 {
-	Limit( flNewFlashMaxAlpha, 0.f, 255.f );
+	Limit( flNewFlashMaxAlpha, MIN_FLASHALPHA, MAX_FLASHALPHA );
 	if ( GetFlashMaxAlpha( ) != flNewFlashMaxAlpha )
 	{
 		lp_flFlashMaxAlpha.val = flNewFlashMaxAlpha;
@@ -241,21 +241,6 @@ float CEngine::GetNextPrimaryAttack( )
 	return aw_flNextPrimaryAttack.val;
 }
 
-void CEngine::WaitTicks( int iTicksToWait )
-{
-	iTicksToWait += GetGlobalVars( ).tickcount;
-	float flTimeWaited = 0.f;
-	while ( iTicksToWait > GetGlobalVars( ).tickcount )
-	{
-		Wait( 1 );
-		flTimeWaited += .001f;
-		if ( flTimeWaited > GetGlobalVars(  ).interval_per_tick )
-		{
-			break;
-		}
-	}
-}
-
 float CEngine::GetPixelToAngleYAW( )
 {
 	return 0.022f * GetSensitivity( ) * all.GetWindowsSensitivity( ); // * ZOOM SENS IF ZOOMED
@@ -268,18 +253,18 @@ float CEngine::GetPixelToAnglePITCH( )
 
 angle_t CEngine::ClampAngle( angle_t angToClamp )
 {
-	Limit( angToClamp.pitch, -89.f, 89.f );
+	Limit( angToClamp.pitch, MIN_PITCH, MAX_PITCH );
 
-	while ( angToClamp.yaw < -180.f )
+	while ( angToClamp.yaw < MIN_YAW )
 	{
 		angToClamp.yaw += 360.f;
 	}
-	while ( angToClamp.yaw > 180.f )
+	while ( angToClamp.yaw > MAX_YAW )
 	{
 		angToClamp.yaw -= 360.f;
 	}
 
-	Limit( angToClamp.roll, -50.f, 50.f );
+	Limit( angToClamp.roll, MIN_ROLL, MAX_ROLL );
 
 	return angToClamp;
 }
@@ -297,10 +282,10 @@ angle_t CEngine::NormalizeAngle( angle_t angDestination )
 		angReturn.yaw *= flAngleScaleFactor;
 	}
 
-	int i = int( angReturn.yaw / GetPixelToAngleYAW( ) + 0.4f );
+	int i = int( angReturn.yaw / GetPixelToAngleYAW( ) );
 	angReturn.yaw = GetPixelToAngleYAW( ) * i;
 
-	i = int( angReturn.pitch / GetPixelToAnglePITCH( ) + 0.4f );
+	i = int( angReturn.pitch / GetPixelToAnglePITCH( ) );
 	angReturn.pitch = GetPixelToAnglePITCH( ) * i;
 
 	angReturn += eng.GetViewAngle( );

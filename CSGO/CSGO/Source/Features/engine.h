@@ -49,7 +49,6 @@ public:
 	EWeapon GetActiveWeaponIndex( );
 
 	// general
-	void WaitTicks( int );
 	float GetPixelToAngleYAW( );
 	float GetPixelToAnglePITCH( );
 	angle_t ClampAngle( angle_t ); // clamps angles to 89, 180, and 50

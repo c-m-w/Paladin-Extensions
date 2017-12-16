@@ -6,8 +6,10 @@ void Panic( );
 void CreateThreads( );
 bool GetPremium( );
 void SetDebug( );
+int CALLBACK WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow );
+BOOL WINAPI DllMain( HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpvReserved );
 
-/*BOOL WINAPI DllMain( HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpvReserved )
+BOOL WINAPI DllMain( HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpvReserved )
 {
 	switch ( fdwReason )
 	{
@@ -41,7 +43,7 @@ void SetDebug( );
 		}
 	}
 	return BOOL( cfg.iQuitReason );
-}*/
+}
 
 int CALLBACK WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow )
 {
@@ -59,7 +61,7 @@ int CALLBACK WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 	{
 		MessageBox( nullptr, "Warning 1: Elevation Token State -> No access\nDid you run the middleman as admin?", "Paladin CSGO", MB_ICONWARNING | MB_OK );
 	}
-	
+
 	if ( cfg.bCheckForAnticheat )
 	{
 		EAnticheatStatus kacCSGO = all.KillAnticheat( "Counter-Strike: Global Offensive", *"csgo.exe" );
@@ -92,7 +94,7 @@ int CALLBACK WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 	}
 
 	// TODO call Menu here
-	
+
 	if ( !mem.AttachToGame( ) )
 	{
 		MessageBox( nullptr, "Fatal Error 2: Game Attach\nAre you running the cheat as admin?", "Paladin CSGO", MB_ICONERROR | MB_OK );
@@ -101,7 +103,7 @@ int CALLBACK WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 	}
 	mem.InitializeAddresses( );
 	LogLastError( );
-	
+
 	LogDebugMsg( DBG, "Waiting for server connection... " );
 	// TODO
 	/*while ( eng.GetSignOnState( ) != ESignOnState::FULL )
@@ -109,10 +111,10 @@ int CALLBACK WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 		printf( "%i", int( eng.GetSignOnState( ) ) );
 		Wait( 1000 );
 	}*/
-	
+
 	CreateThreads( );
 
-	while ( 1/*eng.GetSignOnState( ) == ESignOnState::FULL*/ )
+	while ( true/*eng.GetSignOnState( ) == ESignOnState::FULL*/ )
 	{
 		Wait( 1000 );
 	}
@@ -129,7 +131,7 @@ void SetDebug( )
 	HWND hWndConsole = GetConsoleWindow( );
 
 	CONSOLE_FONT_INFOEX cfiEx;
-	cfiEx.cbSize = sizeof( CONSOLE_FONT_INFOEX );
+	cfiEx.cbSize = sizeof( CONSOLE_FONT_INFOEX);
 	cfiEx.dwFontSize.X = 6;
 	cfiEx.dwFontSize.Y = 8;
 	wcscpy_s( cfiEx.FaceName, L"Terminal" );
@@ -220,15 +222,14 @@ void CreateThreads( )
 		} );
 	} );
 	tThreads.push_back( move( tNoFlash ) );
-	// TODO
-	/*std::thread tRadar( [&]
+	std::thread tRadar( [&]
 	{
-	Feature( true, 1, [&]
-	{
-	rad.Radar( );
+		Feature( true, 1, [&]
+		{
+			rad.Radar( );
+		} );
 	} );
-	} );
-	tThreads.push_back( move( tRadar ) );*/
+	tThreads.push_back( move( tRadar ) );
 	//
 	// combat
 	//
@@ -268,24 +269,22 @@ void CreateThreads( )
 	} );
 	} );
 	tThreads.push_back( move( tAutoNade ) );*/
-	// TODO
-	/*std::thread tAutoShoot( [ & ]
+	std::thread tAutoShoot( [ & ]
 	{
 		Feature( true, 1, [ & ]
 		{
 			aut.AutoShoot( );
 		}, VK_LBUTTON );
 	} );
-	tThreads.push_back( move( tAutoShoot ) );*/
-	// TODO
-	/*std::thread tFOV( [&]
+	tThreads.push_back( move( tAutoShoot ) );
+	std::thread tFOV( [&]
 	{
-	Feature( true, 1, [&]
-	{
-	fov.FOV( );
+		Feature( true, 1, [&]
+		{
+			fov.FOV( );
+		} );
 	} );
-	} );
-	tThreads.push_back( move( tFOV ) );*/
+	tThreads.push_back( move( tFOV ) );
 	// TODO
 	/*std::thread tWeaponFOV( [&]
 	{
@@ -328,10 +327,7 @@ void Feature( bool bFeatureState, unsigned int nWait, std::function< void( ) > f
 		{
 			fnFeature( );
 		}
-		else
-		{
-			Wait( nWait );
-		}
+		Wait( nWait );
 	}
 }
 
@@ -343,9 +339,6 @@ void Feature( bool bFeatureState, unsigned int nWait, std::function< void( ) > f
 		{
 			fnFeature( );
 		}
-		else
-		{
-			Wait( nWait );
-		}
+		Wait( nWait );
 	}
 }
