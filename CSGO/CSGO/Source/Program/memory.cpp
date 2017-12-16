@@ -114,9 +114,9 @@ DWORD CMemoryManager::FindPattern( BYTE *bMask, char *szMask, DWORD dwAddress, D
 	DWORD dwDataLength = strlen( szMask );
 	BYTE *bData = new BYTE[dwDataLength + 1];
 	SIZE_T sRead;
-	for ( DWORD dw = 0; dw < dwLength; dw++ )
+	for ( DWORD dwAdditive = 0; dwAdditive < dwLength; dwAdditive++ )
 	{
-		auto dwCurrentAddress = dwAddress + dw;
+		auto dwCurrentAddress = dwAddress + dwAdditive;
 		bool bSuccess = ReadProcessMemory( hGame, LPVOID( dwCurrentAddress ), bData, dwDataLength, &sRead );
 		if ( !bSuccess || !sRead )
 		{
@@ -132,7 +132,7 @@ DWORD CMemoryManager::FindPattern( BYTE *bMask, char *szMask, DWORD dwAddress, D
 				break;
 			}
 			delete[] bData;
-			return dwAddress + dw;
+			return dwAddress + dwAdditive;
 		}
 	}
 	delete[] bData;

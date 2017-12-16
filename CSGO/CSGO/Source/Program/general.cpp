@@ -67,8 +67,8 @@ EPremium CGeneral::CheckPremiumStatus( )
 	GetUserNameA( chBuffer, &dwBufferSize );
 	uCurrentUser.lpstrUsername = chBuffer;
 	LogDebugMsg( DBG, "Current User Username: %s", uCurrentUser.lpstrUsername );
-	int i = 0;
-	for ( ; i <= PREMIUM_USERS; i++ )
+	int i;
+	for ( i = 0; i <= PREMIUM_USERS; i++ )
 	{
 		if ( uPremiumUsers[i].bValid )
 		{

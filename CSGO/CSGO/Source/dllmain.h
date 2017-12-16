@@ -2,7 +2,6 @@
 
 #include <Windows.h>
 #include <TlHelp32.h>
-#include <limits>
 #include <thread>
 #include <string>
 #include <vector>
@@ -32,13 +31,15 @@
  * * * * NUMS ARE ALL CAPITALS
  * * * CClass
  * * * struct_t
- * * * TYPEDEF
+ * * * typedef
  * * * b bool/byte
  * * * f flag
  * * * i int
- * * * n unsigned int (total)
+ * * * n unsigned int (total, c are alternatives - pls do not use these)
  * * * l long
  * * * clr color
+ * * * cor coordinate
+ * * * ang angle
  * * * fl float
  * * * db double
  * * * ch char
@@ -48,7 +49,7 @@
  * * * fn function
  * * * p pointer
  * * * lp long pointer
- * * * x unknown
+ * * * x unknown (_ is an alternative - pls do not use this)
  * * Variables must also include their inheritance prefix with an underscore (lp_fFlags for frame Local Player Flags)
  * Every function should be a verb (get, set, clamp)
  * * Instead of Alive or IsAlive, do GetLifeState

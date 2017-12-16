@@ -14,7 +14,6 @@ void CHitSound::PlaySoundOnHit( )
 			PlaySound( cfg.strHitSoundLocation.c_str( ), nullptr, SND_SYNC );
 		}
 	}
-	eng.WaitTicks( 1 );
 }
 
 CHitSound hit;

@@ -10,12 +10,9 @@ void CFOV::FOV( )
 	{
 		eng.SetFieldOfView( 90 );
 	}
-	eng.WaitTicks( 1 );
 }
 
 void CFOV::WeaponFOV( )
-{
-	eng.WaitTicks( 1 );
-}
+{}
 
 CFOV fov;

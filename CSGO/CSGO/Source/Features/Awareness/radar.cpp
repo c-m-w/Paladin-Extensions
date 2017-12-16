@@ -12,7 +12,6 @@ void CRadar::Radar( )
 			}
 		}
 	}
-	eng.WaitTicks( 1 );
 }
 
 CRadar rad;
