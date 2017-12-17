@@ -4,35 +4,31 @@ std::string strLog;
 
 void LogDebugMsg( EDebugMessage dmType, char *szMessage, ... )
 {
-	// TODO current time for aesthetics
 	HANDLE hConsole = GetStdHandle( STD_OUTPUT_HANDLE );
 	if ( hConsole && hConsole != INVALID_HANDLE_VALUE )
 	{
+		std::cout << std::endl;
 		switch ( dmType )
 		{
 			case SCS:
 				SetConsoleTextAttribute( hConsole, 10 );
-				printf( "\n[SCS] " );
-				break;
-			case DBG:
-				SetConsoleTextAttribute( hConsole, 15 );
-				printf( "\n[DBG] " );
+				std::cout << "[SCS] ";
 				break;
 			case WRN:
 				SetConsoleTextAttribute( hConsole, 14 );
-				printf( "\n[WRN] " );
+				std::cout << "[WRN] ";
 				break;
 			case ERR:
 				SetConsoleTextAttribute( hConsole, 12 );
-				printf( "\n[ERR] " );
+				std::cout << "[ERR] ";
 				break;
 			case LER:
 				SetConsoleTextAttribute( hConsole, 12 );
-				printf( "\n[LER] " );
+				std::cout << "[LER] ";
 				break;
 			default:
 				SetConsoleTextAttribute( hConsole, 15 );
-				printf( "\n[DBG] " );
+				std::cout << "[DBG] ";
 		}
 		SetConsoleTextAttribute( hConsole, 7 );
 		//Ideally we want to dynamically allocate this, might do later (for now, stick to a max of 2047 data characters)
@@ -41,7 +37,7 @@ void LogDebugMsg( EDebugMessage dmType, char *szMessage, ... )
 		va_start(vaList, szMessage);
 		vsnprintf( chBuffer, sizeof chBuffer, szMessage, vaList );
 		va_end(vaList);
-		printf( chBuffer );
+		std::cout << chBuffer;
 		strLog.append( chBuffer );
 	}
 }

@@ -4,6 +4,10 @@
 #define PI 3.1415926535897932384626f
 #define MILLISECONDS_PER_SECOND 1000.f
 
+#define PREMIUM_USERS uint8(55)
+#define DECEMBER_FIRST moment(1512086400000) // time since epoch in milliseconds to december first 2017
+#define DAY moment(8640000) // day in milliseconds
+
 // typedefs
 typedef long long moment;
 
@@ -14,7 +18,7 @@ extern std::vector< std::thread > tThreads;
 
 // functions
 void Wait( unsigned int );
-moment GetTime( );
+moment GetMoment( );
 
 template< typename datatype > void Limit( datatype &xStatus, datatype xMinimum, datatype xMaximum )
 {

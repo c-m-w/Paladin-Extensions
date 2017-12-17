@@ -2,6 +2,7 @@
 
 #include <Windows.h>
 #include <TlHelp32.h>
+#include <iostream>
 #include <thread>
 #include <string>
 #include <vector>
@@ -40,6 +41,7 @@
  * * * clr color
  * * * cor coordinate
  * * * ang angle
+ * * * mnt moment
  * * * fl float
  * * * db double
  * * * ch char

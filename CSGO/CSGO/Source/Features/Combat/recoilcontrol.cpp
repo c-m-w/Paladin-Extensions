@@ -4,32 +4,28 @@ void CRecoilControl::RecoilControl( )
 {
 	if ( eng.GetShotsFired( ) > 1 ) // ignore shot count
 	{
-		if ( eng.GetNextPrimaryAttack( ) <= 0.f )
+		if ( iOldShotsFired < eng.GetShotsFired( ) )
 		{
 			angle_t angCurrentAimPunch = eng.GetAimPunch( ) - angOldAimPunch;
 			angCurrentAimPunch *= 2.f; // rcs factor
 
-			while ( eng.GetNextPrimaryAttack( ) <= 0.f )
-			{
-				Wait( 1 );
-			}
+			int iNextPrimaryAttack = int( eng.GetNextPrimaryAttack( ) * MILLISECONDS_PER_SECOND / 10 );
 
-			int iStartingShotsFired = eng.GetShotsFired( );
-			int iNextPrimaryAttack = int( eng.GetNextPrimaryAttack( ) * MILLISECONDS_PER_SECOND );
-
-			while ( iNextPrimaryAttack > 0 && !( eng.GetAttack( ) & FA_DEFAULT ) && iStartingShotsFired == eng.GetShotsFired( ) && eng.GetNextPrimaryAttack( ) > 0.f )
+			while ( iNextPrimaryAttack > 0 )
 			{
 				eng.SetViewAngle( eng.GetViewAngle( ) - angCurrentAimPunch / float( iNextPrimaryAttack ) );
-				Wait( iNextPrimaryAttack );
+				Wait( iNextPrimaryAttack * 10 );
 				iNextPrimaryAttack--;
 			}
 
 			angOldAimPunch = eng.GetAimPunch( );
+			iOldShotsFired = eng.GetShotsFired( );
 		}
 	}
 	else
 	{
 		angOldAimPunch = { 0, 0, 0 };
+		iOldShotsFired = 0;
 	}
 }
 

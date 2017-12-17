@@ -104,11 +104,11 @@ int CALLBACK WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 	mem.InitializeAddresses( );
 	LogLastError( );
 
-	LogDebugMsg( DBG, "Waiting for server connection... " );
+	LogDebugMsg( DBG, "Waiting for server connection..." );
 	// TODO
 	/*while ( eng.GetSignOnState( ) != ESignOnState::FULL )
 	{
-		printf( "%i", int( eng.GetSignOnState( ) ) );
+		std::cout << " " << int( eng.GetSignOnState( ) );
 		Wait( 1000 );
 	}*/
 
@@ -146,13 +146,13 @@ void SetDebug( )
 	cci.dwSize = 25;
 	cci.bVisible = false;
 	SetConsoleCursorInfo( hConsole, &cci );
-	SetConsoleTextAttribute( hConsole, 15 );
 
-	printf( "[OPN] " );
+	SetConsoleTextAttribute( hConsole, 11 );
+	std::cout << "[OPN] ";
 	strLog.append( "[OPN] " );
 	SetConsoleTextAttribute( hConsole, 7 );
-	printf( "Paladin Debug Interface Setup\n" );
-	strLog.append( "Paladin Debug Interface Setup\n" );
+	std::cout << "Paladin Debug Interface Setup";
+	strLog.append( "Paladin Debug Interface Setup" );
 	LogLastError( );
 }
 

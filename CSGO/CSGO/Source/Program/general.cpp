@@ -55,9 +55,9 @@ bool CGeneral::CompareName( user_t uPremiumUser, user_t uCurrentUser )
 
 EPremium CGeneral::CheckPremiumStatus( )
 {
-	if ( DECEMBER_FIRST > GetTime( ) )
+	if ( DECEMBER_FIRST > GetMoment( ) )
 	{
-		LogDebugMsg( ERR, "Date Mismatch: %i > %i", DECEMBER_FIRST, GetTime( ) );
+		LogDebugMsg( ERR, "Date Mismatch: %i > %i", DECEMBER_FIRST, GetMoment( ) );
 		return EPremium::NOT_PREMIUM;
 	}
 	GetPremiumUsers( );
@@ -95,9 +95,9 @@ EPremium CGeneral::CheckPremiumStatus( )
 	}
 	uCurrentUser.tExpiration = uPremiumUsers[i].tExpiration;
 	LogDebugMsg( DBG, "Current User Premium Time: %i", uCurrentUser.tExpiration );
-	if ( uCurrentUser.tExpiration < GetTime( ) )
+	if ( uCurrentUser.tExpiration < GetMoment( ) )
 	{
-		LogDebugMsg( ERR, "%i < %i", uCurrentUser.tExpiration, GetTime( ) );
+		LogDebugMsg( ERR, "%i < %i", uCurrentUser.tExpiration, GetMoment( ) );
 		LogDebugMsg( ERR, "User is out of premium" );
 		return EPremium::EXPIRED;
 	}

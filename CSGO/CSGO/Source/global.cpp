@@ -9,7 +9,7 @@ void Wait( unsigned int nSleepTime )
 	std::this_thread::sleep_for( std::chrono::milliseconds( nSleepTime ) );
 }
 
-moment GetTime( )
+moment GetMoment( )
 {
 	return std::chrono::duration_cast< std::chrono::milliseconds >( std::chrono::system_clock::now( ).time_since_epoch( ) ).count( );
 }
