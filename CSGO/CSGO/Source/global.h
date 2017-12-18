@@ -73,6 +73,7 @@ enum class EAnticheatStatus
 #define FA_DEFAULT 0b100 // default command state
 #define FA_PRESS 0b1 // +command
 #define FA_TICK 0b10 // +command, tick, -command
+#define ENTITY_DISTANCE 0x10 //Distance between entities
 
 #define MAX_SENSITIVITY 1000.f
 #define MIN_SENSITIVITY 0.f

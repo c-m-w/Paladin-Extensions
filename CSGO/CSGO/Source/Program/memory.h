@@ -22,6 +22,7 @@ namespace Addresses
 	extern address_t< flag > fForceJump;
 	// Client pointer addresses
 	extern address_t< DWORD > pdwEntityList;
+	extern address_t< DWORD > el_dwGlowManager;
 	extern address_t< bool > el_bDormant;
 	extern address_t< ETeam > el_tTeamNum;
 	extern address_t< bool > el_bSpottedState;

@@ -207,14 +207,14 @@ void CreateThreads( )
 	} );
 	tThreads.push_back( move( tNoFlash ) );
 	// TODO
-	/*std::thread tRadar( [&]
+	std::thread tRadar( [&]
 	{
-		Feature( true, 1, [&]
+		Feature( true, 50, [&]
 		{
 			rad.Radar( );
 		} );
 	} );
-	tThreads.push_back( move( tRadar ) );*/
+	tThreads.push_back( move( tRadar ) );
 	//
 	// combat
 	//
