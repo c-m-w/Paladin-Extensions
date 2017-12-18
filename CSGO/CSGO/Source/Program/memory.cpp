@@ -18,6 +18,7 @@ namespace Addresses
 	address_t< bool > el_bDormant;
 	address_t< ETeam > el_tTeamNum;
 	address_t< bool > el_bSpottedState;
+	address_t< coordinate_t > el_corOrigin;
 
 	address_t< DWORD > pdwLocalPlayer;
 
@@ -159,6 +160,7 @@ void CMemoryManager::InitializeAddresses( )
 	el_bDormant = { 0xE9 };
 	el_tTeamNum = { 0xF0 };
 	el_bSpottedState = { 0x939 };
+	el_corOrigin = { 0x134 };
 	pdwLocalPlayer = { 0xA9ADEC };
 	lp_tTeamNum = { 0xF0 };
 	lp_fFlags = { 0x100 };

@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClInclude Include="Source\Features\Awareness\noflash.h" />
     <ClInclude Include="Source\Features\Awareness\radar.h" />
+    <ClInclude Include="Source\Features\Awareness\sonar.h" />
     <ClInclude Include="Source\Features\Combat\recoilcontrol.h" />
     <ClInclude Include="Source\Features\Combat\trigger.h" />
     <ClInclude Include="Source\Features\Miscellaneous\airstuck.h" />
@@ -39,6 +40,7 @@
   <ItemGroup>
     <ClCompile Include="Source\Features\Awareness\noflash.cpp" />
     <ClCompile Include="Source\Features\Awareness\radar.cpp" />
+    <ClCompile Include="Source\Features\Awareness\sonar.cpp" />
     <ClCompile Include="Source\Features\Combat\recoilcontrol.cpp" />
     <ClCompile Include="Source\Features\Combat\trigger.cpp" />
     <ClCompile Include="Source\Features\Miscellaneous\airstuck.cpp" />

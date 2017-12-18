@@ -26,6 +26,7 @@ namespace Addresses
 	extern address_t< bool > el_bDormant;
 	extern address_t< ETeam > el_tTeamNum;
 	extern address_t< bool > el_bSpottedState;
+	extern address_t<coordinate_t> el_corOrigin;
 
 	extern address_t< DWORD > pdwLocalPlayer;
 
