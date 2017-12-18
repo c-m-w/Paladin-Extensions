@@ -114,12 +114,7 @@ int CALLBACK WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 
 	CreateThreads( );
 
-	while ( true/*eng.GetSignOnState( ) == ESignOnState::FULL*/ )
-	{
-		Wait( 1000 );
-	}
-	//CleanUp( );
-	//WinMain( hInstance, hPrevInstance, pCmdLine, nCmdShow );
+	Feature( true, 1000, [ & ] { Panic( ); }, VK_F4 );
 }
 
 void SetDebug( )
@@ -193,17 +188,6 @@ void CreateThreads( )
 {
 	LogDebugMsg( DBG, "Initializing threads..." );
 	//
-	// general
-	//
-	std::thread tPanic( [ & ]
-	{
-		Feature( true, 1, [ & ]
-		{
-			Panic( );
-		}, VK_F4 );
-	} );
-	tThreads.push_back( move( tPanic ) );
-	//
 	// awareness
 	//
 	std::thread tHitSound( [ & ]
@@ -222,14 +206,15 @@ void CreateThreads( )
 		} );
 	} );
 	tThreads.push_back( move( tNoFlash ) );
-	std::thread tRadar( [&]
+	// TODO
+	/*std::thread tRadar( [&]
 	{
 		Feature( true, 1, [&]
 		{
 			rad.Radar( );
 		} );
 	} );
-	tThreads.push_back( move( tRadar ) );
+	tThreads.push_back( move( tRadar ) );*/
 	//
 	// combat
 	//
@@ -238,7 +223,7 @@ void CreateThreads( )
 		Feature( true, 1, [ & ]
 		{
 			rcs.RecoilControl( );
-		} );
+		} , VK_LBUTTON );
 	} );
 	tThreads.push_back( move( tRecoilControl ) );
 	//
@@ -249,7 +234,7 @@ void CreateThreads( )
 		Feature( true, 1, [ & ]
 		{
 			air.AirStuck( );
-		}, 'L' );
+		}, VK_F5 );
 	} );
 	tThreads.push_back( move( tAirStuck ) );
 	std::thread tAutoJump( [ & ]
@@ -277,14 +262,15 @@ void CreateThreads( )
 		}, VK_LBUTTON );
 	} );
 	tThreads.push_back( move( tAutoShoot ) );
-	std::thread tFOV( [&]
+	// TODO
+	/*std::thread tFOV( [&]
 	{
 		Feature( true, 1, [&]
 		{
 			fov.FOV( );
 		} );
 	} );
-	tThreads.push_back( move( tFOV ) );
+	tThreads.push_back( move( tFOV ) );*/
 	// TODO
 	/*std::thread tWeaponFOV( [&]
 	{

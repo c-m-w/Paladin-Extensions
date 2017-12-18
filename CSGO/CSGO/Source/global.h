@@ -1,7 +1,7 @@
 #pragma once
 
 // defines
-#define PI 3.1415926535897932384626f
+#define PI 3.141593f
 #define MILLISECONDS_PER_SECOND 1000.f
 
 #define PREMIUM_USERS uint8(55)

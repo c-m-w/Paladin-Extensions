@@ -6,16 +6,12 @@ void CRecoilControl::RecoilControl( )
 	{
 		if ( iOldShotsFired < eng.GetShotsFired( ) )
 		{
-			angle_t angCurrentAimPunch = eng.GetAimPunch( ) - angOldAimPunch;
-			angCurrentAimPunch *= 2.f; // rcs factor
+			angle_t angCurrentAimPunch = (eng.GetAimPunch( ) - angOldAimPunch) * 2.f;
 
-			int iNextPrimaryAttack = int( eng.GetNextPrimaryAttack( ) * MILLISECONDS_PER_SECOND / 10 );
-
-			while ( iNextPrimaryAttack > 0 )
+			for ( float flSmooth = eng.GetNextPrimaryAttack( ) / eng.GetGlobalVars( ).interval_per_tick; flSmooth > 0; flSmooth -= eng.GetGlobalVars( ).interval_per_tick )
 			{
-				eng.SetViewAngle( eng.GetViewAngle( ) - angCurrentAimPunch / float( iNextPrimaryAttack ) );
-				Wait( iNextPrimaryAttack * 10 );
-				iNextPrimaryAttack--;
+				eng.SetViewAngle( eng.GetViewAngle( ) - angCurrentAimPunch / flSmooth );
+				Wait( eng.GetGlobalVars( ).interval_per_tick * MILLISECONDS_PER_SECOND );
 			}
 
 			angOldAimPunch = eng.GetAimPunch( );
