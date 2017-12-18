@@ -8,7 +8,7 @@ void CRecoilControl::RecoilControl( )
 		{
 			angle_t angCurrentAimPunch = (eng.GetAimPunch( ) - angOldAimPunch) * 2.f;
 
-			for ( float flSmooth = eng.GetNextPrimaryAttack( ) / eng.GetGlobalVars( ).interval_per_tick; flSmooth > 0; flSmooth -= eng.GetGlobalVars( ).interval_per_tick )
+			for ( float flSmooth = eng.GetNextPrimaryAttack( ); flSmooth > 0; flSmooth -= eng.GetGlobalVars( ).interval_per_tick )
 			{
 				eng.SetViewAngle( eng.GetViewAngle( ) - angCurrentAimPunch / flSmooth );
 				Wait( eng.GetGlobalVars( ).interval_per_tick * MILLISECONDS_PER_SECOND );
