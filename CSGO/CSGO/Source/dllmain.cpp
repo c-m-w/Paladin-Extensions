@@ -59,45 +59,41 @@ int CALLBACK WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 
 	if ( all.GetElevationState( ) == EElevation::NOT_ADMIN )
 	{
-		MessageBox( nullptr, "Warning 1: Elevation Token State -> No access\nDid you run the middleman as admin?", "Paladin CSGO", MB_ICONWARNING | MB_OK );
+		MESSAGE( "Paladin CSGO", "Warning: Elevation Token State -> Not high enough\nDid you run the middleman/injector as admin?", MB_ICONWARNING );
 	}
 
 	if ( cfg.bCheckForAnticheat )
 	{
-		EAnticheatStatus kacCSGO = all.KillAnticheat( "Counter-Strike: Global Offensive", *"csgo.exe" );
-		if ( kacCSGO != EAnticheatStatus::FAILED )
+		EAnticheatStatus asCSGO = all.KillAnticheat( "Counter-Strike: Global Offensive", *"csgo.exe" );
+		if ( asCSGO == EAnticheatStatus::FAILED )
 		{
-			if ( kacCSGO == EAnticheatStatus::KILLED )
-			{
-				MessageBox( nullptr, "Warning 2: Anticheat -> Terminated\nDid you leave CSGO open during injection?", "Paladin CSGO", MB_ICONWARNING | MB_OK );
-			}
-			if ( all.KillAnticheat( "Steam", *"steam.exe" ) == EAnticheatStatus::KILLED )
-			{
-				MessageBox( nullptr, "Warning 2: Anticheat -> Terminated\nDid you leave Steam open during injection?", "Paladin CSGO", MB_ICONWARNING | MB_OK );
-			}
-		}
-		else
-		{
-			MessageBox( nullptr, "Fatal Error 1: Elevation Token State -> No anticheat termination access\nDid you run the middleman as admin?", "Paladin CSGO", MB_ICONERROR | MB_OK );
-			CleanUp( );
+			Panic( );
 			return 0;
+		}
+		if ( asCSGO == EAnticheatStatus::KILLED )
+		{
+			MESSAGE( "Paladin CSGO", "Warning: Anticheat -> Terminated\nDid you leave CSGO open during injection?", MB_ICONWARNING );
+		}
+
+		EAnticheatStatus asSteam = all.KillAnticheat( "Steam", *"steam.exe" );
+		if ( asSteam == EAnticheatStatus::FAILED )
+		{
+			Panic( );
+			return 0;
+		}
+		if ( asSteam == EAnticheatStatus::KILLED )
+		{
+			MESSAGE( "Paladin CSGO", "Warning: Anticheat -> Terminated\nDid you leave Steam open during injection?", MB_ICONWARNING );
 		}
 	}
 
-	if ( !cfg.LoadConfig( ) )
-	{
-		MessageBox( nullptr, "Warning 3: Config File -> Using Defaults\nIs there a config file?", "Paladin CSGO", MB_ICONWARNING | MB_OK );
-	}
-	if ( !cfg.ReadConfig( ) )
-	{
-		MessageBox( nullptr, "Warning 4: Config File -> Using Defaults\nIs the config file formatted for this version?", "Paladin CSGO", MB_ICONWARNING | MB_OK );
-	}
+	// TODO call Config here
 
 	// TODO call Menu here
 
 	if ( !mem.AttachToGame( ) )
 	{
-		MessageBox( nullptr, "Fatal Error 2: Game Attach\nAre you running the cheat as admin?", "Paladin CSGO", MB_ICONERROR | MB_OK );
+		MESSAGE( "Paladin CSGO", "Fatal Error 2: Game Attach\nAre you running the cheat as admin?", MB_ICONERROR );
 		CleanUp( );
 		return 0;
 	}
