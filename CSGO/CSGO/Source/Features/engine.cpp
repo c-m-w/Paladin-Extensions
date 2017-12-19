@@ -93,7 +93,7 @@ void CEngine::SetSensitivity( float flNewSensitivity )
 DWORD CEngine::GetEntityBase( int iEntity )
 {
 	DWORD dwOldEntityList = pdwEntityList.loc;
-	pdwEntityList.loc += ( iEntity - 1 ) * 0x10;
+	pdwEntityList.loc += ( iEntity - 1 ) * ENTITY_DISTANCE;
 	mem.Get( pdwEntityList );
 	pdwEntityList.loc = dwOldEntityList;
 	return pdwEntityList.val;
@@ -127,6 +127,14 @@ void CEngine::SetEntitySpottedState( int iEntity, bool bNewSpottedState )
 		el_bSpottedState.val = bNewSpottedState;
 		mem.Set( el_bSpottedState );
 	}
+}
+
+coordinate_t CEngine::GetEntityOrigin(int iEntity) {
+
+	el_corOrigin.loc = GetEntityBase(iEntity) + el_corOrigin.off;
+	mem.Get(el_corOrigin);
+	return el_corOrigin.val;
+
 }
 
 DWORD CEngine::GetLocalPlayer( )

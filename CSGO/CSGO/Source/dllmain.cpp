@@ -203,14 +203,23 @@ void CreateThreads( )
 	} );
 	tThreads.push_back( move( tNoFlash ) );
 	// TODO
-	/*std::thread tRadar( [&]
+	std::thread tRadar( [&]
 	{
-		Feature( true, 1, [&]
+		Feature( true, 100, [&]
 		{
 			rad.Radar( );
 		} );
 	} );
-	tThreads.push_back( move( tRadar ) );*/
+	tThreads.push_back( move( tRadar ) );
+	//sonar
+	std::thread tSonar([&]
+	{
+		Feature(true, 100, [&]
+		{
+			son.Sonar();
+		});
+	});
+	tThreads.push_back(move(tSonar));
 	//
 	// combat
 	//

@@ -14,9 +14,11 @@ namespace Addresses
 	address_t< flag > fForceJump;
 	// Client pointer addresses
 	address_t< DWORD > pdwEntityList;
+	address_t< DWORD > el_dwGlowManager;
 	address_t< bool > el_bDormant;
 	address_t< ETeam > el_tTeamNum;
 	address_t< bool > el_bSpottedState;
+	address_t< coordinate_t > el_corOrigin;
 
 	address_t< DWORD > pdwLocalPlayer;
 
@@ -154,9 +156,11 @@ void CMemoryManager::InitializeAddresses( )
 	fForceJump = { 0x4F0ED64 };
 	// Client pointer addresses
 	pdwEntityList = { 0x4A77AFC };
+	el_dwGlowManager = { 0x4F94920 };
 	el_bDormant = { 0xE9 };
 	el_tTeamNum = { 0xF0 };
 	el_bSpottedState = { 0x939 };
+	el_corOrigin = { 0x134 };
 	pdwLocalPlayer = { 0xA9ADEC };
 	lp_tTeamNum = { 0xF0 };
 	lp_fFlags = { 0x100 };
