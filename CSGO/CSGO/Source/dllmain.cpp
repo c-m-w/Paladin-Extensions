@@ -1,13 +1,4 @@
 #include "dllmain.h"
-void Feature( bool, unsigned int, std::function< void( ) > );
-void Feature( bool, unsigned int, std::function< void( ) >, int );
-void CleanUp( );
-void Panic( );
-void CreateThreads( );
-bool GetPremium( );
-void SetDebug( );
-int CALLBACK WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow );
-BOOL WINAPI DllMain( HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpvReserved );
 
 BOOL WINAPI DllMain( HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpvReserved )
 {
@@ -110,7 +101,10 @@ int CALLBACK WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 
 	CreateThreads( );
 
-	Feature( true, 1000, [ & ] { Panic( ); }, VK_F4 );
+	Feature( true, 1000, [ & ]
+	{
+		Panic( );
+	}, VK_F4 );
 }
 
 void SetDebug( )
@@ -168,7 +162,7 @@ bool GetPremium( )
 	}
 	if ( uCurrentUserPremiumStatus == EPremium::EXPIRED )
 	{
-		MessageBox( nullptr, "Notice 1: Premium Time Expired -> No access\nDid you renew your premium?", "Paladin CSGO", MB_ICONHAND | MB_OK );
+		MESSAGE( "Paladin CSGO", "Notice 1: Premium Time Expired -> No access\nDid you renew your premium?", MB_ICONHAND );
 		CleanUp( );
 		return false;
 	}
@@ -212,14 +206,14 @@ void CreateThreads( )
 	} );
 	tThreads.push_back( move( tRadar ) );
 	//sonar
-	std::thread tSonar([&]
+	std::thread tSonar( [&]
 	{
-		Feature(true, 100, [&]
+		Feature( true, 100, [&]
 		{
-			son.Sonar();
-		});
-	});
-	tThreads.push_back(move(tSonar));
+			son.Sonar( );
+		} );
+	} );
+	tThreads.push_back( move( tSonar ) );
 	//
 	// combat
 	//
@@ -228,7 +222,7 @@ void CreateThreads( )
 		Feature( true, 1, [ & ]
 		{
 			rcs.RecoilControl( );
-		} , VK_LBUTTON );
+		}, VK_LBUTTON );
 	} );
 	tThreads.push_back( move( tRecoilControl ) );
 	//

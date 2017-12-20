@@ -129,12 +129,11 @@ void CEngine::SetEntitySpottedState( int iEntity, bool bNewSpottedState )
 	}
 }
 
-coordinate_t CEngine::GetEntityOrigin(int iEntity) {
-
-	el_corOrigin.loc = GetEntityBase(iEntity) + el_corOrigin.off;
-	mem.Get(el_corOrigin);
+coordinate_t CEngine::GetEntityOrigin( int iEntity )
+{
+	el_corOrigin.loc = GetEntityBase( iEntity ) + el_corOrigin.off;
+	mem.Get( el_corOrigin );
 	return el_corOrigin.val;
-
 }
 
 DWORD CEngine::GetLocalPlayer( )

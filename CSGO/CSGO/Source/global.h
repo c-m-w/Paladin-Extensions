@@ -105,12 +105,12 @@ struct angle_t
 	bool operator!=( angle_t );
 	angle_t operator+( angle_t );
 	angle_t operator-( angle_t );
-	angle_t operator*( float rhs );
-	angle_t operator/( float rhs );
+	angle_t operator*( float );
+	angle_t operator/( float );
 	angle_t &operator+=( angle_t );
 	angle_t &operator-=( angle_t );
-	angle_t operator*=( float rhs );
-	angle_t operator/=( float rhs );
+	angle_t operator*=( float );
+	angle_t operator/=( float );
 };
 
 struct color_t

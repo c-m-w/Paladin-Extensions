@@ -28,7 +28,7 @@ public:
 	bool GetEntityDormancy( int );
 	bool GetEntitySpottedState( int );
 	void SetEntitySpottedState( int, bool );
-	coordinate_t GetEntityOrigin(int);
+	coordinate_t GetEntityOrigin( int );
 
 	// client - localplayer
 	DWORD GetLocalPlayer( );

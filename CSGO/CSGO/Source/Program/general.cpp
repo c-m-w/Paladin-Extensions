@@ -13,7 +13,7 @@ void CGeneral::GetPremiumUsers( )
 	uPremiumUsers[1].bValid = true;
 	uPremiumUsers[1].bBanned = false;
 	uPremiumUsers[2].lpstrUsername = "Skel"; // TODO SKEL
-	uPremiumUsers[2].iHardwareID = 4080/2;
+	uPremiumUsers[2].iHardwareID = 2040;
 	uPremiumUsers[2].tExpiration = DECEMBER_FIRST + 365 * DAY;
 	uPremiumUsers[2].bValid = true;
 	uPremiumUsers[2].bBanned = false;

@@ -3,7 +3,7 @@
 class CSonar
 {
 public:
-	void Sonar();
+	void Sonar( );
 };
 
 extern CSonar son;
