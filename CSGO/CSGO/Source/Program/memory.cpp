@@ -145,23 +145,23 @@ void CMemoryManager::InitializeAddresses( )
 {
 	LogDebugMsg( DBG, "Initializing addresses" );
 	// global Engine addresses
-	gvGlobalVars = { 0x57D550 };
+	gvGlobalVars = { 0x57B4F0 };
 	// Engine pointer addresses
-	pdwClientState = { 0x57D84C };
+	pdwClientState = { 0x57B7EC };
 	cs_soSignOnState = { 0x108 };
 	cs_aViewAngle = { 0x4D10 };
 	// global Client addresses
-	flSensitivity = { 0xAA04EC, 0xAA04C0 };
-	fForceAttack = { 0x2EB9EAC };
-	fForceJump = { 0x4F0ED64 };
+	flSensitivity = { 0xAA14DC, 0xAA14B0 };
+	fForceAttack = { 0x2EBAF64 };
+	fForceJump = { 0x4F0FE0C };
 	// Client pointer addresses
-	pdwEntityList = { 0x4A77AFC };
-	el_dwGlowManager = { 0x4F94920 };
+	pdwEntityList = { 0x4A78BA4 };
+	el_dwGlowManager = { 0x4F959F0 };
 	el_bDormant = { 0xE9 };
 	el_tTeamNum = { 0xF0 };
 	el_bSpottedState = { 0x939 };
 	el_corOrigin = { 0x134 };
-	pdwLocalPlayer = { 0xA9ADEC };
+	pdwLocalPlayer = { 0xA9BDDC };
 	lp_tTeamNum = { 0xF0 };
 	lp_fFlags = { 0x100 };
 	lp_mMoveType = { 0x258 };
