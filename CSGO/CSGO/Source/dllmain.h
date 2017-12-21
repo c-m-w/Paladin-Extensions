@@ -26,8 +26,8 @@
 #include "Features/Miscellaneous/automation.h"
 #include "Features/Miscellaneous/fov.h"
 
-void Feature( bool, unsigned int, std::function< void( ) > );
-void Feature( bool, unsigned int, std::function< void( ) >, int );
+void Feature( bool, unsigned, std::function< void( ) > );
+void Feature( bool, unsigned, std::function< void( ) >, int );
 void CleanUp( );
 void Panic( );
 void CreateThreads( );
@@ -53,6 +53,7 @@ BOOL WINAPI DllMain( HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpvReserved );
  * * * cor coordinate
  * * * ang angle
  * * * mnt moment
+ * * * vec vector
  * * * fl float
  * * * db double
  * * * ch char

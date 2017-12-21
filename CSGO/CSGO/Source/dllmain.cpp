@@ -304,7 +304,7 @@ void CleanUp( )
 	}
 }
 
-void Feature( bool bFeatureState, unsigned int nWait, std::function< void( ) > fnFeature, int iFeatureKey )
+void Feature( bool bFeatureState, unsigned nWait, std::function< void( ) > fnFeature, int iFeatureKey )
 {
 	while ( !bExitState )
 	{
@@ -316,7 +316,7 @@ void Feature( bool bFeatureState, unsigned int nWait, std::function< void( ) > f
 	}
 }
 
-void Feature( bool bFeatureState, unsigned int nWait, std::function< void( ) > fnFeature )
+void Feature( bool bFeatureState, unsigned nWait, std::function< void( ) > fnFeature )
 {
 	while ( !bExitState )
 	{

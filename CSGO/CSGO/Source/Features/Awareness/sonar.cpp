@@ -8,12 +8,9 @@ void CSonar::Sonar( )
 		{
 			if ( eng.GetTeam( ) != eng.GetEntityTeam( iEntity ) )
 			{
-				float flDelta[3];
-				flDelta[0] = eng.GetEntityOrigin( iEntity ).x - eng.GetEntityOrigin( 1 ).x;
-				flDelta[1] = eng.GetEntityOrigin( iEntity ).y - eng.GetEntityOrigin( 1 ).y;
-				flDelta[2] = eng.GetEntityOrigin( iEntity ).z - eng.GetEntityOrigin( 1 ).z;
+				vector_t vecPlayerToEntity( eng.GetEntityOrigin( iEntity ), eng.GetEntityOrigin( 1 ) );
 
-				float flDistance = sqrt( pow( flDelta[0], 2 ) + pow( flDelta[1], 2 ) + pow( flDelta[2], 2 ) );
+				float flDistance = sqrt( pow( vecPlayerToEntity.dx, 2 ) + pow( vecPlayerToEntity.dy, 2 ) + pow( vecPlayerToEntity.dz, 2 ) );
 
 				std::cout << "Current Entity: " << iEntity << "\n    Distance from Local Player: " << flDistance << std::endl;
 			}

@@ -4,7 +4,7 @@ HINSTANCE hInst = nullptr;
 bool bExitState = false;
 std::vector< std::thread > tThreads;
 
-void Wait( unsigned int nSleepTime )
+void Wait( unsigned nSleepTime )
 {
 	std::this_thread::sleep_for( std::chrono::milliseconds( nSleepTime ) );
 }
