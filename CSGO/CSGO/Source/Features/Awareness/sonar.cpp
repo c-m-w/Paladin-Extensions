@@ -12,7 +12,7 @@ void CSonar::Sonar( )
 
 				float flDistance = sqrt( pow( vecPlayerToEntity.dx, 2 ) + pow( vecPlayerToEntity.dy, 2 ) + pow( vecPlayerToEntity.dz, 2 ) );
 
-				std::cout << "Current Entity: " << iEntity << "\n    Distance from Local Player: " << flDistance << std::endl;
+				std::cout << "Current Entity: " << iEntity << "\n Distance from Local Player: " << flDistance << std::endl;
 			}
 		}
 	}

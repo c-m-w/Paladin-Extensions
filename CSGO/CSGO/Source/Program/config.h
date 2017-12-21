@@ -2,9 +2,9 @@
 
 struct version_t
 {
-	uint8 upper, lower;
+	unsigned __int8 upper, lower;
 
-	bool operator==( const version_t &rhs )
+	bool operator==( version_t &rhs )
 	{
 		if ( upper == rhs.upper && lower == rhs.lower )
 		{
