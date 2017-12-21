@@ -11,6 +11,16 @@
 ##### John
 ##### Cole
 
+## OBJECT CREATOR
+##### Open
+##### Jeremy
+##### Mike
+##### Hunter
+##### John
+##### Cole
+- Fix datatype printing
+- Parse dwLocation
+
 ## CSGO TODO
 ##### Open
 - Encrypt Strings
@@ -29,4 +39,14 @@
 ##### John
 - Glow
 - Define User/HWID for yourself
+##### Cole
+
+## FOF
+##### Open
+##### Jeremy
+- Port CSGO over
+##### Mike
+##### Hunter
+##### John
+- Port CSGO over
 ##### Cole
