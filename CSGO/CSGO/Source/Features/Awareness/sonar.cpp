@@ -1,21 +1,30 @@
 ﻿#include "../../dllmain.h"
+float flSonarTriggerDistance = 5;
+int iSonarSoundPitch = 200;
+int iSonarSoundLength = 200;
+int iSonarSoundSteepness = 1;
+float flDistance = 0;
 
-void CSonar::Sonar( )
+void CSonar::Sonar()
 {
-	for ( int iEntity = 1; iEntity < eng.GetGlobalVars( ).maxClients; iEntity++ )
+	for (int iEntity = 1; iEntity < eng.GetGlobalVars().maxClients; iEntity++)
 	{
-		if ( !eng.GetEntityDormancy( iEntity ) )
+		if (!eng.GetEntityDormancy(iEntity))
 		{
-			if ( eng.GetTeam( ) != eng.GetEntityTeam( iEntity ) )
+			if (eng.GetTeam() != eng.GetEntityTeam(iEntity))
 			{
 				float flDelta[3];
-				flDelta[0] = eng.GetEntityOrigin( iEntity ).x - eng.GetEntityOrigin( 1 ).x;
-				flDelta[1] = eng.GetEntityOrigin( iEntity ).y - eng.GetEntityOrigin( 1 ).y;
-				flDelta[2] = eng.GetEntityOrigin( iEntity ).z - eng.GetEntityOrigin( 1 ).z;
+				flDelta[0] = eng.GetEntityOrigin(iEntity).x - eng.GetEntityOrigin(1).x;
+				flDelta[1] = eng.GetEntityOrigin(iEntity).y - eng.GetEntityOrigin(1).y;
+				flDelta[2] = eng.GetEntityOrigin(iEntity).z - eng.GetEntityOrigin(1).z;
 
-				float flDistance = sqrt( pow( flDelta[0], 2 ) + pow( flDelta[1], 2 ) + pow( flDelta[2], 2 ) );
+				flDistance = sqrt(pow(flDelta[0], 2) + pow(flDelta[1], 2) + pow(flDelta[2], 2));
 
-				std::cout << "Current Entity: " << iEntity << "\n    Distance from Local Player: " << flDistance << std::endl;
+				if (flDistance < flSonarTriggerDistance && flDistance > 0.1) {
+					Beep(iSonarSoundPitch, iSonarSoundLength);
+					Sleep(int(flDistance) * iSonarSoundSteepness); //Increase & decrease frequency depending on distance to enemy.
+				}
+				//std::cout << "Current Entity: " << iEntity << "\n    Distance from Local Player: " << flDistance << std::endl;
 			}
 		}
 	}
