@@ -5,7 +5,7 @@ void CHitSound::PlaySoundOnHit( )
 	if ( plrLocalPlayer.val.ulHitsOnServer > ulOldHitsOnServer )
 	{
 		ulOldHitsOnServer = plrLocalPlayer.val.ulHitsOnServer;
-		if ( !cfg.strHitSoundLocation.c_str(  ) )
+		if ( !cfg.strHitSoundLocation.c_str( ) )
 		{
 			Beep( 750, 100 );
 		}

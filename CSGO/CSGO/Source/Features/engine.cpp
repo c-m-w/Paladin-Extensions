@@ -101,7 +101,7 @@ DWORD CEngine::GetEntityBase( unsigned long ulEntity )
 
 CPlayer CEngine::GetEntity( unsigned long ulEntity )
 {
-	address_t<CPlayer> plrEntity = { 0, 0, GetEntityBase( ulEntity ) };
+	address_t< CPlayer > plrEntity = { 0, 0, GetEntityBase( ulEntity ) };
 	mem.Get( plrEntity );
 	return plrEntity.val;
 }
@@ -135,7 +135,7 @@ CPlayer CEngine::GetLocalPlayer( )
 }
 
 void CEngine::SetLocalPlayer( )
-{ 
+{
 	mem.Set( plrLocalPlayer );
 }
 

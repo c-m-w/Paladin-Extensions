@@ -73,7 +73,7 @@ angle_t angle_t::operator/=( float rhs )
 
 angle_t angle_t::operator*=( float rhs )
 {
-	return *this* rhs;
+	return *this * rhs;
 }
 
 vector_t::vector_t( )

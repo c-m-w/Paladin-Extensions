@@ -1,6 +1,6 @@
 #include "dllmain.h"
 
-void Feature( bool bFeatureState, unsigned long ulWait, std::function< void( ) > fnFeature, unsigned short usiFeatureKey )
+void Feature( bool bFeatureState, unsigned long ulWait, const std::function< void( ) > &fnFeature, unsigned short usiFeatureKey )
 {
 	while ( !bExitState )
 	{
@@ -12,7 +12,7 @@ void Feature( bool bFeatureState, unsigned long ulWait, std::function< void( ) >
 	}
 }
 
-void Feature( bool bFeatureState, unsigned long ulWait, std::function< void( ) > fnFeature )
+void Feature( bool bFeatureState, unsigned long ulWait, const std::function< void( ) > &fnFeature )
 {
 	while ( !bExitState )
 	{

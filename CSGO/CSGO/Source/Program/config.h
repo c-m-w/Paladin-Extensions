@@ -12,18 +12,18 @@ struct version_t
 
 class CConfig
 {
-	char cfgPath[255]{};
+	char cfgPath[255] { };
 	// read from config TODO
-	template< typename datatype > void Read( char *szSetting, char *szSubSetting, datatype &xStatus )
+	template< typename xDatatype > void Read( char *szSetting, char *szSubSetting, xDatatype &xStatus )
 	{ }
 
 	// write to config TODO
-	template< typename datatype > void Write( char *szSetting, char *szSubSetting, datatype xStatus )
+	template< typename xDatatype > void Write( char *szSetting, char *szSubSetting, xDatatype xStatus )
 	{ }
 
 public:
-	version_t verVersion{};
-	EQuitReasons iQuitReason{};
+	version_t verVersion { };
+	EQuitReasons iQuitReason { };
 
 #ifdef _DEBUG
 	bool bCheckForAnticheat = false;
@@ -32,13 +32,13 @@ public:
 #endif
 
 	// Keys TODO rest of features
-	short sExitKey{};
-	short sReloadKey{ };
-	short sAutoJumpKey{ };
+	short sExitKey { };
+	short sReloadKey { };
+	short sAutoJumpKey { };
 
 	// F{}eature Toggles
-	bool bHitSound{};
-	bool bAutoJumpState{ };
+	bool bHitSound { };
+	bool bAutoJumpState { };
 
 	// F{}eature Settings
 	std::string strHitSoundLocation;
@@ -49,10 +49,10 @@ public:
 	bool ReadConfig( );
 
 	CConfig( ); // constructor
-	CConfig( CConfig& ) = default; // copy constructor
-	CConfig( CConfig&& ) = default; // move constructor
-	CConfig & operator=( CConfig const& ) = default; // copy assignment operator
-	CConfig & operator=( CConfig&& ) = default; // move assignment operator
+	CConfig( CConfig & ) = default; // copy constructor
+	CConfig( CConfig && ) = default; // move constructor
+	CConfig &operator=( CConfig const & ) = default; // copy assignment operator
+	CConfig &operator=( CConfig && ) = default; // move assignment operator
 	~CConfig( ); // deconstructor
 };
 

@@ -14,7 +14,7 @@ namespace Addresses
 	address_t< FLAG > fForceJump;
 	// client pointer addresses
 	address_t< DWORD > pdwEntityList;
-	address_t< std::vector< CPlayer> > plrEntities;
+	address_t< std::vector< CPlayer > > plrEntities;
 	address_t< DWORD > pdwLocalPlayer;
 	address_t< CPlayer > plrLocalPlayer;
 	address_t< DWORD > pdwGlowManager;
@@ -48,7 +48,7 @@ bool CMemoryManager::AttachToGame( )
 	}
 	LogDebugMsg( SCS, "Attached to game" );
 	HANDLE hSnapshot;
-	for ( unsigned short us= 0; us < 5; us++, Wait( 2000 ) )
+	for ( unsigned short us = 0; us < 5; us++, Wait( 2000 ) )
 	{
 		do
 		{
@@ -62,21 +62,21 @@ bool CMemoryManager::AttachToGame( )
 			return false;
 		}
 		LogDebugMsg( SCS, "Module snapshot created" );
-		MODULEENTRY32 me = { };
-		me.dwSize = sizeof(MODULEENTRY32);
-		if ( Module32First( hSnapshot, &me ) )
+		MODULEENTRY32 meModules = { };
+		meModules.dwSize = sizeof(MODULEENTRY32);
+		if ( Module32First( hSnapshot, &meModules ) )
 		{
 			do
 			{
-				if ( !_stricmp( me.szModule, "client.dll" ) )
+				if ( !_stricmp( meModules.szModule, "client.dll" ) )
 				{
-					dwClientBase = DWORD( me.modBaseAddr );
+					dwClientBase = DWORD( meModules.modBaseAddr );
 				}
-				else if ( !_stricmp( me.szModule, "engine.dll" ) )
+				else if ( !_stricmp( meModules.szModule, "engine.dll" ) )
 				{
-					dwEngineBase = DWORD( me.modBaseAddr );
+					dwEngineBase = DWORD( meModules.modBaseAddr );
 				}
-			} while ( Module32Next( hSnapshot, &me ) );
+			} while ( Module32Next( hSnapshot, &meModules ) );
 			CloseHandle( hSnapshot );
 		}
 		if ( dwClientBase && dwEngineBase )
@@ -97,7 +97,7 @@ bool CMemoryManager::AttachToGame( )
 DWORD CMemoryManager::FindPattern( BYTE *bMask, char *szMask, DWORD dwAddress, DWORD dwLength )
 {
 	DWORD dwDataLength = strlen( szMask );
-	BYTE *bData = new BYTE[dwDataLength + 1];
+	auto *bData = new BYTE[dwDataLength + 1];
 	SIZE_T sRead;
 	for ( DWORD dwAdditive = 0; dwAdditive < dwLength; dwAdditive++ )
 	{

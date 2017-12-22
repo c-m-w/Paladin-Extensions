@@ -1,11 +1,11 @@
 #pragma once
 
-template< typename datatype > struct address_t
+template< typename xDatatype > struct address_t
 {
 	DWORD off = 0; // offset
 	DWORD ptr = 0; // thisptr
 	DWORD loc = 0; // location
-	datatype val{}; // value
+	xDatatype val { }; // value
 };
 
 namespace Addresses
@@ -22,7 +22,7 @@ namespace Addresses
 	extern address_t< FLAG > fForceJump;
 	// client pointer addresses
 	extern address_t< DWORD > pdwEntityList;
-	extern address_t< std::vector< CPlayer> > plrEntities;
+	extern address_t< std::vector< CPlayer > > plrEntities;
 	extern address_t< DWORD > pdwLocalPlayer;
 	extern address_t< CPlayer > plrLocalPlayer;
 	extern address_t< DWORD > pdwGlowManager;
@@ -44,7 +44,7 @@ public:
 
 	void InitializeAddresses( );
 
-	template< typename datatype > bool Get( address_t< datatype > &adrRead )
+	template< typename xDatatype > bool Get( address_t< xDatatype > &adrRead )
 	{
 		if ( adrRead.loc )
 		{
@@ -53,10 +53,10 @@ public:
 				DWORD dwXor;
 				bool bSuccess = ReadProcessMemory( hGame, LPVOID( adrRead.loc ), &dwXor, sizeof(DWORD), nullptr );
 				dwXor ^= adrRead.ptr;
-				adrRead.val = *reinterpret_cast< datatype* >( &dwXor );
+				adrRead.val = *reinterpret_cast< xDatatype* >( &dwXor );
 				return bSuccess;
 			}
-			return ReadProcessMemory( hGame, LPVOID( adrRead.loc ), &adrRead.val, sizeof(datatype), nullptr );
+			return ReadProcessMemory( hGame, LPVOID( adrRead.loc ), &adrRead.val, sizeof(xDatatype), nullptr );
 		}
 		return false;
 	}
@@ -76,10 +76,10 @@ public:
 	}
 
 	CMemoryManager( ) = default; // constructor
-	CMemoryManager( CMemoryManager& ) = default; // copy constructor
-	CMemoryManager( CMemoryManager&& ) = default; // move constructor
-	CMemoryManager & operator=( CMemoryManager const& ) = default; // copy assignment operator
-	CMemoryManager & operator=( CMemoryManager&& ) = default; // move assignment operator
+	CMemoryManager( CMemoryManager & ) = default; // copy constructor
+	CMemoryManager( CMemoryManager && ) = default; // move constructor
+	CMemoryManager &operator=( CMemoryManager const & ) = default; // copy assignment operator
+	CMemoryManager &operator=( CMemoryManager && ) = default; // move assignment operator
 	~CMemoryManager( ); // deconstructor
 };
 

@@ -56,6 +56,7 @@
  * * * str string
  * * * dw dword
  * * * fn function
+ * * * h handle
  * * * p pointer
  * * * lp long pointer
  * * * x unknown (_ is an alternative - pls do not use this)

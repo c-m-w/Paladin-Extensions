@@ -7,7 +7,7 @@ bool CConfig::LoadConfig( )
 	memset( cfgPath, 0, MAX_PATH );
 	strcpy_s( cfgPath, std::string( chTemp ).substr( 0, std::string( chTemp ).find_last_of( "/\\" ) + 1 ).c_str( ) );
 	strcat_s( cfgPath, "config.txt" );
-	struct stat buffer{};
+	struct stat buffer { };
 	if ( stat( cfgPath, &buffer ) )
 	{
 		Write( "Key bds", "Terminate", sExitKey );
@@ -28,7 +28,7 @@ bool CConfig::LoadConfig( )
 
 bool CConfig::ReadConfig( )
 {
-	version_t verConfig{};
+	version_t verConfig { };
 	Read( "Info", "Version", verConfig );
 	if ( verVersion == verConfig )
 	{
