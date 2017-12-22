@@ -4,7 +4,7 @@ struct version_t
 {
 	unsigned __int8 upper, lower;
 
-	bool operator==( version_t &rhs )
+	bool operator==( version_t rhs )
 	{
 		if ( upper == rhs.upper && lower == rhs.lower )
 		{

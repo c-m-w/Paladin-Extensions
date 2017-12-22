@@ -2,14 +2,8 @@
 
 void CFOV::FOV( )
 {
-	if ( !eng.GetActiveWeaponZoomLevel( ) )
-	{
-		eng.SetFieldOfView( 120 );
-	}
-	else
-	{
-		eng.SetFieldOfView( 90 );
-	}
+	plrLocalPlayer.val.iFOV = 120;
+	eng.SetLocalPlayer( );
 }
 
 void CFOV::WeaponFOV( )

@@ -45,7 +45,7 @@ BOOL WINAPI DllMain( HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpvReserved );
  * * * struct_t
  * * * typedef
  * * * b bool/byte
- * * * f flag
+ * * * f FLAG
  * * * i int
  * * * n unsigned int (total, c are alternatives - pls do not use these)
  * * * l long

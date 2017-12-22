@@ -4,11 +4,11 @@ void CSonar::Sonar( )
 {
 	for ( int iEntity = 1; iEntity < eng.GetGlobalVars( ).maxClients; iEntity++ )
 	{
-		if ( !eng.GetEntityDormancy( iEntity ) )
+		if ( /*!plrEntities.val.at( iEntity ).bDormant*/1 )
 		{
-			if ( eng.GetTeam( ) != eng.GetEntityTeam( iEntity ) )
+			if ( plrLocalPlayer.val.iTeamNum != plrEntities.val.at( iEntity ).iTeamNum )
 			{
-				vector_t vecPlayerToEntity( eng.GetEntityOrigin( iEntity ), eng.GetEntityOrigin( 1 ) );
+				vector_t vecPlayerToEntity( plrEntities.val.at( iEntity ).corOrigin, plrLocalPlayer.val.corOrigin );
 
 				float flDistance = sqrt( pow( vecPlayerToEntity.dx, 2 ) + pow( vecPlayerToEntity.dy, 2 ) + pow( vecPlayerToEntity.dz, 2 ) );
 

@@ -19,7 +19,7 @@ else if ( DIST FROM GROUND < 45 && DIST FROM GROUND > 0 )
 void CAutomation::AutoJump( )
 {
 	// TODO fake scroll
-	if ( eng.GetFlags( ) & FL_ONGROUND )
+	if ( plrLocalPlayer.val.fFlags & FL_ONGROUND )
 	{
 		eng.SetJump( FA_TICK );
 	}
@@ -36,7 +36,7 @@ void CAutomation::AutoNade( )
 	{
 		if ( eng.GetAttack( ) & FA_PRESS )
 		{
-			if ( eng.GetFlags( ) & !FL_ONGROUND )
+			if ( plrLocalPlayer.val.fFlags & !FL_ONGROUND )
 			{
 				eng.SetAttack( !FA_PRESS );
 			}
@@ -47,7 +47,7 @@ void CAutomation::AutoNade( )
 void CAutomation::AutoShoot( )
 {
 	// TODO weapon ID for pistols, shotguns (not xm), and snipers (not autosnipers)
-	if ( eng.GetNextPrimaryAttack( ) <= 0.f )
+	if ( ( plrLocalPlayer.val.flNextAttack - eng.GetGlobalVars( ).curtime ) <= 0.f )
 	{
 		eng.SetAttack( FA_TICK );
 	}

@@ -11,7 +11,6 @@
 
 // global typedefs
 typedef long long moment;
-typedef BYTE unknown;
 
 // global structs
 struct angle_t
@@ -24,8 +23,8 @@ struct angle_t
 	angle_t operator-( angle_t );
 	angle_t operator*( float );
 	angle_t operator/( float );
-	angle_t &operator+=( angle_t );
-	angle_t &operator-=( angle_t );
+	angle_t operator+=( angle_t );
+	angle_t operator-=( angle_t );
 	angle_t operator*=( float );
 	angle_t operator/=( float );
 };
@@ -114,7 +113,7 @@ enum class EAnticheatStatus
 // defines
 #define MAX_ANGLE_DELTA 22.f // Max angle delta per tick
 #define FL_ONGROUND (1 << 0) // At rest / on the ground
-#define FL_DUCKING (1 << 1) // Player flag -- Player is fully crouched
+#define FL_DUCKING (1 << 1) // Player FLAG -- Player is fully crouched
 #define FA_DEFAULT 0b100 // default command state
 #define FA_PRESS 0b1 // +command
 #define FA_TICK 0b10 // +command, tick, -command
@@ -135,9 +134,8 @@ enum class EAnticheatStatus
 #define MIN_ROLL 50.f
 
 // typedefs
-typedef unsigned int flag;
-typedef unsigned short total;
-typedef int EHANDLE;
+typedef unsigned int FLAG;
+typedef unsigned int EHANDLE;
 
 // enums
 enum class EMoveType
@@ -261,7 +259,6 @@ public:
 	bool operator!=( CGlobalVars );
 };
 
-// TODO TEST
 class CPlayer
 {
 	BYTE x0[0x60];
@@ -277,14 +274,14 @@ private:
 public:
 	coordinate_t corCell; // 0x7c
 private:
-	BYTE x88[0x64];
+	BYTE x88[0x64]; // TODO dormancy
 public:
-	flag fEffects; // 0xec
+	FLAG fEffects; // 0xec
 	int iTeamNum; // 0xf0
 	int iPendingTeamNum; // 0xf4
 	unsigned int nNextThinkTick; // 0xf8
 	int iHealth; // 0xfc
-	flag fFlags; // 0x100
+	FLAG fFlags; // 0x100
 	vector_t vecViewOffset; // 0x104
 	vector_t vecVelocity; // 0x110
 	vector_t vecBaseVelocity; // 0x11c
@@ -298,9 +295,9 @@ public:
 private:
 	BYTE x154[0x100];
 public:
-	unsigned __int16 nModelIndex; // 0x254
+	unsigned short nModelIndex; // 0x254
 	unsigned __int8 nRenderFX; // 0x256
-	unsigned __int16 nRenderMode; // 0x257
+	unsigned short nRenderMode; // 0x257
 	unsigned __int8 nWaterLevel; // 0x25a
 	bool lifeState; // 0x25b
 	float flAnimTime; // 0x25c
@@ -439,7 +436,7 @@ private:
 public:
 	int iCoachingTeam; // 0x2f40
 private:
-	BYTE x2F44[0x26C];
+	BYTE x2F44[0x26C]; // TODO get aimpunch and whatnot
 public:
 	EHANDLE hTonemapController; // 0x31b0
 private:
@@ -473,14 +470,14 @@ public:
 private:
 	BYTE x3258[0x8C];
 public:
-	flag fPhysicsFlags; // 0x32e4
+	FLAG fPhysicsFlags; // 0x32e4
 	EHANDLE hVehicle; // 0x32e8
 	EHANDLE hLastWeapon; // 0x32ec
 	EHANDLE hViewModel; // 0x32f0
 private:
 	BYTE x32F4[0x24];
 public:
-	flag fOnTarget; // 0x3318
+	FLAG fOnTarget; // 0x3318
 	EHANDLE hUseEntity; // 0x331c
 	int iDefaultFOV; // 0x3320
 private:
@@ -512,7 +509,7 @@ private:
 	BYTE x3378[0x34];
 public:
 	float flDeathTime; // 0x33ac
-	flag fForceTeam; // 0x33b0
+	FLAG fForceTeam; // 0x33b0
 private:
 	BYTE x33B4[0x60];
 public:
@@ -548,7 +545,7 @@ public:
 	bool bDefusing; // 0x3894
 	bool bGrabbgHostage; // 0x3895
 	bool bRescuing; // 0x3896
-	flag fImmuneToGunGameDamageTime; // 0x3898
+	FLAG fImmuneToGunGameDamageTime; // 0x3898
 private:
 	BYTE x389C[0x4];
 public:
@@ -560,8 +557,8 @@ public:
 	int iNumGunGameKillsWithCurrentWeapon; // 0x38ac
 	int iNumRoundKills; // 0x38b0
 	int iNumRoundKillsHeadshots; // 0x38b4
-	flag fMolotovUseTime; // 0x38b8
-	flag fMolotovDamageTime; // 0x38bc
+	FLAG fMolotovUseTime; // 0x38b8
+	FLAG fMolotovDamageTime; // 0x38bc
 	bool bBombZone; // 0x38c0
 	bool bBuyZone; // 0x38c1
 	bool bNoDefuseArea; // 0x38c2
@@ -602,7 +599,7 @@ public:
 	float flVelocityModifier; // 0xa2bc
 	float flGroundAccelLinearFracLastTime; // 0xa2c0
 	int iStartAccount; // 0xa2c4
-	total totalHitsOnServer; // 0xa2c8
+	unsigned int totalHitsOnServer; // 0xa2c8
 private:
 	BYTE xA2CC[0x4];
 public:
@@ -634,11 +631,11 @@ private:
 	BYTE xA954[0x8A0];
 public:
 	unsigned int nQuestProgressReason; // 0xb1f4
-	unsigned __int16 unCurrentEquipmentValue; // 0xb1f8
-	unsigned __int16 unRoundStartEquipmentValue; // 0xb1fa
-	unsigned __int16 unFreezetimeEndEquipmentValue; // 0xb1fc
+	unsigned short unCurrentEquipmentValue; // 0xb1f8
+	unsigned short unRoundStartEquipmentValue; // 0xb1fa
+	unsigned short unFreezetimeEndEquipmentValue; // 0xb1fc
 	int rank[6]; // 0xb200
-	unsigned __int16 unMusicID; // 0xb218
+	unsigned short unMusicID; // 0xb218
 private:
 	BYTE xB21A[0xE];
 public:

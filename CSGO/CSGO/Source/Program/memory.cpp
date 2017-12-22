@@ -2,39 +2,22 @@
 
 namespace Addresses
 {
-	// global CEngine addresses
-	// CEngine pointer addresses
+	// global engine addresses
 	address_t< CGlobalVars > gvGlobalVars;
+	// engine pointer addresses
 	address_t< DWORD > pdwClientState;
-	address_t< ESignOnState > cs_soSignOnState;
-	address_t< angle_t > cs_aViewAngle;
-	// global Client addresses
+	address_t< ESignOnState > soSignOnState;
+	address_t< angle_t > angViewAngle;
+	// global client addresses
 	address_t< float > flSensitivity;
-	address_t< flag > fForceAttack;
-	address_t< flag > fForceJump;
-	// Client pointer addresses
+	address_t< FLAG > fForceAttack;
+	address_t< FLAG > fForceJump;
+	// client pointer addresses
 	address_t< DWORD > pdwEntityList;
-	address_t< DWORD > el_dwGlowManager;
-	address_t< bool > el_bDormant;
-	address_t< ETeam > el_tTeamNum;
-	address_t< bool > el_bSpottedState;
-	address_t< coordinate_t > el_corOrigin;
-
+	address_t< std::vector< CPlayer> > plrEntities;
 	address_t< DWORD > pdwLocalPlayer;
-
-	address_t< ETeam > lp_tTeamNum;
-	address_t< flag > lp_fFlags;
-	address_t< EMoveType > lp_mMoveType;
-	address_t< angle_t > lp_aAimPunch;
-	address_t< int > lp_iFOV;
-	address_t< int > lp_iShotsFired;
-	address_t< total > lp_totalHitsOnServer;
-	address_t< float > lp_flFlashMaxAlpha;
-
-	address_t< handle > lp_hActiveWeapon;
-	address_t< int > aw_iZoomLevel;
-	address_t< float > aw_flNextPrimaryAttack;
-	address_t< EWeapon > aw_wpnPlayerWeaponIndex;
+	address_t< CPlayer > plrLocalPlayer;
+	address_t< DWORD > pdwGlowManager;
 }
 
 CMemoryManager::~CMemoryManager( )
@@ -144,37 +127,23 @@ DWORD CMemoryManager::FindPattern( BYTE *bMask, char *szMask, DWORD dwAddress, D
 void CMemoryManager::InitializeAddresses( )
 {
 	LogDebugMsg( DBG, "Initializing addresses" );
+
 	// global Engine addresses
 	gvGlobalVars = { 0x57B4F0 };
 	// Engine pointer addresses
 	pdwClientState = { 0x57B7EC };
-	cs_soSignOnState = { 0x108 };
-	cs_aViewAngle = { 0x4D10 };
+	soSignOnState = { 0x108 };
+	angViewAngle = { 0x4D10 };
 	// global Client addresses
 	flSensitivity = { 0xAA14DC, 0xAA14B0 };
 	fForceAttack = { 0x2EBAF64 };
 	fForceJump = { 0x4F0FE0C };
 	// Client pointer addresses
 	pdwEntityList = { 0x4A78BA4 };
-	el_dwGlowManager = { 0x4F959F0 };
-	el_bDormant = { 0xE9 };
-	el_tTeamNum = { 0xF0 };
-	el_bSpottedState = { 0x939 };
-	el_corOrigin = { 0x134 };
+	pdwGlowManager = { 0x4F959F0 };
 	pdwLocalPlayer = { 0xA9BDDC };
-	lp_tTeamNum = { 0xF0 };
-	lp_fFlags = { 0x100 };
-	lp_mMoveType = { 0x258 };
-	lp_aAimPunch = { 0x301C };
-	lp_iFOV = { 0x330C };
-	lp_iShotsFired = { 0xA2B0 };
-	lp_totalHitsOnServer = { 0xA2C8 };
-	lp_flFlashMaxAlpha = { 0xA2F4 };
-	lp_hActiveWeapon = { 0x2EE8 };
-	aw_iZoomLevel = { 0x3340 };
-	aw_flNextPrimaryAttack = { 0x31D8 };
-	aw_wpnPlayerWeaponIndex = { 0x5D38 };
 	LogDebugMsg( SCS, "Initialized bases" );
+
 	// engine
 	gvGlobalVars.loc = dwEngineBase + gvGlobalVars.off;
 	pdwClientState.loc = dwEngineBase + pdwClientState.off;
@@ -185,6 +154,8 @@ void CMemoryManager::InitializeAddresses( )
 	flSensitivity.ptr += dwClientBase;
 	pdwEntityList.loc = dwClientBase + pdwEntityList.off;
 	pdwLocalPlayer.loc = dwClientBase + pdwLocalPlayer.off;
+	LogDebugMsg( SCS, "Initialized locations" );
+
 	LogDebugMsg( SCS, "Initialized addresses" );
 }
 

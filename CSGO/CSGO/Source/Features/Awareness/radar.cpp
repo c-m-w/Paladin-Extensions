@@ -4,11 +4,12 @@ void CRadar::Radar( )
 {
 	for ( int iEntity = 1; iEntity < eng.GetGlobalVars( ).maxClients; iEntity++ )
 	{
-		if ( !eng.GetEntityDormancy( iEntity ) )
+		if ( /*!plrEntities.val.at( iEntity ).bDormant*/1 )
 		{
-			if ( eng.GetTeam( ) != eng.GetEntityTeam( iEntity ) )
+			if ( plrLocalPlayer.val.iTeamNum != plrEntities.val.at( iEntity ).iTeamNum )
 			{
-				eng.SetEntitySpottedState( iEntity, true );
+				plrEntities.val.at( iEntity ).bSpotted = true;
+				eng.SetEntity( iEntity, plrEntities.val.at( iEntity ) );
 			}
 		}
 	}

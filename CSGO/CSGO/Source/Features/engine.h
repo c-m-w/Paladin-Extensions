@@ -14,40 +14,23 @@ public:
 	void SetViewAngle( angle_t ); // sets view angles automatically normalized and clamped
 
 	// client - global
-	flag GetAttack( );
-	void SetAttack( flag );
-	flag GetJump( );
-	void SetJump( flag );
+	FLAG GetAttack( );
+	void SetAttack( FLAG );
+	FLAG GetJump( );
+	void SetJump( FLAG );
 	float GetSensitivity( );
 	void SetSensitivity( float ); // sets sensitivity limited to 0 and 1000
 
 	// client - entities
 	DWORD GetEntityBase( int );
-
-	ETeam GetEntityTeam( int );
-	bool GetEntityDormancy( int );
-	bool GetEntitySpottedState( int );
-	void SetEntitySpottedState( int, bool );
-	coordinate_t GetEntityOrigin( int );
+	CPlayer GetEntity( int );
+	void GetEntities( );
+	void SetEntity( int, CPlayer );
 
 	// client - localplayer
-	DWORD GetLocalPlayer( );
-
-	ETeam GetTeam( );
-	flag GetFlags( );
-	EMoveType GetMoveType( );
-	angle_t GetAimPunch( );
-	int GetFieldOfView( );
-	void SetFieldOfView( int ); // sets field of view limited to 0 and 180
-	int GetShotsFired( );
-	total GetHitsOnServer( );
-	float GetFlashMaxAlpha( );
-	void SetFlashMaxAlpha( float ); // sets max flash limited to 0 and 255
-
-	handle GetActiveWeaponHandle( );
-	int GetActiveWeaponZoomLevel( );
-	float GetNextPrimaryAttack( );
-	EWeapon GetActiveWeaponIndex( );
+	DWORD GetLocalPlayerBase( );
+	CPlayer GetLocalPlayer( );
+	void SetLocalPlayer( );
 
 	// general
 	float GetPixelToAngleYAW( );

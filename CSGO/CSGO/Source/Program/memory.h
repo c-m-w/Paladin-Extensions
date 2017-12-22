@@ -10,39 +10,22 @@ template< typename datatype > struct address_t
 
 namespace Addresses
 {
-	// global CEngine addresses
-	// CEngine pointer addresses
+	// global engine addresses
 	extern address_t< CGlobalVars > gvGlobalVars;
+	// engine pointer addresses
 	extern address_t< DWORD > pdwClientState;
-	extern address_t< ESignOnState > cs_soSignOnState;
-	extern address_t< angle_t > cs_aViewAngle;
-	// global Client addresses
+	extern address_t< ESignOnState > soSignOnState;
+	extern address_t< angle_t > angViewAngle;
+	// global client addresses
 	extern address_t< float > flSensitivity;
-	extern address_t< flag > fForceAttack;
-	extern address_t< flag > fForceJump;
-	// Client pointer addresses
+	extern address_t< FLAG > fForceAttack;
+	extern address_t< FLAG > fForceJump;
+	// client pointer addresses
 	extern address_t< DWORD > pdwEntityList;
-	extern address_t< DWORD > el_dwGlowManager;
-	extern address_t< bool > el_bDormant;
-	extern address_t< ETeam > el_tTeamNum;
-	extern address_t< bool > el_bSpottedState;
-	extern address_t< coordinate_t > el_corOrigin;
-
+	extern address_t< std::vector< CPlayer> > plrEntities;
 	extern address_t< DWORD > pdwLocalPlayer;
-
-	extern address_t< ETeam > lp_tTeamNum;
-	extern address_t< flag > lp_fFlags;
-	extern address_t< EMoveType > lp_mMoveType;
-	extern address_t< angle_t > lp_aAimPunch;
-	extern address_t< int > lp_iFOV;
-	extern address_t< int > lp_iShotsFired;
-	extern address_t< total > lp_totalHitsOnServer;
-	extern address_t< float > lp_flFlashMaxAlpha;
-
-	extern address_t< handle > lp_hActiveWeapon;
-	extern address_t< int > aw_iZoomLevel;
-	extern address_t< float > aw_flNextPrimaryAttack;
-	extern address_t< EWeapon > aw_wpnPlayerWeaponIndex;
+	extern address_t< CPlayer > plrLocalPlayer;
+	extern address_t< DWORD > pdwGlowManager;
 }
 
 using namespace Addresses;

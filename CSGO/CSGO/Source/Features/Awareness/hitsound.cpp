@@ -2,9 +2,9 @@
 
 void CHitSound::PlaySoundOnHit( )
 {
-	if ( eng.GetHitsOnServer( ) > totalPreviousHitsOnServer )
+	if ( plrLocalPlayer.val.totalHitsOnServer > totalOldHitsOnServer )
 	{
-		totalPreviousHitsOnServer = lp_totalHitsOnServer.val;
+		totalOldHitsOnServer = plrLocalPlayer.val.totalHitsOnServer;
 		if ( cfg.strHitSoundLocation == "\0" )
 		{
 			Beep( 750, 100 );

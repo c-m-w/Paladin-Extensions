@@ -2,20 +2,20 @@
 
 void CRecoilControl::RecoilControl( )
 {
-	if ( eng.GetShotsFired( ) > 1 ) // ignore shot count
+	if ( plrLocalPlayer.val.iShotsFired > 1 ) // ignore shot count
 	{
-		if ( iOldShotsFired < eng.GetShotsFired( ) )
+		if ( iOldShotsFired < plrLocalPlayer.val.iShotsFired )
 		{
-			angle_t angCurrentAimPunch = ( eng.GetAimPunch( ) - angOldAimPunch ) * 2.f;
+			angle_t angCurrentAimPunch; // = ( plrLocalPlayer.val.angAimPunch - angOldAimPunch ) * 2.f;
 
-			for ( float flSmooth = eng.GetNextPrimaryAttack( ); flSmooth > 0; flSmooth -= eng.GetGlobalVars( ).interval_per_tick )
+			for ( float flSmooth = plrLocalPlayer.val.flNextAttack; flSmooth > 0; flSmooth -= eng.GetGlobalVars( ).interval_per_tick )
 			{
 				eng.SetViewAngle( eng.GetViewAngle( ) - angCurrentAimPunch / flSmooth );
-				Wait( eng.GetGlobalVars( ).interval_per_tick * MILLISECONDS_PER_SECOND );
+				Wait( int( eng.GetGlobalVars( ).interval_per_tick * MILLISECONDS_PER_SECOND ) );
 			}
 
-			angOldAimPunch = eng.GetAimPunch( );
-			iOldShotsFired = eng.GetShotsFired( );
+			/*angOldAimPunch = plrLocalPlayer.val.angAimPunch;*/
+			iOldShotsFired = plrLocalPlayer.val.iShotsFired;
 		}
 	}
 	else

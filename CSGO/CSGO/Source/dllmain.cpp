@@ -105,6 +105,8 @@ int CALLBACK WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 	{
 		Panic( );
 	}, VK_F4 );
+
+	return 0;
 }
 
 void SetDebug( )
@@ -177,6 +179,15 @@ bool GetPremium( )
 void CreateThreads( )
 {
 	LogDebugMsg( DBG, "Initializing threads..." );
+	std::thread tInfoGrabber ( [ & ]
+	{
+		while ( !bExitState )
+		{
+			eng.GetLocalPlayer( );
+			eng.GetEntities( );
+			Wait( int(eng.GetGlobalVars( ).interval_per_tick * MILLISECONDS_PER_SECOND ) );
+		}
+	} );
 	//
 	// awareness
 	//
