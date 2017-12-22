@@ -274,7 +274,11 @@ private:
 public:
 	coordinate_t corCell { }; // 0x7c
 private:
-	BYTE x88[0x64] { }; // TODO dormancy
+	BYTE x88[0x61] { };
+public:
+    bool bDormant { }; // 0xe9
+private:
+	BYTE xEA[0x2] { };
 public:
 	FLAG fEffects { }; // 0xec
 	unsigned long ulTeamNum { }; // 0xf0
