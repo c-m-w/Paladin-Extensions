@@ -266,7 +266,7 @@ class CPlayer
 {
 	BYTE x0[0x60];
 public:
-	bool bIsAutoaimTarget; // 0x60
+	bool bAutoaimTarget; // 0x60
 private:
 	BYTE x64[0xC];
 public:
@@ -288,8 +288,8 @@ public:
 	vector_t vecViewOffset; // 0x104
 	vector_t vecVelocity; // 0x110
 	vector_t vecBaseVelocity; // 0x11c
-	vector_t angRotation; // 0x128
-	vector_t vecOrigin; // 0x134
+	angle_t angRotation; // 0x128
+	coordinate_t corOrigin; // 0x134
 	float flFriction; // 0x140
 	int moveparent; // 0x144
 	EHANDLE hOwnerEntity; // 0x148
@@ -541,13 +541,13 @@ public:
 private:
 	BYTE x378C[0x100];
 public:
-	bool bIsScoped; // 0x388c
-	bool bIsWalking; // 0x388d
+	bool bScoped; // 0x388c
+	bool bWalking; // 0x388d
 	bool bResumeZoom; // 0x388e
 	int iPlayerState; // 0x3890
-	bool bIsDefusing; // 0x3894
-	bool bIsGrabbingHostage; // 0x3895
-	bool bIsRescuing; // 0x3896
+	bool bDefusing; // 0x3894
+	bool bGrabbgHostage; // 0x3895
+	bool bRescuing; // 0x3896
 	flag fImmuneToGunGameDamageTime; // 0x3898
 private:
 	BYTE x389C[0x4];
@@ -562,12 +562,12 @@ public:
 	int iNumRoundKillsHeadshots; // 0x38b4
 	flag fMolotovUseTime; // 0x38b8
 	flag fMolotovDamageTime; // 0x38bc
-	bool bInBombZone; // 0x38c0
-	bool bInBuyZone; // 0x38c1
-	bool bInNoDefuseArea; // 0x38c2
+	bool bBombZone; // 0x38c0
+	bool bBuyZone; // 0x38c1
+	bool bNoDefuseArea; // 0x38c2
 	int iThrowGrenadeCounter; // 0x38c4
 	bool bWaitForNoAttack; // 0x38c8
-	bool bIsRespawningForDMBonus; // 0x38c9
+	bool bRespawningForDMBonus; // 0x38c9
 	float flGuardianTooFarDistFrac; // 0x38cc
 	float flDetectedByEnemySensorTime; // 0x38d0
 private:
@@ -649,13 +649,10 @@ private:
 	BYTE xB22E[0x6];
 public:
 	int iClass; // 0xb234
-	int ArmorValue; // 0xb238
-	float angEyeAngles[2]; // 0xb23c
-private:
-	BYTE xB244[0x4];
-public:
+	int iArmorValue; // 0xb238
+	angle_t angEyeAngles; // 0xb23c
 	bool bHasDefuser; // 0xb248
-	bool bInHostageRescueZone; // 0xb249
+	bool bHostageRescueZone; // 0xb249
 private:
 	BYTE xB24A[0x20];
 public:
@@ -680,13 +677,13 @@ public:
 private:
 	BYTE xB4F0[0x308];
 public:
-	bool bIsLookingAtWeapon; // 0xb7f8
-	bool bIsHoldingLookAtWeapon; // 0xb7f9
+	bool bLookingAtWeapon; // 0xb7f8
+	bool bHoldingLookAtWeapon; // 0xb7f9
 private:
 	BYTE xB7FA[0x98];
 public:
-	bool bIsAssassinationTarget; // 0xb895
-	bool bIsControllingBot; // 0xb896
+	bool bAssassinationTarget; // 0xb895
+	bool bControllingBot; // 0xb896
 	bool bCanControlObservedBot; // 0xb897
 	int iControlledBotEntIndex; // 0xb898
 private:

@@ -22,9 +22,9 @@ bool CConfig::LoadConfig( )
 	struct stat buffer;
 	if ( stat( cfgPath, &buffer ) )
 	{
-		Write( "Key Binds", "Terminate", iExitKey );
-		Write( "Key Binds", "Reload Config", iReloadKey );
-		Write( "Key Binds", "Auto Jump", iAutoJumpKey );
+		Write( "Key bds", "Terminate", iExitKey );
+		Write( "Key bds", "Reload Config", iReloadKey );
+		Write( "Key bds", "Auto Jump", iAutoJumpKey );
 		Write( "Auto Jump", "Enabled", bAutoJumpState );
 		Write( "Hit Sound", "Enabled", bHitSound );
 		Write( "Hit Sound", "File Location", strHitSoundLocation );
@@ -44,9 +44,9 @@ bool CConfig::ReadConfig( )
 	Read( "Info", "Version", verConfig );
 	if ( verVersion == verConfig )
 	{
-		Read( "Key Binds", "Terminate", iExitKey );
-		Read( "Key Binds", "Reload Config", iReloadKey );
-		Read( "Key Binds", "Auto Jump", iAutoJumpKey );
+		Read( "Key bds", "Terminate", iExitKey );
+		Read( "Key bds", "Reload Config", iReloadKey );
+		Read( "Key bds", "Auto Jump", iAutoJumpKey );
 		Read( "Auto Jump", "Enabled", bAutoJumpState );
 		Read( "Hit Sound", "Enabled", bHitSound );
 		Read( "Hit Sound", "File Location", strHitSoundLocation );
