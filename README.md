@@ -11,16 +11,6 @@
 ##### John
 ##### Cole
 
-## OBJECT CREATOR
-##### Open
-##### Jeremy
-##### Mike
-##### Hunter
-##### John
-##### Cole
-- Fix datatype printing
-- Parse dwLocation
-
 ## CSGO TODO
 ##### Open
 - Encrypt Strings
