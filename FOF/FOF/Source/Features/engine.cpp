@@ -23,34 +23,34 @@ DWORD CEngine::GetClientState( )
 
 ESignOnState CEngine::GetSignOnState( )
 {
-	cs_soSignOnState.loc = GetClientState( ) + cs_soSignOnState.off;
-	mem.Get( pdwClientState );
-	return cs_soSignOnState.val;
+	soSignOnState.loc = GetClientState( ) + soSignOnState.off;
+	mem.Get( soSignOnState );
+	return soSignOnState.val;
 }
 
 angle_t CEngine::GetViewAngle( )
 {
-	cs_aViewAngle.loc = GetClientState( ) + cs_aViewAngle.off;
-	mem.Get( cs_aViewAngle );
-	return cs_aViewAngle.val;
+	angViewAngle.loc = GetClientState( ) + angViewAngle.off;
+	mem.Get( angViewAngle );
+	return angViewAngle.val;
 }
 
 void CEngine::SetViewAngle( angle_t angNewViewAngle )
 {
 	if ( GetViewAngle( ) != ClampAngle( NormalizeAngle( angNewViewAngle ) ) )
 	{
-		cs_aViewAngle.val = ClampAngle( NormalizeAngle( angNewViewAngle ) );
-		mem.Set( cs_aViewAngle );
+		angViewAngle.val = ClampAngle( NormalizeAngle( angNewViewAngle ) );
+		mem.Set( angViewAngle );
 	}
 }
 
-flag CEngine::GetAttack( )
+FLAG CEngine::GetAttack( )
 {
 	mem.Get( fForceAttack );
 	return fForceAttack.val;
 }
 
-void CEngine::SetAttack( flag ksType )
+void CEngine::SetAttack( FLAG ksType )
 {
 	if ( GetAttack( ) != ( FA_DEFAULT | ksType ) )
 	{
@@ -59,13 +59,13 @@ void CEngine::SetAttack( flag ksType )
 	}
 }
 
-flag CEngine::GetJump( )
+FLAG CEngine::GetJump( )
 {
 	mem.Get( fForceJump );
 	return fForceJump.val;
 }
 
-void CEngine::SetJump( flag ksType )
+void CEngine::SetJump( FLAG ksType )
 {
 	if ( GetJump( ) != ( FA_DEFAULT | ksType ) )
 	{
@@ -90,163 +90,54 @@ void CEngine::SetSensitivity( float flNewSensitivity )
 	}
 }
 
-DWORD CEngine::GetEntityBase( int iEntity )
+DWORD CEngine::GetEntityBase( unsigned long ulEntity )
 {
 	DWORD dwOldEntityList = pdwEntityList.loc;
-	pdwEntityList.loc += ( iEntity - 1 ) * ENTITY_DISTANCE;
+	pdwEntityList.loc += ( ulEntity - 1 ) * ENTITY_DISTANCE;
 	mem.Get( pdwEntityList );
 	pdwEntityList.loc = dwOldEntityList;
 	return pdwEntityList.val;
 }
 
-ETeam CEngine::GetEntityTeam( int iEntity )
+CPlayer CEngine::GetEntity( unsigned long ulEntity )
 {
-	el_tTeamNum.loc = GetEntityBase( iEntity ) + el_tTeamNum.off;
-	mem.Get( el_tTeamNum );
-	return el_tTeamNum.val;
+	address_t<CPlayer> plrEntity = { 0, 0, GetEntityBase( ulEntity ) };
+	mem.Get( plrEntity );
+	return plrEntity.val;
 }
 
-bool CEngine::GetEntityDormancy( int iEntity )
+void CEngine::GetEntities( )
 {
-	el_bDormant.loc = GetEntityBase( iEntity ) + el_bDormant.off;
-	mem.Get( el_bDormant );
-	return el_bDormant.val;
-}
-
-bool CEngine::GetEntitySpottedState( int iEntity )
-{
-	el_bSpottedState.loc = GetEntityBase( iEntity ) + el_bSpottedState.off;
-	mem.Get( el_bSpottedState );
-	return el_bSpottedState.val;
-}
-
-void CEngine::SetEntitySpottedState( int iEntity, bool bNewSpottedState )
-{
-	if ( GetEntitySpottedState( iEntity ) != bNewSpottedState )
+	plrEntities.val.clear( );
+	for ( unsigned long ul = GetGlobalVars( ).maxClients; ul > 0; ul-- )
 	{
-		el_bSpottedState.val = bNewSpottedState;
-		mem.Set( el_bSpottedState );
+		plrEntities.val.push_back( GetEntity( ul ) );
 	}
-}
+};
 
-coordinate_t CEngine::GetEntityOrigin( int iEntity )
+void CEngine::SetEntity( unsigned long ulEntity, CPlayer plrNewEntity )
 {
-	el_corOrigin.loc = GetEntityBase( iEntity ) + el_corOrigin.off;
-	mem.Get( el_corOrigin );
-	return el_corOrigin.val;
-}
+	address_t< CPlayer > aplrEntity = { 0, 0, GetEntityBase( ulEntity ), plrNewEntity };
+	mem.Set( aplrEntity );
+};
 
-DWORD CEngine::GetLocalPlayer( )
+DWORD CEngine::GetLocalPlayerBase( )
 {
 	mem.Get( pdwLocalPlayer );
 	return pdwLocalPlayer.val;
 }
 
-ETeam CEngine::GetTeam( )
+CPlayer CEngine::GetLocalPlayer( )
 {
-	lp_tTeamNum.loc = GetLocalPlayer( ) + lp_tTeamNum.off;
-	mem.Get( lp_tTeamNum );
-	return lp_tTeamNum.val;
+	plrLocalPlayer = { 0, 0, GetLocalPlayerBase( ) };
+	mem.Get( plrLocalPlayer );
+	return plrLocalPlayer.val;
 }
 
-flag CEngine::GetFlags( )
-{
-	lp_fFlags.loc = GetLocalPlayer( ) + lp_fFlags.off;
-	mem.Get( lp_fFlags );
-	return lp_fFlags.val;
-}
-
-EMoveType CEngine::GetMoveType( )
-{
-	lp_mMoveType.loc = GetLocalPlayer( ) + lp_mMoveType.off;
-	mem.Get( lp_mMoveType );
-	return lp_mMoveType.val;
-}
-
-angle_t CEngine::GetAimPunch( )
-{
-	lp_aAimPunch.loc = GetLocalPlayer( ) + lp_aAimPunch.off;
-	mem.Get( lp_aAimPunch );
-	return lp_aAimPunch.val;
-}
-
-int CEngine::GetFieldOfView( )
-{
-	lp_iFOV.loc = GetLocalPlayer( ) + lp_iFOV.off;
-	mem.Get( lp_iFOV );
-	return lp_iFOV.val;
-}
-
-void CEngine::SetFieldOfView( int iNewFOV )
-{
-	Limit( iNewFOV, MIN_FIELDOFVIEW, MAX_FIELDOFVIEW );
-	if ( GetFieldOfView( ) != iNewFOV )
-	{
-		lp_iFOV.val = iNewFOV;
-		mem.Set( lp_iFOV );
-	}
-}
-
-int CEngine::GetShotsFired( )
-{
-	lp_iShotsFired.loc = GetLocalPlayer( ) + lp_iShotsFired.off;
-	mem.Get( lp_iShotsFired );
-	return lp_iShotsFired.val;
-}
-
-total CEngine::GetHitsOnServer( )
-{
-	lp_totalHitsOnServer.loc = GetLocalPlayer( ) + lp_totalHitsOnServer.off;
-	mem.Get( lp_totalHitsOnServer );
-	return lp_totalHitsOnServer.val;
-}
-
-float CEngine::GetFlashMaxAlpha( )
-{
-	lp_flFlashMaxAlpha.loc = GetLocalPlayer( ) + lp_flFlashMaxAlpha.off;
-	mem.Get( lp_flFlashMaxAlpha );
-	return lp_flFlashMaxAlpha.val;
-}
-
-void CEngine::SetFlashMaxAlpha( float flNewFlashMaxAlpha )
-{
-	Limit( flNewFlashMaxAlpha, MIN_FLASHALPHA, MAX_FLASHALPHA );
-	if ( GetFlashMaxAlpha( ) != flNewFlashMaxAlpha )
-	{
-		lp_flFlashMaxAlpha.val = flNewFlashMaxAlpha;
-		mem.Set( lp_flFlashMaxAlpha );
-	}
-}
-
-handle CEngine::GetActiveWeaponHandle( )
-{
-	lp_hActiveWeapon.loc = GetLocalPlayer( ) + lp_hActiveWeapon.off;
-	mem.Get( lp_hActiveWeapon );
-	lp_hActiveWeapon.val = GetEntityBase( lp_hActiveWeapon.val & 0xFFF );
-	return lp_hActiveWeapon.val;
-}
-
-int CEngine::GetActiveWeaponZoomLevel( )
-{
-	aw_iZoomLevel.loc = GetActiveWeaponHandle( ) + aw_iZoomLevel.off;
-	mem.Get( aw_iZoomLevel );
-	return aw_iZoomLevel.val;
-}
-
-EWeapon CEngine::GetActiveWeaponIndex( )
-{
-	aw_wpnPlayerWeaponIndex.loc = GetActiveWeaponHandle( ) + aw_wpnPlayerWeaponIndex.off;
-	mem.Get( aw_wpnPlayerWeaponIndex );
-	return aw_wpnPlayerWeaponIndex.val;
-}
-
-float CEngine::GetNextPrimaryAttack( )
-{
-	aw_flNextPrimaryAttack.loc = GetActiveWeaponHandle( ) + aw_flNextPrimaryAttack.off;
-	mem.Get( aw_flNextPrimaryAttack );
-	aw_flNextPrimaryAttack.val -= GetGlobalVars( ).curtime;
-	return aw_flNextPrimaryAttack.val;
-}
+void CEngine::SetLocalPlayer( )
+{ 
+	mem.Set( plrLocalPlayer );
+};
 
 float CEngine::GetPixelToAngleYAW( )
 {
@@ -289,11 +180,11 @@ angle_t CEngine::NormalizeAngle( angle_t angDestination )
 		angReturn.yaw *= flAngleScaleFactor;
 	}
 
-	int i = int( angReturn.yaw / GetPixelToAngleYAW( ) );
-	angReturn.yaw = GetPixelToAngleYAW( ) * i;
+	unsigned short us = unsigned short( angReturn.yaw / GetPixelToAngleYAW( ) );
+	angReturn.yaw = GetPixelToAngleYAW( ) * us;
 
-	i = int( angReturn.pitch / GetPixelToAnglePITCH( ) );
-	angReturn.pitch = GetPixelToAnglePITCH( ) * i;
+	us = unsigned short( angReturn.pitch / GetPixelToAnglePITCH( ) );
+	angReturn.pitch = GetPixelToAnglePITCH( ) * us;
 
 	angReturn += eng.GetViewAngle( );
 	angReturn.roll = eng.GetViewAngle( ).roll;

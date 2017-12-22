@@ -5,7 +5,7 @@ class CGeneral
 	struct user_t
 	{
 		LPSTR lpstrUsername = nullptr;
-		int iHardwareID = 0;
+		long lHardwareID = 0;
 		moment tExpiration = 0;
 		bool bValid = false;
 		bool bBanned = false;

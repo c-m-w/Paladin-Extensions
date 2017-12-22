@@ -17,12 +17,17 @@
 
 #include "Features/engine.h"
 #include "Features/Awareness/hitsound.h"
-#include "Features/Awareness/nodrunk.h"
+#include "Features/Awareness/noflash.h"
+#include "Features/Awareness/radar.h"
+#include "Features/Awareness/sonar.h"
+#include "Features/Combat/recoilcontrol.h"
 #include "Features/Combat/trigger.h"
+#include "Features/Miscellaneous/airstuck.h"
 #include "Features/Miscellaneous/automation.h"
+#include "Features/Miscellaneous/fov.h"
 
-void Feature( bool, unsigned, std::function< void( ) > );
-void Feature( bool, unsigned, std::function< void( ) >, int );
+void Feature( bool, unsigned long, std::function< void( ) > );
+void Feature( bool, unsigned long, std::function< void( ) >, unsigned short );
 void CleanUp( );
 void Panic( );
 void CreateThreads( );
@@ -40,10 +45,15 @@ BOOL WINAPI DllMain( HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpvReserved );
  * * * struct_t
  * * * typedef
  * * * b bool/byte
- * * * f flag
+ * * * f FLAG
+ * * * n nano (__int8)
+ * * * un unsigned nano (unsigned __int8)
+ * * * s short int
+ * * * us unsigned short
  * * * i int
- * * * n unsigned int (total, c are alternatives - pls do not use these)
+ * * * u unsigned int (total, c are alternatives - pls do not use these)
  * * * l long
+ * * * ul unsigned long
  * * * clr color
  * * * cor coordinate
  * * * ang angle

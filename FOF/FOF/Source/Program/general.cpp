@@ -3,27 +3,27 @@
 void CGeneral::GetPremiumUsers( )
 {
 	uPremiumUsers[0].lpstrUsername = "bhopfu1";
-	uPremiumUsers[0].iHardwareID = 12 * 4095;
+	uPremiumUsers[0].lHardwareID = 12 * 4095;
 	uPremiumUsers[0].tExpiration = DECEMBER_FIRST + 365 * DAY;
 	uPremiumUsers[0].bValid = true;
 	uPremiumUsers[0].bBanned = false;
 	uPremiumUsers[1].lpstrUsername = ""; // TODO MIKE
-	uPremiumUsers[1].iHardwareID = 0;
+	uPremiumUsers[1].lHardwareID = 0;
 	uPremiumUsers[1].tExpiration = DECEMBER_FIRST + 365 * DAY;
 	uPremiumUsers[1].bValid = true;
 	uPremiumUsers[1].bBanned = false;
 	uPremiumUsers[2].lpstrUsername = "Skel"; // TODO SKEL
-	uPremiumUsers[2].iHardwareID = 2040;
+	uPremiumUsers[2].lHardwareID = 2040;
 	uPremiumUsers[2].tExpiration = DECEMBER_FIRST + 365 * DAY;
 	uPremiumUsers[2].bValid = true;
 	uPremiumUsers[2].bBanned = false;
 	uPremiumUsers[3].lpstrUsername = "Cole";
-	uPremiumUsers[3].iHardwareID = 4 * 15;
+	uPremiumUsers[3].lHardwareID = 4 * 15;
 	uPremiumUsers[3].tExpiration = DECEMBER_FIRST + 365 * DAY;
 	uPremiumUsers[3].bValid = true;
 	uPremiumUsers[3].bBanned = false;
 	uPremiumUsers[4].lpstrUsername = "Bean"; // TODO BEAN
-	uPremiumUsers[4].iHardwareID = 0;
+	uPremiumUsers[4].lHardwareID = 0;
 	uPremiumUsers[4].tExpiration = DECEMBER_FIRST + 365 * DAY;
 	uPremiumUsers[4].bValid = true;
 	uPremiumUsers[4].bBanned = false;
@@ -31,21 +31,21 @@ void CGeneral::GetPremiumUsers( )
 
 bool CGeneral::CompareName( user_t uPremiumUser, user_t uCurrentUser )
 {
-	for ( int i = 0; i < 256; i++ )
+	for ( unsigned short us= 0; us < 256; us++ )
 	{
-		if ( uPremiumUser.lpstrUsername[i] && !uCurrentUser.lpstrUsername[i] )
+		if ( uPremiumUser.lpstrUsername[ us ] && !uCurrentUser.lpstrUsername[ us ] )
 		{
 			return false;
 		}
-		if ( !uPremiumUser.lpstrUsername[i] && uCurrentUser.lpstrUsername[i] )
+		if ( !uPremiumUser.lpstrUsername[ us ] && uCurrentUser.lpstrUsername[ us ] )
 		{
 			return false;
 		}
-		if ( !uPremiumUser.lpstrUsername[i] && !uCurrentUser.lpstrUsername[i] )
+		if ( !uPremiumUser.lpstrUsername[ us ] && !uCurrentUser.lpstrUsername[ us ] )
 		{
 			break;
 		}
-		if ( uPremiumUser.lpstrUsername[i] != uCurrentUser.lpstrUsername[i] )
+		if ( uPremiumUser.lpstrUsername[ us ] != uCurrentUser.lpstrUsername[ us ] )
 		{
 			return false;
 		}
@@ -67,12 +67,12 @@ EPremium CGeneral::CheckPremiumStatus( )
 	GetUserNameA( chBuffer, &dwBufferSize );
 	uCurrentUser.lpstrUsername = chBuffer;
 	LogDebugMsg( DBG, "Current User Username: %s", uCurrentUser.lpstrUsername );
-	int i;
-	for ( i = 0; i <= PREMIUM_USERS; i++ )
+	unsigned short us;
+	for ( us = 0; us <= PREMIUM_USERS; us++ )
 	{
-		if ( uPremiumUsers[i].bValid )
+		if ( uPremiumUsers[ us ].bValid )
 		{
-			if ( uPremiumUsers[i].lpstrUsername && CompareName( uPremiumUsers[i], uCurrentUser ) )
+			if ( uPremiumUsers[ us ].lpstrUsername && CompareName( uPremiumUsers[ us ], uCurrentUser ) )
 			{
 				break;
 			}
@@ -83,17 +83,17 @@ EPremium CGeneral::CheckPremiumStatus( )
 			return EPremium::NOT_PREMIUM;
 		}
 	}
-	LogDebugMsg( DBG, "Current User Database ID: %i", i );
+	LogDebugMsg( DBG, "Current User Database ID: %i", us );
 	SYSTEM_INFO siCurrentUser;
 	GetSystemInfo( &siCurrentUser );
-	uCurrentUser.iHardwareID = siCurrentUser.dwActiveProcessorMask * siCurrentUser.dwNumberOfProcessors;
-	LogDebugMsg( DBG, "Current User HWID: %i", uCurrentUser.iHardwareID );
-	if ( uCurrentUser.iHardwareID != uPremiumUsers[i].iHardwareID )
+	uCurrentUser.lHardwareID = siCurrentUser.dwActiveProcessorMask * siCurrentUser.dwNumberOfProcessors;
+	LogDebugMsg( DBG, "Current User HWID: %i", uCurrentUser.lHardwareID );
+	if ( uCurrentUser.lHardwareID != uPremiumUsers[ us ].lHardwareID )
 	{
 		LogDebugMsg( ERR, "HWID did not match any users in database" );
 		return EPremium::NOT_PREMIUM;
 	}
-	uCurrentUser.tExpiration = uPremiumUsers[i].tExpiration;
+	uCurrentUser.tExpiration = uPremiumUsers[ us ].tExpiration;
 	LogDebugMsg( DBG, "Current User Premium Time: %i", uCurrentUser.tExpiration );
 	if ( uCurrentUser.tExpiration < GetMoment( ) )
 	{
@@ -101,7 +101,7 @@ EPremium CGeneral::CheckPremiumStatus( )
 		LogDebugMsg( ERR, "User is out of premium" );
 		return EPremium::EXPIRED;
 	}
-	uCurrentUser.bBanned = uPremiumUsers[i].bBanned;
+	uCurrentUser.bBanned = uPremiumUsers[ us ].bBanned;
 	if ( uCurrentUser.bBanned )
 	{
 		LogDebugMsg( SCS, "User is banned" );
@@ -167,10 +167,10 @@ EAnticheatStatus CGeneral::KillAnticheat( LPCSTR cstrAnticheatName, char chAntic
 
 float CGeneral::GetWindowsSensitivity( )
 {
-	int iWindowsSensitivity;
-	if ( SystemParametersInfo( SPI_GETMOUSESPEED, 0, &iWindowsSensitivity, false ) )
+	unsigned short usWindowsSensitivity;
+	if ( SystemParametersInfo( SPI_GETMOUSESPEED, 0, &usWindowsSensitivity, false ) )
 	{
-		return float( iWindowsSensitivity ) / 20.f;
+		return float( usWindowsSensitivity ) / 20.f;
 	}
 	return 1.f;
 }

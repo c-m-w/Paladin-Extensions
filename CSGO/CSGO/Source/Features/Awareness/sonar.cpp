@@ -2,19 +2,25 @@
 
 void CSonar::Sonar( )
 {
-	for ( unsigned long ulEntity = 1; ulEntity < eng.GetGlobalVars( ).maxClients; ulEntity++ )
+	while ( plrEntities.val.size() != eng.GetGlobalVars( ).maxClients )
+	{
+		Wait( 1 );
+	}
+	int i = 0;
+	for ( auto &plrEntity : plrEntities.val )
 	{
 		if ( /*!plrEntities.val.at( ulEntity ).bDormant*/1 )
 		{
-			if ( plrLocalPlayer.val.ulTeamNum != plrEntities.val.at( ulEntity ).ulTeamNum )
+			if ( plrLocalPlayer.val.ulTeamNum != plrEntity.ulTeamNum )
 			{
-				vector_t vecPlayerToEntity( plrEntities.val.at( ulEntity ).corOrigin, plrLocalPlayer.val.corOrigin );
+				vector_t vecPlayerToEntity( plrEntity.corOrigin, plrLocalPlayer.val.corOrigin );
 
 				float flDistance = sqrt( pow( vecPlayerToEntity.dx, 2 ) + pow( vecPlayerToEntity.dy, 2 ) + pow( vecPlayerToEntity.dz, 2 ) );
 
-				std::cout << "Current Entity: " << ulEntity << "\n Distance from Local Player: " << flDistance << std::endl;
+				std::cout << "Current Entity: " << i << "\n Distance from Local Player: " << flDistance << std::endl;
 			}
 		}
+		i++;
 	}
 }
 

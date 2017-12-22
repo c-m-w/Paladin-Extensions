@@ -92,12 +92,12 @@ int CALLBACK WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 	LogLastError( );
 
 	LogDebugMsg( DBG, "Waiting for server connection..." );
-	// TODO
-	/*while ( eng.GetSignOnState( ) != ESignOnState::FULL )
+
+	while ( eng.GetSignOnState( ) != ESignOnState::FULL )
 	{
-		std::cout << " " << int( eng.GetSignOnState( ) );
+		std::cout << " " << short( eng.GetSignOnState( ) );
 		Wait( 1000 );
-	}*/
+	}
 
 	CreateThreads( );
 
@@ -185,9 +185,10 @@ void CreateThreads( )
 		{
 			eng.GetLocalPlayer( );
 			eng.GetEntities( );
-			Wait( long(eng.GetGlobalVars( ).interval_per_tick * MILLISECONDS_PER_SECOND ) );
+			Wait( 100 );
 		}
 	} );
+	tThreads.push_back( move( tInfoGrabber ) );
 	//
 	// awareness
 	//
@@ -207,19 +208,19 @@ void CreateThreads( )
 		} );
 	} );
 	tThreads.push_back( move( tNoFlash ) );
-	// TODO
 	std::thread tRadar( [&]
 	{
-		Feature( true, 100, [&]
+		Feature( true, 1, [&]
 		{
 			rad.Radar( );
 		} );
 	} );
 	tThreads.push_back( move( tRadar ) );
+	Wait( 25000 );
 	//sonar
 	std::thread tSonar( [&]
 	{
-		Feature( true, 100, [&]
+		Feature( true, 1, [&]
 		{
 			son.Sonar( );
 		} );
@@ -273,14 +274,14 @@ void CreateThreads( )
 	} );
 	tThreads.push_back( move( tAutoShoot ) );
 	// TODO
-	/*std::thread tFOV( [&]
+	std::thread tFOV( [&]
 	{
 		Feature( true, 1, [&]
 		{
 			fov.FOV( );
 		} );
 	} );
-	tThreads.push_back( move( tFOV ) );*/
+	tThreads.push_back( move( tFOV ) );
 	// TODO
 	/*std::thread tWeaponFOV( [&]
 	{

@@ -50,20 +50,20 @@ int CALLBACK WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 
 	if ( all.GetElevationState( ) == EElevation::NOT_ADMIN )
 	{
-		MESSAGE( "Paladin FOF", "Warning: Elevation Token State -> Not high enough\nDid you run the middleman/injector as admin?", MB_ICONWARNING );
+		MESSAGE( "Paladin CSGO", "Warning: Elevation Token State -> Not high enough\nDid you run the middleman/injector as admin?", MB_ICONWARNING );
 	}
 
 	if ( cfg.bCheckForAnticheat )
 	{
-		EAnticheatStatus asFOF = all.KillAnticheat( "Fistful of Frags", *"hl2.exe" );
-		if ( asFOF == EAnticheatStatus::FAILED )
+		EAnticheatStatus asCSGO = all.KillAnticheat( "Counter-Strike: Global Offensive", *"csgo.exe" );
+		if ( asCSGO == EAnticheatStatus::FAILED )
 		{
 			Panic( );
 			return 0;
 		}
-		if ( asFOF == EAnticheatStatus::KILLED )
+		if ( asCSGO == EAnticheatStatus::KILLED )
 		{
-			MESSAGE( "Paladin FOF", "Warning: Anticheat -> Terminated\nDid you leave FOF open during injection?", MB_ICONWARNING );
+			MESSAGE( "Paladin CSGO", "Warning: Anticheat -> Terminated\nDid you leave CSGO open during injection?", MB_ICONWARNING );
 		}
 
 		EAnticheatStatus asSteam = all.KillAnticheat( "Steam", *"steam.exe" );
@@ -74,7 +74,7 @@ int CALLBACK WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 		}
 		if ( asSteam == EAnticheatStatus::KILLED )
 		{
-			MESSAGE( "Paladin FOF", "Warning: Anticheat -> Terminated\nDid you leave Steam open during injection?", MB_ICONWARNING );
+			MESSAGE( "Paladin CSGO", "Warning: Anticheat -> Terminated\nDid you leave Steam open during injection?", MB_ICONWARNING );
 		}
 	}
 
@@ -84,7 +84,7 @@ int CALLBACK WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 
 	if ( !mem.AttachToGame( ) )
 	{
-		MESSAGE( "Paladin FOF", "Fatal Error 2: Game Attach\nAre you running the cheat as admin?", MB_ICONERROR );
+		MESSAGE( "Paladin CSGO", "Fatal Error 2: Game Attach\nAre you running the cheat as admin?", MB_ICONERROR );
 		CleanUp( );
 		return 0;
 	}
@@ -92,12 +92,12 @@ int CALLBACK WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 	LogLastError( );
 
 	LogDebugMsg( DBG, "Waiting for server connection..." );
-	// TODO
-	/*while ( eng.GetSignOnState( ) != ESignOnState::FULL )
+
+	while ( eng.GetSignOnState( ) != ESignOnState::FULL )
 	{
-		std::cout << " " << int( eng.GetSignOnState( ) );
+		std::cout << " " << short( eng.GetSignOnState( ) );
 		Wait( 1000 );
-	}*/
+	}
 
 	CreateThreads( );
 
@@ -105,6 +105,8 @@ int CALLBACK WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 	{
 		Panic( );
 	}, VK_F4 );
+
+	return 0;
 }
 
 void SetDebug( )
@@ -122,7 +124,7 @@ void SetDebug( )
 	wcscpy_s( cfiEx.FaceName, L"Terminal" );
 	SetCurrentConsoleFontEx( hConsole, 0, &cfiEx );
 
-	SetConsoleTitle( "Paladin FOF" );
+	SetConsoleTitle( "Paladin CSGO" );
 	MoveWindow( hWndConsole, 300, 300, 339, 279, false );
 	EnableMenuItem( GetSystemMenu( hWndConsole, false ), SC_CLOSE, MF_GRAYED );
 	SetWindowLong( hWndConsole, GWL_STYLE, GetWindowLong( hWndConsole, GWL_STYLE ) & ~SC_CLOSE & ~WS_MAXIMIZEBOX & ~WS_SIZEBOX );
@@ -162,7 +164,7 @@ bool GetPremium( )
 	}
 	if ( uCurrentUserPremiumStatus == EPremium::EXPIRED )
 	{
-		MESSAGE( "Paladin FOF", "Notice 1: Premium Time Expired -> No access\nDid you renew your premium?", MB_ICONHAND );
+		MESSAGE( "Paladin CSGO", "Notice 1: Premium Time Expired -> No access\nDid you renew your premium?", MB_ICONHAND );
 		CleanUp( );
 		return false;
 	}
@@ -177,6 +179,18 @@ bool GetPremium( )
 void CreateThreads( )
 {
 	LogDebugMsg( DBG, "Initializing threads..." );
+	std::thread tInfoGrabber ( [ & ]
+	{
+		while ( !bExitState )
+		{
+			eng.GetLocalPlayer( );
+			eng.GetEntities( );
+			Wait( long(eng.GetGlobalVars( ).interval_per_tick * MILLISECONDS_PER_SECOND ) );
+		}
+	} );
+	//
+	// awareness
+	//
 	std::thread tHitSound( [ & ]
 	{
 		Feature( true, 1, [ & ]
@@ -193,7 +207,46 @@ void CreateThreads( )
 		} );
 	} );
 	tThreads.push_back( move( tNoFlash ) );
-	
+	// TODO
+	std::thread tRadar( [&]
+	{
+		Feature( true, 100, [&]
+		{
+			rad.Radar( );
+		} );
+	} );
+	tThreads.push_back( move( tRadar ) );
+	//sonar
+	std::thread tSonar( [&]
+	{
+		Feature( true, 100, [&]
+		{
+			son.Sonar( );
+		} );
+	} );
+	tThreads.push_back( move( tSonar ) );
+	//
+	// combat
+	//
+	std::thread tRecoilControl( [ & ]
+	{
+		Feature( true, 1, [ & ]
+		{
+			rcs.RecoilControl( );
+		}, VK_LBUTTON );
+	} );
+	tThreads.push_back( move( tRecoilControl ) );
+	//
+	// miscellaneous
+	//
+	std::thread tAirStuck( [ & ]
+	{
+		Feature( true, 1, [ & ]
+		{
+			air.AirStuck( );
+		}, VK_F5 );
+	} );
+	tThreads.push_back( move( tAirStuck ) );
 	std::thread tAutoJump( [ & ]
 	{
 		Feature( true, 1, [ & ]
@@ -202,6 +255,15 @@ void CreateThreads( )
 		}, VK_SPACE );
 	} );
 	tThreads.push_back( move( tAutoJump ) );
+	// TODO
+	/*std::thread tAutoNade( [&]
+	{
+	Feature( true, 1, [&]
+	{
+	aut.AutoNade( );
+	} );
+	} );
+	tThreads.push_back( move( tAutoNade ) );*/
 	std::thread tAutoShoot( [ & ]
 	{
 		Feature( true, 1, [ & ]
@@ -210,6 +272,24 @@ void CreateThreads( )
 		}, VK_LBUTTON );
 	} );
 	tThreads.push_back( move( tAutoShoot ) );
+	// TODO
+	/*std::thread tFOV( [&]
+	{
+		Feature( true, 1, [&]
+		{
+			fov.FOV( );
+		} );
+	} );
+	tThreads.push_back( move( tFOV ) );*/
+	// TODO
+	/*std::thread tWeaponFOV( [&]
+	{
+	Feature( true, 1, [&]
+	{
+	fov.WeaponFOV( );
+	} );
+	} );
+	tThreads.push_back( move( tWeaponFOV ) );*/
 	LogDebugMsg( SCS, "Created threads" );
 	LogLastError( );
 }
@@ -235,19 +315,19 @@ void CleanUp( )
 	}
 }
 
-void Feature( bool bFeatureState, unsigned nWait, std::function< void( ) > fnFeature, int iFeatureKey )
+void Feature( bool bFeatureState, unsigned long ulWait, std::function< void( ) > fnFeature, unsigned short usiFeatureKey )
 {
 	while ( !bExitState )
 	{
-		if ( bFeatureState && GetAsyncKeyState( iFeatureKey ) )
+		if ( bFeatureState && GetAsyncKeyState( usiFeatureKey ) )
 		{
 			fnFeature( );
 		}
-		Wait( nWait );
+		Wait( ulWait );
 	}
 }
 
-void Feature( bool bFeatureState, unsigned nWait, std::function< void( ) > fnFeature )
+void Feature( bool bFeatureState, unsigned long ulWait, std::function< void( ) > fnFeature )
 {
 	while ( !bExitState )
 	{
@@ -255,6 +335,6 @@ void Feature( bool bFeatureState, unsigned nWait, std::function< void( ) > fnFea
 		{
 			fnFeature( );
 		}
-		Wait( nWait );
+		Wait( ulWait );
 	}
 }
