@@ -9,8 +9,8 @@ void CRecoilControl::RecoilControl( )
 			angle_t angCurrentAimPunch { }; // = ( plrLocalPlayer.val.angAimPunch - angOldAimPunch ) * 2.f;
 
 			float flSmooth = plrLocalPlayer.val.flNextAttack;
-			for ( short sLoop = plrLocalPlayer.val.flNextAttack * MILLISECONDS_PER_SECOND; sLoop > 0;
-			      sLoop -= eng.GetGlobalVars( ).flIntervalPerTick * MILLISECONDS_PER_SECOND )
+			for ( short sLoop = short( plrLocalPlayer.val.flNextAttack * MILLISECONDS_PER_SECOND ); sLoop > 0;
+			      sLoop -= short( eng.GetGlobalVars( ).flIntervalPerTick * MILLISECONDS_PER_SECOND ) )
 			{
 				eng.SetViewAngle( eng.GetViewAngle( ) - angCurrentAimPunch / flSmooth );
 				Wait( sLoop );
