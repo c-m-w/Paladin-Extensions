@@ -48,7 +48,7 @@ bool CMemoryManager::AttachToGame( )
 	}
 	LogDebugMsg( SCS, "Attached to game" );
 	HANDLE hSnapshot;
-	for ( int i = 0; i < 5; i++, Wait( 2000 ) )
+	for ( unsigned short us= 0; us < 5; us++, Wait( 2000 ) )
 	{
 		do
 		{

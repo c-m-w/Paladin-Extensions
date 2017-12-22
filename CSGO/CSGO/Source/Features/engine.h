@@ -22,10 +22,10 @@ public:
 	void SetSensitivity( float ); // sets sensitivity limited to 0 and 1000
 
 	// client - entities
-	DWORD GetEntityBase( int );
-	CPlayer GetEntity( int );
+	DWORD GetEntityBase( unsigned long );
+	CPlayer GetEntity( unsigned long );
 	void GetEntities( );
-	void SetEntity( int, CPlayer );
+	void SetEntity( unsigned long, CPlayer );
 
 	// client - localplayer
 	DWORD GetLocalPlayerBase( );

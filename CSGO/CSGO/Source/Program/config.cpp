@@ -4,9 +4,9 @@ CConfig::CConfig( )
 {
 	verVersion = { 1, 0 };
 	iQuitReason = EQuitReasons::UNKNOWN;
-	iExitKey = VK_F4;
-	iReloadKey = VK_F5;
-	iAutoJumpKey = VK_XBUTTON1;
+	sExitKey = VK_F4;
+	sReloadKey = VK_F5;
+	sAutoJumpKey = VK_XBUTTON1;
 	bAutoJumpState = true;
 	bHitSound = true;
 	strHitSoundLocation = "\0";
@@ -22,9 +22,9 @@ bool CConfig::LoadConfig( )
 	struct stat buffer;
 	if ( stat( cfgPath, &buffer ) )
 	{
-		Write( "Key bds", "Terminate", iExitKey );
-		Write( "Key bds", "Reload Config", iReloadKey );
-		Write( "Key bds", "Auto Jump", iAutoJumpKey );
+		Write( "Key bds", "Terminate", sExitKey );
+		Write( "Key bds", "Reload Config", sReloadKey );
+		Write( "Key bds", "Auto Jump", sAutoJumpKey );
 		Write( "Auto Jump", "Enabled", bAutoJumpState );
 		Write( "Hit Sound", "Enabled", bHitSound );
 		Write( "Hit Sound", "File Location", strHitSoundLocation );
@@ -44,9 +44,9 @@ bool CConfig::ReadConfig( )
 	Read( "Info", "Version", verConfig );
 	if ( verVersion == verConfig )
 	{
-		Read( "Key bds", "Terminate", iExitKey );
-		Read( "Key bds", "Reload Config", iReloadKey );
-		Read( "Key bds", "Auto Jump", iAutoJumpKey );
+		Read( "Key bds", "Terminate", sExitKey );
+		Read( "Key bds", "Reload Config", sReloadKey );
+		Read( "Key bds", "Auto Jump", sAutoJumpKey );
 		Read( "Auto Jump", "Enabled", bAutoJumpState );
 		Read( "Hit Sound", "Enabled", bHitSound );
 		Read( "Hit Sound", "File Location", strHitSoundLocation );
@@ -54,17 +54,17 @@ bool CConfig::ReadConfig( )
 	else
 	{
 		// set defaults
-		iExitKey = VK_F4;
-		iReloadKey = VK_F5;
-		iAutoJumpKey = VK_XBUTTON1;
+		sExitKey = VK_F4;
+		sReloadKey = VK_F5;
+		sAutoJumpKey = VK_XBUTTON1;
 		bAutoJumpState = true;
 		bHitSound = true;
 		strHitSoundLocation = "\0";
 		return false;
 	}
-	Limit( iExitKey, VK_F4, MAXINT );
-	Limit( iReloadKey, VK_F5, MAXINT );
-	Limit( iAutoJumpKey, VK_XBUTTON1, MAXINT );
+	Limit( sExitKey, VK_F4, INT_MAX );
+	Limit( sReloadKey, VK_F5, INT_MAX );
+	Limit( sAutoJumpKey, VK_XBUTTON1, INT_MAX );
 	return true;
 }
 

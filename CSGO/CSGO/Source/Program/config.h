@@ -36,9 +36,9 @@ public:
 #endif
 
 	// Keys TODO rest of features
-	int iExitKey;
-	int iReloadKey;
-	int iAutoJumpKey;
+	short sExitKey;
+	short sReloadKey;
+	short sAutoJumpKey;
 
 	// Feature Toggles
 	bool bHitSound;

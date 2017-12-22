@@ -4,9 +4,9 @@ HINSTANCE hInst = nullptr;
 bool bExitState = false;
 std::vector< std::thread > tThreads;
 
-void Wait( unsigned nSleepTime )
+void Wait( unsigned long ulSleepTime )
 {
-	std::this_thread::sleep_for( std::chrono::milliseconds( nSleepTime ) );
+	std::this_thread::sleep_for( std::chrono::milliseconds( ulSleepTime ) );
 }
 
 moment GetMoment( )

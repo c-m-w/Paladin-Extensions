@@ -53,18 +53,18 @@ extern bool bExitState;
 extern std::vector< std::thread > tThreads;
 
 // global functions
-void Wait( unsigned );
+void Wait( unsigned long );
 moment GetMoment( );
 
-template< typename datatype > void Limit( datatype &xStatus, datatype xMinimum, datatype xMaximum )
+template< typename datatype, typename datatype2 > void Limit( datatype &xStatus, datatype2 xMinimum, datatype2 xMaximum )
 {
-	if ( xMinimum > xStatus )
+	if ( datatype(xMinimum) > xStatus )
 	{
-		xStatus = xMinimum;
+		xStatus = datatype(xMinimum);
 	}
-	else if ( xStatus > xMaximum )
+	else if ( xStatus > datatype(xMaximum) )
 	{
-		xStatus = xMaximum;
+		xStatus = datatype(xMaximum);
 	}
 }
 
@@ -134,8 +134,8 @@ enum class EAnticheatStatus
 #define MIN_ROLL 50.f
 
 // typedefs
-typedef unsigned int FLAG;
-typedef unsigned int EHANDLE;
+typedef unsigned long FLAG;
+typedef unsigned long EHANDLE;
 
 // enums
 enum class EMoveType
@@ -245,13 +245,13 @@ class CGlobalVars
 {
 public:
 	float realtime;
-	int framecount;
+	long framecount;
 	float absoluteframetime;
 	float absoluteframestarttimestddev;
 	float curtime;
 	float frametime;
-	int maxClients;
-	int tickcount;
+	unsigned long maxClients;
+	unsigned long tickcount;
 	float interval_per_tick;
 	float interpolation_amount;
 
@@ -277,10 +277,10 @@ private:
 	BYTE x88[0x64]; // TODO dormancy
 public:
 	FLAG fEffects; // 0xec
-	int iTeamNum; // 0xf0
-	int iPendingTeamNum; // 0xf4
-	unsigned int nNextThinkTick; // 0xf8
-	int iHealth; // 0xfc
+	unsigned long ulTeamNum; // 0xf0
+	unsigned long ulPendingTeamNum; // 0xf4
+	unsigned long ulNextThinkTick; // 0xf8
+	unsigned long ulHealth; // 0xfc
 	FLAG fFlags; // 0x100
 	vector_t vecViewOffset; // 0x104
 	vector_t vecVelocity; // 0x110
@@ -295,10 +295,10 @@ public:
 private:
 	BYTE x154[0x100];
 public:
-	unsigned short nModelIndex; // 0x254
-	unsigned __int8 nRenderFX; // 0x256
-	unsigned short nRenderMode; // 0x257
-	unsigned __int8 nWaterLevel; // 0x25a
+	unsigned short usModelIndex; // 0x254
+	unsigned __int8 unRenderFX; // 0x256
+	unsigned short usRenderMode; // 0x257
+	unsigned __int8 unWaterLevel; // 0x25a
 	bool lifeState; // 0x25b
 	float flAnimTime; // 0x25c
 private:
@@ -316,7 +316,7 @@ public:
 private:
 	BYTE x2CC[0x1C];
 public:
-	int iParentAttachment; // 0x2e8
+	long lParentAttachment; // 0x2e8
 private:
 	BYTE x2EC[0x4];
 public:
@@ -341,11 +341,11 @@ public:
 	bool bSpotted; // 0x939
 	bool bSpottedBy[64]; // 0x93a
 	bool bSpottedByMask[10]; // 0x97a
-	unsigned __int8 nMinCPULevel; // 0x984
-	unsigned __int8 nMaxCPULevel; // 0x985
-	unsigned __int8 nMinGPULevel; // 0x986
-	unsigned __int8 nMaxGPULevel; // 0x987
-	int iTextureFrameIndex; // 0x988
+	unsigned __int8 unMinCPULevel; // 0x984
+	unsigned __int8 unMaxCPULevel; // 0x985
+	unsigned __int8 unMinGPULevel; // 0x986
+	unsigned __int8 unMaxGPULevel; // 0x987
+	long lTextureFrameIndex; // 0x988
 private:
 	BYTE x98C[0x8];
 public:
@@ -353,29 +353,29 @@ public:
 private:
 	BYTE x998[0x64];
 public:
-	unsigned int nHitboxSet; // 0x9fc
+	unsigned long ulHitboxSet; // 0x9fc
 private:
 	BYTE xA00[0x14];
 public:
 	float flCycle; // 0xa14
 	float flPlaybackRate; // 0xa18
-	unsigned int nSkin; // 0xa1c
-	unsigned int nBody; // 0xa20
+	unsigned long ulSkin; // 0xa1c
+	unsigned long ulBody; // 0xa20
 private:
 	BYTE xA24[0x14];
 public:
-	unsigned int nNewSequenceParity; // 0xa38
-	unsigned int nResetEventsParity; // 0xa3c
+	unsigned long ulNewSequenceParity; // 0xa38
+	unsigned long ulResetEventsParity; // 0xa3c
 private:
 	BYTE xA40[0x8];
 public:
 	float flEncodedController[4]; // 0xa48
-	unsigned int nMuzzleFlashParity; // 0xa58
+	unsigned long ulMuzzleFlashParity; // 0xa58
 private:
 	BYTE xA5C[0x1C14];
 public:
 	vector_t vecForce; // 0x2670
-	unsigned int nForceBone; // 0x267c
+	unsigned long ulForceBone; // 0x267c
 private:
 	BYTE x2680[0x30];
 public:
@@ -400,7 +400,7 @@ public:
 private:
 	BYTE x2890[0x1C];
 public:
-	unsigned int nSequence; // 0x28ac
+	unsigned long ulSequence; // 0x28ac
 private:
 	BYTE x28B0[0x84];
 public:
@@ -426,15 +426,15 @@ private:
 public:
 	float flNextAttack; // 0x2d60
 	int LastHitGroup; // 0x2d64
-	int iAmmo[32]; // 0x2d68
+	long lAmmo[32]; // 0x2d68
 	EHANDLE hMyWeapons[64]; // 0x2de8
 	EHANDLE hActiveWeapon; // 0x2ee8
 	float flTimeOfLastInjury; // 0x2eec
-	unsigned int nRelativeDirectionOfLastInjury; // 0x2ef0
+	unsigned long ulRelativeDirectionOfLastInjury; // 0x2ef0
 private:
 	BYTE x2EF4[0x4C];
 public:
-	int iCoachingTeam; // 0x2f40
+	long lCoachingTeam; // 0x2f40
 private:
 	BYTE x2F44[0x26C]; // TODO get aimpunch and whatnot
 public:
@@ -442,8 +442,8 @@ public:
 private:
 	BYTE x31B4[0x12];
 public:
-	int iFOV; // 0x31c8
-	int iFOVStart; // 0x31cc
+	unsigned long ulFOV; // 0x31c8
+	unsigned long ulFOVStart; // 0x31cc
 private:
 	BYTE x31D0[0x14];
 public:
@@ -459,8 +459,8 @@ public:
 private:
 	BYTE x3214[0x24];
 public:
-	int iBonusProgress; // 0x3238
-	int iBonusChallenge; // 0x323c
+	long lBonusProgress; // 0x3238
+	long lBonusChallenge; // 0x323c
 	float flMaxspeed; // 0x3240
 	EHANDLE hZoomOwner; // 0x3244
 private:
@@ -479,7 +479,7 @@ private:
 public:
 	FLAG fOnTarget; // 0x3318
 	EHANDLE hUseEntity; // 0x331c
-	int iDefaultFOV; // 0x3320
+	unsigned long ulDefaultFOV; // 0x3320
 private:
 	BYTE x3324[0x8];
 public:
@@ -494,13 +494,13 @@ public:
 private:
 	BYTE x3354[0x8];
 public:
-	int iDeathPostEffect; // 0x335c
-	int iObserverMode; // 0x3360
+	long lDeathPostEffect; // 0x335c
+	long lObserverMode; // 0x3360
 	bool bActiveCameraMan; // 0x3364
 	bool bCameraManXRay; // 0x3365
 	bool bCameraManOverview; // 0x3366
 	bool bCameraManScoreBoard; // 0x3367
-	unsigned int uCameraManGraphs; // 0x3368
+	unsigned long ulCameraManGraphs; // 0x3368
 private:
 	BYTE x336C[0x8];
 public:
@@ -513,7 +513,7 @@ public:
 private:
 	BYTE x33B4[0x60];
 public:
-	unsigned int nTickBase; // 0x3414
+	unsigned long ulTickBase; // 0x3414
 private:
 	BYTE x3418[0x160];
 public:
@@ -541,7 +541,7 @@ public:
 	bool bScoped; // 0x388c
 	bool bWalking; // 0x388d
 	bool bResumeZoom; // 0x388e
-	int iPlayerState; // 0x3890
+	long lPlayerState; // 0x3890
 	bool bDefusing; // 0x3894
 	bool bGrabbgHostage; // 0x3895
 	bool bRescuing; // 0x3896
@@ -552,17 +552,17 @@ public:
 	bool bGunGameImmunity; // 0x38a0
 	bool bHasMovedSinceSpawn; // 0x38a1
 	bool bMadeFinalGunGameProgressiveKill; // 0x38a2
-	int iGunGameProgressiveWeaponIndex; // 0x38a4
-	int iNumGunGameTRKillPopublic; // 0x38a8
-	int iNumGunGameKillsWithCurrentWeapon; // 0x38ac
-	int iNumRoundKills; // 0x38b0
-	int iNumRoundKillsHeadshots; // 0x38b4
+	unsigned long ulGunGameProgressiveWeaponIndex; // 0x38a4
+	unsigned long ulNumGunGameTRKillPopublic; // 0x38a8
+	unsigned long ulNumGunGameKillsWithCurrentWeapon; // 0x38ac
+	unsigned long ulNumRoundKills; // 0x38b0
+	unsigned long ulNumRoundKillsHeadshots; // 0x38b4
 	FLAG fMolotovUseTime; // 0x38b8
 	FLAG fMolotovDamageTime; // 0x38bc
 	bool bBombZone; // 0x38c0
 	bool bBuyZone; // 0x38c1
 	bool bNoDefuseArea; // 0x38c2
-	int iThrowGrenadeCounter; // 0x38c4
+	long lThrowGrenadeCounter; // 0x38c4
 	bool bWaitForNoAttack; // 0x38c8
 	bool bRespawningForDMBonus; // 0x38c9
 	float flGuardianTooFarDistFrac; // 0x38cc
@@ -571,7 +571,7 @@ private:
 	BYTE x38D4[0x4];
 public:
 	bool bKilledByTaser; // 0x38d8
-	int iMoveState; // 0x38dc
+	long lMoveState; // 0x38dc
 	bool bCanMoveDuringFreezePeriod; // 0x38e0
 	bool isCurrentGunGameLeader; // 0x38e1
 	bool isCurrentGunGameTeamLeader; // 0x38e2
@@ -584,22 +584,22 @@ public:
 private:
 	BYTE x39EC[0x68A8];
 public:
-	int iAddonBits; // 0xa294
-	int iPrimaryAddon; // 0xa298
-	int iSecondaryAddon; // 0xa29c
-	int iProgressBarDuration; // 0xa2a0
+	long lAddonBits; // 0xa294
+	long lPrimaryAddon; // 0xa298
+	long lSecondaryAddon; // 0xa29c
+	long lProgressBarDuration; // 0xa2a0
 	float flProgressBarStartTime; // 0xa2a4
 	float flStamina; // 0xa2a8
-	int iDirection; // 0xa2ac
-	int iShotsFired; // 0xa2b0
-	unsigned int nNumFastDucks; // 0xa2b4
+	long lDirection; // 0xa2ac
+	unsigned long ulShotsFired; // 0xa2b0
+	unsigned long ulNumFastDucks; // 0xa2b4
 	bool bDuckOverride; // 0xa2b8
 	bool bNightVisionOn; // 0xa2b9
 	bool bHasNightVision; // 0xa2ba
 	float flVelocityModifier; // 0xa2bc
 	float flGroundAccelLinearFracLastTime; // 0xa2c0
-	int iStartAccount; // 0xa2c4
-	unsigned int totalHitsOnServer; // 0xa2c8
+	long lStartAccount; // 0xa2c4
+	unsigned long ulHitsOnServer; // 0xa2c8
 private:
 	BYTE xA2CC[0x4];
 public:
@@ -614,39 +614,39 @@ public:
 private:
 	BYTE xA2FC[0x40];
 public:
-	int iMatchStats_Kills[30]; // 0xa33c
-	int iMatchStats_Damage[30]; // 0xa3b4
-	int iMatchStats_EquipmentValue[30]; // 0xa42c
-	int iMatchStats_MoneySaved[30]; // 0xa4a4
-	int iMatchStats_KillReward[30]; // 0xa51c
-	int iMatchStats_LiveTime[30]; // 0xa594
-	int iMatchStats_Deaths[30]; // 0xa60c
-	int iMatchStats_Assists[30]; // 0xa684
-	int iMatchStats_HeadShotKills[30]; // 0xa6fc
-	int iMatchStats_Objective[30]; // 0xa774
-	int iMatchStats_CashEarned[30]; // 0xa7ec
-	int iMatchStats_UtilityDamage[30]; // 0xa864
-	int iMatchStats_EnemiesFlashed[30]; // 0xa8dc
+	unsigned long ulMatchStats_Kills[30]; // 0xa33c
+	unsigned long ulMatchStats_Damage[30]; // 0xa3b4
+	unsigned long ulMatchStats_EquipmentValue[30]; // 0xa42c
+	unsigned long ulMatchStats_MoneySaved[30]; // 0xa4a4
+	unsigned long ulMatchStats_KillReward[30]; // 0xa51c
+	unsigned long ulMatchStats_LiveTime[30]; // 0xa594
+	unsigned long ulMatchStats_Deaths[30]; // 0xa60c
+	unsigned long ulMatchStats_Assists[30]; // 0xa684
+	unsigned long ulMatchStats_HeadShotKills[30]; // 0xa6fc
+	unsigned long ulMatchStats_Objective[30]; // 0xa774
+	unsigned long ulMatchStats_CashEarned[30]; // 0xa7ec
+	unsigned long ulMatchStats_UtilityDamage[30]; // 0xa864
+	unsigned long ulMatchStats_EnemiesFlashed[30]; // 0xa8dc
 private:
 	BYTE xA954[0x8A0];
 public:
-	unsigned int nQuestProgressReason; // 0xb1f4
-	unsigned short unCurrentEquipmentValue; // 0xb1f8
-	unsigned short unRoundStartEquipmentValue; // 0xb1fa
-	unsigned short unFreezetimeEndEquipmentValue; // 0xb1fc
+	unsigned long ulQuestProgressReason; // 0xb1f4
+	unsigned short usCurrentEquipmentValue; // 0xb1f8
+	unsigned short usRoundStartEquipmentValue; // 0xb1fa
+	unsigned short usFreezetimeEndEquipmentValue; // 0xb1fc
 	int rank[6]; // 0xb200
-	unsigned short unMusicID; // 0xb218
+	unsigned short usMusicID; // 0xb218
 private:
 	BYTE xB21A[0xE];
 public:
-	int iAccount; // 0xb228
+	long lAccount; // 0xb228
 	bool bHasHelmet; // 0xb22c
 	bool bHasHeavyArmor; // 0xb22d
 private:
 	BYTE xB22E[0x6];
 public:
-	int iClass; // 0xb234
-	int iArmorValue; // 0xb238
+	long lClass; // 0xb234
+	unsigned long ulArmorValue; // 0xb238
 	angle_t angEyeAngles; // 0xb23c
 	bool bHasDefuser; // 0xb248
 	bool bHostageRescueZone; // 0xb249
@@ -655,9 +655,9 @@ private:
 public:
 	bool bHud_MiniScoreHidden; // 0xb26a
 	bool bHud_RadarHidden; // 0xb26b
-	unsigned int nLastKillerIndex; // 0xb26c
-	unsigned int nLastConcurrentKilled; // 0xb270
-	unsigned int nDeathCamMusic; // 0xb274
+	unsigned long ulLastKillerIndex; // 0xb26c
+	unsigned long ulLastConcurrentKilled; // 0xb270
+	unsigned long ulDeathCamMusic; // 0xb274
 private:
 	BYTE xB278[0xEC];
 public:
@@ -670,7 +670,7 @@ public:
 private:
 	BYTE xB3AE[0x2];
 public:
-	int iWeaponPurchasesThisRound[64]; // 0xb3f0
+	unsigned long ulWeaponPurchasesThisRound[64]; // 0xb3f0
 private:
 	BYTE xB4F0[0x308];
 public:
@@ -682,7 +682,7 @@ public:
 	bool bAssassinationTarget; // 0xb895
 	bool bControllingBot; // 0xb896
 	bool bCanControlObservedBot; // 0xb897
-	int iControlledBotEntIndex; // 0xb898
+	long lControlledBotEntIndex; // 0xb898
 private:
 	BYTE xB89B[0x8];
 public:

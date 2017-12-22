@@ -2,14 +2,14 @@
 
 void CRadar::Radar( )
 {
-	for ( int iEntity = 1; iEntity < eng.GetGlobalVars( ).maxClients; iEntity++ )
+	for ( unsigned long ulEntity = 1; ulEntity < eng.GetGlobalVars( ).maxClients; ulEntity++ )
 	{
-		if ( /*!plrEntities.val.at( iEntity ).bDormant*/1 )
+		if ( /*!plrEntities.val.at( ulEntity ).bDormant*/1 )
 		{
-			if ( plrLocalPlayer.val.iTeamNum != plrEntities.val.at( iEntity ).iTeamNum )
+			if ( plrLocalPlayer.val.ulTeamNum != plrEntities.val.at( ulEntity ).ulTeamNum )
 			{
-				plrEntities.val.at( iEntity ).bSpotted = true;
-				eng.SetEntity( iEntity, plrEntities.val.at( iEntity ) );
+				plrEntities.val.at( ulEntity ).bSpotted = true;
+				eng.SetEntity( ulEntity, plrEntities.val.at( ulEntity ) );
 			}
 		}
 	}

@@ -90,18 +90,18 @@ void CEngine::SetSensitivity( float flNewSensitivity )
 	}
 }
 
-DWORD CEngine::GetEntityBase( int iEntity )
+DWORD CEngine::GetEntityBase( unsigned long ulEntity )
 {
 	DWORD dwOldEntityList = pdwEntityList.loc;
-	pdwEntityList.loc += ( iEntity - 1 ) * ENTITY_DISTANCE;
+	pdwEntityList.loc += ( ulEntity - 1 ) * ENTITY_DISTANCE;
 	mem.Get( pdwEntityList );
 	pdwEntityList.loc = dwOldEntityList;
 	return pdwEntityList.val;
 }
 
-CPlayer CEngine::GetEntity( int iEntity )
+CPlayer CEngine::GetEntity( unsigned long ulEntity )
 {
-	address_t<CPlayer> plrEntity = { 0, 0, GetEntityBase( iEntity ) };
+	address_t<CPlayer> plrEntity = { 0, 0, GetEntityBase( ulEntity ) };
 	mem.Get( plrEntity );
 	return plrEntity.val;
 }
@@ -109,15 +109,15 @@ CPlayer CEngine::GetEntity( int iEntity )
 void CEngine::GetEntities( )
 {
 	plrEntities.val.clear( );
-	for ( int i = GetGlobalVars( ).maxClients; i > 0; i-- )
+	for ( unsigned long ul = GetGlobalVars( ).maxClients; ul > 0; ul-- )
 	{
-		plrEntities.val.push_back( GetEntity( i ) );
+		plrEntities.val.push_back( GetEntity( ul ) );
 	}
 };
 
-void CEngine::SetEntity( int iEntity, CPlayer plrNewEntity )
+void CEngine::SetEntity( unsigned long ulEntity, CPlayer plrNewEntity )
 {
-	address_t< CPlayer > aplrEntity = { 0, 0, GetEntityBase( iEntity ), plrNewEntity };
+	address_t< CPlayer > aplrEntity = { 0, 0, GetEntityBase( ulEntity ), plrNewEntity };
 	mem.Set( aplrEntity );
 };
 
@@ -180,11 +180,11 @@ angle_t CEngine::NormalizeAngle( angle_t angDestination )
 		angReturn.yaw *= flAngleScaleFactor;
 	}
 
-	int i = int( angReturn.yaw / GetPixelToAngleYAW( ) );
-	angReturn.yaw = GetPixelToAngleYAW( ) * i;
+	unsigned short us = unsigned short( angReturn.yaw / GetPixelToAngleYAW( ) );
+	angReturn.yaw = GetPixelToAngleYAW( ) * us;
 
-	i = int( angReturn.pitch / GetPixelToAnglePITCH( ) );
-	angReturn.pitch = GetPixelToAnglePITCH( ) * i;
+	us = unsigned short( angReturn.pitch / GetPixelToAnglePITCH( ) );
+	angReturn.pitch = GetPixelToAnglePITCH( ) * us;
 
 	angReturn += eng.GetViewAngle( );
 	angReturn.roll = eng.GetViewAngle( ).roll;

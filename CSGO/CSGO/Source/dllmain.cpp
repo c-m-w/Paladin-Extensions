@@ -185,7 +185,7 @@ void CreateThreads( )
 		{
 			eng.GetLocalPlayer( );
 			eng.GetEntities( );
-			Wait( int(eng.GetGlobalVars( ).interval_per_tick * MILLISECONDS_PER_SECOND ) );
+			Wait( long(eng.GetGlobalVars( ).interval_per_tick * MILLISECONDS_PER_SECOND ) );
 		}
 	} );
 	//
@@ -315,19 +315,19 @@ void CleanUp( )
 	}
 }
 
-void Feature( bool bFeatureState, unsigned nWait, std::function< void( ) > fnFeature, int iFeatureKey )
+void Feature( bool bFeatureState, unsigned long ulWait, std::function< void( ) > fnFeature, unsigned short usiFeatureKey )
 {
 	while ( !bExitState )
 	{
-		if ( bFeatureState && GetAsyncKeyState( iFeatureKey ) )
+		if ( bFeatureState && GetAsyncKeyState( usiFeatureKey ) )
 		{
 			fnFeature( );
 		}
-		Wait( nWait );
+		Wait( ulWait );
 	}
 }
 
-void Feature( bool bFeatureState, unsigned nWait, std::function< void( ) > fnFeature )
+void Feature( bool bFeatureState, unsigned long ulWait, std::function< void( ) > fnFeature )
 {
 	while ( !bExitState )
 	{
@@ -335,6 +335,6 @@ void Feature( bool bFeatureState, unsigned nWait, std::function< void( ) > fnFea
 		{
 			fnFeature( );
 		}
-		Wait( nWait );
+		Wait( ulWait );
 	}
 }

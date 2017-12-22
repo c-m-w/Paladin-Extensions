@@ -2,7 +2,7 @@
 
 /*if ( FAKE SCROLL )
 {
-	for ( int i = rand( ) % 5; i < 7; i++ )
+	for ( unsigned short us= rand( ) % 5; i < 7; i++ )
 	{
 		eng.WaitTicks( rand( ) % 3 + 1 );
 		eng.SetJump( FA_TICK );
