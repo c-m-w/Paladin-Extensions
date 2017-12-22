@@ -5,7 +5,7 @@ template< typename datatype > struct address_t
 	DWORD off = 0; // offset
 	DWORD ptr = 0; // thisptr
 	DWORD loc = 0; // location
-	datatype val; // value
+	datatype val{}; // value
 };
 
 namespace Addresses
@@ -75,7 +75,12 @@ public:
 		return false;
 	}
 
-	~CMemoryManager( );
+	CMemoryManager( ) = default; // constructor
+	CMemoryManager( CMemoryManager& ) = default; // copy constructor
+	CMemoryManager( CMemoryManager&& ) = default; // move constructor
+	CMemoryManager & operator=( CMemoryManager const& ) = default; // copy assignment operator
+	CMemoryManager & operator=( CMemoryManager&& ) = default; // move assignment operator
+	~CMemoryManager( ); // deconstructor
 };
 
 extern CMemoryManager mem;

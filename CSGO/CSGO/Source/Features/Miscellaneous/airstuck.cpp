@@ -5,7 +5,7 @@ void CAirstuck::AirStuck( )
 	if ( eng.GetAttack( ) != ( FA_DEFAULT | FA_PRESS ) )
 	{
 		CGlobalVars gvMaxTickCount = eng.GetGlobalVars( );
-		gvMaxTickCount.tickcount = LONG_MAX;
+		gvMaxTickCount.ulTickCount = LONG_MAX;
 		eng.SetGlobalVars( gvMaxTickCount );
 	}
 }

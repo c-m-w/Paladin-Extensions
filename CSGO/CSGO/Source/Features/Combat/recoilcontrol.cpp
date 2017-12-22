@@ -6,12 +6,14 @@ void CRecoilControl::RecoilControl( )
 	{
 		if ( ulOldShotsFired < plrLocalPlayer.val.ulShotsFired )
 		{
-			angle_t angCurrentAimPunch; // = ( plrLocalPlayer.val.angAimPunch - angOldAimPunch ) * 2.f;
+			angle_t angCurrentAimPunch{}; // = ( plrLocalPlayer.val.angAimPunch - angOldAimPunch ) * 2.f;
 
-			for ( float flSmooth = plrLocalPlayer.val.flNextAttack; flSmooth > 0; flSmooth -= eng.GetGlobalVars( ).interval_per_tick )
+			float flSmooth = plrLocalPlayer.val.flNextAttack;
+			for ( short sLoop = plrLocalPlayer.val.flNextAttack* MILLISECONDS_PER_SECOND; sLoop > 0;
+				  sLoop -= eng.GetGlobalVars( ).flIntervalPerTick * MILLISECONDS_PER_SECOND )
 			{
 				eng.SetViewAngle( eng.GetViewAngle( ) - angCurrentAimPunch / flSmooth );
-				Wait( long( eng.GetGlobalVars( ).interval_per_tick * MILLISECONDS_PER_SECOND ) );
+				Wait( sLoop );
 			}
 
 			/*angOldAimPunch = plrLocalPlayer.val.angAimPunch;*/

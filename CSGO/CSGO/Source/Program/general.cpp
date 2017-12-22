@@ -154,7 +154,7 @@ EAnticheatStatus CGeneral::KillAnticheat( LPCSTR cstrAnticheatName, char chAntic
 	{
 		if ( eElevationState == EElevation::ADMIN )
 		{
-			system( "taskkill /F /T /IM " + chAnticheatExe );
+			system( &"taskkill /F /T /IM " [ chAnticheatExe ] );
 			LogDebugMsg( WRN, "Found anticheat %s open and terminated it", cstrAnticheatName );
 			return EAnticheatStatus::KILLED;
 		}

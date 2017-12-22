@@ -33,8 +33,8 @@ public:
 	void SetLocalPlayer( );
 
 	// general
-	float GetPixelToAngleYAW( );
-	float GetPixelToAnglePITCH( );
+	float GetPixelToAngleYaw( );
+	float GetPixelToAnglePitch( );
 	angle_t ClampAngle( angle_t ); // clamps angles to 89, 180, and 50
 	angle_t NormalizeAngle( angle_t ); // sets angle to sensitivity, limits delta to 22 degrees
 	angle_t VectorToAngle( coordinate_t, coordinate_t );

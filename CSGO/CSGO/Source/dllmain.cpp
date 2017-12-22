@@ -1,39 +1,234 @@
 #include "dllmain.h"
 
-BOOL WINAPI DllMain( HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpvReserved )
+void Feature( bool bFeatureState, unsigned long ulWait, std::function< void( ) > fnFeature, unsigned short usiFeatureKey )
 {
-	switch ( fdwReason )
+	while ( !bExitState )
 	{
-		case DLL_PROCESS_ATTACH:
+		if ( bFeatureState && GetAsyncKeyState( usiFeatureKey ) )
 		{
-			hInst = hInstDll;
-			HANDLE hCheat = CreateThread( nullptr, 0, LPTHREAD_START_ROUTINE( WinMain ), nullptr, 0, nullptr );
-			if ( !hCheat || hCheat == INVALID_HANDLE_VALUE )
-			{
-				cfg.iQuitReason = EQuitReasons::LOAD_LIBRARY_ERROR;
-			}
-			else
-			{
-				cfg.iQuitReason = EQuitReasons::SUCCESS;
-			}
-			DisableThreadLibraryCalls( hInstDll );
-			break;
+			fnFeature( );
 		}
-		case DLL_PROCESS_DETACH:
+		Wait( ulWait );
+	}
+}
+
+void Feature( bool bFeatureState, unsigned long ulWait, std::function< void( ) > fnFeature )
+{
+	while ( !bExitState )
+	{
+		if ( bFeatureState )
 		{
-			CleanUp( );
-#ifdef _DEBUG
-			FreeConsole( );
-#endif
-			break;
+			fnFeature( );
 		}
-		default:
+		Wait( ulWait );
+	}
+}
+
+void CleanUp( )
+{
+	LogDebugMsg( DBG, "Cleaning up" );
+	bExitState = true;
+	for ( auto &tThread: tThreads )
+	{
+		if ( tThread.joinable( ) )
 		{
-			cfg.iQuitReason = EQuitReasons::BLACKLISTED_CALL;
-			break;
+			tThread.join( );
 		}
 	}
-	return BOOL( cfg.iQuitReason );
+}
+
+void Panic( )
+{
+	LogDebugMsg( WRN, "Panic called" );
+	cfg.iQuitReason = EQuitReasons::PANIC;
+	CleanUp( );
+	FreeLibraryAndExitThread( hInst, 0 ); // TODO figure out how to not display ABORT message
+}
+
+void CreateThreads( )
+{
+	LogDebugMsg( DBG, "Initializing threads..." );
+	std::thread tInfoGrabber( [ & ]
+	{
+		while ( !bExitState )
+		{
+			eng.GetLocalPlayer( );
+			eng.GetEntities( );
+			Wait( 100 );
+		}
+	} );
+	tThreads.push_back( move( tInfoGrabber ) );
+	//
+	// awareness
+	//
+	std::thread tHitSound( [ & ]
+	{
+		Feature( true, 1, [ & ]
+		{
+			hit.PlaySoundOnHit( );
+		} );
+	} );
+	tThreads.push_back( move( tHitSound ) );
+	std::thread tNoFlash( [ & ]
+	{
+		Feature( true, 1, [ & ]
+		{
+			nof.NoFlash( );
+		} );
+	} );
+	tThreads.push_back( move( tNoFlash ) );
+	std::thread tRadar( [ & ]
+	{
+		Feature( true, 1, [ & ]
+		{
+			rad.Radar( );
+		} );
+	} );
+	tThreads.push_back( move( tRadar ) );
+	Wait( 25000 );
+	//sonar
+	std::thread tSonar( [ & ]
+	{
+		Feature( true, 1, [ & ]
+		{
+			son.Sonar( );
+		} );
+	} );
+	tThreads.push_back( move( tSonar ) );
+	//
+	// combat
+	//
+	std::thread tRecoilControl( [ & ]
+	{
+		Feature( true, 1, [ & ]
+		{
+			rcs.RecoilControl( );
+		}, VK_LBUTTON );
+	} );
+	tThreads.push_back( move( tRecoilControl ) );
+	//
+	// miscellaneous
+	//
+	std::thread tAirStuck( [ & ]
+	{
+		Feature( true, 1, [ & ]
+		{
+			air.AirStuck( );
+		}, VK_F5 );
+	} );
+	tThreads.push_back( move( tAirStuck ) );
+	std::thread tAutoJump( [ & ]
+	{
+		Feature( true, 1, [ & ]
+		{
+			aut.AutoJump( );
+		}, VK_SPACE );
+	} );
+	tThreads.push_back( move( tAutoJump ) );
+	// TODO
+	/*std::thread tAutoNade( [&]
+	{
+	Feature( true, 1, [&]
+	{
+	aut.AutoNade( );
+	} );
+	} );
+	tThreads.push_back( move( tAutoNade ) );*/
+	std::thread tAutoShoot( [ & ]
+	{
+		Feature( true, 1, [ & ]
+		{
+			aut.AutoShoot( );
+		}, VK_LBUTTON );
+	} );
+	tThreads.push_back( move( tAutoShoot ) );
+	// TODO
+	std::thread tFOV( [ & ]
+	{
+		Feature( true, 1, [ & ]
+		{
+			fov.FOV( );
+		} );
+	} );
+	tThreads.push_back( move( tFOV ) );
+	// TODO
+	/*std::thread tWeaponFOV( [&]
+	{
+	Feature( true, 1, [&]
+	{
+	fov.WeaponFOV( );
+	} );
+	} );
+	tThreads.push_back( move( tWeaponFOV ) );*/
+	LogDebugMsg( SCS, "Created threads" );
+	LogLastError( );
+}
+
+bool GetPremium( )
+{
+	// TODO stop byte patching
+	EPremium uCurrentUserPremiumStatus = all.CheckPremiumStatus( );
+	if ( uCurrentUserPremiumStatus == EPremium::BANNED )
+	{
+		//TODO BANNED: DELETE FILE
+		char chTemp[ MAX_PATH ];
+		GetModuleFileName( hInst, chTemp, MAX_PATH );
+		remove( std::string( chTemp ).c_str( ) );
+		LogLastError( );
+		Panic( );
+		return false;
+	}
+	if ( uCurrentUserPremiumStatus == EPremium::NOT_PREMIUM )
+	{
+		CleanUp( );
+		return false;
+	}
+	if ( uCurrentUserPremiumStatus == EPremium::EXPIRED )
+	{
+		MESSAGE( "Paladin CSGO", "Notice 1: Premium Time Expired -> No access\nDid you renew your premium?", MB_ICONHAND );
+		CleanUp( );
+		return false;
+	}
+	if ( uCurrentUserPremiumStatus == EPremium::PREMIUM )
+	{
+		LogDebugMsg( SCS, "Authenticated!" );
+	}
+
+	return true;
+}
+
+void SetDebug( )
+{
+	FILE *fTemp;
+	freopen_s( &fTemp, "CONOUT$", "w", stdout );
+
+	HANDLE hConsole = GetStdHandle( STD_OUTPUT_HANDLE );
+	HWND hWndConsole = GetConsoleWindow( );
+
+	CONSOLE_FONT_INFOEX cfiEx;
+	cfiEx.cbSize = sizeof( CONSOLE_FONT_INFOEX);
+	cfiEx.dwFontSize.X = 6;
+	cfiEx.dwFontSize.Y = 8;
+	wcscpy_s( cfiEx.FaceName, L"Terminal" );
+	SetCurrentConsoleFontEx( hConsole, 0, &cfiEx );
+
+	SetConsoleTitle( "Paladin CSGO" );
+	MoveWindow( hWndConsole, 300, 300, 339, 279, false );
+	EnableMenuItem( GetSystemMenu( hWndConsole, false ), SC_CLOSE, MF_GRAYED );
+	SetWindowLong( hWndConsole, GWL_STYLE, GetWindowLong( hWndConsole, GWL_STYLE ) & ~SC_CLOSE & ~WS_MAXIMIZEBOX & ~WS_SIZEBOX );
+
+	CONSOLE_CURSOR_INFO cci;
+	cci.dwSize = 25;
+	cci.bVisible = false;
+	SetConsoleCursorInfo( hConsole, &cci );
+
+	SetConsoleTextAttribute( hConsole, 11 );
+	std::cout << "[OPN] ";
+	strLog.append( "[OPN] " );
+	SetConsoleTextAttribute( hConsole, 7 );
+	std::cout << "Paladin Debug Interface Setup";
+	strLog.append( "Paladin Debug Interface Setup" );
+	LogLastError( );
 }
 
 int CALLBACK WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow )
@@ -109,233 +304,38 @@ int CALLBACK WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 	return 0;
 }
 
-void SetDebug( )
+BOOL WINAPI DllMain( HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpvReserved )
 {
-	FILE *fTemp;
-	freopen_s( &fTemp, "CONOUT$", "w", stdout );
-
-	HANDLE hConsole = GetStdHandle( STD_OUTPUT_HANDLE );
-	HWND hWndConsole = GetConsoleWindow( );
-
-	CONSOLE_FONT_INFOEX cfiEx;
-	cfiEx.cbSize = sizeof( CONSOLE_FONT_INFOEX);
-	cfiEx.dwFontSize.X = 6;
-	cfiEx.dwFontSize.Y = 8;
-	wcscpy_s( cfiEx.FaceName, L"Terminal" );
-	SetCurrentConsoleFontEx( hConsole, 0, &cfiEx );
-
-	SetConsoleTitle( "Paladin CSGO" );
-	MoveWindow( hWndConsole, 300, 300, 339, 279, false );
-	EnableMenuItem( GetSystemMenu( hWndConsole, false ), SC_CLOSE, MF_GRAYED );
-	SetWindowLong( hWndConsole, GWL_STYLE, GetWindowLong( hWndConsole, GWL_STYLE ) & ~SC_CLOSE & ~WS_MAXIMIZEBOX & ~WS_SIZEBOX );
-
-	CONSOLE_CURSOR_INFO cci;
-	cci.dwSize = 25;
-	cci.bVisible = false;
-	SetConsoleCursorInfo( hConsole, &cci );
-
-	SetConsoleTextAttribute( hConsole, 11 );
-	std::cout << "[OPN] ";
-	strLog.append( "[OPN] " );
-	SetConsoleTextAttribute( hConsole, 7 );
-	std::cout << "Paladin Debug Interface Setup";
-	strLog.append( "Paladin Debug Interface Setup" );
-	LogLastError( );
-}
-
-bool GetPremium( )
-{
-	// TODO stop byte patching
-	EPremium uCurrentUserPremiumStatus = all.CheckPremiumStatus( );
-	if ( uCurrentUserPremiumStatus == EPremium::BANNED )
+	switch ( fdwReason )
 	{
-		//TODO BANNED: DELETE FILE
-		char chTemp[ MAX_PATH ];
-		GetModuleFileName( hInst, chTemp, MAX_PATH );
-		remove( std::string( chTemp ).c_str( ) );
-		LogLastError( );
-		Panic( );
-		return false;
-	}
-	if ( uCurrentUserPremiumStatus == EPremium::NOT_PREMIUM )
-	{
-		CleanUp( );
-		return false;
-	}
-	if ( uCurrentUserPremiumStatus == EPremium::EXPIRED )
-	{
-		MESSAGE( "Paladin CSGO", "Notice 1: Premium Time Expired -> No access\nDid you renew your premium?", MB_ICONHAND );
-		CleanUp( );
-		return false;
-	}
-	if ( uCurrentUserPremiumStatus == EPremium::PREMIUM )
-	{
-		LogDebugMsg( SCS, "Authenticated!" );
-	}
-
-	return true;
-}
-
-void CreateThreads( )
-{
-	LogDebugMsg( DBG, "Initializing threads..." );
-	std::thread tInfoGrabber ( [ & ]
-	{
-		while ( !bExitState )
+		case DLL_PROCESS_ATTACH:
 		{
-			eng.GetLocalPlayer( );
-			eng.GetEntities( );
-			Wait( 100 );
+			hInst = hInstDll;
+			HANDLE hCheat = CreateThread( nullptr, 0, LPTHREAD_START_ROUTINE( WinMain ), nullptr, 0, nullptr );
+			if ( !hCheat || hCheat == INVALID_HANDLE_VALUE )
+			{
+				cfg.iQuitReason = EQuitReasons::LOAD_LIBRARY_ERROR;
+			}
+			else
+			{
+				cfg.iQuitReason = EQuitReasons::SUCCESS;
+			}
+			DisableThreadLibraryCalls( hInstDll );
+			break;
 		}
-	} );
-	tThreads.push_back( move( tInfoGrabber ) );
-	//
-	// awareness
-	//
-	std::thread tHitSound( [ & ]
-	{
-		Feature( true, 1, [ & ]
+		case DLL_PROCESS_DETACH:
 		{
-			hit.PlaySoundOnHit( );
-		} );
-	} );
-	tThreads.push_back( move( tHitSound ) );
-	std::thread tNoFlash( [ & ]
-	{
-		Feature( true, 1, [ & ]
+			CleanUp( );
+#ifdef _DEBUG
+			FreeConsole( );
+#endif
+			break;
+		}
+		default:
 		{
-			nof.NoFlash( );
-		} );
-	} );
-	tThreads.push_back( move( tNoFlash ) );
-	std::thread tRadar( [&]
-	{
-		Feature( true, 1, [&]
-		{
-			rad.Radar( );
-		} );
-	} );
-	tThreads.push_back( move( tRadar ) );
-	Wait( 25000 );
-	//sonar
-	std::thread tSonar( [&]
-	{
-		Feature( true, 1, [&]
-		{
-			son.Sonar( );
-		} );
-	} );
-	tThreads.push_back( move( tSonar ) );
-	//
-	// combat
-	//
-	std::thread tRecoilControl( [ & ]
-	{
-		Feature( true, 1, [ & ]
-		{
-			rcs.RecoilControl( );
-		}, VK_LBUTTON );
-	} );
-	tThreads.push_back( move( tRecoilControl ) );
-	//
-	// miscellaneous
-	//
-	std::thread tAirStuck( [ & ]
-	{
-		Feature( true, 1, [ & ]
-		{
-			air.AirStuck( );
-		}, VK_F5 );
-	} );
-	tThreads.push_back( move( tAirStuck ) );
-	std::thread tAutoJump( [ & ]
-	{
-		Feature( true, 1, [ & ]
-		{
-			aut.AutoJump( );
-		}, VK_SPACE );
-	} );
-	tThreads.push_back( move( tAutoJump ) );
-	// TODO
-	/*std::thread tAutoNade( [&]
-	{
-	Feature( true, 1, [&]
-	{
-	aut.AutoNade( );
-	} );
-	} );
-	tThreads.push_back( move( tAutoNade ) );*/
-	std::thread tAutoShoot( [ & ]
-	{
-		Feature( true, 1, [ & ]
-		{
-			aut.AutoShoot( );
-		}, VK_LBUTTON );
-	} );
-	tThreads.push_back( move( tAutoShoot ) );
-	// TODO
-	std::thread tFOV( [&]
-	{
-		Feature( true, 1, [&]
-		{
-			fov.FOV( );
-		} );
-	} );
-	tThreads.push_back( move( tFOV ) );
-	// TODO
-	/*std::thread tWeaponFOV( [&]
-	{
-	Feature( true, 1, [&]
-	{
-	fov.WeaponFOV( );
-	} );
-	} );
-	tThreads.push_back( move( tWeaponFOV ) );*/
-	LogDebugMsg( SCS, "Created threads" );
-	LogLastError( );
-}
-
-void Panic( )
-{
-	LogDebugMsg( WRN, "Panic called" );
-	cfg.iQuitReason = EQuitReasons::PANIC;
-	CleanUp( );
-	FreeLibraryAndExitThread( hInst, 0 ); // TODO figure out how to not display ABORT message
-}
-
-void CleanUp( )
-{
-	LogDebugMsg( DBG, "Cleaning up" );
-	bExitState = true;
-	for ( auto &tThread: tThreads )
-	{
-		if ( tThread.joinable( ) )
-		{
-			tThread.join( );
+			cfg.iQuitReason = EQuitReasons::BLACKLISTED_CALL;
+			break;
 		}
 	}
-}
-
-void Feature( bool bFeatureState, unsigned long ulWait, std::function< void( ) > fnFeature, unsigned short usiFeatureKey )
-{
-	while ( !bExitState )
-	{
-		if ( bFeatureState && GetAsyncKeyState( usiFeatureKey ) )
-		{
-			fnFeature( );
-		}
-		Wait( ulWait );
-	}
-}
-
-void Feature( bool bFeatureState, unsigned long ulWait, std::function< void( ) > fnFeature )
-{
-	while ( !bExitState )
-	{
-		if ( bFeatureState )
-		{
-			fnFeature( );
-		}
-		Wait( ulWait );
-	}
+	return BOOL( cfg.iQuitReason );
 }

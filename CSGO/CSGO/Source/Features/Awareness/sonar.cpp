@@ -2,15 +2,15 @@
 
 void CSonar::Sonar( )
 {
-	while ( plrEntities.val.size() != eng.GetGlobalVars( ).maxClients )
+	while ( plrEntities.val.size() != eng.GetGlobalVars( ).ulMaxClients )
 	{
 		Wait( 1 );
 	}
 	int i = 0;
 	for ( auto &plrEntity : plrEntities.val )
 	{
-		if ( /*!plrEntities.val.at( ulEntity ).bDormant*/1 )
-		{
+		//if ( !plrEntities.val.at( ulEntity ).bDormant )
+		//{
 			if ( plrLocalPlayer.val.ulTeamNum != plrEntity.ulTeamNum )
 			{
 				vector_t vecPlayerToEntity( plrEntity.corOrigin, plrLocalPlayer.val.corOrigin );
@@ -19,7 +19,7 @@ void CSonar::Sonar( )
 
 				std::cout << "Current Entity: " << i << "\n Distance from Local Player: " << flDistance << std::endl;
 			}
-		}
+		//}
 		i++;
 	}
 }

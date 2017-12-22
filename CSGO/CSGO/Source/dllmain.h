@@ -26,16 +26,6 @@
 #include "Features/Miscellaneous/automation.h"
 #include "Features/Miscellaneous/fov.h"
 
-void Feature( bool, unsigned long, std::function< void( ) > );
-void Feature( bool, unsigned long, std::function< void( ) >, unsigned short );
-void CleanUp( );
-void Panic( );
-void CreateThreads( );
-bool GetPremium( );
-void SetDebug( );
-int CALLBACK WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow );
-BOOL WINAPI DllMain( HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpvReserved );
-
 /* Conventions:
  * Start naming on everything with a capital
  * * Variables must start with a lowercase including their datatype (bExitState, dwClientBase)

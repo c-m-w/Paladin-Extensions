@@ -109,17 +109,17 @@ CPlayer CEngine::GetEntity( unsigned long ulEntity )
 void CEngine::GetEntities( )
 {
 	plrEntities.val.clear( );
-	for ( unsigned long ul = GetGlobalVars( ).maxClients; ul > 0; ul-- )
+	for ( unsigned long ul = GetGlobalVars( ).ulMaxClients; ul > 0; ul-- )
 	{
 		plrEntities.val.push_back( GetEntity( ul ) );
 	}
-};
+}
 
 void CEngine::SetEntity( unsigned long ulEntity, CPlayer plrNewEntity )
 {
 	address_t< CPlayer > aplrEntity = { 0, 0, GetEntityBase( ulEntity ), plrNewEntity };
 	mem.Set( aplrEntity );
-};
+}
 
 DWORD CEngine::GetLocalPlayerBase( )
 {
@@ -137,14 +137,14 @@ CPlayer CEngine::GetLocalPlayer( )
 void CEngine::SetLocalPlayer( )
 { 
 	mem.Set( plrLocalPlayer );
-};
+}
 
-float CEngine::GetPixelToAngleYAW( )
+float CEngine::GetPixelToAngleYaw( )
 {
 	return 0.022f * GetSensitivity( ) * all.GetWindowsSensitivity( ); // * ZOOM SENS IF ZOOMED
 }
 
-float CEngine::GetPixelToAnglePITCH( )
+float CEngine::GetPixelToAnglePitch( )
 {
 	return 0.022f * GetSensitivity( ) * all.GetWindowsSensitivity( ); // * ZOOM SENS IF ZOOMED
 }
@@ -180,11 +180,11 @@ angle_t CEngine::NormalizeAngle( angle_t angDestination )
 		angReturn.yaw *= flAngleScaleFactor;
 	}
 
-	unsigned short us = unsigned short( angReturn.yaw / GetPixelToAngleYAW( ) );
-	angReturn.yaw = GetPixelToAngleYAW( ) * us;
+	unsigned short us = unsigned short( angReturn.yaw / GetPixelToAngleYaw( ) );
+	angReturn.yaw = GetPixelToAngleYaw( ) * us;
 
-	us = unsigned short( angReturn.pitch / GetPixelToAnglePITCH( ) );
-	angReturn.pitch = GetPixelToAnglePITCH( ) * us;
+	us = unsigned short( angReturn.pitch / GetPixelToAnglePitch( ) );
+	angReturn.pitch = GetPixelToAnglePitch( ) * us;
 
 	angReturn += eng.GetViewAngle( );
 	angReturn.roll = eng.GetViewAngle( ).roll;

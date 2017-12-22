@@ -1,17 +1,5 @@
 #include "../dllmain.h"
 
-CConfig::CConfig( )
-{
-	verVersion = { 1, 0 };
-	iQuitReason = EQuitReasons::UNKNOWN;
-	sExitKey = VK_F4;
-	sReloadKey = VK_F5;
-	sAutoJumpKey = VK_XBUTTON1;
-	bAutoJumpState = true;
-	bHitSound = true;
-	strHitSoundLocation = "\0";
-}
-
 bool CConfig::LoadConfig( )
 {
 	char chTemp[MAX_PATH];
@@ -19,7 +7,7 @@ bool CConfig::LoadConfig( )
 	memset( cfgPath, 0, MAX_PATH );
 	strcpy_s( cfgPath, std::string( chTemp ).substr( 0, std::string( chTemp ).find_last_of( "/\\" ) + 1 ).c_str( ) );
 	strcat_s( cfgPath, "config.txt" );
-	struct stat buffer;
+	struct stat buffer{};
 	if ( stat( cfgPath, &buffer ) )
 	{
 		Write( "Key bds", "Terminate", sExitKey );
@@ -40,7 +28,7 @@ bool CConfig::LoadConfig( )
 
 bool CConfig::ReadConfig( )
 {
-	version_t verConfig;
+	version_t verConfig{};
 	Read( "Info", "Version", verConfig );
 	if ( verVersion == verConfig )
 	{
@@ -59,13 +47,23 @@ bool CConfig::ReadConfig( )
 		sAutoJumpKey = VK_XBUTTON1;
 		bAutoJumpState = true;
 		bHitSound = true;
-		strHitSoundLocation = "\0";
 		return false;
 	}
 	Limit( sExitKey, VK_F4, INT_MAX );
 	Limit( sReloadKey, VK_F5, INT_MAX );
 	Limit( sAutoJumpKey, VK_XBUTTON1, INT_MAX );
 	return true;
+}
+
+CConfig::CConfig( )
+{
+	verVersion = { 1, 0 };
+	iQuitReason = EQuitReasons::UNKNOWN;
+	sExitKey = VK_F4;
+	sReloadKey = VK_F5;
+	sAutoJumpKey = VK_XBUTTON1;
+	bAutoJumpState = true;
+	bHitSound = true;
 }
 
 CConfig::~CConfig( )

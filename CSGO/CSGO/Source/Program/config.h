@@ -6,17 +6,13 @@ struct version_t
 
 	bool operator==( version_t rhs )
 	{
-		if ( upper == rhs.upper && lower == rhs.lower )
-		{
-			return true;
-		}
-		return false;
+		return upper == rhs.upper && lower == rhs.lower;
 	}
 };
 
 class CConfig
 {
-	char cfgPath[255];
+	char cfgPath[255]{};
 	// read from config TODO
 	template< typename datatype > void Read( char *szSetting, char *szSubSetting, datatype &xStatus )
 	{ }
@@ -26,8 +22,8 @@ class CConfig
 	{ }
 
 public:
-	version_t verVersion;
-	EQuitReasons iQuitReason;
+	version_t verVersion{};
+	EQuitReasons iQuitReason{};
 
 #ifdef _DEBUG
 	bool bCheckForAnticheat = false;
@@ -36,24 +32,28 @@ public:
 #endif
 
 	// Keys TODO rest of features
-	short sExitKey;
-	short sReloadKey;
-	short sAutoJumpKey;
+	short sExitKey{};
+	short sReloadKey{ };
+	short sAutoJumpKey{ };
 
-	// Feature Toggles
-	bool bHitSound;
-	bool bAutoJumpState;
+	// F{}eature Toggles
+	bool bHitSound{};
+	bool bAutoJumpState{ };
 
-	// Feature Settings
+	// F{}eature Settings
 	std::string strHitSoundLocation;
 
-	CConfig( );
 	// open config, create if doesn't exist
 	bool LoadConfig( );
 	// read loaded config, replace impossible values
 	bool ReadConfig( );
-	// set quit reason
-	~CConfig( );
+
+	CConfig( ); // constructor
+	CConfig( CConfig& ) = default; // copy constructor
+	CConfig( CConfig&& ) = default; // move constructor
+	CConfig & operator=( CConfig const& ) = default; // copy assignment operator
+	CConfig & operator=( CConfig&& ) = default; // move assignment operator
+	~CConfig( ); // deconstructor
 };
 
 extern CConfig cfg;

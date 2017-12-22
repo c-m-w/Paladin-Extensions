@@ -16,7 +16,7 @@ moment GetMoment( )
 
 bool angle_t::operator==( angle_t rhs )
 {
-	return ( pitch == rhs.pitch && yaw == rhs.yaw && roll == rhs.roll );
+	return pitch == rhs.pitch && yaw == rhs.yaw && roll == rhs.roll;
 }
 
 bool angle_t::operator!=( angle_t rhs )
@@ -58,22 +58,22 @@ angle_t angle_t::operator/( float rhs )
 
 angle_t angle_t::operator+=( angle_t rhs )
 {
-	return (*this + rhs);
+	return *this + rhs;
 }
 
 angle_t angle_t::operator-=( angle_t rhs )
 {
-	return (*this - rhs);
+	return *this - rhs;
 }
 
 angle_t angle_t::operator/=( float rhs )
 {
-	return (*this / rhs);
+	return *this / rhs;
 }
 
 angle_t angle_t::operator*=( float rhs )
 {
-	return (*this* rhs);
+	return *this* rhs;
 }
 
 vector_t::vector_t( )
@@ -92,10 +92,10 @@ vector_t::vector_t( coordinate_t corOrigin, coordinate_t corDestination )
 
 bool CGlobalVars::operator==( CGlobalVars rhs )
 {
-	return ( realtime == rhs.realtime && framecount == rhs.framecount && absoluteframetime == rhs.absoluteframetime
-			 && absoluteframestarttimestddev == rhs.absoluteframestarttimestddev && curtime == rhs.curtime
-			 && frametime == rhs.frametime && maxClients == rhs.maxClients && tickcount == rhs.tickcount
-			 && interval_per_tick == rhs.interval_per_tick && interpolation_amount == rhs.interpolation_amount );
+	return flRealTime == rhs.flRealTime && ulFrameCount == rhs.ulFrameCount && flAbsoluteFrameTime == rhs.flAbsoluteFrameTime
+			&& flAbsoluteFrameStartTimeStdDev == rhs.flAbsoluteFrameStartTimeStdDev && flCurrentTime == rhs.flCurrentTime
+			&& flFrameTime == rhs.flFrameTime && ulMaxClients == rhs.ulMaxClients && ulTickCount == rhs.ulTickCount
+			&& flIntervalPerTick == rhs.flIntervalPerTick && flInterpolationAmount == rhs.flInterpolationAmount;
 }
 
 bool CGlobalVars::operator!=( CGlobalVars rhs )
