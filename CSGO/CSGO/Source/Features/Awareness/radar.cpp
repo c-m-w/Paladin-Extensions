@@ -6,18 +6,16 @@ void CRadar::Radar( )
 	{
 		Wait( 1 );
 	}
-	unsigned short us = 0;
-	for ( auto &plrEntity: plrEntities.val )
+	for ( unsigned long ulEntity = plrEntities.val.size( ); ulEntity > 0; ulEntity-- )
 	{
-		//if ( !plrEntities.val.at( ulEntity ).bDormant )
-		//{
-		if ( plrLocalPlayer.val.ulTeamNum != plrEntity.ulTeamNum )
+		if ( !plrEntities.val.at( ulEntity ).bDormant )
 		{
-			plrEntity.bSpotted = true;
-			eng.SetEntity( us, plrEntity );
+			if ( plrLocalPlayer.val.ulTeamNum != plrEntities.val.at( ulEntity ).ulTeamNum )
+			{
+				plrEntities.val.at( ulEntity ).bSpotted = true;
+				eng.SetEntity( ulEntity, plrEntities.val.at( ulEntity ) );
+			}
 		}
-		//}
-		us++;
 	}
 }
 
