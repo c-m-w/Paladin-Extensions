@@ -17,18 +17,23 @@
 - Polymorphic Junk Code
 ##### Jeremy
 - Velocity Based Backtrack
-- Game Closing
+- Aimbot
+- Legit Antiaim
 - Move Log to C:/ Drive
 - Check for multiple instances
 ##### Mike
 - Pattern Scanning
+- Config
+- Log file implementation
 - Define User/HWID for yourself
 ##### Hunter
 - Menu
 - Define HWID for yourself
 ##### John
 - Glow
-- Define User/HWID for yourself
+- ClientCMD
+- ClientCMDUnrestricted
+- UserCMD
 ##### Cole
 
 ## FOF
