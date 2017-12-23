@@ -6,6 +6,8 @@ public:
 	// engine - global
 	CGlobalVars GetGlobalVars( );
 	void SetGlobalVars( CGlobalVars ); // careful! unlimited
+	bool GetSendPackets( );
+	void SetSendPackets( bool );
 
 	// engine - clientstate
 	DWORD GetClientState( );

@@ -4,6 +4,7 @@ namespace Addresses
 {
 	// global engine addresses
 	address_t< CGlobalVars > gvGlobalVars;
+	address_t< bool > bSendPackets;
 	// engine pointer addresses
 	address_t< DWORD > pdwClientState;
 	address_t< ESignOnState > soSignOnState;
@@ -128,8 +129,10 @@ void CMemoryManager::InitializeAddresses( )
 {
 	LogDebugMsg( DBG, "Initializing addresses" );
 
+	// todo signature scanning
 	// global Engine addresses
 	gvGlobalVars = { 0x57B4F0 };
+	bSendPackets = { 0xCCD5A };
 	// Engine pointer addresses
 	pdwClientState = { 0x57B7EC };
 	soSignOnState = { 0x108 };
@@ -142,19 +145,22 @@ void CMemoryManager::InitializeAddresses( )
 	pdwEntityList = { 0x4A78BA4 };
 	pdwGlowManager = { 0x4F959F0 };
 	pdwLocalPlayer = { 0xA9BDDC };
-	LogDebugMsg( SCS, "Initialized bases" );
+	LogDebugMsg( DBG, "Initialized bases" );
 
-	// engine
+	// engine global
 	gvGlobalVars.loc = dwEngineBase + gvGlobalVars.off;
+	bSendPackets.loc = dwEngineBase + bSendPackets.off;
+	// engine pointers
 	pdwClientState.loc = dwEngineBase + pdwClientState.off;
-	// client
+	// client global
 	fForceJump.loc = dwClientBase + fForceJump.off;
 	fForceAttack.loc = dwClientBase + fForceAttack.off;
 	flSensitivity.loc = dwClientBase + flSensitivity.off;
 	flSensitivity.ptr += dwClientBase;
+	// client pointers
 	pdwEntityList.loc = dwClientBase + pdwEntityList.off;
 	pdwLocalPlayer.loc = dwClientBase + pdwLocalPlayer.off;
-	LogDebugMsg( SCS, "Initialized locations" );
+	LogDebugMsg( DBG, "Initialized locations" );
 
 	LogDebugMsg( SCS, "Initialized addresses" );
 }

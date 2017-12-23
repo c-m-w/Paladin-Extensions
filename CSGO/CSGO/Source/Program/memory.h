@@ -12,6 +12,7 @@ namespace Addresses
 {
 	// global engine addresses
 	extern address_t< CGlobalVars > gvGlobalVars;
+	extern address_t< bool > bSendPackets;
 	// engine pointer addresses
 	extern address_t< DWORD > pdwClientState;
 	extern address_t< ESignOnState > soSignOnState;
@@ -23,8 +24,10 @@ namespace Addresses
 	// client pointer addresses
 	extern address_t< DWORD > pdwEntityList;
 	extern address_t< std::vector< CPlayer > > plrEntities;
+
 	extern address_t< DWORD > pdwLocalPlayer;
 	extern address_t< CPlayer > plrLocalPlayer;
+	
 	extern address_t< DWORD > pdwGlowManager;
 }
 

@@ -15,6 +15,21 @@ void CEngine::SetGlobalVars( CGlobalVars gvNewGlobalVars )
 	}
 }
 
+bool CEngine::GetSendPackets( )
+{
+	mem.Get( bSendPackets );
+	return bSendPackets.val;
+}
+
+void CEngine::SetSendPackets( bool bNewSendPackets )
+{
+	if ( GetSendPackets( ) != bNewSendPackets )
+	{
+		bSendPackets.val = bNewSendPackets;
+		mem.Set( bSendPackets );
+	}
+}
+
 DWORD CEngine::GetClientState( )
 {
 	mem.Get( pdwClientState );
@@ -195,15 +210,15 @@ angle_t CEngine::NormalizeAngle( angle_t angDestination )
 angle_t CEngine::VectorToAngle( coordinate_t corOrigin, coordinate_t corDestination )
 {
 	angle_t angReturn = { 0, 0, 0 };
-	vector_t vDelta( corOrigin, corDestination );
-	if ( !vDelta.dy && !vDelta.dx )
+	vector_t vecDelta( corOrigin, corDestination );
+	if ( !vecDelta.dy && !vecDelta.dx )
 	{
 		angReturn.yaw = 0;
-		if ( vDelta.dz > 0 )
+		if ( vecDelta.dz > 0 )
 		{
 			angReturn.pitch = 90;
 		}
-		else if ( vDelta.dz < 0 )
+		else if ( vecDelta.dz < 0 )
 		{
 			angReturn.pitch = -90;
 		}
@@ -214,14 +229,14 @@ angle_t CEngine::VectorToAngle( coordinate_t corOrigin, coordinate_t corDestinat
 	}
 	else
 	{
-		angReturn.yaw = atan2( vDelta.dy, vDelta.dx ) * 180 / PI;
+		angReturn.yaw = atan2( vecDelta.dy, vecDelta.dx ) * 180 / PI;
 		if ( angReturn.yaw < 0 )
 		{
 			angReturn.yaw += 360;
 		}
 
-		float flTemp = sqrt( vDelta.dx * vDelta.dx + vDelta.dy * vDelta.dy );
-		angReturn.pitch = atan2( -vDelta.dz, flTemp ) * 180 / PI;
+		float flTemp = sqrt( vecDelta.dx * vecDelta.dx + vecDelta.dy * vecDelta.dy );
+		angReturn.pitch = atan2( -vecDelta.dz, flTemp ) * 180 / PI;
 		if ( angReturn.pitch < 0 )
 		{
 			angReturn.pitch += 360;
