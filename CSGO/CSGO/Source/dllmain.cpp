@@ -86,7 +86,6 @@ void CreateThreads( )
 	} );
 	tThreads.push_back( move( tRadar ) );
 	Wait( 25000 );
-	//sonar
 	std::thread tSonar( [ & ]
 	{
 		Feature( true, 1, [ & ]
@@ -142,7 +141,6 @@ void CreateThreads( )
 		}, VK_LBUTTON );
 	} );
 	tThreads.push_back( move( tAutoShoot ) );
-	// TODO
 	std::thread tFOV( [ & ]
 	{
 		Feature( true, 1, [ & ]
@@ -290,17 +288,46 @@ int CALLBACK WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 
 	while ( eng.GetSignOnState( ) != ESignOnState::FULL )
 	{
-		std::cout << " " << short( eng.GetSignOnState( ) );
+		if ( GetAsyncKeyState( VK_F4 ) )
+		{
+			return 0;
+		}
 		Wait( 1000 );
 	}
 
 	CreateThreads( );
 
-	Feature( true, 1000, [ & ]
+	while ( !bExitState )
 	{
-		Panic( );
-	}, VK_F4 );
-
+		if ( GetAsyncKeyState( VK_F4 ) )
+		{
+			Panic( );
+		}
+		else if ( !FindWindow( nullptr, "Counter-Strike: Global Offensive" ) )
+		{
+			LogDebugMsg( WRN, "Game closed!" );
+			mem.AttachToGame( );
+			mem.InitializeAddresses( );
+		}
+		else if ( eng.GetSignOnState( ) != ESignOnState::FULL )
+		{
+			CleanUp( );
+			LogDebugMsg( DBG, "Waiting for server connection..." );
+			while ( eng.GetSignOnState( ) != ESignOnState::FULL )
+			{
+				if ( GetAsyncKeyState( VK_F4 ) )
+				{
+					return 0;
+				}
+				Wait( 1000 );
+			}
+			CreateThreads( );
+		}
+		else
+		{
+			Wait( 250 );
+		}
+	}
 	return 0;
 }
 
@@ -311,7 +338,7 @@ BOOL WINAPI DllMain( HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpvReserved )
 		case DLL_PROCESS_ATTACH:
 		{
 			hInst = hInstDll;
-			HANDLE hCheat = CreateThread( nullptr, 0, LPTHREAD_START_ROUTINE( WinMain ), nullptr, 0, nullptr );
+			HANDLE hCheat = CreateThread( nullptr, 0, LPTHREAD_START_ROUTINE( WinMain ), nullptr, 0, nullptr ); // TODO args
 			if ( !hCheat || hCheat == INVALID_HANDLE_VALUE )
 			{
 				cfg.iQuitReason = EQuitReasons::LOAD_LIBRARY_ERROR;
