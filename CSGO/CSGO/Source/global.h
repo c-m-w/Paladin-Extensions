@@ -13,8 +13,7 @@
 typedef long long moment;
 
 // global structs
-struct angle_t
-{
+struct angle_t {
 	float pitch, yaw, roll; // y, x, z
 
 	bool operator==( angle_t );
@@ -29,18 +28,15 @@ struct angle_t
 	angle_t operator/=( float );
 };
 
-struct color_t
-{
+struct color_t {
 	BYTE r, g, b, a;
 };
 
-struct coordinate_t
-{
+struct coordinate_t {
 	float x, y, z;
 };
 
-struct vector_t
-{
+struct vector_t {
 	float dx, dy, dz;
 
 	vector_t( );
@@ -56,29 +52,22 @@ extern std::vector< std::thread > tThreads;
 void Wait( unsigned long );
 moment GetMoment( );
 
-template< typename xDatatype, typename xDatatype2 > void Limit( xDatatype &xStatus, xDatatype2 xMinimum, xDatatype2 xMaximum )
-{
-	if ( xDatatype( xMinimum ) > xStatus )
-	{
+template< typename xDatatype, typename xDatatype2 > void Limit( xDatatype &xStatus, xDatatype2 xMinimum, xDatatype2 xMaximum ) {
+	if ( xDatatype( xMinimum ) > xStatus ) {
 		xStatus = xDatatype( xMinimum );
-	}
-	else if ( xStatus > xDatatype( xMaximum ) )
-	{
+	} else if ( xStatus > xDatatype( xMaximum ) ) {
 		xStatus = xDatatype( xMaximum );
 	}
 }
 
-template< typename xDatatype > void Absolute( xDatatype &xStatus )
-{
-	if ( xStatus < 0 )
-	{
+template< typename xDatatype > void Absolute( xDatatype &xStatus ) {
+	if ( xStatus < 0 ) {
 		xStatus = -xStatus;
 	}
 }
 
 // global enums
-enum class EQuitReasons
-{
+enum class EQuitReasons {
 	UNKNOWN = -1,
 	LOAD_LIBRARY_ERROR,
 	SUCCESS,
@@ -86,23 +75,20 @@ enum class EQuitReasons
 	PANIC
 };
 
-enum class EPremium
-{
+enum class EPremium {
 	BANNED = -2,
 	EXPIRED,
 	NOT_PREMIUM,
 	PREMIUM
 };
 
-enum class EElevation
-{
+enum class EElevation {
 	UNTESTED = -1,
 	NOT_ADMIN,
 	ADMIN
 };
 
-enum class EAnticheatStatus
-{
+enum class EAnticheatStatus {
 	NOT_FOUND = -1,
 	FAILED,
 	KILLED
@@ -138,39 +124,34 @@ typedef unsigned long FLAG;
 typedef unsigned long EHANDLE;
 
 // enums
-enum class EMoveType
-{
+enum class EMoveType {
 	NONE,
 	WALK = 2,
 	NOCLIP = 8,
 	LADDER,
 };
 
-enum class ESignOnState
-{
+enum class ESignOnState {
 	CONNECTED = 2,
 	SPAWNED = 5,
 	FULL,
 	CHANGELEVEL
 };
 
-enum class ELifeState
-{
+enum class ELifeState {
 	ALIVE,
 	KILLCAM,
 	DEAD
 };
 
-enum class ETeam
-{
+enum class ETeam {
 	NONE,
 	SPECTATOR,
 	TERRORISTS,
 	COUNTERTERRORISTS
 };
 
-enum class EWeaponType
-{
+enum class EWeaponType {
 	KNIVES,
 	PISTOLS,
 	SMGS,
@@ -182,8 +163,7 @@ enum class EWeaponType
 	GRENADES = 9
 };
 
-enum class EWeapon
-{
+enum class EWeapon {
 	DEAGLE = 1,
 	ELITE,
 	FIVESEVEN,
@@ -241,8 +221,7 @@ enum class EWeapon
 };
 
 // classes
-class CGlobalVars
-{
+class CGlobalVars {
 public:
 	float flRealTime;
 	unsigned long ulFrameCount;
@@ -259,8 +238,48 @@ public:
 	bool operator!=( CGlobalVars );
 };
 
-class CPlayer
-{
+struct audio_t {
+	vector_t localSound[8] { };
+	int soundscapeIndex { };
+	int localBits { };
+	int entIndex { };
+};
+
+struct fog_t {
+	vector_t dirPrimary { };
+	int colorPrimary { };
+	int colorSecondary { };
+	BYTE unknown2[0x8] { };
+	float start { };
+	float end { };
+	BYTE unknown3[0x4] { };
+	float maxdensity { };
+	BYTE unknown4[0x14] { };
+	int enable { };
+	int blend { };
+	BYTE unknown5[0x3] { };
+	float flHDRColorScale { };
+};
+
+struct skybox3D_t {
+	int scale { };
+	vector_t origin { };
+	int area { };
+	BYTE unknown1[0x4] { };
+	fog_t fog;
+	BYTE unknown2[0x4] { };
+};
+
+struct attributelist_t {
+	int lengthprop32; // 0x0
+	int iAttributeDefinitionIndex; // 0x4
+	int iRawValue32; // 0x8
+	int iRawInitialValue32; // 0xc
+	int nRefundableCurrency; // 0x10
+	int bSetBonus; // 0x14
+};
+
+class CPlayer {
 	BYTE x0[0x60] { };
 public:
 	bool bAutoaimTarget { }; // 0x60
@@ -276,7 +295,7 @@ public:
 private:
 	BYTE x88[0x61] { };
 public:
-    bool bDormant { }; // 0xe9
+	bool bDormant { }; // 0xe9
 private:
 	BYTE xEA[0x2] { };
 public:
@@ -286,9 +305,9 @@ public:
 	unsigned long ulNextThinkTick { }; // 0xf8
 	unsigned long ulHealth { }; // 0xfc
 	FLAG fFlags { }; // 0x100
-	vector_t vecViewOffset; // 0x104
-	vector_t vecVelocity; // 0x110
-	vector_t vecBaseVelocity; // 0x11c
+	vector_t vecViewOffset { }; // 0x104
+	vector_t vecVelocity { }; // 0x110
+	vector_t vecBaseVelocity { }; // 0x11c
 	angle_t angRotation { }; // 0x128
 	coordinate_t corOrigin { }; // 0x134
 	float flFriction { }; // 0x140
@@ -335,7 +354,7 @@ public:
 private:
 	BYTE x3A0[0xD0] { };
 public:
-	int iCollisionGroup { }; // 0x470
+	long lCollisionGroup { }; // 0x470
 private:
 	BYTE x474[0x4C2] { };
 public:
@@ -378,7 +397,7 @@ public:
 private:
 	BYTE xA5C[0x1C14] { };
 public:
-	vector_t vecForce; // 0x2670
+	vector_t vecForce { }; // 0x2670
 	unsigned long ulForceBone { }; // 0x267c
 private:
 	BYTE x2680[0x30] { };
@@ -392,7 +411,7 @@ private:
 	BYTE x26EC[0x4C] { };
 public:
 	float flModelScale { }; // 0x2738
-	int iScaleType { }; // 0x273c
+	long lScaleType { }; // 0x273c
 private:
 	BYTE x2740[0x24] { };
 public:
@@ -416,7 +435,7 @@ public:
 private:
 	BYTE x293C[0xA4] { };
 public:
-	vector_t viewtarget; // 0x29e0
+	vector_t viewtarget { }; // 0x29e0
 private:
 	BYTE x29EC[0x2C] { };
 public:
@@ -429,7 +448,7 @@ private:
 	BYTE x2BC8[0x198] { };
 public:
 	float flNextAttack { }; // 0x2d60
-	int iLastHitGroup { }; // 0x2d64
+	long lLastHitGroup { }; // 0x2d64
 	long lAmmo[32] { }; // 0x2d68
 	EHANDLE hMyWeapons[64] { }; // 0x2de8
 	EHANDLE hActiveWeapon { }; // 0x2ee8
@@ -440,8 +459,36 @@ private:
 public:
 	long lCoachingTeam { }; // 0x2f40
 private:
-	BYTE x2F44[0x26C] { }; // TODO get aimpunch and whatnot
+	BYTE x2F44[0x6B] { };
 public:
+	char chAreaBits[32] { }; // 0x2fb0
+	char chAreaPortalBits[24] { }; // 0x2fd0
+	BYTE x2FE8[0x8] { };
+	float flFOVRate { }; // 0x2ff0
+	long lHideHUD { }; // 0x2ff4
+	unsigned long ulDuckTimeMsecs { }; // 0x2ff8
+	unsigned long ulDuckJumpTimeMsecs { }; // 0x2ffc
+	unsigned long ulJumpTimeMsecs { }; // 0x3000
+	float flFallVelocity { }; // 0x3004
+private:
+	BYTE x3008[0x4] { };
+public:
+	float flStepSize { }; // 0x300C
+	vector_t viewPunchAngle { }; // 0x3010
+	vector_t aimPunchAngle { }; // 0x301c
+	vector_t aimPunchAngleVel { }; // 0x3028
+	bool bDucked { }; // 0x3034
+	bool bDucking { }; // 0x3035
+	bool bInDuckJump { }; // 0x3036
+	bool bDrawViewmodel { }; // 0x3037
+	bool bWearingSuit { }; // 0x3038
+	bool bPoisoned { }; // 0x3039
+	bool bAllowAutoMovement { }; // 0x303a
+private:
+	BYTE x303B[0x9d] { };
+public:
+	skybox3D_t skybox3d; // 0x30d8
+	audio_t audio; // 0x313C
 	EHANDLE hTonemapController { }; // 0x31b0
 private:
 	BYTE x31B4[0x12] { };
@@ -459,7 +506,7 @@ public:
 private:
 	BYTE x31F0[0x18] { };
 public:
-	vector_t vecLadderNormal; // 0x3208
+	vector_t vecLadderNormal { }; // 0x3208
 private:
 	BYTE x3214[0x24] { };
 public:
@@ -490,7 +537,7 @@ public:
 	EHANDLE hViewEntity { }; // 0x332c
 	bool bShouldDrawPlayerWhileUsingViewEntity { }; // 0x3330
 	EHANDLE hConstrapublicEntity { }; // 0x3334
-	vector_t vecConstrapublicCenter; // 0x3338
+	vector_t vecConstrapublicCenter { }; // 0x3338
 	float flConstrapublicRadius { }; // 0x3344
 	float flConstrapublicWidth { }; // 0x3348
 	float flConstrapublicSpeedFactor { }; // 0x334c
@@ -691,4 +738,4 @@ private:
 	BYTE xB89B[0x8] { };
 public:
 	bool bHasControlledBotThisRound { }; // 0xb8a4
-}; // total size = 0xb8a5
+}; // total size = 0xb8a8
