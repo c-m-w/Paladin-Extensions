@@ -7,19 +7,8 @@
 #include <string>
 #include <vector>
 
-#include "Global/debug.h"
-#include "Global/typedefs.h"
-#include "Global/defines.h"
-#include "Global/enums.h"
-#include "Global/structs.h"
-#include "Global/functions.h"
-
-#include "Global/Game/gametypedefs.h"
-#include "Global/Game/gamedefines.h"
-#include "Global/Game/gameenums.h"
-#include "Global/Game/gamestructs.h"
-#include "Global/Game/gameclasses.h"
-#include "Global/Game/gameengine.h"
+#include "Program/global.h"
+#include "Features/engine.h"
 
 #include "Program/general.h"
 #include "Program/config.h"

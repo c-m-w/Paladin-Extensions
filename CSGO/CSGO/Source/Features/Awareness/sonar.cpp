@@ -16,9 +16,11 @@ void CSonar::Sonar( )
 
 				float flDistance = sqrt( pow( vecEntityDistance.dx, 2 ) + pow( vecEntityDistance.dy, 2 ) + pow( vecEntityDistance.dz, 2 ) );
 
-				std::cout << "Current Entity: " << ulEntity << "\n Distance from Local Player: " << flDistance << std::endl;
-
-				// todo sonar
+				if ( flDistance < 1000.f )
+				{
+					Beep( DWORD( ( 1000.f - flDistance ) / 1000.f ), 50 );
+					Wait( long( flDistance / 1000.f ) );
+				}
 			}
 		}
 	}

@@ -1,5 +1,182 @@
 #pragma once
 
+typedef unsigned long FLAG;
+typedef unsigned long EHANDLE;
+
+#define FL_ONGROUND ( 1 << 0 ) // At rest / on the ground
+#define FL_DUCKING ( 1 << 1 ) // Player FLAG -- Player is fully crouched
+#define MAX_ANGLE_DELTA 22.f // Max angle delta per tick
+#define ACTION_NONE 0b0 // -command
+#define ACTION_PRESS 0b1 // +command
+#define ACTION_TICK 0b10 // +command, tick, -command
+#define ACTION_DEFAULT 0b100 // default command state
+#define ENTITY_DISTANCE 0x10 // Distance between entities
+
+#define MAX_SENSITIVITY 1000.f
+#define MIN_SENSITIVITY 0.f
+#define MAX_FLASHALPHA 255.f
+#define MIN_FLASHALPHA 0.f
+#define MAX_FIELDOFVIEW 180
+#define MIN_FIELDOFVIEW 0
+#define MAX_PITCH 89.f
+#define MIN_PITCH ( -89.f )
+#define MAX_YAW 180.f
+#define MIN_YAW ( -180.f )
+#define MAX_ROLL 50.f
+#define MIN_ROLL 50.f
+
+enum class EMoveType
+{
+	NONE,
+	WALK = 2,
+	NOCLIP = 8,
+	LADDER,
+};
+
+enum class ESignOnState
+{
+	CONNECTED = 2,
+	SPAWNED = 5,
+	FULL,
+	CHANGELEVEL
+};
+
+enum class ELifeState
+{
+	ALIVE,
+	KILLCAM,
+	DEAD
+};
+
+enum class ETeam
+{
+	NONE,
+	SPECTATOR,
+	TERRORISTS,
+	COUNTERTERRORISTS
+};
+
+enum class EWeaponType
+{
+	KNIVES,
+	PISTOLS,
+	SMGS,
+	RIFLES,
+	SHOTGUNS,
+	SNIPERS,
+	LMGS,
+	BOMBS,
+	GRENADES = 9
+};
+
+enum class EWeapon
+{
+	DEAGLE = 1,
+	ELITE,
+	FIVESEVEN,
+	GLOCK,
+	AK47 = 7,
+	AUG,
+	AWP,
+	FAMAS,
+	G3SG1,
+	GALILAR = 13,
+	M249,
+	M4A1 = 16,
+	MAC10,
+	P90 = 19,
+	UMP45 = 24,
+	XM1014,
+	BIZON,
+	MAG7,
+	NEGEV,
+	SAWEDOFF,
+	TEC9,
+	TASER,
+	HKP2000,
+	MP7,
+	MP9,
+	NOVA,
+	P250,
+	SCAR20 = 38,
+	SG556,
+	SSG08,
+	KNIFEGG,
+	KNIFE,
+	FLASHBANG,
+	HEGRENADE,
+	SMOKEGRENADE,
+	MOLOTOV,
+	DECOY,
+	INCGRENADE,
+	C4,
+	KNIFE_T = 59,
+	M4A1_SILENCER,
+	USP_SILENCER,
+	CZ75A = 63,
+	REVOLVER,
+	KNIFE_BAYONET = 500,
+	KNIFE_FLIP = 505,
+	KNIFE_GUT,
+	KNIFE_KARAMBIT,
+	KNIFE_M9_BAYONET,
+	KNIFE_TACTICAL,
+	KNIFE_FALCHION = 512,
+	KNIFE_BOWIE = 514,
+	KNIFE_BUTTERFLY,
+	KNIFE_PUSH
+};
+
+struct audio_t
+{
+	float flFrameRate { };
+	vector_t vecLocalSound[8] { };
+	int lSoundScapeIndex { };
+	int lLocalBits { };
+	int lEntIndex { };
+};
+
+struct fog_t
+{
+	vector_t vecDirPrimary { }; // 0x0
+	long lColorPrimary { }; // 0xc
+	long lColorSecondary { }; // 0x10
+	long lColorPrimaryLerpTo { }; // 0x14
+	long lColorSecondaryLerpTo { }; // 0x18
+	float flStart { }; // 0x1c
+	float flEnd { }; // 0x20
+	float flFarZ { };
+	float flMaxDensity { }; // 0x28
+	float flMaxDensityLerpTo { };
+	float flLerpTime { };
+	float flDuration { };
+	long lEnable { }; // 0x40
+	long lBlend { };
+	float flZoomFogScale { };
+	float flHDRColorScale { };
+};
+
+struct skybox3D_t
+{
+	int lScale { };
+	vector_t vecOrigin { };
+	int lArea { };
+private:
+	BYTE x14[0x4] { };
+public:
+	fog_t fogFog;
+};
+
+struct attributelist_t
+{
+	long lLengthprop32; // 0x0
+	long lAttributeDefinitionIndex; // 0x4
+	long lRawValue32; // 0x8
+	long lRawInitialValue32; // 0xc
+	long lRefundableCurrency; // 0x10
+	bool bSetBonus; // 0x14
+};
+
 class CGlobalVars
 {
 public:
@@ -13,21 +190,21 @@ public:
 	unsigned long ulTickCount; // 0xc
 	float flIntervalPerTick; // 0x20
 	float flInterpolationAmount; // 0x24
-
-	bool operator==( CGlobalVars );
-	bool operator!=( CGlobalVars );
 };
 
 class CPlayer
 {
-	BYTE x0[0x60] { };
+public:
+	float flHDRColorScale { };
+private:
+	BYTE x4[0x5C] { };
 public:
 	bool bAutoaimTarget { }; // 0x60
 private:
 	BYTE x64[0xC] { };
 public:
 	color_t clrRender { }; // 0x70
-	int cellbits { }; // 0x74
+	long lCellBits { }; // 0x74
 private:
 	BYTE x78[0x4] { };
 public:
@@ -51,7 +228,7 @@ public:
 	angle_t angRotation { }; // 0x128
 	coordinate_t corOrigin { }; // 0x134
 	float flFriction { }; // 0x140
-	int moveparent { }; // 0x144
+	long lMoveParent { }; // 0x144
 	EHANDLE hOwnerEntity { }; // 0x148
 	EHANDLE hGroundEntity { }; // 0x14c
 	char *iName { }; // 0x150
@@ -62,7 +239,7 @@ public:
 	unsigned __int8 unRenderFX { }; // 0x256
 	unsigned short usRenderMode { }; // 0x257
 	unsigned __int8 unWaterLevel { }; // 0x25a
-	bool lifeState { }; // 0x25b
+	bool bLifeState { }; // 0x25b
 	float flAnimTime { }; // 0x25c
 private:
 	BYTE x260[0x4] { };
@@ -96,7 +273,7 @@ private:
 public:
 	long lCollisionGroup { }; // 0x470
 private:
-	BYTE x474[0x4C2] { };
+	BYTE x474[0x4C2] { }; // CParticleSystem class
 public:
 	bool bSimulatedEveryTick { }; // 0x936
 	bool bAnimatedEveryTick { }; // 0x937
@@ -135,7 +312,7 @@ public:
 	float flEncodedController[4] { }; // 0xa48
 	unsigned long ulMuzzleFlashParity { }; // 0xa58
 private:
-	BYTE xA5C[0x1C14] { };
+	BYTE xA5C[0x1C14] { }; // CSun class
 public:
 	vector_t vecForce { }; // 0x2670
 	unsigned long ulForceBone { }; // 0x267c
@@ -227,7 +404,7 @@ public:
 private:
 	BYTE x303B[0x9d] { };
 public:
-	skybox3D_t skybox3d; // 0x30d8
+	skybox3D_t skybox3DSkybox3D; // 0x30d8
 	audio_t audio; // 0x313C
 	EHANDLE hTonemapController { }; // 0x31b0
 private:
@@ -479,3 +656,47 @@ private:
 public:
 	bool bHasControlledBotThisRound { }; // 0xb8a4
 }; // total size = 0xb8a8
+
+class CEngine
+{
+public:
+	// engine - global
+	CGlobalVars GetGlobalVars( );
+	void SetGlobalVars( CGlobalVars ); // careful! unlimited
+	bool GetSendPackets( );
+	void SetSendPackets( bool );
+
+	// engine - clientstate
+	DWORD GetClientState( );
+	ESignOnState GetSignOnState( );
+	angle_t GetViewAngle( );
+	void SetViewAngle( angle_t ); // sets view angles automatically normalized and clamped
+
+	// client - global
+	FLAG GetAttack( );
+	void SetAttack( FLAG );
+	FLAG GetJump( );
+	void SetJump( FLAG );
+	float GetSensitivity( );
+	void SetSensitivity( float ); // sets sensitivity limited to 0 and 1000
+
+	// client - entities
+	DWORD GetEntityBase( unsigned long );
+	CPlayer GetEntity( unsigned long );
+	void GetEntities( );
+	void SetEntity( unsigned long );
+
+	// client - localplayer
+	DWORD GetLocalPlayerBase( );
+	CPlayer GetLocalPlayer( );
+	void SetLocalPlayer( );
+
+	// general
+	float GetPixelToAngleYaw( );
+	float GetPixelToAnglePitch( );
+	angle_t ClampAngle( angle_t ); // clamps angles to 89, 180, and 50
+	angle_t NormalizeAngle( angle_t ); // sets angle to sensitivity, limits delta to 22 degrees
+	angle_t VectorToAngle( coordinate_t, coordinate_t );
+};
+
+extern CEngine eng;

@@ -1,4 +1,4 @@
-#include "../../dllmain.h"
+#include "../dllmain.h"
 
 CGlobalVars CEngine::GetGlobalVars( )
 {
@@ -8,11 +8,8 @@ CGlobalVars CEngine::GetGlobalVars( )
 
 void CEngine::SetGlobalVars( CGlobalVars gvNewGlobalVars )
 {
-	if ( GetGlobalVars( ) != gvNewGlobalVars )
-	{
-		gvGlobalVars.val = gvNewGlobalVars;
-		mem.Set( gvGlobalVars );
-	}
+	gvGlobalVars.val = gvNewGlobalVars;
+	mem.Set( gvGlobalVars );
 }
 
 bool CEngine::GetSendPackets( )

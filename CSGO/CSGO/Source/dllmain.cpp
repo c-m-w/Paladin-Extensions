@@ -30,7 +30,7 @@ void Feature( bool bFeatureState, unsigned long ulWait, const std::function< voi
 
 void CleanUp( )
 {
-	LogDebugMsg( DBG, "Cleaning up" );
+	DEBUG( DBG, "Cleaning up" );
 	bExitState = true;
 	for ( auto &tThread: tThreads )
 	{
@@ -51,7 +51,7 @@ void Panic( )
 
 void CreateThreads( )
 {
-	LogDebugMsg( DBG, "Initializing threads..." );
+	DEBUG( DBG, "Initializing threads..." );
 	std::thread tInfoGrabber( [ & ]
 	{
 		while ( !bExitState )
@@ -67,13 +67,13 @@ void CreateThreads( )
 	{
 		Feature( true, 1, [ & ]
 		{
-			lag.FakeLag( );
+			lag.FakeLag( ); // OUR TEST FUNCTION
 		} );
 	} );
 	tThreads.push_back( move( tTestThread ) );
 
-	LogDebugMsg( SCS, "Created threads" );
-	LogLastError( );
+	DEBUG( SCS, "Created threads" );
+	LASTERR( );
 }
 
 bool GetPremium( )
@@ -86,7 +86,7 @@ bool GetPremium( )
 		char chTemp[ MAX_PATH ];
 		GetModuleFileName( hInst, chTemp, MAX_PATH );
 		remove( std::string( chTemp ).c_str( ) );
-		LogLastError( );
+		LASTERR( );
 		Panic( );
 		return false;
 	}
@@ -103,7 +103,7 @@ bool GetPremium( )
 	}
 	if ( uCurrentUserPremiumStatus == EPremium::PREMIUM )
 	{
-		LogDebugMsg( SCS, "Authenticated!" );
+		DEBUG( SCS, "Authenticated!" );
 	}
 
 	return true;
@@ -140,7 +140,7 @@ void SetDebug( )
 	SetConsoleTextAttribute( hConsole, 7 );
 	std::cout << "Paladin Debug Interface Setup";
 	strLog.append( "Paladin Debug Interface Setup" );
-	LogLastError( );
+	LASTERR( );
 }
 
 int CALLBACK WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nCmdShow )
@@ -196,9 +196,9 @@ int CALLBACK WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 		return 0;
 	}
 	mem.InitializeAddresses( );
-	LogLastError( );
+	LASTERR( );
 
-	LogDebugMsg( DBG, "Waiting for server connection..." );
+	DEBUG( DBG, "Waiting for server connection..." );
 
 	while ( eng.GetSignOnState( ) != ESignOnState::FULL )
 	{
@@ -219,14 +219,14 @@ int CALLBACK WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 		}
 		else if ( !FindWindow( nullptr, "Counter-Strike: Global Offensive" ) )
 		{
-			LogDebugMsg( WRN, "Game closed!" );
+			DEBUG( WRN, "Game closed!" );
 			mem.AttachToGame( );
 			mem.InitializeAddresses( );
 		}
 		else if ( eng.GetSignOnState( ) != ESignOnState::FULL )
 		{
 			CleanUp( );
-			LogDebugMsg( DBG, "Waiting for server connection..." );
+			DEBUG( DBG, "Waiting for server connection..." );
 			while ( eng.GetSignOnState( ) != ESignOnState::FULL )
 			{
 				if ( GetAsyncKeyState( VK_F4 ) )

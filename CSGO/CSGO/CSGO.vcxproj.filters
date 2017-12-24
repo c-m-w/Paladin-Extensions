@@ -60,40 +60,10 @@
     <ClInclude Include="Source\Features\Miscellaneous\hitsound.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Global\debug.h">
+    <ClInclude Include="Source\Program\global.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Global\defines.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Global\enums.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Global\functions.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Global\structs.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Global\typedefs.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Global\Game\gamestructs.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Global\Game\gametypedefs.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Global\Game\gameenums.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Global\Game\gameengine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Global\Game\gameclasses.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Global\Game\gamedefines.h">
+    <ClInclude Include="Source\Features\engine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -143,22 +113,10 @@
     <ClCompile Include="Source\Features\Miscellaneous\hitsound.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Global\debug.cpp">
+    <ClCompile Include="Source\Program\global.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Global\functions.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Global\structs.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Global\Game\gameclasses.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Global\Game\gamestructs.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Global\Game\gameengine.cpp">
+    <ClCompile Include="Source\Features\engine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
