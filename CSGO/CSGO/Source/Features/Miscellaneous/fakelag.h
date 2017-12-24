@@ -2,6 +2,7 @@
 
 class CFakeLag
 {
+public:
 	void FakeLag( );
 };
 

@@ -26,7 +26,6 @@
 #include "Program/interface.h"
 #include "Program/memory.h"
 
-
 #include "Features/Awareness/noflash.h"
 #include "Features/Awareness/radar.h"
 #include "Features/Awareness/sonar.h"

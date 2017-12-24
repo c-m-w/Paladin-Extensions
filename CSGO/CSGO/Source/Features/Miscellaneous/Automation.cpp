@@ -40,7 +40,7 @@ void CAutomation::AutoNade( )
 
 void CAutomation::AutoShoot( )
 {
-	// TODO weapon ID for pistols, shotguns (not xm), and snipers (not autosnipers)
+	// TODO if weapon ID for pistols, shotguns (not xm), and snipers (not autosnipers)
 	if ( plrLocalPlayer.val.flNextAttack - eng.GetGlobalVars( ).flCurrentTime <= 0.f )
 	{
 		eng.SetAttack( ACTION_TICK );
