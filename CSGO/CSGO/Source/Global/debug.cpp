@@ -1,4 +1,4 @@
-#include "dllmain.h"
+#include "../dllmain.h"
 
 std::string strLog;
 
@@ -34,9 +34,9 @@ void LogDebugMsg( EDebugMessage dmType, char *szMessage, ... )
 		//Ideally we want to dynamically allocate this, might do later (for now, stick to a max of 2047 data characters)
 		char chBuffer[2048] = { '\0' };
 		va_list vaList;
-		va_start(vaList, szMessage);
+		va_start( vaList, szMessage );
 		vsnprintf( chBuffer, sizeof chBuffer, szMessage, vaList );
-		va_end(vaList);
+		va_end( vaList );
 		std::cout << chBuffer;
 		strLog.append( chBuffer );
 	}
@@ -52,7 +52,7 @@ void LogLastError( )
 		return;
 	}
 	LPSTR lpstrError = nullptr;
-	if ( !FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, dwError, MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), LPSTR( &lpstrError ), 0, nullptr ) )
+	if ( !FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, dwError, MAKELANGID( LANG_NEUTRAL, SUBLANG_DEFAULT ), LPSTR( &lpstrError ), 0, nullptr ) )
 	{
 		LogDebugMsg( LER, "[0x%08lu] - Unable to retrieve error description", dwError );
 	}

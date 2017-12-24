@@ -27,14 +27,23 @@
     <ClInclude Include="Source\Features\Miscellaneous\airstuck.h" />
     <ClInclude Include="Source\Features\Miscellaneous\fakelag.h" />
     <ClInclude Include="Source\Features\Miscellaneous\fov.h" />
-    <ClInclude Include="Source\global.h" />
-    <ClInclude Include="Source\debug.h" />
+    <ClInclude Include="Source\Global\defines.h" />
+    <ClInclude Include="Source\Global\enums.h" />
+    <ClInclude Include="Source\Global\functions.h" />
+    <ClInclude Include="Source\Global\Game\gameclasses.h" />
+    <ClInclude Include="Source\Global\Game\gamedefines.h" />
+    <ClInclude Include="Source\Global\Game\gameenums.h" />
+    <ClInclude Include="Source\Global\Game\gamestructs.h" />
+    <ClInclude Include="Source\Global\Game\gametypedefs.h" />
+    <ClInclude Include="Source\Global\debug.h" />
+    <ClInclude Include="Source\Global\structs.h" />
+    <ClInclude Include="Source\Global\typedefs.h" />
     <ClInclude Include="Source\Program\general.h" />
     <ClInclude Include="Source\Program\config.h" />
     <ClInclude Include="Source\Program\interface.h" />
     <ClInclude Include="Source\Program\memory.h" />
-    <ClInclude Include="Source\Features\engine.h" />
-    <ClInclude Include="Source\Features\Awareness\hitsound.h" />
+    <ClInclude Include="Source\Global\Game\gameengine.h" />
+    <ClInclude Include="Source\Features\Miscellaneous\hitsound.h" />
     <ClInclude Include="Source\Features\Miscellaneous\automation.h" />
     <ClInclude Include="Source\dllmain.h" />
   </ItemGroup>
@@ -47,14 +56,17 @@
     <ClCompile Include="Source\Features\Miscellaneous\airstuck.cpp" />
     <ClCompile Include="Source\Features\Miscellaneous\fakelag.cpp" />
     <ClCompile Include="Source\Features\Miscellaneous\fov.cpp" />
-    <ClCompile Include="Source\global.cpp" />
-    <ClCompile Include="Source\debug.cpp" />
+    <ClCompile Include="Source\Global\functions.cpp" />
+    <ClCompile Include="Source\Global\Game\gameclasses.cpp" />
+    <ClCompile Include="Source\Global\Game\gamestructs.cpp" />
+    <ClCompile Include="Source\Global\debug.cpp" />
+    <ClCompile Include="Source\Global\structs.cpp" />
     <ClCompile Include="Source\Program\general.cpp" />
     <ClCompile Include="Source\Program\config.cpp" />
     <ClCompile Include="Source\Program\interface.cpp" />
     <ClCompile Include="Source\Program\memory.cpp" />
-    <ClCompile Include="Source\Features\engine.cpp" />
-    <ClCompile Include="Source\Features\Awareness\hitsound.cpp" />
+    <ClCompile Include="Source\Global\Game\gameengine.cpp" />
+    <ClCompile Include="Source\Features\Miscellaneous\hitsound.cpp" />
     <ClCompile Include="Source\Features\Miscellaneous\automation.cpp" />
     <ClCompile Include="Source\dllmain.cpp" />
   </ItemGroup>
@@ -125,11 +137,13 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <WarningLevel>Level3</WarningLevel>
+      <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;CSGO_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <DisableSpecificWarnings>4100;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <AdditionalOptions>/analyze:stacksize94564 %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>

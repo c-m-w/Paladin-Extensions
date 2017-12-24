@@ -1,5 +1,9 @@
 #include "dllmain.h"
 
+HINSTANCE hInst = nullptr;
+bool bExitState = false;
+std::vector< std::thread > tThreads;
+
 void Feature( bool bFeatureState, unsigned long ulWait, const std::function< void( ) > &fnFeature, unsigned short usiFeatureKey )
 {
 	while ( !bExitState )
@@ -229,7 +233,7 @@ void SetDebug( )
 	LogLastError( );
 }
 
-int CALLBACK WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow )
+int CALLBACK WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nCmdShow )
 {
 #ifdef _DEBUG
 	AllocConsole( );
@@ -331,13 +335,13 @@ int CALLBACK WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdL
 	return 0;
 }
 
-BOOL WINAPI DllMain( HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpvReserved )
+BOOL WINAPI DllMain( _In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID lpvReserved )
 {
 	switch ( fdwReason )
 	{
 		case DLL_PROCESS_ATTACH:
 		{
-			hInst = hInstDll;
+			hInst = hinstDLL;
 			HANDLE hCheat = CreateThread( nullptr, 0, LPTHREAD_START_ROUTINE( WinMain ), nullptr, 0, nullptr ); // TODO args
 			if ( !hCheat || hCheat == INVALID_HANDLE_VALUE )
 			{
@@ -347,7 +351,7 @@ BOOL WINAPI DllMain( HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpvReserved )
 			{
 				cfg.iQuitReason = EQuitReasons::SUCCESS;
 			}
-			DisableThreadLibraryCalls( hInstDll );
+			DisableThreadLibraryCalls( hinstDLL );
 			break;
 		}
 		case DLL_PROCESS_DETACH:

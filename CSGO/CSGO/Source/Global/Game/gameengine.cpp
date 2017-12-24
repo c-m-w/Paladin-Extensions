@@ -1,4 +1,4 @@
-#include "../dllmain.h"
+#include "../../dllmain.h"
 
 CGlobalVars CEngine::GetGlobalVars( )
 {
@@ -67,9 +67,9 @@ FLAG CEngine::GetAttack( )
 
 void CEngine::SetAttack( FLAG ksType )
 {
-	if ( GetAttack( ) != ( FA_DEFAULT | ksType ) )
+	if ( GetAttack( ) != ( ACTION_DEFAULT | ksType ) )
 	{
-		fForceAttack.val = FA_DEFAULT | ksType;
+		fForceAttack.val = ACTION_DEFAULT | ksType;
 		mem.Set( fForceAttack );
 	}
 }
@@ -82,9 +82,9 @@ FLAG CEngine::GetJump( )
 
 void CEngine::SetJump( FLAG ksType )
 {
-	if ( GetJump( ) != ( FA_DEFAULT | ksType ) )
+	if ( GetJump( ) != ( ACTION_DEFAULT | ksType ) )
 	{
-		fForceJump.val = FA_DEFAULT | ksType;
+		fForceJump.val = ACTION_DEFAULT | ksType;
 		mem.Set( fForceJump );
 	}
 }

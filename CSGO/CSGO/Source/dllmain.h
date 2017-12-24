@@ -7,17 +7,26 @@
 #include <string>
 #include <vector>
 
-#include "global.h"
-#include "debug.h"
+#include "Global/debug.h"
+#include "Global/typedefs.h"
+#include "Global/defines.h"
+#include "Global/enums.h"
+#include "Global/structs.h"
+#include "Global/functions.h"
+
+#include "Global/Game/gametypedefs.h"
+#include "Global/Game/gamedefines.h"
+#include "Global/Game/gameenums.h"
+#include "Global/Game/gamestructs.h"
+#include "Global/Game/gameclasses.h"
+#include "Global/Game/gameengine.h"
 
 #include "Program/general.h"
 #include "Program/config.h"
 #include "Program/interface.h"
 #include "Program/memory.h"
 
-#include "Features/engine.h"
 
-#include "Features/Awareness/hitsound.h"
 #include "Features/Awareness/noflash.h"
 #include "Features/Awareness/radar.h"
 #include "Features/Awareness/sonar.h"
@@ -29,46 +38,4 @@
 #include "Features/Miscellaneous/automation.h"
 #include "Features/Miscellaneous/fakelag.h"
 #include "Features/Miscellaneous/fov.h"
-
-/* Conventions:
- * Start naming on everything with a capital
- * * Variables must start with a lowercase including their datatype (bExitState, dwClientBase)
- * * * EEnum
- * * * * NUMS ARE ALL CAPITALS
- * * * CClass
- * * * struct_t
- * * * typedef
- * * * b bool/byte
- * * * f FLAG
- * * * n nano (__int8)
- * * * un unsigned nano (unsigned __int8)
- * * * s short int
- * * * us unsigned short
- * * * i int
- * * * u unsigned int (total, c are alternatives - pls do not use these)
- * * * l long
- * * * ul unsigned long
- * * * clr color
- * * * cor coordinate
- * * * ang angle
- * * * mnt moment
- * * * vec vector
- * * * fl float
- * * * db double
- * * * ch char
- * * * sz string of chars
- * * * str string
- * * * dw dword
- * * * fn function
- * * * h handle
- * * * p pointer
- * * * lp long pointer
- * * * x unknown (_ is an alternative - pls do not use this)
- * * Variables must also include their inheritance prefix with an underscore (lp_fFlags for frame Local Player Flags)
- * Every function should be a verb (get, set, clamp)
- * * Instead of Alive or IsAlive, do GetLifeState
- * Everything should be English
- * * Instead of OffsetX for a function, do GetHorizontalDistance
- * Always clean your code with ReSharper before committing
- * * Retest to make sure it doesn't break anything!
- */
+#include "Features/Miscellaneous/hitsound.h"
