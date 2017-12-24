@@ -13,7 +13,7 @@ x86/
 bld/
 [Bb]in/
 [Oo]bj/
-DBG/
+[Dd][Bb][Gg]/
 .vs/
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
