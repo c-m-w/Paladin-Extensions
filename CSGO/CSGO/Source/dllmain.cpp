@@ -62,106 +62,16 @@ void CreateThreads( )
 		}
 	} );
 	tThreads.push_back( move( tInfoGrabber ) );
-	//
-	// awareness
-	//
-	std::thread tHitSound( [ & ]
+
+	std::thread tTestThread( [ & ]
 	{
 		Feature( true, 1, [ & ]
 		{
-			hit.PlaySoundOnHit( );
+			lag.FakeLag( );
 		} );
 	} );
-	tThreads.push_back( move( tHitSound ) );
-	std::thread tNoFlash( [ & ]
-	{
-		Feature( true, 1, [ & ]
-		{
-			nof.NoFlash( );
-		} );
-	} );
-	tThreads.push_back( move( tNoFlash ) );
-	std::thread tRadar( [ & ]
-	{
-		Feature( true, 1, [ & ]
-		{
-			rad.Radar( );
-		} );
-	} );
-	tThreads.push_back( move( tRadar ) );
-	Wait( 25000 );
-	std::thread tSonar( [ & ]
-	{
-		Feature( true, 1, [ & ]
-		{
-			son.Sonar( );
-		} );
-	} );
-	tThreads.push_back( move( tSonar ) );
-	//
-	// combat
-	//
-	std::thread tRecoilControl( [ & ]
-	{
-		Feature( true, 1, [ & ]
-		{
-			rcs.RecoilControl( );
-		}, VK_LBUTTON );
-	} );
-	tThreads.push_back( move( tRecoilControl ) );
-	//
-	// miscellaneous
-	//
-	std::thread tAirStuck( [ & ]
-	{
-		Feature( true, 1, [ & ]
-		{
-			air.AirStuck( );
-		}, VK_F5 );
-	} );
-	tThreads.push_back( move( tAirStuck ) );
-	std::thread tAutoJump( [ & ]
-	{
-		Feature( true, 1, [ & ]
-		{
-			aut.AutoJump( );
-		}, VK_SPACE );
-	} );
-	tThreads.push_back( move( tAutoJump ) );
-	// TODO
-	/*std::thread tAutoNade( [&]
-	{
-	Feature( true, 1, [&]
-	{
-	aut.AutoNade( );
-	} );
-	} );
-	tThreads.push_back( move( tAutoNade ) );*/
-	std::thread tAutoShoot( [ & ]
-	{
-		Feature( true, 1, [ & ]
-		{
-			aut.AutoShoot( );
-		}, VK_LBUTTON );
-	} );
-	tThreads.push_back( move( tAutoShoot ) );
-	std::thread tFOV( [ & ]
-	{
-		Feature( true, 1, [ & ]
-		{
-			fov.FOV( );
-		} );
-	} );
-	tThreads.push_back( move( tFOV ) );
-	// TODO
-	/*std::thread tWeaponFOV( [&]
-	{
-	Feature( true, 1, [&]
-	{
-	fov.WeaponFOV( );
-	} );
-	} );
-	tThreads.push_back( move( tWeaponFOV ) );*/
+	tThreads.push_back( move( tTestThread ) );
+
 	LogDebugMsg( SCS, "Created threads" );
 	LogLastError( );
 }

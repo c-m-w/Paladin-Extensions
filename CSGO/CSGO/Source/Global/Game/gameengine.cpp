@@ -130,9 +130,9 @@ void CEngine::GetEntities( )
 	}
 }
 
-void CEngine::SetEntity( unsigned long ulEntity, CPlayer plrNewEntity )
+void CEngine::SetEntity( unsigned long ulEntity )
 {
-	address_t< CPlayer > aplrEntity = { 0, 0, GetEntityBase( ulEntity ), plrNewEntity };
+	address_t< CPlayer > aplrEntity = { 0, 0, GetEntityBase( ulEntity ), plrEntities.val.at( ulEntity ) };
 	mem.Set( aplrEntity );
 }
 

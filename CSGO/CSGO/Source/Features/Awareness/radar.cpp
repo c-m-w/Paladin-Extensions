@@ -13,7 +13,7 @@ void CRadar::Radar( )
 			if ( plrLocalPlayer.val.ulTeamNum != plrEntities.val.at( ulEntity ).ulTeamNum )
 			{
 				plrEntities.val.at( ulEntity ).bSpotted = true;
-				eng.SetEntity( ulEntity, plrEntities.val.at( ulEntity ) );
+				eng.SetEntity( ulEntity );
 			}
 		}
 	}

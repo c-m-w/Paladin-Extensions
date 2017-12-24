@@ -27,7 +27,7 @@ public:
 	DWORD GetEntityBase( unsigned long );
 	CPlayer GetEntity( unsigned long );
 	void GetEntities( );
-	void SetEntity( unsigned long, CPlayer );
+	void SetEntity( unsigned long );
 
 	// client - localplayer
 	DWORD GetLocalPlayerBase( );
