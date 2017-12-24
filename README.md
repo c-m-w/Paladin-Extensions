@@ -35,13 +35,3 @@
 - ClientCMDUnrestricted
 - UserCMD
 ##### Cole
-
-## FOF
-##### Open
-##### Jeremy
-- Port CSGO over
-##### Mike
-##### Hunter
-##### John
-- Port CSGO over
-##### Cole
