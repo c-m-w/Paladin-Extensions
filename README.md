@@ -35,3 +35,5 @@
 - ClientCMDUnrestricted
 - UserCMD
 ##### Cole
+- Refactor all CPlayer variables to match conventions
+- Check CPlayer variables that they work
