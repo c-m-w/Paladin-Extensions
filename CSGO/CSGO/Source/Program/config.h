@@ -12,7 +12,7 @@ struct version_t
 
 class CConfig
 {
-	char cfgPath[255] { };
+	char cfgPath[MAX_PATH] { };
 	// read from config TODO
 	template< typename xDatatype > void Read( char *szSetting, char *szSubSetting, xDatatype &xStatus )
 	{ }

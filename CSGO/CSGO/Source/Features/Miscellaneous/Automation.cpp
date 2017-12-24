@@ -21,20 +21,20 @@ void CAutomation::AutoJump( )
 	// TODO fake scroll
 	if ( plrLocalPlayer.val.fFlags & FL_ONGROUND )
 	{
-		eng.SetJump( FA_TICK );
+		eng.SetJump( ACTION_TICK );
 	}
 	else
 	{
-		eng.SetJump( !FA_PRESS );
+		eng.SetJump( ACTION_NONE );
 	}
 }
 
 void CAutomation::AutoNade( )
 {
 	// TODO weapon ID for nades
-	if ( eng.GetAttack( ) & FA_PRESS && plrLocalPlayer.val.fFlags & !FL_ONGROUND )
+	if ( eng.GetAttack( ) & ACTION_PRESS && plrLocalPlayer.val.fFlags & ~FL_ONGROUND )
 	{
-		eng.SetAttack( !FA_PRESS );
+		eng.SetAttack( ACTION_NONE );
 	}
 }
 
@@ -43,11 +43,11 @@ void CAutomation::AutoShoot( )
 	// TODO weapon ID for pistols, shotguns (not xm), and snipers (not autosnipers)
 	if ( plrLocalPlayer.val.flNextAttack - eng.GetGlobalVars( ).flCurrentTime <= 0.f )
 	{
-		eng.SetAttack( FA_TICK );
+		eng.SetAttack( ACTION_TICK );
 	}
 	else
 	{
-		eng.SetAttack( !FA_PRESS );
+		eng.SetAttack( ACTION_NONE );
 	}
 }
 

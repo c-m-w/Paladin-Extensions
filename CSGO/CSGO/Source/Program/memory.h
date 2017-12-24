@@ -27,7 +27,7 @@ namespace Addresses
 
 	extern address_t< DWORD > pdwLocalPlayer;
 	extern address_t< CPlayer > plrLocalPlayer;
-	
+
 	extern address_t< DWORD > pdwGlowManager;
 }
 

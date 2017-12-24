@@ -23,7 +23,7 @@ namespace Addresses
 
 CMemoryManager::~CMemoryManager( )
 {
-	if ( hGame || hGame != INVALID_HANDLE_VALUE )
+	if ( hGame != nullptr && hGame != INVALID_HANDLE_VALUE )
 	{
 		CloseHandle( hGame );
 	}
