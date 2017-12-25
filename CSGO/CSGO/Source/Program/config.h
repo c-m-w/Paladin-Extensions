@@ -2,11 +2,11 @@
 
 struct version_t
 {
-	unsigned __int8 upper, lower;
+	unsigned __int8 unUpper, unLower;
 
 	bool operator==( version_t rhs )
 	{
-		return upper == rhs.upper && lower == rhs.lower;
+		return unUpper == rhs.unUpper && unLower == rhs.unLower;
 	}
 };
 

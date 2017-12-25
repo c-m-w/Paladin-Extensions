@@ -3,7 +3,7 @@
 void CTrigger::Trigger( )
 {
 	// TODO trigger
-	// long lDelay = int( 25.f - ( velodistaim * 25.f ) / ( maxvelodistaim ) );
+	// long lDelay = long( 25.f - ( velodistaim * 25.f ) / ( maxvelodistaim ) );
 }
 
 CTrigger trg;

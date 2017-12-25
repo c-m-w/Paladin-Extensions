@@ -2,7 +2,7 @@
 
 void CNoFlash::NoFlash( )
 {
-	plrLocalPlayer.val.flFlashMaxAlpha = 0;
+	plrLocalPlayer.xValue.flFlashMaxAlpha = 0;
 	eng.SetLocalPlayer( );
 }
 

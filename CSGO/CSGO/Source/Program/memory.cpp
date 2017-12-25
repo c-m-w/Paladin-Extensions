@@ -15,7 +15,7 @@ namespace Addresses
 	address_t< FLAG > fForceJump;
 	// client pointer addresses
 	address_t< DWORD > pdwEntityList;
-	address_t< std::vector< CPlayer > > plrEntities;
+	std::vector< address_t< CPlayer > > plrEntities;
 	address_t< DWORD > pdwLocalPlayer;
 	address_t< CPlayer > plrLocalPlayer;
 	address_t< DWORD > pdwGlowManager;
@@ -31,7 +31,7 @@ CMemoryManager::~CMemoryManager( )
 
 bool CMemoryManager::AttachToGame( )
 {
-	while ( !GetWindowThreadProcessId( FindWindowA( nullptr, "Counter-Strike: Global Offensive" ), &dwProcessID ) )
+	while ( !GetWindowThreadProcessId( FindWindow( nullptr, "Counter-Strike: Global Offensive" ), &dwProcessID ) )
 	{
 		LogDebugMsg( DBG, "Searching for CSGO" );
 		Wait( 1000 );
@@ -148,18 +148,18 @@ void CMemoryManager::InitializeAddresses( )
 	LogDebugMsg( DBG, "Initialized bases" );
 
 	// engine global
-	gvGlobalVars.loc = dwEngineBase + gvGlobalVars.off;
-	bSendPackets.loc = dwEngineBase + bSendPackets.off;
+	gvGlobalVars.dwLocation = dwEngineBase + gvGlobalVars.dwOffset;
+	bSendPackets.dwLocation = dwEngineBase + bSendPackets.dwOffset;
 	// engine pointers
-	pdwClientState.loc = dwEngineBase + pdwClientState.off;
+	pdwClientState.dwLocation = dwEngineBase + pdwClientState.dwOffset;
 	// client global
-	fForceJump.loc = dwClientBase + fForceJump.off;
-	fForceAttack.loc = dwClientBase + fForceAttack.off;
-	flSensitivity.loc = dwClientBase + flSensitivity.off;
-	flSensitivity.ptr += dwClientBase;
+	fForceJump.dwLocation = dwClientBase + fForceJump.dwOffset;
+	fForceAttack.dwLocation = dwClientBase + fForceAttack.dwOffset;
+	flSensitivity.dwLocation = dwClientBase + flSensitivity.dwOffset;
+	flSensitivity.dwPointer += dwClientBase;
 	// client pointers
-	pdwEntityList.loc = dwClientBase + pdwEntityList.off;
-	pdwLocalPlayer.loc = dwClientBase + pdwLocalPlayer.off;
+	pdwEntityList.dwLocation = dwClientBase + pdwEntityList.dwOffset;
+	pdwLocalPlayer.dwLocation = dwClientBase + pdwLocalPlayer.dwOffset;
 	LogDebugMsg( DBG, "Initialized locations" );
 
 	LogDebugMsg( SCS, "Initialized addresses" );

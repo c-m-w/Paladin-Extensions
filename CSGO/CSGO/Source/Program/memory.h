@@ -2,10 +2,10 @@
 
 template< typename xDatatype > struct address_t
 {
-	DWORD off = 0; // offset
-	DWORD ptr = 0; // thisptr
-	DWORD loc = 0; // location
-	xDatatype val { }; // value
+	DWORD dwOffset = 0; // offset
+	DWORD dwPointer = 0; // thisptr
+	DWORD dwLocation = 0; // location
+	xDatatype xValue { }; // value
 };
 
 namespace Addresses
@@ -23,7 +23,7 @@ namespace Addresses
 	extern address_t< FLAG > fForceJump;
 	// client pointer addresses
 	extern address_t< DWORD > pdwEntityList;
-	extern address_t< std::vector< CPlayer > > plrEntities;
+	extern std::vector< address_t< CPlayer > > plrEntities;
 
 	extern address_t< DWORD > pdwLocalPlayer;
 	extern address_t< CPlayer > plrLocalPlayer;
@@ -49,31 +49,31 @@ public:
 
 	template< typename xDatatype > bool Get( address_t< xDatatype > &adrRead )
 	{
-		if ( adrRead.loc )
+		if ( adrRead.dwLocation )
 		{
-			if ( adrRead.ptr )
+			if ( adrRead.dwPointer )
 			{
 				DWORD dwXor;
-				bool bSuccess = ReadProcessMemory( hGame, LPVOID( adrRead.loc ), &dwXor, sizeof(DWORD), nullptr );
-				dwXor ^= adrRead.ptr;
-				adrRead.val = *reinterpret_cast< xDatatype* >( &dwXor );
+				bool bSuccess = ReadProcessMemory( hGame, LPVOID( adrRead.dwLocation ), &dwXor, sizeof(DWORD), nullptr );
+				dwXor ^= adrRead.dwPointer;
+				adrRead.xValue = *reinterpret_cast< xDatatype* >( &dwXor );
 				return bSuccess;
 			}
-			return ReadProcessMemory( hGame, LPVOID( adrRead.loc ), &adrRead.val, sizeof(xDatatype), nullptr );
+			return ReadProcessMemory( hGame, LPVOID( adrRead.dwLocation ), &adrRead.xValue, sizeof(xDatatype), nullptr );
 		}
 		return false;
 	}
 
 	template< typename datatype > bool Set( address_t< datatype > &adrWrite )
 	{
-		if ( adrWrite.loc )
+		if ( adrWrite.dwLocation )
 		{
-			if ( adrWrite.ptr )
+			if ( adrWrite.dwPointer )
 			{
-				DWORD dwXor = *reinterpret_cast< DWORD* >( &adrWrite.val ) ^ adrWrite.ptr;
-				return WriteProcessMemory( hGame, LPVOID( adrWrite.loc ), &dwXor, sizeof(DWORD), nullptr );
+				DWORD dwXor = *reinterpret_cast< DWORD* >( &adrWrite.xValue ) ^ adrWrite.dwPointer;
+				return WriteProcessMemory( hGame, LPVOID( adrWrite.dwLocation ), &dwXor, sizeof(DWORD), nullptr );
 			}
-			return WriteProcessMemory( hGame, LPVOID( adrWrite.loc ), &adrWrite.val, sizeof(datatype), nullptr );
+			return WriteProcessMemory( hGame, LPVOID( adrWrite.dwLocation ), &adrWrite.xValue, sizeof(datatype), nullptr );
 		}
 		return false;
 	}

@@ -2,19 +2,19 @@
 
 void CSonar::Sonar( )
 {
-	while ( plrEntities.val.size( ) != eng.GetGlobalVars( ).ulMaxClients )
+	while ( plrEntities.size( ) != eng.GetGlobalVars( ).ulMaxClients )
 	{
 		Wait( 1 );
 	}
-	for ( unsigned long ulEntity = plrEntities.val.size( ); ulEntity > 0; ulEntity-- )
+	for ( unsigned long ulEntity = plrEntities.size( ); ulEntity > 0; ulEntity-- )
 	{
-		if ( !plrEntities.val.at( ulEntity ).bDormant )
+		if ( !plrEntities.at( ulEntity ).xValue.bDormant )
 		{
-			if ( plrLocalPlayer.val.ulTeamNum != plrEntities.val.at( ulEntity ).ulTeamNum )
+			if ( plrLocalPlayer.xValue.ulTeamNum != plrEntities.at( ulEntity ).xValue.ulTeamNum )
 			{
-				vector_t vecEntityDistance( plrEntities.val.at( ulEntity ).corOrigin, plrLocalPlayer.val.corOrigin );
+				vector_t vecEntityDistance( plrEntities.at( ulEntity ).xValue.corOrigin, plrLocalPlayer.xValue.corOrigin );
 
-				float flDistance = sqrt( pow( vecEntityDistance.dx, 2 ) + pow( vecEntityDistance.dy, 2 ) + pow( vecEntityDistance.dz, 2 ) );
+				float flDistance = sqrt( pow( vecEntityDistance.flDeltaX, 2 ) + pow( vecEntityDistance.flDeltaY, 2 ) + pow( vecEntityDistance.flDeltaZ, 2 ) );
 
 				if ( flDistance < 1000.f )
 				{
