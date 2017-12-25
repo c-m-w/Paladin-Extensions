@@ -35,12 +35,13 @@ using namespace Addresses;
 
 class CMemoryManager
 {
+	public:
 	DWORD dwProcessID = 0;
 	HANDLE hGame = nullptr;
 	DWORD dwClientBase = 0;
 	DWORD dwEngineBase = 0;
 
-public:
+
 	bool AttachToGame( );
 
 	DWORD FindPattern( BYTE *, char *, DWORD, DWORD );
