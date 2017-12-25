@@ -58,7 +58,6 @@ void CreateThreads( )
 		{
 			eng.GetLocalPlayer( );
 			eng.GetEntities( );
-			Wait( 100 );
 		}
 	} );
 	tThreads.push_back( move( tInfoGrabber ) );

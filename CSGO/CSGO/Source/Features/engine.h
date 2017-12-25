@@ -684,12 +684,12 @@ public:
 	DWORD GetEntityBase( unsigned long );
 	CPlayer GetEntity( unsigned long );
 	void GetEntities( );
-	void SetEntity( unsigned long );
+	void SetEntity( unsigned long, CPlayer );
 
 	// client - localplayer
 	DWORD GetLocalPlayerBase( );
 	CPlayer GetLocalPlayer( );
-	void SetLocalPlayer( );
+	void SetLocalPlayer( CPlayer );
 
 	// general
 	float GetPixelToAngleYaw( );

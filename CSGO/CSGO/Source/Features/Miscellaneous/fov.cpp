@@ -2,8 +2,9 @@
 
 void CFOV::FOV( )
 {
-	plrLocalPlayer.xValue.ulDefaultFOV = 120;
-	eng.SetLocalPlayer( );
+	CPlayer plrNewLocalPlayer = aplrLocalPlayer.xValue;
+	plrNewLocalPlayer.ulDefaultFOV = 120;
+	eng.SetLocalPlayer( plrNewLocalPlayer );
 }
 
 void CFOV::WeaponFOV( )

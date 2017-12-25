@@ -3,9 +3,9 @@
 #include <Windows.h>
 #include <TlHelp32.h>
 #include <iostream>
-#include <thread>
 #include <string>
 #include <vector>
+#include <thread>
 
 #include "Program/global.h"
 #include "Features/engine.h"
