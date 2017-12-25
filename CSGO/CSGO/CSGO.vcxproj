@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\Features\Awareness\glow.h" />
     <ClInclude Include="Source\Features\Awareness\noflash.h" />
     <ClInclude Include="Source\Features\Awareness\radar.h" />
     <ClInclude Include="Source\Features\Awareness\sonar.h" />
@@ -38,6 +39,7 @@
     <ClInclude Include="Source\dllmain.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\Features\Awareness\glow.cpp" />
     <ClCompile Include="Source\Features\Awareness\noflash.cpp" />
     <ClCompile Include="Source\Features\Awareness\radar.cpp" />
     <ClCompile Include="Source\Features\Awareness\sonar.cpp" />
@@ -112,7 +114,7 @@
     <LinkIncremental>true</LinkIncremental>
     <TargetExt>.exe</TargetExt>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -134,7 +136,7 @@
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <DisableSpecificWarnings>4100;%(DisableSpecificWarnings)</DisableSpecificWarnings>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
-      <EnablePREfast>true</EnablePREfast>
+      <EnablePREfast>false</EnablePREfast>
       <ShowIncludes>false</ShowIncludes>
       <AdditionalOptions>/analyze:stacksize47292</AdditionalOptions>
     </ClCompile>

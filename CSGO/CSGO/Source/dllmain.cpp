@@ -67,7 +67,7 @@ void CreateThreads( )
 	{
 		Feature( true, 1, [ & ]
 		{
-			lag.FakeLag( ); // OUR TEST FUNCTION
+			glo.Glow( ); // OUR TEST FUNCTION
 		} );
 	} );
 	tThreads.push_back( move( tTestThread ) );

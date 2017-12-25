@@ -11,6 +11,7 @@ typedef unsigned long EHANDLE;
 #define ACTION_TICK 0b10 // +command, tick, -command
 #define ACTION_DEFAULT 0b100 // default command state
 #define ENTITY_DISTANCE 0x10 // Distance between entities
+#define GLOWINDEX 0xA310
 
 #define MAX_SENSITIVITY 1000.f
 #define MIN_SENSITIVITY 0.f
