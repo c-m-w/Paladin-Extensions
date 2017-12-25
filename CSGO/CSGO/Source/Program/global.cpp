@@ -66,7 +66,7 @@ void LogLastError( )
 
 bool angle_t::operator==( angle_t rhs )
 {
-	return pitch == rhs.pitch && yaw == rhs.yaw && roll == rhs.roll;
+	return flPitch == rhs.flPitch && flYaw == rhs.flYaw && flRoll == rhs.flRoll;
 }
 
 bool angle_t::operator!=( angle_t rhs )
@@ -76,33 +76,33 @@ bool angle_t::operator!=( angle_t rhs )
 
 angle_t angle_t::operator+( angle_t rhs )
 {
-	pitch += rhs.pitch;
-	yaw += rhs.yaw;
-	roll += rhs.roll;
+	flPitch += rhs.flPitch;
+	flYaw += rhs.flYaw;
+	flRoll += rhs.flRoll;
 	return *this;
 }
 
 angle_t angle_t::operator-( angle_t rhs )
 {
-	pitch -= rhs.pitch;
-	yaw -= rhs.yaw;
-	roll -= rhs.roll;
+	flPitch -= rhs.flPitch;
+	flYaw -= rhs.flYaw;
+	flRoll -= rhs.flRoll;
 	return *this;
 }
 
 angle_t angle_t::operator*( float rhs )
 {
-	pitch *= rhs;
-	yaw *= rhs;
-	roll *= rhs;
+	flPitch *= rhs;
+	flYaw *= rhs;
+	flRoll *= rhs;
 	return *this;
 }
 
 angle_t angle_t::operator/( float rhs )
 {
-	pitch /= rhs;
-	yaw /= rhs;
-	roll /= rhs;
+	flPitch /= rhs;
+	flYaw /= rhs;
+	flRoll /= rhs;
 	return *this;
 }
 
@@ -128,16 +128,16 @@ angle_t angle_t::operator*=( float rhs )
 
 vector_t::vector_t( )
 {
-	dx = 0;
-	dy = 0;
-	dz = 0;
+	flDeltaX = 0;
+	flDeltaY = 0;
+	flDeltaZ = 0;
 }
 
 vector_t::vector_t( coordinate_t corOrigin, coordinate_t corDestination )
 {
-	dx = corDestination.x - corOrigin.x;
-	dy = corDestination.y - corOrigin.y;
-	dz = corDestination.z - corOrigin.z;
+	flDeltaX = corDestination.flX - corOrigin.flX;
+	flDeltaY = corDestination.flY - corOrigin.flY;
+	flDeltaZ = corDestination.flZ - corOrigin.flZ;
 }
 
 void Wait( unsigned long ulSleepTime )

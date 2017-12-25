@@ -2,7 +2,7 @@
 
 void CFOV::FOV( )
 {
-	plrLocalPlayer.val.ulDefaultFOV = 120;
+	plrLocalPlayer.xValue.ulDefaultFOV = 120;
 	eng.SetLocalPlayer( );
 }
 

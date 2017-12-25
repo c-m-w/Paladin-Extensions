@@ -64,7 +64,7 @@ void LogLastError( );
 
 struct angle_t
 {
-	float pitch, yaw, roll; // rotation of x/pitch axis, rotation of y/yaw axis, rotation of z/roll axis; visibly y, x, z
+	float flPitch, flYaw, flRoll; // rotation of x/pitch axis, rotation of y/yaw axis, rotation of z/roll axis; visibly y, x, z
 
 	bool operator==( angle_t );
 	bool operator!=( angle_t );
@@ -80,17 +80,17 @@ struct angle_t
 
 struct color_t
 {
-	BYTE r, g, b, a;
+	BYTE bRed, bGreen, bBlue, bAlpha;
 };
 
 struct coordinate_t
 {
-	float x, y, z;
+	float flX, flY, flZ;
 };
 
 struct vector_t
 {
-	float dx, dy, dz;
+	float flDeltaX, flDeltaY, flDeltaZ;
 
 	vector_t( );
 	vector_t( coordinate_t, coordinate_t );

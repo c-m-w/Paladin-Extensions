@@ -132,9 +132,9 @@ struct audio_t
 {
 	float flFrameRate { };
 	vector_t vecLocalSound[8] { };
-	int lSoundScapeIndex { };
-	int lLocalBits { };
-	int lEntIndex { };
+	long lSoundScapeIndex { };
+	long lLocalBits { };
+	long lEntIndex { };
 };
 
 struct fog_t
@@ -159,9 +159,9 @@ struct fog_t
 
 struct skybox3D_t
 {
-	int lScale { };
+	long lScale { };
 	vector_t vecOrigin { };
-	int lArea { };
+	long lArea { };
 private:
 	BYTE x14[0x4] { };
 public:
@@ -416,7 +416,7 @@ public:
 private:
 	BYTE x31D0[0x14] { };
 public:
-	int ladderSurfaceProps { }; // 0x31e4
+	long ladderSurfaceProps { }; // 0x31e4
 private:
 	BYTE x31F8[0x4] { };
 public:
@@ -435,7 +435,7 @@ public:
 private:
 	BYTE x3248[0xC] { };
 public:
-	int vphysicsCollisionState { }; // 0x3254
+	long vphysicsCollisionState { }; // 0x3254
 private:
 	BYTE x3258[0x8C] { };
 public:
@@ -603,7 +603,7 @@ public:
 	unsigned short usCurrentEquipmentValue { }; // 0xb1f8
 	unsigned short usRoundStartEquipmentValue { }; // 0xb1fa
 	unsigned short usFreezetimeEndEquipmentValue { }; // 0xb1fc
-	int rank[6] { }; // 0xb200
+	long rank[6] { }; // 0xb200
 	unsigned short usMusicID { }; // 0xb218
 private:
 	BYTE xB21A[0xE] { };
@@ -630,7 +630,7 @@ public:
 private:
 	BYTE xB278[0xEC] { };
 public:
-	int cycleLatch { }; // 0xb364
+	long cycleLatch { }; // 0xb364
 private:
 	BYTE xB368[0x4] { };
 public:

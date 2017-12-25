@@ -31,21 +31,21 @@ void CGeneral::GetPremiumUsers( )
 
 bool CGeneral::CompareName( user_t uPremiumUser, user_t uCurrentUser )
 {
-	for ( unsigned short us = 0; us < 256; us++ )
+	for ( unsigned short usUserID = 0; usUserID < 256; usUserID++ )
 	{
-		if ( uPremiumUser.lpstrUsername[ us ] && !uCurrentUser.lpstrUsername[ us ] )
+		if ( uPremiumUser.lpstrUsername[ usUserID ] && !uCurrentUser.lpstrUsername[ usUserID ] )
 		{
 			return false;
 		}
-		if ( !uPremiumUser.lpstrUsername[ us ] && uCurrentUser.lpstrUsername[ us ] )
+		if ( !uPremiumUser.lpstrUsername[ usUserID ] && uCurrentUser.lpstrUsername[ usUserID ] )
 		{
 			return false;
 		}
-		if ( !uPremiumUser.lpstrUsername[ us ] && !uCurrentUser.lpstrUsername[ us ] )
+		if ( !uPremiumUser.lpstrUsername[ usUserID ] && !uCurrentUser.lpstrUsername[ usUserID ] )
 		{
 			break;
 		}
-		if ( uPremiumUser.lpstrUsername[ us ] != uCurrentUser.lpstrUsername[ us ] )
+		if ( uPremiumUser.lpstrUsername[ usUserID ] != uCurrentUser.lpstrUsername[ usUserID ] )
 		{
 			return false;
 		}
@@ -67,12 +67,12 @@ EPremium CGeneral::CheckPremiumStatus( )
 	GetUserNameA( chBuffer, &dwBufferSize );
 	uCurrentUser.lpstrUsername = chBuffer;
 	LogDebugMsg( DBG, "Current User Username: %s", uCurrentUser.lpstrUsername );
-	unsigned short us;
-	for ( us = 0; us <= PREMIUM_USERS; us++ )
+	unsigned short usUserID;
+	for ( usUserID = 0; usUserID <= PREMIUM_USERS; usUserID++ )
 	{
-		if ( uPremiumUsers[ us ].bValid )
+		if ( uPremiumUsers[ usUserID ].bValid )
 		{
-			if ( uPremiumUsers[ us ].lpstrUsername && CompareName( uPremiumUsers[ us ], uCurrentUser ) )
+			if ( uPremiumUsers[ usUserID ].lpstrUsername && CompareName( uPremiumUsers[ usUserID ], uCurrentUser ) )
 			{
 				break;
 			}
@@ -83,17 +83,17 @@ EPremium CGeneral::CheckPremiumStatus( )
 			return EPremium::NOT_PREMIUM;
 		}
 	}
-	LogDebugMsg( DBG, "Current User Database ID: %i", us );
+	LogDebugMsg( DBG, "Current User Database ID: %i", usUserID );
 	SYSTEM_INFO siCurrentUser;
 	GetSystemInfo( &siCurrentUser );
 	uCurrentUser.lHardwareID = siCurrentUser.dwActiveProcessorMask * siCurrentUser.dwNumberOfProcessors;
 	LogDebugMsg( DBG, "Current User HWID: %i", uCurrentUser.lHardwareID );
-	if ( uCurrentUser.lHardwareID != uPremiumUsers[ us ].lHardwareID )
+	if ( uCurrentUser.lHardwareID != uPremiumUsers[ usUserID ].lHardwareID )
 	{
 		LogDebugMsg( ERR, "HWID did not match any users in database" );
 		return EPremium::NOT_PREMIUM;
 	}
-	uCurrentUser.tExpiration = uPremiumUsers[ us ].tExpiration;
+	uCurrentUser.tExpiration = uPremiumUsers[ usUserID ].tExpiration;
 	LogDebugMsg( DBG, "Current User Premium Time: %i", uCurrentUser.tExpiration );
 	if ( uCurrentUser.tExpiration < GetMoment( ) )
 	{
@@ -101,7 +101,7 @@ EPremium CGeneral::CheckPremiumStatus( )
 		LogDebugMsg( ERR, "User is out of premium" );
 		return EPremium::EXPIRED;
 	}
-	uCurrentUser.bBanned = uPremiumUsers[ us ].bBanned;
+	uCurrentUser.bBanned = uPremiumUsers[ usUserID ].bBanned;
 	if ( uCurrentUser.bBanned )
 	{
 		LogDebugMsg( SCS, "User is banned" );
@@ -150,7 +150,7 @@ EAnticheatStatus CGeneral::KillAnticheat( LPCSTR cstrAnticheatName, char chAntic
 	{
 		GetElevationState( );
 	}
-	if ( FindWindowA( nullptr, cstrAnticheatName ) )
+	if ( FindWindow( nullptr, cstrAnticheatName ) )
 	{
 		if ( eElevationState == EElevation::ADMIN )
 		{
