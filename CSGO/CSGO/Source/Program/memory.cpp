@@ -15,7 +15,7 @@ namespace Addresses
 	address_t< FLAG > fForceJump;
 	// client pointer addresses
 	address_t< DWORD > pdwEntityList;
-	std::vector< address_t< CPlayer > > plrEntities;
+	std::vector< address_t< CPlayer > > plrEntities(64);
 	address_t< DWORD > pdwLocalPlayer;
 	address_t< CPlayer > plrLocalPlayer;
 	address_t< DWORD > pdwGlowManager;

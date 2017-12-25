@@ -121,11 +121,12 @@ CPlayer CEngine::GetEntity( unsigned long ulEntity )
 void CEngine::GetEntities( )
 {
 	plrEntities.clear( );
-	for ( unsigned long ulEntity = GetGlobalVars( ).ulMaxClients; ulEntity > 0; ulEntity-- )
+	plrEntities.resize( GetGlobalVars( ).ulMaxClients );
+	for ( unsigned long ulEntity = 0; ulEntity < plrEntities.size(); ulEntity++ )
 	{
 		address_t< CPlayer > plrEntity = { 0, 0, GetEntityBase( ulEntity ) };
 		mem.Get( plrEntity );
-		plrEntities.push_back( plrEntity );
+		plrEntities.at( ulEntity ) = plrEntity;
 	}
 }
 
