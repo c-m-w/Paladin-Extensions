@@ -57,7 +57,7 @@ EPremium CGeneral::CheckPremiumStatus( )
 {
 	if ( DECEMBER_FIRST > GetMoment( ) )
 	{
-		LogDebugMsg( ERR, "Date Mismatch: %i > %i", DECEMBER_FIRST, GetMoment( ) );
+		DEBUG( ERR, "Date Mismatch: %i > %i", DECEMBER_FIRST, GetMoment( ) );
 		return EPremium::NOT_PREMIUM;
 	}
 	GetPremiumUsers( );
@@ -66,7 +66,7 @@ EPremium CGeneral::CheckPremiumStatus( )
 	DWORD dwBufferSize = 257;
 	GetUserNameA( chBuffer, &dwBufferSize );
 	uCurrentUser.lpstrUsername = chBuffer;
-	LogDebugMsg( DBG, "Current User Username: %s", uCurrentUser.lpstrUsername );
+	DEBUG( DBG, "Current User Username: %s", uCurrentUser.lpstrUsername );
 	unsigned short usUserID;
 	for ( usUserID = 0; usUserID <= PREMIUM_USERS; usUserID++ )
 	{
@@ -79,35 +79,35 @@ EPremium CGeneral::CheckPremiumStatus( )
 		}
 		else
 		{
-			LogDebugMsg( ERR, "Username did not match any users in database" );
+			DEBUG( ERR, "Username did not match any users in database" );
 			return EPremium::NOT_PREMIUM;
 		}
 	}
-	LogDebugMsg( DBG, "Current User Database ID: %i", usUserID );
+	DEBUG( DBG, "Current User Database ID: %i", usUserID );
 	SYSTEM_INFO siCurrentUser;
 	GetSystemInfo( &siCurrentUser );
 	uCurrentUser.lHardwareID = siCurrentUser.dwActiveProcessorMask * siCurrentUser.dwNumberOfProcessors;
-	LogDebugMsg( DBG, "Current User HWID: %i", uCurrentUser.lHardwareID );
+	DEBUG( DBG, "Current User HWID: %i", uCurrentUser.lHardwareID );
 	if ( uCurrentUser.lHardwareID != uPremiumUsers[ usUserID ].lHardwareID )
 	{
-		LogDebugMsg( ERR, "HWID did not match any users in database" );
+		DEBUG( ERR, "HWID did not match any users in database" );
 		return EPremium::NOT_PREMIUM;
 	}
 	uCurrentUser.tExpiration = uPremiumUsers[ usUserID ].tExpiration;
-	LogDebugMsg( DBG, "Current User Premium Time: %i", uCurrentUser.tExpiration );
+	DEBUG( DBG, "Current User Premium Time: %i", uCurrentUser.tExpiration );
 	if ( uCurrentUser.tExpiration < GetMoment( ) )
 	{
-		LogDebugMsg( ERR, "%i < %i", uCurrentUser.tExpiration, GetMoment( ) );
-		LogDebugMsg( ERR, "User is out of premium" );
+		DEBUG( ERR, "%i < %i", uCurrentUser.tExpiration, GetMoment( ) );
+		DEBUG( ERR, "User is out of premium" );
 		return EPremium::EXPIRED;
 	}
 	uCurrentUser.bBanned = uPremiumUsers[ usUserID ].bBanned;
 	if ( uCurrentUser.bBanned )
 	{
-		LogDebugMsg( SCS, "User is banned" );
+		DEBUG( SCS, "User is banned" );
 		return EPremium::BANNED;
 	}
-	LogDebugMsg( SCS, "User is premium!" );
+	DEBUG( SCS, "User is premium!" );
 	return EPremium::PREMIUM;
 }
 
@@ -155,13 +155,13 @@ EAnticheatStatus CGeneral::KillAnticheat( LPCSTR cstrAnticheatName, char chAntic
 		if ( eElevationState == EElevation::ADMIN )
 		{
 			system( &"taskkill /F /T /IM "[ chAnticheatExe ] );
-			LogDebugMsg( WRN, "Found anticheat %s open and terminated it", cstrAnticheatName );
+			DEBUG( WRN, "Found anticheat %s open and terminated it", cstrAnticheatName );
 			return EAnticheatStatus::KILLED;
 		}
-		LogDebugMsg( WRN, "Found anticheat %s open", cstrAnticheatName );
+		DEBUG( WRN, "Found anticheat %s open", cstrAnticheatName );
 		return EAnticheatStatus::FAILED;
 	}
-	LogDebugMsg( WRN, "Did not find anticheat %s open", cstrAnticheatName );
+	DEBUG( WRN, "Did not find anticheat %s open", cstrAnticheatName );
 	return EAnticheatStatus::NOT_FOUND;
 }
 

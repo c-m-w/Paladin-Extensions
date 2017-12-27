@@ -5,51 +5,55 @@ address_t<int> currentEntity; //CPlayerGlow
 
 struct glowStruct_t
 {
-  DWORD m_hEntity;
-  float r = 1;
-  float g = 0;
-  float b = 0;
-  float thicc;
- 
-  char pad1[ 4 ]; 
-  float flUnk; 
-  float m_flBloomAmount;
-  float localplayeriszeropoint3;
- 
- 
-  bool RenderWhenOccluded;
-  bool RenderWhenUnoccluded;
-  bool fullBloom;
-  char pad2[ 1 ]; 
- 
-  int m_nFullBloomStencilTestValue;
-  int iUnk; 
-  int m_nSplitScreenSlot;    
-  int m_nNextFreeSlot;
+	DWORD dwEntityBase{};
+	float flRed = 1;
+	float flGreen = 0;
+	float flBlue = 0;
+	float flAlpha = 1;
+private:
+	BYTE x14[0x4]{};
+public:
+	float flUnk{};
+	float flBloomAmount{};
+	float localplayeriszeropoint3{};
+
+	bool bRenderWhenOccluded{};
+	bool bRenderWhenUnoccluded{};
+	bool bFullBloom{};
+private:
+	BYTE pad2[ 1 ]{};
+public:
+
+	int nFullBloomStencilTestValue{};
+	int iUnk{};
+	int nSplitScreenSlot{};
+	int nNextFreeSlot{};
 };
 
 
 void CGlow::Glow()
 {
-	while ( plrEntities.val.size( ) != eng.GetGlobalVars( ).ulMaxClients )
+	address_t< CPlayer > aplrLocalPlayerCopy = aplrLocalPlayer;
+	std::vector< address_t< CPlayer > > aplrEntitiesCopy;
+	for ( size_t sizSize = aplrEntities.size(  ); sizSize > 0; sizSize --)
 	{
-		Wait( 1 );
+		aplrEntitiesCopy.push_back( aplrEntities.at( sizSize )._My_val );
 	}
-	for ( unsigned long x = plrEntities.val.size( ); x > 0; x-- )
+	for ( unsigned long ulEntity = aplrEntitiesCopy.size( ); ulEntity > 0; ulEntity-- )
 	{
-		if ( !plrEntities.val.at( x ).bDormant )
+		if ( !aplrEntitiesCopy.at( ulEntity ).xValue.bDormant )
 		{
-			if ( plrLocalPlayer.val.ulTeamNum != plrEntities.val.at( x ).ulTeamNum )
+			if ( aplrLocalPlayerCopy.xValue.ulTeamNum != aplrEntitiesCopy.at( ulEntity ).xValue.ulTeamNum )
 			{
-				address_t<DWORD> glowPointer { mem.dwClientBase + pdwGlowManager.off };
-				currentEntity.loc = ( x + GLOWINDEX );
+				address_t<DWORD> glowPointer { mem.dwClientBase + pdwGlowManager.dwOffset };
+				currentEntity.dwLocation = ulEntity + GLOWINDEX;
 				mem.Get(currentEntity);
 
-				address_t<glowStruct_t> GlowBuffer;
-				GlowBuffer.loc = (glowPointer.val + (x * sizeof(glowStruct_t)));
-				mem.Get(GlowBuffer);
+				address_t<glowStruct_t> glowBuffer;
+				glowBuffer.dwLocation = glowPointer.xValue + ulEntity * sizeof(glowStruct_t);
+				mem.Get(glowBuffer);
 
-				mem.Set(GlowBuffer);
+				mem.Set(glowBuffer);
 
 
 				

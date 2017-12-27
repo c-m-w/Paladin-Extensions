@@ -3,7 +3,8 @@
 void CAutomation::AutoJump( )
 {
 	// TODO fake scroll
-	if ( aplrLocalPlayer.xValue.fFlags & FL_ONGROUND )
+	address_t< CPlayer > aplrLocalPlayerCopy = aplrLocalPlayer;
+	if ( aplrLocalPlayerCopy.xValue.fFlags & FL_ONGROUND )
 	{
 		eng.SetJump( ACTION_TICK );
 	}
@@ -16,7 +17,8 @@ void CAutomation::AutoJump( )
 void CAutomation::AutoNade( )
 {
 	// TODO weapon ID for nades
-	if ( eng.GetAttack( ) & ACTION_PRESS && aplrLocalPlayer.xValue.fFlags & ~FL_ONGROUND )
+	address_t< CPlayer > aplrLocalPlayerCopy = aplrLocalPlayer;
+	if ( eng.GetAttack( ) & ACTION_PRESS && aplrLocalPlayerCopy.xValue.fFlags & ~FL_ONGROUND )
 	{
 		eng.SetAttack( ACTION_NONE );
 	}
@@ -25,7 +27,8 @@ void CAutomation::AutoNade( )
 void CAutomation::AutoShoot( )
 {
 	// TODO if weapon ID for pistols, shotguns (not xm), and snipers (not autosnipers)
-	if ( aplrLocalPlayer.xValue.flNextAttack - eng.GetGlobalVars( ).flCurrentTime <= 0.f )
+	address_t< CPlayer > aplrLocalPlayerCopy = aplrLocalPlayer;
+	if ( aplrLocalPlayerCopy.xValue.flNextAttack - eng.GetGlobalVars( ).flCurrentTime <= 0.f )
 	{
 		eng.SetAttack( ACTION_TICK );
 	}

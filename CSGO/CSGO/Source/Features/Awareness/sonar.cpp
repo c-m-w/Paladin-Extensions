@@ -2,17 +2,19 @@
 
 void CSonar::Sonar( )
 {
-	while ( aplrEntities.size( ) != eng.GetGlobalVars( ).ulMaxClients )
+	address_t< CPlayer > aplrLocalPlayerCopy = aplrLocalPlayer;
+	std::vector< address_t< CPlayer > > aplrEntitiesCopy;
+	for ( size_t sizSize = aplrEntities.size(  ); sizSize > 0; sizSize --)
 	{
-		Wait( 1 );
+		aplrEntitiesCopy.push_back( aplrEntities.at( sizSize )._My_val );
 	}
-	for ( unsigned long ulEntity = aplrEntities.size( ); ulEntity > 0; ulEntity-- )
+	for ( unsigned long ulEntity = aplrEntitiesCopy.size( ); ulEntity > 0; ulEntity-- )
 	{
-		if ( !aplrEntities.at( ulEntity ).xValue.bDormant )
+		if ( !aplrEntitiesCopy.at( ulEntity ).xValue.bDormant )
 		{
-			if ( aplrLocalPlayer.xValue.ulTeamNum != aplrEntities.at( ulEntity ).xValue.ulTeamNum )
+			if ( aplrLocalPlayerCopy.xValue.ulTeamNum != aplrEntitiesCopy.at( ulEntity ).xValue.ulTeamNum )
 			{
-				vector_t vecEntityDistance( aplrEntities.at( ulEntity ).xValue.corOrigin, aplrLocalPlayer.xValue.corOrigin );
+				vector_t vecEntityDistance( aplrEntitiesCopy.at( ulEntity ).xValue.corOrigin, aplrLocalPlayerCopy.xValue.corOrigin );
 
 				float flDistance = sqrt( pow( vecEntityDistance.flDeltaX, 2 ) + pow( vecEntityDistance.flDeltaY, 2 ) + pow( vecEntityDistance.flDeltaZ, 2 ) );
 

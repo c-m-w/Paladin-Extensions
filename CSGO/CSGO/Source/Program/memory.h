@@ -23,10 +23,10 @@ namespace Addresses
 	extern address_t< FLAG > fForceJump;
 	// client pointer addresses
 	extern address_t< DWORD > pdwEntityList;
-	extern std::vector< address_t< CPlayer > > aplrEntities;
+	extern std::vector< std::atomic< address_t< CPlayer > > > aplrEntities;
 
 	extern address_t< DWORD > pdwLocalPlayer;
-	extern address_t< CPlayer > aplrLocalPlayer;
+	extern std::atomic< address_t< CPlayer > > aplrLocalPlayer;
 
 	extern address_t< DWORD > pdwGlowManager;
 }

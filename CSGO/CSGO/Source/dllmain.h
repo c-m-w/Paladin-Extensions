@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include <thread>
+#include <atomic>
 
 #include "Program/global.h"
 #include "Features/engine.h"

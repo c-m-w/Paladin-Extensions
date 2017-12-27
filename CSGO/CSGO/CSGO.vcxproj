@@ -138,7 +138,7 @@
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <EnablePREfast>false</EnablePREfast>
       <ShowIncludes>false</ShowIncludes>
-      <AdditionalOptions>/analyze:stacksize47292</AdditionalOptions>
+      <AdditionalOptions>/analyze:stacksize94568</AdditionalOptions>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -175,7 +175,7 @@
       <BasicRuntimeChecks>
       </BasicRuntimeChecks>
       <EnablePREfast>true</EnablePREfast>
-      <AdditionalOptions>/analyze:stacksize47292</AdditionalOptions>
+      <AdditionalOptions>/analyze:stacksize94568</AdditionalOptions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>

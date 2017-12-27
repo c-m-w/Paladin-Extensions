@@ -1,7 +1,7 @@
 #include "dllmain.h"
 
 HINSTANCE hInst = nullptr;
-bool bExitState = false;
+std::atomic< bool > bExitState = false;
 std::vector< std::thread > tThreads;
 
 void Feature( bool bFeatureState, unsigned long ulWait, const std::function< void( ) > &fnFeature, unsigned short usiFeatureKey )
@@ -43,7 +43,7 @@ void CleanUp( )
 
 void Panic( )
 {
-	LogDebugMsg( WRN, "Panic called" );
+	DEBUG( WRN, "Panic called" );
 	cfg.iQuitReason = EQuitReasons::PANIC;
 	CleanUp( );
 	FreeLibraryAndExitThread( hInst, 0 ); // TODO figure out how to not display ABORT message

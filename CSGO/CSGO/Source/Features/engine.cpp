@@ -113,20 +113,21 @@ DWORD CEngine::GetEntityBase( unsigned long ulEntity )
 
 CPlayer CEngine::GetEntity( unsigned long ulEntity )
 {
-	address_t< CPlayer > plrEntity = { 0, 0, GetEntityBase( ulEntity ) };
-	mem.Get( plrEntity );
-	return plrEntity.xValue;
+	address_t< CPlayer > aplrEntityTemp = { 0, 0, GetEntityBase( ulEntity ) };
+	mem.Get( aplrEntityTemp );
+	// TODO aplrEntities.at(ulEntity) = aplrEntityTemp;
+	return aplrEntityTemp.xValue;
 }
 
 void CEngine::GetEntities( )
 {
-	aplrEntities.clear( );
-	aplrEntities.resize( GetGlobalVars( ).ulMaxClients );
+	// aplrEntities.clear( );
+	// aplrEntities.resize( GetGlobalVars( ).ulMaxClients );
 	for ( unsigned long ulEntity = 0; ulEntity < aplrEntities.size(); ulEntity++ )
 	{
 		address_t< CPlayer > plrEntity = { 0, 0, GetEntityBase( ulEntity ) };
 		mem.Get( plrEntity );
-		aplrEntities.at( ulEntity ) = plrEntity;
+		// TODO aplrEntities.at( ulEntity ) = plrEntity;
 	}
 }
 
@@ -144,9 +145,10 @@ DWORD CEngine::GetLocalPlayerBase( )
 
 CPlayer CEngine::GetLocalPlayer( )
 {
-	aplrLocalPlayer = { 0, 0, GetLocalPlayerBase( ) };
-	mem.Get( aplrLocalPlayer );
-	return aplrLocalPlayer.xValue;
+	address_t< CPlayer > aplrLocalPlayerTemp = { 0, 0, GetLocalPlayerBase( ) };
+	mem.Get( aplrLocalPlayerTemp );
+	aplrLocalPlayer = aplrLocalPlayerTemp;
+	return aplrLocalPlayerTemp.xValue;
 }
 
 void CEngine::SetLocalPlayer( CPlayer plrNewLocalPlayer )

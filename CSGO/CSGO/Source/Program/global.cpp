@@ -2,7 +2,7 @@
 
 std::string strLog;
 
-void LogDebugMsg( EDebugMessage dmType, char *szMessage, ... )
+void LogDebugMsg ( EDebugMessage dmType, char *szMessage, ... )
 {
 	HANDLE hConsole = GetStdHandle( STD_OUTPUT_HANDLE );
 	if ( hConsole && hConsole != INVALID_HANDLE_VALUE )
@@ -43,22 +43,22 @@ void LogDebugMsg( EDebugMessage dmType, char *szMessage, ... )
 }
 
 // Look up errors here: https://msdn.microsoft.com/en-us/library/windows/desktop/ms681381(v=vs.85).aspx
-void LogLastError( )
+void LogLastError ( )
 {
 	DWORD dwError = GetLastError( );
 	if ( !dwError )
 	{
-		LogDebugMsg( LER, "No error" );
+		DEBUG( LER, "No error" );
 		return;
 	}
 	LPSTR lpstrError = nullptr;
 	if ( !FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, dwError, MAKELANGID( LANG_NEUTRAL, SUBLANG_DEFAULT ), LPSTR( &lpstrError ), 0, nullptr ) )
 	{
-		LogDebugMsg( LER, "[0x%08lu] - Unable to retrieve error description", dwError );
+		DEBUG( LER, "[0x%08lu] - Unable to retrieve error description", dwError );
 	}
 	else
 	{
-		LogDebugMsg( LER, "[0x%08lu] - %s", dwError, lpstrError );
+		DEBUG( LER, "[0x%08lu] - %s", dwError, lpstrError );
 	}
 	strLog.append( lpstrError );
 	LocalFree( lpstrError );

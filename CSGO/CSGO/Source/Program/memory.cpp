@@ -15,9 +15,9 @@ namespace Addresses
 	address_t< FLAG > fForceJump;
 	// client pointer addresses
 	address_t< DWORD > pdwEntityList;
-	std::vector< address_t< CPlayer > > aplrEntities;
+	std::vector< std::atomic< address_t< CPlayer > > > aplrEntities;
 	address_t< DWORD > pdwLocalPlayer;
-	address_t< CPlayer > aplrLocalPlayer;
+	std::atomic< address_t< CPlayer > > aplrLocalPlayer;
 	address_t< DWORD > pdwGlowManager;
 }
 
@@ -33,21 +33,21 @@ bool CMemoryManager::AttachToGame( )
 {
 	while ( !GetWindowThreadProcessId( FindWindow( nullptr, "Counter-Strike: Global Offensive" ), &dwProcessID ) )
 	{
-		LogDebugMsg( DBG, "Searching for CSGO" );
+		DEBUG( DBG, "Searching for CSGO" );
 		Wait( 1000 );
 	}
 	if ( all.GetElevationState( ) != all.GetElevationState( hGame ) && all.GetElevationState( ) != EElevation::ADMIN )
 	{
-		LogDebugMsg( ERR, "No permissions" );
+		DEBUG( ERR, "No permissions" );
 		return false;
 	}
 	hGame = OpenProcess( PROCESS_VM_READ | PROCESS_VM_WRITE | PROCESS_VM_OPERATION, false, dwProcessID );
 	if ( !hGame || hGame == INVALID_HANDLE_VALUE )
 	{
-		LogDebugMsg( ERR, "Invalid game handle" );
+		DEBUG( ERR, "Invalid game handle" );
 		return false;
 	}
-	LogDebugMsg( SCS, "Attached to game" );
+	DEBUG( SCS, "Attached to game" );
 	HANDLE hSnapshot;
 	for ( unsigned short us = 0; us < 5; us++, Wait( 2000 ) )
 	{
@@ -59,10 +59,10 @@ bool CMemoryManager::AttachToGame( )
 		} while ( hSnapshot == INVALID_HANDLE_VALUE || GetLastError( ) == ERROR_BAD_LENGTH );
 		if ( hSnapshot == INVALID_HANDLE_VALUE || !hSnapshot )
 		{
-			LogDebugMsg( ERR, "Invalid module snapshot" );
+			DEBUG( ERR, "Invalid module snapshot" );
 			return false;
 		}
-		LogDebugMsg( SCS, "Module snapshot created" );
+		DEBUG( SCS, "Module snapshot created" );
 		MODULEENTRY32 meModules = { };
 		meModules.dwSize = sizeof(MODULEENTRY32);
 		if ( Module32First( hSnapshot, &meModules ) )
@@ -82,16 +82,16 @@ bool CMemoryManager::AttachToGame( )
 		}
 		if ( dwClientBase && dwEngineBase )
 		{
-			LogDebugMsg( SCS, "Modules found" );
-			LogDebugMsg( SCS, "Client.dll: 0x%p", dwClientBase );
-			LogDebugMsg( SCS, "Engine.dll: 0x%p", dwEngineBase );
+			DEBUG( SCS, "Modules found" );
+			DEBUG( SCS, "Client.dll: 0x%p", dwClientBase );
+			DEBUG( SCS, "Engine.dll: 0x%p", dwEngineBase );
 			return true;
 		}
-		LogDebugMsg( DBG, "Modules not found, retrying" );
-		LogDebugMsg( DBG, "Client.dll: 0x%p", dwClientBase );
-		LogDebugMsg( DBG, "Engine.dll: 0x%p", dwEngineBase );
+		DEBUG( DBG, "Modules not found, retrying" );
+		DEBUG( DBG, "Client.dll: 0x%p", dwClientBase );
+		DEBUG( DBG, "Engine.dll: 0x%p", dwEngineBase );
 	}
-	LogDebugMsg( ERR, "Unable to get modules" );
+	DEBUG( ERR, "Unable to get modules" );
 	return false;
 }
 
@@ -127,7 +127,7 @@ DWORD CMemoryManager::FindPattern( BYTE *bMask, char *szMask, DWORD dwAddress, D
 
 void CMemoryManager::InitializeAddresses( )
 {
-	LogDebugMsg( DBG, "Initializing addresses" );
+	DEBUG( DBG, "Initializing addresses" );
 
 	// todo signature scanning
 	// global Engine addresses
@@ -145,7 +145,7 @@ void CMemoryManager::InitializeAddresses( )
 	pdwEntityList = { 0x4A78BA4 };
 	pdwGlowManager = { 0x4F959F0 };
 	pdwLocalPlayer = { 0xA9BDDC };
-	LogDebugMsg( DBG, "Initialized bases" );
+	DEBUG( DBG, "Initialized bases" );
 
 	// engine global
 	gvGlobalVars.dwLocation = dwEngineBase + gvGlobalVars.dwOffset;
@@ -160,9 +160,9 @@ void CMemoryManager::InitializeAddresses( )
 	// client pointers
 	pdwEntityList.dwLocation = dwClientBase + pdwEntityList.dwOffset;
 	pdwLocalPlayer.dwLocation = dwClientBase + pdwLocalPlayer.dwOffset;
-	LogDebugMsg( DBG, "Initialized locations" );
+	DEBUG( DBG, "Initialized locations" );
 
-	LogDebugMsg( SCS, "Initialized addresses" );
+	DEBUG( SCS, "Initialized addresses" );
 }
 
 CMemoryManager mem;
