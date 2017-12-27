@@ -121,16 +121,16 @@ angle_t angle_t::operator/=( float rhs )
 	return *this / rhs;
 }
 
-angle_t angle_t::operator*=( float rhs )
-{
-	return *this * rhs;
-}
-
 vector_t::vector_t( )
 {
 	flDeltaX = 0;
 	flDeltaY = 0;
 	flDeltaZ = 0;
+}
+
+angle_t angle_t::operator*=( float rhs )
+{
+	return *this * rhs;
 }
 
 vector_t::vector_t( coordinate_t corOrigin, coordinate_t corDestination )

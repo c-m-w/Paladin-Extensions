@@ -34,16 +34,16 @@ public:
 void CGlow::Glow()
 {
 	address_t< CPlayer > aplrLocalPlayerCopy = aplrLocalPlayer;
-	std::vector< address_t< CPlayer > > aplrEntitiesCopy;
-	for ( size_t sizSize = aplrEntities.size(  ); sizSize > 0; sizSize --)
+	address_t< CPlayer > aplrEntitiesCopy[64];
+	for (int i = 0; i < 64; i++)
 	{
-		aplrEntitiesCopy.push_back( aplrEntities.at( sizSize )._My_val );
+		aplrEntitiesCopy[i] = aplrEntities[i];
 	}
-	for ( unsigned long ulEntity = aplrEntitiesCopy.size( ); ulEntity > 0; ulEntity-- )
+	for ( unsigned long ulEntity = 64; ulEntity > 0; ulEntity-- )
 	{
-		if ( !aplrEntitiesCopy.at( ulEntity ).xValue.bDormant )
+		if ( !aplrEntitiesCopy[ulEntity].xValue.bDormant )
 		{
-			if ( aplrLocalPlayerCopy.xValue.ulTeamNum != aplrEntitiesCopy.at( ulEntity ).xValue.ulTeamNum )
+			if ( aplrLocalPlayerCopy.xValue.ulTeamNum != aplrEntitiesCopy[ulEntity].xValue.ulTeamNum )
 			{
 				address_t<DWORD> glowPointer { mem.dwClientBase + pdwGlowManager.dwOffset };
 				currentEntity.dwLocation = ulEntity + GLOWINDEX;

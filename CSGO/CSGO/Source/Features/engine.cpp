@@ -115,19 +115,17 @@ CPlayer CEngine::GetEntity( unsigned long ulEntity )
 {
 	address_t< CPlayer > aplrEntityTemp = { 0, 0, GetEntityBase( ulEntity ) };
 	mem.Get( aplrEntityTemp );
-	// TODO aplrEntities.at(ulEntity) = aplrEntityTemp;
+	aplrEntities[ulEntity] = aplrEntityTemp;
 	return aplrEntityTemp.xValue;
 }
 
 void CEngine::GetEntities( )
 {
-	// aplrEntities.clear( );
-	// aplrEntities.resize( GetGlobalVars( ).ulMaxClients );
-	for ( unsigned long ulEntity = 0; ulEntity < aplrEntities.size(); ulEntity++ )
+	for ( unsigned long ulEntity = 0; ulEntity < 64; ulEntity++ )
 	{
 		address_t< CPlayer > plrEntity = { 0, 0, GetEntityBase( ulEntity ) };
 		mem.Get( plrEntity );
-		// TODO aplrEntities.at( ulEntity ) = plrEntity;
+		aplrEntities[ulEntity] = plrEntity;
 	}
 }
 
@@ -246,8 +244,7 @@ angle_t CEngine::VectorToAngle( coordinate_t corOrigin, coordinate_t corDestinat
 			angReturn.flPitch += 360;
 		}
 	}
-	ClampAngle( angReturn );
-	return angReturn;
+	return ClampAngle( angReturn );
 }
 
 CEngine eng;
