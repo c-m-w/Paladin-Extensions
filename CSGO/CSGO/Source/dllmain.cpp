@@ -52,6 +52,7 @@ void Panic( )
 void CreateThreads( )
 {
 	DEBUG( DBG, "Initializing threads..." );
+	
 	std::thread tInfoGrabber( [ & ]
 	{
 		while ( !bExitState )
@@ -61,18 +62,20 @@ void CreateThreads( )
 		}
 	} );
 	tThreads.push_back( move( tInfoGrabber ) );
-
+	
 	std::thread tTestThread( [ & ]
 	{
-		Feature( true, 1, [ & ]
+		Feature( true, 0, [ & ]
 		{
 			glo.Glow( ); // OUR TEST FUNCTION
 		} );
 	} );
 	tThreads.push_back( move( tTestThread ) );
+	
 
 	DEBUG( SCS, "Created threads" );
 	LASTERR( );
+	
 }
 
 bool GetPremium( )

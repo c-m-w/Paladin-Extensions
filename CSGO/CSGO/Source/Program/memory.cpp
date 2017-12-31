@@ -15,7 +15,7 @@ namespace Addresses
 	address_t< FLAG > fForceJump;
 	// client pointer addresses
 	address_t< DWORD > pdwEntityList;
-	std::atomic< address_t< CPlayer > > aplrEntities[64];
+	std::atomic< address_t< CPlayer > > aplrEntities[65];
 
 	address_t< DWORD > pdwLocalPlayer;
 	std::atomic< address_t< CPlayer > > aplrLocalPlayer;
@@ -162,6 +162,7 @@ void CMemoryManager::InitializeAddresses( )
 	// client pointers
 	pdwEntityList.dwLocation = dwClientBase + pdwEntityList.dwOffset;
 	pdwLocalPlayer.dwLocation = dwClientBase + pdwLocalPlayer.dwOffset;
+	pdwGlowManager.dwLocation = dwClientBase + pdwGlowManager.dwOffset;
 	DEBUG( DBG, "Initialized locations" );
 
 	DEBUG( SCS, "Initialized addresses" );

@@ -105,7 +105,7 @@ void CEngine::SetSensitivity( float flNewSensitivity )
 DWORD CEngine::GetEntityBase( unsigned long ulEntity )
 {
 	DWORD dwOldEntityList = pdwEntityList.dwLocation;
-	pdwEntityList.dwLocation += ( ulEntity - 1 ) * ENTITY_DISTANCE;
+	pdwEntityList.dwLocation += ulEntity * ENTITY_DISTANCE;
 	mem.Get( pdwEntityList );
 	pdwEntityList.dwLocation = dwOldEntityList;
 	return pdwEntityList.xValue;
@@ -121,7 +121,7 @@ CPlayer CEngine::GetEntity( unsigned long ulEntity )
 
 void CEngine::GetEntities( )
 {
-	for ( unsigned long ulEntity = 0; ulEntity < 64; ulEntity++ )
+	for ( unsigned long ulEntity = 0; ulEntity <= 64; ulEntity++ )
 	{
 		address_t< CPlayer > plrEntity = { 0, 0, GetEntityBase( ulEntity ) };
 		mem.Get( plrEntity );
@@ -231,7 +231,7 @@ angle_t CEngine::VectorToAngle( coordinate_t corOrigin, coordinate_t corDestinat
 	}
 	else
 	{
-		angReturn.flYaw = atan2( vecDelta.flDeltaY, vecDelta.flDeltaX ) * 180 / PI;
+		angReturn.flYaw = atan2( vecDelta.flDeltaY, vecDelta.flDeltaX ) * 180/PI;
 		if ( angReturn.flYaw < 0 )
 		{
 			angReturn.flYaw += 360;

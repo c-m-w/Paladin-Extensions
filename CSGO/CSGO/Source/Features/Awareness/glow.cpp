@@ -33,28 +33,42 @@ public:
 
 void CGlow::Glow()
 {
+	/*
 	address_t< CPlayer > aplrLocalPlayerCopy = aplrLocalPlayer;
 	address_t< CPlayer > aplrEntitiesCopy[64];
 	for (int i = 0; i < 64; i++)
 	{
 		aplrEntitiesCopy[i] = aplrEntities[i];
+	
 	}
-	for ( unsigned long ulEntity = 64; ulEntity > 0; ulEntity-- )
+	*/
+	for ( unsigned long ulEntity = 0; ulEntity <= 64; ulEntity++ )
 	{
-		if ( !aplrEntitiesCopy[ulEntity].xValue.bDormant )
+		if ( !aplrEntities[ulEntity]._My_val.xValue.bDormant )
 		{
-			if ( aplrLocalPlayerCopy.xValue.ulTeamNum != aplrEntitiesCopy[ulEntity].xValue.ulTeamNum )
+			if ( aplrLocalPlayer._My_val.xValue.ulTeamNum != aplrEntities[ulEntity]._My_val.xValue.ulTeamNum )
 			{
-				address_t<DWORD> glowPointer { mem.dwClientBase + pdwGlowManager.dwOffset };
-				currentEntity.dwLocation = ulEntity + GLOWINDEX;
+				//if (aplrEntities[ulEntity]._My_val.xValue.ulHealth > 0){
+
+				mem.Get( pdwGlowManager );
+
+				std::cout << "glowpointer " << pdwGlowManager.xValue << std::endl;
+				currentEntity.dwLocation = eng.GetEntityBase( ulEntity ) + GLOWINDEX;
 				mem.Get(currentEntity);
+				std::cout << "current entity " << currentEntity.xValue << std::endl;
 
 				address_t<glowStruct_t> glowBuffer;
-				glowBuffer.dwLocation = glowPointer.xValue + ulEntity * sizeof(glowStruct_t);
+				glowBuffer.dwLocation = pdwGlowManager.xValue + (ulEntity * sizeof(glowStruct_t));
 				mem.Get(glowBuffer);
-
+				glowBuffer.xValue.flRed = 0.8;
+				glowBuffer.xValue.flBlue = 0.5;
+					glowBuffer.xValue.flGreen = 0.2;
+				glowBuffer.xValue.bRenderWhenOccluded = false;
+				glowBuffer.xValue.bRenderWhenUnoccluded = true;
+				glowBuffer.xValue.flAlpha = 0.8;
+					glowBuffer.xValue.bFullBloom = false;
 				mem.Set(glowBuffer);
-
+			//	}
 
 				
 			}
