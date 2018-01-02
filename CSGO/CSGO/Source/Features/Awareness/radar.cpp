@@ -8,7 +8,7 @@ void CRadar::Radar( )
 	{
 		aplrEntitiesCopy[i] = aplrEntities[i];
 	}
-	for ( unsigned long ulEntity = 0; ulEntity <= 64; ulEntity++ )
+	for ( unsigned long ulEntity = 0; ulEntity < 64; ulEntity++ )
 	{
 		if ( !aplrEntitiesCopy[ulEntity].xValue.bDormant )
 		{

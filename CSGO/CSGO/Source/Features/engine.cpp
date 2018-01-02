@@ -121,7 +121,7 @@ CPlayer CEngine::GetEntity( unsigned long ulEntity )
 
 void CEngine::GetEntities( )
 {
-	for ( unsigned long ulEntity = 0; ulEntity <= 64; ulEntity++ )
+	for ( unsigned long ulEntity = 0; ulEntity < 64; ulEntity++ )
 	{
 		address_t< CPlayer > plrEntity = { 0, 0, GetEntityBase( ulEntity ) };
 		mem.Get( plrEntity );
