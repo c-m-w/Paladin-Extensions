@@ -52,7 +52,7 @@ void Panic( )
 void CreateThreads( )
 {
 	DEBUG( DBG, "Initializing threads..." );
-	
+
 	std::thread tInfoGrabber( [ & ]
 	{
 		while ( !bExitState )
@@ -62,7 +62,7 @@ void CreateThreads( )
 		}
 	} );
 	tThreads.push_back( move( tInfoGrabber ) );
-	
+
 	std::thread tTestThread( [ & ]
 	{
 		Feature( true, 0, [ & ]
@@ -71,11 +71,9 @@ void CreateThreads( )
 		} );
 	} );
 	tThreads.push_back( move( tTestThread ) );
-	
 
 	DEBUG( SCS, "Created threads" );
 	LASTERR( );
-	
 }
 
 bool GetPremium( )

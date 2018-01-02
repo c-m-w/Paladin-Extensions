@@ -115,7 +115,7 @@ CPlayer CEngine::GetEntity( unsigned long ulEntity )
 {
 	address_t< CPlayer > aplrEntityTemp = { 0, 0, GetEntityBase( ulEntity ) };
 	mem.Get( aplrEntityTemp );
-	aplrEntities[ulEntity] = aplrEntityTemp;
+	aplrEntities[ ulEntity ] = aplrEntityTemp;
 	return aplrEntityTemp.xValue;
 }
 
@@ -125,7 +125,7 @@ void CEngine::GetEntities( )
 	{
 		address_t< CPlayer > plrEntity = { 0, 0, GetEntityBase( ulEntity ) };
 		mem.Get( plrEntity );
-		aplrEntities[ulEntity] = plrEntity;
+		aplrEntities[ ulEntity ] = plrEntity;
 	}
 }
 
@@ -151,7 +151,7 @@ CPlayer CEngine::GetLocalPlayer( )
 
 void CEngine::SetLocalPlayer( CPlayer plrNewLocalPlayer )
 {
-	address_t<CPlayer> aplrNewLocalPlayer = aplrLocalPlayer;
+	address_t< CPlayer > aplrNewLocalPlayer = aplrLocalPlayer;
 	aplrNewLocalPlayer.xValue = plrNewLocalPlayer;
 	mem.Set( aplrNewLocalPlayer );
 }
@@ -231,7 +231,7 @@ angle_t CEngine::VectorToAngle( coordinate_t corOrigin, coordinate_t corDestinat
 	}
 	else
 	{
-		angReturn.flYaw = atan2( vecDelta.flDeltaY, vecDelta.flDeltaX ) * 180/PI;
+		angReturn.flYaw = atan2( vecDelta.flDeltaY, vecDelta.flDeltaX ) * 180 / PI;
 		if ( angReturn.flYaw < 0 )
 		{
 			angReturn.flYaw += 360;

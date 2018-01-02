@@ -2,7 +2,7 @@
 
 std::string strLog;
 
-void LogDebugMsg ( EDebugMessage dmType, char *szMessage, ... )
+void LogDebugMsg( EDebugMessage dmType, char *szMessage, ... )
 {
 	HANDLE hConsole = GetStdHandle( STD_OUTPUT_HANDLE );
 	if ( hConsole && hConsole != INVALID_HANDLE_VALUE )
@@ -43,7 +43,7 @@ void LogDebugMsg ( EDebugMessage dmType, char *szMessage, ... )
 }
 
 // Look up errors here: https://msdn.microsoft.com/en-us/library/windows/desktop/ms681381(v=vs.85).aspx
-void LogLastError ( )
+void LogLastError( )
 {
 	DWORD dwError = GetLastError( );
 	if ( !dwError )

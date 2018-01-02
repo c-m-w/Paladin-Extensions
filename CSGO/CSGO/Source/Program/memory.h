@@ -35,12 +35,11 @@ using namespace Addresses;
 
 class CMemoryManager
 {
-	public:
+public:
 	DWORD dwProcessID = 0;
 	HANDLE hGame = nullptr;
 	DWORD dwClientBase = 0;
 	DWORD dwEngineBase = 0;
-
 
 	bool AttachToGame( );
 

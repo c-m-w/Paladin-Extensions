@@ -59,8 +59,8 @@ enum EDebugMessage
 
 extern std::string strLog;
 
-void LogDebugMsg ( EDebugMessage, char *, ... );
-void LogLastError ( );
+void LogDebugMsg( EDebugMessage, char *, ... );
+void LogLastError( );
 
 struct angle_t
 {
