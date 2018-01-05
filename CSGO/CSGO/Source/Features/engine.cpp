@@ -113,7 +113,7 @@ DWORD CEngine::GetEntityBase( unsigned long ulEntity )
 
 CPlayer CEngine::GetEntity( unsigned long ulEntity )
 {
-	address_t< CPlayer > aplrEntityTemp = { 0, 0, GetEntityBase( ulEntity ) };
+	address_t< CPlayer > aplrEntityTemp { 0, 0, GetEntityBase( ulEntity ) };
 	mem.Get( aplrEntityTemp );
 	aplrEntities[ ulEntity ] = aplrEntityTemp;
 	return aplrEntityTemp.xValue;
@@ -123,7 +123,7 @@ void CEngine::GetEntities( )
 {
 	for ( unsigned long ulEntity = 0; ulEntity < 64; ulEntity++ )
 	{
-		address_t< CPlayer > plrEntity = { 0, 0, GetEntityBase( ulEntity ) };
+		address_t< CPlayer > plrEntity { 0, 0, GetEntityBase( ulEntity ) };
 		mem.Get( plrEntity );
 		aplrEntities[ ulEntity ] = plrEntity;
 	}
@@ -131,7 +131,7 @@ void CEngine::GetEntities( )
 
 void CEngine::SetEntity( unsigned long ulEntity, CPlayer plrNewEntity )
 {
-	address_t< CPlayer > aplrNewEntity = { 0, 0, GetEntityBase( ulEntity ), plrNewEntity };
+	address_t< CPlayer > aplrNewEntity { 0, 0, GetEntityBase( ulEntity ), plrNewEntity };
 	mem.Set( aplrNewEntity );
 }
 
@@ -143,7 +143,7 @@ DWORD CEngine::GetLocalPlayerBase( )
 
 CPlayer CEngine::GetLocalPlayer( )
 {
-	address_t< CPlayer > aplrLocalPlayerTemp = { 0, 0, GetLocalPlayerBase( ) };
+	address_t< CPlayer > aplrLocalPlayerTemp { 0, 0, GetLocalPlayerBase( ) };
 	mem.Get( aplrLocalPlayerTemp );
 	aplrLocalPlayer = aplrLocalPlayerTemp;
 	return aplrLocalPlayerTemp.xValue;
@@ -211,7 +211,7 @@ angle_t CEngine::NormalizeAngle( angle_t angDestination )
 
 angle_t CEngine::VectorToAngle( coordinate_t corOrigin, coordinate_t corDestination )
 {
-	angle_t angReturn = { 0, 0, 0 };
+	angle_t angReturn { 0, 0, 0 };
 	vector_t vecDelta( corOrigin, corDestination );
 	if ( !vecDelta.flDeltaY && !vecDelta.flDeltaX )
 	{

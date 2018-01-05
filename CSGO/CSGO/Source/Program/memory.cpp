@@ -65,7 +65,7 @@ bool CMemoryManager::AttachToGame( )
 			return false;
 		}
 		DEBUG( SCS, "Module snapshot created" );
-		MODULEENTRY32 meModules = { };
+		MODULEENTRY32 meModules { };
 		meModules.dwSize = sizeof(MODULEENTRY32);
 		if ( Module32First( hSnapshot, &meModules ) )
 		{

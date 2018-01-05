@@ -32,7 +32,7 @@ void LogDebugMsg( EDebugMessage dmType, char *szMessage, ... )
 		}
 		SetConsoleTextAttribute( hConsole, 7 );
 		//Ideally we want to dynamically allocate this, might do later (for now, stick to a max of 2047 data characters)
-		char chBuffer[2048] = { '\0' };
+		char chBuffer[2048] { '\0' };
 		va_list vaList;
 		va_start( vaList, szMessage );
 		vsnprintf( chBuffer, sizeof chBuffer, szMessage, vaList );
