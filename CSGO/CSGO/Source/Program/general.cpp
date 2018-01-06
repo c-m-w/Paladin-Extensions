@@ -7,8 +7,8 @@ void CGeneral::GetPremiumUsers( )
 	uPremiumUsers[ 0 ].tExpiration = DECEMBER_FIRST + 365 * DAY;
 	uPremiumUsers[ 0 ].bValid = true;
 	uPremiumUsers[ 0 ].bBanned = false;
-	uPremiumUsers[ 1 ].lpstrUsername = ""; // TODO MIKE
-	uPremiumUsers[ 1 ].lHardwareID = 0;
+	uPremiumUsers[ 1 ].lpstrUsername = "MiKe"; // TODO MIKE
+	uPremiumUsers[ 1 ].lHardwareID = 2040;
 	uPremiumUsers[ 1 ].tExpiration = DECEMBER_FIRST + 365 * DAY;
 	uPremiumUsers[ 1 ].bValid = true;
 	uPremiumUsers[ 1 ].bBanned = false;

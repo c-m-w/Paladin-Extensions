@@ -69,6 +69,9 @@
     <ClInclude Include="Source\Features\Awareness\glow.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Program\pattern.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Program\general.cpp">
@@ -123,6 +126,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Source\Features\Awareness\glow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Program\pattern.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

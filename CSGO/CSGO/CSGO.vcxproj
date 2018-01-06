@@ -37,6 +37,7 @@
     <ClInclude Include="Source\Features\Miscellaneous\hitsound.h" />
     <ClInclude Include="Source\Features\Miscellaneous\automation.h" />
     <ClInclude Include="Source\dllmain.h" />
+    <ClInclude Include="Source\Program\pattern.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Features\Awareness\glow.cpp" />
@@ -57,6 +58,7 @@
     <ClCompile Include="Source\Features\Miscellaneous\hitsound.cpp" />
     <ClCompile Include="Source\Features\Miscellaneous\automation.cpp" />
     <ClCompile Include="Source\dllmain.cpp" />
+    <ClCompile Include="Source\Program\pattern.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

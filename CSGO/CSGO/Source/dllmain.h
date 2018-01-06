@@ -15,6 +15,7 @@
 #include "Program/config.h"
 #include "Program/interface.h"
 #include "Program/memory.h"
+#include "Program/pattern.h"
 
 #include "Features/Awareness/glow.h"
 #include "Features/Awareness/noflash.h"

@@ -71,6 +71,7 @@ bool CMemoryManager::AttachToGame( )
 		{
 			do
 			{
+				//DEBUG(SCS, "%s", meModules.szModule);
 				if ( !_stricmp( meModules.szModule, "client.dll" ) )
 				{
 					dwClientBase = DWORD( meModules.modBaseAddr );

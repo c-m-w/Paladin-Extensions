@@ -125,7 +125,8 @@ void SetDebug( )
 	SetCurrentConsoleFontEx( hConsole, 0, &cfiEx );
 
 	SetConsoleTitle( "Paladin CSGO" );
-	MoveWindow( hWndConsole, 300, 300, 339, 279, false );
+	//MoveWindow( hWndConsole, 300, 300, 339, 279, false );
+	MoveWindow(hWndConsole, 300, 300, 500, 279, false);
 	EnableMenuItem( GetSystemMenu( hWndConsole, false ), SC_CLOSE, MF_GRAYED );
 	SetWindowLong( hWndConsole, GWL_STYLE, GetWindowLong( hWndConsole, GWL_STYLE ) & ~SC_CLOSE & ~WS_MAXIMIZEBOX & ~WS_SIZEBOX );
 
@@ -197,6 +198,9 @@ int CALLBACK WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	}
 	mem.InitializeAddresses( );
 	LASTERR( );
+
+	//DWORD res = scan.findPatternEx(mem.hGame, "client.dll", "\xA3\x00\x00\x00\x00\xC7\x05\x00\x00\x00\x00\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x59\xC3\x6A", "x????xx????????x????xxx") + 16;
+	//DEBUG(DBG, "dwLocalPlayer: 0x%p", res);
 
 	DEBUG( DBG, "Waiting for server connection..." );
 
