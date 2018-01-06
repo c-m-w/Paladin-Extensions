@@ -7,12 +7,12 @@ void CGeneral::GetPremiumUsers( )
 	uPremiumUsers[ 0 ].tExpiration = DECEMBER_FIRST + 365 * DAY;
 	uPremiumUsers[ 0 ].bValid = true;
 	uPremiumUsers[ 0 ].bBanned = false;
-	uPremiumUsers[ 1 ].lpstrUsername = "MiKe"; // TODO MIKE
+	uPremiumUsers[ 1 ].lpstrUsername = "MiKe";
 	uPremiumUsers[ 1 ].lHardwareID = 8 * 255;
 	uPremiumUsers[ 1 ].tExpiration = DECEMBER_FIRST + 365 * DAY;
 	uPremiumUsers[ 1 ].bValid = true;
 	uPremiumUsers[ 1 ].bBanned = false;
-	uPremiumUsers[ 2 ].lpstrUsername = "Skel"; // TODO SKEL
+	uPremiumUsers[ 2 ].lpstrUsername = "Skel";
 	uPremiumUsers[ 2 ].lHardwareID = 8 * 255;
 	uPremiumUsers[ 2 ].tExpiration = DECEMBER_FIRST + 365 * DAY;
 	uPremiumUsers[ 2 ].bValid = true;

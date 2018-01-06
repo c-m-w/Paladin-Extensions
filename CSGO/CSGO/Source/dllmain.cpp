@@ -4,11 +4,11 @@ HINSTANCE hInst = nullptr;
 std::atomic< bool > bExitState = false;
 std::vector< std::thread > tThreads;
 
-void Feature( bool bFeatureState, unsigned long ulWait, const std::function< void( ) > &fnFeature, unsigned short usiFeatureKey )
+void Feature( bool bFeatureState, unsigned long ulWait, const std::function< void( ) > &fnFeature, unsigned short usFeatureKey )
 {
 	while ( !bExitState )
 	{
-		if ( bFeatureState && GetAsyncKeyState( usiFeatureKey ) )
+		if ( bFeatureState && GetAsyncKeyState( usFeatureKey ) )
 		{
 			fnFeature( );
 		}
