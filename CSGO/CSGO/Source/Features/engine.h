@@ -178,6 +178,32 @@ struct attributelist_t
 	bool bSetBonus; // 0x14
 };
 
+struct glow_t
+{
+	DWORD dwEntityBase { };
+	float flRed { };
+	float flGreen { };
+	float flBlue { };
+	float flAlpha { };
+private:
+	BYTE x14[ 0x8 ] { };
+public:
+	float flBloomAmount { }; // 0x22
+	float localplayeriszeropoint3 { }; // 0x26
+	bool bRenderWhenOccluded { }; // 0x27
+	bool bRenderWhenUnoccluded { }; // 0x28
+	bool bFullBloom { }; // 0x29
+private:
+	BYTE x30[ 0x1 ] { };
+public:
+	int nFullBloomStencilTestValue { }; // 0x31
+private:
+	BYTE x35[ 0x4 ] { };
+public:
+	int nSplitScreenSlot { };
+	int nNextFreeSlot { };
+};
+
 class CGlobalVars
 {
 public:
