@@ -6,26 +6,26 @@
 ##### Open
 ##### Jeremy
 ##### Mike
-- Add multiple injection methods (MM, TH)
+- Add multiple injection methods (Manual map, Thread hijack)
 ##### Hunter
 ##### John
 ##### Cole
 
 ## CSGO TODO
 ##### Open
-- Encrypt Strings
-- Polymorphic Junk Code
+- Encrypt strings
+- Polymorphic junk code
 ##### Jeremy
-- Velocity Based Backtrack
-- Aimbot
-- Legit Antiaim
-- Move Log to C:/ Drive
 - Check for multiple instances
+- Move Log to C:/ drive
+- Aimbot
+- Legit antiaim
+- Velocity-based backtrack
+- Fix getting entity list
 ##### Mike
-- Pattern Scanning
 - Config
+- Pattern scanning
 - Log file implementation
-- Define User/HWID for yourself
 ##### Hunter
 - Menu
 - Define HWID for yourself
@@ -35,4 +35,5 @@
 - ClientCMDUnrestricted
 - UserCMD
 ##### Cole
-- Check CPlayer variables that they work
+- Ensure CPlayer variables work
+- Refactor all long l to int i and unsigned long ul to int i (unless it actually needs to be unsigned long, then do unsigned int ui)
