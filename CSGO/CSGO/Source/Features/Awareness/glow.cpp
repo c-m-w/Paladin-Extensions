@@ -1,37 +1,55 @@
 #include "../../dllmain.h"
+address_t< long > lEntity;
+bool hpBasedGlow = true;
+int cPlayerHealth = 0;
+address_t< int > cPlayerHealthAddress;
 
 void CGlow::Glow( )
 {
-	for ( unsigned long ulEntity = 0; ulEntity < 64; ulEntity++ )
+	for ( unsigned long ulEntity = 64; ulEntity < 250; ulEntity++ )
 	{
-		std::cout << ulEntity << " " << plrEntities[ ulEntity ]._My_val.xValue.ulHealth << std::endl;
-		address_t< long > lEntity;
+
+		//std::cout << ulEntity << " " << plrEntities[ ulEntity ]._My_val.xValue.bLifeState << std::endl;
+		//std::cout << ulEntity << " " << plrEntities[ ulEntity ]._My_val.xValue.ulTeamNum << std::endl;
+
 		lEntity.dwLocation = eng.GetEntityBase( ulEntity ) + GLOWINDEX;
+
+		/*
+		cPlayerHealthAddress.dwLocation = lEntity.dwLocation + 0xFC;
+		mem.Get(cPlayerHealthAddress);
+		std::cout << cPlayerHealthAddress.xValue << std::endl;
+		*/
+
+		//std::cout << "ENTITYBASEGET:: " << eng.GetEntityBase(ulEntity) << std::endl;
+		//std::cout << "LOCATION::" << lEntity.dwLocation << std::endl;
 		if ( !plrEntities[ ulEntity ]._My_val.xValue.bDormant )
 		{
 			if ( plrLocalPlayer._My_val.xValue.ulTeamNum != plrEntities[ ulEntity ]._My_val.xValue.ulTeamNum )
 			{
-				if ( plrEntities[ ulEntity ]._My_val.xValue.ulHealth > 0 && plrEntities[ ulEntity ]._My_val.xValue.ulHealth < 100 )
+				/*plrEntities[ ulEntity ]._My_val.xValue.ulHealth > 0 && plrEntities[ ulEntity ]._My_val.xValue.ulHealth < 101*/ 
+				if ( true )
 				{
 					mem.Get( pdwGlowManager );
 					mem.Get( lEntity );
-					address_t< glow_t > agloEntityGlow;
-					agloEntityGlow.dwLocation = pdwGlowManager.xValue + ulEntity * sizeof( glow_t);
-					mem.Get( agloEntityGlow );
+					address_t< glow_t > gloEntityGlow;
+					gloEntityGlow.dwLocation = pdwGlowManager.xValue + ulEntity * sizeof( glow_t);
+					mem.Get( gloEntityGlow );
 
-					agloEntityGlow.xValue.flRed = 2.f - float( plrEntities[ ulEntity ]._My_val.xValue.ulHealth ) / 50.f;
-					agloEntityGlow.xValue.flGreen = float( plrEntities[ ulEntity ]._My_val.xValue.ulHealth ) / 50.f;
-					agloEntityGlow.xValue.flBlue = 0.f;
+					if(hpBasedGlow){
+					gloEntityGlow.xValue.flRed = 2.f - float( plrEntities[ ulEntity ]._My_val.xValue.ulHealth ) / 50.f;
+					gloEntityGlow.xValue.flGreen = float( plrEntities[ ulEntity ]._My_val.xValue.ulHealth ) / 50.f;
+					gloEntityGlow.xValue.flBlue = 0.f;
+					}
 
-					agloEntityGlow.xValue.bRenderWhenOccluded = false;
-					agloEntityGlow.xValue.bRenderWhenUnoccluded = true;
+					gloEntityGlow.xValue.bRenderWhenOccluded = false;
+					gloEntityGlow.xValue.bRenderWhenUnoccluded = true;
 
 					vector_t vecEntityDistance( plrLocalPlayer._My_val.xValue.corOrigin, plrEntities[ ulEntity ]._My_val.xValue.corOrigin );
 					float flDistance = sqrt( pow( vecEntityDistance.flDeltaX, 2 ) + pow( vecEntityDistance.flDeltaY, 2 ) + pow( vecEntityDistance.flDeltaZ, 2 ) );
-					agloEntityGlow.xValue.flAlpha = 1000.f / flDistance;
+					gloEntityGlow.xValue.flAlpha = 1000.f / flDistance;
 
-					agloEntityGlow.xValue.bFullBloom = false;
-					mem.Set( agloEntityGlow );
+					gloEntityGlow.xValue.bFullBloom = false;
+					mem.Set( gloEntityGlow );
 				}
 			}
 		}
