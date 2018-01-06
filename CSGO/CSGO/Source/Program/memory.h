@@ -47,33 +47,33 @@ public:
 
 	void InitializeAddresses( );
 
-	template< typename xDatatype > bool Get( address_t< xDatatype > &adrRead )
+	template< typename xDatatype > bool Get( address_t< xDatatype > &xRead )
 	{
-		if ( adrRead.dwLocation )
+		if ( xRead.dwLocation )
 		{
-			if ( adrRead.dwPointer )
+			if ( xRead.dwPointer )
 			{
 				DWORD dwXor;
-				bool bSuccess = ReadProcessMemory( hGame, LPVOID( adrRead.dwLocation ), &dwXor, sizeof(DWORD), nullptr );
-				dwXor ^= adrRead.dwPointer;
-				adrRead.xValue = *reinterpret_cast< xDatatype* >( &dwXor );
+				bool bSuccess = ReadProcessMemory( hGame, LPVOID( xRead.dwLocation ), &dwXor, sizeof(DWORD), nullptr );
+				dwXor ^= xRead.dwPointer;
+				xRead.xValue = *reinterpret_cast< xDatatype* >( &dwXor );
 				return bSuccess;
 			}
-			return ReadProcessMemory( hGame, LPVOID( adrRead.dwLocation ), &adrRead.xValue, sizeof(xDatatype), nullptr );
+			return ReadProcessMemory( hGame, LPVOID( xRead.dwLocation ), &xRead.xValue, sizeof(xDatatype), nullptr );
 		}
 		return false;
 	}
 
-	template< typename xDatatype > bool Set( address_t< xDatatype > &adrWrite )
+	template< typename xDatatype > bool Set( address_t< xDatatype > &xWrite )
 	{
-		if ( adrWrite.dwLocation )
+		if ( xWrite.dwLocation )
 		{
-			if ( adrWrite.dwPointer )
+			if ( xWrite.dwPointer )
 			{
-				DWORD dwXor = *reinterpret_cast< DWORD* >( &adrWrite.xValue ) ^ adrWrite.dwPointer;
-				return WriteProcessMemory( hGame, LPVOID( adrWrite.dwLocation ), &dwXor, sizeof(DWORD), nullptr );
+				DWORD dwXor = *reinterpret_cast< DWORD* >( &xWrite.xValue ) ^ xWrite.dwPointer;
+				return WriteProcessMemory( hGame, LPVOID( xWrite.dwLocation ), &dwXor, sizeof(DWORD), nullptr );
 			}
-			return WriteProcessMemory( hGame, LPVOID( adrWrite.dwLocation ), &adrWrite.xValue, sizeof(xDatatype), nullptr );
+			return WriteProcessMemory( hGame, LPVOID( xWrite.dwLocation ), &xWrite.xValue, sizeof(xDatatype), nullptr );
 		}
 		return false;
 	}
