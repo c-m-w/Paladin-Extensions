@@ -4,14 +4,13 @@ void CGlow::Glow( )
 {
 	for ( unsigned long ulEntity = 0; ulEntity < 64; ulEntity++ )
 	{
-		std::cout << ulEntity << " " << plrEntities[ ulEntity ]._My_val.xValue.ulHealth << std::endl;
 		address_t< long > lEntity;
-		lEntity.dwLocation = eng.GetEntityBase( ulEntity ) + GLOWINDEX;
+		lEntity.dwLocation = eng.GetEntityBase( ulEntity ) + INDEX_DISTANCE_GLOW;
 		if ( !plrEntities[ ulEntity ]._My_val.xValue.bDormant )
 		{
 			if ( plrLocalPlayer._My_val.xValue.ulTeamNum != plrEntities[ ulEntity ]._My_val.xValue.ulTeamNum )
 			{
-				if ( plrEntities[ ulEntity ]._My_val.xValue.ulHealth > 0 && plrEntities[ ulEntity ]._My_val.xValue.ulHealth < 100 )
+				if ( plrEntities[ ulEntity ]._My_val.xValue.bLifeState == LIFE_ALIVE )
 				{
 					mem.Get( pdwGlowManager );
 					mem.Get( lEntity );

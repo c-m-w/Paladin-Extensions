@@ -8,9 +8,12 @@ void CRadar::Radar( )
 		{
 			if ( plrLocalPlayer._My_val.xValue.ulTeamNum != plrEntities[ ulEntity ]._My_val.xValue.ulTeamNum )
 			{
-				CPlayer plrNewEntity = plrEntities[ ulEntity ]._My_val.xValue;
-				plrNewEntity.bSpotted = true;
-				eng.SetEntity( ulEntity, plrNewEntity );
+				if ( plrEntities[ ulEntity ]._My_val.xValue.bLifeState == LIFE_ALIVE )
+				{
+					CPlayer plrNewEntity = plrEntities[ ulEntity ]._My_val.xValue;
+					plrNewEntity.bSpotted = true;
+					eng.SetEntity( ulEntity, plrNewEntity );
+				}
 			}
 		}
 	}

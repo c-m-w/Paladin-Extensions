@@ -5,14 +5,17 @@ typedef unsigned long EHANDLE;
 
 #define FL_ONGROUND ( 1 << 0 ) // At rest / on the ground
 #define FL_DUCKING ( 1 << 1 ) // Player FLAG -- Player is fully crouched
-#define MAX_ANGLE_DELTA 22.f // Max angle delta per tick
+#define	LIFE_ALIVE 0 // alive
+#define	LIFE_DYING 1 // playing death animation or still falling off of a ledge waiting to hit ground
+#define	LIFE_DEAD 2 // dead. lying still.
 #define ACTION_NONE 0b0 // -command
 #define ACTION_PRESS 0b1 // +command
 #define ACTION_TICK 0b10 // +command, tick, -command
 #define ACTION_DEFAULT 0b100 // default command state
-#define ENTITY_DISTANCE 0x10 // Distance between entities
-#define GLOWINDEX 0xA310
+#define INDEX_DISTANCE_ENTITY 0x10 // Distance between entities
+#define INDEX_DISTANCE_GLOW 0xA310
 
+#define MAX_ANGLE_DELTA 22.f // Max angle delta per tick
 #define MAX_SENSITIVITY 1000.f
 #define MIN_SENSITIVITY 0.f
 #define MAX_FLASHALPHA 255.f
@@ -40,13 +43,6 @@ enum class ESignOnState
 	SPAWNED = 5,
 	FULL,
 	CHANGELEVEL
-};
-
-enum class ELifeState
-{
-	ALIVE,
-	KILLCAM,
-	DEAD
 };
 
 enum class ETeam
@@ -266,7 +262,7 @@ public:
 	unsigned __int8 unRenderFX { }; // 0x256
 	unsigned short usRenderMode { }; // 0x257
 	unsigned __int8 unWaterLevel { }; // 0x25a
-	bool bLifeState { }; // 0x25b
+	BYTE bLifeState { }; // 0x25b
 	float flAnimTime { }; // 0x25c
 private:
 	BYTE x260[0x4] { };
