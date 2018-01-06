@@ -113,26 +113,26 @@ DWORD CEngine::GetEntityBase( unsigned long ulEntity )
 
 CPlayer CEngine::GetEntity( unsigned long ulEntity )
 {
-	address_t< CPlayer > aplrEntityTemp { 0, 0, GetEntityBase( ulEntity ) };
-	mem.Get( aplrEntityTemp );
-	aplrEntities[ ulEntity ] = aplrEntityTemp;
-	return aplrEntityTemp.xValue;
+	address_t< CPlayer > plrEntityTemp { 0, 0, GetEntityBase( ulEntity ) };
+	mem.Get( plrEntityTemp );
+	plrEntities[ ulEntity ] = plrEntityTemp;
+	return plrEntityTemp.xValue;
 }
 
 void CEngine::GetEntities( )
 {
 	for ( unsigned long ulEntity = 0; ulEntity < 64; ulEntity++ )
 	{
-		address_t< CPlayer > plrEntity { 0, 0, GetEntityBase( ulEntity ) };
-		mem.Get( plrEntity );
-		aplrEntities[ ulEntity ] = plrEntity;
+		address_t< CPlayer > plrEntityTemp { 0, 0, GetEntityBase( ulEntity ) };
+		mem.Get( plrEntityTemp );
+		plrEntities[ ulEntity ] = plrEntityTemp;
 	}
 }
 
 void CEngine::SetEntity( unsigned long ulEntity, CPlayer plrNewEntity )
 {
-	address_t< CPlayer > aplrNewEntity { 0, 0, GetEntityBase( ulEntity ), plrNewEntity };
-	mem.Set( aplrNewEntity );
+	address_t< CPlayer > plrEntityTemp { 0, 0, GetEntityBase( ulEntity ), plrNewEntity };
+	mem.Set( plrEntityTemp );
 }
 
 DWORD CEngine::GetLocalPlayerBase( )
@@ -143,17 +143,17 @@ DWORD CEngine::GetLocalPlayerBase( )
 
 CPlayer CEngine::GetLocalPlayer( )
 {
-	address_t< CPlayer > aplrLocalPlayerTemp { 0, 0, GetLocalPlayerBase( ) };
-	mem.Get( aplrLocalPlayerTemp );
-	aplrLocalPlayer = aplrLocalPlayerTemp;
-	return aplrLocalPlayerTemp.xValue;
+	address_t< CPlayer > plrLocalPlayerTemp { 0, 0, GetLocalPlayerBase( ) };
+	mem.Get( plrLocalPlayerTemp );
+	plrLocalPlayer = plrLocalPlayerTemp;
+	return plrLocalPlayerTemp.xValue;
 }
 
 void CEngine::SetLocalPlayer( CPlayer plrNewLocalPlayer )
 {
-	address_t< CPlayer > aplrNewLocalPlayer = aplrLocalPlayer;
-	aplrNewLocalPlayer.xValue = plrNewLocalPlayer;
-	mem.Set( aplrNewLocalPlayer );
+	address_t< CPlayer > plrLocalPlayerTemp = plrLocalPlayer;
+	plrLocalPlayerTemp.xValue = plrNewLocalPlayer;
+	mem.Set( plrLocalPlayerTemp );
 }
 
 float CEngine::GetPixelToAngleYaw( )

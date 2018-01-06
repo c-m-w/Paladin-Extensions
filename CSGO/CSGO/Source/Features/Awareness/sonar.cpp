@@ -2,11 +2,11 @@
 
 void CSonar::Sonar( )
 {
-	address_t< CPlayer > aplrLocalPlayerCopy = aplrLocalPlayer;
+	address_t< CPlayer > aplrLocalPlayerCopy = plrLocalPlayer;
 	address_t< CPlayer > aplrEntitiesCopy[64];
 	for ( int i = 0; i < 64; i++ )
 	{
-		aplrEntitiesCopy[ i ] = aplrEntities[ i ];
+		aplrEntitiesCopy[ i ] = plrEntities[ i ];
 	}
 	for ( auto &ulEntity: aplrEntitiesCopy )
 	{

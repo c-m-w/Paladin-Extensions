@@ -23,10 +23,10 @@ namespace Addresses
 	extern address_t< FLAG > fForceJump;
 	// client pointer addresses
 	extern address_t< DWORD > pdwEntityList;
-	extern std::atomic< address_t< CPlayer > > aplrEntities[64];
+	extern std::atomic< address_t< CPlayer > > plrEntities[64];
 
 	extern address_t< DWORD > pdwLocalPlayer;
-	extern std::atomic< address_t< CPlayer > > aplrLocalPlayer;
+	extern std::atomic< address_t< CPlayer > > plrLocalPlayer;
 
 	extern address_t< DWORD > pdwGlowManager;
 }
@@ -64,7 +64,7 @@ public:
 		return false;
 	}
 
-	template< typename datatype > bool Set( address_t< datatype > &adrWrite )
+	template< typename xDatatype > bool Set( address_t< xDatatype > &adrWrite )
 	{
 		if ( adrWrite.dwLocation )
 		{
@@ -73,7 +73,7 @@ public:
 				DWORD dwXor = *reinterpret_cast< DWORD* >( &adrWrite.xValue ) ^ adrWrite.dwPointer;
 				return WriteProcessMemory( hGame, LPVOID( adrWrite.dwLocation ), &dwXor, sizeof(DWORD), nullptr );
 			}
-			return WriteProcessMemory( hGame, LPVOID( adrWrite.dwLocation ), &adrWrite.xValue, sizeof(datatype), nullptr );
+			return WriteProcessMemory( hGame, LPVOID( adrWrite.dwLocation ), &adrWrite.xValue, sizeof(xDatatype), nullptr );
 		}
 		return false;
 	}

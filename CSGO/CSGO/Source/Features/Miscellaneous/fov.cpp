@@ -2,7 +2,7 @@
 
 void CFOV::FOV( )
 {
-	address_t< CPlayer > aplrLocalPlayerCopy = aplrLocalPlayer;
+	address_t< CPlayer > aplrLocalPlayerCopy = plrLocalPlayer;
 	CPlayer plrNewLocalPlayer = aplrLocalPlayerCopy.xValue;
 	plrNewLocalPlayer.ulDefaultFOV = 120;
 	eng.SetLocalPlayer( plrNewLocalPlayer );
