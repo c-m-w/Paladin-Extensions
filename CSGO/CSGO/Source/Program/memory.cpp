@@ -15,10 +15,10 @@ namespace Addresses
 	address_t< FLAG > fForceJump;
 	// client pointer addresses
 	address_t< DWORD > pdwEntityList;
-	std::atomic< address_t< CPlayer > > aplrEntities[64];
+	std::atomic< address_t< CPlayer > > plrEntities[64];
 
 	address_t< DWORD > pdwLocalPlayer;
-	std::atomic< address_t< CPlayer > > aplrLocalPlayer;
+	std::atomic< address_t< CPlayer > > plrLocalPlayer;
 
 	address_t< DWORD > pdwGlowManager;
 }
@@ -65,7 +65,7 @@ bool CMemoryManager::AttachToGame( )
 			return false;
 		}
 		DEBUG( SCS, "Module snapshot created" );
-		MODULEENTRY32 meModules = { };
+		MODULEENTRY32 meModules { };
 		meModules.dwSize = sizeof(MODULEENTRY32);
 		if ( Module32First( hSnapshot, &meModules ) )
 		{

@@ -3,7 +3,7 @@
 class CRecoilControl
 {
 	unsigned long ulOldShotsFired = 0;
-	angle_t angOldAimPunch = { 0, 0, 0 };
+	angle_t angOldAimPunch { 0, 0, 0 };
 public:
 	void RecoilControl( );
 };

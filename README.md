@@ -35,5 +35,12 @@
 - ClientCMDUnrestricted
 - UserCMD
 ##### Cole
-- Refactor all CPlayer variables to match conventions
+- Change all ints to longs, and rename it from iVar to lVar
+- Refactor all variables to match conventions
+   - address_t< CPlayer > aplr **SHOULD BE** plr
+   - address_t< int > ai **SHOULD BE** i
 - Check CPlayer variables that they work
+- Stop copying of plrs - plrLocalPlayerCopy should just be plrLocalPlayer._My_val.xValue
+- Check for modifying of ._My_val and replace it with a plr duplicate (._My_val is unmodifiable)
+   - ._My_val is for reading
+   - Copy plr for writing, then use Setplr functions
