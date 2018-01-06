@@ -5,8 +5,8 @@ void CGlow::Glow( )
 	for ( unsigned long ulEntity = 0; ulEntity < 64; ulEntity++ )
 	{
 		std::cout << ulEntity << " " << plrEntities[ ulEntity ]._My_val.xValue.ulHealth << std::endl;
-		address_t< int > aiEntity;
-		aiEntity.dwLocation = eng.GetEntityBase( ulEntity ) + GLOWINDEX;
+		address_t< long > lEntity;
+		lEntity.dwLocation = eng.GetEntityBase( ulEntity ) + GLOWINDEX;
 		if ( !plrEntities[ ulEntity ]._My_val.xValue.bDormant )
 		{
 			if ( plrLocalPlayer._My_val.xValue.ulTeamNum != plrEntities[ ulEntity ]._My_val.xValue.ulTeamNum )
@@ -14,7 +14,7 @@ void CGlow::Glow( )
 				if ( plrEntities[ ulEntity ]._My_val.xValue.ulHealth > 0 && plrEntities[ ulEntity ]._My_val.xValue.ulHealth < 100 )
 				{
 					mem.Get( pdwGlowManager );
-					mem.Get( aiEntity );
+					mem.Get( lEntity );
 					address_t< glow_t > agloEntityGlow;
 					agloEntityGlow.dwLocation = pdwGlowManager.xValue + ulEntity * sizeof( glow_t);
 					mem.Get( agloEntityGlow );

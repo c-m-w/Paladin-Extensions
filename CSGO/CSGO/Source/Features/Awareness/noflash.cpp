@@ -2,8 +2,7 @@
 
 void CNoFlash::NoFlash( )
 {
-	address_t< CPlayer > aplrLocalPlayerCopy = plrLocalPlayer;
-	CPlayer plrNewLocalPlayer = aplrLocalPlayerCopy.xValue;
+	CPlayer plrNewLocalPlayer = plrLocalPlayer._My_val.xValue;
 	plrNewLocalPlayer.flFlashMaxAlpha = 0;
 	eng.SetLocalPlayer( plrNewLocalPlayer );
 }

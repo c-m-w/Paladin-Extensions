@@ -2,19 +2,18 @@
 
 void CRadar::Radar( )
 {
-	address_t< CPlayer > aplrLocalPlayerCopy = plrLocalPlayer;
-	address_t< CPlayer > aplrEntitiesCopy[64];
-	for ( int i = 0; i < 64; i++ )
+	address_t< CPlayer > plrEntitiesCopy[64];
+	for ( long i = 0; i < 64; i++ )
 	{
-		aplrEntitiesCopy[ i ] = plrEntities[ i ];
+		plrEntitiesCopy[ i ] = plrEntities[ i ];
 	}
 	for ( unsigned long ulEntity = 0; ulEntity < 64; ulEntity++ )
 	{
-		if ( !aplrEntitiesCopy[ ulEntity ].xValue.bDormant )
+		if ( !plrEntitiesCopy[ ulEntity ].xValue.bDormant )
 		{
-			if ( aplrLocalPlayerCopy.xValue.ulTeamNum != aplrEntitiesCopy[ ulEntity ].xValue.ulTeamNum )
+			if ( plrLocalPlayer._My_val.xValue.ulTeamNum != plrEntitiesCopy[ ulEntity ].xValue.ulTeamNum )
 			{
-				CPlayer plrNewEntity = aplrEntitiesCopy[ ulEntity ].xValue;
+				CPlayer plrNewEntity = plrEntitiesCopy[ ulEntity ].xValue;
 				plrNewEntity.bSpotted = true;
 				eng.SetEntity( ulEntity, plrNewEntity );
 			}

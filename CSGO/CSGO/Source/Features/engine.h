@@ -196,12 +196,12 @@ public:
 private:
 	BYTE x30[ 0x1 ] { };
 public:
-	int nFullBloomStencilTestValue { }; // 0x31
+	long lFullBloomStencilTestValue { }; // 0x31
 private:
 	BYTE x35[ 0x4 ] { };
 public:
-	int nSplitScreenSlot { };
-	int nNextFreeSlot { };
+	long lSplitScreenSlot { };
+	long lNextFreeSlot { };
 };
 
 class CGlobalVars
@@ -258,7 +258,7 @@ public:
 	long lMoveParent { }; // 0x144
 	EHANDLE hOwnerEntity { }; // 0x148
 	EHANDLE hGroundEntity { }; // 0x14c
-	char *iName { }; // 0x150
+	char *szName { }; // 0x150
 private:
 	BYTE x154[0x100] { };
 public:

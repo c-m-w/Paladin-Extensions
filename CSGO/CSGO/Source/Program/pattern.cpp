@@ -47,7 +47,7 @@ MODULEENTRY32 CPatternScanner::getModule(char *module)
 	return MODULEENTRY32({});
 }
 
-uintptr_t CPatternScanner::findPattern(char* base, unsigned int size, char* pattern, char *mask)
+uintptr_t CPatternScanner::findPattern(char* base, unsigned long size, char* pattern, char *mask)
 {
 	size_t patternLength = strlen(mask);
 
