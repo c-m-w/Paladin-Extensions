@@ -36,6 +36,3 @@
 - UserCMD
 ##### Cole
 - Check CPlayer variables that they work
-- Check for modifying of ._My_val and replace it with a plr duplicate (._My_val is unmodifiable)
-   - ._My_val is for reading
-   - Copy plr for writing, then use Setplr functions
