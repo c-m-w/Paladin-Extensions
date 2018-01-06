@@ -2,18 +2,13 @@
 
 void CSonar::Sonar( )
 {
-	address_t< CPlayer > plrEntitiesCopy[64];
-	for ( long i = 0; i < 64; i++ )
+	for ( unsigned long ulEntity = 0; ulEntity < 64; ulEntity++ )
 	{
-		plrEntitiesCopy[ i ] = plrEntities[ i ];
-	}
-	for ( auto &ulEntity: plrEntitiesCopy )
-	{
-		if ( !ulEntity.xValue.bDormant )
+		if ( !plrEntities[ulEntity]._My_val.xValue.bDormant )
 		{
-			if ( plrLocalPlayer._My_val.xValue.ulTeamNum != ulEntity.xValue.ulTeamNum )
+			if ( plrLocalPlayer._My_val.xValue.ulTeamNum != plrEntities[ulEntity]._My_val.xValue.ulTeamNum )
 			{
-				vector_t vecEntityDistance( ulEntity.xValue.corOrigin, plrLocalPlayer._My_val.xValue.corOrigin );
+				vector_t vecEntityDistance( plrEntities[ulEntity]._My_val.xValue.corOrigin, plrLocalPlayer._My_val.xValue.corOrigin );
 
 				float flDistance = sqrt( pow( vecEntityDistance.flDeltaX, 2 ) + pow( vecEntityDistance.flDeltaY, 2 ) + pow( vecEntityDistance.flDeltaZ, 2 ) );
 
