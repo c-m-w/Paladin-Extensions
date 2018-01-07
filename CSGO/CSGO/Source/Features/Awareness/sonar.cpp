@@ -4,13 +4,13 @@ void CSonar::Sonar( )
 {
 	for (auto & plrEntity : plrEntities)
 	{
-		if ( !plrEntity._My_val.xValue.bDormant )
+		if ( !plrEntity.xValue._My_val.bDormant )
 		{
-			if ( plrLocalPlayer._My_val.xValue.ulTeamNum != plrEntity._My_val.xValue.ulTeamNum )
+			if ( plrLocalPlayer.xValue._My_val.ulTeamNum != plrEntity.xValue._My_val.ulTeamNum )
 			{
-				if ( plrEntity._My_val.xValue.bLifeState == LIFE_ALIVE )
+				if ( plrEntity.xValue._My_val.bLifeState == LIFE_ALIVE )
 				{
-					vector_t vecEntityDistance( plrEntity._My_val.xValue.corOrigin, plrLocalPlayer._My_val.xValue.corOrigin );
+					vector_t vecEntityDistance( plrEntity.xValue._My_val.corOrigin, plrLocalPlayer.xValue._My_val.corOrigin );
 
 					float flDistance = sqrt( pow( vecEntityDistance.flDeltaX, 2 ) + pow( vecEntityDistance.flDeltaY, 2 ) + pow( vecEntityDistance.flDeltaZ, 2 ) );
 

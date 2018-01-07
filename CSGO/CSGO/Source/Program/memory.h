@@ -2,10 +2,10 @@
 
 template< typename xDatatype > struct address_t
 {
-	DWORD dwOffset = 0; // offset
-	DWORD dwPointer = 0; // thisptr
-	DWORD dwLocation = 0; // location
-	xDatatype xValue { }; // value
+	std::atomic< DWORD > dwOffset = 0; // offset
+	std::atomic< DWORD > dwPointer = 0; // thisptr
+	std::atomic< DWORD > dwLocation = 0; // location
+	std::atomic< xDatatype > xValue { }; // value
 };
 
 namespace Addresses
@@ -23,10 +23,10 @@ namespace Addresses
 	extern address_t< FLAG > fForceJump;
 	// client pointer addresses
 	extern address_t< DWORD > pdwEntityList;
-	extern std::atomic< address_t< CPlayer > > plrEntities[64];
+	extern address_t< CPlayer > plrEntities[64];
 
 	extern address_t< DWORD > pdwLocalPlayer;
-	extern std::atomic< address_t< CPlayer > > plrLocalPlayer;
+	extern address_t< CPlayer > plrLocalPlayer;
 
 	extern address_t< DWORD > pdwGlowManager;
 }
@@ -54,12 +54,12 @@ public:
 			if ( xRead.dwPointer )
 			{
 				DWORD dwXor;
-				bool bSuccess = ReadProcessMemory( hGame, LPVOID( xRead.dwLocation ), &dwXor, sizeof(DWORD), nullptr );
+				bool bSuccess = ReadProcessMemory( hGame, LPVOID( xRead.dwLocation._My_val ), &dwXor, sizeof(DWORD), nullptr );
 				dwXor ^= xRead.dwPointer;
 				xRead.xValue = *reinterpret_cast< xDatatype* >( &dwXor );
 				return bSuccess;
 			}
-			return ReadProcessMemory( hGame, LPVOID( xRead.dwLocation ), &xRead.xValue, sizeof(xDatatype), nullptr );
+			return ReadProcessMemory( hGame, LPVOID( xRead.dwLocation._My_val ), &xRead.xValue, sizeof(xDatatype), nullptr );
 		}
 		return false;
 	}
@@ -71,9 +71,9 @@ public:
 			if ( xWrite.dwPointer )
 			{
 				DWORD dwXor = *reinterpret_cast< DWORD* >( &xWrite.xValue ) ^ xWrite.dwPointer;
-				return WriteProcessMemory( hGame, LPVOID( xWrite.dwLocation ), &dwXor, sizeof(DWORD), nullptr );
+				return WriteProcessMemory( hGame, LPVOID( xWrite.dwLocation._My_val ), &dwXor, sizeof(DWORD), nullptr );
 			}
-			return WriteProcessMemory( hGame, LPVOID( xWrite.dwLocation ), &xWrite.xValue, sizeof(xDatatype), nullptr );
+			return WriteProcessMemory( hGame, LPVOID( xWrite.dwLocation._My_val ), &xWrite.xValue, sizeof(xDatatype), nullptr );
 		}
 		return false;
 	}

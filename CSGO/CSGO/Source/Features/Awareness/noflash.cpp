@@ -2,7 +2,7 @@
 
 void CNoFlash::NoFlash( )
 {
-	CPlayer plrNewLocalPlayer = plrLocalPlayer._My_val.xValue;
+	CPlayer plrNewLocalPlayer = plrLocalPlayer.xValue;
 	plrNewLocalPlayer.flFlashMaxAlpha = 0;
 	eng.SetLocalPlayer( plrNewLocalPlayer );
 }

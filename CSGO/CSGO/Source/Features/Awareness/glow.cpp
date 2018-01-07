@@ -7,11 +7,11 @@ void CGlow::Glow( )
 		address_t< long > lEntity;
 		lEntity.dwLocation = eng.GetEntityBase( ulEntity ) + INDEX_DISTANCE_GLOW;
 
-		if ( !plrEntities[ ulEntity ]._My_val.xValue.bDormant )
+		if ( !plrEntities[ ulEntity ].xValue._My_val.bDormant )
 		{
-			if ( plrLocalPlayer._My_val.xValue.ulTeamNum != plrEntities[ ulEntity ]._My_val.xValue.ulTeamNum )
+			if ( plrLocalPlayer.xValue._My_val.ulTeamNum != plrEntities[ ulEntity ].xValue._My_val.ulTeamNum )
 			{
-				if ( plrEntities[ ulEntity ]._My_val.xValue.bLifeState == LIFE_ALIVE )
+				if ( plrEntities[ ulEntity ].xValue._My_val.bLifeState == LIFE_ALIVE )
 				{
 					mem.Get( pdwGlowManager );
 					mem.Get( lEntity );
@@ -19,17 +19,18 @@ void CGlow::Glow( )
 					gloEntityGlow.dwLocation = pdwGlowManager.xValue + lEntity.xValue * sizeof( glow_t );
 					mem.Get( gloEntityGlow );
 
-					gloEntityGlow.xValue.flRed = 2.f - float( plrEntities[ ulEntity ]._My_val.xValue.ulHealth ) / 50.f;
-					gloEntityGlow.xValue.flGreen = float( plrEntities[ ulEntity ]._My_val.xValue.ulHealth ) / 50.f;
-					gloEntityGlow.xValue.flBlue = 0.f;
-					gloEntityGlow.xValue.bRenderWhenOccluded = false;
-					gloEntityGlow.xValue.bRenderWhenUnoccluded = true;
-
-					vector_t vecEntityDistance( plrLocalPlayer._My_val.xValue.corOrigin, plrEntities[ ulEntity ]._My_val.xValue.corOrigin );
+					glow_t glowEntityGlowTemp;
+					glowEntityGlowTemp.flRed = 2.f - float( plrEntities[ ulEntity ].xValue._My_val.ulHealth ) / 50.f;
+					glowEntityGlowTemp.flGreen = float( plrEntities[ ulEntity ].xValue._My_val.ulHealth ) / 50.f;
+					glowEntityGlowTemp.flBlue = 0.f;
+					glowEntityGlowTemp.bRenderWhenOccluded = false;
+					glowEntityGlowTemp.bRenderWhenUnoccluded = true;
+					vector_t vecEntityDistance( plrLocalPlayer.xValue._My_val.corOrigin, plrEntities[ ulEntity ].xValue._My_val.corOrigin );
 					float flDistance = sqrt( pow( vecEntityDistance.flDeltaX, 2 ) + pow( vecEntityDistance.flDeltaY, 2 ) + pow( vecEntityDistance.flDeltaZ, 2 ) );
-					gloEntityGlow.xValue.flAlpha = 2500.f / flDistance;
+					glowEntityGlowTemp.flAlpha = 2500.f / flDistance;
+					glowEntityGlowTemp.bFullBloom = false;
 
-					gloEntityGlow.xValue.bFullBloom = false;
+					gloEntityGlow.xValue = glowEntityGlowTemp;
 					mem.Set( gloEntityGlow );
 				}
 			}

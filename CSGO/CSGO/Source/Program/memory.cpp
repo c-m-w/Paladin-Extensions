@@ -15,10 +15,10 @@ namespace Addresses
 	address_t< FLAG > fForceJump;
 	// client pointer addresses
 	address_t< DWORD > pdwEntityList;
-	std::atomic< address_t< CPlayer > > plrEntities[64];
+	address_t< CPlayer > plrEntities[64];
 
 	address_t< DWORD > pdwLocalPlayer;
-	std::atomic< address_t< CPlayer > > plrLocalPlayer;
+	address_t< CPlayer > plrLocalPlayer;
 
 	address_t< DWORD > pdwGlowManager;
 }
@@ -134,20 +134,21 @@ void CMemoryManager::InitializeAddresses( )
 
 	// todo signature scanning
 	// global Engine addresses
-	gvGlobalVars = { 0x57B4F0 };
-	bSendPackets = { 0xCCD5A };
+	gvGlobalVars.dwOffset = 0x57B4F0;
+	bSendPackets.dwOffset = 0xCCD5A;
 	// Engine pointer addresses
-	pdwClientState = { 0x57B7EC };
-	soSignOnState = { 0x108 };
-	angViewAngle = { 0x4D10 };
+	pdwClientState.dwOffset = 0x57B7EC;
+	soSignOnState.dwOffset = 0x108;
+	angViewAngle.dwOffset = 0x4D10;
 	// global Client addresses
-	flSensitivity = { 0xAA14DC, 0xAA14B0 };
-	fForceAttack = { 0x2EBB25C };
-	fForceJump = { 0x4F10154 };
+	flSensitivity.dwOffset = 0xAA14DC;
+	flSensitivity.dwPointer = 0xAA14B0;
+	fForceAttack.dwOffset = 0x2EBB25C;
+	fForceJump.dwOffset = 0x4F10154;
 	// Client pointer addresses
-	pdwEntityList = { 0x4A78EE4 };
-	pdwGlowManager = { 0x4F95D48 };
-	pdwLocalPlayer = { 0xA9C0DC };
+	pdwEntityList.dwOffset = 0x4A78EE4;
+	pdwGlowManager.dwOffset = 0x4F95D48;
+	pdwLocalPlayer.dwOffset = 0xA9C0DC;
 	DEBUG( DBG, "Initialized bases" );
 
 	// engine global

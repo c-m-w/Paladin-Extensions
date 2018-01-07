@@ -115,7 +115,7 @@ CPlayer CEngine::GetEntity( unsigned long ulEntity )
 {
 	address_t< CPlayer > plrEntityTemp { 0, 0, GetEntityBase( ulEntity ) };
 	mem.Get( plrEntityTemp );
-	plrEntities[ ulEntity ] = plrEntityTemp;
+	plrEntities[ ulEntity ].xValue = plrEntityTemp.xValue._My_val;
 	return plrEntityTemp.xValue;
 }
 
@@ -135,13 +135,14 @@ CPlayer CEngine::GetLocalPlayer( )
 {
 	address_t< CPlayer > plrLocalPlayerTemp { 0, 0, GetLocalPlayerBase( ) };
 	mem.Get( plrLocalPlayerTemp );
-	plrLocalPlayer = plrLocalPlayerTemp;
+	plrLocalPlayer.dwLocation = plrLocalPlayerTemp.dwLocation._My_val;
+	plrLocalPlayer.xValue = plrLocalPlayerTemp.xValue._My_val;
 	return plrLocalPlayerTemp.xValue;
 }
 
 void CEngine::SetLocalPlayer( CPlayer plrNewLocalPlayer )
 {
-	address_t< CPlayer > plrLocalPlayerTemp = plrLocalPlayer;
+	address_t< CPlayer > plrLocalPlayerTemp { 0, 0, 0, plrNewLocalPlayer };
 	plrLocalPlayerTemp.xValue = plrNewLocalPlayer;
 	mem.Set( plrLocalPlayerTemp );
 }
