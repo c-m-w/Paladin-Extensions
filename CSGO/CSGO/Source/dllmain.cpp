@@ -58,7 +58,11 @@ void CreateThreads( )
 		while ( !bExitState )
 		{
 			eng.GetLocalPlayer( );
-			eng.GetEntities( );
+
+			for ( unsigned long ulEntity = 0; ulEntity < 64; ulEntity++ )
+			{
+				eng.GetEntity( ulEntity );
+			}
 		}
 	} );
 	tThreads.push_back( move( tInfoGrabber ) );
