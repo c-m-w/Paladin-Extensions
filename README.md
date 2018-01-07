@@ -16,7 +16,9 @@
 - Encrypt strings
 - Polymorphic junk code
 ##### Jeremy
+- Gotos for Main instead of multiple loops
 - Check for multiple instances
+- Fix Expired Cheat
 - Move Log to C:/ drive
 - Aimbot
 - Legit antiaim
