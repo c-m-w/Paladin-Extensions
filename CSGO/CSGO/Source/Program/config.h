@@ -36,11 +36,11 @@ public:
 	short sReloadKey { };
 	short sAutoJumpKey { };
 
-	// F{}eature Toggles
+	// Feature Toggles
 	bool bHitSound { };
 	bool bAutoJumpState { };
 
-	// F{}eature Settings
+	// Feature Settings
 	std::string strHitSoundLocation;
 
 	// open config, create if doesn't exist

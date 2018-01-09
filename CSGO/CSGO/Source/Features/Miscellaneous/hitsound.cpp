@@ -2,9 +2,9 @@
 
 void CHitSound::PlaySoundOnHit( )
 {
-	if ( plrLocalPlayer.xValue._My_val.uiHitsOnServer > uiOldHitsOnServer )
+	if ( plrLocalPlayer.xValue._My_val.iHitsOnServer > iOldHitsOnServer )
 	{
-		uiOldHitsOnServer = plrLocalPlayer.xValue._My_val.uiHitsOnServer;
+		iOldHitsOnServer = plrLocalPlayer.xValue._My_val.iHitsOnServer;
 		if ( !cfg.strHitSoundLocation.c_str( ) )
 		{
 			Beep( 750, 100 );

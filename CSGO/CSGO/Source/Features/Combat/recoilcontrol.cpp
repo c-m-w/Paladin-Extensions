@@ -2,9 +2,9 @@
 
 void CRecoilControl::RecoilControl( )
 {
-	if ( plrLocalPlayer.xValue._My_val.uiShotsFired > 1 ) // ignore shot count
+	if ( plrLocalPlayer.xValue._My_val.iShotsFired > 1 ) // ignore shot count
 	{
-		if ( uiOldShotsFired < plrLocalPlayer.xValue._My_val.uiShotsFired )
+		if ( iOldShotsFired < plrLocalPlayer.xValue._My_val.iShotsFired )
 		{
 			angle_t angCurrentAimPunch { }; // = ( plrLocalPlayer.val.angAimPunch - angOldAimPunch ) * 2.f;
 
@@ -17,13 +17,13 @@ void CRecoilControl::RecoilControl( )
 			}
 
 			/*angOldAimPunch = plrLocalPlayer.val.angAimPunch;*/
-			uiOldShotsFired = plrLocalPlayer.xValue._My_val.uiShotsFired;
+			iOldShotsFired = plrLocalPlayer.xValue._My_val.iShotsFired;
 		}
 	}
 	else
 	{
 		angOldAimPunch = { 0, 0, 0 };
-		uiOldShotsFired = 0;
+		iOldShotsFired = 0;
 	}
 }
 

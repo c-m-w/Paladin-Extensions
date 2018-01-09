@@ -102,26 +102,26 @@ void CEngine::SetSensitivity( float flNewSensitivity )
 	}
 }
 
-DWORD CEngine::GetEntityBase( unsigned int uiEntity )
+DWORD CEngine::GetEntityBase( int iEntity )
 {
 	DWORD dwOldEntityListLocation = pdwEntityList.dwLocation;
-	pdwEntityList.dwLocation += uiEntity * INDEX_DISTANCE_ENTITY;
+	pdwEntityList.dwLocation += iEntity * INDEX_DISTANCE_ENTITY;
 	mem.Get( pdwEntityList );
 	pdwEntityList.dwLocation = dwOldEntityListLocation;
 	return pdwEntityList.xValue;
 }
 
-CPlayer CEngine::GetEntity( unsigned int uiEntity )
+CPlayer CEngine::GetEntity( int iEntity )
 {
-	address_t< CPlayer > plrEntityTemp { 0, 0, GetEntityBase( uiEntity ) };
+	address_t< CPlayer > plrEntityTemp { 0, 0, GetEntityBase( iEntity ) };
 	mem.Get( plrEntityTemp );
-	plrEntities[ uiEntity ].xValue = plrEntityTemp.xValue._My_val;
+	plrEntities[ iEntity ].xValue = plrEntityTemp.xValue._My_val;
 	return plrEntityTemp.xValue;
 }
 
-void CEngine::SetEntity( unsigned int uiEntity, CPlayer plrNewEntity )
+void CEngine::SetEntity( int iEntity, CPlayer plrNewEntity )
 {
-	address_t< CPlayer > plrEntityTemp { 0, 0, GetEntityBase( uiEntity ), plrNewEntity };
+	address_t< CPlayer > plrEntityTemp { 0, 0, GetEntityBase( iEntity ), plrNewEntity };
 	mem.Set( plrEntityTemp );
 }
 

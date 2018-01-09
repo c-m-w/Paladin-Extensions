@@ -2,11 +2,11 @@
 
 void CSonar::Sonar( )
 {
-	for (auto & plrEntity : plrEntities)
+	for ( auto &plrEntity: plrEntities )
 	{
 		if ( !plrEntity.xValue._My_val.bDormant )
 		{
-			if ( plrLocalPlayer.xValue._My_val.uiTeamNum != plrEntity.xValue._My_val.uiTeamNum )
+			if ( plrLocalPlayer.xValue._My_val.iTeamNum != plrEntity.xValue._My_val.iTeamNum )
 			{
 				if ( plrEntity.xValue._My_val.bLifeState == LIFE_ALIVE )
 				{

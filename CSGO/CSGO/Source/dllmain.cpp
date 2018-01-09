@@ -4,7 +4,7 @@ HINSTANCE hInst = nullptr;
 std::atomic< bool > bExitState = false;
 std::vector< std::thread > tThreads;
 
-void Feature( bool bFeatureState, unsigned int uiWait, const std::function< void( ) > &fnFeature, unsigned short usFeatureKey )
+void Feature( bool bFeatureState, moment mntWait, const std::function< void( ) > &fnFeature, unsigned short usFeatureKey )
 {
 	while ( !bExitState )
 	{
@@ -12,11 +12,11 @@ void Feature( bool bFeatureState, unsigned int uiWait, const std::function< void
 		{
 			fnFeature( );
 		}
-		Wait( uiWait );
+		Wait( mntWait );
 	}
 }
 
-void Feature( bool bFeatureState, unsigned int uiWait, const std::function< void( ) > &fnFeature )
+void Feature( bool bFeatureState, moment mntWait, const std::function< void( ) > &fnFeature )
 {
 	while ( !bExitState )
 	{
@@ -24,7 +24,7 @@ void Feature( bool bFeatureState, unsigned int uiWait, const std::function< void
 		{
 			fnFeature( );
 		}
-		Wait( uiWait );
+		Wait( mntWait );
 	}
 }
 
@@ -59,9 +59,9 @@ void CreateThreads( )
 		{
 			eng.GetLocalPlayer( );
 
-			for ( unsigned int ilEntity = 0; ilEntity < 64; ilEntity++ )
+			for ( int iEntity = 0; iEntity < 64; iEntity++ )
 			{
-				eng.GetEntity( ilEntity );
+				eng.GetEntity( iEntity );
 			}
 		}
 	} );
@@ -130,7 +130,7 @@ void SetDebug( )
 
 	SetConsoleTitle( "Paladin CSGO" );
 	//MoveWindow( hWndConsole, 300, 300, 339, 279, false );
-	MoveWindow(hWndConsole, 300, 300, 500, 279, false);
+	MoveWindow( hWndConsole, 300, 300, 500, 279, false );
 	EnableMenuItem( GetSystemMenu( hWndConsole, false ), SC_CLOSE, MF_GRAYED );
 	SetWindowLong( hWndConsole, GWL_STYLE, GetWindowLong( hWndConsole, GWL_STYLE ) & ~SC_CLOSE & ~WS_MAXIMIZEBOX & ~WS_SIZEBOX );
 

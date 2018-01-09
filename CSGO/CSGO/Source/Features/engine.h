@@ -1,7 +1,7 @@
 #pragma once
 
-typedef unsigned int FLAG;
-typedef unsigned int EHANDLE;
+typedef unsigned FLAG;
+typedef unsigned EHANDLE;
 
 #define FL_ONGROUND ( 1 << 0 ) // At rest / on the ground
 #define FL_DUCKING ( 1 << 1 ) // Player FLAG -- Player is fully crouched
@@ -204,13 +204,13 @@ class CGlobalVars
 {
 public:
 	float flRealTime; // 0x0
-	unsigned int uiFrameCount; // 0x4
+	unsigned uiFrameCount; // 0x4
 	float flAbsoluteFrameTime; // 0x8
 	float flAbsoluteFrameStartTimeStdDev; // 0xc
 	float flCurrentTime; // 0x10
 	float flFrameTime; // 0x14
-	unsigned int uiMaxClients; // 0x18
-	unsigned int uiTickCount; // 0xc
+	unsigned uiMaxClients; // 0x18
+	unsigned uiTickCount; // 0xc
 	float flIntervalPerTick; // 0x20
 	float flInterpolationAmount; // 0x24
 };
@@ -240,10 +240,10 @@ private:
 	BYTE xEA[0x2] { };
 public:
 	FLAG fEffects { }; // 0xec
-	unsigned int uiTeamNum { }; // 0xf0
-	unsigned int uiPendingTeamNum { }; // 0xf4
-	unsigned int uiNextThinkTick { }; // 0xf8
-	unsigned int uiHealth { }; // 0xfc
+	int iTeamNum { }; // 0xf0
+	int iPendingTeamNum { }; // 0xf4
+	int iNextThinkTick { }; // 0xf8
+	int iHealth { }; // 0xfc
 	FLAG fFlags { }; // 0x100
 	vector_t vecViewOffset { }; // 0x104
 	vector_t vecVelocity { }; // 0x110
@@ -316,29 +316,29 @@ public:
 private:
 	BYTE x998[0x64] { };
 public:
-	unsigned int uiHitboxSet { }; // 0x9fc
+	int iHitboxSet { }; // 0x9fc
 private:
 	BYTE xA00[0x14] { };
 public:
 	float flCycle { }; // 0xa14
 	float flPlaybackRate { }; // 0xa18
-	unsigned int uiSkin { }; // 0xa1c
-	unsigned int uiBody { }; // 0xa20
+	int iSkin { }; // 0xa1c
+	int iBody { }; // 0xa20
 private:
 	BYTE xA24[0x14] { };
 public:
-	unsigned int uiNewSequenceParity { }; // 0xa38
-	unsigned int uiResetEventsParity { }; // 0xa3c
+	int iNewSequenceParity { }; // 0xa38
+	int iResetEventsParity { }; // 0xa3c
 private:
 	BYTE xA40[0x8] { };
 public:
 	float flEncodedController[4] { }; // 0xa48
-	unsigned int uiMuzzleFlashParity { }; // 0xa58
+	int iMuzzleFlashParity { }; // 0xa58
 private:
 	BYTE xA5C[0x1C14] { }; // CSun class
 public:
 	vector_t vecForce { }; // 0x2670
-	unsigned int uiForceBone { }; // 0x267c
+	int iForceBone { }; // 0x267c
 private:
 	BYTE x2680[0x30] { };
 public:
@@ -363,7 +363,7 @@ public:
 private:
 	BYTE x2890[0x1C] { };
 public:
-	unsigned int uiSequence { }; // 0x28ac
+	int iSequence { }; // 0x28ac
 private:
 	BYTE x28B0[0x84] { };
 public:
@@ -393,7 +393,7 @@ public:
 	EHANDLE hMyWeapons[64] { }; // 0x2de8
 	EHANDLE hActiveWeapon { }; // 0x2ee8
 	float flTimeOfLastInjury { }; // 0x2eec
-	unsigned int uiRelativeDirectionOfLastInjury { }; // 0x2ef0
+	int iRelativeDirectionOfLastInjury { }; // 0x2ef0
 private:
 	BYTE x2EF4[0x4C] { };
 public:
@@ -406,9 +406,9 @@ public:
 	BYTE x2FE8[0x8] { };
 	float flFOVRate { }; // 0x2ff0
 	int iHideHUD { }; // 0x2ff4
-	unsigned int uiDuckTimeMsecs { }; // 0x2ff8
-	unsigned int uiDuckJumpTimeMsecs { }; // 0x2ffc
-	unsigned int uiJumpTimeMsecs { }; // 0x3000
+	int iDuckTimeMsecs { }; // 0x2ff8
+	int iDuckJumpTimeMsecs { }; // 0x2ffc
+	int iJumpTimeMsecs { }; // 0x3000
 	float flFallVelocity { }; // 0x3004
 private:
 	BYTE x3008[0x4] { };
@@ -433,8 +433,8 @@ public:
 private:
 	BYTE x31B4[0x12] { };
 public:
-	unsigned int uiFOV { }; // 0x31c8
-	unsigned int uiFOVStart { }; // 0x31cc
+	int iFOV { }; // 0x31c8
+	int iFOVStart { }; // 0x31cc
 private:
 	BYTE x31D0[0x14] { };
 public:
@@ -470,7 +470,7 @@ private:
 public:
 	FLAG fOnTarget { }; // 0x3318
 	EHANDLE hUseEntity { }; // 0x331c
-	unsigned int uiDefaultFOV { }; // 0x3320
+	int iDefaultFOV { }; // 0x3320
 private:
 	BYTE x3324[0x8] { };
 public:
@@ -491,7 +491,7 @@ public:
 	bool bCameraManXRay { }; // 0x3365
 	bool bCameraManOverview { }; // 0x3366
 	bool bCameraManScoreBoard { }; // 0x3367
-	unsigned int uiCameraManGraphs { }; // 0x3368
+	int iCameraManGraphs { }; // 0x3368
 private:
 	BYTE x336C[0x8] { };
 public:
@@ -504,7 +504,7 @@ public:
 private:
 	BYTE x33B4[0x60] { };
 public:
-	unsigned int uiTickBase { }; // 0x3414
+	int iTickBase { }; // 0x3414
 private:
 	BYTE x3418[0x160] { };
 public:
@@ -543,11 +543,11 @@ public:
 	bool bGunGameImmunity { }; // 0x38a0
 	bool bHasMovedSinceSpawn { }; // 0x38a1
 	bool bMadeFinalGunGameProgressiveKill { }; // 0x38a2
-	unsigned int uiGunGameProgressiveWeaponIndex { }; // 0x38a4
-	unsigned int uiNumGunGameTrKillPopublic { }; // 0x38a8
-	unsigned int uiNumGunGameKillsWithCurrentWeapon { }; // 0x38ac
-	unsigned int uiNumRoundKills { }; // 0x38b0
-	unsigned int uiNumRoundKillsHeadshots { }; // 0x38b4
+	int iGunGameProgressiveWeaponIndex { }; // 0x38a4
+	int iNumGunGameTrKillPopublic { }; // 0x38a8
+	int iNumGunGameKillsWithCurrentWeapon { }; // 0x38ac
+	int iNumRoundKills { }; // 0x38b0
+	int iNumRoundKillsHeadshots { }; // 0x38b4
 	FLAG fMolotovUseTime { }; // 0x38b8
 	FLAG fMolotovDamageTime { }; // 0x38bc
 	bool bBombZone { }; // 0x38c0
@@ -582,15 +582,15 @@ public:
 	float flProgressBarStartTime { }; // 0xa2a4
 	float flStamina { }; // 0xa2a8
 	int iDirection { }; // 0xa2ac
-	unsigned int uiShotsFired { }; // 0xa2b0
-	unsigned int uiNumFastDucks { }; // 0xa2b4
+	int iShotsFired { }; // 0xa2b0
+	int iNumFastDucks { }; // 0xa2b4
 	bool bDuckOverride { }; // 0xa2b8
 	bool bNightVisionOn { }; // 0xa2b9
 	bool bHasNightVision { }; // 0xa2ba
 	float flVelocityModifier { }; // 0xa2bc
 	float flGroundAccelLinearFracLastTime { }; // 0xa2c0
 	int iStartAccount { }; // 0xa2c4
-	unsigned int uiHitsOnServer { }; // 0xa2c8
+	int iHitsOnServer { }; // 0xa2c8
 private:
 	BYTE xA2CC[0x4] { };
 public:
@@ -605,23 +605,23 @@ public:
 private:
 	BYTE xA2FC[0x40] { };
 public:
-	unsigned int uiMatchStatsKills[30] { }; // 0xa33c
-	unsigned int uiMatchStatsDamage[30] { }; // 0xa3b4
-	unsigned int uiMatchStatsEquipmentValue[30] { }; // 0xa42c
-	unsigned int uiMatchStatsMoneySaved[30] { }; // 0xa4a4
-	unsigned int uiMatchStatsKillReward[30] { }; // 0xa51c
-	unsigned int uiMatchStatsLiveTime[30] { }; // 0xa594
-	unsigned int uiMatchStatsDeaths[30] { }; // 0xa60c
-	unsigned int uiMatchStatsAssists[30] { }; // 0xa684
-	unsigned int uiMatchStatsHeadShotKills[30] { }; // 0xa6fc
-	unsigned int uiMatchStatsObjective[30] { }; // 0xa774
-	unsigned int uiMatchStatsCashEarned[30] { }; // 0xa7ec
-	unsigned int uiMatchStatsUtilityDamage[30] { }; // 0xa864
-	unsigned int uiMatchStatsEnemiesFlashed[30] { }; // 0xa8dc
+	int iMatchStatsKills[30] { }; // 0xa33c
+	int iMatchStatsDamage[30] { }; // 0xa3b4
+	int iMatchStatsEquipmentValue[30] { }; // 0xa42c
+	int iMatchStatsMoneySaved[30] { }; // 0xa4a4
+	int iMatchStatsKillReward[30] { }; // 0xa51c
+	int iMatchStatsLiveTime[30] { }; // 0xa594
+	int iMatchStatsDeaths[30] { }; // 0xa60c
+	int iMatchStatsAssists[30] { }; // 0xa684
+	int iMatchStatsHeadShotKills[30] { }; // 0xa6fc
+	int iMatchStatsObjective[30] { }; // 0xa774
+	int iMatchStatsCashEarned[30] { }; // 0xa7ec
+	int iMatchStatsUtilityDamage[30] { }; // 0xa864
+	int iMatchStatsEnemiesFlashed[30] { }; // 0xa8dc
 private:
 	BYTE xA954[0x8A0] { };
 public:
-	unsigned int uiQuestProgressReason { }; // 0xb1f4
+	int iQuestProgressReason { }; // 0xb1f4
 	unsigned short usCurrentEquipmentValue { }; // 0xb1f8
 	unsigned short usRoundStartEquipmentValue { }; // 0xb1fa
 	unsigned short usFreezetimeEndEquipmentValue { }; // 0xb1fc
@@ -637,7 +637,7 @@ private:
 	BYTE xB22E[0x6] { };
 public:
 	int iClass { }; // 0xb234
-	unsigned int uiArmorValue { }; // 0xb238
+	int iArmorValue { }; // 0xb238
 	angle_t angEyeAngles { }; // 0xb23c
 	bool bHasDefuser { }; // 0xb248
 	bool bHostageRescueZone { }; // 0xb249
@@ -646,9 +646,9 @@ private:
 public:
 	bool bHudMiniScoreHidden { }; // 0xb26a
 	bool bHudRadarHidden { }; // 0xb26b
-	unsigned int uiLastKillerIndex { }; // 0xb26c
-	unsigned int uiLastConcurrentKilled { }; // 0xb270
-	unsigned int uiDeathCamMusic { }; // 0xb274
+	int iLastKillerIndex { }; // 0xb26c
+	int iLastConcurrentKilled { }; // 0xb270
+	int iDeathCamMusic { }; // 0xb274
 private:
 	BYTE xB278[0xEC] { };
 public:
@@ -661,7 +661,7 @@ public:
 private:
 	BYTE xB3AE[0x2] { };
 public:
-	unsigned int uiWeaponPurchasesThisRound[64] { }; // 0xb3f0
+	int iWeaponPurchasesThisRound[64] { }; // 0xb3f0
 private:
 	BYTE xB4F0[0x308] { };
 public:
@@ -704,9 +704,9 @@ public:
 	void SetSensitivity( float ); // sets sensitivity limited to 0 and 1000
 
 	// client - entities
-	DWORD GetEntityBase( unsigned int );
-	CPlayer GetEntity( unsigned int );
-	void SetEntity( unsigned int, CPlayer );
+	DWORD GetEntityBase( int );
+	CPlayer GetEntity( int );
+	void SetEntity( int, CPlayer );
 
 	// client - localplayer
 	DWORD GetLocalPlayerBase( );

@@ -2,7 +2,7 @@
 
 class CHitSound
 {
-	unsigned int uiOldHitsOnServer = 0;
+	int iOldHitsOnServer = 0;
 public:
 	void PlaySoundOnHit( );
 };

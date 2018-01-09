@@ -2,17 +2,17 @@
 
 void CRadar::Radar( )
 {
-	for ( unsigned int uiEntity = 0; uiEntity < 64; uiEntity++ )
+	for ( int iEntity = 0; iEntity < 64; iEntity++ )
 	{
-		if ( !plrEntities[ uiEntity ].xValue._My_val.bDormant )
+		if ( !plrEntities[ iEntity ].xValue._My_val.bDormant )
 		{
-			if ( plrLocalPlayer.xValue._My_val.uiTeamNum != plrEntities[ uiEntity ].xValue._My_val.uiTeamNum )
+			if ( plrLocalPlayer.xValue._My_val.iTeamNum != plrEntities[ iEntity ].xValue._My_val.iTeamNum )
 			{
-				if ( plrEntities[ uiEntity ].xValue._My_val.bLifeState == LIFE_ALIVE )
+				if ( plrEntities[ iEntity ].xValue._My_val.bLifeState == LIFE_ALIVE )
 				{
-					CPlayer plrNewEntity = plrEntities[ uiEntity ].xValue;
+					CPlayer plrNewEntity = plrEntities[ iEntity ].xValue;
 					plrNewEntity.bSpotted = true;
-					eng.SetEntity( uiEntity, plrNewEntity );
+					eng.SetEntity( iEntity, plrNewEntity );
 				}
 			}
 		}

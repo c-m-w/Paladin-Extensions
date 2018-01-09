@@ -2,7 +2,7 @@
 
 class CRecoilControl
 {
-	unsigned int uiOldShotsFired = 0;
+	int iOldShotsFired = 0;
 	angle_t angOldAimPunch { 0, 0, 0 };
 public:
 	void RecoilControl( );

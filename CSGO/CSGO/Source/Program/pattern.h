@@ -1,12 +1,12 @@
 #pragma once
 
-class CPatternScanner 
+class CPatternScanner
 {
-	MODULEENTRY32 GetModule(char *module);
-	uintptr_t FindPattern(char* base, unsigned int size, char* pattern, char *mask);
+	MODULEENTRY32 GetModule( char * );
+	uintptr_t FindPattern( char *, unsigned int, char *, char * );
 
 public:
-	uintptr_t FindPatternEx(HANDLE hProcess, char *module, char *pattern, char *mask);
+	uintptr_t FindPatternEx( HANDLE, char *, char *, char * );
 };
 
 extern CPatternScanner scan;
