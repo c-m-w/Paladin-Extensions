@@ -38,4 +38,4 @@
 - UserCMD
 ##### Cole
 - Ensure CPlayer variables work
-- Refactor all long l to int i and unsigned long ul to int i (unless it actually needs to be unsigned long, then do unsigned int ui)
+- Add skin changer
