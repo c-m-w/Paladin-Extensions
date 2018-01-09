@@ -6,7 +6,7 @@ void CSonar::Sonar( )
 	{
 		if ( !plrEntity.xValue._My_val.bDormant )
 		{
-			if ( plrLocalPlayer.xValue._My_val.ulTeamNum != plrEntity.xValue._My_val.ulTeamNum )
+			if ( plrLocalPlayer.xValue._My_val.uiTeamNum != plrEntity.xValue._My_val.uiTeamNum )
 			{
 				if ( plrEntity.xValue._My_val.bLifeState == LIFE_ALIVE )
 				{

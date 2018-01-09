@@ -4,7 +4,7 @@ HINSTANCE hInst = nullptr;
 std::atomic< bool > bExitState = false;
 std::vector< std::thread > tThreads;
 
-void Feature( bool bFeatureState, unsigned long ulWait, const std::function< void( ) > &fnFeature, unsigned short usFeatureKey )
+void Feature( bool bFeatureState, unsigned int uiWait, const std::function< void( ) > &fnFeature, unsigned short usFeatureKey )
 {
 	while ( !bExitState )
 	{
@@ -12,11 +12,11 @@ void Feature( bool bFeatureState, unsigned long ulWait, const std::function< voi
 		{
 			fnFeature( );
 		}
-		Wait( ulWait );
+		Wait( uiWait );
 	}
 }
 
-void Feature( bool bFeatureState, unsigned long ulWait, const std::function< void( ) > &fnFeature )
+void Feature( bool bFeatureState, unsigned int uiWait, const std::function< void( ) > &fnFeature )
 {
 	while ( !bExitState )
 	{
@@ -24,7 +24,7 @@ void Feature( bool bFeatureState, unsigned long ulWait, const std::function< voi
 		{
 			fnFeature( );
 		}
-		Wait( ulWait );
+		Wait( uiWait );
 	}
 }
 
@@ -59,9 +59,9 @@ void CreateThreads( )
 		{
 			eng.GetLocalPlayer( );
 
-			for ( unsigned long ulEntity = 0; ulEntity < 64; ulEntity++ )
+			for ( unsigned int ilEntity = 0; ilEntity < 64; ilEntity++ )
 			{
-				eng.GetEntity( ulEntity );
+				eng.GetEntity( ilEntity );
 			}
 		}
 	} );

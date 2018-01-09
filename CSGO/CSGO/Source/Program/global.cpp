@@ -140,9 +140,9 @@ vector_t::vector_t( coordinate_t corOrigin, coordinate_t corDestination )
 	flDeltaZ = corDestination.flZ - corOrigin.flZ;
 }
 
-void Wait( unsigned long ulSleepTime )
+void Wait( unsigned int uiSleepTime )
 {
-	std::this_thread::sleep_for( std::chrono::milliseconds( ulSleepTime ) );
+	std::this_thread::sleep_for( std::chrono::milliseconds( uiSleepTime ) );
 }
 
 moment GetMoment( )

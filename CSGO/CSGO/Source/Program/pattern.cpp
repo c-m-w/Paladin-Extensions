@@ -48,7 +48,7 @@ MODULEENTRY32 CPatternScanner::GetModule(char *module)
 }
 
 // dont use uintptr_t, use unsigned int
-uintptr_t CPatternScanner::FindPattern(char* base, unsigned long size, char* pattern, char *mask) // pattern should be const as it's a pointer
+uintptr_t CPatternScanner::FindPattern(char* base, unsigned int size, char* pattern, char *mask) // pattern should be const as it's a pointer
 {
 	size_t patternLength = strlen(mask);
 

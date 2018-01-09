@@ -3,27 +3,27 @@
 void CGeneral::GetPremiumUsers( )
 {
 	uPremiumUsers[ 0 ].lpstrUsername = "bhopfu1";
-	uPremiumUsers[ 0 ].lHardwareID = 12 * 4095;
+	uPremiumUsers[ 0 ].iHardwareID = 12 * 4095;
 	uPremiumUsers[ 0 ].tExpiration = DECEMBER_FIRST + 365 * DAY;
 	uPremiumUsers[ 0 ].bValid = true;
 	uPremiumUsers[ 0 ].bBanned = false;
 	uPremiumUsers[ 1 ].lpstrUsername = "MiKe";
-	uPremiumUsers[ 1 ].lHardwareID = 8 * 255;
+	uPremiumUsers[ 1 ].iHardwareID = 8 * 255;
 	uPremiumUsers[ 1 ].tExpiration = DECEMBER_FIRST + 365 * DAY;
 	uPremiumUsers[ 1 ].bValid = true;
 	uPremiumUsers[ 1 ].bBanned = false;
 	uPremiumUsers[ 2 ].lpstrUsername = "Skel";
-	uPremiumUsers[ 2 ].lHardwareID = 8 * 255;
+	uPremiumUsers[ 2 ].iHardwareID = 8 * 255;
 	uPremiumUsers[ 2 ].tExpiration = DECEMBER_FIRST + 365 * DAY;
 	uPremiumUsers[ 2 ].bValid = true;
 	uPremiumUsers[ 2 ].bBanned = false;
 	uPremiumUsers[ 3 ].lpstrUsername = "Cole";
-	uPremiumUsers[ 3 ].lHardwareID = 4 * 15;
+	uPremiumUsers[ 3 ].iHardwareID = 4 * 15;
 	uPremiumUsers[ 3 ].tExpiration = DECEMBER_FIRST + 365 * DAY;
 	uPremiumUsers[ 3 ].bValid = true;
 	uPremiumUsers[ 3 ].bBanned = false;
 	uPremiumUsers[ 4 ].lpstrUsername = "Bean"; // TODO BEAN
-	uPremiumUsers[ 4 ].lHardwareID = 0;
+	uPremiumUsers[ 4 ].iHardwareID = 0;
 	uPremiumUsers[ 4 ].tExpiration = DECEMBER_FIRST + 365 * DAY;
 	uPremiumUsers[ 4 ].bValid = true;
 	uPremiumUsers[ 4 ].bBanned = false;
@@ -86,9 +86,9 @@ EPremium CGeneral::CheckPremiumStatus( )
 	DEBUG( DBG, "Current User Database ID: %i", usUserID );
 	SYSTEM_INFO siCurrentUser;
 	GetSystemInfo( &siCurrentUser );
-	uCurrentUser.lHardwareID = siCurrentUser.dwActiveProcessorMask * siCurrentUser.dwNumberOfProcessors;
-	DEBUG( DBG, "Current User HWID: %i", uCurrentUser.lHardwareID );
-	if ( uCurrentUser.lHardwareID != uPremiumUsers[ usUserID ].lHardwareID )
+	uCurrentUser.iHardwareID = siCurrentUser.dwActiveProcessorMask * siCurrentUser.dwNumberOfProcessors;
+	DEBUG( DBG, "Current User HWID: %i", uCurrentUser.iHardwareID );
+	if ( uCurrentUser.iHardwareID != uPremiumUsers[ usUserID ].iHardwareID )
 	{
 		DEBUG( ERR, "HWID did not match any users in database" );
 		return EPremium::NOT_PREMIUM;

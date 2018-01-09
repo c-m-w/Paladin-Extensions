@@ -100,7 +100,7 @@ struct vector_t
 	vector_t( coordinate_t, coordinate_t );
 };
 
-void Wait( unsigned long );
+void Wait( unsigned int );
 moment GetMoment( );
 
 template< typename xDatatype, typename xDatatype2 > void Limit( xDatatype &xStatus, xDatatype2 xMinimum, xDatatype2 xMaximum )
