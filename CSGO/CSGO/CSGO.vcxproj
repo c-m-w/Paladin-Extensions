@@ -29,6 +29,7 @@
     <ClInclude Include="Source\Features\Miscellaneous\fakelag.h" />
     <ClInclude Include="Source\Features\Miscellaneous\fov.h" />
     <ClInclude Include="Source\Features\engine.h" />
+    <ClInclude Include="Source\Features\Miscellaneous\inventory.h" />
     <ClInclude Include="Source\Program\global.h" />
     <ClInclude Include="Source\Program\general.h" />
     <ClInclude Include="Source\Program\config.h" />
@@ -50,6 +51,7 @@
     <ClCompile Include="Source\Features\Miscellaneous\fakelag.cpp" />
     <ClCompile Include="Source\Features\Miscellaneous\fov.cpp" />
     <ClCompile Include="Source\Features\engine.cpp" />
+    <ClCompile Include="Source\Features\Miscellaneous\inventory.cpp" />
     <ClCompile Include="Source\Program\global.cpp" />
     <ClCompile Include="Source\Program\general.cpp" />
     <ClCompile Include="Source\Program\config.cpp" />
