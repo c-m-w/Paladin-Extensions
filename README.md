@@ -3,28 +3,63 @@
 - CSGO Internal/External
 
 ## WEBSITE TODO
-##### Open
 ##### Jeremy
-- Create/Testing
-##### Mike
-##### Hunter
+- Fix
+   - Testing
+- Change
+   -
+- Add
+   - Create
+- Remove
+   -
 ##### John
-- Create/Testing
-##### Cole
+- Fix
+   - Testing
+- Change
+   -
+- Add
+   - Create
+- Remove
+   -
 
 ## INJECTOR TODO
-##### Open
 ##### Jeremy
-- Look over code, manage
+- Fix
+   - manage
+- Change
+   - Look over code
+- Add
+   -
+- Remove
 ##### Mike
-- Add multiple injection methods (Manual map, Thread hijack)
-- Better interface (work with Hunter)
+- Fix
+   -
+- Change
+   - Better interface (work with Hunter)
+- Add
+   - multiple injection methods (Manual map, Thread hijack)
+- Remove
+   -
 ##### Hunter
-##### John
-##### Cole
+- Fix
+   -
+- Change
+   - Interface
+- Add
+   -
+- Remove
+   -
 
 ## CSGO TODO
 ##### Open
+- Fix
+   -
+- Change
+   -
+- Add
+   -
+- Remove
+   -
 ##### Jeremy
 - Fix
    - Expired cheat
@@ -45,17 +80,42 @@
    - Legit antiaim
    - Velocity-based backtrack
 ##### Mike
-- Config
-- Pattern scanning
-- Log file implementation
+- Fix
+   -
+- Change
+   - Log file implementation
+- Add
+   - Config
+   - Pattern scanning
+- Remove
+   - Pattern scanning WIP files
 ##### Hunter
-- Menu
-- Define HWID for yourself
+- Fix
+   -
+- Change
+   - Define HWID for yourself
+- Add
+   - Menu
+- Remove
+   -
 ##### John
-- Glow
-- ClientCMD
-- ClientCMDUnrestricted
-- UserCMD
+- Fix
+   -
+- Change
+   -
+- Add
+   - Glow
+   - ClientCMD
+   - ClientCMDUnrestricted
+   - UserCMD
+- Remove
+   -
 ##### Cole
-- Ensure CPlayer variables work
-- Add skin changer
+- Fix
+   -
+- Change
+   - Ensure CPlayer variables work
+- Add
+   - Skin changer
+- Remove
+   -
