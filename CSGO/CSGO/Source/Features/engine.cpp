@@ -104,9 +104,9 @@ void CEngine::SetSensitivity( float flNewSensitivity )
 
 DWORD CEngine::GetEntityBase( int iEntity )
 {
-	pdwEntityList.dwLocation += iEntity * INDEX_DISTANCE_ENTITY;
-	mem.Get( pdwEntityList );
-	pdwEntityList.dwLocation -= iEntity * INDEX_DISTANCE_ENTITY;
+	address_t< DWORD > pdwEntityListTemp { 0, 0, iEntity * INDEX_DISTANCE_ENTITY + pdwEntityList.dwLocation._My_val };
+	mem.Get( pdwEntityListTemp );
+	pdwEntityList.xValue = pdwEntityListTemp.xValue._My_val;
 	return pdwEntityList.xValue;
 }
 
