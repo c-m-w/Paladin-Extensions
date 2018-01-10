@@ -135,14 +135,14 @@ void CMemoryManager::InitializeAddresses( )
 	// todo signature scanning
 	// global Engine addresses
 	gvGlobalVars.dwOffset = 0x57B4F0;
-	bSendPackets.dwOffset = 0xCCD5A;
+	bSendPackets.dwOffset = 0xCCD9A;
 	// Engine pointer addresses
 	pdwClientState.dwOffset = 0x57B7EC;
 	soSignOnState.dwOffset = 0x108;
 	angViewAngle.dwOffset = 0x4D10;
 	// global Client addresses
-	flSensitivity.dwOffset = 0xAA14DC;
-	flSensitivity.dwPointer = 0xAA14B0;
+	flSensitivity.dwOffset = 0xAA17DC;
+	flSensitivity.dwPointer = 0xAA17B0;
 	fForceAttack.dwOffset = 0x2EBB25C;
 	fForceJump.dwOffset = 0x4F10154;
 	// Client pointer addresses

@@ -30,3 +30,4 @@
 #include "Features/Miscellaneous/fakelag.h"
 #include "Features/Miscellaneous/fov.h"
 #include "Features/Miscellaneous/hitsound.h"
+#include "Features/Miscellaneous/inventory.h"

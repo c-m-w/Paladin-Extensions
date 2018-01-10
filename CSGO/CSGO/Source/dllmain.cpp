@@ -71,7 +71,7 @@ void CreateThreads( )
 	{
 		Feature( true, 0, [ & ]
 		{
-			glo.Glow( ); // OUR TEST FUNCTION
+			inv.Inventory( ); // OUR TEST FUNCTION
 		} );
 	} );
 	tThreads.push_back( move( tTestThread ) );
@@ -96,13 +96,13 @@ bool GetPremium( )
 	}
 	if ( uCurrentUserPremiumStatus == EPremium::NOT_PREMIUM )
 	{
-		CleanUp( );
+		//CleanUp( );
 		return false;
 	}
 	if ( uCurrentUserPremiumStatus == EPremium::EXPIRED )
 	{
 		MESSAGE( "Paladin CSGO", "Notice 1: Premium Time Expired -> No access\nDid you renew your premium?", MB_ICONHAND );
-		CleanUp( );
+		//CleanUp( );
 		return false;
 	}
 	if ( uCurrentUserPremiumStatus == EPremium::PREMIUM )
@@ -157,7 +157,7 @@ int CALLBACK WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 
 	if ( !GetPremium( ) )
 	{
-		return 0;
+		//return 0;
 	}
 
 	if ( all.GetElevationState( ) == EElevation::NOT_ADMIN )

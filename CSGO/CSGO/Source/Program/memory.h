@@ -47,33 +47,33 @@ public:
 
 	void InitializeAddresses( );
 
-	template< typename xDatatype > bool Get( address_t< xDatatype > &xRead )
+	template< typename xDatatype > bool Get( address_t< xDatatype > &xAddress )
 	{
-		if ( xRead.dwLocation )
+		if ( xAddress.dwLocation )
 		{
-			if ( xRead.dwPointer )
+			if ( xAddress.dwPointer )
 			{
-				DWORD dwXor;
-				bool bSuccess = ReadProcessMemory( hGame, LPVOID( xRead.dwLocation._My_val ), &dwXor, sizeof(DWORD), nullptr );
-				dwXor ^= xRead.dwPointer;
-				xRead.xValue = *reinterpret_cast< xDatatype* >( &dwXor );
+				DWORD dwXor {};
+				bool bSuccess = ReadProcessMemory( hGame, LPVOID( xAddress.dwLocation._My_val ), &dwXor, sizeof(DWORD), nullptr );
+				dwXor ^= xAddress.dwPointer;
+				xAddress.xValue = *reinterpret_cast< xDatatype* >( &dwXor );
 				return bSuccess;
 			}
-			return ReadProcessMemory( hGame, LPVOID( xRead.dwLocation._My_val ), &xRead.xValue, sizeof(xDatatype), nullptr );
+			return ReadProcessMemory( hGame, LPVOID( xAddress.dwLocation._My_val ), &xAddress.xValue, sizeof(xDatatype), nullptr );
 		}
 		return false;
 	}
 
-	template< typename xDatatype > bool Set( address_t< xDatatype > &xWrite )
+	template< typename xDatatype > bool Set( address_t< xDatatype > &xAddress )
 	{
-		if ( xWrite.dwLocation )
+		if ( xAddress.dwLocation )
 		{
-			if ( xWrite.dwPointer )
+			if ( xAddress.dwPointer )
 			{
-				DWORD dwXor = *reinterpret_cast< DWORD* >( &xWrite.xValue ) ^ xWrite.dwPointer;
-				return WriteProcessMemory( hGame, LPVOID( xWrite.dwLocation._My_val ), &dwXor, sizeof(DWORD), nullptr );
+				DWORD dwXor = *reinterpret_cast< DWORD* >( &xAddress.xValue ) ^ xAddress.dwPointer;
+				return WriteProcessMemory( hGame, LPVOID( xAddress.dwLocation._My_val ), &dwXor, sizeof( DWORD ), nullptr );
 			}
-			return WriteProcessMemory( hGame, LPVOID( xWrite.dwLocation._My_val ), &xWrite.xValue, sizeof(xDatatype), nullptr );
+			return WriteProcessMemory( hGame, LPVOID( xAddress.dwLocation._My_val ), &xAddress.xValue, sizeof( xDatatype ), nullptr );
 		}
 		return false;
 	}
