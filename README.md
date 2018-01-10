@@ -24,6 +24,7 @@
 - Legit antiaim
 - Velocity-based backtrack
 - Fix getting entity list
+- Fix release compile
 ##### Mike
 - Config
 - Pattern scanning
