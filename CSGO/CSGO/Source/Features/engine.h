@@ -124,7 +124,7 @@ enum class EWeapon
 	KNIFE_PUSH
 };
 
-enum class EPaintKits
+enum class EPaintKits // FIXME naming TODO @cole
 {
 	Groundwater = 2,
 	CandyApple,
