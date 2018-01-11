@@ -7,27 +7,26 @@ void CInventory::SetKnifeModel( )
 
 void CInventory::SetSkin( weaponentity_t wepWeapon )
 {
-	address_t<int> iHighID = { 0, 0, 0x2FA0 + wepWeapon.dwWeaponBase, -1 };
-	address_t<weapon_t> wepWeaponSkinBase = { 0, 0, 0x3168 + wepWeapon.dwWeaponBase, wepWeapon.wepWeapon };
+	address_t< int > iHighID = { 0, 0, 0x2FA0 + wepWeapon.dwWeaponBase, -1 };
+	address_t< weapon_t > wepWeaponSkinBase = { 0, 0, 0x3168 + wepWeapon.dwWeaponBase, wepWeapon.wepWeapon };
 	mem.Set( iHighID );
 	mem.Set( wepWeaponSkinBase );
-
 }
 
 void CInventory::ForceUpdate( )
 {
-	address_t<int> iForceUpdate = { 0, 0, 0x174 + eng.GetClientState( ), -1 };
+	address_t< int > iForceUpdate = { 0, 0, 0x174 + eng.GetClientState( ), -1 };
 	mem.Set( iForceUpdate );
 }
 
 void CInventory::Inventory( )
 {
 	weapon_t wepDeagle = { plrLocalPlayer.xValue._My_val.iAccount, plrLocalPlayer.xValue._My_val.iAccount, int( EPaintKits::CobaltDisruption ), 24, 0.01f, -1 };
-	weaponentity_t wepWeaponEntity { };
+	weaponentity_t wepWeaponEntity;
 	address_t< int > iItemDefinitionIndex = { 0, 0, 0x2F88 };
 	for ( int i = 0; i <= 8; i++ )
 	{
-		wepWeaponEntity.dwWeaponBase = eng.GetEntityBase( (eng.GetLocalPlayer().hMyWeapons[ i ] & 0xFFF) - 1 );
+		wepWeaponEntity.dwWeaponBase = eng.GetEntityBase( ( eng.GetLocalPlayer( ).hMyWeapons[ i ] & 0xFFF ) - 1 );
 		DWORD dwOldItemDefinitionIndex = iItemDefinitionIndex.dwLocation;
 		iItemDefinitionIndex.dwLocation += wepWeaponEntity.dwWeaponBase;
 		mem.Get( iItemDefinitionIndex );

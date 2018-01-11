@@ -53,13 +53,13 @@ public:
 		{
 			if ( xAddress.dwPointer )
 			{
-				DWORD dwXor {};
-				bool bSuccess = ReadProcessMemory( hGame, LPVOID( xAddress.dwLocation._My_val ), &dwXor, sizeof(DWORD), nullptr );
+				DWORD dwXor { };
+				bool bSuccess = ReadProcessMemory( hGame, LPVOID( xAddress.dwLocation._My_val ), &dwXor, sizeof( DWORD ), nullptr );
 				dwXor ^= xAddress.dwPointer;
 				xAddress.xValue = *reinterpret_cast< xDatatype* >( &dwXor );
 				return bSuccess;
 			}
-			return ReadProcessMemory( hGame, LPVOID( xAddress.dwLocation._My_val ), &xAddress.xValue, sizeof(xDatatype), nullptr );
+			return ReadProcessMemory( hGame, LPVOID( xAddress.dwLocation._My_val ), &xAddress.xValue, sizeof( xDatatype ), nullptr );
 		}
 		return false;
 	}

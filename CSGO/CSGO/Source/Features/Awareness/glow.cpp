@@ -2,7 +2,7 @@
 
 void CGlow::Glow( )
 {
-	for ( int iEntity = 0; iEntity < 64; iEntity++ )  // NOLINT
+	for ( int iEntity = 0; iEntity < 64; iEntity++ ) // NOLINT
 	{
 		address_t< int > iCurrentEntity;
 		iCurrentEntity.dwLocation = eng.GetEntityBase( iEntity ) + INDEX_DISTANCE_GLOW;
