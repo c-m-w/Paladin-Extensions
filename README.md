@@ -72,7 +72,5 @@
 ##### Cole
 - Change
    - Ensure CPlayer variables work
-- Add
-   - Skin changer
 - Fix
-   - Naming of skins (engine.h)
+   - Skin changer
