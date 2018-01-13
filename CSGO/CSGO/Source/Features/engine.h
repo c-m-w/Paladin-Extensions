@@ -124,7 +124,7 @@ enum class EWeapon
 	KNIFE_PUSH
 };
 
-enum class EPaintKits // FIXME naming TODO @cole
+enum class EPaintKit
 {
 	GROUNDWATER = 2,
 	CANDYAPPLE,
@@ -599,7 +599,7 @@ enum class EPaintKits // FIXME naming TODO @cole
 	SLAUGHTER1 = 10021,
 	ECLIPSE = 10024,
 	SPEARMINT = 10026,
-	BOOM,
+	BOOM1,
 	COOLMINT,
 	FORESTDDPAT1 = 10030,
 	CRIMSONKIMONO1 = 10033,

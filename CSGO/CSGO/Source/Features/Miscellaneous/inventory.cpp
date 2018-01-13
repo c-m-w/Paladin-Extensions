@@ -9,6 +9,7 @@ void CInventory::SetSkin( weaponentity_t wepWeapon )
 {
 	address_t< int > iHighID = { 0, 0, 0x2FA0 + wepWeapon.dwWeaponBase, -1 };
 	address_t< weapon_t > wepWeaponSkinBase = { 0, 0, 0x3168 + wepWeapon.dwWeaponBase, wepWeapon.wepWeapon };
+	printf( "%i\n", sizeof(EPaintKit) );
 	mem.Set( iHighID );
 	mem.Set( wepWeaponSkinBase );
 }
@@ -21,8 +22,8 @@ void CInventory::ForceUpdate( )
 
 void CInventory::Inventory( )
 {
-	weapon_t wepDeagle = { plrLocalPlayer.xValue._My_val.iAccount, plrLocalPlayer.xValue._My_val.iAccount, int( EPaintKits::CobaltDisruption ), 24, 0.01f, -1 };
-	weaponentity_t wepWeaponEntity;
+	weapon_t wepDeagle = { plrLocalPlayer.xValue._My_val.iAccount, plrLocalPlayer.xValue._My_val.iAccount,  EPaintKit::COBALTDISRUPTION, 24, 0.01f, -1 };
+	weaponentity_t wepWeaponEntity { };
 	address_t< int > iItemDefinitionIndex = { 0, 0, 0x2F88 };
 	for ( int i = 0; i <= 8; i++ )
 	{

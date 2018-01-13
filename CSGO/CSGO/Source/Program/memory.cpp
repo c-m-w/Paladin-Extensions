@@ -146,7 +146,7 @@ void CMemoryManager::InitializeAddresses( )
 	fForceAttack.dwOffset = 0x2EBB25C;
 	fForceJump.dwOffset = 0x4F10154;
 	// Client pointer addresses
-	pdwEntityList.dwOffset = 0x4A78EE4;
+	pdwEntityList.dwOffset = 0x4A78F24;
 	pdwGlowManager.dwOffset = 0x4F95D48;
 	pdwLocalPlayer.dwOffset = 0xA9C0DC;
 	DEBUG( DBG, "Initialized bases" );
