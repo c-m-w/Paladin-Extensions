@@ -141,14 +141,14 @@ void CMemoryManager::InitializeAddresses( )
 	soSignOnState.dwOffset = 0x108;
 	angViewAngle.dwOffset = 0x4D10;
 	// global Client addresses
-	flSensitivity.dwOffset = 0xAA17DC;
-	flSensitivity.dwPointer = 0xAA17B0;
-	fForceAttack.dwOffset = 0x2EBB25C;
-	fForceJump.dwOffset = 0x4F10154;
+	flSensitivity.dwOffset = 0xAA27DC;
+	flSensitivity.dwPointer = 0xAA27B0;
+	fForceAttack.dwOffset = 0x2EBC23C;
+	fForceJump.dwOffset = 0x4F11134;
 	// Client pointer addresses
-	pdwEntityList.dwOffset = 0x4A78F24;
-	pdwGlowManager.dwOffset = 0x4F95D48;
-	pdwLocalPlayer.dwOffset = 0xA9C0DC;
+	pdwEntityList.dwOffset = 0x4A79EC4;
+	pdwGlowManager.dwOffset = 0x4F96D18;
+	pdwLocalPlayer.dwOffset = 0xA9D0DC;
 	DEBUG( DBG, "Initialized bases" );
 
 	// engine global

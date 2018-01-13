@@ -72,5 +72,6 @@
 ##### Cole
 - Change
    - Ensure CPlayer variables work
+   - Private private mem
 - Fix
    - Skin changer
