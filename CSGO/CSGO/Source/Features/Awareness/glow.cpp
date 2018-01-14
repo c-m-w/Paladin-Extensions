@@ -2,21 +2,21 @@
 
 void CGlow::Glow( )
 {
-	for ( int iEntity { }; iEntity < 64; iEntity++ ) // NOLINT
+	for ( int iEntity { }; iEntity <= 64; iEntity++ )
 	{
 		address_t< int > iCurrentEntity { };
 		iCurrentEntity.dwLocation = eng.GetEntityBase( iEntity ) + INDEX_DISTANCE_GLOW;
 
 		if ( !plrEntities[ iEntity ].xValue._My_val.bDormant )
 		{
-			if ( plrLocalPlayer.xValue._My_val.iTeamNum != plrEntities[ iEntity ].xValue._My_val.iTeamNum )
+			if ( plrEntities[ iEntity ].xValue._My_val.bLifeState == LIFE_ALIVE )
 			{
-				if ( plrEntities[ iEntity ].xValue._My_val.bLifeState == LIFE_ALIVE )
+				if ( plrLocalPlayer.xValue._My_val.iTeamNum != plrEntities[ iEntity ].xValue._My_val.iTeamNum )
 				{
 					mem.Get( pdwGlowManager );
 					mem.Get( iCurrentEntity );
 					address_t< glow_t > gloEntityGlow;
-					gloEntityGlow.dwLocation = pdwGlowManager.xValue + iCurrentEntity.xValue * sizeof( glow_t);
+					gloEntityGlow.dwLocation = pdwGlowManager.xValue + iCurrentEntity.xValue * sizeof( glow_t );
 					mem.Get( gloEntityGlow );
 
 					glow_t glowEntityGlowTemp;
