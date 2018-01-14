@@ -5,9 +5,9 @@ void CInventory::SetKnifeModel( )
 	//TODO: Make knife mdoel changed!
 }
 
-void CInventory::SetSkin( weapon_t wepWeapon, const DWORD dwWeaponBase )
+void CInventory::SetSkin( weapon_t wepWeapon, DWORD dwWeaponBase )
 {
-	const int iIDHIGH = -1;
+	int iIDHIGH = -1;
 	DWORD dwOldIdHigh = iHighID.dwLocation;
 	DWORD dwOldOwnerHigh = wepWeaponSkinBase.dwLocation;
 
