@@ -102,27 +102,6 @@ void CEngine::SetSensitivity( float flNewSensitivity )
 	}
 }
 
-DWORD CEngine::GetEntityBase( int iEntity )
-{
-	address_t< DWORD > pdwEntityListTemp { 0, 0, iEntity * INDEX_DISTANCE_ENTITY + pdwEntityList.dwLocation };
-	mem.Get( pdwEntityListTemp );
-	pdwEntityList.xValue = pdwEntityListTemp.xValue._My_val;
-	return pdwEntityList.xValue;
-}
-
-CPlayer CEngine::GetEntity( int iEntity )
-{
-	plrEntities[ iEntity ].dwLocation = GetEntityBase( iEntity );
-	mem.Get( plrEntities[ iEntity ] );
-	return plrEntities[ iEntity ].xValue;
-}
-
-void CEngine::SetEntity( int iEntity, CPlayer plrNewEntity )
-{
-	address_t< CPlayer > plrEntityTemp { 0, 0, GetEntityBase( iEntity ), plrNewEntity };
-	mem.Set( plrEntityTemp );
-}
-
 DWORD CEngine::GetLocalPlayerBase( )
 {
 	mem.Get( pdwLocalPlayer );
@@ -141,6 +120,91 @@ void CEngine::SetLocalPlayer( CPlayer plrNewLocalPlayer )
 	address_t< CPlayer > plrLocalPlayerTemp { 0, 0, 0, plrNewLocalPlayer };
 	plrLocalPlayerTemp.xValue = plrNewLocalPlayer;
 	mem.Set( plrLocalPlayerTemp );
+}
+
+DWORD CEngine::GetEntityBase( int iEntity )
+{
+	DWORD dwOldEntityListLocation = pdwEntityList.dwLocation;
+	pdwEntityList.dwLocation += iEntity * INDEX_DISTANCE_ENTITY;
+	mem.Get( pdwEntityList );
+	pdwEntityList.dwLocation = dwOldEntityListLocation;
+	return pdwEntityList.xValue;
+}
+
+CPlayer CEngine::GetEntity( int iEntity )
+{
+	plrEntities[ iEntity ].dwLocation = GetEntityBase( iEntity );
+	mem.Get( plrEntities[ iEntity ] );
+	return plrEntities[ iEntity ].xValue;
+}
+
+void CEngine::SetEntity( int iEntity, CPlayer plrNewEntity )
+{
+	address_t< CPlayer > plrEntityTemp { 0, 0, GetEntityBase( iEntity ), plrNewEntity };
+	mem.Set( plrEntityTemp );
+}
+
+int CEngine::GetClosestEnemyToCrosshair( )
+{
+	int iLastClosestEntity { };
+	float flLastClosestDistance = FLT_MAX;
+	for ( int iEntity = 1; iEntity <= 64; iEntity++ )
+	{
+		if ( !plrEntities[ iEntity ].xValue._My_val.bDormant )
+		{
+			if ( plrEntities[ iEntity ].xValue._My_val.bLifeState == LIFE_ALIVE )
+			{
+				if ( plrLocalPlayer.xValue._My_val.iTeamNum != plrEntities[ iEntity ].xValue._My_val.iTeamNum )
+				{
+					angle_t angToEnemy = VectorToAngle( plrLocalPlayer.xValue._My_val.corOrigin, plrEntities[ iEntity ].xValue._My_val.corOrigin );
+					angle_t angCurrentAngle = GetViewAngle( );
+					float flEntityDistance = sqrt( pow( angToEnemy.flPitch - angCurrentAngle.flPitch, 2 ) + pow( angToEnemy.flYaw - angCurrentAngle.flYaw, 2 ) );
+
+					if ( !iEntity )
+					{
+						continue;
+					}
+
+					if ( flEntityDistance < flLastClosestDistance )
+					{
+						iLastClosestEntity = iEntity;
+					}
+				}
+			}
+		}
+	}
+	return iLastClosestEntity;
+}
+
+int CEngine::GetClosestEnemyToPosition( )
+{
+	int iLastClosestEntity { };
+	float flLastClosestDistance = FLT_MAX;
+	for ( int iEntity = 1; iEntity <= 64; iEntity++ )
+	{
+		if ( !plrEntities[ iEntity ].xValue._My_val.bDormant )
+		{
+			if ( plrEntities[ iEntity ].xValue._My_val.bLifeState == LIFE_ALIVE )
+			{
+				if ( plrLocalPlayer.xValue._My_val.iTeamNum != plrEntities[ iEntity ].xValue._My_val.iTeamNum )
+				{
+					vector_t vecEntityDistance( plrLocalPlayer.xValue._My_val.corOrigin, plrEntities[ iEntity ].xValue._My_val.corOrigin );
+					float flEntityDistance = sqrt( pow( vecEntityDistance.flDeltaX, 2 ) + pow( vecEntityDistance.flDeltaY, 2 ) + pow( vecEntityDistance.flDeltaZ, 2 ) );
+
+					if ( !iEntity )
+					{
+						continue;
+					}
+
+					if ( flEntityDistance < flLastClosestDistance )
+					{
+						iLastClosestEntity = iEntity;
+					}
+				}
+			}
+		}
+	}
+	return iLastClosestEntity;
 }
 
 float CEngine::GetPixelToAngleYaw( )

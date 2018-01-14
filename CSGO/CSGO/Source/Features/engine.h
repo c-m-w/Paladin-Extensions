@@ -1345,15 +1345,19 @@ public:
 	float GetSensitivity( );
 	void SetSensitivity( float ); // sets sensitivity limited to 0 and 1000
 
+	// client - localplayer
+	DWORD GetLocalPlayerBase( );
+	CPlayer GetLocalPlayer( );
+	void SetLocalPlayer( CPlayer );
+
 	// client - entities
 	DWORD GetEntityBase( int );
 	CPlayer GetEntity( int );
 	void SetEntity( int, CPlayer );
 
-	// client - localplayer
-	DWORD GetLocalPlayerBase( );
-	CPlayer GetLocalPlayer( );
-	void SetLocalPlayer( CPlayer );
+	// client - localplayer & entities
+	int GetClosestEnemyToCrosshair( );
+	int GetClosestEnemyToPosition( );
 
 	// general
 	float GetPixelToAngleYaw( );
