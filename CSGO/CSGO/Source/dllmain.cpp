@@ -112,7 +112,7 @@ bool GetPremium( )
 	return true;
 }
 
-int _STDCALL Main( )
+int _stdcall Main( )
 {
 	if ( !GetPremium( ) )
 	{
@@ -154,7 +154,6 @@ int _STDCALL Main( )
 	// TODO call Menu here
 
 GameLaunch:
-
 	if ( !mem.AttachToGame( ) )
 	{
 		MESSAGE( "Paladin CSGO", "Fatal Error 2: Game Attach\nAre you running the cheat as admin?", MB_ICONERROR );
@@ -165,6 +164,7 @@ GameLaunch:
 	LASTERR( );
 
 	DEBUG( DBG, "Waiting for server connection..." );
+
 ServerConnect:
 	while ( eng.GetSignOnState( ) != ESignOnState::FULL )
 	{
@@ -172,7 +172,12 @@ ServerConnect:
 		{
 			return 0;
 		}
-		Wait( 1000 );
+		else if ( !FindWindow( nullptr, "Counter-Strike: Global Offensive" ) )
+		{
+			DEBUG( WRN, "Game closed!" );
+			goto GameLaunch;
+		}
+		Wait( 100 );
 	}
 
 	CreateThreads( );
@@ -196,13 +201,14 @@ ServerConnect:
 		}
 		else
 		{
-			Wait( 50 );
+			Wait( 100 );
 		}
 	}
 	return 0;
 }
 
 #ifdef _DEBUG
+
 void SetDebug( )
 {
 	FILE *fTemp;
@@ -245,7 +251,9 @@ int CALLBACK WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	Main( );
 	FreeConsole( );
 }
+
 #else
+
 BOOL WINAPI DllMain( _In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID lpvReserved )
 {
 	switch ( fdwReason )
@@ -278,4 +286,5 @@ BOOL WINAPI DllMain( _In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID 
 	}
 	return BOOL( cfg.iQuitReason );
 }
+
 #endif
