@@ -36,7 +36,7 @@ void CInventory::Inventory( )
 {
 	weapon_t wepDeagle = { plrLocalPlayer.xValue._My_val.iAccount, plrLocalPlayer.xValue._My_val.iAccount,  EPaintKit::DRAGONLORE, 24, 0.01f, 100 };
 
-	for ( int i = 0; i <= 8; i++ )
+	for ( int i { }; i <= 8; i++ )
 	{
 		DWORD dwWeaponBase = eng.GetEntityBase( ( eng.GetLocalPlayer( ).hMyWeapons[ i ] & 0xFFF ) - 1 );
 

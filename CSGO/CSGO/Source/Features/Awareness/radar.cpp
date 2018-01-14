@@ -2,7 +2,7 @@
 
 void CRadar::Radar( )
 {
-	for ( int iEntity = 0; iEntity < 64; iEntity++ )
+	for ( int iEntity { }; iEntity < 64; iEntity++ )
 	{
 		if ( !plrEntities[ iEntity ].xValue._My_val.bDormant )
 		{

@@ -26,7 +26,7 @@ public:
 	EQuitReasons iQuitReason { };
 
 #ifdef _DEBUG
-	bool bCheckForAnticheat = false;
+	bool bCheckForAnticheat { };
 #else
 	bool bCheckForAnticheat = true;
 #endif

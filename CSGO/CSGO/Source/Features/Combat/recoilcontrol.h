@@ -2,7 +2,7 @@
 
 class CRecoilControl
 {
-	int iOldShotsFired = 0;
+	int iOldShotsFired { };
 	angle_t angOldAimPunch { 0, 0, 0 };
 public:
 	void RecoilControl( );

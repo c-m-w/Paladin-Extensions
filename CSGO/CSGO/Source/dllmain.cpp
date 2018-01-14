@@ -1,7 +1,7 @@
 #include "dllmain.h"
 
 HINSTANCE hInst = nullptr;
-std::atomic< bool > bExitState = false;
+std::atomic< bool > bExitState { };
 std::vector< std::thread > tThreads;
 
 void Feature( bool bFeatureState, moment mntWait, const std::function< void( ) > &fnFeature, unsigned short usFeatureKey )
@@ -59,7 +59,7 @@ void CreateThreads( )
 		{
 			eng.GetLocalPlayer( );
 
-			for ( int iEntity = 0; iEntity < 64; iEntity++ )
+			for ( int iEntity { }; iEntity < 64; iEntity++ )
 			{
 				eng.GetEntity( iEntity );
 			}

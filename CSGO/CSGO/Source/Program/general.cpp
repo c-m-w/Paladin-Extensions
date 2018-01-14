@@ -31,7 +31,7 @@ void CGeneral::GetPremiumUsers( )
 
 bool CGeneral::CompareName( user_t uPremiumUser, user_t uCurrentUser )
 {
-	for ( unsigned short usUserID = 0; usUserID < 256; usUserID++ )
+	for ( unsigned short usUserID { }; usUserID < 256; usUserID++ )
 	{
 		if ( uPremiumUser.lpstrUsername[ usUserID ] && !uCurrentUser.lpstrUsername[ usUserID ] )
 		{
@@ -61,14 +61,14 @@ EPremium CGeneral::CheckPremiumStatus( )
 		return EPremium::NOT_PREMIUM;
 	}
 	GetPremiumUsers( );
-	user_t uCurrentUser;
+	user_t uCurrentUser { };
 	char chBuffer[257];
 	DWORD dwBufferSize = 257;
 	GetUserNameA( chBuffer, &dwBufferSize );
 	uCurrentUser.lpstrUsername = chBuffer;
 	DEBUG( DBG, "Current User Username: %s", uCurrentUser.lpstrUsername );
-	unsigned short usUserID;
-	for ( usUserID = 0; usUserID <= PREMIUM_USERS; usUserID++ )
+	unsigned short usUserID { };
+	for ( ; usUserID <= PREMIUM_USERS; usUserID++ )
 	{
 		if ( uPremiumUsers[ usUserID ].bValid )
 		{

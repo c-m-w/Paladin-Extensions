@@ -55,7 +55,7 @@ bool CMemoryManager::AttachToGame( )
 	}
 	DEBUG( SCS, "Attached to game" );
 	HANDLE hSnapshot;
-	for ( unsigned short us = 0; us < 5; us++, Wait( 2000 ) )
+	for ( unsigned short us { }; us < 5; us++, Wait( 2000 ) )
 	{
 		do
 		{
@@ -107,7 +107,7 @@ DWORD CMemoryManager::FindPattern( BYTE *bMask, char *szMask, DWORD dwAddress, D
 	DWORD dwDataLength = strlen( szMask );
 	auto *bData = new BYTE[dwDataLength + 1];
 	SIZE_T sRead;
-	for ( DWORD dwAdditive = 0; dwAdditive < dwLength; dwAdditive++ )
+	for ( DWORD dwAdditive { }; dwAdditive < dwLength; dwAdditive++ )
 	{
 		auto dwCurrentAddress = dwAddress + dwAdditive;
 		bool bSuccess = ReadProcessMemory( hGame, LPVOID( dwCurrentAddress ), bData, dwDataLength, &sRead );

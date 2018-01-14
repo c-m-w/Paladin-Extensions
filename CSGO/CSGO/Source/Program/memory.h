@@ -2,9 +2,9 @@
 
 template< typename xDatatype > struct address_t
 {
-	std::atomic< DWORD > dwOffset = 0; // offset
-	std::atomic< DWORD > dwPointer = 0; // thisptr
-	std::atomic< DWORD > dwLocation = 0; // location
+	std::atomic< DWORD > dwOffset { }; // offset
+	std::atomic< DWORD > dwPointer { }; // thisptr
+	std::atomic< DWORD > dwLocation { }; // location
 	std::atomic< xDatatype > xValue { }; // value
 };
 
@@ -39,12 +39,11 @@ using namespace Addresses;
 
 class CMemoryManager
 {
+	DWORD dwProcessID { };
+	HANDLE hGame { };
+	DWORD dwClientBase { };
+	DWORD dwEngineBase { };
 public:
-	DWORD dwProcessID = 0;
-	HANDLE hGame = nullptr;
-	DWORD dwClientBase = 0;
-	DWORD dwEngineBase = 0;
-
 	bool AttachToGame( );
 
 	DWORD FindPattern( BYTE *, char *, DWORD, DWORD );
