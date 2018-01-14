@@ -72,6 +72,5 @@
 ##### Cole
 - Change
    - Ensure CPlayer variables work
-   - Private private mem
-- Fix
-   - Skin changer
+- Add
+   - Knife model changer
