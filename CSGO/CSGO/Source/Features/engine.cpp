@@ -104,7 +104,7 @@ void CEngine::SetSensitivity( float flNewSensitivity )
 
 DWORD CEngine::GetEntityBase( int iEntity )
 {
-	address_t< DWORD > pdwEntityListTemp { 0, 0, iEntity * INDEX_DISTANCE_ENTITY + pdwEntityList.dwLocation._My_val };
+	address_t< DWORD > pdwEntityListTemp { 0, 0, iEntity * INDEX_DISTANCE_ENTITY + pdwEntityList.dwLocation };
 	mem.Get( pdwEntityListTemp );
 	pdwEntityList.xValue = pdwEntityListTemp.xValue._My_val;
 	return pdwEntityList.xValue;
@@ -112,10 +112,9 @@ DWORD CEngine::GetEntityBase( int iEntity )
 
 CPlayer CEngine::GetEntity( int iEntity )
 {
-	address_t< CPlayer > plrEntityTemp { 0, 0, GetEntityBase( iEntity ) };
-	mem.Get( plrEntityTemp );
-	plrEntities[ iEntity ].xValue = plrEntityTemp.xValue._My_val;
-	return plrEntityTemp.xValue;
+	plrEntities[ iEntity ].dwLocation = GetEntityBase( iEntity );
+	mem.Get( plrEntities[ iEntity ] );
+	return plrEntities[ iEntity ].xValue;
 }
 
 void CEngine::SetEntity( int iEntity, CPlayer plrNewEntity )

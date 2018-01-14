@@ -62,7 +62,9 @@ public:
 				xAddress.xValue = *reinterpret_cast< xDatatype* >( &dwXor );
 				return bSuccess;
 			}
-			return ReadProcessMemory( hGame, LPVOID( xAddress.dwLocation._My_val ), &xAddress.xValue, sizeof( xDatatype ), nullptr );
+			xDatatype xRead { };
+			bool bSuccess = ReadProcessMemory( hGame, LPVOID( xAddress.dwLocation._My_val ), &xRead, sizeof( xDatatype ), nullptr );
+			xAddress.xValue = xRead;
 		}
 		return false;
 	}
@@ -76,7 +78,8 @@ public:
 				DWORD dwXor = *reinterpret_cast< DWORD* >( &xAddress.xValue ) ^ xAddress.dwPointer;
 				return WriteProcessMemory( hGame, LPVOID( xAddress.dwLocation._My_val ), &dwXor, sizeof( DWORD ), nullptr );
 			}
-			return WriteProcessMemory( hGame, LPVOID( xAddress.dwLocation._My_val ), &xAddress.xValue, sizeof( xDatatype ), nullptr );
+			xDatatype xWrite = xAddress.xValue;
+			return WriteProcessMemory( hGame, LPVOID( xAddress.dwLocation._My_val ), &xWrite, sizeof( xDatatype ), nullptr );
 		}
 		return false;
 	}
