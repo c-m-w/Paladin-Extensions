@@ -5,13 +5,25 @@ void CInventory::SetKnifeModel( )
 	//TODO: Make knife mdoel changed!
 }
 
-void CInventory::SetSkin( weaponentity_t wepWeapon )
+void CInventory::SetSkin( weapon_t wepWeapon, const DWORD dwWeaponBase )
 {
-	address_t< int > iHighID = { 0, 0, 0x2FA0 + wepWeapon.dwWeaponBase, -1 };
-	address_t< weapon_t > wepWeaponSkinBase = { 0, 0, 0x3168 + wepWeapon.dwWeaponBase, wepWeapon.wepWeapon };
-	printf( "%i\n", sizeof(EPaintKit) );
+	const int iIDHIGH = -1;
+	DWORD dwOldIdHigh = iHighID.dwLocation;
+	DWORD dwOldOwnerHigh = wepWeaponSkinBase.dwLocation;
+
+	iHighID.dwLocation += dwWeaponBase;
+	iHighID.xValue = iIDHIGH;
+
+	wepWeaponSkinBase.dwLocation += dwWeaponBase;
+	wepWeaponSkinBase.xValue = wepWeapon;
+
 	mem.Set( iHighID );
 	mem.Set( wepWeaponSkinBase );
+
+	iHighID.dwLocation = dwOldIdHigh;
+	wepWeaponSkinBase.dwLocation = dwOldOwnerHigh;
+
+	if(GetAsyncKeyState(VK_F8)) ForceUpdate( );
 }
 
 void CInventory::ForceUpdate( )
@@ -22,23 +34,24 @@ void CInventory::ForceUpdate( )
 
 void CInventory::Inventory( )
 {
-	weapon_t wepDeagle = { plrLocalPlayer.xValue._My_val.iAccount, plrLocalPlayer.xValue._My_val.iAccount,  EPaintKit::COBALTDISRUPTION, 24, 0.01f, -1 };
-	weaponentity_t wepWeaponEntity { };
-	address_t< int > iItemDefinitionIndex = { 0, 0, 0x2F88 };
+	weapon_t wepDeagle = { plrLocalPlayer.xValue._My_val.iAccount, plrLocalPlayer.xValue._My_val.iAccount,  EPaintKit::DRAGONLORE, 24, 0.01f, 100 };
+
 	for ( int i = 0; i <= 8; i++ )
 	{
-		wepWeaponEntity.dwWeaponBase = eng.GetEntityBase( ( eng.GetLocalPlayer( ).hMyWeapons[ i ] & 0xFFF ) - 1 );
-		DWORD dwOldItemDefinitionIndex = iItemDefinitionIndex.dwLocation;
-		iItemDefinitionIndex.dwLocation += wepWeaponEntity.dwWeaponBase;
-		mem.Get( iItemDefinitionIndex );
-		wepWeaponEntity.iWeaponIndex = iItemDefinitionIndex.xValue._My_val;
-		iItemDefinitionIndex.dwLocation = dwOldItemDefinitionIndex;
+		DWORD dwWeaponBase = eng.GetEntityBase( ( eng.GetLocalPlayer( ).hMyWeapons[ i ] & 0xFFF ) - 1 );
 
-		switch ( EWeapon( wepWeaponEntity.iWeaponIndex ) )
+		if ( dwWeaponBase )
+		{
+			DWORD dwOldItemdefinitionIndex = iItemDefinitionIndex.dwLocation;
+			iItemDefinitionIndex.dwLocation += dwWeaponBase;
+			mem.Get( iItemDefinitionIndex );
+			iItemDefinitionIndex.dwLocation = dwOldItemdefinitionIndex;
+		}
+
+		switch ( EWeapon( iItemDefinitionIndex.xValue._My_val ) )
 		{
 			case EWeapon::DEAGLE:
-				wepWeaponEntity.wepWeapon = wepDeagle;
-				SetSkin( wepWeaponEntity );
+				SetSkin( wepDeagle, dwWeaponBase );
 				break;
 			default:
 				break;

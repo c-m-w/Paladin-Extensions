@@ -20,6 +20,10 @@ namespace Addresses
 	address_t< DWORD > pdwLocalPlayer;
 	address_t< CPlayer > plrLocalPlayer;
 
+	address_t< int > iItemDefinitionIndex;
+	address_t< int > iHighID;
+	address_t< weapon_t > wepWeaponSkinBase;
+
 	address_t< DWORD > pdwGlowManager;
 }
 
@@ -149,6 +153,10 @@ void CMemoryManager::InitializeAddresses( )
 	pdwEntityList.dwOffset = 0x4A79EC4;
 	pdwGlowManager.dwOffset = 0x4F96D18;
 	pdwLocalPlayer.dwOffset = 0xA9D0DC;
+	//Weapon Entities
+	iItemDefinitionIndex.dwLocation = 0x2F88;
+	iHighID.dwLocation = 0x2FA0;
+	wepWeaponSkinBase.dwLocation = 0x3164;
 	DEBUG( DBG, "Initialized bases" );
 
 	// engine global

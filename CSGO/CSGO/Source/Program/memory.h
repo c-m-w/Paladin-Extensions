@@ -28,6 +28,10 @@ namespace Addresses
 	extern address_t< DWORD > pdwLocalPlayer;
 	extern address_t< CPlayer > plrLocalPlayer;
 
+	extern address_t< int > iItemDefinitionIndex;
+	extern address_t< int > iHighID;
+	extern address_t< weapon_t > wepWeaponSkinBase;
+
 	extern address_t< DWORD > pdwGlowManager;
 }
 

@@ -756,6 +756,16 @@ enum class EPaintKit
 	ZIGGY
 };
 
+struct weapon_t
+{
+	int iOriginalOwnerXuidHigh;
+	int iOriginalOwnerXuidLow;
+	EPaintKit iFallbackPaintKit;
+	int iFallbackSeed;
+	float flFallbackWear;
+	int iFallbackStatTrak;
+};
+
 struct audio_t
 {
 	float flFrameRate { };
