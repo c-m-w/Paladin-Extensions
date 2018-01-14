@@ -6,10 +6,7 @@ typedef long long moment;
 #define DEBUG LogDebugMsg
 #define LASTERR LogLastError
 #else
-void EmptyFunction( ... )
-{
-	return;
-}
+void EmptyFunction( ... );
 #define DEBUG EmptyFunction
 #define LASTERR EmptyFunction
 #endif

@@ -2,6 +2,9 @@
 
 std::string strLog;
 
+void EmptyFunction( ... )
+{}
+
 void LogDebugMsg( EDebugMessage dmType, char *szMessage, ... )
 {
 	HANDLE hConsole = GetStdHandle( STD_OUTPUT_HANDLE );

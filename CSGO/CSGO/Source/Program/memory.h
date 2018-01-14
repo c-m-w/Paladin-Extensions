@@ -65,6 +65,7 @@ public:
 			xDatatype xRead { };
 			bool bSuccess = ReadProcessMemory( hGame, LPVOID( xAddress.dwLocation._My_val ), &xRead, sizeof( xDatatype ), nullptr );
 			xAddress.xValue = xRead;
+			return bSuccess;
 		}
 		return false;
 	}
