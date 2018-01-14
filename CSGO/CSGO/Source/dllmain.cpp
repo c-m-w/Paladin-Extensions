@@ -59,7 +59,7 @@ void CreateThreads( )
 		{
 			eng.GetLocalPlayer( );
 
-			for ( int iEntity { }; iEntity < 64; iEntity++ )
+			for ( int iEntity { }; iEntity <= 64; iEntity++ )
 			{
 				eng.GetEntity( iEntity );
 			}
@@ -69,10 +69,7 @@ void CreateThreads( )
 
 	std::thread tTestThread( [ & ]
 	{
-		Feature( true, 0, [ & ]
-		{
-			inv.Inventory( ); // OUR TEST FUNCTION
-		} );
+		Feature( true, 1, [ & ] { inv.Inventory( ); } );
 	} );
 	tThreads.push_back( move( tTestThread ) );
 
@@ -92,7 +89,6 @@ bool GetPremium( )
 		remove( std::string( chTemp ).c_str( ) );
 		LASTERR( );
 		Panic( );
-		return false;
 	}
 	if ( uCurrentUserPremiumStatus == EPremium::NOT_PREMIUM )
 	{
@@ -113,47 +109,8 @@ bool GetPremium( )
 	return true;
 }
 
-void SetDebug( )
+int _STDCALL Main( )
 {
-	FILE *fTemp;
-	freopen_s( &fTemp, "CONOUT$", "w", stdout );
-
-	HANDLE hConsole = GetStdHandle( STD_OUTPUT_HANDLE );
-	HWND hWndConsole = GetConsoleWindow( );
-
-	CONSOLE_FONT_INFOEX cfiEx;
-	cfiEx.cbSize = sizeof( CONSOLE_FONT_INFOEX);
-	cfiEx.dwFontSize.X = 6;
-	cfiEx.dwFontSize.Y = 8;
-	wcscpy_s( cfiEx.FaceName, L"Terminal" );
-	SetCurrentConsoleFontEx( hConsole, 0, &cfiEx );
-
-	SetConsoleTitle( "Paladin CSGO" );
-	//MoveWindow( hWndConsole, 300, 300, 339, 279, false );
-	MoveWindow( hWndConsole, 300, 300, 500, 279, false );
-	EnableMenuItem( GetSystemMenu( hWndConsole, false ), SC_CLOSE, MF_GRAYED );
-	SetWindowLong( hWndConsole, GWL_STYLE, GetWindowLong( hWndConsole, GWL_STYLE ) & ~SC_CLOSE & ~WS_MAXIMIZEBOX & ~WS_SIZEBOX );
-
-	CONSOLE_CURSOR_INFO cci;
-	cci.dwSize = 25;
-	cci.bVisible = false;
-	SetConsoleCursorInfo( hConsole, &cci );
-
-	SetConsoleTextAttribute( hConsole, 11 );
-	std::cout << "[OPN] ";
-	strLog.append( "[OPN] " );
-	SetConsoleTextAttribute( hConsole, 7 );
-	std::cout << "Paladin Debug Interface Setup";
-	strLog.append( "Paladin Debug Interface Setup" );
-	LASTERR( );
-}
-
-int CALLBACK WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nCmdShow )
-{
-#ifdef _DEBUG
-	AllocConsole( );
-	SetDebug( );
-#endif
 
 	if ( !GetPremium( ) )
 	{
@@ -194,6 +151,8 @@ int CALLBACK WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 
 	// TODO call Menu here
 
+	GameLaunch:
+
 	if ( !mem.AttachToGame( ) )
 	{
 		MESSAGE( "Paladin CSGO", "Fatal Error 2: Game Attach\nAre you running the cheat as admin?", MB_ICONERROR );
@@ -203,11 +162,8 @@ int CALLBACK WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	mem.InitializeAddresses( );
 	LASTERR( );
 
-	//DWORD res = scan.findPatternEx(mem.hGame, "client.dll", "\xA3\x00\x00\x00\x00\xC7\x05\x00\x00\x00\x00\x00\x00\x00\x00\xE8\x00\x00\x00\x00\x59\xC3\x6A", "x????xx????????x????xxx") + 16;
-	//DEBUG(DBG, "dwLocalPlayer: 0x%p", res);
-
 	DEBUG( DBG, "Waiting for server connection..." );
-
+	ServerConnect:
 	while ( eng.GetSignOnState( ) != ESignOnState::FULL )
 	{
 		if ( GetAsyncKeyState( VK_F4 ) )
@@ -228,31 +184,66 @@ int CALLBACK WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 		else if ( !FindWindow( nullptr, "Counter-Strike: Global Offensive" ) )
 		{
 			DEBUG( WRN, "Game closed!" );
-			mem.AttachToGame( );
-			mem.InitializeAddresses( );
+			goto GameLaunch;
 		}
 		else if ( eng.GetSignOnState( ) != ESignOnState::FULL )
 		{
 			CleanUp( );
 			DEBUG( DBG, "Waiting for server connection..." );
-			while ( eng.GetSignOnState( ) != ESignOnState::FULL )
-			{
-				if ( GetAsyncKeyState( VK_F4 ) )
-				{
-					return 0;
-				}
-				Wait( 1000 );
-			}
-			CreateThreads( );
+			goto ServerConnect;
 		}
 		else
 		{
-			Wait( 250 );
+			Wait( 50 );
 		}
 	}
 	return 0;
 }
 
+#ifdef _DEBUG
+void SetDebug( )
+{
+	FILE *fTemp;
+	freopen_s( &fTemp, "CONOUT$", "w", stdout );
+
+	HANDLE hConsole = GetStdHandle( STD_OUTPUT_HANDLE );
+	HWND hWndConsole = GetConsoleWindow( );
+
+	CONSOLE_FONT_INFOEX cfiEx;
+	cfiEx.cbSize = sizeof( CONSOLE_FONT_INFOEX );
+	cfiEx.dwFontSize.X = 6;
+	cfiEx.dwFontSize.Y = 8;
+	wcscpy_s( cfiEx.FaceName, L"Terminal" );
+	SetCurrentConsoleFontEx( hConsole, 0, &cfiEx );
+
+	SetConsoleTitle( "Paladin CSGO" );
+	//MoveWindow( hWndConsole, 300, 300, 339, 279, false );
+	MoveWindow( hWndConsole, 300, 300, 500, 279, false );
+	EnableMenuItem( GetSystemMenu( hWndConsole, false ), SC_CLOSE, MF_GRAYED );
+	SetWindowLong( hWndConsole, GWL_STYLE, GetWindowLong( hWndConsole, GWL_STYLE ) & ~SC_CLOSE & ~WS_MAXIMIZEBOX & ~WS_SIZEBOX );
+
+	CONSOLE_CURSOR_INFO cci;
+	cci.dwSize = 25;
+	cci.bVisible = false;
+	SetConsoleCursorInfo( hConsole, &cci );
+
+	SetConsoleTextAttribute( hConsole, 11 );
+	std::cout << "[OPN] ";
+	strLog.append( "[OPN] " );
+	SetConsoleTextAttribute( hConsole, 7 );
+	std::cout << "Paladin Debug Interface Setup";
+	strLog.append( "Paladin Debug Interface Setup" );
+	LASTERR( );
+}
+
+int CALLBACK WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nCmdShow )
+{
+	AllocConsole( );
+	SetDebug( );
+	Main( );
+	FreeConsole( );
+}
+#else
 BOOL WINAPI DllMain( _In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID lpvReserved )
 {
 	switch ( fdwReason )
@@ -260,7 +251,7 @@ BOOL WINAPI DllMain( _In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID 
 		case DLL_PROCESS_ATTACH:
 		{
 			hInst = hinstDLL;
-			HANDLE hCheat = CreateThread( nullptr, 0, LPTHREAD_START_ROUTINE( WinMain ), nullptr, 0, nullptr ); // TODO args
+			HANDLE hCheat = CreateThread( nullptr, 0, LPTHREAD_START_ROUTINE( Main ), nullptr, 0, nullptr ); // TODO args
 			if ( !hCheat || hCheat == INVALID_HANDLE_VALUE )
 			{
 				cfg.iQuitReason = EQuitReasons::LOAD_LIBRARY_ERROR;
@@ -275,9 +266,6 @@ BOOL WINAPI DllMain( _In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID 
 		case DLL_PROCESS_DETACH:
 		{
 			CleanUp( );
-#ifdef _DEBUG
-			FreeConsole( );
-#endif
 			break;
 		}
 		default:
@@ -288,3 +276,4 @@ BOOL WINAPI DllMain( _In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID 
 	}
 	return BOOL( cfg.iQuitReason );
 }
+#endif

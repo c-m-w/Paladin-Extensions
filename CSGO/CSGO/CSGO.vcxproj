@@ -177,7 +177,8 @@
       <BasicRuntimeChecks>
       </BasicRuntimeChecks>
       <EnablePREfast>true</EnablePREfast>
-      <AdditionalOptions>/analyze:stacksize94568</AdditionalOptions>
+      <AdditionalOptions>/analyze:stacksize94552</AdditionalOptions>
+      <DisableSpecificWarnings>4100;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
