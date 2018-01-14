@@ -34,10 +34,7 @@
 ##### Jeremy
 - Fix
    - Expired cheat
-   - Getting EntityList
-   - Release compile
 - Change
-   - Gotos for Main instead of multiple loops
    - Check for multiple instances
    - Move Log to C:/ drive
 - New
