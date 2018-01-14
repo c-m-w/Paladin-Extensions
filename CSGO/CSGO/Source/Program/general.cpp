@@ -57,7 +57,7 @@ EPremium CGeneral::CheckPremiumStatus( )
 {
 	if ( DECEMBER_FIRST > GetMoment( ) )
 	{
-		DEBUG( ERR, "Date Mismatch: %i > %i", DECEMBER_FIRST, GetMoment( ) );
+		DEBUG( ERR, "Date Mismatch: %I64d > %I64d", DECEMBER_FIRST, GetMoment( ) );
 		return EPremium::NOT_PREMIUM;
 	}
 	GetPremiumUsers( );
@@ -94,10 +94,10 @@ EPremium CGeneral::CheckPremiumStatus( )
 		return EPremium::NOT_PREMIUM;
 	}
 	uCurrentUser.tExpiration = uPremiumUsers[ usUserID ].tExpiration;
-	DEBUG( DBG, "Current User Premium Time: %i", uCurrentUser.tExpiration );
+	DEBUG( DBG, "Current User Premium Time: %I64d", uCurrentUser.tExpiration );
 	if ( uCurrentUser.tExpiration < GetMoment( ) )
 	{
-		DEBUG( ERR, "%i < %i", uCurrentUser.tExpiration, GetMoment( ) );
+		DEBUG( ERR, "%I64d < %I64d", uCurrentUser.tExpiration, GetMoment( ) );
 		DEBUG( ERR, "User is out of premium" );
 		return EPremium::EXPIRED;
 	}

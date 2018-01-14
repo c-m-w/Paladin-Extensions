@@ -32,8 +32,6 @@
 ## CSGO TODO
 ##### Open
 ##### Jeremy
-- Fix
-   - Expired cheat
 - Change
    - Check for multiple instances
    - Move Log to C:/ drive

@@ -95,13 +95,13 @@ bool GetPremium( )
 	}
 	if ( uCurrentUserPremiumStatus == EPremium::NOT_PREMIUM )
 	{
-		//CleanUp( );
+		CleanUp( );
 		return false;
 	}
 	if ( uCurrentUserPremiumStatus == EPremium::EXPIRED )
 	{
 		MESSAGE( "Paladin CSGO", "Notice 1: Premium Time Expired -> No access\nDid you renew your premium?", MB_ICONHAND );
-		//CleanUp( );
+		CleanUp( );
 		return false;
 	}
 	if ( uCurrentUserPremiumStatus == EPremium::PREMIUM )
