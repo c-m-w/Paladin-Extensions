@@ -115,7 +115,7 @@ EElevation CGeneral::GetElevationState( )
 {
 	HANDLE hTokenSelf;
 	TOKEN_ELEVATION teSelf;
-	DWORD dwReturnLength = sizeof(TOKEN_ELEVATION);
+	DWORD dwReturnLength = sizeof( TOKEN_ELEVATION );
 	if ( OpenProcessToken( GetCurrentProcess( ), TOKEN_QUERY, &hTokenSelf ) &&
 		GetTokenInformation( hTokenSelf, TokenElevation, &teSelf, dwReturnLength, &dwReturnLength ) )
 	{
@@ -133,7 +133,7 @@ EElevation CGeneral::GetElevationState( HANDLE hTarget )
 {
 	HANDLE hTokenTarget;
 	TOKEN_ELEVATION teTarget;
-	DWORD dwReturnLength = sizeof(TOKEN_ELEVATION);
+	DWORD dwReturnLength = sizeof( TOKEN_ELEVATION );
 	if ( OpenProcessToken( hTarget, TOKEN_QUERY, &hTokenTarget ) &&
 		GetTokenInformation( hTokenTarget, TokenElevation, &teTarget, dwReturnLength, &dwReturnLength ) )
 	{

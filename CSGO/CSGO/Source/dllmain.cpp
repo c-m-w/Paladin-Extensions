@@ -69,7 +69,10 @@ void CreateThreads( )
 
 	std::thread tTestThread( [ & ]
 	{
-		Feature( true, 1, [ & ] { inv.Inventory( ); } );
+		Feature( true, 1, [ & ]
+		{
+			inv.Inventory( );
+		} );
 	} );
 	tThreads.push_back( move( tTestThread ) );
 
@@ -111,7 +114,6 @@ bool GetPremium( )
 
 int _STDCALL Main( )
 {
-
 	if ( !GetPremium( ) )
 	{
 		//return 0;
@@ -151,7 +153,7 @@ int _STDCALL Main( )
 
 	// TODO call Menu here
 
-	GameLaunch:
+GameLaunch:
 
 	if ( !mem.AttachToGame( ) )
 	{
@@ -163,7 +165,7 @@ int _STDCALL Main( )
 	LASTERR( );
 
 	DEBUG( DBG, "Waiting for server connection..." );
-	ServerConnect:
+ServerConnect:
 	while ( eng.GetSignOnState( ) != ESignOnState::FULL )
 	{
 		if ( GetAsyncKeyState( VK_F4 ) )

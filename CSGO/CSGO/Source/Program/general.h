@@ -8,7 +8,7 @@ class CGeneral
 		int iHardwareID { };
 		moment tExpiration { };
 		bool bValid { };
-		bool bBanned{ };
+		bool bBanned { };
 	};
 
 	user_t uPremiumUsers[PREMIUM_USERS];

@@ -23,7 +23,10 @@ void CInventory::SetSkin( weapon_t wepWeapon, DWORD dwWeaponBase )
 	iHighID.dwLocation = dwOldIdHigh;
 	wepWeaponSkinBase.dwLocation = dwOldOwnerHigh;
 
-	if(GetAsyncKeyState(VK_F8)) ForceUpdate( );
+	if ( GetAsyncKeyState( VK_F8 ) )
+	{
+		ForceUpdate( );
+	}
 }
 
 void CInventory::ForceUpdate( )
@@ -34,7 +37,7 @@ void CInventory::ForceUpdate( )
 
 void CInventory::Inventory( )
 {
-	weapon_t wepDeagle = { plrLocalPlayer.xValue._My_val.iAccount, plrLocalPlayer.xValue._My_val.iAccount,  EPaintKit::DRAGONLORE, 24, 0.01f, 100 }; // TODO tranny, high = low why? iaccount twice
+	weapon_t wepDeagle = { plrLocalPlayer.xValue._My_val.iAccount, plrLocalPlayer.xValue._My_val.iAccount, EPaintKit::DRAGONLORE, 24, 0.01f, 100 }; // TODO tranny, high = low why? iaccount twice
 
 	for ( int i { }; i <= 8; i++ )
 	{
@@ -51,10 +54,14 @@ void CInventory::Inventory( )
 		switch ( EWeapon( iItemDefinitionIndex.xValue._My_val ) )
 		{
 			case EWeapon::DEAGLE:
+			{
 				SetSkin( wepDeagle, dwWeaponBase );
 				break;
+			}
 			default:
+			{
 				break;
+			}
 		}
 	}
 }
