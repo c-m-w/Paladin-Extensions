@@ -163,16 +163,15 @@ GameLaunch:
 	mem.InitializeAddresses( );
 	LASTERR( );
 
-	DEBUG( DBG, "Waiting for server connection..." );
-
 ServerConnect:
+	DEBUG( DBG, "Waiting for server connection..." );
 	while ( eng.GetSignOnState( ) != ESignOnState::FULL )
 	{
 		if ( GetAsyncKeyState( VK_F4 ) )
 		{
 			return 0;
 		}
-		else if ( !FindWindow( nullptr, "Counter-Strike: Global Offensive" ) )
+		if ( !FindWindow( nullptr, "Counter-Strike: Global Offensive" ) )
 		{
 			DEBUG( WRN, "Game closed!" );
 			goto GameLaunch;
@@ -190,13 +189,14 @@ ServerConnect:
 		}
 		else if ( !FindWindow( nullptr, "Counter-Strike: Global Offensive" ) )
 		{
+			CleanUp( );
 			DEBUG( WRN, "Game closed!" );
 			goto GameLaunch;
 		}
 		else if ( eng.GetSignOnState( ) != ESignOnState::FULL )
 		{
 			CleanUp( );
-			DEBUG( DBG, "Waiting for server connection..." );
+			DEBUG( DBG, "Disconnected from server!" );
 			goto ServerConnect;
 		}
 		else
