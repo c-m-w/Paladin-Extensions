@@ -2,10 +2,10 @@
 
 template< typename xDatatype > struct address_t
 {
-	DWORD dwOffset { }; // offset
-	DWORD dwPointer { }; // thisptr
-	DWORD dwLocation { }; // location
-	xDatatype xValue { }; // value
+	std::atomic< DWORD > dwOffset { }; // offset
+	std::atomic< DWORD > dwPointer { }; // thisptr
+	std::atomic< DWORD > dwLocation { }; // location
+	std::atomic< xDatatype > xValue { }; // value
 };
 
 namespace Addresses
@@ -57,18 +57,14 @@ public:
 			if ( xAddress.dwPointer )
 			{
 				DWORD dwXor { };
-				bool bSuccess = ReadProcessMemory( hGame, LPVOID( xAddress.dwLocation ), &dwXor, sizeof( DWORD ), nullptr );
+				bool bSuccess = ReadProcessMemory( hGame, LPVOID( xAddress.dwLocation._My_val ), &dwXor, sizeof( DWORD ), nullptr );
 				dwXor ^= xAddress.dwPointer;
-				mtxMutex.lock( );
 				xAddress.xValue = *reinterpret_cast< xDatatype* >( &dwXor );
-				mtxMutex.unlock( );
 				return bSuccess;
 			}
 			xDatatype xRead { };
-			bool bSuccess = ReadProcessMemory( hGame, LPVOID( xAddress.dwLocation ), &xRead, sizeof( xDatatype ), nullptr );
-			mtxMutex.lock( );
+			bool bSuccess = ReadProcessMemory( hGame, LPVOID( xAddress.dwLocation._My_val ), &xRead, sizeof( xDatatype ), nullptr );
 			xAddress.xValue = xRead;
-			mtxMutex.unlock( );
 			return bSuccess;
 		}
 		return false;
@@ -81,10 +77,10 @@ public:
 			if ( xAddress.dwPointer )
 			{
 				DWORD dwXor = *reinterpret_cast< DWORD* >( &xAddress.xValue ) ^ xAddress.dwPointer;
-				return WriteProcessMemory( hGame, LPVOID( xAddress.dwLocation ), &dwXor, sizeof( DWORD ), nullptr );
+				return WriteProcessMemory( hGame, LPVOID( xAddress.dwLocation._My_val ), &dwXor, sizeof( DWORD ), nullptr );
 			}
 			xDatatype xWrite = xAddress.xValue;
-			return WriteProcessMemory( hGame, LPVOID( xAddress.dwLocation ), &xWrite, sizeof( xDatatype ), nullptr );
+			return WriteProcessMemory( hGame, LPVOID( xAddress.dwLocation._My_val ), &xWrite, sizeof( xDatatype ), nullptr );
 		}
 		return false;
 	}

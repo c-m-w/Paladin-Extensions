@@ -136,7 +136,6 @@ void CMemoryManager::InitializeAddresses( )
 {
 	DEBUG( DBG, "Initializing addresses" );
 
-	mtxMutex.lock( );
 	// todo signature scanning
 	// global Engine addresses
 	gvGlobalVars.dwOffset = 0x57B4F0;
@@ -155,9 +154,9 @@ void CMemoryManager::InitializeAddresses( )
 	pdwGlowManager.dwOffset = 0x4F96D18;
 	pdwLocalPlayer.dwOffset = 0xA9D0DC;
 	//Weapon Entities
-	iItemDefinitionIndex.dwOffset = 0x2F88;
-	iHighID.dwOffset = 0x2FA0;
-	wepWeaponSkinBase.dwOffset = 0x3164;
+	iItemDefinitionIndex.dwLocation = 0x2F88;
+	iHighID.dwLocation = 0x2FA0;
+	wepWeaponSkinBase.dwLocation = 0x3164;
 	DEBUG( DBG, "Initialized bases" );
 
 	// engine global
@@ -174,7 +173,6 @@ void CMemoryManager::InitializeAddresses( )
 	pdwEntityList.dwLocation = dwClientBase + pdwEntityList.dwOffset;
 	pdwLocalPlayer.dwLocation = dwClientBase + pdwLocalPlayer.dwOffset;
 	pdwGlowManager.dwLocation = dwClientBase + pdwGlowManager.dwOffset;
-	mtxMutex.unlock(  );
 	DEBUG( DBG, "Initialized locations" );
 
 	DEBUG( SCS, "Initialized addresses" );

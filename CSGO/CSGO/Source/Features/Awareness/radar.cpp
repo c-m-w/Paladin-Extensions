@@ -4,11 +4,11 @@ void CRadar::Radar( )
 {
 	for ( int iEntity { }; iEntity <= 64; iEntity++ )
 	{
-		if ( !plrEntities[ iEntity ].xValue.bDormant )
+		if ( !plrEntities[ iEntity ].xValue._My_val.bDormant )
 		{
-			if ( plrLocalPlayer.xValue.iTeamNum != plrEntities[ iEntity ].xValue.iTeamNum )
+			if ( plrLocalPlayer.xValue._My_val.iTeamNum != plrEntities[ iEntity ].xValue._My_val.iTeamNum )
 			{
-				if ( plrEntities[ iEntity ].xValue.bLifeState == LIFE_ALIVE )
+				if ( plrEntities[ iEntity ].xValue._My_val.bLifeState == LIFE_ALIVE )
 				{
 					CPlayer plrNewEntity = plrEntities[ iEntity ].xValue;
 					plrNewEntity.bSpotted = true;

@@ -8,9 +8,7 @@ CGlobalVars CEngine::GetGlobalVars( )
 
 void CEngine::SetGlobalVars( CGlobalVars gvNewGlobalVars )
 {
-	mtxMutex.lock( );
 	gvGlobalVars.xValue = gvNewGlobalVars;
-	mtxMutex.unlock( );
 	mem.Set( gvGlobalVars );
 }
 
@@ -24,9 +22,7 @@ void CEngine::SetSendPackets( bool bNewSendPackets )
 {
 	if ( GetSendPackets( ) != bNewSendPackets )
 	{
-		mtxMutex.lock( );
 		bSendPackets.xValue = bNewSendPackets;
-		mtxMutex.unlock( );
 		mem.Set( bSendPackets );
 	}
 }
@@ -39,18 +35,14 @@ DWORD CEngine::GetClientState( )
 
 ESignOnState CEngine::GetSignOnState( )
 {
-	mtxMutex.lock( );
 	soSignOnState.dwLocation = GetClientState( ) + soSignOnState.dwOffset;
-	mtxMutex.unlock( );
 	mem.Get( soSignOnState );
 	return soSignOnState.xValue;
 }
 
 angle_t CEngine::GetViewAngle( )
 {
-	mtxMutex.lock( );
 	angViewAngle.dwLocation = GetClientState( ) + angViewAngle.dwOffset;
-	mtxMutex.unlock( );
 	mem.Get( angViewAngle );
 	return angViewAngle.xValue;
 }
@@ -59,9 +51,7 @@ void CEngine::SetViewAngle( angle_t angNewViewAngle )
 {
 	if ( GetViewAngle( ) != ClampAngle( NormalizeAngle( angNewViewAngle ) ) )
 	{
-		mtxMutex.lock( );
 		angViewAngle.xValue = ClampAngle( NormalizeAngle( angNewViewAngle ) );
-		mtxMutex.unlock( );
 		mem.Set( angViewAngle );
 	}
 }
@@ -76,9 +66,7 @@ void CEngine::SetAttack( FLAG ksType )
 {
 	if ( GetAttack( ) != ( ACTION_DEFAULT | ksType ) )
 	{
-		mtxMutex.lock( );
 		fForceAttack.xValue = ACTION_DEFAULT | ksType;
-		mtxMutex.unlock( );
 		mem.Set( fForceAttack );
 	}
 }
@@ -93,9 +81,7 @@ void CEngine::SetJump( FLAG ksType )
 {
 	if ( GetJump( ) != ( ACTION_DEFAULT | ksType ) )
 	{
-		mtxMutex.lock( );
 		fForceJump.xValue = ACTION_DEFAULT | ksType;
-		mtxMutex.unlock( );
 		mem.Set( fForceJump );
 	}
 }
@@ -111,9 +97,7 @@ void CEngine::SetSensitivity( float flNewSensitivity )
 	Limit( flNewSensitivity, MIN_SENSITIVITY, MAX_SENSITIVITY );
 	if ( GetSensitivity( ) != flNewSensitivity )
 	{
-		mtxMutex.lock( );
 		flSensitivity.xValue = flNewSensitivity;
-		mtxMutex.unlock( );
 		mem.Set( flSensitivity );
 	}
 }
@@ -126,38 +110,31 @@ DWORD CEngine::GetLocalPlayerBase( )
 
 CPlayer CEngine::GetLocalPlayer( )
 {
-	mtxMutex.lock( );
 	plrLocalPlayer.dwLocation = GetLocalPlayerBase( );
-	mtxMutex.unlock( );
 	mem.Get( plrLocalPlayer );
 	return plrLocalPlayer.xValue;
 }
 
 void CEngine::SetLocalPlayer( CPlayer plrNewLocalPlayer )
 {
-	mtxMutex.lock( );
-	plrLocalPlayer.xValue = plrNewLocalPlayer;
-	mtxMutex.unlock( );
-	mem.Set( plrLocalPlayer );
+	address_t< CPlayer > plrLocalPlayerTemp { 0, 0, 0, plrNewLocalPlayer };
+	plrLocalPlayerTemp.xValue = plrNewLocalPlayer;
+	mem.Set( plrLocalPlayerTemp );
 }
 
 DWORD CEngine::GetEntityBase( int iEntity )
 {
 	DWORD dwOldEntityListLocation = pdwEntityList.dwLocation;
-	mtxMutex.lock( );
 	pdwEntityList.dwLocation += iEntity * INDEX_DISTANCE_ENTITY;
 	mem.Get( pdwEntityList );
 	pdwEntityList.dwLocation = dwOldEntityListLocation;
-	mtxMutex.unlock( );
 	return pdwEntityList.xValue;
 }
 
 CPlayer CEngine::GetEntity( int iEntity )
 {
-	mtxMutex.lock( );
 	plrEntities[ iEntity ].dwLocation = GetEntityBase( iEntity );
 	mem.Get( plrEntities[ iEntity ] );
-	mtxMutex.unlock( );
 	return plrEntities[ iEntity ].xValue;
 }
 
@@ -173,13 +150,13 @@ int CEngine::GetClosestEnemyToCrosshair( )
 	float flLastClosestDistance = FLT_MAX;
 	for ( int iEntity = 1; iEntity <= 64; iEntity++ )
 	{
-		if ( !plrEntities[ iEntity ].xValue.bDormant )
+		if ( !plrEntities[ iEntity ].xValue._My_val.bDormant )
 		{
-			if ( plrEntities[ iEntity ].xValue.bLifeState == LIFE_ALIVE )
+			if ( plrEntities[ iEntity ].xValue._My_val.bLifeState == LIFE_ALIVE )
 			{
-				if ( plrLocalPlayer.xValue.iTeamNum != plrEntities[ iEntity ].xValue.iTeamNum )
+				if ( plrLocalPlayer.xValue._My_val.iTeamNum != plrEntities[ iEntity ].xValue._My_val.iTeamNum )
 				{
-					angle_t angToEnemy = VectorToAngle( plrLocalPlayer.xValue.corOrigin, plrEntities[ iEntity ].xValue.corOrigin );
+					angle_t angToEnemy = VectorToAngle( plrLocalPlayer.xValue._My_val.corOrigin, plrEntities[ iEntity ].xValue._My_val.corOrigin );
 					angle_t angCurrentAngle = GetViewAngle( );
 					float flEntityDistance = sqrt( pow( angToEnemy.flPitch - angCurrentAngle.flPitch, 2 ) + pow( angToEnemy.flYaw - angCurrentAngle.flYaw, 2 ) );
 
@@ -205,13 +182,13 @@ int CEngine::GetClosestEnemyToPosition( )
 	float flLastClosestDistance = FLT_MAX;
 	for ( int iEntity = 1; iEntity <= 64; iEntity++ )
 	{
-		if ( !plrEntities[ iEntity ].xValue.bDormant )
+		if ( !plrEntities[ iEntity ].xValue._My_val.bDormant )
 		{
-			if ( plrEntities[ iEntity ].xValue.bLifeState == LIFE_ALIVE )
+			if ( plrEntities[ iEntity ].xValue._My_val.bLifeState == LIFE_ALIVE )
 			{
-				if ( plrLocalPlayer.xValue.iTeamNum != plrEntities[ iEntity ].xValue.iTeamNum )
+				if ( plrLocalPlayer.xValue._My_val.iTeamNum != plrEntities[ iEntity ].xValue._My_val.iTeamNum )
 				{
-					vector_t vecEntityDistance( plrLocalPlayer.xValue.corOrigin, plrEntities[ iEntity ].xValue.corOrigin );
+					vector_t vecEntityDistance( plrLocalPlayer.xValue._My_val.corOrigin, plrEntities[ iEntity ].xValue._My_val.corOrigin );
 					float flEntityDistance = sqrt( pow( vecEntityDistance.flDeltaX, 2 ) + pow( vecEntityDistance.flDeltaY, 2 ) + pow( vecEntityDistance.flDeltaZ, 2 ) );
 
 					if ( !iEntity )
