@@ -6,7 +6,9 @@
 #include <string>
 #include <vector>
 #include <thread>
-#include <atomic>
+#include <mutex>
+
+extern std::mutex mtxMutex;
 
 #include "Program/global.h"
 #include "Features/engine.h"

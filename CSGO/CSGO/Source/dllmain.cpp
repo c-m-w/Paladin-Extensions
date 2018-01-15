@@ -1,8 +1,9 @@
 #include "dllmain.h"
 
-HINSTANCE hInst = nullptr;
-std::atomic< bool > bExitState { };
-std::vector< std::thread > tThreads;
+bool bExitState { };
+HINSTANCE hInst { };
+std::mutex mtxMutex { };
+std::vector< std::thread > tThreads { };
 
 void Feature( bool bFeatureState, moment mntWait, const std::function< void( ) > &fnFeature, unsigned short usFeatureKey )
 {
@@ -31,7 +32,9 @@ void Feature( bool bFeatureState, moment mntWait, const std::function< void( ) >
 void CleanUp( )
 {
 	DEBUG( DBG, "Cleaning up" );
+	mtxMutex.lock( );
 	bExitState = true;
+	mtxMutex.unlock( );
 	for ( auto &tThread: tThreads )
 	{
 		if ( tThread.joinable( ) )

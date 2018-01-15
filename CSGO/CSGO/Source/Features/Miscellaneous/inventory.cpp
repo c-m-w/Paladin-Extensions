@@ -8,6 +8,7 @@ void CInventory::SetKnifeModel( )
 void CInventory::SetSkin( weapon_t wepWeapon, DWORD dwWeaponBase )
 {
 	int iIDHIGH = -1;
+	mtxMutex.lock( );
 	DWORD dwOldIdHigh = iHighID.dwLocation;
 	DWORD dwOldOwnerHigh = wepWeaponSkinBase.dwLocation;
 
@@ -22,6 +23,7 @@ void CInventory::SetSkin( weapon_t wepWeapon, DWORD dwWeaponBase )
 
 	iHighID.dwLocation = dwOldIdHigh;
 	wepWeaponSkinBase.dwLocation = dwOldOwnerHigh;
+	mtxMutex.unlock( );
 
 	if ( GetAsyncKeyState( VK_F8 ) )
 	{
@@ -37,7 +39,7 @@ void CInventory::ForceUpdate( )
 
 void CInventory::Inventory( )
 {
-	weapon_t wepDeagle = { plrLocalPlayer.xValue._My_val.iAccount, plrLocalPlayer.xValue._My_val.iAccount, EPaintKit::DRAGONLORE, 24, 0.01f, 100 }; // TODO tranny, high = low why? iaccount twice
+	weapon_t wepDeagle = { plrLocalPlayer.xValue.iAccount, plrLocalPlayer.xValue.iAccount, EPaintKit::DRAGONLORE, 24, 0.01f, 100 }; // TODO tranny, high = low why? iaccount twice
 
 	for ( int i { }; i <= 8; i++ )
 	{
@@ -45,13 +47,15 @@ void CInventory::Inventory( )
 
 		if ( dwWeaponBase )
 		{
+			mtxMutex.lock( );
 			DWORD dwOldItemdefinitionIndex = iItemDefinitionIndex.dwLocation;
 			iItemDefinitionIndex.dwLocation += dwWeaponBase;
 			mem.Get( iItemDefinitionIndex );
 			iItemDefinitionIndex.dwLocation = dwOldItemdefinitionIndex;
+			mtxMutex.unlock( );
 		}
 
-		switch ( EWeapon( iItemDefinitionIndex.xValue._My_val ) )
+		switch ( EWeapon( iItemDefinitionIndex.xValue ) )
 		{
 			case EWeapon::DEAGLE:
 			{
