@@ -13,7 +13,8 @@ typedef unsigned EHANDLE;
 #define ACTION_TICK 0b10 // +command, tick, -command
 #define ACTION_DEFAULT 0b100 // default command state
 #define INDEX_DISTANCE_ENTITY 0x10 // Distance between entities
-#define INDEX_DISTANCE_GLOW 0xA310
+#define INDEX_DISTANCE_GLOW 0xA310 // Distance between glow objects
+#define INDEX_ENTITY_MASK 0xFFF
 
 #define MAX_ANGLE_DELTA 22.f // Max angle delta per tick
 #define MAX_SENSITIVITY 1000.f
@@ -1330,6 +1331,7 @@ public:
 	void SetGlobalVars( CGlobalVars ); // careful! unlimited
 	bool GetSendPackets( );
 	void SetSendPackets( bool );
+	void ForceUpdate( );
 
 	// engine - clientstate
 	DWORD GetClientState( );

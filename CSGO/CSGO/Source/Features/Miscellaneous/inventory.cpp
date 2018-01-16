@@ -7,12 +7,11 @@ void CInventory::SetKnifeModel( )
 
 void CInventory::SetSkin( weapon_t wepWeapon, DWORD dwWeaponBase )
 {
-	int iIDHIGH = -1;
 	DWORD dwOldIdHigh = iHighID.dwLocation;
 	DWORD dwOldOwnerHigh = wepWeaponSkinBase.dwLocation;
 
 	iHighID.dwLocation += dwWeaponBase;
-	iHighID.xValue = iIDHIGH;
+	iHighID.xValue = -1;
 
 	wepWeaponSkinBase.dwLocation += dwWeaponBase;
 	wepWeaponSkinBase.xValue = wepWeapon;
@@ -25,14 +24,8 @@ void CInventory::SetSkin( weapon_t wepWeapon, DWORD dwWeaponBase )
 
 	if ( GetAsyncKeyState( VK_F8 ) )
 	{
-		ForceUpdate( );
+		eng.ForceUpdate( );
 	}
-}
-
-void CInventory::ForceUpdate( )
-{
-	address_t< int > iForceUpdate = { 0, 0, 0x174 + eng.GetClientState( ), -1 };
-	mem.Set( iForceUpdate );
 }
 
 void CInventory::Inventory( )
@@ -41,7 +34,7 @@ void CInventory::Inventory( )
 
 	for ( int i { }; i <= 8; i++ )
 	{
-		DWORD dwWeaponBase = eng.GetEntityBase( ( eng.GetLocalPlayer( ).hMyWeapons[ i ] & 0xFFF ) - 1 );
+		DWORD dwWeaponBase = eng.GetEntityBase( ( eng.GetLocalPlayer( ).hMyWeapons[ i ] & INDEX_ENTITY_MASK ) - 1 );
 
 		if ( dwWeaponBase )
 		{

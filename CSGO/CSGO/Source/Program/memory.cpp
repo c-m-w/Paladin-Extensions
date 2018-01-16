@@ -4,6 +4,7 @@ namespace Addresses
 {
 	// global engine addresses
 	address_t< CGlobalVars > gvGlobalVars;
+	address_t< int > iForceUpdate;
 	address_t< bool > bSendPackets;
 	// engine pointer addresses
 	address_t< DWORD > pdwClientState;
@@ -139,6 +140,7 @@ void CMemoryManager::InitializeAddresses( )
 	// todo signature scanning
 	// global Engine addresses
 	gvGlobalVars.dwOffset = 0x57B4F0;
+	iForceUpdate.dwOffset = 0x174;
 	bSendPackets.dwOffset = 0xCCD9A;
 	// Engine pointer addresses
 	pdwClientState.dwOffset = 0x57B7EC;
@@ -153,10 +155,11 @@ void CMemoryManager::InitializeAddresses( )
 	pdwEntityList.dwOffset = 0x4A79EC4;
 	pdwGlowManager.dwOffset = 0x4F96D18;
 	pdwLocalPlayer.dwOffset = 0xA9D0DC;
-	//Weapon Entities
+	// Weapon Entities
 	iItemDefinitionIndex.dwLocation = 0x2F88;
 	iHighID.dwLocation = 0x2FA0;
 	wepWeaponSkinBase.dwLocation = 0x3164;
+
 	DEBUG( DBG, "Initialized bases" );
 
 	// engine global

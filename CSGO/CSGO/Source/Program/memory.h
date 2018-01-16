@@ -12,6 +12,7 @@ namespace Addresses
 {
 	// global engine addresses
 	extern address_t< CGlobalVars > gvGlobalVars;
+	extern address_t< int > iForceUpdate;
 	extern address_t< bool > bSendPackets;
 	// engine pointer addresses
 	extern address_t< DWORD > pdwClientState;

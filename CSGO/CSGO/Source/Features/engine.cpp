@@ -27,6 +27,12 @@ void CEngine::SetSendPackets( bool bNewSendPackets )
 	}
 }
 
+void CEngine::ForceUpdate( )
+{
+	iForceUpdate.dwLocation = eng.GetClientState( ) + iForceUpdate.dwOffset;
+	mem.Set( iForceUpdate );
+}
+
 DWORD CEngine::GetClientState( )
 {
 	mem.Get( pdwClientState );
