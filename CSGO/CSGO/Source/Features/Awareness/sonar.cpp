@@ -4,13 +4,13 @@ void CSonar::Sonar( )
 {
 	int iEntity = eng.GetClosestEnemyToPosition( );
 
-	if ( !plrEntities[ iEntity ].xValue._My_val.bDormant )
+	if ( !plrEntities[ iEntity ].xValue.bDormant )
 	{
-		if ( plrEntities[ iEntity ].xValue._My_val.bLifeState == LIFE_ALIVE )
+		if ( plrEntities[ iEntity ].xValue.bLifeState == LIFE_ALIVE )
 		{
-			if ( plrLocalPlayer.xValue._My_val.iTeamNum != plrEntities[ iEntity ].xValue._My_val.iTeamNum )
+			if ( plrLocalPlayer.xValue.iTeamNum != plrEntities[ iEntity ].xValue.iTeamNum )
 			{
-				vector_t vecEntityDistance( plrEntities[ iEntity ].xValue._My_val.corOrigin, plrLocalPlayer.xValue._My_val.corOrigin );
+				vector_t vecEntityDistance( plrEntities[ iEntity ].xValue.corOrigin, plrLocalPlayer.xValue.corOrigin );
 
 				float flDistance = sqrt( pow( vecEntityDistance.flDeltaX, 2 ) + pow( vecEntityDistance.flDeltaY, 2 ) + pow( vecEntityDistance.flDeltaZ, 2 ) );
 

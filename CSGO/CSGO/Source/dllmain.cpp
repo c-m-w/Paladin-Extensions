@@ -1,8 +1,8 @@
 #include "dllmain.h"
 
-HINSTANCE hInst = nullptr;
-std::atomic< bool > bExitState { };
-std::vector< std::thread > tThreads;
+bool bExitState { };
+HINSTANCE hInst { };
+std::vector< std::thread > tThreads { };
 
 void Feature( bool bFeatureState, moment mntWait, const std::function< void( ) > &fnFeature, unsigned short usFeatureKey )
 {

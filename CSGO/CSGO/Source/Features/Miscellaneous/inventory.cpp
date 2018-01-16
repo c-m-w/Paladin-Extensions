@@ -37,7 +37,7 @@ void CInventory::ForceUpdate( )
 
 void CInventory::Inventory( )
 {
-	weapon_t wepDeagle = { plrLocalPlayer.xValue._My_val.iAccount, plrLocalPlayer.xValue._My_val.iAccount, EPaintKit::DRAGONLORE, 24, 0.01f, 100 }; // TODO tranny, high = low why? iaccount twice
+	weapon_t wepDeagle = { plrLocalPlayer.xValue.iAccount, plrLocalPlayer.xValue.iAccount, EPaintKit::DRAGONLORE, 24, 0.01f, 100 }; // TODO tranny, high = low why? iaccount twice
 
 	for ( int i { }; i <= 8; i++ )
 	{
@@ -51,7 +51,7 @@ void CInventory::Inventory( )
 			iItemDefinitionIndex.dwLocation = dwOldItemdefinitionIndex;
 		}
 
-		switch ( EWeapon( iItemDefinitionIndex.xValue._My_val ) )
+		switch ( EWeapon( iItemDefinitionIndex.xValue ) )
 		{
 			case EWeapon::DEAGLE:
 			{

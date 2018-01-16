@@ -150,13 +150,13 @@ int CEngine::GetClosestEnemyToCrosshair( )
 	float flLastClosestDistance = FLT_MAX;
 	for ( int iEntity = 1; iEntity <= 64; iEntity++ )
 	{
-		if ( !plrEntities[ iEntity ].xValue._My_val.bDormant )
+		if ( !plrEntities[ iEntity ].xValue.bDormant )
 		{
-			if ( plrEntities[ iEntity ].xValue._My_val.bLifeState == LIFE_ALIVE )
+			if ( plrEntities[ iEntity ].xValue.bLifeState == LIFE_ALIVE )
 			{
-				if ( plrLocalPlayer.xValue._My_val.iTeamNum != plrEntities[ iEntity ].xValue._My_val.iTeamNum )
+				if ( plrLocalPlayer.xValue.iTeamNum != plrEntities[ iEntity ].xValue.iTeamNum )
 				{
-					angle_t angToEnemy = VectorToAngle( plrLocalPlayer.xValue._My_val.corOrigin, plrEntities[ iEntity ].xValue._My_val.corOrigin );
+					angle_t angToEnemy = VectorToAngle( plrLocalPlayer.xValue.corOrigin, plrEntities[ iEntity ].xValue.corOrigin );
 					angle_t angCurrentAngle = GetViewAngle( );
 					float flEntityDistance = sqrt( pow( angToEnemy.flPitch - angCurrentAngle.flPitch, 2 ) + pow( angToEnemy.flYaw - angCurrentAngle.flYaw, 2 ) );
 
@@ -182,13 +182,13 @@ int CEngine::GetClosestEnemyToPosition( )
 	float flLastClosestDistance = FLT_MAX;
 	for ( int iEntity = 1; iEntity <= 64; iEntity++ )
 	{
-		if ( !plrEntities[ iEntity ].xValue._My_val.bDormant )
+		if ( !plrEntities[ iEntity ].xValue.bDormant )
 		{
-			if ( plrEntities[ iEntity ].xValue._My_val.bLifeState == LIFE_ALIVE )
+			if ( plrEntities[ iEntity ].xValue.bLifeState == LIFE_ALIVE )
 			{
-				if ( plrLocalPlayer.xValue._My_val.iTeamNum != plrEntities[ iEntity ].xValue._My_val.iTeamNum )
+				if ( plrLocalPlayer.xValue.iTeamNum != plrEntities[ iEntity ].xValue.iTeamNum )
 				{
-					vector_t vecEntityDistance( plrLocalPlayer.xValue._My_val.corOrigin, plrEntities[ iEntity ].xValue._My_val.corOrigin );
+					vector_t vecEntityDistance( plrLocalPlayer.xValue.corOrigin, plrEntities[ iEntity ].xValue.corOrigin );
 					float flEntityDistance = sqrt( pow( vecEntityDistance.flDeltaX, 2 ) + pow( vecEntityDistance.flDeltaY, 2 ) + pow( vecEntityDistance.flDeltaZ, 2 ) );
 
 					if ( !iEntity )
