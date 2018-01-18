@@ -4,30 +4,22 @@
 
 ## WEBSITE TODO
 ##### Jeremy
-- Fix
-   - Testing
-- Add
-   - Create
 ##### John
-- Fix
-   - Testing
+##### Lucas
 - Add
-   - Create
+   - Plugins
 
-## INJECTOR TODO
+## LOADER TODO
 ##### Jeremy
-- Fix
-   - manage
-- Change
-   - Look over code
 ##### Mike
-- Change
-   - Better interface (work with Hunter)
 - Add
-   - multiple injection methods (Manual map, Thread hijack)
+   - Injection
 ##### Hunter
-- Change
+- Add
    - Interface
+##### Cole
+- Add
+   - Server authentication
 
 ## CSGO TODO
 ##### Open
