@@ -20,8 +20,10 @@ class CProgram
 	bool CompareName( user_t, user_t );
 public:
 	EPremium CheckPremiumStatus( );
+
 	EElevation GetElevationState( HANDLE );
 	EAnticheatStatus KillAnticheat( LPCSTR, char );
+
 	float GetWindowsSensitivity( );
 };
 

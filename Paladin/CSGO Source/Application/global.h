@@ -54,6 +54,7 @@ void LogDebugMsg( EDebugMessage, char *, ... );
 void LogLastError( );
 void Wait( moment );
 moment GetMoment( );
+
 template< typename xDatatype > void Limit( xDatatype &xStatus, xDatatype xMinimum, xDatatype xMaximum )
 {
 	if ( xMinimum > xStatus )

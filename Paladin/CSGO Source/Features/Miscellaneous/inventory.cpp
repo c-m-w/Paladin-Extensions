@@ -30,7 +30,7 @@ void CInventory::SetSkin( weapon_t wepWeapon, DWORD dwWeaponBase )
 
 void CInventory::Inventory( )
 {
-	weapon_t wepDeagle = { plrLocalPlayer.xValue.iAccount, plrLocalPlayer.xValue.iAccount, EPaintKit::DRAGONLORE, 24, 0.01f, 100 }; // TODO tranny, high = low why? iaccount twice
+	weapon_t wepDeagle = { plrLocalPlayer.xValue.iAccount, plrLocalPlayer.xValue.iAccount, DRAGONLORE, 24, 0.01f, 100 }; // TODO tranny, high = low why? iaccount twice
 
 	for ( int i { }; i <= 8; i++ )
 	{
@@ -46,7 +46,7 @@ void CInventory::Inventory( )
 
 		switch ( EWeapon( iItemDefinitionIndex.xValue ) )
 		{
-			case EWeapon::DEAGLE:
+			case DEAGLE:
 			{
 				SetSkin( wepDeagle, dwWeaponBase );
 				break;

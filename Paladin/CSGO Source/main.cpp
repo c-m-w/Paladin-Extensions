@@ -4,7 +4,7 @@ bool bExitState { };
 HINSTANCE hInst { };
 std::vector< std::thread > tThreads { };
 
-void Feature( bool bFeatureState, moment mntWait, std::function<void()> &fnFeature, int iFeatureKey )
+void Feature( bool bFeatureState, moment mntWait, std::function< void( ) > &fnFeature, int iFeatureKey )
 {
 	if ( !iFeatureKey )
 	{
@@ -58,7 +58,7 @@ bool GetPremium( )
 	{
 		//TODO BANNED: DELETE FILE
 		char chTemp[ MAX_PATH ];
-		GetModuleFileName( hInst, chTemp, MAX_PATH );
+		GetModuleFileNameA( hInst, chTemp, MAX_PATH );
 		remove( std::string( chTemp ).c_str( ) );
 		LOG_LAST_ERROR( );
 		Panic( );
@@ -100,8 +100,7 @@ void CreateThreads( )
 	} );
 	tThreads.push_back( move( tInfoGrabber ) );
 
-	std::function<void( )> fnTestFunction = std::bind( &CInventory::Inventory, inv );
-	std::thread tTestThread(Feature, true, 1, fnTestFunction, 0 );
+	std::thread tTestThread( Feature, true, 1, std::function<void( )>( std::bind( &CInventory::Inventory, inv ) ), 0 );
 	tThreads.push_back( move( tTestThread ) );
 
 	LOG_DEBUG( SCS, "Created threads" );
@@ -216,7 +215,7 @@ void SetDebug( )
 	freopen_s( &fTemp, "CONOUT$", "w", stdout );
 	HANDLE hConsole = GetStdHandle( STD_OUTPUT_HANDLE );
 	HWND hWndConsole = GetConsoleWindow( );
-	
+
 	SetConsoleTitleA( "Paladin CSGO" );
 	EnableMenuItem( GetSystemMenu( hWndConsole, false ), SC_CLOSE, MF_GRAYED );
 	SetWindowLongA( hWndConsole, GWL_STYLE, GetWindowLongA( hWndConsole, GWL_STYLE ) & ~SC_CLOSE & ~WS_MAXIMIZEBOX & ~WS_SIZEBOX );
@@ -232,7 +231,7 @@ void SetDebug( )
 	LOG_LAST_ERROR( );
 }
 
-int CALLBACK WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nCmdShow )
+int CALLBACK WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR szCmdLine, _In_ int iCmdShow )
 {
 	SetDebug( );
 	Main( );

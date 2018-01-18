@@ -4,23 +4,23 @@ typedef unsigned FLAG;
 typedef unsigned EHANDLE;
 
 #define FL_ONGROUND ( 1 << 0 )
-#define FL_DUCKING ( 1 << 1 ) 
+#define FL_DUCKING ( 1 << 1 )
 #define	LIFE_ALIVE 0
 #define	LIFE_DYING 1
-#define	LIFE_DEAD 2 
+#define	LIFE_DEAD 2
 #define TEAM_NONE 0
 #define TEAM_SPEC 1
 #define TEAM_T 2
 #define TEAM_CT 3
-#define ACTION_NONE 0b0 
+#define ACTION_NONE 0b0
 #define ACTION_PRESS 0b1
 #define ACTION_TICK 0b10
-#define ACTION_DEFAULT 0b100 
-#define INDEX_DISTANCE_ENTITY 0x10 
-#define INDEX_DISTANCE_GLOW 0xA310 
+#define ACTION_DEFAULT 0b100
+#define INDEX_DISTANCE_ENTITY 0x10
+#define INDEX_DISTANCE_GLOW 0xA310
 #define INDEX_ENTITY_MASK 0xFFF
 
-#define MAX_ANGLE_DELTA 22.f 
+#define MAX_ANGLE_DELTA 22.f
 #define MAX_SENSITIVITY 1000.f
 #define MIN_SENSITIVITY 0.f
 #define MAX_FLASHALPHA 255.f
@@ -1335,7 +1335,7 @@ public:
 	angle_t GetViewAngle( );
 	void SetViewAngle( angle_t ); // sets view angles automatically normalized and clamped
 
-								  // client - global
+	// client - global
 	FLAG GetAttack( );
 	void SetAttack( FLAG );
 	FLAG GetJump( );
@@ -1343,7 +1343,7 @@ public:
 	float GetSensitivity( );
 	void SetSensitivity( float ); // sets sensitivity limited to 0 and 1000
 
-								  // client - localplayer
+	// client - localplayer
 	DWORD GetLocalPlayerBase( );
 	CPlayer GetLocalPlayer( );
 	void SetLocalPlayer( CPlayer );

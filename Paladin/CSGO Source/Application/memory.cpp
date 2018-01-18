@@ -30,7 +30,7 @@ namespace Addresses
 
 CMemory::~CMemory( )
 {
-	if ( hGame != nullptr && hGame != INVALID_HANDLE_VALUE )
+	if ( hGame && hGame != INVALID_HANDLE_VALUE )
 	{
 		CloseHandle( hGame );
 	}
@@ -43,11 +43,13 @@ bool CMemory::AttachToGame( )
 		LOG_DEBUG( DBG, "Searching for CSGO" );
 		Wait( 1000 );
 	}
+
 	if ( pro.GetElevationState( GetCurrentProcess( ) ) != pro.GetElevationState( hGame ) && pro.GetElevationState( GetCurrentProcess( ) ) != EElevation::ADMIN )
 	{
 		LOG_DEBUG( ERR, "No permissions" );
 		return false;
 	}
+
 	hGame = OpenProcess( PROCESS_VM_READ | PROCESS_VM_WRITE | PROCESS_VM_OPERATION, false, dwProcessID );
 	if ( !hGame || hGame == INVALID_HANDLE_VALUE )
 	{
@@ -55,6 +57,7 @@ bool CMemory::AttachToGame( )
 		return false;
 	}
 	LOG_DEBUG( SCS, "Attached to game" );
+
 	HANDLE hSnapshot;
 	for ( unsigned short us { }; us < 5; us++, Wait( 2000 ) )
 	{
@@ -63,13 +66,15 @@ bool CMemory::AttachToGame( )
 			SetLastError( 0 );
 			hSnapshot = CreateToolhelp32Snapshot( TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, dwProcessID );
 			Wait( 1 );
-		} while ( hSnapshot == INVALID_HANDLE_VALUE || GetLastError( ) == ERROR_BAD_LENGTH );
+		} while ( hSnapshot == INVALID_HANDLE_VALUE && GetLastError( ) == ERROR_BAD_LENGTH );
+
 		if ( hSnapshot == INVALID_HANDLE_VALUE || !hSnapshot )
 		{
 			LOG_DEBUG( ERR, "Invalid module snapshot" );
 			return false;
 		}
 		LOG_DEBUG( DBG, "Module snapshot created" );
+
 		MODULEENTRY32 meModules { };
 		meModules.dwSize = sizeof( MODULEENTRY32 );
 		if ( Module32First( hSnapshot, &meModules ) )
@@ -86,8 +91,11 @@ bool CMemory::AttachToGame( )
 					dwEngineBase = DWORD( meModules.modBaseAddr );
 				}
 			} while ( Module32Next( hSnapshot, &meModules ) );
+
+			SetLastError( 0 );
 			CloseHandle( hSnapshot );
 		}
+
 		if ( dwClientBase && dwEngineBase )
 		{
 			LOG_DEBUG( DBG, "Modules found" );
@@ -95,10 +103,12 @@ bool CMemory::AttachToGame( )
 			LOG_DEBUG( SCS, "Engine.dll: 0x%p", dwEngineBase );
 			return true;
 		}
+
 		LOG_DEBUG( DBG, "Modules not found, retrying" );
 		LOG_DEBUG( DBG, "Client.dll: 0x%p", dwClientBase );
 		LOG_DEBUG( DBG, "Engine.dll: 0x%p", dwEngineBase );
 	}
+
 	LOG_DEBUG( ERR, "Unable to get modules" );
 	return false;
 }
@@ -107,15 +117,18 @@ DWORD CMemory::FindPattern( BYTE *bMask, char *szMask, DWORD dwAddress, DWORD dw
 {
 	DWORD dwDataLength = strlen( szMask );
 	auto *bData = new BYTE[ dwDataLength + 1 ];
-	SIZE_T sRead;
+	SIZE_T sRead { };
+
 	for ( DWORD dwAdditive { }; dwAdditive < dwLength; dwAdditive++ )
 	{
-		auto dwCurrentAddress = dwAddress + dwAdditive;
+		DWORD dwCurrentAddress = dwAddress + dwAdditive;
 		bool bSuccess = ReadProcessMemory( hGame, LPVOID( dwCurrentAddress ), bData, dwDataLength, &sRead );
+
 		if ( !bSuccess || !sRead )
 		{
 			continue;
 		}
+
 		while ( *szMask )
 		{
 			++szMask;
