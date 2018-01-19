@@ -3,7 +3,7 @@
 void EmptyFunction( ... )
 { }
 
-void LogDebugMsg( EDebugMessage dmType, char *szMessage, ... )
+void LogDebugMessage( EDebugMessage dmType, char *szMessage, ... )
 {
 	HANDLE hConsole = GetStdHandle( STD_OUTPUT_HANDLE );
 	if ( hConsole && hConsole != INVALID_HANDLE_VALUE )

@@ -4,7 +4,7 @@ typedef long long moment;
 
 #ifdef _DEBUG
 
-#define LOG_DEBUG LogDebugMsg
+#define LOG_DEBUG LogDebugMessage
 #define LOG_LAST_ERROR LogLastError
 
 #else
@@ -50,7 +50,7 @@ enum EDebugMessage
 	LER = 4 // Last Windows Error
 };
 
-void LogDebugMsg( EDebugMessage, char *, ... );
+void LogDebugMessage( EDebugMessage, char *, ... );
 void LogLastError( );
 void Wait( moment );
 moment GetMoment( );
