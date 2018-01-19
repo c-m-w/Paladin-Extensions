@@ -11,6 +11,8 @@
 
 ## LOADER TODO
 ##### Jeremy
+- Test
+   - File Hashing
 ##### Mike
 - Add
    - Injection
@@ -18,7 +20,7 @@
 - Add
    - Interface
 ##### Cole
-- Add
+- Fix
    - Server authentication
 
 ## CSGO TODO
