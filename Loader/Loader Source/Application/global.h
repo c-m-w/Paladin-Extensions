@@ -22,11 +22,13 @@ void EmptyFunction( ... );
 
 enum class EPremium
 {
+	BANNED = -1,
 	NOT_PREMIUM,
 	CONNECTION_FAILURE,
 	HARDWARE_MISMATCH,
 	EXPIRED,
-	PREMIUM
+	PREMIUM,
+	DEVELOPER
 };
 
 enum class EElevation

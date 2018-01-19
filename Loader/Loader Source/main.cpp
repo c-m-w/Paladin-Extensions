@@ -1,5 +1,7 @@
 #include "main.h"
 
+bool bDeveloper { };
+
 void SetDebug( )
 {
 
@@ -45,6 +47,10 @@ bool Authenticate( )
 {
 	if ( pro.GetElevationState( GetCurrentProcess( ) ) == EElevation::ADMIN )
 	{
+		if ( pro.GetPremium( ) == EPremium::BANNED )
+		{
+			// TODO Delete file
+		}
 		if ( pro.GetPremium( ) <= EPremium::NOT_PREMIUM )
 		{
 			return false;
@@ -62,6 +68,11 @@ bool Authenticate( )
 		{
 			OPEN_MESSAGE( "Paladin Loader", "Your premium has expired, please renew your premium on the forum.", 0 );
 			return false;
+		}
+		if ( pro.GetPremium( ) == EPremium::DEVELOPER )
+		{
+			bDeveloper = true;
+			return pro.GetPremium( ) == EPremium::DEVELOPER;
 		}
 		return pro.GetPremium( ) == EPremium::PREMIUM;
 	}
