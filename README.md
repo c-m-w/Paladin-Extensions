@@ -48,8 +48,6 @@
 - Remove
    - Pattern scanning WIP files
 ##### Hunter
-- Change
-   - Define HWID for yourself
 - Add
    - Menu
 ##### John
