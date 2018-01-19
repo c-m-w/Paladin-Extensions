@@ -35,10 +35,38 @@ void DrawInterface( )
 	// draw menu
 }
 
-void Authenticate( )
+void DeleteInterface( )
 {
 	// call class
-	// get hwid, check with server information
+	// close all drawings of menu
+}
+
+bool Authenticate( )
+{
+	if ( pro.GetElevationState( GetCurrentProcess( ) ) == EElevation::ADMIN )
+	{
+		if ( pro.GetPremium( ) <= EPremium::NOT_PREMIUM )
+		{
+			return false;
+		}
+		if ( pro.GetPremium( ) <= EPremium::CONNECTION_FAILURE )
+		{
+			return false;
+		}
+		if ( pro.GetPremium( ) <= EPremium::HARDWARE_MISMATCH )
+		{
+			OPEN_MESSAGE( "Paladin Loader", "Your unique identifier has changed - please create a support ticket.", 0 );
+			return false;
+		}
+		if ( pro.GetPremium( ) <= EPremium::EXPIRED )
+		{
+			OPEN_MESSAGE( "Paladin Loader", "Your premium has expired, please renew your premium on the forum.", 0 );
+			return false;
+		}
+		return pro.GetPremium( ) == EPremium::PREMIUM;
+	}
+	OPEN_MESSAGE( "Paladin Loader", "Please run the loader as an administrator.", 0 );
+	return false;
 }
 
 void Verify( )
@@ -50,11 +78,24 @@ void Verify( )
 void Inject( )
 {
 	// call class
+	// get user input for middleman
 	// inject into selected middleman
 }
 
 void StartHeartbeat( )
 {
+	std::thread( [ & ]
+	{
+		while ( true /* FindWindowA(MIDDLEMAN) IS STILL OPEN */ )
+		{
+			if ( !Authenticate( ) )
+			{
+				pro.KillAnticheat( "MIDDLEMAN", "MIDDLEMAN.EXE" );
+				std::ofstream fsRegKey( "reg.key", std::ofstream::out | std::ofstream::trunc );
+				fsRegKey.close( );
+			}
+		}
+	} );
 	// create thread, done here
 	// confirm authenticity of run, & used to check for multiple instances
 }
@@ -65,11 +106,13 @@ int CALLBACK WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 
 	DrawInterface( );
 
-	Authenticate( );
+	if ( !Authenticate( ) ) return 0;
 
 	Verify( );
 
 	Inject( );
+
+	DeleteInterface( );
 
 	StartHeartbeat( );
 

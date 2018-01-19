@@ -2,7 +2,12 @@
 
 #include <Windows.h>
 #include <TlHelp32.h>
+#include <curl/curl.h>
 #include <iostream>
+#include <fstream>
+#include <sstream>
+#include <iomanip>
+#include <string>
 #include <thread>
 
 #include "Application/global.h"
