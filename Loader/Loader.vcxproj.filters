@@ -21,12 +21,30 @@
     <ClCompile Include="Loader Source\Application\global.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Loader Source\Application\interface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Loader Source\Application\program.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Loader Source\Application\injection.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Loader Source\main.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Loader Source\Application\global.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Loader Source\Application\interface.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Loader Source\Application\program.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Loader Source\Application\injection.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

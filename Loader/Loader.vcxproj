@@ -144,10 +144,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Loader Source\Application\global.cpp" />
+    <ClCompile Include="Loader Source\Application\injection.cpp" />
+    <ClCompile Include="Loader Source\Application\interface.cpp" />
+    <ClCompile Include="Loader Source\Application\program.cpp" />
     <ClCompile Include="Loader Source\main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Loader Source\Application\global.h" />
+    <ClInclude Include="Loader Source\Application\injection.h" />
+    <ClInclude Include="Loader Source\Application\interface.h" />
+    <ClInclude Include="Loader Source\Application\program.h" />
     <ClInclude Include="Loader Source\main.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
