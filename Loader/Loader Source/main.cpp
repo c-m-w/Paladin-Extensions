@@ -97,6 +97,8 @@ void StartHeartbeat( )
 {
 	std::thread( [ & ]
 	{
+		std::ofstream fsInstance( "cur.inst", std::ofstream::out );
+		fsInstance << "true";
 		while ( true /* FindWindowA(MIDDLEMAN) IS STILL OPEN */ )
 		{
 			if ( !Authenticate( ) )
@@ -106,8 +108,9 @@ void StartHeartbeat( )
 				fsRegKey.close( );
 			}
 		}
+		fsInstance << "false";
+		fsInstance.close( );
 	} );
-	// create thread, done here
 	// confirm authenticity of run, & used to check for multiple instances
 }
 
