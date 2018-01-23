@@ -3,16 +3,11 @@
 typedef long long moment;
 
 #ifdef _DEBUG
-
 #define LOG_DEBUG LogDebugMessage
 #define LOG_LAST_ERROR LogLastError
-
 #else
-
-void EmptyFunction( ... );
-#define DEBUG EmptyFunction
-#define LASTERR EmptyFunction
-
+#define DEBUG void
+#define LASTERR void
 #endif
 
 #define EPOCH_TO_JANUARY_2017 moment( 1514764800000 )

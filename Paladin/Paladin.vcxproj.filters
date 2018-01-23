@@ -18,45 +18,9 @@
     <ClInclude Include="CSGO Source\main.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CSGO Source\Features\engine.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO Source\Features\Miscellaneous\inventory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO Source\Application\global.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO Source\Application\memory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO Source\Application\program.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="CSGO Source\Features\Miscellaneous\automation.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CSGO Source\main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CSGO Source\Features\engine.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CSGO Source\Features\Miscellaneous\inventory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CSGO Source\Application\global.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CSGO Source\Application\memory.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CSGO Source\Application\program.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="CSGO Source\Features\Miscellaneous\automation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

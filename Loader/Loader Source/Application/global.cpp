@@ -1,12 +1,5 @@
 #include "../main.h"
 
-#ifndef _DEBUG
-
-void EmptyFunction( ... )
-{ }
-
-#endif
-
 void LogDebugMessage( EDebugMessage dmType, char *szMessage, ... )
 {
 	HANDLE hConsole = GetStdHandle( STD_OUTPUT_HANDLE );
@@ -64,11 +57,6 @@ void LogLastError( )
 		LOG_DEBUG( LER, "[0x%08lu] - %s", dwError, lpstrError );
 	}
 	LocalFree( lpstrError );
-}
-
-void Wait( moment mntMoment )
-{
-	std::this_thread::sleep_for( std::chrono::milliseconds( mntMoment ) );
 }
 
 moment GetMoment( )

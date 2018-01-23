@@ -150,22 +150,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="CSGO Source\Features\engine.h" />
-    <ClInclude Include="CSGO Source\Features\Miscellaneous\automation.h" />
-    <ClInclude Include="CSGO Source\Features\Miscellaneous\inventory.h" />
     <ClInclude Include="CSGO Source\main.h" />
-    <ClInclude Include="CSGO Source\Application\global.h" />
-    <ClInclude Include="CSGO Source\Application\memory.h" />
-    <ClInclude Include="CSGO Source\Application\program.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CSGO Source\Features\engine.cpp" />
-    <ClCompile Include="CSGO Source\Features\Miscellaneous\automation.cpp" />
-    <ClCompile Include="CSGO Source\Features\Miscellaneous\inventory.cpp" />
     <ClCompile Include="CSGO Source\main.cpp" />
-    <ClCompile Include="CSGO Source\Application\global.cpp" />
-    <ClCompile Include="CSGO Source\Application\memory.cpp" />
-    <ClCompile Include="CSGO Source\Application\program.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
