@@ -30,30 +30,18 @@
 - Add
    - Interface
 ##### Cole
+- Add
+   - Server connectivity
 
 ## CSGO TODO
 ##### Open
-- Fix
-   - Entity List
 ##### Jeremy
-- Change
-   - Check for multiple instances
-   - Move Log to C:/ drive
-- New
-   - Paladin loader looks for "hwi91jaskg.dll"
-   - Will have 15 other dummy dlls it checks for. "aopdgz204.dll"
-   - Compare size to make sure it is unmodified
-   - Checks integrity
-   - Compare hash
 - Add
-   - Encrypt strings
+   - XOR strings
    - Polymorphic junk code
-   - Aimbot
    - Legit antiaim
    - Velocity-based backtrack
 ##### Mike
-- Change
-   - Log file implementation
 - Add
    - Config (json)
    - Pattern scanning
@@ -68,4 +56,4 @@
    - UserCMD
 ##### Cole
 - Add
-   - Knife model changer
+   - Inventory Changer
