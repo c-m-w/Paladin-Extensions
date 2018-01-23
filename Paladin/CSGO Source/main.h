@@ -12,4 +12,5 @@
 #include "Application/program.h"
 #include "Application/memory.h"
 
+#include "Features/Miscellaneous/automation.h"
 #include "Features/Miscellaneous/inventory.h"
