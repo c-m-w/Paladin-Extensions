@@ -1,18 +1,27 @@
 # Paladin
-- Thread Hijack Injector
-- CSGO Internal/External
+- Manual Map Loader
+- Internal/External CSGO
 
 ## WEBSITE TODO
 ##### Jeremy
-##### John
+- Add
+   - Server logging
+##### Cole
+- Add
+   - Server logging
 ##### Lucas
 - Add
-   - Plugins
+   - Updated Plugins
 
 ## LOADER TODO
 ##### Jeremy
 - Test
    - File Hashing
+- New
+   - Paladin loader looks for "hwi91jaskg.dll"
+   - Will have 15 other dummy dlls it checks for. "aopdgz204.dll"
+   - Compare size to make sure it is unmodified
+   - Compare hash
 ##### Mike
 - Add
    - Injection
@@ -20,11 +29,11 @@
 - Add
    - Interface
 ##### Cole
-- Fix
-   - Server authentication
 
 ## CSGO TODO
 ##### Open
+- Fix
+   - Entity List
 ##### Jeremy
 - Change
    - Check for multiple instances
@@ -33,6 +42,7 @@
    - Paladin loader looks for "hwi91jaskg.dll"
    - Will have 15 other dummy dlls it checks for. "aopdgz204.dll"
    - Compare size to make sure it is unmodified
+   - Compare hash
 - Add
    - Encrypt strings
    - Polymorphic junk code
@@ -43,10 +53,8 @@
 - Change
    - Log file implementation
 - Add
-   - Config
+   - Config (json)
    - Pattern scanning
-- Remove
-   - Pattern scanning WIP files
 ##### Hunter
 - Add
    - Menu
@@ -57,7 +65,5 @@
    - ClientCMDUnrestricted
    - UserCMD
 ##### Cole
-- Change
-   - Ensure CPlayer variables work
 - Add
    - Knife model changer
