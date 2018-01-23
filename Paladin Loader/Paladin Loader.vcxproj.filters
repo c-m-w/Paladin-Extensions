@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Loader Source\main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Loader Source\Application\global.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -27,14 +24,11 @@
     <ClCompile Include="Loader Source\Application\program.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Loader Source\Application\injection.cpp">
+    <ClCompile Include="Loader Source\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Loader Source\main.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Loader Source\Application\global.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -44,7 +38,7 @@
     <ClInclude Include="Loader Source\Application\program.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Loader Source\Application\injection.h">
+    <ClInclude Include="Loader Source\main.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
