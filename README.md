@@ -21,6 +21,7 @@
    - Paladin loader looks for "hwi91jaskg.dll"
    - Will have 15 other dummy dlls it checks for. "aopdgz204.dll"
    - Compare size to make sure it is unmodified
+   - Checks integrity
    - Compare hash
 ##### Mike
 - Add
@@ -42,6 +43,7 @@
    - Paladin loader looks for "hwi91jaskg.dll"
    - Will have 15 other dummy dlls it checks for. "aopdgz204.dll"
    - Compare size to make sure it is unmodified
+   - Checks integrity
    - Compare hash
 - Add
    - Encrypt strings
