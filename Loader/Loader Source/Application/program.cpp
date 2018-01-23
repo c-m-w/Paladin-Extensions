@@ -47,7 +47,7 @@ EPremium CProgram::GetPremium( )
 	GetUserInfo( );
 
 	const char *szParameters = ( std::string( "user_id=" ) + std::to_string( uCurrentUser.iUserID ) + "&secret_key=" + uCurrentUser.strSecretKey +
-								 "&windows_name=" + uCurrentUser.strWindowsName + "&hardware_id" = std::to_string( uCurrentUser.iHardwareID ) ).c_str( );
+								 "&windows_name=" + uCurrentUser.strWindowsName + "&hardware_id=" + std::to_string( uCurrentUser.iHardwareID ) ).c_str( );
 	std::string strResponse { };
 
 	curl_global_init( CURL_GLOBAL_ALL );
