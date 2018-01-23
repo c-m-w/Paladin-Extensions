@@ -33,6 +33,9 @@
     <ClInclude Include="CSGO Source\Application\program.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CSGO Source\Features\Miscellaneous\automation.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CSGO Source\main.cpp">
@@ -51,6 +54,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="CSGO Source\Application\program.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CSGO Source\Features\Miscellaneous\automation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -151,6 +151,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="CSGO Source\Features\engine.h" />
+    <ClInclude Include="CSGO Source\Features\Miscellaneous\automation.h" />
     <ClInclude Include="CSGO Source\Features\Miscellaneous\inventory.h" />
     <ClInclude Include="CSGO Source\main.h" />
     <ClInclude Include="CSGO Source\Application\global.h" />
@@ -159,6 +160,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CSGO Source\Features\engine.cpp" />
+    <ClCompile Include="CSGO Source\Features\Miscellaneous\automation.cpp" />
     <ClCompile Include="CSGO Source\Features\Miscellaneous\inventory.cpp" />
     <ClCompile Include="CSGO Source\main.cpp" />
     <ClCompile Include="CSGO Source\Application\global.cpp" />
