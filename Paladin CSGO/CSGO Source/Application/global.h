@@ -11,7 +11,7 @@ enum EDebugMessage
 
 #ifdef _DEBUG
 
-HANDLE hStandardIn[ 2 ], hStandardOut[ 2 ], hStandardError[ 2 ];
+HANDLE hStandardIn[ 2 ] { }, hStandardOut[ 2 ] { }, hStandardError[ 2 ] { };
 
 void SetDebug( );
 void RestoreDebug( );

@@ -18,14 +18,17 @@ void SetDebug( )
 	SetConsoleMode( hStandardIn[ 1 ], ENABLE_PROCESSED_INPUT | ENABLE_INSERT_MODE | ENABLE_QUICK_EDIT_MODE | ENABLE_EXTENDED_FLAGS );
 	SetConsoleMode( hStandardOut[ 1 ], ENABLE_PROCESSED_OUTPUT | ENABLE_WRAP_AT_EOL_OUTPUT );
 
-
-
 	HANDLE hConsole = GetStdHandle( STD_OUTPUT_HANDLE );
 	HWND hWndConsole = GetConsoleWindow( );
 
+	RECT recScreenResolution { };
+	GetWindowRect( GetDesktopWindow(), &recScreenResolution );
 	SetConsoleTitleA( "Paladin CSGO" );
+	MoveWindow( hWndConsole, recScreenResolution.right / 2 - 800, recScreenResolution.bottom / 2 - 600, 800, 600, TRUE );
+
 	EnableMenuItem( GetSystemMenu( hWndConsole, false ), SC_CLOSE, MF_GRAYED );
 	SetWindowLongA( hWndConsole, GWL_STYLE, GetWindowLongA( hWndConsole, GWL_STYLE ) & ~SC_CLOSE & ~WS_MAXIMIZEBOX & ~WS_SIZEBOX );
+
 	CONSOLE_CURSOR_INFO cci;
 	cci.dwSize = 25;
 	cci.bVisible = false;
@@ -75,9 +78,9 @@ void LogDebugMessage( EDebugMessage dmType, char *szMessage, ... )
 				std::cout << "[DBG] ";
 		}
 		SetConsoleTextAttribute( hConsole, 7 );
-		// Ideally we want to dynamically allocate this, might do later (for now, stick to a max of 2047 data characters)
+		// Ideally we want to dynamically allocate this, might do later (for now, stick to a max of 2047 data characters) TODO
 		char chBuffer[ 2048 ] { '\0' };
-		va_list vaList;
+		va_list vaList { };
 		va_start( vaList, szMessage );
 		vsnprintf( chBuffer, sizeof chBuffer, szMessage, vaList );
 		va_end( vaList );
@@ -93,7 +96,7 @@ void LogLastError( )
 		LOG_DEBUG( LER, "None" );
 		return;
 	}
-	LPSTR lpstrError = nullptr;
+	LPSTR lpstrError { };
 	if ( !FormatMessageA( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, dwError, MAKELANGID( LANG_NEUTRAL, SUBLANG_DEFAULT ), LPSTR( &lpstrError ), 0, nullptr ) )
 	{
 		LOG_DEBUG( LER, "[0x%08lu] - Unable to retrieve error description", dwError );
