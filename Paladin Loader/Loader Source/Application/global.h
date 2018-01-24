@@ -11,12 +11,12 @@ enum EDebugMessage
 
 #ifdef _DEBUG
 
-HANDLE hStandardIn[ 2 ], hStandardOut[ 2 ], hStandardError[ 2 ];
+extern HANDLE hStandardIn[ 2 ], hStandardOut[ 2 ], hStandardError[ 2 ];
 
 void SetDebug( );
 void RestoreDebug( );
 
-void LogDebugMessage( EDebugMessage dmType, char *szMessage, ... );
+void LogDebugMessage( EDebugMessage dmType, wchar_t *szMessage, ... );
 void LogLastError( );
 
 #define SET_DEBUG SetDebug
@@ -35,7 +35,7 @@ typedef long long moment;
 #define EPOCH_TO_JANUARY_2017 moment( 1514764800000 )
 #define PI 3.141593f
 #define MILLISECONDS_PER_SECOND 1000.f
-#define OPEN_MESSAGE( Title, Text, Type ) MessageBoxA( nullptr, Text, Title, Type | MB_OK )
+#define OPEN_MESSAGE( Title, Text, Type ) MessageBox( nullptr, Text, Title, Type | MB_OK )
 
 enum class EPremium
 {

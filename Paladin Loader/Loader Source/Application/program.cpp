@@ -2,37 +2,37 @@
 
 void CProgram::GetUserInfo( )
 {
-	char chBuffer[ 257 ];
+	wchar_t wchBuffer[ 257 ];
 	DWORD dwBufferSize = 257;
-	GetUserNameA( chBuffer, &dwBufferSize );
-	uCurrentUser.strWindowsName = chBuffer;
-	LOG_DEBUG( DBG, "Current User Username: %s", uCurrentUser.strWindowsName.c_str( ) );
+	GetUserName( wchBuffer, &dwBufferSize );
+	uCurrentUser.wstrWindowsName = wchBuffer;
+	LOG_DEBUG( DBG, L"Current User Username: %s", uCurrentUser.wstrWindowsName.c_str( ) );
 
 	SYSTEM_INFO siCurrentUser { };
 	GetSystemInfo( &siCurrentUser );
 	uCurrentUser.iHardwareID = siCurrentUser.dwActiveProcessorMask * siCurrentUser.dwNumberOfProcessors;
-	LOG_DEBUG( DBG, "Current User HWID: %i", uCurrentUser.iHardwareID );
+	LOG_DEBUG( DBG, L"Current User HWID: %i", uCurrentUser.iHardwareID );
 
-	std::ifstream fsRegKey( "reg.key" );
-	std::string strBuffer { };
+	std::wifstream fsRegKey( "reg.key" );
+	std::wstring wstrBuffer { };
 
-	std::getline( fsRegKey, strBuffer );
-	uCurrentUser.iUserID = std::stoi( strBuffer );
-	std::getline( fsRegKey, strBuffer );
-	uCurrentUser.strSecretKey = strBuffer;
+	std::getline( fsRegKey, wstrBuffer );
+	uCurrentUser.iUserID = std::stoi( wstrBuffer );
+	std::getline( fsRegKey, wstrBuffer );
+	uCurrentUser.wstrSecretKey = wstrBuffer;
 }
 
 void CProgram::DeleteUserInfo( )
 {
 	uCurrentUser.iUserID = 0;
-	uCurrentUser.strSecretKey = nullptr;
-	uCurrentUser.strWindowsName = nullptr;
+	uCurrentUser.wstrSecretKey = nullptr;
+	uCurrentUser.wstrWindowsName = nullptr;
 	uCurrentUser.iHardwareID = 0;
 }
 
 unsigned WriteCallback( void *lpContents, unsigned uSize, unsigned uMember, void *lpUser )
 {
-	static_cast< std::string* >( lpUser )->append( static_cast< char* >( lpContents ), uSize * uMember );
+	static_cast< std::wstring* >( lpUser )->append( static_cast< wchar_t* >( lpContents ), uSize * uMember ); // TODO tranny, check if wstring works here
 	return uSize * uMember;
 }
 
@@ -40,24 +40,17 @@ EPremium CProgram::GetPremium( )
 {
 	if ( EPOCH_TO_JANUARY_2017 > GetMoment( ) )
 	{
-		LOG_DEBUG( ERR, "Date Mismatch: %lli > %lli", EPOCH_TO_JANUARY_2017, GetMoment( ) );
+		LOG_DEBUG( ERR, L"Date Mismatch: %lli > %lli", EPOCH_TO_JANUARY_2017, GetMoment( ) );
 		return EPremium::NOT_PREMIUM;
 	}
 
 	GetUserInfo( );
 
-	const char *szParameters = ( std::string( "user_id=" ) + std::to_string( uCurrentUser.iUserID ) + "&secret_key=" + uCurrentUser.strSecretKey +
-								 "&windows_name=" + uCurrentUser.strWindowsName + "&hardware_id=" + std::to_string( uCurrentUser.iHardwareID ) ).c_str( );
-	std::string strResponse { };
+	const wchar_t *szParameters = ( std::wstring( L"user_id=" ) + std::to_wstring( uCurrentUser.iUserID ) + L"&secret_key=" + uCurrentUser.wstrSecretKey +
+								 L"&windows_name=" + uCurrentUser.wstrWindowsName + L"&hardware_id=" + std::to_wstring( uCurrentUser.iHardwareID ) ).c_str( );
+	std::wstring strResponse { };
 
-	curl_global_init( CURL_GLOBAL_ALL );
-	void *lpCurlConnectionType = curl_easy_init( );
-	curl_easy_setopt( lpCurlConnectionType, CURLOPT_URL, "https://paladin.rip/auth.php" );
-	curl_easy_setopt( lpCurlConnectionType, CURLOPT_POSTFIELDS, szParameters );
-	curl_easy_setopt( lpCurlConnectionType, CURLOPT_WRITEFUNCTION, WriteCallback );
-	curl_easy_setopt( lpCurlConnectionType, CURLOPT_WRITEDATA, &strResponse );
-	curl_easy_perform( lpCurlConnectionType );
-	curl_easy_cleanup( lpCurlConnectionType );
+	// CONNECT
 
 	DeleteUserInfo( );
 
@@ -79,45 +72,27 @@ EElevation CProgram::GetElevationState( HANDLE hTarget )
 	return EElevation::NOT_ADMIN;
 }
 
-EAnticheatStatus CProgram::KillAnticheat( LPCSTR cstrAnticheatName, char *chAnticheatExe )
+EAnticheatStatus CProgram::KillAnticheat( LPCWSTR cstrAnticheatName, const wchar_t *chAnticheatExe )
 {
 	if ( FindWindow( nullptr, cstrAnticheatName ) )
 	{
 		if ( GetElevationState( GetCurrentProcess( ) ) == EElevation::ADMIN )
 		{
 			system( &"taskkill /F /T /IM "[ *chAnticheatExe ] );
-			LOG_DEBUG( WRN, "Found anticheat ''%s'' open and terminated it", cstrAnticheatName );
+			LOG_DEBUG( WRN, L"Found anticheat ''%s'' open and terminated it", cstrAnticheatName );
 			return EAnticheatStatus::KILLED;
 		}
-		LOG_DEBUG( WRN, "Found anticheat ''%s'' open", cstrAnticheatName );
+		LOG_DEBUG( WRN, L"Found anticheat ''%s'' open", cstrAnticheatName );
 		return EAnticheatStatus::FAILED;
 	}
-	LOG_DEBUG( WRN, "Didn't find anticheat ''%s'' open", cstrAnticheatName );
+	LOG_DEBUG( WRN, L"Didn't find anticheat ''%s'' open", cstrAnticheatName );
 	return EAnticheatStatus::NOT_FOUND;
-}
-
-const char *CProgram::GetFileHash( char *szFileName )
-{
-	std::ifstream fsFile( szFileName );
-	std::stringstream strsHash { };
-
-	int iHashSeed = 7531;
-	char chBuffer { };
-	
-	while ( fsFile.get( chBuffer ) )
-	{
-		iHashSeed = ( iHashSeed << 5 ) + iHashSeed + chBuffer;
-	}
-
-	strsHash << std::hex << std::setw( 8 ) << std::setfill( '0' ) << iHashSeed;
-
-	return strsHash.str( ).c_str( );
 }
 
 float CProgram::GetWindowsSensitivity( )
 {
 	unsigned short usWindowsSensitivity;
-	if ( SystemParametersInfoA( SPI_GETMOUSESPEED, 0, &usWindowsSensitivity, false ) )
+	if ( SystemParametersInfo( SPI_GETMOUSESPEED, 0, &usWindowsSensitivity, false ) )
 	{
 		return float( usWindowsSensitivity ) / 20.f;
 	}

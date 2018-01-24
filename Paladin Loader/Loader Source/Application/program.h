@@ -5,8 +5,8 @@ class CProgram
 	struct user_t
 	{
 		int iUserID { };
-		std::string strSecretKey { };
-		std::string strWindowsName { };
+		std::wstring wstrSecretKey { };
+		std::wstring wstrWindowsName { };
 		int iHardwareID { };
 	};
 	user_t uCurrentUser { };
@@ -16,9 +16,7 @@ public:
 	EPremium GetPremium( );
 
 	EElevation GetElevationState( HANDLE );
-	EAnticheatStatus KillAnticheat( LPCSTR, char * );
-
-	const char *GetFileHash( char * );
+	EAnticheatStatus KillAnticheat( LPCWSTR, const wchar_t * );
 	
 	float GetWindowsSensitivity( );
 };

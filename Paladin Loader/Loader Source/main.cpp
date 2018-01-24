@@ -1,36 +1,5 @@
 #include "main.h"
 
-bool bDeveloper { };
-
-void SetDebug( )
-{
-
-#ifdef _DEBUG
-
-	AllocConsole( );
-	FILE *fTemp;
-	freopen_s( &fTemp, "CONOUT$", "w", stdout );
-	HANDLE hConsole = GetStdHandle( STD_OUTPUT_HANDLE );
-	HWND hWndConsole = GetConsoleWindow( );
-
-	SetConsoleTitleA( "Paladin Loader" );
-	EnableMenuItem( GetSystemMenu( hWndConsole, false ), SC_CLOSE, MF_GRAYED );
-	SetWindowLongA( hWndConsole, GWL_STYLE, GetWindowLongA( hWndConsole, GWL_STYLE ) & ~SC_CLOSE & ~WS_MAXIMIZEBOX & ~WS_SIZEBOX );
-	CONSOLE_CURSOR_INFO cci;
-	cci.dwSize = 25;
-	cci.bVisible = false;
-	SetConsoleCursorInfo( hConsole, &cci );
-
-	SetConsoleTextAttribute( hConsole, 11 );
-	std::cout << "[OPN] ";
-	SetConsoleTextAttribute( hConsole, 7 );
-	std::cout << "Paladin Debug Interface Setup";
-	LOG_LAST_ERROR( );
-
-#endif
-
-}
-
 void DrawInterface( )
 {
 	// call class
@@ -61,22 +30,22 @@ bool Authenticate( )
 		}
 		if ( pro.GetPremium( ) <= EPremium::HARDWARE_MISMATCH )
 		{
-			OPEN_MESSAGE( "Paladin Loader", "Your unique identifier has changed - please create a support ticket.", 0 );
+			OPEN_MESSAGE( L"Paladin Loader", L"Your unique identifier has changed - please create a support ticket.", 0 );
 			return false;
 		}
 		if ( pro.GetPremium( ) <= EPremium::EXPIRED )
 		{
-			OPEN_MESSAGE( "Paladin Loader", "Your premium has expired, please renew your premium on the forum.", 0 );
+			OPEN_MESSAGE( L"Paladin Loader", L"Your premium has expired, please renew your premium on the forum.", 0 );
 			return false;
 		}
 		if ( pro.GetPremium( ) == EPremium::DEVELOPER )
 		{
-			bDeveloper = true;
+			// TODO developer
 			return pro.GetPremium( ) == EPremium::DEVELOPER;
 		}
 		return pro.GetPremium( ) == EPremium::PREMIUM;
 	}
-	OPEN_MESSAGE( "Paladin Loader", "Please run the loader as an administrator.", 0 );
+	OPEN_MESSAGE( L"Paladin Loader", L"Please run the loader as an administrator.", 0 );
 	return false;
 }
 
@@ -97,14 +66,14 @@ void StartHeartbeat( )
 {
 	std::thread( [ & ]
 	{
-		std::ofstream fsInstance( "cur.inst", std::ofstream::out );
+		std::wofstream fsInstance( "cur.inst", std::wofstream::out );
 		fsInstance << "true";
-		while ( true /* FindWindowA(MIDDLEMAN) IS STILL OPEN */ )
+		while ( true /* FindWindow(MIDDLEMAN) IS STILL OPEN */ )
 		{
 			if ( !Authenticate( ) )
 			{
-				pro.KillAnticheat( "MIDDLEMAN", "MIDDLEMAN.EXE" );
-				std::ofstream fsRegKey( "reg.key", std::ofstream::out | std::ofstream::trunc );
+				pro.KillAnticheat( L"MIDDLEMAN", L"MIDDLEMAN.EXE" );
+				std::wofstream fsRegKey( "reg.key", std::wofstream::out | std::wofstream::trunc );
 				fsRegKey.close( );
 			}
 		}
@@ -136,4 +105,5 @@ int CALLBACK WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 
 #endif
 
+	return 0;
 }
