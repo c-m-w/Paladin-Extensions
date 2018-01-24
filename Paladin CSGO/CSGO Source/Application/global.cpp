@@ -1,6 +1,51 @@
 #include "../main.h"
 
 #ifdef _DEBUG
+
+void SetDebug( )
+{
+	hStandardIn[ 0 ] = GetStdHandle( STD_INPUT_HANDLE );
+	hStandardOut[ 0 ] = GetStdHandle( STD_OUTPUT_HANDLE );
+	hStandardError[ 0 ] = GetStdHandle( STD_ERROR_HANDLE );
+
+	AllocConsole( );
+	AttachConsole( GetCurrentProcessId( ) );
+
+	hStandardIn[ 1 ] = GetStdHandle( STD_INPUT_HANDLE );
+	hStandardOut[ 1 ] = GetStdHandle( STD_OUTPUT_HANDLE );
+	hStandardError[ 1 ] = GetStdHandle( STD_ERROR_HANDLE );
+
+	SetConsoleMode( hStandardIn[ 1 ], ENABLE_PROCESSED_INPUT | ENABLE_INSERT_MODE | ENABLE_QUICK_EDIT_MODE | ENABLE_EXTENDED_FLAGS );
+	SetConsoleMode( hStandardOut[ 1 ], ENABLE_PROCESSED_OUTPUT | ENABLE_WRAP_AT_EOL_OUTPUT );
+
+
+
+	HANDLE hConsole = GetStdHandle( STD_OUTPUT_HANDLE );
+	HWND hWndConsole = GetConsoleWindow( );
+
+	SetConsoleTitleA( "Paladin CSGO" );
+	EnableMenuItem( GetSystemMenu( hWndConsole, false ), SC_CLOSE, MF_GRAYED );
+	SetWindowLongA( hWndConsole, GWL_STYLE, GetWindowLongA( hWndConsole, GWL_STYLE ) & ~SC_CLOSE & ~WS_MAXIMIZEBOX & ~WS_SIZEBOX );
+	CONSOLE_CURSOR_INFO cci;
+	cci.dwSize = 25;
+	cci.bVisible = false;
+	SetConsoleCursorInfo( hConsole, &cci );
+
+	SetConsoleTextAttribute( hConsole, 11 );
+	std::cout << "[OPN] ";
+	SetConsoleTextAttribute( hConsole, 7 );
+	std::cout << "Paladin Debug Interface Setup";
+}
+
+void RestoreDebug( )
+{
+FreeConsole( );
+
+SetStdHandle( STD_INPUT_HANDLE, hStandardIn[ 0 ] );
+SetStdHandle( STD_OUTPUT_HANDLE, hStandardOut[ 0 ] );
+SetStdHandle( STD_ERROR_HANDLE, hStandardError[ 0 ] );
+}
+
 void LogDebugMessage( EDebugMessage dmType, char *szMessage, ... )
 {
 	HANDLE hConsole = GetStdHandle( STD_OUTPUT_HANDLE );
@@ -59,6 +104,7 @@ void LogLastError( )
 	}
 	LocalFree( lpstrError );
 }
+
 #endif
 
 moment GetMoment( )

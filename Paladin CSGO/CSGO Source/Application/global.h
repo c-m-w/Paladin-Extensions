@@ -35,31 +35,6 @@ typedef long long moment;
 #define EPOCH_TO_JANUARY_2017 moment( 1514764800000 )
 #define PI 3.141593f
 #define MILLISECONDS_PER_SECOND 1000.f
-#define OPEN_MESSAGE( Title, Text, Type ) MessageBoxA( nullptr, Text, Title, Type | MB_OK )
-
-enum class EPremium
-{
-	BANNED = -1,
-	NOT_PREMIUM,
-	CONNECTION_FAILURE,
-	HARDWARE_MISMATCH,
-	EXPIRED,
-	PREMIUM,
-	DEVELOPER
-};
-
-enum class EElevation
-{
-	NOT_ADMIN,
-	ADMIN
-};
-
-enum class EAnticheatStatus
-{
-	NOT_FOUND = -1,
-	FAILED,
-	KILLED
-};
 
 void Wait( moment ); // TODO multimedia timer
 moment GetMoment( );

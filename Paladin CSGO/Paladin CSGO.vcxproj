@@ -142,9 +142,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CSGO Source\Application\global.cpp" />
     <ClCompile Include="CSGO Source\main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CSGO Source\Application\global.h" />
     <ClInclude Include="CSGO Source\main.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

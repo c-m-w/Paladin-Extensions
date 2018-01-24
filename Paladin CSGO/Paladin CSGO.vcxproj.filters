@@ -18,9 +18,15 @@
     <ClCompile Include="CSGO Source\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="CSGO Source\Application\global.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CSGO Source\main.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CSGO Source\Application\global.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
