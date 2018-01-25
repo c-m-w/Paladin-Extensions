@@ -144,11 +144,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Loader Source\Application\global.cpp" />
+    <ClCompile Include="Loader Source\Application\menu.cpp" />
     <ClCompile Include="Loader Source\Application\program.cpp" />
     <ClCompile Include="Loader Source\main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Loader Source\Application\global.h" />
+    <ClInclude Include="Loader Source\Application\menu.h" />
     <ClInclude Include="Loader Source\Application\program.h" />
     <ClInclude Include="Loader Source\main.h" />
   </ItemGroup>

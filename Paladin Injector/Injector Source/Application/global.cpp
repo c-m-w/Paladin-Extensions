@@ -26,7 +26,7 @@ void SetDebug( )
 	RECT recScreenResolution { };
 	GetWindowRect( GetDesktopWindow(), &recScreenResolution );
 	SetConsoleTitleA( "Paladin CSGO" );
-	MoveWindow( hWndConsole, recScreenResolution.right / 2 - 800, recScreenResolution.bottom / 2 - 600, 800, 600, TRUE );
+	MoveWindow( hWndConsole, ( recScreenResolution.right - 800 ) / 2 , ( recScreenResolution.bottom - 600 ) / 2, 800, 600, TRUE );
 
 	EnableMenuItem( GetSystemMenu( hWndConsole, false ), SC_CLOSE, MF_GRAYED );
 	SetWindowLongA( hWndConsole, GWL_STYLE, GetWindowLongA( hWndConsole, GWL_STYLE ) & ~SC_CLOSE & ~WS_MAXIMIZEBOX & ~WS_SIZEBOX );
