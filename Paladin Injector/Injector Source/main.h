@@ -10,3 +10,5 @@
 #include <vector>
 
 #include "Application/global.h"
+#include "Application/helper.h"
+#include "Application/inject.h"

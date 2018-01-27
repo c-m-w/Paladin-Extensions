@@ -144,10 +144,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Injector Source\Application\global.cpp" />
+    <ClCompile Include="Injector Source\Application\helper.cpp" />
+    <ClCompile Include="Injector Source\Application\inject.cpp" />
     <ClCompile Include="Injector Source\main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Injector Source\Application\global.h" />
+    <ClInclude Include="Injector Source\Application\helper.h" />
+    <ClInclude Include="Injector Source\Application\inject.h" />
     <ClInclude Include="Injector Source\main.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
