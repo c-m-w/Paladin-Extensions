@@ -11,16 +11,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Paladin CSGO", "Paladin CSGO\Paladin CSGO.vcxproj", "{C596153A-8603-4CEC-8DD5-5C4676F7989C}"
-	ProjectSection(ProjectDependencies) = postProject
-		{E10F7EFE-B8FD-4DE0-9634-42952F187ED4} = {E10F7EFE-B8FD-4DE0-9634-42952F187ED4}
-	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Paladin Loader", "Paladin Loader\Paladin Loader.vcxproj", "{9A29FB98-E1E8-4811-9B82-0A4F336D7DD8}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Paladin Injector", "Paladin Injector\Paladin Injector.vcxproj", "{E10F7EFE-B8FD-4DE0-9634-42952F187ED4}"
-	ProjectSection(ProjectDependencies) = postProject
-		{9A29FB98-E1E8-4811-9B82-0A4F336D7DD8} = {9A29FB98-E1E8-4811-9B82-0A4F336D7DD8}
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
