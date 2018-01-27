@@ -20,6 +20,12 @@ void SetDebug( )
 	SetConsoleMode( hStandardIn[ 1 ], ENABLE_PROCESSED_INPUT | ENABLE_INSERT_MODE | ENABLE_QUICK_EDIT_MODE | ENABLE_EXTENDED_FLAGS );
 	SetConsoleMode( hStandardOut[ 1 ], ENABLE_PROCESSED_OUTPUT | ENABLE_WRAP_AT_EOL_OUTPUT );
 
+	if ( true )  // NOLINT
+	{
+		FILE **pFile { };
+		_wfreopen_s( pFile, L"CONOUT$", L"w", stdout );
+	}
+
 	HANDLE hConsole = GetStdHandle( STD_OUTPUT_HANDLE );
 	HWND hWndConsole = GetConsoleWindow( );
 
