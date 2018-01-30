@@ -2,12 +2,7 @@
 
 #include <Windows.h>
 #include <TlHelp32.h>
-#include <iostream>
-#include <iomanip>
-#include <fstream>
-#include <sstream>
-#include <thread>
-#include <vector>
+#include <cstddef>
 
 #include "Application/global.h"
 
