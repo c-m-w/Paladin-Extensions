@@ -5,5 +5,6 @@
 #include "../../std.h"
 
 #include "Application/global.h"
+#include "Application/debug.h"
 #include "Application/helper.h"
 #include "Application/inject.h"
