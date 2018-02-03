@@ -89,8 +89,7 @@ int CALLBACK WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 
 	DrawInterface( );
 
-	if ( !Authenticate( ) )
-		return 0;
+	if ( !Authenticate( ) ) return 0;
 
 	Verify( );
 
