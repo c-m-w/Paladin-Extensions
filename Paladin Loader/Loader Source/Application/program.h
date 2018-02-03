@@ -9,6 +9,7 @@ class CProgram
 		std::wstring wstrWindowsName { };
 		int iHardwareID { };
 	};
+
 	user_t uCurrentUser { };
 	void GetUserInfo( );
 	void DeleteUserInfo( );
@@ -17,7 +18,7 @@ public:
 
 	EElevation GetElevationState( HANDLE );
 	EAnticheatStatus KillAnticheat( LPCWSTR, const wchar_t * );
-	
+
 	float GetWindowsSensitivity( );
 };
 

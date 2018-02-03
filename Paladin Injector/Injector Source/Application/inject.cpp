@@ -1,55 +1,55 @@
 #include "../main.h"
 
-bool Inject(LPWSTR dll, DWORD processId)
+bool Inject( LPWSTR dll, DWORD processId )
 {
-	if (!processId)
+	if ( !processId )
 		return false;
 
 	HANDLE hProcess = INVALID_HANDLE_VALUE, hThread = INVALID_HANDLE_VALUE;
 	LPVOID mRegion = nullptr;
 	FARPROC loadLibrary = nullptr;
 
-	hProcess = OpenProcess(PROCESS_VM_READ | PROCESS_VM_WRITE | PROCESS_VM_OPERATION, FALSE, processId);
+	hProcess = OpenProcess( PROCESS_VM_READ | PROCESS_VM_WRITE | PROCESS_VM_OPERATION, FALSE, processId );
 
-	if (!hProcess)
+	if ( !hProcess )
 		return false;
 
-	mRegion = VirtualAllocEx(hProcess, nullptr, wcslen(dll), MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE);
+	mRegion = VirtualAllocEx( hProcess, nullptr, wcslen( dll ), MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE );
 
-	if (!mRegion)
+	if ( !mRegion )
 	{
-		CloseHandle(hProcess);
+		CloseHandle( hProcess );
 		return false;
 	}
 
-	if (!WriteProcessMemory(hProcess, mRegion, reinterpret_cast<LPCVOID>(dll), wcslen(dll), nullptr))
+	if ( !WriteProcessMemory( hProcess, mRegion, reinterpret_cast< LPCVOID >( dll ), wcslen( dll ), nullptr ) )
 	{
-		CloseHandle(hProcess);
+		CloseHandle( hProcess );
 		return false;
 	}
 
-	loadLibrary = GetProcAddress(GetModuleHandle(L"Kernel32"), "LoadLibraryA");
+	loadLibrary = GetProcAddress( GetModuleHandle( L"Kernel32" ), "LoadLibraryA" );
 
-	if (!loadLibrary)
+	if ( !loadLibrary )
 	{
-		CloseHandle(hProcess);
+		CloseHandle( hProcess );
 		return false;
 	}
 
-	hThread = CreateRemoteThread(hProcess, nullptr, 0, reinterpret_cast<LPTHREAD_START_ROUTINE>(loadLibrary), mRegion, 0, nullptr);
+	hThread = CreateRemoteThread( hProcess, nullptr, 0, reinterpret_cast< LPTHREAD_START_ROUTINE >( loadLibrary ), mRegion, 0, nullptr );
 
-	if (!hThread)
+	if ( !hThread )
 	{
-		CloseHandle(hProcess);
+		CloseHandle( hProcess );
 		return false;
 	}
 
-	WaitForSingleObject(hThread, INFINITE);
+	WaitForSingleObject( hThread, INFINITE );
 
-	VirtualFreeEx(hProcess, mRegion, wcslen(dll), MEM_RELEASE);
+	VirtualFreeEx( hProcess, mRegion, wcslen( dll ), MEM_RELEASE );
 
-	CloseHandle(hThread);
-	CloseHandle(hProcess);
+	CloseHandle( hThread );
+	CloseHandle( hProcess );
 
 	return true;
 }
