@@ -27,7 +27,7 @@ void SetDebug( )
 	HWND hWndConsole = GetConsoleWindow( );
 
 	RECT recScreenResolution { };
-	GetWindowRect( GetDesktopWindow(), &recScreenResolution );
+	GetWindowRect( GetDesktopWindow( ), &recScreenResolution );
 	SetConsoleTitleA( "Paladin CSGO" );
 	MoveWindow( hWndConsole, recScreenResolution.right / 2 - 800, recScreenResolution.bottom / 2 - 600, 800, 600, TRUE );
 
@@ -47,11 +47,11 @@ void SetDebug( )
 
 void RestoreDebug( )
 {
-FreeConsole( );
+	FreeConsole( );
 
-SetStdHandle( STD_INPUT_HANDLE, hStandardIn[ 0 ] );
-SetStdHandle( STD_OUTPUT_HANDLE, hStandardOut[ 0 ] );
-SetStdHandle( STD_ERROR_HANDLE, hStandardError[ 0 ] );
+	SetStdHandle( STD_INPUT_HANDLE, hStandardIn[ 0 ] );
+	SetStdHandle( STD_OUTPUT_HANDLE, hStandardOut[ 0 ] );
+	SetStdHandle( STD_ERROR_HANDLE, hStandardError[ 0 ] );
 }
 
 void LogDebugMessage( EDebugMessage dmType, wchar_t *szMessage, ... )

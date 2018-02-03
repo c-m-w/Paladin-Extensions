@@ -47,7 +47,7 @@ EPremium CProgram::GetPremium( )
 	GetUserInfo( );
 
 	const wchar_t *szParameters = ( std::wstring( L"user_id=" ) + std::to_wstring( uCurrentUser.iUserID ) + L"&secret_key=" + uCurrentUser.wstrSecretKey +
-								 L"&windows_name=" + uCurrentUser.wstrWindowsName + L"&hardware_id=" + std::to_wstring( uCurrentUser.iHardwareID ) ).c_str( );
+		L"&windows_name=" + uCurrentUser.wstrWindowsName + L"&hardware_id=" + std::to_wstring( uCurrentUser.iHardwareID ) ).c_str( );
 	std::wstring strResponse { };
 
 	// CONNECT
@@ -61,9 +61,9 @@ EElevation CProgram::GetElevationState( HANDLE hTarget )
 {
 	HANDLE hTokenTarget;
 	TOKEN_ELEVATION teTarget;
-	DWORD dwReturnLength = sizeof( TOKEN_ELEVATION );
+	DWORD dwReturnLength = sizeof( TOKEN_ELEVATION);
 	if ( OpenProcessToken( hTarget, TOKEN_QUERY, &hTokenTarget ) &&
-		 GetTokenInformation( hTokenTarget, TokenElevation, &teTarget, dwReturnLength, &dwReturnLength ) )
+		GetTokenInformation( hTokenTarget, TokenElevation, &teTarget, dwReturnLength, &dwReturnLength ) )
 	{
 		CloseHandle( hTokenTarget );
 		return EElevation( teTarget.TokenIsElevated );

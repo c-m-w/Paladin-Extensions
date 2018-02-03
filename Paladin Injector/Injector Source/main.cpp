@@ -58,54 +58,54 @@ int CALLBACK WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	return 0;
 }
 */
-int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+int CALLBACK WinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow )
 {
-	dbg = new Debug();
+	dbg = new Debug( );
 
-	dbg->Init();
+	dbg->Init( );
 
-	int argc{};
-	LPWSTR *argv = CommandLineToArgvW(GetCommandLine(), &argc);
+	int argc { };
+	LPWSTR *argv = CommandLineToArgvW( GetCommandLine( ), &argc );
 
-	if (!argv)
+	if ( !argv )
 	{
-		dbg->LogDebugMsg(ERR, L"Unable to get argument list");
-		Sleep(7000);
+		dbg->LogDebugMsg( ERR, L"Unable to get argument list" );
+		Sleep( 7000 );
 		delete dbg;
 		return 1;
 	}
 
-	if (argc < 2)
+	if ( argc < 2 )
 	{
-		dbg->LogDebugMsg(ERR, L"Invalid argument count");
-		Sleep(7000);
+		dbg->LogDebugMsg( ERR, L"Invalid argument count" );
+		Sleep( 7000 );
 		delete dbg;
 		return 1;
 	}
 
-	dbg->LogDebugMsg(DBG, L"Injecting %s", argv[1]);
+	dbg->LogDebugMsg( DBG, L"Injecting %s", argv[ 1 ] );
 
-	DWORD csgo = getFirstCSGO();
+	DWORD csgo = getFirstCSGO( );
 
-	dbg->LogDebugMsg(DBG, L"Process ID: %lu", csgo);
+	dbg->LogDebugMsg( DBG, L"Process ID: %lu", csgo );
 
-	if (!Inject(argv[1], csgo))
+	if ( !Inject( argv[ 1 ], csgo ) )
 	{
-		dbg->LogDebugMsg(ERR, L"Error injecting");
+		dbg->LogDebugMsg( ERR, L"Error injecting" );
 	}
 	else
 	{
-		dbg->LogDebugMsg(SCS, L"Injected");
+		dbg->LogDebugMsg( SCS, L"Injected" );
 	}
 
-	dbg->LogDebugMsg(DBG, L"Done");
+	dbg->LogDebugMsg( DBG, L"Done" );
 
-	LocalFree(argv);
+	LocalFree( argv );
 
 	//Wait( 7000 );
-	Sleep(7000);
+	Sleep( 7000 );
 
-	Main();
+	Main( );
 
 	delete dbg;
 
