@@ -20,19 +20,16 @@ void SetDebug( )
 	SetConsoleMode( hStandardIn[ 1 ], ENABLE_PROCESSED_INPUT | ENABLE_INSERT_MODE | ENABLE_QUICK_EDIT_MODE | ENABLE_EXTENDED_FLAGS );
 	SetConsoleMode( hStandardOut[ 1 ], ENABLE_PROCESSED_OUTPUT | ENABLE_WRAP_AT_EOL_OUTPUT );
 
-	if ( true )  // NOLINT
-	{
-		FILE **pFile { };
-		_wfreopen_s( pFile, L"CONOUT$", L"w", stdout );
-	}
+	FILE *pFile { };
+	_wfreopen_s( &pFile, L"CONOUT$", L"w", stdout );
 
 	HANDLE hConsole = GetStdHandle( STD_OUTPUT_HANDLE );
 	HWND hWndConsole = GetConsoleWindow( );
 
 	RECT recScreenResolution { };
-	GetWindowRect( GetDesktopWindow(), &recScreenResolution );
+	GetWindowRect( GetDesktopWindow( ), &recScreenResolution );
 	SetConsoleTitleA( "Paladin CSGO" );
-	MoveWindow( hWndConsole, ( recScreenResolution.right - 800 ) / 2 , ( recScreenResolution.bottom - 600 ) / 2, 800, 600, TRUE );
+	MoveWindow( hWndConsole, recScreenResolution.right / 2 - 800, recScreenResolution.bottom / 2 - 600, 800, 600, TRUE );
 
 	EnableMenuItem( GetSystemMenu( hWndConsole, false ), SC_CLOSE, MF_GRAYED );
 	SetWindowLongA( hWndConsole, GWL_STYLE, GetWindowLongA( hWndConsole, GWL_STYLE ) & ~SC_CLOSE & ~WS_MAXIMIZEBOX & ~WS_SIZEBOX );
@@ -50,11 +47,11 @@ void SetDebug( )
 
 void RestoreDebug( )
 {
-FreeConsole( );
+	FreeConsole( );
 
-SetStdHandle( STD_INPUT_HANDLE, hStandardIn[ 0 ] );
-SetStdHandle( STD_OUTPUT_HANDLE, hStandardOut[ 0 ] );
-SetStdHandle( STD_ERROR_HANDLE, hStandardError[ 0 ] );
+	SetStdHandle( STD_INPUT_HANDLE, hStandardIn[ 0 ] );
+	SetStdHandle( STD_OUTPUT_HANDLE, hStandardOut[ 0 ] );
+	SetStdHandle( STD_ERROR_HANDLE, hStandardError[ 0 ] );
 }
 
 void LogDebugMessage( EDebugMessage dmType, wchar_t *szMessage, ... )

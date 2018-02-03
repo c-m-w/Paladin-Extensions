@@ -21,9 +21,6 @@
     <ClCompile Include="CSGO Source\Application\global.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="CSGO Source\Application\interface.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CSGO Source\main.h">
@@ -32,7 +29,28 @@
     <ClInclude Include="CSGO Source\Application\global.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="CSGO Source\Application\interface.h">
+    <ClInclude Include="CSGO Source\SDK\sdk.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CSGO Source\SDK\global_sdk.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CSGO Source\SDK\public\engine\IEngineTrace.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CSGO Source\SDK\public\engine\ivdebugoverlay.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CSGO Source\SDK\public\cdll_int.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CSGO Source\SDK\public\gametrace.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CSGO Source\SDK\public\icliententitylist.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CSGO Source\SDK\public\iclientnetworkable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

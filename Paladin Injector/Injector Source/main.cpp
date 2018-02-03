@@ -52,8 +52,9 @@ int CALLBACK WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	//Wait( 7000 );
 	Sleep( 7000 );
 
-	//Main( );
+	Main( );
 	RESTORE_DEBUG( );
+	return 0;
 }
 
 #else

@@ -2,7 +2,7 @@
 
 #include <Windows.h>
 #include <TlHelp32.h>
-#include <cstddef>
+#include "../../std.h"
 
+#include "SDK/sdk.h"
 #include "Application/global.h"
-#include "Application/interface.h"

@@ -89,6 +89,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;PALADINCSGO_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DisableSpecificWarnings>4100;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -143,13 +144,19 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CSGO Source\Application\global.cpp" />
-    <ClCompile Include="CSGO Source\Application\interface.cpp" />
     <ClCompile Include="CSGO Source\main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CSGO Source\Application\global.h" />
-    <ClInclude Include="CSGO Source\Application\interface.h" />
     <ClInclude Include="CSGO Source\main.h" />
+    <ClInclude Include="CSGO Source\SDK\public\cdll_int.h" />
+    <ClInclude Include="CSGO Source\SDK\public\engine\IEngineTrace.h" />
+    <ClInclude Include="CSGO Source\SDK\public\engine\ivdebugoverlay.h" />
+    <ClInclude Include="CSGO Source\SDK\public\gametrace.h" />
+    <ClInclude Include="CSGO Source\SDK\global_sdk.h" />
+    <ClInclude Include="CSGO Source\SDK\public\icliententitylist.h" />
+    <ClInclude Include="CSGO Source\SDK\public\iclientnetworkable.h" />
+    <ClInclude Include="CSGO Source\SDK\sdk.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
