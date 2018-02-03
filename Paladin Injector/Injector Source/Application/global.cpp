@@ -1,5 +1,7 @@
 #include "../main.h"
 
+/*
+
 #ifdef _DEBUG
 
 HANDLE hStandardIn[ 2 ] { }, hStandardOut[ 2 ] { }, hStandardError[ 2 ] { };
@@ -114,6 +116,8 @@ void LogLastError( )
 }
 
 #endif
+
+*/
 
 moment GetMoment( )
 {
