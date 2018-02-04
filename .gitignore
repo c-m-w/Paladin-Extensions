@@ -13,7 +13,6 @@ x86/
 bld/
 [Bb]in/
 [Oo]bj/
-[Dd][Bb][Gg]/
 .vs/
 [Tt]est[Rr]esult*/
 [Bb]uild[Ll]og.*
@@ -65,4 +64,3 @@ _ReSharper*/
 *.[Rr]e[Ss]harper
 *.DotSettings.user
 **/desktop.ini
-CSGO/CSGO/CSGO.vcxproj
