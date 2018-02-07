@@ -1,4 +1,5 @@
 # Paladin Extensions
+- Extension software developed by Jeremy, Cole, Mike, John, and Hunter
 
 ## TODO
 ##### Jeremy
