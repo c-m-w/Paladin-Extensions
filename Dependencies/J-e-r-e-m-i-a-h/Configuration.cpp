@@ -1,18 +1,16 @@
 #include "../C++ Standard Library.hpp"
 #include "../../nlohmann/json/json.hpp"
-#include <Windows.h>
 #include "Configuration.hpp"
 
 CConfiguration cfg;
 
 void CConfiguration::LoadConfiguration( std::wstring wstrConfig )
 {
-	std::ifstream fFile( wstrPath + wstrConfig );
+	std::ifstream fFile( wstrPath + wstrConfig + std::wstring( L".json" ) );
 
 	try
 	{
 		fFile >> jsConfiguration;
-		if ( 1.f != jsConfiguration[ "Debug" ][ "Version" ] ) // TODO: Outdated Config
 	}
 	catch ( nlohmann::detail::parse_error &ex ) // TODO: Formatting Errors
 	catch ( nlohmann::json::type_error &ex ) // TODO: Missing Variables 
@@ -32,4 +30,16 @@ CConfiguration::CConfiguration( )
 	wchar_t wchTemp[ MAX_PATH ];
 	GetModuleFileName( nullptr, wchTemp, MAX_PATH );
 	wstrPath = std::wstring( wchTemp ).substr( 0, std::wstring( wchTemp ).find_last_of( L"/\\" ) + 1 ).c_str( );
+	
+	std::ifstream fFile( wstrPath + std::wstring( L"global.json" ) );
+	try
+	{
+		fFile >> jsGlobalConfiguration;
+	}
+	catch ( nlohmann::detail::parse_error &ex ) // TODO: Formatting Errors
+	catch ( nlohmann::json::type_error &ex ) // TODO: Missing Variables
+	
+	LoadConfiguration( jsGlobalConfiguration[ "Default Configuration" ] );
+	
+	fFile.close( );
 }

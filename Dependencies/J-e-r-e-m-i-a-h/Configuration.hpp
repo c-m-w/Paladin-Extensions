@@ -11,6 +11,7 @@ class CConfiguration
 	std::wstring wstrPath { };
 	
 public:
+	nlohmann::json jsGlobalConfiguration { };
 	nlohmann::json jsConfiguration { };
 	
 	void LoadConfiguration( std::wstring );
