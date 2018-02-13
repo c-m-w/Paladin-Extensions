@@ -1,7 +1,4 @@
-#include <J-e-r-e-m-i-a-h/C++ Standard Library.hpp>
-#include <Windows.h>
-#include <nlohmann/json.hpp>
-#include "Configuration.hpp"
+#include "Framework.hpp"
 
 CConfiguration cfg;
 
