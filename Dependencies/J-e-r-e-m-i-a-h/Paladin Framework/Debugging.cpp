@@ -1,3 +1,3 @@
 #include "Framework.hpp"
 
-CDrawing draw;
+CDebugging dbg;

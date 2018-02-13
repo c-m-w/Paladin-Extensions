@@ -4,7 +4,4 @@ class CDrawing;
 
 extern CDrawing draw;
 
-class CDrawing
-{
-	
-};
+class CDrawing { };

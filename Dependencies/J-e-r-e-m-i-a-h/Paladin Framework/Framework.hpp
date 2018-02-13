@@ -2,7 +2,6 @@
 
 #include "C++ Standard Library.hpp"
 
-#include <Windows.h>
 #include <nlohmann/json.hpp>
 #include "Configuration.hpp"
 
