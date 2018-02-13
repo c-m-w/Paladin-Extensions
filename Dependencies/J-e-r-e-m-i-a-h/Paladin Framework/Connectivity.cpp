@@ -1,3 +1,3 @@
 #include "Framework.hpp"
 
-CMenu menu;
+CConnectivity connect;
