@@ -1,36 +1,38 @@
 #pragma once
 
+namespace dbg
+{
+	const char endl = '\n';
+
+#define DBG << " DBG "
+#define SCS << " SCS "
+#define WRN << " WRN "
+#define ERR << " ERR "
+#define LER << " LER "
+
 #ifdef _DEBUG
-#define LOG_DEBUG dbg.osDebugStream
-#define LOG_LAST_ERROR dbg.LogLastWindowsErrorDebugMessage
+
+	class CDebugging
+	{
+		std::ofstream ofLogFile;
+		HANDLE hConsole;
+	public:
+		CDebugging( );
+		CDebugging( CDebugging & );
+		CDebugging( CDebugging && ) = delete;
+		CDebugging &operator=( CDebugging & ) = delete;
+		CDebugging &operator=( CDebugging && ) = delete;
+		~CDebugging( );
+		template < typename xDatatype > CDebugging operator<<( const xDatatype & );
+	};
+
 #else
-#define LOG_DEBUG void
-#define LOG_LAST_ERROR void
+
+	class CDebugging {
+		template < typename xDatatype > CDebugging operator<<( const xDatatype & );
+	};
+
 #endif
 
-#define DBG L" DBG "
-#define SCS L" SCS "
-#define WRN L" WRN "
-#define ERR L" ERR "
-#define LER L" LER "
-
-class CDebugging
-{
-	std::ofstream ofLogFile;
-	HANDLE hConsole;
-public:
-	std::ostream osDebugStream;
-	CDebugging( );
-};
-
-extern CDebugging dbg;
-
-CDebugging operator<<( const CDebugging & dbg, const wchar_t( & str)[6] )
-{
-	
-}
-
-inline void test( )
-{
-	dbg << DBG << "uh oh!";
+	extern CDebugging out;
 }

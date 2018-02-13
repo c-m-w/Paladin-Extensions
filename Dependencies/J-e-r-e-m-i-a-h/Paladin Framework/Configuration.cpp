@@ -2,35 +2,64 @@
 
 CConfiguration cfg;
 
-void CConfiguration::LoadConfiguration( std::wstring wstrConfig )
+void CConfiguration::LoadConfiguration( std::string strConfig )
 {
-	std::ifstream fFile( wstrPath + wstrConfig + std::wstring( L".json" ) );
+	std::ifstream fFile( strPath + strConfig + std::string( ".json" ) );
 
-	try fFile >> jsConfiguration;
-	catch ( nlohmann::detail::parse_error &ex )	// TODO: Formatting Errors
-	catch ( nlohmann::json::type_error &ex )	// TODO: Missing Variables 
+	try
+	{
+		fFile >> jsConfiguration;
+	}
+	catch ( nlohmann::detail::parse_error &ex )
+	{
+		// TODO: Formatting Errors
+	}
+	catch ( nlohmann::json::type_error &ex )
+	{
+		// TODO: Missing Variables 
+	}
 
-	fFile.close( );	
-}	
+	fFile.close( );
+}
 
-void CConfiguration::SaveConfiguration( std::wstring wstrConfig )	
+void CConfiguration::SaveConfiguration( std::string strConfig )
 {
-	std::ofstream fFile( wstrPath + wstrConfig, std::ofstream::trunc );
+	std::ofstream fFile( strPath + strConfig, std::ofstream::trunc );
 	fFile << jsConfiguration.dump( SPACES_PER_TAB );
-	fFile.close( );	
-}	
+	fFile.close( );
+}
 
-CConfiguration::CConfiguration( )	
+CConfiguration::CConfiguration( )
 {
-	wchar_t wchTemp[ MAX_PATH ];
-	GetModuleFileName( nullptr, wchTemp, MAX_PATH );
-	wstrPath = std::wstring( wchTemp ).substr( 0, std::wstring( wchTemp ).find_last_of( L"/\\" ) + 1 ) + L"Configurations\\";
-	
-	std::ifstream fFile( wstrPath + L"global.json" );
-	try fFile >> jsGlobalConfiguration;
-	catch ( nlohmann::detail::parse_error &ex )	// TODO: Formatting Errors
-	catch ( nlohmann::json::type_error &ex )	// TODO: Missing Variables
-	
-	LoadConfiguration( jsGlobalConfiguration[ "Default Configuration" ] );
+	char chTemp[ MAX_PATH ];
+	GetModuleFileName( nullptr, chTemp, MAX_PATH );
+	strPath = std::string( chTemp ).substr( 0, std::string( chTemp ).find_last_of( "/\\" ) + 1 ) + "Configurations\\";
+
+	std::ifstream fFile( strPath + "global.json" );
+	try
+	{
+		fFile >> jsGlobalConfiguration;
+	}
+	catch ( nlohmann::detail::parse_error &ex )
+	{
+		// TODO: Formatting Errors
+	}
+	catch ( nlohmann::json::type_error &ex )
+	{
+		// TODO: Missing Variables 
+	}
+
+	try
+	{
+		LoadConfiguration( jsGlobalConfiguration[ "Default Configuration"].get_ref< nlohmann::json::string_t&>( ) );
+	}
+	catch ( nlohmann::detail::parse_error &ex )
+	{
+		// TODO: Formatting Errors
+	}
+	catch ( nlohmann::json::type_error &ex )
+	{
+		// TODO: Missing Variables 
+	}
 	fFile.close( );
 }
