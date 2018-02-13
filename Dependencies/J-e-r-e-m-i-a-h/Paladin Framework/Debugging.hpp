@@ -2,7 +2,9 @@
 
 namespace dbg
 {
-	const char endl = '\n';
+	class CDebugging;
+	extern CDebugging out;
+	extern const char endl;
 
 #define DBG << " DBG "
 #define SCS << " SCS "
@@ -34,5 +36,5 @@ namespace dbg
 
 #endif
 
-	extern CDebugging out;
+	void ler( );
 }

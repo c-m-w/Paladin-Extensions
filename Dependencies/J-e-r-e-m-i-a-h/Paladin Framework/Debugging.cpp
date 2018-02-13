@@ -1,5 +1,8 @@
 #include "Framework.hpp"
 
+dbg::CDebugging out;
+const char endl = '\n';
+
 #ifdef _DEBUG
 
 dbg::CDebugging::CDebugging( )
@@ -18,7 +21,7 @@ dbg::CDebugging::CDebugging( )
 dbg::CDebugging::CDebugging( CDebugging & )
 {
 	ofLogFile.open( "C:/debug.txt", std::ofstream::out | std::ofstream::app ); // append debug
-	
+
 	// TODO: allocate console if not there yet
 	hConsole = GetStdHandle( STD_OUTPUT_HANDLE );
 }
@@ -42,6 +45,28 @@ template< typename xDatatype > dbg::CDebugging dbg::CDebugging::operator<<( cons
 	return *this;
 }
 
+void dbg::ler( )
+{
+	DWORD dwError = GetLastError( );
+	if ( !dwError )
+	{
+		out LER << "No error" << endl;
+		return;
+	}
+
+	LPSTR lpstrError { };
+	if ( !FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+						 nullptr, dwError, MAKELANGID( LANG_NEUTRAL, SUBLANG_DEFAULT ), &lpstrError, 0, nullptr ) )
+	{
+		out LER << "[0x" << std::hex << dwError << "] - Unable to retrieve error description" << endl;
+	}
+	else
+	{
+		out LER << "[0x" << std::hex << dwError << "] - " << lpstrError << endl;
+	}
+	LocalFree( lpstrError );
+}
+
 #else
 
 template< typename xDatatype > dbg::CDebugging dbg::CDebugging::operator<<( const xDatatype & )
@@ -49,6 +74,6 @@ template< typename xDatatype > dbg::CDebugging dbg::CDebugging::operator<<( cons
 	return *this;
 }
 
-#endif
+void dbg::ler( ) { }
 
-dbg::CDebugging out;
+#endif
