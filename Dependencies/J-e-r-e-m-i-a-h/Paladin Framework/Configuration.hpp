@@ -8,11 +8,11 @@ extern CConfiguration cfg;
 
 class CConfiguration 
 {
-	std::wstring wstrPath { };
+	std::wstring wstrPath;
 	
 public:
-	nlohmann::json jsGlobalConfiguration { };
-	nlohmann::json jsConfiguration { };
+	nlohmann::json jsGlobalConfiguration;
+	nlohmann::json jsConfiguration;
 	
 	void LoadConfiguration( std::wstring );
 	void SaveConfiguration( std::wstring );
