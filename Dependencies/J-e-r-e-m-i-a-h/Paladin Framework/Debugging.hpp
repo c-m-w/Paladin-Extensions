@@ -4,7 +4,12 @@ namespace dbg
 {
 	class CDebugging;
 	extern CDebugging out;
-	extern const char endl;
+	extern constexpr auto dec;
+	extern constexpr auto hex;
+	extern constexpr auto endl;
+	extern constexpr auto tab;
+	extern constexpr auto quote;
+	extern constexpr auto money;
 
 #define DBG << " DBG "
 #define SCS << " SCS "

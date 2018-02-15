@@ -5,6 +5,9 @@
 #include <Windows.h>
 #include "Paladin Framework/Debugging.hpp"
 
+#include <openssl/openssl.h>
+#include "Paladin Framework/Connectivity.hpp"
+
 #include <nlohmann/json.hpp>
 #include "Paladin Framework/Configuration.hpp"
 
