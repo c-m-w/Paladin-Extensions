@@ -1,12 +1,6 @@
 #include "Framework.hpp"
 
 dbg::CDebugging out;
-constexpr auto dec = std::dec;
-constexpr auto hex = std::hex;
-constexpr auto endl = std::endl;
-constexpr auto tab = '\t';
-constexpr auto quote = '\"'
-constexpr auto money = std::put_money;
 
 #ifdef _DEBUG
 
@@ -73,6 +67,8 @@ void dbg::ler( )
 }
 
 #else
+
+dbg::CDebugging::CDebugging( CDebugging & ) { }
 
 template< typename xDatatype > dbg::CDebugging dbg::CDebugging::operator<<( const xDatatype & )
 {

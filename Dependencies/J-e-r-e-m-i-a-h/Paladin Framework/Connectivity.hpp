@@ -2,6 +2,6 @@
 
 class CConnectivity;
 
-extern CConnectivity con;
+extern CConnectivity connect;
 
 class CConnectivity { };

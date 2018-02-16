@@ -4,12 +4,11 @@ namespace dbg
 {
 	class CDebugging;
 	extern CDebugging out;
-	extern constexpr auto dec;
-	extern constexpr auto hex;
-	extern constexpr auto endl;
-	extern constexpr auto tab;
-	extern constexpr auto quote;
-	extern constexpr auto money;
+	constexpr auto endl = std::endl;
+	constexpr auto tab = '\t';
+	constexpr auto quote = '\"';
+	constexpr auto hex = std::hex;
+	constexpr auto dec = std::dec;
 
 #define DBG << " DBG "
 #define SCS << " SCS "
@@ -36,6 +35,7 @@ namespace dbg
 #else
 
 	class CDebugging {
+		CDebugging( CDebugging & );
 		template < typename xDatatype > CDebugging operator<<( const xDatatype & );
 	};
 
