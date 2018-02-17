@@ -1,7 +1,11 @@
 #pragma once
+#include "Framework.hpp"
 
-class CDrawing;
+namespace Paladin
+{
+	class CDrawing;
 
-extern CDrawing draw;
+	CDrawing draw;
 
-class CDrawing { };
+	class CDrawing { };
+}

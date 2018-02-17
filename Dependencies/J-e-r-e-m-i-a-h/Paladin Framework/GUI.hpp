@@ -1,7 +1,11 @@
 #pragma once
+#include "Framework.hpp"
 
-class CGUI;
+namespace Paladin
+{
+	class CGUI;
 
-extern CGUI gui;
+	CGUI gui;
 
-class CGUI { };
+	class CGUI { };
+}

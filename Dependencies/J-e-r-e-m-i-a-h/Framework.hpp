@@ -1,6 +1,8 @@
 #pragma once
+#pragma warning(disable : 4996)
 
-#include <C++ Standard Library.hpp>
+#include "C++ Standard Library.hpp"
+
 #include <Windows.h>
 #include "Paladin Framework/Debugging.hpp"
 
@@ -17,4 +19,6 @@
 #include "Paladin Framework/Drawing.hpp"
 
 #include <vurtun/nuklear.h>
-#include "Paladin Framework/Menu.hpp"
+#include "Paladin Framework/GUI.hpp"
+
+using namespace Paladin;

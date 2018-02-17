@@ -1,7 +1,11 @@
 #pragma once
+#include "Framework.hpp"
 
-class CInjection;
+namespace Paladin
+{
+	class CInjection;
 
-extern CInjection inject;
+	CInjection inject;
 
-class CInjection { };
+	class CInjection { };
+}

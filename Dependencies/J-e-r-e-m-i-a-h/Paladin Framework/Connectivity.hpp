@@ -1,7 +1,11 @@
 #pragma once
+#include "Framework.hpp"
 
-class CConnectivity;
+namespace Paladin
+{
+	class CConnectivity;
 
-extern CConnectivity connect;
+	CConnectivity con;
 
-class CConnectivity { };
+	class CConnectivity { };
+}
