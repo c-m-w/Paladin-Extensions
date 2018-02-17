@@ -4,8 +4,9 @@
 namespace Paladin
 {
 	class CGUI;
-
-	CGUI gui;
+	extern CGUI gui;
 
 	class CGUI { };
+	
+	CGUI gui;
 }

@@ -4,6 +4,9 @@
 namespace Paladin
 {
 	#define SPACES_PER_TAB 4
+	
+	class CConfiguration;
+	extern CConfiguration cfg;
 
 	class CConfiguration 
 	{
@@ -44,7 +47,7 @@ namespace Paladin
 			LPWSTR wchTemp = new wchar_t[ MAX_PATH ];
 			GetModuleFileName( nullptr, wchTemp, MAX_PATH );
 			char chTemp[ MAX_PATH ];
-			wcstombs_s( new unsigned, chTemp, wchTemp, MAX_PATH );
+			wcstombs( chTemp, wchTemp, MAX_PATH );
 			strPath = std::string( chTemp ).substr( 0, std::string( chTemp ).find_last_of( "/\\" ) + 1 ) + "Configurations\\";
 
 			std::ifstream fFile( strPath + "global.json" );

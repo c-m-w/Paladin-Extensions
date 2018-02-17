@@ -4,8 +4,9 @@
 namespace Paladin
 {
 	class CConnectivity;
-
-	CConnectivity con;
+	extern CConnectivity con;
 
 	class CConnectivity { };
+	
+	CConnectivity con;
 }

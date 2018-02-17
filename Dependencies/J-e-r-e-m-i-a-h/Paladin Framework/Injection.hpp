@@ -4,8 +4,9 @@
 namespace Paladin
 {
 	class CInjection;
-
-	CInjection inject;
+	extern CInjection inject;
 
 	class CInjection { };
+	
+	CInjection inject;
 }

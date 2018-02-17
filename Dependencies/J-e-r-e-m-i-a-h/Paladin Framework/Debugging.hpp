@@ -51,8 +51,6 @@ namespace Paladin
 		class CDebugging
 		{
 		public:
-			CDebugging( ) = default;
-			CDebugging( CDebugging & ) = default;
 			template < typename xDatatype > CDebugging operator<<( const xDatatype & )
 			{
 				return *this;
@@ -60,8 +58,6 @@ namespace Paladin
 		};
 
 	#endif
-
-		CDebugging out;
 
 	#define LER << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << " [LER] "
 
@@ -92,5 +88,6 @@ namespace Paladin
 	#define WRN << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << " [WRN] "
 	#define ERR << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << " [ERR] "
 
+		CDebugging out;
 	}
 }

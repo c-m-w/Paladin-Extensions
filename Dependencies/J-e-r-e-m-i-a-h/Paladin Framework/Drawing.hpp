@@ -4,8 +4,9 @@
 namespace Paladin
 {
 	class CDrawing;
-
-	CDrawing draw;
+	extern CDrawing draw;
 
 	class CDrawing { };
+	
+	CDrawing draw;
 }
