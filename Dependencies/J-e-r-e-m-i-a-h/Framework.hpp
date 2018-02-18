@@ -6,13 +6,16 @@
 #include <Windows.h>
 #include "Paladin Framework/Debugging.hpp"
 
-#define CURL_STATICLIB
-#include <curl/curl.h>
-#include <cryptopp/modes.h>
-#include <cryptopp/aes.h>
 #include <cryptopp/base64.h>
 #include <cryptopp/filters.h>
 #include <cryptopp/hex.h>
+#include <cryptopp/modes.h>
+#include <cryptopp/sha3.h>
+#include <cryptopp/aes.h>
+#include "Paladin Framework/Encryption.hpp"
+
+#define CURL_STATICLIB
+#include <curl/curl.h>
 #include "Paladin Framework/Connectivity.hpp"
 
 #include <nlohmann/json.hpp>
