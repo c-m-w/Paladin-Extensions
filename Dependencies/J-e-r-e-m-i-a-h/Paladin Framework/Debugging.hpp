@@ -34,7 +34,7 @@ namespace Paladin
 			CDebugging &operator=( CDebugging && ) = delete;
 			~CDebugging( )
 			{
-				std::ofstream ofLogFile( "C:/debug.txt", std::ofstream::out | std::ofstream::trunc );
+				std::ofstream ofLogFile( "C:/debug.txt" );
 				ofLogFile << sstrLog.str( );
 				ofLogFile.close( );
 			}

@@ -24,11 +24,11 @@ namespace Paladin
 			{
 				fFile >> jsConfiguration;
 			}
-			catch ( nlohmann::detail::parse_error &ex )
+			catch ( nlohmann::detail::parse_error & )
 			{
 				// TODO: Formatting Errors
 			}
-			catch ( nlohmann::json::type_error &ex )
+			catch ( nlohmann::json::type_error & )
 			{
 				// TODO: Missing Variables 
 			}
@@ -55,11 +55,11 @@ namespace Paladin
 			{
 				fFile >> jsGlobalConfiguration;
 			}
-			catch ( nlohmann::detail::parse_error &ex )
+			catch ( nlohmann::detail::parse_error & )
 			{
 				// TODO: Formatting Errors
 			}
-			catch ( nlohmann::json::type_error &ex )
+			catch ( nlohmann::json::type_error & )
 			{
 				// TODO: Missing Variables 
 			}
@@ -68,11 +68,11 @@ namespace Paladin
 			{
 				LoadConfiguration( jsGlobalConfiguration[ "Default Configuration"].get_ref< nlohmann::json::string_t&>( ) );
 			}
-			catch ( nlohmann::detail::parse_error &ex )
+			catch ( nlohmann::detail::parse_error & )
 			{
 				// TODO: Formatting Errors
 			}
-			catch ( nlohmann::json::type_error &ex )
+			catch ( nlohmann::json::type_error & )
 			{
 				// TODO: Missing Variables 
 			}
