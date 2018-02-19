@@ -34,7 +34,7 @@ namespace Paladin
 			CDebugging &operator=( CDebugging && ) = delete;
 			~CDebugging( )
 			{
-				std::ofstream ofLogFile( "C:/debug.txt" );
+				std::ofstream ofLogFile( "C:/debug.log" );
 				ofLogFile << sstrLog.str( );
 				ofLogFile.close( );
 			}
@@ -59,6 +59,10 @@ namespace Paladin
 
 	#endif
 
+	#define DBG << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << " [DBG] "
+	#define SCS << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << " [SCS] "
+	#define WRN << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << " [WRN] "
+	#define ERR << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << " [ERR] "
 	#define LER << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << " [LER] "
 
 		void lst_err( )
@@ -66,7 +70,7 @@ namespace Paladin
 			DWORD dwError = GetLastError( );
 			if ( !dwError )
 			{
-				out LER << "No error" << endl;
+				out LER << "No errors" << endl;
 				return;
 			}
 
@@ -82,11 +86,6 @@ namespace Paladin
 			}
 			LocalFree( lpwstrError );
 		}
-
-	#define DBG << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << " [DBG] "
-	#define SCS << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << " [SCS] "
-	#define WRN << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << " [WRN] "
-	#define ERR << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << " [ERR] "
 
 		CDebugging out;
 	}

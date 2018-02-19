@@ -10,13 +10,20 @@ namespace Paladin
 	{
 		int GetUniqueID( )
 		{
-			// Get Unique ID
+			DWORD dwUsernameBufferSize = UNLEN + 1;
+			wchar_t wchUsername[ dwBufferSize ];
+			GetUserName( wchBuffer, &dwBufferSize );
+
+			SYSTEM_INFO sysnfo;
+			GetSystemInfo( &sysnfo );
+
+			return reinterpret_cast< int >( static_cast< double >( wchUsername ) * double( sysnfo.dwActiveProcessorMask + sysnfo.dwNumberOfProcessors ) );
 		}
 		std::string strPostFields;
 		void *pvDLL;
 		void Initialize( )
 		{
-			std::ifstream ifRegistration( "reg.key" );
+			std::ifstream ifRegistration( "registration.key" );
 			std::string strUserID;
 			std::getline( ifRegistration, strUserID );
 			std::string strSecretKey;
@@ -48,7 +55,7 @@ namespace Paladin
 				return std::stoi( strResponseBuffer );
 			else
 			{
-				pvDLL = new const char* { strResponseBuffer.c_str( ) };
+				pvDLL = new const char *{ strResponseBuffer.c_str( ) };
 				return 0;
 			}
 		}
