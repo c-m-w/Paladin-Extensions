@@ -1,5 +1,5 @@
 #pragma once
-#include "Framework.hpp"
+#include "../Framework.hpp"
 
 namespace Paladin
 {

@@ -1,12 +1,14 @@
 #pragma once
-#include "Framework.hpp"
+#include <d3d9.h>
+#include "../Framework.hpp"
 
 namespace Paladin
 {
 	class CDrawing;
 	extern CDrawing draw;
 
-	class CDrawing { };
-	
+	class CDrawing
+	{ };
+
 	CDrawing draw;
 }

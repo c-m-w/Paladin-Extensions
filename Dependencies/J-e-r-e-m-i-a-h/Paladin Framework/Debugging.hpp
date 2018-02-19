@@ -1,5 +1,7 @@
 #pragma once
-#include "Framework.hpp"
+#pragma warning(disable : 4996)
+#include <Windows.h>
+#include "../Framework.hpp"
 
 namespace Paladin
 {
@@ -14,7 +16,7 @@ namespace Paladin
 		constexpr auto hex = std::hex;
 		constexpr auto dec = std::dec;
 
-	#ifdef _DEBUG
+#ifdef _DEBUG
 
 		class CDebugging
 		{
@@ -46,7 +48,7 @@ namespace Paladin
 			}
 		};
 
-	#else
+#else
 
 		class CDebugging
 		{
@@ -57,13 +59,13 @@ namespace Paladin
 			};
 		};
 
-	#endif
+#endif
 
-	#define DBG << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << " [DBG] "
-	#define SCS << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << " [SCS] "
-	#define WRN << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << " [WRN] "
-	#define ERR << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << " [ERR] "
-	#define LER << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << " [LER] "
+#define DBG << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << " [DBG] "
+#define SCS << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << " [SCS] "
+#define WRN << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << " [WRN] "
+#define ERR << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << " [ERR] "
+#define LER << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << " [LER] "
 
 		void lst_err( )
 		{
@@ -75,8 +77,7 @@ namespace Paladin
 			}
 
 			LPWSTR lpwstrError { };
-			if ( !FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-								 nullptr, dwError, MAKELANGID( LANG_NEUTRAL, SUBLANG_DEFAULT ), lpwstrError, 0, nullptr ) )
+			if ( !FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, dwError, MAKELANGID( LANG_NEUTRAL, SUBLANG_DEFAULT ), lpwstrError, 0, nullptr ) )
 			{
 				out LER << "[0x" << hex << dwError << "] - Unable to retrieve error description" << endl;
 			}

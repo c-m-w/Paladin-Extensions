@@ -1,21 +1,22 @@
 #pragma once
-#include "Framework.hpp"
+#include <nlohmann/json.hpp>
+#include "../Framework.hpp"
 
 namespace Paladin
 {
-	#define SPACES_PER_TAB 4
-	
+#define SPACES_PER_TAB 4
+
 	class CConfiguration;
 	extern CConfiguration cfg;
 
-	class CConfiguration 
+	class CConfiguration
 	{
 		std::string strPath;
-		
+
 	public:
 		nlohmann::json jsGlobalConfiguration;
 		nlohmann::json jsConfiguration;
-		
+
 		void LoadConfiguration( std::string strConfig )
 		{
 			std::ifstream fFile( strPath + strConfig + std::string( ".json" ) );
@@ -66,7 +67,7 @@ namespace Paladin
 
 			try
 			{
-				LoadConfiguration( jsGlobalConfiguration[ "Default Configuration"].get_ref< nlohmann::json::string_t&>( ) );
+				LoadConfiguration( jsGlobalConfiguration[ "Default Configuration" ].get_ref< nlohmann::json::string_t&>( ) );
 			}
 			catch ( nlohmann::detail::parse_error & )
 			{
