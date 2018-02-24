@@ -561,42 +561,6 @@
 				"Air Stuck": false,
 				"Air Stuck Key": 0
 			}
-		},
-		"Inventory":
-		{
-			"Global":
-			{
-				"Activated": false,
-				"Increase StatTrak On Kill": false
-			},
-			"Counter-Terrorist Inventory":
-			{
-				"Models":
-				{
-					"Gloves": "",
-					"Knife": ""
-				},
-				"Skins":
-				{
-					"Gloves": [ 482, 0.0000000 ],
-					"Knife": [ 482, 0.0000000, 25 ],
-					"Pistol 1": [ "Paladin.rip", 482, 0.0000000, 25, 0, 0, 0 ]
-				}
-			},
-			"Terrorist Inventory":
-			{
-				"Models":
-				{
-					"Gloves": "",
-					"Knife": ""
-				},
-				"Skins":
-				{
-					"Gloves": [ 482, 0.0000000 ],
-					"Knife": [ 482, 0.0000000, 25 ],
-					"Pistol 1": [ "Paladin.rip", 482, 0.0000000, 25, 0, 0, 0 ]
-				}
-			}
 		}
 	},
 	"Settings":
