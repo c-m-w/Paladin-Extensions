@@ -3,7 +3,7 @@
 
 #ifdef ENTRY_AS_WIN
 
-void Main( );
+void OnLaunch( );
 
 namespace Paladin
 {
@@ -18,14 +18,14 @@ int WINAPI WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 {
 	Paladin::hinstWin = hInstance;
 
-	Main( );
-
+	OnLaunch( );
 	return NULL;
 }
 
 #elseifdef ENTRY_AS_DLL
 
-void Main( );
+void OnAttach( );
+void OnDetach( );
 
 namespace Paladin
 {
@@ -34,8 +34,7 @@ namespace Paladin
 
 DWORD WINAPI ThreadProc( _In_ LPVOID lpParameter )
 {
-	Main( );
-
+	OnAttach( );
 	return NULL;
 }
 
@@ -55,16 +54,13 @@ BOOL WINAPI DllMain( _In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID 
 			return TRUE;
 		}
 		case DLL_PROCESS_DETACH:
-		{
+			OnDetach( );
 			return TRUE;
-		}
 		default:
-		{
 			return FALSE;
-		}
 	}
 }
 
-#else
-#warning "No entry method defined. Use '#define ENTRY_AS_WIN' or '#define ENTRY_AS_DLL' when including the framework to use automatic entry creation."
+#elseifndef ENTRY_AS_NONE
+#warning "No entry method defined. Use '#define ENTRY_AS_WIN' or '#define ENTRY_AS_DLL' when including the framework to use automatic entry creation. Use '#define ENTRY_AS_NONE' to disable automatic entry creation."
 #endif
