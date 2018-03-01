@@ -1,5 +1,5 @@
 #pragma once
-#pragma warning(disable : 4996)
+#pragma warning( disable : 4996 )
 #include <Windows.h>
 #include "../Framework.hpp"
 
@@ -16,7 +16,7 @@ namespace Paladin
 		constexpr auto hex = std::hex;
 		constexpr auto dec = std::dec;
 
-#ifdef _DEBUG
+#if defined( _DEBUG )
 
 		class CDebugging
 		{
