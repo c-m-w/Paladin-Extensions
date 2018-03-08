@@ -48,25 +48,6 @@ namespace Paladin
 			}
 		};
 
-#else
-
-		class CDebugging
-		{
-		public:
-			template < typename xDatatype > CDebugging operator<<( const xDatatype & )
-			{
-				return *this;
-			};
-		};
-
-#endif
-
-#define DBG << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << " [DBG] "
-#define SCS << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << " [SCS] "
-#define WRN << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << " [WRN] "
-#define ERR << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << " [ERR] "
-#define LER << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << " [LER] "
-
 		void lst_err( )
 		{
 			DWORD dwError = GetLastError( );
@@ -87,6 +68,28 @@ namespace Paladin
 			}
 			LocalFree( lpwstrError );
 		}
+
+#define DBG << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << " [DBG] "
+#define SCS << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << " [SCS] "
+#define WRN << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << " [WRN] "
+#define ERR << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << " [ERR] "
+#define LER << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << " [LER] "
+
+#else
+
+		class CDebugging
+		{
+		public:
+			template < typename xDatatype > CDebugging operator<<( const xDatatype & )
+			{
+				return *this;
+			};
+		};
+
+#endif
+
+		void lst_err( )
+		{ }
 
 		CDebugging out;
 	}

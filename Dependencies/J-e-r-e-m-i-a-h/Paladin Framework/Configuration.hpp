@@ -19,7 +19,7 @@ namespace Paladin
 
 		void LoadConfiguration( std::string strConfig )
 		{
-			std::ifstream fFile( strPath + strConfig + std::string( ".json" ) );
+			std::ifstream fFile( strPath + strConfig + std::string( XOR( ".json" ) ) );
 
 			try
 			{
@@ -49,9 +49,9 @@ namespace Paladin
 			GetModuleFileName( nullptr, wchTemp, MAX_PATH );
 			char chTemp[ MAX_PATH ];
 			wcstombs( chTemp, wchTemp, MAX_PATH );
-			strPath = std::string( chTemp ).substr( 0, std::string( chTemp ).find_last_of( "/\\" ) + 1 ) + "Configurations\\";
+			strPath = std::string( chTemp ).substr( 0, std::string( chTemp ).find_last_of( XOR( "/\\" ) ) + 1 ) + XOR( "Configurations\\" );
 
-			std::ifstream fFile( strPath + "global.json" );
+			std::ifstream fFile( strPath + XOR( "global.json" ) );
 			try
 			{
 				fFile >> jsGlobalConfiguration;
@@ -67,7 +67,7 @@ namespace Paladin
 
 			try
 			{
-				LoadConfiguration( jsGlobalConfiguration[ "Default Configuration" ].get_ref< nlohmann::json::string_t&>( ) );
+				LoadConfiguration( jsGlobalConfiguration[ XOR( "Default Configuration" ) ].get_ref< nlohmann::json::string_t&>( ) );
 			}
 			catch ( nlohmann::detail::parse_error & )
 			{

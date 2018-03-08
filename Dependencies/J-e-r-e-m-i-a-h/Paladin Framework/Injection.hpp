@@ -6,7 +6,8 @@ namespace Paladin
 	class CInjection;
 	extern CInjection inject;
 
-	class CInjection { };
-	
+	class CInjection
+	{ };
+
 	CInjection inject;
 }

@@ -25,17 +25,17 @@ namespace Paladin
 		std::string strPostFields;
 		void InitializeData( bool bSendDLL )
 		{
-			std::ifstream ifRegistration( "registration.key" );
+			std::ifstream ifRegistration( XOR( "registration.key" ) );
 			std::string strUserID;
 			std::getline( ifRegistration, strUserID );
 			std::string strSecretKey;
 			std::getline( ifRegistration, strSecretKey );
 
 			std::string strEncryptionKey = enc.Hash_SHA3_256( std::to_string( std::chrono::duration_cast< std::chrono::seconds >( std::chrono::system_clock::now( ).time_since_epoch( ) ).count( ) / 10 ).c_str( ) ).substr( 0, 32 );
-			strPostFields = enc.Hash_SHA3_256( enc.Encrypt( "id", strEncryptionKey ) + strEncryptionKey ) + "=" + enc.Encrypt( strUserID, strEncryptionKey )
-				+ "&" + enc.Hash_SHA3_256( enc.Encrypt( "uid", strEncryptionKey ) + strEncryptionKey ) + "=" + enc.Encrypt( std::to_string( GetUniqueID( ) ), strEncryptionKey )
-				+ "&" + enc.Hash_SHA3_256( enc.Encrypt( "sk", strEncryptionKey ) + strEncryptionKey ) + "=" + enc.Encrypt( strSecretKey, strEncryptionKey )
-				+ "&" + enc.Hash_SHA3_256( enc.Encrypt( "dll", strEncryptionKey ) + strEncryptionKey ) + "=" + enc.Encrypt( std::to_string( bSendDLL ), strEncryptionKey );
+			strPostFields = enc.Hash_SHA3_256( enc.Encrypt( XOR( "id" ), strEncryptionKey ) + strEncryptionKey ) + XOR( "=" ) + enc.Encrypt( strUserID, strEncryptionKey )
+				+ XOR( "&" ) + enc.Hash_SHA3_256( enc.Encrypt( XOR( "uid" ), strEncryptionKey ) + strEncryptionKey ) + XOR( "=" ) + enc.Encrypt( std::to_string( GetUniqueID( ) ), strEncryptionKey )
+				+ XOR( "&" ) + enc.Hash_SHA3_256( enc.Encrypt( XOR( "sk" ), strEncryptionKey ) + strEncryptionKey ) + XOR( "=" ) + enc.Encrypt( strSecretKey, strEncryptionKey )
+				+ XOR( "&" ) + enc.Hash_SHA3_256( enc.Encrypt( XOR( "dll" ), strEncryptionKey ) + strEncryptionKey ) + XOR( "=" ) + enc.Encrypt( std::to_string( bSendDLL ), strEncryptionKey );
 		}
 
 		void *pvDLL;
@@ -48,7 +48,7 @@ namespace Paladin
 		{
 			curl_global_init( CURL_GLOBAL_ALL );
 			void *pvCurl = curl_easy_init( );
-			curl_easy_setopt( pvCurl, CURLOPT_URL, "https://paladin.rip/auth.php" );
+			curl_easy_setopt( pvCurl, CURLOPT_URL, XOR( "https://paladin.rip/auth.php" ) );
 			curl_easy_setopt( pvCurl, CURLOPT_POSTFIELDS, strPostFields.c_str( ) );
 
 			curl_easy_setopt( pvCurl, CURLOPT_WRITEFUNCTION, WriteCallback );
