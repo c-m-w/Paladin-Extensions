@@ -3,6 +3,16 @@
 #include <Windows.h>
 #include "../Framework.hpp"
 
+#if defined( _DEBUG )
+enum
+{
+	ASSERTION_FAILED
+};
+#define ASSERT( Expression ) if ( !Expression ) throw ASSERTION_FAILED;
+#else
+#define ASSERT( Expression ) Expression
+#endif
+
 namespace Paladin
 {
 	namespace dbg
@@ -40,8 +50,9 @@ namespace Paladin
 				ofLogFile << sstrLog.str( );
 				ofLogFile.close( );
 			}
-			template < typename xDatatype > CDebugging operator<<( const xDatatype & rhs )
+			template < typename _Datatype > CDebugging operator<<( const _Datatype & rhs )
 			{
+				ASSERT( typeid( _Datatype ) != typeid( wchar_t ) & typeid( _Datatype ) != typeid( std::wstring ) );
 				sstrLog << rhs;
 				std::cout << rhs;
 				return *this;
@@ -80,7 +91,7 @@ namespace Paladin
 		class CDebugging
 		{
 		public:
-			template < typename xDatatype > CDebugging operator<<( const xDatatype & )
+			template < typename _Datatype > CDebugging operator<<( const _Datatype & )
 			{
 				return *this;
 			};

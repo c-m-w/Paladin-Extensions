@@ -45,66 +45,63 @@ namespace Paladin
 	};
 
 	Encryption enc;
-	
-	namespace xor
+
+
+	constexpr int LinearCongruentialGenerator( const int iRounds )
 	{
-		constexpr int LinearCongruentialGenerator( const int iRounds )
+		return 1013904223 + 1664525 * ( iRounds > 0 ? LinearCongruentialGenerator( iRounds - 1 ) : ( __TIME__[ 7 ] - '0' ) * 1 + ( __TIME__[ 6 ] - '0' ) * 10 + ( __TIME__[ 4 ] - '0' ) * 60 + ( __TIME__[ 3 ] - '0' ) * 600 + ( __TIME__[ 1 ] - '0' ) * 3600 + ( __TIME__[ 0 ] - '0' ) * 36000 & 0xFFFFFFFF );
+	}
+
+	template< int... iPack > struct index_list_t
+	{ };
+
+	template< typename _IndexList, int _Right > struct append_t;
+
+	template< int... _Left, int _Right > struct append_t< index_list_t< _Left... >, _Right >
+	{
+		typedef index_list_t< _Left..., _Right > Result;
+	};
+
+	template< int i > struct construct_index_list_t
+	{
+		typedef typename append_t< typename construct_index_list_t< i - 1 >::Result, i - 1 >::Result Result;
+	};
+
+	template< > struct construct_index_list_t< 0 >
+	{
+		using Result = index_list_t< >;
+	};
+
+	template< typename _chType, typename _IndexList > class CXorString;
+
+	template< typename _chType, int... iIndex > class CXorString< _chType, index_list_t< iIndex... > >
+	{
+		_chType _chValue[ sizeof...( iIndex )+1 ];
+
+		static const _chType XOR_KEY = _chType( LinearCongruentialGenerator( 10 ) % ( 0xFFFF + 1 ) );
+
+		constexpr _chType EncryptCharacter( const _chType _chCharacter, const int iIndexBuffer )
 		{
-			return 1013904223 + 1664525 * ( iRounds > 0 ? LinearCongruentialGenerator( iRounds - 1 ) : ( __TIME__[ 7 ] - '0' ) * 1 + ( __TIME__[ 6 ] - '0' ) * 10 + ( __TIME__[ 4 ] - '0' ) * 60 + ( __TIME__[ 3 ] - '0' ) * 600 + ( __TIME__[ 1 ] - '0' ) * 3600 + ( __TIME__[ 0 ] - '0' ) * 36000 & 0xFFFFFFFF );
+			return _chCharacter ^ ( XOR_KEY + iIndexBuffer );
 		}
 
-		template< int... iPack > struct index_list_t
-		{ };
+	public:
+		__forceinline constexpr explicit CXorString( const _chType * const _chString ): _chValue { EncryptCharacter( _chString[ iIndex ], iIndex )... }
+		{ }
 
-		template< typename _IndexList, int _Right > struct append_t;
-
-		template< int... _Left, int _Right > struct append_t< index_list_t< _Left... >, _Right >
+		const _chType *Decrypt( )
 		{
-			typedef index_list_t< _Left..., _Right > Result;
-		};
-
-		template< int i > struct construct_index_list_t
-		{
-			typedef typename append_t< typename construct_index_list_t< i - 1 >::Result, i - 1 >::Result Result;
-		};
-
-		template< > struct construct_index_list_t< 0 >
-		{
-			using Result = index_list_t< >;
-		};
-
-		template< typename _chType, typename _IndexList > class CXorString;
-
-		template< typename _chType, int... iIndex > class CXorString< _chType, index_list_t< iIndex... > >
-		{
-			_chType _chValue[ sizeof...( iIndex )+1 ];
-
-			static const _chType XOR_KEY = _chType( LinearCongruentialGenerator( 10 ) % ( 0xFFFF + 1 ) );
-
-			constexpr _chType EncryptCharacter( const _chType _chCharacter, const int iIndexBuffer )
+			for ( unsigned u = 0; u < sizeof...( iIndex ); u++ )
 			{
-				return _chCharacter ^ ( XOR_KEY + iIndexBuffer );
+				_chValue[ u ] = _chValue[ u ] ^ ( XOR_KEY + u );
 			}
 
-		public:
-			__forceinline constexpr explicit CXorString( const _chType * const _chString ): _chValue { EncryptCharacter( _chString[ iIndex ], iIndex )... }
-			{ }
+			_chValue[ sizeof...( iIndex ) ] = static_cast< _chType >( 0 );
 
-			const _chType *Decrypt( )
-			{
-				for ( unsigned u = 0; u < sizeof...( iIndex ); u++ )
-				{
-					_chValue[ u ] = _chValue[ u ] ^ ( XOR_KEY + u );
-				}
+			return _chValue;
+		}
+	};
 
-				_chValue[ sizeof...( iIndex ) ] = static_cast< _chType >( 0 );
-
-				return _chValue;
-			}
-		};
-
-#define XOR( String ) ( Paladin::xor::CXorString< char, Paladin::xor::construct_index_list_t< sizeof( String ) - 1 >::Result >( String ).Decrypt( ) )
-#define XORW( String ) ( Paladin::xor::CXorString< wchar_t, Paladin::xor::construct_index_list_t< ( sizeof( String ) - 1 ) / 2 >::Result >( String ).Decrypt( ) )
-
-	}
+#define XOR( String ) ( Paladin::CXorString< char, Paladin::construct_index_list_t< sizeof( String ) - 1 >::Result >( String ).Decrypt( ) )
+#define XORW( String ) ( Paladin::CXorString< wchar_t, Paladin::construct_index_list_t< ( sizeof( String ) - 1 ) / 2 >::Result >( String ).Decrypt( ) )
 }
