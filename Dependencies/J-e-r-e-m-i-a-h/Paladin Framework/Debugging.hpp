@@ -52,9 +52,26 @@ namespace Paladin
 			}
 			template < typename _Datatype > CDebugging operator<<( const _Datatype & rhs )
 			{
-				ASSERT( typeid( _Datatype ) != typeid( wchar_t ) & typeid( _Datatype ) != typeid( std::wstring ) );
-				sstrLog << rhs;
-				std::cout << rhs;
+				if ( typeid( _Datatype ) == typeid( wchar_t ) || typeid( _Datatype ) == typeid( wchar_t[ ] ) || typeid( _Datatype ) == typeid( wchar_t * ) )
+				{
+					std::wcout << rhs;
+					std::wstring wstrBuffer = rhs;
+					std::string strBuffer;
+					strBuffer.assign( wstrBuffer.begin( ), wstrBuffer.end( ) );
+					sstrLog << strBuffer;
+				}
+				else if ( typeid( _Datatype ) == typeid( std::wstring ) )
+				{
+					std::wcout << rhs;
+					std::string strBuffer;
+					strBuffer.assign( rhs.begin( ), rhs.end( ) );
+					sstrLog << strBuffer;
+				}
+				else
+				{
+					std::cout << rhs;
+					sstrLog << rhs;
+				}
 				return *this;
 			}
 		};
