@@ -47,9 +47,9 @@ namespace Paladin
 	Encryption enc;
 
 
-	constexpr int LinearCongruentialGenerator( const int iRounds )
+	constexpr long long LinearCongruentialGenerator( const int iRounds )
 	{
-		return 1013904223 + 1664525 * ( iRounds > 0 ? LinearCongruentialGenerator( iRounds - 1 ) : ( __TIME__[ 7 ] - '0' ) * 1 + ( __TIME__[ 6 ] - '0' ) * 10 + ( __TIME__[ 4 ] - '0' ) * 60 + ( __TIME__[ 3 ] - '0' ) * 600 + ( __TIME__[ 1 ] - '0' ) * 3600 + ( __TIME__[ 0 ] - '0' ) * 36000 & 0xFFFFFFFF );
+		return 1013904223ll + 1664525ll * long long( iRounds > 0 ? LinearCongruentialGenerator( iRounds - 1 ) : ( __TIME__[ 7 ] - '0' ) * 1 + ( __TIME__[ 6 ] - '0' ) * 10 + ( __TIME__[ 4 ] - '0' ) * 60 + ( __TIME__[ 3 ] - '0' ) * 600 + ( __TIME__[ 1 ] - '0' ) * 3600 + ( __TIME__[ 0 ] - '0' ) * 36000 & 0xFFFFFFFF );
 	}
 
 	template< int... iPack > struct index_list_t

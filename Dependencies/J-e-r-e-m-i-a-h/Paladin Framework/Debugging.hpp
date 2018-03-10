@@ -4,11 +4,9 @@
 #include "../Framework.hpp"
 
 #if defined( _DEBUG )
-enum
-{
-	ASSERTION_FAILED
-};
-#define ASSERT( Expression ) if ( !Expression ) throw ASSERTION_FAILED;
+class AssertionError: public std::exception
+{ };
+#define ASSERT( Expression ) if ( !Expression ) throw AssertionError( )
 #else
 #define ASSERT( Expression ) Expression
 #endif
@@ -52,29 +50,17 @@ namespace Paladin
 			}
 			template < typename _Datatype > CDebugging operator<<( const _Datatype & rhs )
 			{
-				if ( typeid( _Datatype ) == typeid( wchar_t ) || typeid( _Datatype ) == typeid( wchar_t[ ] ) || typeid( _Datatype ) == typeid( wchar_t * ) )
-				{
-					std::wcout << rhs;
-					std::wstring wstrBuffer = rhs;
-					std::string strBuffer;
-					strBuffer.assign( wstrBuffer.begin( ), wstrBuffer.end( ) );
-					sstrLog << strBuffer;
-				}
-				else if ( typeid( _Datatype ) == typeid( std::wstring ) )
-				{
-					std::wcout << rhs;
-					std::string strBuffer;
-					strBuffer.assign( rhs.begin( ), rhs.end( ) );
-					sstrLog << strBuffer;
-				}
-				else
-				{
-					std::cout << rhs;
-					sstrLog << rhs;
-				}
+				std::cout << rhs;
+				sstrLog << rhs;
 				return *this;
 			}
 		};
+
+#define DBG << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << " [DBG] "
+#define SCS << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << " [SCS] "
+#define WRN << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << " [WRN] "
+#define ERR << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << " [ERR] "
+#define LER << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << " [LER] "
 
 		void lst_err( )
 		{
@@ -97,12 +83,6 @@ namespace Paladin
 			LocalFree( lpwstrError );
 		}
 
-#define DBG << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << " [DBG] "
-#define SCS << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << " [SCS] "
-#define WRN << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << " [WRN] "
-#define ERR << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << " [ERR] "
-#define LER << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << " [LER] "
-
 #else
 
 		class CDebugging
@@ -114,10 +94,10 @@ namespace Paladin
 			};
 		};
 
-#endif
-
 		void lst_err( )
 		{ }
+
+#endif
 
 		CDebugging out;
 	}
