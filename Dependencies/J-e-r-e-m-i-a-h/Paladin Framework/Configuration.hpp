@@ -67,7 +67,7 @@ namespace Paladin
 
 			try
 			{
-				LoadConfiguration( jsGlobalConfiguration[ XOR( "Default Configuration" ) ].get_ref< nlohmann::json::string_t& >( ) );
+				LoadConfiguration( jsGlobalConfiguration[ XOR( "Default Configuration" ) ].get_ref< nlohmann::json::string_t & >( ) );
 			}
 			catch ( nlohmann::detail::parse_error & )
 			{

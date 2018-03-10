@@ -47,9 +47,9 @@ namespace Paladin
 	Encryption enc;
 
 
-	constexpr long long LinearCongruentialGenerator( const int iRounds )
+	constexpr int LinearCongruentialGenerator( const int iRounds )
 	{
-		return 1013904223ll + 1664525ll * long long( iRounds > 0 ? LinearCongruentialGenerator( iRounds - 1 ) : ( __TIME__[ 7 ] - '0' ) * 1 + ( __TIME__[ 6 ] - '0' ) * 10 + ( __TIME__[ 4 ] - '0' ) * 60 + ( __TIME__[ 3 ] - '0' ) * 600 + ( __TIME__[ 1 ] - '0' ) * 3600 + ( __TIME__[ 0 ] - '0' ) * 36000 & 0xFFFFFFFF );
+		return 1013904223 + 1664525 * iRounds > 0 ? LinearCongruentialGenerator( iRounds - 1 ) : ( __TIME__[ 7 ] - '0' ) * 1 + ( __TIME__[ 6 ] - '0' ) * 10 + ( __TIME__[ 4 ] - '0' ) * 60 + ( __TIME__[ 3 ] - '0' ) * 600 + ( __TIME__[ 1 ] - '0' ) * 3600 + ( __TIME__[ 0 ] - '0' ) * 36000 & 0xFFFFFFFF;
 	}
 
 	template< int... iPack > struct index_list_t
@@ -76,9 +76,9 @@ namespace Paladin
 
 	template< typename _chType, int... iIndex > class CXorString< _chType, index_list_t< iIndex... > >
 	{
-		_chType _chValue[ sizeof...( iIndex )+1 ];
+		_chType _chValue[ sizeof...( iIndex ) + 1 ];
 
-		static const _chType XOR_KEY = _chType( LinearCongruentialGenerator( 10 ) % ( 0xFFFF + 1 ) );
+		static const _chType XOR_KEY = _chType( LinearCongruentialGenerator( 1 ) % 0x10000 );
 
 		constexpr _chType EncryptCharacter( const _chType _chCharacter, const int iIndexBuffer )
 		{
@@ -92,9 +92,7 @@ namespace Paladin
 		const _chType *Decrypt( )
 		{
 			for ( unsigned u = 0; u < sizeof...( iIndex ); u++ )
-			{
 				_chValue[ u ] = _chValue[ u ] ^ ( XOR_KEY + u );
-			}
 
 			_chValue[ sizeof...( iIndex ) ] = static_cast< _chType >( 0 );
 

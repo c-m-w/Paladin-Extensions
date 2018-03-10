@@ -3,20 +3,20 @@
 #include <Windows.h>
 #include "../Framework.hpp"
 
-#if defined( _DEBUG )
-class AssertionError: public std::exception
-{ };
-#define ASSERT( Expression ) if ( !Expression ) throw AssertionError( )
-#else
-#define ASSERT( Expression ) Expression
-#endif
-
 namespace Paladin
 {
 	namespace dbg
 	{
 		class CDebugging;
 		extern CDebugging out;
+
+#if defined( _DEBUG )
+		class AssertionError: public std::exception
+		{ };
+#define ASSERT( Expression ) if ( !Expression ) throw Paladin::dbg::AssertionError( )
+#else
+#define ASSERT( Expression ) Expression
+#endif
 
 		constexpr auto endl = '\n';
 		constexpr auto tab = '\t';
@@ -73,13 +73,9 @@ namespace Paladin
 
 			LPWSTR lpwstrError { };
 			if ( !FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, dwError, MAKELANGID( LANG_NEUTRAL, SUBLANG_DEFAULT ), lpwstrError, 0, nullptr ) )
-			{
 				out LER << "[0x" << hex << dwError << "] - Unable to retrieve error description" << endl;
-			}
 			else
-			{
 				out LER << "[0x" << hex << dwError << "] - " << lpwstrError << endl;
-			}
 			LocalFree( lpwstrError );
 		}
 
