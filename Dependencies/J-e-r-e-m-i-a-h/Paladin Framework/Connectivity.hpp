@@ -23,7 +23,7 @@ namespace Paladin
 		}
 
 		std::string strPostFields;
-		void InitializeData( bool bSendDLL )
+		void InitializeData( bool bSendDLL, std::string strExtension ) // bSendDLL will determine whether you'd like to send the DLL or just DLL initialization information (e.g. signatures)
 		{
 			std::ifstream ifRegistration( XOR( "registration.key" ) );
 			std::string strUserID;
@@ -32,10 +32,24 @@ namespace Paladin
 			std::getline( ifRegistration, strSecretKey );
 
 			std::string strEncryptionKey = enc.Hash_SHA3_256( std::to_string( std::chrono::duration_cast< std::chrono::seconds >( std::chrono::system_clock::now( ).time_since_epoch( ) ).count( ) / 10 ).c_str( ) ).substr( 0, 32 );
-			strPostFields = enc.Hash_SHA3_256( enc.Encrypt( XOR( "id" ), strEncryptionKey ) + strEncryptionKey ) + XOR( "=" ) + enc.Encrypt( strUserID, strEncryptionKey )
-				+ XOR( "&" ) + enc.Hash_SHA3_256( enc.Encrypt( XOR( "uid" ), strEncryptionKey ) + strEncryptionKey ) + XOR( "=" ) + enc.Encrypt( std::to_string( GetUniqueID( ) ), strEncryptionKey )
-				+ XOR( "&" ) + enc.Hash_SHA3_256( enc.Encrypt( XOR( "sk" ), strEncryptionKey ) + strEncryptionKey ) + XOR( "=" ) + enc.Encrypt( strSecretKey, strEncryptionKey )
-				+ XOR( "&" ) + enc.Hash_SHA3_256( enc.Encrypt( XOR( "dll" ), strEncryptionKey ) + strEncryptionKey ) + XOR( "=" ) + enc.Encrypt( std::to_string( bSendDLL ), strEncryptionKey );
+			strPostFields = enc.Hash_SHA3_256( enc.Encrypt( XOR( "id" ), strEncryptionKey ) + strEncryptionKey ) + XOR( "=" ) + enc.Encrypt( strUserID, strEncryptionKey ) // user_id
+							+ XOR( "&" ) + enc.Hash_SHA3_256( enc.Encrypt( XOR( "uid" ), strEncryptionKey ) + strEncryptionKey ) + XOR( "=" ) + enc.Encrypt( std::to_string( GetUniqueID( ) ), strEncryptionKey ) // unique_id
+							+ XOR( "&" ) + enc.Hash_SHA3_256( enc.Encrypt( XOR( "sk" ), strEncryptionKey ) + strEncryptionKey ) + XOR( "=" ) + enc.Encrypt( strSecretKey, strEncryptionKey ) // secret_key
+							+ XOR( "&" ) + enc.Hash_SHA3_256( enc.Encrypt( XOR( "dll" ), strEncryptionKey ) + strEncryptionKey ) + XOR( "=" ) + enc.Encrypt( std::to_string( bSendDLL ), strEncryptionKey ) // bool if requested to send dll
+							+ XOR( "&" ) + enc.Hash_SHA3_256( enc.Encrypt( XOR( "ext" ), strEncryptionKey ) + strEncryptionKey ) + XOR( "=" ) + enc.Encrypt( strExtension, strEncryptionKey ); // requested extension
+
+		}
+		void InitializeData( ) // used only for verification of authenticity
+		{
+			std::ifstream ifRegistration( XOR( "registration.key" ) );
+			std::string strUserID;
+			std::getline( ifRegistration, strUserID );
+			std::string strSecretKey;
+			std::getline( ifRegistration, strSecretKey );
+
+			strPostFields = enc.Hash_SHA3_256( enc.Encrypt( XOR( "id" ), strEncryptionKey ) + strEncryptionKey ) + XOR( "=" ) + enc.Encrypt( strUserID, strEncryptionKey ) // user_id
+							+ XOR( "&" ) + enc.Hash_SHA3_256( enc.Encrypt( XOR( "uid" ), strEncryptionKey ) + strEncryptionKey ) + XOR( "=" ) + enc.Encrypt( std::to_string( GetUniqueID( ) ), strEncryptionKey ) // unique_id
+							+ XOR( "&" ) + enc.Hash_SHA3_256( enc.Encrypt( XOR( "sk" ), strEncryptionKey ) + strEncryptionKey ) + XOR( "=" ) + enc.Encrypt( strSecretKey, strEncryptionKey ) // secret_key
 		}
 
 		void *pvDLL;
@@ -66,9 +80,14 @@ namespace Paladin
 		}
 
 	public:
-		int Authenticate( bool bSendDLL )
+		int Authenticate( bool bSendDLL, std::string strExtension )
 		{
-			InitializeData( bSendDLL );
+			InitializeData( bSendDLL, std::string strExtension );
+			return ConnectToServer( );
+		}
+		int Authenticate( ) // used only for heartbeat
+		{
+			InitializeData( );
 			return ConnectToServer( );
 		}
 		bool Heartbeat( )
@@ -79,7 +98,7 @@ namespace Paladin
 			{
 				do
 				{
-					if ( con.Authenticate( false ) != 0 )
+					if ( con.Authenticate( ) != 0 )
 					{
 						bReturn = true;
 						std::terminate( );
@@ -92,7 +111,7 @@ namespace Paladin
 
 			do
 			{
-				if ( Authenticate( false ) != 0 )
+				if ( Authenticate( ) != 0 )
 				{
 					bReturn = true;
 					std::terminate( );
