@@ -2,7 +2,7 @@
 
 // Todo: xf_loader_atmp logging
 // Todo: DLL Streaming
-// Todo: 
+// Todo: DLL Compilation (separate website)
 
 // Error keys
 $return_keys 		= array( "Establishing Failure" => 0, // Couldn't connect / set up database info
