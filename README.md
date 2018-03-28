@@ -10,8 +10,7 @@
    - Entrance page on visiting
 
 ## Development Objectives
-1. Jeremy finishes GUI (if defined, Standalone/gamehooking)
-2. Jeremy, Mike & John finish copy protection functionality (HWID, XOR strings testing, Polymorphic junk code, Integrity checks, Heartbeat, Byte-patch consideration, etc.)
+2. Jeremy, Mike & John finish copy protection functionality ( Polymorphic junk code, Heartbeat, Byte-patch consideration, etc.)
 3. Mike creates manual map injector & driver
 4. Jeremy creates unique download method & stream DLL/cheat securely & protected (after compiled per person with junk code)
 5. Jeremy, Mike, Cole, & Bean create SDK/base for CSGO cheat (config, pattern scanning, etc.)
