@@ -1,24 +1,11 @@
 <?php
 
+require 'include.php';
+
 // Todo: xf_loader_atmp logging
 // Todo: DLL Streaming
 // Todo: DLL Compilation (separate website)
 // Todo: Sanitize input
-
-// Error keys
-$return_keys    = array( "Establishing Failure" => 0, // Couldn't connect / set up database info
-                            "Banned" => 1, // banned login attempt
-                            "Identity Mismatch" => 2, // secret_key / unique_id mismatch
-                            "Inactive Premium" => 3, // premium time exceeded
-                            "Staff Success" => 8, // staff member logged in
-                            "Success" => 9 );
-
-// Access database as XenForo
-$server_name        = "localhost";
-$database_username  = "palatfef_admin";
-$database_password  = "";
-$database_name      = "palatfef_xenforo";
-$sql_connection     = new mysqli( $server_name, $database_username, $database_password, $database_name );
 
 // Get info from database
 // Info retrieved...
@@ -32,13 +19,13 @@ $sql_connection     = new mysqli( $server_name, $database_username, $database_pa
 //  xf_loader_atmp:         *
 
 $sqlcommands    = array( "xf_user"
-                                => 'SELECT secondary_group_ids, is_banned, is_staff, secret_key FROM xf_user WHERE user_id = "' . $_POST[ "id" ] . '"',
+                                => 'SELECT secondary_group_ids, is_banned, is_staff, secret_key FROM xf_user WHERE user_id = "' . SanitizeInput( $_POST[ "id" ] ) . '"',
                             "xf_user_upgrade_active"
-                                => 'SELECT end_date FROM xf_user_upgrade_active WHERE user_id = "' . $_POST[ "id" ] . '"',
+                                => 'SELECT end_date FROM xf_user_upgrade_active WHERE user_id = "' . SanitizeInput( $_POST[ "id" ] ) . '"',
                             "xf_rm_resource"
-                                => 'SELECT current_version_id FROM xf_rm_resource WHERE title = "' . $_POST[ "ext" ] . '"',
+                                => 'SELECT current_version_id FROM xf_rm_resource WHERE title = "' . SanitizeInput( $_POST[ "ext" ] ) . '"',
                             "xf_user_field_value"
-                                => 'SELECT field_value FROM xf_user_field_value WHERE field_id = "unique_id", user_id = "' . $_POST[ "id" ] . '"',
+                                => 'SELECT field_value FROM xf_user_field_value WHERE field_id = "unique_id", user_id = "' . SanitizeInput( $_POST[ "id" ] ) . '"',
                             "xf_loader_atmp"
                                 => 'SELECT * FROM xf_loader_atmp');
 $results        = array( "xf_user"
@@ -52,17 +39,17 @@ $results        = array( "xf_user"
                             "xf_loader_atmp"
                                 => $sql_connection->query( $sqlcommands[ "xf_loader_atmp" ] ) );
 
-if ( $results[ "xf_user" ]->connect_error OR
-        $results[ "xf_user_upgrade_active" ]->connect_error OR
-        $results[ "xf_rm_resource" ]->connect_error OR
-        $results[ "xf_user_field_value" ]->connect_error OR
+if ( $results[ "xf_user" ]->connect_error ||
+        $results[ "xf_user_upgrade_active" ]->connect_error ||
+        $results[ "xf_rm_resource" ]->connect_error ||
+        $results[ "xf_user_field_value" ]->connect_error ||
         $results[ "xf_loader_atmp" ]->connect_error )
-    die( $return_keys[ "Establishing Failure" ] );
+    die( ReturnKeys[ "Establishing Failure" ] );
 
-if ( $results[ "xf_user" ]->num_rows > 0 AND
-        $results[ "xf_user_upgrade_active" ]->num_rows > 0 AND
-        $results[ "xf_rm_resource" ]->num_rows > 0 AND
-        $results[ "xf_user_field_value" ]->num_rows > 0 AND
+if ( $results[ "xf_user" ]->num_rows > 0 &&
+        $results[ "xf_user_upgrade_active" ]->num_rows > 0 &&
+        $results[ "xf_rm_resource" ]->num_rows > 0 &&
+        $results[ "xf_user_field_value" ]->num_rows > 0 &&
         $results[ "xf_loader_atmp" ]->num_rows > 0 )
 {
     $rows       = array( "xf_user"
@@ -77,26 +64,27 @@ if ( $results[ "xf_user" ]->num_rows > 0 AND
                               => $results[ "xf_loader_atmp" ]->fetch_assoc( ) );
 
     if ( $rows[ "xf_user" ][ "is_banned" ] == 1 )
-        die( $return_keys[ "Banned" ] );
+        die( ReturnKeys[ "Banned" ] );
 
-    if ( $rows[ "xf_user" ][ "secondary_group_ids" ] == 5 AND
-            ( $rows[ "xf_user_upgrade_active" ][ "end_date" ] > time( ) OR
+    if ( $rows[ "xf_user" ][ "secondary_group_ids" ] == 5 &&
+            ( $rows[ "xf_user_upgrade_active" ][ "end_date" ] > time( ) ||
                 $rows[ "xf_user_upgrade_active" ][ "end_date" ] == 0 ) )
     {
-        if ( $rows[ "xf_user" ][ "secret_key" ] == $_POST[ "sk" ] )
+        if ( $rows[ "xf_user" ][ "secret_key" ] == SanitizeInput( $_POST[ "sk" ] ) )
         {
-            if ( $rows[ "xf_user_field_value" ][ "field_value" ] == $_POST[ "uid" ] )
+            if ( $rows[ "xf_user_field_value" ][ "field_value" ] == SanitizeInput( $_POST[ "uid" ] ) )
             {
-                if ( $rows[ "xf_user" ][ "is_staff" ] == 1 ) // if ( $_POST[ "dll" ] )
-                    die( $return_keys[ "Staff Success" ] ); // { send = compile_dll( $_POST[ "ext" ] ); }
-                die( $return_keys[ "Success" ] );
+				StartSession( );
+                if ( $rows[ "xf_user" ][ "is_staff" ] == 1 ) // if ( SanitizeInput( $_POST[ "dll" ] ) )
+                    die( ReturnKeys[ "Staff Success" ] ); // { send = compile_dll( SanitizeInput( $_POST[ "ext" ] ) ); }
+                die( ReturnKeys[ "Success" ] );
             }
-            die( $return_keys[ "Identity Mismatch" ] );
+            die( ReturnKeys[ "Identity Mismatch" ] );
         }
-        die( $return_keys[ "Identity Mismatch" ] );
+        die( ReturnKeys[ "Identity Mismatch" ] );
     }
-    die( $return_keys[ "Inactive Premium" ] );
+    die( ReturnKeys[ "Inactive Premium" ] );
 }
-die( $return_keys[ "Establishing Failure" ] );
+die( ReturnKeys[ "Establishing Failure" ] );
 
 ?>
