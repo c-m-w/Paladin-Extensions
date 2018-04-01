@@ -58,7 +58,7 @@
 		return $returninfo;
 	}
 	
-	function StartSession( $enckey, $iv )
+	function BeginSession( $enckey, $iv )
 	{
 		session_start( );
 		$_SESSION[ "enc_key" ] = $enckey;
@@ -69,6 +69,12 @@
 	define( "GameID", array( "CS: GO" => 2, "PUBG" => 3 ) );
 	define( "GameInfo", array( 2 => ExtensionDirectory . "csgo.info", 3 => ExtensionDirectory . "pubg.info" ) );
 	define( "GameCheat", array( 2=> ExtensionDirectory . "csgo.dll", 3 => ExtensionDirectory . "pubg.dll" ) );
+	
+	function CompileCheat( $game_id )
+	{
+		// -o 'output file' 'file to compile'
+		exec( "g++ -o ".GameCheat[ $game_id ]." **FILE TO COMPILE**" );
+	}
 	
 	function SendCheat( $game_id )
 	{

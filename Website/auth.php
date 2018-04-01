@@ -83,7 +83,7 @@ if ( $results[ "xf_user" ]->num_rows > 0 &&
         {
             if ( $rows[ "xf_user_field_value" ][ "field_value" ] == SanitizeInput( Decrypt( $_POST[ $identifiers[ "uid" ] ] ) ) )
             {
-				StartSession( );
+				BeginSession( Keys[ "enc_key" ], Keys[ "iv" ] );
                 if ( $rows[ "xf_user" ][ "is_staff" ] == 1 ) // if ( SanitizeInput( Decrypt( $_POST[ "dll" ] ) ) )
                     die( ReturnKeys[ "Staff Success" ] ); // { send = compile_dll( SanitizeInput( Decrypt( $_POST[ "ext" ] ) ) ); }
                 die( ReturnKeys[ "Success" ] );
