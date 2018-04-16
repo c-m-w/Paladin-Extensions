@@ -25,7 +25,7 @@ namespace Paladin
 		std::string Hash_SHA3_256( std::string szPlainText )
 		{
 			BYTE bOutput[ CryptoPP::SHA3_256::DIGESTSIZE ];
-			CryptoPP::SHA3_256( ).CalculateDigest( bOutput, reinterpret_cast< unsigned char * >( const_cast< char * >( szPlainText.c_str( ) ) ), szPlainText.length( ) );
+			CryptoPP::SHA3_256( ).CalculateDigest( bOutput, reinterpret_cast< BYTE * >( const_cast< char * >( szPlainText.c_str( ) ) ), szPlainText.length( ) );
 
 			CryptoPP::HexEncoder hHash;
 			std::string strOutput;
@@ -38,7 +38,7 @@ namespace Paladin
 		{
 			std::string strInitializationVector = strKey.substr( 0, 16 );
 			std::string strOutput;
-			CryptoPP::CBC_Mode< CryptoPP::AES >::Encryption encEncryption( reinterpret_cast< unsigned char * >( const_cast< char * >( strKey.c_str( ) ) ), strKey.length( ), reinterpret_cast< unsigned char * >( const_cast< char * >( strInitializationVector.c_str( ) ) ) );
+			CryptoPP::CBC_Mode< CryptoPP::AES >::Encryption encEncryption( reinterpret_cast< BYTE * >( const_cast< char * >( strKey.c_str( ) ) ), strKey.length( ), reinterpret_cast< BYTE * >( const_cast< char * >( strInitializationVector.c_str( ) ) ) );
 			CryptoPP::StringSource( strPlainText, true, new CryptoPP::StreamTransformationFilter( encEncryption, new CryptoPP::Base64Encoder( new CryptoPP::StringSink( strOutput ), false ) ) );
 			return Replace( strOutput.substr( 0, strOutput.length( ) - 2 ), '+', ' ' );
 		}

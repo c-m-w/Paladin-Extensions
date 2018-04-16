@@ -19,11 +19,10 @@ namespace Paladin
 #endif
 
 		constexpr auto tab = '\t';
-		constexpr auto newl = '\n';
+		constexpr auto endl = '\n';
 		constexpr auto quote = '\"';
 		constexpr auto hex = std::hex;
 		constexpr auto dec = std::dec;
-		constexpr auto endl = std::endl;
 
 #if defined( _DEBUG )
 
