@@ -18,11 +18,12 @@ namespace Paladin
 #define ASSERT( Expression ) Expression
 #endif
 
-		constexpr auto endl = '\n';
 		constexpr auto tab = '\t';
+		constexpr auto newl = '\n';
 		constexpr auto quote = '\"';
 		constexpr auto hex = std::hex;
 		constexpr auto dec = std::dec;
+		constexpr auto endl = std::endl;
 
 #if defined( _DEBUG )
 
