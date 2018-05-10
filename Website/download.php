@@ -2,7 +2,7 @@
 require 'include.php';
 
 session_start( );
-if( isset( $_SESSION[ "enc_key" ] ) == FALSE || isset( $_SESSION[ "iv" ] ) || isset( $_SESSION[ "game_id" ] ) )
+if( !isset( $_SESSION[ "enc_key" ] ) || !isset( $_SESSION[ "iv" ] ) )
 	die( ReturnKeys[ "Establishing Failure" ] );
 else
 {
