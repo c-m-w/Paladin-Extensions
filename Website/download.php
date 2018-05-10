@@ -11,7 +11,7 @@ else
 	$game_id = SanitizeInput( Decrypt( $_POST[ $game_id_id ] ) );
 	$file = SanitizeInput( Decrypt( $_POST[ $file_id ] ) );
 	
-	if ( $file == 0 )
+	if ( !$file )
 	{
 		CompileCheat( $game_id );
 		SendCheat( $game_id );
@@ -21,7 +21,7 @@ else
 	else
 	{
 		session_destroy( );
-		die( $ReturnKeys[ "Establishing Failure" ] );
+		die( ReturnKeys[ "Establishing Failure" ] );
 	}
 }
 ?>
