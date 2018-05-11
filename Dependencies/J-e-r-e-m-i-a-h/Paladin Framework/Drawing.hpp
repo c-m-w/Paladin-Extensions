@@ -184,7 +184,7 @@ void CDirectXDrawing::InitializeDevice()
 	table[NK_COLOR_TOGGLE] = nk_rgba(42, 44, 48, 255);
 	table[NK_COLOR_TOGGLE_HOVER] = nk_rgba(42, 44, 48, 255);
 	table[NK_COLOR_TOGGLE_CURSOR] = nk_rgba(48, 83, 111, 255);
-	table[NK_COLOR_SELECT] = nk_rgba(57, 67, 61, 255);
+	table[NK_COLOR_SELECT] = nk_rgba(82, 82, 82, 255); // Updated 5/9/18
 	table[NK_COLOR_SELECT_ACTIVE] = nk_rgba(48, 83, 111, 255);
 	table[NK_COLOR_SLIDER] = nk_rgba(42, 44, 48, 255);
 	table[NK_COLOR_SLIDER_CURSOR] = nk_rgba(53, 88, 116, 255);
