@@ -35,7 +35,7 @@ namespace Paladin
 
 		bool bInitializedConnection = false;
 		std::string strPostFields;
-		constexpr char *szCOOKIEJAR = "paladin.jar";
+		constexpr char *szCOOKIEJAR = "session.jar";
 		
 		void InitializeData( bool bSendDLL, int iExtension ) // bSendDLL will determine whether you'd like to send the DLL or just DLL initialization information (e.g. signatures)
 		{
