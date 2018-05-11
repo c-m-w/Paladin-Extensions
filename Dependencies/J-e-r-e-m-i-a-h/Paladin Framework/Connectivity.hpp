@@ -33,7 +33,10 @@ namespace Paladin
 			return int( wchUsername ) * sysnfo.dwActiveProcessorMask + sysnfo.dwNumberOfProcessors;
 		}
 
+		bool bInitializedConnection = false;
 		std::string strPostFields;
+		constexpr char *szCOOKIEJAR = "paladin.jar";
+		
 		void InitializeData( bool bSendDLL, int iExtension ) // bSendDLL will determine whether you'd like to send the DLL or just DLL initialization information (e.g. signatures)
 		{
 			std::ifstream ifRegistration( XOR( "registration.key" ) );
@@ -69,18 +72,49 @@ namespace Paladin
 			static_cast< std::string * >( pvUserP )->append( static_cast< char * >( pvContent ), uSize * uNumOfMembers );
 			return uSize * uNumOfMembers;
 		};
-		int ConnectToServer( )
+		
+		void InitializeConnection( )
 		{
 			curl_global_init( CURL_GLOBAL_ALL );
 			void *pvCurl = curl_easy_init( );
+		}
+		
+		void ConnectToServer( )
+		{
+			if ( !bInitializedConnection )
+			{
+				InitializeConnection( );
+				bInitializedConnection = true;
+			}
+			
 			curl_easy_setopt( pvCurl, CURLOPT_URL, XOR( "https://paladin.rip/auth.php" ) );
+			curl_easy_setopt( pvCurl, CURLOPT_POST, true );
 			curl_easy_setopt( pvCurl, CURLOPT_POSTFIELDS, strPostFields.c_str( ) );
+			
+			curl_easy_setopt( pvCurl, CURLOPT_COOKIESESSION, true );
+			curl_easy_setopt( pvCurl, CURLOPT_COOKIEFILE, szCOOKIEJAR );
+			curl_easy_setopt( pvCurl, CURLOPT_COOKIEJAR, szCOOKIEJAR );
 
 			curl_easy_setopt( pvCurl, CURLOPT_WRITEFUNCTION, WriteCallback );
 			std::string strResponseBuffer;
 			curl_easy_setopt( pvCurl, CURLOPT_WRITEDATA, &strResponseBuffer );
 			curl_easy_perform( pvCurl );
-			curl_easy_cleanup( pvCurl );
+			//curl_easy_cleanup( pvCurl );
+		}
+		
+		bool DownloadFiles( )
+		{
+			ConnectToServer( );
+			
+			if ( strResponseBuffer.length( ) > 1u )
+				return true;
+			return false;
+		}
+		
+		int RetrieveAuthenticationCode( )
+		{
+			ConnectToServer( );
+			
 			if ( strResponseBuffer.length( ) )
 				return std::stoi( strResponseBuffer );
 			else
@@ -88,15 +122,15 @@ namespace Paladin
 		}
 
 	public:
-		int Authenticate( bool bSendDLL, std::string strExtension )
+		int Authenticate( bool bSendDLL, int iExtension )
 		{
-			InitializeData( bSendDLL, std::string strExtension );
-			return ConnectToServer( );
+			InitializeData( bSendDLL, iExtension );
+			return DownloadFiles( );
 		}
 		int Authenticate( ) // used only for heartbeat
 		{
 			InitializeData( );
-			return ConnectToServer( );
+			return RetrieveAuthenticationCode( );
 		}
 		bool Heartbeat( )
 		{
