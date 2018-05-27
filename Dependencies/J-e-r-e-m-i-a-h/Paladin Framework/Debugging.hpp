@@ -1,5 +1,6 @@
 #pragma once
 #pragma warning( disable : 4996 )
+#define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
 #include "../Framework.hpp"
 
@@ -79,6 +80,11 @@ namespace Paladin
 			LocalFree( lpwstrError );
 		}
 
+		void pause( )
+		{
+			std::cin.get( );
+		}
+
 #else
 
 		class CDebugging
@@ -91,6 +97,8 @@ namespace Paladin
 		};
 
 		void lst_err( )
+		{ }
+		void pause( )
 		{ }
 
 #endif

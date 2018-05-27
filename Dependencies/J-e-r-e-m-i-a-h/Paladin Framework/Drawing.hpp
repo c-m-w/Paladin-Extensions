@@ -2,6 +2,12 @@
 #include <d3d9.h>
 #include "../Framework.hpp"
 
+
+
+/* COMMENTED OUT WHILE BEAN MAKES IT FRAMEWORK COMPATIBLE - CURRENTLY ABSOLUTELY BROKEN
+
+
+
 // For Nuklear
 #include "../main.hpp"
 #include "nuklear_d3d9.h"
@@ -252,3 +258,4 @@ void CDirectXDrawing::InitializeDevice()
 		{
 			// Nuklear Drawing Goes Here
 		}
+		*/

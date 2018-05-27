@@ -19,7 +19,7 @@ namespace Paladin
 			INACTIVE_PREMIUM,
 			STAFF_SUCCESS,
 			SUCCESS
-		}
+		};
 		
 		int GetUniqueID( )
 		{
@@ -35,8 +35,8 @@ namespace Paladin
 
 		bool bInitializedConnection = false;
 		std::string strPostFields;
-		constexpr char *szCOOKIEJAR = "session.jar";
-		
+		const char *szCOOKIEJAR = "session.jar";
+		std::string strEncryptionKey;
 		void InitializeData( bool bSendDLL, int iExtension ) // bSendDLL will determine whether you'd like to send the DLL or just DLL initialization information (e.g. signatures)
 		{
 			std::ifstream ifRegistration( XOR( "registration.key" ) );
@@ -45,12 +45,12 @@ namespace Paladin
 			std::string strSecretKey;
 			std::getline( ifRegistration, strSecretKey );
 
-			std::string strEncryptionKey = enc.Hash_SHA3_256( std::to_string( std::chrono::duration_cast< std::chrono::seconds >( std::chrono::system_clock::now( ).time_since_epoch( ) ).count( ) / 10 ).c_str( ) ).substr( 0, 32 );
+			strEncryptionKey = enc.Hash_SHA3_256( std::to_string( std::chrono::duration_cast< std::chrono::seconds >( std::chrono::system_clock::now( ).time_since_epoch( ) ).count( ) / 10 ).c_str( ) ).substr( 0, 32 );
 			strPostFields = enc.Hash_SHA3_256( enc.Encrypt( XOR( "file" ), strEncryptionKey ) + strEncryptionKey ) + XOR( "=" ) + enc.Encrypt( std::to_string( !bSendDLL ), strEncryptionKey ) // user_id
 							//+ XOR( "&" ) + enc.Hash_SHA3_256( enc.Encrypt( XOR( "uid" ), strEncryptionKey ) + strEncryptionKey ) + XOR( "=" ) + enc.Encrypt( std::to_string( GetUniqueID( ) ), strEncryptionKey ) // unique_id
 							//+ XOR( "&" ) + enc.Hash_SHA3_256( enc.Encrypt( XOR( "sk" ), strEncryptionKey ) + strEncryptionKey ) + XOR( "=" ) + enc.Encrypt( strSecretKey, strEncryptionKey ) // secret_key
 							//+ XOR( "&" ) + enc.Hash_SHA3_256( enc.Encrypt( XOR( "dll" ), strEncryptionKey ) + strEncryptionKey ) + XOR( "=" ) + enc.Encrypt( std::to_string( bSendDLL ), strEncryptionKey ) // bool if requested to send dll
-							+ XOR( "&" ) + enc.Hash_SHA3_256( enc.Encrypt( XOR( "ext" ), strEncryptionKey ) + strEncryptionKey ) + XOR( "=" ) + enc.Encrypt( std::stoi( iExtension ), strEncryptionKey ); // requested extension
+							+ XOR( "&" ) + enc.Hash_SHA3_256( enc.Encrypt( XOR( "ext" ), strEncryptionKey ) + strEncryptionKey ) + XOR( "=" ) + enc.Encrypt( std::to_string( iExtension ), strEncryptionKey ); // requested extension
 
 		}
 		void InitializeData( ) // used only for verification of authenticity
@@ -62,8 +62,8 @@ namespace Paladin
 			std::getline( ifRegistration, strSecretKey );
 
 			strPostFields = enc.Hash_SHA3_256( enc.Encrypt( XOR( "id" ), strEncryptionKey ) + strEncryptionKey ) + XOR( "=" ) + enc.Encrypt( strUserID, strEncryptionKey ) // user_id
-							+ XOR( "&" ) + enc.Hash_SHA3_256( enc.Encrypt( XOR( "uid" ), strEncryptionKey ) + strEncryptionKey ) + XOR( "=" ) + enc.Encrypt( std::to_string( GetUniqueID( ) ), strEncryptionKey ) // unique_id
-							+ XOR( "&" ) + enc.Hash_SHA3_256( enc.Encrypt( XOR( "sk" ), strEncryptionKey ) + strEncryptionKey ) + XOR( "=" ) + enc.Encrypt( strSecretKey, strEncryptionKey ) // secret_key
+				+ XOR( "&" ) + enc.Hash_SHA3_256( enc.Encrypt( XOR( "uid" ), strEncryptionKey ) + strEncryptionKey ) + XOR( "=" ) + enc.Encrypt( std::to_string( GetUniqueID( ) ), strEncryptionKey ) // unique_id
+				+ XOR( "&" ) + enc.Hash_SHA3_256( enc.Encrypt( XOR( "sk" ), strEncryptionKey ) + strEncryptionKey ) + XOR( "=" ) + enc.Encrypt( strSecretKey, strEncryptionKey ); // secret_key
 		}
 
 		void *pvDLL;
@@ -72,13 +72,13 @@ namespace Paladin
 			static_cast< std::string * >( pvUserP )->append( static_cast< char * >( pvContent ), uSize * uNumOfMembers );
 			return uSize * uNumOfMembers;
 		};
-		
+		void *pvCurl;
 		void InitializeConnection( )
 		{
 			curl_global_init( CURL_GLOBAL_ALL );
-			void *pvCurl = curl_easy_init( );
+			pvCurl = curl_easy_init( );
 		}
-		
+		std::string strResponseBuffer;
 		void ConnectToServer( )
 		{
 			if ( !bInitializedConnection )
@@ -96,7 +96,7 @@ namespace Paladin
 			curl_easy_setopt( pvCurl, CURLOPT_COOKIEJAR, szCOOKIEJAR );
 
 			curl_easy_setopt( pvCurl, CURLOPT_WRITEFUNCTION, WriteCallback );
-			std::string strResponseBuffer;
+			
 			curl_easy_setopt( pvCurl, CURLOPT_WRITEDATA, &strResponseBuffer );
 			curl_easy_perform( pvCurl );
 			//curl_easy_cleanup( pvCurl );
