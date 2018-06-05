@@ -1,4 +1,5 @@
 #pragma once
+#include "Psapi.h"
 #include "../Framework.hpp"
 
 #if !defined( ENTRY_AS_WIN ) && !defined( ENTRY_AS_DLL ) && !defined( ENTRY_AS_NONE )
@@ -50,22 +51,34 @@ DWORD WINAPI ThreadProc( _In_ LPVOID lpParameter )
 	return NULL;
 }
 
+void Detach( )
+{
+#if defined( _DEBUG )
+	FreeConsole( );
+#endif
+	OnDetach( );
+	FreeLibraryAndExitThread( Paladin::hinstDLL, 0 );
+}
+
 BOOL WINAPI DllMain( _In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID lpvReserved )
 {
 	switch ( fdwReason )
 	{
 		case DLL_PROCESS_ATTACH:
 		{
+			DisableThreadLibraryCalls( hinstDLL );
 			Paladin::hinstDLL = hinstDLL;
 
 			HANDLE hThreadProc = CreateThread( nullptr, 0, ThreadProc, lpvReserved, 0, nullptr );
 			if ( !hThreadProc || hThreadProc == INVALID_HANDLE_VALUE )
 				return FALSE;
 
-			DisableThreadLibraryCalls( hinstDLL );
 			return TRUE;
 		}
 		case DLL_PROCESS_DETACH:
+#if defined( _DEBUG )
+			FreeConsole( );
+#endif
 			OnDetach( );
 			return TRUE;
 		default:
