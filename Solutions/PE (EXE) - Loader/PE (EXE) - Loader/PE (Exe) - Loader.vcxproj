@@ -22,7 +22,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{DC87D967-A2D8-4070-99DA-D3AED75BA290}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>PEExeLoader</RootNamespace>
+    <RootNamespace>PEEXELoader</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
