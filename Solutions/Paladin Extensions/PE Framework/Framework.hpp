@@ -5,7 +5,7 @@
 #include <J-e-r-e-m-i-a-h/Standard Namespace.hpp>
 
 #include "Application/Debug.hpp"
-//#include "Application/Entry.hpp" //currently will not allow compilation since ENTRY_AS_X symbols are not defined. will have to rework
+#include "Application/Entry.hpp"
 
 #include "Security/Encryption.hpp"
 #include "Security/Connectivity.hpp"
