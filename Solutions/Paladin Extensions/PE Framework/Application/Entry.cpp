@@ -1,9 +1,9 @@
-#pragma once
-#include "Psapi.h"
+/// Entry.cpp
+
 #include "../Framework.hpp"
 
 #if !defined( ENTRY_AS_WIN ) && !defined( ENTRY_AS_DLL ) && !defined( ENTRY_AS_NONE )
-#error "No automatic entry creation method defined. Use '#define ENTRY_AS_WIN' or '#define ENTRY_AS_DLL' when including the framework to use automatic entry creation. Use '#define ENTRY_AS_NONE' to disable automatic entry management."
+#pragma message( "fatal error PE0: No automatic entry creation method defined. Use '#define ENTRY_AS_WIN' or '#define ENTRY_AS_DLL' when including the framework to use automatic entry creation. Use '#define ENTRY_AS_NONE' to disable automatic entry management." )
 #elif defined( ENTRY_AS_WIN ) && !defined( ENTRY_AS_DLL ) && !defined( ENTRY_AS_NONE )
 
 void OnLaunch( );
@@ -40,6 +40,15 @@ namespace Paladin
 	HINSTANCE hinstDLL;
 };
 
+void Detach( )
+{
+#if defined( _DEBUG )
+	FreeConsole( );
+#endif
+	OnDetach( );
+	FreeLibraryAndExitThread( Paladin::hinstDLL, 0 );
+}
+
 DWORD WINAPI ThreadProc( _In_ LPVOID lpParameter )
 {
 #if defined( _DEBUG )
@@ -49,15 +58,6 @@ DWORD WINAPI ThreadProc( _In_ LPVOID lpParameter )
 
 	OnAttach( );
 	return NULL;
-}
-
-void Detach( )
-{
-#if defined( _DEBUG )
-	FreeConsole( );
-#endif
-	OnDetach( );
-	FreeLibraryAndExitThread( Paladin::hinstDLL, 0 );
 }
 
 BOOL WINAPI DllMain( _In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID lpvReserved )
@@ -87,7 +87,7 @@ BOOL WINAPI DllMain( _In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID 
 }
 
 #elif !defined( ENTRY_AS_WIN ) && !defined( ENTRY_AS_DLL ) && defined( ENTRY_AS_NONE )
-#warning "You must manage standard console output yourself."
+#pragma message( "warning PE1: You must manage standard console output yourself." )
 #else
-#error "Too many automatic entry creation methods defined."
+#pragma message( "fatal error PE1: Too many automatic entry creation methods defined." )
 #endif

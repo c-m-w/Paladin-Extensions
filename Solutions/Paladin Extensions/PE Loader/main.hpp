@@ -1,3 +1,3 @@
-#pragma once
+/// main.hpp
 
-#include <J-e-r-e-m-i-a-h/Framework.hpp>
+#pragma once

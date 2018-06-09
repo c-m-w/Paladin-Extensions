@@ -1,8 +1,8 @@
+/// std.hpp
+
 #pragma once
 
-/// Entire C++ Standard library, compiled by bhopfu1
-
-/// Utilities library
+// Utilities library
 #include <cstdlib>
 #include <csignal>
 #include <csetjmp>
@@ -23,27 +23,27 @@
 //#include <variant>			// C++ 17
 //#include <compare>			// C++ 17
 
-/// Dynamic memory management
+// Dynamic memory management
 #include <new>
 #include <memory>
 #include <scoped_allocator>
 //#include <memory_resource>	// Not Visual Studio 2017 Pre-installed
 
-/// Numeric limits
+// Numeric limits
 #include <climits>
 #include <cfloat>
 #include <cstdint>
 #include <cinttypes>
 #include <limits>
 
-/// Error handling
+// Error handling
 #include <exception>
 #include <stdexcept>
 #include <cassert>
 #include <system_error>
 #include <cerrno>
 
-/// Strings library
+// Strings library
 #include <cctype>
 #include <cwctype>
 #include <cstring>
@@ -53,7 +53,7 @@
 //#include <string_view>		// Not Visual Studio 2017 Pre-installed
 //#include <charconv>			// Not Visual Studio 2017 Pre-installed
 
-/// Containers library
+// Containers library
 #include <array>
 #include <vector>
 #include <deque>
@@ -66,14 +66,14 @@
 #include <stack>
 #include <queue>
 
-/// Algorithms library
+// Algorithms library
 #include <algorithm>
 //#include <execution>			// Not Visual Studio 2017 Pre-installed
 
-/// Iterators library
+// Iterators library
 #include <iterator>
 
-/// Numberics library
+// Numberics library
 #include <cmath>
 #include <complex>
 #include <valarray>
@@ -82,7 +82,7 @@
 #include <ratio>
 #include <cfenv>
 
-/// Input/output library
+// Input/output library
 #include <iosfwd>
 #include <ios>
 #include <istream>
@@ -96,23 +96,23 @@
 #include <streambuf>
 #include <cstdio>
 
-/// Localization library
+// Localization library
 #include <locale>
 #include <clocale>
 #include <codecvt>
 
-/// Regular Expressions library
+// Regular Expressions library
 #include <regex>
 
-/// Atomic Operations library
+// Atomic Operations library
 #include <atomic>
 
-/// Thread support library
+// Thread support library
 #include <thread>
 #include <mutex>
 #include <shared_mutex>
 #include <future>
 #include <condition_variable>
 
-/// Filesystem library
+// Filesystem library
 #include <filesystem>
