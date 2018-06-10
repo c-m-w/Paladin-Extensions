@@ -4,5 +4,9 @@
 
 namespace Paladin
 {
+	class CRender
+	{
+	public:
 
+	};
 }
