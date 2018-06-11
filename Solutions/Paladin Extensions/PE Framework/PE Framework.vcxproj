@@ -158,7 +158,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Application\Debug.cpp" />
-    <ClCompile Include="Application\Entry.cpp" />
+    <ClCompile Include="Application\Information\Configuration.cpp" />
     <ClCompile Include="Drawing\Render.cpp" />
     <ClCompile Include="Drawing\User Interface.cpp" />
     <ClCompile Include="Security\Connectivity.cpp" />
@@ -167,7 +167,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Debug.hpp" />
-    <ClInclude Include="Application\Entry.hpp" />
+    <ClInclude Include="Application\Information\Configuration.hpp" />
     <ClInclude Include="Drawing\Render.hpp" />
     <ClInclude Include="Drawing\User Interface.hpp" />
     <ClInclude Include="Framework.hpp" />

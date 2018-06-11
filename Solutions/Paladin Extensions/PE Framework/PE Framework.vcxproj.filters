@@ -36,7 +36,7 @@
     <ClInclude Include="Security\Injection.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Application\Entry.hpp">
+    <ClInclude Include="Application\Information\Configuration.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -59,7 +59,7 @@
     <ClCompile Include="Security\Injection.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Entry.cpp">
+    <ClCompile Include="Application\Information\Configuration.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

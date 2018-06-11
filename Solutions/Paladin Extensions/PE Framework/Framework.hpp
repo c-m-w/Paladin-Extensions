@@ -13,4 +13,4 @@
 #include "Drawing/Render.hpp"
 #include "Drawing/User Interface.hpp"
 
-//#include "Application/Information/Configuration.hpp" //requires XOR, do not include until symbol is defined
+#include "Application/Information/Configuration.hpp"
