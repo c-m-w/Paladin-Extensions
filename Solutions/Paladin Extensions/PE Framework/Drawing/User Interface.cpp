@@ -1,12 +1,19 @@
 /// User Interface.cpp
 
-#include <d3d9.h>
+#define ACS_TRANSPARENT 2
 
+#define COBJMACROS
+#define WIN32_LEAN_AND_MEAN
+
+#define NK_INCLUDE_FIXED_TYPES
 #define NK_INCLUDE_STANDARD_IO
+#define NK_INCLUDE_STANDARD_VARARGS
+#define NK_INCLUDE_DEFAULT_ALLOCATOR
+#define NK_INCLUDE_VERTEX_BUFFER_OUTPUT
 #define NK_INCLUDE_FONT_BAKING
+#define NK_INCLUDE_DEFAULT_FONT
 #define NK_IMPLEMENTATION
 #define NK_D3D9_IMPLEMENTATION
-
 #include <vurtun/nuklear.h>
 #include <vurtun/demo/d3d9/nuklear_d3d9.h>
 
@@ -23,17 +30,17 @@ namespace Paladin
 				return 0;
 
 			case WM_SIZE:
-				if ( ui.pDevice )
+				if ( ui->pDevice )
 				{
 					const auto uWidth = LOWORD( llParam ); // over-using auto
 					const auto uHeight = HIWORD( llParam );
 					if ( uWidth != 0 && uHeight != 0 &&
-						( uWidth != ui.dxParameters.BackBufferWidth || uHeight != ui.dxParameters.BackBufferHeight ) )
+						( uWidth != ui->dxParameters.BackBufferWidth || uHeight != ui->dxParameters.BackBufferHeight ) )
 					{
 						nk_d3d9_release( );
-						ui.dxParameters.BackBufferWidth = uWidth;
-						ui.dxParameters.BackBufferHeight = uHeight;
-						const auto hrReset = ui.pDevice->Reset( &ui.dxParameters );
+						ui->dxParameters.BackBufferWidth = uWidth;
+						ui->dxParameters.BackBufferHeight = uHeight;
+						const auto hrReset = ui->pDevice->Reset( &ui->dxParameters );
 						dbg::Assert( hrReset >= 0 );
 						nk_d3d9_resize( uWidth, uHeight );
 					}
@@ -45,6 +52,12 @@ namespace Paladin
 			return 0;
 
 		return DefWindowProcW( hwHWND, uMessage, uwParam, llParam );
+	}
+
+	CUserInterface::CUserInterface( const char *szDesiredNuklearWindowTitle, unsigned uDesiredWindowSize[ 2 ] )
+	{
+		szNuklearWindowTitle = szDesiredNuklearWindowTitle;
+		SetWindowSize( uDesiredWindowSize[ 0 ], uDesiredWindowSize[ 1 ] );
 	}
 
 	void CUserInterface::InitializeNuklear( ) 
@@ -95,7 +108,6 @@ namespace Paladin
 
 	void CUserInterface::InitializeUserInterface( )
 	{
-		SetWindowSize( 300, 500 );
 		CreateRenderTarget( );
 		InitializeDirectX( );
 		InitializeNuklear( );
@@ -103,22 +115,14 @@ namespace Paladin
 
 	void CUserInterface::HandleWindowInput( ) 
 	{
-		//
-		// Within the window we create, the nuklear window is free to move around.
-		// When it is moved around, it will have its' own position inside of our window.
-		// This position will be the amount that the user has dragged it around.
-		// We will move the actual window by how much they have moved the nuklear window,
-		// so that the edges of the window won't not be rendered.
-		//
-
 		auto pos = nk_window_get_position( pContext );
 		RECT rcWindowRectangle;
 		GetWindowRect( hWnd, &rcWindowRectangle );
 
-		rcWindowRectangle.top		+= pos.y;
-		rcWindowRectangle.bottom	+= pos.y;
-		rcWindowRectangle.left		+= pos.x;
-		rcWindowRectangle.right		+= pos.x;
+		rcWindowRectangle.top		+= int( pos.y );
+		rcWindowRectangle.bottom	+= int( pos.y );
+		rcWindowRectangle.left		+= int( pos.x );
+		rcWindowRectangle.right		+= int( pos.x );
 
 		SetWindowPos( hWnd, nullptr, rcWindowRectangle.left, rcWindowRectangle.top, uWindowWidth, uWindowHeight, SWP_SHOWWINDOW );
 		nk_window_set_position( pContext, szNuklearWindowTitle, nk_vec2( 0, 0 ) );
@@ -136,4 +140,6 @@ namespace Paladin
 		HandleWindowInput( );
 		RenderUserInterface( );
 	}
+
+	CUserInterface *ui;
 }

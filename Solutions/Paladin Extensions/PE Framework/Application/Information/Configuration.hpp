@@ -17,5 +17,5 @@ namespace Paladin
 		void LoadConfiguration( std::string );
 		void SaveConfiguration( std::string );
 		void DeleteConfiguration( std::string );
-	} extern cfg;
+	} extern *cfg;
 }
