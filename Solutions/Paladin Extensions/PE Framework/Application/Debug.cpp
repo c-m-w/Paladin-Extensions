@@ -2,8 +2,6 @@
 
 #include "../Framework.hpp"
 
-#pragma warning( disable : 4996 )
-
 namespace Paladin
 {
 	namespace dbg
@@ -54,7 +52,7 @@ namespace Paladin
 		std::ios_base &__CLRCALL_OR_CDECL binary( std::ios_base &_Iosbase )
 		{	// set basefield to binary
 			_Iosbase.setf( std::ios_base::binary, std::ios_base::basefield );
-			return ( _Iosbase );
+			return _Iosbase;
 		}
 
 		std::ios_base &( *bin )( std::ios_base &_Iosbase ) = binary;

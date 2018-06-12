@@ -60,9 +60,10 @@ namespace Paladin
 
 		RECT rcWindowRect;
 		GetWindowRect( hWnd, &rcWindowRect );
-		auto rcNewWindowRect = rcWindowRect;
-		rcNewWindowRect.bottom += uHeight - ( rcWindowRect.bottom - rcWindowRect.top );
-		rcNewWindowRect.right += uWidth - ( rcWindowRect.right - rcWindowRect.left );
+		// rcNewWindowRect never used
+		//auto rcNewWindowRect = rcWindowRect;
+		//rcNewWindowRect.bottom += uHeight - ( rcWindowRect.bottom - rcWindowRect.top );
+		//rcNewWindowRect.right += uWidth - ( rcWindowRect.right - rcWindowRect.left );
 		SetWindowPos( hWnd, nullptr, rcWindowRect.left, rcWindowRect.top, uWindowWidth, uWindowHeight, SWP_SHOWWINDOW );
 	}
 }

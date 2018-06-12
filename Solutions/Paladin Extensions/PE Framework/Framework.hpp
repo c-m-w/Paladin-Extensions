@@ -21,6 +21,9 @@
 // Drawing
 #include <d3d9.h>
 #include "Drawing/Render.hpp"
+#define NK_PRIVATE
+#include <vurtun/nuklear.h>
+#include <vurtun/demo/d3d9/nuklear_d3d9.h>
 #include "Drawing/User Interface.hpp"
 
 // Application Information

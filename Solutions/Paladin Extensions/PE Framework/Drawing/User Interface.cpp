@@ -1,21 +1,13 @@
 /// User Interface.cpp
 
-#define ACS_TRANSPARENT 2
-
-#define COBJMACROS
-#define WIN32_LEAN_AND_MEAN
-
 #define NK_INCLUDE_FIXED_TYPES
 #define NK_INCLUDE_STANDARD_IO
 #define NK_INCLUDE_STANDARD_VARARGS
 #define NK_INCLUDE_DEFAULT_ALLOCATOR
 #define NK_INCLUDE_VERTEX_BUFFER_OUTPUT
 #define NK_INCLUDE_FONT_BAKING
-#define NK_INCLUDE_DEFAULT_FONT
 #define NK_IMPLEMENTATION
 #define NK_D3D9_IMPLEMENTATION
-#include <vurtun/nuklear.h>
-#include <vurtun/demo/d3d9/nuklear_d3d9.h>
 
 #include "../Framework.hpp"
 
@@ -23,6 +15,7 @@ namespace Paladin
 {
 	LRESULT WINAPI WndProc( HWND hwHWND, UINT uMessage, WPARAM uwParam, LPARAM llParam )
 	{
+		// ReSharper disable once CppDefaultCaseNotHandledInSwitchStatement
 		switch ( uMessage )
 		{
 			case WM_DESTROY:
@@ -54,7 +47,7 @@ namespace Paladin
 		return DefWindowProcW( hwHWND, uMessage, uwParam, llParam );
 	}
 
-	CUserInterface::CUserInterface( const char *szDesiredNuklearWindowTitle, unsigned uDesiredWindowSize[ 2 ] )
+	CUserInterface::CUserInterface( const char *szDesiredNuklearWindowTitle, unsigned uDesiredWindowSize[ 2 ] )  // NOLINT
 	{
 		szNuklearWindowTitle = szDesiredNuklearWindowTitle;
 		SetWindowSize( uDesiredWindowSize[ 0 ], uDesiredWindowSize[ 1 ] );

@@ -6,7 +6,7 @@ namespace Paladin
 {
 	LRESULT WINAPI WndProc( HWND, UINT, WPARAM, LPARAM );
 
-	class CRender
+	class CRender  // NOLINT
 	{
 	protected:
 		IDirect3D9Ex					*pObjectEx { };
