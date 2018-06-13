@@ -1,3 +1,3 @@
-/// main.hpp
+/// Main.hpp
 
 #pragma once
