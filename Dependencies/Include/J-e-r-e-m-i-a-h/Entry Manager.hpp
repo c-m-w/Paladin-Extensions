@@ -14,7 +14,7 @@ namespace Paladin
 	static HINSTANCE hinstWin;
 };
 
-void OnLaunch( );
+extern void OnLaunch( );
 
 #if defined( UNICODE )
 inline int WINAPI wWinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nCmdShow )
@@ -43,8 +43,8 @@ namespace Paladin
 	static HINSTANCE hinstDLL;
 };
 
-void OnAttach( );
-void OnDetach( );
+extern void OnAttach( );
+extern void OnDetach( );
 
 inline void Detach( )
 {
