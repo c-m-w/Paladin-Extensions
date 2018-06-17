@@ -17,6 +17,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PE Framework", "PE Framewor
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PE Driver", "PE Driver\PE Driver.vcxproj", "{FA1CEBD2-773C-44C3-AC50-3B191C6A1D15}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PE Virtual Drive", "PE Virtual Drive\PE Virtual Drive.vcxproj", "{D76D2DF9-E618-4601-A72C-1810751CF7DD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|ARM = Debug|ARM
@@ -85,6 +87,18 @@ Global
 		{FA1CEBD2-773C-44C3-AC50-3B191C6A1D15}.Release|x86.ActiveCfg = Release|Win32
 		{FA1CEBD2-773C-44C3-AC50-3B191C6A1D15}.Release|x86.Build.0 = Release|Win32
 		{FA1CEBD2-773C-44C3-AC50-3B191C6A1D15}.Release|x86.Deploy.0 = Release|Win32
+		{D76D2DF9-E618-4601-A72C-1810751CF7DD}.Debug|ARM.ActiveCfg = Debug|Win32
+		{D76D2DF9-E618-4601-A72C-1810751CF7DD}.Debug|ARM64.ActiveCfg = Debug|Win32
+		{D76D2DF9-E618-4601-A72C-1810751CF7DD}.Debug|x64.ActiveCfg = Debug|x64
+		{D76D2DF9-E618-4601-A72C-1810751CF7DD}.Debug|x64.Build.0 = Debug|x64
+		{D76D2DF9-E618-4601-A72C-1810751CF7DD}.Debug|x86.ActiveCfg = Debug|Win32
+		{D76D2DF9-E618-4601-A72C-1810751CF7DD}.Debug|x86.Build.0 = Debug|Win32
+		{D76D2DF9-E618-4601-A72C-1810751CF7DD}.Release|ARM.ActiveCfg = Release|Win32
+		{D76D2DF9-E618-4601-A72C-1810751CF7DD}.Release|ARM64.ActiveCfg = Release|Win32
+		{D76D2DF9-E618-4601-A72C-1810751CF7DD}.Release|x64.ActiveCfg = Release|x64
+		{D76D2DF9-E618-4601-A72C-1810751CF7DD}.Release|x64.Build.0 = Release|x64
+		{D76D2DF9-E618-4601-A72C-1810751CF7DD}.Release|x86.ActiveCfg = Release|Win32
+		{D76D2DF9-E618-4601-A72C-1810751CF7DD}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
