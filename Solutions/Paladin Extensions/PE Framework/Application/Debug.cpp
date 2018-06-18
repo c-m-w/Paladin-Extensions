@@ -62,6 +62,7 @@ namespace Paladin
 
 		void LastError( )
 		{
+#if defined( _DEBUG )
 			DWORD dwError = GetLastError( );
 			if ( !dwError )
 			{
@@ -76,11 +77,14 @@ namespace Paladin
 			else
 				out LER << "[0x" << hex << dwError << "] - " << *lpwstrError << endl;
 			LocalFree( lpwstrError );
+#endif
 		}
 
 		void Pause( )
 		{
+#if defined( _DEBUG )
 			std::cin.get( );
+#endif
 		}
 	}
 }
