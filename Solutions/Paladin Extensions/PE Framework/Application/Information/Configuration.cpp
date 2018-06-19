@@ -6,13 +6,22 @@ namespace Paladin
 {
 	CConfiguration::CConfiguration( )
 	{
-		LPWSTR wchTemp = new wchar_t[ MAX_PATH ];
+		auto wchTemp = new wchar_t[ MAX_PATH ];
 		GetModuleFileName( nullptr, wchTemp, MAX_PATH );
-		char chTemp[ MAX_PATH ];
-		wcstombs( chTemp, wchTemp, MAX_PATH );
-		strPath = std::string( chTemp ).substr( 0, std::string( chTemp ).find_last_of( XOR( "/\\" ) ) + 1 ) + XOR( "Configurations\\" );
+		wstrPath = std::wstring( wchTemp ).substr( 0, std::wstring( wchTemp ).find_last_of( XORW( L"/\\" ) ) + 1 ) + XORW( L"Configurations\\" );
 
-		std::ifstream fFile( strPath + XOR( "global.json" ) );
+		if ( !PathFileExists( ( wstrPath + XORW( L"global.json" ) ).c_str( ) ) )
+		{
+			// TODO: Missing Global Configuration File
+		}
+
+		std::ifstream fFile( wstrPath + XORW( L"global.json" ) );
+
+		if ( !fFile.is_open( ) )
+		{
+			// TODO: could not open file for reading
+		}
+
 		try
 		{
 			fFile >> jsGlobalConfiguration;
@@ -28,7 +37,7 @@ namespace Paladin
 
 		try
 		{
-			LoadConfiguration( jsGlobalConfiguration[ XOR( "Default Configuration" ) ].get_ref< nlohmann::json::string_t & >( ) );
+			LoadConfiguration( string_cast< std::wstring >( jsGlobalConfiguration[ XOR( "Default Configuration" ) ].get_ref< nlohmann::json::string_t & >( ) ).c_str( ) );
 		}
 		catch ( nlohmann::detail::parse_error & )
 		{
@@ -41,9 +50,19 @@ namespace Paladin
 		fFile.close( );
 	}
 
-	void CConfiguration::LoadConfiguration( std::string strConfig )
+	void CConfiguration::LoadConfiguration( const wchar_t *wszConfig )
 	{
-		std::ifstream fFile( strPath + strConfig + std::string( XOR( ".json" ) ) );
+		if ( !PathFileExists( ( wstrPath + wszConfig + XORW( L".json" ) ).c_str( ) ) )
+		{
+			// TODO: Missing Configuration File
+		}
+
+		std::ifstream fFile( wstrPath + wszConfig + XORW( L".json" ) );
+
+		if ( !fFile.is_open( ) )
+		{
+			// TODO: could not open file for reading
+		}
 
 		try
 		{
@@ -61,18 +80,33 @@ namespace Paladin
 		fFile.close( );
 	}
 
-	void CConfiguration::SaveConfiguration( std::string strConfig )
+	void CConfiguration::SaveConfiguration( const wchar_t *wszConfig ) const
 	{
-		std::ofstream fFile( strPath + strConfig, std::ofstream::trunc );
+		std::ofstream fFile( wstrPath + wszConfig + XORW( L".json" ), std::ofstream::trunc );
+		if ( !fFile.is_open( ) )
+		{
+			// TODO: could not open file for writing
+		}
 		fFile << jsConfiguration.dump( 4 );
 		fFile.close( );
 	}
 
-	void CConfiguration::DeleteConfiguration( std::string strConfig )
+	void CConfiguration::DeleteConfiguration( const wchar_t *wszConfig )
 	{
-		std::ofstream fFile( strPath + strConfig, std::ofstream::trunc );
-		jsConfiguration.clear( );
-		fFile.close( );
+		if ( string_cast< std::wstring >( jsGlobalConfiguration[ XOR( "Default Configuration" ) ].get_ref< nlohmann::json::string_t & >( ) ) != wszConfig )
+		{
+			std::ofstream fFile( wstrPath + wszConfig + XORW( L".json" ), std::ofstream::trunc );
+			if ( !fFile.is_open( ) )
+			{
+				// TODO: could not open file for writing
+			}
+			jsConfiguration.clear( );
+			fFile.close( );
+		}
+		else
+		{
+			// TODO: Attempted to delete global configuration
+		}
 	}
 
 	CConfiguration *cfg;

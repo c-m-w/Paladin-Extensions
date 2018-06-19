@@ -6,16 +6,31 @@ namespace Paladin
 {
 	class CConfiguration
 	{
-		std::string strPath;
+		std::wstring wstrPath;
 
 	public:
-		nlohmann::json jsGlobalConfiguration;
-		nlohmann::json jsConfiguration;
-
 		CConfiguration( );
 
-		void LoadConfiguration( std::string );
-		void SaveConfiguration( std::string );
-		void DeleteConfiguration( std::string );
+		/**
+		 * \brief json file with global configuration information.
+		 */
+		nlohmann::json jsGlobalConfiguration;
+		/**
+		* \brief json file with current selected configuration information.
+		*/
+		nlohmann::json jsConfiguration;
+
+		/**
+		 * \brief Loads configuration of name from parameter in local file directory (Extension '.json' is automatically added)
+		 */
+		void LoadConfiguration( const wchar_t * );
+		/**
+		* \brief Saves configuration of name from parameter in local file directory and creates a new one if it does not exist. (Extension '.json' is automatically added)
+		*/
+		void SaveConfiguration( const wchar_t * ) const;
+		/**
+		* \brief Deletes configuration of name from parameter in local file directory. (Extension '.json' is automatically added)
+		*/
+		void DeleteConfiguration( const wchar_t * );
 	} extern *cfg;
 }
