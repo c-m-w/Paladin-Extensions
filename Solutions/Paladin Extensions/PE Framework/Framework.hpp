@@ -4,10 +4,10 @@
 
 #include <J-e-r-e-m-i-a-h/Standard Namespace.hpp>
 
-// Application - These files provide general functionality for application development
+// Application - These files provide general utilities for application development
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
-#include "Application/General.hpp"
+#include "Application/Utilities.hpp"
 #include "Application/Debug.hpp"
 
 // Security - These files provide specific functionality for ensuring security and verifying authenticity
@@ -28,7 +28,7 @@
 #include <vurtun/demo/d3d9/nuklear_d3d9.h>
 #include "Drawing/User Interface.hpp"
 
-// Application Information - These files provide general functionality for storing and managing application information
+// Application Information - These files provide general utilities for storing and managing application information
 #include <Shlwapi.h>
 #include <nlohmann/json.hpp>
 #include "Application/Information/Configuration.hpp"
