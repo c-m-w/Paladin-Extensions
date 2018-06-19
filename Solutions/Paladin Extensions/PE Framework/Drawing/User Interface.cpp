@@ -15,7 +15,6 @@ namespace Paladin
 {
 	LRESULT WINAPI WndProc( HWND hwHWND, UINT uMessage, WPARAM uwParam, LPARAM llParam )
 	{
-		// ReSharper disable once CppDefaultCaseNotHandledInSwitchStatement
 		switch ( uMessage )
 		{
 			case WM_DESTROY:
@@ -47,7 +46,7 @@ namespace Paladin
 		return DefWindowProcW( hwHWND, uMessage, uwParam, llParam );
 	}
 
-	CUserInterface::CUserInterface( const char *szDesiredNuklearWindowTitle, unsigned uDesiredWindowSize[ 2 ] )  // NOLINT
+	CUserInterface::CUserInterface( const char *szDesiredNuklearWindowTitle, unsigned uDesiredWindowSize[ 2 ] )
 	{
 		szNuklearWindowTitle = szDesiredNuklearWindowTitle;
 		SetWindowSize( uDesiredWindowSize[ 0 ], uDesiredWindowSize[ 1 ] );

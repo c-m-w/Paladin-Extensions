@@ -159,6 +159,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Application\Debug.cpp" />
+    <ClCompile Include="Application\General.cpp" />
     <ClCompile Include="Application\Information\Configuration.cpp" />
     <ClCompile Include="Drawing\Render.cpp" />
     <ClCompile Include="Drawing\User Interface.cpp" />
@@ -168,6 +169,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Debug.hpp" />
+    <ClInclude Include="Application\General.hpp" />
     <ClInclude Include="Application\Information\Configuration.hpp" />
     <ClInclude Include="Drawing\Render.hpp" />
     <ClInclude Include="Drawing\User Interface.hpp" />

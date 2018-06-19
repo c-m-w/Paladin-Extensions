@@ -6,7 +6,7 @@ namespace Paladin
 {
 	LRESULT WINAPI WndProc( HWND, UINT, WPARAM, LPARAM );
 
-	class CRender  // NOLINT
+	class CRender
 	{
 	protected:
 		IDirect3D9Ex					*pObjectEx { };
@@ -21,17 +21,17 @@ namespace Paladin
 		const unsigned	uWindowStartPosition[ 2 ] { uScreenWidth / 2 - uWindowWidth / 2, uScreenHeight / 2 - uWindowHeight / 2 };
 		wchar_t			*szWindowTitle { static_cast< wchar_t* >( malloc( 32 ) ) };
 		WNDCLASSEX		wndWindow { sizeof( WNDCLASSEX ), NULL, WndProc , 0, 0, GetModuleHandle( nullptr ), nullptr,
-			LoadCursor( nullptr, IDC_ARROW ), nullptr, nullptr, szWindowTitle, nullptr };
+									LoadCursor( nullptr, IDC_ARROW ), nullptr, nullptr, szWindowTitle, nullptr };
 
 		void CreateRenderTarget( );
 		virtual void InitializeDirectX( );
 		void BeginRender( );
 		void EndRender( );
 	public:
-		virtual ~CRender( ) = default;
-		IDirect3DDevice9		*pDevice { };
-		D3DPRESENT_PARAMETERS	dxParameters { };
-		
+		virtual               ~CRender( ) = default;
+		IDirect3DDevice9      *pDevice { };
+		D3DPRESENT_PARAMETERS dxParameters { };
+
 		void SetWindowSize( unsigned, unsigned );
 	};
 }
