@@ -8,20 +8,18 @@ namespace Paladin
 	{
 		template< typename _Datatype > void Assert( _Datatype );
 
-#if defined( _DEBUG )
-#define DBG << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << " [DBG] "
-#define SCS << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << " [SCS] "
-#define WRN << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << " [WRN] "
-#define ERR << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << " [ERR] "
-#define LER << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << " [LER] "
-#elif
-#define DBG
-#define SCS
-#define WRN
-#define ERR
-#define LER
-#endif
+		/**
+		* \brief Sets the console text print color with flags from constructor parameter
+		*/
+		struct SetPrintColor
+		{
+			WORD m_wDesiredAttributes;
+			explicit SetPrintColor( const WORD );
+		};
 
+		/**
+		 * \brief Outputs debugging information if and only if compiled as debug to debug log and console.
+		 */
 		class CDebugPrint
 		{
 #if defined( _DEBUG )
@@ -34,6 +32,7 @@ namespace Paladin
 			~CDebugPrint( );
 			CDebugPrint( const CDebugPrint & );
 #endif
+			CDebugPrint operator<<( const SetPrintColor & ) const;
 			template < typename _Datatype > CDebugPrint operator<<( const _Datatype & );
 		} extern out;
 
@@ -41,12 +40,44 @@ namespace Paladin
 		constexpr char endl = '\n';
 		constexpr char quote = '\"';
 
+		/**
+		 * \brief Changes variable output into binary format.
+		 */
 		extern std::ios_base &( *bin )( std::ios_base & );
 		extern std::ios_base &( *oct )( std::ios_base & );
 		extern std::ios_base &( *dec )( std::ios_base & );
 		extern std::ios_base &( *hex )( std::ios_base & );
 
+		/**
+		 * \brief Outputs last error code in textual format.
+		 */
 		void LastError( );
-		void Pause( );
 	}
 }
+
+/**
+ * \brief Optional output indicators
+ */
+#if defined( _DEBUG )
+#define DBG << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << \
+	SetPrintColor( FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE ) << " [DBG] " << \
+	SetPrintColor( ~FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE )
+#define SCS << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << \
+	SetPrintColor( FOREGROUND_INTENSITY | ~FOREGROUND_RED | FOREGROUND_GREEN | ~FOREGROUND_BLUE  ) << " [SCS] " << \
+	SetPrintColor( ~FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE )
+#define WRN << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << \
+	SetPrintColor( FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | ~FOREGROUND_BLUE ) << " [WRN] " << \
+	SetPrintColor( ~FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE )
+#define ERR << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << \
+	SetPrintColor( FOREGROUND_INTENSITY | FOREGROUND_RED | ~FOREGROUND_GREEN | ~FOREGROUND_BLUE ) << " [ERR] " << \
+	SetPrintColor( ~FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE )
+#define LER << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << \
+	SetPrintColor( ~FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | ~FOREGROUND_BLUE ) << " [LER] " << \
+	SetPrintColor( ~FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE )
+#elif
+#define DBG
+#define SCS
+#define WRN
+#define ERR
+#define LER
+#endif

@@ -10,22 +10,33 @@ namespace Paladin
 		{
 #if defined( _DEBUG )
 			static int i;
-			if ( !_Var )
+			if ( _Var == _Datatype { } )
 				throw std::exception( "Failed to assert", i++ );
 #endif
 		}
 
 #if defined( _DEBUG )
+		SetPrintColor::SetPrintColor( const WORD wDesiredAttributes ): m_wDesiredAttributes( wDesiredAttributes )
+		{ }
+
 		CDebugPrint::CDebugPrint( )
 		{
 			strsDebugLog << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%m/%d/%Y %H:%M:%S]" ) << " [OPN] " << "Initialized Paladin Debug" << endl;
-			std::cout << strsDebugLog.str( );
+			std::cout << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%m/%d/%Y %H:%M:%S]" );
+			SetConsoleTextAttribute( GetStdHandle( STD_OUTPUT_HANDLE ), FOREGROUND_INTENSITY | ~FOREGROUND_RED | ~FOREGROUND_GREEN | FOREGROUND_BLUE );
+			std::cout << " [OPN] ";
+			SetConsoleTextAttribute( GetStdHandle( STD_OUTPUT_HANDLE ), ~FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE );
+			std::cout << "Initialized Paladin Debug" << endl;
 		}
 
 		CDebugPrint::~CDebugPrint( )
 		{
 			strsDebugLog << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%m/%d/%Y %H:%M:%S]" ) << " [CLS] " << "Terminated Paladin Debug" << endl;
-			std::cout << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%m/%d/%Y %H:%M:%S]" ) << " [CLS] " << "Terminated Paladin Debug" << endl;
+			std::cout << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%m/%d/%Y %H:%M:%S]" );
+			SetConsoleTextAttribute( GetStdHandle( STD_OUTPUT_HANDLE ), FOREGROUND_INTENSITY | ~FOREGROUND_RED | ~FOREGROUND_GREEN | FOREGROUND_BLUE );
+			std::cout << " [CLS] ";
+			SetConsoleTextAttribute( GetStdHandle( STD_OUTPUT_HANDLE ), ~FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE );
+			std::cout << "Terminated Paladin Debug" << endl;
 
 			std::ofstream ofLogFile( "C:/debug.log" );
 			ofLogFile << strsDebugLog.str( );
@@ -38,11 +49,32 @@ namespace Paladin
 		}
 #endif
 
+		CDebugPrint CDebugPrint::operator<<( const struct SetPrintColor &rhs ) const
+		{
+#if defined( _DEBUG )
+			SetConsoleTextAttribute( GetStdHandle( STD_OUTPUT_HANDLE ), rhs.m_wDesiredAttributes );
+#endif
+			return *this;
+		}
+
 		template< typename _Datatype > CDebugPrint CDebugPrint::operator<<( const _Datatype &rhs )
 		{
 #if defined( _DEBUG )
-			std::cout << rhs;
-			strsDebugLog << rhs;
+			if ( typeid( rhs ) == typeid( std::wstring ) )
+			{
+				std::cout << string_cast< std::string >( rhs );
+				strsDebugLog << string_cast< std::string >( rhs );
+			}
+			else if ( typeid( rhs ) == typeid( const wchar_t * ) )
+			{
+				std::cout << string_cast< const char * >( rhs );
+				strsDebugLog << string_cast< const char * >( rhs );
+			}
+			else
+			{
+				std::cout << rhs;
+				strsDebugLog << rhs;
+			}
 #endif
 			return *this;
 		}
@@ -63,7 +95,7 @@ namespace Paladin
 		void LastError( )
 		{
 #if defined( _DEBUG )
-			DWORD dwError = GetLastError( );
+			auto dwError = GetLastError( );
 			if ( !dwError )
 			{
 				out LER << "[0x0] - No errors" << endl;
@@ -80,11 +112,10 @@ namespace Paladin
 #endif
 		}
 
-		void Pause( )
+		CDebugPrint &SetPrintColor( CDebugPrint &_out, WORD wAttributes )
 		{
-#if defined( _DEBUG )
-			std::cin.get( );
-#endif
+
+			return _out;
 		}
 	}
 }
