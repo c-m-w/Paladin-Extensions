@@ -6,6 +6,7 @@
 
 // Application - These files provide general utilities for application development
 #define WIN32_LEAN_AND_MEAN
+#define NOMINMAX
 #include <Windows.h>
 #include "Application/Utilities.hpp"
 #include "Application/Debug.hpp"

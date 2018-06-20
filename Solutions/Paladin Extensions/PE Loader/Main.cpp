@@ -3,6 +3,4 @@
 #include "Main.hpp"
 
 void OnLaunch( )
-{
-
-}
+{}

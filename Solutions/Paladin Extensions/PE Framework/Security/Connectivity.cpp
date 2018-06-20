@@ -3,6 +3,4 @@
 #include "../Framework.hpp"
 
 namespace Paladin
-{
-
-}
+{}
