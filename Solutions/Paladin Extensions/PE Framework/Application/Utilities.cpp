@@ -46,14 +46,6 @@ namespace Paladin
         return SStringCastImplementation< _To, _From >::Cast( _Source );
     }
 
-    template< typename _To > struct SStringCastImplementation< _To, _To >
-    {
-        static const _To &Cast( const _To &_Source )
-        {
-            return _Source;
-        }
-    };
-
     template< typename _Datatype > struct SStringTypeOfCharacter;
 
     template< > struct SStringTypeOfCharacter< const char * >
