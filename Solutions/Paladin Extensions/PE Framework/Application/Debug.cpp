@@ -60,21 +60,27 @@ namespace Paladin
 		template< typename _Datatype > CDebugPrint CDebugPrint::operator<<( const _Datatype &rhs )
 		{
 #if defined( _DEBUG )
-			if ( typeid( rhs ) == typeid( std::wstring ) )
-			{
-				std::cout << string_cast< std::string >( rhs );
-				strsDebugLog << string_cast< std::string >( rhs );
-			}
-			else if ( typeid( rhs ) == typeid( const wchar_t * ) )
-			{
-				std::cout << string_cast< const char * >( rhs );
-				strsDebugLog << string_cast< const char * >( rhs );
-			}
-			else
-			{
-				std::cout << rhs;
-				strsDebugLog << rhs;
-			}
+
+			std::cout << rhs;
+			strsDebugLog << rhs;
+#endif
+			return *this;
+		}
+
+		template< > CDebugPrint CDebugPrint::operator<<< std::wstring >( const std::wstring &rhs )
+		{
+#if defined( _DEBUG )
+			std::cout << string_cast< std::string >( rhs );
+			strsDebugLog << string_cast< std::string >( rhs );
+#endif
+			return *this;
+		}
+
+		template< > CDebugPrint CDebugPrint::operator<<< const wchar_t * >( const wchar_t *const&rhs )
+		{
+#if defined( _DEBUG )
+			std::cout << string_cast< std::string >( rhs );
+			strsDebugLog << string_cast< std::string >( rhs );
 #endif
 			return *this;
 		}
@@ -110,12 +116,6 @@ namespace Paladin
 				out LER << "[0x" << hex << dwError << "] - " << *lpwstrError << endl;
 			LocalFree( lpwstrError );
 #endif
-		}
-
-		CDebugPrint &SetPrintColor( CDebugPrint &_out, WORD wAttributes )
-		{
-
-			return _out;
 		}
 	}
 }

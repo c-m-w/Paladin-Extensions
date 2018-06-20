@@ -23,14 +23,14 @@ namespace Paladin
 		/**
 		 * \brief Loads configuration of name from parameter in local file directory (Extension '.json' is automatically added)
 		 */
-		void LoadConfiguration( const wchar_t * );
+		void LoadConfiguration( std::wstring );
 		/**
 		* \brief Saves configuration of name from parameter in local file directory and creates a new one if it does not exist. (Extension '.json' is automatically added)
 		*/
-		void SaveConfiguration( const wchar_t * ) const;
+		void SaveConfiguration( std::wstring ) const;
 		/**
 		* \brief Deletes configuration of name from parameter in local file directory. (Extension '.json' is automatically added)
 		*/
-		void DeleteConfiguration( const wchar_t * );
+		void DeleteConfiguration( std::wstring );
 	} extern *cfg;
 }

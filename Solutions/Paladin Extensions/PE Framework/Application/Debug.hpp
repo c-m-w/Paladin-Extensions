@@ -34,11 +34,13 @@ namespace Paladin
 #endif
 			CDebugPrint operator<<( const SetPrintColor & ) const;
 			template < typename _Datatype > CDebugPrint operator<<( const _Datatype & );
+			template < > CDebugPrint operator<<< std::wstring >( const std::wstring & );
+			template < > CDebugPrint operator<<< const wchar_t * >( const wchar_t *const& );
 		} extern out;
 
-		constexpr char tab = '\t';
-		constexpr char endl = '\n';
-		constexpr char quote = '\"';
+		constexpr auto tab = '\t';
+		constexpr auto endl = '\n';
+		constexpr auto quote = '\"';
 
 		/**
 		 * \brief Changes variable output into binary format.

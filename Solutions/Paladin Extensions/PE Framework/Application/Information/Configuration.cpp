@@ -37,7 +37,7 @@ namespace Paladin
 
 		try
 		{
-			LoadConfiguration( string_cast< std::wstring >( jsGlobalConfiguration[ XOR( "Default Configuration" ) ].get_ref< nlohmann::json::string_t & >( ) ).c_str( ) );
+			LoadConfiguration( string_cast< std::wstring >( jsGlobalConfiguration[ XOR( "Default Configuration" ) ].get_ref< nlohmann::json::string_t & >( ) ) );
 		}
 		catch ( nlohmann::detail::parse_error & )
 		{
@@ -50,14 +50,14 @@ namespace Paladin
 		fFile.close( );
 	}
 
-	void CConfiguration::LoadConfiguration( const wchar_t *wszConfig )
+	void CConfiguration::LoadConfiguration( std::wstring wstrConfig )
 	{
-		if ( !PathFileExists( ( wstrPath + wszConfig + XORW( L".json" ) ).c_str( ) ) )
+		if ( !PathFileExists( ( wstrPath + wstrConfig + XORW( L".json" ) ).c_str( ) ) )
 		{
 			// TODO: Missing Configuration File
 		}
 
-		std::ifstream fFile( wstrPath + wszConfig + XORW( L".json" ) );
+		std::ifstream fFile( wstrPath + wstrConfig + XORW( L".json" ) );
 
 		if ( !fFile.is_open( ) )
 		{
@@ -80,9 +80,9 @@ namespace Paladin
 		fFile.close( );
 	}
 
-	void CConfiguration::SaveConfiguration( const wchar_t *wszConfig ) const
+	void CConfiguration::SaveConfiguration( std::wstring wstrConfig ) const
 	{
-		std::ofstream fFile( wstrPath + wszConfig + XORW( L".json" ), std::ofstream::trunc );
+		std::ofstream fFile( wstrPath + wstrConfig + XORW( L".json" ), std::ofstream::trunc );
 		if ( !fFile.is_open( ) )
 		{
 			// TODO: could not open file for writing
@@ -91,11 +91,11 @@ namespace Paladin
 		fFile.close( );
 	}
 
-	void CConfiguration::DeleteConfiguration( const wchar_t *wszConfig )
+	void CConfiguration::DeleteConfiguration( std::wstring wstrConfig )
 	{
-		if ( string_cast< std::wstring >( jsGlobalConfiguration[ XOR( "Default Configuration" ) ].get_ref< nlohmann::json::string_t & >( ) ) != wszConfig )
+		if ( string_cast< std::wstring >( jsGlobalConfiguration[ XOR( "Default Configuration" ) ].get_ref< nlohmann::json::string_t & >( ) ) != wstrConfig )
 		{
-			std::ofstream fFile( wstrPath + wszConfig + XORW( L".json" ), std::ofstream::trunc );
+			std::ofstream fFile( wstrPath + wstrConfig + XORW( L".json" ), std::ofstream::trunc );
 			if ( !fFile.is_open( ) )
 			{
 				// TODO: could not open file for writing

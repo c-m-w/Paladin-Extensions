@@ -4,62 +4,70 @@
 
 namespace Paladin
 {
-	template< typename _Desired, typename _Current > _Desired string_cast( _Current _CurrentString )
-	{
-		auto lambda_caster = [ ]( auto _str )
-		{
-			if ( typeid( _str ) == typeid( std::string ) )
-			{
-				std::wstring wstr;
-				wstr.resize( MultiByteToWideChar( CP_ACP, 0, _str.c_str( ), _str.length( ) + 1, nullptr, 0 ) );
-				MultiByteToWideChar( CP_ACP, 0, _str.c_str( ), _str.length( ) + 1, &wstr[ 0 ], wstr.size( ) );
-				return wstr;
-			}
-			else if ( typeid( _str ) == typeid( std::wstring ) )
-			{
-				std::string str;
-				str.resize( WideCharToMultiByte( CP_ACP, 0, _str.c_str( ), _str.length( ) + 1, nullptr, 0, nullptr, nullptr ) );
-				WideCharToMultiByte( CP_ACP, 0, _str.c_str( ), _str.length( ) + 1, &str[ 0 ], str.size( ), nullptr, nullptr );
-				return str;
-			}
-			else
-			{
-				throw std::exception( XOR( "Attempted to cast unknown string type" ) );
-			}
-		};
+    template< typename _Datatype > struct SStringTraits;
 
-		if ( typeid( _Current ) == typeid( std::string ) && typeid( _Desired ) == typeid( std::wstring ) ||
-			 typeid( _Current ) == typeid( std::wstring ) && typeid( _Desired ) == typeid( std::string ) )
-		{
-			return lambda_caster( _CurrentString );
-		}
+    template< > struct SStringTraits< std::string >
+    {
+        typedef char char_trait_t;
 
-		if ( typeid( _Current ) == typeid( std::string ) && typeid( _Desired ) == typeid( const wchar_t * ) ||
-			 typeid( _Current ) == typeid( std::wstring ) && typeid( _Desired ) == typeid( const char * ) )
-		{
-			return lambda_caster( _CurrentString ).c_str( );
-		}
+        static int ByteConvert( const int iCodePage, LPCSTR szData, int iDataLength, LPWSTR wszBuffer, int iBufferSize )
+        {
+            return MultiByteToWideChar( iCodePage, 0, szData, iDataLength, wszBuffer, iBufferSize );
+        }
+    };
 
-		if ( typeid( _Current ) == typeid( const char * ) && typeid( _Desired ) == typeid( std::wstring ) )
-		{
-			return lambda_caster( std::string( _CurrentString ) );
-		}
+    template< > struct SStringTraits< std::wstring >
+    {
+        typedef wchar_t char_trait_t;
 
-		if ( typeid( _Current ) == typeid( const wchar_t * ) && typeid( _Desired ) == typeid( std::string ) )
-		{
-			return lambda_caster( std::wstring( _CurrentString ) );
-		}
+        static int ByteConvert( const int iCodePage, LPCWSTR wszData, int iDataLength, LPSTR szBuffer, int iBufferSize )
+        {
+            return WideCharToMultiByte( iCodePage, 0, wszData, iDataLength, szBuffer, iBufferSize, nullptr, nullptr );
+        }
+    };
 
-		if ( typeid( _Current ) == typeid( const char * ) && typeid( _Desired ) == typeid( const wchar_t * ) )
-		{
-			return lambda_caster( std::string( _CurrentString ) ).c_str( );
-		}
+    template< typename _To, typename _From > struct SStringCastImplementation
+    {
+        static _To Cast( const _From &_Source )
+        {
+            int iLength = SStringTraits< _From >::ByteConvert( CP_ACP, _Source.data( ), _Source.length( ), nullptr, 0 );
+            if ( iLength == 0 )
+                return _To( );
 
-		if ( typeid( _Current ) == typeid( const wchar_t * ) && typeid( _Desired ) == typeid( const char * ) )
-		{
-			return lambda_caster( std::wstring( _CurrentString ) ).c_str( );
-		}
+            std::vector< typename SStringTraits< _To >::char_trait_t > _strBuffer( iLength );
+            SStringTraits< _From >::ByteConvert( CP_ACP, _Source.data( ), _Source.length( ), &_strBuffer[ 0 ], iLength );
 
-		throw std::exception( XOR( "Attempted to cast unknown string type" ) );
-	}
+            return _To( _strBuffer.begin( ), _strBuffer.end( ) );
+        }
+    };
+
+    template< typename _To, typename _From > _To string_cast( const _From &_Source )
+    {
+        return SStringCastImplementation< _To, _From >::Cast( _Source );
+    }
+
+    template< typename _To > struct SStringCastImplementation< _To, _To >
+    {
+        static const _To &Cast( const _To &_Source )
+        {
+            return _Source;
+        }
+    };
+
+    template< typename _Datatype > struct SStringTypeOfCharacter;
+
+    template< > struct SStringTypeOfCharacter< const char * >
+    {
+        typedef std::string wrap_t;
+    };
+
+    template< > struct SStringTypeOfCharacter< const wchar_t * >
+    {
+        typedef std::wstring wrap_t;
+    };
+
+    template< typename _To, typename _From > _To string_cast( _From *_Source )
+    {
+        return SStringCastImplementation< _To, typename SStringTypeOfCharacter< const _From * >::wrap_t >::Cast( _Source );
+    }
 }
