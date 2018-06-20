@@ -18,16 +18,16 @@
 #include <cstddef>
 #include <initializer_list>
 #include <tuple>
-//#include <any>				// C++ 17
-//#include <optional>			// C++ 17
-//#include <variant>			// C++ 17
-//#include <compare>			// C++ 17
+//#include <any>                // C++ 17
+//#include <optional>           // C++ 17
+//#include <variant>            // C++ 17
+//#include <compare>            // C++ 17
 
 // Dynamic memory management
 #include <new>
 #include <memory>
 #include <scoped_allocator>
-//#include <memory_resource>	// Not Visual Studio 2017 Pre-installed
+//#include <memory_resource>    // Not Visual Studio 2017 Pre-installed
 
 // Numeric limits
 #include <climits>
@@ -50,8 +50,8 @@
 #include <cwchar>
 #include <cuchar>
 #include <string>
-//#include <string_view>		// Not Visual Studio 2017 Pre-installed
-//#include <charconv>			// Not Visual Studio 2017 Pre-installed
+//#include <string_view>        // Not Visual Studio 2017 Pre-installed
+//#include <charconv>           // Not Visual Studio 2017 Pre-installed
 
 // Containers library
 #include <array>
@@ -68,7 +68,7 @@
 
 // Algorithms library
 #include <algorithm>
-//#include <execution>			// Not Visual Studio 2017 Pre-installed
+//#include <execution>          // Not Visual Studio 2017 Pre-installed
 
 // Iterators library
 #include <iterator>
@@ -90,7 +90,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-//#include <syncstream>			// Not Visual Studio 2017 Pre-installed
+//#include <syncstream>         // Not Visual Studio 2017 Pre-installed
 #include <strstream>
 #include <iomanip>
 #include <streambuf>

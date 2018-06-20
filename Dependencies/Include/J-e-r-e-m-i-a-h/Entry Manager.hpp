@@ -11,7 +11,7 @@
 
 namespace Paladin
 {
-	static HINSTANCE hinstWin;
+    static HINSTANCE hinstWin;
 };
 
 extern void OnLaunch( );
@@ -22,15 +22,18 @@ int WINAPI wWinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 int WINAPI WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nCmdShow )
 #endif
 {
-	Paladin::hinstWin = hInstance;
+    if ( hInstance && hInstance != INVALID_HANDLE_VALUE )
+    {
+        Paladin::hinstWin = hInstance;
+    }
 
 #if defined( _DEBUG )
-	AllocConsole( );
-	freopen_s( new FILE * { nullptr }, "CONOUT$", "w", stdout );
+    AllocConsole( );
+    freopen_s( new FILE * { nullptr }, "CONOUT$", "w", stdout );
 #endif
 
-	OnLaunch( );
-	return NULL;
+    OnLaunch( );
+    return NULL;
 }
 
 #elif !defined( ENTRY_AS_WIN ) && defined( ENTRY_AS_DLL ) && !defined( ENTRY_AS_NONE )
@@ -40,7 +43,7 @@ int WINAPI WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 
 namespace Paladin
 {
-	static HINSTANCE hinstDLL;
+    static HINSTANCE hinstDLL;
 };
 
 extern void OnAttach( );
@@ -49,47 +52,50 @@ extern void OnDetach( );
 inline void Detach( )
 {
 #if defined( _DEBUG )
-	FreeConsole( );
+    FreeConsole( );
 #endif
-	OnDetach( );
-	FreeLibraryAndExitThread( Paladin::hinstDLL, 0 );
+    OnDetach( );
+    FreeLibraryAndExitThread( Paladin::hinstDLL, 0 );
 }
 
 inline DWORD WINAPI ThreadProc( _In_ LPVOID lpParameter )
 {
 #if defined( _DEBUG )
-	AllocConsole( );
-	freopen_s( new FILE * { nullptr }, "CONOUT$", "w", stdout );
+    AllocConsole( );
+    freopen_s( new FILE * { nullptr }, "CONOUT$", "w", stdout );
 #endif
 
-	OnAttach( );
-	return NULL;
+    OnAttach( );
+    return NULL;
 }
 
 BOOL WINAPI DllMain( _In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID lpvReserved )
 {
-	switch ( fdwReason )
-	{
-		case DLL_PROCESS_ATTACH:
-		{
-			DisableThreadLibraryCalls( hinstDLL );
-			Paladin::hinstDLL = hinstDLL;
+    switch ( fdwReason )
+    {
+        case DLL_PROCESS_ATTACH:
+        {
+            if ( hinstDLL && hinstDLL != INVALID_HANDLE_VALUE )
+            {
+                DisableThreadLibraryCalls( hinstDLL );
+                Paladin::hinstDLL = hinstDLL;
+            }
 
-			HANDLE hThreadProc = CreateThread( nullptr, 0, ThreadProc, lpvReserved, 0, nullptr );
-			if ( !hThreadProc || hThreadProc == INVALID_HANDLE_VALUE )
-				return FALSE;
+            HANDLE hThreadProc = CreateThread( nullptr, 0, ThreadProc, lpvReserved, 0, nullptr );
+            if ( !hThreadProc || hThreadProc == INVALID_HANDLE_VALUE )
+                return FALSE;
 
-			return TRUE;
-		}
-		case DLL_PROCESS_DETACH:
+            return TRUE;
+        }
+        case DLL_PROCESS_DETACH:
 #if defined( _DEBUG )
-			FreeConsole( );
+            FreeConsole( );
 #endif
-			OnDetach( );
-			return TRUE;
-		default:
-			return FALSE;
-	}
+            OnDetach( );
+            return TRUE;
+        default:
+            return FALSE;
+    }
 }
 
 #elif !defined( ENTRY_AS_WIN ) && !defined( ENTRY_AS_DLL ) && defined( ENTRY_AS_NONE )
