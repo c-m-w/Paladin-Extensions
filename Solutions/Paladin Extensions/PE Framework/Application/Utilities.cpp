@@ -41,6 +41,12 @@ namespace Paladin
         }
     };
 
+    template< typename _ChildClass > _ChildClass &ISingleton< _ChildClass >::Get( )
+    {
+        static _ChildClass _ChildClassObject;
+        return _ChildClassObject;
+    }
+
     template< typename _To, typename _From > _To string_cast( const _From &_Source )
     {
         return SStringCastImplementation< _To, _From >::Cast( _Source );
