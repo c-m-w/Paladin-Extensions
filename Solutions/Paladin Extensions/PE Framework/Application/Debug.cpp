@@ -75,7 +75,7 @@ namespace Paladin
             return *this;
         }
 
-        template< > CDebugPrint CDebugPrint::operator<<< const wchar_t * >( const wchar_t *const&rhs )
+        template< > CDebugPrint CDebugPrint::operator<<< const wchar_t * >( const wchar_t *const &rhs )
         {
 #if defined( _DEBUG )
             std::cout << string_cast< std::string >( rhs );
