@@ -33,9 +33,9 @@ namespace Paladin
             CDebugPrint( const CDebugPrint & );
 #endif
             template< typename _Datatype > CDebugPrint operator<<( const _Datatype & );
-			template< > CDebugPrint operator<<( const SetPrintColor & );
+            template< > CDebugPrint operator<<< SetPrintColor > ( const SetPrintColor & );
             template< > CDebugPrint operator<<< std::wstring >( const std::wstring & );
-            template< > CDebugPrint operator<<< const wchar_t * >( const wchar_t *const& );
+            template< > CDebugPrint operator<<< const wchar_t * >( const wchar_t * const & );
         } extern out;
 
         constexpr auto tab = '\t';
