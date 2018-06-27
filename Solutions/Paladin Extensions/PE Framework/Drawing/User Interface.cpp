@@ -13,8 +13,10 @@
 
 namespace Paladin
 {
-    LRESULT WINAPI WndProc( HWND hwHWND, UINT uMessage, WPARAM uwParam, LPARAM llParam )
+    LRESULT WINAPI WndProc( HWND hwWindowHandle, UINT uMessage, WPARAM uwParam, LPARAM llParam )
     {
+		ui->OnEvent( hwWindowHandle, uMessage, uwParam, llParam );
+
         switch ( uMessage )
         {
             case WM_DESTROY:
@@ -40,13 +42,14 @@ namespace Paladin
                 break;
         }
 
-        if ( nk_d3d9_handle_event( hwHWND, uMessage, uwParam, llParam ) )
-            return 0;
-
-        return DefWindowProcW( hwHWND, uMessage, uwParam, llParam );
+        return nk_d3d9_handle_event( hwWindowHandle, uMessage, uwParam, llParam ) 
+    			   ? ( ui->uOldWindowProc 
+				   	   ? CallWindowProc( reinterpret_cast< WNDPROC >( ui->uOldWindowProc ), hwWindowHandle, uMessage, uwParam, llParam ) 
+				   	   : 0 ) 
+    			   : DefWindowProc( hwWindowHandle, uMessage, uwParam, llParam );
     }
 
-    CUserInterface::CUserInterface( const char *szDesiredNuklearWindowTitle, unsigned uDesiredWindowSize[ 2 ] )
+    CUserInterface::CUserInterface( const char *szDesiredNuklearWindowTitle, unsigned *uDesiredWindowSize )
     {
         szNuklearWindowTitle = szDesiredNuklearWindowTitle;
         SetWindowSize( uDesiredWindowSize[ 0 ], uDesiredWindowSize[ 1 ] );

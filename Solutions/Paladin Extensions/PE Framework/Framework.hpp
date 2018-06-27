@@ -9,6 +9,7 @@
 #define NOMINMAX
 #include <Windows.h>
 #include "Application/Utilities.hpp"
+#include "Application/Input.hpp"
 #include "Application/Debug.hpp"
 
 // Security - These files provide specific functionality for ensuring security and verifying authenticity

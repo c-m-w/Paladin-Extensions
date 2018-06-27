@@ -49,20 +49,34 @@ namespace Paladin
         pDevice->Present( nullptr, nullptr, nullptr, nullptr );
     }
 
-    void CRender::SetWindowSize( unsigned uWidth, unsigned uHeight )
-    {
-        uWindowWidth = uWidth;
-        uWindowHeight = uHeight;
+	void CRender::SetWindowProc( IDirect3DDevice9 *pTargetDevice )
+	{
+		D3DDEVICE_CREATION_PARAMETERS cpParameters;
+		dbg::Assert( pTargetDevice->GetCreationParameters( &cpParameters ) >= 0 );
+		uOldHWND = cpParameters.hFocusWindow;
 
-        if ( !hWnd )
-            return;
-
-        RECT rcWindowRect;
-        GetWindowRect( hWnd, &rcWindowRect );
-        // rcNewWindowRect never used
-        //auto rcNewWindowRect = rcWindowRect;
-        //rcNewWindowRect.bottom += uHeight - ( rcWindowRect.bottom - rcWindowRect.top );
-        //rcNewWindowRect.right += uWidth - ( rcWindowRect.right - rcWindowRect.left );
-        SetWindowPos( hWnd, nullptr, rcWindowRect.left, rcWindowRect.top, uWindowWidth, uWindowHeight, SWP_SHOWWINDOW );
+		uOldWindowProc = SetWindowLongPtr( uOldHWND, GWLP_WNDPROC, reinterpret_cast< long >( WndProc ) );
+		dbg::Assert( uOldWindowProc );
     }
+
+	void CRender::SetWindowSize( unsigned uWidth, unsigned uHeight )
+	{
+		uWindowWidth = uWidth;
+		uWindowHeight = uHeight;
+
+		if ( !hWnd )
+			return;
+
+		RECT rcWindowRect;
+		GetWindowRect( hWnd, &rcWindowRect );
+		SetWindowPos( hWnd, nullptr, rcWindowRect.left, rcWindowRect.top, uWindowWidth, uWindowHeight, SWP_SHOWWINDOW );
+	}
+
+	CRender::~CRender( )
+	{
+		if ( uOldWindowProc )
+			SetWindowLongPtr( uOldHWND, GWLP_WNDPROC, uOldWindowProc );
+		if ( hWnd )
+			UnregisterClass( szWindowTitle, wndWindow.hInstance );
+	}
 }

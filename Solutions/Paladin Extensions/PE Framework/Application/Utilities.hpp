@@ -4,6 +4,22 @@
 
 namespace Paladin
 {
+	/**
+	 * \brief Properly sized datatype to hold the current time.
+	 */
+	typedef unsigned long long moment_t;
+	/**
+	 * \brief Gets the local time
+	 * \tparam _Datatype The format of time to return in ( std::chrono )
+	 * \return Local time in specified format
+	 */
+	template< typename _Datatype > moment_t GetMoment( );
+	/**
+	 * \brief Gets the local time
+	 * \return Local time in milliseconds
+	 */
+	moment_t GetMoment( );
+
 #define abstract_class class
     /**
      * \brief Inheritable abstract class that only allows a single object of child class to be instantiated

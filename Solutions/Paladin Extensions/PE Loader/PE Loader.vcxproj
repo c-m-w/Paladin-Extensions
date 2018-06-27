@@ -16,6 +16,11 @@
   <ItemGroup>
     <ClInclude Include="Main.hpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PE Framework\PE Framework.vcxproj">
+      <Project>{3de44977-ccf2-44d5-acc3-0de1f0475e6b}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{242232EE-83F0-48FE-99C5-7ACB41FB1A39}</ProjectGuid>
@@ -73,6 +78,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

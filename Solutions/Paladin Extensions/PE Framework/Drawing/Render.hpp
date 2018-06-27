@@ -23,14 +23,17 @@ namespace Paladin
         WNDCLASSEX wndWindow { sizeof( WNDCLASSEX ), NULL, WndProc, 0, 0, GetModuleHandle( nullptr ), nullptr, LoadCursor( nullptr, IDC_ARROW ), nullptr, nullptr, szWindowTitle, nullptr };
 
         void CreateRenderTarget( );
-        virtual void InitializeDirectX( );
+        void InitializeDirectX( );
         void BeginRender( );
         void EndRender( );
     public:
-        virtual ~CRender( ) = default;
+		void SetWindowSize( unsigned, unsigned );
+		void SetWindowProc( IDirect3DDevice9 * );
+		~CRender( );
+
+		unsigned uOldWindowProc { };
+		HWND uOldHWND { };
         IDirect3DDevice9 *pDevice { };
         D3DPRESENT_PARAMETERS dxParameters { };
-
-        void SetWindowSize( unsigned, unsigned );
     };
 }
