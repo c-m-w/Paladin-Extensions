@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include <J-e-r-e-m-i-a-h/Standard Namespace.hpp>
+#include <J-e-r-e-m-i-a-h/Standard Library.hpp>
 
 /**
  * \brief Application - These files provide general utilities for application development

@@ -1,6 +1,9 @@
-/// std.hpp
+/// Standard Library.hpp
 
 #pragma once
+
+// Concepts library
+//#include <concepts>           // C++ 20
 
 // Utilities library
 #include <cstdlib>
@@ -18,16 +21,17 @@
 #include <cstddef>
 #include <initializer_list>
 #include <tuple>
-//#include <any>                // C++ 17
-//#include <optional>           // C++ 17
-//#include <variant>            // C++ 17
-//#include <compare>            // C++ 17
+#include <any>
+#include <optional>
+#include <variant>
+//#include <compare>            // C++ 20
+//#include <version>            // C++ 20
 
 // Dynamic memory management
 #include <new>
 #include <memory>
 #include <scoped_allocator>
-//#include <memory_resource>    // Not Visual Studio 2017 Pre-installed
+#include <memory_resource>
 
 // Numeric limits
 #include <climits>
@@ -50,8 +54,8 @@
 #include <cwchar>
 #include <cuchar>
 #include <string>
-//#include <string_view>        // Not Visual Studio 2017 Pre-installed
-//#include <charconv>           // Not Visual Studio 2017 Pre-installed
+#include <string_view>
+#include <charconv>
 
 // Containers library
 #include <array>
@@ -65,10 +69,11 @@
 #include <unordered_map>
 #include <stack>
 #include <queue>
+//#include <span>               // C++ 20
 
 // Algorithms library
 #include <algorithm>
-//#include <execution>          // Not Visual Studio 2017 Pre-installed
+#include <execution>
 
 // Iterators library
 #include <iterator>
@@ -81,6 +86,7 @@
 #include <numeric>
 #include <ratio>
 #include <cfenv>
+//#include <bit>                // C++ 20
 
 // Input/output library
 #include <iosfwd>
@@ -90,8 +96,8 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-//#include <syncstream>         // Not Visual Studio 2017 Pre-installed
-#include <strstream>
+//#include <syncstream>         // C++ 20
+//#include <strstream>          // C++ 17 Deprecated
 #include <iomanip>
 #include <streambuf>
 #include <cstdio>
