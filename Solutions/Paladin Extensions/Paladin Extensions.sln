@@ -18,6 +18,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PE Driver", "PE Driver\PE Driver.vcxproj", "{FA1CEBD2-773C-44C3-AC50-3B191C6A1D15}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PE Virtual Drive", "PE Virtual Drive\PE Virtual Drive.vcxproj", "{D76D2DF9-E618-4601-A72C-1810751CF7DD}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3DE44977-CCF2-44D5-ACC3-0DE1F0475E6B} = {3DE44977-CCF2-44D5-ACC3-0DE1F0475E6B}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

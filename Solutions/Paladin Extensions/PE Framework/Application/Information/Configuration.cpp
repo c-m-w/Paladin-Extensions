@@ -108,6 +108,4 @@ namespace Paladin
             // TODO: Attempted to delete global configuration
         }
     }
-
-    CConfiguration *cfg;
 }

@@ -3,4 +3,9 @@
 #pragma once
 
 namespace Paladin
-{}
+{
+    class CConnectivity
+    {
+        
+    } inline *connect;
+}

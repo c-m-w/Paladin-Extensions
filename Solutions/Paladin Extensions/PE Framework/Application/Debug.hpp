@@ -36,7 +36,7 @@ namespace Paladin
             template< > CDebugPrint operator<<< SetPrintColor > ( const SetPrintColor & );
             template< > CDebugPrint operator<<< std::wstring >( const std::wstring & );
             template< > CDebugPrint operator<<< const wchar_t * >( const wchar_t *const & );
-        } extern out;
+        } inline out;
 
         constexpr auto tab = '\t';
         constexpr auto endl = '\n';

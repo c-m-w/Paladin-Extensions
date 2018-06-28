@@ -84,8 +84,6 @@ namespace Paladin
             return *this;
         }
 
-        CDebugPrint out;
-
         std::ios_base &__CLRCALL_OR_CDECL binary( std::ios_base &_Iosbase )
         {	// set basefield to binary
             _Iosbase.setf( std::ios_base::binary, std::ios_base::basefield );

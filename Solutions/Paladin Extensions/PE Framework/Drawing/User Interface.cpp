@@ -112,14 +112,14 @@ namespace Paladin
     {
         auto pos = nk_window_get_position( pContext );
         RECT rcWindowRectangle;
-        GetWindowRect( hWnd, &rcWindowRectangle );
+        GetWindowRect( hwWindowHandle, &rcWindowRectangle );
 
         rcWindowRectangle.top += int( pos.y );
         rcWindowRectangle.bottom += int( pos.y );
         rcWindowRectangle.left += int( pos.x );
         rcWindowRectangle.right += int( pos.x );
 
-        SetWindowPos( hWnd, nullptr, rcWindowRectangle.left, rcWindowRectangle.top, uWindowWidth, uWindowHeight, SWP_SHOWWINDOW );
+        SetWindowPos( hwWindowHandle, nullptr, rcWindowRectangle.left, rcWindowRectangle.top, uWindowWidth, uWindowHeight, SWP_SHOWWINDOW );
         nk_window_set_position( pContext, szNuklearWindowTitle, nk_vec2( 0, 0 ) );
     }
 
@@ -135,6 +135,4 @@ namespace Paladin
         HandleWindowInput( );
         RenderUserInterface( );
     }
-
-    CUserInterface *ui;
 }

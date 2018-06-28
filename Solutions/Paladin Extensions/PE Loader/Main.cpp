@@ -1,7 +1,7 @@
 /// Main.cpp
 
 #include "Main.hpp"
-#include "../PE Framework/Framework.hpp"
+#include <Framework.hpp>
 
 void OnLaunch( )
 {
