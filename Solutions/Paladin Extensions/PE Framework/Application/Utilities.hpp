@@ -5,7 +5,7 @@
 namespace Paladin
 {
 	/**
-	 * \brief Properly sized datatype to hold the current time.
+	 * \brief Properly sized datatype to hold time.
 	 */
 	typedef unsigned long long moment_t;
 	/**
@@ -19,6 +19,16 @@ namespace Paladin
 	 * \return Local time in milliseconds
 	 */
 	moment_t GetMoment( );
+
+	/**
+	 * \brief Sleeps the thread that has called for the amount of time, in the unit of time specified.
+	 * \tparam _Datatype The unit of time to wait for ( std::chrono ).
+	 */
+	template< typename _Datatype > void Wait( moment_t );
+	/**
+	 * \brief Waits a specified amount of time in milliseconds.
+	 */
+	void Wait( moment_t );
 
 #define M_ABSTRACT_CLASS class
     /**

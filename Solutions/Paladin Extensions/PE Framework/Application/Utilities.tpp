@@ -7,6 +7,11 @@ namespace Paladin
 		return std::chrono::duration_cast< _Datatype >( std::chrono::system_clock::now( ).time_since_epoch( ) ).count( );
 	}
 
+	template< typename _Datatype > void Wait( moment_t mTimeToWait ) 
+	{
+		std::this_thread::sleep_for( _Datatype( mTimeToWait ) );
+	}
+
     template< typename _Datatype > struct SStringTraits;
 
     template< > struct SStringTraits< std::string >
