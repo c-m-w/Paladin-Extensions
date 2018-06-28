@@ -6,8 +6,8 @@ namespace Paladin
 {
 	void CRender::CreateRenderTarget( )
 	{
-		RegisterClassExW( &wndWindow );
-		hwWindowHandle = CreateWindowExW( 0, szWindowTitle, szWindowTitle, WS_POPUP,
+		RegisterClassEx( &wndWindow );
+		hwWindowHandle = CreateWindowEx( 0, szWindowTitle, szWindowTitle, WS_POPUP,
 										  uWindowStartPosition[ 0 ], uWindowStartPosition[ 1 ], uWindowWidth, uWindowHeight,
 										  nullptr, nullptr, wndWindow.hInstance, nullptr );
 				  //SetLayeredWindowAttributes( hWnd, 0, 1.0f, LWA_ALPHA );
