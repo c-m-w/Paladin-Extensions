@@ -32,5 +32,5 @@ namespace Paladin
         * \brief Deletes configuration of name from parameter in local file directory. (Extension '.json' is automatically added)
         */
         void DeleteConfiguration( std::wstring );
-    } inline *cfg;
+    } static *cfg;
 }

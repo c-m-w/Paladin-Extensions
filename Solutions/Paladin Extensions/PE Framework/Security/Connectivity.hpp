@@ -7,5 +7,5 @@ namespace Paladin
     class CConnectivity
     {
         
-    } inline *connect;
+    } static *connect;
 }

@@ -7,5 +7,5 @@ namespace Paladin
     class CInjection
     {
         
-    } inline *inject;
+    } static *inject;
 }
