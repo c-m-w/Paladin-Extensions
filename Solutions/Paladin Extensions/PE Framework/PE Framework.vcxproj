@@ -181,6 +181,11 @@
     <ClInclude Include="Security\Encryption.hpp" />
     <ClInclude Include="Security\Injection.hpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Application\Debug.tpp" />
+    <None Include="Application\Utilities.tpp" />
+    <None Include="Security\Encryption.tpp" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

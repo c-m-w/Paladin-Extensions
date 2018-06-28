@@ -47,7 +47,7 @@ namespace Paladin
 
             static const _char _chXorKey = static_cast< _char >( SEnsureCompileTime< LinearCongruentGenerator( 10 ) >::VALUE % 0x10000 );
 
-            constexpr _char EncryptCharacter( const _char );
+            constexpr _char EncryptCharacter( const _char, int );
 
         public:
             constexpr CXorString( const _char * const );
@@ -69,3 +69,5 @@ namespace Paladin
  * \param String C-style wide string
  */
 #define XORW( String ) ( Paladin::xors::CXorString< wchar_t, Paladin::xors::SConstructIndexList< ( sizeof( String ) - 1 ) / 2 >::result_t >( String ).Decrypt( ) )
+
+#include "Encryption.tpp"
