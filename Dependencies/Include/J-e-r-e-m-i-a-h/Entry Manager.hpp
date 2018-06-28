@@ -6,7 +6,7 @@
 #pragma message( "fatal error PE0: No automatic entry creation method defined. Use '#define ENTRY_AS_WIN' or '#define ENTRY_AS_DLL' when including the framework to use automatic entry creation. Use '#define ENTRY_AS_NONE' to disable automatic entry management." )
 #elif defined( ENTRY_AS_WIN ) && !defined( ENTRY_AS_DLL ) && !defined( ENTRY_AS_NONE )
 
-#include <J-e-r-e-m-i-a-h/Standard Namespace.hpp>
+#include <J-e-r-e-m-i-a-h/Standard Library.hpp>
 #include <Windows.h>
 
 namespace Paladin
@@ -22,10 +22,16 @@ int WINAPI wWinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 int WINAPI WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine, _In_ int nCmdShow )
 #endif
 {
+#if defined( UNICODE )
+    HANDLE hSingleInstanceMutex = CreateMutex( NULL, TRUE, L"Paladin Extensions" );
+#else
+    HANDLE hSingleInstanceMutex = CreateMutex( NULL, TRUE, "Paladin Extensions" );
+#endif
+    if ( hSingleInstanceMutex == INVALID_HANDLE_VALUE || GetLastError( ) == ERROR_ALREADY_EXISTS )
+        return -1;
+
     if ( hInstance && hInstance != INVALID_HANDLE_VALUE )
-    {
         Paladin::hinstWin = hInstance;
-    }
 
 #if defined( _DEBUG )
     AllocConsole( );
@@ -33,7 +39,7 @@ int WINAPI WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
 #endif
 
     OnLaunch( );
-    return NULL;
+    return 0;
 }
 
 #elif !defined( ENTRY_AS_WIN ) && defined( ENTRY_AS_DLL ) && !defined( ENTRY_AS_NONE )
@@ -71,6 +77,14 @@ inline DWORD WINAPI ThreadProc( _In_ LPVOID lpParameter )
 
 BOOL WINAPI DllMain( _In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID lpvReserved )
 {
+#if defined( UNICODE )
+    HANDLE hSingleInstanceMutex = CreateMutex( NULL, TRUE, L"Paladin Extensions" );
+#else
+    HANDLE hSingleInstanceMutex = CreateMutex( NULL, TRUE, "Paladin Extensions" );
+#endif
+    if ( GetLastError( ) == ERROR_ALREADY_EXISTS )
+        return FALSE;
+
     switch ( fdwReason )
     {
         case DLL_PROCESS_ATTACH:
