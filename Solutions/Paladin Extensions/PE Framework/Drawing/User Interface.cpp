@@ -50,15 +50,29 @@ namespace Paladin
     			   : DefWindowProc( hwWindowHandle, uMessage, uwParam, llParam );
     }
 
-    CUserInterface::CUserInterface( const char *szDesiredNuklearWindowTitle, unsigned *uDesiredWindowSize )
+    CUserInterface::CUserInterface( const char *szDesiredNuklearWindowTitle, unsigned *uDesiredWindowSize, const wchar_t *szDesiredWindowClassTitle /*= nullptr*/ )
     {
         szNuklearWindowTitle = szDesiredNuklearWindowTitle;
+		szWindowTitle = szDesiredWindowClassTitle;
         SetWindowSize( uDesiredWindowSize[ 0 ], uDesiredWindowSize[ 1 ] );
     }
 
-    void CUserInterface::InitializeNuklear( )
+	void CUserInterface::Shutdown( ) 
+	{
+		nk_d3d9_shutdown( );
+
+		if ( bCreatedDevice )
+		{
+			pDevice->Release( );
+			pObjectEx->Release( );
+			UnregisterClass( szWindowTitle, wndWindow.hInstance );
+		}
+    }
+
+	void CUserInterface::InitializeNuklear( )
     {
         pContext = nk_d3d9_init( pDevice, uWindowWidth, uWindowHeight );
+		fcFontConfiguration = new struct nk_font_config;
         *fcFontConfiguration = nk_font_config( 14 );
         fcFontConfiguration->oversample_h = 1;
         fcFontConfiguration->oversample_v = 1;
@@ -104,24 +118,58 @@ namespace Paladin
 
     void CUserInterface::InitializeUserInterface( )
     {
-        CreateRenderTarget( );
+		if( szWindowTitle )
+			CreateRenderTarget( );
+
         InitializeDirectX( );
         InitializeNuklear( );
     }
 
-    void CUserInterface::HandleWindowInput( )
+    bool CUserInterface::HandleWindowInput( )
     {
-        auto pos = nk_window_get_position( pContext );
-        RECT rcWindowRectangle;
-        GetWindowRect( hwWindowHandle, &rcWindowRectangle );
+		if ( bCreatedDevice )
+		{
+			static auto bDrag = false;
+			RECT recWindowPos { };
+			GetWindowRect( hwWindowHandle, &recWindowPos );
+			static POINT pntOldCursorPosRelative { };
 
-        rcWindowRectangle.top += int( pos.y );
-        rcWindowRectangle.bottom += int( pos.y );
-        rcWindowRectangle.left += int( pos.x );
-        rcWindowRectangle.right += int( pos.x );
+			if ( GetKeyState( VK_LBUTTON ) == EKeyState::DOWN )
+			{
+				POINT pntCursorPos { };
+				GetCursorPos( &pntCursorPos );
+				POINT pntCursorPosRelative { pntCursorPos.x - recWindowPos.left, pntCursorPos.y - recWindowPos.top };
 
-        SetWindowPos( hwWindowHandle, nullptr, rcWindowRectangle.left, rcWindowRectangle.top, uWindowWidth, uWindowHeight, SWP_SHOWWINDOW );
-        nk_window_set_position( pContext, szNuklearWindowTitle, nk_vec2( 0, 0 ) );
+				if ( ( pntCursorPosRelative.x > 0 && pntCursorPosRelative.x <= signed( uWindowWidth ) && pntCursorPosRelative.y > 0 && pntCursorPosRelative.y <= signed( uTitleBarHeight ) ) || bDrag )
+				{
+					bDrag = true;
+					if ( !pntOldCursorPosRelative.x || !pntOldCursorPosRelative.y ) pntOldCursorPosRelative = pntCursorPosRelative;
+
+					SetWindowPos( hwWindowHandle, nullptr, ( recWindowPos.left - pntOldCursorPosRelative.x ) + pntCursorPosRelative.x, 
+							    ( recWindowPos.top - pntOldCursorPosRelative.y ) + pntCursorPosRelative.y, uWindowWidth, uWindowHeight, 0 );
+					UpdateWindow( hwWindowHandle );
+				}
+			}
+			else
+			{
+				pntOldCursorPosRelative = { 0, 0 };
+				bDrag = false;
+			}
+			constexpr struct nk_vec2 vecDefaultLocation { 0, 0 };
+			nk_window_set_position( pContext, szNuklearWindowTitle, vecDefaultLocation );
+		}
+
+		MSG msgBuffer;
+		nk_input_begin( pContext );
+		while( PeekMessage( &msgBuffer, hwWindowHandle, 0, 0, PM_REMOVE ) ) 
+		{
+			if ( msgBuffer.message == WM_QUIT )
+				bShouldDrawInterface = false;
+			TranslateMessage( &msgBuffer );
+			DispatchMessage( &msgBuffer );
+		}
+		nk_input_end( pContext );
+		return bShouldDrawInterface;
     }
 
     void CUserInterface::RenderUserInterface( )
@@ -129,11 +177,5 @@ namespace Paladin
         BeginRender( );
         nk_d3d9_render( NK_ANTI_ALIASING_ON );
         EndRender( );
-    }
-
-    void CUserInterface::DrawUserInterface( )
-    {
-        HandleWindowInput( );
-        RenderUserInterface( );
     }
 }

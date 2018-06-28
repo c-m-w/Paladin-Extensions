@@ -13,13 +13,16 @@ namespace Paladin
         const char *szNuklearWindowTitle;
 
     public:
-        CUserInterface( const char *, unsigned * );
+        CUserInterface( const char *,unsigned *, const wchar_t * = nullptr );
+	    void Shutdown( );
     private:
         void InitializeNuklear( );
-        void HandleWindowInput( );
-        virtual void RenderUserInterface( );
+        bool HandleWindowInput( );
+        void RenderUserInterface( );
     public:
-        virtual void InitializeUserInterface( );
-        virtual void DrawUserInterface( );
+        void InitializeUserInterface( );
+        bool DrawUserInterface( );
+
+		bool bShouldDrawInterface = true;
     } inline *ui;
 }
