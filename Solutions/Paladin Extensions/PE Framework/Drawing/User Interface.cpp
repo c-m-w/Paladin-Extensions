@@ -40,6 +40,7 @@ namespace Paladin
                     }
                 }
                 break;
+            default: ;
         }
 
         return nk_d3d9_handle_event( hwWindowHandle, uMessage, uwParam, llParam ) 
@@ -64,9 +65,9 @@ namespace Paladin
         fcFontConfiguration->range = nk_font_default_glyph_ranges( );
 
         nk_d3d9_font_stash_begin( &pAtlas );
-        pFontAwesome = nk_font_atlas_add_from_file( pAtlas, XOR( R"(C:\Windows\Fonts\fontawesome-webfont.ttf)" ), 16, fcFontConfiguration );
-        pTahoma = nk_font_atlas_add_from_file( pAtlas, XOR( R"(C:\Windows\Fonts\Tahoma.ttf)" ), 16, fcFontConfiguration );
-        pRoboto = nk_font_atlas_add_from_file( pAtlas, XOR( R"(C:\Windows\Fonts\Roboto-Regular.ttf)" ), 20, fcFontConfiguration );
+        pFontAwesome = nk_font_atlas_add_from_file( pAtlas, M_XOR( R"(C:\Windows\Fonts\fontawesome-webfont.ttf)" ), 16, fcFontConfiguration );
+        pTahoma = nk_font_atlas_add_from_file( pAtlas, M_XOR( R"(C:\Windows\Fonts\Tahoma.ttf)" ), 16, fcFontConfiguration );
+        pRoboto = nk_font_atlas_add_from_file( pAtlas, M_XOR( R"(C:\Windows\Fonts\Roboto-Regular.ttf)" ), 20, fcFontConfiguration );
         nk_d3d9_font_stash_end( );
 
         struct nk_color clrColors[ NK_COLOR_COUNT ];

@@ -63,11 +63,11 @@ namespace Paladin
  * \brief Encrypts string data on compile, then decrypts for access on run.
  * \param String C-style string
  */
-#define XOR( String ) ( Paladin::xors::CXorString< char, Paladin::xors::SConstructIndexList< sizeof( String ) - 1 >::result_t >( String ).Decrypt( ) )
+#define M_XOR( String ) ( Paladin::xors::CXorString< char, Paladin::xors::SConstructIndexList< sizeof( String ) - 1 >::result_t >( String ).Decrypt( ) )
 /**
  * \brief Encrypts wide string data on compile, then decrypts for access on run.
  * \param String C-style wide string
  */
-#define XORW( String ) ( Paladin::xors::CXorString< wchar_t, Paladin::xors::SConstructIndexList< ( sizeof( String ) - 1 ) / 2 >::result_t >( String ).Decrypt( ) )
+#define M_WXOR( String ) ( Paladin::xors::CXorString< wchar_t, Paladin::xors::SConstructIndexList< ( sizeof( String ) - 1 ) / 2 >::result_t >( String ).Decrypt( ) )
 
 #include "Encryption.tpp"

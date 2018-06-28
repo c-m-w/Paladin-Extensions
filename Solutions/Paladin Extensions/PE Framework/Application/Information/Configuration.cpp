@@ -8,14 +8,14 @@ namespace Paladin
     {
         auto wchTemp = new wchar_t[ MAX_PATH ];
         GetModuleFileName( nullptr, wchTemp, MAX_PATH );
-        wstrPath = std::wstring( wchTemp ).substr( 0, std::wstring( wchTemp ).find_last_of( XORW( L"/\\" ) ) + 1 ) + XORW( L"Configurations\\" );
+        wstrPath = std::wstring( wchTemp ).substr( 0, std::wstring( wchTemp ).find_last_of( M_WXOR( L"/\\" ) ) + 1 ) + M_WXOR( L"Configurations\\" );
 
-        if ( !PathFileExists( ( wstrPath + XORW( L"global.json" ) ).c_str( ) ) )
+        if ( !PathFileExists( ( wstrPath + M_WXOR( L"global.json" ) ).c_str( ) ) )
         {
             // TODO: Missing Global Configuration File
         }
 
-        std::ifstream fFile( wstrPath + XORW( L"global.json" ) );
+        std::ifstream fFile( wstrPath + M_WXOR( L"global.json" ) );
 
         if ( !fFile.is_open( ) )
         {
@@ -37,7 +37,7 @@ namespace Paladin
 
         try
         {
-            LoadConfiguration( string_cast< std::wstring >( jsGlobalConfiguration[ XOR( "Default Configuration" ) ].get_ref< nlohmann::json::string_t & >( ) ) );
+            LoadConfiguration( string_cast< std::wstring >( jsGlobalConfiguration[ M_XOR( "Default Configuration" ) ].get_ref< nlohmann::json::string_t & >( ) ) );
         }
         catch ( nlohmann::detail::parse_error & )
         {
@@ -52,12 +52,12 @@ namespace Paladin
 
     void CConfiguration::LoadConfiguration( std::wstring wstrConfig )
     {
-        if ( !PathFileExists( ( wstrPath + wstrConfig + XORW( L".json" ) ).c_str( ) ) )
+        if ( !PathFileExists( ( wstrPath + wstrConfig + M_WXOR( L".json" ) ).c_str( ) ) )
         {
             // TODO: Missing Configuration File
         }
 
-        std::ifstream fFile( wstrPath + wstrConfig + XORW( L".json" ) );
+        std::ifstream fFile( wstrPath + wstrConfig + M_WXOR( L".json" ) );
 
         if ( !fFile.is_open( ) )
         {
@@ -82,7 +82,7 @@ namespace Paladin
 
     void CConfiguration::SaveConfiguration( std::wstring wstrConfig ) const
     {
-        std::ofstream fFile( wstrPath + wstrConfig + XORW( L".json" ), std::ofstream::trunc );
+        std::ofstream fFile( wstrPath + wstrConfig + M_WXOR( L".json" ), std::ofstream::trunc );
         if ( !fFile.is_open( ) )
         {
             // TODO: could not open file for writing
@@ -93,9 +93,9 @@ namespace Paladin
 
     void CConfiguration::DeleteConfiguration( std::wstring wstrConfig )
     {
-        if ( string_cast< std::wstring >( jsGlobalConfiguration[ XOR( "Default Configuration" ) ].get_ref< nlohmann::json::string_t & >( ) ) != wstrConfig )
+        if ( string_cast< std::wstring >( jsGlobalConfiguration[ M_XOR( "Default Configuration" ) ].get_ref< nlohmann::json::string_t & >( ) ) != wstrConfig )
         {
-            std::ofstream fFile( wstrPath + wstrConfig + XORW( L".json" ), std::ofstream::trunc );
+            std::ofstream fFile( wstrPath + wstrConfig + M_WXOR( L".json" ), std::ofstream::trunc );
             if ( !fFile.is_open( ) )
             {
                 // TODO: could not open file for writing

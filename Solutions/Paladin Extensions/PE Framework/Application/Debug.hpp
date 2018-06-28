@@ -70,27 +70,27 @@ namespace Paladin
  * \brief Optional output indicators
  */
 #if defined( _DEBUG )
-#define DBG << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << \
-	Paladin::dbg::SetPrintColor( FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE ) << " [DBG] " << \
-	Paladin::dbg::SetPrintColor( ~FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE )
-#define SCS << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << \
-	Paladin::dbg::SetPrintColor( FOREGROUND_INTENSITY | ~FOREGROUND_RED | FOREGROUND_GREEN | ~FOREGROUND_BLUE  ) << " [SCS] " << \
-	Paladin::dbg::SetPrintColor( ~FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE )
-#define WRN << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << \
-	Paladin::dbg::SetPrintColor( FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | ~FOREGROUND_BLUE ) << " [WRN] " << \
-	Paladin::dbg::SetPrintColor( ~FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE )
-#define ERR << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << \
-	Paladin::dbg::SetPrintColor( FOREGROUND_INTENSITY | FOREGROUND_RED | ~FOREGROUND_GREEN | ~FOREGROUND_BLUE ) << " [ERR] " << \
-	Paladin::dbg::SetPrintColor( ~FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE )
-#define LER << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << \
-	Paladin::dbg::SetPrintColor( ~FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | ~FOREGROUND_BLUE ) << " [LER] " << \
-	Paladin::dbg::SetPrintColor( ~FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE )
+#define M_DBG << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << \
+	    Paladin::dbg::SetPrintColor( FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE ) << " [DBG] " << \
+	    Paladin::dbg::SetPrintColor( ~FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE )
+#define M_SCS << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << \
+	    Paladin::dbg::SetPrintColor( FOREGROUND_INTENSITY | ~FOREGROUND_RED | FOREGROUND_GREEN | ~FOREGROUND_BLUE  ) << " [SCS] " << \
+	    Paladin::dbg::SetPrintColor( ~FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE )
+#define M_WRN << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << \
+	    Paladin::dbg::SetPrintColor( FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | ~FOREGROUND_BLUE ) << " [WRN] " << \
+	    Paladin::dbg::SetPrintColor( ~FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE )
+#define M_ERR << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << \
+	    Paladin::dbg::SetPrintColor( FOREGROUND_INTENSITY | FOREGROUND_RED | ~FOREGROUND_GREEN | ~FOREGROUND_BLUE ) << " [ERR] " << \
+	    Paladin::dbg::SetPrintColor( ~FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE )
+#define M_LER << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << \
+	    Paladin::dbg::SetPrintColor( ~FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | ~FOREGROUND_BLUE ) << " [LER] " << \
+	    Paladin::dbg::SetPrintColor( ~FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE )
 #elif
-#define DBG
-#define SCS
-#define WRN
-#define ERR
-#define LER
+#define M_DBG
+#define M_SCS
+#define M_WRN
+#define M_ERR
+#define M_LER
 #endif
 
 #include "Debug.tpp"

@@ -4,5 +4,5 @@
 
 #include <J-e-r-e-m-i-a-h/Standard Library.hpp>
 
-#define ENTRY_AS_WIN
+#define M_ENTRY_AS_WIN
 #include <J-e-r-e-m-i-a-h/Entry Manager.hpp>

@@ -20,14 +20,14 @@ namespace Paladin
 	 */
 	moment_t GetMoment( );
 
-#define abstract_class class
+#define M_ABSTRACT_CLASS class
     /**
      * \brief Inheritable abstract class that only allows a single object of child class to be instantiated.\n
 	           It is recommended that an empty constructor (no parameters) is created, even if it is empty.\n
 	           It is suggested that you check that your original constructor was called if it has multiple arguments and you declared an empty constructor
      * \tparam _ChildClass Child class to be restricted
      */
-    template< typename _ChildClass > abstract_class ISingleton
+    template< typename _ChildClass > M_ABSTRACT_CLASS ISingleton
     {
     public:
 		ISingleton( ) = default;

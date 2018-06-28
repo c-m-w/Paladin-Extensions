@@ -67,16 +67,16 @@ namespace Paladin
             auto dwError = GetLastError( );
             if ( !dwError )
             {
-                out LER << "[0x0] - No errors" << endl;
+                out M_LER << "[0x0] - No errors" << endl;
                 return;
             }
 
             LPWSTR lpwstrError { };
             if ( !FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
                                  nullptr, dwError, MAKELANGID( LANG_NEUTRAL, SUBLANG_DEFAULT ), lpwstrError, 0, nullptr ) )
-                out LER << "[0x" << hex << dwError << "] - Unable to retrieve error description" << endl;
+                out M_LER << "[0x" << hex << dwError << "] - Unable to retrieve error description" << endl;
             else
-                out LER << "[0x" << hex << dwError << "] - " << *lpwstrError << endl;
+                out M_LER << "[0x" << hex << dwError << "] - " << *lpwstrError << endl;
             LocalFree( lpwstrError );
 #endif
         }
