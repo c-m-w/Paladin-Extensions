@@ -4,14 +4,15 @@
 
 namespace Paladin 
 {
-	enum class EKeyState : unsigned
-	{
-		UP,
-		DOWN
-	};
-
 	class CWindowInput 
 	{
+	public:
+		enum class EKeyState: unsigned
+		{
+			UP,
+			DOWN
+		};
+	private:
 #define M_MAX_KEY 256
 		EKeyState uKeyState[ M_MAX_KEY ];
 		unsigned long long ulKeyDownTime[ M_MAX_KEY ];

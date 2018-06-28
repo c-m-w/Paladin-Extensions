@@ -88,7 +88,7 @@ namespace Paladin
 			fnCallback( uKey );
 	}
 
-	EKeyState CWindowInput::GetKeyState( unsigned uKey )
+	CWindowInput::EKeyState CWindowInput::GetKeyState( unsigned uKey )
 	{
 		return uKeyState[ uKey ];
 	}
