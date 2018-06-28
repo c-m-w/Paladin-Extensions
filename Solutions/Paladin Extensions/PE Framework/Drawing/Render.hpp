@@ -8,17 +8,27 @@ namespace Paladin
 
     class CRender
     {
+    public:
+		enum ECursor
+    	{
+			NONE,
+			ARROW,
+			HAND,
+			IBEAM,
+			CURSOR_MAX
+		};
     protected:
         IDirect3D9Ex *pObjectEx;
         D3DDEVICE_CREATION_PARAMETERS cpCreationParameters;
+		bool bCreatedDevice;
 
         HWND hwWindowHandle;
+		HCURSOR hCursors[ CURSOR_MAX ];
         unsigned uWindowWidth, uWindowHeight;
         unsigned uTitleBarHeight;
         long lWindowStyle;
 
         unsigned uScreenWidth, uScreenHeight;
-        unsigned uWindowStartPosition[ 2 ];
         const wchar_t *szWindowTitle;
 		WNDCLASSEX wndWindow;
 
@@ -28,7 +38,8 @@ namespace Paladin
         void EndRender( );
     public:
 		void SetWindowSize( unsigned, unsigned );
-		void SetWindowProc( IDirect3DDevice9 * );
+	    void SetWindowProc( IDirect3DDevice9 * );
+		void SetActiveCursor( ECursor curCursor );
 		CRender( );
 		~CRender( );
 

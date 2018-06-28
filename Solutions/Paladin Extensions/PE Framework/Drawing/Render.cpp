@@ -6,14 +6,31 @@ namespace Paladin
 {
 	void CRender::CreateRenderTarget( )
 	{
+		wndWindow.style = CS_DBLCLKS;
+		wndWindow.lpfnWndProc = WndProc;
+		wndWindow.hInstance = GetModuleHandle( nullptr );
+		wndWindow.hIcon = HICON( LoadImage( nullptr, LR"(C:\Users\Cole\Documents\GitHub\Paladin\Resources\Logo\Paladin Logo.ico)", 
+											IMAGE_ICON, 0, 0, LR_LOADFROMFILE | LR_DEFAULTSIZE | LR_SHARED ) );
+
+		hCursors[ NONE ]	= LoadCursor( nullptr, IDC_ARROW );
+		hCursors[ ARROW ]	= LoadCursorFromFile( LR"(C:\Users\Cole\Documents\GitHub\Paladin\Resources\Cursor\Arrow.cur)" );
+		hCursors[ HAND ]	= LoadCursorFromFile( LR"(C:\Users\Cole\Documents\GitHub\Paladin\Resources\Cursor\Hand.cur)" );
+		hCursors[ IBEAM ]	= LoadCursorFromFile( LR"(C:\Users\Cole\Documents\GitHub\Paladin\Resources\Cursor\I Beam.cur)" );
+
+		wndWindow.hCursor = hCursors[ ARROW ] ? hCursors[ ARROW ] : hCursors[ NONE ];
+		wndWindow.lpszClassName = szWindowTitle;
 		RegisterClassEx( &wndWindow );
-		hwWindowHandle = CreateWindowEx( 0, szWindowTitle, szWindowTitle, WS_POPUP,
-										  uWindowStartPosition[ 0 ], uWindowStartPosition[ 1 ], uWindowWidth, uWindowHeight,
-										  nullptr, nullptr, wndWindow.hInstance, nullptr );
-				  //SetLayeredWindowAttributes( hWnd, 0, 1.0f, LWA_ALPHA );
-				  //SetLayeredWindowAttributes( hWnd, 0, 0, LWA_COLORKEY );
+
+		RECT rcWindow;
+		AdjustWindowRectEx( &rcWindow, WS_OVERLAPPEDWINDOW, false, WS_EX_APPWINDOW );
+
+		hwWindowHandle = CreateWindowEx( WS_EX_APPWINDOW, szWindowTitle, szWindowTitle, WS_VISIBLE | WS_POPUP,
+										 CW_USEDEFAULT, CW_USEDEFAULT, uWindowWidth, uWindowHeight,
+										 nullptr, nullptr, wndWindow.hInstance, nullptr );
+
 		ShowWindow( hwWindowHandle, SW_SHOWDEFAULT );
 		UpdateWindow( hwWindowHandle );
+		SetForegroundWindow( hwWindowHandle );
 	}
 
 	void CRender::InitializeDirectX( )
@@ -33,8 +50,11 @@ namespace Paladin
 		dxParameters.Flags = D3DPRESENTFLAG_DISCARD_DEPTHSTENCIL;
 		dxParameters.Windowed = true;
 
-		pObjectEx->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hwWindowHandle, D3DCREATE_HARDWARE_VERTEXPROCESSING, &dxParameters, &pDevice );
+		/// Windows 7 doesn't support hardware vertexprocessing, so if it fails we need to use software vertexprocessing.
+		if ( pObjectEx->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hwWindowHandle, D3DCREATE_HARDWARE_VERTEXPROCESSING | D3DCREATE_PUREDEVICE | D3DCREATE_FPU_PRESERVE, &dxParameters, &pDevice ) < 0 )
+			dbg::Assert( pObjectEx->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hwWindowHandle, D3DCREATE_SOFTWARE_VERTEXPROCESSING | D3DCREATE_PUREDEVICE | D3DCREATE_FPU_PRESERVE, &dxParameters, &pDevice ) >= 0 );
 		pDevice->GetCreationParameters( &cpCreationParameters );
+		bCreatedDevice = true;
 	}
 
 	void CRender::BeginRender( )
@@ -59,15 +79,6 @@ namespace Paladin
 		dbg::Assert( uOldWindowProc );
 	}
 
-	CRender::CRender( ): pObjectEx { }, cpCreationParameters { }, hwWindowHandle { },
-	                     uWindowWidth { }, uWindowHeight { }, uTitleBarHeight { },
-	                     lWindowStyle { WS_EX_TRANSPARENT | WS_EX_TOPMOST | WS_EX_NOACTIVATE | WS_EX_LAYERED },
-	                     uScreenWidth { unsigned( GetSystemMetrics( SM_CXSCREEN ) ) }, uScreenHeight { unsigned( GetSystemMetrics( SM_CYSCREEN ) ) },
-	                     uWindowStartPosition { uScreenWidth / 2 - uWindowWidth / 2, uScreenHeight / 2 - uWindowHeight / 2 },
-	                     szWindowTitle { static_cast< wchar_t* >( malloc( 32 ) ) },
-	                     wndWindow { sizeof( WNDCLASSEX ), NULL, WndProc, 0, 0, GetModuleHandle( nullptr ), nullptr, LoadCursor( nullptr, IDC_ARROW ), nullptr, nullptr, szWindowTitle, nullptr },
-		                 uOldWindowProc { }, hwOldWindowHandle { }, pDevice { }, dxParameters { }
-	{ }
 
 	void CRender::SetWindowSize( unsigned uWidth, unsigned uHeight )
 	{
@@ -81,6 +92,20 @@ namespace Paladin
 		GetWindowRect( hwWindowHandle, &rcWindowRect );
 		SetWindowPos( hwWindowHandle, nullptr, rcWindowRect.left, rcWindowRect.top, uWindowWidth, uWindowHeight, SWP_SHOWWINDOW );
 	}
+
+	void CRender::SetActiveCursor( ECursor curCursorType ) 
+	{
+		SetCursor( hCursors[ curCursorType ] ? hCursors[ curCursorType ] : hCursors[ NONE ] );
+	}
+
+	CRender::CRender( ): pObjectEx { }, cpCreationParameters { }, bCreatedDevice { false }, hwWindowHandle { },
+						 uWindowWidth { }, uWindowHeight { }, uTitleBarHeight { 30u },
+						 lWindowStyle { WS_EX_TRANSPARENT | WS_EX_TOPMOST | WS_EX_NOACTIVATE | WS_EX_LAYERED },
+						 uScreenWidth { unsigned( GetSystemMetrics( SM_CXSCREEN ) ) }, uScreenHeight { unsigned( GetSystemMetrics( SM_CYSCREEN ) ) },
+						 szWindowTitle { static_cast< wchar_t* >( malloc( 32 ) ) },
+						 wndWindow { sizeof( WNDCLASSEX ), NULL, WndProc, 0, 0, GetModuleHandle( nullptr ), nullptr, LoadCursor( nullptr, IDC_ARROW ), nullptr, nullptr, szWindowTitle, nullptr },
+						 uOldWindowProc { }, hwOldWindowHandle { }, pDevice { }, dxParameters { }
+	{ }
 
 	CRender::~CRender( )
 	{
