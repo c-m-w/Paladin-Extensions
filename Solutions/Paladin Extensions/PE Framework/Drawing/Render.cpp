@@ -9,14 +9,14 @@ namespace Paladin
 		wndWindow.style = CS_DBLCLKS;
 		wndWindow.lpfnWndProc = WndProc;
 		wndWindow.hInstance = GetModuleHandle( nullptr );
-		/// TODO: BYTES
-		wndWindow.hIcon = HICON( LoadImage( nullptr, LR"(C:\Users\bhopfu1\Documents\Visual Studio 2017\Projects\Paladin\Resources\Logo\Paladin Logo.ico)", 
+		const auto strResourceDirectory = GetDirectory( M_DEPENDENCIES ) + LR"(\Resources\)";
+		wndWindow.hIcon = HICON( LoadImage( nullptr, ( strResourceDirectory + LR"(Logo\Paladin Logo.ico)" ).c_str( ),
 											IMAGE_ICON, 0, 0, LR_LOADFROMFILE | LR_DEFAULTSIZE | LR_SHARED ) );
 
 		hCursors[ NONE ]	= LoadCursor( nullptr, IDC_ARROW );
-		hCursors[ ARROW ]	= LoadCursorFromFile( LR"(C:\Users\bhopfu1\Documents\Visual Studio 2017\Projects\Paladin\Resources\Cursor\Arrow.cur)" );
-		hCursors[ HAND ]	= LoadCursorFromFile( LR"(C:\Users\bhopfu1\Documents\Visual Studio 2017\Projects\Paladin\Resources\Cursor\Hand.cur)" );
-		hCursors[ IBEAM ]	= LoadCursorFromFile( LR"(C:\Users\bhopfu1\Documents\Visual Studio 2017\Projects\Paladin\Resources\Cursor\I Beam.cur)" );
+		hCursors[ ARROW ]	= LoadCursorFromFile( ( strResourceDirectory + LR"(Cursor\Arrow.cur)" ).c_str( ) );
+		hCursors[ HAND ]	= LoadCursorFromFile( ( strResourceDirectory + LR"(Cursor\Hand.cur)" ).c_str( ) );
+		hCursors[ IBEAM ]	= LoadCursorFromFile( ( strResourceDirectory + LR"(Cursor\I Beam.cur)" ).c_str( ) );
 
 		wndWindow.hCursor = hCursors[ ARROW ] ? hCursors[ ARROW ] : hCursors[ NONE ];
 		wndWindow.lpszClassName = szWindowTitle;
@@ -51,7 +51,7 @@ namespace Paladin
 		dxParameters.Flags = D3DPRESENTFLAG_DISCARD_DEPTHSTENCIL;
 		dxParameters.Windowed = true;
 
-		/// Windows 7 doesn't support hardware vertexprocessing, so if it fails we need to use software vertexprocessing.
+		// Windows 7 doesn't support hardware vertexprocessing, so if it fails we need to use software vertexprocessing.
 		if ( pObjectEx->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hwWindowHandle, D3DCREATE_HARDWARE_VERTEXPROCESSING | D3DCREATE_PUREDEVICE | D3DCREATE_FPU_PRESERVE, &dxParameters, &pDevice ) < 0 )
 			dbg::Assert( pObjectEx->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hwWindowHandle, D3DCREATE_SOFTWARE_VERTEXPROCESSING | D3DCREATE_PUREDEVICE | D3DCREATE_FPU_PRESERVE, &dxParameters, &pDevice ) >= 0 );
 		pDevice->GetCreationParameters( &cpCreationParameters );

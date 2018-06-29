@@ -11,11 +11,6 @@
 
 #include "../Framework.hpp"
 
-#define M_ITEM_WIDTH 15
-#define M_ITEM_HEIGHT 25
-#define M_DYNAMIC_HEIGHT 25
-#define M_TOOLTIP_DELAY 20
-
 namespace Paladin
 {
 	LRESULT WINAPI WndProc( HWND hwWindowHandle, UINT uMessage, WPARAM uwParam, LPARAM llParam )
@@ -31,7 +26,7 @@ namespace Paladin
 			case WM_SIZE:
 				if ( ui->pDevice )
 				{
-					const auto uWidth = LOWORD( llParam ); // over-using auto
+					const auto uWidth = LOWORD( llParam );
 					const auto uHeight = HIWORD( llParam );
 					if ( uWidth != 0 && uHeight != 0 &&
 						( uWidth != ui->dxParameters.BackBufferWidth || uHeight != ui->dxParameters.BackBufferHeight ) )
@@ -55,81 +50,8 @@ namespace Paladin
 			: DefWindowProc( hwWindowHandle, uMessage, uwParam, llParam );
 	}
 
-	CUserInterface::SWidget::SWidget( std::string strText, std::string strTooltip )
-	{
-		wgtWidgetType = TEXT_BOX;
-		this->strText = strText;
-		this->strTooltip = strTooltip;
-	}
-
-	CUserInterface::SWidget::SWidget( std::string strText, std::string strTooltip, unsigned uAlignment )
-	{
-		wgtWidgetType = LABEL;
-		this->strText = strText;
-		this->strTooltip = strTooltip;
-		this->uAlignment = uAlignment;
-	}
-
-	CUserInterface::SWidget::SWidget( std::string strText, std::string strTooltip, std::function< void( ) > fnCallback )
-	{
-		wgtWidgetType = BUTTON;
-		this->strText = strText;
-		this->strTooltip = strTooltip;
-		this->fnCallback = fnCallback;
-	}
-
-	CUserInterface::SWidget::SWidget( std::string strText, std::string strTooltip, int *iActive )
-	{
-		wgtWidgetType = CHECK_BOX;
-		this->strText = strText;
-		this->strTooltip = strTooltip;
-		this->pActive = iActive;
-	}
-
-	CUserInterface::SWidget::SWidget( std::string strText, std::string strTooltip, const char *pItems[ ], int iItems, int iSelected )
-	{
-		wgtWidgetType = COMBO_BOX;
-		this->strText = strText;
-		this->strTooltip = strTooltip;
-		this->pItems = pItems;
-		this->iItems = iItems;
-		this->iSelected = iSelected;
-	}
-
-	CUserInterface::SWidget::SWidget( std::string strText, std::string strTooltip, bool bUseAlpha, BYTE *bColor )
-	{
-		wgtWidgetType = COLOR_PICKER;
-		this->strText = strText;
-		this->strTooltip = strTooltip;
-		this->bUseAlpha = bUseAlpha;
-		for ( int i = 0; i < 4; i++ )
-			this->bColor[ i ] = bColor[ i ];
-	}
-
-	CUserInterface::SWidget::SWidget( std::string strText, std::string strTooltip, int iMinimum, int iValue, int iMaximum, int iStep )
-	{
-		wgtWidgetType = INT_SLIDER;
-		this->strText = strText;
-		this->strTooltip = strTooltip;
-		this->iMinimum = iMinimum;
-		this->iValue = iValue;
-		this->iMaximum = iMaximum;
-		this->iStep = iStep;
-	}
-
-	CUserInterface::SWidget::SWidget( std::string strText, std::string strTooltip, float flMinimum, float flValue, float flMaximum, float flStep )
-	{
-		wgtWidgetType = FLOAT_SLIDER;
-		this->strText = strText;
-		this->strTooltip = strTooltip;
-		this->flMinimum = flMinimum;
-		this->flValue = flValue;
-		this->flMaximum = flMaximum;
-		this->flStep = flStep;
-	}
-
 	CUserInterface::CUserInterface( const char *szDesiredNuklearWindowTitle, unsigned *uDesiredWindowSize, const wchar_t *szDesiredWindowClassTitle )
-		: pContext { }, fcFontConfiguration { }, pAtlas { }, pFontAwesome { }, pTahoma { }, pRoboto { }
+		: pContext { }, pAtlas { }, pFontAwesome { }, pTahoma { }, pRoboto { }
 	{
 		szNuklearWindowTitle = szDesiredNuklearWindowTitle;
 		szWindowTitle = szDesiredWindowClassTitle;
@@ -150,17 +72,27 @@ namespace Paladin
 
 	void CUserInterface::InitializeNuklear( )
 	{
-		pContext = nk_d3d9_init( pDevice, uWindowWidth, uWindowHeight );
-		fcFontConfiguration = new struct nk_font_config;
-		*fcFontConfiguration = nk_font_config( 14 );
-		fcFontConfiguration->oversample_h = 1;
-		fcFontConfiguration->oversample_v = 1;
-		fcFontConfiguration->range = nk_font_default_glyph_ranges( );
+		struct nk_font_config fcFontConfiguration;
+		struct nk_font_config fcFontAwesomeConfiguration;
 
+		pContext = nk_d3d9_init( pDevice, uWindowWidth, uWindowHeight );
+		fcFontConfiguration = nk_font_config( 14 );
+		fcFontConfiguration.oversample_h = 1;
+		fcFontConfiguration.oversample_v = 1;
+		fcFontConfiguration.range = nk_font_default_glyph_ranges( );
+
+		fcFontAwesomeConfiguration = fcFontConfiguration;
+		fcFontAwesomeConfiguration = nk_font_config( 16 );
+		fcFontAwesomeConfiguration.merge_mode = 1;
+		unsigned uRange[] { 0xf000, 0xf2e0 };
+		fcFontAwesomeConfiguration.range = uRange;
+
+
+		const auto strFontDirectory = string_cast< std::string >( GetDirectory( M_DEPENDENCIES ) + M_WXOR( LR"(\Resources\Fonts\)" ) );
 		nk_d3d9_font_stash_begin( &pAtlas );
-		pFontAwesome = nk_font_atlas_add_from_file( pAtlas, M_XOR( R"(C:\Windows\Fonts\fontawesome-webfont.ttf)" ), 16, fcFontConfiguration );
-		pTahoma = nk_font_atlas_add_from_file( pAtlas, M_XOR( R"(C:\Windows\Fonts\Tahoma.ttf)" ), 16, fcFontConfiguration );
-		pRoboto = nk_font_atlas_add_from_file( pAtlas, M_XOR( R"(C:\Windows\Fonts\Roboto-Regular.ttf)" ), 20, fcFontConfiguration );
+		pFontAwesome = nk_font_atlas_add_from_file( pAtlas, ( strFontDirectory + M_XOR( "FontAwesome.ttf" ) ).c_str( ), 12, &fcFontAwesomeConfiguration );
+		pTahoma = nk_font_atlas_add_from_file( pAtlas, ( strFontDirectory + M_XOR( "Tahoma.ttf" ) ).c_str( ), 14, &fcFontConfiguration );
+		pRoboto = nk_font_atlas_add_from_file( pAtlas, ( strFontDirectory + M_XOR( "Roboto.ttf" ) ).c_str( ), 16, &fcFontConfiguration );
 		nk_d3d9_font_stash_end( );
 
 		struct nk_color clrColors[ NK_COLOR_COUNT ];
@@ -265,147 +197,14 @@ namespace Paladin
 	{
 		nk_style_set_font( pContext, &pRoboto->handle );
 		if ( nk_begin( pContext, szNuklearWindowTitle, nk_rect( 0, 0, float( uWindowWidth ), float( uWindowHeight ) ),
-					   NK_WINDOW_BORDER | NK_WINDOW_TITLE | NK_WINDOW_CLOSABLE | NK_WINDOW_NO_SCROLLBAR )
-			 && HandleWindowInput( ) )
+					   NK_WINDOW_BORDER | NK_WINDOW_TITLE | NK_WINDOW_CLOSABLE | NK_WINDOW_NO_SCROLLBAR ) && HandleWindowInput( ) )
 		{
-			if ( !dqWidgets.empty( ) )
-				for ( auto dqWidget : dqWidgets )
-				{
-					nk_layout_row_dynamic( pContext, M_DYNAMIC_HEIGHT, 3 );
-					switch ( dqWidget.wgtWidgetType )
-					{
-						case SWidget::LABEL:
-							nk_label( pContext, dqWidget.strText.c_str( ), dqWidget.uAlignment );
-							{
-								static int iHover;
-								if ( pContext->last_widget_state & ( NK_WIDGET_STATE_ACTIVE | NK_WIDGET_STATE_HOVER ) )
-								{
-									SetActiveCursor( HAND );
-									if ( iHover > M_TOOLTIP_DELAY )
-										nk_tooltip( pContext, dqWidget.strTooltip.c_str( ) );
-									iHover++;
-								}
-								else
-									iHover = 0;
-							}
-							break;
-						case SWidget::BUTTON:
-							if ( nk_button_label( pContext, dqWidget.strText.c_str( ) ) )
-								dqWidget.fnCallback( );
-							{
-								static int iHover;
-								if ( pContext->last_widget_state & ( NK_WIDGET_STATE_ACTIVE | NK_WIDGET_STATE_HOVER ) )
-								{
-									SetActiveCursor( HAND );
-									if ( iHover > M_TOOLTIP_DELAY )
-										nk_tooltip( pContext, dqWidget.strTooltip.c_str( ) );
-									iHover++;
-								}
-								else
-									iHover = 0;
-							}
-							break;
-						case SWidget::TEXT_BOX:
-							nk_edit_string_zero_terminated( pContext, NK_EDIT_BOX | NK_EDIT_AUTO_SELECT | NK_EDIT_NO_HORIZONTAL_SCROLL | NK_TEXT_EDIT_SINGLE_LINE,
-															&dqWidget.strText[ 0 ], 16, nk_filter_ascii );
-							{
-								static int iHover;
-								if ( pContext->last_widget_state & ( NK_WIDGET_STATE_ACTIVE | NK_WIDGET_STATE_HOVER ) )
-								{
-									SetActiveCursor( IBEAM );
-									if ( iHover > M_TOOLTIP_DELAY )
-										nk_tooltip( pContext, dqWidget.strTooltip.c_str( ) );
-									iHover++;
-								}
-								else
-									iHover = 0;
-							}
-							break;
-						case SWidget::CHECK_BOX:
-							nk_checkbox_label( pContext, dqWidget.strText.c_str( ), dqWidget.pActive );
-							{
-								static int iHover;
-								if ( pContext->last_widget_state & ( NK_WIDGET_STATE_ACTIVE | NK_WIDGET_STATE_HOVER ) )
-								{
-									SetActiveCursor( HAND );
-									if ( iHover > M_TOOLTIP_DELAY )
-										nk_tooltip( pContext, dqWidget.strTooltip.c_str( ) );
-									iHover++;
-								}
-								else
-									iHover = 0;
-							}
-							break;
-						case SWidget::COMBO_BOX:
-							nk_combobox( pContext, dqWidget.pItems, dqWidget.iItems, &dqWidget.iSelected, M_ITEM_HEIGHT, { M_ITEM_WIDTH, M_ITEM_HEIGHT } );
-							{
-								static int iHover;
-								if ( pContext->last_widget_state & ( NK_WIDGET_STATE_ACTIVE | NK_WIDGET_STATE_HOVER ) )
-								{
-									SetActiveCursor( HAND );
-									if ( iHover > M_TOOLTIP_DELAY )
-										nk_tooltip( pContext, dqWidget.strTooltip.c_str( ) );
-									iHover++;
-								}
-								else
-									iHover = 0;
-							}
-							break;
-						case SWidget::COLOR_PICKER:
-							nk_color_picker( pContext, { float( int( dqWidget.bColor[ 0 ] ) ), float( int( dqWidget.bColor[ 1 ] ) ),
-														 float( int( dqWidget.bColor[ 2 ] ) ), float( int( dqWidget.bColor[ 3 ] ) ) },
-											 dqWidget.bUseAlpha ? NK_RGBA : NK_RGB );
-							{
-								static int iHover;
-								if ( pContext->last_widget_state & ( NK_WIDGET_STATE_ACTIVE | NK_WIDGET_STATE_HOVER ) )
-								{
-									SetActiveCursor( HAND );
-									if ( iHover > M_TOOLTIP_DELAY )
-										nk_tooltip( pContext, dqWidget.strTooltip.c_str( ) );
-									iHover++;
-								}
-								else
-									iHover = 0;
-							}
-							break;
-						case SWidget::INT_SLIDER:
-							nk_slider_int( pContext, dqWidget.iMinimum, &dqWidget.iValue, dqWidget.iMaximum, dqWidget.iStep );
-							{
-								static int iHover;
-								if ( pContext->last_widget_state & ( NK_WIDGET_STATE_ACTIVE | NK_WIDGET_STATE_HOVER ) )
-								{
-									SetActiveCursor( HAND );
-									if ( iHover > M_TOOLTIP_DELAY )
-										nk_tooltip( pContext, dqWidget.strTooltip.c_str( ) );
-									iHover++;
-								}
-								else
-									iHover = 0;
-							}
-							break;
-						case SWidget::FLOAT_SLIDER:
-							nk_slider_float( pContext, dqWidget.flMinimum, &dqWidget.flValue, dqWidget.flMaximum, dqWidget.flStep );
-							{
-								static int iHover;
-								if ( pContext->last_widget_state & ( NK_WIDGET_STATE_ACTIVE | NK_WIDGET_STATE_HOVER ) )
-								{
-									SetActiveCursor( HAND );
-									if ( iHover > M_TOOLTIP_DELAY )
-										nk_tooltip( pContext, dqWidget.strTooltip.c_str( ) );
-									iHover++;
-								}
-								else
-									iHover = 0;
-							}
-							break;
-						case SWidget::NONE:
-						default:
-							throw std::exception( "Unknown widget type" );
-					}
-				}
+			nk_style_set_font( pContext, &pTahoma->handle );
+			nk_layout_row_dynamic( pContext, 30, 3 );
+			SetLayout( );
 		}
 		else
-			bShouldDrawInterface = false; // Top right 'x' button has been clicked.
+			bShouldDrawInterface = false;
 		nk_end( pContext );
 
 		RenderUserInterface( );

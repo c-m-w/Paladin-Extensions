@@ -30,6 +30,13 @@ namespace Paladin
 	 */
 	void Wait( moment_t );
 
+
+	/**
+	 * \brief Gets directory with specied directories upward
+	 * \return Directory
+	 */
+	std::wstring GetDirectory( unsigned = 0 );
+
 #define M_ABSTRACT_CLASS class
     /**
      * \brief Inheritable abstract class that only allows a single object of child class to be instantiated.\n

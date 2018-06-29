@@ -6,9 +6,7 @@ namespace Paladin
 {
     CConfiguration::CConfiguration( )
     {
-        auto wchTemp = new wchar_t[ MAX_PATH ];
-        GetModuleFileName( nullptr, wchTemp, MAX_PATH );
-        wstrPath = std::wstring( wchTemp ).substr( 0, std::wstring( wchTemp ).find_last_of( M_WXOR( L"/\\" ) ) + 1 ) + M_WXOR( L"Configurations\\" );
+        wstrPath = GetDirectory( M_DEPENDENCIES ) + M_WXOR( L"Configurations\\" );
 
         if ( !PathFileExists( ( wstrPath + M_WXOR( L"global.json" ) ).c_str( ) ) )
         {

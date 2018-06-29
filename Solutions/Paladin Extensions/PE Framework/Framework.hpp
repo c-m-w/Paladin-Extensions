@@ -2,6 +2,7 @@
 
 #pragma once
 
+
 #include <J-e-r-e-m-i-a-h/Standard Library.hpp>
 
 /**
@@ -34,8 +35,13 @@
 #include <d3d9.h>
 #include "Drawing/Render.hpp"
 
-#define NK_PRIVATE
-#include <vurtun/nuklear.h>
+#if defined( _DEBUG )
+#define M_DEPENDENCIES 3
+#else
+#define M_DEPENDENCIES 0
+#endif
+#include <vurtun/src/nuklear.h>
+#include <vurtun/src/nuklear_internal.h>
 #include <vurtun/demo/d3d9/nuklear_d3d9.h>
 #include "Drawing/User Interface.hpp"
 

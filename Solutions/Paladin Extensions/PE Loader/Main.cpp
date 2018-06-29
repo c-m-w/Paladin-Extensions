@@ -11,6 +11,11 @@ void Button2Callback( )
 	std::cout << "I've been called because Button 2 was clicked!" << std::endl;
 }
 
+void CUserInterface::SetLayout( )
+{
+	nk_button_label( pContext, "I Love Men???" );
+}
+
 void OnLaunch( )
 {
 	std::cout << "Started User Interface Creation" << dbg::endl;
@@ -27,11 +32,6 @@ void OnLaunch( )
 	std::cout << "Initialized User Interface Successfully" << dbg::endl;
 
 	std::cout << "Drawing User Interface" << dbg::endl;
-
-	ui->dqWidgets.emplace_back( CUserInterface::SWidget( "MENASS", "NOT UR DAD TOOL TIP", Button1Callback ) );
-	int bob = 0;
-	ui->dqWidgets.emplace_back( CUserInterface::SWidget( "MENASSCHECJ", "NOT UR DAD TOOL TIP3", &bob ) );
-	ui->dqWidgets.emplace_back( CUserInterface::SWidget( "MENASS2", "NOT UR DAD TOOL TIP2", Button2Callback ) );
 
 	while ( ui->DrawUserInterface( ) )
 		if ( !ui->DrawUserInterface( ) )
