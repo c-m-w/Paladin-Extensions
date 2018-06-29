@@ -9,13 +9,14 @@ namespace Paladin
 		wndWindow.style = CS_DBLCLKS;
 		wndWindow.lpfnWndProc = WndProc;
 		wndWindow.hInstance = GetModuleHandle( nullptr );
-		wndWindow.hIcon = HICON( LoadImage( nullptr, LR"(C:\Users\Cole\Documents\GitHub\Paladin\Resources\Logo\Paladin Logo.ico)", 
+		/// TODO: BYTES
+		wndWindow.hIcon = HICON( LoadImage( nullptr, LR"(C:\Users\bhopfu1\Documents\Visual Studio 2017\Projects\Paladin\Resources\Logo\Paladin Logo.ico)", 
 											IMAGE_ICON, 0, 0, LR_LOADFROMFILE | LR_DEFAULTSIZE | LR_SHARED ) );
 
 		hCursors[ NONE ]	= LoadCursor( nullptr, IDC_ARROW );
-		hCursors[ ARROW ]	= LoadCursorFromFile( LR"(C:\Users\Cole\Documents\GitHub\Paladin\Resources\Cursor\Arrow.cur)" );
-		hCursors[ HAND ]	= LoadCursorFromFile( LR"(C:\Users\Cole\Documents\GitHub\Paladin\Resources\Cursor\Hand.cur)" );
-		hCursors[ IBEAM ]	= LoadCursorFromFile( LR"(C:\Users\Cole\Documents\GitHub\Paladin\Resources\Cursor\I Beam.cur)" );
+		hCursors[ ARROW ]	= LoadCursorFromFile( LR"(C:\Users\bhopfu1\Documents\Visual Studio 2017\Projects\Paladin\Resources\Cursor\Arrow.cur)" );
+		hCursors[ HAND ]	= LoadCursorFromFile( LR"(C:\Users\bhopfu1\Documents\Visual Studio 2017\Projects\Paladin\Resources\Cursor\Hand.cur)" );
+		hCursors[ IBEAM ]	= LoadCursorFromFile( LR"(C:\Users\bhopfu1\Documents\Visual Studio 2017\Projects\Paladin\Resources\Cursor\I Beam.cur)" );
 
 		wndWindow.hCursor = hCursors[ ARROW ] ? hCursors[ ARROW ] : hCursors[ NONE ];
 		wndWindow.lpszClassName = szWindowTitle;
