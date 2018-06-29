@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2035
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "nuklear", "nuklear\nuklear.vcxproj", "{05470549-0B5B-46B1-9ACB-7632293B95B7}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{05470549-0B5B-46B1-9ACB-7632293B95B7}.Debug|x64.ActiveCfg = Debug|x64
+		{05470549-0B5B-46B1-9ACB-7632293B95B7}.Debug|x64.Build.0 = Debug|x64
+		{05470549-0B5B-46B1-9ACB-7632293B95B7}.Debug|x86.ActiveCfg = Debug|Win32
+		{05470549-0B5B-46B1-9ACB-7632293B95B7}.Debug|x86.Build.0 = Debug|Win32
+		{05470549-0B5B-46B1-9ACB-7632293B95B7}.Release|x64.ActiveCfg = Release|x64
+		{05470549-0B5B-46B1-9ACB-7632293B95B7}.Release|x64.Build.0 = Release|x64
+		{05470549-0B5B-46B1-9ACB-7632293B95B7}.Release|x86.ActiveCfg = Release|Win32
+		{05470549-0B5B-46B1-9ACB-7632293B95B7}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A5C28DA4-F75A-4E8C-80FC-EB8A3993A7AB}
+	EndGlobalSection
+EndGlobal
