@@ -2,6 +2,9 @@
 
 #pragma once
 
+#define M_ABSTRACT_CLASS class
+#define M_ABSTRACT_STRUCT struct
+
 namespace Paladin
 {
 	/**
@@ -37,7 +40,6 @@ namespace Paladin
 	 */
 	std::wstring GetDirectory( unsigned = 0 );
 
-#define M_ABSTRACT_CLASS class
     /**
      * \brief Inheritable abstract class that only allows a single object of child class to be instantiated.\n
 	           It is recommended that an empty constructor (no parameters) is created, even if it is empty.\n
