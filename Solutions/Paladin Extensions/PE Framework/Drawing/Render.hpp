@@ -17,6 +17,7 @@ namespace Paladin
 			IBEAM,
 			CURSOR_MAX
 		};
+
     protected:
         IDirect3D9Ex *pObjectEx;
         D3DDEVICE_CREATION_PARAMETERS cpCreationParameters;
@@ -36,6 +37,7 @@ namespace Paladin
         void InitializeDirectX( );
         void BeginRender( );
         void EndRender( );
+
     public:
 		void SetWindowSize( unsigned, unsigned );
 	    void SetWindowProc( IDirect3DDevice9 * );
