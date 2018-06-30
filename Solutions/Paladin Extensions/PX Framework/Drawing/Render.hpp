@@ -15,28 +15,28 @@ namespace PX
             IBEAM,
             CURSOR_MAX
         };
-        inline HCURSOR hCursors[ CURSOR_MAX ];
-        void SetCursor( ECursor );
+        PX_SDK HCURSOR hCursors[ CURSOR_MAX ];
+        void PX_API SetCursor( ECursor );
 
-        inline const wchar_t* szWindowTitle = static_cast< wchar_t* >( malloc( 32 ) );
+        PX_SDK const wchar_t* szWindowTitle = static_cast< wchar_t* >( malloc( 32 ) );
         LRESULT WINAPI WndProc( HWND, UINT, WPARAM, LPARAM );
-        inline WNDCLASSEX wndWindow;
-        inline HWND hwWindowHandle;
+        PX_SDK WNDCLASSEX wndWindow;
+        PX_SDK HWND hwWindowHandle;
 
-        inline unsigned uWindowWidth, uWindowHeight;
-        void SetWindowSize( unsigned, unsigned );
-        void CreateRenderTarget( );
+        PX_SDK unsigned uWindowWidth, uWindowHeight;
+        void PX_API SetWindowSize( unsigned, unsigned );
+        void PX_API CreateRenderTarget( );
 
-        inline D3DPRESENT_PARAMETERS dxParameters;
-        inline IDirect3D9Ex* pObjectEx;
-        inline IDirect3DDevice9* pDevice;
-        void InitializeDirectX( );
+        PX_SDK D3DPRESENT_PARAMETERS dxParameters;
+        PX_SDK IDirect3D9Ex* pObjectEx;
+        PX_SDK IDirect3DDevice9* pDevice;
+        void PX_API InitializeDirectX( );
 
-        inline unsigned uOldWindowProc;
-        inline HWND hwOldWindowHandle;
-        void SetWindowProc( IDirect3DDevice9* );
+        PX_SDK unsigned uOldWindowProc;
+        PX_SDK HWND hwOldWindowHandle;
+        void PX_API SetWindowProc( IDirect3DDevice9* );
 
-        void BeginRender( );
-        void EndRender( );
+        void PX_API BeginRender( );
+        void PX_API EndRender( );
     }
 }
