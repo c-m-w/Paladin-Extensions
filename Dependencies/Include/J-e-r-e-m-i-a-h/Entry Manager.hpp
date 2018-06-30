@@ -2,9 +2,9 @@
 
 #pragma once
 
-#if !defined( M_ENTRY_AS_WIN ) && !defined( M_ENTRY_AS_DLL ) && !defined( M_ENTRY_AS_NONE )
-#pragma message( "fatal error PE0: No automatic entry creation method defined. Use '#define M_ENTRY_AS_WIN' or '#define M_ENTRY_AS_DLL' when including the framework to use automatic entry creation. Use '#define M_ENTRY_AS_NONE' to disable automatic entry management." )
-#elif defined( M_ENTRY_AS_WIN ) && !defined( M_ENTRY_AS_DLL ) && !defined( M_ENTRY_AS_NONE )
+#if !defined( PX_ENTRY_AS_WIN ) && !defined( PX_ENTRY_AS_DLL ) && !defined( PX_ENTRY_AS_NONE )
+#pragma message( "fatal error PE0: No automatic entry creation method defined. Use '#define PX_ENTRY_AS_WIN' or '#define PX_ENTRY_AS_DLL' when including the framework to use automatic entry creation. Use '#define PX_ENTRY_AS_NONE' to disable automatic entry management." )
+#elif defined( PX_ENTRY_AS_WIN ) && !defined( PX_ENTRY_AS_DLL ) && !defined( PX_ENTRY_AS_NONE )
 
 #include <J-e-r-e-m-i-a-h/Standard Library.hpp>
 #include <Windows.h>
@@ -42,7 +42,7 @@ int WINAPI WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, 
     return 0;
 }
 
-#elif !defined( M_ENTRY_AS_WIN ) && defined( M_ENTRY_AS_DLL ) && !defined( M_ENTRY_AS_NONE )
+#elif !defined( PX_ENTRY_AS_WIN ) && defined( PX_ENTRY_AS_DLL ) && !defined( PX_ENTRY_AS_NONE )
 
 #include <J-e-r-e-m-i-a-h/Standard Namespace.hpp>
 #include <Windows.h>
@@ -112,7 +112,7 @@ BOOL WINAPI DllMain( _In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID 
     }
 }
 
-#elif !defined( M_ENTRY_AS_WIN ) && !defined( M_ENTRY_AS_DLL ) && defined( M_ENTRY_AS_NONE )
+#elif !defined( PX_ENTRY_AS_WIN ) && !defined( PX_ENTRY_AS_DLL ) && defined( PX_ENTRY_AS_NONE )
 #pragma message( "warning PE1: You must manage standard console output yourself." )
 #else
 #pragma message( "fatal error PE2: Too many automatic entry creation methods defined." )
