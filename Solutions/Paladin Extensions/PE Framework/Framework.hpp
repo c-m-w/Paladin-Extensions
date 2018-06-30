@@ -40,9 +40,10 @@
 #else
 #define M_DEPENDENCIES 0
 #endif
-#include <vurtun/src/nuklear.h>
-#include <vurtun/src/nuklear_internal.h>
+#define NK_PRIVATE
+#include <vurtun/nuklear.h>
 #include <vurtun/demo/d3d9/nuklear_d3d9.h>
+#include <IconFontCppHeaders/IconsFontAwesome5-Solid.hpp>
 #include "Drawing/User Interface.hpp"
 
 /**
