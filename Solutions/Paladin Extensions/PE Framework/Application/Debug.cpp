@@ -22,16 +22,16 @@ namespace Paladin
 
         CDebugPrint::~CDebugPrint( )
         {
-            strsDebugLog << std::put_time( std::localtime( new time_t{ std::time( nullptr ) } ), "[%m/%d/%Y %H:%M:%S]" ) << " [CLS] " << "Terminated Paladin Debug" << endl;
-            std::cout << std::put_time( std::localtime( new time_t{ std::time( nullptr ) } ), "[%m/%d/%Y %H:%M:%S]" );
-            SetConsoleTextAttribute( GetStdHandle( STD_OUTPUT_HANDLE ), FOREGROUND_INTENSITY | ~FOREGROUND_RED | ~FOREGROUND_GREEN | FOREGROUND_BLUE );
-            std::cout << " [CLS] ";
-            SetConsoleTextAttribute( GetStdHandle( STD_OUTPUT_HANDLE ), ~FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE );
-            std::cout << "Terminated Paladin Debug" << endl;
-
-            std::ofstream ofLogFile( "C:/debug.log" );
-            ofLogFile << strsDebugLog.str( );
-            ofLogFile.close( );
+           /// strsDebugLog << std::put_time( std::localtime( new time_t{ std::time( nullptr ) } ), "[%m/%d/%Y %H:%M:%S]" ) << " [CLS] " << "Terminated Paladin Debug" << endl;
+           /// std::cout << std::put_time( std::localtime( new time_t{ std::time( nullptr ) } ), "[%m/%d/%Y %H:%M:%S]" );
+           /// SetConsoleTextAttribute( GetStdHandle( STD_OUTPUT_HANDLE ), FOREGROUND_INTENSITY | ~FOREGROUND_RED | ~FOREGROUND_GREEN | FOREGROUND_BLUE );
+           /// std::cout << " [CLS] ";
+           /// SetConsoleTextAttribute( GetStdHandle( STD_OUTPUT_HANDLE ), ~FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE );
+           /// std::cout << "Terminated Paladin Debug" << endl;
+           ///
+           /// std::ofstream ofLogFile( "C:/debug.log" );
+           /// ofLogFile << strsDebugLog.str( );
+           /// ofLogFile.close( );
         }
 
         CDebugPrint::CDebugPrint( const CDebugPrint &rhs )
