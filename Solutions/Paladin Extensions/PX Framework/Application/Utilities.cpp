@@ -6,18 +6,15 @@ namespace PX
 {
     namespace Utilities
     {
-		std::wstring GetDirectory( unsigned uUpLevels )
+		std::wstring PX_API GetDirectory( unsigned uEscapeLevels )
 		{
-			auto wchTemp = new wchar_t[ MAX_PATH ];
-			GetModuleFileNameW( nullptr, wchTemp, MAX_PATH );
+            std::wstring wstr;
+            GetModuleFileNameW( nullptr, &wstr[ 0 ], MAX_PATH );
 
-			auto str = std::wstring( wchTemp );
-			delete[ ] wchTemp;
+			for ( auto i = 0u; i <= uEscapeLevels; i++ )
+                wstr = wstr.substr( 0, wstr.find_last_of( L'\\' ) );
 
-			for ( auto i = 0u; i <= uUpLevels; i++ )
-				str = str.substr( 0, str.find_last_of( L'\\' ) );
-
-			return str;
+			return wstr;
 		}
     }
 }
