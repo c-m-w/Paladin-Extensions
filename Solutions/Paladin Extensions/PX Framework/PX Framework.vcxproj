@@ -156,6 +156,7 @@
     <ClInclude Include="Application\Debug.hpp" />
     <ClInclude Include="Application\Input Manager.hpp" />
     <ClInclude Include="Drawing\Render.hpp" />
+    <ClInclude Include="Drawing\User Interface.hpp" />
     <ClInclude Include="Inclusions.hpp" />
     <ClInclude Include="Definitions.hpp" />
     <ClInclude Include="Application\Utilities.hpp" />

@@ -6,31 +6,8 @@ namespace PX
 {
 	namespace Utilities
 	{
-		// INFO: Dimention-dynamic vector
-		// INFO: - supports operations
-		// *_t*: vector datatype
-		// *i*: vector size
-		template< typename _t, int i > class vector_t
-		{
-			std::array< _t, i > _Data;
-		public:
-			PX_API vector_t( ) = default;
-			PX_API vector_t( std::initializer_list< _t > );
-
-			// INFO: returns vector data from index of ID parameter
-			_t PX_API operator[ ]( int ) const;
-			vector_t PX_API operator+( const vector_t& ) const;
-			vector_t PX_API operator-( const vector_t& ) const;
-			vector_t PX_API operator*( const vector_t& ) const;
-			vector_t PX_API operator/( const vector_t& ) const;
-			vector_t& PX_API operator+=( const vector_t& );
-			vector_t& PX_API operator-=( const vector_t& );
-			vector_t& PX_API operator*=( const vector_t& );
-			vector_t& PX_API operator/=( const vector_t& );
-		};
-
-		// INFO: Inheritable abstract struct that only allows a single object of child class/struct to be instantiated
-		// *_Child*: Child class/struct to be restricted
+		// INFO: Inheritable abstract structure that only allows a single object of child class/structure to be instantiated
+		// *_Child*: Child class/structure to be restricted
 		template< class _Child > PX_ABSTRACT_STRUCT ISingleton
 		{
 			ISingleton( ) = default;
@@ -45,16 +22,16 @@ namespace PX
 			template< typename ... _Arg > static _Child& PX_API Get( _Arg ... );
 		};
 
-		// INFO: Datatype sized to hold any time
+		// INFO: Data type sized to hold any time
 		typedef unsigned long long moment_t;
 		// INFO: Gets the local time
-		// *typename*: Time info format type
+		// *type name*: Time info format type
 		template< typename = std::chrono::milliseconds > moment_t PX_API GetMoment( );
 		// INFO: Sleeps the thread that has called for the amount of time, in the unit of time specified.
-		// *typename*: The unit of time to wait for ( std::chrono ).
+		// *type name*: The unit of time to wait for ( std::chrono ).
 		template< typename = std::chrono::milliseconds > void PX_API Wait( moment_t );
 
-		// INFO: Gets directory with specied directories upward
+		// INFO: Gets directory with specified directories upward
 		// PARAM: Levels to escape
 		std::wstring PX_API GetDirectory( unsigned = 0 );
 

@@ -1,16 +1,14 @@
-/// User Interface.cpp
+/// User Interface.hpp
 
-#define PX_NUKLEAR_IMPLEMENTATION
+#pragma once
 
-#include "../PX Framework.hpp"
-
-namespace Paladin
+namespace PX
 {
     namespace UI
     {
         namespace Manager
         {
-
+            
         }
 
         namespace Widgets

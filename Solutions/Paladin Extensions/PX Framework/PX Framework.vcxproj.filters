@@ -39,6 +39,9 @@
     <ClInclude Include="Drawing\Render.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Drawing\User Interface.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application\Utilities.cpp">

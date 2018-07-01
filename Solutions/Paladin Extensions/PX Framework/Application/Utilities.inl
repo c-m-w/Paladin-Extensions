@@ -6,65 +6,6 @@ namespace PX
 {
     namespace Utilities
     {
-        template< typename _t, int i > PX_API vector_t< _t, i >::vector_t( std::initializer_list< _t > vecInitialData )
-        {
-            if ( vecInitialData.size( ) <= i )
-                return;
-
-            int j = 1;
-            for ( auto vecSubData : vecInitialData )
-            {
-                _Data[ j ] = vecSubData;
-                j++;
-            }
-        }
-
-        template< typename _t, int i > _t PX_API vector_t< _t, i >::operator[ ]( int iIndex ) const
-        {
-            return _Data[ iIndex ];
-        }
-
-        template< typename _t, int i > vector_t< _t, i > PX_API vector_t< _t, i >::operator+( const vector_t& rhs ) const
-        {                                                                                              
-            _Data += rhs._Data;                                                                        
-            return *this;                                                                              
-        }                                                                                              
-        template< typename _t, int i > vector_t< _t, i > PX_API vector_t< _t, i >::operator-( const vector_t& rhs ) const
-        {                                                                                              
-            _Data -= rhs._Data;                                                                        
-            return *this;                                                                              
-        }                                                                                              
-        template< typename _t, int i > vector_t< _t, i > PX_API vector_t< _t, i >::operator*( const vector_t& rhs ) const
-        {                                                                                              
-            _Data *= rhs._Data;                                                                        
-            return *this;                                                                              
-        }                                                                                              
-        template< typename _t, int i > vector_t< _t, i > PX_API vector_t< _t, i >::operator/( const vector_t& rhs ) const
-        {
-            _Data /= rhs._Data;
-            return *this;
-        }
-        template< typename _t, int i > vector_t< _t, i >& PX_API vector_t< _t, i >::operator+=( const vector_t& rhs )
-        {                                                 
-            *this = *this + rhs;                          
-            return *this;                                 
-        }                                                 
-        template< typename _t, int i > vector_t< _t, i >& PX_API vector_t< _t, i >::operator-=( const vector_t& rhs )
-        {                                                                                                
-            *this = *this - rhs;                                                                         
-            return *this;                                                                                
-        }                                                                                                
-        template< typename _t, int i > vector_t< _t, i >& PX_API vector_t< _t, i >::operator*=( const vector_t& rhs )
-        {                                                                                                
-            *this = *this * rhs;                                                                         
-            return *this;                                                                                
-        }                                                                                                
-        template< typename _t, int i > vector_t< _t, i >& PX_API vector_t< _t, i >::operator/=( const vector_t& rhs )
-        {
-            *this = *this / rhs;
-            return *this;
-        }
-
         template< class _Child > template< typename ... _Arg > _Child& PX_API ISingleton<_Child >::Get( _Arg ... _Args )
         {
             static _Child _ChildClassObject( _Args ... );
