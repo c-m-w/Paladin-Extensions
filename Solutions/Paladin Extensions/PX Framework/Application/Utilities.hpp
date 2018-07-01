@@ -45,16 +45,6 @@ namespace PX
 		// *_To*: Desired string type
 		// *_From*: Current string
 		template< typename _To, typename _From > _To PX_API string_cast( _From* );
-		// INFO: Casts strings\n
-		// INFO: Supports any combination of conversion from "std::string" and "std::wstring" to "const char*" and "const wchar_t*"
-		// *_To*: Desired string type
-		// *_From*: Current string
-		template< typename _To, typename _From > _To* PX_API string_cast( const _From & );
-		// INFO: Casts strings\n
-		// INFO: Supports any combination of conversion from "const char*" and "const wchar_t*" to "const char*" and "const wchar_t*"
-		// *_To*: Desired string type
-		// *_From*: Current string
-		template< typename _To, typename _From > _To* PX_API string_cast( _From* );
 	}
 }
 

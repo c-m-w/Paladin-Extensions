@@ -84,13 +84,5 @@ namespace PX
         {
             return IStringCastImplementation< _To, typename IStringTypeOfCharacter< const _From* >::wrap_t >::Cast( _Source );
         }
-        template< typename _To, typename _From > _To* PX_API string_cast( const _From& _Source )
-        {
-            return IStringCastImplementation< _To, _From >::Cast( _Source ).c_str( );
-        }
-        template< typename _To, typename _From > _To* PX_API string_cast( _From* _Source )
-        {
-            return IStringCastImplementation< _To, typename IStringTypeOfCharacter< const _From* >::wrap_t >::Cast( _Source ).c_str( );
-        }
     }
 }
