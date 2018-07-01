@@ -23,21 +23,25 @@ namespace PX
         template< typename _t > out_t& PX_API out_t::operator<<( const _t& rhs )
         {
 #if defined( _DEBUG )
-            if ( !ofLogFile.is_open( ) )
+            if ( !wofLogFile.is_open( ) )
             {
-                ofLogFile.open( "C:/debug.log" );
-                ofLogFile << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%m/%d/%Y %H:%M:%S]" )
-                          << " [OPN] " << "Initialized Paladin Debug" << endl;
+                wofLogFile.open( "C:/debug.log", std::ofstream::trunc );
+                if ( !wofLogFile.is_open( ) )
+                    throw std::exception( "Failed to open debug.log" );
+
+                auto timeCurrent = std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), L"[%m/%d/%Y %H:%M:%S]" );
+                wofLogFile << timeCurrent << L" [OPN] " << L"Initialized Paladin Debug" << endl;
+
                 *this << out_clr_t( FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED | !FOREGROUND_INTENSITY );
-                std::cout << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%m/%d/%Y %H:%M:%S]" );
+                std::wcout << timeCurrent;
                 *this << out_clr_t( FOREGROUND_BLUE | !FOREGROUND_GREEN | !FOREGROUND_RED | FOREGROUND_INTENSITY );
-                std::cout << " [OPN] ";
+                std::wcout << L" [OPN] ";
                 *this << out_clr_t( FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED | !FOREGROUND_INTENSITY );
-                std::cout << "Initialized Paladin Debug" << endl;
+                std::wcout << L"Initialized Paladin Debug" << endl;
             }
 
-            ofLogFile << rhs;
-            std::cout << rhs;
+            wofLogFile << rhs;
+            std::wcout << rhs;
 #endif
             return *this;
         }

@@ -153,28 +153,30 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Application\Debug.hpp" />
+    <ClInclude Include="Application\Debug Manager.hpp" />
+    <ClInclude Include="Application\File Manager.hpp" />
     <ClInclude Include="Application\Input Manager.hpp" />
-    <ClInclude Include="Drawing\Render.hpp" />
+    <ClInclude Include="Drawing\Render Manager.hpp" />
     <ClInclude Include="Drawing\User Interface.hpp" />
     <ClInclude Include="Inclusions.hpp" />
     <ClInclude Include="Definitions.hpp" />
     <ClInclude Include="Application\Utilities.hpp" />
     <ClInclude Include="PX Framework.hpp" />
-    <ClInclude Include="Security\Encryption.hpp" />
+    <ClInclude Include="Security\Encryption Manager.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Application\Debug.cpp" />
+    <ClCompile Include="Application\Debug Manager.cpp" />
+    <ClCompile Include="Application\File Manager.cpp" />
     <ClCompile Include="Application\Input Manager.cpp" />
     <ClCompile Include="Application\Utilities.cpp" />
-    <ClCompile Include="Drawing\Render.cpp" />
+    <ClCompile Include="Drawing\Render Manager.cpp" />
     <ClCompile Include="Drawing\User Interface.cpp" />
     <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Application\Debug.inl" />
+    <None Include="Application\Debug Manager.inl" />
     <None Include="Application\Utilities.inl" />
-    <None Include="Security\Encryption.inl" />
+    <None Include="Security\Encryption Manager.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
