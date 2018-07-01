@@ -8,12 +8,23 @@ namespace Paladin
     {
 	    nk_context *pContext;
         nk_font_atlas *pAtlas;
-		struct nk_font *pTahoma, *pTahomaBold, *pRoboto, *pRobotoBold, *pRobotoBoldSmall;
+		struct nk_font *pTahoma, *pTahomaBold, *pRoboto, *pRobotoBold, *pRobotoSmall, *pRobotoBoldSmall;
         const char *szNuklearWindowTitle;
 		const char *szApplicationTitle;
 		bool bFoundHoverTarget;
 
     public:
+		struct panel_t
+    	{
+			panel_t( struct nk_rect rcPanelDimensions ) 
+			{
+				rcPanel = rcPanelDimensions;
+			}
+			struct nk_rect rcPanel;
+			struct nk_context pContext;
+		};
+
+		std::deque< panel_t > pnlPanels;
 		ECursor curFoundCursorType;
 
 		enum class EFont : int
@@ -22,12 +33,13 @@ namespace Paladin
 			TAHOMABOLD,
 			ROBOTO,
 			ROBOTOBOLD,
+			ROBOTOSMALL,
 			ROBOTOBOLDSMALL
 		};
 
 		struct nk_color clrColors[ NK_COLOR_COUNT ];
 		nk_color clrTextDormant, clrTextActive;
-		nk_style_button btnRegularActive, btnRegular, btnSpecialActive, btnSpecial;
+		nk_style_button btnTopActive, btnTop, btnRegularActive, btnRegular, btnSpecialActive, btnSpecial;
 
         CUserInterface( const char *, const char *, unsigned *, const wchar_t * = nullptr );
 	    void Shutdown( );
@@ -48,6 +60,8 @@ namespace Paladin
 		
 		class CWidgets
     	{
+			struct nk_rect rcLastWidgetLocation;
+			bool bBeganRow = false;
 		public:
 			enum class EPosition: int
 			{
@@ -56,10 +70,16 @@ namespace Paladin
 				RIGHT
 			};
 
+			void urmom( );
 			bool Header( const char *, const char *, unsigned );
+			void Separator( unsigned char, unsigned char, unsigned char, unsigned, unsigned = 3, bool = false );
+			bool TopButton( const char *, bool );
 			bool RegularButton( const char *, bool );
 			bool SpecialButton( EPosition, const char *, bool );
+			void Checkbox( const char *, bool * );
 			void NewRow( unsigned = 30, unsigned = 3 );
+			void BeginRow( unsigned = 30, unsigned = 6 );
+			void EndRow( );
 			void NewStaticRow( unsigned, unsigned = 30, unsigned = 3 );
 		} wdg;
 

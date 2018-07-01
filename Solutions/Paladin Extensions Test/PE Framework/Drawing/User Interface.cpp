@@ -55,8 +55,9 @@ namespace Paladin
 	}
 
 	CUserInterface::CUserInterface( const char *szDesiredNuklearWindowTitle, const char *szDesiredApplicationName, unsigned *uDesiredWindowSize, const wchar_t *szDesiredWindowClassTitle )
-		: pContext { }, pAtlas { }, pTahoma { }, pTahomaBold { }, pRoboto { }, pRobotoBold { },szNuklearWindowTitle{ szDesiredNuklearWindowTitle }, szApplicationTitle { szDesiredApplicationName },
-		  bFoundHoverTarget{ }, clrColors { }, clrTextDormant { }, clrTextActive { }, btnRegularActive { }, btnRegular { }, btnSpecialActive { }, btnSpecial { }
+		: pContext { }, pAtlas { }, pTahoma { }, pTahomaBold { }, pRoboto { }, pRobotoBold { }, pRobotoSmall { }, pRobotoBoldSmall { }, szNuklearWindowTitle { szDesiredNuklearWindowTitle }, 
+		  szApplicationTitle { szDesiredApplicationName }, bFoundHoverTarget { }, clrColors { }, clrTextDormant { }, clrTextActive { }, btnTopActive { }, btnTop { }, btnRegularActive	{ }, 
+		  btnRegular { }, btnSpecialActive { }, btnSpecial { }
 	{
 		szWindowTitle = szDesiredWindowClassTitle;
 		SetWindowSize( uDesiredWindowSize[ 0 ], uDesiredWindowSize[ 1 ] );
@@ -99,17 +100,16 @@ namespace Paladin
 		fcFontAwesomeConfiguration.range = rnIconRange;
 		fcFontAwesomeConfiguration.merge_mode = 1;
 
-		const auto strFontDirectory = string_cast< std::string >( GetDirectory( M_DEPENDENCIES ) + M_WXOR( LR"(\Resources\Fonts\)" ) );
-
 		pRoboto				= AddFont( M_XOR( "Roboto.ttf" ), 21, fcFontAwesomeConfiguration );
 		pRobotoBold			= AddFont( M_XOR( "RobotoBold.ttf" ), 21, fcFontAwesomeConfiguration );
+		pRobotoSmall		= AddFont( M_XOR( "Roboto.ttf" ), 16, fcFontAwesomeConfiguration, 12 );
 		pRobotoBoldSmall	= AddFont( M_XOR( "RobotoBold.ttf" ), 16, fcFontAwesomeConfiguration, 12 );
 		pTahoma				= AddFont( M_XOR( "Tahoma.ttf" ), 16, fcFontAwesomeConfiguration );
 		pTahomaBold			= AddFont( M_XOR( "TahomaBold.ttf" ), 16, fcFontAwesomeConfiguration );
 
 		clrColors[ NK_COLOR_TEXT ] = nk_rgba( 255, 255, 255, 255 );
-		clrColors[ NK_COLOR_WINDOW ] = nk_rgba( 56, 60, 66, 255 );
-		clrColors[ NK_COLOR_HEADER ] = nk_rgba( 61, 65, 72, 255 );
+		clrColors[ NK_COLOR_WINDOW ] = nk_rgba( 45, 50, 56, 255 );
+		clrColors[ NK_COLOR_HEADER ] = nk_rgba( 45, 50, 56, 255 );
 		clrColors[ NK_COLOR_BORDER ] = nk_rgba( 80, 84, 89, 255 );
 		clrColors[ NK_COLOR_BUTTON ] = nk_rgba( 48, 83, 111, 255 );
 		clrColors[ NK_COLOR_BUTTON_HOVER ] = nk_rgba( 58, 93, 121, 255 );
@@ -142,30 +142,52 @@ namespace Paladin
 		pContext->style.window.header.close_button.text_hover = nk_rgba( 43, 60, 75, 255 );
 		pContext->style.window.header.close_button.text_normal = nk_rgba( 33, 150, 243, 255 );
 		pContext->style.window.rounding = 5.f;
-		pContext->style.window.padding = nk_vec2( 3, 8 );
+		pContext->style.window.padding = nk_vec2( 0, 8 );
+		pContext->style.edit.row_padding = 0;
+
+		btnTopActive.rounding = 3.f;
+		btnTopActive.padding = nk_vec2( 0, 0 );
+		btnTopActive.active.data.color = nk_rgba( 61, 65, 72, 255 );
+		btnTopActive.hover.data.color = nk_rgba( 61, 65, 72, 255 );
+		btnTopActive.normal.data.color = nk_rgba( 61, 65, 72, 255 );
+		btnTopActive.text_active = nk_rgba( 33, 150, 243, 255 );
+		btnTopActive.text_hover = nk_rgba( 33, 150, 243, 255 );
+		btnTopActive.text_normal = nk_rgba( 33, 150, 243, 255 );
+		btnTopActive.text_alignment = NK_TEXT_CENTERED;
+
+		btnTop.rounding = 3.f;
+		btnTop.padding = nk_vec2( 0, 0 );
+		btnTop.active.data.color = nk_rgba( 61, 65, 72, 255 );
+		btnTop.hover.data.color = nk_rgba( 56, 60, 66, 255 );
+		btnTop.normal.data.color = nk_rgba( 45, 50, 56, 255 );
+		btnTop.text_active = nk_rgba( 175, 180, 187, 255 );
+		btnTop.text_hover = nk_rgba( 175, 180, 187, 255 );
+		btnTop.text_normal = nk_rgba( 175, 180, 187, 255 );
+		btnTop.text_alignment = NK_TEXT_CENTERED;
 
 		btnRegularActive.rounding = 0;
-		btnRegularActive.padding = nk_vec2( 5, 5 );
+		btnRegularActive.padding = nk_vec2( 12, 0 );
 		btnRegularActive.active.data.color = nk_rgba( 61, 65, 72, 255 );
 		btnRegularActive.hover.data.color = nk_rgba( 61, 65, 72, 255 );
 		btnRegularActive.normal.data.color = nk_rgba( 61, 65, 72, 255 );
-		btnRegularActive.text_active = nk_rgba( 255, 255, 255, 255 );
+		btnRegularActive.text_active = nk_rgba( 33, 150, 243, 255 );
 		btnRegularActive.text_hover = nk_rgba( 255, 255, 255, 255 );
-		btnRegularActive.text_normal = nk_rgba( 255, 255, 255, 255 );
+		btnRegularActive.text_normal = nk_rgba( 33, 150, 243, 255 );
 		btnRegularActive.text_alignment = NK_TEXT_LEFT;
 
 		btnRegular.rounding = 0;
-		btnRegular.padding = nk_vec2( 5, 5 );
+		btnRegular.padding = nk_vec2( 10, 0 );
 		btnRegular.active.data.color = nk_rgba( 61, 65, 72, 255 );
-		btnRegular.hover.data.color = nk_rgba( 61, 65, 72, 200 );
-		btnRegular.normal.data.color = nk_rgba( 56, 60, 66, 255 );
-		btnRegular.text_active = nk_rgba( 175, 180, 187, 255 );
-		btnRegular.text_hover = nk_rgba( 175, 180, 187, 255 );
+		btnRegular.hover.data.color = nk_rgba( 56, 60, 66, 255 );
+		btnRegular.normal.data.color = nk_rgba( 45, 50, 56, 255 );
+		btnRegular.text_active = nk_rgba( 33, 150, 243, 255 );
+		btnRegular.text_hover = nk_rgba( 255, 255, 255, 255 );
 		btnRegular.text_normal = nk_rgba( 175, 180, 187, 255 );
 		btnRegular.text_alignment = NK_TEXT_LEFT;
 
 		btnSpecialActive.rounding = 3.f;
-		btnSpecialActive.padding = nk_vec2( 1, 5 );
+		btnSpecialActive.padding = nk_vec2( 1, 0 );
+		btnSpecialActive.touch_padding = nk_vec2( 1, 0 );
 		btnSpecialActive.active.data.color = nk_rgba( 54, 70, 84, 255 );
 		btnSpecialActive.hover.data.color = nk_rgba( 54, 70, 84, 255 );
 		btnSpecialActive.normal.data.color = nk_rgba( 54, 70, 84, 255 );
@@ -175,7 +197,8 @@ namespace Paladin
 		btnSpecialActive.text_alignment = NK_TEXT_CENTERED;
 
 		btnSpecial.rounding = 3.f;
-		btnSpecial.padding = nk_vec2( 1, 5 );
+		btnSpecial.padding = nk_vec2( 1, 0 );
+		btnSpecial.touch_padding = nk_vec2( 1, 0 );
 		btnSpecial.active.data.color = nk_rgba( 54, 70, 84, 255 );
 		btnSpecial.hover.data.color = nk_rgba( 54, 70, 84, 200 );
 		btnSpecial.normal.data.color = nk_rgba( 43, 60, 75, 255 );
@@ -277,13 +300,19 @@ namespace Paladin
 
 	bool CUserInterface::DrawUserInterface( )
 	{
-		nk_style_set_font( pContext, &pRoboto->handle );
+		SetFont( EFont::ROBOTO );
+
 		if ( nk_begin( pContext, szNuklearWindowTitle, nk_rect( 0, 0, float( uWindowWidth ), float( uWindowHeight ) ),
 					   NK_WINDOW_NO_SCROLLBAR ) && wdg.Header( szNuklearWindowTitle, szApplicationTitle, uWindowWidth ) && HandleWindowInput( ) )
 		{
 			nk_layout_row_dynamic( pContext, 10, 0 );
-			nk_style_set_font( pContext, &pTahoma->handle );
+			SetFont( EFont::TAHOMA );
 			SetLayout( );
+
+			//pContext->current->bounds = nk_rect( 210, 60, 390, 130 );
+			//pContext->style.window.fixed_background.data.color = nk_rgba( 61, 65, 72, 255 );
+			//nk_panel_begin( pContext, szNuklearWindowTitle, NK_PANEL_POP );
+			//nk_panel_end( pContext );
 		}
 		else
 			bShouldDrawInterface = false;
@@ -311,12 +340,19 @@ namespace Paladin
 			case EFont::ROBOTOBOLD:
 				nk_style_set_font( pContext, &pRobotoBold->handle );
 				break;
+			case EFont::ROBOTOSMALL:
+				nk_style_set_font( pContext, &pRobotoSmall->handle );
+				break;
 			case EFont::ROBOTOBOLDSMALL:
 				nk_style_set_font( pContext, &pRobotoBoldSmall->handle );
 				break;
 			default:
 				nk_style_set_font( pContext, &pTahoma->handle );
 		}
+	}
+
+	void CUserInterface::CWidgets::urmom( ) 
+	{
 	}
 
 	bool CUserInterface::CWidgets::Header( const char *szTitle, const char *szApplicationTitle, unsigned uWidth )
@@ -340,28 +376,20 @@ namespace Paladin
 
 		static auto clrIconColor = nk_rgba( 33, 150, 243, 255 );
 		txtCloseButton.text = clrIconColor;
-		auto rcCloseButton = nk_rect( 567, 13, 20, 20 );
+		constexpr struct nk_rect rcCloseButton = { 567, 13, 20, 20 };
 		nk_widget_text( pOutput, rcCloseButton, ICON_FA_TIMES, strlen( ICON_FA_TIMES ), &txtCloseButton, NK_TEXT_CENTERED, ui->pContext->style.font );
 
-		RECT recWindowPos { };
-		GetWindowRect( ui->hwWindowHandle, &recWindowPos );
-		
-		POINT pntCursorPos { };
-		GetCursorPos( &pntCursorPos );
-		POINT pntCursorPosRelative { pntCursorPos.x - recWindowPos.left, pntCursorPos.y - recWindowPos.top };
-
-		if ( ( pntCursorPosRelative.x >= rcCloseButton.x && pntCursorPosRelative.x <= ( rcCloseButton.x + rcCloseButton.w ) ) &&
-			( pntCursorPosRelative.y >= rcCloseButton.y && pntCursorPosRelative.y <= ( rcCloseButton.y + rcCloseButton.h ) ) )
+		const auto iHoveringPanel = nk_input_is_mouse_hovering_rect( &ui->pContext->input, rcCloseButton );
+		if( iHoveringPanel ) 
 		{
+			clrIconColor = nk_rgba( 115, 189, 247, 255 );
+			if ( ui->GetKeyState( VK_LBUTTON ) == EKeyState::DOWN )
+				return false;
 			ui->pContext->last_widget_state |= NK_WIDGET_STATE_ACTIVE;
 			ui->pContext->last_widget_state |= NK_WIDGET_STATE_HOVER;
 			ui->bFoundHoverTarget = true;
 			ui->curFoundCursorType = HAND;
 			ui->SetActiveCursor( HAND );
-			clrIconColor = nk_rgba( 115, 189, 247, 255 );
-		
-			if ( ui->GetKeyState( VK_LBUTTON ) == EKeyState::DOWN )
-				return false;
 		}
 		else
 			clrIconColor = nk_rgba( 33, 150, 243, 255 );
@@ -369,24 +397,38 @@ namespace Paladin
 		return true;
 	}
 
+	void CUserInterface::CWidgets::Separator( unsigned char bRed, unsigned char bGreen, unsigned char bBlue, unsigned uStartHeight, unsigned uRowSize /*= 3*/, bool bUpperBorder /*= false*/ )
+	{
+		constexpr auto uSeparatorHeight = 420u / 10u;
+		constexpr struct nk_color clrBorderColor = { 85, 88, 94, 255 };
+		auto pOutput = nk_window_get_canvas( ui->pContext );
+		nk_fill_rect( pOutput, nk_rect( 0, uStartHeight, ui->uWindowWidth, uSeparatorHeight ), 0.f, nk_rgba( bRed, bGreen, bBlue, 255 ) );
+		nk_stroke_line( pOutput, 0, uStartHeight + uSeparatorHeight - 1, ui->uWindowWidth, uStartHeight + uSeparatorHeight - 1, 0.5, clrBorderColor );
+
+		if( bUpperBorder )
+			nk_stroke_line( pOutput, 0, uStartHeight + 1, ui->uWindowWidth, uStartHeight + 1, 0.5, clrBorderColor );
+	}
+
+	bool CUserInterface::CWidgets::TopButton( const char *szText, bool bActive )
+	{
+		return nk_button_label_styled( ui->pContext, bActive ? &ui->btnTopActive : &ui->btnTop, szText );
+	}
+
 	bool CUserInterface::CWidgets::RegularButton( const char *szText, bool bActive )
 	{
 		if ( bActive )
 		{
-			constexpr nk_color clrLeftLineColor { 33, 150, 243, 255 };
+			constexpr nk_color clrBlueLine { 33, 150, 243, 255 };
 			auto rcBoundaries = nk_widget_bounds( ui->pContext );
 			rcBoundaries.w += rcBoundaries.x;
 			rcBoundaries.h += rcBoundaries.y;
 
 			auto pOutput = nk_window_get_canvas( ui->pContext );
 
-			nk_stroke_line( pOutput, rcBoundaries.x - 1, rcBoundaries.y, rcBoundaries.w, rcBoundaries.y, 2, ui->clrColors[ NK_COLOR_BORDER ] );
-			nk_stroke_line( pOutput, rcBoundaries.x - 1, rcBoundaries.h, rcBoundaries.w, rcBoundaries.h, 2, ui->clrColors[ NK_COLOR_BORDER ] );
-			nk_stroke_line( pOutput, rcBoundaries.x, rcBoundaries.y, rcBoundaries.x, rcBoundaries.h, 3, clrLeftLineColor );
-
 			ui->SetFont( EFont::TAHOMABOLD );
 			const auto bResult = nk_button_label_styled( ui->pContext, &ui->btnRegularActive, szText );
 			ui->SetFont( EFont::TAHOMA );
+			nk_stroke_line( pOutput, rcBoundaries.x + 2, rcBoundaries.y, rcBoundaries.x + 2, rcBoundaries.h, 2, clrBlueLine );
 			return bResult;
 		}
 		const auto bReturn = nk_button_label_styled( ui->pContext, &ui->btnRegular, szText );
@@ -405,14 +447,14 @@ namespace Paladin
 		const auto rcBoundaries = nk_widget_bounds( ui->pContext );
 		const auto pOutput = nk_window_get_canvas( ui->pContext );
 		auto bHover = false;
-		nk_flags fOldFlags;
+		nk_flags fOldFlags = 0;
 		if ( !ui->bFoundHoverTarget )
 		{
 			fOldFlags = ui->pContext->last_widget_state;
 			ui->pContext->last_widget_state = 0;
 		}
 		const auto bReturn = nk_button_label_styled( ui->pContext, bActive ? &ui->btnSpecialActive : &ui->btnSpecial, szText );
-		if( !ui->bFoundHoverTarget ) 
+		if( !ui->bFoundHoverTarget )
 		{
 			bHover = ui->HoverCheck( HAND );
 			ui->pContext->last_widget_state = fOldFlags;
@@ -421,11 +463,6 @@ namespace Paladin
 		nk_color clrCurrentColor;
 		if ( bHover )
 		{
-			//if ( fOldFlags & ~NK_WIDGET_STATE_HOVER )
-			//	fOldFlags &= NK_WIDGET_STATE_HOVER;
-			//if( fOldFlags & ~NK_WIDGET_STATE_ACTIVE )
-			//	fOldFlags &= NK_WIDGET_STATE_ACTIVE;
-
 			if ( !bActive )
 				clrCurrentColor = clrHoverColor;
 		}
@@ -460,9 +497,47 @@ namespace Paladin
 		return bReturn;
 	}
 
+	void CUserInterface::CWidgets::Checkbox( const char *szText, bool *bActive ) 
+	{
+		constexpr struct nk_color clrDormant { 175, 180, 187, 255 }, clrHover { 33, 150, 243, 200 }, clrActive { 33, 150, 243, 255 };
+		static auto bWasClicking = false;
+
+		nk_layout_row_push( ui->pContext, 15 );
+		const auto rcBoundaries = nk_widget_bounds( ui->pContext );
+		const auto bHovering = nk_input_is_mouse_hovering_rect( &ui->pContext->input, rcBoundaries );
+		const auto bClicking = ui->GetKeyState( VK_LBUTTON ) == EKeyState::DOWN;
+
+		if ( bClicking && bHovering )
+		{
+			if ( !bWasClicking )
+				*bActive = !*bActive;
+			bWasClicking = true;
+		}
+		else if( !bClicking )
+			bWasClicking = false;
+
+		nk_label_colored( ui->pContext, *bActive ? ICON_FA_CHECK_SQUARE : ICON_FA_SQUARE, NK_TEXT_CENTERED, *bActive ? clrActive : bHovering ? ( bClicking ? clrActive : clrHover ) : clrDormant );
+		nk_layout_row_push( ui->pContext, 40 );
+		nk_label_colored( ui->pContext, ( szText + std::string( "  " ) ).c_str( ), NK_TEXT_LEFT, nk_rgba( 175, 180, 187, 255 ) );
+	}
+
 	void CUserInterface::CWidgets::NewRow( unsigned uHeight /*= 30*/, unsigned uColumns /*= 3*/ )
 	{
 		return nk_layout_row_dynamic( ui->pContext, uHeight, uColumns );
+	}
+
+	void CUserInterface::CWidgets::BeginRow( unsigned uHeight /*= 30*/, unsigned uColumns /*= 6*/ ) 
+	{
+		if ( bBeganRow )
+			nk_layout_row_end( ui->pContext );
+		bBeganRow = true;
+		return nk_layout_row_begin( ui->pContext, NK_STATIC, uHeight, uColumns );
+	}
+
+	void CUserInterface::CWidgets::EndRow( ) 
+	{
+		bBeganRow = false;
+		return nk_layout_row_end( ui->pContext );
 	}
 
 	void CUserInterface::CWidgets::NewStaticRow( unsigned uWidth, unsigned uHeight /*= 30*/, unsigned uColumns /*= 3*/ )
