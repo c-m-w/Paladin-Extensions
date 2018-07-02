@@ -3390,7 +3390,7 @@ NK_API void nk_plot_function(struct nk_context*, enum nk_chart_type, void *userd
  *                                  POPUP
  *
  * ============================================================================= */
-NK_API int nk_popup_begin(struct nk_context*, enum nk_popup_type, const char*, nk_flags, struct nk_rect bounds);
+NK_API int nk_popup_begin(struct nk_context*, enum nk_popup_type, const char*, nk_flags, struct nk_rect bounds, bool should_close = false);
 NK_API void nk_popup_close(struct nk_context*);
 NK_API void nk_popup_end(struct nk_context*);
 /* =============================================================================
@@ -5821,7 +5821,7 @@ NK_LIB float nk_panel_get_border(const struct nk_style *style, nk_flags flags, e
 NK_LIB struct nk_color nk_panel_get_border_color(const struct nk_style *style, enum nk_panel_type type);
 NK_LIB int nk_panel_is_sub(enum nk_panel_type type);
 NK_LIB int nk_panel_is_nonblock(enum nk_panel_type type);
-NK_LIB int nk_panel_begin(struct nk_context *ctx, const char *title, enum nk_panel_type panel_type);
+NK_LIB int nk_panel_begin(struct nk_context *ctx, const char *title, enum nk_panel_type panel_type, bool should_close = false);
 NK_LIB void nk_panel_end(struct nk_context *ctx);
 
 /* layout */
@@ -15511,7 +15511,7 @@ nk_panel_is_nonblock(enum nk_panel_type type)
     return (type & NK_PANEL_SET_NONBLOCK)?1:0;
 }
 NK_LIB int
-nk_panel_begin(struct nk_context *ctx, const char *title, enum nk_panel_type panel_type)
+nk_panel_begin(struct nk_context *ctx, const char *title, enum nk_panel_type panel_type, bool should_close)
 {
     struct nk_input *in;
     struct nk_window *win;
@@ -15528,7 +15528,7 @@ nk_panel_begin(struct nk_context *ctx, const char *title, enum nk_panel_type pan
     NK_ASSERT(ctx->current->layout);
     if (!ctx || !ctx->current || !ctx->current->layout) return 0;
     nk_zero(ctx->current->layout, sizeof(*ctx->current->layout));
-    if ((ctx->current->flags & NK_WINDOW_HIDDEN) || (ctx->current->flags & NK_WINDOW_CLOSED)) {
+    if ((ctx->current->flags & NK_WINDOW_HIDDEN) || (ctx->current->flags & NK_WINDOW_CLOSED) || should_close) {
         nk_zero(ctx->current->layout, sizeof(struct nk_panel));
         ctx->current->layout->type = panel_type;
         return 0;
@@ -16682,7 +16682,7 @@ nk_window_set_focus(struct nk_context *ctx, const char *name)
  * ===============================================================*/
 NK_API int
 nk_popup_begin(struct nk_context *ctx, enum nk_popup_type type,
-    const char *title, nk_flags flags, struct nk_rect rect)
+    const char *title, nk_flags flags, struct nk_rect rect, bool should_close)
 {
     struct nk_window *popup;
     struct nk_window *win;
@@ -16745,7 +16745,7 @@ nk_popup_begin(struct nk_context *ctx, enum nk_popup_type type,
     allocated = ctx->memory.allocated;
     nk_push_scissor(&popup->buffer, nk_null_rect);
 
-    if (nk_panel_begin(ctx, title, NK_PANEL_POPUP)) {
+    if (nk_panel_begin(ctx, title, NK_PANEL_POPUP, should_close)) {
         /* popup is running therefore invalidate parent panels */
         struct nk_panel *root;
         root = win->layout;
@@ -24202,8 +24202,10 @@ nk_draw_color_picker(struct nk_command_buffer *o, const struct nk_rect *matrix,
                 hue_colors[i+1], hue_colors[i+1]);
     }
     line_y = (float)(int)(hue_bar->y + hsva[0] * matrix->h + 0.5f);
-    nk_stroke_line(o, hue_bar->x-1, line_y, hue_bar->x + hue_bar->w + 2,
-        line_y, 1, nk_rgb(255,255,255));
+	  nk_stroke_line( o, hue_bar->x - 1, line_y, hue_bar->x + hue_bar->w + 1,
+					line_y , 3, nk_rgb( 0, 0, 0 ) );
+	  nk_stroke_line( o, hue_bar->x + 1, line_y, hue_bar->x + hue_bar->w - 1,
+					line_y, 1, nk_rgb( 255, 255, 255 ) );
 
     /* draw alpha bar */
     if (alpha_bar) {
@@ -24211,8 +24213,10 @@ nk_draw_color_picker(struct nk_command_buffer *o, const struct nk_rect *matrix,
         line_y = (float)(int)(alpha_bar->y +  (1.0f - alpha) * matrix->h + 0.5f);
 
         nk_fill_rect_multi_color(o, *alpha_bar, white, white, black, black);
-        nk_stroke_line(o, alpha_bar->x-1, line_y, alpha_bar->x + alpha_bar->w + 2,
-            line_y, 1, nk_rgb(255,255,255));
+        nk_stroke_line(o, alpha_bar->x, line_y, alpha_bar->x + alpha_bar->w,
+            line_y, 3, nk_rgb(0,0,0));
+		    nk_stroke_line( o, alpha_bar->x + 1, line_y, alpha_bar->x + alpha_bar->w - 1,
+						line_y, 1, nk_rgb( 255, 255, 255 ) );
     }
 
     /* draw color matrix */
@@ -24224,10 +24228,13 @@ nk_draw_color_picker(struct nk_command_buffer *o, const struct nk_rect *matrix,
     {struct nk_vec2 p; float S = hsva[1]; float V = hsva[2];
     p.x = (float)(int)(matrix->x + S * matrix->w);
     p.y = (float)(int)(matrix->y + (1.0f - V) * matrix->h);
-    nk_stroke_line(o, p.x - crosshair_size, p.y, p.x-2, p.y, 1.0f, white);
-    nk_stroke_line(o, p.x + crosshair_size + 1, p.y, p.x+3, p.y, 1.0f, white);
-    nk_stroke_line(o, p.x, p.y + crosshair_size + 1, p.x, p.y+3, 1.0f, white);
-    nk_stroke_line(o, p.x, p.y - crosshair_size, p.x, p.y-2, 1.0f, white);}
+    //nk_stroke_line(o, p.x - crosshair_size, p.y, p.x-2, p.y, 1.0f, white);
+    //nk_stroke_line(o, p.x + crosshair_size + 1, p.y, p.x+3, p.y, 1.0f, white);
+    //nk_stroke_line(o, p.x, p.y + crosshair_size + 1, p.x, p.y+3, 1.0f, white);
+    //nk_stroke_line(o, p.x, p.y - crosshair_size, p.x, p.y-2, 1.0f, white);
+	  nk_stroke_circle( o, nk_rect( p.x - 6, p.y - 6, 12, 12 ), 1, black );
+	  nk_stroke_circle( o, nk_rect( p.x - 5, p.y - 5, 10, 10 ), 1, white );
+	  }
 }
 NK_LIB int
 nk_do_color_picker(nk_flags *state,
@@ -24301,7 +24308,7 @@ nk_color_pick(struct nk_context * ctx, struct nk_colorf *color,
     if (!state) return 0;
     in = (state == NK_WIDGET_ROM || layout->flags & NK_WINDOW_ROM) ? 0 : &ctx->input;
     return nk_do_color_picker(&ctx->last_widget_state, &win->buffer, color, fmt, bounds,
-                nk_vec2(0,0), in, config->font);
+                nk_vec2(5,0), in, config->font);
 }
 NK_API struct nk_colorf
 nk_color_picker(struct nk_context *ctx, struct nk_colorf color,
