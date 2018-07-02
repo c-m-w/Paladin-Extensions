@@ -2,20 +2,97 @@
 
 #include "Main.hpp"
 
+std::deque< const char * > dqTabs
+{
+	{
+		ICON_FA_MONEY_BILL " Tab 1",
+		ICON_FA_PHONE " Tab 2",
+		ICON_FA_ADDRESS_BOOK " Tab 3",
+		ICON_FA_CAR " Tab 4",
+		ICON_FA_BOMB " Tab 5"
+	}
+};
 
+std::deque< std::deque< const char * > > dqSidebarButtons
+{
+	{
+		"Tab 1 Subtab 1",
+		"Tab 1 Subtab 2",
+		"Tab 1 Subtab 3",
+		"Tab 1 Subtab 4"
+	},
+	{
+		"Tab 2 Subtab 1",
+		"Tab 2 Subtab 2",
+		"Tab 2 Subtab 3",
+		"Tab 2 Subtab 4"
+	},
+	{
+		"Tab 3 Subtab 1",
+		"Tab 3 Subtab 2",
+		"Tab 3 Subtab 3",
+		"Tab 3 Subtab 4"
+	},
+	{
+		"Tab 4 Subtab 1",
+		"Tab 4 Subtab 2",
+		"Tab 4 Subtab 3",
+		"Tab 4 Subtab 4"
+	},
+	{
+		"Tab 5 Subtab 1",
+		"Tab 5 Subtab 2",
+		"Tab 5 Subtab 3",
+		"Tab 5 Subtab 4"
+	}
+};
+
+std::deque< std::deque< const char * > > dqGroupBoxes
+{
+	{
+		"Tab 1 Subtab 1 Groupbox",
+		"Tab 1 Subtab 2 Groupbox",
+		"Tab 1 Subtab 3 Groupbox",
+		"Tab 1 Subtab 4 Groupbox"
+	},
+
+	{
+		"Tab 2 Subtab 1 Groupbox",
+		"Tab 2 Subtab 2 Groupbox",
+		"Tab 2 Subtab 3 Groupbox",
+		"Tab 2 Subtab 4 Groupbox"
+	},
+
+	{
+		"Tab 3 Subtab 1 Groupbox",
+		"Tab 3 Subtab 2 Groupbox",
+		"Tab 3 Subtab 3 Groupbox",
+		"Tab 3 Subtab 4 Groupbox"
+	},
+
+	{
+		"Tab 4 Subtab 1 Groupbox",
+		"Tab 4 Subtab 2 Groupbox",
+		"Tab 4 Subtab 3 Groupbox",
+		"Tab 4 Subtab 4 Groupbox"
+	},
+
+	{
+		"Tab 5 Subtab 1 Groupbox",
+		"Tab 5 Subtab 2 Groupbox",
+		"Tab 5 Subtab 3 Groupbox",
+		"Tab 5 Subtab 4 Groupbox"
+	},
+};
 
 void CUserInterface::SetLayout( )
 {
-	//wdg.urmom( );
+	//wdg.menfuck( );
+	static px_color_t clr( { 255, 0, 0, 255 } ), clr1( { 0, 255, 255, 255 } );
 	static int iCurrentUpperTab { }, iCurrentSubTab { }, iCurrentLowerTab { };
-	
-	wdg.NewRow( 48, 5 );
-	ui->SetFont( EFont::ROBOTOBOLDSMALL );
-	iCurrentUpperTab = wdg.TopButton( ICON_FA_MONEY_BILL " Finance", iCurrentUpperTab == 0 ) ? 0 : iCurrentUpperTab;
-	iCurrentUpperTab = wdg.TopButton( ICON_FA_PHONE " Phone", iCurrentUpperTab == 1 ) ? 1 : iCurrentUpperTab;
-	iCurrentUpperTab = wdg.TopButton( ICON_FA_ADDRESS_BOOK " Addresses", iCurrentUpperTab == 2 ) ? 2 : iCurrentUpperTab;
-	iCurrentUpperTab = wdg.TopButton( ICON_FA_CAR " Cars", iCurrentUpperTab == 3 ) ? 3 : iCurrentUpperTab;
-	iCurrentUpperTab = wdg.TopButton( ICON_FA_BOMB " Bomb Syria", iCurrentUpperTab == 4 ) ? 4 : iCurrentUpperTab;
+
+	auto iTabResult = wdg.Tabs( 10, 0, 140, 45, dqTabs, iCurrentUpperTab );
+	iCurrentUpperTab = iTabResult >= 0 ? iTabResult : iCurrentUpperTab;
 	
 	wdg.Separator( 61, 65, 72, 100, 5 );
 	ui->SetFont( EFont::ROBOTOBOLDSMALL );
@@ -25,27 +102,37 @@ void CUserInterface::SetLayout( )
 	iCurrentLowerTab = wdg.SpecialButton( CWidgets::EPosition::CENTER, "NO ROUNDING", iCurrentLowerTab == 1 ) ? 1 : iCurrentLowerTab;
 	iCurrentLowerTab = wdg.SpecialButton( CWidgets::EPosition::RIGHT, "RIGHT ROUNDED", iCurrentLowerTab == 2 ) ? 2 : iCurrentLowerTab;
 	
-	wdg.NewRow( 25, 0 );
-	wdg.NewRow( 30 );
-	ui->SetFont( EFont::TAHOMA );
-	iCurrentSubTab = wdg.RegularButton( "Men are Hot!", iCurrentSubTab == 0 ) ? 0 : iCurrentSubTab;
-	iCurrentSubTab = wdg.RegularButton( "Men are Hot!", iCurrentSubTab == 1 ) ? 1 : iCurrentSubTab;
-	iCurrentSubTab = wdg.RegularButton( "Men are Hot!", iCurrentSubTab == 2 ) ? 2 : iCurrentSubTab;
-	
-	wdg.NewRow( 25, 4 );
-	
-	static bool bWasPressed[ 4 ] { };
-	bWasPressed[ 0 ] = wdg.SpecialButton( CWidgets::EPosition::LEFT, ICON_FA_PLUS, bWasPressed[ 0 ] );
-	bWasPressed[ 1 ] = wdg.SpecialButton( CWidgets::EPosition::CENTER, ICON_FA_SAVE, bWasPressed[ 1 ] );
-	bWasPressed[ 2 ] = wdg.SpecialButton( CWidgets::EPosition::CENTER, ICON_FA_UNDO, bWasPressed[ 2 ] );
-	bWasPressed[ 3 ] = wdg.SpecialButton( CWidgets::EPosition::RIGHT, ICON_FA_TIMES_CIRCLE, bWasPressed[ 3 ] );
+	auto iResult = wdg.Sidebar( 30, 190, 5, 10, dqSidebarButtons.at( iCurrentUpperTab ), iCurrentSubTab );
+	iCurrentSubTab = iResult >= 0 ? iResult : iCurrentSubTab;
 
-	wdg.BeginRow( );
-	static bool bCheckbox[ 3 ] { };
-	wdg.Checkbox( "Men", &bCheckbox[ 0 ] );
-	wdg.Checkbox( "Men1", &bCheckbox[ 1 ] );
-	wdg.Checkbox( "Men2", &bCheckbox[ 2 ] );
+	wdg.BeginGroupbox( 240, 300, 205, 147, dqGroupBoxes.at( iCurrentUpperTab ).at( iCurrentSubTab ), 155 );
+	wdg.EndGroupbox( );
+
+	wdg.BeginGroupbox( 240, 300, 665, 35, dqGroupBoxes.at( iCurrentUpperTab ).at( iCurrentSubTab ), 155 );
+	wdg.BeginRow( 17, 3 );
+	static auto b = false;
+	wdg.Checkbox( "Counter-Terrorist Visible", 170, &b );
+	wdg.SetRowWidth( 30 );
+	wdg.ColorButton( "Counter-Terrorist Glow Visible", &clr );
 	wdg.EndRow( );
+
+	wdg.BeginRow( 17, 3 );
+	static auto b1 = false;
+	wdg.Checkbox( "Counter-Terrorist Invisible", 170, &b1 );
+	wdg.SetRowWidth( 30 );
+	wdg.ColorButton( "Counter-Terrorist Glow Invisible", &clr1 );
+	wdg.EndRow( );
+	wdg.EndGroupbox( );
+
+	if ( wdg.pActiveEditColor != nullptr )
+		wdg.ColorPicker( );
+
+	//wdg.BeginRow( );
+	//static bool bCheckbox[ 3 ] { };
+	//wdg.Checkbox( "Men", &bCheckbox[ 0 ] );
+	//wdg.Checkbox( "Men1", &bCheckbox[ 1 ] );
+	//wdg.Checkbox( "Men2", &bCheckbox[ 2 ] );
+	//wdg.EndRow( );
 }				    
 
 void OnLaunch( )
@@ -54,7 +141,7 @@ void OnLaunch( )
 
 	unsigned u[ ]
 	{
-		600, 600
+		720, 600
 	};
 
 	ui = new CUserInterface( M_XOR( "Paladin Extensions" ), M_XOR( "Loader" ), u, M_WXOR( L"Paladin Extensions Loader" ) );
