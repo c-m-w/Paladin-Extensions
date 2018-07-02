@@ -22,7 +22,7 @@ namespace PX
         class out_t
         {
 #if defined( _DEBUG )
-            static std::ofstream ofLogFile;
+            static std::wofstream wofLogFile;
 #endif
         public:
             template< typename _t > out_t& PX_API operator<<( const _t& );
@@ -33,4 +33,4 @@ namespace PX
     }
 }
 
-#include "Debug.inl"
+#include "Debug Manager.inl"
