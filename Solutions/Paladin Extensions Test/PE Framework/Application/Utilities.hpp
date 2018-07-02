@@ -7,6 +7,65 @@
 
 namespace Paladin
 {
+	class px_color_t
+	{
+		unsigned char r, g, b, a;
+
+	public:
+		px_color_t( ) 
+		{
+			r = g = b = a = 0;
+		}
+
+		px_color_t( int r, int g, int b, int a )
+		{
+			this->r = r;
+			this->g = g;
+			this->b = b;
+			this->a = a;
+		}
+		px_color_t( float r, float g, float b, float a )
+		{
+			this->r = unsigned char( r > 1.f ? r : r * 255.f );
+			this->g = unsigned char( g > 1.f ? g : g * 255.f );
+			this->b = unsigned char( b > 1.f ? b : b * 255.f );
+			this->a = unsigned char( a > 1.f ? a : a * 255.f );
+		}
+
+		template< typename _t > _t *Get( )
+		{
+			_t buf[ ] { r, g, b, a };
+			return buf;
+		}
+
+		template< typename _t > void Set( std::initializer_list< int > listFloats )
+		{
+			if ( listFloats.size( ) <= 4 )
+			{
+				int i = 1;
+				for ( auto listFloat : listFloats )
+					_Data[ i++ ] = listFloat > 1.f ? int( listFloat ) : int( listFloat * 255.f );
+			}
+		}
+
+		template< typename _t > void Set( std::initializer_list< float > listFloats )
+		{
+			if ( listFloats.size( ) <= 4 )
+			{
+				int i = 1;
+				for ( auto listFloat : listFloats )
+					_Data[ i++ ] = listFloat > 1.f ? int( listFloat ) : int( listFloat * 255.f );
+			}
+		}
+
+		template< typename _t > _t operator[ ]( _t i )
+		{
+			_t buf[ ] { r, g, b, a };
+			return buf[ int( i ) ];
+		}
+	};
+
+
 	/**
 	 * \brief Properly sized datatype to hold time.
 	 */
