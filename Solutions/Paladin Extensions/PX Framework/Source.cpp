@@ -5,8 +5,7 @@
 
 void Example( )
 {
-    // nk_button_label( new nk_context, new char ); // INACCESSIBLE
-    // PX::Render::Button( ); // INACCESSIBLE
+    PX::Render::BeginRender( );
 
     const wchar_t* wsz = L"Hi";
     const char* sz = "Hi";
@@ -14,5 +13,5 @@ void Example( )
     PX_XOR( wsz );
     PX_XOR( sz );
 
-
+    PX::Cryptography::Encrypt( std::string( "hi" ), std::string( "hi" ) );
 }

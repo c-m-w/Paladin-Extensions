@@ -6,6 +6,11 @@ namespace PX
 {
     namespace Render
     {
+        void PX_API SetCursor( ECursor curType )
+        {
+            SetCursor( hCursors[ curType ] ? hCursors[ curType ] : hCursors[ NONE ] );
+        }
+
         void PX_API SetWindowSize( unsigned uWidth, unsigned uHeight )
         {
             uWindowWidth = uWidth;
@@ -85,6 +90,16 @@ namespace PX
             }
         }
 
+        void PX_API SetWindowProc( IDirect3DDevice9* pTargetDevice )
+        {
+            D3DDEVICE_CREATION_PARAMETERS cpParameters;
+            dbg::Assert( pTargetDevice->GetCreationParameters( &cpParameters ) >= 0 );
+            hwOldWindowHandle = cpParameters.hFocusWindow;
+
+            uOldWindowProc = SetWindowLongPtr( hwOldWindowHandle, GWLP_WNDPROC, reinterpret_cast< long >( WndProc ) );
+            dbg::Assert( uOldWindowProc );
+        }
+
         void PX_API BeginRender( )
         {
             pDevice->Clear( 0, nullptr, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER | D3DCLEAR_STENCIL, D3DCOLOR_ARGB( 0, 0, 0, 0 ), 0, 0 );
@@ -95,21 +110,6 @@ namespace PX
         {
             pDevice->EndScene( );
             pDevice->Present( nullptr, nullptr, nullptr, nullptr );
-        }
-
-        void PX_API SetCursor( ECursor curType )
-        {
-            SetCursor( hCursors[ curType ] ? hCursors[ curType ] : hCursors[ NONE ] );
-        }
-
-        void PX_API SetWindowProc( IDirect3DDevice9* pTargetDevice )
-        {
-            D3DDEVICE_CREATION_PARAMETERS cpParameters;
-            dbg::Assert( pTargetDevice->GetCreationParameters( &cpParameters ) >= 0 );
-            hwOldWindowHandle = cpParameters.hFocusWindow;
-
-            uOldWindowProc = SetWindowLongPtr( hwOldWindowHandle, GWLP_WNDPROC, reinterpret_cast< long >( WndProc ) );
-            dbg::Assert( uOldWindowProc );
         }
     }
 }

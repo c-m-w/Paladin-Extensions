@@ -6,19 +6,24 @@ namespace PX
 {
     namespace XOR
     {
-        template< typename > PX_ABSTRACT_STRUCT ICStringTrait;
-        template< > PX_ABSTRACT_STRUCT ICStringTrait< const char* >
+        template< int iValueToEnsure > PX_ABSTRACT_STRUCT IEnsureCompileTime
         {
-            static constexpr int int_trait_t = 1;
-            typedef char char_trait_t;
-        };
-        template< > PX_ABSTRACT_STRUCT ICStringTrait< const wchar_t* >
-        {
-            static constexpr int int_trait_t = 2;
-            typedef wchar_t char_trait_t;
+            enum: int
+            {
+                VALUE = iValueToEnsure
+            };
         };
 
-        template< int ... > PX_ABSTRACT_STRUCT IIndexList;
+        template< > PX_ABSTRACT_STRUCT ICStringTraits< const char* >
+        {
+            static PX_DEF int_trait_t = 1;
+            typedef char char_trait_t;
+        };
+        template< > PX_ABSTRACT_STRUCT ICStringTraits< const wchar_t* >
+        {
+            static PX_DEF int_trait_t = 2;
+            typedef wchar_t char_trait_t;
+        };
 
         template< typename, int > PX_ABSTRACT_STRUCT IAppend;
         template< int ... iLeft, int iRight > struct IAppend< IIndexList< iLeft ... >, iRight >

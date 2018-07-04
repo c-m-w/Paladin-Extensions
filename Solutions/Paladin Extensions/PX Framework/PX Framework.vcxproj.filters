@@ -36,13 +36,13 @@
     <ClInclude Include="Application\File Manager.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Drawing\Render Manager.hpp">
+    <ClInclude Include="Security\Cryptography.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Application\Debug Manager.hpp">
+    <ClInclude Include="Application\Debug.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Security\Encryption Manager.hpp">
+    <ClInclude Include="Drawing\Render Engine.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -62,19 +62,22 @@
     <ClCompile Include="Application\File Manager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Drawing\Render Manager.cpp">
+    <ClCompile Include="Security\Cryptography.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Debug Manager.cpp">
+    <ClCompile Include="Application\Debug.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Drawing\Render Engine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Application\Utilities.inl" />
-    <None Include="Application\Debug Manager.inl">
+    <None Include="Security\Cryptography.inl">
       <Filter>Header Files</Filter>
     </None>
-    <None Include="Security\Encryption Manager.inl">
+    <None Include="Application\Debug.inl">
       <Filter>Header Files</Filter>
     </None>
   </ItemGroup>

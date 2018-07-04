@@ -7,7 +7,7 @@ namespace PX
     PX_ABSTRACT_CLASS IInputManager: Utilities::ISingleton< IInputManager >
     {
 	public:
-		enum class EKeyState
+		enum EKeyState
 		{
 			UP,
 			DOWN
@@ -18,9 +18,9 @@ namespace PX
 		unsigned uLastKeyPressed;
 		std::vector< std::function< void( unsigned ) > > vecKeyCallback[ PX_MAX_KEY ];
 
+        void PX_API ProcessKey( unsigned, UINT );
 		void PX_API ProcessMouseMessage( UINT, WPARAM, LPARAM );
 		void PX_API ProcessKeyboardMessage( UINT, WPARAM, LPARAM );
-		void PX_API ProcessKey( unsigned, UINT );
 	public:
 		void PX_API OnEvent( HWND, UINT, WPARAM, LPARAM );
 

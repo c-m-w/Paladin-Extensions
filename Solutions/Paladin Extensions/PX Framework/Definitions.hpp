@@ -39,6 +39,10 @@
 #define PX_SDK inline
 // identifies function as "Paladin Extensions" original
 #define PX_API __stdcall
+// identifies constant as "Paladin Extensions" original
+#define PX_DEF constexpr auto
+// identifies instruct as "Paladin Extensions" original
+#define PX_EXT extern
 
 // identifies class as abstract interface
 #define PX_ABSTRACT_CLASS class
@@ -54,30 +58,31 @@
 #define PX_DEPENDENCIES_ESCAPE
 #endif
 
+
 // INFO: Encrypts string data on compile, then decrypts for access on run.
-#define PX_XOR( String ) ( PX::XOR::IXorString< PX::XOR::ICStringTrait< decltype( wsz ) >::char_trait_t, \
-        PX::XOR::SConstructIndexList< ( sizeof( wsz ) - 1 ) / PX::XOR::ICStringTrait< decltype( wsz ) >::int_trait_t >::result_t >( wsz ).Decrypt( ) )
+#define PX_XOR( String ) ( PX::XOR::IXorString< PX::XOR::ICStringTraits< decltype( String ) >::char_trait_t, \
+        PX::XOR::SConstructIndexList< ( sizeof( String ) - 1 ) / PX::XOR::ICStringTraits< decltype( String ) >::int_trait_t >::result_t >( String ).Decrypt( ) )
 
 #if defined( _DEBUG )
 // sets debug out line identifier as "Debug"
-#define PX_DBG << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << \
-        PX::dbg::out_clr_t( FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE ) << " [DBG] " << \
+#define PX_DBG << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), L"[%H:%M:%S]" ) << \
+        PX::dbg::out_clr_t( FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE ) << L" [DBG] " << \
         PX::dbg::out_clr_t( !FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE )
 // sets debug out line identifier as "Success"
-#define PX_SCS << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << \
-        PX::dbg::out_clr_t( FOREGROUND_INTENSITY | !FOREGROUND_RED | FOREGROUND_GREEN | !FOREGROUND_BLUE  ) << " [SCS] " << \
+#define PX_SCS << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), L"[%H:%M:%S]" ) << \
+        PX::dbg::out_clr_t( FOREGROUND_INTENSITY | !FOREGROUND_RED | FOREGROUND_GREEN | !FOREGROUND_BLUE  ) << L" [SCS] " << \
         PX::dbg::out_clr_t( !FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE )
 // sets debug out line identifier as "Warning"
-#define PX_WRN << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << \
-        PX::dbg::out_clr_t( FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | !FOREGROUND_BLUE ) << " [WRN] " << \
+#define PX_WRN << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), L"[%H:%M:%S]" ) << \
+        PX::dbg::out_clr_t( FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | !FOREGROUND_BLUE ) << L" [WRN] " << \
         PX::dbg::out_clr_t( !FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE )
 // sets debug out line identifier as "Error"
-#define PX_ERR << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << \
-        PX::dbg::out_clr_t( FOREGROUND_INTENSITY | FOREGROUND_RED | !FOREGROUND_GREEN | !FOREGROUND_BLUE ) << " [ERR] " << \
+#define PX_ERR << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), L"[%H:%M:%S]" ) << \
+        PX::dbg::out_clr_t( FOREGROUND_INTENSITY | FOREGROUND_RED | !FOREGROUND_GREEN | !FOREGROUND_BLUE ) << L" [ERR] " << \
         PX::dbg::out_clr_t( !FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE )
 // sets debug out line identifier as "Last Error Info"
-#define PX_LER << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << \
-        PX::dbg::out_clr_t( !FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | !FOREGROUND_BLUE ) << " [LER] " << \
+#define PX_LER << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), L"[%H:%M:%S]" ) << \
+        PX::dbg::out_clr_t( !FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | !FOREGROUND_BLUE ) << L" [LER] " << \
         PX::dbg::out_clr_t( !FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE )
 #elif
 #define PX_DBG

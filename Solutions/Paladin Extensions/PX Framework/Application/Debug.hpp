@@ -9,7 +9,7 @@ namespace PX
         // INFO: Asserts parameter to empty initialization version of parameter
         template< typename _t > bool PX_API Assert( _t );
 
-        PX_SDK constexpr auto endl = '\n';
+        PX_DEF endl = '\n';
 
         // INFO: Used to change console print color of debug output
         struct out_clr_t
@@ -25,12 +25,12 @@ namespace PX
             static std::wofstream wofLogFile;
 #endif
         public:
+            out_t & PX_API operator<<( const out_clr_t& );
             template< typename _t > out_t& PX_API operator<<( const _t& );
-            template< > out_t& PX_API operator<<( const out_clr_t& );
         } PX_SDK out;
 
         void PX_API PrintLastError( );
     }
 }
 
-#include "Debug Manager.inl"
+#include "Debug.inl"

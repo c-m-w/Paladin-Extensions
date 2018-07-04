@@ -4,6 +4,16 @@
 
 namespace PX
 {
+    void PX_API IInputManager::ProcessKey( unsigned uKey, UINT uMessage )
+    {
+        uKeyState[ uKey ] = uMessage % 2 ? DOWN : UP;
+        ulKeyDownTime[ uKey ] = Utilities::GetMoment( );
+        uLastKeyPressed = uKey;
+
+        for ( auto fnCallback: vecKeyCallback[ uKey ] )
+            fnCallback( uKey );
+    }
+
     void PX_API IInputManager::ProcessMouseMessage( UINT uMessage, WPARAM wParam, LPARAM lParam ) // lParam is unused
     {
         unsigned uKey;
@@ -49,17 +59,7 @@ namespace PX
         ProcessKey( wParam, uMessage );
     }
 
-    void PX_API IInputManager::ProcessKey( unsigned uKey, UINT uMessage )
-    {
-        uKeyState[ uKey ] = uMessage % 2 ? EKeyState::DOWN : EKeyState::UP;
-        ulKeyDownTime[ uKey ] = Utilities::GetMoment( );
-        uLastKeyPressed = uKey;
-
-        for ( auto fnCallback : vecKeyCallback[ uKey ] )
-            fnCallback( uKey );
-    }
-
-    void PX_API IInputManager::OnEvent( HWND hwWindowHandle, UINT uMessage, WPARAM wParam, LPARAM lParam )
+    void PX_API IInputManager::OnEvent( HWND hwWindowHandle, UINT uMessage, WPARAM wParam, LPARAM lParam ) // hwWindowHandle is unused
     {
         switch ( uMessage )
         {
@@ -83,8 +83,7 @@ namespace PX
             case WM_SYSKEYUP:
                 ProcessKeyboardMessage( uMessage, wParam, lParam );
                 break;
-            default:
-                return;
+            default: ;
         }
     }
 
