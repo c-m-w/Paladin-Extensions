@@ -85,6 +85,22 @@ std::deque< std::deque< const char * > > dqGroupBoxes
 	},
 };
 
+std::deque< const char * > dqCombo
+{
+	"Option 1",
+	"Option 2",
+	"Option 3",
+	"Option 4"
+};
+
+std::deque< bool > dqToggleCombo
+{
+	false,
+	false,
+	false,
+	false
+};
+
 void CUserInterface::SetLayout( )
 {
 	//wdg.menfuck( );
@@ -102,24 +118,35 @@ void CUserInterface::SetLayout( )
 	iCurrentLowerTab = wdg.SpecialButton( CWidgets::EPosition::CENTER, "NO ROUNDING", iCurrentLowerTab == 1 ) ? 1 : iCurrentLowerTab;
 	iCurrentLowerTab = wdg.SpecialButton( CWidgets::EPosition::RIGHT, "RIGHT ROUNDED", iCurrentLowerTab == 2 ) ? 2 : iCurrentLowerTab;
 	
-	auto iResult = wdg.Sidebar( 30, 190, 5, 10, dqSidebarButtons.at( iCurrentUpperTab ), iCurrentSubTab );
+	auto iResult = wdg.Sidebar( 30, 190, 10, 30, dqSidebarButtons.at( iCurrentUpperTab ), iCurrentSubTab );
 	iCurrentSubTab = iResult >= 0 ? iResult : iCurrentSubTab;
 
-	wdg.BeginGroupbox( 240, 300, 205, 147, dqGroupBoxes.at( iCurrentUpperTab ).at( iCurrentSubTab ), 155 );
+	wdg.BeginGroupbox( 250, 300, 205, 147, dqGroupBoxes.at( iCurrentUpperTab ).at( iCurrentSubTab ), 155 );
+	wdg.VerticalSpacing( );
+	wdg.BeginPaddedRow( 10, 150, 24, 1 );
+	static auto uComboOption = 0u;
+	const auto iComboResult = wdg.Combobox( 150, 25, "Combo Box", dqCombo, uComboOption );
+	wdg.BeginPaddedRow( 10, 150, 24, 1 );
+	wdg.ComboboxToggle( 150, 25, "Toggle combo", dqCombo, dqToggleCombo );
+	uComboOption = iComboResult >= 0 ? iComboResult : uComboOption;
+	wdg.BeginPaddedRow( 10, 150, 24, 1 );
+	static char szBuffer[4];
+	wdg.InputboxInteger( 4, szBuffer );
 	wdg.EndGroupbox( );
 
-	wdg.BeginGroupbox( 240, 300, 665, 35, dqGroupBoxes.at( iCurrentUpperTab ).at( iCurrentSubTab ), 155 );
-	wdg.BeginRow( 17, 3 );
+	wdg.BeginGroupbox( 250, 300, 665, 35, dqGroupBoxes.at( iCurrentUpperTab ).at( iCurrentSubTab ), 155 );
+	wdg.VerticalSpacing( );
+	wdg.BeginPaddedRow( 7, 0, 17, 3 );
 	static auto b = false;
-	wdg.Checkbox( "Counter-Terrorist Visible", 170, &b );
-	wdg.SetRowWidth( 30 );
+	wdg.Checkbox( "Counter-Terrorist Visible", 172, &b );
+	wdg.SetRowWidth( 17 );
 	wdg.ColorButton( "Counter-Terrorist Glow Visible", &clr );
 	wdg.EndRow( );
-
-	wdg.BeginRow( 17, 3 );
+	
+	wdg.BeginPaddedRow( 7, 0, 17, 3 );
 	static auto b1 = false;
-	wdg.Checkbox( "Counter-Terrorist Invisible", 170, &b1 );
-	wdg.SetRowWidth( 30 );
+	wdg.Checkbox( "Counter-Terrorist Invisible", 172, &b1 );
+	wdg.SetRowWidth( 17 );
 	wdg.ColorButton( "Counter-Terrorist Glow Invisible", &clr1 );
 	wdg.EndRow( );
 	wdg.EndGroupbox( );

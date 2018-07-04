@@ -16828,8 +16828,8 @@ nk_nonblock_begin(struct nk_context *ctx,
     popup->bounds = body;
     popup->parent = win;
     popup->layout = (struct nk_panel*)nk_create_panel(ctx);
-    popup->flags = flags;
-    popup->flags |= NK_WINDOW_BORDER;
+    popup->flags = flags | NK_WINDOW_NO_SCROLLBAR;
+    //popup->flags |= NK_WINDOW_BORDER;
     popup->flags |= NK_WINDOW_DYNAMIC;
     popup->seq = ctx->seq;
     win->popup.active = 1;
@@ -23188,7 +23188,7 @@ nk_edit_string(struct nk_context *ctx, nk_flags flags,
     nk_textedit_clear_state(&ctx->text_edit, (flags & NK_EDIT_MULTILINE)?
         NK_TEXT_EDIT_MULTI_LINE: NK_TEXT_EDIT_SINGLE_LINE, filter);
 
-    if (win->edit.active && hash == win->edit.name) {
+    if (win->edit.active && hash == win->edit.name ) {
         if (flags & NK_EDIT_NO_CURSOR)
             edit->cursor = nk_utf_len(memory, *len);
         else edit->cursor = win->edit.cursor;
@@ -24346,7 +24346,7 @@ nk_combo_begin(struct nk_context *ctx, struct nk_window *win,
     popup = win->popup.win;
     body.x = header.x;
     body.w = size.x;
-    body.y = header.y + header.h-ctx->style.window.combo_border;
+    body.y = header.y + header.h-ctx->style.window.combo_border + 13;
     body.h = size.y;
 
     hash = win->popup.combo_count++;
@@ -24445,8 +24445,8 @@ nk_combo_begin_text(struct nk_context *ctx, const char *selected, int len,
             NK_TEXT_LEFT, ctx->style.font);
 
         /* draw open/close button */
-        nk_draw_button_symbol(&win->buffer, &button, &content, ctx->last_widget_state,
-            &ctx->style.combo.button, sym, style->font);
+        //nk_draw_button_symbol(&win->buffer, &button, &content, ctx->last_widget_state,
+        //    &ctx->style.combo.button, sym, style->font);
     }
     return nk_combo_begin(ctx, win, size, is_clicked, header);
 }

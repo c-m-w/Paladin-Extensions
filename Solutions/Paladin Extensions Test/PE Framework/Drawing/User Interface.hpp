@@ -9,6 +9,8 @@ namespace Paladin
 	    nk_context *pContext;
         nk_font_atlas *pAtlas;
 		struct nk_font *pTahoma, *pTahomaBold, *pRoboto, *pRobotoBold, *pRobotoSmall, *pRobotoBoldSmall;
+		bool bDrawComboboxArrow;
+		struct nk_rect rcComboboxWindowBounds;
         const char *szNuklearWindowTitle;
 		const char *szApplicationTitle;
 		bool bFoundHoverTarget;
@@ -37,8 +39,10 @@ namespace Paladin
 		};
 
 		struct nk_color clrColors[ NK_COLOR_COUNT ];
-		nk_color clrTextDormant, clrTextActive;
-		nk_style_button btnTopActive, btnTop, btnRegularActive, btnRegular, btnSpecialActive, btnSpecial;
+		nk_color clrTextDormant, clrTextActive, clrBlue, clrDarkBlue, clrBackground, 
+    			 clrLightBackground, clrDarkBackground, clrBorder, clrToolbox, clrHeader,
+    			 clrBlueActive, clrBlueHover, clrBlueDormant;
+		nk_style_button btnTopActive, btnTop, btnRegularActive, btnRegular, btnSpecialActive, btnSpecial, btnCombo, btnComboActive;
 
         CUserInterface( const char *, const char *, unsigned *, const wchar_t * = nullptr );
 	    void Shutdown( );
@@ -62,6 +66,13 @@ namespace Paladin
 			struct nk_rect rcLastWidgetLocation;
 			bool bBeganRow = false;
 			const char *szColorPickerSubject;
+			enum class ERowType: int
+			{
+				DYNAMIC,
+				STATIC,
+				MANUAL,
+				CUSTOM
+			} rwLastRowType;
 
 		public:
 			px_color_t *pActiveEditColor = nullptr;
@@ -84,6 +95,11 @@ namespace Paladin
 			void EndGroupbox( );
 			void ColorButton( const char *, px_color_t * );
 			void ColorPicker( );
+			int Combobox( unsigned, unsigned, const char *, std::deque< const char * >, unsigned );
+			void ComboboxToggle( unsigned, unsigned, const char *, std::deque< const char * >, std::deque< bool > & );
+			int InputboxInteger( unsigned, char * );
+			float InputboxFloat( unsigned, char * );
+			char *Inputbox( unsigned, char * );
 			void NewRow( unsigned = 30, unsigned = 3 );
 			void BeginRow( unsigned = 30, unsigned = 6 );
 			void SetRowWidth( float );
@@ -91,8 +107,9 @@ namespace Paladin
 			void NewStaticRow( unsigned, unsigned = 30, unsigned = 3 );
 			void BeginCustomRow( unsigned = 30, unsigned = 3 );
 			void PushCustomRow( unsigned, unsigned, unsigned, unsigned );
+			void BeginPaddedRow( unsigned, unsigned, unsigned = 30, unsigned = 3 );
 			void Spacing( unsigned = 1 );
-			int menfuck( );
+			void VerticalSpacing( unsigned = 5 );
 		} wdg;
 
     private:
