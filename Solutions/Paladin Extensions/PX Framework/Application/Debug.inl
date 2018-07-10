@@ -18,6 +18,12 @@ namespace PX
             i++;
             return true;
         }
+        namespace
+        {
+#if defined( _DEBUG )
+            std::wofstream wofLogFile;
+#endif
+        }
 
         template< typename _t > out_t& PX_API out_t::operator<<( const _t& rhs )
         {

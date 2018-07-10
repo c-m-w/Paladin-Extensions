@@ -1,5 +1,5 @@
 /// Encryption.hpp
-
+// TODO: document @Cole
 #pragma once
 
 namespace PX
@@ -22,7 +22,7 @@ namespace PX
 
         template< int > PX_ABSTRACT_STRUCT IEnsureCompileTime;
         template< typename > PX_ABSTRACT_STRUCT ICStringTraits;
-        template< int ... > PX_ABSTRACT_STRUCT IIndexList;
+        template< int... > PX_ABSTRACT_STRUCT IIndexList;
         template< typename, int > PX_ABSTRACT_STRUCT IAppend;
         template< int > struct SConstructIndexList;
         template< typename, typename > PX_ABSTRACT_CLASS IXorString;

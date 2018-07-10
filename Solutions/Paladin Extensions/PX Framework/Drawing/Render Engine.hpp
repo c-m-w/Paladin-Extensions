@@ -1,5 +1,5 @@
 /// Render.hpp
-
+// TODO: document @Cole
 #pragma once
 
 namespace PX
@@ -19,7 +19,6 @@ namespace PX
         void PX_API SetCursor( ECursor );
 
         PX_SDK const wchar_t* szWindowTitle = static_cast< wchar_t* >( malloc( 32 ) );
-        LRESULT WINAPI WndProc( HWND, UINT, WPARAM, LPARAM );
         PX_SDK WNDCLASSEX wndWindow;
         PX_SDK HWND hwWindowHandle;
 

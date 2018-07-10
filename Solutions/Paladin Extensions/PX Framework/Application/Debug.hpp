@@ -21,11 +21,8 @@ namespace PX
         // INFO: Managed debug output; used like std::cout
         class out_t
         {
-#if defined( _DEBUG )
-            static std::wofstream wofLogFile;
-#endif
         public:
-            out_t & PX_API operator<<( const out_clr_t& );
+            out_t& PX_API operator<<( const out_clr_t& );
             template< typename _t > out_t& PX_API operator<<( const _t& );
         } PX_SDK out;
 

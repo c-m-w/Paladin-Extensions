@@ -172,11 +172,11 @@
     <ClCompile Include="Drawing\Render Engine.cpp" />
     <ClCompile Include="Drawing\User Interface.cpp" />
     <ClCompile Include="Security\Cryptography.cpp" />
-    <ClCompile Include="Source.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Application\Debug.inl" />
     <None Include="Application\Utilities.inl" />
+    <None Include="Drawing\User Interface.inl" />
     <None Include="Security\Cryptography.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -26,9 +26,9 @@ namespace PX
         };
 
         template< typename, int > PX_ABSTRACT_STRUCT IAppend;
-        template< int ... iLeft, int iRight > struct IAppend< IIndexList< iLeft ... >, iRight >
+        template< int... iLeft, int iRight > struct IAppend< IIndexList< iLeft... >, iRight >
         {
-            typedef IIndexList< iLeft ..., iRight > result_t;
+            typedef IIndexList< iLeft..., iRight > result_t;
         };
 
         template< int i > struct SConstructIndexList
@@ -41,9 +41,9 @@ namespace PX
         };
 
         template< typename, typename > PX_ABSTRACT_CLASS IXorString;
-        template< typename _char, int ... iIndex > PX_ABSTRACT_CLASS IXorString< _char, IIndexList< iIndex ... > >
+        template< typename _char, int... iIndex > PX_ABSTRACT_CLASS IXorString< _char, IIndexList< iIndex... > >
         {
-            _char _chValue[ sizeof ... ( iIndex ) + 1 ];
+            _char _chValue[ sizeof... ( iIndex ) + 1 ];
 
             static const _char _chXorKey = static_cast< _char >( IEnsureCompileTime< LinearCongruentGenerator( 10 ) >::VALUE % 0x10000 );
 
@@ -53,17 +53,17 @@ namespace PX
             }
 
         public:
-            explicit constexpr PX_API IXorString( const _char* const _String ): _chValue { EncryptCharacter( _String[ iIndex ], iIndex ) ... }
+            explicit constexpr PX_API IXorString( const _char* const _String ): _chValue { EncryptCharacter( _String[ iIndex ], iIndex )... }
             { }
 
             const _char* PX_API Decrypt( )
             {
-                for ( int i = 0; i < sizeof ... ( iIndex ); i++ )
+                for ( int i = 0; i < sizeof... ( iIndex ); i++ )
                 {
                     _chValue[ i ] = _chValue[ i ] ^ ( _chXorKey + i );
                 }
 
-                _chValue[ sizeof ... ( iIndex ) ] = static_cast< _char >( 0 );
+                _chValue[ sizeof... ( iIndex ) ] = static_cast< _char >( 0 );
 
                 return _chValue;
             }

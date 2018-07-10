@@ -1,10 +1,12 @@
 /// Input Manager.hpp
-
+// TODO: document @Cole
 #pragma once
 
 namespace PX
 {
-    PX_ABSTRACT_CLASS IInputManager: Utilities::ISingleton< IInputManager >
+    LRESULT WINAPI WndProc( HWND, UINT, WPARAM, LPARAM );
+
+    PX_ABSTRACT_CLASS IInputManager: public Utilities::ISingleton< IInputManager >
     {
 	public:
 		enum EKeyState
@@ -13,10 +15,10 @@ namespace PX
 			DOWN
 		};
 	private:
-		EKeyState uKeyState[ PX_MAX_KEY ];
-		unsigned long long ulKeyDownTime[ PX_MAX_KEY ];
+		EKeyState stateKeys[ PX_MAX_KEY ];
+        Utilities::moment_t mmtKeyDownTime[ PX_MAX_KEY ];
 		unsigned uLastKeyPressed;
-		std::vector< std::function< void( unsigned ) > > vecKeyCallback[ PX_MAX_KEY ];
+		std::vector< std::function< void( unsigned ) > > vecfnKeyCallback[ PX_MAX_KEY ];
 
         void PX_API ProcessKey( unsigned, UINT );
 		void PX_API ProcessMouseMessage( UINT, WPARAM, LPARAM );

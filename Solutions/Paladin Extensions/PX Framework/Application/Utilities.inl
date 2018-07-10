@@ -6,9 +6,9 @@ namespace PX
 {
     namespace Utilities
     {
-        template< class _Child > template< typename ... _Arg > _Child& PX_API ISingleton<_Child >::Get( _Arg ... _Args )
+        template< class _Child > _Child& PX_API ISingleton< _Child >::Get( )
         {
-            static _Child _ChildClassObject( _Args ... );
+            static _Child _ChildClassObject { };
             return _ChildClassObject;
         }
 
@@ -48,7 +48,7 @@ namespace PX
             static _To Cast( const _From& _Source )
             {
                 int iLength = IStringTraits< _From >::ByteConvert( CP_ACP, _Source.data( ), _Source.length( ), nullptr, 0 );
-                if ( iLength == 0 )
+                if ( !iLength )
                     return _To( );
 
                 std::vector< typename IStringTraits< _To >::char_trait_t > _strBuffer( iLength );

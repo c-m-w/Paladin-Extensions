@@ -6,11 +6,11 @@ namespace PX
 {
     void PX_API IInputManager::ProcessKey( unsigned uKey, UINT uMessage )
     {
-        uKeyState[ uKey ] = uMessage % 2 ? DOWN : UP;
-        ulKeyDownTime[ uKey ] = Utilities::GetMoment( );
+        stateKeys[ uKey ] = uMessage % 2 ? DOWN : UP;
+        mmtKeyDownTime[ uKey ] = Utilities::GetMoment( );
         uLastKeyPressed = uKey;
 
-        for ( auto fnCallback: vecKeyCallback[ uKey ] )
+        for ( auto fnCallback: vecfnKeyCallback[ uKey ] )
             fnCallback( uKey );
     }
 
@@ -89,7 +89,7 @@ namespace PX
 
     IInputManager::EKeyState PX_API IInputManager::GetKeyState( unsigned uKey )
     {
-        return uKeyState[ uKey ];
+        return stateKeys[ uKey ];
     }
 
     unsigned PX_API IInputManager::GetLastPressedKey( )
@@ -99,11 +99,11 @@ namespace PX
 
     Utilities::moment_t PX_API IInputManager::TimeSinceKeyPress( unsigned uKey )
     {
-        return Utilities::GetMoment( ) - ulKeyDownTime[ uKey ];
+        return Utilities::GetMoment( ) - mmtKeyDownTime[ uKey ];
     }
 
     void PX_API IInputManager::AddKeyCallback( unsigned uKey, std::function< void( int ) > fnCallback )
     {
-        vecKeyCallback[ uKey ].emplace_back( fnCallback );
+        vecfnKeyCallback[ uKey ].emplace_back( fnCallback );
     }
 }

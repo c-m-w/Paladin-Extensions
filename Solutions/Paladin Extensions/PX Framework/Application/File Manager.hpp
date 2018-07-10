@@ -4,7 +4,7 @@
 
 namespace PX
 {
-    class CFileManager: Utilities::ISingleton< CFileManager >
+    class CFileManager: public Utilities::ISingleton< CFileManager >
     {
     public:
         // INFO: Contains global information generally used for program initialization
@@ -12,10 +12,9 @@ namespace PX
         // INFO: Contains user-defined information generally used for program customization
         nlohmann::json jsCurrent;
         // INFO: Name of current configuration
-        const wchar_t* wszCurrent;
-    protected:
+        const wchar_t* wszCurrent = static_cast< wchar_t* >( malloc( 32 ) );
+
         PX_API CFileManager( );
-    public:
         // INFO: Saves json configurations
         void PX_API SaveInformation( );
         // INFO: Changes json configuration to reference desired configuration

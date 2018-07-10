@@ -18,9 +18,6 @@
     <ClInclude Include="PX Framework.hpp">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="Application\Utilities.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Definitions.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -45,15 +42,12 @@
     <ClInclude Include="Drawing\Render Engine.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Application\Utilities.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Application\Utilities.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Application\Input Manager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Source.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Drawing\User Interface.cpp">
@@ -71,13 +65,19 @@
     <ClCompile Include="Drawing\Render Engine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Application\Utilities.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Application\Utilities.inl" />
     <None Include="Security\Cryptography.inl">
       <Filter>Header Files</Filter>
     </None>
     <None Include="Application\Debug.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="Application\Utilities.inl" />
+    <None Include="Drawing\User Interface.inl">
       <Filter>Header Files</Filter>
     </None>
   </ItemGroup>
