@@ -23,9 +23,15 @@ int APIENTRY WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 #endif
 {
 #if defined( UNICODE )
-    HANDLE hSingleInstanceMutex = CreateMutex( NULL, TRUE, L"Paladin Extensions" );
+#if !defined( PX_INSTANCE_ID )
+#define PX_INSTANCE_ID L"0"
+#endif
+    HANDLE hSingleInstanceMutex = CreateMutex( NULL, TRUE, L"Paladin Extensions " PX_INSTANCE_ID );
 #else
-    HANDLE hSingleInstanceMutex = CreateMutex( NULL, TRUE, "Paladin Extensions" );
+#if !defined( PX_INSTANCE_ID )
+#define PX_INSTANCE_ID "0"
+#endif
+    HANDLE hSingleInstanceMutex = CreateMutex( NULL, TRUE, "Paladin Extensions " PX_INSTANCE_ID );
 #endif
     if ( hSingleInstanceMutex == INVALID_HANDLE_VALUE || GetLastError( ) == ERROR_ALREADY_EXISTS )
         return -1;
@@ -35,7 +41,7 @@ int APIENTRY WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 
 #if defined( _DEBUG )
     AllocConsole( );
-    freopen_s( new FILE * { nullptr }, "CONOUT$", "w", stdout );
+    freopen_s( new FILE* { nullptr }, "CONOUT$", "w", stdout );
 #endif
 
     OnLaunch( );
@@ -68,7 +74,7 @@ inline DWORD WINAPI ThreadProc( _In_ LPVOID lpParameter )
 {
 #if defined( _DEBUG )
     AllocConsole( );
-    freopen_s( new FILE * { nullptr }, "CONOUT$", "w", stdout );
+    freopen_s( new FILE* { nullptr }, "CONOUT$", "w", stdout );
 #endif
 
     OnAttach( );
@@ -78,9 +84,15 @@ inline DWORD WINAPI ThreadProc( _In_ LPVOID lpParameter )
 BOOL WINAPI DllMain( _In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID lpvReserved )
 {
 #if defined( UNICODE )
-    HANDLE hSingleInstanceMutex = CreateMutex( NULL, TRUE, L"Paladin Extensions" );
+#if !defined( PX_INSTANCE_ID )
+#define PX_INSTANCE_ID L"0"
+#endif
+    HANDLE hSingleInstanceMutex = CreateMutex( NULL, TRUE, L"Paladin Extensions " PX_INSTANCE_ID );
 #else
-    HANDLE hSingleInstanceMutex = CreateMutex( NULL, TRUE, "Paladin Extensions" );
+#if !defined( PX_INSTANCE_ID )
+#define PX_INSTANCE_ID "0"
+#endif
+    HANDLE hSingleInstanceMutex = CreateMutex( NULL, TRUE, "Paladin Extensions " PX_INSTANCE_ID );
 #endif
     if ( GetLastError( ) == ERROR_ALREADY_EXISTS )
         return FALSE;
