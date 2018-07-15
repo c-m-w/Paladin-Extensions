@@ -85,7 +85,7 @@ namespace Paladin
 #define M_LER << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), "[%H:%M:%S]" ) << \
 	    Paladin::dbg::SetPrintColor( ~FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | ~FOREGROUND_BLUE ) << " [LER] " << \
 	    Paladin::dbg::SetPrintColor( ~FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE )
-#elif
+#elif not defined( _DEBUG)
 #define M_DBG
 #define M_SCS
 #define M_WRN
