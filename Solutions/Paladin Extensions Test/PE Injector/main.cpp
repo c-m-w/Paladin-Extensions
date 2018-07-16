@@ -123,12 +123,49 @@ void CUserInterface::SetLayout()
 
 	wdg.BeginGroupbox(250, 300, 205, 147, dqGroupBoxes.at(iCurrentUpperTab).at(iCurrentSubTab), 155);
 	wdg.VerticalSpacing();
+
+	/*
+	wdg.BeginPaddedRow(10, 150, 24, 1);
+	if (wdg.RegularButton("Refresh", false))
+	{
+		dqCombo.clear();
+
+		char *proc = new char[MAX_PATH + 1];
+		proc[MAX_PATH] = '\0';
+
+		PROCESSENTRY32 entry;
+		entry.dwSize = sizeof(PROCESSENTRY32);
+		HANDLE snapshot = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, NULL);
+		if (Process32First(snapshot, &entry)) 
+		{
+			while (Process32Next(snapshot, &entry)) 
+			{
+				ZeroMemory(proc, MAX_PATH);
+				wcstombs(proc, entry.szExeFile, MAX_PATH);
+				dqCombo.push_back(proc);
+			}
+		}
+		CloseHandle(snapshot);
+		delete proc;
+
+		dqCombo.push_back("Hey");
+		dqCombo.push_back("cousin");
+		dqCombo.push_back("lets");
+		dqCombo.push_back("go");
+		dqCombo.push_back("bowling");
+
+		std::sort(dqCombo.begin(), dqCombo.end());
+	}
+	*/
+
 	wdg.BeginPaddedRow(10, 150, 24, 1);
 	static auto uComboOption = 0u;
 	const auto iComboResult = wdg.Combobox(150, 25, "Combo Box", dqCombo, uComboOption);
+	
 	wdg.BeginPaddedRow(10, 150, 24, 1);
 	wdg.ComboboxToggle(150, 25, "Toggle combo", dqCombo, dqToggleCombo);
 	uComboOption = iComboResult >= 0 ? iComboResult : uComboOption;
+
 	wdg.BeginPaddedRow(10, 150, 24, 1);
 	static char szBuffer[4];
 	wdg.InputboxInteger(4, szBuffer);
@@ -171,7 +208,7 @@ void OnLaunch()
 		720, 600
 	};
 
-	ui = new CUserInterface(M_XOR("Paladin Extensions"), M_XOR("Loader"), u, M_WXOR(L"Paladin Extensions Loader"));
+	ui = new CUserInterface(M_XOR("Paladin Extensions"), M_XOR("Injector"), u, M_WXOR(L"Paladin Extensions Injector"));
 	std::cout << M_XOR("Created User Interface") << dbg::endl;
 
 	std::cout << M_XOR("Initializing User Interface") << dbg::endl;
