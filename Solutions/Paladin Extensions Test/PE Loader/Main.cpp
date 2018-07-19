@@ -103,6 +103,8 @@ std::deque< bool > dqToggleCombo
 
 void CUserInterface::SetLayout( )
 {
+	constexpr auto uGroupboxColumnWidth = 215u, uCheckboxWidth = 25u, uColorButtonWidth = 15u, uColorButtonPadding = 2u;
+
 	//wdg.menfuck( );
 	static px_color_t clr( { 255, 0, 0, 255 } ), clr1( { 0, 255, 255, 255 } );
 	static int iCurrentUpperTab { }, iCurrentSubTab { }, iCurrentLowerTab { };
@@ -136,19 +138,45 @@ void CUserInterface::SetLayout( )
 
 	wdg.BeginGroupbox( 250, 300, 665, 35, dqGroupBoxes.at( iCurrentUpperTab ).at( iCurrentSubTab ), 155 );
 	wdg.VerticalSpacing( );
-	wdg.BeginPaddedRow( 7, 0, 17, 3 );
+	wdg.BeginPaddedRow( 7, 0, 17, 4 );
 	static auto b = false;
-	wdg.Checkbox( "Counter-Terrorist Visible", 172, &b );
+	wdg.Checkbox( "Counter-Terrorist Visible", &b );
+	wdg.SetRowWidth( uGroupboxColumnWidth - uCheckboxWidth - GetTextSize( "Counter-Terrorist Visible" ).x - uColorButtonWidth - ( uColorButtonPadding * 2 ) );
+	wdg.Spacing( );
 	wdg.SetRowWidth( 17 );
 	wdg.ColorButton( "Counter-Terrorist Glow Visible", &clr );
 	wdg.EndRow( );
 	
-	wdg.BeginPaddedRow( 7, 0, 17, 3 );
+	wdg.BeginPaddedRow( 7, 0, 17, 4 );
 	static auto b1 = false;
-	wdg.Checkbox( "Counter-Terrorist Invisible", 172, &b1 );
+	wdg.Checkbox( "Counter-Terrorist Invisible", &b1 );
+	wdg.SetRowWidth( uGroupboxColumnWidth - uCheckboxWidth - GetTextSize( "Counter-Terrorist Invisible" ).x - uColorButtonWidth - ( uColorButtonPadding * 2 ) );
+	wdg.Spacing( );
 	wdg.SetRowWidth( 17 );
 	wdg.ColorButton( "Counter-Terrorist Glow Invisible", &clr1 );
 	wdg.EndRow( );
+
+	static auto iTestSlider			= 0;
+	static auto flTestSlider		= 0.f;
+	static char szIntSliderBuffer[ 16 ] { }, szFloatSliderBuffer[ 16 ] { };
+	static auto bEditingIntSlider	= false, bSetIntSliderValue		= false,
+				bEditingFloatSlider = false, bSetFloatSliderValue	= false;
+
+	const static auto iMaxIntChars		= std::to_string( INT_MAX ).length( );
+	const static auto iMaxFloatChars	= std::to_string( FLT_MAX ).length( );
+
+	wdg.VerticalSpacing( );
+
+	wdg.BeginCustomRow( 30, 3 );
+	iTestSlider = wdg.SliderInt( "Integer Slider", szIntSliderBuffer, bEditingIntSlider, bSetIntSliderValue, 0, 100, iTestSlider, 15, 0, 200, 30 );
+	wdg.EndCustomRow( );
+
+	wdg.VerticalSpacing( );
+
+	wdg.BeginCustomRow( 30, 3 );
+	flTestSlider = wdg.SliderFloat( "Float Slider", szFloatSliderBuffer, bEditingFloatSlider, bSetFloatSliderValue, 0.f, 100.f, flTestSlider, 15, 0, 200, 30, 2 );
+	wdg.EndCustomRow( );
+	
 	wdg.EndGroupbox( );
 
 	if ( wdg.pActiveEditColor != nullptr )
