@@ -103,12 +103,13 @@ namespace Paladin
 		fcFontAwesomeConfiguration.range = rnIconRange;
 		fcFontAwesomeConfiguration.merge_mode = 1;
 
-		pRoboto				= AddFont( M_XOR( "Roboto.ttf" ), 21, fcFontAwesomeConfiguration );
-		pRobotoBold			= AddFont( M_XOR( "RobotoBold.ttf" ), 21, fcFontAwesomeConfiguration );
-		pRobotoSmall		= AddFont( M_XOR( "Roboto.ttf" ), 16, fcFontAwesomeConfiguration, 14 );
-		pRobotoBoldSmall	= AddFont( M_XOR( "RobotoBold.ttf" ), 16, fcFontAwesomeConfiguration, 12 );
-		pTahoma				= AddFont( M_XOR( "Tahoma.ttf" ), 16, fcFontAwesomeConfiguration );
-		pTahomaBold			= AddFont( M_XOR( "TahomaBold.ttf" ), 16, fcFontAwesomeConfiguration );
+		pRoboto				= AddFont( M_XOR( "Roboto.ttf"		),	21, fcFontAwesomeConfiguration		);
+		pRobotoBold			= AddFont( M_XOR( "RobotoBold.ttf"	),	21, fcFontAwesomeConfiguration		);
+		pRobotoSmall		= AddFont( M_XOR( "Roboto.ttf"		),	16, fcFontAwesomeConfiguration, 14	);
+		pRobotoBoldSmall	= AddFont( M_XOR( "RobotoBold.ttf"	),	16, fcFontAwesomeConfiguration, 12	);
+		pTahoma				= AddFont( M_XOR( "Tahoma.ttf"		),	16, fcFontAwesomeConfiguration		);
+		pTahomaBold			= AddFont( M_XOR( "TahomaBold.ttf"	),	16, fcFontAwesomeConfiguration		);
+		pEnvy				= AddFont( M_XOR( "Envy.ttf"		),	14, fcFontAwesomeConfiguration		);
 
 		clrColors[ NK_COLOR_TEXT ] = nk_rgba( 255, 255, 255, 255 );
 		clrColors[ NK_COLOR_WINDOW ] = nk_rgba( 45, 50, 56, 255 );
@@ -190,6 +191,17 @@ namespace Paladin
 		pContext->style.edit.cursor_normal = nk_rgba( 11, 62, 146, 255 );
 		pContext->style.edit.selected_hover = nk_rgba( 11, 62, 146, 255 );
 		pContext->style.edit.cursor_size = 1.f;
+
+		pContext->style.slider.bar_height = 5.f;
+		pContext->style.slider.border = 1.f;
+		//pContext->style.slider.rounding = 2.f;
+		pContext->style.slider.bar_filled = nk_rgba( 33, 150, 243, 170 );
+		pContext->style.slider.bar_normal = nk_rgba( 43, 60, 75, 255 );
+		pContext->style.slider.cursor_size = nk_vec2( 8, 8 );
+		pContext->style.slider.cursor_active.data.color = nk_rgba( 33, 150, 243, 255 );
+		pContext->style.slider.cursor_hover.data.color = nk_rgba( 33, 150, 243, 255 );
+		pContext->style.slider.cursor_normal.data.color = nk_rgba( 43, 60, 75, 255 );
+		pContext->style.slider.padding = nk_vec2( 0, 0 );
 
 		btnTopActive.rounding = 3.f;
 		btnTopActive.padding = nk_vec2( 0, 0 );
@@ -415,9 +427,17 @@ namespace Paladin
 			case EFont::ROBOTOBOLDSMALL:
 				nk_style_set_font( pContext, &pRobotoBoldSmall->handle );
 				break;
+			case EFont::ENVY:
+				nk_style_set_font( pContext, &pEnvy->handle );
+				break;
 			default:
 				nk_style_set_font( pContext, &pTahoma->handle );
 		}
+	}
+
+	struct nk_vec2 CUserInterface::GetTextSize( const char *szText, unsigned uRowHeight /*= 30*/ )
+	{
+		return nk_text_calculate_text_bounds( pContext->style.font, szText, strlen( szText ), uRowHeight, new const char *, new struct nk_vec2, new int, 0 );
 	}
 
 	bool CUserInterface::CWidgets::Header( const char *szTitle, const char *szApplicationTitle, unsigned uWidth )
@@ -557,7 +577,7 @@ namespace Paladin
 		return bReturn;
 	}
 
-	void CUserInterface::CWidgets::Checkbox( const char *szText, unsigned uTextWidth, bool *bActive ) 
+	void CUserInterface::CWidgets::Checkbox( const char *szText, bool *bActive ) 
 	{
 		static auto bWasClicking = false;
 
@@ -579,7 +599,7 @@ namespace Paladin
 			bWasClicking = false;
 
 		nk_label_colored( ui->pContext, *bActive ? ICON_FA_CHECK_SQUARE : ICON_FA_SQUARE, NK_TEXT_CENTERED, *bActive ? ui->clrBlue : bHovering ? ( bClicking ? ui->clrBlue : ui->clrBlue ) : ui->clrTextDormant );
-		nk_layout_row_push( ui->pContext, uTextWidth );
+		nk_layout_row_push( ui->pContext, ui->GetTextSize( szText, 15 ).x );
 		nk_label_colored( ui->pContext, ( szText + std::string( "  " ) ).c_str( ), NK_TEXT_LEFT, ui->clrTextDormant );
 	}
 
@@ -784,29 +804,159 @@ namespace Paladin
 
 	int CUserInterface::CWidgets::InputboxInteger( unsigned uMaxCharacters, char *szBuffer )
 	{
-		auto rcBounds = nk_widget_bounds( ui->pContext );
-		if ( nk_input_is_mouse_prev_hovering_rect( &ui->pContext->input, rcBounds ) )
-			ui->SetActiveCursor( IBEAM );
+		ui->SetFont( EFont::ENVY );
 		nk_edit_string_zero_terminated( ui->pContext, NK_EDIT_FIELD | NK_EDIT_AUTO_SELECT, szBuffer, uMaxCharacters + 1, nk_filter_decimal );
+		ui->HoverCheck( IBEAM );
+		ui->SetFont( EFont::ROBOTOSMALL );
 		return strlen( szBuffer ) ? std::stoi( szBuffer ) : 0;
 	}
 
 	float CUserInterface::CWidgets::InputboxFloat( unsigned uMaxCharacters, char *szBuffer )
 	{
-		auto rcBounds = nk_widget_bounds( ui->pContext );
-		if ( nk_input_is_mouse_prev_hovering_rect( &ui->pContext->input, rcBounds ) )
-			ui->SetActiveCursor( IBEAM );
+		ui->SetFont( EFont::ENVY );
 		nk_edit_string_zero_terminated( ui->pContext, NK_EDIT_FIELD | NK_EDIT_AUTO_SELECT, szBuffer, uMaxCharacters, nk_filter_float );
-		return strlen( szBuffer ) ? std::stof( szBuffer ) : 0.f;
+		ui->HoverCheck( IBEAM );
+		ui->SetFont( EFont::ROBOTOSMALL );
+		return strlen( szBuffer ) && strcmp( szBuffer, "." ) ? std::stof( szBuffer ) : 0.f;
 	}
 
 	char *CUserInterface::CWidgets::Inputbox( unsigned uMaxCharacters, char *szBuffer )
 	{
-		auto rcBounds = nk_widget_bounds( ui->pContext );
-		if ( nk_input_is_mouse_prev_hovering_rect( &ui->pContext->input, rcBounds ) )
-			ui->SetActiveCursor( IBEAM );
+		ui->SetFont( EFont::ENVY );
 		nk_edit_string_zero_terminated( ui->pContext, NK_EDIT_FIELD | NK_EDIT_AUTO_SELECT, szBuffer, uMaxCharacters, nk_filter_ascii );
+		ui->HoverCheck( IBEAM );
+		ui->SetFont( EFont::ROBOTOSMALL );
 		return szBuffer;
+	}
+
+	int CUserInterface::CWidgets::SliderInt( const char *szTitle, char *szInputBuffer, bool &bInEdit, bool &bSetEditValue, int iMin, int iMax, int iCurrentValue, unsigned uStartX, unsigned uStartY, unsigned uWidth, unsigned uHeight )
+	{
+		assert( iMax > iMin );
+		auto szTexta = std::to_string( iCurrentValue ).substr( 0, std::to_string( iCurrentValue ).size( ) );
+		auto szText = szTexta.c_str( );
+
+		ui->SetFont( EFont::ROBOTOSMALL );
+		auto vecTitleSize = ui->GetTextSize( szTitle, 10 );
+		auto vecTextSize = ui->GetTextSize( szText, 10 );
+		PushCustomRow( uStartX + 5, uStartY, vecTitleSize.x, vecTitleSize.y );
+		nk_label( ui->pContext, szTitle, NK_TEXT_LEFT );
+		PushCustomRow( uStartX + uWidth - vecTextSize.x - 5, uStartY, vecTextSize.x, vecTextSize.y );
+
+		const auto recBounds = nk_widget_bounds( ui->pContext );
+		const auto bHovering = nk_input_is_mouse_hovering_rect( &ui->pContext->input, recBounds );
+		const auto bClicking = ui->GetKeyState( VK_LBUTTON ) == EKeyState::DOWN;
+
+		if ( bHovering && !bInEdit )
+		{
+			ui->bFoundHoverTarget = true;
+			ui->SetActiveCursor( HAND );
+			if ( bClicking )
+			{
+				bInEdit = true;
+				strcpy( szInputBuffer, szText );
+			}
+		}
+		auto bHoveringInputBox = false;
+
+		if ( bInEdit )
+		{
+			PushCustomRow( uStartX + vecTitleSize.x + 8, uStartY, uWidth - vecTitleSize.x, vecTextSize.y + 5 );
+			auto recNewBounds = nk_widget_bounds( ui->pContext );
+			//if ( InputSys::ui->GetKeyState( VK_NUMPAD3 ) == KeyState::Down )
+			//	auto i = 1;
+			iCurrentValue = InputboxFloat( strlen( std::to_string( FLT_MAX ).c_str( ) ), szInputBuffer );
+			bHoveringInputBox = nk_input_is_mouse_hovering_rect( &ui->pContext->input, recNewBounds );
+
+			if ( bHoveringInputBox )
+			{
+				ui->bFoundHoverTarget = true;
+				ui->SetActiveCursor( IBEAM );
+			}
+			else if ( bClicking || ui->GetKeyState( VK_RETURN ) == EKeyState::DOWN )
+			{
+				bSetEditValue = strlen( szInputBuffer ) > 0;
+				bInEdit = false;
+			}
+		}
+		else if ( bSetEditValue )
+		{
+			bSetEditValue = false;
+			const auto iValue = std::stoi( szInputBuffer );
+			iCurrentValue = iValue <= iMax ? ( iValue >= iMin ? iValue : iMin ) : iMax;
+		}
+		else
+			nk_label( ui->pContext, szText, NK_TEXT_LEFT );
+
+		PushCustomRow( uStartX, uStartY + vecTextSize.y + 3, uWidth, uHeight - vecTextSize.y - 3 );
+		iCurrentValue = nk_slide_int( ui->pContext, iMin, iCurrentValue, iMax, ( iMax - iMin ) / 20.f );
+		ui->HoverCheck( HAND );
+		ui->SetFont( EFont::ROBOTOSMALL );
+		return iCurrentValue;
+	}
+
+	float CUserInterface::CWidgets::SliderFloat( const char *szTitle, char *szInputBuffer, bool &bInEdit, bool &bSetEditValue, float flMin, float flMax, float flCurrentValue, unsigned uStartX, unsigned uStartY, unsigned uWidth, unsigned uHeight, unsigned uDigits /*= 1*/ )
+	{
+		assert( flMax > flMin );
+		auto szTexta = std::to_string( flCurrentValue ).substr( 0, std::to_string( int( flCurrentValue ) ).size( ) + 1 + uDigits );
+		auto szText = szTexta.c_str( );
+
+		ui->SetFont( EFont::ROBOTOSMALL );
+		auto vecTitleSize = ui->GetTextSize( szTitle, 10 );
+		auto vecTextSize = ui->GetTextSize( szText, 10 );
+		PushCustomRow( uStartX + 5, uStartY, vecTitleSize.x, vecTitleSize.y );
+		nk_label( ui->pContext, szTitle, NK_TEXT_LEFT );
+		PushCustomRow( uStartX + uWidth - vecTextSize.x - 5, uStartY, vecTextSize.x, vecTextSize.y );
+
+		const auto recBounds = nk_widget_bounds( ui->pContext );
+		const auto bHovering = nk_input_is_mouse_hovering_rect( &ui->pContext->input, recBounds );
+		const auto bClicking = ui->GetKeyState( VK_LBUTTON ) == EKeyState::DOWN;
+
+		if ( bHovering && !bInEdit )
+		{
+			ui->bFoundHoverTarget = true;
+			ui->SetActiveCursor( HAND );
+			if ( bClicking )
+			{
+				bInEdit = true;
+				strcpy( szInputBuffer, szText );
+			}
+		}
+		auto bHoveringInputBox = false;
+
+		if ( bInEdit )
+		{
+			PushCustomRow( uStartX + vecTitleSize.x + 8, uStartY, uWidth - vecTitleSize.x, vecTextSize.y + 5 );
+			auto recNewBounds = nk_widget_bounds( ui->pContext );
+			//if ( GetKeyState( VK_NUMPAD3 ) == KeyState::Down )
+			//	auto i = 1;
+			flCurrentValue = InputboxFloat( strlen( std::to_string( FLT_MAX ).c_str( ) ), szInputBuffer );
+			bHoveringInputBox = nk_input_is_mouse_hovering_rect( &ui->pContext->input, recNewBounds );
+
+			if ( bHoveringInputBox )
+			{
+				ui->bFoundHoverTarget = true;
+				ui->SetActiveCursor( IBEAM );
+			}
+			else if ( bClicking || ui->GetKeyState( VK_RETURN ) == EKeyState::DOWN )
+			{
+				bSetEditValue = strlen( szInputBuffer ) > 0;
+				bInEdit = false;
+			}
+		}
+		else if ( bSetEditValue )
+		{
+			bSetEditValue = false;
+			const auto iValue = std::stof( szInputBuffer );
+			flCurrentValue = iValue <= flMax ? ( iValue >= flMin ? iValue : flMin ) : flMax;
+		}
+		else
+			nk_label( ui->pContext, szText, NK_TEXT_LEFT );
+
+		PushCustomRow( uStartX, uStartY + vecTextSize.y + 3, uWidth, uHeight - vecTextSize.y - 3 );
+		flCurrentValue = nk_slide_float( ui->pContext, flMin, flCurrentValue, flMax, ( flMax - flMin ) / 20.f );
+		ui->HoverCheck( HAND );
+		ui->SetFont( EFont::ROBOTOSMALL );
+		return flCurrentValue;
 	}
 
 	void CUserInterface::CWidgets::NewRow( unsigned uHeight /*= 30*/, unsigned uColumns /*= 3*/ )
@@ -844,6 +994,11 @@ namespace Paladin
 	{
 		rwLastRowType = ERowType::CUSTOM;
 		return nk_layout_space_begin( ui->pContext, NK_STATIC, uHeight, uWidgetCount );
+	}
+
+	void CUserInterface::CWidgets::EndCustomRow( )
+	{
+		return nk_layout_space_end( ui->pContext );
 	}
 
 	void CUserInterface::CWidgets::PushCustomRow( unsigned uXModification, unsigned uYModification, unsigned uWidth, unsigned uHeight ) 

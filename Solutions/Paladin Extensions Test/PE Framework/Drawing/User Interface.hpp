@@ -8,7 +8,7 @@ namespace Paladin
     {
 	    nk_context *pContext;
         nk_font_atlas *pAtlas;
-		struct nk_font *pTahoma, *pTahomaBold, *pRoboto, *pRobotoBold, *pRobotoSmall, *pRobotoBoldSmall;
+		struct nk_font *pTahoma, *pTahomaBold, *pRoboto, *pRobotoBold, *pRobotoSmall, *pRobotoBoldSmall, *pEnvy;
 		bool bDrawComboboxArrow;
 		struct nk_rect rcComboboxWindowBounds;
         const char *szNuklearWindowTitle;
@@ -35,7 +35,8 @@ namespace Paladin
 			ROBOTO,
 			ROBOTOBOLD,
 			ROBOTOSMALL,
-			ROBOTOBOLDSMALL
+			ROBOTOBOLDSMALL,
+			ENVY
 		};
 
 		struct nk_color clrColors[ NK_COLOR_COUNT ];
@@ -60,6 +61,7 @@ namespace Paladin
         void SetLayout( );
         bool DrawUserInterface( );
 		void SetFont( EFont );
+		struct nk_vec2 GetTextSize( const char *, unsigned = 30 );
 		
 		class CWidgets
     	{
@@ -88,7 +90,7 @@ namespace Paladin
 			bool TopButton( const char *, bool );
 			bool RegularButton( const char *, bool );
 			bool SpecialButton( EPosition, const char *, bool );
-			void Checkbox( const char *, unsigned, bool * );
+			void Checkbox( const char *, bool * );
 			int Tabs( unsigned, unsigned, unsigned, unsigned, std::deque< const char * >, unsigned );
 			int Sidebar( unsigned, unsigned, unsigned, unsigned, std::deque< const char * >, unsigned );
 			void BeginGroupbox( unsigned, unsigned, unsigned, unsigned, const char *, unsigned );
@@ -100,12 +102,15 @@ namespace Paladin
 			int InputboxInteger( unsigned, char * );
 			float InputboxFloat( unsigned, char * );
 			char *Inputbox( unsigned, char * );
+			int SliderInt( const char *, char *, bool &, bool &, int, int , int, unsigned, unsigned, unsigned, unsigned );
+			float SliderFloat( const char *, char *, bool &, bool &, float, float, float, unsigned, unsigned, unsigned, unsigned, unsigned );
 			void NewRow( unsigned = 30, unsigned = 3 );
 			void BeginRow( unsigned = 30, unsigned = 6 );
 			void SetRowWidth( float );
 			void EndRow( );
 			void NewStaticRow( unsigned, unsigned = 30, unsigned = 3 );
 			void BeginCustomRow( unsigned = 30, unsigned = 3 );
+			void EndCustomRow( );
 			void PushCustomRow( unsigned, unsigned, unsigned, unsigned );
 			void BeginPaddedRow( unsigned, unsigned, unsigned = 30, unsigned = 3 );
 			void Spacing( unsigned = 1 );

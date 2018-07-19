@@ -80,7 +80,6 @@ namespace Paladin
 		dbg::Assert( uOldWindowProc );
 	}
 
-
 	void CRender::SetWindowSize( unsigned uWidth, unsigned uHeight )
 	{
 		uWindowWidth = uWidth;
