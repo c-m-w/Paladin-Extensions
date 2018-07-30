@@ -11,7 +11,7 @@ namespace PX
 
         out_t& PX_API out_t::operator<<( const out_clr_t& rhs )
         {
-#if defined( _DEBUG )
+#if defined _DEBUG
             SetConsoleTextAttribute( GetStdHandle( STD_OUTPUT_HANDLE ), rhs.m_wDesiredAttributes );
 #endif
             return *this;
@@ -19,7 +19,7 @@ namespace PX
 
         void PX_API PrintLastError( )
         {
-#if defined( _DEBUG )
+#if defined _DEBUG 
             auto dwError = GetLastError( );
             if ( !dwError )
             {

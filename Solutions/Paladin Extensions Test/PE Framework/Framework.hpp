@@ -34,12 +34,22 @@
 #include <d3d9.h>
 #include "Drawing/Render.hpp"
 
-#if defined( _DEBUG )
+#if defined _DEBUG
 #define M_DEPENDENCIES 3
 #else
 #define M_DEPENDENCIES 0
 #endif
+#if defined NK_IMPLEMENTATION
+#define NK_INCLUDE_FIXED_TYPES
+#define NK_INCLUDE_STANDARD_IO
+#define NK_INCLUDE_STANDARD_VARARGS
+#define NK_INCLUDE_DEFAULT_ALLOCATOR
+#define NK_INCLUDE_VERTEX_BUFFER_OUTPUT
+#define NK_INCLUDE_FONT_BAKING
+#define NK_D3D9_IMPLEMENTATION
+#else
 #define NK_PRIVATE
+#endif
 #include <vurtun/nuklear.h>
 #include <vurtun/demo/d3d9/nuklear_d3d9.h>
 #include <IconFontCppHeaders/IconsFontAwesome5-Solid.hpp>

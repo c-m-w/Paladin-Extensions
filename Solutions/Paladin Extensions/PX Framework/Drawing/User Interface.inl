@@ -38,6 +38,9 @@ namespace PX
 
             template< typename _t > _t PX_API Inputbox( unsigned uMaxCharacters, char* szBuffer )
             {
+				dbg::Assert( iCurrentRowMaxColumns - iCurrentRowUsedColumns > 0 );
+				iCurrentRowUsedColumns++;
+
                 auto rcBounds = nk_widget_bounds( Manager::pContext );
                 if ( nk_input_is_mouse_prev_hovering_rect( &Manager::pContext->input, rcBounds ) )
                     Render::SetCursor( Render::IBEAM );
@@ -45,15 +48,24 @@ namespace PX
                 return IFilterImplementation< _t >::ret( szBuffer );
             }
 
-            template< ERowType > void PX_API NewRow( unsigned, unsigned )
-            {
-                
-            }
+			void PX_API NewRow( unsigned uRowHeight, unsigned uColumns, ERowType rowRowType )
+			{
+				rowLastRowType = rowRowType;
+				iCurrentRowUsedColumns = 0;
+				iCurrentRowMaxColumns = uColumns;
 
-            template< ERowType > void PX_API BeginRow( unsigned, unsigned )
-            {
-                
-            }
+                switch( rowRowType )
+                {
+					case ERowType::DYNAMIC:
+						return nk_layout_row_begin( Manager::pContext, NK_DYNAMIC, uRowHeight, uColumns );
+					case ERowType::STATIC:
+						return nk_layout_row_begin( Manager::pContext, NK_STATIC, uRowHeight, uColumns );
+					case ERowType::CUSTOM:
+						return nk_layout_space_begin( Manager::pContext, NK_STATIC, uRowHeight, uColumns );
+					default:
+						return;
+                }
+			}
         }
     }
 }

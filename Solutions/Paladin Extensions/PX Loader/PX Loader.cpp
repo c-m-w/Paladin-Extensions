@@ -6,7 +6,7 @@ using namespace PX;
 
 void TestDebug( )
 {
-    auto print = Utilities::string_cast< std::wstring >( "casted" );
+    auto print = Tools::string_cast< std::wstring >( "casted" );
     dbg::out PX_DBG << L"Hi" << dbg::endl;
     dbg::out PX_ERR << L"Mid-print" << dbg::endl;
     dbg::out PX_WRN << L"Mid-print 2" << dbg::endl;
@@ -18,8 +18,8 @@ void TestInput( )
 {
     while ( true )
     {
-        dbg::out << IInputManager::Get( ).GetKeyState( VK_LBUTTON );
-        Utilities::Wait( 100 );
+        dbg::out << PX_INPUT.GetKeyState( VK_LBUTTON );
+        Tools::Wait( 100 );
     }
 }
 

@@ -6,7 +6,6 @@ namespace PX
 {
     namespace Render
     {
-        // note: does not include any of the unused variables from old CRender. also does not include any variable unused with currently declared functions
         enum ECursor
         {
             NONE,
@@ -15,6 +14,7 @@ namespace PX
             IBEAM,
             CURSOR_MAX
         };
+
         PX_SDK HCURSOR hCursors[ CURSOR_MAX ];
         void PX_API SetCursor( ECursor );
 

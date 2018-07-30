@@ -77,6 +77,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(SolutionDir)..\..\Dependencies\Include\;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)..\..\Dependencies\Lib\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -110,6 +112,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -160,7 +163,7 @@
     <ClInclude Include="Drawing\User Interface.hpp" />
     <ClInclude Include="Inclusions.hpp" />
     <ClInclude Include="Definitions.hpp" />
-    <ClInclude Include="Application\Utilities.hpp" />
+    <ClInclude Include="Application\Tools.hpp" />
     <ClInclude Include="PX Framework.hpp" />
     <ClInclude Include="Security\Cryptography.hpp" />
   </ItemGroup>
@@ -168,14 +171,14 @@
     <ClCompile Include="Application\Debug.cpp" />
     <ClCompile Include="Application\File Manager.cpp" />
     <ClCompile Include="Application\Input Manager.cpp" />
-    <ClCompile Include="Application\Utilities.cpp" />
+    <ClCompile Include="Application\Tools.cpp" />
     <ClCompile Include="Drawing\Render Engine.cpp" />
     <ClCompile Include="Drawing\User Interface.cpp" />
     <ClCompile Include="Security\Cryptography.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Application\Debug.inl" />
-    <None Include="Application\Utilities.inl" />
+    <None Include="Application\Tools.inl" />
     <None Include="Drawing\User Interface.inl" />
     <None Include="Security\Cryptography.inl" />
   </ItemGroup>

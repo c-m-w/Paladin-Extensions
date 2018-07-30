@@ -8,7 +8,7 @@ namespace Paladin
     {
 	    nk_context *pContext;
         nk_font_atlas *pAtlas;
-		struct nk_font *pTahoma, *pTahomaBold, *pRoboto, *pRobotoBold, *pRobotoSmall, *pRobotoBoldSmall, *pEnvy;
+		struct nk_font *pTahoma, *pTahomaBold, *pRoboto, *pRobotoBold, *pRobotoSmall, *pRobotoBoldSmall, *pEnvy { };
 		bool bDrawComboboxArrow;
 		struct nk_rect rcComboboxWindowBounds;
         const char *szNuklearWindowTitle;
@@ -99,11 +99,16 @@ namespace Paladin
 			void ColorPicker( );
 			int Combobox( unsigned, unsigned, const char *, std::deque< const char * >, unsigned );
 			void ComboboxToggle( unsigned, unsigned, const char *, std::deque< const char * >, std::deque< bool > & );
-			int InputboxInteger( unsigned, char * );
-			float InputboxFloat( unsigned, char * );
-			char *Inputbox( unsigned, char * );
-			int SliderInt( const char *, char *, bool &, bool &, int, int , int, unsigned, unsigned, unsigned, unsigned );
-			float SliderFloat( const char *, char *, bool &, bool &, float, float, float, unsigned, unsigned, unsigned, unsigned, unsigned );
+
+			template< typename _t > _t Inputbox( unsigned, char * );
+			template< > int Inputbox< int >( unsigned, char * );
+			template< > float Inputbox< float >( unsigned, char * );
+			template< > char *Inputbox< char * >( unsigned, char * );
+
+			template< typename _t > _t Slider( const char *, char *, _t, _t, _t, unsigned, unsigned, unsigned, unsigned, unsigned );
+			template< > int Slider< int >( const char *, char *, int, int , int, unsigned, unsigned, unsigned, unsigned, unsigned );
+			//template< typename _t > float Slider< float >( const char *, char *, float, float, float, unsigned, unsigned, unsigned, unsigned, unsigned );
+
 			void NewRow( unsigned = 30, unsigned = 3 );
 			void BeginRow( unsigned = 30, unsigned = 6 );
 			void SetRowWidth( float );
@@ -127,3 +132,5 @@ namespace Paladin
 #define M_ITEM_HEIGHT 25 - M_ITEM_PADDING
 #define M_DYNAMIC_HEIGHT 25 - M_ITEM_PADDING
 #define M_TOOLTIP_DELAY 20
+
+#include "User Interface.tpp"

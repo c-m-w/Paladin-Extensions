@@ -4,8 +4,15 @@
 
 namespace PX
 {
-	namespace Utilities
+	namespace Tools
 	{
+		// INFO: Typedefs for long datatypes
+		
+        typedef const char* px_cstr_t;
+        typedef const wchar_t* px_wcstr_t;
+        typedef uintptr_t px_ptr_t;
+		typedef unsigned char px_byte_t;
+		
 		// INFO: Inheritable abstract class that only allows a single object of child class/structure to be instantiated
 		// *_Child*: Child class/structure to be restricted
 		template< class _Child > PX_ABSTRACT_CLASS ISingleton
@@ -49,4 +56,4 @@ namespace PX
 	}
 }
 
-#include "Utilities.inl"
+#include "Tools.inl"

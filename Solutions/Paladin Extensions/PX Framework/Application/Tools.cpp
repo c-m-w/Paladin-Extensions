@@ -4,7 +4,7 @@
 
 namespace PX
 {
-    namespace Utilities
+    namespace Tools
     {
 		std::wstring PX_API GetDirectory( unsigned uEscapeLevels )
 		{

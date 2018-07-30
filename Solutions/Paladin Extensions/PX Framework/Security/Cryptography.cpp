@@ -23,9 +23,9 @@ namespace PX
         {
             auto strInitializationVector = strKey.substr( 0, 16 );
             std::string strOutput;
-            CryptoPP::CBC_Mode< CryptoPP::AES >::Encryption encEncryption( reinterpret_cast< byte* >( const_cast< char* >( Utilities::string_cast< std::string >( strKey ).c_str( ) ) ),
+            CryptoPP::CBC_Mode< CryptoPP::AES >::Encryption encEncryption( reinterpret_cast< byte* >( const_cast< char* >( Tools::string_cast< std::string >( strKey ).c_str( ) ) ),
                                                                            strKey.length( ), reinterpret_cast< byte* >( const_cast< char* >( strInitializationVector.c_str( ) ) ) );
-            CryptoPP::StringSource( Utilities::string_cast< std::string >( strPlainText ), true, new
+            CryptoPP::StringSource( Tools::string_cast< std::string >( strPlainText ), true, new
                                     CryptoPP::StreamTransformationFilter( encEncryption, new CryptoPP::Base64Encoder( new CryptoPP::StringSink( strOutput ), false ) ) );
             strOutput.replace( strOutput.begin( ), strOutput.end( ), '+', '-' );
             return strOutput;

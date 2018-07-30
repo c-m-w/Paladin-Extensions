@@ -4,7 +4,7 @@
 
 namespace PX
 {
-    class CFileManager: public Utilities::ISingleton< CFileManager >
+    class CFileManager: public Tools::ISingleton< CFileManager >
     {
     public:
         // INFO: Contains global information generally used for program initialization

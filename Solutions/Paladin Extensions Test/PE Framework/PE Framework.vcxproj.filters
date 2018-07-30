@@ -79,5 +79,6 @@
     <None Include="Application\Debug.tpp" />
     <None Include="Application\Utilities.tpp" />
     <None Include="Security\Encryption.tpp" />
+    <None Include="Drawing\User Interface.tpp" />
   </ItemGroup>
 </Project>

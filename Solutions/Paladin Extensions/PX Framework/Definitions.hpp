@@ -2,7 +2,9 @@
 
 #pragma once
 
-#if defined( PX_NO_COMPILE_DEFINITIONS )
+#include "PX Framework.hpp"
+
+#if defined PX_NO_COMPILE_DEFINITIONS
 #else
 
 // Compiler
@@ -17,8 +19,7 @@
 
 // nuklear.h
 
-#define NK_PRIVATE
-#if defined( PX_NUKLEAR_IMPLEMENTATION )
+#if defined PX_NUKLEAR_IMPLEMENTATION
 #define NK_INCLUDE_FIXED_TYPES
 #define NK_INCLUDE_STANDARD_IO
 #define NK_INCLUDE_STANDARD_VARARGS
@@ -27,6 +28,8 @@
 #define NK_INCLUDE_FONT_BAKING
 #define NK_IMPLEMENTATION
 #define NK_D3D9_IMPLEMENTATION
+#else
+#define NK_PRIVATE
 #endif
 
 // FontAwesome
@@ -38,7 +41,7 @@
 // identifies variable as "Paladin Extensions" original
 #define PX_SDK inline
 // identifies function as "Paladin Extensions" original
-#define PX_API __stdcall
+#define PX_API __cdecl
 // identifies constant as "Paladin Extensions" original
 #define PX_DEF constexpr auto
 // identifies instruct as "Paladin Extensions" original
@@ -52,18 +55,18 @@
 // maximum managed keys
 #define PX_MAX_KEY 256
 
-#if defined( _DEBUG )
+#if defined _DEBUG
 #define PX_DEPENDENCIES_ESCAPE 3
 #else
 #define PX_DEPENDENCIES_ESCAPE
 #endif
 
 
-// INFO: Encrypts string data on compile, then decrypts for access on run.
+// Encrypts string data on compile, then decrypts for access on run.
 #define PX_XOR( String ) ( PX::XOR::IXorString< PX::XOR::ICStringTraits< decltype( String ) >::char_trait_t, \
         PX::XOR::SConstructIndexList< ( sizeof( String ) - 1 ) / PX::XOR::ICStringTraits< decltype( String ) >::int_trait_t >::result_t >( String ).Decrypt( ) )
 
-#if defined( _DEBUG )
+#if defined _DEBUG
 // sets debug out line identifier as "Debug"
 #define PX_DBG << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), L"[%H:%M:%S]" ) << \
         PX::dbg::out_clr_t( FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE ) << L" [DBG] " << \
@@ -91,3 +94,11 @@
 #define PX_ERR
 #define PX_LER
 #endif
+
+// Singleton access macros
+
+// Input interface singleton access macro
+#define PX_INPUT PX::IInputManager::Get( )
+// File manager class singleton access macro
+#define PX_FILE_MANAGER PX::CFileManager::Get( )
+

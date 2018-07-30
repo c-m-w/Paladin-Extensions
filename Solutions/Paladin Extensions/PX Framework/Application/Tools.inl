@@ -4,7 +4,7 @@
 
 namespace PX
 {
-    namespace Utilities
+    namespace Tools
     {
         template< class _Child > _Child& PX_API ISingleton< _Child >::Get( )
         {

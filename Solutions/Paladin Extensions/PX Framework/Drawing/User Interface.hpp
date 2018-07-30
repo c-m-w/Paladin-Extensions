@@ -31,12 +31,13 @@ namespace PX
             {
                 DYNAMIC,
                 STATIC,
-                MANUAL,
                 CUSTOM
             } PX_SDK rowLastRowType;
+
             PX_SDK struct nk_rect recLastWidgetLocation;
             PX_SDK const char *szColorPickerSubject;
             PX_SDK BYTE* pActiveEditColor = nullptr;
+			PX_SDK int iCurrentRowUsedColumns, iCurrentRowMaxColumns;
 
             bool PX_API Header( const char*, const char*, unsigned );
             bool PX_API PrimaryTab( const char*, bool );
@@ -57,10 +58,17 @@ namespace PX
             int PX_API Combobox( unsigned, unsigned, const char*, std::deque< const char* >, unsigned );
             void PX_API ComboboxMulti( unsigned, unsigned, const char *, std::deque< const char* >, std::deque< bool >& );
 
-            template< typename _t > _t PX_API Inputbox( unsigned, char* );
+			template< typename _t > _t PX_API Inputbox( unsigned, char * );
+			template< > int PX_API Inputbox< int >( unsigned, char * );
+			template< > float PX_API Inputbox< float >( unsigned, char * );
+			template< > char *PX_API Inputbox< char * >( unsigned, char * );
 
-            template< ERowType > void PX_API NewRow( unsigned = 30, unsigned = 3 );
-            template< ERowType > void PX_API BeginRow( unsigned = 30, unsigned = 6 );
+			template< typename _t > _t PX_API Slider( const char *, char *, _t, _t, _t, unsigned, unsigned, unsigned, unsigned, unsigned );
+			template< > float PX_API Slider< float >( const char *, char *, float, float, float, unsigned, unsigned, unsigned, unsigned, unsigned );
+			template< > int PX_API Slider< int >( const char *, char *, int, int, int, unsigned, unsigned, unsigned, unsigned, unsigned );
+
+            template< ERowType > void PX_API NewRow( unsigned, );
+
             void PX_API SetRowWidth( float );
             void PX_API Spacing( unsigned = 1 );
             void PX_API VerticalSpacing( unsigned = 5 );

@@ -45,7 +45,7 @@ namespace PX
         {
             _char _chValue[ sizeof... ( iIndex ) + 1 ];
 
-            static const _char _chXorKey = static_cast< _char >( IEnsureCompileTime< LinearCongruentGenerator( 10 ) >::VALUE % 0x10000 );
+            static const _char _chXorKey = static_cast< _char >( IEnsureCompileTime< LinearCongruentialGenerator( 10 ) >::VALUE % 0x10000 );
 
             constexpr _char PX_API EncryptCharacter( const _char _chCharacter, int iIndexParam )
             {

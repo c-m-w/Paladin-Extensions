@@ -205,6 +205,7 @@
   <ItemGroup>
     <None Include="Application\Debug.tpp" />
     <None Include="Application\Utilities.tpp" />
+    <None Include="Drawing\User Interface.tpp" />
     <None Include="Security\Encryption.tpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
