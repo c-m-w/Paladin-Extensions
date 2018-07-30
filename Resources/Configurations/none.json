@@ -1,0 +1,585 @@
+{
+	"Awareness":
+	{
+		"Glow":
+		{
+			"Global":
+			{
+				"Activated": false,
+				"Distance Scaling": false,
+				"Distance Scaling Factor": 0
+			},
+			"Players":
+			{
+				"Visible Only": false,
+				"Spotted Only": false,
+				"Heard Only": false,
+				"Opposition Only": false,
+				"Glowing Style": 0,
+				"Coloring Style": 0,
+				"Counter-Terrorist Color": [ 0, 0, 0, 0 ],
+				"Terrorist Color": [ 0, 0, 0, 0 ],
+				"Highlight Vulnerable": false,
+				"Highlight Color": [ 0, 0, 0, 0 ]
+			},
+			"Objects":
+			{
+				"Visible Only": false,
+				"Glowing Style": 0,
+				"Objective Utility Color": [ 0, 0, 0, 0 ],
+				"Weaponry Color": [ 0, 0, 0, 0 ],
+				"Projectiles Color": [ 0, 0, 0, 0 ]
+			}
+		},
+		"Information":
+		{
+			"Global":
+			{
+				"Activated": false,
+				"Outline Type": 0,
+				"Thickness": 0,
+				"Border": false,
+				"Border Thickness": 0,
+				"Figure Type": 0,
+				"Positioning": 0
+			},
+			"Players":
+			{
+				"Visible Only": false,
+				"Spotted Only": false,
+				"Heard Only": false,
+				"Opposition Only": false,
+				"Name": false,
+				"Health": false,
+				"Armor": false,
+				"Skeleton": false,
+				"Distance": false,
+				"Weaponry": false,
+				"Ammunition": false,
+				"Orientation": false,
+				"Bullet Tracers": false,
+				"Coloring Style": 0,
+				"Counter-Terrorist Color": [ 0, 0, 0, 0 ],
+				"Terrorist Color": [ 0, 0, 0, 0 ],
+				"Highlight Vulnerable": false,
+				"Highlight Color": [ 0, 0, 0, 0 ]
+			},
+			"Objects":
+			{
+				"Visible Only": false,
+				"Name": false,
+				"Ammunition": false,
+				"Objective Utility Color": [ 0, 0, 0, 0 ],
+				"Weaponry Color": [ 0, 0, 0, 0 ],
+				"Projectiles Color": [ 0, 0, 0, 0 ]
+			},
+			"Other":
+			{
+				"Display Bomb Information": false,
+				"Display Grenade Trajectory": false
+				"Display Unscoped Crosshair": false,
+				"Display Recoil Crosshair": false,
+				"Display Spread": false,
+			}
+		},
+		"Materialization":
+		{
+			"Global":
+			{
+				"Activated": false,
+				"Material Style": 0,
+				"Color Burn Brightness": 0
+			},
+			"Players":
+			{
+				"Layered": false,
+				"Opposition Only": false,
+				"Coloring Style": 0,
+				"Counter-Terrorist Color": [ 0, 0, 0, 0 ],
+				"Counter-Terrorist Layered Color": [ 0, 0, 0, 0 ],
+				"Terrorist Color": [ 0, 0, 0, 0 ],
+				"Terrorist Layered Color": [ 0, 0, 0, 0 ],
+				"Highlight Vulnerable": false,
+				"Highlight Color": [ 0, 0, 0, 0 ]
+				"Highlight Layered Color": [ 0, 0, 0, 0 ]
+			},
+			"Objects":
+			{
+				"Layered": false,
+				"Objective Utility Color": [ 0, 0, 0, 0 ],
+				"Objective Utility Layered Color": [ 0, 0, 0, 0 ],
+				"Weaponry Color": [ 0, 0, 0, 0 ],
+				"Weaponry Layered Color": [ 0, 0, 0, 0 ],
+				"Projectiles Color": [ 0, 0, 0, 0 ]
+				"Projectiles Layered Color": [ 0, 0, 0, 0 ]
+			}
+		},
+		"Situation":
+		{
+			"Global":
+			{
+				"Activated": false,
+				"Radar": false,
+				"Sonar": false,
+				"Hit Marker": false,
+				"Hit Sound": false
+			},
+			"Radar":
+			{
+				"Mode": 0,
+				"Heard Only": false,
+				"Spotted Only": false,
+				"Width": 0.00,
+				"Height": 0.00,
+				"Zoom": 0
+			},
+			"Sonar":
+			{
+				"Frequency Scale": 0,
+				"Distance Scale": 0,
+				"Beep Pitch": 0
+			},
+			"Hit Marker":
+			{
+				"Size": 0,
+				"Gap": 0
+				"Thickness": 0,
+				"Color": [ 0, 0, 0, 0 ],
+			},
+			"Hit Sound":
+			{
+				"Volume": 0.00
+			}
+		}
+	},
+	"Combat":
+	{
+		"Aim Assistance":
+		{
+			"Global":
+			{
+				"Activated": false,
+				"Activation Key": 0
+				"Mode": 0,
+				"Type": 0,
+				"Target Teammates": false
+				"Backtrack Records": 0,
+				"Backtrack Targeting Type": 0,
+				"Through Smokes/Flashes": false,
+				"Through Transparent Surfaces": false,
+				"Through Penetrable Surfaces": false,
+				"Through Everything": false
+			},
+			"Weapon Customization":
+			{
+				"All":
+				{
+					"Activation FOV": 0,
+					"Auto-fire": false,
+					"No Air Shots": false,
+					"Zoom Scale FOV": false,
+					"No Refractory Aiming": false,
+					"No Target Changing": false,
+					"Activation Spot": 0,
+					"Smoothness Factor": 0,
+					"Visible Delay": 0,
+					"Curve Start": 0,
+					"Curve End": 0,
+					"Over Compensation": 0,
+					"Maximum Activation Time": 0
+				},
+				"Pistols":
+				{
+					"Activation FOV": 0,
+					"Auto-fire": false,
+					"No Air Shots": false,
+					"Zoom Scale FOV": false,
+					"No Refractory Aiming": false,
+					"No Target Changing": false,
+					"Activation Spot": 0,
+					"Smoothness Factor": 0,
+					"Visible Delay": 0,
+					"Curve Start": 0,
+					"Curve End": 0,
+					"Over Compensation": 0,
+					"Maximum Activation Time": 0
+				},
+				"Shotguns":
+				{
+					"Activation FOV": 0,
+					"Auto-fire": false,
+					"No Air Shots": false,
+					"Zoom Scale FOV": false,
+					"No Refractory Aiming": false,
+					"No Target Changing": false,
+					"Activation Spot": 0,
+					"Smoothness Factor": 0,
+					"Visible Delay": 0,
+					"Curve Start": 0,
+					"Curve End": 0,
+					"Over Compensation": 0,
+					"Maximum Activation Time": 0
+				},
+				"Sub-Machine Guns":
+				{
+					"Activation FOV": 0,
+					"Auto-fire": false,
+					"No Air Shots": false,
+					"Zoom Scale FOV": false,
+					"No Refractory Aiming": false,
+					"No Target Changing": false,
+					"Activation Spot": 0,
+					"Smoothness Factor": 0,
+					"Visible Delay": 0,
+					"Curve Start": 0,
+					"Curve End": 0,
+					"Over Compensation": 0,
+					"Maximum Activation Time": 0
+				},
+				"Rifles":
+				{
+					"Activation FOV": 0,
+					"Auto-fire": false,
+					"No Air Shots": false,
+					"Zoom Scale FOV": false,
+					"No Refractory Aiming": false,
+					"No Target Changing": false,
+					"Activation Spot": 0,
+					"Smoothness Factor": 0,
+					"Visible Delay": 0,
+					"Curve Start": 0,
+					"Curve End": 0,
+					"Over Compensation": 0,
+					"Maximum Activation Time": 0
+				},
+				"Large Machine Guns":
+				{
+					"Activation FOV": 0,
+					"Auto-fire": false,
+					"No Air Shots": false,
+					"Zoom Scale FOV": false,
+					"No Refractory Aiming": false,
+					"No Target Changing": false,
+					"Activation Spot": 0,
+					"Smoothness Factor": 0,
+					"Visible Delay": 0,
+					"Curve Start": 0,
+					"Curve End": 0,
+					"Over Compensation": 0,
+					"Maximum Activation Time": 0
+				},
+				"Snipers":
+				{
+					"Activation FOV": 0,
+					"Auto-fire": false,
+					"No Air Shots": false,
+					"Zoom Scale FOV": false,
+					"No Refractory Aiming": false,
+					"No Target Changing": false,
+					"Activation Spot": 0,
+					"Smoothness Factor": 0,
+					"Visible Delay": 0,
+					"Curve Start": 0,
+					"Curve End": 0,
+					"Over Compensation": 0,
+					"Maximum Activation Time": 0
+				},
+				"Other":
+				{
+					"Activation FOV": 0,
+					"Auto-fire": false,
+					"No Air Shots": false,
+					"Zoom Scale FOV": false,
+					"No Refractory Aiming": false,
+					"No Target Changing": false,
+					"Activation Spot": 0,
+					"Smoothness Factor": 0,
+					"Visible Delay": 0,
+					"Curve Start": 0,
+					"Curve End": 0,
+					"Over Compensation": 0,
+					"Maximum Activation Time": 0
+				}
+			},
+			"Helpers":
+			{
+				"Draw FOV": false,
+				"Draw Activation Spot": false,
+				"Trace Backtrack Records": false
+			}
+		},
+		"Magnetism":
+		{
+			"Global":
+			{
+				"Activated": false,
+				"Target Teammates": false
+				"Backtrack Records": 0,
+				"Backtrack Targeting Type": 0,
+				"Through Smokes/Flashes": false,
+				"Through Transparent Surfaces": false,
+				"Through Penetrable Surfaces": false,
+				"Through Everything": false
+			},
+			"Customization":
+			{
+				"Activation FOV": 0,
+				"No Target Changing": false,
+				"Activation Spot": 0,
+				"Magnetic Speed": 0,
+				"Slow Down Factor": 0
+			},
+			"Helpers":
+			{
+				"Draw FOV": false,
+				"Draw Activation Spot": false,
+				"Trace Backtrack Records": false
+			}
+		},
+		"Automated Trigger":
+		{
+			"Global":
+			{
+				"Activated": false,
+				"Activation Key": false,
+				"Target Teammates": false
+				"Backtrack Records": 0,
+				"Backtrack Targeting Type": 0,
+				"Through Smokes/Flashes": false,
+				"Through Transparent Surfaces": false,
+				"Through Penetrable Surfaces": false,
+				"Through Everything": false
+			},
+			"Customization":
+			{
+				"Target Hit boxes": [ false, false, false, false ],
+				"Visible Delay": 0,
+				"Intersection Delay": 0
+				"Minimum Damage": 0,
+				"Minimum Hit Chance": 0
+			},
+			"Other":
+			{
+				"Auto-Knife": false,
+				"Back-stab Only": false
+			},
+			"Helpers":
+			{
+				"Draw FOV": false,
+				"Draw Activation Spot": false,
+				"Trace Backtrack Records": false
+			}
+		},
+		"Recoil Compensation":
+		{
+			"Global":
+			{
+				"Activated": false,
+				"No Recoil": false
+			},
+			"Customization":
+			{
+				"All":
+				{
+					"No Refractory Control": false,
+					"Vertical Compensation": 0.00,
+					"Horizontal Compensation": 0.00,
+					"Over Compensation": false,
+					"Shots to Ignore": 0
+				},
+				"Pistols":
+				{
+					"No Refractory Control": false,
+					"Vertical Compensation": 0.00,
+					"Horizontal Compensation": 0.00,
+					"Over Compensation": false,
+					"Shots to Ignore": 0
+				},
+				"Shotguns":
+				{
+					"No Refractory Control": false,
+					"Vertical Compensation": 0.00,
+					"Horizontal Compensation": 0.00,
+					"Over Compensation": false,
+					"Shots to Ignore": 0
+				},
+				"Sub-Machine Guns":
+				{
+					"No Refractory Control": false,
+					"Vertical Compensation": 0.00,
+					"Horizontal Compensation": 0.00,
+					"Over Compensation": false,
+					"Shots to Ignore": 0
+				},
+				"Rifles":
+				{
+					"No Refractory Control": false,
+					"Vertical Compensation": 0.00,
+					"Horizontal Compensation": 0.00,
+					"Over Compensation": false,
+					"Shots to Ignore": 0
+				},
+				"Large Machine Guns":
+				{
+					"No Refractory Control": false,
+					"Vertical Compensation": 0.00,
+					"Horizontal Compensation": 0.00,
+					"Over Compensation": false,
+					"Shots to Ignore": 0
+				},
+				"Snipers":
+				{
+					"No Refractory Control": false,
+					"Vertical Compensation": 0.00,
+					"Horizontal Compensation": 0.00,
+					"Over Compensation": false,
+					"Shots to Ignore": 0
+				},
+				"Other":
+				{
+					"No Refractory Control": false,
+					"Vertical Compensation": 0.00,
+					"Horizontal Compensation": 0.00,
+					"Over Compensation": false,
+					"Shots to Ignore": 0
+				}
+			}
+		},
+		"Anti-Aim Assistance":
+		{
+			"Global":
+			{
+				"Activated": false,
+				"Activation Key": 0
+			},
+			"Customization":
+			{
+				"Dynamic": false,
+				"Edge Based": false,
+				"Preferred Angle": 0
+			},
+			"Other":
+			{
+				"Enable Enemy Lower-body Targeting": false
+			}
+		}
+	},
+	"Miscellaneous":
+	{
+		"General":
+		{
+			"Labeling":
+			{
+				"Change Name": "",
+				"Use Paladin Name": false,
+				"Change Clan-tag": "",
+				"Use Paladin Tag": false,
+				"Spam Chat": "",
+				"Use Paladin Chat-Spam": false
+			},
+			"Event Based Messages":
+			{
+				"On Damage": "",
+				"On Head-Shot":
+				"On Kill": "",
+				"On Head-Shot Kill": "",
+				"On Other Kill": "",
+				"On Death": "",
+				"On Round Loss": "",
+				"On Round Win": "",
+				"On Game Start": "",
+				"On Half-time": "",
+				"On Game End": ""
+			},
+			"Other":
+			{
+				"Auto Accept Matchmaking Matches": false,
+				"Display Spectators": false,
+				"Reveal Enemy Ranks": false
+				"Event Logger": false,
+				"Enable FOV Changer": false,
+				"View FOV": 0,
+				"Weapon FOV": 0
+			}
+		},
+		"Environment":
+		{
+			"Automation":
+			{
+				"Auto-Pistol": false,
+				"Auto-Weapon Switch": false,
+				"Auto-Jump": false,
+				"Auto-Jump Activation Key": 0,
+				"Auto-Jump Miss Chance": 0.00,
+				"Auto-Crouch-Jump": false,
+				"Auto-Stamina Bug": false,
+				"Auto-Stamina Bug Key": 0,
+				"Auto-Edge Jump": false,
+				"Auto-Edge Jump Key": 0,
+				"Auto-Strafer": false,
+				"Auto-Strafer Mode": 0
+			}.
+			"Game-play Recorder":
+			{
+				"Selected Replay": ""
+			},
+			"Visuals":
+			{
+				"Night Mode": false,
+				"Night Mode Factor": 0,
+				"Colored Sky": false,
+				"Colored Sky Color": [ 0, 0, 0, 0 ]
+			}
+		}
+		"Player":
+		{
+			"Call Outs":
+			{
+				"Activated": false,
+				"Team Mode": false,
+				"Grief Mode": false
+			},
+			"Visuals":
+			{
+				"No Flash": false,
+				"No Smoke": false,
+				"No Scope": false,
+				"No Hands": false,
+				"No Weaponry": false,
+				"Third Person": false,
+				"Third Person Camera Distance": 0
+			},
+			"Other":
+			{
+				"Last Moment Defuse": false,
+				"No Team Damage": false
+			},
+			"Movement Manipulation":
+			{
+				"Fake Lag": false,
+				"Fake Lag Key": 0,
+				"Air Stuck": false,
+				"Air Stuck Key": 0
+			}
+		}
+	},
+	"Settings":
+	{
+		"Drawing":
+		{
+			"Font": "Tahoma",
+			"Size": 8.00,
+			"Bolded": false,
+			"Italicized": false,
+			"Underlined": false
+		},
+		"Performance":
+		{
+			"Enable Low-Performance Mode": false
+		},
+		"Streaming":
+		{
+			"Enable Stream-Proof Mode": false
+		}
+	}
+}
