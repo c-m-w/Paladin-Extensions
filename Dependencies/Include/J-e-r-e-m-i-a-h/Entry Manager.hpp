@@ -9,7 +9,7 @@
 #include <J-e-r-e-m-i-a-h/Standard Library.hpp>
 #include <Windows.h>
 
-namespace Paladin
+namespace PX
 {
     static HINSTANCE hinstWin;
 };
@@ -37,7 +37,7 @@ int APIENTRY WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
         return -1;
 
     if ( hInstance && hInstance != INVALID_HANDLE_VALUE )
-        Paladin::hinstWin = hInstance;
+        PX::hinstWin = hInstance;
 
 #if defined( _DEBUG )
     AllocConsole( );
@@ -53,7 +53,7 @@ int APIENTRY WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 #include <J-e-r-e-m-i-a-h/Standard Namespace.hpp>
 #include <Windows.h>
 
-namespace Paladin
+namespace PX
 {
     static HINSTANCE hinstDLL;
 };
@@ -67,7 +67,7 @@ inline void Detach( )
     FreeConsole( );
 #endif
     OnDetach( );
-    FreeLibraryAndExitThread( Paladin::hinstDLL, 0 );
+    FreeLibraryAndExitThread( PX::hinstDLL, 0 );
 }
 
 inline DWORD WINAPI ThreadProc( _In_ LPVOID lpParameter )
@@ -104,7 +104,7 @@ BOOL WINAPI DllMain( _In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID 
             if ( hinstDLL && hinstDLL != INVALID_HANDLE_VALUE )
             {
                 DisableThreadLibraryCalls( hinstDLL );
-                Paladin::hinstDLL = hinstDLL;
+                PX::hinstDLL = hinstDLL;
             }
 
             HANDLE hThreadProc = CreateThread( nullptr, 0, ThreadProc, lpvReserved, 0, nullptr );

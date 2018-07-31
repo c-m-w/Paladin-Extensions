@@ -18,9 +18,9 @@ namespace PX
         PX_SDK HCURSOR hCursors[ CURSOR_MAX ];
         void PX_API SetCursor( ECursor );
 
-        PX_SDK Tools::wcstr_t szWindowTitle = static_cast< wchar_t* >( malloc( 32 ) );
+        PX_SDK Tools::wcstr_t wszWindowTitle = static_cast< wchar_t* >( malloc( 32 ) );
 		PX_SDK unsigned uWindowWidth, uWindowHeight;
-        PX_SDK WNDCLASSEX wndWindow;
+        PX_SDK WNDCLASSEX wndWindow { sizeof( WNDCLASSEX ), CS_DBLCLKS, nullptr, 0, 0, nullptr, nullptr, nullptr, nullptr, nullptr, wszWindowTitle, nullptr };
         PX_SDK HWND hwWindowHandle;
 
 		PX_SDK D3DPRESENT_PARAMETERS dxParameters;
@@ -28,7 +28,7 @@ namespace PX
 		PX_SDK IDirect3DDevice9* pDevice;
 		PX_SDK auto bCreatedWindow = false;
         void PX_API SetWindowSize( unsigned, unsigned );
-		void PX_API InitializeRenderTarget( unsigned*, Tools::wcstr_t = nullptr );
+		void PX_API InitializeRenderTarget( unsigned*, HINSTANCE, Tools::wcstr_t = nullptr );
 
         PX_SDK unsigned uOldWindowProc;
         PX_SDK HWND hwOldWindowHandle;

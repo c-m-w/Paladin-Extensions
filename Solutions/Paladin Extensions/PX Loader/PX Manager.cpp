@@ -27,32 +27,32 @@ void Uncalled( )
     UI::Widgets::Inputbox< float >( 20, new char[ 6 ] { "Hello" } );
 }
 
+void Minimize( )
+{
+    
+}
+
+void Exit( )
+{
+    
+}
+
 void PX_API UI::Manager::SetLayout( )
 {
-
-}
-
-void f2( int one, int two )
-{
-	dbg::out << one << " | " << two << dbg::newl;
-}
-
-void f1( int one, int two )
-{
-	f2( one, two );
+	using namespace Widgets;
+	Header( Tools::string_cast< std::string >( Render::wszWindowTitle ).c_str( ), szNuklearWindowTitle, Minimize, Exit );
 }
 
 void OnLaunch( )
 {
     //TestDebug( );
-    //
-    //unsigned piDimes[ 2 ] { 500, 500 };
-    //Render::InitializeRenderTarget( piDimes, L"Paladin" );
-    //UI::Manager::Initialize( "Men" );
-    //while ( UI::Manager::Render( ) )
-    //{
-    //    
-    //    TestInput( );
-    //}
+
+    unsigned piDimes[ 2 ] { 500, 500 };
+    Render::InitializeRenderTarget( piDimes, hinstWin, L"Paladin Extensions" );
+    UI::Manager::Initialize( "Manager" );
+    while ( UI::Manager::Render( ) )
+    {
+		Sleep( 1 );
+    }
 	system( "pause" );
 }

@@ -12,23 +12,23 @@ namespace Paladin
 		const auto strResourceDirectory = GetDirectory( M_DEPENDENCIES ) + LR"(\Resources\)";
 		wndWindow.hIcon = HICON( LoadImage( nullptr, ( strResourceDirectory + LR"(Logo\Paladin Logo.ico)" ).c_str( ),
 											IMAGE_ICON, 0, 0, LR_LOADFROMFILE | LR_DEFAULTSIZE | LR_SHARED ) );
-
+		
 		hCursors[ NONE ]	= LoadCursor( nullptr, IDC_ARROW );
-		hCursors[ ARROW ]	= LoadCursorFromFile( ( strResourceDirectory + LR"(Cursor\Arrow.cur)" ).c_str( ) );
-		hCursors[ HAND ]	= LoadCursorFromFile( ( strResourceDirectory + LR"(Cursor\Hand.cur)" ).c_str( ) );
-		hCursors[ IBEAM ]	= LoadCursorFromFile( ( strResourceDirectory + LR"(Cursor\I Beam.cur)" ).c_str( ) );
-
+		//hCursors[ ARROW ]	= LoadCursorFromFile( ( strResourceDirectory + LR"(Cursor\Arrow.cur)" ).c_str( ) );
+		//hCursors[ HAND ]	= LoadCursorFromFile( ( strResourceDirectory + LR"(Cursor\Hand.cur)" ).c_str( ) );
+		//hCursors[ IBEAM ]	= LoadCursorFromFile( ( strResourceDirectory + LR"(Cursor\I Beam.cur)" ).c_str( ) );
+		
 		wndWindow.hCursor = hCursors[ ARROW ] ? hCursors[ ARROW ] : hCursors[ NONE ];
 		wndWindow.lpszClassName = szWindowTitle;
 		RegisterClassEx( &wndWindow );
-
+		
 		RECT rcWindow;
 		AdjustWindowRectEx( &rcWindow, WS_OVERLAPPEDWINDOW, false, WS_EX_APPWINDOW );
-
+		
 		hwWindowHandle = CreateWindowEx( WS_EX_APPWINDOW, szWindowTitle, szWindowTitle, WS_VISIBLE | WS_POPUP,
 										 CW_USEDEFAULT, CW_USEDEFAULT, uWindowWidth, uWindowHeight,
 										 nullptr, nullptr, wndWindow.hInstance, nullptr );
-
+		
 		ShowWindow( hwWindowHandle, SW_SHOWDEFAULT );
 		UpdateWindow( hwWindowHandle );
 		SetForegroundWindow( hwWindowHandle );
@@ -103,7 +103,7 @@ namespace Paladin
 						 lWindowStyle { WS_EX_TRANSPARENT | WS_EX_TOPMOST | WS_EX_NOACTIVATE | WS_EX_LAYERED },
 						 uScreenWidth { unsigned( GetSystemMetrics( SM_CXSCREEN ) ) }, uScreenHeight { unsigned( GetSystemMetrics( SM_CYSCREEN ) ) },
 						 szWindowTitle { static_cast< wchar_t* >( malloc( 32 ) ) },
-						 wndWindow { sizeof( WNDCLASSEX ), NULL, WndProc, 0, 0, GetModuleHandle( nullptr ), nullptr, LoadCursor( nullptr, IDC_ARROW ), nullptr, nullptr, szWindowTitle, nullptr },
+						 wndWindow { sizeof( WNDCLASSEX ), CS_DBLCLKS, WndProc, 0, 0, GetModuleHandle( nullptr ), nullptr, LoadCursor( nullptr, IDC_ARROW ), nullptr, nullptr, szWindowTitle, nullptr },
 						 uOldWindowProc { }, hwOldWindowHandle { }, pDevice { }, dxParameters { }
 	{ }
 

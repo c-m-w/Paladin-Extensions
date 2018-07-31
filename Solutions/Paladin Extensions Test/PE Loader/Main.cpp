@@ -132,8 +132,7 @@ void CUserInterface::SetLayout( )
 	wdg.ComboboxToggle( 150, 25, "Toggle combo", dqCombo, dqToggleCombo );
 	uComboOption = iComboResult >= 0 ? iComboResult : uComboOption;
 	wdg.BeginPaddedRow( 10, 150, 24, 1 );
-	static char szBuffer[4];
-	wdg.Inputbox< int >( 4, szBuffer );
+	static char szBuffer[ 4 ];
 	wdg.EndGroupbox( );
 
 	wdg.BeginGroupbox( 250, 300, 665, 35, dqGroupBoxes.at( iCurrentUpperTab ).at( iCurrentSubTab ), 155 );
@@ -166,16 +165,6 @@ void CUserInterface::SetLayout( )
 	const static auto iMaxFloatChars	= std::to_string( FLT_MAX ).length( );
 
 	wdg.VerticalSpacing( );
-
-	wdg.BeginCustomRow( 30, 3 );
-	iTestSlider = wdg.Slider< int >( "Integer Slider", szIntSliderBuffer, 0, 100, iTestSlider, 15, 0, 200, 30, 10 );
-	wdg.EndCustomRow( );
-
-	wdg.VerticalSpacing( );
-
-	wdg.BeginCustomRow( 30, 3 );
-	flTestSlider = wdg.Slider< float >( "Float Slider", szFloatSliderBuffer, 0.f, 100.f, flTestSlider, 15, 0, 200, 30, 2 );
-	wdg.EndCustomRow( );
 	
 	wdg.EndGroupbox( );
 

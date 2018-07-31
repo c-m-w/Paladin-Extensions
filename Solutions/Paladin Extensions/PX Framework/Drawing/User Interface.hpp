@@ -9,6 +9,7 @@ namespace PX
         namespace Manager
         {
 			PX_SDK nk_context* pContext;
+			PX_SDK Tools::cstr_t szNuklearWindowTitle;
 
 			enum EFont
 			{

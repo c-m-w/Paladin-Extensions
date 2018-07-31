@@ -14,7 +14,6 @@ namespace PX
 			using Render::dxParameters;
 
 			Tools::cstr_t	szWindowTitle = PX_XOR( "Paladin Extensions" );
-			Tools::cstr_t	szNuklearWindowTitle;
 			auto			szApplicationTitle = static_cast< char* >( malloc( 32 ) );
 
 			nk_font_atlas* pAtlas;
@@ -23,7 +22,7 @@ namespace PX
 
 			constexpr nk_color clrTextActive { 255, 255, 255, 255 },	clrBlue { 33, 150, 243, 255 },		clrDarkBlue { 43, 60, 75, 255 },	clrBackground { 56, 60, 66, 255 },	clrLightBackground { 61, 65, 72, 255 },
 							   clrDarkBackground { 45, 50, 56, 255 },	clrBorder { 80, 84, 89, 255 },		clrToolbox { 42, 44, 48, 255 },		clrHeader { 33, 36, 40, 255 },		clrBlueActive { 54, 70, 84, 255 },
-							   clrBlueHover { 54, 70, 84, 200 },		clrBlueDormant { 43, 60, 75, 255 };
+							   clrBlueHover { 54, 70, 84, 200 },		clrBlueDormant { 43, 60, 75, 255 },	clrTextDormant { 175, 180, 187, 255 };
 			nk_color clrColorTable[ NK_COLOR_COUNT ] { };
 
 			nk_style_button btnTopActive { }, btnTop { }, btnRegularActive { }, btnRegular { }, btnSpecialActive { }, btnSpecial { }, btnCombo { }, btnComboActive { };
@@ -274,18 +273,76 @@ namespace PX
 				nk_d3d9_resize( uWidth, uHeight );
 			}
 
-			bool OnEvent( HWND, UINT, WPARAM, LPARAM )
+			bool OnEvent( HWND h, UINT msg, WPARAM w, LPARAM l )
 			{
-				BOOL bReturn;
-				__asm call nk_d3d9_handle_event
-				__asm mov eax, bReturn
-				return bReturn;
+				return nk_d3d9_handle_event( h, msg, w, l );
+			}
+
+			bool HandleWindowInput(  )
+			{
+				auto bShouldDrawInterface = true;
+				if ( Render::bCreatedWindow )
+				{
+					static auto bDrag = false;
+					RECT recWindowPos { };
+					GetWindowRect( Render::hwWindowHandle, &recWindowPos );
+					static POINT pntOldCursorPosRelative { };
+
+					if ( PX_INPUT.GetKeyState( VK_LBUTTON ) )
+					{
+						POINT pntCursorPos { };
+						GetCursorPos( &pntCursorPos );
+						POINT pntCursorPosRelative { pntCursorPos.x - recWindowPos.left, pntCursorPos.y - recWindowPos.top };
+
+						if ( ( pntCursorPosRelative.x > 0 && pntCursorPosRelative.x <= signed( Render::uWindowWidth ) && pntCursorPosRelative.y > 0 && pntCursorPosRelative.y <= 30 ) || bDrag )
+						{
+							bDrag = true;
+							if ( !pntOldCursorPosRelative.x || !pntOldCursorPosRelative.y ) pntOldCursorPosRelative = pntCursorPosRelative;
+
+							SetWindowPos( Render::hwWindowHandle, nullptr, ( recWindowPos.left - pntOldCursorPosRelative.x ) + pntCursorPosRelative.x,
+								( recWindowPos.top - pntOldCursorPosRelative.y ) + pntCursorPosRelative.y, Render::uWindowWidth, Render::uWindowHeight, 0 );
+							UpdateWindow( Render::hwWindowHandle );
+						}
+					}
+					else
+					{
+						pntOldCursorPosRelative = { 0, 0 };
+						bDrag = false;
+					}
+					constexpr struct nk_vec2 vecDefaultLocation
+					{
+						0, 0
+					};
+					nk_window_set_position( pContext, szNuklearWindowTitle, vecDefaultLocation );
+				}
+
+				MSG msgBuffer;
+				nk_input_begin( pContext );
+				while ( PeekMessage( &msgBuffer, Render::hwWindowHandle, 0, 0, PM_REMOVE ) )
+				{
+					if ( msgBuffer.message == WM_QUIT )
+						bShouldDrawInterface = false;
+					TranslateMessage( &msgBuffer );
+					DispatchMessage( &msgBuffer );
+				}
+				nk_input_end( pContext );
+				return bShouldDrawInterface;
+			}
+
+			void ApplyCursor( )
+			{
+				SetCursor( curCurrent );
+				curCurrent = Render::CURSOR_ARROW;
+				bFoundHoverTarget = false;
+				pContext->last_widget_state &= ~( NK_WIDGET_STATE_ACTIVE | NK_WIDGET_STATE_HOVER );
 			}
 
 			bool Render( )
 			{
 				auto bShouldDrawUserInterface = true;
 				SetFont( FONT_ROBOTO );
+
+				Render::bCreatedWindow && HandleWindowInput( );
 
 				if ( nk_begin( pContext, szNuklearWindowTitle, nk_rect( 0, 0, float( Render::uWindowWidth ), float( Render::uWindowHeight ) ),
 							   NK_WINDOW_NO_SCROLLBAR ) )
@@ -298,6 +355,7 @@ namespace PX
 					bShouldDrawUserInterface = false;
 				nk_end( pContext );
 
+				ApplyCursor( );
 				if( Render::bCreatedWindow )
 				{
 					pDevice->Clear( 0, nullptr, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER | D3DCLEAR_STENCIL, D3DCOLOR_ARGB( 0, 0, 0, 0 ), 0, 0 );
@@ -306,6 +364,9 @@ namespace PX
 					pDevice->EndScene( );
 					pDevice->Present( nullptr, nullptr, nullptr, nullptr );
 				}
+				else
+					nk_d3d9_render( NK_ANTI_ALIASING_ON );
+
 
 				return bShouldDrawUserInterface;
 			}
@@ -333,36 +394,38 @@ namespace PX
 
 	        void PX_API Header( Tools::cstr_t szTitle, Tools::cstr_t szApplicationTitle, std::function< void( PX_API )( ) > fnMinimizeCallback, std::function< void( PX_API )( ) > fnCloseCallback )
 			{
-				static const unsigned uWidth = unsigned( pContext->current->bounds.w );
-				auto pRenderBuffer = nk_window_get_canvas( pContext );
+				nk_layout_row_dynamic( pContext, 30, 0 );
+				auto pOutput = nk_window_get_canvas( pContext );
 				auto pInput = &pContext->input;
-				static const auto clrActive = nk_rgba( 155, 189, 247, 255 );
-				static auto clrClose = clrBlue, clrMinimize = clrBlue;
+				constexpr nk_color clrBlueHover { 115, 189, 247, 255 };
+				const auto uWidth = pContext->current->bounds.w;
 
-				BeginRow( 30, 4, ROW_CUSTOM );
-				const int  iTitleWidth				= int( CalculateTextBounds( szTitle, 30 ).x ),
-						   iApplicationTitleWidth	= int( CalculateTextBounds( szApplicationTitle, 30 ).x ),
-						   iMinimizeButtonWidth		= int( CalculateTextBounds( ICON_FA_MINUS, 30 ).x ),
-						   iCloseButtonWidth		= int( CalculateTextBounds( ICON_FA_TIMES, 30 ).x );
+				struct nk_text txtTitle, txtApplication, txtCloseButton, txtMinimizeButton;
+				txtCloseButton.padding = txtApplication.padding = txtTitle.padding = pContext->style.text.padding;
+				txtTitle.text = clrTextActive;
+				txtApplication.text = clrTextDormant;
 
-				PushCustomRow( 5, 5, iTitleWidth, 30 );
-				nk_label( pContext, szTitle, NK_TEXT_CENTERED );
-				PushCustomRow( 5 + iTitleWidth, 5, iApplicationTitleWidth, 30 );
-				nk_label( pContext, szApplicationTitle, NK_TEXT_CENTERED );
-				PushCustomRow( uWidth - iCloseButtonWidth - 5 - iMinimizeButtonWidth, 5, iCloseButtonWidth, 30 );
+				nk_fill_rect( pOutput, nk_rect( 0, 0, uWidth, 102 ), 0.f, clrHeader );
+				nk_stroke_line( pOutput, 0, 40, uWidth, 40, 1, clrColorTable[ NK_COLOR_BORDER ] );
 
-				const auto vecMinimizeButtonBounds = nk_widget_bounds( pContext );
+				SetFont( FONT_ROBOTOBOLD );
+				auto vecTitle = CalculateTextBounds( szTitle, 30 );
+				nk_widget_text( pOutput, nk_rect( 15, 7, vecTitle.x, 30 ), szTitle, strlen( szTitle ), &txtTitle, NK_TEXT_CENTERED, pContext->style.font );
+				SetFont( FONT_ROBOTO );
+				auto vecApplicationTitle = CalculateTextBounds( szApplicationTitle, 30 );
+				nk_widget_text( pOutput, nk_rect( 23 + vecTitle.x, 7, vecApplicationTitle.x, 30 ), szApplicationTitle, strlen( szApplicationTitle ), &txtApplication, NK_TEXT_CENTERED, pContext->style.font );
 
-				nk_label_colored( pContext, ICON_FA_MINUS, NK_TEXT_CENTERED, clrMinimize );
-				PushCustomRow( uWidth - iCloseButtonWidth - 5, 5, iCloseButtonWidth, 30 );
+				static auto clrMinimize = clrBlue, clrClose = clrMinimize;
+				txtMinimizeButton.text = clrMinimize;
+				txtCloseButton.text = clrClose;
+				const struct nk_rect recMinimize = { uWidth - 70, 19, 50, 8 };
+				const struct nk_rect recCloseButton = { uWidth - 33, 13, 20, 20 };
+				nk_widget_text( pOutput, recMinimize, ICON_FA_MINUS, strlen( ICON_FA_MINUS ), &txtMinimizeButton, NK_TEXT_CENTERED, pContext->style.font );
+				nk_widget_text( pOutput, recCloseButton, ICON_FA_TIMES, strlen( ICON_FA_TIMES ), &txtCloseButton, NK_TEXT_CENTERED, pContext->style.font );
 
-				const auto vecCloseButtonBounds = nk_widget_bounds( pContext );
-
-				nk_label_colored( pContext, ICON_FA_TIMES, NK_TEXT_CENTERED, clrClose );
-
-				const bool bHoveringMinimizeButton = nk_input_is_mouse_hovering_rect( pInput, vecMinimizeButtonBounds ),
-						   bHoveringCloseButton = nk_input_is_mouse_hovering_rect( pInput, vecCloseButtonBounds ),
-						   bClicking = PX_INPUT.GetKeyState( VK_LBUTTON ) == CInputManager::EKeyState::DOWN;
+				const bool bHoveringMinimize = nk_input_is_mouse_hovering_rect( &pContext->input, recMinimize ),
+	        				bHoveringClose = nk_input_is_mouse_hovering_rect( &pContext->input, recCloseButton ),
+	        				bClicking = PX_INPUT.GetKeyState( VK_LBUTTON );
 
 				static auto fnSetWidgetActive = [ & ]( )
 				{
@@ -371,9 +434,9 @@ namespace PX
 					curCurrent = Render::CURSOR_HAND;
 				};
 
-				if ( bHoveringMinimizeButton )
+				if ( bHoveringMinimize )
 				{
-					clrMinimize = clrActive;
+					clrMinimize = clrBlueHover;
 					fnSetWidgetActive( );
 					if ( bClicking )
 						fnMinimizeCallback( );
@@ -381,9 +444,9 @@ namespace PX
 				else
 					clrMinimize = clrBlue;
 
-				if ( bHoveringCloseButton )
+				if ( bHoveringClose )
 				{
-					clrClose = clrActive;
+					clrClose = clrBlueHover;
 					fnSetWidgetActive( );
 					if ( bClicking )
 						fnCloseCallback( );
@@ -399,27 +462,18 @@ namespace PX
 
 			void PX_API BeginRow( unsigned uRowHeight, unsigned uColumns, ERowType rowRowType )
 			{
-				static std::function< void( PX_API )( unsigned _uRowHeight, unsigned _uColumns ) > fnBeginRow[ ROW_MAX ]
+				static std::function< void( PX_API )( nk_context*, nk_layout_format, float, int ) > fnBeginRow[ ROW_MAX ]
 				{
-					[ ]( unsigned _uRowHeight, unsigned _uColumns )
-					{
-						return nk_layout_row_begin( pContext, NK_DYNAMIC, float( _uRowHeight ), _uColumns );
-					},
-					[ ]( unsigned _uRowHeight, unsigned _uColumns )
-					{
-						return nk_layout_row_begin( pContext, NK_STATIC, float( _uRowHeight ), _uColumns );
-					},
-					[ ]( unsigned _uRowHeight, unsigned _uColumns )
-					{
-						return nk_layout_space_begin( pContext, NK_STATIC, float( _uRowHeight ), _uColumns );
-					},
+					nk_layout_row_begin,
+					nk_layout_row_begin,
+					nk_layout_space_begin
 				};
 
 				rowLastRowType = rowRowType;
 				iCurrentRowUsedColumns = 0;
 				iCurrentRowMaxColumns = uColumns;
 
-				return fnBeginRow[ rowRowType ]( uRowHeight, uColumns );
+				return fnBeginRow[ rowRowType ]( pContext, rowRowType == ROW_DYNAMIC ? NK_DYNAMIC : NK_STATIC, uRowHeight, uColumns );
 			}
 
 			void PX_API EndRow( )
