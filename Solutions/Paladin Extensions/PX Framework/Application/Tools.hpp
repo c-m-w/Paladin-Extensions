@@ -7,12 +7,12 @@ namespace PX
 	namespace Tools
 	{
 		// INFO: Typedefs for long datatypes
-		
-        typedef const char* cstr_t;
-        typedef const wchar_t* wcstr_t;
-        typedef uintptr_t ptr_t;
+
+		typedef const char* cstr_t;
+		typedef const wchar_t* wcstr_t;
+		typedef uintptr_t ptr_t;
 		typedef unsigned char byte_t;
-		
+
 		// INFO: Inheritable struct that manages a single instantiated object of child class/structure
 		// *_Child*: Child class/structure to be restricted
 		template< class _Child > struct SSingleton

@@ -4,8 +4,8 @@
 
 namespace PX
 {
-    namespace Render
-    {
+	namespace Render
+	{
 		LPCREATESTRUCT pWindowInformation;
 
 		LRESULT WINAPI WndProc( HWND hwWindowHandle, UINT uMessage, WPARAM uwParam, LPARAM llParam )
@@ -59,21 +59,21 @@ namespace PX
 			SetCursor( hCursors[ curType ] ? hCursors[ curType ] : hCursors[ CURSOR_NONE ] );
 		}
 
-        void PX_API SetWindowSize( unsigned uWidth, unsigned uHeight )
-        {
-            uWindowWidth = uWidth;
-            uWindowHeight = uHeight;
+		void PX_API SetWindowSize( unsigned uWidth, unsigned uHeight )
+		{
+			uWindowWidth = uWidth;
+			uWindowHeight = uHeight;
 
-            if ( !hwWindowHandle )
-                return;
+			if ( !hwWindowHandle )
+				return;
 
-            RECT rcWindowRect;
-            GetWindowRect( hwWindowHandle, &rcWindowRect );
-            SetWindowPos( hwWindowHandle, nullptr, rcWindowRect.left, rcWindowRect.top, uWindowWidth, uWindowHeight, SWP_SHOWWINDOW );
-        }
+			RECT rcWindowRect;
+			GetWindowRect( hwWindowHandle, &rcWindowRect );
+			SetWindowPos( hwWindowHandle, nullptr, rcWindowRect.left, rcWindowRect.top, uWindowWidth, uWindowHeight, SWP_SHOWWINDOW );
+		}
 
-        void PX_API CreateRenderTarget( HINSTANCE hInstance )
-        {
+		void PX_API CreateRenderTarget( HINSTANCE hInstance )
+		{
 			wndWindow.lpfnWndProc = WndProc;
 			wndWindow.hInstance = hInstance;
 
@@ -81,10 +81,10 @@ namespace PX
 			wndWindow.hIcon = HICON( LoadImage( nullptr, ( strResourceDirectory + LR"(Logo\Paladin Logo.ico)" ).c_str( ),
 												IMAGE_ICON, 0, 0, LR_LOADFROMFILE | LR_DEFAULTSIZE | LR_SHARED ) );
 
-			hCursors[ CURSOR_NONE ]		= LoadCursor( nullptr, IDC_ARROW );
-			hCursors[ CURSOR_ARROW ]	= LoadCursorFromFile( ( strResourceDirectory + LR"(Cursor\Arrow.cur)" ).c_str( ) );
-			hCursors[ CURSOR_HAND ]		= LoadCursorFromFile( ( strResourceDirectory + LR"(Cursor\Hand.cur)" ).c_str( ) );
-			hCursors[ CURSOR_IBEAM ]	= LoadCursorFromFile( ( strResourceDirectory + LR"(Cursor\I Beam.cur)" ).c_str( ) );
+			hCursors[ CURSOR_NONE ] = LoadCursor( nullptr, IDC_ARROW );
+			hCursors[ CURSOR_ARROW ] = LoadCursorFromFile( ( strResourceDirectory + LR"(Cursor\Arrow.cur)" ).c_str( ) );
+			hCursors[ CURSOR_HAND ] = LoadCursorFromFile( ( strResourceDirectory + LR"(Cursor\Hand.cur)" ).c_str( ) );
+			hCursors[ CURSOR_IBEAM ] = LoadCursorFromFile( ( strResourceDirectory + LR"(Cursor\I Beam.cur)" ).c_str( ) );
 
 			wndWindow.hCursor = hCursors[ CURSOR_ARROW ] ? hCursors[ CURSOR_ARROW ] : hCursors[ CURSOR_NONE ];
 			wndWindow.lpszClassName = wszWindowTitle;
@@ -104,33 +104,33 @@ namespace PX
 			SetForegroundWindow( hwWindowHandle );
 
 			bCreatedWindow = true;
-        }
+		}
 
-        void PX_API InitializeDirectX( )
-        {
-            if ( bCreatedWindow )
-            {
-                Direct3DCreate9Ex( D3D_SDK_VERSION, &pObjectEx );
+		void PX_API InitializeDirectX( )
+		{
+			if ( bCreatedWindow )
+			{
+				Direct3DCreate9Ex( D3D_SDK_VERSION, &pObjectEx );
 
-                dxParameters.PresentationInterval = D3DPRESENT_INTERVAL_DEFAULT;
-                dxParameters.BackBufferWidth = uWindowWidth;
-                dxParameters.BackBufferHeight = uWindowHeight;
-                dxParameters.BackBufferFormat = D3DFMT_X8R8G8B8;
-                dxParameters.BackBufferCount = 1;
-                dxParameters.MultiSampleType = D3DMULTISAMPLE_NONE;
-                dxParameters.SwapEffect = D3DSWAPEFFECT_DISCARD;
-                dxParameters.hDeviceWindow = hwWindowHandle;
-                dxParameters.EnableAutoDepthStencil = true;
-                dxParameters.AutoDepthStencilFormat = D3DFMT_D24S8;
-                dxParameters.Flags = D3DPRESENTFLAG_DISCARD_DEPTHSTENCIL;
-                dxParameters.Windowed = true;
+				dxParameters.PresentationInterval = D3DPRESENT_INTERVAL_DEFAULT;
+				dxParameters.BackBufferWidth = uWindowWidth;
+				dxParameters.BackBufferHeight = uWindowHeight;
+				dxParameters.BackBufferFormat = D3DFMT_X8R8G8B8;
+				dxParameters.BackBufferCount = 1;
+				dxParameters.MultiSampleType = D3DMULTISAMPLE_NONE;
+				dxParameters.SwapEffect = D3DSWAPEFFECT_DISCARD;
+				dxParameters.hDeviceWindow = hwWindowHandle;
+				dxParameters.EnableAutoDepthStencil = true;
+				dxParameters.AutoDepthStencilFormat = D3DFMT_D24S8;
+				dxParameters.Flags = D3DPRESENTFLAG_DISCARD_DEPTHSTENCIL;
+				dxParameters.Windowed = true;
 
-                // Windows 7 doesn't support hardware vertexprocessing, so if it fails we need to use software vertexprocessing.
-                if ( pObjectEx->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hwWindowHandle, D3DCREATE_HARDWARE_VERTEXPROCESSING | D3DCREATE_PUREDEVICE | D3DCREATE_FPU_PRESERVE, &dxParameters, &pDevice ) < 0 )
-                    dbg::Assert( pObjectEx->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hwWindowHandle, D3DCREATE_SOFTWARE_VERTEXPROCESSING | D3DCREATE_PUREDEVICE | D3DCREATE_FPU_PRESERVE, &dxParameters, &pDevice ) >= 0 );
-                pDevice->GetCreationParameters( new D3DDEVICE_CREATION_PARAMETERS ); // warning: passing NEW because parameter passed from before was never used
-            }
-        }
+				// Windows 7 doesn't support hardware vertexprocessing, so if it fails we need to use software vertexprocessing.
+				if ( pObjectEx->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hwWindowHandle, D3DCREATE_HARDWARE_VERTEXPROCESSING | D3DCREATE_PUREDEVICE | D3DCREATE_FPU_PRESERVE, &dxParameters, &pDevice ) < 0 )
+					dbg::Assert( pObjectEx->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hwWindowHandle, D3DCREATE_SOFTWARE_VERTEXPROCESSING | D3DCREATE_PUREDEVICE | D3DCREATE_FPU_PRESERVE, &dxParameters, &pDevice ) >= 0 );
+				pDevice->GetCreationParameters( new D3DDEVICE_CREATION_PARAMETERS ); // warning: passing NEW because parameter passed from before was never used
+			}
+		}
 
 		void PX_API InitializeRenderTarget( unsigned* pDimensions, HINSTANCE hInstance, Tools::wcstr_t szNewWindowTitle )
 		{
@@ -140,14 +140,14 @@ namespace PX
 			InitializeDirectX( );
 		}
 
-        void PX_API SetWindowProc( IDirect3DDevice9* pTargetDevice )
-        {
-            D3DDEVICE_CREATION_PARAMETERS cpParameters;
-            dbg::Assert( pTargetDevice->GetCreationParameters( &cpParameters ) >= 0 );
-            hwOldWindowHandle = cpParameters.hFocusWindow;
+		void PX_API SetWindowProc( IDirect3DDevice9* pTargetDevice )
+		{
+			D3DDEVICE_CREATION_PARAMETERS cpParameters;
+			dbg::Assert( pTargetDevice->GetCreationParameters( &cpParameters ) >= 0 );
+			hwOldWindowHandle = cpParameters.hFocusWindow;
 
-            uOldWindowProc = SetWindowLongPtr( hwOldWindowHandle, GWLP_WNDPROC, reinterpret_cast< long >( WndProc ) );
-            dbg::Assert( uOldWindowProc );
-        }
-    }
+			uOldWindowProc = SetWindowLongPtr( hwOldWindowHandle, GWLP_WNDPROC, reinterpret_cast< long >( WndProc ) );
+			dbg::Assert( uOldWindowProc );
+		}
+	}
 }

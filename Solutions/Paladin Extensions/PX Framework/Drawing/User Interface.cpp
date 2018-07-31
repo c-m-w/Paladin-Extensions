@@ -6,8 +6,8 @@
 
 namespace PX
 {
-    namespace UI
-    {
+	namespace UI
+	{
 		namespace Manager
 		{
 			using Render::pDevice;
@@ -20,9 +20,9 @@ namespace PX
 			struct nk_font *pTahoma, *pTahomaBold, *pRoboto, *pRobotoBold, *pRobotoSmall, *pRobotoBoldSmall, *pEnvy;
 			struct nk_rect recComboboxWindowBounds;
 
-			constexpr nk_color clrTextActive { 255, 255, 255, 255 },	clrBlue { 33, 150, 243, 255 },		clrDarkBlue { 43, 60, 75, 255 },	clrBackground { 56, 60, 66, 255 },	clrLightBackground { 61, 65, 72, 255 },
-							   clrDarkBackground { 45, 50, 56, 255 },	clrBorder { 80, 84, 89, 255 },		clrToolbox { 42, 44, 48, 255 },		clrHeader { 33, 36, 40, 255 },		clrBlueActive { 54, 70, 84, 255 },
-							   clrBlueHover { 54, 70, 84, 200 },		clrBlueDormant { 43, 60, 75, 255 },	clrTextDormant { 175, 180, 187, 255 };
+			constexpr nk_color clrTextActive { 255, 255, 255, 255 }, clrBlue { 33, 150, 243, 255 }, clrDarkBlue { 43, 60, 75, 255 }, clrBackground { 56, 60, 66, 255 }, clrLightBackground { 61, 65, 72, 255 },
+				clrDarkBackground { 45, 50, 56, 255 }, clrBorder { 80, 84, 89, 255 }, clrToolbox { 42, 44, 48, 255 }, clrHeader { 33, 36, 40, 255 }, clrBlueActive { 54, 70, 84, 255 },
+				clrBlueHover { 54, 70, 84, 200 }, clrBlueDormant { 43, 60, 75, 255 }, clrTextDormant { 175, 180, 187, 255 };
 			nk_color clrColorTable[ NK_COLOR_COUNT ] { };
 
 			nk_style_button btnTopActive { }, btnTop { }, btnRegularActive { }, btnRegular { }, btnSpecialActive { }, btnSpecial { }, btnCombo { }, btnComboActive { };
@@ -49,7 +49,8 @@ namespace PX
 				//
 				// We only need a font configuration for FontAwesome because it needs font merging and a specific glyph range.
 				//
-				struct nk_font_config fcFontAwesomeConfiguration{ };
+				struct nk_font_config fcFontAwesomeConfiguration
+				{ };
 				static constexpr nk_rune rnIconRange[ ] { ICON_MIN_FA, ICON_MAX_FA, 0 };
 
 				fcFontAwesomeConfiguration = nk_font_config( 16 );
@@ -241,11 +242,11 @@ namespace PX
 				btnComboActive.touch_padding = nk_vec2( 5, 5 );
 			}
 
-            void PX_API Initialize( Tools::cstr_t szApplicationTitle )
-            {
-                szNuklearWindowTitle = szApplicationTitle;
-                InitializeNuklear( );
-            }
+			void PX_API Initialize( Tools::cstr_t szApplicationTitle )
+			{
+				szNuklearWindowTitle = szApplicationTitle;
+				InitializeNuklear( );
+			}
 
 			struct nk_vec2 PX_API CalculateTextBounds( Tools::cstr_t szText, unsigned uRowHeight /*= 30*/ )
 			{
@@ -278,7 +279,7 @@ namespace PX
 				return nk_d3d9_handle_event( h, msg, w, l );
 			}
 
-			bool HandleWindowInput(  )
+			bool HandleWindowInput( )
 			{
 				auto bShouldDrawInterface = true;
 				if ( Render::bCreatedWindow )
@@ -356,7 +357,7 @@ namespace PX
 				nk_end( pContext );
 
 				ApplyCursor( );
-				if( Render::bCreatedWindow )
+				if ( Render::bCreatedWindow )
 				{
 					pDevice->Clear( 0, nullptr, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER | D3DCLEAR_STENCIL, D3DCOLOR_ARGB( 0, 0, 0, 0 ), 0, 0 );
 					pDevice->BeginScene( );
@@ -372,8 +373,8 @@ namespace PX
 			}
 		}
 
-        namespace Widgets
-        {
+		namespace Widgets
+		{
 			using namespace Manager;
 
 			ERowType rowLastRowType;
@@ -382,17 +383,17 @@ namespace PX
 			Tools::cstr_t szColorPickerSubject;
 			Tools::byte_t* pActiveEditColor = nullptr;
 
-	        bool PX_API HoveringNextWidget( )
-	        {
+			bool PX_API HoveringNextWidget( )
+			{
 				return nk_input_is_mouse_prev_hovering_rect( &pContext->input, nk_widget_bounds( pContext ) );
-	        }
+			}
 
-	        nk_flags PX_API EditTextBox( nk_context* ctx, nk_flags flags, char* buffer, int max, nk_plugin_filter filter )
-	        {
+			nk_flags PX_API EditTextBox( nk_context* ctx, nk_flags flags, char* buffer, int max, nk_plugin_filter filter )
+			{
 				__asm call nk_edit_string_zero_terminated
-	        }
+			}
 
-	        void PX_API Header( Tools::cstr_t szTitle, Tools::cstr_t szApplicationTitle, std::function< void( PX_API )( ) > fnMinimizeCallback, std::function< void( PX_API )( ) > fnCloseCallback )
+			void PX_API Header( Tools::cstr_t szTitle, Tools::cstr_t szApplicationTitle, std::function< void( PX_API )( ) > fnMinimizeCallback, std::function< void( PX_API )( ) > fnCloseCallback )
 			{
 				nk_layout_row_dynamic( pContext, 30, 0 );
 				auto pOutput = nk_window_get_canvas( pContext );
@@ -424,8 +425,8 @@ namespace PX
 				nk_widget_text( pOutput, recCloseButton, ICON_FA_TIMES, strlen( ICON_FA_TIMES ), &txtCloseButton, NK_TEXT_CENTERED, pContext->style.font );
 
 				const bool bHoveringMinimize = nk_input_is_mouse_hovering_rect( &pContext->input, recMinimize ),
-	        				bHoveringClose = nk_input_is_mouse_hovering_rect( &pContext->input, recCloseButton ),
-	        				bClicking = PX_INPUT.GetKeyState( VK_LBUTTON );
+					bHoveringClose = nk_input_is_mouse_hovering_rect( &pContext->input, recCloseButton ),
+					bClicking = PX_INPUT.GetKeyState( VK_LBUTTON );
 
 				static auto fnSetWidgetActive = [ & ]( )
 				{
@@ -523,6 +524,6 @@ namespace PX
 				dbg::Assert( rowLastRowType == ROW_CUSTOM );
 				return nk_layout_space_push( pContext, nk_rect( float( uStartX ), float( uStartY ), float( uWidth ), float( uHeight ) ) );
 			}
-        }
-    }
+		}
+	}
 }
