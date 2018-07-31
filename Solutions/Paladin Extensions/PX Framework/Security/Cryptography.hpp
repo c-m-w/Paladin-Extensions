@@ -1,5 +1,5 @@
 /// Encryption.hpp
-// TODO: document @Cole
+
 #pragma once
 
 namespace PX
@@ -7,6 +7,8 @@ namespace PX
     namespace Cryptography
     {
         std::string GenerateHash( const std::string& );
+        // Pass either CryptoPP::Base64Decoder or CryptoPP::Base64Encoder as _t
+		template< typename _t > std::string Base64( const std::string& );
         std::string Encrypt( const std::string&, const std::string& );
     }
 

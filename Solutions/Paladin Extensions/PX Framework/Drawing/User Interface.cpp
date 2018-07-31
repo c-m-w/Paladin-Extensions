@@ -13,7 +13,8 @@ namespace PX
 			using Render::pDevice;
 			using Render::dxParameters;
 
-			Tools::cstr_t	szWindowTitle = "Paladin Extensions";
+			Tools::cstr_t	szWindowTitle = PX_XOR( "Paladin Extensions" );
+			Tools::cstr_t	szNuklearWindowTitle;
 			auto			szApplicationTitle = static_cast< char* >( malloc( 32 ) );
 
 			nk_font_atlas* pAtlas;
@@ -33,11 +34,11 @@ namespace PX
 
 			nk_font* PX_API AddFont( std::string strFontFileName, unsigned uFontSize, struct nk_font_config fcFontConfiguration, unsigned uFontAwesomeSize = 0 )
 			{
-				static auto strFontDirectory = Tools::string_cast< std::string >( Tools::GetDirectory( 3 ) + /*PX_XOR*/( LR"(\Resources\Fonts\)" ) );
+				static auto strFontDirectory = Tools::string_cast< std::string >( Tools::GetDirectory( 3 ) + PX_XOR( LR"(\Resources\Fonts\)" ) );
 
 				nk_d3d9_font_stash_begin( &pAtlas );
 				auto pFont = nk_font_atlas_add_from_file( pAtlas, ( strFontDirectory + strFontFileName ).c_str( ), float( uFontSize ), nullptr );
-				nk_font_atlas_add_from_file( pAtlas, ( strFontDirectory + /*PX_XOR*/( "FontAwesome.ttf" ) ).c_str( ), uFontAwesomeSize ? float( uFontAwesomeSize ) : float( uFontSize ), &fcFontConfiguration );
+				nk_font_atlas_add_from_file( pAtlas, ( strFontDirectory + PX_XOR( "FontAwesome.ttf" ) ).c_str( ), uFontAwesomeSize ? float( uFontAwesomeSize ) : float( uFontSize ), &fcFontConfiguration );
 				nk_d3d9_font_stash_end( );
 				return pFont;
 			}
@@ -49,21 +50,20 @@ namespace PX
 				//
 				// We only need a font configuration for FontAwesome because it needs font merging and a specific glyph range.
 				//
-				struct nk_font_config fcFontAwesomeConfiguration
-				{ };
+				struct nk_font_config fcFontAwesomeConfiguration{ };
 				static constexpr nk_rune rnIconRange[ ] { ICON_MIN_FA, ICON_MAX_FA, 0 };
 
 				fcFontAwesomeConfiguration = nk_font_config( 16 );
 				fcFontAwesomeConfiguration.range = rnIconRange;
 				fcFontAwesomeConfiguration.merge_mode = 1;
 
-				pRoboto = AddFont( /*PX_XOR*/( "Roboto.ttf" ), 21, fcFontAwesomeConfiguration );
-				pRobotoBold = AddFont( /*PX_XOR*/( "RobotoBold.ttf" ), 21, fcFontAwesomeConfiguration );
-				pRobotoSmall = AddFont( /*PX_XOR*/( "Roboto.ttf" ), 16, fcFontAwesomeConfiguration, 14 );
-				pRobotoBoldSmall = AddFont( /*PX_XOR*/( "RobotoBold.ttf" ), 16, fcFontAwesomeConfiguration, 12 );
-				pTahoma = AddFont( /*PX_XOR*/( "Tahoma.ttf" ), 16, fcFontAwesomeConfiguration );
-				pTahomaBold = AddFont( /*PX_XOR*/( "TahomaBold.ttf" ), 16, fcFontAwesomeConfiguration );
-				pEnvy = AddFont( /*PX_XOR*/( "Envy.ttf" ), 14, fcFontAwesomeConfiguration );
+				pRoboto = AddFont( PX_XOR( "Roboto.ttf" ), 21, fcFontAwesomeConfiguration );
+				pRobotoBold = AddFont( PX_XOR( "RobotoBold.ttf" ), 21, fcFontAwesomeConfiguration );
+				pRobotoSmall = AddFont( PX_XOR( "Roboto.ttf" ), 16, fcFontAwesomeConfiguration, 14 );
+				pRobotoBoldSmall = AddFont( PX_XOR( "RobotoBold.ttf" ), 16, fcFontAwesomeConfiguration, 12 );
+				pTahoma = AddFont( PX_XOR( "Tahoma.ttf" ), 16, fcFontAwesomeConfiguration );
+				pTahomaBold = AddFont( PX_XOR( "TahomaBold.ttf" ), 16, fcFontAwesomeConfiguration );
+				pEnvy = AddFont( PX_XOR( "Envy.ttf" ), 14, fcFontAwesomeConfiguration );
 
 				clrColorTable[ NK_COLOR_TEXT ] = nk_rgba( 255, 255, 255, 255 );
 				clrColorTable[ NK_COLOR_WINDOW ] = nk_rgba( 45, 50, 56, 255 );
@@ -244,7 +244,7 @@ namespace PX
 
             void PX_API Initialize( Tools::cstr_t szApplicationTitle )
             {
-                szWindowTitle = szApplicationTitle;
+                szNuklearWindowTitle = szApplicationTitle;
                 InitializeNuklear( );
             }
 
@@ -272,6 +272,42 @@ namespace PX
 			void PX_API Resize( unsigned uWidth, unsigned uHeight )
 			{
 				nk_d3d9_resize( uWidth, uHeight );
+			}
+
+			bool OnEvent( HWND, UINT, WPARAM, LPARAM )
+			{
+				BOOL bReturn;
+				__asm call nk_d3d9_handle_event
+				__asm mov eax, bReturn
+				return bReturn;
+			}
+
+			bool Render( )
+			{
+				auto bShouldDrawUserInterface = true;
+				SetFont( FONT_ROBOTO );
+
+				if ( nk_begin( pContext, szNuklearWindowTitle, nk_rect( 0, 0, float( Render::uWindowWidth ), float( Render::uWindowHeight ) ),
+							   NK_WINDOW_NO_SCROLLBAR ) )
+				{
+					nk_layout_row_dynamic( pContext, 10, 0 );
+					SetFont( FONT_ROBOTO );
+					SetLayout( );
+				}
+				else
+					bShouldDrawUserInterface = false;
+				nk_end( pContext );
+
+				if( Render::bCreatedWindow )
+				{
+					pDevice->Clear( 0, nullptr, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER | D3DCLEAR_STENCIL, D3DCOLOR_ARGB( 0, 0, 0, 0 ), 0, 0 );
+					pDevice->BeginScene( );
+					nk_d3d9_render( NK_ANTI_ALIASING_ON );
+					pDevice->EndScene( );
+					pDevice->Present( nullptr, nullptr, nullptr, nullptr );
+				}
+
+				return bShouldDrawUserInterface;
 			}
 		}
 

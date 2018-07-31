@@ -6,20 +6,20 @@ namespace PX
 {
     namespace Cryptography
     {
-        std::string GenerateHash( const std::string& strPlainText )
-        {
-            Tools::byte_t bOutput[ CryptoPP::SHA3_256::DIGESTSIZE ];
-            CryptoPP::SHA3_256( ).CalculateDigest( bOutput, reinterpret_cast< Tools::byte_t* >( const_cast< char* >( strPlainText.c_str( ) ) ), strPlainText.length( ) );
+		std::string GenerateHash( const std::string& strPlainText )
+		{
+			Tools::byte_t bOutput[ CryptoPP::SHA3_256::DIGESTSIZE ];
+			CryptoPP::SHA3_256( ).CalculateDigest( bOutput, reinterpret_cast< Tools::byte_t* >( const_cast< char* >( strPlainText.c_str( ) ) ), strPlainText.length( ) );
 
-            CryptoPP::HexEncoder hHash;
-            std::string strOutput;
-            hHash.Attach( new CryptoPP::StringSink( strOutput ) );
-            hHash.Put( bOutput, sizeof( Tools::byte_t[ CryptoPP::SHA3_256::DIGESTSIZE ] ) );
-            hHash.MessageEnd( );
-            return strOutput;
-        }
+			CryptoPP::HexEncoder hHash;
+			std::string strOutput;
+			hHash.Attach( new CryptoPP::StringSink( strOutput ) );
+			hHash.Put( bOutput, sizeof( Tools::byte_t[ CryptoPP::SHA3_256::DIGESTSIZE ] ) );
+			hHash.MessageEnd( );
+			return strOutput;
+		}
 
-        std::string Encrypt( const std::string& strPlainText, const std::string& strKey )
+	    std::string Encrypt( const std::string& strPlainText, const std::string& strKey )
         {
             auto strInitializationVector = strKey.substr( 0, 16 );
             std::string strOutput;

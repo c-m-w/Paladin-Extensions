@@ -25,6 +25,9 @@ namespace PX
 			void PX_API Initialize( Tools::cstr_t );
 			void PX_API OnRelease( );
 			void PX_API Resize( unsigned, unsigned );
+			bool PX_API OnEvent( HWND, UINT, WPARAM, LPARAM );
+			bool PX_API Render( );
+			void PX_API SetLayout( );
         }
 
         namespace Widgets

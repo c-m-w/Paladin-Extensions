@@ -6,7 +6,7 @@
 #else
 
 // Compiler
-#pragma warning( disable : 4307 996 )
+#pragma warning( disable : 4307 4309 4996 )
 #define _CRT_SECURE_NO_WARNINGS
 #define _SILENCE_ALL_CXX17_DEPRECATION_WARNINGS
 
@@ -57,8 +57,8 @@
 
 
 // Encrypts string data on compile, then decrypts for access on run.
-#define PX_XOR( String ) ( PX::XOR::IXorString< PX::XOR::ICStringTraits< decltype( String ) >::char_trait_t, \
-        PX::XOR::SConstructIndexList< ( sizeof( String ) - 1 ) / PX::XOR::ICStringTraits< decltype( String ) >::int_trait_t >::result_t >( String ).Decrypt( ) )
+#define PX_XOR( String ) ( PX::XOR::CXorString< PX::XOR::SCStringTraits< decltype( String ) >::char_trait_t, \
+        PX::XOR::SConstructIndexList< ( sizeof( String ) - 1 ) / PX::XOR::SCStringTraits< decltype( String ) >::int_trait_t >::result_t >( String ).Decrypt( ) )
 
 #if defined _DEBUG
 // sets debug out line identifier as "Debug"

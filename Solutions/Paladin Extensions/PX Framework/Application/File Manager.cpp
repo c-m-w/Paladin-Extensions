@@ -6,30 +6,34 @@ namespace PX
 {
     CFileManager::CFileManager( )
     {
-        std::ifstream ifGlobalConfiguration( Tools::GetDirectory( PX_DEPENDENCIES_ESCAPE ) + LR"(\Configurations\global.json)" );
-        if ( ifGlobalConfiguration.is_open( ) )
-            ifGlobalConfiguration >> jsGlobal;
+        std::ifstream ifGlobalConfiguration( Tools::GetDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(\Configurations\global.pxcfg)" ) );
+        if ( ifGlobalConfiguration.good( ) )
+        {
+			std::stringstream ssBuffer;
+			ssBuffer << ifGlobalConfiguration.rdbuf( );
+			jsGlobal = nlohmann::json::parse( Cryptography::Base64< CryptoPP::Base64Decoder >( ssBuffer.str( ) ) );
+        }
         else
-            throw std::exception( "Failed to open global.json for reading" );
+            throw std::exception( PX_XOR( "Failed to open global.pxcfg for reading" ) );
 
-        wszCurrent = &Tools::string_cast< std::wstring >( jsGlobal[ "Default Configuration" ].get_ref< std::string& >( ) )[ 0 ];
+        wszCurrent = &Tools::string_cast< std::wstring >( jsGlobal[ PX_XOR( "Default Configuration" ) ].get_ref< std::string& >( ) )[ 0 ];
 
         ChangeConfiguration( wszCurrent );
     }
 
     void PX_API CFileManager::SaveInformation( )
     {
-        std::ofstream ofGlobalConfiguration( Tools::GetDirectory( PX_DEPENDENCIES_ESCAPE ) + LR"(\Configurations\global.json)" );
-        if ( ofGlobalConfiguration.is_open( ) )
-            ofGlobalConfiguration << jsGlobal.dump( 4 );
+        std::ofstream ofGlobalConfiguration( Tools::GetDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(\Configurations\global.pxcfg)" ) );
+        if ( ofGlobalConfiguration.good( ) )
+            ofGlobalConfiguration << Cryptography::Base64< CryptoPP::Base64Encoder >( jsGlobal.dump( 4 ) );
         else
-            throw std::exception( "Failed to open global.json for writing" );
+            throw std::exception( PX_XOR( "Failed to open global.pxcfg for writing" ) );
 
-        std::ofstream ofCurrentConfiguration( Tools::GetDirectory( PX_DEPENDENCIES_ESCAPE ) + LR"(\Configurations\global\)" + wszCurrent + L".json)" );
-        if ( ofCurrentConfiguration.is_open( ) )
-            ofCurrentConfiguration << jsGlobal.dump( 4 );
+        std::ofstream ofCurrentConfiguration( Tools::GetDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(\Configurations\)" ) + wszCurrent + PX_XOR( L".pxcfg" ) );
+        if ( ofCurrentConfiguration.good( ) )
+            ofCurrentConfiguration << Cryptography::Base64< CryptoPP::Base64Encoder >( jsCurrent.dump( 4 ) );
         else
-            throw std::exception( ( std::string( "Failed to open " ) + Tools::string_cast< std::string >( wszCurrent ) + ".json for writing" ).c_str( ) );
+            throw std::exception( ( std::string( PX_XOR( "Failed to open " ) ) + Tools::string_cast< std::string >( wszCurrent ) + PX_XOR( ".pxcfg for writing" ) ).c_str( ) );
     }
 
     bool PX_API CFileManager::ChangeConfiguration( Tools::wcstr_t wszConfig )
@@ -37,14 +41,16 @@ namespace PX
         if ( wszCurrent == wszConfig )
             return true;
 
-        if ( PathFileExistsW( ( Tools::GetDirectory( PX_DEPENDENCIES_ESCAPE ) + LR"(\Configurations\global\)" + wszConfig + L".json)" ).c_str( ) ) )
+        if ( PathFileExists( ( Tools::GetDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(\Configurations\)" ) + wszConfig + PX_XOR( L".pxcfg" ) ).c_str( ) ) )
         {
-            std::ifstream ifNewConfiguration( Tools::GetDirectory( PX_DEPENDENCIES_ESCAPE ) + LR"(\Configurations\global\)" + wszConfig + L".json)" );
-            if ( ifNewConfiguration.is_open( ) )
+            std::ifstream ifNewConfiguration( Tools::GetDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(\Configurations\)" ) + wszConfig + PX_XOR( L".pxcfg" ) );
+            if ( ifNewConfiguration.good( ) )
             {
                 try
                 {
-                    ifNewConfiguration >> jsGlobal;
+					std::stringstream ssBuffer; 
+					ssBuffer << ifNewConfiguration.rdbuf( );
+					jsCurrent = nlohmann::json::parse( Cryptography::Base64< CryptoPP::Base64Decoder >( ssBuffer.str( ) ) );
                 }
                 catch ( nlohmann::detail::parse_error& )
                 {
@@ -56,7 +62,7 @@ namespace PX
                 }
             }
             else
-                throw std::exception( ( std::string( "Failed to open " ) + Tools::string_cast< std::string >( wszConfig ) + ".json for writing" ).c_str( ) );
+                throw std::exception( ( std::string( PX_XOR( "Failed to open " ) ) + Tools::string_cast< std::string >( wszConfig ) + PX_XOR( ".pxcfg for writing" ) ).c_str( ) );
 
             wszCurrent = wszConfig;
             return true;

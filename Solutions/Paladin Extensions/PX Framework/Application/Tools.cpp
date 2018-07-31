@@ -9,7 +9,7 @@ namespace PX
 		std::wstring PX_API GetDirectory( unsigned uEscapeLevels )
 		{
 			auto wszBuffer = static_cast< wchar_t* >( malloc( MAX_PATH ) );
-            GetModuleFileNameW( nullptr, wszBuffer, MAX_PATH );
+            GetModuleFileName( nullptr, wszBuffer, MAX_PATH );
 			std::wstring wstrDirectory = wszBuffer;
 
 			for ( auto i = 0u; i <= uEscapeLevels; i++ )

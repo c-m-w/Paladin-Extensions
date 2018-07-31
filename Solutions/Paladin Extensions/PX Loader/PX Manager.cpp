@@ -27,17 +27,32 @@ void Uncalled( )
     UI::Widgets::Inputbox< float >( 20, new char[ 6 ] { "Hello" } );
 }
 
+void PX_API UI::Manager::SetLayout( )
+{
+
+}
+
+void f2( int one, int two )
+{
+	dbg::out << one << " | " << two << dbg::newl;
+}
+
+void f1( int one, int two )
+{
+	f2( one, two );
+}
+
 void OnLaunch( )
 {
-    TestDebug( );
-
-    unsigned piDimes[ 2 ] { 500, 500 };
-    Render::InitializeRenderTarget( piDimes, L"Paladin" );
-    UI::Manager::Initialize( "Men" );
-    while ( !PX_INPUT.GetKeyState( VK_RETURN ) )
-    {
-        Render::BeginRender( );
-        TestInput( );
-        Render::EndRender( );
-    }
+    //TestDebug( );
+    //
+    //unsigned piDimes[ 2 ] { 500, 500 };
+    //Render::InitializeRenderTarget( piDimes, L"Paladin" );
+    //UI::Manager::Initialize( "Men" );
+    //while ( UI::Manager::Render( ) )
+    //{
+    //    
+    //    TestInput( );
+    //}
+	system( "pause" );
 }

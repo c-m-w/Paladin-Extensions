@@ -40,7 +40,11 @@ namespace PX
 				default:
 					break;
 			}
-			return 0;
+			return UI::Manager::OnEvent( hwWindowHandle, uMessage, uwParam, llParam )
+				? ( uOldWindowProc
+					? CallWindowProc( reinterpret_cast< WNDPROC >( uOldWindowProc ), hwWindowHandle, uMessage, uwParam, llParam )
+					: 0 )
+				: DefWindowProc( hwWindowHandle, uMessage, uwParam, llParam );
 		}
 
 		void PX_API SetCursor( ECursor curType )
@@ -61,38 +65,36 @@ namespace PX
             SetWindowPos( hwWindowHandle, nullptr, rcWindowRect.left, rcWindowRect.top, uWindowWidth, uWindowHeight, SWP_SHOWWINDOW );
         }
 
-		bool bCreatedWindow = false;
-
         void PX_API CreateRenderTarget( )
         {
             wndWindow = { sizeof( WNDCLASSEX ), NULL, WndProc, 0, 0, GetModuleHandle( nullptr ), nullptr, LoadCursor( nullptr, IDC_ARROW ), nullptr, nullptr, szWindowTitle, nullptr };
 
-            wndWindow.style = CS_DBLCLKS;
-            wndWindow.lpfnWndProc = WndProc;
-            wndWindow.hInstance = GetModuleHandle( nullptr );
-            const auto strResourceDirectory = Tools::GetDirectory( PX_DEPENDENCIES_ESCAPE ) + LR"(\Resources\)";
-            wndWindow.hIcon = HICON( LoadImage( nullptr, ( strResourceDirectory + LR"(Logo\Paladin Logo.ico)" ).c_str( ),
-                                                IMAGE_ICON, 0, 0, LR_LOADFROMFILE | LR_DEFAULTSIZE | LR_SHARED ) );
+			wndWindow.style = CS_DBLCLKS;
+			wndWindow.lpfnWndProc = WndProc;
+			wndWindow.hInstance = GetModuleHandle( nullptr );
+			const auto strResourceDirectory = Tools::GetDirectory( 3 ) + LR"(\Resources\)";
+			wndWindow.hIcon = HICON( LoadImage( nullptr, ( strResourceDirectory + LR"(Logo\Paladin Logo.ico)" ).c_str( ),
+												IMAGE_ICON, 0, 0, LR_LOADFROMFILE | LR_DEFAULTSIZE | LR_SHARED ) );
 
-            hCursors[ CURSOR_NONE ] = LoadCursor( nullptr, IDC_ARROW );
-            hCursors[ CURSOR_ARROW ] = LoadCursorFromFile( ( strResourceDirectory + LR"(Cursor\Arrow.cur)" ).c_str( ) );
-            hCursors[ CURSOR_HAND ] = LoadCursorFromFile( ( strResourceDirectory + LR"(Cursor\Hand.cur)" ).c_str( ) );
-            hCursors[ CURSOR_IBEAM ] = LoadCursorFromFile( ( strResourceDirectory + LR"(Cursor\I Beam.cur)" ).c_str( ) );
+			hCursors[ CURSOR_NONE ] = LoadCursor( nullptr, IDC_ARROW );
+			hCursors[ CURSOR_ARROW ] = LoadCursorFromFile( ( strResourceDirectory + LR"(Cursor\Arrow.cur)" ).c_str( ) );
+			hCursors[ CURSOR_HAND ] = LoadCursorFromFile( ( strResourceDirectory + LR"(Cursor\Hand.cur)" ).c_str( ) );
+			hCursors[ CURSOR_IBEAM ] = LoadCursorFromFile( ( strResourceDirectory + LR"(Cursor\I Beam.cur)" ).c_str( ) );
 
-            wndWindow.hCursor = hCursors[ CURSOR_ARROW ] ? hCursors[ CURSOR_ARROW ] : hCursors[ CURSOR_NONE ];
-            wndWindow.lpszClassName = szWindowTitle;
-            RegisterClassEx( &wndWindow );
+			wndWindow.hCursor = hCursors[ CURSOR_ARROW ] ? hCursors[ CURSOR_ARROW ] : hCursors[ CURSOR_NONE ];
+			wndWindow.lpszClassName = szWindowTitle;
+			RegisterClassEx( &wndWindow );
 
-            RECT rcWindow;
-            AdjustWindowRectEx( &rcWindow, WS_OVERLAPPEDWINDOW, false, WS_EX_APPWINDOW );
+			RECT rcWindow;
+			AdjustWindowRectEx( &rcWindow, WS_OVERLAPPEDWINDOW, false, WS_EX_APPWINDOW );
 
-            hwWindowHandle = CreateWindowEx( WS_EX_APPWINDOW, szWindowTitle, szWindowTitle, WS_VISIBLE | WS_POPUP,
-                                             CW_USEDEFAULT, CW_USEDEFAULT, uWindowWidth, uWindowHeight,
-                                             nullptr, nullptr, wndWindow.hInstance, nullptr );
+			hwWindowHandle = CreateWindowEx( WS_EX_APPWINDOW, szWindowTitle, szWindowTitle, WS_VISIBLE | WS_POPUP,
+											 CW_USEDEFAULT, CW_USEDEFAULT, uWindowWidth, uWindowHeight,
+											 nullptr, nullptr, wndWindow.hInstance, nullptr );
 
-            ShowWindow( hwWindowHandle, SW_SHOWDEFAULT );
-            UpdateWindow( hwWindowHandle );
-            SetForegroundWindow( hwWindowHandle );
+			ShowWindow( hwWindowHandle, SW_SHOWDEFAULT );
+			UpdateWindow( hwWindowHandle );
+			SetForegroundWindow( hwWindowHandle );
 
 			bCreatedWindow = true;
         }
@@ -139,18 +141,6 @@ namespace PX
 
             uOldWindowProc = SetWindowLongPtr( hwOldWindowHandle, GWLP_WNDPROC, reinterpret_cast< long >( WndProc ) );
             dbg::Assert( uOldWindowProc );
-        }
-
-        void PX_API BeginRender( )
-        {
-            pDevice->Clear( 0, nullptr, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER | D3DCLEAR_STENCIL, D3DCOLOR_ARGB( 0, 0, 0, 0 ), 0, 0 );
-            pDevice->BeginScene( );
-        }
-
-        void PX_API EndRender( )
-        {
-            pDevice->EndScene( );
-            pDevice->Present( nullptr, nullptr, nullptr, nullptr );
         }
     }
 }

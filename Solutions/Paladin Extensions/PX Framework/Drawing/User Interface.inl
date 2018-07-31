@@ -17,7 +17,7 @@ namespace PX
 						return nk_false;
 					return nk_true;
 				}
-                template< typename _t > PX_ABSTRACT_STRUCT IFilterImplementation
+                template< typename _t > struct SFilterImplementation
                 {
 					inline static nk_plugin_filter fnFilter = fnAscii;
                     static char* ret( char* szBuffer )
@@ -33,7 +33,7 @@ namespace PX
 						return nk_false;
 					return nk_true;
 	            }
-                template< > PX_ABSTRACT_STRUCT IFilterImplementation< int >
+                template< > struct SFilterImplementation< int >
                 {
 					inline static nk_plugin_filter fnFilter = fnDecimal;
                     static int ret( char* szBuffer )
@@ -49,7 +49,7 @@ namespace PX
 						return nk_false;
 					return nk_true;
 				}
-                template< > PX_ABSTRACT_STRUCT IFilterImplementation< float >
+                template< > struct SFilterImplementation< float >
                 {
 					inline static nk_plugin_filter fnFilter = fnFloat;
                     static float ret( char* szBuffer )
@@ -66,8 +66,8 @@ namespace PX
 
                 if ( HoveringNextWidget( ) )
                     Render::SetCursor( Render::CURSOR_IBEAM );
-                EditTextBox( Manager::pContext, NK_EDIT_FIELD | NK_EDIT_AUTO_SELECT, szBuffer, uMaxCharacters, IFilterImplementation< _t >::fnFilter );
-                return IFilterImplementation< _t >::ret( szBuffer );
+                EditTextBox( Manager::pContext, NK_EDIT_FIELD | NK_EDIT_AUTO_SELECT, szBuffer, uMaxCharacters, SFilterImplementation< _t >::fnFilter );
+                return SFilterImplementation< _t >::ret( szBuffer );
             }
         }
     }

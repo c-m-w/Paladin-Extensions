@@ -12,12 +12,15 @@
 #include <cryptopp/modes.h>
 #include <cryptopp/sha3.h>
 #include <cryptopp/aes.h>
+#pragma comment( lib, "cryptlib.lib" )
 
 #include <curl/curl.h>
+#pragma comment( lib, "libcurl.lib" )
 
 #include <Psapi.h>
 
 #include <DirectX/d3d9.h>
+#pragma comment( lib, "d3d9.lib" )
 
 #include <IconFontCppHeaders/IconsFontAwesome5-Solid.hpp>
 
@@ -26,3 +29,4 @@
 
 #include <Shlwapi.h>
 #include <nlohmann/json.hpp>
+
