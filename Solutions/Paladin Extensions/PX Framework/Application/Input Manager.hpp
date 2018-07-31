@@ -6,7 +6,7 @@ namespace PX
 {
     LRESULT WINAPI WndProc( HWND, UINT, WPARAM, LPARAM );
 
-    PX_ABSTRACT_CLASS IInputManager: public Tools::ISingleton< IInputManager >
+    class CInputManager: public Tools::SSingleton< CInputManager >
     {
 	public:
 		enum EKeyState

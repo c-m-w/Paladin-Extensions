@@ -30,10 +30,6 @@
 #define NK_PRIVATE
 #endif
 
-// FontAwesome
-
-#include <IconFontCppHeaders/IconsFontAwesome5-Solid.hpp>
-
 #endif
 
 // identifies variable as "Paladin Extensions" original
@@ -96,7 +92,7 @@
 // Singleton access macros
 
 // Input interface singleton access macro
-#define PX_INPUT PX::IInputManager::Get( )
+#define PX_INPUT PX::CInputManager::Get( )
 // File manager class singleton access macro
-#define PX_FILE_MANAGER PX::CFileManager::Get( )
+#define PX_FILES PX::CFileManager::Get( )
 

@@ -26,8 +26,8 @@ namespace PX
 		PX_SDK D3DPRESENT_PARAMETERS dxParameters;
 		PX_SDK IDirect3D9Ex* pObjectEx;
 		PX_SDK IDirect3DDevice9* pDevice;
-		void PX_API InitializeRenderTarget( unsigned *, Tools::wcstr_t = nullptr );
         void PX_API SetWindowSize( unsigned, unsigned );
+		void PX_API InitializeRenderTarget( unsigned*, Tools::wcstr_t = nullptr );
 
         PX_SDK unsigned uOldWindowProc;
         PX_SDK HWND hwOldWindowHandle;

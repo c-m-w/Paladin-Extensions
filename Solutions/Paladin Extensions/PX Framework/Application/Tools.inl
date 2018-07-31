@@ -1,4 +1,4 @@
-/// Utilities.inl
+/// Tools.inl
 
 #pragma once
 
@@ -6,7 +6,7 @@ namespace PX
 {
     namespace Tools
     {
-        template< class _Child > _Child& PX_API ISingleton< _Child >::Get( )
+        template< class _Child > _Child& PX_API SSingleton< _Child >::Get( )
         {
             static _Child _ChildClassObject { };
             return _ChildClassObject;

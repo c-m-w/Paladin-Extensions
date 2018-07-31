@@ -6,7 +6,7 @@ namespace PX
 {
     namespace dbg
     {
-        PX_API out_clr_t::out_clr_t( const WORD wDesiredAttributes ): m_wDesiredAttributes( wDesiredAttributes )
+        out_clr_t::out_clr_t( const WORD wDesiredAttributes ): m_wDesiredAttributes( wDesiredAttributes )
         { }
 
         out_t& PX_API out_t::operator<<( const out_clr_t& rhs )
@@ -30,32 +30,11 @@ namespace PX
             LPWSTR lpwstrError { };
             if ( !FormatMessageW( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
                                   nullptr, dwError, MAKELANGID( LANG_NEUTRAL, SUBLANG_DEFAULT ), lpwstrError, 0, nullptr ) )
-                out PX_LER << "[0x" << std::hex << dwError << "] - Unable to retrieve error description" << endl;
+                out PX_LER << "[0x" << std::hex << dwError << "] - Unable to retrieve error description" << newl;
             else
-                out PX_LER << "[0x" << std::hex << dwError << "] - " << *lpwstrError << endl;
+                out PX_LER << "[0x" << std::hex << dwError << "] - " << *lpwstrError << newl;
             LocalFree( lpwstrError );
 #endif
-        }
-
-        std::ios_base& __CLRCALL_OR_CDECL bin( std::ios_base& _Iosbase )
-        {   // set basefield to binary
-            _Iosbase.setf( std::ios_base::binary, std::ios_base::basefield );
-            return _Iosbase;
-        }
-        std::ios_base& __CLRCALL_OR_CDECL oct( std::ios_base& _Iosbase )
-        {   // set basefield to binary
-            _Iosbase.setf( std::ios_base::oct, std::ios_base::basefield );
-            return _Iosbase;
-        }
-        std::ios_base& __CLRCALL_OR_CDECL dec( std::ios_base& _Iosbase )
-        {   // set basefield to binary
-            _Iosbase.setf( std::ios_base::dec, std::ios_base::basefield );
-            return _Iosbase;
-        }
-        std::ios_base& __CLRCALL_OR_CDECL hex( std::ios_base& _Iosbase )
-        {   // set basefield to hex
-            _Iosbase.setf( std::ios_base::hex, std::ios_base::basefield );
-            return _Iosbase;
         }
     }
 }

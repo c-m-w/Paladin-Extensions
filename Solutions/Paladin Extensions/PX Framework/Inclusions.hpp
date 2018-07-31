@@ -19,6 +19,8 @@
 
 #include <DirectX/d3d9.h>
 
+#include <IconFontCppHeaders/IconsFontAwesome5-Solid.hpp>
+
 #include <vurtun/nuklear.h>
 #include <vurtun/demo/d3d9/nuklear_d3d9.h>
 

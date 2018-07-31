@@ -35,14 +35,14 @@ namespace PX
                     throw std::exception( "Failed to open debug.log" );
 
                 wofLogFile << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ),
-                                             L"[%m/%d/%Y %H:%M:%S]" ) << L" [OPN] " << L"Initialized Paladin Debug" << endl;
+                                             L"[%m/%d/%Y %H:%M:%S]" ) << L" [OPN] " << L"Initialized Paladin Debug" << newl;
 
                 *this << out_clr_t( FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED | !FOREGROUND_INTENSITY );
                 std::wcout << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), L"[%m/%d/%Y %H:%M:%S]" );
                 *this << out_clr_t( FOREGROUND_BLUE | !FOREGROUND_GREEN | !FOREGROUND_RED | FOREGROUND_INTENSITY );
                 std::wcout << L" [OPN] ";
                 *this << out_clr_t( FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED | !FOREGROUND_INTENSITY );
-                std::wcout << L"Initialized Paladin Debug" << endl;
+                std::wcout << L"Initialized Paladin Debug" << newl;
             }
 
             wofLogFile << rhs;

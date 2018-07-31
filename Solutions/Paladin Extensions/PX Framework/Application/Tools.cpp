@@ -1,4 +1,4 @@
-/// Utilities.cpp
+/// Tools.cpp
 
 #include "../PX Framework.hpp"
 
@@ -8,7 +8,7 @@ namespace PX
     {
 		std::wstring PX_API GetDirectory( unsigned uEscapeLevels )
 		{
-			auto wszBuffer = static_cast< wchar_t * >( malloc( MAX_PATH ) );
+			auto wszBuffer = static_cast< wchar_t* >( malloc( MAX_PATH ) );
             GetModuleFileNameW( nullptr, wszBuffer, MAX_PATH );
 			std::wstring wstrDirectory = wszBuffer;
 

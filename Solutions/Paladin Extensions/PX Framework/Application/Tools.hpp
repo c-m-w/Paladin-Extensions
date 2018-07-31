@@ -1,4 +1,4 @@
-/// Utilities.hpp
+/// Tools.hpp
 
 #pragma once
 
@@ -13,19 +13,18 @@ namespace PX
         typedef uintptr_t ptr_t;
 		typedef unsigned char byte_t;
 		
-		// INFO: Inheritable abstract class that only allows a single object of child class/structure to be instantiated
+		// INFO: Inheritable struct that manages a single instantiated object of child class/structure
 		// *_Child*: Child class/structure to be restricted
-		template< class _Child > PX_ABSTRACT_CLASS ISingleton
+		template< class _Child > struct SSingleton
 		{
-        public:
-			ISingleton( ) = default;
-			~ISingleton( ) = default;
+			SSingleton( ) = default;
+			~SSingleton( ) = default;
 
-			ISingleton( ISingleton&& ) = delete;
-			ISingleton( const ISingleton& ) = delete;
+			SSingleton( SSingleton&& ) = delete;
+			SSingleton( const SSingleton& ) = delete;
 
-			ISingleton& operator=( ISingleton&& ) = delete;
-			ISingleton& operator=( const ISingleton& ) = delete;
+			SSingleton& operator=( SSingleton&& ) = delete;
+			SSingleton& operator=( const SSingleton& ) = delete;
 
 			static _Child& PX_API Get( );
 		};

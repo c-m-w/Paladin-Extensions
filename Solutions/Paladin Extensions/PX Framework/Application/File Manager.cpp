@@ -4,7 +4,7 @@
 
 namespace PX
 {
-    PX_API CFileManager::CFileManager( )
+    CFileManager::CFileManager( )
     {
         std::ifstream ifGlobalConfiguration( Tools::GetDirectory( PX_DEPENDENCIES_ESCAPE ) + LR"(\Configurations\global.json)" );
         if ( ifGlobalConfiguration.is_open( ) )

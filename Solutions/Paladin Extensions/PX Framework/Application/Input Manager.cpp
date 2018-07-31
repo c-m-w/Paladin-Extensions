@@ -4,17 +4,20 @@
 
 namespace PX
 {
-    void PX_API IInputManager::ProcessKey( unsigned uKey, UINT uMessage )
+    void PX_API CInputManager::ProcessKey( unsigned uKey, UINT uMessage )
     {
         stateKeys[ uKey ] = uMessage % 2 ? DOWN : UP;
-        mmtKeyDownTime[ uKey ] = Tools::GetMoment( );
-        uLastKeyPressed = uKey;
+        if ( stateKeys[ uKey ] )
+        {
+            mmtKeyDownTime[ uKey ] = Tools::GetMoment( );
+            uLastKeyPressed = uKey;
+        }
 
         for ( auto fnCallback: vecfnKeyCallback[ uKey ] )
             fnCallback( uKey );
     }
 
-    void PX_API IInputManager::ProcessMouseMessage( UINT uMessage, WPARAM wParam, LPARAM lParam ) // lParam is unused
+    void PX_API CInputManager::ProcessMouseMessage( UINT uMessage, WPARAM wParam, LPARAM lParam ) // lParam is unused
     {
         unsigned uKey;
 
@@ -43,7 +46,7 @@ namespace PX
         ProcessKey( uKey, uMessage );
     }
 
-    void PX_API IInputManager::ProcessKeyboardMessage( UINT uMessage, WPARAM wParam, LPARAM lParam ) // lParam is unused
+    void PX_API CInputManager::ProcessKeyboardMessage( UINT uMessage, WPARAM wParam, LPARAM lParam ) // lParam is unused
     {
         switch ( uMessage )
         {
@@ -59,7 +62,7 @@ namespace PX
         ProcessKey( wParam, uMessage );
     }
 
-    void PX_API IInputManager::OnEvent( HWND hwWindowHandle, UINT uMessage, WPARAM wParam, LPARAM lParam ) // hwWindowHandle is unused
+    void PX_API CInputManager::OnEvent( HWND hwWindowHandle, UINT uMessage, WPARAM wParam, LPARAM lParam ) // hwWindowHandle is unused
     {
         switch ( uMessage )
         {
@@ -87,22 +90,22 @@ namespace PX
         }
     }
 
-    IInputManager::EKeyState PX_API IInputManager::GetKeyState( unsigned uKey )
+    CInputManager::EKeyState PX_API CInputManager::GetKeyState( unsigned uKey )
     {
         return stateKeys[ uKey ];
     }
 
-    unsigned PX_API IInputManager::GetLastPressedKey( )
+    unsigned PX_API CInputManager::GetLastPressedKey( )
     {
         return uLastKeyPressed;
     }
 
-    Tools::moment_t PX_API IInputManager::TimeSinceKeyPress( unsigned uKey )
+    Tools::moment_t PX_API CInputManager::TimeSinceKeyPress( unsigned uKey )
     {
         return Tools::GetMoment( ) - mmtKeyDownTime[ uKey ];
     }
 
-    void PX_API IInputManager::AddKeyCallback( unsigned uKey, std::function< void( int ) > fnCallback )
+    void PX_API CInputManager::AddKeyCallback( unsigned uKey, std::function< void( int ) > fnCallback )
     {
         vecfnKeyCallback[ uKey ].emplace_back( fnCallback );
     }

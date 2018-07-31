@@ -9,13 +9,13 @@ namespace PX
         // INFO: Asserts parameter to empty initialization version of parameter
         template< typename _t > bool PX_API Assert( _t );
 
-        PX_DEF endl = '\n';
+        PX_DEF newl = '\n';
 
         // INFO: Used to change console print color of debug output
         struct out_clr_t
         {
             WORD m_wDesiredAttributes;
-            explicit PX_API out_clr_t( const WORD );
+            explicit out_clr_t( const WORD );
         };
 
         // INFO: Managed debug output; used like std::cout

@@ -66,7 +66,7 @@ namespace PX
 
                 if ( HoveringNextWidget( ) )
                     Render::SetCursor( Render::CURSOR_IBEAM );
-                EditBox( Manager::pContext, NK_EDIT_FIELD | NK_EDIT_AUTO_SELECT, szBuffer, uMaxCharacters, IFilterImplementation< _t >::fnFilter );
+                EditTextBox( Manager::pContext, NK_EDIT_FIELD | NK_EDIT_AUTO_SELECT, szBuffer, uMaxCharacters, IFilterImplementation< _t >::fnFilter );
                 return IFilterImplementation< _t >::ret( szBuffer );
             }
         }

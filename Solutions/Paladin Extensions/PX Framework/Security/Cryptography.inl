@@ -14,16 +14,19 @@ namespace PX
             };
         };
 
-        template< > PX_ABSTRACT_STRUCT ICStringTraits< Tools::cstr_t >
+        template< typename > PX_ABSTRACT_STRUCT ICStringTraits;
+        template< std::size_t i > PX_ABSTRACT_STRUCT ICStringTraits< char const( & )[ i ] >
         {
             static PX_DEF int_trait_t = 1;
             typedef char char_trait_t;
         };
-        template< > PX_ABSTRACT_STRUCT ICStringTraits< Tools::wcstr_t >
+        template< std::size_t i > PX_ABSTRACT_STRUCT ICStringTraits< wchar_t const( & )[ i ] >
         {
             static PX_DEF int_trait_t = 2;
             typedef wchar_t char_trait_t;
         };
+
+        template< int... > PX_ABSTRACT_STRUCT IIndexList;
 
         template< typename, int > PX_ABSTRACT_STRUCT IAppend;
         template< int... iLeft, int iRight > struct IAppend< IIndexList< iLeft... >, iRight >
@@ -53,7 +56,7 @@ namespace PX
             }
 
         public:
-            explicit constexpr PX_API IXorString( const _char* const _String ): _chValue { EncryptCharacter( _String[ iIndex ], iIndex )... }
+            explicit constexpr IXorString( const _char* const _String ): _chValue { EncryptCharacter( _String[ iIndex ], iIndex )... }
             { }
 
             const _char* PX_API Decrypt( )

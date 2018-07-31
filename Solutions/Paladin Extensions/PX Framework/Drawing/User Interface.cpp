@@ -31,21 +31,13 @@ namespace PX
 
 			bool bFoundHoverTarget = false;
 
-			void PX_API InitializeNuklear( );
-
-			void PX_API Initialize( Tools::cstr_t szApplicationTitle )
-			{
-				szWindowTitle = szApplicationTitle;
-				InitializeNuklear( );
-			}
-
 			nk_font* PX_API AddFont( std::string strFontFileName, unsigned uFontSize, struct nk_font_config fcFontConfiguration, unsigned uFontAwesomeSize = 0 )
 			{
 				static auto strFontDirectory = Tools::string_cast< std::string >( Tools::GetDirectory( 3 ) + /*PX_XOR*/( LR"(\Resources\Fonts\)" ) );
 
 				nk_d3d9_font_stash_begin( &pAtlas );
-				auto pFont = nk_font_atlas_add_from_file( pAtlas, ( strFontDirectory + strFontFileName ).c_str( ), uFontSize, nullptr );
-				nk_font_atlas_add_from_file( pAtlas, ( strFontDirectory + /*PX_XOR*/( "FontAwesome.ttf" ) ).c_str( ), uFontAwesomeSize ? uFontAwesomeSize : uFontSize, &fcFontConfiguration );
+				auto pFont = nk_font_atlas_add_from_file( pAtlas, ( strFontDirectory + strFontFileName ).c_str( ), float( uFontSize ), nullptr );
+				nk_font_atlas_add_from_file( pAtlas, ( strFontDirectory + /*PX_XOR*/( "FontAwesome.ttf" ) ).c_str( ), uFontAwesomeSize ? float( uFontAwesomeSize ) : float( uFontSize ), &fcFontConfiguration );
 				nk_d3d9_font_stash_end( );
 				return pFont;
 			}
@@ -250,18 +242,24 @@ namespace PX
 				btnComboActive.touch_padding = nk_vec2( 5, 5 );
 			}
 
+            void PX_API Initialize( Tools::cstr_t szApplicationTitle )
+            {
+                szWindowTitle = szApplicationTitle;
+                InitializeNuklear( );
+            }
+
 			struct nk_vec2 PX_API CalculateTextBounds( Tools::cstr_t szText, unsigned uRowHeight /*= 30*/ )
 			{
 				static Tools::cstr_t szBuffer;
 				static struct nk_vec2 vecBuffer;
 				static int iBuffer;
 
-				return nk_text_calculate_text_bounds( pContext->style.font, szText, strlen( szText ), uRowHeight, &szBuffer, &vecBuffer, &iBuffer, 0 );
+				return nk_text_calculate_text_bounds( pContext->style.font, szText, strlen( szText ), float( uRowHeight ), &szBuffer, &vecBuffer, &iBuffer, 0 );
 			}
 
 			void PX_API SetFont( EFont fntDesiredFont )
 			{
-				static std::deque< nk_font * > dqFonts { pTahoma, pTahomaBold, pRoboto, pRobotoBold, pRobotoSmall, pRobotoBoldSmall, pEnvy };
+				static std::deque< nk_font* > dqFonts { pTahoma, pTahomaBold, pRoboto, pRobotoBold, pRobotoSmall, pRobotoBoldSmall, pEnvy };
 				dbg::Assert( fntDesiredFont >= 0 && fntDesiredFont < FONT_MAX );
 				return nk_style_set_font( pContext, &dqFonts[ fntDesiredFont ]->handle );
 			}
@@ -292,24 +290,24 @@ namespace PX
 				return nk_input_is_mouse_prev_hovering_rect( &pContext->input, nk_widget_bounds( pContext ) );
 	        }
 
-	        nk_flags PX_API EditBox( nk_context *ctx, nk_flags flags, char *buffer, int max, nk_plugin_filter filter )
+	        nk_flags PX_API EditTextBox( nk_context* ctx, nk_flags flags, char* buffer, int max, nk_plugin_filter filter )
 	        {
 				__asm call nk_edit_string_zero_terminated
 	        }
 
 	        void PX_API Header( Tools::cstr_t szTitle, Tools::cstr_t szApplicationTitle, std::function< void( PX_API )( ) > fnMinimizeCallback, std::function< void( PX_API )( ) > fnCloseCallback )
 			{
-				static const auto uWidth = pContext->current->bounds.w;
+				static const unsigned uWidth = unsigned( pContext->current->bounds.w );
 				auto pRenderBuffer = nk_window_get_canvas( pContext );
 				auto pInput = &pContext->input;
 				static const auto clrActive = nk_rgba( 155, 189, 247, 255 );
 				static auto clrClose = clrBlue, clrMinimize = clrBlue;
 
 				BeginRow( 30, 4, ROW_CUSTOM );
-				const auto iTitleWidth				= CalculateTextBounds( szTitle, 30 ).x,
-						   iApplicationTitleWidth	= CalculateTextBounds( szApplicationTitle, 30 ).x,
-						   iMinimizeButtonWidth		= CalculateTextBounds( ICON_FA_MINUS, 30 ).x,
-						   iCloseButtonWidth		= CalculateTextBounds( ICON_FA_TIMES, 30 ).x;
+				const int  iTitleWidth				= int( CalculateTextBounds( szTitle, 30 ).x ),
+						   iApplicationTitleWidth	= int( CalculateTextBounds( szApplicationTitle, 30 ).x ),
+						   iMinimizeButtonWidth		= int( CalculateTextBounds( ICON_FA_MINUS, 30 ).x ),
+						   iCloseButtonWidth		= int( CalculateTextBounds( ICON_FA_TIMES, 30 ).x );
 
 				PushCustomRow( 5, 5, iTitleWidth, 30 );
 				nk_label( pContext, szTitle, NK_TEXT_CENTERED );
@@ -328,7 +326,7 @@ namespace PX
 
 				const bool bHoveringMinimizeButton = nk_input_is_mouse_hovering_rect( pInput, vecMinimizeButtonBounds ),
 						   bHoveringCloseButton = nk_input_is_mouse_hovering_rect( pInput, vecCloseButtonBounds ),
-						   bClicking = PX_INPUT.GetKeyState( VK_LBUTTON ) == IInputManager::EKeyState::DOWN;
+						   bClicking = PX_INPUT.GetKeyState( VK_LBUTTON ) == CInputManager::EKeyState::DOWN;
 
 				static auto fnSetWidgetActive = [ & ]( )
 				{
@@ -369,15 +367,15 @@ namespace PX
 				{
 					[ ]( unsigned _uRowHeight, unsigned _uColumns )
 					{
-						return nk_layout_row_begin( pContext, NK_DYNAMIC, _uRowHeight, _uColumns );
+						return nk_layout_row_begin( pContext, NK_DYNAMIC, float( _uRowHeight ), _uColumns );
 					},
 					[ ]( unsigned _uRowHeight, unsigned _uColumns )
 					{
-						return nk_layout_row_begin( pContext, NK_STATIC, _uRowHeight, _uColumns );
+						return nk_layout_row_begin( pContext, NK_STATIC, float( _uRowHeight ), _uColumns );
 					},
 					[ ]( unsigned _uRowHeight, unsigned _uColumns )
 					{
-						return nk_layout_space_begin( pContext, NK_STATIC, _uRowHeight, _uColumns );
+						return nk_layout_space_begin( pContext, NK_STATIC, float( _uRowHeight ), _uColumns );
 					},
 				};
 
@@ -433,7 +431,7 @@ namespace PX
 			void PX_API PushCustomRow( unsigned uStartX, unsigned uStartY, unsigned uWidth, unsigned uHeight )
 			{
 				dbg::Assert( rowLastRowType == ROW_CUSTOM );
-				return nk_layout_space_push( pContext, nk_rect( uStartX, uStartY, uWidth, uHeight ) );
+				return nk_layout_space_push( pContext, nk_rect( float( uStartX ), float( uStartY ), float( uWidth ), float( uHeight ) ) );
 			}
         }
     }

@@ -4,7 +4,7 @@
 
 namespace PX
 {
-    class CFileManager: public Tools::ISingleton< CFileManager >
+    class CFileManager: public Tools::SSingleton< CFileManager >
     {
     public:
         // INFO: Contains global information generally used for program initialization
@@ -14,7 +14,7 @@ namespace PX
         // INFO: Name of current configuration
         Tools::wcstr_t wszCurrent = static_cast< wchar_t* >( malloc( 32 ) );
 
-        PX_API CFileManager( );
+        CFileManager( );
         // INFO: Saves json configurations
         void PX_API SaveInformation( );
         // INFO: Changes json configuration to reference desired configuration

@@ -47,7 +47,7 @@ namespace PX
 			PX_SDK int iCurrentRowUsedColumns, iCurrentRowMaxColumns;
 
 			bool PX_API HoveringNextWidget( );
-			nk_flags PX_API EditBox( struct nk_context *ctx, nk_flags flags, char *buffer, int max, nk_plugin_filter filter );
+			nk_flags PX_API EditTextBox( struct nk_context* ctx, nk_flags flags, char* buffer, int max, nk_plugin_filter filter );
 			// Creates a header for the window with a title, subtitle and two callbacks for the minimize and close buttons.
 			void PX_API Header( Tools::cstr_t, Tools::cstr_t, std::function< void( PX_API )( ) >, std::function< void( PX_API )( ) > );
         	bool PX_API PrimaryTab( Tools::cstr_t, bool );
@@ -70,9 +70,8 @@ namespace PX
 
 			template< typename _t > _t PX_API Inputbox( unsigned, char* );
 
-			template< typename _t > _t PX_API Slider( Tools::cstr_t, char*, _t, _t, _t, unsigned, unsigned, unsigned, unsigned, unsigned );
-			template< > float PX_API Slider< float >( Tools::cstr_t, char*, float, float, float, unsigned, unsigned, unsigned, unsigned, unsigned );
-			template< > int PX_API Slider< int >( Tools::cstr_t, char*, int, int, int, unsigned, unsigned, unsigned, unsigned, unsigned );
+            int PX_API Slider( Tools::cstr_t, char*, int, int, int, unsigned, unsigned, unsigned, unsigned, unsigned );
+			float PX_API Slider( Tools::cstr_t, char*, float, float, float, unsigned, unsigned, unsigned, unsigned, unsigned );
 
             void PX_API BeginRow( unsigned, unsigned, ERowType );
 
