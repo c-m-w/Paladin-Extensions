@@ -4,6 +4,9 @@
 
 namespace Paladin
 {
+	class CUserInterface;
+	inline CUserInterface *ui;
+
     class CUserInterface: public CRender, public CWindowInput
     {
 	    nk_context *pContext;
@@ -101,9 +104,32 @@ namespace Paladin
 			void ComboboxToggle( unsigned, unsigned, const char *, std::deque< const char * >, std::deque< bool > & );
 
 			template< typename _t > _t Inputbox( unsigned, char * );
-			template< > int Inputbox< int >( unsigned, char * );
-			template< > float Inputbox< float >( unsigned, char * );
-			template< > char *Inputbox< char * >( unsigned, char * );
+			template< > int Inputbox< int >( unsigned uMaxCharacters, char *szBuffer )
+			{
+				ui->SetFont( EFont::ENVY );
+				nk_edit_string_zero_terminated( ui->pContext, NK_EDIT_FIELD | NK_EDIT_AUTO_SELECT, szBuffer, uMaxCharacters + 1, nk_filter_decimal );
+				ui->HoverCheck( IBEAM );
+				ui->SetFont( EFont::ROBOTOSMALL );
+				return strlen( szBuffer ) ? std::stoi( szBuffer ) : 0;
+			}
+
+			template< > float Inputbox< float >( unsigned uMaxCharacters, char *szBuffer )
+			{
+				ui->SetFont( EFont::ENVY );
+				nk_edit_string_zero_terminated( ui->pContext, NK_EDIT_FIELD | NK_EDIT_AUTO_SELECT, szBuffer, uMaxCharacters, nk_filter_float );
+				ui->HoverCheck( IBEAM );
+				ui->SetFont( EFont::ROBOTOSMALL );
+				return strlen( szBuffer ) && strcmp( szBuffer, "." ) ? std::stof( szBuffer ) : 0.f;
+			}
+
+			template< > char *Inputbox< char * >( unsigned uMaxCharacters, char *szBuffer )
+			{
+				ui->SetFont( EFont::ENVY );
+				nk_edit_string_zero_terminated( ui->pContext, NK_EDIT_FIELD | NK_EDIT_AUTO_SELECT, szBuffer, uMaxCharacters, nk_filter_ascii );
+				ui->HoverCheck( IBEAM );
+				ui->SetFont( EFont::ROBOTOSMALL );
+				return szBuffer;
+			}
 
 			template< typename _t > _t Slider( const char *, char *, _t, _t, _t, unsigned, unsigned, unsigned, unsigned, unsigned );
 			template< > int Slider< int >( const char *, char *, int, int , int, unsigned, unsigned, unsigned, unsigned, unsigned );
@@ -124,7 +150,7 @@ namespace Paladin
 
     private:
         bool bShouldDrawInterface = true;
-    } inline *ui;
+    };
 }
 
 #define M_ITEM_WIDTH 15

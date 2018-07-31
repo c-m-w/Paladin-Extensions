@@ -32,7 +32,7 @@ namespace PX
             throw std::exception( ( std::string( "Failed to open " ) + Tools::string_cast< std::string >( wszCurrent ) + ".json for writing" ).c_str( ) );
     }
 
-    bool PX_API CFileManager::ChangeConfiguration( const wchar_t* wszConfig )
+    bool PX_API CFileManager::ChangeConfiguration( Tools::wcstr_t wszConfig )
     {
         if ( wszCurrent == wszConfig )
             return true;

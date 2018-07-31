@@ -8,13 +8,14 @@ namespace PX
     {
 		std::wstring PX_API GetDirectory( unsigned uEscapeLevels )
 		{
-            std::wstring wstr;
-            GetModuleFileNameW( nullptr, &wstr[ 0 ], MAX_PATH );
+			auto wszBuffer = static_cast< wchar_t * >( malloc( MAX_PATH ) );
+            GetModuleFileNameW( nullptr, wszBuffer, MAX_PATH );
+			std::wstring wstrDirectory = wszBuffer;
 
 			for ( auto i = 0u; i <= uEscapeLevels; i++ )
-                wstr = wstr.substr( 0, wstr.find_last_of( L'\\' ) );
+				wstrDirectory = wstrDirectory.substr( 0, wstrDirectory.find_last_of( L'\\' ) );
 
-			return wstr;
+			return wstrDirectory;
 		}
     }
 }

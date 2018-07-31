@@ -67,11 +67,11 @@ namespace PX
 
         // INFO: Interface for C-Style string casting
         template< typename > PX_ABSTRACT_STRUCT IStringTypeOfCharacter;
-        template< > PX_ABSTRACT_STRUCT IStringTypeOfCharacter< const char* >
+        template< > PX_ABSTRACT_STRUCT IStringTypeOfCharacter< cstr_t >
         {
             typedef std::string wrap_t;
         };
-        template< > PX_ABSTRACT_STRUCT IStringTypeOfCharacter< const wchar_t* >
+        template< > PX_ABSTRACT_STRUCT IStringTypeOfCharacter< wcstr_t >
         {
             typedef std::wstring wrap_t;
         };

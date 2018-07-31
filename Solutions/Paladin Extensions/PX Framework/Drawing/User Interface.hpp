@@ -1,5 +1,5 @@
 /// User Interface.hpp
-// TODO: document @Cole
+
 #pragma once
 
 namespace PX
@@ -8,15 +8,23 @@ namespace PX
     {
         namespace Manager
         {
-            PX_SDK const char* szWindowTitle = "Paladin Extensions";
-            PX_SDK const char* szApplicationTitle = static_cast< char* >( malloc( 32 ) );
+			PX_SDK nk_context* pContext;
 
-            PX_SDK nk_context* pContext;
-            PX_SDK nk_font_atlas* pAtlas;
-            PX_SDK struct nk_font *pTahoma, *pTahomaBold, *pRoboto, *pRobotoBold, *pRobotoSmall, *pRobotoBoldSmall;
-            PX_SDK struct nk_rect recComboboxWindowBounds;
+			enum EFont
+			{
+				FONT_TAHOMA,
+				FONT_TAHOMABOLD,
+				FONT_ROBOTO,
+				FONT_ROBOTOBOLD,
+				FONT_ROBOTOSMALL,
+				FONT_ROBOTOBOLDSMALL,
+				FONT_ENVY,
+				FONT_MAX
+			};
 
-            PX_SDK Render::ECursor curCurrent;
+			void PX_API Initialize( Tools::cstr_t );
+			void PX_API OnRelease( );
+			void PX_API Resize( unsigned, unsigned );
         }
 
         namespace Widgets
@@ -27,53 +35,51 @@ namespace PX
                 CENTER,
                 RIGHT
             };
-            enum class ERowType
-            {
-                DYNAMIC,
-                STATIC,
-                CUSTOM
-            } PX_SDK rowLastRowType;
 
-            PX_SDK struct nk_rect recLastWidgetLocation;
-            PX_SDK const char *szColorPickerSubject;
-            PX_SDK BYTE* pActiveEditColor = nullptr;
+			enum ERowType
+			{
+				ROW_DYNAMIC,
+				ROW_STATIC,
+				ROW_CUSTOM,
+				ROW_MAX
+			};
+
 			PX_SDK int iCurrentRowUsedColumns, iCurrentRowMaxColumns;
 
-            bool PX_API Header( const char*, const char*, unsigned );
-            bool PX_API PrimaryTab( const char*, bool );
-            bool PX_API SecondaryTab( const char*, bool );
+			bool PX_API HoveringNextWidget( );
+			nk_flags PX_API EditBox( struct nk_context *ctx, nk_flags flags, char *buffer, int max, nk_plugin_filter filter );
+			// Creates a header for the window with a title, subtitle and two callbacks for the minimize and close buttons.
+			void PX_API Header( Tools::cstr_t, Tools::cstr_t, std::function< void( PX_API )( ) >, std::function< void( PX_API )( ) > );
+        	bool PX_API PrimaryTab( Tools::cstr_t, bool );
+            bool PX_API SecondaryTab( Tools::cstr_t, bool );
             void PX_API Separator( unsigned char, unsigned char, unsigned char, unsigned, unsigned = 3, bool = false );
-            bool PX_API Button( EPosition, const char*, bool );
-            void PX_API Checkbox( const char*, unsigned, bool* );
+            bool PX_API Button( EPosition, Tools::cstr_t, bool );
+            void PX_API Checkbox( Tools::cstr_t, unsigned, bool* );
 
-            int PX_API Tabs( unsigned, unsigned, unsigned, unsigned, std::deque< const char* >, unsigned );
-            int PX_API Subtabs( unsigned, unsigned, unsigned, unsigned, std::deque< const char* >, unsigned );
+            int PX_API Tabs( unsigned, unsigned, unsigned, unsigned, std::deque< Tools::cstr_t >, unsigned );
+            int PX_API Subtabs( unsigned, unsigned, unsigned, unsigned, std::deque< Tools::cstr_t >, unsigned );
 
-            void PX_API BeginGroupbox( unsigned, unsigned, unsigned, unsigned, const char*, unsigned );
+            void PX_API BeginGroupbox( unsigned, unsigned, unsigned, unsigned, Tools::cstr_t, unsigned );
             void PX_API EndGroupbox( );
 
             void PX_API ColorPicker( );
-            void PX_API ColorButton( const char*, BYTE* );
+            void PX_API ColorButton( Tools::cstr_t, Tools::byte_t* );
 
-            int PX_API Combobox( unsigned, unsigned, const char*, std::deque< const char* >, unsigned );
-            void PX_API ComboboxMulti( unsigned, unsigned, const char *, std::deque< const char* >, std::deque< bool >& );
+            int PX_API Combobox( unsigned, unsigned, Tools::cstr_t, std::deque< Tools::cstr_t >, unsigned );
+            void PX_API ComboboxMulti( unsigned, unsigned, Tools::cstr_t, std::deque< Tools::cstr_t >, std::deque< bool >& );
 
-			template< typename _t > _t PX_API Inputbox( unsigned, char * );
-			template< > int PX_API Inputbox< int >( unsigned, char * );
-			template< > float PX_API Inputbox< float >( unsigned, char * );
-			template< > char *PX_API Inputbox< char * >( unsigned, char * );
+			template< typename _t > _t PX_API Inputbox( unsigned, char* );
 
-			template< typename _t > _t PX_API Slider( const char *, char *, _t, _t, _t, unsigned, unsigned, unsigned, unsigned, unsigned );
-			template< > float PX_API Slider< float >( const char *, char *, float, float, float, unsigned, unsigned, unsigned, unsigned, unsigned );
-			template< > int PX_API Slider< int >( const char *, char *, int, int, int, unsigned, unsigned, unsigned, unsigned, unsigned );
+			template< typename _t > _t PX_API Slider( Tools::cstr_t, char*, _t, _t, _t, unsigned, unsigned, unsigned, unsigned, unsigned );
+			template< > float PX_API Slider< float >( Tools::cstr_t, char*, float, float, float, unsigned, unsigned, unsigned, unsigned, unsigned );
+			template< > int PX_API Slider< int >( Tools::cstr_t, char*, int, int, int, unsigned, unsigned, unsigned, unsigned, unsigned );
 
-            template< ERowType > void PX_API NewRow( unsigned, );
+            void PX_API BeginRow( unsigned, unsigned, ERowType );
 
             void PX_API SetRowWidth( float );
             void PX_API Spacing( unsigned = 1 );
             void PX_API VerticalSpacing( unsigned = 5 );
             void PX_API PushCustomRow( unsigned, unsigned, unsigned, unsigned );
-            void PX_API EndRow( );
         }
     }
 }

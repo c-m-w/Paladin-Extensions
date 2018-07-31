@@ -14,12 +14,12 @@ namespace PX
             };
         };
 
-        template< > PX_ABSTRACT_STRUCT ICStringTraits< const char* >
+        template< > PX_ABSTRACT_STRUCT ICStringTraits< Tools::cstr_t >
         {
             static PX_DEF int_trait_t = 1;
             typedef char char_trait_t;
         };
-        template< > PX_ABSTRACT_STRUCT ICStringTraits< const wchar_t* >
+        template< > PX_ABSTRACT_STRUCT ICStringTraits< Tools::wcstr_t >
         {
             static PX_DEF int_trait_t = 2;
             typedef wchar_t char_trait_t;

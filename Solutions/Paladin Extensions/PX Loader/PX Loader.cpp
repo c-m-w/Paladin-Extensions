@@ -32,6 +32,12 @@ void Uncalled( )
 
 void OnLaunch( )
 {
-    TestDebug( );
-    TestInput( );
+	unsigned dimensions[ 2 ] { 500, 500 };
+	Render::InitializeRenderTarget( dimensions, L"Paladin" );
+	UI::Manager::Initialize( "Men" );
+	while( PX_INPUT.GetKeyState( VK_DELETE ) != IInputManager::EKeyState::DOWN )
+	{
+		Render::BeginRender( );
+		Render::EndRender( );
+	}
 }

@@ -8,10 +8,10 @@ namespace PX
 	{
 		// INFO: Typedefs for long datatypes
 		
-        typedef const char* px_cstr_t;
-        typedef const wchar_t* px_wcstr_t;
-        typedef uintptr_t px_ptr_t;
-		typedef unsigned char px_byte_t;
+        typedef const char* cstr_t;
+        typedef const wchar_t* wcstr_t;
+        typedef uintptr_t ptr_t;
+		typedef unsigned char byte_t;
 		
 		// INFO: Inheritable abstract class that only allows a single object of child class/structure to be instantiated
 		// *_Child*: Child class/structure to be restricted

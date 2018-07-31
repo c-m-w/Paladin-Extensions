@@ -8,13 +8,13 @@ namespace PX
     {
         std::string GenerateHash( const std::string& strPlainText )
         {
-            BYTE bOutput[ CryptoPP::SHA3_256::DIGESTSIZE ];
-            CryptoPP::SHA3_256( ).CalculateDigest( bOutput, reinterpret_cast< byte* >( const_cast< char* >( strPlainText.c_str( ) ) ), strPlainText.length( ) );
+            Tools::byte_t bOutput[ CryptoPP::SHA3_256::DIGESTSIZE ];
+            CryptoPP::SHA3_256( ).CalculateDigest( bOutput, reinterpret_cast< Tools::byte_t* >( const_cast< char* >( strPlainText.c_str( ) ) ), strPlainText.length( ) );
 
             CryptoPP::HexEncoder hHash;
             std::string strOutput;
             hHash.Attach( new CryptoPP::StringSink( strOutput ) );
-            hHash.Put( bOutput, sizeof( BYTE[ CryptoPP::SHA3_256::DIGESTSIZE ] ) );
+            hHash.Put( bOutput, sizeof( Tools::byte_t[ CryptoPP::SHA3_256::DIGESTSIZE ] ) );
             hHash.MessageEnd( );
             return strOutput;
         }
@@ -23,8 +23,8 @@ namespace PX
         {
             auto strInitializationVector = strKey.substr( 0, 16 );
             std::string strOutput;
-            CryptoPP::CBC_Mode< CryptoPP::AES >::Encryption encEncryption( reinterpret_cast< byte* >( const_cast< char* >( Tools::string_cast< std::string >( strKey ).c_str( ) ) ),
-                                                                           strKey.length( ), reinterpret_cast< byte* >( const_cast< char* >( strInitializationVector.c_str( ) ) ) );
+            CryptoPP::CBC_Mode< CryptoPP::AES >::Encryption encEncryption( reinterpret_cast< Tools::byte_t* >( const_cast< char* >( Tools::string_cast< std::string >( strKey ).c_str( ) ) ),
+                                                                           strKey.length( ), reinterpret_cast< Tools::byte_t* >( const_cast< char* >( strInitializationVector.c_str( ) ) ) );
             CryptoPP::StringSource( Tools::string_cast< std::string >( strPlainText ), true, new
                                     CryptoPP::StreamTransformationFilter( encEncryption, new CryptoPP::Base64Encoder( new CryptoPP::StringSink( strOutput ), false ) ) );
             strOutput.replace( strOutput.begin( ), strOutput.end( ), '+', '-' );

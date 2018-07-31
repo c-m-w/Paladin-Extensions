@@ -28,10 +28,10 @@ namespace PX
         template< typename _t > out_t& PX_API out_t::operator<<( const _t& rhs )
         {
 #if defined _DEBUG 
-            if ( !wofLogFile.is_open( ) )
+            if ( !wofLogFile.good( ) )
             {
                 wofLogFile.open( "C:/debug.log", std::ofstream::trunc );
-                if ( !wofLogFile.is_open( ) )
+                if ( !wofLogFile.good( ) )
                     throw std::exception( "Failed to open debug.log" );
 
                 wofLogFile << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ),
