@@ -1,18 +1,16 @@
 # Paladin Extensions
-- Extension software developed by Jeremy, Cole, Mike, John, and Hunter
+- Extension software developed by Jeremy, Cole, and John.
 
 ## TODO
 ##### Jeremy
 - Website
    - Make installer plugin msi for cheat (fonts and everything)
-   - Generate automatic backups
-   - php auth file (creates user stuff for xf_login table)
-   - Entrance page on visiting
+   - Finish Website php
 
 ## Development Objectives
-2. Jeremy, Mike & John finish copy protection functionality ( Polymorphic junk code, Heartbeat, Byte-patch consideration, etc.)
-3. Mike creates manual map injector & driver
-4. Jeremy creates unique download method & stream DLL/cheat securely & protected (after compiled per person with junk code)
-5. Jeremy, Mike, Cole, & Bean create SDK/base for CSGO cheat (config, pattern scanning, etc.)
-6. Jeremy, Cole, Hunter, Bean, and John work on features. (Velocity-based backtrack, anything p.)
-7. Jeremy & John work on security (VAC, Untrusted, and Anticheats)
+1. finish manager/framework
+2. Heartbeat, Byte-patch consideration, etc.
+3. manual map injector & driver
+4. unique download method & stream DLL/cheat securely & protected (after compiled per person with junk code)
+5. pattern scanning, work on features. (Velocity-based backtrack, anything p.)
+7. work on security (VAC, Untrusted, and Anticheats)
