@@ -5,7 +5,9 @@ VisualStudioVersion = 15.0.27703.2026
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PX Framework", "PX Framework\PX Framework.vcxproj", "{808D007E-ABFB-4C41-B85F-601066ECE0FB}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PX Loader", "PX Loader\PX Loader.vcxproj", "{B01E94BB-1B00-49CC-BD2A-044F750552A5}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PX Manager", "PX Manager\PX Manager.vcxproj", "{B01E94BB-1B00-49CC-BD2A-044F750552A5}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "PX Setup", "PX Setup\PX Setup.vdproj", "{FBE3E7C8-3E38-4563-A31A-4CEBE7F74552}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,6 +33,10 @@ Global
 		{B01E94BB-1B00-49CC-BD2A-044F750552A5}.Release|x64.Build.0 = Release|x64
 		{B01E94BB-1B00-49CC-BD2A-044F750552A5}.Release|x86.ActiveCfg = Release|Win32
 		{B01E94BB-1B00-49CC-BD2A-044F750552A5}.Release|x86.Build.0 = Release|Win32
+		{FBE3E7C8-3E38-4563-A31A-4CEBE7F74552}.Debug|x64.ActiveCfg = Debug
+		{FBE3E7C8-3E38-4563-A31A-4CEBE7F74552}.Debug|x86.ActiveCfg = Debug
+		{FBE3E7C8-3E38-4563-A31A-4CEBE7F74552}.Release|x64.ActiveCfg = Release
+		{FBE3E7C8-3E38-4563-A31A-4CEBE7F74552}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

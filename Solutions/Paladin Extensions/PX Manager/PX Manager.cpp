@@ -4,7 +4,7 @@
 
 using namespace PX;
 
-PX_SDK auto g_bShutdown = false;
+PX_SDK auto bShutdown = false;
 
 void TestDebug( )
 {
@@ -36,7 +36,7 @@ void Minimize( )
 
 void Exit( )
 {
-	g_bShutdown = true;
+    bShutdown = true;
 }
 
 void PX_API UI::Manager::SetLayout( )
@@ -50,6 +50,6 @@ void OnLaunch( )
 	unsigned uDimensions[ 2 ] { 500, 500 };
 	Render::InitializeRenderTarget( uDimensions, hinstWin, PX_XOR( L"Paladin Extensions" ) );
 	UI::Manager::Initialize( PX_XOR( "Manager" ) );
-	while ( UI::Manager::Render( ) && !g_bShutdown )
+	while ( UI::Manager::Render( ) && !bShutdown )
 		Tools::Wait( 1 );
 }

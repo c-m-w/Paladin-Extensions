@@ -301,7 +301,7 @@ namespace PX
 							if ( !pntOldCursorPosRelative.x || !pntOldCursorPosRelative.y ) pntOldCursorPosRelative = pntCursorPosRelative;
 
 							SetWindowPos( Render::hwWindowHandle, nullptr, ( recWindowPos.left - pntOldCursorPosRelative.x ) + pntCursorPosRelative.x,
-								( recWindowPos.top - pntOldCursorPosRelative.y ) + pntCursorPosRelative.y, Render::uWindowWidth, Render::uWindowHeight, NULL );
+								( recWindowPos.top - pntOldCursorPosRelative.y ) + pntCursorPosRelative.y, Render::uWindowWidth, Render::uWindowHeight, 0 );
 							UpdateWindow( Render::hwWindowHandle );
 						}
 					}

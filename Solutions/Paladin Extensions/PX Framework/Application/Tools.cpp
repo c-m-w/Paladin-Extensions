@@ -20,10 +20,10 @@ namespace PX
 
 		unsigned* GetScreenDimensions( )
 		{
-			unsigned uScreenDimensions[ ] 
+			unsigned uScreenDimensions[ ]
 			{ 
-				GetSystemMetrics( SM_CXSCREEN ),
-				GetSystemMetrics( SM_CYSCREEN )
+				unsigned( GetSystemMetrics( SM_CXSCREEN ) ),
+				unsigned( GetSystemMetrics( SM_CYSCREEN ) )
 			};
 			return uScreenDimensions;
 		}

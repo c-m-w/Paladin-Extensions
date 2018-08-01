@@ -22,7 +22,7 @@
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{B01E94BB-1B00-49CC-BD2A-044F750552A5}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>PXLoader</RootNamespace>
+    <RootNamespace>PXManager</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
     <ProjectName>PX Manager</ProjectName>
   </PropertyGroup>

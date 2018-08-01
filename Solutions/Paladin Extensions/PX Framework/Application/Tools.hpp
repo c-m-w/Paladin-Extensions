@@ -44,7 +44,7 @@ namespace PX
 		std::wstring PX_API GetDirectory( unsigned = 0 );
 
 		// Get main screen dimensions
-		unsigned *GetScreenDimensions( );
+		unsigned* GetScreenDimensions( );
 
 		// INFO: Casts strings\n
 		// INFO: Supports any combination of conversion from "std::string" and "std::wstring" to "std::string" and "std::wstring"
