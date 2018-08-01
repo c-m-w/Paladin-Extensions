@@ -44,7 +44,7 @@ namespace PX
 				if ( !bFilesExist )
 					return false;
 
-				const auto fnGetFileData = [ ]( Tools::wcstr_t szPathToFile )
+				const auto fnGetFileData = [ ]( Types::wcstr_t szPathToFile )
 				{
 					auto pResource = _wfopen( szPathToFile, L"r" );
 					dbg::Assert( pResource );
@@ -131,7 +131,7 @@ namespace PX
 				throw std::exception( ( std::string( PX_XOR( "Failed to open " ) ) + Tools::string_cast< std::string >( wszCurrent ) + PX_XOR( ".pxcfg for writing" ) ).c_str( ) );
 		}
 
-		bool PX_API CConfig::ChangeConfiguration( Tools::wcstr_t wszConfig )
+		bool PX_API CConfig::ChangeConfiguration( Types::wcstr_t wszConfig )
 		{
 			if ( wszCurrent == wszConfig )
 				return true;

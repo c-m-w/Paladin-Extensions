@@ -13,7 +13,7 @@ namespace PX
 			using Render::pDevice;
 			using Render::dxParameters;
 
-			Tools::cstr_t	szWindowTitle = PX_XOR( "Paladin Extensions" );
+			Types::cstr_t	szWindowTitle = PX_XOR( "Paladin Extensions" );
 			auto			szApplicationTitle = static_cast< char* >( malloc( 32 ) );
 
 			nk_font_atlas* pAtlas;
@@ -615,11 +615,11 @@ namespace PX
 
 			int PX_SDK Subtabs( unsigned uButtonHeight, unsigned uButtonWidth, unsigned uStartX, unsigned uStartY, std::deque< Types::cstr_t > dqButtons, unsigned uActiveButton )
 			{
-				nk_layout_space_begin( pContext, NK_STATIC, uButtonHeight * dqButtons.size( ), dqButtons.size( ) );
+				nk_layout_space_begin( pContext, NK_STATIC, float( uButtonHeight * dqButtons.size( ) ), dqButtons.size( ) );
 				auto iButtonPressed = -1;
 				for ( unsigned i { }; i < dqButtons.size( ); i++ )
 				{
-					nk_layout_space_push( pContext, nk_rect( uStartX, uStartY + ( uButtonHeight * i ), uButtonWidth, uButtonHeight ) );
+					nk_layout_space_push( pContext, nk_rect( float( uStartX ), float( uStartY + ( uButtonHeight * i ) ), float( uButtonWidth ), float( uButtonHeight ) ) );
 					if ( SecondaryTab( dqButtons.at( i ), i == uActiveButton ) )
 						iButtonPressed = i;
 				}
@@ -630,9 +630,9 @@ namespace PX
 			void PX_API BeginGroupbox( unsigned uStartX, unsigned uStartY, unsigned uBoxWidth, unsigned uBoxHeight, Types::cstr_t szTitle )
 			{
 				SetFont( FONT_TAHOMA );
-				nk_layout_space_begin( pContext, NK_STATIC, uBoxHeight, 1 );
+				nk_layout_space_begin( pContext, NK_STATIC, float( uBoxHeight ), 1 );
 				const auto rcBoundaries = nk_widget_bounds( pContext );
-				nk_layout_space_push( pContext, nk_rect( uStartX - rcBoundaries.x, uStartY - rcBoundaries.y, uBoxWidth, uBoxHeight ) );
+				nk_layout_space_push( pContext, nk_rect( float( uStartX - rcBoundaries.x ), float( uStartY - rcBoundaries.y ), float( uBoxWidth ), float( uBoxHeight ) ) );
 				auto rcNewBoundaries = nk_widget_bounds( pContext );
 				nk_group_begin( pContext, szTitle, NK_WINDOW_NO_SCROLLBAR );
 
@@ -642,13 +642,13 @@ namespace PX
 				rcNewBoundaries.w -= 8;
 				rcNewBoundaries.h -= 28;
 				// Top left, top right, bottom right, bottom left
-				const auto uTextWidth = CalculateTextBounds( szTitle, 30 ).x;
-				nk_fill_rect_multi_color( pOutput, nk_rect( rcNewBoundaries.x + 1.8, rcNewBoundaries.y + 1, rcNewBoundaries.w - 2, rcNewBoundaries.h - 2 ), clrDarkBackground, clrDarkBackground, clrBackground, clrBackground );
+				const unsigned uTextWidth = CalculateTextBounds( szTitle, 30 ).x;
+				nk_fill_rect_multi_color( pOutput, nk_rect( rcNewBoundaries.x + 1.8f, rcNewBoundaries.y + 1.f, rcNewBoundaries.w - 2.f, rcNewBoundaries.h - 2.f ), clrDarkBackground, clrDarkBackground, clrBackground, clrBackground );
 				nk_stroke_rect( pOutput, rcNewBoundaries, 4.f, 1.f, clrBorder );
 				nk_stroke_line( pOutput, rcNewBoundaries.x + 7, rcNewBoundaries.y, rcNewBoundaries.x + 3 + uTextWidth, rcNewBoundaries.y, 3, clrDarkBackground );
 				BeginRow( 16, 1, ROW_CUSTOM );
 				auto rcText = nk_widget_bounds( pContext );
-				PushCustomRow( rcNewBoundaries.x + 8 - rcText.x, rcNewBoundaries.y - rcText.y - 10, uTextWidth, 16 );
+				PushCustomRow( unsigned( rcNewBoundaries.x  + 8 - rcText.x ), unsigned( rcNewBoundaries.y  - rcText.y - 10 ), uTextWidth, 16 );
 				nk_label( pContext, szTitle, NK_TEXT_LEFT );
 				VerticalSpacing( 5 );
 
@@ -681,7 +681,7 @@ namespace PX
 				if ( !PX_INPUT.GetKeyState( VK_LBUTTON ) )
 					bStoppedClicking = true;
 				if ( bNewColor && pActiveEditColor )
-					clrChosenColor = { ( pActiveEditColor->flr, pActiveEditColor->flg, pActiveEditColor->flb, pActiveEditColor->fla ) };
+					clrChosenColor = { ( pActiveEditColor->rfl, pActiveEditColor->gfl, pActiveEditColor->bfl, pActiveEditColor->afl ) };
 				bNewColor = false;
 
 				const auto pOutput = nk_window_get_canvas( pContext );
@@ -705,8 +705,8 @@ namespace PX
 					nk_label( pContext, ( "B: " + std::to_string( int( clrChosenColor.b * 255.f ) ) ).c_str( ), NK_TEXT_CENTERED );
 					nk_label( pContext, ( "A: " + std::to_string( int( clrChosenColor.a * 255.f ) ) ).c_str( ), NK_TEXT_CENTERED );
 					nk_layout_row_dynamic( pContext, 10, 1 );
-					nk_button_color( pContext, nk_rgba( clrChosenColor.r * 255.f, clrChosenColor.g * 255.f, clrChosenColor.b * 255.f, clrChosenColor.a * 255.f ) );
-					nk_layout_row_static( pContext, 25, vecColorPickerSize.x / 2 - 10, 2 );
+					nk_button_color( pContext, nk_rgba( int( clrChosenColor.r * 255.f ), int( clrChosenColor.g * 255.f ), int( clrChosenColor.b * 255.f ), int( clrChosenColor.a * 255.f ) ) );
+					nk_layout_row_static( pContext, 25, int( vecColorPickerSize.x / 2 - 10 ), 2 );
 					if ( Button( EPosition::LEFT, "CANCEL", false ) )
 					{
 						bShouldClose = true;

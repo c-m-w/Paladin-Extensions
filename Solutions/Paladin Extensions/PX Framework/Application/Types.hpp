@@ -35,6 +35,7 @@ namespace PX
 		private:
 			std::array< byte_t, COLOR_MAX > bColors { };
 
+		public:
 			byte_t GetRed( );
 			byte_t GetGreen( );
 			byte_t GetBlue( );
@@ -55,14 +56,14 @@ namespace PX
 			void PutBlueFloat( float flValue );
 			void PutAlphaFloat( float flValue );
 
-			byte_t Luminance( );
+			byte_t CalculateLuminance( );
+			void SetLuminance( ) = delete;
 
-		public:
 			color_t( ) = default;
 			color_t( byte_t* bNewColors );
 			color_t( byte_t bRed, byte_t bGreen, byte_t bBlue, byte_t bAlpha );
 			color_t( byte_t bRed, byte_t bGreen, byte_t bBlue );
-			color_t( float* flNewColors );
+			color_t( const float* flNewColors );
 			color_t( float flRed, float flGreen, float flBlue, float flAlpha );
 			color_t( float flRed, float flGreen, float flBlue );
 
@@ -70,17 +71,17 @@ namespace PX
 			bool operator==( const color_t& rhs );
 			bool operator!=( const color_t& rhs );
 
-			__declspec( property( get = GetAlpha ) ) byte_t luminance;
+			__declspec( property( get = CalculateLuminance, put = SetLuminance ) ) byte_t Luminance;
 
 			__declspec( property( get = GetRed, put = PutRed ) ) byte_t r;
 			__declspec( property( get = GetGreen, put = PutGreen ) ) byte_t g;
 			__declspec( property( get = GetBlue, put = PutBlue ) ) byte_t b;
 			__declspec( property( get = GetAlpha, put = PutAlpha ) ) byte_t a;
 
-			__declspec( property( get = GetRedFloat, put = PutRedFloat ) ) float flr;
-			__declspec( property( get = GetGreenFloat, put = PutGreenFloat ) ) float flg;
-			__declspec( property( get = GetBlueFloat, put = PutBlueFloat ) ) float flb;
-			__declspec( property( get = GetAlphaFloat, put = PutAlphaFloat ) ) float fla;
+			__declspec( property( get = GetRedFloat, put = PutRedFloat ) ) float rfl;
+			__declspec( property( get = GetGreenFloat, put = PutGreenFloat ) ) float gfl;
+			__declspec( property( get = GetBlueFloat, put = PutBlueFloat ) ) float bfl;
+			__declspec( property( get = GetAlphaFloat, put = PutAlphaFloat ) ) float afl;
 		};
 	}
 }

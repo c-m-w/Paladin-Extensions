@@ -10,14 +10,14 @@ namespace PX
 		{
 			dbg::Assert( !strSubject.empty( ) );
 			_t _Coder;
-			_Coder.Put( reinterpret_cast< Tools::byte_t* >( const_cast< char* >( strSubject.c_str( ) ) ), strSubject.size( ) );
+			_Coder.Put( reinterpret_cast< Types::byte_t* >( const_cast< char* >( strSubject.c_str( ) ) ), strSubject.size( ) );
 			_Coder.MessageEnd( );
 
 			const auto uSize = unsigned( _Coder.MaxRetrievable( ) );
 			dbg::Assert( uSize > 0 );
 			std::string strProcessedText;
 			strProcessedText.resize( uSize );
-			_Coder.Get( reinterpret_cast< Tools::byte_t* >( &strProcessedText[ 0 ] ), uSize );
+			_Coder.Get( reinterpret_cast< Types::byte_t* >( &strProcessedText[ 0 ] ), uSize );
 			return strProcessedText;
 		}
 
@@ -25,8 +25,8 @@ namespace PX
 		{
 			dbg::Assert( !strEncryptionKey.empty( ) && !strInitializationVector.empty( ) );
 			std::string strOutput;
-			_t _Cryption( reinterpret_cast< Tools::byte_t* >( const_cast< char* >( Tools::string_cast< std::string >( strEncryptionKey ).c_str( ) ) ),
-						  strEncryptionKey.length( ), reinterpret_cast< Tools::byte_t* >( const_cast< char* >( strInitializationVector.c_str( ) ) ) );
+			_t _Cryption( reinterpret_cast< Types::byte_t* >( const_cast< char* >( Tools::string_cast< std::string >( strEncryptionKey ).c_str( ) ) ),
+						  strEncryptionKey.length( ), reinterpret_cast< Types::byte_t* >( const_cast< char* >( strInitializationVector.c_str( ) ) ) );
 			CryptoPP::StringSource( Tools::string_cast< std::string >( strPlainText ), true, new
 									CryptoPP::StreamTransformationFilter( _Cryption, new CryptoPP::StringSink( strOutput ) ) );
 			return strOutput;

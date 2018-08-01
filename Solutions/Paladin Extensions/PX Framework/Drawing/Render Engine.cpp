@@ -138,7 +138,7 @@ namespace PX
 			}
 		}
 
-		void PX_API InitializeRenderTarget( unsigned* pDimensions, Tools::wcstr_t szNewWindowTitle )
+		void PX_API InitializeRenderTarget( unsigned* pDimensions, Types::wcstr_t szNewWindowTitle )
 		{
 			wszWindowTitle = szNewWindowTitle;
 			SetWindowSize( pDimensions[ 0 ], pDimensions[ 1 ] );

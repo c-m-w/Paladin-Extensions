@@ -86,7 +86,7 @@ namespace PX
 			bColors[ COLOR_ALPHA ] = byte_t( flValue <= 1.f ? flValue * 255u : flValue );
 		}
 
-		byte_t color_t::Luminance( )
+		byte_t color_t::CalculateLuminance( )
 		{
 			return static_cast< byte_t >( 0.2126f * float( bColors[ COLOR_RED ] ) + 0.7152f * float( bColors[ COLOR_GREEN ] ) + 0.0722f * float( bColors[ COLOR_BLUE ] ) );
 		}
@@ -112,27 +112,57 @@ namespace PX
 			bColors[ COLOR_ALPHA ] = UCHAR_MAX;
 		}
 
-		color_t::color_t( float* flNewColors )
+		color_t::color_t( const float* flNewColors )
 		{
-			bColors[ COLOR_RED ] = flNewColors[ COLOR_RED ];
-			bColors[ COLOR_GREEN ] = flNewColors[ COLOR_GREEN ];
-			bColors[ COLOR_BLUE ] = flNewColors[ COLOR_BLUE ];
-			bColors[ COLOR_ALPHA ] = flNewColors[ COLOR_ALPHA ];
+			const bool bContainsAlphaData = sizeof flNewColors == 16;
+			if ( flNewColors[ COLOR_RED ] > 1.f || flNewColors[ COLOR_GREEN ] > 1.f || flNewColors[ COLOR_BLUE ] > 1.f || flNewColors ? flNewColors[ COLOR_ALPHA ] > 1.f : false )
+			{
+				bColors[ COLOR_RED ] = byte_t( flNewColors[ COLOR_RED ] );
+				bColors[ COLOR_GREEN ] = byte_t( flNewColors[ COLOR_GREEN ] );
+				bColors[ COLOR_BLUE ] = byte_t( flNewColors[ COLOR_BLUE ]  );
+				bColors[ COLOR_ALPHA ] = bContainsAlphaData ? byte_t( flNewColors[ COLOR_ALPHA ] ) : UCHAR_MAX;
+			}
+			else
+			{
+				bColors[ COLOR_RED ] = byte_t( flNewColors[ COLOR_RED ] * 255.f );
+				bColors[ COLOR_GREEN ] = byte_t( flNewColors[ COLOR_GREEN ] * 255.f );
+				bColors[ COLOR_BLUE ] = byte_t( flNewColors[ COLOR_BLUE ] * 255.f );
+				bColors[ COLOR_ALPHA ] = bContainsAlphaData ? byte_t( flNewColors[ COLOR_ALPHA ] * 255.f ) : UCHAR_MAX;
+			}
 		}
 
 		color_t::color_t( float flRed, float flGreen, float flBlue, float flAlpha )
 		{
-			bColors[ COLOR_RED ] = byte_t( flRed <= 1.f ? flRed * 255.f : flRed );
-			bColors[ COLOR_GREEN ] = byte_t( flGreen <= 1.f ? flGreen * 255.f : flGreen );
-			bColors[ COLOR_BLUE ] = byte_t( flBlue <= 1.f ? flBlue * 255.f : flBlue );
-			bColors[ COLOR_ALPHA ] = byte_t( flAlpha <= 1.f ? flAlpha * 255.f : flAlpha );
+			if ( flRed > 1.f || flGreen > 1.f || flBlue > 1.f || flAlpha > 1.f )
+			{
+				bColors[ COLOR_RED ] = byte_t( flRed );
+				bColors[ COLOR_GREEN ] = byte_t( flGreen );
+				bColors[ COLOR_BLUE ] = byte_t( flBlue );
+				bColors[ COLOR_ALPHA ] = byte_t( flAlpha );
+			}
+			else
+			{
+				bColors[ COLOR_RED ] = byte_t( flRed * 255.f );
+				bColors[ COLOR_GREEN ] = byte_t( flGreen * 255.f );
+				bColors[ COLOR_BLUE ] = byte_t( flBlue * 255.f );
+				bColors[ COLOR_ALPHA ] = byte_t( flAlpha * 255.f );
+			}
 		}
 
 		color_t::color_t( float flRed, float flGreen, float flBlue )
 		{
-			bColors[ COLOR_RED ] = byte_t( flRed <= 1.f ? flRed * 255.f : flRed );
-			bColors[ COLOR_GREEN ] = byte_t( flGreen <= 1.f ? flGreen * 255.f : flGreen );
-			bColors[ COLOR_BLUE ] = byte_t( flBlue <= 1.f ? flBlue * 255.f : flBlue );
+			if ( flRed > 1.f || flGreen > 1.f || flBlue > 1.f )
+			{
+				bColors[ COLOR_RED ] = byte_t( flRed );
+				bColors[ COLOR_GREEN ] = byte_t( flGreen );
+				bColors[ COLOR_BLUE ] = byte_t( flBlue );
+			}
+			else
+			{
+				bColors[ COLOR_RED ] = byte_t( flRed * 255.f );
+				bColors[ COLOR_GREEN ] = byte_t( flGreen * 255.f );
+				bColors[ COLOR_BLUE ] = byte_t( flBlue * 255.f );
+			}
 			bColors[ COLOR_ALPHA ] = UCHAR_MAX;
 		}
 
