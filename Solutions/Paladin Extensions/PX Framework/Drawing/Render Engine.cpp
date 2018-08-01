@@ -85,7 +85,7 @@ namespace PX
 			wndWindow.hInstance = GetModuleHandle( nullptr );
 
 			const auto strResourceDirectory = Files::GetDirectory( ) + LR"(\Resources\)";
-			wndWindow.hIcon = HICON( LoadImage( nullptr, ( strResourceDirectory + LR"(Logo\Paladin Logo.ico)" ).c_str( ),
+			wndWindow.hIcon = HICON( LoadImage( nullptr, ( strResourceDirectory + LR"(Paladin Logo.ico)" ).c_str( ),
 												IMAGE_ICON, 0, 0, LR_LOADFROMFILE | LR_DEFAULTSIZE | LR_SHARED ) );
 
 			hCursors[ CURSOR_NONE ] = LoadCursor( nullptr, IDC_ARROW );

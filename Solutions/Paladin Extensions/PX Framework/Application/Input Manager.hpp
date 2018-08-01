@@ -1,5 +1,5 @@
 /// Input Manager.hpp
-// TODO: document @Cole
+
 #pragma once
 
 namespace PX

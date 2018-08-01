@@ -36,6 +36,11 @@ namespace PX
 		/**	\param strCipherText Cipher text to decode and decrypt. */
 		/**	\return Decoded and decrypted text. */
 		std::string PX_API Decrypt( const std::string& strCipherText );
+		/** \brief Creates an identifier to be used in post data for connectivity.\n 
+					Always should be ten characters long and requires Initialize( ) to be called beforehand */
+		/**	\param strIdentifier Plain text identifier title. */
+		/**	\return Processed identifier which has been encrypted and encoded. */
+		std::string PX_API CreateIdentifier( const std::string& strIdentifier );
 	}
 
 	namespace XOR

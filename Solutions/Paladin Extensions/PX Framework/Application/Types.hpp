@@ -18,6 +18,16 @@ namespace PX
 		typedef void( PX_API fn_callback_t )( );
 		/** \brief Paladin time datatype, long enough to hold any time type, down to microseconds. */
 		typedef unsigned long long moment_t;
+		/** \brief Paladin type for post data. */
+		struct post_data_t
+		{
+			std::string strIdentifier, strValue;
+			post_data_t( std::string strIdentifier, std::string strValue )
+			{
+				this->strIdentifier = strIdentifier;
+				this->strValue = strValue;
+			}
+		};
 
 		/** \brief Type to hold colors. */
 		struct color_t

@@ -48,17 +48,15 @@ void PX_API UI::Manager::SetLayout( )
 void OnLaunch( )
 {
 	//unsigned uDimensions[ 2 ] { 500, 500 };
-	//Render::InitializeRenderTarget( uDimensions, hinstWin, PX_XOR( L"Paladin Extensions" ) );
+	//Render::InitializeRenderTarget( uDimensions, PX_XOR( L"Paladin Extensions" ) );
 	//UI::Manager::Initialize( PX_XOR( "Manager" ) );
 	//while ( UI::Manager::Render( ) && !bShutdown )
 	//	Tools::Wait( 1 );
-	Cryptography::Initialize( );
-
-	std::string strPlainText = "Men",
-				strEncryptedText = Cryptography::Encrypt( strPlainText ),
-				strDecryptedText = Cryptography::Decrypt( strEncryptedText );
-	dbg::out << "Original: "	<< Tools::string_cast< std::wstring >( strPlainText		) << dbg::newl;
-	dbg::out << "Encrypted: "	<< Tools::string_cast< std::wstring >( strEncryptedText ) << dbg::newl;
-	dbg::out << "Decrypted: "	<< Tools::string_cast< std::wstring >( strDecryptedText ) << dbg::newl;
+	Net::InitializeConnection( );
+	std::deque< Types::post_data_t > dqPostData;
+	dqPostData.emplace_back( "test", "men" );
+	const auto strResponse = Net::Request( PX_XOR( "https://paladin.rip/test.php?test=men" ), dqPostData );
+	Net::CleanupConnection( );
+	dbg::out << strResponse.c_str( ) << dbg::newl;
 	system( "pause" );
 }

@@ -1,7 +1,6 @@
 /// Tools.hpp
 
 #pragma once
-#include "../../PX Manager/PX Manager.hpp"
 
 namespace PX
 {

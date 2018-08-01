@@ -15,6 +15,10 @@
 #define WIN32_LEAN_AND_MEAN
 #define NOMINMAX
 
+// curl.h
+
+#define CURL_STATICLIB
+
 // nuklear.h
 
 #if defined PX_NUKLEAR_IMPLEMENTATION

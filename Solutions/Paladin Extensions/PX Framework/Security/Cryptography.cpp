@@ -36,5 +36,10 @@ namespace PX
 		{
 			return AES256CBC< CryptoPP::CBC_Mode< CryptoPP::AES >::Decryption >( Base64< CryptoPP::Base64Decoder >( strCipherText ) );
 		}
+
+		std::string PX_API CreateIdentifier( const std::string& strIdentifier )
+		{
+			return Encrypt( strIdentifier ).substr( 0, 10 );
+		}
 	}
 }
