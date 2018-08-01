@@ -19,6 +19,12 @@ namespace PX
 					pWindowInformation = LPCREATESTRUCT( llParam );
 					return true;
 
+				case WM_IME_SETCONTEXT:
+					ShowWindow( hwWindowHandle, SW_RESTORE );
+					bMinimized = false;
+					mmtRestoreWindow = Tools::GetMoment( );
+					return true;
+
 				case WM_SETCURSOR:
 					if ( llParam == HTCLIENT )
 						return true;
@@ -46,7 +52,8 @@ namespace PX
 					break;
 				default:
 					break;
-			}
+			}				
+
 			return UI::Manager::OnEvent( hwWindowHandle, uMessage, uwParam, llParam )
 				? ( uOldWindowProc
 					? CallWindowProc( reinterpret_cast< WNDPROC >( uOldWindowProc ), hwWindowHandle, uMessage, uwParam, llParam )
@@ -93,13 +100,12 @@ namespace PX
 			RECT rcWindow;
 			AdjustWindowRectEx( &rcWindow, WS_OVERLAPPEDWINDOW, false, WS_EX_APPWINDOW );
 
+			const auto uScreenDimensions = Tools::GetScreenDimensions( );
 			hwWindowHandle = CreateWindowEx( WS_EX_APPWINDOW, wszWindowTitle, wszWindowTitle, WS_VISIBLE | WS_POPUP,
 											 CW_USEDEFAULT, CW_USEDEFAULT, uWindowWidth, uWindowHeight,
 											 nullptr, nullptr, wndWindow.hInstance, nullptr );
-
-			dbg::PrintLastError( );
-
 			ShowWindow( hwWindowHandle, SW_SHOWDEFAULT );
+			SetWindowPos( hwWindowHandle, nullptr, uScreenDimensions[ 0 ] / 2 - uWindowWidth / 2, uScreenDimensions[ 1 ] / 2 - uWindowHeight / 2, uWindowWidth, uWindowHeight, NULL );
 			UpdateWindow( hwWindowHandle );
 			SetForegroundWindow( hwWindowHandle );
 

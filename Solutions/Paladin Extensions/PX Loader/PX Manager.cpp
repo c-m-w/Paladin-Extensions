@@ -4,6 +4,8 @@
 
 using namespace PX;
 
+PX_SDK auto g_bShutdown = false;
+
 void TestDebug( )
 {
 	auto print = Tools::string_cast< std::wstring >( "casted" );
@@ -34,7 +36,7 @@ void Minimize( )
 
 void Exit( )
 {
-
+	g_bShutdown = true;
 }
 
 void PX_API UI::Manager::SetLayout( )
@@ -45,14 +47,9 @@ void PX_API UI::Manager::SetLayout( )
 
 void OnLaunch( )
 {
-	//TestDebug( );
-
-	unsigned piDimes[ 2 ] { 500, 500 };
-	Render::InitializeRenderTarget( piDimes, hinstWin, L"Paladin Extensions" );
-	UI::Manager::Initialize( "Manager" );
-	while ( UI::Manager::Render( ) )
-	{
-		Sleep( 1 );
-	}
-	system( "pause" );
+	unsigned uDimensions[ 2 ] { 500, 500 };
+	Render::InitializeRenderTarget( uDimensions, hinstWin, PX_XOR( L"Paladin Extensions" ) );
+	UI::Manager::Initialize( PX_XOR( "Manager" ) );
+	while ( UI::Manager::Render( ) && !g_bShutdown )
+		Tools::Wait( 1 );
 }

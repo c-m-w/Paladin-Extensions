@@ -53,10 +53,10 @@ namespace PX
 			bool PX_API HoveringNextWidget( );
 			nk_flags PX_API EditTextBox( struct nk_context* ctx, nk_flags flags, char* buffer, int max, nk_plugin_filter filter );
 			// Creates a header for the window with a title, subtitle and two callbacks for the minimize and close buttons.
-			void PX_API Header( Tools::cstr_t, Tools::cstr_t, std::function< void( PX_API )( ) >, std::function< void( PX_API )( ) > );
+			void PX_API Header( Tools::cstr_t, Tools::cstr_t, Tools::fn_callback_t, Tools::fn_callback_t );
 			bool PX_API PrimaryTab( Tools::cstr_t, bool );
 			bool PX_API SecondaryTab( Tools::cstr_t, bool );
-			void PX_API Separator( unsigned char, unsigned char, unsigned char, unsigned, unsigned = 3, bool = false );
+			void PX_API Separator( float, float, float, unsigned, unsigned = 3, bool = false );
 			bool PX_API Button( EPosition, Tools::cstr_t, bool );
 			void PX_API Checkbox( Tools::cstr_t, unsigned, bool* );
 

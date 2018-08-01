@@ -12,6 +12,7 @@ namespace PX
 		typedef const wchar_t* wcstr_t;
 		typedef uintptr_t ptr_t;
 		typedef unsigned char byte_t;
+		typedef void( PX_API fn_callback_t )( );
 
 		// INFO: Inheritable struct that manages a single instantiated object of child class/structure
 		// *_Child*: Child class/structure to be restricted
@@ -41,6 +42,9 @@ namespace PX
 		// INFO: Gets directory with specified directories upward
 		// PARAM: Levels to escape
 		std::wstring PX_API GetDirectory( unsigned = 0 );
+
+		// Get main screen dimensions
+		unsigned *GetScreenDimensions( );
 
 		// INFO: Casts strings\n
 		// INFO: Supports any combination of conversion from "std::string" and "std::wstring" to "std::string" and "std::wstring"

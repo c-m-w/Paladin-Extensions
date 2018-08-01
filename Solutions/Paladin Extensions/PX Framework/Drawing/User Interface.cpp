@@ -289,7 +289,7 @@ namespace PX
 					GetWindowRect( Render::hwWindowHandle, &recWindowPos );
 					static POINT pntOldCursorPosRelative { };
 
-					if ( PX_INPUT.GetKeyState( VK_LBUTTON ) )
+					if ( PX_INPUT.GetKeyState( VK_LBUTTON ) && !Render::bMinimized )
 					{
 						POINT pntCursorPos { };
 						GetCursorPos( &pntCursorPos );
@@ -301,7 +301,7 @@ namespace PX
 							if ( !pntOldCursorPosRelative.x || !pntOldCursorPosRelative.y ) pntOldCursorPosRelative = pntCursorPosRelative;
 
 							SetWindowPos( Render::hwWindowHandle, nullptr, ( recWindowPos.left - pntOldCursorPosRelative.x ) + pntCursorPosRelative.x,
-								( recWindowPos.top - pntOldCursorPosRelative.y ) + pntCursorPosRelative.y, Render::uWindowWidth, Render::uWindowHeight, 0 );
+								( recWindowPos.top - pntOldCursorPosRelative.y ) + pntCursorPosRelative.y, Render::uWindowWidth, Render::uWindowHeight, NULL );
 							UpdateWindow( Render::hwWindowHandle );
 						}
 					}
@@ -393,7 +393,16 @@ namespace PX
 				__asm call nk_edit_string_zero_terminated
 			}
 
-			void PX_API Header( Tools::cstr_t szTitle, Tools::cstr_t szApplicationTitle, std::function< void( PX_API )( ) > fnMinimizeCallback, std::function< void( PX_API )( ) > fnCloseCallback )
+			void HoverCheck( Render::ECursor curSetCursor )
+			{
+				if ( pContext->last_widget_state & NK_WIDGET_STATE_ACTIVE || pContext->last_widget_state & NK_WIDGET_STATE_HOVER )
+				{
+					bFoundHoverTarget = true;
+					curCurrent = curSetCursor;
+				}
+			}
+
+			void PX_API Header( Tools::cstr_t szTitle, Tools::cstr_t szApplicationTitle, Tools::fn_callback_t fnMinimizeCallback, Tools::fn_callback_t fnCloseCallback )
 			{
 				nk_layout_row_dynamic( pContext, 30, 0 );
 				auto pOutput = nk_window_get_canvas( pContext );
@@ -419,14 +428,18 @@ namespace PX
 				static auto clrMinimize = clrBlue, clrClose = clrMinimize;
 				txtMinimizeButton.text = clrMinimize;
 				txtCloseButton.text = clrClose;
-				const struct nk_rect recMinimize = { uWidth - 70, 19, 50, 8 };
+				const struct nk_rect recMinimize = { uWidth - 70, 19, 20, 8 };
 				const struct nk_rect recCloseButton = { uWidth - 33, 13, 20, 20 };
 				nk_widget_text( pOutput, recMinimize, ICON_FA_MINUS, strlen( ICON_FA_MINUS ), &txtMinimizeButton, NK_TEXT_CENTERED, pContext->style.font );
 				nk_widget_text( pOutput, recCloseButton, ICON_FA_TIMES, strlen( ICON_FA_TIMES ), &txtCloseButton, NK_TEXT_CENTERED, pContext->style.font );
 
-				const bool bHoveringMinimize = nk_input_is_mouse_hovering_rect( &pContext->input, recMinimize ),
+				const bool bHoveringMinimize = nk_input_is_mouse_hovering_rect( &pContext->input, nk_rect( recMinimize.x + 8, recMinimize.y, recMinimize.w + 2, recMinimize.h ) ),
 					bHoveringClose = nk_input_is_mouse_hovering_rect( &pContext->input, recCloseButton ),
 					bClicking = PX_INPUT.GetKeyState( VK_LBUTTON );
+
+				// Wait at least 200 ms for Nuklear to fix it's mouse pos stuff, and ensure that the window is in focus and not minimized.
+				if ( GetActiveWindow( ) != Render::hwWindowHandle || Render::bMinimized || Tools::GetMoment( ) - Render::mmtRestoreWindow < 500u )
+					return;
 
 				static auto fnSetWidgetActive = [ & ]( )
 				{
@@ -440,7 +453,14 @@ namespace PX
 					clrMinimize = clrBlueHover;
 					fnSetWidgetActive( );
 					if ( bClicking )
+					{
+						if ( Render::bCreatedWindow )
+						{
+							Render::bMinimized = true;
+							ShowWindow( Render::hwWindowHandle, SW_MINIMIZE );
+						}
 						fnMinimizeCallback( );
+					}
 				}
 				else
 					clrMinimize = clrBlue;
@@ -461,6 +481,41 @@ namespace PX
 				return nk_button_label_styled( pContext, bActive ? &btnTopActive : &btnTop, szText );
 			}
 
+			bool SecondaryTab( Tools::cstr_t szText, bool bActive )
+			{
+				if ( bActive )
+				{
+					auto rcBoundaries = nk_widget_bounds( pContext );
+					auto pOutput = nk_window_get_canvas( pContext );
+					nk_fill_rect_multi_color( pOutput, rcBoundaries, clrBorder, clrDarkBackground, clrDarkBackground, clrBorder );
+
+					rcBoundaries.w += rcBoundaries.x;
+					rcBoundaries.h += rcBoundaries.y;
+					SetFont( FONT_TAHOMABOLD );
+					const auto bResult = nk_button_label_styled( pContext, &btnRegularActive, szText );
+					HoverCheck( Render::CURSOR_HAND );
+					SetFont( FONT_TAHOMA );
+					nk_stroke_line( pOutput, rcBoundaries.x + 2, rcBoundaries.y, rcBoundaries.x + 2, rcBoundaries.h, 2, clrBlue );
+					return bResult;
+				}
+				SetFont( FONT_TAHOMA );
+				const auto bReturn = nk_button_label_styled( pContext, &btnRegular, szText );
+				HoverCheck( Render::CURSOR_HAND );
+				return bReturn;
+			}
+
+			void Separator( float bRed, float bGreen, float bBlue, unsigned uStartHeight, unsigned uRowSize /*= 3*/, bool bUpperBorder /*= false*/ )
+			{
+				constexpr auto uSeparatorHeight = 42u;
+				constexpr struct nk_color clrBorderColor = { 85, 88, 94, 255 };
+				const auto pDrawBuffer = nk_window_get_canvas( pContext );
+				nk_fill_rect( pDrawBuffer, nk_rect( 0, uStartHeight, Render::uWindowWidth, uSeparatorHeight ), 0.f, nk_rgba( bRed, bGreen, bBlue, 255 ) );
+				nk_stroke_line( pDrawBuffer, 0, uStartHeight + uSeparatorHeight - 1, pContext->current->bounds.w, uStartHeight + uSeparatorHeight - 1, 0.5, clrBorderColor );
+
+				if ( bUpperBorder )
+					nk_stroke_line( pDrawBuffer, 0, uStartHeight + 1, pContext->current->bounds.w, uStartHeight + 1, 0.5, clrBorderColor );
+			}
+
 			void PX_API BeginRow( unsigned uRowHeight, unsigned uColumns, ERowType rowRowType )
 			{
 				static std::function< void( PX_API )( nk_context*, nk_layout_format, float, int ) > fnBeginRow[ ROW_MAX ]
@@ -479,24 +534,15 @@ namespace PX
 
 			void PX_API EndRow( )
 			{
-				static std::function< void( PX_API )( ) > fnEndRow[ ROW_MAX ]
+				static std::function< void( PX_API )( nk_context* ) > fnEndRow[ ROW_MAX ]
 				{
-					[ ]( )
-					{
-						return nk_layout_row_end( pContext );
-					},
-					[ ]( )
-					{
-						return nk_layout_row_end( pContext );
-					},
-					[ ]( )
-					{
-						return nk_layout_space_end( pContext );
-					},
+					nk_layout_row_end,
+					nk_layout_row_end,
+					nk_layout_space_end
 				};
 
 				dbg::Assert( iCurrentRowUsedColumns == iCurrentRowMaxColumns );
-				fnEndRow[ rowLastRowType ]( );
+				fnEndRow[ rowLastRowType ]( pContext );
 			}
 
 			void PX_API SetRowWidth( float flRowWidth )

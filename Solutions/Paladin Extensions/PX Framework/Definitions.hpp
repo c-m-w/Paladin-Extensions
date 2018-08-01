@@ -55,7 +55,6 @@
 #define PX_DEPENDENCIES_ESCAPE
 #endif
 
-
 // Encrypts string data on compile, then decrypts for access on run.
 #define PX_XOR( String ) ( PX::XOR::CXorString< PX::XOR::SCStringTraits< decltype( String ) >::char_trait_t, \
 	PX::XOR::SConstructIndexList< ( sizeof( String ) - 1 ) / PX::XOR::SCStringTraits< decltype( String ) >::int_trait_t >::result_t >( String ).Decrypt( ) )
