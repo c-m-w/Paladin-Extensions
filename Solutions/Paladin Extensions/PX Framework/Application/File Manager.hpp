@@ -31,7 +31,7 @@ namespace PX
 
 			// INFO: Verifies vital resources have not been modified, then loads them
 			// PARAM: Hash of resources
-			bool LoadResources( std::string );
+			bool LoadResources( const std::string& );
 		}
 
 		class CConfig: public Tools::SSingleton< CConfig >
@@ -42,14 +42,14 @@ namespace PX
 			// INFO: Contains user-defined information generally used for program customization
 			nlohmann::json jsCurrent;
 			// INFO: Name of current configuration
-			Tools::wcstr_t wszCurrent = static_cast< wchar_t* >( malloc( 32 ) );
+			Types::wcstr_t wszCurrent = static_cast< wchar_t* >( malloc( 32 ) );
 
 			CConfig( );
 			// INFO: Saves json configurations
 			void PX_API SaveInformation( );
 			// INFO: Changes json configuration to reference desired configuration
 			// *return*: false if path does not exist or there was an issue prcoessing the file, true if changed/is same file
-			bool PX_API ChangeConfiguration( Tools::wcstr_t );
+			bool PX_API ChangeConfiguration( Types::wcstr_t );
 
 		};
 	}

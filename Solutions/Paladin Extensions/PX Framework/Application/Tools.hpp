@@ -1,19 +1,12 @@
 /// Tools.hpp
 
 #pragma once
+#include "../../PX Manager/PX Manager.hpp"
 
 namespace PX
 {
 	namespace Tools
 	{
-		// INFO: Typedefs for long datatypes
-
-		typedef const char* cstr_t;
-		typedef const wchar_t* wcstr_t;
-		typedef uintptr_t ptr_t;
-		typedef unsigned char byte_t;
-		typedef void( PX_API fn_callback_t )( );
-
 		// INFO: Inheritable struct that manages a single instantiated object of child class/structure
 		// *_Child*: Child class/structure to be restricted
 		template< class _Child > struct SSingleton
@@ -30,14 +23,12 @@ namespace PX
 			static _Child& PX_API Get( );
 		};
 
-		// INFO: Data type sized to hold any time
-		typedef unsigned long long moment_t;
 		// INFO: Gets the local time
 		// *type name*: Time info format type
-		template< typename = std::chrono::milliseconds > moment_t PX_API GetMoment( );
+		template< typename = std::chrono::milliseconds > Types::moment_t PX_API GetMoment( );
 		// INFO: Sleeps the thread that has called for the amount of time, in the unit of time specified.
 		// *type name*: The unit of time to wait for ( std::chrono ).
-		template< typename = std::chrono::milliseconds > void PX_API Wait( moment_t );
+		template< typename = std::chrono::milliseconds > void PX_API Wait( Types::moment_t );
 
 		// Get main screen dimensions
 		unsigned* GetScreenDimensions( );

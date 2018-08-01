@@ -12,11 +12,11 @@ namespace PX
 			return _ChildClassObject;
 		}
 
-		template< typename _t > moment_t PX_API GetMoment( )
+		template< typename _t > Types::moment_t PX_API GetMoment( )
 		{
 			return std::chrono::duration_cast< _t >( std::chrono::system_clock::now( ).time_since_epoch( ) ).count( );
 		}
-		template< typename _t > void PX_API Wait( moment_t mmtWaitLength )
+		template< typename _t > void PX_API Wait( Types::moment_t mmtWaitLength )
 		{
 			std::this_thread::sleep_for( _t( mmtWaitLength ) );
 		}
@@ -67,11 +67,11 @@ namespace PX
 
 		// INFO: Interface for C-Style string casting
 		template< typename > PX_ABSTRACT_STRUCT IStringTypeOfCharacter;
-		template< > PX_ABSTRACT_STRUCT IStringTypeOfCharacter< cstr_t >
+		template< > PX_ABSTRACT_STRUCT IStringTypeOfCharacter< Types::cstr_t >
 		{
 			typedef std::string wrap_t;
 		};
-		template< > PX_ABSTRACT_STRUCT IStringTypeOfCharacter< wcstr_t >
+		template< > PX_ABSTRACT_STRUCT IStringTypeOfCharacter< Types::wcstr_t >
 		{
 			typedef std::wstring wrap_t;
 		};

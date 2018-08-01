@@ -242,15 +242,15 @@ namespace PX
 				btnComboActive.touch_padding = nk_vec2( 5, 5 );
 			}
 
-			void PX_API Initialize( Tools::cstr_t szApplicationTitle )
+			void PX_API Initialize( Types::cstr_t szApplicationTitle )
 			{
 				szNuklearWindowTitle = szApplicationTitle;
 				InitializeNuklear( );
 			}
 
-			struct nk_vec2 PX_API CalculateTextBounds( Tools::cstr_t szText, unsigned uRowHeight /*= 30*/ )
+			struct nk_vec2 PX_API CalculateTextBounds( Types::cstr_t szText, unsigned uRowHeight /*= 30*/ )
 			{
-				static Tools::cstr_t szBuffer;
+				static Types::cstr_t szBuffer;
 				static struct nk_vec2 vecBuffer;
 				static int iBuffer;
 
@@ -274,12 +274,12 @@ namespace PX
 				nk_d3d9_resize( uWidth, uHeight );
 			}
 
-			bool OnEvent( HWND h, UINT msg, WPARAM w, LPARAM l )
+			bool PX_API OnEvent( HWND h, UINT msg, WPARAM w, LPARAM l )
 			{
 				return nk_d3d9_handle_event( h, msg, w, l );
 			}
 
-			bool HandleWindowInput( )
+			bool PX_API HandleWindowInput( )
 			{
 				auto bShouldDrawInterface = true;
 				if ( Render::bCreatedWindow )
@@ -330,7 +330,7 @@ namespace PX
 				return bShouldDrawInterface;
 			}
 
-			void ApplyCursor( )
+			void PX_API ApplyCursor( )
 			{
 				SetCursor( curCurrent );
 				curCurrent = Render::CURSOR_ARROW;
@@ -338,7 +338,7 @@ namespace PX
 				pContext->last_widget_state &= ~( NK_WIDGET_STATE_ACTIVE | NK_WIDGET_STATE_HOVER );
 			}
 
-			bool Render( )
+			bool PX_API Render( )
 			{
 				auto bShouldDrawUserInterface = true;
 				SetFont( FONT_ROBOTO );
@@ -380,8 +380,8 @@ namespace PX
 			ERowType rowLastRowType;
 
 			struct nk_rect recLastWidgetLocation;
-			Tools::cstr_t szColorPickerSubject;
-			Tools::byte_t* pActiveEditColor = nullptr;
+			Types::cstr_t szColorPickerSubject;
+			Types::color_t* pActiveEditColor = nullptr;
 
 			bool PX_API HoveringNextWidget( )
 			{
@@ -393,16 +393,25 @@ namespace PX
 				__asm call nk_edit_string_zero_terminated
 			}
 
-			void HoverCheck( Render::ECursor curSetCursor )
+			bool PX_API HoverCheck( Render::ECursor curSetCursor )
 			{
 				if ( pContext->last_widget_state & NK_WIDGET_STATE_ACTIVE || pContext->last_widget_state & NK_WIDGET_STATE_HOVER )
 				{
 					bFoundHoverTarget = true;
 					curCurrent = curSetCursor;
+					return true;
 				}
+				return false;
 			}
 
-			void PX_API Header( Tools::cstr_t szTitle, Tools::cstr_t szApplicationTitle, Tools::fn_callback_t fnMinimizeCallback, Tools::fn_callback_t fnCloseCallback )
+			void PX_API SetWidgetActive( Render::ECursor curSetCursor )
+			{
+				pContext->last_widget_state |= NK_WIDGET_STATE_ACTIVE | NK_WIDGET_STATE_HOVER;
+				bFoundHoverTarget = true;
+				curCurrent = curSetCursor;
+			}
+
+			void PX_API Header( Types::cstr_t szTitle, Types::cstr_t szApplicationTitle, Types::fn_callback_t fnMinimizeCallback, Types::fn_callback_t fnCloseCallback )
 			{
 				nk_layout_row_dynamic( pContext, 30, 0 );
 				auto pOutput = nk_window_get_canvas( pContext );
@@ -441,17 +450,10 @@ namespace PX
 				if ( GetActiveWindow( ) != Render::hwWindowHandle || Render::bMinimized || Tools::GetMoment( ) - Render::mmtRestoreWindow < 500u )
 					return;
 
-				static auto fnSetWidgetActive = [ & ]( )
-				{
-					pContext->last_widget_state |= NK_WIDGET_STATE_ACTIVE | NK_WIDGET_STATE_HOVER;
-					bFoundHoverTarget = true;
-					curCurrent = Render::CURSOR_HAND;
-				};
-
 				if ( bHoveringMinimize )
 				{
 					clrMinimize = clrBlueHover;
-					fnSetWidgetActive( );
+					SetWidgetActive( Render::CURSOR_HAND );
 					if ( bClicking )
 					{
 						if ( Render::bCreatedWindow )
@@ -468,7 +470,7 @@ namespace PX
 				if ( bHoveringClose )
 				{
 					clrClose = clrBlueHover;
-					fnSetWidgetActive( );
+					SetWidgetActive( Render::CURSOR_HAND );
 					if ( bClicking )
 						fnCloseCallback( );
 				}
@@ -476,12 +478,12 @@ namespace PX
 					clrClose = clrBlue;
 			}
 
-			bool PX_API PrimaryTab( Tools::cstr_t szText, bool bActive )
+			bool PX_API PrimaryTab( Types::cstr_t szText, bool bActive )
 			{
 				return nk_button_label_styled( pContext, bActive ? &btnTopActive : &btnTop, szText );
 			}
 
-			bool SecondaryTab( Tools::cstr_t szText, bool bActive )
+			bool PX_API SecondaryTab( Types::cstr_t szText, bool bActive )
 			{
 				if ( bActive )
 				{
@@ -504,7 +506,7 @@ namespace PX
 				return bReturn;
 			}
 
-			void Separator( int iRed, int iGreen, int iBlue, unsigned uStartHeight, unsigned uRowSize /*= 3*/, bool bUpperBorder /*= false*/ )
+			void PX_API Separator( int iRed, int iGreen, int iBlue, unsigned uStartHeight, bool bUpperBorder /*= false*/ )
 			{
 				constexpr auto uSeparatorHeight = 42u;
 				constexpr struct nk_color clrBorderColor = { 85, 88, 94, 255 };
@@ -516,9 +518,223 @@ namespace PX
 					nk_stroke_line( pDrawBuffer, 0.f, float( uStartHeight + 1 ), float( pContext->current->bounds.w ), float( uStartHeight + 1 ), 0.5f, clrBorderColor );
 			}
 
+			bool PX_API Button( EPosition pPosition, const char* szText, bool bActive )
+			{
+				SetFont( FONT_ROBOTOBOLDSMALL );
+
+				const auto rcBoundaries = nk_widget_bounds( pContext );
+				const auto pOutput = nk_window_get_canvas( pContext );
+				auto bHover = false;
+				nk_flags fOldFlags = 0;
+				if ( !bFoundHoverTarget )
+				{
+					fOldFlags = pContext->last_widget_state;
+					pContext->last_widget_state = 0;
+				}
+				const auto bReturn = nk_button_label_styled( pContext, bActive ? &btnSpecialActive : &btnSpecial, szText );
+				if ( !bFoundHoverTarget )
+				{
+					bHover = HoverCheck( Render::CURSOR_HAND );
+					pContext->last_widget_state = fOldFlags;
+					HoverCheck( Render::CURSOR_HAND );
+				}
+				nk_color clrCurrentColor { };
+				if ( bHover )
+				{
+					if ( !bActive )
+						clrCurrentColor = clrBlueHover;
+				}
+				else
+					clrCurrentColor = clrBlueDormant;
+				if ( bActive )
+					clrCurrentColor = clrBlueActive;
+
+				switch ( pPosition )
+				{
+					case EPosition::LEFT:
+					{
+						nk_fill_rect( pOutput, nk_rect( rcBoundaries.x + rcBoundaries.w - 5, rcBoundaries.y, 5, rcBoundaries.h ), 0.f, clrCurrentColor );
+						break;
+					}
+					case EPosition::CENTER:
+					{
+						nk_fill_rect( pOutput, nk_rect( rcBoundaries.x + rcBoundaries.w - 5, rcBoundaries.y, 5, rcBoundaries.h ), 0.f, clrCurrentColor );
+						nk_fill_rect( pOutput, nk_rect( rcBoundaries.x, rcBoundaries.y, 5, rcBoundaries.h ), 0.f, clrCurrentColor );
+						break;
+					}
+					case EPosition::RIGHT:
+					{
+						nk_fill_rect( pOutput, nk_rect( rcBoundaries.x, rcBoundaries.y, 5, rcBoundaries.h ), 0.f, clrCurrentColor );
+						break;
+					}
+					default:
+						return false;
+				}
+				return bReturn;
+			}
+
+			void PX_API Checkbox( Types::cstr_t szText, bool *bActive )
+			{
+				static auto bWasClicking = false;
+
+				nk_layout_row_push( pContext, 25 );
+				const auto rcBoundaries = nk_widget_bounds( pContext );
+				const auto bHovering = nk_input_is_mouse_hovering_rect( &pContext->input, rcBoundaries );
+				const auto bClicking = PX_INPUT.GetKeyState( VK_LBUTTON ) == CInputManager::EKeyState::DOWN;
+
+				if ( bHovering )
+					SetWidgetActive( Render::CURSOR_HAND );
+
+				if ( bClicking && bHovering )
+				{
+					if ( !bWasClicking )
+						*bActive = !*bActive;
+					bWasClicking = true;
+				}
+				else if ( !bClicking )
+					bWasClicking = false;
+
+				nk_label_colored( pContext, *bActive ? ICON_FA_CHECK_SQUARE : ICON_FA_SQUARE, NK_TEXT_CENTERED, *bActive ? clrBlue : bHovering ? ( bClicking ? clrBlue : clrBlue ) : clrTextDormant );
+				nk_layout_row_push( pContext, CalculateTextBounds( szText, 15 ).x );
+				nk_label_colored( pContext, ( szText + std::string( "  " ) ).c_str( ), NK_TEXT_LEFT, clrTextDormant );
+			}
+
+			int PX_SDK Tabs( unsigned uStartX, unsigned uStartY, unsigned uButtonWidth, unsigned uButtonHeight, std::deque< Types::cstr_t > dqButtons, unsigned uActiveButton )
+			{
+				SetFont( FONT_ROBOTOBOLDSMALL );
+				BeginRow( uButtonHeight, dqButtons.size( ), ROW_CUSTOM );
+				auto iPressedButton = -1;
+				for ( unsigned i { }; i < dqButtons.size( ); i++ )
+				{
+					PushCustomRow( uStartX + ( uButtonWidth * i ), uStartY, uButtonWidth, uButtonHeight );
+					if ( SecondaryTab( dqButtons.at( i ), i == uActiveButton ) )
+						iPressedButton = i;
+				}
+				return iPressedButton;
+			}
+
+			int PX_SDK Subtabs( unsigned uButtonHeight, unsigned uButtonWidth, unsigned uStartX, unsigned uStartY, std::deque< Types::cstr_t > dqButtons, unsigned uActiveButton )
+			{
+				nk_layout_space_begin( pContext, NK_STATIC, uButtonHeight * dqButtons.size( ), dqButtons.size( ) );
+				auto iButtonPressed = -1;
+				for ( unsigned i { }; i < dqButtons.size( ); i++ )
+				{
+					nk_layout_space_push( pContext, nk_rect( uStartX, uStartY + ( uButtonHeight * i ), uButtonWidth, uButtonHeight ) );
+					if ( SecondaryTab( dqButtons.at( i ), i == uActiveButton ) )
+						iButtonPressed = i;
+				}
+				nk_layout_space_end( pContext );
+				return iButtonPressed;
+			}
+
+			void PX_API BeginGroupbox( unsigned uStartX, unsigned uStartY, unsigned uBoxWidth, unsigned uBoxHeight, Types::cstr_t szTitle )
+			{
+				SetFont( FONT_TAHOMA );
+				nk_layout_space_begin( pContext, NK_STATIC, uBoxHeight, 1 );
+				const auto rcBoundaries = nk_widget_bounds( pContext );
+				nk_layout_space_push( pContext, nk_rect( uStartX - rcBoundaries.x, uStartY - rcBoundaries.y, uBoxWidth, uBoxHeight ) );
+				auto rcNewBoundaries = nk_widget_bounds( pContext );
+				nk_group_begin( pContext, szTitle, NK_WINDOW_NO_SCROLLBAR );
+
+				const auto pOutput = nk_window_get_canvas( pContext );
+				rcNewBoundaries.x += 4;
+				rcNewBoundaries.y += 20;
+				rcNewBoundaries.w -= 8;
+				rcNewBoundaries.h -= 28;
+				// Top left, top right, bottom right, bottom left
+				const auto uTextWidth = CalculateTextBounds( szTitle, 30 ).x;
+				nk_fill_rect_multi_color( pOutput, nk_rect( rcNewBoundaries.x + 1.8, rcNewBoundaries.y + 1, rcNewBoundaries.w - 2, rcNewBoundaries.h - 2 ), clrDarkBackground, clrDarkBackground, clrBackground, clrBackground );
+				nk_stroke_rect( pOutput, rcNewBoundaries, 4.f, 1.f, clrBorder );
+				nk_stroke_line( pOutput, rcNewBoundaries.x + 7, rcNewBoundaries.y, rcNewBoundaries.x + 3 + uTextWidth, rcNewBoundaries.y, 3, clrDarkBackground );
+				BeginRow( 16, 1, ROW_CUSTOM );
+				auto rcText = nk_widget_bounds( pContext );
+				PushCustomRow( rcNewBoundaries.x + 8 - rcText.x, rcNewBoundaries.y - rcText.y - 10, uTextWidth, 16 );
+				nk_label( pContext, szTitle, NK_TEXT_LEFT );
+				VerticalSpacing( 5 );
+
+				SetFont( FONT_ROBOTOSMALL );
+			}
+
+			void PX_API EndGroupbox( )
+			{
+				return nk_group_end( pContext );
+			}
+
+			void PX_API ColorPicker( )
+			{
+				constexpr struct nk_vec2 vecColorPickerSize
+				{
+					305, 375
+				};
+				const auto uWindowWidth = pContext->current->bounds.x, uWindowHeight = pContext->current->bounds.y;
+				const struct nk_rect rcColorPickerBoundaries
+				{
+					( pContext->current->bounds.x / 2 ) - ( vecColorPickerSize.x / 2 ), ( uWindowHeight / 2 ) - ( vecColorPickerSize.y / 2 ), vecColorPickerSize.x, vecColorPickerSize.y
+				};
+				const static std::string strBaseTitle = R"(Color of ')";
+
+				static struct nk_colorf clrChosenColor;
+				static auto bNewColor = true;
+				static auto bShouldClose = false;
+				static auto bStoppedClicking = false;
+
+				if ( !PX_INPUT.GetKeyState( VK_LBUTTON ) )
+					bStoppedClicking = true;
+				if ( bNewColor && pActiveEditColor )
+					clrChosenColor = { ( pActiveEditColor->flr, pActiveEditColor->flg, pActiveEditColor->flb, pActiveEditColor->fla ) };
+				bNewColor = false;
+
+				const auto pOutput = nk_window_get_canvas( pContext );
+				nk_fill_rect( pOutput, nk_rect( 0, 0, uWindowWidth, uWindowHeight ), 0, nk_rgba( 0, 0, 0, 180 ) );
+
+				if ( bShouldClose )
+				{
+					bShouldClose = false;
+					pActiveEditColor = nullptr;
+				}
+
+				if ( nk_popup_begin( pContext, NK_POPUP_DYNAMIC, ( strBaseTitle + szColorPickerSubject + R"(')" ).c_str( ), NK_WINDOW_BORDER | NK_WINDOW_TITLE | NK_WINDOW_NO_SCROLLBAR,
+									 rcColorPickerBoundaries, pActiveEditColor == nullptr ) )
+				{
+					nk_layout_row_static( pContext, 255, 295, 1 );
+					clrChosenColor = nk_color_picker( pContext, clrChosenColor, NK_RGBA );
+					nk_layout_row_dynamic( pContext, 5, 0 );
+					nk_layout_row_dynamic( pContext, 16, 4 );
+					nk_label( pContext, ( "R: " + std::to_string( int( clrChosenColor.r * 255.f ) ) ).c_str( ), NK_TEXT_CENTERED );
+					nk_label( pContext, ( "G: " + std::to_string( int( clrChosenColor.g * 255.f ) ) ).c_str( ), NK_TEXT_CENTERED );
+					nk_label( pContext, ( "B: " + std::to_string( int( clrChosenColor.b * 255.f ) ) ).c_str( ), NK_TEXT_CENTERED );
+					nk_label( pContext, ( "A: " + std::to_string( int( clrChosenColor.a * 255.f ) ) ).c_str( ), NK_TEXT_CENTERED );
+					nk_layout_row_dynamic( pContext, 10, 1 );
+					nk_button_color( pContext, nk_rgba( clrChosenColor.r * 255.f, clrChosenColor.g * 255.f, clrChosenColor.b * 255.f, clrChosenColor.a * 255.f ) );
+					nk_layout_row_static( pContext, 25, vecColorPickerSize.x / 2 - 10, 2 );
+					if ( Button( EPosition::LEFT, "CANCEL", false ) )
+					{
+						bShouldClose = true;
+						bNewColor = true;
+					}
+					if ( Button( EPosition::RIGHT, "CONFIRM", false ) )
+					{
+						*pActiveEditColor = Types::color_t( clrChosenColor.r, clrChosenColor.g, clrChosenColor.b, clrChosenColor.a );
+						bNewColor = true;
+						bShouldClose = true;
+					}
+					if ( !nk_input_is_mouse_prev_hovering_rect( &pContext->input, rcColorPickerBoundaries ) && ( PX_INPUT.GetKeyState( VK_LBUTTON ) ) && bStoppedClicking )
+					{
+						bShouldClose = true;
+						bNewColor = true;
+					}
+					nk_layout_row_dynamic( pContext, 10, 0 );
+					nk_popup_end( pContext );
+					return;
+				}
+				bNewColor = true;
+				bStoppedClicking = false;
+			}
+
 			void PX_API BeginRow( unsigned uRowHeight, unsigned uColumns, ERowType rowRowType )
 			{
-				static std::function< void( PX_API )( nk_context*, nk_layout_format, float, int ) > fnBeginRow[ ROW_MAX ]
+				typedef void( PX_API* fn_begin_row_t )( nk_context*, nk_layout_format, float, int );
+				static fn_begin_row_t fnBeginRow[ ROW_MAX ]
 				{
 					nk_layout_row_begin,
 					nk_layout_row_begin,
@@ -534,7 +750,8 @@ namespace PX
 
 			void PX_API EndRow( )
 			{
-				static std::function< void( PX_API )( nk_context* ) > fnEndRow[ ROW_MAX ]
+				typedef void( PX_API* fn_end_row_t )( nk_context* );
+				static fn_end_row_t fnEndRow[ ROW_MAX ]
 				{
 					nk_layout_row_end,
 					nk_layout_row_end,

@@ -12,7 +12,7 @@ namespace PX
 			GetModuleFileName( nullptr, wszBuffer, MAX_PATH );
 			std::wstring wstrDirectory = wszBuffer;
 
-			for ( auto i = 0u; i <= uEscapeLevels; i++ )
+			for ( unsigned i = 0u; i <= uEscapeLevels; i++ )
 				wstrDirectory = wstrDirectory.substr( 0, wstrDirectory.find_last_of( L'\\' ) );
 
 			return wstrDirectory;
@@ -20,7 +20,7 @@ namespace PX
 
 		namespace Resources
 		{
-			bool LoadResources( std::string strHash )
+			bool LoadResources( const std::string& strHash )
 			{
 				std::wstring wstrPath = GetDirectory( PX_DEPENDENCIES_ESCAPE ) + LR"(\Resources\)";
 
@@ -44,18 +44,18 @@ namespace PX
 				if ( !bFilesExist )
 					return false;
 
-				auto fnGetFileData = [ ]( Tools::wcstr_t szPathToFile )
+				const auto fnGetFileData = [ ]( Tools::wcstr_t szPathToFile )
 				{
-					FILE* pResource = _wfopen( szPathToFile, L"r" );
+					auto pResource = _wfopen( szPathToFile, L"r" );
 					dbg::Assert( pResource );
 
 					fseek( pResource, 0, SEEK_END );
-					int iSize = ftell( pResource );
+					const auto lSize = ftell( pResource );
 					rewind( pResource );
 
 					std::string strData;
-					strData.resize( iSize );
-					fread( &strData[ 0 ], 1, iSize, pResource );
+					strData.resize( lSize );
+					fread( &strData[ 0 ], 1, lSize, pResource );
 
 					fclose( pResource );
 					return strData;
@@ -95,10 +95,7 @@ namespace PX
 					+ Cryptography::GenerateHash( strGameIconsCSGO )
 					+ Cryptography::GenerateHash( strGameIconsPUBG );
 
-				if ( strHash != strResourcesHash )
-					return false;
-
-				return true;
+				return strHash == strResourcesHash;
 			}
 		}
 

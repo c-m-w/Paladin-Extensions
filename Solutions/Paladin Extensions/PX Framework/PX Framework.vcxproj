@@ -160,22 +160,28 @@
     <ClInclude Include="Application\Debug.hpp" />
     <ClInclude Include="Application\File Manager.hpp" />
     <ClInclude Include="Application\Input Manager.hpp" />
+    <ClInclude Include="Application\Types.hpp" />
     <ClInclude Include="Drawing\Render Engine.hpp" />
     <ClInclude Include="Drawing\User Interface.hpp" />
     <ClInclude Include="Inclusions.hpp" />
     <ClInclude Include="Definitions.hpp" />
     <ClInclude Include="Application\Tools.hpp" />
     <ClInclude Include="PX Framework.hpp" />
+    <ClInclude Include="Security\Connectivity.hpp" />
     <ClInclude Include="Security\Cryptography.hpp" />
+    <ClInclude Include="Security\Information.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application\Debug.cpp" />
     <ClCompile Include="Application\File Manager.cpp" />
     <ClCompile Include="Application\Input Manager.cpp" />
     <ClCompile Include="Application\Tools.cpp" />
+    <ClCompile Include="Application\Types.cpp" />
     <ClCompile Include="Drawing\Render Engine.cpp" />
     <ClCompile Include="Drawing\User Interface.cpp" />
+    <ClCompile Include="Security\Connectivity.cpp" />
     <ClCompile Include="Security\Cryptography.cpp" />
+    <ClCompile Include="Security\Information.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Application\Debug.inl" />

@@ -79,10 +79,10 @@ namespace PX
 			SetWindowPos( hwWindowHandle, nullptr, rcWindowRect.left, rcWindowRect.top, uWindowWidth, uWindowHeight, SWP_SHOWWINDOW );
 		}
 
-		void PX_API CreateRenderTarget( HINSTANCE hInstance )
+		void PX_API CreateRenderTarget( )
 		{
 			wndWindow.lpfnWndProc = WndProc;
-			wndWindow.hInstance = hInstance;
+			wndWindow.hInstance = GetModuleHandle( nullptr );
 
 			const auto strResourceDirectory = Files::GetDirectory( ) + LR"(\Resources\)";
 			wndWindow.hIcon = HICON( LoadImage( nullptr, ( strResourceDirectory + LR"(Logo\Paladin Logo.ico)" ).c_str( ),
@@ -138,11 +138,11 @@ namespace PX
 			}
 		}
 
-		void PX_API InitializeRenderTarget( unsigned* pDimensions, HINSTANCE hInstance, Tools::wcstr_t szNewWindowTitle )
+		void PX_API InitializeRenderTarget( unsigned* pDimensions, Tools::wcstr_t szNewWindowTitle )
 		{
 			wszWindowTitle = szNewWindowTitle;
 			SetWindowSize( pDimensions[ 0 ], pDimensions[ 1 ] );
-			CreateRenderTarget( hInstance );
+			CreateRenderTarget( );
 			InitializeDirectX( );
 		}
 

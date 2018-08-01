@@ -13,7 +13,7 @@ namespace PX
 			uLastKeyPressed = uKey;
 		}
 
-		for ( auto fnCallback: vecfnKeyCallback[ uKey ] )
+		for each ( auto fnCallback in vecfnKeyCallback[ uKey ] )
 			fnCallback( uKey );
 	}
 

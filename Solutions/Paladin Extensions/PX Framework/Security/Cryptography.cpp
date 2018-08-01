@@ -6,29 +6,35 @@ namespace PX
 {
 	namespace Cryptography
 	{
-		std::string GenerateHash( const std::string& strPlainText )
+		bool PX_API Initialize( )
 		{
-			Tools::byte_t bOutput[ CryptoPP::SHA3_256::DIGESTSIZE ];
-			CryptoPP::SHA3_256( ).CalculateDigest( bOutput, reinterpret_cast< Tools::byte_t* >( const_cast< char* >( strPlainText.c_str( ) ) ), strPlainText.length( ) );
+			const auto strUnhashedKey = std::to_string( Tools::GetMoment< std::chrono::seconds >( ) );
+			strEncryptionKey = GenerateHash( strUnhashedKey ).substr( 0, 32 );
+			strInitializationVector = strEncryptionKey.substr( 0, 16 );
+			return !strEncryptionKey.empty( );
+		}
+
+		std::string PX_API GenerateHash( const std::string& strPlainText )
+		{
+			Types::byte_t bOutput[ CryptoPP::SHA3_256::DIGESTSIZE ];
+			CryptoPP::SHA3_256( ).CalculateDigest( bOutput, reinterpret_cast< Types::byte_t* >( const_cast< char* >( strPlainText.c_str( ) ) ), strPlainText.length( ) );
 
 			CryptoPP::HexEncoder hHash;
 			std::string strOutput;
 			hHash.Attach( new CryptoPP::StringSink( strOutput ) );
-			hHash.Put( bOutput, sizeof( Tools::byte_t[ CryptoPP::SHA3_256::DIGESTSIZE ] ) );
+			hHash.Put( bOutput, sizeof( Types::byte_t[ CryptoPP::SHA3_256::DIGESTSIZE ] ) );
 			hHash.MessageEnd( );
 			return strOutput;
 		}
 
-		std::string Encrypt( const std::string& strPlainText, const std::string& strKey )
+		std::string PX_API Encrypt( const std::string& strPlainText )
 		{
-			auto strInitializationVector = strKey.substr( 0, 16 );
-			std::string strOutput;
-			CryptoPP::CBC_Mode< CryptoPP::AES >::Encryption encEncryption( reinterpret_cast< Tools::byte_t* >( const_cast< char* >( Tools::string_cast< std::string >( strKey ).c_str( ) ) ),
-																		   strKey.length( ), reinterpret_cast< Tools::byte_t* >( const_cast< char* >( strInitializationVector.c_str( ) ) ) );
-			CryptoPP::StringSource( Tools::string_cast< std::string >( strPlainText ), true, new
-									CryptoPP::StreamTransformationFilter( encEncryption, new CryptoPP::Base64Encoder( new CryptoPP::StringSink( strOutput ), false ) ) );
-			strOutput.replace( strOutput.begin( ), strOutput.end( ), '+', '-' );
-			return strOutput;
+			return Base64< CryptoPP::Base64Encoder >( AES256CBC< CryptoPP::CBC_Mode< CryptoPP::AES >::Encryption >( strPlainText ) );
+		}
+
+		std::string PX_API Decrypt( const std::string& strCipherText )
+		{
+			return AES256CBC< CryptoPP::CBC_Mode< CryptoPP::AES >::Decryption >( Base64< CryptoPP::Base64Decoder >( strCipherText ) );
 		}
 	}
 }

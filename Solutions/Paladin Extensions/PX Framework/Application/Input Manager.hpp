@@ -16,7 +16,7 @@ namespace PX
 		};
 	private:
 		EKeyState stateKeys[ PX_MAX_KEY ];
-		Tools::moment_t mmtKeyDownTime[ PX_MAX_KEY ];
+		Types::moment_t mmtKeyDownTime[ PX_MAX_KEY ];
 		unsigned uLastKeyPressed;
 		std::vector< std::function< void( unsigned ) > > vecfnKeyCallback[ PX_MAX_KEY ];
 
@@ -28,7 +28,7 @@ namespace PX
 
 		EKeyState PX_API GetKeyState( unsigned );
 		unsigned PX_API GetLastPressedKey( );
-		Tools::moment_t PX_API TimeSinceKeyPress( unsigned );
+		Types::moment_t PX_API TimeSinceKeyPress( unsigned );
 		void PX_API AddKeyCallback( unsigned, std::function< void( int ) > );
 	};
 }

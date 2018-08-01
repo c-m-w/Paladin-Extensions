@@ -6,7 +6,7 @@ namespace PX
 {
 	namespace Cryptography
 	{
-		template< typename _t > std::string Base64( const std::string& strSubject )
+		template< typename _t > std::string PX_API Base64( const std::string& strSubject )
 		{
 			dbg::Assert( !strSubject.empty( ) );
 			_t _Coder;
@@ -19,6 +19,17 @@ namespace PX
 			strProcessedText.resize( uSize );
 			_Coder.Get( reinterpret_cast< Tools::byte_t* >( &strProcessedText[ 0 ] ), uSize );
 			return strProcessedText;
+		}
+
+		template< typename _t > std::string PX_API AES256CBC( const std::string& strPlainText )
+		{
+			dbg::Assert( !strEncryptionKey.empty( ) && !strInitializationVector.empty( ) );
+			std::string strOutput;
+			_t _Cryption( reinterpret_cast< Tools::byte_t* >( const_cast< char* >( Tools::string_cast< std::string >( strEncryptionKey ).c_str( ) ) ),
+						  strEncryptionKey.length( ), reinterpret_cast< Tools::byte_t* >( const_cast< char* >( strInitializationVector.c_str( ) ) ) );
+			CryptoPP::StringSource( Tools::string_cast< std::string >( strPlainText ), true, new
+									CryptoPP::StreamTransformationFilter( _Cryption, new CryptoPP::StringSink( strOutput ) ) );
+			return strOutput;
 		}
 	}
 
