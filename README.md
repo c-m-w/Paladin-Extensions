@@ -1,16 +1,28 @@
 # Paladin Extensions
 - Extension software developed by Jeremy, Cole, and John.
 
-## TODO
-##### Jeremy
-- Website
-   - Make installer plugin msi for cheat (fonts and everything)
-   - Finish Website php
+## PX Framework Functionality
+Fully featured framework for all PX projects, with a wide variety of functionality such as
+ - Singleton implementation
+ - Time management (Wait and GetMoment)
+ - String casting (between wide and multibyte)
+ - Debugging tools such as logging
+ - Input handling with callback management
+ - System file management and configurations
+ - Security and copy protection implemented through preventative and counter measures such as encrypting traffic, protecting plain data, server communications, and manual mapping injection management
+ - User interface with clean design and modular functionality
 
-## Development Objectives
-1. finish manager/framework
-2. Heartbeat, Byte-patch consideration, etc.
-3. manual map injector & driver
-4. unique download method & stream DLL/cheat securely & protected (after compiled per person with junk code)
-5. pattern scanning, work on features. (Velocity-based backtrack, anything p.)
-7. work on security (VAC, Untrusted, and Anticheats)
+## PX Manager Functionality
+Fully featured program for managing server-to-client communications/distribution with utilities like
+ - Payload management
+ - Antidebug
+ - Antivirtualization
+ - Heartbeat
+ - Byte-patch consideration
+
+## PX CSGO Functionality
+Fully featured cheat for with features of
+ - Awareness
+ - Combat
+ - Other
+ - Settings
