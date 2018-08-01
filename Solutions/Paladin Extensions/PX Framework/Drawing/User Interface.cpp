@@ -33,7 +33,7 @@ namespace PX
 
 			nk_font* PX_API AddFont( std::string strFontFileName, unsigned uFontSize, struct nk_font_config fcFontConfiguration, unsigned uFontAwesomeSize = 0 )
 			{
-				static auto strFontDirectory = Tools::string_cast< std::string >( Tools::GetDirectory( 3 ) + PX_XOR( LR"(\Resources\Fonts\)" ) );
+				static auto strFontDirectory = Tools::string_cast< std::string >( Files::GetDirectory( ) + PX_XOR( LR"(\Resources\Fonts\)" ) );
 
 				nk_d3d9_font_stash_begin( &pAtlas );
 				auto pFont = nk_font_atlas_add_from_file( pAtlas, ( strFontDirectory + strFontFileName ).c_str( ), float( uFontSize ), nullptr );
@@ -504,16 +504,16 @@ namespace PX
 				return bReturn;
 			}
 
-			void Separator( float bRed, float bGreen, float bBlue, unsigned uStartHeight, unsigned uRowSize /*= 3*/, bool bUpperBorder /*= false*/ )
+			void Separator( int iRed, int iGreen, int iBlue, unsigned uStartHeight, unsigned uRowSize /*= 3*/, bool bUpperBorder /*= false*/ )
 			{
 				constexpr auto uSeparatorHeight = 42u;
 				constexpr struct nk_color clrBorderColor = { 85, 88, 94, 255 };
 				const auto pDrawBuffer = nk_window_get_canvas( pContext );
-				nk_fill_rect( pDrawBuffer, nk_rect( 0, uStartHeight, Render::uWindowWidth, uSeparatorHeight ), 0.f, nk_rgba( bRed, bGreen, bBlue, 255 ) );
-				nk_stroke_line( pDrawBuffer, 0, uStartHeight + uSeparatorHeight - 1, pContext->current->bounds.w, uStartHeight + uSeparatorHeight - 1, 0.5, clrBorderColor );
+				nk_fill_rect( pDrawBuffer, nk_rect( 0.f, float( uStartHeight ), float( Render::uWindowWidth ), float( uSeparatorHeight ) ), 0.f, nk_rgba( iRed, iGreen, iBlue, 255 ) );
+				nk_stroke_line( pDrawBuffer, 0.f, float( uStartHeight + uSeparatorHeight - 1 ), float( pContext->current->bounds.w ), float( uStartHeight + uSeparatorHeight - 1 ), 0.5f, clrBorderColor );
 
 				if ( bUpperBorder )
-					nk_stroke_line( pDrawBuffer, 0, uStartHeight + 1, pContext->current->bounds.w, uStartHeight + 1, 0.5, clrBorderColor );
+					nk_stroke_line( pDrawBuffer, 0.f, float( uStartHeight + 1 ), float( pContext->current->bounds.w ), float( uStartHeight + 1 ), 0.5f, clrBorderColor );
 			}
 
 			void PX_API BeginRow( unsigned uRowHeight, unsigned uColumns, ERowType rowRowType )
@@ -529,7 +529,7 @@ namespace PX
 				iCurrentRowUsedColumns = 0;
 				iCurrentRowMaxColumns = uColumns;
 
-				return fnBeginRow[ rowRowType ]( pContext, rowRowType == ROW_DYNAMIC ? NK_DYNAMIC : NK_STATIC, uRowHeight, uColumns );
+				return fnBeginRow[ rowRowType ]( pContext, rowRowType == ROW_DYNAMIC ? NK_DYNAMIC : NK_STATIC, float( uRowHeight ), uColumns );
 			}
 
 			void PX_API EndRow( )

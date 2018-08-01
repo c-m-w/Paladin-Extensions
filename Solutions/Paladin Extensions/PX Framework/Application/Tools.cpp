@@ -6,25 +6,11 @@ namespace PX
 {
 	namespace Tools
 	{
-		std::wstring PX_API GetDirectory( unsigned uEscapeLevels )
-		{
-			auto wszBuffer = static_cast< wchar_t* >( malloc( MAX_PATH ) );
-			GetModuleFileName( nullptr, wszBuffer, MAX_PATH );
-			std::wstring wstrDirectory = wszBuffer;
-
-			for ( auto i = 0u; i <= uEscapeLevels; i++ )
-				wstrDirectory = wstrDirectory.substr( 0, wstrDirectory.find_last_of( L'\\' ) );
-
-			return wstrDirectory;
-		}
-
 		unsigned* GetScreenDimensions( )
 		{
-			unsigned uScreenDimensions[ ]
-			{ 
-				unsigned( GetSystemMetrics( SM_CXSCREEN ) ),
-				unsigned( GetSystemMetrics( SM_CYSCREEN ) )
-			};
+			static unsigned uScreenDimensions[ 2 ];
+			uScreenDimensions[ 0 ] = GetSystemMetrics( SM_CXSCREEN );
+			uScreenDimensions[ 1 ] = GetSystemMetrics( SM_CYSCREEN );
 			return uScreenDimensions;
 		}
 	}

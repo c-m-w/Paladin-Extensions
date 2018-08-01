@@ -39,10 +39,6 @@ namespace PX
 		// *type name*: The unit of time to wait for ( std::chrono ).
 		template< typename = std::chrono::milliseconds > void PX_API Wait( moment_t );
 
-		// INFO: Gets directory with specified directories upward
-		// PARAM: Levels to escape
-		std::wstring PX_API GetDirectory( unsigned = 0 );
-
 		// Get main screen dimensions
 		unsigned* GetScreenDimensions( );
 

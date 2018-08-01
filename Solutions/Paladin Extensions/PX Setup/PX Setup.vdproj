@@ -39,6 +39,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_18EFADDD9BF54ECB8261EB5BB600977F"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_2370A120C7DF496AA208A5F93EEC4124"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
@@ -75,19 +81,13 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_B4924508476A4A9C9FD6E9C3C0214E19"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_BD0A73554E384F669E90B949089F0A39"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_D97638493EB64152BBDEF44704258025"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_DAB4B61B298D49CD9C05EAF5062FD69E"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -115,6 +115,22 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.6.1"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.6.1 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.6.1"
+                    }
+                }
+            }
         }
         "Release"
         {
@@ -125,12 +141,28 @@
         "PackageFilesAs" = "3:2"
         "PackageFileSize" = "3:-2147483648"
         "CabType" = "3:1"
-        "Compression" = "3:2"
+        "Compression" = "3:3"
         "SignOutput" = "11:FALSE"
         "CertificateFile" = "8:"
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.6.1"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.6.1 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.6.1"
+                    }
+                }
+            }
         }
     }
     "Deployable"
@@ -157,7 +189,7 @@
             "SourcePath" = "8:..\\..\\..\\Resources\\Cursor\\Arrow.cur"
             "TargetName" = "8:Arrow.cur"
             "Tag" = "8:"
-            "Folder" = "8:_B8D6F36BF2E8423F9A2AE6ED3A6A3E35"
+            "Folder" = "8:_69F5217FCAD64476A907F5F3C2DCE30A"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -177,7 +209,7 @@
             "SourcePath" = "8:..\\..\\..\\Resources\\Fonts\\TahomaBold.ttf"
             "TargetName" = "8:TahomaBold.ttf"
             "Tag" = "8:"
-            "Folder" = "8:_B8D6F36BF2E8423F9A2AE6ED3A6A3E35"
+            "Folder" = "8:_4E9BD734948B46538DDB06640BC307A0"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -197,7 +229,7 @@
             "SourcePath" = "8:..\\..\\..\\Resources\\Cursor\\Hand.cur"
             "TargetName" = "8:Hand.cur"
             "Tag" = "8:"
-            "Folder" = "8:_B8D6F36BF2E8423F9A2AE6ED3A6A3E35"
+            "Folder" = "8:_69F5217FCAD64476A907F5F3C2DCE30A"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -217,7 +249,27 @@
             "SourcePath" = "8:..\\..\\..\\Resources\\Game Icons\\CSGO.png"
             "TargetName" = "8:CSGO.png"
             "Tag" = "8:"
-            "Folder" = "8:_B8D6F36BF2E8423F9A2AE6ED3A6A3E35"
+            "Folder" = "8:_63C720B8C0724A75849000D724FB83CC"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_18EFADDD9BF54ECB8261EB5BB600977F"
+            {
+            "SourcePath" = "8:..\\..\\..\\Resources\\Paladin Logo.png"
+            "TargetName" = "8:Paladin Logo.png"
+            "Tag" = "8:"
+            "Folder" = "8:_0A96D58E94E64CC2A1800EE93F658D75"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -237,7 +289,7 @@
             "SourcePath" = "8:..\\..\\..\\Resources\\Game Icons\\PUBG.png"
             "TargetName" = "8:PUBG.png"
             "Tag" = "8:"
-            "Folder" = "8:_B8D6F36BF2E8423F9A2AE6ED3A6A3E35"
+            "Folder" = "8:_63C720B8C0724A75849000D724FB83CC"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -257,7 +309,7 @@
             "SourcePath" = "8:..\\..\\..\\Resources\\Fonts\\Envy.ttf"
             "TargetName" = "8:Envy.ttf"
             "Tag" = "8:"
-            "Folder" = "8:_B8D6F36BF2E8423F9A2AE6ED3A6A3E35"
+            "Folder" = "8:_4E9BD734948B46538DDB06640BC307A0"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -277,7 +329,7 @@
             "SourcePath" = "8:..\\..\\..\\Resources\\Cursor\\I Beam.cur"
             "TargetName" = "8:I Beam.cur"
             "Tag" = "8:"
-            "Folder" = "8:_B8D6F36BF2E8423F9A2AE6ED3A6A3E35"
+            "Folder" = "8:_69F5217FCAD64476A907F5F3C2DCE30A"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -297,7 +349,7 @@
             "SourcePath" = "8:..\\..\\..\\Resources\\Fonts\\Roboto.ttf"
             "TargetName" = "8:Roboto.ttf"
             "Tag" = "8:"
-            "Folder" = "8:_B8D6F36BF2E8423F9A2AE6ED3A6A3E35"
+            "Folder" = "8:_4E9BD734948B46538DDB06640BC307A0"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -317,7 +369,7 @@
             "SourcePath" = "8:..\\..\\..\\Resources\\Fonts\\FontAwesome.ttf"
             "TargetName" = "8:FontAwesome.ttf"
             "Tag" = "8:"
-            "Folder" = "8:_B8D6F36BF2E8423F9A2AE6ED3A6A3E35"
+            "Folder" = "8:_4E9BD734948B46538DDB06640BC307A0"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -337,7 +389,7 @@
             "SourcePath" = "8:..\\..\\..\\Resources\\Fonts\\RobotoBold.ttf"
             "TargetName" = "8:RobotoBold.ttf"
             "Tag" = "8:"
-            "Folder" = "8:_B8D6F36BF2E8423F9A2AE6ED3A6A3E35"
+            "Folder" = "8:_4E9BD734948B46538DDB06640BC307A0"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -352,32 +404,12 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_D97638493EB64152BBDEF44704258025"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B4924508476A4A9C9FD6E9C3C0214E19"
             {
-            "SourcePath" = "8:..\\..\\..\\Resources\\Logo\\Paladin Logo.ico"
+            "SourcePath" = "8:..\\..\\..\\Resources\\Paladin Logo.ico"
             "TargetName" = "8:Paladin Logo.ico"
             "Tag" = "8:"
-            "Folder" = "8:_B8D6F36BF2E8423F9A2AE6ED3A6A3E35"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_DAB4B61B298D49CD9C05EAF5062FD69E"
-            {
-            "SourcePath" = "8:..\\..\\..\\Resources\\Logo\\Paladin Logo.png"
-            "TargetName" = "8:Paladin Logo.png"
-            "Tag" = "8:"
-            "Folder" = "8:_B8D6F36BF2E8423F9A2AE6ED3A6A3E35"
+            "Folder" = "8:_0A96D58E94E64CC2A1800EE93F658D75"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -397,7 +429,7 @@
             "SourcePath" = "8:..\\..\\..\\Resources\\Fonts\\Tahoma.ttf"
             "TargetName" = "8:Tahoma.ttf"
             "Tag" = "8:"
-            "Folder" = "8:_B8D6F36BF2E8423F9A2AE6ED3A6A3E35"
+            "Folder" = "8:_4E9BD734948B46538DDB06640BC307A0"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -450,6 +482,61 @@
             "Property" = "8:TARGETDIR"
                 "Folders"
                 {
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_0A96D58E94E64CC2A1800EE93F658D75"
+                    {
+                    "Name" = "8:Resources"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_A0B8C24090C24893A0A06C060B7B04D1"
+                        "Folders"
+                        {
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_4E9BD734948B46538DDB06640BC307A0"
+                            {
+                            "Name" = "8:Fonts"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_A4B9C88A8587490EB9C0F74C999CD3F5"
+                                "Folders"
+                                {
+                                }
+                            }
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_63C720B8C0724A75849000D724FB83CC"
+                            {
+                            "Name" = "8:Game Icons"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_2CD9B2F36DA34A1081076F4937B893DC"
+                                "Folders"
+                                {
+                                }
+                            }
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_69F5217FCAD64476A907F5F3C2DCE30A"
+                            {
+                            "Name" = "8:Cursor"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_E0544E87A36E48D09F6FE8248D4D6289"
+                                "Folders"
+                                {
+                                }
+                            }
+                        }
+                    }
+                    "{9EF0B969-E518-4E46-987F-47570745A589}:_3A3E90BC589F4C83AF90CE7FB8B01A19"
+                    {
+                    "Name" = "8:Extensions Data"
+                    "AlwaysCreate" = "11:FALSE"
+                    "Condition" = "8:"
+                    "Transitive" = "11:FALSE"
+                    "Property" = "8:_059A0AF118A1492DAFEF730EAE7EC237"
+                        "Folders"
+                        {
+                        }
+                    }
                 }
             }
         }

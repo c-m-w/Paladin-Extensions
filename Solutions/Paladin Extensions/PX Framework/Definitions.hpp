@@ -52,7 +52,7 @@
 #if defined _DEBUG
 #define PX_DEPENDENCIES_ESCAPE 3
 #else
-#define PX_DEPENDENCIES_ESCAPE
+#define PX_DEPENDENCIES_ESCAPE 0
 #endif
 
 // Encrypts string data on compile, then decrypts for access on run.
@@ -93,5 +93,5 @@
 // Input interface singleton access macro
 #define PX_INPUT PX::CInputManager::Get( )
 // File manager class singleton access macro
-#define PX_FILES PX::CFileManager::Get( )
+#define PX_CONFIG PX::CConfig::Get( )
 

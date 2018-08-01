@@ -56,7 +56,7 @@ namespace PX
 			void PX_API Header( Tools::cstr_t, Tools::cstr_t, Tools::fn_callback_t, Tools::fn_callback_t );
 			bool PX_API PrimaryTab( Tools::cstr_t, bool );
 			bool PX_API SecondaryTab( Tools::cstr_t, bool );
-			void PX_API Separator( float, float, float, unsigned, unsigned = 3, bool = false );
+			void PX_API Separator( int, int, int, unsigned, unsigned = 3, bool = false );
 			bool PX_API Button( EPosition, Tools::cstr_t, bool );
 			void PX_API Checkbox( Tools::cstr_t, unsigned, bool* );
 
