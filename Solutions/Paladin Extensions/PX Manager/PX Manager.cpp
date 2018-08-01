@@ -54,8 +54,8 @@ void OnLaunch( )
 	//	Tools::Wait( 1 );
 	Net::InitializeConnection( );
 	std::deque< Types::post_data_t > dqPostData;
-	dqPostData.emplace_back( "test", "men" );
-	const auto strResponse = Net::Request( PX_XOR( "https://paladin.rip/test.php?test=men" ), dqPostData );
+	dqPostData.emplace_back( "test", "post" );
+	const auto strResponse = Net::Request( PX_XOR( "https://paladin.rip/test.php?test=get" ), dqPostData );
 	Net::CleanupConnection( );
 	dbg::out << strResponse.c_str( ) << dbg::newl;
 	system( "pause" );
