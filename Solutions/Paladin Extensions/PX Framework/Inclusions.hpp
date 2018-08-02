@@ -25,6 +25,10 @@
 #pragma comment( lib, "libcurl_a.lib" )
 #endif
 
+#include <comdef.h>
+#include <Wbemidl.h>
+#pragma comment( lib, "wbemuuid.lib" )
+
 #include <Psapi.h>
 
 #include <DirectX/d3d9.h>
