@@ -662,7 +662,7 @@ namespace PX
 				nk_stroke_line( pOutput, rcNewBoundaries.x + 7, rcNewBoundaries.y, rcNewBoundaries.x + 3 + uTextWidth, rcNewBoundaries.y, 3, clrDarkBackground );
 				BeginRow( 16, 1, ROW_CUSTOM );
 				auto rcText = nk_widget_bounds( pContext );
-				PushCustomRow( unsigned( rcNewBoundaries.x  + 8 - rcText.x ), unsigned( rcNewBoundaries.y  - rcText.y - 10 ), unsigned( uTextWidth ), 16 );
+				PushCustomRow( unsigned( rcNewBoundaries.x + 8 - rcText.x ), unsigned( rcNewBoundaries.y - rcText.y - 10 ), unsigned( uTextWidth ), 16 );
 				nk_label( pContext, szTitle, NK_TEXT_LEFT );
 				VerticalSpacing( 5 );
 

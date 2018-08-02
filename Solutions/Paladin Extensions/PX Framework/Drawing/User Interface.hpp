@@ -60,8 +60,9 @@ namespace PX
 				RIGHT
 			};
 
-			/** \brief Type of row to begin.\n Dynamic - The width of each column varies and is determined by a ratio.\n Static - The width of each column is fixed and is determined by a static amount. 
-						It may be altered with SetRowWidth( ). \n Custom - Position and size of widgets may be altered using PushCustomRow( ). */
+			/** \brief Type of row to begin.\n Dynamic - The width of each column varies and is determined by a ratio.\n
+						Static - The width of each column is fixed and is determined by a static amount. It may be altered with SetRowWidth( ).\n
+						Custom - Position and size of widgets may be altered using PushCustomRow( ). */
 			enum ERowType
 			{
 				ROW_DYNAMIC,
