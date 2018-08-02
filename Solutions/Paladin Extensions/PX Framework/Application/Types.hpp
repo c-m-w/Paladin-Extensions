@@ -73,11 +73,14 @@ namespace PX
 			color_t( byte_t* bNewColors );
 			color_t( byte_t bRed, byte_t bGreen, byte_t bBlue, byte_t bAlpha );
 			color_t( byte_t bRed, byte_t bGreen, byte_t bBlue );
+			color_t( int* iNewColors );
+			color_t( int iRed, int iGreen, int iBlue, int iAlpha );
+			color_t( int iRed, int iGreen, int iBlue );
 			color_t( const float* flNewColors );
 			color_t( float flRed, float flGreen, float flBlue, float flAlpha );
 			color_t( float flRed, float flGreen, float flBlue );
 
-			byte_t operator[ ]( EColor clrColor );
+			byte_t operator[ ]( int clrColor );
 			bool operator==( const color_t& rhs );
 			bool operator!=( const color_t& rhs );
 

@@ -45,13 +45,17 @@
 // identifies instruct as "Paladin Extensions" original
 #define PX_EXT extern
 
-// identifies class as abstract interface
+
+/** \brief Identifies class as abstract interface. */
 #define PX_ABSTRACT_CLASS class
-// identifies struct as abstract interface
+/** \brief Identifies struct as abstract interface. */
 #define PX_ABSTRACT_STRUCT struct
 
-// maximum managed keys
+/** \brief Maximum managed keys. */
 #define PX_MAX_KEY 256
+
+/** \brief Size of a memory page. */
+#define PX_PAGE 1024 * 4
 
 #if defined _DEBUG
 #define PX_DEPENDENCIES_ESCAPE 3

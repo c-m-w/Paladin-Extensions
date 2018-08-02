@@ -29,6 +29,9 @@ namespace PX
 			/** \brief Initialize the GUI for drawing interactable windows. */
 			/**	\param szApplicationTitle The subtitle of the GUI window. */
 			void PX_API Initialize( Types::cstr_t szApplicationTitle );
+			/** \brief Sets the font for rendering with Nuklear. */
+			/**	\param fntDesiredFont Desired font enumeration index. */
+			void PX_API SetFont( EFont fntDesiredFont );
 			/** \brief Clean up the GUI library for shutdown. */
 			void PX_API OnRelease( );
 			/** \brief Sets a new size for the GUI window. */
@@ -40,6 +43,8 @@ namespace PX
 			bool PX_API Render( );
 			/** \brief Called when widgets should be drawn onto the GUI window. */
 			void PX_API SetLayout( );
+			/** \brief Draws an example demonstrating usage of all widgets. */
+			void PX_API Example( );
 		}
 
 		namespace Widgets
@@ -111,12 +116,10 @@ namespace PX
 			/** \brief Creates primary tabs for navigation, using previously defined widgets. */
 			/**	\param uStartX X value at which the tabs should be rendered at. */
 			/**	\param uStartY Y value at which the tabs should be rendered at. */
-			/**	\param uButtonWidth Width of the tabs. */
-			/**	\param uButtonHeight Height of the tabs. */
 			/**	\param dqButtons Deque of the tabs to render. */
 			/**	\param uActiveButton Current active button, for a toggle effect. */
 			/**	\return -1 - No button was clicked.\n >= 0 - Index of the button that was clicked in the deque. */
-			int PX_API Tabs( unsigned uStartX, unsigned uStartY, unsigned uButtonWidth, unsigned uButtonHeight, std::deque< Types::cstr_t > dqButtons, unsigned uActiveButton );
+			int PX_API Tabs( unsigned uStartX, unsigned uStartY, std::deque< Types::cstr_t > dqButtons, unsigned uActiveButton );
 			/** \brief Creats subtabs for navigation, using previously defined widgets. */
 			/**	\param uStartX X value at which the tabs should be rendered at. */
 			/**	\param uStartY Y value at which the tabs should be rendered at. */
@@ -125,8 +128,7 @@ namespace PX
 			/**	\param dqButtons Deque of the tabs to render. */
 			/**	\param uActiveButton Current active button, for a toggle effect. */
 			/**	\return -1 - No button was clicked.\n >= 0 - Index of the button that was clicked in the deque. */
-			int PX_API Subtabs( unsigned uStartX, unsigned uStartY, unsigned uButtonWidth, unsigned uButtonHeight, std::deque< Types::cstr_t > dqButtons, unsigned uActiveButton );
-
+			int PX_API SubTabs( unsigned uStartX, unsigned uStartY, unsigned uButtonHeight, unsigned uButtonWidth, std::deque< Types::cstr_t > dqButtons, unsigned uActiveButton );
 			/** \brief Creates a groupbox for widget organization. */
 			/**	\param uStartX X position of the groupbox. */
 			/**	\param uStartY Y position of the groupbox. */
@@ -139,10 +141,24 @@ namespace PX
 
 			/** \brief Edit the color that was associated with the color button that was clicked, whose address was stored in a pointer.\n A popup window will be created above everything else and be handled at the end of Render( ) automatically. */
 			void PX_API ColorPicker( );
-			void PX_API ColorButton( Types::cstr_t, Types::byte_t* );
+			/** \brief Creates a color button that the user can set the color for if clicked.\n The color picker is handled automatically if the button is clicked. */
+			/**	\param szSubject What the color is for. */
+			/**	\param pColor Pointer to the color that will be edited if the button is clicked. */
+			void PX_API ColorButton( Types::cstr_t szSubject, Types::color_t* pColor );
 
-			int PX_API Combobox( unsigned, unsigned, Types::cstr_t, std::deque< Types::cstr_t >, unsigned );
-			void PX_API ComboboxMulti( unsigned, unsigned, Types::cstr_t, std::deque< Types::cstr_t >, std::deque< bool >& );
+			/** \brief Creates a combobox for the user to select an option within. */
+			/**	\param uButtonHeight Height of each of the buttons inside the combobox. */
+			/** \param szTitle Title of the combobox. */
+			/**	\param dqOptions Options that should be available inside the combobox. */
+			/**	\param uSelectedOption Currently selected option. */
+			/**	\return -1 - Nothing was selected.\n >= 0 - Something was selected, the index for the option inside the deque of options. */
+			int PX_API Combobox( unsigned uButtonHeight, Types::cstr_t szTitle, std::deque< Types::cstr_t > dqOptions, unsigned uSelectedOption );
+			/** \brief Creates a combobox with multiple options which can all be enabled or disabled. */
+			/**	\param uButtonHeight Height of each of the buttons inside the combobox. */
+			/**	\param szTitle Title of the combobox. */
+			/**	\param dqOptions Options that should be available inside the combobox. */
+			/**	\param dqEnabledOptions List of the options that are enabled in the combobox. */
+			void PX_API ComboboxMulti( unsigned uButtonHeight, Types::cstr_t szTitle, std::deque< Types::cstr_t > dqOptions, std::deque< bool >& dqEnabledOptions );
 
 			template< typename _t > _t PX_API Inputbox( unsigned, char* );
 

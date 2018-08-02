@@ -112,6 +112,21 @@ namespace PX
 			bColors[ COLOR_ALPHA ] = UCHAR_MAX;
 		}
 
+		color_t::color_t( int* iNewColors )
+		{
+			color_t( reinterpret_cast< byte_t* >( iNewColors ) );
+		}
+
+		color_t::color_t( int iRed, int iGreen, int iBlue, int iAlpha )
+		{
+			color_t( byte_t( iRed ), byte_t( iGreen ), byte_t( iBlue ), byte_t( iAlpha ) );
+		}
+
+		color_t::color_t( int iRed, int iGreen, int iBlue )
+		{
+			color_t( byte_t( iRed ), byte_t( iGreen ), byte_t( iBlue ) );
+		}
+
 		color_t::color_t( const float* flNewColors )
 		{
 			const bool bContainsAlphaData = sizeof flNewColors == 16;
@@ -166,7 +181,7 @@ namespace PX
 			bColors[ COLOR_ALPHA ] = UCHAR_MAX;
 		}
 
-		byte_t color_t::operator[ ]( EColor clrColor )
+		byte_t color_t::operator[ ]( int clrColor )
 		{
 			return bColors[ clrColor ];
 		}

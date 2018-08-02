@@ -84,7 +84,11 @@ namespace PX
 			wndWindow.lpfnWndProc = WndProc;
 			wndWindow.hInstance = GetModuleHandle( nullptr );
 
+#if defined _DEBUG
+			const auto strResourceDirectory = Files::GetDirectory( 1 ) + LR"(\Resources\)";
+#else
 			const auto strResourceDirectory = Files::GetDirectory( ) + LR"(\Resources\)";
+#endif
 			wndWindow.hIcon = HICON( LoadImage( nullptr, ( strResourceDirectory + LR"(Paladin Logo.ico)" ).c_str( ),
 												IMAGE_ICON, 0, 0, LR_LOADFROMFILE | LR_DEFAULTSIZE | LR_SHARED ) );
 

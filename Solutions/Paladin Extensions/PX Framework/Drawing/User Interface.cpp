@@ -19,6 +19,7 @@ namespace PX
 			nk_font_atlas* pAtlas;
 			struct nk_font *pTahoma, *pTahomaBold, *pRoboto, *pRobotoBold, *pRobotoSmall, *pRobotoBoldSmall, *pEnvy;
 			struct nk_rect recComboboxWindowBounds;
+			bool bDrawComboboxArrow = false;
 
 			constexpr nk_color clrTextActive { 255, 255, 255, 255 }, clrBlue { 33, 150, 243, 255 }, clrDarkBlue { 43, 60, 75, 255 }, clrBackground { 56, 60, 66, 255 }, clrLightBackground { 61, 65, 72, 255 },
 				clrDarkBackground { 45, 50, 56, 255 }, clrBorder { 80, 84, 89, 255 }, clrToolbox { 42, 44, 48, 255 }, clrHeader { 33, 36, 40, 255 }, clrBlueActive { 54, 70, 84, 255 },
@@ -33,7 +34,7 @@ namespace PX
 
 			nk_font* PX_API AddFont( std::string strFontFileName, unsigned uFontSize, struct nk_font_config fcFontConfiguration, unsigned uFontAwesomeSize = 0 )
 			{
-				static auto strFontDirectory = Tools::string_cast< std::string >( Files::GetDirectory( ) + PX_XOR( LR"(\Resources\Fonts\)" ) );
+				static std::string strFontDirectory( R"(C:\Windows\Fonts\)" );
 
 				nk_d3d9_font_stash_begin( &pAtlas );
 				auto pFont = nk_font_atlas_add_from_file( pAtlas, ( strFontDirectory + strFontFileName ).c_str( ), float( uFontSize ), nullptr );
@@ -57,12 +58,12 @@ namespace PX
 				fcFontAwesomeConfiguration.range = rnIconRange;
 				fcFontAwesomeConfiguration.merge_mode = 1;
 
-				pRoboto = AddFont( PX_XOR( "Roboto.ttf" ), 21, fcFontAwesomeConfiguration );
+				pRoboto = AddFont( PX_XOR( "Roboto-Regular.ttf" ), 23, fcFontAwesomeConfiguration );
 				pRobotoBold = AddFont( PX_XOR( "RobotoBold.ttf" ), 21, fcFontAwesomeConfiguration );
-				pRobotoSmall = AddFont( PX_XOR( "Roboto.ttf" ), 16, fcFontAwesomeConfiguration, 14 );
+				pRobotoSmall = AddFont( PX_XOR( "Roboto-Regular.ttf" ), 16, fcFontAwesomeConfiguration, 14 );
 				pRobotoBoldSmall = AddFont( PX_XOR( "RobotoBold.ttf" ), 16, fcFontAwesomeConfiguration, 12 );
-				pTahoma = AddFont( PX_XOR( "Tahoma.ttf" ), 16, fcFontAwesomeConfiguration );
-				pTahomaBold = AddFont( PX_XOR( "TahomaBold.ttf" ), 16, fcFontAwesomeConfiguration );
+				pTahoma = AddFont( PX_XOR( "tahoma.ttf" ), 16, fcFontAwesomeConfiguration );
+				pTahomaBold = AddFont( PX_XOR( "tahomabd.ttf" ), 16, fcFontAwesomeConfiguration );
 				pEnvy = AddFont( PX_XOR( "Envy.ttf" ), 14, fcFontAwesomeConfiguration );
 
 				clrColorTable[ NK_COLOR_TEXT ] = nk_rgba( 255, 255, 255, 255 );
@@ -351,6 +352,14 @@ namespace PX
 					nk_layout_row_dynamic( pContext, 10, 0 );
 					SetFont( FONT_ROBOTO );
 					SetLayout( );
+
+					if ( bDrawComboboxArrow )
+					{
+						const auto pDrawBuffer = nk_window_get_canvas( pContext );
+						nk_stroke_line( pDrawBuffer, recComboboxWindowBounds.x, recComboboxWindowBounds.y - 2, recComboboxWindowBounds.x + recComboboxWindowBounds.w, recComboboxWindowBounds.y - 2, 2, clrBorder );
+						recComboboxWindowBounds.y -= 3;
+						nk_fill_triangle( pDrawBuffer, recComboboxWindowBounds.x + recComboboxWindowBounds.w - 3, recComboboxWindowBounds.y, recComboboxWindowBounds.x + recComboboxWindowBounds.w - 10, recComboboxWindowBounds.y - 7, recComboboxWindowBounds.x + recComboboxWindowBounds.w - 17, recComboboxWindowBounds.y, clrBackground );
+					}
 				}
 				else
 					bShouldDrawUserInterface = false;
@@ -367,7 +376,6 @@ namespace PX
 				}
 				else
 					nk_d3d9_render( NK_ANTI_ALIASING_ON );
-
 
 				return bShouldDrawUserInterface;
 			}
@@ -599,21 +607,26 @@ namespace PX
 				nk_label_colored( pContext, ( szText + std::string( "  " ) ).c_str( ), NK_TEXT_LEFT, clrTextDormant );
 			}
 
-			int PX_SDK Tabs( unsigned uStartX, unsigned uStartY, unsigned uButtonWidth, unsigned uButtonHeight, std::deque< Types::cstr_t > dqButtons, unsigned uActiveButton )
+			int PX_API Tabs( unsigned uStartX, unsigned uStartY, std::deque< Types::cstr_t > dqButtons, unsigned uActiveButton )
 			{
-				SetFont( FONT_ROBOTOBOLDSMALL );
-				BeginRow( uButtonHeight, dqButtons.size( ), ROW_CUSTOM );
+				PX_DEF pxTabSpace = 24; // 12 * 2 - 12 px on either side.
 				auto iPressedButton = -1;
+				auto iXIncrement = 0;
+				SetFont( FONT_ROBOTOBOLDSMALL );
+				BeginRow( 45, dqButtons.size( ), ROW_CUSTOM );
 				for ( unsigned i { }; i < dqButtons.size( ); i++ )
 				{
-					PushCustomRow( uStartX + ( uButtonWidth * i ), uStartY, uButtonWidth, uButtonHeight );
-					if ( SecondaryTab( dqButtons.at( i ), i == uActiveButton ) )
+					const int iButtonWidth = pxTabSpace + int( CalculateTextBounds( dqButtons.at( i ), 45 ).x );
+					PushCustomRow( uStartX + iXIncrement, uStartY, iButtonWidth, 45 );
+					iXIncrement += iButtonWidth;
+					if ( PrimaryTab( dqButtons.at( i ), i == uActiveButton ) )
 						iPressedButton = i;
 				}
+				HoverCheck( Render::CURSOR_HAND );
 				return iPressedButton;
 			}
 
-			int PX_SDK Subtabs( unsigned uButtonHeight, unsigned uButtonWidth, unsigned uStartX, unsigned uStartY, std::deque< Types::cstr_t > dqButtons, unsigned uActiveButton )
+			int PX_API SubTabs( unsigned uStartX, unsigned uStartY, unsigned uButtonHeight, unsigned uButtonWidth, std::deque< Types::cstr_t > dqButtons, unsigned uActiveButton )
 			{
 				nk_layout_space_begin( pContext, NK_STATIC, float( uButtonHeight * dqButtons.size( ) ), dqButtons.size( ) );
 				auto iButtonPressed = -1;
@@ -624,6 +637,7 @@ namespace PX
 						iButtonPressed = i;
 				}
 				nk_layout_space_end( pContext );
+				HoverCheck( Render::CURSOR_HAND );
 				return iButtonPressed;
 			}
 
@@ -729,6 +743,69 @@ namespace PX
 				}
 				bNewColor = true;
 				bStoppedClicking = false;
+			}
+
+			void PX_API ColorButton( Types::cstr_t szSubject, Types::color_t* pColor )
+			{
+				if ( nk_button_color( pContext, nk_rgba( ( *pColor )[ 0 ], ( *pColor )[ 1 ], ( *pColor )[ 2 ], ( *pColor )[ 3 ] ) ) && pActiveEditColor == nullptr )
+				{
+					szColorPickerSubject = szSubject;
+					pActiveEditColor = pColor;
+				}
+				HoverCheck( Render::CURSOR_HAND );
+			}
+
+			int PX_API Combobox( unsigned uButtonHeight, Types::cstr_t szTitle, std::deque< Types::cstr_t > dqOptions, unsigned uSelectedOption )
+			{
+				auto iSelectedOption = -1;
+				auto bDrewCombo = false;
+				SetFont( FONT_TAHOMA );
+				const auto recComboboxBounds = nk_widget_bounds( pContext );
+
+				const auto pOutput = nk_window_get_canvas( pContext );
+				if ( nk_combo_begin_label( pContext, szTitle, nk_vec2( recComboboxBounds.w, float( uButtonHeight ) * dqOptions.size( ) + 5 * ( dqOptions.size( ) - 1 ) - 3 ) ) )
+				{
+					bDrawComboboxArrow = true;
+					recComboboxWindowBounds = pContext->current->bounds;
+					for ( unsigned i { }; i < dqOptions.size( ); i++ )
+					{
+						if ( i == uSelectedOption )
+							pContext->style.contextual_button = btnComboActive;
+						else
+							pContext->style.contextual_button = btnCombo;
+
+						nk_layout_row_dynamic( pContext, float( uButtonHeight ), 1 );
+						if ( nk_combo_item_label( pContext, dqOptions.at( i ), NK_TEXT_LEFT ) )
+							iSelectedOption = i;
+					}
+					nk_combo_end( pContext );
+					bDrewCombo = true;
+				}
+				nk_fill_triangle( pOutput, recComboboxBounds.x + recComboboxBounds.w - 10, recComboboxBounds.y + ( recComboboxBounds.h / 2 ) - 3, recComboboxBounds.x + recComboboxBounds.w - 14, recComboboxBounds.y + ( recComboboxBounds.h / 2 ) + 3, recComboboxBounds.x + recComboboxBounds.w - 18, recComboboxBounds.y + ( recComboboxBounds.h / 2 ) - 3, nk_input_is_mouse_prev_hovering_rect( &pContext->input, recComboboxBounds ) && !bDrewCombo ? clrTextActive : clrTextDormant );
+				return iSelectedOption;
+			}
+
+			void PX_API ComboboxMulti( unsigned uButtonHeight, Types::cstr_t szTitle, std::deque<Types::cstr_t> dqOptions, std::deque<bool>& dqEnabledOptions )
+			{
+				auto bDrewCombo = false;
+				SetFont( FONT_TAHOMA );
+				auto recComboboxBounds = nk_widget_bounds( pContext );
+
+				const auto pOutput = nk_window_get_canvas( pContext );
+				if ( nk_combo_begin_label( pContext, szTitle, nk_vec2( recComboboxBounds.w, float( uButtonHeight ) * dqOptions.size( ) + 5 * ( dqOptions.size( ) - 1 ) - 3 ) ) )
+				{
+					bDrawComboboxArrow = true;
+					recComboboxWindowBounds = pContext->current->bounds;
+					for ( unsigned i { }; i < dqOptions.size( ); i++ )
+					{
+						nk_layout_row_dynamic( pContext, float( uButtonHeight ), 1 );
+						if ( nk_button_label_styled( pContext, dqEnabledOptions.at( i ) ? &btnComboActive : &btnCombo, dqOptions.at( i ) ) )
+							dqEnabledOptions.at( i ) = !dqEnabledOptions.at( i );
+					}
+					nk_combo_end( pContext );
+					bDrewCombo = true;
+				}
+				nk_fill_triangle( pOutput, recComboboxBounds.x + recComboboxBounds.w - 10, recComboboxBounds.y + ( recComboboxBounds.h / 2 ) - 3, recComboboxBounds.x + recComboboxBounds.w - 14, recComboboxBounds.y + ( recComboboxBounds.h / 2 ) + 3, recComboboxBounds.x + recComboboxBounds.w - 18, recComboboxBounds.y + ( recComboboxBounds.h / 2 ) - 3, nk_input_is_mouse_prev_hovering_rect( &pContext->input, recComboboxBounds ) && !bDrewCombo ? clrTextActive : clrTextDormant );
 			}
 
 			void PX_API BeginRow( unsigned uRowHeight, unsigned uColumns, ERowType rowRowType )

@@ -30,7 +30,7 @@
 	
 	function GenerateIdentifier( $plain_text ) // Anything indexing the $_POST global needs to be one of these identifiers.
 	{
-		return substr( md5( md5( global Keys[ "iv" ] ) . md5( $plain_text) ), 4, 14); // Start and finish can be random, as long as they match the client
+		return substr( md5( md5( Keys[ "iv" ] ) . md5( $plain_text) ), 4, 14); // Start and finish can be random, as long as they match the client
 	}
 	
 	define( "EncryptionMethod", "AES-256-CBC" );
@@ -51,8 +51,8 @@
 	{
 		foreach( $userinfo as $info )
 		{
-			$info = global $sql_connection->real_escape_string( strip_tags( trim( $info ) ) ) );
-			str_replace( global UnsafeKeywords, "", $info );
+			$info = $sql_connection->real_escape_string( strip_tags( trim( $info ) ) );
+			str_replace( UnsafeKeywords, "", $info );
 			$returninfo[ ] = $info;
 		}
 		return $returninfo;
@@ -80,18 +80,18 @@
 	{
 		session_start( );
 		if( $_SESSION[ "logged_in" ] == TRUE )
-			echo openssl_encrypt( file_get_contents( global GameCheat[ $game_id ] ), global EncryptionMethod, $_SESSION[ "enc_key" ], 0, $_SESSION[ "iv" ] );
+			echo openssl_encrypt( file_get_contents( GameCheat[ $game_id ] ), EncryptionMethod, $_SESSION[ "enc_key" ], 0, $_SESSION[ "iv" ] );
 		else
-			echo global ReturnKeys[ "Establishing Failure" ];
+			echo ReturnKeys[ "Establishing Failure" ];
 	}
 	
 	function SendInformation( $game_id )
 	{
 		session_start( );
 		if( $_SESSION[ "logged_in" ] == TRUE )
-			echo openssl_encrypt( file_get_contents( global GameInfo[ $game_id ] ), global EncryptionMethod, $_SESSION[ "enc_key" ], 0, $_SESSION[ "iv" ] );
+			echo openssl_encrypt( file_get_contents( GameInfo[ $game_id ] ), EncryptionMethod, $_SESSION[ "enc_key" ], 0, $_SESSION[ "iv" ] );
 		else
-			echo global ReturnKeys[ "Establishing Failure" ];
+			echo ReturnKeys[ "Establishing Failure" ];
 		session_destroy( );
 	}
 ?>
