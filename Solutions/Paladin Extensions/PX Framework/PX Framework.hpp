@@ -15,7 +15,7 @@
 
 // Security - These files provide specific functionality for ensuring security and verifying authenticity
 #include "Security/Cryptography.hpp"
-#include "Security/Information.hpp"
+#include "Security/System Information.hpp"
 #include "Security/Connectivity.hpp"
 
 // Drawing - These files provide specific functionality for creating visuals

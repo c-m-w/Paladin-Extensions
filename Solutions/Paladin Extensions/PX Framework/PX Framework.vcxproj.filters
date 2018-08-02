@@ -45,13 +45,13 @@
     <ClInclude Include="Application\Tools.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Security\Information.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Security\Connectivity.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Application\Types.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Security\System Information.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -77,13 +77,13 @@
     <ClCompile Include="Application\Tools.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Security\Information.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Security\Connectivity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Application\Types.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Security\System Information.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
