@@ -6,7 +6,7 @@
 #else
 
 // Compiler
-#pragma warning( disable: 4099 4307 4309 4996 )
+#pragma warning( disable: 4098 4099 4307 4309 4996 )
 #define _CRT_SECURE_NO_WARNINGS
 #define _SILENCE_ALL_CXX17_DEPRECATION_WARNINGS
 

@@ -15,7 +15,15 @@
 #pragma comment( lib, "cryptlib.lib" )
 
 #include <curl/curl.h>
-#pragma comment( lib, "libcurl.lib" )
+#pragma comment( lib, "Ws2_32.lib" )
+#pragma comment( lib, "wldap32.lib" )
+#pragma comment( lib, "Crypt32.lib" )
+#pragma comment( lib, "Normaliz.lib" )
+#ifdef _DEBUG
+#pragma comment( lib, "libcurl_a_debug.lib" )
+#else
+#pragma comment( lib, "libcurl_a.lib" )
+#endif
 
 #include <Psapi.h>
 

@@ -37,22 +37,16 @@ namespace PX
 
 		std::string PX_API Request( const std::string& strSite, const std::deque< Types::post_data_t >& dqPostData )
 		{
-			std::string strResponseBuffer;
+			std::string strResponseBuffer, strPostDataBuffer = GeneratePostData( dqPostData );
 
 			curl_easy_setopt( pConnection, CURLOPT_URL, strSite.c_str( ) );
-
-			curl_easy_setopt( pConnection, CURLOPT_POST, true );
-			curl_easy_setopt( pConnection, CURLOPT_POSTFIELDS, GeneratePostData( dqPostData ).c_str( ) );
-
-			curl_easy_setopt( pConnection, CURLOPT_FOLLOWLOCATION, true );
-			//curl_easy_setopt( pConnection, CURLOPT_REFERER, "https://paladin.rip/index.html" );
-			//curl_easy_setopt( pConnection, CURLOPT_USERAGENT, "User Agent/1.0" );
-			//curl_easy_setopt( pConnection, CURLOPT_SSL_VERIFYPEER, false );
-
+			curl_easy_setopt( pConnection, CURLOPT_POST, 1L );
+			curl_easy_setopt( pConnection, CURLOPT_POSTFIELDS, strPostDataBuffer.c_str( ) );
+			curl_easy_setopt( pConnection, CURLOPT_FOLLOWLOCATION, 1L );
 			curl_easy_setopt( pConnection, CURLOPT_WRITEFUNCTION, WriteCallback );
 			curl_easy_setopt( pConnection, CURLOPT_WRITEDATA, &strResponseBuffer );
 
-			curl_easy_perform( pConnection );
+			dbg::Assert( curl_easy_perform( pConnection ) == CURLE_OK );
 			return strResponseBuffer;
 		}
 	}
