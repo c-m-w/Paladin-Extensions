@@ -15,73 +15,79 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_0274D9E94D494F4EA96C0CE02D33A592"
+        "MsmKey" = "8:_0C900B51A223477CAD0E108021940D75"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_049504A731DE4EDCA417FA4B8FDCFFC7"
+        "MsmKey" = "8:_0FCD3F2825D44AB6A8250B2B76E07669"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_09D1504D37544E5C9491FF43F440EED9"
+        "MsmKey" = "8:_1120CF9044F14EB881D5B38EC4B4B4E7"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_176C92EDD1FD4221A7C71CBA865FC898"
+        "MsmKey" = "8:_2A20F2DCB5A34A03846889FEE25086F8"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_18EFADDD9BF54ECB8261EB5BB600977F"
+        "MsmKey" = "8:_2D22B4FDCAB54EDEA920A3782B372823"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_2370A120C7DF496AA208A5F93EEC4124"
+        "MsmKey" = "8:_339B5C21094E4EABBE464FF2FEB3E0C2"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_6FE4BB1970724291A0E0E85D9C1F6CED"
+        "MsmKey" = "8:_36430420DAE54446AD0222DA50D1C345"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_9C4B22A963684CEF871889925AC583D6"
+        "MsmKey" = "8:_3C6BC97E40C14EB08B574B5D9081A505"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_9DE16739E9AC4BAAB521884B60CAD4F7"
+        "MsmKey" = "8:_57E7AAC1BCA04D4E9A3A6D89D24463CA"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_ABDC9C48264348C3A767C59B9D13312B"
+        "MsmKey" = "8:_96876515AB15493C80405E794F16716E"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_AFF7434AC7C44B9DB897FDA2B2850FD5"
+        "MsmKey" = "8:_B5C3C9557D344F4883E7F5379DC19B12"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_B4924508476A4A9C9FD6E9C3C0214E19"
+        "MsmKey" = "8:_B6070DCB25104237A063DBE8C8CE1747"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_B7B96B5734F14CB1B85A62F0150A4045"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -93,7 +99,13 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_F997CB6B88D343FBBEFC2333D1E42226"
+        "MsmKey" = "8:_E2EB57333AE14D42865575A202C59885"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_FBDEEB7F46F041FBAD22449AFF460586"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -184,49 +196,9 @@
         }
         "File"
         {
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0274D9E94D494F4EA96C0CE02D33A592"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0C900B51A223477CAD0E108021940D75"
             {
-            "SourcePath" = "8:..\\..\\..\\Resources\\Cursor\\Arrow.cur"
-            "TargetName" = "8:Arrow.cur"
-            "Tag" = "8:"
-            "Folder" = "8:_69F5217FCAD64476A907F5F3C2DCE30A"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_049504A731DE4EDCA417FA4B8FDCFFC7"
-            {
-            "SourcePath" = "8:..\\..\\..\\Resources\\Fonts\\TahomaBold.ttf"
-            "TargetName" = "8:TahomaBold.ttf"
-            "Tag" = "8:"
-            "Folder" = "8:_4E9BD734948B46538DDB06640BC307A0"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_09D1504D37544E5C9491FF43F440EED9"
-            {
-            "SourcePath" = "8:..\\..\\..\\Resources\\Cursor\\Hand.cur"
+            "SourcePath" = "8:..\\Resources\\Cursor\\Hand.cur"
             "TargetName" = "8:Hand.cur"
             "Tag" = "8:"
             "Folder" = "8:_69F5217FCAD64476A907F5F3C2DCE30A"
@@ -244,112 +216,12 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_176C92EDD1FD4221A7C71CBA865FC898"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_0FCD3F2825D44AB6A8250B2B76E07669"
             {
-            "SourcePath" = "8:..\\..\\..\\Resources\\Game Icons\\CSGO.png"
-            "TargetName" = "8:CSGO.png"
-            "Tag" = "8:"
-            "Folder" = "8:_63C720B8C0724A75849000D724FB83CC"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_18EFADDD9BF54ECB8261EB5BB600977F"
-            {
-            "SourcePath" = "8:..\\..\\..\\Resources\\Paladin Logo.png"
-            "TargetName" = "8:Paladin Logo.png"
-            "Tag" = "8:"
-            "Folder" = "8:_0A96D58E94E64CC2A1800EE93F658D75"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2370A120C7DF496AA208A5F93EEC4124"
-            {
-            "SourcePath" = "8:..\\..\\..\\Resources\\Game Icons\\PUBG.png"
-            "TargetName" = "8:PUBG.png"
-            "Tag" = "8:"
-            "Folder" = "8:_63C720B8C0724A75849000D724FB83CC"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6FE4BB1970724291A0E0E85D9C1F6CED"
-            {
-            "SourcePath" = "8:..\\..\\..\\Resources\\Fonts\\Envy.ttf"
-            "TargetName" = "8:Envy.ttf"
-            "Tag" = "8:"
-            "Folder" = "8:_4E9BD734948B46538DDB06640BC307A0"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9C4B22A963684CEF871889925AC583D6"
-            {
-            "SourcePath" = "8:..\\..\\..\\Resources\\Cursor\\I Beam.cur"
-            "TargetName" = "8:I Beam.cur"
-            "Tag" = "8:"
-            "Folder" = "8:_69F5217FCAD64476A907F5F3C2DCE30A"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_9DE16739E9AC4BAAB521884B60CAD4F7"
-            {
-            "SourcePath" = "8:..\\..\\..\\Resources\\Fonts\\Roboto.ttf"
+            "SourcePath" = "8:..\\Fonts\\Roboto.ttf"
             "TargetName" = "8:Roboto.ttf"
             "Tag" = "8:"
-            "Folder" = "8:_4E9BD734948B46538DDB06640BC307A0"
+            "Folder" = "8:_F052F98462814123BBCD84C6F56571F0"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -359,17 +231,17 @@
             "Permanent" = "11:FALSE"
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
-            "Register" = "3:1"
+            "Register" = "3:5"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_ABDC9C48264348C3A767C59B9D13312B"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_1120CF9044F14EB881D5B38EC4B4B4E7"
             {
-            "SourcePath" = "8:..\\..\\..\\Resources\\Fonts\\FontAwesome.ttf"
+            "SourcePath" = "8:..\\Fonts\\FontAwesome.ttf"
             "TargetName" = "8:FontAwesome.ttf"
             "Tag" = "8:"
-            "Folder" = "8:_4E9BD734948B46538DDB06640BC307A0"
+            "Folder" = "8:_F052F98462814123BBCD84C6F56571F0"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -379,17 +251,17 @@
             "Permanent" = "11:FALSE"
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
-            "Register" = "3:1"
+            "Register" = "3:5"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_AFF7434AC7C44B9DB897FDA2B2850FD5"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2A20F2DCB5A34A03846889FEE25086F8"
             {
-            "SourcePath" = "8:..\\..\\..\\Resources\\Fonts\\RobotoBold.ttf"
-            "TargetName" = "8:RobotoBold.ttf"
+            "SourcePath" = "8:..\\Fonts\\csgo_icons.ttf"
+            "TargetName" = "8:csgo_icons.ttf"
             "Tag" = "8:"
-            "Folder" = "8:_4E9BD734948B46538DDB06640BC307A0"
+            "Folder" = "8:_F052F98462814123BBCD84C6F56571F0"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -399,14 +271,14 @@
             "Permanent" = "11:FALSE"
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
-            "Register" = "3:1"
+            "Register" = "3:5"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B4924508476A4A9C9FD6E9C3C0214E19"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2D22B4FDCAB54EDEA920A3782B372823"
             {
-            "SourcePath" = "8:..\\..\\..\\Resources\\Paladin Logo.ico"
+            "SourcePath" = "8:..\\Resources\\Paladin Logo.ico"
             "TargetName" = "8:Paladin Logo.ico"
             "Tag" = "8:"
             "Folder" = "8:_0A96D58E94E64CC2A1800EE93F658D75"
@@ -424,12 +296,12 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F997CB6B88D343FBBEFC2333D1E42226"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_339B5C21094E4EABBE464FF2FEB3E0C2"
             {
-            "SourcePath" = "8:..\\..\\..\\Resources\\Fonts\\Tahoma.ttf"
-            "TargetName" = "8:Tahoma.ttf"
+            "SourcePath" = "8:..\\Resources\\Game Icons\\PUBG.png"
+            "TargetName" = "8:PUBG.png"
             "Tag" = "8:"
-            "Folder" = "8:_4E9BD734948B46538DDB06640BC307A0"
+            "Folder" = "8:_63C720B8C0724A75849000D724FB83CC"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -444,27 +316,196 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_36430420DAE54446AD0222DA50D1C345"
+            {
+            "SourcePath" = "8:..\\Fonts\\Tahoma.ttf"
+            "TargetName" = "8:Tahoma.ttf"
+            "Tag" = "8:"
+            "Folder" = "8:_F052F98462814123BBCD84C6F56571F0"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:5"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_3C6BC97E40C14EB08B574B5D9081A505"
+            {
+            "SourcePath" = "8:..\\Resources\\Cursor\\Arrow.cur"
+            "TargetName" = "8:Arrow.cur"
+            "Tag" = "8:"
+            "Folder" = "8:_69F5217FCAD64476A907F5F3C2DCE30A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_57E7AAC1BCA04D4E9A3A6D89D24463CA"
+            {
+            "SourcePath" = "8:..\\Fonts\\Envy.ttf"
+            "TargetName" = "8:Envy.ttf"
+            "Tag" = "8:"
+            "Folder" = "8:_F052F98462814123BBCD84C6F56571F0"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:5"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_96876515AB15493C80405E794F16716E"
+            {
+            "SourcePath" = "8:..\\Fonts\\RobotoBold.ttf"
+            "TargetName" = "8:RobotoBold.ttf"
+            "Tag" = "8:"
+            "Folder" = "8:_F052F98462814123BBCD84C6F56571F0"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:5"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B5C3C9557D344F4883E7F5379DC19B12"
+            {
+            "SourcePath" = "8:..\\Fonts\\csgo_icons_outline.ttf"
+            "TargetName" = "8:csgo_icons_outline.ttf"
+            "Tag" = "8:"
+            "Folder" = "8:_F052F98462814123BBCD84C6F56571F0"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:5"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B6070DCB25104237A063DBE8C8CE1747"
+            {
+            "SourcePath" = "8:..\\Resources\\Game Icons\\CSGO.png"
+            "TargetName" = "8:CSGO.png"
+            "Tag" = "8:"
+            "Folder" = "8:_63C720B8C0724A75849000D724FB83CC"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B7B96B5734F14CB1B85A62F0150A4045"
+            {
+            "SourcePath" = "8:..\\Resources\\Cursor\\I Beam.cur"
+            "TargetName" = "8:I Beam.cur"
+            "Tag" = "8:"
+            "Folder" = "8:_69F5217FCAD64476A907F5F3C2DCE30A"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_E2EB57333AE14D42865575A202C59885"
+            {
+            "SourcePath" = "8:..\\Resources\\Paladin Logo.png"
+            "TargetName" = "8:Paladin Logo.png"
+            "Tag" = "8:"
+            "Folder" = "8:_0A96D58E94E64CC2A1800EE93F658D75"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_FBDEEB7F46F041FBAD22449AFF460586"
+            {
+            "SourcePath" = "8:..\\Fonts\\TahomaBold.ttf"
+            "TargetName" = "8:TahomaBold.ttf"
+            "Tag" = "8:"
+            "Folder" = "8:_F052F98462814123BBCD84C6F56571F0"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:5"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
         }
         "FileType"
         {
         }
         "Folder"
         {
-            "{1525181F-901A-416C-8A58-119130FE478E}:_45B06A322C444B5F837A5C434DBFEF86"
-            {
-            "Name" = "8:#1916"
-            "AlwaysCreate" = "11:FALSE"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Property" = "8:DesktopFolder"
-                "Folders"
-                {
-                }
-            }
             "{1525181F-901A-416C-8A58-119130FE478E}:_93D2449EB08142A5B3328356B38D10D6"
             {
             "Name" = "8:#1919"
-            "AlwaysCreate" = "11:FALSE"
+            "AlwaysCreate" = "11:TRUE"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Property" = "8:ProgramMenuFolder"
@@ -485,23 +526,12 @@
                     "{9EF0B969-E518-4E46-987F-47570745A589}:_0A96D58E94E64CC2A1800EE93F658D75"
                     {
                     "Name" = "8:Resources"
-                    "AlwaysCreate" = "11:FALSE"
+                    "AlwaysCreate" = "11:TRUE"
                     "Condition" = "8:"
                     "Transitive" = "11:FALSE"
                     "Property" = "8:_A0B8C24090C24893A0A06C060B7B04D1"
                         "Folders"
                         {
-                            "{9EF0B969-E518-4E46-987F-47570745A589}:_4E9BD734948B46538DDB06640BC307A0"
-                            {
-                            "Name" = "8:Fonts"
-                            "AlwaysCreate" = "11:FALSE"
-                            "Condition" = "8:"
-                            "Transitive" = "11:FALSE"
-                            "Property" = "8:_A4B9C88A8587490EB9C0F74C999CD3F5"
-                                "Folders"
-                                {
-                                }
-                            }
                             "{9EF0B969-E518-4E46-987F-47570745A589}:_63C720B8C0724A75849000D724FB83CC"
                             {
                             "Name" = "8:Game Icons"
@@ -529,14 +559,91 @@
                     "{9EF0B969-E518-4E46-987F-47570745A589}:_3A3E90BC589F4C83AF90CE7FB8B01A19"
                     {
                     "Name" = "8:Extensions Data"
-                    "AlwaysCreate" = "11:FALSE"
+                    "AlwaysCreate" = "11:TRUE"
                     "Condition" = "8:"
                     "Transitive" = "11:FALSE"
                     "Property" = "8:_059A0AF118A1492DAFEF730EAE7EC237"
                         "Folders"
                         {
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_68975D22A4BC46CB93C5820DDD45CE06"
+                            {
+                            "Name" = "8:CSGO"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_B1F0C11300AD420FAC1D2CBFB297BC9C"
+                                "Folders"
+                                {
+                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_E9068493B45D4671B337A27111C8154E"
+                                    {
+                                    "Name" = "8:Resources"
+                                    "AlwaysCreate" = "11:FALSE"
+                                    "Condition" = "8:"
+                                    "Transitive" = "11:FALSE"
+                                    "Property" = "8:_0B262D8A05964683A0A4570AE9DE2257"
+                                        "Folders"
+                                        {
+                                        }
+                                    }
+                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_F99B9672455A452089D9529B4FFFF91A"
+                                    {
+                                    "Name" = "8:Configurations"
+                                    "AlwaysCreate" = "11:FALSE"
+                                    "Condition" = "8:"
+                                    "Transitive" = "11:FALSE"
+                                    "Property" = "8:_27C5B0039F0E4F859814D054446B720F"
+                                        "Folders"
+                                        {
+                                        }
+                                    }
+                                }
+                            }
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_7FA62F1D94C6473092F6E2C04E0CE9D1"
+                            {
+                            "Name" = "8:PUBG"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_A077A88397414847BED10A1A0B2904FE"
+                                "Folders"
+                                {
+                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_34F3875829FA45429462865CD93AD487"
+                                    {
+                                    "Name" = "8:Resources"
+                                    "AlwaysCreate" = "11:FALSE"
+                                    "Condition" = "8:"
+                                    "Transitive" = "11:FALSE"
+                                    "Property" = "8:_D5AA50A9A5A244F1B0A3F5D4D8771A9B"
+                                        "Folders"
+                                        {
+                                        }
+                                    }
+                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_C90787ADB69440B097D3B77733808B71"
+                                    {
+                                    "Name" = "8:Configurations"
+                                    "AlwaysCreate" = "11:FALSE"
+                                    "Condition" = "8:"
+                                    "Transitive" = "11:FALSE"
+                                    "Property" = "8:_5AD06454BE7841CFBF46B5C814C520F1"
+                                        "Folders"
+                                        {
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
+                }
+            }
+            "{1525181F-901A-416C-8A58-119130FE478E}:_F052F98462814123BBCD84C6F56571F0"
+            {
+            "Name" = "8:#1911"
+            "AlwaysCreate" = "11:FALSE"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Property" = "8:FontsFolder"
+                "Folders"
+                {
                 }
             }
         }
@@ -549,14 +656,14 @@
         "MsiBootstrapper"
         {
         "LangId" = "3:1033"
-        "RequiresElevation" = "11:FALSE"
+        "RequiresElevation" = "11:TRUE"
         }
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:PX Setup"
         "ProductCode" = "8:{16E897D1-FFB4-46A2-AC4D-5E30C44A9403}"
-        "PackageCode" = "8:{8D3C5708-8573-4C41-ACAA-676F4549B93E}"
+        "PackageCode" = "8:{53864F35-4652-4C52-A970-96C549BD9641}"
         "UpgradeCode" = "8:{02253ED8-E3CC-4DB9-B535-B299F45DEB80}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -676,6 +783,20 @@
         }
         "Shortcut"
         {
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_7DDD51964A614DAB902611219740FDFB"
+            {
+            "Name" = "8:Paladin Extensions Manager"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:TRUE"
+            "Target" = "8:_93D2449EB08142A5B3328356B38D10D6"
+            "Folder" = "8:_93D2449EB08142A5B3328356B38D10D6"
+            "WorkingFolder" = "8:_93D2449EB08142A5B3328356B38D10D6"
+            "Icon" = "8:"
+            "Feature" = "8:"
+            }
         }
         "UserInterface"
         {
@@ -703,7 +824,7 @@
                             "Type" = "3:8"
                             "ContextData" = "8:Bitmap"
                             "Attributes" = "3:4"
-                            "Setting" = "3:1"
+                            "Setting" = "3:0"
                             "UsePlugInResources" = "11:TRUE"
                             }
                         }
@@ -725,7 +846,7 @@
                             "Type" = "3:8"
                             "ContextData" = "8:Bitmap"
                             "Attributes" = "3:4"
-                            "Setting" = "3:1"
+                            "Setting" = "3:0"
                             "UsePlugInResources" = "11:TRUE"
                             }
                             "CopyrightWarning"
@@ -773,7 +894,7 @@
                             "Type" = "3:8"
                             "ContextData" = "8:Bitmap"
                             "Attributes" = "3:4"
-                            "Setting" = "3:1"
+                            "Setting" = "3:0"
                             "UsePlugInResources" = "11:TRUE"
                             }
                         }
@@ -804,7 +925,7 @@
                             "Type" = "3:8"
                             "ContextData" = "8:Bitmap"
                             "Attributes" = "3:4"
-                            "Setting" = "3:1"
+                            "Setting" = "3:0"
                             "UsePlugInResources" = "11:TRUE"
                             }
                             "ShowProgress"
@@ -854,7 +975,7 @@
                             "Type" = "3:8"
                             "ContextData" = "8:Bitmap"
                             "Attributes" = "3:4"
-                            "Setting" = "3:1"
+                            "Setting" = "3:0"
                             "UsePlugInResources" = "11:TRUE"
                             }
                         }
@@ -885,7 +1006,7 @@
                             "Type" = "3:8"
                             "ContextData" = "8:Bitmap"
                             "Attributes" = "3:4"
-                            "Setting" = "3:1"
+                            "Setting" = "3:0"
                             "UsePlugInResources" = "11:TRUE"
                             }
                             "UpdateText"
@@ -929,7 +1050,7 @@
                             "Type" = "3:8"
                             "ContextData" = "8:Bitmap"
                             "Attributes" = "3:4"
-                            "Setting" = "3:1"
+                            "Setting" = "3:0"
                             "UsePlugInResources" = "11:TRUE"
                             }
                             "InstallAllUsersVisible"
@@ -941,7 +1062,7 @@
                             "ContextData" = "8:1;True=1;False=0"
                             "Attributes" = "3:0"
                             "Setting" = "3:0"
-                            "Value" = "3:1"
+                            "Value" = "3:0"
                             "DefaultValue" = "3:1"
                             "UsePlugInResources" = "11:TRUE"
                             }
@@ -964,7 +1085,7 @@
                             "Type" = "3:8"
                             "ContextData" = "8:Bitmap"
                             "Attributes" = "3:4"
-                            "Setting" = "3:1"
+                            "Setting" = "3:0"
                             "UsePlugInResources" = "11:TRUE"
                             }
                             "CopyrightWarning"
@@ -1012,7 +1133,7 @@
                             "Type" = "3:8"
                             "ContextData" = "8:Bitmap"
                             "Attributes" = "3:4"
-                            "Setting" = "3:1"
+                            "Setting" = "3:0"
                             "UsePlugInResources" = "11:TRUE"
                             }
                         }
@@ -1049,7 +1170,7 @@
                             "Type" = "3:8"
                             "ContextData" = "8:Bitmap"
                             "Attributes" = "3:4"
-                            "Setting" = "3:1"
+                            "Setting" = "3:0"
                             "UsePlugInResources" = "11:TRUE"
                             }
                             "ShowProgress"
