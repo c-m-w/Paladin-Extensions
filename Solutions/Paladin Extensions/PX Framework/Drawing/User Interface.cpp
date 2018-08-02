@@ -738,7 +738,11 @@ namespace PX::UI
 				}
 				if ( Button( EPosition::RIGHT, "CONFIRM", false ) )
 				{
-					*pActiveEditColor = Types::color_t( clrChosenColor.r, clrChosenColor.g, clrChosenColor.b, clrChosenColor.a );
+					//*pActiveEditColor = Types::color_t( clrChosenColor.r, clrChosenColor.g, clrChosenColor.b, clrChosenColor.a );
+					pActiveEditColor->rfl = clrChosenColor.r;
+					pActiveEditColor->gfl = clrChosenColor.g;
+					pActiveEditColor->bfl = clrChosenColor.b;
+					pActiveEditColor->afl = clrChosenColor.a;
 					bNewColor = true;
 					bShouldClose = true;
 				}
@@ -759,7 +763,7 @@ namespace PX::UI
 		{
 			iCurrentRowUsedColumns++;
 
-			if ( nk_button_color( pContext, nk_rgba( ( *pColor )[ 0 ], ( *pColor )[ 1 ], ( *pColor )[ 2 ], ( *pColor )[ 3 ] ) ) && pActiveEditColor == nullptr )
+			if ( nk_button_color( pContext, nk_rgba( pColor->r, pColor->g, pColor->b, pColor->a ) ) && pActiveEditColor == nullptr )
 			{
 				szColorPickerSubject = szSubject;
 				pActiveEditColor = pColor;

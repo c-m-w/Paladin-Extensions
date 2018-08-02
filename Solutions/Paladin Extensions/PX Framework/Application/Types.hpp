@@ -41,7 +41,7 @@ namespace PX::Types
 		};
 
 	private:
-		std::array< byte_t, COLOR_MAX > bColors { };
+		ptr_t* ptrColor;
 
 	public:
 		byte_t GetRed( );
@@ -69,6 +69,7 @@ namespace PX::Types
 		byte_t CalculateLuminance( );
 		void SetLuminance( ) = delete;
 
+
 		color_t( ) = default;
 		color_t( byte_t* bNewColors );
 		color_t( byte_t bRed, byte_t bGreen, byte_t bBlue, byte_t bAlpha );
@@ -79,8 +80,10 @@ namespace PX::Types
 		color_t( const float* flNewColors );
 		color_t( float flRed, float flGreen, float flBlue, float flAlpha );
 		color_t( float flRed, float flGreen, float flBlue );
+		color_t( ptr_t* ptrNewAddress );
+		~color_t( ) = default;
 
-		byte_t operator[ ]( int clrColor );
+		byte_t operator[ ]( int iColor );
 		bool operator==( const color_t& rhs );
 		bool operator!=( const color_t& rhs );
 
@@ -96,6 +99,6 @@ namespace PX::Types
 		__declspec( property( get = GetBlueFloat, put = PutBlueFloat ) ) float bfl;
 		__declspec( property( get = GetAlphaFloat, put = PutAlphaFloat ) ) float afl;
 
-		__declspec( property( get = GetAsHex ) ) ptr_t dwclr;
+		//ptr_t *dwclr = &pColors->u;
 	};
 }
