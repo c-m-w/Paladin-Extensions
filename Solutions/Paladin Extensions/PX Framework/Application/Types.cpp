@@ -119,7 +119,7 @@ namespace PX
 			{
 				bColors[ COLOR_RED ] = byte_t( flNewColors[ COLOR_RED ] );
 				bColors[ COLOR_GREEN ] = byte_t( flNewColors[ COLOR_GREEN ] );
-				bColors[ COLOR_BLUE ] = byte_t( flNewColors[ COLOR_BLUE ]  );
+				bColors[ COLOR_BLUE ] = byte_t( flNewColors[ COLOR_BLUE ] );
 				bColors[ COLOR_ALPHA ] = bContainsAlphaData ? byte_t( flNewColors[ COLOR_ALPHA ] ) : UCHAR_MAX;
 			}
 			else

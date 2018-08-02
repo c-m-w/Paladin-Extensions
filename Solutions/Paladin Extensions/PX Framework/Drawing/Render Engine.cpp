@@ -52,7 +52,7 @@ namespace PX
 					break;
 				default:
 					break;
-			}				
+			}
 
 			return UI::Manager::OnEvent( hwWindowHandle, uMessage, uwParam, llParam )
 				? ( uOldWindowProc
