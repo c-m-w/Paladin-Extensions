@@ -2,16 +2,13 @@
 
 #include "../PX Framework.hpp"
 
-namespace PX
+namespace PX::Tools
 {
-	namespace Tools
+	unsigned* GetScreenDimensions( )
 	{
-		unsigned* GetScreenDimensions( )
-		{
-			static unsigned uScreenDimensions[ 2 ];
-			uScreenDimensions[ 0 ] = GetSystemMetrics( SM_CXSCREEN );
-			uScreenDimensions[ 1 ] = GetSystemMetrics( SM_CYSCREEN );
-			return uScreenDimensions;
-		}
+		static unsigned uScreenDimensions[ 2 ];
+		uScreenDimensions[ 0 ] = GetSystemMetrics( SM_CXSCREEN );
+		uScreenDimensions[ 1 ] = GetSystemMetrics( SM_CYSCREEN );
+		return uScreenDimensions;
 	}
 }

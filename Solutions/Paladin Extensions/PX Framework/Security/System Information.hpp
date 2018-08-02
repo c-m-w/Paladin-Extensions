@@ -4,7 +4,7 @@
 
 namespace PX
 {
-	namespace SYS
+	namespace sys
 	{
 		enum
 		{

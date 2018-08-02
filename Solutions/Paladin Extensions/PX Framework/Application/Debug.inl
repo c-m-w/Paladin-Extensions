@@ -28,7 +28,7 @@ namespace PX
 		template< typename _t > out_t& PX_API out_t::operator<<( const _t& rhs )
 		{
 #if defined _DEBUG 
-			if ( !wofLogFile.good( ) )
+			if ( !wofLogFile.is_open( ) )
 			{
 				wofLogFile.open( "C:/debug.log", std::ofstream::trunc );
 				if ( !wofLogFile.good( ) )

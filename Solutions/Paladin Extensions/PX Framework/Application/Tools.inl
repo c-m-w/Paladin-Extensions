@@ -2,87 +2,84 @@
 
 #pragma once
 
-namespace PX
+namespace PX::Tools
 {
-	namespace Tools
+	template< class _Child > _Child& PX_API SSingleton< _Child >::Get( )
 	{
-		template< class _Child > _Child& PX_API SSingleton< _Child >::Get( )
+		static _Child _ChildClassObject { };
+		return _ChildClassObject;
+	}
+
+	template< typename _t > Types::moment_t PX_API GetMoment( )
+	{
+		return std::chrono::duration_cast< _t >( std::chrono::system_clock::now( ).time_since_epoch( ) ).count( );
+	}
+	template< typename _t > void PX_API Wait( Types::moment_t mmtWaitLength )
+	{
+		std::this_thread::sleep_for( _t( mmtWaitLength ) );
+	}
+
+	// INFO: Deduces traits and uses matching casting function of trait
+	template< typename > PX_ABSTRACT_STRUCT IStringTraits;
+	template< > PX_ABSTRACT_STRUCT IStringTraits< std::wstring >
+	{
+		typedef wchar_t char_trait_t;
+
+		static int ByteConvert( const int iCodePage, LPCWSTR wszData, int iDataLength, LPSTR szBuffer, int iBufferSize )
 		{
-			static _Child _ChildClassObject { };
-			return _ChildClassObject;
+			return WideCharToMultiByte( iCodePage, 0, wszData, iDataLength, szBuffer, iBufferSize, nullptr, nullptr );
 		}
+	};
+	template< > PX_ABSTRACT_STRUCT IStringTraits< std::string >
+	{
+		typedef char char_trait_t;
 
-		template< typename _t > Types::moment_t PX_API GetMoment( )
+		static int ByteConvert( const int iCodePage, LPCSTR szData, int iDataLength, LPWSTR wszBuffer, int iBufferSize )
 		{
-			return std::chrono::duration_cast< _t >( std::chrono::system_clock::now( ).time_since_epoch( ) ).count( );
+			return MultiByteToWideChar( iCodePage, 0, szData, iDataLength, wszBuffer, iBufferSize );
 		}
-		template< typename _t > void PX_API Wait( Types::moment_t mmtWaitLength )
+	};
+
+	// INFO: Differentiates casting from like or unlike string types 
+	template< typename _To, typename _From > PX_ABSTRACT_STRUCT IStringCastImplementation
+	{
+		static _To Cast( const _From& _Source )
 		{
-			std::this_thread::sleep_for( _t( mmtWaitLength ) );
+			int iLength = IStringTraits< _From >::ByteConvert( CP_ACP, _Source.data( ), _Source.length( ), nullptr, 0 );
+			if ( !iLength )
+				return _To( );
+
+			std::vector< typename IStringTraits< _To >::char_trait_t > _strBuffer( iLength );
+			IStringTraits< _From >::ByteConvert( CP_ACP, _Source.data( ), _Source.length( ), &_strBuffer[ 0 ], iLength );
+
+			return _To( _strBuffer.begin( ), _strBuffer.end( ) );
 		}
-
-		// INFO: Deduces traits and uses matching casting function of trait
-		template< typename > PX_ABSTRACT_STRUCT IStringTraits;
-		template< > PX_ABSTRACT_STRUCT IStringTraits< std::wstring >
+	};
+	template< typename _From > PX_ABSTRACT_STRUCT IStringCastImplementation< _From, _From >
+	{
+		static const _From& Cast( const _From& _Source )
 		{
-			typedef wchar_t char_trait_t;
-
-			static int ByteConvert( const int iCodePage, LPCWSTR wszData, int iDataLength, LPSTR szBuffer, int iBufferSize )
-			{
-				return WideCharToMultiByte( iCodePage, 0, wszData, iDataLength, szBuffer, iBufferSize, nullptr, nullptr );
-			}
-		};
-		template< > PX_ABSTRACT_STRUCT IStringTraits< std::string >
-		{
-			typedef char char_trait_t;
-
-			static int ByteConvert( const int iCodePage, LPCSTR szData, int iDataLength, LPWSTR wszBuffer, int iBufferSize )
-			{
-				return MultiByteToWideChar( iCodePage, 0, szData, iDataLength, wszBuffer, iBufferSize );
-			}
-		};
-
-		// INFO: Differentiates casting from like or unlike string types 
-		template< typename _To, typename _From > PX_ABSTRACT_STRUCT IStringCastImplementation
-		{
-			static _To Cast( const _From& _Source )
-			{
-				int iLength = IStringTraits< _From >::ByteConvert( CP_ACP, _Source.data( ), _Source.length( ), nullptr, 0 );
-				if ( !iLength )
-					return _To( );
-
-				std::vector< typename IStringTraits< _To >::char_trait_t > _strBuffer( iLength );
-				IStringTraits< _From >::ByteConvert( CP_ACP, _Source.data( ), _Source.length( ), &_strBuffer[ 0 ], iLength );
-
-				return _To( _strBuffer.begin( ), _strBuffer.end( ) );
-			}
-		};
-		template< typename _From > PX_ABSTRACT_STRUCT IStringCastImplementation< _From, _From >
-		{
-			static const _From& Cast( const _From& _Source )
-			{
-				return _Source;
-			}
-		};
-
-		// INFO: Interface for C-Style string casting
-		template< typename > PX_ABSTRACT_STRUCT IStringTypeOfCharacter;
-		template< > PX_ABSTRACT_STRUCT IStringTypeOfCharacter< Types::cstr_t >
-		{
-			typedef std::string wrap_t;
-		};
-		template< > PX_ABSTRACT_STRUCT IStringTypeOfCharacter< Types::wcstr_t >
-		{
-			typedef std::wstring wrap_t;
-		};
-
-		template< typename _To, typename _From > _To PX_API string_cast( const _From& _Source )
-		{
-			return IStringCastImplementation< _To, _From >::Cast( _Source );
+			return _Source;
 		}
-		template< typename _To, typename _From > _To PX_API string_cast( _From* _Source )
-		{
-			return IStringCastImplementation< _To, typename IStringTypeOfCharacter< const _From* >::wrap_t >::Cast( _Source );
-		}
+	};
+
+	// INFO: Interface for C-Style string casting
+	template< typename > PX_ABSTRACT_STRUCT IStringTypeOfCharacter;
+	template< > PX_ABSTRACT_STRUCT IStringTypeOfCharacter< Types::cstr_t >
+	{
+		typedef std::string wrap_t;
+	};
+	template< > PX_ABSTRACT_STRUCT IStringTypeOfCharacter< Types::wcstr_t >
+	{
+		typedef std::wstring wrap_t;
+	};
+
+	template< typename _To, typename _From > _To PX_API string_cast( const _From& _Source )
+	{
+		return IStringCastImplementation< _To, _From >::Cast( _Source );
+	}
+	template< typename _To, typename _From > _To PX_API string_cast( _From* _Source )
+	{
+		return IStringCastImplementation< _To, typename IStringTypeOfCharacter< const _From* >::wrap_t >::Cast( _Source );
 	}
 }
