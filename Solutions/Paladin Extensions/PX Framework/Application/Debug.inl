@@ -18,6 +18,7 @@ namespace PX
 			i++;
 			return true;
 		}
+
 		namespace
 		{
 #if defined _DEBUG 

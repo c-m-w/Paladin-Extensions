@@ -148,7 +148,82 @@ namespace PX::sys
 		return peTarget.th32ProcessID;
 	}
 
-	bool PX_API Inject( LPVOID pDLL, const std::wstring& wstrExecutableName, SInjectionInfo* injInfo )
+	DWORD WINAPI CallDLLThreadEnd( )
+	{
+		return 0;
+	}
+
+	DWORD WINAPI CallDLLThread( _In_ LPVOID lpParameter )
+	{
+		auto* injInfo = static_cast< SInjectionInfo* >( lpParameter );
+
+		// Mark starting address in header
+		auto pBaseRelocation = injInfo->pBaseRelocation;
+		auto dwHeaderSize = DWORD( LPBYTE( injInfo->pImageBase ) - injInfo->pNTHeaders->OptionalHeader.ImageBase );
+		while ( pBaseRelocation->VirtualAddress )
+		{
+			if ( pBaseRelocation->SizeOfBlock >= sizeof( IMAGE_BASE_RELOCATION ) )
+			{
+				auto dwNumberOfBlocks = ( pBaseRelocation->SizeOfBlock - sizeof( IMAGE_BASE_RELOCATION ) ) / sizeof( WORD );
+				auto pList = PWORD( pBaseRelocation + 1 );
+
+				for ( DWORD d = 0; d < dwNumberOfBlocks; d++ )
+					if ( pList[ d ] )
+					{
+						auto pAddress = PDWORD( LPBYTE( injInfo->pImageBase ) + ( pBaseRelocation->VirtualAddress + ( pList[ d ] & 0xFFF ) ) );
+						*pAddress += dwHeaderSize;
+					}
+			}
+
+			pBaseRelocation = PIMAGE_BASE_RELOCATION( LPBYTE( pBaseRelocation ) + pBaseRelocation->SizeOfBlock );
+		}
+
+		// Resolve DLL imports
+		auto pImportDescriptor = injInfo->pImportDescriptor;
+		for ( ; pImportDescriptor->Characteristics; pImportDescriptor++ )
+		{
+			auto thkOriginalFirst = PIMAGE_THUNK_DATA( LPBYTE( injInfo->pImageBase ) + pImportDescriptor->OriginalFirstThunk );
+			auto thkNewFirst = PIMAGE_THUNK_DATA( LPBYTE( injInfo->pImageBase ) + pImportDescriptor->FirstThunk );
+
+			auto hModule = injInfo->fnLoadLibraryA( LPCSTR( injInfo->pImageBase ) + pImportDescriptor->Name );
+
+			if ( !hModule )
+				return FALSE;
+
+			for ( ; thkOriginalFirst->u1.AddressOfData; thkOriginalFirst++, thkNewFirst++ )
+			{
+				if ( thkOriginalFirst->u1.Ordinal & IMAGE_ORDINAL_FLAG ) // Import by ordinal
+				{
+					auto dwFunction = DWORD( injInfo->fnGetProcAddress( hModule, LPCSTR( thkOriginalFirst->u1.Ordinal & 0xFFFF ) ) );
+
+					if ( !dwFunction )
+						return FALSE;
+
+					thkNewFirst->u1.Function = dwFunction;
+				}
+				else // Import by name
+				{
+					auto dwFunction = DWORD( injInfo->fnGetProcAddress( hModule, LPCSTR( PIMAGE_IMPORT_BY_NAME( LPBYTE( injInfo->pImageBase ) + thkOriginalFirst->u1.AddressOfData )->Name ) ) );
+
+					if ( !dwFunction )
+						return FALSE;
+
+					thkNewFirst->u1.Function = dwFunction;
+				}
+			}
+		}
+
+		// Call DLLMain
+		if ( injInfo->pNTHeaders->OptionalHeader.AddressOfEntryPoint )
+		{
+			auto fnEntry = reinterpret_cast< BOOL( WINAPI* )( HMODULE, DWORD, PVOID ) > ( LPBYTE( injInfo->pImageBase ) + injInfo->pNTHeaders->OptionalHeader.AddressOfEntryPoint );
+			return fnEntry( HMODULE( injInfo->pImageBase ), DLL_PROCESS_ATTACH, nullptr );
+		}
+
+		return TRUE;
+	}
+
+	bool PX_API DLLManualMap( LPVOID pDLL, const std::wstring& wstrExecutableName, SInjectionInfo* injInfo )
 	{
 		if ( !dbg::Ensure( EnsureElevation( ) ) )
 			return false;
@@ -164,50 +239,51 @@ namespace PX::sys
 			return false;
 
 		// open handle to target process
-		auto hProcess = OpenProcess( PROCESS_VM_OPERATION | PROCESS_VM_WRITE, FALSE, GetProcessID( wstrExecutableName ) );
-		if ( !dbg::Ensure( hProcess ) )
+		auto hTarget = OpenProcess( PROCESS_VM_OPERATION | PROCESS_VM_WRITE, FALSE, GetProcessID( wstrExecutableName ) );
+		if ( !dbg::Ensure( hTarget ) )
 		{
 			dbg::PutLastError( );
-			CloseHandle( hProcess );
+			CloseHandle( hTarget );
 			return false;
 		}
 
 		// allocate memory in & write headers to target process
-		auto pImage = VirtualAllocEx( hProcess, nullptr, pNTHeader->OptionalHeader.SizeOfImage, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE );
+		auto pImage = VirtualAllocEx( hTarget, nullptr, pNTHeader->OptionalHeader.SizeOfImage, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE );
 		if ( !dbg::Ensure( pImage ) )
 		{
 			dbg::PutLastError( );
-			CloseHandle( hProcess );
+			CloseHandle( hTarget );
 			return false;
 		}
 
-		if ( !dbg::Ensure( WriteProcessMemory( hProcess, pImage, pDLL, pNTHeader->OptionalHeader.SizeOfHeaders, nullptr ) ) )
+		if ( !dbg::Ensure( WriteProcessMemory( hTarget, pImage, pDLL, pNTHeader->OptionalHeader.SizeOfHeaders, nullptr ) ) )
 		{
 			dbg::PutLastError( );
-			VirtualFreeEx( hProcess, pImage, 0, MEM_RELEASE );
-			CloseHandle( hProcess );
+			VirtualFreeEx( hTarget, pImage, 0, MEM_RELEASE );
+			CloseHandle( hTarget );
 			return false;
 		}
 
 		auto pSectionHeader = PIMAGE_SECTION_HEADER( pNTHeader + 1 );
-		for ( int i = 0; i < pNTHeader->FileHeader.NumberOfSections; i++ )
+		for ( WORD w = 0; w < pNTHeader->FileHeader.NumberOfSections; w++ )
 		{
-			if ( !dbg::Ensure( WriteProcessMemory( hProcess, PBYTE( pImage ) + pSectionHeader[ i ].VirtualAddress, PBYTE( pDLL ) + pSectionHeader[ i ].PointerToRawData, pSectionHeader[ i ].SizeOfRawData, nullptr ) ) )
+			if ( !dbg::Ensure( WriteProcessMemory( hTarget, PBYTE( pImage ) + pSectionHeader[ w ].VirtualAddress, PBYTE( pDLL ) + pSectionHeader[ w ].PointerToRawData, pSectionHeader[ w ].SizeOfRawData, nullptr ) ) )
 			{
 				dbg::PutLastError( );
-				VirtualFreeEx( hProcess, pImage, 0, MEM_RELEASE );
-				CloseHandle( hProcess );
+				VirtualFreeEx( hTarget, pImage, 0, MEM_RELEASE );
+				CloseHandle( hTarget );
 				return false;
 			}
 		}
 
 		// allocate memory in & write data to target process
-		auto pMemory = VirtualAllocEx( hProcess, nullptr, 4096, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE );
+		auto pMemory = VirtualAllocEx( hTarget, nullptr, 4096, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE );
 		if ( !dbg::Ensure( pMemory ) )
 		{
 			dbg::PutLastError( );
-			VirtualFreeEx( hProcess, pImage, 0, MEM_RELEASE );
-			CloseHandle( hProcess );
+			VirtualFreeEx( hTarget, pImage, 0, MEM_RELEASE );
+			CloseHandle( hTarget );
+			return false;
 		}
 
 		// transfer important info to dll
@@ -218,16 +294,59 @@ namespace PX::sys
 		injInfo->fnLoadLibraryA = LoadLibraryA;
 		injInfo->fnGetProcAddress = GetProcAddress;
 
-		if ( !dbg::Ensure( WriteProcessMemory( hProcess, pMemory, injInfo, sizeof( SInjectionInfo ), nullptr ) ) )
+		if ( !dbg::Ensure( WriteProcessMemory( hTarget, pMemory, injInfo, sizeof( SInjectionInfo ), nullptr ) ) )
 		{
 			dbg::PutLastError( );
-			VirtualFreeEx( hProcess, pImage, 0, MEM_RELEASE );
-			VirtualFreeEx( hProcess, pMemory, 0, MEM_RELEASE );
-			CloseHandle( hProcess );
+			VirtualFreeEx( hTarget, pImage, 0, MEM_RELEASE );
+			VirtualFreeEx( hTarget, pMemory, 0, MEM_RELEASE );
+			CloseHandle( hTarget );
+			return false;
 		}
 
-		// hijack thread instead of normal create thread for dllmain
-		//WriteProcessMemory( hProcess, PVOID( static_cast< SInjectionInfo* >( pMemory ) + 1 ), LoadDll, ( DWORD )LoadDllEnd - ( DWORD )LoadDll, nullptr );
+		WriteProcessMemory( hTarget, PVOID( static_cast< SInjectionInfo* >( pMemory ) + 1 ), CallDLLThread, DWORD( CallDLLThreadEnd ) - DWORD( CallDLLThread ), nullptr );
+		auto hThread = CreateRemoteThread( hTarget, nullptr, 0, LPTHREAD_START_ROUTINE( static_cast< SInjectionInfo* >( pMemory ) + 1 ), pMemory, 0, nullptr );
+		if ( !dbg::Ensure( hThread ) )
+		{
+			dbg::PutLastError( );
+			VirtualFreeEx( hTarget, pImage, 0, MEM_RELEASE );
+			VirtualFreeEx( hTarget, pMemory, 0, MEM_RELEASE );
+			CloseHandle( hTarget );
+			return false;
+		}
+
+		if ( !dbg::Ensure( WaitForSingleObject( hThread, INFINITE ) != WAIT_FAILED ) )
+		{
+			dbg::PutLastError( );
+			VirtualFreeEx( hTarget, pMemory, 0, MEM_RELEASE );
+			VirtualFreeEx( hTarget, pImage, 0, MEM_RELEASE );
+			CloseHandle( hThread );
+			CloseHandle( hTarget );
+			return false;
+		}
+
+		DWORD dwExitCode;
+		if ( !dbg::Ensure( GetExitCodeThread( hThread, &dwExitCode ) ) )
+		{
+			dbg::PutLastError( );
+			VirtualFreeEx( hTarget, pMemory, 0, MEM_RELEASE );
+			VirtualFreeEx( hTarget, pImage, 0, MEM_RELEASE );
+			CloseHandle( hThread );
+			CloseHandle( hTarget );
+			return false;
+		}
+
+		if ( !dbg::Ensure( dwExitCode ) )
+		{
+			VirtualFreeEx( hTarget, pMemory, 0, MEM_RELEASE );
+			VirtualFreeEx( hTarget, pImage, 0, MEM_RELEASE );
+			CloseHandle( hThread );
+			CloseHandle( hTarget );
+			return false;
+		}
+
+		CloseHandle( hThread );
+		VirtualFreeEx( hTarget, pMemory, 0, MEM_RELEASE );
+		CloseHandle( hTarget );
 
 		return true;
 	}

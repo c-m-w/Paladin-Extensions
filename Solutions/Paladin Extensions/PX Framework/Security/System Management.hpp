@@ -2,34 +2,42 @@
 
 #pragma once
 
-namespace PX
+namespace PX::sys
 {
-	namespace sys
+	enum
 	{
-		enum
-		{
-			SYS_CPU, SYS_GPU, SYS_DISPLAY, SYS_OS, SYS_BOARD, SYS_MAX
-		};
+		SYS_CPU, SYS_GPU, SYS_DISPLAY, SYS_OS, SYS_BOARD, SYS_MAX
+	};
 
-		PX_SDK std::wstring wstrSystemParts[ SYS_MAX ];
-		PX_SDK std::wstring wstrInstallUSBName;
-		PX_SDK std::deque< std::wstring > dqApps;
+	PX_SDK std::wstring wstrSystemParts[ SYS_MAX ];
+	PX_SDK std::wstring wstrInstallUSBName;
+	PX_SDK std::deque< std::wstring > dqApps;
 
-		/** \brief Puts system info into info variables. */
-		void PX_API GetSystemInfo( );
+	/** \brief Puts system info into info variables. */
+	void PX_API GetSystemInfo( );
 
-		bool PX_API EnsureElevation( );
-		DWORD PX_API GetProcessID( const std::wstring& wstrExecutableName );
+	/** \brief Used to ensure elevation for self process\n
+		If current process is not elevated, it will attempt to elevate it manually. */
+	/** \return True if self process is elevated */
+	bool PX_API EnsureElevation( );
+	/** \brief Gets process identifier for any running executable */
+	/** \param wstrExecutableName Executable name for target process */
+	/** \return Process ID */
+	DWORD PX_API GetProcessID( const std::wstring& wstrExecutableName );
 
-		struct SInjectionInfo
-		{
-			PVOID pImageBase;
-			PIMAGE_NT_HEADERS pNTHeaders;
-			PIMAGE_BASE_RELOCATION pBaseRelocation;
-			PIMAGE_IMPORT_DESCRIPTOR pImportDescriptor;
-			HMODULE( WINAPI* fnLoadLibraryA )( LPCSTR );
-			FARPROC( WINAPI* fnGetProcAddress )( HMODULE, LPCSTR );
-		};
-		bool PX_API Inject( LPVOID pDLL, const std::wstring& wstrExecutableName, SInjectionInfo* injInfo );
-	}
+	struct SInjectionInfo
+	{
+		PVOID pImageBase;
+		PIMAGE_NT_HEADERS pNTHeaders;
+		PIMAGE_BASE_RELOCATION pBaseRelocation;
+		PIMAGE_IMPORT_DESCRIPTOR pImportDescriptor;
+		HMODULE( WINAPI* fnLoadLibraryA )( LPCSTR );
+		FARPROC( WINAPI* fnGetProcAddress )( HMODULE, LPCSTR );
+	};
+	/** \brief Manually maps and calls desired DLL into any running executable */
+	/** \param pDLL Data for DLL to be mapped */
+	/** \param wstrExecutableName Executable name for target process */
+	/** \param injInfo Object to store information of injection. */
+	/** \return True if successful, false if failed. */
+	bool PX_API DLLManualMap( LPVOID pDLL, const std::wstring& wstrExecutableName, SInjectionInfo* injInfo );
 }
