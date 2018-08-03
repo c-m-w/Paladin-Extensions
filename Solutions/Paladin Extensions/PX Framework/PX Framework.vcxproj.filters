@@ -54,9 +54,6 @@
     <ClInclude Include="Security\System Management.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Application\Audio.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application\Input Manager.cpp">
@@ -87,9 +84,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Security\System Management.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Application\Audio.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

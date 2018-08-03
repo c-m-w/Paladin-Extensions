@@ -20,6 +20,10 @@ namespace PX::Tools
 		static _Child& PX_API Get( );
 	};
 
+	/** \brief Plays a sound. */
+	/**	\param szFileName File name of the sound. */
+	void PX_API EmitSound( Types::wcstr_t szFileName );
+
 	/** \brief Paladin time datatype, long enough to hold any time type, down to microseconds. */
 	typedef unsigned long long moment_t;
 	// INFO: Gets the local time

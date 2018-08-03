@@ -492,7 +492,7 @@ namespace PX::UI
 			if( nk_button_label_styled( pContext, bActive ? &btnTopActive : &btnTop, szText ) )
 			{
 				if( !bActive )
-					Audio::PlaySound( "ButtonClick.wav" );
+					Audio::EmitSound( L"ButtonClick.wav" );
 				return true;
 			}
 			return false;
@@ -520,7 +520,7 @@ namespace PX::UI
 			SetFont( FONT_TAHOMA );
 			const auto bReturn = nk_button_label_styled( pContext, &btnRegular, szText );
 			if ( bReturn )
-				Audio::PlaySound( "ButtonClick.wav" );
+				Audio::EmitSound( L"ButtonClick.wav" );
 			HoverCheck( CURSOR_HAND );
 			return bReturn;
 		}
@@ -554,7 +554,7 @@ namespace PX::UI
 			const auto bReturn = nk_button_label_styled( pContext, bActive ? &btnSpecialActive : &btnSpecial, szText );
 
 			if( bReturn )
-				Audio::PlaySound( "ButtonClick.wav" );
+				Audio::EmitSound( L"ButtonClick.wav" );
 
 			if ( !bFoundHoverTarget )
 			{
@@ -616,7 +616,7 @@ namespace PX::UI
 				if ( !bWasClicking )
 				{
 					*bActive = !*bActive;
-					Audio::PlaySound( *bActive ? R"(Tick.wav)" : R"(Untick.wav)" );
+					Audio::EmitSound( *bActive ? LR"(Tick.wav)" : LR"(Untick.wav)" );
 				}
 				bWasClicking = true;
 			}
