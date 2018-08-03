@@ -16,7 +16,7 @@ namespace PX::Render
 	};
 
 	/** \brief Time at which the window was restored from minimized. */
-	PX_SDK Types::moment_t mmtRestoreWindow;
+	PX_SDK Tools::moment_t mmtRestoreWindow;
 
 	/** \brief Custom cursors. */
 	PX_SDK HCURSOR hCursors[ CURSOR_MAX ];

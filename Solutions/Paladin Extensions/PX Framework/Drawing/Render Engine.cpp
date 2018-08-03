@@ -43,7 +43,7 @@ namespace PX::Render
 						dxParameters.BackBufferWidth = uWidth;
 						dxParameters.BackBufferHeight = uHeight;
 						const auto hrReset = pDevice->Reset( &dxParameters );
-						dbg::Assert( hrReset >= 0 );
+						dbg::Ensure( hrReset >= 0 );
 						UI::Manager::Resize( uWidth, uHeight );
 					}
 				}
@@ -135,7 +135,7 @@ namespace PX::Render
 
 			// Windows 7 doesn't support hardware vertexprocessing, so if it fails we need to use software vertexprocessing.
 			if ( pObjectEx->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hwWindowHandle, D3DCREATE_HARDWARE_VERTEXPROCESSING | D3DCREATE_PUREDEVICE | D3DCREATE_FPU_PRESERVE, &dxParameters, &pDevice ) < 0 )
-				dbg::Assert( pObjectEx->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hwWindowHandle, D3DCREATE_SOFTWARE_VERTEXPROCESSING | D3DCREATE_PUREDEVICE | D3DCREATE_FPU_PRESERVE, &dxParameters, &pDevice ) >= 0 );
+				dbg::Ensure( pObjectEx->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hwWindowHandle, D3DCREATE_SOFTWARE_VERTEXPROCESSING | D3DCREATE_PUREDEVICE | D3DCREATE_FPU_PRESERVE, &dxParameters, &pDevice ) >= 0 );
 			pDevice->GetCreationParameters( new D3DDEVICE_CREATION_PARAMETERS ); // warning: passing NEW because parameter passed from before was never used
 		}
 	}
@@ -151,10 +151,10 @@ namespace PX::Render
 	void PX_API SetWindowProc( IDirect3DDevice9* pTargetDevice )
 	{
 		D3DDEVICE_CREATION_PARAMETERS cpParameters;
-		dbg::Assert( pTargetDevice->GetCreationParameters( &cpParameters ) >= 0 );
+		dbg::Ensure( pTargetDevice->GetCreationParameters( &cpParameters ) >= 0 );
 		hwOldWindowHandle = cpParameters.hFocusWindow;
 
 		uOldWindowProc = SetWindowLongPtr( hwOldWindowHandle, GWLP_WNDPROC, reinterpret_cast< long >( WndProc ) );
-		dbg::Assert( uOldWindowProc );
+		dbg::Ensure( uOldWindowProc );
 	}
 }

@@ -258,7 +258,7 @@ namespace PX::UI
 		void PX_API SetFont( EFont fntDesiredFont )
 		{
 			static std::deque< nk_font* > dqFonts { pTahoma, pTahomaBold, pRoboto, pRobotoBold, pRobotoSmall, pRobotoBoldSmall, pEnvy };
-			dbg::Assert( fntDesiredFont >= 0 && fntDesiredFont < FONT_MAX );
+			dbg::Ensure( fntDesiredFont >= 0 && fntDesiredFont < FONT_MAX );
 			return nk_style_set_font( pContext, &dqFonts[ fntDesiredFont ]->handle );
 		}
 
@@ -832,7 +832,7 @@ namespace PX::UI
 		{
 			iCurrentRowUsedColumns += 3 ;
 
-			dbg::Assert( iMax > iMin );
+			dbg::Ensure( iMax > iMin );
 			auto szTexta = std::to_string( iCurrentValue ).substr( 0, std::to_string( iCurrentValue ).size( ) );
 			auto szText = szTexta.c_str( );
 			static auto bInEdit = false, bSetEditValue = false;
@@ -840,9 +840,9 @@ namespace PX::UI
 			SetFont( FONT_ROBOTOSMALL );
 			const auto vecTitleSize = CalculateTextBounds( szTitle, 10 );
 			auto vecTextSize = CalculateTextBounds( szText, 10 );
-			PushCustomRow( uStartX + 5, uStartY, vecTitleSize.x, vecTitleSize.y );
+			PushCustomRow( uStartX + 5, uStartY, unsigned( vecTitleSize.x ), unsigned( vecTitleSize.y ) );
 			nk_label( pContext, szTitle, NK_TEXT_LEFT );
-			PushCustomRow( uStartX + uWidth - vecTextSize.x - 5, uStartY, vecTextSize.x, vecTextSize.y );
+			PushCustomRow( uStartX + uWidth - unsigned( vecTextSize.x ) - 5, uStartY, unsigned( vecTextSize.x ), unsigned( vecTextSize.y ) );
 
 			const auto recBounds = nk_widget_bounds( pContext );
 			const auto bHovering = nk_input_is_mouse_hovering_rect( &pContext->input, recBounds );
@@ -891,7 +891,7 @@ namespace PX::UI
 				}
 
 				iCurrentRowUsedColumns--;
-				PushCustomRow( uStartX + vecTitleSize.x + 8, uStartY, uWidth - vecTitleSize.x, vecTextSize.y + 5 );
+				PushCustomRow( uStartX + unsigned( vecTitleSize.x ) + 8, uStartY, uWidth - unsigned( vecTitleSize.x ), unsigned( vecTextSize.y ) + 5 );
 				const auto recNewBounds = nk_widget_bounds( pContext );
 				iCurrentValue = Inputbox< int >( strlen( std::to_string( FLT_MAX ).c_str( ) ), szInputBuffer );
 				bHoveringInputBox = nk_input_is_mouse_hovering_rect( &pContext->input, recNewBounds );
@@ -915,13 +915,13 @@ namespace PX::UI
 			else
 				nk_label( pContext, szText, NK_TEXT_LEFT );
 
-			PushCustomRow( uStartX, uStartY + vecTextSize.y + 3, uWidth, uHeight - vecTextSize.y - 3 );
+			PushCustomRow( uStartX, uStartY + unsigned( vecTextSize.y ) + 3, uWidth, uHeight - unsigned( vecTextSize.y ) - 3 );
 
 			const auto recSliderBounds = nk_widget_bounds( pContext );
 			if ( nk_input_is_mouse_hovering_rect( &pContext->input, recSliderBounds ) && bClicking )
-				iCurrentValue = iMin + ( ( pContext->input.mouse.pos.x - recSliderBounds.x ) / recSliderBounds.w ) * ( iMax - iMin );
+				iCurrentValue = int( iMin + ( pContext->input.mouse.pos.x - recSliderBounds.x ) / recSliderBounds.w * ( iMax - iMin ) );
 
-			const auto iNewValue = nk_slide_int( pContext, iMin, iCurrentValue, iMax, ( iMax - iMin ) / 20.f );
+			const auto iNewValue = nk_slide_int( pContext, iMin, iCurrentValue, iMax, ( iMax - iMin ) / 20 );
 			if ( !bInEdit )
 				iCurrentValue = iNewValue;
 			HoverCheck( CURSOR_HAND );
@@ -933,7 +933,7 @@ namespace PX::UI
 		{
 			iCurrentRowUsedColumns += 3;
 
-			dbg::Assert( flMax > flMin );
+			dbg::Ensure( flMax > flMin );
 			auto szTexta = std::to_string( flCurrentValue ).substr( 0, std::to_string( int( flCurrentValue ) ).size( ) + 1 + uDigits );
 			auto szText = szTexta.c_str( );
 			static auto bInEdit = false, bSetEditValue = false;
@@ -941,9 +941,9 @@ namespace PX::UI
 			SetFont( FONT_ROBOTOSMALL );
 			auto vecTitleSize = CalculateTextBounds( szTitle, 10 );
 			auto vecTextSize = CalculateTextBounds( szText, 10 );
-			PushCustomRow( uStartX + 5, uStartY, vecTitleSize.x, vecTitleSize.y );
+			PushCustomRow( uStartX + 5, uStartY, unsigned( vecTitleSize.x ), unsigned( vecTitleSize.y ) );
 			nk_label( pContext, szTitle, NK_TEXT_LEFT );
-			PushCustomRow( uStartX + uWidth - vecTextSize.x - 5, uStartY, vecTextSize.x, vecTextSize.y );
+			PushCustomRow( uStartX + uWidth - unsigned( vecTextSize.x ) - 5, uStartY, unsigned( vecTextSize.x ), unsigned( vecTextSize.y ) );
 
 			const auto recBounds = nk_widget_bounds( pContext );
 			const auto bHovering = nk_input_is_mouse_hovering_rect( &pContext->input, recBounds );
@@ -991,7 +991,7 @@ namespace PX::UI
 				}
 
 				iCurrentRowUsedColumns--;
-				PushCustomRow( uStartX + vecTitleSize.x + 8, uStartY, uWidth - vecTitleSize.x, vecTextSize.y + 5 );
+				PushCustomRow( uStartX + unsigned( vecTitleSize.x ) + 8, uStartY, uWidth - unsigned( vecTitleSize.x ), unsigned( vecTextSize.y ) + 5 );
 				const auto recNewBounds = nk_widget_bounds( pContext );
 				flCurrentValue = Inputbox< float >( strlen( std::to_string( FLT_MAX ).c_str( ) ), szInputBuffer );
 				bHoveringInputBox = nk_input_is_mouse_hovering_rect( &pContext->input, recNewBounds );
@@ -1013,7 +1013,7 @@ namespace PX::UI
 			else
 				nk_label( pContext, szText, NK_TEXT_LEFT );
 
-			PushCustomRow( uStartX, uStartY + vecTextSize.y + 3, uWidth, uHeight - vecTextSize.y - 3 );
+			PushCustomRow( uStartX, uStartY + unsigned( vecTextSize.y ) + 3, uWidth, uHeight - unsigned( vecTextSize.y ) - 3 );
 
 			const auto recSliderBounds = nk_widget_bounds( pContext );
 			if( nk_input_is_mouse_hovering_rect( &pContext->input, recSliderBounds ) && bClicking )
@@ -1054,19 +1054,19 @@ namespace PX::UI
 				nk_layout_space_end
 			};
 
-			dbg::Assert( iCurrentRowUsedColumns == iCurrentRowMaxColumns );
+			dbg::Ensure( iCurrentRowUsedColumns == iCurrentRowMaxColumns );
 			fnEndRow[ rowLastRowType ]( pContext );
 		}
 
 		void PX_API SetRowWidth( float flRowWidth )
 		{
-			dbg::Assert( rowLastRowType == ROW_STATIC );
+			dbg::Ensure( rowLastRowType == ROW_STATIC );
 			return nk_layout_row_push( pContext, flRowWidth );
 		}
 
 		void PX_API Spacing( unsigned uColumns /*= 1*/ )
 		{
-			dbg::Assert( iCurrentRowUsedColumns++ < iCurrentRowMaxColumns );
+			dbg::Ensure( iCurrentRowUsedColumns++ < iCurrentRowMaxColumns );
 			nk_spacing( pContext, uColumns );
 			if ( iCurrentRowUsedColumns == iCurrentRowMaxColumns )
 				EndRow( );
@@ -1080,7 +1080,7 @@ namespace PX::UI
 
 		void PX_API PushCustomRow( unsigned uStartX, unsigned uStartY, unsigned uWidth, unsigned uHeight )
 		{
-			dbg::Assert( rowLastRowType == ROW_CUSTOM );
+			dbg::Ensure( rowLastRowType == ROW_CUSTOM );
 			return nk_layout_space_push( pContext, nk_rect( float( uStartX ), float( uStartY ), float( uWidth ), float( uHeight ) ) );
 		}
 	}

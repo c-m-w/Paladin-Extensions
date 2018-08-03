@@ -8,13 +8,13 @@ namespace PX
 	{
 		template< typename _t > std::string PX_API Base64( const std::string& strSubject )
 		{
-			dbg::Assert( !strSubject.empty( ) );
+			dbg::Ensure( !strSubject.empty( ) );
 			_t _Coder;
 			_Coder.Put( reinterpret_cast< Types::byte_t* >( const_cast< char* >( strSubject.c_str( ) ) ), strSubject.size( ) );
 			_Coder.MessageEnd( );
 
 			const auto uSize = unsigned( _Coder.MaxRetrievable( ) );
-			dbg::Assert( uSize > 0 );
+			dbg::Ensure( uSize > 0 );
 			std::string strProcessedText;
 			strProcessedText.resize( uSize );
 			_Coder.Get( reinterpret_cast< Types::byte_t* >( &strProcessedText[ 0 ] ), uSize );
@@ -23,7 +23,7 @@ namespace PX
 
 		template< typename _t > std::string PX_API AES256CBC( const std::string& strPlainText )
 		{
-			dbg::Assert( !strEncryptionKey.empty( ) && !strInitializationVector.empty( ) );
+			dbg::Ensure( !strEncryptionKey.empty( ) && !strInitializationVector.empty( ) );
 			std::string strOutput;
 			_t _Cryption( reinterpret_cast< Types::byte_t* >( const_cast< char* >( Tools::string_cast< std::string >( strEncryptionKey ).c_str( ) ) ),
 						  strEncryptionKey.length( ), reinterpret_cast< Types::byte_t* >( const_cast< char* >( strInitializationVector.c_str( ) ) ) );

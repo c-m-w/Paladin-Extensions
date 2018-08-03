@@ -18,7 +18,7 @@ void TestDebug( )
 
 void TestInput( )
 {
-	dbg::out << PX_INPUT.GetKeyState( VK_LBUTTON );
+	dbg::out PX_DBG << PX_INPUT.GetKeyState( VK_LBUTTON );
 	Tools::Wait( 100 );
 }
 
@@ -162,7 +162,7 @@ void OnLaunch( )
 		Tools::Wait( 1 );
 
 	//Net::InitializeConnection( );
-	//std::deque< Types::post_data_t > dqPostData;
+	//std::deque< Net::post_data_t > dqPostData;
 	//
 	//nlohmann::json jsDLL
 	//{
