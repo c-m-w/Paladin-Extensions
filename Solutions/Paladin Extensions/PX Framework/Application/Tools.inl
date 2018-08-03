@@ -10,11 +10,11 @@ namespace PX::Tools
 		return _ChildClassObject;
 	}
 
-	template< typename _t > Types::moment_t PX_API GetMoment( )
+	template< typename _t > Tools::moment_t PX_API GetMoment( )
 	{
 		return std::chrono::duration_cast< _t >( std::chrono::system_clock::now( ).time_since_epoch( ) ).count( );
 	}
-	template< typename _t > void PX_API Wait( Types::moment_t mmtWaitLength )
+	template< typename _t > void PX_API Wait( Tools::moment_t mmtWaitLength )
 	{
 		std::this_thread::sleep_for( _t( mmtWaitLength ) );
 	}

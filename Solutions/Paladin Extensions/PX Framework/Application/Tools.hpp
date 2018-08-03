@@ -20,12 +20,14 @@ namespace PX::Tools
 		static _Child& PX_API Get( );
 	};
 
+	/** \brief Paladin time datatype, long enough to hold any time type, down to microseconds. */
+	typedef unsigned long long moment_t;
 	// INFO: Gets the local time
 	// *type name*: Time info format type
-	template< typename = std::chrono::milliseconds > Types::moment_t PX_API GetMoment( );
+	template< typename = std::chrono::milliseconds > Tools::moment_t PX_API GetMoment( );
 	// INFO: Sleeps the thread that has called for the amount of time, in the unit of time specified.
 	// *type name*: The unit of time to wait for ( std::chrono ).
-	template< typename = std::chrono::milliseconds > void PX_API Wait( Types::moment_t );
+	template< typename = std::chrono::milliseconds > void PX_API Wait( Tools::moment_t );
 
 	// Get main screen dimensions
 	unsigned* GetScreenDimensions( );
