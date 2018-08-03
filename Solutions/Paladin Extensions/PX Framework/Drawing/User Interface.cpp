@@ -489,7 +489,13 @@ namespace PX::UI
 		{
 			iCurrentRowUsedColumns++;
 
-			return nk_button_label_styled( pContext, bActive ? &btnTopActive : &btnTop, szText );
+			if( nk_button_label_styled( pContext, bActive ? &btnTopActive : &btnTop, szText ) )
+			{
+				if( !bActive )
+					Audio::PlaySound( "ButtonClick.wav" );
+				return true;
+			}
+			return false;
 		}
 
 		bool PX_API SecondaryTab( Types::cstr_t szText, bool bActive )
@@ -513,6 +519,8 @@ namespace PX::UI
 			}
 			SetFont( FONT_TAHOMA );
 			const auto bReturn = nk_button_label_styled( pContext, &btnRegular, szText );
+			if ( bReturn )
+				Audio::PlaySound( "ButtonClick.wav" );
 			HoverCheck( CURSOR_HAND );
 			return bReturn;
 		}
@@ -544,6 +552,10 @@ namespace PX::UI
 				pContext->last_widget_state = 0;
 			}
 			const auto bReturn = nk_button_label_styled( pContext, bActive ? &btnSpecialActive : &btnSpecial, szText );
+
+			if( bReturn )
+				Audio::PlaySound( "ButtonClick.wav" );
+
 			if ( !bFoundHoverTarget )
 			{
 				bHover = HoverCheck( CURSOR_HAND );
@@ -602,7 +614,10 @@ namespace PX::UI
 			if ( bClicking && bHovering )
 			{
 				if ( !bWasClicking )
+				{
 					*bActive = !*bActive;
+					Audio::PlaySound( *bActive ? R"(Tick.wav)" : R"(Untick.wav)" );
+				}
 				bWasClicking = true;
 			}
 			else if ( !bClicking )

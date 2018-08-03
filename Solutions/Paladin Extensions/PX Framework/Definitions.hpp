@@ -34,6 +34,9 @@
 #define NK_PRIVATE
 #endif
 
+// sfml
+#define SFML_STATIC
+
 #endif
 
 // identifies variable as "Paladin Extensions" original

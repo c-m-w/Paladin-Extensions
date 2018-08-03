@@ -157,6 +157,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Application\Audio.hpp" />
     <ClInclude Include="Application\Debug.hpp" />
     <ClInclude Include="Application\File Manager.hpp" />
     <ClInclude Include="Application\Input Manager.hpp" />
@@ -172,6 +173,7 @@
     <ClInclude Include="Security\System Information.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Application\Audio.cpp" />
     <ClCompile Include="Application\Debug.cpp" />
     <ClCompile Include="Application\File Manager.cpp" />
     <ClCompile Include="Application\Input Manager.cpp" />

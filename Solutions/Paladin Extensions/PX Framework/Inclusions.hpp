@@ -39,6 +39,21 @@
 #include <vurtun/nuklear.h>
 #include <vurtun/demo/d3d9/nuklear_d3d9.h>
 
+#include <SFML/Audio.hpp>
+#ifdef _DEBUG
+#pragma comment( lib, "sfml-system-s-d.lib" )
+#pragma comment( lib, "sfml-audio-s-d.lib" )
+#else
+#pragma comment( lib, "sfml-system-s.lib" )
+#pragma comment( lib, "sfml-audio-s.lib" )
+#endif
+#pragma comment( lib, "flac.lib" )
+#pragma comment( lib, "freetype.lib" )
+#pragma comment( lib, "ogg.lib" )
+#pragma comment( lib, "openal32.lib" )
+#pragma comment( lib, "vorbis.lib" )
+#pragma comment( lib, "vorbisfile.lib" )
+
 #include <Shlwapi.h>
 #include <nlohmann/json.hpp>
 

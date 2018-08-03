@@ -12,6 +12,7 @@
 #include "Application/Debug.hpp"
 #include "Application/Input Manager.hpp"
 #include "Application/File Manager.hpp"
+#include "Application/Audio.hpp"
 
 // Security - These files provide specific functionality for ensuring security and verifying authenticity
 #include "Security/Cryptography.hpp"
