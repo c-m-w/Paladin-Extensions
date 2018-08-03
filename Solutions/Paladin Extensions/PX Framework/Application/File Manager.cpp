@@ -45,7 +45,7 @@ namespace PX::Files
 			const auto fnGetFileData = [ ]( Types::wcstr_t szPathToFile )
 			{
 				auto pResource = _wfopen( szPathToFile, L"r" );
-				dbg::Assert( pResource );
+				dbg::Ensure( pResource );
 
 				fseek( pResource, 0, SEEK_END );
 				const auto lSize = ftell( pResource );

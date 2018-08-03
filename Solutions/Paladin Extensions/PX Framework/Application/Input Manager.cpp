@@ -103,7 +103,7 @@ namespace PX
 		return uLastKeyPressed;
 	}
 
-	Types::moment_t PX_API CInputManager::TimeSinceKeyPress( unsigned uKey )
+	Tools::moment_t PX_API CInputManager::TimeSinceKeyPress( unsigned uKey )
 	{
 		return Tools::GetMoment( ) - mmtKeyDownTime[ uKey ];
 	}

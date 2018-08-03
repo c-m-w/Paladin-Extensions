@@ -15,7 +15,7 @@ namespace PX::dbg
 		return *this;
 	}
 
-	void PX_API PrintLastError( )
+	void PX_API PutLastError( )
 	{
 #if defined _DEBUG 
 		auto dwError = GetLastError( );

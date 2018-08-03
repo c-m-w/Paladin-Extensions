@@ -51,7 +51,7 @@
     <ClInclude Include="Application\Types.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Security\System Information.hpp">
+    <ClInclude Include="Security\System Management.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Application\Audio.hpp">
@@ -86,7 +86,7 @@
     <ClCompile Include="Application\Types.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Security\System Information.cpp">
+    <ClCompile Include="Security\System Management.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Application\Audio.cpp">
