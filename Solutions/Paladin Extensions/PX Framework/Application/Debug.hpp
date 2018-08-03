@@ -5,7 +5,7 @@
 namespace PX::dbg
 {
 	// INFO: Asserts parameter to empty initialization version of parameter
-	template< typename _t > bool PX_API Assert( _t );
+	template< typename _t > bool PX_API Ensure( _t );
 
 	PX_DEF newl = '\n';
 
@@ -24,7 +24,7 @@ namespace PX::dbg
 		template< typename _t > out_t& PX_API operator<<( const _t& );
 	} PX_SDK out;
 
-	void PX_API PrintLastError( );
+	void PX_API PutLastError( );
 }
 
 #include "Debug.inl"
