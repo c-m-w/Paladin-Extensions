@@ -36,7 +36,7 @@ int APIENTRY WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	HANDLE hSingleInstanceMutex = CreateMutex( NULL, TRUE, "Paladin Extensions " PX_INSTANCE_ID );
 #endif
 	if ( hSingleInstanceMutex == INVALID_HANDLE_VALUE || GetLastError( ) == ERROR_ALREADY_EXISTS )
-		return -1;
+		return 0;
 
 	if ( hInstance && hInstance != INVALID_HANDLE_VALUE )
 		PX::hinstWin = hInstance;
@@ -47,6 +47,7 @@ int APIENTRY WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 #endif
 
 	OnLaunch( );
+
 	return 0;
 }
 
@@ -80,7 +81,7 @@ inline DWORD WINAPI ThreadProc( _In_ LPVOID lpParameter )
 #endif
 
 	OnAttach( );
-	return NULL;
+	return TRUE;
 }
 
 BOOL WINAPI DllMain( _In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID lpvReserved )
@@ -96,7 +97,7 @@ BOOL WINAPI DllMain( _In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID 
 #endif
 	HANDLE hSingleInstanceMutex = CreateMutex( NULL, TRUE, "Paladin Extensions " PX_INSTANCE_ID );
 #endif
-	if ( GetLastError( ) == ERROR_ALREADY_EXISTS )
+	if ( hSingleInstanceMutex == INVALID_HANDLE_VALUE || GetLastError( ) == ERROR_ALREADY_EXISTS )
 		return FALSE;
 
 	switch ( fdwReason )
