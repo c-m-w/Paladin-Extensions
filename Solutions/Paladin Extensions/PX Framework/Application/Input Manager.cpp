@@ -15,6 +15,9 @@ namespace PX
 
 		for each ( auto fnCallback in vecfnKeyCallback[ uKey ] )
 			fnCallback( uKey );
+
+		for each ( auto fnCallback in vecfnGlobalCallbacks )
+			fnCallback( uKey );
 	}
 
 	void PX_API CInputManager::ProcessMouseMessage( UINT uMessage, WPARAM wParam, LPARAM lParam ) // lParam is unused
@@ -108,5 +111,10 @@ namespace PX
 	void PX_API CInputManager::AddKeyCallback( unsigned uKey, std::function< void( int ) > fnCallback )
 	{
 		vecfnKeyCallback[ uKey ].emplace_back( fnCallback );
+	}
+
+	void PX_API CInputManager::AddGlobalCallback( std::function< void( unsigned ) > fnCallback )
+	{
+		vecfnGlobalCallbacks.emplace_back( fnCallback );
 	}
 }

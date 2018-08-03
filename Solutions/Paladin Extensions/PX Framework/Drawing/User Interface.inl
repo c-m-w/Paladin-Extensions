@@ -41,6 +41,8 @@ namespace PX::UI::Widgets
 		int fnFloat( const nk_text_edit* box, nk_rune unicode )
 		{
 			( void )box;
+			if ( unicode == 190 )
+				unicode = '.';
 			if ( ( unicode < '0' || unicode > '9' ) && unicode != '.' && unicode != '-' )
 				return nk_false;
 			return nk_true;
@@ -50,7 +52,7 @@ namespace PX::UI::Widgets
 			inline static nk_plugin_filter fnFilter = fnFloat;
 			static float ret( char* szBuffer )
 			{
-				return strlen( szBuffer ) ? std::stof( szBuffer ) : 0.f;
+				return strlen( szBuffer ) && strcmp( szBuffer, "-" ) && strcmp( szBuffer, "." ) ? std::stof( szBuffer ) : 0.f;
 			}
 		};
 	}

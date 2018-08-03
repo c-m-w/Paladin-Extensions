@@ -68,22 +68,31 @@ void PX_API UI::Manager::Example( )
 
 	static const auto fnSetTabValue = [ ]( int& iCurrentValue, const int iNewValue ) { iCurrentValue = iNewValue >= 0 ? iNewValue : iCurrentValue; };
 
-	/// Declare variables for widgets to use.
+	/// Create a JSON object to hold our variables for widgets to use.
+	static nlohmann::json jsWidgets
+	{
+		{ "PrimaryTab", 0 },
+		{ "SubTab", 0 },
+		{ "First", false },
+		{ "Second", false },
+		{ "Third", false },
+		{ "Color One", 0xFF0000FFu },
+		{ "Color Two", 0xFEBA4E10u },
+		{ "Color Three", 0x00FF00FFu },
+		{ "Int", 0 },
+		{ "Float", 0.f }
+	};
 
-	// Tabs
-	static auto iPrimaryTab = 0, iSubTab = 0;
-	// Checkboxes
-	static auto bFirst = false, bSecond = false;
 	// Color pickers
-	static Types::color_t clrFirst( 255, 0, 0, 255 ), clrSecond( 0, 255, 0 );
-
-	/// 
+	static Types::color_t clrFirst( jsWidgets[ "Color One" ].get_ptr< unsigned* >( ) );
+	static Types::color_t clrSecond( jsWidgets[ "Color Two" ].get_ptr< unsigned* >( ) );
+	static Types::color_t clrThird( jsWidgets[ "Color Three" ].get_ptr< unsigned* >( ) );
 
 	// Create a header with the window title and subtitle, with minimize and close functionality.
 	Header( Tools::string_cast< std::string >( Render::wszWindowTitle ).c_str( ), szNuklearWindowTitle, Minimize, Exit );
 
 	// Create primary tabs.
-	fnSetTabValue( iPrimaryTab, Tabs( 10, 0, dqPrimaryTabs, iPrimaryTab ) );
+	fnSetTabValue( jsWidgets[ "PrimaryTab" ].get_ref< int& >( ), Tabs( 10, 0, dqPrimaryTabs, jsWidgets[ "PrimaryTab" ] ) );
 
 	// Separate the primary tabs from the rest of the application.
 	Separator( 61, 65, 72, 100 );
@@ -91,30 +100,49 @@ void PX_API UI::Manager::Example( )
 	SetFont( FONT_ROBOTOSMALL );
 
 	// Create subtabs.
-	fnSetTabValue( iSubTab, SubTabs( 10, 60, 190, 30, dqSubTabs, iSubTab ) );
+	fnSetTabValue( jsWidgets[ "SubTab" ].get_ref< int& >( ), SubTabs( 10, 60, 190, 30, dqSubTabs, jsWidgets[ "SubTab" ] ) );
 
 	// Begin a groupbox for all of our widgets to be inside of.
-	BeginGroupbox( 200, 150, 500, 420, dqSubTabs.at( iSubTab ) );
+	BeginGroupbox( 200, 150, 500, 420, dqSubTabs.at( jsWidgets[ "SubTab" ] ) );
 	{
+		const static auto iCheckboxTextWidth = CalculateTextBounds( "Checkbox", 30 ).x;
+		static char szIntBuffer[ 32 ], szFloatBuffer[ 32 ], buf[ 32 ];
+		auto bInitializedBuffers = false;
+
+		if ( !bInitializedBuffers )
+		{
+			bInitializedBuffers = true;
+			strcpy( szIntBuffer, std::to_string( jsWidgets[ "Int" ].get< int >( ) ).c_str( ) );
+			strcpy( szFloatBuffer, std::to_string( jsWidgets[ "Float" ].get< int >( ) ).c_str( ) );
+			strcpy( buf, "5.0" );
+		}
+
 		VerticalSpacing( );
 
-		BeginRow( 15, 5, ROW_STATIC );
+		BeginRow( 15, 12, ROW_STATIC );
 		SetRowWidth( 5 );
 		Spacing( );
-		const static auto iCheckboxTextWidth = CalculateTextBounds( "Checkbox", 30 ).x;
 		SetRowWidth( CHECKBOX_ICON_WIDTH + CalculateTextBounds( "Checkbox", 30 ).x );
-		Checkbox( "Checkbox", &bFirst );
+		Checkbox( "Checkbox", jsWidgets[ "First" ].get_ptr< bool* >( ) );
 		SetRowWidth( GROUPBOX_COLUMN_WIDTH - iCheckboxTextWidth - CHECKBOX_ICON_WIDTH - COLOR_BUTTON_WIDTH - COLOR_BUTTON_PADDING * 2 );
 		Spacing( );
 		SetRowWidth( COLOR_BUTTON_WIDTH );
 		ColorButton( "Color 1", &clrFirst );
+		SetRowWidth( CHECKBOX_ICON_WIDTH + CalculateTextBounds( "Checkbox", 30 ).x );
+		Checkbox( "Checkbox", jsWidgets[ "Second" ].get_ptr< bool* >( ) );
+		SetRowWidth( GROUPBOX_COLUMN_WIDTH - iCheckboxTextWidth - CHECKBOX_ICON_WIDTH - ( COLOR_BUTTON_WIDTH * 2 ) - ( COLOR_BUTTON_PADDING * 4 ) );
+		Spacing( );
+		SetRowWidth( COLOR_BUTTON_WIDTH );
+		ColorButton( "Color 2", &clrSecond );
+		ColorButton( "Color 3", &clrThird );
+		Checkbox( "Checkbox", jsWidgets[ "Third" ].get_ptr< bool* >( ) );
 		EndRow( );
 
-		BeginRow( 15, 3, ROW_STATIC );
-		SetRowWidth( 5 );
-		Spacing( );
-		SetRowWidth( CHECKBOX_ICON_WIDTH + CalculateTextBounds( "Checkbox", 30 ).x );
-		Checkbox( "Checkbox", &bSecond );
+		VerticalSpacing( );
+
+		BeginRow( 30, 6, ROW_CUSTOM );
+		jsWidgets[ "Int" ] = Slider( "Int Slider", szIntBuffer, -50, 50, jsWidgets[ "Int" ], 15, 0, GROUPBOX_COLUMN_WIDTH, 30 );
+		jsWidgets[ "Float" ] = Slider( "Float Slider", szFloatBuffer, -50.f, 50.f, jsWidgets[ "Float" ], GROUPBOX_COLUMN_WIDTH + 25, 0, GROUPBOX_COLUMN_WIDTH, 30, 1 );
 		EndRow( );
 	}
 	EndGroupbox( );
@@ -132,7 +160,7 @@ void OnLaunch( )
 	UI::Manager::Initialize( PX_XOR( "Manager" ) );
 	while ( UI::Manager::Render( ) && !bShutdown )
 		Tools::Wait( 1 );
-	
+
 	//Net::InitializeConnection( );
 	//std::deque< Types::post_data_t > dqPostData;
 	//

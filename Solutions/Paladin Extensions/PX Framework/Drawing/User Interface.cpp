@@ -830,12 +830,11 @@ namespace PX::UI
 
 		int PX_API Slider( Types::cstr_t szTitle, char* szInputBuffer, int iMin, int iMax, int iCurrentValue, unsigned uStartX, unsigned uStartY, unsigned uWidth, unsigned uHeight )
 		{
-			iCurrentRowUsedColumns += 3;
+			iCurrentRowUsedColumns += 3 ;
 
 			dbg::Assert( iMax > iMin );
 			auto szTexta = std::to_string( iCurrentValue ).substr( 0, std::to_string( iCurrentValue ).size( ) );
 			auto szText = szTexta.c_str( );
-
 			static auto bInEdit = false, bSetEditValue = false;
 
 			SetFont( FONT_ROBOTOSMALL );
@@ -863,14 +862,45 @@ namespace PX::UI
 
 			if ( bInEdit )
 			{
+				static auto bSetBuffer = false;
+				static unsigned uSetKey = 0;
+				const auto fnWriteBuffer = [ = ]( unsigned uKey )
+				{
+					if ( ( uKey >= '0' && uKey <= '9' || uKey == '-' ) && bSetBuffer )
+						uSetKey = uKey;
+				};
+				static auto bSetCallback = false;
+
+				if ( !strcmp( szInputBuffer, "0" ) )
+					bSetBuffer = true;
+
+				if( uSetKey != 0 && bSetBuffer )
+				{
+					strcpy( szInputBuffer, "" );
+					uSetKey = 0;
+					pContext->text_edit.select_start = 1;
+					pContext->text_edit.select_end = 1;
+					pContext->text_edit.string.len = 1;
+					bSetBuffer = false;
+				}
+
+				if ( !bSetCallback )
+				{
+					PX_INPUT.AddGlobalCallback( fnWriteBuffer );
+					bSetCallback = true;
+				}
+
+				iCurrentRowUsedColumns--;
 				PushCustomRow( uStartX + vecTitleSize.x + 8, uStartY, uWidth - vecTitleSize.x, vecTextSize.y + 5 );
 				const auto recNewBounds = nk_widget_bounds( pContext );
 				iCurrentValue = Inputbox< int >( strlen( std::to_string( FLT_MAX ).c_str( ) ), szInputBuffer );
 				bHoveringInputBox = nk_input_is_mouse_hovering_rect( &pContext->input, recNewBounds );
 
+				auto urdad = pContext;
+
 				if ( bHoveringInputBox )
 					SetWidgetActive( CURSOR_IBEAM );
-				else if ( bClicking || PX_INPUT.GetKeyState( VK_RETURN ) )
+				if ( !bHoveringInputBox && bClicking )
 				{
 					bSetEditValue = strlen( szInputBuffer ) > 0;
 					bInEdit = false;
@@ -886,7 +916,14 @@ namespace PX::UI
 				nk_label( pContext, szText, NK_TEXT_LEFT );
 
 			PushCustomRow( uStartX, uStartY + vecTextSize.y + 3, uWidth, uHeight - vecTextSize.y - 3 );
-			iCurrentValue = nk_slide_int( pContext, iMin, iCurrentValue, iMax, ( iMax - iMin ) / 20.f );
+
+			const auto recSliderBounds = nk_widget_bounds( pContext );
+			if ( nk_input_is_mouse_hovering_rect( &pContext->input, recSliderBounds ) && bClicking )
+				iCurrentValue = iMin + ( ( pContext->input.mouse.pos.x - recSliderBounds.x ) / recSliderBounds.w ) * ( iMax - iMin );
+
+			const auto iNewValue = nk_slide_int( pContext, iMin, iCurrentValue, iMax, ( iMax - iMin ) / 20.f );
+			if ( !bInEdit )
+				iCurrentValue = iNewValue;
 			HoverCheck( CURSOR_HAND );
 			SetFont( FONT_ROBOTOSMALL );
 			return iCurrentValue;
@@ -899,7 +936,6 @@ namespace PX::UI
 			dbg::Assert( flMax > flMin );
 			auto szTexta = std::to_string( flCurrentValue ).substr( 0, std::to_string( int( flCurrentValue ) ).size( ) + 1 + uDigits );
 			auto szText = szTexta.c_str( );
-
 			static auto bInEdit = false, bSetEditValue = false;
 
 			SetFont( FONT_ROBOTOSMALL );
@@ -926,6 +962,35 @@ namespace PX::UI
 
 			if ( bInEdit )
 			{
+				static auto bSetBuffer = false;
+				static unsigned uSetKey = 0;
+				const auto fnWriteBuffer = [ = ]( unsigned uKey )
+				{
+					if ( ( uKey >= '0' && uKey <= '9' || uKey == '-' || uKey == '.' ) && bSetBuffer )
+						uSetKey = uKey;
+				};
+				static auto bSetCallback = false;
+
+				if ( !strcmp( szInputBuffer, "0" ) )
+					bSetBuffer = true;
+
+				if ( uSetKey != 0 && bSetBuffer )
+				{
+					strcpy( szInputBuffer, "" );
+					uSetKey = 0;
+					pContext->text_edit.select_start = 1;
+					pContext->text_edit.select_end = 1;
+					pContext->text_edit.string.len = 1;
+					bSetBuffer = false;
+				}
+
+				if ( !bSetCallback )
+				{
+					PX_INPUT.AddGlobalCallback( fnWriteBuffer );
+					bSetCallback = true;
+				}
+
+				iCurrentRowUsedColumns--;
 				PushCustomRow( uStartX + vecTitleSize.x + 8, uStartY, uWidth - vecTitleSize.x, vecTextSize.y + 5 );
 				const auto recNewBounds = nk_widget_bounds( pContext );
 				flCurrentValue = Inputbox< float >( strlen( std::to_string( FLT_MAX ).c_str( ) ), szInputBuffer );
@@ -949,7 +1014,14 @@ namespace PX::UI
 				nk_label( pContext, szText, NK_TEXT_LEFT );
 
 			PushCustomRow( uStartX, uStartY + vecTextSize.y + 3, uWidth, uHeight - vecTextSize.y - 3 );
-			flCurrentValue = nk_slide_float( pContext, flMin, flCurrentValue, flMax, ( flMax - flMin ) / 20.f );
+
+			const auto recSliderBounds = nk_widget_bounds( pContext );
+			if( nk_input_is_mouse_hovering_rect( &pContext->input, recSliderBounds ) && bClicking )
+				flCurrentValue = flMin + ( ( pContext->input.mouse.pos.x - recSliderBounds.x ) / recSliderBounds.w ) * ( flMax - flMin );
+
+			const auto flNewValue = nk_slide_float( pContext, flMin, flCurrentValue, flMax, ( flMax - flMin ) / 20.f );
+			if ( !bInEdit )
+				flCurrentValue = flNewValue;
 			HoverCheck( CURSOR_HAND );
 			SetFont( FONT_ROBOTOSMALL );
 			return flCurrentValue;
