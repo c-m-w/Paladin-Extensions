@@ -16,10 +16,12 @@ namespace PX::sys
 	/** \brief Puts system info into info variables. */
 	void PX_API GetSystemInfo( );
 
-	/** \brief Used to ensure elevation for self process\n
-		If current process is not elevated, it will attempt to elevate it manually. */
-	/** \return True if self process is elevated */
-	bool PX_API EnsureElevation( );
+	/** \brief Used to ensure elevation for a process.\n
+		If the process is not elevated, it will attempt to elevate it manually. */
+	/** \param hProcess Process to ensure elevation for.\n
+				Leave it as nullptr if you wish to check the current process. */
+	/** \return True if the process is elevated. */
+	bool PX_API EnsureElevation( HANDLE hProcess = nullptr );
 	/** \brief Gets process identifier for any running executable */
 	/** \param wstrExecutableName Executable name for target process */
 	/** \return Process ID */
