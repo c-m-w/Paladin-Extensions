@@ -183,13 +183,21 @@ void OnLaunch( )
 	//dbg::out << strResponse.length( ) << dbg::newl;
 	//system( "pause" );
 
-	auto pDLL = fopen( R"(C:\Users\Cole\Desktop\Messagebox.dll)", "rb" );
-	fseek( pDLL, 0, SEEK_END );
-	long lSize = ftell( pDLL );
-	rewind( pDLL );
-	auto pBuffer = VirtualAlloc( NULL, lSize, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE );
-	fread( pBuffer, 1, lSize, pDLL );
+	const auto pDLL = fopen( R"(C:\Users\Cole\Desktop\Messagebox.dll)", "rb" );
 
-	sys::SInjectionInfo inj;
-	DLLManualMap( pBuffer, L"ConsoleApplication1.exe", &inj );
+	if ( !dbg::Assert( pDLL != nullptr ) )
+		return;
+
+	fseek( pDLL, 0, SEEK_END );
+	const auto lSize = ftell( pDLL );
+	rewind( pDLL );
+	const auto pBuffer = VirtualAlloc( nullptr, lSize, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE );
+	fread( pBuffer, 1, lSize, pDLL );
+	
+	if ( dbg::Assert( lSize != 0 && pBuffer != nullptr ) )
+	{
+		Types::injection_info_t inj { };
+		sys::DLLManualMap( pBuffer, L"ConsoleApplication1.exe", &inj );
+	}
+	system( "pause" );
 }

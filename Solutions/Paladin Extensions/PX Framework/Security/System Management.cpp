@@ -155,7 +155,7 @@ namespace PX::sys
 
 	DWORD WINAPI CallDLLThread( _In_ LPVOID lpParameter )
 	{
-		auto* injInfo = static_cast< SInjectionInfo* >( lpParameter );
+		auto* injInfo = static_cast< Types::injection_info_t* >( lpParameter );
 		
 		// Mark starting address in header
 		auto pBaseRelocation = injInfo->pBaseRelocation;
@@ -223,7 +223,7 @@ namespace PX::sys
 		return TRUE;
 	}
 
-	bool PX_API DLLManualMap( LPVOID pDLL, const std::wstring& wstrExecutableName, SInjectionInfo* injInfo )
+	bool PX_API DLLManualMap( const LPVOID& pDLL, const std::wstring& wstrExecutableName, Types::injection_info_t* injInfo )
 	{
 		HANDLE hTarget { },
 			   hThread { };
@@ -252,8 +252,6 @@ namespace PX::sys
 		auto pDOSHeader = PIMAGE_DOS_HEADER( pDLL );
 		if ( !dbg::Assert( pDOSHeader->e_magic == IMAGE_DOS_SIGNATURE ) )
 			return false;
-
-		dbg::out << pDOSHeader->e_lfanew << dbg::newl;
 
 		auto pNTHeader = PIMAGE_NT_HEADERS( PBYTE( pDLL ) + pDOSHeader->e_lfanew );
 		if ( !dbg::Assert( pNTHeader->Signature == IMAGE_NT_SIGNATURE )
@@ -291,8 +289,7 @@ namespace PX::sys
 			}
 
 		// allocate memory in & write data to target process
-		pMemory = VirtualAllocEx( hTarget, nullptr, 4096, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE );
-		if ( !dbg::Assert( pMemory ) )
+		if ( !dbg::Assert( pMemory = VirtualAllocEx( hTarget, nullptr, 4096, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE ) ) )
 		{
 			fnCleanup( true );
 			return false;
@@ -306,22 +303,20 @@ namespace PX::sys
 		injInfo->fnLoadLibraryA = LoadLibraryA;
 		injInfo->fnGetProcAddress = GetProcAddress;
 
-		if ( !dbg::Assert( WriteProcessMemory( hTarget, pMemory, injInfo, sizeof( SInjectionInfo ), nullptr ) ) )
+		if ( !dbg::Assert( WriteProcessMemory( hTarget, pMemory, injInfo, sizeof( Types::injection_info_t ), nullptr ) ) )
 		{
 			fnCleanup( true );
 			return false;
 		}
 		
-		if ( !dbg::Assert( WriteProcessMemory( hTarget, PVOID( static_cast< SInjectionInfo* >( pMemory ) + 1 ), CallDLLThread, 3765, nullptr ) ) )
+		if ( !dbg::Assert( WriteProcessMemory( hTarget, PVOID( static_cast< Types::injection_info_t* >( pMemory ) + 1 ), CallDLLThread, 3765, nullptr ) ) )
 		{
 			fnCleanup( true );
 			return false;
 		}
 
-		hThread = CreateRemoteThread( hTarget, nullptr, 0, LPTHREAD_START_ROUTINE( static_cast< SInjectionInfo* >( pMemory ) + 1 ), pMemory, 0, nullptr );
-
-		DWORD dwExitCode;
-		if ( !dbg::Assert( hThread ) ||
+		DWORD dwExitCode { };
+		if ( !dbg::Assert( hThread = CreateRemoteThread( hTarget, nullptr, 0, LPTHREAD_START_ROUTINE( static_cast< Types::injection_info_t* >( pMemory ) + 1 ), pMemory, 0, nullptr ) ) ||
 			 !dbg::Assert( WaitForSingleObject( hThread, INFINITE ) != WAIT_FAILED ) ||
 			 !dbg::Assert( GetExitCodeThread( hThread, &dwExitCode ) ) || 
 			 !dbg::Assert( dwExitCode ) )
@@ -340,7 +335,7 @@ namespace PX::sys
 		};
 
 		// Erase PE headers
-		fnWipeMemory( pImage, pDOSHeader->e_lfanew + sizeof pNTHeader + ( sizeof pSectionHeader ) * pNTHeader->FileHeader.NumberOfSections );
+		fnWipeMemory( pImage, pDOSHeader->e_lfanew + sizeof pNTHeader + sizeof pSectionHeader * pNTHeader->FileHeader.NumberOfSections );
 
 		// Wipe discardable sections
 		for ( WORD w = 0; w < pNTHeader->FileHeader.NumberOfSections; w++ )

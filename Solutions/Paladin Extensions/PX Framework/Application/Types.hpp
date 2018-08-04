@@ -15,6 +15,17 @@ namespace PX::Types
 	/** \brief Paladin callback function type. */
 	typedef void( PX_API fn_callback_t )( );
 
+	/** \brief Information for manually mapping a DLL into a process. */
+	using injection_info_t = struct
+	{
+		PVOID pImageBase;
+		PIMAGE_NT_HEADERS pNTHeaders;
+		PIMAGE_BASE_RELOCATION pBaseRelocation;
+		PIMAGE_IMPORT_DESCRIPTOR pImportDescriptor;
+		HMODULE( WINAPI* fnLoadLibraryA )( LPCSTR );
+		FARPROC( WINAPI* fnGetProcAddress )( HMODULE, LPCSTR );
+	};
+
 	/** \brief Type to hold colors. */
 	struct color_t
 	{
