@@ -80,7 +80,7 @@ namespace PX::sys
 	bool PX_API EnsureElevation( )
 	{
 		HANDLE hTokenSelf;
-		TOKEN_ELEVATION teSelf;
+		TOKEN_ELEVATION teSelf { };
 		DWORD dwReturnLength = sizeof( TOKEN_ELEVATION );
 
 		if ( !OpenProcessToken( GetCurrentProcess( ), TOKEN_QUERY | TOKEN_ADJUST_PRIVILEGES, &hTokenSelf )
@@ -239,7 +239,7 @@ namespace PX::sys
 			return false;
 
 		// open handle to target process
-		auto hTarget = OpenProcess( PROCESS_VM_OPERATION | PROCESS_VM_WRITE, FALSE, GetProcessID( wstrExecutableName ) );
+		auto hTarget = OpenProcess( PROCESS_ALL_ACCESS, FALSE, GetProcessID( wstrExecutableName ) );
 		if ( !dbg::Ensure( hTarget ) )
 		{
 			dbg::PutLastError( );
@@ -313,7 +313,7 @@ namespace PX::sys
 			CloseHandle( hTarget );
 			return false;
 		}
-
+		dbg::PutLastError( );
 		if ( !dbg::Ensure( WaitForSingleObject( hThread, INFINITE ) != WAIT_FAILED ) )
 		{
 			dbg::PutLastError( );

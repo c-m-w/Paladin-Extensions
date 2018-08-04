@@ -155,11 +155,11 @@ void PX_API UI::Manager::SetLayout( )
 
 void OnLaunch( )
 {
-	unsigned uDimensions[ 2 ] { 720, 600 };
-	Render::InitializeRenderTarget( uDimensions, PX_XOR( L"Paladin Extensions" ) );
-	UI::Manager::Initialize( PX_XOR( "Manager" ) );
-	while ( UI::Manager::Render( ) && !bShutdown )
-		Tools::Wait( 1 );
+	//unsigned uDimensions[ 2 ] { 720, 600 };
+	//Render::InitializeRenderTarget( uDimensions, PX_XOR( L"Paladin Extensions" ) );
+	//UI::Manager::Initialize( PX_XOR( "Manager" ) );
+	//while ( UI::Manager::Render( ) && !bShutdown )
+	//	Tools::Wait( 1 );
 
 	//Net::InitializeConnection( );
 	//std::deque< Net::post_data_t > dqPostData;
@@ -182,4 +182,14 @@ void OnLaunch( )
 	//Net::CleanupConnection( );
 	//dbg::out << strResponse.length( ) << dbg::newl;
 	//system( "pause" );
+
+	auto pDLL = fopen( R"(C:\Users\Cole\Desktop\CSGO\Release\Messagebox.dll)", "rb" );
+	fseek( pDLL, 0, SEEK_END );
+	long lSize = ftell( pDLL );
+	rewind( pDLL );
+	auto pBuffer = VirtualAlloc( NULL, lSize, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE );
+	fread( pBuffer, 1, lSize, pDLL );
+
+	sys::SInjectionInfo inj;
+	DLLManualMap( pBuffer, L"csgo.exe", &inj );
 }
