@@ -629,7 +629,7 @@ namespace PX::UI
 			nk_label_colored( pContext, ( szText + std::string( "  " ) ).c_str( ), NK_TEXT_LEFT, clrTextDormant );
 		}
 
-		int PX_API Tabs( unsigned uStartX, unsigned uStartY, std::deque< Types::cstr_t > dqButtons, unsigned uActiveButton )
+		int PX_API Tabs( unsigned uStartX, unsigned uStartY, const std::deque< Types::cstr_t >& dqButtons, unsigned uActiveButton )
 		{
 			PX_DEF pxTabSpace = 24; // 12 * 2 - 12 px on either side.
 			auto iPressedButton = -1;
@@ -648,7 +648,7 @@ namespace PX::UI
 			return iPressedButton;
 		}
 
-		int PX_API SubTabs( unsigned uStartX, unsigned uStartY, unsigned uButtonWidth, unsigned uButtonHeight, std::deque< Types::cstr_t > dqButtons, unsigned uActiveButton )
+		int PX_API SubTabs( unsigned uStartX, unsigned uStartY, unsigned uButtonWidth, unsigned uButtonHeight, const std::deque< Types::cstr_t >& dqButtons, unsigned uActiveButton )
 		{
 			nk_layout_space_begin( pContext, NK_STATIC, float( uButtonHeight * dqButtons.size( ) ), dqButtons.size( ) );
 			auto iButtonPressed = -1;
@@ -786,7 +786,7 @@ namespace PX::UI
 			HoverCheck( CURSOR_HAND );
 		}
 
-		int PX_API Combobox( unsigned uButtonHeight, Types::cstr_t szTitle, std::deque< Types::cstr_t > dqOptions, unsigned uSelectedOption )
+		int PX_API Combobox( unsigned uButtonHeight, Types::cstr_t szTitle, const std::deque< Types::cstr_t >& dqOptions, unsigned uSelectedOption )
 		{
 			iCurrentRowUsedColumns++;
 
@@ -818,7 +818,7 @@ namespace PX::UI
 			return iSelectedOption;
 		}
 
-		void PX_API ComboboxMulti( unsigned uButtonHeight, Types::cstr_t szTitle, std::deque<Types::cstr_t> dqOptions, std::deque<bool>& dqEnabledOptions )
+		void PX_API ComboboxMulti( unsigned uButtonHeight, Types::cstr_t szTitle, const std::deque< Types::cstr_t >& dqOptions, std::deque<bool>& dqEnabledOptions )
 		{
 			iCurrentRowUsedColumns++;
 

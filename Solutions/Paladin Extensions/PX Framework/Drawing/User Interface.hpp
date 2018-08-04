@@ -130,7 +130,7 @@ namespace PX::UI
 		/**	\param dqButtons Deque of the tabs to render. */
 		/**	\param uActiveButton Current active button, for a toggle effect. */
 		/**	\return -1 - No button was clicked.\n >= 0 - Index of the button that was clicked in the deque. */
-		int PX_API Tabs( unsigned uStartX, unsigned uStartY, std::deque< Types::cstr_t > dqButtons, unsigned uActiveButton );
+		int PX_API Tabs( unsigned uStartX, unsigned uStartY, const std::deque< Types::cstr_t >& dqButtons, unsigned uActiveButton );
 		/** \brief Creats subtabs for navigation, using previously defined widgets.\n Not to be put in a row. */
 		/**	\param uStartX X value at which the tabs should be rendered at. */
 		/**	\param uStartY Y value at which the tabs should be rendered at. */
@@ -139,7 +139,7 @@ namespace PX::UI
 		/**	\param dqButtons Deque of the tabs to render. */
 		/**	\param uActiveButton Current active button, for a toggle effect. */
 		/**	\return -1 - No button was clicked.\n >= 0 - Index of the button that was clicked in the deque. */
-		int PX_API SubTabs( unsigned uStartX, unsigned uStartY, unsigned uButtonWidth, unsigned uButtonHeight, std::deque< Types::cstr_t > dqButtons, unsigned uActiveButton );
+		int PX_API SubTabs( unsigned uStartX, unsigned uStartY, unsigned uButtonWidth, unsigned uButtonHeight, const std::deque< Types::cstr_t >& dqButtons, unsigned uActiveButton );
 		/** \brief Creates a groupbox for widget organization. */
 		/**	\param uStartX X position of the groupbox. */
 		/**	\param uStartY Y position of the groupbox. */
@@ -163,13 +163,13 @@ namespace PX::UI
 		/**	\param dqOptions Options that should be available inside the combobox. */
 		/**	\param uSelectedOption Currently selected option. */
 		/**	\return -1 - Nothing was selected.\n >= 0 - Something was selected, the index for the option inside the deque of options. */
-		int PX_API Combobox( unsigned uButtonHeight, Types::cstr_t szTitle, std::deque< Types::cstr_t > dqOptions, unsigned uSelectedOption );
+		int PX_API Combobox( unsigned uButtonHeight, Types::cstr_t szTitle, const std::deque< Types::cstr_t >& dqOptions, unsigned uSelectedOption );
 		/** \brief Creates a combobox with multiple options which can all be enabled or disabled.\n Uses one column. */
 		/**	\param uButtonHeight Height of each of the buttons inside the combobox. */
 		/**	\param szTitle Title of the combobox. */
 		/**	\param dqOptions Options that should be available inside the combobox. */
 		/**	\param dqEnabledOptions List of the options that are enabled in the combobox. */
-		void PX_API ComboboxMulti( unsigned uButtonHeight, Types::cstr_t szTitle, std::deque< Types::cstr_t > dqOptions, std::deque< bool >& dqEnabledOptions );
+		void PX_API ComboboxMulti( unsigned uButtonHeight, Types::cstr_t szTitle, const std::deque< Types::cstr_t >& dqOptions, std::deque< bool >& dqEnabledOptions );
 
 		/** \brief Creates a box for the user to input data.\n Uses one column. */
 		/**	\tparam _t Can be either float, char* or int. */
