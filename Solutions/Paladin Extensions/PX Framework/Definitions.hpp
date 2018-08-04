@@ -6,7 +6,7 @@
 #else
 
 // Compiler
-#pragma warning( disable: 4098 4099 4307 4309 4996 )
+#pragma warning( disable: 4098 4099 4100 4307 4309 4996 )
 #define _CRT_SECURE_NO_WARNINGS
 #define _SILENCE_ALL_CXX17_DEPRECATION_WARNINGS
 
@@ -55,7 +55,7 @@
 #define PX_MAX_KEY 256
 
 /** \brief Size of a memory page. */
-#define PX_PAGE 1024 * 4
+#define PX_PAGE ( 1024 * 4 )
 
 #if defined _DEBUG
 #define PX_DEPENDENCIES_ESCAPE 3
@@ -88,7 +88,7 @@
 #define PX_LER << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), L"[%H:%M:%S]" ) << \
 		PX::dbg::out_clr_t( !FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | !FOREGROUND_BLUE ) << L" [LER] " << \
 		PX::dbg::out_clr_t( !FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE )
-#elif
+#else
 #define PX_DBG
 #define PX_SCS
 #define PX_WRN

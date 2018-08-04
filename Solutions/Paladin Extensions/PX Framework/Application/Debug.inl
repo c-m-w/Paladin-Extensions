@@ -6,7 +6,7 @@ namespace PX
 {
 	namespace dbg
 	{
-		template< typename _t > bool PX_API Ensure( _t _ToAssert )
+		template< typename _t > bool PX_API Assert( _t _ToAssert )
 		{
 			static int i;
 			if ( _ToAssert == _t( ) )

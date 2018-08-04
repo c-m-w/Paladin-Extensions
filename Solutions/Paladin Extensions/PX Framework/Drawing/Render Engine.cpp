@@ -6,9 +6,9 @@ namespace PX::Render
 {
 	LPCREATESTRUCT pWindowInformation;
 
-	LRESULT WINAPI WndProc( HWND hwWindowHandle, UINT uMessage, WPARAM uwParam, LPARAM llParam )
+	LRESULT WINAPI WndProc( HWND _hwWindowHandle, UINT uMessage, WPARAM uwParam, LPARAM llParam )
 	{
-		PX_INPUT.OnEvent( hwWindowHandle, uMessage, uwParam, llParam );
+		PX_INPUT.OnEvent( _hwWindowHandle, uMessage, uwParam, llParam );
 
 		switch ( uMessage )
 		{
@@ -18,7 +18,7 @@ namespace PX::Render
 				return true;
 
 			case WM_IME_SETCONTEXT:
-				ShowWindow( hwWindowHandle, SW_RESTORE );
+				ShowWindow( _hwWindowHandle, SW_RESTORE );
 				bMinimized = false;
 				mmtRestoreWindow = Tools::GetMoment( );
 				return true;
@@ -43,7 +43,7 @@ namespace PX::Render
 						dxParameters.BackBufferWidth = uWidth;
 						dxParameters.BackBufferHeight = uHeight;
 						const auto hrReset = pDevice->Reset( &dxParameters );
-						dbg::Ensure( hrReset >= 0 );
+						dbg::Assert( hrReset >= 0 );
 						UI::Manager::Resize( uWidth, uHeight );
 					}
 				}
@@ -52,11 +52,11 @@ namespace PX::Render
 				break;
 		}
 
-		return UI::Manager::OnEvent( hwWindowHandle, uMessage, uwParam, llParam )
+		return UI::Manager::OnEvent( _hwWindowHandle, uMessage, uwParam, llParam )
 			       ? ( uOldWindowProc
-				           ? CallWindowProc( reinterpret_cast< WNDPROC >( uOldWindowProc ), hwWindowHandle, uMessage, uwParam, llParam )
+				           ? CallWindowProc( reinterpret_cast< WNDPROC >( uOldWindowProc ), _hwWindowHandle, uMessage, uwParam, llParam )
 				           : 0 )
-			       : DefWindowProc( hwWindowHandle, uMessage, uwParam, llParam );
+			       : DefWindowProc( _hwWindowHandle, uMessage, uwParam, llParam );
 	}
 
 	void PX_API SetCursor( ECursor curType )
@@ -135,7 +135,7 @@ namespace PX::Render
 
 			// Windows 7 doesn't support hardware vertexprocessing, so if it fails we need to use software vertexprocessing.
 			if ( pObjectEx->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hwWindowHandle, D3DCREATE_HARDWARE_VERTEXPROCESSING | D3DCREATE_PUREDEVICE | D3DCREATE_FPU_PRESERVE, &dxParameters, &pDevice ) < 0 )
-				dbg::Ensure( pObjectEx->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hwWindowHandle, D3DCREATE_SOFTWARE_VERTEXPROCESSING | D3DCREATE_PUREDEVICE | D3DCREATE_FPU_PRESERVE, &dxParameters, &pDevice ) >= 0 );
+				dbg::Assert( pObjectEx->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hwWindowHandle, D3DCREATE_SOFTWARE_VERTEXPROCESSING | D3DCREATE_PUREDEVICE | D3DCREATE_FPU_PRESERVE, &dxParameters, &pDevice ) >= 0 );
 			pDevice->GetCreationParameters( new D3DDEVICE_CREATION_PARAMETERS ); // warning: passing NEW because parameter passed from before was never used
 		}
 	}
@@ -151,10 +151,10 @@ namespace PX::Render
 	void PX_API SetWindowProc( IDirect3DDevice9* pTargetDevice )
 	{
 		D3DDEVICE_CREATION_PARAMETERS cpParameters;
-		dbg::Ensure( pTargetDevice->GetCreationParameters( &cpParameters ) >= 0 );
+		dbg::Assert( pTargetDevice->GetCreationParameters( &cpParameters ) >= 0 );
 		hwOldWindowHandle = cpParameters.hFocusWindow;
 
 		uOldWindowProc = SetWindowLongPtr( hwOldWindowHandle, GWLP_WNDPROC, reinterpret_cast< long >( WndProc ) );
-		dbg::Ensure( uOldWindowProc );
+		dbg::Assert( uOldWindowProc );
 	}
 }

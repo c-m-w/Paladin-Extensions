@@ -183,7 +183,7 @@ void OnLaunch( )
 	//dbg::out << strResponse.length( ) << dbg::newl;
 	//system( "pause" );
 
-	auto pDLL = fopen( R"(C:\Users\Cole\Desktop\CSGO\Release\Messagebox.dll)", "rb" );
+	auto pDLL = fopen( R"(C:\Users\bhopfu1\Desktop\Messagebox.dll)", "rb" );
 	fseek( pDLL, 0, SEEK_END );
 	long lSize = ftell( pDLL );
 	rewind( pDLL );
@@ -191,5 +191,5 @@ void OnLaunch( )
 	fread( pBuffer, 1, lSize, pDLL );
 
 	sys::SInjectionInfo inj;
-	DLLManualMap( pBuffer, L"csgo.exe", &inj );
+	DLLManualMap( pBuffer, L"ConsoleApplication1.exe", &inj );
 }

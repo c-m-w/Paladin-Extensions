@@ -25,7 +25,7 @@ namespace PX::Types
 
 	color_t::color_t( const float* flNewColors, const unsigned __int8 nColorsCount ) : pColor( new UColor )
 	{
-		if ( !dbg::Ensure( nColorsCount == 4 || nColorsCount == 3 ) )
+		if ( !dbg::Assert( nColorsCount == 4 || nColorsCount == 3 ) )
 			return;
 		PutRedFloat( flNewColors[ COLOR_RED ] );
 		PutGreenFloat( flNewColors[ COLOR_GREEN ] );

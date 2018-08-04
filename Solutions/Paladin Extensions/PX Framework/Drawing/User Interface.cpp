@@ -240,9 +240,9 @@ namespace PX::UI
 			btnComboActive.touch_padding = nk_vec2( 5, 5 );
 		}
 
-		void PX_API Initialize( Types::cstr_t szApplicationTitle )
+		void PX_API Initialize( Types::cstr_t _szApplicationTitle )
 		{
-			szNuklearWindowTitle = szApplicationTitle;
+			szNuklearWindowTitle = _szApplicationTitle;
 			InitializeNuklear( );
 		}
 
@@ -258,7 +258,7 @@ namespace PX::UI
 		void PX_API SetFont( EFont fntDesiredFont )
 		{
 			static std::deque< nk_font* > dqFonts { pTahoma, pTahomaBold, pRoboto, pRobotoBold, pRobotoSmall, pRobotoBoldSmall, pEnvy };
-			dbg::Ensure( fntDesiredFont >= 0 && fntDesiredFont < FONT_MAX );
+			dbg::Assert( fntDesiredFont >= 0 && fntDesiredFont < FONT_MAX );
 			return nk_style_set_font( pContext, &dqFonts[ fntDesiredFont ]->handle );
 		}
 
@@ -418,12 +418,12 @@ namespace PX::UI
 			curCurrent = curSetCursor;
 		}
 
-		void PX_API Header( Types::cstr_t szTitle, Types::cstr_t szApplicationTitle, Types::fn_callback_t fnMinimizeCallback, Types::fn_callback_t fnCloseCallback )
+		void PX_API Header( Types::cstr_t szTitle, Types::cstr_t _szApplicationTitle, Types::fn_callback_t fnMinimizeCallback, Types::fn_callback_t fnCloseCallback )
 		{
 			nk_layout_row_dynamic( pContext, 30, 0 );
 			auto pOutput = nk_window_get_canvas( pContext );
-			auto pInput = &pContext->input;
-			constexpr nk_color clrBlueHover { 115, 189, 247, 255 };
+			//auto pInput = &pContext->input;
+			constexpr nk_color _clrBlueHover { 115, 189, 247, 255 };
 			const auto uWidth = pContext->current->bounds.w;
 
 			struct nk_text txtTitle, txtApplication, txtCloseButton, txtMinimizeButton;
@@ -438,8 +438,8 @@ namespace PX::UI
 			auto vecTitle = CalculateTextBounds( szTitle, 30 );
 			nk_widget_text( pOutput, nk_rect( 15, 7, vecTitle.x, 30 ), szTitle, strlen( szTitle ), &txtTitle, NK_TEXT_CENTERED, pContext->style.font );
 			SetFont( FONT_ROBOTO );
-			auto vecApplicationTitle = CalculateTextBounds( szApplicationTitle, 30 );
-			nk_widget_text( pOutput, nk_rect( 23 + vecTitle.x, 7, vecApplicationTitle.x, 30 ), szApplicationTitle, strlen( szApplicationTitle ), &txtApplication, NK_TEXT_CENTERED, pContext->style.font );
+			auto vecApplicationTitle = CalculateTextBounds( _szApplicationTitle, 30 );
+			nk_widget_text( pOutput, nk_rect( 23 + vecTitle.x, 7, vecApplicationTitle.x, 30 ), _szApplicationTitle, strlen( _szApplicationTitle ), &txtApplication, NK_TEXT_CENTERED, pContext->style.font );
 
 			static auto clrMinimize = clrBlue, clrClose = clrMinimize;
 			txtMinimizeButton.text = clrMinimize;
@@ -459,7 +459,7 @@ namespace PX::UI
 
 			if ( bHoveringMinimize )
 			{
-				clrMinimize = clrBlueHover;
+				clrMinimize = _clrBlueHover;
 				SetWidgetActive( CURSOR_HAND );
 				if ( bClicking )
 				{
@@ -476,7 +476,7 @@ namespace PX::UI
 
 			if ( bHoveringClose )
 			{
-				clrClose = clrBlueHover;
+				clrClose = _clrBlueHover;
 				SetWidgetActive( CURSOR_HAND );
 				if ( bClicking )
 					fnCloseCallback( );
@@ -702,10 +702,10 @@ namespace PX::UI
 			{
 				305, 375
 			};
-			const auto uWindowWidth = pContext->current->bounds.w, uWindowHeight = pContext->current->bounds.h;
+			const auto _uWindowWidth = pContext->current->bounds.w, _uWindowHeight = pContext->current->bounds.h;
 			const struct nk_rect rcColorPickerBoundaries
 			{
-				( uWindowWidth / 2 ) - ( vecColorPickerSize.x / 2 ), ( uWindowHeight / 2 ) - ( vecColorPickerSize.y / 2 ), vecColorPickerSize.x, vecColorPickerSize.y
+				( _uWindowWidth / 2 ) - ( vecColorPickerSize.x / 2 ), ( _uWindowHeight / 2 ) - ( vecColorPickerSize.y / 2 ), vecColorPickerSize.x, vecColorPickerSize.y
 			};
 			const static std::string strBaseTitle = R"(Color of ')";
 
@@ -721,7 +721,7 @@ namespace PX::UI
 			bNewColor = false;
 
 			const auto pOutput = nk_window_get_canvas( pContext );
-			nk_fill_rect( pOutput, nk_rect( 0, 0, uWindowWidth, uWindowHeight ), 0, nk_rgba( 0, 0, 0, 180 ) );
+			nk_fill_rect( pOutput, nk_rect( 0, 0, _uWindowWidth, _uWindowHeight ), 0, nk_rgba( 0, 0, 0, 180 ) );
 
 			if ( bShouldClose )
 			{
@@ -847,7 +847,7 @@ namespace PX::UI
 		{
 			iCurrentRowUsedColumns += 3 ;
 
-			dbg::Ensure( iMax > iMin );
+			dbg::Assert( iMax > iMin );
 			auto szTexta = std::to_string( iCurrentValue ).substr( 0, std::to_string( iCurrentValue ).size( ) );
 			auto szText = szTexta.c_str( );
 			static auto bInEdit = false, bSetEditValue = false;
@@ -911,7 +911,7 @@ namespace PX::UI
 				iCurrentValue = Inputbox< int >( strlen( std::to_string( FLT_MAX ).c_str( ) ), szInputBuffer );
 				bHoveringInputBox = nk_input_is_mouse_hovering_rect( &pContext->input, recNewBounds );
 
-				auto urdad = pContext;
+				//auto urdad = pContext;
 
 				if ( bHoveringInputBox )
 					SetWidgetActive( CURSOR_IBEAM );
@@ -948,7 +948,7 @@ namespace PX::UI
 		{
 			iCurrentRowUsedColumns += 3;
 
-			dbg::Ensure( flMax > flMin );
+			dbg::Assert( flMax > flMin );
 			auto szTexta = std::to_string( flCurrentValue ).substr( 0, std::to_string( int( flCurrentValue ) ).size( ) + 1 + uDigits );
 			auto szText = szTexta.c_str( );
 			static auto bInEdit = false, bSetEditValue = false;
@@ -1069,19 +1069,19 @@ namespace PX::UI
 				nk_layout_space_end
 			};
 
-			dbg::Ensure( iCurrentRowUsedColumns == iCurrentRowMaxColumns );
+			dbg::Assert( iCurrentRowUsedColumns == iCurrentRowMaxColumns );
 			fnEndRow[ rowLastRowType ]( pContext );
 		}
 
 		void PX_API SetRowWidth( float flRowWidth )
 		{
-			dbg::Ensure( rowLastRowType == ROW_STATIC );
+			dbg::Assert( rowLastRowType == ROW_STATIC );
 			return nk_layout_row_push( pContext, flRowWidth );
 		}
 
 		void PX_API Spacing( unsigned uColumns /*= 1*/ )
 		{
-			dbg::Ensure( iCurrentRowUsedColumns++ < iCurrentRowMaxColumns );
+			dbg::Assert( iCurrentRowUsedColumns++ < iCurrentRowMaxColumns );
 			nk_spacing( pContext, uColumns );
 			if ( iCurrentRowUsedColumns == iCurrentRowMaxColumns )
 				EndRow( );
@@ -1095,7 +1095,7 @@ namespace PX::UI
 
 		void PX_API PushCustomRow( unsigned uStartX, unsigned uStartY, unsigned uWidth, unsigned uHeight )
 		{
-			dbg::Ensure( rowLastRowType == ROW_CUSTOM );
+			dbg::Assert( rowLastRowType == ROW_CUSTOM );
 			return nk_layout_space_push( pContext, nk_rect( float( uStartX ), float( uStartY ), float( uWidth ), float( uHeight ) ) );
 		}
 	}

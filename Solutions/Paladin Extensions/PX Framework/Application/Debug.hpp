@@ -5,7 +5,7 @@
 namespace PX::dbg
 {
 	// INFO: Asserts parameter to empty initialization version of parameter
-	template< typename _t > bool PX_API Ensure( _t );
+	template< typename _t > bool PX_API Assert( _t );
 
 	PX_DEF newl = '\n';
 
