@@ -225,6 +225,26 @@ namespace PX::sys
 
 	bool PX_API DLLManualMap( LPVOID pDLL, const std::wstring& wstrExecutableName, SInjectionInfo* injInfo )
 	{
+		HANDLE hTarget { },
+			   hThread { };
+		LPVOID pMemory { },
+				pImage { };
+
+		const auto fnCleanup = [ = ]( bool bPrintLastError )
+		{
+			if( hTarget )
+			{
+				if( pMemory )
+					VirtualFreeEx( hTarget, pMemory, 0, MEM_RELEASE );
+				if( pImage )
+					VirtualFreeEx( hTarget, pImage, 0, MEM_RELEASE );
+				CloseHandle( hTarget );
+			}
+
+			if ( hThread )
+				CloseHandle( hThread );
+		};
+
 		if ( !dbg::Assert( EnsureElevation( ) ) )
 			return false;
 
@@ -233,34 +253,32 @@ namespace PX::sys
 		if ( !dbg::Assert( pDOSHeader->e_magic == IMAGE_DOS_SIGNATURE ) )
 			return false;
 
+		dbg::out << pDOSHeader->e_lfanew << dbg::newl;
+
 		auto pNTHeader = PIMAGE_NT_HEADERS( PBYTE( pDLL ) + pDOSHeader->e_lfanew );
 		if ( !dbg::Assert( pNTHeader->Signature == IMAGE_NT_SIGNATURE )
 			 || !dbg::Assert( pNTHeader->FileHeader.Characteristics & IMAGE_FILE_DLL ) )
 			return false;
 
 		// open handle to target process
-		auto hTarget = OpenProcess( PROCESS_ALL_ACCESS, FALSE, GetProcessID( wstrExecutableName ) );
+		hTarget = OpenProcess( PROCESS_ALL_ACCESS, FALSE, GetProcessID( wstrExecutableName ) );
 		if ( !dbg::Assert( hTarget ) )
 		{
-			dbg::PutLastError( );
-			CloseHandle( hTarget );
+			fnCleanup( true );
 			return false;
 		}
 
 		// allocate memory in & write headers to target process
-		auto pImage = VirtualAllocEx( hTarget, nullptr, pNTHeader->OptionalHeader.SizeOfImage, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE );
+		pImage = VirtualAllocEx( hTarget, nullptr, pNTHeader->OptionalHeader.SizeOfImage, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE );
 		if ( !dbg::Assert( pImage ) )
 		{
-			dbg::PutLastError( );
-			CloseHandle( hTarget );
+			fnCleanup( true );
 			return false;
 		}
 
 		if ( !dbg::Assert( WriteProcessMemory( hTarget, pImage, pDLL, pNTHeader->OptionalHeader.SizeOfHeaders, nullptr ) ) )
 		{
-			dbg::PutLastError( );
-			VirtualFreeEx( hTarget, pImage, 0, MEM_RELEASE );
-			CloseHandle( hTarget );
+			fnCleanup( true );
 			return false;
 		}
 
@@ -268,19 +286,15 @@ namespace PX::sys
 		for ( WORD w = 0; w < pNTHeader->FileHeader.NumberOfSections; w++ )
 			if ( !dbg::Assert( WriteProcessMemory( hTarget, PBYTE( pImage ) + pSectionHeader[ w ].VirtualAddress, PBYTE( pDLL ) + pSectionHeader[ w ].PointerToRawData, pSectionHeader[ w ].SizeOfRawData, nullptr ) ) )
 			{
-				dbg::PutLastError( );
-				VirtualFreeEx( hTarget, pImage, 0, MEM_RELEASE );
-				CloseHandle( hTarget );
+				fnCleanup( true );
 				return false;
 			}
 
 		// allocate memory in & write data to target process
-		auto pMemory = VirtualAllocEx( hTarget, nullptr, 4096, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE );
+		pMemory = VirtualAllocEx( hTarget, nullptr, 4096, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE );
 		if ( !dbg::Assert( pMemory ) )
 		{
-			dbg::PutLastError( );
-			VirtualFreeEx( hTarget, pImage, 0, MEM_RELEASE );
-			CloseHandle( hTarget );
+			fnCleanup( true );
 			return false;
 		}
 
@@ -294,75 +308,46 @@ namespace PX::sys
 
 		if ( !dbg::Assert( WriteProcessMemory( hTarget, pMemory, injInfo, sizeof( SInjectionInfo ), nullptr ) ) )
 		{
-			dbg::PutLastError( );
-			VirtualFreeEx( hTarget, pImage, 0, MEM_RELEASE );
-			VirtualFreeEx( hTarget, pMemory, 0, MEM_RELEASE );
-			CloseHandle( hTarget );
+			fnCleanup( true );
 			return false;
 		}
 		
-		dbg::out << DWORD( CallDLLThreadEnd ) - DWORD( CallDLLThread );
-
-		if ( !/*dbg::Assert*/( WriteProcessMemory( hTarget, PVOID( static_cast< SInjectionInfo* >( pMemory ) + 1 ), CallDLLThread, 3765, nullptr ) ) )
+		if ( !dbg::Assert( WriteProcessMemory( hTarget, PVOID( static_cast< SInjectionInfo* >( pMemory ) + 1 ), CallDLLThread, 3765, nullptr ) ) )
 		{
-			dbg::out << DWORD( CallDLLThreadEnd ) - DWORD( CallDLLThread );
-			dbg::PutLastError( );
-			VirtualFreeEx( hTarget, pImage, 0, MEM_RELEASE );
-			VirtualFreeEx( hTarget, pMemory, 0, MEM_RELEASE );
-			CloseHandle( hTarget );
+			fnCleanup( true );
 			return false;
 		}
 
-		Types::byte_t bBuffer[ 16 ];
-		ReadProcessMemory( hTarget, PVOID( static_cast< SInjectionInfo* >( pMemory ) + 5 ), &bBuffer, 16, nullptr );
-
-		//dbg::out << bBuffer << dbg::newl << LoadLibraryA << dbg::newl;
-
-
-		auto hThread = CreateRemoteThread( hTarget, nullptr, 0, LPTHREAD_START_ROUTINE( static_cast< SInjectionInfo* >( pMemory ) + 1 ), pMemory, 0, nullptr );
-		if ( !dbg::Assert( hThread ) )
-		{
-			dbg::PutLastError( );
-			VirtualFreeEx( hTarget, pImage, 0, MEM_RELEASE );
-			VirtualFreeEx( hTarget, pMemory, 0, MEM_RELEASE );
-			CloseHandle( hTarget );
-			return false;
-		}
-		dbg::PutLastError( );
-		if ( !dbg::Assert( WaitForSingleObject( hThread, INFINITE ) != WAIT_FAILED ) )
-		{
-			dbg::PutLastError( );
-			VirtualFreeEx( hTarget, pMemory, 0, MEM_RELEASE );
-			VirtualFreeEx( hTarget, pImage, 0, MEM_RELEASE );
-			CloseHandle( hThread );
-			CloseHandle( hTarget );
-			return false;
-		}
+		hThread = CreateRemoteThread( hTarget, nullptr, 0, LPTHREAD_START_ROUTINE( static_cast< SInjectionInfo* >( pMemory ) + 1 ), pMemory, 0, nullptr );
 
 		DWORD dwExitCode;
-		if ( !dbg::Assert( GetExitCodeThread( hThread, &dwExitCode ) ) )
+		if ( !dbg::Assert( hThread ) ||
+			 !dbg::Assert( WaitForSingleObject( hThread, INFINITE ) != WAIT_FAILED ) ||
+			 !dbg::Assert( GetExitCodeThread( hThread, &dwExitCode ) ) || 
+			 !dbg::Assert( dwExitCode ) )
 		{
-			dbg::PutLastError( );
-			VirtualFreeEx( hTarget, pMemory, 0, MEM_RELEASE );
-			VirtualFreeEx( hTarget, pImage, 0, MEM_RELEASE );
-			CloseHandle( hThread );
-			CloseHandle( hTarget );
+			fnCleanup( true );
 			return false;
 		}
 
-		if ( !dbg::Assert( dwExitCode ) )
+		auto fnWipeMemory = [ = ]( LPVOID pAddress, unsigned uSize )
 		{
-			VirtualFreeEx( hTarget, pMemory, 0, MEM_RELEASE );
-			VirtualFreeEx( hTarget, pImage, 0, MEM_RELEASE );
-			CloseHandle( hThread );
-			CloseHandle( hTarget );
-			return false;
-		}
+			DWORD dwBuffer;
+			std::unique_ptr< Types::byte_t[ ] > pZeroMemoryBuffer( new Types::byte_t[ uSize ]( ) );
+			WriteProcessMemory( hTarget, pAddress, pZeroMemoryBuffer.get( ), uSize, nullptr );
+			VirtualProtectEx( hTarget, pAddress, uSize, PAGE_NOACCESS, &dwBuffer );
+			VirtualFreeEx( hTarget, pAddress, uSize, MEM_DECOMMIT );
+		};
 
-		CloseHandle( hThread );
-		VirtualFreeEx( hTarget, pMemory, 0, MEM_RELEASE );
-		CloseHandle( hTarget );
+		// Erase PE headers
+		fnWipeMemory( pImage, pDOSHeader->e_lfanew + sizeof pNTHeader + ( sizeof pSectionHeader ) * pNTHeader->FileHeader.NumberOfSections );
 
+		// Wipe discardable sections
+		for ( WORD w = 0; w < pNTHeader->FileHeader.NumberOfSections; w++ )
+			if ( pSectionHeader[ w ].Characteristics & IMAGE_SCN_MEM_DISCARDABLE ) // If the section's characteristics are marked as discardable, wipe them and free the memory, and set it back to its' previous state.
+				fnWipeMemory( LPVOID( pSectionHeader[ w ].VirtualAddress ), pSectionHeader[ w ].SizeOfRawData );
+
+		fnCleanup( false );
 		return true;
 	}
 }
