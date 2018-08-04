@@ -24,6 +24,11 @@ namespace PX::Tools
 	/**	\param szFileName File name of the sound. */
 	void PX_API EmitSound( Types::wcstr_t szFileName );
 
+	/** \brief Creates shellcode from a byte array. */
+	/**	\param bByteArray Array of bytes to convert. */
+	/**	\return Converted byte array. */
+	std::string PX_API FormatShellcode( Types::byte_t* bByteArray );
+
 	/** \brief Paladin time datatype, long enough to hold any time type, down to microseconds. */
 	typedef unsigned long long moment_t;
 	// INFO: Gets the local time
