@@ -80,9 +80,6 @@
     <ClCompile Include="Security\Connectivity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Types.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Security\System Management.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -98,5 +95,8 @@
       <Filter>Header Files</Filter>
     </None>
     <None Include="Application\Tools.inl" />
+    <None Include="Application\Types.inl">
+      <Filter>Header Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -41,13 +41,6 @@ void Exit( )
 
 void PX_API UI::Manager::Example( )
 {
-	PX_DEF GROUPBOX_COLUMN_WIDTH = 150;
-	PX_DEF CHECKBOX_ICON_WIDTH = 25;
-	PX_DEF COLOR_BUTTON_WIDTH = 15;
-	PX_DEF COLOR_BUTTON_PADDING = 2;
-	PX_DEF KEYBIND_BUTTON_WIDTH = 60;
-	PX_DEF KEYBIND_BUTTON_PADDING = 2;
-
 	static const std::deque< Types::cstr_t > dqPrimaryTabs
 	{
 		"Tab One",
@@ -76,17 +69,14 @@ void PX_API UI::Manager::Example( )
 		{ "First", false },
 		{ "Second", false },
 		{ "Third", false },
-		{ "Color One", 0xFF0000FFu },
-		{ "Color Two", 0xFEBA4E10u },
-		{ "Color Three", 0x00FF00FFu },
 		{ "Int", 0 },
 		{ "Float", 0.f }
 	};
 
 	// Color pickers
-	static Types::color_t clrFirst( jsWidgets[ "Color One" ].get_ptr< unsigned* >( ) );
-	static Types::color_t clrSecond( jsWidgets[ "Color Two" ].get_ptr< unsigned* >( ) );
-	static Types::color_t clrThird( jsWidgets[ "Color Three" ].get_ptr< unsigned* >( ) );
+	static Tools::color_sequence_t clrFirst( Tools::color_t( 255, 0, 0 ), 100 );
+	static Tools::color_sequence_t clrSecond( Tools::color_t( 0, 255, 0 ), 400 );
+	static Tools::color_sequence_t clrThird( Tools::color_t( 0, 0, 255 ), 200 );
 
 	// Create a header with the window title and subtitle, with minimize and close functionality.
 	Header( Tools::string_cast< std::string >( Render::wszWindowTitle ).c_str( ), szNuklearWindowTitle, Minimize, Exit );
@@ -155,11 +145,11 @@ void PX_API UI::Manager::SetLayout( )
 
 void OnLaunch( )
 {
-	//unsigned uDimensions[ 2 ] { 720, 600 };
-	//Render::InitializeRenderTarget( uDimensions, PX_XOR( L"Paladin Extensions" ) );
-	//UI::Manager::Initialize( PX_XOR( "Manager" ) );
-	//while ( UI::Manager::Render( ) && !bShutdown )
-	//	Tools::Wait( 1 );
+	unsigned uDimensions[ 2 ] { 720, 600 };
+	Render::InitializeRenderTarget( uDimensions, PX_XOR( L"Paladin Extensions" ) );
+	UI::Manager::Initialize( PX_XOR( "Manager" ) );
+	while ( UI::Manager::Render( ) && !bShutdown )
+		Tools::Wait( 1 );
 
 	//Net::InitializeConnection( );
 	//std::deque< Net::post_data_t > dqPostData;
@@ -196,7 +186,7 @@ void OnLaunch( )
 	
 	if ( dbg::Assert( lSize != 0 && pBuffer != nullptr ) )
 	{
-		Types::injection_info_t inj { };
+		sys::injection_info_t inj { };
 		sys::DLLManualMap( pBuffer, L"ConsoleApplication1.exe", &inj );
 	}
 	system( "pause" );

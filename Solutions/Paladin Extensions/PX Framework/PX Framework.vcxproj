@@ -180,7 +180,6 @@
     <ClCompile Include="Application\File Manager.cpp" />
     <ClCompile Include="Application\Input Manager.cpp" />
     <ClCompile Include="Application\Tools.cpp" />
-    <ClCompile Include="Application\Types.cpp" />
     <ClCompile Include="Drawing\Render Engine.cpp" />
     <ClCompile Include="Drawing\User Interface.cpp" />
     <ClCompile Include="Security\Connectivity.cpp" />
@@ -190,6 +189,7 @@
   <ItemGroup>
     <None Include="Application\Debug.inl" />
     <None Include="Application\Tools.inl" />
+    <None Include="Application\Types.inl" />
     <None Include="Drawing\User Interface.inl" />
     <None Include="Security\Cryptography.inl" />
   </ItemGroup>

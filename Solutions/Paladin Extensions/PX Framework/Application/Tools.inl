@@ -10,13 +10,18 @@ namespace PX::Tools
 		return _ChildClassObject;
 	}
 
-	template< typename _t > Tools::moment_t PX_API GetMoment( )
+	template< typename _t > moment_t PX_API GetMoment( )
 	{
 		return std::chrono::duration_cast< _t >( std::chrono::system_clock::now( ).time_since_epoch( ) ).count( );
 	}
-	template< typename _t > void PX_API Wait( Tools::moment_t mmtWaitLength )
+	template< typename _t > void PX_API Wait( moment_t mmtWaitLength )
 	{
 		std::this_thread::sleep_for( _t( mmtWaitLength ) );
+	}
+	
+	template< typename _t > color_t color_t::operator/( _t _Divisor )
+	{
+		return color_t( byte_t( r / _Divisor ), byte_t( g / _Divisor ), byte_t( b / _Divisor ), byte_t( a / _Divisor ) );
 	}
 
 	// INFO: Deduces traits and uses matching casting function of trait

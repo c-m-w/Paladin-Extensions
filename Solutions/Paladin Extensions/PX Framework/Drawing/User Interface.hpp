@@ -7,6 +7,13 @@ namespace PX::UI
 	/** \brief Used for managing the user interface. */
 	namespace Manager
 	{
+		PX_DEF GROUPBOX_COLUMN_WIDTH = 150;
+		PX_DEF CHECKBOX_ICON_WIDTH = 25;
+		PX_DEF COLOR_BUTTON_WIDTH = 15;
+		PX_DEF COLOR_BUTTON_PADDING = 2;
+		PX_DEF KEYBIND_BUTTON_WIDTH = 60;
+		PX_DEF KEYBIND_BUTTON_PADDING = 2;
+
 		/** \brief Contains information regarding GUI drawing. */
 		PX_SDK nk_context* pContext;
 		/** \brief Title of the GUI window. */
@@ -84,7 +91,7 @@ namespace PX::UI
 		/** \brief Maximum amount of widgets the current row can hold. */
 		PX_SDK int iCurrentRowMaxColumns;
 		/** \brief Color pointer that is being edited. */
-		PX_SDK Types::color_t* pActiveEditColor = nullptr;
+		PX_SDK Tools::color_sequence_t* pActiveEditColor = nullptr;
 
 		/** \brief Checks whether or not the mouse is hovering the next widget's render bounds. */
 		/**	\return true - Mouse is hovering next widget.\n false - Mouse is not hovering next widget. */
@@ -155,7 +162,7 @@ namespace PX::UI
 		/** \brief Creates a color button that the user can set the color for if clicked.\n The color picker is handled automatically if the button is clicked.\n Uses one column. */
 		/**	\param szSubject What the color is for. */
 		/**	\param pColor Pointer to the color that will be edited if the button is clicked. */
-		void PX_API ColorButton( Types::cstr_t szSubject, Types::color_t* pColor );
+		void PX_API ColorButton( Types::cstr_t szSubject, Tools::color_sequence_t* pColor );
 
 		/** \brief Creates a combobox for the user to select an option within.\n Uses one column. */
 		/**	\param uButtonHeight Height of each of the buttons inside the combobox. */
