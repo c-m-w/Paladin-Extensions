@@ -33,7 +33,7 @@ namespace PX::Tools
 		return uScreenDimensions;
 	}
 
-	color_t::color_t( ): pColor( new UColor )
+	color_t::color_t( )
 	{
 		for each ( auto& bColor in pColor->b )
 			bColor = XOR::LinearCongruentialGenerator( 0 ) % UCHAR_MAX;
@@ -44,17 +44,17 @@ namespace PX::Tools
 		pColor = reinterpret_cast< UColor* >( ptrNewAddress );
 	}
 
-	color_t::color_t( byte_t* bNewColors ): pColor( new UColor )
+	color_t::color_t( byte_t* bNewColors )
 	{
 		std::memcpy( pColor, bNewColors, sizeof( UColor ) );
 	}
 
-	color_t::color_t( int* iNewColors ) : pColor( new UColor )
+	color_t::color_t( int* iNewColors )
 	{
 		std::memcpy( pColor, iNewColors, sizeof( UColor ) );
 	}
 
-	color_t::color_t( const float* flNewColors, const unsigned __int8 nColorsCount ) : pColor( new UColor )
+	color_t::color_t( const float* flNewColors, const unsigned __int8 nColorsCount )
 	{
 		if ( !dbg::Assert( nColorsCount == 4 || nColorsCount == 3 ) )
 			return;
@@ -64,7 +64,7 @@ namespace PX::Tools
 		PutAlphaFloat( nColorsCount == 4 ? flNewColors[ COLOR_ALPHA ] : 255.f );
 	}
 
-	color_t::color_t( const byte_t bRed, const byte_t bGreen, const byte_t bBlue, const byte_t bAlpha ): pColor( new UColor )
+	color_t::color_t( const byte_t bRed, const byte_t bGreen, const byte_t bBlue, const byte_t bAlpha )
 	{
 		PutRed( bRed );
 		PutGreen( bGreen );
@@ -72,7 +72,7 @@ namespace PX::Tools
 		PutAlpha( bAlpha );
 	}
 
-	color_t::color_t( const byte_t bRed, const byte_t bGreen, const byte_t bBlue ): pColor( new UColor )
+	color_t::color_t( const byte_t bRed, const byte_t bGreen, const byte_t bBlue )
 	{
 		PutRed( bRed );
 		PutGreen( bGreen );
@@ -80,7 +80,7 @@ namespace PX::Tools
 		PutAlpha( UCHAR_MAX );
 	}
 
-	color_t::color_t( const int iRed, const int iGreen, const int iBlue, const int iAlpha ): pColor( new UColor )
+	color_t::color_t( const int iRed, const int iGreen, const int iBlue, const int iAlpha )
 	{
 		PutRed( byte_t( iRed ) );
 		PutGreen( byte_t( iGreen ) );
@@ -88,7 +88,7 @@ namespace PX::Tools
 		PutAlpha( byte_t( iAlpha ) );
 	}
 
-	color_t::color_t( const int iRed, const int iGreen, const int iBlue ): pColor( new UColor )
+	color_t::color_t( const int iRed, const int iGreen, const int iBlue )
 	{
 		PutRed( byte_t( iRed ) );
 		PutGreen( byte_t( iGreen ) );
@@ -96,7 +96,7 @@ namespace PX::Tools
 		PutAlpha( UCHAR_MAX );
 	}
 
-	color_t::color_t( const float flRed, const float flGreen, const float flBlue, const float flAlpha ): pColor( new UColor )
+	color_t::color_t( const float flRed, const float flGreen, const float flBlue, const float flAlpha )
 	{
 		PutRedFloat( flRed );
 		PutGreenFloat( flGreen );
@@ -104,7 +104,7 @@ namespace PX::Tools
 		PutAlphaFloat( flAlpha );
 	}
 
-	color_t::color_t( const float flRed, const float flGreen, const float flBlue ): pColor( new UColor )
+	color_t::color_t( const float flRed, const float flGreen, const float flBlue )
 	{
 		PutRedFloat( flRed );
 		PutGreenFloat( flGreen );
@@ -275,7 +275,6 @@ namespace PX::Tools
 				return GetGradient( sqInfo[ s ].clrColor, sqInfo[ s < 7 ? s - 1 : 0 ].clrColor,
 									float( mmtTotalDuration ) / float( mmtCurrentProgress ) );
 
-		// how did we get here? todo: test cases to get us here
 		dbg::Assert( false );
 	}
 
@@ -303,7 +302,7 @@ namespace PX::Tools
 	{
 		dbg::Assert( sSequences > uPosition );
 
-		for ( auto s = uPosition; s < sSequences; s++ )
+		for ( auto s = uPosition; s < sSequences - 1; s++ )
 		{
 			sqInfo[ s ].clrColor = sqInfo[ s + 1 ].clrColor;
 			sqInfo[ s ].mmtDuration = sqInfo[ s + 1 ].mmtDuration;

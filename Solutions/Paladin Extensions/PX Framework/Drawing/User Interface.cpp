@@ -750,10 +750,10 @@ namespace PX::UI
 				nk_layout_row_dynamic( pContext, 10, 1 );
 				nk_button_color( pContext, nk_rgba( int( clrChosenColor.r * 255.f ), int( clrChosenColor.g * 255.f ), int( clrChosenColor.b * 255.f ), int( clrChosenColor.a * 255.f ) ) );
 
-				nk_layout_row_begin( pContext, NK_STATIC, 15, pActiveEditColor->uSequenceCount + 3 );
+				nk_layout_row_begin( pContext, NK_STATIC, 15, pActiveEditColor->sSequences + 3 );
 				nk_layout_row_push( pContext, COLOR_BUTTON_WIDTH );
 
-				for ( auto u = 0u; u < pActiveEditColor->CountSequences( ); u++ )
+				for ( auto u = 0u; u < pActiveEditColor->sSequences; u++ )
 				{
 					auto recBoundaries = nk_widget_bounds( pContext );
 					if ( nk_button_color( pContext, nk_rgba( pActiveEditColor->GetColor( u ).r, pActiveEditColor->GetColor( u ).g, pActiveEditColor->GetColor( u ).b, pActiveEditColor->GetColor( u ).a ) ) )
@@ -771,7 +771,7 @@ namespace PX::UI
 					}
 				}
 
-				auto uPadding = vecColorPickerSize.x - ( COLOR_BUTTON_WIDTH * pActiveEditColor->CountSequences( ) ) - ( COLOR_BUTTON_PADDING * pActiveEditColor->CountSequences( ) * 2 ) - 170;
+				auto uPadding = vecColorPickerSize.x - ( COLOR_BUTTON_WIDTH * pActiveEditColor->sSequences ) - ( COLOR_BUTTON_PADDING * pActiveEditColor->sSequences * 2 ) - 170;
 				nk_layout_row_push( pContext, uPadding );
 				nk_spacing( pContext, 1 );
 				nk_layout_row_push( pContext, 75 );
@@ -779,7 +779,7 @@ namespace PX::UI
 				if ( Button( EPosition::LEFT, "+", false ) )
 				{
 					pActiveEditColor->PutNewColorSequence( Tools::color_t( ), 100u );
-					iCurrentSequence = pActiveEditColor->uSequenceCount - 1;
+					iCurrentSequence = pActiveEditColor->sSequences - 1;
 					clrChosenColor = { pActiveEditColor->GetColor( iCurrentSequence ).rfl, pActiveEditColor->GetColor( iCurrentSequence ).gfl, pActiveEditColor->GetColor( iCurrentSequence ).bfl, pActiveEditColor->GetColor( iCurrentSequence ).afl };
 				}
 				if ( Button( EPosition::RIGHT, "-", false ) )

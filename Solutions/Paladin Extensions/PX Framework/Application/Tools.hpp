@@ -57,7 +57,7 @@ namespace PX::Tools
 			unsigned u;
 			Types::byte_t b[ COLOR_MAX ];
 		};
-		UColor* pColor;
+		UColor* pColor = new UColor;
 
 	public:
 		color_t( );
@@ -127,7 +127,7 @@ namespace PX::Tools
 		} sqInfo[ 7 ];
 		moment_t mmtTotalDuration;
 	public:
-		std::size_t sSequences;
+		std::size_t sSequences = 0u;
 		color_sequence_t( ) = default;
 		color_sequence_t( color_t clrFirstSequence, moment_t mmtFirstSequence );
 		color_sequence_t( color_t* clrColors, moment_t* mmtDurations, std::size_t sSequences );
