@@ -35,8 +35,8 @@ namespace PX::Tools
 
 	color_t::color_t( ): pColor( new UColor )
 	{
-		for each ( auto& b in pColor->b ) // should automatically be reference? @cole
-			b = UCHAR_MAX;
+		for each ( auto& bColor in pColor->b )
+			bColor = XOR::LinearCongruentialGenerator( 0 ) % UCHAR_MAX;
 	}
 
 	color_t::color_t( ptr_t* ptrNewAddress )
@@ -244,74 +244,69 @@ namespace PX::Tools
 						byte_t( fabs( float( clrEnd.a - clrStart.a ) ) / flProgress ) + clrStart.a );
 	}
 
-	color_sequence_t::color_sequence_t( )
-	{
-		PutNewColorSequence( color_t( ), 100u );
-	}
-
 	color_sequence_t::color_sequence_t( color_t clrFirstSequence, moment_t mmtFirstSequence )
 	{
-		dbg::Assert( mmtFirstSequence >= 100 && mmtFirstSequence <= 1000 );
 		PutNewColorSequence( clrFirstSequence, mmtFirstSequence );
 	}
 
-	//color_sequence_t::color_sequence_t( std::deque<color_t> dqColors, std::deque<moment_t> dqDurations )
-	//{
-	//	clrColors = dqColors;
-	//	mmtDurations = dqDurations;
-	//}
-
-	color_t color_sequence_t::GetCurrentColor( ) const
+	color_sequence_t::color_sequence_t( color_t* clrColors, moment_t* mmtDurations, std::size_t sSequences )
 	{
-		dbg::Assert( clrColors.size( ) == mmtDurations.size( ) );
-
-		mmtTotalDuration = 0;
-		for each ( auto mmtDuration in mmtDurations )
-			mmtTotalDuration += mmtDuration;
-		moment_t mmtCurrentProgress = Tools::GetMoment( ) % mmtTotalDuration;
-		moment_t mmtPassedProgress = 0;
-
-		for ( auto u = 0u; u < mmtDurations.size( ); u++ )
-			if ( mmtDurations[ u ] < mmtCurrentProgress - mmtPassedProgress )
-				mmtPassedProgress += mmtDurations[ u ];
-			else
-				return GetGradient( clrColors[ u ], clrColors[ u + 1 == mmtDurations.size( ) ? 0 : u ],
-									float( mmtTotalDuration ) / float( mmtCurrentProgress ) );
-									// how did we get here? todo: test cases to get us here
-									dbg::Assert( false );
+		for ( std::size_t s = 0; s < sSequences; s++ )
+		{
+			sqInfo[ s ].clrColor = clrColors[ s ];
+			sqInfo[ s ].mmtDuration = mmtDurations[ s ];
+		}
 	}
 
-	color_t& color_sequence_t::GetColor( int iColor /*= -1*/ )
+	color_t color_sequence_t::GetCurrentColor( )
 	{
-		return iColor >= 0 ? clrColors[ iColor ] : GetCurrentColor( );
+		dbg::Assert( sSequences );
+
+		mmtTotalDuration = 0;
+		for ( std::size_t s = 0u; s < sSequences; s++ )
+			mmtTotalDuration += sqInfo[ s ].mmtDuration;
+		auto mmtCurrentProgress = GetMoment( ) % mmtTotalDuration;
+		auto mmtPassedProgress = 0ull;
+
+		for ( std::size_t s = 0u; s < sSequences; s++ )
+			if ( sqInfo[ s ].mmtDuration < mmtCurrentProgress - mmtPassedProgress )
+				mmtPassedProgress += sqInfo[ s ].mmtDuration;
+			else
+				return GetGradient( sqInfo[ s ].clrColor, sqInfo[ s < 7 ? s - 1 : 0 ].clrColor,
+									float( mmtTotalDuration ) / float( mmtCurrentProgress ) );
+
+		// how did we get here? todo: test cases to get us here
+		dbg::Assert( false );
+	}
+
+	color_t& color_sequence_t::GetColor( unsigned uColor )
+	{
+		dbg::Assert( sSequences > uColor );
+		return sqInfo[ uColor ].clrColor;
 	}
 
 	moment_t& color_sequence_t::GetDuration( unsigned uDuration )
 	{
-		return mmtDurations[ uDuration ];
+		dbg::Assert( sSequences > uDuration );
+		return sqInfo[ uDuration ].mmtDuration;
 	}
 
 	void color_sequence_t::PutNewColorSequence( color_t clrNewColor, moment_t mmtDuration )
 	{
-		dbg::Assert( clrColors.size( ) == mmtDurations.size( ) );
-
-		clrColors.emplace_back( clrNewColor );
-		mmtDurations.emplace_back( mmtDurations );
+		dbg::Assert( sSequences < 7 );
+		sqInfo[ sSequences ].clrColor = clrNewColor;
+		sqInfo[ sSequences ].mmtDuration = mmtDuration;
+		sSequences++;
 	}
 
 	void color_sequence_t::DeleteColorSequence( unsigned uPosition )
 	{
-		dbg::Assert( clrColors.size( ) == mmtDurations.size( ) );
+		dbg::Assert( sSequences > uPosition );
 
-		if ( clrColors.size( ) > uPosition )
+		for ( auto s = uPosition; s < sSequences; s++ )
 		{
-			clrColors.erase( clrColors.begin( ) + uPosition );
-			mmtDurations.erase( mmtDurations.begin( ) + uPosition );
+			sqInfo[ s ].clrColor = sqInfo[ s + 1 ].clrColor;
+			sqInfo[ s ].mmtDuration = sqInfo[ s + 1 ].mmtDuration;
 		}
-	}
-
-	unsigned color_sequence_t::CountSequences( )
-	{
-		return clrColors.size( );
 	}
 }

@@ -118,28 +118,28 @@ namespace PX::Tools
 
 	struct color_sequence_t
 	{
-	private:
-		std::deque< color_t > clrColors;
-		std::deque< moment_t > mmtDurations;
-		mutable moment_t mmtTotalDuration { };
-	public:
 		static color_t GetGradient( color_t clrStart, color_t clrEnd, float flProgress );
-		color_sequence_t( );
+	private:
+		struct sequence_info_t
+		{
+			color_t clrColor;
+			moment_t mmtDuration;
+		} sqInfo[ 7 ];
+		moment_t mmtTotalDuration;
+	public:
+		std::size_t sSequences;
+		color_sequence_t( ) = default;
 		color_sequence_t( color_t clrFirstSequence, moment_t mmtFirstSequence );
-		//color_sequence_t( std::deque< color_t > dqColors, std::deque< moment_t > dqDurations );
+		color_sequence_t( color_t* clrColors, moment_t* mmtDurations, std::size_t sSequences );
 
-		color_t GetCurrentColor( ) const;
+		color_t GetCurrentColor( );
 		void PutCurrentColor( ) = delete;
 
-		color_t& GetColor( int iColor = -1 );
+		color_t& GetColor( unsigned uColor );
 		moment_t& GetDuration( unsigned uDuration );
 
 		void PutNewColorSequence( color_t clrNewColor, moment_t mmtDuration ); // todo: overload <<
 		void DeleteColorSequence( unsigned uPosition ); // todo: overload >>
-
-		unsigned CountSequences( );
-
-		__declspec( property( get = CountSequences ) ) unsigned uSequenceCount;
 	};
 
 	// Get main screen dimensions

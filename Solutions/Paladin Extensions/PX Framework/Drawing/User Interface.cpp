@@ -713,7 +713,7 @@ namespace PX::UI
 			static auto bNewColor = true;
 			static auto bShouldClose = false;
 			static auto bStoppedClicking = false;
-			static auto iCurrentSequence = 0;
+			static auto iCurrentSequence = 0u;
 
 			if ( !PX_INPUT.GetKeyState( VK_LBUTTON ) )
 				bStoppedClicking = true;
@@ -753,7 +753,7 @@ namespace PX::UI
 				nk_layout_row_begin( pContext, NK_STATIC, 15, pActiveEditColor->uSequenceCount + 3 );
 				nk_layout_row_push( pContext, COLOR_BUTTON_WIDTH );
 
-				for ( unsigned u { }; u < pActiveEditColor->CountSequences( ); u++ )
+				for ( auto u = 0u; u < pActiveEditColor->CountSequences( ); u++ )
 				{
 					auto recBoundaries = nk_widget_bounds( pContext );
 					if ( nk_button_color( pContext, nk_rgba( pActiveEditColor->GetColor( u ).r, pActiveEditColor->GetColor( u ).g, pActiveEditColor->GetColor( u ).b, pActiveEditColor->GetColor( u ).a ) ) )
