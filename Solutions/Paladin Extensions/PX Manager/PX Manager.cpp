@@ -145,6 +145,15 @@ void PX_API UI::Manager::SetLayout( )
 
 void OnLaunch( )
 {
+	using namespace Tools;
+
+	dbg::out << color_sequence_t::GetGradient( color_t( 255, 0, 0 ), color_t( 0, 0, 255 ), 0.f ).r << dbg::newl;
+	dbg::out << color_sequence_t::GetGradient( color_t( 255, 0, 0 ), color_t( 0, 0, 255 ), 0.25f ).r << dbg::newl;
+	dbg::out << color_sequence_t::GetGradient( color_t( 255, 0, 0 ), color_t( 0, 0, 255 ), 0.5f ).r << dbg::newl;
+	dbg::out << color_sequence_t::GetGradient( color_t( 255, 0, 0 ), color_t( 0, 0, 255 ), 0.75f ).r << dbg::newl;
+	dbg::out << color_sequence_t::GetGradient( color_t( 255, 0, 0 ), Tools::color_t( 0, 0, 255 ), 1.f ).r << dbg::newl; 	//dbg::out << color_sequence_t::GetGradient( color_t( 255, 0, 0 ), Tools::color_t( 0, 0, 255 ), 1.25f ).r << dbg::newl;
+
+
 	unsigned uDimensions[ 2 ] { 720, 600 };
 	Render::InitializeRenderTarget( uDimensions, PX_XOR( L"Paladin Extensions" ) );
 	UI::Manager::Initialize( PX_XOR( "Manager" ) );

@@ -36,7 +36,7 @@ namespace PX::Tools
 	color_t::color_t( )
 	{
 		for each ( auto& bColor in pColor->b )
-			bColor = XOR::LinearCongruentialGenerator( 0 ) % UCHAR_MAX;
+			bColor = rand( ) % UCHAR_MAX;
 	}
 
 	color_t::color_t( ptr_t* ptrNewAddress )
@@ -239,10 +239,11 @@ namespace PX::Tools
 
 	color_t color_sequence_t::GetGradient( color_t clrStart, color_t clrEnd, float flProgress )
 	{
-		return color_t( byte_t( fabs( float( clrEnd.r - clrStart.r ) ) / flProgress ) + clrStart.r,
-						byte_t( fabs( float( clrEnd.g - clrStart.g ) ) / flProgress ) + clrStart.g,
-						byte_t( fabs( float( clrEnd.b - clrStart.b ) ) / flProgress ) + clrStart.b,
-						byte_t( fabs( float( clrEnd.a - clrStart.a ) ) / flProgress ) + clrStart.a );
+		dbg::Assert( flProgress >= 0.f && flProgress <= 1.f );
+		return color_t( clrStart.r + byte_t( ( clrEnd.r - clrStart.r ) * flProgress ),
+						clrStart.g + byte_t( ( clrEnd.g - clrStart.g ) * flProgress ),
+						clrStart.b + byte_t( ( clrEnd.b - clrStart.b ) * flProgress ),
+						clrStart.a + byte_t( ( clrEnd.a - clrStart.a ) * flProgress ) );
 	}
 
 	color_sequence_t::color_sequence_t( color_t clrFirstSequence, moment_t mmtFirstSequence )
@@ -277,7 +278,7 @@ namespace PX::Tools
 				mmtPassedProgress += sqInfo[ s ].mmtDuration;
 			else
 				return GetGradient( sqInfo[ s ].clrColor, sqInfo[ s < 7 ? s - 1 : 0 ].clrColor,
-									float( mmtTotalDuration ) / float( mmtCurrentProgress ) );
+									float( mmtCurrentProgress - mmtPassedProgress ) / float( sqInfo[ s ].mmtDuration ) );
 
 		dbg::Assert( false );
 	}
@@ -296,7 +297,9 @@ namespace PX::Tools
 
 	void color_sequence_t::PutNewColorSequence( color_t clrNewColor, moment_t mmtDuration )
 	{
-		dbg::Assert( sSequences < 7 );
+		if ( sSequences >= 7 )
+			return;
+
 		sqInfo[ sSequences ].clrColor = clrNewColor;
 		sqInfo[ sSequences ].mmtDuration = mmtDuration;
 		sSequences++;
@@ -304,7 +307,8 @@ namespace PX::Tools
 
 	void color_sequence_t::DeleteColorSequence( unsigned uPosition )
 	{
-		dbg::Assert( sSequences > uPosition );
+		if ( sSequences <= uPosition )
+			return;
 
 		for ( auto s = uPosition; s < sSequences - 1; s++ )
 		{

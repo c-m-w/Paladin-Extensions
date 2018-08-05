@@ -613,7 +613,7 @@ namespace PX::UI
 
 			if ( bClicking && bHovering )
 			{
-				if ( !bWasClicking )
+				if ( !bWasClicking && !pActiveEditColor )
 				{
 					*bActive = !*bActive;
 					Tools::EmitSound( *bActive ? LR"(Tick.wav)" : LR"(Untick.wav)" );
@@ -784,7 +784,7 @@ namespace PX::UI
 
 				if ( Button( EPosition::LEFT, "+", false ) )
 				{
-					pActiveEditColor->PutNewColorSequence( Tools::color_t( ), 100u );
+					pActiveEditColor->PutNewColorSequence( Tools::color_t( ), 1000u );
 					iCurrentSequence = pActiveEditColor->sSequences - 1;
 					clrChosenColor = { pActiveEditColor->GetColor( iCurrentSequence ).rfl, pActiveEditColor->GetColor( iCurrentSequence ).gfl, pActiveEditColor->GetColor( iCurrentSequence ).bfl, pActiveEditColor->GetColor( iCurrentSequence ).afl };
 				}
