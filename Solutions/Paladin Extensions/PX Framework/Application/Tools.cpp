@@ -41,6 +41,7 @@ namespace PX::Tools
 
 	color_t::color_t( ptr_t* ptrNewAddress )
 	{
+		delete pColor;
 		pColor = reinterpret_cast< UColor* >( ptrNewAddress );
 	}
 
@@ -262,6 +263,9 @@ namespace PX::Tools
 	{
 		dbg::Assert( sSequences );
 
+		if ( sSequences == 1 )
+			return sqInfo[ 0 ].clrColor;
+
 		mmtTotalDuration = 0;
 		for ( std::size_t s = 0u; s < sSequences; s++ )
 			mmtTotalDuration += sqInfo[ s ].mmtDuration;
@@ -307,5 +311,7 @@ namespace PX::Tools
 			sqInfo[ s ].clrColor = sqInfo[ s + 1 ].clrColor;
 			sqInfo[ s ].mmtDuration = sqInfo[ s + 1 ].mmtDuration;
 		}
+
+		sSequences--;
 	}
 }

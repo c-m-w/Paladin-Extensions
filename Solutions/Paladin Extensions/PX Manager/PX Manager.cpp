@@ -74,9 +74,9 @@ void PX_API UI::Manager::Example( )
 	};
 
 	// Color pickers
-	static Tools::color_sequence_t clrFirst( Tools::color_t( 255, 0, 0 ), 100 );
-	static Tools::color_sequence_t clrSecond( Tools::color_t( 0, 255, 0 ), 400 );
-	static Tools::color_sequence_t clrThird( Tools::color_t( 0, 0, 255 ), 200 );
+	static Tools::color_sequence_t clrFirst( Tools::color_t( 255, 0, 0 ), 1000 );
+	static Tools::color_sequence_t clrSecond( Tools::color_t( 0, 255, 0 ), 1000 );
+	static Tools::color_sequence_t clrThird( Tools::color_t( 0, 0, 255 ), 1000 );
 
 	// Create a header with the window title and subtitle, with minimize and close functionality.
 	Header( Tools::string_cast< std::string >( Render::wszWindowTitle ).c_str( ), szNuklearWindowTitle, Minimize, Exit );

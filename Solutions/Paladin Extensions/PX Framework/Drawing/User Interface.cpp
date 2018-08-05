@@ -720,7 +720,10 @@ namespace PX::UI
 			if ( bNewColor && pActiveEditColor )
 			{
 				iCurrentSequence = 0;
-				clrChosenColor = { pActiveEditColor->GetColor( iCurrentSequence ).rfl, pActiveEditColor->GetColor( iCurrentSequence ).gfl, pActiveEditColor->GetColor( iCurrentSequence ).bfl, pActiveEditColor->GetColor( iCurrentSequence ).afl };
+				clrChosenColor = { pActiveEditColor->GetColor( iCurrentSequence ).rfl,
+					pActiveEditColor->GetColor( iCurrentSequence ).gfl,
+					pActiveEditColor->GetColor( iCurrentSequence ).bfl,
+					pActiveEditColor->GetColor( iCurrentSequence ).afl };
 			}
 			bNewColor = false;
 
@@ -759,7 +762,10 @@ namespace PX::UI
 					if ( nk_button_color( pContext, nk_rgba( pActiveEditColor->GetColor( u ).r, pActiveEditColor->GetColor( u ).g, pActiveEditColor->GetColor( u ).b, pActiveEditColor->GetColor( u ).a ) ) )
 					{
 						iCurrentSequence = u;
-						clrChosenColor = { pActiveEditColor->GetColor( iCurrentSequence ).rfl, pActiveEditColor->GetColor( iCurrentSequence ).gfl, pActiveEditColor->GetColor( iCurrentSequence ).bfl, pActiveEditColor->GetColor( iCurrentSequence ).afl };
+						clrChosenColor = { pActiveEditColor->GetColor( iCurrentSequence ).rfl,
+							pActiveEditColor->GetColor( iCurrentSequence ).gfl,
+							pActiveEditColor->GetColor( iCurrentSequence ).bfl,
+							pActiveEditColor->GetColor( iCurrentSequence ).afl };
 					}
 					if ( u == iCurrentSequence )
 					{
