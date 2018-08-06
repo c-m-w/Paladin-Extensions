@@ -143,7 +143,7 @@ void PX_API UI::Manager::SetLayout( )
 	Example( );
 }
 
-void OnLaunch( )
+void PX_API OnLaunch( )
 {
 	using namespace Tools;
 
