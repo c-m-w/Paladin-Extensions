@@ -679,7 +679,8 @@ namespace PX::UI
 			rcNewBoundaries.h -= 28;
 			// Top left, top right, bottom right, bottom left
 			const auto uTextWidth = CalculateTextBounds( szTitle, 30 ).x;
-			nk_fill_rect_multi_color( pOutput, nk_rect( rcNewBoundaries.x + 1.8f, rcNewBoundaries.y + 1.f, rcNewBoundaries.w - 2.f, rcNewBoundaries.h - 2.f ), clrDarkBackground, clrDarkBackground, clrBackground, clrBackground );
+			nk_fill_rect_multi_color( pOutput, nk_rect( rcNewBoundaries.x + 1.8f, rcNewBoundaries.y + 1.f, rcNewBoundaries.w - 2.f, rcNewBoundaries.h - 2.f ),
+									  clrDarkBackground, clrDarkBackground, clrBackground, clrBackground );
 			nk_stroke_rect( pOutput, rcNewBoundaries, 4.f, 1.f, clrBorder );
 			nk_stroke_line( pOutput, rcNewBoundaries.x + 7, rcNewBoundaries.y, rcNewBoundaries.x + 3 + uTextWidth, rcNewBoundaries.y, 3, clrDarkBackground );
 			BeginRow( 16, 1, ROW_CUSTOM );
@@ -705,7 +706,7 @@ namespace PX::UI
 			const auto _uWindowWidth = pContext->current->bounds.w, _uWindowHeight = pContext->current->bounds.h;
 			const struct nk_rect rcColorPickerBoundaries
 			{
-				( _uWindowWidth / 2 ) - ( vecColorPickerSize.x / 2 ), ( _uWindowHeight / 2 ) - ( vecColorPickerSize.y / 2 ), vecColorPickerSize.x, vecColorPickerSize.y
+				_uWindowWidth / 2 - vecColorPickerSize.x / 2, _uWindowHeight / 2 - vecColorPickerSize.y / 2, vecColorPickerSize.x, vecColorPickerSize.y
 			};
 			const static std::string strBaseTitle = R"(Color of ')";
 
@@ -713,17 +714,17 @@ namespace PX::UI
 			static auto bNewColor = true;
 			static auto bShouldClose = false;
 			static auto bStoppedClicking = false;
-			static auto iCurrentSequence = 0u;
+			static auto uCurrentSequence = 0u;
 
 			if ( !PX_INPUT.GetKeyState( VK_LBUTTON ) )
 				bStoppedClicking = true;
 			if ( bNewColor && pActiveEditColor )
 			{
-				iCurrentSequence = 0;
-				clrChosenColor = { pActiveEditColor->GetColor( iCurrentSequence ).rfl,
-					pActiveEditColor->GetColor( iCurrentSequence ).gfl,
-					pActiveEditColor->GetColor( iCurrentSequence ).bfl,
-					pActiveEditColor->GetColor( iCurrentSequence ).afl };
+				uCurrentSequence = 0u;
+				clrChosenColor = { pActiveEditColor->GetColor( uCurrentSequence ).rfl,
+					pActiveEditColor->GetColor( uCurrentSequence ).gfl,
+					pActiveEditColor->GetColor( uCurrentSequence ).bfl,
+					pActiveEditColor->GetColor( uCurrentSequence ).afl };
 			}
 			bNewColor = false;
 
@@ -739,7 +740,8 @@ namespace PX::UI
 			if ( !bStoppedClicking )
 				return;
 
-			if ( nk_popup_begin( pContext, NK_POPUP_DYNAMIC, ( strBaseTitle + szColorPickerSubject + R"(')" ).c_str( ), NK_WINDOW_BORDER | NK_WINDOW_TITLE | NK_WINDOW_NO_SCROLLBAR,
+			if ( nk_popup_begin( pContext, NK_POPUP_DYNAMIC, ( strBaseTitle + szColorPickerSubject + R"(')" ).c_str( ),
+								 NK_WINDOW_BORDER | NK_WINDOW_TITLE | NK_WINDOW_NO_SCROLLBAR,
 			                     rcColorPickerBoundaries, pActiveEditColor == nullptr ) )
 			{
 				nk_layout_row_static( pContext, 255, 295, 1 );
@@ -751,7 +753,10 @@ namespace PX::UI
 				nk_label( pContext, ( "B: " + std::to_string( int( clrChosenColor.b * 255.f ) ) ).c_str( ), NK_TEXT_CENTERED );
 				nk_label( pContext, ( "A: " + std::to_string( int( clrChosenColor.a * 255.f ) ) ).c_str( ), NK_TEXT_CENTERED );
 				nk_layout_row_dynamic( pContext, 10, 1 );
-				nk_button_color( pContext, nk_rgba( int( clrChosenColor.r * 255.f ), int( clrChosenColor.g * 255.f ), int( clrChosenColor.b * 255.f ), int( clrChosenColor.a * 255.f ) ) );
+				nk_button_color( pContext, nk_rgba( int( clrChosenColor.r * 255.f ),
+													int( clrChosenColor.g * 255.f ),
+													int( clrChosenColor.b * 255.f ),
+													int( clrChosenColor.a * 255.f ) ) );
 
 				nk_layout_row_begin( pContext, NK_STATIC, 15, pActiveEditColor->sSequences + 3 );
 				nk_layout_row_push( pContext, COLOR_BUTTON_WIDTH );
@@ -759,15 +764,18 @@ namespace PX::UI
 				for ( auto u = 0u; u < pActiveEditColor->sSequences; u++ )
 				{
 					auto recBoundaries = nk_widget_bounds( pContext );
-					if ( nk_button_color( pContext, nk_rgba( pActiveEditColor->GetColor( u ).r, pActiveEditColor->GetColor( u ).g, pActiveEditColor->GetColor( u ).b, pActiveEditColor->GetColor( u ).a ) ) )
+					if ( nk_button_color( pContext, nk_rgba( pActiveEditColor->GetColor( u ).r,
+															 pActiveEditColor->GetColor( u ).g,
+															 pActiveEditColor->GetColor( u ).b,
+															 pActiveEditColor->GetColor( u ).a ) ) )
 					{
-						iCurrentSequence = u;
-						clrChosenColor = { pActiveEditColor->GetColor( iCurrentSequence ).rfl,
-							pActiveEditColor->GetColor( iCurrentSequence ).gfl,
-							pActiveEditColor->GetColor( iCurrentSequence ).bfl,
-							pActiveEditColor->GetColor( iCurrentSequence ).afl };
+						uCurrentSequence = u;
+						clrChosenColor = { pActiveEditColor->GetColor( uCurrentSequence ).rfl,
+							pActiveEditColor->GetColor( uCurrentSequence ).gfl,
+							pActiveEditColor->GetColor( uCurrentSequence ).bfl,
+							pActiveEditColor->GetColor( uCurrentSequence ).afl };
 					}
-					if ( u == iCurrentSequence )
+					if ( u == uCurrentSequence )
 					{
 						recBoundaries.x += 1;
 						recBoundaries.y += 1;
@@ -777,7 +785,7 @@ namespace PX::UI
 					}
 				}
 
-				auto uPadding = vecColorPickerSize.x - ( COLOR_BUTTON_WIDTH * pActiveEditColor->sSequences ) - ( COLOR_BUTTON_PADDING * pActiveEditColor->sSequences * 2 ) - 170;
+				auto uPadding = vecColorPickerSize.x - COLOR_BUTTON_WIDTH * pActiveEditColor->sSequences - COLOR_BUTTON_PADDING * pActiveEditColor->sSequences * 2 - 170;
 				nk_layout_row_push( pContext, uPadding );
 				nk_spacing( pContext, 1 );
 				nk_layout_row_push( pContext, 75 );
@@ -785,26 +793,32 @@ namespace PX::UI
 				if ( Button( EPosition::LEFT, "+", false ) )
 				{
 					pActiveEditColor->PutNewColorSequence( Tools::color_t( ), 1000u );
-					iCurrentSequence = pActiveEditColor->sSequences - 1;
-					clrChosenColor = { pActiveEditColor->GetColor( iCurrentSequence ).rfl, pActiveEditColor->GetColor( iCurrentSequence ).gfl, pActiveEditColor->GetColor( iCurrentSequence ).bfl, pActiveEditColor->GetColor( iCurrentSequence ).afl };
+					uCurrentSequence = pActiveEditColor->sSequences - 1;
+					clrChosenColor = { pActiveEditColor->GetColor( uCurrentSequence ).rfl,
+						pActiveEditColor->GetColor( uCurrentSequence ).gfl,
+						pActiveEditColor->GetColor( uCurrentSequence ).bfl,
+						pActiveEditColor->GetColor( uCurrentSequence ).afl };
 				}
 				if ( Button( EPosition::RIGHT, "-", false ) )
 				{
-					pActiveEditColor->DeleteColorSequence( iCurrentSequence );
-					iCurrentSequence = 0;
-					clrChosenColor = { pActiveEditColor->GetColor( iCurrentSequence ).rfl, pActiveEditColor->GetColor( iCurrentSequence ).gfl, pActiveEditColor->GetColor( iCurrentSequence ).bfl, pActiveEditColor->GetColor( iCurrentSequence ).afl };
+					pActiveEditColor->DeleteColorSequence( uCurrentSequence );
+					uCurrentSequence = 0u;
+					clrChosenColor = { pActiveEditColor->GetColor( uCurrentSequence ).rfl,
+						pActiveEditColor->GetColor( uCurrentSequence ).gfl,
+						pActiveEditColor->GetColor( uCurrentSequence ).bfl,
+						pActiveEditColor->GetColor( uCurrentSequence ).afl };
 				}
 
 				nk_layout_row_end( pContext );
 
-				nk_layout_row_static( pContext, 25, int( vecColorPickerSize.x - 5 ), 1 );
-				if ( Button( EPosition::RIGHT, "SET", false ) )
-				{
-					pActiveEditColor->GetColor( iCurrentSequence ).rfl = clrChosenColor.r;
-					pActiveEditColor->GetColor( iCurrentSequence ).gfl = clrChosenColor.g;
-					pActiveEditColor->GetColor( iCurrentSequence ).bfl = clrChosenColor.b;
-					pActiveEditColor->GetColor( iCurrentSequence ).afl = clrChosenColor.a;
-				}
+				//nk_layout_row_static( pContext, 25, int( vecColorPickerSize.x - 5 ), 1 );
+				//if ( Button( EPosition::RIGHT, "SET", false ) )
+				//{
+					pActiveEditColor->GetColor( uCurrentSequence ).rfl = clrChosenColor.r;
+					pActiveEditColor->GetColor( uCurrentSequence ).gfl = clrChosenColor.g;
+					pActiveEditColor->GetColor( uCurrentSequence ).bfl = clrChosenColor.b;
+					pActiveEditColor->GetColor( uCurrentSequence ).afl = clrChosenColor.a;
+				//}
 				nk_layout_row_static( pContext, 25, int( vecColorPickerSize.x - 5 ), 1 );
 				if ( Button( EPosition::LEFT, "EXIT", false ) )
 				{
@@ -824,15 +838,15 @@ namespace PX::UI
 			bStoppedClicking = false;
 		}
 
-		void PX_API ColorButton( Types::cstr_t szSubject, Tools::color_sequence_t* pColor )
+		void PX_API ColorButton( Types::cstr_t szSubject, Tools::color_sequence_t* pSequence )
 		{
 			iCurrentRowUsedColumns++;
 			
-			auto clr = pColor->GetCurrentColor( );
+			auto clr = pSequence->GetCurrentColor( );
 			if ( nk_button_color( pContext, nk_rgba( clr.r, clr.g, clr.b, clr.a ) ) && pActiveEditColor == nullptr )
 			{
 				szColorPickerSubject = szSubject;
-				pActiveEditColor = pColor;
+				pActiveEditColor = pSequence;
 			}
 			HoverCheck( CURSOR_HAND );
 		}

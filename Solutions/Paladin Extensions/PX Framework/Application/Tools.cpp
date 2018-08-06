@@ -277,7 +277,7 @@ namespace PX::Tools
 			if ( sqInfo[ s ].mmtDuration < mmtCurrentProgress - mmtPassedProgress )
 				mmtPassedProgress += sqInfo[ s ].mmtDuration;
 			else
-				return GetGradient( sqInfo[ s ].clrColor, sqInfo[ s < 7 ? s - 1 : 0 ].clrColor,
+				return GetGradient( sqInfo[ s ].clrColor, sqInfo[ s + 1 != sSequences ? s + 1 : 0 ].clrColor,
 									float( mmtCurrentProgress - mmtPassedProgress ) / float( sqInfo[ s ].mmtDuration ) );
 
 		dbg::Assert( false );

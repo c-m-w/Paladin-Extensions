@@ -119,12 +119,13 @@ namespace PX::Tools
 	struct color_sequence_t
 	{
 		static color_t GetGradient( color_t clrStart, color_t clrEnd, float flProgress );
-	private:
 		struct sequence_info_t
 		{
 			color_t clrColor;
 			moment_t mmtDuration;
-		} sqInfo[ 7 ];
+		};
+	private:
+		sequence_info_t sqInfo[ 7 ];
 		moment_t mmtTotalDuration;
 	public:
 		std::size_t sSequences = 0u;
@@ -140,6 +141,9 @@ namespace PX::Tools
 
 		void PutNewColorSequence( color_t clrNewColor, moment_t mmtDuration ); // todo: overload <<
 		void DeleteColorSequence( unsigned uPosition ); // todo: overload >>
+		
+		//void operator<<( sequence_info_t );
+		//void operator>>( unsigned uPosition );
 	};
 
 	// Get main screen dimensions
