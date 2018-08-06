@@ -827,7 +827,7 @@ namespace PX::UI
 				pActiveEditColor->GetColor( uCurrentSequence ).afl = clrChosenColor.a;
 
 				nk_layout_space_begin( pContext, NK_STATIC, 30, 3 );
-				pActiveEditColor->GetDuration( uCurrentSequence ) = Slider( "Duration", szSliderBuffer, 100, 1000, pActiveEditColor->GetDuration( uCurrentSequence ), 0, 0, 290, 30 );
+				pActiveEditColor->GetDuration( uCurrentSequence ) = Slider( "Duration", szSliderBuffer, 100, 1000, pActiveEditColor->GetDuration( uCurrentSequence ), 0, 0, 290, 30, true );
 				nk_layout_space_end( pContext );
 				
 				nk_layout_row_static( pContext, 25, int( vecColorPickerSize.x - 5 ), 1 );
@@ -921,7 +921,7 @@ namespace PX::UI
 			dbg::Assert( iMax > iMin );
 			auto szTexta = std::to_string( iCurrentValue ).substr( 0, std::to_string( iCurrentValue ).size( ) );
 			auto szText = szTexta.c_str( );
-			static auto bInEdit = false, bSetEditValue = false;
+			static auto bInEdit = false, bSetEditValue = false, bWasClickingInBoundaries = false, bWasClicking = false;
 
 			SetFont( FONT_ROBOTOSMALL );
 			const auto vecTitleSize = CalculateTextBounds( szTitle, 10 );
@@ -1004,8 +1004,15 @@ namespace PX::UI
 			PushCustomRow( uStartX, uStartY + unsigned( vecTextSize.y ) + 3, uWidth, uHeight - unsigned( vecTextSize.y ) - 3 );
 
 			const auto recSliderBounds = nk_widget_bounds( pContext );
-			if ( nk_input_is_mouse_hovering_rect( &pContext->input, recSliderBounds ) && bClicking && ( !pActiveEditColor || bIgnorePopup ) )
+			if ( nk_input_is_mouse_hovering_rect( &pContext->input, recSliderBounds ) && bClicking && ( !pActiveEditColor || bIgnorePopup ) || ( bWasClickingInBoundaries && bWasClicking ) )
+			{
+				bWasClickingInBoundaries = true;
 				iCurrentValue = int( iMin + ( pContext->input.mouse.pos.x - recSliderBounds.x ) / recSliderBounds.w * ( iMax - iMin ) );
+			}
+			else
+				bWasClickingInBoundaries = false;
+
+			bWasClicking = PX_INPUT.GetKeyState( VK_LBUTTON );
 
 			const auto iNewValue = nk_slide_int( pContext, iMin, iCurrentValue, iMax, ( iMax - iMin ) / 20 );
 			if ( !bInEdit )
