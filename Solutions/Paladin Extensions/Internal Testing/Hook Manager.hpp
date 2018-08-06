@@ -4,22 +4,27 @@
 
 namespace PX::Tools
 {
-	std::size_t PX_API EstimateTableLength( void* pVirtualTable );
+	std::size_t PX_API EstimateTableLength( Types::ptr_t* pVirtualTable );
 
 	struct hook_t
 	{
 	private:
-		unsigned uOldProtection;
-		std::size_t sTableLength;
+		DWORD dwOldProtection;
+		std::size_t sTableLength, sTableSize;
 		void* pClassBase;
 		Types::ptr_t* pOldTable,* pNewTable;
+		HMODULE hAllocationModule;
+		bool bSetNewTable;
 
 	public:
-		hook_t( void* pVirtualTable );
+		hook_t( void* pVirtualTable, const wchar_t* wszAllocationModule );
 		~hook_t( );
 
 		template< typename _fn > void HookIndex( unsigned uIndex, _fn fnNewFunction );
 		void UnhookIndex( unsigned uIndex );
+		template< typename _fn > _fn GetOriginalFunction( unsigned uIndex );
+
+		void Cleanup( );
 	};
 }
 

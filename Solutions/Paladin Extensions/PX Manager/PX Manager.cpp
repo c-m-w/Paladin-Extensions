@@ -147,18 +147,11 @@ void PX_API OnLaunch( )
 {
 	using namespace Tools;
 
-	dbg::out << color_sequence_t::GetGradient( color_t( 255, 0, 0 ), color_t( 0, 0, 255 ), 0.f ).r << dbg::newl;
-	dbg::out << color_sequence_t::GetGradient( color_t( 255, 0, 0 ), color_t( 0, 0, 255 ), 0.25f ).r << dbg::newl;
-	dbg::out << color_sequence_t::GetGradient( color_t( 255, 0, 0 ), color_t( 0, 0, 255 ), 0.5f ).r << dbg::newl;
-	dbg::out << color_sequence_t::GetGradient( color_t( 255, 0, 0 ), color_t( 0, 0, 255 ), 0.75f ).r << dbg::newl;
-	dbg::out << color_sequence_t::GetGradient( color_t( 255, 0, 0 ), Tools::color_t( 0, 0, 255 ), 1.f ).r << dbg::newl; 	//dbg::out << color_sequence_t::GetGradient( color_t( 255, 0, 0 ), Tools::color_t( 0, 0, 255 ), 1.25f ).r << dbg::newl;
-
-
 	unsigned uDimensions[ 2 ] { 720, 600 };
 	Render::InitializeRenderTarget( uDimensions, PX_XOR( L"Paladin Extensions" ) );
 	UI::Manager::Initialize( PX_XOR( "Manager" ) );
 	while ( UI::Manager::Render( ) && !bShutdown )
-		Tools::Wait( 1 );
+		Wait( 1 );
 
 	//Net::InitializeConnection( );
 	//std::deque< Net::post_data_t > dqPostData;
@@ -182,21 +175,21 @@ void PX_API OnLaunch( )
 	//dbg::out << strResponse.length( ) << dbg::newl;
 	//system( "pause" );
 
-	const auto pDLL = fopen( R"(C:\Users\Cole\Desktop\Messagebox.dll)", "rb" );
-
-	if ( !dbg::Assert( pDLL != nullptr ) )
-		return;
-
-	fseek( pDLL, 0, SEEK_END );
-	const auto lSize = ftell( pDLL );
-	rewind( pDLL );
-	const auto pBuffer = VirtualAlloc( nullptr, lSize, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE );
-	fread( pBuffer, 1, lSize, pDLL );
-	
-	if ( dbg::Assert( lSize != 0 && pBuffer != nullptr ) )
-	{
-		sys::injection_info_t inj { };
-		sys::DLLManualMap( pBuffer, L"ConsoleApplication1.exe", &inj );
-	}
-	system( "pause" );
+	//const auto pDLL = fopen( R"(C:\Users\Cole\Desktop\Messagebox.dll)", "rb" );
+	//
+	//if ( !dbg::Assert( pDLL != nullptr ) )
+	//	return;
+	//
+	//fseek( pDLL, 0, SEEK_END );
+	//const auto lSize = ftell( pDLL );
+	//rewind( pDLL );
+	//const auto pBuffer = VirtualAlloc( nullptr, lSize, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE );
+	//fread( pBuffer, 1, lSize, pDLL );
+	//
+	//if ( dbg::Assert( lSize != 0 && pBuffer != nullptr ) )
+	//{
+	//	sys::injection_info_t inj { };
+	//	sys::DLLManualMap( pBuffer, L"ConsoleApplication1.exe", &inj );
+	//}
+	//system( "pause" );
 }

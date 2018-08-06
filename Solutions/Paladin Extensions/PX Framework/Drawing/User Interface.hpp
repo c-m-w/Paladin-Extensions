@@ -196,7 +196,7 @@ namespace PX::UI
 		/**	\param uWidth Width of the slider. */
 		/**	\param uHeight Height of the slider. */
 		/**	\return Value of the slider. */
-		int PX_API Slider( Types::cstr_t szTitle, char *szInputBuffer, int iMin, int iMax, int iCurrentValue, unsigned uStartX, unsigned uStartY, unsigned uWidth, unsigned uHeight );
+		int PX_API Slider( Types::cstr_t szTitle, char *szInputBuffer, int iMin, int iMax, int iCurrentValue, unsigned uStartX, unsigned uStartY, unsigned uWidth, unsigned uHeight, bool bIgnorePopup = false );
 		/** \brief Creates a slider whose value label can be clicked to manually input a value.\n It steps 1/20th of the slidable distance.\n Uses three columns. */
 		/**	\param szTitle Title of the slider. */
 		/**	\param szInputBuffer Buffer for the value of the slider. */

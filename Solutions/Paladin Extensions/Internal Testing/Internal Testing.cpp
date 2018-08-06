@@ -11,56 +11,90 @@ using namespace PX;
 class CVirtualTable
 {
 public:
-	virtual void	FunctionOne( )							= 0;
-	virtual void	FunctionTwo( const wchar_t* szText )	= 0;
-	virtual void	FunctionThree( unsigned uFlags )		= 0;
-	virtual int		FunctionFour( )							= 0;
-	virtual bool	FunctionFive( bool bReturn )			= 0;
+	virtual void __thiscall	FunctionOne( )							= 0;
+	virtual void __thiscall	FunctionTwo( const wchar_t* szText )	= 0;
+	virtual void __thiscall	FunctionThree( unsigned uFlags )		= 0;
+	virtual int	__thiscall	FunctionFour( )							= 0;
+	virtual bool __thiscall	FunctionFive( bool bReturn )			= 0;
 };
 
 class CFunctions : public CVirtualTable
 {
 public:
-	void FunctionOne( )
+	void __thiscall FunctionOne( ) override
 	{ }
 
-	void FunctionTwo( const wchar_t* szText )
+	void __thiscall FunctionTwo( const wchar_t* szText ) override
 	{
 		MessageBox( nullptr, szText, L"Message Box", MB_OK );
 	}
 
-	void FunctionThree( unsigned uFlags )
+	void __thiscall FunctionThree( unsigned uFlags ) override
 	{
 		MessageBox( nullptr, L"Message Box", L"Message Box", uFlags );
 	}
 
-	int FunctionFour( )
+	int __thiscall FunctionFour( ) override
 	{
 		return 10;
 	}
 
-	bool FunctionFive( bool bReturn )
+	bool __thiscall FunctionFive( bool bReturn ) override
 	{
 		return !bReturn;
 	}
 };
 
-using fn1_t = void( __cdecl* )( void );
-using fn2_t = void( __cdecl* )( const wchar_t* );
-using fn3_t = void( __cdecl* )( unsigned );
-using fn4_t = int( __cdecl* )( void );
-using fn5_t = bool( __cdecl* )( bool );
+Tools::hook_t* hHook;
+
+using fn1_t = void( __thiscall* )( CFunctions* );
+using fn2_t = void( __thiscall* )( CFunctions*, const wchar_t* );
+using fn3_t = void( __thiscall* )( CFunctions*, unsigned );
+using fn4_t = int( __thiscall* )( CFunctions* );
+using fn5_t = bool( __thiscall* )( CFunctions*, bool );
+
+void __fastcall hkFunctionTwo( CFunctions* pECX, int edx, const wchar_t *szText )
+{
+	static auto fnOriginal = hHook->GetOriginalFunction< fn2_t >( 1 );
+
+	std::cout << "Intercepted function two with text " << szText << std::endl;
+	fnOriginal( pECX, L"Hooked text!" );
+}
+
+void __fastcall hkFunctionThree( CFunctions* pECX, int edx, unsigned uFlags )
+{
+	static auto fnOriginal = hHook->GetOriginalFunction< fn3_t >( 2 );
+
+	std::cout << "Intercepted function three with flags " << uFlags << std::endl;
+	fnOriginal( pECX, MB_HELP | MB_CANCELTRYCONTINUE );
+}
+
+int __fastcall hkFunctionFour( CFunctions* pECX, int edx )
+{
+	static auto fnOriginal = hHook->GetOriginalFunction< fn4_t >( 3 );
+
+	const auto iReturnValue = fnOriginal( pECX );
+	std::cout << "Intercepted function four with rvalue " << iReturnValue << std::endl;
+	return iReturnValue * 10;
+}
 
 void PX_API OnLaunch( )
 {
 	CFunctions obj;
+	CVirtualTable* vftbl = &obj;
 
-	/// Calling virtual functions manually.
-	// We can do this because since it's virtual, it counts as memory within the class as a 4 byte pointer. For this, we need a calling convention with a pointer( __cdecl* )
-	//( *reinterpret_cast< void( __cdecl*** )( void ) >( &obj ) )[ 0 ]( ); // obj.FunctionOne( );
-	//( *reinterpret_cast< fn2_t** >( &obj ) )[ 1 ]( L"Test" );
-	//( *reinterpret_cast< fn3_t** >( &obj ) )[ 2 ]( MB_ICONERROR | MB_OK );
-	//std::cout << ( *reinterpret_cast< fn4_t** >( &obj ) )[ 3 ]( ) << std::endl;
-	//std::cout << ( *reinterpret_cast< fn5_t** >( &obj ) )[ 4 ]( true ) << std::endl;
-	std::cout << Tools::EstimateTableLength( &obj );
+	hHook = new Tools::hook_t( vftbl, L"user32.dll" );
+	hHook->HookIndex( 1, hkFunctionTwo );
+	hHook->HookIndex( 2, hkFunctionThree );
+	hHook->HookIndex( 3, hkFunctionFour );
+
+	vftbl->FunctionTwo( L"Men" );
+	vftbl->FunctionThree( MB_OK );
+	const auto i = vftbl->FunctionFour( );
+
+	delete hHook;
+
+	vftbl->FunctionTwo( L"Men" );
+
+	system( "pause" );
 }

@@ -608,10 +608,10 @@ namespace PX::UI
 			const auto bHovering = nk_input_is_mouse_hovering_rect( &pContext->input, rcBoundaries );
 			const auto bClicking = PX_INPUT.GetKeyState( VK_LBUTTON ) == CInputManager::EKeyState::DOWN;
 
-			if ( bHovering )
+			if ( bHovering && !pActiveEditColor )
 				SetWidgetActive( CURSOR_HAND );
 
-			if ( bClicking && bHovering )
+			if ( bClicking && bHovering && !pActiveEditColor )
 			{
 				if ( !bWasClicking && !pActiveEditColor )
 				{
@@ -624,7 +624,7 @@ namespace PX::UI
 				bWasClicking = false;
 
 			SetFont( FONT_TAHOMA );
-			nk_label_colored( pContext, *bActive ? ICON_FA_CHECK_SQUARE : ICON_FA_SQUARE, NK_TEXT_CENTERED, *bActive ? clrBlue : bHovering ? ( bClicking ? clrBlue : clrBlue ) : clrTextDormant );
+			nk_label_colored( pContext, *bActive ? ICON_FA_CHECK_SQUARE : ICON_FA_SQUARE, NK_TEXT_CENTERED, *bActive ? clrBlue : bHovering && !pActiveEditColor ? ( bClicking ? clrBlue : clrBlue ) : clrTextDormant );
 			nk_layout_row_push( pContext, CalculateTextBounds( szText, 15 ).x );
 			nk_label_colored( pContext, ( szText + std::string( "  " ) ).c_str( ), NK_TEXT_LEFT, clrTextDormant );
 		}
@@ -715,8 +715,17 @@ namespace PX::UI
 			static auto bShouldClose = false;
 			static auto bStoppedClicking = false;
 			static auto uCurrentSequence = 0u;
+			static char szSliderBuffer[ 32 ] = "\0";
+			static auto bWasClicking = false;
 
-			if ( !PX_INPUT.GetKeyState( VK_LBUTTON ) )
+			if ( !nk_input_is_mouse_prev_hovering_rect( &pContext->input, rcColorPickerBoundaries ) && PX_INPUT.GetKeyState( VK_LBUTTON ) && bStoppedClicking && !bWasClicking )
+			{
+				bShouldClose = true;
+				bNewColor = true;
+			}
+
+			bWasClicking = PX_INPUT.GetKeyState( VK_LBUTTON );
+			if ( !bWasClicking )
 				bStoppedClicking = true;
 			if ( bNewColor && pActiveEditColor )
 			{
@@ -725,6 +734,7 @@ namespace PX::UI
 					pActiveEditColor->GetColor( uCurrentSequence ).gfl,
 					pActiveEditColor->GetColor( uCurrentSequence ).bfl,
 					pActiveEditColor->GetColor( uCurrentSequence ).afl };
+				sprintf( szSliderBuffer, "%llu", pActiveEditColor->GetDuration( uCurrentSequence ) );
 			}
 			bNewColor = false;
 
@@ -771,9 +781,10 @@ namespace PX::UI
 					{
 						uCurrentSequence = u;
 						clrChosenColor = { pActiveEditColor->GetColor( uCurrentSequence ).rfl,
-							pActiveEditColor->GetColor( uCurrentSequence ).gfl,
-							pActiveEditColor->GetColor( uCurrentSequence ).bfl,
-							pActiveEditColor->GetColor( uCurrentSequence ).afl };
+											pActiveEditColor->GetColor( uCurrentSequence ).gfl,
+											pActiveEditColor->GetColor( uCurrentSequence ).bfl,
+											pActiveEditColor->GetColor( uCurrentSequence ).afl };
+						sprintf( szSliderBuffer, "%llu", pActiveEditColor->GetDuration( uCurrentSequence ) );
 					}
 					if ( u == uCurrentSequence )
 					{
@@ -790,7 +801,7 @@ namespace PX::UI
 				nk_spacing( pContext, 1 );
 				nk_layout_row_push( pContext, 75 );
 
-				if ( Button( EPosition::LEFT, "+", false ) )
+				if ( Button( EPosition::LEFT, PX_XOR( "+" ), false ) )
 				{
 					pActiveEditColor->PutNewColorSequence( Tools::color_t( ), 1000u );
 					uCurrentSequence = pActiveEditColor->sSequences - 1;
@@ -799,7 +810,7 @@ namespace PX::UI
 						pActiveEditColor->GetColor( uCurrentSequence ).bfl,
 						pActiveEditColor->GetColor( uCurrentSequence ).afl };
 				}
-				if ( Button( EPosition::RIGHT, "-", false ) )
+				if ( Button( EPosition::RIGHT, PX_XOR( "-" ), false ) )
 				{
 					pActiveEditColor->DeleteColorSequence( uCurrentSequence );
 					uCurrentSequence = 0u;
@@ -810,22 +821,17 @@ namespace PX::UI
 				}
 
 				nk_layout_row_end( pContext );
+				pActiveEditColor->GetColor( uCurrentSequence ).rfl = clrChosenColor.r;
+				pActiveEditColor->GetColor( uCurrentSequence ).gfl = clrChosenColor.g;
+				pActiveEditColor->GetColor( uCurrentSequence ).bfl = clrChosenColor.b;
+				pActiveEditColor->GetColor( uCurrentSequence ).afl = clrChosenColor.a;
 
-				//nk_layout_row_static( pContext, 25, int( vecColorPickerSize.x - 5 ), 1 );
-				//if ( Button( EPosition::RIGHT, "SET", false ) )
-				//{
-					pActiveEditColor->GetColor( uCurrentSequence ).rfl = clrChosenColor.r;
-					pActiveEditColor->GetColor( uCurrentSequence ).gfl = clrChosenColor.g;
-					pActiveEditColor->GetColor( uCurrentSequence ).bfl = clrChosenColor.b;
-					pActiveEditColor->GetColor( uCurrentSequence ).afl = clrChosenColor.a;
-				//}
+				nk_layout_space_begin( pContext, NK_STATIC, 30, 3 );
+				pActiveEditColor->GetDuration( uCurrentSequence ) = Slider( "Duration", szSliderBuffer, 100, 1000, pActiveEditColor->GetDuration( uCurrentSequence ), 0, 0, 290, 30 );
+				nk_layout_space_end( pContext );
+				
 				nk_layout_row_static( pContext, 25, int( vecColorPickerSize.x - 5 ), 1 );
 				if ( Button( EPosition::LEFT, "EXIT", false ) )
-				{
-					bShouldClose = true;
-					bNewColor = true;
-				}
-				if ( !nk_input_is_mouse_prev_hovering_rect( &pContext->input, rcColorPickerBoundaries ) && ( PX_INPUT.GetKeyState( VK_LBUTTON ) ) && bStoppedClicking )
 				{
 					bShouldClose = true;
 					bNewColor = true;
@@ -883,7 +889,7 @@ namespace PX::UI
 			return iSelectedOption;
 		}
 
-		void PX_API ComboboxMulti( unsigned uButtonHeight, Types::cstr_t szTitle, const std::deque< Types::cstr_t >& dqOptions, std::deque<bool>& dqEnabledOptions )
+		void PX_API ComboboxMulti( unsigned uButtonHeight, Types::cstr_t szTitle, const std::deque< Types::cstr_t >& dqOptions, std::deque< bool >& dqEnabledOptions )
 		{
 			iCurrentRowUsedColumns++;
 
@@ -908,9 +914,9 @@ namespace PX::UI
 			nk_fill_triangle( pOutput, recComboboxBounds.x + recComboboxBounds.w - 10, recComboboxBounds.y + ( recComboboxBounds.h / 2 ) - 3, recComboboxBounds.x + recComboboxBounds.w - 14, recComboboxBounds.y + ( recComboboxBounds.h / 2 ) + 3, recComboboxBounds.x + recComboboxBounds.w - 18, recComboboxBounds.y + ( recComboboxBounds.h / 2 ) - 3, nk_input_is_mouse_prev_hovering_rect( &pContext->input, recComboboxBounds ) && !bDrewCombo ? clrTextActive : clrTextDormant );
 		}
 
-		int PX_API Slider( Types::cstr_t szTitle, char* szInputBuffer, int iMin, int iMax, int iCurrentValue, unsigned uStartX, unsigned uStartY, unsigned uWidth, unsigned uHeight )
+		int PX_API Slider( Types::cstr_t szTitle, char* szInputBuffer, int iMin, int iMax, int iCurrentValue, unsigned uStartX, unsigned uStartY, unsigned uWidth, unsigned uHeight, bool bIgnorePopup /*= false*/ )
 		{
-			iCurrentRowUsedColumns += 3 ;
+			iCurrentRowUsedColumns += 3;
 
 			dbg::Assert( iMax > iMin );
 			auto szTexta = std::to_string( iCurrentValue ).substr( 0, std::to_string( iCurrentValue ).size( ) );
@@ -998,7 +1004,7 @@ namespace PX::UI
 			PushCustomRow( uStartX, uStartY + unsigned( vecTextSize.y ) + 3, uWidth, uHeight - unsigned( vecTextSize.y ) - 3 );
 
 			const auto recSliderBounds = nk_widget_bounds( pContext );
-			if ( nk_input_is_mouse_hovering_rect( &pContext->input, recSliderBounds ) && bClicking && !pActiveEditColor )
+			if ( nk_input_is_mouse_hovering_rect( &pContext->input, recSliderBounds ) && bClicking && ( !pActiveEditColor || bIgnorePopup ) )
 				iCurrentValue = int( iMin + ( pContext->input.mouse.pos.x - recSliderBounds.x ) / recSliderBounds.w * ( iMax - iMin ) );
 
 			const auto iNewValue = nk_slide_int( pContext, iMin, iCurrentValue, iMax, ( iMax - iMin ) / 20 );
