@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include <J-e-r-e-m-i-a-h/Standard Library.hpp>
+#include <Jeremia-h/Standard Library.hpp>
 
 #include <Windows.h>
 

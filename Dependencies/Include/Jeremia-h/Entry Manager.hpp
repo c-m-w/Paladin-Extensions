@@ -6,12 +6,12 @@
 #pragma message( "fatal error PX0: No automatic entry creation method defined. Use '#define PX_ENTRY_AS_WIN' or '#define PX_ENTRY_AS_DLL' when including the framework to use automatic entry creation. Use '#define PX_ENTRY_AS_NONE' to disable automatic entry management." )
 #elif defined( PX_ENTRY_AS_WIN ) && !defined( PX_ENTRY_AS_DLL ) && !defined( PX_ENTRY_AS_NONE )
 
-#include <J-e-r-e-m-i-a-h/Standard Library.hpp>
+#include <Jeremia-h/Standard Library.hpp>
 #include <Windows.h>
 
 namespace PX
 {
-	static HINSTANCE hinstWin;
+	inline HINSTANCE hinstWin;
 };
 
 extern void OnLaunch( );
@@ -53,12 +53,12 @@ int APIENTRY WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 
 #elif !defined( PX_ENTRY_AS_WIN ) && defined( PX_ENTRY_AS_DLL ) && !defined( PX_ENTRY_AS_NONE )
 
-#include <J-e-r-e-m-i-a-h/Standard Namespace.hpp>
+#include <Jeremia-h/Standard Namespace.hpp>
 #include <Windows.h>
 
 namespace PX
 {
-	static HINSTANCE hinstDLL;
+	inline HINSTANCE hinstDLL;
 };
 
 extern void OnAttach( );
@@ -73,7 +73,7 @@ inline void Detach( )
 	FreeLibraryAndExitThread( PX::hinstDLL, 0 );
 }
 
-inline DWORD WINAPI ThreadProc( _In_ LPVOID lpParameter )
+static DWORD WINAPI ThreadProc( _In_ LPVOID lpParameter )
 {
 #if defined( _DEBUG )
 	AllocConsole( );
