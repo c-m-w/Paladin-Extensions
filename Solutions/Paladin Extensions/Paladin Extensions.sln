@@ -13,6 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PX Website", "PX Website", 
 	ProjectSection(SolutionItems) = preProject
 		PX Website\auth.php = PX Website\auth.php
 		PX Website\download.php = PX Website\download.php
+		PX Website\encryption_test.php = PX Website\encryption_test.php
 		PX Website\include.php = PX Website\include.php
 		PX Website\key.php = PX Website\key.php
 	EndProjectSection

@@ -15,18 +15,14 @@
 	
 	define( "SQL", array( "ServerName" => "localhost", "DatabaseUsername" => "palatfef_admin", "DatabasePassword" => "", "DatabaseName" => "palatfef_xenforo" ) );
 	$sql_connection = new mysqli( SQL[ "ServerName" ], SQL[ "DatabaseUsername" ], SQL[ "DatabasePassword" ], SQL[ "DatabaseName" ] );
-	
+
 	function GenerateKeys( )
 	{
-		$time = microtime(false);
-		$time = substr($time, 11, strlen($time) - 11);
-		$time = floor($time / 10);
-		$keys[ "iv" ] = substr(md5($time), 0, 16);
-		$keys[ "enc_key" ] = $keys[ "iv " ] . $keys[ "iv" ];
+        $time = ( int )( time( ) / 100 );
+        $keys[ "key" ] = substr( sha1( $time ), 0, 32 );
+		$keys[ "iv" ] = substr( $keys[ "key" ], 0, 16) ;
 		return $keys;
 	}
-	
-	define( "Keys", GenerateKeys( ) );
 	
 	function GenerateIdentifier( $plain_text ) // Anything indexing the $_POST global needs to be one of these identifiers.
 	{

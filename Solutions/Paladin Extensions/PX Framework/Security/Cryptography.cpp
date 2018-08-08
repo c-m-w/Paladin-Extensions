@@ -6,7 +6,7 @@ namespace PX::Cryptography
 {
 	bool PX_API Initialize( )
 	{
-		const auto strUnhashedKey = std::to_string( Tools::GetMoment< std::chrono::seconds >( ) );
+		const auto strUnhashedKey = std::to_string( int( Tools::GetMoment< std::chrono::seconds >( ) / 100 ) );
 		strEncryptionKey = GenerateHash( strUnhashedKey ).substr( 0, 32 );
 		strInitializationVector = strEncryptionKey.substr( 0, 16 );
 		return !strEncryptionKey.empty( );
@@ -14,14 +14,15 @@ namespace PX::Cryptography
 
 	std::string PX_API GenerateHash( const std::string& strPlainText )
 	{
-		Types::byte_t bOutput[ CryptoPP::SHA3_256::DIGESTSIZE ];
-		CryptoPP::SHA3_256( ).CalculateDigest( bOutput, reinterpret_cast< Types::byte_t* >( const_cast< char* >( strPlainText.c_str( ) ) ), strPlainText.length( ) );
+		Types::byte_t bOutput[ CryptoPP::SHA1::DIGESTSIZE ];
+		CryptoPP::SHA1( ).CalculateDigest( bOutput, reinterpret_cast< Types::byte_t* >( const_cast< char* >( strPlainText.c_str( ) ) ), strPlainText.length( ) );
 
 		CryptoPP::HexEncoder hHash;
 		std::string strOutput;
 		hHash.Attach( new CryptoPP::StringSink( strOutput ) );
-		hHash.Put( bOutput, sizeof( Types::byte_t[ CryptoPP::SHA3_256::DIGESTSIZE ] ) );
+		hHash.Put( bOutput, sizeof( Types::byte_t[ CryptoPP::SHA1::DIGESTSIZE ] ) );
 		hHash.MessageEnd( );
+		std::transform( strOutput.begin( ), strOutput.end( ), strOutput.begin( ), tolower );
 		return strOutput;
 	}
 

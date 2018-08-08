@@ -75,6 +75,16 @@ void PX_API InjectionExample( )
 
 void PX_API OnLaunch( )
 {
-	UIExample( );
+	Net::InitializeConnection( );
+
+	std::deque< Net::post_data_t > dqPostData;
+	Cryptography::Initialize( );
+	const auto strResponse = Request( PX_XOR( "https://www.paladin.rip/auth/encryption_test.php" ), dqPostData );
+	const auto strDecryptedResponse = Cryptography::Decrypt( strResponse );
+	Net::CleanupConnection( );
+
+	dbg::out << Tools::string_cast< std::wstring >( strDecryptedResponse ) << dbg::newl;
+
+
 	system( "pause" );
 }
