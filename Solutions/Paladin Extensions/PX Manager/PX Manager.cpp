@@ -147,11 +147,11 @@ void PX_API OnLaunch( )
 {
 	using namespace Tools;
 
-	unsigned uDimensions[ 2 ] { 720, 600 };
-	Render::InitializeRenderTarget( uDimensions, PX_XOR( L"Paladin Extensions" ) );
-	UI::Manager::Initialize( PX_XOR( "Manager" ) );
-	while ( UI::Manager::Render( ) && !bShutdown )
-		Wait( 1 );
+	//unsigned uDimensions[ 2 ] { 720, 600 };
+	//Render::InitializeRenderTarget( uDimensions, PX_XOR( L"Paladin Extensions" ) );
+	//UI::Manager::Initialize( PX_XOR( "Manager" ) );
+	//while ( UI::Manager::Render( ) && !bShutdown )
+	//	Wait( 1 );
 
 	//Net::InitializeConnection( );
 	//std::deque< Net::post_data_t > dqPostData;
@@ -175,21 +175,21 @@ void PX_API OnLaunch( )
 	//dbg::out << strResponse.length( ) << dbg::newl;
 	//system( "pause" );
 
-	//const auto pDLL = fopen( R"(C:\Users\Cole\Desktop\Messagebox.dll)", "rb" );
-	//
-	//if ( !dbg::Assert( pDLL != nullptr ) )
-	//	return;
-	//
-	//fseek( pDLL, 0, SEEK_END );
-	//const auto lSize = ftell( pDLL );
-	//rewind( pDLL );
-	//const auto pBuffer = VirtualAlloc( nullptr, lSize, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE );
-	//fread( pBuffer, 1, lSize, pDLL );
-	//
-	//if ( dbg::Assert( lSize != 0 && pBuffer != nullptr ) )
-	//{
-	//	sys::injection_info_t inj { };
-	//	sys::DLLManualMap( pBuffer, L"ConsoleApplication1.exe", &inj );
-	//}
-	//system( "pause" );
+	const auto pDLL = fopen( R"(C:\Users\Cole\Desktop\Messagebox.dll)", "rb" );
+	
+	if ( !dbg::Assert( pDLL != nullptr ) )
+		return;
+	
+	fseek( pDLL, 0, SEEK_END );
+	const auto lSize = ftell( pDLL );
+	rewind( pDLL );
+	const auto pBuffer = VirtualAlloc( nullptr, lSize, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE );
+	fread( pBuffer, 1, lSize, pDLL );
+	
+	if ( dbg::Assert( lSize != 0 && pBuffer != nullptr ) )
+	{
+		sys::injection_info_t inj { };
+		sys::DLLManualMap( pBuffer, L"ConsoleApplication1.exe", &inj );
+	}
+	system( "pause" );
 }

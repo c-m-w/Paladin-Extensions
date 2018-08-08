@@ -57,6 +57,13 @@
 /** \brief Size of a memory page. */
 #define PX_PAGE ( 1024 * 4 )
 
+/** \brief Value of memory on the stack before it is assigned a value. */
+#define PX_UNITIALIZED_STACK_MEMORY 0xCCCCCCCC
+
+#define PX_MOV_EAX	0xB8
+#define PX_MOV_EDX	0xBA
+#define PX_PUSH		0x68
+
 #if defined _DEBUG
 #define PX_DEPENDENCIES_ESCAPE 3
 #else
