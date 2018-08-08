@@ -13,5 +13,5 @@ namespace PX::Types
 	/** \brief Paladin byte datatype. Stores one byte of data. */
 	typedef unsigned char byte_t;
 	/** \brief Paladin callback function type. */
-	typedef void( PX_API fn_callback_t )( );
+	typedef void( PX_API* fn_callback_t )( );
 }

@@ -102,7 +102,7 @@ namespace PX::UI
 		/**	\param szApplicationTitle Subtitle of the window. */
 		/**	\param fnMinimizeCallback Called when the minimize button is pressed. */
 		/**	\param fnCloseCallback Called when the close button is pressed. */
-		void PX_API Header( Types::cstr_t szTitle, Types::cstr_t szApplicationTitle, Types::fn_callback_t fnMinimizeCallback, Types::fn_callback_t fnCloseCallback );
+		void PX_API Header( Types::cstr_t szTitle, Types::cstr_t szApplicationTitle, Types::fn_callback_t fnMinimizeCallback = nullptr, Types::fn_callback_t fnCloseCallback = nullptr );
 		/** \brief Draws a forum-theme rectangular button which is used for very general categories.\n Uses one column. */
 		/**	\param szText Text the button will display. */
 		/**	\param bActive Changes the color style of the button. Used for a toggle effect. */
