@@ -78,12 +78,12 @@ int __fastcall hkFunctionFour( CFunctions* pECX, int edx )
 	return iReturnValue * 10;
 }
 
-void PX_API OnLaunch( )
+void PX_API VirtualTableHookExample( )
 {
 	CFunctions obj;
 	CVirtualTable* vftbl = &obj;
 
-	hHook = new Tools::hook_t( vftbl, L"user32.dll" );
+	hHook = new Tools::hook_t( vftbl, L"user32.dll" ); // example module
 	hHook->HookIndex( 1, hkFunctionTwo );
 	hHook->HookIndex( 2, hkFunctionThree );
 	hHook->HookIndex( 3, hkFunctionFour );
@@ -95,6 +95,58 @@ void PX_API OnLaunch( )
 	delete hHook;
 
 	vftbl->FunctionTwo( L"Men" );
+}
+
+void PX_API ThreadTest( )
+{
+	while ( true )
+		Tools::Wait( 1 );
+}
+
+void messagebox( unsigned uFlags )
+{
+	MessageBox( nullptr, L"Thread has been hijacked!", L"Thread has been hijacked!", uFlags );
+}
+
+auto men = MB_OK | MB_ICONERROR;
+
+__declspec( naked ) DWORD WINAPI ThreadHijack( )
+{
+	__asm
+	{
+		pushad
+		pushfd
+		push men
+		call messagebox
+		pop eax
+		popfd
+		popad
+		ret
+	}
+}
+
+void PX_API ThreadHijackExample( )
+{
+	DWORD dwThreadID;
+	auto hThread = CreateThread( nullptr, 0, LPTHREAD_START_ROUTINE( ThreadTest ), nullptr, 0, &dwThreadID );
+
+	CONTEXT ctxThread { CONTEXT_FULL };
+
+	SuspendThread( hThread );
+	GetThreadContext( hThread, &ctxThread );
+
+	ctxThread.Esp -= 4;
+	auto ptr = reinterpret_cast< Types::ptr_t* >( ctxThread.Esp );
+	*ptr = ctxThread.Eip;
+	ctxThread.Eip = DWORD( ThreadHijack );
+
+	SetThreadContext( hThread, &ctxThread );
+	ResumeThread( hThread );
+}
+
+void PX_API OnLaunch( )
+{
+	VirtualTableHookExample( );
 
 	system( "pause" );
 }
