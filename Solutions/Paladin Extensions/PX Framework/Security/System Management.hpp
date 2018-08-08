@@ -27,6 +27,8 @@ namespace PX::sys
 	/** \return Process ID */
 	DWORD PX_API GetProcessID( const std::wstring& wstrExecutableName );
 
+	HANDLE PX_API FindProcessThread( DWORD dwProcessID );
+
 	/** \brief Information for manually mapping a DLL into a process. */
 	struct injection_info_t
 	{
