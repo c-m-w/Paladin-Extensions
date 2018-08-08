@@ -26,8 +26,9 @@ namespace PX::Tools
 
 	/** \brief Creates shellcode from a byte array. */
 	/**	\param bByteArray Array of bytes to convert. */
+	/**	\param uSize Size of the byte array. */
 	/**	\return Converted byte array. */
-	std::string PX_API FormatShellcode( Types::byte_t* bByteArray );
+	std::string PX_API FormatShellcode( Types::byte_t* bByteArray, unsigned uSize );
 	
 	/** \brief Paladin time datatype, long enough to hold any time type, down to microseconds. */
 	typedef unsigned long long moment_t;

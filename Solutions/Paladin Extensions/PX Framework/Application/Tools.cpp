@@ -13,17 +13,17 @@ namespace PX::Tools
 		PlaySound( ( strSoundDirectory + szFileName ).c_str( ), nullptr, SND_ASYNC );
 	}
 
-	//std::string PX_API FormatShellcode( Types::byte_t* bByteArray )
-	//{
-	//	std::string strFormatted { };
-	//	for ( int i { }; i < sizeof bByteArray; i++ )
-	//	{
-	//		strFormatted += PX_XOR( R"(\x)" );
-	//		strFormatted.resize( strFormatted.size( ) + 2 ); // +2 because max length of a byte in digits is 2.
-	//		sprintf( &strFormatted[ 0 ], PX_XOR( "%s%02X" ), strFormatted.c_str( ), bByteArray[ i ] );
-	//	}
-	//	return strFormatted;
-	//}
+	std::string PX_API FormatShellcode( byte_t* bByteArray, unsigned uSize )
+	{
+		std::string strFormatted { };
+		for ( int i { }; i < uSize; i++ )
+		{
+			strFormatted += R"(\x)";
+			strFormatted.resize( strFormatted.size( ) + 2 ); // +2 because max length of a byte in digits is 2.
+			sprintf( &strFormatted[ 0 ], "%s%02X", strFormatted.c_str( ), bByteArray[ i ] );
+		}
+		return strFormatted;
+	}
 
 	unsigned* GetScreenDimensions( )
 	{
