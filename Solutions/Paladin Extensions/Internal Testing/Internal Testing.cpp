@@ -2,7 +2,7 @@
 
 #define PX_ENTRY_AS_WIN
 #define PX_INSTANCE_ID L"Internal Testing"
-#include <J-e-r-e-m-i-a-h/Entry Manager.hpp>
+#include <Jeremia-h/Entry Manager.hpp>
 
 #include "Internal Testing.hpp"
 

@@ -3,7 +3,7 @@
 #pragma once
 
 // Concepts library
-//#include <concepts>           // C++ 20
+//#include <concepts>			// C++ 20
 
 // Utilities library
 #include <cstdlib>
@@ -24,8 +24,8 @@
 #include <any>
 #include <optional>
 #include <variant>
-//#include <compare>            // C++ 20
-//#include <version>            // C++ 20
+//#include <compare>			// C++ 20
+//#include <version>			// C++ 20
 
 // Dynamic memory management
 #include <new>
@@ -69,7 +69,7 @@
 #include <unordered_map>
 #include <stack>
 #include <queue>
-//#include <span>               // C++ 20
+//#include <span>				// C++ 20
 
 // Algorithms library
 #include <algorithm>
@@ -86,7 +86,7 @@
 #include <numeric>
 #include <ratio>
 #include <cfenv>
-//#include <bit>                // C++ 20
+//#include <bit>				// C++ 20
 
 // Input/output library
 #include <iosfwd>
@@ -96,8 +96,8 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-//#include <syncstream>         // C++ 20
-//#include <strstream>          // C++ 17 Deprecated
+//#include <syncstream>			// C++ 20
+//#include <strstream>			// C++ 17 Deprecated
 #include <iomanip>
 #include <streambuf>
 #include <cstdio>
