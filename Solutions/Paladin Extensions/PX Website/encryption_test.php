@@ -1,5 +1,4 @@
 <?php
     require "include.php";
-    $result = GetIPInformation( );
-    echo $result[ "countryName" ];
+	die( Keys["key"]);
 ?>
