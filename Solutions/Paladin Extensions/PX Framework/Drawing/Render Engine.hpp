@@ -18,11 +18,6 @@ namespace PX::Render
 	/** \brief Time at which the window was restored from minimized. */
 	PX_SDK Tools::moment_t mmtRestoreWindow;
 
-	/** \brief Custom cursors. */
-	PX_SDK HCURSOR hCursors[ CURSOR_MAX ];
-	/** \brief  */
-	void PX_API SetCursor( ECursor curType );
-
 	/** \brief Title of the window that will be created. */
 	PX_SDK Types::wcstr_t wszWindowTitle = static_cast< wchar_t* >( malloc( 32 ) );
 	/** \brief Width of the window. */

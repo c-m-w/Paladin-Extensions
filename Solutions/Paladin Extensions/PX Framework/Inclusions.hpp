@@ -26,14 +26,18 @@
 #endif
 
 #include <comdef.h>
-#include <Wbemidl.h>
+#include <WbemIdl.h>
 #pragma comment( lib, "wbemuuid.lib" )
 #include <TlHelp32.h>
 
 #include <Psapi.h>
 
-#include <DirectX/d3d9.h>
+#include <d3d9.h>
+#include <d3dx9math.h>
+#include <d3dx9core.h>
+#include <d3dx9tex.h>
 #pragma comment( lib, "d3d9.lib" )
+#pragma comment( lib, "d3dx9.lib" )
 
 #include <IconFontCppHeaders/IconsFontAwesome5-Solid.hpp>
 

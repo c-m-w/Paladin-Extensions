@@ -18,6 +18,48 @@ namespace PX::UI
 		PX_SDK nk_context* pContext;
 		/** \brief Title of the GUI window. */
 		PX_SDK Types::cstr_t szNuklearWindowTitle;
+		PX_SDK Render::ECursor curCurrent;
+		PX_SDK bool bFoundHoverTarget = false;
+
+		enum
+		{
+			TEXTURE_LOGO,
+			TEXTURE_LOGO_LOADING,
+			TEXTURE_CURSOR_ARROW,
+			TEXTURE_CURSOR_HAND,
+			TEXTURE_CURSOR_IBEAM,
+			TEXTURE_MAX
+		};
+
+		struct texture_t
+		{
+			unsigned uWidth, uHeight;
+			LPDIRECT3DTEXTURE9 pTexture;
+			D3DXIMAGE_INFO iiImage;
+			texture_t( unsigned _uWidth, unsigned _uHeight, LPDIRECT3DTEXTURE9 _pTexture = nullptr ):
+				iiImage( D3DXIMAGE_INFO( ) )
+			{
+				uWidth = _uWidth;
+				uHeight = _uHeight;
+				pTexture = _pTexture;
+			}
+		};
+
+		struct texture_queue_t
+		{
+			int iTexture;
+			D3DXVECTOR3 vecLocation;
+			D3DCOLOR clrColor;
+			texture_queue_t( int _iTexture, D3DXVECTOR3 _vecLocation, D3DCOLOR _clrColor = D3DCOLOR_ARGB( 255, 255, 255, 255 ) )
+			{
+				iTexture = _iTexture;
+				vecLocation = _vecLocation;
+				clrColor = _clrColor;
+			}
+		};
+
+		PX_SDK std::vector< texture_t > vecTextures;
+		PX_SDK std::vector< texture_queue_t > vecImageQueue;
 
 		/** \brief Available fonts. */
 		enum EFont
@@ -33,8 +75,9 @@ namespace PX::UI
 		};
 
 		/** \brief Initialize the GUI for drawing interactable windows. */
-		/**	\param szApplicationTitle The subtitle of the GUI window. */
-		void PX_API Initialize( Types::cstr_t szApplicationTitle );
+		/**	\param _szApplicationTitle The subtitle of the GUI window. */
+		/** \return true - Initialization was successful.\n false - Initialization was not successful. */
+		bool PX_API Initialize( Types::cstr_t _szApplicationTitle );
 		/** \brief Calculates text dimensions with the current font. */
 		/**	\param szText Text to calculate the bounds for. */
 		/**	\param uRowHeight Height of the row that the text is in. */
@@ -52,6 +95,8 @@ namespace PX::UI
 		/** \brief Render the GUI. */
 		/**	\return true - GUI should be drawn again.\n false - GUI should not be drawn again. */
 		bool PX_API Render( );
+
+		std::array< unsigned, 2 > PX_API GetCurrentWindowDimensions( );
 		/** \brief Called when widgets should be drawn onto the GUI window. */
 		void PX_API SetLayout( );
 		/** \brief Draws an example demonstrating usage of all widgets. */
@@ -97,12 +142,13 @@ namespace PX::UI
 		/**	\return true - Mouse is hovering next widget.\n false - Mouse is not hovering next widget. */
 		bool PX_API HoveringNextWidget( );
 		nk_flags PX_API EditTextBox( struct nk_context* ctx, nk_flags flags, char* buffer, int max, nk_plugin_filter filter );
+		void PX_API SetWidgetActive( Render::ECursor curSetCursor );
 		/** \brief Creates a window header for the GUI window. */
 		/**	\param szTitle Title of the window. */
-		/**	\param szApplicationTitle Subtitle of the window. */
+		/**	\param _szApplicationTitle Subtitle of the window. */
 		/**	\param fnMinimizeCallback Called when the minimize button is pressed. */
 		/**	\param fnCloseCallback Called when the close button is pressed. */
-		void PX_API Header( Types::cstr_t szTitle, Types::cstr_t szApplicationTitle, Types::fn_callback_t fnMinimizeCallback = nullptr, Types::fn_callback_t fnCloseCallback = nullptr );
+		void PX_API Header( Types::cstr_t szTitle, Types::cstr_t _szApplicationTitle, unsigned uFillHeight = 102u, Types::fn_callback_t fnMinimizeCallback = nullptr, Types::fn_callback_t fnCloseCallback = nullptr );
 		/** \brief Draws a forum-theme rectangular button which is used for very general categories.\n Uses one column. */
 		/**	\param szText Text the button will display. */
 		/**	\param bActive Changes the color style of the button. Used for a toggle effect. */

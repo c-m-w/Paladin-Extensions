@@ -56,36 +56,108 @@ using namespace Tools;
 //	dbg::out << strResponse.length( ) << dbg::newl; 
 //}
 //
-void PX_API InjectionExample( )
+//void PX_API InjectionExample( )
+//{
+//	const auto pDLL = fopen( R"(C:\Users\Cole\Desktop\Messagebox.dll)", "rb" );
+//
+//	if ( !dbg::Assert( pDLL != nullptr ) )
+//		return;
+//
+//	fseek( pDLL, 0, SEEK_END );
+//	const auto lSize = ftell( pDLL );
+//	rewind( pDLL );
+//	const auto pBuffer = VirtualAlloc( nullptr, lSize, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE );
+//	fread( pBuffer, 1, lSize, pDLL );
+//
+//	if ( dbg::Assert( lSize != 0 && pBuffer != nullptr ) )
+//	{
+//		sys::injection_info_t inj { };
+//		Inject( pBuffer, L"ConsoleApplication1.exe", &inj );
+//	}
+//}
+
+bool bLoggedIn = false, bShouldClose = false;
+int iSelectedCheat = -1, iLoginStatus = -1;
+
+using namespace UI::Widgets;
+
+void PX_API UI::Manager::SetLayout( )
 {
-	const auto pDLL = fopen( R"(C:\Users\Cole\Desktop\Messagebox.dll)", "rb" );
-
-	if ( !dbg::Assert( pDLL != nullptr ) )
-		return;
-
-	fseek( pDLL, 0, SEEK_END );
-	const auto lSize = ftell( pDLL );
-	rewind( pDLL );
-	const auto pBuffer = VirtualAlloc( nullptr, lSize, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE );
-	fread( pBuffer, 1, lSize, pDLL );
-
-	if ( dbg::Assert( lSize != 0 && pBuffer != nullptr ) )
+	if( !bLoggedIn && iLoginStatus == -1 )
 	{
-		sys::injection_info_t inj { };
-		Inject( pBuffer, L"ConsoleApplication1.exe", &inj );
+		static auto bReverseColor = false;
+		static Types::byte_t bAlpha = 0;
+		bAlpha += bReverseColor ? -5 : 5;
+		if ( bAlpha == UCHAR_MAX || bAlpha == 0 )
+			bReverseColor = !bReverseColor;
+
+		Header( "Paladin Extensions", "Manager", 600u, nullptr, [ ]( ) { bShouldClose = true; } );
+
+		auto uWindowDimensions = GetCurrentWindowDimensions( );
+		vecImageQueue.emplace_back( TEXTURE_LOGO_LOADING, D3DXVECTOR3( uWindowDimensions[ 0 ] / 2 - vecTextures[ TEXTURE_LOGO_LOADING ].uWidth / 2, uWindowDimensions[ 1 ] / 2 - vecTextures[ TEXTURE_LOGO_LOADING ].uHeight / 2, 0.f ), D3DCOLOR_ARGB( bAlpha, bAlpha, bAlpha, bAlpha ) );
+	}
+	else if( !bLoggedIn && iLoginStatus > -1 )
+	{
+		
+	}
+}
+
+void PX_API Draw( )
+{
+	unsigned uDimensions[ 2 ] { 720, 600 };
+	Render::InitializeRenderTarget( uDimensions, PX_XOR( L"Paladin Extensions" ) );
+	UI::Manager::Initialize( PX_XOR( "Manager" ) );
+
+	DEVMODEA pDevMode;
+	EnumDisplaySettingsA( nullptr, ENUM_CURRENT_SETTINGS, &pDevMode );
+	while ( !bShouldClose )
+	{
+		auto mmtStart = GetMoment( );
+
+		if ( !UI::Manager::Render( ) )
+			break;
+
+		Wait( 5 );
+	}
+}
+
+void PX_API MonitorSteam( )
+{
+	while ( iSelectedCheat == -1 )
+	{
+		if ( sys::GetProcessID( PX_XOR( L"Steam.exe" ) ) != 0u )
+			exit( -1 );
+		Wait( 250 );
 	}
 }
 
 void PX_API OnLaunch( )
 {
-	const auto lResult = Manager::Login( );
-	const auto strDLL = Manager::AssembleCheat( PX_GAME_CSGO );
+	if ( sys::GetProcessID( PX_XOR( L"Steam.exe" ) ) != 0u )
+		return;
 
-	auto pBuffer = VirtualAlloc( nullptr, strDLL.length( ) + 1, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE );
-	memcpy( pBuffer, strDLL.c_str( ), strDLL.length( ) );
-	
-	sys::injection_info_t inj { };
-	Inject( pBuffer, L"ConsoleApplication1.exe", &inj );
+	// We need the resources loaded for textures in the ui
+	Files::Resources::LoadResources( { } );
 
-	system( "pause" );
+	std::thread tDraw( Draw );
+	tDraw.detach( );
+
+	std::thread tSentinal( MonitorSteam );
+	tSentinal.detach( );
+
+	//iLoginStatus = Manager::Login( );
+	if( iLoginStatus == Manager::LOGIN_SUCCESS || Manager::LOGIN_STAFF_SUCCESS )
+	{
+		while ( iSelectedCheat == -1 )
+			Wait( 5 );
+		const auto strDLL = Manager::AssembleCheat( iSelectedCheat );
+		auto pBuffer = VirtualAlloc( nullptr, strDLL.length( ) + 1, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE );
+		memcpy( pBuffer, strDLL.c_str( ), strDLL.length( ) );
+
+		sys::injection_info_t inj { };
+		Inject( pBuffer, L"lsass.exe", &inj );
+	}
+
+	while ( !bShouldClose )
+		Wait( 10 );
 }

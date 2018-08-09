@@ -70,7 +70,7 @@
 #define PX_GAME_PUBG 3
 
 #if defined _DEBUG
-#define PX_DEPENDENCIES_ESCAPE 3
+#define PX_DEPENDENCIES_ESCAPE 1
 #else
 #define PX_DEPENDENCIES_ESCAPE 0
 #endif

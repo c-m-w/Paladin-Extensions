@@ -25,9 +25,7 @@ namespace PX::UI
 
 		nk_style_button btnTopActive { }, btnTop { }, btnRegularActive { }, btnRegular { }, btnSpecialActive { }, btnSpecial { }, btnCombo { }, btnComboActive { };
 
-		ECursor curCurrent;
-
-		bool bFoundHoverTarget = false;
+		LPD3DXSPRITE pBufferSprite;
 
 		nk_font* PX_API AddFont( std::string strFontFileName, unsigned uFontSize, struct nk_font_config fcFontConfiguration, unsigned uFontAwesomeSize = 0 )
 		{
@@ -55,8 +53,8 @@ namespace PX::UI
 			fcFontAwesomeConfiguration.range = rnIconRange;
 			fcFontAwesomeConfiguration.merge_mode = 1;
 
-			pRoboto = AddFont( PX_XOR( "Roboto-Regular.ttf" ), 23, fcFontAwesomeConfiguration );
-			pRobotoBold = AddFont( PX_XOR( "RobotoBold.ttf" ), 21, fcFontAwesomeConfiguration );
+			pRoboto = AddFont( PX_XOR( "Roboto-Regular.ttf" ), 26, fcFontAwesomeConfiguration );
+			pRobotoBold = AddFont( PX_XOR( "RobotoBold.ttf" ), 24, fcFontAwesomeConfiguration );
 			pRobotoSmall = AddFont( PX_XOR( "Roboto-Regular.ttf" ), 16, fcFontAwesomeConfiguration, 14 );
 			pRobotoBoldSmall = AddFont( PX_XOR( "RobotoBold.ttf" ), 16, fcFontAwesomeConfiguration, 18 );
 			pTahoma = AddFont( PX_XOR( "tahoma.ttf" ), 16, fcFontAwesomeConfiguration );
@@ -240,10 +238,33 @@ namespace PX::UI
 			btnComboActive.touch_padding = nk_vec2( 5, 5 );
 		}
 
-		void PX_API Initialize( Types::cstr_t _szApplicationTitle )
+		bool PX_API Initialize( Types::cstr_t _szApplicationTitle )
 		{
 			szNuklearWindowTitle = _szApplicationTitle;
 			InitializeNuklear( );
+
+			vecTextures.emplace_back( 40, 40 ); // TEXTURE_LOGO
+			vecTextures.emplace_back( 300, 300 ); // TEXTURE_LOGO_LOADING
+			vecTextures.emplace_back( 50, 50 ); // TEXTURE_LOGO
+			vecTextures.emplace_back( 50, 50 ); // TEXTURE_LOGO
+			vecTextures.emplace_back( 50, 50 ); // TEXTURE_LOGO
+
+			return D3DXCreateTextureFromFileEx( pDevice, ( Files::GetDirectory( PX_DEPENDENCIES_ESCAPE ) + LR"(Resources\Paladin Logo Small.png)" ).c_str( ), vecTextures[ TEXTURE_LOGO ].uWidth,
+												vecTextures[ TEXTURE_LOGO ].uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL,
+												&vecTextures[ TEXTURE_LOGO ].iiImage, nullptr, &vecTextures[ TEXTURE_LOGO ].pTexture ) == D3D_OK
+					&& D3DXCreateTextureFromFileEx( pDevice, ( Files::GetDirectory( PX_DEPENDENCIES_ESCAPE ) + LR"(Resources\Paladin Logo Loading.png)" ).c_str( ), vecTextures[ TEXTURE_LOGO_LOADING ].uWidth,
+												vecTextures[ TEXTURE_LOGO_LOADING ].uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL,
+												&vecTextures[ TEXTURE_LOGO_LOADING ].iiImage, nullptr, &vecTextures[ TEXTURE_LOGO_LOADING ].pTexture ) == D3D_OK
+					&& D3DXCreateTextureFromFileEx( pDevice, ( Files::GetDirectory( PX_DEPENDENCIES_ESCAPE ) + LR"(Resources\Cursor\Arrow.png)" ).c_str( ), vecTextures[ TEXTURE_CURSOR_ARROW ].uWidth,
+													vecTextures[ TEXTURE_CURSOR_ARROW ].uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL,
+													&vecTextures[ TEXTURE_CURSOR_ARROW ].iiImage, nullptr, &vecTextures[ TEXTURE_CURSOR_ARROW ].pTexture ) == D3D_OK
+					&& D3DXCreateTextureFromFileEx( pDevice, ( Files::GetDirectory( PX_DEPENDENCIES_ESCAPE ) + LR"(Resources\Cursor\Hand.png)" ).c_str( ), vecTextures[ TEXTURE_CURSOR_HAND ].uWidth,
+												vecTextures[ TEXTURE_CURSOR_HAND ].uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL,
+												&vecTextures[ TEXTURE_CURSOR_HAND ].iiImage, nullptr, &vecTextures[ TEXTURE_CURSOR_HAND ].pTexture ) == D3D_OK
+					&& D3DXCreateTextureFromFileEx( pDevice, ( Files::GetDirectory( PX_DEPENDENCIES_ESCAPE ) + LR"(Resources\Cursor\I Beam.png)" ).c_str( ), vecTextures[ TEXTURE_CURSOR_IBEAM ].uWidth,
+												vecTextures[ TEXTURE_CURSOR_IBEAM ].uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL,
+												&vecTextures[ TEXTURE_CURSOR_IBEAM ].iiImage, nullptr, &vecTextures[ TEXTURE_CURSOR_IBEAM ].pTexture ) == D3D_OK
+					&& D3DXCreateSprite( pDevice, &pBufferSprite ) == D3D_OK;
 		}
 
 		struct nk_vec2 PX_API CalculateTextBounds( Types::cstr_t szText, unsigned uRowHeight /*= 30*/ )
@@ -328,9 +349,27 @@ namespace PX::UI
 			return bShouldDrawInterface;
 		}
 
+		void PX_API DrawTextures( )
+		{
+			if ( pBufferSprite->Begin( D3DXSPRITE_ALPHABLEND ) == D3D_OK )
+			{
+				for each( const auto& texture in vecImageQueue )
+					pBufferSprite->Draw( vecTextures[ texture.iTexture ].pTexture, nullptr, nullptr, &texture.vecLocation, texture.clrColor );
+				pBufferSprite->End( );
+			}
+			vecImageQueue.clear( );
+		}
+
 		void PX_API ApplyCursor( )
 		{
-			SetCursor( curCurrent );
+			POINT pntCursor { };
+
+			GetCursorPos( &pntCursor );
+			ScreenToClient( hwWindowHandle, &pntCursor );
+
+			auto uTextureID = curCurrent == CURSOR_ARROW ? TEXTURE_CURSOR_ARROW : ( curCurrent == CURSOR_HAND ? TEXTURE_CURSOR_HAND : TEXTURE_CURSOR_IBEAM );
+			vecImageQueue.emplace_back( uTextureID, D3DXVECTOR3( float( pntCursor.x + vecTextures[ uTextureID ].uWidth / 2.f - 50 ), float( pntCursor.y + vecTextures[ uTextureID ].uHeight / 2.f - 50 ), 0.f ) );
+			for ( int i { }; i < 50 && ShowCursor( false ) > -1; i++ );
 			curCurrent = CURSOR_ARROW;
 			bFoundHoverTarget = false;
 			pContext->last_widget_state &= ~( NK_WIDGET_STATE_ACTIVE | NK_WIDGET_STATE_HOVER );
@@ -365,12 +404,22 @@ namespace PX::UI
 				bShouldDrawUserInterface = false;
 			nk_end( pContext );
 
-			ApplyCursor( );
 			if ( bCreatedWindow )
 			{
 				pDevice->Clear( 0, nullptr, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER | D3DCLEAR_STENCIL, D3DCOLOR_ARGB( 0, 0, 0, 0 ), 0, 0 );
 				pDevice->BeginScene( );
+
+				IDirect3DStateBlock9* pState;
+				pDevice->CreateStateBlock( D3DSBT_ALL, &pState );
+
 				nk_d3d9_render( NK_ANTI_ALIASING_ON );
+
+				pState->Apply( );
+				pState->Release( );
+
+				ApplyCursor( );
+				DrawTextures( );
+
 				pDevice->EndScene( );
 				pDevice->Present( nullptr, nullptr, nullptr, nullptr );
 			}
@@ -378,6 +427,12 @@ namespace PX::UI
 				nk_d3d9_render( NK_ANTI_ALIASING_ON );
 
 			return bShouldDrawUserInterface;
+		}
+
+		std::array< unsigned, 2 > PX_API GetCurrentWindowDimensions( )
+		{
+			std::array< unsigned, 2 > uBuffer { unsigned( pContext->current->bounds.w ), unsigned( pContext->current->bounds.h ) };
+			return uBuffer;
 		}
 
 		void PX_API Manager::Example( )
@@ -520,11 +575,13 @@ namespace PX::UI
 			curCurrent = curSetCursor;
 		}
 
-		void PX_API Header( Types::cstr_t szTitle, Types::cstr_t _szApplicationTitle, Types::fn_callback_t fnMinimizeCallback /*= nullptr*/, Types::fn_callback_t fnCloseCallback /*= nullptr*/ )
+		void PX_API Header( Types::cstr_t szTitle, Types::cstr_t _szApplicationTitle, unsigned uFillHeight /*= 102u*/, Types::fn_callback_t fnMinimizeCallback /*= nullptr*/, Types::fn_callback_t fnCloseCallback /*= nullptr*/ )
 		{
+			auto recMainWindow = pContext->current->bounds;
+			vecImageQueue.emplace_back( TEXTURE_LOGO, D3DXVECTOR3( recMainWindow.x + 5.f, recMainWindow.y, 0.f ) );
+
 			nk_layout_row_dynamic( pContext, 30, 0 );
 			auto pOutput = nk_window_get_canvas( pContext );
-			//auto pInput = &pContext->input;
 			constexpr nk_color _clrBlueHover { 115, 189, 247, 255 };
 			const auto uWidth = pContext->current->bounds.w;
 
@@ -533,15 +590,15 @@ namespace PX::UI
 			txtTitle.text = clrTextActive;
 			txtApplication.text = clrTextDormant;
 
-			nk_fill_rect( pOutput, nk_rect( 0, 0, uWidth, 102 ), 0.f, clrHeader );
+			nk_fill_rect( pOutput, nk_rect( 0, 0, uWidth, uFillHeight ), 0.f, clrHeader );
 			nk_stroke_line( pOutput, 0, 40, uWidth, 40, 1, clrColorTable[ NK_COLOR_BORDER ] );
 
 			SetFont( FONT_ROBOTOBOLD );
 			auto vecTitle = CalculateTextBounds( szTitle, 30 );
-			nk_widget_text( pOutput, nk_rect( 15, 7, vecTitle.x, 30 ), szTitle, strlen( szTitle ), &txtTitle, NK_TEXT_CENTERED, pContext->style.font );
+			nk_widget_text( pOutput, nk_rect( 50, 7, vecTitle.x, 30 ), szTitle, strlen( szTitle ), &txtTitle, NK_TEXT_CENTERED, pContext->style.font );
 			SetFont( FONT_ROBOTO );
 			auto vecApplicationTitle = CalculateTextBounds( _szApplicationTitle, 30 );
-			nk_widget_text( pOutput, nk_rect( 23 + vecTitle.x, 7, vecApplicationTitle.x, 30 ), _szApplicationTitle, strlen( _szApplicationTitle ), &txtApplication, NK_TEXT_CENTERED, pContext->style.font );
+			nk_widget_text( pOutput, nk_rect( 58 + vecTitle.x, 7, vecApplicationTitle.x, 30 ), _szApplicationTitle, strlen( _szApplicationTitle ), &txtApplication, NK_TEXT_CENTERED, pContext->style.font );
 
 			static auto clrMinimize = clrBlue, clrClose = clrMinimize;
 			txtMinimizeButton.text = clrMinimize;

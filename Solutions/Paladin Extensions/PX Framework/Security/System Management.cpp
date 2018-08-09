@@ -56,7 +56,7 @@ namespace PX::sys
 		wstrSystemParts[ SYS_GPU ]		= RetrieveInfo( PX_XOR( L"SELECT * FROM CIM_PCVideoController" ) );
 		wstrSystemParts[ SYS_DISPLAY ]	= RetrieveInfo( PX_XOR( L"SELECT * FROM Win32_DesktopMonitor" ) );
 		wstrSystemParts[ SYS_OS ]		= RetrieveInfo( PX_XOR( L"SELECT * FROM CIM_OperatingSystem" ) );
-		wstrSystemParts[ SYS_BOARD ]	= RetrieveInfo( PX_XOR( L"SELECT * FROM Win32_BaseBoard", L"Manufacturer" ) );
+		wstrSystemParts[ SYS_BOARD ]	= RetrieveInfo( PX_XOR( L"SELECT * FROM Win32_BaseBoard" ), PX_XOR( L"Manufacturer" ) );
 
 		dbg::Assert( !wstrSystemParts[ SYS_CPU ].empty( )
 					 && !wstrSystemParts[ SYS_GPU ].empty( )
@@ -145,16 +145,15 @@ namespace PX::sys
 					break;
 			} while ( Process32Next( hSnapshot, &peTarget ) == TRUE );
 
-			if ( !dbg::Assert( GetLastError( ) != ERROR_NO_MORE_FILES ) )
-			{
-				CloseHandle( hSnapshot );
-				return 0;
-			}
+			CloseHandle( hSnapshot );
+
+			if ( GetLastError( ) == ERROR_NO_MORE_FILES )
+				return 0u;
 		}
 		else
 		{
 			CloseHandle( hSnapshot );
-			return 0;
+			return 0u;
 		}
 
 		return peTarget.th32ProcessID;

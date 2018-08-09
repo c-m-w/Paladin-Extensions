@@ -34,7 +34,7 @@ namespace PX::UI::Widgets
 			inline static nk_plugin_filter fnFilter = fnDecimal;
 			static int ret( char* szBuffer )
 			{
-				return strlen( szBuffer ) ? std::stoi( szBuffer ) : 0;
+				return strlen( szBuffer ) && strcmp( szBuffer, "-" ) ? std::stoi( szBuffer ) : 0;
 			}
 		};
 
@@ -63,7 +63,7 @@ namespace PX::UI::Widgets
 		iCurrentRowUsedColumns++;
 
 		if ( HoveringNextWidget( ) )
-			Render::SetCursor( Render::CURSOR_IBEAM );
+			SetWidgetActive( Render::CURSOR_IBEAM );
 		EditTextBox( Manager::pContext, NK_EDIT_FIELD | NK_EDIT_AUTO_SELECT, szBuffer, uMaxCharacters, SFilterImplementation< _t >::fnFilter );
 		return SFilterImplementation< _t >::ret( szBuffer );
 	}

@@ -23,10 +23,6 @@ namespace PX::Render
 				mmtRestoreWindow = Tools::GetMoment( );
 				return true;
 
-			case WM_SETCURSOR:
-				if ( llParam == HTCLIENT )
-					return true;
-
 			case WM_DESTROY:
 				PostQuitMessage( 0 );
 				return 0;
@@ -59,11 +55,6 @@ namespace PX::Render
 			       : DefWindowProc( _hwWindowHandle, uMessage, uwParam, llParam );
 	}
 
-	void PX_API SetCursor( ECursor curType )
-	{
-		SetCursor( hCursors[ curType ] ? hCursors[ curType ] : hCursors[ CURSOR_NONE ] );
-	}
-
 	void PX_API SetWindowSize( unsigned uWidth, unsigned uHeight )
 	{
 		uWindowWidth = uWidth;
@@ -90,12 +81,6 @@ namespace PX::Render
 		wndWindow.hIcon = HICON( LoadImage( nullptr, ( strResourceDirectory + LR"(Paladin Logo.ico)" ).c_str( ),
 		                                    IMAGE_ICON, 0, 0, LR_LOADFROMFILE | LR_DEFAULTSIZE | LR_SHARED ) );
 
-		hCursors[ CURSOR_NONE ] = LoadCursor( nullptr, IDC_ARROW );
-		hCursors[ CURSOR_ARROW ] = LoadCursorFromFile( ( strResourceDirectory + LR"(Cursor\Arrow.cur)" ).c_str( ) );
-		hCursors[ CURSOR_HAND ] = LoadCursorFromFile( ( strResourceDirectory + LR"(Cursor\Hand.cur)" ).c_str( ) );
-		hCursors[ CURSOR_IBEAM ] = LoadCursorFromFile( ( strResourceDirectory + LR"(Cursor\I Beam.cur)" ).c_str( ) );
-
-		wndWindow.hCursor = hCursors[ CURSOR_ARROW ] ? hCursors[ CURSOR_ARROW ] : hCursors[ CURSOR_NONE ];
 		wndWindow.lpszClassName = wszWindowTitle;
 		const auto atInstance = RegisterClassEx( &wndWindow );
 
