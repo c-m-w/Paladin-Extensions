@@ -64,6 +64,11 @@
 #define PX_MOV_EDX	0xBA
 #define PX_PUSH		0x68
 
+#define PX_FILE_SECTIONS 7
+
+#define PX_GAME_CSGO 2
+#define PX_GAME_PUBG 3
+
 #if defined _DEBUG
 #define PX_DEPENDENCIES_ESCAPE 3
 #else

@@ -5,16 +5,17 @@
 	// TODO: Check loader hash.
 	
 	define("ReturnKeys",
-		array( "Invalid Hash"			=> "-1",
-		"Establishing Failure" 			=> "0", // Couldn't connect / set up database info
-        "Banned" 						=> "1", // banned login attempt
-        "Identity Mismatch" 			=> "2", // secret_key / unique_id mismatch
-        "Inactive Premium" 				=> "3", // premium time exceeded
-        "Staff Success" 				=> "8", // staff member logged in
-        "Success" 						=> "9" ) );
+		array( 
+        "Establishing Failure" 			=> "1", // Couldn't connect / set up database info or unique id and secret key arent found / debugger is found
+        "Invalid Hash"			        => "2",
+        "Banned" 						=> "3", // banned login attempt
+        "Hardware Mismatch"             => "4",
+        "Inactive Premium" 				=> "5", // premium time exceeded
+        "Success" 						=> "6", // regular user logged in
+        "Staff Success" 				=> "7"  // staff member logged in
+        ) );
 	
-	define( "SQL", array( "ServerName" => "localhost", "DatabaseUsername" => "palatfef_admin", "DatabasePassword" => "", "DatabaseName" => "palatfef_xenforo" ) );
-	$sql_connection = new mysqli( SQL[ "ServerName" ], SQL[ "DatabaseUsername" ], SQL[ "DatabasePassword" ], SQL[ "DatabaseName" ] );
+	$sql_connection = new mysqli( "localhost", "palatfef_admin", "_paladin_ext()++", "palatfef_xenforo" );
 
 	function GenerateKeys( )
 	{
@@ -23,48 +24,158 @@
 		$keys[ "iv" ] = substr( $keys[ "key" ], 0, 16) ;
 		return $keys;
 	}
+
+    define( "Keys", GenerateKeys( ) );
 	
-	function GenerateIdentifier( $plain_text ) // Anything indexing the $_POST global needs to be one of these identifiers.
+	function GenerateIdentifier( $identifier ) // Anything indexing the $_POST global needs to be one of these identifiers.
 	{
-		return substr( md5( md5( Keys[ "iv" ] ) . md5( $plain_text) ), 4, 14); // Start and finish can be random, as long as they match the client
+		return substr( sha1( sha1( Keys[ "iv" ] ) . sha1( $identifier ) ), 0, 16 ); // encrypt the identifier for a random hash each time
 	}
 	
 	define( "EncryptionMethod", "AES-256-CBC" );
 	
 	function Encrypt( $plain_text )
 	{
-		return openssl_encrypt( $plain_text, EncryptionMethod, Keys[ "enc_key" ], 0, Keys[ "iv" ] ); // Base64 encode then encrypt.
+		return openssl_encrypt( $plain_text, EncryptionMethod,isset( $_SESSION[ "key" ] ) ? $_SESSION[ "key" ] : Keys[ "key" ], 0, isset( $_SESSION[ "iv" ] ) ? $_SESSION[ "iv" ] : Keys[ "iv" ] ); // Base64 encode then encrypt.
 	}
 	
 	function Decrypt( $cipher_text )
 	{
-		return openssl_decrypt( $cipher_text, EncryptionMethod, Keys[ "enc_key" ], 0, Keys[ "iv" ] ); // Base64 decode then decrypt.
+        // We remove the == at the end so its not obvious if someone is packet sniffing that it's base 64'd. CryptoPP adds a \n at the end for some reason so we also have to re-add that.
+		return openssl_decrypt( str_replace( " ", "+", $cipher_text ) . PHP_EOL, EncryptionMethod, isset( $_SESSION[ "key" ] ) ? $_SESSION[ "key" ] : Keys[ "key" ], 0, isset( $_SESSION[ "iv" ] ) ? $_SESSION[ "iv" ] : Keys[ "iv" ] ); // Base64 decode then decrypt.
 	}
+
+    function GetUserFromIP( )
+    {
+        global $sql_connection;
+
+        $ip = "0x" . dechex( ip2long( $_SERVER[ "REMOTE_ADDR"] ) );
+        $result = $sql_connection->query( 'SELECT user_id FROM xf_ip WHERE ip =' . $ip );
+
+        if( $result->num_rows == 0 )
+            return false;
+
+        $row = $result->fetch_assoc( );
+        $user_id = $row[ "user_id" ];
+        $result = $sql_connection->query( 'SELECT secret_key FROM xf_user WHERE user_id = "' . $user_id . '"' );
+
+        if( $result->num_rows == 0 )
+            return false;
+
+        return array( "id" => $user_id, "sk" => $result->fetch_assoc( )[ "secret_key" ] );
+    }
 	
-	define( "UnsafeKeywords", array( " drop ", " delete " ) ); // TODO: Add all unsafe keywords.
+	define( "UnsafeKeywords", array( " drop ", " delete ", " select ", " alter ", " table ", " class ", " DROP ", " DELETE ", " SELECT ", " ALTER ", " TABLE ", " CLASS " ) ); // TODO: Add all unsafe keywords.
 	
-	function SanitizeInput( $userinfo )
+	function SanitizeInput( $string )
 	{
-		foreach( $userinfo as $info )
-		{
-			$info = $sql_connection->real_escape_string( strip_tags( trim( $info ) ) );
-			str_replace( UnsafeKeywords, "", $info );
-			$returninfo[ ] = $info;
-		}
-		return $returninfo;
+        global $sql_connection;
+		return $sql_connection->escape_string( strip_tags( trim( str_replace( UnsafeKeywords, "", $string ) ) ) );
 	}
+
+    $secondary_group_ids = 0;
+    $is_staff = false;
+    $is_banned = false;
+
+    function ValidUser( $user_id, $secret_key )
+    {
+        global $sql_connection;
+        global $secondary_group_ids;
+        global $is_staff;
+        global $is_banned;
+
+        $result = $sql_connection->query( "SELECT secondary_group_ids, is_banned, is_staff FROM xf_user WHERE user_id = " . $user_id . " AND secret_key = '" . $secret_key . "'" );
+        
+        if( $result->num_rows == 0 )
+            return false;
+
+        $row = $result->fetch_assoc( );
+        $secondary_group_ids = $row[ "secondary_group_ids" ];
+        $is_staff = $row[ "is_staff" ];
+        $is_banned = $row[ "is_banned" ];
+        return true;
+    }
+
+    function GetUniqueID( $user_id )
+    {
+        global $sql_connection;
+
+        $result = $sql_connection->query( "SELECT field_value FROM xf_user_field_value WHERE field_id = 'unique_id' AND user_id = '" . $user_id . "'" );
+        
+        if( $result->num_rows == 0 )
+            return 0;
+        return $result->fetch_assoc( )[ "field_value" ];
+    }
+
+    // https://iphub.info/api
+    function GetIPInformation( )
+    {
+        $curl = curl_init( );
+
+        curl_setopt( $curl, CURLOPT_URL, "http://v2.api.iphub.info/ip/" . $_SERVER[ "REMOTE_ADDR" ] );
+        curl_setopt( $curl, CURLOPT_RETURNTRANSFER, true );
+        curl_setopt( $curl, CURLOPT_HTTPHEADER, array( "X-Key: MjkxMzpaTFZoNVVjakR2bGU0ZmlucW95WlFrMWhxMmtVMzNlNA==" ) );
+
+        $response = json_decode( curl_exec( $curl ), true );
+        curl_close( $curl );
+        return $response;
+    }
+
+    function PutLoginAttempt( $user_id, $cur_unique_id, $hardware, $code )
+    {
+        global $sql_connection;
+
+        $info = GetIPInformation( );
+        if( $hardware == NULL )
+            $unique_id = 0;
+         else
+         {
+            $result = $sql_connection->query( 'SELECT unique_id FROM px_unique_id WHERE user_id = '. $user_id . ' AND cpu = "' . $hardware[ "cpu" ] . '" AND gpu = "' . $hardware[ "gpu" ] . '" AND display = "' . $hardware[ "display" ] . '" AND os = "' . $hardware[ "os" ] . '" AND board = "' . $hardware[ "board" ] . '"' );
+            if( $result->num_rows == 0 )
+                $unique_id = NULL;
+            else
+                $unique_id = $result->fetch_assoc( )[ "unique_id" ];
+         }
+        $sql_connection->query( 'INSERT INTO px_logins VALUES (' . ( int )$user_id . ', ' . ( int )time( ) . ', ' . ( int )$cur_unique_id . ', ' . $unique_id . ', "' . ( string )$info[ "ip" ] . '", "' . ( string )$info[ "isp" ] . '", "' . ( string )$info[ "countryCode" ] . '", ' . ( int )$code . ')' );
+        return ( string )$code;
+    }
+
+    function InsertNewHardware( $unique_id, $user_id, $hardware )
+    {
+        global $sql_connection;
+
+         // Don't break the query line.
+        $sql_connection->query( 'INSERT INTO px_unique_id VALUES (0, ' . $user_id . ', "' . $hardware[ "cpu" ] . '", "' . $hardware[ "gpu" ] . '", "' . $hardware[ "display" ] . '", "' . $hardware[ "os" ] . '", "' . $hardware[ "board" ] . '")' );
+    }
+
+    function ValidateHardware( $unique_id, $user_id, $hardware )
+    {
+        global $sql_connection;
+
+        $result = $sql_connection->query( 'SELECT * FROM px_unique_id WHERE user_id = '. $user_id . ' AND cpu = "' . $hardware[ "cpu" ] . '" AND gpu = "' . $hardware[ "gpu" ] . '" AND display = "' . $hardware[ "display" ] . '" AND os = "' . $hardware[ "os" ] . '" AND board = "' . $hardware[ "board" ] . '"' );
+
+        if( $result->num_rows == 0 )
+        {
+             InsertNewHardware( $unique_id, $user_id, $hardware );
+             return false;
+        }
+        
+        $row = $result->fetch_assoc( );
+        return $row[ "unique_id" ] == $unique_id;
+    }
 	
-	function BeginSession( $enckey, $iv )
+	function BeginSession( )
 	{
+        global $is_staff;
+
 		session_start( );
-		$_SESSION[ "enc_key" ] = $enckey;
-		$_SESSION[ "iv" ] = $iv;
+		$_SESSION[ "key" ] = Keys[ "key" ];
+		$_SESSION[ "iv" ] = Keys[ "iv" ];
+        $_SESSION[ "is_staff" ] = $is_staff;
 	}
 	
-	define( "ExtensionDirectory", "../Extensions/" );
-	define( "GameID", array( "CS: GO" => 2, "PUBG" => 3 ) );
-	define( "GameInfo", array( 2 => ExtensionDirectory . "csgo.info", 3 => ExtensionDirectory . "pubg.info" ) );
-	define( "GameCheat", array( 2=> ExtensionDirectory . "csgo.dll", 3 => ExtensionDirectory . "pubg.dll" ) );
+	define( "GameInfo", array( 2 => "../../Extensions/csgo.info", 3 => "../../Extensions/pubg.info" ) );
+	define( "GameCheat", array( 2 => "../../Extensions/csgo.dll", 3 => "../../Extensions/pubg.dll" ) );
 	
 	function CompileCheat( $game_id )
 	{
@@ -72,20 +183,49 @@
 		exec( "g++ -o ".GameCheat[ $game_id ]." **FILE TO COMPILE**" );
 	}
 	
-	function SendCheat( $game_id )
+    define( "FileSections", 7 );
+
+    function GenerateRandomOrder( )
+    {
+        for( $i = 0; $i < FileSections; $i++ )  
+        {
+            do
+            {
+                $number = rand( 0, FileSections - 1 );
+            } while( $used_sections[ $number ] === true );
+
+            $used_sections[ $number ] = true;
+            $section_order[ $i ] = $number;
+        }
+        return $section_order;
+    }
+
+    function GenerateSections( $file_name, $order )
+    {
+        clearstatcache( );
+        $file_data = file_get_contents( $file_name );
+        $file_size = strlen( $file_data );
+        $size_per_section = ( int )ceil( $file_size / FileSections );
+        
+        for( $i = 0; $i < FileSections; $i++ )
+            $ordered_sections[ $i ] = Encrypt( substr( $file_data, $size_per_section * $i, $size_per_section ) );
+        
+        for( $i = 0; $i < FileSections; $i++ )
+            $sections[ $i ] = $ordered_sections[ $order[ $i ] ];
+        return $sections;
+    }
+
+	function GetDLL( $game_id )
 	{
-		session_start( );
-		if( $_SESSION[ "logged_in" ] == TRUE )
-			echo openssl_encrypt( file_get_contents( GameCheat[ $game_id ] ), EncryptionMethod, $_SESSION[ "enc_key" ], 0, $_SESSION[ "iv" ] );
-		else
-			echo ReturnKeys[ "Establishing Failure" ];
+        $order = GenerateRandomOrder( );
+		return Encrypt( json_encode( array( "Order" => $order, "Sections" => GenerateSections( GameCheat[ $game_id ], $order ) ) ) );
 	}
 	
 	function SendInformation( $game_id )
 	{
 		session_start( );
 		if( $_SESSION[ "logged_in" ] == TRUE )
-			echo openssl_encrypt( file_get_contents( GameInfo[ $game_id ] ), EncryptionMethod, $_SESSION[ "enc_key" ], 0, $_SESSION[ "iv" ] );
+			echo openssl_encrypt( file_get_contents( GameInfo[ $game_id ] ), EncryptionMethod, $_SESSION[ "key" ], 0, $_SESSION[ "iv" ] );
 		else
 			echo ReturnKeys[ "Establishing Failure" ];
 		session_destroy( );

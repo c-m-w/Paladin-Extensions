@@ -48,6 +48,8 @@ namespace PX::Files
 		// INFO: Changes json configuration to reference desired configuration
 		// *return*: false if path does not exist or there was an issue prcoessing the file, true if changed/is same file
 		bool PX_API ChangeConfiguration( Types::wcstr_t );
-
 	};
+
+	bool PX_API ReadFile( std::wstring wstrPath, std::string& strData, bool bRelativePath, bool bBase64 = true );
+	bool PX_API WriteFile( std::wstring wstrPath, const std::wstring& wstrData, bool bRelativePath, bool bBase64 = true );
 }

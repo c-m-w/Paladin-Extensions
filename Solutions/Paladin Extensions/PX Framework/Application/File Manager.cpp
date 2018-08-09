@@ -13,14 +13,14 @@ namespace PX::Files
 		for ( unsigned i = 0u; i <= uEscapeLevels; i++ )
 			wstrDirectory = wstrDirectory.substr( 0, wstrDirectory.find_last_of( L'\\' ) );
 
-		return wstrDirectory;
+		return wstrDirectory + L"\\";
 	}
 
 	namespace Resources
 	{
 		bool LoadResources( const std::string& strHash )
 		{
-			std::wstring wstrPath = GetDirectory( PX_DEPENDENCIES_ESCAPE ) + LR"(\Resources\)";
+			std::wstring wstrPath = GetDirectory( PX_DEPENDENCIES_ESCAPE ) + LR"(Resources\)";
 
 			bool bFilesExist = std::filesystem::exists( ( wstrPath + LR"(Paladin Logo.ico)" ).c_str( ) )
 					& std::filesystem::exists( ( wstrPath + LR"(Paladin Logo.png)" ).c_str( ) )
@@ -161,5 +161,32 @@ namespace PX::Files
 			return true;
 		}
 		return false;
+	}
+
+	bool PX_API ReadFile( std::wstring wstrPath, std::string& strData, bool bRelativePath, bool bBase64 /*= true*/ )
+	{
+		if ( !dbg::Assert( !wstrPath.empty( ) ) )
+			return false;
+
+		std::ifstream fFile( bRelativePath ? GetDirectory( 0 ) + wstrPath : wstrPath );
+
+		if ( !fFile.good( ) )
+			return false;
+
+		std::stringstream ssReturn { };
+		ssReturn << fFile.rdbuf( );
+		strData = bBase64 ? Cryptography::Base64< CryptoPP::Base64Decoder >( ssReturn.str( ) ) : ssReturn.str( );
+		return true;
+	}
+
+	bool PX_API WriteFile( std::wstring wstrPath, const std::wstring& wstrData, bool bRelativePath, bool bBase64 /*= true*/ )
+	{
+		if ( !dbg::Assert( !wstrPath.empty( ) && !wstrData.empty( ) ) )
+			return false;
+
+		std::ofstream fFile( bRelativePath ? GetDirectory( 0 ) + wstrPath : wstrPath );
+
+		fFile.write( bBase64 ? Cryptography::Base64< CryptoPP::Base64Encoder >( Tools::string_cast< std::string >( wstrData ) ).c_str( ) : Tools::string_cast< std::string >( wstrData ).c_str( ), wstrData.length( ) );
+		return true;
 	}
 }

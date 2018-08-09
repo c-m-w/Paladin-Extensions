@@ -151,9 +151,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Functionality.hpp" />
     <ClInclude Include="PX Manager.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Functionality.cpp" />
     <ClCompile Include="PX Manager.cpp" />
   </ItemGroup>
   <ItemGroup>

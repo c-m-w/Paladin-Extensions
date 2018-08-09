@@ -4,8 +4,16 @@
 
 namespace PX::Net
 {
-	/** \brief Base site address. */
-	PX_SDK const std::string strSite = PX_XOR( "https://paladin.rip" );
+	PX_SDK std::string strUserIDIdentifier		= PX_XOR( "id" );
+	PX_SDK std::string strExtensionIdentifier	= PX_XOR( "ext" );
+	PX_SDK std::string strFileIdentifier		= PX_XOR( "file" );
+	PX_SDK std::string strHardwareIdentifier	= PX_XOR( "hw" );
+	PX_SDK std::string strSecretKeyIdentifier	= PX_XOR( "sk" );
+	PX_SDK std::string strUniqueIDIdentifier	= PX_XOR( "uid" );
+	
+	PX_SDK std::string strLoginURL		= PX_XOR( "https://www.paladin.rip/auth/auth.php" );
+	PX_SDK std::string strKeyURL		= PX_XOR( "https://www.paladin.rip/auth/key.php" );
+	PX_SDK std::string strDownloadURL	= PX_XOR( "https://www.paladin.rip/auth/download.php" );
 
 	/** \brief Pointer where the connection information is stored. */
 	PX_SDK CURL* pConnection = nullptr;
@@ -34,4 +42,6 @@ namespace PX::Net
 	/** \param dqPostData Post data to send to the site. */
 	/**	\return What the site sends back from the request. */
 	std::string PX_API Request( const std::string& strSite, const std::deque< Net::post_data_t >& dqPostData );
+
+	std::string PX_API RequestFile( unsigned uGameID, bool bInformation );
 }

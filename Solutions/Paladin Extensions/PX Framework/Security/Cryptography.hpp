@@ -40,7 +40,7 @@ namespace PX
 					Always should be ten characters long and requires Initialize( ) to be called beforehand */
 		/**	\param strIdentifier Plain text identifier title. */
 		/**	\return Processed identifier which has been encrypted and encoded. */
-		std::string PX_API CreateIdentifier( const std::string& strIdentifier );
+		std::string PX_API GenerateIdentifier( const std::string& strIdentifier );
 	}
 
 	namespace XOR

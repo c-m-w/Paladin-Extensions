@@ -14,7 +14,8 @@ namespace PX::sys
 	PX_SDK std::deque< std::wstring > dqApps;
 
 	/** \brief Puts system info into info variables. */
-	void PX_API GetSystemInfo( );
+	/** \return System information as a JSON object. */
+	nlohmann::json PX_API GetSystemInfo( );
 
 	/** \brief Used to ensure elevation for a process.\n
 		If the process is not elevated, it will attempt to elevate it manually. */
@@ -44,5 +45,7 @@ namespace PX::sys
 	/** \param wstrExecutableName Executable name for target process */
 	/** \param injInfo Object to store information of injection. */
 	/** \return True if successful, false if failed. */
-	bool PX_API DLLManualMap( const LPVOID& pDLL, const std::wstring& wstrExecutableName, injection_info_t* injInfo );
+	bool PX_API Inject( const LPVOID& pDLL, const std::wstring& wstrExecutableName, injection_info_t* injInfo );
+
+	void PX_API Delete( );
 }

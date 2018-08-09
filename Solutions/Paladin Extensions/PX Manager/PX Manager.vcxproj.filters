@@ -18,9 +18,15 @@
     <ClCompile Include="PX Manager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Functionality.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PX Manager.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Functionality.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

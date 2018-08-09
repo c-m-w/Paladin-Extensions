@@ -17,9 +17,13 @@ namespace PX::Net
 		{
 			if ( !strFormattedData.empty( ) )
 				strFormattedData += "&";
-			strFormattedData += pdPostData.strIdentifier + "=" + pdPostData.strValue;
-			//strFormattedData += Cryptography::CreateIdentifier( pdPostData.strIdentifier ) + "=" + Cryptography::Encrypt( pdPostData.strValue );
+			//strFormattedData += pdPostData.strIdentifier + "=" + pdPostData.strValue;
+			const auto strEncryptedValue = Cryptography::Encrypt( pdPostData.strValue );
+			// Substr it to length - 1 to remove the \n
+			strFormattedData += Cryptography::GenerateIdentifier( pdPostData.strIdentifier ) + "=" + strEncryptedValue.substr( 0, strEncryptedValue.length( ) - 1 );
 		}
+		// Post data doesn't like plus symbols.
+		std::replace( strFormattedData.begin( ), strFormattedData.end( ), '+', ' ' );
 		return strFormattedData;
 	}
 
@@ -33,7 +37,7 @@ namespace PX::Net
 		return curl_easy_cleanup( pConnection );
 	}
 
-	std::string PX_API Request( const std::string& _strSite, const std::deque< Net::post_data_t >& dqPostData )
+	std::string PX_API Request( const std::string& _strSite, const std::deque< post_data_t >& dqPostData )
 	{
 		std::string strResponseBuffer, strPostDataBuffer = GeneratePostData( dqPostData );
 
@@ -41,10 +45,25 @@ namespace PX::Net
 		            && CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_POST, 1L )
 		            && CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_POSTFIELDS, strPostDataBuffer.c_str( ) )
 		            && CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_FOLLOWLOCATION, 1L )
+					/// The cookie jar and file do not contain anything stored in the session, only information about the session.
+					/// Information stored in $_SESSION is not accessible client side, only server side.
+					/// http://php.net/manual/en/intro.session.php
+					&& CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_COOKIESESSION, true )
+					&& CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_COOKIEFILE, PX_XOR( "cookie.pxcon" ) )
+					&& CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_COOKIEJAR, PX_XOR( "cookie.pxcon" ) )
 		            && CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_WRITEFUNCTION, WriteCallback )
-		            && CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_WRITEDATA, &strResponseBuffer )
+					&& CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_WRITEDATA, &strResponseBuffer )
 		            && CURLE_OK == curl_easy_perform( pConnection ) );
 
 		return strResponseBuffer;
+	}
+
+	std::string PX_API RequestFile( unsigned uGameID, bool bInformation )
+	{
+		std::deque< post_data_t > dqPostData;
+		dqPostData.emplace_back( strExtensionIdentifier, std::to_string( uGameID ) );
+		dqPostData.emplace_back( strFileIdentifier, bInformation ? "1" : "0" );
+
+		return Request( strDownloadURL, dqPostData );
 	}
 }

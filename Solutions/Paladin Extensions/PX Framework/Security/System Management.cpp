@@ -50,13 +50,13 @@ namespace PX::sys
 		return wstrInfo;
 	}
 
-	void PX_API GetSystemInfo( )
+	nlohmann::json PX_API GetSystemInfo( )
 	{
-		wstrSystemParts[ SYS_CPU ] = RetrieveInfo( L"SELECT * FROM Win32_Processor" );
-		wstrSystemParts[ SYS_GPU ] = RetrieveInfo( L"SELECT * FROM CIM_PCVideoController" );
-		wstrSystemParts[ SYS_DISPLAY ] = RetrieveInfo( L"SELECT * FROM Win32_DesktopMonitor" );
-		wstrSystemParts[ SYS_OS ] = RetrieveInfo( L"SELECT * FROM CIM_OperatingSystem" );
-		wstrSystemParts[ SYS_BOARD ] = RetrieveInfo( L"SELECT * FROM Win32_BaseBoard", L"Product" );
+		wstrSystemParts[ SYS_CPU ]		= RetrieveInfo( PX_XOR( L"SELECT * FROM Win32_Processor" ) );
+		wstrSystemParts[ SYS_GPU ]		= RetrieveInfo( PX_XOR( L"SELECT * FROM CIM_PCVideoController" ) );
+		wstrSystemParts[ SYS_DISPLAY ]	= RetrieveInfo( PX_XOR( L"SELECT * FROM Win32_DesktopMonitor" ) );
+		wstrSystemParts[ SYS_OS ]		= RetrieveInfo( PX_XOR( L"SELECT * FROM CIM_OperatingSystem" ) );
+		wstrSystemParts[ SYS_BOARD ]	= RetrieveInfo( PX_XOR( L"SELECT * FROM Win32_BaseBoard", L"Manufacturer" ) );
 
 		dbg::Assert( !wstrSystemParts[ SYS_CPU ].empty( )
 					 && !wstrSystemParts[ SYS_GPU ].empty( )
@@ -64,17 +64,30 @@ namespace PX::sys
 					 && !wstrSystemParts[ SYS_OS ].empty( )
 					 && !wstrSystemParts[ SYS_BOARD ].empty( ) );
 
-		wstrInstallUSBName = RetrieveInfo( L"SELECT * FROM CIM_LogicalDisk", L"Model" ); // TODO @Skel get the install usb name/model, then store it in this variable
-		dbg::Assert( !wstrInstallUSBName.empty( ) );
+		for each( auto &wstr in wstrSystemParts )
+			if ( wstr.length( ) > 50 )
+				wstr = wstr.substr( 0, 50 );
 
-		std::wstring wstrBuffer = RetrieveInfo( L"SELECT * FROM CIM_LogicalDisk", L"Model" );
-		dbg::Assert( !wstrBuffer.empty( ) );
-
-		while ( !wstrBuffer.substr( wstrBuffer.find_first_of( L'\n' ), wstrBuffer.size( ) ).empty( ) )
+		return nlohmann::json
 		{
-			dqApps.emplace_back( wstrBuffer.substr( 0, wstrBuffer.find_first_of( L'\n' ) ) );
-			wstrBuffer = wstrBuffer.substr( wstrBuffer.find_first_of( L'\n' ), wstrBuffer.size( ) );
-		}
+			{ "cpu"		, Tools::string_cast< std::string >( wstrSystemParts[ SYS_CPU ] ) },
+			{ "gpu"		, Tools::string_cast< std::string >( wstrSystemParts[ SYS_GPU ] ) },
+			{ "display"	, Tools::string_cast< std::string >( wstrSystemParts[ SYS_DISPLAY ] ) },
+			{ "os"		, Tools::string_cast< std::string >( wstrSystemParts[ SYS_OS ] ) },
+			{ "board"	, Tools::string_cast< std::string >( wstrSystemParts[ SYS_BOARD ] ) },
+		};
+
+		//wstrInstallUSBName = RetrieveInfo( L"SELECT * FROM CIM_LogicalDisk", L"Model" ); // TODO @Skel get the install usb name/model, then store it in this variable
+		//dbg::Assert( !wstrInstallUSBName.empty( ) );
+		//
+		//std::wstring wstrBuffer = RetrieveInfo( L"SELECT * FROM CIM_LogicalDisk", L"Model" );
+		//dbg::Assert( !wstrBuffer.empty( ) );
+		//
+		//while ( !wstrBuffer.substr( wstrBuffer.find_first_of( L'\n' ), wstrBuffer.size( ) ).empty( ) )
+		//{
+		//	dqApps.emplace_back( wstrBuffer.substr( 0, wstrBuffer.find_first_of( L'\n' ) ) );
+		//	wstrBuffer = wstrBuffer.substr( wstrBuffer.find_first_of( L'\n' ), wstrBuffer.size( ) );
+		//}
 	}
 
 	bool PX_API EnsureElevation( HANDLE hProcess /*= nullptr*/ )
@@ -288,7 +301,7 @@ namespace PX::sys
 	}
 	*/
 
-	bool PX_API DLLManualMap( const LPVOID& pDLL, const std::wstring& wstrExecutableName, injection_info_t* injInfo )
+	bool PX_API Inject( const LPVOID& pDLL, const std::wstring& wstrExecutableName, injection_info_t* injInfo )
 	{
 		HANDLE hTarget { },
 			hThread { };
@@ -452,5 +465,10 @@ namespace PX::sys
 
 		fnCleanup( false );
 		return true;
+	}
+
+	void PX_API Delete( )
+	{
+		
 	}
 }
