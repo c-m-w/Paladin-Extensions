@@ -371,9 +371,9 @@ namespace PX::sys
 		injInfo->fnGetProcAddress = GetProcAddress;
 
 		//// allocate memory in & write data to target process
-		if ( !( pMemory = VirtualAllocEx( hTarget, nullptr, 4096, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE ) ) ||
-			 !( pStub = VirtualAllocEx( hTarget, nullptr, 4096, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE ) ) ||
-			 !WriteProcessMemory( hTarget, pMemory, injInfo, INJECTION_INFO_SIZE, nullptr ) ||
+		pMemory = VirtualAllocEx( hTarget, nullptr, 4096, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE );
+		pStub = VirtualAllocEx( hTarget, nullptr, 4096, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE );
+		if ( !WriteProcessMemory( hTarget, pMemory, injInfo, INJECTION_INFO_SIZE, nullptr ) ||
 			 !WriteProcessMemory( hTarget, PVOID( ptr_t( pMemory ) + sizeof( injection_info_t ) ), bCallDLLThread, CALL_DLL_THREAD_SIZE, nullptr ) )
 		{
 			fnCleanup( true );

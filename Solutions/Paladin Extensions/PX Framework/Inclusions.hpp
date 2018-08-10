@@ -1,6 +1,7 @@
 /// Inclusions.hpp
 
 #pragma once
+#pragma warning( push, 0 )
 
 #include <Jeremia-h/Standard Library.hpp>
 
@@ -19,11 +20,7 @@
 #pragma comment( lib, "wldap32.lib" )
 #pragma comment( lib, "Crypt32.lib" )
 #pragma comment( lib, "Normaliz.lib" )
-#ifdef _DEBUG
-#pragma comment( lib, "libcurl_a_debug.lib" )
-#else
 #pragma comment( lib, "libcurl_a.lib" )
-#endif
 
 #include <comdef.h>
 #include <WbemIdl.h>
@@ -32,11 +29,11 @@
 
 #include <Psapi.h>
 
-#include <d3d9.h>
-#include <d3dx9math.h>
-#include <d3dx9core.h>
-#include <d3dx9tex.h>
+#include <DirectX/d3d9.h>
 #pragma comment( lib, "d3d9.lib" )
+#include <DirectX/d3dx9core.h>
+#include <DirectX/d3dx9math.h>
+#include <DirectX/d3dx9tex.h>
 #pragma comment( lib, "d3dx9.lib" )
 
 #include <IconFontCppHeaders/IconsFontAwesome5-Solid.hpp>
@@ -49,3 +46,5 @@
 
 #include <playsoundapi.h>
 #pragma comment( lib, "Winmm.lib" )
+
+#pragma warning( pop )
