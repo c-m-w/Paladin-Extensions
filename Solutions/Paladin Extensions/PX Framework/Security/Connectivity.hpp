@@ -31,7 +31,7 @@ namespace PX::Net
 	/** \brief Formats passed post data into a string that can be used as post data in a connection. */
 	/**	\param dqPostData All of the elements that are to be included in the formatted data. */
 	/**	\return Formatted post data string. */
-	std::string PX_API GeneratePostData( const std::deque< Net::post_data_t >& dqPostData );
+	std::string PX_API GeneratePostData( const std::deque< post_data_t >& dqPostData );
 	/** \brief Attempts to initialize cURL. */
 	/**	\return true - Initialization was successful.\n false - Initialization was not successful. */
 	bool PX_API InitializeConnection( );
@@ -41,7 +41,7 @@ namespace PX::Net
 	/**	\param strSite Site to make the request to.	*/
 	/** \param dqPostData Post data to send to the site. */
 	/**	\return What the site sends back from the request. */
-	std::string PX_API Request( const std::string& strSite, const std::deque< Net::post_data_t >& dqPostData );
+	std::string PX_API Request( const std::string& strSite, const std::deque< post_data_t >& dqPostData );
 
 	std::string PX_API RequestFile( unsigned uGameID, bool bInformation );
 }

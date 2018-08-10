@@ -4,9 +4,9 @@
 
 namespace PX
 {
-	LRESULT WINAPI WndProc( HWND, UINT, WPARAM, LPARAM );
+	using namespace Tools;
 
-	class CInputManager: public Tools::SSingleton< CInputManager >
+	class CInputManager: public ASingleton< CInputManager >
 	{
 	public:
 		enum EKeyState
@@ -16,7 +16,7 @@ namespace PX
 		};
 	private:
 		EKeyState stateKeys[ PX_MAX_KEY ];
-		Tools::moment_t mmtKeyDownTime[ PX_MAX_KEY ];
+		moment_t mmtKeyDownTime[ PX_MAX_KEY ];
 		unsigned uLastKeyPressed;
 		std::vector< std::function< void( PX_API )( unsigned ) > > vecfnKeyCallback[ PX_MAX_KEY ];
 		std::vector< std::function< void( PX_API )( unsigned ) > > vecfnGlobalCallbacks;
@@ -29,7 +29,7 @@ namespace PX
 
 		EKeyState PX_API GetKeyState( unsigned );
 		unsigned PX_API GetLastPressedKey( );
-		Tools::moment_t PX_API TimeSinceKeyPress( unsigned );
+		moment_t PX_API TimeSinceKeyPress( unsigned );
 		void PX_API AddKeyCallback( unsigned, std::function< void( int ) > );
 		void PX_API AddGlobalCallback( std::function< void( unsigned ) > );
 	};

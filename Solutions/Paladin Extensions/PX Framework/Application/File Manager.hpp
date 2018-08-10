@@ -32,7 +32,7 @@ namespace PX::Files
 		bool LoadResources( const std::string& );
 	}
 
-	class CConfig: public Tools::SSingleton< CConfig >
+	class CConfig: public ASingleton< CConfig >
 	{
 	public:
 		// INFO: Contains global information generally used for program initialization
@@ -40,14 +40,14 @@ namespace PX::Files
 		// INFO: Contains user-defined information generally used for program customization
 		nlohmann::json jsCurrent;
 		// INFO: Name of current configuration
-		Types::wcstr_t wszCurrent = static_cast< wchar_t* >( malloc( 32 ) );
+		wcstr_t wszCurrent = static_cast< wchar_t* >( malloc( 32 ) );
 
 		CConfig( );
 		// INFO: Saves json configurations
 		void PX_API SaveInformation( );
 		// INFO: Changes json configuration to reference desired configuration
 		// *return*: false if path does not exist or there was an issue prcoessing the file, true if changed/is same file
-		bool PX_API ChangeConfiguration( Types::wcstr_t );
+		bool PX_API ChangeConfiguration( wcstr_t );
 	};
 
 	bool PX_API ReadFile( std::wstring wstrPath, std::string& strData, bool bRelativePath, bool bBase64 = true );

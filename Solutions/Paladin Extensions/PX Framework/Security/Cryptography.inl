@@ -8,26 +8,26 @@ namespace PX
 	{
 		template< typename _t > std::string PX_API Base64( const std::string& strSubject )
 		{
-			dbg::Assert( !strSubject.empty( ) );
+			px_assert( !strSubject.empty( ) );
 			_t _Coder;
-			_Coder.Put( reinterpret_cast< Types::byte_t* >( const_cast< char* >( strSubject.c_str( ) ) ), strSubject.size( ) );
+			_Coder.Put( reinterpret_cast< byte_t* >( const_cast< char* >( strSubject.c_str( ) ) ), strSubject.size( ) );
 			_Coder.MessageEnd( );
 
 			const auto uSize = unsigned( _Coder.MaxRetrievable( ) );
-			dbg::Assert( uSize > 0 );
+			px_assert( uSize > 0 );
 			std::string strProcessedText;
 			strProcessedText.resize( uSize );
-			_Coder.Get( reinterpret_cast< Types::byte_t* >( &strProcessedText[ 0 ] ), uSize );
+			_Coder.Get( reinterpret_cast< byte_t* >( &strProcessedText[ 0 ] ), uSize );
 			return strProcessedText;
 		}
 
 		template< typename _t > std::string PX_API AES256CBC( const std::string& strPlainText )
 		{
-			dbg::Assert( !strEncryptionKey.empty( ) && !strInitializationVector.empty( ) );
+			px_assert( !strEncryptionKey.empty( ) && !strInitializationVector.empty( ) );
 			std::string strOutput;
-			_t _Cryption( reinterpret_cast< Types::byte_t* >( const_cast< char* >( Tools::string_cast< std::string >( strEncryptionKey ).c_str( ) ) ),
-						  strEncryptionKey.length( ), reinterpret_cast< Types::byte_t* >( const_cast< char* >( strInitializationVector.c_str( ) ) ) );
-			CryptoPP::StringSource( Tools::string_cast< std::string >( strPlainText ), true, new
+			_t _Cryption( reinterpret_cast< byte_t* >( const_cast< char* >( string_cast< std::string >( strEncryptionKey ).c_str( ) ) ),
+						  strEncryptionKey.length( ), reinterpret_cast< byte_t* >( const_cast< char* >( strInitializationVector.c_str( ) ) ) );
+			CryptoPP::StringSource( string_cast< std::string >( strPlainText ), true, new
 									CryptoPP::StreamTransformationFilter( _Cryption, new CryptoPP::StringSink( strOutput ) ) );
 			return strOutput;
 		}
@@ -35,60 +35,68 @@ namespace PX
 
 	namespace XOR
 	{
-		template< int iValueToEnsure > PX_ABSTRACT_STRUCT SEnsureCompileTime
+		template< int iValueToEnsure > px_abstract_class AEnsureCompileTime
 		{
+		public:
 			enum: int
 			{
 				VALUE = iValueToEnsure
 			};
 		};
 
-		template< typename > PX_ABSTRACT_STRUCT SCStringTraits;
-		template< std::size_t i > PX_ABSTRACT_STRUCT SCStringTraits< char const( &)[ i ] >
+		template< typename > px_abstract_class ACStringTraits;
+		template< std::size_t i > px_abstract_class ACStringTraits< char const( &)[ i ] >
 		{
+		public:
 			static PX_DEF int_trait_t = 1;
 			typedef char char_trait_t;
 		};
-		template< std::size_t i > PX_ABSTRACT_STRUCT SCStringTraits< wchar_t const( &)[ i ] >
+		template< std::size_t i > px_abstract_class ACStringTraits< wchar_t const( &)[ i ] >
 		{
+		public:
 			static PX_DEF int_trait_t = 2;
 			typedef wchar_t char_trait_t;
 		};
 
-		template< > PX_ABSTRACT_STRUCT SCStringTraits< const char* >
+		template< > px_abstract_class ACStringTraits< const char* >
 		{
+		public:
 			static PX_DEF int_trait_t = 1;
 			typedef char char_trait_t;
 		};
-		template< > PX_ABSTRACT_STRUCT SCStringTraits< const wchar_t* >
+		template< > px_abstract_class ACStringTraits< const wchar_t* >
 		{
+		public:
 			static PX_DEF int_trait_t = 2;
 			typedef wchar_t char_trait_t;
 		};
 
-		template< int... > PX_ABSTRACT_STRUCT SIndexList;
+		template< int... > px_abstract_class AIndexList;
 
-		template< typename, int > PX_ABSTRACT_STRUCT SAppend;
-		template< int... iLeft, int iRight > struct SAppend< SIndexList< iLeft... >, iRight >
+		template< typename, int > px_abstract_class AAppend;
+		template< int... iLeft, int iRight > px_abstract_class AAppend< AIndexList< iLeft... >, iRight >
 		{
-			typedef SIndexList< iLeft..., iRight > result_t;
+		public:
+			typedef AIndexList< iLeft..., iRight > result_t;
 		};
 
-		template< int i > struct SConstructIndexList
+		template< int i > px_abstract_class AConstructIndexList
 		{
-			typedef typename SAppend< typename SConstructIndexList< i - 1 >::result_t, i - 1 >::result_t result_t;
+		public:
+			typedef typename AAppend< typename AConstructIndexList< i - 1 >::result_t, i - 1 >::result_t result_t;
 		};
-		template< > struct SConstructIndexList< 0 >
+		template< > px_abstract_class AConstructIndexList< 0 >
 		{
-			typedef SIndexList< > result_t;
+		public:
+			typedef AIndexList< > result_t;
 		};
 
-		template< typename, typename > PX_ABSTRACT_CLASS CXorString;
-		template< typename _char, int... iIndex > PX_ABSTRACT_CLASS CXorString< _char, SIndexList< iIndex... > >
+		template< typename, typename > px_abstract_class AXorString;
+		template< typename _char, int... iIndex > px_abstract_class AXorString< _char, AIndexList< iIndex... > >
 		{
 			_char _chValue[ sizeof... ( iIndex ) + 1 ];
 
-			static const _char _chXorKey = static_cast< _char >( SEnsureCompileTime< LinearCongruentialGenerator( 10 ) >::VALUE % 0x10000 );
+			static const _char _chXorKey = static_cast< _char >( AEnsureCompileTime< LinearCongruentialGenerator( 10 ) >::VALUE % 0x10000 );
 
 			constexpr _char PX_API EncryptCharacter( const _char _chCharacter, int iIndexParam )
 			{
@@ -96,7 +104,7 @@ namespace PX
 			}
 
 		public:
-			explicit constexpr CXorString( const _char* const _String ): _chValue { EncryptCharacter( _String[ iIndex ], iIndex )... }
+			explicit constexpr AXorString( const _char* const _String ): _chValue { EncryptCharacter( _String[ iIndex ], iIndex )... }
 			{ }
 
 			const _char* PX_API Decrypt( )

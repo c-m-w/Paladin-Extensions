@@ -31,7 +31,7 @@ namespace Manager
 		if ( strResponse.empty( ) )
 			return false;
 
-		Files::WriteFile( wszCredentialsFile, Tools::string_cast< std::wstring >( strResponse ), true, false );
+		Files::WriteFile( wszCredentialsFile, string_cast< std::wstring >( strResponse ), true, false );
 		return true;
 	}
 

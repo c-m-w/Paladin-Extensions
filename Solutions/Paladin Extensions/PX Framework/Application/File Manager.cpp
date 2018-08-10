@@ -2,6 +2,8 @@
 
 #include "../PX Framework.hpp"
 
+using namespace PX::Cryptography;
+
 namespace PX::Files
 {
 	std::wstring PX_API GetDirectory( unsigned uEscapeLevels )
@@ -42,10 +44,10 @@ namespace PX::Files
 			if ( !bFilesExist )
 				return false;
 
-			const auto fnGetFileData = [ ]( Types::wcstr_t szPathToFile )
+			const auto fnGetFileData = [ ]( wcstr_t szPathToFile )
 			{
 				auto pResource = _wfopen( szPathToFile, L"r" );
-				dbg::Assert( pResource );
+				px_assert( pResource );
 
 				fseek( pResource, 0, SEEK_END );
 				const auto lSize = ftell( pResource );
@@ -76,22 +78,22 @@ namespace PX::Files
 			strGameIconsCSGO = fnGetFileData( ( wstrPath + LR"(Game Icons\CSGO.png)" ).c_str( ) );
 			strGameIconsPUBG = fnGetFileData( ( wstrPath + LR"(Game Icons\PUBG.png)" ).c_str( ) );
 
-			auto strResourcesHash = Cryptography::GenerateHash( strLogoICO )
-					+ Cryptography::GenerateHash( strLogoPNG )
+			auto strResourcesHash = GenerateHash( strLogoICO )
+					+ GenerateHash( strLogoPNG )
 
-					+ Cryptography::GenerateHash( strCursorArrow )
-					+ Cryptography::GenerateHash( strCursorHand )
-					+ Cryptography::GenerateHash( strCursorIBeam )
+					+ GenerateHash( strCursorArrow )
+					+ GenerateHash( strCursorHand )
+					+ GenerateHash( strCursorIBeam )
 
-					+ Cryptography::GenerateHash( strFontsEnvy )
-					+ Cryptography::GenerateHash( strFontsFontAwesome )
-					+ Cryptography::GenerateHash( strFontsRoboto )
-					+ Cryptography::GenerateHash( strFontsRobotoBold )
-					+ Cryptography::GenerateHash( strFontsTahoma )
-					+ Cryptography::GenerateHash( strFontsTahomaBold )
+					+ GenerateHash( strFontsEnvy )
+					+ GenerateHash( strFontsFontAwesome )
+					+ GenerateHash( strFontsRoboto )
+					+ GenerateHash( strFontsRobotoBold )
+					+ GenerateHash( strFontsTahoma )
+					+ GenerateHash( strFontsTahomaBold )
 
-					+ Cryptography::GenerateHash( strGameIconsCSGO )
-					+ Cryptography::GenerateHash( strGameIconsPUBG );
+					+ GenerateHash( strGameIconsCSGO )
+					+ GenerateHash( strGameIconsPUBG );
 
 			return strHash == strResourcesHash;
 		}
@@ -104,12 +106,12 @@ namespace PX::Files
 		{
 			std::stringstream ssBuffer;
 			ssBuffer << ifGlobalConfiguration.rdbuf( );
-			jsGlobal = nlohmann::json::parse( Cryptography::Base64< CryptoPP::Base64Decoder >( ssBuffer.str( ) ) );
+			jsGlobal = nlohmann::json::parse( Base64< CryptoPP::Base64Decoder >( ssBuffer.str( ) ) );
 		}
 		else
 			throw std::exception( PX_XOR( "Failed to open global.pxcfg for reading" ) );
 
-		wszCurrent = &Tools::string_cast< std::wstring >( jsGlobal[ PX_XOR( "Default Configuration" ) ].get_ref< std::string& >( ) )[ 0 ];
+		wszCurrent = &string_cast< std::wstring >( jsGlobal[ PX_XOR( "Default Configuration" ) ].get_ref< std::string& >( ) )[ 0 ];
 
 		ChangeConfiguration( wszCurrent );
 	}
@@ -118,18 +120,18 @@ namespace PX::Files
 	{
 		std::ofstream ofGlobalConfiguration( GetDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(\Configurations\global.pxcfg)" ) );
 		if ( ofGlobalConfiguration.good( ) )
-			ofGlobalConfiguration << Cryptography::Base64< CryptoPP::Base64Encoder >( jsGlobal.dump( 4 ) );
+			ofGlobalConfiguration << Base64< CryptoPP::Base64Encoder >( jsGlobal.dump( 4 ) );
 		else
 			throw std::exception( PX_XOR( "Failed to open global.pxcfg for writing" ) );
 
 		std::ofstream ofCurrentConfiguration( GetDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(\Configurations\)" ) + wszCurrent + PX_XOR( L".pxcfg" ) );
 		if ( ofCurrentConfiguration.good( ) )
-			ofCurrentConfiguration << Cryptography::Base64< CryptoPP::Base64Encoder >( jsCurrent.dump( 4 ) );
+			ofCurrentConfiguration << Base64< CryptoPP::Base64Encoder >( jsCurrent.dump( 4 ) );
 		else
-			throw std::exception( ( std::string( PX_XOR( "Failed to open " ) ) + Tools::string_cast< std::string >( wszCurrent ) + PX_XOR( ".pxcfg for writing" ) ).c_str( ) );
+			throw std::exception( ( std::string( PX_XOR( "Failed to open " ) ) + string_cast< std::string >( wszCurrent ) + PX_XOR( ".pxcfg for writing" ) ).c_str( ) );
 	}
 
-	bool PX_API CConfig::ChangeConfiguration( Types::wcstr_t wszConfig )
+	bool PX_API CConfig::ChangeConfiguration( wcstr_t wszConfig )
 	{
 		if ( wszCurrent == wszConfig )
 			return true;
@@ -155,7 +157,7 @@ namespace PX::Files
 				}
 			}
 			else
-				throw std::exception( ( std::string( PX_XOR( "Failed to open " ) ) + Tools::string_cast< std::string >( wszConfig ) + PX_XOR( ".pxcfg for writing" ) ).c_str( ) );
+				throw std::exception( ( std::string( PX_XOR( "Failed to open " ) ) + string_cast< std::string >( wszConfig ) + PX_XOR( ".pxcfg for writing" ) ).c_str( ) );
 
 			wszCurrent = wszConfig;
 			return true;
@@ -165,8 +167,7 @@ namespace PX::Files
 
 	bool PX_API ReadFile( std::wstring wstrPath, std::string& strData, bool bRelativePath, bool bBase64 /*= true*/ )
 	{
-		if ( !dbg::Assert( !wstrPath.empty( ) ) )
-			return false;
+		px_assert( !wstrPath.empty( ) );
 
 		std::ifstream fFile( bRelativePath ? GetDirectory( 0 ) + wstrPath : wstrPath );
 
@@ -175,18 +176,18 @@ namespace PX::Files
 
 		std::stringstream ssReturn { };
 		ssReturn << fFile.rdbuf( );
-		strData = bBase64 ? Cryptography::Base64< CryptoPP::Base64Decoder >( ssReturn.str( ) ) : ssReturn.str( );
+		strData = bBase64 ? Base64< CryptoPP::Base64Decoder >( ssReturn.str( ) ) : ssReturn.str( );
 		return true;
 	}
 
 	bool PX_API WriteFile( std::wstring wstrPath, const std::wstring& wstrData, bool bRelativePath, bool bBase64 /*= true*/ )
 	{
-		if ( !dbg::Assert( !wstrPath.empty( ) && !wstrData.empty( ) ) )
+		if ( wstrPath.empty( ) || wstrData.empty( ) )
 			return false;
 
 		std::ofstream fFile( bRelativePath ? GetDirectory( 0 ) + wstrPath : wstrPath );
 
-		fFile.write( bBase64 ? Cryptography::Base64< CryptoPP::Base64Encoder >( Tools::string_cast< std::string >( wstrData ) ).c_str( ) : Tools::string_cast< std::string >( wstrData ).c_str( ), wstrData.length( ) );
+		fFile.write( bBase64 ? Base64< CryptoPP::Base64Encoder >( string_cast< std::string >( wstrData ) ).c_str( ) : string_cast< std::string >( wstrData ).c_str( ), wstrData.length( ) );
 		return true;
 	}
 }

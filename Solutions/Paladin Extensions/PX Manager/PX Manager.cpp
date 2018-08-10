@@ -10,7 +10,7 @@ using namespace Tools;
 
 //void TestDebug( )
 //{
-//	auto print = Tools::string_cast< std::wstring >( "casted" );
+//	auto print = string_cast< std::wstring >( "casted" );
 //	dbg::out PX_DBG << PX_XOR( L"Hi" ) << dbg::newl;
 //	dbg::out PX_ERR << PX_XOR( L"Mid-print" ) << dbg::newl;
 //	dbg::out PX_WRN << PX_XOR( L"Mid-print 2" ) << dbg::newl;
@@ -60,7 +60,7 @@ using namespace Tools;
 //{
 //	const auto pDLL = fopen( R"(C:\Users\Cole\Desktop\Messagebox.dll)", "rb" );
 //
-//	if ( !dbg::Assert( pDLL != nullptr ) )
+//	if ( !px_assert( pDLL != nullptr ) )
 //		return;
 //
 //	fseek( pDLL, 0, SEEK_END );
@@ -69,7 +69,7 @@ using namespace Tools;
 //	const auto pBuffer = VirtualAlloc( nullptr, lSize, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE );
 //	fread( pBuffer, 1, lSize, pDLL );
 //
-//	if ( dbg::Assert( lSize != 0 && pBuffer != nullptr ) )
+//	if ( px_assert( lSize != 0 && pBuffer != nullptr ) )
 //	{
 //		sys::injection_info_t inj { };
 //		Inject( pBuffer, L"ConsoleApplication1.exe", &inj );
@@ -83,22 +83,27 @@ using namespace UI::Widgets;
 
 void PX_API UI::Manager::SetLayout( )
 {
-	if( !bLoggedIn && iLoginStatus == -1 )
+	//Example( );
+
+	if ( !bLoggedIn && iLoginStatus == -1 )
 	{
 		static auto bReverseColor = false;
-		static Types::byte_t bAlpha = 0;
+		static byte_t bAlpha = 0;
 		bAlpha += bReverseColor ? -5 : 5;
 		if ( bAlpha == UCHAR_MAX || bAlpha == 0 )
 			bReverseColor = !bReverseColor;
 
-		Header( "Paladin Extensions", "Manager", 600u, nullptr, [ ]( ) { bShouldClose = true; } );
+		Header( "Paladin Extensions", "Manager", 600u, nullptr, [ ]( )
+		{
+			bShouldClose = true;
+		} );
 
 		auto uWindowDimensions = GetCurrentWindowDimensions( );
-		vecImageQueue.emplace_back( TEXTURE_LOGO_LOADING, D3DXVECTOR3( uWindowDimensions[ 0 ] / 2 - vecTextures[ TEXTURE_LOGO_LOADING ].uWidth / 2, uWindowDimensions[ 1 ] / 2 - vecTextures[ TEXTURE_LOGO_LOADING ].uHeight / 2, 0.f ), D3DCOLOR_ARGB( bAlpha, bAlpha, bAlpha, bAlpha ) );
+		vecImageQueue.emplace_back( TEXTURE_LOGO_LOADING, D3DXVECTOR3( float( uWindowDimensions[ 0 ] / 2 - vecTextures[ TEXTURE_LOGO_LOADING ].uWidth / 2 ), float( uWindowDimensions[ 1 ] / 2 - vecTextures[ TEXTURE_LOGO_LOADING ].uHeight / 2 ), 0.f ), D3DCOLOR_ARGB( bAlpha, bAlpha, bAlpha, bAlpha ) );
 	}
-	else if( !bLoggedIn && iLoginStatus > -1 )
+	else if ( !bLoggedIn && iLoginStatus > -1 )
 	{
-		
+
 	}
 }
 
@@ -108,8 +113,8 @@ void PX_API Draw( )
 	Render::InitializeRenderTarget( uDimensions, PX_XOR( L"Paladin Extensions" ) );
 	UI::Manager::Initialize( PX_XOR( "Manager" ) );
 
-	DEVMODEA pDevMode;
-	EnumDisplaySettingsA( nullptr, ENUM_CURRENT_SETTINGS, &pDevMode );
+	DEVMODE pDevMode;
+	EnumDisplaySettings( nullptr, ENUM_CURRENT_SETTINGS, &pDevMode );
 	while ( !bShouldClose )
 	{
 		auto mmtStart = GetMoment( );
@@ -117,7 +122,7 @@ void PX_API Draw( )
 		if ( !UI::Manager::Render( ) )
 			break;
 
-		Wait( 5 );
+		Wait( 1000 / pDevMode.dmDisplayFrequency - ( GetMoment( ) - mmtStart ) );
 	}
 }
 
@@ -145,17 +150,24 @@ void PX_API OnLaunch( )
 	std::thread tSentinal( MonitorSteam );
 	tSentinal.detach( );
 
-	//iLoginStatus = Manager::Login( );
-	if( iLoginStatus == Manager::LOGIN_SUCCESS || Manager::LOGIN_STAFF_SUCCESS )
+	iLoginStatus = Manager::Login( );
+	switch ( iLoginStatus )
 	{
-		while ( iSelectedCheat == -1 )
-			Wait( 5 );
-		const auto strDLL = Manager::AssembleCheat( iSelectedCheat );
+		case Manager::LOGIN_HARDWARE_MISMATCH:
+			MessageBox( nullptr, L"Unique ID Mismatch", L"Your Unique ID does not match the one in the database. Please create a ticket to change your unique ID.", MB_OK );
+			break;
+		case Manager::LOGIN_STAFF_SUCCESS:
+		// staff shit
+		case Manager::LOGIN_SUCCESS:
+		//while ( iSelectedCheat == -1 )
+		//	Wait( 5 );
+		const auto strDLL = Manager::AssembleCheat( 2 /*iSelectedCheat*/ );
 		auto pBuffer = VirtualAlloc( nullptr, strDLL.length( ) + 1, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE );
 		memcpy( pBuffer, strDLL.c_str( ), strDLL.length( ) );
 
 		sys::injection_info_t inj { };
-		Inject( pBuffer, L"lsass.exe", &inj );
+		Inject( pBuffer, L"ConsoleApplication1.exe", &inj );
+		break;
 	}
 
 	while ( !bShouldClose )

@@ -4,16 +4,13 @@
 
 namespace PX::dbg
 {
-	// INFO: Asserts parameter to empty initialization version of parameter
-	template< typename _t > bool PX_API Assert( _t );
-
 	PX_DEF newl = '\n';
 
 	// INFO: Used to change console print color of debug output
 	struct out_clr_t
 	{
-		WORD m_wDesiredAttributes;
-		explicit out_clr_t( const WORD );
+		WORD wDesiredAttributes;
+		explicit out_clr_t( WORD );
 	};
 
 	// INFO: Managed debug output; used like std::cout

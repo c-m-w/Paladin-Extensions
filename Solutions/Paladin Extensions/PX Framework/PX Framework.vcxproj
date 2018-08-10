@@ -180,6 +180,7 @@
     <ClCompile Include="Application\File Manager.cpp" />
     <ClCompile Include="Application\Input Manager.cpp" />
     <ClCompile Include="Application\Tools.cpp" />
+    <ClCompile Include="Application\Types.cpp" />
     <ClCompile Include="Drawing\Render Engine.cpp" />
     <ClCompile Include="Drawing\User Interface.cpp" />
     <ClCompile Include="Security\Connectivity.cpp" />

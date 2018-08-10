@@ -36,6 +36,21 @@
 
 #endif
 
+#if defined _DEBUG
+	/** \brief Asserts parameter to empty initialization version of parameter */
+	/** \param _ToAssert Value to assert. */
+#define px_assert( _ToAssert ) \
+		if ( _ToAssert == decltype( _ToAssert )( ) ) \
+			throw std::exception( ( std::string( "Failed to assert " ) + #_ToAssert + " in function " + __func__ \
+			+ " from line " + std::to_string( unsigned( __LINE__ ) ) + " in file " + ##( __FILE__ ) + "." ).c_str( ) )
+#else
+	/** \brief Asserts parameter to empty initialization version of parameter */
+	/** \param _ToAssert Value to assert. */
+#define px_assert( _ToAssert ) \
+		if ( _ToAssert == decltype( _ToAssert )( ) ) \
+			return { }
+#endif
+
 // identifies variable as "Paladin Extensions" original
 #define PX_SDK inline
 // identifies function as "Paladin Extensions" original
@@ -45,11 +60,12 @@
 // identifies instruct as "Paladin Extensions" original
 #define PX_EXT extern
 
-
-/** \brief Identifies class as abstract interface. */
-#define PX_ABSTRACT_CLASS class
-/** \brief Identifies struct as abstract interface. */
-#define PX_ABSTRACT_STRUCT struct
+/** \brief Identifies a class as abstract. */
+#define px_abstract_class class
+/** \brief Identifies a function as abstract. */
+#define px_abstract virtual
+/** \brief Identifies an interface. */
+#define px_interface class
 
 /** \brief Maximum managed keys. */
 #define PX_MAX_KEY 256
@@ -76,8 +92,8 @@
 #endif
 
 // Encrypts string data on compile, then decrypts for access on run.
-#define PX_XOR( String ) ( PX::XOR::CXorString< PX::XOR::SCStringTraits< decltype( String ) >::char_trait_t, \
-	PX::XOR::SConstructIndexList< ( sizeof( String ) - 1 ) / PX::XOR::SCStringTraits< decltype( String ) >::int_trait_t >::result_t >( String ).Decrypt( ) )
+#define PX_XOR( String ) ( PX::XOR::AXorString< PX::XOR::ACStringTraits< decltype( String ) >::char_trait_t, \
+	PX::XOR::AConstructIndexList< ( sizeof( String ) - 1 ) / PX::XOR::ACStringTraits< decltype( String ) >::int_trait_t >::result_t >( String ).Decrypt( ) )
 
 #if defined _DEBUG
 // sets debug out line identifier as "Debug"

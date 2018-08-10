@@ -9,7 +9,7 @@ namespace PX
 		stateKeys[ uKey ] = uMessage % 2 ? DOWN : UP;
 		if ( stateKeys[ uKey ] )
 		{
-			mmtKeyDownTime[ uKey ] = Tools::GetMoment( );
+			mmtKeyDownTime[ uKey ] = GetMoment( );
 			uLastKeyPressed = uKey;
 		}
 
@@ -103,9 +103,9 @@ namespace PX
 		return uLastKeyPressed;
 	}
 
-	Tools::moment_t PX_API CInputManager::TimeSinceKeyPress( unsigned uKey )
+	moment_t PX_API CInputManager::TimeSinceKeyPress( unsigned uKey )
 	{
-		return Tools::GetMoment( ) - mmtKeyDownTime[ uKey ];
+		return GetMoment( ) - mmtKeyDownTime[ uKey ];
 	}
 
 	void PX_API CInputManager::AddKeyCallback( unsigned uKey, std::function< void( int ) > fnCallback )

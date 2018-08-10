@@ -20,7 +20,7 @@ namespace PX::Render
 			case WM_IME_SETCONTEXT:
 				ShowWindow( _hwWindowHandle, SW_RESTORE );
 				bMinimized = false;
-				mmtRestoreWindow = Tools::GetMoment( );
+				mmtRestoreWindow = GetMoment( );
 				return true;
 
 			case WM_DESTROY:
@@ -39,7 +39,7 @@ namespace PX::Render
 						dxParameters.BackBufferWidth = uWidth;
 						dxParameters.BackBufferHeight = uHeight;
 						const auto hrReset = pDevice->Reset( &dxParameters );
-						dbg::Assert( hrReset >= 0 );
+						px_assert( hrReset >= 0 );
 						UI::Manager::Resize( uWidth, uHeight );
 					}
 				}
@@ -87,7 +87,7 @@ namespace PX::Render
 		RECT rcWindow;
 		AdjustWindowRectEx( &rcWindow, WS_OVERLAPPEDWINDOW, false, WS_EX_APPWINDOW );
 
-		const auto uScreenDimensions = Tools::GetScreenDimensions( );
+		const auto uScreenDimensions = GetScreenDimensions( );
 		hwWindowHandle = CreateWindowEx( WS_EX_APPWINDOW, wszWindowTitle, wszWindowTitle, WS_VISIBLE | WS_POPUP,
 		                                 CW_USEDEFAULT, CW_USEDEFAULT, uWindowWidth, uWindowHeight,
 		                                 nullptr, nullptr, wndWindow.hInstance, nullptr );
@@ -120,12 +120,12 @@ namespace PX::Render
 
 			// Windows 7 doesn't support hardware vertexprocessing, so if it fails we need to use software vertexprocessing.
 			if ( pObjectEx->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hwWindowHandle, D3DCREATE_HARDWARE_VERTEXPROCESSING | D3DCREATE_PUREDEVICE | D3DCREATE_FPU_PRESERVE, &dxParameters, &pDevice ) < 0 )
-				dbg::Assert( pObjectEx->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hwWindowHandle, D3DCREATE_SOFTWARE_VERTEXPROCESSING | D3DCREATE_PUREDEVICE | D3DCREATE_FPU_PRESERVE, &dxParameters, &pDevice ) >= 0 );
+				px_assert( pObjectEx->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hwWindowHandle, D3DCREATE_SOFTWARE_VERTEXPROCESSING | D3DCREATE_PUREDEVICE | D3DCREATE_FPU_PRESERVE, &dxParameters, &pDevice ) >= 0 );
 			pDevice->GetCreationParameters( new D3DDEVICE_CREATION_PARAMETERS ); // warning: passing NEW because parameter passed from before was never used
 		}
 	}
 
-	void PX_API InitializeRenderTarget( unsigned* pDimensions, Types::wcstr_t szNewWindowTitle )
+	void PX_API InitializeRenderTarget( unsigned* pDimensions, wcstr_t szNewWindowTitle )
 	{
 		wszWindowTitle = szNewWindowTitle;
 		SetWindowSize( pDimensions[ 0 ], pDimensions[ 1 ] );
@@ -136,10 +136,10 @@ namespace PX::Render
 	void PX_API SetWindowProc( IDirect3DDevice9* pTargetDevice )
 	{
 		D3DDEVICE_CREATION_PARAMETERS cpParameters;
-		dbg::Assert( pTargetDevice->GetCreationParameters( &cpParameters ) >= 0 );
+		px_assert( pTargetDevice->GetCreationParameters( &cpParameters ) >= 0 );
 		hwOldWindowHandle = cpParameters.hFocusWindow;
 
 		uOldWindowProc = SetWindowLongPtr( hwOldWindowHandle, GWLP_WNDPROC, reinterpret_cast< long >( WndProc ) );
-		dbg::Assert( uOldWindowProc );
+		px_assert( uOldWindowProc );
 	}
 }

@@ -4,7 +4,7 @@
 
 namespace PX::Tools
 {
-	template< class _Child > _Child& PX_API SSingleton< _Child >::Get( )
+	template< class _Child > _Child& PX_API ASingleton< _Child >::Get( )
 	{
 		static _Child _ChildClassObject { };
 		return _ChildClassObject;
@@ -18,16 +18,12 @@ namespace PX::Tools
 	{
 		std::this_thread::sleep_for( _t( mmtWaitLength ) );
 	}
-	
-	template< typename _t > color_t color_t::operator/( _t _Divisor )
-	{
-		return color_t( byte_t( r / _Divisor ), byte_t( g / _Divisor ), byte_t( b / _Divisor ), byte_t( a / _Divisor ) );
-	}
 
 	// INFO: Deduces traits and uses matching casting function of trait
-	template< typename > PX_ABSTRACT_STRUCT IStringTraits;
-	template< > PX_ABSTRACT_STRUCT IStringTraits< std::wstring >
+	template< typename > px_abstract_class AStringTraits;
+	template< > px_abstract_class AStringTraits< std::wstring >
 	{
+	public:
 		typedef wchar_t char_trait_t;
 
 		static int ByteConvert( const int iCodePage, LPCWSTR wszData, int iDataLength, LPSTR szBuffer, int iBufferSize )
@@ -35,8 +31,9 @@ namespace PX::Tools
 			return WideCharToMultiByte( iCodePage, 0, wszData, iDataLength, szBuffer, iBufferSize, nullptr, nullptr );
 		}
 	};
-	template< > PX_ABSTRACT_STRUCT IStringTraits< std::string >
+	template< > px_abstract_class AStringTraits< std::string >
 	{
+	public:
 		typedef char char_trait_t;
 
 		static int ByteConvert( const int iCodePage, LPCSTR szData, int iDataLength, LPWSTR wszBuffer, int iBufferSize )
@@ -46,22 +43,24 @@ namespace PX::Tools
 	};
 
 	// INFO: Differentiates casting from like or unlike string types 
-	template< typename _To, typename _From > PX_ABSTRACT_STRUCT IStringCastImplementation
+	template< typename _To, typename _From > px_abstract_class AStringCastImplementation
 	{
+	public:
 		static _To Cast( const _From& _Source )
 		{
-			int iLength = IStringTraits< _From >::ByteConvert( CP_ACP, _Source.data( ), _Source.length( ), nullptr, 0 );
+			int iLength = AStringTraits< _From >::ByteConvert( CP_ACP, _Source.data( ), _Source.length( ), nullptr, 0 );
 			if ( !iLength )
 				return _To( );
 
-			std::vector< typename IStringTraits< _To >::char_trait_t > _strBuffer( iLength );
-			IStringTraits< _From >::ByteConvert( CP_ACP, _Source.data( ), _Source.length( ), &_strBuffer[ 0 ], iLength );
+			std::vector< typename AStringTraits< _To >::char_trait_t > _strBuffer( iLength );
+			AStringTraits< _From >::ByteConvert( CP_ACP, _Source.data( ), _Source.length( ), &_strBuffer[ 0 ], iLength );
 
 			return _To( _strBuffer.begin( ), _strBuffer.end( ) );
 		}
 	};
-	template< typename _From > PX_ABSTRACT_STRUCT IStringCastImplementation< _From, _From >
+	template< typename _From > px_abstract_class AStringCastImplementation< _From, _From >
 	{
+	public:
 		static const _From& Cast( const _From& _Source )
 		{
 			return _Source;
@@ -69,22 +68,24 @@ namespace PX::Tools
 	};
 
 	// INFO: Interface for C-Style string casting
-	template< typename > PX_ABSTRACT_STRUCT IStringTypeOfCharacter;
-	template< > PX_ABSTRACT_STRUCT IStringTypeOfCharacter< Types::cstr_t >
+	template< typename > px_abstract_class AStringTypeOfCharacter;
+	template< > px_abstract_class AStringTypeOfCharacter< cstr_t >
 	{
+	public:
 		typedef std::string wrap_t;
 	};
-	template< > PX_ABSTRACT_STRUCT IStringTypeOfCharacter< Types::wcstr_t >
+	template< > px_abstract_class AStringTypeOfCharacter< wcstr_t >
 	{
+	public:
 		typedef std::wstring wrap_t;
 	};
 
 	template< typename _To, typename _From > _To PX_API string_cast( const _From& _Source )
 	{
-		return IStringCastImplementation< _To, _From >::Cast( _Source );
+		return AStringCastImplementation< _To, _From >::Cast( _Source );
 	}
 	template< typename _To, typename _From > _To PX_API string_cast( _From* _Source )
 	{
-		return IStringCastImplementation< _To, typename IStringTypeOfCharacter< const _From* >::wrap_t >::Cast( _Source );
+		return AStringCastImplementation< _To, typename AStringTypeOfCharacter< const _From* >::wrap_t >::Cast( _Source );
 	}
 }

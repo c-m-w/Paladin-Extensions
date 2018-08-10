@@ -4,13 +4,14 @@
 
 namespace PX::dbg
 {
-	out_clr_t::out_clr_t( const WORD wDesiredAttributes ): m_wDesiredAttributes( wDesiredAttributes )
+
+	out_clr_t::out_clr_t( const WORD wDesiredAttributes ): wDesiredAttributes( wDesiredAttributes )
 	{ }
 
 	out_t& PX_API out_t::operator<<( const out_clr_t& rhs )
 	{
 #if defined _DEBUG
-		SetConsoleTextAttribute( GetStdHandle( STD_OUTPUT_HANDLE ), rhs.m_wDesiredAttributes );
+		SetConsoleTextAttribute( GetStdHandle( STD_OUTPUT_HANDLE ), rhs.wDesiredAttributes );
 #endif
 		return *this;
 	}

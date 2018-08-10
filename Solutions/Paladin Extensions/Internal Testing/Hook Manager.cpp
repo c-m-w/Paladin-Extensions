@@ -4,7 +4,7 @@
 
 namespace PX::Tools
 {
-	std::size_t PX_API EstimateTableLength( Types::ptr_t* pVirtualTable )
+	std::size_t PX_API EstimateTableLength( ptr_t* pVirtualTable )
 	{
 		auto uReturn = 0u;
 		MEMORY_BASIC_INFORMATION mbiTable { };
@@ -16,11 +16,11 @@ namespace PX::Tools
 		return uReturn;
 	}
 
-	Types::ptr_t FindFreeMemory( HMODULE hLocation, std::size_t sMinimumSize )
+	ptr_t FindFreeMemory( HMODULE hLocation, std::size_t sMinimumSize )
 	{
-		const auto ptrModuleEnd = reinterpret_cast< Types::ptr_t  >( hLocation ) + reinterpret_cast< PIMAGE_NT_HEADERS > ( reinterpret_cast< std::uint8_t* >( hLocation ) + reinterpret_cast< PIMAGE_DOS_HEADER > ( hLocation )->e_lfanew )->OptionalHeader.SizeOfImage;
+		const auto ptrModuleEnd = reinterpret_cast< ptr_t  >( hLocation ) + reinterpret_cast< PIMAGE_NT_HEADERS > ( reinterpret_cast< std::uint8_t* >( hLocation ) + reinterpret_cast< PIMAGE_DOS_HEADER > ( hLocation )->e_lfanew )->OptionalHeader.SizeOfImage;
 		
-		for( auto ptrAddress = ptrModuleEnd; ptrAddress > Types::ptr_t( hLocation ); ptrAddress -= sizeof( Types::ptr_t ) )
+		for( auto ptrAddress = ptrModuleEnd; ptrAddress > ptr_t( hLocation ); ptrAddress -= sizeof( ptr_t ) )
 		{
 			MEMORY_BASIC_INFORMATION mbiPage;
 			if ( VirtualQuery( reinterpret_cast< LPCVOID >( ptrAddress ), &mbiPage, sizeof mbiPage ) == NULL ||
@@ -36,8 +36,8 @@ namespace PX::Tools
 			auto uPageCount = 0u;
 			while( uPageCount < sMinimumSize && !bMemoryInUse )
 			{
-				uPageCount += sizeof( Types::ptr_t );
-				if ( *reinterpret_cast< Types::ptr_t* >( ptrAddress + uPageCount ) )
+				uPageCount += sizeof( ptr_t );
+				if ( *reinterpret_cast< ptr_t* >( ptrAddress + uPageCount ) )
 					bMemoryInUse = true;
 			}
 
@@ -52,15 +52,15 @@ namespace PX::Tools
 	{
 		// Ensure that we are hooking a valid virtual table and that the length is valid( there are proper permissions to read and write to it ).
 		// Set the address of pOldTable to the address of the first virtual function.
-		if ( !dbg::Assert( pClassBase != nullptr ) || 
-			!dbg::Assert( ( sTableLength = EstimateTableLength( pOldTable = reinterpret_cast< Types::ptr_t** >( pClassBase )[ 0 ] ) ) > 0 ) )
+		if ( !px_assert( pClassBase != nullptr ) || 
+			!px_assert( ( sTableLength = EstimateTableLength( pOldTable = reinterpret_cast< ptr_t** >( pClassBase )[ 0 ] ) ) > 0 ) )
 			return;
 
 		// Get the size of the table in bytes.
-		sTableSize = sTableLength * sizeof( Types::ptr_t );
+		sTableSize = sTableLength * sizeof( ptr_t );
 		// Ensure that the module that has been entered is valid and find free memory inside of that module to point the class base to.
-		if ( !dbg::Assert( ( hAllocationModule = GetModuleHandle( wszAllocationModule ) ) != nullptr ) ||
-			 !dbg::Assert( ( pNewTable = reinterpret_cast< Types::ptr_t* >( FindFreeMemory( hAllocationModule, sTableSize + sizeof( Types::ptr_t ) ) ) ) != nullptr ) )
+		if ( !px_assert( ( hAllocationModule = GetModuleHandle( wszAllocationModule ) ) != nullptr ) ||
+			 !px_assert( ( pNewTable = reinterpret_cast< ptr_t* >( FindFreeMemory( hAllocationModule, sTableSize + sizeof( ptr_t ) ) ) ) != nullptr ) )
 			return;
 
 		// Copy the addresses of the old table to the new table so the functions can still be accessed as normal.
@@ -68,14 +68,14 @@ namespace PX::Tools
 
 		// Set the permissions of the memory we found so that it is readable and writable, and store the old protection.
 		// This is also used just to ensure that we have permission to modify the memory.
-		if ( !dbg::Assert( VirtualProtect( pClassBase, sTableSize, PAGE_READWRITE, &dwOldProtection ) ) )
+		if ( !px_assert( VirtualProtect( pClassBase, sTableSize, PAGE_READWRITE, &dwOldProtection ) ) )
 		{
 			Cleanup( );
 			return;
 		}
 
 		// Set the address of the class base to the new table.
-		reinterpret_cast< Types::ptr_t** >( pClassBase )[ 0 ] = &pNewTable[ 0 ];
+		reinterpret_cast< ptr_t** >( pClassBase )[ 0 ] = &pNewTable[ 0 ];
 		bSetNewTable = true;
 	}
 
@@ -99,7 +99,7 @@ namespace PX::Tools
 	{
 		// Reset the virtual function address array first, before we set the memory to 0 in case that function is called between and causes a crash.
 		if ( bSetNewTable )
-			reinterpret_cast< Types::ptr_t** >( pClassBase )[ 0 ] = &pOldTable[ 0 ];
+			reinterpret_cast< ptr_t** >( pClassBase )[ 0 ] = &pOldTable[ 0 ];
 
 		memset( pNewTable, 0, sTableSize );
 		DWORD dwBuffer;

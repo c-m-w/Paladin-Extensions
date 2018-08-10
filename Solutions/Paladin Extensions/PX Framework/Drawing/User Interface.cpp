@@ -10,7 +10,7 @@ namespace PX::UI
 
 	namespace Manager
 	{
-		Types::cstr_t	szWindowTitle = PX_XOR( "Paladin Extensions" );
+		cstr_t	szWindowTitle = PX_XOR( "Paladin Extensions" );
 		auto			szApplicationTitle = static_cast< char* >( malloc( 32 ) );
 
 		nk_font_atlas* pAtlas;
@@ -238,7 +238,7 @@ namespace PX::UI
 			btnComboActive.touch_padding = nk_vec2( 5, 5 );
 		}
 
-		bool PX_API Initialize( Types::cstr_t _szApplicationTitle )
+		bool PX_API Initialize( cstr_t _szApplicationTitle )
 		{
 			szNuklearWindowTitle = _szApplicationTitle;
 			InitializeNuklear( );
@@ -267,9 +267,9 @@ namespace PX::UI
 					&& D3DXCreateSprite( pDevice, &pBufferSprite ) == D3D_OK;
 		}
 
-		struct nk_vec2 PX_API CalculateTextBounds( Types::cstr_t szText, unsigned uRowHeight /*= 30*/ )
+		struct nk_vec2 PX_API CalculateTextBounds( cstr_t szText, unsigned uRowHeight /*= 30*/ )
 		{
-			static Types::cstr_t szBuffer;
+			static cstr_t szBuffer;
 			static struct nk_vec2 vecBuffer;
 			static int iBuffer;
 
@@ -279,7 +279,7 @@ namespace PX::UI
 		void PX_API SetFont( EFont fntDesiredFont )
 		{
 			static std::deque< nk_font* > dqFonts { pTahoma, pTahomaBold, pRoboto, pRobotoBold, pRobotoSmall, pRobotoBoldSmall, pEnvy };
-			dbg::Assert( fntDesiredFont >= 0 && fntDesiredFont < FONT_MAX );
+			px_assert( fntDesiredFont >= 0 && fntDesiredFont < FONT_MAX );
 			return nk_style_set_font( pContext, &dqFonts[ fntDesiredFont ]->handle );
 		}
 
@@ -314,7 +314,7 @@ namespace PX::UI
 					GetCursorPos( &pntCursorPos );
 					POINT pntCursorPosRelative { pntCursorPos.x - recWindowPos.left, pntCursorPos.y - recWindowPos.top };
 
-					if ( ( pntCursorPosRelative.x > 0 && pntCursorPosRelative.x <= signed( uWindowWidth ) && pntCursorPosRelative.y > 0 && pntCursorPosRelative.y <= 30 ) || bDrag )
+					if ( pntCursorPosRelative.x > 0 && pntCursorPosRelative.x <= signed( uWindowWidth ) && pntCursorPosRelative.y > 0 && pntCursorPosRelative.y <= 30 || bDrag )
 					{
 						bDrag = true;
 						if ( !pntOldCursorPosRelative.x || !pntOldCursorPosRelative.y ) pntOldCursorPosRelative = pntCursorPosRelative;
@@ -362,7 +362,7 @@ namespace PX::UI
 
 		void PX_API ApplyCursor( )
 		{
-			POINT pntCursor { };
+			POINT pntCursor;
 
 			GetCursorPos( &pntCursor );
 			ScreenToClient( hwWindowHandle, &pntCursor );
@@ -437,7 +437,7 @@ namespace PX::UI
 
 		void PX_API Manager::Example( )
 		{
-			static const std::deque< Types::cstr_t > dqPrimaryTabs
+			static const std::deque< cstr_t > dqPrimaryTabs
 			{
 				"Tab One",
 				"Super Wide Tab That Is Dynamically Sized Depending On Text",
@@ -445,7 +445,7 @@ namespace PX::UI
 				"Tab Four"
 			};
 
-			static const std::deque< Types::cstr_t > dqSubTabs
+			static const std::deque< cstr_t > dqSubTabs
 			{
 				"Subtab One",
 				"Subtab Two",
@@ -473,12 +473,12 @@ namespace PX::UI
 			};
 
 			// Color pickers
-			static Tools::color_sequence_t clrFirst( Tools::color_t( 255, 0, 0 ), 1000 );
-			static Tools::color_sequence_t clrSecond( Tools::color_t( 0, 255, 0 ), 1000 );
-			static Tools::color_sequence_t clrThird( Tools::color_t( 0, 0, 255 ), 1000 );
+			static color_sequence_t clrFirst( { 255, 0, 0 }, 1000 );
+			static color_sequence_t clrSecond( { 0, 255, 0 }, 1000 );
+			static color_sequence_t clrThird( { 0, 0, 255 }, 1000 );
 
 			// Create a header with the window title and subtitle, with minimize and close functionality.
-			Header( Tools::string_cast< std::string >( wszWindowTitle ).c_str( ), szNuklearWindowTitle );
+			Header( string_cast< std::string >( wszWindowTitle ).c_str( ), szNuklearWindowTitle );
 
 			// Create primary tabs.
 			fnSetTabValue( jsWidgets[ "PrimaryTab" ].get_ref< int& >( ), Tabs( 10, 0, dqPrimaryTabs, jsWidgets[ "PrimaryTab" ] ) );
@@ -545,7 +545,7 @@ namespace PX::UI
 		ERowType rowLastRowType;
 
 		struct nk_rect recLastWidgetLocation;
-		Types::cstr_t szColorPickerSubject;
+		cstr_t szColorPickerSubject;
 
 		bool PX_API HoveringNextWidget( )
 		{
@@ -575,7 +575,7 @@ namespace PX::UI
 			curCurrent = curSetCursor;
 		}
 
-		void PX_API Header( Types::cstr_t szTitle, Types::cstr_t _szApplicationTitle, unsigned uFillHeight /*= 102u*/, Types::fn_callback_t fnMinimizeCallback /*= nullptr*/, Types::fn_callback_t fnCloseCallback /*= nullptr*/ )
+		void PX_API Header( cstr_t szTitle, cstr_t _szApplicationTitle, unsigned uFillHeight /*= 102u*/, callback_t fnMinimizeCallback /*= nullptr*/, callback_t fnCloseCallback /*= nullptr*/ )
 		{
 			auto recMainWindow = pContext->current->bounds;
 			vecImageQueue.emplace_back( TEXTURE_LOGO, D3DXVECTOR3( recMainWindow.x + 5.f, recMainWindow.y, 0.f ) );
@@ -583,15 +583,15 @@ namespace PX::UI
 			nk_layout_row_dynamic( pContext, 30, 0 );
 			auto pOutput = nk_window_get_canvas( pContext );
 			constexpr nk_color _clrBlueHover { 115, 189, 247, 255 };
-			const auto uWidth = pContext->current->bounds.w;
+			const auto flWidth = pContext->current->bounds.w;
 
 			struct nk_text txtTitle, txtApplication, txtCloseButton, txtMinimizeButton;
 			txtCloseButton.padding = txtApplication.padding = txtTitle.padding = pContext->style.text.padding;
 			txtTitle.text = clrTextActive;
 			txtApplication.text = clrTextDormant;
 
-			nk_fill_rect( pOutput, nk_rect( 0, 0, uWidth, uFillHeight ), 0.f, clrHeader );
-			nk_stroke_line( pOutput, 0, 40, uWidth, 40, 1, clrColorTable[ NK_COLOR_BORDER ] );
+			nk_fill_rect( pOutput, nk_rect( 0.f, 0.f, flWidth, float( uFillHeight ) ), 0.f, clrHeader );
+			nk_stroke_line( pOutput, 0, 40, flWidth, 40, 1, clrColorTable[ NK_COLOR_BORDER ] );
 
 			SetFont( FONT_ROBOTOBOLD );
 			auto vecTitle = CalculateTextBounds( szTitle, 30 );
@@ -603,8 +603,8 @@ namespace PX::UI
 			static auto clrMinimize = clrBlue, clrClose = clrMinimize;
 			txtMinimizeButton.text = clrMinimize;
 			txtCloseButton.text = clrClose;
-			const struct nk_rect recMinimize = { uWidth - 70, 19, 20, 8 };
-			const struct nk_rect recCloseButton = { uWidth - 33, 13, 20, 20 };
+			const struct nk_rect recMinimize = { flWidth - 70, 19, 20, 8 };
+			const struct nk_rect recCloseButton = { flWidth - 33, 13, 20, 20 };
 			nk_widget_text( pOutput, recMinimize, ICON_FA_MINUS, strlen( ICON_FA_MINUS ), &txtMinimizeButton, NK_TEXT_CENTERED, pContext->style.font );
 			nk_widget_text( pOutput, recCloseButton, ICON_FA_TIMES, strlen( ICON_FA_TIMES ), &txtCloseButton, NK_TEXT_CENTERED, pContext->style.font );
 
@@ -613,7 +613,7 @@ namespace PX::UI
 			           bClicking = PX_INPUT.GetKeyState( VK_LBUTTON );
 
 			// Wait at least 200 ms for Nuklear to fix it's mouse pos stuff, and ensure that the window is in focus and not minimized.
-			if ( GetActiveWindow( ) != hwWindowHandle || bMinimized || Tools::GetMoment( ) - mmtRestoreWindow < 500u )
+			if ( GetActiveWindow( ) != hwWindowHandle || bMinimized || GetMoment( ) - mmtRestoreWindow < 500u )
 				return;
 
 			if ( bHoveringMinimize )
@@ -645,20 +645,20 @@ namespace PX::UI
 				clrClose = clrBlue;
 		}
 
-		bool PX_API PrimaryTab( Types::cstr_t szText, bool bActive )
+		bool PX_API PrimaryTab( cstr_t szText, bool bActive )
 		{
 			iCurrentRowUsedColumns++;
 
 			if( nk_button_label_styled( pContext, bActive ? &btnTopActive : &btnTop, szText ) )
 			{
 				if( !bActive )
-					Tools::EmitSound( L"ButtonClick.wav" );
+					EmitSound( L"ButtonClick.wav" );
 				return true;
 			}
 			return false;
 		}
 
-		bool PX_API SecondaryTab( Types::cstr_t szText, bool bActive )
+		bool PX_API SecondaryTab( cstr_t szText, bool bActive )
 		{
 			iCurrentRowUsedColumns++;
 
@@ -680,7 +680,7 @@ namespace PX::UI
 			SetFont( FONT_TAHOMA );
 			const auto bReturn = nk_button_label_styled( pContext, &btnRegular, szText );
 			if ( bReturn )
-				Tools::EmitSound( L"ButtonClick.wav" );
+				EmitSound( L"ButtonClick.wav" );
 			HoverCheck( CURSOR_HAND );
 			return bReturn;
 		}
@@ -714,7 +714,7 @@ namespace PX::UI
 			const auto bReturn = nk_button_label_styled( pContext, bActive ? &btnSpecialActive : &btnSpecial, szText );
 
 			if( bReturn )
-				Tools::EmitSound( L"ButtonClick.wav" );
+				EmitSound( L"ButtonClick.wav" );
 
 			if ( !bFoundHoverTarget )
 			{
@@ -757,7 +757,7 @@ namespace PX::UI
 			return bReturn;
 		}
 
-		void PX_API Checkbox( Types::cstr_t szText, bool *bActive )
+		void PX_API Checkbox( cstr_t szText, bool *bActive )
 		{
 			iCurrentRowUsedColumns += 2;
 
@@ -776,7 +776,7 @@ namespace PX::UI
 				if ( !bWasClicking && !pActiveEditColor )
 				{
 					*bActive = !*bActive;
-					Tools::EmitSound( *bActive ? LR"(Tick.wav)" : LR"(Untick.wav)" );
+					EmitSound( *bActive ? LR"(Tick.wav)" : LR"(Untick.wav)" );
 				}
 				bWasClicking = true;
 			}
@@ -789,7 +789,7 @@ namespace PX::UI
 			nk_label_colored( pContext, ( szText + std::string( "  " ) ).c_str( ), NK_TEXT_LEFT, clrTextDormant );
 		}
 
-		int PX_API Tabs( unsigned uStartX, unsigned uStartY, const std::deque< Types::cstr_t >& dqButtons, unsigned uActiveButton )
+		int PX_API Tabs( unsigned uStartX, unsigned uStartY, const std::deque< cstr_t >& dqButtons, unsigned uActiveButton )
 		{
 			PX_DEF pxTabSpace = 24; // 12 * 2 - 12 px on either side.
 			auto iPressedButton = -1;
@@ -808,7 +808,7 @@ namespace PX::UI
 			return iPressedButton;
 		}
 
-		int PX_API SubTabs( unsigned uStartX, unsigned uStartY, unsigned uButtonWidth, unsigned uButtonHeight, const std::deque< Types::cstr_t >& dqButtons, unsigned uActiveButton )
+		int PX_API SubTabs( unsigned uStartX, unsigned uStartY, unsigned uButtonWidth, unsigned uButtonHeight, const std::deque< cstr_t >& dqButtons, unsigned uActiveButton )
 		{
 			nk_layout_space_begin( pContext, NK_STATIC, float( uButtonHeight * dqButtons.size( ) ), dqButtons.size( ) );
 			auto iButtonPressed = -1;
@@ -823,7 +823,7 @@ namespace PX::UI
 			return iButtonPressed;
 		}
 
-		void PX_API BeginGroupbox( unsigned uStartX, unsigned uStartY, unsigned uBoxWidth, unsigned uBoxHeight, Types::cstr_t szTitle )
+		void PX_API BeginGroupbox( unsigned uStartX, unsigned uStartY, unsigned uBoxWidth, unsigned uBoxHeight, cstr_t szTitle )
 		{
 			SetFont( FONT_TAHOMA );
 			nk_layout_space_begin( pContext, NK_STATIC, float( uBoxHeight ), 1 );
@@ -963,7 +963,7 @@ namespace PX::UI
 
 				if ( Button( EPosition::LEFT, PX_XOR( "+" ), false ) )
 				{
-					pActiveEditColor->PutNewColorSequence( Tools::color_t( ), 1000u );
+					pActiveEditColor->PutNewColorSequence( color_t( ), 1000u );
 					uCurrentSequence = pActiveEditColor->sSequences - 1;
 					clrChosenColor = { pActiveEditColor->GetColor( uCurrentSequence ).rfl,
 						pActiveEditColor->GetColor( uCurrentSequence ).gfl,
@@ -987,7 +987,7 @@ namespace PX::UI
 				pActiveEditColor->GetColor( uCurrentSequence ).afl = clrChosenColor.a;
 
 				nk_layout_space_begin( pContext, NK_STATIC, 30, 3 );
-				pActiveEditColor->GetDuration( uCurrentSequence ) = Slider( "Duration", szSliderBuffer, 100, 1000, pActiveEditColor->GetDuration( uCurrentSequence ), 0, 0, 290, 30, true );
+				pActiveEditColor->GetDuration( uCurrentSequence ) = Slider( "Duration", szSliderBuffer, 100, 1000, int( pActiveEditColor->GetDuration( uCurrentSequence ) ), 0, 0, 290, 30, true );
 				nk_layout_space_end( pContext );
 				
 				nk_layout_row_static( pContext, 25, int( vecColorPickerSize.x - 5 ), 1 );
@@ -1004,7 +1004,7 @@ namespace PX::UI
 			bStoppedClicking = false;
 		}
 
-		void PX_API ColorButton( Types::cstr_t szSubject, Tools::color_sequence_t* pSequence )
+		void PX_API ColorButton( cstr_t szSubject, color_sequence_t* pSequence )
 		{
 			iCurrentRowUsedColumns++;
 			
@@ -1017,7 +1017,7 @@ namespace PX::UI
 			HoverCheck( CURSOR_HAND );
 		}
 
-		int PX_API Combobox( unsigned uButtonHeight, Types::cstr_t szTitle, const std::deque< Types::cstr_t >& dqOptions, unsigned uSelectedOption )
+		int PX_API Combobox( unsigned uButtonHeight, cstr_t szTitle, const std::deque< cstr_t >& dqOptions, unsigned uSelectedOption )
 		{
 			iCurrentRowUsedColumns++;
 
@@ -1049,7 +1049,7 @@ namespace PX::UI
 			return iSelectedOption;
 		}
 
-		void PX_API ComboboxMulti( unsigned uButtonHeight, Types::cstr_t szTitle, const std::deque< Types::cstr_t >& dqOptions, std::deque< bool >& dqEnabledOptions )
+		void PX_API ComboboxMulti( unsigned uButtonHeight, cstr_t szTitle, const std::deque< cstr_t >& dqOptions, std::deque< bool >& dqEnabledOptions )
 		{
 			iCurrentRowUsedColumns++;
 
@@ -1074,11 +1074,11 @@ namespace PX::UI
 			nk_fill_triangle( pOutput, recComboboxBounds.x + recComboboxBounds.w - 10, recComboboxBounds.y + ( recComboboxBounds.h / 2 ) - 3, recComboboxBounds.x + recComboboxBounds.w - 14, recComboboxBounds.y + ( recComboboxBounds.h / 2 ) + 3, recComboboxBounds.x + recComboboxBounds.w - 18, recComboboxBounds.y + ( recComboboxBounds.h / 2 ) - 3, nk_input_is_mouse_prev_hovering_rect( &pContext->input, recComboboxBounds ) && !bDrewCombo ? clrTextActive : clrTextDormant );
 		}
 
-		int PX_API Slider( Types::cstr_t szTitle, char* szInputBuffer, int iMin, int iMax, int iCurrentValue, unsigned uStartX, unsigned uStartY, unsigned uWidth, unsigned uHeight, bool bIgnorePopup /*= false*/ )
+		int PX_API Slider( cstr_t szTitle, char* szInputBuffer, int iMin, int iMax, int iCurrentValue, unsigned uStartX, unsigned uStartY, unsigned uWidth, unsigned uHeight, bool bIgnorePopup /*= false*/ )
 		{
 			iCurrentRowUsedColumns += 3;
 
-			dbg::Assert( iMax > iMin );
+			px_assert( iMax > iMin );
 			auto szTexta = std::to_string( iCurrentValue ).substr( 0, std::to_string( iCurrentValue ).size( ) );
 			auto szText = szTexta.c_str( );
 			static auto bInEdit = false, bSetEditValue = false, bWasClickingInBoundaries = false, bWasClicking = false;
@@ -1182,11 +1182,11 @@ namespace PX::UI
 			return iCurrentValue;
 		}
 
-		float PX_API Slider( Types::cstr_t szTitle, char* szInputBuffer, float flMin, float flMax, float flCurrentValue, unsigned uStartX, unsigned uStartY, unsigned uWidth, unsigned uHeight, unsigned uDigits )
+		float PX_API Slider( cstr_t szTitle, char* szInputBuffer, float flMin, float flMax, float flCurrentValue, unsigned uStartX, unsigned uStartY, unsigned uWidth, unsigned uHeight, unsigned uDigits )
 		{
 			iCurrentRowUsedColumns += 3;
 
-			dbg::Assert( flMax > flMin );
+			px_assert( flMax > flMin );
 			auto szTexta = std::to_string( flCurrentValue ).substr( 0, std::to_string( int( flCurrentValue ) ).size( ) + 1 + uDigits );
 			auto szText = szTexta.c_str( );
 			static auto bInEdit = false, bSetEditValue = false;
@@ -1307,19 +1307,19 @@ namespace PX::UI
 				nk_layout_space_end
 			};
 
-			dbg::Assert( iCurrentRowUsedColumns == iCurrentRowMaxColumns );
+			px_assert( iCurrentRowUsedColumns == iCurrentRowMaxColumns );
 			fnEndRow[ rowLastRowType ]( pContext );
 		}
 
 		void PX_API SetRowWidth( float flRowWidth )
 		{
-			dbg::Assert( rowLastRowType == ROW_STATIC );
+			px_assert( rowLastRowType == ROW_STATIC );
 			return nk_layout_row_push( pContext, flRowWidth );
 		}
 
 		void PX_API Spacing( unsigned uColumns /*= 1*/ )
 		{
-			dbg::Assert( iCurrentRowUsedColumns++ < iCurrentRowMaxColumns );
+			px_assert( iCurrentRowUsedColumns++ < iCurrentRowMaxColumns );
 			nk_spacing( pContext, uColumns );
 			if ( iCurrentRowUsedColumns == iCurrentRowMaxColumns )
 				EndRow( );
@@ -1333,7 +1333,7 @@ namespace PX::UI
 
 		void PX_API PushCustomRow( unsigned uStartX, unsigned uStartY, unsigned uWidth, unsigned uHeight )
 		{
-			dbg::Assert( rowLastRowType == ROW_CUSTOM );
+			px_assert( rowLastRowType == ROW_CUSTOM );
 			return nk_layout_space_push( pContext, nk_rect( float( uStartX ), float( uStartY ), float( uWidth ), float( uHeight ) ) );
 		}
 	}

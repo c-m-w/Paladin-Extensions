@@ -45,7 +45,7 @@ public:
 	}
 };
 
-Tools::hook_t* hHook;
+hook_t* hHook;
 
 using fn1_t = void( __thiscall* )( CFunctions* );
 using fn2_t = void( __thiscall* )( CFunctions*, const wchar_t* );
@@ -83,7 +83,7 @@ void PX_API VirtualTableHookExample( )
 	CFunctions obj;
 	CVirtualTable* vftbl = &obj;
 
-	hHook = new Tools::hook_t( vftbl, L"user32.dll" ); // example module
+	hHook = new hook_t( vftbl, L"user32.dll" ); // example module
 	hHook->HookIndex( 1, hkFunctionTwo );
 	hHook->HookIndex( 2, hkFunctionThree );
 	hHook->HookIndex( 3, hkFunctionFour );
@@ -100,7 +100,7 @@ void PX_API VirtualTableHookExample( )
 void PX_API ThreadTest( )
 {
 	while ( true )
-		Tools::Wait( 1 );
+		Wait( 1 );
 }
 
 void messagebox( unsigned uFlags )
@@ -136,7 +136,7 @@ void PX_API ThreadHijackExample( )
 	GetThreadContext( hThread, &ctxThread );
 
 	ctxThread.Esp -= 4;
-	auto ptr = reinterpret_cast< Types::ptr_t* >( ctxThread.Esp );
+	auto ptr = reinterpret_cast< ptr_t* >( ctxThread.Esp );
 	*ptr = ctxThread.Eip;
 	ctxThread.Eip = DWORD( ThreadHijack );
 

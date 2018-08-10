@@ -6,19 +6,6 @@ namespace PX
 {
 	namespace dbg
 	{
-		template< typename _t > bool PX_API Assert( _t _ToAssert )
-		{
-			static int i;
-			if ( _ToAssert == _t( ) )
-#if defined _DEBUG
-				throw std::exception( "Failed to assert", i );
-#else
-				return false;
-#endif
-			i++;
-			return true;
-		}
-
 		namespace
 		{
 #if defined _DEBUG 

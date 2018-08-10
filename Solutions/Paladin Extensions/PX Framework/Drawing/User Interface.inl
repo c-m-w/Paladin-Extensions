@@ -59,7 +59,7 @@ namespace PX::UI::Widgets
 
 	template< typename _t > _t PX_API Inputbox( unsigned uMaxCharacters, char* szBuffer )
 	{
-		dbg::Assert( iCurrentRowMaxColumns - iCurrentRowUsedColumns > 0 );
+		px_assert( iCurrentRowMaxColumns - iCurrentRowUsedColumns > 0 );
 		iCurrentRowUsedColumns++;
 
 		if ( HoveringNextWidget( ) )

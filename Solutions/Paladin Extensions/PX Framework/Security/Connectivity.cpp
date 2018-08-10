@@ -10,7 +10,7 @@ namespace PX::Net
 		return size * nmemb;
 	}
 
-	std::string PX_API GeneratePostData( const std::deque< Net::post_data_t >& dqPostData )
+	std::string PX_API GeneratePostData( const std::deque< post_data_t >& dqPostData )
 	{
 		std::string strFormattedData { };
 		for each( auto pdPostData in dqPostData )
@@ -41,7 +41,7 @@ namespace PX::Net
 	{
 		std::string strResponseBuffer, strPostDataBuffer = GeneratePostData( dqPostData );
 
-		dbg::Assert(	CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_URL, _strSite.c_str( ) )
+		px_assert(	CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_URL, _strSite.c_str( ) )
 		            && CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_POST, 1L )
 		            && CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_POSTFIELDS, strPostDataBuffer.c_str( ) )
 		            && CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_FOLLOWLOCATION, 1L )

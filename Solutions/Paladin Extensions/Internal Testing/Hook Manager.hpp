@@ -4,7 +4,7 @@
 
 namespace PX::Tools
 {
-	std::size_t PX_API EstimateTableLength( Types::ptr_t* pVirtualTable );
+	std::size_t PX_API EstimateTableLength( ptr_t* pVirtualTable );
 
 	struct hook_t
 	{
@@ -12,7 +12,7 @@ namespace PX::Tools
 		DWORD dwOldProtection;
 		std::size_t sTableLength, sTableSize;
 		void* pClassBase;
-		Types::ptr_t* pOldTable,* pNewTable;
+		ptr_t* pOldTable,* pNewTable;
 		HMODULE hAllocationModule;
 		bool bSetNewTable;
 

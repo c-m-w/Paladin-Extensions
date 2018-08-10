@@ -16,10 +16,10 @@ namespace PX::Render
 	};
 
 	/** \brief Time at which the window was restored from minimized. */
-	PX_SDK Tools::moment_t mmtRestoreWindow;
+	PX_SDK moment_t mmtRestoreWindow;
 
 	/** \brief Title of the window that will be created. */
-	PX_SDK Types::wcstr_t wszWindowTitle = static_cast< wchar_t* >( malloc( 32 ) );
+	PX_SDK wcstr_t wszWindowTitle = static_cast< wchar_t* >( malloc( 32 ) );
 	/** \brief Width of the window. */
 	PX_SDK unsigned uWindowWidth;
 	/** \brief Height of the window. */
@@ -43,10 +43,10 @@ namespace PX::Render
 	/** \brief Creates a window and sets up the ability to render to it. */
 	/**	\param pDimensions Array of the dimensions of the render target, elements being in order width, height. */
 	/**	\param szNewWindowTitle Title of the window. */
-	void PX_API InitializeRenderTarget( unsigned* pDimensions, Types::wcstr_t szNewWindowTitle = nullptr );
+	void PX_API InitializeRenderTarget( unsigned* pDimensions, wcstr_t szNewWindowTitle = nullptr );
 
 	/** \brief The address of the old Window Proc. */
-	PX_SDK Types::ptr_t uOldWindowProc;
+	PX_SDK ptr_t uOldWindowProc;
 	/** \brief HWND of the window which we set the Window Proc for. */
 	PX_SDK HWND hwOldWindowHandle;
 	/** \brief Set the Window Proc of the HWND being used by a d3d device, to receive input from the window through our WndProc function. */
