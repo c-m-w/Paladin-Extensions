@@ -418,16 +418,17 @@ void PX_API OnLaunchOriginal( )
 
 			bShouldClose = true;
 
-			while ( sys::GetProcessID( PX_XOR( L"Steam.exe" ) ) == 0u || sys::GetProcessID( wstrApplicationExecutableNames[ iSelectedExtension ].c_str( ) ) == 0u )
-				Wait( 1 );
-
-			Wait( 100 );
+			while ( !sys::IsProcessOpen( PX_XOR( L"Steam.exe" ) ) 
+					|| !sys::IsProcessOpen( wstrApplicationExecutableNames[ iSelectedExtension ] )
+					|| !sys::IsProcessThreadRunning( wstrApplicationExecutableNames[ iSelectedExtension ] ) )
+				Wait( 5 );
 
 			const auto strDLL = Manager::AssembleExtension( iSelectedExtension );
 			auto pBuffer = VirtualAlloc( nullptr, strDLL.length( ) + 1, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE );
 			memcpy( pBuffer, strDLL.c_str( ), strDLL.length( ) );
 
 			Inject( pBuffer, wstrApplicationExecutableNames[ iSelectedExtension ], new sys::injection_info_t );
+			bShouldClose = true;
 		}
 		break;
 

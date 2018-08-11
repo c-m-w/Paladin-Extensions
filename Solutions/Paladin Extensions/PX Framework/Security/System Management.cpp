@@ -120,6 +120,9 @@ namespace PX::sys
 	{
 		PROCESSENTRY32 peTarget { sizeof peTarget };
 
+		const auto errLastError = GetLastError( );
+		SetLastError( 0u );
+
 		auto hSnapshot = CreateToolhelp32Snapshot( TH32CS_SNAPPROCESS, NULL );
 		if ( hSnapshot == INVALID_HANDLE_VALUE )
 		{
@@ -140,6 +143,8 @@ namespace PX::sys
 
 			if ( GetLastError( ) == ERROR_NO_MORE_FILES )
 				return 0u;
+
+			SetLastError( errLastError );
 		}
 		else
 		{
@@ -154,6 +159,9 @@ namespace PX::sys
 	{
 		auto hSnapshot = CreateToolhelp32Snapshot( TH32CS_SNAPTHREAD, NULL );
 		THREADENTRY32 teThread { sizeof teThread };
+
+		const auto errLastError = GetLastError( );
+		SetLastError( 0u );
 
 		if ( hSnapshot == INVALID_HANDLE_VALUE )
 		{
@@ -178,9 +186,25 @@ namespace PX::sys
 				CloseHandle( hSnapshot );
 				return INVALID_HANDLE_VALUE;
 			}
+
+			SetLastError( errLastError );
 		}
 		CloseHandle( hSnapshot );
 		return INVALID_HANDLE_VALUE;
+	}
+
+	bool PX_API IsProcessOpen( const std::wstring& wstrExecutableName )
+	{
+		return GetProcessID( wstrExecutableName ) != 0u;
+	}
+
+	bool PX_API IsProcessThreadRunning( const std::wstring& wstrExecutableName )
+	{
+		const auto hThread = FindProcessThread( GetProcessID( wstrExecutableName ) );
+		const auto bResult = hThread != nullptr;
+		if ( bResult )
+			CloseHandle( hThread );
+		return bResult;
 	}
 
 	/// ALLIGN ALL SIZES TO A PAGE (4 bytes)
