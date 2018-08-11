@@ -7,6 +7,8 @@
 
 #include <Windows.h>
 #include <shellapi.h>
+#include <winternl.h>
+#include <ntstatus.h>
 
 #include <cryptopp/base64.h>
 #include <cryptopp/filters.h>

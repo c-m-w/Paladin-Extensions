@@ -3,6 +3,7 @@
 #include "PX Manager.hpp"
 
 using namespace Net;
+using namespace Files;
 
 namespace Manager
 {
@@ -21,7 +22,7 @@ namespace Manager
 		bAttemptedLicenceCreation = true;
 
 		post_data_t dqPostData;
-		dqPostData.emplace_back( "client", "true" );
+		dqPostData.emplace_back( PX_XOR(  "client" ), PX_XOR( "true" ) );
 
 		Net::InitializeConnection( );
 		Cryptography::Initialize( );
@@ -33,7 +34,7 @@ namespace Manager
 		if ( strResponse.empty( ) )
 			return false;
 
-		Files::WriteFile( wszCredentialsFile, string_cast< std::wstring >( strResponse ), true, false );
+		FileWrite( wszCredentialsFile, string_cast< std::wstring >( strResponse ), true, false );
 		return true;
 	}
 
@@ -46,7 +47,7 @@ namespace Manager
 		if ( bRecalled )
 			bAttemptedLicenceCreation = false;
 
-		if ( !Files::ReadFile( wszCredentialsFile, strFile, true ) )
+		if ( !FileRead( wszCredentialsFile, strFile, true ) )
 			bCreatedLicenseFile = CreateLicenseFile( );
 
 		try
@@ -91,24 +92,24 @@ namespace Manager
 
 	extensions_t PX_API RetrieveExtensionInformation( )
 	{
-		auto strSecurityBuffer = Cryptography::Decrypt( Request( "https://www.paladin.rip/auth/extensions.php", post_data_t { } ) );
+		auto strSecurityBuffer = Cryptography::Decrypt( Request( PX_XOR( "https://www.paladin.rip/auth/extensions.php" ), post_data_t { } ) );
 		if ( strSecurityBuffer.empty( ) )
 			return { };
 
 		auto jsFileInformation = nlohmann::json::parse( strSecurityBuffer );
 		extensions_t extReturn;
-		extReturn.emplace_back( "Empty", "Empty", "Empty", "Empty", "Empty" ); // Extension 0 doesn't exist & we dont want to use default constructor cause itll make the connection fail.
+		extReturn.emplace_back( PX_XOR( "Empty" ), PX_XOR( "Empty" ), PX_XOR( "Empty" ), PX_XOR( "Empty" ), PX_XOR( "Empty" ) ); // Extension 0 doesn't exist & we dont want to use default constructor cause itll make the connection fail.
 
-		for each ( auto& extension in jsFileInformation[ "Info" ] )
-			extReturn.emplace_back( extension[ "Name" ].get< std::string >( ), extension[ "Status" ].get< std::string >( ),
-									extension[ "Estimated Next Update" ].get< std::string >( ), extension[ "Last Update" ].get< std::string >( ),
-									extension[ "Version" ].get< std::string >( ) );
+		for each ( auto& extension in jsFileInformation[ PX_XOR( "Info" ) ] )
+			extReturn.emplace_back( extension[ PX_XOR( "Name" ) ].get< std::string >( ), extension[ PX_XOR( "Status" ) ].get< std::string >( ),
+									extension[ PX_XOR( "Estimated Next Update" ) ].get< std::string >( ), extension[ PX_XOR( "Last Update" ) ].get< std::string >( ),
+									extension[ PX_XOR( "Version" ) ].get< std::string >( ) );
 		return extReturn;
 	}
 
 	std::string* PX_API RetrieveLaunchInformation( )
 	{
-		auto strSecurityBuffer = Cryptography::Decrypt( Request( "https://www.paladin.rip/auth/lastlaunch.php", post_data_t { } ) );
+		auto strSecurityBuffer = Cryptography::Decrypt( Request( PX_XOR( "https://www.paladin.rip/auth/lastlaunch.php" ), post_data_t { } ) );
 		if ( strSecurityBuffer.empty( ) )
 			return nullptr;
 
@@ -129,7 +130,7 @@ namespace Manager
 		std::string strAssembledFile { };
 
 		for ( int i { }; i < PX_FILE_SECTIONS; i++ )
-			strFileSections.at( jsFileInformation[ "Order" ][ i ].get< int >( ) ) = Cryptography::Decrypt( jsFileInformation[ "Sections" ][ i ].get< std::string >( ) );
+			strFileSections.at( jsFileInformation[ PX_XOR( "Order" ) ][ i ].get< int >( ) ) = Cryptography::Decrypt( jsFileInformation[ PX_XOR( "Sections" ) ][ i ].get< std::string >( ) );
 
 		for each ( const auto& strSection in strFileSections )
 			strAssembledFile += strSection;

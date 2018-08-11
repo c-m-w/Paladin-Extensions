@@ -4,7 +4,7 @@
 
 namespace PX::sys
 {
-	std::wstring PX_API RetrieveInfo( const bstr_t& wstrDevice, wcstr_t wstrdeviceProperty = L"Name" )
+	std::wstring PX_API RetrieveInfo( const bstr_t& wstrDevice, wcstr_t wstrdeviceProperty = PX_XOR( L"Name" ) )
 	{
 		if ( CoInitializeEx( nullptr, COINIT_MULTITHREADED ) != S_OK )
 			return { };
@@ -19,13 +19,13 @@ namespace PX::sys
 			return { };
 
 		IWbemServices* pServices;
-		pLocator->ConnectServer( bstr_t( L"ROOT\\CIMV2" ), nullptr, nullptr, nullptr, 0, nullptr, nullptr, &pServices );
+		pLocator->ConnectServer( bstr_t( PX_XOR( L"ROOT\\CIMV2" ) ), nullptr, nullptr, nullptr, 0, nullptr, nullptr, &pServices );
 		if ( pServices == nullptr
 			 || CoSetProxyBlanket( pServices, RPC_C_AUTHN_WINNT, RPC_C_AUTHZ_NONE, nullptr, RPC_C_AUTHN_LEVEL_CALL, RPC_C_IMP_LEVEL_IMPERSONATE, nullptr, EOAC_NONE ) != S_OK )
 			return { };
 
 		IEnumWbemClassObject* pEnumerator;
-		pServices->ExecQuery( bstr_t( L"WQL" ), wstrDevice, WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY, nullptr, &pEnumerator );
+		pServices->ExecQuery( bstr_t( PX_XOR( L"WQL" ) ), wstrDevice, WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY, nullptr, &pEnumerator );
 		if ( pEnumerator == nullptr )
 			return { };
 
@@ -74,43 +74,42 @@ namespace PX::sys
 
 		return nlohmann::json
 		{
-			{ "cpu"    , string_cast< std::string >( wstrSystemParts[ SYS_CPU ] ) },
-			{ "gpu"    , string_cast< std::string >( wstrSystemParts[ SYS_GPU ] ) },
-			{ "display", string_cast< std::string >( wstrSystemParts[ SYS_DISPLAY ] ) },
-			{ "os"     , string_cast< std::string >( wstrSystemParts[ SYS_OS ] ) },
-			{ "board"  , string_cast< std::string >( wstrSystemParts[ SYS_BOARD ] ) },
+			{ PX_XOR( "cpu"     ), string_cast< std::string >( wstrSystemParts[ SYS_CPU ] ) },
+			{ PX_XOR( "gpu"     ), string_cast< std::string >( wstrSystemParts[ SYS_GPU ] ) },
+			{ PX_XOR( "display" ), string_cast< std::string >( wstrSystemParts[ SYS_DISPLAY ] ) },
+			{ PX_XOR( "os"      ), string_cast< std::string >( wstrSystemParts[ SYS_OS ] ) },
+			{ PX_XOR( "board"   ), string_cast< std::string >( wstrSystemParts[ SYS_BOARD ] ) },
 		};
 	}
 
-	bool PX_API EnsureElevation( HANDLE hProcess /*= nullptr*/ )
+	bool PX_API EnsureElevation( HANDLE hProcess /*= GetCurrentProcess( )*/ )
 	{
-		HANDLE hTokenSelf;
+		HANDLE hTokenSelf { };
 		TOKEN_ELEVATION teSelf { };
 		DWORD dwReturnLength = sizeof( TOKEN_ELEVATION );
 
-		if ( !OpenProcessToken( hProcess == nullptr ? GetCurrentProcess( ) : hProcess, TOKEN_QUERY | TOKEN_ADJUST_PRIVILEGES, &hTokenSelf )
-			 && !GetTokenInformation( hTokenSelf, TokenElevation, &teSelf, dwReturnLength, &dwReturnLength ) )
+		if ( !OpenProcessToken( hProcess, TOKEN_QUERY | TOKEN_ADJUST_PRIVILEGES, &hTokenSelf ) || !hTokenSelf
+			 || !GetTokenInformation( hTokenSelf, TokenElevation, &teSelf, dwReturnLength, &dwReturnLength ) )
 		{
-			CloseHandle( hTokenSelf );
+			hTokenSelf && CloseHandle( hTokenSelf );
 			return false;
 		}
 
-		if ( !teSelf.TokenIsElevated )
+		TOKEN_PRIVILEGES tpSelf;
+		tpSelf.PrivilegeCount = 1;
+		
+		tpSelf.Privileges[ 0 ].Attributes = SE_PRIVILEGE_ENABLED;
+		
+		if ( !LookupPrivilegeValue( nullptr, SE_DEBUG_NAME, &tpSelf.Privileges[ 0 ].Luid )
+			 || !AdjustTokenPrivileges( hTokenSelf, FALSE, &tpSelf, 0, nullptr, nullptr ) )
 		{
-			TOKEN_PRIVILEGES tpSelf;
-			tpSelf.PrivilegeCount = 1;
-
-			tpSelf.Privileges[ 0 ].Attributes = SE_PRIVILEGE_ENABLED;
-
-			tpSelf.Privileges[ 0 ].Luid.LowPart = 20;
-			tpSelf.Privileges[ 0 ].Luid.HighPart = 0;
-
-			AdjustTokenPrivileges( hTokenSelf, FALSE, &tpSelf, 0, nullptr, nullptr );
+			hTokenSelf && CloseHandle( hTokenSelf );
+			return false;
 		}
 
 		if ( !GetTokenInformation( hTokenSelf, TokenElevation, &teSelf, dwReturnLength, &dwReturnLength ) || !teSelf.TokenIsElevated )
 		{
-			CloseHandle( hTokenSelf );
+			hTokenSelf && CloseHandle( hTokenSelf );
 			return false;
 		}
 
@@ -170,7 +169,7 @@ namespace PX::sys
 				if ( teThread.th32OwnerProcessID == dwProcessID )
 				{
 					CloseHandle( hSnapshot );
-					return OpenThread( THREAD_ALL_ACCESS, FALSE, teThread.th32ThreadID );
+					return OpenThread( THREAD_GET_CONTEXT | THREAD_SET_CONTEXT, FALSE, teThread.th32ThreadID );
 				}
 			} while ( Thread32Next( hSnapshot, &teThread ) == TRUE );
 
@@ -456,6 +455,45 @@ namespace PX::sys
 
 		fnCleanup( false );
 		return true;
+	}
+
+	typedef struct
+	{
+		DWORD    dwProcessID;
+		BYTE     bObjectType;
+		BYTE     bFlags;
+		WORD     wValue;
+		PVOID    pAddress;
+		DWORD    dwGrantedAccess;
+	} system_handle_t;
+	typedef struct
+	{
+		ULONG HandleCount;
+		system_handle_t Handles[ 1 ];
+	} *psystem_handle_information_t;
+
+	HANDLE FindInternalHandle( const DWORD dwTargetProcessID )
+	{
+		const auto fnQuerySystemInfo = reinterpret_cast< NTSTATUS( NTAPI* )( ULONG, PVOID, ULONG, PULONG ) >
+								( GetProcAddress( GetModuleHandle( PX_XOR( L"ntdll.dll" ) ), PX_XOR( "NtQuerySystemInformation" ) ) );
+		auto ulHandleInfoSize = 0x10000ul;
+		auto pHandleInfo = reinterpret_cast< psystem_handle_information_t >( malloc( ulHandleInfoSize ) );
+
+		NTSTATUS ntsResult;
+		constexpr auto ulSystemHandleInfoFlags = 1 << 4;
+		while ( ( ntsResult = fnQuerySystemInfo( ulSystemHandleInfoFlags, pHandleInfo, ulHandleInfoSize, nullptr ) ) == STATUS_INFO_LENGTH_MISMATCH )
+			pHandleInfo = reinterpret_cast< psystem_handle_information_t >( realloc( pHandleInfo, ulHandleInfoSize *= 2 ) );
+
+		px_assert( NT_SUCCESS( ntsResult ) );
+
+		for ( auto ul = 0ul; ul < pHandleInfo->HandleCount; ul++ )
+		{
+			if ( pHandleInfo->Handles[ ul ].dwProcessID == GetCurrentProcessId( )
+				 && dwTargetProcessID == GetProcessId( reinterpret_cast< HANDLE >( pHandleInfo->Handles[ ul ].wValue ) ) )
+				return reinterpret_cast< HANDLE >( pHandleInfo->Handles[ ul ].wValue );
+		}
+		free( pHandleInfo );
+		return nullptr;
 	}
 
 	void PX_API Delete( )

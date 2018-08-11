@@ -15,38 +15,38 @@ namespace PX::Files
 		for ( unsigned i = 0u; i <= uEscapeLevels; i++ )
 			wstrDirectory = wstrDirectory.substr( 0, wstrDirectory.find_last_of( L'\\' ) );
 
-		return wstrDirectory + L"\\";
+		return wstrDirectory + L'\\';
 	}
 
 	namespace Resources
 	{
 		bool LoadResources( const std::string& strHash )
 		{
-			std::wstring wstrPath = GetDirectory( PX_DEPENDENCIES_ESCAPE ) + LR"(Resources\)";
+			std::wstring wstrPath = GetDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(Resources\)" );
 
-			bool bFilesExist = std::filesystem::exists( ( wstrPath + LR"(Paladin Logo.ico)" ).c_str( ) )
-					& std::filesystem::exists( ( wstrPath + LR"(Paladin Logo.png)" ).c_str( ) )
+			bool bFilesExist = std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Paladin Logo.ico)" ) ).c_str( ) )
+				& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Paladin Logo.png)" ) ).c_str( ) )
 
-					& std::filesystem::exists( ( wstrPath + LR"(Cursor\Arrow.cur)" ).c_str( ) )
-					& std::filesystem::exists( ( wstrPath + LR"(Cursor\Hand.cur)" ).c_str( ) )
-					& std::filesystem::exists( ( wstrPath + LR"(Cursor\I Beam.cur)" ).c_str( ) )
+				& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Cursor\Arrow.cur)" ) ).c_str( ) )
+				& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Cursor\Hand.cur)" ) ).c_str( ) )
+				& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Cursor\I Beam.cur)" ) ).c_str( ) )
 
-					& std::filesystem::exists( ( wstrPath + LR"(Fonts\Envy.ttf)" ).c_str( ) )
-					& std::filesystem::exists( ( wstrPath + LR"(Fonts\Font Awesome.ttf)" ).c_str( ) )
-					& std::filesystem::exists( ( wstrPath + LR"(Fonts\Roboto.ttf)" ).c_str( ) )
-					& std::filesystem::exists( ( wstrPath + LR"(Fonts\Roboto Bold.ttf)" ).c_str( ) )
-					& std::filesystem::exists( ( wstrPath + LR"(Fonts\Tahoma.ttf)" ).c_str( ) )
-					& std::filesystem::exists( ( wstrPath + LR"(Fonts\Tahoma Bold.ttf)" ).c_str( ) )
+				& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Fonts\Envy.ttf)" ) ).c_str( ) )
+				& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Fonts\Font Awesome.ttf)" ) ).c_str( ) )
+				& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Fonts\Roboto.ttf)" ) ).c_str( ) )
+				& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Fonts\Roboto Bold.ttf)" ) ).c_str( ) )
+				& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Fonts\Tahoma.ttf)" ) ).c_str( ) )
+				& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Fonts\Tahoma Bold.ttf)" ) ).c_str( ) )
 
-					& std::filesystem::exists( ( wstrPath + LR"(Game Icons\CSGO.png)" ).c_str( ) )
-					& std::filesystem::exists( ( wstrPath + LR"(Game Icons\PUBG.png)" ).c_str( ) );
+				& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Game Icons\CSGO.png)" ) ).c_str( ) )
+				& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Game Icons\PUBG.png)" ) ).c_str( ) );
 
 			if ( !bFilesExist )
 				return false;
 
 			const auto fnGetFileData = [ ]( wcstr_t szPathToFile )
 			{
-				auto pResource = _wfopen( szPathToFile, L"r" );
+				auto pResource = _wfopen( szPathToFile, PX_XOR( L"r" ) );
 				px_assert( pResource );
 
 				fseek( pResource, 0, SEEK_END );
@@ -61,39 +61,39 @@ namespace PX::Files
 				return strData;
 			};
 
-			strLogoICO = fnGetFileData( ( wstrPath + LR"(Paladin Logo.ico)" ).c_str( ) );
-			strLogoPNG = fnGetFileData( ( wstrPath + LR"(Paladin Logo.png)" ).c_str( ) );
+			strLogoICO = fnGetFileData( ( wstrPath + PX_XOR( LR"(Paladin Logo.ico)" ) ).c_str( ) );
+			strLogoPNG = fnGetFileData( ( wstrPath + PX_XOR( LR"(Paladin Logo.png)" ) ).c_str( ) );
 
-			strCursorArrow = fnGetFileData( ( wstrPath + LR"(Cursor\Arrow.cur)" ).c_str( ) );
-			strCursorHand = fnGetFileData( ( wstrPath + LR"(Cursor\Hand.cur)" ).c_str( ) );
-			strCursorIBeam = fnGetFileData( ( wstrPath + LR"(Cursor\I Beam.cur)" ).c_str( ) );
+			strCursorArrow = fnGetFileData( ( wstrPath + PX_XOR( LR"(Cursor\Arrow.cur)" ) ).c_str( ) );
+			strCursorHand = fnGetFileData( ( wstrPath + PX_XOR( LR"(Cursor\Hand.cur)" ) ).c_str( ) );
+			strCursorIBeam = fnGetFileData( ( wstrPath + PX_XOR( LR"(Cursor\I Beam.cur)" ) ).c_str( ) );
 
-			strFontsEnvy = fnGetFileData( ( wstrPath + LR"(Fonts\Envy.ttf)" ).c_str( ) );
-			strFontsFontAwesome = fnGetFileData( ( wstrPath + LR"(Fonts\Font Awesome.ttf)" ).c_str( ) );
-			strFontsRoboto = fnGetFileData( ( wstrPath + LR"(Fonts\Font Awesome.ttf)" ).c_str( ) );
-			strFontsRobotoBold = fnGetFileData( ( wstrPath + LR"(Fonts\Roboto Bold.ttf)" ).c_str( ) );
-			strFontsTahoma = fnGetFileData( ( wstrPath + LR"(Fonts\Tahoma.ttf)" ).c_str( ) );
-			strFontsTahomaBold = fnGetFileData( ( wstrPath + LR"(Fonts\Tahoma Bold.ttf)" ).c_str( ) );
+			strFontsEnvy = fnGetFileData( ( wstrPath + PX_XOR( LR"(Fonts\Envy.ttf)" ) ).c_str( ) );
+			strFontsFontAwesome = fnGetFileData( ( wstrPath + PX_XOR( LR"(Fonts\Font Awesome.ttf)" ) ).c_str( ) );
+			strFontsRoboto = fnGetFileData( ( wstrPath + PX_XOR( LR"(Fonts\Font Awesome.ttf)" ) ).c_str( ) );
+			strFontsRobotoBold = fnGetFileData( ( wstrPath + PX_XOR( LR"(Fonts\Roboto Bold.ttf)" ) ).c_str( ) );
+			strFontsTahoma = fnGetFileData( ( wstrPath + PX_XOR( LR"(Fonts\Tahoma.ttf)" ) ).c_str( ) );
+			strFontsTahomaBold = fnGetFileData( ( wstrPath + PX_XOR( LR"(Fonts\Tahoma Bold.ttf)" ) ).c_str( ) );
 
-			strGameIconsCSGO = fnGetFileData( ( wstrPath + LR"(Game Icons\CSGO.png)" ).c_str( ) );
-			strGameIconsPUBG = fnGetFileData( ( wstrPath + LR"(Game Icons\PUBG.png)" ).c_str( ) );
+			strGameIconsCSGO = fnGetFileData( ( wstrPath + PX_XOR( LR"(Game Icons\CSGO.png)" ) ).c_str( ) );
+			strGameIconsPUBG = fnGetFileData( ( wstrPath + PX_XOR( LR"(Game Icons\PUBG.png)" ) ).c_str( ) );
 
 			auto strResourcesHash = GenerateHash( strLogoICO )
-					+ GenerateHash( strLogoPNG )
+				+ GenerateHash( strLogoPNG )
 
-					+ GenerateHash( strCursorArrow )
-					+ GenerateHash( strCursorHand )
-					+ GenerateHash( strCursorIBeam )
+				+ GenerateHash( strCursorArrow )
+				+ GenerateHash( strCursorHand )
+				+ GenerateHash( strCursorIBeam )
 
-					+ GenerateHash( strFontsEnvy )
-					+ GenerateHash( strFontsFontAwesome )
-					+ GenerateHash( strFontsRoboto )
-					+ GenerateHash( strFontsRobotoBold )
-					+ GenerateHash( strFontsTahoma )
-					+ GenerateHash( strFontsTahomaBold )
+				+ GenerateHash( strFontsEnvy )
+				+ GenerateHash( strFontsFontAwesome )
+				+ GenerateHash( strFontsRoboto )
+				+ GenerateHash( strFontsRobotoBold )
+				+ GenerateHash( strFontsTahoma )
+				+ GenerateHash( strFontsTahomaBold )
 
-					+ GenerateHash( strGameIconsCSGO )
-					+ GenerateHash( strGameIconsPUBG );
+				+ GenerateHash( strGameIconsCSGO )
+				+ GenerateHash( strGameIconsPUBG );
 
 			return strHash == strResourcesHash;
 		}
@@ -165,7 +165,7 @@ namespace PX::Files
 		return false;
 	}
 
-	bool PX_API ReadFile( std::wstring wstrPath, std::string& strData, bool bRelativePath, bool bBase64 /*= true*/ )
+	bool PX_API FileRead( std::wstring wstrPath, std::string& strData, bool bRelativePath, bool bBase64 /*= true*/ )
 	{
 		px_assert( !wstrPath.empty( ) );
 
@@ -180,7 +180,7 @@ namespace PX::Files
 		return true;
 	}
 
-	bool PX_API WriteFile( std::wstring wstrPath, const std::wstring& wstrData, bool bRelativePath, bool bBase64 /*= true*/ )
+	bool PX_API FileWrite( std::wstring wstrPath, const std::wstring& wstrData, bool bRelativePath, bool bBase64 /*= true*/ )
 	{
 		if ( wstrPath.empty( ) || wstrData.empty( ) )
 			return false;

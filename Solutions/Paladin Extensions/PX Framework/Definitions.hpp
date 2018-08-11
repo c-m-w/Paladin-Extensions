@@ -99,6 +99,7 @@
 // Encrypts string data on compile, then decrypts for access on run.
 #define PX_XOR( String ) ( PX::XOR::AXorString< PX::XOR::ACStringTraits< decltype( String ) >::char_trait_t, \
 	PX::XOR::AConstructIndexList< ( sizeof( String ) - 1 ) / PX::XOR::ACStringTraits< decltype( String ) >::int_trait_t >::result_t >( String ).Decrypt( ) )
+//#define PX_XOR( String ) ( String )
 
 #if defined _DEBUG
 // sets debug out line identifier as "Debug"

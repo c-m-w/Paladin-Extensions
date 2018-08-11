@@ -4,10 +4,11 @@
 
 #include "../PX Framework.hpp"
 
+using namespace PX::Files;
+using namespace PX::Render;
+
 namespace PX::UI
 {
-	using namespace Render;
-
 	namespace Manager
 	{
 		cstr_t	szWindowTitle = PX_XOR( "Paladin Extensions" );
@@ -19,8 +20,8 @@ namespace PX::UI
 		bool bDrawComboboxArrow = false;
 
 		constexpr nk_color clrTextActive { 255, 255, 255, 255 }, clrBlue { 33, 150, 243, 255 }, clrDarkBlue { 43, 60, 75, 255 }, clrBackground { 56, 60, 66, 255 }, clrLightBackground { 61, 65, 72, 255 },
-		                   clrDarkBackground { 45, 50, 56, 255 }, clrBorder { 80, 84, 89, 255 }, clrToolbox { 42, 44, 48, 255 }, clrHeader { 33, 36, 40, 255 }, clrBlueActive { 54, 70, 84, 255 },
-		                   clrBlueHover { 54, 70, 84, 200 }, clrBlueDormant { 43, 60, 75, 255 }, clrTextDormant { 175, 180, 187, 255 };
+			clrDarkBackground { 45, 50, 56, 255 }, clrBorder { 80, 84, 89, 255 }, clrToolbox { 42, 44, 48, 255 }, clrHeader { 33, 36, 40, 255 }, clrBlueActive { 54, 70, 84, 255 },
+			clrBlueHover { 54, 70, 84, 200 }, clrBlueDormant { 43, 60, 75, 255 }, clrTextDormant { 175, 180, 187, 255 };
 		nk_color clrColorTable[ NK_COLOR_COUNT ] { };
 
 		nk_style_button btnTopActive { }, btnTop { }, btnRegularActive { }, btnRegular { }, btnSpecialActive { }, btnSpecial { }, btnCombo { }, btnComboActive { };
@@ -29,7 +30,7 @@ namespace PX::UI
 
 		nk_font* PX_API AddFont( std::string strFontFileName, unsigned uFontSize, struct nk_font_config fcFontConfiguration, unsigned uFontAwesomeSize = 0 )
 		{
-			static std::string strFontDirectory( R"(C:\Windows\Fonts\)" );
+			static std::string strFontDirectory( PX_XOR( R"(C:\Windows\Fonts\)" ) );
 
 			nk_d3d9_font_stash_begin( &pAtlas );
 			auto pFont = nk_font_atlas_add_from_file( pAtlas, ( strFontDirectory + strFontFileName ).c_str( ), float( uFontSize ), nullptr );
@@ -46,7 +47,7 @@ namespace PX::UI
 			// We only need a font configuration for FontAwesome because it needs font merging and a specific glyph range.
 			//
 			struct nk_font_config fcFontAwesomeConfiguration
-					{ };
+			{ };
 			static constexpr nk_rune rnIconRange[ ] { ICON_MIN_FA, ICON_MAX_FA, 0 };
 
 			fcFontAwesomeConfiguration = nk_font_config( 16 );
@@ -252,39 +253,31 @@ namespace PX::UI
 			vecTextures.emplace_back( 50, 50 ); // TEXTURE_CURSOR_HAND
 			vecTextures.emplace_back( 50, 50 ); // TEXTURE_CURSOR_IBEAM
 
-			return D3DXCreateTextureFromFileEx( pDevice, ( Files::GetDirectory( PX_DEPENDENCIES_ESCAPE ) + LR"(Resources\Paladin Logo Small.png)" ).c_str( ), vecTextures[ TEXTURE_LOGO ].uWidth,
+			return D3DXCreateTextureFromFileEx( pDevice, ( GetDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(Resources\Paladin Logo Small.png)" ) ).c_str( ), vecTextures[ TEXTURE_LOGO ].uWidth,
 												vecTextures[ TEXTURE_LOGO ].uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL,
 												&vecTextures[ TEXTURE_LOGO ].iiImage, nullptr, &vecTextures[ TEXTURE_LOGO ].pTexture ) == D3D_OK
-
-					&& D3DXCreateTextureFromFileEx( pDevice, ( Files::GetDirectory( PX_DEPENDENCIES_ESCAPE ) + LR"(Resources\Paladin Logo Loading.png)" ).c_str( ), vecTextures[ TEXTURE_LOGO_LOADING ].uWidth,
+				&& D3DXCreateTextureFromFileEx( pDevice, ( GetDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(Resources\Paladin Logo Loading.png)" ) ).c_str( ), vecTextures[ TEXTURE_LOGO_LOADING ].uWidth,
 												vecTextures[ TEXTURE_LOGO_LOADING ].uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL,
 												&vecTextures[ TEXTURE_LOGO_LOADING ].iiImage, nullptr, &vecTextures[ TEXTURE_LOGO_LOADING ].pTexture ) == D3D_OK
-
-					&& D3DXCreateTextureFromFileEx( pDevice, ( Files::GetDirectory( PX_DEPENDENCIES_ESCAPE ) + LR"(Resources\Game Icons\CSGO Sized.png)" ).c_str( ), vecTextures[ TEXTURE_ICON_CSGO ].uWidth,
+				&& D3DXCreateTextureFromFileEx( pDevice, ( GetDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(Resources\Game Icons\CSGO Sized.png)" ) ).c_str( ), vecTextures[ TEXTURE_ICON_CSGO ].uWidth,
 												vecTextures[ TEXTURE_ICON_CSGO ].uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL,
 												&vecTextures[ TEXTURE_ICON_CSGO ].iiImage, nullptr, &vecTextures[ TEXTURE_ICON_CSGO ].pTexture ) == D3D_OK
-
-					&& D3DXCreateTextureFromFileEx( pDevice, ( Files::GetDirectory( PX_DEPENDENCIES_ESCAPE ) + LR"(Resources\Game Icons\PUBG Sized.png)" ).c_str( ), vecTextures[ TEXTURE_ICON_PUBG ].uWidth,
+				&& D3DXCreateTextureFromFileEx( pDevice, ( GetDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(Resources\Game Icons\PUBG Sized.png)" ) ).c_str( ), vecTextures[ TEXTURE_ICON_PUBG ].uWidth,
 												vecTextures[ TEXTURE_ICON_PUBG ].uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL,
 												&vecTextures[ TEXTURE_ICON_PUBG ].iiImage, nullptr, &vecTextures[ TEXTURE_ICON_PUBG ].pTexture ) == D3D_OK
-
-				&& D3DXCreateTextureFromFileEx( pDevice, ( Files::GetDirectory( PX_DEPENDENCIES_ESCAPE ) + LR"(Resources\Game Icons\RSIX Sized.png)" ).c_str( ), vecTextures[ TEXTURE_ICON_RSIX ].uWidth,
+				&& D3DXCreateTextureFromFileEx( pDevice, ( GetDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(Resources\Game Icons\RSIX Sized.png)" ) ).c_str( ), vecTextures[ TEXTURE_ICON_RSIX ].uWidth,
 												vecTextures[ TEXTURE_ICON_RSIX ].uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL,
 												&vecTextures[ TEXTURE_ICON_RSIX ].iiImage, nullptr, &vecTextures[ TEXTURE_ICON_RSIX ].pTexture ) == D3D_OK
-
-					&& D3DXCreateTextureFromFileEx( pDevice, ( Files::GetDirectory( PX_DEPENDENCIES_ESCAPE ) + LR"(Resources\Cursor\Arrow.png)" ).c_str( ), vecTextures[ TEXTURE_CURSOR_ARROW ].uWidth,
-													vecTextures[ TEXTURE_CURSOR_ARROW ].uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL,
-													&vecTextures[ TEXTURE_CURSOR_ARROW ].iiImage, nullptr, &vecTextures[ TEXTURE_CURSOR_ARROW ].pTexture ) == D3D_OK
-
-					&& D3DXCreateTextureFromFileEx( pDevice, ( Files::GetDirectory( PX_DEPENDENCIES_ESCAPE ) + LR"(Resources\Cursor\Hand.png)" ).c_str( ), vecTextures[ TEXTURE_CURSOR_HAND ].uWidth,
+				&& D3DXCreateTextureFromFileEx( pDevice, ( GetDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(Resources\Cursor\Arrow.png)" ) ).c_str( ), vecTextures[ TEXTURE_CURSOR_ARROW ].uWidth,
+												vecTextures[ TEXTURE_CURSOR_ARROW ].uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL,
+												&vecTextures[ TEXTURE_CURSOR_ARROW ].iiImage, nullptr, &vecTextures[ TEXTURE_CURSOR_ARROW ].pTexture ) == D3D_OK
+				&& D3DXCreateTextureFromFileEx( pDevice, ( GetDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(Resources\Cursor\Hand.png)" ) ).c_str( ), vecTextures[ TEXTURE_CURSOR_HAND ].uWidth,
 												vecTextures[ TEXTURE_CURSOR_HAND ].uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL,
 												&vecTextures[ TEXTURE_CURSOR_HAND ].iiImage, nullptr, &vecTextures[ TEXTURE_CURSOR_HAND ].pTexture ) == D3D_OK
-
-					&& D3DXCreateTextureFromFileEx( pDevice, ( Files::GetDirectory( PX_DEPENDENCIES_ESCAPE ) + LR"(Resources\Cursor\I Beam.png)" ).c_str( ), vecTextures[ TEXTURE_CURSOR_IBEAM ].uWidth,
+				&& D3DXCreateTextureFromFileEx( pDevice, ( GetDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(Resources\Cursor\I Beam.png)" ) ).c_str( ), vecTextures[ TEXTURE_CURSOR_IBEAM ].uWidth,
 												vecTextures[ TEXTURE_CURSOR_IBEAM ].uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL,
 												&vecTextures[ TEXTURE_CURSOR_IBEAM ].iiImage, nullptr, &vecTextures[ TEXTURE_CURSOR_IBEAM ].pTexture ) == D3D_OK
-
-					&& D3DXCreateSprite( pDevice, &pBufferSprite ) == D3D_OK;
+				&& D3DXCreateSprite( pDevice, &pBufferSprite ) == D3D_OK;
 		}
 
 		struct nk_vec2 PX_API CalculateTextBounds( cstr_t szText, unsigned uRowHeight /*= 30*/ )
@@ -342,7 +335,7 @@ namespace PX::UI
 						if ( !pntOldCursorPosRelative.x || !pntOldCursorPosRelative.y ) pntOldCursorPosRelative = pntCursorPosRelative;
 
 						SetWindowPos( hwWindowHandle, nullptr, ( recWindowPos.left - pntOldCursorPosRelative.x ) + pntCursorPosRelative.x,
-						              ( recWindowPos.top - pntOldCursorPosRelative.y ) + pntCursorPosRelative.y, uWindowWidth, uWindowHeight, 0 );
+							( recWindowPos.top - pntOldCursorPosRelative.y ) + pntCursorPosRelative.y, uWindowWidth, uWindowHeight, 0 );
 						UpdateWindow( hwWindowHandle );
 					}
 				}
@@ -405,7 +398,7 @@ namespace PX::UI
 			bCreatedWindow && HandleWindowInput( );
 
 			if ( nk_begin( pContext, szNuklearWindowTitle, nk_rect( 0, 0, float( uWindowWidth ), float( uWindowHeight ) ),
-			               NK_WINDOW_NO_SCROLLBAR ) )
+						   NK_WINDOW_NO_SCROLLBAR ) )
 			{
 				nk_layout_row_dynamic( pContext, 10, 0 );
 				SetFont( FONT_ROBOTO );
@@ -461,18 +454,18 @@ namespace PX::UI
 		{
 			static const std::deque< cstr_t > dqPrimaryTabs
 			{
-				"Tab One",
-				"Super Wide Tab That Is Dynamically Sized Depending On Text",
-				"Tab three!!!" ICON_FA_KEY,
-				"Tab Four"
+				PX_XOR( "Tab One" ),
+				PX_XOR( "Super Wide Tab That Is Dynamically Sized Depending On Text" ),
+				PX_XOR( "Tab three!!!" ICON_FA_KEY ),
+				PX_XOR( "Tab Four" )
 			};
 
 			static const std::deque< cstr_t > dqSubTabs
 			{
-				"Subtab One",
-				"Subtab Two",
-				"Subtab Three",
-				"Subtab Four"
+				PX_XOR( "Subtab One" ),
+				PX_XOR( "Subtab Two" ),
+				PX_XOR( "Subtab Three" ),
+				PX_XOR( "Subtab Four" )
 			};
 
 			using namespace Widgets;
@@ -485,13 +478,13 @@ namespace PX::UI
 			/// Create a JSON object to hold our variables for widgets to use.
 			static nlohmann::json jsWidgets
 			{
-				{ "PrimaryTab", 0 },
-				{ "SubTab", 0 },
-				{ "First", false },
-				{ "Second", false },
-				{ "Third", false },
-				{ "Int", 0 },
-				{ "Float", 0.f }
+				{ PX_XOR( "PrimaryTab" ), 0 },
+			{ PX_XOR( "SubTab" ), 0 },
+			{ PX_XOR( "First" ), false },
+			{ PX_XOR( "Second" ), false },
+			{ PX_XOR( "Third" ), false },
+			{ PX_XOR( "Int" ), 0 },
+			{ PX_XOR( "Float" ), 0.f }
 			};
 
 			// Color pickers
@@ -503,7 +496,7 @@ namespace PX::UI
 			Header( string_cast< std::string >( wszWindowTitle ).c_str( ), szNuklearWindowTitle );
 
 			// Create primary tabs.
-			fnSetTabValue( jsWidgets[ "PrimaryTab" ].get_ref< int& >( ), Tabs( 10, 0, dqPrimaryTabs, jsWidgets[ "PrimaryTab" ] ) );
+			fnSetTabValue( jsWidgets[ PX_XOR( "PrimaryTab" ) ].get_ref< int& >( ), Tabs( 10, 0, dqPrimaryTabs, jsWidgets[ PX_XOR( "PrimaryTab" ) ] ) );
 
 			// Separate the primary tabs from the rest of the application.
 			Separator( 61, 65, 72, 100 );
@@ -511,21 +504,21 @@ namespace PX::UI
 			SetFont( FONT_ROBOTOSMALL );
 
 			// Create subtabs.
-			fnSetTabValue( jsWidgets[ "SubTab" ].get_ref< int& >( ), SubTabs( 10, 60, 190, 30, dqSubTabs, jsWidgets[ "SubTab" ] ) );
+			fnSetTabValue( jsWidgets[ PX_XOR( "SubTab" ) ].get_ref< int& >( ), SubTabs( 10, 60, 190, 30, dqSubTabs, jsWidgets[ PX_XOR( "SubTab" ) ] ) );
 
 			// Begin a groupbox for all of our widgets to be inside of.
-			BeginGroupbox( 200, 150, 500, 420, dqSubTabs.at( jsWidgets[ "SubTab" ] ) );
+			BeginGroupbox( 200, 150, 500, 420, dqSubTabs.at( jsWidgets[ PX_XOR( "SubTab" ) ] ) );
 			{
-				const static auto iCheckboxTextWidth = CalculateTextBounds( "Checkbox", 30 ).x;
+				const static auto iCheckboxTextWidth = CalculateTextBounds( PX_XOR( "Checkbox" ), 30 ).x;
 				static char szIntBuffer[ 32 ], szFloatBuffer[ 32 ], buf[ 32 ];
 				auto bInitializedBuffers = false;
 
 				if ( !bInitializedBuffers )
 				{
 					bInitializedBuffers = true;
-					strcpy( szIntBuffer, std::to_string( jsWidgets[ "Int" ].get< int >( ) ).c_str( ) );
-					strcpy( szFloatBuffer, std::to_string( jsWidgets[ "Float" ].get< int >( ) ).c_str( ) );
-					strcpy( buf, "5.0" );
+					strcpy( szIntBuffer, std::to_string( jsWidgets[ PX_XOR( "Int" ) ].get< int >( ) ).c_str( ) );
+					strcpy( szFloatBuffer, std::to_string( jsWidgets[ PX_XOR( "Float" ) ].get< int >( ) ).c_str( ) );
+					strcpy( buf, ( "5.0" ) );
 				}
 
 				VerticalSpacing( );
@@ -533,27 +526,27 @@ namespace PX::UI
 				BeginRow( 15, 12, ROW_STATIC );
 				SetRowWidth( 5 );
 				Spacing( );
-				SetRowWidth( CHECKBOX_ICON_WIDTH + CalculateTextBounds( "Checkbox", 30 ).x );
-				Checkbox( "Checkbox", jsWidgets[ "First" ].get_ptr< bool* >( ) );
+				SetRowWidth( CHECKBOX_ICON_WIDTH + CalculateTextBounds( PX_XOR( "Checkbox" ), 30 ).x );
+				Checkbox( PX_XOR( "Checkbox" ), jsWidgets[ PX_XOR( "First" ) ].get_ptr< bool* >( ) );
 				SetRowWidth( GROUPBOX_COLUMN_WIDTH - iCheckboxTextWidth - CHECKBOX_ICON_WIDTH - COLOR_BUTTON_WIDTH - COLOR_BUTTON_PADDING * 2 );
 				Spacing( );
 				SetRowWidth( COLOR_BUTTON_WIDTH );
-				ColorButton( "Color 1", &clrFirst );
-				SetRowWidth( CHECKBOX_ICON_WIDTH + CalculateTextBounds( "Checkbox", 30 ).x );
-				Checkbox( "Checkbox", jsWidgets[ "Second" ].get_ptr< bool* >( ) );
+				ColorButton( PX_XOR( "Color 1" ), &clrFirst );
+				SetRowWidth( CHECKBOX_ICON_WIDTH + CalculateTextBounds( PX_XOR( "Checkbox" ), 30 ).x );
+				Checkbox( PX_XOR( "Checkbox" ), jsWidgets[ PX_XOR( "Second" ) ].get_ptr< bool* >( ) );
 				SetRowWidth( GROUPBOX_COLUMN_WIDTH - iCheckboxTextWidth - CHECKBOX_ICON_WIDTH - ( COLOR_BUTTON_WIDTH * 2 ) - ( COLOR_BUTTON_PADDING * 4 ) );
 				Spacing( );
 				SetRowWidth( COLOR_BUTTON_WIDTH );
-				ColorButton( "Color 2", &clrSecond );
-				ColorButton( "Color 3", &clrThird );
-				Checkbox( "Checkbox", jsWidgets[ "Third" ].get_ptr< bool* >( ) );
+				ColorButton( PX_XOR( "Color 2" ), &clrSecond );
+				ColorButton( PX_XOR( "Color 3" ), &clrThird );
+				Checkbox( PX_XOR( "Checkbox" ), jsWidgets[ PX_XOR( "Third" ) ].get_ptr< bool* >( ) );
 				EndRow( );
 
 				VerticalSpacing( );
 
 				BeginRow( 30, 6, ROW_CUSTOM );
-				jsWidgets[ "Int" ] = Slider( "Int Slider", szIntBuffer, -50, 50, jsWidgets[ "Int" ], 15, 0, GROUPBOX_COLUMN_WIDTH, 30 );
-				jsWidgets[ "Float" ] = Slider( "Float Slider", szFloatBuffer, -50.f, 50.f, jsWidgets[ "Float" ], GROUPBOX_COLUMN_WIDTH + 25, 0, GROUPBOX_COLUMN_WIDTH, 30, 1 );
+				jsWidgets[ PX_XOR( "Int" ) ] = Slider( PX_XOR( "Int Slider" ), szIntBuffer, -50, 50, jsWidgets[ PX_XOR( "Int" ) ], 15, 0, GROUPBOX_COLUMN_WIDTH, 30 );
+				jsWidgets[ PX_XOR( "Float" ) ] = Slider( PX_XOR( "Float Slider" ), szFloatBuffer, -50.f, 50.f, jsWidgets[ PX_XOR( "Float" ) ], GROUPBOX_COLUMN_WIDTH + 25, 0, GROUPBOX_COLUMN_WIDTH, 30, 1 );
 				EndRow( );
 			}
 			EndGroupbox( );
@@ -561,13 +554,13 @@ namespace PX::UI
 
 		bool PX_API MouseHoveringRectangle( unsigned x, unsigned y, unsigned width, unsigned height )
 		{
-			return nk_input_is_mouse_hovering_rect( &pContext->input, nk_rect( x, y, width, height ) );
+			return nk_input_is_mouse_hovering_rect( &pContext->input, nk_rect( float( x ), float( y ), float( width ), float( height ) ) );
 		}
 
 		void SetWidgetPosition( unsigned x, unsigned y )
 		{
-			pContext->current->layout->at_x = x;
-			pContext->current->layout->at_y = y;
+			pContext->current->layout->at_x = float( x );
+			pContext->current->layout->at_y = float( y );
 		}
 	}
 
@@ -628,7 +621,7 @@ namespace PX::UI
 
 			SetFont( FONT_ROBOTOBOLD );
 			auto vecTitle = CalculateTextBounds( szTitle, 30 );
-			nk_widget_text( pOutput, nk_rect( 10.f + vecTextures[ TEXTURE_LOGO ].uWidth , 7, vecTitle.x, 30 ), szTitle, strlen( szTitle ), &txtTitle, NK_TEXT_CENTERED, pContext->style.font );
+			nk_widget_text( pOutput, nk_rect( 10.f + vecTextures[ TEXTURE_LOGO ].uWidth, 7, vecTitle.x, 30 ), szTitle, strlen( szTitle ), &txtTitle, NK_TEXT_CENTERED, pContext->style.font );
 			SetFont( FONT_ROBOTO );
 			auto vecApplicationTitle = CalculateTextBounds( _szApplicationTitle, 30 );
 			nk_widget_text( pOutput, nk_rect( 13.f + vecTextures[ TEXTURE_LOGO ].uWidth + vecTitle.x, 7, vecApplicationTitle.x, 30 ), _szApplicationTitle, strlen( _szApplicationTitle ), &txtApplication, NK_TEXT_CENTERED, pContext->style.font );
@@ -642,8 +635,8 @@ namespace PX::UI
 			nk_widget_text( pOutput, recCloseButton, ICON_FA_TIMES, strlen( ICON_FA_TIMES ), &txtCloseButton, NK_TEXT_CENTERED, pContext->style.font );
 
 			const bool bHoveringMinimize = nk_input_is_mouse_hovering_rect( &pContext->input, nk_rect( recMinimize.x + 8, recMinimize.y, recMinimize.w + 2, recMinimize.h ) ),
-			           bHoveringClose = nk_input_is_mouse_hovering_rect( &pContext->input, recCloseButton ),
-			           bClicking = PX_INPUT.GetKeyState( VK_LBUTTON );
+				bHoveringClose = nk_input_is_mouse_hovering_rect( &pContext->input, recCloseButton ),
+				bClicking = PX_INPUT.GetKeyState( VK_LBUTTON );
 
 			if ( GetActiveWindow( ) != hwWindowHandle || bMinimized )
 				return;
@@ -682,10 +675,10 @@ namespace PX::UI
 		{
 			iCurrentRowUsedColumns++;
 
-			if( nk_button_label_styled( pContext, bActive ? &btnTopActive : &btnTop, szText ) )
+			if ( nk_button_label_styled( pContext, bActive ? &btnTopActive : &btnTop, szText ) )
 			{
-				if( !bActive )
-					EmitSound( L"ButtonClick.wav" );
+				if ( !bActive )
+					EmitSound( PX_XOR( L"ButtonClick.wav" ) );
 				return true;
 			}
 			return false;
@@ -713,7 +706,7 @@ namespace PX::UI
 			SetFont( FONT_TAHOMA );
 			const auto bReturn = nk_button_label_styled( pContext, &btnRegular, szText );
 			if ( bReturn )
-				EmitSound( L"ButtonClick.wav" );
+				EmitSound( PX_XOR( L"ButtonClick.wav" ) );
 			HoverCheck( CURSOR_HAND );
 			return bReturn;
 		}
@@ -744,7 +737,7 @@ namespace PX::UI
 			for each ( const auto& link in *pLinkList )
 			{
 				auto vecTextSize = CalculateTextBounds( link.szTitle, uLinkTextHeight );
-				PushCustomRow( uPosition, uYPosition, vecTextSize.x, uLinkTextHeight );
+				PushCustomRow( uPosition, uYPosition, unsigned( vecTextSize.x ), uLinkTextHeight );
 				auto recTextBounds = nk_widget_bounds( pContext );
 
 				auto clrText = clrTextDormant;
@@ -758,7 +751,7 @@ namespace PX::UI
 				}
 
 				Text( link.szTitle, { clrText.r, clrText.g, clrText.b, clrText.a } );
-				uPosition += vecTextSize.x + uLinkTextSpacing;
+				uPosition += unsigned( vecTextSize.x ) + uLinkTextSpacing;
 			}
 			EndRow( );
 			bWasClicking = PX_INPUT.GetKeyState( VK_LBUTTON );
@@ -780,8 +773,8 @@ namespace PX::UI
 			}
 			const auto bReturn = nk_button_label_styled( pContext, bActive ? &btnSpecialActive : &btnSpecial, szText );
 
-			if( bReturn )
-				EmitSound( L"ButtonClick.wav" );
+			if ( bReturn )
+				EmitSound( PX_XOR( L"ButtonClick.wav" ) );
 
 			if ( !bFoundHoverTarget )
 			{
@@ -843,7 +836,7 @@ namespace PX::UI
 				if ( !bWasClicking && !pActiveEditColor )
 				{
 					*bActive = !*bActive;
-					EmitSound( *bActive ? LR"(Tick.wav)" : LR"(Untick.wav)" );
+					EmitSound( PX_XOR( *bActive ? LR"(Tick.wav)" : LR"(Untick.wav)" ) );
 				}
 				bWasClicking = true;
 			}
@@ -853,7 +846,7 @@ namespace PX::UI
 			SetFont( FONT_TAHOMA );
 			nk_label_colored( pContext, *bActive ? ICON_FA_CHECK_SQUARE : ICON_FA_SQUARE, NK_TEXT_CENTERED, *bActive ? clrBlue : bHovering && !pActiveEditColor ? ( bClicking ? clrBlue : clrBlue ) : clrTextDormant );
 			nk_layout_row_push( pContext, CalculateTextBounds( szText, 15 ).x );
-			nk_label_colored( pContext, ( szText + std::string( "  " ) ).c_str( ), NK_TEXT_LEFT, clrTextDormant );
+			nk_label_colored( pContext, ( szText + std::string( PX_XOR( "  " ) ) ).c_str( ), NK_TEXT_LEFT, clrTextDormant );
 		}
 
 		int PX_API Tabs( unsigned uStartX, unsigned uStartY, const std::deque< cstr_t >& dqButtons, unsigned uActiveButton )
@@ -926,23 +919,21 @@ namespace PX::UI
 
 		void PX_API ColorPicker( )
 		{
-			constexpr struct nk_vec2 vecColorPickerSize
-			{
-				305, 440
-			};
+			constexpr float flColorPickerWidth = 305.f, flColorPickerHeight = 440.f;
+
 			const auto _uWindowWidth = pContext->current->bounds.w, _uWindowHeight = pContext->current->bounds.h;
 			const struct nk_rect rcColorPickerBoundaries
 			{
-				_uWindowWidth / 2 - vecColorPickerSize.x / 2, _uWindowHeight / 2 - vecColorPickerSize.y / 2, vecColorPickerSize.x, vecColorPickerSize.y
+				_uWindowWidth / 2 - flColorPickerWidth / 2, _uWindowHeight / 2 - flColorPickerHeight / 2, flColorPickerWidth, flColorPickerHeight
 			};
-			const static std::string strBaseTitle = R"(Color of ')";
+			const static std::string strBaseTitle = PX_XOR( R"(Color of ')" );
 
 			static struct nk_colorf clrChosenColor;
 			static auto bNewColor = true;
 			static auto bShouldClose = false;
 			static auto bStoppedClicking = false;
 			static auto uCurrentSequence = 0u;
-			static char szSliderBuffer[ 32 ] = "\0";
+			static char szSliderBuffer[ 32 ];
 			static auto bWasClicking = false;
 
 			if ( !nk_input_is_mouse_prev_hovering_rect( &pContext->input, rcColorPickerBoundaries ) && PX_INPUT.GetKeyState( VK_LBUTTON ) && bStoppedClicking && !bWasClicking )
@@ -961,7 +952,7 @@ namespace PX::UI
 					pActiveEditColor->GetColor( uCurrentSequence ).gfl,
 					pActiveEditColor->GetColor( uCurrentSequence ).bfl,
 					pActiveEditColor->GetColor( uCurrentSequence ).afl };
-				sprintf( szSliderBuffer, "%llu", pActiveEditColor->GetDuration( uCurrentSequence ) );
+				sprintf( szSliderBuffer, ( "%llu" ), pActiveEditColor->GetDuration( uCurrentSequence ) );
 			}
 			bNewColor = false;
 
@@ -977,18 +968,18 @@ namespace PX::UI
 			if ( !bStoppedClicking )
 				return;
 
-			if ( nk_popup_begin( pContext, NK_POPUP_DYNAMIC, ( strBaseTitle + szColorPickerSubject + R"(')" ).c_str( ),
+			if ( nk_popup_begin( pContext, NK_POPUP_DYNAMIC, ( strBaseTitle + szColorPickerSubject + PX_XOR( R"(')" ) ).c_str( ),
 								 NK_WINDOW_BORDER | NK_WINDOW_TITLE | NK_WINDOW_NO_SCROLLBAR,
-			                     rcColorPickerBoundaries, pActiveEditColor == nullptr ) )
+								 rcColorPickerBoundaries, pActiveEditColor == nullptr ) )
 			{
 				nk_layout_row_static( pContext, 255, 295, 1 );
 				clrChosenColor = nk_color_picker( pContext, clrChosenColor, NK_RGBA );
 				nk_layout_row_dynamic( pContext, 5, 0 );
 				nk_layout_row_dynamic( pContext, 16, 4 );
-				nk_label( pContext, ( "R: " + std::to_string( int( clrChosenColor.r * 255.f ) ) ).c_str( ), NK_TEXT_CENTERED );
-				nk_label( pContext, ( "G: " + std::to_string( int( clrChosenColor.g * 255.f ) ) ).c_str( ), NK_TEXT_CENTERED );
-				nk_label( pContext, ( "B: " + std::to_string( int( clrChosenColor.b * 255.f ) ) ).c_str( ), NK_TEXT_CENTERED );
-				nk_label( pContext, ( "A: " + std::to_string( int( clrChosenColor.a * 255.f ) ) ).c_str( ), NK_TEXT_CENTERED );
+				nk_label( pContext, ( PX_XOR( "R: " ) + std::to_string( int( clrChosenColor.r * 255.f ) ) ).c_str( ), NK_TEXT_CENTERED );
+				nk_label( pContext, ( PX_XOR( "G: " ) + std::to_string( int( clrChosenColor.g * 255.f ) ) ).c_str( ), NK_TEXT_CENTERED );
+				nk_label( pContext, ( PX_XOR( "B: " ) + std::to_string( int( clrChosenColor.b * 255.f ) ) ).c_str( ), NK_TEXT_CENTERED );
+				nk_label( pContext, ( PX_XOR( "A: " ) + std::to_string( int( clrChosenColor.a * 255.f ) ) ).c_str( ), NK_TEXT_CENTERED );
 				nk_layout_row_dynamic( pContext, 10, 1 );
 				nk_button_color( pContext, nk_rgba( int( clrChosenColor.r * 255.f ),
 													int( clrChosenColor.g * 255.f ),
@@ -1008,10 +999,10 @@ namespace PX::UI
 					{
 						uCurrentSequence = u;
 						clrChosenColor = { pActiveEditColor->GetColor( uCurrentSequence ).rfl,
-											pActiveEditColor->GetColor( uCurrentSequence ).gfl,
-											pActiveEditColor->GetColor( uCurrentSequence ).bfl,
-											pActiveEditColor->GetColor( uCurrentSequence ).afl };
-						sprintf( szSliderBuffer, "%llu", pActiveEditColor->GetDuration( uCurrentSequence ) );
+							pActiveEditColor->GetColor( uCurrentSequence ).gfl,
+							pActiveEditColor->GetColor( uCurrentSequence ).bfl,
+							pActiveEditColor->GetColor( uCurrentSequence ).afl };
+						sprintf( szSliderBuffer, ( "%llu" ), pActiveEditColor->GetDuration( uCurrentSequence ) );
 					}
 					if ( u == uCurrentSequence )
 					{
@@ -1023,7 +1014,7 @@ namespace PX::UI
 					}
 				}
 
-				auto uPadding = vecColorPickerSize.x - COLOR_BUTTON_WIDTH * pActiveEditColor->sSequences - COLOR_BUTTON_PADDING * pActiveEditColor->sSequences * 2 - 170;
+				auto uPadding = flColorPickerWidth - COLOR_BUTTON_WIDTH * pActiveEditColor->sSequences - COLOR_BUTTON_PADDING * pActiveEditColor->sSequences * 2 - 170;
 				nk_layout_row_push( pContext, uPadding );
 				nk_spacing( pContext, 1 );
 				nk_layout_row_push( pContext, 75 );
@@ -1054,11 +1045,11 @@ namespace PX::UI
 				pActiveEditColor->GetColor( uCurrentSequence ).afl = clrChosenColor.a;
 
 				nk_layout_space_begin( pContext, NK_STATIC, 30, 3 );
-				pActiveEditColor->GetDuration( uCurrentSequence ) = Slider( "Duration", szSliderBuffer, 100, 1000, int( pActiveEditColor->GetDuration( uCurrentSequence ) ), 0, 0, 290, 30, true );
+				pActiveEditColor->GetDuration( uCurrentSequence ) = Slider( PX_XOR( "Duration" ), szSliderBuffer, 100, 1000, int( pActiveEditColor->GetDuration( uCurrentSequence ) ), 0, 0, 290, 30, true );
 				nk_layout_space_end( pContext );
-				
-				nk_layout_row_static( pContext, 25, int( vecColorPickerSize.x - 5 ), 1 );
-				if ( Button( EPosition::LEFT, "EXIT", false ) )
+
+				nk_layout_row_static( pContext, 25, int( flColorPickerWidth - 5 ), 1 );
+				if ( Button( EPosition::LEFT, PX_XOR( "EXIT" ), false ) )
 				{
 					bShouldClose = true;
 					bNewColor = true;
@@ -1074,7 +1065,7 @@ namespace PX::UI
 		void PX_API ColorButton( cstr_t szSubject, color_sequence_t* pSequence )
 		{
 			iCurrentRowUsedColumns++;
-			
+
 			auto clr = pSequence->GetCurrentColor( );
 			if ( nk_button_color( pContext, nk_rgba( clr.r, clr.g, clr.b, clr.a ) ) && pActiveEditColor == nullptr )
 			{
@@ -1184,12 +1175,12 @@ namespace PX::UI
 				};
 				static auto bSetCallback = false;
 
-				if ( !strcmp( szInputBuffer, "0" ) )
+				if ( !strcmp( szInputBuffer, ( "0" ) ) )
 					bSetBuffer = true;
 
-				if( uSetKey != 0 && bSetBuffer )
+				if ( uSetKey != 0 && bSetBuffer )
 				{
-					strcpy( szInputBuffer, "" );
+					strcpy( szInputBuffer, ( "" ) );
 					uSetKey = 0;
 					pContext->text_edit.select_start = 1;
 					pContext->text_edit.select_end = 1;
@@ -1291,12 +1282,12 @@ namespace PX::UI
 				};
 				static auto bSetCallback = false;
 
-				if ( !strcmp( szInputBuffer, "0" ) )
+				if ( !strcmp( szInputBuffer, ( "0" ) ) )
 					bSetBuffer = true;
 
 				if ( uSetKey != 0 && bSetBuffer )
 				{
-					strcpy( szInputBuffer, "" );
+					strcpy( szInputBuffer, ( "" ) );
 					uSetKey = 0;
 					pContext->text_edit.select_start = 1;
 					pContext->text_edit.select_end = 1;
@@ -1336,7 +1327,7 @@ namespace PX::UI
 			PushCustomRow( uStartX, uStartY + unsigned( vecTextSize.y ) + 3, uWidth, uHeight - unsigned( vecTextSize.y ) - 3 );
 
 			const auto recSliderBounds = nk_widget_bounds( pContext );
-			if( nk_input_is_mouse_hovering_rect( &pContext->input, recSliderBounds ) && bClicking && !pActiveEditColor )
+			if ( nk_input_is_mouse_hovering_rect( &pContext->input, recSliderBounds ) && bClicking && !pActiveEditColor )
 				flCurrentValue = flMin + ( ( pContext->input.mouse.pos.x - recSliderBounds.x ) / recSliderBounds.w ) * ( flMax - flMin );
 
 			const auto flNewValue = nk_slide_float( pContext, flMin, flCurrentValue, flMax, ( flMax - flMin ) / 20.f );
@@ -1362,7 +1353,7 @@ namespace PX::UI
 
 			SetRowWidth( uLeftTextWidth );
 			Text( szLeft, clrLeft );
-			SetRowWidth( iSpacing );
+			SetRowWidth( float( iSpacing ) );
 			Spacing( );
 			SetRowWidth( uRightTextWidth );
 			Text( szRight, clrRight );

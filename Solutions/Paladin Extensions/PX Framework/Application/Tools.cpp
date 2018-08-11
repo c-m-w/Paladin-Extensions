@@ -2,11 +2,13 @@
 
 #include "../PX Framework.hpp"
 
+using namespace PX::Files;
+
 namespace PX::Tools
 {
 	void PX_API EmitSound( wcstr_t szFileName )
 	{
-		const static auto strSoundDirectory = Files::GetDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(\Resources\Sound\)" );
+		const static auto strSoundDirectory = GetDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(Resources\Sound\)" );
 		PlaySound( ( strSoundDirectory + szFileName ).c_str( ), nullptr, SND_ASYNC );
 	}
 
@@ -17,13 +19,8 @@ namespace PX::Tools
 
 	std::string PX_API TimeToDate( moment_t mmtTime )
 	{
-		constexpr char* szDateSuffixes[ ]
-		{
-			"", "st", "nd", "rd", "th", "th", "th", "th", "th", "th", "th", "th", "th", "th", "th", "th", "th", "th", "th", "th", "th", "st", "nd", "rd", "th", "th", "th", "th", "th", "th", "th", "th"
-		};
-
 		if ( mmtTime == 0ull )
-			return "Never";
+			return PX_XOR( "Never" );
 
 		static char szBuffer[ 32 ];
 		time_t tmBuffer = mmtTime;
@@ -31,7 +28,30 @@ namespace PX::Tools
 		time( &tmBuffer );
 		const auto tmTime = localtime( &tmBuffer );
 
-		strftime( szBuffer, 80, ( std::string( "%B %e" ) + szDateSuffixes[ tmTime->tm_mday ] + ", 20%g" ).c_str( ), tmTime );
+		const char* szDaySuffix;
+
+		switch ( tmTime->tm_mday % 10 )
+		{
+			default:
+				if ( tmTime->tm_mday / 10 == 1 || tmTime->tm_mday % 10 > 3 )
+				{
+					szDaySuffix = PX_XOR( "th" );
+					break;
+				}
+			case 1:
+				szDaySuffix = PX_XOR( "st" );
+				break;
+			case 2:
+				szDaySuffix = PX_XOR( "nd" );
+				break;
+			case 3:
+				szDaySuffix = PX_XOR( "rd" );
+				break;
+		}
+
+		px_assert( szDaySuffix );
+
+		strftime( szBuffer, 80, ( std::string( PX_XOR( "%B %e" ) ) + szDaySuffix + PX_XOR( ", 20%g" ) ).c_str( ), tmTime );
 		return szBuffer;
 	}
 
@@ -40,7 +60,7 @@ namespace PX::Tools
 		std::string strFormatted { };
 		for ( auto u = 0u; u < uSize; u++ )
 		{
-			strFormatted += R"(\x)";
+			strFormatted += PX_XOR( R"(\x)" );
 			strFormatted.resize( strFormatted.size( ) + 2 ); // +2 because max length of a byte in digits is 2.
 			sprintf( &strFormatted[ 0 ], "%s%02X", strFormatted.c_str( ), bByteArray[ u ] );
 		}

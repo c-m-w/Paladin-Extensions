@@ -4,7 +4,7 @@
 
 namespace PX::Types
 {
-	color_t::color_t( std::initializer_list< ptr_t > initInputs )
+	SColor::SColor( std::initializer_list< ptr_t > initInputs )
 	{
 		px_assert( initInputs.size( ) == 1 );
 		for each ( auto initInput in initInputs )
@@ -14,7 +14,7 @@ namespace PX::Types
 		}
 	}
 
-	color_t::color_t( std::initializer_list< int > initInputs )
+	SColor::SColor( std::initializer_list< int > initInputs )
 	{
 		px_assert( initInputs.size( ) <= 4 );
 		auto u = 0u;
@@ -27,7 +27,7 @@ namespace PX::Types
 			pColor->b[ uu ] = UCHAR_MAX;
 	}
 
-	color_t::color_t( std::initializer_list< float > initInputs )
+	SColor::SColor( std::initializer_list< float > initInputs )
 	{
 		px_assert( initInputs.size( ) <= 4 );
 		auto u = 0u;
@@ -40,117 +40,117 @@ namespace PX::Types
 			pColor->b[ uu ] = UCHAR_MAX;
 	}
 
-	//color_t::~color_t( )
+	//SColor::~SColor( )
 	//{
 	//	delete pColor;
 	//}
 
-	unsigned color_t::GetHex( ) const
+	unsigned SColor::GetHex( ) const
 	{
 		return pColor->u;
 	}
 
-	void color_t::PutHex( const unsigned uValue ) const
+	void SColor::PutHex( const unsigned uValue ) const
 	{
 		pColor->u = uValue;
 	}
 
-	byte_t color_t::GetRed( ) const
+	byte_t SColor::GetRed( ) const
 	{
 		return pColor->b[ COLOR_RED ];
 	}
 
-	byte_t color_t::GetGreen( ) const
+	byte_t SColor::GetGreen( ) const
 	{
 		return pColor->b[ COLOR_GREEN ];
 	}
 
-	byte_t color_t::GetBlue( ) const
+	byte_t SColor::GetBlue( ) const
 	{
 		return pColor->b[ COLOR_BLUE ];
 	}
 
-	byte_t color_t::GetAlpha( ) const
+	byte_t SColor::GetAlpha( ) const
 	{
 		return pColor->b[ COLOR_ALPHA ];
 	}
 
-	void color_t::PutRed( const byte_t bValue ) const
+	void SColor::PutRed( const byte_t bValue ) const
 	{
 		pColor->b[ COLOR_RED ] = bValue;
 	}
 
-	void color_t::PutGreen( const byte_t bValue ) const
+	void SColor::PutGreen( const byte_t bValue ) const
 	{
 		pColor->b[ COLOR_GREEN ] = bValue;
 	}
 
-	void color_t::PutBlue( const byte_t bValue ) const
+	void SColor::PutBlue( const byte_t bValue ) const
 	{
 		pColor->b[ COLOR_BLUE ] = bValue;
 	}
 
-	void color_t::PutAlpha( const byte_t bValue ) const
+	void SColor::PutAlpha( const byte_t bValue ) const
 	{
 		pColor->b[ COLOR_ALPHA ] = bValue;
 	}
 
-	float color_t::GetRedFloat( ) const
+	float SColor::GetRedFloat( ) const
 	{
 		return GetRed( ) / 255.f;
 	}
 
-	float color_t::GetGreenFloat( ) const
+	float SColor::GetGreenFloat( ) const
 	{
 		return GetGreen( ) / 255.f;
 	}
 
-	float color_t::GetBlueFloat( ) const
+	float SColor::GetBlueFloat( ) const
 	{
 		return GetBlue( ) / 255.f;
 	}
 
-	float color_t::GetAlphaFloat( ) const
+	float SColor::GetAlphaFloat( ) const
 	{
 		return GetAlpha( ) / 255.f;
 	}
 
-	void color_t::PutRedFloat( const float flValue ) const
+	void SColor::PutRedFloat( const float flValue ) const
 	{
 		PutRed( byte_t( flValue <= 1.f ? flValue * 255u : flValue ) );
 	}
 
-	void color_t::PutGreenFloat( const float flValue ) const
+	void SColor::PutGreenFloat( const float flValue ) const
 	{
 		PutGreen( byte_t( flValue <= 1.f ? flValue * 255u : flValue ) );
 	}
 
-	void color_t::PutBlueFloat( const float flValue ) const
+	void SColor::PutBlueFloat( const float flValue ) const
 	{
 		PutBlue( byte_t( flValue <= 1.f ? flValue * 255u : flValue ) );
 	}
 
-	void color_t::PutAlphaFloat( const float flValue ) const
+	void SColor::PutAlphaFloat( const float flValue ) const
 	{
 		PutAlpha( byte_t( flValue <= 1.f ? flValue * 255u : flValue ) );
 	}
 
-	byte_t color_t::CalculateLuminance( ) const
+	byte_t SColor::CalculateLuminance( ) const
 	{
 		return static_cast< byte_t >( 0.2126f * float( GetRed( ) ) + 0.7152f * float( GetGreen( ) ) + 0.0722f * float( GetBlue( ) ) );
 	}
 
-	byte_t color_t::operator[ ]( const int iColor ) const
+	byte_t SColor::operator[ ]( const int iColor ) const
 	{
 		return pColor->b[ iColor ];
 	}
 
-	float color_t::operator[ ]( const float flColor ) const
+	float SColor::operator[ ]( const float flColor ) const
 	{
 		return float( pColor->b[ int( flColor ) ] ) / 255.f;
 	}
 
-	color_t color_sequence_t::GetGradient( color_t clrStart, color_t clrEnd, float flProgress )
+	color_t SColorSequence::GetGradient( color_t clrStart, color_t clrEnd, float flProgress )
 	{
 		px_assert( flProgress >= 0.f && flProgress <= 1.f );
 		return { clrStart.r + byte_t( ( clrEnd.r - clrStart.r ) * flProgress ),
@@ -159,22 +159,22 @@ namespace PX::Types
 					clrStart.a + byte_t( ( clrEnd.a - clrStart.a ) * flProgress ) };
 	}
 
-	//bool color_t::operator==( const color_t& rhs ) const
+	//bool SColor::operator==( const SColor& rhs ) const
 	//{
 	//	return pColor->u == rhs.pColor->u;
 	//}
 	//
-	//bool color_t::operator!=( const color_t& rhs ) const
+	//bool SColor::operator!=( const SColor& rhs ) const
 	//{
 	//	return !( *this == rhs );
 	//}
 
-	color_sequence_t::color_sequence_t( color_t clrFirstSequence, moment_t mmtFirstSequence )
+	SColorSequence::SColorSequence( color_t clrFirstSequence, moment_t mmtFirstSequence )
 	{
 		PutNewColorSequence( clrFirstSequence, mmtFirstSequence );
 	}
 
-	color_sequence_t::color_sequence_t( color_t* clrColors, moment_t* mmtDurations, std::size_t sSequences )
+	SColorSequence::SColorSequence( color_t* clrColors, moment_t* mmtDurations, std::size_t sSequences )
 	{
 		for ( std::size_t s = 0; s < sSequences; s++ )
 		{
@@ -183,7 +183,7 @@ namespace PX::Types
 		}
 	}
 
-	color_t color_sequence_t::GetCurrentColor( )
+	color_t SColorSequence::GetCurrentColor( )
 	{
 		px_assert( sSequences );
 
@@ -206,19 +206,19 @@ namespace PX::Types
 		throw std::exception( PX_XOR( "Color failure" ) );
 	}
 
-	color_t& color_sequence_t::GetColor( unsigned uColor )
+	color_t& SColorSequence::GetColor( unsigned uColor )
 	{
 		px_assert( sSequences > uColor );
 		return sqInfo[ uColor ].clrColor;
 	}
 
-	moment_t& color_sequence_t::GetDuration( unsigned uDuration )
+	moment_t& SColorSequence::GetDuration( unsigned uDuration )
 	{
 		px_assert( sSequences > uDuration );
 		return sqInfo[ uDuration ].mmtDuration;
 	}
 
-	void color_sequence_t::PutNewColorSequence( const color_t& clrNewColor, moment_t mmtDuration )
+	void SColorSequence::PutNewColorSequence( const color_t& clrNewColor, moment_t mmtDuration )
 	{
 		if ( sSequences >= 7 )
 			return;
@@ -228,7 +228,7 @@ namespace PX::Types
 		sSequences++;
 	}
 
-	void color_sequence_t::DeleteColorSequence( unsigned uPosition )
+	void SColorSequence::DeleteColorSequence( unsigned uPosition )
 	{
 		if ( sSequences <= uPosition )
 			return;

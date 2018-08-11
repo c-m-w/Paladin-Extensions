@@ -17,7 +17,6 @@ namespace PX::Types
 	/** \brief Paladin time datatype, long enough to hold any time type, down to microseconds. */
 	typedef unsigned long long moment_t;
 
-	/** \brief Paladin type for post data. */
 	struct SPostData
 	{
 		std::string strIdentifier, strValue;
@@ -27,19 +26,18 @@ namespace PX::Types
 			this->strValue = strValue;
 		}
 	};
-
+	/** \brief Paladin type for post data. */
 	typedef std::deque< SPostData > post_data_t;
 
 	struct SLink
 	{
 		char szTitle[ 32 ], szLink[ MAX_PATH ];
-		SLink( cstr_t _szTitle, cstr_t _szLink )
+		SLink( cstr_t szTitle, cstr_t szLink )
 		{
-			strcpy( szTitle, _szTitle );
-			strcpy( szLink, _szLink );
+			strcpy( this->szTitle, szTitle );
+			strcpy( this->szLink, szLink );
 		}
 	};
-
 	typedef std::deque< SLink > links_t;
 
 	struct SExtensionInfo
@@ -61,11 +59,10 @@ namespace PX::Types
 			strVersion = _strVersion;
 		}
 	};
-
 	typedef std::deque< SExtensionInfo > extensions_t;
 	
 	/** \brief Type to hold colors. */
-	struct color_t
+	typedef struct SColor
 	{
 		/** \brief Enumeration of colors to index the bColors array. */
 		enum EColor
@@ -85,10 +82,10 @@ namespace PX::Types
 		} *pColor = new UColor { UINT_MAX };
 
 	public:
-		color_t( ) = default;
-		color_t( std::initializer_list< ptr_t > initInputs );
-		color_t( std::initializer_list< int > initInputs );
-		color_t( std::initializer_list< float > initInputs );
+		SColor( ) = default;
+		SColor( std::initializer_list< ptr_t > initInputs );
+		SColor( std::initializer_list< int > initInputs );
+		SColor( std::initializer_list< float > initInputs );
 		//~color_t( );
 
 		unsigned GetHex( ) const;
@@ -129,24 +126,24 @@ namespace PX::Types
 		float operator[ ]( float flColor ) const;
 		//bool operator==( const color_t& rhs ) const;
 		//bool operator!=( const color_t& rhs ) const;
-	};
+	} color_t;
 
-	struct color_sequence_t
+	typedef struct SColorSequence
 	{
 		static color_t GetGradient( color_t clrStart, color_t clrEnd, float flProgress );
-		struct sequence_info_t
+		typedef struct
 		{
 			color_t clrColor;
-			moment_t mmtDuration;
-		};
+			moment_t mmtDuration = 0;
+		} sequence_info_t;
 	private:
 		sequence_info_t sqInfo[ 7 ];
 		moment_t mmtTotalDuration = 0;
 	public:
 		std::size_t sSequences = 0u;
-		color_sequence_t( ) = default;
-		color_sequence_t( color_t clrFirstSequence, moment_t mmtFirstSequence );
-		color_sequence_t( color_t* clrColors, moment_t* mmtDurations, std::size_t sSequences );
+		SColorSequence( ) = default;
+		SColorSequence( color_t clrFirstSequence, moment_t mmtFirstSequence );
+		SColorSequence( color_t* clrColors, moment_t* mmtDurations, std::size_t sSequences );
 
 		color_t GetCurrentColor( );
 		void PutCurrentColor( ) = delete;
@@ -154,10 +151,10 @@ namespace PX::Types
 		color_t& GetColor( unsigned uColor );
 		moment_t& GetDuration( unsigned uDuration );
 
-		void PutNewColorSequence( const color_t& clrNewColor, moment_t mmtDuration ); // todo: overload <<
+		void PutNewColorSequence( const color_t& clrNewColor, moment_t mmtDuration ); // todo: overload <<, make sequence_info_t public
 		void DeleteColorSequence( unsigned uPosition ); // todo: overload >>
 		
 		//void operator<<( sequence_info_t );
 		//void operator>>( unsigned uPosition );
-	};
+	} color_sequence_t;
 }

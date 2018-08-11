@@ -53,7 +53,7 @@ int APIENTRY WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 
 #elif !defined( PX_ENTRY_AS_WIN ) && defined( PX_ENTRY_AS_DLL ) && !defined( PX_ENTRY_AS_NONE )
 
-#include <Jeremia-h/Standard Namespace.hpp>
+#include <Jeremia-h/Standard Library.hpp>
 #include <Windows.h>
 
 namespace PX

@@ -28,6 +28,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "auth", "auth", "{197FBADF-0
 		PX Website\public_html\auth\lastlaunch.php = PX Website\public_html\auth\lastlaunch.php
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PX Middleman", "PX Middleman\PX Middleman.vcxproj", "{8753F98A-32F8-4D04-983B-A020EC0591F3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -61,6 +63,14 @@ Global
 		{449C3D24-E084-43F6-8989-98C405D0269F}.Release|x64.Build.0 = Release|x64
 		{449C3D24-E084-43F6-8989-98C405D0269F}.Release|x86.ActiveCfg = Release|Win32
 		{449C3D24-E084-43F6-8989-98C405D0269F}.Release|x86.Build.0 = Release|Win32
+		{8753F98A-32F8-4D04-983B-A020EC0591F3}.Debug|x64.ActiveCfg = Debug|x64
+		{8753F98A-32F8-4D04-983B-A020EC0591F3}.Debug|x64.Build.0 = Debug|x64
+		{8753F98A-32F8-4D04-983B-A020EC0591F3}.Debug|x86.ActiveCfg = Debug|Win32
+		{8753F98A-32F8-4D04-983B-A020EC0591F3}.Debug|x86.Build.0 = Debug|Win32
+		{8753F98A-32F8-4D04-983B-A020EC0591F3}.Release|x64.ActiveCfg = Release|x64
+		{8753F98A-32F8-4D04-983B-A020EC0591F3}.Release|x64.Build.0 = Release|x64
+		{8753F98A-32F8-4D04-983B-A020EC0591F3}.Release|x86.ActiveCfg = Release|Win32
+		{8753F98A-32F8-4D04-983B-A020EC0591F3}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
