@@ -16,6 +16,53 @@ namespace PX::Types
 	typedef void( PX_API* callback_t )( );
 	/** \brief Paladin time datatype, long enough to hold any time type, down to microseconds. */
 	typedef unsigned long long moment_t;
+
+	/** \brief Paladin type for post data. */
+	struct SPostData
+	{
+		std::string strIdentifier, strValue;
+		SPostData( std::string strIdentifier, std::string strValue )
+		{
+			this->strIdentifier = strIdentifier;
+			this->strValue = strValue;
+		}
+	};
+
+	typedef std::deque< SPostData > post_data_t;
+
+	struct SLink
+	{
+		char szTitle[ 32 ], szLink[ MAX_PATH ];
+		SLink( cstr_t _szTitle, cstr_t _szLink )
+		{
+			strcpy( szTitle, _szTitle );
+			strcpy( szLink, _szLink );
+		}
+	};
+
+	typedef std::deque< SLink > links_t;
+
+	struct SExtensionInfo
+	{
+		std::string  strName, strStatus, strEstimatedNextUpdate, strLastUpdate, strVersion;
+		bool bInitialized = true;
+
+		SExtensionInfo( )
+		{
+			bInitialized = false;
+		}
+
+		SExtensionInfo( std::string  _strName, std::string  _strStatus, std::string  _strEstimatedNextUpdate, std::string  _strLastUpdate, std::string  _strVersion )
+		{
+			strName = _strName;
+			strStatus = _strStatus;
+			strEstimatedNextUpdate = _strEstimatedNextUpdate;
+			strLastUpdate = _strLastUpdate;
+			strVersion = _strVersion;
+		}
+	};
+
+	typedef std::deque< SExtensionInfo > extensions_t;
 	
 	/** \brief Type to hold colors. */
 	struct color_t

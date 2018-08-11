@@ -1,5 +1,5 @@
 <?php
-	require 'include.php';
+	require '../../include.php';
 
     if( !isset( $_POST[ GenerateIdentifier( "client" ) ] ) )
         return;

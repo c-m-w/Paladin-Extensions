@@ -10,17 +10,17 @@ namespace PX::Net
 		return size * nmemb;
 	}
 
-	std::string PX_API GeneratePostData( const std::deque< post_data_t >& dqPostData )
+	std::string PX_API GeneratePostData( const post_data_t& dqPostData )
 	{
 		std::string strFormattedData { };
-		for each( auto pdPostData in dqPostData )
+		for each ( auto pdPostData in dqPostData )
 		{
 			if ( !strFormattedData.empty( ) )
-				strFormattedData += "&";
+				strFormattedData += PX_XOR( "&" );
 			//strFormattedData += pdPostData.strIdentifier + "=" + pdPostData.strValue;
 			const auto strEncryptedValue = Cryptography::Encrypt( pdPostData.strValue );
 			// Substr it to length - 1 to remove the \n
-			strFormattedData += Cryptography::GenerateIdentifier( pdPostData.strIdentifier ) + "=" + strEncryptedValue.substr( 0, strEncryptedValue.length( ) - 1 );
+			strFormattedData += Cryptography::GenerateIdentifier( pdPostData.strIdentifier ) + PX_XOR( "=" ) + strEncryptedValue.substr( 0, strEncryptedValue.length( ) - 1 );
 		}
 		// Post data doesn't like plus symbols.
 		std::replace( strFormattedData.begin( ), strFormattedData.end( ), '+', ' ' );
@@ -37,7 +37,7 @@ namespace PX::Net
 		return curl_easy_cleanup( pConnection );
 	}
 
-	std::string PX_API Request( const std::string& _strSite, const std::deque< post_data_t >& dqPostData )
+	std::string PX_API Request( const std::string& _strSite, const post_data_t& dqPostData )
 	{
 		std::string strResponseBuffer, strPostDataBuffer = GeneratePostData( dqPostData );
 
@@ -60,9 +60,9 @@ namespace PX::Net
 
 	std::string PX_API RequestFile( unsigned uGameID, bool bInformation )
 	{
-		std::deque< post_data_t > dqPostData;
+		post_data_t dqPostData;
 		dqPostData.emplace_back( strExtensionIdentifier, std::to_string( uGameID ) );
-		dqPostData.emplace_back( strFileIdentifier, bInformation ? "1" : "0" );
+		dqPostData.emplace_back( strFileIdentifier, bInformation ? PX_XOR( "1" ) : PX_XOR( "0" ) );
 
 		return Request( strDownloadURL, dqPostData );
 	}

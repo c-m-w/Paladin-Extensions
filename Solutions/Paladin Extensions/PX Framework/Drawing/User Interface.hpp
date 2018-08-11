@@ -25,6 +25,9 @@ namespace PX::UI
 		{
 			TEXTURE_LOGO,
 			TEXTURE_LOGO_LOADING,
+			TEXTURE_ICON_CSGO,
+			TEXTURE_ICON_PUBG,
+			TEXTURE_ICON_RSIX,
 			TEXTURE_CURSOR_ARROW,
 			TEXTURE_CURSOR_HAND,
 			TEXTURE_CURSOR_IBEAM,
@@ -101,6 +104,8 @@ namespace PX::UI
 		void PX_API SetLayout( );
 		/** \brief Draws an example demonstrating usage of all widgets. */
 		void PX_API Example( );
+		bool PX_API MouseHoveringRectangle( unsigned x, unsigned y, unsigned width, unsigned height );
+		void PX_API SetWidgetPosition( unsigned x, unsigned y );
 	}
 
 	namespace Widgets
@@ -164,9 +169,10 @@ namespace PX::UI
 		/**	\param iGreen Green amount. */
 		/**	\param iBlue Blue amount. */
 		/**	\param uStartHeight Y value of where the separator should begin. */
+		/** \param pLinkList List of links to have in the separator for users to click for quick access to the site for convenience. */
 		/**	\param bUpperBorder Whether or not a border should be drawn on the top of the separator, as a partial outline. */
-		void PX_API Separator( int iRed, int iGreen, int iBlue, unsigned uStartHeight, bool bUpperBorder = false );
-		/** \brief General purpose button.\n Uses one column. */
+		void PX_API Separator( int iRed, int iGreen, int iBlue, unsigned uStartHeight, const links_t* pLinkList = nullptr, bool bUpperBorder = false );
+			/** \brief General purpose button.\n Uses one column. */
 		/**	\param pPosition Position of the button which controls rounding. */
 		/**	\param szText Text the button will display. */
 		/**	\param bActive Changes the color and style of the button. Used for a toggle effect. */
@@ -208,7 +214,7 @@ namespace PX::UI
 		/** \brief Creates a color button that the user can set the color for if clicked.\n The color picker is handled automatically if the button is clicked.\n Uses one column. */
 		/**	\param szSubject What the color is for. */
 		/**	\param pColor Pointer to the color that will be edited if the button is clicked. */
-		void PX_API ColorButton( cstr_t szSubject, color_sequence_t* pColor );
+		void PX_API ColorButton( cstr_t szSubject, color_sequence_t* pSequence );
 
 		/** \brief Creates a combobox for the user to select an option within.\n Uses one column. */
 		/**	\param uButtonHeight Height of each of the buttons inside the combobox. */
@@ -255,6 +261,10 @@ namespace PX::UI
 		/**	\param uHeight Height of the slider. */
 		/**	\return Value of the slider. */
 		float PX_API Slider( cstr_t szTitle, char *szInputBuffer, float flMin, float flMax, float flCurrentValue, unsigned uStartX, unsigned uStartY, unsigned uWidth, unsigned uHeight, unsigned uDigits );
+
+		void PX_API Text( cstr_t szText, color_t clrText );
+
+		void PX_API JustifiedText( cstr_t szLeft, cstr_t szRight, color_t clrLeft, color_t clrRight, unsigned uTotalLength );
 
 		/** \brief Begins a new row for widgets to be placed in. */
 		/**	\param uRowHeight Initial height of the row.\n May be modified if the row type is custom. */

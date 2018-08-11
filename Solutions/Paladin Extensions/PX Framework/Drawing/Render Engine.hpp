@@ -15,9 +15,6 @@ namespace PX::Render
 		CURSOR_MAX
 	};
 
-	/** \brief Time at which the window was restored from minimized. */
-	PX_SDK moment_t mmtRestoreWindow;
-
 	/** \brief Title of the window that will be created. */
 	PX_SDK wcstr_t wszWindowTitle = static_cast< wchar_t* >( malloc( 32 ) );
 	/** \brief Width of the window. */

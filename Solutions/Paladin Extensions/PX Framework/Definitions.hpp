@@ -82,8 +82,13 @@
 
 #define PX_FILE_SECTIONS 7
 
-#define PX_GAME_CSGO 2
-#define PX_GAME_PUBG 3
+/// TODO: make this an enumerated type
+#define PX_EXTENSION_NONE -1
+#define PX_EXTENSION_MANAGER 1
+#define PX_EXTENSION_CSGO 2
+#define PX_EXTENSION_PUBG 3
+#define PX_EXTENSION_RSIX 4
+#define PX_EXTENSION_MAX 5
 
 #if defined _DEBUG
 #define PX_DEPENDENCIES_ESCAPE 1

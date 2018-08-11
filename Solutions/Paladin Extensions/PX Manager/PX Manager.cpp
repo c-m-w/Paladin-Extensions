@@ -5,6 +5,7 @@
 #include <Jeremia-h/Entry Manager.hpp>
 
 #include "PX Manager.hpp"
+#include "../Internal Testing/Internal Testing.hpp"
 
 using namespace Tools;
 
@@ -76,40 +77,252 @@ using namespace Tools;
 //	}
 //}
 
-bool bLoggedIn = false, bShouldClose = false;
-int iSelectedCheat = -1, iLoginStatus = -1;
+bool bLoggedIn = false, bShouldClose = false, bIsStaff = false, bPreferBeta = false;
+int iSelectedExtension = -1, iLoginStatus = -1;
+extensions_t extInfo;
+
+const std::wstring wstrApplicationExecutableNames[ ] { { }, { }, PX_XOR( L"csgo.exe" ), PX_XOR( L"pubg.exe" ), PX_XOR( L"rsix.exe" ) };
+constexpr bool bExtensionDisabled[ PX_EXTENSION_MAX ] { true, true, false, true, true };
+const std::string strExtensionNames[ PX_EXTENSION_MAX ] { { }, PX_XOR( "Manager" ), PX_XOR( "CSGO" ), PX_XOR( "PUBG" ), PX_XOR( "RSIX" ) },
+					*strLastLaunchTimes;
 
 using namespace UI::Widgets;
 
 void PX_API UI::Manager::SetLayout( )
 {
-	//Example( );
-
-	if ( !bLoggedIn && iLoginStatus == -1 )
+	const auto fnClose = [ ]( )
 	{
-		static auto bReverseColor = false;
-		static byte_t bAlpha = 0;
-		bAlpha += bReverseColor ? -5 : 5;
-		if ( bAlpha == UCHAR_MAX || bAlpha == 0 )
+		bShouldClose = true;
+	};
+
+	static byte_t bLogoAlpha = 0, bCSGOAlpha = 0, bPUBGAlpha = 0;
+	static auto bReverseColor = false;
+	auto uWindowDimensions = GetCurrentWindowDimensions( );
+
+	if ( !bLoggedIn && iLoginStatus == -1 ) /// Connecting to server.
+	{
+		Header( "Paladin Extensions", "Manager", 600u, nullptr, fnClose );
+
+		bLogoAlpha += bReverseColor ? -5 : 5;
+		if ( bLogoAlpha == UCHAR_MAX || bLogoAlpha == 0 )
 			bReverseColor = !bReverseColor;
-
-		Header( "Paladin Extensions", "Manager", 600u, nullptr, [ ]( )
-		{
-			bShouldClose = true;
-		} );
-
-		auto uWindowDimensions = GetCurrentWindowDimensions( );
-		vecImageQueue.emplace_back( TEXTURE_LOGO_LOADING, D3DXVECTOR3( float( uWindowDimensions[ 0 ] / 2 - vecTextures[ TEXTURE_LOGO_LOADING ].uWidth / 2 ), float( uWindowDimensions[ 1 ] / 2 - vecTextures[ TEXTURE_LOGO_LOADING ].uHeight / 2 ), 0.f ), D3DCOLOR_ARGB( bAlpha, bAlpha, bAlpha, bAlpha ) );
+	
+		vecImageQueue.emplace_back( TEXTURE_LOGO_LOADING, D3DXVECTOR3( float( uWindowDimensions[ 0 ] ) / 2.f - float( vecTextures[ TEXTURE_LOGO_LOADING ].uWidth ) / 2.f, 
+																	   float( uWindowDimensions[ 1 ] ) / 2.f - float( vecTextures[ TEXTURE_LOGO_LOADING ].uHeight ) / 2.f, 0.f ), 
+									D3DCOLOR_ARGB( bLogoAlpha, bLogoAlpha, bLogoAlpha, bLogoAlpha ) );
 	}
-	else if ( !bLoggedIn && iLoginStatus > -1 )
+	else if ( !bLoggedIn && iLoginStatus > -1 ) /// Error message
 	{
+		Header( "Paladin Extensions", "Manager", 600u, nullptr, fnClose );
 
+		if( bLogoAlpha != 255 )
+		{
+			bLogoAlpha += 5;
+		}
+		else
+		{
+			const static std::string strErrorMessages[ ]
+			{
+				{ },
+				PX_XOR( "Communication with the server has failed. Please try again later." ),
+				PX_XOR( "The manager is outdated. Please download and reinstall the updated version." ),
+				PX_XOR( "You are banned and may not access any extensions." ),
+				PX_XOR( "Your hardware does not match previous records. Please submit a support ticket." ),
+				PX_XOR( "You currently do not have any active subscriptions to any extensions." )
+			};
+
+			const static color_t clrErrorMessages[ ]
+			{
+				{ },
+				{ 255, 0, 0, 255 },
+				{ 190, 220, 5, 255 },
+				{ 255, 0, 0, 255 },
+				{ 190, 220, 5, 255 },
+				{ 190, 220, 5, 255 }
+			};
+
+			SetFont( FONT_ROBOTOSMALL );
+			BeginRow( 30u, 1u, ROW_CUSTOM );
+			auto vecTextSize = CalculateTextBounds( strErrorMessages[ iLoginStatus ].c_str( ), 30u );
+			PushCustomRow( unsigned( float( uWindowDimensions[ 0 ] ) / 2.f - vecTextSize.x / 2.f ), unsigned( float( uWindowDimensions[ 1 ] ) - 140.f ), unsigned( vecTextSize.x ), 30u );
+			Text( strErrorMessages[ iLoginStatus ].c_str( ), clrErrorMessages[ iLoginStatus ] );
+			EndRow( );
+
+			BeginRow( 30u, 3u, ROW_CUSTOM );
+			constexpr auto uButtonWidth = 150u;
+			PushCustomRow( unsigned( float( uWindowDimensions[ 0 ] ) / 2.f - ( uButtonWidth * 3.f ) / 2.f - 2.f ), unsigned( float( uWindowDimensions[ 1 ] ) - 140.f ), uButtonWidth, 30u );
+			if ( Button( EPosition::LEFT, PX_XOR( "FORUM" ), false ) )
+				OpenLink( PX_XOR( "https://www.paladin.rip/" ) );
+			PushCustomRow( unsigned( float( uWindowDimensions[ 0 ] ) / 2.f - uButtonWidth / 2.f ), unsigned( float( uWindowDimensions[ 1 ] ) - 140.f ), uButtonWidth, 30u );
+			if ( Button( EPosition::CENTER, PX_XOR( "SUPPORT" ), false ) )
+				OpenLink( PX_XOR( "https://www.paladin.rip/support/" ) );
+			PushCustomRow( unsigned( float( uWindowDimensions[ 0 ] ) / 2.f + uButtonWidth / 2.f + 2.f ), unsigned( float( uWindowDimensions[ 1 ] ) - 140.f ), uButtonWidth, 30u );
+			if ( Button( EPosition::RIGHT, PX_XOR( "EXTENSIONS" ), false ) )
+				OpenLink( PX_XOR( "https://www.paladin.rip/extensions/" ) );
+			EndRow( );
+		}
+		vecImageQueue.emplace_back( TEXTURE_LOGO_LOADING, D3DXVECTOR3( float( uWindowDimensions[ 0 ] ) / 2.f - float( vecTextures[ TEXTURE_LOGO_LOADING ].uWidth ) / 2.f,
+																	   float( uWindowDimensions[ 1 ] ) / 2.f - float( vecTextures[ TEXTURE_LOGO_LOADING ].uHeight ) / 2.f, 0.f ),
+									D3DCOLOR_ARGB( bLogoAlpha, bLogoAlpha, bLogoAlpha, bLogoAlpha ) );
+	}
+	else
+	{
+		static const auto fnSetTabValue = [ ]( int& iCurrentValue, const int iNewValue )
+		{
+			iCurrentValue = iNewValue >= 0 ? iNewValue : iCurrentValue;
+		};
+		static auto bSetTabs = false;
+		static auto iCurrentTab = 0;
+		static std::deque< cstr_t > dqTabs;
+		if( !bSetTabs )
+		{
+			dqTabs.push_back( ICON_FA_SHARE_ALT_SQUARE "  EXTENSIONS" );
+			if( bIsStaff )
+				dqTabs.push_back( ICON_FA_CODE_BRANCH "  DEVELOPER" ); // blank tab just to look COOL DXDXDXDXDXDXD
+			bSetTabs = true;
+		}
+
+		const static links_t lnkSeparator
+		{
+			SLink( "My Account", "https://www.paladin.rip/account/" ),
+			SLink( "Support", "https://www.paladin.rip/support/" ),
+			SLink( "Forum", "https://www.paladin.rip/" )
+		};
+
+		constexpr unsigned uImagePositions[ PX_EXTENSION_MAX ][ 2 ]
+		{
+			{ { }, { } },
+			{ { }, { } },
+			{ 47u, 190u },
+			{ 162u, 190u },
+			{ 277u, 190u }
+		};
+
+		bool bHoveringImage[ PX_EXTENSION_MAX ]
+		{
+			false,
+			false,
+			MouseHoveringRectangle( uImagePositions[ PX_EXTENSION_CSGO ][ 0 ], uImagePositions[ PX_EXTENSION_CSGO ][ 1 ], vecTextures[ TEXTURE_ICON_CSGO ].uWidth, vecTextures[ TEXTURE_ICON_CSGO ].uHeight ),
+			MouseHoveringRectangle( uImagePositions[ PX_EXTENSION_PUBG ][ 0 ], uImagePositions[ PX_EXTENSION_PUBG ][ 1 ], vecTextures[ TEXTURE_ICON_PUBG ].uWidth, vecTextures[ TEXTURE_ICON_PUBG ].uHeight ),
+			MouseHoveringRectangle( uImagePositions[ PX_EXTENSION_RSIX ][ 0 ], uImagePositions[ PX_EXTENSION_RSIX ][ 1 ], vecTextures[ TEXTURE_ICON_RSIX ].uWidth, vecTextures[ TEXTURE_ICON_RSIX ].uHeight )
+		};
+
+		static auto uSelectedExtension = PX_EXTENSION_CSGO;
+		static auto bWasClicking = false;
+
+		for( auto u = 0u; u < PX_EXTENSION_MAX; u++ )
+			if ( bHoveringImage[ u ] )
+			{
+				SetWidgetActive( Render::CURSOR_HAND );
+				if( PX_INPUT.GetKeyState( VK_LBUTTON ) && !bExtensionDisabled[ u ] )
+				{
+					uSelectedExtension = u;
+					bWasClicking = true;
+				}
+			}
+
+		const static auto uHoverColor = D3DCOLOR_ARGB( 255, 255, 255, 255 ),
+			uDormantColor = D3DCOLOR_ARGB( 200, 200, 200, 200 );
+
+		const static color_t clrText { 255, 255, 255, 255 }, 
+								clrGold { 255, 192, 0, 255 }, 
+								clrGreen { 32, 200, 32, 255 }, 
+								clrPurple { 192, 0, 255, 255 };
+
+		Header( "Paladin Extensions", "Manager", 102u, nullptr, fnClose );
+
+		if ( bLogoAlpha > 0 )
+		{
+			bLogoAlpha -= 5;
+			vecImageQueue.emplace_back( TEXTURE_LOGO_LOADING, D3DXVECTOR3( float( uWindowDimensions[ 0 ] ) / 2.f - float( vecTextures[ TEXTURE_LOGO_LOADING ].uWidth ) / 2.f,
+																		   float( uWindowDimensions[ 1 ] ) / 2.f - float( vecTextures[ TEXTURE_LOGO_LOADING ].uHeight ) / 2.f, 0.f ),
+										D3DCOLOR_ARGB( bLogoAlpha, bLogoAlpha, bLogoAlpha, bLogoAlpha ) );			
+			return;
+		}
+
+		fnSetTabValue( iCurrentTab, Tabs( 10, 0, dqTabs, iCurrentTab ) );
+		Separator( 61, 65, 72, 100, &lnkSeparator );
+
+		BeginGroupbox( 27, 153, 370, 160, "Extensions" );
+		{
+			vecImageQueue.emplace_back( TEXTURE_ICON_CSGO, D3DXVECTOR3( uImagePositions[ PX_EXTENSION_CSGO ][ 0 ], uImagePositions[ PX_EXTENSION_CSGO ][ 1 ], 0 ), bHoveringImage[ PX_EXTENSION_CSGO ] ? uHoverColor : uDormantColor );
+			vecImageQueue.emplace_back( TEXTURE_ICON_PUBG, D3DXVECTOR3( uImagePositions[ PX_EXTENSION_PUBG ][ 0 ], uImagePositions[ PX_EXTENSION_PUBG ][ 1 ], 0 ), bHoveringImage[ PX_EXTENSION_PUBG ] ? uHoverColor : uDormantColor );
+			vecImageQueue.emplace_back( TEXTURE_ICON_RSIX, D3DXVECTOR3( uImagePositions[ PX_EXTENSION_RSIX ][ 0 ], uImagePositions[ PX_EXTENSION_RSIX ][ 1 ], 0 ), bHoveringImage[ PX_EXTENSION_RSIX ] ? uHoverColor : uDormantColor );
+		}
+		EndGroupbox( );
+
+		BeginGroupbox( 448, 180, 273, 160, ( strExtensionNames[ uSelectedExtension ] + " Information" ).c_str( ) );
+		{
+			BeginRow( 15, 4, ROW_STATIC );
+			SetRowWidth( 10 );
+			Spacing( );
+			JustifiedText( "Status:", extInfo[ uSelectedExtension ].strStatus.c_str( ), clrText, clrGold, 240 );
+			EndRow( );
+
+			BeginRow( 15, 4, ROW_STATIC );
+			SetRowWidth( 10 );
+			Spacing( );
+			JustifiedText( "Next Update:", extInfo[ uSelectedExtension ].strEstimatedNextUpdate.c_str( ), clrText, clrGreen, 240 );
+			EndRow( );
+
+			BeginRow( 15, 4, ROW_STATIC );
+			SetRowWidth( 10 );
+			Spacing( );
+			JustifiedText( "Last Update:", extInfo[ uSelectedExtension ].strLastUpdate.c_str( ), clrText, clrGreen, 240 );
+			EndRow( );
+
+			BeginRow( 15, 4, ROW_STATIC );
+			SetRowWidth( 10 );
+			Spacing( );
+			JustifiedText( "Last Load:", strLastLaunchTimes[ uSelectedExtension ].c_str( ), clrText, clrGreen, 240 );
+			EndRow( );
+
+			BeginRow( 15, 4, ROW_STATIC );
+			SetRowWidth( 10 );
+			Spacing( );
+			JustifiedText( "Version:", extInfo[ uSelectedExtension ].strVersion.c_str( ), clrText, clrPurple, 240 );
+			EndRow( );
+		}
+		EndGroupbox( );
+
+		constexpr auto uColumnWidth = 217u;
+
+		SetWidgetPosition( 30, 200 );
+
+		BeginRow( 25, bIsStaff ? 6 : 4, ROW_STATIC );
+		JustifiedText( "Manager Version:", extInfo[ PX_EXTENSION_MANAGER ].strVersion.c_str( ), clrText, clrPurple, uColumnWidth - 5u );
+		SetRowWidth( uColumnWidth - 5u);
+		Spacing( );
+		if ( bIsStaff )
+			Checkbox( "Prefer Beta", &bPreferBeta );
+		EndRow( );
+
+		SetFont( FONT_ROBOTOBOLDSMALL );
+		BeginRow( 25u, 3, ROW_CUSTOM );
+
+		auto flBaseButtonPosition = float( uWindowDimensions[ 0 ] ) / 2.f;
+
+		PushCustomRow( unsigned( flBaseButtonPosition - ( uColumnWidth * 3.f ) / 2.f - 33.f ), 0.f, uColumnWidth, 25u );
+		if ( Button( EPosition::LEFT, "MANAGER CHANGELOG", false ) )
+			OpenLink( "https://www.paladin.rip/extensions/1/updates/" );
+
+		PushCustomRow( unsigned( flBaseButtonPosition - uColumnWidth / 2.f - 30.f), 0.f, uColumnWidth, 25u );
+		if ( Button( EPosition::CENTER, ( strExtensionNames[ uSelectedExtension ] + " CHANGELOG" ).c_str( ), false ) )
+			OpenLink( ( "https://www.paladin.rip/extensions/" + std::to_string( uSelectedExtension ) + "/updates/" ).c_str( ) );
+
+		PushCustomRow( unsigned( flBaseButtonPosition + uColumnWidth / 2.f - 27.f ), 0.f, uColumnWidth, 25u );
+		if ( Button( EPosition::RIGHT, ( "LOAD " + strExtensionNames[ uSelectedExtension ] ).c_str( ), false ) )
+			iSelectedExtension = uSelectedExtension;
+
+		EndRow( );
+
+		bWasClicking = PX_INPUT.GetKeyState( VK_LBUTTON );
 	}
 }
 
 void PX_API Draw( )
 {
-	unsigned uDimensions[ 2 ] { 720, 600 };
+	unsigned uDimensions[ 2 ] { 720, 435 };
 	Render::InitializeRenderTarget( uDimensions, PX_XOR( L"Paladin Extensions" ) );
 	UI::Manager::Initialize( PX_XOR( "Manager" ) );
 
@@ -117,22 +330,21 @@ void PX_API Draw( )
 	EnumDisplaySettings( nullptr, ENUM_CURRENT_SETTINGS, &pDevMode );
 	while ( !bShouldClose )
 	{
-		auto mmtStart = GetMoment( );
-
+		const auto mmtStart = GetMoment( );
 		if ( !UI::Manager::Render( ) )
 			break;
 
-		Wait( 1000 / pDevMode.dmDisplayFrequency - ( GetMoment( ) - mmtStart ) );
+		Wait( 1000ull / pDevMode.dmDisplayFrequency - ( GetMoment( ) - mmtStart ) ); // Refresh the application at the speed of the monitor's refresh rate.
 	}
 }
 
 void PX_API MonitorSteam( )
 {
-	while ( iSelectedCheat == -1 )
+	while ( iSelectedExtension == PX_EXTENSION_NONE && !bShouldClose )
 	{
 		if ( sys::GetProcessID( PX_XOR( L"Steam.exe" ) ) != 0u )
 			exit( -1 );
-		Wait( 250 );
+		Wait( 1500ull );
 	}
 }
 
@@ -140,36 +352,71 @@ void PX_API OnLaunch( )
 {
 	if ( sys::GetProcessID( PX_XOR( L"Steam.exe" ) ) != 0u )
 		return;
-
+	
 	// We need the resources loaded for textures in the ui
 	Files::Resources::LoadResources( { } );
-
+	
 	std::thread tDraw( Draw );
 	tDraw.detach( );
-
+	
 	std::thread tSentinal( MonitorSteam );
 	tSentinal.detach( );
+
+	// wait 2 secs so that our cool loading animation has some time to play :D
+	Wait< std::chrono::seconds >( 2ull );
 
 	iLoginStatus = Manager::Login( );
 	switch ( iLoginStatus )
 	{
-		case Manager::LOGIN_HARDWARE_MISMATCH:
-			MessageBox( nullptr, L"Unique ID Mismatch", L"Your Unique ID does not match the one in the database. Please create a ticket to change your unique ID.", MB_OK );
-			break;
 		case Manager::LOGIN_STAFF_SUCCESS:
-		// staff shit
+			bIsStaff = true;
+
 		case Manager::LOGIN_SUCCESS:
-		//while ( iSelectedCheat == -1 )
-		//	Wait( 5 );
-		const auto strDLL = Manager::AssembleCheat( 2 /*iSelectedCheat*/ );
-		auto pBuffer = VirtualAlloc( nullptr, strDLL.length( ) + 1, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE );
-		memcpy( pBuffer, strDLL.c_str( ), strDLL.length( ) );
+		{
+			extInfo = Manager::RetrieveExtensionInformation( );
+			strLastLaunchTimes = Manager::RetrieveLaunchInformation( );
 
-		sys::injection_info_t inj { };
-		Inject( pBuffer, L"ConsoleApplication1.exe", &inj );
+			if( extInfo.empty( ) )
+			{
+				iLoginStatus = Manager::LOGIN_CONNECTION_FAILURE;
+				break;
+			}
+
+			for( const auto& ext : extInfo )
+				if( !ext.bInitialized ) // issue getting info, connection error or someone has messed with the loader to get here and the php session hasnt started
+				{
+					iLoginStatus = Manager::LOGIN_CONNECTION_FAILURE;
+					break;
+				}
+			if( strLastLaunchTimes == nullptr )
+			{
+				iLoginStatus = Manager::LOGIN_CONNECTION_FAILURE;
+				break;
+			}
+
+			bLoggedIn = true;
+			while ( iSelectedExtension == PX_EXTENSION_NONE )
+				Wait( 1 );
+
+			bShouldClose = true;
+
+			while ( sys::GetProcessID( PX_XOR( L"Steam.exe" ) ) == 0u || sys::GetProcessID( wstrApplicationExecutableNames[ iSelectedExtension ].c_str( ) ) == 0u )
+				Wait( 1 );
+
+			Wait( 100 );
+
+			const auto strDLL = Manager::AssembleExtension( iSelectedExtension );
+			auto pBuffer = VirtualAlloc( nullptr, strDLL.length( ) + 1, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE );
+			memcpy( pBuffer, strDLL.c_str( ), strDLL.length( ) );
+
+			Inject( pBuffer, wstrApplicationExecutableNames[ iSelectedExtension ], new sys::injection_info_t );
+		}
 		break;
-	}
 
+		default:
+			break;
+	}
+	
 	while ( !bShouldClose )
 		Wait( 10 );
 }

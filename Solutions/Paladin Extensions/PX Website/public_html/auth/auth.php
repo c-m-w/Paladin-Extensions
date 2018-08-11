@@ -1,6 +1,6 @@
 <?php
 
-require 'include.php';
+require '../../include.php';
 
 if( mysqli_connect_errno( ) || $sql_connection->connect_error )
 	die( ReturnKeys[ "Establishing Failure" ] );
@@ -46,6 +46,6 @@ if( mysqli_connect_errno( ) || $sql_connection->connect_error )
     if( $is_banned )
         die( PutLoginAttempt( $user_id, 0, $hardware, ReturnKeys[ "Banned" ] ) );
 
-	BeginSession( );
+	BeginSession( $user_id );
     die( PutLoginAttempt( $user_id, $unique_id, $hardware, $is_staff ? ReturnKeys[ "Staff Success" ] : ReturnKeys[ "Success" ] ) );
 ?>

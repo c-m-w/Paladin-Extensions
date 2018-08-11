@@ -28,6 +28,7 @@ namespace Manager
 	/** \brief Logs in using the credentials in the license file. */
 	/**	\return Login status. */
 	ELogin PX_API Login( );
-
-	std::string PX_API AssembleCheat( unsigned uGame );
+	extensions_t PX_API RetrieveExtensionInformation( );
+	std::string* PX_API RetrieveLaunchInformation( );
+	std::string PX_API AssembleExtension( unsigned uExtension );
 }

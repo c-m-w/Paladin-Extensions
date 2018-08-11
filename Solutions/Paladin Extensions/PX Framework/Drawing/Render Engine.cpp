@@ -20,7 +20,6 @@ namespace PX::Render
 			case WM_IME_SETCONTEXT:
 				ShowWindow( _hwWindowHandle, SW_RESTORE );
 				bMinimized = false;
-				mmtRestoreWindow = GetMoment( );
 				return true;
 
 			case WM_DESTROY:

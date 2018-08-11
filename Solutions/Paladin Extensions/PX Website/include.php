@@ -164,7 +164,7 @@
         return $row[ "unique_id" ] == $unique_id;
     }
 	
-	function BeginSession( )
+	function BeginSession( $user_id )
 	{
         global $is_staff;
 
@@ -172,8 +172,11 @@
 		$_SESSION[ "key" ] = Keys[ "key" ];
 		$_SESSION[ "iv" ] = Keys[ "iv" ];
         $_SESSION[ "is_staff" ] = $is_staff;
+        $_SESSION[ "user_id" ] = $user_id;
 	}
 	
+    define( "ExtensionID", array( "manager" => 1, "csgo" => 2, "pubg" => 3, "rsix" => 4 ) );
+
 	define( "GameInfo", array( 2 => "../../Extensions/csgo.info", 3 => "../../Extensions/pubg.info" ) );
 	define( "GameCheat", array( 2 => "../../Extensions/csgo.dll", 3 => "../../Extensions/pubg.dll" ) );
 	
@@ -230,4 +233,37 @@
 			echo ReturnKeys[ "Establishing Failure" ];
 		session_destroy( );
 	}
+
+    function GetExtensionInformation( )
+    {
+        global $sql_connection;
+
+        $result = $sql_connection->query( "SELECT * FROM px_extension_info" );
+
+        while( ( $row = $result->fetch_assoc( ) ) != NULL )
+        {
+            $info = array( "Name" => ( string )$row[ "name" ], "Status" => ( string )$row[ "status" ], "Estimated Next Update" => ( string )$row[ "estimated_next_update" ], "Last Update" => ( string )$row[ "last_update" ], "Version" => ( string )$row[ "version" ] );
+
+            $return[ "Info" ][ ExtensionID[ $row[ "name" ] ] ] = $info;
+            $return[ "Count" ]++;
+        }
+
+        return json_encode( $return );
+    }
+
+    function GetLastLaunchTime( )
+    {
+        global $sql_connection;
+
+        for( $i = ExtensionID[ "csgo" ]; $i <= ExtensionID[ "rsix" ]; $i++ )
+        {
+            $result = $sql_connection->query( "SELECT MAX( time ) FROM px_extension_load WHERE user_id = " . $_SESSION[ "user_id" ] . " AND ext = " . $i );
+            if( $result->num_rows < 1 )
+                $launchtimes[ $i ] = 0;
+
+            $row = $result->fetch_assoc( );
+            $launchtimes[ $i ] = ( int )$row[ "time" ];
+        }
+        return $launchtimes;
+    }
 ?>

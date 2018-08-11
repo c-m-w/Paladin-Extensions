@@ -15,7 +15,7 @@ namespace PX
 			DOWN
 		};
 	private:
-		EKeyState stateKeys[ PX_MAX_KEY ];
+		EKeyState ksKeys[ PX_MAX_KEY ];
 		moment_t mmtKeyDownTime[ PX_MAX_KEY ];
 		unsigned uLastKeyPressed;
 		std::vector< std::function< void( PX_API )( unsigned ) > > vecfnKeyCallback[ PX_MAX_KEY ];

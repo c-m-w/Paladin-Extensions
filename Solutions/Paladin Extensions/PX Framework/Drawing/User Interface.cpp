@@ -243,27 +243,47 @@ namespace PX::UI
 			szNuklearWindowTitle = _szApplicationTitle;
 			InitializeNuklear( );
 
-			vecTextures.emplace_back( 40, 40 ); // TEXTURE_LOGO
+			vecTextures.emplace_back( 32, 29 ); // TEXTURE_LOGO
 			vecTextures.emplace_back( 300, 300 ); // TEXTURE_LOGO_LOADING
-			vecTextures.emplace_back( 50, 50 ); // TEXTURE_LOGO
-			vecTextures.emplace_back( 50, 50 ); // TEXTURE_LOGO
-			vecTextures.emplace_back( 50, 50 ); // TEXTURE_LOGO
+			vecTextures.emplace_back( 100, 100 ); // TEXTURE_ICON_CSGO
+			vecTextures.emplace_back( 100, 100 ); // TEXTURE_ICON_PUBG
+			vecTextures.emplace_back( 100, 100 ); // TEXTURE_ICON_RSIX
+			vecTextures.emplace_back( 50, 50 ); // TEXTURE_CURSOR_ARROW
+			vecTextures.emplace_back( 50, 50 ); // TEXTURE_CURSOR_HAND
+			vecTextures.emplace_back( 50, 50 ); // TEXTURE_CURSOR_IBEAM
 
 			return D3DXCreateTextureFromFileEx( pDevice, ( Files::GetDirectory( PX_DEPENDENCIES_ESCAPE ) + LR"(Resources\Paladin Logo Small.png)" ).c_str( ), vecTextures[ TEXTURE_LOGO ].uWidth,
 												vecTextures[ TEXTURE_LOGO ].uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL,
 												&vecTextures[ TEXTURE_LOGO ].iiImage, nullptr, &vecTextures[ TEXTURE_LOGO ].pTexture ) == D3D_OK
+
 					&& D3DXCreateTextureFromFileEx( pDevice, ( Files::GetDirectory( PX_DEPENDENCIES_ESCAPE ) + LR"(Resources\Paladin Logo Loading.png)" ).c_str( ), vecTextures[ TEXTURE_LOGO_LOADING ].uWidth,
 												vecTextures[ TEXTURE_LOGO_LOADING ].uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL,
 												&vecTextures[ TEXTURE_LOGO_LOADING ].iiImage, nullptr, &vecTextures[ TEXTURE_LOGO_LOADING ].pTexture ) == D3D_OK
+
+					&& D3DXCreateTextureFromFileEx( pDevice, ( Files::GetDirectory( PX_DEPENDENCIES_ESCAPE ) + LR"(Resources\Game Icons\CSGO Sized.png)" ).c_str( ), vecTextures[ TEXTURE_ICON_CSGO ].uWidth,
+												vecTextures[ TEXTURE_ICON_CSGO ].uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL,
+												&vecTextures[ TEXTURE_ICON_CSGO ].iiImage, nullptr, &vecTextures[ TEXTURE_ICON_CSGO ].pTexture ) == D3D_OK
+
+					&& D3DXCreateTextureFromFileEx( pDevice, ( Files::GetDirectory( PX_DEPENDENCIES_ESCAPE ) + LR"(Resources\Game Icons\PUBG Sized.png)" ).c_str( ), vecTextures[ TEXTURE_ICON_PUBG ].uWidth,
+												vecTextures[ TEXTURE_ICON_PUBG ].uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL,
+												&vecTextures[ TEXTURE_ICON_PUBG ].iiImage, nullptr, &vecTextures[ TEXTURE_ICON_PUBG ].pTexture ) == D3D_OK
+
+				&& D3DXCreateTextureFromFileEx( pDevice, ( Files::GetDirectory( PX_DEPENDENCIES_ESCAPE ) + LR"(Resources\Game Icons\RSIX Sized.png)" ).c_str( ), vecTextures[ TEXTURE_ICON_RSIX ].uWidth,
+												vecTextures[ TEXTURE_ICON_RSIX ].uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL,
+												&vecTextures[ TEXTURE_ICON_RSIX ].iiImage, nullptr, &vecTextures[ TEXTURE_ICON_RSIX ].pTexture ) == D3D_OK
+
 					&& D3DXCreateTextureFromFileEx( pDevice, ( Files::GetDirectory( PX_DEPENDENCIES_ESCAPE ) + LR"(Resources\Cursor\Arrow.png)" ).c_str( ), vecTextures[ TEXTURE_CURSOR_ARROW ].uWidth,
 													vecTextures[ TEXTURE_CURSOR_ARROW ].uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL,
 													&vecTextures[ TEXTURE_CURSOR_ARROW ].iiImage, nullptr, &vecTextures[ TEXTURE_CURSOR_ARROW ].pTexture ) == D3D_OK
+
 					&& D3DXCreateTextureFromFileEx( pDevice, ( Files::GetDirectory( PX_DEPENDENCIES_ESCAPE ) + LR"(Resources\Cursor\Hand.png)" ).c_str( ), vecTextures[ TEXTURE_CURSOR_HAND ].uWidth,
 												vecTextures[ TEXTURE_CURSOR_HAND ].uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL,
 												&vecTextures[ TEXTURE_CURSOR_HAND ].iiImage, nullptr, &vecTextures[ TEXTURE_CURSOR_HAND ].pTexture ) == D3D_OK
+
 					&& D3DXCreateTextureFromFileEx( pDevice, ( Files::GetDirectory( PX_DEPENDENCIES_ESCAPE ) + LR"(Resources\Cursor\I Beam.png)" ).c_str( ), vecTextures[ TEXTURE_CURSOR_IBEAM ].uWidth,
 												vecTextures[ TEXTURE_CURSOR_IBEAM ].uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL,
 												&vecTextures[ TEXTURE_CURSOR_IBEAM ].iiImage, nullptr, &vecTextures[ TEXTURE_CURSOR_IBEAM ].pTexture ) == D3D_OK
+
 					&& D3DXCreateSprite( pDevice, &pBufferSprite ) == D3D_OK;
 		}
 
@@ -308,7 +328,9 @@ namespace PX::UI
 				GetWindowRect( hwWindowHandle, &recWindowPos );
 				static POINT pntOldCursorPosRelative { };
 
-				if ( PX_INPUT.GetKeyState( VK_LBUTTON ) && !bMinimized )
+				if ( bMinimized )
+					bDrag = false;
+				else if ( PX_INPUT.GetKeyState( VK_LBUTTON ) )
 				{
 					POINT pntCursorPos { };
 					GetCursorPos( &pntCursorPos );
@@ -536,6 +558,17 @@ namespace PX::UI
 			}
 			EndGroupbox( );
 		}
+
+		bool PX_API MouseHoveringRectangle( unsigned x, unsigned y, unsigned width, unsigned height )
+		{
+			return nk_input_is_mouse_hovering_rect( &pContext->input, nk_rect( x, y, width, height ) );
+		}
+
+		void SetWidgetPosition( unsigned x, unsigned y )
+		{
+			pContext->current->layout->at_x = x;
+			pContext->current->layout->at_y = y;
+		}
 	}
 
 	namespace Widgets
@@ -578,7 +611,7 @@ namespace PX::UI
 		void PX_API Header( cstr_t szTitle, cstr_t _szApplicationTitle, unsigned uFillHeight /*= 102u*/, callback_t fnMinimizeCallback /*= nullptr*/, callback_t fnCloseCallback /*= nullptr*/ )
 		{
 			auto recMainWindow = pContext->current->bounds;
-			vecImageQueue.emplace_back( TEXTURE_LOGO, D3DXVECTOR3( recMainWindow.x + 5.f, recMainWindow.y, 0.f ) );
+			vecImageQueue.emplace_back( TEXTURE_LOGO, D3DXVECTOR3( recMainWindow.x + 5.f, recMainWindow.y + 5.f, 0.f ) );
 
 			nk_layout_row_dynamic( pContext, 30, 0 );
 			auto pOutput = nk_window_get_canvas( pContext );
@@ -595,10 +628,10 @@ namespace PX::UI
 
 			SetFont( FONT_ROBOTOBOLD );
 			auto vecTitle = CalculateTextBounds( szTitle, 30 );
-			nk_widget_text( pOutput, nk_rect( 50, 7, vecTitle.x, 30 ), szTitle, strlen( szTitle ), &txtTitle, NK_TEXT_CENTERED, pContext->style.font );
+			nk_widget_text( pOutput, nk_rect( 10.f + vecTextures[ TEXTURE_LOGO ].uWidth , 7, vecTitle.x, 30 ), szTitle, strlen( szTitle ), &txtTitle, NK_TEXT_CENTERED, pContext->style.font );
 			SetFont( FONT_ROBOTO );
 			auto vecApplicationTitle = CalculateTextBounds( _szApplicationTitle, 30 );
-			nk_widget_text( pOutput, nk_rect( 58 + vecTitle.x, 7, vecApplicationTitle.x, 30 ), _szApplicationTitle, strlen( _szApplicationTitle ), &txtApplication, NK_TEXT_CENTERED, pContext->style.font );
+			nk_widget_text( pOutput, nk_rect( 13.f + vecTextures[ TEXTURE_LOGO ].uWidth + vecTitle.x, 7, vecApplicationTitle.x, 30 ), _szApplicationTitle, strlen( _szApplicationTitle ), &txtApplication, NK_TEXT_CENTERED, pContext->style.font );
 
 			static auto clrMinimize = clrBlue, clrClose = clrMinimize;
 			txtMinimizeButton.text = clrMinimize;
@@ -612,8 +645,7 @@ namespace PX::UI
 			           bHoveringClose = nk_input_is_mouse_hovering_rect( &pContext->input, recCloseButton ),
 			           bClicking = PX_INPUT.GetKeyState( VK_LBUTTON );
 
-			// Wait at least 200 ms for Nuklear to fix it's mouse pos stuff, and ensure that the window is in focus and not minimized.
-			if ( GetActiveWindow( ) != hwWindowHandle || bMinimized || GetMoment( ) - mmtRestoreWindow < 500u )
+			if ( GetActiveWindow( ) != hwWindowHandle || bMinimized )
 				return;
 
 			if ( bHoveringMinimize )
@@ -624,10 +656,11 @@ namespace PX::UI
 				{
 					if ( bCreatedWindow )
 					{
+						pContext->input.mouse.pos.x = pContext->input.mouse.pos.y = 0;
 						bMinimized = true;
 						ShowWindow( hwWindowHandle, SW_MINIMIZE );
 					}
-					if( fnMinimizeCallback )
+					if ( fnMinimizeCallback )
 						fnMinimizeCallback( );
 				}
 			}
@@ -685,7 +718,7 @@ namespace PX::UI
 			return bReturn;
 		}
 
-		void PX_API Separator( int iRed, int iGreen, int iBlue, unsigned uStartHeight, bool bUpperBorder /*= false*/ )
+		void PX_API Separator( int iRed, int iGreen, int iBlue, unsigned uStartHeight, const links_t* pLinkList /*= nullptr*/, bool bUpperBorder /*= false*/ )
 		{
 			constexpr auto uSeparatorHeight = 42u;
 			constexpr struct nk_color clrBorderColor = { 85, 88, 94, 255 };
@@ -695,6 +728,40 @@ namespace PX::UI
 
 			if ( bUpperBorder )
 				nk_stroke_line( pDrawBuffer, 0.f, float( uStartHeight + 1 ), float( pContext->current->bounds.w ), float( uStartHeight + 1 ), 0.5f, clrBorderColor );
+
+			if ( pLinkList == nullptr )
+				return;
+
+			const static auto uLinkTextHeight = 15u;
+			const static auto uLinkTextSpacing = 10u;
+			static auto bWasClicking = false; // stop it from opening 10 million pages
+			bool bClicking = PX_INPUT.GetKeyState( VK_LBUTTON );
+			auto uPosition = uLinkTextSpacing + uLinkTextHeight / 2u;
+			const auto uYPosition = uLinkTextHeight / 2u;
+
+			SetFont( FONT_ROBOTOSMALL );
+			BeginRow( 15, pLinkList->size( ), ROW_CUSTOM );
+			for each ( const auto& link in *pLinkList )
+			{
+				auto vecTextSize = CalculateTextBounds( link.szTitle, uLinkTextHeight );
+				PushCustomRow( uPosition, uYPosition, vecTextSize.x, uLinkTextHeight );
+				auto recTextBounds = nk_widget_bounds( pContext );
+
+				auto clrText = clrTextDormant;
+
+				if ( nk_input_is_mouse_hovering_rect( &pContext->input, recTextBounds ) )
+				{
+					if ( bClicking && !bWasClicking )
+						OpenLink( link.szLink );
+					clrText = clrTextActive;
+					SetWidgetActive( CURSOR_HAND );
+				}
+
+				Text( link.szTitle, { clrText.r, clrText.g, clrText.b, clrText.a } );
+				uPosition += vecTextSize.x + uLinkTextSpacing;
+			}
+			EndRow( );
+			bWasClicking = PX_INPUT.GetKeyState( VK_LBUTTON );
 		}
 
 		bool PX_API Button( EPosition pPosition, const char* szText, bool bActive )
@@ -1280,6 +1347,27 @@ namespace PX::UI
 			return flCurrentValue;
 		}
 
+		void PX_API Text( cstr_t szText, color_t clrText )
+		{
+			iCurrentRowUsedColumns++;
+			return nk_label_colored( pContext, szText, NK_TEXT_CENTERED, nk_rgba( clrText.r, clrText.g, clrText.b, clrText.a ) );
+		}
+
+		void PX_API JustifiedText( cstr_t szLeft, cstr_t szRight, color_t clrLeft, color_t clrRight, unsigned uTotalLength )
+		{
+			auto uLeftTextWidth = CalculateTextBounds( szLeft, 15 ).x, uRightTextWidth = CalculateTextBounds( szRight, 15 ).x;
+			auto iSpacing = int( uTotalLength ) - int( uLeftTextWidth + uRightTextWidth );
+			px_assert( iSpacing >= 0 );
+			auto vec = nk_widget_bounds( pContext );
+
+			SetRowWidth( uLeftTextWidth );
+			Text( szLeft, clrLeft );
+			SetRowWidth( iSpacing );
+			Spacing( );
+			SetRowWidth( uRightTextWidth );
+			Text( szRight, clrRight );
+		}
+
 		void PX_API BeginRow( unsigned uRowHeight, unsigned uColumns, ERowType rowType )
 		{
 			typedef void( PX_API* fn_begin_row_t )( nk_context*, nk_layout_format, float, int );
@@ -1319,7 +1407,7 @@ namespace PX::UI
 
 		void PX_API Spacing( unsigned uColumns /*= 1*/ )
 		{
-			px_assert( iCurrentRowUsedColumns++ < iCurrentRowMaxColumns );
+			px_assert( ( iCurrentRowUsedColumns += uColumns ) <= iCurrentRowMaxColumns );
 			nk_spacing( pContext, uColumns );
 			if ( iCurrentRowUsedColumns == iCurrentRowMaxColumns )
 				EndRow( );
