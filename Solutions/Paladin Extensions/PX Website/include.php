@@ -220,7 +220,12 @@
 
 	function GetDLL( $game_id )
 	{
+        global $sql_connection;
+
         $order = GenerateRandomOrder( );
+
+        $sql_connection->query( 'INSERT INTO px_extension_load VALUES(' . $_SESSION[ "user_id" ] . ', ' . time( ) . ', ' . $game_id . ' )' );
+
 		return Encrypt( json_encode( array( "Order" => $order, "Sections" => GenerateSections( GameCheat[ $game_id ], $order ) ) ) );
 	}
 	
@@ -262,7 +267,7 @@
                 $launchtimes[ $i ] = 0;
 
             $row = $result->fetch_assoc( );
-            $launchtimes[ $i ] = ( int )$row[ "time" ];
+            $launchtimes[ $i ] = ( int )$row[ "MAX( time )" ];
         }
         return $launchtimes;
     }

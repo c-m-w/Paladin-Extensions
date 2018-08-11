@@ -30,6 +30,10 @@ namespace PX::sys
 
 	HANDLE PX_API FindProcessThread( DWORD dwProcessID );
 
+	bool PX_API IsProcessOpen( const std::wstring& wstrExecutableName );
+
+	bool PX_API IsProcessThreadRunning( const std::wstring& wstrExecutableName );
+
 	/** \brief Information for manually mapping a DLL into a process. */
 	struct injection_info_t
 	{
