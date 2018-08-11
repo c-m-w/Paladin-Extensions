@@ -6,6 +6,7 @@
 #include <Jeremia-h/Standard Library.hpp>
 
 #include <Windows.h>
+#include <shellapi.h>
 
 #include <cryptopp/base64.h>
 #include <cryptopp/filters.h>
