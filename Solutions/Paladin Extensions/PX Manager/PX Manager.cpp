@@ -320,6 +320,17 @@ void PX_API UI::Manager::SetLayout( )
 	}
 }
 
+void PX_API UI::Manager::DrawOther( )
+{
+	std::deque< vertex_t > vtxVertices;
+	PX_DEF dwColor = D3DCOLOR_ARGB( 255, 255, 255, 255 );
+	vtxVertices.emplace_back( 0, 0, dwColor );
+	vtxVertices.emplace_back( 100, 0, dwColor );
+	vtxVertices.emplace_back( 0, 100, dwColor );
+	vtxVertices.emplace_back( 100, 100, dwColor );
+	Drawing::Polygon( vtxVertices );
+}
+
 void PX_API Draw( )
 {
 	unsigned uDimensions[ 2 ] { 720, 435 };

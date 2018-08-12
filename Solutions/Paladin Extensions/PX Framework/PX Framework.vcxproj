@@ -167,6 +167,7 @@
     <ClInclude Include="Application\File Manager.hpp" />
     <ClInclude Include="Application\Input Manager.hpp" />
     <ClInclude Include="Application\Types.hpp" />
+    <ClInclude Include="Drawing\Drawing.hpp" />
     <ClInclude Include="Drawing\Render Engine.hpp" />
     <ClInclude Include="Drawing\User Interface.hpp" />
     <ClInclude Include="Inclusions.hpp" />
@@ -183,6 +184,7 @@
     <ClCompile Include="Application\Input Manager.cpp" />
     <ClCompile Include="Application\Tools.cpp" />
     <ClCompile Include="Application\Types.cpp" />
+    <ClCompile Include="Drawing\Drawing.cpp" />
     <ClCompile Include="Drawing\Render Engine.cpp" />
     <ClCompile Include="Drawing\User Interface.cpp" />
     <ClCompile Include="Security\Connectivity.cpp" />

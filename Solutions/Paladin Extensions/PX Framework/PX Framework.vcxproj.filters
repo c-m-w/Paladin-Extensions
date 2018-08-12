@@ -54,6 +54,9 @@
     <ClInclude Include="Security\System Management.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Drawing\Drawing.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application\Input Manager.cpp">
@@ -84,6 +87,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Application\Types.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Drawing\Drawing.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

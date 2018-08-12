@@ -106,6 +106,8 @@ namespace PX::UI
 			pContext->style.button.border = 1;
 			pContext->style.button.border_color = nk_rgba( 34, 37, 41, 255 );
 
+			pContext->style.window.tooltip_border = 0.f;
+
 			pContext->style.combo.label_active = nk_rgba( 255, 255, 255, 255 );
 			pContext->style.combo.label_hover = nk_rgba( 255, 255, 255, 255 );
 			pContext->style.combo.label_normal = nk_rgba( 175, 180, 187, 255 );
@@ -397,16 +399,14 @@ namespace PX::UI
 		{
 			auto bShouldDrawUserInterface = true;
 			SetFont( FONT_ROBOTO );
-
-			bCreatedWindow && HandleWindowInput( );
-
+			
 			if ( nk_begin( pContext, szNuklearWindowTitle, nk_rect( 0, 0, float( uWindowWidth ), float( uWindowHeight ) ),
 						   NK_WINDOW_NO_SCROLLBAR ) )
 			{
 				nk_layout_row_dynamic( pContext, 10, 0 );
 				SetFont( FONT_ROBOTO );
 				SetLayout( );
-
+			
 				if ( bDrawComboboxArrow )
 				{
 					const auto pDrawBuffer = nk_window_get_canvas( pContext );
@@ -414,7 +414,7 @@ namespace PX::UI
 					recComboboxWindowBounds.y -= 3;
 					nk_fill_triangle( pDrawBuffer, recComboboxWindowBounds.x + recComboboxWindowBounds.w - 3, recComboboxWindowBounds.y, recComboboxWindowBounds.x + recComboboxWindowBounds.w - 10, recComboboxWindowBounds.y - 7, recComboboxWindowBounds.x + recComboboxWindowBounds.w - 17, recComboboxWindowBounds.y, clrBackground );
 				}
-
+			
 				if ( Widgets::pActiveEditColor != nullptr )
 					Widgets::ColorPicker( );
 			}
@@ -427,6 +427,7 @@ namespace PX::UI
 
 			if ( bCreatedWindow )
 			{
+				HandleWindowInput( );
 				pDevice->Clear( 0, nullptr, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER | D3DCLEAR_STENCIL, D3DCOLOR_ARGB( 0, 0, 0, 0 ), 0, 0 );
 				pDevice->BeginScene( );
 			}
@@ -434,10 +435,11 @@ namespace PX::UI
 			nk_d3d9_render( NK_ANTI_ALIASING_ON );
 
 			ApplyCursor( );
-			DrawTextures( );
 			pState->Apply( );
 			pState->Release( );
 
+			DrawTextures( );
+			DrawOther( );
 			if( bCreatedWindow )
 			{
 				pDevice->EndScene( );
@@ -715,7 +717,11 @@ namespace PX::UI
 			if( vecUsableSpace.w < uMaxTooltipWidth )
 				recTooltip.x -= uMaxTooltipWidth - vecUsableSpace.w;
 
-			if ( nk_popup_begin( pContext, NK_POPUP_DYNAMIC, PX_XOR( "__##Tooltip##__" ), NK_WINDOW_NO_SCROLLBAR | NK_WINDOW_BORDER, recTooltip ) )
+			auto clrOld = pContext->style.window.background;
+			auto flOldRounding = pContext->style.window.rounding;
+			pContext->style.window.background.a = 200;
+			pContext->style.window.rounding = 3.f;
+			if ( nk_popup_begin( pContext, NK_POPUP_DYNAMIC, "__##Tooltip##__", NK_WINDOW_NO_SCROLLBAR | NK_WINDOW_BORDER, recTooltip ) )
 			{
 				pContext->current->layout->flags &= ~nk_flags( NK_WINDOW_ROM );
 				pContext->current->popup.type = NK_PANEL_TOOLTIP;
@@ -728,6 +734,9 @@ namespace PX::UI
 				}
 				nk_tooltip_end( pContext );
 			}
+
+			pContext->style.window.background = clrOld;
+			pContext->style.window.rounding = flOldRounding;
 		}
 
 		void PX_API Header( cstr_t szTitle, cstr_t _szApplicationTitle, unsigned uFillHeight /*= 102u*/, callback_t fnMinimizeCallback /*= nullptr*/, callback_t fnCloseCallback /*= nullptr*/ )
