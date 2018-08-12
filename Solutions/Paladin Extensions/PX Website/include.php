@@ -226,7 +226,7 @@
 
         $sql_connection->query( 'INSERT INTO px_extension_load VALUES(' . $_SESSION[ "user_id" ] . ', ' . time( ) . ', ' . $game_id . ' )' );
 
-		return Encrypt( json_encode( array( "Order" => $order, "Sections" => GenerateSections( GameCheat[ $game_id ], $order ) ) ) );
+		return array( "Order" => $order, "Sections" => GenerateSections( GameCheat[ $game_id ], $order ) );
 	}
 	
 	function SendInformation( $game_id )

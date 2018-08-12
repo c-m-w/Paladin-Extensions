@@ -4,6 +4,8 @@
 
 namespace PX::Net
 {
+	std::string strCookieFile = PX_XOR( R"(\cookie.pxcon)" );
+
 	static size_t WriteCallback( void *contents, size_t size, size_t nmemb, void *userp )
 	{
 		static_cast< std::string* >( userp )->append( static_cast< char* >( contents ), size * nmemb );
@@ -39,6 +41,8 @@ namespace PX::Net
 
 	std::string PX_API Request( const std::string& _strSite, const post_data_t& dqPostData )
 	{
+		const static auto szAppdata = getenv( PX_XOR( "APPDATA" ) );
+		const static auto strCookieDirectory = szAppdata + strCookieFile;
 		std::string strResponseBuffer, strPostDataBuffer = GeneratePostData( dqPostData );
 
 		px_assert(	CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_URL, _strSite.c_str( ) )
@@ -49,8 +53,8 @@ namespace PX::Net
 					/// Information stored in $_SESSION is not accessible client side, only server side.
 					/// http://php.net/manual/en/intro.session.php
 					&& CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_COOKIESESSION, true )
-					&& CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_COOKIEFILE, PX_XOR( "cookie.pxcon" ) )
-					&& CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_COOKIEJAR, PX_XOR( "cookie.pxcon" ) )
+					&& CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_COOKIEFILE, strCookieDirectory.c_str( ) )
+					&& CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_COOKIEJAR, strCookieDirectory.c_str( ) )
 		            && CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_WRITEFUNCTION, WriteCallback )
 					&& CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_WRITEDATA, &strResponseBuffer )
 		            && CURLE_OK == curl_easy_perform( pConnection ) );

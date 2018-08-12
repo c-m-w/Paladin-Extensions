@@ -30,5 +30,5 @@ namespace Manager
 	ELogin PX_API Login( );
 	extensions_t PX_API RetrieveExtensionInformation( );
 	std::string* PX_API RetrieveLaunchInformation( );
-	std::string PX_API AssembleExtension( unsigned uExtension );
+	std::string PX_API RequestExtensionInformation( unsigned uExtensionID );
 }

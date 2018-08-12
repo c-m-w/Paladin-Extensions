@@ -11,6 +11,7 @@ Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "PX Setup", "PX Setup\PX Set
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PX Website", "PX Website", "{86072343-4C86-4074-9335-E0829747D3CB}"
 	ProjectSection(SolutionItems) = preProject
+		PX Website\functions.json = PX Website\functions.json
 		PX Website\include.php = PX Website\include.php
 	EndProjectSection
 EndProject

@@ -23,10 +23,6 @@ namespace PX::Tools
 		static _Child& PX_API Get( );
 	};
 
-	/** \brief Plays a sound. */
-	/**	\param szFileName File name of the sound. */
-	void PX_API EmitSound( wcstr_t szFileName );
-
 	void PX_API OpenLink( cstr_t szLink );
 
 	std::string PX_API TimeToDate( moment_t mmtTime );

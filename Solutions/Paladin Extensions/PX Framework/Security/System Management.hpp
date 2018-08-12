@@ -30,9 +30,19 @@ namespace PX::sys
 
 	HANDLE PX_API FindProcessThread( DWORD dwProcessID );
 
+	HMODULE FindModule( const std::wstring& wstrModule, DWORD dwProcessID );
+
 	bool PX_API IsProcessOpen( const std::wstring& wstrExecutableName );
 
-	bool PX_API IsProcessThreadRunning( const std::wstring& wstrExecutableName );
+	bool PX_API IsProcessThreadRunning( DWORD dwProcessID );
+
+	bool PX_API NecessaryModulesLoaded( DWORD dwProcessID );
+
+	PX_DEF INJECTION_INFO_SIZE = 24u;
+	PX_SDK unsigned uLoadDLLSize = 0u;
+	PX_SDK unsigned uStubSize = 0u;
+	PX_SDK byte_t* bLoadDLL = nullptr;
+	PX_SDK byte_t* bStub = nullptr;
 
 	/** \brief Information for manually mapping a DLL into a process. */
 	typedef struct

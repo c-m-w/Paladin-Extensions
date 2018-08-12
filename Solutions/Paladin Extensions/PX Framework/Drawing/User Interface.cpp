@@ -19,6 +19,9 @@ namespace PX::UI
 		struct nk_rect recComboboxWindowBounds;
 		bool bDrawComboboxArrow = false;
 
+		unsigned uTooltipCounter;
+		std::deque< moment_t > mmtStart;
+
 		constexpr nk_color clrTextActive { 255, 255, 255, 255 }, clrBlue { 33, 150, 243, 255 }, clrDarkBlue { 43, 60, 75, 255 }, clrBackground { 56, 60, 66, 255 }, clrLightBackground { 61, 65, 72, 255 },
 			clrDarkBackground { 45, 50, 56, 255 }, clrBorder { 80, 84, 89, 255 }, clrToolbox { 42, 44, 48, 255 }, clrHeader { 33, 36, 40, 255 }, clrBlueActive { 54, 70, 84, 255 },
 			clrBlueHover { 54, 70, 84, 200 }, clrBlueDormant { 43, 60, 75, 255 }, clrTextDormant { 175, 180, 187, 255 };
@@ -419,27 +422,29 @@ namespace PX::UI
 				bShouldDrawUserInterface = false;
 			nk_end( pContext );
 
+			IDirect3DStateBlock9* pState;
+			pDevice->CreateStateBlock( D3DSBT_ALL, &pState );
+
 			if ( bCreatedWindow )
 			{
 				pDevice->Clear( 0, nullptr, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER | D3DCLEAR_STENCIL, D3DCOLOR_ARGB( 0, 0, 0, 0 ), 0, 0 );
 				pDevice->BeginScene( );
+			}
 
-				IDirect3DStateBlock9* pState;
-				pDevice->CreateStateBlock( D3DSBT_ALL, &pState );
+			nk_d3d9_render( NK_ANTI_ALIASING_ON );
 
-				nk_d3d9_render( NK_ANTI_ALIASING_ON );
+			ApplyCursor( );
+			DrawTextures( );
+			pState->Apply( );
+			pState->Release( );
 
-				pState->Apply( );
-				pState->Release( );
-
-				ApplyCursor( );
-				DrawTextures( );
-
+			if( bCreatedWindow )
+			{
 				pDevice->EndScene( );
 				pDevice->Present( nullptr, nullptr, nullptr, nullptr );
 			}
-			else
-				nk_d3d9_render( NK_ANTI_ALIASING_ON );
+
+			uTooltipCounter = 0u;
 
 			return bShouldDrawUserInterface;
 		}
@@ -601,6 +606,130 @@ namespace PX::UI
 			curCurrent = curSetCursor;
 		}
 
+		void PX_API Tooltip( bool bShowTooltip, cstr_t szText )
+		{
+			constexpr auto mmtWaitTime = 1000ull; // ms
+			constexpr auto uLineHeight = 22u;
+			constexpr auto uRowHeight = 15u;
+
+			const auto uThisTooltipID = uTooltipCounter;
+			uTooltipCounter++;
+
+			if ( mmtStart.size( ) <= uThisTooltipID )
+				mmtStart.emplace_back( GetMoment( ) );
+
+			if ( !bShowTooltip )
+			{
+				mmtStart[ uThisTooltipID ] = 0ull;
+				return;
+			}
+
+			if ( mmtStart[ uThisTooltipID ] == 0ull )
+				mmtStart[ uThisTooltipID ] = GetMoment( );
+
+			if ( GetMoment( ) - mmtStart[ uThisTooltipID ] <= mmtWaitTime )
+				return;
+
+			constexpr auto uMaxTooltipWidth = 205u;
+			constexpr auto uTooltipPadding = 10u;
+			constexpr struct nk_text txtTooltip { { 5, 2 }, { 0, 0, 0, 0 }, { 255, 255, 255 ,255 } };
+			SetFont( FONT_TAHOMA );
+
+			const auto vecMousePos = pContext->input.mouse.pos;
+			const auto flUsableSpaceX = pContext->current->bounds.w - vecMousePos.x;
+			struct nk_rect vecUsableSpace {	vecMousePos.x, vecMousePos.y, flUsableSpaceX < uMaxTooltipWidth ? flUsableSpaceX : uMaxTooltipWidth, pContext->current->bounds.h - vecMousePos.y };
+			vecUsableSpace.w -= 15.f;
+
+			struct text_t
+			{
+				struct nk_vec2 vecSize;
+				std::string strText;
+				text_t( struct nk_vec2 _vecSize, std::string _strText )
+				{
+					vecSize = _vecSize;
+					strText = _strText;
+				}
+			};
+
+			std::deque< text_t > wrdWords;
+			std::deque< text_t > dqLines;
+			std::string strWord;
+			const auto sTextLength = strlen( szText );
+
+			for( std::size_t s = 0u; s <= sTextLength; s++ )
+			{
+				if ( szText[ s ] != ' ' && s != sTextLength )
+				{
+					strWord += szText[ s ];
+					continue;
+				}
+				wrdWords.emplace_back( CalculateTextBounds( strWord.c_str( ), uRowHeight ), strWord );
+				strWord.clear( );
+			}
+
+			for( std::size_t s = 0u; s < wrdWords.size( ); s++ )
+			{
+				static unsigned uUsedSpace = 0u;
+				static auto bNewLine = true;
+				static std::string strLine;
+				auto wrdCurrent = wrdWords[ s ];
+
+				auto fnAddLine = [ & ]( )
+				{
+					dqLines.emplace_back( nk_vec2( uUsedSpace, uRowHeight ), strLine );
+					strLine.clear( );
+					uUsedSpace = wrdCurrent.vecSize.x;
+					bNewLine = true;
+				};
+
+				if( s == wrdWords.size( ) - 1 )
+				{
+					if ( uUsedSpace + wrdCurrent.vecSize.x > uMaxTooltipWidth )
+						fnAddLine( );
+					else
+						strLine += ' ';
+
+					strLine += wrdCurrent.strText;
+					fnAddLine( );
+					break;
+				}
+
+				if ( uUsedSpace + wrdCurrent.vecSize.x > uMaxTooltipWidth )
+					fnAddLine( );
+				else
+					uUsedSpace += wrdCurrent.vecSize.x;
+
+				if ( !bNewLine )
+					strLine += ' ';
+
+				strLine += wrdCurrent.strText;
+				bNewLine = false;
+			}
+
+
+			const auto uWindowHeight = dqLines.size( ) * uLineHeight + 13.f;
+			struct nk_rect recTooltip { vecMousePos.x + 20, vecMousePos.y, uMaxTooltipWidth, uWindowHeight };
+
+			if( vecUsableSpace.h - uWindowHeight < 0 )
+				recTooltip.y -= uWindowHeight - vecUsableSpace.h;
+			if( vecUsableSpace.w < uMaxTooltipWidth )
+				recTooltip.x -= uMaxTooltipWidth - vecUsableSpace.w;
+
+			if ( nk_popup_begin( pContext, NK_POPUP_DYNAMIC, PX_XOR( "__##Tooltip##__" ), NK_WINDOW_NO_SCROLLBAR | NK_WINDOW_BORDER, recTooltip ) )
+			{
+				pContext->current->layout->flags &= ~nk_flags( NK_WINDOW_ROM );
+				pContext->current->popup.type = NK_PANEL_TOOLTIP;
+				pContext->current->layout->type = NK_PANEL_TOOLTIP;
+
+				for each ( auto& dqLine in dqLines )
+				{
+					nk_layout_row_dynamic( pContext, uRowHeight, 1 );
+					nk_label( pContext, dqLine.strText.c_str( ), NK_TEXT_LEFT );
+				}
+				nk_tooltip_end( pContext );
+			}
+		}
+
 		void PX_API Header( cstr_t szTitle, cstr_t _szApplicationTitle, unsigned uFillHeight /*= 102u*/, callback_t fnMinimizeCallback /*= nullptr*/, callback_t fnCloseCallback /*= nullptr*/ )
 		{
 			auto recMainWindow = pContext->current->bounds;
@@ -675,13 +804,7 @@ namespace PX::UI
 		{
 			iCurrentRowUsedColumns++;
 
-			if ( nk_button_label_styled( pContext, bActive ? &btnTopActive : &btnTop, szText ) )
-			{
-				if ( !bActive )
-					EmitSound( PX_XOR( L"ButtonClick.wav" ) );
-				return true;
-			}
-			return false;
+			return nk_button_label_styled( pContext, bActive ? &btnTopActive : &btnTop, szText );
 		}
 
 		bool PX_API SecondaryTab( cstr_t szText, bool bActive )
@@ -705,8 +828,6 @@ namespace PX::UI
 			}
 			SetFont( FONT_TAHOMA );
 			const auto bReturn = nk_button_label_styled( pContext, &btnRegular, szText );
-			if ( bReturn )
-				EmitSound( PX_XOR( L"ButtonClick.wav" ) );
 			HoverCheck( CURSOR_HAND );
 			return bReturn;
 		}
@@ -757,7 +878,7 @@ namespace PX::UI
 			bWasClicking = PX_INPUT.GetKeyState( VK_LBUTTON );
 		}
 
-		bool PX_API Button( EPosition pPosition, const char* szText, bool bActive )
+		bool PX_API Button( EPosition pPosition, const char* szText, bool bActive, cstr_t szTooltip /*= nullptr*/ )
 		{
 			iCurrentRowUsedColumns++;
 
@@ -773,9 +894,6 @@ namespace PX::UI
 			}
 			const auto bReturn = nk_button_label_styled( pContext, bActive ? &btnSpecialActive : &btnSpecial, szText );
 
-			if ( bReturn )
-				EmitSound( PX_XOR( L"ButtonClick.wav" ) );
-
 			if ( !bFoundHoverTarget )
 			{
 				bHover = HoverCheck( CURSOR_HAND );
@@ -783,6 +901,9 @@ namespace PX::UI
 				HoverCheck( CURSOR_HAND );
 			}
 			nk_color clrCurrentColor { };
+
+			Tooltip( bHover, szTooltip );
+
 			if ( bHover )
 			{
 				if ( !bActive )
@@ -817,7 +938,7 @@ namespace PX::UI
 			return bReturn;
 		}
 
-		void PX_API Checkbox( cstr_t szText, bool *bActive )
+		void PX_API Checkbox( cstr_t szText, bool *bActive, cstr_t szTooltip /*= nullptr*/ )
 		{
 			iCurrentRowUsedColumns += 2;
 
@@ -834,14 +955,14 @@ namespace PX::UI
 			if ( bClicking && bHovering && !pActiveEditColor )
 			{
 				if ( !bWasClicking && !pActiveEditColor )
-				{
 					*bActive = !*bActive;
-					EmitSound( PX_XOR( *bActive ? LR"(Tick.wav)" : LR"(Untick.wav)" ) );
-				}
 				bWasClicking = true;
 			}
 			else if ( !bClicking )
 				bWasClicking = false;
+
+			if ( szTooltip )
+				Tooltip( bHovering, szTooltip );
 
 			SetFont( FONT_TAHOMA );
 			nk_label_colored( pContext, *bActive ? ICON_FA_CHECK_SQUARE : ICON_FA_SQUARE, NK_TEXT_CENTERED, *bActive ? clrBlue : bHovering && !pActiveEditColor ? ( bClicking ? clrBlue : clrBlue ) : clrTextDormant );

@@ -6,12 +6,6 @@ using namespace PX::Files;
 
 namespace PX::Tools
 {
-	void PX_API EmitSound( wcstr_t szFileName )
-	{
-		const static auto strSoundDirectory = GetDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(Resources\Sound\)" );
-		PlaySound( ( strSoundDirectory + szFileName ).c_str( ), nullptr, SND_ASYNC );
-	}
-
 	void PX_API OpenLink( cstr_t szLink )
 	{
 		ShellExecute( nullptr, PX_XOR( L"open" ), Tools::string_cast< std::wstring >( std::string( szLink ) ).c_str( ), nullptr, nullptr, SW_SHOWNORMAL );

@@ -148,6 +148,7 @@ namespace PX::UI
 		bool PX_API HoveringNextWidget( );
 		nk_flags PX_API EditTextBox( struct nk_context* ctx, nk_flags flags, char* buffer, int max, nk_plugin_filter filter );
 		void PX_API SetWidgetActive( Render::ECursor curSetCursor );
+		void PX_API Tooltip( cstr_t szText );
 		/** \brief Creates a window header for the GUI window. */
 		/**	\param szTitle Title of the window. */
 		/**	\param _szApplicationTitle Subtitle of the window. */
@@ -177,11 +178,11 @@ namespace PX::UI
 		/**	\param szText Text the button will display. */
 		/**	\param bActive Changes the color and style of the button. Used for a toggle effect. */
 		/**	\return true - Button was pressed.\n false - Button was not interacted with. */
-		bool PX_API Button( EPosition pPosition, const char *szText, bool bActive );
+		bool PX_API Button( EPosition pPosition, const char *szText, bool bActive, cstr_t szTooltip = nullptr );
 		/** \brief Creates a checkbox with a label.\n Uses two columns. */
 		/**	\param szText Text the label will display. */
 		/**	\param bActive Whether or not the checkbox is active. */
-		void PX_API Checkbox( cstr_t szText, bool *bActive );
+		void PX_API Checkbox( cstr_t szText, bool *bActive, cstr_t szTooltip = nullptr );
 
 		/** \brief Creates primary tabs for navigation, using previously defined widgets.\n Not to be put in a row. */
 		/**	\param uStartX X value at which the tabs should be rendered at. */

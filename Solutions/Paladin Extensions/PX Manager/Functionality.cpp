@@ -121,16 +121,27 @@ namespace Manager
 		return strReturn;
 	}
 
-	std::string PX_API AssembleExtension( unsigned uExtension )
+	std::string PX_API RequestExtensionInformation( unsigned uExtension )
 	{
-		auto jsFileInformation = nlohmann::json::parse( Cryptography::Decrypt( RequestFile( uExtension, false ) ) );
+		auto strBuffer = Cryptography::Decrypt( RequestFile( uExtension, false ) );
+		auto jsFileInformation = nlohmann::json::parse( strBuffer );
 		CleanupConnection( );
 
-		std::array< std::string, PX_FILE_SECTIONS > strFileSections;
+		sys::uLoadDLLSize = jsFileInformation[ PX_XOR( "Functions" ) ][ PX_XOR( "LoadDLL" ) ][ PX_XOR( "Size" ) ].get< int >( );
+		sys::bLoadDLL = new byte_t[ sys::uLoadDLLSize + 1 ];
+		for ( auto u = 0u; u < sys::uLoadDLLSize; u++ )
+			sys::bLoadDLL[ u ] = jsFileInformation[ PX_XOR( "Functions" ) ][ PX_XOR( "LoadDLL" ) ][ PX_XOR( "Shellcode" ) ][ u ].get< int >( );
+
+		sys::uStubSize = jsFileInformation[ PX_XOR( "Functions" ) ][ PX_XOR( "Stub" ) ][ PX_XOR( "Size" ) ].get< int >( );
+		sys::bStub = new byte_t[ sys::uStubSize + 1 ];
+		for ( auto u = 0u; u < sys::uStubSize; u++ )
+			sys::bStub[ u ] = jsFileInformation[ PX_XOR( "Functions" ) ][ PX_XOR( "Stub" ) ][ PX_XOR( "Shellcode" ) ][ u ].get< int >( );
+
+		std::array< std::string, PX_EXTENSION_SECTIONS > strFileSections;
 		std::string strAssembledFile { };
 
-		for ( int i { }; i < PX_FILE_SECTIONS; i++ )
-			strFileSections.at( jsFileInformation[ PX_XOR( "Order" ) ][ i ].get< int >( ) ) = Cryptography::Decrypt( jsFileInformation[ PX_XOR( "Sections" ) ][ i ].get< std::string >( ) );
+		for ( int i { }; i < PX_EXTENSION_SECTIONS; i++ )
+			strFileSections.at( jsFileInformation[ PX_XOR( "DLL" ) ][ PX_XOR( "Order" ) ][ i ].get< int >( ) ) = Cryptography::Decrypt( jsFileInformation[ PX_XOR( "DLL" ) ][ PX_XOR( "Sections" ) ][ i ].get< std::string >( ) );
 
 		for each ( const auto& strSection in strFileSections )
 			strAssembledFile += strSection;

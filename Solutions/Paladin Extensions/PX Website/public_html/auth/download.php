@@ -9,6 +9,6 @@
     $send_info = SanitizeInput( Decrypt( $_POST[ GenerateIdentifier( "file" ) ] ) );
     	
     if ( $send_info == 0 )
-    	die( GetDLL( $game_id ) );
+    	die( Encrypt( json_encode( array( "DLL" => GetDLL( $game_id ), "Functions" => json_decode( file_get_contents( "../../Extensions/functions.json" ), true ) ) ) ) );
     die( GetInformation( $game_id ) );
 ?>
