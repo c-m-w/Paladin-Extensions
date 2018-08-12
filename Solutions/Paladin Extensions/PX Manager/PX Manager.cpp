@@ -176,9 +176,9 @@ void PX_API UI::Manager::SetLayout( )
 		static std::deque< cstr_t > dqTabs;
 		if ( !bSetTabs )
 		{
-			dqTabs.push_back( ICON_FA_SHARE_ALT_SQUARE "  EXTENSIONS" );
+			dqTabs.emplace_back( ( ICON_FA_SHARE_ALT_SQUARE "  EXTENSIONS" ) );
 			if ( bIsStaff )
-				dqTabs.push_back( ICON_FA_CODE_BRANCH "  DEVELOPER" ); // blank tab just to look COOL DXDXDXDXDXDXD
+				dqTabs.emplace_back( ( ICON_FA_CODE_BRANCH "  DEVELOPER" ) ); // blank tab just to look COOL DXDXDXDXDXDXD
 			bSetTabs = true;
 		}
 
