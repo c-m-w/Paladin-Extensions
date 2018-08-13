@@ -81,7 +81,7 @@ bool bLoggedIn = false, bShouldClose = false, bIsStaff = false, bPreferBeta = fa
 int iSelectedExtension = -1, iLoginStatus = -1;
 extensions_t extInfo;
 
-const std::wstring wstrApplicationExecutableNames[ ] { { }, { }, PX_XOR( L"csgo.exe" ), PX_XOR( L"pubg.exe" ), PX_XOR( L"rsix.exe" ) };
+const std::wstring wstrApplicationExecutableNames[ ] { { }, PX_XOR( L"Steam.exe" ), PX_XOR( L"csgo.exe" ), PX_XOR( L"pubg.exe" ), PX_XOR( L"rsix.exe" ) };
 constexpr bool bExtensionDisabled[ PX_EXTENSION_MAX ] { true, true, false, true, true };
 const std::string strExtensionNames[ PX_EXTENSION_MAX ] { { }, PX_XOR( "Manager" ), PX_XOR( "CSGO" ), PX_XOR( "PUBG" ), PX_XOR( "RSIX" ) },
 *strLastLaunchTimes;
@@ -243,7 +243,7 @@ void PX_API UI::Manager::SetLayout( )
 		fnSetTabValue( iCurrentTab, Tabs( 10, 0, dqTabs, iCurrentTab ) );
 		Separator( 61, 65, 72, 100, &lnkSeparator );
 
-		BeginGroupbox( 27, 153, 370, 160, PX_XOR("Extensions" ) );
+		BeginGroupbox( 27, 153, 370, 160, PX_XOR( "Extensions" ) );
 		{
 			vecImageQueue.emplace_back( TEXTURE_ICON_CSGO, D3DXVECTOR3( uImagePositions[ PX_EXTENSION_CSGO ][ 0 ], uImagePositions[ PX_EXTENSION_CSGO ][ 1 ], 0 ), bHoveringImage[ PX_EXTENSION_CSGO ] ? uHoverColor : uDormantColor );
 			vecImageQueue.emplace_back( TEXTURE_ICON_PUBG, D3DXVECTOR3( uImagePositions[ PX_EXTENSION_PUBG ][ 0 ], uImagePositions[ PX_EXTENSION_PUBG ][ 1 ], 0 ), bHoveringImage[ PX_EXTENSION_PUBG ] ? uHoverColor : uDormantColor );
@@ -268,19 +268,19 @@ void PX_API UI::Manager::SetLayout( )
 			BeginRow( 15, 4, ROW_STATIC );
 			SetRowWidth( 10 );
 			Spacing( );
-			JustifiedText(PX_XOR( "Last Update:" ), extInfo[ uSelectedExtension ].strLastUpdate.c_str( ), clrText, clrGreen, 240 );
+			JustifiedText( PX_XOR( "Last Update:" ), extInfo[ uSelectedExtension ].strLastUpdate.c_str( ), clrText, clrGreen, 240 );
 			EndRow( );
 
 			BeginRow( 15, 4, ROW_STATIC );
 			SetRowWidth( 10 );
 			Spacing( );
-			JustifiedText(PX_XOR( "Last Load:" ), strLastLaunchTimes[ uSelectedExtension ].c_str( ), clrText, clrGreen, 240 );
+			JustifiedText( PX_XOR( "Last Load:" ), strLastLaunchTimes[ uSelectedExtension ].c_str( ), clrText, clrGreen, 240 );
 			EndRow( );
 
 			BeginRow( 15, 4, ROW_STATIC );
 			SetRowWidth( 10 );
 			Spacing( );
-			JustifiedText(PX_XOR( "Version:" ), extInfo[ uSelectedExtension ].strVersion.c_str( ), clrText, clrPurple, 240 );
+			JustifiedText( PX_XOR( "Version:" ), extInfo[ uSelectedExtension ].strVersion.c_str( ), clrText, clrPurple, 240 );
 			EndRow( );
 		}
 		EndGroupbox( );
@@ -338,20 +338,22 @@ void PX_API Draw( )
 	}
 }
 
-void PX_API MonitorSteam( )
+void PX_API MonitorDetectionVectors( )
 {
 	while ( iSelectedExtension == PX_EXTENSION_NONE && !bShouldClose )
 	{
-		if ( sys::GetProcessID( PX_XOR( L"Steam.exe" ) ) != 0u )
-			exit( -1 );
+		for each ( auto wstrExecutable in wstrApplicationExecutableNames )
+			if ( !wstrExecutable.empty( ) )
+				sys::TerminateProcess( sys::GetProcessID( wstrExecutable ) );
 		Wait( 1500ull );
 	}
 }
 
 void PX_API OnLaunch( )
 {
-	if ( sys::GetProcessID( PX_XOR( L"Steam.exe" ) ) != 0u )
-		return;
+	for each ( auto wstrExecutable in wstrApplicationExecutableNames )
+		if ( !wstrExecutable.empty( ) )
+			sys::TerminateProcess( sys::GetProcessID( wstrExecutable ) );
 
 	// We need the resources loaded for textures in the ui
 	Files::Resources::LoadResources( { } );
@@ -359,11 +361,11 @@ void PX_API OnLaunch( )
 	std::thread tDraw( Draw );
 	tDraw.detach( );
 
-	std::thread tSentinal( MonitorSteam );
+	std::thread tSentinal( MonitorDetectionVectors );
 	tSentinal.detach( );
 
-	// wait 2 secs so that our cool loading animation has some time to play :D
-	Wait< std::chrono::seconds >( 2ull );
+	// wait 1 sec so that our cool loading animation has some time to play :D
+	Wait( rand( ) % 1900 + 100 );
 
 	iLoginStatus = Manager::Login( );
 	switch ( iLoginStatus )
@@ -396,7 +398,7 @@ void PX_API OnLaunch( )
 
 			bLoggedIn = true;
 			while ( iSelectedExtension == PX_EXTENSION_NONE )
-				Wait( 1 );
+				Wait( 100 );
 
 			bShouldClose = true;
 
@@ -404,8 +406,8 @@ void PX_API OnLaunch( )
 			do
 			{
 				dwProcessID = sys::GetProcessID( wstrApplicationExecutableNames[ iSelectedExtension ] );
-				Wait( 1 );
-			} while ( dwProcessID == 0u 
+				Wait( 10 );
+			} while ( dwProcessID == 0u
 					  || !sys::IsProcessThreadRunning( dwProcessID )
 					  || !sys::NecessaryModulesLoaded( dwProcessID ) );
 
