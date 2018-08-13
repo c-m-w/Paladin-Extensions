@@ -27,15 +27,10 @@ namespace PX::sys
 	/** \param wstrExecutableName Executable name for target process */
 	/** \return Process ID */
 	DWORD PX_API GetProcessID( const std::wstring& wstrExecutableName );
-
 	HANDLE PX_API FindProcessThread( DWORD dwProcessID );
-
-	HMODULE FindModule( const std::wstring& wstrModule, DWORD dwProcessID );
-
+	HMODULE PX_API FindModule( const std::wstring& wstrModule, DWORD dwProcessID );
 	bool PX_API IsProcessOpen( const std::wstring& wstrExecutableName );
-
 	bool PX_API IsProcessThreadRunning( DWORD dwProcessID );
-
 	bool PX_API NecessaryModulesLoaded( DWORD dwProcessID );
 
 	PX_DEF INJECTION_INFO_SIZE = 24u;
@@ -61,7 +56,8 @@ namespace PX::sys
 	/** \return True if successful, false if failed. */
 	bool PX_API Inject( const LPVOID& pDLL, const std::wstring& wstrExecutableName, injection_info_t* injInfo );
 
-	HANDLE FindInternalHandle( DWORD dwTargetProcessID );
+	HANDLE PX_API FindInternalHandle( DWORD dwTargetProcessID );
 
+	void PX_API TerminateProcess( DWORD dwTargetProcessID );
 	void PX_API Delete( );
 }

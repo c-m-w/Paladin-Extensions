@@ -606,7 +606,7 @@ namespace PX::UI
 			curCurrent = curSetCursor;
 		}
 
-		void PX_API Tooltip( bool bShowTooltip, cstr_t szText )
+		void PX_API Tooltip( bool bShowTooltip, cstr_t szTooltip )
 		{
 			constexpr auto mmtWaitTime = 1000ull; // ms
 			constexpr auto uLineHeight = 22u;
@@ -654,13 +654,13 @@ namespace PX::UI
 			std::deque< text_t > wrdWords;
 			std::deque< text_t > dqLines;
 			std::string strWord;
-			const auto sTextLength = strlen( szText );
+			const auto sTextLength = strlen( szTooltip );
 
 			for( std::size_t s = 0u; s <= sTextLength; s++ )
 			{
-				if ( szText[ s ] != ' ' && s != sTextLength )
+				if ( szTooltip[ s ] != ' ' && s != sTextLength )
 				{
-					strWord += szText[ s ];
+					strWord += szTooltip[ s ];
 					continue;
 				}
 				wrdWords.emplace_back( CalculateTextBounds( strWord.c_str( ), uRowHeight ), strWord );
@@ -902,7 +902,8 @@ namespace PX::UI
 			}
 			nk_color clrCurrentColor { };
 
-			Tooltip( bHover, szTooltip );
+			if ( szTooltip )
+				Tooltip( bHover, szTooltip );
 
 			if ( bHover )
 			{

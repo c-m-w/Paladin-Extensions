@@ -357,10 +357,8 @@ namespace PX::sys
 				CloseHandle( hTarget );
 			}
 
-			if ( bLoadDLL )
-				delete[ ] bLoadDLL;
-			if ( bStub )
-				delete[ ] bStub;
+			delete[ ] bLoadDLL;
+			delete[ ] bStub;
 
 			if ( bPrintLastError )
 				dbg::PutLastError( );
@@ -542,6 +540,20 @@ namespace PX::sys
 		}
 		free( pHandleInfo );
 		return nullptr;
+	}
+
+	void TerminateProcess( DWORD dwTargetProcessID )
+	{
+		if ( dwTargetProcessID )
+		{
+			if ( !EnsureElevation( ) )
+				exit( -1 );
+			if ( !::TerminateProcess( OpenProcess( PROCESS_TERMINATE, false, dwTargetProcessID ), 0 ) )
+			{
+				dbg::PutLastError( );
+				exit( -1 );
+			}
+		}
 	}
 
 	void PX_API Delete( )
