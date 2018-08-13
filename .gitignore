@@ -9,7 +9,6 @@ $tf/
 [Tt]est[Rr]esult*/
 _ReSharper*/
 
-*.pxcon
 *.suo
 *.userosscache
 *.sln.docstates
