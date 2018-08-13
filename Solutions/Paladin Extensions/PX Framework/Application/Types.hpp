@@ -60,6 +60,21 @@ namespace PX::Types
 		}
 	};
 	typedef std::deque< SExtensionInfo > extensions_t;
+
+	struct vertex_t
+	{
+		float flVectors[ 4 ] { };
+		DWORD dwColor;
+		vertex_t( ) = default;
+		vertex_t( float x, float y, DWORD _dwColor )
+		{
+			flVectors[ 0 ] = x;
+			flVectors[ 1 ] = y;
+			flVectors[ 2 ] = 0.f;
+			flVectors[ 3 ] = 0.f;
+			dwColor = _dwColor;
+		}
+	};
 	
 	/** \brief Type to hold colors. */
 	typedef struct SColor

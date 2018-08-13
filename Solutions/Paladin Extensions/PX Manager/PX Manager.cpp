@@ -176,9 +176,9 @@ void PX_API UI::Manager::SetLayout( )
 		static std::deque< cstr_t > dqTabs;
 		if ( !bSetTabs )
 		{
-			dqTabs.push_back( ICON_FA_SHARE_ALT_SQUARE "  EXTENSIONS" );
+			dqTabs.emplace_back( ( ICON_FA_SHARE_ALT_SQUARE "  EXTENSIONS" ) );
 			if ( bIsStaff )
-				dqTabs.push_back( ICON_FA_CODE_BRANCH "  DEVELOPER" ); // blank tab just to look COOL DXDXDXDXDXDXD
+				dqTabs.emplace_back( ( ICON_FA_CODE_BRANCH "  DEVELOPER" ) ); // blank tab just to look COOL DXDXDXDXDXDXD
 			bSetTabs = true;
 		}
 
@@ -318,6 +318,17 @@ void PX_API UI::Manager::SetLayout( )
 
 		bWasClicking = PX_INPUT.GetKeyState( VK_LBUTTON );
 	}
+}
+
+void PX_API UI::Manager::DrawOther( )
+{
+	std::deque< vertex_t > vtxVertices;
+	PX_DEF dwColor = D3DCOLOR_ARGB( 255, 255, 255, 255 );
+	vtxVertices.emplace_back( 0, 0, dwColor );
+	vtxVertices.emplace_back( 100, 0, dwColor );
+	vtxVertices.emplace_back( 0, 100, dwColor );
+	vtxVertices.emplace_back( 100, 100, dwColor );
+	Drawing::Polygon( vtxVertices );
 }
 
 void PX_API Draw( )

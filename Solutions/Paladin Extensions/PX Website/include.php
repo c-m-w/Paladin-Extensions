@@ -107,6 +107,13 @@
         return $result->fetch_assoc( )[ "field_value" ];
     }
 
+    function SetUniqueID( $user_id, $unique_id )
+    {
+        global $sql_connection;
+
+        $sql_connection->query( "UPDATE xf_user_field_value SET field_value = " . $unique_id . " WHERE field_id = 'unique_id' AND user_id = " . $user_id );
+    }
+
     // https://iphub.info/api
     function GetIPInformation( )
     {
@@ -161,7 +168,11 @@
         }
         
         $row = $result->fetch_assoc( );
-        return $row[ "unique_id" ] == $unique_id;
+        if( $row[ "unique_id" ] == $unique_id )
+            return true;
+
+        SetUniqueID( $user_id, 0 );
+        return false;
     }
 	
 	function BeginSession( $user_id )

@@ -20,4 +20,5 @@
 
 // Drawing - These files provide specific functionality for creating visuals
 #include "Drawing/Render Engine.hpp"
+#include "Drawing/Drawing.hpp"
 #include "Drawing/User Interface.hpp"
