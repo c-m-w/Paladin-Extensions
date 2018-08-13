@@ -23,6 +23,30 @@ namespace PX::Tools
 		static _Child& PX_API Get( );
 	};
 
+	std::size_t PX_API EstimateTableLength( ptr_t* pVirtualTable );
+
+	struct CHook
+	{
+	private:
+		DWORD dwOldProtection;
+		std::size_t sTableLength, sTableSize;
+		void* pClassBase;
+		ptr_t* pOldTable, *pNewTable;
+		HMODULE hAllocationModule;
+		bool bSetNewTable;
+
+	public:
+		CHook( void* pVirtualTable );
+		~CHook( );
+
+		template< typename _fn > void HookIndex( unsigned uIndex, _fn fnNewFunction );
+		void UnhookIndex( unsigned uIndex );
+		void ResetTable( );
+		template< typename _fn > _fn GetOriginalFunction( unsigned uIndex );
+
+		void Cleanup( );
+	};
+
 	void PX_API OpenLink( cstr_t szLink );
 
 	std::string PX_API TimeToDate( moment_t mmtTime );

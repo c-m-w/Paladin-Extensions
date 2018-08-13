@@ -10,6 +10,18 @@ namespace PX::Tools
 		return _ChildClassObject;
 	}
 
+	template< typename _fn > void CHook::HookIndex( unsigned uIndex, _fn fnNewFunction )
+	{
+		px_assert( uIndex >= 0 && uIndex <= sTableLength );
+		pNewTable[ uIndex ] = reinterpret_cast< ptr_t >( fnNewFunction );
+	}
+
+	template< typename _fn > _fn CHook::GetOriginalFunction( unsigned uIndex )
+	{
+		px_assert( uIndex >= 0 && uIndex <= sTableLength );
+		return reinterpret_cast< _fn >( pOldTable[ uIndex ] );
+	}
+
 	template< typename _t > moment_t PX_API GetMoment( )
 	{
 		return std::chrono::duration_cast< _t >( std::chrono::system_clock::now( ).time_since_epoch( ) ).count( );
