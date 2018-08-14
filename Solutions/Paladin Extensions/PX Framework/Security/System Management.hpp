@@ -50,15 +50,15 @@ namespace PX::sys
 		FARPROC( WINAPI* fnGetProcAddress )( HMODULE, LPCSTR );
 	} injection_info_t;
 
-	void PX_API WipeMemory( HANDLE hTarget, LPVOID pAddress, std::size_t sSize );
+	void PX_API WipeMemoryEx( HANDLE hTarget, LPVOID pAddress, std::size_t sSize );
 	void PX_API WipeMemory( LPVOID pAddress, std::size_t sSize );
 	/** \brief Manually maps and calls desired DLL into any running executable */
 	/** \param pDLL Data for DLL to be mapped */
 	/** \param wstrExecutableName Executable name for target process */
 	/** \param injInfo Object to store information of injection. */
 	/** \return True if successful, false if failed. */
-	bool PX_API Inject( const LPVOID& pDLL, const std::wstring& wstrExecutableName, injection_info_t* injInfo );
-	bool PX_API LocalInject( const LPVOID& pDLL, injection_info_t* injInfo );
+	bool PX_API LoadRawLibraryEx( const LPVOID& pDLL, const std::wstring& wstrExecutableName, injection_info_t* injInfo );
+	bool PX_API LoadRawLibrary( const LPVOID& pDLL, injection_info_t* injInfo );
 
 	HANDLE PX_API FindInternalHandle( DWORD dwTargetProcessID );
 

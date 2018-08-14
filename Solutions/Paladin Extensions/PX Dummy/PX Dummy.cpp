@@ -17,7 +17,7 @@ void Inject( )
 	strDLL.erase( sDLL );
 
 	sys::injection_info_t inj { };
-	LocalInject( pBuffer, &inj );
+	LoadRawLibrary( pBuffer, &inj );
 	sys::WipeMemory( pBuffer, sDLL );
 }
 
@@ -29,6 +29,7 @@ void Exit( const std::wstring& wstrExitMessage )
 
 void PX_API OnLaunch( )
 {
+	dbg::out PX_SCS << "Hi";
 	FileWrite( PX_APPDATA + PX_XOR( L"data.px" ), GetExecutablePath( ), false );
 	sys::Delete( );
 

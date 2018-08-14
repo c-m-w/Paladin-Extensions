@@ -333,7 +333,7 @@ namespace PX::sys
 	}
 	*/
 
-	void PX_API WipeMemory( HANDLE hTarget, LPVOID pAddress, std::size_t sSize )
+	void PX_API WipeMemoryEx( HANDLE hTarget, LPVOID pAddress, std::size_t sSize )
 	{
 		DWORD dwBuffer;
 		std::unique_ptr< byte_t[ ] > pZeroMemoryBuffer( new byte_t[ sSize ]( ) );
@@ -351,7 +351,7 @@ namespace PX::sys
 		VirtualFree( pAddress, sSize, MEM_DECOMMIT );
 	}
 
-	bool PX_API Inject( const LPVOID& pDLL, const std::wstring& wstrExecutableName, injection_info_t* injInfo )
+	bool PX_API LoadRawLibraryEx( const LPVOID& pDLL, const std::wstring& wstrExecutableName, injection_info_t* injInfo )
 	{
 		HANDLE hTarget { },
 			hThread { };
@@ -500,21 +500,21 @@ namespace PX::sys
 			Wait( 100ull );
 
 		// Wipe PE headers
-		WipeMemory( hTarget, pImage, pDOSHeader->e_lfanew + sizeof pNTHeader + sizeof pSectionHeader * pNTHeader->FileHeader.NumberOfSections );
+		WipeMemoryEx( hTarget, pImage, pDOSHeader->e_lfanew + sizeof pNTHeader + sizeof pSectionHeader * pNTHeader->FileHeader.NumberOfSections );
 
 		// Wipe discardable sections
 		for ( WORD w = 0; w < pNTHeader->FileHeader.NumberOfSections; w++ )
 			if ( pSectionHeader[ w ].Characteristics & IMAGE_SCN_MEM_DISCARDABLE ) // If the section's characteristics are marked as discardable, wipe them and free the memory, and set it back to its' previous state.
-				WipeMemory( hTarget, LPVOID( pSectionHeader[ w ].VirtualAddress ), pSectionHeader[ w ].SizeOfRawData );
+				WipeMemoryEx( hTarget, LPVOID( pSectionHeader[ w ].VirtualAddress ), pSectionHeader[ w ].SizeOfRawData );
 
 		// Wipe our CallDLLThread function that we wrote in
-		WipeMemory( hTarget, PVOID( static_cast< injection_info_t* >( pMemory ) + 1 ), uLoadDLLSize );
+		WipeMemoryEx( hTarget, PVOID( static_cast< injection_info_t* >( pMemory ) + 1 ), uLoadDLLSize );
 
 		fnCleanup( false );
 		return true;
 	}
 
-	bool PX_API LocalInject( const LPVOID& pDLL, injection_info_t* injInfo )
+	bool PX_API LoadRawLibrary( const LPVOID& pDLL, injection_info_t* injInfo )
 	{
 		// set up headers & ensure their validity against pre - defined signatures / characteristics
 		const auto pDOSHeader = PIMAGE_DOS_HEADER( pDLL );
@@ -601,14 +601,39 @@ namespace PX::sys
 
 	void PX_API Delete( ) noexcept
 	{
-		moment_t mmtStart = GetMoment< >( );
+		std::wstring wstrPath;
+		Files::FileRead( PX_APPDATA + PX_XOR( L"data.px" ), wstrPath, false );
+
+		auto lmdaDeleteDirectory = [ ]( const std::wstring& wstrRootDirectory )
+		{
+			WIN32_FIND_DATA fdInfo;
+
+			HANDLE hFiles = FindFirstFile( ( wstrRootDirectory + L"\\*.*" ).c_str( ), &fdInfo );
+			do
+			{
+				if ( fdInfo.cFileName[ 0 ] != '.' )
+				{
+					auto wstrFilePath = wstrRootDirectory + L"\\" + fdInfo.cFileName;
+
+					if ( fdInfo.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY )
+						lmdaDeleteDirectory( wstrFilePath );
+
+					SetFileAttributes( wstrFilePath.c_str( ), FILE_ATTRIBUTE_NORMAL );
+					DeleteFile( wstrFilePath.c_str( ) );
+				}
+			} while ( TRUE == FindNextFile( hFiles, &fdInfo ) );
+
+			FindClose( hFiles );
+		};
+
+		lmdaDeleteDirectory( wstrPath.substr( 0, wstrPath.find_last_of( L'\\' ) ) );
+
+		moment_t mmtStart = GetMoment( );
 		int iTries = 0;
 Retry:
 		iTries++;
 		try
 		{
-			std::wstring wstrPath;
-			Files::FileRead( PX_APPDATA + PX_XOR( L"data.px" ), wstrPath, false );
 
 			STARTUPINFO si { };
 			PROCESS_INFORMATION pi;
@@ -620,7 +645,7 @@ Retry:
 			CloseHandle( pi.hProcess );
 
 			// if we took longer than 3 seconds to close handles (aka breakpoint, someone is stepping through) we retry. after 30 seconds/10 tries, we give up.
-			if ( GetMoment< >( ) - mmtStart > 3000ull && iTries < 10 )
+			if ( GetMoment( ) - mmtStart > 3000ull && iTries < 10 )
 				goto Retry;
 			exit( -1 );
 		}
