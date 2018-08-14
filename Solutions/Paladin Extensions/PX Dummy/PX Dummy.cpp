@@ -14,7 +14,7 @@ void Inject( )
 	memcpy( pBuffer, strDLL.c_str( ), strDLL.length( ) );
 
 	sys::injection_info_t inj { };
-	sys::Inject( pBuffer, L"ConsoleApplication1.exe", &inj );
+	LocalInject( pBuffer, &inj );
 }
 
 void Exit( const std::wstring& wstrExitMessage )

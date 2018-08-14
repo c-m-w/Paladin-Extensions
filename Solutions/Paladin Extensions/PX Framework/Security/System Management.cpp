@@ -236,77 +236,76 @@ namespace PX::sys
 	/// These functions have been converted to shellcode below, so they will function properly in debug mode. They should not be deleted in case we need them.
 
 	/// Resolves imports and calls DLLMain.
-	/*
-	DWORD WINAPI CallDLLThread( _In_ LPVOID lpParameter )
+	
+	DWORD WINAPI LoadDLL( _In_ LPVOID lpParameter )
 	{
-	auto* injInfo = static_cast< injection_info_t* >( lpParameter );
+		auto* injInfo = static_cast< injection_info_t* >( lpParameter );
 
-	// Mark starting address in header
-	auto pBaseRelocation = injInfo->pBaseRelocation;
-	auto dwHeaderSize = DWORD( LPBYTE( injInfo->pImageBase ) - injInfo->pNTHeaders->OptionalHeader.ImageBase );
-	while ( pBaseRelocation->VirtualAddress )
-	{
-	if ( pBaseRelocation->SizeOfBlock >= sizeof( IMAGE_BASE_RELOCATION ) )
-	{
-	auto dwNumberOfBlocks = ( pBaseRelocation->SizeOfBlock - sizeof( IMAGE_BASE_RELOCATION ) ) / sizeof( WORD );
-	auto pList = PWORD( pBaseRelocation + 1 );
+		// Mark starting address in header
+		auto pBaseRelocation = injInfo->pBaseRelocation;
+		auto dwHeaderSize = DWORD( LPBYTE( injInfo->pImageBase ) - injInfo->pNTHeaders->OptionalHeader.ImageBase );
+		while ( pBaseRelocation->VirtualAddress )
+		{
+			if ( pBaseRelocation->SizeOfBlock >= sizeof( IMAGE_BASE_RELOCATION ) )
+			{
+				auto dwNumberOfBlocks = ( pBaseRelocation->SizeOfBlock - sizeof( IMAGE_BASE_RELOCATION ) ) / sizeof( WORD );
+				auto pList = PWORD( pBaseRelocation + 1 );
 
-	for ( DWORD d = 0; d < dwNumberOfBlocks; d++ )
-	if ( pList[ d ] )
-	{
-	auto pAddress = PDWORD( LPBYTE( injInfo->pImageBase ) + ( pBaseRelocation->VirtualAddress + ( pList[ d ] & 0xFFF ) ) );
-	*pAddress += dwHeaderSize;
+				for ( DWORD d = 0; d < dwNumberOfBlocks; d++ )
+					if ( pList[ d ] )
+					{
+						auto pAddress = PDWORD( LPBYTE( injInfo->pImageBase ) + ( pBaseRelocation->VirtualAddress + ( pList[ d ] & 0xFFF ) ) );
+						*pAddress += dwHeaderSize;
+					}
+			}
+
+			pBaseRelocation = PIMAGE_BASE_RELOCATION( LPBYTE( pBaseRelocation ) + pBaseRelocation->SizeOfBlock );
+		}
+
+		// Resolve DLL imports
+		auto pImportDescriptor = injInfo->pImportDescriptor;
+		for ( ; pImportDescriptor->Characteristics; pImportDescriptor++ )
+		{
+			auto thkOriginalFirst = PIMAGE_THUNK_DATA( LPBYTE( injInfo->pImageBase ) + pImportDescriptor->OriginalFirstThunk );
+			auto thkNewFirst = PIMAGE_THUNK_DATA( LPBYTE( injInfo->pImageBase ) + pImportDescriptor->FirstThunk );
+
+			auto hModule = injInfo->fnLoadLibraryA( LPCSTR( injInfo->pImageBase ) + pImportDescriptor->Name );
+
+			if ( !hModule )
+				return FALSE;
+
+			for ( ; thkOriginalFirst->u1.AddressOfData; thkOriginalFirst++, thkNewFirst++ )
+			{
+				if ( thkOriginalFirst->u1.Ordinal & IMAGE_ORDINAL_FLAG ) // Import by ordinal
+				{
+					auto dwFunction = DWORD( injInfo->fnGetProcAddress( hModule, LPCSTR( thkOriginalFirst->u1.Ordinal & 0xFFFF ) ) );
+
+					if ( !dwFunction )
+						return FALSE;
+
+					thkNewFirst->u1.Function = dwFunction;
+				}
+				else // Import by name
+				{
+					auto dwFunction = DWORD( injInfo->fnGetProcAddress( hModule, LPCSTR( PIMAGE_IMPORT_BY_NAME( LPBYTE( injInfo->pImageBase ) + thkOriginalFirst->u1.AddressOfData )->Name ) ) );
+
+					if ( !dwFunction )
+						return FALSE;
+
+					thkNewFirst->u1.Function = dwFunction;
+				}
+			}
+		}
+
+		// Call DLLMain
+		if ( injInfo->pNTHeaders->OptionalHeader.AddressOfEntryPoint )
+		{
+			auto fnEntry = reinterpret_cast< BOOL( WINAPI* )( HMODULE, DWORD, PVOID ) > ( LPBYTE( injInfo->pImageBase ) + injInfo->pNTHeaders->OptionalHeader.AddressOfEntryPoint );
+			return fnEntry( HMODULE( injInfo->pImageBase ), DLL_PROCESS_ATTACH, nullptr );
+		}
+
+		return TRUE;
 	}
-	}
-
-	pBaseRelocation = PIMAGE_BASE_RELOCATION( LPBYTE( pBaseRelocation ) + pBaseRelocation->SizeOfBlock );
-	}
-
-	// Resolve DLL imports
-	auto pImportDescriptor = injInfo->pImportDescriptor;
-	for ( ; pImportDescriptor->Characteristics; pImportDescriptor++ )
-	{
-	auto thkOriginalFirst = PIMAGE_THUNK_DATA( LPBYTE( injInfo->pImageBase ) + pImportDescriptor->OriginalFirstThunk );
-	auto thkNewFirst = PIMAGE_THUNK_DATA( LPBYTE( injInfo->pImageBase ) + pImportDescriptor->FirstThunk );
-
-	auto hModule = injInfo->fnLoadLibraryA( LPCSTR( injInfo->pImageBase ) + pImportDescriptor->Name );
-
-	if ( !hModule )
-	return FALSE;
-
-	for ( ; thkOriginalFirst->u1.AddressOfData; thkOriginalFirst++, thkNewFirst++ )
-	{
-	if ( thkOriginalFirst->u1.Ordinal & IMAGE_ORDINAL_FLAG ) // Import by ordinal
-	{
-	auto dwFunction = DWORD( injInfo->fnGetProcAddress( hModule, LPCSTR( thkOriginalFirst->u1.Ordinal & 0xFFFF ) ) );
-
-	if ( !dwFunction )
-	return FALSE;
-
-	thkNewFirst->u1.Function = dwFunction;
-	}
-	else // Import by name
-	{
-	auto dwFunction = DWORD( injInfo->fnGetProcAddress( hModule, LPCSTR( PIMAGE_IMPORT_BY_NAME( LPBYTE( injInfo->pImageBase ) + thkOriginalFirst->u1.AddressOfData )->Name ) ) );
-
-	if ( !dwFunction )
-	return FALSE;
-
-	thkNewFirst->u1.Function = dwFunction;
-	}
-	}
-	}
-
-	// Call DLLMain
-	if ( injInfo->pNTHeaders->OptionalHeader.AddressOfEntryPoint )
-	{
-	auto fnEntry = reinterpret_cast< BOOL( WINAPI* )( HMODULE, DWORD, PVOID ) > ( LPBYTE( injInfo->pImageBase ) + injInfo->pNTHeaders->OptionalHeader.AddressOfEntryPoint );
-	return fnEntry( HMODULE( injInfo->pImageBase ), DLL_PROCESS_ATTACH, nullptr );
-	}
-
-	return TRUE;
-	}
-	*/
 
 	/// Stub to store and restore registers so we don't mess up the stack and cause crashing.
 	/*
@@ -503,6 +502,38 @@ namespace PX::sys
 		fnWipeMemory( PVOID( static_cast< injection_info_t* >( pMemory ) + 1 ), uLoadDLLSize );
 
 		fnCleanup( false );
+		return true;
+	}
+
+	bool PX_API LocalInject( const LPVOID& pDLL, injection_info_t* injInfo )
+	{
+		// set up headers & ensure their validity against pre - defined signatures / characteristics
+		const auto pDOSHeader = PIMAGE_DOS_HEADER( pDLL );
+		const auto pNTHeader = PIMAGE_NT_HEADERS( PBYTE( pDLL ) + pDOSHeader->e_lfanew );
+		const auto pSectionHeader = PIMAGE_SECTION_HEADER( pNTHeader + 1 );
+		const auto pImage = new byte_t[ pNTHeader->OptionalHeader.SizeOfImage ];
+
+		if ( pDOSHeader->e_magic != IMAGE_DOS_SIGNATURE )
+			return false;
+
+		if ( pNTHeader->Signature != IMAGE_NT_SIGNATURE
+			 || !( pNTHeader->FileHeader.Characteristics & IMAGE_FILE_DLL ) )
+			return false;
+
+		memcpy( pImage, pDLL, pNTHeader->OptionalHeader.SizeOfHeaders );
+
+		for ( WORD w = 0; w < pNTHeader->FileHeader.NumberOfSections; w++ )
+			memcpy( reinterpret_cast< void* >( ptr_t( pImage ) + pSectionHeader[ w ].VirtualAddress ), reinterpret_cast< void* >( ptr_t( pDLL ) + pSectionHeader[ w ].PointerToRawData ), pSectionHeader[ w ].SizeOfRawData );
+
+		injInfo->pImageBase = pImage;
+		injInfo->pNTHeaders = PIMAGE_NT_HEADERS( PBYTE( pImage ) + pDOSHeader->e_lfanew );
+		injInfo->pBaseRelocation = PIMAGE_BASE_RELOCATION( PBYTE( pImage ) + pNTHeader->OptionalHeader.DataDirectory[ IMAGE_DIRECTORY_ENTRY_BASERELOC ].VirtualAddress );
+		injInfo->pImportDescriptor = PIMAGE_IMPORT_DESCRIPTOR( PBYTE( pImage ) + pNTHeader->OptionalHeader.DataDirectory[ IMAGE_DIRECTORY_ENTRY_IMPORT ].VirtualAddress );
+		injInfo->fnLoadLibraryA = LoadLibraryA;
+		injInfo->fnGetProcAddress = GetProcAddress;
+
+		LoadDLL( injInfo );
+
 		return true;
 	}
 

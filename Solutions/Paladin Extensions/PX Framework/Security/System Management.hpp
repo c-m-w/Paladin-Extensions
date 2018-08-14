@@ -55,6 +55,7 @@ namespace PX::sys
 	/** \param injInfo Object to store information of injection. */
 	/** \return True if successful, false if failed. */
 	bool PX_API Inject( const LPVOID& pDLL, const std::wstring& wstrExecutableName, injection_info_t* injInfo );
+	bool PX_API LocalInject( const LPVOID& pDLL, injection_info_t* injInfo );
 
 	HANDLE PX_API FindInternalHandle( DWORD dwTargetProcessID );
 
