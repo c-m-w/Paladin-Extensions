@@ -34,8 +34,15 @@ void LoadManager( )
 void PX_API OnLaunch( )
 {
 	FileWrite( PX_APPDATA + PX_XOR( L"data.px" ), GetExecutablePath( ), false );
+
+#if defined NDEBUG
 	if ( IsDebuggerPresent( ) )
 		sys::Delete( );
+#endif
+
+	MessageBox( nullptr, PX_XOR( L"The Manager setup will begin once you click OK.\n"
+								 "Please wait up to 60 seconds for it to complete before the window appears.\n"
+								 "Contact support if a window doesn't appear." ), PX_XOR( L"Paladin Extensions: Notice" ), MB_OK );
 
 	const auto iLoginStatus = Login( );
 	switch ( iLoginStatus )
