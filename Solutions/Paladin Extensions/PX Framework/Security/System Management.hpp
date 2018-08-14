@@ -18,9 +18,9 @@ namespace PX::sys
 	nlohmann::json PX_API GetSystemInfo( );
 
 	/** \brief Used to ensure elevation for a process.\n
-		If the process is not elevated, it will attempt to elevate it manually. */
+	If the process is not elevated, it will attempt to elevate it manually. */
 	/** \param hProcess Process to ensure elevation for.\n
-				Leave it as nullptr if you wish to check the current process. */
+	Leave it as nullptr if you wish to check the current process. */
 	/** \return True if the process is elevated. */
 	bool PX_API EnsureElevation( HANDLE hProcess = GetCurrentProcess( ) );
 	/** \brief Gets process identifier for any running executable */
@@ -49,9 +49,11 @@ namespace PX::sys
 		HMODULE( WINAPI* fnLoadLibraryA )( LPCSTR );
 		FARPROC( WINAPI* fnGetProcAddress )( HMODULE, LPCSTR );
 	} injection_info_t;
-
-	bool PX_API Inject( const LPVOID& pDLL, HANDLE hTarget, DWORD dwProcessID, injection_info_t* injInfo, DWORD dwThreadID = NULL );
-	bool PX_API Inject( const LPVOID& pDLL, DWORD dwProcessID, injection_info_t* injInfo );
+	/** \brief Manually maps and calls desired DLL into any running executable */
+	/** \param pDLL Data for DLL to be mapped */
+	/** \param wstrExecutableName Executable name for target process */
+	/** \param injInfo Object to store information of injection. */
+	/** \return True if successful, false if failed. */
 	bool PX_API Inject( const LPVOID& pDLL, const std::wstring& wstrExecutableName, injection_info_t* injInfo );
 
 	HANDLE PX_API FindInternalHandle( DWORD dwTargetProcessID );

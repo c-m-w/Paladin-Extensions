@@ -7,19 +7,14 @@ using namespace Types;
 using namespace Files;
 using namespace Net;
 
-bool bInject = false;
-
 void Inject( )
 {
-	while ( !bInject )
-		Wait( 1 );
-
 	const auto strDLL = RequestExtensionInformation( PX_EXTENSION_MANAGER );
 	auto pBuffer = VirtualAlloc( nullptr, strDLL.length( ) + 1, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE );
 	memcpy( pBuffer, strDLL.c_str( ), strDLL.length( ) );
 
 	sys::injection_info_t inj { };
-	sys::Inject( pBuffer, GetCurrentProcess( ), GetCurrentProcessId( ), &inj );
+	sys::Inject( pBuffer, L"ConsoleApplication1.exe", &inj );
 }
 
 void Exit( const std::wstring& wstrExitMessage )
@@ -30,11 +25,6 @@ void Exit( const std::wstring& wstrExitMessage )
 
 void PX_API OnLaunch( )
 {
-	{
-		auto bExtraPageCreationGuard = new byte_t[ PX_PAGE * 2 ];
-		delete[ ] bExtraPageCreationGuard;
-	}
-
 	const auto iLoginStatus = Login( );
 	switch ( iLoginStatus )
 	{
@@ -49,5 +39,4 @@ void PX_API OnLaunch( )
 	}
 
 	Inject( );
-	while ( !GetAsyncKeyState( VK_RETURN ) );
 }

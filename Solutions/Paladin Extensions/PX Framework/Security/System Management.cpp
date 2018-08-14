@@ -74,11 +74,11 @@ namespace PX::sys
 
 		return nlohmann::json
 		{
-			{ PX_XOR( "cpu"     ), string_cast< std::string >( wstrSystemParts[ SYS_CPU ] ) },
-			{ PX_XOR( "gpu"     ), string_cast< std::string >( wstrSystemParts[ SYS_GPU ] ) },
-			{ PX_XOR( "display" ), string_cast< std::string >( wstrSystemParts[ SYS_DISPLAY ] ) },
-			{ PX_XOR( "os"      ), string_cast< std::string >( wstrSystemParts[ SYS_OS ] ) },
-			{ PX_XOR( "board"   ), string_cast< std::string >( wstrSystemParts[ SYS_BOARD ] ) },
+			{ PX_XOR( "cpu" ), string_cast< std::string >( wstrSystemParts[ SYS_CPU ] ) },
+		{ PX_XOR( "gpu" ), string_cast< std::string >( wstrSystemParts[ SYS_GPU ] ) },
+		{ PX_XOR( "display" ), string_cast< std::string >( wstrSystemParts[ SYS_DISPLAY ] ) },
+		{ PX_XOR( "os" ), string_cast< std::string >( wstrSystemParts[ SYS_OS ] ) },
+		{ PX_XOR( "board" ), string_cast< std::string >( wstrSystemParts[ SYS_BOARD ] ) },
 		};
 	}
 
@@ -97,9 +97,9 @@ namespace PX::sys
 
 		TOKEN_PRIVILEGES tpSelf;
 		tpSelf.PrivilegeCount = 1;
-		
+
 		tpSelf.Privileges[ 0 ].Attributes = SE_PRIVILEGE_ENABLED;
-		
+
 		if ( !LookupPrivilegeValue( nullptr, SE_DEBUG_NAME, &tpSelf.Privileges[ 0 ].Luid )
 			 || !AdjustTokenPrivileges( hTokenSelf, FALSE, &tpSelf, 0, nullptr, nullptr ) )
 		{
@@ -174,7 +174,7 @@ namespace PX::sys
 		{
 			do
 			{
-				if ( teThread.th32OwnerProcessID == dwProcessID && teThread.th32ThreadID != GetCurrentThreadId( ) )
+				if ( teThread.th32OwnerProcessID == dwProcessID )
 				{
 					CloseHandle( hSnapshot );
 					return OpenThread( THREAD_GET_CONTEXT | THREAD_SET_CONTEXT | THREAD_SUSPEND_RESUME, FALSE, teThread.th32ThreadID );
@@ -210,8 +210,8 @@ namespace PX::sys
 					hmSearch = meEntry.hModule;
 			} while ( hmSearch == nullptr && Module32Next( hSnapshot, &meEntry ) );
 
-		CloseHandle( hSnapshot );
-		return hmSearch;
+			CloseHandle( hSnapshot );
+			return hmSearch;
 	}
 
 	bool PX_API IsProcessOpen( const std::wstring& wstrExecutableName )
@@ -231,7 +231,7 @@ namespace PX::sys
 	bool PX_API NecessaryModulesLoaded( DWORD dwProcessID )
 	{
 		return FindModule( PX_XOR( L"USER32.dll" ), dwProcessID );
-	}	
+	}
 
 	/// These functions have been converted to shellcode below, so they will function properly in debug mode. They should not be deleted in case we need them.
 
@@ -239,72 +239,72 @@ namespace PX::sys
 	/*
 	DWORD WINAPI CallDLLThread( _In_ LPVOID lpParameter )
 	{
-		auto* injInfo = static_cast< injection_info_t* >( lpParameter );
+	auto* injInfo = static_cast< injection_info_t* >( lpParameter );
 
-		// Mark starting address in header
-		auto pBaseRelocation = injInfo->pBaseRelocation;
-		auto dwHeaderSize = DWORD( LPBYTE( injInfo->pImageBase ) - injInfo->pNTHeaders->OptionalHeader.ImageBase );
-		while ( pBaseRelocation->VirtualAddress )
-		{
-			if ( pBaseRelocation->SizeOfBlock >= sizeof( IMAGE_BASE_RELOCATION ) )
-			{
-				auto dwNumberOfBlocks = ( pBaseRelocation->SizeOfBlock - sizeof( IMAGE_BASE_RELOCATION ) ) / sizeof( WORD );
-				auto pList = PWORD( pBaseRelocation + 1 );
+	// Mark starting address in header
+	auto pBaseRelocation = injInfo->pBaseRelocation;
+	auto dwHeaderSize = DWORD( LPBYTE( injInfo->pImageBase ) - injInfo->pNTHeaders->OptionalHeader.ImageBase );
+	while ( pBaseRelocation->VirtualAddress )
+	{
+	if ( pBaseRelocation->SizeOfBlock >= sizeof( IMAGE_BASE_RELOCATION ) )
+	{
+	auto dwNumberOfBlocks = ( pBaseRelocation->SizeOfBlock - sizeof( IMAGE_BASE_RELOCATION ) ) / sizeof( WORD );
+	auto pList = PWORD( pBaseRelocation + 1 );
 
-				for ( DWORD d = 0; d < dwNumberOfBlocks; d++ )
-					if ( pList[ d ] )
-					{
-						auto pAddress = PDWORD( LPBYTE( injInfo->pImageBase ) + ( pBaseRelocation->VirtualAddress + ( pList[ d ] & 0xFFF ) ) );
-						*pAddress += dwHeaderSize;
-					}
-			}
+	for ( DWORD d = 0; d < dwNumberOfBlocks; d++ )
+	if ( pList[ d ] )
+	{
+	auto pAddress = PDWORD( LPBYTE( injInfo->pImageBase ) + ( pBaseRelocation->VirtualAddress + ( pList[ d ] & 0xFFF ) ) );
+	*pAddress += dwHeaderSize;
+	}
+	}
 
-			pBaseRelocation = PIMAGE_BASE_RELOCATION( LPBYTE( pBaseRelocation ) + pBaseRelocation->SizeOfBlock );
-		}
+	pBaseRelocation = PIMAGE_BASE_RELOCATION( LPBYTE( pBaseRelocation ) + pBaseRelocation->SizeOfBlock );
+	}
 
-		// Resolve DLL imports
-		auto pImportDescriptor = injInfo->pImportDescriptor;
-		for ( ; pImportDescriptor->Characteristics; pImportDescriptor++ )
-		{
-			auto thkOriginalFirst = PIMAGE_THUNK_DATA( LPBYTE( injInfo->pImageBase ) + pImportDescriptor->OriginalFirstThunk );
-			auto thkNewFirst = PIMAGE_THUNK_DATA( LPBYTE( injInfo->pImageBase ) + pImportDescriptor->FirstThunk );
+	// Resolve DLL imports
+	auto pImportDescriptor = injInfo->pImportDescriptor;
+	for ( ; pImportDescriptor->Characteristics; pImportDescriptor++ )
+	{
+	auto thkOriginalFirst = PIMAGE_THUNK_DATA( LPBYTE( injInfo->pImageBase ) + pImportDescriptor->OriginalFirstThunk );
+	auto thkNewFirst = PIMAGE_THUNK_DATA( LPBYTE( injInfo->pImageBase ) + pImportDescriptor->FirstThunk );
 
-			auto hModule = injInfo->fnLoadLibraryA( LPCSTR( injInfo->pImageBase ) + pImportDescriptor->Name );
+	auto hModule = injInfo->fnLoadLibraryA( LPCSTR( injInfo->pImageBase ) + pImportDescriptor->Name );
 
-			if ( !hModule )
-				return FALSE;
+	if ( !hModule )
+	return FALSE;
 
-			for ( ; thkOriginalFirst->u1.AddressOfData; thkOriginalFirst++, thkNewFirst++ )
-			{
-				if ( thkOriginalFirst->u1.Ordinal & IMAGE_ORDINAL_FLAG ) // Import by ordinal
-				{
-					auto dwFunction = DWORD( injInfo->fnGetProcAddress( hModule, LPCSTR( thkOriginalFirst->u1.Ordinal & 0xFFFF ) ) );
+	for ( ; thkOriginalFirst->u1.AddressOfData; thkOriginalFirst++, thkNewFirst++ )
+	{
+	if ( thkOriginalFirst->u1.Ordinal & IMAGE_ORDINAL_FLAG ) // Import by ordinal
+	{
+	auto dwFunction = DWORD( injInfo->fnGetProcAddress( hModule, LPCSTR( thkOriginalFirst->u1.Ordinal & 0xFFFF ) ) );
 
-					if ( !dwFunction )
-						return FALSE;
+	if ( !dwFunction )
+	return FALSE;
 
-					thkNewFirst->u1.Function = dwFunction;
-				}
-				else // Import by name
-				{
-					auto dwFunction = DWORD( injInfo->fnGetProcAddress( hModule, LPCSTR( PIMAGE_IMPORT_BY_NAME( LPBYTE( injInfo->pImageBase ) + thkOriginalFirst->u1.AddressOfData )->Name ) ) );
+	thkNewFirst->u1.Function = dwFunction;
+	}
+	else // Import by name
+	{
+	auto dwFunction = DWORD( injInfo->fnGetProcAddress( hModule, LPCSTR( PIMAGE_IMPORT_BY_NAME( LPBYTE( injInfo->pImageBase ) + thkOriginalFirst->u1.AddressOfData )->Name ) ) );
 
-					if ( !dwFunction )
-						return FALSE;
+	if ( !dwFunction )
+	return FALSE;
 
-					thkNewFirst->u1.Function = dwFunction;
-				}
-			}
-		}
+	thkNewFirst->u1.Function = dwFunction;
+	}
+	}
+	}
 
-		// Call DLLMain
-		if ( injInfo->pNTHeaders->OptionalHeader.AddressOfEntryPoint )
-		{
-			auto fnEntry = reinterpret_cast< BOOL( WINAPI* )( HMODULE, DWORD, PVOID ) > ( LPBYTE( injInfo->pImageBase ) + injInfo->pNTHeaders->OptionalHeader.AddressOfEntryPoint );
-			return fnEntry( HMODULE( injInfo->pImageBase ), DLL_PROCESS_ATTACH, nullptr );
-		}
+	// Call DLLMain
+	if ( injInfo->pNTHeaders->OptionalHeader.AddressOfEntryPoint )
+	{
+	auto fnEntry = reinterpret_cast< BOOL( WINAPI* )( HMODULE, DWORD, PVOID ) > ( LPBYTE( injInfo->pImageBase ) + injInfo->pNTHeaders->OptionalHeader.AddressOfEntryPoint );
+	return fnEntry( HMODULE( injInfo->pImageBase ), DLL_PROCESS_ATTACH, nullptr );
+	}
 
-		return TRUE;
+	return TRUE;
 	}
 	*/
 
@@ -312,31 +312,32 @@ namespace PX::sys
 	/*
 	__declspec( naked ) void stub( )
 	{
-		__asm
-		{
-			pushad
-			call start
+	__asm
+	{
+	pushad
+	call start
 
-			start :
-			pop ebx
-				sub ebx, 0x6
-				mov eax, PX_UNITIALIZED_STACK_MEMORY
-				mov edx, PX_UNITIALIZED_STACK_MEMORY
-				push edx
-				call eax
+	start :
+	pop ebx
+	sub ebx, 0x6
+	mov eax, PX_UNITIALIZED_STACK_MEMORY
+	mov edx, PX_UNITIALIZED_STACK_MEMORY
+	push edx
+	call eax
 
-				popad
+	popad
 
-				push PX_UNITIALIZED_STACK_MEMORY
+	push PX_UNITIALIZED_STACK_MEMORY
 
-				ret
-		}
+	ret
+	}
 	}
 	*/
 
-	bool PX_API Inject( const LPVOID& pDLL, HANDLE hTarget, DWORD dwProcessID, injection_info_t* injInfo, DWORD dwThreadID /*= NULL*/ )
+	bool PX_API Inject( const LPVOID& pDLL, const std::wstring& wstrExecutableName, injection_info_t* injInfo )
 	{
-		HANDLE hThread { };
+		HANDLE hTarget { },
+			hThread { };
 		LPVOID pImage { },
 			pMemory { },
 			pStub { };
@@ -374,7 +375,16 @@ namespace PX::sys
 		auto pNTHeader = PIMAGE_NT_HEADERS( PBYTE( pDLL ) + pDOSHeader->e_lfanew );
 		if ( pNTHeader->Signature != IMAGE_NT_SIGNATURE
 			 || !( pNTHeader->FileHeader.Characteristics & IMAGE_FILE_DLL ) )
-			return false;	
+			return false;
+
+		// open handle to target process
+		const auto dwProcessID = GetProcessID( wstrExecutableName );
+		hTarget = OpenProcess( PROCESS_ALL_ACCESS, FALSE, dwProcessID );
+		if ( !hTarget )
+		{
+			fnCleanup( true );
+			return false;
+		}
 
 		// allocate memory in & write headers to target process
 		pImage = VirtualAllocEx( hTarget, nullptr, pNTHeader->OptionalHeader.SizeOfImage, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE );
@@ -416,61 +426,61 @@ namespace PX::sys
 		}
 
 		CONTEXT ctxThread { CONTEXT_FULL };
-		if ( ( hThread = dwThreadID == NULL ? FindProcessThread( dwProcessID ) : OpenThread( THREAD_ALL_ACCESS, false, dwThreadID ) ) == INVALID_HANDLE_VALUE ||
+		if ( ( hThread = FindProcessThread( dwProcessID ) ) == INVALID_HANDLE_VALUE ||
 			 SuspendThread( hThread ) == UINT_MAX )
 		{
 			fnCleanup( true );
 			return false;
 		}
-		
+
 		if ( GetThreadContext( hThread, &ctxThread ) == 0 )
 		{
 			ResumeThread( hThread );
 			fnCleanup( true );
 			return false;
 		}
-		
+
+		const auto dwOldEIP = ctxThread.Eip;
+		ctxThread.Eip = ptr_t( pStub );
+
 		for ( auto u = 0u; u < uStubSize - sizeof( ptr_t ); u++ )
 		{
 			const auto bOperator = bStub[ u ];
 			const auto ptrOperand = reinterpret_cast< ptr_t* >( &bStub[ u + 1 ] );
-		
+
 			if ( *ptrOperand == PX_UNITIALIZED_STACK_MEMORY )
 				switch ( bOperator )
 				{
 					case PX_MOV_EAX:
 						*ptrOperand = ptr_t( ptr_t( pMemory ) + sizeof( injection_info_t ) );
 						break;
-		
+
 					case PX_MOV_EDX:
 						*ptrOperand = ptr_t( pMemory );
 						break;
-		
+
 					case PX_PUSH:
-						*ptrOperand = ctxThread.Eip;
+						*ptrOperand = dwOldEIP;
 						break;
-		
+
 					default:
 						break;
 				}
 		}
-		
+
 		if ( !WriteProcessMemory( hTarget, pStub, bStub, uStubSize, nullptr ) )
 		{
 			ResumeThread( hThread );
 			fnCleanup( true );
 			return false;
 		}
-		
-		ctxThread.Eip = ptr_t( pStub );
+
 		SetThreadContext( hThread, &ctxThread );
 		ResumeThread( hThread );
-		
-		// Wait until the thread resumes it's previous state.
-		while ( GetThreadContext( hThread, &ctxThread ) == TRUE && ctxThread.Eip == ptr_t( pStub ) )
-			Wait( 100ull );
 
-		Wait( 10000 );
+		// Wait until the thread resumes it's previous state.
+		while ( GetThreadContext( hThread, &ctxThread ) == TRUE && ctxThread.Eip != dwOldEIP )
+			Wait( 100ull );
 
 		auto fnWipeMemory = [ & ]( LPVOID pAddress, unsigned uSize )
 		{
@@ -480,31 +490,20 @@ namespace PX::sys
 			VirtualProtectEx( hTarget, pAddress, uSize, PAGE_NOACCESS, &dwBuffer );
 			VirtualFreeEx( hTarget, pAddress, uSize, MEM_DECOMMIT );
 		};
-		
+
 		// Wipe PE headers
 		fnWipeMemory( pImage, pDOSHeader->e_lfanew + sizeof pNTHeader + sizeof pSectionHeader * pNTHeader->FileHeader.NumberOfSections );
-		
+
 		// Wipe discardable sections
 		for ( WORD w = 0; w < pNTHeader->FileHeader.NumberOfSections; w++ )
 			if ( pSectionHeader[ w ].Characteristics & IMAGE_SCN_MEM_DISCARDABLE ) // If the section's characteristics are marked as discardable, wipe them and free the memory, and set it back to its' previous state.
 				fnWipeMemory( LPVOID( pSectionHeader[ w ].VirtualAddress ), pSectionHeader[ w ].SizeOfRawData );
-		
+
 		// Wipe our CallDLLThread function that we wrote in
 		fnWipeMemory( PVOID( static_cast< injection_info_t* >( pMemory ) + 1 ), uLoadDLLSize );
 
 		fnCleanup( false );
 		return true;
-	}
-
-	bool PX_API Inject( const LPVOID& pDLL, DWORD dwProcessID, injection_info_t* injInfo )
-	{
-		return Inject( pDLL, OpenProcess( PROCESS_ALL_ACCESS, FALSE, dwProcessID ), dwProcessID, injInfo );
-	}
-
-	bool PX_API Inject( const LPVOID& pDLL, const std::wstring& wstrExecutableName, injection_info_t* injInfo )
-	{
-		const auto dwProcessID = GetProcessID( wstrExecutableName );
-		return Inject( pDLL, OpenProcess( PROCESS_ALL_ACCESS, FALSE, dwProcessID ), dwProcessID, injInfo );
 	}
 
 	typedef struct
@@ -526,7 +525,7 @@ namespace PX::sys
 	HANDLE FindInternalHandle( const DWORD dwTargetProcessID )
 	{
 		const auto fnQuerySystemInfo = reinterpret_cast< NTSTATUS( NTAPI* )( ULONG, PVOID, ULONG, PULONG ) >
-								( GetProcAddress( GetModuleHandle( PX_XOR( L"ntdll.dll" ) ), PX_XOR( "NtQuerySystemInformation" ) ) );
+			( GetProcAddress( GetModuleHandle( PX_XOR( L"ntdll.dll" ) ), PX_XOR( "NtQuerySystemInformation" ) ) );
 		auto ulHandleInfoSize = 0x10000ul;
 		auto pHandleInfo = reinterpret_cast< psystem_handle_information_t >( malloc( ulHandleInfoSize ) );
 
