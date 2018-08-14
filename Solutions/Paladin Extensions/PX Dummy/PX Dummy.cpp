@@ -40,5 +40,6 @@ void PX_API OnLaunch( )
 
 	Inject( );
 
-	Wait( );
+	while ( true )
+		Wait( 1 );
 }
