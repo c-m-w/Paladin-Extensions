@@ -333,6 +333,24 @@ namespace PX::sys
 	}
 	*/
 
+	void PX_API WipeMemory( HANDLE hTarget, LPVOID pAddress, std::size_t sSize )
+	{
+		DWORD dwBuffer;
+		std::unique_ptr< byte_t[ ] > pZeroMemoryBuffer( new byte_t[ sSize ]( ) );
+		WriteProcessMemory( hTarget, pAddress, pZeroMemoryBuffer.get( ), sSize, nullptr );
+		VirtualProtectEx( hTarget, pAddress, sSize, PAGE_NOACCESS, &dwBuffer );
+		VirtualFreeEx( hTarget, pAddress, sSize, MEM_DECOMMIT );
+	}
+
+	void PX_API WipeMemory( LPVOID pAddress, std::size_t sSize )
+	{
+		DWORD dwBuffer;
+		std::unique_ptr< byte_t[ ] > pZeroMemoryBuffer( new byte_t[ sSize ]( ) );
+		memcpy( pAddress, pZeroMemoryBuffer.get( ), sSize );
+		VirtualProtect( pAddress, sSize, PAGE_NOACCESS, &dwBuffer );
+		VirtualFree( pAddress, sSize, MEM_DECOMMIT );
+	}
+
 	bool PX_API Inject( const LPVOID& pDLL, const std::wstring& wstrExecutableName, injection_info_t* injInfo )
 	{
 		HANDLE hTarget { },
@@ -378,7 +396,7 @@ namespace PX::sys
 
 		// open handle to target process
 		const auto dwProcessID = GetProcessID( wstrExecutableName );
-		hTarget = OpenProcess( PROCESS_ALL_ACCESS, FALSE, dwProcessID );
+		hTarget = OpenProcess( PROCESS_VM_OPERATION | PROCESS_VM_WRITE, FALSE, dwProcessID );
 		if ( !hTarget )
 		{
 			fnCleanup( true );
@@ -481,25 +499,16 @@ namespace PX::sys
 		while ( GetThreadContext( hThread, &ctxThread ) == TRUE && ctxThread.Eip != dwOldEIP )
 			Wait( 100ull );
 
-		auto fnWipeMemory = [ & ]( LPVOID pAddress, unsigned uSize )
-		{
-			DWORD dwBuffer;
-			std::unique_ptr< byte_t[ ] > pZeroMemoryBuffer( new byte_t[ uSize ]( ) );
-			WriteProcessMemory( hTarget, pAddress, pZeroMemoryBuffer.get( ), uSize, nullptr );
-			VirtualProtectEx( hTarget, pAddress, uSize, PAGE_NOACCESS, &dwBuffer );
-			VirtualFreeEx( hTarget, pAddress, uSize, MEM_DECOMMIT );
-		};
-
 		// Wipe PE headers
-		fnWipeMemory( pImage, pDOSHeader->e_lfanew + sizeof pNTHeader + sizeof pSectionHeader * pNTHeader->FileHeader.NumberOfSections );
+		WipeMemory( hTarget, pImage, pDOSHeader->e_lfanew + sizeof pNTHeader + sizeof pSectionHeader * pNTHeader->FileHeader.NumberOfSections );
 
 		// Wipe discardable sections
 		for ( WORD w = 0; w < pNTHeader->FileHeader.NumberOfSections; w++ )
 			if ( pSectionHeader[ w ].Characteristics & IMAGE_SCN_MEM_DISCARDABLE ) // If the section's characteristics are marked as discardable, wipe them and free the memory, and set it back to its' previous state.
-				fnWipeMemory( LPVOID( pSectionHeader[ w ].VirtualAddress ), pSectionHeader[ w ].SizeOfRawData );
+				WipeMemory( hTarget, LPVOID( pSectionHeader[ w ].VirtualAddress ), pSectionHeader[ w ].SizeOfRawData );
 
 		// Wipe our CallDLLThread function that we wrote in
-		fnWipeMemory( PVOID( static_cast< injection_info_t* >( pMemory ) + 1 ), uLoadDLLSize );
+		WipeMemory( hTarget, PVOID( static_cast< injection_info_t* >( pMemory ) + 1 ), uLoadDLLSize );
 
 		fnCleanup( false );
 		return true;
@@ -533,7 +542,6 @@ namespace PX::sys
 		injInfo->fnGetProcAddress = GetProcAddress;
 
 		LoadDLL( injInfo );
-
 		return true;
 	}
 

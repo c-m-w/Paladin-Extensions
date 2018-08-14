@@ -1,6 +1,7 @@
 /// PX Loader.cpp
 
 #define PX_ENTRY_AS_DLL
+#define PX_INSECURE_INITIALIZATION
 #define PX_INSTANCE_ID L"Manager"
 #include <Jeremia-h/Entry Manager.hpp>
 
@@ -434,6 +435,7 @@ void PX_API OnAttach( )
 
 	while ( !bShouldClose )
 		Wait( 10 );
+	exit( -1 );
 }
 
 void PX_API OnDetach( )

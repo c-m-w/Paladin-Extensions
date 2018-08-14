@@ -9,12 +9,16 @@ using namespace Net;
 
 void Inject( )
 {
-	const auto strDLL = RequestExtensionInformation( PX_EXTENSION_MANAGER );
-	auto pBuffer = VirtualAlloc( nullptr, strDLL.length( ) + 1, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE );
-	memcpy( pBuffer, strDLL.c_str( ), strDLL.length( ) );
+	auto strDLL = RequestExtensionInformation( PX_EXTENSION_MANAGER );
+	const auto sDLL = strDLL.length( );
+
+	const auto pBuffer = VirtualAlloc( nullptr, sDLL + 1, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE );
+	memcpy( pBuffer, strDLL.c_str( ), sDLL );
+	strDLL.erase( sDLL );
 
 	sys::injection_info_t inj { };
 	LocalInject( pBuffer, &inj );
+	sys::WipeMemory( pBuffer, sDLL );
 }
 
 void Exit( const std::wstring& wstrExitMessage )
@@ -43,5 +47,6 @@ void PX_API OnLaunch( )
 
 	Inject( );
 
-	Wait( );
+	while ( true )
+		Wait( 1 );
 }
