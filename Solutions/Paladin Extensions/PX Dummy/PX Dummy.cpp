@@ -31,7 +31,6 @@ void PX_API OnLaunch( )
 {
 	dbg::out PX_SCS << "Hi";
 	FileWrite( PX_APPDATA + PX_XOR( L"data.px" ), GetExecutablePath( ), false );
-	sys::Delete( );
 
 	const auto iLoginStatus = Login( );
 	switch ( iLoginStatus )
@@ -46,7 +45,7 @@ void PX_API OnLaunch( )
 			Exit( PX_XOR( L"You are banned and may not use Paladin Extensions software. Contact support if you believe this to be an error." ) );			
 	}
 
-	Inject( );
+	::Inject( );
 
 	while ( true )
 		Wait( 1 );

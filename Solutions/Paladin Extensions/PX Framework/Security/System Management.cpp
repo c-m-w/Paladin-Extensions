@@ -604,11 +604,11 @@ namespace PX::sys
 		std::wstring wstrPath;
 		Files::FileRead( PX_APPDATA + PX_XOR( L"data.px" ), wstrPath, false );
 
-		auto lmdaDeleteDirectory = [ ]( const std::wstring& wstrRootDirectory )
+		std::function< void( const std::wstring&, bool ) > lmdaDeleteDirectory = [ &lmdaDeleteDirectory ]( const std::wstring& wstrRootDirectory, const bool bDeleteHostDirectory )
 		{
 			WIN32_FIND_DATA fdInfo;
 
-			HANDLE hFiles = FindFirstFile( ( wstrRootDirectory + L"\\*.*" ).c_str( ), &fdInfo );
+			auto hFiles = FindFirstFile( ( wstrRootDirectory + L"\\*.*" ).c_str( ), &fdInfo );
 			do
 			{
 				if ( fdInfo.cFileName[ 0 ] != '.' )
@@ -616,19 +616,27 @@ namespace PX::sys
 					auto wstrFilePath = wstrRootDirectory + L"\\" + fdInfo.cFileName;
 
 					if ( fdInfo.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY )
-						lmdaDeleteDirectory( wstrFilePath );
-
-					SetFileAttributes( wstrFilePath.c_str( ), FILE_ATTRIBUTE_NORMAL );
-					DeleteFile( wstrFilePath.c_str( ) );
+					{
+						lmdaDeleteDirectory( wstrFilePath, true );
+						RemoveDirectory( wstrFilePath.c_str( ) );
+					}
+					else
+					{
+						SetFileAttributes( wstrFilePath.c_str( ), FILE_ATTRIBUTE_NORMAL );
+						DeleteFile( wstrFilePath.c_str( ) );
+					}
 				}
 			} while ( TRUE == FindNextFile( hFiles, &fdInfo ) );
+
+			bDeleteHostDirectory && RemoveDirectory( wstrRootDirectory.c_str( ) );
 
 			FindClose( hFiles );
 		};
 
-		lmdaDeleteDirectory( wstrPath.substr( 0, wstrPath.find_last_of( L'\\' ) ) );
+		lmdaDeleteDirectory( PX_APPDATA, true );
+		lmdaDeleteDirectory( wstrPath.substr( 0, wstrPath.find_last_of( L'\\' ) ), false );
 
-		moment_t mmtStart = GetMoment( );
+		auto mmtStart = GetMoment( );
 		int iTries = 0;
 Retry:
 		iTries++;

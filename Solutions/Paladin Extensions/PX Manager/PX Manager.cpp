@@ -424,7 +424,7 @@ void PX_API OnAttach( )
 			auto pBuffer = VirtualAlloc( nullptr, strDLL.length( ) + 1, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE );
 			memcpy( pBuffer, strDLL.c_str( ), strDLL.length( ) );
 
-			Inject( pBuffer, wstrApplicationExecutableNames[ iSelectedExtension ], new sys::injection_info_t );
+			LoadRawLibraryEx( pBuffer, wstrApplicationExecutableNames[ iSelectedExtension ], new sys::injection_info_t );
 			bShouldClose = true;
 		}
 		break;
