@@ -134,9 +134,13 @@ BOOL WINAPI DllMain( _In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID 
 				PX::hinstDLL = hinstDLL;
 			}
 
+#if defined PX_INSECURE_INITIALIZATION
 			HANDLE hThreadProc = CreateThread( nullptr, 0, ThreadProc, lpvReserved, 0, nullptr );
 			if ( !hThreadProc || hThreadProc == INVALID_HANDLE_VALUE )
 				return FALSE;
+#else
+			ThreadProc( lpvReserved );
+#endif
 
 			return TRUE;
 		}
