@@ -155,4 +155,32 @@ namespace PX::Net
 		const auto strResponse = Request( strLoginURL, dqLoginData );
 		return strResponse.empty( ) ? LOGIN_CONNECTION_FAILURE : ELogin( std::stoi( strResponse ) );
 	}
+
+	std::string PX_API RequestExtensionInformation( unsigned uExtension )
+	{
+		auto strBuffer = Cryptography::Decrypt( RequestFile( uExtension, false ) );
+		auto jsFileInformation = nlohmann::json::parse( strBuffer );
+		CleanupConnection( );
+
+		sys::uLoadDLLSize = jsFileInformation[ PX_XOR( "Functions" ) ][ PX_XOR( "LoadDLL" ) ][ PX_XOR( "Size" ) ].get< int >( );
+		sys::bLoadDLL = new byte_t[ sys::uLoadDLLSize + 1 ];
+		for ( auto u = 0u; u < sys::uLoadDLLSize; u++ )
+			sys::bLoadDLL[ u ] = byte_t( jsFileInformation[ PX_XOR( "Functions" ) ][ PX_XOR( "LoadDLL" ) ][ PX_XOR( "Shellcode" ) ][ u ].get< int >( ) );
+
+		sys::uStubSize = jsFileInformation[ PX_XOR( "Functions" ) ][ PX_XOR( "Stub" ) ][ PX_XOR( "Size" ) ].get< int >( );
+		sys::bStub = new byte_t[ sys::uStubSize + 1 ];
+		for ( auto u = 0u; u < sys::uStubSize; u++ )
+			sys::bStub[ u ] = byte_t( jsFileInformation[ PX_XOR( "Functions" ) ][ PX_XOR( "Stub" ) ][ PX_XOR( "Shellcode" ) ][ u ].get< int >( ) );
+
+		std::array< std::string, PX_EXTENSION_SECTIONS > strFileSections;
+		std::string strAssembledFile { };
+
+		for ( int i { }; i < PX_EXTENSION_SECTIONS; i++ )
+			strFileSections.at( jsFileInformation[ PX_XOR( "DLL" ) ][ PX_XOR( "Order" ) ][ i ].get< int >( ) ) = Cryptography::Decrypt( jsFileInformation[ PX_XOR( "DLL" ) ][ PX_XOR( "Sections" ) ][ i ].get< std::string >( ) );
+
+		for each ( const auto& strSection in strFileSections )
+			strAssembledFile += strSection;
+
+		return strAssembledFile;
+	}
 }

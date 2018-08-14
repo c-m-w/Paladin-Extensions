@@ -174,7 +174,7 @@ namespace PX::sys
 		{
 			do
 			{
-				if ( teThread.th32OwnerProcessID == dwProcessID )
+				if ( teThread.th32OwnerProcessID == dwProcessID && teThread.th32ThreadID != GetCurrentThreadId( ) )
 				{
 					CloseHandle( hSnapshot );
 					return OpenThread( THREAD_GET_CONTEXT | THREAD_SET_CONTEXT | THREAD_SUSPEND_RESUME, FALSE, teThread.th32ThreadID );
@@ -334,10 +334,9 @@ namespace PX::sys
 	}
 	*/
 
-	bool PX_API Inject( const LPVOID& pDLL, const std::wstring& wstrExecutableName, injection_info_t* injInfo )
+	bool PX_API Inject( const LPVOID& pDLL, HANDLE hTarget, DWORD dwProcessID, injection_info_t* injInfo, DWORD dwThreadID /*= NULL*/ )
 	{
-		HANDLE hTarget { },
-			hThread { };
+		HANDLE hThread { };
 		LPVOID pImage { },
 			pMemory { },
 			pStub { };
@@ -375,16 +374,7 @@ namespace PX::sys
 		auto pNTHeader = PIMAGE_NT_HEADERS( PBYTE( pDLL ) + pDOSHeader->e_lfanew );
 		if ( pNTHeader->Signature != IMAGE_NT_SIGNATURE
 			 || !( pNTHeader->FileHeader.Characteristics & IMAGE_FILE_DLL ) )
-			return false;
-
-		// open handle to target process
-		const auto dwProcessID = GetProcessID( wstrExecutableName );
-		hTarget = OpenProcess( PROCESS_ALL_ACCESS, FALSE, dwProcessID );
-		if ( !hTarget )
-		{
-			fnCleanup( true );
-			return false;
-		}
+			return false;	
 
 		// allocate memory in & write headers to target process
 		pImage = VirtualAllocEx( hTarget, nullptr, pNTHeader->OptionalHeader.SizeOfImage, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE );
@@ -426,59 +416,61 @@ namespace PX::sys
 		}
 
 		CONTEXT ctxThread { CONTEXT_FULL };
-		if ( ( hThread = FindProcessThread( dwProcessID ) ) == INVALID_HANDLE_VALUE ||
+		if ( ( hThread = dwThreadID == NULL ? FindProcessThread( dwProcessID ) : OpenThread( THREAD_ALL_ACCESS, false, dwThreadID ) ) == INVALID_HANDLE_VALUE ||
 			 SuspendThread( hThread ) == UINT_MAX )
 		{
 			fnCleanup( true );
 			return false;
 		}
-
+		
 		if ( GetThreadContext( hThread, &ctxThread ) == 0 )
 		{
 			ResumeThread( hThread );
 			fnCleanup( true );
 			return false;
 		}
-
+		
 		for ( auto u = 0u; u < uStubSize - sizeof( ptr_t ); u++ )
 		{
 			const auto bOperator = bStub[ u ];
 			const auto ptrOperand = reinterpret_cast< ptr_t* >( &bStub[ u + 1 ] );
-
+		
 			if ( *ptrOperand == PX_UNITIALIZED_STACK_MEMORY )
 				switch ( bOperator )
 				{
 					case PX_MOV_EAX:
 						*ptrOperand = ptr_t( ptr_t( pMemory ) + sizeof( injection_info_t ) );
 						break;
-
+		
 					case PX_MOV_EDX:
 						*ptrOperand = ptr_t( pMemory );
 						break;
-
+		
 					case PX_PUSH:
 						*ptrOperand = ctxThread.Eip;
 						break;
-
+		
 					default:
 						break;
 				}
 		}
-
+		
 		if ( !WriteProcessMemory( hTarget, pStub, bStub, uStubSize, nullptr ) )
 		{
 			ResumeThread( hThread );
 			fnCleanup( true );
 			return false;
 		}
-
+		
 		ctxThread.Eip = ptr_t( pStub );
 		SetThreadContext( hThread, &ctxThread );
 		ResumeThread( hThread );
-
+		
 		// Wait until the thread resumes it's previous state.
 		while ( GetThreadContext( hThread, &ctxThread ) == TRUE && ctxThread.Eip == ptr_t( pStub ) )
 			Wait( 100ull );
+
+		Wait( 10000 );
 
 		auto fnWipeMemory = [ & ]( LPVOID pAddress, unsigned uSize )
 		{
@@ -488,20 +480,31 @@ namespace PX::sys
 			VirtualProtectEx( hTarget, pAddress, uSize, PAGE_NOACCESS, &dwBuffer );
 			VirtualFreeEx( hTarget, pAddress, uSize, MEM_DECOMMIT );
 		};
-
+		
 		// Wipe PE headers
 		fnWipeMemory( pImage, pDOSHeader->e_lfanew + sizeof pNTHeader + sizeof pSectionHeader * pNTHeader->FileHeader.NumberOfSections );
-
+		
 		// Wipe discardable sections
 		for ( WORD w = 0; w < pNTHeader->FileHeader.NumberOfSections; w++ )
 			if ( pSectionHeader[ w ].Characteristics & IMAGE_SCN_MEM_DISCARDABLE ) // If the section's characteristics are marked as discardable, wipe them and free the memory, and set it back to its' previous state.
 				fnWipeMemory( LPVOID( pSectionHeader[ w ].VirtualAddress ), pSectionHeader[ w ].SizeOfRawData );
-
+		
 		// Wipe our CallDLLThread function that we wrote in
 		fnWipeMemory( PVOID( static_cast< injection_info_t* >( pMemory ) + 1 ), uLoadDLLSize );
 
 		fnCleanup( false );
 		return true;
+	}
+
+	bool PX_API Inject( const LPVOID& pDLL, DWORD dwProcessID, injection_info_t* injInfo )
+	{
+		return Inject( pDLL, OpenProcess( PROCESS_ALL_ACCESS, FALSE, dwProcessID ), dwProcessID, injInfo );
+	}
+
+	bool PX_API Inject( const LPVOID& pDLL, const std::wstring& wstrExecutableName, injection_info_t* injInfo )
+	{
+		const auto dwProcessID = GetProcessID( wstrExecutableName );
+		return Inject( pDLL, OpenProcess( PROCESS_ALL_ACCESS, FALSE, dwProcessID ), dwProcessID, injInfo );
 	}
 
 	typedef struct

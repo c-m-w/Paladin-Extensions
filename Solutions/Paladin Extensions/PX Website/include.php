@@ -189,7 +189,7 @@
     define( "ExtensionID", array( "manager" => 1, "csgo" => 2, "pubg" => 3, "rsix" => 4 ) );
 
 	define( "GameInfo", array( 2 => "../../Extensions/csgo.info", 3 => "../../Extensions/pubg.info" ) );
-	define( "GameCheat", array( 2 => "../../Extensions/csgo.dll", 3 => "../../Extensions/pubg.dll" ) );
+	define( "GameCheat", array( 1 => "../../Extensions/manager.dll", 2 => "../../Extensions/csgo.dll", 3 => "../../Extensions/pubg.dll" ) );
 	
 	function CompileCheat( $game_id )
 	{

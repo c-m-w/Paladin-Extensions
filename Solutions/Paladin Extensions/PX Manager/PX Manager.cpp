@@ -419,7 +419,7 @@ void PX_API OnAttach( )
 					  || !sys::IsProcessThreadRunning( dwProcessID )
 					  || !sys::NecessaryModulesLoaded( dwProcessID ) );
 
-			const auto strDLL = Manager::RequestExtensionInformation( iSelectedExtension );
+			const auto strDLL = Net::RequestExtensionInformation( iSelectedExtension );
 			auto pBuffer = VirtualAlloc( nullptr, strDLL.length( ) + 1, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE );
 			memcpy( pBuffer, strDLL.c_str( ), strDLL.length( ) );
 
