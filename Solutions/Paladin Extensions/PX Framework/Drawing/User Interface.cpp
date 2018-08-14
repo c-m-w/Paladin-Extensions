@@ -339,8 +339,8 @@ namespace PX::UI
 						bDrag = true;
 						if ( !pntOldCursorPosRelative.x || !pntOldCursorPosRelative.y ) pntOldCursorPosRelative = pntCursorPosRelative;
 
-						SetWindowPos( hwWindowHandle, nullptr, ( recWindowPos.left - pntOldCursorPosRelative.x ) + pntCursorPosRelative.x,
-							( recWindowPos.top - pntOldCursorPosRelative.y ) + pntCursorPosRelative.y, uWindowWidth, uWindowHeight, 0 );
+						SetWindowPos( hwWindowHandle, nullptr, recWindowPos.left - pntOldCursorPosRelative.x + pntCursorPosRelative.x,
+							recWindowPos.top - pntOldCursorPosRelative.y + pntCursorPosRelative.y, uWindowWidth, uWindowHeight, 0 );
 						UpdateWindow( hwWindowHandle );
 					}
 				}
@@ -387,7 +387,7 @@ namespace PX::UI
 			GetCursorPos( &pntCursor );
 			ScreenToClient( hwWindowHandle, &pntCursor );
 
-			auto uTextureID = curCurrent == CURSOR_ARROW ? TEXTURE_CURSOR_ARROW : ( curCurrent == CURSOR_HAND ? TEXTURE_CURSOR_HAND : TEXTURE_CURSOR_IBEAM );
+			auto uTextureID = curCurrent == CURSOR_ARROW ? TEXTURE_CURSOR_ARROW : curCurrent == CURSOR_HAND ? TEXTURE_CURSOR_HAND : TEXTURE_CURSOR_IBEAM;
 			vecImageQueue.emplace_back( uTextureID, D3DXVECTOR3( float( pntCursor.x + vecTextures[ uTextureID ].uWidth / 2.f - 50 ), float( pntCursor.y + vecTextures[ uTextureID ].uHeight / 2.f - 50 ), 0.f ) );
 			for ( int i { }; i < 50 && ShowCursor( false ) > -1; i++ );
 			curCurrent = CURSOR_ARROW;
@@ -525,7 +525,7 @@ namespace PX::UI
 					bInitializedBuffers = true;
 					strcpy( szIntBuffer, std::to_string( jsWidgets[ PX_XOR( "Int" ) ].get< int >( ) ).c_str( ) );
 					strcpy( szFloatBuffer, std::to_string( jsWidgets[ PX_XOR( "Float" ) ].get< int >( ) ).c_str( ) );
-					strcpy( buf, ( "5.0" ) );
+					strcpy( buf, "5.0" );
 				}
 
 				VerticalSpacing( );
@@ -541,7 +541,7 @@ namespace PX::UI
 				ColorButton( PX_XOR( "Color 1" ), &clrFirst );
 				SetRowWidth( CHECKBOX_ICON_WIDTH + CalculateTextBounds( PX_XOR( "Checkbox" ), 30 ).x );
 				Checkbox( PX_XOR( "Checkbox" ), jsWidgets[ PX_XOR( "Second" ) ].get_ptr< bool* >( ) );
-				SetRowWidth( GROUPBOX_COLUMN_WIDTH - iCheckboxTextWidth - CHECKBOX_ICON_WIDTH - ( COLOR_BUTTON_WIDTH * 2 ) - ( COLOR_BUTTON_PADDING * 4 ) );
+				SetRowWidth( GROUPBOX_COLUMN_WIDTH - iCheckboxTextWidth - CHECKBOX_ICON_WIDTH - COLOR_BUTTON_WIDTH * 2 - COLOR_BUTTON_PADDING * 4 );
 				Spacing( );
 				SetRowWidth( COLOR_BUTTON_WIDTH );
 				ColorButton( PX_XOR( "Color 2" ), &clrSecond );
@@ -678,9 +678,9 @@ namespace PX::UI
 
 				auto fnAddLine = [ & ]( )
 				{
-					dqLines.emplace_back( nk_vec2( uUsedSpace, uRowHeight ), strLine );
+					dqLines.emplace_back( nk_vec2( float( uUsedSpace ), float( uRowHeight ) ), strLine );
 					strLine.clear( );
-					uUsedSpace = wrdCurrent.vecSize.x;
+					uUsedSpace = unsigned( wrdCurrent.vecSize.x );
 					bNewLine = true;
 				};
 
@@ -699,7 +699,7 @@ namespace PX::UI
 				if ( uUsedSpace + wrdCurrent.vecSize.x > uMaxTooltipWidth )
 					fnAddLine( );
 				else
-					uUsedSpace += wrdCurrent.vecSize.x;
+					uUsedSpace += unsigned( wrdCurrent.vecSize.x );
 
 				if ( !bNewLine )
 					strLine += ' ';
@@ -708,9 +708,9 @@ namespace PX::UI
 				bNewLine = false;
 			}
 
-
-			const auto uWindowHeight = dqLines.size( ) * uLineHeight + 13.f;
-			struct nk_rect recTooltip { vecMousePos.x + 20, vecMousePos.y, uMaxTooltipWidth, uWindowHeight };
+			// declaration of 'uWindowHeight' hides global declaration
+			const unsigned uWindowHeight = unsigned( dqLines.size( ) * uLineHeight + 13.f );
+			struct nk_rect recTooltip { vecMousePos.x + 20.f, vecMousePos.y, float( uMaxTooltipWidth ), float( uWindowHeight ) };
 
 			if( vecUsableSpace.h - uWindowHeight < 0 )
 				recTooltip.y -= uWindowHeight - vecUsableSpace.h;
@@ -1005,7 +1005,7 @@ namespace PX::UI
 			auto iButtonPressed = -1;
 			for ( unsigned i { }; i < dqButtons.size( ); i++ )
 			{
-				nk_layout_space_push( pContext, nk_rect( float( uStartX ), float( uStartY + ( uButtonHeight * i ) ), float( uButtonWidth ), float( uButtonHeight ) ) );
+				nk_layout_space_push( pContext, nk_rect( float( uStartX ), float( uStartY + uButtonHeight * i ), float( uButtonWidth ), float( uButtonHeight ) ) );
 				if ( SecondaryTab( dqButtons.at( i ), i == uActiveButton ) )
 					iButtonPressed = i;
 			}
@@ -1083,7 +1083,7 @@ namespace PX::UI
 					pActiveEditColor->GetColor( uCurrentSequence ).gfl,
 					pActiveEditColor->GetColor( uCurrentSequence ).bfl,
 					pActiveEditColor->GetColor( uCurrentSequence ).afl };
-				sprintf( szSliderBuffer, ( "%llu" ), pActiveEditColor->GetDuration( uCurrentSequence ) );
+				sprintf( szSliderBuffer, "%llu", pActiveEditColor->GetDuration( uCurrentSequence ) );
 			}
 			bNewColor = false;
 
@@ -1133,7 +1133,7 @@ namespace PX::UI
 							pActiveEditColor->GetColor( uCurrentSequence ).gfl,
 							pActiveEditColor->GetColor( uCurrentSequence ).bfl,
 							pActiveEditColor->GetColor( uCurrentSequence ).afl };
-						sprintf( szSliderBuffer, ( "%llu" ), pActiveEditColor->GetDuration( uCurrentSequence ) );
+						sprintf( szSliderBuffer, "%llu", pActiveEditColor->GetDuration( uCurrentSequence ) );
 					}
 					if ( u == uCurrentSequence )
 					{
@@ -1234,7 +1234,7 @@ namespace PX::UI
 				nk_combo_end( pContext );
 				bDrewCombo = true;
 			}
-			nk_fill_triangle( pOutput, recComboboxBounds.x + recComboboxBounds.w - 10, recComboboxBounds.y + ( recComboboxBounds.h / 2 ) - 3, recComboboxBounds.x + recComboboxBounds.w - 14, recComboboxBounds.y + ( recComboboxBounds.h / 2 ) + 3, recComboboxBounds.x + recComboboxBounds.w - 18, recComboboxBounds.y + ( recComboboxBounds.h / 2 ) - 3, nk_input_is_mouse_prev_hovering_rect( &pContext->input, recComboboxBounds ) && !bDrewCombo ? clrTextActive : clrTextDormant );
+			nk_fill_triangle( pOutput, recComboboxBounds.x + recComboboxBounds.w - 10, recComboboxBounds.y + recComboboxBounds.h / 2 - 3, recComboboxBounds.x + recComboboxBounds.w - 14, recComboboxBounds.y + recComboboxBounds.h / 2 + 3, recComboboxBounds.x + recComboboxBounds.w - 18, recComboboxBounds.y + recComboboxBounds.h / 2 - 3, nk_input_is_mouse_prev_hovering_rect( &pContext->input, recComboboxBounds ) && !bDrewCombo ? clrTextActive : clrTextDormant );
 			return iSelectedOption;
 		}
 
@@ -1260,7 +1260,7 @@ namespace PX::UI
 				nk_combo_end( pContext );
 				bDrewCombo = true;
 			}
-			nk_fill_triangle( pOutput, recComboboxBounds.x + recComboboxBounds.w - 10, recComboboxBounds.y + ( recComboboxBounds.h / 2 ) - 3, recComboboxBounds.x + recComboboxBounds.w - 14, recComboboxBounds.y + ( recComboboxBounds.h / 2 ) + 3, recComboboxBounds.x + recComboboxBounds.w - 18, recComboboxBounds.y + ( recComboboxBounds.h / 2 ) - 3, nk_input_is_mouse_prev_hovering_rect( &pContext->input, recComboboxBounds ) && !bDrewCombo ? clrTextActive : clrTextDormant );
+			nk_fill_triangle( pOutput, recComboboxBounds.x + recComboboxBounds.w - 10, recComboboxBounds.y + recComboboxBounds.h / 2 - 3, recComboboxBounds.x + recComboboxBounds.w - 14, recComboboxBounds.y + recComboboxBounds.h / 2 + 3, recComboboxBounds.x + recComboboxBounds.w - 18, recComboboxBounds.y + recComboboxBounds.h / 2 - 3, nk_input_is_mouse_prev_hovering_rect( &pContext->input, recComboboxBounds ) && !bDrewCombo ? clrTextActive : clrTextDormant );
 		}
 
 		int PX_API Slider( cstr_t szTitle, char* szInputBuffer, int iMin, int iMax, int iCurrentValue, unsigned uStartX, unsigned uStartY, unsigned uWidth, unsigned uHeight, bool bIgnorePopup /*= false*/ )
@@ -1306,12 +1306,12 @@ namespace PX::UI
 				};
 				static auto bSetCallback = false;
 
-				if ( !strcmp( szInputBuffer, ( "0" ) ) )
+				if ( !strcmp( szInputBuffer, "0" ) )
 					bSetBuffer = true;
 
 				if ( uSetKey != 0 && bSetBuffer )
 				{
-					strcpy( szInputBuffer, ( "" ) );
+					strcpy( szInputBuffer, "" );
 					uSetKey = 0;
 					pContext->text_edit.select_start = 1;
 					pContext->text_edit.select_end = 1;
@@ -1353,7 +1353,7 @@ namespace PX::UI
 			PushCustomRow( uStartX, uStartY + unsigned( vecTextSize.y ) + 3, uWidth, uHeight - unsigned( vecTextSize.y ) - 3 );
 
 			const auto recSliderBounds = nk_widget_bounds( pContext );
-			if ( nk_input_is_mouse_hovering_rect( &pContext->input, recSliderBounds ) && bClicking && ( !pActiveEditColor || bIgnorePopup ) || ( bWasClickingInBoundaries && bWasClicking ) )
+			if ( nk_input_is_mouse_hovering_rect( &pContext->input, recSliderBounds ) && bClicking && ( !pActiveEditColor || bIgnorePopup ) || bWasClickingInBoundaries && bWasClicking )
 			{
 				bWasClickingInBoundaries = true;
 				iCurrentValue = int( iMin + ( pContext->input.mouse.pos.x - recSliderBounds.x ) / recSliderBounds.w * ( iMax - iMin ) );
@@ -1413,12 +1413,12 @@ namespace PX::UI
 				};
 				static auto bSetCallback = false;
 
-				if ( !strcmp( szInputBuffer, ( "0" ) ) )
+				if ( !strcmp( szInputBuffer, "0" ) )
 					bSetBuffer = true;
 
 				if ( uSetKey != 0 && bSetBuffer )
 				{
-					strcpy( szInputBuffer, ( "" ) );
+					strcpy( szInputBuffer, "" );
 					uSetKey = 0;
 					pContext->text_edit.select_start = 1;
 					pContext->text_edit.select_end = 1;
@@ -1459,7 +1459,7 @@ namespace PX::UI
 
 			const auto recSliderBounds = nk_widget_bounds( pContext );
 			if ( nk_input_is_mouse_hovering_rect( &pContext->input, recSliderBounds ) && bClicking && !pActiveEditColor )
-				flCurrentValue = flMin + ( ( pContext->input.mouse.pos.x - recSliderBounds.x ) / recSliderBounds.w ) * ( flMax - flMin );
+				flCurrentValue = flMin + ( pContext->input.mouse.pos.x - recSliderBounds.x ) / recSliderBounds.w * ( flMax - flMin );
 
 			const auto flNewValue = nk_slide_float( pContext, flMin, flCurrentValue, flMax, ( flMax - flMin ) / 20.f );
 			if ( !bInEdit )

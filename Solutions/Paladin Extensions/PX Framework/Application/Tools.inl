@@ -26,7 +26,7 @@ namespace PX::Tools
 	{
 		return std::chrono::duration_cast< _t >( std::chrono::system_clock::now( ).time_since_epoch( ) ).count( );
 	}
-	template< typename _t > void PX_API Wait( moment_t mmtWaitLength )
+	template< typename _t > void PX_API Wait( moment_t mmtWaitLength = ULLONG_MAX )
 	{
 		std::this_thread::sleep_for( _t( mmtWaitLength ) );
 	}

@@ -1,12 +1,10 @@
 /// PX Loader.cpp
 
-#define PX_ENTRY_AS_WIN
+#define PX_ENTRY_AS_DLL
 #define PX_INSTANCE_ID L"Manager"
 #include <Jeremia-h/Entry Manager.hpp>
 
 #include "PX Manager.hpp"
-
-using namespace Tools;
 
 //void TestDebug( )
 //{
@@ -149,7 +147,7 @@ void PX_API UI::Manager::SetLayout( )
 
 			BeginRow( 30u, 3u, ROW_CUSTOM );
 			constexpr auto uButtonWidth = 150u;
-			PushCustomRow( unsigned( float( uWindowDimensions[ 0 ] ) / 2.f - ( uButtonWidth * 3.f ) / 2.f - 2.f ), unsigned( float( uWindowDimensions[ 1 ] ) - 140.f ), uButtonWidth, 30u );
+			PushCustomRow( unsigned( float( uWindowDimensions[ 0 ] ) / 2.f - uButtonWidth * 3.f / 2.f - 2.f ), unsigned( float( uWindowDimensions[ 1 ] ) - 140.f ), uButtonWidth, 30u );
 			if ( Button( EPosition::LEFT, PX_XOR( "FORUM" ), false ) )
 				OpenLink( PX_XOR( "https://www.paladin.rip/" ) );
 			PushCustomRow( unsigned( float( uWindowDimensions[ 0 ] ) / 2.f - uButtonWidth / 2.f ), unsigned( float( uWindowDimensions[ 1 ] ) - 140.f ), uButtonWidth, 30u );
@@ -175,9 +173,9 @@ void PX_API UI::Manager::SetLayout( )
 		static std::deque< cstr_t > dqTabs;
 		if ( !bSetTabs )
 		{
-			dqTabs.emplace_back( ( ICON_FA_SHARE_ALT_SQUARE "  EXTENSIONS" ) );
+			dqTabs.emplace_back( ICON_FA_SHARE_ALT_SQUARE "  EXTENSIONS" );
 			if ( bIsStaff )
-				dqTabs.emplace_back( ( ICON_FA_CODE_BRANCH "  DEVELOPER" ) ); // blank tab just to look COOL DXDXDXDXDXDXD
+				dqTabs.emplace_back( ICON_FA_CODE_BRANCH "  DEVELOPER" ); // blank tab just to look COOL DXDXDXDXDXDXD
 			bSetTabs = true;
 		}
 
@@ -244,9 +242,9 @@ void PX_API UI::Manager::SetLayout( )
 
 		BeginGroupbox( 27, 153, 370, 160, PX_XOR( "Extensions" ) );
 		{
-			vecImageQueue.emplace_back( TEXTURE_ICON_CSGO, D3DXVECTOR3( uImagePositions[ PX_EXTENSION_CSGO ][ 0 ], uImagePositions[ PX_EXTENSION_CSGO ][ 1 ], 0 ), bHoveringImage[ PX_EXTENSION_CSGO ] ? uHoverColor : uDormantColor );
-			vecImageQueue.emplace_back( TEXTURE_ICON_PUBG, D3DXVECTOR3( uImagePositions[ PX_EXTENSION_PUBG ][ 0 ], uImagePositions[ PX_EXTENSION_PUBG ][ 1 ], 0 ), bHoveringImage[ PX_EXTENSION_PUBG ] ? uHoverColor : uDormantColor );
-			vecImageQueue.emplace_back( TEXTURE_ICON_RSIX, D3DXVECTOR3( uImagePositions[ PX_EXTENSION_RSIX ][ 0 ], uImagePositions[ PX_EXTENSION_RSIX ][ 1 ], 0 ), bHoveringImage[ PX_EXTENSION_RSIX ] ? uHoverColor : uDormantColor );
+			vecImageQueue.emplace_back( TEXTURE_ICON_CSGO, D3DXVECTOR3( float( uImagePositions[ PX_EXTENSION_CSGO ][ 0 ] ), float( uImagePositions[ PX_EXTENSION_CSGO ][ 1 ] ), 0.f ), bHoveringImage[ PX_EXTENSION_CSGO ] ? uHoverColor : uDormantColor );
+			vecImageQueue.emplace_back( TEXTURE_ICON_PUBG, D3DXVECTOR3( float( uImagePositions[ PX_EXTENSION_PUBG ][ 0 ] ), float( uImagePositions[ PX_EXTENSION_PUBG ][ 1 ] ), 0.f ), bHoveringImage[ PX_EXTENSION_PUBG ] ? uHoverColor : uDormantColor );
+			vecImageQueue.emplace_back( TEXTURE_ICON_RSIX, D3DXVECTOR3( float( uImagePositions[ PX_EXTENSION_RSIX ][ 0 ] ), float( uImagePositions[ PX_EXTENSION_RSIX ][ 1 ] ), 0.f ), bHoveringImage[ PX_EXTENSION_RSIX ] ? uHoverColor : uDormantColor );
 		}
 		EndGroupbox( );
 
@@ -301,15 +299,15 @@ void PX_API UI::Manager::SetLayout( )
 
 		auto flBaseButtonPosition = float( uWindowDimensions[ 0 ] ) / 2.f;
 
-		PushCustomRow( unsigned( flBaseButtonPosition - ( uColumnWidth * 3.f ) / 2.f - 33.f ), 0.f, uColumnWidth, 25u );
+		PushCustomRow( unsigned( flBaseButtonPosition - uColumnWidth * 3.f / 2.f - 33.f ), 0, uColumnWidth, 25u );
 		if ( Button( EPosition::LEFT, PX_XOR( "MANAGER CHANGELOG" ), false, PX_XOR( "View the changelog for the manager." ) ) )
 			OpenLink( PX_XOR( "https://www.paladin.rip/extensions/1/updates/" ) );
 
-		PushCustomRow( unsigned( flBaseButtonPosition - uColumnWidth / 2.f - 30.f ), 0.f, uColumnWidth, 25u );
+		PushCustomRow( unsigned( flBaseButtonPosition - uColumnWidth / 2.f - 30.f ), 0, uColumnWidth, 25u );
 		if ( Button( EPosition::CENTER, ( strExtensionNames[ uSelectedExtension ] + PX_XOR( " CHANGELOG" ) ).c_str( ), false, PX_XOR( "View the changelog for an extension." ) ) )
 			OpenLink( ( PX_XOR( "https://www.paladin.rip/extensions/" ) + std::to_string( uSelectedExtension ) + PX_XOR( "/updates/" ) ).c_str( ) );
 
-		PushCustomRow( unsigned( flBaseButtonPosition + uColumnWidth / 2.f - 27.f ), 0.f, uColumnWidth, 25u );
+		PushCustomRow( unsigned( flBaseButtonPosition + uColumnWidth / 2.f - 27.f ), 0, uColumnWidth, 25u );
 		if ( Button( EPosition::RIGHT, ( PX_XOR( "LOAD " ) + strExtensionNames[ uSelectedExtension ] ).c_str( ), false, PX_XOR( "Load an extension." ) ) )
 			iSelectedExtension = uSelectedExtension;
 
@@ -359,7 +357,7 @@ void PX_API MonitorDetectionVectors( )
 	}
 }
 
-void PX_API OnLaunch( )
+void PX_API OnAttach( )
 {
 	for each ( auto wstrExecutable in wstrApplicationExecutableNames )
 		if ( !wstrExecutable.empty( ) )
@@ -377,32 +375,32 @@ void PX_API OnLaunch( )
 	// wait 1 sec so that our cool loading animation has some time to play :D
 	Wait( rand( ) % 1900 + 100 );
 
-	iLoginStatus = Manager::Login( );
+	iLoginStatus = Net::Login( );
 	switch ( iLoginStatus )
 	{
-		case Manager::LOGIN_STAFF_SUCCESS:
+		case Net::LOGIN_STAFF_SUCCESS:
 			bIsStaff = true;
 
-		case Manager::LOGIN_SUCCESS:
+		case Net::LOGIN_SUCCESS:
 		{
 			extInfo = Manager::RetrieveExtensionInformation( );
 			strLastLaunchTimes = Manager::RetrieveLaunchInformation( );
 
 			if ( extInfo.empty( ) )
 			{
-				iLoginStatus = Manager::LOGIN_CONNECTION_FAILURE;
+				iLoginStatus = Net::LOGIN_CONNECTION_FAILURE;
 				break;
 			}
 
 			for ( const auto& ext : extInfo )
 				if ( !ext.bInitialized ) // issue getting info, connection error or someone has messed with the loader to get here and the php session hasnt started
 				{
-					iLoginStatus = Manager::LOGIN_CONNECTION_FAILURE;
+					iLoginStatus = Net::LOGIN_CONNECTION_FAILURE;
 					break;
 				}
 			if ( strLastLaunchTimes == nullptr )
 			{
-				iLoginStatus = Manager::LOGIN_CONNECTION_FAILURE;
+				iLoginStatus = Net::LOGIN_CONNECTION_FAILURE;
 				break;
 			}
 
@@ -436,4 +434,9 @@ void PX_API OnLaunch( )
 
 	while ( !bShouldClose )
 		Wait( 10 );
+}
+
+void PX_API OnDetach( )
+{
+	
 }

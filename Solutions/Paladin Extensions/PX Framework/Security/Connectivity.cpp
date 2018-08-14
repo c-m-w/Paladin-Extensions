@@ -2,6 +2,8 @@
 
 #include "../PX Framework.hpp"
 
+using namespace PX::Files;
+
 namespace PX::Net
 {
 	std::string strCookieFile = PX_XOR( R"(\cookie.pxcon)" );
@@ -69,5 +71,88 @@ namespace PX::Net
 		dqPostData.emplace_back( strFileIdentifier, bInformation ? PX_XOR( "1" ) : PX_XOR( "0" ) );
 
 		return Request( strDownloadURL, dqPostData );
+	}
+
+	std::wstring wszCredentialsFile = PX_XOR( L"user.license" );
+
+	nlohmann::json jsCredentials = nlohmann::json::parse( PX_XOR( R"(
+	{
+		"id":"0",
+		"sk":"none"	
+	})" ) );
+
+	auto bAttemptedLicenceCreation = false;
+
+	bool PX_API CreateLicenseFile( )
+	{
+		bAttemptedLicenceCreation = true;
+
+		post_data_t dqPostData;
+		dqPostData.emplace_back( PX_XOR( "client" ), PX_XOR( "true" ) );
+
+		InitializeConnection( );
+		Cryptography::Initialize( );
+
+		auto strResponse = Request( strKeyURL, dqPostData );
+
+		CleanupConnection( );
+
+		if ( strResponse.empty( ) )
+			return false;
+
+		FileWrite( wszCredentialsFile, string_cast< std::wstring >( strResponse ), true, false );
+		return true;
+	}
+
+	ELogin PX_API Login( )
+	{
+		static auto bCreatedLicenseFile = false;
+		static auto bRecalled = false;
+		std::string strFile { };
+
+		if ( bRecalled )
+			bAttemptedLicenceCreation = false;
+
+		if ( !FileRead( wszCredentialsFile, strFile, true ) )
+			bCreatedLicenseFile = CreateLicenseFile( );
+
+		try
+		{
+			jsCredentials = nlohmann::json::parse( strFile );
+		}
+		catch ( nlohmann::detail::parse_error& )
+		{
+			bCreatedLicenseFile = CreateLicenseFile( );
+		}
+		catch ( nlohmann::detail::type_error& )
+		{
+			bCreatedLicenseFile = CreateLicenseFile( );
+		}
+
+		if ( jsCredentials[ strUserIDIdentifier ].is_null( ) ||
+			 jsCredentials[ strSecretKeyIdentifier ].is_null( ) )
+			bCreatedLicenseFile = CreateLicenseFile( );
+
+		if ( bAttemptedLicenceCreation )
+		{
+			if ( bCreatedLicenseFile && !bRecalled )
+			{
+				bRecalled = true;
+				return Login( );
+			}
+			sys::Delete( );
+			return LOGIN_INVALID_LICENSE_FILE;
+		}
+
+		post_data_t dqLoginData;
+		dqLoginData.emplace_back( strUserIDIdentifier, jsCredentials[ strUserIDIdentifier ].get< std::string >( ) );
+		dqLoginData.emplace_back( strSecretKeyIdentifier, jsCredentials[ strSecretKeyIdentifier ].get< std::string >( ) );
+		dqLoginData.emplace_back( strHardwareIdentifier, sys::GetSystemInfo( ).dump( ) );
+
+		InitializeConnection( );
+		Cryptography::Initialize( );
+
+		const auto strResponse = Request( strLoginURL, dqLoginData );
+		return strResponse.empty( ) ? LOGIN_CONNECTION_FAILURE : ELogin( std::stoi( strResponse ) );
 	}
 }

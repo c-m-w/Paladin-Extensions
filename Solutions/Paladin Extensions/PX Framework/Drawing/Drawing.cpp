@@ -18,7 +18,7 @@ namespace PX::Drawing
 			return;
 
 		vertex_t* pVertices;
-		void* pIndices;
+
 		if ( pVertexBuffer->Lock( NULL, NULL, reinterpret_cast< void** >( &pVertices ), NULL ) != D3D_OK )
 		{
 			pVertexBuffer->Unlock( );

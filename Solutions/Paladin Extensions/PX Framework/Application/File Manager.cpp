@@ -8,14 +8,23 @@ namespace PX::Files
 {
 	std::wstring PX_API GetDirectory( unsigned uEscapeLevels )
 	{
-		auto wszBuffer = static_cast< wchar_t* >( malloc( MAX_PATH ) );
-		GetModuleFileName( nullptr, wszBuffer, MAX_PATH );
-		std::wstring wstrDirectory = wszBuffer;
+		std::wstring wstrDirectory;
+		wstrDirectory.resize( MAX_PATH );
+		GetModuleFileName( nullptr, &wstrDirectory[ 0 ], MAX_PATH );
 
 		for ( unsigned i = 0u; i <= uEscapeLevels; i++ )
 			wstrDirectory = wstrDirectory.substr( 0, wstrDirectory.find_last_of( L'\\' ) );
 
 		return wstrDirectory + L'\\';
+	}
+
+	std::wstring PX_API GetCurrentExecutableName( )
+	{
+		std::wstring wstrDirectory;
+		wstrDirectory.resize( MAX_PATH );
+		GetModuleFileName( nullptr, &wstrDirectory[ 0 ], MAX_PATH );
+
+		return wstrDirectory.substr( wstrDirectory.find_last_of( L'\\' ) + 1, wstrDirectory.length( ) );
 	}
 
 	namespace Resources
