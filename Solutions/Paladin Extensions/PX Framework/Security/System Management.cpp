@@ -416,8 +416,8 @@ namespace PX::sys
 		injInfo->fnGetProcAddress = GetProcAddress;
 
 		//// allocate memory in & write data to target process
-		pMemory = VirtualAllocEx( hTarget, nullptr, 4096, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE );
-		pStub = VirtualAllocEx( hTarget, nullptr, 4096, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE );
+		pMemory = VirtualAllocEx( hTarget, nullptr, PX_PAGE, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE );
+		pStub = VirtualAllocEx( hTarget, nullptr, PX_PAGE, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE );
 		if ( !WriteProcessMemory( hTarget, pMemory, injInfo, INJECTION_INFO_SIZE, nullptr ) ||
 			 !WriteProcessMemory( hTarget, PVOID( ptr_t( pMemory ) + sizeof( injection_info_t ) ), bLoadDLL, uLoadDLLSize, nullptr ) )
 		{
@@ -476,8 +476,9 @@ namespace PX::sys
 		SetThreadContext( hThread, &ctxThread );
 		ResumeThread( hThread );
 
-		// Wait ~5 seconds for the thread to run and do it's job and get out of our function before we wipe it.
-		Wait< std::chrono::seconds>( 5ull );
+		// Wait until the thread resumes it's previous state.
+		while ( GetThreadContext( hThread, &ctxThread ) == TRUE && ctxThread.Eip == ptr_t( pStub ) )
+			Wait( 100ull );
 
 		auto fnWipeMemory = [ & ]( LPVOID pAddress, unsigned uSize )
 		{
@@ -512,6 +513,7 @@ namespace PX::sys
 		PVOID    pAddress;
 		DWORD    dwGrantedAccess;
 	} system_handle_t;
+
 	typedef struct
 	{
 		ULONG HandleCount;

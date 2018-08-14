@@ -72,6 +72,8 @@ namespace PX::Types
 
 	byte_t SColor::GetAlpha( ) const
 	{
+		if ( pColor == nullptr )
+			return UCHAR_MAX;
 		return pColor->b[ COLOR_ALPHA ];
 	}
 

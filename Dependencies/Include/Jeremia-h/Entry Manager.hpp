@@ -7,6 +7,7 @@
 #elif defined( PX_ENTRY_AS_WIN ) && !defined( PX_ENTRY_AS_DLL ) && !defined( PX_ENTRY_AS_NONE )
 
 #include <Windows.h>
+#include <stdio.h>
 
 namespace PX
 {
@@ -15,8 +16,6 @@ namespace PX
 
 extern void OnLaunch( );
 
-namespace
-{
 #if defined( UNICODE )
 	int APIENTRY wWinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine, _In_ int nCmdShow )
 #else
@@ -51,7 +50,6 @@ namespace
 
 		return 0;
 	}
-}
 
 #elif !defined( PX_ENTRY_AS_WIN ) && defined( PX_ENTRY_AS_DLL ) && !defined( PX_ENTRY_AS_NONE )
 
@@ -75,8 +73,6 @@ inline void Detach( )
 	FreeLibraryAndExitThread( PX::hinstDLL, 0 );
 }
 
-namespace
-{
 	DWORD WINAPI ThreadProc( _In_ LPVOID lpParameter )
 	{
 #if defined( _DEBUG )
@@ -130,7 +126,6 @@ namespace
 				return FALSE;
 		}
 	}
-}
 
 #elif !defined( PX_ENTRY_AS_WIN ) && !defined( PX_ENTRY_AS_DLL ) && defined( PX_ENTRY_AS_NONE )
 #pragma message( "warning PX1: You must manage standard console output yourself." )

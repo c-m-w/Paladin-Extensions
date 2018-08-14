@@ -5,7 +5,6 @@
 #include <Jeremia-h/Entry Manager.hpp>
 
 #include "PX Manager.hpp"
-#include "../Internal Testing/Internal Testing.hpp"
 
 using namespace Tools;
 
@@ -221,7 +220,7 @@ void PX_API UI::Manager::SetLayout( )
 				}
 			}
 
-		const static auto uHoverColor = D3DCOLOR_ARGB( 255, 255, 255, 255 ),
+		constexpr auto uHoverColor = D3DCOLOR_ARGB( 255, 255, 255, 255 ),
 			uDormantColor = D3DCOLOR_ARGB( 200, 200, 200, 200 );
 
 		const static color_t clrText { 255, 255, 255, 255 },
