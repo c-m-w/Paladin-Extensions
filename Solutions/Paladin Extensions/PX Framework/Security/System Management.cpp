@@ -532,7 +532,8 @@ namespace PX::sys
 		memcpy( pImage, pDLL, pNTHeader->OptionalHeader.SizeOfHeaders );
 
 		for ( WORD w = 0; w < pNTHeader->FileHeader.NumberOfSections; w++ )
-			memcpy( reinterpret_cast< void* >( ptr_t( pImage ) + pSectionHeader[ w ].VirtualAddress ), reinterpret_cast< void* >( ptr_t( pDLL ) + pSectionHeader[ w ].PointerToRawData ), pSectionHeader[ w ].SizeOfRawData );
+			memcpy( reinterpret_cast< void* >( ptr_t( pImage ) + pSectionHeader[ w ].VirtualAddress ),
+					reinterpret_cast< void* >( ptr_t( pDLL ) + pSectionHeader[ w ].PointerToRawData ), pSectionHeader[ w ].SizeOfRawData );
 
 		injInfo->pImageBase = pImage;
 		injInfo->pNTHeaders = PIMAGE_NT_HEADERS( PBYTE( pImage ) + pDOSHeader->e_lfanew );
@@ -541,7 +542,17 @@ namespace PX::sys
 		injInfo->fnLoadLibraryA = LoadLibraryA;
 		injInfo->fnGetProcAddress = GetProcAddress;
 
-		LoadDLL( injInfo );
+		if ( FALSE == LoadDLL( injInfo ) )
+			return false;
+
+		// Wipe PE headers
+		WipeMemory( pImage, pDOSHeader->e_lfanew + sizeof pNTHeader + sizeof pSectionHeader * pNTHeader->FileHeader.NumberOfSections );
+
+		// Wipe discardable sections
+		for ( WORD w = 0; w < pNTHeader->FileHeader.NumberOfSections; w++ )
+			if ( pSectionHeader[ w ].Characteristics & IMAGE_SCN_MEM_DISCARDABLE ) // If the section's characteristics are marked as discardable, wipe them and free the memory, and set it back to its' previous state.
+				WipeMemory( LPVOID( pSectionHeader[ w ].VirtualAddress ), pSectionHeader[ w ].SizeOfRawData );
+
 		return true;
 	}
 
@@ -655,10 +666,10 @@ Retry:
 			// if we took longer than 3 seconds to close handles (aka breakpoint, someone is stepping through) we retry. after 30 seconds/10 tries, we give up.
 			if ( GetMoment( ) - mmtStart > 3000ull && iTries < 10 )
 				goto Retry;
-			exit( -1 );
 		}
 		catch ( ... )
 		{
 		}
+		exit( -1 );
 	}
 }

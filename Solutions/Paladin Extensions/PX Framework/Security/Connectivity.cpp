@@ -140,7 +140,6 @@ namespace PX::Net
 				bRecalled = true;
 				return Login( );
 			}
-			sys::Delete( );
 			return LOGIN_INVALID_LICENSE_FILE;
 		}
 
@@ -186,6 +185,7 @@ namespace PX::Net
 
 	bool Heartbeat( )
 	{
+		// assert no debugger
 		// assert appdata data.px is there
 		// assert login
 		// assert anything else
