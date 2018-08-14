@@ -2,9 +2,6 @@
 
 #pragma once
 
-#if defined PX_NO_COMPILE_DEFINITIONS
-#else
-
 // Compiler
 #pragma warning( disable: 4098 4099 4100 4307 4309 4996 )
 #define _CRT_SECURE_NO_WARNINGS
@@ -32,8 +29,6 @@
 #define NK_D3D9_IMPLEMENTATION
 #else
 #define NK_PRIVATE
-#endif
-
 #endif
 
 #if defined _DEBUG
@@ -66,6 +61,9 @@
 #define px_abstract virtual
 /** \brief Identifies an interface. */
 #define px_interface class
+
+/** \brief Path to appdata directory */
+#define PX_APPDATA ( std::wstring( _wgetenv( PX_XOR( L"APPDATA" ) ) ) + PX_XOR( L"\\PX\\" ) )
 
 /** \brief Maximum managed keys. */
 #define PX_MAX_KEY 256

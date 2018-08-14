@@ -6,8 +6,9 @@ namespace PX::Files
 {
 	// INFO: Gets directory with specified directories upward
 	// PARAM: Levels to escape
-	std::wstring PX_API GetDirectory( unsigned = PX_DEPENDENCIES_ESCAPE );
-	std::wstring PX_API GetCurrentExecutableName( );
+	std::wstring PX_API GetExecutablePath( );
+	std::wstring PX_API GetExecutableDirectory( unsigned = PX_DEPENDENCIES_ESCAPE );
+	std::wstring PX_API GetExecutableName( );
 
 	namespace Resources
 	{
@@ -51,6 +52,6 @@ namespace PX::Files
 		bool PX_API ChangeConfiguration( wcstr_t );
 	};
 
-	bool PX_API FileRead( std::wstring wstrPath, std::string& strData, bool bRelativePath, bool bBase64 = true );
+	bool PX_API FileRead( std::wstring wstrPath, std::wstring& wstrData, bool bRelativePath, bool bBase64 = true );
 	bool PX_API FileWrite( std::wstring wstrPath, const std::wstring& wstrData, bool bRelativePath, bool bBase64 = true );
 }

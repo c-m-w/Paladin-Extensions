@@ -60,4 +60,6 @@ namespace PX::Net
 	/**	\return Login status. */
 	ELogin PX_API Login( );
 	std::string PX_API RequestExtensionInformation( unsigned uExtensionID );
+
+	bool PX_API Heartbeat( );
 }

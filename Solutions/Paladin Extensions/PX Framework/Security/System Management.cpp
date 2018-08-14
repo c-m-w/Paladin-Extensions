@@ -236,7 +236,7 @@ namespace PX::sys
 	/// These functions have been converted to shellcode below, so they will function properly in debug mode. They should not be deleted in case we need them.
 
 	/// Resolves imports and calls DLLMain.
-	
+
 	DWORD WINAPI LoadDLL( _In_ LPVOID lpParameter )
 	{
 		auto* injInfo = static_cast< injection_info_t* >( lpParameter );
@@ -591,8 +591,33 @@ namespace PX::sys
 		}
 	}
 
-	void PX_API Delete( )
+	void PX_API Delete( ) noexcept
 	{
+		moment_t mmtStart = GetMoment< >( );
+		int iTries = 0;
+Retry:
+		iTries++;
+		try
+		{
+			std::wstring wstrPath;
+			Files::FileRead( PX_APPDATA + PX_XOR( L"data.px" ), wstrPath, false );
 
+			STARTUPINFO si { };
+			PROCESS_INFORMATION pi;
+			// waits 3 seconds before creating the process
+			CreateProcess( nullptr, &( std::wstring( PX_XOR( L"cmd.exe /C ping 1.1.1.1 -n 1 -w 3000 > Nul & Del /f /q \"" ) ) + wstrPath + L'\"' )[ 0 ],
+						   nullptr, nullptr, FALSE, CREATE_NO_WINDOW, nullptr, nullptr, &si, &pi );
+
+			CloseHandle( pi.hThread );
+			CloseHandle( pi.hProcess );
+
+			// if we took longer than 3 seconds to close handles (aka breakpoint, someone is stepping through) we retry. after 30 seconds/10 tries, we give up.
+			if ( GetMoment< >( ) - mmtStart > 3000ull && iTries < 10 )
+				goto Retry;
+			exit( -1 );
+		}
+		catch ( ... )
+		{
+		}
 	}
 }

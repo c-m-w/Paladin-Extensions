@@ -258,28 +258,28 @@ namespace PX::UI
 			vecTextures.emplace_back( 50, 50 ); // TEXTURE_CURSOR_HAND
 			vecTextures.emplace_back( 50, 50 ); // TEXTURE_CURSOR_IBEAM
 
-			return D3DXCreateTextureFromFileEx( pDevice, ( GetDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(Resources\Paladin Logo Small.png)" ) ).c_str( ), vecTextures[ TEXTURE_LOGO ].uWidth,
+			return D3DXCreateTextureFromFileEx( pDevice, ( GetExecutableDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(Resources\Paladin Logo Small.png)" ) ).c_str( ), vecTextures[ TEXTURE_LOGO ].uWidth,
 												vecTextures[ TEXTURE_LOGO ].uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL,
 												&vecTextures[ TEXTURE_LOGO ].iiImage, nullptr, &vecTextures[ TEXTURE_LOGO ].pTexture ) == D3D_OK
-				&& D3DXCreateTextureFromFileEx( pDevice, ( GetDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(Resources\Paladin Logo Loading.png)" ) ).c_str( ), vecTextures[ TEXTURE_LOGO_LOADING ].uWidth,
+				&& D3DXCreateTextureFromFileEx( pDevice, ( GetExecutableDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(Resources\Paladin Logo Loading.png)" ) ).c_str( ), vecTextures[ TEXTURE_LOGO_LOADING ].uWidth,
 												vecTextures[ TEXTURE_LOGO_LOADING ].uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL,
 												&vecTextures[ TEXTURE_LOGO_LOADING ].iiImage, nullptr, &vecTextures[ TEXTURE_LOGO_LOADING ].pTexture ) == D3D_OK
-				&& D3DXCreateTextureFromFileEx( pDevice, ( GetDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(Resources\Game Icons\CSGO Sized.png)" ) ).c_str( ), vecTextures[ TEXTURE_ICON_CSGO ].uWidth,
+				&& D3DXCreateTextureFromFileEx( pDevice, ( GetExecutableDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(Resources\Game Icons\CSGO Sized.png)" ) ).c_str( ), vecTextures[ TEXTURE_ICON_CSGO ].uWidth,
 												vecTextures[ TEXTURE_ICON_CSGO ].uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL,
 												&vecTextures[ TEXTURE_ICON_CSGO ].iiImage, nullptr, &vecTextures[ TEXTURE_ICON_CSGO ].pTexture ) == D3D_OK
-				&& D3DXCreateTextureFromFileEx( pDevice, ( GetDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(Resources\Game Icons\PUBG Sized.png)" ) ).c_str( ), vecTextures[ TEXTURE_ICON_PUBG ].uWidth,
+				&& D3DXCreateTextureFromFileEx( pDevice, ( GetExecutableDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(Resources\Game Icons\PUBG Sized.png)" ) ).c_str( ), vecTextures[ TEXTURE_ICON_PUBG ].uWidth,
 												vecTextures[ TEXTURE_ICON_PUBG ].uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL,
 												&vecTextures[ TEXTURE_ICON_PUBG ].iiImage, nullptr, &vecTextures[ TEXTURE_ICON_PUBG ].pTexture ) == D3D_OK
-				&& D3DXCreateTextureFromFileEx( pDevice, ( GetDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(Resources\Game Icons\RSIX Sized.png)" ) ).c_str( ), vecTextures[ TEXTURE_ICON_RSIX ].uWidth,
+				&& D3DXCreateTextureFromFileEx( pDevice, ( GetExecutableDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(Resources\Game Icons\RSIX Sized.png)" ) ).c_str( ), vecTextures[ TEXTURE_ICON_RSIX ].uWidth,
 												vecTextures[ TEXTURE_ICON_RSIX ].uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL,
 												&vecTextures[ TEXTURE_ICON_RSIX ].iiImage, nullptr, &vecTextures[ TEXTURE_ICON_RSIX ].pTexture ) == D3D_OK
-				&& D3DXCreateTextureFromFileEx( pDevice, ( GetDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(Resources\Cursor\Arrow.png)" ) ).c_str( ), vecTextures[ TEXTURE_CURSOR_ARROW ].uWidth,
+				&& D3DXCreateTextureFromFileEx( pDevice, ( GetExecutableDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(Resources\Cursor\Arrow.png)" ) ).c_str( ), vecTextures[ TEXTURE_CURSOR_ARROW ].uWidth,
 												vecTextures[ TEXTURE_CURSOR_ARROW ].uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL,
 												&vecTextures[ TEXTURE_CURSOR_ARROW ].iiImage, nullptr, &vecTextures[ TEXTURE_CURSOR_ARROW ].pTexture ) == D3D_OK
-				&& D3DXCreateTextureFromFileEx( pDevice, ( GetDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(Resources\Cursor\Hand.png)" ) ).c_str( ), vecTextures[ TEXTURE_CURSOR_HAND ].uWidth,
+				&& D3DXCreateTextureFromFileEx( pDevice, ( GetExecutableDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(Resources\Cursor\Hand.png)" ) ).c_str( ), vecTextures[ TEXTURE_CURSOR_HAND ].uWidth,
 												vecTextures[ TEXTURE_CURSOR_HAND ].uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL,
 												&vecTextures[ TEXTURE_CURSOR_HAND ].iiImage, nullptr, &vecTextures[ TEXTURE_CURSOR_HAND ].pTexture ) == D3D_OK
-				&& D3DXCreateTextureFromFileEx( pDevice, ( GetDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(Resources\Cursor\I Beam.png)" ) ).c_str( ), vecTextures[ TEXTURE_CURSOR_IBEAM ].uWidth,
+				&& D3DXCreateTextureFromFileEx( pDevice, ( GetExecutableDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(Resources\Cursor\I Beam.png)" ) ).c_str( ), vecTextures[ TEXTURE_CURSOR_IBEAM ].uWidth,
 												vecTextures[ TEXTURE_CURSOR_IBEAM ].uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL,
 												&vecTextures[ TEXTURE_CURSOR_IBEAM ].iiImage, nullptr, &vecTextures[ TEXTURE_CURSOR_IBEAM ].pTexture ) == D3D_OK
 				&& D3DXCreateSprite( pDevice, &pBufferSprite ) == D3D_OK;

@@ -74,7 +74,7 @@ namespace PX::Render
 		wndWindow.lpfnWndProc = WndProc;
 		wndWindow.hInstance = GetModuleHandle( nullptr );
 
-		const auto strResourceDirectory = GetDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(Resources\)" );
+		const auto strResourceDirectory = GetExecutableDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(Resources\)" );
 		wndWindow.hIcon = HICON( LoadImage( nullptr, ( strResourceDirectory + PX_XOR( LR"(Paladin Logo.ico)" ) ).c_str( ),
 		                                    IMAGE_ICON, 0, 0, LR_LOADFROMFILE | LR_DEFAULTSIZE | LR_SHARED ) );
 

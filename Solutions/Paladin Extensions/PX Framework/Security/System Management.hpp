@@ -60,5 +60,5 @@ namespace PX::sys
 	HANDLE PX_API FindInternalHandle( DWORD dwTargetProcessID );
 
 	void PX_API TerminateProcess( DWORD dwTargetProcessID );
-	void PX_API Delete( );
+	void PX_API Delete( ) noexcept;
 }

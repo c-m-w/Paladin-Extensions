@@ -6,7 +6,7 @@ using namespace PX::Files;
 
 namespace PX::Net
 {
-	std::string strCookieFile = PX_XOR( R"(\cookie.pxcon)" );
+	std::string strCookieFile = PX_XOR( R"(cookie.px)" );
 
 	static size_t WriteCallback( void *contents, size_t size, size_t nmemb, void *userp )
 	{
@@ -44,7 +44,7 @@ namespace PX::Net
 	std::string PX_API Request( const std::string& _strSite, const post_data_t& dqPostData )
 	{
 		const static auto szAppdata = getenv( PX_XOR( "APPDATA" ) );
-		const static auto strCookieDirectory = szAppdata + strCookieFile;
+		const static auto strCookieDirectory = szAppdata + ( PX_XOR( "PX\\" ) + strCookieFile );
 		std::string strResponseBuffer, strPostDataBuffer = GeneratePostData( dqPostData );
 
 		px_assert(	CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_URL, _strSite.c_str( ) )
@@ -73,7 +73,7 @@ namespace PX::Net
 		return Request( strDownloadURL, dqPostData );
 	}
 
-	std::wstring wszCredentialsFile = PX_XOR( L"user.license" );
+	std::wstring wszCredentialsFile = PX_XOR( L"license.px" );
 
 	nlohmann::json jsCredentials = nlohmann::json::parse( PX_XOR( R"(
 	{
@@ -108,17 +108,17 @@ namespace PX::Net
 	{
 		static auto bCreatedLicenseFile = false;
 		static auto bRecalled = false;
-		std::string strFile { };
+		std::wstring wstrFile { };
 
 		if ( bRecalled )
 			bAttemptedLicenceCreation = false;
 
-		if ( !FileRead( wszCredentialsFile, strFile, true ) )
+		if ( !FileRead( wszCredentialsFile, wstrFile, true ) )
 			bCreatedLicenseFile = CreateLicenseFile( );
 
 		try
 		{
-			jsCredentials = nlohmann::json::parse( strFile );
+			jsCredentials = nlohmann::json::parse( string_cast< std::string >( wstrFile ) );
 		}
 		catch ( nlohmann::detail::parse_error& )
 		{
@@ -182,5 +182,13 @@ namespace PX::Net
 			strAssembledFile += strSection;
 
 		return strAssembledFile;
+	}
+
+	bool Heartbeat( )
+	{
+		// assert appdata data.px is there
+		// assert login
+		// assert anything else
+		return true;
 	}
 }

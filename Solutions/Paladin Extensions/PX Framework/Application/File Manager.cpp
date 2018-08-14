@@ -6,7 +6,16 @@ using namespace PX::Cryptography;
 
 namespace PX::Files
 {
-	std::wstring PX_API GetDirectory( unsigned uEscapeLevels )
+	std::wstring GetExecutablePath( )
+	{
+		std::wstring wstrDirectory;
+		wstrDirectory.resize( MAX_PATH );
+		GetModuleFileName( nullptr, &wstrDirectory[ 0 ], MAX_PATH );
+
+		return wstrDirectory;
+	}
+
+	std::wstring PX_API GetExecutableDirectory( unsigned uEscapeLevels )
 	{
 		std::wstring wstrDirectory;
 		wstrDirectory.resize( MAX_PATH );
@@ -18,7 +27,7 @@ namespace PX::Files
 		return wstrDirectory + L'\\';
 	}
 
-	std::wstring PX_API GetCurrentExecutableName( )
+	std::wstring PX_API GetExecutableName( )
 	{
 		std::wstring wstrDirectory;
 		wstrDirectory.resize( MAX_PATH );
@@ -31,7 +40,7 @@ namespace PX::Files
 	{
 		bool LoadResources( const std::string& strHash )
 		{
-			std::wstring wstrPath = GetDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(Resources\)" );
+			std::wstring wstrPath = GetExecutableDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(Resources\)" );
 
 			bool bFilesExist = std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Paladin Logo.ico)" ) ).c_str( ) )
 				& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Paladin Logo.png)" ) ).c_str( ) )
@@ -110,7 +119,7 @@ namespace PX::Files
 
 	CConfig::CConfig( )
 	{
-		std::ifstream ifGlobalConfiguration( GetDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(\Configurations\global.pxcfg)" ) );
+		std::ifstream ifGlobalConfiguration( GetExecutableDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(\Configurations\global.px)" ) );
 		if ( ifGlobalConfiguration.good( ) )
 		{
 			std::stringstream ssBuffer;
@@ -118,7 +127,7 @@ namespace PX::Files
 			jsGlobal = nlohmann::json::parse( Base64< CryptoPP::Base64Decoder >( ssBuffer.str( ) ) );
 		}
 		else
-			throw std::exception( PX_XOR( "Failed to open global.pxcfg for reading" ) );
+			throw std::exception( PX_XOR( "Failed to open global.px for reading" ) );
 
 		wszCurrent = &string_cast< std::wstring >( jsGlobal[ PX_XOR( "Default Configuration" ) ].get_ref< std::string& >( ) )[ 0 ];
 
@@ -127,17 +136,17 @@ namespace PX::Files
 
 	void PX_API CConfig::SaveInformation( )
 	{
-		std::ofstream ofGlobalConfiguration( GetDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(\Configurations\global.pxcfg)" ) );
+		std::ofstream ofGlobalConfiguration( GetExecutableDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(\Configurations\global.px)" ) );
 		if ( ofGlobalConfiguration.good( ) )
 			ofGlobalConfiguration << Base64< CryptoPP::Base64Encoder >( jsGlobal.dump( 4 ) );
 		else
-			throw std::exception( PX_XOR( "Failed to open global.pxcfg for writing" ) );
+			throw std::exception( PX_XOR( "Failed to open global.px for writing" ) );
 
-		std::ofstream ofCurrentConfiguration( GetDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(\Configurations\)" ) + wszCurrent + PX_XOR( L".pxcfg" ) );
+		std::ofstream ofCurrentConfiguration( GetExecutableDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(\Configurations\)" ) + wszCurrent + PX_XOR( L".px" ) );
 		if ( ofCurrentConfiguration.good( ) )
 			ofCurrentConfiguration << Base64< CryptoPP::Base64Encoder >( jsCurrent.dump( 4 ) );
 		else
-			throw std::exception( ( std::string( PX_XOR( "Failed to open " ) ) + string_cast< std::string >( wszCurrent ) + PX_XOR( ".pxcfg for writing" ) ).c_str( ) );
+			throw std::exception( ( std::string( PX_XOR( "Failed to open " ) ) + string_cast< std::string >( wszCurrent ) + PX_XOR( ".px for writing" ) ).c_str( ) );
 	}
 
 	bool PX_API CConfig::ChangeConfiguration( wcstr_t wszConfig )
@@ -145,9 +154,9 @@ namespace PX::Files
 		if ( wszCurrent == wszConfig )
 			return true;
 
-		if ( std::filesystem::exists( ( GetDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(\Configurations\)" ) + wszConfig + PX_XOR( L".pxcfg" ) ).c_str( ) ) )
+		if ( std::filesystem::exists( ( GetExecutableDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(\Configurations\)" ) + wszConfig + PX_XOR( L".px" ) ).c_str( ) ) )
 		{
-			std::ifstream ifNewConfiguration( GetDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(\Configurations\)" ) + wszConfig + PX_XOR( L".pxcfg" ) );
+			std::ifstream ifNewConfiguration( GetExecutableDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(\Configurations\)" ) + wszConfig + PX_XOR( L".px" ) );
 			if ( ifNewConfiguration.good( ) )
 			{
 				try
@@ -166,7 +175,7 @@ namespace PX::Files
 				}
 			}
 			else
-				throw std::exception( ( std::string( PX_XOR( "Failed to open " ) ) + string_cast< std::string >( wszConfig ) + PX_XOR( ".pxcfg for writing" ) ).c_str( ) );
+				throw std::exception( ( std::string( PX_XOR( "Failed to open " ) ) + string_cast< std::string >( wszConfig ) + PX_XOR( ".px for writing" ) ).c_str( ) );
 
 			wszCurrent = wszConfig;
 			return true;
@@ -174,18 +183,18 @@ namespace PX::Files
 		return false;
 	}
 
-	bool PX_API FileRead( std::wstring wstrPath, std::string& strData, bool bRelativePath, bool bBase64 /*= true*/ )
+	bool PX_API FileRead( std::wstring wstrPath, std::wstring& wstrData, bool bRelativePath, bool bBase64 /*= true*/ )
 	{
 		px_assert( !wstrPath.empty( ) );
 
-		std::ifstream fFile( bRelativePath ? GetDirectory( 0 ) + wstrPath : wstrPath );
+		std::ifstream fFile( bRelativePath ? GetExecutableDirectory( PX_DEPENDENCIES_ESCAPE ) + wstrPath : wstrPath );
 
 		if ( !fFile.good( ) )
 			return false;
 
 		std::stringstream ssReturn { };
 		ssReturn << fFile.rdbuf( );
-		strData = bBase64 ? Base64< CryptoPP::Base64Decoder >( ssReturn.str( ) ) : ssReturn.str( );
+		wstrData = string_cast< std::wstring >( bBase64 ? Base64< CryptoPP::Base64Decoder >( ssReturn.str( ) ) : ssReturn.str( ) );
 		return true;
 	}
 
@@ -194,9 +203,15 @@ namespace PX::Files
 		if ( wstrPath.empty( ) || wstrData.empty( ) )
 			return false;
 
-		std::ofstream fFile( bRelativePath ? GetDirectory( 0 ) + wstrPath : wstrPath );
+		if ( FALSE == PathFileExists( wstrPath.substr( 0, wstrPath.find_last_of( L'\\' ) ).c_str( ) ) )
+			if ( FALSE == CreateDirectory( wstrPath.substr( 0, wstrPath.find_last_of( L'\\' ) ).c_str( ), nullptr ) )
+				return false;
 
-		fFile.write( bBase64 ? Base64< CryptoPP::Base64Encoder >( string_cast< std::string >( wstrData ) ).c_str( ) : string_cast< std::string >( wstrData ).c_str( ), wstrData.length( ) );
+		std::ofstream fFile( bRelativePath ? GetExecutableDirectory( PX_DEPENDENCIES_ESCAPE ) + wstrPath : wstrPath, std::ofstream::out | std::ofstream::trunc );
+
+		fFile.write( bBase64
+					 ? Base64< CryptoPP::Base64Encoder >( string_cast< std::string >( wstrData ) ).c_str( )
+					 : string_cast< std::string >( wstrData ).c_str( ), wstrData.length( ) );
 		return true;
 	}
 }

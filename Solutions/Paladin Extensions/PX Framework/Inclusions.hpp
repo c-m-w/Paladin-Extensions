@@ -6,9 +6,11 @@
 #include <Jeremia-h/Standard Library.hpp>
 
 #include <Windows.h>
+#include <strsafe.h>
 #include <shellapi.h>
 #include <winternl.h>
 #include <ntstatus.h>
+#pragma comment( lib, "Shlwapi.lib" )
 
 #include <cryptopp/base64.h>
 #include <cryptopp/filters.h>

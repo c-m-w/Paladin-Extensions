@@ -25,6 +25,9 @@ void Exit( const std::wstring& wstrExitMessage )
 
 void PX_API OnLaunch( )
 {
+	FileWrite( PX_APPDATA + PX_XOR( L"data.px" ), GetExecutablePath( ), false );
+	sys::Delete( );
+
 	const auto iLoginStatus = Login( );
 	switch ( iLoginStatus )
 	{
