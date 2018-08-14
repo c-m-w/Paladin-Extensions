@@ -2,9 +2,9 @@
 
 #pragma once
 
-#if !defined( PX_ENTRY_AS_WIN ) && !defined( PX_ENTRY_AS_DLL ) && !defined( PX_ENTRY_AS_NONE )
+#if !defined PX_ENTRY_AS_WIN && !defined PX_ENTRY_AS_DLL && !defined PX_ENTRY_AS_NONE
 #pragma message( "fatal error PX0: No automatic entry creation method defined. Use '#define PX_ENTRY_AS_WIN' or '#define PX_ENTRY_AS_DLL' when including the framework to use automatic entry creation. Use '#define PX_ENTRY_AS_NONE' to disable automatic entry management." )
-#elif defined( PX_ENTRY_AS_WIN ) && !defined( PX_ENTRY_AS_DLL ) && !defined( PX_ENTRY_AS_NONE )
+#elif defined PX_ENTRY_AS_WIN && !defined PX_ENTRY_AS_DLL && !defined PX_ENTRY_AS_NONE
 
 #include <Jeremia-h/Standard Library.hpp>
 #define WIN32_LEAN_AND_MEAN
@@ -23,23 +23,21 @@ namespace PX
 PX_EXT void OnLaunch( );
 
 int APIENTRY
-#if defined( UNICODE )
+#if defined UNICODE
 wWinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine,
 #else
 WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR lpCmdLine,
 #endif
 		 _In_ int nCmdShow )
 {
-#if defined( UNICODE )
-#if !defined( PX_INSTANCE_ID )
-#pragma message( "warning PX2: No instance identifier defined." )
-	HANDLE hSingleInstanceMutex = CreateMutex( NULL, TRUE, L"Paladin Extensions" );
+#if defined UNICODE
+#if !defined PX_INSTANCE_ID
+#define PX_INSTANCE_ID L"0"
 #endif
 	HANDLE hSingleInstanceMutex = CreateMutex( NULL, TRUE, L"Paladin Extensions " PX_INSTANCE_ID );
 #else
-#if !defined( PX_INSTANCE_ID )
-#pragma message( "warning PX2: No instance identifier defined." )
-	HANDLE hSingleInstanceMutex = CreateMutex( NULL, TRUE, "Paladin Extensions" );
+#if !defined PX_INSTANCE_ID
+#define PX_INSTANCE_ID "0"
 #endif
 	HANDLE hSingleInstanceMutex = CreateMutex( NULL, TRUE, "Paladin Extensions " PX_INSTANCE_ID );
 #endif
@@ -49,7 +47,7 @@ WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR 
 	if ( hInstance && hInstance != INVALID_HANDLE_VALUE )
 		PX::hinstWin = hInstance;
 
-#if defined( _DEBUG )
+#if defined _DEBUG
 	AllocConsole( );
 	freopen_s( new FILE* { nullptr }, "CONOUT$", "w", stdout );
 #endif
@@ -66,7 +64,7 @@ WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR 
 #undef NOMINMAX
 #undef WIN32_LEAN_AND_MEAN
 
-#elif !defined( PX_ENTRY_AS_WIN ) && defined( PX_ENTRY_AS_DLL ) && !defined( PX_ENTRY_AS_NONE )
+#elif !defined PX_ENTRY_AS_WIN && defined PX_ENTRY_AS_DLL && !defined PX_ENTRY_AS_NONE
 
 #include <Jeremia-h/Standard Library.hpp>
 #define WIN32_LEAN_AND_MEAN
@@ -87,7 +85,7 @@ PX_EXT void PX_API OnDetach( );
 
 PX_SDK void PX_API Detach( )
 {
-#if defined( _DEBUG )
+#if defined _DEBUG
 	FreeConsole( );
 #endif
 	OnDetach( );
@@ -98,7 +96,7 @@ namespace
 {
 	DWORD WINAPI ThreadProc( _In_ LPVOID lpParameter )
 	{
-#if defined( _DEBUG )
+#if defined _DEBUG
 		AllocConsole( );
 		freopen_s( new FILE* { nullptr }, "CONOUT$", "w", stdout );
 #endif
@@ -110,13 +108,13 @@ namespace
 
 BOOL WINAPI DllMain( _In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID lpvReserved )
 {
-#if defined( UNICODE )
-#if !defined( PX_INSTANCE_ID )
+#if defined UNICODE
+#if !defined PX_INSTANCE_ID
 #define PX_INSTANCE_ID L"0"
 #endif
 	HANDLE hSingleInstanceMutex = CreateMutex( NULL, TRUE, L"Paladin Extensions " PX_INSTANCE_ID );
 #else
-#if !defined( PX_INSTANCE_ID )
+#if !defined PX_INSTANCE_ID
 #define PX_INSTANCE_ID "0"
 #endif
 	HANDLE hSingleInstanceMutex = CreateMutex( NULL, TRUE, "Paladin Extensions " PX_INSTANCE_ID );
@@ -145,7 +143,7 @@ BOOL WINAPI DllMain( _In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID 
 			return TRUE;
 		}
 		case DLL_PROCESS_DETACH:
-#if defined( _DEBUG )
+#if defined _DEBUG
 			FreeConsole( );
 #endif
 			OnDetach( );
@@ -162,7 +160,7 @@ BOOL WINAPI DllMain( _In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID 
 #undef NOMINMAX
 #undef WIN32_LEAN_AND_MEAN
 
-#elif !defined( PX_ENTRY_AS_WIN ) && !defined( PX_ENTRY_AS_DLL ) && defined( PX_ENTRY_AS_NONE )
+#elif !defined PX_ENTRY_AS_WIN && !defined PX_ENTRY_AS_DLL && defined PX_ENTRY_AS_NONE
 #pragma message( "warning PX1: You must manage standard console output yourself." )
 #else
 #pragma message( "fatal error PX2: Too many automatic entry creation methods defined." )
