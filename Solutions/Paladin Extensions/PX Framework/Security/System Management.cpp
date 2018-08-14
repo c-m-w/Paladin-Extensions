@@ -511,7 +511,7 @@ namespace PX::sys
 		const auto pDOSHeader = PIMAGE_DOS_HEADER( pDLL );
 		const auto pNTHeader = PIMAGE_NT_HEADERS( PBYTE( pDLL ) + pDOSHeader->e_lfanew );
 		const auto pSectionHeader = PIMAGE_SECTION_HEADER( pNTHeader + 1 );
-		const auto pImage = new byte_t[ pNTHeader->OptionalHeader.SizeOfImage ];
+		const auto pImage = VirtualAlloc( nullptr, pNTHeader->OptionalHeader.SizeOfImage, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE );
 
 		if ( pDOSHeader->e_magic != IMAGE_DOS_SIGNATURE )
 			return false;
