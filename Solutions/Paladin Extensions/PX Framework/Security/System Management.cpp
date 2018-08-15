@@ -120,7 +120,7 @@ namespace PX::sys
 	{
 		PROCESSENTRY32 peTarget { sizeof peTarget };
 
-		const auto errLastError = GetLastError( );
+		const auto dwLastError = GetLastError( );
 		SetLastError( 0u );
 
 		auto hSnapshot = CreateToolhelp32Snapshot( TH32CS_SNAPPROCESS, NULL );
@@ -131,26 +131,23 @@ namespace PX::sys
 			return 0;
 		}
 
-		if ( Process32First( hSnapshot, &peTarget ) == TRUE )
-		{
-			do
-			{
-				if ( wstrExecutableName == peTarget.szExeFile )
-					break;
-			} while ( Process32Next( hSnapshot, &peTarget ) == TRUE );
-
-			CloseHandle( hSnapshot );
-
-			if ( GetLastError( ) == ERROR_NO_MORE_FILES )
-				return 0u;
-
-			SetLastError( errLastError );
-		}
-		else
+		if ( Process32First( hSnapshot, &peTarget ) != TRUE )
 		{
 			CloseHandle( hSnapshot );
 			return 0u;
 		}
+		do
+		{
+			if ( wstrExecutableName == peTarget.szExeFile )
+				break;
+		} while ( Process32Next( hSnapshot, &peTarget ) == TRUE );
+
+		CloseHandle( hSnapshot );
+
+		if ( GetLastError( ) == ERROR_NO_MORE_FILES )
+			return 0u;
+
+		SetLastError( dwLastError );
 
 		return peTarget.th32ProcessID;
 	}

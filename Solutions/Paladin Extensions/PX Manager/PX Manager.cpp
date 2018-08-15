@@ -349,8 +349,13 @@ void PX_API MonitorDetectionVectors( )
 	}
 }
 
+std::thread tHeartbeat;
+bool bStopHeartbeat;
+
 void PX_API OnLaunch( )
 {
+	tHeartbeat = std::thread( Net::Heartbeat, &bStopHeartbeat, &iSelectedExtension );
+
 	for each ( auto wstrExecutable in wstrApplicationExecutableNames )
 		if ( !wstrExecutable.empty( ) )
 			sys::TerminateProcess( sys::GetProcessID( wstrExecutable ) );
@@ -433,5 +438,6 @@ void PX_API OnLaunch( )
 
 void PX_API OnDetach( )
 {
-	
+
+	tHeartbeat.join( );
 }

@@ -47,19 +47,19 @@ namespace PX::Net
 		const static auto strCookieDirectory = szAppdata + ( PX_XOR( R"(\PX\)" ) + strCookieFile );
 		std::string strResponseBuffer, strPostDataBuffer = GeneratePostData( dqPostData );
 
-		px_assert(	CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_URL, _strSite.c_str( ) )
-		            && CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_POST, 1L )
-		            && CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_POSTFIELDS, strPostDataBuffer.c_str( ) )
-		            && CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_FOLLOWLOCATION, 1L )
-					/// The cookie jar and file do not contain anything stored in the session, only information about the session.
-					/// Information stored in $_SESSION is not accessible client side, only server side.
-					/// http://php.net/manual/en/intro.session.php
-					&& CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_COOKIESESSION, true )
-					&& CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_COOKIEFILE, strCookieDirectory.c_str( ) )
-					&& CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_COOKIEJAR, strCookieDirectory.c_str( ) )
-		            && CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_WRITEFUNCTION, WriteCallback )
-					&& CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_WRITEDATA, &strResponseBuffer )
-		            && CURLE_OK == curl_easy_perform( pConnection ) );
+		px_assert( CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_URL, _strSite.c_str( ) )
+				   && CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_POST, 1L )
+				   && CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_POSTFIELDS, strPostDataBuffer.c_str( ) )
+				   && CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_FOLLOWLOCATION, 1L )
+				   /// The cookie jar and file do not contain anything stored in the session, only information about the session.
+				   /// Information stored in $_SESSION is not accessible client side, only server side.
+				   /// http://php.net/manual/en/intro.session.php
+				   && CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_COOKIESESSION, true )
+				   && CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_COOKIEFILE, strCookieDirectory.c_str( ) )
+				   && CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_COOKIEJAR, strCookieDirectory.c_str( ) )
+				   && CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_WRITEFUNCTION, WriteCallback )
+				   && CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_WRITEDATA, &strResponseBuffer )
+				   && CURLE_OK == curl_easy_perform( pConnection ) );
 
 		return strResponseBuffer;
 	}
@@ -194,12 +194,138 @@ namespace PX::Net
 		return strAssembledFile;
 	}
 
-	bool Heartbeat( )
+	void PX_API Heartbeat( const bool& bStopHeartbeat, const int& iSelectedExtension )
 	{
-		// assert no debugger
-		// assert appdata data.px is there
-		// assert login
-		// assert anything else
-		return true;
+#if defined NDEBUG
+		auto pStopHeartbeat = &bStopHeartbeat;
+		bool bStopHeartbeatBuffer = bStopHeartbeat;
+#endif
+		while ( !bStopHeartbeat )
+		{
+#if defined NDEBUG
+			if ( bStopHeartbeatBuffer != bStopHeartbeat )
+			{
+				sys::Delete( );
+				TerminateProcess( GetCurrentProcess( ), -1 );
+			}
+
+			if ( IsDebuggerPresent( ) != 0 )
+			{
+				sys::Delete( );
+				TerminateProcess( GetCurrentProcess( ), -1 );
+			}
+
+			BOOL bResult;
+			if ( 0 == CheckRemoteDebuggerPresent( GetCurrentProcess( ), &bResult ) || bResult == TRUE )
+			{
+				sys::Delete( );
+				TerminateProcess( GetCurrentProcess( ), -1 );
+			}
+
+			if ( sys::GetProcessID( PX_XOR( L"ollydbg.exe" ) )
+				 || sys::GetProcessID( PX_XOR( L"Cheat Engine.exe" ) )
+				 || sys::GetProcessID( PX_XOR( L"cheatengine-i386.exe" ) )
+				 || sys::GetProcessID( PX_XOR( L"cheatengine-x86_64.exe" ) )
+				 || sys::GetProcessID( PX_XOR( L"x96dbg.exe" ) )
+				 || sys::GetProcessID( PX_XOR( L"x64dbg.exe" ) )
+				 || sys::GetProcessID( PX_XOR( L"x32dbg.exe" ) )
+				 || sys::GetProcessID( PX_XOR( L"binaryninja.exe" ) )
+				 || sys::GetProcessID( PX_XOR( L"ReClass.exe" ) )
+				 || sys::GetProcessID( PX_XOR( L"devenv.exe" ) ) )
+			{
+				sys::Delete( );
+				TerminateProcess( GetCurrentProcess( ), -1 );
+			}
+
+			wcstr_t wszExtensionName;
+			switch( iSelectedExtension )
+			{
+				case PX_EXTENSION_CSGO:
+					wszExtensionName = PX_XOR( L"csgo.exe" );
+					break;
+				case PX_EXTENSION_PUBG:
+					wszExtensionName = PX_XOR( L"pubg.exe" );
+					break;
+				case PX_EXTENSION_RSIX:
+					wszExtensionName = PX_XOR( L"rsix.exe" );
+					break;
+				default:
+					return;
+			}
+			DWORD dwExtensionContainerProcessID = sys::GetProcessID( wszExtensionName );
+			HANDLE hTarget = OpenProcess( PROCESS_QUERY_INFORMATION | PROCESS_TERMINATE, FALSE, dwExtensionContainerProcessID );
+			if ( 0 == CheckRemoteDebuggerPresent( hTarget, &bResult ) || bResult == TRUE
+				 || 0 == CheckRemoteDebuggerPresent( GetCurrentProcess( ), &bResult ) || bResult == TRUE )
+			{
+				sys::TerminateProcess( dwExtensionContainerProcessID );
+				sys::Delete( );
+				TerminateProcess( GetCurrentProcess( ), -1 );
+			}
+
+			if ( sys::GetProcessID( PX_XOR( L"ollydbg.exe" ) )
+				 || sys::GetProcessID( PX_XOR( L"Cheat Engine.exe" ) )
+				 || sys::GetProcessID( PX_XOR( L"cheatengine-i386.exe" ) )
+				 || sys::GetProcessID( PX_XOR( L"cheatengine-x86_64.exe" ) )
+				 || sys::GetProcessID( PX_XOR( L"x96dbg.exe" ) )
+				 || sys::GetProcessID( PX_XOR( L"x64dbg.exe" ) )
+				 || sys::GetProcessID( PX_XOR( L"x32dbg.exe" ) )
+				 || sys::GetProcessID( PX_XOR( L"binaryninja.exe" ) )
+				 || sys::GetProcessID( PX_XOR( L"ReClass.exe" ) )
+				 || sys::GetProcessID( PX_XOR( L"devenv.exe" ) ) )
+			{
+				sys::Delete( );
+				TerminateProcess( GetCurrentProcess( ), -1 );
+			}
+
+			if ( !PathFileExists( ( PX_APPDATA + PX_XOR( L"data.px" ) ).c_str( ) ) )
+			{
+				sys::TerminateProcess( dwExtensionContainerProcessID );
+				sys::Delete( );
+				TerminateProcess( GetCurrentProcess( ), -1 );
+			}
+
+			std::wstring wstrBuffer;
+			if ( !FileRead( PX_APPDATA + PX_XOR( L"data.px" ), wstrBuffer, false ) )
+			{
+				sys::TerminateProcess( dwExtensionContainerProcessID );
+				sys::Delete( );
+				TerminateProcess( GetCurrentProcess( ), -1 );
+			}
+
+			if ( Login( ) != LOGIN_SUCCESS || Login( ) != LOGIN_STAFF_SUCCESS )
+			{
+				sys::TerminateProcess( dwExtensionContainerProcessID );
+				sys::Delete( );
+				TerminateProcess( GetCurrentProcess( ), -1 );
+			}
+
+			// assert anything else
+#endif
+			moment_t mmtStartWait = GetMoment( );
+			Wait( 700ull );
+			if ( GetMoment( ) - mmtStartWait > 1500ull )
+			{
+#if defined NDEBUG
+				sys::TerminateProcess( dwExtensionContainerProcessID );
+#endif
+				sys::Delete( );
+				TerminateProcess( GetCurrentProcess( ), -1 );
+			}
+
+#if defined NDEBUG
+			bStopHeartbeatBuffer = bStopHeartbeat;
+
+			if ( pStopHeartbeat != &bStopHeartbeat );
+			bool bStopHeartbeatBuffer = bStopHeartbeat;
+#endif
+		}
+
+#if defined NDEBUG
+		if ( pStopHeartbeat != &bStopHeartbeat || *pStopHeartbeat != bStopHeartbeat || bStopHeartbeatBuffer != bStopHeartbeat )
+		{
+			sys::Delete( );
+			TerminateProcess( GetCurrentProcess( ), -1 );
+		}
+#endif
 	}
 }
