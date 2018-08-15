@@ -40,12 +40,9 @@ if( mysqli_connect_errno( ) || $sql_connection->connect_error )
     if( !ValidateHardware( $unique_id, $user_id, $hardware ) )
         die( PutLoginAttempt( $user_id, $unique_id, $hardware, ReturnKeys[ "Hardware Mismatch" ] ) );
 
-    if( $secondary_group_ids != 5 )
-        die( PutLoginAttempt( $user_id, 0, $hardware, ReturnKeys[ "Inactive Premium" ] ) );
-
     if( $is_banned )
         die( PutLoginAttempt( $user_id, 0, $hardware, ReturnKeys[ "Banned" ] ) );
 
 	BeginSession( $user_id );
-    die( PutLoginAttempt( $user_id, $unique_id, $hardware, $is_staff ? ReturnKeys[ "Staff Success" ] : ReturnKeys[ "Success" ] ) );
+    die( PutLoginAttempt( $user_id, $unique_id, $hardware, $is_staff ? ReturnKeys[ "Staff Success" ] : ReturnKeys[ "Success" ], $secondary_group_ids ) );
 ?>

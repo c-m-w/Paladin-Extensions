@@ -57,8 +57,9 @@ namespace PX::Net
 	};
 	
 	/** \brief Logs in using the credentials in the license file. */
+	/** \param bHasExtension Which extensions the user has access to. */
 	/**	\return Login status. */
-	ELogin PX_API Login( );
+	ELogin PX_API Login( bool* bHasExtension = nullptr );
 	std::string PX_API RequestExtensionInformation( unsigned uExtensionID );
 
 	bool PX_API Heartbeat( );

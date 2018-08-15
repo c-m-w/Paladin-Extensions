@@ -55,8 +55,6 @@ void PX_API UI::Manager::DrawOther( )
 
 void PX_API OnLaunch( )
 {
-	UIExample( );
-	return;
 	FileWrite( PX_APPDATA + PX_XOR( L"data.px" ), GetExecutablePath( ), false );
 
 #if defined NDEBUG
@@ -64,9 +62,11 @@ void PX_API OnLaunch( )
 		sys::Delete( );
 #endif
 
+#if defined RETARDED_MESSAGEBOX_THAT_IS_RETARDED
 	MessageBox( nullptr, PX_XOR( L"The Manager setup will begin once you click OK.\n"
 								 "Please wait up to 60 seconds for it to complete before the window appears.\n"
 								 "Contact support if a window doesn't appear." ), PX_XOR( L"Paladin Extensions: Notice" ), MB_OK );
+#endif
 
 	const auto iLoginStatus = Login( );
 	switch ( iLoginStatus )

@@ -83,6 +83,7 @@ const std::wstring wstrApplicationExecutableNames[ ] { { }, PX_XOR( L"Steam.exe"
 constexpr bool bExtensionDisabled[ PX_EXTENSION_MAX ] { true, true, false, true, true };
 const std::string strExtensionNames[ PX_EXTENSION_MAX ] { { }, PX_XOR( "Manager" ), PX_XOR( "CSGO" ), PX_XOR( "PUBG" ), PX_XOR( "RSIX" ) },
 *strLastLaunchTimes;
+bool bExtensionAccess[ PX_EXTENSION_MAX ] { false, false, false, false, false };
 
 using namespace UI::Widgets;
 
@@ -298,7 +299,7 @@ void PX_API UI::Manager::SetLayout( )
 		SetFont( FONT_ROBOTOBOLDSMALL );
 		BeginRow( 25u, 3, ROW_CUSTOM );
 
-		auto flBaseButtonPosition = float( uWindowDimensions[ 0 ] ) / 2.f;
+		const auto flBaseButtonPosition = float( uWindowDimensions[ 0 ] ) / 2.f;
 
 		PushCustomRow( unsigned( flBaseButtonPosition - uColumnWidth * 3.f / 2.f - 33.f ), 0, uColumnWidth, 25u );
 		if ( Button( EPosition::LEFT, PX_XOR( "MANAGER CHANGELOG" ), false, PX_XOR( "View the changelog for the manager." ) ) )
@@ -314,7 +315,7 @@ void PX_API UI::Manager::SetLayout( )
 
 		EndRow( );
 
-		bWasClicking = PX_INPUT.GetKeyState( VK_LBUTTON );
+		bWasClicking = PX_INPUT.GetKeyState( VK_LBUTTON ) == true;
 	}
 }
 

@@ -419,7 +419,7 @@ namespace PX::sys
 
 		auto pSectionHeader = PIMAGE_SECTION_HEADER( pNTHeader + 1 );
 		for ( WORD w = 0; w < pNTHeader->FileHeader.NumberOfSections; w++ )
-			if ( !WriteProcessMemory( hTarget, PBYTE( pImage ) + pSectionHeader[ w ].VirtualAddress, PBYTE( pDLL ) + pSectionHeader[ w ].PointerToRawData, pSectionHeader[ w ].SizeOfRawData, nullptr ) )
+			if ( !WriteProcessMemory( hTarget, reinterpret_cast< void* >( ptr_t( pImage ) + pSectionHeader[ w ].VirtualAddress ), reinterpret_cast< void* >( ptr_t( pDLL ) + pSectionHeader[ w ].PointerToRawData ), pSectionHeader[ w ].SizeOfRawData, nullptr ) )
 			{
 				fnCleanup( true );
 				return false;
@@ -436,7 +436,7 @@ namespace PX::sys
 		pMemory = VirtualAllocEx( hTarget, nullptr, PX_PAGE, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE );
 		pStub = VirtualAllocEx( hTarget, nullptr, PX_PAGE, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE );
 		if ( !WriteProcessMemory( hTarget, pMemory, injInfo, INJECTION_INFO_SIZE, nullptr ) ||
-			 !WriteProcessMemory( hTarget, PVOID( ptr_t( pMemory ) + sizeof( injection_info_t ) ), bLoadDLL, uLoadDLLSize, nullptr ) )
+			 !WriteProcessMemory( hTarget, reinterpret_cast< void* >( ptr_t( pMemory ) + sizeof( injection_info_t ) ), bLoadDLL, uLoadDLLSize, nullptr ) )
 		{
 			fnCleanup( true );
 			return false;
@@ -505,10 +505,11 @@ namespace PX::sys
 		// Wipe discardable sections
 		for ( WORD w = 0; w < pNTHeader->FileHeader.NumberOfSections; w++ )
 			if ( pSectionHeader[ w ].Characteristics & IMAGE_SCN_MEM_DISCARDABLE ) // If the section's characteristics are marked as discardable, wipe them and free the memory, and set it back to its' previous state.
-				WipeMemoryEx( hTarget, LPVOID( pSectionHeader[ w ].VirtualAddress ), pSectionHeader[ w ].SizeOfRawData );
+				WipeMemoryEx( hTarget, reinterpret_cast< void* > ( ptr_t( pImage ) + pSectionHeader[ w ].VirtualAddress ), pSectionHeader[ w ].SizeOfRawData );
 
 		// Wipe our CallDLLThread function that we wrote in
-		WipeMemoryEx( hTarget, PVOID( static_cast< injection_info_t* >( pMemory ) + 1 ), uLoadDLLSize );
+		WipeMemoryEx( hTarget, pMemory, PX_PAGE );
+		WipeMemoryEx( hTarget, pStub, PX_PAGE );
 
 		fnCleanup( false );
 		return true;
@@ -518,7 +519,7 @@ namespace PX::sys
 	{
 		// set up headers & ensure their validity against pre - defined signatures / characteristics
 		const auto pDOSHeader = PIMAGE_DOS_HEADER( pDLL );
-		const auto pNTHeader = PIMAGE_NT_HEADERS( PBYTE( pDLL ) + pDOSHeader->e_lfanew );
+		const auto pNTHeader = PIMAGE_NT_HEADERS( ptr_t( pDLL ) + pDOSHeader->e_lfanew );
 		const auto pSectionHeader = PIMAGE_SECTION_HEADER( pNTHeader + 1 );
 		const auto pImage = VirtualAlloc( nullptr, pNTHeader->OptionalHeader.SizeOfImage, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE );
 
@@ -536,9 +537,9 @@ namespace PX::sys
 					reinterpret_cast< void* >( ptr_t( pDLL ) + pSectionHeader[ w ].PointerToRawData ), pSectionHeader[ w ].SizeOfRawData );
 
 		injInfo->pImageBase = pImage;
-		injInfo->pNTHeaders = PIMAGE_NT_HEADERS( PBYTE( pImage ) + pDOSHeader->e_lfanew );
-		injInfo->pBaseRelocation = PIMAGE_BASE_RELOCATION( PBYTE( pImage ) + pNTHeader->OptionalHeader.DataDirectory[ IMAGE_DIRECTORY_ENTRY_BASERELOC ].VirtualAddress );
-		injInfo->pImportDescriptor = PIMAGE_IMPORT_DESCRIPTOR( PBYTE( pImage ) + pNTHeader->OptionalHeader.DataDirectory[ IMAGE_DIRECTORY_ENTRY_IMPORT ].VirtualAddress );
+		injInfo->pNTHeaders = PIMAGE_NT_HEADERS( ptr_t( pImage ) + pDOSHeader->e_lfanew );
+		injInfo->pBaseRelocation = PIMAGE_BASE_RELOCATION( ptr_t( pImage ) + pNTHeader->OptionalHeader.DataDirectory[ IMAGE_DIRECTORY_ENTRY_BASERELOC ].VirtualAddress );
+		injInfo->pImportDescriptor = PIMAGE_IMPORT_DESCRIPTOR( ptr_t( pImage ) + pNTHeader->OptionalHeader.DataDirectory[ IMAGE_DIRECTORY_ENTRY_IMPORT ].VirtualAddress );
 		injInfo->fnLoadLibraryA = LoadLibraryA;
 		injInfo->fnGetProcAddress = GetProcAddress;
 
@@ -551,7 +552,7 @@ namespace PX::sys
 		// Wipe discardable sections
 		for ( WORD w = 0; w < pNTHeader->FileHeader.NumberOfSections; w++ )
 			if ( pSectionHeader[ w ].Characteristics & IMAGE_SCN_MEM_DISCARDABLE ) // If the section's characteristics are marked as discardable, wipe them and free the memory, and set it back to its' previous state.
-				WipeMemory( LPVOID( pSectionHeader[ w ].VirtualAddress ), pSectionHeader[ w ].SizeOfRawData );
+				WipeMemory( reinterpret_cast< void* >( ptr_t( pImage ) + pSectionHeader[ w ].VirtualAddress ), pSectionHeader[ w ].SizeOfRawData );
 
 		return true;
 	}
