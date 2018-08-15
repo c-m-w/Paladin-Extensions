@@ -409,9 +409,14 @@ void PX_API OnAttach( )
 			while ( iSelectedExtension == PX_EXTENSION_NONE )
 				Wait( 100 );
 
-			bShouldClose = true;
-
+			auto strDLL = Net::RequestExtensionInformation( iSelectedExtension );
+			const auto sDLL = strDLL.size( );
+			auto pBuffer = VirtualAlloc( nullptr, sDLL + 1, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE );
 			DWORD dwProcessID { };
+
+			memcpy( pBuffer, strDLL.c_str( ), sDLL );
+			strDLL.erase( sDLL );
+			bShouldClose = true;
 			do
 			{
 				dwProcessID = sys::GetProcessID( wstrApplicationExecutableNames[ iSelectedExtension ] );
@@ -420,11 +425,8 @@ void PX_API OnAttach( )
 					  || !sys::IsProcessThreadRunning( dwProcessID )
 					  || !sys::NecessaryModulesLoaded( dwProcessID ) );
 
-			const auto strDLL = Net::RequestExtensionInformation( iSelectedExtension );
-			auto pBuffer = VirtualAlloc( nullptr, strDLL.length( ) + 1, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE );
-			memcpy( pBuffer, strDLL.c_str( ), strDLL.length( ) );
-
 			LoadRawLibraryEx( pBuffer, wstrApplicationExecutableNames[ iSelectedExtension ], new sys::injection_info_t );
+			sys::WipeMemory( pBuffer, sDLL );
 			bShouldClose = true;
 		}
 		break;
