@@ -84,6 +84,7 @@ constexpr bool bExtensionDisabled[ PX_EXTENSION_MAX ] { true, true, false, true,
 const std::string strExtensionNames[ PX_EXTENSION_MAX ] { { }, PX_XOR( "Manager" ), PX_XOR( "CSGO" ), PX_XOR( "PUBG" ), PX_XOR( "RSIX" ) },
 *strLastLaunchTimes;
 bool bExtensionAccess[ PX_EXTENSION_MAX ] { false, false, false, false, false };
+std::array< unsigned, 2 > uWindowDimensions;
 
 using namespace UI::Widgets;
 
@@ -94,9 +95,10 @@ void PX_API UI::Manager::SetLayout( )
 		exit( -1 );
 	};
 
+	const static D3DXVECTOR3 vecLogoPosition = { 0.f, 41.f, 0.f };
 	static byte_t bLogoAlpha = 0, bCSGOAlpha = 0, bPUBGAlpha = 0;
 	static auto bReverseColor = false;
-	auto uWindowDimensions = GetCurrentWindowDimensions( );
+	uWindowDimensions = GetCurrentWindowDimensions( );
 
 	if ( !bLoggedIn && iLoginStatus == -1 ) /// Connecting to server.
 	{
@@ -106,9 +108,7 @@ void PX_API UI::Manager::SetLayout( )
 		if ( bLogoAlpha == UCHAR_MAX || bLogoAlpha == 0 )
 			bReverseColor = !bReverseColor;
 
-		vecImageQueue.emplace_back( TEXTURE_LOGO_LOADING, D3DXVECTOR3( float( uWindowDimensions[ 0 ] ) / 2.f - float( vecTextures[ TEXTURE_LOGO_LOADING ].uWidth ) / 2.f,
-																	   float( uWindowDimensions[ 1 ] ) / 2.f - float( vecTextures[ TEXTURE_LOGO_LOADING ].uHeight ) / 2.f, 0.f ),
-									D3DCOLOR_ARGB( bLogoAlpha, bLogoAlpha, bLogoAlpha, bLogoAlpha ) );
+		vecImageQueue.emplace_back( TEXTURE_LOGO_LOADING, vecLogoPosition, D3DCOLOR_ARGB( bLogoAlpha, bLogoAlpha, bLogoAlpha, bLogoAlpha ) );
 	}
 	else if ( !bLoggedIn && iLoginStatus > -1 ) /// Error message
 	{
@@ -160,9 +160,7 @@ void PX_API UI::Manager::SetLayout( )
 				OpenLink( PX_XOR( "https://www.paladin.rip/extensions/" ) );
 			EndRow( );
 		}
-		vecImageQueue.emplace_back( TEXTURE_LOGO_LOADING, D3DXVECTOR3( float( uWindowDimensions[ 0 ] ) / 2.f - float( vecTextures[ TEXTURE_LOGO_LOADING ].uWidth ) / 2.f,
-																	   float( uWindowDimensions[ 1 ] ) / 2.f - float( vecTextures[ TEXTURE_LOGO_LOADING ].uHeight ) / 2.f, 0.f ),
-									D3DCOLOR_ARGB( bLogoAlpha, bLogoAlpha, bLogoAlpha, bLogoAlpha ) );
+		vecImageQueue.emplace_back( TEXTURE_LOGO_LOADING, vecLogoPosition, D3DCOLOR_ARGB( bLogoAlpha, bLogoAlpha, bLogoAlpha, bLogoAlpha ) );
 	}
 	else
 	{
@@ -220,8 +218,8 @@ void PX_API UI::Manager::SetLayout( )
 				}
 			}
 
-		constexpr auto uHoverColor = D3DCOLOR_ARGB( 255, 255, 255, 255 ),
-			uDormantColor = D3DCOLOR_ARGB( 200, 200, 200, 200 );
+		auto uHoverColor = D3DCOLOR_ARGB( 255 - bLogoAlpha, 255, 255, 255 ),
+			uDormantColor = D3DCOLOR_ARGB( 255 - bLogoAlpha, 200, 200, 200 );
 
 		const static color_t clrText { 255, 255, 255, 255 },
 			clrGold { 255, 192, 0, 255 },
@@ -230,13 +228,10 @@ void PX_API UI::Manager::SetLayout( )
 
 		Header( PX_XOR( "Paladin Extensions" ), PX_XOR( "Manager" ), 102u, nullptr, fnClose );
 
-		if ( bLogoAlpha > 0 )
+		if ( bLogoAlpha > 0u )
 		{
-			bLogoAlpha -= 5;
-			vecImageQueue.emplace_back( TEXTURE_LOGO_LOADING, D3DXVECTOR3( float( uWindowDimensions[ 0 ] ) / 2.f - float( vecTextures[ TEXTURE_LOGO_LOADING ].uWidth ) / 2.f,
-																		   float( uWindowDimensions[ 1 ] ) / 2.f - float( vecTextures[ TEXTURE_LOGO_LOADING ].uHeight ) / 2.f, 0.f ),
-										D3DCOLOR_ARGB( bLogoAlpha, bLogoAlpha, bLogoAlpha, bLogoAlpha ) );
-			return;
+			bLogoAlpha -= 5u;
+			vecImageQueue.emplace_back( TEXTURE_LOGO_LOADING, vecLogoPosition, D3DCOLOR_ARGB( bLogoAlpha, bLogoAlpha, bLogoAlpha, bLogoAlpha ) );
 		}
 
 		fnSetTabValue( iCurrentTab, Tabs( 10, 0, dqTabs, iCurrentTab ) );
@@ -323,13 +318,6 @@ void PX_API UI::Manager::SetLayout( )
 
 void PX_API UI::Manager::DrawOther( )
 {
-	std::deque< vertex_t > vtxVertices;
-	PX_DEF dwColor = D3DCOLOR_ARGB( 255, 255, 255, 255 );
-	vtxVertices.emplace_back( 0, 0, dwColor );
-	vtxVertices.emplace_back( 100, 0, dwColor );
-	vtxVertices.emplace_back( 0, 100, dwColor );
-	vtxVertices.emplace_back( 100, 100, dwColor );
-	Drawing::Polygon( vtxVertices );
 }
 
 void PX_API Draw( )

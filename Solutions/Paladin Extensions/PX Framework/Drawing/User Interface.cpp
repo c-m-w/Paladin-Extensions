@@ -261,7 +261,7 @@ namespace PX::UI
 			InitializeNuklear( );
 
 			vecTextures.emplace_back( 32, 29 ); // TEXTURE_LOGO
-			vecTextures.emplace_back( 300, 300 ); // TEXTURE_LOGO_LOADING
+			vecTextures.emplace_back( 720, 394 ); // TEXTURE_LOGO_LOADING
 			vecTextures.emplace_back( 100, 100 ); // TEXTURE_ICON_CSGO
 			vecTextures.emplace_back( 100, 100 ); // TEXTURE_ICON_PUBG
 			vecTextures.emplace_back( 100, 100 ); // TEXTURE_ICON_RSIX

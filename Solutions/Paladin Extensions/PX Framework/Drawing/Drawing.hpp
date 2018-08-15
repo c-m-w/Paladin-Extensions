@@ -4,5 +4,6 @@
 
 namespace PX::Drawing
 {
-	void PX_API Polygon( std::deque< vertex_t > vtxPoints );
+	void PX_API Rectangle( unsigned uX, unsigned uY, unsigned uWidth, unsigned uHeight, DWORD dwColor );
+	void PX_API Line( std::deque< D3DXVECTOR2 > dqPoints, float flWidth, DWORD dwColor, BOOL bAntiAlias = TRUE );
 }
