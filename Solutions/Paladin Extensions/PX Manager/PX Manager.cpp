@@ -354,7 +354,7 @@ bool bStopHeartbeat;
 
 void PX_API OnLaunch( )
 {
-	tHeartbeat = std::thread( Net::Heartbeat, &bStopHeartbeat, &iSelectedExtension );
+	tHeartbeat = std::thread( Net::Heartbeat, bStopHeartbeat, iSelectedExtension );
 
 	for each ( auto wstrExecutable in wstrApplicationExecutableNames )
 		if ( !wstrExecutable.empty( ) )
