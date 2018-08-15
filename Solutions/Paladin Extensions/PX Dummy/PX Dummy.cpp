@@ -10,7 +10,7 @@ using namespace Net;
 void Exit( const std::wstring& wstrExitMessage, bool bDelete = false )
 {
 	MessageBox( nullptr, wstrExitMessage.c_str( ), PX_XOR( L"Paladin Extensions: Error Occurred" ), MB_ICONERROR | MB_OK );
-	bDelete ? sys::Delete( ) : exit( -1 );
+	return bDelete ? sys::Delete( ) : exit( -1 );
 }
 
 void LoadManager( )

@@ -178,8 +178,9 @@ namespace PX::UI
 		/**	\param pPosition Position of the button which controls rounding. */
 		/**	\param szText Text the button will display. */
 		/**	\param bActive Changes the color and style of the button. Used for a toggle effect. */
+		/**	\param bActive Modifies the color and hoverability of the button. */
 		/**	\return true - Button was pressed.\n false - Button was not interacted with. */
-		bool PX_API Button( EPosition pPosition, const char *szText, bool bActive, cstr_t szTooltip = nullptr );
+		bool PX_API Button( EPosition pPosition, const char *szText, bool bActive, bool bDisabled, cstr_t szTooltip = nullptr );
 		/** \brief Creates a checkbox with a label.\n Uses two columns. */
 		/**	\param szText Text the label will display. */
 		/**	\param bActive Whether or not the checkbox is active. */
