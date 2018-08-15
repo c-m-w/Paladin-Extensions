@@ -20,6 +20,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "auth", "auth", "{197FBADF-02E0-43BF-B302-E8BDB01C00E7}"
 	ProjectSection(SolutionItems) = preProject
 		PX Website\public_html\auth\auth.php = PX Website\public_html\auth\auth.php
+		PX Website\public_html\auth\ban.php = PX Website\public_html\auth\ban.php
 		PX Website\public_html\auth\download.php = PX Website\public_html\auth\download.php
 		PX Website\public_html\auth\encryption_test.php = PX Website\public_html\auth\encryption_test.php
 		PX Website\public_html\auth\extensions.php = PX Website\public_html\auth\extensions.php

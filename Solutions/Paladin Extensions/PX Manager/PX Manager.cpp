@@ -83,6 +83,7 @@ const std::wstring wstrApplicationExecutableNames[ ] { { }, PX_XOR( L"Steam.exe"
 constexpr bool bExtensionDisabled[ PX_EXTENSION_MAX ] { true, true, false, true, true };
 const std::string strExtensionNames[ PX_EXTENSION_MAX ] { { }, PX_XOR( "Manager" ), PX_XOR( "CSGO" ), PX_XOR( "PUBG" ), PX_XOR( "RSIX" ) },
 *strLastLaunchTimes;
+bool bExtensionAccess[ PX_EXTENSION_MAX ] { false, false, false, false, false };
 
 using namespace UI::Widgets;
 
@@ -132,11 +133,11 @@ void PX_API UI::Manager::SetLayout( )
 			const static color_t clrErrorMessages[ ]
 			{
 				{ },
-			{ 255, 0, 0, 255 },
-			{ 190, 220, 5, 255 },
-			{ 255, 0, 0, 255 },
-			{ 190, 220, 5, 255 },
-			{ 190, 220, 5, 255 }
+				{ 255, 0, 0, 255 },
+				{ 190, 220, 5, 255 },
+				{ 255, 0, 0, 255 },
+				{ 190, 220, 5, 255 },
+				{ 190, 220, 5, 255 }
 			};
 
 			SetFont( FONT_ROBOTOSMALL );
@@ -149,13 +150,13 @@ void PX_API UI::Manager::SetLayout( )
 			BeginRow( 30u, 3u, ROW_CUSTOM );
 			constexpr auto uButtonWidth = 150u;
 			PushCustomRow( unsigned( float( uWindowDimensions[ 0 ] ) / 2.f - uButtonWidth * 3.f / 2.f - 2.f ), unsigned( float( uWindowDimensions[ 1 ] ) - 140.f ), uButtonWidth, 30u );
-			if ( Button( EPosition::LEFT, PX_XOR( "FORUM" ), false ) )
+			if ( Button( EPosition::LEFT, PX_XOR( "FORUM" ), false, false ) )
 				OpenLink( PX_XOR( "https://www.paladin.rip/" ) );
 			PushCustomRow( unsigned( float( uWindowDimensions[ 0 ] ) / 2.f - uButtonWidth / 2.f ), unsigned( float( uWindowDimensions[ 1 ] ) - 140.f ), uButtonWidth, 30u );
-			if ( Button( EPosition::CENTER, PX_XOR( "SUPPORT" ), false ) )
+			if ( Button( EPosition::CENTER, PX_XOR( "SUPPORT" ), false, false ) )
 				OpenLink( PX_XOR( "https://www.paladin.rip/support/" ) );
 			PushCustomRow( unsigned( float( uWindowDimensions[ 0 ] ) / 2.f + uButtonWidth / 2.f + 2.f ), unsigned( float( uWindowDimensions[ 1 ] ) - 140.f ), uButtonWidth, 30u );
-			if ( Button( EPosition::RIGHT, PX_XOR( "EXTENSIONS" ), false ) )
+			if ( Button( EPosition::RIGHT, PX_XOR( "EXTENSIONS" ), false, false ) )
 				OpenLink( PX_XOR( "https://www.paladin.rip/extensions/" ) );
 			EndRow( );
 		}
@@ -212,7 +213,7 @@ void PX_API UI::Manager::SetLayout( )
 			if ( bHoveringImage[ u ] )
 			{
 				SetWidgetActive( Render::CURSOR_HAND );
-				if ( PX_INPUT.GetKeyState( VK_LBUTTON ) && !bExtensionDisabled[ u ] )
+				if ( PX_INPUT.GetKeyState( VK_LBUTTON ) )
 				{
 					uSelectedExtension = u;
 					bWasClicking = true;
@@ -288,9 +289,10 @@ void PX_API UI::Manager::SetLayout( )
 		SetWidgetPosition( 30, 200 );
 
 		BeginRow( 25, bIsStaff ? 6 : 4, ROW_STATIC );
-		JustifiedText( PX_XOR( "Manager Version:" ), extInfo[ PX_EXTENSION_MANAGER ].strVersion.c_str( ), clrText, clrPurple, uColumnWidth - 5u );
-		SetRowWidth( uColumnWidth - 5u );
-		Spacing( );
+		JustifiedText( PX_XOR( "Manager Version:" ), extInfo[ PX_EXTENSION_MANAGER ].strVersion.c_str( ), clrText, clrPurple, uColumnWidth - 8u );
+		SetRowWidth( uColumnWidth );
+		if ( Button( EPosition::CENTER, bExtensionAccess[ uSelectedExtension ] ? PX_XOR( "PURCHASED" ) : PX_XOR( "PURCHASE" ), false, bExtensionAccess[ uSelectedExtension ], bExtensionAccess[ uSelectedExtension ] ? PX_XOR( "You have purchased this extension." ) : PX_XOR( "Purchase this extension." ) ) )
+			OpenLink( PX_XOR( "https://www.paladin.rip/account/upgrades/" ) );
 		if ( bIsStaff )
 			Checkbox( PX_XOR( "Prefer Beta" ), &bPreferBeta, PX_XOR( "If the beta is available, choose it over the regular build. Warning: The beta may be less stable." ) );
 		EndRow( );
@@ -298,23 +300,24 @@ void PX_API UI::Manager::SetLayout( )
 		SetFont( FONT_ROBOTOBOLDSMALL );
 		BeginRow( 25u, 3, ROW_CUSTOM );
 
-		auto flBaseButtonPosition = float( uWindowDimensions[ 0 ] ) / 2.f;
+		const auto flBaseButtonPosition = float( uWindowDimensions[ 0 ] ) / 2.f;
 
 		PushCustomRow( unsigned( flBaseButtonPosition - uColumnWidth * 3.f / 2.f - 33.f ), 0, uColumnWidth, 25u );
-		if ( Button( EPosition::LEFT, PX_XOR( "MANAGER CHANGELOG" ), false, PX_XOR( "View the changelog for the manager." ) ) )
+		if ( Button( EPosition::LEFT, PX_XOR( "MANAGER CHANGELOG" ), false, false, PX_XOR( "View the changelog for the manager." ) ) )
 			OpenLink( PX_XOR( "https://www.paladin.rip/extensions/1/updates/" ) );
 
 		PushCustomRow( unsigned( flBaseButtonPosition - uColumnWidth / 2.f - 30.f ), 0, uColumnWidth, 25u );
-		if ( Button( EPosition::CENTER, ( strExtensionNames[ uSelectedExtension ] + PX_XOR( " CHANGELOG" ) ).c_str( ), false, PX_XOR( "View the changelog for an extension." ) ) )
+		if ( Button( EPosition::CENTER, ( strExtensionNames[ uSelectedExtension ] + PX_XOR( " CHANGELOG" ) ).c_str( ), false, false, PX_XOR( "View the changelog for an extension." ) ) )
 			OpenLink( ( PX_XOR( "https://www.paladin.rip/extensions/" ) + std::to_string( uSelectedExtension ) + PX_XOR( "/updates/" ) ).c_str( ) );
 
 		PushCustomRow( unsigned( flBaseButtonPosition + uColumnWidth / 2.f - 27.f ), 0, uColumnWidth, 25u );
-		if ( Button( EPosition::RIGHT, ( PX_XOR( "LOAD " ) + strExtensionNames[ uSelectedExtension ] ).c_str( ), false, PX_XOR( "Load an extension." ) ) )
+		if ( Button( EPosition::RIGHT, ( PX_XOR( "LOAD " ) + strExtensionNames[ uSelectedExtension ] ).c_str( ), false, 
+					 !bExtensionAccess[ uSelectedExtension ] || bExtensionDisabled[ uSelectedExtension ], PX_XOR( "Load an extension." ) ) )
 			iSelectedExtension = uSelectedExtension;
 
 		EndRow( );
 
-		bWasClicking = PX_INPUT.GetKeyState( VK_LBUTTON );
+		bWasClicking = PX_INPUT.GetKeyState( VK_LBUTTON ) == true;
 	}
 }
 
@@ -361,7 +364,7 @@ void PX_API MonitorDetectionVectors( )
 std::thread tHeartbeat;
 bool bStopHeartbeat;
 
-void PX_API OnAttach( )
+void PX_API OnLaunch( )
 {
 	tHeartbeat = std::thread( Net::Heartbeat, &bStopHeartbeat, &iSelectedExtension );
 
@@ -381,7 +384,7 @@ void PX_API OnAttach( )
 	// wait 1 sec so that our cool loading animation has some time to play :D
 	Wait( rand( ) % 1900 + 100 );
 
-	iLoginStatus = Net::Login( );
+	iLoginStatus = Net::Login( bExtensionAccess );
 	switch ( iLoginStatus )
 	{
 		case Net::LOGIN_STAFF_SUCCESS:
@@ -414,9 +417,14 @@ void PX_API OnAttach( )
 			while ( iSelectedExtension == PX_EXTENSION_NONE )
 				Wait( 100 );
 
-			bShouldClose = true;
-
+			auto strDLL = Net::RequestExtensionInformation( iSelectedExtension );
+			const auto sDLL = strDLL.size( );
+			auto pBuffer = VirtualAlloc( nullptr, sDLL + 1, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE );
 			DWORD dwProcessID { };
+
+			memcpy( pBuffer, strDLL.c_str( ), sDLL );
+			strDLL.erase( sDLL );
+			bShouldClose = true;
 			do
 			{
 				dwProcessID = sys::GetProcessID( wstrApplicationExecutableNames[ iSelectedExtension ] );
@@ -425,11 +433,8 @@ void PX_API OnAttach( )
 					  || !sys::IsProcessThreadRunning( dwProcessID )
 					  || !sys::NecessaryModulesLoaded( dwProcessID ) );
 
-			const auto strDLL = Net::RequestExtensionInformation( iSelectedExtension );
-			auto pBuffer = VirtualAlloc( nullptr, strDLL.length( ) + 1, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE );
-			memcpy( pBuffer, strDLL.c_str( ), strDLL.length( ) );
-
 			LoadRawLibraryEx( pBuffer, wstrApplicationExecutableNames[ iSelectedExtension ], new sys::injection_info_t );
+			sys::WipeMemory( pBuffer, sDLL );
 			bShouldClose = true;
 		}
 		break;

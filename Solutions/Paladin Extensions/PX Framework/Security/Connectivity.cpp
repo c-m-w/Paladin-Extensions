@@ -44,7 +44,7 @@ namespace PX::Net
 	std::string PX_API Request( const std::string& _strSite, const post_data_t& dqPostData )
 	{
 		const static auto szAppdata = getenv( PX_XOR( "APPDATA" ) );
-		const static auto strCookieDirectory = szAppdata + ( PX_XOR( "PX\\" ) + strCookieFile );
+		const static auto strCookieDirectory = szAppdata + ( PX_XOR( R"(\PX\)" ) + strCookieFile );
 		std::string strResponseBuffer, strPostDataBuffer = GeneratePostData( dqPostData );
 
 		px_assert( CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_URL, _strSite.c_str( ) )
@@ -104,8 +104,9 @@ namespace PX::Net
 		return true;
 	}
 
-	ELogin PX_API Login( )
+	ELogin PX_API Login( bool* bHasExtension /*= nullptr*/ )
 	{
+		constexpr int iGroupIDS[ PX_EXTENSION_MAX ] { -1, -1, 7, 8, 10 };
 		static auto bCreatedLicenseFile = false;
 		static auto bRecalled = false;
 		std::wstring wstrFile { };
@@ -138,7 +139,7 @@ namespace PX::Net
 			if ( bCreatedLicenseFile && !bRecalled )
 			{
 				bRecalled = true;
-				return Login( );
+				return Login( bHasExtension );
 			}
 			return LOGIN_INVALID_LICENSE_FILE;
 		}
@@ -152,7 +153,17 @@ namespace PX::Net
 		Cryptography::Initialize( );
 
 		const auto strResponse = Request( strLoginURL, dqLoginData );
-		return strResponse.empty( ) ? LOGIN_CONNECTION_FAILURE : ELogin( std::stoi( strResponse ) );
+		if ( strResponse.empty( ) )
+			return LOGIN_CONNECTION_FAILURE;
+
+		auto jsResponse = nlohmann::json::parse( Cryptography::Decrypt( strResponse ) );
+		const auto strSecondaryGroups = jsResponse[ "Secondary Groups" ].get< std::string >( );
+
+		if( bHasExtension != nullptr )
+			for ( auto i = PX_EXTENSION_CSGO; i <= PX_EXTENSION_RSIX; i++ )
+				bHasExtension[ i ] = strSecondaryGroups.find( std::to_string( iGroupIDS[ i ] ) ) != std::string::npos;
+
+		return ELogin( std::stoi( jsResponse[ "Return Code" ].get< std::string >( ) ) );
 	}
 
 	std::string PX_API RequestExtensionInformation( unsigned uExtension )

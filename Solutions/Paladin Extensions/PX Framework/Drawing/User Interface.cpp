@@ -24,10 +24,10 @@ namespace PX::UI
 
 		constexpr nk_color clrTextActive { 255, 255, 255, 255 }, clrBlue { 33, 150, 243, 255 }, clrDarkBlue { 43, 60, 75, 255 }, clrBackground { 56, 60, 66, 255 }, clrLightBackground { 61, 65, 72, 255 },
 			clrDarkBackground { 45, 50, 56, 255 }, clrBorder { 80, 84, 89, 255 }, clrToolbox { 42, 44, 48, 255 }, clrHeader { 33, 36, 40, 255 }, clrBlueActive { 54, 70, 84, 255 },
-			clrBlueHover { 54, 70, 84, 200 }, clrBlueDormant { 43, 60, 75, 255 }, clrTextDormant { 175, 180, 187, 255 };
+			clrBlueHover { 54, 70, 84, 200 }, clrBlueDormant { 43, 60, 75, 255 }, clrTextDormant { 175, 180, 187, 255 }, clrDisabled { 54, 64, 73, 255 };
 		nk_color clrColorTable[ NK_COLOR_COUNT ] { };
 
-		nk_style_button btnTopActive { }, btnTop { }, btnRegularActive { }, btnRegular { }, btnSpecialActive { }, btnSpecial { }, btnCombo { }, btnComboActive { };
+		nk_style_button btnTopActive { }, btnTop { }, btnRegularActive { }, btnRegular { }, btnDisabled { }, btnSpecialActive { }, btnSpecial { }, btnCombo { }, btnComboActive { };
 
 		LPD3DXSPRITE pBufferSprite;
 
@@ -198,6 +198,17 @@ namespace PX::UI
 			btnRegular.text_hover = nk_rgba( 255, 255, 255, 255 );
 			btnRegular.text_normal = nk_rgba( 175, 180, 187, 255 );
 			btnRegular.text_alignment = NK_TEXT_LEFT;
+
+			btnDisabled.rounding = 3.f;
+			btnDisabled.padding = nk_vec2( 1, 0 );
+			btnDisabled.touch_padding = nk_vec2( 1, 0 );
+			btnDisabled.active.data.color = clrDisabled;
+			btnDisabled.hover.data.color = clrDisabled;
+			btnDisabled.normal.data.color = clrDisabled;
+			btnDisabled.text_active = nk_rgba( 116, 153, 183, 255 );
+			btnDisabled.text_hover = nk_rgba( 116, 153, 183, 255 );
+			btnDisabled.text_normal = nk_rgba( 116, 153, 183, 255 );
+			btnDisabled.text_alignment = NK_TEXT_CENTERED;
 
 			btnSpecialActive.rounding = 3.f;
 			btnSpecialActive.padding = nk_vec2( 1, 0 );
@@ -882,7 +893,7 @@ namespace PX::UI
 			bWasClicking = PX_INPUT.GetKeyState( VK_LBUTTON ) == true;
 		}
 
-		bool PX_API Button( EPosition pPosition, const char* szText, bool bActive, cstr_t szTooltip /*= nullptr*/ )
+		bool PX_API Button( EPosition pPosition, const char* szText, bool bActive, bool bDisabled, cstr_t szTooltip /*= nullptr*/ )
 		{
 			iCurrentRowUsedColumns++;
 
@@ -896,9 +907,9 @@ namespace PX::UI
 				fOldFlags = pContext->last_widget_state;
 				pContext->last_widget_state = 0;
 			}
-			const auto bReturn = nk_button_label_styled( pContext, bActive ? &btnSpecialActive : &btnSpecial, szText );
+			const auto bReturn = nk_button_label_styled( pContext, bDisabled ? &btnDisabled : bActive ? &btnSpecialActive : &btnSpecial, szText );
 
-			if ( !bFoundHoverTarget )
+			if ( !bFoundHoverTarget && !bDisabled )
 			{
 				bHover = HoverCheck( CURSOR_HAND );
 				pContext->last_widget_state = fOldFlags;
@@ -909,15 +920,20 @@ namespace PX::UI
 			if ( szTooltip )
 				Tooltip( bHover, szTooltip );
 
-			if ( bHover )
-			{
-				if ( !bActive )
-					clrCurrentColor = clrBlueHover;
-			}
+			if ( bDisabled )
+				clrCurrentColor = clrDisabled;
 			else
-				clrCurrentColor = clrBlueDormant;
-			if ( bActive )
-				clrCurrentColor = clrBlueActive;
+			{
+				if ( bHover )
+				{
+					if ( !bActive )
+						clrCurrentColor = clrBlueHover;
+				}
+				else
+					clrCurrentColor = clrBlueDormant;
+				if ( bActive )
+					clrCurrentColor = clrBlueActive;
+			}
 
 			switch ( pPosition )
 			{
@@ -940,7 +956,7 @@ namespace PX::UI
 				default:
 					return false;
 			}
-			return bReturn;
+			return bDisabled ? false : bReturn;
 		}
 
 		void PX_API Checkbox( cstr_t szText, bool *bActive, cstr_t szTooltip /*= nullptr*/ )
@@ -1145,7 +1161,7 @@ namespace PX::UI
 				nk_spacing( pContext, 1 );
 				nk_layout_row_push( pContext, 75 );
 
-				if ( Button( EPosition::LEFT, PX_XOR( "+" ), false ) )
+				if ( Button( EPosition::LEFT, PX_XOR( "+" ), false, false ) )
 				{
 					pActiveEditColor->PutNewColorSequence( color_t( ), 1000u );
 					uCurrentSequence = pActiveEditColor->sSequences - 1;
@@ -1154,7 +1170,7 @@ namespace PX::UI
 						pActiveEditColor->GetColor( uCurrentSequence ).bfl,
 						pActiveEditColor->GetColor( uCurrentSequence ).afl };
 				}
-				if ( Button( EPosition::RIGHT, PX_XOR( "-" ), false ) )
+				if ( Button( EPosition::RIGHT, PX_XOR( "-" ), false, false ) )
 				{
 					pActiveEditColor->DeleteColorSequence( uCurrentSequence );
 					uCurrentSequence = 0u;
@@ -1175,7 +1191,7 @@ namespace PX::UI
 				nk_layout_space_end( pContext );
 
 				nk_layout_row_static( pContext, 25, int( flColorPickerWidth - 5 ), 1 );
-				if ( Button( EPosition::LEFT, PX_XOR( "EXIT" ), false ) )
+				if ( Button( EPosition::LEFT, PX_XOR( "EXIT" ), false, false ) )
 				{
 					bShouldClose = true;
 					bNewColor = true;

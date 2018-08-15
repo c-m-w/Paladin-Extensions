@@ -128,7 +128,7 @@
         return $response;
     }
 
-    function PutLoginAttempt( $user_id, $cur_unique_id, $hardware, $code )
+    function PutLoginAttempt( $user_id, $cur_unique_id, $hardware, $code, $secondary_groups = "NONE" )
     {
         global $sql_connection;
 
@@ -144,7 +144,7 @@
                 $unique_id = $result->fetch_assoc( )[ "unique_id" ];
          }
         $sql_connection->query( 'INSERT INTO px_logins VALUES (' . ( int )$user_id . ', ' . ( int )time( ) . ', ' . ( int )$cur_unique_id . ', ' . $unique_id . ', "' . ( string )$info[ "ip" ] . '", "' . ( string )$info[ "isp" ] . '", "' . ( string )$info[ "countryCode" ] . '", ' . ( int )$code . ')' );
-        return ( string )$code;
+        return Encrypt( json_encode( array( "Return Code" => ( string )$code, "Secondary Groups" => $secondary_groups ) ) );
     }
 
     function InsertNewHardware( $unique_id, $user_id, $hardware )
@@ -174,27 +174,36 @@
         SetUniqueID( $user_id, 0 );
         return false;
     }
+
+    function BanUser( $user_id )
+    {
+        global $sql_connection;
+
+        $sql_connection->query( "UPDATE xf_user SET is_banned = 1 WHERE user_id = " . $user_id );
+    }
 	
 	function BeginSession( $user_id )
 	{
         global $is_staff;
+        global $secondary_group_ids;
 
 		session_start( );
 		$_SESSION[ "key" ] = Keys[ "key" ];
 		$_SESSION[ "iv" ] = Keys[ "iv" ];
         $_SESSION[ "is_staff" ] = $is_staff;
         $_SESSION[ "user_id" ] = $user_id;
+        $_SESSION[ "secondary_group_ids" ] = $secondary_group_ids;
 	}
 	
     define( "ExtensionID", array( "manager" => 1, "csgo" => 2, "pubg" => 3, "rsix" => 4 ) );
 
-	define( "GameInfo", array( 2 => "../../Extensions/csgo.info", 3 => "../../Extensions/pubg.info" ) );
-	define( "GameCheat", array( 1 => "../../Extensions/manager.dll", 2 => "../../Extensions/csgo.dll", 3 => "../../Extensions/pubg.dll" ) );
+	define( "ExtensionInfo", array( 2 => "../../Extensions/PX CSGO.info", 3 => "../../Extensions/PX PUBG.info" ) );
+	define( "Extension", array( 1 => "../../Extensions/PX Manager.dll", 2 => "../../Extensions/PX CSGO.dll", 3 => "../../Extensions/PX PUBG.dll" ) );
 	
 	function CompileCheat( $game_id )
 	{
 		// -o 'output file' 'file to compile'
-		exec( "g++ -o ".GameCheat[ $game_id ]." **FILE TO COMPILE**" );
+		exec( "g++ -o ".Extension[ $game_id ]." **FILE TO COMPILE**" );
 	}
 	
     define( "FileSections", 7 );
@@ -237,14 +246,14 @@
 
         $sql_connection->query( 'INSERT INTO px_extension_load VALUES(' . $_SESSION[ "user_id" ] . ', ' . time( ) . ', ' . $game_id . ' )' );
 
-		return array( "Order" => $order, "Sections" => GenerateSections( GameCheat[ $game_id ], $order ) );
+		return array( "Order" => $order, "Sections" => GenerateSections( Extension[ $game_id ], $order ) );
 	}
 	
 	function SendInformation( $game_id )
 	{
 		session_start( );
 		if( $_SESSION[ "logged_in" ] == TRUE )
-			echo openssl_encrypt( file_get_contents( GameInfo[ $game_id ] ), EncryptionMethod, $_SESSION[ "key" ], 0, $_SESSION[ "iv" ] );
+			echo openssl_encrypt( file_get_contents( ExtensionInfo[ $game_id ] ), EncryptionMethod, $_SESSION[ "key" ], 0, $_SESSION[ "iv" ] );
 		else
 			echo ReturnKeys[ "Establishing Failure" ];
 		session_destroy( );
