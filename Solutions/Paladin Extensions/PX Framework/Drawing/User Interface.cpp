@@ -461,18 +461,18 @@ namespace PX::UI
 		{
 			static const std::deque< cstr_t > dqPrimaryTabs
 			{
-				PX_XOR( "Tab One" ),
-				PX_XOR( "Super Wide Tab That Is Dynamically Sized Depending On Text" ),
-				PX_XOR( "Tab three!!!" ICON_FA_KEY ),
-				PX_XOR( "Tab Four" )
+				"Tab One",
+				"Super Wide Tab That Is Dynamically Sized Depending On Text",
+				"Tab three!!!" ICON_FA_KEY,
+				"Tab Four" 
 			};
 
 			static const std::deque< cstr_t > dqSubTabs
 			{
-				PX_XOR( "Subtab One" ),
-				PX_XOR( "Subtab Two" ),
-				PX_XOR( "Subtab Three" ),
-				PX_XOR( "Subtab Four" )
+				"Subtab One",
+				"Subtab Two",
+				"Subtab Three",
+				"Subtab Four"
 			};
 
 			using namespace Widgets;
@@ -517,18 +517,13 @@ namespace PX::UI
 			BeginGroupbox( 200, 150, 500, 420, dqSubTabs.at( jsWidgets[ PX_XOR( "SubTab" ) ] ) );
 			{
 				const static auto iCheckboxTextWidth = CalculateTextBounds( PX_XOR( "Checkbox" ), 30 ).x;
-				static char szIntBuffer[ 32 ], szFloatBuffer[ 32 ], buf[ 32 ];
-				auto bInitializedBuffers = false;
-
-				if ( !bInitializedBuffers )
-				{
-					bInitializedBuffers = true;
-					strcpy( szIntBuffer, std::to_string( jsWidgets[ PX_XOR( "Int" ) ].get< int >( ) ).c_str( ) );
-					strcpy( szFloatBuffer, std::to_string( jsWidgets[ PX_XOR( "Float" ) ].get< int >( ) ).c_str( ) );
-					strcpy( buf, "5.0" );
-				}
+				static char szIntBuffer[ 64 ] { }, szFloatBuffer[ 64 ] { }, buf[ 64 ] { };
 
 				VerticalSpacing( );
+
+				nk_layout_row_dynamic( pContext, 30, 1 );
+				static auto iVal = float( );
+				iVal = InputboxFloat( 10, buf );
 
 				BeginRow( 15, 12, ROW_STATIC );
 				SetRowWidth( 5 );
@@ -538,14 +533,14 @@ namespace PX::UI
 				SetRowWidth( GROUPBOX_COLUMN_WIDTH - iCheckboxTextWidth - CHECKBOX_ICON_WIDTH - COLOR_BUTTON_WIDTH - COLOR_BUTTON_PADDING * 2 );
 				Spacing( );
 				SetRowWidth( COLOR_BUTTON_WIDTH );
-				ColorButton( PX_XOR( "Color 1" ), &clrFirst );
+				ColorButton( "Color 1", &clrFirst );
 				SetRowWidth( CHECKBOX_ICON_WIDTH + CalculateTextBounds( PX_XOR( "Checkbox" ), 30 ).x );
 				Checkbox( PX_XOR( "Checkbox" ), jsWidgets[ PX_XOR( "Second" ) ].get_ptr< bool* >( ) );
 				SetRowWidth( GROUPBOX_COLUMN_WIDTH - iCheckboxTextWidth - CHECKBOX_ICON_WIDTH - COLOR_BUTTON_WIDTH * 2 - COLOR_BUTTON_PADDING * 4 );
 				Spacing( );
 				SetRowWidth( COLOR_BUTTON_WIDTH );
-				ColorButton( PX_XOR( "Color 2" ), &clrSecond );
-				ColorButton( PX_XOR( "Color 3" ), &clrThird );
+				ColorButton( "Color 2", &clrSecond );
+				ColorButton( "Color 3", &clrThird );
 				Checkbox( PX_XOR( "Checkbox" ), jsWidgets[ PX_XOR( "Third" ) ].get_ptr< bool* >( ) );
 				EndRow( );
 
@@ -774,7 +769,7 @@ namespace PX::UI
 
 			const bool bHoveringMinimize = nk_input_is_mouse_hovering_rect( &pContext->input, nk_rect( recMinimize.x + 8, recMinimize.y, recMinimize.w + 2, recMinimize.h ) ),
 				bHoveringClose = nk_input_is_mouse_hovering_rect( &pContext->input, recCloseButton ),
-				bClicking = PX_INPUT.GetKeyState( VK_LBUTTON );
+				bClicking = PX_INPUT.GetKeyState( VK_LBUTTON ) == true;
 
 			if ( GetActiveWindow( ) != hwWindowHandle || bMinimized )
 				return;
@@ -858,7 +853,7 @@ namespace PX::UI
 			const static auto uLinkTextHeight = 15u;
 			const static auto uLinkTextSpacing = 10u;
 			static auto bWasClicking = false; // stop it from opening 10 million pages
-			bool bClicking = PX_INPUT.GetKeyState( VK_LBUTTON );
+			bool bClicking = PX_INPUT.GetKeyState( VK_LBUTTON ) == true;
 			auto uPosition = uLinkTextSpacing + uLinkTextHeight / 2u;
 			const auto uYPosition = uLinkTextHeight / 2u;
 
@@ -884,7 +879,7 @@ namespace PX::UI
 				uPosition += unsigned( vecTextSize.x ) + uLinkTextSpacing;
 			}
 			EndRow( );
-			bWasClicking = PX_INPUT.GetKeyState( VK_LBUTTON );
+			bWasClicking = PX_INPUT.GetKeyState( VK_LBUTTON ) == true;
 		}
 
 		bool PX_API Button( EPosition pPosition, const char* szText, bool bActive, cstr_t szTooltip /*= nullptr*/ )
@@ -957,7 +952,7 @@ namespace PX::UI
 			nk_layout_row_push( pContext, 25 );
 			const auto rcBoundaries = nk_widget_bounds( pContext );
 			const auto bHovering = nk_input_is_mouse_hovering_rect( &pContext->input, rcBoundaries );
-			const auto bClicking = PX_INPUT.GetKeyState( VK_LBUTTON ) == CInputManager::EKeyState::DOWN;
+			const auto bClicking = PX_INPUT.GetKeyState( VK_LBUTTON ) == true;
 
 			if ( bHovering && !pActiveEditColor )
 				SetWidgetActive( CURSOR_HAND );
@@ -1073,7 +1068,7 @@ namespace PX::UI
 				bNewColor = true;
 			}
 
-			bWasClicking = PX_INPUT.GetKeyState( VK_LBUTTON );
+			bWasClicking = PX_INPUT.GetKeyState( VK_LBUTTON ) == true;
 			if ( !bWasClicking )
 				bStoppedClicking = true;
 			if ( bNewColor && pActiveEditColor )
@@ -1099,7 +1094,7 @@ namespace PX::UI
 			if ( !bStoppedClicking )
 				return;
 
-			if ( nk_popup_begin( pContext, NK_POPUP_DYNAMIC, ( strBaseTitle + szColorPickerSubject + PX_XOR( R"(')" ) ).c_str( ),
+			if ( nk_popup_begin( pContext, NK_POPUP_DYNAMIC, ( strBaseTitle + szColorPickerSubject + "'" ).c_str( ),
 								 NK_WINDOW_BORDER | NK_WINDOW_TITLE | NK_WINDOW_NO_SCROLLBAR,
 								 rcColorPickerBoundaries, pActiveEditColor == nullptr ) )
 			{
@@ -1263,6 +1258,30 @@ namespace PX::UI
 			nk_fill_triangle( pOutput, recComboboxBounds.x + recComboboxBounds.w - 10, recComboboxBounds.y + recComboboxBounds.h / 2 - 3, recComboboxBounds.x + recComboboxBounds.w - 14, recComboboxBounds.y + recComboboxBounds.h / 2 + 3, recComboboxBounds.x + recComboboxBounds.w - 18, recComboboxBounds.y + recComboboxBounds.h / 2 - 3, nk_input_is_mouse_prev_hovering_rect( &pContext->input, recComboboxBounds ) && !bDrewCombo ? clrTextActive : clrTextDormant );
 		}
 
+		void PX_API Inputbox( unsigned uMaxCharacters, char* szBuffer )
+		{
+			iCurrentRowUsedColumns++;
+			nk_edit_string_zero_terminated( pContext, NK_EDIT_FIELD, szBuffer, uMaxCharacters, nk_filter_ascii );
+		}
+
+		int PX_API InputboxInteger( unsigned uMaxCharacters, char* szBuffer )
+		{
+			iCurrentRowUsedColumns++;
+			nk_edit_string_zero_terminated( pContext, NK_EDIT_FIELD, szBuffer, uMaxCharacters, nk_filter_decimal );
+			if ( strlen( szBuffer ) > 0 && strcmp( szBuffer, PX_XOR( "-" ) ) )
+				return std::stoi( szBuffer );
+			return 0;
+		}
+
+		float PX_API InputboxFloat( unsigned uMaxCharacters, char* szBuffer )
+		{
+			iCurrentRowUsedColumns++;
+			nk_edit_string_zero_terminated( pContext, NK_EDIT_FIELD, szBuffer, uMaxCharacters, nk_filter_float );
+			if ( strlen( szBuffer ) > 0 && strcmp( szBuffer, PX_XOR( "-" ) ) && strcmp( szBuffer, PX_XOR( "." ) ) && strcmp( szBuffer, PX_XOR( "-." ) ) )
+				return std::stof( szBuffer );
+			return 0.f;
+		}
+
 		int PX_API Slider( cstr_t szTitle, char* szInputBuffer, int iMin, int iMax, int iCurrentValue, unsigned uStartX, unsigned uStartY, unsigned uWidth, unsigned uHeight, bool bIgnorePopup /*= false*/ )
 		{
 			iCurrentRowUsedColumns += 3;
@@ -1281,7 +1300,7 @@ namespace PX::UI
 
 			const auto recBounds = nk_widget_bounds( pContext );
 			const auto bHovering = nk_input_is_mouse_hovering_rect( &pContext->input, recBounds );
-			const bool bClicking = PX_INPUT.GetKeyState( VK_LBUTTON );
+			const bool bClicking = bool( PX_INPUT.GetKeyState( VK_LBUTTON ) );
 
 			if ( bHovering && !bInEdit )
 			{
@@ -1297,41 +1316,11 @@ namespace PX::UI
 
 			if ( bInEdit )
 			{
-				static auto bSetBuffer = false;
-				static unsigned uSetKey = 0;
-				const auto fnWriteBuffer = [ = ]( unsigned uKey )
-				{
-					if ( ( uKey >= '0' && uKey <= '9' || uKey == '-' ) && bSetBuffer )
-						uSetKey = uKey;
-				};
-				static auto bSetCallback = false;
-
-				if ( !strcmp( szInputBuffer, "0" ) )
-					bSetBuffer = true;
-
-				if ( uSetKey != 0 && bSetBuffer )
-				{
-					strcpy( szInputBuffer, "" );
-					uSetKey = 0;
-					pContext->text_edit.select_start = 1;
-					pContext->text_edit.select_end = 1;
-					pContext->text_edit.string.len = 1;
-					bSetBuffer = false;
-				}
-
-				if ( !bSetCallback )
-				{
-					PX_INPUT.AddGlobalCallback( fnWriteBuffer );
-					bSetCallback = true;
-				}
-
 				iCurrentRowUsedColumns--;
 				PushCustomRow( uStartX + unsigned( vecTitleSize.x ) + 8, uStartY, uWidth - unsigned( vecTitleSize.x ), unsigned( vecTextSize.y ) + 5 );
 				const auto recNewBounds = nk_widget_bounds( pContext );
-				iCurrentValue = Inputbox< int >( strlen( std::to_string( FLT_MAX ).c_str( ) ), szInputBuffer );
+				iCurrentValue = InputboxInteger( strlen( std::to_string( FLT_MAX ).c_str( ) ), szInputBuffer );
 				bHoveringInputBox = nk_input_is_mouse_hovering_rect( &pContext->input, recNewBounds );
-
-				//auto urdad = pContext;
 
 				if ( bHoveringInputBox )
 					SetWidgetActive( CURSOR_IBEAM );
@@ -1361,7 +1350,7 @@ namespace PX::UI
 			else
 				bWasClickingInBoundaries = false;
 
-			bWasClicking = PX_INPUT.GetKeyState( VK_LBUTTON );
+			bWasClicking = bool( PX_INPUT.GetKeyState( VK_LBUTTON ) );
 
 			const auto iNewValue = nk_slide_int( pContext, iMin, iCurrentValue, iMax, ( iMax - iMin ) / 20 );
 			if ( !bInEdit )
@@ -1376,7 +1365,7 @@ namespace PX::UI
 			iCurrentRowUsedColumns += 3;
 
 			px_assert( flMax > flMin );
-			auto szTexta = std::to_string( flCurrentValue ).substr( 0, std::to_string( int( flCurrentValue ) ).size( ) + 1 + uDigits );
+			auto szTexta = std::to_string( flCurrentValue ).substr( 0, std::to_string( int( flCurrentValue ) ).size( ) + ( flCurrentValue < 0.f ? 2 : 1 ) + uDigits );
 			auto szText = szTexta.c_str( );
 			static auto bInEdit = false, bSetEditValue = false;
 
@@ -1404,43 +1393,16 @@ namespace PX::UI
 
 			if ( bInEdit )
 			{
-				static auto bSetBuffer = false;
-				static unsigned uSetKey = 0;
-				const auto fnWriteBuffer = [ = ]( unsigned uKey )
-				{
-					if ( ( uKey >= '0' && uKey <= '9' || uKey == '-' || uKey == '.' ) && bSetBuffer )
-						uSetKey = uKey;
-				};
-				static auto bSetCallback = false;
-
-				if ( !strcmp( szInputBuffer, "0" ) )
-					bSetBuffer = true;
-
-				if ( uSetKey != 0 && bSetBuffer )
-				{
-					strcpy( szInputBuffer, "" );
-					uSetKey = 0;
-					pContext->text_edit.select_start = 1;
-					pContext->text_edit.select_end = 1;
-					pContext->text_edit.string.len = 1;
-					bSetBuffer = false;
-				}
-
-				if ( !bSetCallback )
-				{
-					PX_INPUT.AddGlobalCallback( fnWriteBuffer );
-					bSetCallback = true;
-				}
-
 				iCurrentRowUsedColumns--;
 				PushCustomRow( uStartX + unsigned( vecTitleSize.x ) + 8, uStartY, uWidth - unsigned( vecTitleSize.x ), unsigned( vecTextSize.y ) + 5 );
 				const auto recNewBounds = nk_widget_bounds( pContext );
-				flCurrentValue = Inputbox< float >( strlen( std::to_string( FLT_MAX ).c_str( ) ), szInputBuffer );
+				flCurrentValue = InputboxFloat( strlen( std::to_string( FLT_MAX ).c_str( ) ), szInputBuffer );
 				bHoveringInputBox = nk_input_is_mouse_hovering_rect( &pContext->input, recNewBounds );
 
 				if ( bHoveringInputBox )
 					SetWidgetActive( CURSOR_IBEAM );
-				else if ( bClicking || PX_INPUT.GetKeyState( VK_RETURN ) )
+
+				if ( !bHoveringInputBox && bClicking )
 				{
 					bSetEditValue = strlen( szInputBuffer ) > 0;
 					bInEdit = false;

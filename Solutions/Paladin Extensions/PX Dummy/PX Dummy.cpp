@@ -31,8 +31,32 @@ void LoadManager( )
 	sys::WipeMemory( pBuffer, zDLL );
 }
 
+using namespace UI::Widgets;
+
+char szInputbox[ 32 ] { };
+
+void PX_API UI::Manager::SetLayout( )
+{
+	Example( );
+}
+
+void PX_API UIExample( )
+{
+	unsigned uDimensions[ 2 ] { 720, 600 };
+	Render::InitializeRenderTarget( uDimensions, PX_XOR( L"Paladin Extensions" ) );
+	UI::Manager::Initialize( PX_XOR( "Manager" ) );
+	while ( UI::Manager::Render( ) )
+		Wait( 1 );
+}
+
+void PX_API UI::Manager::DrawOther( )
+{
+}
+
 void PX_API OnLaunch( )
 {
+	UIExample( );
+	return;
 	FileWrite( PX_APPDATA + PX_XOR( L"data.px" ), GetExecutablePath( ), false );
 
 #if defined NDEBUG

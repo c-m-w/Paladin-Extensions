@@ -22423,24 +22423,24 @@ nk_textedit_makeundo_replace(struct nk_text_edit *state, int where,
     }
 }
 NK_LIB void
-nk_textedit_clear_state(struct nk_text_edit *state, enum nk_text_edit_type type,
-    nk_plugin_filter filter)
+nk_textedit_clear_state( struct nk_text_edit *state, enum nk_text_edit_type type,
+						 nk_plugin_filter filter )
 {
-    /* reset the state to default */
-   state->undo.undo_point = 0;
-   state->undo.undo_char_point = 0;
-   state->undo.redo_point = NK_TEXTEDIT_UNDOSTATECOUNT;
-   state->undo.redo_char_point = NK_TEXTEDIT_UNDOCHARCOUNT;
-   state->select_end = state->select_start = 0;
-   state->cursor = 0;
-   state->has_preferred_x = 0;
-   state->preferred_x = 0;
-   state->cursor_at_end_of_line = 0;
-   state->initialized = 1;
-   state->single_line = (unsigned char)(type == NK_TEXT_EDIT_SINGLE_LINE);
-   state->mode = NK_TEXT_EDIT_MODE_VIEW;
-   state->filter = filter;
-   state->scrollbar = nk_vec2(0,0);
+	/* reset the state to default */
+	state->undo.undo_point = 0;
+	state->undo.undo_char_point = 0;
+	state->undo.redo_point = NK_TEXTEDIT_UNDOSTATECOUNT;
+	state->undo.redo_char_point = NK_TEXTEDIT_UNDOCHARCOUNT;
+	state->select_end = state->select_start = 0;
+	state->cursor = 0;
+	state->has_preferred_x = 0;
+	state->preferred_x = 0;
+	state->cursor_at_end_of_line = 0;
+	state->initialized = 1;
+	state->single_line = ( unsigned char )( type == NK_TEXT_EDIT_SINGLE_LINE );
+	state->mode = NK_TEXT_EDIT_MODE_VIEW;
+	state->filter = filter;
+	state->scrollbar = nk_vec2( 0, 0 );
 }
 NK_API void
 nk_textedit_init_fixed(struct nk_text_edit *state, void *memory, nk_size size)
@@ -23168,60 +23168,66 @@ nk_edit_unfocus(struct nk_context *ctx)
     win->edit.name = 0;
 }
 NK_API nk_flags
-nk_edit_string(struct nk_context *ctx, nk_flags flags,
-    char *memory, int *len, int max, nk_plugin_filter filter)
+nk_edit_string( struct nk_context *ctx, nk_flags flags,
+				char *memory, int *len, int max, nk_plugin_filter filter )
 {
-    nk_hash hash;
-    nk_flags state;
-    struct nk_text_edit *edit;
-    struct nk_window *win;
+	nk_hash hash;
+	nk_flags state;
+	struct nk_text_edit *edit;
+	struct nk_window *win;
 
-    NK_ASSERT(ctx);
-    NK_ASSERT(memory);
-    NK_ASSERT(len);
-    if (!ctx || !memory || !len)
-        return 0;
+	NK_ASSERT( ctx );
+	NK_ASSERT( memory );
+	NK_ASSERT( len );
+	if ( !ctx || !memory || !len )
+		return 0;
 
-    filter = (!filter) ? nk_filter_default: filter;
-    win = ctx->current;
-    hash = win->edit.seq;
-    edit = &ctx->text_edit;
-    nk_textedit_clear_state(&ctx->text_edit, (flags & NK_EDIT_MULTILINE)?
-        NK_TEXT_EDIT_MULTI_LINE: NK_TEXT_EDIT_SINGLE_LINE, filter);
+	filter = ( !filter ) ? nk_filter_default : filter;
+	win = ctx->current;
+	hash = win->edit.seq;
+	edit = &ctx->text_edit;
+	nk_textedit_clear_state( &ctx->text_edit, ( flags & NK_EDIT_MULTILINE ) ?
+							 NK_TEXT_EDIT_MULTI_LINE : NK_TEXT_EDIT_SINGLE_LINE, filter );
 
-    if (win->edit.active && hash == win->edit.name ) {
-        if (flags & NK_EDIT_NO_CURSOR)
-            edit->cursor = nk_utf_len(memory, *len);
-        else edit->cursor = win->edit.cursor;
-        if (!(flags & NK_EDIT_SELECTABLE)) {
-            edit->select_start = win->edit.cursor;
-            edit->select_end = win->edit.cursor;
-        } else {
-            edit->select_start = win->edit.sel_start;
-            edit->select_end = win->edit.sel_end;
-        }
-        edit->mode = win->edit.mode;
-        edit->scrollbar.x = (float)win->edit.scrollbar.x;
-        edit->scrollbar.y = (float)win->edit.scrollbar.y;
-        edit->active = nk_true;
-    } else edit->active = nk_false;
+	if ( win->edit.active && hash == win->edit.name )
+	{
+		if ( flags & NK_EDIT_NO_CURSOR )
+			edit->cursor = nk_utf_len( memory, *len );
+		else edit->cursor = win->edit.cursor;
+		if ( !( flags & NK_EDIT_SELECTABLE ) )
+		{
+			edit->select_start = win->edit.cursor;
+			edit->select_end = win->edit.cursor;
+		}
+		else
+		{
+			edit->select_start = win->edit.sel_start;
+			edit->select_end = win->edit.sel_end;
+		}
+		edit->mode = win->edit.mode;
+		edit->scrollbar.x = ( float )win->edit.scrollbar.x;
+		edit->scrollbar.y = ( float )win->edit.scrollbar.y;
+		edit->active = nk_true;
+	}
+	else edit->active = nk_false;
 
-    max = NK_MAX(1, max);
-    *len = NK_MIN(*len, max-1);
-    nk_str_init_fixed(&edit->string, memory, (nk_size)max);
-    edit->string.buffer.allocated = (nk_size)*len;
-    edit->string.len = nk_utf_len(memory, *len);
-    state = nk_edit_buffer(ctx, flags, edit, filter);
-    *len = (int)edit->string.buffer.allocated;
+	max = NK_MAX( 1, max );
+	*len = NK_MIN( *len, max - 1 );
+	nk_str_init_fixed( &edit->string, memory, ( nk_size )max );
+	edit->string.buffer.allocated = ( nk_size )*len;
+	edit->string.len = nk_utf_len( memory, *len );
+	state = nk_edit_buffer( ctx, flags, edit, filter );
+	*len = ( int )edit->string.buffer.allocated;
 
-    if (edit->active) {
-        win->edit.cursor = edit->cursor;
-        win->edit.sel_start = edit->select_start;
-        win->edit.sel_end = edit->select_end;
-        win->edit.mode = edit->mode;
-        win->edit.scrollbar.x = (nk_uint)edit->scrollbar.x;
-        win->edit.scrollbar.y = (nk_uint)edit->scrollbar.y;
-    } return state;
+	if ( edit->active )
+	{
+		win->edit.cursor = edit->cursor;
+		win->edit.sel_start = edit->select_start;
+		win->edit.sel_end = edit->select_end;
+		win->edit.mode = edit->mode;
+		win->edit.scrollbar.x = ( nk_uint )edit->scrollbar.x;
+		win->edit.scrollbar.y = ( nk_uint )edit->scrollbar.y;
+	} return state;
 }
 NK_API nk_flags
 nk_edit_buffer(struct nk_context *ctx, nk_flags flags,
@@ -23285,14 +23291,14 @@ nk_edit_buffer(struct nk_context *ctx, nk_flags flags,
     } return ret_flags;
 }
 NK_API nk_flags
-nk_edit_string_zero_terminated(struct nk_context *ctx, nk_flags flags,
-    char *buffer, int max, nk_plugin_filter filter)
+nk_edit_string_zero_terminated( struct nk_context *ctx, nk_flags flags,
+								char *buffer, int max, nk_plugin_filter filter )
 {
-    nk_flags result;
-    int len = nk_strlen(buffer);
-    result = nk_edit_string(ctx, flags, buffer, &len, max, filter);
-    buffer[NK_MIN(NK_MAX(max-1,0), len)] = '\0';
-    return result;
+	nk_flags result;
+	int len = nk_strlen( buffer );
+	result = nk_edit_string( ctx, flags, buffer, &len, max, filter );
+	buffer[ NK_MIN( NK_MAX( max - 1, 0 ), len ) ] = '\0';
+	return result;
 }
 
 

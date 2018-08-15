@@ -233,11 +233,11 @@ namespace PX::UI
 		void PX_API ComboboxMulti( unsigned uButtonHeight, cstr_t szTitle, const std::deque< cstr_t >& dqOptions, std::deque< bool >& dqEnabledOptions );
 
 		/** \brief Creates a box for the user to input data.\n Uses one column. */
-		/**	\tparam _t Can be either float, char* or int. */
 		/**	\param uMaxCharacters Maximum amount of characters for the inputbox to allow. */
 		/**	\param szBuffer Buffer for the value of the text box. */
-		/**	\return Value of the text box. */
-		template< typename _t > _t PX_API Inputbox( unsigned uMaxCharacters, char* szBuffer );
+		void PX_API Inputbox( unsigned uMaxCharacters, char* szBuffer );
+		int PX_API InputboxInteger( unsigned uMaxCharacters, char* szBuffer );
+		float PX_API InputboxFloat( unsigned uMaxCharacters, char* szBuffer );
 
 		/** \brief Creates a slider whose value label can be clicked to manually input a value.\n It steps 1/20th of the slidable distance.\n Uses three columns. */
 		/**	\param szTitle Title of the slider. */

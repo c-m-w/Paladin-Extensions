@@ -6,7 +6,7 @@ namespace PX
 {
 	void PX_API CInputManager::ProcessKey( unsigned uKey, UINT uMessage )
 	{
-		ksKeys[ uKey ] = uMessage % 2 ? DOWN : UP;
+		ksKeys[ uKey ] = uMessage % 2 ? CKeyState::DOWN : CKeyState::UP;
 		if ( ksKeys[ uKey ] )
 		{
 			mmtKeyDownTime[ uKey ] = GetMoment( );
@@ -65,13 +65,16 @@ namespace PX
 		ProcessKey( wParam, uMessage );
 	}
 
+	CInputManager::CInputManager( ): ksKeys( )
+	{}
+
 	void PX_API CInputManager::OnEvent( HWND hwWindowHandle, UINT uMessage, WPARAM wParam, LPARAM lParam ) // hwWindowHandle is unused
 	{
 		if ( uMessage == WM_SIZE && wParam == SIZE_MINIMIZED )
 		{
 			// When the window is minimized, set all the key states to up so that when the window becomes back in focus it won't be fucked up.
 			for each( auto& key in ksKeys )
-				key = UP;
+				key = CKeyState::UP;
 			return;
 		}
 
@@ -101,7 +104,7 @@ namespace PX
 		}
 	}
 
-	CInputManager::EKeyState PX_API CInputManager::GetKeyState( unsigned uKey )
+	CKeyState PX_API CInputManager::GetKeyState( unsigned uKey )
 	{
 		return ksKeys[ uKey ];
 	}
