@@ -1,6 +1,7 @@
 TestResult.xml
 dlldata.c
 project.lock.json
+license.px
 
 **/desktop.ini
 [Bb]uild[Ll]og.*
@@ -67,4 +68,3 @@ ipch/
 *.gpState
 *.[Rr]e[Ss]harper
 *.DotSettings.user
-*.px
