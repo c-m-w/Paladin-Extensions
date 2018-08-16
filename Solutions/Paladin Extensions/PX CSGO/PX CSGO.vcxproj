@@ -23,7 +23,7 @@
     <ProjectGuid>{DE0F53AB-6B29-4C0D-BD91-024D6493EBDB}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>PXCSGO</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">

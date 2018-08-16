@@ -8,27 +8,17 @@
 
 bool PX_API Initialize( )
 {
-<<<<<<< HEAD
-	const auto lgnResult = Net::Login( );
-	return ( lgnResult == Net::LOGIN_SUCCESS
-			 || lgnResult == Net::LOGIN_STAFF_SUCCESS )
-		&& Information::Initialize( )
-		&& Hooks::Initialize( );
-=======
-	return PX::Information::InitializeInformation( )
-		   && PX::Hooks::InitializeHooks( );
->>>>>>> 0d3965065accae6dee106ae23579fd5acd0cb49a
+	const auto lgnResult = PX::Net::Login( );
+	return ( lgnResult == PX::Net::LOGIN_SUCCESS
+			 || lgnResult == PX::Net::LOGIN_STAFF_SUCCESS )
+		&& PX::Information::InitializeInformation( )
+		&& PX::Hooks::InitializeHooks( );
 }
 
 void PX_API OnAttach( )
 {
-<<<<<<< HEAD
 	if ( !Initialize( ) )
 		exit( -1 );
-=======
-	Initialize( );
-	PX::Hooks::hkDirectXDevice->HookIndex( PX::VirtualTableIndicies::uEndScene, PX::Hooks::EndScene );
->>>>>>> 0d3965065accae6dee106ae23579fd5acd0cb49a
 }
 
 void PX_API OnDetach( )

@@ -124,6 +124,16 @@ namespace PX::Tools
 		return bSetNewTable;
 	}
 
+	bool CHook::HookIndex( unsigned uIndex, void* pNewFunction )
+	{
+		if ( uIndex >= 0 && uIndex <= sTableLength )
+		{
+			pNewTable[ uIndex ] = ptr_t( pNewFunction );
+			return true;
+		}
+		return false;
+	}
+
 	void CHook::UnhookIndex( unsigned uIndex )
 	{
 		if ( uIndex >= 0 && uIndex < sTableLength )

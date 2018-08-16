@@ -10,16 +10,6 @@ namespace PX::Tools
 		return _ChildClassObject;
 	}
 
-	template< typename _fn > bool CHook::HookIndex( unsigned uIndex, _fn fnNewFunction )
-	{
-		if ( uIndex >= 0 && uIndex <= sTableLength )
-		{
-			pNewTable[ uIndex ] = reinterpret_cast< ptr_t >( fnNewFunction );
-			return true;
-		}
-		return false;
-	}
-
 	template< typename _fn > _fn CHook::GetOriginalFunction( unsigned uIndex )
 	{
 		px_assert( uIndex >= 0 && uIndex <= sTableLength );
