@@ -39,7 +39,7 @@
 //{
 //	unsigned uDimensions[ 2 ] { 720, 600 };
 //	Render::InitializeRenderTarget( uDimensions, PX_XOR( L"Paladin Extensions" ) );
-//	UI::Manager::Initialize( PX_XOR( "Manager" ) );
+//	UI::Manager::InitializeUI( PX_XOR( "Manager" ) );
 //	while ( UI::Manager::Render( ) )
 //		Wait( 1 );
 //}
@@ -322,7 +322,7 @@ void PX_API Draw( )
 {
 	unsigned uDimensions[ 2 ] { 720, 435 };
 	InitializeRenderTarget( uDimensions, PX_XOR( L"Paladin Extensions" ) );
-	Initialize( PX_XOR( "Manager" ) );
+	InitializeUI( PX_XOR( "Manager" ) );
 
 	DEVMODE pDevMode;
 	EnumDisplaySettings( nullptr, ENUM_CURRENT_SETTINGS, &pDevMode );

@@ -40,7 +40,7 @@ void LoadManager( )
 //{
 //	unsigned uDimensions[ 2 ] { 720, 600 };
 //	Render::InitializeRenderTarget( uDimensions, PX_XOR( L"Paladin Extensions" ) );
-//	UI::Manager::Initialize( PX_XOR( "Manager" ) );
+//	UI::Manager::InitializeUI( PX_XOR( "Manager" ) );
 //	while ( UI::Manager::Render( ) )
 //		Wait( 1 );
 //}

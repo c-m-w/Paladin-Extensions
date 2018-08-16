@@ -79,7 +79,7 @@ namespace PX::UI
 		/** \brief Initialize the GUI for drawing interactable windows. */
 		/**	\param _szApplicationTitle The subtitle of the GUI window. */
 		/** \return true - Initialization was successful.\n false - Initialization was not successful. */
-		bool PX_API Initialize( Types::cstr_t _szApplicationTitle );
+		bool PX_API InitializeUI( Types::cstr_t _szApplicationTitle );
 		/** \brief Calculates text dimensions with the current font. */
 		/**	\param szText Text to calculate the bounds for. */
 		/**	\param uRowHeight Height of the row that the text is in. */

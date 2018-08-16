@@ -99,7 +99,7 @@ namespace PX::Net
 		dqPostData.emplace_back( PX_XOR( "client" ), PX_XOR( "true" ) );
 
 		InitializeConnection( );
-		Initialize( );
+		InitializeEncryption( );
 
 		auto strResponse = Request( strKeyURL, dqPostData );
 
@@ -158,7 +158,7 @@ namespace PX::Net
 		dqLoginData.emplace_back( strHardwareIdentifier, sys::GetSystemInfo( ).dump( ) );
 
 		px_assert( InitializeConnection( )
-				   && Initialize( ) );
+				   && InitializeEncryption( ) );
 
 		const auto strResponse = Request( strLoginURL, dqLoginData );
 		if ( strResponse.empty( ) )

@@ -3,15 +3,24 @@
 #pragma once
 #pragma warning( push, 0 )
 
+// Standard
 #include <Jeremia-h/Standard Library.hpp>
 
+// Windows
 #include <Windows.h>
-#include <strsafe.h>
 #include <shellapi.h>
 #include <winternl.h>
 #include <ntstatus.h>
+#include <strsafe.h>
+#include <Shlwapi.h>
+#include <TlHelp32.h>
+#include <Psapi.h>
+#include <comdef.h>
+#include <WbemIdl.h>
 #pragma comment( lib, "Shlwapi.lib" )
+#pragma comment( lib, "wbemuuid.lib" )
 
+// Crypto++
 #include <cryptopp/base64.h>
 #include <cryptopp/filters.h>
 #include <cryptopp/hex.h>
@@ -20,6 +29,7 @@
 #include <cryptopp/aes.h>
 #pragma comment( lib, "cryptlib.lib" )
 
+// cURL
 #include <curl/curl.h>
 #pragma comment( lib, "Ws2_32.lib" )
 #pragma comment( lib, "wldap32.lib" )
@@ -27,29 +37,22 @@
 #pragma comment( lib, "Normaliz.lib" )
 #pragma comment( lib, "libcurl_a.lib" )
 
-#include <comdef.h>
-#include <WbemIdl.h>
-#pragma comment( lib, "wbemuuid.lib" )
-#include <TlHelp32.h>
-
-#include <Psapi.h>
-
+// Direct X
 #include <DirectX/d3d9.h>
-#pragma comment( lib, "d3d9.lib" )
 #include <DirectX/d3dx9core.h>
 #include <DirectX/d3dx9math.h>
 #include <DirectX/d3dx9tex.h>
+#pragma comment( lib, "d3d9.lib" )
 #pragma comment( lib, "d3dx9.lib" )
 
+// Fonts
 #include <IconFontCppHeaders/IconsFontAwesome5-Solid.hpp>
 
+// Nuklear
 #include <vurtun/nuklear.h>
 #include <vurtun/demo/d3d9/nuklear_d3d9.h>
 
-#include <Shlwapi.h>
+// Json
 #include <nlohmann/json.hpp>
-
-#include <playsoundapi.h>
-#pragma comment( lib, "Winmm.lib" )
 
 #pragma warning( pop )

@@ -252,7 +252,7 @@ namespace PX::UI
 			btnComboActive.touch_padding = nk_vec2( 5, 5 );
 		}
 
-		bool PX_API Initialize( cstr_t _szApplicationTitle )
+		bool PX_API InitializeUI( cstr_t _szApplicationTitle )
 		{
 			szNuklearWindowTitle = _szApplicationTitle;
 			InitializeNuklear( );
