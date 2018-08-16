@@ -159,7 +159,7 @@ namespace PX::Net
 		auto jsResponse = nlohmann::json::parse( Cryptography::Decrypt( strResponse ) );
 		const auto strSecondaryGroups = jsResponse[ "Secondary Groups" ].get< std::string >( );
 
-		if( bHasExtension != nullptr )
+		if ( bHasExtension != nullptr )
 			for ( auto i = PX_EXTENSION_CSGO; i <= PX_EXTENSION_RSIX; i++ )
 				bHasExtension[ i ] = strSecondaryGroups.find( std::to_string( iGroupIDS[ i ] ) ) != std::string::npos;
 

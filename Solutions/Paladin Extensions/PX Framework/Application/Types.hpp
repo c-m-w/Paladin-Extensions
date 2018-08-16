@@ -42,7 +42,7 @@ namespace PX::Types
 
 	struct SExtensionInfo
 	{
-		std::string  strName, strStatus, strEstimatedNextUpdate, strLastUpdate, strVersion;
+		std::string strName, strStatus, strEstimatedNextUpdate, strLastUpdate, strVersion;
 		bool bInitialized = true;
 
 		SExtensionInfo( )
@@ -50,7 +50,7 @@ namespace PX::Types
 			bInitialized = false;
 		}
 
-		SExtensionInfo( std::string  _strName, std::string  _strStatus, std::string  _strEstimatedNextUpdate, std::string  _strLastUpdate, std::string  _strVersion )
+		SExtensionInfo( std::string _strName, std::string _strStatus, std::string _strEstimatedNextUpdate, std::string _strLastUpdate, std::string _strVersion )
 		{
 			strName = _strName;
 			strStatus = _strStatus;

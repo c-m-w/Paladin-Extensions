@@ -54,7 +54,7 @@ namespace PX::Tools
 		}
 	};
 
-	// INFO: Differentiates casting from like or unlike string types 
+	// INFO: Differentiates casting from like or unlike string types
 	template< typename _To, typename _From > px_abstract_class AStringCastImplementation
 	{
 	public:

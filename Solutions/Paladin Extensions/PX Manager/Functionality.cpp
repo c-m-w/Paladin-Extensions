@@ -30,7 +30,7 @@ namespace Manager
 		if ( strSecurityBuffer.empty( ) )
 			return nullptr;
 
-		auto jsLaunchInformation = nlohmann::json::parse(  strSecurityBuffer );
+		auto jsLaunchInformation = nlohmann::json::parse( strSecurityBuffer );
 		static std::string strReturn[ PX_EXTENSION_MAX ] { { }, { }, { }, { }, { } };
 
 		for( auto u = PX_EXTENSION_CSGO; u <= PX_EXTENSION_RSIX; u++ )

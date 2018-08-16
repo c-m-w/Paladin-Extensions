@@ -451,7 +451,7 @@ namespace PX::UI
 
 			DrawTextures( );
 			DrawOther( );
-			if( bCreatedWindow )
+			if ( bCreatedWindow )
 			{
 				pDevice->EndScene( );
 				pDevice->Present( nullptr, nullptr, nullptr, nullptr );
@@ -475,7 +475,7 @@ namespace PX::UI
 				"Tab One",
 				"Super Wide Tab That Is Dynamically Sized Depending On Text",
 				"Tab three!!!" ICON_FA_KEY,
-				"Tab Four" 
+				"Tab Four"
 			};
 
 			static const std::deque< cstr_t > dqSubTabs
@@ -690,7 +690,7 @@ namespace PX::UI
 					bNewLine = true;
 				};
 
-				if( s == wrdWords.size( ) - 1 )
+				if ( s == wrdWords.size( ) - 1 )
 				{
 					if ( uUsedSpace + wrdCurrent.vecSize.x > uMaxTooltipWidth )
 						fnAddLine( );
@@ -718,9 +718,9 @@ namespace PX::UI
 			const unsigned uWindowHeight = unsigned( dqLines.size( ) * uLineHeight + 13.f );
 			struct nk_rect recTooltip { vecMousePos.x + 20.f, vecMousePos.y, float( uMaxTooltipWidth ), float( uWindowHeight ) };
 
-			if( vecUsableSpace.h - uWindowHeight < 0 )
+			if ( vecUsableSpace.h - uWindowHeight < 0 )
 				recTooltip.y -= uWindowHeight - vecUsableSpace.h;
-			if( vecUsableSpace.w < uMaxTooltipWidth )
+			if ( vecUsableSpace.w < uMaxTooltipWidth )
 				recTooltip.x -= uMaxTooltipWidth - vecUsableSpace.w;
 
 			auto clrOld = pContext->style.window.background;
@@ -828,17 +828,17 @@ namespace PX::UI
 
 			if ( bActive )
 			{
-				auto rcBoundaries = nk_widget_bounds( pContext );
+				auto recBoundaries = nk_widget_bounds( pContext );
 				auto pOutput = nk_window_get_canvas( pContext );
-				nk_fill_rect_multi_color( pOutput, rcBoundaries, clrBorder, clrDarkBackground, clrDarkBackground, clrBorder );
+				nk_fill_rect_multi_color( pOutput, recBoundaries, clrBorder, clrDarkBackground, clrDarkBackground, clrBorder );
 
-				rcBoundaries.w += rcBoundaries.x;
-				rcBoundaries.h += rcBoundaries.y;
+				recBoundaries.w += recBoundaries.x;
+				recBoundaries.h += recBoundaries.y;
 				SetFont( FONT_TAHOMABOLD );
 				const auto bResult = nk_button_label_styled( pContext, &btnRegularActive, szText );
 				HoverCheck( CURSOR_HAND );
 				SetFont( FONT_TAHOMA );
-				nk_stroke_line( pOutput, rcBoundaries.x + 2, rcBoundaries.y, rcBoundaries.x + 2, rcBoundaries.h, 2, clrBlue );
+				nk_stroke_line( pOutput, recBoundaries.x + 2, recBoundaries.y, recBoundaries.x + 2, recBoundaries.h, 2, clrBlue );
 				return bResult;
 			}
 			SetFont( FONT_TAHOMA );
@@ -898,7 +898,7 @@ namespace PX::UI
 			iCurrentRowUsedColumns++;
 
 			SetFont( FONT_ROBOTOBOLDSMALL );
-			const auto rcBoundaries = nk_widget_bounds( pContext );
+			const auto recBoundaries = nk_widget_bounds( pContext );
 			const auto pOutput = nk_window_get_canvas( pContext );
 			auto bHover = false;
 			nk_flags fOldFlags = 0;
@@ -939,18 +939,18 @@ namespace PX::UI
 			{
 				case EPosition::LEFT:
 				{
-					nk_fill_rect( pOutput, nk_rect( rcBoundaries.x + rcBoundaries.w - 5, rcBoundaries.y, 5, rcBoundaries.h ), 0.f, clrCurrentColor );
+					nk_fill_rect( pOutput, nk_rect( recBoundaries.x + recBoundaries.w - 5, recBoundaries.y, 5, recBoundaries.h ), 0.f, clrCurrentColor );
 					break;
 				}
 				case EPosition::CENTER:
 				{
-					nk_fill_rect( pOutput, nk_rect( rcBoundaries.x + rcBoundaries.w - 5, rcBoundaries.y, 5, rcBoundaries.h ), 0.f, clrCurrentColor );
-					nk_fill_rect( pOutput, nk_rect( rcBoundaries.x, rcBoundaries.y, 5, rcBoundaries.h ), 0.f, clrCurrentColor );
+					nk_fill_rect( pOutput, nk_rect( recBoundaries.x + recBoundaries.w - 5, recBoundaries.y, 5, recBoundaries.h ), 0.f, clrCurrentColor );
+					nk_fill_rect( pOutput, nk_rect( recBoundaries.x, recBoundaries.y, 5, recBoundaries.h ), 0.f, clrCurrentColor );
 					break;
 				}
 				case EPosition::RIGHT:
 				{
-					nk_fill_rect( pOutput, nk_rect( rcBoundaries.x, rcBoundaries.y, 5, rcBoundaries.h ), 0.f, clrCurrentColor );
+					nk_fill_rect( pOutput, nk_rect( recBoundaries.x, recBoundaries.y, 5, recBoundaries.h ), 0.f, clrCurrentColor );
 					break;
 				}
 				default:
@@ -966,8 +966,8 @@ namespace PX::UI
 			static auto bWasClicking = false;
 
 			nk_layout_row_push( pContext, 25 );
-			const auto rcBoundaries = nk_widget_bounds( pContext );
-			const auto bHovering = nk_input_is_mouse_hovering_rect( &pContext->input, rcBoundaries );
+			const auto recBoundaries = nk_widget_bounds( pContext );
+			const auto bHovering = nk_input_is_mouse_hovering_rect( &pContext->input, recBoundaries );
 			const auto bClicking = PX_INPUT.GetKeyState( VK_LBUTTON ) == true;
 
 			if ( bHovering && !pActiveEditColor )
@@ -1029,25 +1029,25 @@ namespace PX::UI
 		{
 			SetFont( FONT_TAHOMA );
 			nk_layout_space_begin( pContext, NK_STATIC, float( uBoxHeight ), 1 );
-			const auto rcBoundaries = nk_widget_bounds( pContext );
-			nk_layout_space_push( pContext, nk_rect( float( uStartX - rcBoundaries.x ), float( uStartY - rcBoundaries.y ), float( uBoxWidth ), float( uBoxHeight ) ) );
-			auto rcNewBoundaries = nk_widget_bounds( pContext );
+			const auto recBoundaries = nk_widget_bounds( pContext );
+			nk_layout_space_push( pContext, nk_rect( float( uStartX - recBoundaries.x ), float( uStartY - recBoundaries.y ), float( uBoxWidth ), float( uBoxHeight ) ) );
+			auto recNewBoundaries = nk_widget_bounds( pContext );
 			nk_group_begin( pContext, szTitle, NK_WINDOW_NO_SCROLLBAR );
 
 			const auto pOutput = nk_window_get_canvas( pContext );
-			rcNewBoundaries.x += 4;
-			rcNewBoundaries.y += 20;
-			rcNewBoundaries.w -= 8;
-			rcNewBoundaries.h -= 28;
+			recNewBoundaries.x += 4;
+			recNewBoundaries.y += 20;
+			recNewBoundaries.w -= 8;
+			recNewBoundaries.h -= 28;
 			// Top left, top right, bottom right, bottom left
 			const auto uTextWidth = CalculateTextBounds( szTitle, 30 ).x;
-			nk_fill_rect_multi_color( pOutput, nk_rect( rcNewBoundaries.x + 1.8f, rcNewBoundaries.y + 1.f, rcNewBoundaries.w - 2.f, rcNewBoundaries.h - 2.f ),
+			nk_fill_rect_multi_color( pOutput, nk_rect( recNewBoundaries.x + 1.8f, recNewBoundaries.y + 1.f, recNewBoundaries.w - 2.f, recNewBoundaries.h - 2.f ),
 									  clrDarkBackground, clrDarkBackground, clrBackground, clrBackground );
-			nk_stroke_rect( pOutput, rcNewBoundaries, 4.f, 1.f, clrBorder );
-			nk_stroke_line( pOutput, rcNewBoundaries.x + 7, rcNewBoundaries.y, rcNewBoundaries.x + 3 + uTextWidth, rcNewBoundaries.y, 3, clrDarkBackground );
+			nk_stroke_rect( pOutput, recNewBoundaries, 4.f, 1.f, clrBorder );
+			nk_stroke_line( pOutput, recNewBoundaries.x + 7, recNewBoundaries.y, recNewBoundaries.x + 3 + uTextWidth, recNewBoundaries.y, 3, clrDarkBackground );
 			BeginRow( 16, 1, ROW_CUSTOM );
-			auto rcText = nk_widget_bounds( pContext );
-			PushCustomRow( unsigned( rcNewBoundaries.x + 8 - rcText.x ), unsigned( rcNewBoundaries.y - rcText.y - 10 ), unsigned( uTextWidth ), 16 );
+			auto recText = nk_widget_bounds( pContext );
+			PushCustomRow( unsigned( recNewBoundaries.x + 8 - recText.x ), unsigned( recNewBoundaries.y - recText.y - 10 ), unsigned( uTextWidth ), 16 );
 			nk_label( pContext, szTitle, NK_TEXT_LEFT );
 			VerticalSpacing( 5 );
 
@@ -1064,7 +1064,7 @@ namespace PX::UI
 			constexpr float flColorPickerWidth = 305.f, flColorPickerHeight = 440.f;
 
 			const auto _uWindowWidth = pContext->current->bounds.w, _uWindowHeight = pContext->current->bounds.h;
-			const struct nk_rect rcColorPickerBoundaries
+			const struct nk_rect recColorPickerBoundaries
 			{
 				_uWindowWidth / 2 - flColorPickerWidth / 2, _uWindowHeight / 2 - flColorPickerHeight / 2, flColorPickerWidth, flColorPickerHeight
 			};
@@ -1078,7 +1078,7 @@ namespace PX::UI
 			static char szSliderBuffer[ 32 ];
 			static auto bWasClicking = false;
 
-			if ( !nk_input_is_mouse_prev_hovering_rect( &pContext->input, rcColorPickerBoundaries ) && PX_INPUT.GetKeyState( VK_LBUTTON ) && bStoppedClicking && !bWasClicking )
+			if ( !nk_input_is_mouse_prev_hovering_rect( &pContext->input, recColorPickerBoundaries ) && PX_INPUT.GetKeyState( VK_LBUTTON ) && bStoppedClicking && !bWasClicking )
 			{
 				bShouldClose = true;
 				bNewColor = true;
@@ -1112,7 +1112,7 @@ namespace PX::UI
 
 			if ( nk_popup_begin( pContext, NK_POPUP_DYNAMIC, ( strBaseTitle + szColorPickerSubject + "'" ).c_str( ),
 								 NK_WINDOW_BORDER | NK_WINDOW_TITLE | NK_WINDOW_NO_SCROLLBAR,
-								 rcColorPickerBoundaries, pActiveEditColor == nullptr ) )
+								 recColorPickerBoundaries, pActiveEditColor == nullptr ) )
 			{
 				nk_layout_row_static( pContext, 255, 295, 1 );
 				clrChosenColor = nk_color_picker( pContext, clrChosenColor, NK_RGBA );

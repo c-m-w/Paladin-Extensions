@@ -75,10 +75,10 @@ namespace PX::sys
 		return nlohmann::json
 		{
 			{ PX_XOR( "cpu" ), string_cast< std::string >( wstrSystemParts[ SYS_CPU ] ) },
-		{ PX_XOR( "gpu" ), string_cast< std::string >( wstrSystemParts[ SYS_GPU ] ) },
-		{ PX_XOR( "display" ), string_cast< std::string >( wstrSystemParts[ SYS_DISPLAY ] ) },
-		{ PX_XOR( "os" ), string_cast< std::string >( wstrSystemParts[ SYS_OS ] ) },
-		{ PX_XOR( "board" ), string_cast< std::string >( wstrSystemParts[ SYS_BOARD ] ) },
+			{ PX_XOR( "gpu" ), string_cast< std::string >( wstrSystemParts[ SYS_GPU ] ) },
+			{ PX_XOR( "display" ), string_cast< std::string >( wstrSystemParts[ SYS_DISPLAY ] ) },
+			{ PX_XOR( "os" ), string_cast< std::string >( wstrSystemParts[ SYS_OS ] ) },
+			{ PX_XOR( "board" ), string_cast< std::string >( wstrSystemParts[ SYS_BOARD ] ) },
 		};
 	}
 
@@ -556,12 +556,12 @@ namespace PX::sys
 
 	typedef struct
 	{
-		DWORD    dwProcessID;
-		BYTE     bObjectType;
-		BYTE     bFlags;
-		WORD     wValue;
-		PVOID    pAddress;
-		DWORD    dwGrantedAccess;
+		DWORD	dwProcessID;
+		BYTE	bObjectType;
+		BYTE	bFlags;
+		WORD	wValue;
+		PVOID	pAddress;
+		DWORD	dwGrantedAccess;
 	} system_handle_t;
 
 	typedef struct

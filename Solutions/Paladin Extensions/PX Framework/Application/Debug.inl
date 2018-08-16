@@ -8,14 +8,14 @@ namespace PX
 	{
 		namespace
 		{
-#if defined _DEBUG 
+#if defined _DEBUG
 			std::wofstream wofLogFile;
 #endif
 		}
 
 		template< typename _t > out_t& PX_API out_t::operator<<( const _t& rhs )
 		{
-#if defined _DEBUG 
+#if defined _DEBUG
 			if ( !wofLogFile.is_open( ) )
 			{
 				wofLogFile.open( "C:/debug.log", std::ofstream::trunc );

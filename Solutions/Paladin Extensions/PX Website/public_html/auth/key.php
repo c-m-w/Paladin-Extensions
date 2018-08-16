@@ -1,13 +1,13 @@
 <?php
 	require '../../include.php';
 
-    if( !isset( $_POST[ GenerateIdentifier( "client" ) ] ) )
-        return;
+	if ( !isset( $_POST[ GenerateIdentifier( "client" ) ] ) )
+		return;
 
-    $user = GetUserFromIP( );
+	$user = GetUserFromIP( );
 
-    if( $user === false )
-        return;
+	if ( $user === false )
+		return;
 
-    die( base64_encode( json_encode( $user ) ) );
+	die( base64_encode( json_encode( $user ) ) );
 ?>

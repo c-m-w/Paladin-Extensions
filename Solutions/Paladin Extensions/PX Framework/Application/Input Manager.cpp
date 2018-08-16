@@ -65,8 +65,8 @@ namespace PX
 		ProcessKey( wParam, uMessage );
 	}
 
-	CInputManager::CInputManager( ): ksKeys( )
-	{}
+	CInputManager::CInputManager( ): ksKeys( ), mmtKeyDownTime( ), uLastKeyPressed( )
+	{ }
 
 	void PX_API CInputManager::OnEvent( HWND hwWindowHandle, UINT uMessage, WPARAM wParam, LPARAM lParam ) // hwWindowHandle is unused
 	{
@@ -100,7 +100,8 @@ namespace PX
 			case WM_SYSKEYUP:
 				ProcessKeyboardMessage( uMessage, wParam, lParam );
 				break;
-			default:;
+			default:
+				break;
 		}
 	}
 

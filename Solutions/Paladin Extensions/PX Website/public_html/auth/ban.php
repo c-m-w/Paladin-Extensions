@@ -1,8 +1,8 @@
 <?php
-    require '../../include.php';
+	require '../../include.php';
 
-    session_start( );
+	session_start( );
 
-    BanUser( $_SESSION[ "user_id" ] );
-    return;
+	BanUser( $_SESSION[ "user_id" ] );
+	return;
 ?>

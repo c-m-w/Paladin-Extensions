@@ -50,10 +50,10 @@ namespace PX::Render
 		}
 
 		return UI::Manager::OnEvent( _hwWindowHandle, uMessage, uwParam, llParam )
-			       ? ( uOldWindowProc
-				           ? CallWindowProc( reinterpret_cast< WNDPROC >( uOldWindowProc ), _hwWindowHandle, uMessage, uwParam, llParam )
-				           : 0 )
-			       : DefWindowProc( _hwWindowHandle, uMessage, uwParam, llParam );
+				   ? ( uOldWindowProc
+						   ? CallWindowProc( reinterpret_cast< WNDPROC >( uOldWindowProc ), _hwWindowHandle, uMessage, uwParam, llParam )
+						   : 0 )
+				   : DefWindowProc( _hwWindowHandle, uMessage, uwParam, llParam );
 	}
 
 	void PX_API SetWindowSize( unsigned uWidth, unsigned uHeight )
@@ -64,9 +64,9 @@ namespace PX::Render
 		if ( !hwWindowHandle )
 			return;
 
-		RECT rcWindowRect;
-		GetWindowRect( hwWindowHandle, &rcWindowRect );
-		SetWindowPos( hwWindowHandle, nullptr, rcWindowRect.left, rcWindowRect.top, uWindowWidth, uWindowHeight, SWP_SHOWWINDOW );
+		RECT recWindowRect;
+		GetWindowRect( hwWindowHandle, &recWindowRect );
+		SetWindowPos( hwWindowHandle, nullptr, recWindowRect.left, recWindowRect.top, uWindowWidth, uWindowHeight, SWP_SHOWWINDOW );
 	}
 
 	void PX_API CreateRenderTarget( )
@@ -76,18 +76,18 @@ namespace PX::Render
 
 		const auto strResourceDirectory = GetExecutableDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(Resources\)" );
 		wndWindow.hIcon = HICON( LoadImage( nullptr, ( strResourceDirectory + PX_XOR( LR"(Paladin Logo.ico)" ) ).c_str( ),
-		                                    IMAGE_ICON, 0, 0, LR_LOADFROMFILE | LR_DEFAULTSIZE | LR_SHARED ) );
+											IMAGE_ICON, 0, 0, LR_LOADFROMFILE | LR_DEFAULTSIZE | LR_SHARED ) );
 
 		wndWindow.lpszClassName = wszWindowTitle;
 		const auto atInstance = RegisterClassEx( &wndWindow );
 
-		RECT rcWindow;
-		AdjustWindowRectEx( &rcWindow, WS_OVERLAPPEDWINDOW, false, WS_EX_APPWINDOW );
+		RECT recWindow;
+		AdjustWindowRectEx( &recWindow, WS_OVERLAPPEDWINDOW, false, WS_EX_APPWINDOW );
 
 		const auto uScreenDimensions = GetScreenDimensions( );
 		hwWindowHandle = CreateWindowEx( WS_EX_APPWINDOW, wszWindowTitle, wszWindowTitle, WS_VISIBLE | WS_POPUP,
-		                                 CW_USEDEFAULT, CW_USEDEFAULT, uWindowWidth, uWindowHeight,
-		                                 nullptr, nullptr, wndWindow.hInstance, nullptr );
+										 CW_USEDEFAULT, CW_USEDEFAULT, uWindowWidth, uWindowHeight,
+										 nullptr, nullptr, wndWindow.hInstance, nullptr );
 		ShowWindow( hwWindowHandle, SW_SHOWDEFAULT );
 		SetWindowPos( hwWindowHandle, nullptr, uScreenDimensions[ 0 ] / 2 - uWindowWidth / 2, uScreenDimensions[ 1 ] / 2 - uWindowHeight / 2, uWindowWidth, uWindowHeight, NULL );
 		UpdateWindow( hwWindowHandle );

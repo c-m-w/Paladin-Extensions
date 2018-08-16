@@ -62,11 +62,9 @@ void PX_API OnLaunch( )
 		sys::Delete( );
 #endif
 
-#if defined RETARDED_MESSAGEBOX_THAT_IS_RETARDED
-	MessageBox( nullptr, PX_XOR( L"The Manager setup will begin once you click OK.\n"
-								 "Please wait up to 60 seconds for it to complete before the window appears.\n"
-								 "Contact support if a window doesn't appear." ), PX_XOR( L"Paladin Extensions: Notice" ), MB_OK );
-#endif
+//	MessageBox( nullptr, PX_XOR( L"The Manager setup will begin once you click OK.\n"
+//								 "Please wait up to 60 seconds for it to complete before the window appears.\n"
+//								 "Contact support if a window doesn't appear." ), PX_XOR( L"Paladin Extensions: Notice" ), MB_OK );
 
 	const auto iLoginStatus = Login( );
 	switch ( iLoginStatus )
@@ -79,7 +77,7 @@ void PX_API OnLaunch( )
 			Exit( PX_XOR( L"Your client is outdated. Please download the updated version at https://www.paladin.rip/extensions/1/." ), true );
 		case LOGIN_BANNED:
 			Exit( PX_XOR( L"You are banned and may not use Paladin Extensions software. Email support@paladin.rip if you believe this to be an error." ), true );
-		default: 
+		default:
 			break;
 	}
 

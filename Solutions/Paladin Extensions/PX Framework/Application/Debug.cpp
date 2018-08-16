@@ -18,7 +18,7 @@ namespace PX::dbg
 
 	void PX_API PutLastError( )
 	{
-#if defined _DEBUG 
+#if defined _DEBUG
 		auto dwError = GetLastError( );
 		if ( !dwError )
 		{
@@ -28,7 +28,7 @@ namespace PX::dbg
 
 		LPWSTR lpwstrError { };
 		if ( !FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-		                     nullptr, dwError, MAKELANGID( LANG_NEUTRAL, SUBLANG_DEFAULT ), lpwstrError, 0, nullptr ) )
+							 nullptr, dwError, MAKELANGID( LANG_NEUTRAL, SUBLANG_DEFAULT ), lpwstrError, 0, nullptr ) )
 			out PX_LER << "[0x" << std::hex << dwError << "] - Unable to retrieve error description" << newl;
 		else
 			out PX_LER << "[0x" << std::hex << dwError << "] - " << *lpwstrError << newl;

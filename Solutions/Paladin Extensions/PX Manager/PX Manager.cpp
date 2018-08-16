@@ -52,7 +52,7 @@
 //	dqPostData.emplace_back( "test", R"()" );
 //	const auto strResponse = Request( PX_XOR( "https://www.paladin.rip:443/test.php" ), dqPostData );
 //	Net::CleanupConnection( );
-//	dbg::out << strResponse.length( ) << dbg::newl; 
+//	dbg::out << strResponse.length( ) << dbg::newl;
 //}
 //
 //void PX_API InjectionExample( )
@@ -306,7 +306,7 @@ void PX_API UI::Manager::SetLayout( )
 			OpenLink( ( PX_XOR( "https://www.paladin.rip/extensions/" ) + std::to_string( uSelectedExtension ) + PX_XOR( "/updates/" ) ).c_str( ) );
 
 		PushCustomRow( unsigned( flBaseButtonPosition + uColumnWidth / 2.f - 27.f ), 0, uColumnWidth, 25u );
-		if ( Button( EPosition::RIGHT, ( PX_XOR( "LOAD " ) + strExtensionNames[ uSelectedExtension ] ).c_str( ), false, 
+		if ( Button( EPosition::RIGHT, ( PX_XOR( "LOAD " ) + strExtensionNames[ uSelectedExtension ] ).c_str( ), false,
 					 !bExtensionAccess[ uSelectedExtension ] || bExtensionDisabled[ uSelectedExtension ], PX_XOR( "Load an extension." ) ) )
 			iSelectedExtension = uSelectedExtension;
 
