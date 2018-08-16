@@ -89,6 +89,9 @@ PX_SDK void PX_API Detach( )
 	FreeConsole( );
 #endif
 	OnDetach( );
+#if !defined PX_MANUAL_MAP_DLL
+	FreeLibraryAndExitThread( PX::hinstDLL, 0 );
+#endif
 }
 
 namespace
