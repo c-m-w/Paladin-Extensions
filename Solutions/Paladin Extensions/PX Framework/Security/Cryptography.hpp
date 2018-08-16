@@ -56,3 +56,8 @@ namespace PX
 }
 
 #include "Cryptography.inl"
+
+#if defined PX_USE_NAMESPACES
+using namespace PX::Cryptography;
+using namespace PX::XOR;
+#endif

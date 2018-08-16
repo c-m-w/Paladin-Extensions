@@ -1,8 +1,7 @@
 /// Connectivity.cpp
 
+#define PX_USE_NAMESPACES
 #include "../PX Framework.hpp"
-
-using namespace PX::Files;
 
 namespace PX::Net
 {
@@ -22,9 +21,9 @@ namespace PX::Net
 			if ( !strFormattedData.empty( ) )
 				strFormattedData += PX_XOR( "&" );
 			//strFormattedData += pdPostData.strIdentifier + "=" + pdPostData.strValue;
-			const auto strEncryptedValue = Cryptography::Encrypt( pdPostData.strValue );
+			const auto strEncryptedValue = Encrypt( pdPostData.strValue );
 			// Substr it to length - 1 to remove the \n
-			strFormattedData += Cryptography::GenerateIdentifier( pdPostData.strIdentifier ) + PX_XOR( "=" ) + strEncryptedValue.substr( 0, strEncryptedValue.length( ) - 1 );
+			strFormattedData += GenerateIdentifier( pdPostData.strIdentifier ) + PX_XOR( "=" ) + strEncryptedValue.substr( 0, strEncryptedValue.length( ) - 1 );
 		}
 		// Post data doesn't like plus symbols.
 		std::replace( strFormattedData.begin( ), strFormattedData.end( ), '+', ' ' );
@@ -100,7 +99,7 @@ namespace PX::Net
 		dqPostData.emplace_back( PX_XOR( "client" ), PX_XOR( "true" ) );
 
 		InitializeConnection( );
-		Cryptography::Initialize( );
+		Initialize( );
 
 		auto strResponse = Request( strKeyURL, dqPostData );
 
@@ -159,13 +158,13 @@ namespace PX::Net
 		dqLoginData.emplace_back( strHardwareIdentifier, sys::GetSystemInfo( ).dump( ) );
 
 		InitializeConnection( );
-		Cryptography::Initialize( );
+		Initialize( );
 
 		const auto strResponse = Request( strLoginURL, dqLoginData );
 		if ( strResponse.empty( ) )
 			return LOGIN_CONNECTION_FAILURE;
 
-		auto jsResponse = nlohmann::json::parse( Cryptography::Decrypt( strResponse ) );
+		auto jsResponse = nlohmann::json::parse( Decrypt( strResponse ) );
 		const auto strSecondaryGroups = jsResponse[ "Secondary Groups" ].get< std::string >( );
 
 		if ( bHasExtension != nullptr )
@@ -177,25 +176,25 @@ namespace PX::Net
 
 	std::string PX_API RequestExtensionInformation( unsigned uExtension )
 	{
-		auto strBuffer = Cryptography::Decrypt( RequestExtension( uExtension, false ) );
+		auto strBuffer = Decrypt( RequestExtension( uExtension, false ) );
 		auto jsFileInformation = nlohmann::json::parse( strBuffer );
 		CleanupConnection( );
 
-		sys::uLoadDLLSize = jsFileInformation[ PX_XOR( "Functions" ) ][ PX_XOR( "LoadDLL" ) ][ PX_XOR( "Size" ) ].get< int >( );
-		sys::bLoadDLL = new byte_t[ sys::uLoadDLLSize + 1 ];
-		for ( auto u = 0u; u < sys::uLoadDLLSize; u++ )
-			sys::bLoadDLL[ u ] = byte_t( jsFileInformation[ PX_XOR( "Functions" ) ][ PX_XOR( "LoadDLL" ) ][ PX_XOR( "Shellcode" ) ][ u ].get< int >( ) );
+		uLoadDLLSize = jsFileInformation[ PX_XOR( "Functions" ) ][ PX_XOR( "LoadDLL" ) ][ PX_XOR( "Size" ) ].get< int >( );
+		bLoadDLL = new byte_t[ uLoadDLLSize + 1 ];
+		for ( auto u = 0u; u < uLoadDLLSize; u++ )
+			bLoadDLL[ u ] = byte_t( jsFileInformation[ PX_XOR( "Functions" ) ][ PX_XOR( "LoadDLL" ) ][ PX_XOR( "Shellcode" ) ][ u ].get< int >( ) );
 
-		sys::uStubSize = jsFileInformation[ PX_XOR( "Functions" ) ][ PX_XOR( "Stub" ) ][ PX_XOR( "Size" ) ].get< int >( );
-		sys::bStub = new byte_t[ sys::uStubSize + 1 ];
-		for ( auto u = 0u; u < sys::uStubSize; u++ )
-			sys::bStub[ u ] = byte_t( jsFileInformation[ PX_XOR( "Functions" ) ][ PX_XOR( "Stub" ) ][ PX_XOR( "Shellcode" ) ][ u ].get< int >( ) );
+		uStubSize = jsFileInformation[ PX_XOR( "Functions" ) ][ PX_XOR( "Stub" ) ][ PX_XOR( "Size" ) ].get< int >( );
+		bStub = new byte_t[ uStubSize + 1 ];
+		for ( auto u = 0u; u < uStubSize; u++ )
+			bStub[ u ] = byte_t( jsFileInformation[ PX_XOR( "Functions" ) ][ PX_XOR( "Stub" ) ][ PX_XOR( "Shellcode" ) ][ u ].get< int >( ) );
 
 		std::array< std::string, PX_EXTENSION_SECTIONS > strFileSections;
 		std::string strAssembledFile { };
 
 		for ( int i { }; i < PX_EXTENSION_SECTIONS; i++ )
-			strFileSections.at( jsFileInformation[ PX_XOR( "DLL" ) ][ PX_XOR( "Order" ) ][ i ].get< int >( ) ) = Cryptography::Decrypt( jsFileInformation[ PX_XOR( "DLL" ) ][ PX_XOR( "Sections" ) ][ i ].get< std::string >( ) );
+			strFileSections.at( jsFileInformation[ PX_XOR( "DLL" ) ][ PX_XOR( "Order" ) ][ i ].get< int >( ) ) = Decrypt( jsFileInformation[ PX_XOR( "DLL" ) ][ PX_XOR( "Sections" ) ][ i ].get< std::string >( ) );
 
 		for each ( const auto& strSection in strFileSections )
 			strAssembledFile += strSection;
@@ -214,35 +213,35 @@ namespace PX::Net
 #if defined NDEBUG
 			if ( bStopHeartbeatBuffer != bStopHeartbeat )
 			{
-				sys::Delete( );
+				Delete( );
 				TerminateProcess( GetCurrentProcess( ), -1 );
 			}
 
 			if ( IsDebuggerPresent( ) != 0 )
 			{
-				sys::Delete( );
+				Delete( );
 				TerminateProcess( GetCurrentProcess( ), -1 );
 			}
 
 			BOOL bResult;
 			if ( 0 == CheckRemoteDebuggerPresent( GetCurrentProcess( ), &bResult ) || bResult == TRUE )
 			{
-				sys::Delete( );
+				Delete( );
 				TerminateProcess( GetCurrentProcess( ), -1 );
 			}
 
-			if ( sys::GetProcessID( PX_XOR( L"ollydbg.exe" ) )
-				 || sys::GetProcessID( PX_XOR( L"Cheat Engine.exe" ) )
-				 || sys::GetProcessID( PX_XOR( L"cheatengine-i386.exe" ) )
-				 || sys::GetProcessID( PX_XOR( L"cheatengine-x86_64.exe" ) )
-				 || sys::GetProcessID( PX_XOR( L"x96dbg.exe" ) )
-				 || sys::GetProcessID( PX_XOR( L"x64dbg.exe" ) )
-				 || sys::GetProcessID( PX_XOR( L"x32dbg.exe" ) )
-				 || sys::GetProcessID( PX_XOR( L"binaryninja.exe" ) )
-				 || sys::GetProcessID( PX_XOR( L"ReClass.exe" ) )
-				 || sys::GetProcessID( PX_XOR( L"devenv.exe" ) ) )
+			if ( GetProcessID( PX_XOR( L"ollydbg.exe" ) )
+				 || GetProcessID( PX_XOR( L"Cheat Engine.exe" ) )
+				 || GetProcessID( PX_XOR( L"cheatengine-i386.exe" ) )
+				 || GetProcessID( PX_XOR( L"cheatengine-x86_64.exe" ) )
+				 || GetProcessID( PX_XOR( L"x96dbg.exe" ) )
+				 || GetProcessID( PX_XOR( L"x64dbg.exe" ) )
+				 || GetProcessID( PX_XOR( L"x32dbg.exe" ) )
+				 || GetProcessID( PX_XOR( L"binaryninja.exe" ) )
+				 || GetProcessID( PX_XOR( L"ReClass.exe" ) )
+				 || GetProcessID( PX_XOR( L"devenv.exe" ) ) )
 			{
-				sys::Delete( );
+				Delete( );
 				TerminateProcess( GetCurrentProcess( ), -1 );
 			}
 
@@ -261,50 +260,50 @@ namespace PX::Net
 				default:
 					return;
 			}
-			DWORD dwExtensionContainerProcessID = sys::GetProcessID( wszExtensionName );
+			DWORD dwExtensionContainerProcessID = GetProcessID( wszExtensionName );
 			HANDLE hTarget = OpenProcess( PROCESS_QUERY_INFORMATION | PROCESS_TERMINATE, FALSE, dwExtensionContainerProcessID );
 			if ( 0 == CheckRemoteDebuggerPresent( hTarget, &bResult ) || bResult == TRUE
 				 || 0 == CheckRemoteDebuggerPresent( GetCurrentProcess( ), &bResult ) || bResult == TRUE )
 			{
-				sys::TerminateProcess( dwExtensionContainerProcessID );
-				sys::Delete( );
+				TerminateProcess( dwExtensionContainerProcessID );
+				Delete( );
 				TerminateProcess( GetCurrentProcess( ), -1 );
 			}
 
-			if ( sys::GetProcessID( PX_XOR( L"ollydbg.exe" ) )
-				 || sys::GetProcessID( PX_XOR( L"Cheat Engine.exe" ) )
-				 || sys::GetProcessID( PX_XOR( L"cheatengine-i386.exe" ) )
-				 || sys::GetProcessID( PX_XOR( L"cheatengine-x86_64.exe" ) )
-				 || sys::GetProcessID( PX_XOR( L"x96dbg.exe" ) )
-				 || sys::GetProcessID( PX_XOR( L"x64dbg.exe" ) )
-				 || sys::GetProcessID( PX_XOR( L"x32dbg.exe" ) )
-				 || sys::GetProcessID( PX_XOR( L"binaryninja.exe" ) )
-				 || sys::GetProcessID( PX_XOR( L"ReClass.exe" ) )
-				 || sys::GetProcessID( PX_XOR( L"devenv.exe" ) ) )
+			if ( GetProcessID( PX_XOR( L"ollydbg.exe" ) )
+				 || GetProcessID( PX_XOR( L"Cheat Engine.exe" ) )
+				 || GetProcessID( PX_XOR( L"cheatengine-i386.exe" ) )
+				 || GetProcessID( PX_XOR( L"cheatengine-x86_64.exe" ) )
+				 || GetProcessID( PX_XOR( L"x96dbg.exe" ) )
+				 || GetProcessID( PX_XOR( L"x64dbg.exe" ) )
+				 || GetProcessID( PX_XOR( L"x32dbg.exe" ) )
+				 || GetProcessID( PX_XOR( L"binaryninja.exe" ) )
+				 || GetProcessID( PX_XOR( L"ReClass.exe" ) )
+				 || GetProcessID( PX_XOR( L"devenv.exe" ) ) )
 			{
-				sys::Delete( );
+				Delete( );
 				TerminateProcess( GetCurrentProcess( ), -1 );
 			}
 
 			if ( !PathFileExists( ( PX_APPDATA + PX_XOR( L"data.px" ) ).c_str( ) ) )
 			{
-				sys::TerminateProcess( dwExtensionContainerProcessID );
-				sys::Delete( );
+				TerminateProcess( dwExtensionContainerProcessID );
+				Delete( );
 				TerminateProcess( GetCurrentProcess( ), -1 );
 			}
 
 			std::wstring wstrBuffer;
 			if ( !FileRead( PX_APPDATA + PX_XOR( L"data.px" ), wstrBuffer, false ) )
 			{
-				sys::TerminateProcess( dwExtensionContainerProcessID );
-				sys::Delete( );
+				TerminateProcess( dwExtensionContainerProcessID );
+				Delete( );
 				TerminateProcess( GetCurrentProcess( ), -1 );
 			}
 
 			if ( Login( ) != LOGIN_SUCCESS || Login( ) != LOGIN_STAFF_SUCCESS )
 			{
-				sys::TerminateProcess( dwExtensionContainerProcessID );
-				sys::Delete( );
+				TerminateProcess( dwExtensionContainerProcessID );
+				Delete( );
 				TerminateProcess( GetCurrentProcess( ), -1 );
 			}
 
@@ -315,9 +314,9 @@ namespace PX::Net
 			if ( GetMoment( ) - mmtStartWait > 1500ull )
 			{
 #if defined NDEBUG
-				sys::TerminateProcess( dwExtensionContainerProcessID );
+				TerminateProcess( dwExtensionContainerProcessID );
+				Delete( );
 #endif
-				sys::Delete( );
 				TerminateProcess( GetCurrentProcess( ), -1 );
 			}
 
@@ -332,7 +331,7 @@ namespace PX::Net
 #if defined NDEBUG
 		if ( pStopHeartbeat != &bStopHeartbeat || *pStopHeartbeat != bStopHeartbeat || bStopHeartbeatBuffer != bStopHeartbeat )
 		{
-			sys::Delete( );
+			Delete( );
 			TerminateProcess( GetCurrentProcess( ), -1 );
 		}
 #endif

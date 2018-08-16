@@ -1,8 +1,7 @@
 /// Drawing.cpp
 
+#define PX_USE_NAMESPACES
 #include "../PX Framework.hpp"
-
-using namespace PX::Render;
 
 namespace PX::Drawing
 {
@@ -16,17 +15,17 @@ namespace PX::Drawing
 
 		vtxPoints[ 0 ].dwColor = vtxPoints[ 1 ].dwColor = vtxPoints[ 2 ].dwColor = vtxPoints[ 3 ].dwColor = dwColor;
 
-		vtxPoints[ 0 ].flVectors[2] = vtxPoints[ 1 ].flVectors[2] = vtxPoints[ 2 ].flVectors[2] = vtxPoints[ 3 ].flVectors[2] = 0;
-		vtxPoints[ 0 ].flVectors[3] = vtxPoints[ 1 ].flVectors[3] = vtxPoints[ 2 ].flVectors[3] = vtxPoints[ 3 ].flVectors[3] = 0;
+		vtxPoints[ 0 ].flVectors[ 2 ] = vtxPoints[ 1 ].flVectors[ 2 ] = vtxPoints[ 2 ].flVectors[ 2 ] = vtxPoints[ 3 ].flVectors[ 2 ] = 0;
+		vtxPoints[ 0 ].flVectors[ 3 ] = vtxPoints[ 1 ].flVectors[ 3 ] = vtxPoints[ 2 ].flVectors[ 3 ] = vtxPoints[ 3 ].flVectors[ 3 ] = 0;
 
-		vtxPoints[ 0 ].flVectors[0] = uX;
-		vtxPoints[ 0 ].flVectors[1] = uY;
-		vtxPoints[ 1 ].flVectors[0] = uX + uWidth;
-		vtxPoints[ 1 ].flVectors[1] = uY;
-		vtxPoints[ 2 ].flVectors[0] = uX + uWidth;
-		vtxPoints[ 2 ].flVectors[1] = uY + uHeight;
-		vtxPoints[ 3 ].flVectors[0] = uX;
-		vtxPoints[ 3 ].flVectors[1] = uY + uHeight;
+		vtxPoints[ 0 ].flVectors[ 0 ] = float( uX );
+		vtxPoints[ 0 ].flVectors[ 1 ] = float( uY );
+		vtxPoints[ 1 ].flVectors[ 0 ] = float( uX + uWidth );
+		vtxPoints[ 1 ].flVectors[ 1 ] = float( uY );
+		vtxPoints[ 2 ].flVectors[ 0 ] = float( uX + uWidth );
+		vtxPoints[ 2 ].flVectors[ 1 ] = float( uY + uHeight );
+		vtxPoints[ 3 ].flVectors[ 0 ] = float( uX );
+		vtxPoints[ 3 ].flVectors[ 1 ] = float( uY + uHeight );
 
 		unsigned short sIndicies[ ] = { 0, 1, 3, 1, 2, 3 };
 
@@ -34,13 +33,13 @@ namespace PX::Drawing
 		pDevice->CreateIndexBuffer( 2 * sizeof( short ), D3DUSAGE_WRITEONLY, D3DFMT_INDEX16, D3DPOOL_DEFAULT, &pIndexBuffer, NULL );
 
 		void* pVertices;
-		pVertexBuffer->Lock( 0, sizeof( vtxPoints ), static_cast< void** >( &pVertices ), 0 );
-		memcpy( pVertices, vtxPoints, sizeof( vtxPoints ) );
+		pVertexBuffer->Lock( 0, sizeof vtxPoints, static_cast< void** >( &pVertices ), 0 );
+		memcpy( pVertices, vtxPoints, sizeof vtxPoints );
 		pVertexBuffer->Unlock( );
 
 		void* pIndex;
-		pIndexBuffer->Lock( 0, sizeof( sIndicies ), static_cast< void** >( &pIndex ), 0 );
-		memcpy( pIndex, sIndicies, sizeof( sIndicies ) );
+		pIndexBuffer->Lock( 0, sizeof sIndicies, static_cast< void** >( &pIndex ), 0 );
+		memcpy( pIndex, sIndicies, sizeof sIndicies );
 		pIndexBuffer->Unlock( );
 
 		pDevice->SetTexture( 0, nullptr );

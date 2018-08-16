@@ -19,6 +19,10 @@
 #include "Security/Connectivity.hpp"
 
 // Drawing - These files provide specific functionality for creating visuals
-#include "Drawing/Render Engine.hpp"
-#include "Drawing/Drawing.hpp"
-#include "Drawing/User Interface.hpp"
+#include "Design/Render Engine.hpp"
+#include "Design/Drawing.hpp"
+#include "Design/User Interface.hpp"
+
+#if defined PX_USE_NAMESPACES
+using namespace PX;
+#endif

@@ -1,8 +1,7 @@
 /// Render.cpp
 
+#define PX_USE_NAMESPACES
 #include "../PX Framework.hpp"
-
-using namespace PX::Files;
 
 namespace PX::Render
 {
@@ -36,12 +35,12 @@ namespace PX::Render
 					if ( uWidth != 0 && uHeight != 0 &&
 						( uWidth != dxParameters.BackBufferWidth || uHeight != dxParameters.BackBufferHeight ) )
 					{
-						UI::Manager::OnRelease( );
+						OnRelease( );
 						dxParameters.BackBufferWidth = uWidth;
 						dxParameters.BackBufferHeight = uHeight;
 						const auto hrReset = pDevice->Reset( &dxParameters );
 						px_assert( hrReset >= 0 );
-						UI::Manager::Resize( uWidth, uHeight );
+						Resize( uWidth, uHeight );
 					}
 				}
 				break;
@@ -49,7 +48,7 @@ namespace PX::Render
 				break;
 		}
 
-		return UI::Manager::OnEvent( _hwWindowHandle, uMessage, uwParam, llParam )
+		return OnEvent( _hwWindowHandle, uMessage, uwParam, llParam )
 				   ? ( uOldWindowProc
 						   ? CallWindowProc( reinterpret_cast< WNDPROC >( uOldWindowProc ), _hwWindowHandle, uMessage, uwParam, llParam )
 						   : 0 )

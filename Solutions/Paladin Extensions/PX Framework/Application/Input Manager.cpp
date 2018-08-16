@@ -1,5 +1,6 @@
 /// Input Manager.cpp
 
+#define PX_USE_NAMESPACES
 #include "../PX Framework.hpp"
 
 namespace PX

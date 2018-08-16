@@ -18,10 +18,10 @@ namespace PX
 
 	namespace Hooks
 	{
-		bool PX_API Initialize( );
+		bool PX_API InitializeHooks( );
 		void PX_API Destruct( );
 
-		PX_SDK CHook* hkDirectXDevice;
+		PX_SDK Tools::CHook* hkDirectXDevice;
 
 		int __stdcall EndScene( IDirect3DDevice9* pDevice );
 		int __stdcall Reset( IDirect3DDevice9* pDevice, D3DPRESENT_PARAMETERS* pParams );

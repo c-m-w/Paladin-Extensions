@@ -168,9 +168,9 @@
     <ClInclude Include="Application\File Manager.hpp" />
     <ClInclude Include="Application\Input Manager.hpp" />
     <ClInclude Include="Application\Types.hpp" />
-    <ClInclude Include="Drawing\Drawing.hpp" />
-    <ClInclude Include="Drawing\Render Engine.hpp" />
-    <ClInclude Include="Drawing\User Interface.hpp" />
+    <ClInclude Include="Design\Drawing.hpp" />
+    <ClInclude Include="Design\Render Engine.hpp" />
+    <ClInclude Include="Design\User Interface.hpp" />
     <ClInclude Include="Inclusions.hpp" />
     <ClInclude Include="Definitions.hpp" />
     <ClInclude Include="Application\Tools.hpp" />
@@ -185,9 +185,9 @@
     <ClCompile Include="Application\Input Manager.cpp" />
     <ClCompile Include="Application\Tools.cpp" />
     <ClCompile Include="Application\Types.cpp" />
-    <ClCompile Include="Drawing\Drawing.cpp" />
-    <ClCompile Include="Drawing\Render Engine.cpp" />
-    <ClCompile Include="Drawing\User Interface.cpp" />
+    <ClCompile Include="Design\Drawing.cpp" />
+    <ClCompile Include="Design\Render Engine.cpp" />
+    <ClCompile Include="Design\User Interface.cpp" />
     <ClCompile Include="Security\Connectivity.cpp" />
     <ClCompile Include="Security\Cryptography.cpp" />
     <ClCompile Include="Security\System Management.cpp" />
@@ -196,7 +196,7 @@
     <None Include="Application\Debug.inl" />
     <None Include="Application\Tools.inl" />
     <None Include="Application\Types.inl" />
-    <None Include="Drawing\User Interface.inl" />
+    <None Include="Design\User Interface.inl" />
     <None Include="Security\Cryptography.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

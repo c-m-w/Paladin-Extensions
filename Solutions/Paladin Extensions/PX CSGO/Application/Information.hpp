@@ -2,13 +2,9 @@
 
 #pragma once
 
-#include "../SDK/Valve/Interfaces/IAppSystem.hpp"
-#include "../SDK/Valve/Interfaces/IBaseClientDll.hpp"
-
-
 namespace PX::Information
 {
-	bool PX_API Initialize( );
+	bool PX_API InitializeInformation( );
 
 	namespace Memory
 	{
@@ -18,7 +14,7 @@ namespace PX::Information
 	namespace Modules
 	{
 		PX_SDK std::string strCreateInterfaceName = PX_XOR( "CreateInterface" );
-		struct SModule : module_t
+		struct SModule: Types::module_t
 		{
 			CreateInterfaceFn ciFactory { };
 

@@ -1,8 +1,7 @@
 /// File Manager.cpp
 
+#define PX_USE_NAMESPACES
 #include "../PX Framework.hpp"
-
-using namespace PX::Cryptography;
 
 namespace PX::Files
 {
@@ -163,7 +162,7 @@ namespace PX::Files
 				{
 					std::stringstream ssBuffer;
 					ssBuffer << ifNewConfiguration.rdbuf( );
-					jsCurrent = nlohmann::json::parse( Cryptography::Base64< CryptoPP::Base64Decoder >( ssBuffer.str( ) ) );
+					jsCurrent = nlohmann::json::parse( Base64< CryptoPP::Base64Decoder >( ssBuffer.str( ) ) );
 				}
 				catch ( nlohmann::detail::parse_error& )
 				{

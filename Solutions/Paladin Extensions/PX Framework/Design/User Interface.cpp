@@ -1,18 +1,15 @@
 /// User Interface.cpp
 
 #define PX_NUKLEAR_IMPLEMENTATION
-
+#define PX_USE_NAMESPACES
 #include "../PX Framework.hpp"
-
-using namespace PX::Files;
-using namespace PX::Render;
 
 namespace PX::UI
 {
 	namespace Manager
 	{
 		cstr_t	szWindowTitle = PX_XOR( "Paladin Extensions" );
-		auto			szApplicationTitle = static_cast< char* >( malloc( 32 ) );
+		auto	szApplicationTitle = static_cast< char* >( malloc( 32 ) );
 
 		nk_font_atlas* pAtlas;
 		struct nk_font *pTahoma, *pTahomaBold, *pRoboto, *pRobotoBold, *pRobotoSmall, *pRobotoBoldSmall, *pEnvy;
@@ -426,8 +423,8 @@ namespace PX::UI
 					nk_fill_triangle( pDrawBuffer, recComboboxWindowBounds.x + recComboboxWindowBounds.w - 3, recComboboxWindowBounds.y, recComboboxWindowBounds.x + recComboboxWindowBounds.w - 10, recComboboxWindowBounds.y - 7, recComboboxWindowBounds.x + recComboboxWindowBounds.w - 17, recComboboxWindowBounds.y, clrBackground );
 				}
 			
-				if ( Widgets::pActiveEditColor != nullptr )
-					Widgets::ColorPicker( );
+				if ( pActiveEditColor != nullptr )
+					ColorPicker( );
 			}
 			else
 				bShouldDrawUserInterface = false;
@@ -468,7 +465,7 @@ namespace PX::UI
 			return uBuffer;
 		}
 
-		void PX_API Manager::Example( )
+		void PX_API Example( )
 		{
 			static const std::deque< cstr_t > dqPrimaryTabs
 			{
@@ -485,8 +482,6 @@ namespace PX::UI
 				"Subtab Three",
 				"Subtab Four"
 			};
-
-			using namespace Widgets;
 
 			static const auto fnSetTabValue = [ ]( int& iCurrentValue, const int iNewValue )
 			{
@@ -579,8 +574,6 @@ namespace PX::UI
 
 	namespace Widgets
 	{
-		using namespace Manager;
-
 		ERowType rowLastRowType;
 
 		struct nk_rect recLastWidgetLocation;
@@ -715,7 +708,7 @@ namespace PX::UI
 			}
 
 			// declaration of 'uWindowHeight' hides global declaration
-			const unsigned uWindowHeight = unsigned( dqLines.size( ) * uLineHeight + 13.f );
+			const auto uWindowHeight = unsigned( dqLines.size( ) * uLineHeight + 13.f );
 			struct nk_rect recTooltip { vecMousePos.x + 20.f, vecMousePos.y, float( uMaxTooltipWidth ), float( uWindowHeight ) };
 
 			if ( vecUsableSpace.h - uWindowHeight < 0 )
@@ -1190,7 +1183,7 @@ namespace PX::UI
 				pActiveEditColor->GetDuration( uCurrentSequence ) = Slider( PX_XOR( "Duration" ), szSliderBuffer, 100, 1000, int( pActiveEditColor->GetDuration( uCurrentSequence ) ), 0, 0, 290, 30, true );
 				nk_layout_space_end( pContext );
 
-				nk_layout_row_static( pContext, 25, int( flColorPickerWidth - 5 ), 1 );
+				nk_layout_row_static( pContext, 25.f, int( flColorPickerWidth - 5 ), 1 );
 				if ( Button( EPosition::LEFT, PX_XOR( "EXIT" ), false, false ) )
 				{
 					bShouldClose = true;
