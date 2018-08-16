@@ -4,6 +4,66 @@
 
 namespace PX::Types
 {
+	module_t::module_t( std::wstring _wstrName )
+	{
+		wstrName = _wstrName;
+		hModule = GetModuleHandle( wstrName.c_str( ) );
+	}
+
+	bool module_t::Succeeded( )
+	{
+		return hModule != nullptr;
+	}
+
+	ptr_t module_t::FindPattern( std::string strPattern )
+	{
+		const static auto fnIDAPatternToBytes = [ = ]( )
+		{
+			std::vector< int > vecBytes { };
+			auto iCurrentByteCount = 0;
+			char szCurrentBytes[ 2 ] { };
+
+			for each( auto& ch in strPattern )
+			{
+				if ( ch == '?' )
+					vecBytes.emplace_back( -1 );
+				else if ( ch != ' ' )
+				{
+					szCurrentBytes[ iCurrentByteCount ] = ch;
+					iCurrentByteCount++;
+					if ( iCurrentByteCount == 2 )
+					{
+						char* szBuffer;
+						vecBytes.emplace_back( strtol( szCurrentBytes, &szBuffer, 16 ) );
+						iCurrentByteCount = 0;
+					}
+				}
+			}
+			return vecBytes;
+		};
+
+		const auto vecByteForm = fnIDAPatternToBytes( );
+		for( auto ptr = ptr_t( hModule ); ptr < GetModuleEnd( hModule ); ptr++ )
+		{
+			auto bFound = true;
+			for ( auto i = 0; i < vecByteForm.size( ); i++ )
+			{
+				auto iValue = vecByteForm[ i ];
+				if ( iValue == -1 )
+					continue;
+				if ( *reinterpret_cast< byte_t* >( ptr + i ) != iValue )
+				{
+					bFound = false;
+					break;
+				}
+			}
+
+			if ( bFound )
+				return ptr;
+		}
+		return 0u;
+	}
+
 	SColor::SColor( std::initializer_list< ptr_t > initInputs )
 	{
 		px_assert( initInputs.size( ) == 1 );

@@ -199,6 +199,7 @@
 
 	define( "ExtensionInfo", array( 2 => "../../Extensions/PX CSGO.info", 3 => "../../Extensions/PX PUBG.info" ) );
 	define( "Extension", array( 1 => "../../Extensions/PX Manager.dll", 2 => "../../Extensions/PX CSGO.dll", 3 => "../../Extensions/PX PUBG.dll" ) );
+	define( "GroupID", array( ExtensionID[ "csgo" ] => "7", ExtensionID[ "pubg" ] => "8", ExtensionID[ "rsix" ] => "10" ) );
 	
 	function CompileCheat( $game_id )
 	{
@@ -243,9 +244,7 @@
         global $sql_connection;
 
         $order = GenerateRandomOrder( );
-
         $sql_connection->query( 'INSERT INTO px_extension_load VALUES(' . $_SESSION[ "user_id" ] . ', ' . time( ) . ', ' . $game_id . ' )' );
-
 		return array( "Order" => $order, "Sections" => GenerateSections( Extension[ $game_id ], $order ) );
 	}
 	

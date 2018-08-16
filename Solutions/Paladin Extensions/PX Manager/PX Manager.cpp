@@ -352,7 +352,7 @@ void PX_API MonitorDetectionVectors( )
 std::thread tHeartbeat;
 bool bStopHeartbeat;
 
-void PX_API OnLaunch( )
+void PX_API OnAttach( )
 {
 	tHeartbeat = std::thread( Net::Heartbeat, bStopHeartbeat, iSelectedExtension );
 
@@ -369,7 +369,6 @@ void PX_API OnLaunch( )
 	std::thread tSentinal( MonitorDetectionVectors );
 	tSentinal.detach( );
 
-	// wait 1 sec so that our cool loading animation has some time to play :D
 	Wait( rand( ) % 1900 + 100 );
 
 	iLoginStatus = Net::Login( bExtensionAccess );
@@ -405,13 +404,9 @@ void PX_API OnLaunch( )
 			while ( iSelectedExtension == PX_EXTENSION_NONE )
 				Wait( 100 );
 
-			auto strDLL = Net::RequestExtensionInformation( iSelectedExtension );
-			const auto sDLL = strDLL.size( );
-			auto pBuffer = VirtualAlloc( nullptr, sDLL + 1, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE );
+			auto strEncryptedDLL = Net::RequestExtension( iSelectedExtension, false );
 			DWORD dwProcessID { };
 
-			memcpy( pBuffer, strDLL.c_str( ), sDLL );
-			strDLL.erase( sDLL );
 			bShouldClose = true;
 			do
 			{
@@ -420,6 +415,15 @@ void PX_API OnLaunch( )
 			} while ( dwProcessID == 0u
 					  || !sys::IsProcessThreadRunning( dwProcessID )
 					  || !sys::NecessaryModulesLoaded( dwProcessID ) );
+
+			auto strDLL = sys::AssembleExtensionInformation( strEncryptedDLL );
+
+			const auto sDLL = strDLL.size( );
+			auto pBuffer = VirtualAlloc( nullptr, sDLL + 1, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE );
+
+			memcpy( pBuffer, strDLL.c_str( ), sDLL );
+			strEncryptedDLL.erase( strEncryptedDLL.size( ) );
+			strDLL.erase( sDLL );
 
 			LoadRawLibraryEx( pBuffer, wstrApplicationExecutableNames[ iSelectedExtension ], new sys::injection_info_t );
 			sys::WipeMemory( pBuffer, sDLL );

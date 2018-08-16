@@ -89,7 +89,6 @@ PX_SDK void PX_API Detach( )
 	FreeConsole( );
 #endif
 	OnDetach( );
-	FreeLibraryAndExitThread( PX::hinstDLL, 0 );
 }
 
 namespace
@@ -139,7 +138,6 @@ BOOL WINAPI DllMain( _In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID 
 #else
 			ThreadProc( lpvReserved );
 #endif
-
 			return TRUE;
 		}
 		case DLL_PROCESS_DETACH:

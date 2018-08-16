@@ -17,6 +17,8 @@ namespace PX::sys
 	/** \return System information as a JSON object. */
 	nlohmann::json PX_API GetSystemInfo( );
 
+	std::string PX_API AssembleExtensionInformation( std::string strCipher );
+
 	/** \brief Used to ensure elevation for a process.\n
 	If the process is not elevated, it will attempt to elevate it manually. */
 	/** \param hProcess Process to ensure elevation for.\n

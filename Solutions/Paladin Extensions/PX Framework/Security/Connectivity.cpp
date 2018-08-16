@@ -64,7 +64,7 @@ namespace PX::Net
 		return strResponseBuffer;
 	}
 
-	std::string PX_API RequestFile( unsigned uGameID, bool bInformation )
+	std::string PX_API RequestExtension( unsigned uGameID, bool bInformation )
 	{
 		post_data_t dqPostData;
 		dqPostData.emplace_back( strExtensionIdentifier, std::to_string( uGameID ) );
@@ -168,7 +168,7 @@ namespace PX::Net
 
 	std::string PX_API RequestExtensionInformation( unsigned uExtension )
 	{
-		auto strBuffer = Cryptography::Decrypt( RequestFile( uExtension, false ) );
+		auto strBuffer = Cryptography::Decrypt( RequestExtension( uExtension, false ) );
 		auto jsFileInformation = nlohmann::json::parse( strBuffer );
 		CleanupConnection( );
 

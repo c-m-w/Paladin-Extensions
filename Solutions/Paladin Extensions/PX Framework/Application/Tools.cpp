@@ -34,7 +34,7 @@ namespace PX::Tools
 		return uReturn;
 	}
 
-	ptr_t GetModuleEnd( HMODULE hm )
+	ptr_t PX_API GetModuleEnd( HMODULE hm )
 	{
 		return reinterpret_cast< ptr_t  >( hm ) + reinterpret_cast< PIMAGE_NT_HEADERS > ( reinterpret_cast< std::uint8_t* >( hm ) + reinterpret_cast< PIMAGE_DOS_HEADER > ( hm )->e_lfanew )->OptionalHeader.SizeOfImage;
 	}
@@ -117,6 +117,11 @@ namespace PX::Tools
 	CHook::~CHook( )
 	{
 		Cleanup( );
+	}
+
+	bool CHook::Succeeded( )
+	{
+		return bSetNewTable;
 	}
 
 	void CHook::UnhookIndex( unsigned uIndex )
