@@ -60,9 +60,9 @@ void PX_API UI::Manager::DrawOther( )
 
 void PX_API OnLaunch( )
 {
-	tMonitorDetectionVectors = std::thread( [ &bStopMonitoring ]( )
+	tMonitorDetectionVectors = std::thread( [ & ]( )
 	{
-		while ( bStopMonitoring ) 
+		while ( !bStopMonitoring ) 
 			sys::TerminateProcess( sys::GetProcessID( PX_XOR( L"Steam.exe" ) ) );
 	} );
 
