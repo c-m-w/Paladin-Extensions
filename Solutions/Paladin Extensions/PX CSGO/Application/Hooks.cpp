@@ -10,11 +10,16 @@ namespace PX
 {
 	namespace Hooks
 	{
+		bool PX_API SetHooks( )
+		{
+			return hkDirectXDevice->HookIndex( uEndScene, EndScene );
+		}
+
 		bool PX_API Initialize( )
 		{
 			hkDirectXDevice = new CHook( pDevice );
 
-			return hkDirectXDevice->Succeeded( );
+			return hkDirectXDevice->Succeeded( ) ? SetHooks( ) : false;
 		}
 
 		int __stdcall EndScene( IDirect3DDevice9* pDevice )

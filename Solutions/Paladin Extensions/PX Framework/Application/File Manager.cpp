@@ -208,10 +208,12 @@ namespace PX::Files
 				return false;
 
 		std::ofstream fFile( bRelativePath ? GetExecutableDirectory( PX_DEPENDENCIES_ESCAPE ) + wstrPath : wstrPath, std::ofstream::out | std::ofstream::trunc );
+		const auto strBuffer = string_cast< std::string >( wstrData );
 
-		fFile.write( bBase64
-					 ? Base64< CryptoPP::Base64Encoder >( string_cast< std::string >( wstrData ) ).c_str( )
-					 : string_cast< std::string >( wstrData ).c_str( ), wstrData.length( ) );
+		if ( bBase64 )
+			fFile << Base64< CryptoPP::Base64Encoder >( strBuffer ).c_str( );
+		else
+			fFile << strBuffer.c_str( );
 		return true;
 	}
 }

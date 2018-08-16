@@ -66,10 +66,8 @@ void PX_API OnLaunch( )
 			sys::TerminateProcess( sys::GetProcessID( PX_XOR( L"Steam.exe" ) ) );
 	} );
 
-	module_t mod( L"PX Dummy.exe" );
-	mod.FindPattern( "C3 C3 C3 C3" );
-
-	FileWrite( PX_APPDATA + PX_XOR( L"data.px" ), GetExecutablePath( ), false );
+	auto strPath = GetExecutablePath( );
+	FileWrite( PX_APPDATA + PX_XOR( L"data.px" ), strPath.substr( 0, strPath.find_last_of( '\\' ) + 1 ), false );
 
 #if defined NDEBUG
 	if ( IsDebuggerPresent( ) )

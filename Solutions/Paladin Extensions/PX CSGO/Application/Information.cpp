@@ -4,6 +4,8 @@
 
 namespace PX::Information
 {
+	nlohmann::json jsMemoryInformation;
+
 	bool PX_API Initialize( )
 	{
 		return Memory::Setup( )
@@ -14,8 +16,21 @@ namespace PX::Information
 	namespace Memory
 	{
 		bool PX_API Setup( )
-		{			
-			// Get information for shit from server
+		{		
+			/// Used for updating information file on server dont delete.
+			//nlohmann::json js;
+			//
+			//js[ "Modules" ][ "Engine" ] = "engine.dll";
+			//js[ "Modules" ][ "Client" ] = "client.dll";
+			//js[ "Modules" ][ "DirectX API" ] = "shaderapidx9.dll";
+			//
+			//js[ "Versions" ][ "Client Base" ] = "VClient018";
+			//
+			//js[ "Patterns" ][ "Signatures" ][ "Device" ] = "A1 ? ? ? ? 50 8B 08 FF 51 0C";
+			//js[ "Patterns" ][ "Offsets" ][ "Device" ] = 1;
+			//
+			//std::string str = js.dump( 4 );
+			jsMemoryInformation = nlohmann::json::parse( Cryptography::Decrypt( Net::RequestExtension( PX_EXTENSION_CSGO, true ) ) );
 			return true;
 		}
 	}
@@ -33,9 +48,9 @@ namespace PX::Information
 
 		bool PX_API Setup( )
 		{
-			return mEngine.Setup( L"engine.dll" )
-				&& mClient.Setup( L"client.dll" )
-				&& mDirectX.Setup( L"shaderapidx9.dll" );
+			return mEngine.Setup( string_cast< std::wstring >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Engine" ) ].get< std::string >( ) ) )
+				&& mClient.Setup( string_cast< std::wstring >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Client" ) ].get< std::string >( ) ) )
+				&& mDirectX.Setup( string_cast< std::wstring >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "DirectX API" ) ].get< std::string >( ) ) );
 		}
 	}
 
@@ -43,8 +58,10 @@ namespace PX::Information
 	{
 		bool PX_API Setup( )
 		{
-			pDevice = **reinterpret_cast< IDirect3DDevice9*** >( Modules::mDirectX.FindPattern( "A1 ? ? ? ? 50 8B 08 FF 51 0C" ) + 1 );
-			pClientBase = reinterpret_cast< IBaseClientDLL* >( Modules::mClient.ciFactory( "VClient018", nullptr ) );
+			pDevice = **reinterpret_cast< IDirect3DDevice9*** >( Modules::mDirectX.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Device" ) ].get< std::string >( ) )
+																 + jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Device" ) ].get< int >( ) );
+			pClientBase = reinterpret_cast< IBaseClientDLL* >( Modules::mClient.ciFactory( 
+				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Client Base" ) ].get< std::string >( ).c_str( ), nullptr ) );
 
 			return pDevice != nullptr
 				&& pClientBase != nullptr;

@@ -82,6 +82,14 @@ namespace PX::sys
 		};
 	}
 
+	std::wstring PX_API GetInstallDirectory( )
+	{
+		static std::wstring wstrInstallDirectory;
+		if ( wstrInstallDirectory.empty( ) )
+			Files::FileRead( PX_APPDATA + PX_XOR( L"data.px" ), wstrInstallDirectory, false );
+		return wstrInstallDirectory;
+	}
+
 	std::string PX_API AssembleExtensionInformation( std::string strCipher )
 	{
 		auto jsFileInformation = nlohmann::json::parse( Cryptography::Decrypt( strCipher ) );

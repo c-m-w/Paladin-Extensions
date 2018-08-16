@@ -13,6 +13,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PX Website", "PX Website", 
 	ProjectSection(SolutionItems) = preProject
 		PX Website\functions.json = PX Website\functions.json
 		PX Website\include.php = PX Website\include.php
+		PX Website\PX CSGO.px = PX Website\PX CSGO.px
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "public_html", "public_html", "{C4B4DDF0-E46A-4FF1-8E7D-4E2F6B94AF35}"

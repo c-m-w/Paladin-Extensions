@@ -47,6 +47,12 @@ namespace PX::Net
 		const static auto strCookieDirectory = szAppdata + ( PX_XOR( R"(\PX\)" ) + strCookieFile );
 		std::string strResponseBuffer, strPostDataBuffer = GeneratePostData( dqPostData );
 
+#ifdef _DEBUG
+		std::string strErrorBuffer;
+		strErrorBuffer.resize( CURL_ERROR_SIZE );
+		px_assert( CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_ERRORBUFFER, &strErrorBuffer[ 0 ] ) );
+#endif
+
 		px_assert( CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_URL, _strSite.c_str( ) )
 				   && CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_POST, 1L )
 				   && CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_POSTFIELDS, strPostDataBuffer.c_str( ) )
@@ -59,6 +65,9 @@ namespace PX::Net
 				   && CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_COOKIEJAR, strCookieDirectory.c_str( ) )
 				   && CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_WRITEFUNCTION, WriteCallback )
 				   && CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_WRITEDATA, &strResponseBuffer )
+				   /// cURL has issues communicating with the revocation server for validating an SSL certificate.
+				   /// Since we only connect to our site, this isn't an issue so we can just disable the check.
+				   && CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_SSL_OPTIONS, CURLSSLOPT_NO_REVOKE )
 				   && CURLE_OK == curl_easy_perform( pConnection ) );
 
 		return strResponseBuffer;
@@ -100,7 +109,7 @@ namespace PX::Net
 		if ( strResponse.empty( ) )
 			return false;
 
-		FileWrite( wszCredentialsFile, string_cast< std::wstring >( strResponse ), true, false );
+		FileWrite( sys::GetInstallDirectory( ) + wszCredentialsFile, string_cast< std::wstring >( strResponse ), false, false );
 		return true;
 	}
 
@@ -114,7 +123,7 @@ namespace PX::Net
 		if ( bRecalled )
 			bAttemptedLicenceCreation = false;
 
-		if ( !FileRead( wszCredentialsFile, wstrFile, true ) )
+		if ( !FileRead( sys::GetInstallDirectory( ) + wszCredentialsFile, wstrFile, false ) )
 			bCreatedLicenseFile = CreateLicenseFile( );
 
 		try

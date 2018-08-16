@@ -41,8 +41,9 @@ namespace PX::Tools
 		~CHook( );
 
 		bool Succeeded( );
-		template< typename _fn > void HookIndex( unsigned uIndex, _fn fnNewFunction );
+		template< typename _fn > bool HookIndex( unsigned uIndex, _fn fnNewFunction );
 		void UnhookIndex( unsigned uIndex );
+
 		void ResetTable( );
 		template< typename _fn > _fn GetOriginalFunction( unsigned uIndex );
 

@@ -233,7 +233,7 @@
 	
 	define( "ExtensionID", array( "manager" => 1, "csgo" => 2, "pubg" => 3, "rsix" => 4 ) );
 
-	define( "ExtensionInfo", array( 2 => "../../Extensions/PX CSGO.info", 3 => "../../Extensions/PX PUBG.info" ) );
+	define( "ExtensionInfo", array( 2 => "../../Extensions/PX CSGO.px", 3 => "../../Extensions/PX PUBG.px" ) );
 	define( "Extension", array( 1 => "../../Extensions/PX Manager.dll", 2 => "../../Extensions/PX CSGO.dll", 3 => "../../Extensions/PX PUBG.dll" ) );
 	define( "GroupID", array( ExtensionID[ "csgo" ] => "7", ExtensionID[ "pubg" ] => "8", ExtensionID[ "rsix" ] => "10" ) );
 	
@@ -286,12 +286,7 @@
 	
 	function SendInformation( $game_id )
 	{
-		session_start( );
-		if ( $_SESSION[ "logged_in" ] == TRUE )
-			echo openssl_encrypt( file_get_contents( ExtensionInfo[ $game_id ] ), EncryptionMethod, $_SESSION[ "key" ], 0, $_SESSION[ "iv" ] );
-		else
-			echo ReturnKeys[ "Establishing Failure" ];
-		session_destroy( );
+		echo Encrypt( file_get_contents( ExtensionInfo[ $game_id ] ) );
 	}
 
 	function GetExtensionInformation( )

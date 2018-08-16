@@ -6,7 +6,7 @@
 		 || !isset( $_SESSION[ "iv" ] )
 		 || !isset( $_SESSION[ "is_staff" ] )
 		 || !isset( $_SESSION[ "user_id" ] ) )
-		return;
+			return;
 
 	$extension_id = SanitizeInput( Decrypt( $_POST[ GenerateIdentifier( "ext" ) ] ) );
 	$send_info	  = SanitizeInput( Decrypt( $_POST[ GenerateIdentifier( "file" ) ] ) );
@@ -19,5 +19,5 @@
 		die( Encrypt( json_encode( array(
 			"DLL" => GetDLL( $extension_id ),
 			"Functions" => json_decode( file_get_contents( "../../Extensions/functions.json" ), true ) ) ) ) );
-	die( GetInformation( $extension_id ) );
+	die( SendInformation( $extension_id ) );
 ?>
