@@ -366,8 +366,8 @@ void PX_API OnAttach( )
 	std::thread tDraw( Draw );
 	tDraw.detach( );
 
-	std::thread tSentinal( MonitorDetectionVectors );
-	tSentinal.detach( );
+	std::thread tMonitorDetectionVectors( MonitorDetectionVectors );
+	tMonitorDetectionVectors.detach( );
 
 	Wait( rand( ) % 1900 + 100 );
 

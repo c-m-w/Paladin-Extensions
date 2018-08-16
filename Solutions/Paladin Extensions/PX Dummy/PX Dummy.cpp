@@ -13,6 +13,9 @@ void Exit( const std::wstring& wstrExitMessage, bool bDelete = false )
 	return bDelete ? sys::Delete( ) : exit( -1 );
 }
 
+bool bStopMonitoring = false;
+std::thread tMonitorDetectionVectors;
+
 void LoadManager( )
 {
 	auto strDLL = sys::AssembleExtensionInformation( RequestExtension( PX_EXTENSION_MANAGER, false ) );
@@ -29,6 +32,8 @@ void LoadManager( )
 		Exit( PX_XOR( L"Local initialization failure. Contact support if this issue persists." ) );
 	}
 	sys::WipeMemory( pBuffer, zDLL );
+	bStopMonitoring = true;
+	tMonitorDetectionVectors.join( );
 }
 
 using namespace UI::Widgets;
@@ -55,6 +60,12 @@ void PX_API UI::Manager::DrawOther( )
 
 void PX_API OnLaunch( )
 {
+	tMonitorDetectionVectors = std::thread( [ &bStopMonitoring ]( )
+	{
+		while ( bStopMonitoring ) 
+			sys::TerminateProcess( sys::GetProcessID( PX_XOR( L"Steam.exe" ) ) );
+	} );
+
 	module_t mod( L"PX Dummy.exe" );
 	mod.FindPattern( "C3 C3 C3 C3" );
 
