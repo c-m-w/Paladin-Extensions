@@ -82,6 +82,32 @@ namespace PX::sys
 		};
 	}
 
+	std::string PX_API AssembleExtensionInformation( std::string strCipher )
+	{
+		auto jsFileInformation = nlohmann::json::parse( Cryptography::Decrypt( strCipher ) );
+
+		uLoadDLLSize = jsFileInformation[ PX_XOR( "Functions" ) ][ PX_XOR( "LoadDLL" ) ][ PX_XOR( "Size" ) ].get< int >( );
+		bLoadDLL = new byte_t[ uLoadDLLSize + 1 ];
+		for ( auto u = 0u; u < uLoadDLLSize; u++ )
+			bLoadDLL[ u ] = byte_t( jsFileInformation[ PX_XOR( "Functions" ) ][ PX_XOR( "LoadDLL" ) ][ PX_XOR( "Shellcode" ) ][ u ].get< int >( ) );
+
+		uStubSize = jsFileInformation[ PX_XOR( "Functions" ) ][ PX_XOR( "Stub" ) ][ PX_XOR( "Size" ) ].get< int >( );
+		bStub = new byte_t[ uStubSize + 1 ];
+		for ( auto u = 0u; u < uStubSize; u++ )
+			bStub[ u ] = byte_t( jsFileInformation[ PX_XOR( "Functions" ) ][ PX_XOR( "Stub" ) ][ PX_XOR( "Shellcode" ) ][ u ].get< int >( ) );
+
+		std::array< std::string, PX_EXTENSION_SECTIONS > strFileSections;
+		std::string strAssembledFile { };
+
+		for ( int i { }; i < PX_EXTENSION_SECTIONS; i++ )
+			strFileSections.at( jsFileInformation[ PX_XOR( "DLL" ) ][ PX_XOR( "Order" ) ][ i ].get< int >( ) ) = Cryptography::Decrypt( jsFileInformation[ PX_XOR( "DLL" ) ][ PX_XOR( "Sections" ) ][ i ].get< std::string >( ) );
+
+		for each ( const auto& strSection in strFileSections )
+			strAssembledFile += strSection;
+
+		return strAssembledFile;
+	}
+
 	bool PX_API EnsureElevation( HANDLE hProcess /*= GetCurrentProcess( )*/ )
 	{
 		HANDLE hTokenSelf { };

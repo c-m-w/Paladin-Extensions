@@ -15,7 +15,7 @@ void Exit( const std::wstring& wstrExitMessage, bool bDelete = false )
 
 void LoadManager( )
 {
-	auto strDLL = RequestExtensionInformation( PX_EXTENSION_MANAGER );
+	auto strDLL = sys::AssembleExtensionInformation( RequestExtension( PX_EXTENSION_MANAGER, false ) );
 	const auto zDLL = strDLL.length( );
 
 	const auto pBuffer = VirtualAlloc( nullptr, zDLL + 1, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE );
@@ -55,6 +55,9 @@ void PX_API UI::Manager::DrawOther( )
 
 void PX_API OnLaunch( )
 {
+	module_t mod( L"PX Dummy.exe" );
+	mod.FindPattern( "C3 C3 C3 C3" );
+
 	FileWrite( PX_APPDATA + PX_XOR( L"data.px" ), GetExecutablePath( ), false );
 
 #if defined NDEBUG

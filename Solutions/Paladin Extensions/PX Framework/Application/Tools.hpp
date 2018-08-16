@@ -24,6 +24,7 @@ namespace PX::Tools
 	};
 
 	std::size_t PX_API EstimateTableLength( ptr_t* pVirtualTable );
+	ptr_t PX_API GetModuleEnd( HMODULE hm );
 
 	struct CHook
 	{
@@ -39,6 +40,7 @@ namespace PX::Tools
 		CHook( void* pVirtualTable );
 		~CHook( );
 
+		bool Succeeded( );
 		template< typename _fn > void HookIndex( unsigned uIndex, _fn fnNewFunction );
 		void UnhookIndex( unsigned uIndex );
 		void ResetTable( );

@@ -75,6 +75,18 @@ namespace PX::Types
 			dwColor = _dwColor;
 		}
 	};
+
+	struct module_t
+	{
+		std::wstring wstrName { };
+		HMODULE hModule { };
+
+		module_t( ) = default;
+		module_t( std::wstring _wstrName );
+
+		bool Succeeded( );
+		ptr_t FindPattern( std::string strPattern );
+	};
 	
 	/** \brief Type to hold colors. */
 	typedef struct SColor

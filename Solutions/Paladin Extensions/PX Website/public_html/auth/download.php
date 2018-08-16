@@ -12,7 +12,7 @@
 	$send_info	  = SanitizeInput( Decrypt( $_POST[ GenerateIdentifier( "file" ) ] ) );
 
 	// somehow requested an extension without the proper permissions, most likely memory editing the manager.
-	if ( strpos( $_SESSION[ "secondary_group_ids" ], $extension_id ) === FALSE )
+	if ( $extension_id != ExtensionID[ "manager" ] && strpos( $_SESSION[ "secondary_group_ids" ], GroupID[ $extension_id ] ) === FALSE )
 		return;
 	
 	if ( $send_info == 0 )

@@ -33,7 +33,7 @@ namespace PX::Net
 	/**	\return What the site sends back from the request. */
 	std::string PX_API Request( const std::string& strSite, const post_data_t& dqPostData );
 
-	std::string PX_API RequestFile( unsigned uGameID, bool bInformation );
+	std::string PX_API RequestExtension( unsigned uGameID, bool bInformation );
 
 	/** \brief Login status received from server after login attempt. */
 	enum ELogin
