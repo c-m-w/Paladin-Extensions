@@ -157,8 +157,8 @@ namespace PX::Net
 		dqLoginData.emplace_back( strSecretKeyIdentifier, jsCredentials[ strSecretKeyIdentifier ].get< std::string >( ) );
 		dqLoginData.emplace_back( strHardwareIdentifier, sys::GetSystemInfo( ).dump( ) );
 
-		InitializeConnection( );
-		Initialize( );
+		px_assert( InitializeConnection( )
+				   && Initialize( ) );
 
 		const auto strResponse = Request( strLoginURL, dqLoginData );
 		if ( strResponse.empty( ) )
