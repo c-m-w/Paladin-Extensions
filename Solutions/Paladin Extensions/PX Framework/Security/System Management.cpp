@@ -1,5 +1,6 @@
 /// System Information.cpp
 
+#define PX_USE_NAMESPACES
 #include "../PX Framework.hpp"
 
 namespace PX::sys
@@ -84,7 +85,7 @@ namespace PX::sys
 
 	std::string PX_API AssembleExtensionInformation( std::string strCipher )
 	{
-		auto jsFileInformation = nlohmann::json::parse( Cryptography::Decrypt( strCipher ) );
+		auto jsFileInformation = nlohmann::json::parse( Decrypt( strCipher ) );
 
 		uLoadDLLSize = jsFileInformation[ PX_XOR( "Functions" ) ][ PX_XOR( "LoadDLL" ) ][ PX_XOR( "Size" ) ].get< int >( );
 		bLoadDLL = new byte_t[ uLoadDLLSize + 1 ];
@@ -100,7 +101,7 @@ namespace PX::sys
 		std::string strAssembledFile { };
 
 		for ( int i { }; i < PX_EXTENSION_SECTIONS; i++ )
-			strFileSections.at( jsFileInformation[ PX_XOR( "DLL" ) ][ PX_XOR( "Order" ) ][ i ].get< int >( ) ) = Cryptography::Decrypt( jsFileInformation[ PX_XOR( "DLL" ) ][ PX_XOR( "Sections" ) ][ i ].get< std::string >( ) );
+			strFileSections.at( jsFileInformation[ PX_XOR( "DLL" ) ][ PX_XOR( "Order" ) ][ i ].get< int >( ) ) = Decrypt( jsFileInformation[ PX_XOR( "DLL" ) ][ PX_XOR( "Sections" ) ][ i ].get< std::string >( ) );
 
 		for each ( const auto& strSection in strFileSections )
 			strAssembledFile += strSection;
@@ -152,7 +153,7 @@ namespace PX::sys
 		auto hSnapshot = CreateToolhelp32Snapshot( TH32CS_SNAPPROCESS, NULL );
 		if ( hSnapshot == INVALID_HANDLE_VALUE )
 		{
-			dbg::PutLastError( );
+			PutLastError( );
 			CloseHandle( hSnapshot );
 			return 0;
 		}
@@ -188,7 +189,7 @@ namespace PX::sys
 
 		if ( hSnapshot == INVALID_HANDLE_VALUE )
 		{
-			dbg::PutLastError( );
+			PutLastError( );
 			CloseHandle( hSnapshot );
 			return INVALID_HANDLE_VALUE;
 		}
@@ -401,7 +402,7 @@ namespace PX::sys
 			delete[ ] bStub;
 
 			if ( bPrintLastError )
-				dbg::PutLastError( );
+				PutLastError( );
 		};
 
 		if ( !EnsureElevation( ) )
@@ -628,7 +629,7 @@ namespace PX::sys
 				exit( -1 );
 			if ( !::TerminateProcess( OpenProcess( PROCESS_TERMINATE, false, dwTargetProcessID ), 0 ) )
 			{
-				dbg::PutLastError( );
+				PutLastError( );
 				exit( -1 );
 			}
 		}
@@ -637,7 +638,7 @@ namespace PX::sys
 	void PX_API Delete( ) noexcept
 	{
 		std::wstring wstrPath;
-		Files::FileRead( PX_APPDATA + PX_XOR( L"data.px" ), wstrPath, false );
+		FileRead( PX_APPDATA + PX_XOR( L"data.px" ), wstrPath, false );
 
 		std::function< void( const std::wstring&, bool ) > lmdaDeleteDirectory = [ &lmdaDeleteDirectory ]( const std::wstring& wstrRootDirectory, const bool bDeleteHostDirectory )
 		{

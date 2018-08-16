@@ -1,5 +1,6 @@
 /// Types.cpp
 
+#define PX_USE_NAMESPACES
 #include "../PX Framework.hpp"
 
 namespace PX::Types
@@ -46,12 +47,12 @@ namespace PX::Types
 		for( auto ptr = ptr_t( hModule ); ptr < GetModuleEnd( hModule ); ptr++ )
 		{
 			auto bFound = true;
-			for ( auto i = 0; i < vecByteForm.size( ); i++ )
+			for ( auto u = 0u; u < vecByteForm.size( ); u++ )
 			{
-				auto iValue = vecByteForm[ i ];
+				auto iValue = vecByteForm[ u ];
 				if ( iValue == -1 )
 					continue;
-				if ( *reinterpret_cast< byte_t* >( ptr + i ) != iValue )
+				if ( *reinterpret_cast< byte_t* >( ptr + u ) != iValue )
 				{
 					bFound = false;
 					break;

@@ -163,9 +163,11 @@ namespace PX::Types
 			color_t clrColor;
 			moment_t mmtDuration = 0;
 		} sequence_info_t;
+
 	private:
 		sequence_info_t sqInfo[ 7 ];
 		moment_t mmtTotalDuration = 0;
+
 	public:
 		std::size_t sSequences = 0u;
 		SColorSequence( ) = default;
@@ -185,3 +187,7 @@ namespace PX::Types
 		//void operator>>( unsigned uPosition );
 	} color_sequence_t;
 }
+
+#if defined PX_USE_NAMESPACES
+using namespace PX::Types;
+#endif

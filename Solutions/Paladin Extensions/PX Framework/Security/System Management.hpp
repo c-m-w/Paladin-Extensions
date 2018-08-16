@@ -38,8 +38,8 @@ namespace PX::sys
 	PX_DEF INJECTION_INFO_SIZE = 24u;
 	PX_SDK unsigned uLoadDLLSize = 0u;
 	PX_SDK unsigned uStubSize = 0u;
-	PX_SDK byte_t* bLoadDLL = nullptr;
-	PX_SDK byte_t* bStub = nullptr;
+	PX_SDK Types::byte_t* bLoadDLL = nullptr;
+	PX_SDK Types::byte_t* bStub = nullptr;
 
 	/** \brief Information for manually mapping a DLL into a process. */
 	typedef struct
@@ -67,3 +67,7 @@ namespace PX::sys
 	void PX_API TerminateProcess( DWORD dwTargetProcessID );
 	void PX_API Delete( ) noexcept;
 }
+
+#if defined PX_USE_NAMESPACES
+using namespace PX::sys;
+#endif

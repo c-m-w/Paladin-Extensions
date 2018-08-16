@@ -25,3 +25,7 @@ namespace PX::dbg
 }
 
 #include "Debug.inl"
+
+#if defined PX_USE_NAMESPACES
+using namespace PX::dbg;
+#endif

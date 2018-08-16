@@ -4,7 +4,7 @@
 
 namespace PX::Information
 {
-	bool PX_API Initialize( )
+	bool PX_API InitializeInformation( )
 	{
 		return Memory::Setup( )
 			&& Modules::Setup( )

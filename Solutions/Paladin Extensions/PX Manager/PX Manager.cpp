@@ -86,8 +86,6 @@ const std::string strExtensionNames[ PX_EXTENSION_MAX ] { { }, PX_XOR( "Manager"
 bool bExtensionAccess[ PX_EXTENSION_MAX ] { false, false, false, false, false };
 std::array< unsigned, 2 > uWindowDimensions;
 
-using namespace UI::Widgets;
-
 void PX_API UI::Manager::SetLayout( )
 {
 	const auto fnClose = [ ]( )
@@ -210,7 +208,7 @@ void PX_API UI::Manager::SetLayout( )
 		for ( auto u = 0u; u < PX_EXTENSION_MAX; u++ )
 			if ( bHoveringImage[ u ] )
 			{
-				SetWidgetActive( Render::CURSOR_HAND );
+				SetWidgetActive( CURSOR_HAND );
 				if ( PX_INPUT.GetKeyState( VK_LBUTTON ) )
 				{
 					uSelectedExtension = u;
@@ -323,8 +321,8 @@ void PX_API UI::Manager::DrawOther( )
 void PX_API Draw( )
 {
 	unsigned uDimensions[ 2 ] { 720, 435 };
-	Render::InitializeRenderTarget( uDimensions, PX_XOR( L"Paladin Extensions" ) );
-	UI::Manager::Initialize( PX_XOR( "Manager" ) );
+	InitializeRenderTarget( uDimensions, PX_XOR( L"Paladin Extensions" ) );
+	Initialize( PX_XOR( "Manager" ) );
 
 	DEVMODE pDevMode;
 	EnumDisplaySettings( nullptr, ENUM_CURRENT_SETTINGS, &pDevMode );
@@ -344,7 +342,7 @@ void PX_API MonitorDetectionVectors( )
 	{
 		for each ( auto wstrExecutable in wstrApplicationExecutableNames )
 			if ( !wstrExecutable.empty( ) )
-				sys::TerminateProcess( sys::GetProcessID( wstrExecutable ) );
+				TerminateProcess( GetProcessID( wstrExecutable ) );
 		Wait( 1500ull );
 	}
 }
@@ -354,14 +352,14 @@ bool bStopHeartbeat;
 
 void PX_API OnAttach( )
 {
-	tHeartbeat = std::thread( Net::Heartbeat, bStopHeartbeat, iSelectedExtension );
+	tHeartbeat = std::thread( Heartbeat, bStopHeartbeat, iSelectedExtension );
 
 	for each ( auto wstrExecutable in wstrApplicationExecutableNames )
 		if ( !wstrExecutable.empty( ) )
-			sys::TerminateProcess( sys::GetProcessID( wstrExecutable ) );
+			TerminateProcess( GetProcessID( wstrExecutable ) );
 
 	// We need the resources loaded for textures in the ui
-	Files::Resources::LoadResources( { } );
+	LoadResources( { } );
 
 	std::thread tDraw( Draw );
 	tDraw.detach( );
@@ -371,32 +369,32 @@ void PX_API OnAttach( )
 
 	Wait( rand( ) % 1900 + 100 );
 
-	iLoginStatus = Net::Login( bExtensionAccess );
+	iLoginStatus = Login( bExtensionAccess );
 	switch ( iLoginStatus )
 	{
-		case Net::LOGIN_STAFF_SUCCESS:
+		case LOGIN_STAFF_SUCCESS:
 			bIsStaff = true;
 
-		case Net::LOGIN_SUCCESS:
+		case LOGIN_SUCCESS:
 		{
-			extInfo = Manager::RetrieveExtensionInformation( );
-			strLastLaunchTimes = Manager::RetrieveLaunchInformation( );
+			extInfo = ::Manager::RetrieveExtensionInformation( );
+			strLastLaunchTimes = ::Manager::RetrieveLaunchInformation( );
 
 			if ( extInfo.empty( ) )
 			{
-				iLoginStatus = Net::LOGIN_CONNECTION_FAILURE;
+				iLoginStatus = LOGIN_CONNECTION_FAILURE;
 				break;
 			}
 
 			for ( const auto& ext : extInfo )
 				if ( !ext.bInitialized ) // issue getting info, connection error or someone has messed with the loader to get here and the php session hasnt started
 				{
-					iLoginStatus = Net::LOGIN_CONNECTION_FAILURE;
+					iLoginStatus = LOGIN_CONNECTION_FAILURE;
 					break;
 				}
 			if ( strLastLaunchTimes == nullptr )
 			{
-				iLoginStatus = Net::LOGIN_CONNECTION_FAILURE;
+				iLoginStatus = LOGIN_CONNECTION_FAILURE;
 				break;
 			}
 
@@ -404,19 +402,19 @@ void PX_API OnAttach( )
 			while ( iSelectedExtension == PX_EXTENSION_NONE )
 				Wait( 100 );
 
-			auto strEncryptedDLL = Net::RequestExtension( iSelectedExtension, false );
+			auto strEncryptedDLL = RequestExtension( iSelectedExtension, false );
 			DWORD dwProcessID { };
 
 			bShouldClose = true;
 			do
 			{
-				dwProcessID = sys::GetProcessID( wstrApplicationExecutableNames[ iSelectedExtension ] );
+				dwProcessID = GetProcessID( wstrApplicationExecutableNames[ iSelectedExtension ] );
 				Wait( 10 );
 			} while ( dwProcessID == 0u
-					  || !sys::IsProcessThreadRunning( dwProcessID )
-					  || !sys::NecessaryModulesLoaded( dwProcessID ) );
+					  || !IsProcessThreadRunning( dwProcessID )
+					  || !NecessaryModulesLoaded( dwProcessID ) );
 
-			auto strDLL = sys::AssembleExtensionInformation( strEncryptedDLL );
+			auto strDLL = AssembleExtensionInformation( strEncryptedDLL );
 
 			const auto sDLL = strDLL.size( );
 			auto pBuffer = VirtualAlloc( nullptr, sDLL + 1, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE );
@@ -425,8 +423,8 @@ void PX_API OnAttach( )
 			strEncryptedDLL.erase( strEncryptedDLL.size( ) );
 			strDLL.erase( sDLL );
 
-			LoadRawLibraryEx( pBuffer, wstrApplicationExecutableNames[ iSelectedExtension ], new sys::injection_info_t );
-			sys::WipeMemory( pBuffer, sDLL );
+			LoadRawLibraryEx( pBuffer, wstrApplicationExecutableNames[ iSelectedExtension ], new injection_info_t );
+			WipeMemory( pBuffer, sDLL );
 			bShouldClose = true;
 		}
 		break;
@@ -442,6 +440,5 @@ void PX_API OnAttach( )
 
 void PX_API OnDetach( )
 {
-
 	tHeartbeat.join( );
 }

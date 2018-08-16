@@ -13,7 +13,7 @@ namespace PX::Tools
 	template< typename _fn > void CHook::HookIndex( unsigned uIndex, _fn fnNewFunction )
 	{
 		px_assert( uIndex >= 0 && uIndex <= sTableLength );
-		pNewTable[ uIndex ] = reinterpret_cast< ptr_t >( fnNewFunction );
+		pNewTable[ uIndex ] = reinterpret_cast< Types::ptr_t >( fnNewFunction );
 	}
 
 	template< typename _fn > _fn CHook::GetOriginalFunction( unsigned uIndex )
@@ -22,11 +22,11 @@ namespace PX::Tools
 		return reinterpret_cast< _fn >( pOldTable[ uIndex ] );
 	}
 
-	template< typename _t > moment_t PX_API GetMoment( )
+	template< typename _t > Types::moment_t PX_API GetMoment( )
 	{
 		return std::chrono::duration_cast< _t >( std::chrono::system_clock::now( ).time_since_epoch( ) ).count( );
 	}
-	template< typename _t > void PX_API Wait( moment_t mmtWaitLength = ULLONG_MAX )
+	template< typename _t > void PX_API Wait( Types::moment_t mmtWaitLength = ULLONG_MAX )
 	{
 		std::this_thread::sleep_for( _t( mmtWaitLength ) );
 	}
@@ -81,12 +81,12 @@ namespace PX::Tools
 
 	// INFO: Interface for C-Style string casting
 	template< typename > px_abstract_class AStringTypeOfCharacter;
-	template< > px_abstract_class AStringTypeOfCharacter< cstr_t >
+	template< > px_abstract_class AStringTypeOfCharacter< Types::cstr_t >
 	{
 	public:
 		typedef std::string wrap_t;
 	};
-	template< > px_abstract_class AStringTypeOfCharacter< wcstr_t >
+	template< > px_abstract_class AStringTypeOfCharacter< Types::wcstr_t >
 	{
 	public:
 		typedef std::wstring wrap_t;

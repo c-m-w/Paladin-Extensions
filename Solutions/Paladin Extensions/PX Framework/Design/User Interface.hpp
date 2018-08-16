@@ -17,7 +17,7 @@ namespace PX::UI
 		/** \brief Contains information regarding GUI drawing. */
 		PX_SDK nk_context* pContext;
 		/** \brief Title of the GUI window. */
-		PX_SDK cstr_t szNuklearWindowTitle;
+		PX_SDK Types::cstr_t szNuklearWindowTitle;
 		PX_SDK Render::ECursor curCurrent;
 		PX_SDK bool bFoundHoverTarget = false;
 
@@ -39,8 +39,7 @@ namespace PX::UI
 			unsigned uWidth, uHeight;
 			LPDIRECT3DTEXTURE9 pTexture;
 			D3DXIMAGE_INFO iiImage;
-			texture_t( unsigned _uWidth, unsigned _uHeight, LPDIRECT3DTEXTURE9 _pTexture = nullptr ):
-				iiImage( D3DXIMAGE_INFO( ) )
+			texture_t( unsigned _uWidth, unsigned _uHeight, LPDIRECT3DTEXTURE9 _pTexture = nullptr ): iiImage( D3DXIMAGE_INFO( ) )
 			{
 				uWidth = _uWidth;
 				uHeight = _uHeight;
@@ -80,12 +79,12 @@ namespace PX::UI
 		/** \brief Initialize the GUI for drawing interactable windows. */
 		/**	\param _szApplicationTitle The subtitle of the GUI window. */
 		/** \return true - Initialization was successful.\n false - Initialization was not successful. */
-		bool PX_API Initialize( cstr_t _szApplicationTitle );
+		bool PX_API Initialize( Types::cstr_t _szApplicationTitle );
 		/** \brief Calculates text dimensions with the current font. */
 		/**	\param szText Text to calculate the bounds for. */
 		/**	\param uRowHeight Height of the row that the text is in. */
 		/**	\return Dimensions of the text. */
-		struct nk_vec2 PX_API CalculateTextBounds( cstr_t szText, unsigned uRowHeight /*= 30*/ );
+		struct nk_vec2 PX_API CalculateTextBounds( Types::cstr_t szText, unsigned uRowHeight /*= 30*/ );
 		/** \brief Sets the font for rendering with Nuklear. */
 		/**	\param fntDesiredFont Desired font enumeration index. */
 		void PX_API SetFont( EFont fntDesiredFont );
@@ -142,30 +141,30 @@ namespace PX::UI
 		/** \brief Maximum amount of widgets the current row can hold. */
 		PX_SDK int iCurrentRowMaxColumns;
 		/** \brief Color pointer that is being edited. */
-		PX_SDK color_sequence_t* pActiveEditColor = nullptr;
+		PX_SDK Types::color_sequence_t* pActiveEditColor = nullptr;
 
 		/** \brief Checks whether or not the mouse is hovering the next widget's render bounds. */
 		/**	\return true - Mouse is hovering next widget.\n false - Mouse is not hovering next widget. */
 		bool PX_API HoveringNextWidget( );
 		nk_flags PX_API EditTextBox( struct nk_context* ctx, nk_flags flags, char* buffer, int max, nk_plugin_filter filter );
 		void PX_API SetWidgetActive( Render::ECursor curSetCursor );
-		void PX_API Tooltip( cstr_t szText );
+		void PX_API Tooltip( Types::cstr_t szText );
 		/** \brief Creates a window header for the GUI window. */
 		/**	\param szTitle Title of the window. */
 		/**	\param _szApplicationTitle Subtitle of the window. */
 		/**	\param fnMinimizeCallback Called when the minimize button is pressed. */
 		/**	\param fnCloseCallback Called when the close button is pressed. */
-		void PX_API Header( cstr_t szTitle, cstr_t _szApplicationTitle, unsigned uFillHeight = 102u, callback_t fnMinimizeCallback = nullptr, callback_t fnCloseCallback = nullptr );
+		void PX_API Header( Types::cstr_t szTitle, Types::cstr_t _szApplicationTitle, unsigned uFillHeight = 102u, Types::callback_t fnMinimizeCallback = nullptr, Types::callback_t fnCloseCallback = nullptr );
 		/** \brief Draws a forum-theme rectangular button which is used for very general categories.\n Uses one column. */
 		/**	\param szText Text the button will display. */
 		/**	\param bActive Changes the color style of the button. Used for a toggle effect. */
 		/**	\return true - Button was pressed.\n false - Button was not interacted with. */
-		bool PX_API PrimaryTab( cstr_t szText, bool bActive );
+		bool PX_API PrimaryTab( Types::cstr_t szText, bool bActive );
 		/** \brief More specific than a primary tab, used for sections within a primary tab.\n Uses one column. */
 		/**	\param szText Text the button will display. */
 		/**	\param bActive Changes the color and style of the button. Used for a toggle effect. */
 		/**	\return true - Button was pressed.\n false - Button was not interacted with. */
-		bool PX_API SecondaryTab( cstr_t szText, bool bActive );
+		bool PX_API SecondaryTab( Types::cstr_t szText, bool bActive );
 		/** \brief Creates a rectangular space, to separate widgets vertically all the way across a GUI window.\n Not to be put in a row. */
 		/**	\param iRed Red amount. */
 		/**	\param iGreen Green amount. */
@@ -173,18 +172,18 @@ namespace PX::UI
 		/**	\param uStartHeight Y value of where the separator should begin. */
 		/** \param pLinkList List of links to have in the separator for users to click for quick access to the site for convenience. */
 		/**	\param bUpperBorder Whether or not a border should be drawn on the top of the separator, as a partial outline. */
-		void PX_API Separator( int iRed, int iGreen, int iBlue, unsigned uStartHeight, const links_t* pLinkList = nullptr, bool bUpperBorder = false );
+		void PX_API Separator( int iRed, int iGreen, int iBlue, unsigned uStartHeight, const Types::links_t* pLinkList = nullptr, bool bUpperBorder = false );
 			/** \brief General purpose button.\n Uses one column. */
 		/**	\param pPosition Position of the button which controls rounding. */
 		/**	\param szText Text the button will display. */
 		/**	\param bActive Changes the color and style of the button. Used for a toggle effect. */
 		/**	\param bActive Modifies the color and hoverability of the button. */
 		/**	\return true - Button was pressed.\n false - Button was not interacted with. */
-		bool PX_API Button( EPosition pPosition, const char *szText, bool bActive, bool bDisabled, cstr_t szTooltip = nullptr );
+		bool PX_API Button( EPosition pPosition, const char *szText, bool bActive, bool bDisabled, Types::cstr_t szTooltip = nullptr );
 		/** \brief Creates a checkbox with a label.\n Uses two columns. */
 		/**	\param szText Text the label will display. */
 		/**	\param bActive Whether or not the checkbox is active. */
-		void PX_API Checkbox( cstr_t szText, bool *bActive, cstr_t szTooltip = nullptr );
+		void PX_API Checkbox( Types::cstr_t szText, bool *bActive, Types::cstr_t szTooltip = nullptr );
 
 		/** \brief Creates primary tabs for navigation, using previously defined widgets.\n Not to be put in a row. */
 		/**	\param uStartX X value at which the tabs should be rendered at. */
@@ -192,7 +191,7 @@ namespace PX::UI
 		/**	\param dqButtons Deque of the tabs to render. */
 		/**	\param uActiveButton Current active button, for a toggle effect. */
 		/**	\return -1 - No button was clicked.\n >= 0 - Index of the button that was clicked in the deque. */
-		int PX_API Tabs( unsigned uStartX, unsigned uStartY, const std::deque< cstr_t >& dqButtons, unsigned uActiveButton );
+		int PX_API Tabs( unsigned uStartX, unsigned uStartY, const std::deque< Types::cstr_t >& dqButtons, unsigned uActiveButton );
 		/** \brief Creats subtabs for navigation, using previously defined widgets.\n Not to be put in a row. */
 		/**	\param uStartX X value at which the tabs should be rendered at. */
 		/**	\param uStartY Y value at which the tabs should be rendered at. */
@@ -201,14 +200,14 @@ namespace PX::UI
 		/**	\param dqButtons Deque of the tabs to render. */
 		/**	\param uActiveButton Current active button, for a toggle effect. */
 		/**	\return -1 - No button was clicked.\n >= 0 - Index of the button that was clicked in the deque. */
-		int PX_API SubTabs( unsigned uStartX, unsigned uStartY, unsigned uButtonWidth, unsigned uButtonHeight, const std::deque< cstr_t >& dqButtons, unsigned uActiveButton );
+		int PX_API SubTabs( unsigned uStartX, unsigned uStartY, unsigned uButtonWidth, unsigned uButtonHeight, const std::deque< Types::cstr_t >& dqButtons, unsigned uActiveButton );
 		/** \brief Creates a groupbox for widget organization. */
 		/**	\param uStartX X position of the groupbox. */
 		/**	\param uStartY Y position of the groupbox. */
 		/**	\param uBoxWidth Width of the groupbox. */
 		/**	\param uBoxHeight Height of the groupbox. */
 		/**	\param szTitle Title of the groupbox. */
-		void PX_API BeginGroupbox( unsigned uStartX, unsigned uStartY, unsigned uBoxWidth, unsigned uBoxHeight, cstr_t szTitle );
+		void PX_API BeginGroupbox( unsigned uStartX, unsigned uStartY, unsigned uBoxWidth, unsigned uBoxHeight, Types::cstr_t szTitle );
 		/** \brief Ends a groupbox. Must be called after BeginGroupbox( ) else an exception will be thrown. */
 		void PX_API EndGroupbox( );
 
@@ -217,7 +216,7 @@ namespace PX::UI
 		/** \brief Creates a color button that the user can set the color for if clicked.\n The color picker is handled automatically if the button is clicked.\n Uses one column. */
 		/**	\param szSubject What the color is for. */
 		/**	\param pColor Pointer to the color that will be edited if the button is clicked. */
-		void PX_API ColorButton( cstr_t szSubject, color_sequence_t* pSequence );
+		void PX_API ColorButton( Types::cstr_t szSubject, Types::color_sequence_t* pSequence );
 
 		/** \brief Creates a combobox for the user to select an option within.\n Uses one column. */
 		/**	\param uButtonHeight Height of each of the buttons inside the combobox. */
@@ -225,13 +224,13 @@ namespace PX::UI
 		/**	\param dqOptions Options that should be available inside the combobox. */
 		/**	\param uSelectedOption Currently selected option. */
 		/**	\return -1 - Nothing was selected.\n >= 0 - Something was selected, the index for the option inside the deque of options. */
-		int PX_API Combobox( unsigned uButtonHeight, cstr_t szTitle, const std::deque< cstr_t >& dqOptions, unsigned uSelectedOption );
+		int PX_API Combobox( unsigned uButtonHeight, Types::cstr_t szTitle, const std::deque< Types::cstr_t >& dqOptions, unsigned uSelectedOption );
 		/** \brief Creates a combobox with multiple options which can all be enabled or disabled.\n Uses one column. */
 		/**	\param uButtonHeight Height of each of the buttons inside the combobox. */
 		/**	\param szTitle Title of the combobox. */
 		/**	\param dqOptions Options that should be available inside the combobox. */
 		/**	\param dqEnabledOptions List of the options that are enabled in the combobox. */
-		void PX_API ComboboxMulti( unsigned uButtonHeight, cstr_t szTitle, const std::deque< cstr_t >& dqOptions, std::deque< bool >& dqEnabledOptions );
+		void PX_API ComboboxMulti( unsigned uButtonHeight, Types::cstr_t szTitle, const std::deque< Types::cstr_t >& dqOptions, std::deque< bool >& dqEnabledOptions );
 
 		/** \brief Creates a box for the user to input data.\n Uses one column. */
 		/**	\param uMaxCharacters Maximum amount of characters for the inputbox to allow. */
@@ -251,7 +250,7 @@ namespace PX::UI
 		/**	\param uWidth Width of the slider. */
 		/**	\param uHeight Height of the slider. */
 		/**	\return Value of the slider. */
-		int PX_API Slider( cstr_t szTitle, char *szInputBuffer, int iMin, int iMax, int iCurrentValue, unsigned uStartX, unsigned uStartY, unsigned uWidth, unsigned uHeight, bool bIgnorePopup = false );
+		int PX_API Slider( Types::cstr_t szTitle, char *szInputBuffer, int iMin, int iMax, int iCurrentValue, unsigned uStartX, unsigned uStartY, unsigned uWidth, unsigned uHeight, bool bIgnorePopup = false );
 		/** \brief Creates a slider whose value label can be clicked to manually input a value.\n It steps 1/20th of the slidable distance.\n Uses three columns. */
 		/**	\param szTitle Title of the slider. */
 		/**	\param szInputBuffer Buffer for the value of the slider. */
@@ -263,11 +262,11 @@ namespace PX::UI
 		/**	\param uWidth Width of the slider. */
 		/**	\param uHeight Height of the slider. */
 		/**	\return Value of the slider. */
-		float PX_API Slider( cstr_t szTitle, char *szInputBuffer, float flMin, float flMax, float flCurrentValue, unsigned uStartX, unsigned uStartY, unsigned uWidth, unsigned uHeight, unsigned uDigits );
+		float PX_API Slider( Types::cstr_t szTitle, char *szInputBuffer, float flMin, float flMax, float flCurrentValue, unsigned uStartX, unsigned uStartY, unsigned uWidth, unsigned uHeight, unsigned uDigits );
 
-		void PX_API Text( cstr_t szText, color_t clrText );
+		void PX_API Text( Types::cstr_t szText, Types::color_t clrText );
 
-		void PX_API JustifiedText( cstr_t szLeft, cstr_t szRight, color_t clrLeft, color_t clrRight, unsigned uTotalLength );
+		void PX_API JustifiedText( Types::cstr_t szLeft, Types::cstr_t szRight, Types::color_t clrLeft, Types::color_t clrRight, unsigned uTotalLength );
 
 		/** \brief Begins a new row for widgets to be placed in. */
 		/**	\param uRowHeight Initial height of the row.\n May be modified if the row type is custom. */
@@ -296,3 +295,9 @@ namespace PX::UI
 }
 
 #include "User Interface.inl"
+
+#if defined PX_USE_NAMESPACES
+using namespace PX::UI;
+using namespace PX::UI::Manager;
+using namespace PX::UI::Widgets;
+#endif

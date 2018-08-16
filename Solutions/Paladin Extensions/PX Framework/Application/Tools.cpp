@@ -1,8 +1,7 @@
 /// Tools.cpp
 
+#define PX_USE_NAMESPACES
 #include "../PX Framework.hpp"
-
-using namespace PX::Files;
 
 namespace PX::Tools
 {
@@ -34,9 +33,10 @@ namespace PX::Tools
 		return uReturn;
 	}
 
-	ptr_t PX_API GetModuleEnd( HMODULE hm )
+	ptr_t PX_API GetModuleEnd( HMODULE hModule )
 	{
-		return reinterpret_cast< ptr_t >( hm ) + reinterpret_cast< PIMAGE_NT_HEADERS > ( reinterpret_cast< std::uint8_t* >( hm ) + reinterpret_cast< PIMAGE_DOS_HEADER > ( hm )->e_lfanew )->OptionalHeader.SizeOfImage;
+		return reinterpret_cast< ptr_t >( hModule ) + reinterpret_cast< PIMAGE_NT_HEADERS >
+			( reinterpret_cast< ptr_t* >( hModule ) + reinterpret_cast< PIMAGE_DOS_HEADER >( hModule )->e_lfanew )->OptionalHeader.SizeOfImage;
 	}
 
 	ptr_t FindFreeMemory( HMODULE hLocation, std::size_t sMinimumSize )
@@ -82,8 +82,8 @@ namespace PX::Tools
 		return nullptr;
 	}
 
-	CHook::CHook( void* pVirtualTable ):
-		dwOldProtection( 0u ), sTableLength( 0u ), sTableSize( 0u ), pClassBase( pVirtualTable ), pOldTable( nullptr ), pNewTable( nullptr ), hAllocationModule( HMODULE( ) ), bSetNewTable( false )
+	CHook::CHook( void* pVirtualTable ): dwOldProtection( 0u ), sTableLength( 0u ), sTableSize( 0u ), pClassBase( pVirtualTable ),
+		pOldTable( nullptr ), pNewTable( nullptr ), hAllocationModule( HMODULE( ) ), bSetNewTable( false )
 	{
 		// Ensure that we are hooking a valid virtual table and that the length is valid( there are proper permissions to read and write to it ).
 		// Set the address of pOldTable to the address of the first virtual function.

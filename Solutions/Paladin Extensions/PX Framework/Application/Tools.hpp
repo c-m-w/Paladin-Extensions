@@ -4,8 +4,6 @@
 
 namespace PX::Tools
 {
-	using namespace Types;
-
 	// INFO: Inheritable class that manages a single instantiated object of child class/structure
 	// *_Child*: Child class/structure to be restricted
 	template< class _Child > px_abstract_class ASingleton
@@ -23,8 +21,8 @@ namespace PX::Tools
 		static _Child& PX_API Get( );
 	};
 
-	std::size_t PX_API EstimateTableLength( ptr_t* pVirtualTable );
-	ptr_t PX_API GetModuleEnd( HMODULE hm );
+	std::size_t PX_API EstimateTableLength( Types::ptr_t* pVirtualTable );
+	Types::ptr_t PX_API GetModuleEnd( HMODULE hm );
 
 	struct CHook
 	{
@@ -32,7 +30,7 @@ namespace PX::Tools
 		DWORD dwOldProtection;
 		std::size_t sTableLength, sTableSize;
 		void* pClassBase;
-		ptr_t* pOldTable, *pNewTable;
+		Types::ptr_t* pOldTable, *pNewTable;
 		HMODULE hAllocationModule;
 		bool bSetNewTable;
 
@@ -49,22 +47,22 @@ namespace PX::Tools
 		void Cleanup( );
 	};
 
-	void PX_API OpenLink( cstr_t szLink );
+	void PX_API OpenLink( Types::cstr_t szLink );
 
-	std::string PX_API TimeToDate( moment_t mmtTime );
+	std::string PX_API TimeToDate( Types::moment_t mmtTime );
 
 	/** \brief Creates shellcode from a byte array. */
 	/**	\param bByteArray Array of bytes to convert. */
 	/**	\param uSize Size of the byte array. */
 	/**	\return Converted byte array. */
-	std::string PX_API FormatShellcode( byte_t* bByteArray, unsigned uSize );
+	std::string PX_API FormatShellcode( Types::byte_t* bByteArray, unsigned uSize );
 
 	// INFO: Gets the local time
 	// *type name*: Time info format type
-	template< typename = std::chrono::milliseconds > moment_t PX_API GetMoment( );
+	template< typename = std::chrono::milliseconds > Types::moment_t PX_API GetMoment( );
 	// INFO: Sleeps the thread that has called for the amount of time, in the unit of time specified.
 	// *type name*: The unit of time to wait for ( std::chrono ).
-	template< typename = std::chrono::milliseconds > void PX_API Wait( moment_t );
+	template< typename = std::chrono::milliseconds > void PX_API Wait( Types::moment_t );
 
 	// Get main screen dimensions
 	unsigned* GetScreenDimensions( );
@@ -82,3 +80,7 @@ namespace PX::Tools
 }
 
 #include "Tools.inl"
+
+#if defined PX_USE_NAMESPACES
+using namespace PX::Tools;
+#endif
