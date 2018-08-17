@@ -7,28 +7,29 @@ namespace PX::sys
 {
 	std::wstring PX_API RetrieveInfo( const bstr_t& wstrDevice, wcstr_t wstrdeviceProperty = PX_XOR( L"Name" ) )
 	{
-		if ( CoInitializeEx( nullptr, COINIT_MULTITHREADED ) != S_OK )
-			return { };
+		const auto hrReturn = CoInitialize( nullptr );
+		if ( hrReturn != S_OK && hrReturn != S_FALSE )
+			return PX_XOR( L"-1" );
 
 		auto hResult = CoInitializeSecurity( nullptr, -1, nullptr, nullptr, RPC_C_AUTHN_LEVEL_DEFAULT, RPC_C_IMP_LEVEL_IMPERSONATE, nullptr, EOAC_NONE, nullptr );
 		if ( hResult != S_OK && hResult != RPC_E_TOO_LATE )
-			return { };
+			return PX_XOR( L"0" );
 
 		IWbemLocator* pLocator;
 		if ( CoCreateInstance( CLSID_WbemLocator, nullptr, CLSCTX_INPROC_SERVER, IID_IWbemLocator, reinterpret_cast< LPVOID* >( &pLocator ) ) != S_OK
 			 || pLocator == nullptr )
-			return { };
+			return PX_XOR( L"1" );
 
 		IWbemServices* pServices;
 		pLocator->ConnectServer( bstr_t( PX_XOR( L"ROOT\\CIMV2" ) ), nullptr, nullptr, nullptr, 0, nullptr, nullptr, &pServices );
 		if ( pServices == nullptr
 			 || CoSetProxyBlanket( pServices, RPC_C_AUTHN_WINNT, RPC_C_AUTHZ_NONE, nullptr, RPC_C_AUTHN_LEVEL_CALL, RPC_C_IMP_LEVEL_IMPERSONATE, nullptr, EOAC_NONE ) != S_OK )
-			return { };
+			return PX_XOR( L"2" );
 
 		IEnumWbemClassObject* pEnumerator;
 		pServices->ExecQuery( bstr_t( PX_XOR( L"WQL" ) ), wstrDevice, WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY, nullptr, &pEnumerator );
 		if ( pEnumerator == nullptr )
-			return { };
+			return PX_XOR( L"3" );
 
 		std::wstring wstrInfo;
 		while ( pEnumerator )
@@ -51,6 +52,7 @@ namespace PX::sys
 		pServices->Release( );
 		pLocator->Release( );
 		CoUninitialize( );
+
 		return wstrInfo;
 	}
 

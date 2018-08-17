@@ -176,8 +176,7 @@ namespace PX::Net
 
 	std::string PX_API RequestExtensionInformation( unsigned uExtension )
 	{
-		auto strBuffer = Decrypt( RequestExtension( uExtension, false ) );
-		auto jsFileInformation = nlohmann::json::parse( strBuffer );
+		auto jsFileInformation = nlohmann::json::parse( Decrypt( RequestExtension( uExtension, false ) ) );
 		CleanupConnection( );
 
 		uLoadDLLSize = jsFileInformation[ PX_XOR( "Functions" ) ][ PX_XOR( "LoadDLL" ) ][ PX_XOR( "Size" ) ].get< int >( );

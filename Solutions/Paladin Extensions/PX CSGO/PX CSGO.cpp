@@ -4,9 +4,9 @@
 
 // Creating threads with our manual mapping thread hijacking injector WILL crash.
 // Do not upload the debug version to the server or it will crash.
-#ifdef _DEBUG
-#define PX_INSECURE_INITIALIZATION
-#endif
+//#ifdef _DEBUG
+//#define PX_INSECURE_INITIALIZATION
+//#endif
 
 #define PX_INSTANCE_ID L"CSGO"
 #include <Jeremia-h/Entry Manager.hpp>
@@ -16,8 +16,9 @@
 bool PX_API Initialize( )
 {
 	const auto lgnResult = PX::Net::Login( );
+	MessageBox( NULL, std::to_wstring( lgnResult ).c_str( ), L"MEN", MB_OK );
 	return( lgnResult == PX::Net::LOGIN_SUCCESS
-				  || lgnResult == PX::Net::LOGIN_STAFF_SUCCESS )
+			|| lgnResult == PX::Net::LOGIN_STAFF_SUCCESS )
 		&& PX::Information::InitializeInformation( )
 		&& PX::Hooks::InitializeHooks( );
 }
@@ -25,7 +26,7 @@ bool PX_API Initialize( )
 void PX_API OnAttach( )
 {
 	if ( !Initialize( ) )
-		exit( -1 );
+		MessageBox( NULL, L"setup failed", L"MEN", MB_OK );
 }
 
 void PX_API OnDetach( )

@@ -1,6 +1,6 @@
 /// PX Loader.cpp
 
-#define PX_ENTRY_AS_DLL
+#define PX_ENTRY_AS_WIN
 #define PX_INSECURE_INITIALIZATION
 #define PX_INSTANCE_ID L"Manager"
 #include <Jeremia-h/Entry Manager.hpp>
@@ -350,13 +350,13 @@ void PX_API MonitorDetectionVectors( )
 std::thread tHeartbeat;
 bool bStopHeartbeat;
 
-void PX_API OnAttach( )
+void PX_API OnLaunch( )
 {
-	tHeartbeat = std::thread( Heartbeat, bStopHeartbeat, iSelectedExtension );
+	//tHeartbeat = std::thread( Heartbeat, bStopHeartbeat, iSelectedExtension );
 
-	for each ( auto wstrExecutable in wstrApplicationExecutableNames )
-		if ( !wstrExecutable.empty( ) )
-			TerminateProcess( GetProcessID( wstrExecutable ) );
+	//for each ( auto wstrExecutable in wstrApplicationExecutableNames )
+	//	if ( !wstrExecutable.empty( ) )
+	//		TerminateProcess( GetProcessID( wstrExecutable ) );
 
 	// We need the resources loaded for textures in the ui
 	LoadResources( { } );
@@ -364,8 +364,8 @@ void PX_API OnAttach( )
 	std::thread tDraw( Draw );
 	tDraw.detach( );
 
-	std::thread tMonitorDetectionVectors( MonitorDetectionVectors );
-	tMonitorDetectionVectors.detach( );
+	//std::thread tMonitorDetectionVectors( MonitorDetectionVectors );
+	//tMonitorDetectionVectors.detach( );
 
 	Wait( rand( ) % 1900 + 100 );
 
@@ -404,6 +404,8 @@ void PX_API OnAttach( )
 
 			bShouldClose = true;
 			auto strEncryptedDLL = RequestExtension( iSelectedExtension, false );
+			CleanupConnection( );
+
 			DWORD dwProcessID { };
 
 			auto strDLL = AssembleExtensionInformation( strEncryptedDLL );

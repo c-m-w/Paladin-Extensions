@@ -12,14 +12,14 @@ namespace PX
 	{
 		bool PX_API SetHooks( )
 		{
-			return hkDirectXDevice->HookIndex( uEndScene, EndScene );
+			return hkDirectXDevice->HookIndex( uEndScene, reinterpret_cast< void* >( EndScene ) );
 		}
 
 		bool PX_API InitializeHooks( )
 		{
 			hkDirectXDevice = new Tools::CHook( pDevice );
-
-			return hkDirectXDevice->Succeeded( ) ? SetHooks( ) : false;
+			return true;
+			//return hkDirectXDevice->Succeeded( ) ? SetHooks( ) : false;
 		}
 
 		int __stdcall EndScene( IDirect3DDevice9* pDevice )
