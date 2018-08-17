@@ -48,9 +48,19 @@ namespace PX::Information
 
 		bool PX_API Setup( )
 		{
-			return mEngine.Setup( Tools::string_cast< std::wstring >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Engine" ) ].get< std::string >( ) ) )
-				&& mClient.Setup( Tools::string_cast< std::wstring >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Client" ) ].get< std::string >( ) ) )
-				&& mDirectX.Setup( Tools::string_cast< std::wstring >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "DirectX API" ) ].get< std::string >( ) ) );
+			constexpr auto mmtMaxWaitTime = 7500ull;
+			const auto mmtStart = Tools::GetMoment( );
+			do
+			{
+				if( Tools::GetMoment( ) - mmtStart >= mmtMaxWaitTime )
+				{
+					dbg::out << "Failed to wait for modules." << dbg::newl;
+					return false;
+				}
+			} while( !mEngine.Setup( Tools::string_cast< std::wstring >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Engine" ) ].get< std::string >( ) ) )
+				|| !mClient.Setup( Tools::string_cast< std::wstring >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Client" ) ].get< std::string >( ) ) )
+				|| !mDirectX.Setup( Tools::string_cast< std::wstring >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "DirectX API" ) ].get< std::string >( ) ) ) );
+			return true;
 		}
 	}
 

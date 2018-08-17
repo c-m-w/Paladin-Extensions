@@ -35,8 +35,7 @@ namespace PX::Tools
 
 	ptr_t PX_API GetModuleEnd( HMODULE hModule )
 	{
-		return reinterpret_cast< ptr_t >( hModule ) + reinterpret_cast< PIMAGE_NT_HEADERS >
-			( reinterpret_cast< ptr_t* >( hModule ) + reinterpret_cast< PIMAGE_DOS_HEADER >( hModule )->e_lfanew )->OptionalHeader.SizeOfImage;
+		return reinterpret_cast< ptr_t >( hModule ) + reinterpret_cast< PIMAGE_NT_HEADERS > ( reinterpret_cast< byte_t* >( hModule ) + reinterpret_cast< PIMAGE_DOS_HEADER > ( hModule )->e_lfanew )->OptionalHeader.SizeOfImage;
 	}
 
 	ptr_t FindFreeMemory( HMODULE hLocation, std::size_t sMinimumSize )

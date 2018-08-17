@@ -1,0 +1,18 @@
+{
+    "Modules": {
+        "Client": "client_panorama.dll",
+        "DirectX API": "shaderapidx9.dll",
+        "Engine": "engine.dll"
+    },
+    "Patterns": {
+        "Offsets": {
+            "Device": 1
+        },
+        "Signatures": {
+            "Device": "A1 ? ? ? ? 50 8B 08 FF 51 0C"
+        }
+    },
+    "Versions": {
+        "Client Base": "VClient018"
+    }
+}

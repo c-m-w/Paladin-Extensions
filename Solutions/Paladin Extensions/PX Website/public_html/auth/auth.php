@@ -38,7 +38,7 @@ if ( mysqli_connect_errno( ) || $sql_connection->connect_error )
 
 	 $unique_id = GetUniqueID( $user_id );
 	if ( $unique_id == 0 || $hardware === NULL )
-		die( PutLoginAttempt( $user_id, $unique_id, $hardware, ReturnKeys[ "Establishing Failure" ] ) );
+		die( PutLoginAttempt( $user_id, $unique_id, $hardware, ReturnKeys[ "Hardware Mismatch" ] ) );
 
 	if ( !ValidateHardware( $unique_id, $user_id, $hardware ) )
 		die( PutLoginAttempt( $user_id, $unique_id, $hardware, ReturnKeys[ "Hardware Mismatch" ] ) );

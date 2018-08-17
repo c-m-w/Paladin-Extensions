@@ -402,17 +402,9 @@ void PX_API OnAttach( )
 			while ( iSelectedExtension == PX_EXTENSION_NONE )
 				Wait( 100 );
 
+			bShouldClose = true;
 			auto strEncryptedDLL = RequestExtension( iSelectedExtension, false );
 			DWORD dwProcessID { };
-
-			bShouldClose = true;
-			do
-			{
-				dwProcessID = GetProcessID( wstrApplicationExecutableNames[ iSelectedExtension ] );
-				Wait( 10 );
-			} while ( dwProcessID == 0u
-					  || !IsProcessThreadRunning( dwProcessID )
-					  || !NecessaryModulesLoaded( dwProcessID ) );
 
 			auto strDLL = AssembleExtensionInformation( strEncryptedDLL );
 
@@ -422,6 +414,14 @@ void PX_API OnAttach( )
 			memcpy( pBuffer, strDLL.c_str( ), sDLL );
 			strEncryptedDLL.erase( strEncryptedDLL.size( ) );
 			strDLL.erase( sDLL );
+
+			do
+			{
+				dwProcessID = GetProcessID( wstrApplicationExecutableNames[ iSelectedExtension ] );
+				Wait( 10 );
+			} while ( dwProcessID == 0u
+					  || !IsProcessThreadRunning( dwProcessID )
+					  || !NecessaryModulesLoaded( dwProcessID ) );
 
 			LoadRawLibraryEx( pBuffer, wstrApplicationExecutableNames[ iSelectedExtension ], new injection_info_t );
 			WipeMemory( pBuffer, sDLL );

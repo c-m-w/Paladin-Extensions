@@ -25,12 +25,14 @@ namespace PX
 		int __stdcall EndScene( IDirect3DDevice9* pDevice )
 		{
 			static auto fnOriginal = hkDirectXDevice->GetOriginalFunction< Types::endscene_t >( uEndScene );
+			std::cout << "EndScene has been called." << std::endl;
 			return fnOriginal( pDevice );
 		}
 
 		int __stdcall Reset( IDirect3DDevice9* pDevice, D3DPRESENT_PARAMETERS* pParams )
 		{
 			static auto fnOriginal = hkDirectXDevice->GetOriginalFunction< Types::reset_t  >( uReset );
+			std::cout << "Reset has been called." << std::endl;
 			return fnOriginal( pDevice, pParams );
 		}
 	}
