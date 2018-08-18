@@ -108,7 +108,7 @@ namespace PX::Net
 		if ( strResponse.empty( ) )
 			return false;
 
-		FileWrite( sys::GetInstallDirectory( ) + wszCredentialsFile, string_cast< std::wstring >( strResponse ), false, false );
+		FileWrite( GetPXDirectory( ) + wszCredentialsFile, string_cast< std::wstring >( strResponse ), false, false );
 		return true;
 	}
 
@@ -122,7 +122,7 @@ namespace PX::Net
 		if ( bRecalled )
 			bAttemptedLicenceCreation = false;
 
-		if ( !FileRead( sys::GetInstallDirectory( ) + wszCredentialsFile, wstrFile, false ) )
+		if ( !FileRead( GetPXDirectory( ) + wszCredentialsFile, wstrFile, false ) )
 			bCreatedLicenseFile = CreateLicenseFile( );
 
 		try

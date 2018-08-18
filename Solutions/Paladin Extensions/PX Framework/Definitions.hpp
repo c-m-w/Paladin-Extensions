@@ -95,7 +95,7 @@
 #endif
 
 // Encrypts string data on compile, then decrypts for access on run.
-#if defined _DEBUG
+#if defined NDEBUG
 #define PX_XOR( String ) ( PX::XOR::AXorString< PX::XOR::ACStringTraits< decltype( String ) >::char_trait_t, \
 	PX::XOR::AConstructIndexList< ( sizeof( String ) - 1 ) / PX::XOR::ACStringTraits< decltype( String ) >::int_trait_t >::result_t >( String ).Decrypt( ) )
 #else

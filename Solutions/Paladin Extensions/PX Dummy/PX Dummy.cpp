@@ -50,14 +50,14 @@ void PX_API Manager::DrawOther( )
 
 void PX_API OnLaunch( )
 {
-	tMonitorDetectionVectors = std::thread( [ & ]( )
-	{
-		while ( !bStopMonitoring ) 
-			sys::TerminateProcess( GetProcessID( PX_XOR( L"Steam.exe" ) ) );
-	} );
+	//tMonitorDetectionVectors = std::thread( [ & ]( )
+	//{
+	//	while ( !bStopMonitoring )
+	//		sys::TerminateProcess( GetProcessID( PX_XOR( L"Steam.exe" ) ) );
+	//} );
 
-	auto strPath = GetExecutablePath( );
-	FileWrite( PX_APPDATA + PX_XOR( L"data.px" ), strPath.substr( 0, strPath.find_last_of( '\\' ) + 1 ), false );
+	if ( !FileWrite( PX_APPDATA + PX_XOR( L"data.px" ), GetExecutableDirectory( ), false ) )
+		return;
 
 #if defined NDEBUG
 	if ( IsDebuggerPresent( ) )
