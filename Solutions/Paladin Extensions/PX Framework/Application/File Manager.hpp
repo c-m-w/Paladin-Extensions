@@ -7,8 +7,9 @@ namespace PX::Files
 	// INFO: Gets directory with specified directories upward
 	// PARAM: Levels to escape
 	std::wstring PX_API GetExecutablePath( );
-	std::wstring PX_API GetExecutableDirectory( unsigned = PX_DEPENDENCIES_ESCAPE );
+	std::wstring PX_API GetExecutableDirectory( );
 	std::wstring PX_API GetExecutableName( );
+	std::wstring PX_API GetPXDirectory( );
 
 	namespace Resources
 	{

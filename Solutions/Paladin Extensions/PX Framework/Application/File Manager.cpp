@@ -14,14 +14,13 @@ namespace PX::Files
 		return wstrDirectory;
 	}
 
-	std::wstring PX_API GetExecutableDirectory( unsigned uEscapeLevels )
+	std::wstring PX_API GetExecutableDirectory( )
 	{
 		std::wstring wstrDirectory;
 		wstrDirectory.resize( MAX_PATH );
 		GetModuleFileName( nullptr, &wstrDirectory[ 0 ], MAX_PATH );
 
-		for ( unsigned i = 0u; i <= uEscapeLevels; i++ )
-			wstrDirectory = wstrDirectory.substr( 0, wstrDirectory.find_last_of( L'\\' ) );
+		wstrDirectory = wstrDirectory.substr( 0, wstrDirectory.find_last_of( L'\\' ) );
 
 		return wstrDirectory + L'\\';
 	}
@@ -35,11 +34,25 @@ namespace PX::Files
 		return wstrDirectory.substr( wstrDirectory.find_last_of( L'\\' ) + 1, wstrDirectory.length( ) );
 	}
 
+	std::wstring GetPXDirectory( )
+	{
+		static std::wstring wstrInstallDirectory;
+		if ( wstrInstallDirectory.empty( ) )
+		{
+			if ( !FileRead( PX_APPDATA + PX_XOR( L"data.px" ), wstrInstallDirectory, false ) )
+				return { };
+			for ( auto u = 0u; u < PX_DEPENDENCIES_ESCAPE; u++ )
+				wstrInstallDirectory = wstrInstallDirectory.substr( 0, wstrInstallDirectory.find_last_of( L'\\' ) + 1 );
+		}
+
+		return wstrInstallDirectory;
+	}
+
 	namespace Resources
 	{
 		bool LoadResources( const std::string& strHash )
 		{
-			std::wstring wstrPath = sys::GetInstallDirectory( ) + PX_XOR( LR"(Resources\)" );
+			std::wstring wstrPath = GetPXDirectory( ) + PX_XOR( LR"(Resources\)" );
 
 			bool bFilesExist = std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Paladin Logo.ico)" ) ).c_str( ) )
 				&& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Paladin Logo.png)" ) ).c_str( ) )
@@ -134,7 +147,7 @@ namespace PX::Files
 
 	CConfig::CConfig( )
 	{
-		std::ifstream ifGlobalConfiguration( GetExecutableDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(\Configurations\global.px)" ) );
+		std::ifstream ifGlobalConfiguration( GetPXDirectory( ) + PX_XOR( LR"(Configurations\global.px)" ) );
 		if ( ifGlobalConfiguration.good( ) )
 		{
 			std::stringstream ssBuffer;
@@ -151,13 +164,13 @@ namespace PX::Files
 
 	void PX_API CConfig::SaveInformation( )
 	{
-		std::ofstream ofGlobalConfiguration( GetExecutableDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(\Configurations\global.px)" ) );
+		std::ofstream ofGlobalConfiguration( GetPXDirectory( ) + PX_XOR( LR"(Configurations\global.px)" ) );
 		if ( ofGlobalConfiguration.good( ) )
 			ofGlobalConfiguration << Base64< CryptoPP::Base64Encoder >( jsGlobal.dump( 4 ) );
 		else
 			throw std::exception( PX_XOR( "Failed to open global.px for writing" ) );
 
-		std::ofstream ofCurrentConfiguration( GetExecutableDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(\Configurations\)" ) + wszCurrent + PX_XOR( L".px" ) );
+		std::ofstream ofCurrentConfiguration( GetPXDirectory( ) + PX_XOR( LR"(Configurations\)" ) + wszCurrent + PX_XOR( L".px" ) );
 		if ( ofCurrentConfiguration.good( ) )
 			ofCurrentConfiguration << Base64< CryptoPP::Base64Encoder >( jsCurrent.dump( 4 ) );
 		else
@@ -169,9 +182,9 @@ namespace PX::Files
 		if ( wszCurrent == wszConfig )
 			return true;
 
-		if ( std::filesystem::exists( ( GetExecutableDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(\Configurations\)" ) + wszConfig + PX_XOR( L".px" ) ).c_str( ) ) )
+		if ( std::filesystem::exists( ( GetPXDirectory( ) + PX_XOR( LR"(Configurations\)" ) + wszConfig + PX_XOR( L".px" ) ).c_str( ) ) )
 		{
-			std::ifstream ifNewConfiguration( GetExecutableDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(\Configurations\)" ) + wszConfig + PX_XOR( L".px" ) );
+			std::ifstream ifNewConfiguration( GetPXDirectory( ) + PX_XOR( LR"(Configurations\)" ) + wszConfig + PX_XOR( L".px" ) );
 			if ( ifNewConfiguration.good( ) )
 			{
 				try
@@ -202,7 +215,7 @@ namespace PX::Files
 	{
 		px_assert( !wstrPath.empty( ) );
 
-		std::ifstream fFile( bRelativePath ? GetExecutableDirectory( PX_DEPENDENCIES_ESCAPE ) + wstrPath : wstrPath );
+		std::ifstream fFile( bRelativePath ? GetPXDirectory( ) + wstrPath : wstrPath );
 
 		if ( !fFile.good( ) )
 			return false;
@@ -222,7 +235,7 @@ namespace PX::Files
 			if ( FALSE == CreateDirectory( wstrPath.substr( 0, wstrPath.find_last_of( L'\\' ) ).c_str( ), nullptr ) )
 				return false;
 
-		std::ofstream fFile( bRelativePath ? GetExecutableDirectory( PX_DEPENDENCIES_ESCAPE ) + wstrPath : wstrPath, std::ofstream::out | std::ofstream::trunc );
+		std::ofstream fFile( bRelativePath ? GetPXDirectory( ) + wstrPath : wstrPath, std::ofstream::out | std::ofstream::trunc );
 		const auto strBuffer = string_cast< std::string >( wstrData );
 
 		if ( bBase64 )

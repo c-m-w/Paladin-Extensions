@@ -76,7 +76,7 @@ namespace PX::Information
 				+ jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Device" ) ].get< int >( );
 			std::cout << "Found Address: " << ptrDeviceAddress << std::endl;
 
-			Interfaces::pDevice = **reinterpret_cast< IDirect3DDevice9*** >( ptrDeviceAddress );
+			pDevice = **reinterpret_cast< IDirect3DDevice9*** >( ptrDeviceAddress );
 
 			pClientBase = reinterpret_cast< IBaseClientDLL* >( Modules::mClient.ciFactory( 
 				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Client Base" ) ].get< std::string >( ).c_str( ), nullptr ) );

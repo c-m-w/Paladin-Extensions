@@ -73,7 +73,7 @@ namespace PX::Render
 		wndWindow.lpfnWndProc = WndProc;
 		wndWindow.hInstance = GetModuleHandle( nullptr );
 
-		const auto strResourceDirectory = GetExecutableDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(Resources\)" );
+		const auto strResourceDirectory = GetPXDirectory( ) + PX_XOR( LR"(Resources\)" );
 		wndWindow.hIcon = HICON( LoadImage( nullptr, ( strResourceDirectory + PX_XOR( LR"(Paladin Logo.ico)" ) ).c_str( ),
 											IMAGE_ICON, 0, 0, LR_LOADFROMFILE | LR_DEFAULTSIZE | LR_SHARED ) );
 
@@ -134,7 +134,7 @@ namespace PX::Render
 		SetWindowProc( pNewDevice );
 		uWindowWidth = pDimensions[ 0 ];
 		uWindowHeight = pDimensions[ 1 ];
-		return ( Render::pDevice = pNewDevice ) != nullptr;
+		return ( pDevice = pNewDevice ) != nullptr;
 	}
 
 	void PX_API SetWindowProc( IDirect3DDevice9* pTargetDevice )

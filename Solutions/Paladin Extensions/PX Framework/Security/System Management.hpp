@@ -17,8 +17,6 @@ namespace PX::sys
 	/** \return System information as a JSON object. */
 	nlohmann::json PX_API GetSystemInfo( );
 
-	std::wstring PX_API GetInstallDirectory( );
-
 	std::string PX_API AssembleExtensionInformation( std::string strCipher );
 
 	/** \brief Used to ensure elevation for a process.\n
