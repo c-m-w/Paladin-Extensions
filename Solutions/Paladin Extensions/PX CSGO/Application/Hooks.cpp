@@ -2,24 +2,49 @@
 
 #include "../PX CSGO.hpp"
 
+#define PX_PRINT( var ) std::cout << #var << ": " << var << std::endl;
+#define PX_PRINT_ENUM( var, enum_type ) std::cout << std::string( #var ).substr( 0, std::string( #var ).find_last_of( '[' ) ) << "[ " << enum_type << " ]: " << var;
+
 void PrintD3DeviceInfo( IDirect3DDevice9* pDeviceParameter )
 {
 	DWORD dwFVF;
 	pDeviceParameter->GetFVF( &dwFVF );
-
+	PX_PRINT( dwFVF );
+	
 	float flNPatchMode = pDeviceParameter->GetNPatchMode( );
+	PX_PRINT( flNPatchMode );
 
 	D3DMATERIAL9 matMaterial;
 	pDeviceParameter->GetMaterial( &matMaterial );
+	PX_PRINT( matMaterial.Ambient.r );
+	PX_PRINT( matMaterial.Ambient.g );
+	PX_PRINT( matMaterial.Ambient.b );
+	PX_PRINT( matMaterial.Ambient.a );
+	PX_PRINT( matMaterial.Diffuse.r );
+	PX_PRINT( matMaterial.Diffuse.g );
+	PX_PRINT( matMaterial.Diffuse.b );
+	PX_PRINT( matMaterial.Diffuse.a );
+	PX_PRINT( matMaterial.Emissive.b );
+	PX_PRINT( matMaterial.Emissive.g );
+	PX_PRINT( matMaterial.Emissive.r );
+	PX_PRINT( matMaterial.Emissive.a );
+	PX_PRINT( matMaterial.Power );
+	PX_PRINT( matMaterial.Specular.r );
+	PX_PRINT( matMaterial.Specular.g );
+	PX_PRINT( matMaterial.Specular.b );
+	PX_PRINT( matMaterial.Specular.a );
 
-	IDirect3DPixelShader9* pShader;
-	pDeviceParameter->GetPixelShader( &pShader );
 
 	const UINT uSwapChains = pDeviceParameter->GetNumberOfSwapChains( );
-	std::vector< D3DRASTER_STATUS > statRaster;
-	statRaster.resize( uSwapChains );
+	std::vector< D3DRASTER_STATUS > statRasters;
+	statRasters.resize( uSwapChains );
 	for ( auto u = 0u; u < uSwapChains; u++ )
-		pDeviceParameter->GetRasterStatus( u, &statRaster[ u ] );
+		pDeviceParameter->GetRasterStatus( u, &statRasters[ u ] );
+	for each ( auto statRaster in statRasters )
+	{
+		PX_PRINT( statRaster.InVBlank );
+		PX_PRINT( statRaster.ScanLine );
+	}
 
 	std::vector< D3DRENDERSTATETYPE > vecRenderStateTypes {
 		D3DRS_ZENABLE,
@@ -130,9 +155,9 @@ void PrintD3DeviceInfo( IDirect3DDevice9* pDeviceParameter )
 	std::vector< DWORD > vecRenderStates;
 	vecRenderStates.resize( vecRenderStateTypes.size( ) );
 	for each ( auto rsType in vecRenderStateTypes )
-	{
 		pDeviceParameter->GetRenderState( rsType, &vecRenderStates[ rsType ] );
-	}
+	for each ( auto rsType in vecRenderStateTypes )
+		PX_PRINT_ENUM( vecRenderStateTypes[ rsType ], rsType );
 
 	std::vector< D3DSAMPLERSTATETYPE > vecSamplerStateTypes {
 		D3DSAMP_ADDRESSU,
@@ -153,13 +178,12 @@ void PrintD3DeviceInfo( IDirect3DDevice9* pDeviceParameter )
 	std::vector< DWORD > vecSamplerStates;
 	vecSamplerStates.resize( vecSamplerStateTypes.size( ) );
 	for each ( auto ssType in vecSamplerStateTypes )
-	{
 		pDeviceParameter->GetSamplerState( NULL, ssType, &vecSamplerStates[ ssType ] );
-	}
+	for each ( auto ssType in vecSamplerStateTypes )
+		PX_PRINT_ENUM( vecSamplerStateTypes[ ssType ], ssType );
 
 	BOOL bSoftwareVertexProcessing = pDeviceParameter->GetSoftwareVertexProcessing( );
-	IDirect3DVertexShader9* pShader2;
-	pDeviceParameter->GetVertexShader( &pShader2 );
+	PX_PRINT( bSoftwareVertexProcessing );
 }
 
 using namespace PX::VirtualTableIndicies;
