@@ -23,6 +23,7 @@ namespace PX::Tools
 
 	std::size_t PX_API EstimateTableLength( Types::ptr_t* pVirtualTable );
 	Types::ptr_t PX_API GetModuleEnd( HMODULE hm );
+	HMODULE PX_API FindAddressOrigin( Types::ptr_t ptrAddress );
 
 	struct CHook
 	{

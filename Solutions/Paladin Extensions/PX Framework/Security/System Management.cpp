@@ -476,6 +476,9 @@ namespace PX::sys
 			return false;
 		}
 
+		//const auto hCreatedThread = CreateRemoteThread( hTarget, nullptr, NULL, LPTHREAD_START_ROUTINE( ptr_t( pMemory ) + sizeof( injection_info_t ) ), pMemory, NULL, nullptr );
+		//WaitForSingleObject( hCreatedThread, INFINITE );
+
 		CONTEXT ctxThread { CONTEXT_FULL };
 		if ( ( hThread = FindProcessThread( dwProcessID ) ) == INVALID_HANDLE_VALUE ||
 			 SuspendThread( hThread ) == UINT_MAX )
@@ -483,52 +486,52 @@ namespace PX::sys
 			fnCleanup( true );
 			return false;
 		}
-
+		
 		if ( GetThreadContext( hThread, &ctxThread ) == 0 )
 		{
 			ResumeThread( hThread );
 			fnCleanup( true );
 			return false;
 		}
-
+		
 		const auto dwOldEIP = ctxThread.Eip;
 		ctxThread.Eip = ptr_t( pStub );
-
+		
 		for ( auto u = 0u; u < uStubSize - sizeof( ptr_t ); u++ )
 		{
 			const auto bOperator = bStub[ u ];
 			const auto ptrOperand = reinterpret_cast< ptr_t* >( &bStub[ u + 1 ] );
-
+		
 			if ( *ptrOperand == PX_UNITIALIZED_STACK_MEMORY )
 				switch ( bOperator )
 				{
 					case PX_MOV_EAX:
 						*ptrOperand = ptr_t( ptr_t( pMemory ) + sizeof( injection_info_t ) );
 						break;
-
+		
 					case PX_MOV_EDX:
 						*ptrOperand = ptr_t( pMemory );
 						break;
-
+		
 					case PX_PUSH:
 						*ptrOperand = dwOldEIP;
 						break;
-
+		
 					default:
 						break;
 				}
 		}
-
+		
 		if ( !WriteProcessMemory( hTarget, pStub, bStub, uStubSize, nullptr ) )
 		{
 			ResumeThread( hThread );
 			fnCleanup( true );
 			return false;
 		}
-
+		
 		SetThreadContext( hThread, &ctxThread );
 		ResumeThread( hThread );
-
+		
 		// Wait until the thread resumes it's previous state.
 		while ( GetThreadContext( hThread, &ctxThread ) == TRUE && ctxThread.Eip != dwOldEIP )
 			Wait( 100ull );

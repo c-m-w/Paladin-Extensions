@@ -6,14 +6,16 @@ namespace PX
 {
 	namespace Types
 	{
-		typedef int( __stdcall* endscene_t )( IDirect3DDevice9* );
-		typedef int( __stdcall* reset_t )( IDirect3DDevice9*, D3DPRESENT_PARAMETERS* );
+		typedef HRESULT( __stdcall* endscene_t )( IDirect3DDevice9* );
+		typedef HRESULT( __stdcall* reset_t )( IDirect3DDevice9*, D3DPRESENT_PARAMETERS* );
+		typedef HRESULT( __stdcall* present_t )( IDirect3DDevice9*, CONST RECT*, CONST RECT*, HWND, CONST RGNDATA* );
 	}
 
 	namespace VirtualTableIndicies
 	{
 		PX_DEF uEndScene	= 42u;
 		PX_DEF uReset		= 16u;
+		PX_DEF uPresent		= 17u;
 	}
 
 	namespace Hooks
@@ -23,7 +25,8 @@ namespace PX
 
 		PX_SDK Tools::CHook* hkDirectXDevice;
 
-		int __stdcall EndScene( IDirect3DDevice9* pDevice );
-		int __stdcall Reset( IDirect3DDevice9* pDevice, D3DPRESENT_PARAMETERS* pParams );
+		HRESULT __stdcall EndScene( IDirect3DDevice9* pDeviceParameter );
+		HRESULT __stdcall Reset( IDirect3DDevice9* pDeviceParameter, D3DPRESENT_PARAMETERS* pParams );
+		HRESULT __stdcall Present( IDirect3DDevice9* pDeviceParameter, CONST RECT* pSourceRect, CONST RECT* pDestRect, HWND hDestWindowOverride, CONST RGNDATA* pDirtyRegion );
 	}
 }

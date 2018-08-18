@@ -41,6 +41,7 @@ namespace PX::Render
 	/**	\param pDimensions Array of the dimensions of the render target, elements being in order width, height. */
 	/**	\param szNewWindowTitle Title of the window. */
 	void PX_API InitializeRenderTarget( unsigned* pDimensions, Types::wcstr_t szNewWindowTitle = nullptr );
+	bool PX_API InitializeRenderTarget( IDirect3DDevice9* pNewDevice, unsigned* pDimensions );
 
 	/** \brief The address of the old Window Proc. */
 	PX_SDK Types::ptr_t uOldWindowProc;

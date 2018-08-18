@@ -254,7 +254,8 @@ namespace PX::UI
 
 		bool PX_API InitializeUI( cstr_t _szApplicationTitle )
 		{
-			szNuklearWindowTitle = _szApplicationTitle;
+			szNuklearWindowTitle = new char[ strlen( _szApplicationTitle ) + 1 ];
+			strcpy( szNuklearWindowTitle, _szApplicationTitle );
 			InitializeNuklear( );
 
 			vecTextures.emplace_back( 32, 29 ); // TEXTURE_LOGO
@@ -266,28 +267,28 @@ namespace PX::UI
 			vecTextures.emplace_back( 50, 50 ); // TEXTURE_CURSOR_HAND
 			vecTextures.emplace_back( 50, 50 ); // TEXTURE_CURSOR_IBEAM
 
-			return D3DXCreateTextureFromFileEx( pDevice, ( GetExecutableDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(Resources\Paladin Logo Small.png)" ) ).c_str( ), vecTextures[ TEXTURE_LOGO ].uWidth,
+			return D3DXCreateTextureFromFileEx( pDevice, ( sys::GetInstallDirectory( ) + PX_XOR( LR"(Resources\Paladin Logo Small.png)" ) ).c_str( ), vecTextures[ TEXTURE_LOGO ].uWidth,
 												vecTextures[ TEXTURE_LOGO ].uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL,
 												&vecTextures[ TEXTURE_LOGO ].iiImage, nullptr, &vecTextures[ TEXTURE_LOGO ].pTexture ) == D3D_OK
-				&& D3DXCreateTextureFromFileEx( pDevice, ( GetExecutableDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(Resources\Paladin Logo Loading.png)" ) ).c_str( ), vecTextures[ TEXTURE_LOGO_LOADING ].uWidth,
+				&& D3DXCreateTextureFromFileEx( pDevice, (  sys::GetInstallDirectory( ) + PX_XOR( LR"(Resources\Paladin Logo Loading.png)" ) ).c_str( ), vecTextures[ TEXTURE_LOGO_LOADING ].uWidth,
 												vecTextures[ TEXTURE_LOGO_LOADING ].uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL,
 												&vecTextures[ TEXTURE_LOGO_LOADING ].iiImage, nullptr, &vecTextures[ TEXTURE_LOGO_LOADING ].pTexture ) == D3D_OK
-				&& D3DXCreateTextureFromFileEx( pDevice, ( GetExecutableDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(Resources\Game Icons\CSGO Sized.png)" ) ).c_str( ), vecTextures[ TEXTURE_ICON_CSGO ].uWidth,
+				&& D3DXCreateTextureFromFileEx( pDevice, (  sys::GetInstallDirectory( ) + PX_XOR( LR"(Resources\Game Icons\CSGO Sized.png)" ) ).c_str( ), vecTextures[ TEXTURE_ICON_CSGO ].uWidth,
 												vecTextures[ TEXTURE_ICON_CSGO ].uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL,
 												&vecTextures[ TEXTURE_ICON_CSGO ].iiImage, nullptr, &vecTextures[ TEXTURE_ICON_CSGO ].pTexture ) == D3D_OK
-				&& D3DXCreateTextureFromFileEx( pDevice, ( GetExecutableDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(Resources\Game Icons\PUBG Sized.png)" ) ).c_str( ), vecTextures[ TEXTURE_ICON_PUBG ].uWidth,
+				&& D3DXCreateTextureFromFileEx( pDevice, (  sys::GetInstallDirectory( ) + PX_XOR( LR"(Resources\Game Icons\PUBG Sized.png)" ) ).c_str( ), vecTextures[ TEXTURE_ICON_PUBG ].uWidth,
 												vecTextures[ TEXTURE_ICON_PUBG ].uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL,
 												&vecTextures[ TEXTURE_ICON_PUBG ].iiImage, nullptr, &vecTextures[ TEXTURE_ICON_PUBG ].pTexture ) == D3D_OK
-				&& D3DXCreateTextureFromFileEx( pDevice, ( GetExecutableDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(Resources\Game Icons\RSIX Sized.png)" ) ).c_str( ), vecTextures[ TEXTURE_ICON_RSIX ].uWidth,
+				&& D3DXCreateTextureFromFileEx( pDevice, (  sys::GetInstallDirectory( ) + PX_XOR( LR"(Resources\Game Icons\RSIX Sized.png)" ) ).c_str( ), vecTextures[ TEXTURE_ICON_RSIX ].uWidth,
 												vecTextures[ TEXTURE_ICON_RSIX ].uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL,
 												&vecTextures[ TEXTURE_ICON_RSIX ].iiImage, nullptr, &vecTextures[ TEXTURE_ICON_RSIX ].pTexture ) == D3D_OK
-				&& D3DXCreateTextureFromFileEx( pDevice, ( GetExecutableDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(Resources\Cursor\Arrow.png)" ) ).c_str( ), vecTextures[ TEXTURE_CURSOR_ARROW ].uWidth,
+				&& D3DXCreateTextureFromFileEx( pDevice, (  sys::GetInstallDirectory( ) + PX_XOR( LR"(Resources\Cursor\Arrow.png)" ) ).c_str( ), vecTextures[ TEXTURE_CURSOR_ARROW ].uWidth,
 												vecTextures[ TEXTURE_CURSOR_ARROW ].uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL,
 												&vecTextures[ TEXTURE_CURSOR_ARROW ].iiImage, nullptr, &vecTextures[ TEXTURE_CURSOR_ARROW ].pTexture ) == D3D_OK
-				&& D3DXCreateTextureFromFileEx( pDevice, ( GetExecutableDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(Resources\Cursor\Hand.png)" ) ).c_str( ), vecTextures[ TEXTURE_CURSOR_HAND ].uWidth,
+				&& D3DXCreateTextureFromFileEx( pDevice, (  sys::GetInstallDirectory( ) + PX_XOR( LR"(Resources\Cursor\Hand.png)" ) ).c_str( ), vecTextures[ TEXTURE_CURSOR_HAND ].uWidth,
 												vecTextures[ TEXTURE_CURSOR_HAND ].uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL,
 												&vecTextures[ TEXTURE_CURSOR_HAND ].iiImage, nullptr, &vecTextures[ TEXTURE_CURSOR_HAND ].pTexture ) == D3D_OK
-				&& D3DXCreateTextureFromFileEx( pDevice, ( GetExecutableDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(Resources\Cursor\I Beam.png)" ) ).c_str( ), vecTextures[ TEXTURE_CURSOR_IBEAM ].uWidth,
+				&& D3DXCreateTextureFromFileEx( pDevice, (  sys::GetInstallDirectory( ) + PX_XOR( LR"(Resources\Cursor\I Beam.png)" ) ).c_str( ), vecTextures[ TEXTURE_CURSOR_IBEAM ].uWidth,
 												vecTextures[ TEXTURE_CURSOR_IBEAM ].uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL,
 												&vecTextures[ TEXTURE_CURSOR_IBEAM ].iiImage, nullptr, &vecTextures[ TEXTURE_CURSOR_IBEAM ].pTexture ) == D3D_OK
 				&& D3DXCreateSprite( pDevice, &pBufferSprite ) == D3D_OK;
@@ -317,6 +318,11 @@ namespace PX::UI
 		void PX_API Resize( unsigned uWidth, unsigned uHeight )
 		{
 			nk_d3d9_resize( uWidth, uHeight );
+		}
+
+		void PX_API OnDeviceReset( )
+		{
+			nk_d3d9_create_font_texture( );
 		}
 
 		bool PX_API OnEvent( HWND h, UINT msg, WPARAM w, LPARAM l )
@@ -402,19 +408,18 @@ namespace PX::UI
 			bFoundHoverTarget = false;
 			pContext->last_widget_state &= ~( NK_WIDGET_STATE_ACTIVE | NK_WIDGET_STATE_HOVER );
 		}
-
 		bool PX_API Render( )
 		{
 			auto bShouldDrawUserInterface = true;
 			SetFont( FONT_ROBOTO );
-			
+
 			if ( nk_begin( pContext, szNuklearWindowTitle, nk_rect( 0, 0, float( uWindowWidth ), float( uWindowHeight ) ),
 						   NK_WINDOW_NO_SCROLLBAR ) )
 			{
 				nk_layout_row_dynamic( pContext, 10, 0 );
 				SetFont( FONT_ROBOTO );
 				SetLayout( );
-			
+
 				if ( bDrawComboboxArrow )
 				{
 					const auto pDrawBuffer = nk_window_get_canvas( pContext );
@@ -422,7 +427,7 @@ namespace PX::UI
 					recComboboxWindowBounds.y -= 3;
 					nk_fill_triangle( pDrawBuffer, recComboboxWindowBounds.x + recComboboxWindowBounds.w - 3, recComboboxWindowBounds.y, recComboboxWindowBounds.x + recComboboxWindowBounds.w - 10, recComboboxWindowBounds.y - 7, recComboboxWindowBounds.x + recComboboxWindowBounds.w - 17, recComboboxWindowBounds.y, clrBackground );
 				}
-			
+
 				if ( pActiveEditColor != nullptr )
 					ColorPicker( );
 			}
@@ -430,8 +435,12 @@ namespace PX::UI
 				bShouldDrawUserInterface = false;
 			nk_end( pContext );
 
-			IDirect3DStateBlock9* pState;
-			pDevice->CreateStateBlock( D3DSBT_ALL, &pState );
+			DrawTextures( );
+			DrawOther( );
+			ApplyCursor( );
+
+			//IDirect3DStateBlock9* pState;
+			//pDevice->CreateStateBlock( D3DSBT_ALL, &pState );
 
 			if ( bCreatedWindow )
 			{
@@ -442,12 +451,9 @@ namespace PX::UI
 
 			nk_d3d9_render( NK_ANTI_ALIASING_ON );
 
-			ApplyCursor( );
-			pState->Apply( );
-			pState->Release( );
+			//pState->Apply( );
+			//pState->Release( );
 
-			DrawTextures( );
-			DrawOther( );
 			if ( bCreatedWindow )
 			{
 				pDevice->EndScene( );
@@ -506,7 +512,7 @@ namespace PX::UI
 			static color_sequence_t clrThird( { 0, 0, 255 }, 1000 );
 
 			// Create a header with the window title and subtitle, with minimize and close functionality.
-			Header( string_cast< std::string >( wszWindowTitle ).c_str( ), szNuklearWindowTitle );
+			Header( PX_XOR( "Paladin Extensions" ), szNuklearWindowTitle );
 
 			// Create primary tabs.
 			fnSetTabValue( jsWidgets[ PX_XOR( "PrimaryTab" ) ].get_ref< int& >( ), Tabs( 10, 0, dqPrimaryTabs, jsWidgets[ PX_XOR( "PrimaryTab" ) ] ) );
@@ -520,7 +526,7 @@ namespace PX::UI
 			fnSetTabValue( jsWidgets[ PX_XOR( "SubTab" ) ].get_ref< int& >( ), SubTabs( 10, 60, 190, 30, dqSubTabs, jsWidgets[ PX_XOR( "SubTab" ) ] ) );
 
 			// Begin a groupbox for all of our widgets to be inside of.
-			BeginGroupbox( 200, 150, 500, 420, dqSubTabs.at( jsWidgets[ PX_XOR( "SubTab" ) ] ) );
+			if( BeginGroupbox( 200, 150, 500, 420, dqSubTabs.at( jsWidgets[ PX_XOR( "SubTab" ) ] ) ) )
 			{
 				const static auto iCheckboxTextWidth = CalculateTextBounds( PX_XOR( "Checkbox" ), 30 ).x;
 				static char szIntBuffer[ 64 ] { }, szFloatBuffer[ 64 ] { }, buf[ 64 ] { };
@@ -556,8 +562,8 @@ namespace PX::UI
 				jsWidgets[ PX_XOR( "Int" ) ] = Slider( PX_XOR( "Int Slider" ), szIntBuffer, -50, 50, jsWidgets[ PX_XOR( "Int" ) ], 15, 0, GROUPBOX_COLUMN_WIDTH, 30 );
 				jsWidgets[ PX_XOR( "Float" ) ] = Slider( PX_XOR( "Float Slider" ), szFloatBuffer, -50.f, 50.f, jsWidgets[ PX_XOR( "Float" ) ], GROUPBOX_COLUMN_WIDTH + 25, 0, GROUPBOX_COLUMN_WIDTH, 30, 1 );
 				EndRow( );
+				EndGroupbox( );
 			}
-			EndGroupbox( );
 		}
 
 		bool PX_API MouseHoveringRectangle( unsigned x, unsigned y, unsigned width, unsigned height )
@@ -1018,14 +1024,15 @@ namespace PX::UI
 			return iButtonPressed;
 		}
 
-		void PX_API BeginGroupbox( unsigned uStartX, unsigned uStartY, unsigned uBoxWidth, unsigned uBoxHeight, cstr_t szTitle )
+		bool PX_API BeginGroupbox( unsigned uStartX, unsigned uStartY, unsigned uBoxWidth, unsigned uBoxHeight, cstr_t szTitle )
 		{
 			SetFont( FONT_TAHOMA );
 			nk_layout_space_begin( pContext, NK_STATIC, float( uBoxHeight ), 1 );
 			const auto recBoundaries = nk_widget_bounds( pContext );
 			nk_layout_space_push( pContext, nk_rect( float( uStartX - recBoundaries.x ), float( uStartY - recBoundaries.y ), float( uBoxWidth ), float( uBoxHeight ) ) );
 			auto recNewBoundaries = nk_widget_bounds( pContext );
-			nk_group_begin( pContext, szTitle, NK_WINDOW_NO_SCROLLBAR );
+			if ( !nk_group_begin( pContext, szTitle, NK_WINDOW_NO_SCROLLBAR ) )
+				return false;
 
 			const auto pOutput = nk_window_get_canvas( pContext );
 			recNewBoundaries.x += 4;
@@ -1045,6 +1052,7 @@ namespace PX::UI
 			VerticalSpacing( 5 );
 
 			SetFont( FONT_ROBOTOSMALL );
+			return true;
 		}
 
 		void PX_API EndGroupbox( )

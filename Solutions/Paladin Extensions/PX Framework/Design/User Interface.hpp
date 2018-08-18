@@ -17,7 +17,7 @@ namespace PX::UI
 		/** \brief Contains information regarding GUI drawing. */
 		PX_SDK nk_context* pContext;
 		/** \brief Title of the GUI window. */
-		PX_SDK Types::cstr_t szNuklearWindowTitle;
+		PX_SDK char* szNuklearWindowTitle;
 		PX_SDK Render::ECursor curCurrent;
 		PX_SDK bool bFoundHoverTarget = false;
 
@@ -92,6 +92,7 @@ namespace PX::UI
 		void PX_API OnRelease( );
 		/** \brief Sets a new size for the GUI window. */
 		void PX_API Resize( unsigned, unsigned );
+		void PX_API OnDeviceReset( );
 		/** \brief Handles events to interact with the GUI. */
 		bool PX_API OnEvent( HWND, UINT, WPARAM, LPARAM );
 		/** \brief Render the GUI. */
@@ -207,7 +208,7 @@ namespace PX::UI
 		/**	\param uBoxWidth Width of the groupbox. */
 		/**	\param uBoxHeight Height of the groupbox. */
 		/**	\param szTitle Title of the groupbox. */
-		void PX_API BeginGroupbox( unsigned uStartX, unsigned uStartY, unsigned uBoxWidth, unsigned uBoxHeight, Types::cstr_t szTitle );
+		bool PX_API BeginGroupbox( unsigned uStartX, unsigned uStartY, unsigned uBoxWidth, unsigned uBoxHeight, Types::cstr_t szTitle );
 		/** \brief Ends a groupbox. Must be called after BeginGroupbox( ) else an exception will be thrown. */
 		void PX_API EndGroupbox( );
 

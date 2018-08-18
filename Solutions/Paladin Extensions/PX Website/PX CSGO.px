@@ -2,7 +2,8 @@
     "Modules": {
         "Client": "client_panorama.dll",
         "DirectX API": "shaderapidx9.dll",
-        "Engine": "engine.dll"
+        "Engine": "engine.dll",
+        "Overlay":  "GameOverlayRenderer.dll"
     },
     "Patterns": {
         "Offsets": {

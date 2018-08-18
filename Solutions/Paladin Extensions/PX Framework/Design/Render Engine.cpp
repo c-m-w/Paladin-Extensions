@@ -48,11 +48,11 @@ namespace PX::Render
 				break;
 		}
 
-		return OnEvent( _hwWindowHandle, uMessage, uwParam, llParam )
-				   ? ( uOldWindowProc
-						   ? CallWindowProc( reinterpret_cast< WNDPROC >( uOldWindowProc ), _hwWindowHandle, uMessage, uwParam, llParam )
-						   : 0 )
-				   : DefWindowProc( _hwWindowHandle, uMessage, uwParam, llParam );
+		if ( OnEvent( _hwWindowHandle, uMessage, uwParam, llParam ) && !uOldWindowProc )
+			return true;
+		if ( !uOldWindowProc )
+			return  DefWindowProc( _hwWindowHandle, uMessage, uwParam, llParam );
+		return CallWindowProc( reinterpret_cast< WNDPROC >( uOldWindowProc ), _hwWindowHandle, uMessage, uwParam, llParam );
 	}
 
 	void PX_API SetWindowSize( unsigned uWidth, unsigned uHeight )
@@ -109,10 +109,10 @@ namespace PX::Render
 			dxParameters.MultiSampleType = D3DMULTISAMPLE_NONE;
 			dxParameters.SwapEffect = D3DSWAPEFFECT_DISCARD;
 			dxParameters.hDeviceWindow = hwWindowHandle;
-			dxParameters.EnableAutoDepthStencil = true;
+			dxParameters.EnableAutoDepthStencil = TRUE;
 			dxParameters.AutoDepthStencilFormat = D3DFMT_D24S8;
 			dxParameters.Flags = D3DPRESENTFLAG_DISCARD_DEPTHSTENCIL;
-			dxParameters.Windowed = true;
+			dxParameters.Windowed = TRUE;
 
 			// Windows 7 doesn't support hardware vertexprocessing, so if it fails we need to use software vertexprocessing.
 			if ( pObjectEx->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hwWindowHandle, D3DCREATE_HARDWARE_VERTEXPROCESSING | D3DCREATE_PUREDEVICE | D3DCREATE_FPU_PRESERVE, &dxParameters, &pDevice ) < 0 )
@@ -127,6 +127,14 @@ namespace PX::Render
 		SetWindowSize( pDimensions[ 0 ], pDimensions[ 1 ] );
 		CreateRenderTarget( );
 		InitializeDirectX( );
+	}
+
+	bool PX_API InitializeRenderTarget( IDirect3DDevice9* pNewDevice, unsigned* pDimensions )
+	{
+		SetWindowProc( pNewDevice );
+		uWindowWidth = pDimensions[ 0 ];
+		uWindowHeight = pDimensions[ 1 ];
+		return ( Render::pDevice = pNewDevice ) != nullptr;
 	}
 
 	void PX_API SetWindowProc( IDirect3DDevice9* pTargetDevice )

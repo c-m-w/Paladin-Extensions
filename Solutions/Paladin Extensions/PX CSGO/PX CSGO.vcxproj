@@ -125,6 +125,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;PXCSGO_EXPORTS;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>false</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -154,11 +155,13 @@
   <ItemGroup>
     <ClCompile Include="Application\Hooks.cpp" />
     <ClCompile Include="Application\Information.cpp" />
+    <ClCompile Include="Design\User Interface.cpp" />
     <ClCompile Include="PX CSGO.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Hooks.hpp" />
     <ClInclude Include="Application\Information.hpp" />
+    <ClInclude Include="Design\User Interface.hpp" />
     <ClInclude Include="PX CSGO.hpp" />
     <ClInclude Include="SDK\SDK.hpp" />
     <ClInclude Include="SDK\Valve\Interfaces\IAppSystem.hpp" />

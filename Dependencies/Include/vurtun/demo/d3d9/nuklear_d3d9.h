@@ -525,7 +525,7 @@ nk_d3d9_init( IDirect3DDevice9 *device, int width, int height )
 	d3d9.viewport.X = 0;
 	d3d9.viewport.Y = 0;
 	d3d9.viewport.MinZ = 0.0f;
-	d3d9.viewport.MaxZ = 1.0f;
+	d3d9.viewport.MaxZ = 0.0f;
 
 	nk_d3d9_resize( width, height );
 

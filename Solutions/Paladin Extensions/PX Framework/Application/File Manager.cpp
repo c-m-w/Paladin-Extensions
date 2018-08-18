@@ -39,24 +39,29 @@ namespace PX::Files
 	{
 		bool LoadResources( const std::string& strHash )
 		{
-			std::wstring wstrPath = GetExecutableDirectory( PX_DEPENDENCIES_ESCAPE ) + PX_XOR( LR"(Resources\)" );
+			std::wstring wstrPath = sys::GetInstallDirectory( ) + PX_XOR( LR"(Resources\)" );
 
 			bool bFilesExist = std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Paladin Logo.ico)" ) ).c_str( ) )
-				& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Paladin Logo.png)" ) ).c_str( ) )
+				&& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Paladin Logo.png)" ) ).c_str( ) )
 
-				& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Cursor\Arrow.cur)" ) ).c_str( ) )
-				& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Cursor\Hand.cur)" ) ).c_str( ) )
-				& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Cursor\I Beam.cur)" ) ).c_str( ) )
+				&& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Cursor\Arrow.png)" ) ).c_str( ) )
+				&& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Cursor\Hand.png)" ) ).c_str( ) )
+				&& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Cursor\I Beam.png)" ) ).c_str( ) )
 
-				& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Fonts\Envy.ttf)" ) ).c_str( ) )
-				& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Fonts\Font Awesome.ttf)" ) ).c_str( ) )
-				& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Fonts\Roboto.ttf)" ) ).c_str( ) )
-				& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Fonts\Roboto Bold.ttf)" ) ).c_str( ) )
-				& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Fonts\Tahoma.ttf)" ) ).c_str( ) )
-				& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Fonts\Tahoma Bold.ttf)" ) ).c_str( ) )
+				//& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Fonts\Envy.ttf)" ) ).c_str( ) )
+				//& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Fonts\Font Awesome.ttf)" ) ).c_str( ) )
+				//& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Fonts\Roboto.ttf)" ) ).c_str( ) )
+				//& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Fonts\Roboto Bold.ttf)" ) ).c_str( ) )
+				//& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Fonts\Tahoma.ttf)" ) ).c_str( ) )
+				//& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Fonts\Tahoma Bold.ttf)" ) ).c_str( ) )
 
-				& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Game Icons\CSGO.png)" ) ).c_str( ) )
-				& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Game Icons\PUBG.png)" ) ).c_str( ) );
+				&& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Game Icons\CSGO.png)" ) ).c_str( ) )
+				&& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Game Icons\PUBG.png)" ) ).c_str( ) )
+				&& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Game Icons\RSIX.png)" ) ).c_str( ) )
+
+				&& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Game Icons\CSGO Sized.png)" ) ).c_str( ) )
+				&& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Game Icons\PUBG Sized.png)" ) ).c_str( ) )
+				&& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Game Icons\RSIX Sized.png)" ) ).c_str( ) );
 
 			if ( !bFilesExist )
 				return false;
@@ -81,19 +86,24 @@ namespace PX::Files
 			strLogoICO = fnGetFileData( ( wstrPath + PX_XOR( LR"(Paladin Logo.ico)" ) ).c_str( ) );
 			strLogoPNG = fnGetFileData( ( wstrPath + PX_XOR( LR"(Paladin Logo.png)" ) ).c_str( ) );
 
-			strCursorArrow = fnGetFileData( ( wstrPath + PX_XOR( LR"(Cursor\Arrow.cur)" ) ).c_str( ) );
-			strCursorHand = fnGetFileData( ( wstrPath + PX_XOR( LR"(Cursor\Hand.cur)" ) ).c_str( ) );
-			strCursorIBeam = fnGetFileData( ( wstrPath + PX_XOR( LR"(Cursor\I Beam.cur)" ) ).c_str( ) );
+			strCursorArrow = fnGetFileData( ( wstrPath + PX_XOR( LR"(Cursor\Arrow.png)" ) ).c_str( ) );
+			strCursorHand = fnGetFileData( ( wstrPath + PX_XOR( LR"(Cursor\Hand.png)" ) ).c_str( ) );
+			strCursorIBeam = fnGetFileData( ( wstrPath + PX_XOR( LR"(Cursor\I Beam.png)" ) ).c_str( ) );
 
-			strFontsEnvy = fnGetFileData( ( wstrPath + PX_XOR( LR"(Fonts\Envy.ttf)" ) ).c_str( ) );
-			strFontsFontAwesome = fnGetFileData( ( wstrPath + PX_XOR( LR"(Fonts\Font Awesome.ttf)" ) ).c_str( ) );
-			strFontsRoboto = fnGetFileData( ( wstrPath + PX_XOR( LR"(Fonts\Font Awesome.ttf)" ) ).c_str( ) );
-			strFontsRobotoBold = fnGetFileData( ( wstrPath + PX_XOR( LR"(Fonts\Roboto Bold.ttf)" ) ).c_str( ) );
-			strFontsTahoma = fnGetFileData( ( wstrPath + PX_XOR( LR"(Fonts\Tahoma.ttf)" ) ).c_str( ) );
-			strFontsTahomaBold = fnGetFileData( ( wstrPath + PX_XOR( LR"(Fonts\Tahoma Bold.ttf)" ) ).c_str( ) );
+			//strFontsEnvy = fnGetFileData( ( wstrPath + PX_XOR( LR"(Fonts\Envy.ttf)" ) ).c_str( ) );
+			//strFontsFontAwesome = fnGetFileData( ( wstrPath + PX_XOR( LR"(Fonts\Font Awesome.ttf)" ) ).c_str( ) );
+			//strFontsRoboto = fnGetFileData( ( wstrPath + PX_XOR( LR"(Fonts\Font Awesome.ttf)" ) ).c_str( ) );
+			//strFontsRobotoBold = fnGetFileData( ( wstrPath + PX_XOR( LR"(Fonts\Roboto Bold.ttf)" ) ).c_str( ) );
+			//strFontsTahoma = fnGetFileData( ( wstrPath + PX_XOR( LR"(Fonts\Tahoma.ttf)" ) ).c_str( ) );
+			//strFontsTahomaBold = fnGetFileData( ( wstrPath + PX_XOR( LR"(Fonts\Tahoma Bold.ttf)" ) ).c_str( ) );
 
 			strGameIconsCSGO = fnGetFileData( ( wstrPath + PX_XOR( LR"(Game Icons\CSGO.png)" ) ).c_str( ) );
 			strGameIconsPUBG = fnGetFileData( ( wstrPath + PX_XOR( LR"(Game Icons\PUBG.png)" ) ).c_str( ) );
+			strGameIconsRSIX = fnGetFileData( ( wstrPath + PX_XOR( LR"(Game Icons\RSIX.png)" ) ).c_str( ) );
+
+			strGameIconsPUBGSized = fnGetFileData( ( wstrPath + PX_XOR( LR"(Game Icons\CSGO Sized.png)" ) ).c_str( ) );
+			strGameIconsCSGOSized = fnGetFileData( ( wstrPath + PX_XOR( LR"(Game Icons\PUBG Sized.png)" ) ).c_str( ) );
+			strGameIconsPUBGSized = fnGetFileData( ( wstrPath + PX_XOR( LR"(Game Icons\RSIX Sized.png)" ) ).c_str( ) );
 
 			auto strResourcesHash = GenerateHash( strLogoICO )
 				+ GenerateHash( strLogoPNG )
@@ -102,17 +112,23 @@ namespace PX::Files
 				+ GenerateHash( strCursorHand )
 				+ GenerateHash( strCursorIBeam )
 
-				+ GenerateHash( strFontsEnvy )
-				+ GenerateHash( strFontsFontAwesome )
-				+ GenerateHash( strFontsRoboto )
-				+ GenerateHash( strFontsRobotoBold )
-				+ GenerateHash( strFontsTahoma )
-				+ GenerateHash( strFontsTahomaBold )
+				//+ GenerateHash( strFontsEnvy )
+				//+ GenerateHash( strFontsFontAwesome )
+				//+ GenerateHash( strFontsRoboto )
+				//+ GenerateHash( strFontsRobotoBold )
+				//+ GenerateHash( strFontsTahoma )
+				//+ GenerateHash( strFontsTahomaBold )
 
 				+ GenerateHash( strGameIconsCSGO )
-				+ GenerateHash( strGameIconsPUBG );
+				+ GenerateHash( strGameIconsPUBG )
+				+ GenerateHash( strGameIconsRSIX )
+			
+				+ GenerateHash( strGameIconsCSGOSized )
+				+ GenerateHash( strGameIconsPUBGSized )
+				+ GenerateHash( strGameIconsRSIXSized );
 
-			return strHash == strResourcesHash;
+			return true;
+			//return strHash == strResourcesHash;
 		}
 	}
 

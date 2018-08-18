@@ -26,6 +26,7 @@ namespace PX::Information
 		PX_SDK SModule mEngine;
 		PX_SDK SModule mClient;
 		PX_SDK SModule mDirectX;
+		PX_SDK SModule mOverlay;
 	}
 
 	namespace Interfaces

@@ -28,6 +28,11 @@ namespace PX::Files
 
 		PX_SDK std::string strGameIconsCSGO;
 		PX_SDK std::string strGameIconsPUBG;
+		PX_SDK std::string strGameIconsRSIX;
+
+		PX_SDK std::string strGameIconsCSGOSized;
+		PX_SDK std::string strGameIconsPUBGSized;
+		PX_SDK std::string strGameIconsRSIXSized;
 
 		// INFO: Verifies vital resources have not been modified, then loads them
 		// PARAM: Hash of resources

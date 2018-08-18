@@ -8,3 +8,5 @@
 #include "SDK/SDK.hpp"
 #include "Application/Information.hpp"
 #include "Application/Hooks.hpp"
+
+#include "Design/User Interface.hpp"

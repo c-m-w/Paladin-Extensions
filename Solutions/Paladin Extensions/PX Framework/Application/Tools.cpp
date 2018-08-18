@@ -69,7 +69,7 @@ namespace PX::Tools
 		return 0u;
 	}
 
-	HMODULE PX_API GetAddressOriginModule( ptr_t ptrAddress )
+	HMODULE PX_API FindAddressOrigin( ptr_t ptrAddress )
 	{
 		if ( vecModules.empty( ) )
 			px_assert( FindModules( ) );
@@ -93,7 +93,7 @@ namespace PX::Tools
 		// Get the size of the table in bytes.
 		sTableSize = sTableLength * sizeof( ptr_t );
 		// Ensure that the module that has been entered is valid and find free memory inside of that module to point the class base to.
-		if ( ( hAllocationModule = GetAddressOriginModule( ptr_t( *reinterpret_cast< void** >( pOldTable ) ) ) ) == nullptr ||
+		if ( ( hAllocationModule = FindAddressOrigin( ptr_t( *reinterpret_cast< void** >( pOldTable ) ) ) ) == nullptr ||
 			( pNewTable = reinterpret_cast< ptr_t* >( FindFreeMemory( hAllocationModule, sTableSize + sizeof( ptr_t ) ) ) ) == nullptr )
 			return;
 

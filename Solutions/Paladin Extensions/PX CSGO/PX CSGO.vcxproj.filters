@@ -24,6 +24,9 @@
     <ClCompile Include="Application\Information.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Design\User Interface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PX CSGO.hpp">
@@ -42,6 +45,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SDK\SDK.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Design\User Interface.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
