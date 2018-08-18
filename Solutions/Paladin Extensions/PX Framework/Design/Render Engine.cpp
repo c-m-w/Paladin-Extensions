@@ -28,7 +28,7 @@ namespace PX::Render
 				return 0;
 
 			case WM_SIZE:
-				if ( pDevice )
+				if ( pDevice && bCreatedWindow )
 				{
 					const auto uWidth = LOWORD( llParam );
 					const auto uHeight = HIWORD( llParam );
@@ -140,10 +140,10 @@ namespace PX::Render
 	void PX_API SetWindowProc( IDirect3DDevice9* pTargetDevice )
 	{
 		D3DDEVICE_CREATION_PARAMETERS cpParameters;
-		px_assert( pTargetDevice->GetCreationParameters( &cpParameters ) >= 0 );
-		hwOldWindowHandle = cpParameters.hFocusWindow;
+		px_assert( pTargetDevice->GetCreationParameters( &cpParameters ) == D3D_OK );
+		hwWindowHandle = cpParameters.hFocusWindow;
 
-		uOldWindowProc = SetWindowLongPtr( hwOldWindowHandle, GWLP_WNDPROC, reinterpret_cast< long >( WndProc ) );
+		uOldWindowProc = SetWindowLongPtr( hwWindowHandle, GWLP_WNDPROC, reinterpret_cast< long >( WndProc ) );
 		px_assert( uOldWindowProc );
 	}
 }

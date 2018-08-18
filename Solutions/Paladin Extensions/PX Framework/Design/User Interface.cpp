@@ -403,7 +403,10 @@ namespace PX::UI
 
 			auto uTextureID = curCurrent == CURSOR_ARROW ? TEXTURE_CURSOR_ARROW : curCurrent == CURSOR_HAND ? TEXTURE_CURSOR_HAND : TEXTURE_CURSOR_IBEAM;
 			vecImageQueue.emplace_back( uTextureID, D3DXVECTOR3( float( pntCursor.x + vecTextures[ uTextureID ].uWidth / 2.f - 50 ), float( pntCursor.y + vecTextures[ uTextureID ].uHeight / 2.f - 50 ), 0.f ) );
+
+			// hide the cursor
 			for ( int i { }; i < 50 && ShowCursor( false ) > -1; i++ );
+
 			curCurrent = CURSOR_ARROW;
 			bFoundHoverTarget = false;
 			pContext->last_widget_state &= ~( NK_WIDGET_STATE_ACTIVE | NK_WIDGET_STATE_HOVER );
@@ -435,12 +438,8 @@ namespace PX::UI
 				bShouldDrawUserInterface = false;
 			nk_end( pContext );
 
-			DrawTextures( );
-			DrawOther( );
-			ApplyCursor( );
-
-			//IDirect3DStateBlock9* pState;
-			//pDevice->CreateStateBlock( D3DSBT_ALL, &pState );
+			IDirect3DStateBlock9* pState = nullptr;
+			pDevice->CreateStateBlock( D3DSBT_ALL, &pState );
 
 			if ( bCreatedWindow )
 			{
@@ -451,8 +450,12 @@ namespace PX::UI
 
 			nk_d3d9_render( NK_ANTI_ALIASING_ON );
 
-			//pState->Apply( );
-			//pState->Release( );
+			pState->Apply( );
+			pState->Release( );
+
+			DrawTextures( );
+			DrawOther( );
+			ApplyCursor( );
 
 			if ( bCreatedWindow )
 			{

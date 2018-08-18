@@ -37,20 +37,26 @@ namespace PX
 			}
 
 			if( ptrDesiredReturnAddress == ptrReturnAddress )	
-			{																	
+			{
+				static IDirect3DStateBlock9* pState = nullptr;
+				IDirect3DStateBlock9* pCurrentState;
 				DWORD dwColor, dwSRGB;
 				IDirect3DVertexDeclaration9* pVertexDeclaration;
 				IDirect3DVertexShader9* pVertexShader;
-				IDirect3DStateBlock9* pPixelState;
 
-				px_assert( D3D_OK == pDevice->GetRenderState( D3DRS_COLORWRITEENABLE, &dwColor )
-						   && D3D_OK == pDevice->GetRenderState( D3DRS_SRGBWRITEENABLE, &dwSRGB )
-						   && D3D_OK == pDevice->GetVertexDeclaration( &pVertexDeclaration )
+				if ( !pState )
+					pDevice->CreateStateBlock( D3DSBT_ALL, &pState );
+				pDevice->CreateStateBlock( D3DSBT_ALL, &pCurrentState );
+
+				pState->Apply( );
+
+				px_assert( //D3D_OK == pDevice->GetRenderState( D3DRS_COLORWRITEENABLE, &dwColor )
+						   //&& D3D_OK == pDevice->GetRenderState( D3DRS_SRGBWRITEENABLE, &dwSRGB )
+						    D3D_OK == pDevice->GetVertexDeclaration( &pVertexDeclaration )
 						   && D3D_OK == pDevice->GetVertexShader( &pVertexShader )
-						   && D3D_OK == pDevice->CreateStateBlock( D3DSBT_PIXELSTATE, &pPixelState )
-
-						   && D3D_OK == pDevice->SetRenderState( D3DRS_COLORWRITEENABLE, UINT_MAX )
-						   && D3D_OK == pDevice->SetRenderState( D3DRS_SRGBWRITEENABLE, FALSE )
+						   
+						   //&& D3D_OK == pDevice->SetRenderState( D3DRS_COLORWRITEENABLE, UINT_MAX )
+						   //&& D3D_OK == pDevice->SetRenderState( D3DRS_SRGBWRITEENABLE, FALSE )
 						   && D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP )
 						   && D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_ADDRESSV, D3DTADDRESS_WRAP )
 						   && D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_ADDRESSW, D3DTADDRESS_WRAP )
@@ -58,12 +64,13 @@ namespace PX
 
 						   && UI::Manager::Render( )
 
-						   && D3D_OK == pDevice->SetRenderState( D3DRS_COLORWRITEENABLE, dwColor )
-						   && D3D_OK == pDevice->SetRenderState( D3DRS_SRGBWRITEENABLE, dwSRGB )
+						   //&& D3D_OK == pDevice->SetRenderState( D3DRS_COLORWRITEENABLE, dwColor )
+						   //&& D3D_OK == pDevice->SetRenderState( D3DRS_SRGBWRITEENABLE, dwSRGB )
 						   && D3D_OK == pDevice->SetVertexDeclaration( pVertexDeclaration )
-						   && D3D_OK == pDevice->SetVertexShader( pVertexShader )
-						   && D3D_OK == pPixelState->Apply( )
-						   && D3D_OK == pPixelState->Release( ) );
+						   && D3D_OK == pDevice->SetVertexShader( pVertexShader ) );
+
+				pCurrentState->Apply( );
+				pCurrentState->Release( );
 			}
 			std::cout << "EndScene has been called." << std::endl;
 			return fnOriginal( pDeviceParameter );
