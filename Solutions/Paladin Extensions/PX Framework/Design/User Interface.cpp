@@ -310,7 +310,7 @@ namespace PX::UI
 			return nk_style_set_font( pContext, &dqFonts[ fntDesiredFont ]->handle );
 		}
 
-		void PX_API OnRelease( )
+		void PX_API Release( )
 		{
 			nk_d3d9_release( );
 		}
@@ -320,12 +320,12 @@ namespace PX::UI
 			nk_d3d9_resize( uWidth, uHeight );
 		}
 
-		void PX_API OnDeviceReset( )
+		void PX_API Reset( )
 		{
 			nk_d3d9_create_font_texture( );
 		}
 
-		bool PX_API OnEvent( HWND h, UINT msg, WPARAM w, LPARAM l )
+		bool PX_API HandleEvent( HWND h, UINT msg, WPARAM w, LPARAM l )
 		{
 			return nk_d3d9_handle_event( h, msg, w, l );
 		}

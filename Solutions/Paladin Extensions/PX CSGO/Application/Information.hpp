@@ -27,13 +27,15 @@ namespace PX::Information
 		PX_SDK SModule mClient;
 		PX_SDK SModule mDirectX;
 		PX_SDK SModule mOverlay;
+		PX_SDK SModule mVGUI;
 	}
 
 	namespace Interfaces
 	{
 		bool PX_API Setup( );
 
-		PX_SDK IDirect3DDevice9* pDevice;
-		PX_SDK IBaseClientDLL* pClientBase;
+		PX_SDK IDirect3DDevice9* pDevice = nullptr;
+		PX_SDK IBaseClientDLL* pClientBase = nullptr;
+		PX_SDK ISurface* pSurface = nullptr;
 	}	
 }

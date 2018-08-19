@@ -157,6 +157,10 @@
     <ClCompile Include="Application\Information.cpp" />
     <ClCompile Include="Design\User Interface.cpp" />
     <ClCompile Include="PX CSGO.cpp" />
+    <ClCompile Include="SDK\Valve\Math\Vector2D.cpp" />
+    <ClCompile Include="SDK\Valve\Math\Vector4D.cpp" />
+    <ClCompile Include="SDK\Valve\Math\VMatrix.cpp" />
+    <ClCompile Include="SDK\Valve\Types\Color.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Hooks.hpp" />
@@ -166,6 +170,16 @@
     <ClInclude Include="SDK\SDK.hpp" />
     <ClInclude Include="SDK\Valve\Interfaces\IAppSystem.hpp" />
     <ClInclude Include="SDK\Valve\Interfaces\IBaseClientDll.hpp" />
+    <ClInclude Include="SDK\Valve\Interfaces\Interfaces.hpp" />
+    <ClInclude Include="SDK\Valve\Interfaces\ISurface.hpp" />
+    <ClInclude Include="SDK\Valve\Math\Math.hpp" />
+    <ClInclude Include="SDK\Valve\Math\QAngle.hpp" />
+    <ClInclude Include="SDK\Valve\Math\Vector.hpp" />
+    <ClInclude Include="SDK\Valve\Math\Vector2D.hpp" />
+    <ClInclude Include="SDK\Valve\Math\Vector4D.hpp" />
+    <ClInclude Include="SDK\Valve\Math\VMatrix.hpp" />
+    <ClInclude Include="SDK\Valve\Types\Color.hpp" />
+    <ClInclude Include="SDK\Valve\Types\Types.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PX Framework\PX Framework.vcxproj">

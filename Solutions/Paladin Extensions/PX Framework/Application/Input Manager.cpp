@@ -15,10 +15,10 @@ namespace PX
 		}
 
 		for each ( auto fnCallback in vecfnKeyCallback[ uKey ] )
-			fnCallback( uKey );
+			fnCallback( bool( ksKeys[ uKey ] ) );
 
 		for each ( auto fnCallback in vecfnGlobalCallbacks )
-			fnCallback( uKey );
+			fnCallback( uKey, bool( ksKeys[ uKey ] ) );
 	}
 
 	void PX_API CInputManager::ProcessMouseMessage( UINT uMessage, WPARAM wParam, LPARAM lParam ) // lParam is unused
@@ -121,12 +121,12 @@ namespace PX
 		return GetMoment( ) - mmtKeyDownTime[ uKey ];
 	}
 
-	void PX_API CInputManager::AddKeyCallback( unsigned uKey, std::function< void( int ) > fnCallback )
+	void PX_API CInputManager::AddKeyCallback( unsigned uKey, std::function< void( bool ) > fnCallback )
 	{
 		vecfnKeyCallback[ uKey ].emplace_back( fnCallback );
 	}
 
-	void PX_API CInputManager::AddGlobalCallback( std::function< void( unsigned ) > fnCallback )
+	void PX_API CInputManager::AddGlobalCallback( std::function< void( unsigned, bool ) > fnCallback )
 	{
 		vecfnGlobalCallbacks.emplace_back( fnCallback );
 	}

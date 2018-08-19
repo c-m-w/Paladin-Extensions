@@ -31,6 +31,7 @@ namespace PX::Render
 	PX_SDK IDirect3DDevice9* pDevice;
 	/** \brief Used to decide how to handle window related events. */
 	PX_SDK auto bCreatedWindow = false;
+	PX_SDK auto bShouldRender = true;
 	/** \brief Tracks whether or not the window is currently minimized. */
 	PX_SDK auto bMinimized = false;
 	/** \brief Resizes the created window. */

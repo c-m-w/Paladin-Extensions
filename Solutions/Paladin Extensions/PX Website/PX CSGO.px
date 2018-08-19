@@ -3,7 +3,8 @@
         "Client": "client_panorama.dll",
         "DirectX API": "shaderapidx9.dll",
         "Engine": "engine.dll",
-        "Overlay":  "GameOverlayRenderer.dll"
+        "Overlay":  "GameOverlayRenderer.dll",
+        "VGUI":  "vguimatsurface.dll"
     },
     "Patterns": {
         "Offsets": {
@@ -14,6 +15,7 @@
         }
     },
     "Versions": {
-        "Client Base": "VClient018"
+        "Client Base": "VClient018",
+        "VGUI Surface":  "VGUI_Surface031"
     }
 }

@@ -14,14 +14,19 @@ namespace PX
 		{
 			return hkDirectXDevice->HookIndex( uEndScene, reinterpret_cast< void* >( EndScene ) )
 				&& hkDirectXDevice->HookIndex( uReset, reinterpret_cast< void* >( Reset ) )
-				&& hkDirectXDevice->HookIndex( uPresent, reinterpret_cast< void* >( Present ) );
+				&& hkDirectXDevice->HookIndex( uPresent, reinterpret_cast< void* >( Present ) )
+				&& hkSurface->HookIndex( uLockCursor, reinterpret_cast< void* >( LockCursor ) );
 		}
 
 		bool PX_API InitializeHooks( )
 		{
 			hkDirectXDevice = new Tools::CHook( pDevice );
+			hkClientBase = new Tools::CHook( pClientBase );
+			hkSurface = new Tools::CHook( pSurface );
 
-			return hkDirectXDevice->Succeeded( ) ? SetHooks( ) : false;
+			return hkDirectXDevice->Succeeded( )
+				&& hkClientBase->Succeeded( )
+				&& hkSurface->Succeeded( ) ? SetHooks( ) : false;
 		}
 
 		HRESULT __stdcall EndScene( IDirect3DDevice9* pDeviceParameter )
@@ -30,19 +35,18 @@ namespace PX
 			static auto ptrDesiredReturnAddress = 0u;
 			const auto ptrReturnAddress = Types::ptr_t( _ReturnAddress( ) );
 
-			if( !ptrDesiredReturnAddress )
+			if ( !ptrDesiredReturnAddress )
 			{
 				if ( Tools::FindAddressOrigin( ptrReturnAddress ) == Modules::mOverlay.hModule )
 					ptrDesiredReturnAddress = ptrReturnAddress;
 			}
 
-			if( ptrDesiredReturnAddress == ptrReturnAddress )	
+			if ( ptrDesiredReturnAddress == ptrReturnAddress )
 			{
 				static IDirect3DStateBlock9* pState = nullptr;
-				IDirect3DStateBlock9* pCurrentState;
-				DWORD dwColor, dwSRGB;
-				IDirect3DVertexDeclaration9* pVertexDeclaration;
-				IDirect3DVertexShader9* pVertexShader;
+				IDirect3DStateBlock9* pCurrentState = nullptr;
+				IDirect3DVertexDeclaration9* pVertexDeclaration = nullptr;
+				IDirect3DVertexShader9* pVertexShader = nullptr;
 
 				if ( !pState )
 					pDevice->CreateStateBlock( D3DSBT_ALL, &pState );
@@ -50,23 +54,18 @@ namespace PX
 
 				pState->Apply( );
 
-				px_assert( //D3D_OK == pDevice->GetRenderState( D3DRS_COLORWRITEENABLE, &dwColor )
-						   //&& D3D_OK == pDevice->GetRenderState( D3DRS_SRGBWRITEENABLE, &dwSRGB )
-						    D3D_OK == pDevice->GetVertexDeclaration( &pVertexDeclaration )
-						   && D3D_OK == pDevice->GetVertexShader( &pVertexShader )
-						   
-						   //&& D3D_OK == pDevice->SetRenderState( D3DRS_COLORWRITEENABLE, UINT_MAX )
-						   //&& D3D_OK == pDevice->SetRenderState( D3DRS_SRGBWRITEENABLE, FALSE )
-						   && D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP )
-						   && D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_ADDRESSV, D3DTADDRESS_WRAP )
-						   && D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_ADDRESSW, D3DTADDRESS_WRAP )
-						   && D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_SRGBTEXTURE, NULL )
+				px_assert( D3D_OK == pDevice->GetVertexDeclaration( &pVertexDeclaration )
+							&& D3D_OK == pDevice->GetVertexShader( &pVertexShader )
 
-						   && UI::Manager::Render( )
+							&& D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP )
+							&& D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_ADDRESSV, D3DTADDRESS_WRAP )
+							&& D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_ADDRESSW, D3DTADDRESS_WRAP )
+							&& D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_SRGBTEXTURE, NULL ) );
 
-						   //&& D3D_OK == pDevice->SetRenderState( D3DRS_COLORWRITEENABLE, dwColor )
-						   //&& D3D_OK == pDevice->SetRenderState( D3DRS_SRGBWRITEENABLE, dwSRGB )
-						   && D3D_OK == pDevice->SetVertexDeclaration( pVertexDeclaration )
+				if ( Render::bShouldRender )
+					UI::Manager::Render( );
+
+				px_assert( D3D_OK == pDevice->SetVertexDeclaration( pVertexDeclaration )
 						   && D3D_OK == pDevice->SetVertexShader( pVertexShader ) );
 
 				pCurrentState->Apply( );
@@ -79,10 +78,12 @@ namespace PX
 		HRESULT __stdcall Reset( IDirect3DDevice9* pDeviceParameter, D3DPRESENT_PARAMETERS* pParams )
 		{
 			static auto fnOriginal = hkDirectXDevice->GetOriginalFunction< Types::reset_t  >( uReset );
-			std::cout << "Reset has been called." << std::endl;
+
 			const auto hrReset = fnOriginal( pDeviceParameter, pParams );
 			if ( SUCCEEDED( hrReset ) )
-				UI::Manager::OnDeviceReset( );
+				UI::Manager::Reset( );
+
+			std::cout << "Reset has been called." << std::endl;
 			return hrReset;
 		}
 
@@ -91,6 +92,15 @@ namespace PX
 			static auto fnOriginal = hkDirectXDevice->GetOriginalFunction< Types::present_t >( uPresent );
 			std::cout << "Present has been called." << std::endl;
 			return fnOriginal( pDeviceParameter, pSourceRect, pDestRect, hDestWindowOverride, pDirtyRegion );
+		}
+
+		void __fastcall LockCursor( ISurface* pThisClass, void* edx )
+		{
+			static auto fnOriginal = hkSurface->GetOriginalFunction< Types::lockcursor_t >( uLockCursor );
+
+			if ( Render::bShouldRender )
+				return pSurface->UnlockCursor( );
+			return fnOriginal( pThisClass );
 		}
 	}
 }

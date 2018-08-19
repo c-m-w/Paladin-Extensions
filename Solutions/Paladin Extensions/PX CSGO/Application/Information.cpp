@@ -60,7 +60,8 @@ namespace PX::Information
 			} while( !mEngine.Setup( Tools::string_cast< std::wstring >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Engine" ) ].get< std::string >( ) ) )
 				|| !mClient.Setup( Tools::string_cast< std::wstring >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Client" ) ].get< std::string >( ) ) )
 				|| !mDirectX.Setup( Tools::string_cast< std::wstring >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "DirectX API" ) ].get< std::string >( ) ) )
-				|| !mOverlay.Setup( Tools::string_cast< std::wstring >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Overlay" ) ].get< std::string >( ) ) ) );
+				|| !mOverlay.Setup( Tools::string_cast< std::wstring >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Overlay" ) ].get< std::string >( ) ) )
+				|| !mVGUI.Setup( Tools::string_cast< std::wstring >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "VGUI" ) ].get< std::string >( ) ) ) );
 			return true;
 		}
 	}
@@ -69,22 +70,18 @@ namespace PX::Information
 	{
 		bool PX_API Setup( )
 		{
-			std::cout << "Pattern: " << jsMemoryInformation[ "Patterns" ][ "Signatures" ][ "Device" ].get< std::string >( ) << std::endl;
-			std::cout << "Offset: " << jsMemoryInformation[ "Patterns" ][ "Offsets" ][ "Device" ].get< int >( ) << std::endl;
-
-			const auto ptrDeviceAddress = Modules::mDirectX.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Device" ) ].get< std::string >( ) )
-				+ jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Device" ) ].get< int >( );
-			std::cout << "Found Address: " << ptrDeviceAddress << std::endl;
-
-			pDevice = **reinterpret_cast< IDirect3DDevice9*** >( ptrDeviceAddress );
+			pDevice = **reinterpret_cast< IDirect3DDevice9*** >( Modules::mDirectX.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Device" ) ].get< std::string >( ) )
+																 + jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Device" ) ].get< int >( ) );
 
 			pClientBase = reinterpret_cast< IBaseClientDLL* >( Modules::mClient.ciFactory( 
 				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Client Base" ) ].get< std::string >( ).c_str( ), nullptr ) );
-			std::cout << "Device: " << Types::ptr_t( pDevice ) << std::endl;
-			std::cout << "Client Base: " << Types::ptr_t( pClientBase ) << std::endl;
+
+			pSurface = reinterpret_cast< ISurface* >( Modules::mVGUI.ciFactory(
+				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "VGUI Surface" ) ].get< std::string >( ).c_str( ), nullptr ) );
 
 			return pDevice != nullptr
-				&& pClientBase != nullptr;
+				&& pClientBase != nullptr
+				&& pSurface != nullptr;
 		}
 	}
 }

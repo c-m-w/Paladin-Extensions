@@ -89,12 +89,12 @@ namespace PX::UI
 		/**	\param fntDesiredFont Desired font enumeration index. */
 		void PX_API SetFont( EFont fntDesiredFont );
 		/** \brief Clean up the GUI library for shutdown. */
-		void PX_API OnRelease( );
+		void PX_API Release( );
 		/** \brief Sets a new size for the GUI window. */
 		void PX_API Resize( unsigned, unsigned );
-		void PX_API OnDeviceReset( );
+		void PX_API Reset( );
 		/** \brief Handles events to interact with the GUI. */
-		bool PX_API OnEvent( HWND, UINT, WPARAM, LPARAM );
+		bool PX_API HandleEvent( HWND, UINT, WPARAM, LPARAM );
 		/** \brief Render the GUI. */
 		/**	\return true - GUI should be drawn again.\n false - GUI should not be drawn again. */
 		bool PX_API Render( );

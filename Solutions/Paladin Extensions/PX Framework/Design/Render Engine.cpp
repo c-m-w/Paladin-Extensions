@@ -15,27 +15,35 @@ namespace PX::Render
 		{
 			case WM_NCCREATE:
 			case WM_CREATE:
-				pWindowInformation = LPCREATESTRUCT( llParam );
-				return true;
+				if ( bCreatedWindow )
+				{
+					pWindowInformation = LPCREATESTRUCT( llParam );
+					return true;
+				}
 
 			case WM_IME_SETCONTEXT:
-				ShowWindow( _hwWindowHandle, SW_RESTORE );
-				bMinimized = false;
-				return true;
+				if ( bCreatedWindow )
+				{
+					ShowWindow( _hwWindowHandle, SW_RESTORE );
+					bMinimized = false;
+					return true;
+				}
 
 			case WM_DESTROY:
-				PostQuitMessage( 0 );
-				return 0;
+				if ( bCreatedWindow )
+				{
+					PostQuitMessage( 0 );
+					return 0;
+				}
 
 			case WM_SIZE:
-				if ( pDevice && bCreatedWindow )
+				if ( bCreatedWindow && pDevice )
 				{
 					const auto uWidth = LOWORD( llParam );
 					const auto uHeight = HIWORD( llParam );
 					if ( uWidth != 0 && uHeight != 0 &&
 						( uWidth != dxParameters.BackBufferWidth || uHeight != dxParameters.BackBufferHeight ) )
 					{
-						OnRelease( );
 						dxParameters.BackBufferWidth = uWidth;
 						dxParameters.BackBufferHeight = uHeight;
 						const auto hrReset = pDevice->Reset( &dxParameters );
@@ -48,10 +56,10 @@ namespace PX::Render
 				break;
 		}
 
-		if ( OnEvent( _hwWindowHandle, uMessage, uwParam, llParam ) && !uOldWindowProc )
+		if ( bShouldRender && HandleEvent( _hwWindowHandle, uMessage, uwParam, llParam ) )
 			return true;
 		if ( !uOldWindowProc )
-			return  DefWindowProc( _hwWindowHandle, uMessage, uwParam, llParam );
+			return DefWindowProc( _hwWindowHandle, uMessage, uwParam, llParam );
 		return CallWindowProc( reinterpret_cast< WNDPROC >( uOldWindowProc ), _hwWindowHandle, uMessage, uwParam, llParam );
 	}
 

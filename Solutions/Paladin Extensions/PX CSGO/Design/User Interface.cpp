@@ -4,6 +4,24 @@
 
 namespace PX::UI::Manager
 {
+	namespace CSGO
+	{
+		bool PX_API Initialize( )
+		{
+			unsigned uDimensions[ 2 ] { 720, 600 };
+
+			PX_INPUT.AddKeyCallback( VK_HOME, [ = ]( bool bIsPressed )
+			{
+				if( bIsPressed )
+					Render::bShouldRender = !Render::bShouldRender;
+				while( ShowCursor( true ) <= 0 );
+			} );
+
+			return Render::InitializeRenderTarget( Information::Interfaces::pDevice, uDimensions )
+				&& InitializeUI( PX_XOR( "CS: GO" ) );
+		}
+	}
+
 	void PX_API SetLayout( )
 	{
 		Example( );
@@ -11,11 +29,5 @@ namespace PX::UI::Manager
 
 	void PX_API DrawOther( )
 	{
-		std::deque< D3DXVECTOR2 > dqPoints;
-		dqPoints.emplace_back( 0, 0 );
-		dqPoints.emplace_back( 100, 0 );
-		dqPoints.emplace_back( 100, 100 );
-		dqPoints.emplace_back( 600, 600 );
-		Drawing::Line( dqPoints, 5, D3DCOLOR_ARGB( 150, 0, 0, 255 ) );
 	}
 }
