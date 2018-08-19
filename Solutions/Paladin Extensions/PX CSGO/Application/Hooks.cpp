@@ -7,8 +7,6 @@
 
 void PrintD3DeviceInfo( IDirect3DDevice9* pDeviceParameter )
 {
-	system( "cls" );
-
 	DWORD dwFVF;
 	pDeviceParameter->GetFVF( &dwFVF );
 	PX_PRINT( dwFVF );
@@ -219,9 +217,6 @@ namespace PX
 
 		HRESULT __stdcall EndScene( IDirect3DDevice9* pDeviceParameter )
 		{
-			PrintD3DeviceInfo( pDeviceParameter );
-			Tools::Wait( 100 );
-
 			static auto fnOriginal = hkDirectXDevice->GetOriginalFunction< Types::endscene_t >( uEndScene );
 			static auto ptrDesiredReturnAddress = 0u;
 			const auto ptrReturnAddress = Types::ptr_t( _ReturnAddress( ) );
@@ -236,8 +231,6 @@ namespace PX
 			{
 				static IDirect3DStateBlock9* pState = nullptr;
 				IDirect3DStateBlock9* pCurrentState = nullptr;
-				IDirect3DVertexDeclaration9* pVertexDeclaration = nullptr;
-				IDirect3DVertexShader9* pVertexShader = nullptr;
 
 				if ( !pState )
 					pDevice->CreateStateBlock( D3DSBT_ALL, &pState );
@@ -245,23 +238,13 @@ namespace PX
 
 				pState->Apply( );
 
-				px_assert( D3D_OK == pDevice->GetVertexDeclaration( &pVertexDeclaration )
-							&& D3D_OK == pDevice->GetVertexShader( &pVertexShader )
-
-							&& D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP )
-							&& D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_ADDRESSV, D3DTADDRESS_WRAP )
-							&& D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_ADDRESSW, D3DTADDRESS_WRAP )
-							&& D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_SRGBTEXTURE, NULL ) );
-
 				if ( Render::bShouldRender )
 					UI::Manager::Render( );
-
-				px_assert( D3D_OK == pDevice->SetVertexDeclaration( pVertexDeclaration )
-						   && D3D_OK == pDevice->SetVertexShader( pVertexShader ) );
 
 				pCurrentState->Apply( );
 				pCurrentState->Release( );
 			}
+
 			std::cout << "EndScene has been called." << std::endl;
 			return fnOriginal( pDeviceParameter );
 		}
@@ -269,12 +252,18 @@ namespace PX
 		HRESULT __stdcall Reset( IDirect3DDevice9* pDeviceParameter, D3DPRESENT_PARAMETERS* pParams )
 		{
 			static auto fnOriginal = hkDirectXDevice->GetOriginalFunction< Types::reset_t  >( uReset );
-
-			const auto hrReset = fnOriginal( pDeviceParameter, pParams );
-			if ( SUCCEEDED( hrReset ) )
-				UI::Manager::Reset( );
+			static auto iOldWindowWidth = -1, iOldWindowHeight = -1;
 
 			std::cout << "Reset has been called." << std::endl;
+
+			if ( pParams )
+				Render::dxParameters = *pParams;
+
+			UI::Manager::Reset( );
+			const auto hrReset = fnOriginal( pDeviceParameter, pParams );
+			if( SUCCEEDED( hrReset ) )
+				UI::Manager::PostReset( Render::uWindowWidth, Render::uWindowHeight );
+
 			return hrReset;
 		}
 

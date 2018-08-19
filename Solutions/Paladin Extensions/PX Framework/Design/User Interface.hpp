@@ -91,8 +91,8 @@ namespace PX::UI
 		/** \brief Clean up the GUI library for shutdown. */
 		void PX_API Release( );
 		/** \brief Sets a new size for the GUI window. */
-		void PX_API Resize( unsigned, unsigned );
 		void PX_API Reset( );
+		void PX_API PostReset( unsigned uWidth, unsigned uHeight );
 		/** \brief Handles events to interact with the GUI. */
 		bool PX_API HandleEvent( HWND, UINT, WPARAM, LPARAM );
 		/** \brief Render the GUI. */

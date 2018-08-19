@@ -315,14 +315,16 @@ namespace PX::UI
 			nk_d3d9_release( );
 		}
 
-		void PX_API Resize( unsigned uWidth, unsigned uHeight )
-		{
-			nk_d3d9_resize( uWidth, uHeight );
-		}
-
 		void PX_API Reset( )
 		{
-			nk_d3d9_create_font_texture( );
+			pBufferSprite->OnLostDevice( );
+			nk_d3d9_release( );
+		}
+
+		void PX_API PostReset( unsigned uWidth, unsigned uHeight )
+		{
+			pBufferSprite->OnResetDevice( );
+			nk_d3d9_resize( uWidth, uHeight );
 		}
 
 		bool PX_API HandleEvent( HWND h, UINT msg, WPARAM w, LPARAM l )
