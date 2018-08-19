@@ -3,10 +3,12 @@
 #include "../PX CSGO.hpp"
 
 #define PX_PRINT( var ) std::cout << #var << ": " << var << std::endl;
-#define PX_PRINT_ENUM( var, enum_type ) std::cout << std::string( #var ).substr( 0, std::string( #var ).find_last_of( '[' ) ) << "[ " << enum_type << " ]: " << var;
+#define PX_PRINT_ENUM( var, enum_type ) std::cout << std::string( #var ).substr( 0, std::string( #var ).find_last_of( '[' ) ) << "[ " << enum_type << " ]: " << var << std::endl;
 
 void PrintD3DeviceInfo( IDirect3DDevice9* pDeviceParameter )
 {
+	system( "cls" );
+
 	DWORD dwFVF;
 	pDeviceParameter->GetFVF( &dwFVF );
 	PX_PRINT( dwFVF );
@@ -154,10 +156,11 @@ void PrintD3DeviceInfo( IDirect3DDevice9* pDeviceParameter )
 	};
 	std::vector< DWORD > vecRenderStates;
 	vecRenderStates.resize( vecRenderStateTypes.size( ) );
-	for each ( auto rsType in vecRenderStateTypes )
-		pDeviceParameter->GetRenderState( rsType, &vecRenderStates[ rsType ] );
-	for each ( auto rsType in vecRenderStateTypes )
-		PX_PRINT_ENUM( vecRenderStateTypes[ rsType ], rsType );
+	for ( auto u = 0u; u < vecRenderStateTypes.size( ); u++ )
+	{
+		pDeviceParameter->GetRenderState( vecRenderStateTypes.at( u ), &vecRenderStates[ u ] );
+		PX_PRINT_ENUM( vecRenderStateTypes[ u ], u );
+	}
 
 	std::vector< D3DSAMPLERSTATETYPE > vecSamplerStateTypes {
 		D3DSAMP_ADDRESSU,
@@ -177,10 +180,11 @@ void PrintD3DeviceInfo( IDirect3DDevice9* pDeviceParameter )
 	};
 	std::vector< DWORD > vecSamplerStates;
 	vecSamplerStates.resize( vecSamplerStateTypes.size( ) );
-	for each ( auto ssType in vecSamplerStateTypes )
-		pDeviceParameter->GetSamplerState( NULL, ssType, &vecSamplerStates[ ssType ] );
-	for each ( auto ssType in vecSamplerStateTypes )
-		PX_PRINT_ENUM( vecSamplerStateTypes[ ssType ], ssType );
+	for ( auto u = 0u; u < vecSamplerStateTypes.size( ); u++ )
+	{
+		pDeviceParameter->GetSamplerState( NULL, vecSamplerStateTypes.at( u ), &vecSamplerStates[ u ] );
+		PX_PRINT_ENUM( vecSamplerStateTypes[ u ], u );
+	}
 
 	BOOL bSoftwareVertexProcessing = pDeviceParameter->GetSoftwareVertexProcessing( );
 	PX_PRINT( bSoftwareVertexProcessing );
@@ -210,6 +214,9 @@ namespace PX
 
 		HRESULT __stdcall EndScene( IDirect3DDevice9* pDeviceParameter )
 		{
+			PrintD3DeviceInfo( pDeviceParameter );
+			Tools::Wait( 100 );
+
 			static auto fnOriginal = hkDirectXDevice->GetOriginalFunction< Types::endscene_t >( uEndScene );
 			static auto ptrDesiredReturnAddress = 0u;
 			const auto ptrReturnAddress = Types::ptr_t( _ReturnAddress( ) );
