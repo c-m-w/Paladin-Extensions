@@ -32,17 +32,14 @@ namespace PX::UI
 		{
 			static std::string strFontDirectory( PX_XOR( R"(C:\Windows\Fonts\)" ) );
 
-			nk_d3d9_font_stash_begin( &pAtlas );
 			auto pFont = nk_font_atlas_add_from_file( pAtlas, ( strFontDirectory + strFontFileName ).c_str( ), float( uFontSize ), nullptr );
 			nk_font_atlas_add_from_file( pAtlas, ( strFontDirectory + PX_XOR( "FontAwesome.ttf" ) ).c_str( ), uFontAwesomeSize ? float( uFontAwesomeSize ) : float( uFontSize ), &fcFontConfiguration );
-			nk_d3d9_font_stash_end( );
 			return pFont;
 		}
 
 		void PX_API InitializeNuklear( )
 		{
 			pContext = nk_d3d9_init( pDevice, uWindowWidth, uWindowHeight );
-
 			//
 			// We only need a font configuration for FontAwesome because it needs font merging and a specific glyph range.
 			//
@@ -54,6 +51,7 @@ namespace PX::UI
 			fcFontAwesomeConfiguration.range = rnIconRange;
 			fcFontAwesomeConfiguration.merge_mode = 1;
 
+			nk_d3d9_font_stash_begin( &pAtlas );
 			pRoboto = AddFont( PX_XOR( "Roboto-Regular.ttf" ), 26, fcFontAwesomeConfiguration );
 			pRobotoBold = AddFont( PX_XOR( "RobotoBold.ttf" ), 24, fcFontAwesomeConfiguration );
 			pRobotoSmall = AddFont( PX_XOR( "Roboto-Regular.ttf" ), 16, fcFontAwesomeConfiguration, 14 );
@@ -61,6 +59,8 @@ namespace PX::UI
 			pTahoma = AddFont( PX_XOR( "tahoma.ttf" ), 16, fcFontAwesomeConfiguration );
 			pTahomaBold = AddFont( PX_XOR( "tahomabd.ttf" ), 16, fcFontAwesomeConfiguration );
 			pEnvy = AddFont( PX_XOR( "Envy.ttf" ), 14, fcFontAwesomeConfiguration );
+			nk_d3d9_font_stash_end( );
+
 
 			clrColorTable[ NK_COLOR_TEXT ] = nk_rgba( 255, 255, 255, 255 );
 			clrColorTable[ NK_COLOR_WINDOW ] = nk_rgba( 45, 50, 56, 255 );
@@ -258,14 +258,18 @@ namespace PX::UI
 			strcpy( szNuklearWindowTitle, _szApplicationTitle );
 			InitializeNuklear( );
 
-			vecTextures.emplace_back( 32, 29 ); // TEXTURE_LOGO
-			vecTextures.emplace_back( 720, 394 ); // TEXTURE_LOGO_LOADING
-			vecTextures.emplace_back( 100, 100 ); // TEXTURE_ICON_CSGO
-			vecTextures.emplace_back( 100, 100 ); // TEXTURE_ICON_PUBG
-			vecTextures.emplace_back( 100, 100 ); // TEXTURE_ICON_RSIX
-			vecTextures.emplace_back( 50, 50 ); // TEXTURE_CURSOR_ARROW
-			vecTextures.emplace_back( 50, 50 ); // TEXTURE_CURSOR_HAND
-			vecTextures.emplace_back( 50, 50 ); // TEXTURE_CURSOR_IBEAM
+			vecTextures.emplace_back( 32, 29, PX_XOR( LR"(Paladin Logo Small.png)" ) ); // TEXTURE_LOGO
+			vecTextures.emplace_back( 720, 394, PX_XOR( LR"(Paladin Logo Loading.png)" ) ); // TEXTURE_LOGO_LOADING
+			vecTextures.emplace_back( 100, 100, PX_XOR( LR"(Game Icons\CSGO Sized.png)" ) ); // TEXTURE_ICON_CSGO
+			vecTextures.emplace_back( 100, 100, PX_XOR( LR"(Game Icons\PUBG Sized.png)" ) ); // TEXTURE_ICON_PUBG
+			vecTextures.emplace_back( 100, 100, PX_XOR( LR"(Game Icons\RSIX Sized.png)" ) ); // TEXTURE_ICON_RSIX
+			vecTextures.emplace_back( 50, 50, PX_XOR( LR"(Cursor\Arrow.png)" ) ); // TEXTURE_CURSOR_ARROW
+			vecTextures.emplace_back( 50, 50, PX_XOR( LR"(Cursor\Hand.png)" ) ); // TEXTURE_CURSOR_HAND
+			vecTextures.emplace_back( 50, 50, PX_XOR( LR"(Cursor\I Beam.png)" ) ); // TEXTURE_CURSOR_IBEAM
+
+
+			return !vecTextures.empty( )
+					&& D3DXCreateSprite( pDevice, &pBufferSprite ) == D3D_OK;
 
 			return D3DXCreateTextureFromFileEx( pDevice, ( GetPXDirectory( ) + PX_XOR( LR"(Resources\Paladin Logo Small.png)" ) ).c_str( ), vecTextures[ TEXTURE_LOGO ].uWidth,
 												vecTextures[ TEXTURE_LOGO ].uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL,
@@ -290,8 +294,7 @@ namespace PX::UI
 												&vecTextures[ TEXTURE_CURSOR_HAND ].iiImage, nullptr, &vecTextures[ TEXTURE_CURSOR_HAND ].pTexture ) == D3D_OK
 				&& D3DXCreateTextureFromFileEx( pDevice, ( GetPXDirectory( ) + PX_XOR( LR"(Resources\Cursor\I Beam.png)" ) ).c_str( ), vecTextures[ TEXTURE_CURSOR_IBEAM ].uWidth,
 												vecTextures[ TEXTURE_CURSOR_IBEAM ].uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL,
-												&vecTextures[ TEXTURE_CURSOR_IBEAM ].iiImage, nullptr, &vecTextures[ TEXTURE_CURSOR_IBEAM ].pTexture ) == D3D_OK
-				&& D3DXCreateSprite( pDevice, &pBufferSprite ) == D3D_OK;
+												&vecTextures[ TEXTURE_CURSOR_IBEAM ].iiImage, nullptr, &vecTextures[ TEXTURE_CURSOR_IBEAM ].pTexture ) == D3D_OK;
 		}
 
 		struct nk_vec2 PX_API CalculateTextBounds( cstr_t szText, unsigned uRowHeight /*= 30*/ )
@@ -313,18 +316,14 @@ namespace PX::UI
 		void PX_API Release( )
 		{
 			nk_d3d9_release( );
-		}
-
-		void PX_API Reset( )
-		{
 			pBufferSprite->OnLostDevice( );
-			nk_d3d9_release( );
 		}
 
-		void PX_API PostReset( unsigned uWidth, unsigned uHeight )
+		void PX_API Reset( unsigned uWidth, unsigned uHeight )
 		{
+			nk_d3d9_create_font_texture( );
+			D3DXCreateSprite( pDevice, &pBufferSprite );
 			pBufferSprite->OnResetDevice( );
-			nk_d3d9_resize( uWidth, uHeight );
 		}
 
 		bool PX_API HandleEvent( HWND h, UINT msg, WPARAM w, LPARAM l )
@@ -387,10 +386,29 @@ namespace PX::UI
 
 		void PX_API DrawTextures( )
 		{
+			auto fnCreateTextures = [ ]( std::vector< texture_t >& textures )
+			{
+				for each( auto& texTexture in textures )
+					if ( D3DXCreateTextureFromFileEx( pDevice, ( GetPXDirectory( ) + PX_XOR( LR"(Resources\)" ) + texTexture.wstrFileName ).c_str( ), texTexture.uWidth,
+													  texTexture.uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL,
+													  const_cast< D3DXIMAGE_INFO* >( &texTexture.iiImage ), nullptr, const_cast< IDirect3DTexture9** >( &texTexture.pTexture ) ) != D3D_OK )
+						return false;
+				return true;
+			};
+
+			if ( !fnCreateTextures( vecTextures ) )
+				return;
+
+			vecImageQueue.clear( );
+			return;
+
 			if ( pBufferSprite->Begin( D3DXSPRITE_ALPHABLEND ) == D3D_OK )
 			{
 				for each( const auto& texture in vecImageQueue )
+				{
 					pBufferSprite->Draw( vecTextures[ texture.iTexture ].pTexture, nullptr, nullptr, &texture.vecLocation, texture.clrColor );
+					vecTextures[ texture.iTexture ].pTexture->Release( );
+				}
 				pBufferSprite->End( );
 			}
 			vecImageQueue.clear( );
@@ -455,9 +473,9 @@ namespace PX::UI
 			pState->Apply( );
 			pState->Release( );
 
+			ApplyCursor( );
 			DrawTextures( );
 			DrawOther( );
-			ApplyCursor( );
 
 			if ( bCreatedWindow )
 			{

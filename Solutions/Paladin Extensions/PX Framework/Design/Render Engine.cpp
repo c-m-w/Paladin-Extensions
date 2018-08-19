@@ -53,7 +53,7 @@ namespace PX::Render
 						dxParameters.BackBufferWidth = uWidth;
 						dxParameters.BackBufferHeight = uHeight;
 						px_assert( SUCCEEDED( pDevice->Reset( &dxParameters ) ) );
-						PostReset( uWidth, uHeight );
+						Reset( uWidth, uHeight );
 					}
 				}
 				break;

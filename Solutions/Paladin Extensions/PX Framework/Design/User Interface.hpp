@@ -39,11 +39,13 @@ namespace PX::UI
 			unsigned uWidth, uHeight;
 			LPDIRECT3DTEXTURE9 pTexture;
 			D3DXIMAGE_INFO iiImage;
-			texture_t( unsigned _uWidth, unsigned _uHeight, LPDIRECT3DTEXTURE9 _pTexture = nullptr ): iiImage( D3DXIMAGE_INFO( ) )
+			std::wstring wstrFileName;
+			texture_t( unsigned _uWidth, unsigned _uHeight, std::wstring _wstrFileName, LPDIRECT3DTEXTURE9 _pTexture = nullptr ): iiImage( D3DXIMAGE_INFO( ) )
 			{
 				uWidth = _uWidth;
 				uHeight = _uHeight;
 				pTexture = _pTexture;
+				wstrFileName = _wstrFileName;
 			}
 		};
 
@@ -91,8 +93,7 @@ namespace PX::UI
 		/** \brief Clean up the GUI library for shutdown. */
 		void PX_API Release( );
 		/** \brief Sets a new size for the GUI window. */
-		void PX_API Reset( );
-		void PX_API PostReset( unsigned uWidth, unsigned uHeight );
+		void PX_API Reset( unsigned uWidth, unsigned uHeight );
 		/** \brief Handles events to interact with the GUI. */
 		bool PX_API HandleEvent( HWND, UINT, WPARAM, LPARAM );
 		/** \brief Render the GUI. */
@@ -216,7 +217,7 @@ namespace PX::UI
 		void PX_API ColorPicker( );
 		/** \brief Creates a color button that the user can set the color for if clicked.\n The color picker is handled automatically if the button is clicked.\n Uses one column. */
 		/**	\param szSubject What the color is for. */
-		/**	\param pColor Pointer to the color that will be edited if the button is clicked. */
+		/**	\param pSequence Pointer to the color that will be edited if the button is clicked. */
 		void PX_API ColorButton( Types::cstr_t szSubject, Types::color_sequence_t* pSequence );
 
 		/** \brief Creates a combobox for the user to select an option within.\n Uses one column. */

@@ -229,20 +229,15 @@ namespace PX
 
 			if ( ptrDesiredReturnAddress == ptrReturnAddress )
 			{
-				static IDirect3DStateBlock9* pState = nullptr;
-				IDirect3DStateBlock9* pCurrentState = nullptr;
+				//static IDirect3DStateBlock9* pState = nullptr;
 
-				if ( !pState )
-					pDevice->CreateStateBlock( D3DSBT_ALL, &pState );
-				pDevice->CreateStateBlock( D3DSBT_ALL, &pCurrentState );
+				//if ( !pState )
+				//	pDevice->CreateStateBlock( D3DSBT_ALL, &pState );
 
-				pState->Apply( );
+				//pState->Apply( );
 
 				if ( Render::bShouldRender )
 					UI::Manager::Render( );
-
-				pCurrentState->Apply( );
-				pCurrentState->Release( );
 			}
 
 			std::cout << "EndScene has been called." << std::endl;
@@ -259,10 +254,10 @@ namespace PX
 			if ( pParams )
 				Render::dxParameters = *pParams;
 
-			UI::Manager::Reset( );
+			UI::Manager::Release( );
 			const auto hrReset = fnOriginal( pDeviceParameter, pParams );
 			if( SUCCEEDED( hrReset ) )
-				UI::Manager::PostReset( Render::uWindowWidth, Render::uWindowHeight );
+				UI::Manager::Reset( Render::uWindowWidth, Render::uWindowHeight );
 
 			return hrReset;
 		}
