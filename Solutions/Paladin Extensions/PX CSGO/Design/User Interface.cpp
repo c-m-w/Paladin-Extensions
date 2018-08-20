@@ -154,24 +154,242 @@ void PrintD3DeviceInfo( IDirect3DDevice9* pDeviceParameter )
 		D3DTSS_CONSTANT
 	};
 
-	DWORD dwValue;
+#define print( var ) ( std::cout << #var << ": " << var << std::endl )
+#define printn( var, num ) ( std::cout << #var << "[ " << num << " ]: " << var << std::endl )
+	print( pDeviceParameter->GetAvailableTextureMem( ) );
+	{
+		struct anon
+		{
+			DWORD FVF;
+		} *pDevice = new anon;
+		pDeviceParameter->GetFVF( &pDevice->FVF );
+		delete pDevice;
+	}
+	print( pDeviceParameter->GetNPatchMode( ) );
+	{
+		struct anon
+		{
+			D3DMATERIAL9 Material;
+		} *pDevice = new anon;
+		pDeviceParameter->GetMaterial( &pDevice->Material );
+		print( pDevice->Material.Ambient.a );
+		print( pDevice->Material.Ambient.b );
+		print( pDevice->Material.Ambient.g );
+		print( pDevice->Material.Ambient.r );
+		print( pDevice->Material.Diffuse.a );
+		print( pDevice->Material.Diffuse.b );
+		print( pDevice->Material.Diffuse.g );
+		print( pDevice->Material.Diffuse.r );
+		print( pDevice->Material.Emissive.a );
+		print( pDevice->Material.Emissive.b );
+		print( pDevice->Material.Emissive.g );
+		print( pDevice->Material.Emissive.r );
+		print( pDevice->Material.Power );
+		print( pDevice->Material.Specular.a );
+		print( pDevice->Material.Specular.b );
+		print( pDevice->Material.Specular.g );
+		print( pDevice->Material.Specular.r );
+		delete pDevice;
+	}
+	//{
+	//	struct anon
+	//	{
+	//		IDirect3DPixelShader9* PixelShader;
+	//	} *pDevice = new anon;
+	//	pDeviceParameter->GetPixelShader( &pDevice->PixelShader );
+	//	void* pData = NULL;
+	//	pDevice->PixelShader->GetFunction( pData, NULL );
+	//	void* pDevicePixelShaderGetFunctionData = NULL;
+	//	pDevice->PixelShader->GetFunction( pDevicePixelShaderGetFunctionData, static_cast< UINT* >( pData ) );
+	//	print( pDevicePixelShaderGetFunctionData );
+	//	delete pDevice;
+	//}
+	print( pDeviceParameter->GetNumberOfSwapChains( ) );
+	const UINT uSwapChains = pDeviceParameter->GetNumberOfSwapChains( );
+	{
+		struct anon
+		{
+			std::vector< D3DRASTER_STATUS > RasterStatus;
+		} *pDevice = new anon;
+		pDevice->RasterStatus.resize( uSwapChains );
+		for ( auto u = 0u; u < uSwapChains; u++ )
+			pDeviceParameter->GetRasterStatus( u, &pDevice->RasterStatus[ u ] );
+		for ( auto u = 0u; u < uSwapChains; u++ )
+		{
+			printn( pDevice->RasterStatus.at( u ).InVBlank, u );
+			printn( pDevice->RasterStatus.at( u ).ScanLine, u );
+		}
+		delete pDevice;
+	}
+	{
+		struct anon
+		{
+			std::vector< IDirect3DSurface9* > Type;
+		} *pDevice = new anon;
+		pDevice->Type.resize( uSwapChains );
+		for ( auto u = 0u; u < uSwapChains; u++ )
+			pDeviceParameter->GetBackBuffer( u, 0, D3DBACKBUFFER_TYPE_MONO, &pDevice->Type[ u ] );
+		std::cout << "\t\tBACK BUFFER" << std::endl;
+		for ( auto u = 0u; u < uSwapChains; u++ )
+		{
+			printn( pDevice->Type.at( u )->DCCount, u );
+			printn( pDevice->Type.at( u )->Format, u );
+			void* pContainerIID;
+			IID bufIID;
+			pDevice->Type.at( u )->GetContainer( bufIID, &pContainerIID );
+			printn( pContainerIID, u );
+			printn( bufIID.Data1, u );
+			printn( bufIID.Data2, u );
+			printn( bufIID.Data3, u );
+			printn( bufIID.Data4, u );
+			HDC bufHDC;
+			pDevice->Type.at( u )->GetDC( &bufHDC );
+			printn( bufHDC->unused, u );
+			D3DSURFACE_DESC bufDESC;
+			pDevice->Type.at( u )->GetDesc( &bufDESC );
+			printn( bufDESC.Format, u );
+			printn( bufDESC.Usage, u );
+			printn( bufDESC.Type, u );
+			printn( bufDESC.Height, u );
+			printn( bufDESC.Width, u );
+			printn( bufDESC.MultiSampleQuality, u );
+			printn( bufDESC.MultiSampleType, u );
+			printn( bufDESC.Pool, u );
+			printn( pDevice->Type.at( u )->Name, u );
+			printn( pDevice->Type.at( u )->GetType( ), u );
+			printn( pDevice->Type.at( u )->Usage, u );
+			printn( pDevice->Type.at( u )->Width, u );
+		}
+		std::cout << "\t\tEND BACK BUFFER" << std::endl;
+		delete pDevice;
+	}
+	print( pDeviceParameter->GetSoftwareVertexProcessing( ) );
+	{
+		struct anon
+		{
+			float ClipPlane;
+		} *pDevice = new anon;
+		for ( auto u = 0; u < 24; u++ )
+		{
+			pDeviceParameter->GetClipPlane( u, &pDevice->ClipPlane );
+			printn( pDevice->ClipPlane, u );
+		}
+		delete pDevice;
+	}
+	{
+		struct anon
+		{
+			D3DCLIPSTATUS9 ClipStatus;
+		} *pDevice = new anon;
+		pDeviceParameter->GetClipStatus( &pDevice->ClipStatus );
+		print( pDevice->ClipStatus.ClipIntersection );
+		print( pDevice->ClipStatus.ClipUnion );
+		delete pDevice;
+	}
+	{
+		struct anon
+		{
+			D3DDEVICE_CREATION_PARAMETERS CreationParameters;
+		} *pDevice = new anon;
+		pDeviceParameter->GetCreationParameters( &pDevice->CreationParameters );
+		print( pDevice->CreationParameters.AdapterOrdinal );
+		print( pDevice->CreationParameters.BehaviorFlags );
+		print( pDevice->CreationParameters.DeviceType );
+		print( pDevice->CreationParameters.hFocusWindow );
+		delete pDevice;
+	}
+	{
+		struct anon
+		{
+			UINT CurrentTexturePalette;
+		} *pDevice = new anon;
+		pDeviceParameter->GetCurrentTexturePalette( &pDevice->CurrentTexturePalette );
+		print( pDevice->CurrentTexturePalette );
+		delete pDevice;
+	}
+	{
+		struct anon
+		{
+			IDirect3DSurface9* DepthStencilSurface;
+		} *pDevice = new anon;
+		pDeviceParameter->GetDepthStencilSurface( &pDevice->DepthStencilSurface );
+		print( pDevice->DepthStencilSurface ); // ??????
+		delete pDevice;
+	}
+
+	
+	
+	/*
+	{
+		struct anon
+		{
+			____ NAME;
+		} *pDevice = new anon;
+		pDeviceParameter->Get( &pDevice->NAME );
+		print( pDevice->NAME );
+		delete pDevice;
+	}
+	*/
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	for ( auto uState : uVertexRenderStates )
 	{
-		pDeviceParameter->GetRenderState( uState, &dwValue );
-		std::cout << "Render State " << uState << ": " << dwValue << std::endl;
+		struct anon
+		{
+			DWORD RenderState;
+		} *pDevice = new anon;
+		pDeviceParameter->GetRenderState( uState, &pDevice->RenderState );
+
+		printn( pDevice->RenderState, uState );
+		delete pDevice;
 	}
 
 	for ( auto uState : uSamplerStates )
 	{
-		pDeviceParameter->GetSamplerState( NULL, uState, &dwValue );
-		std::cout << "Sampler State " << uState << ": " << dwValue << std::endl;
+		struct anon
+		{
+			DWORD SamplerState;
+		} *pDevice = new anon;
+		pDeviceParameter->GetSamplerState( NULL, uState, &pDevice->SamplerState );
+
+		printn( pDevice->SamplerState, uState );
+		delete pDevice;
 	}
 
 	for ( auto uState : uTextureStates )
 	{
-		pDeviceParameter->GetTextureStageState( NULL, uState, &dwValue );
-		std::cout << "Texture State " << uState << ": " << dwValue << std::endl;
+		struct anon
+		{
+			DWORD TextureStageState;
+		} *pDevice = new anon;
+		pDeviceParameter->GetTextureStageState( NULL, uState, &pDevice->TextureStageState );
+
+		printn( pDevice->TextureStageState, uState );
+		delete pDevice;
 	}
+
+#undef print
 }
 
 namespace PX::UI::Manager
