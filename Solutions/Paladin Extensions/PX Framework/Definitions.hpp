@@ -94,6 +94,10 @@
 #define PX_DEPENDENCIES_ESCAPE 0
 #endif
 
+#if defined _DEBUG
+#define D3D_DEBUG_INFO
+#endif
+
 // Encrypts string data on compile, then decrypts for access on run.
 #if defined NDEBUG
 #define PX_XOR( String ) ( PX::XOR::AXorString< PX::XOR::ACStringTraits< decltype( String ) >::char_trait_t, \

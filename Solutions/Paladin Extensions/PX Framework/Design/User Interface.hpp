@@ -37,10 +37,10 @@ namespace PX::UI
 		struct texture_t
 		{
 			unsigned uWidth, uHeight;
-			LPDIRECT3DTEXTURE9 pTexture;
+			IDirect3DTexture9* pTexture;
 			D3DXIMAGE_INFO iiImage;
 			std::wstring wstrFileName;
-			texture_t( unsigned _uWidth, unsigned _uHeight, std::wstring _wstrFileName, LPDIRECT3DTEXTURE9 _pTexture = nullptr ): iiImage( D3DXIMAGE_INFO( ) )
+			texture_t( unsigned _uWidth, unsigned _uHeight, std::wstring _wstrFileName, IDirect3DTexture9* _pTexture = nullptr ): iiImage( D3DXIMAGE_INFO( ) )
 			{
 				uWidth = _uWidth;
 				uHeight = _uHeight;
@@ -90,10 +90,12 @@ namespace PX::UI
 		/** \brief Sets the font for rendering with Nuklear. */
 		/**	\param fntDesiredFont Desired font enumeration index. */
 		void PX_API SetFont( EFont fntDesiredFont );
-		/** \brief Clean up the GUI library for shutdown. */
-		void PX_API Release( );
-		/** \brief Sets a new size for the GUI window. */
-		void PX_API Reset( unsigned uWidth, unsigned uHeight );
+		/** \brief Frees memory that needs to be before calling IDirect3DDevice9::Reset( ).\n
+					Must be called before reset else it will fail. */
+		void PX_API OnReset( );
+		/** \brief Recreates textures once the IDirect3DDevice9::Reset( ) was successful.\n
+					Must be called after reset succeeds or textures will not be drawn. */
+		void PX_API OnSuccessfulReset( );
 		/** \brief Handles events to interact with the GUI. */
 		bool PX_API HandleEvent( HWND, UINT, WPARAM, LPARAM );
 		/** \brief Render the GUI. */

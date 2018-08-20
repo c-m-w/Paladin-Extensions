@@ -38,12 +38,16 @@
 #pragma comment( lib, "libcurl_a.lib" )
 
 // Direct X
-#include <DirectX/d3d9.h>
-#include <DirectX/d3dx9core.h>
-#include <DirectX/d3dx9math.h>
-#include <DirectX/d3dx9tex.h>
-#pragma comment( lib, "d3d9.lib" )
+#include <d3d9.h>
+#include <d3dx9core.h>
+#include <d3dx9math.h>
+#include <d3dx9tex.h>
+#if defined _DEBUG
+#pragma comment( lib, "d3dx9d.lib" )
+#else
 #pragma comment( lib, "d3dx9.lib" )
+#endif
+#pragma comment( lib, "d3d9.lib" )
 
 // Fonts
 #include <IconFontCppHeaders/IconsFontAwesome5-Solid.hpp>

@@ -252,6 +252,29 @@ namespace PX::UI
 			btnComboActive.touch_padding = nk_vec2( 5, 5 );
 		}
 
+		bool PX_API CreateSpriteTextures( )
+		{
+			for each( auto& texTexture in vecTextures )
+				if ( D3D_OK != D3DXCreateTextureFromFileEx( pDevice, ( GetPXDirectory( ) + PX_XOR( LR"(Resources\)" ) + texTexture.wstrFileName ).c_str( ),
+															texTexture.uWidth, texTexture.uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE,
+															D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL, const_cast< D3DXIMAGE_INFO* >( &texTexture.iiImage ),
+															nullptr, const_cast< IDirect3DTexture9** >( &texTexture.pTexture ) ) )
+					return false;
+			return true;
+		}
+
+		void PX_API DestroySpriteTextures( )
+		{
+			texture_t* texTexture;
+			for ( auto u = 0u; u < vecTextures.size( )
+				  && nullptr != ( texTexture = &vecTextures[ u ] ); u++ )
+				if ( texTexture->pTexture )
+				{
+					texTexture->pTexture->Release( );
+					texTexture->pTexture = nullptr;
+				}
+		}
+
 		bool PX_API InitializeUI( cstr_t _szApplicationTitle )
 		{
 			szNuklearWindowTitle = new char[ strlen( _szApplicationTitle ) + 1 ];
@@ -267,34 +290,9 @@ namespace PX::UI
 			vecTextures.emplace_back( 50, 50, PX_XOR( LR"(Cursor\Hand.png)" ) ); // TEXTURE_CURSOR_HAND
 			vecTextures.emplace_back( 50, 50, PX_XOR( LR"(Cursor\I Beam.png)" ) ); // TEXTURE_CURSOR_IBEAM
 
-
 			return !vecTextures.empty( )
-					&& D3DXCreateSprite( pDevice, &pBufferSprite ) == D3D_OK;
-
-			return D3DXCreateTextureFromFileEx( pDevice, ( GetPXDirectory( ) + PX_XOR( LR"(Resources\Paladin Logo Small.png)" ) ).c_str( ), vecTextures[ TEXTURE_LOGO ].uWidth,
-												vecTextures[ TEXTURE_LOGO ].uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL,
-												&vecTextures[ TEXTURE_LOGO ].iiImage, nullptr, &vecTextures[ TEXTURE_LOGO ].pTexture ) == D3D_OK
-				&& D3DXCreateTextureFromFileEx( pDevice, ( GetPXDirectory( ) + PX_XOR( LR"(Resources\Paladin Logo Loading.png)" ) ).c_str( ), vecTextures[ TEXTURE_LOGO_LOADING ].uWidth,
-												vecTextures[ TEXTURE_LOGO_LOADING ].uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL,
-												&vecTextures[ TEXTURE_LOGO_LOADING ].iiImage, nullptr, &vecTextures[ TEXTURE_LOGO_LOADING ].pTexture ) == D3D_OK
-				&& D3DXCreateTextureFromFileEx( pDevice, ( GetPXDirectory( ) + PX_XOR( LR"(Resources\Game Icons\CSGO Sized.png)" ) ).c_str( ), vecTextures[ TEXTURE_ICON_CSGO ].uWidth,
-												vecTextures[ TEXTURE_ICON_CSGO ].uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL,
-												&vecTextures[ TEXTURE_ICON_CSGO ].iiImage, nullptr, &vecTextures[ TEXTURE_ICON_CSGO ].pTexture ) == D3D_OK
-				&& D3DXCreateTextureFromFileEx( pDevice, ( GetPXDirectory( ) + PX_XOR( LR"(Resources\Game Icons\PUBG Sized.png)" ) ).c_str( ), vecTextures[ TEXTURE_ICON_PUBG ].uWidth,
-												vecTextures[ TEXTURE_ICON_PUBG ].uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL,
-												&vecTextures[ TEXTURE_ICON_PUBG ].iiImage, nullptr, &vecTextures[ TEXTURE_ICON_PUBG ].pTexture ) == D3D_OK
-				&& D3DXCreateTextureFromFileEx( pDevice, ( GetPXDirectory( ) + PX_XOR( LR"(Resources\Game Icons\RSIX Sized.png)" ) ).c_str( ), vecTextures[ TEXTURE_ICON_RSIX ].uWidth,
-												vecTextures[ TEXTURE_ICON_RSIX ].uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL,
-												&vecTextures[ TEXTURE_ICON_RSIX ].iiImage, nullptr, &vecTextures[ TEXTURE_ICON_RSIX ].pTexture ) == D3D_OK
-				&& D3DXCreateTextureFromFileEx( pDevice, ( GetPXDirectory( ) + PX_XOR( LR"(Resources\Cursor\Arrow.png)" ) ).c_str( ), vecTextures[ TEXTURE_CURSOR_ARROW ].uWidth,
-												vecTextures[ TEXTURE_CURSOR_ARROW ].uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL,
-												&vecTextures[ TEXTURE_CURSOR_ARROW ].iiImage, nullptr, &vecTextures[ TEXTURE_CURSOR_ARROW ].pTexture ) == D3D_OK
-				&& D3DXCreateTextureFromFileEx( pDevice, ( GetPXDirectory( ) + PX_XOR( LR"(Resources\Cursor\Hand.png)" ) ).c_str( ), vecTextures[ TEXTURE_CURSOR_HAND ].uWidth,
-												vecTextures[ TEXTURE_CURSOR_HAND ].uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL,
-												&vecTextures[ TEXTURE_CURSOR_HAND ].iiImage, nullptr, &vecTextures[ TEXTURE_CURSOR_HAND ].pTexture ) == D3D_OK
-				&& D3DXCreateTextureFromFileEx( pDevice, ( GetPXDirectory( ) + PX_XOR( LR"(Resources\Cursor\I Beam.png)" ) ).c_str( ), vecTextures[ TEXTURE_CURSOR_IBEAM ].uWidth,
-												vecTextures[ TEXTURE_CURSOR_IBEAM ].uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL,
-												&vecTextures[ TEXTURE_CURSOR_IBEAM ].iiImage, nullptr, &vecTextures[ TEXTURE_CURSOR_IBEAM ].pTexture ) == D3D_OK;
+					&& D3DXCreateSprite( pDevice, &pBufferSprite ) == D3D_OK
+					&& CreateSpriteTextures( );
 		}
 
 		struct nk_vec2 PX_API CalculateTextBounds( cstr_t szText, unsigned uRowHeight /*= 30*/ )
@@ -313,17 +311,17 @@ namespace PX::UI
 			return nk_style_set_font( pContext, &dqFonts[ fntDesiredFont ]->handle );
 		}
 
-		void PX_API Release( )
+		void PX_API OnReset( )
 		{
 			nk_d3d9_release( );
 			pBufferSprite->OnLostDevice( );
+			DestroySpriteTextures( );
 		}
 
-		void PX_API Reset( unsigned uWidth, unsigned uHeight )
+		void PX_API OnSuccessfulReset( )
 		{
-			nk_d3d9_create_font_texture( );
-			D3DXCreateSprite( pDevice, &pBufferSprite );
 			pBufferSprite->OnResetDevice( );
+			CreateSpriteTextures( );
 		}
 
 		bool PX_API HandleEvent( HWND h, UINT msg, WPARAM w, LPARAM l )
@@ -386,29 +384,11 @@ namespace PX::UI
 
 		void PX_API DrawTextures( )
 		{
-			auto fnCreateTextures = [ ]( std::vector< texture_t >& textures )
-			{
-				for each( auto& texTexture in textures )
-					if ( D3DXCreateTextureFromFileEx( pDevice, ( GetPXDirectory( ) + PX_XOR( LR"(Resources\)" ) + texTexture.wstrFileName ).c_str( ), texTexture.uWidth,
-													  texTexture.uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL,
-													  const_cast< D3DXIMAGE_INFO* >( &texTexture.iiImage ), nullptr, const_cast< IDirect3DTexture9** >( &texTexture.pTexture ) ) != D3D_OK )
-						return false;
-				return true;
-			};
-
-			if ( !fnCreateTextures( vecTextures ) )
-				return;
-
-			vecImageQueue.clear( );
-			return;
-
 			if ( pBufferSprite->Begin( D3DXSPRITE_ALPHABLEND ) == D3D_OK )
 			{
 				for each( const auto& texture in vecImageQueue )
-				{
-					pBufferSprite->Draw( vecTextures[ texture.iTexture ].pTexture, nullptr, nullptr, &texture.vecLocation, texture.clrColor );
-					vecTextures[ texture.iTexture ].pTexture->Release( );
-				}
+					if( vecTextures[ texture.iTexture ].pTexture )
+						pBufferSprite->Draw( vecTextures[ texture.iTexture ].pTexture, nullptr, nullptr, &texture.vecLocation, texture.clrColor );
 				pBufferSprite->End( );
 			}
 			vecImageQueue.clear( );
@@ -458,15 +438,15 @@ namespace PX::UI
 				bShouldDrawUserInterface = false;
 			nk_end( pContext );
 
-			IDirect3DStateBlock9* pState = nullptr;
-			pDevice->CreateStateBlock( D3DSBT_ALL, &pState );
-
 			if ( bCreatedWindow )
 			{
 				HandleWindowInput( );
 				pDevice->Clear( 0, nullptr, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER | D3DCLEAR_STENCIL, D3DCOLOR_ARGB( 0, 0, 0, 0 ), 0, 0 );
 				pDevice->BeginScene( );
 			}
+
+			IDirect3DStateBlock9* pState = nullptr;
+			pDevice->CreateStateBlock( D3DSBT_ALL, &pState );
 
 			nk_d3d9_render( NK_ANTI_ALIASING_ON );
 
