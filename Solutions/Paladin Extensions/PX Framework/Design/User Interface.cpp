@@ -877,7 +877,7 @@ namespace PX::UI
 			constexpr auto uSeparatorHeight = 42u;
 			constexpr struct nk_color clrBorderColor = { 85, 88, 94, 255 };
 			const auto pDrawBuffer = nk_window_get_canvas( pContext );
-			nk_fill_rect( pDrawBuffer, nk_rect( 0.f, float( uStartHeight ), float( uWindowWidth ), float( uSeparatorHeight ) ), 0.f, nk_rgba( iRed, iGreen, iBlue, 255 ) );
+			nk_fill_rect( pDrawBuffer, nk_rect( 0.f, float( uStartHeight ), float( uNuklearWindowWidth ), float( uSeparatorHeight ) ), 0.f, nk_rgba( iRed, iGreen, iBlue, 255 ) );
 			nk_stroke_line( pDrawBuffer, 0.f, float( uStartHeight + uSeparatorHeight - 1 ), float( pContext->current->bounds.w ), float( uStartHeight + uSeparatorHeight - 1 ), 0.5f, clrBorderColor );
 
 			if ( bUpperBorder )
@@ -1105,15 +1105,15 @@ namespace PX::UI
 			static char szSliderBuffer[ 32 ];
 			static auto bWasClicking = false;
 
-			if ( !nk_input_is_mouse_prev_hovering_rect( &pContext->input, recColorPickerBoundaries ) && PX_INPUT.GetKeyState( VK_LBUTTON ) && bStoppedClicking && !bWasClicking )
+			if ( !nk_input_is_mouse_hovering_rect( &pContext->input, recColorPickerBoundaries ) && PX_INPUT.GetKeyState( VK_LBUTTON ) && bStoppedClicking && !bWasClicking )
 			{
 				bShouldClose = true;
 				bNewColor = true;
 			}
 
-			bWasClicking = PX_INPUT.GetKeyState( VK_LBUTTON ) == true;
 			if ( !bWasClicking )
 				bStoppedClicking = true;
+
 			if ( bNewColor && pActiveEditColor )
 			{
 				uCurrentSequence = 0u;
@@ -1134,10 +1134,7 @@ namespace PX::UI
 				pActiveEditColor = nullptr;
 			}
 
-			if ( !bStoppedClicking )
-				return;
-
-			if ( nk_popup_begin( pContext, NK_POPUP_DYNAMIC, ( strBaseTitle + szColorPickerSubject + "'" ).c_str( ),
+			if ( bStoppedClicking && nk_popup_begin( pContext, NK_POPUP_DYNAMIC, ( strBaseTitle + szColorPickerSubject + "'" ).c_str( ),
 								 NK_WINDOW_BORDER | NK_WINDOW_TITLE | NK_WINDOW_NO_SCROLLBAR,
 								 recColorPickerBoundaries, pActiveEditColor == nullptr ) )
 			{
@@ -1188,7 +1185,7 @@ namespace PX::UI
 				nk_spacing( pContext, 1 );
 				nk_layout_row_push( pContext, 75 );
 
-				if ( Button( EPosition::LEFT, PX_XOR( "+" ), false, false ) )
+				if ( Button( EPosition::LEFT, PX_XOR( "+" ), false, false ) && !bWasClicking && pActiveEditColor->sSequences < 7 )
 				{
 					pActiveEditColor->PutNewColorSequence( color_t( ), 1000u );
 					uCurrentSequence = pActiveEditColor->sSequences - 1;
@@ -1197,7 +1194,7 @@ namespace PX::UI
 						pActiveEditColor->GetColor( uCurrentSequence ).bfl,
 						pActiveEditColor->GetColor( uCurrentSequence ).afl };
 				}
-				if ( Button( EPosition::RIGHT, PX_XOR( "-" ), false, false ) )
+				if ( Button( EPosition::RIGHT, PX_XOR( "-" ), false, false ) && !bWasClicking && pActiveEditColor->sSequences > 1 )
 				{
 					pActiveEditColor->DeleteColorSequence( uCurrentSequence );
 					uCurrentSequence = 0u;
@@ -1225,8 +1222,10 @@ namespace PX::UI
 				}
 				nk_layout_row_dynamic( pContext, 10, 0 );
 				nk_popup_end( pContext );
+				bWasClicking = PX_INPUT.GetKeyState( VK_LBUTTON ) == true;
 				return;
 			}
+			bWasClicking = PX_INPUT.GetKeyState( VK_LBUTTON ) == true;
 			bNewColor = true;
 			bStoppedClicking = false;
 		}
