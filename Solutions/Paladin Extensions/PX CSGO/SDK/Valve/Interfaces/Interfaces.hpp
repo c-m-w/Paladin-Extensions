@@ -4,4 +4,5 @@
 
 #include "IAppSystem.hpp"
 #include "IBaseClientDll.hpp"
+#include "IVEngineClient.hpp"
 #include "ISurface.hpp"

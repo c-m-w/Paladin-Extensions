@@ -16,6 +16,7 @@
     },
     "Versions": {
         "Client Base": "VClient018",
+        "Engine Client": "VEngineClient014",
         "VGUI Surface":  "VGUI_Surface031"
     }
 }

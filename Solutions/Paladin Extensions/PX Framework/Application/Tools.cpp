@@ -87,7 +87,7 @@ namespace PX::Tools
 		// Ensure that we are hooking a valid virtual table and that the length is valid( there are proper permissions to read and write to it ).
 		// Set the address of pOldTable to the address of the first virtual function.
 		if ( pClassBase == nullptr ||
-			( sTableLength = EstimateTableLength( pOldTable = reinterpret_cast< ptr_t** >( pClassBase )[ 0 ] ) ) <= 0 )
+			( sTableLength = EstimateTableLength( pOldTable = *reinterpret_cast< ptr_t** >( pClassBase ) ) ) <= 0 )
 			return;
 
 		// Get the size of the table in bytes.
@@ -109,7 +109,7 @@ namespace PX::Tools
 		}
 
 		// Set the address of the class base to the new table.
-		reinterpret_cast< ptr_t** >( pClassBase )[ 0 ] = &pNewTable[ 0 ];
+		*reinterpret_cast< ptr_t** >( pClassBase ) = pNewTable;
 		bSetNewTable = true;
 	}
 
