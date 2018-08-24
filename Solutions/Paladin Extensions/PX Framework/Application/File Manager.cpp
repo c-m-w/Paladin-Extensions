@@ -54,27 +54,27 @@ namespace PX::Files
 		{
 			std::wstring wstrPath = GetPXDirectory( ) + PX_XOR( LR"(Resources\)" );
 
-			bool bFilesExist = std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Paladin Logo.ico)" ) ).c_str( ) )
-				&& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Paladin Logo.png)" ) ).c_str( ) )
+			bool bFilesExist = TRUE == PathFileExists( ( wstrPath + PX_XOR( LR"(Paladin Logo.ico)" ) ).c_str( ) )
+							&& TRUE == PathFileExists( ( wstrPath + PX_XOR( LR"(Paladin Logo.png)" ) ).c_str( ) )
 
-				&& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Cursor\Arrow.png)" ) ).c_str( ) )
-				&& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Cursor\Hand.png)" ) ).c_str( ) )
-				&& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Cursor\I Beam.png)" ) ).c_str( ) )
+							&& TRUE == PathFileExists( ( wstrPath + PX_XOR( LR"(Cursor\Arrow.png)" ) ).c_str( ) )
+							&& TRUE == PathFileExists( ( wstrPath + PX_XOR( LR"(Cursor\Hand.png)" ) ).c_str( ) )
+							&& TRUE == PathFileExists( ( wstrPath + PX_XOR( LR"(Cursor\I Beam.png)" ) ).c_str( ) )
 
-				//& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Fonts\Envy.ttf)" ) ).c_str( ) )
-				//& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Fonts\Font Awesome.ttf)" ) ).c_str( ) )
-				//& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Fonts\Roboto.ttf)" ) ).c_str( ) )
-				//& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Fonts\Roboto Bold.ttf)" ) ).c_str( ) )
-				//& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Fonts\Tahoma.ttf)" ) ).c_str( ) )
-				//& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Fonts\Tahoma Bold.ttf)" ) ).c_str( ) )
+							//& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Fonts\Envy.ttf)" ) ).c_str( ) )
+							//& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Fonts\Font Awesome.ttf)" ) ).c_str( ) )
+							//& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Fonts\Roboto.ttf)" ) ).c_str( ) )
+							//& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Fonts\Roboto Bold.ttf)" ) ).c_str( ) )
+							//& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Fonts\Tahoma.ttf)" ) ).c_str( ) )
+							//& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Fonts\Tahoma Bold.ttf)" ) ).c_str( ) )
 
-				&& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Game Icons\CSGO.png)" ) ).c_str( ) )
-				&& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Game Icons\PUBG.png)" ) ).c_str( ) )
-				&& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Game Icons\RSIX.png)" ) ).c_str( ) )
+							&& TRUE == PathFileExists( ( wstrPath + PX_XOR( LR"(Game Icons\CSGO.png)" ) ).c_str( ) )
+							&& TRUE == PathFileExists( ( wstrPath + PX_XOR( LR"(Game Icons\PUBG.png)" ) ).c_str( ) )
+							&& TRUE == PathFileExists( ( wstrPath + PX_XOR( LR"(Game Icons\RSIX.png)" ) ).c_str( ) )
 
-				&& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Game Icons\CSGO Sized.png)" ) ).c_str( ) )
-				&& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Game Icons\PUBG Sized.png)" ) ).c_str( ) )
-				&& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Game Icons\RSIX Sized.png)" ) ).c_str( ) );
+							&& TRUE == PathFileExists( ( wstrPath + PX_XOR( LR"(Game Icons\CSGO Sized.png)" ) ).c_str( ) )
+							&& TRUE == PathFileExists( ( wstrPath + PX_XOR( LR"(Game Icons\PUBG Sized.png)" ) ).c_str( ) )
+							&& TRUE == PathFileExists( ( wstrPath + PX_XOR( LR"(Game Icons\RSIX Sized.png)" ) ).c_str( ) );
 
 			if ( !bFilesExist )
 				return false;
@@ -182,7 +182,7 @@ namespace PX::Files
 		if ( wszCurrent == wszConfig )
 			return true;
 
-		if ( std::filesystem::exists( ( GetPXDirectory( ) + PX_XOR( LR"(Configurations\)" ) + wszConfig + PX_XOR( L".px" ) ).c_str( ) ) )
+		if ( TRUE == PathFileExists( ( GetPXDirectory( ) + PX_XOR( LR"(Configurations\)" ) + wszConfig + PX_XOR( L".px" ) ).c_str( ) ) )
 		{
 			std::ifstream ifNewConfiguration( GetPXDirectory( ) + PX_XOR( LR"(Configurations\)" ) + wszConfig + PX_XOR( L".px" ) );
 			if ( ifNewConfiguration.good( ) )
