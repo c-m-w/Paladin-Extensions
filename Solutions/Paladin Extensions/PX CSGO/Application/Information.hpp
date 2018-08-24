@@ -36,6 +36,7 @@ namespace PX::Information
 
 		PX_SDK IDirect3DDevice9* pDevice = nullptr;
 		PX_SDK IBaseClientDLL* pClientBase = nullptr;
+		PX_SDK IVEngineClient* pEngineClient = nullptr;
 		PX_SDK ISurface* pSurface = nullptr;
 	}	
 }

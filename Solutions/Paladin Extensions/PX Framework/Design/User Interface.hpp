@@ -81,7 +81,7 @@ namespace PX::UI
 		/** \brief Initialize the GUI for drawing interactable windows. */
 		/**	\param _szApplicationTitle The subtitle of the GUI window. */
 		/** \return true - Initialization was successful.\n false - Initialization was not successful. */
-		bool PX_API InitializeUI( Types::cstr_t _szApplicationTitle );
+		bool PX_API InitializeUI( Types::cstr_t _szApplicationTitle, unsigned uWidth = Render::uWindowWidth, unsigned uHeight = Render::uWindowHeight );
 		/** \brief Calculates text dimensions with the current font. */
 		/**	\param szText Text to calculate the bounds for. */
 		/**	\param uRowHeight Height of the row that the text is in. */
@@ -95,7 +95,7 @@ namespace PX::UI
 		void PX_API OnReset( );
 		/** \brief Recreates textures once the IDirect3DDevice9::Reset( ) was successful.\n
 					Must be called after reset succeeds or textures will not be drawn. */
-		void PX_API OnSuccessfulReset( );
+		void PX_API OnSuccessfulReset( int iWidth, int iHeight );
 		/** \brief Handles events to interact with the GUI. */
 		bool PX_API HandleEvent( HWND, UINT, WPARAM, LPARAM );
 		/** \brief Render the GUI. */

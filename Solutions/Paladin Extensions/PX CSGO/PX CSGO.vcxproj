@@ -172,6 +172,7 @@
     <ClInclude Include="SDK\Valve\Interfaces\IBaseClientDll.hpp" />
     <ClInclude Include="SDK\Valve\Interfaces\Interfaces.hpp" />
     <ClInclude Include="SDK\Valve\Interfaces\ISurface.hpp" />
+    <ClInclude Include="SDK\Valve\Interfaces\IVEngineClient.hpp" />
     <ClInclude Include="SDK\Valve\Math\Math.hpp" />
     <ClInclude Include="SDK\Valve\Math\QAngle.hpp" />
     <ClInclude Include="SDK\Valve\Math\Vector.hpp" />

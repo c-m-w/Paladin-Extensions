@@ -76,12 +76,16 @@ namespace PX::Information
 			pClientBase = reinterpret_cast< IBaseClientDLL* >( Modules::mClient.ciFactory( 
 				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Client Base" ) ].get< std::string >( ).c_str( ), nullptr ) );
 
+			pEngineClient = reinterpret_cast< IVEngineClient* >( Modules::mEngine.ciFactory(
+				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Engine Client" ) ].get< std::string >( ).c_str( ), nullptr ) );
+
 			pSurface = reinterpret_cast< ISurface* >( Modules::mVGUI.ciFactory(
 				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "VGUI Surface" ) ].get< std::string >( ).c_str( ), nullptr ) );
 
-			return pDevice != nullptr
-				&& pClientBase != nullptr
-				&& pSurface != nullptr;
+			return nullptr != pDevice
+				&& nullptr != pClientBase
+				&& nullptr != pEngineClient
+				&& nullptr != pSurface;
 		}
 	}
 }

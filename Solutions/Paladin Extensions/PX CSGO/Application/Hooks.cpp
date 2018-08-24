@@ -13,6 +13,8 @@ namespace PX
 {
 	namespace Hooks
 	{
+		std::vector< Tools::CHook* > vecHookPointers { };
+
 		bool PX_API SetHooks( )
 		{
 			return hkDirectXDevice->HookIndex( uEndScene, reinterpret_cast< void* >( EndScene ) )
@@ -27,9 +29,21 @@ namespace PX
 			hkClientBase = new Tools::CHook( pClientBase );
 			hkSurface = new Tools::CHook( pSurface );
 
+			vecHookPointers.emplace_back( hkDirectXDevice );
+			vecHookPointers.emplace_back( hkClientBase );
+			vecHookPointers.emplace_back( hkSurface );
+
 			return hkDirectXDevice->Succeeded( )
 				&& hkClientBase->Succeeded( )
-				&& hkSurface->Succeeded( ) ? SetHooks( ) : false;
+				&& hkSurface->Succeeded( ) ? 
+				SetHooks( ) 
+			: false;
+		}
+
+		void PX_API Destruct( )
+		{
+			for each( auto& hkPointer in vecHookPointers )
+				delete hkPointer;
 		}
 
 		HRESULT __stdcall EndScene( IDirect3DDevice9* pDeviceParameter )
@@ -48,12 +62,11 @@ namespace PX
 		HRESULT __stdcall Reset( IDirect3DDevice9* pDeviceParameter, D3DPRESENT_PARAMETERS* pParams )
 		{
 			static auto fnOriginal = hkDirectXDevice->GetOriginalFunction< Types::reset_t  >( uReset );
-			static auto iOldWindowWidth = -1, iOldWindowHeight = -1;
 
 			//std::cout << "Reset has been called." << std::endl;
 
 			{
-				UI::Manager::CSGO::bCreatedTextures = false;
+				UI::Manager::CSGO::OnReset( );
 				UI::Manager::OnReset( );
 			}
 
@@ -61,8 +74,8 @@ namespace PX
 
 			if ( SUCCEEDED( hrReset ) )
 			{
-				UI::Manager::OnSuccessfulReset( );
-				UI::Manager::CSGO::bCreatedTextures = true;
+				UI::Manager::CSGO::OnSuccessfulReset( );
+				UI::Manager::OnSuccessfulReset( pParams->BackBufferWidth, pParams->BackBufferHeight );
 			}
 
 			return hrReset;

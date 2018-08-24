@@ -10,6 +10,7 @@ namespace PX::UI
 	{
 		cstr_t	szWindowTitle = PX_XOR( "Paladin Extensions" );
 		auto	szApplicationTitle = static_cast< char* >( malloc( 32 ) );
+		unsigned uNuklearWindowWidth, uNuklearWindowHeight;
 
 		nk_font_atlas* pAtlas;
 		struct nk_font *pTahoma, *pTahomaBold, *pRoboto, *pRobotoBold, *pRobotoSmall, *pRobotoBoldSmall, *pEnvy;
@@ -33,7 +34,7 @@ namespace PX::UI
 			static std::string strFontDirectory( PX_XOR( R"(C:\Windows\Fonts\)" ) );
 
 			auto pFont = nk_font_atlas_add_from_file( pAtlas, ( strFontDirectory + strFontFileName ).c_str( ), float( uFontSize ), nullptr );
-			nk_font_atlas_add_from_file( pAtlas, ( strFontDirectory + PX_XOR( "FontAwesome.ttf" ) ).c_str( ), uFontAwesomeSize ? float( uFontAwesomeSize ) : float( uFontSize ), &fcFontConfiguration );
+			//nk_font_atlas_add_from_file( pAtlas, ( strFontDirectory + PX_XOR( "FontAwesome.ttf" ) ).c_str( ), uFontAwesomeSize ? float( uFontAwesomeSize ) : float( uFontSize ), &fcFontConfiguration );
 			return pFont;
 		}
 
@@ -275,11 +276,14 @@ namespace PX::UI
 				}
 		}
 
-		bool PX_API InitializeUI( cstr_t _szApplicationTitle )
+		bool PX_API InitializeUI( cstr_t _szApplicationTitle, unsigned uWidth /*= uWindowWidth*/, unsigned uHeight /*= uWindowHeight*/ )
 		{
 			szNuklearWindowTitle = new char[ strlen( _szApplicationTitle ) + 1 ];
 			strcpy( szNuklearWindowTitle, _szApplicationTitle );
 			InitializeNuklear( );
+
+			uNuklearWindowWidth = uWidth;
+			uNuklearWindowHeight = uHeight;
 
 			vecTextures.emplace_back( 32, 29, PX_XOR( LR"(Paladin Logo Small.png)" ) ); // TEXTURE_LOGO
 			vecTextures.emplace_back( 720, 394, PX_XOR( LR"(Paladin Logo Loading.png)" ) ); // TEXTURE_LOGO_LOADING
@@ -318,8 +322,10 @@ namespace PX::UI
 			DestroySpriteTextures( );
 		}
 
-		void PX_API OnSuccessfulReset( )
+		void PX_API OnSuccessfulReset( int iWidth, int iHeight )
 		{
+			//nk_d3d9_create_font_texture( );
+			nk_d3d9_resize( iWidth, iHeight );
 			pBufferSprite->OnResetDevice( );
 			CreateSpriteTextures( );
 		}
@@ -416,7 +422,7 @@ namespace PX::UI
 			auto bShouldDrawUserInterface = true;
 			SetFont( FONT_ROBOTO );
 
-			if ( nk_begin( pContext, szNuklearWindowTitle, nk_rect( 0, 0, float( uWindowWidth ), float( uWindowHeight ) ),
+			if ( nk_begin( pContext, szNuklearWindowTitle, nk_rect( 0, 0, float( uNuklearWindowWidth ), float( uNuklearWindowHeight ) ),
 						   NK_WINDOW_NO_SCROLLBAR ) )
 			{
 				nk_layout_row_dynamic( pContext, 10, 0 );
@@ -438,15 +444,15 @@ namespace PX::UI
 				bShouldDrawUserInterface = false;
 			nk_end( pContext );
 
+			IDirect3DStateBlock9* pState;
+			pDevice->CreateStateBlock( D3DSBT_PIXELSTATE, &pState );
+
 			if ( bCreatedWindow )
 			{
 				HandleWindowInput( );
-				pDevice->Clear( 0, nullptr, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER | D3DCLEAR_STENCIL, D3DCOLOR_ARGB( 0, 0, 0, 0 ), 0, 0 );
+				pDevice->Clear( NULL, nullptr, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER | D3DCLEAR_STENCIL, NULL, NULL, NULL );
 				pDevice->BeginScene( );
 			}
-
-			IDirect3DStateBlock9* pState = nullptr;
-			pDevice->CreateStateBlock( D3DSBT_ALL, &pState );
 
 			nk_d3d9_render( NK_ANTI_ALIASING_ON );
 
