@@ -22074,7 +22074,7 @@ retry:
       } break;
 
     case NK_KEY_DEL:
-        if (state->mode == NK_TEXT_EDIT_MODE_VIEW)
+        if (!GetAsyncKeyState(VK_DELETE) || state->mode == NK_TEXT_EDIT_MODE_VIEW)
             break;
         if (NK_TEXT_HAS_SELECTION(state))
             nk_textedit_delete_selection(state);
@@ -22087,18 +22087,29 @@ retry:
          break;
 
     case NK_KEY_BACKSPACE:
-        if (state->mode == NK_TEXT_EDIT_MODE_VIEW)
-            break;
-        if (NK_TEXT_HAS_SELECTION(state))
-            nk_textedit_delete_selection(state);
-        else {
-            nk_textedit_clamp(state);
-            if (state->cursor > 0) {
-                nk_textedit_delete(state, state->cursor-1, 1);
-                --state->cursor;
-            }
-         }
-         state->has_preferred_x = 0;
+	       {
+	       	static bool released = true;
+			    if ( !GetAsyncKeyState( VK_BACK ) )
+			    {
+			    	released = true;
+			    	break;
+			    }
+	       	if ( !released || state->mode == NK_TEXT_EDIT_MODE_VIEW )
+	       		break;
+	       	released = false;
+	       	if ( NK_TEXT_HAS_SELECTION( state ) )
+	       		nk_textedit_delete_selection( state );
+	       	else
+	       	{
+	       		nk_textedit_clamp( state );
+	       		if ( state->cursor > 0 )
+	       		{
+	       			nk_textedit_delete( state, state->cursor - 1, 1 );
+	       			--state->cursor;
+	       		}
+	       	}
+	       	state->has_preferred_x = 0;
+	       }
          break;
 
     case NK_KEY_TEXT_START:
