@@ -53,21 +53,21 @@ namespace PX::Net
 #endif
 
 		px_assert( CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_URL, _strSite.c_str( ) )
-				&& CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_POST, 1L )
-				&& CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_POSTFIELDS, strPostDataBuffer.c_str( ) )
-				&& CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_FOLLOWLOCATION, 1L )
-				// The cookie jar and file do not contain anything stored in the session, only information about the session.
-				// Information stored in $_SESSION is not accessible client side, only server side.
-				// http://php.net/manual/en/intro.session.php
-				&& CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_COOKIESESSION, true )
-				&& CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_COOKIEFILE, strCookieDirectory.c_str( ) )
-				&& CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_COOKIEJAR, strCookieDirectory.c_str( ) )
-				&& CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_WRITEFUNCTION, WriteCallback )
-				&& CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_WRITEDATA, &strResponseBuffer )
-				// cURL has issues communicating with the revocation server for validating an SSL certificate.
-				// Since we only connect to our site, this isn't an issue so we can just disable the check.
-				&& CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_SSL_OPTIONS, CURLSSLOPT_NO_REVOKE )
-				&& CURLE_OK == curl_easy_perform( pConnection ) );
+				   && CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_POST, 1L )
+				   && CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_POSTFIELDS, strPostDataBuffer.c_str( ) )
+				   && CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_FOLLOWLOCATION, 1L )
+				   /// The cookie jar and file do not contain anything stored in the session, only information about the session.
+				   /// Information stored in $_SESSION is not accessible client side, only server side.
+				   /// http://php.net/manual/en/intro.session.php
+				   && CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_COOKIESESSION, true )
+				   && CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_COOKIEFILE, strCookieDirectory.c_str( ) )
+				   && CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_COOKIEJAR, strCookieDirectory.c_str( ) )
+				   && CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_WRITEFUNCTION, WriteCallback )
+				   && CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_WRITEDATA, &strResponseBuffer )
+				   /// cURL has issues communicating with the revocation server for validating an SSL certificate.
+				   /// Since we only connect to our site, this isn't an issue so we can just disable the check.
+				   && CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_SSL_OPTIONS, CURLSSLOPT_NO_REVOKE )
+				   && CURLE_OK == curl_easy_perform( pConnection ) );
 
 		return strResponseBuffer;
 	}
@@ -158,7 +158,7 @@ namespace PX::Net
 		dqLoginData.emplace_back( strHardwareIdentifier, sys::GetSystemInfo( ).dump( ) );
 
 		px_assert( InitializeConnection( )
-				&& InitializeEncryption( ) );
+				   && InitializeEncryption( ) );
 
 		const auto strResponse = Request( strLoginURL, dqLoginData );
 		if ( strResponse.empty( ) )

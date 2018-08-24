@@ -45,8 +45,8 @@ namespace PX::Render
 				{
 					const auto uWidth = LOWORD( llParam );
 					const auto uHeight = HIWORD( llParam );
-					if ( uWidth != 0 && uHeight != 0
-					  && ( uWidth != dxParameters.BackBufferWidth || uHeight != dxParameters.BackBufferHeight ) )
+					if ( uWidth != 0 && uHeight != 0 &&
+						( uWidth != dxParameters.BackBufferWidth || uHeight != dxParameters.BackBufferHeight ) )
 					{
 						if ( !bCreatedWindow )
 						{

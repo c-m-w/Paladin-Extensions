@@ -23,11 +23,11 @@ namespace PX::Tools
 	{
 		auto uReturn = 0u;
 		MEMORY_BASIC_INFORMATION mbiTable { };
-		for ( ; VirtualQuery( reinterpret_cast<LPCVOID>( pVirtualTable[ uReturn ] ), &mbiTable, sizeof mbiTable )
-			 && mbiTable.BaseAddress != nullptr
-			 && mbiTable.Type != NULL
-			 && mbiTable.Protect & ( PAGE_EXECUTE | PAGE_EXECUTE_READ | PAGE_EXECUTE_READWRITE | PAGE_EXECUTE_WRITECOPY )
-			 && !( mbiTable.Protect & ( PAGE_GUARD | PAGE_NOACCESS ) ); uReturn++ )
+		for ( ; VirtualQuery( reinterpret_cast<LPCVOID>( pVirtualTable[ uReturn ] ), &mbiTable, sizeof mbiTable ) &&
+			  mbiTable.BaseAddress != nullptr &&
+			  mbiTable.Type != NULL &&
+			  mbiTable.Protect & ( PAGE_EXECUTE | PAGE_EXECUTE_READ | PAGE_EXECUTE_READWRITE | PAGE_EXECUTE_WRITECOPY ) &&
+			  !( mbiTable.Protect & ( PAGE_GUARD | PAGE_NOACCESS ) ); uReturn++ )
 		{
 		}
 		return uReturn;

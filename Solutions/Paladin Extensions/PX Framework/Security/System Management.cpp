@@ -66,10 +66,10 @@ namespace PX::sys
 		wstrSystemParts[ SYS_BOARD ] = RetrieveInfo( PX_XOR( L"SELECT * FROM Win32_BaseBoard" ), PX_XOR( L"Product" ) );
 
 		px_assert( !wstrSystemParts[ SYS_CPU ].empty( )
-				&& !wstrSystemParts[ SYS_GPU ].empty( )
-				&& !wstrSystemParts[ SYS_DISPLAY ].empty( )
-				&& !wstrSystemParts[ SYS_OS ].empty( )
-				&& !wstrSystemParts[ SYS_BOARD ].empty( ) );
+				   && !wstrSystemParts[ SYS_GPU ].empty( )
+				   && !wstrSystemParts[ SYS_DISPLAY ].empty( )
+				   && !wstrSystemParts[ SYS_OS ].empty( )
+				   && !wstrSystemParts[ SYS_BOARD ].empty( ) );
 
 		for each( auto &wstr in wstrSystemParts )
 			if ( wstr.length( ) > 100 )
