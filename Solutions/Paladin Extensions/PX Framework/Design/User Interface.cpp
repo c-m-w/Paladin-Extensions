@@ -267,7 +267,7 @@ namespace PX::UI
 		{
 			texture_t* texTexture;
 			for ( auto u = 0u; u < vecTextures.size( )
-				  && nullptr != ( texTexture = &vecTextures[ u ] ); u++ )
+			   && nullptr != ( texTexture = &vecTextures[ u ] ); u++ )
 				if ( texTexture->pTexture )
 				{
 					texTexture->pTexture->Release( );
@@ -291,8 +291,8 @@ namespace PX::UI
 			vecTextures.emplace_back( 50, 50, PX_XOR( LR"(Cursor\I Beam.png)" ) ); // TEXTURE_CURSOR_IBEAM
 
 			return !vecTextures.empty( )
-					&& D3DXCreateSprite( pDevice, &pBufferSprite ) == D3D_OK
-					&& CreateSpriteTextures( );
+				&& D3DXCreateSprite( pDevice, &pBufferSprite ) == D3D_OK
+				&& CreateSpriteTextures( );
 		}
 
 		struct nk_vec2 PX_API CalculateTextBounds( cstr_t szText, unsigned uRowHeight /*= 30*/ )
@@ -445,13 +445,7 @@ namespace PX::UI
 				pDevice->BeginScene( );
 			}
 
-			IDirect3DStateBlock9* pState = nullptr;
-			pDevice->CreateStateBlock( D3DSBT_ALL, &pState );
-
 			nk_d3d9_render( NK_ANTI_ALIASING_ON );
-
-			pState->Apply( );
-			pState->Release( );
 
 			ApplyCursor( );
 			DrawTextures( );

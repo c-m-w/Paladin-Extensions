@@ -17,7 +17,7 @@
 bool PX_API Initialize( )
 {
 	const auto lgnResult = PX::Net::Login( );
-	MessageBox( nullptr, std::to_wstring( lgnResult ).c_str( ), L"MEN", MB_OK );
+	//MessageBox( nullptr, std::to_wstring( lgnResult ).c_str( ), L"MEN", MB_OK );
 	return ( lgnResult == PX::Net::LOGIN_SUCCESS
 			 || lgnResult == PX::Net::LOGIN_STAFF_SUCCESS )
 		&& PX::Information::InitializeInformation( )
