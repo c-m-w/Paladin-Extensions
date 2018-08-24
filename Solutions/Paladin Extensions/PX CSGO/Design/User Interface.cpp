@@ -17,6 +17,7 @@ namespace PX::UI::Manager
 
 			pEngineClient->GetScreenSize( iDimensions[ 0 ], iDimensions[ 1 ] );
 			memcpy( uDimensions, iDimensions, sizeof( int ) * 2 );
+			Render::bShouldRender = false;
 
 			PX_INPUT.AddKeyCallback( VK_HOME, [ = ]( bool bIsPressed )
 			{
@@ -82,10 +83,11 @@ namespace PX::UI::Manager
 
 		void PX_API OnReset( )
 		{
+			Render::bShouldRender = false;
 			bCreatedTextures = false;
 		}
 
-		void PX_API OnSuccessfulReset( )
+		void PX_API OnSuccessfulReset( unsigned uWidth, unsigned uHeight )
 		{
 			bCreatedTextures = true;
 		}

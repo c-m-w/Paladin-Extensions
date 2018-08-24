@@ -13,7 +13,8 @@ namespace PX::UI
 		unsigned uNuklearWindowWidth, uNuklearWindowHeight;
 
 		nk_font_atlas* pAtlas;
-		struct nk_font *pTahoma, *pTahomaBold, *pRoboto, *pRobotoBold, *pRobotoSmall, *pRobotoBoldSmall, *pEnvy;
+		std::deque< nk_font* > dqFonts;
+		//struct nk_font *pTahoma, *pTahomaBold, *pRoboto, *pRobotoBold, *pRobotoSmall, *pRobotoBoldSmall, *pEnvy;
 		struct nk_rect recComboboxWindowBounds;
 		bool bDrawComboboxArrow = false;
 
@@ -34,7 +35,8 @@ namespace PX::UI
 			static std::string strFontDirectory( PX_XOR( R"(C:\Windows\Fonts\)" ) );
 
 			auto pFont = nk_font_atlas_add_from_file( pAtlas, ( strFontDirectory + strFontFileName ).c_str( ), float( uFontSize ), nullptr );
-			//nk_font_atlas_add_from_file( pAtlas, ( strFontDirectory + PX_XOR( "FontAwesome.ttf" ) ).c_str( ), uFontAwesomeSize ? float( uFontAwesomeSize ) : float( uFontSize ), &fcFontConfiguration );
+			nk_font_atlas_add_from_file( pAtlas, ( strFontDirectory + PX_XOR( "FontAwesome.ttf" ) ).c_str( ), uFontAwesomeSize ? float( uFontAwesomeSize ) : float( uFontSize ), &fcFontConfiguration );
+
 			return pFont;
 		}
 
@@ -52,16 +54,20 @@ namespace PX::UI
 			fcFontAwesomeConfiguration.range = rnIconRange;
 			fcFontAwesomeConfiguration.merge_mode = 1;
 
+			if ( !dqFonts.empty( ) )
+				dqFonts.clear( );
+
 			nk_d3d9_font_stash_begin( &pAtlas );
-			pRoboto = AddFont( PX_XOR( "Roboto-Regular.ttf" ), 26, fcFontAwesomeConfiguration );
-			pRobotoBold = AddFont( PX_XOR( "RobotoBold.ttf" ), 24, fcFontAwesomeConfiguration );
-			pRobotoSmall = AddFont( PX_XOR( "Roboto-Regular.ttf" ), 16, fcFontAwesomeConfiguration, 14 );
-			pRobotoBoldSmall = AddFont( PX_XOR( "RobotoBold.ttf" ), 16, fcFontAwesomeConfiguration, 18 );
-			pTahoma = AddFont( PX_XOR( "tahoma.ttf" ), 16, fcFontAwesomeConfiguration );
-			pTahomaBold = AddFont( PX_XOR( "tahomabd.ttf" ), 16, fcFontAwesomeConfiguration );
-			pEnvy = AddFont( PX_XOR( "Envy.ttf" ), 14, fcFontAwesomeConfiguration );
+			dqFonts.emplace_back( AddFont( PX_XOR( "tahoma.ttf" ), 16, fcFontAwesomeConfiguration ) );
+			dqFonts.emplace_back( AddFont( PX_XOR( "tahomabd.ttf" ), 16, fcFontAwesomeConfiguration ) );
+			dqFonts.emplace_back( AddFont( PX_XOR( "Roboto-Regular.ttf" ), 26, fcFontAwesomeConfiguration ) );
+			dqFonts.emplace_back( AddFont( PX_XOR( "RobotoBold.ttf" ), 24, fcFontAwesomeConfiguration ) );
+			dqFonts.emplace_back( AddFont( PX_XOR( "Roboto-Regular.ttf" ), 16, fcFontAwesomeConfiguration, 14 ) );
+			dqFonts.emplace_back( AddFont( PX_XOR( "RobotoBold.ttf" ), 16, fcFontAwesomeConfiguration, 18 ) );
+			dqFonts.emplace_back( AddFont( PX_XOR( "Envy.ttf" ), 14, fcFontAwesomeConfiguration ) );
 			nk_d3d9_font_stash_end( );
 
+			px_assert( dqFonts.size( ) == FONT_MAX );
 
 			clrColorTable[ NK_COLOR_TEXT ] = nk_rgba( 255, 255, 255, 255 );
 			clrColorTable[ NK_COLOR_WINDOW ] = nk_rgba( 45, 50, 56, 255 );
@@ -310,24 +316,35 @@ namespace PX::UI
 
 		void PX_API SetFont( EFont fntDesiredFont )
 		{
-			static std::deque< nk_font* > dqFonts { pTahoma, pTahomaBold, pRoboto, pRobotoBold, pRobotoSmall, pRobotoBoldSmall, pEnvy };
+			//std::deque< nk_font* > dqFonts { pTahoma, pTahomaBold, pRoboto, pRobotoBold, pRobotoSmall, pRobotoBoldSmall, pEnvy };
 			px_assert( fntDesiredFont >= 0 && fntDesiredFont < FONT_MAX );
 			return nk_style_set_font( pContext, &dqFonts[ fntDesiredFont ]->handle );
 		}
 
+		bool bDestroyedTextures = false;
+
 		void PX_API OnReset( )
 		{
-			nk_d3d9_release( );
-			pBufferSprite->OnLostDevice( );
-			DestroySpriteTextures( );
+			if ( !bDestroyedTextures )
+			{
+				nk_d3d9_shutdown( );
+				pBufferSprite->OnLostDevice( );
+				DestroySpriteTextures( );
+				bDestroyedTextures = true;
+			}
 		}
 
 		void PX_API OnSuccessfulReset( int iWidth, int iHeight )
 		{
-			//nk_d3d9_create_font_texture( );
-			nk_d3d9_resize( iWidth, iHeight );
-			pBufferSprite->OnResetDevice( );
-			CreateSpriteTextures( );
+			if ( bDestroyedTextures )
+			{
+				uWindowWidth = iWidth;
+				uWindowHeight = iHeight;
+				InitializeNuklear( );
+				pBufferSprite->OnResetDevice( );
+				CreateSpriteTextures( );
+				bDestroyedTextures = false;
+			}
 		}
 
 		bool PX_API HandleEvent( HWND h, UINT msg, WPARAM w, LPARAM l )

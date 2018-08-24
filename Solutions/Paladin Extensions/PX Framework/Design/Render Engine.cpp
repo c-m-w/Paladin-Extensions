@@ -36,6 +36,10 @@ namespace PX::Render
 					return 0;
 				}
 
+			case WM_SETCURSOR:
+				if ( bShouldRender )
+					return false;
+
 			case WM_SIZE:
 				if ( pDevice )
 				{
@@ -144,7 +148,9 @@ namespace PX::Render
 
 	bool PX_API InitializeRenderTarget( IDirect3DDevice9* pNewDevice, unsigned* pDimensions )
 	{
-		SetWindowProc( pNewDevice );
+		if( !uOldWindowProc )
+			SetWindowProc( pNewDevice );
+
 		uWindowWidth = pDimensions[ 0 ];
 		uWindowHeight = pDimensions[ 1 ];
 		return ( pDevice = pNewDevice ) != nullptr;

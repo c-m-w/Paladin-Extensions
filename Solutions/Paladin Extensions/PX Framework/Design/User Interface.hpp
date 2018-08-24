@@ -78,6 +78,7 @@ namespace PX::UI
 			FONT_MAX
 		};
 
+		void PX_API InitializeNuklear( );
 		/** \brief Initialize the GUI for drawing interactable windows. */
 		/**	\param _szApplicationTitle The subtitle of the GUI window. */
 		/** \return true - Initialization was successful.\n false - Initialization was not successful. */

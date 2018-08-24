@@ -74,7 +74,7 @@ namespace PX
 
 			if ( SUCCEEDED( hrReset ) )
 			{
-				UI::Manager::CSGO::OnSuccessfulReset( );
+				UI::Manager::CSGO::OnSuccessfulReset( pParams->BackBufferWidth, pParams->BackBufferHeight );
 				UI::Manager::OnSuccessfulReset( pParams->BackBufferWidth, pParams->BackBufferHeight );
 			}
 

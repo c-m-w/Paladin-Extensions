@@ -10,7 +10,7 @@ namespace PX::UI::Manager
 		bool PX_API Initialize( );
 		void PX_API OnEndScene( Types::ptr_t ptrReturnAddress );
 		void PX_API OnReset( );
-		void PX_API OnSuccessfulReset( );
+		void PX_API OnSuccessfulReset( unsigned uWidth, unsigned uHeight );
 	}
 
 	void PX_API SetLayout( );
