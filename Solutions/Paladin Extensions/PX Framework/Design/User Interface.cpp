@@ -3,6 +3,7 @@
 #define PX_NUKLEAR_IMPLEMENTATION
 #define PX_USE_NAMESPACES
 #include "../PX Framework.hpp"
+#include "../../PX Manager/PX Manager.hpp"
 
 namespace PX::UI
 {
@@ -11,6 +12,7 @@ namespace PX::UI
 		cstr_t	szWindowTitle = PX_XOR( "Paladin Extensions" );
 		auto	szApplicationTitle = static_cast< char* >( malloc( 32 ) );
 		unsigned uNuklearWindowWidth, uNuklearWindowHeight;
+		struct nk_rect recWindow;
 
 		std::deque< nk_font* > dqFonts;
 		std::deque< nk_font_atlas > dqAtlases;
@@ -53,6 +55,8 @@ namespace PX::UI
 		void PX_API InitializeNuklear( )
 		{
 			pContext = nk_d3d9_init( pDevice, uWindowWidth, uWindowHeight );
+			recWindow.w = uNuklearWindowWidth;
+			recWindow.h = uNuklearWindowHeight;
 
 			if ( !dqFonts.empty( ) )
 				dqFonts.clear( );
@@ -284,10 +288,9 @@ namespace PX::UI
 		{
 			szNuklearWindowTitle = new char[ strlen( _szApplicationTitle ) + 1 ];
 			strcpy( szNuklearWindowTitle, _szApplicationTitle );
-			InitializeNuklear( );
-
 			uNuklearWindowWidth = uWidth;
 			uNuklearWindowHeight = uHeight;
+			InitializeNuklear( );
 
 			vecTextures.emplace_back( 32, 29, PX_XOR( LR"(Paladin Logo Small.png)" ) ); // TEXTURE_LOGO
 			vecTextures.emplace_back( 720, 394, PX_XOR( LR"(Paladin Logo Loading.png)" ) ); // TEXTURE_LOGO_LOADING
@@ -418,6 +421,58 @@ namespace PX::UI
 			vecImageQueue.clear( );
 		}
 
+		void PX_API HandleWindowMovement( struct nk_rect &recInterfaceWindow, int iWindow )
+		{
+			if ( !nk_window_has_focus( pContext ) )
+				return;
+
+			static bool bClicking[ 2 ] { false, false };
+			POINT pntMousePosition;
+			static POINT pntOriginalMousePosition;
+			static auto vecWindowDifference = nk_vec2( 0, 0 );
+			static auto rcOriginalWindowPosition = recInterfaceWindow;
+
+			RECT recWindow;
+			GetWindowRect( hwWindowHandle, &recWindow );
+			GetCursorPos( &pntMousePosition );
+			pntMousePosition.x -= recWindow.left;
+			pntMousePosition.y -= recWindow.top;
+
+			if ( ( nk_input_is_mouse_hovering_rect( &pContext->input, nk_rect( recInterfaceWindow.x, recInterfaceWindow.y, recInterfaceWindow.w, 30 ) )
+				   && PX_INPUT.GetKeyState( VK_LBUTTON ) == true ) || bClicking[ iWindow ] )
+			{
+				if ( PX_INPUT.GetKeyState( VK_LBUTTON ) == false )
+				{
+					bClicking[ iWindow ] = false;
+					return;
+				}
+				if ( !bClicking[ iWindow ] )
+				{
+					vecWindowDifference = nk_vec2( pntMousePosition.x - recInterfaceWindow.x, pntMousePosition.y - recInterfaceWindow.y );
+					pntOriginalMousePosition = pntMousePosition;
+					rcOriginalWindowPosition = recInterfaceWindow;
+					bClicking[ iWindow ] = true;
+				}
+				recInterfaceWindow.x = rcOriginalWindowPosition.x + pntMousePosition.x - pntOriginalMousePosition.x;
+				recInterfaceWindow.y = rcOriginalWindowPosition.y + pntMousePosition.y - pntOriginalMousePosition.y;
+
+				const auto uCurrentWindowWidth = recWindow.right - recWindow.left;
+				const auto uCurrentWindowHeight = recWindow.bottom - recWindow.top;
+				const auto recBounds = pContext->current->bounds;
+
+				if ( recInterfaceWindow.x + recBounds.w > uCurrentWindowWidth )
+					recInterfaceWindow.x = uCurrentWindowWidth - recBounds.w;
+				else if ( recInterfaceWindow.x < 0 )
+					recInterfaceWindow.x = 0;
+				if ( recInterfaceWindow.y < 0 )
+					recInterfaceWindow.y = 0;
+				else if( recInterfaceWindow.y + recBounds.h > uCurrentWindowHeight )
+					recInterfaceWindow.y = uCurrentWindowHeight - recBounds.h;
+			}
+			else
+				bClicking[ iWindow ] = false;
+		}
+
 		void PX_API ApplyCursor( )
 		{
 			POINT pntCursor;
@@ -441,9 +496,14 @@ namespace PX::UI
 			auto bShouldDrawUserInterface = true;
 			SetFont( FONT_ROBOTO );
 
-			if ( nk_begin( pContext, szNuklearWindowTitle, nk_rect( 0, 0, float( uNuklearWindowWidth ), float( uNuklearWindowHeight ) ),
-						   NK_WINDOW_NO_SCROLLBAR ) )
+			if ( bCreatedWindow )
+				recWindow.x = recWindow.y = 0.f;
+
+			if ( nk_begin( pContext, szNuklearWindowTitle, recWindow, NK_WINDOW_NO_SCROLLBAR ) )
 			{
+				if( !bCreatedWindow )
+					HandleWindowMovement( recWindow, 0 );
+
 				nk_layout_row_dynamic( pContext, 10, 0 );
 				SetFont( FONT_ROBOTO );
 				SetLayout( );
@@ -472,6 +532,8 @@ namespace PX::UI
 				pDevice->Clear( NULL, nullptr, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER | D3DCLEAR_STENCIL, NULL, NULL, NULL );
 				pDevice->BeginScene( );
 			}
+			else
+				nk_window_set_bounds( pContext, szNuklearWindowTitle, recWindow );
 
 			nk_d3d9_render( NK_ANTI_ALIASING_ON );
 
@@ -551,7 +613,7 @@ namespace PX::UI
 			SetFont( FONT_ROBOTOSMALL );
 
 			// Create subtabs.
-			fnSetTabValue( jsWidgets[ PX_XOR( "SubTab" ) ].get_ref< int& >( ), SubTabs( 10, 60, 190, 30, dqSubTabs, jsWidgets[ PX_XOR( "SubTab" ) ] ) );
+			fnSetTabValue( jsWidgets[ PX_XOR( "SubTab" ) ].get_ref< int& >( ), SubTabs( 10, 60, 150, 30, dqSubTabs, jsWidgets[ PX_XOR( "SubTab" ) ] ) );
 
 			// Begin a groupbox for all of our widgets to be inside of.
 			if( BeginGroupbox( 200, 150, 500, 420, dqSubTabs.at( jsWidgets[ PX_XOR( "SubTab" ) ] ) ) )
@@ -743,7 +805,7 @@ namespace PX::UI
 
 			// declaration of 'uWindowHeight' hides global declaration
 			const auto uWindowHeight = unsigned( dqLines.size( ) * uLineHeight + 13.f );
-			struct nk_rect recTooltip { vecMousePos.x + 20.f, vecMousePos.y, float( uMaxTooltipWidth ), float( uWindowHeight ) };
+			struct nk_rect recTooltip { pContext->current->bounds.x + vecMousePos.x + 20.f, pContext->current->bounds.y + vecMousePos.y, float( uMaxTooltipWidth ), float( uWindowHeight ) };
 
 			if ( vecUsableSpace.h - uWindowHeight < 0 )
 				recTooltip.y -= uWindowHeight - vecUsableSpace.h;
@@ -775,7 +837,7 @@ namespace PX::UI
 		void PX_API Header( cstr_t szTitle, cstr_t _szApplicationTitle, unsigned uFillHeight /*= 102u*/, callback_t fnMinimizeCallback /*= nullptr*/, callback_t fnCloseCallback /*= nullptr*/ )
 		{
 			auto recMainWindow = pContext->current->bounds;
-			vecImageQueue.emplace_back( TEXTURE_LOGO, D3DXVECTOR3( recMainWindow.x + 5.f, recMainWindow.y + 5.f, 0.f ) );
+			vecImageQueue.emplace_back( TEXTURE_LOGO, D3DXVECTOR3( recMainWindow.x + 5.f, recMainWindow.y + 5.f, 0.f ), pActiveEditColor != nullptr ? D3DCOLOR_ARGB( 170, 170, 170, 170 ) : 0xFFFFFFFF );
 
 			nk_layout_row_dynamic( pContext, 30, 0 );
 			auto pOutput = nk_window_get_canvas( pContext );
@@ -787,21 +849,21 @@ namespace PX::UI
 			txtTitle.text = clrTextActive;
 			txtApplication.text = clrTextDormant;
 
-			nk_fill_rect( pOutput, nk_rect( 0.f, 0.f, flWidth, float( uFillHeight ) ), 0.f, clrHeader );
-			nk_stroke_line( pOutput, 0, 40, flWidth, 40, 1, clrColorTable[ NK_COLOR_BORDER ] );
+			nk_fill_rect( pOutput, nk_rect( pContext->current->bounds.x, pContext->current->bounds.y, flWidth, float( uFillHeight ) ), 0.f, clrHeader );
+			nk_stroke_line( pOutput, pContext->current->bounds.x, pContext->current->bounds.y + 40, pContext->current->bounds.x + flWidth, pContext->current->bounds.y + 40, 1, clrColorTable[ NK_COLOR_BORDER ] );
 
 			SetFont( FONT_ROBOTOBOLD );
 			auto vecTitle = CalculateTextBounds( szTitle, 30 );
-			nk_widget_text( pOutput, nk_rect( 10.f + vecTextures[ TEXTURE_LOGO ].uWidth, 7, vecTitle.x, 30 ), szTitle, strlen( szTitle ), &txtTitle, NK_TEXT_CENTERED, pContext->style.font );
+			nk_widget_text( pOutput, nk_rect( pContext->current->bounds.x + 10.f + vecTextures[ TEXTURE_LOGO ].uWidth, pContext->current->bounds.y + 7, vecTitle.x, 30 ), szTitle, strlen( szTitle ), &txtTitle, NK_TEXT_CENTERED, pContext->style.font );
 			SetFont( FONT_ROBOTO );
 			auto vecApplicationTitle = CalculateTextBounds( _szApplicationTitle, 30 );
-			nk_widget_text( pOutput, nk_rect( 13.f + vecTextures[ TEXTURE_LOGO ].uWidth + vecTitle.x, 7, vecApplicationTitle.x, 30 ), _szApplicationTitle, strlen( _szApplicationTitle ), &txtApplication, NK_TEXT_CENTERED, pContext->style.font );
+			nk_widget_text( pOutput, nk_rect( pContext->current->bounds.x + 13.f + vecTextures[ TEXTURE_LOGO ].uWidth + vecTitle.x, pContext->current->bounds.y + 7, vecApplicationTitle.x, 30 ), _szApplicationTitle, strlen( _szApplicationTitle ), &txtApplication, NK_TEXT_CENTERED, pContext->style.font );
 
 			static auto clrMinimize = clrBlue, clrClose = clrMinimize;
 			txtMinimizeButton.text = clrMinimize;
 			txtCloseButton.text = clrClose;
-			const struct nk_rect recMinimize = { flWidth - 70, 19, 20, 8 };
-			const struct nk_rect recCloseButton = { flWidth - 33, 13, 20, 20 };
+			struct nk_rect recMinimize = { pContext->current->bounds.x + flWidth - 70, pContext->current->bounds.y + 19, 20, 8 };
+			struct nk_rect recCloseButton = { pContext->current->bounds.x + flWidth - 33, pContext->current->bounds.y + 13, 20, 20 };
 			nk_widget_text( pOutput, recMinimize, ICON_FA_MINUS, strlen( ICON_FA_MINUS ), &txtMinimizeButton, NK_TEXT_CENTERED, pContext->style.font );
 			nk_widget_text( pOutput, recCloseButton, ICON_FA_TIMES, strlen( ICON_FA_TIMES ), &txtCloseButton, NK_TEXT_CENTERED, pContext->style.font );
 
@@ -857,7 +919,8 @@ namespace PX::UI
 			{
 				auto recBoundaries = nk_widget_bounds( pContext );
 				auto pOutput = nk_window_get_canvas( pContext );
-				nk_fill_rect_multi_color( pOutput, recBoundaries, clrBorder, clrDarkBackground, clrDarkBackground, clrBorder );
+
+				nk_fill_rect( pOutput, recBoundaries, 0.f, clrBackground );
 
 				recBoundaries.w += recBoundaries.x;
 				recBoundaries.h += recBoundaries.y;
@@ -865,7 +928,9 @@ namespace PX::UI
 				const auto bResult = nk_button_label_styled( pContext, &btnRegularActive, szText );
 				HoverCheck( CURSOR_HAND );
 				SetFont( FONT_TAHOMA );
-				nk_stroke_line( pOutput, recBoundaries.x + 2, recBoundaries.y, recBoundaries.x + 2, recBoundaries.h, 2, clrBlue );
+				nk_stroke_line( pOutput, recBoundaries.x, recBoundaries.y, recBoundaries.x, recBoundaries.h, 2, clrBlue );
+				nk_stroke_line( pOutput, recBoundaries.x, recBoundaries.y, recBoundaries.w, recBoundaries.y, 1, clrBorder );
+				nk_stroke_line( pOutput, recBoundaries.x, recBoundaries.h - 1, recBoundaries.w, recBoundaries.h - 1, 1, clrBorder );
 				return bResult;
 			}
 			SetFont( FONT_TAHOMA );
@@ -879,11 +944,11 @@ namespace PX::UI
 			constexpr auto uSeparatorHeight = 42u;
 			constexpr struct nk_color clrBorderColor = { 85, 88, 94, 255 };
 			const auto pDrawBuffer = nk_window_get_canvas( pContext );
-			nk_fill_rect( pDrawBuffer, nk_rect( 0.f, float( uStartHeight ), float( uNuklearWindowWidth ), float( uSeparatorHeight ) ), 0.f, nk_rgba( iRed, iGreen, iBlue, 255 ) );
-			nk_stroke_line( pDrawBuffer, 0.f, float( uStartHeight + uSeparatorHeight - 1 ), float( pContext->current->bounds.w ), float( uStartHeight + uSeparatorHeight - 1 ), 0.5f, clrBorderColor );
+			nk_fill_rect( pDrawBuffer, nk_rect( pContext->current->bounds.x, pContext->current->bounds.y + float( uStartHeight ), float( uNuklearWindowWidth ), float( uSeparatorHeight ) ), 0.f, nk_rgba( iRed, iGreen, iBlue, 255 ) );
+			nk_stroke_line( pDrawBuffer, pContext->current->bounds.x, pContext->current->bounds.y + float( uStartHeight + uSeparatorHeight - 1 ), pContext->current->bounds.x + float( pContext->current->bounds.w ), pContext->current->bounds.y + float( uStartHeight + uSeparatorHeight - 1 ), 0.5f, clrBorderColor );
 
 			if ( bUpperBorder )
-				nk_stroke_line( pDrawBuffer, 0.f, float( uStartHeight + 1 ), float( pContext->current->bounds.w ), float( uStartHeight + 1 ), 0.5f, clrBorderColor );
+				nk_stroke_line( pDrawBuffer, pContext->current->bounds.x, pContext->current->bounds.y + float( uStartHeight + 1 ), pContext->current->bounds.x + float( pContext->current->bounds.w ), pContext->current->bounds.y + float( uStartHeight + 1 ), 0.5f, clrBorderColor );
 
 			if ( pLinkList == nullptr )
 				return;
@@ -1057,7 +1122,7 @@ namespace PX::UI
 			SetFont( FONT_TAHOMA );
 			nk_layout_space_begin( pContext, NK_STATIC, float( uBoxHeight ), 1 );
 			const auto recBoundaries = nk_widget_bounds( pContext );
-			nk_layout_space_push( pContext, nk_rect( float( uStartX - recBoundaries.x ), float( uStartY - recBoundaries.y ), float( uBoxWidth ), float( uBoxHeight ) ) );
+			nk_layout_space_push( pContext, nk_rect( pContext->current->bounds.x + float( uStartX - recBoundaries.x ), pContext->current->bounds.y + float( uStartY - recBoundaries.y ), float( uBoxWidth ), float( uBoxHeight ) ) );
 			auto recNewBoundaries = nk_widget_bounds( pContext );
 			if ( !nk_group_begin( pContext, szTitle, NK_WINDOW_NO_SCROLLBAR ) )
 				return false;
@@ -1095,7 +1160,7 @@ namespace PX::UI
 			const auto _uWindowWidth = pContext->current->bounds.w, _uWindowHeight = pContext->current->bounds.h;
 			const struct nk_rect recColorPickerBoundaries
 			{
-				_uWindowWidth / 2 - flColorPickerWidth / 2, _uWindowHeight / 2 - flColorPickerHeight / 2, flColorPickerWidth, flColorPickerHeight
+				pContext->current->bounds.x + _uWindowWidth / 2 - flColorPickerWidth / 2, pContext->current->bounds.y + _uWindowHeight / 2 - flColorPickerHeight / 2, flColorPickerWidth, flColorPickerHeight
 			};
 			const static std::string strBaseTitle = PX_XOR( R"(Color of ')" );
 
@@ -1128,7 +1193,7 @@ namespace PX::UI
 			bNewColor = false;
 
 			const auto pOutput = nk_window_get_canvas( pContext );
-			nk_fill_rect( pOutput, nk_rect( 0, 0, _uWindowWidth, _uWindowHeight ), 0, nk_rgba( 0, 0, 0, 180 ) );
+			nk_fill_rect( pOutput, nk_rect( pContext->current->bounds.x, pContext->current->bounds.y, _uWindowWidth, _uWindowHeight ), 0, nk_rgba( 0, 0, 0, 180 ) );
 
 			if ( bShouldClose )
 			{
@@ -1138,7 +1203,8 @@ namespace PX::UI
 
 			if ( bStoppedClicking && nk_popup_begin( pContext, NK_POPUP_DYNAMIC, ( strBaseTitle + szColorPickerSubject + "'" ).c_str( ),
 								 NK_WINDOW_BORDER | NK_WINDOW_TITLE | NK_WINDOW_NO_SCROLLBAR,
-								 recColorPickerBoundaries, pActiveEditColor == nullptr ) )
+								 nk_rect( recColorPickerBoundaries.x - pContext->current->bounds.x, recColorPickerBoundaries.y - pContext->current->bounds.y,
+										  recColorPickerBoundaries.w, recColorPickerBoundaries.h ), pActiveEditColor == nullptr ) )
 			{
 				nk_layout_row_static( pContext, 255, 295, 1 );
 				clrChosenColor = nk_color_picker( pContext, clrChosenColor, NK_RGBA );

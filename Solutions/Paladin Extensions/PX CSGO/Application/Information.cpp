@@ -30,7 +30,14 @@ namespace PX::Information
 			//js[ "Patterns" ][ "Offsets" ][ "Device" ] = 1;
 			//
 			//std::string str = js.dump( 4 );
+#ifdef _DEBUG
+			std::wstring wstrBuffer;
+			const auto wstrDir = Files::GetPXDirectory( );
+			Files::FileRead( wstrDir.substr( 0, wstrDir.substr( 0, wstrDir.find_last_of( L'\\' ) ).find_last_of( L'\\' ) + 1 ) + LR"(PX Website\PX CSGO.px)", wstrBuffer, false, false );
+			jsMemoryInformation = nlohmann::json::parse( Tools::string_cast< std::string >( wstrBuffer ) );
+#else
 			jsMemoryInformation = nlohmann::json::parse( Cryptography::Decrypt( Net::RequestExtension( PX_EXTENSION_CSGO, true ) ) );
+#endif
 			return true;
 		}
 	}
