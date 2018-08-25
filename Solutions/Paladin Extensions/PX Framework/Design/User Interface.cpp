@@ -464,7 +464,7 @@ namespace PX::UI
 			nk_end( pContext );
 
 			IDirect3DStateBlock9* pState;
-			pDevice->CreateStateBlock( D3DSBT_PIXELSTATE, &pState );
+			pDevice->CreateStateBlock( bCreatedWindow ? D3DSBT_ALL : D3DSBT_PIXELSTATE, &pState );
 
 			if ( bCreatedWindow )
 			{

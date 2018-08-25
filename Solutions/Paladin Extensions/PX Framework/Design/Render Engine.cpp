@@ -37,11 +37,11 @@ namespace PX::Render
 				}
 
 			case WM_SETCURSOR:
-				if ( bShouldRender )
+				if ( !bCreatedWindow && bShouldRender )
 					return false;
 
 			case WM_SIZE:
-				if ( pDevice )
+				if ( false && pDevice )
 				{
 					const auto uWidth = LOWORD( llParam );
 					const auto uHeight = HIWORD( llParam );
@@ -92,24 +92,23 @@ namespace PX::Render
 
 		const auto strResourceDirectory = GetPXDirectory( ) + PX_XOR( LR"(Resources\)" );
 		wndWindow.hIcon = HICON( LoadImage( nullptr, ( strResourceDirectory + PX_XOR( LR"(Paladin Logo.ico)" ) ).c_str( ),
-											IMAGE_ICON, 0, 0, LR_LOADFROMFILE | LR_DEFAULTSIZE | LR_SHARED ) );
+		                                    IMAGE_ICON, 0, 0, LR_LOADFROMFILE | LR_DEFAULTSIZE | LR_SHARED ) );
 
 		wndWindow.lpszClassName = wszWindowTitle;
 		const auto atInstance = RegisterClassEx( &wndWindow );
 
-		RECT recWindow;
-		AdjustWindowRectEx( &recWindow, WS_OVERLAPPEDWINDOW, false, WS_EX_APPWINDOW );
+		RECT rcWindow;
+		AdjustWindowRectEx( &rcWindow, WS_OVERLAPPEDWINDOW, false, WS_EX_APPWINDOW );
 
 		const auto uScreenDimensions = GetScreenDimensions( );
+		bCreatedWindow = true;
 		hwWindowHandle = CreateWindowEx( WS_EX_APPWINDOW, wszWindowTitle, wszWindowTitle, WS_VISIBLE | WS_POPUP,
-										 CW_USEDEFAULT, CW_USEDEFAULT, uWindowWidth, uWindowHeight,
-										 nullptr, nullptr, wndWindow.hInstance, nullptr );
+		                                 CW_USEDEFAULT, CW_USEDEFAULT, uWindowWidth, uWindowHeight,
+		                                 nullptr, nullptr, wndWindow.hInstance, nullptr );
 		ShowWindow( hwWindowHandle, SW_SHOWDEFAULT );
 		SetWindowPos( hwWindowHandle, nullptr, uScreenDimensions[ 0 ] / 2 - uWindowWidth / 2, uScreenDimensions[ 1 ] / 2 - uWindowHeight / 2, uWindowWidth, uWindowHeight, NULL );
 		UpdateWindow( hwWindowHandle );
 		SetForegroundWindow( hwWindowHandle );
-
-		bCreatedWindow = true;
 	}
 
 	void PX_API InitializeDirectX( )
