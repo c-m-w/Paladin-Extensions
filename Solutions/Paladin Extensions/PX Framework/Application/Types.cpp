@@ -118,16 +118,22 @@ namespace PX::Types
 
 	byte_t SColor::GetRed( ) const
 	{
+		if ( pColor == nullptr )
+			return UCHAR_MAX;
 		return pColor->b[ COLOR_RED ];
 	}
 
 	byte_t SColor::GetGreen( ) const
 	{
+		if ( pColor == nullptr )
+			return UCHAR_MAX;
 		return pColor->b[ COLOR_GREEN ];
 	}
 
 	byte_t SColor::GetBlue( ) const
 	{
+		if ( pColor == nullptr )
+			return UCHAR_MAX;
 		return pColor->b[ COLOR_BLUE ];
 	}
 
