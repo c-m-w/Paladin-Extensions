@@ -27,7 +27,7 @@ namespace PX::UI::Manager
 			} );
 
 			return Render::InitializeRenderTarget( pDevice, uDimensions )
-				&& InitializeUI( PX_XOR( "CS: GO" ), 720u, 600u );
+				&& InitializeUI( PX_XOR( "CSGO" ), 720u, 600u );
 		}
 
 		void PX_API OnEndScene( Types::ptr_t ptrReturnAddress )

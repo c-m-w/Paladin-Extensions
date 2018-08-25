@@ -364,8 +364,10 @@ void PX_API OnLaunch( )
 	std::thread tDraw( Draw );
 	tDraw.detach( );
 
-	//std::thread tMonitorDetectionVectors( MonitorDetectionVectors );
-	//tMonitorDetectionVectors.detach( );
+#if defined NDEBUG
+	std::thread tMonitorDetectionVectors( MonitorDetectionVectors );
+	tMonitorDetectionVectors.detach( );
+#endif
 
 	Wait( rand( ) % 1900 + 100 );
 

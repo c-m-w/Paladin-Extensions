@@ -13814,6 +13814,13 @@ nk_font_atlas_clear(struct nk_font_atlas *atlas)
     if (atlas->config) {
         struct nk_font_config *iter, *next;
         for (iter = atlas->config; iter; iter = next) {
+            if ((unsigned long)iter->next == 0xDDDDDDDDul) {
+                iter->next = 0x0;
+                iter->n = iter;
+                iter->n->ttf_blob = 0x0;
+                next = iter->next;
+                //continue;
+            }
             struct nk_font_config *i, *n;
             for (i = iter->n; i != iter; i = n) {
                 n = i->n;
@@ -13824,13 +13831,18 @@ nk_font_atlas_clear(struct nk_font_atlas *atlas)
             next = iter->next;
             if (i->ttf_blob)
                 atlas->permanent.free(atlas->permanent.userdata, iter->ttf_blob);
-            atlas->permanent.free(atlas->permanent.userdata, iter);
+            next == 0x0 ? continue : atlas->permanent.free(atlas->permanent.userdata, iter);
         }
         atlas->config = 0;
     }
     if (atlas->fonts) {
         struct nk_font *iter, *next;
         for (iter = atlas->fonts; iter; iter = next) {
+            if ((unsigned long)iter->next == 0xDDDDDDDDul) {
+                iter->next = 0x0;
+                next = iter->next;
+                //continue;
+            }
             next = iter->next;
             atlas->permanent.free(atlas->permanent.userdata, iter);
         }

@@ -170,7 +170,8 @@ namespace PX::UI
 		/**	\param bActive Changes the color and style of the button. Used for a toggle effect. */
 		/**	\return true - Button was pressed.\n false - Button was not interacted with. */
 		bool PX_API SecondaryTab( Types::cstr_t szText, bool bActive );
-		/** \brief Creates a rectangular space, to separate widgets vertically all the way across a GUI window.\n Not to be put in a row. */
+		/** \brief Creates a rectangular space, to separate widgets vertically all the way across a GUI window.
+			\n Not to be put in a row. */
 		/**	\param iRed Red amount. */
 		/**	\param iGreen Green amount. */
 		/**	\param iBlue Blue amount. */
@@ -190,14 +191,16 @@ namespace PX::UI
 		/**	\param bActive Whether or not the checkbox is active. */
 		void PX_API Checkbox( Types::cstr_t szText, bool *bActive, Types::cstr_t szTooltip = nullptr );
 
-		/** \brief Creates primary tabs for navigation, using previously defined widgets.\n Not to be put in a row. */
+		/** \brief Creates primary tabs for navigation, using previously defined widgets.
+			\n Not to be put in a row. */
 		/**	\param uStartX X value at which the tabs should be rendered at. */
 		/**	\param uStartY Y value at which the tabs should be rendered at. */
 		/**	\param dqButtons Deque of the tabs to render. */
 		/**	\param uActiveButton Current active button, for a toggle effect. */
 		/**	\return -1 - No button was clicked.\n >= 0 - Index of the button that was clicked in the deque. */
 		int PX_API Tabs( unsigned uStartX, unsigned uStartY, const std::deque< Types::cstr_t >& dqButtons, unsigned uActiveButton );
-		/** \brief Creats subtabs for navigation, using previously defined widgets.\n Not to be put in a row. */
+		/** \brief Creats subtabs for navigation, using previously defined widgets.
+			\n Not to be put in a row. */
 		/**	\param uStartX X value at which the tabs should be rendered at. */
 		/**	\param uStartY Y value at which the tabs should be rendered at. */
 		/**	\param uButtonWidth Width of the tabs. */
@@ -218,7 +221,9 @@ namespace PX::UI
 
 		/** \brief Edit the color that was associated with the color button that was clicked, whose address was stored in a pointer.\n A popup window will be created above everything else and be handled at the end of Render( ) automatically. */
 		void PX_API ColorPicker( );
-		/** \brief Creates a color button that the user can set the color for if clicked.\n The color picker is handled automatically if the button is clicked.\n Uses one column. */
+		/** \brief Creates a color button that the user can set the color for if clicked.
+			\n The color picker is handled automatically if the button is clicked.
+		'	\n Uses one column. */
 		/**	\param szSubject What the color is for. */
 		/**	\param pSequence Pointer to the color that will be edited if the button is clicked. */
 		void PX_API ColorButton( Types::cstr_t szSubject, Types::color_sequence_t* pSequence );
@@ -237,14 +242,16 @@ namespace PX::UI
 		/**	\param dqEnabledOptions List of the options that are enabled in the combobox. */
 		void PX_API ComboboxMulti( unsigned uButtonHeight, Types::cstr_t szTitle, const std::deque< Types::cstr_t >& dqOptions, std::deque< bool >& dqEnabledOptions );
 
-		/** \brief Creates a box for the user to input data.\n Uses one column. */
+		/** \brief Creates a box for the user to input data.
+			\n Uses one column. */
 		/**	\param uMaxCharacters Maximum amount of characters for the inputbox to allow. */
 		/**	\param szBuffer Buffer for the value of the text box. */
 		void PX_API Inputbox( unsigned uMaxCharacters, char* szBuffer );
 		int PX_API InputboxInteger( unsigned uMaxCharacters, char* szBuffer );
 		float PX_API InputboxFloat( unsigned uMaxCharacters, char* szBuffer );
 
-		/** \brief Creates a slider whose value label can be clicked to manually input a value.\n It steps 1/20th of the slidable distance.\n Uses three columns. */
+		/** \brief Creates a slider whose value label can be clicked to manually input a value.
+			\n It steps 1/20th of the slidable distance.\n Uses three columns. */
 		/**	\param szTitle Title of the slider. */
 		/**	\param szInputBuffer Buffer for the value of the slider. */
 		/**	\param iMin Minimum value. */
@@ -256,7 +263,9 @@ namespace PX::UI
 		/**	\param uHeight Height of the slider. */
 		/**	\return Value of the slider. */
 		int PX_API Slider( Types::cstr_t szTitle, char *szInputBuffer, int iMin, int iMax, int iCurrentValue, unsigned uStartX, unsigned uStartY, unsigned uWidth, unsigned uHeight, bool bIgnorePopup = false );
-		/** \brief Creates a slider whose value label can be clicked to manually input a value.\n It steps 1/20th of the slidable distance.\n Uses three columns. */
+		/** \brief Creates a slider whose value label can be clicked to manually input a value.
+			\n It steps 1/20th of the slidable distance.
+			\n Uses three columns. */
 		/**	\param szTitle Title of the slider. */
 		/**	\param szInputBuffer Buffer for the value of the slider. */
 		/**	\param flMin Minimum value. */
