@@ -5,9 +5,9 @@
 #define PX_PRINT( var ) std::cout << #var << ": " << var << std::endl;
 #define PX_PRINT_ENUM( var, enum_type ) std::cout << std::string( #var ).substr( 0, std::string( #var ).find_last_of( '[' ) ) << "[ " << enum_type << " ]: " << var << std::endl;
 
-using namespace PX::VirtualTableIndicies;
 using namespace PX::Information;
-using namespace Interfaces;
+using namespace Memory::VirtualTableIndicies;
+using namespace Pointers;
 
 namespace PX
 {
@@ -19,7 +19,8 @@ namespace PX
 		{
 			return hkDirectXDevice->HookIndex( uEndScene, reinterpret_cast< void* >( EndScene ) )
 				&& hkDirectXDevice->HookIndex( uReset, reinterpret_cast< void* >( Reset ) )
-				&& hkDirectXDevice->HookIndex( uPresent, reinterpret_cast< void* >( Present ) )
+				&& hkClientBase->HookIndex( uFrameStageNotify, reinterpret_cast< void* >( FrameStageNotify ) )
+				&& hkClientBase->HookIndex( uCreateMove, reinterpret_cast< void* >( CreateMove ) )
 				&& hkSurface->HookIndex( uLockCursor, reinterpret_cast< void* >( LockCursor ) );
 		}
 
@@ -48,12 +49,10 @@ namespace PX
 
 		HRESULT __stdcall EndScene( IDirect3DDevice9* pDeviceParameter )
 		{
-			static auto fnOriginal = hkDirectXDevice->GetOriginalFunction< Types::endscene_t >( uEndScene );
-
-			//std::cout << "EndScene has been called." << std::endl;
+			static auto fnOriginal = hkDirectXDevice->GetOriginalFunction< endscene_t >( uEndScene );
 
 			{
-				UI::Manager::CSGO::OnEndScene( Types::ptr_t( _ReturnAddress( ) ) );
+				UI::Manager::CSGO::OnEndScene( ptr_t( _ReturnAddress( ) ) );
 			}
 
 			return fnOriginal( pDeviceParameter );
@@ -61,9 +60,7 @@ namespace PX
 
 		HRESULT __stdcall Reset( IDirect3DDevice9* pDeviceParameter, D3DPRESENT_PARAMETERS* pParams )
 		{
-			static auto fnOriginal = hkDirectXDevice->GetOriginalFunction< Types::reset_t  >( uReset );
-
-			//std::cout << "Reset has been called." << std::endl;
+			static auto fnOriginal = hkDirectXDevice->GetOriginalFunction< reset_t  >( uReset );
 
 			{
 				UI::Manager::CSGO::OnReset( );
@@ -81,18 +78,27 @@ namespace PX
 			return hrReset;
 		}
 
-		HRESULT __stdcall Present( IDirect3DDevice9* pDeviceParameter, CONST RECT* pSourceRect, CONST RECT* pDestRect, HWND hDestWindowOverride, CONST RGNDATA* pDirtyRegion )
+		void __stdcall FrameStageNotify( ClientFrameStage_t cfsStage )
 		{
-			static auto fnOriginal = hkDirectXDevice->GetOriginalFunction< Types::present_t >( uPresent );
+			static auto fnOriginal = hkClientBase->GetOriginalFunction< framestagenotify_t >( uFrameStageNotify );
+			return fnOriginal( cfsStage );
+		}
 
-			//std::cout << "Present has been called." << std::endl;
+		void __stdcall CreateMove( int sequence_number, float input_sample_frametime, bool active )
+		{
+			static auto fnOriginal = hkClientBase->GetOriginalFunction< createmove_t >( uCreateMove );
+			fnOriginal( sequence_number, input_sample_frametime, active );
 
-			return fnOriginal( pDeviceParameter, pSourceRect, pDestRect, hDestWindowOverride, pDirtyRegion );
+			const auto pLocalPlayer = Tools::GetLocalPlayer( );
+			if ( nullptr == pLocalPlayer )
+				return;
+			
+			std::cout << "Local Player Health: " << pLocalPlayer->m_iHealth( ) << std::endl;
 		}
 
 		void __fastcall LockCursor( ISurface* pThisClass, void* edx )
 		{
-			static auto fnOriginal = hkSurface->GetOriginalFunction< Types::lockcursor_t >( uLockCursor );
+			static auto fnOriginal = hkSurface->GetOriginalFunction< lockcursor_t >( uLockCursor );
 
 			if ( Render::bShouldRender )
 				return pSurface->UnlockCursor( );

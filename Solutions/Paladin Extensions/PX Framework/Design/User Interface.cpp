@@ -2,8 +2,8 @@
 
 #define PX_NUKLEAR_IMPLEMENTATION
 #define PX_USE_NAMESPACES
+
 #include "../PX Framework.hpp"
-#include "../../PX Manager/PX Manager.hpp"
 
 namespace PX::UI
 {

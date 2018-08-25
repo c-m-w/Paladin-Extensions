@@ -157,9 +157,11 @@
     <ClCompile Include="Application\Information.cpp" />
     <ClCompile Include="Design\User Interface.cpp" />
     <ClCompile Include="PX CSGO.cpp" />
+    <ClCompile Include="SDK\Tools.cpp" />
     <ClCompile Include="SDK\Valve\Math\Vector2D.cpp" />
     <ClCompile Include="SDK\Valve\Math\Vector4D.cpp" />
     <ClCompile Include="SDK\Valve\Math\VMatrix.cpp" />
+    <ClCompile Include="SDK\Valve\Types\CHandle.cpp" />
     <ClCompile Include="SDK\Valve\Types\Color.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -168,8 +170,17 @@
     <ClInclude Include="Design\User Interface.hpp" />
     <ClInclude Include="PX CSGO.hpp" />
     <ClInclude Include="SDK\SDK.hpp" />
+    <ClInclude Include="SDK\Tools.hpp" />
     <ClInclude Include="SDK\Valve\Interfaces\IAppSystem.hpp" />
     <ClInclude Include="SDK\Valve\Interfaces\IBaseClientDll.hpp" />
+    <ClInclude Include="SDK\Valve\Interfaces\IClientEntity.hpp" />
+    <ClInclude Include="SDK\Valve\Interfaces\IClientEntityList.hpp" />
+    <ClInclude Include="SDK\Valve\Interfaces\IClientMode.hpp" />
+    <ClInclude Include="SDK\Valve\Interfaces\IClientNetworkable.hpp" />
+    <ClInclude Include="SDK\Valve\Interfaces\IClientRenderable.hpp" />
+    <ClInclude Include="SDK\Valve\Interfaces\IClientThinkable.hpp" />
+    <ClInclude Include="SDK\Valve\Interfaces\IClientUnknown.hpp" />
+    <ClInclude Include="SDK\Valve\Interfaces\ICollideable.hpp" />
     <ClInclude Include="SDK\Valve\Interfaces\Interfaces.hpp" />
     <ClInclude Include="SDK\Valve\Interfaces\ISurface.hpp" />
     <ClInclude Include="SDK\Valve\Interfaces\IVEngineClient.hpp" />
@@ -179,7 +190,15 @@
     <ClInclude Include="SDK\Valve\Math\Vector2D.hpp" />
     <ClInclude Include="SDK\Valve\Math\Vector4D.hpp" />
     <ClInclude Include="SDK\Valve\Math\VMatrix.hpp" />
+    <ClInclude Include="SDK\Valve\Types\CBaseHandle.hpp" />
+    <ClInclude Include="SDK\Valve\Types\CCSWeaponInfo.hpp" />
+    <ClInclude Include="SDK\Valve\Types\CGlobalVars.hpp" />
+    <ClInclude Include="SDK\Valve\Types\CHandle.hpp" />
+    <ClInclude Include="SDK\Valve\Types\ClientClass.hpp" />
     <ClInclude Include="SDK\Valve\Types\Color.hpp" />
+    <ClInclude Include="SDK\Valve\Types\Enumerations.hpp" />
+    <ClInclude Include="SDK\Valve\Types\IHandleEntity.hpp" />
+    <ClInclude Include="SDK\Valve\Types\Recv.hpp" />
     <ClInclude Include="SDK\Valve\Types\Types.hpp" />
   </ItemGroup>
   <ItemGroup>

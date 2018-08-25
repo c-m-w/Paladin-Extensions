@@ -18,7 +18,7 @@ namespace PX::Types
 
 	ptr_t module_t::FindPattern( std::string strPattern )
 	{
-		const static auto fnIDAPatternToBytes = [ = ]( )
+		const auto fnIDAPatternToBytes = [ = ]( )
 		{
 			std::vector< int > vecBytes { };
 			auto iCurrentByteCount = 0;

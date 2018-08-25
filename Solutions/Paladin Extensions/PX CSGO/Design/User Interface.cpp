@@ -3,7 +3,7 @@
 #include "../PX CSGO.hpp"
 
 using namespace PX::Information;
-using namespace Interfaces;
+using namespace Pointers;
 using namespace Modules;
 
 namespace PX::UI::Manager

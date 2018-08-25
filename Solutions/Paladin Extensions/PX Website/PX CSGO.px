@@ -8,15 +8,26 @@
     },
     "Patterns": {
         "Offsets": {
-            "Device": 1
+            "Device": 1,
+            "Send Packets": 1,
+            "Global Variables":  1,
+            "Line Goes Through Smoke": 0,
+            "Get CS Weapon Data": 0,
+            "Is Reloading": 2
         },
         "Signatures": {
-            "Device": "A1 ? ? ? ? 50 8B 08 FF 51 0C"
+            "Device": "A1 ? ? ? ? 50 8B 08 FF 51 0C",
+            "Send Packets":  "B3 01 8B 01 8B 40 10 FF D0 84 C0 74 0F 80 BF",
+            "Global Variables": "A1 ? ? ? ? 5E 8B 40 10",
+            "Line Goes Through Smoke": "55 8B EC 83 EC 08 8B 15 ? ? ? ? 0F 57 C0",
+            "Get CS Weapon Data": "55 8B EC 81 EC ? ? ? ? 53 8B D9 56 57 8D 8B",
+            "Is Reloading": "C6 87 ? ? ? ? ? 8B 06 8B CE FF 90"
         }
     },
     "Versions": {
         "Client Base": "VClient018",
         "Engine Client": "VEngineClient014",
-        "VGUI Surface":  "VGUI_Surface031"
+        "VGUI Surface":  "VGUI_Surface031",
+        "Entity List": "VClientEntityList003"
     }
 }

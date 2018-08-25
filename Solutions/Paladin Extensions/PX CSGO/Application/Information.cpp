@@ -10,26 +10,14 @@ namespace PX::Information
 	{
 		return Memory::Setup( )
 			&& Modules::Setup( )
-			&& Interfaces::Setup( );
+			&& Pointers::FindPointers( )
+			&& FindNetworkedVariables( );
 	}
 
 	namespace Memory
 	{
 		bool PX_API Setup( )
 		{		
-			/// Used for updating information file on server dont delete.
-			//nlohmann::json js;
-			//
-			//js[ "Modules" ][ "Engine" ] = "engine.dll";
-			//js[ "Modules" ][ "Client" ] = "client.dll";
-			//js[ "Modules" ][ "DirectX API" ] = "shaderapidx9.dll";
-			//
-			//js[ "Versions" ][ "Client Base" ] = "VClient018";
-			//
-			//js[ "Patterns" ][ "Signatures" ][ "Device" ] = "A1 ? ? ? ? 50 8B 08 FF 51 0C";
-			//js[ "Patterns" ][ "Offsets" ][ "Device" ] = 1;
-			//
-			//std::string str = js.dump( 4 );
 #ifdef _DEBUG
 			std::wstring wstrBuffer;
 			const auto wstrDir = Files::GetPXDirectory( );
@@ -74,10 +62,16 @@ namespace PX::Information
 		}
 	}
 
-	namespace Interfaces
+	namespace Pointers
 	{
-		bool PX_API Setup( )
+		bool PX_API FindPointers( )
 		{
+			pSendPackets = reinterpret_cast< bool* >( Modules::mEngine.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Send Packets" ) ].get< std::string >( ) )
+													  + jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Send Packets" ) ].get< int >( ) );
+			pGlobalVariables = **reinterpret_cast< CGlobalVarsBase*** >( Modules::mClient.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Global Variables" ) ].get< std::string >( ) )
+																		 + jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Global Variables" ) ].get< int >( ) );
+
+			// Interfaces
 			pDevice = **reinterpret_cast< IDirect3DDevice9*** >( Modules::mDirectX.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Device" ) ].get< std::string >( ) )
 																 + jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Device" ) ].get< int >( ) );
 
@@ -90,10 +84,81 @@ namespace PX::Information
 			pSurface = reinterpret_cast< ISurface* >( Modules::mVGUI.ciFactory(
 				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "VGUI Surface" ) ].get< std::string >( ).c_str( ), nullptr ) );
 
-			return nullptr != pDevice
+			pEntityList = reinterpret_cast< IClientEntityList* >( Modules::mClient.ciFactory(
+				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Entity List" ) ].get< std::string >( ).c_str( ), nullptr ) );
+			return nullptr != pSendPackets
+				&& nullptr != pGlobalVariables
+				&& nullptr != pDevice
 				&& nullptr != pClientBase
 				&& nullptr != pEngineClient
 				&& nullptr != pSurface;
+		}
+	}
+
+	namespace NetworkedVariableManager
+	{
+		networked_variable_table_t PX_API ParseTable( RecvTable* pTable )
+		{
+			networked_variable_table_t nvtCurrent( pTable->m_pNetTableName );
+
+			for ( auto i = 0; i < pTable->m_nProps; i++ )
+			{
+				const auto pProp = &pTable->m_pProps[ i ];
+				if ( nullptr == pProp
+					 || std::isdigit( pProp->m_pVarName[ 0 ] )
+					 || !strcmp( pProp->m_pVarName, PX_XOR( "baseclass" ) ) )
+					continue;
+				if ( pProp->m_RecvType == DPT_DataTable && pProp->m_pDataTable != nullptr )
+				{
+					nvtCurrent.vecChildTables.emplace_back( ParseTable( pProp->m_pDataTable ) );
+					nvtCurrent.vecChildTables.back( ).ptrOffset = pProp->m_Offset;
+					nvtCurrent.vecChildTables.back( ).pProp = pProp;
+				}
+				else
+					nvtCurrent.vecChildProps.emplace_back( pProp );
+			}
+
+			return nvtCurrent;
+		}
+
+		bool PX_API FindNetworkedVariables( )
+		{
+			for ( auto pClass = Pointers::pClientBase->GetAllClasses( ); nullptr != pClass; pClass = pClass->m_pNext )
+				if ( pClass->m_pRecvTable )
+					vecNetworkedVariables.push_back( ParseTable( pClass->m_pRecvTable ) );
+			return !vecNetworkedVariables.empty( );
+		}
+
+		ptr_t PX_API FindOffset( networked_variable_table_t& nvtTable, cstr_t szVariable )
+		{
+			for each ( auto& pProp in nvtTable.vecChildProps )
+				if ( !strcmp( pProp->m_pVarName, szVariable ) )
+					return nvtTable.ptrOffset + pProp->m_Offset;
+
+			for each ( networked_variable_table_t pChild in nvtTable.vecChildTables )
+			{
+				auto ptrPropOffset = FindOffset( pChild, szVariable );
+				if( ptrPropOffset != 0 )
+					return nvtTable.ptrOffset + ptrPropOffset;
+			}
+
+			for each ( auto& pChild in nvtTable.vecChildTables )
+				if ( !strcmp( pChild.pProp->m_pVarName, szVariable ) )
+					return nvtTable.ptrOffset + pChild.ptrOffset;
+
+			return 0u;
+		}
+
+		ptr_t PX_API FindOffset( cstr_t szTable, cstr_t szVariable )
+		{
+			for each( auto pTable in vecNetworkedVariables )
+				if( !strcmp( pTable.szName, szTable ) )
+				{
+					const auto ptrResult = FindOffset( pTable, szVariable );
+					if ( 0u != ptrResult )
+						return ptrResult;
+				}
+			return 0u;
 		}
 	}
 }
