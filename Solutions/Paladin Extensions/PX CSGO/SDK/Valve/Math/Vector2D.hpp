@@ -196,6 +196,7 @@ public:
 		x = ( vecOld.x * flCos ) - ( vecOld.y * flSin ) + vecSubtractVector.x;
 		y = ( vecOld.x * flSin ) + ( vecOld.y * flCos ) + vecSubtractVector.y;
 	}
+
 	void Normalize( ) 
 	{
 		while ( this->y < -180.f )

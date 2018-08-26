@@ -8,6 +8,9 @@
 #include "SDK/SDK.hpp"
 #include "Application/Information.hpp"
 #include "SDK/Tools.hpp"
+
+#include "Features/Awareness/Glow.hpp"
+
 #include "Application/Hooks.hpp"
 
 #include "Design/User Interface.hpp"

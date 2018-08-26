@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "CClientState.hpp"
 #include "IAppSystem.hpp"
 #include "IBaseClientDll.hpp"
 #include "IClientEntity.hpp"

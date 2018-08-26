@@ -156,21 +156,27 @@
     <ClCompile Include="Application\Hooks.cpp" />
     <ClCompile Include="Application\Information.cpp" />
     <ClCompile Include="Design\User Interface.cpp" />
+    <ClCompile Include="Features\Awareness\Glow.cpp" />
     <ClCompile Include="PX CSGO.cpp" />
     <ClCompile Include="SDK\Tools.cpp" />
     <ClCompile Include="SDK\Valve\Math\Vector2D.cpp" />
     <ClCompile Include="SDK\Valve\Math\Vector4D.cpp" />
     <ClCompile Include="SDK\Valve\Math\VMatrix.cpp" />
     <ClCompile Include="SDK\Valve\Types\CHandle.cpp" />
+    <ClCompile Include="SDK\Valve\Types\characterset.cpp" />
     <ClCompile Include="SDK\Valve\Types\Color.cpp" />
+    <ClCompile Include="SDK\Valve\Types\UtlBuffer.cpp" />
+    <ClCompile Include="SDK\Valve\Types\UtlString.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application\Hooks.hpp" />
     <ClInclude Include="Application\Information.hpp" />
     <ClInclude Include="Design\User Interface.hpp" />
+    <ClInclude Include="Features\Awareness\Glow.hpp" />
     <ClInclude Include="PX CSGO.hpp" />
     <ClInclude Include="SDK\SDK.hpp" />
     <ClInclude Include="SDK\Tools.hpp" />
+    <ClInclude Include="SDK\Valve\Interfaces\CClientState.hpp" />
     <ClInclude Include="SDK\Valve\Interfaces\IAppSystem.hpp" />
     <ClInclude Include="SDK\Valve\Interfaces\IBaseClientDll.hpp" />
     <ClInclude Include="SDK\Valve\Interfaces\IClientEntity.hpp" />
@@ -194,12 +200,19 @@
     <ClInclude Include="SDK\Valve\Types\CCSWeaponInfo.hpp" />
     <ClInclude Include="SDK\Valve\Types\CGlobalVars.hpp" />
     <ClInclude Include="SDK\Valve\Types\CHandle.hpp" />
+    <ClInclude Include="SDK\Valve\Types\characterset.hpp" />
     <ClInclude Include="SDK\Valve\Types\ClientClass.hpp" />
     <ClInclude Include="SDK\Valve\Types\Color.hpp" />
     <ClInclude Include="SDK\Valve\Types\Enumerations.hpp" />
+    <ClInclude Include="SDK\Valve\Types\GlowOutlineEffect.hpp" />
     <ClInclude Include="SDK\Valve\Types\IHandleEntity.hpp" />
+    <ClInclude Include="SDK\Valve\Types\platform.hpp" />
     <ClInclude Include="SDK\Valve\Types\Recv.hpp" />
     <ClInclude Include="SDK\Valve\Types\Types.hpp" />
+    <ClInclude Include="SDK\Valve\Types\UtlBuffer.hpp" />
+    <ClInclude Include="SDK\Valve\Types\UtlMemory.hpp" />
+    <ClInclude Include="SDK\Valve\Types\UtlString.hpp" />
+    <ClInclude Include="SDK\Valve\Types\UtlVector.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PX Framework\PX Framework.vcxproj">

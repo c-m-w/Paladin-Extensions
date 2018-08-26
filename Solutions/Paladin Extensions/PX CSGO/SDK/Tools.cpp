@@ -18,9 +18,77 @@ namespace PX::Tools
 		return reinterpret_cast< bool( __cdecl* )( Vector, Vector ) >( ptrLineGoesThroughSmoke )( vecStartPos, vecEndPos );
 	}
 
+	void PX_API SetClantag( cstr_t szTag )
+	{
+		static auto ptrSetClantag = mEngine.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Set Clantag" ) ].get< std::string >( ) )
+			+ jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Set Clantag" ) ].get< int >( );
+		reinterpret_cast< int( __fastcall* )( const char*, const char* ) >( ptrSetClantag )( szTag, szTag );
+	}
+
+	void PX_API RevealRanks( )
+	{
+		static auto ptrRevealRanks = mClient.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Reveal Ranks" ) ].get< std::string >( ) )
+			+ jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Reveal Ranks" ) ].get< int >( );
+		static int iBuffer[ ] { 0, 0, 0 };
+		reinterpret_cast< char( __cdecl* )( int* ) >( ptrRevealRanks )( iBuffer );
+	}
+
 	CBasePlayer* PX_API GetLocalPlayer( )
 	{
 		return reinterpret_cast< CBasePlayer* >( pEntityList->GetClientEntity( pEngineClient->GetLocalPlayer( ) ) );
+	}
+
+	void PX_API ClampAngles( QAngle& qAngles )
+	{
+		while ( qAngles.yaw >= 180.f )
+			qAngles.yaw -= 180.f;
+		while ( qAngles.yaw <= -180.f )
+			qAngles.yaw += 180.f;
+
+		while ( qAngles.pitch >= 90.f )
+			qAngles.pitch -= 90.f;
+		while ( qAngles.pitch <= -90.f )
+			qAngles.pitch += 90.f;
+	}
+
+	bool PX_API WorldToScreen( const Vector vecWorld, Vector &vecScreen )
+	{
+		int iWidth, iHeight;
+		pEngineClient->GetScreenSize( iWidth, iHeight );
+		auto vmMatrix = pEngineClient->WorldToScreenMatrix( );
+
+		const auto flTemp = vmMatrix[ 3 ][ 0 ] * vecWorld.x + vmMatrix[ 3 ][ 1 ] * vecWorld.y + vmMatrix[ 3 ][ 2 ] * vecWorld.z + vmMatrix[ 3 ][ 3 ];
+
+		if ( flTemp <= 0.01f )
+			return false;
+
+		const auto flInverseTemp = 1.f / flTemp;
+		vecScreen.x = vmMatrix[ 0 ][ 0 ] * vecWorld.x + vmMatrix[ 0 ][ 1 ] * vecWorld.y + vmMatrix[ 0 ][ 2 ] * vecWorld.z + vmMatrix[ 0 ][ 3 ];
+		vecScreen.y = vmMatrix[ 1 ][ 0 ] * vecWorld.x + vmMatrix[ 1 ][ 1 ] * vecWorld.y + vmMatrix[ 1 ][ 2 ] * vecWorld.z + vmMatrix[ 1 ][ 3 ];
+		vecScreen = { iWidth / 2.f + 0.5f * ( vecScreen.x * flInverseTemp ) * iWidth + 0.5f, iHeight / 2.f - 0.5f * ( vecScreen.y * flInverseTemp ) * iHeight + 0.5f, 0.f };
+		return true;
+	}
+
+	Vector2D PX_API CalcAngle( Vector vecPosOne, Vector vecPosTwo )
+	{
+		vecPosTwo.x -= vecPosOne.x;
+		vecPosTwo.y -= vecPosOne.y;
+		const auto flZDifference = vecPosOne.z - vecPosTwo.z;
+		const auto flDistance = sqrt( vecPosTwo.x * vecPosTwo.x + vecPosTwo.y * vecPosTwo.y );
+
+		Vector2D vecAimAngles { D3DXToDegree( atan2( flZDifference, flDistance ) ),
+			D3DXToDegree( atan2( vecPosTwo.y, vecPosTwo.x ) ) };
+
+		vecAimAngles.Normalize( );
+		return vecAimAngles;
+	}
+
+	float PX_API GetAngleDistance( Vector vecCurrentAngles, Vector vecPosOne, Vector vecPosTwo )
+	{
+		const auto vecAngles = CalcAngle( vecPosOne, vecPosTwo );
+		Vector2D vecRelativeAngles { vecCurrentAngles.x - vecAngles.x, vecCurrentAngles.y - vecAngles.y };
+		vecRelativeAngles.Normalize( );
+		return sqrt( ( vecRelativeAngles.x * vecRelativeAngles.x ) + ( vecRelativeAngles.y * vecRelativeAngles.y ) );
 	}
 
 	bool CBaseEntity::IsPlayer( )
@@ -133,5 +201,10 @@ namespace PX::Tools
 	void CBaseCombatWeapon::UpdateAccuracyPenalty( )
 	{
 		return reinterpret_cast< void( __thiscall* )( CBaseCombatWeapon* ) >( ( *reinterpret_cast< void*** >( this ) )[ uUpdateAccuracyPenalty ] )( this );
+	}
+
+	bool CBasePlayer::IsAlive( )
+	{
+		return m_lifeState( ) == LIFE_ALIVE;
 	}
 }

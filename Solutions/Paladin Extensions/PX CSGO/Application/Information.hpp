@@ -2,8 +2,6 @@
 
 #pragma once
 
-class CBasePlayer;
-
 namespace PX::Information
 {
 	extern nlohmann::json jsMemoryInformation;
@@ -23,6 +21,9 @@ namespace PX::Information
 			// Client Base
 			PX_DEF uFrameStageNotify = 37u;
 			PX_DEF uCreateMove = 22u;
+
+			// Client Mode
+			PX_DEF uDoPostScreenEffects = 44u;
 
 			// Surface
 			PX_DEF uLockCursor = 67u;
@@ -69,9 +70,12 @@ namespace PX::Information
 
 		PX_SDK bool* pSendPackets = nullptr; // Only modify in CreateMove
 		PX_SDK CGlobalVarsBase* pGlobalVariables = nullptr;
+		PX_SDK CClientState* pClientState = nullptr;
 
 		PX_SDK IDirect3DDevice9* pDevice = nullptr;
 		PX_SDK IBaseClientDLL* pClientBase = nullptr;
+		PX_SDK IClientMode* pClientMode = nullptr;
+		PX_SDK CGlowObjectManager* pGlowObjectManager = nullptr;
 		PX_SDK IVEngineClient* pEngineClient = nullptr;
 		PX_SDK ISurface* pSurface = nullptr;
 		PX_SDK IClientEntityList* pEntityList = nullptr;
@@ -99,30 +103,30 @@ namespace PX::Information
 	}
 }
 
-#define PX_NETVAR_REFERENCE( type, name, table, netvar )                           \
-    type& name() const \
-	{                                          \
-        static int ptrOffset = PX::Information::NetworkedVariableManager::FindOffset( table, netvar );     \
-        return *reinterpret_cast< type* >( PX::Types::ptr_t( this ) + ptrOffset );                 \
+#define PX_NETVAR_REFERENCE( type, name, table, netvar )													\
+    type& name() const																						\
+	{																										\
+        static int ptrOffset = PX::Information::NetworkedVariableManager::FindOffset( table, netvar );		\
+        return *reinterpret_cast< type* >( PX::Types::ptr_t( this ) + ptrOffset );							\
     }
 
-#define PX_NETVAR_REFERENCE_OFFSET( type, name, table, netvar, offset )                           \
-    type& name() const \
-	{                                          \
-        static int ptrOffset = PX::Information::NetworkedVariableManager::FindOffset( table, netvar );     \
-        return *reinterpret_cast< type* >( PX::Types::ptr_t( this ) + ptrOffset + offset );                 \
+#define PX_NETVAR_REFERENCE_OFFSET( type, name, table, netvar, offset )										\
+    type& name() const																						\
+	{																										\
+        static int ptrOffset = PX::Information::NetworkedVariableManager::FindOffset( table, netvar );		\
+        return *reinterpret_cast< type* >( PX::Types::ptr_t( this ) + ptrOffset + offset );					\
     }
 
-#define PX_NETVAR_POINTER( type, name, table, netvar )                           \
-    type* name() const \
-	{                                          \
-        static int ptrOffset = PX::Information::NetworkedVariableManager::FindOffset( table, netvar );     \
-        return reinterpret_cast< type* >( PX::Types::ptr_t( this ) + ptrOffset );                 \
+#define PX_NETVAR_POINTER( type, name, table, netvar )														\
+    type* name() const																						\
+	{																										\
+        static int ptrOffset = PX::Information::NetworkedVariableManager::FindOffset( table, netvar );		\
+        return reinterpret_cast< type* >( PX::Types::ptr_t( this ) + ptrOffset );							\
     }
 
-#define PX_NETVAR_POINTER_OFFSET( type, name, table, netvar, offset )                           \
-    type* name() const \
-	{                                          \
-        static int ptrOffset = PX::Information::NetworkedVariableManager::FindOffset( table, netvar );     \
-        return reinterpret_cast< type* >( PX::Types::ptr_t( this ) + ptrOffset + offset );                 \
+#define PX_NETVAR_POINTER_OFFSET( type, name, table, netvar, offset )										\
+    type* name() const																						\
+	{																										\
+        static int ptrOffset = PX::Information::NetworkedVariableManager::FindOffset( table, netvar );		\
+        return reinterpret_cast< type* >( PX::Types::ptr_t( this ) + ptrOffset + offset );					\
     }

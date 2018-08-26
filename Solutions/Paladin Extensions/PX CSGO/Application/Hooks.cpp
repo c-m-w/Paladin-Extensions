@@ -21,6 +21,7 @@ namespace PX
 				&& hkDirectXDevice->HookIndex( uReset, reinterpret_cast< void* >( Reset ) )
 				&& hkClientBase->HookIndex( uFrameStageNotify, reinterpret_cast< void* >( FrameStageNotify ) )
 				&& hkClientBase->HookIndex( uCreateMove, reinterpret_cast< void* >( CreateMove ) )
+				&& hkClientMode->HookIndex( uDoPostScreenEffects, reinterpret_cast< void* >( DoPostScreenEffects ) )
 				&& hkSurface->HookIndex( uLockCursor, reinterpret_cast< void* >( LockCursor ) );
 		}
 
@@ -28,6 +29,7 @@ namespace PX
 		{
 			hkDirectXDevice = new Tools::CHook( pDevice );
 			hkClientBase = new Tools::CHook( pClientBase );
+			hkClientMode = new Tools::CHook( pClientMode );
 			hkSurface = new Tools::CHook( pSurface );
 
 			vecHookPointers.emplace_back( hkDirectXDevice );
@@ -36,6 +38,7 @@ namespace PX
 
 			return hkDirectXDevice->Succeeded( )
 				&& hkClientBase->Succeeded( )
+				&& hkClientMode->Succeeded( )
 				&& hkSurface->Succeeded( ) ? 
 				SetHooks( ) 
 			: false;
@@ -49,7 +52,7 @@ namespace PX
 
 		HRESULT __stdcall EndScene( IDirect3DDevice9* pDeviceParameter )
 		{
-			static auto fnOriginal = hkDirectXDevice->GetOriginalFunction< endscene_t >( uEndScene );
+			static auto fnOriginal = hkDirectXDevice->GetOriginalFunction< end_scene_t >( uEndScene );
 
 			{
 				UI::Manager::CSGO::OnEndScene( ptr_t( _ReturnAddress( ) ) );
@@ -80,13 +83,13 @@ namespace PX
 
 		void __stdcall FrameStageNotify( ClientFrameStage_t cfsStage )
 		{
-			static auto fnOriginal = hkClientBase->GetOriginalFunction< framestagenotify_t >( uFrameStageNotify );
+			static auto fnOriginal = hkClientBase->GetOriginalFunction< frame_stage_notify_t >( uFrameStageNotify );
 			return fnOriginal( cfsStage );
 		}
 
 		void __stdcall CreateMove( int sequence_number, float input_sample_frametime, bool active )
 		{
-			static auto fnOriginal = hkClientBase->GetOriginalFunction< createmove_t >( uCreateMove );
+			static auto fnOriginal = hkClientBase->GetOriginalFunction< create_move_t >( uCreateMove );
 			fnOriginal( sequence_number, input_sample_frametime, active );
 
 			const auto pLocalPlayer = Tools::GetLocalPlayer( );
@@ -96,9 +99,20 @@ namespace PX
 			std::cout << "Local Player Health: " << pLocalPlayer->m_iHealth( ) << std::endl;
 		}
 
+		int __stdcall DoPostScreenEffects( int iUnknown )
+		{
+			static auto fnOriginal = hkClientMode->GetOriginalFunction< do_post_screen_effects_t >( uDoPostScreenEffects );
+
+			{
+				Features::Awareness::GlowEntities( );
+			}
+
+			return fnOriginal( pClientMode, iUnknown );
+		}
+
 		void __fastcall LockCursor( ISurface* pThisClass, void* edx )
 		{
-			static auto fnOriginal = hkSurface->GetOriginalFunction< lockcursor_t >( uLockCursor );
+			static auto fnOriginal = hkSurface->GetOriginalFunction< lock_cursor_t >( uLockCursor );
 
 			if ( Render::bShouldRender )
 				return pSurface->UnlockCursor( );
