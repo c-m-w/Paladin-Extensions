@@ -17,7 +17,12 @@ namespace PX::UI::Manager
 
 			pEngineClient->GetScreenSize( iDimensions[ 0 ], iDimensions[ 1 ] );
 			memcpy( uDimensions, iDimensions, sizeof( int ) * 2 );
-			Render::bShouldRender = false;
+			static bool bSetFirstRender = false;
+			if ( !bSetFirstRender )
+			{
+				Render::bShouldRender = false;
+				bSetFirstRender = true;
+			}
 
 			PX_INPUT.AddKeyCallback( VK_HOME, [ = ]( bool bIsPressed )
 			{
@@ -37,10 +42,8 @@ namespace PX::UI::Manager
 			auto bPrintStates = bool( PX_INPUT.GetKeyState( VK_RETURN ) ) && !bPrintedStates;
 
 			if ( !ptrDesiredReturnAddress )
-			{
 				if ( Tools::FindAddressOrigin( ptrReturnAddress ) == mOverlay.hModule )
 					ptrDesiredReturnAddress = ptrReturnAddress;
-			}
 
 			if ( ptrDesiredReturnAddress == ptrReturnAddress )
 			{
@@ -67,8 +70,7 @@ namespace PX::UI::Manager
 						   && D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_MINFILTER, D3DTADDRESS_WRAP )
 						   && D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_SRGBTEXTURE, NULL ) );
 
-				if ( Render::bShouldRender && bCreatedTextures )
-					Render( );
+				Render::bShouldRender && bCreatedTextures && Render( );
 
 				px_assert( D3D_OK == pDevice->SetVertexDeclaration( pVertexDeclaration )
 						   && D3D_OK == pDevice->SetVertexShader( pVertexShader )
