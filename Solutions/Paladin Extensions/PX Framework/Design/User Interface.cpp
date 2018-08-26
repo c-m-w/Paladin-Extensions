@@ -329,7 +329,7 @@ namespace PX::UI
 			if ( !bDestroyedTextures )
 			{
 				nk_d3d9_shutdown( );
-				//dqAtlases.pop_front( );
+				dqAtlases.pop_back( );
 				for each ( auto& dqAtlas in dqAtlases )
 					nk_font_atlas_clear( const_cast< nk_font_atlas* >( &dqAtlas ) );
 				pBufferSprite->OnLostDevice( );
