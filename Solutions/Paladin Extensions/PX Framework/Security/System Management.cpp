@@ -236,8 +236,8 @@ namespace PX::sys
 					hmSearch = meEntry.hModule;
 			} while ( hmSearch == nullptr && Module32Next( hSnapshot, &meEntry ) );
 
-			CloseHandle( hSnapshot );
-			return hmSearch;
+		CloseHandle( hSnapshot );
+		return hmSearch;
 	}
 
 	bool PX_API IsProcessOpen( const std::wstring& wstrExecutableName )
@@ -262,7 +262,6 @@ namespace PX::sys
 	/// These functions have been converted to shellcode below, so they will function properly in debug mode. They should not be deleted in case we need them.
 
 	/// Resolves imports and calls DLLMain.
-
 	DWORD WINAPI LoadDLL( _In_ LPVOID lpParameter )
 	{
 		auto* injInfo = static_cast< injection_info_t* >( lpParameter );

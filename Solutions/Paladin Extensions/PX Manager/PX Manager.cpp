@@ -409,16 +409,6 @@ void PX_API OnLaunch( )
 			CleanupConnection( );
 
 			DWORD dwProcessID { };
-
-			auto strDLL = AssembleExtensionInformation( strEncryptedDLL );
-
-			const auto sDLL = strDLL.size( );
-			auto pBuffer = VirtualAlloc( nullptr, sDLL + 1, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE );
-
-			memcpy( pBuffer, strDLL.c_str( ), sDLL );
-			strEncryptedDLL.erase( strEncryptedDLL.size( ) );
-			strDLL.erase( sDLL );
-
 			do
 			{
 				dwProcessID = GetProcessID( wstrApplicationExecutableNames[ iSelectedExtension ] );
@@ -426,6 +416,14 @@ void PX_API OnLaunch( )
 			} while ( dwProcessID == 0u
 					  || !IsProcessThreadRunning( dwProcessID )
 					  || !NecessaryModulesLoaded( dwProcessID ) );
+
+			auto strDLL = AssembleExtensionInformation( strEncryptedDLL );
+			const auto sDLL = strDLL.size( );
+			auto pBuffer = VirtualAlloc( nullptr, sDLL + 1, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE );
+
+			memcpy( pBuffer, strDLL.c_str( ), sDLL );
+			strEncryptedDLL.erase( strEncryptedDLL.size( ) );
+			strDLL.erase( sDLL );
 
 			LoadRawLibraryEx( pBuffer, wstrApplicationExecutableNames[ iSelectedExtension ], new injection_info_t );
 			WipeMemory( pBuffer, sDLL );
