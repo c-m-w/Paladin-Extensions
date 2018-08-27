@@ -14,9 +14,8 @@ namespace PX::UI
 		unsigned uNuklearWindowWidth, uNuklearWindowHeight;
 		struct nk_rect recWindow;
 
+		nk_font_atlas* pAtlas;
 		std::deque< nk_font* > dqFonts;
-		std::deque< nk_font_atlas > dqAtlases;
-		//struct nk_font *pTahoma, *pTahomaBold, *pRoboto, *pRobotoBold, *pRobotoSmall, *pRobotoBoldSmall, *pEnvy;
 		struct nk_rect recComboboxWindowBounds;
 		bool bDrawComboboxArrow = false;
 
@@ -32,23 +31,19 @@ namespace PX::UI
 
 		LPD3DXSPRITE pBufferSprite;
 
+
 		nk_font* PX_API AddFont( std::string strFontFileName, unsigned uFontSize, unsigned uFontAwesomeSize = 0 )
 		{
-			static std::string strFontDirectory( PX_XOR( R"(C:\Windows\Fonts\)" ) );
-			static struct nk_font_config fcFontAwesome = nk_font_config( 16 );
+			std::string strFontDirectory( PX_XOR( R"(C:\Windows\Fonts\)" ) );
+
+			const auto flFontAwesomeSize = float( uFontAwesomeSize ? uFontAwesomeSize : uFontSize );
+			auto fcFontAwesome = nk_font_config( flFontAwesomeSize );
 			static constexpr nk_rune rnIconRange[ ] { ICON_MIN_FA, ICON_MAX_FA, 0 };
 			fcFontAwesome.range = rnIconRange;
 			fcFontAwesome.merge_mode = 1;
 
-			nk_font_atlas* pAtlas;
-			nk_d3d9_font_stash_begin( &pAtlas );
 			auto pFont = nk_font_atlas_add_from_file( pAtlas, ( strFontDirectory + strFontFileName ).c_str( ), float( uFontSize ), nullptr );
-			nk_font_atlas_add_from_file( pAtlas, ( strFontDirectory + PX_XOR( "FontAwesome.ttf" ) ).c_str( ),
-													uFontAwesomeSize ? float( uFontAwesomeSize ) : float( uFontSize ), &fcFontAwesome );
-			dqAtlases.emplace_back( nk_font_atlas( ) );
-			memcpy( &dqAtlases[ dqAtlases.size( ) - 1 ], pAtlas, sizeof( nk_font_atlas ) );
-			nk_d3d9_font_stash_end( );
-
+			nk_font_atlas_add_from_file( pAtlas, ( strFontDirectory + PX_XOR( "FontAwesome.ttf" ) ).c_str( ), flFontAwesomeSize, &fcFontAwesome );
 			return pFont;
 		}
 
@@ -61,6 +56,7 @@ namespace PX::UI
 			if ( !dqFonts.empty( ) )
 				dqFonts.clear( );
 
+			nk_d3d9_font_stash_begin( &pAtlas );
 			dqFonts.emplace_back( AddFont( PX_XOR( "tahoma.ttf" ), 16 ) );
 			dqFonts.emplace_back( AddFont( PX_XOR( "tahomabd.ttf" ), 16 ) );
 			dqFonts.emplace_back( AddFont( PX_XOR( "Roboto-Regular.ttf" ), 26 ) );
@@ -68,6 +64,7 @@ namespace PX::UI
 			dqFonts.emplace_back( AddFont( PX_XOR( "Roboto-Regular.ttf" ), 16, 14 ) );
 			dqFonts.emplace_back( AddFont( PX_XOR( "RobotoBold.ttf" ), 16, 18 ) );
 			dqFonts.emplace_back( AddFont( PX_XOR( "Envy.ttf" ), 14 ) );
+			nk_d3d9_font_stash_end( );
 
 			px_assert( dqFonts.size( ) == FONT_MAX );
 
@@ -329,9 +326,6 @@ namespace PX::UI
 			if ( !bDestroyedTextures )
 			{
 				nk_d3d9_shutdown( );
-				dqAtlases.pop_back( );
-				for each ( auto& dqAtlas in dqAtlases )
-					nk_font_atlas_clear( const_cast< nk_font_atlas* >( &dqAtlas ) );
 				pBufferSprite->OnLostDevice( );
 				DestroySpriteTextures( );
 				bDestroyedTextures = true;

@@ -13407,6 +13407,7 @@ NK_API struct nk_font*
 nk_font_atlas_add(struct nk_font_atlas *atlas, const struct nk_font_config *config)
 {
     struct nk_font *font = 0;
+	  static struct nk_font *font_last;
     struct nk_font_config *cfg;
 
     NK_ASSERT(atlas);
@@ -13462,12 +13463,13 @@ nk_font_atlas_add(struct nk_font_atlas *atlas, const struct nk_font_config *conf
             font->next = 0;
         }
         cfg->font = &font->info;
+		    font_last = font;
     } else {
         /* extend previously added font */
         struct nk_font *f = 0;
         struct nk_font_config *c = 0;
-        NK_ASSERT(atlas->font_num);
-        f = atlas->fonts;
+        NK_ASSERT( font_last );
+        f = font_last;
         c = f->config;
         cfg->font = &f->info;
 
