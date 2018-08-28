@@ -14,6 +14,7 @@
 #include "IHandleEntity.hpp"
 #include "platform.hpp"
 #include "Recv.hpp"
+#include "Studio.hpp"
 #include "UtlBuffer.hpp"
 #include "UtlMemory.hpp"
 #include "UtlString.hpp"

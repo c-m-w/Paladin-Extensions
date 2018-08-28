@@ -314,10 +314,6 @@ void PX_API UI::Manager::SetLayout( )
 	}
 }
 
-void PX_API UI::Manager::DrawOther( )
-{
-}
-
 void PX_API Draw( )
 {
 	unsigned uDimensions[ 2 ] { 720, 435 };

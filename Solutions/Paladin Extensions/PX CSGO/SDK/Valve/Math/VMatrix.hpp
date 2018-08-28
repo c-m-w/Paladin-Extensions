@@ -10,7 +10,6 @@ struct cplane_t
     unsigned char type;   // for fast side tests
     unsigned char signbits;  // signx + (signy<<1) + (signz<<1)
     unsigned char pad[2];
-
 };
 
 class matrix3x4_t

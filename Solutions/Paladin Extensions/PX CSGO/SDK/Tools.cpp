@@ -11,6 +11,22 @@ using namespace Pointers;
 
 namespace PX::Tools
 {
+	CBasePlayer* PX_API GetLocalPlayer( )
+	{
+		return reinterpret_cast< CBasePlayer* >( pEntityList->GetClientEntity( pEngineClient->GetLocalPlayer( ) ) );
+	}
+
+	bool PX_API ValidPlayer( void* pEntity )
+	{
+		if ( !pEntity )
+			return false;
+
+		const auto pPlayer = reinterpret_cast< CBasePlayer* >( pEntity );
+		if ( !pPlayer->IsPlayer( ) || !pPlayer->IsAlive( ) )
+			return false;
+		return true;
+	}
+
 	bool PX_API LineGoesThroughSmoke( Vector vecStartPos, Vector vecEndPos )
 	{
 		static auto ptrLineGoesThroughSmoke = mClient.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Line Goes Through Smoke" ) ].get< std::string >( ) )
@@ -31,11 +47,6 @@ namespace PX::Tools
 			+ jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Reveal Ranks" ) ].get< int >( );
 		static int iBuffer[ ] { 0, 0, 0 };
 		reinterpret_cast< char( __cdecl* )( int* ) >( ptrRevealRanks )( iBuffer );
-	}
-
-	CBasePlayer* PX_API GetLocalPlayer( )
-	{
-		return reinterpret_cast< CBasePlayer* >( pEntityList->GetClientEntity( pEngineClient->GetLocalPlayer( ) ) );
 	}
 
 	void PX_API ClampAngles( QAngle& qAngles )
@@ -69,6 +80,13 @@ namespace PX::Tools
 		return true;
 	}
 
+	void PX_API TransformVector( Vector vecInput, matrix3x4_t mtxInput, Vector& vecOutput )
+	{
+		vecOutput[ 0 ] = vecInput.Dot( mtxInput[ 0 ] ) + mtxInput[ 0 ][ 3 ];
+		vecOutput[ 1 ] = vecInput.Dot( mtxInput[ 1 ] ) + mtxInput[ 1 ][ 3 ];
+		vecOutput[ 2 ] = vecInput.Dot( mtxInput[ 2 ] ) + mtxInput[ 2 ][ 3 ];
+	}
+
 	Vector2D PX_API CalcAngle( Vector vecPosOne, Vector vecPosTwo )
 	{
 		vecPosTwo.x -= vecPosOne.x;
@@ -89,6 +107,38 @@ namespace PX::Tools
 		Vector2D vecRelativeAngles { vecCurrentAngles.x - vecAngles.x, vecCurrentAngles.y - vecAngles.y };
 		vecRelativeAngles.Normalize( );
 		return sqrt( ( vecRelativeAngles.x * vecRelativeAngles.x ) + ( vecRelativeAngles.y * vecRelativeAngles.y ) );
+	}
+
+	RECT CalculateRenderBounds( Vector* vecScreenPoints )
+	{
+		if ( !vecScreenPoints )
+			return RECT( );
+
+		auto flLeft = vecScreenPoints[ 0 ].x;
+		auto flTop = vecScreenPoints[ 0 ].y;
+		auto flRight = vecScreenPoints[ 0 ].x;
+		auto flBottom = vecScreenPoints[ 0 ].y;
+
+		for ( auto i = 1; i < 8; i++ )
+		{
+			if ( flLeft > vecScreenPoints[ i ].x )
+				flLeft = vecScreenPoints[ i ].x;
+			if ( flTop < vecScreenPoints[ i ].y )
+				flTop = vecScreenPoints[ i ].y;
+			if ( flRight < vecScreenPoints[ i ].x )
+				flRight = vecScreenPoints[ i ].x;
+			if ( flBottom > vecScreenPoints[ i ].y )
+				flBottom = vecScreenPoints[ i ].y;
+		}
+		return RECT { int( flLeft ), int( flTop ), int( flRight ), int( flBottom ) };
+	}
+
+	RECT CalculateRenderBounds( CBaseEntity* pEntity )
+	{
+		const auto pPoints = pEntity->BoundingBox( );
+		const auto recReturn = CalculateRenderBounds( pPoints );
+		delete[ ] pPoints;
+		return recReturn;
 	}
 
 	bool CBaseEntity::IsPlayer( )
@@ -113,14 +163,49 @@ namespace PX::Tools
 
 	float CBaseEntity::GetBombTimer( )
 	{
-		const auto flTimer = *reinterpret_cast< float* >( this + Offsets::ptrBombTimer ) - pGlobalVariables->curtime;
+		const auto flTimer = *reinterpret_cast< float* >( this + Offsets::ptrBombTimer ) - pGlobalVariables->m_flCurrentTime;
 		return flTimer > 0.f ? flTimer : 0.f;
 	}
 
 	float CBaseEntity::GetDefuseTimer( )
 	{
-		const auto flTimer = *reinterpret_cast< float* >( this + Offsets::ptrDefuseTimer ) - pGlobalVariables->curtime;
+		const auto flTimer = *reinterpret_cast< float* >( this + Offsets::ptrDefuseTimer ) - pGlobalVariables->m_flCurrentTime;
 		return flTimer > 0.f ? flTimer : 0.f;
+	}
+
+	Vector* CBaseEntity::BoundingBox( )
+	{
+		const auto pCollideable = GetCollideable( );
+		if ( !pCollideable )
+			return nullptr;
+
+		const auto vecMin = pCollideable->OBBMins( );
+		const auto vecMax = pCollideable->OBBMaxs( );
+		const auto& mtxCoordinateFrame = m_rgflCoordinateFrame( );
+
+		Vector points[ ] = {
+			Vector( vecMin.x, vecMin.y, vecMin.z ),
+			Vector( vecMin.x, vecMax.y, vecMin.z ),
+			Vector( vecMax.x, vecMax.y, vecMin.z ),
+			Vector( vecMax.x, vecMin.y, vecMin.z ),
+			Vector( vecMax.x, vecMax.y, vecMax.z ),
+			Vector( vecMin.x, vecMax.y, vecMax.z ),
+			Vector( vecMin.x, vecMin.y, vecMax.z ),
+			Vector( vecMax.x, vecMin.y, vecMax.z )
+		};
+
+		Vector vecTransformedPoints[ 8 ];
+		for ( auto i = 0; i < 8; i++ )
+			TransformVector( points[ i ], mtxCoordinateFrame, vecTransformedPoints[ i ] );
+
+		const auto vecScreenPoints = new Vector[ 8 ];
+		for ( auto i = 0; i < 8; i++ )
+			if ( !WorldToScreen( vecTransformedPoints[ i ], vecScreenPoints[ i ] ) )
+			{
+				delete[ ] vecScreenPoints;
+				return nullptr;
+			}
+		return vecScreenPoints;
 	}
 
 	CEconomyItemView* CBaseAttributableItem::m_Item( )
@@ -144,7 +229,7 @@ namespace PX::Tools
 	{
 		if ( !HasBullets( ) )
 			return false;
-		return m_flNextPrimaryAttack( ) <= pGlobalVariables->curtime;
+		return m_flNextPrimaryAttack( ) <= pGlobalVariables->m_flCurrentTime;
 	}
 
 	bool CBaseCombatWeapon::IsGrenade( )
@@ -206,5 +291,51 @@ namespace PX::Tools
 	bool CBasePlayer::IsAlive( )
 	{
 		return m_lifeState( ) == LIFE_ALIVE;
+	}
+
+	Vector CBasePlayer::GetViewPosition( )
+	{
+		return m_vecOrigin( ) + m_vecViewOffset( );
+	}
+
+	bool CBasePlayer::PositionInSight( Vector& vecPosition, bool bMindSmoke, void* pEntity /*= nullptr*/ )
+	{
+		auto vecStart = GetViewPosition( );
+		if ( bMindSmoke && LineGoesThroughSmoke( vecStart, vecPosition ) )
+			return false;
+
+		CTraceFilter tfFilter;
+		Ray_t rRay;
+		CGameTrace gtRay;
+
+		tfFilter.pSkip = this;
+
+		rRay.Init( vecStart, vecPosition );
+		pEngineTrace->TraceRay( rRay, PX_MASK_VISIBLE, &tfFilter, &gtRay );
+
+		if ( gtRay.fraction == 1.f )
+			return true;
+		return gtRay.hit_entity == pEntity;
+	}
+
+	Vector CBasePlayer::GetHitboxPosition( EHitbox hHitboxID )
+	{
+		matrix3x4_t mtxBones[ MAXSTUDIOBONES ];
+
+		if ( !SetupBones( mtxBones, MAXSTUDIOBONES, BONE_USED_BY_HITBOX, 0.f ) )
+			return Vector( );
+
+		const auto pStudioModel = pModelInfo->GetStudiomodel( GetModel( ) );
+		if ( !pStudioModel )
+			return Vector( );
+
+		const auto pHitbox = pStudioModel->GetHitboxSet( NULL )->GetHitbox( hHitboxID );
+		if ( !pHitbox )
+			return Vector( );
+
+		Vector vecMin, vecMax;
+		TransformVector( pHitbox->bbmin, mtxBones[ pHitbox->bone ], vecMin );
+		TransformVector( pHitbox->bbmax, mtxBones[ pHitbox->bone ], vecMax );
+		return ( vecMin + vecMax ) / 2.f;
 	}
 }

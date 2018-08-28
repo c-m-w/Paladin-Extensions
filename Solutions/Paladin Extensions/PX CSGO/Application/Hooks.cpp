@@ -55,7 +55,40 @@ namespace PX
 			static auto fnOriginal = hkDirectXDevice->GetOriginalFunction< end_scene_t >( uEndScene );
 
 			{
+				IDirect3DStateBlock9* pNewState = nullptr;
+				IDirect3DVertexDeclaration9* pVertexDeclaration = nullptr;
+				IDirect3DVertexShader9* pVertexShader = nullptr;
+				DWORD dwColorWrite, dwSRGBWrite;
+
+				pDevice->CreateStateBlock( D3DSBT_PIXELSTATE, &pNewState );
+
+				px_assert( D3D_OK == pDevice->GetVertexDeclaration( &pVertexDeclaration )
+						   && D3D_OK == pDevice->GetVertexShader( &pVertexShader )
+
+						   && D3D_OK == pDevice->GetRenderState( D3DRS_COLORWRITEENABLE, &dwColorWrite )
+						   && D3D_OK == pDevice->GetRenderState( D3DRS_SRGBWRITEENABLE, &dwSRGBWrite )
+						   && D3D_OK == pDevice->SetRenderState( D3DRS_COLORWRITEENABLE, UINT_MAX )
+						   && D3D_OK == pDevice->SetRenderState( D3DRS_SRGBWRITEENABLE, NULL )
+						   && D3D_OK == pDevice->SetRenderState( D3DRS_DESTBLEND, D3DBLEND_ZERO )
+
+						   && D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP )
+						   && D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_ADDRESSV, D3DTADDRESS_WRAP )
+						   && D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_ADDRESSW, D3DTADDRESS_WRAP )
+						   && D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_MAGFILTER, D3DTADDRESS_WRAP )
+						   && D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_MINFILTER, D3DTADDRESS_WRAP )
+						   && D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_SRGBTEXTURE, NULL ) );
+
+				Features::Awareness::Draw( );
 				UI::Manager::CSGO::OnEndScene( ptr_t( _ReturnAddress( ) ) );
+
+				px_assert( D3D_OK == pDevice->SetVertexDeclaration( pVertexDeclaration )
+						   && D3D_OK == pDevice->SetVertexShader( pVertexShader )
+						   && D3D_OK == pDevice->SetRenderState( D3DRS_COLORWRITEENABLE, dwColorWrite )
+						   && D3D_OK == pDevice->SetRenderState( D3DRS_SRGBWRITEENABLE, dwSRGBWrite ) );
+
+
+				pNewState->Apply( );
+				pNewState->Release( );
 			}
 
 			return fnOriginal( pDeviceParameter );

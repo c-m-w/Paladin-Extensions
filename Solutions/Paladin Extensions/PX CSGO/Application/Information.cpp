@@ -88,6 +88,10 @@ namespace PX::Information
 				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "VGUI Surface" ) ].get< std::string >( ).c_str( ), nullptr ) );
 			pEntityList = reinterpret_cast< IClientEntityList* >( Modules::mClient.ciFactory(
 				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Entity List" ) ].get< std::string >( ).c_str( ), nullptr ) );
+			pEngineTrace = reinterpret_cast< IEngineTrace* >( Modules::mEngine.ciFactory(
+				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Engine Trace" ) ].get< std::string >( ).c_str( ), nullptr ) );
+			pModelInfo = reinterpret_cast< IVModelInfoClient* >( Modules::mEngine.ciFactory(
+				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Model Info" ) ].get< std::string >( ).c_str( ), nullptr ) );
 
 			return nullptr != pSendPackets
 				&& nullptr != pGlobalVariables
@@ -98,7 +102,9 @@ namespace PX::Information
 				&& nullptr != pClientBase
 				&& nullptr != pEngineClient
 				&& nullptr != pSurface
-				&& nullptr != pEntityList;
+				&& nullptr != pEntityList
+				&& nullptr != pEngineTrace
+				&& nullptr != pModelInfo;
 		}
 	}
 
