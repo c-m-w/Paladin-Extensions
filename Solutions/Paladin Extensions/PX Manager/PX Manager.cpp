@@ -98,7 +98,7 @@ void PX_API UI::Manager::SetLayout( )
 	static auto bReverseColor = false;
 	uWindowDimensions = GetCurrentWindowDimensions( );
 
-	if ( !bLoggedIn && iLoginStatus == -1 ) /// Connecting to server.
+	if ( !bLoggedIn && iLoginStatus == -1 ) // Connecting to server.
 	{
 		Header( PX_XOR( "Paladin Extensions" ), PX_XOR( "Manager" ), 600u, nullptr, fnClose );
 
@@ -108,7 +108,7 @@ void PX_API UI::Manager::SetLayout( )
 
 		vecImageQueue.emplace_back( TEXTURE_LOGO_LOADING, vecLogoPosition, D3DCOLOR_ARGB( bLogoAlpha, bLogoAlpha, bLogoAlpha, bLogoAlpha ) );
 	}
-	else if ( !bLoggedIn && iLoginStatus > -1 ) /// Error message
+	else if ( !bLoggedIn && iLoginStatus > -1 ) // Error message
 	{
 		Header( PX_XOR( "Paladin Extensions" ), PX_XOR( "Manager" ), 600u, nullptr, fnClose );
 

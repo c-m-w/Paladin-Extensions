@@ -3,11 +3,25 @@
 #define PX_USE_NAMESPACES
 #include "../../PX Framework.hpp"
 
+namespace PX::sys
+{
+	/** \brief Retrieves info from WMIC service */
+	/** \param bszDevice Device name, generally Win32_ */
+	/** \param wszDeviceProperty Property to find from index */
+	/** \return Property of device */
+	PX_EXT std::wstring PX_API RetrieveInfo( const bstr_t& bszDevice, wcstr_t wszDeviceProperty = PX_XOR( L"Name" ) );
+}
+
 namespace PX::AnalysisProtection
 {
 	namespace Debug
 	{
-
+		bool RemoteDebuggerPresence( HANDLE hTarget /*= GetCurrentProcess( )*/ )
+		{
+			BOOL bPresent;
+			px_assert( 0 != CheckRemoteDebuggerPresent( hTarget, &bPresent ) );
+			return FALSE != bPresent;
+		}
 	}
 
 	namespace Analysis
@@ -26,9 +40,7 @@ namespace PX::AnalysisProtection
 					wchar_t wchAppKeyID[ 1024 ];
 					DWORD dwBuffer = sizeof wchAppKeyID;
 					if ( RegEnumKeyEx( hkeyUninstall, u++, wchAppKeyID, &dwBuffer, nullptr, nullptr, nullptr, nullptr ) != ERROR_SUCCESS )
-					{
 						break;
-					}
 
 					wchar_t wchSubKeyID[ dwBuffer ];
 					wsprintf( wchSubKeyID, L"%s\\%s", wszRegPath, wchAppKeyID );
@@ -44,10 +56,9 @@ namespace PX::AnalysisProtection
 				} while ( true );
 				RegCloseKey( hkeyUninstall );
 			}
-			std::wstringstream ssBuffer( wchDisplay );
 			{
 				// todo skel
-				wcstr_t wszAnalysisTools[ ]
+				wcstr_t wszAnalysisToolsInstallName[ ]
 				{
 					PX_XOR( L"Cheat Engine 6.6" ),
 					PX_XOR( L"cheatengine-i386.exe" ),
@@ -85,17 +96,34 @@ namespace PX::AnalysisProtection
 					PX_XOR( L"joeboxcontrol.exe" ),
 					PX_XOR( L"joeboxserver.exe" )
 				};
-				std::wstring wstrBuffer;
-				std::getline( ssBuffer, wstrBuffer );
-				for each ( auto& wszAnalysisTool in wszAnalysisTools )
-					if ( wstrBuffer.substr( 0, 7 ) == std::wstring( wszAnalysisTool ).substr( 0, 7 ) )
-						return true;
+				{
+					std::wstringstream ssReg( wchDisplay ), ssWMIC( RetrieveInfo( PX_XOR( L"SELECT * FROM Win32_Product" ) ) );
+					do
+					{
+						std::wstring wstrBuffer;
+						if ( !ssReg.eof )
+						{
+							std::getline( ssReg, wstrBuffer );
+							for each ( auto& wszAnalysisTool in wszAnalysisToolsInstallName )
+								if ( wstrBuffer.substr( 0, 7 ) == std::wstring( wszAnalysisTool ).substr( 0, 7 ) )
+									return true;
+						}
+						if ( !ssWMIC.eof )
+						{
+							std::getline( ssWMIC, wstrBuffer );
+							for each ( auto& wszAnalysisTool in wszAnalysisToolsInstallName )
+								if ( wstrBuffer.substr( 0, 7 ) == std::wstring( wszAnalysisTool ).substr( 0, 7 ) )
+									return true;
+						}
+					} while ( !ssReg.eof( ) || !ssWMIC.eof( ) );
+				}
 			}
+			return false;
 		}
 
 		bool AnalysisToolsRunning( )
 		{
-			wcstr_t wszAnalysisTools[ ]
+			wcstr_t wszAnalysisToolsExecutableTitle[ ]
 			{
 				PX_XOR( L"Cheat Engine.exe" ),
 				PX_XOR( L"cheatengine-i386.exe" ),
@@ -131,12 +159,19 @@ namespace PX::AnalysisProtection
 				PX_XOR( L"windbg.exe" ),
 				PX_XOR( L"dnspy.exe" ),
 				PX_XOR( L"joeboxcontrol.exe" ),
-				PX_XOR( L"joeboxserver.exe" )
+				PX_XOR( L"joeboxserver.exe" ),
+				PX_XOR( L"lsass.exe" )
 			};
-			bool bProcessFound = false;
-			for each ( auto& wszAnalysisTool in wszAnalysisTools )
-				bProcessFound |= GetProcessID( wszAnalysisTool );
-			return bProcessFound;
+			bool bResult = true;
+			for each ( auto& wszAnalysisTool in wszAnalysisToolsExecutableTitle )
+				if ( std::wstring( PX_XOR( L"lsass.exe" ) ) == wszAnalysisTool )
+				{
+					bResult = false;
+					goto Ensure;
+				}
+				else Ensure: if ( GetProcessID( wszAnalysisTool ) )
+					return bResult;
+			return false; // bytepatched
 		}
 	}
 

@@ -5,15 +5,23 @@
 
 namespace PX::sys
 {
+	/** \brief Retrieves info from WMIC service */
+	/** \param bszDevice Device name, generally Win32_ */
+	/** \param wszDeviceProperty Property to find from index */
+	/** \return Property of device */
 	std::wstring PX_API RetrieveInfo( const bstr_t& bszDevice, wcstr_t wszDeviceProperty = PX_XOR( L"Name" ) )
 	{
-		const auto hrReturn = CoInitialize( nullptr );
-		if ( hrReturn != S_OK && hrReturn != S_FALSE )
-			return PX_XOR( L"-1" );
+		{
+			const auto hrReturn = CoInitialize( nullptr );
+			if ( hrReturn != S_OK && hrReturn != S_FALSE )
+				return PX_XOR( L"-1" );
+		}
 
+		{
 		auto hResult = CoInitializeSecurity( nullptr, -1, nullptr, nullptr, RPC_C_AUTHN_LEVEL_DEFAULT, RPC_C_IMP_LEVEL_IMPERSONATE, nullptr, EOAC_NONE, nullptr );
 		if ( hResult != S_OK && hResult != RPC_E_TOO_LATE )
 			return PX_XOR( L"0" );
+	}
 
 		IWbemLocator* pLocator;
 		if ( CoCreateInstance( CLSID_WbemLocator, nullptr, CLSCTX_INPROC_SERVER, IID_IWbemLocator, reinterpret_cast< LPVOID* >( &pLocator ) ) != S_OK
@@ -42,7 +50,7 @@ namespace PX::sys
 
 			VARIANT vtProp;
 			pClassObject->Get( wszDeviceProperty, 0, &vtProp, nullptr, nullptr );
-			wstrInfo += vtProp.bstrVal;
+			wstrInfo += std::wstring( vtProp.bstrVal ) + L'\n';
 
 			VariantClear( &vtProp );
 			pClassObject->Release( );
@@ -53,7 +61,7 @@ namespace PX::sys
 		pLocator->Release( );
 		CoUninitialize( );
 
-		return wstrInfo;
+		return wstrInfo.substr( 0, wstrInfo.size( ) - 1 ); // remove last newline character
 	}
 
 	nlohmann::json PX_API GetSystemInfo( )
@@ -191,7 +199,7 @@ namespace PX::sys
 		auto hSnapshot = CreateToolhelp32Snapshot( TH32CS_SNAPTHREAD, NULL );
 		THREADENTRY32 teThread { sizeof teThread };
 
-		const auto errLastError = GetLastError( );
+		const auto dwLastError = GetLastError( );
 		SetLastError( 0u );
 
 		if ( hSnapshot == INVALID_HANDLE_VALUE )
@@ -218,7 +226,7 @@ namespace PX::sys
 				return INVALID_HANDLE_VALUE;
 			}
 
-			SetLastError( errLastError );
+			SetLastError( dwLastError );
 		}
 		CloseHandle( hSnapshot );
 		return INVALID_HANDLE_VALUE;
@@ -264,9 +272,9 @@ namespace PX::sys
 		return FindModule( PX_XOR( L"USER32.dll" ), dwProcessID );
 	}
 
-	/// These functions have been converted to shellcode below, so they will function properly in debug mode. They should not be deleted in case we need them.
+	// These functions have been converted to shellcode below, so they will function properly in debug mode. They should not be deleted in case we need them.
 
-	/// Resolves imports and calls DLLMain.
+	// Resolves imports and calls DLLMain.
 	DWORD WINAPI LoadDLL( _In_ LPVOID lpParameter )
 	{
 		auto* injInfo = static_cast< injection_info_t* >( lpParameter );
@@ -337,7 +345,7 @@ namespace PX::sys
 		return TRUE;
 	}
 
-	/// Stub to store and restore registers so we don't mess up the stack and cause crashing.
+	// Stub to store and restore registers so we don't mess up the stack and cause crashing.
 	/*
 	__declspec( naked ) void stub( )
 	{
@@ -462,7 +470,7 @@ namespace PX::sys
 		injInfo->fnLoadLibraryA = LoadLibraryA;
 		injInfo->fnGetProcAddress = GetProcAddress;
 
-		//// allocate memory in & write data to target process
+		// allocate memory in & write data to target process
 		pMemory = VirtualAllocEx( hTarget, nullptr, PX_PAGE, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE );
 		pStub = VirtualAllocEx( hTarget, nullptr, PX_PAGE, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE );
 		if ( !WriteProcessMemory( hTarget, pMemory, injInfo, INJECTION_INFO_SIZE, nullptr ) ||

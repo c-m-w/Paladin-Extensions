@@ -35,7 +35,7 @@
 	/** \brief Asserts parameter to empty initialization version of parameter */
 	/** \param _ToAssert Value to assert. */
 #define px_assert( _ToAssert ) \
-		if ( _ToAssert == decltype( _ToAssert )( ) ) \
+		if ( ( _ToAssert ) == decltype( ( _ToAssert ) )( ) ) \
 			throw std::exception( ( std::string( "Failed to assert " ) + #_ToAssert + " in function " + __func__ \
 			+ " from line " + std::to_string( unsigned( __LINE__ ) ) + " in file " + ##( __FILE__ ) + "." ).c_str( ) )
 #else
@@ -80,7 +80,7 @@
 
 #define PX_EXTENSION_SECTIONS 7
 
-/// TODO: make this an enumerated type
+// TODO: make this an enumerated type
 #define PX_EXTENSION_NONE -1
 #define PX_EXTENSION_MANAGER 1
 #define PX_EXTENSION_CSGO 2

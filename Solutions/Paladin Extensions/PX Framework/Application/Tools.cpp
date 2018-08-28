@@ -155,8 +155,6 @@ namespace PX::Tools
 		VirtualProtect( pClassBase, sTableSize, dwOldProtection, &dwBuffer );
 	}
 
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
 	void PX_API OpenLink( cstr_t szLink )
 	{
 		ShellExecute( nullptr, PX_XOR( L"open" ), Tools::string_cast< std::wstring >( std::string( szLink ) ).c_str( ), nullptr, nullptr, SW_SHOWNORMAL );

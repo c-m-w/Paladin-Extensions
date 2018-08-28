@@ -132,7 +132,7 @@ public:
     virtual void          RestrictPaintToSinglePanel(vgui::VPANEL panel, bool bForceAllowNonModalSurface = false) = 0;
     virtual void          SetModalPanel(vgui::VPANEL) = 0;
     virtual vgui::VPANEL  GetModalPanel() = 0;
-    virtual void          UnlockCursor() = 0; /// MENASS
+    virtual void          UnlockCursor() = 0; // MENASS
     virtual void          LockCursor() = 0;
     virtual void          SetTranslateExtendedKeys(bool state) = 0;
     virtual vgui::VPANEL  GetTopmostPopup() = 0;
