@@ -17,6 +17,8 @@
 #include "Security/Cryptography.hpp"
 #include "Security/System Management.hpp"
 #include "Security/Connectivity.hpp"
+// Analysis Protection - These files provide specific functionality to prevent analysis
+#include "Security/Analysis Protection/Analysis Protection.hpp"
 
 // Drawing - These files provide specific functionality for creating visuals
 #include "Design/Render Engine.hpp"

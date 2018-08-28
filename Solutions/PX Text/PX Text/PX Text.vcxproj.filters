@@ -15,12 +15,18 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="PX Dummy.hpp">
+    <ClInclude Include="PX Test.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="General Analysis Protection.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="PX Dummy.cpp">
+    <ClCompile Include="PX Test.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="General Analysis Protection.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

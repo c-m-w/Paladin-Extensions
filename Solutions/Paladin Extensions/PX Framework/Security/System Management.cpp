@@ -5,7 +5,7 @@
 
 namespace PX::sys
 {
-	std::wstring PX_API RetrieveInfo( const bstr_t& wstrDevice, wcstr_t wstrdeviceProperty = PX_XOR( L"Name" ) )
+	std::wstring PX_API RetrieveInfo( const bstr_t& bszDevice, wcstr_t wszDeviceProperty = PX_XOR( L"Name" ) )
 	{
 		const auto hrReturn = CoInitialize( nullptr );
 		if ( hrReturn != S_OK && hrReturn != S_FALSE )
@@ -27,7 +27,7 @@ namespace PX::sys
 			return PX_XOR( L"2" );
 
 		IEnumWbemClassObject* pEnumerator;
-		pServices->ExecQuery( bstr_t( PX_XOR( L"WQL" ) ), wstrDevice, WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY, nullptr, &pEnumerator );
+		pServices->ExecQuery( bstr_t( PX_XOR( L"WQL" ) ), bszDevice, WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY, nullptr, &pEnumerator );
 		if ( pEnumerator == nullptr )
 			return PX_XOR( L"3" );
 
@@ -41,7 +41,7 @@ namespace PX::sys
 				break;
 
 			VARIANT vtProp;
-			pClassObject->Get( wstrdeviceProperty, 0, &vtProp, nullptr, nullptr );
+			pClassObject->Get( wszDeviceProperty, 0, &vtProp, nullptr, nullptr );
 			wstrInfo += vtProp.bstrVal;
 
 			VariantClear( &vtProp );
@@ -58,17 +58,21 @@ namespace PX::sys
 
 	nlohmann::json PX_API GetSystemInfo( )
 	{
+		std::wstring wstrSystemParts[ SYS_MAX ];
 		wstrSystemParts[ SYS_CPU ] = RetrieveInfo( PX_XOR( L"SELECT * FROM Win32_Processor" ) );
 		wstrSystemParts[ SYS_GPU ] = RetrieveInfo( PX_XOR( L"SELECT * FROM CIM_PCVideoController" ) );
 		wstrSystemParts[ SYS_DISPLAY ] = RetrieveInfo( PX_XOR( L"SELECT * FROM Win32_DesktopMonitor" ) );
-		wstrSystemParts[ SYS_OS ] = RetrieveInfo( PX_XOR( L"SELECT * FROM CIM_OperatingSystem" ) );
-		wstrSystemParts[ SYS_OS ] = wstrSystemParts[ SYS_OS ].substr( 0, wstrSystemParts[ SYS_OS ].find_first_of( '|' ) );
+		wstrSystemParts[ SYS_OS ] = RetrieveInfo( PX_XOR( L"SELECT * FROM CIM_OperatingSystem" ), PX_XOR( L"CSName" ) );
+		wstrSystemParts[ SYS_DRIVE ] = RetrieveInfo( PX_XOR( L"SELECT * FROM Win32_DiskDrive" ), PX_XOR( L"SerialNumber" ) );
 		wstrSystemParts[ SYS_BOARD ] = RetrieveInfo( PX_XOR( L"SELECT * FROM Win32_BaseBoard" ), PX_XOR( L"Product" ) );
+		// todo: std::wstring wstrInstallUSBName
+		// todo: std::deque< std::wstring > dqApps
 
 		px_assert( !wstrSystemParts[ SYS_CPU ].empty( )
 				   && !wstrSystemParts[ SYS_GPU ].empty( )
 				   && !wstrSystemParts[ SYS_DISPLAY ].empty( )
 				   && !wstrSystemParts[ SYS_OS ].empty( )
+				   && !wstrSystemParts[ SYS_DRIVE ].empty( )
 				   && !wstrSystemParts[ SYS_BOARD ].empty( ) );
 
 		for each( auto &wstr in wstrSystemParts )
@@ -81,7 +85,8 @@ namespace PX::sys
 			{ PX_XOR( "gpu" ), string_cast< std::string >( wstrSystemParts[ SYS_GPU ] ) },
 			{ PX_XOR( "display" ), string_cast< std::string >( wstrSystemParts[ SYS_DISPLAY ] ) },
 			{ PX_XOR( "os" ), string_cast< std::string >( wstrSystemParts[ SYS_OS ] ) },
-			{ PX_XOR( "board" ), string_cast< std::string >( wstrSystemParts[ SYS_BOARD ] ) },
+			{ PX_XOR( "drive" ), string_cast< std::string >( wstrSystemParts[ SYS_DRIVE ] ) },
+			{ PX_XOR( "board" ), string_cast< std::string >( wstrSystemParts[ SYS_BOARD ] ) }
 		};
 	}
 

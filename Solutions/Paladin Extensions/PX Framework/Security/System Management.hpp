@@ -6,12 +6,8 @@ namespace PX::sys
 {
 	enum
 	{
-		SYS_CPU, SYS_GPU, SYS_DISPLAY, SYS_OS, SYS_BOARD, SYS_MAX
+		SYS_CPU, SYS_GPU, SYS_DISPLAY, SYS_OS, SYS_DRIVE, SYS_BOARD, SYS_MAX
 	};
-
-	PX_SDK std::wstring wstrSystemParts[ SYS_MAX ];
-	PX_SDK std::wstring wstrInstallUSBName;
-	PX_SDK std::deque< std::wstring > dqApps;
 
 	/** \brief Puts system info into info variables. */
 	/** \return System information as a JSON object. */
@@ -22,7 +18,7 @@ namespace PX::sys
 	/** \brief Used to ensure elevation for a process.\n
 	If the process is not elevated, it will attempt to elevate it manually. */
 	/** \param hProcess Process to ensure elevation for.\n
-	Leave it as nullptr if you wish to check the current process. */
+	Pass no parameter if you wish to check the current process. */
 	/** \return True if the process is elevated. */
 	bool PX_API EnsureElevation( HANDLE hProcess = GetCurrentProcess( ) );
 	/** \brief Gets process identifier for any running executable */

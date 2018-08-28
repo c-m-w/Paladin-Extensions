@@ -57,6 +57,9 @@
     <ClInclude Include="Design\User Interface.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Security\Analysis Protection\Analysis Protection.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application\Input Manager.cpp">
@@ -90,6 +93,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Design\User Interface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Security\Analysis Protection\Analysis Protection.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

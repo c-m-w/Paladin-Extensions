@@ -1,6 +1,6 @@
 /// PX Loader.cpp
 
-#define PX_ENTRY_AS_WIN
+#define PX_ENTRY_AS_DLL
 #define PX_INSECURE_INITIALIZATION
 #define PX_INSTANCE_ID L"Manager"
 #include <Jeremia-h/Entry Manager.hpp>
@@ -50,7 +50,7 @@
 //	std::deque< Net::post_data_t > dqPostData;
 //	
 //	dqPostData.emplace_back( "test", R"()" );
-//	const auto strResponse = Request( PX_XOR( "https://www.paladin.rip:443/test.php" ), dqPostData );
+//	const auto strResponse = Request( PX_XOR( "https://www.paladin.rip:443/test.php/" ), dqPostData );
 //	Net::CleanupConnection( );
 //	dbg::out << strResponse.length( ) << dbg::newl;
 //}
@@ -350,7 +350,7 @@ void PX_API MonitorDetectionVectors( )
 std::thread tHeartbeat;
 bool bStopHeartbeat;
 
-void PX_API OnLaunch( )
+void PX_API OnAttach( )
 {
 	//tHeartbeat = std::thread( Heartbeat, bStopHeartbeat, iSelectedExtension );
 
@@ -422,8 +422,8 @@ void PX_API OnLaunch( )
 			auto pBuffer = VirtualAlloc( nullptr, sDLL + 1, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE );
 
 			memcpy( pBuffer, strDLL.c_str( ), sDLL );
-			strEncryptedDLL.erase( strEncryptedDLL.size( ) );
-			strDLL.erase( sDLL );
+			strEncryptedDLL.clear( );
+			strDLL.clear( );
 
 			LoadRawLibraryEx( pBuffer, wstrApplicationExecutableNames[ iSelectedExtension ], new injection_info_t );
 			WipeMemory( pBuffer, sDLL );
