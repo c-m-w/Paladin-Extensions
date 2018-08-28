@@ -38,6 +38,8 @@
         "Client Base": "VClient018",
         "Engine Client": "VEngineClient014",
         "VGUI Surface":  "VGUI_Surface031",
-        "Entity List": "VClientEntityList003"
+        "Entity List": "VClientEntityList003",
+        "Engine Trace": "EngineTraceClient004",
+        "Model Info": "VModelInfoClient004"
     }
 }

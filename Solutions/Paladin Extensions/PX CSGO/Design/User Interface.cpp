@@ -5,6 +5,9 @@
 using namespace PX::Information;
 using namespace Pointers;
 using namespace Modules;
+using namespace PX::UI;
+using namespace Widgets;
+using namespace PX::Features;
 
 namespace PX::UI::Manager
 {
@@ -43,42 +46,8 @@ namespace PX::UI::Manager
 			}
 
 			if ( ptrDesiredReturnAddress == ptrReturnAddress )
-			{
-				IDirect3DStateBlock9* pNewState = nullptr;
-				IDirect3DVertexDeclaration9* pVertexDeclaration = nullptr;
-				IDirect3DVertexShader9* pVertexShader = nullptr;
-				DWORD dwColorWrite, dwSRGBWrite;
-
-				pDevice->CreateStateBlock( D3DSBT_PIXELSTATE, &pNewState );
-
-				px_assert( D3D_OK == pDevice->GetVertexDeclaration( &pVertexDeclaration )
-						   && D3D_OK == pDevice->GetVertexShader( &pVertexShader )
-				
-						   && D3D_OK == pDevice->GetRenderState( D3DRS_COLORWRITEENABLE, &dwColorWrite )
-						   && D3D_OK == pDevice->GetRenderState( D3DRS_SRGBWRITEENABLE, &dwSRGBWrite )
-						   && D3D_OK == pDevice->SetRenderState( D3DRS_COLORWRITEENABLE, UINT_MAX )
-						   && D3D_OK == pDevice->SetRenderState( D3DRS_SRGBWRITEENABLE, NULL )
-						   && D3D_OK == pDevice->SetRenderState( D3DRS_DESTBLEND, D3DBLEND_ZERO )
-				
-						   && D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP )
-						   && D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_ADDRESSV, D3DTADDRESS_WRAP )
-						   && D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_ADDRESSW, D3DTADDRESS_WRAP )
-						   && D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_MAGFILTER, D3DTADDRESS_WRAP )
-						   && D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_MINFILTER, D3DTADDRESS_WRAP )
-						   && D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_SRGBTEXTURE, NULL ) );
-
 				if ( Render::bShouldRender && bCreatedTextures )
 					Render( );
-
-				px_assert( D3D_OK == pDevice->SetVertexDeclaration( pVertexDeclaration )
-						   && D3D_OK == pDevice->SetVertexShader( pVertexShader )
-						   && D3D_OK == pDevice->SetRenderState( D3DRS_COLORWRITEENABLE, dwColorWrite )
-						   && D3D_OK == pDevice->SetRenderState( D3DRS_SRGBWRITEENABLE, dwSRGBWrite ) );
-
-
-				pNewState->Apply( );
-				pNewState->Release( );
-			}
 		}
 
 		void PX_API OnReset( )
@@ -93,12 +62,156 @@ namespace PX::UI::Manager
 		}
 	}
 
+	void PX_API LayoutAwareness( int iSubtab );
+	void PX_API LayoutCombat( int iSubtab );
+	void PX_API LayoutMiscellaneous( int iSubtab );
+	void PX_API LayoutSettings( int iSubtab );
+
 	void PX_API SetLayout( )
 	{
-		Example( );
+		constexpr auto iTabCount = 4;
+		static const std::deque< cstr_t > dqPrimaryTabs
+		{
+			ICON_FA_EYE " AWARENESS",
+			ICON_FA_CROSSHAIRS " COMBAT",
+			ICON_FA_QUESTION_CIRCLE " MISCELLANEOUS",
+			ICON_FA_COG " SETTINGS"
+		};
+
+		static const std::deque< std::deque< cstr_t > > dqSubTabs
+		{
+			
+			{
+				"Extra Sensory Drawing",
+				"Glow",
+				"Materials"
+			},
+			{
+				"Tab"
+			},
+			{
+				"Tab"
+			},
+			{
+				"Tab"
+			}
+		};
+
+		static const auto fnSetTabValue = [ ]( int& iCurrentValue, const int iNewValue )
+		{
+			iCurrentValue = iNewValue >= 0 ? iNewValue : iCurrentValue;
+		};
+
+		static auto iCurrentTab = 0;
+		static int iCurrentSubTab[ iTabCount ] { };
+		const static std::function< void( PX_API )( int ) > fnTabCallbacks[ iTabCount ] { LayoutAwareness, LayoutCombat, LayoutMiscellaneous, LayoutSettings };
+
+		Header( PX_XOR( "Paladin Extensions" ), szNuklearWindowTitle );
+		fnSetTabValue( iCurrentTab, Tabs( 10, 0, dqPrimaryTabs, iCurrentTab ) );
+		Separator( 61, 65, 72, 100 );
+		SetFont( FONT_ROBOTOSMALL );
+		fnSetTabValue( iCurrentSubTab[ iCurrentTab ], SubTabs( 10, 60, 175, 30, dqSubTabs[ iCurrentTab ], iCurrentSubTab[ iCurrentTab ] ) );
+		fnTabCallbacks[ iCurrentTab ]( iCurrentSubTab[ iCurrentTab ] );
 	}
 
-	void PX_API DrawOther( )
+	void PX_API LayoutAwareness( int iSubtab )
 	{
+		enum
+		{
+			EXTRA_SENSORY_DRAWING,
+			GLOW,
+			MATERIALS
+		};
+
+		switch ( iSubtab )
+		{
+			case EXTRA_SENSORY_DRAWING:
+			{
+				auto& esdConfig = sSettings.awareness.extra_sensory_drawing;
+
+				if ( BeginGroupbox( 200, 150, 500, 420, PX_XOR( "Teammates" ) ) )
+				{
+					VerticalSpacing( );
+
+					BeginRow( 15, 3, ROW_STATIC );
+					SetRowWidth( 5 );
+					Spacing( );
+					Checkbox( PX_XOR( "Enabled" ), &esdConfig.players[ TEAM ].bEnabled, PX_XOR( "Enable teammate extra sensory drawing." ) );
+					EndRow( );
+
+					BeginRow( 15, 7, ROW_STATIC );
+					SetRowWidth( 5 );
+					Spacing( );
+					Checkbox( PX_XOR( "Box" ), &esdConfig.players[ TEAM ].bBox, PX_XOR( "Enable drawing a box overtop of your teammates." ) );
+					SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( "Box", 15 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 3 );
+					Spacing( );
+					SetRowWidth( COLOR_BUTTON_WIDTH );
+					ColorButton( PX_XOR( "Teammate Box Visible" ), &esdConfig.players[ TEAM ].seqBox[ VISIBLE ] );
+					ColorButton( PX_XOR( "Teammate Box Invisible" ), &esdConfig.players[ TEAM ].seqBox[ INVISIBLE ] );
+					ColorButton( PX_XOR( "Teammate Box Dormant" ), &esdConfig.players[ TEAM ].seqBox[ DORMANT ] );
+					EndRow( );
+
+					EndGroupbox( );
+				}
+			}
+				break;
+
+			case GLOW:
+			{
+
+			}
+			break;
+
+			case MATERIALS:
+			{
+
+			}
+			break;
+
+			default:
+				break;
+		}
+	}
+
+	void PX_API LayoutCombat( int iSubtab )
+	{
+		enum
+		{
+
+		};
+
+		switch ( iSubtab )
+		{
+			default:
+				break;
+		}
+	}
+
+	void PX_API LayoutMiscellaneous( int iSubtab )
+	{
+		enum
+		{
+
+		};
+
+		switch ( iSubtab )
+		{
+			default:
+				break;
+		}
+	}
+
+	void PX_API LayoutSettings( int iSubtab )
+	{
+		enum
+		{
+
+		};
+
+		switch ( iSubtab )
+		{
+			default:
+				break;
+		}
 	}
 }

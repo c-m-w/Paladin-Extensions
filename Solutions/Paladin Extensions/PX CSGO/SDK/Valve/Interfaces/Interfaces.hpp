@@ -13,5 +13,7 @@
 #include "IClientThinkable.hpp"
 #include "IClientUnknown.hpp"
 #include "ICollideable.hpp"
+#include "IEngineTrace.hpp"
 #include "IVEngineClient.hpp"
 #include "ISurface.hpp"
+#include "IVModelInfoClient.hpp"

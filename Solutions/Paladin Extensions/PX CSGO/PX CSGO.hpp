@@ -9,6 +9,8 @@
 #include "Application/Information.hpp"
 #include "SDK/Tools.hpp"
 
+#include "Features/Features.hpp"
+#include "Features/Awareness/Extra Sensory Drawing.hpp"
 #include "Features/Awareness/Glow.hpp"
 
 #include "Application/Hooks.hpp"

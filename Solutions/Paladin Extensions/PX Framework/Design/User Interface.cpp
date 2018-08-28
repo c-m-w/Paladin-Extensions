@@ -536,7 +536,6 @@ namespace PX::UI
 
 			ApplyCursor( );
 			DrawTextures( );
-			DrawOther( );
 
 			if ( bCreatedWindow )
 			{
@@ -1051,7 +1050,7 @@ namespace PX::UI
 
 			static auto bWasClicking = false;
 
-			nk_layout_row_push( pContext, 25 );
+			nk_layout_row_push( pContext, CHECKBOX_ICON_WIDTH );
 			const auto recBoundaries = nk_widget_bounds( pContext );
 			const auto bHovering = nk_input_is_mouse_hovering_rect( &pContext->input, recBoundaries );
 			const auto bClicking = PX_INPUT.GetKeyState( VK_LBUTTON ) == true;
@@ -1273,6 +1272,7 @@ namespace PX::UI
 				pActiveEditColor->GetColor( uCurrentSequence ).afl = clrChosenColor.a;
 
 				nk_layout_space_begin( pContext, NK_STATIC, 30, 3 );
+				rowLastRowType = ROW_CUSTOM;
 				pActiveEditColor->GetDuration( uCurrentSequence ) = Slider( PX_XOR( "Duration" ), szSliderBuffer, 100, 1000, int( pActiveEditColor->GetDuration( uCurrentSequence ) ), 0, 0, 290, 30, true );
 				nk_layout_space_end( pContext );
 
@@ -1296,7 +1296,7 @@ namespace PX::UI
 		{
 			iCurrentRowUsedColumns++;
 
-			auto clr = pSequence->GetCurrentColor( );
+			const auto clr = pSequence->GetCurrentColor( );
 			if ( nk_button_color( pContext, nk_rgba( clr.r, clr.g, clr.b, clr.a ) ) && pActiveEditColor == nullptr )
 			{
 				szColorPickerSubject = szSubject;

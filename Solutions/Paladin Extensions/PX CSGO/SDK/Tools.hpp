@@ -8,17 +8,24 @@ using namespace PX::Types;
 namespace PX::Tools
 {
 	class CBasePlayer;
+	class CBaseEntity;
 
+	CBasePlayer* PX_API GetLocalPlayer( );
+	bool PX_API ValidPlayer( void* pEntity );
+
+	// Game fucntions
 	bool PX_API LineGoesThroughSmoke( Vector vecStartPos, Vector vecEndPos );
 	void PX_API SetClantag( cstr_t szTag );
 	void PX_API RevealRanks( );
-	CBasePlayer* PX_API GetLocalPlayer( );
 
 	// Math
 	void PX_API ClampAngles( QAngle& qAngles );
 	bool PX_API WorldToScreen( Vector vecWorld, Vector& vecScreen );
+	void PX_API TransformVector( Vector vecInput, matrix3x4_t mtxInput, Vector &vecOutput );
 	Vector2D PX_API CalcAngle( Vector vecPosOne, Vector vecPosTwo );
 	float PX_API GetAngleDistance( Vector vecCurrentAngles, Vector vecPosOne, Vector vecPosTwo );
+	RECT PX_API CalculateRenderBounds( Vector* vecScreenPoints );
+	RECT PX_API CalculateRenderBounds( CBaseEntity* pEntity );
 
 	class CEconomyItemView
 	{
@@ -49,6 +56,7 @@ namespace PX::Tools
 		bool IsDefuseKit( );
 		float GetBombTimer( );
 		float GetDefuseTimer( );
+		Vector* BoundingBox( );
 	};
 
 	class CBaseAttributableItem: public CBaseEntity
@@ -128,6 +136,9 @@ namespace PX::Tools
 		PX_NETVAR_POINTER( CHandle<CBaseAttributableItem>, m_hMyWearables,PX_XOR( "DT_BaseCombatCharacter" ), PX_XOR( "m_hMyWearables" ) );
 
 		bool IsAlive( );
+		Vector GetViewPosition( );
+		bool PositionInSight( Vector& vecPosition, bool bMindSmoke, void* pEntity = nullptr );
+		Vector GetHitboxPosition( EHitbox hHitboxID );
 	};
 
 	class CPlantedC4

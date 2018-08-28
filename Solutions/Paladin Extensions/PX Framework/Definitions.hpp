@@ -98,6 +98,8 @@
 #define D3D_DEBUG_INFO
 #endif
 
+#define PX_CUSTOM_FVF D3DFVF_XYZRHW | D3DFVF_DIFFUSE
+
 // Encrypts string data on compile, then decrypts for access on run.
 #if defined NDEBUG
 #define PX_XOR( String ) ( PX::XOR::AXorString< PX::XOR::ACStringTraits< decltype( String ) >::char_trait_t, \
@@ -140,5 +142,7 @@
 // Input interface singleton access macro
 #define PX_INPUT PX::CInputManager::Get( )
 // File manager class singleton access macro
-#define PX_CONFIG PX::CConfig::Get( )
+#define PX_FILES PX::Files::CConfig::Get( )
+// Configuration access macro for convenience
+#define PX_CONFIG PX_FILES.jsCurrent
 

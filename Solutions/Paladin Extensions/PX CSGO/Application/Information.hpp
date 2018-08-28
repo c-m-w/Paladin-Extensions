@@ -79,6 +79,8 @@ namespace PX::Information
 		PX_SDK IVEngineClient* pEngineClient = nullptr;
 		PX_SDK ISurface* pSurface = nullptr;
 		PX_SDK IClientEntityList* pEntityList = nullptr;
+		PX_SDK IEngineTrace* pEngineTrace = nullptr;
+		PX_SDK IVModelInfoClient* pModelInfo = nullptr;
 	}
 
 	namespace NetworkedVariableManager // http://www.bailopan.net/table_dump.txt
@@ -102,31 +104,3 @@ namespace PX::Information
 		Types::ptr_t PX_API FindOffset( Types::cstr_t szTable, Types::cstr_t szVariable );
 	}
 }
-
-#define PX_NETVAR_REFERENCE( type, name, table, netvar )													\
-    type& name() const																						\
-	{																										\
-        static int ptrOffset = PX::Information::NetworkedVariableManager::FindOffset( table, netvar );		\
-        return *reinterpret_cast< type* >( PX::Types::ptr_t( this ) + ptrOffset );							\
-    }
-
-#define PX_NETVAR_REFERENCE_OFFSET( type, name, table, netvar, offset )										\
-    type& name() const																						\
-	{																										\
-        static int ptrOffset = PX::Information::NetworkedVariableManager::FindOffset( table, netvar );		\
-        return *reinterpret_cast< type* >( PX::Types::ptr_t( this ) + ptrOffset + offset );					\
-    }
-
-#define PX_NETVAR_POINTER( type, name, table, netvar )														\
-    type* name() const																						\
-	{																										\
-        static int ptrOffset = PX::Information::NetworkedVariableManager::FindOffset( table, netvar );		\
-        return reinterpret_cast< type* >( PX::Types::ptr_t( this ) + ptrOffset );							\
-    }
-
-#define PX_NETVAR_POINTER_OFFSET( type, name, table, netvar, offset )										\
-    type* name() const																						\
-	{																										\
-        static int ptrOffset = PX::Information::NetworkedVariableManager::FindOffset( table, netvar );		\
-        return reinterpret_cast< type* >( PX::Types::ptr_t( this ) + ptrOffset + offset );					\
-    }

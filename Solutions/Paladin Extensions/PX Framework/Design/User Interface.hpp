@@ -106,7 +106,6 @@ namespace PX::UI
 		std::array< unsigned, 2 > PX_API GetCurrentWindowDimensions( );
 		/** \brief Called when widgets should be drawn onto the GUI window. */
 		void PX_API SetLayout( );
-		void PX_API DrawOther( );
 		/** \brief Draws an example demonstrating usage of all widgets. */
 		void PX_API Example( );
 		bool PX_API MouseHoveringRectangle( unsigned x, unsigned y, unsigned width, unsigned height );
