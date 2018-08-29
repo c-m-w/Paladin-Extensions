@@ -277,7 +277,7 @@ namespace PX::Types
 				return GetGradient( sqInfo[ s ].clrColor, sqInfo[ s + 1 != sSequences ? s + 1 : 0 ].clrColor,
 									float( mmtCurrentProgress - mmtPassedProgress ) / float( sqInfo[ s ].mmtDuration ) );
 
-		throw std::exception( PX_XOR( "Color failure" ) );
+		px_assert( false );
 	}
 
 	color_t& SColorSequence::GetColor( unsigned uColor )

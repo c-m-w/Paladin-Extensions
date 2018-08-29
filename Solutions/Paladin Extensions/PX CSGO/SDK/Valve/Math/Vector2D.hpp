@@ -38,7 +38,7 @@ public:
 
     // Initialization methods
     void Random(vec_t minVal, vec_t maxVal);
-    void Zero(); ///< zero out a vector
+    void Zero(); // < zero out a vector
 
                  // equality
     bool operator==(const Vector2D& v) const;
@@ -161,7 +161,7 @@ public:
     vec_t Length2D(void) const;
     vec_t Length2DSqr(void) const;
 
-    /// Get the component of this vector parallel to some other given vector
+    // Get the component of this vector parallel to some other given vector
     Vector2D  ProjectOnto(const Vector2D& onto);
 
     // copy constructors

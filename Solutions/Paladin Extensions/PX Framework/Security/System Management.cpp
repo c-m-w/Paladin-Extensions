@@ -5,15 +5,23 @@
 
 namespace PX::sys
 {
-	std::wstring PX_API RetrieveInfo( const bstr_t& wstrDevice, wcstr_t wstrdeviceProperty = PX_XOR( L"Name" ) )
+	/** \brief Retrieves info from WMIC service */
+	/** \param bszDevice Device name, generally Win32_ */
+	/** \param wszDeviceProperty Property to find from index */
+	/** \return Property of device */
+	std::wstring PX_API RetrieveInfo( const bstr_t& bszDevice, wcstr_t wszDeviceProperty = PX_XOR( L"Name" ) )
 	{
-		const auto hrReturn = CoInitialize( nullptr );
-		if ( hrReturn != S_OK && hrReturn != S_FALSE )
-			return PX_XOR( L"-1" );
+		{
+			const auto hrReturn = CoInitialize( nullptr );
+			if ( hrReturn != S_OK && hrReturn != S_FALSE )
+				return PX_XOR( L"-1" );
+		}
 
+		{
 		auto hResult = CoInitializeSecurity( nullptr, -1, nullptr, nullptr, RPC_C_AUTHN_LEVEL_DEFAULT, RPC_C_IMP_LEVEL_IMPERSONATE, nullptr, EOAC_NONE, nullptr );
 		if ( hResult != S_OK && hResult != RPC_E_TOO_LATE )
 			return PX_XOR( L"0" );
+	}
 
 		IWbemLocator* pLocator;
 		if ( CoCreateInstance( CLSID_WbemLocator, nullptr, CLSCTX_INPROC_SERVER, IID_IWbemLocator, reinterpret_cast< LPVOID* >( &pLocator ) ) != S_OK
@@ -27,7 +35,7 @@ namespace PX::sys
 			return PX_XOR( L"2" );
 
 		IEnumWbemClassObject* pEnumerator;
-		pServices->ExecQuery( bstr_t( PX_XOR( L"WQL" ) ), wstrDevice, WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY, nullptr, &pEnumerator );
+		pServices->ExecQuery( bstr_t( PX_XOR( L"WQL" ) ), bszDevice, WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY, nullptr, &pEnumerator );
 		if ( pEnumerator == nullptr )
 			return PX_XOR( L"3" );
 
@@ -41,8 +49,8 @@ namespace PX::sys
 				break;
 
 			VARIANT vtProp;
-			pClassObject->Get( wstrdeviceProperty, 0, &vtProp, nullptr, nullptr );
-			wstrInfo += vtProp.bstrVal;
+			pClassObject->Get( wszDeviceProperty, 0, &vtProp, nullptr, nullptr );
+			wstrInfo += std::wstring( vtProp.bstrVal ) + L'\n';
 
 			VariantClear( &vtProp );
 			pClassObject->Release( );
@@ -53,22 +61,26 @@ namespace PX::sys
 		pLocator->Release( );
 		CoUninitialize( );
 
-		return wstrInfo;
+		return wstrInfo.substr( 0, wstrInfo.size( ) - 1 ); // remove last newline character
 	}
 
 	nlohmann::json PX_API GetSystemInfo( )
 	{
+		std::wstring wstrSystemParts[ SYS_MAX ];
 		wstrSystemParts[ SYS_CPU ] = RetrieveInfo( PX_XOR( L"SELECT * FROM Win32_Processor" ) );
 		wstrSystemParts[ SYS_GPU ] = RetrieveInfo( PX_XOR( L"SELECT * FROM CIM_PCVideoController" ) );
 		wstrSystemParts[ SYS_DISPLAY ] = RetrieveInfo( PX_XOR( L"SELECT * FROM Win32_DesktopMonitor" ) );
-		wstrSystemParts[ SYS_OS ] = RetrieveInfo( PX_XOR( L"SELECT * FROM CIM_OperatingSystem" ) );
-		wstrSystemParts[ SYS_OS ] = wstrSystemParts[ SYS_OS ].substr( 0, wstrSystemParts[ SYS_OS ].find_first_of( '|' ) );
+		wstrSystemParts[ SYS_OS ] = RetrieveInfo( PX_XOR( L"SELECT * FROM CIM_OperatingSystem" ), PX_XOR( L"CSName" ) );
+		wstrSystemParts[ SYS_DRIVE ] = RetrieveInfo( PX_XOR( L"SELECT * FROM Win32_DiskDrive" ), PX_XOR( L"SerialNumber" ) );
 		wstrSystemParts[ SYS_BOARD ] = RetrieveInfo( PX_XOR( L"SELECT * FROM Win32_BaseBoard" ), PX_XOR( L"Product" ) );
+		// todo: std::wstring wstrInstallUSBName
+		// todo: std::deque< std::wstring > dqApps
 
 		px_assert( !wstrSystemParts[ SYS_CPU ].empty( )
 				   && !wstrSystemParts[ SYS_GPU ].empty( )
 				   && !wstrSystemParts[ SYS_DISPLAY ].empty( )
 				   && !wstrSystemParts[ SYS_OS ].empty( )
+				   && !wstrSystemParts[ SYS_DRIVE ].empty( )
 				   && !wstrSystemParts[ SYS_BOARD ].empty( ) );
 
 		for each( auto &wstr in wstrSystemParts )
@@ -81,7 +93,8 @@ namespace PX::sys
 			{ PX_XOR( "gpu" ), string_cast< std::string >( wstrSystemParts[ SYS_GPU ] ) },
 			{ PX_XOR( "display" ), string_cast< std::string >( wstrSystemParts[ SYS_DISPLAY ] ) },
 			{ PX_XOR( "os" ), string_cast< std::string >( wstrSystemParts[ SYS_OS ] ) },
-			{ PX_XOR( "board" ), string_cast< std::string >( wstrSystemParts[ SYS_BOARD ] ) },
+			{ PX_XOR( "drive" ), string_cast< std::string >( wstrSystemParts[ SYS_DRIVE ] ) },
+			{ PX_XOR( "board" ), string_cast< std::string >( wstrSystemParts[ SYS_BOARD ] ) }
 		};
 	}
 
@@ -155,7 +168,7 @@ namespace PX::sys
 		auto hSnapshot = CreateToolhelp32Snapshot( TH32CS_SNAPPROCESS, NULL );
 		if ( hSnapshot == INVALID_HANDLE_VALUE )
 		{
-			PutLastError( );
+			PrintLastError( );
 			CloseHandle( hSnapshot );
 			return 0;
 		}
@@ -169,7 +182,8 @@ namespace PX::sys
 		{
 			if ( wstrExecutableName == peTarget.szExeFile )
 				break;
-		} while ( Process32Next( hSnapshot, &peTarget ) == TRUE );
+		}
+		while ( Process32Next( hSnapshot, &peTarget ) == TRUE );
 
 		CloseHandle( hSnapshot );
 
@@ -186,12 +200,12 @@ namespace PX::sys
 		auto hSnapshot = CreateToolhelp32Snapshot( TH32CS_SNAPTHREAD, NULL );
 		THREADENTRY32 teThread { sizeof teThread };
 
-		const auto errLastError = GetLastError( );
+		const auto dwLastError = GetLastError( );
 		SetLastError( 0u );
 
 		if ( hSnapshot == INVALID_HANDLE_VALUE )
 		{
-			PutLastError( );
+			PrintLastError( );
 			CloseHandle( hSnapshot );
 			return INVALID_HANDLE_VALUE;
 		}
@@ -205,7 +219,8 @@ namespace PX::sys
 					CloseHandle( hSnapshot );
 					return OpenThread( THREAD_GET_CONTEXT | THREAD_SET_CONTEXT | THREAD_SUSPEND_RESUME, FALSE, teThread.th32ThreadID );
 				}
-			} while ( Thread32Next( hSnapshot, &teThread ) == TRUE );
+			}
+			while ( Thread32Next( hSnapshot, &teThread ) == TRUE );
 
 			if ( GetLastError( ) == ERROR_NO_MORE_FILES )
 			{
@@ -213,15 +228,15 @@ namespace PX::sys
 				return INVALID_HANDLE_VALUE;
 			}
 
-			SetLastError( errLastError );
+			SetLastError( dwLastError );
 		}
 		CloseHandle( hSnapshot );
 		return INVALID_HANDLE_VALUE;
 	}
 
-	HMODULE FindModule( const std::wstring& wstrModule, DWORD dwProcessID )
+	HMODULE FindModuleEx( const std::wstring& wstrModule, DWORD dwProcessID )
 	{
-		auto hSnapshot = CreateToolhelp32Snapshot( TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, dwProcessID );
+		const auto hSnapshot = CreateToolhelp32Snapshot( TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, dwProcessID );
 
 		if ( hSnapshot == INVALID_HANDLE_VALUE )
 			return nullptr;
@@ -234,7 +249,8 @@ namespace PX::sys
 			{
 				if ( wstrModule == meEntry.szModule )
 					hmSearch = meEntry.hModule;
-			} while ( hmSearch == nullptr && Module32Next( hSnapshot, &meEntry ) );
+			}
+			while ( hmSearch == nullptr && Module32Next( hSnapshot, &meEntry ) );
 
 		CloseHandle( hSnapshot );
 		return hmSearch;
@@ -245,7 +261,7 @@ namespace PX::sys
 		return GetProcessID( wstrExecutableName ) != 0u;
 	}
 
-	bool PX_API IsProcessThreadRunning( DWORD dwProcessID )
+	bool PX_API IsProcessThreadRunning( const DWORD dwProcessID )
 	{
 		const auto hThread = FindProcessThread( dwProcessID );
 		const auto bResult = hThread != nullptr;
@@ -254,14 +270,14 @@ namespace PX::sys
 		return bResult;
 	}
 
-	bool PX_API NecessaryModulesLoaded( DWORD dwProcessID )
+	bool PX_API NecessaryModulesLoaded( const DWORD dwProcessID )
 	{
-		return FindModule( PX_XOR( L"USER32.dll" ), dwProcessID );
+		return FindModuleEx( PX_XOR( L"USER32.dll" ), dwProcessID );
 	}
 
-	/// These functions have been converted to shellcode below, so they will function properly in debug mode. They should not be deleted in case we need them.
+	// These functions have been converted to shellcode below, so they will function properly in debug mode. They should not be deleted in case we need them.
 
-	/// Resolves imports and calls DLLMain.
+	// Resolves imports and calls DLLMain.
 	DWORD WINAPI LoadDLL( _In_ LPVOID lpParameter )
 	{
 		auto* injInfo = static_cast< injection_info_t* >( lpParameter );
@@ -332,7 +348,7 @@ namespace PX::sys
 		return TRUE;
 	}
 
-	/// Stub to store and restore registers so we don't mess up the stack and cause crashing.
+	// Stub to store and restore registers so we don't mess up the stack and cause crashing.
 	/*
 	__declspec( naked ) void stub( )
 	{
@@ -403,7 +419,7 @@ namespace PX::sys
 			delete[ ] bStub;
 
 			if ( bPrintLastError )
-				PutLastError( );
+				PrintLastError( );
 		};
 
 		if ( !EnsureElevation( ) )
@@ -457,7 +473,7 @@ namespace PX::sys
 		injInfo->fnLoadLibraryA = LoadLibraryA;
 		injInfo->fnGetProcAddress = GetProcAddress;
 
-		//// allocate memory in & write data to target process
+		// allocate memory in & write data to target process
 		pMemory = VirtualAllocEx( hTarget, nullptr, PX_PAGE, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE );
 		pStub = VirtualAllocEx( hTarget, nullptr, PX_PAGE, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE );
 		if ( !WriteProcessMemory( hTarget, pMemory, injInfo, INJECTION_INFO_SIZE, nullptr ) ||
@@ -633,7 +649,7 @@ namespace PX::sys
 				exit( -1 );
 			if ( !::TerminateProcess( OpenProcess( PROCESS_TERMINATE, false, dwTargetProcessID ), 0 ) )
 			{
-				PutLastError( );
+				PrintLastError( );
 				exit( -1 );
 			}
 		}
@@ -666,7 +682,8 @@ namespace PX::sys
 						DeleteFile( wstrFilePath.c_str( ) );
 					}
 				}
-			} while ( TRUE == FindNextFile( hFiles, &fdInfo ) );
+			}
+			while ( TRUE == FindNextFile( hFiles, &fdInfo ) );
 
 			bDeleteHostDirectory && RemoveDirectory( wstrRootDirectory.c_str( ) );
 
@@ -700,5 +717,127 @@ Retry:
 		{
 		}
 		exit( -1 );
+	}
+
+	struct
+	{
+		SWindowsAPI::EFuncs efnID;
+		wchar_t* wszLibrary;
+		char* szFunctionSymbolName;
+		SWindowsAPI::EOSes osMinimumVersion;
+		SWindowsAPI::EOSes osMaximumVersion;
+		bool bAvailable = false;
+		bool bExpectedAvailable = false;
+		void* pPointer = nullptr;
+	} fndAPIFunctionsData[ SWindowsAPI::FUNC_MAX ]
+	{
+		/* Function Identifier								Library						Exported Symbol Name						Minimum OS Version				Removed in OS Version		*/
+		{ SWindowsAPI::EFuncs::CsrGetProcessId,				PX_XOR( L"ntdll.dll" ),		PX_XOR( "CsrGetProcessId" ),				SWindowsAPI::EOSes::WIN_XP,		SWindowsAPI::EOSes::OS_NONE	},
+		{ SWindowsAPI::EFuncs::EnumSystemFirmwareTables,	PX_XOR( L"kernel32.dll" ),	PX_XOR( "EnumSystemFirmwareTables" ),		SWindowsAPI::EOSes::WIN_VISTA,	SWindowsAPI::EOSes::OS_NONE	},
+		{ SWindowsAPI::EFuncs::GetSystemFirmwareTable,		PX_XOR( L"kernel32.dll" ),	PX_XOR( "GetSystemFirmwareTable" ),			SWindowsAPI::EOSes::WIN_XP,		SWindowsAPI::EOSes::OS_NONE	},
+		{ SWindowsAPI::EFuncs::GetNativeSystemInfo,			PX_XOR( L"kernel32.dll" ),	PX_XOR( "GetNativeSystemInfo" ),			SWindowsAPI::EOSes::WIN_XP,		SWindowsAPI::EOSes::OS_NONE	},
+		{ SWindowsAPI::EFuncs::GetProductInfo,				PX_XOR( L"kernel32.dll" ),	PX_XOR( "GetProductInfo" ),					SWindowsAPI::EOSes::WIN_XP,		SWindowsAPI::EOSes::OS_NONE	},
+		{ SWindowsAPI::EFuncs::IsWow64Process,				PX_XOR( L"kernel32.dll" ),	PX_XOR( "IsWow64Process" ),					SWindowsAPI::EOSes::WIN_XP_SP2,	SWindowsAPI::EOSes::OS_NONE	},
+		{ SWindowsAPI::EFuncs::LdrEnumerateLoadedModules,	PX_XOR( L"ntdll.dll" ),		PX_XOR( "LdrEnumerateLoadedModules" ),		SWindowsAPI::EOSes::WIN_XP_SP1,	SWindowsAPI::EOSes::OS_NONE	},
+		{ SWindowsAPI::EFuncs::NtClose,						PX_XOR( L"ntdll.dll" ),		PX_XOR( "NtClose" ),						SWindowsAPI::EOSes::WIN_XP,		SWindowsAPI::EOSes::OS_NONE	},
+		{ SWindowsAPI::EFuncs::NtCreateDebugObject,			PX_XOR( L"ntdll.dll" ),		PX_XOR( "NtCreateDebugObject" ),			SWindowsAPI::EOSes::WIN_XP,		SWindowsAPI::EOSes::OS_NONE	},
+		{ SWindowsAPI::EFuncs::NtCreateThreadEx,			PX_XOR( L"ntdll.dll" ),		PX_XOR( "NtCreateThreadEx" ),				SWindowsAPI::EOSes::WIN_XP,		SWindowsAPI::EOSes::OS_NONE	},
+		{ SWindowsAPI::EFuncs::NtDelayExecution,			PX_XOR( L"ntdll.dll" ),		PX_XOR( "NtDelayExecution" ),				SWindowsAPI::EOSes::WIN_XP,		SWindowsAPI::EOSes::OS_NONE	},
+		{ SWindowsAPI::EFuncs::NtQueryInformationThread,	PX_XOR( L"ntdll.dll" ),		PX_XOR( "NtQueryInformationThread" ),		SWindowsAPI::EOSes::WIN_XP,		SWindowsAPI::EOSes::OS_NONE	},
+		{ SWindowsAPI::EFuncs::NtQueryInformationProcess,	PX_XOR( L"ntdll.dll" ),		PX_XOR( "NtQueryInformationProcess" ),		SWindowsAPI::EOSes::WIN_XP,		SWindowsAPI::EOSes::OS_NONE	},
+		{ SWindowsAPI::EFuncs::NtQueryObject,				PX_XOR( L"ntdll.dll" ),		PX_XOR( "NtQueryObject" ),					SWindowsAPI::EOSes::WIN_XP,		SWindowsAPI::EOSes::OS_NONE	},
+		{ SWindowsAPI::EFuncs::NtQuerySystemInformation,	PX_XOR( L"ntdll.dll" ),		PX_XOR( "NtQuerySystemInformation" ),		SWindowsAPI::EOSes::WIN_XP,		SWindowsAPI::EOSes::OS_NONE	},
+		{ SWindowsAPI::EFuncs::NtSetInformationThread,		PX_XOR( L"ntdll.dll" ),		PX_XOR( "NtSetInformationThread" ),			SWindowsAPI::EOSes::WIN_XP,		SWindowsAPI::EOSes::OS_NONE	},
+		{ SWindowsAPI::EFuncs::NtWow64QueryVirtualMemory64,	PX_XOR( L"ntdll.dll" ),		PX_XOR( "NtWow64QueryVirtualMemory64" ),	SWindowsAPI::EOSes::WIN_XP_SP1,	SWindowsAPI::EOSes::WIN_10	},
+		{ SWindowsAPI::EFuncs::NtWow64ReadVirtualMemory64,	PX_XOR( L"ntdll.dll" ),		PX_XOR( "NtWow64ReadVirtualMemory64" ),		SWindowsAPI::EOSes::WIN_XP_SP1,	SWindowsAPI::EOSes::OS_NONE	},
+		{ SWindowsAPI::EFuncs::NtUnmapViewOfSection,		PX_XOR( L"ntdll.dll" ),		PX_XOR( "NtUnmapViewOfSection" ),			SWindowsAPI::EOSes::WIN_XP,		SWindowsAPI::EOSes::OS_NONE	},
+		{ SWindowsAPI::EFuncs::NtYieldExecution,			PX_XOR( L"ntdll.dll" ),		PX_XOR( "NtYieldExecution" ),				SWindowsAPI::EOSes::WIN_XP,		SWindowsAPI::EOSes::OS_NONE	},
+		{ SWindowsAPI::EFuncs::RtlGetVersion,				PX_XOR( L"ntdll.dll" ),		PX_XOR( "RtlGetVersion" ),					SWindowsAPI::EOSes::WIN_XP,		SWindowsAPI::EOSes::OS_NONE	},
+		{ SWindowsAPI::EFuncs::RtlCreateUserThread,			PX_XOR( L"ntdll.dll" ),		PX_XOR( "RtlCreateUserThread" ),			SWindowsAPI::EOSes::WIN_XP,		SWindowsAPI::EOSes::OS_NONE	},
+	};
+	struct
+	{
+		SWindowsAPI::EOSes osVersion;
+		bool( *fnFunction )( );
+	} const mapVersionFunctions[ ]
+	{
+		{ SWindowsAPI::EOSes::OS_NONE,			nullptr },
+		{ SWindowsAPI::EOSes::WIN_XP,			IsWindowsXPOrGreater },
+		{ SWindowsAPI::EOSes::WIN_XP_SP1,		IsWindowsXPSP1OrGreater },
+		{ SWindowsAPI::EOSes::WIN_XP_SP2,		IsWindowsXPSP2OrGreater },
+		{ SWindowsAPI::EOSes::WIN_XP_SP3,		IsWindowsXPSP3OrGreater },
+		{ SWindowsAPI::EOSes::WIN_VISTA,		IsWindowsVistaOrGreater },
+		{ SWindowsAPI::EOSes::WIN_VISTA_SP1,	IsWindowsVistaSP1OrGreater },
+		{ SWindowsAPI::EOSes::WIN_VISTA_SP2,	IsWindowsVistaSP2OrGreater },
+		{ SWindowsAPI::EOSes::WIN_7,			IsWindows7OrGreater },
+		{ SWindowsAPI::EOSes::WIN_7_SP1,		IsWindows7SP1OrGreater },
+		{ SWindowsAPI::EOSes::WIN_8_0,			IsWindows8OrGreater },
+		{ SWindowsAPI::EOSes::WIN_8_1,			IsWindows8Point1OrGreater },
+		{ SWindowsAPI::EOSes::WIN_10,			IsWindows10OrGreater }
+	};
+
+	SWindowsAPI::SWindowsAPI( )
+	{
+		for ( auto& fndAPIFunctionData: fndAPIFunctionsData )
+		{
+			fndAPIFunctionData.bExpectedAvailable = FunctionIsOnOS( fndAPIFunctionData.osMinimumVersion, fndAPIFunctionData.osMaximumVersion );
+
+			const auto hLib = LoadLibrary( fndAPIFunctionData.wszLibrary );
+			if ( hLib == nullptr )
+			{
+				fndAPIFunctionData.bAvailable = false;
+				continue;
+			}
+			fndAPIFunctionData.pPointer = GetProcAddress( hLib, fndAPIFunctionData.szFunctionSymbolName );
+			if ( fndAPIFunctionData.pPointer == nullptr )
+			{
+				fndAPIFunctionData.bAvailable = false;
+				continue;
+			}
+			fndAPIFunctionData.bAvailable = true;
+		}
+	}
+
+	bool SWindowsAPI::FunctionIsOnOS( EOSes osMinimum, EOSes osRemoved )
+	{
+		// Determine if function meets minimum version
+		px_assert( osMinimum != OS_NONE );
+		{
+			bool bFoundMinimumOS;
+			bool bMeetsMinimumOS;
+			for ( auto& mapVersionFunction: mapVersionFunctions )
+				if ( mapVersionFunction.osVersion != OS_NONE && mapVersionFunction.osVersion == osMinimum )
+				{
+					bFoundMinimumOS = true;
+					bMeetsMinimumOS = mapVersionFunction.fnFunction( );
+				}
+			px_assert( bFoundMinimumOS && bMeetsMinimumOS );
+		}
+		// if there's no maximum OS restriction and we are above the minimum, the API should exist
+		if ( osRemoved == OS_NONE )
+			return true;
+
+		// we have an upper restriction. check if it was removed in our current os ver
+		bool bFoundRemovedOS;
+		bool bMeetsRemovedOS = false;
+		for ( auto& mapVersionFunction: mapVersionFunctions )
+			if ( mapVersionFunction.osVersion != OS_NONE && mapVersionFunction.osVersion == osRemoved )
+			{
+				bFoundRemovedOS = true;
+				bMeetsRemovedOS = !mapVersionFunction.fnFunction( );
+			}
+
+		px_assert( bFoundRemovedOS );
+
+		return bMeetsRemovedOS;
+	}
+
+	void* SWindowsAPI::GetFunctionPointer( EFuncs enfRequest )
+	{
+		for ( auto& fndAPIFunctionData: fndAPIFunctionsData )
+			if ( fndAPIFunctionData.efnID == enfRequest )
+				return fndAPIFunctionData.bAvailable ? fndAPIFunctionData.pPointer : nullptr;
+
+		px_assert( false ); // how did you manage to pass an EFuncs not in the enum?? :P
 	}
 }

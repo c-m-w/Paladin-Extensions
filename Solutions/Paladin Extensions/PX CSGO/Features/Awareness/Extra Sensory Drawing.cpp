@@ -68,7 +68,7 @@ namespace PX::Features::Awareness
 					esdEntityConfig = &esdConfig->_Players[ info.iSettingIndex ];
 					info.bIsPlayer = true;
 					break;
-				/// TODO: add rest of options for esp.
+				// TODO: add rest of options for esp.
 				default:
 					continue;
 			}

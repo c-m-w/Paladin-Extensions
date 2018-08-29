@@ -149,14 +149,10 @@ namespace PX::Files
 	CConfig::CConfig( )
 	{
 		std::ifstream ifGlobalConfiguration( GetPXDirectory( ) + PX_XOR( LR"(Configurations\global.px)" ) );
-		if ( ifGlobalConfiguration.good( ) )
-		{
-			std::stringstream ssBuffer;
-			ssBuffer << ifGlobalConfiguration.rdbuf( );
-			jsGlobal = nlohmann::json::parse( Base64< CryptoPP::Base64Decoder >( ssBuffer.str( ) ) );
-		}
-		else
-			throw std::exception( PX_XOR( "Failed to open global.px for reading" ) );
+		px_assert( ifGlobalConfiguration.good( ) );
+		std::stringstream ssBuffer;
+		ssBuffer << ifGlobalConfiguration.rdbuf( );
+		jsGlobal = nlohmann::json::parse( Base64< CryptoPP::Base64Decoder >( ssBuffer.str( ) ) );
 
 		wszCurrent = &string_cast< std::wstring >( jsGlobal[ PX_XOR( "Default Configuration" ) ].get_ref< std::string& >( ) )[ 0 ];
 
@@ -166,16 +162,12 @@ namespace PX::Files
 	void PX_API CConfig::SaveInformation( )
 	{
 		std::ofstream ofGlobalConfiguration( GetPXDirectory( ) + PX_XOR( LR"(Configurations\global.px)" ) );
-		if ( ofGlobalConfiguration.good( ) )
-			ofGlobalConfiguration << Base64< CryptoPP::Base64Encoder >( jsGlobal.dump( 4 ) );
-		else
-			throw std::exception( PX_XOR( "Failed to open global.px for writing" ) );
+		px_assert( ofGlobalConfiguration.good( ) );
+		ofGlobalConfiguration << Base64< CryptoPP::Base64Encoder >( jsGlobal.dump( 4 ) );
 
 		std::ofstream ofCurrentConfiguration( GetPXDirectory( ) + PX_XOR( LR"(Configurations\)" ) + wszCurrent + PX_XOR( L".px" ) );
-		if ( ofCurrentConfiguration.good( ) )
-			ofCurrentConfiguration << Base64< CryptoPP::Base64Encoder >( jsCurrent.dump( 4 ) );
-		else
-			throw std::exception( ( std::string( PX_XOR( "Failed to open " ) ) + string_cast< std::string >( wszCurrent ) + PX_XOR( ".px for writing" ) ).c_str( ) );
+		px_assert( ofCurrentConfiguration.good( ) );
+		ofCurrentConfiguration << Base64< CryptoPP::Base64Encoder >( jsCurrent.dump( 4 ) );
 	}
 
 	bool PX_API CConfig::ChangeConfiguration( wcstr_t wszConfig )
@@ -186,8 +178,7 @@ namespace PX::Files
 		if ( std::filesystem::exists( ( GetPXDirectory( ) + PX_XOR( LR"(Configurations\)" ) + wszConfig + PX_XOR( L".px" ) ).c_str( ) ) )
 		{
 			std::ifstream ifNewConfiguration( GetPXDirectory( ) + PX_XOR( LR"(Configurations\)" ) + wszConfig + PX_XOR( L".px" ) );
-			if ( ifNewConfiguration.good( ) )
-			{
+			px_assert( ifNewConfiguration.good( ) );
 				try
 				{
 					std::stringstream ssBuffer;
@@ -202,9 +193,6 @@ namespace PX::Files
 				{
 					return false; // Missing Errors
 				}
-			}
-			else
-				throw std::exception( ( std::string( PX_XOR( "Failed to open " ) ) + string_cast< std::string >( wszConfig ) + PX_XOR( ".px for writing" ) ).c_str( ) );
 
 			wszCurrent = wszConfig;
 			return true;

@@ -50,8 +50,8 @@ namespace PX::UI
 		void PX_API InitializeNuklear( )
 		{
 			pContext = nk_d3d9_init( pDevice, uWindowWidth, uWindowHeight );
-			recWindow.w = uNuklearWindowWidth;
-			recWindow.h = uNuklearWindowHeight;
+			recWindow.w = float( uNuklearWindowWidth );
+			recWindow.h = float( uNuklearWindowHeight );
 
 			if ( !dqFonts.empty( ) )
 				dqFonts.clear( );

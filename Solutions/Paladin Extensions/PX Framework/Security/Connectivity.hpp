@@ -11,9 +11,9 @@ namespace PX::Net
 	PX_SDK std::string strSecretKeyIdentifier	= PX_XOR( "sk" );
 	PX_SDK std::string strUniqueIDIdentifier	= PX_XOR( "uid" );
 	
-	PX_SDK std::string strLoginURL		= PX_XOR( "https://www.paladin.rip/auth/auth.php" );
-	PX_SDK std::string strKeyURL		= PX_XOR( "https://www.paladin.rip/auth/key.php" );
-	PX_SDK std::string strDownloadURL	= PX_XOR( "https://www.paladin.rip/auth/download.php" );
+	PX_SDK std::string strLoginURL		= PX_XOR( "https://www.paladin.rip/auth/auth.php/" );
+	PX_SDK std::string strKeyURL		= PX_XOR( "https://www.paladin.rip/auth/key.php/" );
+	PX_SDK std::string strDownloadURL	= PX_XOR( "https://www.paladin.rip/auth/download.php/" );
 
 	/** \brief Pointer where the connection information is stored. */
 	PX_SDK CURL* pConnection = nullptr;

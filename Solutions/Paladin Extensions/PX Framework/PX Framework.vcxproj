@@ -175,6 +175,7 @@
     <ClInclude Include="Definitions.hpp" />
     <ClInclude Include="Application\Tools.hpp" />
     <ClInclude Include="PX Framework.hpp" />
+    <ClInclude Include="Security\Analysis Protection\Analysis Protection.hpp" />
     <ClInclude Include="Security\Connectivity.hpp" />
     <ClInclude Include="Security\Cryptography.hpp" />
     <ClInclude Include="Security\System Management.hpp" />
@@ -188,6 +189,7 @@
     <ClCompile Include="Design\Drawing.cpp" />
     <ClCompile Include="Design\Render Engine.cpp" />
     <ClCompile Include="Design\User Interface.cpp" />
+    <ClCompile Include="Security\Analysis Protection\Analysis Protection.cpp" />
     <ClCompile Include="Security\Connectivity.cpp" />
     <ClCompile Include="Security\Cryptography.cpp" />
     <ClCompile Include="Security\System Management.cpp" />

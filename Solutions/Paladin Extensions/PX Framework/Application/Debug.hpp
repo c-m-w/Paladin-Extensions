@@ -21,7 +21,7 @@ namespace PX::dbg
 		template< typename _t > out_t& PX_API operator<<( const _t& );
 	} PX_SDK out;
 
-	void PX_API PutLastError( );
+	void PX_API PrintLastError( );
 }
 
 #include "Debug.inl"

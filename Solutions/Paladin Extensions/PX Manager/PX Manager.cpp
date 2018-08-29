@@ -1,6 +1,6 @@
 /// PX Loader.cpp
 
-#define PX_ENTRY_AS_WIN
+#define PX_ENTRY_AS_DLL
 #define PX_INSECURE_INITIALIZATION
 #define PX_INSTANCE_ID L"Manager"
 #include <Jeremia-h/Entry Manager.hpp>
@@ -50,7 +50,7 @@
 //	std::deque< Net::post_data_t > dqPostData;
 //	
 //	dqPostData.emplace_back( "test", R"()" );
-//	const auto strResponse = Request( PX_XOR( "https://www.paladin.rip:443/test.php" ), dqPostData );
+//	const auto strResponse = Request( PX_XOR( "https://www.paladin.rip:443/test.php/" ), dqPostData );
 //	Net::CleanupConnection( );
 //	dbg::out << strResponse.length( ) << dbg::newl;
 //}
@@ -98,7 +98,7 @@ void PX_API UI::Manager::SetLayout( )
 	static auto bReverseColor = false;
 	uWindowDimensions = GetCurrentWindowDimensions( );
 
-	if ( !bLoggedIn && iLoginStatus == -1 ) /// Connecting to server.
+	if ( !bLoggedIn && iLoginStatus == -1 ) // Connecting to server.
 	{
 		Header( PX_XOR( "Paladin Extensions" ), PX_XOR( "Manager" ), 600u, nullptr, fnClose );
 
@@ -108,7 +108,7 @@ void PX_API UI::Manager::SetLayout( )
 
 		vecImageQueue.emplace_back( TEXTURE_LOGO_LOADING, vecLogoPosition, D3DCOLOR_ARGB( bLogoAlpha, bLogoAlpha, bLogoAlpha, bLogoAlpha ) );
 	}
-	else if ( !bLoggedIn && iLoginStatus > -1 ) /// Error message
+	else if ( !bLoggedIn && iLoginStatus > -1 ) // Error message
 	{
 		Header( PX_XOR( "Paladin Extensions" ), PX_XOR( "Manager" ), 600u, nullptr, fnClose );
 
@@ -346,7 +346,7 @@ void PX_API MonitorDetectionVectors( )
 std::thread tHeartbeat;
 bool bStopHeartbeat;
 
-void PX_API OnLaunch( )
+void PX_API OnAttach( )
 {
 	//tHeartbeat = std::thread( Heartbeat, bStopHeartbeat, iSelectedExtension );
 
@@ -409,7 +409,8 @@ void PX_API OnLaunch( )
 			{
 				dwProcessID = GetProcessID( wstrApplicationExecutableNames[ iSelectedExtension ] );
 				Wait( 10 );
-			} while ( dwProcessID == 0u
+			}
+			while ( dwProcessID == 0u
 					  || !IsProcessThreadRunning( dwProcessID )
 					  || !NecessaryModulesLoaded( dwProcessID ) );
 
@@ -418,8 +419,8 @@ void PX_API OnLaunch( )
 			auto pBuffer = VirtualAlloc( nullptr, sDLL + 1, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE );
 
 			memcpy( pBuffer, strDLL.c_str( ), sDLL );
-			strEncryptedDLL.erase( strEncryptedDLL.size( ) );
-			strDLL.erase( sDLL );
+			strEncryptedDLL.clear( );
+			strDLL.clear( );
 
 			LoadRawLibraryEx( pBuffer, wstrApplicationExecutableNames[ iSelectedExtension ], new injection_info_t );
 			WipeMemory( pBuffer, sDLL );
