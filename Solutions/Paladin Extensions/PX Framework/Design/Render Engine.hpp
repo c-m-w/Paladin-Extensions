@@ -34,6 +34,7 @@ namespace PX::Render
 	PX_SDK auto bShouldRender = true;
 	/** \brief Tracks whether or not the window is currently minimized. */
 	PX_SDK auto bMinimized = false;
+	LRESULT WINAPI WindowProc( HWND _hwWindowHandle, UINT uMessage, WPARAM uwParam, LPARAM llParam );
 	/** \brief Resizes the created window. */
 	/**	\param uWidth New width of the window. */
 	/**	\param uHeight New height of the window. */
@@ -43,14 +44,15 @@ namespace PX::Render
 	/**	\param szNewWindowTitle Title of the window. */
 	void PX_API InitializeRenderTarget( unsigned* pDimensions, Types::wcstr_t szNewWindowTitle = nullptr );
 	bool PX_API InitializeRenderTarget( IDirect3DDevice9* pNewDevice, unsigned* pDimensions );
+	void PX_API Destruct( );
 
 	/** \brief The address of the old Window Proc. */
-	PX_SDK Types::ptr_t uOldWindowProc;
+	PX_SDK long lOldWindowProc;
 	/** \brief HWND of the window which we set the Window Proc for. */
 	PX_SDK HWND hwOldWindowHandle;
 	/** \brief Set the Window Proc of the HWND being used by a d3d device, to receive input from the window through our WndProc function. */
 	/** \param pTargetDevice Device to get the HWND from to retarget the Window Proc. */
-	void PX_API SetWindowProc( IDirect3DDevice9* pTargetDevice );
+	void PX_API SetWindowProc( IDirect3DDevice9* pTargetDevice, long lWindowProc = reinterpret_cast< long >( WindowProc ) );
 }
 
 #if defined PX_USE_NAMESPACES

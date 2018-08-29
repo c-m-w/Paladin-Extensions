@@ -57,7 +57,8 @@ namespace PX::Information
 				|| !mClient.Setup( Tools::string_cast< std::wstring >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Client" ) ].get< std::string >( ) ) )
 				|| !mDirectX.Setup( Tools::string_cast< std::wstring >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "DirectX API" ) ].get< std::string >( ) ) )
 				|| !mOverlay.Setup( Tools::string_cast< std::wstring >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Overlay" ) ].get< std::string >( ) ) )
-				|| !mVGUI.Setup( Tools::string_cast< std::wstring >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "VGUI" ) ].get< std::string >( ) ) ) );
+				|| !mVGUI.Setup( Tools::string_cast< std::wstring >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "VGUI" ) ].get< std::string >( ) ) )
+				|| !mVGUI2.Setup( Tools::string_cast< std::wstring >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "VGUI2" ) ].get< std::string >( ) ) ) );
 			return true;
 		}
 	}
@@ -86,6 +87,8 @@ namespace PX::Information
 				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Engine Client" ) ].get< std::string >( ).c_str( ), nullptr ) );
 			pSurface = reinterpret_cast< ISurface* >( Modules::mVGUI.ciFactory(
 				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "VGUI Surface" ) ].get< std::string >( ).c_str( ), nullptr ) );
+			pPanel = reinterpret_cast< IPanel* >( Modules::mVGUI2.ciFactory(
+				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "VGUI Panel" ) ].get< std::string >( ).c_str( ), nullptr ) );
 			pEntityList = reinterpret_cast< IClientEntityList* >( Modules::mClient.ciFactory(
 				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Entity List" ) ].get< std::string >( ).c_str( ), nullptr ) );
 			pEngineTrace = reinterpret_cast< IEngineTrace* >( Modules::mEngine.ciFactory(
@@ -102,6 +105,7 @@ namespace PX::Information
 				&& nullptr != pClientBase
 				&& nullptr != pEngineClient
 				&& nullptr != pSurface
+				&& nullptr != pPanel
 				&& nullptr != pEntityList
 				&& nullptr != pEngineTrace
 				&& nullptr != pModelInfo;

@@ -11,6 +11,13 @@ using namespace Pointers;
 
 namespace PX::Tools
 {
+	VMatrix vmMatrix;
+
+	void PX_API OnPaintTraverse( )
+	{
+		memcpy( &vmMatrix, &pEngineClient->WorldToScreenMatrix( ), sizeof( VMatrix ) );
+	}
+
 	CBasePlayer* PX_API GetLocalPlayer( )
 	{
 		return reinterpret_cast< CBasePlayer* >( pEntityList->GetClientEntity( pEngineClient->GetLocalPlayer( ) ) );
@@ -22,9 +29,7 @@ namespace PX::Tools
 			return false;
 
 		const auto pPlayer = reinterpret_cast< CBasePlayer* >( pEntity );
-		if ( !pPlayer->IsPlayer( ) || !pPlayer->IsAlive( ) )
-			return false;
-		return true;
+		return pPlayer->IsPlayer( ) && pPlayer->IsAlive( );
 	}
 
 	bool PX_API LineGoesThroughSmoke( Vector vecStartPos, Vector vecEndPos )
@@ -62,17 +67,17 @@ namespace PX::Tools
 			qAngles.pitch += 90.f;
 	}
 
-	bool PX_API WorldToScreen( const Vector vecWorld, Vector &vecScreen )
+	bool PX_API WorldToScreen( const Vector& vecWorld, Vector &vecScreen )
 	{
 		int iWidth, iHeight;
 		pEngineClient->GetScreenSize( iWidth, iHeight );
-		auto vmMatrix = pEngineClient->WorldToScreenMatrix( );
-
-		const auto flTemp = vmMatrix[ 3 ][ 0 ] * vecWorld.x + vmMatrix[ 3 ][ 1 ] * vecWorld.y + vmMatrix[ 3 ][ 2 ] * vecWorld.z + vmMatrix[ 3 ][ 3 ];
-
-		if ( flTemp <= 0.01f )
+	
+		const auto dbTemp = double( vmMatrix[ 3 ][ 0 ] * vecWorld.x + vmMatrix[ 3 ][ 1 ] * vecWorld.y + vmMatrix[ 3 ][ 2 ] * vecWorld.z + vmMatrix[ 3 ][ 3 ] );
+	
+		if ( dbTemp <= 0.01 ) /// no .f cause we need double for DECIMAL PRECISION
 			return false;
 
+		const auto flTemp = float( dbTemp );
 		const auto flInverseTemp = 1.f / flTemp;
 		vecScreen.x = vmMatrix[ 0 ][ 0 ] * vecWorld.x + vmMatrix[ 0 ][ 1 ] * vecWorld.y + vmMatrix[ 0 ][ 2 ] * vecWorld.z + vmMatrix[ 0 ][ 3 ];
 		vecScreen.y = vmMatrix[ 1 ][ 0 ] * vecWorld.x + vmMatrix[ 1 ][ 1 ] * vecWorld.y + vmMatrix[ 1 ][ 2 ] * vecWorld.z + vmMatrix[ 1 ][ 3 ];

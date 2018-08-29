@@ -303,6 +303,11 @@ namespace PX::UI
 					&& CreateSpriteTextures( );
 		}
 
+		void PX_API Destruct( )
+		{
+			OnReset( );
+		}
+
 		struct nk_vec2 PX_API CalculateTextBounds( cstr_t szText, unsigned uRowHeight /*= 30*/ )
 		{
 			static cstr_t szBuffer;
@@ -517,9 +522,6 @@ namespace PX::UI
 				bShouldDrawUserInterface = false;
 			nk_end( pContext );
 
-			IDirect3DStateBlock9* pState;
-			pDevice->CreateStateBlock( bCreatedWindow ? D3DSBT_ALL : D3DSBT_PIXELSTATE, &pState );
-
 			if ( bCreatedWindow )
 			{
 				HandleWindowInput( );
@@ -529,11 +531,11 @@ namespace PX::UI
 			else
 				nk_window_set_bounds( pContext, szNuklearWindowTitle, recWindow );
 
+			IDirect3DStateBlock9* pState;
+			pDevice->CreateStateBlock( bCreatedWindow ? D3DSBT_ALL : D3DSBT_PIXELSTATE, &pState );
 			nk_d3d9_render( NK_ANTI_ALIASING_ON );
-
 			pState->Apply( );
 			pState->Release( );
-
 			ApplyCursor( );
 			DrawTextures( );
 
@@ -542,9 +544,7 @@ namespace PX::UI
 				pDevice->EndScene( );
 				pDevice->Present( nullptr, nullptr, nullptr, nullptr );
 			}
-
 			uTooltipCounter = 0u;
-
 			return bShouldDrawUserInterface;
 		}
 

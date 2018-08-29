@@ -31,10 +31,10 @@ namespace PX::Features
 
 					bool bSnaplines = false;
 					color_sequence_t seqSnapline[ 3 ];
-				} players[ 2 ];
-			} extra_sensory_drawing;
-		} awareness;
-	} sSettings;
+				} _Players[ 2 ];
+			} _ExtraSensoryDrawing;
+		} _Awareness;
+	} _Settings;
 
 	bool PX_API InitializeFeatures( );
 

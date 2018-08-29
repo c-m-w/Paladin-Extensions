@@ -28,6 +28,9 @@ namespace PX::Information
 			// Surface
 			PX_DEF uLockCursor = 67u;
 
+			// Panel
+			PX_DEF uPaintTraverse = 41u;
+
 			// CBaseEntity
 			PX_DEF uIsPlayer = 152u;
 			PX_DEF uIsWeapon = 160u;
@@ -62,6 +65,7 @@ namespace PX::Information
 		PX_SDK SModule mDirectX;
 		PX_SDK SModule mOverlay;
 		PX_SDK SModule mVGUI;
+		PX_SDK SModule mVGUI2;
 	}
 
 	namespace Pointers
@@ -78,6 +82,7 @@ namespace PX::Information
 		PX_SDK CGlowObjectManager* pGlowObjectManager = nullptr;
 		PX_SDK IVEngineClient* pEngineClient = nullptr;
 		PX_SDK ISurface* pSurface = nullptr;
+		PX_SDK IPanel* pPanel = nullptr;
 		PX_SDK IClientEntityList* pEntityList = nullptr;
 		PX_SDK IEngineTrace* pEngineTrace = nullptr;
 		PX_SDK IVModelInfoClient* pModelInfo = nullptr;

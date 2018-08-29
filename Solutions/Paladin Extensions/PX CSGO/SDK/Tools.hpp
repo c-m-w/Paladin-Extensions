@@ -10,6 +10,7 @@ namespace PX::Tools
 	class CBasePlayer;
 	class CBaseEntity;
 
+	void PX_API OnPaintTraverse( );
 	CBasePlayer* PX_API GetLocalPlayer( );
 	bool PX_API ValidPlayer( void* pEntity );
 
@@ -20,7 +21,7 @@ namespace PX::Tools
 
 	// Math
 	void PX_API ClampAngles( QAngle& qAngles );
-	bool PX_API WorldToScreen( Vector vecWorld, Vector& vecScreen );
+	bool PX_API WorldToScreen( const Vector& vecWorld, Vector &vecScreen );
 	void PX_API TransformVector( Vector vecInput, matrix3x4_t mtxInput, Vector &vecOutput );
 	Vector2D PX_API CalcAngle( Vector vecPosOne, Vector vecPosTwo );
 	float PX_API GetAngleDistance( Vector vecCurrentAngles, Vector vecPosOne, Vector vecPosTwo );

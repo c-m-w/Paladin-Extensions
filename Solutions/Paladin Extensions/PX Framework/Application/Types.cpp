@@ -106,9 +106,14 @@ namespace PX::Types
 	//	delete pColor;
 	//}
 
-	unsigned SColor::GetHex( ) const
+	unsigned SColor::GetRGBA( ) const
 	{
 		return pColor->u;
+	}
+
+	unsigned SColor::GetARGB( ) const
+	{
+		return D3DCOLOR_ARGB( pColor->b[ COLOR_ALPHA ], pColor->b[ COLOR_RED ], pColor->b[ COLOR_GREEN ], pColor->b[ COLOR_BLUE ] );
 	}
 
 	void SColor::PutHex( const unsigned uValue ) const

@@ -83,6 +83,7 @@ namespace PX::UI
 		/**	\param _szApplicationTitle The subtitle of the GUI window. */
 		/** \return true - Initialization was successful.\n false - Initialization was not successful. */
 		bool PX_API InitializeUI( Types::cstr_t _szApplicationTitle, unsigned uWidth = Render::uWindowWidth, unsigned uHeight = Render::uWindowHeight );
+		void PX_API Destruct( );
 		/** \brief Calculates text dimensions with the current font. */
 		/**	\param szText Text to calculate the bounds for. */
 		/**	\param uRowHeight Height of the row that the text is in. */

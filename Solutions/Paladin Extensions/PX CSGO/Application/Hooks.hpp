@@ -19,6 +19,9 @@ namespace PX
 
 		// Surface
 		typedef void( __thiscall* lock_cursor_t )( ISurface* );
+
+		// Panel
+		typedef void( __thiscall* paint_traverse_t )( IPanel*, vgui::VPANEL, bool, bool );
 	}
 
 	namespace Hooks
@@ -30,6 +33,7 @@ namespace PX
 		PX_SDK Tools::CHook* hkClientBase;
 		PX_SDK Tools::CHook* hkClientMode;
 		PX_SDK Tools::CHook* hkSurface;
+		PX_SDK Tools::CHook* hkPanel;
 
 		// Device
 		HRESULT __stdcall EndScene( IDirect3DDevice9* pDeviceParameter );
@@ -42,7 +46,10 @@ namespace PX
 		// Client Mode
 		int __stdcall DoPostScreenEffects( int iUnknown );
 
-		// Panel
+		// Surface
 		void __fastcall LockCursor( ISurface* pThisClass, void* edx );
+
+		// Panel
+		void __stdcall PaintTraverse( vgui::VPANEL panel, bool forceRepaint, bool allowForce );
 	}
 }

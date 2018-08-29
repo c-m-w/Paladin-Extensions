@@ -184,6 +184,7 @@
     <ClInclude Include="SDK\Valve\Interfaces\CClientState.hpp" />
     <ClInclude Include="SDK\Valve\Interfaces\IAppSystem.hpp" />
     <ClInclude Include="SDK\Valve\Interfaces\IBaseClientDll.hpp" />
+    <ClInclude Include="SDK\Valve\Interfaces\IBaseInterface.hpp" />
     <ClInclude Include="SDK\Valve\Interfaces\IClientEntity.hpp" />
     <ClInclude Include="SDK\Valve\Interfaces\IClientEntityList.hpp" />
     <ClInclude Include="SDK\Valve\Interfaces\IClientMode.hpp" />
@@ -194,6 +195,7 @@
     <ClInclude Include="SDK\Valve\Interfaces\ICollideable.hpp" />
     <ClInclude Include="SDK\Valve\Interfaces\IEngineTrace.hpp" />
     <ClInclude Include="SDK\Valve\Interfaces\Interfaces.hpp" />
+    <ClInclude Include="SDK\Valve\Interfaces\IPanel.hpp" />
     <ClInclude Include="SDK\Valve\Interfaces\ISurface.hpp" />
     <ClInclude Include="SDK\Valve\Interfaces\IVEngineClient.hpp" />
     <ClInclude Include="SDK\Valve\Interfaces\IVModelInfoClient.hpp" />

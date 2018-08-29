@@ -22,7 +22,8 @@ namespace PX
 				&& hkClientBase->HookIndex( uFrameStageNotify, reinterpret_cast< void* >( FrameStageNotify ) )
 				&& hkClientBase->HookIndex( uCreateMove, reinterpret_cast< void* >( CreateMove ) )
 				&& hkClientMode->HookIndex( uDoPostScreenEffects, reinterpret_cast< void* >( DoPostScreenEffects ) )
-				&& hkSurface->HookIndex( uLockCursor, reinterpret_cast< void* >( LockCursor ) );
+				&& hkSurface->HookIndex( uLockCursor, reinterpret_cast< void* >( LockCursor ) )
+				&& hkPanel->HookIndex( uPaintTraverse, reinterpret_cast< void* >( PaintTraverse ) );
 		}
 
 		bool PX_API InitializeHooks( )
@@ -31,15 +32,19 @@ namespace PX
 			hkClientBase = new Tools::CHook( pClientBase );
 			hkClientMode = new Tools::CHook( pClientMode );
 			hkSurface = new Tools::CHook( pSurface );
+			hkPanel = new Tools::CHook( pPanel );
 
 			vecHookPointers.emplace_back( hkDirectXDevice );
 			vecHookPointers.emplace_back( hkClientBase );
+			vecHookPointers.emplace_back( hkClientMode );
 			vecHookPointers.emplace_back( hkSurface );
+			vecHookPointers.emplace_back( hkPanel );
 
 			return hkDirectXDevice->Succeeded( )
 				&& hkClientBase->Succeeded( )
 				&& hkClientMode->Succeeded( )
-				&& hkSurface->Succeeded( ) ? 
+				&& hkSurface->Succeeded( )
+				&& hkPanel->Succeeded( ) ?
 				SetHooks( ) 
 			: false;
 		}
@@ -78,14 +83,13 @@ namespace PX
 						   && D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_MINFILTER, D3DTADDRESS_WRAP )
 						   && D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_SRGBTEXTURE, NULL ) );
 
-				Features::Awareness::Draw( );
 				UI::Manager::CSGO::OnEndScene( ptr_t( _ReturnAddress( ) ) );
+				Features::Awareness::Draw( );
 
 				px_assert( D3D_OK == pDevice->SetVertexDeclaration( pVertexDeclaration )
 						   && D3D_OK == pDevice->SetVertexShader( pVertexShader )
 						   && D3D_OK == pDevice->SetRenderState( D3DRS_COLORWRITEENABLE, dwColorWrite )
 						   && D3D_OK == pDevice->SetRenderState( D3DRS_SRGBWRITEENABLE, dwSRGBWrite ) );
-
 
 				pNewState->Apply( );
 				pNewState->Release( );
@@ -128,8 +132,6 @@ namespace PX
 			const auto pLocalPlayer = Tools::GetLocalPlayer( );
 			if ( nullptr == pLocalPlayer )
 				return;
-			
-			std::cout << "Local Player Health: " << pLocalPlayer->m_iHealth( ) << std::endl;
 		}
 
 		int __stdcall DoPostScreenEffects( int iUnknown )
@@ -150,6 +152,23 @@ namespace PX
 			if ( Render::bShouldRender )
 				return pSurface->UnlockCursor( );
 			return fnOriginal( pThisClass );
+		}
+
+		void __stdcall PaintTraverse( vgui::VPANEL panel, bool forceRepaint, bool allowForce )
+		{
+			constexpr auto szDesiredPanelName = PX_XOR( "FocusOverlayPanel" );
+			static auto fnOriginal = hkPanel->GetOriginalFunction< paint_traverse_t >( uPaintTraverse );
+			static auto vpDesiredPanelID = vgui::VPANEL( 0u );
+
+			fnOriginal( pPanel, panel, forceRepaint, allowForce );
+			if ( !vpDesiredPanelID && !strcmp( szDesiredPanelName, pPanel->GetName( panel ) ) )
+				vpDesiredPanelID = panel;
+			if ( vpDesiredPanelID != panel )
+				return;
+
+			{
+				Tools::OnPaintTraverse( );
+			}
 		}
 	}
 }

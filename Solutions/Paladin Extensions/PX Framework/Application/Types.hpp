@@ -71,7 +71,7 @@ namespace PX::Types
 			flVectors[ 0 ] = x;
 			flVectors[ 1 ] = y;
 			flVectors[ 2 ] = 0.f;
-			flVectors[ 3 ] = 0.f;
+			flVectors[ 3 ] = 1.f;
 			dwColor = _dwColor;
 		}
 	};
@@ -115,7 +115,8 @@ namespace PX::Types
 		SColor( std::initializer_list< float > initInputs );
 		//~color_t( );
 
-		unsigned GetHex( ) const;
+		unsigned GetRGBA( ) const;
+		unsigned GetARGB( ) const;
 		void PutHex( unsigned uValue ) const;
 		__declspec( property( get = GetHex, put = PutHex ) ) unsigned Hex;
 

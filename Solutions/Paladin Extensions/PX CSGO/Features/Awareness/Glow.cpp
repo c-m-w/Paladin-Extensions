@@ -10,6 +10,7 @@ namespace PX::Features::Awareness
 {
 	void PX_API GlowEntities( )
 	{
+		return;
 		const auto pLocalPlayer = GetLocalPlayer( );
 		if ( nullptr == pLocalPlayer )
 			return;
