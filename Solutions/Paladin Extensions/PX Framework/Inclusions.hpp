@@ -8,6 +8,7 @@
 
 // Windows
 #include <Windows.h>
+#include <VersionHelpers.h>
 #include <shellapi.h>
 #include <winternl.h>
 #include <ntstatus.h>

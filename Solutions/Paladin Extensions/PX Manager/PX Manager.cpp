@@ -409,7 +409,8 @@ void PX_API OnAttach( )
 			{
 				dwProcessID = GetProcessID( wstrApplicationExecutableNames[ iSelectedExtension ] );
 				Wait( 10 );
-			} while ( dwProcessID == 0u
+			}
+			while ( dwProcessID == 0u
 					  || !IsProcessThreadRunning( dwProcessID )
 					  || !NecessaryModulesLoaded( dwProcessID ) );
 

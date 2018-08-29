@@ -6,24 +6,28 @@
 
 namespace PX::AnalysisProtection
 {
-	namespace Debug
+	namespace DebuggerDetection
 	{
-		/** \brief Checks presence of remote debugger using WinAPI */
+		/** \brief Checks presence of debugger */
 		/** \param hTarget Target to check presence of remote debugger */
-		/** \return true if found */
-		bool RemoteDebuggerPresence( HANDLE hTarget = GetCurrentProcess( ) );
-
-
+		/** \return false if found */
+		bool DebuggerPresenceEx( HANDLE hTarget );
+		/** \brief Checks presence of debugger (calls EX) */
+		/** \return false if found */
+		bool DebuggerPresence( );
+		/** \brief Forces an exception at usermode & kernel level and checks how it was caught in order to evaluate the presence of a debugger */
+		/** \return false if debugger catch occurred */
+		bool ForceExceptions( );
 	}
 
-	namespace Analysis
+	namespace AnalysisSoftwareDetection
 	{
 		/** \brief Checks if analysis tools are installed\n
 			Slow, only needs to be called once per instance */
-		/** \return true if one tool from list is found to be installed */
+		/** \return false if one tool from list is found to be installed */
 		bool AnalysisToolsInstalled( );
 		/** \brief Checks if analysis tools are running */
-		/** \return true if one tool from list is found running */
+		/** \return false if one tool from list is found running */
 		bool AnalysisToolsRunning( );
 	}
 
@@ -54,10 +58,8 @@ namespace PX::AnalysisProtection
 	{
 		
 	}
-
-	bool CheckAll( );
 }
 
 #if defined PX_USE_NAMESPACES
-using namespace PX::AP;
+using namespace PX::AnalysisProtection;
 #endif
