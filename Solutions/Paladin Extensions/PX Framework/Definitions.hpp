@@ -36,7 +36,7 @@
 		(false) and throws an exception if the evaluation succeeds */
 	/** \param _ToAssert Value to assert. */
 #define px_assert( _ToAssert ) \
-		if ( ( _ToAssert ) == decltype( ( _ToAssert ) )( ) ) \
+		if ( ( _ToAssert ) == decltype( _ToAssert )( ) ) \
 			throw std::exception( ( std::string( "Failed to assert " ) + #_ToAssert + " in function " + __func__ \
 			+ " from line " + std::to_string( unsigned( __LINE__ ) ) + " in file " + ##( __FILE__ ) + "." ).c_str( ) )
 #else
@@ -113,32 +113,32 @@
 #if defined _DEBUG
 // sets debug out line identifier as "Opening"
 #define PX_OPN << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), L"[%H:%M:%S]" ) << \
-		PX::dbg::out_clr_t( !FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE ) << L" [OPN] " << \
-		PX::dbg::out_clr_t( !FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE )
+		PX::dbg::out_clr_t( !( FOREGROUND_INTENSITY ) | ( FOREGROUND_RED ) | ( FOREGROUND_GREEN ) | ( FOREGROUND_BLUE ) ) << L" [OPN] " << \
+		PX::dbg::out_clr_t( !( FOREGROUND_INTENSITY ) | ( FOREGROUND_RED ) | ( FOREGROUND_GREEN ) | ( FOREGROUND_BLUE ) )
 // sets debug out line identifier as "Information"
 #define PX_NFO << PX::dbg::newl << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), L"[%H:%M:%S]" ) << \
-		PX::dbg::out_clr_t( !FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE ) << L" [NFO] " << \
-		PX::dbg::out_clr_t( !FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE )
+		PX::dbg::out_clr_t( !( FOREGROUND_INTENSITY ) | ( FOREGROUND_RED ) | ( FOREGROUND_GREEN ) | ( FOREGROUND_BLUE ) ) << L" [NFO] " << \
+		PX::dbg::out_clr_t( !( FOREGROUND_INTENSITY ) | ( FOREGROUND_RED ) | ( FOREGROUND_GREEN ) | ( FOREGROUND_BLUE ) )
 // sets debug out line identifier as "Debug"
 #define PX_DBG << PX::dbg::newl << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), L"[%H:%M:%S]" ) << \
-		PX::dbg::out_clr_t( FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE ) << L" [DBG] " << \
-		PX::dbg::out_clr_t( !FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE )
+		PX::dbg::out_clr_t( ( FOREGROUND_INTENSITY ) | ( FOREGROUND_RED ) | ( FOREGROUND_GREEN ) | ( FOREGROUND_BLUE ) ) << L" [DBG] " << \
+		PX::dbg::out_clr_t( !( FOREGROUND_INTENSITY ) | ( FOREGROUND_RED ) | ( FOREGROUND_GREEN ) | ( FOREGROUND_BLUE ) )
 // sets debug out line identifier as "Success"
 #define PX_SCS << PX::dbg::newl << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), L"[%H:%M:%S]" ) << \
-		PX::dbg::out_clr_t( FOREGROUND_INTENSITY | !FOREGROUND_RED | FOREGROUND_GREEN | !FOREGROUND_BLUE ) << L" [SCS] " << \
-		PX::dbg::out_clr_t( !FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE )
+		PX::dbg::out_clr_t( ( FOREGROUND_INTENSITY ) | !( FOREGROUND_RED ) | ( FOREGROUND_GREEN ) | !( FOREGROUND_BLUE ) ) << L" [SCS] " << \
+		PX::dbg::out_clr_t( !( FOREGROUND_INTENSITY ) | ( FOREGROUND_RED ) | ( FOREGROUND_GREEN ) | ( FOREGROUND_BLUE ) )
 // sets debug out line identifier as "Warning"
 #define PX_WRN << PX::dbg::newl << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), L"[%H:%M:%S]" ) << \
-		PX::dbg::out_clr_t( FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | !FOREGROUND_BLUE ) << L" [WRN] " << \
-		PX::dbg::out_clr_t( !FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE )
+		PX::dbg::out_clr_t( ( FOREGROUND_INTENSITY ) | ( FOREGROUND_RED ) | ( FOREGROUND_GREEN )  | !( FOREGROUND_BLUE ) ) << L" [WRN] " << \
+		PX::dbg::out_clr_t( !( FOREGROUND_INTENSITY ) | ( FOREGROUND_RED ) | ( FOREGROUND_GREEN )  | ( FOREGROUND_BLUE ) )
 // sets debug out line identifier as "Error"
 #define PX_ERR << PX::dbg::newl << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), L"[%H:%M:%S]" ) << \
-		PX::dbg::out_clr_t( FOREGROUND_INTENSITY | FOREGROUND_RED | !FOREGROUND_GREEN | !FOREGROUND_BLUE ) << L" [ERR] " << \
-		PX::dbg::out_clr_t( !FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE )
+		PX::dbg::out_clr_t( ( FOREGROUND_INTENSITY ) | ( FOREGROUND_RED ) | !( FOREGROUND_GREEN ) | !( FOREGROUND_BLUE ) ) << L" [ERR] " << \
+		PX::dbg::out_clr_t( !( FOREGROUND_INTENSITY ) | ( FOREGROUND_RED ) | ( FOREGROUND_GREEN ) | ( FOREGROUND_BLUE ) )
 // sets debug out line identifier as "Last Error Info"
 #define PX_LER << PX::dbg::newl << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), L"[%H:%M:%S]" ) << \
-		PX::dbg::out_clr_t( !FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | !FOREGROUND_BLUE ) << L" [LER] " << \
-		PX::dbg::out_clr_t( !FOREGROUND_INTENSITY | FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE )
+		PX::dbg::out_clr_t( !( FOREGROUND_INTENSITY ) | ( FOREGROUND_RED ) | ( FOREGROUND_GREEN ) | !( FOREGROUND_BLUE ) ) << L" [LER] " << \
+		PX::dbg::out_clr_t( !( FOREGROUND_INTENSITY ) | ( FOREGROUND_RED ) | ( FOREGROUND_GREEN ) | ( FOREGROUND_BLUE ) )
 #else
 #define PX_DBG
 #define PX_SCS

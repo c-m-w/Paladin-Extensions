@@ -97,8 +97,8 @@ namespace PX::Render
 		wndWindow.lpszClassName = wszWindowTitle;
 		const auto atInstance = RegisterClassEx( &wndWindow );
 
-		RECT rcWindow;
-		AdjustWindowRectEx( &rcWindow, WS_OVERLAPPEDWINDOW, false, WS_EX_APPWINDOW );
+		RECT recWindow { };
+		AdjustWindowRectEx( &recWindow, WS_OVERLAPPEDWINDOW, false, WS_EX_APPWINDOW );
 
 		const auto uScreenDimensions = GetScreenDimensions( );
 		bCreatedWindow = true;

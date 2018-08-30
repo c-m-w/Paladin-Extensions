@@ -29,6 +29,7 @@ namespace PX
 						  strEncryptionKey.length( ), reinterpret_cast< Types::byte_t* >( const_cast< char* >( strInitializationVector.c_str( ) ) ) );
 			CryptoPP::StringSource( Tools::string_cast< std::string >( strPlainText ), true, new
 									CryptoPP::StreamTransformationFilter( _Cryption, new CryptoPP::StringSink( strOutput ) ) );
+			// should we be declaring an object of StringSource type??
 			return strOutput;
 		}
 	}

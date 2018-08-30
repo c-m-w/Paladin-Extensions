@@ -15,6 +15,9 @@ namespace PX::AnalysisProtection
 		/** \brief Checks presence of debugger (calls EX) */
 		/** \return false if found */
 		bool DebuggerPresence( );
+		/** \brief Checks presence of debugger by setting up SEH and calling interrupt[ 0x2D ]  */
+		/** \return false if debugger catch occurred */
+		bool Interrupt0x2D( );
 		/** \brief Forces an exception at usermode & kernel level and checks how it was caught in order to evaluate the presence of a debugger */
 		/** \return false if debugger catch occurred */
 		bool ForceExceptions( );
