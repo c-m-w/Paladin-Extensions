@@ -23,7 +23,8 @@ namespace PX::Features::Awareness
 	} info;
 
 	void PX_API Box( );
-	void PX_API Snapline( );
+	void PX_API SnapLine( );
+	void PX_API ViewLine( );
 
 	void PX_API Draw( )
 	{
@@ -76,11 +77,12 @@ namespace PX::Features::Awareness
 			if ( !esdEntityConfig->bEnabled )
 				continue;
 
-			info.iState = pEntity->IsDormant( ) ? DORMANT
+			info.iState = pEntity->IsDormant( ) ? STATE_DORMANT
 				: pLocalPlayer->PositionInSight( !info.bIsPlayer ? info.vecLocation : reinterpret_cast< CBasePlayer* >( info.pEntity )->GetHitboxPosition( HITBOX_CHEST ), 
-												 esdEntityConfig->bMindSmoke, info.pEntity ) ? VISIBLE : INVISIBLE;
+												 esdEntityConfig->bMindSmoke, info.pEntity ) ? STATE_VISIBLE : STATE_INVISIBLE;
 			Box( );
-			Snapline( );
+			SnapLine( );
+			ViewLine( );
 		}
 	}
 
@@ -135,36 +137,82 @@ namespace PX::Features::Awareness
 			dqScreenPoints[ 3 ] = D3DXVECTOR2( vecBuffer[ TOPRIGHT ].x, vecBuffer[ TOPRIGHT ].y );
 			dqScreenPoints[ 4 ] = D3DXVECTOR2( vecBuffer[ BOTTOMRIGHT ].x, vecBuffer[ BOTTOMRIGHT ].y );
 
+			if ( esdEntityConfig->bFill )
+			{
+				vertex_t vtxFillPoints[ 4 ];
+				if ( esdEntityConfig->bHealthBasedFillColor )
+				{
+					PX_DEF iMaxHealth = 100;
+					const auto iHealth = reinterpret_cast< CBasePlayer* >( info.pEntity )->m_iHealth( );
+					const auto iLeftSideHeight = vecBuffer[ BOTTOMLEFT ].y - vecBuffer[ TOPLEFT ].y;
+					const auto iRightSideHeight = vecBuffer[ BOTTOMRIGHT ].y - vecBuffer[ TOPRIGHT ].y;
+					const auto flHealthRatio = float( iHealth ) / float( iMaxHealth );
+					const auto iLeftSideDifference = vecBuffer[ BOTTOMLEFT ].x - vecBuffer[ TOPLEFT ].x;
+					const auto iRightSideDifference = vecBuffer[ BOTTOMRIGHT ].x - vecBuffer[ TOPRIGHT ].x;
+					const auto dwBottom = esdEntityConfig->seqHealthFill[ 1 ][ info.iState ].GetCurrentColor( ).GetARGB( );
+
+					if ( iHealth < iMaxHealth )
+					{
+						const auto dwTop = esdEntityConfig->seqHealthFill[ 0 ][ info.iState ].GetCurrentColor( ).GetARGB( );
+						vtxFillPoints[ 0 ] = vertex_t( vecBuffer[ TOPLEFT ].x, vecBuffer[ TOPLEFT ].y, esdEntityConfig->bSolidHealthFill ? dwTop : 0 );
+						vtxFillPoints[ 1 ] = vertex_t( vecBuffer[ TOPRIGHT ].x, vecBuffer[ TOPRIGHT ].y, esdEntityConfig->bSolidHealthFill ? dwTop : 0 );
+						vtxFillPoints[ 2 ] = vertex_t( vecBuffer[ TOPRIGHT ].x + iRightSideDifference * ( 1.f - flHealthRatio ), vecBuffer[ TOPRIGHT ].y + ( iRightSideHeight - ( iRightSideHeight * flHealthRatio ) ), dwTop );
+						vtxFillPoints[ 3 ] = vertex_t( vecBuffer[ TOPLEFT ].x + iLeftSideDifference * ( 1.f - flHealthRatio ), vecBuffer[ TOPLEFT ].y + ( iLeftSideHeight - ( iLeftSideHeight * flHealthRatio ) ), dwTop );
+						Drawing::Polygon( vtxFillPoints, 4, 2 );
+					}
+
+					vtxFillPoints[ 0 ] = vertex_t( vecBuffer[ BOTTOMLEFT ].x - iLeftSideDifference * flHealthRatio, vecBuffer[ BOTTOMLEFT ].y - iLeftSideHeight * flHealthRatio, dwBottom );
+					vtxFillPoints[ 1 ] = vertex_t( vecBuffer[ BOTTOMRIGHT ].x - iRightSideDifference * flHealthRatio, vecBuffer[ BOTTOMRIGHT ].y - iRightSideHeight * flHealthRatio, dwBottom );
+					vtxFillPoints[ 2 ] = vertex_t( vecBuffer[ BOTTOMRIGHT ].x, vecBuffer[ BOTTOMRIGHT ].y, esdEntityConfig->bSolidHealthFill ? dwBottom : 0 );
+					vtxFillPoints[ 3 ] = vertex_t( vecBuffer[ BOTTOMLEFT ].x, vecBuffer[ BOTTOMLEFT ].y, esdEntityConfig->bSolidHealthFill ? dwBottom : 0 );
+					Drawing::Polygon( vtxFillPoints, 4, 2 );
+				}
+				else
+				{
+					const auto dwColor = esdEntityConfig->seqFill[ info.iState ].GetCurrentColor( ).GetARGB( );
+					vtxFillPoints[ 0 ] = vertex_t( vecBuffer[ TOPLEFT ].x, vecBuffer[ TOPLEFT ].y, dwColor );
+					vtxFillPoints[ 1 ] = vertex_t( vecBuffer[ TOPRIGHT ].x, vecBuffer[ TOPRIGHT ].y, dwColor );
+					vtxFillPoints[ 2 ] = vertex_t( vecBuffer[ BOTTOMRIGHT ].x, vecBuffer[ BOTTOMRIGHT ].y, dwColor );
+					vtxFillPoints[ 3 ] = vertex_t( vecBuffer[ BOTTOMLEFT ].x, vecBuffer[ BOTTOMLEFT ].y, dwColor );
+					Drawing::Polygon( vtxFillPoints, 4, 2 );
+				}
+			}
+
 			Drawing::Line( dqScreenPoints, 2, esdEntityConfig->seqBox[ info.iState ].GetCurrentColor( ).GetARGB( ) );
-			if ( !esdEntityConfig->bFill )
-				return;
-
-			vertex_t vtxFillPoints[ 4 ];
-			if ( esdEntityConfig->bHealthBasedFillColor )
-			{
-				const auto iHealth = reinterpret_cast< CBasePlayer* >( info.pEntity )->m_iHealth( );
-				const auto dwTopColor = D3DCOLOR_ARGB( byte_t( iHealth * 1.275f ), 0, 0xFF, 0 );
-				const auto dwBottomColor = D3DCOLOR_ARGB( byte_t( iHealth * 5.1f ), 0, 0xFF, 0 );
-
-				vtxFillPoints[ 0 ] = vertex_t( vecBuffer[ TOPLEFT ].x, vecBuffer[ TOPLEFT ].y, dwTopColor );
-				vtxFillPoints[ 1 ] = vertex_t( vecBuffer[ TOPRIGHT ].x, vecBuffer[ TOPRIGHT ].y, dwTopColor );
-				vtxFillPoints[ 2 ] = vertex_t( vecBuffer[ BOTTOMRIGHT ].x, vecBuffer[ BOTTOMRIGHT ].y, dwBottomColor );
-				vtxFillPoints[ 3 ] = vertex_t( vecBuffer[ BOTTOMLEFT ].x, vecBuffer[ BOTTOMLEFT ].y, dwBottomColor );
-			}
-			else
-			{
-				const auto dwColor = esdEntityConfig->seqFill[ info.iState ].GetCurrentColor( ).GetARGB( );
-				vtxFillPoints[ 0 ] = vertex_t( vecBuffer[ TOPLEFT ].x, vecBuffer[ TOPLEFT ].y, dwColor );
-				vtxFillPoints[ 1 ] = vertex_t( vecBuffer[ TOPRIGHT ].x, vecBuffer[ TOPRIGHT ].y, dwColor );
-				vtxFillPoints[ 2 ] = vertex_t( vecBuffer[ BOTTOMRIGHT ].x, vecBuffer[ BOTTOMRIGHT ].y, dwColor );
-				vtxFillPoints[ 3 ] = vertex_t( vecBuffer[ BOTTOMLEFT ].x, vecBuffer[ BOTTOMLEFT ].y, dwColor );
-			}
-			Drawing::Polygon( vtxFillPoints, 4, 2 );
 		}
 	}
 
-	void PX_API Snapline( )
+	void PX_API SnapLine( )
 	{
+		if ( !esdEntityConfig->bSnaplines )
+			return;
 
+		Vector vecEntity;
+		int iWidth, iHeight;
+		std::deque< D3DXVECTOR2 > dqScreenPoints;
+
+		if ( !WorldToScreen( info.vecLocation, vecEntity ) )
+			return;
+
+		pEngineClient->GetScreenSize( iWidth, iHeight );
+		dqScreenPoints.emplace_back( vecEntity.x, vecEntity.y );
+		dqScreenPoints.emplace_back( iWidth / 2.f, iHeight );
+		Drawing::Line( dqScreenPoints, esdEntityConfig->flSnaplineWidth, esdEntityConfig->seqSnaplines[ info.iState ].GetCurrentColor( ).GetARGB( ) );
+	}
+
+	void PX_API ViewLine( )
+	{
+		if ( !esdEntityConfig->bViewLines )
+			return;
+
+		Vector vecEntity, vecEnd;
+		std::deque< D3DXVECTOR2 > dqScreenPoints;
+		auto& gtRay = reinterpret_cast< CBasePlayer* >( info.pEntity )->TraceRayFromView( );
+
+		WorldToScreen( gtRay.startpos, vecEntity );
+		WorldToScreen( gtRay.endpos, vecEnd );
+		dqScreenPoints.emplace_back( vecEntity.x, vecEntity.y );
+		dqScreenPoints.emplace_back( vecEnd.x, vecEnd.y );
+		Drawing::Line( dqScreenPoints, esdEntityConfig->flViewLineWidth, esdEntityConfig->seqViewLines[ info.iState ].GetCurrentColor( ).GetARGB( ) );
 	}
 }

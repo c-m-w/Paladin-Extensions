@@ -109,7 +109,7 @@ namespace PX::Drawing
 		}
 
 		pLine->Begin( );
-		pLine->Draw( &dqPoints[ 0 ], sPoints, dwColor );
+		pLine->Draw( &dqPoints[ 0 ], 2, dwColor );
 		pLine->End( );
 		dqPoints.pop_front( );
 		pLine->Release( );

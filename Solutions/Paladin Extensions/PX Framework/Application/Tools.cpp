@@ -149,10 +149,7 @@ namespace PX::Tools
 		// Reset the virtual function address array first, before we set the memory to 0 in case that function is called between and causes a crash.
 		if ( bSetNewTable )
 			reinterpret_cast< ptr_t** >( pClassBase )[ 0 ] = &pOldTable[ 0 ];
-
-		memset( pNewTable, NULL, sTableSize );
-		DWORD dwBuffer;
-		VirtualProtect( pClassBase, sTableSize, dwOldProtection, &dwBuffer );
+		WipeMemory( pNewTable, sTableLength );
 	}
 
 	void PX_API OpenLink( cstr_t szLink )
@@ -192,7 +189,7 @@ namespace PX::Tools
 				break;
 		}
 
-		px_assert( szDaySuffix );
+		px_assert( strlen( szDaySuffix ) > 0 );
 
 		strftime( szBuffer, 80, ( std::string( PX_XOR( "%B %e" ) ) + szDaySuffix + PX_XOR( ", 20%g" ) ).c_str( ), tmTime );
 		return szBuffer;

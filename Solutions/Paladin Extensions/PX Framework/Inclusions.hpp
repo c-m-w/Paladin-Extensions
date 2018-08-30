@@ -42,6 +42,7 @@
 #include <d3d9.h>
 #include <d3dx9core.h>
 #include <d3dx9math.h>
+#include <DirectXMath.h>
 #include <d3dx9tex.h>
 #if defined _DEBUG
 #pragma comment( lib, "d3dx9d.lib" )

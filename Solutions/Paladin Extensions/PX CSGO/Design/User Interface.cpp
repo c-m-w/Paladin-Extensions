@@ -133,41 +133,94 @@ namespace PX::UI::Manager
 				{
 					VerticalSpacing( );
 
-					BeginRow( 15, 3, ROW_STATIC );
-					SetRowWidth( 5 );
-					Spacing( );
+					{
+						BeginRow( 15, 3, ROW_STATIC );
+						SetRowWidth( 5 );
+						Spacing( );
 
-					Checkbox( PX_XOR( "Enabled" ), &esdConfig._Players[ TEAM ].bEnabled, PX_XOR( "Enable teammate extra sensory drawing." ) );
+						Checkbox( PX_XOR( "Enabled" ), &esdConfig._Players[ TEAM ].bEnabled, PX_XOR( "Enable teammate extra sensory drawing." ) );
 
-					EndRow( );
+						EndRow( );
+					}
+
+					VerticalSpacing( );
+
+					{
+						BeginRow( 15, 16, ROW_STATIC );
+						SetRowWidth( 5 );
+						Spacing( );
+
+						Checkbox( PX_XOR( "Box" ), &esdConfig._Players[ TEAM ].bBox, PX_XOR( "Enable drawing a box overtop of your teammates." ) );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Box" ), 15 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 3 );
+						Spacing( );
+						SetRowWidth( COLOR_BUTTON_WIDTH );
+						ColorButton( PX_XOR( "Teammate Box Visible" ), &esdConfig._Players[ TEAM ].seqBox[ STATE_VISIBLE ] );
+						ColorButton( PX_XOR( "Teammate Box Invisible" ), &esdConfig._Players[ TEAM ].seqBox[ STATE_INVISIBLE ] );
+						ColorButton( PX_XOR( "Teammate Box Dormant" ), &esdConfig._Players[ TEAM ].seqBox[ STATE_DORMANT ] );
+
+						Checkbox( PX_XOR( "Three Dimensional" ), &esdConfig._Players[ TEAM ].bThreeDimensional, PX_XOR( "Render a three dimensional prism overtop of your teammates." ) );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Three Dimensional" ), 15 ).x );
+						Spacing( );
+
+						Checkbox( PX_XOR( "Fill" ), &esdConfig._Players[ TEAM ].bFill, PX_XOR( "Enable filling in the box drawn overtop of your temmates." ) );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Fill" ), 15 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 3 );
+						Spacing( );
+						SetRowWidth( COLOR_BUTTON_WIDTH );
+						ColorButton( PX_XOR( "Teammate Box Fill Visible" ), &esdConfig._Players[ TEAM ].seqFill[ STATE_VISIBLE ] );
+						ColorButton( PX_XOR( "Teammate Box Fill Invisible" ), &esdConfig._Players[ TEAM ].seqFill[ STATE_INVISIBLE ] );
+						ColorButton( PX_XOR( "Teammate Box Fill Dormant" ), &esdConfig._Players[ TEAM ].seqFill[ STATE_DORMANT ] );
+
+						EndRow( );
+					}
 
 					VerticalSpacing( );
 
-					BeginRow( 15, 15, ROW_STATIC );
-					SetRowWidth( 5 );
-					Spacing( );
+					{
+						BeginRow( 15, 12, ROW_STATIC );
+						SetRowWidth( 5 );
+						Spacing( );
 
-					Checkbox( PX_XOR( "Box" ), &esdConfig._Players[ TEAM ].bBox, PX_XOR( "Enable drawing a box overtop of your teammates." ) );
-					SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( "Box", 15 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 3 );
-					Spacing( );
-					SetRowWidth( COLOR_BUTTON_WIDTH );
-					ColorButton( PX_XOR( "Teammate Box Visible" ), &esdConfig._Players[ TEAM ].seqBox[ VISIBLE ] );
-					ColorButton( PX_XOR( "Teammate Box Invisible" ), &esdConfig._Players[ TEAM ].seqBox[ INVISIBLE ] );
-					ColorButton( PX_XOR( "Teammate Box Dormant" ), &esdConfig._Players[ TEAM ].seqBox[ DORMANT ] );
+						Checkbox( PX_XOR( "Health-Based Fill" ), &esdConfig._Players[ TEAM ].bHealthBasedFillColor, PX_XOR( "Use your teammate's health to color the box fill." ) );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH * 2 - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Health-Based Fill" ), 15 ).x - COLOR_BUTTON_PADDING * 12 - COLOR_BUTTON_WIDTH * 6 );
+						Spacing( );
+						SetRowWidth( COLOR_BUTTON_WIDTH );
+						ColorButton( PX_XOR( "Teammate Box Fill Health Top Visible" ), &esdConfig._Players[ TEAM ].seqHealthFill[ 1 ][ STATE_VISIBLE ] );
+						ColorButton( PX_XOR( "Teammate Box Fill Health Top Invisible" ), &esdConfig._Players[ TEAM ].seqHealthFill[ 1 ][ STATE_INVISIBLE ] );
+						ColorButton( PX_XOR( "Teammate Box Fill Health Top Dormant" ), &esdConfig._Players[ TEAM ].seqHealthFill[ 1 ][ STATE_DORMANT ] );
+						ColorButton( PX_XOR( "Teammate Box Fill Health Bottom Visible" ), &esdConfig._Players[ TEAM ].seqHealthFill[ 0 ][ STATE_VISIBLE ] );
+						ColorButton( PX_XOR( "Teammate Box Fill Health Bottom Invisible" ), &esdConfig._Players[ TEAM ].seqHealthFill[ 0 ][ STATE_INVISIBLE ] );
+						ColorButton( PX_XOR( "Teammate Box Fill Health Bottom Dormant" ), &esdConfig._Players[ TEAM ].seqHealthFill[ 0 ][ STATE_DORMANT ] );
 
-					Checkbox( PX_XOR( "Fill" ), &esdConfig._Players[ TEAM ].bFill, PX_XOR( "Enable filling in the box drawn overtop of your temmates." ) );
-					SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Fill" ), 15 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 3 );
-					Spacing( );
-					SetRowWidth( COLOR_BUTTON_WIDTH );
-					ColorButton( PX_XOR( "Teammate Box Fill Visible" ), &esdConfig._Players[ TEAM ].seqFill[ VISIBLE ] );
-					ColorButton( PX_XOR( "Teammate Box Fill Invisible" ), &esdConfig._Players[ TEAM ].seqFill[ INVISIBLE ] );
-					ColorButton( PX_XOR( "Teammate Box Fill Dormant" ), &esdConfig._Players[ TEAM ].seqFill[ DORMANT ] );
+						Checkbox( PX_XOR( "Solid" ), &esdConfig._Players[ TEAM ].bSolidHealthFill, PX_XOR( "Don't apply a transparent gradient to the health fill." ) );
 
-					Checkbox( PX_XOR( "Health-Based Fill" ), &esdConfig._Players[ TEAM ].bHealthBasedFillColor, PX_XOR( "Use your teammate's health to color the box fill." ) );
-
-					EndRow( );
+						EndRow( );
+					}
 
 					VerticalSpacing( );
+
+					{
+						BeginRow( 15, 13, ROW_STATIC );
+						SetRowWidth( 5 );
+						Spacing( );
+
+						Checkbox( PX_XOR( "Snaplines" ), &esdConfig._Players[ TEAM ].bSnaplines, PX_XOR( "Draw a line from the bottom of your screen to your teammates." ) );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Snaplines" ), 15 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 3 );
+						Spacing( );
+						SetRowWidth( COLOR_BUTTON_WIDTH );
+						ColorButton( PX_XOR( "Teammate Snapline Visible" ), &esdConfig._Players[ TEAM ].seqSnaplines[ STATE_VISIBLE ] );
+						ColorButton( PX_XOR( "Teammate Snapline Invisible" ), &esdConfig._Players[ TEAM ].seqSnaplines[ STATE_INVISIBLE ] );
+						ColorButton( PX_XOR( "Teammate Snapline Dormant" ), &esdConfig._Players[ TEAM ].seqSnaplines[ STATE_DORMANT ] );
+
+						Checkbox( PX_XOR( "Viewlines" ), &esdConfig._Players[ TEAM ].bViewLines, PX_XOR( "Draw a line from where your teammate is looking until it hits a surface." ) );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Viewlines" ), 15 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 3 );
+						Spacing( );
+						SetRowWidth( COLOR_BUTTON_WIDTH );
+						ColorButton( PX_XOR( "Teammate Viewline Visible" ), &esdConfig._Players[ TEAM ].seqViewLines[ STATE_VISIBLE ] );
+						ColorButton( PX_XOR( "Teammate Viewline Invisible" ), &esdConfig._Players[ TEAM ].seqViewLines[ STATE_INVISIBLE ] );
+						ColorButton( PX_XOR( "Teammate Viewline Dormant" ), &esdConfig._Players[ TEAM ].seqViewLines[ STATE_DORMANT ] );
+
+						EndRow( );
+					}
 
 					EndGroupbox( );
 				}

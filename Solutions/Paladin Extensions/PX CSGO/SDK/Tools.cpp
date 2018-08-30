@@ -92,6 +92,26 @@ namespace PX::Tools
 		vecOutput[ 2 ] = vecInput.Dot( mtxInput[ 2 ] ) + mtxInput[ 2 ][ 3 ];
 	}
 
+	void PX_API TransformAngle( const QAngle& qAngles, Vector& vecForward )
+	{
+		float flSin, flSin2, flCos, flCos2;
+
+		DirectX::XMScalarSinCos( &flSin, &flCos, D3DXToRadian( qAngles[ 0 ] ) );
+		DirectX::XMScalarSinCos( &flSin2, &flCos2, D3DXToRadian( qAngles[ 1 ] ) );
+
+		vecForward.x = flCos * flCos2;
+		vecForward.y = flCos * flSin2;
+		vecForward.z = -flSin;
+	}
+
+	void PX_API TransformAngle( const Vector& vecAngles, Vector& vecForward )
+	{
+		QAngle qBuffer;
+		qBuffer[ 0 ] = vecAngles.x;
+		qBuffer[ 1 ] = vecAngles.y;
+		return TransformAngle( qBuffer, vecForward );
+	}
+
 	Vector2D PX_API CalcAngle( Vector vecPosOne, Vector vecPosTwo )
 	{
 		vecPosTwo.x -= vecPosOne.x;
@@ -305,7 +325,7 @@ namespace PX::Tools
 
 	bool CBasePlayer::PositionInSight( Vector& vecPosition, bool bMindSmoke, void* pEntity /*= nullptr*/ )
 	{
-		auto vecStart = GetViewPosition( );
+		const auto vecStart = GetViewPosition( );
 		if ( bMindSmoke && LineGoesThroughSmoke( vecStart, vecPosition ) )
 			return false;
 
@@ -314,13 +334,28 @@ namespace PX::Tools
 		CGameTrace gtRay;
 
 		tfFilter.pSkip = this;
-
 		rRay.Init( vecStart, vecPosition );
 		pEngineTrace->TraceRay( rRay, PX_MASK_VISIBLE, &tfFilter, &gtRay );
 
 		if ( gtRay.fraction == 1.f )
 			return true;
 		return gtRay.hit_entity == pEntity;
+	}
+
+	CGameTrace& CBasePlayer::TraceRayFromView( )
+	{
+		Vector vecEnd;
+		CTraceFilter tfFilter;
+		Ray_t rRay;
+		static CGameTrace gtRay;
+
+		TransformAngle( m_angEyeAngles( ), vecEnd );
+		vecEnd *= 8192;
+		vecEnd += GetViewPosition( );
+		tfFilter.pSkip = this;
+		rRay.Init( GetViewPosition( ), vecEnd );
+		pEngineTrace->TraceRay( rRay, PX_MASK_VISIBLE, &tfFilter, &gtRay );
+		return gtRay;
 	}
 
 	Vector CBasePlayer::GetHitboxPosition( EHitbox hHitboxID )

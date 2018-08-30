@@ -23,6 +23,8 @@ namespace PX::Tools
 	void PX_API ClampAngles( QAngle& qAngles );
 	bool PX_API WorldToScreen( const Vector& vecWorld, Vector &vecScreen );
 	void PX_API TransformVector( Vector vecInput, matrix3x4_t mtxInput, Vector &vecOutput );
+	void PX_API TransformAngle( const QAngle &qAngles, Vector& vecForward );
+	void PX_API TransformAngle( const Vector &vecAngles, Vector& vecForward );
 	Vector2D PX_API CalcAngle( Vector vecPosOne, Vector vecPosTwo );
 	float PX_API GetAngleDistance( Vector vecCurrentAngles, Vector vecPosOne, Vector vecPosTwo );
 	RECT PX_API CalculateRenderBounds( Vector* vecScreenPoints );
@@ -139,6 +141,7 @@ namespace PX::Tools
 		bool IsAlive( );
 		Vector GetViewPosition( );
 		bool PositionInSight( Vector& vecPosition, bool bMindSmoke, void* pEntity = nullptr );
+		CGameTrace& TraceRayFromView( );
 		Vector GetHitboxPosition( EHitbox hHitboxID );
 	};
 
