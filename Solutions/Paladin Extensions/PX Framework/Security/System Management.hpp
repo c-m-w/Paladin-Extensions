@@ -73,7 +73,7 @@ namespace PX::sys
 	void PX_API TerminateProcess( DWORD dwTargetProcessID );
 	void PX_API Delete( ) noexcept;
 
-	struct SWindowsAPI: public ASingleton< SWindowsAPI >
+	struct SWindowsAPI: PX::Tools::ASingleton< SWindowsAPI >
 	{
 		// typedefs
 		typedef LONG KPRIORITY;
