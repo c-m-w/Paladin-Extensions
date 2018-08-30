@@ -3,7 +3,7 @@
 #pragma once
 
 #include <climits>
-#include <DirectX/d3dx9math.h>
+#include <d3dx9math.h>
 
 #include "Definitions.hpp"
 

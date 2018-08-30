@@ -14,12 +14,12 @@ namespace PX::Features::Awareness
 
 	struct
 	{
-		CBaseEntity* pEntity { };
-		bool bTeammate { }, bIsPlayer { };
-		int iSettingIndex { };
-		Vector vecLocation { };
-		EClassID cClass;
-		int iState { };
+		CBaseEntity* pEntity = nullptr;
+		bool bTeammate = false, bIsPlayer = false;
+		int iSettingIndex = 0;
+		Vector vecLocation = Vector( );
+		EClassID cClass = CLASSID_MAX;
+		int iState = STATE_VISIBLE;
 	} info;
 
 	void PX_API Box( );
@@ -28,18 +28,6 @@ namespace PX::Features::Awareness
 
 	void PX_API Draw( )
 	{
-		//vertex_t vtxPoints[]
-		//{
-		//	vertex_t( 0, 0, 0xffffffff ),
-		//	vertex_t( 50, 0, 0xffffffff ),
-		//	vertex_t( 50, 50, 0xffffffff ),
-		//	vertex_t( 0, 50, 0xffffffff )
-		//};
-		//
-		//Drawing::Polygon( vtxPoints, 4, 2 );
-		//
-		//Drawing::BoxFilled( 500, 500, 200, 200, 0xffff0000 );
-
 		if ( !pEngineClient->IsInGame( ) )
 			return;
 		pLocalPlayer = GetLocalPlayer( );

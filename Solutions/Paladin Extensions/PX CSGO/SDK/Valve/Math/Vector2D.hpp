@@ -1,6 +1,6 @@
 #pragma once
 
-#include <DirectX/d3dx9math.h>
+#include <d3dx9math.h>
 
 typedef float vec_t;
 // 2D Vector
