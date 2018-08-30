@@ -320,7 +320,7 @@ void PX_API Draw( )
 	InitializeRenderTarget( uDimensions, PX_XOR( L"Paladin Extensions" ) );
 	InitializeUI( PX_XOR( "Manager" ) );
 
-	DEVMODE pDevMode;
+	DEVMODE pDevMode { };
 	EnumDisplaySettings( nullptr, ENUM_CURRENT_SETTINGS, &pDevMode );
 	while ( !bShouldClose )
 	{
@@ -364,7 +364,7 @@ void PX_API OnAttach( )
 	std::thread tMonitorDetectionVectors( MonitorDetectionVectors );
 	tMonitorDetectionVectors.detach( );
 #endif
-
+	// we shouldn't have this todo
 	Wait( rand( ) % 1900 + 100 );
 
 	iLoginStatus = Login( bExtensionAccess );
@@ -417,7 +417,7 @@ void PX_API OnAttach( )
 			auto strDLL = AssembleExtensionInformation( strEncryptedDLL );
 			const auto sDLL = strDLL.size( );
 			auto pBuffer = VirtualAlloc( nullptr, sDLL + 1, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE );
-
+			px_assert( pBuffer );
 			memcpy( pBuffer, strDLL.c_str( ), sDLL );
 			strEncryptedDLL.clear( );
 			strDLL.clear( );

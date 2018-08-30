@@ -24,6 +24,7 @@ namespace PX::Cryptography
 		hHash.Put( bOutput, sizeof( byte_t[ CryptoPP::SHA1::DIGESTSIZE ] ) );
 		hHash.MessageEnd( );
 		std::transform( strOutput.begin( ), strOutput.end( ), strOutput.begin( ), tolower );
+		// shouldn't we be using strOutput's transform fn?
 		return strOutput;
 	}
 

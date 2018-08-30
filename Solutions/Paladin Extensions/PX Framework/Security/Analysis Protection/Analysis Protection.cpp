@@ -69,7 +69,7 @@ namespace PX::AnalysisProtection
 		{
 			// if the exception is swallowed, a debugger exists
 			bSwallowedException = true;
-			const auto phExceptionHandler = AddVectoredExceptionHandler( 1, [ ]( PEXCEPTION_POINTERS pExceptionInfo ) -> LONG //CALLBACK
+			const auto phExceptionHandler = AddVectoredExceptionHandler( 1, [ ]( IN PEXCEPTION_POINTERS pExceptionInfo ) -> LONG //CALLBACK
 			{
 				// we're called for the exception, so a debugger didn't catch it
 				bSwallowedException = false;
@@ -128,7 +128,7 @@ namespace PX::AnalysisProtection
 				{
 					static auto u = 0u;
 					wchar_t wchAppKeyID[ 1024 ];
-					DWORD dwBuffer = sizeof wchAppKeyID;
+					DWORD dwBuffer = sizeof wchAppKeyID / 2; // wide, so /2
 					if ( RegEnumKeyEx( hkeyUninstall, u++, wchAppKeyID, &dwBuffer, nullptr, nullptr, nullptr, nullptr ) != ERROR_SUCCESS )
 						break;
 
@@ -138,7 +138,7 @@ namespace PX::AnalysisProtection
 					px_assert( RegOpenKeyEx( HKEY_LOCAL_MACHINE, wstrSubKeyID.c_str( ), 0, KEY_READ, &hkeyApp ) == ERROR_SUCCESS );
 
 					wchar_t wchDisplay[ 1024 ];
-					dwBuffer = sizeof wchDisplay;
+					dwBuffer = sizeof wchDisplay / 2; // wide, so /2
 					DWORD dwType = KEY_ALL_ACCESS;
 					px_assert( RegQueryValueEx( hkeyApp, PX_XOR( L"DisplayName" ), nullptr, &dwType, reinterpret_cast< BYTE* >( wchDisplay ), &dwBuffer ) == ERROR_SUCCESS );
 					wstrInstalls += wchDisplay;

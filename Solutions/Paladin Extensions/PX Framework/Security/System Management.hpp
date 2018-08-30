@@ -245,7 +245,7 @@ namespace PX::sys
 			OS_MAX
 		};
 
-		SWindowsAPI( );
+		SWindowsAPI( ) noexcept;
 		void* PX_API GetFunctionPointer( EFuncs enfRequest );
 	private:
 		bool PX_API FunctionIsOnOS( EOSes osMinimum, EOSes osRemoved );

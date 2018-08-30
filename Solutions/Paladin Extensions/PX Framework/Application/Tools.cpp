@@ -194,6 +194,7 @@ namespace PX::Tools
 
 		px_assert( szDaySuffix );
 
+		// TODO: writing 80 bytes to szBuffer, but it's only 32...
 		strftime( szBuffer, 80, ( std::string( PX_XOR( "%B %e" ) ) + szDaySuffix + PX_XOR( ", 20%g" ) ).c_str( ), tmTime );
 		return szBuffer;
 	}

@@ -4,7 +4,7 @@
 
 const wchar_t* wszWindowTitle = PX_XOR( L"Paladin Extensions Manager" );
 
-LRESULT WINAPI WindowProc( HWND _hwWindowHandle, UINT uMessage, WPARAM uwParam, LPARAM llParam )
+LRESULT WINAPI WindowProc( _In_ HWND _hwWindowHandle, _In_ UINT uMessage, _In_ WPARAM uwParam, _In_ LPARAM llParam )
 {
 	if ( uMessage == WM_HELP )
 		OpenLink( PX_XOR( "https://www.paladin.rip/support/" ) );
@@ -55,6 +55,7 @@ void LoadManager( )
 	const auto zDLL = strDLL.length( );
 
 	const auto pBuffer = VirtualAlloc( nullptr, zDLL + 1, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE );
+	px_assert( pBuffer );
 	memcpy( pBuffer, strDLL.c_str( ), zDLL );
 	strDLL.clear( );
 

@@ -20,7 +20,7 @@ namespace PX::Features::Awareness
 		Vector vecLocation { };
 		EClassID cClass;
 		int iState { };
-	} info;
+	} info { };
 
 	void PX_API Box( );
 	void PX_API Snapline( );

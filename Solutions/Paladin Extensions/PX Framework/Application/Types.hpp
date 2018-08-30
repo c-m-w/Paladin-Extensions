@@ -45,7 +45,7 @@ namespace PX::Types
 		std::string strName, strStatus, strEstimatedNextUpdate, strLastUpdate, strVersion;
 		bool bInitialized = true;
 
-		SExtensionInfo( )
+		SExtensionInfo( ) noexcept
 		{
 			bInitialized = false;
 		}
@@ -64,7 +64,7 @@ namespace PX::Types
 	struct vertex_t
 	{
 		float flVectors[ 4 ] { };
-		DWORD dwColor;
+		DWORD dwColor { };
 		vertex_t( ) = default;
 		vertex_t( float x, float y, DWORD _dwColor )
 		{
@@ -109,7 +109,7 @@ namespace PX::Types
 		} *pColor = new UColor { UINT_MAX };
 
 	public:
-		SColor( ) = default;
+		SColor( ) noexcept = default;
 		SColor( std::initializer_list< ptr_t > initInputs );
 		SColor( std::initializer_list< int > initInputs );
 		SColor( std::initializer_list< float > initInputs );
@@ -171,7 +171,7 @@ namespace PX::Types
 
 	public:
 		std::size_t sSequences = 0u;
-		SColorSequence( )
+		SColorSequence( ) noexcept
 		{
 			PutNewColorSequence( { 0, 0, 0, 255 }, 1000 );
 		}

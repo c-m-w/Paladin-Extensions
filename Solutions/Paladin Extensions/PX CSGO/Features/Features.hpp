@@ -31,7 +31,7 @@ namespace PX::Features
 
 					bool bSnaplines = false;
 					color_sequence_t seqSnapline[ 3 ];
-				} _Players[ 2 ];
+				} _Players[ 2 ] { };
 			} _ExtraSensoryDrawing;
 		} _Awareness;
 	} _Settings;
