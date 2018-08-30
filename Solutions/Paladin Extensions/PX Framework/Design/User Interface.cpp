@@ -835,28 +835,29 @@ namespace PX::UI
 			nk_layout_row_dynamic( pContext, 30, 0 );
 			auto pOutput = nk_window_get_canvas( pContext );
 			constexpr nk_color _clrBlueHover { 115, 189, 247, 255 };
-			const auto flWidth = pContext->current->bounds.w;
+			const auto flWidth = recMainWindow.w;
 
 			struct nk_text txtTitle, txtApplication, txtCloseButton, txtMinimizeButton;
 			txtCloseButton.padding = txtApplication.padding = txtTitle.padding = pContext->style.text.padding;
 			txtTitle.text = clrTextActive;
 			txtApplication.text = clrTextDormant;
 
-			nk_fill_rect( pOutput, nk_rect( pContext->current->bounds.x, pContext->current->bounds.y, flWidth, float( uFillHeight ) ), 0.f, clrHeader );
-			nk_stroke_line( pOutput, pContext->current->bounds.x, pContext->current->bounds.y + 40, pContext->current->bounds.x + flWidth, pContext->current->bounds.y + 40, 1, clrColorTable[ NK_COLOR_BORDER ] );
+			nk_fill_rect( pOutput, nk_rect( recMainWindow.x, recMainWindow.y, flWidth, float( uFillHeight ) ), 0.f, clrHeader );
+			nk_stroke_line( pOutput, recMainWindow.x, recMainWindow.y + 40, recMainWindow.x + flWidth, recMainWindow.y + 40, 1, clrColorTable[ NK_COLOR_BORDER ] );
 
 			SetFont( FONT_ROBOTOBOLD );
 			auto vecTitle = CalculateTextBounds( szTitle, 30 );
-			nk_widget_text( pOutput, nk_rect( pContext->current->bounds.x + 10.f + vecTextures[ TEXTURE_LOGO ].uWidth, pContext->current->bounds.y + 7, vecTitle.x, 30 ), szTitle, strlen( szTitle ), &txtTitle, NK_TEXT_CENTERED, pContext->style.font );
+			nk_widget_text( pOutput, nk_rect( recMainWindow.x + 10.f + vecTextures[ TEXTURE_LOGO ].uWidth, recMainWindow.y + 7, vecTitle.x, 30 ), szTitle, strlen( szTitle ), &txtTitle, NK_TEXT_CENTERED, pContext->style.font );
 			SetFont( FONT_ROBOTO );
 			auto vecApplicationTitle = CalculateTextBounds( _szApplicationTitle, 30 );
-			nk_widget_text( pOutput, nk_rect( pContext->current->bounds.x + 13.f + vecTextures[ TEXTURE_LOGO ].uWidth + vecTitle.x, pContext->current->bounds.y + 7, vecApplicationTitle.x, 30 ), _szApplicationTitle, strlen( _szApplicationTitle ), &txtApplication, NK_TEXT_CENTERED, pContext->style.font );
+			nk_widget_text( pOutput, nk_rect( recMainWindow.x + 13.f + vecTextures[ TEXTURE_LOGO ].uWidth + vecTitle.x, recMainWindow.y + 7, vecApplicationTitle.x, 30 ), _szApplicationTitle, strlen( _szApplicationTitle ), &txtApplication, NK_TEXT_CENTERED, pContext->style.font );
 
 			static auto clrMinimize = clrBlue, clrClose = clrMinimize;
 			txtMinimizeButton.text = clrMinimize;
 			txtCloseButton.text = clrClose;
-			struct nk_rect recMinimize = { pContext->current->bounds.x + flWidth - 70, pContext->current->bounds.y + 19, 20, 8 };
-			struct nk_rect recCloseButton = { pContext->current->bounds.x + flWidth - 33, pContext->current->bounds.y + 13, 20, 20 };
+			txtMinimizeButton.padding = txtCloseButton.padding = nk_vec2( 0, 0 );
+			struct nk_rect recMinimize = { recMainWindow.x + flWidth - 70, recMainWindow.y + 19, 20, 8 };
+			struct nk_rect recCloseButton = { recMainWindow.x + flWidth - 33, recMainWindow.y + 13, 20, 20 };
 			nk_widget_text( pOutput, recMinimize, ICON_FA_MINUS, strlen( ICON_FA_MINUS ), &txtMinimizeButton, NK_TEXT_CENTERED, pContext->style.font );
 			nk_widget_text( pOutput, recCloseButton, ICON_FA_TIMES, strlen( ICON_FA_TIMES ), &txtCloseButton, NK_TEXT_CENTERED, pContext->style.font );
 
