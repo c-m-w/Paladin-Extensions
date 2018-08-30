@@ -80,6 +80,29 @@ namespace PX::sys
 
 		// structs
 
+		typedef struct _SYSTEM_HANDLE
+		{
+			ULONG ProcessId;
+			BYTE ObjectTypeNumber;
+			BYTE Flags;
+			USHORT Handle;
+			PVOID Object;
+			ACCESS_MASK GrantedAccess;
+		} SYSTEM_HANDLE, *PSYSTEM_HANDLE;
+
+		typedef struct _SYSTEM_HANDLE_INFORMATION
+		{
+			ULONG HandleCount;
+			SYSTEM_HANDLE Handles[ 1 ];
+		} SYSTEM_HANDLE_INFORMATION, *PSYSTEM_HANDLE_INFORMATION;
+
+
+		typedef struct _SYSTEM_KERNEL_DEBUGGER_INFORMATION
+		{
+			BOOLEAN DebuggerEnabled;
+			BOOLEAN DebuggerNotPresent;
+		} SYSTEM_KERNEL_DEBUGGER_INFORMATION, *PSYSTEM_KERNEL_DEBUGGER_INFORMATION;
+
 		typedef struct _LDR_MODULE
 		{
 			LIST_ENTRY InLoadOrderModuleList, InMemoryOrderModuleList, InInitializationOrderModuleList;
@@ -172,7 +195,9 @@ namespace PX::sys
 		typedef NTSTATUS ( WINAPI* fnNtUnmapViewOfSection )( HANDLE, PVOID );
 		typedef NTSTATUS ( WINAPI* fnNtYieldExecution )( );
 		typedef NTSTATUS ( WINAPI* fnRtlGetVersion )( RTL_OSVERSIONINFOEXW* );
-		typedef DWORD( WINAPI* fnRtlCreateUserThread )( HANDLE, PSECURITY_DESCRIPTOR, BOOL, ULONG, PULONG, PULONG, LPVOID, LPVOID, HANDLE, LPVOID );
+		typedef DWORD ( WINAPI* fnRtlCreateUserThread )( HANDLE, PSECURITY_DESCRIPTOR, BOOL, ULONG, PULONG, PULONG, LPVOID, LPVOID, HANDLE, LPVOID );
+		typedef NTSTATUS ( WINAPI* fnZwQuerySystemInformation )( SYSTEM_INFORMATION_CLASS, PVOID, ULONG, PULONG );
+
 
 		enum EFuncs
 		{
@@ -198,6 +223,7 @@ namespace PX::sys
 			NtYieldExecution,
 			RtlGetVersion,
 			RtlCreateUserThread,
+			ZwQuerySystemInformation,
 			FUNC_MAX
 		};
 
@@ -220,9 +246,9 @@ namespace PX::sys
 		};
 
 		SWindowsAPI( );
-		void* GetFunctionPointer( EFuncs );
+		void* PX_API GetFunctionPointer( EFuncs enfRequest );
 	private:
-		bool FunctionIsOnOS( EOSes osMinimum, EOSes osRemoved );
+		bool PX_API FunctionIsOnOS( EOSes osMinimum, EOSes osRemoved );
 	};
 }
 

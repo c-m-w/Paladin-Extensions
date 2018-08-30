@@ -601,41 +601,25 @@ namespace PX::sys
 		return true;
 	}
 
-	typedef struct
-	{
-		DWORD	dwProcessID;
-		BYTE	bObjectType;
-		BYTE	bFlags;
-		WORD	wValue;
-		PVOID	pAddress;
-		DWORD	dwGrantedAccess;
-	} system_handle_t;
-
-	typedef struct
-	{
-		ULONG HandleCount;
-		system_handle_t Handles[ 1 ];
-	} *psystem_handle_information_t;
-
 	HANDLE FindInternalHandle( const DWORD dwTargetProcessID )
 	{
 		const auto fnQuerySystemInfo = reinterpret_cast< NTSTATUS( NTAPI* )( ULONG, PVOID, ULONG, PULONG ) >
 			( GetProcAddress( GetModuleHandle( PX_XOR( L"ntdll.dll" ) ), PX_XOR( "NtQuerySystemInformation" ) ) );
 		auto ulHandleInfoSize = 0x10000ul;
-		auto pHandleInfo = reinterpret_cast< psystem_handle_information_t >( malloc( ulHandleInfoSize ) );
+		auto pHandleInfo = reinterpret_cast< SWindowsAPI::PSYSTEM_HANDLE_INFORMATION >( malloc( ulHandleInfoSize ) );
 
 		NTSTATUS ntsResult;
 		constexpr auto ulSystemHandleInfoFlags = 1 << 4;
 		while ( ( ntsResult = fnQuerySystemInfo( ulSystemHandleInfoFlags, pHandleInfo, ulHandleInfoSize, nullptr ) ) == STATUS_INFO_LENGTH_MISMATCH )
-			pHandleInfo = reinterpret_cast< psystem_handle_information_t >( realloc( pHandleInfo, ulHandleInfoSize *= 2 ) );
+			pHandleInfo = reinterpret_cast< SWindowsAPI::PSYSTEM_HANDLE_INFORMATION >( realloc( pHandleInfo, ulHandleInfoSize *= 2 ) );
 
 		px_assert( NT_SUCCESS( ntsResult ) );
 
 		for ( auto ul = 0ul; ul < pHandleInfo->HandleCount; ul++ )
 		{
-			if ( pHandleInfo->Handles[ ul ].dwProcessID == GetCurrentProcessId( )
-				 && dwTargetProcessID == GetProcessId( reinterpret_cast< HANDLE >( pHandleInfo->Handles[ ul ].wValue ) ) )
-				return reinterpret_cast< HANDLE >( pHandleInfo->Handles[ ul ].wValue );
+			if ( pHandleInfo->Handles[ ul ].ProcessId == GetCurrentProcessId( )
+				 && dwTargetProcessID == GetProcessId( reinterpret_cast< HANDLE >( pHandleInfo->Handles[ ul ].Handle ) ) )
+				return reinterpret_cast< HANDLE >( pHandleInfo->Handles[ ul ].Handle );
 		}
 		free( pHandleInfo );
 		return nullptr;
@@ -753,7 +737,8 @@ Retry:
 		{ SWindowsAPI::EFuncs::NtUnmapViewOfSection,		PX_XOR( L"ntdll.dll" ),		PX_XOR( "NtUnmapViewOfSection" ),			SWindowsAPI::EOSes::WIN_XP,		SWindowsAPI::EOSes::OS_NONE	},
 		{ SWindowsAPI::EFuncs::NtYieldExecution,			PX_XOR( L"ntdll.dll" ),		PX_XOR( "NtYieldExecution" ),				SWindowsAPI::EOSes::WIN_XP,		SWindowsAPI::EOSes::OS_NONE	},
 		{ SWindowsAPI::EFuncs::RtlGetVersion,				PX_XOR( L"ntdll.dll" ),		PX_XOR( "RtlGetVersion" ),					SWindowsAPI::EOSes::WIN_XP,		SWindowsAPI::EOSes::OS_NONE	},
-		{ SWindowsAPI::EFuncs::RtlCreateUserThread,			PX_XOR( L"ntdll.dll" ),		PX_XOR( "RtlCreateUserThread" ),			SWindowsAPI::EOSes::WIN_XP,		SWindowsAPI::EOSes::OS_NONE	},
+		{ SWindowsAPI::EFuncs::RtlCreateUserThread,			PX_XOR( L"ntdll.dll" ),		PX_XOR( "RtlCreateUserThread" ),			SWindowsAPI::EOSes::WIN_XP,		SWindowsAPI::EOSes::OS_NONE },
+		{ SWindowsAPI::EFuncs::ZwQuerySystemInformation,	PX_XOR( L"ntdll.dll" ),		PX_XOR( "ZwQuerySystemInformation" ),		SWindowsAPI::EOSes::WIN_XP,		SWindowsAPI::EOSes::WIN_8_0 },
 	};
 	struct
 	{
@@ -783,13 +768,13 @@ Retry:
 			fndAPIFunctionData.bExpectedAvailable = FunctionIsOnOS( fndAPIFunctionData.osMinimumVersion, fndAPIFunctionData.osMaximumVersion );
 
 			const auto hLib = LoadLibrary( fndAPIFunctionData.wszLibrary );
-			if ( hLib == nullptr )
+			if ( !hLib )
 			{
 				fndAPIFunctionData.bAvailable = false;
 				continue;
 			}
 			fndAPIFunctionData.pPointer = GetProcAddress( hLib, fndAPIFunctionData.szFunctionSymbolName );
-			if ( fndAPIFunctionData.pPointer == nullptr )
+			if ( !fndAPIFunctionData.pPointer )
 			{
 				fndAPIFunctionData.bAvailable = false;
 				continue;
@@ -798,14 +783,23 @@ Retry:
 		}
 	}
 
-	bool SWindowsAPI::FunctionIsOnOS( EOSes osMinimum, EOSes osRemoved )
+	void* PX_API SWindowsAPI::GetFunctionPointer( EFuncs enfRequest )
+	{
+		for ( auto& fndAPIFunctionData: fndAPIFunctionsData )
+			if ( fndAPIFunctionData.efnID == enfRequest )
+				return fndAPIFunctionData.bAvailable ? fndAPIFunctionData.pPointer : nullptr;
+
+		px_assert( false ); // how did you manage to pass an EFuncs not in the enum?? :P
+	}
+
+	bool PX_API SWindowsAPI::FunctionIsOnOS( EOSes osMinimum, EOSes osRemoved )
 	{
 		// Determine if function meets minimum version
 		px_assert( osMinimum != OS_NONE );
 		{
 			bool bFoundMinimumOS;
 			bool bMeetsMinimumOS;
-			for ( auto& mapVersionFunction: mapVersionFunctions )
+			for ( auto& mapVersionFunction : mapVersionFunctions )
 				if ( mapVersionFunction.osVersion != OS_NONE && mapVersionFunction.osVersion == osMinimum )
 				{
 					bFoundMinimumOS = true;
@@ -820,7 +814,7 @@ Retry:
 		// we have an upper restriction. check if it was removed in our current os ver
 		bool bFoundRemovedOS;
 		bool bMeetsRemovedOS = false;
-		for ( auto& mapVersionFunction: mapVersionFunctions )
+		for ( auto& mapVersionFunction : mapVersionFunctions )
 			if ( mapVersionFunction.osVersion != OS_NONE && mapVersionFunction.osVersion == osRemoved )
 			{
 				bFoundRemovedOS = true;
@@ -830,14 +824,5 @@ Retry:
 		px_assert( bFoundRemovedOS );
 
 		return bMeetsRemovedOS;
-	}
-
-	void* SWindowsAPI::GetFunctionPointer( EFuncs enfRequest )
-	{
-		for ( auto& fndAPIFunctionData: fndAPIFunctionsData )
-			if ( fndAPIFunctionData.efnID == enfRequest )
-				return fndAPIFunctionData.bAvailable ? fndAPIFunctionData.pPointer : nullptr;
-
-		px_assert( false ); // how did you manage to pass an EFuncs not in the enum?? :P
 	}
 }

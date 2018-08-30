@@ -28,27 +28,60 @@ namespace PX::AnalysisProtection
 			auto NtQueryInformationProcess = static_cast< SWindowsAPI::fnNtQueryInformationProcess >( PX_WINAPI.GetFunctionPointer( SWindowsAPI::NtQueryInformationProcess ) );
 			// port (returns true if being debugged)
 			px_assert( STATUS_SUCCESS == NtQueryInformationProcess( hTarget, ProcessDebugPort, &bPresent, sizeof( DWORD ), nullptr )
-					&& !bPresent );
-			// objecthandle (returns ProcessDebugPort inverted [false if being debugged])
+					   && !bPresent );
+			   // objecthandle (returns ProcessDebugPort inverted [false if being debugged])
 			px_assert( STATUS_SUCCESS == NtQueryInformationProcess( hTarget, /*ProcessDebugPort*/ 0x1E, &bPresent, sizeof( DWORD ), nullptr )
-					&& !bPresent );
-			// flags (returns true if being debugged)
+					   && !bPresent );
+			   // flags (returns true if being debugged)
 			px_assert( STATUS_SUCCESS == NtQueryInformationProcess( hTarget, /*ProcessDebugFlags*/ 0x1F, &bPresent, sizeof( DWORD ), nullptr )
-					&& bPresent );
+					   && bPresent );
 
 			return true;
 		}
 
-		bool DebuggerPresence( )
+		bool DebuggerPresence( ) // check for debugger using remove functions & WinAPI
 		{
-			// check for debugger manually
-			byte_t bDebuggerPresence;
-			__asm mov bDebuggerPresence, [ FS:[ 0x30 ] + 0x2 ]
+			bool bDebuggerPresence;
+			__asm
+			{
+				mov eax, FS:[ 0x30 ] // get process environment info
+				mov al, [ eax + 2h ] // read "being debugged" flag
+				mov bDebuggerPresence, al // store result in bDebuggerPresence
+			}
 
-			// check for debugger using remove functions & WinAPI
+			auto ZwQuerySystemInformation = static_cast< SWindowsAPI::fnZwQuerySystemInformation >( PX_WINAPI.GetFunctionPointer( SWindowsAPI::EFuncs::ZwQuerySystemInformation ) );
+			if ( ZwQuerySystemInformation != nullptr )
+			{
+				SWindowsAPI::SYSTEM_KERNEL_DEBUGGER_INFORMATION nfoDebuggerStatus;
+				px_assert( STATUS_SUCCESS == ZwQuerySystemInformation( SYSTEM_INFORMATION_CLASS( /*SystemKernelDebuggerInformation*/ 35 ),
+																	   &nfoDebuggerStatus, sizeof( SWindowsAPI::SYSTEM_KERNEL_DEBUGGER_INFORMATION ), nullptr ) );
+				px_assert( FALSE == nfoDebuggerStatus.DebuggerEnabled
+						&& TRUE == nfoDebuggerStatus.DebuggerNotPresent );
+			}
 			px_assert( true == DebuggerPresenceEx( GetCurrentProcess( ) )
-					|| 0 == IsDebuggerPresent( )
-					|| 0 == bDebuggerPresence );
+					&& 0 == IsDebuggerPresent( )
+					&& !bDebuggerPresence );
+			return true;
+		}
+
+		bool bSwallowedException;
+		bool Interrupt0x2D( ) // utilizes SEH instead of __try __except
+		{
+			// if the exception is swallowed, a debugger exists
+			bSwallowedException = true;
+			const auto phExceptionHandler = AddVectoredExceptionHandler( 1, [ ]( PEXCEPTION_POINTERS pExceptionInfo ) -> LONG //CALLBACK
+			{
+				// we're called for the exception, so a debugger didn't catch it
+				bSwallowedException = false;
+
+				if ( pExceptionInfo->ExceptionRecord->ExceptionCode == EXCEPTION_BREAKPOINT )
+					return EXCEPTION_CONTINUE_EXECUTION;
+
+				return EXCEPTION_CONTINUE_SEARCH;
+			} );
+			__asm { int 0x2D }; // call the interrupt 0x2d fn
+			RemoveVectoredExceptionHandler( phExceptionHandler );
+			px_assert( false == bSwallowedException ); // we return inverted status, so we assert the inverse
 			return true;
 		}
 
@@ -56,40 +89,28 @@ namespace PX::AnalysisProtection
 		{
 			__try
 			{
-				px_assert( 0 == CloseHandle( INVALID_HANDLE_VALUE ) );
+				if ( 0 != CloseHandle( INVALID_HANDLE_VALUE ) )
+					return false;
 			}
 			__except ( EXCEPTION_EXECUTE_HANDLER )
 			{
 				// exception was caught and handled by something else
-				px_assert( false );
+				return false;
 			}
 
 			auto NtClose = static_cast< SWindowsAPI::fnNtClose >( PX_WINAPI.GetFunctionPointer( SWindowsAPI::NtClose ) );
 			__try
 			{
-				px_assert( STATUS_INVALID_HANDLE == NtClose( INVALID_HANDLE_VALUE ) );
+				if ( STATUS_INVALID_HANDLE != NtClose( INVALID_HANDLE_VALUE ) )
+					return false;
 			}
 			__except ( EXCEPTION_EXECUTE_HANDLER )
 			{
 				// exception was caught and handled by something else
-				px_assert( false );
+				return false;
 			}
 
-			// exception is only thrown without a debugger
-			__try
-			{
-				__asm
-				{
-					int 0x2D
-					xor eax, eax
-					add eax, 2
-				}
-			}
-			__except ( EXCEPTION_EXECUTE_HANDLER )
-			{
-				return true;
-			}
-			px_assert( false );
+			return Interrupt0x2D( );
 		}
 	}
 
@@ -97,7 +118,7 @@ namespace PX::AnalysisProtection
 	{
 		bool AnalysisToolsInstalled( )
 		{
-			wchar_t wchDisplay[ 1024 ];
+			std::wstring wstrInstalls;
 			{
 				wcstr_t wszRegPath = PX_XOR( L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall" );
 				HKEY hkeyUninstall;
@@ -111,15 +132,16 @@ namespace PX::AnalysisProtection
 					if ( RegEnumKeyEx( hkeyUninstall, u++, wchAppKeyID, &dwBuffer, nullptr, nullptr, nullptr, nullptr ) != ERROR_SUCCESS )
 						break;
 
-					wchar_t wchSubKeyID[ dwBuffer ];
-					wsprintf( wchSubKeyID, L"%s\\%s", wszRegPath, wchAppKeyID );
+					std::wstring wstrSubKeyID;
+					wstrSubKeyID = wstrSubKeyID + wszRegPath + L'\\' + wchAppKeyID;
 					HKEY hkeyApp;
-					px_assert( RegOpenKeyEx( HKEY_LOCAL_MACHINE, wchSubKeyID, 0, KEY_READ, &hkeyApp ) == ERROR_SUCCESS );
+					px_assert( RegOpenKeyEx( HKEY_LOCAL_MACHINE, wstrSubKeyID.c_str( ), 0, KEY_READ, &hkeyApp ) == ERROR_SUCCESS );
 
+					wchar_t wchDisplay[ 1024 ];
 					dwBuffer = sizeof wchDisplay;
 					DWORD dwType = KEY_ALL_ACCESS;
 					px_assert( RegQueryValueEx( hkeyApp, PX_XOR( L"DisplayName" ), nullptr, &dwType, reinterpret_cast< BYTE* >( wchDisplay ), &dwBuffer ) == ERROR_SUCCESS );
-					wprintf( L"%s\n", wchDisplay );
+					wstrInstalls += wchDisplay;
 
 					RegCloseKey( hkeyApp );
 				}
@@ -167,18 +189,18 @@ namespace PX::AnalysisProtection
 					PX_XOR( L"joeboxserver.exe" )
 				};
 				{
-					std::wstringstream ssReg( wchDisplay ), ssWMIC( RetrieveInfo( PX_XOR( L"SELECT * FROM Win32_Product" ) ) );
+					std::wstringstream ssReg( wstrInstalls ), ssWMIC( RetrieveInfo( PX_XOR( L"SELECT * FROM Win32_Product" ) ) );
 					do
 					{
 						std::wstring wstrBuffer;
-						if ( !ssReg.eof )
+						if ( !ssReg.eof( ) )
 						{
 							std::getline( ssReg, wstrBuffer );
 							for each ( auto& wszAnalysisTool in wszAnalysisToolsInstallName )
 								if ( wstrBuffer.substr( 0, 7 ) == std::wstring( wszAnalysisTool ).substr( 0, 7 ) )
 									px_assert( false );
 						}
-						if ( !ssWMIC.eof )
+						if ( !ssWMIC.eof( ) )
 						{
 							std::getline( ssWMIC, wstrBuffer );
 							for each ( auto& wszAnalysisTool in wszAnalysisToolsInstallName )
@@ -235,15 +257,16 @@ namespace PX::AnalysisProtection
 			};
 			bool bResult = false;
 			for each ( auto& wszAnalysisTool in wszAnalysisToolsExecutableTitle )
-				if ( std::wstring( PX_XOR( L"lsass.exe" ) ) == wszAnalysisTool )
-				{ // check for basic, always running exe. if it's running, that means they aren't forcing our strings to null
-					bResult = true;
-					goto Ensure; // go to GetProcessID to make sure they arent forcing GetProcessID to false
-				}
-				else Ensure: if ( GetProcessID( wszAnalysisTool ) )
+			{
+				bResult = std::wstring( PX_XOR( L"lsass.exe" ) ) == wszAnalysisTool;
+				// check for basic, always running exe. if it's running, that means they aren't forcing our strings to null
+				// then go to GetProcessID to make sure they arent forcing GetProcessID to false
+
+				if ( GetProcessID( wszAnalysisTool ) )
 					px_assert( bResult );
 				else if ( bResult ) // this is only true at the end of the list, and the exe should be running, thus, we've been
 					px_assert( false ); // byte patched!
+			}
 			return true;
 		}
 	}
