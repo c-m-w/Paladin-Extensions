@@ -39,10 +39,10 @@
 #pragma comment( lib, "libcurl_a.lib" )
 
 // Direct X
-#include <d3d9.h>
-#include <d3dx9core.h>
-#include <d3dx9math.h>
-#include <d3dx9tex.h>
+#include <DirectX/d3d9.h>
+#include <DirectX/d3dx9core.h>
+#include <DirectX/d3dx9math.h>
+#include <DirectX/d3dx9tex.h>
 #if defined _DEBUG
 #pragma comment( lib, "d3dx9d.lib" )
 #else
