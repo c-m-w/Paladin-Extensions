@@ -181,7 +181,7 @@ namespace PX::UI::Manager
 						Spacing( );
 
 						Checkbox( PX_XOR( "Health-Based Fill" ), &esdConfig._Players[ TEAM ].bHealthBasedFillColor, PX_XOR( "Use your teammate's health to color the box fill." ) );
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH * 2 - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Health-Based Fill" ), 15 ).x - COLOR_BUTTON_PADDING * 12 - COLOR_BUTTON_WIDTH * 6 );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH * 2 - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Health-Based Fill" ), 15 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 6 );
 						Spacing( );
 						SetRowWidth( COLOR_BUTTON_WIDTH );
 						ColorButton( PX_XOR( "Teammate Box Fill Health Top Visible" ), &esdConfig._Players[ TEAM ].seqHealthFill[ 1 ][ STATE_VISIBLE ] );

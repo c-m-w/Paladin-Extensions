@@ -24157,18 +24157,18 @@ nk_color_picker_behavior(nk_flags *state,
     nk_colorf_hsva_fv(hsva, *color);
     if (nk_button_behavior(state, *matrix, in, NK_BUTTON_REPEATER)) {
         hsva[1] = NK_SATURATE((in->mouse.pos.x - matrix->x) / (matrix->w-1));
-        hsva[2] = 1.0f - NK_SATURATE((in->mouse.pos.y - matrix->y) / (matrix->h-1));
+        hsva[2] = 1.0f - NK_SATURATE((in->mouse.pos.y - matrix->y) / (matrix->h-5));
         value_changed = hsv_changed = 1;
     }
     /* hue bar */
     if (nk_button_behavior(state, *hue_bar, in, NK_BUTTON_REPEATER)) {
-        hsva[0] = NK_SATURATE((in->mouse.pos.y - hue_bar->y) / (hue_bar->h-1));
+        hsva[0] = NK_SATURATE((in->mouse.pos.y - hue_bar->y) / (hue_bar->h-5));
         value_changed = hsv_changed = 1;
     }
     /* alpha bar */
     if (alpha_bar) {
         if (nk_button_behavior(state, *alpha_bar, in, NK_BUTTON_REPEATER)) {
-            hsva[3] = 1.0f - NK_SATURATE((in->mouse.pos.y - alpha_bar->y) / (alpha_bar->h-1));
+            hsva[3] = 1.0f - NK_SATURATE((in->mouse.pos.y - alpha_bar->y) / (alpha_bar->h-6));
             value_changed = 1;
         }
     }

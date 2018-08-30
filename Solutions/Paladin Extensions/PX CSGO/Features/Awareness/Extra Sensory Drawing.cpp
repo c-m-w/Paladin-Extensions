@@ -197,8 +197,10 @@ namespace PX::Features::Awareness
 		std::deque< D3DXVECTOR2 > dqScreenPoints;
 		auto& gtRay = reinterpret_cast< CBasePlayer* >( info.pEntity )->TraceRayFromView( );
 
-		WorldToScreen( gtRay.startpos, vecEntity );
-		WorldToScreen( gtRay.endpos, vecEnd );
+		if ( !WorldToScreen( gtRay.startpos, vecEntity )
+			 || !WorldToScreen( gtRay.endpos, vecEnd ) )
+			return;
+
 		dqScreenPoints.emplace_back( vecEntity.x, vecEntity.y );
 		dqScreenPoints.emplace_back( vecEnd.x, vecEnd.y );
 		Drawing::Line( dqScreenPoints, esdEntityConfig->flViewLineWidth, esdEntityConfig->seqViewLines[ info.iState ].GetCurrentColor( ).GetARGB( ) );

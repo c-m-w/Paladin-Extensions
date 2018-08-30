@@ -7,7 +7,7 @@ namespace PX::UI
 	/** \brief Used for managing the user interface. */
 	namespace Manager
 	{
-		PX_DEF GROUPBOX_COLUMN_WIDTH = 150;
+		PX_DEF GROUPBOX_COLUMN_WIDTH = 147;
 		PX_DEF CHECKBOX_ICON_WIDTH = 25;
 		PX_DEF COLOR_BUTTON_WIDTH = 15;
 		PX_DEF COLOR_BUTTON_PADDING = 2;
