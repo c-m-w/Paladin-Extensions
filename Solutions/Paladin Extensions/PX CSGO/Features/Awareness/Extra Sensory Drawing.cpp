@@ -14,7 +14,7 @@ namespace PX::Features::Awareness
 
 	struct
 	{
-		CBaseEntity* pEntity = nullptr;
+		CBaseEntity* pEntity;
 		bool bTeammate = false, bIsPlayer = false;
 		int iSettingIndex = 0;
 		Vector vecLocation = Vector( );
@@ -66,13 +66,18 @@ namespace PX::Features::Awareness
 			if ( !esdEntityConfig->bEnabled )
 				continue;
 
-			info.iState = pEntity->IsDormant( ) ? STATE_DORMANT
-				: pLocalPlayer->PositionInSight( !info.bIsPlayer ? info.vecLocation : reinterpret_cast< CBasePlayer* >( info.pEntity )->GetHitboxPosition( HITBOX_HEAD ),
-												 esdEntityConfig->bMindSmoke, info.pEntity )
-				|| pLocalPlayer->PositionInSight( !info.bIsPlayer ? info.vecLocation : reinterpret_cast< CBasePlayer* >( info.pEntity )->GetHitboxPosition( HITBOX_LEFT_FOOT ),
-												  esdEntityConfig->bMindSmoke, info.pEntity )
-				|| pLocalPlayer->PositionInSight( !info.bIsPlayer ? info.vecLocation : reinterpret_cast< CBasePlayer* >( info.pEntity )->GetHitboxPosition( HITBOX_RIGHT_FOOT ),
-												  esdEntityConfig->bMindSmoke, info.pEntity ) ? STATE_VISIBLE : STATE_INVISIBLE;
+			if ( pEntity->IsDormant( ) )
+				info.iState = STATE_DORMANT;
+			else if ( pLocalPlayer->PositionInSight( !info.bIsPlayer ? info.vecLocation : reinterpret_cast< CBasePlayer* >( info.pEntity )->GetHitboxPosition( HITBOX_HEAD ),
+													 esdEntityConfig->bMindSmoke, info.pEntity )
+					  || pLocalPlayer->PositionInSight( !info.bIsPlayer ? info.vecLocation : reinterpret_cast< CBasePlayer* >( info.pEntity )->GetHitboxPosition( HITBOX_LEFT_FOOT ),
+														esdEntityConfig->bMindSmoke, info.pEntity )
+					  || pLocalPlayer->PositionInSight( !info.bIsPlayer ? info.vecLocation : reinterpret_cast< CBasePlayer* >( info.pEntity )->GetHitboxPosition( HITBOX_RIGHT_FOOT ),
+														esdEntityConfig->bMindSmoke, info.pEntity ) )
+				info.iState = STATE_VISIBLE;
+			else
+				info.iState = STATE_INVISIBLE;
+
 			Box( );
 			SnapLine( );
 			ViewLine( );

@@ -360,27 +360,32 @@ namespace PX::Tools
 
 	Vector CBasePlayer::GetHitboxPosition( EHitbox hHitboxID )
 	{
-		static auto iTickCount = -1;
-		static matrix3x4_t mtxBones[ MAXSTUDIOBONES ];
-		static studiohdr_t* pStudioModel;
-		static mstudiohitboxset_t* pHitboxSet;
-
-		if ( pGlobalVariables->m_iTickCount != iTickCount )
+		static struct player_model_t
 		{
-			if ( !SetupBones( mtxBones, MAXSTUDIOBONES, BONE_USED_BY_HITBOX, 0.f )
-				 || nullptr == ( pStudioModel = pModelInfo->GetStudiomodel( GetModel( ) ) )
-				 || nullptr == ( pHitboxSet = pStudioModel->GetHitboxSet( NULL ) ) )
+			int iTickCount = -1;
+			matrix3x4_t mtxBones[ MAXSTUDIOBONES ] { };
+			studiohdr_t* pStudioModel = nullptr;
+			mstudiohitboxset_t* pHitboxSet = nullptr;
+		} _PlayerModels[ 64 ];
+		auto& pmPlayer = _PlayerModels[ EntIndex( ) ];
+
+		if ( pGlobalVariables->m_iTickCount != pmPlayer.iTickCount
+			 || !pmPlayer.pStudioModel || !pmPlayer.pHitboxSet )
+		{
+			if ( !SetupBones( pmPlayer.mtxBones, MAXSTUDIOBONES, BONE_USED_BY_HITBOX, 0.f )
+				 || nullptr == ( pmPlayer.pStudioModel = pModelInfo->GetStudiomodel( GetModel( ) ) )
+				 || nullptr == ( pmPlayer.pHitboxSet = pmPlayer.pStudioModel->GetHitboxSet( NULL ) ) )
 				return Vector( );
-			iTickCount = pGlobalVariables->m_iTickCount;
+			pmPlayer.iTickCount = pGlobalVariables->m_iTickCount;
 		}
 
-		const auto pHitbox = pHitboxSet->GetHitbox( hHitboxID );
+		const auto pHitbox = pmPlayer.pHitboxSet->GetHitbox( hHitboxID );
 		if ( !pHitbox )
 			return Vector( );
 
 		Vector vecMin, vecMax;
-		TransformVector( pHitbox->bbmin, mtxBones[ pHitbox->bone ], vecMin );
-		TransformVector( pHitbox->bbmax, mtxBones[ pHitbox->bone ], vecMax );
+		TransformVector( pHitbox->bbmin, pmPlayer.mtxBones[ pHitbox->bone ], vecMin );
+		TransformVector( pHitbox->bbmax, pmPlayer.mtxBones[ pHitbox->bone ], vecMax );
 		return ( vecMin + vecMax ) / 2.f;
 	}
 }
