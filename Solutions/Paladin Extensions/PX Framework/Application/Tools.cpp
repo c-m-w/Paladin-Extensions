@@ -94,7 +94,11 @@ namespace PX::Tools
 		sTableSize = sTableLength * sizeof( ptr_t );
 		// Ensure that the module that has been entered is valid and find free memory inside of that module to point the class base to.
 		if ( ( hAllocationModule = FindAddressOrigin( ptr_t( *reinterpret_cast< void** >( pOldTable ) ) ) ) == nullptr ||
-			( pNewTable = reinterpret_cast< ptr_t* >( FindFreeMemory( hAllocationModule, sTableSize + sizeof( ptr_t ) ) ) ) == nullptr )
+#if defined _DEBUG
+		( pNewTable = new ptr_t[ sTableLength + 1 ] ) == nullptr )
+#else
+			 ( pNewTable = reinterpret_cast< ptr_t* >( FindFreeMemory( hAllocationModule, sTableSize + sizeof( ptr_t ) ) ) ) == nullptr )
+#endif
 			return;
 
 		// Copy the addresses of the old table to the new table so the functions can still be accessed as normal.
@@ -148,8 +152,13 @@ namespace PX::Tools
 	{
 		// Reset the virtual function address array first, before we set the memory to 0 in case that function is called between and causes a crash.
 		if ( bSetNewTable )
-			reinterpret_cast< ptr_t** >( pClassBase )[ 0 ] = &pOldTable[ 0 ];
-		WipeMemory( pNewTable, sTableLength );
+		{
+			*reinterpret_cast< ptr_t** >( pClassBase ) = pOldTable;
+#if defined _DEBUG
+			delete[ ] pNewTable;
+#endif
+			bSetNewTable = false;
+		}
 	}
 
 	void PX_API OpenLink( cstr_t szLink )

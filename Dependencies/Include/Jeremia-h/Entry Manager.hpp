@@ -106,6 +106,7 @@ WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR 
 namespace PX
 {
 	PX_SDK HINSTANCE hinstDLL;
+	PX_SDK HANDLE hSingleInstanceMutex;
 };
 
 PX_EXT void PX_API OnAttach( );
@@ -113,12 +114,9 @@ PX_EXT void PX_API OnDetach( );
 
 PX_SDK void PX_API Detach( )
 {
-#if defined _DEBUG
-	FreeConsole( );
-#endif
-	OnDetach( );
+	//ReleaseMutex( PX::hSingleInstanceMutex );
 #if !defined PX_MANUAL_MAP_DLL
-	FreeLibraryAndExitThread( PX::hinstDLL, 0 );
+	FreeLibraryAndExitThread( PX::hinstDLL, TRUE );
 #endif
 }
 
@@ -127,8 +125,15 @@ namespace
 	DWORD WINAPI ThreadProc( _In_ LPVOID lpParameter )
 	{
 #if defined _DEBUG
-		AllocConsole( );
-		freopen_s( new FILE* { nullptr }, "CONOUT$", "w", stdout );
+		const auto hwConsole = GetConsoleWindow( );
+		if ( !hwConsole )
+		{
+			AllocConsole( );
+			AttachConsole( GetCurrentProcessId( ) );
+			freopen_s( new FILE* { nullptr }, "CONOUT$", "w", stdout );
+		}
+		else
+			ShowWindow( hwConsole, SW_SHOW );
 #endif
 
 		OnAttach( );
@@ -143,15 +148,15 @@ BOOL WINAPI DllMain( _In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID 
 #if !defined PX_INSTANCE_ID
 #define PX_INSTANCE_ID L"0"
 #endif
-		HANDLE hSingleInstanceMutex = CreateMutex( NULL, TRUE, L"Paladin Extensions " PX_INSTANCE_ID );
+		//PX::hSingleInstanceMutex = CreateMutex( NULL, TRUE, L"Paladin Extensions " PX_INSTANCE_ID );
 #else
 #if !defined PX_INSTANCE_ID
 #define PX_INSTANCE_ID "0"
 #endif
-		HANDLE hSingleInstanceMutex = CreateMutex( NULL, TRUE, "Paladin Extensions " PX_INSTANCE_ID );
+		PX::hSingleInstanceMutex = CreateMutex( NULL, TRUE, "Paladin Extensions " PX_INSTANCE_ID );
 #endif
-		if ( hSingleInstanceMutex == INVALID_HANDLE_VALUE || GetLastError( ) == ERROR_ALREADY_EXISTS )
-			return FALSE;
+		//if ( PX::hSingleInstanceMutex == INVALID_HANDLE_VALUE || GetLastError( ) == ERROR_ALREADY_EXISTS )
+		//	return FALSE;
 	}
 
 	switch ( fdwReason )
@@ -176,6 +181,7 @@ BOOL WINAPI DllMain( _In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID 
 		case DLL_PROCESS_DETACH:
 #if defined _DEBUG
 			FreeConsole( );
+			ShowWindow( GetConsoleWindow( ), SW_HIDE );
 #endif
 			OnDetach( );
 			return TRUE;

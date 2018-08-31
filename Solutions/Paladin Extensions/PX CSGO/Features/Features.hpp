@@ -46,6 +46,10 @@ namespace PX::Features
 					color_sequence_t seqViewLines[ STATE_MAX ]; // player only
 					float flViewLineWidth = 1.f; // player only
 
+					bool bSkeleton = false; // player only
+					color_sequence_t seqSkeleton[ STATE_MAX ]; // player only
+					float flSkeletonWidth = 1.f; // player only
+
 					bool bShowHealth = false; // player only
 					bool bHealthText = false; // player only
 				} _Players[ 2 ];

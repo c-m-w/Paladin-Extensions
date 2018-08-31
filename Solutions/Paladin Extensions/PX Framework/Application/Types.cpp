@@ -5,6 +5,28 @@
 
 namespace PX::Types
 {
+	drawing_t::drawing_t( vertex_t* _pVertices, std::size_t _sVertices )
+	{
+		pVertices = _pVertices;
+		sVertices = _sVertices;
+	}
+
+	drawing_t::~drawing_t( )
+	{
+		delete[ ] pVertices;
+	}
+
+	polygon_t::polygon_t( vertex_t* _pVertices, std::size_t _sVertices, std::size_t _sPrimitives, D3DPRIMITIVETYPE _ptType ): drawing_t( _pVertices, _sVertices )
+	{
+		sPrimitives = _sPrimitives;
+		ptType = _ptType;
+	}
+
+	polygon_t::~polygon_t( )
+	{
+		delete[ ] pVertices;
+	}
+
 	module_t::module_t( std::wstring _wstrName )
 	{
 		wstrName = _wstrName;
@@ -113,7 +135,8 @@ namespace PX::Types
 
 	unsigned SColor::GetARGB( ) const
 	{
-		return D3DCOLOR_ARGB( pColor->b[ COLOR_ALPHA ], pColor->b[ COLOR_RED ], pColor->b[ COLOR_GREEN ], pColor->b[ COLOR_BLUE ] );
+		const auto flFactor = pColor->b[ COLOR_ALPHA ] / 255.f;
+		return D3DCOLOR_ARGB( pColor->b[ COLOR_ALPHA ], byte_t( pColor->b[ COLOR_RED ] * flFactor ), byte_t( pColor->b[ COLOR_GREEN ] * flFactor ), byte_t( pColor->b[ COLOR_BLUE ] * flFactor ) );
 	}
 
 	void SColor::PutHex( const unsigned uValue ) const

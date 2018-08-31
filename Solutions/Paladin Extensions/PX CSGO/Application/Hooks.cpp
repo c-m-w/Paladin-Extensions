@@ -13,8 +13,6 @@ namespace PX
 {
 	namespace Hooks
 	{
-		std::vector< Tools::CHook* > vecHookPointers { };
-
 		bool PX_API SetHooks( )
 		{
 			return hkDirectXDevice->HookIndex( uEndScene, reinterpret_cast< void* >( EndScene ) )
@@ -28,17 +26,11 @@ namespace PX
 
 		bool PX_API InitializeHooks( )
 		{
-			hkDirectXDevice = new Tools::CHook( pDevice );
-			hkClientBase = new Tools::CHook( pClientBase );
-			hkClientMode = new Tools::CHook( pClientMode );
-			hkSurface = new Tools::CHook( pSurface );
-			hkPanel = new Tools::CHook( pPanel );
-
-			vecHookPointers.emplace_back( hkDirectXDevice );
-			vecHookPointers.emplace_back( hkClientBase );
-			vecHookPointers.emplace_back( hkClientMode );
-			vecHookPointers.emplace_back( hkSurface );
-			vecHookPointers.emplace_back( hkPanel );
+			hkDirectXDevice	= new Tools::CHook( pDevice );
+			hkClientBase	= new Tools::CHook( pClientBase );
+			hkClientMode	= new Tools::CHook( pClientMode );
+			hkSurface		= new Tools::CHook( pSurface );
+			hkPanel			= new Tools::CHook( pPanel );
 
 			return hkDirectXDevice->Succeeded( )
 				&& hkClientBase->Succeeded( )
@@ -51,8 +43,11 @@ namespace PX
 
 		void PX_API Destruct( )
 		{
-			for each( auto& hkPointer in vecHookPointers )
-				delete hkPointer;
+			delete hkDirectXDevice;
+			delete hkClientBase;
+			delete hkClientMode;
+			delete hkSurface;
+			delete hkPanel;
 		}
 
 		HRESULT __stdcall EndScene( IDirect3DDevice9* pDeviceParameter )

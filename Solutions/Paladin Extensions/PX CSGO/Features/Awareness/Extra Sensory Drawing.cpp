@@ -25,6 +25,7 @@ namespace PX::Features::Awareness
 	void PX_API Box( );
 	void PX_API SnapLine( );
 	void PX_API ViewLine( );
+	void PX_API Skeleton( );
 
 	void PX_API Draw( )
 	{
@@ -66,17 +67,28 @@ namespace PX::Features::Awareness
 				continue;
 
 			info.iState = pEntity->IsDormant( ) ? STATE_DORMANT
-				: pLocalPlayer->PositionInSight( !info.bIsPlayer ? info.vecLocation : reinterpret_cast< CBasePlayer* >( info.pEntity )->GetHitboxPosition( HITBOX_CHEST ), 
-												 esdEntityConfig->bMindSmoke, info.pEntity ) ? STATE_VISIBLE : STATE_INVISIBLE;
+				: pLocalPlayer->PositionInSight( !info.bIsPlayer ? info.vecLocation : reinterpret_cast< CBasePlayer* >( info.pEntity )->GetHitboxPosition( HITBOX_HEAD ),
+												 esdEntityConfig->bMindSmoke, info.pEntity )
+				|| pLocalPlayer->PositionInSight( !info.bIsPlayer ? info.vecLocation : reinterpret_cast< CBasePlayer* >( info.pEntity )->GetHitboxPosition( HITBOX_LEFT_FOOT ),
+												  esdEntityConfig->bMindSmoke, info.pEntity )
+				|| pLocalPlayer->PositionInSight( !info.bIsPlayer ? info.vecLocation : reinterpret_cast< CBasePlayer* >( info.pEntity )->GetHitboxPosition( HITBOX_RIGHT_FOOT ),
+												  esdEntityConfig->bMindSmoke, info.pEntity ) ? STATE_VISIBLE : STATE_INVISIBLE;
 			Box( );
 			SnapLine( );
 			ViewLine( );
+			Skeleton( );
 		}
 	}
 
 	void PX_API Box( )
 	{
 		if ( !esdEntityConfig->bBox )
+			return;
+		const auto clrBox = esdEntityConfig->seqBox[ info.iState ].GetCurrentColor( ),
+					clrFill = esdEntityConfig->bHealthBasedFillColor ? color_t( ) : esdEntityConfig->seqFill[ info.iState ].GetCurrentColor( ),
+					clrBottom = esdEntityConfig->bHealthBasedFillColor ? esdEntityConfig->seqHealthFill[ 1 ][ info.iState ].GetCurrentColor( ) : color_t( ),
+					clrTop = esdEntityConfig->bHealthBasedFillColor ? esdEntityConfig->seqHealthFill[ 0 ][ info.iState ].GetCurrentColor( ) : color_t( );
+		if ( clrBox.a == 0 && esdEntityConfig->bHealthBasedFillColor ? clrBottom.a == 0 && clrTop.a == 0 : clrFill.a == 0 )
 			return;
 
 		if( esdEntityConfig->bThreeDimensional ) // 3d box
@@ -95,8 +107,6 @@ namespace PX::Features::Awareness
 
 			Vector vecPoints[ ] { info.vecLocation, info.vecLocation, info.vecLocation, info.vecLocation };
 			Vector vecBuffer[ 4 ];
-			std::deque< D3DXVECTOR2 > dqScreenPoints;
-			dqScreenPoints.resize( 5 );
 			const Vector2D vecRotationPoint { info.vecLocation.x, info.vecLocation.y };
 			const auto vecHeadPosition = reinterpret_cast< CBasePlayer* >( info.pEntity )->GetHitboxPosition( HITBOX_HEAD );
 
@@ -119,11 +129,14 @@ namespace PX::Features::Awareness
 					return;
 			}
 
-			dqScreenPoints[ 0 ] = D3DXVECTOR2( vecBuffer[ BOTTOMRIGHT ].x, vecBuffer[ BOTTOMRIGHT ].y );
-			dqScreenPoints[ 1 ] = D3DXVECTOR2( vecBuffer[ BOTTOMLEFT ].x, vecBuffer[ BOTTOMLEFT ].y );
-			dqScreenPoints[ 2 ] = D3DXVECTOR2( vecBuffer[ TOPLEFT ].x, vecBuffer[ TOPLEFT ].y );
-			dqScreenPoints[ 3 ] = D3DXVECTOR2( vecBuffer[ TOPRIGHT ].x, vecBuffer[ TOPRIGHT ].y );
-			dqScreenPoints[ 4 ] = D3DXVECTOR2( vecBuffer[ BOTTOMRIGHT ].x, vecBuffer[ BOTTOMRIGHT ].y );
+			D3DXVECTOR2 vecScreenPoints[ ]
+			{
+				D3DXVECTOR2( vecBuffer[ BOTTOMRIGHT ].x, vecBuffer[ BOTTOMRIGHT ].y ),
+				D3DXVECTOR2( vecBuffer[ BOTTOMLEFT ].x, vecBuffer[ BOTTOMLEFT ].y ),
+				D3DXVECTOR2( vecBuffer[ TOPLEFT ].x, vecBuffer[ TOPLEFT ].y ),
+				D3DXVECTOR2( vecBuffer[ TOPRIGHT ].x, vecBuffer[ TOPRIGHT ].y ),
+				D3DXVECTOR2( vecBuffer[ BOTTOMRIGHT ].x, vecBuffer[ BOTTOMRIGHT ].y )
+			};
 
 			if ( esdEntityConfig->bFill )
 			{
@@ -137,11 +150,11 @@ namespace PX::Features::Awareness
 					const auto flHealthRatio = float( iHealth ) / float( iMaxHealth );
 					const auto iLeftSideDifference = vecBuffer[ BOTTOMLEFT ].x - vecBuffer[ TOPLEFT ].x;
 					const auto iRightSideDifference = vecBuffer[ BOTTOMRIGHT ].x - vecBuffer[ TOPRIGHT ].x;
-					const auto dwBottom = esdEntityConfig->seqHealthFill[ 1 ][ info.iState ].GetCurrentColor( ).GetARGB( );
+					const auto dwBottom = clrBottom.GetARGB( );
 
 					if ( iHealth < iMaxHealth )
 					{
-						const auto dwTop = esdEntityConfig->seqHealthFill[ 0 ][ info.iState ].GetCurrentColor( ).GetARGB( );
+						const auto dwTop = clrTop.GetARGB( );
 						vtxFillPoints[ 0 ] = vertex_t( vecBuffer[ TOPLEFT ].x, vecBuffer[ TOPLEFT ].y, esdEntityConfig->bSolidHealthFill ? dwTop : 0 );
 						vtxFillPoints[ 1 ] = vertex_t( vecBuffer[ TOPRIGHT ].x, vecBuffer[ TOPRIGHT ].y, esdEntityConfig->bSolidHealthFill ? dwTop : 0 );
 						vtxFillPoints[ 2 ] = vertex_t( vecBuffer[ TOPRIGHT ].x + iRightSideDifference * ( 1.f - flHealthRatio ), vecBuffer[ TOPRIGHT ].y + ( iRightSideHeight - ( iRightSideHeight * flHealthRatio ) ), dwTop );
@@ -157,7 +170,7 @@ namespace PX::Features::Awareness
 				}
 				else
 				{
-					const auto dwColor = esdEntityConfig->seqFill[ info.iState ].GetCurrentColor( ).GetARGB( );
+					const auto dwColor = clrFill.GetARGB( );
 					vtxFillPoints[ 0 ] = vertex_t( vecBuffer[ TOPLEFT ].x, vecBuffer[ TOPLEFT ].y, dwColor );
 					vtxFillPoints[ 1 ] = vertex_t( vecBuffer[ TOPRIGHT ].x, vecBuffer[ TOPRIGHT ].y, dwColor );
 					vtxFillPoints[ 2 ] = vertex_t( vecBuffer[ BOTTOMRIGHT ].x, vecBuffer[ BOTTOMRIGHT ].y, dwColor );
@@ -165,8 +178,7 @@ namespace PX::Features::Awareness
 					Drawing::Polygon( vtxFillPoints, 4, 2 );
 				}
 			}
-
-			Drawing::Line( dqScreenPoints, 2, esdEntityConfig->seqBox[ info.iState ].GetCurrentColor( ).GetARGB( ) );
+			Drawing::Line( vecScreenPoints, 5, 2, clrBox.GetARGB( ) );
 		}
 	}
 
@@ -175,17 +187,23 @@ namespace PX::Features::Awareness
 		if ( !esdEntityConfig->bSnaplines )
 			return;
 
+		const auto clrSnapLine = esdEntityConfig->seqViewLines[ info.iState ].GetCurrentColor( );
+		if ( clrSnapLine.a == 0 )
+			return;
+
 		Vector vecEntity;
 		int iWidth, iHeight;
-		std::deque< D3DXVECTOR2 > dqScreenPoints;
-
 		if ( !WorldToScreen( info.vecLocation, vecEntity ) )
 			return;
 
 		pEngineClient->GetScreenSize( iWidth, iHeight );
-		dqScreenPoints.emplace_back( vecEntity.x, vecEntity.y );
-		dqScreenPoints.emplace_back( iWidth / 2.f, iHeight );
-		Drawing::Line( dqScreenPoints, esdEntityConfig->flSnaplineWidth, esdEntityConfig->seqSnaplines[ info.iState ].GetCurrentColor( ).GetARGB( ) );
+		const D3DXVECTOR2 vecScreenPoints[ ]
+		{
+			D3DXVECTOR2( vecEntity.x, vecEntity.y ),
+			D3DXVECTOR2( iWidth / 2.f, iHeight )
+		};
+
+		Drawing::Line( vecScreenPoints, 2, esdEntityConfig->flSnaplineWidth, clrSnapLine.GetARGB( ) );
 	}
 
 	void PX_API ViewLine( )
@@ -193,16 +211,85 @@ namespace PX::Features::Awareness
 		if ( !esdEntityConfig->bViewLines )
 			return;
 
+		const auto clrViewline = esdEntityConfig->seqViewLines[ info.iState ].GetCurrentColor( );
+		if ( clrViewline.a == 0 )
+			return;
+
 		Vector vecEntity, vecEnd;
-		std::deque< D3DXVECTOR2 > dqScreenPoints;
 		auto& gtRay = reinterpret_cast< CBasePlayer* >( info.pEntity )->TraceRayFromView( );
 
-		if ( !WorldToScreen( gtRay.startpos, vecEntity )
+		if ( !WorldToScreen( reinterpret_cast< CBasePlayer* >( info.pEntity )->GetHitboxPosition( HITBOX_HEAD ), vecEntity )
 			 || !WorldToScreen( gtRay.endpos, vecEnd ) )
 			return;
 
-		dqScreenPoints.emplace_back( vecEntity.x, vecEntity.y );
-		dqScreenPoints.emplace_back( vecEnd.x, vecEnd.y );
-		Drawing::Line( dqScreenPoints, esdEntityConfig->flViewLineWidth, esdEntityConfig->seqViewLines[ info.iState ].GetCurrentColor( ).GetARGB( ) );
+		const D3DXVECTOR2 vecScreenPoints[ ]
+		{
+			D3DXVECTOR2( vecEntity.x, vecEntity.y ),
+			D3DXVECTOR2( vecEnd.x, vecEnd.y )
+		};
+		const auto dwColor = clrViewline.GetARGB( );
+		const auto flBoxSize = esdEntityConfig->flViewLineWidth + 1.5f;
+
+		Drawing::Line( vecScreenPoints, 2, esdEntityConfig->flViewLineWidth, dwColor );
+
+		vertex_t vtxBox[ ]
+		{
+			vertex_t( vecEnd.x - flBoxSize, vecEnd.y - flBoxSize, dwColor ),
+			vertex_t( vecEnd.x + flBoxSize, vecEnd.y - flBoxSize, dwColor ),
+			vertex_t( vecEnd.x + flBoxSize, vecEnd.y + flBoxSize, dwColor ),
+			vertex_t( vecEnd.x - flBoxSize, vecEnd.y + flBoxSize, dwColor )
+		};
+		Drawing::Polygon( vtxBox, 4, 2 );
+	}
+
+	void PX_API Skeleton( )
+	{
+		if ( !esdEntityConfig->bSkeleton )
+			return;
+
+		const auto clrSkeleton = esdEntityConfig->seqSkeleton[ info.iState ].GetCurrentColor( );
+		if ( clrSkeleton.a == 0 )
+			return;
+
+		Vector vecHitboxes[ HITBOX_MAX ];
+		for ( auto e = int( HITBOX_HEAD ); e < HITBOX_MAX; e++ )
+			if ( !WorldToScreen( reinterpret_cast< CBasePlayer* >( info.pEntity )->GetHitboxPosition( EHitbox( e ) ), vecHitboxes[ e ] ) )
+				 return;
+
+		const D3DXVECTOR2 vecLegs[ ] // 7
+		{
+			D3DXVECTOR2( vecHitboxes[ HITBOX_LEFT_FOOT ].x, vecHitboxes[ HITBOX_LEFT_FOOT ].y ),
+			D3DXVECTOR2( vecHitboxes[ HITBOX_LEFT_CALF ].x, vecHitboxes[ HITBOX_LEFT_CALF ].y ),
+			D3DXVECTOR2( vecHitboxes[ HITBOX_LEFT_THIGH ].x, vecHitboxes[ HITBOX_LEFT_THIGH ].y ),
+			D3DXVECTOR2( vecHitboxes[ HITBOX_PELVIS ].x, vecHitboxes[ HITBOX_PELVIS ].y ),
+			D3DXVECTOR2( vecHitboxes[ HITBOX_RIGHT_THIGH ].x, vecHitboxes[ HITBOX_RIGHT_THIGH ].y ),
+			D3DXVECTOR2( vecHitboxes[ HITBOX_RIGHT_CALF ].x, vecHitboxes[ HITBOX_RIGHT_CALF ].y ),
+			D3DXVECTOR2( vecHitboxes[ HITBOX_RIGHT_FOOT ].x, vecHitboxes[ HITBOX_RIGHT_FOOT ].y )
+		};
+
+		const D3DXVECTOR2 vecArms[ ] // 7
+		{
+			D3DXVECTOR2( vecHitboxes[ HITBOX_LEFT_HAND ].x, vecHitboxes[ HITBOX_LEFT_HAND ].y ),
+			D3DXVECTOR2( vecHitboxes[ HITBOX_LEFT_FOREARM ].x, vecHitboxes[ HITBOX_LEFT_FOREARM ].y ),
+			D3DXVECTOR2( vecHitboxes[ HITBOX_LEFT_UPPER_ARM ].x, vecHitboxes[ HITBOX_LEFT_UPPER_ARM ].y ),
+			D3DXVECTOR2( vecHitboxes[ HITBOX_UPPER_CHEST ].x, vecHitboxes[ HITBOX_UPPER_CHEST ].y ),
+			D3DXVECTOR2( vecHitboxes[ HITBOX_RIGHT_UPPER_ARM ].x, vecHitboxes[ HITBOX_RIGHT_UPPER_ARM ].y ),
+			D3DXVECTOR2( vecHitboxes[ HITBOX_RIGHT_FOREARM ].x, vecHitboxes[ HITBOX_RIGHT_FOREARM ].y ),
+			D3DXVECTOR2( vecHitboxes[ HITBOX_RIGHT_HAND ].x, vecHitboxes[ HITBOX_RIGHT_HAND ].y )
+		};
+
+		const D3DXVECTOR2 vecTorso[ ] // 5
+		{
+			D3DXVECTOR2( vecHitboxes[ HITBOX_PELVIS ].x, vecHitboxes[ HITBOX_PELVIS ].y ),
+			D3DXVECTOR2( vecHitboxes[ HITBOX_CHEST ].x, vecHitboxes[ HITBOX_CHEST ].y ),
+			D3DXVECTOR2( vecHitboxes[ HITBOX_UPPER_CHEST ].x, vecHitboxes[ HITBOX_UPPER_CHEST ].y ),
+			D3DXVECTOR2( vecHitboxes[ HITBOX_NECK ].x, vecHitboxes[ HITBOX_NECK ].y ),
+			D3DXVECTOR2( vecHitboxes[ HITBOX_HEAD ].x, vecHitboxes[ HITBOX_HEAD ].y )
+		};
+
+		const auto dwColor = clrSkeleton.GetARGB( );
+		Drawing::Line( vecLegs, 7, esdEntityConfig->flSkeletonWidth, dwColor );
+		Drawing::Line( vecArms, 7, esdEntityConfig->flSkeletonWidth, dwColor );
+		Drawing::Line( vecTorso, 5, esdEntityConfig->flSkeletonWidth, dwColor );
 	}
 }

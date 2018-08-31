@@ -36,11 +36,12 @@ void PX_API OnAttach( )
 	if ( !Initialize( ) )
 		exit( -1 );
 #if defined _DEBUG
-	while ( !PX_INPUT.GetKeyState( VK_DELETE ) )
+	while ( !GetAsyncKeyState( VK_DELETE ) )
 		PX::Tools::Wait( 1 );
 	PX::Hooks::Destruct( );
 	PX::UI::Manager::Destruct( );
 	PX::Render::Destruct( );
+	Detach( );
 #endif
 }
 

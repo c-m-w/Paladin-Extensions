@@ -76,6 +76,26 @@ namespace PX::Types
 		}
 	};
 
+	struct drawing_t
+	{
+		vertex_t* pVertices;
+		std::size_t sVertices;
+
+		drawing_t( vertex_t* _pVertices, std::size_t _sVertices );
+		~drawing_t( );
+	};
+
+	typedef drawing_t line_t;
+
+	struct polygon_t: drawing_t
+	{
+		std::size_t sPrimitives;
+		D3DPRIMITIVETYPE ptType;
+
+		polygon_t( vertex_t* _pVertices, std::size_t _sVertices, std::size_t _sPrimitives, D3DPRIMITIVETYPE _ptType = D3DPT_TRIANGLEFAN );
+		~polygon_t( );
+	};
+
 	struct module_t
 	{
 		std::wstring wstrName { };

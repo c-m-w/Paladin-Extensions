@@ -360,16 +360,21 @@ namespace PX::Tools
 
 	Vector CBasePlayer::GetHitboxPosition( EHitbox hHitboxID )
 	{
-		matrix3x4_t mtxBones[ MAXSTUDIOBONES ];
+		static auto iTickCount = -1;
+		static matrix3x4_t mtxBones[ MAXSTUDIOBONES ];
+		static studiohdr_t* pStudioModel;
+		static mstudiohitboxset_t* pHitboxSet;
 
-		if ( !SetupBones( mtxBones, MAXSTUDIOBONES, BONE_USED_BY_HITBOX, 0.f ) )
-			return Vector( );
+		if ( pGlobalVariables->m_iTickCount != iTickCount )
+		{
+			if ( !SetupBones( mtxBones, MAXSTUDIOBONES, BONE_USED_BY_HITBOX, 0.f )
+				 || nullptr == ( pStudioModel = pModelInfo->GetStudiomodel( GetModel( ) ) )
+				 || nullptr == ( pHitboxSet = pStudioModel->GetHitboxSet( NULL ) ) )
+				return Vector( );
+			iTickCount = pGlobalVariables->m_iTickCount;
+		}
 
-		const auto pStudioModel = pModelInfo->GetStudiomodel( GetModel( ) );
-		if ( !pStudioModel )
-			return Vector( );
-
-		const auto pHitbox = pStudioModel->GetHitboxSet( NULL )->GetHitbox( hHitboxID );
+		const auto pHitbox = pHitboxSet->GetHitbox( hHitboxID );
 		if ( !pHitbox )
 			return Vector( );
 

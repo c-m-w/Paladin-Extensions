@@ -102,11 +102,16 @@ namespace PX::UI::Manager
 			iCurrentValue = iNewValue >= 0 ? iNewValue : iCurrentValue;
 		};
 
+		static const auto fnMinimize = [ ]( )
+		{
+			Render::bShouldRender = false;
+		};
+
 		static auto iCurrentTab = 0;
 		static int iCurrentSubTab[ iTabCount ] { };
 		const static std::function< void( PX_API )( int ) > fnTabCallbacks[ iTabCount ] { LayoutAwareness, LayoutCombat, LayoutMiscellaneous, LayoutSettings };
 
-		Header( PX_XOR( "Paladin Extensions" ), szNuklearWindowTitle );
+		Header( PX_XOR( "Paladin Extensions" ), szNuklearWindowTitle, 102, fnMinimize );
 		fnSetTabValue( iCurrentTab, Tabs( 10, 0, dqPrimaryTabs, iCurrentTab ) );
 		Separator( 61, 65, 72, 100 );
 		SetFont( FONT_ROBOTOSMALL );
@@ -199,7 +204,7 @@ namespace PX::UI::Manager
 					VerticalSpacing( );
 
 					{
-						BeginRow( 15, 13, ROW_STATIC );
+						BeginRow( 15, 19, ROW_STATIC );
 						SetRowWidth( 5 );
 						Spacing( );
 
@@ -219,7 +224,21 @@ namespace PX::UI::Manager
 						ColorButton( PX_XOR( "Teammate Viewline Invisible" ), &esdConfig._Players[ TEAM ].seqViewLines[ STATE_INVISIBLE ] );
 						ColorButton( PX_XOR( "Teammate Viewline Dormant" ), &esdConfig._Players[ TEAM ].seqViewLines[ STATE_DORMANT ] );
 
+						Checkbox( PX_XOR( "Skeleton" ), &esdConfig._Players[ TEAM ].bSkeleton, PX_XOR( "Draw a skeleton overtop of your teammates." ) );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Skeleton" ), 15 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 3 );
+						Spacing( );
+						SetRowWidth( COLOR_BUTTON_WIDTH );
+						ColorButton( PX_XOR( "Teammate Skeleton Visible" ), &esdConfig._Players[ TEAM ].seqSkeleton[ STATE_VISIBLE ] );
+						ColorButton( PX_XOR( "Teammate Skeleton Invisible" ), &esdConfig._Players[ TEAM ].seqSkeleton[ STATE_INVISIBLE ] );
+						ColorButton( PX_XOR( "Teammate Skeleton Dormant" ), &esdConfig._Players[ TEAM ].seqSkeleton[ STATE_DORMANT ] );
+
 						EndRow( );
+					}
+
+					VerticalSpacing( );
+
+					{
+						
 					}
 
 					EndGroupbox( );
