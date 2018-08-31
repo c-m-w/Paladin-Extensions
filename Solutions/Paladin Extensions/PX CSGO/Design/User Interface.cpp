@@ -24,13 +24,14 @@ namespace PX::UI::Manager
 
 			PX_INPUT.AddKeyCallback( VK_HOME, [ = ]( bool bIsPressed )
 			{
-				static void* pOldHWND;
+				static HWND* pOldWindowHandle = nullptr;
 				static HCURSOR hOldCursor;
 
 				if ( bIsPressed )
 				{
 					Render::bShouldRender = !Render::bShouldRender;
-					std::swap( pOldHWND, *reinterpret_cast< void** >( reinterpret_cast< ptr_t* >( pInputSystem ) + *reinterpret_cast< ptr_t* >( ptr_t( ( *reinterpret_cast< void*** >( pInputSystem ) )[ 10 ] ) + 5 ) ) );
+					static auto ptrOffset = *reinterpret_cast< ptr_t* >( ptr_t( ( *reinterpret_cast< void*** >( pInputSystem ) )[ 10 ] ) + 5 );
+					std::swap( pOldWindowHandle, *reinterpret_cast< HWND** >( reinterpret_cast< byte_t* >( pInputSystem ) + ptrOffset ) );
 
 					if ( Render::bShouldRender )
 						hOldCursor = SetCursor( nullptr );
