@@ -8,9 +8,9 @@ namespace PX::Drawing
 	IDirect3DVertexBuffer9* pVertexBuffer = nullptr;;
 	ID3DXLine* pLine;
 
-	void PX_API Polygon( vertex_t* pVertices, std::size_t sVertexCount, std::size_t sPrimitiveCount, D3DPRIMITIVETYPE ptDrawingType /*= D3DPT_TRIANGLEFAN*/ )
+	void PX_API Polygon( vertex_t* pVertices, std::size_t zVertexCount, std::size_t zPrimitiveCount, D3DPRIMITIVETYPE ptDrawingType /*= D3DPT_TRIANGLEFAN*/ )
 	{
-		const auto sVertexSize = sizeof( vertex_t ) * sVertexCount;
+		const auto sVertexSize = sizeof( vertex_t ) * zVertexCount;
 		if( D3D_OK != pDevice->CreateVertexBuffer( sVertexSize, NULL, PX_CUSTOM_FVF, D3DPOOL_DEFAULT, &pVertexBuffer, nullptr ) )
 		{
 			pVertexBuffer->Release( );
@@ -37,7 +37,7 @@ namespace PX::Drawing
 			return;
 		}
 
-		px_assert( D3D_OK == pDevice->DrawPrimitive( ptDrawingType, 0, sPrimitiveCount ) );
+		px_assert( D3D_OK == pDevice->DrawPrimitive( ptDrawingType, 0, zPrimitiveCount ) );
 		pVertexBuffer->Release( );
 		pVertexBuffer = nullptr;
 	}

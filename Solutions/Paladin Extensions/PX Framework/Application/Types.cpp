@@ -248,71 +248,71 @@ namespace PX::Types
 		PutNewColorSequence( clrFirstSequence, mmtFirstSequence );
 	}
 
-	SColorSequence::SColorSequence( color_t* clrColors, moment_t* mmtDurations, std::size_t sSequences )
+	SColorSequence::SColorSequence( color_t* clrColors, moment_t* mmtDurations, std::size_t zSequences )
 	{
-		for ( std::size_t s = 0; s < sSequences; s++ )
+		for ( std::size_t z = 0; z < zSequences; z++ )
 		{
-			sqInfo[ s ].clrColor = clrColors[ s ];
-			sqInfo[ s ].mmtDuration = mmtDurations[ s ];
+			sqInfo[ z ].clrColor = clrColors[ z ];
+			sqInfo[ z ].mmtDuration = mmtDurations[ z ];
 		}
 	}
 
 	color_t SColorSequence::GetCurrentColor( )
 	{
-		px_assert( sSequences );
+		px_assert( zSequences );
 
-		if ( sSequences == 1 )
+		if ( zSequences == 1 )
 			return sqInfo[ 0 ].clrColor;
 
 		mmtTotalDuration = 0;
-		for ( std::size_t s = 0u; s < sSequences; s++ )
-			mmtTotalDuration += sqInfo[ s ].mmtDuration;
+		for ( std::size_t z = 0u; z < zSequences; z++ )
+			mmtTotalDuration += sqInfo[ z ].mmtDuration;
 		auto mmtCurrentProgress = GetMoment( ) % mmtTotalDuration;
 		auto mmtPassedProgress = 0ull;
 
-		for ( std::size_t s = 0u; s < sSequences; s++ )
-			if ( sqInfo[ s ].mmtDuration < mmtCurrentProgress - mmtPassedProgress )
-				mmtPassedProgress += sqInfo[ s ].mmtDuration;
+		for ( std::size_t z = 0u; z < zSequences; z++ )
+			if ( sqInfo[ z ].mmtDuration < mmtCurrentProgress - mmtPassedProgress )
+				mmtPassedProgress += sqInfo[ z ].mmtDuration;
 			else
-				return GetGradient( sqInfo[ s ].clrColor, sqInfo[ s + 1 != sSequences ? s + 1 : 0 ].clrColor,
-									float( mmtCurrentProgress - mmtPassedProgress ) / float( sqInfo[ s ].mmtDuration ) );
+				return GetGradient( sqInfo[ z ].clrColor, sqInfo[ z + 1 != zSequences ? z + 1 : 0 ].clrColor,
+									float( mmtCurrentProgress - mmtPassedProgress ) / float( sqInfo[ z ].mmtDuration ) );
 
 		px_assert( false );
 	}
 
 	color_t& SColorSequence::GetColor( unsigned uColor )
 	{
-		px_assert( sSequences > uColor );
+		px_assert( zSequences > uColor );
 		return sqInfo[ uColor ].clrColor;
 	}
 
 	moment_t& SColorSequence::GetDuration( unsigned uDuration )
 	{
-		px_assert( sSequences > uDuration );
+		px_assert( zSequences > uDuration );
 		return sqInfo[ uDuration ].mmtDuration;
 	}
 
 	void SColorSequence::PutNewColorSequence( const color_t& clrNewColor, moment_t mmtDuration )
 	{
-		if ( sSequences >= 7 )
+		if ( zSequences >= 7 )
 			return;
 
-		sqInfo[ sSequences ].clrColor = clrNewColor;
-		sqInfo[ sSequences ].mmtDuration = mmtDuration;
-		sSequences++;
+		sqInfo[ zSequences ].clrColor = clrNewColor;
+		sqInfo[ zSequences ].mmtDuration = mmtDuration;
+		zSequences++;
 	}
 
 	void SColorSequence::DeleteColorSequence( unsigned uPosition )
 	{
-		if ( sSequences <= uPosition )
+		if ( zSequences <= uPosition )
 			return;
 
-		for ( auto s = uPosition; s < sSequences - 1; s++ )
+		for ( auto s = uPosition; s < zSequences - 1; s++ )
 		{
 			sqInfo[ s ].clrColor = sqInfo[ s + 1 ].clrColor;
 			sqInfo[ s ].mmtDuration = sqInfo[ s + 1 ].mmtDuration;
 		}
 
-		sSequences--;
+		zSequences--;
 	}
 }

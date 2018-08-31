@@ -146,7 +146,7 @@ namespace PX::Files
 		}
 	}
 
-	CConfig::CConfig( ) noexcept
+	CConfig::CConfig( )
 	{
 		std::ifstream ifGlobalConfiguration( GetPXDirectory( ) + PX_XOR( LR"(Configurations\global.px)" ) );
 		px_assert( ifGlobalConfiguration.good( ) );

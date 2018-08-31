@@ -38,7 +38,7 @@ namespace PX::Tools
 		return reinterpret_cast< ptr_t >( hModule ) + reinterpret_cast< PIMAGE_NT_HEADERS > ( reinterpret_cast< byte_t* >( hModule ) + reinterpret_cast< PIMAGE_DOS_HEADER > ( hModule )->e_lfanew )->OptionalHeader.SizeOfImage;
 	}
 
-	ptr_t FindFreeMemory( HMODULE hLocation, std::size_t sMinimumSize )
+	ptr_t FindFreeMemory( HMODULE hLocation, std::size_t zMinimumSize )
 	{
 		const auto ptrModuleEnd = GetModuleEnd( hLocation );
 
@@ -51,19 +51,19 @@ namespace PX::Tools
 				 !( mbiPage.State & MEM_COMMIT ) ||
 				 mbiPage.Protect & ( PAGE_GUARD | PAGE_NOACCESS ) ||
 				 !( mbiPage.Protect & ( PAGE_EXECUTE_READWRITE | PAGE_READWRITE ) ) ||
-				 mbiPage.RegionSize < sMinimumSize )
+				 mbiPage.RegionSize < zMinimumSize )
 				continue;
 
 			auto bMemoryInUse = false;
 			auto uPageCount = 0u;
-			while ( uPageCount < sMinimumSize && !bMemoryInUse )
+			while ( uPageCount < zMinimumSize && !bMemoryInUse )
 			{
 				uPageCount += sizeof( ptr_t );
 				if ( *reinterpret_cast< ptr_t* >( ptrAddress + uPageCount ) )
 					bMemoryInUse = true;
 			}
 
-			if ( !bMemoryInUse && uPageCount >= sMinimumSize )
+			if ( !bMemoryInUse && uPageCount >= zMinimumSize )
 				return ptrAddress;
 		}
 		return 0u;
@@ -81,28 +81,28 @@ namespace PX::Tools
 		return nullptr;
 	}
 
-	CHook::CHook( void* pVirtualTable ): dwOldProtection( 0u ), sTableLength( 0u ), sTableSize( 0u ), pClassBase( pVirtualTable ),
+	CHook::CHook( void* pVirtualTable ): dwOldProtection( 0u ), zTableLength( 0u ), zTableSize( 0u ), pClassBase( pVirtualTable ),
 		pOldTable( nullptr ), pNewTable( nullptr ), hAllocationModule( HMODULE( ) ), bSetNewTable( false )
 	{
 		// Ensure that we are hooking a valid virtual table and that the length is valid( there are proper permissions to read and write to it ).
 		// Set the address of pOldTable to the address of the first virtual function.
 		if ( pClassBase == nullptr ||
-			( sTableLength = EstimateTableLength( pOldTable = *reinterpret_cast< ptr_t** >( pClassBase ) ) ) <= 0 )
+			( zTableLength = EstimateTableLength( pOldTable = *reinterpret_cast< ptr_t** >( pClassBase ) ) ) <= 0 )
 			return;
 
 		// Get the size of the table in bytes.
-		sTableSize = sTableLength * sizeof( ptr_t );
+		zTableSize = zTableLength * sizeof( ptr_t );
 		// Ensure that the module that has been entered is valid and find free memory inside of that module to point the class base to.
 		if ( ( hAllocationModule = FindAddressOrigin( ptr_t( *reinterpret_cast< void** >( pOldTable ) ) ) ) == nullptr ||
-			( pNewTable = reinterpret_cast< ptr_t* >( FindFreeMemory( hAllocationModule, sTableSize + sizeof( ptr_t ) ) ) ) == nullptr )
+			( pNewTable = reinterpret_cast< ptr_t* >( FindFreeMemory( hAllocationModule, zTableSize + sizeof( ptr_t ) ) ) ) == nullptr )
 			return;
 
 		// Copy the addresses of the old table to the new table so the functions can still be accessed as normal.
-		memcpy( pNewTable, pOldTable, sTableSize );
+		memcpy( pNewTable, pOldTable, zTableSize );
 
 		// Set the permissions of the memory we found so that it is readable and writable, and store the old protection.
 		// This is also used just to ensure that we have permission to modify the memory.
-		if ( !VirtualProtect( pClassBase, sTableSize, PAGE_READWRITE, &dwOldProtection ) )
+		if ( !VirtualProtect( pClassBase, zTableSize, PAGE_READWRITE, &dwOldProtection ) )
 		{
 			Cleanup( );
 			return;
@@ -125,7 +125,7 @@ namespace PX::Tools
 
 	bool CHook::HookIndex( unsigned uIndex, void* pNewFunction )
 	{
-		if ( uIndex >= 0 && uIndex <= sTableLength )
+		if ( uIndex >= 0 && uIndex <= zTableLength )
 		{
 			pNewTable[ uIndex ] = ptr_t( pNewFunction );
 			return true;
@@ -135,13 +135,13 @@ namespace PX::Tools
 
 	void CHook::UnhookIndex( unsigned uIndex )
 	{
-		if ( uIndex >= 0 && uIndex < sTableLength )
+		if ( uIndex >= 0 && uIndex < zTableLength )
 			pNewTable[ uIndex ] = pOldTable[ uIndex ];
 	}
 
 	void CHook::ResetTable( )
 	{
-		memcpy( pNewTable, pOldTable, sTableSize );
+		memcpy( pNewTable, pOldTable, zTableSize );
 	}
 
 	void CHook::Cleanup( )
@@ -149,7 +149,7 @@ namespace PX::Tools
 		// Reset the virtual function address array first, before we set the memory to 0 in case that function is called between and causes a crash.
 		if ( bSetNewTable )
 			reinterpret_cast< ptr_t** >( pClassBase )[ 0 ] = &pOldTable[ 0 ];
-		WipeMemory( pNewTable, sTableLength );
+		WipeMemory( pNewTable, zTableLength );
 	}
 
 	void PX_API OpenLink( cstr_t szLink )

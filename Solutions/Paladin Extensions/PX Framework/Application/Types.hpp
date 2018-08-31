@@ -170,13 +170,13 @@ namespace PX::Types
 		moment_t mmtTotalDuration = 0;
 
 	public:
-		std::size_t sSequences = 0u;
+		std::size_t zSequences = 0u;
 		SColorSequence( ) noexcept
 		{
 			PutNewColorSequence( { 0, 0, 0, 255 }, 1000 );
 		}
 		SColorSequence( color_t clrFirstSequence, moment_t mmtFirstSequence );
-		SColorSequence( color_t* clrColors, moment_t* mmtDurations, std::size_t sSequences );
+		SColorSequence( color_t* clrColors, moment_t* mmtDurations, std::size_t zSequences );
 
 		color_t GetCurrentColor( );
 		void PutCurrentColor( ) = delete;

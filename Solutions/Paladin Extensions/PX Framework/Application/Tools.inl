@@ -12,7 +12,7 @@ namespace PX::Tools
 
 	template< typename _fn > _fn CHook::GetOriginalFunction( unsigned uIndex )
 	{
-		px_assert( uIndex >= 0 && uIndex <= sTableLength );
+		px_assert( uIndex >= 0 && uIndex <= zTableLength );
 		return reinterpret_cast< _fn >( pOldTable[ uIndex ] );
 	}
 
