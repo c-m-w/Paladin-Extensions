@@ -39,6 +39,7 @@ namespace PX::Render
 			case WM_SETCURSOR:
 				if ( !bCreatedWindow && bShouldRender )
 					return false;
+				break;
 
 			case WM_SIZE:
 				if ( false && pDevice )

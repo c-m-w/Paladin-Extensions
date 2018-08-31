@@ -33,21 +33,10 @@ namespace PX::UI::Manager
 				&& InitializeUI( PX_XOR( "CSGO" ), 720u, 600u );
 		}
 
-		void PX_API OnEndScene( Types::ptr_t ptrReturnAddress )
+		void PX_API OnEndScene( )
 		{
-			static auto ptrDesiredReturnAddress = 0u;
-			static auto bPrintedStates = false;
-			auto bPrintStates = bool( PX_INPUT.GetKeyState( VK_RETURN ) ) && !bPrintedStates;
-
-			if ( !ptrDesiredReturnAddress )
-			{
-				if ( Tools::FindAddressOrigin( ptrReturnAddress ) == mOverlay.hModule )
-					ptrDesiredReturnAddress = ptrReturnAddress;
-			}
-
-			if ( ptrDesiredReturnAddress == ptrReturnAddress )
-				if ( Render::bShouldRender && bCreatedTextures )
-					Render( );
+			if ( Render::bShouldRender && bCreatedTextures )
+				Render( );
 		}
 
 		void PX_API OnReset( )

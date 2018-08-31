@@ -53,7 +53,16 @@ namespace PX
 		HRESULT __stdcall EndScene( IDirect3DDevice9* pDeviceParameter )
 		{
 			static auto fnOriginal = hkDirectXDevice->GetOriginalFunction< end_scene_t >( uEndScene );
+			static auto ptrDesiredReturnAddress = 0u;
+			const auto ptrReturnAddress = ptr_t( _ReturnAddress( ) );
 
+			if ( !ptrDesiredReturnAddress )
+			{
+				if ( Tools::FindAddressOrigin( ptrReturnAddress ) == Modules::mOverlay.hModule )
+					ptrDesiredReturnAddress = ptrReturnAddress;
+			}
+
+			if ( ptrDesiredReturnAddress == ptrReturnAddress )
 			{
 				IDirect3DStateBlock9* pNewState = nullptr;
 				IDirect3DVertexDeclaration9* pVertexDeclaration = nullptr;
@@ -78,8 +87,9 @@ namespace PX
 						   && D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_MINFILTER, D3DTADDRESS_WRAP )
 						   && D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_SRGBTEXTURE, NULL ) );
 
-				UI::Manager::CSGO::OnEndScene( ptr_t( _ReturnAddress( ) ) );
 				Features::Awareness::Draw( );
+				Drawing::Draw( );
+				UI::Manager::CSGO::OnEndScene( );
 
 				px_assert( D3D_OK == pDevice->SetVertexDeclaration( pVertexDeclaration )
 						   && D3D_OK == pDevice->SetVertexShader( pVertexShader )

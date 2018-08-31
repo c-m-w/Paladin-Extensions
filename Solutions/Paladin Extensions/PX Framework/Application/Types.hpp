@@ -76,24 +76,35 @@ namespace PX::Types
 		}
 	};
 
-	struct drawing_t
+	template< typename _t > struct drawing_t
 	{
-		vertex_t* pVertices;
-		std::size_t sVertices;
+		std::vector< _t > vecVertices;
 
-		drawing_t( vertex_t* _pVertices, std::size_t _sVertices );
-		~drawing_t( );
+		drawing_t( ) = default;
+		drawing_t( const _t* pVertices, std::size_t _sVertices )
+		{
+			for ( auto z = 0u; z < _sVertices; z++ )
+				vecVertices.emplace_back( pVertices[ z ] );
+		}
 	};
 
-	typedef drawing_t line_t;
+	struct line_t: drawing_t< D3DXVECTOR2 >
+	{
+		DWORD dwColor;
+		float flWidth;
+		BOOL bAntiAlias;
 
-	struct polygon_t: drawing_t
+		line_t( ) = default;
+		line_t( const D3DXVECTOR2* _pVertices, std::size_t _sVertices, float _flWidth, DWORD _dwColor, BOOL _bAntiAlias = TRUE );
+	};
+
+	struct polygon_t: drawing_t< vertex_t >
 	{
 		std::size_t sPrimitives;
 		D3DPRIMITIVETYPE ptType;
 
-		polygon_t( vertex_t* _pVertices, std::size_t _sVertices, std::size_t _sPrimitives, D3DPRIMITIVETYPE _ptType = D3DPT_TRIANGLEFAN );
-		~polygon_t( );
+		polygon_t( ) = default;
+		polygon_t( const vertex_t* _pVertices, std::size_t _sVertices, std::size_t _sPrimitives, D3DPRIMITIVETYPE _ptType = D3DPT_TRIANGLEFAN );
 	};
 
 	struct module_t

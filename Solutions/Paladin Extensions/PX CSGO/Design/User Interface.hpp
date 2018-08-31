@@ -8,7 +8,7 @@ namespace PX::UI::Manager
 	{
 		PX_SDK auto bCreatedTextures = true;
 		bool PX_API Initialize( );
-		void PX_API OnEndScene( Types::ptr_t ptrReturnAddress );
+		void PX_API OnEndScene( );
 		void PX_API OnReset( );
 		void PX_API OnSuccessfulReset( unsigned uWidth, unsigned uHeight );
 	}

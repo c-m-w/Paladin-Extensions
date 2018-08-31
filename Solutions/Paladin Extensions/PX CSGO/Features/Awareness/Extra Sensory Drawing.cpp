@@ -148,22 +148,29 @@ namespace PX::Features::Awareness
 					const auto iLeftSideHeight = vecBuffer[ BOTTOMLEFT ].y - vecBuffer[ TOPLEFT ].y;
 					const auto iRightSideHeight = vecBuffer[ BOTTOMRIGHT ].y - vecBuffer[ TOPRIGHT ].y;
 					const auto flHealthRatio = float( iHealth ) / float( iMaxHealth );
-					const auto iLeftSideDifference = vecBuffer[ BOTTOMLEFT ].x - vecBuffer[ TOPLEFT ].x;
-					const auto iRightSideDifference = vecBuffer[ BOTTOMRIGHT ].x - vecBuffer[ TOPRIGHT ].x;
+					const auto flZDifference = ( vecPoints[ TOPLEFT ].z - vecPoints[ BOTTOMLEFT ].z ) * ( float( iHealth ) / float( iMaxHealth ) );
+					auto vecMiddleLeft = vecPoints[ BOTTOMLEFT ],
+						vecMiddleRight = vecPoints[ BOTTOMRIGHT ];
+					vecMiddleLeft.z += flZDifference;
+					vecMiddleRight.z += flZDifference;
+					Vector vecScreenMiddleLeft, vecScreenMiddleRight;
 					const auto dwBottom = clrBottom.GetARGB( );
+
+					WorldToScreen( vecMiddleLeft, vecScreenMiddleLeft );
+					WorldToScreen( vecMiddleRight, vecScreenMiddleRight );
 
 					if ( iHealth < iMaxHealth )
 					{
 						const auto dwTop = clrTop.GetARGB( );
 						vtxFillPoints[ 0 ] = vertex_t( vecBuffer[ TOPLEFT ].x, vecBuffer[ TOPLEFT ].y, esdEntityConfig->bSolidHealthFill ? dwTop : 0 );
 						vtxFillPoints[ 1 ] = vertex_t( vecBuffer[ TOPRIGHT ].x, vecBuffer[ TOPRIGHT ].y, esdEntityConfig->bSolidHealthFill ? dwTop : 0 );
-						vtxFillPoints[ 2 ] = vertex_t( vecBuffer[ TOPRIGHT ].x + iRightSideDifference * ( 1.f - flHealthRatio ), vecBuffer[ TOPRIGHT ].y + ( iRightSideHeight - ( iRightSideHeight * flHealthRatio ) ), dwTop );
-						vtxFillPoints[ 3 ] = vertex_t( vecBuffer[ TOPLEFT ].x + iLeftSideDifference * ( 1.f - flHealthRatio ), vecBuffer[ TOPLEFT ].y + ( iLeftSideHeight - ( iLeftSideHeight * flHealthRatio ) ), dwTop );
+						vtxFillPoints[ 2 ] = vertex_t( vecScreenMiddleRight.x, vecScreenMiddleRight.y, dwTop );
+						vtxFillPoints[ 3 ] = vertex_t( vecScreenMiddleLeft.x, vecScreenMiddleLeft.y, dwTop );
 						Drawing::Polygon( vtxFillPoints, 4, 2 );
 					}
 
-					vtxFillPoints[ 0 ] = vertex_t( vecBuffer[ BOTTOMLEFT ].x - iLeftSideDifference * flHealthRatio, vecBuffer[ BOTTOMLEFT ].y - iLeftSideHeight * flHealthRatio, dwBottom );
-					vtxFillPoints[ 1 ] = vertex_t( vecBuffer[ BOTTOMRIGHT ].x - iRightSideDifference * flHealthRatio, vecBuffer[ BOTTOMRIGHT ].y - iRightSideHeight * flHealthRatio, dwBottom );
+					vtxFillPoints[ 0 ] = vertex_t( vecScreenMiddleLeft.x, vecScreenMiddleLeft.y, dwBottom );
+					vtxFillPoints[ 1 ] = vertex_t( vecScreenMiddleRight.x, vecScreenMiddleRight.y, dwBottom );
 					vtxFillPoints[ 2 ] = vertex_t( vecBuffer[ BOTTOMRIGHT ].x, vecBuffer[ BOTTOMRIGHT ].y, esdEntityConfig->bSolidHealthFill ? dwBottom : 0 );
 					vtxFillPoints[ 3 ] = vertex_t( vecBuffer[ BOTTOMLEFT ].x, vecBuffer[ BOTTOMLEFT ].y, esdEntityConfig->bSolidHealthFill ? dwBottom : 0 );
 					Drawing::Polygon( vtxFillPoints, 4, 2 );
@@ -187,7 +194,7 @@ namespace PX::Features::Awareness
 		if ( !esdEntityConfig->bSnaplines )
 			return;
 
-		const auto clrSnapLine = esdEntityConfig->seqViewLines[ info.iState ].GetCurrentColor( );
+		const auto clrSnapLine = esdEntityConfig->seqSnaplines[ info.iState ].GetCurrentColor( );
 		if ( clrSnapLine.a == 0 )
 			return;
 

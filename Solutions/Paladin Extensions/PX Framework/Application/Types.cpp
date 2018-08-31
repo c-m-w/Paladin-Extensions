@@ -5,26 +5,17 @@
 
 namespace PX::Types
 {
-	drawing_t::drawing_t( vertex_t* _pVertices, std::size_t _sVertices )
+	line_t::line_t( const D3DXVECTOR2* _pVertices, std::size_t _sVertices, float _flWidth, DWORD _dwColor, BOOL _bAntiAlias /*= TRUE*/ ): drawing_t< D3DXVECTOR2 >( _pVertices, _sVertices )
 	{
-		pVertices = _pVertices;
-		sVertices = _sVertices;
+		dwColor = _dwColor;
+		flWidth = _flWidth;
+		bAntiAlias = _bAntiAlias;
 	}
 
-	drawing_t::~drawing_t( )
-	{
-		delete[ ] pVertices;
-	}
-
-	polygon_t::polygon_t( vertex_t* _pVertices, std::size_t _sVertices, std::size_t _sPrimitives, D3DPRIMITIVETYPE _ptType ): drawing_t( _pVertices, _sVertices )
+	polygon_t::polygon_t( const vertex_t* _pVertices, std::size_t _sVertices, std::size_t _sPrimitives, D3DPRIMITIVETYPE _ptType ): drawing_t< vertex_t >( _pVertices, _sVertices )
 	{
 		sPrimitives = _sPrimitives;
 		ptType = _ptType;
-	}
-
-	polygon_t::~polygon_t( )
-	{
-		delete[ ] pVertices;
 	}
 
 	module_t::module_t( std::wstring _wstrName )
