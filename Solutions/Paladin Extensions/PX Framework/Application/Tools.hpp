@@ -29,7 +29,7 @@ namespace PX::Tools
 	{
 	private:
 		DWORD dwOldProtection;
-		std::size_t sTableLength, sTableSize;
+		std::size_t zTableLength, zTableSize;
 		void* pClassBase;
 		Types::ptr_t* pOldTable, *pNewTable;
 		HMODULE hAllocationModule;

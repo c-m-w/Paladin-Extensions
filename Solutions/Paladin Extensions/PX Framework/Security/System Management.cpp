@@ -374,22 +374,22 @@ namespace PX::sys
 	}
 	*/
 
-	void PX_API WipeMemoryEx( HANDLE hTarget, LPVOID pAddress, std::size_t sSize )
+	void PX_API WipeMemoryEx( HANDLE hTarget, LPVOID pAddress, std::size_t zSize )
 	{
 		DWORD dwBuffer;
-		std::unique_ptr< byte_t[ ] > pZeroMemoryBuffer( new byte_t[ sSize ]( ) );
-		WriteProcessMemory( hTarget, pAddress, pZeroMemoryBuffer.get( ), sSize, nullptr );
-		VirtualProtectEx( hTarget, pAddress, sSize, PAGE_NOACCESS, &dwBuffer );
-		VirtualFreeEx( hTarget, pAddress, sSize, MEM_DECOMMIT ); // todo should we be calling this with MEM_RELEASE? this might cause address space leaks
+		std::unique_ptr< byte_t[ ] > pZeroMemoryBuffer( new byte_t[ zSize ]( ) );
+		WriteProcessMemory( hTarget, pAddress, pZeroMemoryBuffer.get( ), zSize, nullptr );
+		VirtualProtectEx( hTarget, pAddress, zSize, PAGE_NOACCESS, &dwBuffer );
+		VirtualFreeEx( hTarget, pAddress, zSize, MEM_DECOMMIT ); // todo should we be calling this with MEM_RELEASE? this might cause address space leaks
 	}
 
-	void PX_API WipeMemory( LPVOID pAddress, std::size_t sSize )
+	void PX_API WipeMemory( LPVOID pAddress, std::size_t zSize )
 	{
 		DWORD dwBuffer;
-		std::unique_ptr< byte_t[ ] > pZeroMemoryBuffer( new byte_t[ sSize ]( ) );
-		memcpy( pAddress, pZeroMemoryBuffer.get( ), sSize );
-		VirtualProtect( pAddress, sSize, PAGE_NOACCESS, &dwBuffer );
-		VirtualFree( pAddress, sSize, MEM_DECOMMIT );
+		std::unique_ptr< byte_t[ ] > pZeroMemoryBuffer( new byte_t[ zSize ]( ) );
+		memcpy( pAddress, pZeroMemoryBuffer.get( ), zSize );
+		VirtualProtect( pAddress, zSize, PAGE_NOACCESS, &dwBuffer );
+		VirtualFree( pAddress, zSize, MEM_DECOMMIT );
 	}
 
 	bool PX_API LoadRawLibraryEx( const LPVOID& pDLL, const std::wstring& wstrExecutableName, injection_info_t* injInfo )

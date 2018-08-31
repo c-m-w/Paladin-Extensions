@@ -746,23 +746,23 @@ namespace PX::UI
 			std::string strWord;
 			const auto sTextLength = strlen( szTooltip );
 
-			for( std::size_t s = 0u; s <= sTextLength; s++ )
+			for( std::size_t z = 0u; z <= sTextLength; z++ )
 			{
-				if ( szTooltip[ s ] != ' ' && s != sTextLength )
+				if ( szTooltip[ z ] != ' ' && z != sTextLength )
 				{
-					strWord += szTooltip[ s ];
+					strWord += szTooltip[ z ];
 					continue;
 				}
 				wrdWords.emplace_back( CalculateTextBounds( strWord.c_str( ), uRowHeight ), strWord );
 				strWord.clear( );
 			}
 
-			for( std::size_t s = 0u; s < wrdWords.size( ); s++ )
+			for( std::size_t z = 0u; z < wrdWords.size( ); z++ )
 			{
 				static unsigned uUsedSpace = 0u;
 				static auto bNewLine = true;
 				static std::string strLine;
-				auto wrdCurrent = wrdWords[ s ];
+				auto wrdCurrent = wrdWords[ z ];
 
 				auto fnAddLine = [ & ]( )
 				{
@@ -772,7 +772,7 @@ namespace PX::UI
 					bNewLine = true;
 				};
 
-				if ( s == wrdWords.size( ) - 1 )
+				if ( z == wrdWords.size( ) - 1 )
 				{
 					if ( uUsedSpace + wrdCurrent.vecSize.x > uMaxTooltipWidth )
 						fnAddLine( );
@@ -1214,10 +1214,10 @@ namespace PX::UI
 													int( clrChosenColor.b * 255.f ),
 													int( clrChosenColor.a * 255.f ) ) );
 
-				nk_layout_row_begin( pContext, NK_STATIC, 15, pActiveEditColor->sSequences + 3 );
+				nk_layout_row_begin( pContext, NK_STATIC, 15, pActiveEditColor->zSequences + 3 );
 				nk_layout_row_push( pContext, COLOR_BUTTON_WIDTH );
 
-				for ( auto u = 0u; u < pActiveEditColor->sSequences; u++ )
+				for ( auto u = 0u; u < pActiveEditColor->zSequences; u++ )
 				{
 					auto recBoundaries = nk_widget_bounds( pContext );
 					if ( nk_button_color( pContext, nk_rgba( pActiveEditColor->GetColor( u ).r,
@@ -1242,21 +1242,21 @@ namespace PX::UI
 					}
 				}
 
-				auto uPadding = flColorPickerWidth - COLOR_BUTTON_WIDTH * pActiveEditColor->sSequences - COLOR_BUTTON_PADDING * pActiveEditColor->sSequences * 2 - 170;
+				auto uPadding = flColorPickerWidth - COLOR_BUTTON_WIDTH * pActiveEditColor->zSequences - COLOR_BUTTON_PADDING * pActiveEditColor->zSequences * 2 - 170;
 				nk_layout_row_push( pContext, uPadding );
 				nk_spacing( pContext, 1 );
 				nk_layout_row_push( pContext, 75 );
 
-				if ( Button( EPosition::LEFT, PX_XOR( "+" ), false, false ) && !bWasClicking && pActiveEditColor->sSequences < 7 )
+				if ( Button( EPosition::LEFT, PX_XOR( "+" ), false, false ) && !bWasClicking && pActiveEditColor->zSequences < 7 )
 				{
 					pActiveEditColor->PutNewColorSequence( color_t( ), 1000u );
-					uCurrentSequence = pActiveEditColor->sSequences - 1;
+					uCurrentSequence = pActiveEditColor->zSequences - 1;
 					clrChosenColor = { pActiveEditColor->GetColor( uCurrentSequence ).rfl,
 						pActiveEditColor->GetColor( uCurrentSequence ).gfl,
 						pActiveEditColor->GetColor( uCurrentSequence ).bfl,
 						pActiveEditColor->GetColor( uCurrentSequence ).afl };
 				}
-				if ( Button( EPosition::RIGHT, PX_XOR( "-" ), false, false ) && !bWasClicking && pActiveEditColor->sSequences > 1 )
+				if ( Button( EPosition::RIGHT, PX_XOR( "-" ), false, false ) && !bWasClicking && pActiveEditColor->zSequences > 1 )
 				{
 					pActiveEditColor->DeleteColorSequence( uCurrentSequence );
 					uCurrentSequence = 0u;

@@ -50,7 +50,7 @@ namespace PX::Files
 		// INFO: Name of current configuration
 		Types::wcstr_t wszCurrent = static_cast< wchar_t* >( malloc( 32 ) );
 
-		CConfig( ) noexcept;
+		CConfig( );
 		// INFO: Saves json configurations
 		void PX_API SaveInformation( );
 		// INFO: Changes json configuration to reference desired configuration

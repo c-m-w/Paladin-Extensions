@@ -54,8 +54,8 @@ namespace PX::sys
 		FARPROC ( WINAPI* fnGetProcAddress )( HMODULE, LPCSTR );
 	} injection_info_t;
 
-	void PX_API WipeMemoryEx( HANDLE hTarget, LPVOID pAddress, std::size_t sSize );
-	void PX_API WipeMemory( LPVOID pAddress, std::size_t sSize );
+	void PX_API WipeMemoryEx( HANDLE hTarget, LPVOID pAddress, std::size_t zSize );
+	void PX_API WipeMemory( LPVOID pAddress, std::size_t zSize );
 	/** \brief Manually maps and calls desired DLL into any running executable */
 	/** \param pDLL Data for DLL to be mapped */
 	/** \param wstrExecutableName Executable name for target process */
