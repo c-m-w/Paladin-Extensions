@@ -153,7 +153,6 @@ namespace PX::UI
 
 			pContext->style.slider.bar_height = 5.f;
 			pContext->style.slider.border = 1.f;
-			//pContext->style.slider.rounding = 2.f;
 			pContext->style.slider.bar_filled = nk_rgba( 33, 150, 243, 170 );
 			pContext->style.slider.bar_normal = nk_rgba( 43, 60, 75, 255 );
 			pContext->style.slider.cursor_size = nk_vec2( 8, 8 );
