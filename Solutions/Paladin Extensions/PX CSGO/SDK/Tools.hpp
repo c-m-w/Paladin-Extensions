@@ -45,7 +45,6 @@ namespace PX::Tools
 	class CBaseEntity: public IClientEntity
 	{
 	public:
-		PX_NETVAR_REFERENCE( int32_t, m_nModelIndex,PX_XOR( "DT_BaseEntity" ), PX_XOR( "m_nModelIndex" ) );
 		PX_NETVAR_REFERENCE( int32_t, m_iTeamNum,PX_XOR( "DT_BaseEntity" ), PX_XOR( "m_iTeamNum" ) );
 		PX_NETVAR_REFERENCE( Vector, m_vecOrigin,PX_XOR( "DT_BaseEntity" ), PX_XOR( "m_vecOrigin" ) );
 		PX_NETVAR_REFERENCE( bool, m_bShouldGlow,PX_XOR( "DT_DynamicProp" ), PX_XOR( "m_bShouldGlow" ) );

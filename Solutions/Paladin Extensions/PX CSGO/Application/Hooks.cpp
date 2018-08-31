@@ -2,9 +2,6 @@
 
 #include "../PX CSGO.hpp"
 
-#define PX_PRINT( var ) std::cout << #var << ": " << var << std::endl;
-#define PX_PRINT_ENUM( var, enum_type ) std::cout << std::string( #var ).substr( 0, std::string( #var ).find_last_of( '[' ) ) << "[ " << enum_type << " ]: " << var << std::endl;
-
 using namespace PX::Information;
 using namespace Memory::VirtualTableIndicies;
 using namespace Pointers;

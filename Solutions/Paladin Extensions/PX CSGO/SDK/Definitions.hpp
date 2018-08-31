@@ -2,7 +2,7 @@
 
 #pragma once
 
-#define PX_MASK_VISIBLE MASK_SHOT | MASK_OPAQUE
+#define PX_MASK_VISIBLE ( MASK_SHOT | MASK_OPAQUE )
 
 #define PX_NETVAR_REFERENCE( type, name, table, netvar )													\
     type& name() const																						\

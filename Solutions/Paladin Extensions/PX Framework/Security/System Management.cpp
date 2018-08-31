@@ -252,8 +252,8 @@ namespace PX::sys
 			}
 			while ( hmSearch == nullptr && Module32Next( hSnapshot, &meEntry ) );
 
-			CloseHandle( hSnapshot );
-			return hmSearch;
+		CloseHandle( hSnapshot );
+		return hmSearch;
 	}
 
 	bool PX_API IsProcessOpen( const std::wstring& wstrExecutableName )

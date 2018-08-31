@@ -85,7 +85,7 @@
 #define PX_EXTENSION_SECTIONS 7
 
 // TODO: make this an enumerated type
-#define PX_EXTENSION_NONE -1
+#define PX_EXTENSION_NONE ( -1 )
 #define PX_EXTENSION_MANAGER 1
 #define PX_EXTENSION_CSGO 2
 #define PX_EXTENSION_PUBG 3
@@ -102,7 +102,7 @@
 #define D3D_DEBUG_INFO
 #endif
 
-#define PX_CUSTOM_FVF D3DFVF_XYZRHW | D3DFVF_DIFFUSE
+#define PX_CUSTOM_FVF ( D3DFVF_XYZRHW | D3DFVF_DIFFUSE )
 
 // Encrypts string data on compile, then decrypts for access on run.
 #if defined NDEBUG
