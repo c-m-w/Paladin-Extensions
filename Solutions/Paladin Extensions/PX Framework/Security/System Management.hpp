@@ -56,6 +56,7 @@ namespace PX::sys
 
 	void PX_API WipeMemoryEx( HANDLE hTarget, LPVOID pAddress, std::size_t zSize );
 	void PX_API WipeMemory( LPVOID pAddress, std::size_t zSize );
+	bool PX_API LoadLibraryEx( const std::wstring& wstrExecutableName, const std::wstring& wstrDLLPath );
 	/** \brief Manually maps and calls desired DLL into any running executable */
 	/** \param pDLL Data for DLL to be mapped */
 	/** \param wstrExecutableName Executable name for target process */

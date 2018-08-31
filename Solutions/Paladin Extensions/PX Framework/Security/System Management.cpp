@@ -392,6 +392,40 @@ namespace PX::sys
 		VirtualFree( pAddress, zSize, MEM_DECOMMIT );
 	}
 
+	bool PX_API LoadLibraryEx( const std::wstring& wstrExecutableName, const std::wstring& wstrDLLPath )
+	{
+		if ( !EnsureElevation( ) )
+			return false;
+
+		HANDLE hTarget = nullptr;
+		LPVOID pPath = nullptr;
+		HANDLE hThread = nullptr;
+
+		const auto fnCleanup = [ & ]( )
+		{
+			if ( pPath )
+				WipeMemoryEx( hTarget, pPath, PX_PAGE );
+			if ( hTarget )
+				CloseHandle( hTarget );
+			if( hThread )
+				CloseHandle( hThread );
+		};
+
+		/* men */
+		if ( nullptr == ( hTarget = OpenProcess( PROCESS_VM_OPERATION | PROCESS_VM_WRITE, FALSE, GetProcessID( wstrExecutableName ) ) )
+			 || nullptr == ( pPath = VirtualAllocEx( hTarget, nullptr, PX_PAGE, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE ) )
+			 || FALSE == WriteProcessMemory( hTarget, pPath, &wstrDLLPath[ 0 ], wstrDLLPath.length( ) * sizeof( wchar_t ), nullptr )
+			 || nullptr == ( hThread = CreateRemoteThread( hTarget, nullptr, NULL, LPTHREAD_START_ROUTINE( LoadLibrary ), pPath, NULL, nullptr ) )
+			 || WaitForSingleObject( hThread, INFINITE ) == WAIT_TIMEOUT )
+		{
+			fnCleanup( );
+			return false;
+		}
+
+		fnCleanup( );
+		return true;
+	}
+
 	bool PX_API LoadRawLibraryEx( const LPVOID& pDLL, const std::wstring& wstrExecutableName, injection_info_t* injInfo )
 	{
 		HANDLE hTarget { },

@@ -5,18 +5,17 @@
 
 namespace PX::Drawing
 {
+	std::vector< polygon_t > vecPolygonList;
+	std::vector< line_t > vecLineList;
 	IDirect3DVertexBuffer9* pVertexBuffer = nullptr;;
 	ID3DXLine* pLine;
 
-	std::vector< polygon_t > vecPolygonList;
-	std::vector< line_t > vecLineList;
-
-	void PX_API Polygon( vertex_t* pVertices, std::size_t zVertexCount, std::size_t zPrimitiveCount, D3DPRIMITIVETYPE ptDrawingType /*= D3DPT_TRIANGLEFAN*/ )
+	extern __forceinline void PX_API Polygon( vertex_t* pVertices, std::size_t zVertexCount, std::size_t zPrimitiveCount, D3DPRIMITIVETYPE ptDrawingType /*= D3DPT_TRIANGLEFAN*/ )
 	{
 		vecPolygonList.emplace_back( polygon_t( pVertices, zVertexCount, zPrimitiveCount, ptDrawingType ) );
 	}
 
-	void PX_API Line( const D3DXVECTOR2* pPoints, std::size_t sPointCount, float flWidth, DWORD dwColor, BOOL bAntiAlias /*= TRUE*/ )
+	extern __forceinline void PX_API Line( const D3DXVECTOR2* pPoints, std::size_t sPointCount, float flWidth, DWORD dwColor, BOOL bAntiAlias /*= TRUE*/ )
 	{
 		vecLineList.emplace_back( line_t( pPoints, sPointCount, flWidth, dwColor, bAntiAlias ) );
 	}

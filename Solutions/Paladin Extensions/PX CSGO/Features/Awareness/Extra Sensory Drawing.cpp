@@ -46,10 +46,8 @@ namespace PX::Features::Awareness
 			if ( !pEntity || !ValidPlayer( pEntity ) )
 				continue;
 
-			info.pEntity = pEntity;
-			info.bTeammate = pEntity->m_iTeamNum( ) == iLocalPlayerTeam;
-			info.vecLocation = pEntity->m_vecOrigin( );
 			info.cClass = pEntity->GetClientNetworkable( )->GetClientClass( )->m_ClassID;
+			info.bTeammate = pEntity->m_iTeamNum( ) == iLocalPlayerTeam;
 
 			switch ( info.cClass )
 			{
@@ -66,14 +64,17 @@ namespace PX::Features::Awareness
 			if ( !esdEntityConfig->bEnabled )
 				continue;
 
+			info.pEntity = pEntity;
+			info.vecLocation = info.pEntity->m_vecOrigin( );
+
 			if ( pEntity->IsDormant( ) )
 				info.iState = STATE_DORMANT;
 			else if ( pLocalPlayer->PositionInSight( !info.bIsPlayer ? info.vecLocation : reinterpret_cast< CBasePlayer* >( info.pEntity )->GetHitboxPosition( HITBOX_HEAD ),
 													 esdEntityConfig->bMindSmoke, info.pEntity )
-					  || pLocalPlayer->PositionInSight( !info.bIsPlayer ? info.vecLocation : reinterpret_cast< CBasePlayer* >( info.pEntity )->GetHitboxPosition( HITBOX_LEFT_FOOT ),
+					  || info.bIsPlayer && ( pLocalPlayer->PositionInSight( reinterpret_cast< CBasePlayer* >( info.pEntity )->GetHitboxPosition( HITBOX_LEFT_FOOT ),
 														esdEntityConfig->bMindSmoke, info.pEntity )
-					  || pLocalPlayer->PositionInSight( !info.bIsPlayer ? info.vecLocation : reinterpret_cast< CBasePlayer* >( info.pEntity )->GetHitboxPosition( HITBOX_RIGHT_FOOT ),
-														esdEntityConfig->bMindSmoke, info.pEntity ) )
+					  || pLocalPlayer->PositionInSight( reinterpret_cast< CBasePlayer* >( info.pEntity )->GetHitboxPosition( HITBOX_RIGHT_FOOT ),
+														esdEntityConfig->bMindSmoke, info.pEntity ) ) )
 				info.iState = STATE_VISIBLE;
 			else
 				info.iState = STATE_INVISIBLE;
@@ -113,16 +114,16 @@ namespace PX::Features::Awareness
 			Vector vecPoints[ ] { info.vecLocation, info.vecLocation, info.vecLocation, info.vecLocation };
 			Vector vecBuffer[ 4 ];
 			const Vector2D vecRotationPoint { info.vecLocation.x, info.vecLocation.y };
-			const auto vecHeadPosition = reinterpret_cast< CBasePlayer* >( info.pEntity )->GetHitboxPosition( HITBOX_HEAD );
+			const auto vecViewPosition = info.vecLocation + reinterpret_cast< CBasePlayer* >( info.pEntity )->m_vecViewOffset( );
 
 			vecPoints[ BOTTOMRIGHT ].y -= 20.f; // Bottom right
 			vecPoints[ BOTTOMRIGHT ].z -= 5.f;
 			vecPoints[ BOTTOMLEFT ].y += 20.f; // Bottom left
 			vecPoints[ BOTTOMLEFT ].z -= 5.f;
 			vecPoints[ TOPRIGHT ].y -= 20.f; // Top right
-			vecPoints[ TOPRIGHT ].z = vecHeadPosition.z + 10.f;
+			vecPoints[ TOPRIGHT ].z = vecViewPosition.z + 10.f;
 			vecPoints[ TOPLEFT ].y += 20.f; // Top left
-			vecPoints[ TOPLEFT ].z = vecHeadPosition.z + 10.f;
+			vecPoints[ TOPLEFT ].z = vecViewPosition.z + 10.f;
 
 			const auto flRotation = pClientState->viewangles.y - ( pClientState->viewangles.y -
 																   CalcAngle( pLocalPlayer->GetViewPosition( ), reinterpret_cast< CBasePlayer* >( info.pEntity )->GetViewPosition( ) ).y );

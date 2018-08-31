@@ -56,7 +56,7 @@ WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR 
 		if ( hSingleInstanceMutex == INVALID_HANDLE_VALUE || GetLastError( ) == ERROR_ALREADY_EXISTS )
 			return -1;
 	}
-
+#if defined PX_WINDOW_MANAGEMENT
 	if ( hInstance && hInstance != INVALID_HANDLE_VALUE )
 		PX::hinstWin = hInstance;
 
@@ -69,6 +69,7 @@ WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR 
 		nullptr };
 
 	const auto atInstance = RegisterClassEx( &wndWindow );
+#endif
 
 #if defined _DEBUG
 	AllocConsole( );

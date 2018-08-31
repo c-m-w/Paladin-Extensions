@@ -30,7 +30,7 @@ namespace PX::UI::Manager
 				if ( bIsPressed )
 				{
 					Render::bShouldRender = !Render::bShouldRender;
-					static auto ptrOffset = *reinterpret_cast< ptr_t* >( ptr_t( ( *reinterpret_cast< void*** >( pInputSystem ) )[ 10 ] ) + 5 );
+					static auto ptrOffset = *reinterpret_cast< ptr_t* >( ptr_t( ( *reinterpret_cast< void*** >( pInputSystem ) )[ 10 ] ) + 0x5 );
 					std::swap( pOldWindowHandle, *reinterpret_cast< HWND** >( reinterpret_cast< byte_t* >( pInputSystem ) + ptrOffset ) );
 
 					if ( Render::bShouldRender )
