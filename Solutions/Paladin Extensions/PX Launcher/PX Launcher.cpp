@@ -43,7 +43,7 @@ bool Popup( EMBType popType, const wchar_t* wszMessage, const bool bDelete = fal
 		default:
 			MessageBox( nullptr, wszMessage, PX_XOR( L"Paladin Extensions" ), UINT( popType ) );
 	}
-	exit( 0 );
+	exit( -1 );
 }
 
 bool bStopMonitoring = false;

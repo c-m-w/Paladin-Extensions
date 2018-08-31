@@ -90,7 +90,7 @@ void PX_API UI::Manager::SetLayout( )
 {
 	const auto fnClose = [ ]( )
 	{
-		exit( 0 );
+		exit( -1 );
 	};
 
 	const static D3DXVECTOR3 vecLogoPosition = { 0.f, 41.f, 0.f };
@@ -434,7 +434,7 @@ void PX_API OnAttach( )
 
 	while ( !bShouldClose )
 		Wait( 10 );
-	exit( 0 );
+	exit( -1 );
 }
 
 void PX_API OnDetach( )

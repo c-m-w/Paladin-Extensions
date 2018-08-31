@@ -221,5 +221,8 @@
     <ClInclude Include="SDK\Valve\Interfaces\IBaseInterface.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\Valve\Interfaces\IInputSystem.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

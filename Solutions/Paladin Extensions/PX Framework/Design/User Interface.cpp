@@ -484,7 +484,8 @@ namespace PX::UI
 
 			// hide the cursor
 			while ( ShowCursor( FALSE ) >= 0 );
-			px_assert( nullptr == SetCursor( nullptr ) );
+			if ( bCreatedWindow )
+				SetCursor( nullptr );
 
 			curCurrent = CURSOR_ARROW;
 			bFoundHoverTarget = false;

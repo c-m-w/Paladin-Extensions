@@ -5,7 +5,8 @@
         "Engine": "engine.dll",
         "Overlay":  "GameOverlayRenderer.dll",
         "VGUI":  "vguimatsurface.dll",
-        "VGUI2": "vgui2.dll"
+        "VGUI2": "vgui2.dll",
+        "Input": "inputsystem.dll"
     },
     "Patterns": {
         "Offsets": {
@@ -42,6 +43,7 @@
         "VGUI Panel": "VGUI_Panel009",
         "Entity List": "VClientEntityList003",
         "Engine Trace": "EngineTraceClient004",
-        "Model Info": "VModelInfoClient004"
+        "Model Info": "VModelInfoClient004",
+        "Input": "InputSystemVersion001"
     }
 }

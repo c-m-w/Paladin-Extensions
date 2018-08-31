@@ -15,6 +15,7 @@
 #include "IClientUnknown.hpp"
 #include "ICollideable.hpp"
 #include "IEngineTrace.hpp"
+#include "IInputSystem.hpp"
 #include "IVEngineClient.hpp"
 #include "IPanel.hpp"
 #include "ISurface.hpp"

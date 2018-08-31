@@ -194,6 +194,7 @@
     <ClInclude Include="SDK\Valve\Interfaces\IClientUnknown.hpp" />
     <ClInclude Include="SDK\Valve\Interfaces\ICollideable.hpp" />
     <ClInclude Include="SDK\Valve\Interfaces\IEngineTrace.hpp" />
+    <ClInclude Include="SDK\Valve\Interfaces\IInputSystem.hpp" />
     <ClInclude Include="SDK\Valve\Interfaces\Interfaces.hpp" />
     <ClInclude Include="SDK\Valve\Interfaces\IPanel.hpp" />
     <ClInclude Include="SDK\Valve\Interfaces\ISurface.hpp" />

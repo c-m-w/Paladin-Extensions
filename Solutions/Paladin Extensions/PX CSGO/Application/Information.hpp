@@ -66,6 +66,7 @@ namespace PX::Information
 		PX_SDK SModule mOverlay;
 		PX_SDK SModule mVGUI;
 		PX_SDK SModule mVGUI2;
+		PX_SDK SModule mInput;
 	}
 
 	namespace Pointers
@@ -86,6 +87,7 @@ namespace PX::Information
 		PX_SDK IClientEntityList* pEntityList = nullptr;
 		PX_SDK IEngineTrace* pEngineTrace = nullptr;
 		PX_SDK IVModelInfoClient* pModelInfo = nullptr;
+		PX_SDK IInputSystem* pInputSystem = nullptr;
 	}
 
 	namespace NetworkedVariableManager // http://www.bailopan.net/table_dump.txt
