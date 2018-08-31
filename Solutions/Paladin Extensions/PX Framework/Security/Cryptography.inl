@@ -46,13 +46,13 @@ namespace PX
 		};
 
 		template< typename > px_abstract_class ACStringTraits;
-		template< std::size_t i > px_abstract_class ACStringTraits< char const( &)[ i ] >
+		template< std::size_t i > px_abstract_class ACStringTraits< char const( & )[ i ] >
 		{
 		public:
 			static PX_DEF int_trait_t = 1;
 			typedef char char_trait_t;
 		};
-		template< std::size_t i > px_abstract_class ACStringTraits< wchar_t const( &)[ i ] >
+		template< std::size_t i > px_abstract_class ACStringTraits< wchar_t const( & )[ i ] >
 		{
 		public:
 			static PX_DEF int_trait_t = 2;
