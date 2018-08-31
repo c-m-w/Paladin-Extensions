@@ -17,7 +17,7 @@ namespace PX
 				&& hkClientBase->HookIndex( uFrameStageNotify, reinterpret_cast< void* >( FrameStageNotify ) )
 				&& hkClientBase->HookIndex( uCreateMove, reinterpret_cast< void* >( CreateMove ) )
 				&& hkClientMode->HookIndex( uDoPostScreenEffects, reinterpret_cast< void* >( DoPostScreenEffects ) )
-				&& hkSurface->HookIndex( uLockCursor, reinterpret_cast< void* >( LockCursor ) )
+				//&& hkSurface->HookIndex( uLockCursor, reinterpret_cast< void* >( LockCursor ) )
 				&& hkPanel->HookIndex( uPaintTraverse, reinterpret_cast< void* >( PaintTraverse ) );
 		}
 

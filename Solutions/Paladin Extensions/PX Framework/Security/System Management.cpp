@@ -639,11 +639,11 @@ namespace PX::sys
 		if ( dwTargetProcessID )
 		{
 			if ( !EnsureElevation( ) )
-				exit( 0 );
+				exit( -1 );
 			if ( !::TerminateProcess( OpenProcess( PROCESS_TERMINATE, false, dwTargetProcessID ), 0 ) )
 			{
 				PrintLastError( );
-				exit( 0 );
+				exit( -1 );
 			}
 		}
 	}
@@ -709,7 +709,7 @@ Retry:
 		catch ( ... )
 		{
 		}
-		exit( 0 );
+		exit( -1 );
 	}
 
 	struct

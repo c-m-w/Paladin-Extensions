@@ -57,7 +57,8 @@ namespace PX::Information
 				|| !mDirectX.Setup( Tools::string_cast< std::wstring >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "DirectX API" ) ].get< std::string >( ) ) )
 				|| !mOverlay.Setup( Tools::string_cast< std::wstring >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Overlay" ) ].get< std::string >( ) ) )
 				|| !mVGUI.Setup( Tools::string_cast< std::wstring >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "VGUI" ) ].get< std::string >( ) ) )
-				|| !mVGUI2.Setup( Tools::string_cast< std::wstring >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "VGUI2" ) ].get< std::string >( ) ) ) );
+				|| !mVGUI2.Setup( Tools::string_cast< std::wstring >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "VGUI2" ) ].get< std::string >( ) ) )
+				|| !mInput.Setup( Tools::string_cast< std::wstring >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Input" ) ].get< std::string >( ) ) ) );
 			return true;
 		}
 	}
@@ -94,6 +95,8 @@ namespace PX::Information
 				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Engine Trace" ) ].get< std::string >( ).c_str( ), nullptr ) );
 			pModelInfo = reinterpret_cast< IVModelInfoClient* >( Modules::mEngine.ciFactory(
 				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Model Info" ) ].get< std::string >( ).c_str( ), nullptr ) );
+			pInputSystem = reinterpret_cast< IInputSystem* >( Modules::mInput.ciFactory(
+				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Input" ) ].get< std::string >( ).c_str( ), nullptr ) );
 
 			return nullptr != pSendPackets
 				&& nullptr != pGlobalVariables
@@ -107,7 +110,8 @@ namespace PX::Information
 				&& nullptr != pPanel
 				&& nullptr != pEntityList
 				&& nullptr != pEngineTrace
-				&& nullptr != pModelInfo;
+				&& nullptr != pModelInfo
+				&& nullptr != pInputSystem;
 		}
 	}
 

@@ -34,7 +34,7 @@ bool PX_API Initialize( )
 void PX_API OnAttach( )
 {
 	if ( !Initialize( ) )
-		exit( 0 );
+		exit( -1 );
 #if defined _DEBUG
 	while ( !GetAsyncKeyState( VK_DELETE ) )
 		PX::Tools::Wait( 1 );
