@@ -358,15 +358,16 @@ namespace PX::Tools
 		return gtRay;
 	}
 
+	struct player_model_t
+	{
+		int iTickCount = -1;
+		matrix3x4_t mtxBones[ MAXSTUDIOBONES ] { };
+		studiohdr_t* pStudioModel = nullptr;
+		mstudiohitboxset_t* pHitboxSet = nullptr;
+	} _PlayerModels[ 64 ];
+
 	Vector CBasePlayer::GetHitboxPosition( EHitbox hHitboxID )
 	{
-		static struct player_model_t
-		{
-			int iTickCount = -1;
-			matrix3x4_t mtxBones[ MAXSTUDIOBONES ] { };
-			studiohdr_t* pStudioModel = nullptr;
-			mstudiohitboxset_t* pHitboxSet = nullptr;
-		} _PlayerModels[ 64 ];
 		auto& pmPlayer = _PlayerModels[ EntIndex( ) ];
 
 		if ( pGlobalVariables->m_iTickCount != pmPlayer.iTickCount
