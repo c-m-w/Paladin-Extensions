@@ -21,7 +21,7 @@ namespace PX::Drawing
 		vecLineList.emplace_back( line_t( pPoints, sPointCount, flWidth, dwColor, bAntiAlias ) );
 	}
 
-	void PX_API Draw( )
+	void PX_API DrawFigures( )
 	{
 		for( auto& polygon : vecPolygonList )
 		{

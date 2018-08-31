@@ -41,8 +41,9 @@ namespace PX::Files
 		{
 			if ( !FileRead( PX_APPDATA + PX_XOR( L"data.px" ), wstrInstallDirectory, false ) )
 				return { };
-			for ( auto u = 0u; u < PX_DEPENDENCIES_ESCAPE; u++ )
-				wstrInstallDirectory = wstrInstallDirectory.substr( 0, wstrInstallDirectory.find_last_of( L'\\' ) + 1 );
+			for ( auto u = 0u; u <= PX_DEPENDENCIES_ESCAPE; u++ )
+				wstrInstallDirectory = wstrInstallDirectory.substr( 0, wstrInstallDirectory.find_last_of( L'\\' ) );
+			wstrInstallDirectory += L'\\';
 		}
 
 		return wstrInstallDirectory;

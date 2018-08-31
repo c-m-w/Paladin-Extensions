@@ -483,7 +483,8 @@ namespace PX::UI
 			vecImageQueue.emplace_back( uTextureID, D3DXVECTOR3( float( pntCursor.x + vecTextures[ uTextureID ].uWidth / 2.f - 50 ), float( pntCursor.y + vecTextures[ uTextureID ].uHeight / 2.f - 50 ), 0.f ) );
 
 			// hide the cursor
-			for ( int i { }; i < 50 && ShowCursor( false ) > -1; i++ );
+			while ( ShowCursor( FALSE ) >= 0 );
+			px_assert( nullptr == SetCursor( nullptr ) );
 
 			curCurrent = CURSOR_ARROW;
 			bFoundHoverTarget = false;

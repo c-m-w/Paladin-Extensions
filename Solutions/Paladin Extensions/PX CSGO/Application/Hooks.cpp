@@ -88,7 +88,7 @@ namespace PX
 						   && D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_SRGBTEXTURE, NULL ) );
 
 				Features::Awareness::Draw( );
-				Drawing::Draw( );
+				Drawing::DrawFigures( );
 				UI::Manager::CSGO::OnEndScene( );
 
 				px_assert( D3D_OK == pDevice->SetVertexDeclaration( pVertexDeclaration )

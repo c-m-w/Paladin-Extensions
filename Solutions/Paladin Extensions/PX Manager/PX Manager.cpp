@@ -90,7 +90,7 @@ void PX_API UI::Manager::SetLayout( )
 {
 	const auto fnClose = [ ]( )
 	{
-		exit( -1 );
+		exit( 0 );
 	};
 
 	const static D3DXVECTOR3 vecLogoPosition = { 0.f, 41.f, 0.f };
@@ -314,7 +314,7 @@ void PX_API UI::Manager::SetLayout( )
 	}
 }
 
-void PX_API Draw( )
+void PX_API DrawWindow( )
 {
 	unsigned uDimensions[ 2 ] { 720, 435 };
 	InitializeRenderTarget( uDimensions, PX_XOR( L"Paladin Extensions" ) );
@@ -357,7 +357,7 @@ void PX_API OnAttach( )
 	// We need the resources loaded for textures in the ui
 	LoadResources( { } );
 
-	std::thread tDraw( Draw );
+	std::thread tDraw( DrawWindow );
 	tDraw.detach( );
 
 #if defined NDEBUG
@@ -434,7 +434,7 @@ void PX_API OnAttach( )
 
 	while ( !bShouldClose )
 		Wait( 10 );
-	exit( -1 );
+	exit( 0 );
 }
 
 void PX_API OnDetach( )
