@@ -18,10 +18,10 @@ namespace PX::sys
 		}
 
 		{
-		auto hResult = CoInitializeSecurity( nullptr, -1, nullptr, nullptr, RPC_C_AUTHN_LEVEL_DEFAULT, RPC_C_IMP_LEVEL_IMPERSONATE, nullptr, EOAC_NONE, nullptr );
-		if ( hResult != S_OK && hResult != RPC_E_TOO_LATE )
-			return PX_XOR( L"0" );
-	}
+			auto hResult = CoInitializeSecurity( nullptr, -1, nullptr, nullptr, RPC_C_AUTHN_LEVEL_DEFAULT, RPC_C_IMP_LEVEL_IMPERSONATE, nullptr, EOAC_NONE, nullptr );
+			if ( hResult != S_OK && hResult != RPC_E_TOO_LATE )
+				return PX_XOR( L"0" );
+		}
 
 		IWbemLocator* pLocator;
 		if ( CoCreateInstance( CLSID_WbemLocator, nullptr, CLSCTX_INPROC_SERVER, IID_IWbemLocator, reinterpret_cast< LPVOID* >( &pLocator ) ) != S_OK
@@ -252,8 +252,8 @@ namespace PX::sys
 			}
 			while ( hmSearch == nullptr && Module32Next( hSnapshot, &meEntry ) );
 
-		CloseHandle( hSnapshot );
-		return hmSearch;
+			CloseHandle( hSnapshot );
+			return hmSearch;
 	}
 
 	bool PX_API IsProcessOpen( const std::wstring& wstrExecutableName )
@@ -772,7 +772,7 @@ Retry:
 
 	SWindowsAPI::SWindowsAPI( ) noexcept
 	{
-		for ( auto& fndAPIFunctionData: fndAPIFunctionsData )
+		for each ( auto& fndAPIFunctionData in fndAPIFunctionsData )
 		{
 			fndAPIFunctionData.bExpectedAvailable = FunctionIsOnOS( fndAPIFunctionData.osMinimumVersion, fndAPIFunctionData.osMaximumVersion );
 
@@ -794,7 +794,7 @@ Retry:
 
 	void* PX_API SWindowsAPI::GetFunctionPointer( EFuncs enfRequest )
 	{
-		for ( auto& fndAPIFunctionData: fndAPIFunctionsData )
+		for each ( auto& fndAPIFunctionData in fndAPIFunctionsData )
 			if ( fndAPIFunctionData.efnID == enfRequest )
 				return fndAPIFunctionData.bAvailable ? fndAPIFunctionData.pPointer : nullptr;
 

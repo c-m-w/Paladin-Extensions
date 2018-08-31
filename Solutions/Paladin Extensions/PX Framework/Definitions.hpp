@@ -56,6 +56,8 @@
 #define PX_DEF constexpr auto
 // identifies instruct as "Paladin Extensions" original
 #define PX_EXT extern
+// identifies in-lines as "Paladin Extensions" original
+#define PX_INL __forceinline
 
 /** \brief Identifies a class as abstract. */
 #define px_abstract_class class
@@ -156,32 +158,3 @@
 #define PX_CONFIG PX_FILES.jsCurrent
 /** \brief Undocumented WINAPI Manager */
 #define PX_WINAPI PX::sys::SWindowsAPI::Get( )
-/** \brief Calls common AnalysisProtection functions */
-#define PX_ANTI_ANALYSIS( ) \
-		!PX::AnalysisProtection::DebuggerDetection::DebuggerPresence( ) && \
-		!PX::AnalysisProtection::DebuggerDetection::ForceExceptions( ) && \
-		!PX::AnalysisProtection::AnalysisSoftwareDetection::AnalysisToolsRunning( ) && \
-		!( ) && \
-		!( ) && \
-		!( ) && \
-		!( ) && \
-		!( ) && \
-		!( ) && \
-		!( ) && \
-		!( ) && \
-		!( ) && \
-		!( ) && \
-/** \brief Calls common AnalysisProtection functions, including those for external processes */
-#define PX_ANTI_ANALYSIS_EX( hExtension ) \
-		PX_ANTI_ANALYSIS( ) && \
-		!PX::AnalysisProtection::DebuggerDetection::DebuggerPresenceEx( hExtension ) && \
-		!( ) && \
-		!( ) && \
-		!( ) && \
-/** \brief Calls all AnalysisProtection functions, including those for external processes */
-#define PX_ANTI_ANALYSIS_ALL( hExtension ) \
-		PX_ANTI_ANALYSIS_EX( hExtension ) \
-		!PX::AnalysisProtection::AnalysisSoftwareDetection::AnalysisToolsInstalled( ) && \
-		!( ) && \
-		!( ) && \
-		!( ) && \

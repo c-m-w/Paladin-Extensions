@@ -15,9 +15,28 @@ namespace PX::sys
 
 namespace PX::AnalysisProtection
 {
+	PX_INL bool PX_API CheckForAnalysis( )
+	{
+		return DebuggerDetection::DebuggerPresence( )
+			&& DebuggerDetection::ForceExceptions( )
+			&& AnalysisSoftwareDetection::AnalysisToolsRunning( );
+	}
+
+	PX_INL bool PX_API CheckForAnalysisEx( HANDLE hExtensionContainer )
+	{
+		return CheckForAnalysis( )
+			&& DebuggerDetection::DebuggerPresenceEx( hExtensionContainer );
+	}
+
+	PX_INL bool PX_API CheckForAllAnalysis( HANDLE hExtensionContainer )
+	{
+		return CheckForAnalysisEx( hExtensionContainer )
+			&& AnalysisSoftwareDetection::AnalysisToolsInstalled( );
+	};
+
 	namespace DebuggerDetection
 	{
-		bool DebuggerPresenceEx( HANDLE hTarget )
+		PX_INL bool PX_API DebuggerPresenceEx( HANDLE hTarget )
 		{
 			// check for debugger with WinAPI
 			BOOL bPresent;
@@ -39,7 +58,7 @@ namespace PX::AnalysisProtection
 			return true;
 		}
 
-		bool DebuggerPresence( ) // check for debugger using remove functions & WinAPI
+		PX_INL bool PX_API DebuggerPresence( ) // check for debugger using remove functions & WinAPI
 		{
 			bool bDebuggerPresence;
 			__asm
@@ -65,7 +84,7 @@ namespace PX::AnalysisProtection
 		}
 
 		bool bSwallowedException;
-		bool Interrupt0x2D( ) // utilizes SEH instead of __try __except
+		PX_INL bool PX_API Interrupt0x2D( ) // utilizes SEH instead of __try __except
 		{
 			// if the exception is swallowed, a debugger exists
 			bSwallowedException = true;
@@ -80,12 +99,12 @@ namespace PX::AnalysisProtection
 				return EXCEPTION_CONTINUE_SEARCH;
 			} );
 			__asm { int 0x2D }; // call the interrupt 0x2d fn
-			RemoveVectoredExceptionHandler( phExceptionHandler );
+			RemoveVectoredExceptionHandler( phExceptionHandler ); // remove our handler
 			px_assert( false == bSwallowedException ); // we return inverted status, so we assert the inverse
 			return true;
 		}
 
-		bool ForceExceptions( )
+		PX_INL bool PX_API ForceExceptions( )
 		{
 			__try
 			{
@@ -98,7 +117,7 @@ namespace PX::AnalysisProtection
 				return false;
 			}
 
-			auto NtClose = static_cast< SWindowsAPI::fnNtClose >( PX_WINAPI.GetFunctionPointer( SWindowsAPI::NtClose ) );
+			const auto NtClose = static_cast< SWindowsAPI::fnNtClose >( PX_WINAPI.GetFunctionPointer( SWindowsAPI::NtClose ) );
 			__try
 			{
 				if ( STATUS_INVALID_HANDLE != NtClose( INVALID_HANDLE_VALUE ) )
@@ -116,11 +135,11 @@ namespace PX::AnalysisProtection
 
 	namespace AnalysisSoftwareDetection
 	{
-		bool AnalysisToolsInstalled( )
+		PX_INL bool PX_API AnalysisToolsInstalled( )
 		{
 			std::wstring wstrInstalls;
 			{
-				wcstr_t wszRegPath = PX_XOR( L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall" );
+				auto wszRegPath = PX_XOR( L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall" );
 				HKEY hkeyUninstall;
 				px_assert( RegOpenKeyEx( HKEY_LOCAL_MACHINE, wszRegPath, 0, KEY_READ, &hkeyUninstall ) == ERROR_SUCCESS );
 
@@ -214,7 +233,7 @@ namespace PX::AnalysisProtection
 			return true;
 		}
 
-		bool AnalysisToolsRunning( )
+		PX_INL bool PX_API AnalysisToolsRunning( )
 		{
 			wcstr_t wszAnalysisToolsExecutableTitle[ ]
 			{
@@ -283,7 +302,7 @@ namespace PX::AnalysisProtection
 
 	namespace Sandbox
 	{
-		namespace Timely
+		namespace Tempo
 		{
 
 		}
