@@ -21,6 +21,7 @@
 namespace PX
 {
 	PX_SDK HINSTANCE hinstWin;
+	PX_SDK HANDLE hSingleInstanceMutex;
 	PX_SDK ATOM atomInstance;
 	PX_SDK HICON hIcon;
 };
@@ -41,22 +42,20 @@ WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR 
 #endif
 		 _In_ int nCmdShow )
 {
-	{
 #if defined UNICODE
 #if !defined PX_INSTANCE_ID
 #define PX_INSTANCE_ID L"0"
 #endif
-		HANDLE hSingleInstanceMutex = CreateMutex( NULL, TRUE, L"Paladin Extensions " PX_INSTANCE_ID );
+	PX::hSingleInstanceMutex = CreateMutex( NULL, TRUE, L"Paladin Extensions " PX_INSTANCE_ID );
 #else
 #if !defined PX_INSTANCE_ID
 #define PX_INSTANCE_ID "0"
 #endif
-		HANDLE hSingleInstanceMutex = CreateMutex( NULL, TRUE, "Paladin Extensions " PX_INSTANCE_ID );
+	PX::hSingleInstanceMutex = CreateMutex( NULL, TRUE, "Paladin Extensions " PX_INSTANCE_ID );
 #endif
-		if ( hSingleInstanceMutex == INVALID_HANDLE_VALUE || GetLastError( ) == ERROR_ALREADY_EXISTS )
-			return -1;
-	}
-#if defined PX_WINDOW_MANAGEMENT
+	if ( PX::hSingleInstanceMutex == INVALID_HANDLE_VALUE || GetLastError( ) == ERROR_ALREADY_EXISTS )
+		return -1;
+
 	if ( hInstance && hInstance != INVALID_HANDLE_VALUE )
 		PX::hinstWin = hInstance;
 
@@ -68,8 +67,7 @@ WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR 
 #endif
 		nullptr };
 
-	const auto atInstance = RegisterClassEx( &wndWindow );
-#endif
+	PX::atomInstance = RegisterClassEx( &wndWindow );
 
 #if defined _DEBUG
 	AllocConsole( );
@@ -78,6 +76,10 @@ WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR 
 
 	OnLaunch( );
 
+#if defined _DEBUG
+	FreeConsole( );
+#endif
+	ReleaseMutex( PX::hSingleInstanceMutex );
 	return 0;
 }
 
@@ -115,9 +117,14 @@ PX_EXT void PX_API OnDetach( );
 
 PX_SDK void PX_API Detach( )
 {
-	//ReleaseMutex( PX::hSingleInstanceMutex );
-#if !defined PX_MANUAL_MAP_DLL
+#if defined _DEBUG
+	FreeConsole( );
+#endif
+	ReleaseMutex( PX::hSingleInstanceMutex );
+#if defined PX_INSECURE_INITIALIZATION
 	FreeLibraryAndExitThread( PX::hinstDLL, TRUE );
+#else
+	OnDetach( );
 #endif
 }
 
@@ -126,15 +133,8 @@ namespace
 	DWORD WINAPI ThreadProc( _In_ LPVOID lpParameter )
 	{
 #if defined _DEBUG
-		const auto hwConsole = GetConsoleWindow( );
-		if ( !hwConsole )
-		{
-			AllocConsole( );
-			AttachConsole( GetCurrentProcessId( ) );
-			freopen_s( new FILE* { nullptr }, "CONOUT$", "w", stdout );
-		}
-		else
-			ShowWindow( hwConsole, SW_SHOW );
+		AllocConsole( );
+		freopen_s( new FILE* { nullptr }, "CONOUT$", "w", stdout );
 #endif
 
 		OnAttach( );
@@ -144,26 +144,24 @@ namespace
 
 BOOL WINAPI DllMain( _In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID lpvReserved )
 {
-	{
-#if defined UNICODE
-#if !defined PX_INSTANCE_ID
-#define PX_INSTANCE_ID L"0"
-#endif
-		//PX::hSingleInstanceMutex = CreateMutex( NULL, TRUE, L"Paladin Extensions " PX_INSTANCE_ID );
-#else
-#if !defined PX_INSTANCE_ID
-#define PX_INSTANCE_ID "0"
-#endif
-		PX::hSingleInstanceMutex = CreateMutex( NULL, TRUE, "Paladin Extensions " PX_INSTANCE_ID );
-#endif
-		//if ( PX::hSingleInstanceMutex == INVALID_HANDLE_VALUE || GetLastError( ) == ERROR_ALREADY_EXISTS )
-		//	return FALSE;
-	}
-
 	switch ( fdwReason )
 	{
 		case DLL_PROCESS_ATTACH:
 		{
+#if defined UNICODE
+#if !defined PX_INSTANCE_ID
+#define PX_INSTANCE_ID L"0"
+#endif
+			PX::hSingleInstanceMutex = CreateMutex( NULL, TRUE, L"Paladin Extensions " PX_INSTANCE_ID );
+#else
+#if !defined PX_INSTANCE_ID
+#define PX_INSTANCE_ID "0"
+#endif
+			PX::hSingleInstanceMutex = CreateMutex( NULL, TRUE, "Paladin Extensions " PX_INSTANCE_ID );
+#endif
+			if ( PX::hSingleInstanceMutex == INVALID_HANDLE_VALUE || GetLastError( ) == ERROR_ALREADY_EXISTS )
+				return FALSE;
+		
 			if ( hinstDLL && hinstDLL != INVALID_HANDLE_VALUE )
 			{
 				DisableThreadLibraryCalls( hinstDLL );
@@ -180,14 +178,14 @@ BOOL WINAPI DllMain( _In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID 
 			return TRUE;
 		}
 		case DLL_PROCESS_DETACH:
-#if defined _DEBUG
-			FreeConsole( );
-			ShowWindow( GetConsoleWindow( ), SW_HIDE );
-#endif
+		{
 			OnDetach( );
 			return TRUE;
+		}
 		default:
+		{
 			return FALSE;
+		}
 	}
 }
 
