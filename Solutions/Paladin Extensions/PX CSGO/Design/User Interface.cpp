@@ -13,6 +13,24 @@ namespace PX::UI::Manager
 {
 	namespace CSGO
 	{
+		void PX_API ChangeVisibility( )
+		{
+			static HWND* pOldWindowHandle = nullptr;
+			static HCURSOR hOldCursor;
+			
+			Render::bShouldRender = !Render::bShouldRender;
+			static auto ptrOffset = *reinterpret_cast< ptr_t* >( ptr_t( ( *reinterpret_cast< void*** >( pInputSystem ) )[ 10 ] ) + 0x5 );
+			std::swap( pOldWindowHandle, *reinterpret_cast< HWND** >( reinterpret_cast< byte_t* >( pInputSystem ) + ptrOffset ) );
+
+			if ( Render::bShouldRender )
+				hOldCursor = SetCursor( nullptr );
+			else
+			{
+				SetCursor( hOldCursor );
+				while ( ShowCursor( TRUE ) <= 0 );
+			}
+		}
+
 		bool PX_API Initialize( )
 		{
 			int iDimensions[ 2 ];
@@ -22,23 +40,24 @@ namespace PX::UI::Manager
 			memcpy( uDimensions, iDimensions, sizeof( int ) * 2 );
 			Render::bShouldRender = false;
 
-			PX_INPUT.AddKeyCallback( VK_HOME, [ = ]( bool bIsPressed )
+			PX_INPUT.AddGlobalCallback( [ = ]( unsigned uKey, bool bIsPressed )
 			{
-				static HWND* pOldWindowHandle = nullptr;
-				static HCURSOR hOldCursor;
-
+				PX_DEF uKeyPressSequenceSize = 11u;
+				const static unsigned uKeyPresses[ uKeyPressSequenceSize ] { VK_UP, VK_UP, VK_DOWN, VK_DOWN, VK_LEFT, VK_RIGHT, VK_LEFT, VK_RIGHT, 'B', 'A', VK_RETURN };
+				static std::deque< unsigned > dqKeyPresses;
 				if ( bIsPressed )
 				{
-					Render::bShouldRender = !Render::bShouldRender;
-					static auto ptrOffset = *reinterpret_cast< ptr_t* >( ptr_t( ( *reinterpret_cast< void*** >( pInputSystem ) )[ 10 ] ) + 0x5 );
-					std::swap( pOldWindowHandle, *reinterpret_cast< HWND** >( reinterpret_cast< byte_t* >( pInputSystem ) + ptrOffset ) );
-
-					if ( Render::bShouldRender )
-						hOldCursor = SetCursor( nullptr );
-					else
+					dqKeyPresses.emplace_back( uKey );
+					if ( dqKeyPresses.size( ) > uKeyPressSequenceSize )
+						dqKeyPresses.pop_front( );
+					if ( dqKeyPresses.size( ) == uKeyPressSequenceSize )
 					{
-						SetCursor( hOldCursor );
-						while ( ShowCursor( TRUE ) <= 0 );
+						auto bCorrectSequence = true;
+						for ( auto u = 0u; u < uKeyPressSequenceSize; u++ )
+							if ( uKeyPresses[ u ] != dqKeyPresses[ u ] )
+								bCorrectSequence = false;
+						if ( bCorrectSequence )
+							ChangeVisibility( );
 					}
 				}
 			} );
@@ -106,16 +125,12 @@ namespace PX::UI::Manager
 			}
 		};
 
-		static const auto fnMinimize = [ ]( )
-		{
-			Render::bShouldRender = false;
-		};
 
 		static auto iCurrentTab = 0;
 		static int iCurrentSubTab[ iTabCount ] { };
 		const static std::function< void( PX_API )( int ) > fnTabCallbacks[ iTabCount ] { LayoutAwareness, LayoutCombat, LayoutMiscellaneous, LayoutSettings };
 
-		Header( PX_XOR( "Paladin Extensions" ), szNuklearWindowTitle, 102, fnMinimize );
+		Header( PX_XOR( "Paladin Extensions" ), szNuklearWindowTitle, 102, CSGO::ChangeVisibility );
 		fnSetValue( iCurrentTab, Tabs( 10, 0, dqPrimaryTabs, iCurrentTab ) );
 		Separator( 61, 65, 72, 100 );
 		SetFont( FONT_ROBOTOSMALL );
