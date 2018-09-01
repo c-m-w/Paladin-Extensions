@@ -21,10 +21,15 @@
 namespace PX
 {
 	PX_SDK HINSTANCE hinstWin;
-	PX_SDK HANDLE hSingleInstanceMutex;
-	PX_SDK ATOM atomInstance;
 	PX_SDK HICON hIcon;
-};
+}
+
+namespace
+{
+	PX_SDK HANDLE hSingleInstanceMutex;
+	PX_SDK FILE* pConsoleOutput;
+	PX_SDK ATOM atomInstance;
+}
 
 #if defined UNICODE
 PX_EXT const wchar_t* wszWindowTitle;
@@ -46,14 +51,15 @@ WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR 
 #if !defined PX_INSTANCE_ID
 #define PX_INSTANCE_ID L"0"
 #endif
-	PX::hSingleInstanceMutex = CreateMutex( NULL, TRUE, L"Paladin Extensions " PX_INSTANCE_ID );
+	hSingleInstanceMutex = CreateMutex( nullptr, TRUE, L"Paladin Extensions " PX_INSTANCE_ID );
 #else
 #if !defined PX_INSTANCE_ID
 #define PX_INSTANCE_ID "0"
 #endif
-	PX::hSingleInstanceMutex = CreateMutex( NULL, TRUE, "Paladin Extensions " PX_INSTANCE_ID );
+	hSingleInstanceMutex = CreateMutex( nullptr, TRUE, "Paladin Extensions " PX_INSTANCE_ID );
 #endif
-	if ( PX::hSingleInstanceMutex == INVALID_HANDLE_VALUE || GetLastError( ) == ERROR_ALREADY_EXISTS )
+	if ( hSingleInstanceMutex == nullptr
+	  || GetLastError( ) == ERROR_ALREADY_EXISTS )
 		return -1;
 
 	if ( hInstance && hInstance != INVALID_HANDLE_VALUE )
@@ -67,19 +73,23 @@ WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR 
 #endif
 		nullptr };
 
-	PX::atomInstance = RegisterClassEx( &wndWindow );
+	atomInstance = RegisterClassEx( &wndWindow );
+	if ( atomInstance == 0 )
+		return -1;
 
 #if defined _DEBUG
 	AllocConsole( );
-	freopen_s( new FILE* { nullptr }, "CONOUT$", "w", stdout );
+	if ( 0 != freopen_s( &pConsoleOutput, "CONOUT$", "w", stdout ) )
+		return -1;
 #endif
 
 	OnLaunch( );
 
 #if defined _DEBUG
+	fclose( pConsoleOutput );
 	FreeConsole( );
 #endif
-	ReleaseMutex( PX::hSingleInstanceMutex );
+	CloseHandle( hSingleInstanceMutex );
 	return 0;
 }
 
@@ -109,18 +119,24 @@ WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR 
 namespace PX
 {
 	PX_SDK HINSTANCE hinstDLL;
-	PX_SDK HANDLE hSingleInstanceMutex;
-};
+}
 
 PX_EXT void PX_API OnAttach( );
 PX_EXT void PX_API OnDetach( );
 
+namespace
+{
+	PX_SDK HANDLE hSingleInstanceMutex;
+	PX_SDK FILE* pConsoleOutput;
+}
+
 PX_SDK void PX_API Detach( )
 {
 #if defined _DEBUG
+	fclose( pConsoleOutput );
 	FreeConsole( );
 #endif
-	ReleaseMutex( PX::hSingleInstanceMutex );
+	CloseHandle( hSingleInstanceMutex );
 #if defined PX_INSECURE_INITIALIZATION
 	FreeLibraryAndExitThread( PX::hinstDLL, TRUE );
 #else
@@ -134,7 +150,7 @@ namespace
 	{
 #if defined _DEBUG
 		AllocConsole( );
-		freopen_s( new FILE* { nullptr }, "CONOUT$", "w", stdout );
+		freopen_s( &pConsoleOutput, "CONOUT$", "w", stdout );
 #endif
 
 		OnAttach( );
@@ -152,14 +168,15 @@ BOOL WINAPI DllMain( _In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID 
 #if !defined PX_INSTANCE_ID
 #define PX_INSTANCE_ID L"0"
 #endif
-			PX::hSingleInstanceMutex = CreateMutex( NULL, TRUE, L"Paladin Extensions " PX_INSTANCE_ID );
+			hSingleInstanceMutex = CreateMutex( nullptr, TRUE, L"Paladin Extensions " PX_INSTANCE_ID );
 #else
 #if !defined PX_INSTANCE_ID
 #define PX_INSTANCE_ID "0"
 #endif
-			PX::hSingleInstanceMutex = CreateMutex( NULL, TRUE, "Paladin Extensions " PX_INSTANCE_ID );
+			hSingleInstanceMutex = CreateMutex( nullptr, TRUE, "Paladin Extensions " PX_INSTANCE_ID );
 #endif
-			if ( PX::hSingleInstanceMutex == INVALID_HANDLE_VALUE || GetLastError( ) == ERROR_ALREADY_EXISTS )
+			if ( hSingleInstanceMutex == nullptr
+			  || GetLastError( ) == ERROR_ALREADY_EXISTS )
 				return FALSE;
 		
 			if ( hinstDLL && hinstDLL != INVALID_HANDLE_VALUE )
@@ -170,7 +187,7 @@ BOOL WINAPI DllMain( _In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID 
 
 #if defined PX_INSECURE_INITIALIZATION
 			HANDLE hThreadProc = CreateThread( nullptr, 0, ThreadProc, lpvReserved, 0, nullptr );
-			if ( !hThreadProc || hThreadProc == INVALID_HANDLE_VALUE )
+			if ( hThreadProc == nullptr )
 				return FALSE;
 #else
 			ThreadProc( lpvReserved );
