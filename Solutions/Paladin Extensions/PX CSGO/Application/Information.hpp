@@ -15,6 +15,7 @@ namespace PX::Information
 		namespace VirtualTableIndicies
 		{
 			// Device
+			PX_DEF uBeginScene = 41u;
 			PX_DEF uEndScene = 42u;
 			PX_DEF uReset = 16u;
 

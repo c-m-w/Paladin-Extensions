@@ -12,12 +12,12 @@ namespace PX
 	{
 		bool PX_API SetHooks( )
 		{
-			return hkDirectXDevice->HookIndex( uEndScene, reinterpret_cast< void* >( EndScene ) )
+			return hkDirectXDevice->HookIndex( uBeginScene, reinterpret_cast< void* >( BeginScene ) )
+				&& hkDirectXDevice->HookIndex( uEndScene, reinterpret_cast< void* >( EndScene ) )
 				&& hkDirectXDevice->HookIndex( uReset, reinterpret_cast< void* >( Reset ) )
 				&& hkClientBase->HookIndex( uFrameStageNotify, reinterpret_cast< void* >( FrameStageNotify ) )
 				&& hkClientBase->HookIndex( uCreateMove, reinterpret_cast< void* >( CreateMove ) )
 				&& hkClientMode->HookIndex( uDoPostScreenEffects, reinterpret_cast< void* >( DoPostScreenEffects ) )
-				//&& hkSurface->HookIndex( uLockCursor, reinterpret_cast< void* >( LockCursor ) )
 				&& hkPanel->HookIndex( uPaintTraverse, reinterpret_cast< void* >( PaintTraverse ) );
 		}
 
@@ -26,13 +26,11 @@ namespace PX
 			hkDirectXDevice	= new Tools::CHook( pDevice );
 			hkClientBase	= new Tools::CHook( pClientBase );
 			hkClientMode	= new Tools::CHook( pClientMode );
-			hkSurface		= new Tools::CHook( pSurface );
 			hkPanel			= new Tools::CHook( pPanel );
 
 			return hkDirectXDevice->Succeeded( )
 				&& hkClientBase->Succeeded( )
 				&& hkClientMode->Succeeded( )
-				&& hkSurface->Succeeded( )
 				&& hkPanel->Succeeded( ) ?
 				SetHooks( ) 
 			: false;
@@ -43,11 +41,28 @@ namespace PX
 			delete hkDirectXDevice;
 			delete hkClientBase;
 			delete hkClientMode;
-			delete hkSurface;
 			delete hkPanel;
 		}
 
-		HRESULT __stdcall EndScene( IDirect3DDevice9* pDeviceParameter )
+		HRESULT __stdcall BeginScene( IDirect3DDevice9* pThis )
+		{
+			static auto fnOriginal = hkDirectXDevice->GetOriginalFunction< begin_scene_t >( uBeginScene );
+			static auto ptrDesiredReturnAddress = 0u;
+			const auto ptrReturnAddress = ptr_t( _ReturnAddress( ) );
+
+			if ( !ptrDesiredReturnAddress )
+			{
+				if ( Tools::FindAddressOrigin( ptrReturnAddress ) == Modules::mOverlay.hModule )
+					ptrDesiredReturnAddress = ptrReturnAddress;
+			}
+
+			if ( ptrDesiredReturnAddress == ptrReturnAddress )
+				Features::Awareness::Draw( );
+
+			return fnOriginal( pThis );
+		}
+
+		HRESULT __stdcall EndScene( IDirect3DDevice9* pThis )
 		{
 			static auto fnOriginal = hkDirectXDevice->GetOriginalFunction< end_scene_t >( uEndScene );
 			static auto ptrDesiredReturnAddress = 0u;
@@ -84,7 +99,6 @@ namespace PX
 						   && D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_MINFILTER, D3DTADDRESS_WRAP )
 						   && D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_SRGBTEXTURE, NULL ) );
 
-				Features::Awareness::Draw( );
 				Drawing::DrawFigures( );
 				UI::Manager::CSGO::OnEndScene( );
 
@@ -97,24 +111,26 @@ namespace PX
 				pNewState->Release( );
 			}
 
-			return fnOriginal( pDeviceParameter );
+			return fnOriginal( pThis );
 		}
 
-		HRESULT __stdcall Reset( IDirect3DDevice9* pDeviceParameter, D3DPRESENT_PARAMETERS* pParams )
+		HRESULT __stdcall Reset( IDirect3DDevice9* pThis, D3DPRESENT_PARAMETERS* pParams )
 		{
 			static auto fnOriginal = hkDirectXDevice->GetOriginalFunction< reset_t  >( uReset );
 
 			{
 				UI::Manager::CSGO::OnReset( );
 				UI::Manager::OnReset( );
+				Drawing::ResetDrawing( );
 			}
 
-			const auto hrReset = fnOriginal( pDeviceParameter, pParams );
+			const auto hrReset = fnOriginal( pThis, pParams );
 
 			if ( SUCCEEDED( hrReset ) )
 			{
 				UI::Manager::CSGO::OnSuccessfulReset( pParams->BackBufferWidth, pParams->BackBufferHeight );
 				UI::Manager::OnSuccessfulReset( pParams->BackBufferWidth, pParams->BackBufferHeight );
+				Drawing::InitializeDrawing( );
 			}
 
 			return hrReset;
@@ -145,15 +161,6 @@ namespace PX
 			}
 
 			return fnOriginal( pClientMode, iUnknown );
-		}
-
-		void __fastcall LockCursor( ISurface* pThisClass, void* edx )
-		{
-			static auto fnOriginal = hkSurface->GetOriginalFunction< lock_cursor_t >( uLockCursor );
-
-			if ( Render::bShouldRender )
-				return pSurface->UnlockCursor( );
-			return fnOriginal( pThisClass );
 		}
 
 		void __stdcall PaintTraverse( vgui::VPANEL panel, bool forceRepaint, bool allowForce )

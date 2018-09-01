@@ -4,6 +4,9 @@
 
 namespace PX::Drawing
 {
+	bool PX_API InitializeDrawing( );
+	void PX_API ResetDrawing( );
+
 	void PX_API Polygon( Types::vertex_t* pVertices, std::size_t zVertexCount, std::size_t zPrimitiveCount, D3DPRIMITIVETYPE ptDrawingType = D3DPT_TRIANGLEFAN );
 	void PX_API Line( const D3DXVECTOR2* pPoints, std::size_t sPointCount, float flWidth, DWORD dwColor, BOOL bAntiAlias = TRUE );
 	void PX_API DrawFigures( );

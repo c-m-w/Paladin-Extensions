@@ -152,6 +152,7 @@ namespace PX::UI
 		/**	\return true - Mouse is hovering next widget.\n false - Mouse is not hovering next widget. */
 		bool PX_API HoveringNextWidget( );
 		nk_flags PX_API EditTextBox( struct nk_context* ctx, nk_flags flags, char* buffer, int max, nk_plugin_filter filter );
+		struct nk_rect PX_API NextWidgetBounds( );
 		void PX_API SetWidgetActive( Render::ECursor curSetCursor );
 		void PX_API Tooltip( Types::cstr_t szText );
 		/** \brief Creates a window header for the GUI window. */
@@ -226,7 +227,7 @@ namespace PX::UI
 		'	\n Uses one column. */
 		/**	\param szSubject What the color is for. */
 		/**	\param pSequence Pointer to the color that will be edited if the button is clicked. */
-		void PX_API ColorButton( Types::cstr_t szSubject, Types::color_sequence_t* pSequence );
+		void PX_API ColorButton( Types::cstr_t szSubject, Types::color_sequence_t* pSequence, float flVerticalPadding = 0.f );
 
 		/** \brief Creates a combobox for the user to select an option within.\n Uses one column. */
 		/**	\param uButtonHeight Height of each of the buttons inside the combobox. */
@@ -240,7 +241,7 @@ namespace PX::UI
 		/**	\param szTitle Title of the combobox. */
 		/**	\param dqOptions Options that should be available inside the combobox. */
 		/**	\param dqEnabledOptions List of the options that are enabled in the combobox. */
-		void PX_API ComboboxMulti( unsigned uButtonHeight, Types::cstr_t szTitle, const std::deque< Types::cstr_t >& dqOptions, std::deque< bool >& dqEnabledOptions );
+		void PX_API ComboboxMulti( unsigned uButtonHeight, Types::cstr_t szTitle, const std::deque< Types::cstr_t >& dqOptions, std::deque< bool* >& dqEnabledOptions );
 
 		/** \brief Creates a box for the user to input data.
 			\n Uses one column. */

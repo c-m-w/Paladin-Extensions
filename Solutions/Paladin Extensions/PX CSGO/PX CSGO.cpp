@@ -28,6 +28,7 @@ bool PX_API Initialize( )
 		&& PX::Files::Resources::LoadResources( { } )
 		&& PX::UI::Manager::CSGO::Initialize( )
 		&& PX::Features::InitializeFeatures( )
+		&& PX::Drawing::InitializeDrawing( )
 		&& PX::Hooks::InitializeHooks( );
 }
 

@@ -19557,11 +19557,17 @@ nk_draw_button(struct nk_command_buffer *out,
         background = &style->active;
     else background = &style->normal;
 
+	  auto newbounds = *bounds;
+	  //newbounds.x += style->padding.x + style->border;
+	  newbounds.y += style->padding.y;
+	  //newbounds.w -= 2 * ( style->padding.x + style->border );
+	  newbounds.h -= 2 * style->padding.y;
+
     if (background->type == NK_STYLE_ITEM_IMAGE) {
-        nk_draw_image(out, *bounds, &background->data.image, nk_white);
+        nk_draw_image(out, newbounds, &background->data.image, nk_white);
     } else {
-        nk_fill_rect(out, *bounds, style->rounding, background->data.color);
-        nk_stroke_rect(out, *bounds, style->rounding, style->border, style->border_color);
+        nk_fill_rect(out, newbounds, style->rounding, background->data.color);
+        nk_stroke_rect(out, newbounds, style->rounding, style->border, style->border_color);
     }
     return background;
 }

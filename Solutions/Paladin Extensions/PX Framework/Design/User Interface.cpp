@@ -107,6 +107,7 @@ namespace PX::UI
 			pContext->style.edit.row_padding = 0;
 			pContext->style.button.rounding = 3.f;
 			pContext->style.button.border = 1;
+			pContext->style.button.padding = nk_vec2( 0.f, 0.f );
 			pContext->style.button.border_color = nk_rgba( 34, 37, 41, 255 );
 
 			pContext->style.window.tooltip_border = 0.f;
@@ -494,6 +495,7 @@ namespace PX::UI
 		bool PX_API Render( )
 		{
 			auto bShouldDrawUserInterface = true;
+			bDrawComboboxArrow = false;
 			SetFont( FONT_ROBOTO );
 
 			if ( bCreatedWindow )
@@ -514,6 +516,7 @@ namespace PX::UI
 					nk_stroke_line( pDrawBuffer, recComboboxWindowBounds.x, recComboboxWindowBounds.y - 2, recComboboxWindowBounds.x + recComboboxWindowBounds.w, recComboboxWindowBounds.y - 2, 2, clrBorder );
 					recComboboxWindowBounds.y -= 3;
 					nk_fill_triangle( pDrawBuffer, recComboboxWindowBounds.x + recComboboxWindowBounds.w - 3, recComboboxWindowBounds.y, recComboboxWindowBounds.x + recComboboxWindowBounds.w - 10, recComboboxWindowBounds.y - 7, recComboboxWindowBounds.x + recComboboxWindowBounds.w - 17, recComboboxWindowBounds.y, clrBackground );
+					recComboboxWindowBounds.y += 3;
 				}
 
 				if ( pActiveEditColor != nullptr )
@@ -546,6 +549,8 @@ namespace PX::UI
 				pDevice->Present( nullptr, nullptr, nullptr, nullptr );
 			}
 			uTooltipCounter = 0u;
+			if ( !pActiveEditColor && PX_INPUT.GetKeyState( VK_LBUTTON ) == true )
+				nk_d3d9_handle_event( hwWindowHandle, WM_LBUTTONUP, 0, int( pContext->input.mouse.pos.x ) | int( pContext->input.mouse.pos.y ) << 16 );
 			return bShouldDrawUserInterface;
 		}
 
@@ -679,6 +684,11 @@ namespace PX::UI
 			return nk_edit_string_zero_terminated( ctx, flags, buffer, max, filter );
 		}
 
+		struct nk_rect PX_API NextWidgetBounds( )
+		{
+			return nk_widget_bounds( pContext );
+		}
+
 		bool PX_API HoverCheck( ECursor curSetCursor )
 		{
 			if ( pContext->last_widget_state & NK_WIDGET_STATE_ACTIVE || pContext->last_widget_state & NK_WIDGET_STATE_HOVER )
@@ -721,15 +731,13 @@ namespace PX::UI
 			if ( GetMoment( ) - mmtStart[ uThisTooltipID ] <= mmtWaitTime )
 				return;
 
-			constexpr auto uMaxTooltipWidth = 205u;
+			constexpr auto uMaxTooltipWidth = 210u;
 			constexpr auto uTooltipPadding = 10u;
 			constexpr struct nk_text txtTooltip { { 5, 2 }, { 0, 0, 0, 0 }, { 255, 255, 255 ,255 } };
 			SetFont( FONT_TAHOMA );
 
 			const auto vecMousePos = pContext->input.mouse.pos;
 			const auto flUsableSpaceX = pContext->current->bounds.w - vecMousePos.x;
-			struct nk_rect vecUsableSpace {	vecMousePos.x, vecMousePos.y, flUsableSpaceX < uMaxTooltipWidth ? flUsableSpaceX : uMaxTooltipWidth, pContext->current->bounds.h - vecMousePos.y };
-			vecUsableSpace.w -= 15.f;
 
 			struct text_t
 			{
@@ -775,7 +783,7 @@ namespace PX::UI
 
 				if ( z == wrdWords.size( ) - 1 )
 				{
-					if ( uUsedSpace + wrdCurrent.vecSize.x > uMaxTooltipWidth )
+					if ( uUsedSpace + wrdCurrent.vecSize.x > uMaxTooltipWidth - uTooltipPadding )
 						fnAddLine( );
 					else
 						strLine += ' ';
@@ -785,26 +793,25 @@ namespace PX::UI
 					break;
 				}
 
-				if ( uUsedSpace + wrdCurrent.vecSize.x > uMaxTooltipWidth )
+				if ( uUsedSpace + wrdCurrent.vecSize.x > uMaxTooltipWidth - uTooltipPadding )
 					fnAddLine( );
-				else
-					uUsedSpace += unsigned( wrdCurrent.vecSize.x );
 
 				if ( !bNewLine )
 					strLine += ' ';
 
 				strLine += wrdCurrent.strText;
+				uUsedSpace = unsigned( CalculateTextBounds( strLine.c_str( ), 15 ).x );
 				bNewLine = false;
 			}
 
-			// declaration of 'uWindowHeight' hides global declaration
-			const auto uWindowHeight = unsigned( dqLines.size( ) * uLineHeight + 13.f );
-			struct nk_rect recTooltip { pContext->current->bounds.x + vecMousePos.x + 20.f, pContext->current->bounds.y + vecMousePos.y, float( uMaxTooltipWidth ), float( uWindowHeight ) };
-
-			if ( vecUsableSpace.h - uWindowHeight < 0 )
-				recTooltip.y -= uWindowHeight - vecUsableSpace.h;
-			if ( vecUsableSpace.w < uMaxTooltipWidth )
-				recTooltip.x -= uMaxTooltipWidth - vecUsableSpace.w;
+			struct nk_rect recTooltip {	vecMousePos.x - pContext->current->layout->clip.x + 20.f, vecMousePos.y - pContext->current->layout->clip.y + 20.f, float( uMaxTooltipWidth ), dqLines.size( ) * uLineHeight + 13.f };
+			const auto& recWindowBounds = pContext->current->bounds;
+			const struct nk_rect recRealTooltip { recTooltip.x + pContext->current->layout->clip.x, recTooltip.y + pContext->current->layout->clip.y, recTooltip.w, recTooltip.h };
+			
+			if ( recRealTooltip.y + recRealTooltip.h > recWindowBounds.y + recWindowBounds.h )
+				recTooltip.y = recWindowBounds.y + recWindowBounds.h - recTooltip.h - pContext->current->layout->clip.y;
+			if ( recRealTooltip.x + recRealTooltip.w > recWindowBounds.x + recWindowBounds.w )
+				recTooltip.x = recWindowBounds.x + recWindowBounds.w - recTooltip.w - pContext->current->layout->clip.x;
 
 			auto clrOld = pContext->style.window.background;
 			auto flOldRounding = pContext->style.window.rounding;
@@ -857,7 +864,7 @@ namespace PX::UI
 			txtMinimizeButton.text = clrMinimize;
 			txtCloseButton.text = clrClose;
 			txtMinimizeButton.padding = txtCloseButton.padding = nk_vec2( 0, 0 );
-			struct nk_rect recMinimize = { recMainWindow.x + flWidth - 70, recMainWindow.y + 19, 20, 8 };
+			struct nk_rect recMinimize = { recMainWindow.x + flWidth - 65, recMainWindow.y + 19, 20, 8 };
 			struct nk_rect recCloseButton = { recMainWindow.x + flWidth - 33, recMainWindow.y + 13, 20, 20 };
 			nk_widget_text( pOutput, recMinimize, ICON_FA_MINUS, strlen( ICON_FA_MINUS ), &txtMinimizeButton, NK_TEXT_CENTERED, pContext->style.font );
 			nk_widget_text( pOutput, recCloseButton, ICON_FA_TIMES, strlen( ICON_FA_TIMES ), &txtCloseButton, NK_TEXT_CENTERED, pContext->style.font );
@@ -924,8 +931,6 @@ namespace PX::UI
 				HoverCheck( CURSOR_HAND );
 				SetFont( FONT_TAHOMA );
 				nk_stroke_line( pOutput, recBoundaries.x, recBoundaries.y, recBoundaries.x, recBoundaries.h, 2, clrBlue );
-				nk_stroke_line( pOutput, recBoundaries.x, recBoundaries.y, recBoundaries.w, recBoundaries.y, 1, clrBorder );
-				nk_stroke_line( pOutput, recBoundaries.x, recBoundaries.h - 1, recBoundaries.w, recBoundaries.h - 1, 1, clrBorder );
 				return bResult;
 			}
 			SetFont( FONT_TAHOMA );
@@ -1294,11 +1299,12 @@ namespace PX::UI
 			bStoppedClicking = false;
 		}
 
-		void PX_API ColorButton( cstr_t szSubject, color_sequence_t* pSequence )
+		void PX_API ColorButton( cstr_t szSubject, color_sequence_t* pSequence, float flVerticalPadding /*= 0.f*/ )
 		{
 			iCurrentRowUsedColumns++;
 
 			const auto clr = pSequence->GetCurrentColor( );
+			pContext->style.button.padding = nk_vec2( 0.f, flVerticalPadding );
 			if ( nk_button_color( pContext, nk_rgba( clr.r, clr.g, clr.b, clr.a ) ) && pActiveEditColor == nullptr )
 			{
 				szColorPickerSubject = szSubject;
@@ -1331,15 +1337,17 @@ namespace PX::UI
 					nk_layout_row_dynamic( pContext, float( uButtonHeight ), 1 );
 					if ( nk_combo_item_label( pContext, dqOptions.at( i ), NK_TEXT_LEFT ) )
 						iSelectedOption = i;
+					HoverCheck( CURSOR_HAND );
 				}
 				nk_combo_end( pContext );
 				bDrewCombo = true;
 			}
+			HoverCheck( CURSOR_HAND );
 			nk_fill_triangle( pOutput, recComboboxBounds.x + recComboboxBounds.w - 10, recComboboxBounds.y + recComboboxBounds.h / 2 - 3, recComboboxBounds.x + recComboboxBounds.w - 14, recComboboxBounds.y + recComboboxBounds.h / 2 + 3, recComboboxBounds.x + recComboboxBounds.w - 18, recComboboxBounds.y + recComboboxBounds.h / 2 - 3, nk_input_is_mouse_prev_hovering_rect( &pContext->input, recComboboxBounds ) && !bDrewCombo ? clrTextActive : clrTextDormant );
 			return iSelectedOption;
 		}
 
-		void PX_API ComboboxMulti( unsigned uButtonHeight, cstr_t szTitle, const std::deque< cstr_t >& dqOptions, std::deque< bool >& dqEnabledOptions )
+		void PX_API ComboboxMulti( unsigned uButtonHeight, cstr_t szTitle, const std::deque< cstr_t >& dqOptions, std::deque< bool* >& dqEnabledOptions )
 		{
 			iCurrentRowUsedColumns++;
 
@@ -1355,12 +1363,14 @@ namespace PX::UI
 				for ( unsigned i { }; i < dqOptions.size( ); i++ )
 				{
 					nk_layout_row_dynamic( pContext, float( uButtonHeight ), 1 );
-					if ( nk_button_label_styled( pContext, dqEnabledOptions.at( i ) ? &btnComboActive : &btnCombo, dqOptions.at( i ) ) )
-						dqEnabledOptions.at( i ) = !dqEnabledOptions.at( i );
+					if ( nk_button_label_styled( pContext, *dqEnabledOptions.at( i ) ? &btnComboActive : &btnCombo, dqOptions.at( i ) ) )
+						*dqEnabledOptions.at( i ) = !*dqEnabledOptions.at( i );
+					HoverCheck( CURSOR_HAND );
 				}
 				nk_combo_end( pContext );
 				bDrewCombo = true;
 			}
+			HoverCheck( CURSOR_HAND );
 			nk_fill_triangle( pOutput, recComboboxBounds.x + recComboboxBounds.w - 10, recComboboxBounds.y + recComboboxBounds.h / 2 - 3, recComboboxBounds.x + recComboboxBounds.w - 14, recComboboxBounds.y + recComboboxBounds.h / 2 + 3, recComboboxBounds.x + recComboboxBounds.w - 18, recComboboxBounds.y + recComboboxBounds.h / 2 - 3, nk_input_is_mouse_prev_hovering_rect( &pContext->input, recComboboxBounds ) && !bDrewCombo ? clrTextActive : clrTextDormant );
 		}
 
@@ -1406,7 +1416,7 @@ namespace PX::UI
 
 			const auto recBounds = nk_widget_bounds( pContext );
 			const auto bHovering = nk_input_is_mouse_hovering_rect( &pContext->input, recBounds );
-			const bool bClicking = bool( PX_INPUT.GetKeyState( VK_LBUTTON ) );
+			const auto bClicking = bool( PX_INPUT.GetKeyState( VK_LBUTTON ) );
 
 			if ( bHovering && !bInEdit )
 			{

@@ -14,6 +14,16 @@ namespace PX::Features
 		STATE_MAX
 	};
 
+	enum EAlignment
+	{
+		ALIGNMENT_LEFT,
+		ALIGNMENT_TOP,
+		ALIGNMENT_RIGHT,
+		ALIGNMENT_BOTTOM,
+		ALIGNMENT_SMART,
+		ALIGNMENT_MAX
+	};
+
 	inline struct settings_t
 	{
 		struct awareness_t
@@ -50,8 +60,16 @@ namespace PX::Features
 					color_sequence_t seqSkeleton[ STATE_MAX ]; // player only
 					float flSkeletonWidth = 1.f; // player only
 
+					bool bShowInformation = false;
+					color_sequence_t seqInformation[ STATE_MAX ];
 					bool bShowHealth = false; // player only
 					bool bHealthText = false; // player only
+					bool bShowName = false;
+					bool bShowRank = false; // player only
+					bool bShowWeapon = false; // player only
+					bool bWeaponText = false;
+					int iInformationAlignment = ALIGNMENT_BOTTOM;
+
 				} _Players[ 2 ];
 			} _ExtraSensoryDrawing;
 		} _Awareness;

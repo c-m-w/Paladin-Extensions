@@ -8,7 +8,21 @@ namespace PX::Drawing
 	std::vector< polygon_t > vecPolygonList;
 	std::vector< line_t > vecLineList;
 	IDirect3DVertexBuffer9* pVertexBuffer = nullptr;;
-	ID3DXLine* pLine;
+	ID3DXLine* pLine = nullptr;
+
+	bool PX_API InitializeDrawing( )
+	{
+		return D3D_OK == D3DXCreateLine( pDevice, &pLine );
+	}
+
+	void PX_API ResetDrawing( )
+	{
+		if ( pLine )
+		{
+			pLine->Release( );
+			pLine = nullptr;
+		}
+	}
 
 	extern __forceinline void PX_API Polygon( vertex_t* pVertices, std::size_t zVertexCount, std::size_t zPrimitiveCount, D3DPRIMITIVETYPE ptDrawingType /*= D3DPT_TRIANGLEFAN*/ )
 	{
@@ -57,8 +71,7 @@ namespace PX::Drawing
 		}
 		vecPolygonList.clear( );
 
-		if ( D3D_OK == D3DXCreateLine( pDevice, &pLine ) )
-		{
+		if ( pLine )
 			for ( auto& line : vecLineList )
 			{
 				px_assert( line.vecVertices.size( ) > 1 );
@@ -69,9 +82,6 @@ namespace PX::Drawing
 				px_assert( D3D_OK == pLine->Draw( &line.vecVertices[ 0 ], line.vecVertices.size( ), line.dwColor ) );
 				pLine->End( );
 			}
-			pLine->Release( );
-			pLine = nullptr;
-		}
-		vecLineList.clear																											( );
+		vecLineList.clear( );
 	}
 }
