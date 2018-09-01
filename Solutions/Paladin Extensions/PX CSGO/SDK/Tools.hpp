@@ -138,7 +138,9 @@ namespace PX::Tools
 		PX_NETVAR_POINTER( CHandle<CBaseAttributableItem>, m_hMyWearables,PX_XOR( "DT_BaseCombatCharacter" ), PX_XOR( "m_hMyWearables" ) );
 
 		bool IsAlive( );
+		bool IsLocalPlayer( );
 		Vector GetViewPosition( );
+		player_info_t GetPlayerInformation( );
 		bool PositionInSight( Vector& vecPosition, bool bMindSmoke, void* pEntity = nullptr );
 		CGameTrace& TraceRayFromView( );
 		Vector GetHitboxPosition( EHitbox hHitboxID );

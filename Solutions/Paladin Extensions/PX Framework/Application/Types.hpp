@@ -107,6 +107,17 @@ namespace PX::Types
 		polygon_t( const vertex_t* _pVertices, std::size_t _sVertices, std::size_t _sPrimitives, D3DPRIMITIVETYPE _ptType = D3DPT_TRIANGLEFAN );
 	};
 
+	struct text_t
+	{
+		int iFont;
+		int x, y;
+		std::wstring wstrText;
+		bool bOutlined;
+		DWORD dwFlags, dwColor, dwOutline;
+		text_t( ) = default;
+		text_t( int _iFont, int _x, int _y, const wchar_t* _wszText, bool _bOutlined, DWORD _dwFlags, DWORD _dwColor, DWORD _dwOutline );
+	};
+
 	struct module_t
 	{
 		std::wstring wstrName { };

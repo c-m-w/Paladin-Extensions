@@ -318,9 +318,21 @@ namespace PX::Tools
 		return m_lifeState( ) == LIFE_ALIVE;
 	}
 
+	bool CBasePlayer::IsLocalPlayer( )
+	{
+		return EntIndex( ) == pEngineClient->GetLocalPlayer( );
+	}
+
 	Vector CBasePlayer::GetViewPosition( )
 	{
 		return m_vecOrigin( ) + m_vecViewOffset( );
+	}
+
+	player_info_t CBasePlayer::GetPlayerInformation( )
+	{
+		player_info_t piPlayer;
+		pEngineClient->GetPlayerInfo( EntIndex( ), &piPlayer );
+		return piPlayer;
 	}
 
 	bool CBasePlayer::PositionInSight( Vector& vecPosition, bool bMindSmoke, void* pEntity /*= nullptr*/ )
