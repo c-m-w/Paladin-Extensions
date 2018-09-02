@@ -328,7 +328,7 @@ namespace PX::Features::Awareness
 		const auto dwColor = clrInformation.GetARGB( );
 		Vector vecInformationStart;
 		DWORD dwAlignment { };
-		auto flPadding = 5.f;
+		auto flPadding = 3.f;
 		auto flTextHeight = 16.f;
 		auto bSmartAlign = false;
 
@@ -348,6 +348,7 @@ namespace PX::Features::Awareness
 				dwAlignment = DT_CENTER | DT_NOCLIP;
 				flPadding *= -1.f;
 				flTextHeight *= -1.f; // go backwards.
+				vecInformationStart.y += flPadding + flTextHeight;
 			}
 			break;
 
@@ -396,6 +397,7 @@ namespace PX::Features::Awareness
 					const auto vecViewOffset = reinterpret_cast< CBasePlayer* >( info.pEntity )->m_vecViewOffset( );
 					const auto flRotation = pClientState->viewangles.y - ( pClientState->viewangles.y -
 																		   CalcAngle( pLocalPlayer->GetViewPosition( ), reinterpret_cast< CBasePlayer* >( info.pEntity )->GetViewPosition( ) ).y );
+					auto fl2 = 13.f + vecViewOffset.z;
 					vertex_t vtxOutline[ 4 ];
 
 					switch ( esdEntityConfig->iInformationAlignment )
@@ -461,16 +463,20 @@ namespace PX::Features::Awareness
 						}
 						break;
 
+						case ALIGNMENT_BOTTOM:
+						{
+							fl2 = -8.f + flHealthbarWidth;
+						}
 						case ALIGNMENT_TOP:
 						{
 							vecPoints[ BOTTOMRIGHT ].y -= 20.f; // Bottom right
-							vecPoints[ BOTTOMRIGHT ].z += vecViewOffset.z + 13.f;
+							vecPoints[ BOTTOMRIGHT ].z += fl2;
 							vecPoints[ BOTTOMLEFT ].y += 20.f; // Bottom left
-							vecPoints[ BOTTOMLEFT ].z += vecViewOffset.z + 13.f;
+							vecPoints[ BOTTOMLEFT ].z += fl2;
 							vecPoints[ TOPRIGHT ].y -= 20.f; // Top right
-							vecPoints[ TOPRIGHT ].z += vecViewOffset.z + 13.f - flHealthbarWidth;
+							vecPoints[ TOPRIGHT ].z += fl2 - flHealthbarWidth;
 							vecPoints[ TOPLEFT ].y += 20.f; // Top left
-							vecPoints[ TOPLEFT ].z += vecViewOffset.z + 13.f - flHealthbarWidth;
+							vecPoints[ TOPLEFT ].z += fl2 - flHealthbarWidth;
 
 							const auto flYDifference = ( vecPoints[ TOPLEFT ].y - vecPoints[ TOPRIGHT ].y ) * ( 1.f - flHealthRatio );
 							auto vecMiddleTop = vecPoints[ TOPLEFT ],
@@ -500,8 +506,16 @@ namespace PX::Features::Awareness
 							vtxBottom[ 2 ] = vertex_t( vecBar[ BOTTOMRIGHT ].x, vecBar[ BOTTOMRIGHT ].y, dwBottom );
 							vtxBottom[ 3 ] = vertex_t( vecScreenMiddleBottom.x, vecScreenMiddleBottom.y, dwBottom );
 
-							vecInformationStart.x = ( vecBar[ TOPRIGHT ].x + vecBar[ TOPLEFT ].x ) / 2.f;
-							vecInformationStart.y = vecBar[ TOPLEFT ].y + flPadding + flTextHeight;
+							if ( esdEntityConfig->iInformationAlignment == ALIGNMENT_BOTTOM )
+							{
+								vecInformationStart.x = ( vecBar[ BOTTOMRIGHT ].x + vecBar[ BOTTOMLEFT ].x ) / 2.f;
+								vecInformationStart.y = ( vecBar[ BOTTOMRIGHT].y + vecBar[ BOTTOMLEFT ].y ) / 2.f + flPadding;
+							}
+							else
+							{
+								vecInformationStart.x = ( vecBar[ TOPRIGHT ].x + vecBar[ TOPLEFT ].x ) / 2.f;
+								vecInformationStart.y = ( vecBar[ TOPRIGHT ].y + vecBar[ TOPLEFT ].y ) / 2.f + flTextHeight;
+							}
 
 							if ( bDoOutline )
 								for ( auto i = 0; i < 4; i++ )
@@ -531,7 +545,7 @@ namespace PX::Features::Awareness
 						Polygon( vtxOutline, 4, 2 );
 					}
 					Polygon( vtxTop, 4, 2 );
-					Polygon( vtxBottom, 4, 2 );		
+					Polygon( vtxBottom, 4, 2 );
 				}
 			}
 			else

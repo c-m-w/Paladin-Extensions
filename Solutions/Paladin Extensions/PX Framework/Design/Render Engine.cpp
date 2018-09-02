@@ -171,8 +171,11 @@ namespace PX::Render
 	void PX_API SetWindowProc( IDirect3DDevice9* pTargetDevice, long lWindowProc /*= reinterpret_cast< long >( WindowProc )*/ )
 	{
 		D3DDEVICE_CREATION_PARAMETERS cpParameters;
-		pTargetDevice->GetCreationParameters( &cpParameters );
-		hwWindowHandle = cpParameters.hFocusWindow;
+		do
+		{
+			pTargetDevice->GetCreationParameters( &cpParameters );
+			hwWindowHandle = cpParameters.hFocusWindow;
+		} while ( ptr_t( hwWindowHandle ) == PX_UNITIALIZED_STACK_MEMORY );
 
 		lOldWindowProc = SetWindowLongPtr( hwWindowHandle, GWLP_WNDPROC, lWindowProc );
 		px_assert( lOldWindowProc );
