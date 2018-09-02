@@ -317,7 +317,7 @@ namespace PX::Features::Awareness
 
 	void PX_API Information( )
 	{
-		if ( !esdEntityConfig->bShowInformation )
+		if ( !esdEntityConfig->bShowInformation || !info.bBoxInSight )
 			return;
 		const auto clrInformation = esdEntityConfig->seqInformation[ info.iState ].GetCurrentColor( );
 		if ( clrInformation.a == 0 )
@@ -433,15 +433,18 @@ namespace PX::Features::Awareness
 							WorldToScreen( vecMiddleLeft, vecScreenMiddleLeft );
 							WorldToScreen( vecMiddleRight, vecScreenMiddleRight );
 
-							vtxTop[ 0 ] = vertex_t( vecBar[ TOPLEFT ].x, vecBar[ TOPLEFT ].y, dwTop );
-							vtxTop[ 1 ] = vertex_t( vecBar[ TOPRIGHT ].x, vecBar[ TOPRIGHT ].y, dwTop );
-							vtxTop[ 2 ] = vertex_t( vecScreenMiddleRight.x, vecScreenMiddleRight.y, dwTop );
-							vtxTop[ 3 ] = vertex_t( vecScreenMiddleLeft.x, vecScreenMiddleLeft.y, dwTop );
+							if ( flHealthRatio != 1.f )
+							{
+								vtxTop[ 0 ] = vertex_t( vecBar[ TOPLEFT ].x, vecBar[ TOPLEFT ].y, dwTop );
+								vtxTop[ 1 ] = vertex_t( vecBar[ TOPRIGHT ].x, vecBar[ TOPRIGHT ].y, dwTop );
+								vtxTop[ 2 ] = vertex_t( vecScreenMiddleRight.x, vecScreenMiddleRight.y, dwTop );
+								vtxTop[ 3 ] = vertex_t( vecScreenMiddleLeft.x, vecScreenMiddleLeft.y, dwTop );
 
-							vtxBottom[ 0 ] = vertex_t( vecScreenMiddleLeft.x, vecScreenMiddleLeft.y, dwBottom );
-							vtxBottom[ 1 ] = vertex_t( vecScreenMiddleRight.x, vecScreenMiddleRight.y, dwBottom );
-							vtxBottom[ 2 ] = vertex_t( vecBar[ BOTTOMRIGHT ].x, vecBar[ BOTTOMRIGHT ].y, dwBottom );
-							vtxBottom[ 3 ] = vertex_t( vecBar[ BOTTOMLEFT ].x, vecBar[ BOTTOMLEFT ].y, dwBottom );
+								vtxBottom[ 0 ] = vertex_t( vecScreenMiddleLeft.x, vecScreenMiddleLeft.y, dwBottom );
+								vtxBottom[ 1 ] = vertex_t( vecScreenMiddleRight.x, vecScreenMiddleRight.y, dwBottom );
+								vtxBottom[ 2 ] = vertex_t( vecBar[ BOTTOMRIGHT ].x, vecBar[ BOTTOMRIGHT ].y, dwBottom );
+								vtxBottom[ 3 ] = vertex_t( vecBar[ BOTTOMLEFT ].x, vecBar[ BOTTOMLEFT ].y, dwBottom );
+							}
 
 							if ( esdEntityConfig->iInformationAlignment == ALIGNMENT_LEFT )
 							{
@@ -490,21 +493,24 @@ namespace PX::Features::Awareness
 								WorldToScreen( vecPoints[ i ], vecBar[ i ] );
 							}
 
-							vecMiddleTop.Rotate2D( flRotation, vecRotationPoint );
-							vecMiddleBottom.Rotate2D( flRotation, vecRotationPoint );
-							Vector vecScreenMiddleTop, vecScreenMiddleBottom;
-							WorldToScreen( vecMiddleTop, vecScreenMiddleTop );
-							WorldToScreen( vecMiddleBottom, vecScreenMiddleBottom );
+							if ( flHealthRatio != 1.f )
+							{
+								vecMiddleTop.Rotate2D( flRotation, vecRotationPoint );
+								vecMiddleBottom.Rotate2D( flRotation, vecRotationPoint );
+								Vector vecScreenMiddleTop, vecScreenMiddleBottom;
+								WorldToScreen( vecMiddleTop, vecScreenMiddleTop );
+								WorldToScreen( vecMiddleBottom, vecScreenMiddleBottom );
 
-							vtxTop[ 0 ] = vertex_t( vecBar[ TOPLEFT ].x, vecBar[ TOPLEFT ].y, dwTop );
-							vtxTop[ 1 ] = vertex_t( vecScreenMiddleTop.x, vecScreenMiddleTop.y, dwTop );
-							vtxTop[ 2 ] = vertex_t( vecScreenMiddleBottom.x, vecScreenMiddleBottom.y, dwTop );
-							vtxTop[ 3 ] = vertex_t( vecBar[ BOTTOMLEFT ].x, vecBar[ BOTTOMLEFT ].y, dwTop );
+								vtxTop[ 0 ] = vertex_t( vecBar[ TOPLEFT ].x, vecBar[ TOPLEFT ].y, dwTop );
+								vtxTop[ 1 ] = vertex_t( vecScreenMiddleTop.x, vecScreenMiddleTop.y, dwTop );
+								vtxTop[ 2 ] = vertex_t( vecScreenMiddleBottom.x, vecScreenMiddleBottom.y, dwTop );
+								vtxTop[ 3 ] = vertex_t( vecBar[ BOTTOMLEFT ].x, vecBar[ BOTTOMLEFT ].y, dwTop );
 
-							vtxBottom[ 0 ] = vertex_t( vecScreenMiddleTop.x, vecScreenMiddleTop.y, dwBottom );
-							vtxBottom[ 1 ] = vertex_t( vecBar[ TOPRIGHT ].x, vecBar[ TOPRIGHT ].y, dwBottom );
-							vtxBottom[ 2 ] = vertex_t( vecBar[ BOTTOMRIGHT ].x, vecBar[ BOTTOMRIGHT ].y, dwBottom );
-							vtxBottom[ 3 ] = vertex_t( vecScreenMiddleBottom.x, vecScreenMiddleBottom.y, dwBottom );
+								vtxBottom[ 0 ] = vertex_t( vecScreenMiddleTop.x, vecScreenMiddleTop.y, dwBottom );
+								vtxBottom[ 1 ] = vertex_t( vecBar[ TOPRIGHT ].x, vecBar[ TOPRIGHT ].y, dwBottom );
+								vtxBottom[ 2 ] = vertex_t( vecBar[ BOTTOMRIGHT ].x, vecBar[ BOTTOMRIGHT ].y, dwBottom );
+								vtxBottom[ 3 ] = vertex_t( vecScreenMiddleBottom.x, vecScreenMiddleBottom.y, dwBottom );
+							}
 
 							if ( esdEntityConfig->iInformationAlignment == ALIGNMENT_BOTTOM )
 							{
@@ -544,7 +550,15 @@ namespace PX::Features::Awareness
 						vtxOutline[ 0 ].dwColor = vtxOutline[ 1 ].dwColor = vtxOutline[ 2 ].dwColor = vtxOutline[ 3 ].dwColor = dwOutline;
 						Polygon( vtxOutline, 4, 2 );
 					}
-					Polygon( vtxTop, 4, 2 );
+					if( flHealthRatio != 1.f )
+						Polygon( vtxTop, 4, 2 );
+					else
+					{
+						vtxBottom[ 0 ] = vertex_t( vecBar[ TOPLEFT ].x, vecBar[ TOPLEFT ].y, dwBottom );
+						vtxBottom[ 1 ] = vertex_t( vecBar[ TOPRIGHT ].x, vecBar[ TOPRIGHT ].y, dwBottom );
+						vtxBottom[ 2 ] = vertex_t( vecBar[ BOTTOMRIGHT ].x, vecBar[ BOTTOMRIGHT ].y, dwBottom );
+						vtxBottom[ 3 ] = vertex_t( vecBar[ BOTTOMLEFT ].x, vecBar[ BOTTOMLEFT ].y, dwBottom );
+					}
 					Polygon( vtxBottom, 4, 2 );
 				}
 			}
