@@ -115,22 +115,28 @@ namespace PX::Drawing
 		{
 			if ( !pFonts[ text.iFont ] )
 				continue;
-			RECT recText { text.x, text.y };
+			RECT recText { text.x - 1, text.y - 1, text.x, text.y };
 			if ( text.bOutlined )
 			{
-				RECT recOutline[ ] { { text.x - 1, text.y - 1 },
-					{ text.x, text.y - 1 },
-					{ text.x + 1, text.y - 1 },
-					{ text.x - 1, text.y },
-					{ text.x + 1, text.y },
+				RECT recOutline[ ] { { text.x - 1l, text.y - 1l },
+					{ text.x, text.y - 1l },
+					{ text.x + 1l, text.y - 1l },
+					{ text.x - 1l, text.y },
+					{ text.x + 1l, text.y },
 					{ text.x, text.y },
-					{ text.x + 1, text.y },
-					{ text.x - 1, text.y + 1 },
-					{ text.x, text.y + 1 },
-					{ text.x + 1, text.y + 1 } };
+					{ text.x + 1l, text.y },
+					{ text.x - 1l, text.y + 1l },
+					{ text.x, text.y + 1l },
+					{ text.x + 1l, text.y + 1l } };
 
-				for( auto& rect : recOutline )
+				for ( auto& rect : recOutline )
+				{
+					rect.right = rect.left;
+					rect.bottom = rect.top;
+					rect.left -= 1;
+					rect.top -= 1;
 					px_assert( NULL != pFonts[ text.iFont ]->DrawText( nullptr, text.wstrText.c_str( ), -1, &rect, text.dwFlags, text.dwOutline ) );
+				}
 			}
 			px_assert( NULL != pFonts[ text.iFont ]->DrawText( nullptr, text.wstrText.c_str( ), -1, &recText, text.dwFlags, text.dwColor ) );
 		}

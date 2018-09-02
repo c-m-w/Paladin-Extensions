@@ -309,18 +309,32 @@ namespace PX::UI::Manager
 						Spacing( );
 
 						Checkbox( PX_XOR( "Health Bar" ), &esdConfig._Players[ TEAM ].bHealthBar, PX_XOR( "Draw a health bar rather than text for your teammates." ) );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Health Bar" ), 30 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 3 );
 						Spacing( );
 						SetRowWidth( COLOR_BUTTON_WIDTH );
 						ColorButton( PX_XOR( "Teammate Healthbar Visible" ), &esdConfig._Players[ TEAM ].seqHealthBar[ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
 						ColorButton( PX_XOR( "Teammate Healthbar Invisible" ), &esdConfig._Players[ TEAM ].seqHealthBar[ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
 						ColorButton( PX_XOR( "Teammate Healthbar Dormant" ), &esdConfig._Players[ TEAM ].seqHealthBar[ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
 
-						Checkbox( PX_XOR( "Outline Info." ), &esdConfig._Players[ TEAM ].bInformationOutline, PX_XOR( "Draw an outline over information for your teammates." ) );
+						Checkbox( PX_XOR( "Outline Info" ), &esdConfig._Players[ TEAM ].bInformationOutline, PX_XOR( "Draw an outline over information for your teammates." ) );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Outline Info" ), 30 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 3 );
 						Spacing( );
 						SetRowWidth( COLOR_BUTTON_WIDTH );
 						ColorButton( PX_XOR( "Teammate Info. Outline Visible" ), &esdConfig._Players[ TEAM ].seqInformationOutline[ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
 						ColorButton( PX_XOR( "Teammate Info. Outline Invisible" ), &esdConfig._Players[ TEAM ].seqInformationOutline[ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
 						ColorButton( PX_XOR( "Teammate Info. Outline Dormant" ), &esdConfig._Players[ TEAM ].seqInformationOutline[ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
+
+						EndRow( );
+					}
+
+					{
+						static char szSnaplineWidth[ 64 ] { }, szViewlineWidth[ 64 ] { }, szSkeletonWidth[ 64 ] { }, szInformationOutlineWidth[ 64 ] { };
+
+						BeginRow( 30, 9, ROW_CUSTOM );
+
+						esdConfig._Players[ TEAM ].flSnaplineWidth = Slider( PX_XOR( "Snapline Width" ), szSnaplineWidth, 1.f, 5.f, esdConfig._Players[ TEAM ].flSnaplineWidth, 15, 0, GROUPBOX_COLUMN_WIDTH, 30, 1 );
+						esdConfig._Players[ TEAM ].flViewLineWidth = Slider( PX_XOR( "Viewline Width" ), szViewlineWidth, 1.f, 5.f, esdConfig._Players[ TEAM ].flViewLineWidth, GROUPBOX_COLUMN_WIDTH + 30, 0, GROUPBOX_COLUMN_WIDTH, 30, 1 );
+						esdConfig._Players[ TEAM ].flSkeletonWidth = Slider( PX_XOR( "Skeleton Width" ), szSkeletonWidth, 1.f, 5.f, esdConfig._Players[ TEAM ].flSkeletonWidth, GROUPBOX_COLUMN_WIDTH * 2 + 40, 0, GROUPBOX_COLUMN_WIDTH, 30, 1 );
 
 						EndRow( );
 					}

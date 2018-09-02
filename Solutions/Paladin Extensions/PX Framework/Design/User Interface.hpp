@@ -277,7 +277,7 @@ namespace PX::UI
 		/**	\param uWidth Width of the slider. */
 		/**	\param uHeight Height of the slider. */
 		/**	\return Value of the slider. */
-		float PX_API Slider( Types::cstr_t szTitle, char *szInputBuffer, float flMin, float flMax, float flCurrentValue, unsigned uStartX, unsigned uStartY, unsigned uWidth, unsigned uHeight, unsigned uDigits );
+		float PX_API Slider( Types::cstr_t szTitle, char* szInputBuffer, float flMin, float flMax, float flCurrentValue, unsigned uStartX, unsigned uStartY, unsigned uWidth, unsigned uHeight, unsigned uDigits );
 
 		void PX_API Text( Types::cstr_t szText, Types::color_t clrText );
 

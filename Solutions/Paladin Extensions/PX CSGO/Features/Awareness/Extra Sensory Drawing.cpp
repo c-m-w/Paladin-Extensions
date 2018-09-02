@@ -12,6 +12,7 @@ namespace PX::Features::Awareness
 	auto esdConfig = &_Settings._Awareness._ExtraSensoryDrawing;
 	auto esdEntityConfig = &esdConfig->_Players[ TEAM ];
 	CBasePlayer* pLocalPlayer = nullptr;
+	PX_DEF iMaxHealth = 100;
 
 	enum
 	{
@@ -29,6 +30,7 @@ namespace PX::Features::Awareness
 		Vector vecLocation = Vector( );
 		EClassID cClass = CLASSID_MAX;
 		int iState = STATE_VISIBLE;
+		int iHealth = 0;
 		Vector vecBoundingBoxCorners[ 4 ] { };
 		Vector vecWorldBoundingBoxCorners[ 4 ] { };
 		bool bBoxInSight = true;
@@ -43,7 +45,6 @@ namespace PX::Features::Awareness
 
 	void PX_API Draw( )
 	{
-		Text( ED3DFont::FONT_TAHOMA, 10, 10, LR"(~|_the” ^quick! (brown] <fox} #jumps, ?over% &the; ‘lazy: \dog/.+)", true, DT_NOCLIP | DT_LEFT, 0xffffffff, 0xff000000 );
 		if ( !pEngineClient->IsInGame( ) )
 			return;
 		pLocalPlayer = GetLocalPlayer( );
@@ -70,6 +71,7 @@ namespace PX::Features::Awareness
 					info.iSettingIndex = info.bTeammate ? TEAM : ENEMY;
 					esdEntityConfig = &esdConfig->_Players[ info.iSettingIndex ];
 					info.bIsPlayer = true;
+					info.iHealth = reinterpret_cast< CBasePlayer* >( pEntity )->m_iHealth( );
 					break;
 				// TODO: add rest of options for esp.
 				default:
@@ -161,9 +163,7 @@ namespace PX::Features::Awareness
 				vertex_t vtxFillPoints[ 4 ];
 				if ( esdEntityConfig->bHealthBasedFillColor )
 				{
-					PX_DEF iMaxHealth = 100;
-					const auto iHealth = reinterpret_cast< CBasePlayer* >( info.pEntity )->m_iHealth( );
-					const auto flZDifference = ( info.vecWorldBoundingBoxCorners[ TOPLEFT ].z - info.vecWorldBoundingBoxCorners[ BOTTOMLEFT ].z ) * ( float( iHealth ) / float( iMaxHealth ) );
+					const auto flZDifference = ( info.vecWorldBoundingBoxCorners[ TOPLEFT ].z - info.vecWorldBoundingBoxCorners[ BOTTOMLEFT ].z ) * ( float( info.iHealth ) / float( iMaxHealth ) );
 					auto vecMiddleLeft = info.vecWorldBoundingBoxCorners[ BOTTOMLEFT ],
 						vecMiddleRight = info.vecWorldBoundingBoxCorners[ BOTTOMRIGHT ];
 					vecMiddleLeft.z += flZDifference;
@@ -174,7 +174,7 @@ namespace PX::Features::Awareness
 					WorldToScreen( vecMiddleLeft, vecScreenMiddleLeft );
 					WorldToScreen( vecMiddleRight, vecScreenMiddleRight );
 
-					if ( iHealth < iMaxHealth )
+					if ( info.iHealth < iMaxHealth )
 					{
 						const auto dwTop = clrTop.GetARGB( );
 						vtxFillPoints[ 0 ] = vertex_t( info.vecBoundingBoxCorners[ TOPLEFT ].x, info.vecBoundingBoxCorners[ TOPLEFT ].y, esdEntityConfig->bSolidHealthFill ? dwTop : 0 );
@@ -329,6 +329,7 @@ namespace PX::Features::Awareness
 		constexpr auto flPadding = 5.f;
 		Vector vecInformationStart;
 		DWORD dwAlignment { };
+		auto flHealthbarWidth = 0.f;
 		auto bSmartAlign = false;
 
 		switch ( esdEntityConfig->iInformationAlignment )
@@ -362,14 +363,90 @@ namespace PX::Features::Awareness
 				dwAlignment = DT_CENTER | DT_NOCLIP;
 			}
 			break;
+
 			default:
+			{
+				bSmartAlign = true;
+			}
 				break;
 
 		}
 
-		if( esdEntityConfig->bShowHealth )
+		if ( esdEntityConfig->bShowHealth )
 		{
-			
+			if ( esdEntityConfig->bHealthBar )
+			{
+				const auto clrBar = esdEntityConfig->seqHealthBar[ info.iState ].GetCurrentColor( );
+				if ( clrBar.a != 0 )
+				{
+					const auto dwBar = clrBar.GetARGB( );
+					vertex_t vtxBar[ 4 ];
+					const auto flHealthRatio = float( info.iHealth ) / float( iMaxHealth );
+					flHealthbarWidth = 5.f;
+					auto fl = 30.f;
+
+					switch ( esdEntityConfig->iInformationAlignment )
+					{
+						case ALIGNMENT_RIGHT:
+						{
+							fl = -25.f;
+							flHealthbarWidth = -5.f;
+						}
+						case ALIGNMENT_LEFT:
+						{
+							Vector vecPoints[ ] { info.vecLocation, info.vecLocation, info.vecLocation, info.vecLocation };
+							const Vector2D vecRotationPoint { info.vecLocation.x, info.vecLocation.y };
+							const auto vecViewOffset = reinterpret_cast< CBasePlayer* >( info.pEntity )->m_vecViewOffset( );
+
+							vecPoints[ BOTTOMRIGHT ].y += fl; // Bottom right
+							vecPoints[ BOTTOMRIGHT ].z -= 5.f;
+							vecPoints[ BOTTOMLEFT ].y += fl - flHealthbarWidth; // Bottom left
+							vecPoints[ BOTTOMLEFT ].z -= 5.f;
+							vecPoints[ TOPRIGHT ].y += fl; // Top right
+							vecPoints[ TOPRIGHT ].z = info.vecLocation.z + ( vecViewOffset.z + 10.f ) * flHealthRatio - 5.f * ( 1.f - flHealthRatio );
+							vecPoints[ TOPLEFT ].y += fl - flHealthbarWidth; // Top left
+							vecPoints[ TOPLEFT ].z = info.vecLocation.z + ( vecViewOffset.z + 10.f ) * flHealthRatio - 5.f * ( 1.f - flHealthRatio );
+
+							const auto flRotation = pClientState->viewangles.y - ( pClientState->viewangles.y -
+																				   CalcAngle( pLocalPlayer->GetViewPosition( ), reinterpret_cast< CBasePlayer* >( info.pEntity )->GetViewPosition( ) ).y );
+							Vector vecBar[ 4 ];
+							for ( auto i = 0; i < 4; i++ )
+							{
+								vecPoints[ i ].Rotate2D( flRotation, vecRotationPoint );
+								WorldToScreen( vecPoints[ i ], vecBar[ i ] );
+							}
+
+							vtxBar[ 0 ] = vertex_t( vecBar[ TOPLEFT ].x, vecBar[ TOPLEFT ].y, dwBar );
+							vtxBar[ 1 ] = vertex_t( vecBar[ TOPRIGHT ].x, vecBar[ TOPRIGHT ].y, dwBar );
+							vtxBar[ 2 ] = vertex_t( vecBar[ BOTTOMRIGHT ].x, vecBar[ BOTTOMRIGHT ].y, dwBar );
+							vtxBar[ 3 ] = vertex_t( vecBar[ BOTTOMLEFT ].x, vecBar[ BOTTOMLEFT ].y, dwBar );
+
+							if ( bDoOutline )
+							{
+								vertex_t vtxOutline[ 4 ];
+								memcpy( vtxOutline, vtxBar, sizeof( vertex_t ) * 4 );
+								vtxOutline[ 0 ].flVectors[ 0 ] -= 1.f;
+								vtxOutline[ 0 ].flVectors[ 1 ] -= 1.f;
+								vtxOutline[ 1 ].flVectors[ 0 ] += 1.f;
+								vtxOutline[ 1 ].flVectors[ 1 ] -= 1.f;
+								vtxOutline[ 2 ].flVectors[ 0 ] += 1.f;
+								vtxOutline[ 2 ].flVectors[ 1 ] += 1.f;
+								vtxOutline[ 3 ].flVectors[ 0 ] -= 1.f;
+								vtxOutline[ 3 ].flVectors[ 1 ] += 1.f;
+								vtxOutline[ 0 ].dwColor = vtxOutline[ 1 ].dwColor = vtxOutline[ 2 ].dwColor = vtxOutline[ 3 ].dwColor = dwOutline;
+								Polygon( vtxOutline, 4, 2 );
+							}
+							Polygon( vtxBar, 4, 2 );							
+						}
+						break;
+					}
+				}
+			}
+			else
+			{
+				Text( ED3DFont::FONT_TAHOMA, vecInformationStart.x, vecInformationStart.y, ( std::to_wstring( info.iHealth ) + PX_XOR( L" HP" ) ).c_str( ), bDoOutline, dwAlignment, dwColor, dwOutline );
+				vecInformationStart.y += 16.f + flPadding;
+			}
 		}
 
 		if( esdEntityConfig->bShowName )
