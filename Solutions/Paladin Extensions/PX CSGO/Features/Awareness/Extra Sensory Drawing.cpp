@@ -326,10 +326,10 @@ namespace PX::Features::Awareness
 		const auto bDoOutline = esdEntityConfig->bInformationOutline && clrOutline.a != 0;
 		const auto dwOutline = bDoOutline ? clrOutline.GetARGB( ) : 0;
 		const auto dwColor = clrInformation.GetARGB( );
-		constexpr auto flPadding = 5.f;
 		Vector vecInformationStart;
 		DWORD dwAlignment { };
-		auto flHealthbarWidth = 0.f;
+		auto flPadding = 5.f;
+		auto flTextHeight = 16.f;
 		auto bSmartAlign = false;
 
 		switch ( esdEntityConfig->iInformationAlignment )
@@ -346,6 +346,8 @@ namespace PX::Features::Awareness
 			{
 				vecInformationStart = ( info.vecBoundingBoxCorners[ TOPLEFT ] + info.vecBoundingBoxCorners[ TOPRIGHT ] ) / 2.f;
 				dwAlignment = DT_CENTER | DT_NOCLIP;
+				flPadding *= -1.f;
+				flTextHeight *= -1.f; // go backwards.
 			}
 			break;
 
@@ -376,76 +378,166 @@ namespace PX::Features::Awareness
 		{
 			if ( esdEntityConfig->bHealthBar )
 			{
-				const auto clrBar = esdEntityConfig->seqHealthBar[ info.iState ].GetCurrentColor( );
-				if ( clrBar.a != 0 )
+				const auto clrBottom = esdEntityConfig->seqHealthBar[ 0 ][ info.iState ].GetCurrentColor( );
+				const auto clrTop = esdEntityConfig->seqHealthBar[ 1 ][ info.iState ].GetCurrentColor( );
+
+				if ( clrBottom.a != 0 && clrTop.a != 0 )
 				{
-					const auto dwBar = clrBar.GetARGB( );
-					vertex_t vtxBar[ 4 ];
+					constexpr auto flHealthbarWidth = -5.f;
+					const auto dwBottom = clrBottom.GetARGB( );
+					const auto dwTop = clrTop.GetARGB( );
+					vertex_t vtxTop[ 4 ], vtxBottom[ 4 ];
+					Vector vecBar[ 4 ];
 					const auto flHealthRatio = float( info.iHealth ) / float( iMaxHealth );
-					flHealthbarWidth = 5.f;
-					auto fl = 30.f;
+					auto fl = 23.f;
+
+					Vector vecPoints[ ] { info.vecLocation, info.vecLocation, info.vecLocation, info.vecLocation };
+					const Vector2D vecRotationPoint { info.vecLocation.x, info.vecLocation.y };
+					const auto vecViewOffset = reinterpret_cast< CBasePlayer* >( info.pEntity )->m_vecViewOffset( );
+					const auto flRotation = pClientState->viewangles.y - ( pClientState->viewangles.y -
+																		   CalcAngle( pLocalPlayer->GetViewPosition( ), reinterpret_cast< CBasePlayer* >( info.pEntity )->GetViewPosition( ) ).y );
+					vertex_t vtxOutline[ 4 ];
 
 					switch ( esdEntityConfig->iInformationAlignment )
 					{
 						case ALIGNMENT_RIGHT:
 						{
-							fl = -25.f;
-							flHealthbarWidth = -5.f;
+							fl = -28.f;
 						}
 						case ALIGNMENT_LEFT:
 						{
-							Vector vecPoints[ ] { info.vecLocation, info.vecLocation, info.vecLocation, info.vecLocation };
-							const Vector2D vecRotationPoint { info.vecLocation.x, info.vecLocation.y };
-							const auto vecViewOffset = reinterpret_cast< CBasePlayer* >( info.pEntity )->m_vecViewOffset( );
-
 							vecPoints[ BOTTOMRIGHT ].y += fl; // Bottom right
 							vecPoints[ BOTTOMRIGHT ].z -= 5.f;
 							vecPoints[ BOTTOMLEFT ].y += fl - flHealthbarWidth; // Bottom left
 							vecPoints[ BOTTOMLEFT ].z -= 5.f;
 							vecPoints[ TOPRIGHT ].y += fl; // Top right
-							vecPoints[ TOPRIGHT ].z = info.vecLocation.z + ( vecViewOffset.z + 10.f ) * flHealthRatio - 5.f * ( 1.f - flHealthRatio );
+							vecPoints[ TOPRIGHT ].z = info.vecLocation.z + vecViewOffset.z + 10.f;
 							vecPoints[ TOPLEFT ].y += fl - flHealthbarWidth; // Top left
-							vecPoints[ TOPLEFT ].z = info.vecLocation.z + ( vecViewOffset.z + 10.f ) * flHealthRatio - 5.f * ( 1.f - flHealthRatio );
+							vecPoints[ TOPLEFT ].z = info.vecLocation.z + vecViewOffset.z + 10.f;
 
-							const auto flRotation = pClientState->viewangles.y - ( pClientState->viewangles.y -
-																				   CalcAngle( pLocalPlayer->GetViewPosition( ), reinterpret_cast< CBasePlayer* >( info.pEntity )->GetViewPosition( ) ).y );
-							Vector vecBar[ 4 ];
 							for ( auto i = 0; i < 4; i++ )
 							{
 								vecPoints[ i ].Rotate2D( flRotation, vecRotationPoint );
 								WorldToScreen( vecPoints[ i ], vecBar[ i ] );
 							}
 
-							vtxBar[ 0 ] = vertex_t( vecBar[ TOPLEFT ].x, vecBar[ TOPLEFT ].y, dwBar );
-							vtxBar[ 1 ] = vertex_t( vecBar[ TOPRIGHT ].x, vecBar[ TOPRIGHT ].y, dwBar );
-							vtxBar[ 2 ] = vertex_t( vecBar[ BOTTOMRIGHT ].x, vecBar[ BOTTOMRIGHT ].y, dwBar );
-							vtxBar[ 3 ] = vertex_t( vecBar[ BOTTOMLEFT ].x, vecBar[ BOTTOMLEFT ].y, dwBar );
+							const auto flZDifference = ( vecPoints[ TOPLEFT ].z - vecPoints[ BOTTOMLEFT ].z ) * flHealthRatio;
+							auto vecMiddleLeft = vecPoints[ BOTTOMLEFT ],
+								vecMiddleRight = vecPoints[ BOTTOMRIGHT ];
+							vecMiddleLeft.z += flZDifference;
+							vecMiddleRight.z += flZDifference;
+
+							Vector vecScreenMiddleLeft, vecScreenMiddleRight;
+							WorldToScreen( vecMiddleLeft, vecScreenMiddleLeft );
+							WorldToScreen( vecMiddleRight, vecScreenMiddleRight );
+
+							vtxTop[ 0 ] = vertex_t( vecBar[ TOPLEFT ].x, vecBar[ TOPLEFT ].y, dwTop );
+							vtxTop[ 1 ] = vertex_t( vecBar[ TOPRIGHT ].x, vecBar[ TOPRIGHT ].y, dwTop );
+							vtxTop[ 2 ] = vertex_t( vecScreenMiddleRight.x, vecScreenMiddleRight.y, dwTop );
+							vtxTop[ 3 ] = vertex_t( vecScreenMiddleLeft.x, vecScreenMiddleLeft.y, dwTop );
+
+							vtxBottom[ 0 ] = vertex_t( vecScreenMiddleLeft.x, vecScreenMiddleLeft.y, dwBottom );
+							vtxBottom[ 1 ] = vertex_t( vecScreenMiddleRight.x, vecScreenMiddleRight.y, dwBottom );
+							vtxBottom[ 2 ] = vertex_t( vecBar[ BOTTOMRIGHT ].x, vecBar[ BOTTOMRIGHT ].y, dwBottom );
+							vtxBottom[ 3 ] = vertex_t( vecBar[ BOTTOMLEFT ].x, vecBar[ BOTTOMLEFT ].y, dwBottom );
+
+							if ( esdEntityConfig->iInformationAlignment == ALIGNMENT_LEFT )
+							{
+								vecInformationStart = vecBar[ TOPLEFT ];
+								vecInformationStart.x -= flPadding;
+							}
+							else
+							{
+								vecInformationStart = vecBar[ TOPRIGHT ];
+								vecInformationStart.x += flPadding;
+							}
 
 							if ( bDoOutline )
 							{
-								vertex_t vtxOutline[ 4 ];
-								memcpy( vtxOutline, vtxBar, sizeof( vertex_t ) * 4 );
-								vtxOutline[ 0 ].flVectors[ 0 ] -= 1.f;
-								vtxOutline[ 0 ].flVectors[ 1 ] -= 1.f;
-								vtxOutline[ 1 ].flVectors[ 0 ] += 1.f;
-								vtxOutline[ 1 ].flVectors[ 1 ] -= 1.f;
-								vtxOutline[ 2 ].flVectors[ 0 ] += 1.f;
-								vtxOutline[ 2 ].flVectors[ 1 ] += 1.f;
-								vtxOutline[ 3 ].flVectors[ 0 ] -= 1.f;
-								vtxOutline[ 3 ].flVectors[ 1 ] += 1.f;
-								vtxOutline[ 0 ].dwColor = vtxOutline[ 1 ].dwColor = vtxOutline[ 2 ].dwColor = vtxOutline[ 3 ].dwColor = dwOutline;
-								Polygon( vtxOutline, 4, 2 );
+								const auto uSize = sizeof( vertex_t ) * 2u;
+								memcpy( vtxOutline, vtxTop, uSize );
+								memcpy( &vtxOutline[ 2 ], &vtxBottom[ 2 ], uSize );
 							}
-							Polygon( vtxBar, 4, 2 );							
 						}
 						break;
+
+						case ALIGNMENT_TOP:
+						{
+							vecPoints[ BOTTOMRIGHT ].y -= 20.f; // Bottom right
+							vecPoints[ BOTTOMRIGHT ].z += vecViewOffset.z + 13.f;
+							vecPoints[ BOTTOMLEFT ].y += 20.f; // Bottom left
+							vecPoints[ BOTTOMLEFT ].z += vecViewOffset.z + 13.f;
+							vecPoints[ TOPRIGHT ].y -= 20.f; // Top right
+							vecPoints[ TOPRIGHT ].z += vecViewOffset.z + 13.f - flHealthbarWidth;
+							vecPoints[ TOPLEFT ].y += 20.f; // Top left
+							vecPoints[ TOPLEFT ].z += vecViewOffset.z + 13.f - flHealthbarWidth;
+
+							const auto flYDifference = ( vecPoints[ TOPLEFT ].y - vecPoints[ TOPRIGHT ].y ) * ( 1.f - flHealthRatio );
+							auto vecMiddleTop = vecPoints[ TOPLEFT ],
+								vecMiddleBottom = vecPoints[ BOTTOMLEFT ];
+							vecMiddleTop.y -= flYDifference;
+							vecMiddleBottom.y -= flYDifference;
+
+							for ( auto i = 0; i < 4; i++ )
+							{
+								vecPoints[ i ].Rotate2D( flRotation, vecRotationPoint );
+								WorldToScreen( vecPoints[ i ], vecBar[ i ] );
+							}
+
+							vecMiddleTop.Rotate2D( flRotation, vecRotationPoint );
+							vecMiddleBottom.Rotate2D( flRotation, vecRotationPoint );
+							Vector vecScreenMiddleTop, vecScreenMiddleBottom;
+							WorldToScreen( vecMiddleTop, vecScreenMiddleTop );
+							WorldToScreen( vecMiddleBottom, vecScreenMiddleBottom );
+
+							vtxTop[ 0 ] = vertex_t( vecBar[ TOPLEFT ].x, vecBar[ TOPLEFT ].y, dwTop );
+							vtxTop[ 1 ] = vertex_t( vecScreenMiddleTop.x, vecScreenMiddleTop.y, dwTop );
+							vtxTop[ 2 ] = vertex_t( vecScreenMiddleBottom.x, vecScreenMiddleBottom.y, dwTop );
+							vtxTop[ 3 ] = vertex_t( vecBar[ BOTTOMLEFT ].x, vecBar[ BOTTOMLEFT ].y, dwTop );
+
+							vtxBottom[ 0 ] = vertex_t( vecScreenMiddleTop.x, vecScreenMiddleTop.y, dwBottom );
+							vtxBottom[ 1 ] = vertex_t( vecBar[ TOPRIGHT ].x, vecBar[ TOPRIGHT ].y, dwBottom );
+							vtxBottom[ 2 ] = vertex_t( vecBar[ BOTTOMRIGHT ].x, vecBar[ BOTTOMRIGHT ].y, dwBottom );
+							vtxBottom[ 3 ] = vertex_t( vecScreenMiddleBottom.x, vecScreenMiddleBottom.y, dwBottom );
+
+							vecInformationStart.x = ( vecBar[ TOPRIGHT ].x + vecBar[ TOPLEFT ].x ) / 2.f;
+							vecInformationStart.y = vecBar[ TOPLEFT ].y + flPadding + flTextHeight;
+
+							if ( bDoOutline )
+								for ( auto i = 0; i < 4; i++ )
+								{
+									vtxOutline[ 0 ].flVectors[ 0 ] = vecBar[ TOPLEFT ].x;
+									vtxOutline[ 0 ].flVectors[ 1 ] = vecBar[ TOPLEFT ].y;
+									vtxOutline[ 1 ].flVectors[ 0 ] = vecBar[ TOPRIGHT ].x;
+									vtxOutline[ 1 ].flVectors[ 1 ] = vecBar[ TOPRIGHT ].y;
+									vtxOutline[ 2 ].flVectors[ 0 ] = vecBar[ BOTTOMRIGHT ].x;
+									vtxOutline[ 2 ].flVectors[ 1 ] = vecBar[ BOTTOMRIGHT ].y;
+									vtxOutline[ 3 ].flVectors[ 0 ] = vecBar[ BOTTOMLEFT ].x;
+									vtxOutline[ 3 ].flVectors[ 1 ] = vecBar[ BOTTOMLEFT ].y;
+								}
+						}
 					}
+					if ( bDoOutline )
+					{
+						vtxOutline[ 0 ].flVectors[ 0 ] -= 1.f;
+						vtxOutline[ 0 ].flVectors[ 1 ] -= 1.f;
+						vtxOutline[ 1 ].flVectors[ 0 ] += 1.f;
+						vtxOutline[ 1 ].flVectors[ 1 ] -= 1.f;
+						vtxOutline[ 2 ].flVectors[ 0 ] += 1.f;
+						vtxOutline[ 2 ].flVectors[ 1 ] += 1.f;
+						vtxOutline[ 3 ].flVectors[ 0 ] -= 1.f;
+						vtxOutline[ 3 ].flVectors[ 1 ] += 1.f;
+						vtxOutline[ 0 ].dwColor = vtxOutline[ 1 ].dwColor = vtxOutline[ 2 ].dwColor = vtxOutline[ 3 ].dwColor = dwOutline;
+						Polygon( vtxOutline, 4, 2 );
+					}
+					Polygon( vtxTop, 4, 2 );
+					Polygon( vtxBottom, 4, 2 );		
 				}
 			}
 			else
 			{
 				Text( ED3DFont::FONT_TAHOMA, vecInformationStart.x, vecInformationStart.y, ( std::to_wstring( info.iHealth ) + PX_XOR( L" HP" ) ).c_str( ), bDoOutline, dwAlignment, dwColor, dwOutline );
-				vecInformationStart.y += 16.f + flPadding;
+				vecInformationStart.y += flTextHeight + flPadding;
 			}
 		}
 

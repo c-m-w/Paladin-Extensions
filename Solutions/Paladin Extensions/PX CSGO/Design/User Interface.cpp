@@ -208,12 +208,12 @@ namespace PX::UI::Manager
 						SetRowWidth( GROUPBOX_COLUMN_WIDTH * 2 - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Health-Based Fill" ), 30 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 6 );
 						Spacing( );
 						SetRowWidth( COLOR_BUTTON_WIDTH );
-						ColorButton( PX_XOR( "Teammate Box Fill Health Top Visible" ), &esdConfig._Players[ TEAM ].seqHealthFill[ 1 ][ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
-						ColorButton( PX_XOR( "Teammate Box Fill Health Top Invisible" ), &esdConfig._Players[ TEAM ].seqHealthFill[ 1 ][ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
-						ColorButton( PX_XOR( "Teammate Box Fill Health Top Dormant" ), &esdConfig._Players[ TEAM ].seqHealthFill[ 1 ][ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
 						ColorButton( PX_XOR( "Teammate Box Fill Health Bottom Visible" ), &esdConfig._Players[ TEAM ].seqHealthFill[ 0 ][ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
 						ColorButton( PX_XOR( "Teammate Box Fill Health Bottom Invisible" ), &esdConfig._Players[ TEAM ].seqHealthFill[ 0 ][ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
 						ColorButton( PX_XOR( "Teammate Box Fill Health Bottom Dormant" ), &esdConfig._Players[ TEAM ].seqHealthFill[ 0 ][ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
+						ColorButton( PX_XOR( "Teammate Box Fill Health Top Visible" ), &esdConfig._Players[ TEAM ].seqHealthFill[ 1 ][ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+						ColorButton( PX_XOR( "Teammate Box Fill Health Top Invisible" ), &esdConfig._Players[ TEAM ].seqHealthFill[ 1 ][ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+						ColorButton( PX_XOR( "Teammate Box Fill Health Top Dormant" ), &esdConfig._Players[ TEAM ].seqHealthFill[ 1 ][ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
 
 						Checkbox( PX_XOR( "Solid" ), &esdConfig._Players[ TEAM ].bSolidHealthFill, PX_XOR( "Don't apply a transparent gradient to the health fill." ) );
 
@@ -304,17 +304,20 @@ namespace PX::UI::Manager
 					}
 
 					{
-						BeginRow( 30, 13, ROW_STATIC );
+						BeginRow( 30, 16, ROW_STATIC );
 						SetRowWidth( 5 );
 						Spacing( );
 
 						Checkbox( PX_XOR( "Health Bar" ), &esdConfig._Players[ TEAM ].bHealthBar, PX_XOR( "Draw a health bar rather than text for your teammates." ) );
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Health Bar" ), 30 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 3 );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH * 2 - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Health Bar" ), 30 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 6 );
 						Spacing( );
 						SetRowWidth( COLOR_BUTTON_WIDTH );
-						ColorButton( PX_XOR( "Teammate Healthbar Visible" ), &esdConfig._Players[ TEAM ].seqHealthBar[ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
-						ColorButton( PX_XOR( "Teammate Healthbar Invisible" ), &esdConfig._Players[ TEAM ].seqHealthBar[ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
-						ColorButton( PX_XOR( "Teammate Healthbar Dormant" ), &esdConfig._Players[ TEAM ].seqHealthBar[ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
+						ColorButton( PX_XOR( "Teammate Healthbar Bottom Visible" ), &esdConfig._Players[ TEAM ].seqHealthBar[0][ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+						ColorButton( PX_XOR( "Teammate Healthbar Bottom Invisible" ), &esdConfig._Players[ TEAM ].seqHealthBar[ 0 ][ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+						ColorButton( PX_XOR( "Teammate Healthbar Bottom Dormant" ), &esdConfig._Players[ TEAM ].seqHealthBar[ 0 ][ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
+						ColorButton( PX_XOR( "Teammate Healthbar Top Visible" ), &esdConfig._Players[ TEAM ].seqHealthBar[ 1 ][ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+						ColorButton( PX_XOR( "Teammate Healthbar Top Invisible" ), &esdConfig._Players[ TEAM ].seqHealthBar[ 1 ][ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+						ColorButton( PX_XOR( "Teammate Healthbar Top Dormant" ), &esdConfig._Players[ TEAM ].seqHealthBar[ 1 ][ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
 
 						Checkbox( PX_XOR( "Outline Info" ), &esdConfig._Players[ TEAM ].bInformationOutline, PX_XOR( "Draw an outline over information for your teammates." ) );
 						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Outline Info" ), 30 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 3 );

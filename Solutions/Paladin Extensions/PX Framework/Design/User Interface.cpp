@@ -731,7 +731,7 @@ namespace PX::UI
 				return;
 
 			constexpr auto uMaxTooltipWidth = 210u;
-			constexpr auto uTooltipPadding = 10u;
+			constexpr auto uTooltipPadding = 14u;
 			constexpr struct nk_text txtTooltip { { 5, 2 }, { 0, 0, 0, 0 }, { 255, 255, 255 ,255 } };
 			SetFont( FONT_TAHOMA );
 

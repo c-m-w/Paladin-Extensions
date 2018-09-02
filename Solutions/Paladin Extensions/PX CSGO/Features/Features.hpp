@@ -64,7 +64,7 @@ namespace PX::Features
 					color_sequence_t seqInformation[ STATE_MAX ];
 					bool bShowHealth = false; // player only
 					bool bHealthBar = false; // player only
-					color_sequence_t seqHealthBar[ STATE_MAX ];
+					color_sequence_t seqHealthBar[ 2 ][ STATE_MAX ]; // player only
 					bool bShowName = false;
 					bool bShowRank = false; // player only
 					bool bShowWeapon = false; // player only

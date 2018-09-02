@@ -339,10 +339,10 @@ nk_d3d9_handle_event( HWND wnd, UINT msg, WPARAM wparam, LPARAM lparam )
 					nk_input_key( &d3d9.ctx, NK_KEY_BACKSPACE, down );
 					return 1;
 
-				case VK_HOME:
-					nk_input_key( &d3d9.ctx, NK_KEY_TEXT_START, down );
-					nk_input_key( &d3d9.ctx, NK_KEY_SCROLL_START, down );
-					return 1;
+				//case VK_HOME:
+				//	nk_input_key( &d3d9.ctx, NK_KEY_TEXT_START, down );
+				//	nk_input_key( &d3d9.ctx, NK_KEY_SCROLL_START, down );
+				//	return 1;
 
 				case VK_END:
 					nk_input_key( &d3d9.ctx, NK_KEY_TEXT_END, down );
