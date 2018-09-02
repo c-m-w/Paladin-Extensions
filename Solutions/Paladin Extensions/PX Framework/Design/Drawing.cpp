@@ -36,12 +36,12 @@ namespace PX::Drawing
 			}
 	}
 
-	extern __forceinline void PX_API Polygon( vertex_t* pVertices, std::size_t zVertexCount, std::size_t zPrimitiveCount, D3DPRIMITIVETYPE ptDrawingType /*= D3DPT_TRIANGLEFAN*/ )
+	PX_EXT PX_INL void PX_API Polygon( vertex_t* pVertices, std::size_t zVertexCount, std::size_t zPrimitiveCount, D3DPRIMITIVETYPE ptDrawingType /*= D3DPT_TRIANGLEFAN*/ )
 	{
 		vecPolygonList.emplace_back( polygon_t( pVertices, zVertexCount, zPrimitiveCount, ptDrawingType ) );
 	}
 
-	extern __forceinline void PX_API Line( const D3DXVECTOR2* pPoints, std::size_t sPointCount, float flWidth, DWORD dwColor, BOOL bAntiAlias /*= TRUE*/ )
+	PX_EXT PX_INL void PX_API Line( const D3DXVECTOR2* pPoints, std::size_t sPointCount, float flWidth, DWORD dwColor, BOOL bAntiAlias /*= TRUE*/ )
 	{
 		vecLineList.emplace_back( line_t( pPoints, sPointCount, flWidth, dwColor, bAntiAlias ) );
 	}
@@ -63,9 +63,9 @@ namespace PX::Drawing
 
 	void PX_API DrawQueue( )
 	{
-		for( auto& polygon : vecPolygonList )
+		for each ( auto& polPolygon in vecPolygonList )
 		{
-			const auto sVertexSize = sizeof( vertex_t ) * polygon.vecVertices.size( );
+			const auto sVertexSize = sizeof( vertex_t ) * polPolygon.vecVertices.size( );
 			if ( D3D_OK != pDevice->CreateVertexBuffer( sVertexSize, NULL, PX_CUSTOM_FVF, D3DPOOL_DEFAULT, &pVertexBuffer, nullptr ) )
 			{
 				pVertexBuffer->Release( );
@@ -75,7 +75,7 @@ namespace PX::Drawing
 
 			void* pVertexMemory;
 			pVertexBuffer->Lock( 0, sVertexSize, &pVertexMemory, 0 );
-			memcpy( pVertexMemory, &polygon.vecVertices[ 0 ], sVertexSize );
+			memcpy( pVertexMemory, &polPolygon.vecVertices[ 0 ], sVertexSize );
 			pVertexBuffer->Unlock( );
 
 			if ( D3D_OK != pDevice->SetRenderState( D3DRS_ALPHABLENDENABLE, TRUE )
@@ -92,21 +92,21 @@ namespace PX::Drawing
 				continue;
 			}
 
-			px_assert( D3D_OK == pDevice->DrawPrimitive( polygon.ptType, 0, polygon.sPrimitives ) );
+			px_assert( D3D_OK == pDevice->DrawPrimitive( polPolygon.ptType, 0, polPolygon.sPrimitives ) );
 			pVertexBuffer->Release( );
 			pVertexBuffer = nullptr;
 		}
 		vecPolygonList.clear( );
 
 		if ( pLine )
-			for ( auto& line : vecLineList )
+			for each ( auto& linLine in vecLineList )
 			{
-				px_assert( line.vecVertices.size( ) > 1 );
-				if ( D3D_OK != pLine->SetWidth( line.flWidth )
-					 || D3D_OK != pLine->SetAntialias( line.bAntiAlias )
+				px_assert( linLine.vecVertices.size( ) > 1 );
+				if ( D3D_OK != pLine->SetWidth( linLine.flWidth )
+					 || D3D_OK != pLine->SetAntialias( linLine.bAntiAlias )
 					 || D3D_OK != pLine->Begin( ) )
 					break;
-				px_assert( D3D_OK == pLine->Draw( &line.vecVertices[ 0 ], line.vecVertices.size( ), line.dwColor ) );
+				px_assert( D3D_OK == pLine->Draw( &linLine.vecVertices[ 0 ], linLine.vecVertices.size( ), linLine.dwColor ) );
 				pLine->End( );
 			}
 		vecLineList.clear( );

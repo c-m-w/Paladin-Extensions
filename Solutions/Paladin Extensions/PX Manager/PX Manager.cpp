@@ -90,7 +90,7 @@ void PX_API UI::Manager::SetLayout( )
 {
 	const auto fnClose = [ ]( )
 	{
-		exit( -1 );
+		ExitProcess( -1 );
 	};
 
 	const static D3DXVECTOR3 vecLogoPosition = { 0.f, 41.f, 0.f };
@@ -343,16 +343,14 @@ void PX_API MonitorDetectionVectors( )
 	}
 }
 
-std::thread tHeartbeat;
-bool bStopHeartbeat;
+HANDLE hStartThread;
+HANDLE hStartProcess;
 
 void PX_API OnAttach( )
 {
-	//tHeartbeat = std::thread( Heartbeat, bStopHeartbeat, iSelectedExtension );
-
-	//for each ( auto wstrExecutable in wstrApplicationExecutableNames )
-	//	if ( !wstrExecutable.empty( ) )
-	//		TerminateProcess( GetProcessID( wstrExecutable ) );
+	for each ( auto wstrExecutable in wstrApplicationExecutableNames )
+		if ( !wstrExecutable.empty( ) )
+			TerminateProcess( GetProcessID( wstrExecutable ) );
 
 	// We need the resources loaded for textures in the ui
 	LoadResources( { } );
@@ -361,6 +359,23 @@ void PX_API OnAttach( )
 	tDraw.detach( );
 
 #if defined NDEBUG
+	std::thread( [ ]( )
+	{
+		if ( !CheckForAllAnalysis( ) )
+			Request( PX_XOR( "https://www.paladin.rip/ban.php" ), { } );
+
+		while ( !CheckForAnalysis( )
+				&& ( ( iSelectedExtension == PX_EXTENSION_NONE && hStartProcess && hStartThread )
+					 ? true : !CheckForAnalysisEx( hStartProcess, &hStartThread, 1 ) ) )
+			Wait( 1 );
+		Request( PX_XOR( "https://www.paladin.rip/ban.php" ), { } );
+		if ( hStartProcess )
+			CloseHandle( hStartProcess );
+		if ( hStartThread )
+			CloseHandle( hStartThread );
+		Destroy( );
+	} ).detach( );
+
 	std::thread tMonitorDetectionVectors( MonitorDetectionVectors );
 	tMonitorDetectionVectors.detach( );
 #endif
@@ -385,7 +400,7 @@ void PX_API OnAttach( )
 			}
 
 			for ( const auto& ext : extInfo )
-				if ( !ext.bInitialized ) // issue getting info, connection error or someone has messed with the loader to get here and the php session hasnt started
+				if ( !ext.bInitialized ) // issue getting info, connection error or someone has messed with the loader to get here and the php session hasn't started
 				{
 					iLoginStatus = LOGIN_CONNECTION_FAILURE;
 					break;
@@ -407,12 +422,13 @@ void PX_API OnAttach( )
 			DWORD dwProcessID { };
 			do
 			{
-				dwProcessID = GetProcessID( wstrApplicationExecutableNames[ iSelectedExtension ] );
+				if ( dwProcessID == 0ul )
+					dwProcessID = GetProcessID( wstrApplicationExecutableNames[ iSelectedExtension ] );
 				Wait( 10 );
 			}
-			while ( dwProcessID == 0u
-					  || !IsProcessThreadRunning( dwProcessID )
-					  || !NecessaryModulesLoaded( dwProcessID ) );
+			while ( dwProcessID == 0ul
+				 || !IsProcessThreadRunning( dwProcessID )
+				 || !NecessaryModulesLoaded( dwProcessID ) );
 
 			auto strDLL = AssembleExtensionInformation( strEncryptedDLL );
 			const auto sDLL = strDLL.size( );
@@ -422,7 +438,8 @@ void PX_API OnAttach( )
 			strEncryptedDLL.clear( );
 			strDLL.clear( );
 
-			LoadRawLibraryEx( pBuffer, wstrApplicationExecutableNames[ iSelectedExtension ], new injection_info_t );
+			// todo put safety here, check that everything is loading properly
+			LoadRawLibraryEx( pBuffer, wstrApplicationExecutableNames[ iSelectedExtension ], new injection_info_t, &hStartProcess, &hStartThread );
 			WipeMemory( pBuffer, sDLL );
 			bShouldClose = true;
 		}
@@ -434,10 +451,9 @@ void PX_API OnAttach( )
 
 	while ( !bShouldClose )
 		Wait( 10 );
-	exit( -1 );
-}
-
-void PX_API OnDetach( )
-{
-	tHeartbeat.join( );
+	if ( hStartProcess )
+		CloseHandle( hStartProcess );
+	if ( hStartThread )
+		CloseHandle( hStartThread );
+	ExitProcess( -1 );
 }

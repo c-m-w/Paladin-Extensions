@@ -8,31 +8,38 @@ namespace PX::AnalysisProtection
 {
 	/** \brief Calls common AnalysisProtection functions */
 	/** \return false analysis can occur */
-	PX_INL bool PX_API CheckForAnalysis( );
+	bool PX_API CheckForAnalysis( );
 	/** \brief Calls common AnalysisProtection functions, including those for external processes */	   
 	/** \param hExtensionContainer Target of extension container to check for analysis */
 	/** \return false analysis can occur */
-	PX_INL bool PX_API CheckForAnalysisEx( HANDLE hExtensionContainer );
+	bool PX_API CheckForAnalysisEx( HANDLE hExtensionContainer, _In_reads_( zExtensionThreads ) HANDLE* hExtensionThreads, std::size_t zExtensionThreads );
 	/** \brief Calls all AnalysisProtection functions, including those for external processes */
 	/** \param hExtensionContainer Target of extension container to check for analysis */
 	/** \return false analysis can occur */
-	PX_INL bool PX_API CheckForAllAnalysis( HANDLE hExtensionContainer );
+	bool PX_API CheckForAllAnalysis( HANDLE hExtensionContainer = nullptr, _In_reads_( zExtensionThreads ) HANDLE* hExtensionThreads = nullptr, std::size_t zExtensionThreads = 0u );
+
+	namespace DebuggerPrevention
+	{
+		/** \brief Forcefully deletes PX data and shuts down */
+		PX_END void PX_API Destroy( const HANDLE& hExtensionContainer = nullptr ) PX_NOX;
+		/** \brief Sets HideThreadFromDebugger flag so that debuggers cannot see thread */
+		/** \param hTargetThread Target to set the HideThreadFromDebugger flag */
+		/** \return false if setting failed */
+		bool PX_API HideThreadFromDebugger( HANDLE hTargetThread = GetCurrentThread( ) );
+	}
 
 	namespace DebuggerDetection
 	{
 		/** \brief Checks presence of debugger */
-		/** \param hTarget Target to check presence of remote debugger */
-		/** \return false if found */
-		PX_INL bool PX_API DebuggerPresenceEx( HANDLE hTarget );
+		/** \param hTargetProcess Target to check presence of remote debugger */
+		/** \return false if debugger found */
+		bool PX_API DebuggerPresenceEx( HANDLE hTargetProcess = GetCurrentProcess( ) );
 		/** \brief Checks presence of debugger (calls EX) */
-		/** \return false if found */
-		PX_INL bool PX_API DebuggerPresence( );
-		/** \brief Checks presence of debugger by setting up SEH and calling interrupt[ 0x2D ]  */
-		/** \return false if debugger catch occurred */
-		PX_INL bool PX_API Interrupt0x2D( );
+		/** \return false if debugger found */
+		bool PX_API DebuggerPresence( );
 		/** \brief Forces an exception at usermode & kernel level and checks how it was caught in order to evaluate the presence of a debugger */
 		/** \return false if debugger catch occurred */
-		PX_INL bool PX_API ForceExceptions( );
+		bool PX_API ForceExceptions( );
 	}
 
 	namespace AnalysisSoftwareDetection
@@ -40,13 +47,13 @@ namespace PX::AnalysisProtection
 		/** \brief Checks if analysis tools are installed\n
 			Slow, only needs to be called once per instance */
 		/** \return false if one tool from list is found to be installed */
-		PX_INL bool PX_API AnalysisToolsInstalled( );
+		bool PX_API AnalysisToolsInstalled( );
 		/** \brief Checks if analysis tools are running */
 		/** \return false if one tool from list is found running */
-		PX_INL bool PX_API AnalysisToolsRunning( );
+		bool PX_API AnalysisToolsRunning( );
 	}
 
-	namespace Dump
+	namespace DumpPrevention
 	{
 		
 	}
@@ -54,6 +61,11 @@ namespace PX::AnalysisProtection
 	namespace Injection
 	{
 		
+	}
+
+	namespace Emulation
+	{
+
 	}
 
 	namespace Sandbox
@@ -68,13 +80,17 @@ namespace PX::AnalysisProtection
 			
 		}
 	}
-
-	namespace Emulation
-	{
-		
-	}
 }
 
 #if defined PX_USE_NAMESPACES
 using namespace PX::AnalysisProtection;
+using namespace PX::AnalysisProtection::DebuggerPrevention;
+using namespace PX::AnalysisProtection::DebuggerDetection;
+using namespace PX::AnalysisProtection::AnalysisSoftwareDetection;
+using namespace PX::AnalysisProtection::DumpPrevention;
+using namespace PX::AnalysisProtection::Injection;
+using namespace PX::AnalysisProtection::Sandbox;
+using namespace PX::AnalysisProtection::Emulation;
+using namespace PX::AnalysisProtection::Sandbox::Tempo;
+using namespace PX::AnalysisProtection::Sandbox::Turing;
 #endif

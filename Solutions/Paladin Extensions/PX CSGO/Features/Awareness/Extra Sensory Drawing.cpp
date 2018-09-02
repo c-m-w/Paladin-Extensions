@@ -143,7 +143,7 @@ namespace PX::Features::Awareness
 		if ( clrBox.a == 0 && esdEntityConfig->bHealthBasedFillColor ? clrBottom.a == 0 && clrTop.a == 0 : clrFill.a == 0 )
 			return;
 
-		if( esdEntityConfig->bThreeDimensional ) // 3d box
+		if ( esdEntityConfig->bThreeDimensional ) // 3d box
 		{
 			
 		}

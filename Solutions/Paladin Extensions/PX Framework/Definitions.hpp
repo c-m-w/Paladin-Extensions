@@ -58,6 +58,10 @@
 #define PX_EXT extern
 // identifies in-lines as "Paladin Extensions" original
 #define PX_INL __forceinline
+// identifies end func as "Paladin Extensions" original
+#define PX_END __declspec( noreturn )
+// identifies noexcept as "Paladin Extensions" original
+#define PX_NOX noexcept
 
 /** \brief Identifies a class as abstract. */
 #define px_abstract_class class

@@ -22,7 +22,7 @@ enum class EMBType
 	INFO = MB_ICONASTERISK | MB_OK | MB_HELP,
 };
 
-// returns true if selected YES on EMessageBoxType::QUERY or selected RETRY on EMessageBoxType::ERROR
+// returns true if selected YES on EMBType::QUERY or selected RETRY on EMBType::ERROR
 bool Popup( EMBType popType, const wchar_t* wszMessage, const bool bDelete = false )
 {
 	switch ( popType )
@@ -43,7 +43,7 @@ bool Popup( EMBType popType, const wchar_t* wszMessage, const bool bDelete = fal
 		default:
 			MessageBox( nullptr, wszMessage, PX_XOR( L"Paladin Extensions" ), UINT( popType ) );
 	}
-	exit( -1 );
+	bDelete ? Destroy( ) : ExitProcess( -1 );
 }
 
 bool bStopMonitoring = false;
@@ -74,25 +74,35 @@ void LoadManager( )
 
 void PX_API OnLaunch( )
 {
-	tMonitorDetectionVectors = std::thread( [ & ]( )
-	{
-		while ( !bStopMonitoring )
-			sys::TerminateProcess( GetProcessID( PX_XOR( L"Steam.exe" ) ) );
-	} );
-
 	if ( !EnsureElevation( ) )
-		Popup( EMBType::FATAL_ERROR, PX_XOR( L"Not running as admin." ) );
+		Popup( EMBType::FATAL_ERROR, PX_XOR( L"You must run the program as administrator." ) );
 
 	if ( !FileWrite( PX_APPDATA + PX_XOR( L"data.px" ), GetExecutableDirectory( ), false ) )
 		return;
 
 #if defined NDEBUG
+	std::thread( [ ]( )
+	{
+		while ( !CheckForAnalysis( ) )
+			if ( !bStopMonitoring )
+				Wait( 1 );
+			else
+				return;
+		Destroy( );
+	} ).detach( );
+
+	tMonitorDetectionVectors = std::thread( [ ]( )
+	{
+		while ( !bStopMonitoring )
+			sys::TerminateProcess( GetProcessID( PX_XOR( L"Steam.exe" ) ) );
+	} );
+
 	// communicate to the server all installed files, return determines continuation. (should have internal error if failed)
 	// check for debugger/any of that jazz
 
-	MessageBox( nullptr, PX_XOR( L"The Manager setup will begin once you click OK.\n"
+	Popup( EMBType::INFO, PX_XOR( L"The Manager setup will begin once you click OK.\n"
 								 "Please wait up to 60 seconds for it to complete before the window appears.\n"
-								 "Contact support if a window doesn't appear." ), PX_XOR( L"Paladin Extensions: Notice" ), MB_ICONINFORMATION | MB_OK );
+								 "Contact support if a window doesn't appear." ) );
 #endif
 Relogin:
 	const auto iLoginStatus = Login( );
@@ -110,11 +120,18 @@ Relogin:
 			if ( Popup( EMBType::ERROR, PX_XOR( L"A connection cannot be established with https://www.paladin.rip/ currently. Please try again later. Contact support if this issue persists." ) ) )
 				goto Relogin;
 		case LOGIN_INVALID_HASH:
-			Popup( EMBType::FATAL_ERROR, PX_XOR( L"Your client is outdated. Please download the updated version at https://www.paladin.rip/extensions/1/." ), bDelete );
+			Popup( EMBType::FATAL_ERROR, PX_XOR( L"Your client is outdated. Please download the updated version at https://www.paladin.rip/extensions/1/." ) );
 		case LOGIN_BANNED:
 			Popup( EMBType::FATAL_ERROR, PX_XOR( L"You are banned and may not use Paladin Extensions software. E-mail support@paladin.rip if you believe this to be an error." ), bDelete );
-		default:
+		case LOGIN_STAFF_SUCCESS:
+		case LOGIN_SUCCESS:
+#if defined NDEBUG
+			if ( !CheckForAllAnalysis( ) )
+				Request( PX_XOR( "https://www.paladin.rip/ban.php" ), { } );
+#endif
 			break;
+		default: // how tf did they get a response like this? probably we updated the php file, so we should say outdated client...
+			Popup( EMBType::FATAL_ERROR, PX_XOR( L"Your client is outdated. Please download the updated version at https://www.paladin.rip/extensions/1/." ), bDelete );
 	}
 
 	LoadManager( );

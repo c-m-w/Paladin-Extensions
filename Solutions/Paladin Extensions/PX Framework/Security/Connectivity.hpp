@@ -61,8 +61,6 @@ namespace PX::Net
 	/**	\return Login status. */
 	ELogin PX_API Login( bool* bHasExtension = nullptr );
 	std::string PX_API RequestExtensionInformation( unsigned uExtensionID );
-
-	void PX_API Heartbeat( const bool& bStopHeartbeat, const int& iSelectedExtension );
 }
 
 #if defined PX_USE_NAMESPACES
