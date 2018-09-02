@@ -45,7 +45,7 @@ namespace PX::Types
 		std::string strName, strStatus, strEstimatedNextUpdate, strLastUpdate, strVersion;
 		bool bInitialized = true;
 
-		SExtensionInfo( ) noexcept
+		SExtensionInfo( ) PX_NOX
 		{
 			bInitialized = false;
 		}
@@ -140,7 +140,7 @@ namespace PX::Types
 		} *pColor = new UColor { UINT_MAX };
 
 	public:
-		SColor( ) noexcept = default;
+		SColor( ) = default;
 		SColor( std::initializer_list< ptr_t > initInputs );
 		SColor( std::initializer_list< int > initInputs );
 		SColor( std::initializer_list< float > initInputs );
@@ -202,7 +202,7 @@ namespace PX::Types
 
 	public:
 		std::size_t zSequences = 0u;
-		SColorSequence( ) noexcept
+		SColorSequence( ) PX_NOX
 		{
 			PutNewColorSequence( { 0, 0, 0, 255 }, 1000 );
 		}

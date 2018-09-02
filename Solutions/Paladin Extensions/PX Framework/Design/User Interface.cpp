@@ -413,7 +413,7 @@ namespace PX::UI
 			if ( pBufferSprite->Begin( D3DXSPRITE_ALPHABLEND ) == D3D_OK )
 			{
 				for each( const auto& texture in vecImageQueue )
-					if( vecTextures[ texture.iTexture ].pTexture )
+					if ( vecTextures[ texture.iTexture ].pTexture )
 						pBufferSprite->Draw( vecTextures[ texture.iTexture ].pTexture, nullptr, nullptr, &texture.vecLocation, texture.clrColor );
 				pBufferSprite->End( );
 			}
@@ -465,7 +465,7 @@ namespace PX::UI
 					recInterfaceWindow.x = 0;
 				if ( recInterfaceWindow.y < 0 )
 					recInterfaceWindow.y = 0;
-				else if( recInterfaceWindow.y + recBounds.h > uCurrentWindowHeight )
+				else if ( recInterfaceWindow.y + recBounds.h > uCurrentWindowHeight )
 					recInterfaceWindow.y = uCurrentWindowHeight - recBounds.h;
 			}
 			else
@@ -503,7 +503,7 @@ namespace PX::UI
 
 			if ( nk_begin( pContext, szNuklearWindowTitle, recWindow, NK_WINDOW_NO_SCROLLBAR ) )
 			{
-				if( !bCreatedWindow )
+				if ( !bCreatedWindow )
 					HandleWindowMovement( recWindow, 0 );
 
 				nk_layout_row_dynamic( pContext, 10, 0 );
@@ -615,7 +615,7 @@ namespace PX::UI
 			fnSetTabValue( jsWidgets[ PX_XOR( "SubTab" ) ].get_ref< int& >( ), SubTabs( 10, 60, 150, 30, dqSubTabs, jsWidgets[ PX_XOR( "SubTab" ) ] ) );
 
 			// Begin a groupbox for all of our widgets to be inside of.
-			if( BeginGroupbox( 200, 150, 500, 420, dqSubTabs.at( jsWidgets[ PX_XOR( "SubTab" ) ] ) ) )
+			if ( BeginGroupbox( 200, 150, 500, 420, dqSubTabs.at( jsWidgets[ PX_XOR( "SubTab" ) ] ) ) )
 			{
 				const static auto iCheckboxTextWidth = CalculateTextBounds( PX_XOR( "Checkbox" ), 30 ).x;
 				static char szIntBuffer[ 64 ] { }, szFloatBuffer[ 64 ] { }, buf[ 64 ] { };
@@ -755,7 +755,7 @@ namespace PX::UI
 			std::string strWord;
 			const auto sTextLength = strlen( szTooltip );
 
-			for( std::size_t z = 0u; z <= sTextLength; z++ )
+			for ( auto z = 0u; z <= sTextLength; z++ )
 			{
 				if ( szTooltip[ z ] != ' ' && z != sTextLength )
 				{
@@ -766,7 +766,7 @@ namespace PX::UI
 				strWord.clear( );
 			}
 
-			for( std::size_t z = 0u; z < wrdWords.size( ); z++ )
+			for ( auto z = 0u; z < wrdWords.size( ); z++ )
 			{
 				static unsigned uUsedSpace = 0u;
 				static auto bNewLine = true;
@@ -1384,6 +1384,7 @@ namespace PX::UI
 		{
 			iCurrentRowUsedColumns++;
 			nk_edit_string_zero_terminated( pContext, NK_EDIT_FIELD, szBuffer, uMaxCharacters, nk_filter_decimal );
+			// suspicious
 			if ( strlen( szBuffer ) > 0 && strcmp( szBuffer, PX_XOR( "-" ) ) )
 				return std::stoi( szBuffer );
 			return 0;
@@ -1393,6 +1394,7 @@ namespace PX::UI
 		{
 			iCurrentRowUsedColumns++;
 			nk_edit_string_zero_terminated( pContext, NK_EDIT_FIELD, szBuffer, uMaxCharacters, nk_filter_float );
+			// suspicious
 			if ( strlen( szBuffer ) > 0 && strcmp( szBuffer, PX_XOR( "-" ) ) && strcmp( szBuffer, PX_XOR( "." ) ) && strcmp( szBuffer, PX_XOR( "-." ) ) )
 				return std::stof( szBuffer );
 			return 0.f;

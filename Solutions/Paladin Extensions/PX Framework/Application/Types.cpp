@@ -57,7 +57,7 @@ namespace PX::Types
 		};
 
 		const auto vecByteForm = fnIDAPatternToBytes( );
-		for( auto ptr = ptr_t( hModule ); ptr < GetModuleEnd( hModule ); ptr++ )
+		for ( auto ptr = ptr_t( hModule ); ptr < GetModuleEnd( hModule ); ptr++ )
 		{
 			auto bFound = true;
 			for ( auto u = 0u; u < vecByteForm.size( ); u++ )
