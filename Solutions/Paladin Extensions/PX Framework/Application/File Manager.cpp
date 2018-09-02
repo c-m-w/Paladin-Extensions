@@ -51,7 +51,7 @@ namespace PX::Files
 
 	namespace Resources
 	{
-		// todo: cole figure out not parameter nigger
+		// todo: shouldn't have a parameter, should be hash from server
 		bool LoadResources( const std::string& strHash )
 		{
 			std::wstring wstrPath = GetPXDirectory( ) + PX_XOR( LR"(Resources\)" );

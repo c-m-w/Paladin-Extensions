@@ -68,7 +68,7 @@ namespace PX
 		void PX_API ProcessKeyboardMessage( UINT, WPARAM, LPARAM );
 
 	public:
-		CInputManager( ) noexcept;
+		CInputManager( ) PX_NOX;
 
 		void PX_API OnEvent( HWND, UINT, WPARAM, LPARAM );
 

@@ -66,7 +66,7 @@ namespace PX
 		ProcessKey( wParam, uMessage );
 	}
 
-	CInputManager::CInputManager( ) noexcept: ksKeys( ), mmtKeyDownTime( ), uLastKeyPressed( )
+	CInputManager::CInputManager( ) PX_NOX: ksKeys( ), mmtKeyDownTime( ), uLastKeyPressed( )
 	{ }
 
 	void PX_API CInputManager::OnEvent( HWND hwWindowHandle, UINT uMessage, WPARAM wParam, LPARAM lParam ) // hwWindowHandle is unused
