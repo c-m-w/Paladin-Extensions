@@ -235,7 +235,7 @@ namespace PX::UI
 			btnSpecial.text_alignment = NK_TEXT_CENTERED;
 
 			btnCombo.text_active = nk_rgba( 255, 255, 255, 255 );
-			btnCombo.text_hover = nk_rgba( 33, 150, 243, 255 );
+			btnCombo.text_hover = nk_rgba( 255, 255, 255, 255 );
 			btnCombo.text_normal = nk_rgba( 175, 180, 187, 255 );
 			btnCombo.border = 0.f;
 			btnCombo.active.data.color = nk_rgba( 56, 60, 66, 255 );
@@ -247,7 +247,7 @@ namespace PX::UI
 
 			btnComboActive.text_active = nk_rgba( 255, 255, 255, 255 );
 			btnComboActive.text_hover = nk_rgba( 255, 255, 255, 255 );
-			btnComboActive.text_normal = nk_rgba( 255, 255, 255, 255 );
+			btnComboActive.text_normal = nk_rgba( 33, 150, 243, 255 );
 			btnComboActive.border = 0.f;
 			btnComboActive.active.data.color = nk_rgba( 56, 60, 66, 255 );
 			btnComboActive.hover.data.color = nk_rgba( 56, 60, 66, 255 );

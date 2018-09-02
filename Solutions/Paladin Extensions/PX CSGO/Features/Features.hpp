@@ -6,6 +6,13 @@ namespace PX::Features
 {
 	extern nlohmann::json jsConfig;
 
+	enum EBox
+	{
+		BOX_NONE,
+		BOX_DYNAMIC,
+		BOX_STATIC
+	};
+
 	enum EState
 	{
 		STATE_VISIBLE,
@@ -38,7 +45,7 @@ namespace PX::Features
 					bool bDormant = false;
 
 					bool bMindSmoke = false;
-					bool bBox = false;
+					int iBoxMode = BOX_NONE;
 					color_sequence_t seqBox[ STATE_MAX ];
 					bool bThreeDimensional = false;
 

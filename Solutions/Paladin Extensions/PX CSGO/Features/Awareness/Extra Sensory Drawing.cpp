@@ -134,7 +134,7 @@ namespace PX::Features::Awareness
 
 	void PX_API Box( )
 	{
-		if ( !esdEntityConfig->bBox || !info.bBoxInSight )
+		if ( esdEntityConfig->iBoxMode == BOX_NONE || !info.bBoxInSight )
 			return;
 		const auto clrBox = esdEntityConfig->seqBox[ info.iState ].GetCurrentColor( ),
 					clrFill = esdEntityConfig->bHealthBasedFillColor ? color_t( ) : esdEntityConfig->seqFill[ info.iState ].GetCurrentColor( ),

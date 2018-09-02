@@ -172,12 +172,21 @@ namespace PX::UI::Manager
 					}
 
 					{
-						BeginRow( 30, 16, ROW_STATIC );
-						SetRowWidth( 5 );
+						std::deque< cstr_t > dqBoxModes
+						{
+							PX_XOR( "None" ),
+							PX_XOR( "Dynamic" ),
+							PX_XOR( "Static" )
+						};
+
+						BeginRow( 30, 15, ROW_STATIC );
+						SetRowWidth( 10 );
 						Spacing( );
 
-						Checkbox( PX_XOR( "Box" ), &esdConfig._Players[ TEAM ].bBox, PX_XOR( "Enable drawing a box overtop of your teammates." ) );
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Box" ), 30 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 3 );
+						//Checkbox( PX_XOR( "Box" ), &esdConfig._Players[ TEAM ].bBox, PX_XOR( "Enable drawing a box overtop of your teammates." ) );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH - COLOR_BUTTON_PADDING * 7 - COLOR_BUTTON_WIDTH * 3 );
+						fnSetValue( esdConfig._Players[ TEAM ].iBoxMode, Combobox( 25, PX_XOR( "Box" ), dqBoxModes, esdConfig._Players[ TEAM ].iBoxMode ) );
+						SetRowWidth( 1 );
 						Spacing( );
 						SetRowWidth( COLOR_BUTTON_WIDTH );
 						ColorButton( PX_XOR( "Teammate Box Visible" ), &esdConfig._Players[ TEAM ].seqBox[ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
