@@ -4,6 +4,7 @@
 
 using namespace PX::Tools;
 using namespace PX::Information;
+using namespace PX::Drawing;
 using namespace Pointers;
 
 namespace PX::Features::Awareness
@@ -11,6 +12,14 @@ namespace PX::Features::Awareness
 	auto esdConfig = &_Settings._Awareness._ExtraSensoryDrawing;
 	auto esdEntityConfig = &esdConfig->_Players[ TEAM ];
 	CBasePlayer* pLocalPlayer = nullptr;
+
+	enum
+	{
+		BOTTOMRIGHT,
+		BOTTOMLEFT,
+		TOPRIGHT,
+		TOPLEFT
+	};
 
 	struct
 	{
@@ -20,15 +29,21 @@ namespace PX::Features::Awareness
 		Vector vecLocation = Vector( );
 		EClassID cClass = CLASSID_MAX;
 		int iState = STATE_VISIBLE;
+		Vector vecBoundingBoxCorners[ 4 ] { };
+		Vector vecWorldBoundingBoxCorners[ 4 ] { };
+		bool bBoxInSight = true;
 	} info;
 
+	void PX_API CalculateBoundingBox( );
 	void PX_API Box( );
 	void PX_API SnapLine( );
 	void PX_API ViewLine( );
 	void PX_API Skeleton( );
+	void PX_API Information( );
 
 	void PX_API Draw( )
 	{
+		Text( ED3DFont::FONT_TAHOMA, 10, 10, LR"(~|_the” ^quick! (brown] <fox} #jumps, ?over% &the; ‘lazy: \dog/.+)", true, DT_NOCLIP | DT_LEFT, 0xffffffff, 0xff000000 );
 		if ( !pEngineClient->IsInGame( ) )
 			return;
 		pLocalPlayer = GetLocalPlayer( );
@@ -79,16 +94,45 @@ namespace PX::Features::Awareness
 			else
 				info.iState = STATE_INVISIBLE;
 
+			CalculateBoundingBox( );
 			Box( );
 			SnapLine( );
 			ViewLine( );
 			Skeleton( );
+			Information( );
 		}
+	}
+
+	void PX_API CalculateBoundingBox( )
+	{
+		Vector vecPoints[ ] { info.vecLocation, info.vecLocation, info.vecLocation, info.vecLocation };
+		const Vector2D vecRotationPoint { info.vecLocation.x, info.vecLocation.y };
+		const auto vecViewPosition = info.vecLocation + reinterpret_cast< CBasePlayer* >( info.pEntity )->m_vecViewOffset( );
+
+		vecPoints[ BOTTOMRIGHT ].y -= 20.f; // Bottom right
+		vecPoints[ BOTTOMRIGHT ].z -= 5.f;
+		vecPoints[ BOTTOMLEFT ].y += 20.f; // Bottom left
+		vecPoints[ BOTTOMLEFT ].z -= 5.f;
+		vecPoints[ TOPRIGHT ].y -= 20.f; // Top right
+		vecPoints[ TOPRIGHT ].z = vecViewPosition.z + 10.f;
+		vecPoints[ TOPLEFT ].y += 20.f; // Top left
+		vecPoints[ TOPLEFT ].z = vecViewPosition.z + 10.f;
+
+		const auto flRotation = pClientState->viewangles.y - ( pClientState->viewangles.y -
+															   CalcAngle( pLocalPlayer->GetViewPosition( ), reinterpret_cast< CBasePlayer* >( info.pEntity )->GetViewPosition( ) ).y );
+		info.bBoxInSight = true;
+		for ( auto i = 0; i < 4; i++ )
+		{
+			vecPoints[ i ].Rotate2D( flRotation, vecRotationPoint );
+			if ( !WorldToScreen( vecPoints[ i ], info.vecBoundingBoxCorners[ i ] ) )
+				info.bBoxInSight = false;
+		}
+		memcpy( info.vecWorldBoundingBoxCorners, vecPoints, sizeof( Vector ) * 4 );
 	}
 
 	void PX_API Box( )
 	{
-		if ( !esdEntityConfig->bBox )
+		if ( !esdEntityConfig->bBox || !info.bBoxInSight )
 			return;
 		const auto clrBox = esdEntityConfig->seqBox[ info.iState ].GetCurrentColor( ),
 					clrFill = esdEntityConfig->bHealthBasedFillColor ? color_t( ) : esdEntityConfig->seqFill[ info.iState ].GetCurrentColor( ),
@@ -103,45 +147,13 @@ namespace PX::Features::Awareness
 		}
 		else // 2d box
 		{
-			enum
-			{
-				BOTTOMRIGHT,
-				BOTTOMLEFT,
-				TOPRIGHT,
-				TOPLEFT
-			};
-
-			Vector vecPoints[ ] { info.vecLocation, info.vecLocation, info.vecLocation, info.vecLocation };
-			Vector vecBuffer[ 4 ];
-			const Vector2D vecRotationPoint { info.vecLocation.x, info.vecLocation.y };
-			const auto vecViewPosition = info.vecLocation + reinterpret_cast< CBasePlayer* >( info.pEntity )->m_vecViewOffset( );
-
-			vecPoints[ BOTTOMRIGHT ].y -= 20.f; // Bottom right
-			vecPoints[ BOTTOMRIGHT ].z -= 5.f;
-			vecPoints[ BOTTOMLEFT ].y += 20.f; // Bottom left
-			vecPoints[ BOTTOMLEFT ].z -= 5.f;
-			vecPoints[ TOPRIGHT ].y -= 20.f; // Top right
-			vecPoints[ TOPRIGHT ].z = vecViewPosition.z + 10.f;
-			vecPoints[ TOPLEFT ].y += 20.f; // Top left
-			vecPoints[ TOPLEFT ].z = vecViewPosition.z + 10.f;
-
-			const auto flRotation = pClientState->viewangles.y - ( pClientState->viewangles.y -
-																   CalcAngle( pLocalPlayer->GetViewPosition( ), reinterpret_cast< CBasePlayer* >( info.pEntity )->GetViewPosition( ) ).y );
-
-			for ( auto i = 0; i < 4; i++ )
-			{
-				vecPoints[ i ].Rotate2D( flRotation, vecRotationPoint );
-				if ( !WorldToScreen( vecPoints[ i ], vecBuffer[ i ] ) )
-					return;
-			}
-
 			D3DXVECTOR2 vecScreenPoints[ ]
 			{
-				D3DXVECTOR2( vecBuffer[ BOTTOMRIGHT ].x, vecBuffer[ BOTTOMRIGHT ].y ),
-				D3DXVECTOR2( vecBuffer[ BOTTOMLEFT ].x, vecBuffer[ BOTTOMLEFT ].y ),
-				D3DXVECTOR2( vecBuffer[ TOPLEFT ].x, vecBuffer[ TOPLEFT ].y ),
-				D3DXVECTOR2( vecBuffer[ TOPRIGHT ].x, vecBuffer[ TOPRIGHT ].y ),
-				D3DXVECTOR2( vecBuffer[ BOTTOMRIGHT ].x, vecBuffer[ BOTTOMRIGHT ].y )
+				D3DXVECTOR2( info.vecBoundingBoxCorners[ BOTTOMRIGHT ].x, info.vecBoundingBoxCorners[ BOTTOMRIGHT ].y ),
+				D3DXVECTOR2( info.vecBoundingBoxCorners[ BOTTOMLEFT ].x, info.vecBoundingBoxCorners[ BOTTOMLEFT ].y ),
+				D3DXVECTOR2( info.vecBoundingBoxCorners[ TOPLEFT ].x, info.vecBoundingBoxCorners[ TOPLEFT ].y ),
+				D3DXVECTOR2( info.vecBoundingBoxCorners[ TOPRIGHT ].x, info.vecBoundingBoxCorners[ TOPRIGHT ].y ),
+				D3DXVECTOR2( info.vecBoundingBoxCorners[ BOTTOMRIGHT ].x, info.vecBoundingBoxCorners[ BOTTOMRIGHT ].y )
 			};
 
 			if ( esdEntityConfig->bFill )
@@ -151,12 +163,9 @@ namespace PX::Features::Awareness
 				{
 					PX_DEF iMaxHealth = 100;
 					const auto iHealth = reinterpret_cast< CBasePlayer* >( info.pEntity )->m_iHealth( );
-					const auto iLeftSideHeight = vecBuffer[ BOTTOMLEFT ].y - vecBuffer[ TOPLEFT ].y;
-					const auto iRightSideHeight = vecBuffer[ BOTTOMRIGHT ].y - vecBuffer[ TOPRIGHT ].y;
-					const auto flHealthRatio = float( iHealth ) / float( iMaxHealth );
-					const auto flZDifference = ( vecPoints[ TOPLEFT ].z - vecPoints[ BOTTOMLEFT ].z ) * ( float( iHealth ) / float( iMaxHealth ) );
-					auto vecMiddleLeft = vecPoints[ BOTTOMLEFT ],
-						vecMiddleRight = vecPoints[ BOTTOMRIGHT ];
+					const auto flZDifference = ( info.vecWorldBoundingBoxCorners[ TOPLEFT ].z - info.vecWorldBoundingBoxCorners[ BOTTOMLEFT ].z ) * ( float( iHealth ) / float( iMaxHealth ) );
+					auto vecMiddleLeft = info.vecWorldBoundingBoxCorners[ BOTTOMLEFT ],
+						vecMiddleRight = info.vecWorldBoundingBoxCorners[ BOTTOMRIGHT ];
 					vecMiddleLeft.z += flZDifference;
 					vecMiddleRight.z += flZDifference;
 					Vector vecScreenMiddleLeft, vecScreenMiddleRight;
@@ -168,8 +177,8 @@ namespace PX::Features::Awareness
 					if ( iHealth < iMaxHealth )
 					{
 						const auto dwTop = clrTop.GetARGB( );
-						vtxFillPoints[ 0 ] = vertex_t( vecBuffer[ TOPLEFT ].x, vecBuffer[ TOPLEFT ].y, esdEntityConfig->bSolidHealthFill ? dwTop : 0 );
-						vtxFillPoints[ 1 ] = vertex_t( vecBuffer[ TOPRIGHT ].x, vecBuffer[ TOPRIGHT ].y, esdEntityConfig->bSolidHealthFill ? dwTop : 0 );
+						vtxFillPoints[ 0 ] = vertex_t( info.vecBoundingBoxCorners[ TOPLEFT ].x, info.vecBoundingBoxCorners[ TOPLEFT ].y, esdEntityConfig->bSolidHealthFill ? dwTop : 0 );
+						vtxFillPoints[ 1 ] = vertex_t( info.vecBoundingBoxCorners[ TOPRIGHT ].x, info.vecBoundingBoxCorners[ TOPRIGHT ].y, esdEntityConfig->bSolidHealthFill ? dwTop : 0 );
 						vtxFillPoints[ 2 ] = vertex_t( vecScreenMiddleRight.x, vecScreenMiddleRight.y, dwTop );
 						vtxFillPoints[ 3 ] = vertex_t( vecScreenMiddleLeft.x, vecScreenMiddleLeft.y, dwTop );
 						Drawing::Polygon( vtxFillPoints, 4, 2 );
@@ -177,21 +186,21 @@ namespace PX::Features::Awareness
 
 					vtxFillPoints[ 0 ] = vertex_t( vecScreenMiddleLeft.x, vecScreenMiddleLeft.y, dwBottom );
 					vtxFillPoints[ 1 ] = vertex_t( vecScreenMiddleRight.x, vecScreenMiddleRight.y, dwBottom );
-					vtxFillPoints[ 2 ] = vertex_t( vecBuffer[ BOTTOMRIGHT ].x, vecBuffer[ BOTTOMRIGHT ].y, esdEntityConfig->bSolidHealthFill ? dwBottom : 0 );
-					vtxFillPoints[ 3 ] = vertex_t( vecBuffer[ BOTTOMLEFT ].x, vecBuffer[ BOTTOMLEFT ].y, esdEntityConfig->bSolidHealthFill ? dwBottom : 0 );
+					vtxFillPoints[ 2 ] = vertex_t( info.vecBoundingBoxCorners[ BOTTOMRIGHT ].x, info.vecBoundingBoxCorners[ BOTTOMRIGHT ].y, esdEntityConfig->bSolidHealthFill ? dwBottom : 0 );
+					vtxFillPoints[ 3 ] = vertex_t( info.vecBoundingBoxCorners[ BOTTOMLEFT ].x, info.vecBoundingBoxCorners[ BOTTOMLEFT ].y, esdEntityConfig->bSolidHealthFill ? dwBottom : 0 );
 					Drawing::Polygon( vtxFillPoints, 4, 2 );
 				}
 				else
 				{
 					const auto dwColor = clrFill.GetARGB( );
-					vtxFillPoints[ 0 ] = vertex_t( vecBuffer[ TOPLEFT ].x, vecBuffer[ TOPLEFT ].y, dwColor );
-					vtxFillPoints[ 1 ] = vertex_t( vecBuffer[ TOPRIGHT ].x, vecBuffer[ TOPRIGHT ].y, dwColor );
-					vtxFillPoints[ 2 ] = vertex_t( vecBuffer[ BOTTOMRIGHT ].x, vecBuffer[ BOTTOMRIGHT ].y, dwColor );
-					vtxFillPoints[ 3 ] = vertex_t( vecBuffer[ BOTTOMLEFT ].x, vecBuffer[ BOTTOMLEFT ].y, dwColor );
+					vtxFillPoints[ 0 ] = vertex_t( info.vecBoundingBoxCorners[ TOPLEFT ].x, info.vecBoundingBoxCorners[ TOPLEFT ].y, dwColor );
+					vtxFillPoints[ 1 ] = vertex_t( info.vecBoundingBoxCorners[ TOPRIGHT ].x, info.vecBoundingBoxCorners[ TOPRIGHT ].y, dwColor );
+					vtxFillPoints[ 2 ] = vertex_t( info.vecBoundingBoxCorners[ BOTTOMRIGHT ].x, info.vecBoundingBoxCorners[ BOTTOMRIGHT ].y, dwColor );
+					vtxFillPoints[ 3 ] = vertex_t( info.vecBoundingBoxCorners[ BOTTOMLEFT ].x, info.vecBoundingBoxCorners[ BOTTOMLEFT ].y, dwColor );
 					Drawing::Polygon( vtxFillPoints, 4, 2 );
 				}
 			}
-			Drawing::Line( vecScreenPoints, 5, 2, clrBox.GetARGB( ) );
+			Line( vecScreenPoints, 5, 2, clrBox.GetARGB( ) );
 		}
 	}
 
@@ -216,7 +225,7 @@ namespace PX::Features::Awareness
 			D3DXVECTOR2( iWidth / 2.f, iHeight )
 		};
 
-		Drawing::Line( vecScreenPoints, 2, esdEntityConfig->flSnaplineWidth, clrSnapLine.GetARGB( ) );
+		Line( vecScreenPoints, 2, esdEntityConfig->flSnaplineWidth, clrSnapLine.GetARGB( ) );
 	}
 
 	void PX_API ViewLine( )
@@ -243,7 +252,7 @@ namespace PX::Features::Awareness
 		const auto dwColor = clrViewline.GetARGB( );
 		const auto flBoxSize = esdEntityConfig->flViewLineWidth + 1.5f;
 
-		Drawing::Line( vecScreenPoints, 2, esdEntityConfig->flViewLineWidth, dwColor );
+		Line( vecScreenPoints, 2, esdEntityConfig->flViewLineWidth, dwColor );
 
 		vertex_t vtxBox[ ]
 		{
@@ -252,7 +261,7 @@ namespace PX::Features::Awareness
 			vertex_t( vecEnd.x + flBoxSize, vecEnd.y + flBoxSize, dwColor ),
 			vertex_t( vecEnd.x - flBoxSize, vecEnd.y + flBoxSize, dwColor )
 		};
-		Drawing::Polygon( vtxBox, 4, 2 );
+		Polygon( vtxBox, 4, 2 );
 	}
 
 	void PX_API Skeleton( )
@@ -301,8 +310,89 @@ namespace PX::Features::Awareness
 		};
 
 		const auto dwColor = clrSkeleton.GetARGB( );
-		Drawing::Line( vecLegs, 7, esdEntityConfig->flSkeletonWidth, dwColor );
-		Drawing::Line( vecArms, 7, esdEntityConfig->flSkeletonWidth, dwColor );
-		Drawing::Line( vecTorso, 5, esdEntityConfig->flSkeletonWidth, dwColor );
+		Line( vecLegs, 7, esdEntityConfig->flSkeletonWidth, dwColor );
+		Line( vecArms, 7, esdEntityConfig->flSkeletonWidth, dwColor );
+		Line( vecTorso, 5, esdEntityConfig->flSkeletonWidth, dwColor );
+	}
+
+	void PX_API Information( )
+	{
+		if ( !esdEntityConfig->bShowInformation )
+			return;
+		const auto clrInformation = esdEntityConfig->seqInformation[ info.iState ].GetCurrentColor( );
+		if ( clrInformation.a == 0 )
+			return;
+		const auto clrOutline = esdEntityConfig->bInformationOutline ? esdEntityConfig->seqInformationOutline[ info.iState ].GetCurrentColor( ) : color_t( );
+		const auto bDoOutline = esdEntityConfig->bInformationOutline && clrOutline.a != 0;
+		const auto dwOutline = bDoOutline ? clrOutline.GetARGB( ) : 0;
+		const auto dwColor = clrInformation.GetARGB( );
+		constexpr auto flPadding = 5.f;
+		Vector vecInformationStart;
+		DWORD dwAlignment { };
+		auto bSmartAlign = false;
+
+		switch ( esdEntityConfig->iInformationAlignment )
+		{
+			case ALIGNMENT_LEFT:
+			{
+				vecInformationStart = info.vecBoundingBoxCorners[ TOPLEFT ];
+				vecInformationStart.x -= flPadding;
+				dwAlignment = DT_RIGHT | DT_NOCLIP;
+			}
+			break;
+
+			case ALIGNMENT_TOP:
+			{
+				vecInformationStart = ( info.vecBoundingBoxCorners[ TOPLEFT ] + info.vecBoundingBoxCorners[ TOPRIGHT ] ) / 2.f;
+				dwAlignment = DT_CENTER | DT_NOCLIP;
+			}
+			break;
+
+			case ALIGNMENT_RIGHT:
+			{
+				vecInformationStart = info.vecBoundingBoxCorners[ TOPRIGHT ];
+				vecInformationStart.x += flPadding;
+				dwAlignment = DT_LEFT | DT_NOCLIP;
+			}
+			break;
+
+			case ALIGNMENT_BOTTOM:
+			{
+				vecInformationStart = ( info.vecBoundingBoxCorners[ BOTTOMLEFT ] + info.vecBoundingBoxCorners[ BOTTOMRIGHT ] ) / 2.f;
+				dwAlignment = DT_CENTER | DT_NOCLIP;
+			}
+			break;
+			default:
+				break;
+
+		}
+
+		if( esdEntityConfig->bShowHealth )
+		{
+			
+		}
+
+		if( esdEntityConfig->bShowName )
+		{
+			constexpr auto zPlayerNameMaxLength = std::size_t( 128u );
+			wchar_t wszName[ zPlayerNameMaxLength ];
+
+			if ( info.bIsPlayer )
+				wcscpy( wszName, string_cast< std::wstring >( std::string( reinterpret_cast< CBasePlayer* >( info.pEntity )->GetPlayerInformation( ).szName ) ).c_str( ) );
+			else
+				return;
+			Text( ED3DFont::FONT_TAHOMA, vecInformationStart.x, vecInformationStart.y, wszName, bDoOutline, dwAlignment, dwColor, dwOutline );
+			vecInformationStart.y += 16.f + flPadding;
+		}
+
+		if ( esdEntityConfig->bShowRank )
+		{
+
+		}
+
+		if ( esdEntityConfig->bShowWeapon )
+		{
+
+		}
 	}
 }

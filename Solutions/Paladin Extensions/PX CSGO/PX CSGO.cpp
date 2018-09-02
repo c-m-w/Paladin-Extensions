@@ -53,6 +53,7 @@ void PX_API OnAttach( )
 	PX::Hooks::Destruct( );
 	PX::UI::Manager::Destruct( );
 	PX::Render::Destruct( );
+	PX::Drawing::Destruct( );
 	Detach( );
 #endif
 }

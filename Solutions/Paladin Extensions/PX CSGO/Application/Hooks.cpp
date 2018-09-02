@@ -99,7 +99,7 @@ namespace PX
 						   && D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_MINFILTER, D3DTADDRESS_WRAP )
 						   && D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_SRGBTEXTURE, NULL ) );
 
-				Drawing::DrawFigures( );
+				Drawing::DrawQueue( );
 				UI::Manager::CSGO::OnEndScene( );
 
 				px_assert( D3D_OK == pDevice->SetVertexDeclaration( pVertexDeclaration )
@@ -121,7 +121,7 @@ namespace PX
 			{
 				UI::Manager::CSGO::OnReset( );
 				UI::Manager::OnReset( );
-				Drawing::ResetDrawing( );
+				Drawing::Destruct( );
 			}
 
 			const auto hrReset = fnOriginal( pThis, pParams );

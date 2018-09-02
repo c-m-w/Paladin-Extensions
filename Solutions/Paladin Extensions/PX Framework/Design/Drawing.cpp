@@ -6,22 +6,34 @@
 namespace PX::Drawing
 {
 	std::vector< polygon_t > vecPolygonList;
+	std::vector< text_t > vecTextList;
 	std::vector< line_t > vecLineList;
 	IDirect3DVertexBuffer9* pVertexBuffer = nullptr;;
 	ID3DXLine* pLine = nullptr;
 
 	bool PX_API InitializeDrawing( )
 	{
-		return D3D_OK == D3DXCreateLine( pDevice, &pLine );
+		return D3D_OK == D3DXCreateFont( pDevice, 16, 0, FW_BOLD, 1, FALSE, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS,
+										 NONANTIALIASED_QUALITY, DEFAULT_PITCH, PX_XOR( L"Tahoma" ), &pFonts[ FONT_TAHOMA ] )
+			&& D3D_OK == D3DXCreateFont( pDevice, 16, 0, FW_NORMAL, 1, FALSE, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS,
+										 ANTIALIASED_QUALITY, DEFAULT_PITCH, PX_XOR( L"Roboto" ), &pFonts[ FONT_ROBOTO ] )
+			&& D3D_OK == D3DXCreateLine( pDevice, &pLine );
 	}
 
-	void PX_API ResetDrawing( )
+	void PX_API Destruct( )
 	{
 		if ( pLine )
 		{
 			pLine->Release( );
 			pLine = nullptr;
 		}
+
+		for( auto& font : pFonts )
+			if( font )
+			{
+				font->Release( );
+				font = nullptr;
+			}
 	}
 
 	PX_EXT PX_INL void PX_API Polygon( vertex_t* pVertices, std::size_t zVertexCount, std::size_t zPrimitiveCount, D3DPRIMITIVETYPE ptDrawingType /*= D3DPT_TRIANGLEFAN*/ )
@@ -34,7 +46,22 @@ namespace PX::Drawing
 		vecLineList.emplace_back( line_t( pPoints, sPointCount, flWidth, dwColor, bAntiAlias ) );
 	}
 
-	void PX_API DrawFigures( )
+	extern __forceinline void PX_API Text( ED3DFont iFont, int x, int y, const wchar_t *wszText, bool bOutlined, DWORD dwFlags, DWORD dwColor, DWORD dwOutline /*= 0*/ )
+	{
+		vecTextList.emplace_back( text_t( int( iFont ), x, y, wszText, bOutlined, dwFlags, dwColor, dwOutline ) );
+	}
+
+	extern __forceinline RECT PX_API GetTextSize( ED3DFont iFont, const wchar_t *wszText )
+	{
+		RECT recText { };
+
+		if ( !pFonts[ int( iFont ) ] )
+			return recText;
+		pFonts[ int( iFont ) ]->DrawText( nullptr, wszText, -1, &recText, DT_CALCRECT, 0 );
+		return recText;
+	}
+
+	void PX_API DrawQueue( )
 	{
 		for each ( auto& polPolygon in vecPolygonList )
 		{
@@ -83,5 +110,30 @@ namespace PX::Drawing
 				pLine->End( );
 			}
 		vecLineList.clear( );
+
+		for( auto& text : vecTextList )
+		{
+			if ( !pFonts[ text.iFont ] )
+				continue;
+			RECT recText { text.x, text.y };
+			if ( text.bOutlined )
+			{
+				RECT recOutline[ ] { { text.x - 1, text.y - 1 },
+					{ text.x, text.y - 1 },
+					{ text.x + 1, text.y - 1 },
+					{ text.x - 1, text.y },
+					{ text.x + 1, text.y },
+					{ text.x, text.y },
+					{ text.x + 1, text.y },
+					{ text.x - 1, text.y + 1 },
+					{ text.x, text.y + 1 },
+					{ text.x + 1, text.y + 1 } };
+
+				for( auto& rect : recOutline )
+					px_assert( NULL != pFonts[ text.iFont ]->DrawText( nullptr, text.wstrText.c_str( ), -1, &rect, text.dwFlags, text.dwOutline ) );
+			}
+			px_assert( NULL != pFonts[ text.iFont ]->DrawText( nullptr, text.wstrText.c_str( ), -1, &recText, text.dwFlags, text.dwColor ) );
+		}
+		vecTextList.clear( );
 	}
 }

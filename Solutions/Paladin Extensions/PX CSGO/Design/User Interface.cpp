@@ -47,6 +47,12 @@ namespace PX::UI::Manager
 				static std::deque< unsigned > dqKeyPresses;
 				if ( bIsPressed )
 				{
+					if ( uKey == VK_HOME )
+					{
+						ChangeVisibility( );
+						return;
+					}
+
 					dqKeyPresses.emplace_back( uKey );
 					if ( dqKeyPresses.size( ) > uKeyPressSequenceSize )
 						dqKeyPresses.pop_front( );
@@ -293,6 +299,28 @@ namespace PX::UI::Manager
 						Spacing( );
 						SetRowWidth( GROUPBOX_COLUMN_WIDTH );
 						fnSetValue( esdConfig._Players[ TEAM ].iInformationAlignment, Combobox( 25, PX_XOR( "Alignment" ), dqAlignment, esdConfig._Players[ TEAM ].iInformationAlignment ) );
+
+						EndRow( );
+					}
+
+					{
+						BeginRow( 30, 13, ROW_STATIC );
+						SetRowWidth( 5 );
+						Spacing( );
+
+						Checkbox( PX_XOR( "Health Bar" ), &esdConfig._Players[ TEAM ].bHealthBar, PX_XOR( "Draw a health bar rather than text for your teammates." ) );
+						Spacing( );
+						SetRowWidth( COLOR_BUTTON_WIDTH );
+						ColorButton( PX_XOR( "Teammate Healthbar Visible" ), &esdConfig._Players[ TEAM ].seqHealthBar[ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+						ColorButton( PX_XOR( "Teammate Healthbar Invisible" ), &esdConfig._Players[ TEAM ].seqHealthBar[ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+						ColorButton( PX_XOR( "Teammate Healthbar Dormant" ), &esdConfig._Players[ TEAM ].seqHealthBar[ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
+
+						Checkbox( PX_XOR( "Outline Info." ), &esdConfig._Players[ TEAM ].bInformationOutline, PX_XOR( "Draw an outline over information for your teammates." ) );
+						Spacing( );
+						SetRowWidth( COLOR_BUTTON_WIDTH );
+						ColorButton( PX_XOR( "Teammate Info. Outline Visible" ), &esdConfig._Players[ TEAM ].seqInformationOutline[ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+						ColorButton( PX_XOR( "Teammate Info. Outline Invisible" ), &esdConfig._Players[ TEAM ].seqInformationOutline[ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+						ColorButton( PX_XOR( "Teammate Info. Outline Dormant" ), &esdConfig._Players[ TEAM ].seqInformationOutline[ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
 
 						EndRow( );
 					}

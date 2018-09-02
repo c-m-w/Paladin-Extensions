@@ -63,12 +63,15 @@ namespace PX::Features
 					bool bShowInformation = false;
 					color_sequence_t seqInformation[ STATE_MAX ];
 					bool bShowHealth = false; // player only
-					bool bHealthText = false; // player only
+					bool bHealthBar = false; // player only
+					color_sequence_t seqHealthBar[ STATE_MAX ];
 					bool bShowName = false;
 					bool bShowRank = false; // player only
 					bool bShowWeapon = false; // player only
 					bool bWeaponText = false;
 					int iInformationAlignment = ALIGNMENT_BOTTOM;
+					bool bInformationOutline = false;
+					color_sequence_t seqInformationOutline[ STATE_MAX ];
 
 				} _Players[ 2 ];
 			} _ExtraSensoryDrawing;

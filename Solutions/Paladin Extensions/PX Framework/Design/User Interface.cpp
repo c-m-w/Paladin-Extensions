@@ -1215,6 +1215,7 @@ namespace PX::UI
 				nk_label( pContext, ( PX_XOR( "B: " ) + std::to_string( int( clrChosenColor.b * 255.f ) ) ).c_str( ), NK_TEXT_CENTERED );
 				nk_label( pContext, ( PX_XOR( "A: " ) + std::to_string( int( clrChosenColor.a * 255.f ) ) ).c_str( ), NK_TEXT_CENTERED );
 				nk_layout_row_dynamic( pContext, 10, 1 );
+				pContext->style.button.padding = nk_vec2( 0.f, 0.f );
 				nk_button_color( pContext, nk_rgba( int( clrChosenColor.r * 255.f ),
 													int( clrChosenColor.g * 255.f ),
 													int( clrChosenColor.b * 255.f ),

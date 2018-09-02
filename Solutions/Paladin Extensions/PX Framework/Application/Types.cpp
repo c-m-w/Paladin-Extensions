@@ -18,6 +18,10 @@ namespace PX::Types
 		ptType = _ptType;
 	}
 
+	text_t::text_t( int _iFont, int _x, int _y, const wchar_t* _wszText, bool _bOutlined, DWORD _dwFlags, DWORD _dwColor, DWORD _dwOutline )
+		: iFont( _iFont ), x( _x ), y( _y ), wstrText( _wszText ), bOutlined( _bOutlined ), dwFlags( _dwFlags ), dwColor( _dwColor ), dwOutline( _dwOutline )
+	{ }
+
 	module_t::module_t( std::wstring _wstrName )
 	{
 		wstrName = _wstrName;
