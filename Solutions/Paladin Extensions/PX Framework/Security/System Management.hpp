@@ -62,7 +62,7 @@ namespace PX::sys
 	/** \param wstrExecutableName Executable name for target process */
 	/** \param injInfo Object to store information of injection. */
 	/** \return True if successful, false if failed. */
-	bool PX_API LoadRawLibraryEx( const LPVOID& pDLL, const std::wstring& wstrExecutableName, injection_info_t* injInfo );
+	bool PX_API LoadRawLibraryEx( const LPVOID& pDLL, const std::wstring& wstrExecutableName, injection_info_t* injInfo, HANDLE* hTarget = nullptr, HANDLE* hThread = nullptr );
 	/** \brief Manually maps and calls desired DLL into self */
 	/** \param pDLL Data for DLL to be mapped */
 	/** \param injInfo Object to store information of injection. */
@@ -72,7 +72,6 @@ namespace PX::sys
 	HANDLE PX_API FindInternalHandle( DWORD dwTargetProcessID );
 
 	void PX_API TerminateProcess( DWORD dwTargetProcessID );
-	void PX_API Delete( ) noexcept;
 
 	struct SWindowsAPI: PX::Tools::ASingleton< SWindowsAPI >
 	{
@@ -80,7 +79,6 @@ namespace PX::sys
 		typedef LONG KPRIORITY;
 
 		// structs
-
 		typedef struct _SYSTEM_HANDLE
 		{
 			ULONG ProcessId;
@@ -197,8 +195,6 @@ namespace PX::sys
 		typedef NTSTATUS ( WINAPI* fnNtYieldExecution )( );
 		typedef NTSTATUS ( WINAPI* fnRtlGetVersion )( RTL_OSVERSIONINFOEXW* );
 		typedef DWORD ( WINAPI* fnRtlCreateUserThread )( HANDLE, PSECURITY_DESCRIPTOR, BOOL, ULONG, PULONG, PULONG, LPVOID, LPVOID, HANDLE, LPVOID );
-		typedef NTSTATUS ( WINAPI* fnZwQuerySystemInformation )( SYSTEM_INFORMATION_CLASS, PVOID, ULONG, PULONG );
-
 
 		enum EFuncs
 		{
@@ -224,32 +220,11 @@ namespace PX::sys
 			NtYieldExecution,
 			RtlGetVersion,
 			RtlCreateUserThread,
-			ZwQuerySystemInformation,
 			FUNC_MAX
 		};
 
-		enum EOSes
-		{
-			OS_NONE,
-			WIN_XP,
-			WIN_XP_SP1,
-			WIN_XP_SP2,
-			WIN_XP_SP3,
-			WIN_VISTA,
-			WIN_VISTA_SP1,
-			WIN_VISTA_SP2,
-			WIN_7,
-			WIN_7_SP1,
-			WIN_8_0,
-			WIN_8_1,
-			WIN_10,
-			OS_MAX
-		};
-
-		SWindowsAPI( ) noexcept;
-		void* PX_API GetFunctionPointer( EFuncs enfRequest );
-	private:
-		bool PX_API FunctionIsOnOS( EOSes osMinimum, EOSes osRemoved );
+		SWindowsAPI( ) PX_NOX;
+		void* PX_API GetFunctionPointer( EFuncs enfRequest ) const PX_NOX;
 	};
 }
 

@@ -16,15 +16,26 @@
 
 bool PX_API Initialize( )
 {
-#if defined _DEBUG
-	return
-#else
+#if defined NDEBUG
 	const auto lgnResult = PX::Net::Login( );
+	std::thread( [ ]( )
+	{
+		if ( !PX::AnalysisProtection::CheckForAllAnalysis( ) )
+			PX::Net::Request( PX_XOR( "https://www.paladin.rip/ban.php" ), { } );
+
+		while ( !PX::AnalysisProtection::CheckForAnalysis( ) )
+			PX::Tools::Wait( 1 );
+
+		PX::Net::Request( PX_XOR( "https://www.paladin.rip/ban.php" ), { } );
+		PX::AnalysisProtection::DebuggerPrevention::Destroy( );
+	} ).detach( );
 	//MessageBox( nullptr, std::to_wstring( lgnResult ).c_str( ), L"MEN", MB_OK );
 	return ( lgnResult == PX::Net::LOGIN_SUCCESS
 			 || lgnResult == PX::Net::LOGIN_STAFF_SUCCESS ) &&
+#else
+	return
 #endif
-		PX::Information::InitializeInformation( )
+		   PX::Information::InitializeInformation( )
 		&& PX::Files::Resources::LoadResources( { } )
 		&& PX::UI::Manager::CSGO::Initialize( )
 		&& PX::Features::InitializeFeatures( )
@@ -35,7 +46,7 @@ bool PX_API Initialize( )
 void PX_API OnAttach( )
 {
 	if ( !Initialize( ) )
-		exit( -1 );
+		ExitProcess( -1 );
 #if defined _DEBUG
 	while ( !GetAsyncKeyState( VK_END ) )
 		PX::Tools::Wait( 1 );

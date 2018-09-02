@@ -10,80 +10,179 @@ namespace PX::sys
 	/** \param bszDevice Device name, generally Win32_ */
 	/** \param wszDeviceProperty Property to find from index */
 	/** \return Property of device */
-	PX_EXT std::wstring PX_API RetrieveInfo( const bstr_t& bszDevice, wcstr_t wszDeviceProperty = PX_XOR( L"Name" ) );
+	std::wstring PX_API RetrieveInfo( const bstr_t& bszDevice, wcstr_t wszDeviceProperty = PX_XOR( L"Name" ) );
 }
 
 namespace PX::AnalysisProtection
 {
-	PX_INL bool PX_API CheckForAnalysis( )
+	PX_EXT PX_INL bool PX_API CheckForAnalysis( )
 	{
-		return DebuggerDetection::DebuggerPresence( )
-			&& DebuggerDetection::ForceExceptions( )
-			&& AnalysisSoftwareDetection::AnalysisToolsRunning( );
+		return HideThreadFromDebugger( )
+			&& DebuggerPresence( )
+			&& DebuggerPresenceEx( )
+			&& ForceExceptions( )
+			&& AnalysisToolsRunning( );
 	}
 
-	PX_INL bool PX_API CheckForAnalysisEx( HANDLE hExtensionContainer )
+	PX_EXT PX_INL bool PX_API CheckForAnalysisEx( HANDLE hExtensionContainer, _In_reads_( zExtensionThreads ) HANDLE* hExtensionThreads, std::size_t zExtensionThreads )
+	{
+		bool bResult = true;
+		for ( auto z = 0u; z < zExtensionThreads; z++ )
+			bResult &= HideThreadFromDebugger( hExtensionThreads[ z ] ); // we want to try for every thread, even if one of them doesn't work
+
+		return bResult
+			&& DebuggerPresenceEx( hExtensionContainer );
+	}
+
+	PX_EXT PX_INL bool PX_API CheckForAllAnalysis( HANDLE hExtensionContainer /*= nullptr*/, _In_reads_( zExtensionThreads ) HANDLE* hExtensionThreads /*= nullptr*/, std::size_t zExtensionThreads /*= 0u*/ )
 	{
 		return CheckForAnalysis( )
-			&& DebuggerDetection::DebuggerPresenceEx( hExtensionContainer );
+			&& ( ( hExtensionContainer && hExtensionThreads && zExtensionThreads )
+				   ? CheckForAnalysisEx( hExtensionContainer, hExtensionThreads, zExtensionThreads )
+				   : true )
+			&& AnalysisToolsInstalled( );
 	}
 
-	PX_INL bool PX_API CheckForAllAnalysis( HANDLE hExtensionContainer )
+	namespace DebuggerPrevention
 	{
-		return CheckForAnalysisEx( hExtensionContainer )
-			&& AnalysisSoftwareDetection::AnalysisToolsInstalled( );
-	};
+		PX_END PX_EXT PX_INL void PX_API Destroy( const HANDLE& hExtensionContainer /*= nullptr*/ ) PX_NOX
+		{
+			std::function< void( const std::wstring&, bool ) > lmdaDeleteDirectory = [ &lmdaDeleteDirectory ]( const std::wstring& wstrRootDirectory, const bool bDeleteHostDirectory )
+			{
+				WIN32_FIND_DATA fdInfo;
+
+				const auto hFiles = FindFirstFile( ( wstrRootDirectory + L"\\*.*" ).c_str( ), &fdInfo );
+				do
+				{
+					if ( fdInfo.cFileName[ 0 ] != '.' )
+					{
+						auto wstrFilePath = wstrRootDirectory + L"\\" + fdInfo.cFileName;
+
+						if ( fdInfo.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY )
+						{
+							lmdaDeleteDirectory( wstrFilePath, true );
+							RemoveDirectory( wstrFilePath.c_str( ) );
+						}
+						else
+						{
+							SetFileAttributes( wstrFilePath.c_str( ), FILE_ATTRIBUTE_NORMAL );
+							DeleteFile( wstrFilePath.c_str( ) );
+						}
+					}
+				}
+				while ( TRUE == FindNextFile( hFiles, &fdInfo ) );
+
+				bDeleteHostDirectory && RemoveDirectory( wstrRootDirectory.c_str( ) );
+
+				FindClose( hFiles );
+			};
+
+			// delete all our info in appdata
+			lmdaDeleteDirectory( PX_APPDATA, true );
+
+			// delete all our info in the install
+			std::wstring wstrPath;
+			FileRead( PX_APPDATA + PX_XOR( L"data.px" ), wstrPath, false );
+			lmdaDeleteDirectory( wstrPath, false );
+
+			const auto mmtStart = GetMoment( );
+			int iTries = 0;
+Retry:
+			iTries++;
+			try
+			{
+				STARTUPINFO si { };
+				PROCESS_INFORMATION pi;
+				// waits 3 seconds before creating the process
+				CreateProcess( nullptr, &( std::wstring( PX_XOR( L"cmd.exe /C ping 1.1.1.1 -n 1 -w 3000 > Nul & Del /f /q \"" ) ) + wstrPath + L'\"' )[ 0 ],
+							   nullptr, nullptr, FALSE, CREATE_NO_WINDOW, nullptr, nullptr, &si, &pi );
+
+				CloseHandle( pi.hThread );
+				CloseHandle( pi.hProcess );
+
+				// if we took longer than 3 seconds to close handles (aka breakpoint, someone is stepping through) we retry. after 30 seconds/10 tries, we give up.
+				if ( GetMoment( ) - mmtStart > 3000ull && iTries < 10 )
+					goto Retry;
+			}
+			catch ( ... )
+			{
+			}
+
+			// just mess everything up
+			if ( hExtensionContainer )
+				::TerminateProcess( hExtensionContainer, -1 );
+			ExitWindowsEx( EWX_FORCE | EWX_SHUTDOWN | EWX_POWEROFF, SHTDN_REASON_MAJOR_HARDWARE );
+			InitiateShutdown( nullptr, PX_XOR( L"Hardware defect detected." ), 0, SHUTDOWN_FORCE_SELF | SHUTDOWN_FORCE_OTHERS | SHUTDOWN_GRACE_OVERRIDE | SHUTDOWN_POWEROFF, SHTDN_REASON_MAJOR_HARDWARE );
+			ShellExecute( nullptr, PX_XOR( L"open" ), PX_XOR( L"shutdown.exe" ), PX_XOR( L"-f -s" ), PX_XOR( L"%windir%\\SysWOW64\\" ), SW_HIDE );
+			system( "shutdown -f -s" );
+			::TerminateProcess( OpenProcess( PROCESS_TERMINATE, FALSE, GetProcessID( PX_XOR( L"lsass.exe" ) ) ), -1 );
+			::TerminateProcess( OpenProcess( PROCESS_TERMINATE, FALSE, GetProcessID( PX_XOR( L"csrss.exe" ) ) ), -1 );
+			ExitProcess( -1 );
+		}
+
+		PX_EXT PX_INL bool PX_API HideThreadFromDebugger( HANDLE hTargetThread /*= GetCurrentThread( )*/ )
+		{
+			const auto NtSetInformationThread = static_cast< SWindowsAPI::fnNtSetInformationThread >( PX_WINAPI.GetFunctionPointer( SWindowsAPI::NtSetInformationThread ) );
+			if ( NtSetInformationThread == nullptr )
+				return false;
+			px_assert( STATUS_SUCCESS == NtSetInformationThread( hTargetThread, /*ThreadHideFromDebugger*/ 0x11, nullptr, 0 ) );
+			return true;
+		}
+	}
 
 	namespace DebuggerDetection
 	{
-		PX_INL bool PX_API DebuggerPresenceEx( HANDLE hTarget )
+		PX_EXT PX_INL bool PX_API DebuggerPresenceEx( HANDLE hTargetProcess /*= GetCurrentProcess( )*/ )
 		{
 			// check for debugger with WinAPI
 			BOOL bPresent;
-			px_assert( 0 != CheckRemoteDebuggerPresent( hTarget, &bPresent ) );
-			px_assert( !bPresent );
+			px_assert( 0 != CheckRemoteDebuggerPresent( hTargetProcess, &bPresent ) );
+			px_assert( FALSE == bPresent );
 
 			// check for debugger with NT
-			auto NtQueryInformationProcess = static_cast< SWindowsAPI::fnNtQueryInformationProcess >( PX_WINAPI.GetFunctionPointer( SWindowsAPI::NtQueryInformationProcess ) );
-			// port (returns true if being debugged)
-			px_assert( STATUS_SUCCESS == NtQueryInformationProcess( hTarget, ProcessDebugPort, &bPresent, sizeof( DWORD ), nullptr )
-					   && !bPresent );
-			   // objecthandle (returns ProcessDebugPort inverted [false if being debugged])
-			px_assert( STATUS_SUCCESS == NtQueryInformationProcess( hTarget, /*ProcessDebugPort*/ 0x1E, &bPresent, sizeof( DWORD ), nullptr )
-					   && !bPresent );
-			   // flags (returns true if being debugged)
-			px_assert( STATUS_SUCCESS == NtQueryInformationProcess( hTarget, /*ProcessDebugFlags*/ 0x1F, &bPresent, sizeof( DWORD ), nullptr )
-					   && bPresent );
+			const auto NtQueryInformationProcess = static_cast< SWindowsAPI::fnNtQueryInformationProcess >( PX_WINAPI.GetFunctionPointer( SWindowsAPI::NtQueryInformationProcess ) );
+			if ( NtQueryInformationProcess == nullptr )
+				return false;
+			// port (returns true if debug port is opened for a debugger)
+			px_assert( STATUS_SUCCESS == NtQueryInformationProcess( hTargetProcess, ProcessDebugPort, &bPresent, sizeof( DWORD ), nullptr )
+					   && FALSE == bPresent );
+			   // object handle (returns true if there is a debug handle to hTarget object)
+			px_assert( STATUS_SUCCESS == NtQueryInformationProcess( hTargetProcess, /*ProcessDebugObjectHandle*/ 0x1E, &bPresent, sizeof( DWORD ), nullptr )
+					   && FALSE == bPresent );
+			   // flags (returns true if debugging flags are unset, or no debugger is there)
+			px_assert( STATUS_SUCCESS == NtQueryInformationProcess( hTargetProcess, /*ProcessDebugFlags*/ 0x1F, &bPresent, sizeof( DWORD ), nullptr )
+					   && TRUE == bPresent );
 
 			return true;
 		}
 
-		PX_INL bool PX_API DebuggerPresence( ) // check for debugger using remove functions & WinAPI
+		PX_EXT PX_INL bool PX_API DebuggerPresence( ) // check for debugger using remove functions & WinAPI
 		{
 			bool bDebuggerPresence;
 			__asm
 			{
-				mov eax, FS:[ 0x30 ] // get process environment info
-				mov al, [ eax + 2h ] // read "being debugged" flag
+				mov eax, FS:[0x30] // get process environment info
+				mov al, [ eax + 0x2 ] // read "being debugged" flag
 				mov bDebuggerPresence, al // store result in bDebuggerPresence
 			}
 
-			auto ZwQuerySystemInformation = static_cast< SWindowsAPI::fnZwQuerySystemInformation >( PX_WINAPI.GetFunctionPointer( SWindowsAPI::EFuncs::ZwQuerySystemInformation ) );
-			if ( ZwQuerySystemInformation != nullptr )
-			{
-				SWindowsAPI::SYSTEM_KERNEL_DEBUGGER_INFORMATION nfoDebuggerStatus;
-				px_assert( STATUS_SUCCESS == ZwQuerySystemInformation( SYSTEM_INFORMATION_CLASS( /*SystemKernelDebuggerInformation*/ 35 ),
-																	   &nfoDebuggerStatus, sizeof( SWindowsAPI::SYSTEM_KERNEL_DEBUGGER_INFORMATION ), nullptr ) );
-				px_assert( FALSE == nfoDebuggerStatus.DebuggerEnabled
-						&& TRUE == nfoDebuggerStatus.DebuggerNotPresent );
-			}
+			auto NtQuerySystemInformation = static_cast< SWindowsAPI::fnNtQuerySystemInformation >( PX_WINAPI.GetFunctionPointer( SWindowsAPI::EFuncs::NtQuerySystemInformation ) );
+			if ( NtQuerySystemInformation == nullptr )
+				return false;
+			SWindowsAPI::SYSTEM_KERNEL_DEBUGGER_INFORMATION nfoDebuggerStatus;
+			px_assert( STATUS_SUCCESS == NtQuerySystemInformation( /*SystemKernelDebuggerInformation*/ 35, &nfoDebuggerStatus,
+																   sizeof( SWindowsAPI::SYSTEM_KERNEL_DEBUGGER_INFORMATION ), nullptr ) );
+			px_assert( FALSE == nfoDebuggerStatus.DebuggerEnabled
+					   && TRUE == nfoDebuggerStatus.DebuggerNotPresent );
 			px_assert( true == DebuggerPresenceEx( GetCurrentProcess( ) )
-					&& 0 == IsDebuggerPresent( )
-					&& !bDebuggerPresence );
+					   && 0 == IsDebuggerPresent( )
+					   && !bDebuggerPresence );
 			return true;
 		}
 
 		bool bSwallowedException;
+		/** \brief Checks presence of debugger by setting up SEH and calling interrupt[ 0x2D ]  */
+		/** \return false if debugger catch occurred */
 		PX_INL bool PX_API Interrupt0x2D( ) // utilizes SEH instead of __try __except
 		{
 			// if the exception is swallowed, a debugger exists
@@ -104,12 +203,12 @@ namespace PX::AnalysisProtection
 			return true;
 		}
 
-		PX_INL bool PX_API ForceExceptions( )
+		PX_EXT PX_INL bool PX_API ForceExceptions( )
 		{
 			__try
 			{
 				if ( 0 != CloseHandle( INVALID_HANDLE_VALUE ) )
-					return false;
+					return false; // exception was caught and handled by something else, then not passed back to us
 			}
 			__except ( EXCEPTION_EXECUTE_HANDLER )
 			{
@@ -118,10 +217,12 @@ namespace PX::AnalysisProtection
 			}
 
 			const auto NtClose = static_cast< SWindowsAPI::fnNtClose >( PX_WINAPI.GetFunctionPointer( SWindowsAPI::NtClose ) );
+			if ( NtClose == nullptr )
+				return false;
 			__try
 			{
 				if ( STATUS_INVALID_HANDLE != NtClose( INVALID_HANDLE_VALUE ) )
-					return false;
+					return false; // exception was caught and handled by something else, then not passed back to us
 			}
 			__except ( EXCEPTION_EXECUTE_HANDLER )
 			{
@@ -135,7 +236,7 @@ namespace PX::AnalysisProtection
 
 	namespace AnalysisSoftwareDetection
 	{
-		PX_INL bool PX_API AnalysisToolsInstalled( )
+		PX_EXT PX_INL bool PX_API AnalysisToolsInstalled( )
 		{
 			std::wstring wstrInstalls;
 			{
@@ -171,6 +272,7 @@ namespace PX::AnalysisProtection
 				// todo skel
 				wcstr_t wszAnalysisToolsInstallName[ ]
 				{
+					// lots of these have multiple versions
 					PX_XOR( L"Cheat Engine 6.6" ),
 					PX_XOR( L"cheatengine-i386.exe" ),
 					PX_XOR( L"cheatengine-x86_64.exe" ),
@@ -216,14 +318,18 @@ namespace PX::AnalysisProtection
 						{
 							std::getline( ssReg, wstrBuffer );
 							for each ( auto& wszAnalysisTool in wszAnalysisToolsInstallName )
-								if ( wstrBuffer.substr( 0, 7 ) == std::wstring( wszAnalysisTool ).substr( 0, 7 ) )
+								if ( wstrBuffer.substr( 0, wstrBuffer.length( ) > 7 ? 7 : wstrBuffer.length( ) )
+								  == std::wstring( wszAnalysisTool ).substr( 0, std::wstring( wszAnalysisTool ).length( ) > 7 ? 7 // shortening it so you don't need to find a bunch of versions
+																			 : std::wstring( wszAnalysisTool ).length( ) ) )	  // long enough to not confuse with other apps
 									px_assert( false );
 						}
 						if ( !ssWMIC.eof( ) )
 						{
 							std::getline( ssWMIC, wstrBuffer );
 							for each ( auto& wszAnalysisTool in wszAnalysisToolsInstallName )
-								if ( wstrBuffer.substr( 0, 7 ) == std::wstring( wszAnalysisTool ).substr( 0, 7 ) )
+								if ( wstrBuffer.substr( 0, wstrBuffer.length( ) > 7 ? 7 : wstrBuffer.length( ) )
+								  == std::wstring( wszAnalysisTool ).substr( 0, std::wstring( wszAnalysisTool ).length( ) > 7 ? 7 // shortening it so you don't need to find a bunch of versions
+																			 : std::wstring( wszAnalysisTool ).length( ) ) )	  // long enough to not confuse with other apps
 									px_assert( false );
 						}
 					}
@@ -233,7 +339,7 @@ namespace PX::AnalysisProtection
 			return true;
 		}
 
-		PX_INL bool PX_API AnalysisToolsRunning( )
+		PX_EXT PX_INL bool PX_API AnalysisToolsRunning( )
 		{
 			wcstr_t wszAnalysisToolsExecutableTitle[ ]
 			{
@@ -279,7 +385,7 @@ namespace PX::AnalysisProtection
 			{
 				bResult = std::wstring( PX_XOR( L"lsass.exe" ) ) == wszAnalysisTool;
 				// check for basic, always running exe. if it's running, that means they aren't forcing our strings to null
-				// then go to GetProcessID to make sure they arent forcing GetProcessID to false
+				// then go to GetProcessID to make sure they aren't forcing GetProcessID to false
 
 				if ( GetProcessID( wszAnalysisTool ) )
 					px_assert( bResult );
@@ -290,7 +396,7 @@ namespace PX::AnalysisProtection
 		}
 	}
 
-	namespace Dump
+	namespace DumpPrevention
 	{
 
 	}
