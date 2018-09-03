@@ -2,6 +2,7 @@
 
 #define PX_USE_NAMESPACES
 #include "../PX Framework.hpp"
+#include "../../PX CSGO/SDK/Valve/Interfaces/CClientState.hpp"
 
 namespace PX::Drawing
 {
@@ -49,9 +50,52 @@ namespace PX::Drawing
 		vecPolygonList.emplace_back( polygon_t( pVertices, zVertexCount, zPrimitiveCount, ptDrawingType ) );
 	}
 
-	PX_EXT PX_INL void PX_API Line( const D3DXVECTOR2* pPoints, std::size_t sPointCount, float flWidth, DWORD dwColor, BOOL bAntiAlias /*= TRUE*/ )
+	PX_EXT PX_INL void PX_API Line( D3DXVECTOR2* const pPoints, std::size_t sPointCount, float flWidth, DWORD dwColor, BOOL bAntiAlias /*= TRUE*/ )
 	{
-		vecLineList.emplace_back( line_t( pPoints, sPointCount, flWidth, dwColor, bAntiAlias ) );
+		// using primitives > ID3DXLine speed-wise.
+		auto fnRotateVector = [ ]( D3DXVECTOR2 vecRotatee, D3DXVECTOR2 vecRotationPoint, float flAngle )
+		{
+			const auto flRadians = D3DXToRadian( flAngle );
+			const auto flSin = sin( flRadians );
+			const auto flCos = cos( flRadians );
+			D3DXVECTOR2 vecOld { vecRotatee.x - vecRotationPoint.x, vecRotatee.y - vecRotationPoint.y };
+		
+			vecRotatee.x = ( vecOld.x * flCos ) - ( vecOld.y * flSin ) + vecRotationPoint.x;
+			vecRotatee.y = ( vecOld.x * flSin ) + ( vecOld.y * flCos ) + vecRotationPoint.y;
+			return vecRotatee;
+		};
+
+		const auto pVertices = new vertex_t[ sPointCount ][ 4 ];
+		for ( auto z = 0u; z < sPointCount - 1; z++ )
+		{
+			//if( !( z % 2 ) ) // todo: make this a proper fix not ghetto
+			//{
+			//	pPoints[ z ].x -= flWidth;
+			//	pPoints[ z ].y -= flWidth;
+			//	pPoints[ z + 1 ].x += flWidth;
+			//	pPoints[ z + 1 ].y += flWidth;
+			//}
+
+			const auto vecDifference = pPoints[ z ] - pPoints[ z + 1 ];
+			const auto flAngle = D3DXToDegree( atan2( vecDifference.x, vecDifference.y ) );
+			const auto flHalf = flWidth / 2.f;
+			const auto vecTopRight = fnRotateVector( D3DXVECTOR2( pPoints[ z + 1 ].x + flHalf, pPoints[ z + 1 ].y + flHalf ), pPoints[ z + 1 ], 180.f - flAngle ),
+				vecBottomRight = fnRotateVector( D3DXVECTOR2( pPoints[ z ].x + flHalf, pPoints[ z ].y + flHalf ), pPoints[ z ], 180.f - flAngle ),
+				vecTopLeft = fnRotateVector( D3DXVECTOR2( pPoints[ z + 1 ].x - flHalf, pPoints[ z + 1 ].y - flHalf ), pPoints[ z + 1 ], 180.f - flAngle ),
+				vecBottomLeft = fnRotateVector( D3DXVECTOR2( pPoints[ z ].x - flHalf, pPoints[ z ].y - flHalf ), pPoints[ z ], 180.f - flAngle );
+
+			pVertices[ z ][ 0 ].flVectors[ 0 ] = vecTopLeft.x;
+			pVertices[ z ][ 0 ].flVectors[ 1 ] = vecTopLeft.y;
+			pVertices[ z ][ 1 ].flVectors[ 0 ] = vecTopRight.x;
+			pVertices[ z ][ 1 ].flVectors[ 1 ] = vecTopRight.y;
+			pVertices[ z ][ 2 ].flVectors[ 0 ] = vecBottomRight.x;
+			pVertices[ z ][ 2 ].flVectors[ 1 ] = vecBottomRight.y;
+			pVertices[ z ][ 3 ].flVectors[ 0 ] = vecBottomLeft.x;
+			pVertices[ z ][ 3 ].flVectors[ 1 ] = vecBottomLeft.y;
+			pVertices[ z ][ 0 ].dwColor = pVertices[ z ][ 1 ].dwColor = pVertices[ z ][ 2 ].dwColor = pVertices[ z ][ 3 ].dwColor = dwColor;
+			Polygon( pVertices[ z ], 4, 2, D3DPT_TRIANGLEFAN );
+		}
+		delete[ ] pVertices;
 	}
 
 	extern __forceinline void PX_API Text( ED3DFont iFont, int x, int y, const wchar_t *wszText, bool bOutlined, DWORD dwFlags, DWORD dwColor, DWORD dwOutline /*= 0*/ )
@@ -89,6 +133,7 @@ namespace PX::Drawing
 			if ( D3D_OK != pDevice->SetRenderState( D3DRS_ALPHABLENDENABLE, TRUE )
 				 || D3D_OK != pDevice->SetRenderState( D3DRS_ANTIALIASEDLINEENABLE, TRUE )
 				 || D3D_OK != pDevice->SetRenderState( D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA )
+				 || D3D_OK != pDevice->SetRenderState( D3DRS_CULLMODE, D3DCULL_NONE )
 				 || D3D_OK != pDevice->SetStreamSource( NULL, pVertexBuffer, NULL, sizeof( vertex_t ) )
 				 || D3D_OK != pDevice->SetPixelShader( nullptr )
 				 || D3D_OK != pDevice->SetVertexShader( nullptr )

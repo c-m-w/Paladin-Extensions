@@ -321,7 +321,7 @@ namespace PX::UI::Manager
 						SetRowWidth( GROUPBOX_COLUMN_WIDTH * 2 - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Health Bar" ), 30 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 6 );
 						Spacing( );
 						SetRowWidth( COLOR_BUTTON_WIDTH );
-						ColorButton( PX_XOR( "Teammate Healthbar Bottom Visible" ), &esdConfig._Players[ TEAM ].seqHealthBar[0][ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+						ColorButton( PX_XOR( "Teammate Healthbar Bottom Visible" ), &esdConfig._Players[ TEAM ].seqHealthBar[ 0 ][ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
 						ColorButton( PX_XOR( "Teammate Healthbar Bottom Invisible" ), &esdConfig._Players[ TEAM ].seqHealthBar[ 0 ][ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
 						ColorButton( PX_XOR( "Teammate Healthbar Bottom Dormant" ), &esdConfig._Players[ TEAM ].seqHealthBar[ 0 ][ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
 						ColorButton( PX_XOR( "Teammate Healthbar Top Visible" ), &esdConfig._Players[ TEAM ].seqHealthBar[ 1 ][ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );

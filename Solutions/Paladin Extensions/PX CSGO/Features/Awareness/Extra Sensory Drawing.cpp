@@ -138,8 +138,8 @@ namespace PX::Features::Awareness
 			return;
 		const auto clrBox = esdEntityConfig->seqBox[ info.iState ].GetCurrentColor( ),
 					clrFill = esdEntityConfig->bHealthBasedFillColor ? color_t( ) : esdEntityConfig->seqFill[ info.iState ].GetCurrentColor( ),
-					clrBottom = esdEntityConfig->bHealthBasedFillColor ? esdEntityConfig->seqHealthFill[ 1 ][ info.iState ].GetCurrentColor( ) : color_t( ),
-					clrTop = esdEntityConfig->bHealthBasedFillColor ? esdEntityConfig->seqHealthFill[ 0 ][ info.iState ].GetCurrentColor( ) : color_t( );
+					clrBottom = esdEntityConfig->bHealthBasedFillColor ? esdEntityConfig->seqHealthFill[ 0 ][ info.iState ].GetCurrentColor( ) : color_t( ),
+					clrTop = esdEntityConfig->bHealthBasedFillColor ? esdEntityConfig->seqHealthFill[ 1 ][ info.iState ].GetCurrentColor( ) : color_t( );
 		if ( clrBox.a == 0 && esdEntityConfig->bHealthBasedFillColor ? clrBottom.a == 0 && clrTop.a == 0 : clrFill.a == 0 )
 			return;
 
@@ -219,7 +219,7 @@ namespace PX::Features::Awareness
 			return;
 
 		pEngineClient->GetScreenSize( iWidth, iHeight );
-		const D3DXVECTOR2 vecScreenPoints[ ]
+		D3DXVECTOR2 vecScreenPoints[ ]
 		{
 			D3DXVECTOR2( vecEntity.x, vecEntity.y ),
 			D3DXVECTOR2( iWidth / 2.f, iHeight )
@@ -244,7 +244,7 @@ namespace PX::Features::Awareness
 			 || !WorldToScreen( gtRay.endpos, vecEnd ) )
 			return;
 
-		const D3DXVECTOR2 vecScreenPoints[ ]
+		D3DXVECTOR2 vecScreenPoints[ ]
 		{
 			D3DXVECTOR2( vecEntity.x, vecEntity.y ),
 			D3DXVECTOR2( vecEnd.x, vecEnd.y )
@@ -278,7 +278,7 @@ namespace PX::Features::Awareness
 			if ( !WorldToScreen( reinterpret_cast< CBasePlayer* >( info.pEntity )->GetHitboxPosition( EHitbox( e ) ), vecHitboxes[ e ] ) )
 				 return;
 
-		const D3DXVECTOR2 vecLegs[ ] // 7
+		D3DXVECTOR2 vecLegs[ ] // 7
 		{
 			D3DXVECTOR2( vecHitboxes[ HITBOX_LEFT_FOOT ].x, vecHitboxes[ HITBOX_LEFT_FOOT ].y ),
 			D3DXVECTOR2( vecHitboxes[ HITBOX_LEFT_CALF ].x, vecHitboxes[ HITBOX_LEFT_CALF ].y ),
@@ -289,7 +289,7 @@ namespace PX::Features::Awareness
 			D3DXVECTOR2( vecHitboxes[ HITBOX_RIGHT_FOOT ].x, vecHitboxes[ HITBOX_RIGHT_FOOT ].y )
 		};
 
-		const D3DXVECTOR2 vecArms[ ] // 7
+		D3DXVECTOR2 vecArms[ ] // 7
 		{
 			D3DXVECTOR2( vecHitboxes[ HITBOX_LEFT_HAND ].x, vecHitboxes[ HITBOX_LEFT_HAND ].y ),
 			D3DXVECTOR2( vecHitboxes[ HITBOX_LEFT_FOREARM ].x, vecHitboxes[ HITBOX_LEFT_FOREARM ].y ),
@@ -300,7 +300,7 @@ namespace PX::Features::Awareness
 			D3DXVECTOR2( vecHitboxes[ HITBOX_RIGHT_HAND ].x, vecHitboxes[ HITBOX_RIGHT_HAND ].y )
 		};
 
-		const D3DXVECTOR2 vecTorso[ ] // 5
+		D3DXVECTOR2 vecTorso[ ] // 5
 		{
 			D3DXVECTOR2( vecHitboxes[ HITBOX_PELVIS ].x, vecHitboxes[ HITBOX_PELVIS ].y ),
 			D3DXVECTOR2( vecHitboxes[ HITBOX_CHEST ].x, vecHitboxes[ HITBOX_CHEST ].y ),

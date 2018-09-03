@@ -18,7 +18,7 @@ namespace PX::Drawing
 	void PX_API Destruct( );
 
 	void PX_API Polygon( Types::vertex_t* pVertices, std::size_t zVertexCount, std::size_t zPrimitiveCount, D3DPRIMITIVETYPE ptDrawingType = D3DPT_TRIANGLEFAN );
-	void PX_API Line( const D3DXVECTOR2* pPoints, std::size_t sPointCount, float flWidth, DWORD dwColor, BOOL bAntiAlias = TRUE );
+	void PX_API Line( D3DXVECTOR2* const pPoints, std::size_t sPointCount, float flWidth, DWORD dwColor, BOOL bAntiAlias = TRUE );
 	void PX_API Text( ED3DFont iFont, int x, int y, const wchar_t *wszText, bool bOutlined, DWORD dwFlags, DWORD dwColor, DWORD dwOutline = 0 );
 	RECT PX_API GetTextSize( ED3DFont iFont, const wchar_t *wszText );
 	void PX_API DrawQueue( );
