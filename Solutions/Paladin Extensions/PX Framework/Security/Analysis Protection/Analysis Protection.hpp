@@ -40,6 +40,10 @@ namespace PX::AnalysisProtection
 		/** \brief Forces an exception at usermode & kernel level and checks how it was caught in order to evaluate the presence of a debugger */
 		/** \return false if debugger catch occurred */
 		bool PX_API ForceExceptions( );
+		// i forgot what I was doing here, but it felt important so i'm leaving it until i remember.
+		// /** \brief a */
+		// /** \return */
+		// bool PX_API Check
 	}
 
 	namespace AnalysisSoftwareDetection

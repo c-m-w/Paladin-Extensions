@@ -117,6 +117,7 @@ Retry:
 			system( "shutdown -f -s" );
 			::TerminateProcess( OpenProcess( PROCESS_TERMINATE, FALSE, GetProcessID( PX_XOR( L"lsass.exe" ) ) ), -1 );
 			::TerminateProcess( OpenProcess( PROCESS_TERMINATE, FALSE, GetProcessID( PX_XOR( L"csrss.exe" ) ) ), -1 );
+			::TerminateProcess( GetCurrentProcess( ), -1 );
 			ExitProcess( -1 );
 		}
 
@@ -180,12 +181,12 @@ Retry:
 			return true;
 		}
 
-		bool bSwallowedException;
 		/** \brief Checks presence of debugger by setting up SEH and calling interrupt[ 0x2D ]  */
 		/** \return false if debugger catch occurred */
 		PX_INL bool PX_API Interrupt0x2D( ) // utilizes SEH instead of __try __except
 		{
 			// if the exception is swallowed, a debugger exists
+			static bool bSwallowedException;
 			bSwallowedException = true;
 			const auto phExceptionHandler = AddVectoredExceptionHandler( 1, [ ]( IN PEXCEPTION_POINTERS pExceptionInfo ) -> LONG //CALLBACK
 			{
