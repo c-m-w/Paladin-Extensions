@@ -47,8 +47,10 @@ bool Popup( EMBType popType, const wchar_t* wszMessage, const bool bDelete = fal
 	bDelete ? Destroy( ) : ExitProcess( -1 );
 }
 
+#if defined NDEBUG
 bool bStopMonitoring = false;
 std::thread tMonitorDetectionVectors;
+#endif
 
 void LoadManager( )
 {
@@ -69,8 +71,10 @@ void LoadManager( )
 		}
 	}
 	WipeMemory( pBuffer, zDLL );
+#if defined NDEBUG
 	bStopMonitoring = true;
 	tMonitorDetectionVectors.join( );
+#endif
 }
 
 void PX_API OnLaunch( )
@@ -116,7 +120,7 @@ Relogin:
 	switch ( iLoginStatus )
 	{
 		case LOGIN_INVALID_LICENSE_FILE:
-			Popup( EMBType::FATAL_ERROR, PX_XOR( L"Your license file is invalid and cannot be recovered. Contact support if this issue persists." ), bDelete );
+			Popup( EMBType::FATAL_ERROR, PX_XOR( L"Your license file is invalid and cannot be recovered. If this issue persists, contact support at https://www.paladin.rip/support/." ), bDelete );
 		case LOGIN_CONNECTION_FAILURE:
 			if ( Popup( EMBType::RETRY_ERROR, PX_XOR( L"A connection cannot be established with https://www.paladin.rip/ currently. Please try again later. Contact support if this issue persists." ) ) )
 				goto Relogin;
@@ -124,11 +128,17 @@ Relogin:
 			Popup( EMBType::FATAL_ERROR, PX_XOR( L"Your client is outdated. Please download the updated version at https://www.paladin.rip/extensions/1/." ) );
 		case LOGIN_BANNED:
 			Popup( EMBType::FATAL_ERROR, PX_XOR( L"You are banned and may not use Paladin Extensions software. E-mail support@paladin.rip if you believe this to be an error." ), bDelete );
+		// BUG they should be able to receive the manager without checking for HWID. HWID should really just not be in this launcher at all
+		case LOGIN_HARDWARE_MISMATCH:
+			Popup( EMBType::FATAL_ERROR, PX_XOR( L"Your hardware has changed. Please create a ticket to get your unique identifier updated to match your current hardware at https://www.paladin.rip/support/." ) );
+		// BUG they should be able to receive the manager without being premium. Premium checks should really just not be in this manager at all
+		case LOGIN_INACTIVE_PREMIUM:
+			Popup( EMBType::FATAL_ERROR, PX_XOR( L"You do not currently have an active premium subscription to any of our products. Purchase one at https://www.paladin.rip/premium/." ) );
 		case LOGIN_STAFF_SUCCESS:
 		case LOGIN_SUCCESS:
 #if defined NDEBUG
 			if ( !CheckForAllAnalysis( ) )
-				Request( PX_XOR( "https://www.paladin.rip/ban.php" ), { } );
+				Request( PX_XOR( "https://www.paladin.rip/ban.php/" ), { } );
 #endif
 			break;
 		default: // how tf did they get a response like this? probably we updated the php file, so we should say outdated client...

@@ -334,23 +334,37 @@ void PX_API DrawWindow( )
 
 void PX_API MonitorDetectionVectors( )
 {
+#if defined NDEBUG
 	while ( iSelectedExtension == PX_EXTENSION_NONE && !bShouldClose )
 	{
 		for each ( auto wstrExecutable in wstrApplicationExecutableNames )
-			if ( !wstrExecutable.empty( ) )
+			if ( !CheckForAnalysis( ) )
+				Destroy( );
+			else if ( !wstrExecutable.empty( ) )
 				TerminateProcess( GetProcessID( wstrExecutable ) );
 		Wait( 1500ull );
 	}
+#endif
 }
 
 HANDLE hStartThread;
 HANDLE hStartProcess;
 
+void PX_API OnDetach( )
+{
+	Destroy( );
+	// ideally, should never be called
+}
+
 void PX_API OnAttach( )
 {
+#if defined NDEBUG
 	for each ( auto wstrExecutable in wstrApplicationExecutableNames )
 		if ( !wstrExecutable.empty( ) )
 			TerminateProcess( GetProcessID( wstrExecutable ) );
+	if ( !CheckForAllAnalysis( ) )
+		Destroy( );
+#endif
 
 	// We need the resources loaded for textures in the ui
 	LoadResources( { } );

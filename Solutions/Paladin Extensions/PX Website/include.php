@@ -153,6 +153,7 @@
 				. ' AND cpu = "' . $hardware[ "cpu" ]
 				. '" AND gpu = "' . $hardware[ "gpu" ]
 				. '" AND display = "' . $hardware[ "display" ]
+				. '" AND pc = "' . $hardware[ "pc" ]
 				. '" AND os = "' . $hardware[ "os" ]
 				, '" AND drive = "' . $hardware[ "drive" ]
 				. '" AND board = "' . $hardware[ "board" ] . '"' );
@@ -183,6 +184,7 @@
 			. $hardware[ "cpu" ] . '", "'
 			. $hardware[ "gpu" ] . '", "'
 			. $hardware[ "display" ] . '", "'
+			. $hardware[ "pc" ] . '", "'
 			. $hardware[ "os" ] . '", "'
 			. $hardware[ "drive" ] . '", "'
 			. $hardware[ "board" ] . '")' );
@@ -196,6 +198,7 @@
 			. ' AND cpu = "' . $hardware[ "cpu" ]
 			. '" AND gpu = "' . $hardware[ "gpu" ]
 			. '" AND display = "' . $hardware[ "display" ]
+			. '" AND pc = "' . $hardware[ "pc" ]
 			. '" AND os = "' . $hardware[ "os" ]
 			. '" AND drive = "' . $hardware[ "drive" ]
 			. '" AND board = "' . $hardware[ "board" ] . '"' );

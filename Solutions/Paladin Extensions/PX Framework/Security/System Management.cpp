@@ -71,15 +71,15 @@ namespace PX::sys
 		wstrSystemParts[ SYS_CPU ] = RetrieveInfo( PX_XOR( L"SELECT * FROM Win32_Processor" ) );
 		wstrSystemParts[ SYS_GPU ] = RetrieveInfo( PX_XOR( L"SELECT * FROM CIM_PCVideoController" ) );
 		wstrSystemParts[ SYS_DISPLAY ] = RetrieveInfo( PX_XOR( L"SELECT * FROM Win32_DesktopMonitor" ) );
+		wstrSystemParts[ SYS_PC ] = RetrieveInfo( PX_XOR( L"SELECT * FROM CIM_OperatingSystem" ), PX_XOR( L"CSName" ) );
 		wstrSystemParts[ SYS_OS ] = RetrieveInfo( PX_XOR( L"SELECT * FROM CIM_OperatingSystem" ), PX_XOR( L"Caption" ) );
 		wstrSystemParts[ SYS_DRIVE ] = RetrieveInfo( PX_XOR( L"SELECT * FROM Win32_DiskDrive" ), PX_XOR( L"SerialNumber" ) );
 		wstrSystemParts[ SYS_BOARD ] = RetrieveInfo( PX_XOR( L"SELECT * FROM Win32_BaseBoard" ), PX_XOR( L"Product" ) );
-		// todo: std::wstring wstrInstallUSBName
-		// todo: std::deque< std::wstring > dqApps
 
 		px_assert( !wstrSystemParts[ SYS_CPU ].empty( )
 				   && !wstrSystemParts[ SYS_GPU ].empty( )
 				   && !wstrSystemParts[ SYS_DISPLAY ].empty( )
+				   && !wstrSystemParts[ SYS_PC ].empty( )
 				   && !wstrSystemParts[ SYS_OS ].empty( )
 				   && !wstrSystemParts[ SYS_DRIVE ].empty( )
 				   && !wstrSystemParts[ SYS_BOARD ].empty( ) );
@@ -93,6 +93,7 @@ namespace PX::sys
 			{ PX_XOR( "cpu" ), string_cast< std::string >( wstrSystemParts[ SYS_CPU ] ) },
 			{ PX_XOR( "gpu" ), string_cast< std::string >( wstrSystemParts[ SYS_GPU ] ) },
 			{ PX_XOR( "display" ), string_cast< std::string >( wstrSystemParts[ SYS_DISPLAY ] ) },
+			{ PX_XOR( "pc" ), string_cast< std::string >( wstrSystemParts[ SYS_PC ] ) },
 			{ PX_XOR( "os" ), string_cast< std::string >( wstrSystemParts[ SYS_OS ] ) },
 			{ PX_XOR( "drive" ), string_cast< std::string >( wstrSystemParts[ SYS_DRIVE ] ) },
 			{ PX_XOR( "board" ), string_cast< std::string >( wstrSystemParts[ SYS_BOARD ] ) }

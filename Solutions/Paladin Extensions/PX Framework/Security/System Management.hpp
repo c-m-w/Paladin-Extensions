@@ -9,6 +9,7 @@ namespace PX::sys
 		SYS_CPU,
 		SYS_GPU,
 		SYS_DISPLAY,
+		SYS_PC,
 		SYS_OS,
 		SYS_DRIVE,
 		SYS_BOARD,
