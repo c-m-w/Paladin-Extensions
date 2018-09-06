@@ -2,7 +2,6 @@
 
 #define PX_USE_NAMESPACES
 #include "../PX Framework.hpp"
-#include "../../PX CSGO/SDK/Valve/Interfaces/CClientState.hpp"
 
 namespace PX::Drawing
 {
@@ -50,7 +49,7 @@ namespace PX::Drawing
 		vecPolygonList.emplace_back( polygon_t( pVertices, zVertexCount, zPrimitiveCount, ptDrawingType ) );
 	}
 
-	PX_EXT PX_INL void PX_API Line( D3DXVECTOR2* const pPoints, std::size_t sPointCount, float flWidth, DWORD dwColor, BOOL bAntiAlias /*= TRUE*/ )
+	PX_EXT PX_INL void PX_API Line( const D3DXVECTOR2* pPoints, std::size_t sPointCount, float flWidth, DWORD dwColor )
 	{
 		// using primitives > ID3DXLine speed-wise.
 		auto fnRotateVector = [ ]( D3DXVECTOR2 vecRotatee, D3DXVECTOR2 vecRotationPoint, float flAngle )
@@ -58,24 +57,16 @@ namespace PX::Drawing
 			const auto flRadians = D3DXToRadian( flAngle );
 			const auto flSin = sin( flRadians );
 			const auto flCos = cos( flRadians );
-			D3DXVECTOR2 vecOld { vecRotatee.x - vecRotationPoint.x, vecRotatee.y - vecRotationPoint.y };
+			const D3DXVECTOR2 vecRelative { vecRotatee.x - vecRotationPoint.x, vecRotatee.y - vecRotationPoint.y };
 		
-			vecRotatee.x = ( vecOld.x * flCos ) - ( vecOld.y * flSin ) + vecRotationPoint.x;
-			vecRotatee.y = ( vecOld.x * flSin ) + ( vecOld.y * flCos ) + vecRotationPoint.y;
+			vecRotatee.x = ( vecRelative.x * flCos ) - ( vecRelative.y * flSin ) + vecRotationPoint.x;
+			vecRotatee.y = ( vecRelative.x * flSin ) + ( vecRelative.y * flCos ) + vecRotationPoint.y;
 			return vecRotatee;
 		};
 
 		const auto pVertices = new vertex_t[ sPointCount ][ 4 ];
 		for ( auto z = 0u; z < sPointCount - 1; z++ )
 		{
-			//if( !( z % 2 ) ) // todo: make this a proper fix not ghetto
-			//{
-			//	pPoints[ z ].x -= flWidth;
-			//	pPoints[ z ].y -= flWidth;
-			//	pPoints[ z + 1 ].x += flWidth;
-			//	pPoints[ z + 1 ].y += flWidth;
-			//}
-
 			const auto vecDifference = pPoints[ z ] - pPoints[ z + 1 ];
 			const auto flAngle = D3DXToDegree( atan2( vecDifference.x, vecDifference.y ) );
 			const auto flHalf = flWidth / 2.f;
@@ -115,75 +106,83 @@ namespace PX::Drawing
 
 	void PX_API DrawQueue( )
 	{
-		for each ( auto& polPolygon in vecPolygonList )
-		{
-			const auto sVertexSize = sizeof( vertex_t ) * polPolygon.vecVertices.size( );
-			if ( D3D_OK != pDevice->CreateVertexBuffer( sVertexSize, NULL, PX_CUSTOM_FVF, D3DPOOL_DEFAULT, &pVertexBuffer, nullptr ) )
-			{
-				pVertexBuffer->Release( );
-				pVertexBuffer = nullptr;
-				return;
-			}
+		auto vecPolygons = vecPolygonList;
+		auto vecText = vecTextList;
 
-			void* pVertexMemory;
-			pVertexBuffer->Lock( 0, sVertexSize, &pVertexMemory, 0 );
-			memcpy( pVertexMemory, &polPolygon.vecVertices[ 0 ], sVertexSize );
-			pVertexBuffer->Unlock( );
-
-			if ( D3D_OK != pDevice->SetRenderState( D3DRS_ALPHABLENDENABLE, TRUE )
-				 || D3D_OK != pDevice->SetRenderState( D3DRS_ANTIALIASEDLINEENABLE, TRUE )
-				 || D3D_OK != pDevice->SetRenderState( D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA )
-				 || D3D_OK != pDevice->SetRenderState( D3DRS_CULLMODE, D3DCULL_NONE )
-				 || D3D_OK != pDevice->SetStreamSource( NULL, pVertexBuffer, NULL, sizeof( vertex_t ) )
-				 || D3D_OK != pDevice->SetPixelShader( nullptr )
-				 || D3D_OK != pDevice->SetVertexShader( nullptr )
-				 || D3D_OK != pDevice->SetTexture( NULL, nullptr )
-				 || D3D_OK != pDevice->SetFVF( PX_CUSTOM_FVF ) )
-			{
-				pVertexBuffer->Release( );
-				pVertexBuffer = nullptr;
-				continue;
-			}
-
-			px_assert( D3D_OK == pDevice->DrawPrimitive( polPolygon.ptType, 0, polPolygon.sPrimitives ) );
-			pVertexBuffer->Release( );
-			pVertexBuffer = nullptr;
-		}
 		vecPolygonList.clear( );
-
-		if ( pLine && pLine->Begin( ) == D3D_OK )
-		{
-			static auto flCurrentWidth = 0.f;
-			static auto bCurrentlyAntiAliased = FALSE;
-			auto bEndFinalLine = true;
-
-			auto fnNewLine = [ ]( ID3DXLine*& pTargetLine, float flWidth, BOOL bAntiAlias )
+		vecTextList.clear( );
+		
+		if ( D3D_OK == pDevice->SetRenderState( D3DRS_ALPHABLENDENABLE, TRUE )
+			 && D3D_OK == pDevice->SetRenderState( D3DRS_ANTIALIASEDLINEENABLE, TRUE )
+			 && D3D_OK == pDevice->SetRenderState( D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA )
+			 && D3D_OK == pDevice->SetRenderState( D3DRS_CULLMODE, D3DCULL_NONE )
+			 && D3D_OK == pDevice->SetPixelShader( nullptr )
+			 && D3D_OK == pDevice->SetVertexShader( nullptr )
+			 && D3D_OK == pDevice->SetTexture( NULL, nullptr )
+			 && D3D_OK == pDevice->SetFVF( PX_CUSTOM_FVF ) )
+			for each ( auto& polPolygon in vecPolygons )
 			{
-				return D3D_OK == pTargetLine->End( )
-				 && D3D_OK == pTargetLine->SetWidth( flWidth )
-				 && D3D_OK == pTargetLine->SetAntialias( bAntiAlias )
-				 && D3D_OK == pTargetLine->Begin( );
-			};
-
-			for each ( auto& lnLine in vecLineList )
-			{
-				px_assert( lnLine.vecVertices.size( ) > 1 );
-				if ( lnLine.flWidth != flCurrentWidth || lnLine.bAntiAlias != bCurrentlyAntiAliased )
-					if ( !fnNewLine( pLine, lnLine.flWidth, lnLine.bAntiAlias ) )
+				const auto sVertexSize = sizeof( vertex_t ) * polPolygon.vecVertices.size( );
+				if ( D3D_OK != pDevice->CreateVertexBuffer( sVertexSize, NULL, PX_CUSTOM_FVF, D3DPOOL_DEFAULT, &pVertexBuffer, nullptr ) )
+				{
+					if ( pVertexBuffer )
 					{
-						bEndFinalLine = false;
-						break;
+						pVertexBuffer->Release( );
+						pVertexBuffer = nullptr;
 					}
-				px_assert( D3D_OK == pLine->Draw( &lnLine.vecVertices[ 0 ], lnLine.vecVertices.size( ), lnLine.dwColor ) );
+					return;
+				}
+
+				void* pVertexMemory;
+				pVertexBuffer->Lock( 0, sVertexSize, &pVertexMemory, 0 );
+				memcpy( pVertexMemory, &polPolygon.vecVertices[ 0 ], sVertexSize );
+				pVertexBuffer->Unlock( );
+
+				if ( D3D_OK != pDevice->SetStreamSource( NULL, pVertexBuffer, NULL, sizeof( vertex_t ) ) )
+				{
+					pVertexBuffer->Release( );
+					pVertexBuffer = nullptr;
+					continue;
+				}
+
+				px_assert( D3D_OK == pDevice->DrawPrimitive( polPolygon.ptType, 0, polPolygon.sPrimitives ) );
+				pVertexBuffer->Release( );
+				pVertexBuffer = nullptr;
 			}
-			if( bEndFinalLine )
-				pLine->End( );
-		}
-		vecLineList.clear( );
+
+		//if ( pLine && pLine->Begin( ) == D3D_OK )
+		//{
+		//	static auto flCurrentWidth = 0.f;
+		//	static auto bCurrentlyAntiAliased = FALSE;
+		//	auto bEndFinalLine = true;
+		//
+		//	auto fnNewLine = [ ]( ID3DXLine*& pTargetLine, float flWidth, BOOL bAntiAlias )
+		//	{
+		//		return D3D_OK == pTargetLine->End( )
+		//			&& D3D_OK == pTargetLine->SetWidth( flWidth )
+		//			&& D3D_OK == pTargetLine->SetAntialias( bAntiAlias )
+		//			&& D3D_OK == pTargetLine->Begin( );
+		//	};
+		//
+		//	for each ( auto& lnLine in vecLineList )
+		//	{
+		//		px_assert( lnLine.vecVertices.size( ) > 1 );
+		//		if ( lnLine.flWidth != flCurrentWidth || lnLine.bAntiAlias != bCurrentlyAntiAliased )
+		//			if ( !fnNewLine( pLine, lnLine.flWidth, lnLine.bAntiAlias ) )
+		//			{
+		//				bEndFinalLine = false;
+		//				break;
+		//			}
+		//		px_assert( D3D_OK == pLine->Draw( &lnLine.vecVertices[ 0 ], lnLine.vecVertices.size( ), lnLine.dwColor ) );
+		//	}
+		//	if ( bEndFinalLine )
+		//		pLine->End( );
+		//}
+		//vecLineList.clear( );
 
 		if ( pTextSprite && pTextSprite->Begin( D3DXSPRITE_ALPHABLEND ) == D3D_OK )
 		{
-			for ( auto& text : vecTextList )
+			for ( auto& text : vecText )
 			{
 				if ( !pFonts[ text.iFont ] )
 					continue;
@@ -202,6 +201,5 @@ namespace PX::Drawing
 			}
 			pTextSprite->End( );
 		}
-		vecTextList.clear( );
 	}
 }

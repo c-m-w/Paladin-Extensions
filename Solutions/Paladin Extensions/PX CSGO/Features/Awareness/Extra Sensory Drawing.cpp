@@ -105,7 +105,7 @@ namespace PX::Features::Awareness
 		}
 	}
 
-	void PX_API CalculateBoundingBox( )
+	PX_EXT PX_INL void PX_API CalculateBoundingBox( )
 	{
 		Vector vecPoints[ ] { info.vecLocation, info.vecLocation, info.vecLocation, info.vecLocation };
 		const Vector2D vecRotationPoint { info.vecLocation.x, info.vecLocation.y };
@@ -132,7 +132,7 @@ namespace PX::Features::Awareness
 		memcpy( info.vecWorldBoundingBoxCorners, vecPoints, sizeof( Vector ) * 4 );
 	}
 
-	void PX_API Box( )
+	PX_EXT PX_INL void PX_API Box( )
 	{
 		if ( esdEntityConfig->iBoxMode == BOX_NONE || !info.bBoxInSight )
 			return;
@@ -149,7 +149,7 @@ namespace PX::Features::Awareness
 		}
 		else // 2d box
 		{
-			D3DXVECTOR2 vecScreenPoints[ ]
+			const D3DXVECTOR2 vecScreenPoints[ ]
 			{
 				D3DXVECTOR2( info.vecBoundingBoxCorners[ BOTTOMRIGHT ].x, info.vecBoundingBoxCorners[ BOTTOMRIGHT ].y ),
 				D3DXVECTOR2( info.vecBoundingBoxCorners[ BOTTOMLEFT ].x, info.vecBoundingBoxCorners[ BOTTOMLEFT ].y ),
@@ -204,7 +204,7 @@ namespace PX::Features::Awareness
 		}
 	}
 
-	void PX_API SnapLine( )
+	PX_EXT PX_INL void PX_API SnapLine( )
 	{
 		if ( !esdEntityConfig->bSnaplines )
 			return;
@@ -219,7 +219,7 @@ namespace PX::Features::Awareness
 			return;
 
 		pEngineClient->GetScreenSize( iWidth, iHeight );
-		D3DXVECTOR2 vecScreenPoints[ ]
+		const D3DXVECTOR2 vecScreenPoints[ ]
 		{
 			D3DXVECTOR2( vecEntity.x, vecEntity.y ),
 			D3DXVECTOR2( iWidth / 2.f, iHeight )
@@ -244,7 +244,7 @@ namespace PX::Features::Awareness
 			 || !WorldToScreen( gtRay.endpos, vecEnd ) )
 			return;
 
-		D3DXVECTOR2 vecScreenPoints[ ]
+		const D3DXVECTOR2 vecScreenPoints[ ]
 		{
 			D3DXVECTOR2( vecEntity.x, vecEntity.y ),
 			D3DXVECTOR2( vecEnd.x, vecEnd.y )
@@ -264,8 +264,31 @@ namespace PX::Features::Awareness
 		Polygon( vtxBox, 4, 2 );
 	}
 
-	void PX_API Skeleton( )
+	PX_EXT PX_INL void PX_API Skeleton( )
 	{
+		constexpr bool bUsedBone[ HITBOX_MAX ]
+		{
+			true,
+			true,
+			true,
+			false,
+			false,
+			true,
+			true,
+			true,
+			true,
+			true,
+			true,
+			true,
+			true,
+			true,
+			true,
+			true,
+			true,
+			true,
+			true
+		};
+
 		if ( !esdEntityConfig->bSkeleton )
 			return;
 
@@ -275,10 +298,10 @@ namespace PX::Features::Awareness
 
 		Vector vecHitboxes[ HITBOX_MAX ];
 		for ( auto e = int( HITBOX_HEAD ); e < HITBOX_MAX; e++ )
-			if ( !WorldToScreen( reinterpret_cast< CBasePlayer* >( info.pEntity )->GetHitboxPosition( EHitbox( e ) ), vecHitboxes[ e ] ) )
+			if ( bUsedBone[ e ] && !WorldToScreen( reinterpret_cast< CBasePlayer* >( info.pEntity )->GetHitboxPosition( EHitbox( e ) ), vecHitboxes[ e ] ) )
 				 return;
 
-		D3DXVECTOR2 vecLegs[ ] // 7
+		const D3DXVECTOR2 vecLegs[ ] // 7
 		{
 			D3DXVECTOR2( vecHitboxes[ HITBOX_LEFT_FOOT ].x, vecHitboxes[ HITBOX_LEFT_FOOT ].y ),
 			D3DXVECTOR2( vecHitboxes[ HITBOX_LEFT_CALF ].x, vecHitboxes[ HITBOX_LEFT_CALF ].y ),
@@ -289,7 +312,7 @@ namespace PX::Features::Awareness
 			D3DXVECTOR2( vecHitboxes[ HITBOX_RIGHT_FOOT ].x, vecHitboxes[ HITBOX_RIGHT_FOOT ].y )
 		};
 
-		D3DXVECTOR2 vecArms[ ] // 7
+		const D3DXVECTOR2 vecArms[ ] // 7
 		{
 			D3DXVECTOR2( vecHitboxes[ HITBOX_LEFT_HAND ].x, vecHitboxes[ HITBOX_LEFT_HAND ].y ),
 			D3DXVECTOR2( vecHitboxes[ HITBOX_LEFT_FOREARM ].x, vecHitboxes[ HITBOX_LEFT_FOREARM ].y ),
@@ -300,7 +323,7 @@ namespace PX::Features::Awareness
 			D3DXVECTOR2( vecHitboxes[ HITBOX_RIGHT_HAND ].x, vecHitboxes[ HITBOX_RIGHT_HAND ].y )
 		};
 
-		D3DXVECTOR2 vecTorso[ ] // 5
+		const D3DXVECTOR2 vecTorso[ ] // 5
 		{
 			D3DXVECTOR2( vecHitboxes[ HITBOX_PELVIS ].x, vecHitboxes[ HITBOX_PELVIS ].y ),
 			D3DXVECTOR2( vecHitboxes[ HITBOX_CHEST ].x, vecHitboxes[ HITBOX_CHEST ].y ),
@@ -315,7 +338,7 @@ namespace PX::Features::Awareness
 		Line( vecTorso, 5, esdEntityConfig->flSkeletonWidth, dwColor );
 	}
 
-	void PX_API Information( )
+	PX_EXT PX_INL void PX_API Information( )
 	{
 		if ( !esdEntityConfig->bShowInformation || !info.bBoxInSight )
 			return;
@@ -423,18 +446,18 @@ namespace PX::Features::Awareness
 								WorldToScreen( vecPoints[ i ], vecBar[ i ] );
 							}
 
-							const auto flZDifference = ( vecPoints[ TOPLEFT ].z - vecPoints[ BOTTOMLEFT ].z ) * flHealthRatio;
-							auto vecMiddleLeft = vecPoints[ BOTTOMLEFT ],
-								vecMiddleRight = vecPoints[ BOTTOMRIGHT ];
-							vecMiddleLeft.z += flZDifference;
-							vecMiddleRight.z += flZDifference;
-
-							Vector vecScreenMiddleLeft, vecScreenMiddleRight;
-							WorldToScreen( vecMiddleLeft, vecScreenMiddleLeft );
-							WorldToScreen( vecMiddleRight, vecScreenMiddleRight );
-
 							if ( flHealthRatio != 1.f )
 							{
+								const auto flZDifference = ( vecPoints[ TOPLEFT ].z - vecPoints[ BOTTOMLEFT ].z ) * flHealthRatio;
+								auto vecMiddleLeft = vecPoints[ BOTTOMLEFT ],
+									vecMiddleRight = vecPoints[ BOTTOMRIGHT ];
+								vecMiddleLeft.z += flZDifference;
+								vecMiddleRight.z += flZDifference;
+
+								Vector vecScreenMiddleLeft, vecScreenMiddleRight;
+								WorldToScreen( vecMiddleLeft, vecScreenMiddleLeft );
+								WorldToScreen( vecMiddleRight, vecScreenMiddleRight );
+
 								vtxTop[ 0 ] = vertex_t( vecBar[ TOPLEFT ].x, vecBar[ TOPLEFT ].y, dwTop );
 								vtxTop[ 1 ] = vertex_t( vecBar[ TOPRIGHT ].x, vecBar[ TOPRIGHT ].y, dwTop );
 								vtxTop[ 2 ] = vertex_t( vecScreenMiddleRight.x, vecScreenMiddleRight.y, dwTop );
@@ -444,6 +467,20 @@ namespace PX::Features::Awareness
 								vtxBottom[ 1 ] = vertex_t( vecScreenMiddleRight.x, vecScreenMiddleRight.y, dwBottom );
 								vtxBottom[ 2 ] = vertex_t( vecBar[ BOTTOMRIGHT ].x, vecBar[ BOTTOMRIGHT ].y, dwBottom );
 								vtxBottom[ 3 ] = vertex_t( vecBar[ BOTTOMLEFT ].x, vecBar[ BOTTOMLEFT ].y, dwBottom );
+
+								if ( bDoOutline )
+								{
+									const auto uSize = sizeof( vertex_t ) * 2u;
+									memcpy( vtxOutline, vtxTop, uSize );
+									memcpy( &vtxOutline[ 2 ], &vtxBottom[ 2 ], uSize );
+								}
+							}
+							else if ( bDoOutline )
+							{
+								vtxOutline[ 0 ] = vertex_t( vecBar[ TOPLEFT ].x, vecBar[ TOPLEFT ].y, 0 );
+								vtxOutline[ 1 ] = vertex_t( vecBar[ TOPRIGHT ].x, vecBar[ TOPRIGHT ].y, 0 );
+								vtxOutline[ 2 ] = vertex_t( vecBar[ BOTTOMRIGHT ].x, vecBar[ BOTTOMRIGHT ].y, 0 );
+								vtxOutline[ 3 ] = vertex_t( vecBar[ BOTTOMLEFT ].x, vecBar[ BOTTOMLEFT ].y, 0 );
 							}
 
 							if ( esdEntityConfig->iInformationAlignment == ALIGNMENT_LEFT )
@@ -455,13 +492,6 @@ namespace PX::Features::Awareness
 							{
 								vecInformationStart = vecBar[ TOPRIGHT ];
 								vecInformationStart.x += flPadding;
-							}
-
-							if ( bDoOutline )
-							{
-								const auto uSize = sizeof( vertex_t ) * 2u;
-								memcpy( vtxOutline, vtxTop, uSize );
-								memcpy( &vtxOutline[ 2 ], &vtxBottom[ 2 ], uSize );
 							}
 						}
 						break;
@@ -481,20 +511,20 @@ namespace PX::Features::Awareness
 							vecPoints[ TOPLEFT ].y += 20.f; // Top left
 							vecPoints[ TOPLEFT ].z += fl2 - flHealthbarWidth;
 
-							const auto flYDifference = ( vecPoints[ TOPLEFT ].y - vecPoints[ TOPRIGHT ].y ) * ( 1.f - flHealthRatio );
-							auto vecMiddleTop = vecPoints[ TOPLEFT ],
-								vecMiddleBottom = vecPoints[ BOTTOMLEFT ];
-							vecMiddleTop.y -= flYDifference;
-							vecMiddleBottom.y -= flYDifference;
-
-							for ( auto i = 0; i < 4; i++ )
-							{
-								vecPoints[ i ].Rotate2D( flRotation, vecRotationPoint );
-								WorldToScreen( vecPoints[ i ], vecBar[ i ] );
-							}
-
 							if ( flHealthRatio != 1.f )
 							{
+								const auto flYDifference = ( vecPoints[ TOPLEFT ].y - vecPoints[ TOPRIGHT ].y ) * ( 1.f - flHealthRatio );
+								auto vecMiddleTop = vecPoints[ TOPLEFT ],
+									vecMiddleBottom = vecPoints[ BOTTOMLEFT ];
+								vecMiddleTop.y -= flYDifference;
+								vecMiddleBottom.y -= flYDifference;
+
+								for ( auto i = 0; i < 4; i++ )
+								{
+									vecPoints[ i ].Rotate2D( flRotation, vecRotationPoint );
+									WorldToScreen( vecPoints[ i ], vecBar[ i ] );
+								}
+
 								vecMiddleTop.Rotate2D( flRotation, vecRotationPoint );
 								vecMiddleBottom.Rotate2D( flRotation, vecRotationPoint );
 								Vector vecScreenMiddleTop, vecScreenMiddleBottom;
@@ -511,6 +541,12 @@ namespace PX::Features::Awareness
 								vtxBottom[ 2 ] = vertex_t( vecBar[ BOTTOMRIGHT ].x, vecBar[ BOTTOMRIGHT ].y, dwBottom );
 								vtxBottom[ 3 ] = vertex_t( vecScreenMiddleBottom.x, vecScreenMiddleBottom.y, dwBottom );
 							}
+							else
+								for ( auto i = 0; i < 4; i++ )
+								{
+									vecPoints[ i ].Rotate2D( flRotation, vecRotationPoint );
+									WorldToScreen( vecPoints[ i ], vecBar[ i ] );
+								}
 
 							if ( esdEntityConfig->iInformationAlignment == ALIGNMENT_BOTTOM )
 							{
