@@ -18,7 +18,7 @@ namespace PX::Tools
 
 	template< typename _t > Types::moment_t PX_API GetMoment( )
 	{
-		return std::chrono::duration_cast< _t >( std::chrono::high_resolution_clock::now( ).time_since_epoch( ) ).count( );
+		return std::chrono::duration_cast< _t >( std::chrono::system_clock::now( ).time_since_epoch( ) ).count( );
 	}
 	template< typename _t > void PX_API Wait( Types::moment_t mmtWaitLength = ULLONG_MAX )
 	{
