@@ -71,7 +71,7 @@ namespace PX::sys
 		wstrSystemParts[ SYS_CPU ] = RetrieveInfo( PX_XOR( L"SELECT * FROM Win32_Processor" ) );
 		wstrSystemParts[ SYS_GPU ] = RetrieveInfo( PX_XOR( L"SELECT * FROM CIM_PCVideoController" ) );
 		wstrSystemParts[ SYS_DISPLAY ] = RetrieveInfo( PX_XOR( L"SELECT * FROM Win32_DesktopMonitor" ) );
-		wstrSystemParts[ SYS_OS ] = RetrieveInfo( PX_XOR( L"SELECT * FROM CIM_OperatingSystem" ), PX_XOR( L"CSName" ) );
+		wstrSystemParts[ SYS_OS ] = RetrieveInfo( PX_XOR( L"SELECT * FROM CIM_OperatingSystem" ), PX_XOR( L"Caption" ) );
 		wstrSystemParts[ SYS_DRIVE ] = RetrieveInfo( PX_XOR( L"SELECT * FROM Win32_DiskDrive" ), PX_XOR( L"SerialNumber" ) );
 		wstrSystemParts[ SYS_BOARD ] = RetrieveInfo( PX_XOR( L"SELECT * FROM Win32_BaseBoard" ), PX_XOR( L"Product" ) );
 		// todo: std::wstring wstrInstallUSBName

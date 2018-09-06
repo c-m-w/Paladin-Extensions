@@ -154,6 +154,7 @@
 				. '" AND gpu = "' . $hardware[ "gpu" ]
 				. '" AND display = "' . $hardware[ "display" ]
 				. '" AND os = "' . $hardware[ "os" ]
+				, '" AND drive = "' . $hardware[ "drive" ]
 				. '" AND board = "' . $hardware[ "board" ] . '"' );
 			if ( $result->num_rows == 0 )
 				$unique_id = NULL;
@@ -177,12 +178,13 @@
 		global $sql_connection;
 
 		 // Don't break the query line.
-		$sql_connection->query( 'INSERT INTO px_unique_id VALUES (0, '
+		$sql_connection->query( 'INSERT INTO px_unique_id VALUES ( 0, '
 			. $user_id . ', "'
 			. $hardware[ "cpu" ] . '", "'
 			. $hardware[ "gpu" ] . '", "'
 			. $hardware[ "display" ] . '", "'
 			. $hardware[ "os" ] . '", "'
+			. $hardware[ "drive" ] . '", "'
 			. $hardware[ "board" ] . '")' );
 	}
 
@@ -195,6 +197,7 @@
 			. '" AND gpu = "' . $hardware[ "gpu" ]
 			. '" AND display = "' . $hardware[ "display" ]
 			. '" AND os = "' . $hardware[ "os" ]
+			. '" AND drive = "' . $hardware[ "drive" ]
 			. '" AND board = "' . $hardware[ "board" ] . '"' );
 
 		if ( $result->num_rows == 0 )
