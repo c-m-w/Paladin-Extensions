@@ -81,7 +81,7 @@ namespace PX::Net
 		return Request( strDownloadURL, dqPostData );
 	}
 
-	std::wstring wszCredentialsFile = PX_XOR( L"license.px" );
+	wcstr_t wszCredentialsFile = PX_XOR( L"license.px" );
 
 	nlohmann::json jsCredentials = nlohmann::json::parse( PX_XOR( R"(
 	{
@@ -98,6 +98,7 @@ namespace PX::Net
 		post_data_t dqPostData;
 		dqPostData.emplace_back( PX_XOR( "client" ), PX_XOR( "true" ) );
 
+		// BUG should really be checking the return on these
 		InitializeConnection( );
 		InitializeEncryption( );
 
@@ -108,7 +109,7 @@ namespace PX::Net
 		if ( strResponse.empty( ) )
 			return false;
 
-		FileWrite( GetPXDirectory( ) + wszCredentialsFile, string_cast< std::wstring >( strResponse ), false, false );
+		FileWrite( PX_APPDATA + wszCredentialsFile, string_cast< std::wstring >( strResponse ), false, false );
 		return true;
 	}
 
@@ -122,7 +123,7 @@ namespace PX::Net
 		if ( bRecalled )
 			bAttemptedLicenceCreation = false;
 
-		if ( !FileRead( GetPXDirectory( ) + wszCredentialsFile, wstrFile, false ) )
+		if ( !FileRead( PX_APPDATA + wszCredentialsFile, wstrFile, false ) )
 			bCreatedLicenseFile = CreateLicenseFile( );
 
 		try
@@ -131,15 +132,18 @@ namespace PX::Net
 		}
 		catch ( nlohmann::detail::parse_error& )
 		{
-			bCreatedLicenseFile = CreateLicenseFile( );
+			if ( !bCreatedLicenseFile )
+				bCreatedLicenseFile = CreateLicenseFile( );
 		}
 		catch ( nlohmann::detail::type_error& )
 		{
-			bCreatedLicenseFile = CreateLicenseFile( );
+			if ( !bCreatedLicenseFile )
+				bCreatedLicenseFile = CreateLicenseFile( );
 		}
 
-		if ( jsCredentials[ strUserIDIdentifier ].is_null( ) ||
-			 jsCredentials[ strSecretKeyIdentifier ].is_null( ) )
+		if ( !bCreatedLicenseFile
+		&& ( jsCredentials[ strUserIDIdentifier ].is_null( )
+		  || jsCredentials[ strSecretKeyIdentifier ].is_null( ) ) )
 			bCreatedLicenseFile = CreateLicenseFile( );
 
 		if ( bAttemptedLicenceCreation )

@@ -13,7 +13,7 @@ namespace PX::Tools
 		DWORD dwMemoryNeeded;
 
 		vecModules.resize( sMaxModules );
-		if ( EnumProcessModules( GetCurrentProcess( ), &vecModules[ 0 ], sMaxModules * sizeof( HMODULE ), &dwMemoryNeeded ) == FALSE )
+		if ( 0 == EnumProcessModules( GetCurrentProcess( ), &vecModules[ 0 ], sMaxModules * sizeof( HMODULE ), &dwMemoryNeeded ) )
 			return false;
 		vecModules.erase( vecModules.begin( ) + dwMemoryNeeded / sizeof( HMODULE ), vecModules.end( ) );
 		return true;

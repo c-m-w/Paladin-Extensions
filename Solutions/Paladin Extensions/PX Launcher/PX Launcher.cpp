@@ -15,8 +15,7 @@ enum class EMBType
 {
 	NONE = MB_OK | MB_HELP,
 	FATAL_ERROR = MB_ICONHAND | MB_HELP,
-#undef ERROR
-	ERROR = MB_ICONHAND | MB_OK | MB_RETRYCANCEL | MB_HELP,
+	RETRY_ERROR = MB_ICONHAND | MB_OK | MB_RETRYCANCEL | MB_HELP,
 	QUERY = MB_ICONQUESTION | MB_YESNO | MB_HELP,
 	WARNING = MB_ICONEXCLAMATION | MB_OK | MB_HELP,
 	INFO = MB_ICONASTERISK | MB_OK | MB_HELP,
@@ -30,10 +29,12 @@ bool Popup( EMBType popType, const wchar_t* wszMessage, const bool bDelete = fal
 		case EMBType::FATAL_ERROR:
 			MessageBox( nullptr, wszMessage, PX_XOR( L"Paladin Extensions: Fatal Error" ), UINT( popType ) );
 			break;
-		case EMBType::ERROR:
-			return MessageBox( nullptr, wszMessage, PX_XOR( L"Paladin Extensions: Error" ), UINT( popType ) ) == IDRETRY;
+		case EMBType::RETRY_ERROR:
+			if ( !bDelete )
+				return MessageBox( nullptr, wszMessage, PX_XOR( L"Paladin Extensions: Error" ), UINT( popType ) ) == IDRETRY;
 		case EMBType::QUERY:
-			return MessageBox( nullptr, wszMessage, PX_XOR( L"Paladin Extensions: Query" ), UINT( popType ) ) == IDYES;
+			if ( !bDelete )
+				return MessageBox( nullptr, wszMessage, PX_XOR( L"Paladin Extensions: Query" ), UINT( popType ) ) == IDYES;
 		case EMBType::WARNING:
 			MessageBox( nullptr, wszMessage, PX_XOR( L"Paladin Extensions: Warning" ), UINT( popType ) );
 			break;
@@ -117,7 +118,7 @@ Relogin:
 		case LOGIN_INVALID_LICENSE_FILE:
 			Popup( EMBType::FATAL_ERROR, PX_XOR( L"Your license file is invalid and cannot be recovered. Contact support if this issue persists." ), bDelete );
 		case LOGIN_CONNECTION_FAILURE:
-			if ( Popup( EMBType::ERROR, PX_XOR( L"A connection cannot be established with https://www.paladin.rip/ currently. Please try again later. Contact support if this issue persists." ) ) )
+			if ( Popup( EMBType::RETRY_ERROR, PX_XOR( L"A connection cannot be established with https://www.paladin.rip/ currently. Please try again later. Contact support if this issue persists." ) ) )
 				goto Relogin;
 		case LOGIN_INVALID_HASH:
 			Popup( EMBType::FATAL_ERROR, PX_XOR( L"Your client is outdated. Please download the updated version at https://www.paladin.rip/extensions/1/." ) );

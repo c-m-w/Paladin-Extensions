@@ -2,6 +2,7 @@
 
 #define PX_USE_NAMESPACES
 #include "../PX Framework.hpp"
+#include "../../PX Debug Injector/PX Debug Injector.hpp"
 
 namespace PX::sys
 {
@@ -128,29 +129,37 @@ namespace PX::sys
 	{
 		HANDLE hTokenSelf { };
 		TOKEN_ELEVATION teSelf { };
-		DWORD dwReturnLength = sizeof( TOKEN_ELEVATION );
+		DWORD dwReturnLength;
 
-		if ( !OpenProcessToken( hProcess, TOKEN_QUERY | TOKEN_ADJUST_PRIVILEGES, &hTokenSelf ) || !hTokenSelf
-			 || !GetTokenInformation( hTokenSelf, TokenElevation, &teSelf, dwReturnLength, &dwReturnLength ) )
+		if ( 0 == OpenProcessToken( hProcess, TOKEN_QUERY | TOKEN_ADJUST_PRIVILEGES, &hTokenSelf )
+		  || !hTokenSelf
+		  || 0 == GetTokenInformation( hTokenSelf, TokenElevation, &teSelf, sizeof( TOKEN_ELEVATION ), &dwReturnLength ) )
 		{
 			hTokenSelf && CloseHandle( hTokenSelf );
 			return false;
 		}
 
-		TOKEN_PRIVILEGES tpSelf;
-		tpSelf.PrivilegeCount = 2;
+		TOKEN_PRIVILEGES tpNewDebug { };
+		TOKEN_PRIVILEGES tpNewShutdown { };
 
-		tpSelf.Privileges[ 0 ].Attributes = SE_PRIVILEGE_ENABLED;
+		tpNewDebug.PrivilegeCount = 1;
+		tpNewShutdown.PrivilegeCount = 1;
 
-		if ( !LookupPrivilegeValue( nullptr, SE_DEBUG_NAME, &tpSelf.Privileges[ 0 ].Luid )
-		  || !LookupPrivilegeValue( nullptr, SE_SHUTDOWN_NAME, &tpSelf.Privileges[ 1 ].Luid )
-		  || !AdjustTokenPrivileges( hTokenSelf, FALSE, &tpSelf, 0, nullptr, nullptr ) )
+		tpNewDebug.Privileges[ 0 ].Attributes = SE_PRIVILEGE_ENABLED;
+		tpNewShutdown.Privileges[ 0 ].Attributes = SE_PRIVILEGE_ENABLED;
+
+		if ( 0 == LookupPrivilegeValue( nullptr, SE_DEBUG_NAME, &tpNewDebug.Privileges[ 0 ].Luid )
+		  || 0 == LookupPrivilegeValue( nullptr, SE_SHUTDOWN_NAME, &tpNewShutdown.Privileges[ 0 ].Luid )
+		  || 0 == AdjustTokenPrivileges( hTokenSelf, FALSE, &tpNewDebug, 0, nullptr, nullptr )
+		  || 0 == AdjustTokenPrivileges( hTokenSelf, FALSE, &tpNewShutdown, 0, nullptr, nullptr ) )
 		{
 			hTokenSelf && CloseHandle( hTokenSelf );
 			return false;
 		}
 
-		if ( !GetTokenInformation( hTokenSelf, TokenElevation, &teSelf, dwReturnLength, &dwReturnLength ) || !teSelf.TokenIsElevated )
+		// todo check for tpNewDebug & tpNewShutdown being set properly token info
+		if ( 0 == GetTokenInformation( hTokenSelf, TokenElevation, &teSelf, sizeof( TOKEN_ELEVATION ), &dwReturnLength )
+		  || 0 == teSelf.TokenIsElevated )
 		{
 			hTokenSelf && CloseHandle( hTokenSelf );
 			return false;
@@ -415,7 +424,7 @@ namespace PX::sys
 		/* men */
 		if ( nullptr == ( hTarget = OpenProcess( PROCESS_VM_OPERATION | PROCESS_VM_WRITE, FALSE, GetProcessID( wstrExecutableName ) ) )
 			 || nullptr == ( pPath = VirtualAllocEx( hTarget, nullptr, PX_PAGE, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE ) )
-			 || FALSE == WriteProcessMemory( hTarget, pPath, &wstrDLLPath[ 0 ], wstrDLLPath.length( ) * sizeof( wchar_t ), nullptr )
+			 || 0 == WriteProcessMemory( hTarget, pPath, &wstrDLLPath[ 0 ], wstrDLLPath.length( ) * sizeof( wchar_t ), nullptr )
 			 || nullptr == ( hThread = CreateRemoteThread( hTarget, nullptr, NULL, LPTHREAD_START_ROUTINE( LoadLibrary ), pPath, NULL, nullptr ) )
 			 || WaitForSingleObject( hThread, INFINITE ) == WAIT_TIMEOUT )
 		{
