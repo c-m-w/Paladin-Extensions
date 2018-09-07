@@ -548,7 +548,7 @@ namespace PX::UI
 				pDevice->Present( nullptr, nullptr, nullptr, nullptr );
 			}
 			uTooltipCounter = uSliderIntCounter = uSliderFloatCounter = 0u;
-			if ( !pActiveEditColor && PX_INPUT.GetKeyState( VK_LBUTTON ) == true )
+			if ( !bCreatedWindow && !pActiveEditColor && PX_INPUT.GetKeyState( VK_LBUTTON ) == true )
 				nk_d3d9_handle_event( hwWindowHandle, WM_LBUTTONUP, 0, int( pContext->input.mouse.pos.x ) | int( pContext->input.mouse.pos.y ) << 16 );
 			return bShouldDrawUserInterface;
 		}
