@@ -7,7 +7,7 @@
 namespace PX::sys
 {
 	/** \brief Retrieves info from WMIC service */
-	/** \param bszDevice Device name, generally Win32_ */
+	/** \param bszDevice Device name, generally Win32_ but can be CIM_ or other */
 	/** \param wszDeviceProperty Property to find from index */
 	/** \return Property of device */
 	std::wstring PX_API RetrieveInfo( const bstr_t& bszDevice, wcstr_t wszDeviceProperty = PX_XOR( L"Name" ) );
@@ -20,7 +20,7 @@ namespace PX::AnalysisProtection
 		return HideThreadFromDebugger( )
 			&& DebuggerPresence( )
 			&& DebuggerPresenceEx( )
-			&& ForceExceptions( )
+			&& ExternalExceptionHandlingPresence( )
 			&& AnalysisToolsRunning( );
 	}
 
@@ -175,7 +175,7 @@ Retry:
 																   sizeof( SWindowsAPI::SYSTEM_KERNEL_DEBUGGER_INFORMATION ), nullptr ) );
 			px_assert( FALSE == nfoDebuggerStatus.DebuggerEnabled
 					   && TRUE == nfoDebuggerStatus.DebuggerNotPresent );
-			px_assert( true == DebuggerPresenceEx( GetCurrentProcess( ) )
+			px_assert( true == DebuggerPresenceEx( )
 					   && 0 == IsDebuggerPresent( )
 					   && !bDebuggerPresence );
 			return true;
@@ -183,28 +183,35 @@ Retry:
 
 		/** \brief Checks presence of debugger by setting up SEH and calling interrupt[ 0x2D ]  */
 		/** \return false if debugger catch occurred */
-		PX_INL bool PX_API Interrupt0x2D( ) // utilizes SEH instead of __try __except
+		PX_INL bool PX_API Interrupt0x2D( )
 		{
-			// if the exception is swallowed, a debugger exists
-			static bool bSwallowedException;
-			bSwallowedException = true;
-			const auto phExceptionHandler = AddVectoredExceptionHandler( 1, [ ]( IN PEXCEPTION_POINTERS pExceptionInfo ) -> LONG //CALLBACK
+			// try with seh
+			__try
 			{
-				// we're called for the exception, so a debugger didn't catch it
-				bSwallowedException = false;
+				// if eax is 1, 3, 4, 5, windows will increase exception address by 1
+				__asm
+				{
+					int 0x2D
+#if defined xor
+#undef xor
+					xor eax, eax
+#define xor ^
+#else
+					xor eax, eax
+#endif
+					add eax, 2
+				}
+			}
+			__except ( EXCEPTION_EXECUTE_HANDLER )
+			{
+				// not EXCEPTION_BREAKPOINT
+				return true;
+			}
 
-				if ( pExceptionInfo->ExceptionRecord->ExceptionCode == EXCEPTION_BREAKPOINT )
-					return EXCEPTION_CONTINUE_EXECUTION;
-
-				return EXCEPTION_CONTINUE_SEARCH;
-			} );
-			__asm { int 0x2D }; // call the interrupt 0x2d fn
-			RemoveVectoredExceptionHandler( phExceptionHandler ); // remove our handler
-			px_assert( false == bSwallowedException ); // we return inverted status, so we assert the inverse
-			return true;
+			return false;
 		}
 
-		PX_EXT PX_INL bool PX_API ForceExceptions( )
+		PX_EXT PX_INL bool PX_API ExternalExceptionHandlingPresence( )
 		{
 			__try
 			{
@@ -232,6 +239,39 @@ Retry:
 			}
 
 			return Interrupt0x2D( );
+		}
+
+		PX_EXT PX_INL bool PX_API SoftwareBreakpointPresence( )
+		{
+			return false;
+		}
+
+		PX_EXT PX_INL bool PX_API HardwareBreakpointPresenceEx( _In_reads_( zExtensionThreads ) HANDLE* hExtensionThreads /*= nullptr*/, std::size_t zExtensionThreads /*= 0u*/ )
+		{
+			px_assert( !( ( nullptr == hExtensionThreads ) ^ ( 0u == zExtensionThreads ) ) );
+
+			auto pContext = new CONTEXT { CONTEXT_DEBUG_REGISTERS };
+
+			if ( nullptr != hExtensionThreads
+			  && 0u != zExtensionThreads )
+				for ( auto z = 0u; z < zExtensionThreads; z++ )
+				{
+					px_assert( 0 != GetThreadContext( hExtensionThreads[ z ], pContext ) );
+
+					if ( pContext->Dr0 != 0 || pContext->Dr1 != 0 || pContext->Dr2 != 0
+					  || pContext->Dr3 != 0 || pContext->Dr6 != 0 || pContext->Dr7 != 0 )
+						return false;
+				}
+			else
+			{
+				px_assert( 0 != GetThreadContext( GetCurrentThread( ), pContext ) );
+
+				if ( pContext->Dr0 != 0 || pContext->Dr1 != 0 || pContext->Dr2 != 0
+				  || pContext->Dr3 != 0 || pContext->Dr6 != 0 || pContext->Dr7 != 0 )
+					return false;
+			}
+
+			return true;
 		}
 	}
 

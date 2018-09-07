@@ -10,11 +10,15 @@ namespace PX::AnalysisProtection
 	/** \return false analysis can occur */
 	bool PX_API CheckForAnalysis( );
 	/** \brief Calls common AnalysisProtection functions, including those for external processes */	   
+	/** \param hExtensionThreads Array of threads to check */
+	/** \param zExtensionThreads Size of thread array */
 	/** \param hExtensionContainer Target of extension container to check for analysis */
 	/** \return false analysis can occur */
 	bool PX_API CheckForAnalysisEx( HANDLE hExtensionContainer, _In_reads_( zExtensionThreads ) HANDLE* hExtensionThreads, std::size_t zExtensionThreads );
 	/** \brief Calls all AnalysisProtection functions, including those for external processes */
 	/** \param hExtensionContainer Target of extension container to check for analysis */
+	/** \param hExtensionThreads Array of threads to check */
+	/** \param zExtensionThreads Size of thread array */
 	/** \return false analysis can occur */
 	bool PX_API CheckForAllAnalysis( HANDLE hExtensionContainer = nullptr, _In_reads_( zExtensionThreads ) HANDLE* hExtensionThreads = nullptr, std::size_t zExtensionThreads = 0u );
 
@@ -37,13 +41,17 @@ namespace PX::AnalysisProtection
 		/** \brief Checks presence of debugger (calls EX) */
 		/** \return false if debugger found */
 		bool PX_API DebuggerPresence( );
-		/** \brief Forces an exception at usermode & kernel level and checks how it was caught in order to evaluate the presence of a debugger */
+		/** \brief Forces an exception at usermode & kernel level and checks how it was caught in order to evaluate the presence of a debugger\n */
 		/** \return false if debugger catch occurred */
-		bool PX_API ForceExceptions( );
-		// i forgot what I was doing here, but it felt important so i'm leaving it until i remember.
-		// /** \brief a */
-		// /** \return */
-		// bool PX_API Check
+		bool PX_API ExternalExceptionHandlingPresence( );
+		/** \brief Checks for the presence of software breakpoints */
+		/** \return false if breakpoints exist */
+		bool PX_API SoftwareBreakpointPresence( );
+		/** \brief Checks for the presence of hardware breakpoints in specified threads */
+		/** \param hExtensionThreads Array of threads to check */
+		/** \param zExtensionThreads Size of thread array */
+		/** \return false if breakpoints exist */
+		bool PX_API HardwareBreakpointPresenceEx( _In_reads_( zExtensionThreads ) HANDLE* hExtensionThreads = nullptr, std::size_t zExtensionThreads = 0u );
 	}
 
 	namespace AnalysisSoftwareDetection

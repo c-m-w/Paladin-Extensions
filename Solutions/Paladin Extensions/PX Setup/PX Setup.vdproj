@@ -570,6 +570,39 @@
                     "Property" = "8:_059A0AF118A1492DAFEF730EAE7EC237"
                         "Folders"
                         {
+                            "{9EF0B969-E518-4E46-987F-47570745A589}:_48FE87AE9CD94D99A432E2B82B329B71"
+                            {
+                            "Name" = "8:RSIX"
+                            "AlwaysCreate" = "11:FALSE"
+                            "Condition" = "8:"
+                            "Transitive" = "11:FALSE"
+                            "Property" = "8:_7256854FC80B4009BF9607FB126850FF"
+                                "Folders"
+                                {
+                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_8A0AB680450F48EBBEBC451522517A82"
+                                    {
+                                    "Name" = "8:Resources"
+                                    "AlwaysCreate" = "11:FALSE"
+                                    "Condition" = "8:"
+                                    "Transitive" = "11:FALSE"
+                                    "Property" = "8:_C85EDA4F26954597AE05292C1077C5E1"
+                                        "Folders"
+                                        {
+                                        }
+                                    }
+                                    "{9EF0B969-E518-4E46-987F-47570745A589}:_FD12145DA4584EEFB9067601BAEF5397"
+                                    {
+                                    "Name" = "8:Configurations"
+                                    "AlwaysCreate" = "11:FALSE"
+                                    "Condition" = "8:"
+                                    "Transitive" = "11:FALSE"
+                                    "Property" = "8:_1BB5FE86BCEF497A88B6AF93A66DE939"
+                                        "Folders"
+                                        {
+                                        }
+                                    }
+                                }
+                            }
                             "{9EF0B969-E518-4E46-987F-47570745A589}:_68975D22A4BC46CB93C5820DDD45CE06"
                             {
                             "Name" = "8:CSGO"
