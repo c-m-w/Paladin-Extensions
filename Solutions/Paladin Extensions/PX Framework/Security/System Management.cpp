@@ -179,7 +179,7 @@ namespace PX::sys
 		auto hSnapshot = CreateToolhelp32Snapshot( TH32CS_SNAPPROCESS, NULL );
 		if ( hSnapshot == nullptr || hSnapshot == INVALID_HANDLE_VALUE )
 		{
-			PrintLastError( );
+			LogLastError( );
 			CloseHandle( hSnapshot );
 			return 0;
 		}
@@ -216,7 +216,7 @@ namespace PX::sys
 
 		if ( hSnapshot == nullptr || hSnapshot == INVALID_HANDLE_VALUE )
 		{
-			PrintLastError( );
+			LogLastError( );
 			CloseHandle( hSnapshot );
 			return INVALID_HANDLE_VALUE;
 		}
@@ -481,7 +481,7 @@ namespace PX::sys
 			delete[ ] bStub;
 
 			if ( bPrintLastError )
-				PrintLastError( );
+				LogLastError( );
 		};
 
 		if ( !EnsureElevation( ) )
@@ -704,7 +704,7 @@ namespace PX::sys
 				ExitProcess( -1 );
 			if ( !::TerminateProcess( OpenProcess( PROCESS_TERMINATE, false, dwTargetProcessID ), 0 ) )
 			{
-				PrintLastError( );
+				LogLastError( );
 				ExitProcess( -1 );
 			}
 		}

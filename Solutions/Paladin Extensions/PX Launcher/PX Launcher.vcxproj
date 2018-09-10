@@ -150,6 +150,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="PX Launcher.hpp" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PX Launcher.cpp" />
@@ -158,6 +159,12 @@
     <ProjectReference Include="..\PX Framework\PX Framework.vcxproj">
       <Project>{808d007e-abfb-4c41-b85f-601066ece0fb}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="PX Launcher.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\Resources\PX Logo.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

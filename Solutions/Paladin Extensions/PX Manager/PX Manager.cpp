@@ -393,7 +393,7 @@ void PX_API OnAttach( )
 	std::thread tMonitorDetectionVectors( MonitorDetectionVectors );
 	tMonitorDetectionVectors.detach( );
 #endif
-	// we shouldn't have this todo
+	// todo we shouldn't have this
 	Wait( rand( ) % 1900 + 100 );
 
 	iLoginStatus = Login( bExtensionAccess );
@@ -452,7 +452,7 @@ void PX_API OnAttach( )
 			strEncryptedDLL.clear( );
 			strDLL.clear( );
 
-			// todo put safety here, check that everything is loading properly
+			// todo put safety here, check that everything is loading properly/return is success
 			LoadRawLibraryEx( pBuffer, wstrApplicationExecutableNames[ iSelectedExtension ], new injection_info_t, &hStartProcess, &hStartThread );
 			WipeMemory( pBuffer, sDLL );
 			bShouldClose = true;

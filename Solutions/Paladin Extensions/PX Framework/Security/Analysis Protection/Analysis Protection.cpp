@@ -15,8 +15,11 @@ namespace PX::sys
 
 namespace PX::AnalysisProtection
 {
+	// Review: see that all analysis protection functions are called in one of the following three functions
+
 	PX_EXT PX_INL bool PX_API CheckForAnalysis( )
 	{
+		// Note: must include all local process/general basic analysis checks
 		return HideThreadFromDebugger( )
 			&& DebuggerPresence( )
 			&& DebuggerPresenceEx( )
@@ -24,8 +27,9 @@ namespace PX::AnalysisProtection
 			&& AnalysisToolsRunning( );
 	}
 
-	PX_EXT PX_INL bool PX_API CheckForAnalysisEx( HANDLE hExtensionContainer, _In_reads_( zExtensionThreads ) HANDLE* hExtensionThreads, std::size_t zExtensionThreads )
+	PX_EXT PX_INL bool PX_API CheckForAnalysisEx( HANDLE hExtensionContainer /*= nullptr*/, _In_reads_( zExtensionThreads ) HANDLE* hExtensionThreads /*= nullptr*/, std::size_t zExtensionThreads /*= 0u*/ )
 	{
+		// Note: must include all external process analysis checks
 		bool bResult = true;
 		for ( auto z = 0u; z < zExtensionThreads; z++ )
 			bResult &= HideThreadFromDebugger( hExtensionThreads[ z ] ); // we want to try for every thread, even if one of them doesn't work
@@ -36,6 +40,7 @@ namespace PX::AnalysisProtection
 
 	PX_EXT PX_INL bool PX_API CheckForAllAnalysis( HANDLE hExtensionContainer /*= nullptr*/, _In_reads_( zExtensionThreads ) HANDLE* hExtensionThreads /*= nullptr*/, std::size_t zExtensionThreads /*= 0u*/ )
 	{
+		// Note: must include CheckForAnalysis & CheckForAnalysisEx and any other intensive analysis checks
 		return CheckForAnalysis( )
 			&& ( ( hExtensionContainer && hExtensionThreads && zExtensionThreads )
 				   ? CheckForAnalysisEx( hExtensionContainer, hExtensionThreads, zExtensionThreads )
@@ -100,8 +105,8 @@ Retry:
 				CloseHandle( pi.hThread );
 				CloseHandle( pi.hProcess );
 
-				// if we took longer than 3 seconds to close handles (aka breakpoint, someone is stepping through) we retry. after 30 seconds/10 tries, we give up.
-				if ( GetMoment( ) - mmtStart > 3000ull && iTries < 10 )
+				// if we took longer than 3 seconds to close handles (aka breakpoint, someone is stepping through) we retry. after 9 seconds/10 tries, we give up.
+				if ( GetMoment( ) - mmtStart > 3000ull && iTries < 3 )
 					goto Retry;
 			}
 			catch ( ... )

@@ -2,7 +2,7 @@
 
 #pragma once
 
-// TODO: replace all WinAPI functions with NT functions
+// TODO: replace all WinAPI functions in solution with NT functions since we have a neat API for it now
 
 namespace PX::AnalysisProtection
 {
@@ -14,7 +14,7 @@ namespace PX::AnalysisProtection
 	/** \param zExtensionThreads Size of thread array */
 	/** \param hExtensionContainer Target of extension container to check for analysis */
 	/** \return false analysis can occur */
-	bool PX_API CheckForAnalysisEx( HANDLE hExtensionContainer, _In_reads_( zExtensionThreads ) HANDLE* hExtensionThreads, std::size_t zExtensionThreads );
+	bool PX_API CheckForAnalysisEx( HANDLE hExtensionContainer = nullptr, _In_reads_( zExtensionThreads ) HANDLE* hExtensionThreads = nullptr, std::size_t zExtensionThreads = 0u );
 	/** \brief Calls all AnalysisProtection functions, including those for external processes */
 	/** \param hExtensionContainer Target of extension container to check for analysis */
 	/** \param hExtensionThreads Array of threads to check */

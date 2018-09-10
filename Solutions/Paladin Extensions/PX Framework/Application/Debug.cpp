@@ -17,24 +17,18 @@ namespace PX::dbg
 		return *this;
 	}
 
-	void PX_API PrintLastError( )
+	void PX_API LogLastError( )
 	{
 #if defined _DEBUG
-		auto dwError = GetLastError( );
-		if ( !dwError )
-		{
-			out PX_LER << "[0x0] - No errors";
-			return;
-		}
+		auto dwLastError = GetLastError( );
 
-		// improper, todo fix mikes paste
-		LPWSTR lpwstrError { };
-		if ( !FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-							 nullptr, dwError, MAKELANGID( LANG_NEUTRAL, SUBLANG_DEFAULT ), lpwstrError, 0, nullptr ) )
-			out PX_LER << "[0x" << std::hex << dwError << "] - Unable to retrieve error description";
+		std::wstring wstrLastErrorMessage;
+		wstrLastErrorMessage.resize( 1024 );
+		if ( 0 == FormatMessage( FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS, nullptr, dwLastError,
+								 MAKELANGID( LANG_NEUTRAL, SUBLANG_DEFAULT ), &wstrLastErrorMessage[ 0 ], 0, nullptr ) )
+			out PX_LER << "[0x" << std::hex << dwLastError << "] - Unable to retrieve error description due to 0x" << GetLastError( ) << std::dec;
 		else
-			out PX_LER << "[0x" << std::hex << dwError << "] - " << *lpwstrError;
-		LocalFree( lpwstrError );
+			out PX_LER << "[0x" << std::hex << dwLastError << "] - " << wstrLastErrorMessage << std::dec;
 #endif
 	}
 }
