@@ -36,8 +36,8 @@ PX_EXT const wchar_t* wszWindowTitle;
 #else
 PX_EXT const char* szWindowTitle;
 #endif
-PX_EXT LRESULT CALLBACK WindowProc( _In_ HWND hwnd, _In_ UINT uMsg, _In_ WPARAM wParam, _In_ LPARAM lParam );
-PX_EXT void OnLaunch( );
+LRESULT CALLBACK WindowProc( _In_ HWND hwnd, _In_ UINT uMsg, _In_ WPARAM wParam, _In_ LPARAM lParam );
+void PX_API OnLaunch( );
 
 int APIENTRY
 #if defined UNICODE
@@ -121,8 +121,8 @@ namespace PX
 	PX_SDK HINSTANCE hinstDLL;
 }
 
-PX_EXT void PX_API OnAttach( );
-PX_EXT void PX_API OnDetach( );
+void PX_API OnAttach( );
+void PX_API OnDetach( );
 
 namespace
 {
