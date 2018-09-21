@@ -7,7 +7,7 @@ namespace PX::Cryptography
 {
 	bool PX_API InitializeEncryption( )
 	{
-		const auto strUnhashedKey = std::to_string( int( GetMoment< std::chrono::seconds >( ) / 100 ) );
+		const auto strUnhashedKey = std::to_string( GetMoment( ) / 1000000000ull );
 		strEncryptionKey = GenerateHash( strUnhashedKey ).substr( 0, 32 );
 		strInitializationVector = strEncryptionKey.substr( 0, 16 );
 		return !strEncryptionKey.empty( );

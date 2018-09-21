@@ -174,32 +174,30 @@ namespace PX::sys
 		typedef VOID ( NTAPI LDR_ENUM_CALLBACK )( PLDR_DATA_TABLE_ENTRY, PVOID, BOOLEAN* );
 		typedef LDR_ENUM_CALLBACK *PLDR_ENUM_CALLBACK;
 
-		typedef DWORD ( NTAPI* fnCsrGetId )( VOID );
 		typedef UINT ( WINAPI* fnEnumSystemFirmwareTables )( DWORD, PVOID, DWORD );
 		typedef UINT ( WINAPI* fnGetSystemFirmwareTable )( DWORD, DWORD, PVOID, DWORD );
 		typedef void ( WINAPI* fnGetNativeSystemInfo )( LPSYSTEM_INFO );
 		typedef BOOL ( WINAPI* fnGetProductInfo )( DWORD, DWORD, DWORD, DWORD, PDWORD );
 		typedef BOOL ( WINAPI* fnIsWow64Process )( HANDLE, PBOOL );
 		typedef NTSTATUS ( NTAPI* fnLdrEnumerateLoadedModules )( BOOLEAN, PLDR_ENUM_CALLBACK, PVOID );
-		typedef NTSTATUS ( WINAPI* fnNtClose )( HANDLE );
-		typedef NTSTATUS ( WINAPI* fnNtCreateDebugObject )( PHANDLE, ACCESS_MASK, POBJECT_ATTRIBUTES, ULONG );
-		typedef NTSTATUS ( WINAPI* fnNtCreateThreadEx )( PHANDLE, ACCESS_MASK, LPVOID, HANDLE, LPTHREAD_START_ROUTINE, LPVOID, BOOL, DWORD, DWORD, DWORD, LPVOID );
-		typedef NTSTATUS ( WINAPI* fnNtDelayExecution )( BOOLEAN, PLARGE_INTEGER );
-		typedef NTSTATUS ( WINAPI* fnNtQueryInformationThread )( HANDLE, UINT, PVOID, ULONG, PULONG );
-		typedef NTSTATUS ( WINAPI* fnNtQueryInformationProcess )(  HANDLE,  UINT, PVOID, ULONG, PULONG );
-		typedef NTSTATUS ( WINAPI* fnNtQueryObject )( HANDLE, UINT, PVOID, ULONG, PULONG );
-		typedef NTSTATUS ( WINAPI* fnNtQuerySystemInformation )( UINT, PVOID, ULONG, PULONG );
-		typedef NTSTATUS ( WINAPI* fnNtSetInformationThread )( HANDLE, UINT, PVOID, ULONG );
-		typedef NTSTATUS ( WINAPI* fnNtWow64ReadVirtualMemory64 )( HANDLE, PVOID64, PVOID, ULONGLONG, PULONGLONG );
+		typedef NTSTATUS ( NTAPI* fnNtClose )( HANDLE );
+		typedef NTSTATUS ( NTAPI* fnNtCreateDebugObject )( PHANDLE, ACCESS_MASK, POBJECT_ATTRIBUTES, ULONG );
+		typedef NTSTATUS ( NTAPI* fnNtCreateThreadEx )( PHANDLE, ACCESS_MASK, LPVOID, HANDLE, LPTHREAD_START_ROUTINE, LPVOID, BOOL, DWORD, DWORD, DWORD, LPVOID );
+		typedef NTSTATUS ( NTAPI* fnNtDelayExecution )( BOOLEAN, PLARGE_INTEGER );
+		typedef NTSTATUS ( NTAPI* fnNtQueryInformationThread )( HANDLE, UINT, PVOID, ULONG, PULONG );
+		typedef NTSTATUS ( NTAPI* fnNtQueryInformationProcess )(  HANDLE,  UINT, PVOID, ULONG, PULONG );
+		typedef NTSTATUS ( NTAPI* fnNtQueryObject )( HANDLE, UINT, PVOID, ULONG, PULONG );
+		typedef NTSTATUS ( NTAPI* fnNtQuerySystemInformation )( UINT, PVOID, ULONG, PULONG );
+		typedef NTSTATUS ( NTAPI* fnNtSetInformationThread )( HANDLE, UINT, PVOID, ULONG );
+		typedef NTSTATUS ( NTAPI* fnNtWow64ReadVirtualMemory64 )( HANDLE, PVOID64, PVOID, ULONGLONG, PULONGLONG );
 		typedef NTSTATUS ( NTAPI* fnNtWow64QueryVirtualMemory64 )( HANDLE, PVOID64, DWORD, PMEMORY_BASIC_INFORMATION64, ULONG64, PULONG64 );
-		typedef NTSTATUS ( WINAPI* fnNtUnmapViewOfSection )( HANDLE, PVOID );
-		typedef NTSTATUS ( WINAPI* fnNtYieldExecution )( );
+		typedef NTSTATUS ( NTAPI* fnNtUnmapViewOfSection )( HANDLE, PVOID );
+		typedef NTSTATUS ( NTAPI* fnNtYieldExecution )( );
 		typedef NTSTATUS ( WINAPI* fnRtlGetVersion )( RTL_OSVERSIONINFOEXW* );
 		typedef DWORD ( WINAPI* fnRtlCreateUserThread )( HANDLE, PSECURITY_DESCRIPTOR, BOOL, ULONG, PULONG, PULONG, LPVOID, LPVOID, HANDLE, LPVOID );
 
 		enum EFuncs
 		{
-			CsrGetProcessId,
 			EnumSystemFirmwareTables,
 			GetSystemFirmwareTable,
 			GetNativeSystemInfo,

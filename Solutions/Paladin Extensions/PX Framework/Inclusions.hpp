@@ -14,6 +14,7 @@
 #include <ntstatus.h>
 #include <strsafe.h>
 #include <Shlwapi.h>
+#include <intrin.h>
 #include <TlHelp32.h>
 #include <Psapi.h>
 #include <comdef.h>
@@ -60,5 +61,8 @@
 
 // Json
 #include <nlohmann/json.hpp>
+
+#undef xor
+#undef LoadLibraryEx
 
 #pragma warning( pop )

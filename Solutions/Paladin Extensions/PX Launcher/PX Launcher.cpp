@@ -58,7 +58,6 @@ void LoadManager( )
 	const auto zDLL = strDLL.length( );
 
 	const auto pBuffer = VirtualAlloc( nullptr, zDLL + 1, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE );
-	px_assert( pBuffer );
 	memcpy( pBuffer, strDLL.c_str( ), zDLL );
 	strDLL.clear( );
 

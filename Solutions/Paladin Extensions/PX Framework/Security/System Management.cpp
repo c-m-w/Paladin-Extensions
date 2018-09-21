@@ -423,7 +423,7 @@ namespace PX::sys
 		};
 
 		/* men */
-		if ( nullptr == ( hTarget = OpenProcess( PROCESS_VM_OPERATION | PROCESS_VM_WRITE, FALSE, GetProcessID( wstrExecutableName ) ) )
+		if ( nullptr == ( hTarget = OpenProcess( PROCESS_CREATE_THREAD | PROCESS_QUERY_INFORMATION | PROCESS_VM_OPERATION | PROCESS_VM_WRITE | PROCESS_VM_READ, FALSE, GetProcessID( wstrExecutableName ) ) )
 			 || nullptr == ( pPath = VirtualAllocEx( hTarget, nullptr, PX_PAGE, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE ) )
 			 || 0 == WriteProcessMemory( hTarget, pPath, &wstrDLLPath[ 0 ], wstrDLLPath.length( ) * sizeof( wchar_t ), nullptr )
 			 || nullptr == ( hThread = CreateRemoteThread( hTarget, nullptr, NULL, LPTHREAD_START_ROUTINE( LoadLibrary ), pPath, NULL, nullptr ) )
@@ -713,14 +713,13 @@ namespace PX::sys
 	struct
 	{
 		SWindowsAPI::EFuncs efnID;
-		wchar_t* wszLibrary;
-		char* szFunctionSymbolName;
+		const wchar_t* wszLibrary;
+		const char* szFunctionSymbolName;
 		bool bAvailable = false;
-		void* pPointer = nullptr;
+		void* pPointer;
 	} fndAPIFunctionsData[ SWindowsAPI::FUNC_MAX ]
 	{
 		/* Function Identifier								Library						Exported Symbol Name					*/
-		{ SWindowsAPI::EFuncs::CsrGetProcessId,				PX_XOR( L"ntdll.dll" ),		PX_XOR( "CsrGetProcessId" )				},
 		{ SWindowsAPI::EFuncs::EnumSystemFirmwareTables,	PX_XOR( L"kernel32.dll" ),	PX_XOR( "EnumSystemFirmwareTables" )	},
 		{ SWindowsAPI::EFuncs::GetSystemFirmwareTable,		PX_XOR( L"kernel32.dll" ),	PX_XOR( "GetSystemFirmwareTable" )		},
 		{ SWindowsAPI::EFuncs::GetNativeSystemInfo,			PX_XOR( L"kernel32.dll" ),	PX_XOR( "GetNativeSystemInfo" )			},

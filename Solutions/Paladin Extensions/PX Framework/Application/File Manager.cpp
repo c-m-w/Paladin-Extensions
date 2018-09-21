@@ -81,7 +81,7 @@ namespace PX::Files
 			if ( !bFilesExist )
 				return false;
 
-			const auto fnGetFileData = [ ]( wcstr_t szPathToFile )
+			const auto fnGetFileData = [ ]( wcstr_t szPathToFile ) -> std::string
 			{
 				auto pResource = _wfopen( szPathToFile, PX_XOR( L"r" ) );
 				px_assert( pResource );

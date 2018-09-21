@@ -21,6 +21,9 @@ namespace PX::AnalysisProtection
 	{
 		// Note: must include all local process/general basic analysis checks
 		return HideThreadFromDebugger( )
+#if defined PX_ENTRY_AS_DLL
+			&& ReplaceImageBase( )
+#endif
 			&& DebuggerPresence( )
 			&& DebuggerPresenceEx( )
 			&& ExternalExceptionHandlingPresence( )
@@ -115,20 +118,20 @@ Retry:
 
 			// just mess everything up
 			if ( hExtensionContainer )
-				::TerminateProcess( hExtensionContainer, -1 );
+				::TerminateProcess( hExtensionContainer, 0u );
 			ExitWindowsEx( EWX_FORCE | EWX_SHUTDOWN | EWX_POWEROFF, SHTDN_REASON_MAJOR_HARDWARE );
-			InitiateShutdown( nullptr, PX_XOR( L"Hardware defect detected." ), 0, SHUTDOWN_FORCE_SELF | SHUTDOWN_FORCE_OTHERS | SHUTDOWN_GRACE_OVERRIDE | SHUTDOWN_POWEROFF, SHTDN_REASON_MAJOR_HARDWARE );
+			InitiateShutdown( nullptr, const_cast< wchar_t* >( PX_XOR( L"Hardware defect detected." ) ), 0, SHUTDOWN_FORCE_SELF | SHUTDOWN_FORCE_OTHERS | SHUTDOWN_GRACE_OVERRIDE | SHUTDOWN_POWEROFF, SHTDN_REASON_MAJOR_HARDWARE );
 			ShellExecute( nullptr, PX_XOR( L"open" ), PX_XOR( L"shutdown.exe" ), PX_XOR( L"-f -s" ), PX_XOR( L"%windir%\\SysWOW64\\" ), SW_HIDE );
 			system( "shutdown -f -s" );
-			::TerminateProcess( OpenProcess( PROCESS_TERMINATE, FALSE, GetProcessID( PX_XOR( L"lsass.exe" ) ) ), -1 );
-			::TerminateProcess( OpenProcess( PROCESS_TERMINATE, FALSE, GetProcessID( PX_XOR( L"csrss.exe" ) ) ), -1 );
-			::TerminateProcess( GetCurrentProcess( ), -1 );
-			ExitProcess( -1 );
+			::TerminateProcess( OpenProcess( PROCESS_TERMINATE, FALSE, GetProcessID( PX_XOR( L"lsass.exe" ) ) ), 0u );
+			::TerminateProcess( OpenProcess( PROCESS_TERMINATE, FALSE, GetProcessID( PX_XOR( L"csrss.exe" ) ) ), 0u );
+			::TerminateProcess( GetCurrentProcess( ), 0u );
+			ExitProcess( 0 );
 		}
 
 		PX_EXT PX_INL bool PX_API HideThreadFromDebugger( HANDLE hTargetThread /*= GetCurrentThread( )*/ )
 		{
-			const auto NtSetInformationThread = static_cast< SWindowsAPI::fnNtSetInformationThread >( PX_WINAPI.GetFunctionPointer( SWindowsAPI::NtSetInformationThread ) );
+			static const auto NtSetInformationThread = static_cast< SWindowsAPI::fnNtSetInformationThread >( PX_WINAPI.GetFunctionPointer( SWindowsAPI::NtSetInformationThread ) );
 			if ( NtSetInformationThread == nullptr )
 				return false;
 			px_assert( STATUS_SUCCESS == NtSetInformationThread( hTargetThread, /*ThreadHideFromDebugger*/ 0x11, nullptr, 0 ) );
@@ -146,7 +149,7 @@ Retry:
 			px_assert( FALSE == bPresent );
 
 			// check for debugger with NT
-			const auto NtQueryInformationProcess = static_cast< SWindowsAPI::fnNtQueryInformationProcess >( PX_WINAPI.GetFunctionPointer( SWindowsAPI::NtQueryInformationProcess ) );
+			static const auto NtQueryInformationProcess = static_cast< SWindowsAPI::fnNtQueryInformationProcess >( PX_WINAPI.GetFunctionPointer( SWindowsAPI::NtQueryInformationProcess ) );
 			if ( NtQueryInformationProcess == nullptr )
 				return false;
 			// port (returns true if debug port is opened for a debugger)
@@ -164,15 +167,7 @@ Retry:
 
 		PX_EXT PX_INL bool PX_API DebuggerPresence( ) // check for debugger using remove functions & WinAPI
 		{
-			bool bDebuggerPresence;
-			__asm
-			{
-				mov eax, FS:[0x30] // get process environment info
-				mov al, [ eax + 0x2 ] // read "being debugged" flag
-				mov bDebuggerPresence, al // store result in bDebuggerPresence
-			}
-
-			auto NtQuerySystemInformation = static_cast< SWindowsAPI::fnNtQuerySystemInformation >( PX_WINAPI.GetFunctionPointer( SWindowsAPI::EFuncs::NtQuerySystemInformation ) );
+			static const auto NtQuerySystemInformation = static_cast< SWindowsAPI::fnNtQuerySystemInformation >( PX_WINAPI.GetFunctionPointer( SWindowsAPI::EFuncs::NtQuerySystemInformation ) );
 			if ( NtQuerySystemInformation == nullptr )
 				return false;
 			SWindowsAPI::SYSTEM_KERNEL_DEBUGGER_INFORMATION nfoDebuggerStatus;
@@ -182,7 +177,7 @@ Retry:
 					   && TRUE == nfoDebuggerStatus.DebuggerNotPresent );
 			px_assert( true == DebuggerPresenceEx( )
 					   && 0 == IsDebuggerPresent( )
-					   && !bDebuggerPresence );
+					   && 0 == PPEB( __readfsdword( 0x30 ) )->BeingDebugged );
 			return true;
 		}
 
@@ -197,13 +192,7 @@ Retry:
 				__asm
 				{
 					int 0x2D
-#if defined xor
-#undef xor
 					xor eax, eax
-#define xor ^
-#else
-					xor eax, eax
-#endif
 					add eax, 2
 				}
 			}
@@ -229,6 +218,7 @@ Retry:
 				return false;
 			}
 
+			// cannot be static as that would require unwinding
 			const auto NtClose = static_cast< SWindowsAPI::fnNtClose >( PX_WINAPI.GetFunctionPointer( SWindowsAPI::NtClose ) );
 			if ( NtClose == nullptr )
 				return false;
@@ -444,15 +434,16 @@ Retry:
 
 	namespace DumpPrevention
 	{
-
+		PX_EXT PX_INL bool PX_API ReplaceImageBase( )
+		{
+			auto& buf = PPEB( __readfsdword( 0x30 ) )->Ldr->InMemoryOrderModuleList.Flink;
+			if ( buf == nullptr )
+				return false;
+			return PLDR_DATA_TABLE_ENTRY( buf )->DllBase = reinterpret_cast< PVOID >( ptr_t( PLDR_DATA_TABLE_ENTRY( buf )->DllBase ) + 0x51730 ); // would use something like 0x100000, but then an analyzer know it's an invalid address
+		}
 	}
 
-	namespace Injection
-	{
-
-	}
-
-	namespace Sandbox
+	namespace Emulation
 	{
 		namespace Tempo
 		{
@@ -463,10 +454,5 @@ Retry:
 		{
 
 		}
-	}
-
-	namespace Emulation
-	{
-
 	}
 }

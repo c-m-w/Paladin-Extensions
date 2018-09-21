@@ -93,11 +93,11 @@ namespace PX::Tools
 		// Get the size of the table in bytes.
 		zTableSize = zTableLength * sizeof( ptr_t );
 		// Ensure that the module that has been entered is valid and find free memory inside of that module to point the class base to.
-		if ( ( hAllocationModule = FindAddressOrigin( ptr_t( *reinterpret_cast< void** >( pOldTable ) ) ) ) == nullptr ||
+		if ( ( hAllocationModule = FindAddressOrigin( ptr_t( *reinterpret_cast< void** >( pOldTable ) ) ) ) == nullptr
 #if defined _DEBUG
-		( pNewTable = new ptr_t[ zTableLength + 1 ] ) == nullptr )
+			  || ( pNewTable = new ptr_t[ zTableLength + 1 ] ) == nullptr )
 #else
-			 ( pNewTable = reinterpret_cast< ptr_t* >( FindFreeMemory( hAllocationModule, sTableSize + sizeof( ptr_t ) ) ) ) == nullptr )
+			  || ( pNewTable = reinterpret_cast< ptr_t* >( FindFreeMemory( hAllocationModule, zTableSize + sizeof( ptr_t ) ) ) ) == nullptr )
 #endif
 			return;
 
@@ -215,6 +215,29 @@ namespace PX::Tools
 			sprintf( &strFormatted[ 0 ], "%s%02X", strFormatted.c_str( ), bByteArray[ u ] );
 		}
 		return strFormatted;
+	}
+
+	moment_t PX_API GetMoment( )
+	{
+		// WinAPI resolution is only in tenths of a microsecond
+		return std::chrono::duration_cast< std::chrono::nanoseconds >( std::chrono::system_clock::now( ).time_since_epoch( ) ).count( ) / 100;
+	}
+	PX_EXT PX_INL void PX_API Wait( const moment_t mmtWaitLength /*= 1ull*/ ) // only accept time in milliseconds as that's all we can guarantee
+	{
+		if ( 0 == mmtWaitLength )
+			return;
+
+		static const auto NtDelayExecution = static_cast< SWindowsAPI::fnNtDelayExecution >( PX_WINAPI.GetFunctionPointer( SWindowsAPI::NtDelayExecution ) );
+		if ( nullptr == NtDelayExecution ) // their system must be really messed up if it can't find delay execution
+			return Sleep( DWORD( mmtWaitLength ) );
+
+		const auto mmtEndTarget = GetMoment( ) + mmtWaitLength * 10000ull - 5000ull; // 10,000 is milliseconds to 100 nanoseconds conversion
+
+		LARGE_INTEGER liDelayInterval;
+		liDelayInterval.QuadPart = -1ll;
+
+		while ( GetMoment( ) < mmtEndTarget )
+			NtDelayExecution( FALSE, &liDelayInterval );
 	}
 
 	unsigned* GetScreenDimensions( )

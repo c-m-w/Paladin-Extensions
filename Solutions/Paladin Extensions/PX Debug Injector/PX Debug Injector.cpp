@@ -3,7 +3,8 @@
 #include "PX Debug Injector.hpp"
 
 const std::wstring wstrApplication = LR"(csgo.exe)";
-const std::wstring wstrLibraryPath = LR"(C:\Users\Cole\Documents\GitHub\Paladin\Solutions\Paladin Extensions\Debug\PX CSGO.dll)";
+//const std::wstring wstrLibraryPath = LR"(C:\Users\Cole\Documents\GitHub\Paladin\Solutions\Paladin Extensions\Debug\PX CSGO.dll)";
+const std::wstring wstrLibraryPath = LR"(C:\Users\bhopfu1\Documents\Visual Studio 2017\Projects\Paladin Extensions\Solutions\Paladin Extensions\Debug\PX CSGO.dll)";
 
 int main( )
 {

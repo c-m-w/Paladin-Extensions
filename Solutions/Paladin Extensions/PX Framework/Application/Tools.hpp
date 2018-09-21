@@ -61,10 +61,13 @@ namespace PX::Tools
 
 	// INFO: Gets the local time
 	// *type name*: Time info format type
-	template< typename = std::chrono::milliseconds > Types::moment_t PX_API GetMoment( );
-	// INFO: Sleeps the thread that has called for the amount of time, in the unit of time specified.
-	// *type name*: The unit of time to wait for ( std::chrono ).
-	template< typename = std::chrono::milliseconds > void PX_API Wait( Types::moment_t );
+	/** \brief Gets the local time */
+	/** \return Local time in moment_t form */
+	Types::moment_t PX_API GetMoment( );
+	// INFO: 
+	/** \brief Pauses (doesn't free up CPU) the thread that has called for the amount of time within .5 ms */
+	/** \param mmtWaitLength Length to wait in milliseconds */
+	void PX_API Wait( Types::moment_t mmtWaitLength = 1ull );
 
 	// Get main screen dimensions
 	unsigned* GetScreenDimensions( );

@@ -67,20 +67,12 @@ namespace PX::AnalysisProtection
 
 	namespace DumpPrevention
 	{
-		
-	}
-
-	namespace Injection
-	{
-		
+		/** \brief Replaces the marked image base address to change where dumpers begin writing memory */
+		/** \return false if replace failed */
+		bool PX_API ReplaceImageBase( );
 	}
 
 	namespace Emulation
-	{
-
-	}
-
-	namespace Sandbox
 	{
 		namespace Tempo
 		{
@@ -100,9 +92,7 @@ using namespace PX::AnalysisProtection::DebuggerPrevention;
 using namespace PX::AnalysisProtection::DebuggerDetection;
 using namespace PX::AnalysisProtection::AnalysisSoftwareDetection;
 using namespace PX::AnalysisProtection::DumpPrevention;
-using namespace PX::AnalysisProtection::Injection;
-using namespace PX::AnalysisProtection::Sandbox;
 using namespace PX::AnalysisProtection::Emulation;
-using namespace PX::AnalysisProtection::Sandbox::Tempo;
-using namespace PX::AnalysisProtection::Sandbox::Turing;
+using namespace PX::AnalysisProtection::Emulation::Tempo;
+using namespace PX::AnalysisProtection::Emulation::Turing;
 #endif

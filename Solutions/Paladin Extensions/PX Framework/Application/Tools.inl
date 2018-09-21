@@ -16,15 +16,6 @@ namespace PX::Tools
 		return reinterpret_cast< _fn >( pOldTable[ uIndex ] );
 	}
 
-	template< typename _t > Types::moment_t PX_API GetMoment( )
-	{
-		return std::chrono::duration_cast< _t >( std::chrono::system_clock::now( ).time_since_epoch( ) ).count( );
-	}
-	template< typename _t > void PX_API Wait( Types::moment_t mmtWaitLength = ULLONG_MAX )
-	{
-		std::this_thread::sleep_for( _t( mmtWaitLength ) );
-	}
-
 	// INFO: Deduces traits and uses matching casting function of trait
 	template< typename > px_abstract_class AStringTraits;
 	template< > px_abstract_class AStringTraits< std::wstring >

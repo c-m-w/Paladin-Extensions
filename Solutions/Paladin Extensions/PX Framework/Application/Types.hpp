@@ -14,7 +14,7 @@ namespace PX::Types
 	typedef unsigned char byte_t;
 	/** \brief Paladin callback function type. */
 	typedef void( PX_API* callback_t )( );
-	/** \brief Paladin time datatype, long enough to hold any time type, down to microseconds. */
+	/** \brief Paladin time datatype, wide enough to hold any time type, with sig figs up to a tenth of a microsecond. */
 	typedef unsigned long long moment_t;
 
 	struct SPostData

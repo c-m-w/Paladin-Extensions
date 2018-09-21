@@ -294,8 +294,6 @@ namespace PX::Types
 			else
 				return GetGradient( sqInfo[ z ].clrColor, sqInfo[ z + 1 != zSequences ? z + 1 : 0 ].clrColor,
 									float( mmtCurrentProgress - mmtPassedProgress ) / float( sqInfo[ z ].mmtDuration ) );
-
-		px_assert( false );
 	}
 
 	color_t& SColorSequence::GetColor( unsigned uColor )
