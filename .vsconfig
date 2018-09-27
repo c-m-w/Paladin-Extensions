@@ -1,0 +1,10 @@
+{
+	"version": "1.0",
+	"components": [
+		"Microsoft.VisualStudio.Workload.NativeDesktop",
+		"microsoft.visualstudio.component.vc.diagnostictools",
+		"microsoft.visualstudio.component.windows10sdk.14393",
+		"component.microsoft.windows.driverkit",
+		"component.vsinstallerprojects"
+	]
+}
