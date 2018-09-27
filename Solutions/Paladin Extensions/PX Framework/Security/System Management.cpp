@@ -609,7 +609,7 @@ namespace PX::sys
 
 		// Wait until the thread resumes it's previous state.
 		while ( GetThreadContext( *hThread, &ctxThread ) == TRUE && ctxThread.Eip != dwOldEIP )
-			Wait( 100ull );
+			Pause( 100ull );
 
 		// Wipe PE headers
 		WipeMemoryEx( *hTarget, pImage, pDOSHeader->e_lfanew + sizeof pNTHeader + sizeof pSectionHeader * pNTHeader->FileHeader.NumberOfSections );

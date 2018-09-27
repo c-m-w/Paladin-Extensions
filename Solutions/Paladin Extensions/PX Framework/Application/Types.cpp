@@ -134,9 +134,9 @@ namespace PX::Types
 		return D3DCOLOR_ARGB( pColor->b[ COLOR_ALPHA ], byte_t( pColor->b[ COLOR_RED ] * flFactor ), byte_t( pColor->b[ COLOR_GREEN ] * flFactor ), byte_t( pColor->b[ COLOR_BLUE ] * flFactor ) );
 	}
 
-	void SColor::PutHex( const unsigned uValue ) const
+	unsigned SColor::PutHex( const unsigned uValue ) const
 	{
-		pColor->u = uValue;
+		return pColor->u = uValue;
 	}
 
 	byte_t SColor::GetRed( ) const
@@ -167,24 +167,24 @@ namespace PX::Types
 		return pColor->b[ COLOR_ALPHA ];
 	}
 
-	void SColor::PutRed( const byte_t bValue ) const
+	byte_t SColor::PutRed( const byte_t bValue ) const
 	{
-		pColor->b[ COLOR_RED ] = bValue;
+		return pColor->b[ COLOR_RED ] = bValue;
 	}
 
-	void SColor::PutGreen( const byte_t bValue ) const
+	byte_t SColor::PutGreen( const byte_t bValue ) const
 	{
-		pColor->b[ COLOR_GREEN ] = bValue;
+		return pColor->b[ COLOR_GREEN ] = bValue;
 	}
 
-	void SColor::PutBlue( const byte_t bValue ) const
+	byte_t SColor::PutBlue( const byte_t bValue ) const
 	{
-		pColor->b[ COLOR_BLUE ] = bValue;
+		return pColor->b[ COLOR_BLUE ] = bValue;
 	}
 
-	void SColor::PutAlpha( const byte_t bValue ) const
+	byte_t SColor::PutAlpha( const byte_t bValue ) const
 	{
-		pColor->b[ COLOR_ALPHA ] = bValue;
+		return pColor->b[ COLOR_ALPHA ] = bValue;
 	}
 
 	float SColor::GetRedFloat( ) const
@@ -207,29 +207,29 @@ namespace PX::Types
 		return GetAlpha( ) / 255.f;
 	}
 
-	void SColor::PutRedFloat( const float flValue ) const
+	float SColor::PutRedFloat( const float flValue ) const
 	{
-		PutRed( byte_t( flValue <= 1.f ? flValue * 255u : flValue ) );
+		return PutRed( byte_t( flValue <= 1.f ? flValue * 255u : flValue ) );
 	}
 
-	void SColor::PutGreenFloat( const float flValue ) const
+	float SColor::PutGreenFloat( const float flValue ) const
 	{
-		PutGreen( byte_t( flValue <= 1.f ? flValue * 255u : flValue ) );
+		return PutGreen( byte_t( flValue <= 1.f ? flValue * 255u : flValue ) );
 	}
 
-	void SColor::PutBlueFloat( const float flValue ) const
+	float SColor::PutBlueFloat( const float flValue ) const
 	{
-		PutBlue( byte_t( flValue <= 1.f ? flValue * 255u : flValue ) );
+		return PutBlue( byte_t( flValue <= 1.f ? flValue * 255u : flValue ) );
 	}
 
-	void SColor::PutAlphaFloat( const float flValue ) const
+	float SColor::PutAlphaFloat( const float flValue ) const
 	{
-		PutAlpha( byte_t( flValue <= 1.f ? flValue * 255u : flValue ) );
+		return PutAlpha( byte_t( flValue <= 1.f ? flValue * 255u : flValue ) );
 	}
 
 	byte_t SColor::CalculateLuminance( ) const
 	{
-		return static_cast< byte_t >( 0.2126f * float( GetRed( ) ) + 0.7152f * float( GetGreen( ) ) + 0.0722f * float( GetBlue( ) ) );
+		return byte_t( 0.2126 * double( GetRed( ) ) + 0.7152 * double( GetGreen( ) ) + 0.0722 * double( GetBlue( ) ) );
 	}
 
 	byte_t SColor::operator[ ]( const int iColor ) const
@@ -240,6 +240,16 @@ namespace PX::Types
 	float SColor::operator[ ]( const float flColor ) const
 	{
 		return float( pColor->b[ int( flColor ) ] ) / 255.f;
+	}
+
+	bool SColor::operator==( const SColor &rhs ) const
+	{
+		return this->Hex == rhs.Hex;
+	}
+
+	bool SColor::operator!=( const SColor &rhs ) const
+	{
+		return !( *this == rhs );
 	}
 
 	color_t SColorSequence::GetGradient( color_t clrStart, color_t clrEnd, float flProgress )
@@ -270,8 +280,7 @@ namespace PX::Types
 	{
 		for ( std::size_t z = 0; z < zSequences; z++ )
 		{
-			sqInfo[ z ].clrColor = clrColors[ z ];
-			sqInfo[ z ].mmtDuration = mmtDurations[ z ];
+			PutNewColorSequence( clrColors[ z ], mmtDurations[ z ] );
 		}
 	}
 
@@ -294,6 +303,8 @@ namespace PX::Types
 			else
 				return GetGradient( sqInfo[ z ].clrColor, sqInfo[ z + 1 != zSequences ? z + 1 : 0 ].clrColor,
 									float( mmtCurrentProgress - mmtPassedProgress ) / float( sqInfo[ z ].mmtDuration ) );
+
+		px_assert( false );
 	}
 
 	color_t& SColorSequence::GetColor( unsigned uColor )
@@ -311,7 +322,7 @@ namespace PX::Types
 	void SColorSequence::PutNewColorSequence( const color_t& clrNewColor, moment_t mmtDuration )
 	{
 		if ( zSequences >= 7 )
-			return;
+			return; //review can we use? DeleteColorSequence( 0 );
 
 		sqInfo[ zSequences ].clrColor = clrNewColor;
 		sqInfo[ zSequences ].mmtDuration = mmtDuration;
@@ -320,14 +331,16 @@ namespace PX::Types
 
 	void SColorSequence::DeleteColorSequence( unsigned uPosition )
 	{
-		if ( zSequences <= uPosition )
-			return;
+		px_assert( uPosition < zSequences );
 
 		for ( auto s = uPosition; s < zSequences - 1; s++ )
 		{
 			sqInfo[ s ].clrColor = sqInfo[ s + 1 ].clrColor;
 			sqInfo[ s ].mmtDuration = sqInfo[ s + 1 ].mmtDuration;
 		}
+
+		sqInfo[ zSequences - 1 ].clrColor = { };
+		sqInfo[ zSequences - 1 ].mmtDuration = { };
 
 		zSequences--;
 	}

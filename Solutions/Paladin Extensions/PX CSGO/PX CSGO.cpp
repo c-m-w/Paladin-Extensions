@@ -49,7 +49,7 @@ void PX_API OnAttach( )
 		ExitProcess( -1 );
 #if defined _DEBUG
 	while ( !GetAsyncKeyState( VK_END ) )
-		PX::Tools::Wait( 1 );
+		PX::Tools::Pause( 1 );
 	PX::Hooks::Destruct( );
 	PX::UI::Manager::Destruct( );
 	PX::Render::Destruct( );

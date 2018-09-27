@@ -59,28 +59,26 @@ namespace PX::Tools
 	/**	\return Converted byte array. */
 	std::string PX_API FormatShellcode( Types::byte_t* bByteArray, unsigned uSize );
 
-	// INFO: Gets the local time
-	// *type name*: Time info format type
 	/** \brief Gets the local time */
-	/** \return Local time in moment_t form */
+	/**			Divide return by 10000000ull to go to seconds */
+	/** \return Local time in moment_t form (tenths of microsecond) */
 	Types::moment_t PX_API GetMoment( );
-	// INFO: 
 	/** \brief Pauses (doesn't free up CPU) the thread that has called for the amount of time within .5 ms */
-	/** \param mmtWaitLength Length to wait in milliseconds */
-	void PX_API Wait( Types::moment_t mmtWaitLength = 1ull );
+	/** \param mmtPauseLength Length to pause in milliseconds */
+	void PX_API Pause( Types::moment_t mmtPauseLength = 1ull );
 
 	// Get main screen dimensions
 	unsigned* GetScreenDimensions( );
 
-	// INFO: Casts strings\n
-	// INFO: Supports any combination of conversion from "std::string" and "std::wstring" to "std::string" and "std::wstring"
-	// *_To*: Desired string type
-	// *_From*: Current string
+	/** \brief Supports any combination of string casting conversion from "std::string" and "std::wstring" to "std::string" and "std::wstring" */
+	/** \tparam _To Desired string type */
+	/** \tparam _From Current string */
+	/** \return Converted string in desired type */
 	template< typename _To, typename _From > _To PX_API string_cast( const _From& );
-	// INFO: Casts strings\n
-	// INFO: Supports any combination of conversion from "const char*" and "const wchar_t*" to "std::string" and "std::wstring"
-	// *_To*: Desired string type
-	// *_From*: Current string
+	/** \brief Supports any combination of string casting conversion from "const char*" and "const wchar_t*" to "std::string" and "std::wstring" */
+	/** \tparam _To Desired string type */
+	/** \tparam _From Current string */
+	/** \return Converted string in desired type */
 	template< typename _To, typename _From > _To PX_API string_cast( _From* );
 }
 

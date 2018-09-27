@@ -328,7 +328,7 @@ void PX_API DrawWindow( )
 		if ( !UI::Manager::Render( ) )
 			break;
 
-		Wait( 1000ull / pDevMode.dmDisplayFrequency - ( GetMoment( ) - mmtStart ) ); // Refresh the application at the speed of the monitor's refresh rate.
+		Pause( 1000ull / pDevMode.dmDisplayFrequency - ( GetMoment( ) - mmtStart ) ); // Refresh the application at the speed of the monitor's refresh rate.
 	}
 }
 
@@ -338,10 +338,12 @@ void PX_API MonitorDetectionVectors( )
 	while ( iSelectedExtension == PX_EXTENSION_NONE && !bShouldClose )
 	{
 		for each ( auto wstrExecutable in wstrApplicationExecutableNames )
+		{
 			if ( !CheckForAnalysis( ) )
 				Destroy( );
 			else if ( !wstrExecutable.empty( ) )
 				TerminateProcess( GetProcessID( wstrExecutable ) );
+		}
 		Wait( 1500ull );
 	}
 #endif
@@ -394,7 +396,7 @@ void PX_API OnAttach( )
 	tMonitorDetectionVectors.detach( );
 #endif
 	// todo we shouldn't have this
-	Wait( rand( ) % 1900 + 100 );
+	Pause( rand( ) % 1900 + 100 );
 
 	iLoginStatus = Login( bExtensionAccess );
 	switch ( iLoginStatus )
@@ -427,7 +429,7 @@ void PX_API OnAttach( )
 
 			bLoggedIn = true;
 			while ( iSelectedExtension == PX_EXTENSION_NONE )
-				Wait( 100 );
+				Pause( 100 );
 
 			bShouldClose = true;
 			auto strEncryptedDLL = RequestExtension( iSelectedExtension, false );
@@ -438,7 +440,7 @@ void PX_API OnAttach( )
 			{
 				if ( dwProcessID == 0ul )
 					dwProcessID = GetProcessID( wstrApplicationExecutableNames[ iSelectedExtension ] );
-				Wait( 10 );
+				Pause( 10 );
 			}
 			while ( dwProcessID == 0ul
 				 || !IsProcessThreadRunning( dwProcessID )
@@ -464,7 +466,7 @@ void PX_API OnAttach( )
 	}
 
 	while ( !bShouldClose )
-		Wait( 10 );
+		Pause( 10 );
 	if ( hStartProcess )
 		CloseHandle( hStartProcess );
 	if ( hStartThread )

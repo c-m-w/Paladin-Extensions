@@ -45,7 +45,7 @@
 	/** \param _ToAssert Value to assert. */
 #define px_assert( _ToAssert ) \
 		if ( ( _ToAssert ) == decltype( _ToAssert )( ) ) \
-			return { }
+			throw
 #endif
 
 // identifies variable as "Paladin Extensions" original

@@ -147,5 +147,5 @@ Relogin:
 	LoadManager( );
 
 	while ( true )
-		Wait( 1 );
+		Pause( 1 );
 }

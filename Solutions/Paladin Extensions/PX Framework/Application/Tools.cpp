@@ -198,7 +198,7 @@ namespace PX::Tools
 				break;
 		}
 
-		px_assert( strlen( szDaySuffix ) > 0 );
+		px_assert( strlen( szDaySuffix ) > 0 ); // if you get an exception thrown here, it's likely because the date is 0th
 
 		// TODO: writing 80 bytes to szBuffer, but it's only 32...
 		strftime( szBuffer, 80, ( std::string( PX_XOR( "%B %e" ) ) + szDaySuffix + PX_XOR( ", 20%g" ) ).c_str( ), tmTime );
@@ -222,16 +222,16 @@ namespace PX::Tools
 		// WinAPI resolution is only in tenths of a microsecond
 		return std::chrono::duration_cast< std::chrono::nanoseconds >( std::chrono::system_clock::now( ).time_since_epoch( ) ).count( ) / 100;
 	}
-	PX_EXT PX_INL void PX_API Wait( const moment_t mmtWaitLength /*= 1ull*/ ) // only accept time in milliseconds as that's all we can guarantee
+	PX_EXT PX_INL void PX_API Pause( const moment_t mmtPauseLength /*= 1ull*/ ) // only accept time in milliseconds as that's all we can guarantee
 	{
-		if ( 0 == mmtWaitLength )
+		if ( 0 == mmtPauseLength )
 			return;
 
 		static const auto NtDelayExecution = static_cast< SWindowsAPI::fnNtDelayExecution >( PX_WINAPI.GetFunctionPointer( SWindowsAPI::NtDelayExecution ) );
 		if ( nullptr == NtDelayExecution ) // their system must be really messed up if it can't find delay execution
-			return Sleep( DWORD( mmtWaitLength ) );
+			return Sleep( DWORD( mmtPauseLength ) );
 
-		const auto mmtEndTarget = GetMoment( ) + mmtWaitLength * 10000ull - 5000ull; // 10,000 is milliseconds to 100 nanoseconds conversion
+		const auto mmtEndTarget = GetMoment( ) + mmtPauseLength * 10000ull - 5000ull; // 10,000 is milliseconds to 100 nanoseconds conversion
 
 		LARGE_INTEGER liDelayInterval;
 		liDelayInterval.QuadPart = -1ll;
