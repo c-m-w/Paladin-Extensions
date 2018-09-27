@@ -201,7 +201,7 @@ BOOL WINAPI DllMain( _In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID 
 		}
 		default:
 		{
-			return FALSE;
+			return TRUE; // review: should this be false since it's an unhandled dllmain call?
 		}
 	}
 }
