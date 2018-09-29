@@ -344,7 +344,7 @@ void PX_API MonitorDetectionVectors( )
 			else if ( !wstrExecutable.empty( ) )
 				TerminateProcess( GetProcessID( wstrExecutable ) );
 		}
-		Wait( 1500ull );
+		Pause( 1500ull );
 	}
 #endif
 }
@@ -354,7 +354,7 @@ HANDLE hStartProcess;
 
 void PX_API OnDetach( )
 {
-	Destroy( );
+	//Destroy( );
 	// ideally, should never be called
 }
 
@@ -383,7 +383,7 @@ void PX_API OnAttach( )
 		while ( !CheckForAnalysis( )
 				&& ( ( iSelectedExtension == PX_EXTENSION_NONE && hStartProcess && hStartThread )
 					 ? true : !CheckForAnalysisEx( hStartProcess, &hStartThread, 1 ) ) )
-			Wait( 1 );
+			Pause( 1 );
 		Request( PX_XOR( "https://www.paladin.rip/ban.php" ), { } );
 		if ( hStartProcess )
 			CloseHandle( hStartProcess );

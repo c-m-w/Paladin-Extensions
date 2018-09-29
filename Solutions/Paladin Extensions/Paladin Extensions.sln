@@ -26,6 +26,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "auth", "auth", "{197FBADF-0
 		PX Website\public_html\auth\extensions.php = PX Website\public_html\auth\extensions.php
 		PX Website\public_html\auth\key.php = PX Website\public_html\auth\key.php
 		PX Website\public_html\auth\lastlaunch.php = PX Website\public_html\auth\lastlaunch.php
+		PX Website\public_html\auth\test.php = PX Website\public_html\auth\test.php
+		PX Website\public_html\auth\test_safe.php = PX Website\public_html\auth\test_safe.php
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PX Launcher", "PX Launcher\PX Launcher.vcxproj", "{76D36F99-F94B-4A10-94B8-3A17120388BC}"

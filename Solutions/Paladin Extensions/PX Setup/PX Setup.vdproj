@@ -661,13 +661,6 @@
         }
         "LaunchCondition"
         {
-            "{836E08B8-0285-4809-BA42-01DB6754A45D}:_B58685D14143467184D4E52EFC47D75C"
-            {
-            "Name" = "8:USN Journal Disabled"
-            "Condition" = "8:"
-            "Message" = "8:You must install on a drive that has USN Journal disabled. (e.g. FAT, FAT32, exFAT, etc.)"
-            "InstallUrl" = "8:"
-            }
         }
         "Locator"
         {

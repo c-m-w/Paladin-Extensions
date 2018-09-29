@@ -39,10 +39,11 @@ bool Popup( EMBType popType, const wchar_t* wszMessage, const bool bDelete = fal
 			MessageBox( nullptr, wszMessage, PX_XOR( L"Paladin Extensions: Warning" ), UINT( popType ) );
 			break;
 		case EMBType::INFO:
-			MessageBox( nullptr, wszMessage, PX_XOR( L"Paladin Extensions: Information" ), UINT( popType ) );
-			break;
+			if ( !bDelete )
+				return MessageBox( nullptr, wszMessage, PX_XOR( L"Paladin Extensions: Information" ), UINT( popType ) );
 		default:
 			MessageBox( nullptr, wszMessage, PX_XOR( L"Paladin Extensions" ), UINT( popType ) );
+			break;
 	}
 	bDelete ? Destroy( ) : ExitProcess( -1 );
 }
@@ -89,7 +90,7 @@ void PX_API OnLaunch( )
 	{
 		while ( !CheckForAnalysis( ) )
 			if ( !bStopMonitoring )
-				Wait( 1 );
+				Pause( 1 );
 			else
 				return;
 		Destroy( );

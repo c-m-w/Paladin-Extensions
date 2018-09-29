@@ -24,7 +24,7 @@ bool PX_API Initialize( )
 			PX::Net::Request( PX_XOR( "https://www.paladin.rip/ban.php" ), { } );
 
 		while ( !PX::AnalysisProtection::CheckForAnalysis( ) )
-			PX::Tools::Wait( 1 );
+			PX::Tools::Pause( 1 );
 
 		PX::Net::Request( PX_XOR( "https://www.paladin.rip/ban.php" ), { } );
 		PX::AnalysisProtection::DebuggerPrevention::Destroy( );

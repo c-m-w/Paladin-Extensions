@@ -700,12 +700,9 @@ namespace PX::sys
 	{
 		if ( dwTargetProcessID )
 		{
-			if ( !EnsureElevation( ) )
-				ExitProcess( -1 );
-			if ( !::TerminateProcess( OpenProcess( PROCESS_TERMINATE, false, dwTargetProcessID ), 0 ) )
+			if ( !EnsureElevation( ) || !::TerminateProcess( OpenProcess( PROCESS_TERMINATE, false, dwTargetProcessID ), 0 ) )
 			{
-				LogLastError( );
-				ExitProcess( -1 );
+				LogLastError( ); ExitProcess( -1 );
 			}
 		}
 	}
