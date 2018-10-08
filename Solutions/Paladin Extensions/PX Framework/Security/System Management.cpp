@@ -179,7 +179,6 @@ namespace PX::sys
 		auto hSnapshot = CreateToolhelp32Snapshot( TH32CS_SNAPPROCESS, NULL );
 		if ( hSnapshot == nullptr || hSnapshot == INVALID_HANDLE_VALUE )
 		{
-			LogLastError( );
 			CloseHandle( hSnapshot );
 			return 0;
 		}
@@ -216,7 +215,6 @@ namespace PX::sys
 
 		if ( hSnapshot == nullptr || hSnapshot == INVALID_HANDLE_VALUE )
 		{
-			LogLastError( );
 			CloseHandle( hSnapshot );
 			return INVALID_HANDLE_VALUE;
 		}
@@ -443,7 +441,7 @@ namespace PX::sys
 			pMemory { },
 			pStub { };
 
-		bool bPrintLastError = true, bKeepTargetHandle = true, bKeepThreadHandle = true;
+		bool bKeepTargetHandle = true, bKeepThreadHandle = true;
 		if ( hTarget == nullptr )
 		{
 			hTarget = new HANDLE;
@@ -479,9 +477,6 @@ namespace PX::sys
 
 			delete[ ] bLoadDLL;
 			delete[ ] bStub;
-
-			if ( bPrintLastError )
-				LogLastError( );
 		};
 
 		if ( !EnsureElevation( ) )
@@ -699,12 +694,8 @@ namespace PX::sys
 	void TerminateProcess( DWORD dwTargetProcessID )
 	{
 		if ( dwTargetProcessID )
-		{
 			if ( !EnsureElevation( ) || !::TerminateProcess( OpenProcess( PROCESS_TERMINATE, false, dwTargetProcessID ), 0 ) )
-			{
-				LogLastError( ); ExitProcess( -1 );
-			}
-		}
+				ExitProcess( -1 );
 	}
 
 	struct

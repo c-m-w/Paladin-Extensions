@@ -1,8 +1,8 @@
 <?php
-require '../../include.php';
+	require '../../include.php';
 
-if ( mysqli_connect_errno( ) || $sql_connection->connect_error )
-	die( ReturnKeys[ "Establishing Failure" ] );
+	if ( mysqli_connect_errno( ) || $sql_connection->connect_error )
+		die( ReturnKeys[ "Establishing Failure" ] );
 
 // Todo: xf_loader_atmp logging
 // Todo: DLL Streaming

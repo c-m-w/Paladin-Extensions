@@ -2,30 +2,25 @@
 
 #pragma once
 
-namespace PX
+namespace PX::dbg
 {
-	namespace dbg
+	namespace
 	{
-		namespace
+		PX_SDK std::ofstream ofLogFile( "C:/debug.log" );
+		PX_SDK bool bNotFirstPrint;
+	}
+	template< typename _t > PX_INL SDebugStream& PX_API SDebugStream::operator<<( const _t& _Log )
+	{
+		if ( !bNotFirstPrint )
 		{
-			std::wofstream wofLogFile; // var cannot be static as each fn is compiled as an independent fn due to templating
+			bNotFirstPrint = true;
+			std::cout << "[OPN] Begin new logging session";
+			ofLogFile << "[OPN] Begin new logging session";
 		}
-
-		template< typename _t > out_t& PX_API out_t::operator<<( const _t& rhs )
-		{
-#if defined _DEBUG
-			if ( !wofLogFile.is_open( ) )
-			{
-				wofLogFile.open( "C:/debug.log", std::ofstream::trunc );
-				px_assert( wofLogFile.good( ) );
-
-				out PX_OPN;
-			}
-
-			wofLogFile << rhs;
-			std::wcout << rhs;
-#endif
-			return *this;
-		}
+		std::cout << _Log;
+		ofLogFile << _Log;
+		std::cout.flush( );
+		ofLogFile.flush( );
+		return *this;
 	}
 }

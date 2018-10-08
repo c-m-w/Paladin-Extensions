@@ -71,9 +71,6 @@
     <ClCompile Include="Security\Cryptography.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Application\Debug.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Application\Tools.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

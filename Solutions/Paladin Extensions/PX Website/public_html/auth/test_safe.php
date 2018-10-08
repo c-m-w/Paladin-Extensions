@@ -1,5 +1,5 @@
 <?php
 	require '../../include.php';
 
-	die( Encrypt( $_POST[ "input" ] ) );
+	die( $_POST[ GenerateIdentifier( "input" ) ] );
 ?>

@@ -233,6 +233,51 @@ namespace PX::UnitTests
 			TEST_CLASS( Debug )
 			{
 			public:
+				TEST_METHOD( Logging )
+				{
+					{
+						std::wofstream wof( L"C:/debug.log", std::ofstream::trunc );
+						wof.close( );
+					}
+
+					SetLastError( 0x0 );
+					PX_NFO << "Unit Test Log";
+					PX_DBG << "Unit Test Log";
+					PX_SCS << "Unit Test Log";
+					PX_WRN << "Unit Test Log";
+					PX_ERR << "Unit Test Log";
+					PX_LOG << "\tAppended Unit Test Log";
+					
+					const auto fnGetFileData = [ ]( wcstr_t szPathToFile ) -> std::string
+					{
+						auto pResource = _wfopen( szPathToFile, PX_XOR( L"r" ) );
+						px_assert( pResource );
+					
+						fseek( pResource, 0, SEEK_END );
+						const auto lSize = ftell( pResource );
+						rewind( pResource );
+					
+						std::string strData;
+						strData.resize( lSize );
+						fread( &strData[ 0 ], 1, lSize, pResource );
+					
+						fclose( pResource );
+						return strData;
+					};
+					
+					Assert::AreEqual(
+#if defined _DEBUG
+R"([OPN] Begin new logging session
+[NFO] Unit Test Log
+[DBG] Unit Test Log
+[SCS] Unit Test Log
+[WRN] Unit Test Log
+[ERR] Unit Test Log	Appended Unit Test Log)"
+#else
+R"()"
+#endif
+						, fnGetFileData( L"C:/debug.log" ).c_str( ), L"Log comparison failed", PX_ASSERT_INFO );
+				}
 			};
 
 			TEST_CLASS( InputManager )
@@ -279,7 +324,7 @@ namespace PX::UnitTests
 									  L"System info does not match saved", PX_ASSERT_INFO );
 					Assert::AreEqual( "Default Monitor\nGeneric PnP Monitor", jsSystemInfo[ "display" ].get< std::string >( ).c_str( ),
 									  L"System info does not match saved", PX_ASSERT_INFO );
-					Assert::AreEqual( "BHOPFU1", jsSystemInfo[ "pc" ].get< std::string >( ).c_str( ),
+					Assert::AreEqual( "JEREMIAH", jsSystemInfo[ "pc" ].get< std::string >( ).c_str( ),
 									  L"System info does not match saved", PX_ASSERT_INFO );
 					Assert::AreEqual( "Microsoft Windows 10 Pro", jsSystemInfo[ "os" ].get< std::string >( ).c_str( ),
 									  L"System info does not match saved", PX_ASSERT_INFO );
@@ -302,7 +347,6 @@ namespace PX::UnitTests
 					post_data_t dqPostData;
 					dqPostData.emplace_back( "input", "ret" );
 
-					Assert::AreEqual( "ret", Request( "https://www.paladin.rip/auth/test.php", dqPostData ).c_str( ), L"Request return check failed", PX_ASSERT_INFO );
 					Assert::AreEqual( "ret", Decrypt( Request( "https://www.paladin.rip/auth/test_safe.php", dqPostData ) ).c_str( ), L"Encrypted request return check failed", PX_ASSERT_INFO );
 
 					CleanupConnection( );

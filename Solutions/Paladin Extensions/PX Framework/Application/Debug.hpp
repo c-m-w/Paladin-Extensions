@@ -2,30 +2,18 @@
 
 #pragma once
 
+#if defined _DEBUG
 namespace PX::dbg
 {
-	PX_DEF newl = '\n';
-
-	// INFO: Used to change console print color of debug output
-	struct out_clr_t
+	struct SDebugStream: PX::Tools::ASingleton< SDebugStream >
 	{
-		WORD wDesiredAttributes;
-		explicit out_clr_t( WORD );
+		template< typename _t > SDebugStream& PX_API operator<<( const _t& _Log );
 	};
-
-	// INFO: Managed debug output; used like std::cout
-	class out_t
-	{
-	public:
-		out_t& PX_API operator<<( const out_clr_t& );
-		template< typename _t > out_t& PX_API operator<<( const _t& );
-	} PX_SDK out;
-
-	void PX_API LogLastError( );
 }
 
 #include "Debug.inl"
 
 #if defined PX_USE_NAMESPACES
 using namespace PX::dbg;
+#endif
 #endif

@@ -62,6 +62,8 @@
 #define PX_END __declspec( noreturn )
 // identifies noexcept as "Paladin Extensions" original
 #define PX_NOX noexcept
+// identifies returned as "Paladin Extensions" original
+#define PX_RET [ [ nodiscard ] ]
 
 /** \brief Identifies a class as abstract. */
 #define px_abstract_class class
@@ -117,41 +119,34 @@
 #endif
 
 #if defined _DEBUG
-// sets debug out line identifier as "Opening"
-#define PX_OPN << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), L"[%H:%M:%S]" ) << \
-		PX::dbg::out_clr_t( !( FOREGROUND_INTENSITY ) | ( FOREGROUND_RED ) | ( FOREGROUND_GREEN ) | ( FOREGROUND_BLUE ) ) << L" [OPN] " << \
-		PX::dbg::out_clr_t( !( FOREGROUND_INTENSITY ) | ( FOREGROUND_RED ) | ( FOREGROUND_GREEN ) | ( FOREGROUND_BLUE ) )
-// sets debug out line identifier as "Information"
-#define PX_NFO << PX::dbg::newl << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), L"[%H:%M:%S]" ) << \
-		PX::dbg::out_clr_t( !( FOREGROUND_INTENSITY ) | ( FOREGROUND_RED ) | ( FOREGROUND_GREEN ) | ( FOREGROUND_BLUE ) ) << L" [NFO] " << \
-		PX::dbg::out_clr_t( !( FOREGROUND_INTENSITY ) | ( FOREGROUND_RED ) | ( FOREGROUND_GREEN ) | ( FOREGROUND_BLUE ) )
-// sets debug out line identifier as "Debug"
-#define PX_DBG << PX::dbg::newl << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), L"[%H:%M:%S]" ) << \
-		PX::dbg::out_clr_t( ( FOREGROUND_INTENSITY ) | ( FOREGROUND_RED ) | ( FOREGROUND_GREEN ) | ( FOREGROUND_BLUE ) ) << L" [DBG] " << \
-		PX::dbg::out_clr_t( !( FOREGROUND_INTENSITY ) | ( FOREGROUND_RED ) | ( FOREGROUND_GREEN ) | ( FOREGROUND_BLUE ) )
-// sets debug out line identifier as "Success"
-#define PX_SCS << PX::dbg::newl << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), L"[%H:%M:%S]" ) << \
-		PX::dbg::out_clr_t( ( FOREGROUND_INTENSITY ) | !( FOREGROUND_RED ) | ( FOREGROUND_GREEN ) | !( FOREGROUND_BLUE ) ) << L" [SCS] " << \
-		PX::dbg::out_clr_t( !( FOREGROUND_INTENSITY ) | ( FOREGROUND_RED ) | ( FOREGROUND_GREEN ) | ( FOREGROUND_BLUE ) )
-// sets debug out line identifier as "Warning"
-#define PX_WRN << PX::dbg::newl << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), L"[%H:%M:%S]" ) << \
-		PX::dbg::out_clr_t( ( FOREGROUND_INTENSITY ) | ( FOREGROUND_RED ) | ( FOREGROUND_GREEN )  | !( FOREGROUND_BLUE ) ) << L" [WRN] " << \
-		PX::dbg::out_clr_t( !( FOREGROUND_INTENSITY ) | ( FOREGROUND_RED ) | ( FOREGROUND_GREEN )  | ( FOREGROUND_BLUE ) )
-// sets debug out line identifier as "Error"
-#define PX_ERR << PX::dbg::newl << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), L"[%H:%M:%S]" ) << \
-		PX::dbg::out_clr_t( ( FOREGROUND_INTENSITY ) | ( FOREGROUND_RED ) | !( FOREGROUND_GREEN ) | !( FOREGROUND_BLUE ) ) << L" [ERR] " << \
-		PX::dbg::out_clr_t( !( FOREGROUND_INTENSITY ) | ( FOREGROUND_RED ) | ( FOREGROUND_GREEN ) | ( FOREGROUND_BLUE ) )
-// sets debug out line identifier as "Last Error Info"
-#define PX_LER << PX::dbg::newl << std::put_time( std::localtime( new time_t { std::time( nullptr ) } ), L"[%H:%M:%S]" ) << \
-		PX::dbg::out_clr_t( !( FOREGROUND_INTENSITY ) | ( FOREGROUND_RED ) | ( FOREGROUND_GREEN ) | !( FOREGROUND_BLUE ) ) << L" [LER] " << \
-		PX::dbg::out_clr_t( !( FOREGROUND_INTENSITY ) | ( FOREGROUND_RED ) | ( FOREGROUND_GREEN ) | ( FOREGROUND_BLUE ) )
+#define PX_SHOW_ALL_DEBUG true
+#define PX_SHOW_LOG_DEBUG true
+#define PX_SHOW_NFO_DEBUG true
+#define PX_SHOW_DBG_DEBUG true
+#define PX_SHOW_SCS_DEBUG true
+#define PX_SHOW_WRN_DEBUG true
+#define PX_SHOW_ERR_DEBUG true
+
+#define PX_LOG if constexpr ( PX_SHOW_ALL_DEBUG || PX_SHOW_LOG_DEBUG ) \
+				   PX::dbg::SDebugStream::Get( )
+#define PX_NFO if constexpr ( PX_SHOW_ALL_DEBUG || PX_SHOW_NFO_DEBUG ) \
+				   PX::dbg::SDebugStream::Get( ) << "\n[NFO] "
+#define PX_DBG if constexpr ( PX_SHOW_ALL_DEBUG || PX_SHOW_DBG_DEBUG ) \
+				   PX::dbg::SDebugStream::Get( ) << "\n[DBG] "
+#define PX_SCS if constexpr ( PX_SHOW_ALL_DEBUG || PX_SHOW_SCS_DEBUG ) \
+				   PX::dbg::SDebugStream::Get( ) << "\n[SCS] "
+#define PX_WRN if constexpr ( PX_SHOW_ALL_DEBUG || PX_SHOW_WRN_DEBUG ) \
+				   PX::dbg::SDebugStream::Get( ) << "\n[WRN] "
+#define PX_ERR if constexpr ( PX_SHOW_ALL_DEBUG || PX_SHOW_ERR_DEBUG ) \
+				   PX::dbg::SDebugStream::Get( ) << "\n[ERR] "
 #else
-#define PX_DBG
-#define PX_SCS
-#define PX_WRN
-#define PX_ERR
-#define PX_LER
+#define PX_NFO /##/
+#define PX_DBG /##/
+#define PX_SCS /##/
+#define PX_WRN /##/
+#define PX_ERR /##/
 #endif
+
 
 // Singleton access macros
 /** \brief Input interface singleton access macro */
