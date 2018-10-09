@@ -1,5 +1,5 @@
 # Paladin Extensions
-- Extension software developed by Jeremy, Cole, and John.
+- Extension software developed by Jeremy and Cole.
 
 ## PX Framework Functionality
 Fully featured framework for all PX projects, with a wide variety of functionality such as
