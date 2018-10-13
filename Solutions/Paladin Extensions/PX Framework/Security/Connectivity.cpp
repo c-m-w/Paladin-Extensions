@@ -81,7 +81,7 @@ namespace PX::Net
 		return Request( strDownloadURL, dqPostData );
 	}
 
-	wcstr_t wszCredentialsFile = PX_XOR( L"license.px" );
+	std::wstring wstrCredentialsFile = PX_XOR( L"license.px" );
 
 	nlohmann::json jsCredentials = nlohmann::json::parse( PX_XOR( R"(
 	{
@@ -109,7 +109,7 @@ namespace PX::Net
 		if ( strResponse.empty( ) )
 			return false;
 
-		FileWrite( PX_APPDATA + wszCredentialsFile, string_cast< std::wstring >( strResponse ), false, false );
+		FileWrite( PX_APPDATA + wstrCredentialsFile, string_cast< std::wstring >( strResponse ), false, false );
 		return true;
 	}
 
@@ -123,7 +123,7 @@ namespace PX::Net
 		if ( bRecalled )
 			bAttemptedLicenceCreation = false;
 
-		if ( !FileRead( PX_APPDATA + wszCredentialsFile, wstrFile, false ) )
+		if ( !FileRead( PX_APPDATA + wstrCredentialsFile, wstrFile, false ) )
 			bCreatedLicenseFile = CreateLicenseFile( );
 
 		try

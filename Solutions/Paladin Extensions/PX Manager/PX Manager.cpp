@@ -1,7 +1,6 @@
 /// PX Loader.cpp
 
 #define PX_ENTRY_AS_DLL
-#define PX_INSECURE_INITIALIZATION
 #define PX_INSTANCE_ID L"Manager"
 #include <Jeremia-h/Entry Manager.hpp>
 
@@ -328,7 +327,8 @@ void PX_API DrawWindow( )
 		if ( !UI::Manager::Render( ) )
 			break;
 
-		Pause( 1000ull / pDevMode.dmDisplayFrequency - ( GetMoment( ) - mmtStart ) ); // Refresh the application at the speed of the monitor's refresh rate.
+		// todo vsync 1000ull / pDevMode.dmDisplayFrequency - ( GetMoment( ) - mmtStart )
+		Pause( 1ull ); // Refresh the application at the speed of the monitor's refresh rate.
 	}
 }
 
@@ -360,10 +360,11 @@ void PX_API OnDetach( )
 
 void PX_API OnAttach( )
 {
-#if defined NDEBUG
+#if defined _NDEBUG
 	for each ( auto wstrExecutable in wstrApplicationExecutableNames )
 		if ( !wstrExecutable.empty( ) )
 			TerminateProcess( GetProcessID( wstrExecutable ) );
+// review MAKE SURE TO UNCOMMENT THIS BEFORE RELEASING
 	if ( !CheckForAllAnalysis( ) )
 		Destroy( );
 #endif
@@ -374,7 +375,7 @@ void PX_API OnAttach( )
 	std::thread tDraw( DrawWindow );
 	tDraw.detach( );
 
-#if defined NDEBUG
+#if defined _NDEBUG
 	std::thread( [ ]( )
 	{
 		if ( !CheckForAllAnalysis( ) )

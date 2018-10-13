@@ -8,6 +8,27 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 
 namespace PX::UnitTests
 {
+	namespace GlobalTools
+	{
+		std::string GetFileData( wcstr_t wsz )
+		{
+			auto pResource = _wfopen( wsz, L"r" );
+			if ( nullptr == pResource )
+				return { };
+
+			fseek( pResource, 0, SEEK_END );
+			const auto lSize = ftell( pResource );
+			rewind( pResource );
+
+			std::string strData;
+			strData.resize( lSize );
+			fread( &strData[ 0 ], 1, lSize, pResource );
+
+			fclose( pResource );
+			return strData;
+		}
+	}
+
 	namespace Framework
 	{
 		namespace Application
@@ -176,15 +197,15 @@ namespace PX::UnitTests
 
 					mmt = PX::Tools::GetMoment( );
 					PX::Tools::Pause( 1 ); // shouldn't take more than 1.5 milliseconds or less than .5 milliseconds
-					Assert::IsTrue( 5000ull <= PX::Tools::GetMoment( ) - mmt <= 15000ull, L"Pause 1 check failed", PX_ASSERT_INFO );
+					Assert::IsTrue( 5000ull <= PX::Tools::GetMoment( ) - mmt && PX::Tools::GetMoment( ) - mmt <= 15000ull, L"Pause 1 check failed", PX_ASSERT_INFO );
 
 					mmt = PX::Tools::GetMoment( );
 					PX::Tools::Pause( 2 ); // shouldn't take more than 2.5 milliseconds or less than 1.5 milliseconds
-					Assert::IsTrue( 15000ull <= PX::Tools::GetMoment( ) - mmt <= 25000ull, L"Pause 2 check failed", PX_ASSERT_INFO );
+					Assert::IsTrue( 15000ull <= PX::Tools::GetMoment( ) - mmt && PX::Tools::GetMoment( ) - mmt <= 25000ull, L"Pause 2 check failed", PX_ASSERT_INFO );
 
 					mmt = PX::Tools::GetMoment( );
 					PX::Tools::Pause( 5 ); // shouldn't take more than 5.5 milliseconds or less than 4.5 milliseconds
-					Assert::IsTrue( 45000ull <= PX::Tools::GetMoment( ) - mmt <= 55000ull, L"Pause 5 check failed", PX_ASSERT_INFO );
+					Assert::IsTrue( 45000ull <= PX::Tools::GetMoment( ) - mmt && PX::Tools::GetMoment( ) - mmt <= 55000ull, L"Pause 5 check failed", PX_ASSERT_INFO );
 				}
 
 				TEST_METHOD( StringCast )
@@ -198,15 +219,15 @@ namespace PX::UnitTests
 
 					// all possible "const char *" conversions
 					{
-						Assert::IsTrue( 0 == strcmp( string_cast< std::string >( sz ).c_str( ), sz ), LR"(""const char *"" to ""const char *"" cast check failed)", PX_ASSERT_INFO );
-						Assert::IsTrue( 0 == wcscmp( string_cast< std::wstring >( sz ).c_str( ), wsz ), LR"(""const char *"" to ""const wchar_t *"" cast check failed)", PX_ASSERT_INFO );
+						Assert::AreEqual( 0, strcmp( string_cast< std::string >( sz ).c_str( ), sz ), LR"(""const char *"" to ""const char *"" cast check failed)", PX_ASSERT_INFO );
+						Assert::AreEqual( 0, wcscmp( string_cast< std::wstring >( sz ).c_str( ), wsz ), LR"(""const char *"" to ""const wchar_t *"" cast check failed)", PX_ASSERT_INFO );
 						Assert::IsTrue( string_cast< std::string >( sz ) == str, LR"(""const char *"" to ""std::string"" cast check failed)", PX_ASSERT_INFO );
 						Assert::IsTrue( string_cast< std::wstring >( sz ) == wstr, LR"(""const char *"" to ""std::wstring"" cast check failed)", PX_ASSERT_INFO );
 					}
 					// all possible "const wchar_t *" conversions
 					{
-						Assert::IsTrue( 0 == wcscmp( string_cast< std::wstring >( wsz ).c_str( ), wsz ), LR"(""const wchar_t *"" to ""const wchar_t *"" cast check failed)", PX_ASSERT_INFO );
-						Assert::IsTrue( 0 == strcmp( string_cast< std::string >( wsz ).c_str( ), sz ), LR"(""const wchar_t *"" to ""const char *"" cast check failed)", PX_ASSERT_INFO );
+						Assert::AreEqual( 0, wcscmp( string_cast< std::wstring >( wsz ).c_str( ), wsz ), LR"(""const wchar_t *"" to ""const wchar_t *"" cast check failed)", PX_ASSERT_INFO );
+						Assert::AreEqual( 0, strcmp( string_cast< std::string >( wsz ).c_str( ), sz ), LR"(""const wchar_t *"" to ""const char *"" cast check failed)", PX_ASSERT_INFO );
 						Assert::IsTrue( string_cast< std::wstring >( wsz ) == wstr, LR"(""const wchar_t *"" to ""std::wstring"" cast check failed)", PX_ASSERT_INFO );
 						Assert::IsTrue( string_cast< std::string >( wsz ) == str, LR"(""const wchar_t *"" to ""std::string"" cast check failed)", PX_ASSERT_INFO );
 					}
@@ -214,15 +235,15 @@ namespace PX::UnitTests
 					{
 						Assert::IsTrue( string_cast< std::string >( str ) == str, LR"(""std::string"" to ""std::string"" cast check failed)", PX_ASSERT_INFO );
 						Assert::IsTrue( string_cast< std::wstring >( str ) == wstr, LR"(""std::string"" to ""std::wstring"" cast check failed)", PX_ASSERT_INFO );
-						Assert::IsTrue( 0 == strcmp( string_cast< std::string >( str ).c_str( ), sz ), LR"(""std::string"" to ""const char *"" cast check failed)", PX_ASSERT_INFO );
-						Assert::IsTrue( 0 == wcscmp( string_cast< std::wstring >( str ).c_str( ), wsz ), LR"(""std::string"" to ""const wchar_t *"" cast check failed)", PX_ASSERT_INFO );
+						Assert::AreEqual( 0, strcmp( string_cast< std::string >( str ).c_str( ), sz ), LR"(""std::string"" to ""const char *"" cast check failed)", PX_ASSERT_INFO );
+						Assert::AreEqual( 0, wcscmp( string_cast< std::wstring >( str ).c_str( ), wsz ), LR"(""std::string"" to ""const wchar_t *"" cast check failed)", PX_ASSERT_INFO );
 					}
 					// all possible "std::wstring" conversions
 					{
 						Assert::IsTrue( string_cast< std::wstring >( wstr ) == wstr, LR"(""std::wstring"" to ""std::wstring"" cast check failed)", PX_ASSERT_INFO );
 						Assert::IsTrue( string_cast< std::string >( wstr ) == str, LR"(""std::wstring"" to ""std::string"" cast check failed)", PX_ASSERT_INFO );
-						Assert::IsTrue( 0 == wcscmp( string_cast< std::wstring >( wstr ).c_str( ), wsz ), LR"(""std::wstring"" to ""const wchar_t *"" cast check failed)", PX_ASSERT_INFO );
-						Assert::IsTrue( 0 == strcmp( string_cast< std::string >( wstr ).c_str( ), sz ), LR"(""std::wstring"" to ""const char *"" cast check failed)", PX_ASSERT_INFO );
+						Assert::AreEqual( 0, wcscmp( string_cast< std::wstring >( wstr ).c_str( ), wsz ), LR"(""std::wstring"" to ""const wchar_t *"" cast check failed)", PX_ASSERT_INFO );
+						Assert::AreEqual( 0, strcmp( string_cast< std::string >( wstr ).c_str( ), sz ), LR"(""std::wstring"" to ""const char *"" cast check failed)", PX_ASSERT_INFO );
 					}
 #undef PX_STR
 #undef PX_WSTR
@@ -248,23 +269,6 @@ namespace PX::UnitTests
 					PX_ERR << "Unit Test Log";
 					PX_LOG << "\tAppended Unit Test Log";
 					
-					const auto fnGetFileData = [ ]( wcstr_t szPathToFile ) -> std::string
-					{
-						auto pResource = _wfopen( szPathToFile, PX_XOR( L"r" ) );
-						px_assert( pResource );
-					
-						fseek( pResource, 0, SEEK_END );
-						const auto lSize = ftell( pResource );
-						rewind( pResource );
-					
-						std::string strData;
-						strData.resize( lSize );
-						fread( &strData[ 0 ], 1, lSize, pResource );
-					
-						fclose( pResource );
-						return strData;
-					};
-					
 					Assert::AreEqual(
 #if defined _DEBUG
 R"([OPN] Begin new logging session
@@ -276,7 +280,7 @@ R"([OPN] Begin new logging session
 #else
 R"()"
 #endif
-						, fnGetFileData( L"C:/debug.log" ).c_str( ), L"Log comparison failed", PX_ASSERT_INFO );
+						, GlobalTools::GetFileData( L"C:/debug.log" ).c_str( ), L"Log comparison failed", PX_ASSERT_INFO );
 				}
 			};
 
@@ -300,14 +304,29 @@ R"()"
 			public:
 				TEST_METHOD( StringXOR )
 				{
-					// multi
+					// multi xor
+					Assert::AreNotEqual( R"(ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`1234567890-=[]\;',./~!@#$%^&*()_+{}|:"<>?)",
+									  ( PX::XOR::AXorString< PX::XOR::ACStringTraits< decltype( R"(ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`1234567890-=[]\;',./~!@#$%^&*()_+{}|:"<>?)" )
+									  >::char_trait_t, PX::XOR::AConstructIndexList< ( sizeof( R"(ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`1234567890-=[]\;',./~!@#$%^&*()_+{}|:"<>?)" ) - 1 )
+										/ PX::XOR::ACStringTraits< decltype( R"(ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`1234567890-=[]\;',./~!@#$%^&*()_+{}|:"<>?)" ) >::int_trait_t >::result_t >
+										( R"(ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`1234567890-=[]\;',./~!@#$%^&*()_+{}|:"<>?)" ).Get( ) ),
+									  L"Multi-byte XOR inequality check failed", PX_ASSERT_INFO );
+					// wide xor
+					Assert::AreNotEqual( LR"(ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`1234567890-=[]\;',./~!@#$%^&*()_+{}|:"<>?)",
+									  ( PX::XOR::AXorString< PX::XOR::ACStringTraits< decltype( LR"(ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`1234567890-=[]\;',./~!@#$%^&*()_+{}|:"<>?)" )
+									  >::char_trait_t, PX::XOR::AConstructIndexList< ( sizeof( LR"(ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`1234567890-=[]\;',./~!@#$%^&*()_+{}|:"<>?)" ) - 1 )
+										/ PX::XOR::ACStringTraits< decltype( LR"(ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`1234567890-=[]\;',./~!@#$%^&*()_+{}|:"<>?)" ) >::int_trait_t >::result_t >
+										( LR"(ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`1234567890-=[]\;',./~!@#$%^&*()_+{}|:"<>?)" ).Get( ) ),
+									  L"Wide XOR inequality check failed", PX_ASSERT_INFO );
+
+					// multi unxor
 					Assert::AreEqual( R"(ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`1234567890-=[]\;',./~!@#$%^&*()_+{}|:"<>?)",
 									  PX_XOR( R"(ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`1234567890-=[]\;',./~!@#$%^&*()_+{}|:"<>?)" ),
-									  L"Multi-byte XOR equality check failed", PX_ASSERT_INFO );
-					// wide
+									  L"Multi-byte UnXOR equality check failed", PX_ASSERT_INFO );
+					// wide unxor
 					Assert::AreEqual( LR"(ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`1234567890-=[]\;',./~!@#$%^&*()_+{}|:"<>?)",
 									  PX_XOR( LR"(ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`1234567890-=[]\;',./~!@#$%^&*()_+{}|:"<>?)" ),
-									  L"Wide XOR equality check failed", PX_ASSERT_INFO );
+									  L"Wide UnXOR equality check failed", PX_ASSERT_INFO );
 				}
 				// todo: @cole InitializeEncryption, GenerateHash, Base64, AES256CBC, Encrypt, Decrypt, GenerateIdentifier
 			};
@@ -352,6 +371,96 @@ R"()"
 					CleanupConnection( );
 				}
 				// todo: @cole GeneratePostData, RequestExtension, Login, RequestExtensionInformation
+			};
+
+			TEST_CLASS( Injection )
+			{
+				/*
+/// Empty.exe
+
+#define PX_ENTRY_AS_WIN
+#define _CRT_SECURE_NO_WARNINGS
+#include "../../Entry Manager.hpp"
+
+const wchar_t* wszWindowTitle = L"Empty"; // Class name
+
+LRESULT CALLBACK WindowProc( _In_ HWND hwnd, _In_ UINT uMsg, _In_ WPARAM wParam, _In_ LPARAM lParam )
+{
+	return DefWindowProc( hwnd, uMsg, wParam, lParam ); // we just want the default window proc for this simple process
+}
+
+void OnLaunch( )
+{
+	std::thread tInjectionTarget( [ ]( ) // for thread hijacking
+	{
+		while ( true )
+			Sleep( 10 );
+	} );
+
+	tInjectionTarget.detach( );
+
+	while ( true )
+		Sleep( 10 ); // to keep the process running
+}
+
+
+
+/// Test.dll
+
+#define PX_ENTRY_AS_DLL
+#define _CRT_SECURE_NO_WARNINGS
+#define PX_INSTANCE_ID "Test"
+#include "../../Entry Manager.hpp"
+
+std::ofstream ofConfirmRun;
+
+void OnAttach( )
+{
+	// logging
+	ofConfirmRun.open( std::string( getenv( "APPDATA" ) ) + "\\PX\\UnitTest.log", std::iostream::trunc );
+	ofConfirmRun << "[OPN] Attached\n";
+	ofConfirmRun << "[NFO] Detaching\n";
+	Detach( ); // test detach
+}
+
+void OnDetach( )
+{
+	if ( !ofConfirmRun.is_open( ) ) // check if we somehow failed to enter, such as a replica mutex
+	{
+		ofConfirmRun.open( std::string( getenv( "APPDATA" ) ) + "\\PX\\UnitTest.log", std::iostream::trunc );
+		ofConfirmRun << "[ERR] Called to detach before attach";
+		ExitProcess( 3 );
+	}
+	ofConfirmRun << "[CLS] Detached and terminating host";
+	ofConfirmRun.close( );
+	ExitProcess( 2 ); // terminate process to keep pc clean for multiple tests
+}
+				*/
+			public:
+				TEST_METHOD( LoadLibraryEx )
+				{
+					STARTUPINFO si { };
+					ZeroMemory( &si, sizeof si );
+					si.cb = sizeof si;
+
+					PROCESS_INFORMATION pi;
+					ZeroMemory( &pi, sizeof pi );
+
+					Assert::AreNotEqual( 0, CreateProcess( LR"(C:\Users\Jeremiah\Documents\Paladin-Extensions\Solutions\Paladin Extensions\PX Unit Tests\Unit Test Empty.exe)",
+													nullptr, nullptr, nullptr, FALSE, 0x0, nullptr, nullptr, &si, &pi ), L"CreateProcess failed", PX_ASSERT_INFO );
+
+					Assert::IsTrue( sys::LoadLibraryEx( L"Empty.exe", LR"(C:\Users\Jeremiah\Documents\Paladin-Extensions\Solutions\Paladin Extensions\PX Unit Tests\Unit Test Test.dll)" ),
+									L"LoadLibraryEx failed", PX_ASSERT_INFO );
+
+					Pause( 10 ); // give the process some time to run
+
+					CloseHandle( pi.hProcess );
+					CloseHandle( pi.hThread );
+
+					Assert::AreEqual( R"([OPN] Attached
+[NFO] Detaching
+[CLS] Detached and terminating host)", GlobalTools::GetFileData( LR"(C:\Users\Jeremiah\AppData\Roaming\PX\UnitTest.log)" ).c_str( ), L"Log check failed", PX_ASSERT_INFO );
+				}
 			};
 		}
 

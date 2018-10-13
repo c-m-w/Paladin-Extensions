@@ -444,12 +444,15 @@ namespace PX::sys
 		bool bKeepTargetHandle = true, bKeepThreadHandle = true;
 		if ( hTarget == nullptr )
 		{
-			hTarget = new HANDLE;
+			// it isn't reclaimed because if it's called with a value, then the caller wants to have access to the handle after the function returns
+			// ReSharper disable once CppNonReclaimedResourceAcquisition
+			hTarget = new HANDLE( nullptr );
 			bKeepTargetHandle = false;
 		}
 		if ( hThread == nullptr )
 		{
-			hThread = new HANDLE;
+			// ReSharper disable once CppNonReclaimedResourceAcquisition
+			hThread = new HANDLE( nullptr );
 			bKeepThreadHandle = false;
 		}
 
@@ -494,7 +497,8 @@ namespace PX::sys
 
 		// open handle to target process
 		const auto dwProcessID = GetProcessID( wstrExecutableName );
-		*hTarget = OpenProcess( PROCESS_VM_OPERATION | PROCESS_VM_WRITE, FALSE, dwProcessID );
+		if ( !*hTarget )
+			*hTarget = OpenProcess( PROCESS_VM_OPERATION | PROCESS_VM_WRITE, FALSE, dwProcessID );
 		if ( !*hTarget )
 		{
 			fnCleanup( );
@@ -544,7 +548,7 @@ namespace PX::sys
 		//WaitForSingleObject( hCreatedThread, INFINITE );
 
 		CONTEXT ctxThread { CONTEXT_FULL };
-		if ( ( *hThread = FindProcessThread( dwProcessID ) ) == INVALID_HANDLE_VALUE
+		if ( ( *hThread ? *hThread : *hThread = FindProcessThread( dwProcessID ) ) == INVALID_HANDLE_VALUE
 		  || SuspendThread( *hThread ) == UINT_MAX )
 		{
 			fnCleanup( );

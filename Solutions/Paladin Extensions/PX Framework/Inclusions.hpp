@@ -46,11 +46,7 @@
 #include <d3dx9math.h>
 #include <DirectXMath.h>
 #include <d3dx9tex.h>
-#if defined _DEBUG
-#pragma comment( lib, "d3dx9d.lib" )
-#else
 #pragma comment( lib, "d3dx9.lib" )
-#endif
 #pragma comment( lib, "d3d9.lib" )
 
 // Fonts
