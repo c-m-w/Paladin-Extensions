@@ -36,7 +36,9 @@ PX_EXT const wchar_t* wszWindowTitle;
 #else
 PX_EXT const char* szWindowTitle;
 #endif
+#if defined PX_USE_WINDOW_HANDLER
 LRESULT CALLBACK WindowProc( _In_ HWND hwnd, _In_ UINT uMsg, _In_ WPARAM wParam, _In_ LPARAM lParam );
+#endif
 void PX_API OnLaunch( );
 
 int APIENTRY
@@ -65,6 +67,7 @@ WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR 
 	if ( hInstance && hInstance != INVALID_HANDLE_VALUE )
 		PX::hinstWin = hInstance;
 
+#if defined PX_USE_WINDOW_HANDLER
 	WNDCLASSEX wndWindow { sizeof( WNDCLASSEX ), CS_DBLCLKS, WindowProc, 0, 0, PX::hinstWin, PX::hIcon, nullptr, nullptr, nullptr,
 #if defined UNICODE
 		wszWindowTitle,
@@ -76,6 +79,7 @@ WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR 
 	atomInstance = RegisterClassEx( &wndWindow );
 	if ( atomInstance == 0 )
 		return -1;
+#endif
 
 #if defined _DEBUG
 	AllocConsole( );
