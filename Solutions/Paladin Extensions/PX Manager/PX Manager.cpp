@@ -473,5 +473,5 @@ void PX_API OnLaunch( )
 		CloseHandle( hStartProcess );
 	if ( hStartThread )
 		CloseHandle( hStartThread );
-	ExitProcess( -1 );
+	ExitProcess( 0 );
 }
