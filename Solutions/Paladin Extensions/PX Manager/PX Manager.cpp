@@ -1,6 +1,7 @@
 /// PX Loader.cpp
 
-#define PX_ENTRY_AS_DLL
+#include "PX Precompiled.hpp"
+#define PX_ENTRY_AS_WIN
 #define PX_INSTANCE_ID L"Manager"
 #include <Jeremia-h/Entry Manager.hpp>
 
@@ -358,7 +359,7 @@ void PX_API OnDetach( )
 	// ideally, should never be called
 }
 
-void PX_API OnAttach( )
+void PX_API OnLaunch( )
 {
 #if defined _NDEBUG
 	for each ( auto wstrExecutable in wstrApplicationExecutableNames )
@@ -456,7 +457,7 @@ void PX_API OnAttach( )
 			strDLL.clear( );
 
 			// todo put safety here, check that everything is loading properly/return is success
-			LoadRawLibraryEx( pBuffer, wstrApplicationExecutableNames[ iSelectedExtension ], new injection_info_t, &hStartProcess, &hStartThread );
+			bool buf = LoadRawLibraryEx( pBuffer, wstrApplicationExecutableNames[ iSelectedExtension ], new injection_info_t, &hStartProcess, &hStartThread );
 			WipeMemory( pBuffer, sDLL );
 			bShouldClose = true;
 		}

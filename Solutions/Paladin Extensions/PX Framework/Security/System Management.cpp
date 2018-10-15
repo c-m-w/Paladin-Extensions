@@ -1,8 +1,8 @@
 /// System Information.cpp
 
+#include "PX Precompiled.hpp"
 #define PX_USE_NAMESPACES
 #include "../PX Framework.hpp"
-#include "../../PX Debug Injector/PX Debug Injector.hpp"
 
 namespace PX::sys
 {

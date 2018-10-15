@@ -4,7 +4,10 @@
 
 // Global - These files provide assistance in compilation management
 #include "Definitions.hpp"
-#include "Inclusions.hpp"
+
+// External - These files need to be included dynamically
+#include <vurtun/nuklear.h>
+#include <vurtun/demo/d3d9/nuklear_d3d9.h>
 
 // Application - These files provide general utilities for application development
 #include "Application/Types.hpp"

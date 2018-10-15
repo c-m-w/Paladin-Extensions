@@ -1,12 +1,13 @@
 /// PX CSGO.cpp
 
+#include "PX Precompiled.hpp"
 #define PX_ENTRY_AS_DLL
 
 // Creating threads with our manual mapping thread hijacking injector WILL crash.
 // Do not upload the debug version to the server or it will crash.
 // Only use a load library injector that creates a new thread in debug mode.
 #ifdef _DEBUG
-#define PX_INSECURE_INITIALIZATION
+//#define PX_INSECURE_INITIALIZATION
 #endif
 
 #define PX_INSTANCE_ID L"CSGO"
@@ -45,6 +46,8 @@ bool PX_API Initialize( )
 
 void PX_API OnAttach( )
 {
+	MessageBox( nullptr, L"CS", L"CS", 0 );
+	return;
 	if ( !Initialize( ) )
 		ExitProcess( -1 );
 #if defined _DEBUG

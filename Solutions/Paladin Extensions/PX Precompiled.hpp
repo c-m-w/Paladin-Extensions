@@ -1,13 +1,20 @@
-/// Inclusions.hpp
+/// PX Precompiled.hpp
 
 #pragma once
+
+// Compiler
 #pragma warning( push, 0 )
 
-// Standard
+// Standard C++ Library
+#define _CRT_SECURE_NO_WARNINGS
+#define _SILENCE_ALL_CXX17_DEPRECATION_WARNINGS // review Uncomment?
 #include <Jeremia-h/Standard Library.hpp>
 
 // Windows
+#define WIN32_LEAN_AND_MEAN
+#define NOMINMAX
 #include <Windows.h>
+#undef LoadLibraryEx
 #include <tchar.h>
 #include <VersionHelpers.h>
 #include <shellapi.h>
@@ -15,12 +22,12 @@
 #include <ntstatus.h>
 #include <strsafe.h>
 #include <Shlwapi.h>
+#pragma comment( lib, "Shlwapi.lib" )
 #include <intrin.h>
 #include <TlHelp32.h>
 #include <Psapi.h>
 #include <comdef.h>
 #include <WbemIdl.h>
-#pragma comment( lib, "Shlwapi.lib" )
 #pragma comment( lib, "wbemuuid.lib" )
 
 // Crypto++
@@ -33,6 +40,7 @@
 #pragma comment( lib, "cryptlib.lib" )
 
 // cURL
+#define CURL_STATICLIB
 #include <curl/curl.h>
 #pragma comment( lib, "Ws2_32.lib" )
 #pragma comment( lib, "wldap32.lib" )
@@ -52,14 +60,11 @@
 // Fonts
 #include <IconFontCppHeaders/IconsFontAwesome5-Solid.hpp>
 
-// Nuklear
-#include <vurtun/nuklear.h>
-#include <vurtun/demo/d3d9/nuklear_d3d9.h>
-
 // Json
 #include <nlohmann/json.hpp>
-
 #undef xor
-#undef LoadLibraryEx
 
+// Compiler
 #pragma warning( pop )
+#pragma warning( disable: 4098 4099 4100 4307 4309 4996 )
+

@@ -1,5 +1,6 @@
 /// PX Launcher.cpp
 
+#include "PX Precompiled.hpp"
 #include "PX Launcher.hpp"
 
 const wchar_t* wszWindowTitle = PX_XOR( L"Paladin Extensions Manager" );

@@ -1,5 +1,6 @@
 /// Features.cpp
 
+#include "PX Precompiled.hpp"
 #include "../PX CSGO.hpp"
 
 #define NOCOLOR 0x000000FFu

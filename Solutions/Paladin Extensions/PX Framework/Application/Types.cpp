@@ -1,5 +1,6 @@
 /// Types.cpp
 
+#include "PX Precompiled.hpp"
 #define PX_USE_NAMESPACES
 #include "../PX Framework.hpp"
 

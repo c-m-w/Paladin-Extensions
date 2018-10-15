@@ -18,9 +18,15 @@
     <ClCompile Include="PX Debug Injector.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\PX Precompiled.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PX Debug Injector.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\PX Precompiled.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

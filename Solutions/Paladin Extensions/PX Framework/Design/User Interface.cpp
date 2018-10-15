@@ -1,8 +1,9 @@
 /// User Interface.cpp
 
+// Nuklear
+#include "PX Precompiled.hpp"
 #define PX_NUKLEAR_IMPLEMENTATION
 #define PX_USE_NAMESPACES
-
 #include "../PX Framework.hpp"
 
 namespace PX::UI

@@ -1,5 +1,6 @@
 /// Hooks.cpp
 
+#include "PX Precompiled.hpp"
 #include "../PX CSGO.hpp"
 
 using namespace PX::Information;

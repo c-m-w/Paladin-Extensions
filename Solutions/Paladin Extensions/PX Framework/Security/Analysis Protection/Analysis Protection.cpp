@@ -1,8 +1,8 @@
 /// Analysis Protection.cpp
 
+#include "PX Precompiled.hpp"
 #define PX_USE_NAMESPACES
 #include "../../PX Framework.hpp"
-#include "../../../PX CSGO/PX CSGO.hpp"
 
 namespace PX::sys
 {

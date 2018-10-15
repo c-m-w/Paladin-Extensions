@@ -1,5 +1,6 @@
 /// PX Debug Injector.cpp
 
+#include "PX Precompiled.hpp"
 #include "PX Debug Injector.hpp"
 
 const std::wstring wstrApplication = LR"(csgo.exe)";

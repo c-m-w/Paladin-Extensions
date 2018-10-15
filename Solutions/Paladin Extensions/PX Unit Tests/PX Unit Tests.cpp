@@ -1,5 +1,6 @@
 /// PX Unit Tests.cpp
 
+#include "PX Precompiled.hpp"
 #include "CppUnitTest.h"
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 #define PX_USE_NAMESPACES
@@ -439,27 +440,38 @@ void OnDetach( )
 			public:
 				TEST_METHOD( LoadLibraryEx )
 				{
-					STARTUPINFO si { };
-					ZeroMemory( &si, sizeof si );
-					si.cb = sizeof si;
+					{
+						std::ofstream ofLogFile;
+						ofLogFile.open( std::string( getenv( "APPDATA" ) ) + R"(\\PX\\UnitTest.log)", std::iostream::trunc );
+						ofLogFile.close( );
+					}
 
+					STARTUPINFO si { sizeof( STARTUPINFO ) };
 					PROCESS_INFORMATION pi;
-					ZeroMemory( &pi, sizeof pi );
+
+					auto fnCleanUp = [ & ]( )
+					{
+						TerminateProcess( pi.hProcess, 0 );
+						CloseHandle( pi.hProcess );
+						CloseHandle( pi.hThread );
+					};
 
 					Assert::AreNotEqual( 0, CreateProcess( LR"(C:\Users\Jeremiah\Documents\Paladin-Extensions\Solutions\Paladin Extensions\PX Unit Tests\Unit Test Empty.exe)",
 													nullptr, nullptr, nullptr, FALSE, 0x0, nullptr, nullptr, &si, &pi ), L"CreateProcess failed", PX_ASSERT_INFO );
 
-					Assert::IsTrue( sys::LoadLibraryEx( L"Empty.exe", LR"(C:\Users\Jeremiah\Documents\Paladin-Extensions\Solutions\Paladin Extensions\PX Unit Tests\Unit Test Test.dll)" ),
-									L"LoadLibraryEx failed", PX_ASSERT_INFO );
+					if ( !sys::LoadLibraryEx( L"Unit Test Empty.exe", LR"(C:\Users\Jeremiah\Documents\Paladin-Extensions\Solutions\Paladin Extensions\PX Unit Tests\Unit Test Test.dll)" ) )
+					{
+						fnCleanUp( );
+						Assert::Fail( L"LoadLibraryEx failed", PX_ASSERT_INFO );
+					}
 
-					Pause( 10 ); // give the process some time to run
+					Pause( 100 ); // give the process some time to run
 
-					CloseHandle( pi.hProcess );
-					CloseHandle( pi.hThread );
+					fnCleanUp( );
 
 					Assert::AreEqual( R"([OPN] Attached
 [NFO] Detaching
-[CLS] Detached and terminating host)", GlobalTools::GetFileData( LR"(C:\Users\Jeremiah\AppData\Roaming\PX\UnitTest.log)" ).c_str( ), L"Log check failed", PX_ASSERT_INFO );
+[CLS] Detached)", GlobalTools::GetFileData( LR"(C:\Users\Jeremiah\AppData\Roaming\PX\UnitTest.log)" ).c_str( ), L"Log check failed", PX_ASSERT_INFO );
 				}
 			};
 		}

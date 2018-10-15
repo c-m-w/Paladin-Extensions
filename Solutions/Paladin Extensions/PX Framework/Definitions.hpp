@@ -2,22 +2,6 @@
 
 #pragma once
 
-// Compiler
-#pragma warning( disable: 4098 4099 4100 4307 4309 4996 )
-#define _CRT_SECURE_NO_WARNINGS
-#define _SILENCE_ALL_CXX17_DEPRECATION_WARNINGS
-
-// Windows.h
-
-#define WIN32_LEAN_AND_MEAN
-#define NOMINMAX
-
-// curl.h
-
-#define CURL_STATICLIB
-
-// nuklear.h
-
 #if defined PX_NUKLEAR_IMPLEMENTATION
 #define NK_INCLUDE_FIXED_TYPES
 #define NK_INCLUDE_STANDARD_IO
@@ -41,14 +25,14 @@
 			+ " from line " + std::to_string( unsigned( __LINE__ ) ) + " in file " + ##( __FILE__ ) + "." ).c_str( ) )
 #else
 	/** \brief Evaluates if parameter is equivalent to empty initialized version of parameter
-		(false) and returns if the evaluation succeeds */
+		(false) and throws an exception if the evaluation succeeds */
 	/** \param _ToAssert Value to assert. */
 #define px_assert( _ToAssert ) \
 		if ( ( _ToAssert ) == decltype( _ToAssert )( ) ) \
 			throw
 #endif
 
-// identifies variable as "Paladin Extensions" original
+// identifies head var as "Paladin Extensions" original
 #define PX_SDK inline
 // identifies function as "Paladin Extensions" original
 #define PX_API __cdecl
@@ -58,12 +42,16 @@
 #define PX_EXT extern
 // identifies in-lines as "Paladin Extensions" original
 #define PX_INL __forceinline
-// identifies end func as "Paladin Extensions" original
-#define PX_END __declspec( noreturn )
 // identifies noexcept as "Paladin Extensions" original
 #define PX_NOX noexcept
+// identifies end func as "Paladin Extensions" original
+#define PX_END __declspec( noreturn )
 // identifies returned as "Paladin Extensions" original
 #define PX_RET [ [ nodiscard ] ]
+// identifies unusable as "Paladin Extensions" original
+#define PX_DEP( reason ) [ [ deprecated( #reason ) ] ]
+// identifies stacking as "Paladin Extensions" original
+#define PX_STK [ [ fallthrough ] ]
 
 /** \brief Identifies a class as abstract. */
 #define px_abstract_class class
