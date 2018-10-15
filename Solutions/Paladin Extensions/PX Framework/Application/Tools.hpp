@@ -49,6 +49,34 @@ namespace PX::Tools
 		void Cleanup( );
 	};
 
+	struct CTrampolineHook
+	{
+	private:
+		static constexpr std::size_t STUB_SIZE = 6;
+		static constexpr unsigned char STUB[ 6 ] {
+												0x68, 0xCC, 0xCC, 0xCC, 0xCC,	// push 0xCCCCCCCC
+												0xC3							// ret
+		};
+		std::size_t zTableLength { }, zTableSize { };
+		void* pTable;
+		Types::ptr_t* pOldTable;
+		HMODULE hAllocationModule;
+		std::vector< Types::ptr_t > vecStubs;
+
+	public:
+		CTrampolineHook( void* pVirtualTable );
+		~CTrampolineHook( );
+
+		bool Succeeded( );
+		bool HookIndex( unsigned uIndex, void* pNewFunction );
+		void UnhookIndex( unsigned uIndex );
+
+		void ResetTable( );
+		template< typename _fn > _fn GetOriginalFunction( unsigned uIndex );
+
+		void Cleanup( );
+	};
+
 	void PX_API OpenLink( Types::cstr_t szLink );
 
 	std::string PX_API TimeToDate( Types::moment_t mmtTime );

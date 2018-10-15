@@ -24,13 +24,13 @@ namespace PX
 
 		bool PX_API InitializeHooks( )
 		{
-			hkDirectXDevice	= new Tools::CHook( pDevice );
+			//hkDirectXDevice	= new Tools::CHook( pDevice );
+			hkDirectXDevice = new Tools::CTrampolineHook( pDevice );
 			hkClientBase	= new Tools::CHook( pClientBase );
 			hkClientMode	= new Tools::CHook( pClientMode );
 			hkPanel			= new Tools::CHook( pPanel );
 
-			return hkDirectXDevice->Succeeded( )
-				&& hkClientBase->Succeeded( )
+			return hkClientBase->Succeeded( )
 				&& hkClientMode->Succeeded( )
 				&& hkPanel->Succeeded( ) ?
 				SetHooks( ) 

@@ -30,7 +30,8 @@ namespace PX
 		bool PX_API InitializeHooks( );
 		void PX_API Destruct( );
 
-		PX_SDK Tools::CHook* hkDirectXDevice;
+		//PX_SDK Tools::CHook* hkDirectXDevice;
+		PX_SDK Tools::CTrampolineHook* hkDirectXDevice;
 		PX_SDK Tools::CHook* hkClientBase;
 		PX_SDK Tools::CHook* hkClientMode;
 		PX_SDK Tools::CHook* hkPanel;

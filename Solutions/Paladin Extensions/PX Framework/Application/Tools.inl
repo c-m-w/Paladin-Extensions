@@ -77,6 +77,11 @@ namespace PX::Tools
 		typedef std::wstring wrap_t;
 	};
 
+	template< typename _fn > _fn CTrampolineHook::GetOriginalFunction( unsigned uIndex )
+	{
+		return reinterpret_cast< _fn >( pOldTable[ uIndex ] );
+	}
+
 	template< typename _To, typename _From > _To PX_API string_cast( const _From& _Source )
 	{
 		return AStringCastImplementation< _To, _From >::Cast( _Source );

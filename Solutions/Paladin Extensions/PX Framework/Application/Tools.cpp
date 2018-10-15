@@ -162,6 +162,53 @@ namespace PX::Tools
 		}
 	}
 
+	CTrampolineHook::CTrampolineHook( void* pVirtualTable ): zTableLength( 0u ), zTableSize( 0u ), pTable( *reinterpret_cast< void** >( pVirtualTable ) ),
+		pOldTable( nullptr ), hAllocationModule( HMODULE( ) )
+	{
+		if ( pTable == nullptr ||
+			( zTableLength = EstimateTableLength( pOldTable = reinterpret_cast< ptr_t* >( pTable ) ) ) <= 0 )
+			return;
+
+		zTableSize = zTableLength * sizeof( ptr_t );
+		pOldTable = new ptr_t[ zTableLength ];
+		memcpy( pOldTable, pTable, zTableSize );
+		if ( ( hAllocationModule = FindAddressOrigin( ptr_t( *reinterpret_cast< void** >( pOldTable ) ) ) ) == nullptr )
+			return;
+	}
+
+	CTrampolineHook::~CTrampolineHook( )
+	{
+		memcpy( pTable, pOldTable, zTableSize );
+		delete[ ] pOldTable;
+
+		for ( auto& stub : vecStubs )
+		{
+			DWORD dwBuffer;
+			VirtualProtect( reinterpret_cast< void* >( stub ), STUB_SIZE, PAGE_READWRITE, &dwBuffer );
+			sys::WipeMemory( reinterpret_cast< void* >( stub ), STUB_SIZE );
+		}
+		vecStubs.clear( );
+	}
+
+	bool CTrampolineHook::HookIndex( unsigned uIndex, void* pNewFunction )
+	{
+		const auto ptrStubAddress = FindFreeMemory( hAllocationModule, STUB_SIZE );
+		const auto pAddress = reinterpret_cast< void* >( ptr_t( pTable ) + uIndex * sizeof( ptr_t ) );
+		DWORD dwOldProtection, dwStubProtection;
+		unsigned char bNewStub[ 6 ];
+
+		memcpy( bNewStub, STUB, STUB_SIZE );
+		*reinterpret_cast< ptr_t* >( ptr_t( bNewStub ) + 1 ) = ptr_t( pNewFunction );
+		memcpy( reinterpret_cast< void* >( ptrStubAddress ), bNewStub, STUB_SIZE );
+		VirtualProtect( reinterpret_cast< void* >( ptrStubAddress ), STUB_SIZE, PAGE_EXECUTE, &dwStubProtection );
+
+		if ( FALSE == VirtualProtect( pAddress, sizeof( ptr_t ), PAGE_READWRITE, &dwOldProtection ) )
+			return false;
+		reinterpret_cast< void** >( pTable )[ uIndex ] = reinterpret_cast< void* >( ptrStubAddress );
+		VirtualProtect( pAddress, sizeof( ptr_t ), dwOldProtection, &dwOldProtection );
+		return true;
+	}
+
 	void PX_API OpenLink( cstr_t szLink )
 	{
 		ShellExecute( nullptr, PX_XOR( L"open" ), Tools::string_cast< std::wstring >( std::string( szLink ) ).c_str( ), nullptr, nullptr, SW_SHOWNORMAL );
