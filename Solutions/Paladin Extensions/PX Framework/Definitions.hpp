@@ -19,10 +19,11 @@
 	/** \brief Evaluates if parameter is equivalent to empty initialized version of parameter
 		(false) and throws an exception if the evaluation succeeds */
 	/** \param _ToAssert Value to assert. */
-#define px_assert( _ToAssert ) \
-		if ( ( _ToAssert ) == decltype( _ToAssert )( ) ) \
-			throw std::exception( ( std::string( "Failed to assert " ) + #_ToAssert + " in function " + __func__ \
-			+ " from line " + std::to_string( unsigned( __LINE__ ) ) + " in file " + ##( __FILE__ ) + "." ).c_str( ) )
+#define px_assert( as ) ( assert( as) )
+//#define px_assert( _ToAssert ) \
+//		if ( ( _ToAssert ) == decltype( _ToAssert )( ) ) \
+//			throw std::exception( ( std::string( "Failed to assert " ) + #_ToAssert + " in function " + __func__ \
+//			+ " from line " + std::to_string( unsigned( __LINE__ ) ) + " in file " + ##( __FILE__ ) + "." ).c_str( ) )
 #else
 	/** \brief Evaluates if parameter is equivalent to empty initialized version of parameter
 		(false) and throws an exception if the evaluation succeeds */

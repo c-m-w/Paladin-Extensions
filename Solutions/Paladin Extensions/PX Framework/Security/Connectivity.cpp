@@ -68,6 +68,7 @@ namespace PX::Net
 				   // cURL has issues communicating with the revocation server for validating an SSL certificate.
 				   // Since we only connect to our site, this isn't an issue so we can just disable the check.
 				   && CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_SSL_OPTIONS, CURLSSLOPT_NO_REVOKE )
+				   && CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_TIMEOUT, 5L )
 				   && CURLE_OK == curl_easy_perform( pConnection ) );
 
 		return strResponseBuffer;

@@ -46,7 +46,7 @@ namespace PX::Information
 
 		bool PX_API Setup( )
 		{
-			constexpr auto mmtMaxWaitTime = 7500ull;
+			constexpr auto mmtMaxWaitTime = 7500000ull;
 			const auto mmtStart = Tools::GetMoment( );
 			do
 			{

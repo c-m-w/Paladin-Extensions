@@ -58,10 +58,10 @@ namespace PX::UI
 
 			nk_d3d9_font_stash_begin( &pAtlas );
 			dqFonts.emplace_back( AddFont( PX_XOR( "tahoma.ttf" ), 16 ) );
-			dqFonts.emplace_back( AddFont( PX_XOR( "tahomabd.ttf" ), 16 ) );
-			dqFonts.emplace_back( AddFont( PX_XOR( "Roboto-Regular.ttf" ), 26 ) );
+			dqFonts.emplace_back( AddFont( PX_XOR( "TahomaBold.ttf" ), 16 ) );
+			dqFonts.emplace_back( AddFont( PX_XOR( "Roboto.ttf" ), 26 ) );
 			dqFonts.emplace_back( AddFont( PX_XOR( "RobotoBold.ttf" ), 24 ) );
-			dqFonts.emplace_back( AddFont( PX_XOR( "Roboto-Regular.ttf" ), 16, 14 ) );
+			dqFonts.emplace_back( AddFont( PX_XOR( "Roboto.ttf" ), 16, 14 ) );
 			dqFonts.emplace_back( AddFont( PX_XOR( "RobotoBold.ttf" ), 16, 18 ) );
 			dqFonts.emplace_back( AddFont( PX_XOR( "Envy.ttf" ), 14 ) );
 			nk_d3d9_font_stash_end( );
@@ -261,11 +261,14 @@ namespace PX::UI
 		bool PX_API CreateSpriteTextures( )
 		{
 			for each( auto& texTexture in vecTextures )
-				if ( D3D_OK != D3DXCreateTextureFromFileEx( pDevice, ( GetPXDirectory( ) + PX_XOR( LR"(Resources\)" ) + texTexture.wstrFileName ).c_str( ),
+			{
+				const auto wstrFile = GetPXDirectory( ) + PX_XOR( LR"(\Resources\)" ) + texTexture.wstrFileName;
+				if ( D3D_OK != D3DXCreateTextureFromFileEx( pDevice, wstrFile.c_str( ),
 															texTexture.uWidth, texTexture.uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE,
 															D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL, const_cast< D3DXIMAGE_INFO* >( &texTexture.iiImage ),
 															nullptr, const_cast< IDirect3DTexture9** >( &texTexture.pTexture ) ) )
 					return false;
+			}
 			return true;
 		}
 
@@ -482,7 +485,6 @@ namespace PX::UI
 			auto uTextureID = curCurrent == CURSOR_ARROW ? TEXTURE_CURSOR_ARROW : curCurrent == CURSOR_HAND ? TEXTURE_CURSOR_HAND : TEXTURE_CURSOR_IBEAM;
 			vecImageQueue.emplace_back( uTextureID, D3DXVECTOR3( float( pntCursor.x + vecTextures[ uTextureID ].uWidth / 2.f - 50 ), float( pntCursor.y + vecTextures[ uTextureID ].uHeight / 2.f - 50 ), 0.f ) );
 
-			// hide the cursor
 			while ( ShowCursor( FALSE ) >= 0 );
 			if ( bCreatedWindow )
 				SetCursor( nullptr );

@@ -136,7 +136,6 @@ namespace PX::Render
 			// Windows 7 doesn't support hardware vertexprocessing, so if it fails we need to use software vertexprocessing.
 			if ( pObjectEx->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hwWindowHandle, D3DCREATE_HARDWARE_VERTEXPROCESSING | D3DCREATE_PUREDEVICE | D3DCREATE_FPU_PRESERVE, &dxParameters, &pDevice ) < 0 )
 				px_assert( pObjectEx->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, hwWindowHandle, D3DCREATE_SOFTWARE_VERTEXPROCESSING | D3DCREATE_PUREDEVICE | D3DCREATE_FPU_PRESERVE, &dxParameters, &pDevice ) >= 0 );
-			pDevice->GetCreationParameters( new D3DDEVICE_CREATION_PARAMETERS ); // warning: passing NEW because parameter passed from before was never used
 		}
 	}
 
@@ -171,6 +170,7 @@ namespace PX::Render
 
 	void PX_API SetWindowProc( IDirect3DDevice9* pTargetDevice, long lWindowProc /*= reinterpret_cast< long >( WindowProc )*/ )
 	{
+		// todo new way to get window of game
 		D3DDEVICE_CREATION_PARAMETERS cpParameters;
 		pTargetDevice->GetCreationParameters( &cpParameters );
 		hwWindowHandle = cpParameters.hFocusWindow;
