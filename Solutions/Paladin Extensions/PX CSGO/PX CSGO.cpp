@@ -32,7 +32,7 @@ bool PX_API Initialize( )
 	} ).detach( );
 	//MessageBox( nullptr, std::to_wstring( lgnResult ).c_str( ), L"MEN", MB_OK );
 	return ( lgnResult == PX::Net::LOGIN_SUCCESS
-			 || lgnResult == PX::Net::LOGIN_STAFF_SUCCESS ) &&
+			 || lgnResult == PX::Net::LOGIN_STAFF_SUCCESS );// &&
 #else
 	return
 #endif
@@ -46,8 +46,8 @@ bool PX_API Initialize( )
 
 void PX_API OnAttach( )
 {
-	MessageBox( nullptr, L"CS", L"CS", 0 );
-	return;
+	//MessageBox( nullptr, L"CS", L"CS", 0 );
+	//return;
 	if ( !Initialize( ) )
 		ExitProcess( -1 );
 #if defined _DEBUG
