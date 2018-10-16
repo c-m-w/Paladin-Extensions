@@ -10,7 +10,7 @@ namespace PX::sys
 	/** \param bszDevice Device name, generally Win32_ */
 	/** \param wszDeviceProperty Property to find from index */
 	/** \return Property of device */
-	wstr_t PX_API RetrieveInfo( const _bstr_t& bszDevice, wcstr_t wszDeviceProperty = PX_XOR( L"Name" ) )
+	std::wstring PX_API RetrieveInfo( const bstr_t& bszDevice, wcstr_t wszDeviceProperty = PX_XOR( L"Name" ) )
 	{
 		{
 			const auto hrReturn = CoInitialize( nullptr );
@@ -30,17 +30,17 @@ namespace PX::sys
 			return PX_XOR( L"1" );
 
 		IWbemServices* pServices;
-		pLocator->ConnectServer( _bstr_t( PX_XOR( L"ROOT\\CIMV2" ) ), nullptr, nullptr, nullptr, 0, nullptr, nullptr, &pServices );
+		pLocator->ConnectServer( bstr_t( PX_XOR( L"ROOT\\CIMV2" ) ), nullptr, nullptr, nullptr, 0, nullptr, nullptr, &pServices );
 		if ( pServices == nullptr
 			 || CoSetProxyBlanket( pServices, RPC_C_AUTHN_WINNT, RPC_C_AUTHZ_NONE, nullptr, RPC_C_AUTHN_LEVEL_CALL, RPC_C_IMP_LEVEL_IMPERSONATE, nullptr, EOAC_NONE ) != S_OK )
 			return PX_XOR( L"2" );
 
 		IEnumWbemClassObject* pEnumerator;
-		pServices->ExecQuery( _bstr_t( PX_XOR( L"WQL" ) ), bszDevice, WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY, nullptr, &pEnumerator );
+		pServices->ExecQuery( bstr_t( PX_XOR( L"WQL" ) ), bszDevice, WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY, nullptr, &pEnumerator );
 		if ( pEnumerator == nullptr )
 			return PX_XOR( L"3" );
 
-		wstr_t wstrInfo;
+		std::wstring wstrInfo;
 		while ( pEnumerator )
 		{
 			IWbemClassObject* pClassObject;
@@ -51,7 +51,7 @@ namespace PX::sys
 
 			VARIANT vtProp;
 			pClassObject->Get( wszDeviceProperty, 0, &vtProp, nullptr, nullptr );
-			wstrInfo += wstr_t( vtProp.bstrVal ) + L'\n';
+			wstrInfo += std::wstring( vtProp.bstrVal ) + L'\n';
 
 			VariantClear( &vtProp );
 			pClassObject->Release( );
@@ -67,7 +67,7 @@ namespace PX::sys
 
 	nlohmann::json PX_API GetSystemInfo( )
 	{
-		wstr_t wstrSystemParts[ SYS_MAX ];
+		std::wstring wstrSystemParts[ SYS_MAX ];
 		wstrSystemParts[ SYS_CPU ] = RetrieveInfo( PX_XOR( L"SELECT * FROM Win32_Processor" ) );
 		wstrSystemParts[ SYS_GPU ] = RetrieveInfo( PX_XOR( L"SELECT * FROM CIM_PCVideoController" ) );
 		wstrSystemParts[ SYS_DISPLAY ] = RetrieveInfo( PX_XOR( L"SELECT * FROM Win32_DesktopMonitor" ) );
@@ -90,17 +90,17 @@ namespace PX::sys
 
 		return nlohmann::json
 		{
-			{ PX_XOR( "cpu" ), string_cast< str_t >( wstrSystemParts[ SYS_CPU ] ) },
-			{ PX_XOR( "gpu" ), string_cast< str_t >( wstrSystemParts[ SYS_GPU ] ) },
-			{ PX_XOR( "display" ), string_cast< str_t >( wstrSystemParts[ SYS_DISPLAY ] ) },
-			{ PX_XOR( "pc" ), string_cast< str_t >( wstrSystemParts[ SYS_PC ] ) },
-			{ PX_XOR( "os" ), string_cast< str_t >( wstrSystemParts[ SYS_OS ] ) },
-			{ PX_XOR( "drive" ), string_cast< str_t >( wstrSystemParts[ SYS_DRIVE ] ) },
-			{ PX_XOR( "board" ), string_cast< str_t >( wstrSystemParts[ SYS_BOARD ] ) }
+			{ PX_XOR( "cpu" ), string_cast< std::string >( wstrSystemParts[ SYS_CPU ] ) },
+			{ PX_XOR( "gpu" ), string_cast< std::string >( wstrSystemParts[ SYS_GPU ] ) },
+			{ PX_XOR( "display" ), string_cast< std::string >( wstrSystemParts[ SYS_DISPLAY ] ) },
+			{ PX_XOR( "pc" ), string_cast< std::string >( wstrSystemParts[ SYS_PC ] ) },
+			{ PX_XOR( "os" ), string_cast< std::string >( wstrSystemParts[ SYS_OS ] ) },
+			{ PX_XOR( "drive" ), string_cast< std::string >( wstrSystemParts[ SYS_DRIVE ] ) },
+			{ PX_XOR( "board" ), string_cast< std::string >( wstrSystemParts[ SYS_BOARD ] ) }
 		};
 	}
 
-	str_t PX_API AssembleExtensionInformation( str_t strCipher )
+	std::string PX_API AssembleExtensionInformation( std::string strCipher )
 	{
 		auto jsFileInformation = nlohmann::json::parse( Decrypt( strCipher ) );
 
@@ -114,11 +114,11 @@ namespace PX::sys
 		for ( auto u = 0u; u < uStubSize; u++ )
 			bStub[ u ] = byte_t( jsFileInformation[ PX_XOR( "Functions" ) ][ PX_XOR( "Stub" ) ][ PX_XOR( "Shellcode" ) ][ u ].get< int >( ) );
 
-		std::array< str_t, PX_EXTENSION_SECTIONS > strFileSections;
-		str_t strAssembledFile { };
+		std::array< std::string, PX_EXTENSION_SECTIONS > strFileSections;
+		std::string strAssembledFile { };
 
 		for ( int i { }; i < PX_EXTENSION_SECTIONS; i++ )
-			strFileSections.at( jsFileInformation[ PX_XOR( "DLL" ) ][ PX_XOR( "Order" ) ][ i ].get< int >( ) ) = Decrypt( jsFileInformation[ PX_XOR( "DLL" ) ][ PX_XOR( "Sections" ) ][ i ].get< str_t >( ) );
+			strFileSections.at( jsFileInformation[ PX_XOR( "DLL" ) ][ PX_XOR( "Order" ) ][ i ].get< int >( ) ) = Decrypt( jsFileInformation[ PX_XOR( "DLL" ) ][ PX_XOR( "Sections" ) ][ i ].get< std::string >( ) );
 
 		for each ( const auto& strSection in strFileSections )
 			strAssembledFile += strSection;
@@ -169,7 +169,7 @@ namespace PX::sys
 		return true;
 	}
 
-	DWORD PX_API GetProcessID( const wstr_t& wstrExecutableName )
+	DWORD PX_API GetProcessID( const std::wstring& wstrExecutableName )
 	{
 		PROCESSENTRY32 peTarget { sizeof peTarget };
 
@@ -243,7 +243,7 @@ namespace PX::sys
 		return INVALID_HANDLE_VALUE;
 	}
 
-	HMODULE FindModuleEx( const wstr_t& wstrModule, DWORD dwProcessID )
+	HMODULE FindModuleEx( const std::wstring& wstrModule, DWORD dwProcessID )
 	{
 		const auto hSnapshot = CreateToolhelp32Snapshot( TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, dwProcessID );
 
@@ -265,7 +265,7 @@ namespace PX::sys
 		return hmSearch;
 	}
 
-	bool PX_API IsProcessOpen( const wstr_t& wstrExecutableName )
+	bool PX_API IsProcessOpen( const std::wstring& wstrExecutableName )
 	{
 		return GetProcessID( wstrExecutableName ) != 0u;
 	}
@@ -401,7 +401,7 @@ namespace PX::sys
 		VirtualFree( pAddress, zSize, MEM_DECOMMIT );
 	}
 
-	bool PX_API LoadLibraryEx( const wstr_t& wstrExecutableName, const wstr_t& wstrDLLPath )
+	bool PX_API LoadLibraryEx( const std::wstring& wstrExecutableName, const std::wstring& wstrDLLPath )
 	{
 		if ( !EnsureElevation( ) )
 			return false;
@@ -435,7 +435,7 @@ namespace PX::sys
 		return true;
 	}
 
-	bool PX_API LoadRawLibraryEx( const LPVOID& pDLL, const wstr_t& wstrExecutableName, injection_info_t* injInfo, HANDLE* hTarget /*= nullptr*/, HANDLE* hThread /*= nullptr*/ )
+	bool PX_API LoadRawLibraryEx( const LPVOID& pDLL, const std::wstring& wstrExecutableName, injection_info_t* injInfo, HANDLE* hTarget /*= nullptr*/, HANDLE* hThread /*= nullptr*/ )
 	{
 		LPVOID pImage { },
 			pMemory { },

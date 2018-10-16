@@ -20,9 +20,9 @@ namespace PX::Information
 		bool PX_API Setup( )
 		{		
 #ifdef _DEBUG
-			wstr_t wstrBuffer;
+			std::wstring wstrBuffer;
 			Files::FileRead( Files::GetPXDirectory( ) + LR"(PX Website\PX CSGO.px)", wstrBuffer, false, false );
-			jsMemoryInformation = nlohmann::json::parse( Tools::string_cast< Types::str_t >( wstrBuffer ) );
+			jsMemoryInformation = nlohmann::json::parse( Tools::string_cast< std::string >( wstrBuffer ) );
 #else
 			jsMemoryInformation = nlohmann::json::parse( Cryptography::Decrypt( Net::RequestExtension( PX_EXTENSION_CSGO, true ) ) );
 #endif
@@ -32,7 +32,7 @@ namespace PX::Information
 
 	namespace Modules
 	{
-		bool SModule::Setup( wstr_t wstrModule )
+		bool SModule::Setup( std::wstring wstrModule )
 		{
 			wstrName = wstrModule;
 			hModule = GetModuleHandle( wstrName.c_str( ) );
@@ -50,16 +50,16 @@ namespace PX::Information
 			const auto mmtStart = Tools::GetMoment( );
 			do
 			{
-				if ( Tools::GetMoment( ) - mmtStart >= mmtMaxWaitTime )
+				if( Tools::GetMoment( ) - mmtStart >= mmtMaxWaitTime )
 					return false;
 			}
-			while ( !mEngine.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Engine" ) ].get< Types::str_t >( ) ) )
-				 || !mClient.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Client" ) ].get< Types::str_t >( ) ) )
-				 || !mDirectX.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "DirectX API" ) ].get< Types::str_t >( ) ) )
-				 || !mOverlay.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Overlay" ) ].get< Types::str_t >( ) ) )
-				 || !mVGUI.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "VGUI" ) ].get< Types::str_t >( ) ) )
-				 || !mVGUI2.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "VGUI2" ) ].get< Types::str_t >( ) ) )
-				 || !mInput.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Input" ) ].get< Types::str_t >( ) ) ) );
+			while( !mEngine.Setup( Tools::string_cast< std::wstring >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Engine" ) ].get< std::string >( ) ) )
+				|| !mClient.Setup( Tools::string_cast< std::wstring >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Client" ) ].get< std::string >( ) ) )
+				|| !mDirectX.Setup( Tools::string_cast< std::wstring >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "DirectX API" ) ].get< std::string >( ) ) )
+				|| !mOverlay.Setup( Tools::string_cast< std::wstring >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Overlay" ) ].get< std::string >( ) ) )
+				|| !mVGUI.Setup( Tools::string_cast< std::wstring >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "VGUI" ) ].get< std::string >( ) ) )
+				|| !mVGUI2.Setup( Tools::string_cast< std::wstring >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "VGUI2" ) ].get< std::string >( ) ) )
+				|| !mInput.Setup( Tools::string_cast< std::wstring >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Input" ) ].get< std::string >( ) ) ) );
 			return true;
 		}
 	}
@@ -68,36 +68,36 @@ namespace PX::Information
 	{
 		bool PX_API FindPointers( )
 		{
-			pSendPackets = reinterpret_cast< bool* >( Modules::mEngine.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Send Packets" ) ].get< str_t >( ) )
+			pSendPackets = reinterpret_cast< bool* >( Modules::mEngine.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Send Packets" ) ].get< std::string >( ) )
 													  + jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Send Packets" ) ].get< int >( ) );
-			pGlobalVariables = **reinterpret_cast< CGlobalVarsBase*** >( Modules::mClient.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Global Variables" ) ].get< str_t >( ) )
+			pGlobalVariables = **reinterpret_cast< CGlobalVarsBase*** >( Modules::mClient.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Global Variables" ) ].get< std::string >( ) )
 																		 + jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Global Variables" ) ].get< int >( ) );
-			pClientState = **reinterpret_cast< CClientState*** >( Modules::mEngine.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Client State" ) ].get< str_t >( ) )
+			pClientState = **reinterpret_cast< CClientState*** >( Modules::mEngine.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Client State" ) ].get< std::string >( ) )
 																  + jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Client State" ) ].get< int >( ) );
 			// Interfaces
-			pDevice = **reinterpret_cast< IDirect3DDevice9*** >( Modules::mDirectX.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Device" ) ].get< str_t >( ) )
+			pDevice = **reinterpret_cast< IDirect3DDevice9*** >( Modules::mDirectX.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Device" ) ].get< std::string >( ) )
 																 + jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Device" ) ].get< int >( ) );
-			pClientMode = *reinterpret_cast< IClientMode** >( Modules::mClient.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Client Mode" ) ].get< str_t >( ) )
+			pClientMode = *reinterpret_cast< IClientMode** >( Modules::mClient.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Client Mode" ) ].get< std::string >( ) )
 																			   + jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Client Mode" ) ].get< int >( ) );
-			pGlowObjectManager = *reinterpret_cast< CGlowObjectManager** >( Modules::mClient.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Glow Object Manager" ) ].get< str_t >( ) )
+			pGlowObjectManager = *reinterpret_cast< CGlowObjectManager** >( Modules::mClient.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Glow Object Manager" ) ].get< std::string >( ) )
 															  + jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Glow Object Manager" ) ].get< int >( ) );
 
 			pClientBase = reinterpret_cast< IBaseClientDLL* >( Modules::mClient.ciFactory( 
-				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Client Base" ) ].get< str_t >( ).c_str( ), nullptr ) );
+				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Client Base" ) ].get< std::string >( ).c_str( ), nullptr ) );
 			pEngineClient = reinterpret_cast< IVEngineClient* >( Modules::mEngine.ciFactory(
-				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Engine Client" ) ].get< str_t >( ).c_str( ), nullptr ) );
+				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Engine Client" ) ].get< std::string >( ).c_str( ), nullptr ) );
 			pSurface = reinterpret_cast< ISurface* >( Modules::mVGUI.ciFactory(
-				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "VGUI Surface" ) ].get< str_t >( ).c_str( ), nullptr ) );
+				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "VGUI Surface" ) ].get< std::string >( ).c_str( ), nullptr ) );
 			pPanel = reinterpret_cast< IPanel* >( Modules::mVGUI2.ciFactory(
-				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "VGUI Panel" ) ].get< str_t >( ).c_str( ), nullptr ) );
+				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "VGUI Panel" ) ].get< std::string >( ).c_str( ), nullptr ) );
 			pEntityList = reinterpret_cast< IClientEntityList* >( Modules::mClient.ciFactory(
-				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Entity List" ) ].get< str_t >( ).c_str( ), nullptr ) );
+				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Entity List" ) ].get< std::string >( ).c_str( ), nullptr ) );
 			pEngineTrace = reinterpret_cast< IEngineTrace* >( Modules::mEngine.ciFactory(
-				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Engine Trace" ) ].get< str_t >( ).c_str( ), nullptr ) );
+				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Engine Trace" ) ].get< std::string >( ).c_str( ), nullptr ) );
 			pModelInfo = reinterpret_cast< IVModelInfoClient* >( Modules::mEngine.ciFactory(
-				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Model Info" ) ].get< str_t >( ).c_str( ), nullptr ) );
+				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Model Info" ) ].get< std::string >( ).c_str( ), nullptr ) );
 			pInputSystem = reinterpret_cast< IInputSystem* >( Modules::mInput.ciFactory(
-				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Input" ) ].get< str_t >( ).c_str( ), nullptr ) );
+				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Input" ) ].get< std::string >( ).c_str( ), nullptr ) );
 
 			return nullptr != pSendPackets
 				&& nullptr != pGlobalVariables

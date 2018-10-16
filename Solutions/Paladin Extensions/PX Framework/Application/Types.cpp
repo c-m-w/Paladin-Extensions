@@ -23,7 +23,7 @@ namespace PX::Types
 		: iFont( _iFont ), x( _x ), y( _y ), wstrText( _wszText ), bOutlined( _bOutlined ), dwFlags( _dwFlags ), dwColor( _dwColor ), dwOutline( _dwOutline )
 	{ }
 
-	module_t::module_t( wstr_t _wstrName )
+	module_t::module_t( std::wstring _wstrName )
 	{
 		wstrName = _wstrName;
 		hModule = GetModuleHandle( wstrName.c_str( ) );
@@ -34,7 +34,7 @@ namespace PX::Types
 		return hModule != nullptr;
 	}
 
-	ptr_t module_t::FindPattern( str_t strPattern )
+	ptr_t module_t::FindPattern( std::string strPattern )
 	{
 		const auto fnIDAPatternToBytes = [ = ]( )
 		{

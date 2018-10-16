@@ -6,18 +6,18 @@
 
 namespace PX::Files
 {
-	wstr_t GetExecutablePath( )
+	std::wstring GetExecutablePath( )
 	{
-		wstr_t wstrDirectory;
+		std::wstring wstrDirectory;
 		wstrDirectory.resize( MAX_PATH );
 		GetModuleFileName( nullptr, &wstrDirectory[ 0 ], MAX_PATH );
 
 		return wstrDirectory;
 	}
 
-	wstr_t PX_API GetExecutableDirectory( )
+	std::wstring PX_API GetExecutableDirectory( )
 	{
-		wstr_t wstrDirectory;
+		std::wstring wstrDirectory;
 		wstrDirectory.resize( MAX_PATH );
 		GetModuleFileName( nullptr, &wstrDirectory[ 0 ], MAX_PATH );
 
@@ -26,18 +26,18 @@ namespace PX::Files
 		return wstrDirectory + L'\\';
 	}
 
-	wstr_t PX_API GetExecutableName( )
+	std::wstring PX_API GetExecutableName( )
 	{
-		wstr_t wstrDirectory;
+		std::wstring wstrDirectory;
 		wstrDirectory.resize( MAX_PATH );
 		GetModuleFileName( nullptr, &wstrDirectory[ 0 ], MAX_PATH );
 
 		return wstrDirectory.substr( wstrDirectory.find_last_of( L'\\' ) + 1, wstrDirectory.length( ) );
 	}
 
-	wstr_t GetPXDirectory( )
+	std::wstring GetPXDirectory( )
 	{
-		static wstr_t wstrInstallDirectory;
+		static std::wstring wstrInstallDirectory;
 		if ( wstrInstallDirectory.empty( ) )
 		{
 			if ( !FileRead( PX_APPDATA + PX_XOR( L"data.px" ), wstrInstallDirectory, false ) )
@@ -53,11 +53,12 @@ namespace PX::Files
 	namespace Resources
 	{
 		// todo: shouldn't have a parameter, should be hash from server
-		bool LoadResources( const str_t& strHash )
+		bool LoadResources( const std::string& strHash )
 		{
-			wstr_t wstrPath = GetPXDirectory( ) + PX_XOR( LR"(Resources\)" );
+			std::wstring wstrPath = GetPXDirectory( ) + PX_XOR( LR"(Resources\)" );
 
-			bool bFilesExist = std::filesystem::exists( ( wstrPath + PX_XOR( LR"(PX Logo.ico)" ) ).c_str( ) )
+			bool bFilesExist = std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Paladin Logo.ico)" ) ).c_str( ) )
+				&& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Paladin Logo.png)" ) ).c_str( ) )
 
 				&& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Cursor\Arrow.png)" ) ).c_str( ) )
 				&& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Cursor\Hand.png)" ) ).c_str( ) )
@@ -81,7 +82,7 @@ namespace PX::Files
 			if ( !bFilesExist )
 				return false;
 
-			const auto fnGetFileData = [ ]( wcstr_t szPathToFile ) -> str_t
+			const auto fnGetFileData = [ ]( wcstr_t szPathToFile ) -> std::string
 			{
 				auto pResource = _wfopen( szPathToFile, PX_XOR( L"r" ) );
 				px_assert( pResource );
@@ -90,7 +91,7 @@ namespace PX::Files
 				const auto lSize = ftell( pResource );
 				rewind( pResource );
 
-				str_t strData;
+				std::string strData;
 				strData.resize( lSize );
 				fread( &strData[ 0 ], 1, lSize, pResource );
 
@@ -98,7 +99,8 @@ namespace PX::Files
 				return strData;
 			};
 
-			strLogoICO = fnGetFileData( ( wstrPath + PX_XOR( LR"(PX Logo.ico)" ) ).c_str( ) );
+			strLogoICO = fnGetFileData( ( wstrPath + PX_XOR( LR"(Paladin Logo.ico)" ) ).c_str( ) );
+			strLogoPNG = fnGetFileData( ( wstrPath + PX_XOR( LR"(Paladin Logo.png)" ) ).c_str( ) );
 
 			strCursorArrow = fnGetFileData( ( wstrPath + PX_XOR( LR"(Cursor\Arrow.png)" ) ).c_str( ) );
 			strCursorHand = fnGetFileData( ( wstrPath + PX_XOR( LR"(Cursor\Hand.png)" ) ).c_str( ) );
@@ -120,6 +122,7 @@ namespace PX::Files
 			strGameIconsPUBGSized = fnGetFileData( ( wstrPath + PX_XOR( LR"(Game Icons\RSIX Sized.png)" ) ).c_str( ) );
 
 			auto strResourcesHash = GenerateHash( strLogoICO )
+				+ GenerateHash( strLogoPNG )
 
 				+ GenerateHash( strCursorArrow )
 				+ GenerateHash( strCursorHand )
@@ -153,7 +156,7 @@ namespace PX::Files
 		ssBuffer << ifGlobalConfiguration.rdbuf( );
 		jsGlobal = nlohmann::json::parse( Base64< CryptoPP::Base64Decoder >( ssBuffer.str( ) ) );
 
-		wszCurrent = &string_cast< wstr_t >( jsGlobal[ PX_XOR( "Default Configuration" ) ].get_ref< str_t& >( ) )[ 0 ];
+		wszCurrent = &string_cast< std::wstring >( jsGlobal[ PX_XOR( "Default Configuration" ) ].get_ref< std::string& >( ) )[ 0 ];
 
 		ChangeConfiguration( wszCurrent );
 	}
@@ -199,7 +202,7 @@ namespace PX::Files
 		return false;
 	}
 
-	bool PX_API FileRead( wstr_t wstrPath, wstr_t& wstrData, bool bRelativePath, bool bBase64 /*= true*/ )
+	bool PX_API FileRead( std::wstring wstrPath, std::wstring& wstrData, bool bRelativePath, bool bBase64 /*= true*/ )
 	{
 		px_assert( !wstrPath.empty( ) );
 
@@ -210,11 +213,11 @@ namespace PX::Files
 
 		std::stringstream ssReturn { };
 		ssReturn << fFile.rdbuf( );
-		wstrData = string_cast< wstr_t >( bBase64 ? Base64< CryptoPP::Base64Decoder >( ssReturn.str( ) ) : ssReturn.str( ) );
+		wstrData = string_cast< std::wstring >( bBase64 ? Base64< CryptoPP::Base64Decoder >( ssReturn.str( ) ) : ssReturn.str( ) );
 		return true;
 	}
 
-	bool PX_API FileWrite( wstr_t wstrPath, const wstr_t& wstrData, bool bRelativePath, bool bBase64 /*= true*/ )
+	bool PX_API FileWrite( std::wstring wstrPath, const std::wstring& wstrData, bool bRelativePath, bool bBase64 /*= true*/ )
 	{
 		if ( wstrPath.empty( ) || wstrData.empty( ) )
 			return false;
@@ -224,7 +227,7 @@ namespace PX::Files
 				return false;
 
 		std::ofstream fFile( bRelativePath ? GetPXDirectory( ) + wstrPath : wstrPath, std::ofstream::out | std::ofstream::trunc );
-		const auto strBuffer = string_cast< str_t >( wstrData );
+		const auto strBuffer = string_cast< std::string >( wstrData );
 
 		if ( bBase64 )
 			fFile << Base64< CryptoPP::Base64Encoder >( strBuffer ).c_str( );

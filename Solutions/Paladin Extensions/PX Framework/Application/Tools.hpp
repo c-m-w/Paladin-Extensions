@@ -77,28 +77,15 @@ namespace PX::Tools
 		void Cleanup( );
 	};
 
-	enum class EMBType
-	{
-		NONE = MB_OK | MB_HELP,
-		FATAL_ERROR = MB_ICONHAND | MB_HELP,
-		RETRY_ERROR = MB_ICONHAND | MB_OK | MB_RETRYCANCEL | MB_HELP,
-		QUERY = MB_ICONQUESTION | MB_YESNO | MB_HELP,
-		WARNING = MB_ICONEXCLAMATION | MB_OK | MB_HELP,
-		INFO = MB_ICONASTERISK | MB_OK | MB_HELP,
-	};
-
-	// returns true if selected YES on EMBType::QUERY or selected RETRY on EMBType::ERROR
-	bool Popup( EMBType popType, const wchar_t* wszMessage, bool bDelete = false );
-
 	void PX_API OpenLink( Types::cstr_t szLink );
 
-	Types::str_t PX_API TimeToDate( Types::moment_t mmtTime );
+	std::string PX_API TimeToDate( Types::moment_t mmtTime );
 
 	/** \brief Creates shellcode from a byte array. */
 	/**	\param bByteArray Array of bytes to convert. */
 	/**	\param uSize Size of the byte array. */
 	/**	\return Converted byte array. */
-	Types::str_t PX_API FormatShellcode( Types::byte_t* bByteArray, unsigned uSize );
+	std::string PX_API FormatShellcode( Types::byte_t* bByteArray, unsigned uSize );
 
 	/** \brief Gets the local time */
 	/**			Divide return by 10000000ull to go to seconds */
@@ -111,12 +98,12 @@ namespace PX::Tools
 	// Get main screen dimensions
 	unsigned* GetScreenDimensions( );
 
-	/** \brief Supports any combination of string casting conversion of "str_t", "str16_t", "str32_t", and "wstr_t" */
+	/** \brief Supports any combination of string casting conversion from "std::string" and "std::wstring" to "std::string" and "std::wstring" */
 	/** \tparam _To Desired string type */
 	/** \tparam _From Current string */
 	/** \return Converted string in desired type */
 	template< typename _To, typename _From > _To PX_API string_cast( const _From& );
-	/** \brief Supports any combination of string casting conversion from "char", "char16_t", "char32_t", "wchar_t", and "byte_t", and of "str_t", "str16_t", "str32_t", and "wstr_t" */
+	/** \brief Supports any combination of string casting conversion from "const char*" and "const wchar_t*" to "std::string" and "std::wstring" */
 	/** \tparam _To Desired string type */
 	/** \tparam _From Current string */
 	/** \return Converted string in desired type */

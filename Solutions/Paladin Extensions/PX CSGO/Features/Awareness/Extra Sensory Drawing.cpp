@@ -612,7 +612,7 @@ namespace PX::Features::Awareness
 			wchar_t wszName[ zPlayerNameMaxLength ];
 
 			if ( info.bIsPlayer )
-				wcscpy( wszName, string_cast< wstr_t >( Types::str_t( reinterpret_cast< CBasePlayer* >( info.pEntity )->GetPlayerInformation( ).szName ) ).c_str( ) );
+				wcscpy( wszName, string_cast< std::wstring >( std::string( reinterpret_cast< CBasePlayer* >( info.pEntity )->GetPlayerInformation( ).szName ) ).c_str( ) );
 			else
 				return;
 			Text( ED3DFont::FONT_TAHOMA, vecInformationStart.x, vecInformationStart.y, wszName, bDoOutline, dwAlignment, dwColor, dwOutline );

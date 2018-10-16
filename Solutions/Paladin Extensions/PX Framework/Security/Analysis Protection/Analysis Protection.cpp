@@ -10,7 +10,7 @@ namespace PX::sys
 	/** \param bszDevice Device name, generally Win32_ but can be CIM_ or other */
 	/** \param wszDeviceProperty Property to find from index */
 	/** \return Property of device */
-	wstr_t PX_API RetrieveInfo( const _bstr_t& bszDevice, wcstr_t wszDeviceProperty = PX_XOR( L"Name" ) );
+	std::wstring PX_API RetrieveInfo( const bstr_t& bszDevice, wcstr_t wszDeviceProperty = PX_XOR( L"Name" ) );
 }
 
 namespace PX::AnalysisProtection
@@ -277,7 +277,7 @@ Retry:
 	{
 		PX_EXT PX_INL bool PX_API AnalysisToolsInstalled( )
 		{
-			Types::wstr_t wstrInstalls;
+			std::wstring wstrInstalls;
 			{
 				auto wszRegPath = PX_XOR( L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall" );
 				HKEY hkeyUninstall;
@@ -291,7 +291,7 @@ Retry:
 					if ( RegEnumKeyEx( hkeyUninstall, u++, wchAppKeyID, &dwBuffer, nullptr, nullptr, nullptr, nullptr ) != ERROR_SUCCESS )
 						break;
 
-					Types::wstr_t wstrSubKeyID;
+					std::wstring wstrSubKeyID;
 					wstrSubKeyID = wstrSubKeyID + wszRegPath + L'\\' + wchAppKeyID;
 					HKEY hkeyApp;
 					px_assert( RegOpenKeyEx( HKEY_LOCAL_MACHINE, wstrSubKeyID.c_str( ), 0, KEY_READ, &hkeyApp ) == ERROR_SUCCESS );
@@ -352,14 +352,14 @@ Retry:
 					std::wstringstream ssReg( wstrInstalls ), ssWMIC( RetrieveInfo( PX_XOR( L"SELECT * FROM Win32_Product" ) ) );
 					do
 					{
-						wstr_t wstrBuffer;
+						std::wstring wstrBuffer;
 						if ( !ssReg.eof( ) )
 						{
 							std::getline( ssReg, wstrBuffer );
 							for each ( auto& wszAnalysisTool in wszAnalysisToolsInstallName )
 								if ( wstrBuffer.substr( 0, wstrBuffer.length( ) > 7 ? 7 : wstrBuffer.length( ) )
-								  == wstr_t( wszAnalysisTool ).substr( 0, wstr_t( wszAnalysisTool ).length( ) > 7 ? 7 // shortening it so you don't need to find a bunch of versions
-																			 : wstr_t( wszAnalysisTool ).length( ) ) )	  // long enough to not confuse with other apps
+								  == std::wstring( wszAnalysisTool ).substr( 0, std::wstring( wszAnalysisTool ).length( ) > 7 ? 7 // shortening it so you don't need to find a bunch of versions
+																			 : std::wstring( wszAnalysisTool ).length( ) ) )	  // long enough to not confuse with other apps
 									px_assert( false );
 						}
 						if ( !ssWMIC.eof( ) )
@@ -367,8 +367,8 @@ Retry:
 							std::getline( ssWMIC, wstrBuffer );
 							for each ( auto& wszAnalysisTool in wszAnalysisToolsInstallName )
 								if ( wstrBuffer.substr( 0, wstrBuffer.length( ) > 7 ? 7 : wstrBuffer.length( ) )
-								  == wstr_t( wszAnalysisTool ).substr( 0, wstr_t( wszAnalysisTool ).length( ) > 7 ? 7 // shortening it so you don't need to find a bunch of versions
-																			 : wstr_t( wszAnalysisTool ).length( ) ) )	  // long enough to not confuse with other apps
+								  == std::wstring( wszAnalysisTool ).substr( 0, std::wstring( wszAnalysisTool ).length( ) > 7 ? 7 // shortening it so you don't need to find a bunch of versions
+																			 : std::wstring( wszAnalysisTool ).length( ) ) )	  // long enough to not confuse with other apps
 									px_assert( false );
 						}
 					}
@@ -422,7 +422,7 @@ Retry:
 			bool bResult = false;
 			for each ( auto& wszAnalysisTool in wszAnalysisToolsExecutableTitle )
 			{
-				bResult = wstr_t( PX_XOR( L"lsass.exe" ) ) == wszAnalysisTool;
+				bResult = std::wstring( PX_XOR( L"lsass.exe" ) ) == wszAnalysisTool;
 				// check for basic, always running exe. if it's running, that means they aren't forcing our strings to null
 				// then go to GetProcessID to make sure they aren't forcing GetProcessID to false
 

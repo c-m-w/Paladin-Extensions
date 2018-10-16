@@ -1,14 +1,8 @@
 /// PX Launcher.cpp
 
 #include "PX Precompiled.hpp"
-
-#define PX_ENTRY_AS_WIN
-#define PX_INSTANCE_ID L"Launcher"
-#include <Jeremia-h/Entry Manager.hpp>
-
 #include "PX Launcher.hpp"
 
-// todo title + windowproc
 const wchar_t* wszWindowTitle = PX_XOR( L"Paladin Extensions Manager" );
 
 LRESULT WINAPI WindowProc( _In_ HWND _hwWindowHandle, _In_ UINT uMessage, _In_ WPARAM uwParam, _In_ LPARAM llParam )
@@ -16,6 +10,43 @@ LRESULT WINAPI WindowProc( _In_ HWND _hwWindowHandle, _In_ UINT uMessage, _In_ W
 	if ( uMessage == WM_HELP )
 		OpenLink( PX_XOR( "https://www.paladin.rip/support/" ) );
 	return DefWindowProc( _hwWindowHandle, uMessage, uwParam, llParam );
+}
+
+enum class EMBType
+{
+	NONE = MB_OK | MB_HELP,
+	FATAL_ERROR = MB_ICONHAND | MB_HELP,
+	RETRY_ERROR = MB_ICONHAND | MB_OK | MB_RETRYCANCEL | MB_HELP,
+	QUERY = MB_ICONQUESTION | MB_YESNO | MB_HELP,
+	WARNING = MB_ICONEXCLAMATION | MB_OK | MB_HELP,
+	INFO = MB_ICONASTERISK | MB_OK | MB_HELP,
+};
+
+// returns true if selected YES on EMBType::QUERY or selected RETRY on EMBType::ERROR
+bool Popup( EMBType popType, const wchar_t* wszMessage, const bool bDelete = false )
+{
+	switch ( popType )
+	{
+		case EMBType::FATAL_ERROR:
+			MessageBox( nullptr, wszMessage, PX_XOR( L"Paladin Extensions: Fatal Error" ), UINT( popType ) );
+			break;
+		case EMBType::RETRY_ERROR:
+			if ( !bDelete )
+				return MessageBox( nullptr, wszMessage, PX_XOR( L"Paladin Extensions: Error" ), UINT( popType ) ) == IDRETRY;
+		case EMBType::QUERY:
+			if ( !bDelete )
+				return MessageBox( nullptr, wszMessage, PX_XOR( L"Paladin Extensions: Query" ), UINT( popType ) ) == IDYES;
+		case EMBType::WARNING:
+			MessageBox( nullptr, wszMessage, PX_XOR( L"Paladin Extensions: Warning" ), UINT( popType ) );
+			break;
+		case EMBType::INFO:
+			if ( !bDelete )
+				return MessageBox( nullptr, wszMessage, PX_XOR( L"Paladin Extensions: Information" ), UINT( popType ) );
+		default:
+			MessageBox( nullptr, wszMessage, PX_XOR( L"Paladin Extensions" ), UINT( popType ) );
+			break;
+	}
+	bDelete ? Destroy( ) : ExitProcess( -1 );
 }
 
 #if defined NDEBUG

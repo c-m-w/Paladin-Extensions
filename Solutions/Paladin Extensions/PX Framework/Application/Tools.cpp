@@ -209,41 +209,12 @@ namespace PX::Tools
 		return true;
 	}
 
-	bool Popup( EMBType popType, const wchar_t *wszMessage, const bool bDelete )
-	{
-		switch ( popType )
-		{
-			case EMBType::FATAL_ERROR:
-				MessageBox( nullptr, wszMessage, PX_XOR( L"Paladin Extensions: Fatal Error" ), UINT( popType ) );
-				break;
-			case EMBType::RETRY_ERROR:
-				if ( !bDelete )
-					return MessageBox( nullptr, wszMessage, PX_XOR( L"Paladin Extensions: Error" ), UINT( popType ) ) == IDRETRY;
-				Destroy( );
-			case EMBType::QUERY:
-				if ( !bDelete )
-					return MessageBox( nullptr, wszMessage, PX_XOR( L"Paladin Extensions: Query" ), UINT( popType ) ) == IDYES;
-				Destroy( );
-			case EMBType::WARNING:
-				MessageBox( nullptr, wszMessage, PX_XOR( L"Paladin Extensions: Warning" ), UINT( popType ) );
-				break;
-			case EMBType::INFO:
-				if ( !bDelete )
-					return MessageBox( nullptr, wszMessage, PX_XOR( L"Paladin Extensions: Information" ), UINT( popType ) );
-				Destroy( );
-			default:
-				MessageBox( nullptr, wszMessage, PX_XOR( L"Paladin Extensions" ), UINT( popType ) );
-				break;
-		}
-		bDelete ? Destroy( ) : ExitProcess( -1 );
-	}
-
 	void PX_API OpenLink( cstr_t szLink )
 	{
-		ShellExecute( nullptr, PX_XOR( L"open" ), Tools::string_cast< wstr_t >( str_t( szLink ) ).c_str( ), nullptr, nullptr, SW_SHOWNORMAL );
+		ShellExecute( nullptr, PX_XOR( L"open" ), Tools::string_cast< std::wstring >( std::string( szLink ) ).c_str( ), nullptr, nullptr, SW_SHOWNORMAL );
 	}
 
-	str_t PX_API TimeToDate( moment_t mmtTime )
+	std::string PX_API TimeToDate( moment_t mmtTime )
 	{
 		if ( mmtTime == 0ull )
 			return PX_XOR( "Never" );
@@ -278,13 +249,13 @@ namespace PX::Tools
 		px_assert( strlen( szDaySuffix ) > 0 ); // if you get an exception thrown here, it's likely because the date is 0th
 
 		// TODO: writing 80 bytes to szBuffer, but it's only 32...
-		strftime( szBuffer, 80, ( str_t( PX_XOR( "%B %e" ) ) + szDaySuffix + PX_XOR( ", 20%g" ) ).c_str( ), tmTime );
+		strftime( szBuffer, 80, ( std::string( PX_XOR( "%B %e" ) ) + szDaySuffix + PX_XOR( ", 20%g" ) ).c_str( ), tmTime );
 		return szBuffer;
 	}
 
-	str_t PX_API FormatShellcode( byte_t* bByteArray, unsigned uSize )
+	std::string PX_API FormatShellcode( byte_t* bByteArray, unsigned uSize )
 	{
-		str_t strFormatted { };
+		std::string strFormatted { };
 		for ( auto u = 0u; u < uSize; u++ )
 		{
 			strFormatted += PX_XOR( R"(\x)" );

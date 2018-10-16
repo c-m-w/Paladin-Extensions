@@ -7,9 +7,9 @@ namespace PX
 	namespace Cryptography
 	{
 		/** \brief Stores the encryption key, which is generated in InitializeEncryption( ).\n Used in encryption and decryption functions. */
-		PX_SDK Types::str_t strEncryptionKey { };
+		PX_SDK std::string strEncryptionKey { };
 		/** \brief Stores the initialization vector, which is generated in InitializeEncryption( ).\n Used in encryption and decryption functions. */
-		PX_SDK Types::str_t strInitializationVector { };
+		PX_SDK std::string strInitializationVector { };
 
 		/** \brief Generates an encryption key and initialization vector for use with encryption.\n Call before using any cryption functions. */
 		/**	\return true - Successfully generated key and vector\n false - Did not successfully generate key and vector. */
@@ -17,30 +17,30 @@ namespace PX
 		/** \brief Hashes text. */
 		/**	\param strPlainText Text to be hashed. */
 		/**	\return Hash of the text. */
-		Types::str_t PX_API GenerateHash( const Types::str_t& strPlainText );
+		std::string PX_API GenerateHash( const std::string& strPlainText );
 		/** \brief Base64 encodes or decodes text. */
 		/**	\tparam _t Either CryptoPP::Base64Decoder or CryptoPP::Base64Encoder, depending on if you wish to encode or decode text. */
 		/**	\param strSubject Text to encode or decode. */
 		/**	\return Processed text. */
-		template< typename _t > Types::str_t PX_API Base64( const Types::str_t& strSubject );
+		template< typename _t > std::string PX_API Base64( const std::string& strSubject );
 		/** \brief Encrypts or decrypts text with AES-256-CBC style.\n Requires InitializeEncryption( ) be called beforehand. */
 		/**	\tparam _t Either CryptoPP::CBC_Mode< CryptoPP::AES >::Encryption or CryptoPP::CBC_Mode< CryptoPP::AES >::Decryption, depending on if you wish to encrypt or decrypt text. */
 		/**	\param strPlainText Text to encrypt or decrypt. */
 		/**	\return Processed text. */
-		template< typename _t > Types::str_t PX_API AES256CBC( const Types::str_t& strPlainText );
+		template< typename _t > std::string PX_API AES256CBC( const std::string& strPlainText );
 		/** \brief Encrypts and Base64 encodes text.\n Requires InitializeEncryption( ) be called beforehand. */
 		/**	\param strPlainText Plain text to encrypt and encode. */
 		/**	\return Encrypted and encoded text. */
-		Types::str_t PX_API Encrypt( const Types::str_t& strPlainText );
+		std::string PX_API Encrypt( const std::string& strPlainText );
 		/** \brief Base64 decodes and decrypts text.\n Requires InitializeEncryption( ) be called beforehand. */
 		/**	\param strCipherText Cipher text to decode and decrypt. */
 		/**	\return Decoded and decrypted text. */
-		Types::str_t PX_API Decrypt( const Types::str_t& strCipherText );
+		std::string PX_API Decrypt( const std::string& strCipherText );
 		/** \brief Creates an identifier to be used in post data for connectivity.\n
 					Always should be ten characters long and requires InitializeEncryption( ) to be called beforehand */
 		/**	\param strIdentifier Plain text identifier title. */
 		/**	\return Processed identifier which has been encrypted and encoded. */
-		Types::str_t PX_API GenerateIdentifier( const Types::str_t& strIdentifier );
+		std::string PX_API GenerateIdentifier( const std::string& strIdentifier );
 	}
 
 	namespace XOR

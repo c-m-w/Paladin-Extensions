@@ -51,12 +51,12 @@ namespace PX::Information
 	
 	namespace Modules
 	{
-		PX_SDK Types::str_t strCreateInterfaceName = PX_XOR( "CreateInterface" );
+		PX_SDK std::string strCreateInterfaceName = PX_XOR( "CreateInterface" );
 		struct SModule: Types::module_t
 		{
 			CreateInterfaceFn ciFactory { };
 
-			bool Setup( Types::wstr_t wstrModule );
+			bool Setup( std::wstring wstrModule );
 		};
 
 		bool PX_API Setup( );

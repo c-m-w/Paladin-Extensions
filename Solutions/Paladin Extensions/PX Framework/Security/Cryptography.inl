@@ -6,7 +6,7 @@ namespace PX
 {
 	namespace Cryptography
 	{
-		template< typename _t > Types::str_t PX_API Base64( const Types::str_t& strSubject )
+		template< typename _t > std::string PX_API Base64( const std::string& strSubject )
 		{
 			px_assert( !strSubject.empty( ) );
 			_t _Coder;
@@ -15,19 +15,19 @@ namespace PX
 
 			const auto uSize = unsigned( _Coder.MaxRetrievable( ) );
 			px_assert( uSize > 0 );
-			Types::str_t strProcessedText;
+			std::string strProcessedText;
 			strProcessedText.resize( uSize );
 			_Coder.Get( reinterpret_cast< Types::byte_t* >( &strProcessedText[ 0 ] ), uSize );
 			return strProcessedText;
 		}
 
-		template< typename _t > Types::str_t PX_API AES256CBC( const Types::str_t& strPlainText )
+		template< typename _t > std::string PX_API AES256CBC( const std::string& strPlainText )
 		{
 			px_assert( !strEncryptionKey.empty( ) && !strInitializationVector.empty( ) );
-			Types::str_t strOutput;
-			_t _Cryption( reinterpret_cast< Types::byte_t* >( const_cast< char* >( Tools::string_cast< Types::str_t >( strEncryptionKey ).c_str( ) ) ),
+			std::string strOutput;
+			_t _Cryption( reinterpret_cast< Types::byte_t* >( const_cast< char* >( Tools::string_cast< std::string >( strEncryptionKey ).c_str( ) ) ),
 						  strEncryptionKey.length( ), reinterpret_cast< Types::byte_t* >( const_cast< char* >( strInitializationVector.c_str( ) ) ) );
-			CryptoPP::StringSource( Tools::string_cast< Types::str_t >( strPlainText ), true, new
+			CryptoPP::StringSource( Tools::string_cast< std::string >( strPlainText ), true, new
 									CryptoPP::StreamTransformationFilter( _Cryption, new CryptoPP::StringSink( strOutput ) ) );
 			// should we be declaring an object of StringSource type??
 			return strOutput;

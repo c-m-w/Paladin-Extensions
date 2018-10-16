@@ -20,7 +20,7 @@ namespace PX::sys
 	/** \return System information as a JSON object. */
 	nlohmann::json PX_API GetSystemInfo( );
 
-	Types::str_t PX_API AssembleExtensionInformation( Types::str_t strCipher );
+	std::string PX_API AssembleExtensionInformation( std::string strCipher );
 
 	/** \brief Used to ensure elevation for a process.\n
 	If the process is not elevated, it will attempt to elevate it manually. */
@@ -31,10 +31,10 @@ namespace PX::sys
 	/** \brief Gets process identifier for any running executable */
 	/** \param wstrExecutableName Executable name for target process */
 	/** \return Process ID */
-	DWORD PX_API GetProcessID( const Types::wstr_t& wstrExecutableName );
+	DWORD PX_API GetProcessID( const std::wstring& wstrExecutableName );
 	HANDLE PX_API FindProcessThread( DWORD dwProcessID );
-	HMODULE PX_API FindModuleEx( const Types::wstr_t& wstrModule, DWORD dwProcessID );
-	bool PX_API IsProcessOpen( const Types::wstr_t& wstrExecutableName );
+	HMODULE PX_API FindModuleEx( const std::wstring& wstrModule, DWORD dwProcessID );
+	bool PX_API IsProcessOpen( const std::wstring& wstrExecutableName );
 	bool PX_API IsProcessThreadRunning( DWORD dwProcessID );
 	bool PX_API NecessaryModulesLoaded( DWORD dwProcessID );
 
@@ -57,13 +57,13 @@ namespace PX::sys
 
 	void PX_API WipeMemoryEx( HANDLE hTarget, LPVOID pAddress, std::size_t zSize );
 	void PX_API WipeMemory( LPVOID pAddress, std::size_t zSize );
-	bool PX_API LoadLibraryEx( const Types::wstr_t& wstrExecutableName, const Types::wstr_t& wstrDLLPath );
+	bool PX_API LoadLibraryEx( const std::wstring& wstrExecutableName, const std::wstring& wstrDLLPath );
 	/** \brief Manually maps and calls desired DLL into any running executable */
 	/** \param pDLL Data for DLL to be mapped */
 	/** \param wstrExecutableName Executable name for target process */
 	/** \param injInfo Object to store information of injection. */
 	/** \return True if successful, false if failed. */
-	bool PX_API LoadRawLibraryEx( const LPVOID& pDLL, const Types::wstr_t& wstrExecutableName, injection_info_t* injInfo, HANDLE* hTarget = nullptr, HANDLE* hThread = nullptr );
+	bool PX_API LoadRawLibraryEx( const LPVOID& pDLL, const std::wstring& wstrExecutableName, injection_info_t* injInfo, HANDLE* hTarget = nullptr, HANDLE* hThread = nullptr );
 	/** \brief Manually maps and calls desired DLL into self */
 	/** \param pDLL Data for DLL to be mapped */
 	/** \param injInfo Object to store information of injection. */

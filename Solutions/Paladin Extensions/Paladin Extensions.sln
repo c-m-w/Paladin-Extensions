@@ -112,8 +112,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Configurations", "Configura
 		Extensions Data\RSIX\Configurations\none.pxcfg = Extensions Data\RSIX\Configurations\none.pxcfg
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PX Installer", "PX Installer\PX Installer.vcxproj", "{8391F784-AA73-4830-A399-1B04295A533E}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -157,14 +155,6 @@ Global
 		{535A2F32-9744-4FC6-A9A7-10986661DEA6}.Release|x64.ActiveCfg = Release|x64
 		{535A2F32-9744-4FC6-A9A7-10986661DEA6}.Release|x86.ActiveCfg = Release|Win32
 		{535A2F32-9744-4FC6-A9A7-10986661DEA6}.Release|x86.Build.0 = Release|Win32
-		{8391F784-AA73-4830-A399-1B04295A533E}.Debug|x64.ActiveCfg = Debug|x64
-		{8391F784-AA73-4830-A399-1B04295A533E}.Debug|x64.Build.0 = Debug|x64
-		{8391F784-AA73-4830-A399-1B04295A533E}.Debug|x86.ActiveCfg = Debug|Win32
-		{8391F784-AA73-4830-A399-1B04295A533E}.Debug|x86.Build.0 = Debug|Win32
-		{8391F784-AA73-4830-A399-1B04295A533E}.Release|x64.ActiveCfg = Release|x64
-		{8391F784-AA73-4830-A399-1B04295A533E}.Release|x64.Build.0 = Release|x64
-		{8391F784-AA73-4830-A399-1B04295A533E}.Release|x86.ActiveCfg = Release|Win32
-		{8391F784-AA73-4830-A399-1B04295A533E}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

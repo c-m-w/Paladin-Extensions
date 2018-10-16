@@ -4,79 +4,23 @@
 
 namespace PX::Types
 {
-
+	/** \brief Paladin constant char string. */
+	typedef const char* cstr_t;
+	/** \brief Paladin wide constant char string. */
+	typedef const wchar_t* wcstr_t;
 	/** \brief Paladin virtual memory address variable. */
 	typedef uintptr_t ptr_t;
+	/** \brief Paladin byte datatype. Stores one byte of data. */
+	typedef unsigned char byte_t;
 	/** \brief Paladin callback function type. */
 	typedef void( PX_API* callback_t )( );
 	/** \brief Paladin time datatype, wide enough to hold any time type, with sig figs up to a tenth of a microsecond. */
 	typedef unsigned long long moment_t;
-	/** \brief Paladin byte datatype. Stores one byte of data. */
-	typedef unsigned char byte_t;
-
-	/** \brief Paladin constant char string. */
-	typedef const char* cstr_t;
-	/** \brief Paladin char-16 constant char string. */
-	typedef const char16_t* cstr16_t;
-	/** \brief Paladin char-32 constant char string. */
-	typedef const char32_t* cstr32_t;
-	/** \brief Paladin wide constant char string. */
-	typedef const wchar_t* wcstr_t;
-	/** \brief Paladin byte constant string */
-	typedef const byte_t* bcstr_t;
-
-	/** \brief Paladin string datatype */
-	typedef std::basic_string< char > str_t;
-	/** \brief Paladin char-16 string datatype */
-	typedef std::basic_string< char16_t > str16_t;
-	/** \brief Paladin char-32 string datatype */
-	typedef std::basic_string< char32_t > str32_t;
-	/** \brief Paladin wide string datatype */
-	typedef std::basic_string< wchar_t > wstr_t;
-	/** \brief Paladin wide string datatype */
-	typedef std::basic_string< byte_t > bstr_t;
-
-	/** \brief Unsigned char string literal identifier */
-	/** \param chSource Character */
-	/** \return byte_t version of array */
-	byte_t operator""_b( char chSource );
-   /** \brief Unsigned char string literal identifier */
-   /** \param ch16Source Character */
-   /** \return byte_t version of array */
-	byte_t operator""_b( char16_t ch16Source );
-   /** \brief Unsigned char string literal identifier */
-   /** \param ch32Source Character */
-   /** \return byte_t version of array */
-	byte_t operator""_b( char32_t ch32Source );
-   /** \brief Unsigned char string literal identifier */
-   /** \param wchSource Character */
-   /** \return byte_t version of array */
-	byte_t operator""_b( wchar_t wchSource );
-   /** \brief Unsigned char string literal identifier */
-   /** \param szSource Array of characters */
-   /** \param zSize Length of array */
-   /** \return byte_t version of array */
-	const byte_t* operator""_b( cstr_t szSource, std::size_t zSize );
-	/** \brief Unsigned char string literal identifier */
-	/** \param sz16Source Array of characters */
-	/** \param zSize Length of array */
-	/** \return byte_t version of array */
-	const byte_t* operator""_b( cstr16_t sz16Source, std::size_t zSize );
-	/** \brief Unsigned char string literal identifier */
-	/** \param sz32Source Array of characters */
-	/** \param zSize Length of array */
-	/** \return byte_t version of array */
-	const byte_t* operator""_b( cstr32_t sz32Source, std::size_t zSize );
-	/** \brief Unsigned char string literal identifier */
-	/** \param wszSource Array of characters */
-	/** \param zSize Length of array */
-	/** \return byte_t version of array */
-	const byte_t* operator""_b( wcstr_t wszSource, std::size_t zSize );
 
 	struct SPostData
 	{
-		str_t strIdentifier, strValue;
-		SPostData( str_t strIdentifier, str_t strValue )
+		std::string strIdentifier, strValue;
+		SPostData( std::string strIdentifier, std::string strValue )
 		{
 			this->strIdentifier = strIdentifier;
 			this->strValue = strValue;
@@ -98,7 +42,7 @@ namespace PX::Types
 
 	struct SExtensionInfo
 	{
-		str_t strName, strStatus, strEstimatedNextUpdate, strLastUpdate, strVersion;
+		std::string strName, strStatus, strEstimatedNextUpdate, strLastUpdate, strVersion;
 		bool bInitialized = true;
 
 		SExtensionInfo( ) PX_NOX
@@ -106,7 +50,7 @@ namespace PX::Types
 			bInitialized = false;
 		}
 
-		SExtensionInfo( str_t _strName, str_t _strStatus, str_t _strEstimatedNextUpdate, str_t _strLastUpdate, str_t _strVersion )
+		SExtensionInfo( std::string _strName, std::string _strStatus, std::string _strEstimatedNextUpdate, std::string _strLastUpdate, std::string _strVersion )
 		{
 			strName = _strName;
 			strStatus = _strStatus;
@@ -167,7 +111,7 @@ namespace PX::Types
 	{
 		int iFont;
 		int x, y;
-		Types::wstr_t wstrText;
+		std::wstring wstrText;
 		bool bOutlined;
 		DWORD dwFlags, dwColor, dwOutline;
 		text_t( ) = default;
@@ -176,16 +120,16 @@ namespace PX::Types
 
 	struct module_t
 	{
-		Types::wstr_t wstrName { };
+		std::wstring wstrName { };
 		HMODULE hModule { };
 
 		module_t( ) = default;
-		module_t( Types::wstr_t _wstrName );
+		module_t( std::wstring _wstrName );
 
 		bool Succeeded( );
-		ptr_t FindPattern( str_t strPattern );
+		ptr_t FindPattern( std::string strPattern );
 	};
-
+	
 	/** \brief Type to hold colors. */
 	typedef struct SColor
 	{
@@ -287,13 +231,11 @@ namespace PX::Types
 
 		void PutNewColorSequence( const color_t& clrNewColor, moment_t mmtDuration ); // todo: overload <<, make sequence_info_t public
 		void DeleteColorSequence( unsigned uPosition ); // todo: overload >>
-
+		
 		//void operator<<( sequence_info_t );
 		//void operator>>( unsigned uPosition );
 	} color_sequence_t;
 }
-
-#include "Types.inl"
 
 #if defined PX_USE_NAMESPACES
 using namespace PX::Types;
