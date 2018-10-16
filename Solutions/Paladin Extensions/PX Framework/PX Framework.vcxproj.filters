@@ -113,5 +113,8 @@
     <None Include="Design\User Interface.inl">
       <Filter>Header Files</Filter>
     </None>
+    <None Include="Application\Types.inl">
+      <Filter>Header Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

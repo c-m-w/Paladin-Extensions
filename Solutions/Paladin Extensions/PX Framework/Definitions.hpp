@@ -19,11 +19,10 @@
 	/** \brief Evaluates if parameter is equivalent to empty initialized version of parameter
 		(false) and throws an exception if the evaluation succeeds */
 	/** \param _ToAssert Value to assert. */
-#define px_assert( as ) ( assert( as) )
-//#define px_assert( _ToAssert ) \
-//		if ( ( _ToAssert ) == decltype( _ToAssert )( ) ) \
-//			throw std::exception( ( std::string( "Failed to assert " ) + #_ToAssert + " in function " + __func__ \
-//			+ " from line " + std::to_string( unsigned( __LINE__ ) ) + " in file " + ##( __FILE__ ) + "." ).c_str( ) )
+#define px_assert( _ToAssert ) \
+		if ( ( _ToAssert ) == decltype( _ToAssert )( ) ) \
+			throw std::exception( ( PX::Types::str_t( "Failed to assert " ) + #_ToAssert + " in function " + __func__ \
+			+ " from line " + std::to_string( unsigned( __LINE__ ) ) + " in file " + ##( __FILE__ ) + "." ).c_str( ) )
 #else
 	/** \brief Evaluates if parameter is equivalent to empty initialized version of parameter
 		(false) and throws an exception if the evaluation succeeds */
@@ -62,7 +61,7 @@
 #define px_interface class
 
 /** \brief Path to appdata directory */
-#define PX_APPDATA ( std::wstring( _wgetenv( PX_XOR( L"APPDATA" ) ) ) + PX_XOR( L"\\PX\\" ) )
+#define PX_APPDATA ( PX::Types::wstr_t( _wgetenv( PX_XOR( L"APPDATA" ) ) ) + PX_XOR( L"\\PX\\" ) )
 
 /** \brief Maximum managed keys. */
 #define PX_MAX_KEY 256

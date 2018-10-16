@@ -11,7 +11,7 @@ namespace PX::UnitTests
 {
 	namespace GlobalTools
 	{
-		std::string GetFileData( wcstr_t wsz )
+		str_t GetFileData( wcstr_t wsz )
 		{
 			auto pResource = _wfopen( wsz, L"r" );
 			if ( nullptr == pResource )
@@ -21,7 +21,7 @@ namespace PX::UnitTests
 			const auto lSize = ftell( pResource );
 			rewind( pResource );
 
-			std::string strData;
+			str_t strData;
 			strData.resize( lSize );
 			fread( &strData[ 0 ], 1, lSize, pResource );
 
@@ -37,6 +37,52 @@ namespace PX::UnitTests
 			TEST_CLASS( Types )
 			{
 			public:
+				TEST_METHOD( StringTypes )
+				{
+					auto bstrszcmp = [ ]( bstr_t bstr, bcstr_t bsz ) -> bool
+					{
+						bool b = bstr == bsz;
+						std::size_t z = 0;
+						for each ( auto by in bstr )
+						{
+							if ( !b )
+								return false;
+							b &= by == bsz[ z ];
+							z++;
+						}
+						return b;
+					};
+
+					{
+						bstr_t bstr = ( unsigned char * )"\x12\x16";
+						bstr_t bstr2 = ( unsigned char * )"\x12\x16";
+						bstr_t bstr3 = bstr2;
+
+						Assert::IsTrue( bstr == bstr, L"bstr self equality check failed", PX_ASSERT_INFO );
+						Assert::IsTrue( bstr == bstr2, L"bstr same equality check failed", PX_ASSERT_INFO );
+						Assert::IsTrue( bstr == bstr3, L"bstr copy equality check failed", PX_ASSERT_INFO );
+
+						Assert::IsTrue( bstr.c_str( ) == bstr, L"bstr self cstr equality check failed", PX_ASSERT_INFO );
+						Assert::IsTrue( bstr.c_str( ) == bstr2, L"bstr same cstr equality check failed", PX_ASSERT_INFO );
+						Assert::IsTrue( bstr3.c_str( ) == bstr, L"bstr copy cstr equality check failed", PX_ASSERT_INFO );
+					}
+
+					{
+						byte b[ ] = { 'X'_b, u'X'_b, U'X'_b, L'X'_b };
+						bstr_t bstr = bstr_t( "X\0"_b ) + u'X'_b + U'X'_b + L'X'_b;
+
+						bcstr_t bsz[ ] = { "ABCabc123!@#\0"_b, u"ABCabc123!@#\0"_b, U"ABCabc123!@#\0"_b, L"ABCabc123!@#\0"_b };
+						bstr_t bstrs[ ] = { "ABCabc123!@#\0"_b, u"ABCabc123!@#\0"_b, U"ABCabc123!@#\0"_b, L"ABCabc123!@#\0"_b };
+
+						for ( std::size_t z = 0; z < 4; z++ )
+						{
+							auto asdf = bstr[ z ];
+							Assert::IsTrue( b[ z ] == bstr[ z ], L"bstr operator''b check failed", PX_ASSERT_INFO );
+							Assert::IsTrue( bstrszcmp( bstrs[ z ], bsz[ z ] ), L"bstr operator\"\"b check failed", PX_ASSERT_INFO );
+						}
+					}
+				}
+
 				TEST_METHOD( Color )
 				{
 					// test == operator
@@ -181,12 +227,12 @@ namespace PX::UnitTests
 					}
 					const auto tmTime = mktime( &tmCompileTime );
 					Assert::IsTrue( tmTime != -1, L"mktime check failed", PX_ASSERT_INFO );
-					const unsigned long ulTimeSinceCompilation = PX::Tools::GetMoment( ) / 10000000ull - tmTime;
+					const auto ulTimeSinceCompilation = unsigned long( PX::Tools::GetMoment( ) / 10000000ull - tmTime );
 					Assert::IsTrue( ulTimeSinceCompilation > 0ul, L"GetMoment check failed", PX_ASSERT_INFO );
 
 					// check with run time
 					Sleep( 3000 );
-					const unsigned long ulChangeInTime = time( nullptr ) - ( ulTimeSinceCompilation + tmTime );
+					const auto ulChangeInTime = unsigned long( time( nullptr ) - ( ulTimeSinceCompilation + tmTime ) );
 					Assert::IsTrue( 4 >= ulChangeInTime && ulChangeInTime >= 2, L"GetMoment check failed", PX_ASSERT_INFO );
 				}
 
@@ -212,42 +258,54 @@ namespace PX::UnitTests
 				TEST_METHOD( StringCast )
 				{
 #define PX_STR "the quick brown fox jumps over the lazy dog"
+#define PX_STR16 u"the quick brown fox jumps over the lazy dog"
+#define PX_STR32 U"the quick brown fox jumps over the lazy dog"
 #define PX_WSTR L"the quick brown fox jumps over the lazy dog"
-					const char *sz = PX_STR;
-					const wchar_t *wsz = PX_WSTR;
-					std::string str = PX_STR;
-					std::wstring wstr = PX_WSTR;
+#define PX_BSTR "the quick brown fox jumps over the lazy dog\0"_b
+					cstr_t sz = PX_STR;
+					cstr16_t usz = PX_STR16;
+					cstr32_t Usz = PX_STR32;
+					wcstr_t wsz = PX_WSTR;
+					bcstr_t bsz = PX_BSTR;
+					str_t str = PX_STR;
+					str16_t ustr = PX_STR16;
+					str32_t Ustr = PX_STR32;
+					wstr_t wstr = PX_WSTR;
+					bstr_t bstr = PX_BSTR;
 
-					// all possible "const char *" conversions
-					{
-						Assert::AreEqual( 0, strcmp( string_cast< std::string >( sz ).c_str( ), sz ), LR"(""const char *"" to ""const char *"" cast check failed)", PX_ASSERT_INFO );
-						Assert::AreEqual( 0, wcscmp( string_cast< std::wstring >( sz ).c_str( ), wsz ), LR"(""const char *"" to ""const wchar_t *"" cast check failed)", PX_ASSERT_INFO );
-						Assert::IsTrue( string_cast< std::string >( sz ) == str, LR"(""const char *"" to ""std::string"" cast check failed)", PX_ASSERT_INFO );
-						Assert::IsTrue( string_cast< std::wstring >( sz ) == wstr, LR"(""const char *"" to ""std::wstring"" cast check failed)", PX_ASSERT_INFO );
+					// todo: implement c16, c32, wc converter: https://en.cppreference.com/w/cpp/locale/codecvt
+#define PX_S__CHECK( s_, _str_t ) \
+					{ \
+						Assert::IsTrue( string_cast< str_t >( s_ ) == sz, L"\""#_str_t"\" to \"cstr_t\" cast check failed)", PX_ASSERT_INFO ); \
+						/*Assert::IsTrue( string_cast< str16_t >( s_ ) == usz, L"\""#_str_t"\" to \"cstr16_t\" cast check failed)", PX_ASSERT_INFO );*/ \
+						/*Assert::IsTrue( string_cast< str32_t >( s_ ) == Usz, L"\""#_str_t"\" to \"cstr32_t\" cast check failed)", PX_ASSERT_INFO );*/ \
+						Assert::IsTrue( string_cast< wstr_t >( s_ ) == wsz, L"\""#_str_t"\" to \"wcstr_t\" cast check failed)", PX_ASSERT_INFO ); \
+						/*Assert::IsTrue( string_cast< bstr_t >( s_ ) == bsz, L"\""#_str_t"\" to \"bcstr_t\" cast check failed)", PX_ASSERT_INFO );*/ \
+						\
+						Assert::IsTrue( string_cast< str_t >( s_ ) == str, L"\""#_str_t"\" to  to \"str_t\" cast check failed)", PX_ASSERT_INFO ); \
+						/*Assert::IsTrue( string_cast< str16_t >( s_ ) == ustr, L"\""#_str_t"\" to  to \"str16_t\" cast check failed)", PX_ASSERT_INFO );*/ \
+						/*Assert::IsTrue( string_cast< str32_t >( s_ ) == Ustr, L"\""#_str_t"\" to  to \"str32_t\" cast check failed)", PX_ASSERT_INFO );*/ \
+						Assert::IsTrue( string_cast< wstr_t >( s_ ) == wstr, L"\""#_str_t"\" to  to \"wstr_t\" cast check failed)", PX_ASSERT_INFO ); \
+						/*Assert::IsTrue( string_cast< bstr_t >( s_ ) == bstr, L"\""#_str_t"\" to  to \"bstr_t\" cast check failed)", PX_ASSERT_INFO );*/ \
 					}
-					// all possible "const wchar_t *" conversions
-					{
-						Assert::AreEqual( 0, wcscmp( string_cast< std::wstring >( wsz ).c_str( ), wsz ), LR"(""const wchar_t *"" to ""const wchar_t *"" cast check failed)", PX_ASSERT_INFO );
-						Assert::AreEqual( 0, strcmp( string_cast< std::string >( wsz ).c_str( ), sz ), LR"(""const wchar_t *"" to ""const char *"" cast check failed)", PX_ASSERT_INFO );
-						Assert::IsTrue( string_cast< std::wstring >( wsz ) == wstr, LR"(""const wchar_t *"" to ""std::wstring"" cast check failed)", PX_ASSERT_INFO );
-						Assert::IsTrue( string_cast< std::string >( wsz ) == str, LR"(""const wchar_t *"" to ""std::string"" cast check failed)", PX_ASSERT_INFO );
-					}
-					// all possible "std::string" conversions
-					{
-						Assert::IsTrue( string_cast< std::string >( str ) == str, LR"(""std::string"" to ""std::string"" cast check failed)", PX_ASSERT_INFO );
-						Assert::IsTrue( string_cast< std::wstring >( str ) == wstr, LR"(""std::string"" to ""std::wstring"" cast check failed)", PX_ASSERT_INFO );
-						Assert::AreEqual( 0, strcmp( string_cast< std::string >( str ).c_str( ), sz ), LR"(""std::string"" to ""const char *"" cast check failed)", PX_ASSERT_INFO );
-						Assert::AreEqual( 0, wcscmp( string_cast< std::wstring >( str ).c_str( ), wsz ), LR"(""std::string"" to ""const wchar_t *"" cast check failed)", PX_ASSERT_INFO );
-					}
-					// all possible "std::wstring" conversions
-					{
-						Assert::IsTrue( string_cast< std::wstring >( wstr ) == wstr, LR"(""std::wstring"" to ""std::wstring"" cast check failed)", PX_ASSERT_INFO );
-						Assert::IsTrue( string_cast< std::string >( wstr ) == str, LR"(""std::wstring"" to ""std::string"" cast check failed)", PX_ASSERT_INFO );
-						Assert::AreEqual( 0, wcscmp( string_cast< std::wstring >( wstr ).c_str( ), wsz ), LR"(""std::wstring"" to ""const wchar_t *"" cast check failed)", PX_ASSERT_INFO );
-						Assert::AreEqual( 0, strcmp( string_cast< std::string >( wstr ).c_str( ), sz ), LR"(""std::wstring"" to ""const char *"" cast check failed)", PX_ASSERT_INFO );
-					}
+
+					PX_S__CHECK( sz, cstr_t );
+					//PX_S__CHECK( usz, cstr16_t );
+					//PX_S__CHECK( Usz, cstr32_t );
+					PX_S__CHECK( wsz, wcstr_t );
+					//PX_S__CHECK( bsz, bcstr_t );
+
+					PX_S__CHECK( str, str_t );
+					//PX_S__CHECK( ustr, str16_t );
+					//PX_S__CHECK( Ustr, str32_t );
+					PX_S__CHECK( wstr, wstr_t );
+					//PX_S__CHECK( bstr, bstr_t );
 #undef PX_STR
+#undef PX_STR16
+#undef PX_STR32
 #undef PX_WSTR
+#undef PX_BSTR
+#undef PX_S__CHECK
 				}
 				// todo: @cole tests for EstimateTableLength, GetModuleEnd, FindAddressOrigin, CHook, OpenLink, FormatShellcode
 			};
@@ -338,19 +396,19 @@ R"()"
 				TEST_METHOD( RetrieveSystemInformation )
 				{
 					auto jsSystemInfo = GetSystemInfo( );
-					Assert::AreEqual( "Intel(R) Xeon(R) CPU E5-1650 v2 @ 3.50GHz", jsSystemInfo[ "cpu" ].get< std::string >( ).c_str( ),
+					Assert::AreEqual( "Intel(R) Xeon(R) CPU E5-1650 v2 @ 3.50GHz", jsSystemInfo[ "cpu" ].get< str_t >( ).c_str( ),
 									  L"System info does not match saved", PX_ASSERT_INFO );
-					Assert::AreEqual( "AMD FirePro D500 (FireGL V)\nAMD FirePro D500 (FireGL V)", jsSystemInfo[ "gpu" ].get< std::string >( ).c_str( ),
+					Assert::AreEqual( "AMD FirePro D500 (FireGL V)\nAMD FirePro D500 (FireGL V)", jsSystemInfo[ "gpu" ].get< str_t >( ).c_str( ),
 									  L"System info does not match saved", PX_ASSERT_INFO );
-					Assert::AreEqual( "Default Monitor\nGeneric PnP Monitor", jsSystemInfo[ "display" ].get< std::string >( ).c_str( ),
+					Assert::AreEqual( "Default Monitor\nGeneric PnP Monitor", jsSystemInfo[ "display" ].get< str_t >( ).c_str( ),
 									  L"System info does not match saved", PX_ASSERT_INFO );
-					Assert::AreEqual( "JEREMIAH", jsSystemInfo[ "pc" ].get< std::string >( ).c_str( ),
+					Assert::AreEqual( "JEREMIAH", jsSystemInfo[ "pc" ].get< str_t >( ).c_str( ),
 									  L"System info does not match saved", PX_ASSERT_INFO );
-					Assert::AreEqual( "Microsoft Windows 10 Pro", jsSystemInfo[ "os" ].get< std::string >( ).c_str( ),
+					Assert::AreEqual( "Microsoft Windows 10 Pro", jsSystemInfo[ "os" ].get< str_t >( ).c_str( ),
 									  L"System info does not match saved", PX_ASSERT_INFO );
-					Assert::AreEqual( "NA76ENT9\nS18WNYBD801667", jsSystemInfo[ "drive" ].get< std::string >( ).c_str( ),
+					Assert::AreEqual( "NA76ENT9\nS18WNYBD801667", jsSystemInfo[ "drive" ].get< str_t >( ).c_str( ),
 									  L"System info does not match saved", PX_ASSERT_INFO );
-					Assert::AreEqual( "Mac-F60DEB81FF30ACF6", jsSystemInfo[ "board" ].get< std::string >( ).c_str( ),
+					Assert::AreEqual( "Mac-F60DEB81FF30ACF6", jsSystemInfo[ "board" ].get< str_t >( ).c_str( ),
 									  L"System info does not match saved", PX_ASSERT_INFO );
 				}
 				// todo: @cole AssembleExtensionInformation, FindProcessThread, FindModuleEx, IsProcessThreadRunning, NecessaryModulesLoaded, WipeMemoryEx, WipeMemory, LoadLibraryEx, LoadRawLibraryEx, LoadRawLibrary, FindInternalHandle
@@ -442,7 +500,7 @@ void OnDetach( )
 				{
 					{
 						std::ofstream ofLogFile;
-						ofLogFile.open( std::string( getenv( "APPDATA" ) ) + R"(\\PX\\UnitTest.log)", std::iostream::trunc );
+						ofLogFile.open( str_t( getenv( "APPDATA" ) ) + R"(\\PX\\UnitTest.log)", std::iostream::trunc );
 						ofLogFile.close( );
 					}
 

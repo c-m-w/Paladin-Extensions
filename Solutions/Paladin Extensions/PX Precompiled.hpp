@@ -27,6 +27,7 @@
 #include <TlHelp32.h>
 #include <Psapi.h>
 #include <comdef.h>
+#undef bstr_t
 #include <WbemIdl.h>
 #pragma comment( lib, "wbemuuid.lib" )
 

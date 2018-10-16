@@ -14,13 +14,13 @@ namespace PX::Cryptography
 		return !strEncryptionKey.empty( );
 	}
 
-	std::string PX_API GenerateHash( const std::string& strPlainText )
+	str_t PX_API GenerateHash( const str_t& strPlainText )
 	{
 		byte_t bOutput[ CryptoPP::SHA1::DIGESTSIZE ];
 		CryptoPP::SHA1( ).CalculateDigest( bOutput, reinterpret_cast< byte_t* >( const_cast< char* >( strPlainText.c_str( ) ) ), strPlainText.length( ) );
 
 		CryptoPP::HexEncoder hHash;
-		std::string strOutput;
+		str_t strOutput;
 		hHash.Attach( new CryptoPP::StringSink( strOutput ) );
 		hHash.Put( bOutput, sizeof( byte_t[ CryptoPP::SHA1::DIGESTSIZE ] ) );
 		hHash.MessageEnd( );
@@ -29,17 +29,17 @@ namespace PX::Cryptography
 		return strOutput;
 	}
 
-	std::string PX_API Encrypt( const std::string& strPlainText )
+	str_t PX_API Encrypt( const str_t& strPlainText )
 	{
 		return Base64< CryptoPP::Base64Encoder >( AES256CBC< CryptoPP::CBC_Mode< CryptoPP::AES >::Encryption >( strPlainText ) );
 	}
 
-	std::string PX_API Decrypt( const std::string& strCipherText )
+	str_t PX_API Decrypt( const str_t& strCipherText )
 	{
 		return AES256CBC< CryptoPP::CBC_Mode< CryptoPP::AES >::Decryption >( Base64< CryptoPP::Base64Decoder >( strCipherText ) );
 	}
 
-	std::string PX_API GenerateIdentifier( const std::string& strIdentifier )
+	str_t PX_API GenerateIdentifier( const str_t& strIdentifier )
 	{
 		return GenerateHash( GenerateHash( strInitializationVector ) + GenerateHash( strIdentifier ) ).substr( 0, 16 );
 	}

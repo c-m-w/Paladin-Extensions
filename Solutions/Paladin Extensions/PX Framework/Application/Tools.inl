@@ -18,24 +18,56 @@ namespace PX::Tools
 
 	// INFO: Deduces traits and uses matching casting function of trait
 	template< typename > px_abstract_class AStringTraits;
-	template< > px_abstract_class AStringTraits< std::wstring >
+	template< > px_abstract_class AStringTraits< Types::bstr_t >
 	{
 	public:
 		typedef wchar_t char_trait_t;
 
-		static int ByteConvert( const int iCodePage, LPCWSTR wszData, int iDataLength, LPSTR szBuffer, int iBufferSize )
+		static int ByteConvert( const int iCodePage, LPVOID _szData, int iDataLength, LPVOID _szBuffer, int iBufferSize )
 		{
-			return WideCharToMultiByte( iCodePage, 0, wszData, iDataLength, szBuffer, iBufferSize, nullptr, nullptr );
+			return MultiByteToWideChar( iCodePage, 0, (LPCSTR)_szData, iDataLength, (LPWSTR)_szBuffer, iBufferSize );
 		}
 	};
-	template< > px_abstract_class AStringTraits< std::string >
+	template< > px_abstract_class AStringTraits< Types::wstr_t >
+	{
+	public:
+		typedef wchar_t char_trait_t;
+
+		static int ByteConvert( const int iCodePage, LPVOID _szData, int iDataLength, LPVOID _szBuffer, int iBufferSize )
+		{
+			return WideCharToMultiByte( iCodePage, 0, (LPCWSTR)_szData, iDataLength, (LPSTR)_szBuffer, iBufferSize, nullptr, nullptr );
+		}
+	};
+	template< > px_abstract_class AStringTraits< Types::str32_t >
+	{
+		//todo
+	public:
+		typedef char32_t char_trait_t;
+
+		static int ByteConvert( const int iCodePage, LPVOID _szData, int iDataLength, LPVOID _szBuffer, int iBufferSize )
+		{
+			return WideCharToMultiByte( iCodePage, 0, (LPCWSTR)_szData, iDataLength, (LPSTR)_szBuffer, iBufferSize, nullptr, nullptr );
+		}
+	};
+	template< > px_abstract_class AStringTraits< Types::str16_t >
+	{
+		//todo
+	public:
+		typedef char16_t char_trait_t;
+
+		static int ByteConvert( const int iCodePage, LPVOID _szData, int iDataLength, LPVOID _szBuffer, int iBufferSize )
+		{
+			return WideCharToMultiByte( iCodePage, 0, (LPCWSTR)_szData, iDataLength, (LPSTR)_szBuffer, iBufferSize, nullptr, nullptr );
+		}
+	};
+	template< > px_abstract_class AStringTraits< Types::str_t >
 	{
 	public:
 		typedef char char_trait_t;
 
-		static int ByteConvert( const int iCodePage, LPCSTR szData, int iDataLength, LPWSTR wszBuffer, int iBufferSize )
+		static int ByteConvert( const int iCodePage, LPVOID _szData, int iDataLength, LPVOID _szBuffer, int iBufferSize )
 		{
-			return MultiByteToWideChar( iCodePage, 0, szData, iDataLength, wszBuffer, iBufferSize );
+			return MultiByteToWideChar( iCodePage, 0, (LPCSTR)_szData, iDataLength, (LPWSTR)_szBuffer, iBufferSize );
 		}
 	};
 
@@ -45,12 +77,12 @@ namespace PX::Tools
 	public:
 		static _To Cast( const _From& _Source )
 		{
-			int iLength = AStringTraits< _From >::ByteConvert( CP_ACP, _Source.data( ), _Source.length( ), nullptr, 0 );
+			int iLength = AStringTraits< _From >::ByteConvert( CP_ACP, (LPVOID)_Source.data( ), _Source.length( ), nullptr, 0 );
 			if ( !iLength )
 				return _To( );
 
 			std::vector< typename AStringTraits< _To >::char_trait_t > _strBuffer( iLength );
-			AStringTraits< _From >::ByteConvert( CP_ACP, _Source.data( ), _Source.length( ), &_strBuffer[ 0 ], iLength );
+			AStringTraits< _From >::ByteConvert( CP_ACP, (LPVOID)_Source.data( ), _Source.length( ), (LPVOID)&_strBuffer[ 0 ], iLength );
 
 			return _To( _strBuffer.begin( ), _strBuffer.end( ) );
 		}
@@ -69,12 +101,27 @@ namespace PX::Tools
 	template< > px_abstract_class AStringTypeOfCharacter< Types::cstr_t >
 	{
 	public:
-		typedef std::string wrap_t;
+		typedef Types::str_t wrap_t;
+	};
+	template< > px_abstract_class AStringTypeOfCharacter< Types::cstr16_t >
+	{
+	public:
+		typedef Types::str16_t wrap_t;
+	};
+	template< > px_abstract_class AStringTypeOfCharacter< Types::cstr32_t >
+	{
+	public:
+		typedef Types::str32_t wrap_t;
 	};
 	template< > px_abstract_class AStringTypeOfCharacter< Types::wcstr_t >
 	{
 	public:
-		typedef std::wstring wrap_t;
+		typedef Types::wstr_t wrap_t;
+	};
+	template< > px_abstract_class AStringTypeOfCharacter< Types::bcstr_t >
+	{
+	public:
+		typedef Types::bstr_t wrap_t;
 	};
 
 	template< typename _fn > _fn CTrampolineHook::GetOriginalFunction( unsigned uIndex )

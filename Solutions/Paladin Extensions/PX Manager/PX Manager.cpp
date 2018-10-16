@@ -79,9 +79,9 @@ bool bLoggedIn = false, bShouldClose = false, bIsStaff = false, bPreferBeta = fa
 int iSelectedExtension = -1, iLoginStatus = -1;
 extensions_t extInfo;
 
-const std::wstring wstrApplicationExecutableNames[ ] { { }, PX_XOR( L"Steam.exe" ), PX_XOR( L"csgo.exe" ), PX_XOR( L"pubg.exe" ), PX_XOR( L"rsix.exe" ) };
+const wstr_t wstrApplicationExecutableNames[ ] { { }, PX_XOR( L"Steam.exe" ), PX_XOR( L"csgo.exe" ), PX_XOR( L"pubg.exe" ), PX_XOR( L"rsix.exe" ) };
 constexpr bool bExtensionDisabled[ PX_EXTENSION_MAX ] { true, true, false, true, true };
-const std::string strExtensionNames[ PX_EXTENSION_MAX ] { { }, PX_XOR( "Manager" ), PX_XOR( "CSGO" ), PX_XOR( "PUBG" ), PX_XOR( "RSIX" ) },
+const str_t strExtensionNames[ PX_EXTENSION_MAX ] { { }, PX_XOR( "Manager" ), PX_XOR( "CSGO" ), PX_XOR( "PUBG" ), PX_XOR( "RSIX" ) },
 *strLastLaunchTimes;
 bool bExtensionAccess[ PX_EXTENSION_MAX ] { false, false, false, false, false };
 std::array< unsigned, 2 > uWindowDimensions;
@@ -118,7 +118,7 @@ void PX_API UI::Manager::SetLayout( )
 		}
 		else
 		{
-			const static std::string strErrorMessages[ ]
+			const static str_t strErrorMessages[ ]
 			{
 				{ },
 				PX_XOR( "Communication with the server has failed. Please try again later." ),
@@ -361,6 +361,8 @@ void PX_API OnDetach( )
 
 void PX_API OnLaunch( )
 {
+	px_assert( !EnsureElevation( ) ); // todo something with not elevated
+
 #if defined _NDEBUG
 	for each ( auto wstrExecutable in wstrApplicationExecutableNames )
 		if ( !wstrExecutable.empty( ) )

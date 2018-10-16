@@ -32,9 +32,9 @@ namespace PX::UI
 		LPD3DXSPRITE pBufferSprite;
 
 
-		nk_font* PX_API AddFont( std::string strFontFileName, unsigned uFontSize, unsigned uFontAwesomeSize = 0 )
+		nk_font* PX_API AddFont( Types::str_t strFontFileName, unsigned uFontSize, unsigned uFontAwesomeSize = 0 )
 		{
-			std::string strFontDirectory( PX_XOR( R"(C:\Windows\Fonts\)" ) );
+			Types::str_t strFontDirectory( PX_XOR( R"(C:\Windows\Fonts\)" ) );
 
 			const auto flFontAwesomeSize = float( uFontAwesomeSize ? uFontAwesomeSize : uFontSize );
 			auto fcFontAwesome = nk_font_config( flFontAwesomeSize );
@@ -292,8 +292,8 @@ namespace PX::UI
 			uNuklearWindowHeight = uHeight;
 			InitializeNuklear( );
 
-			vecTextures.emplace_back( 32, 29, PX_XOR( LR"(Paladin Logo Small.png)" ) ); // TEXTURE_LOGO
-			vecTextures.emplace_back( 720, 394, PX_XOR( LR"(Paladin Logo Loading.png)" ) ); // TEXTURE_LOGO_LOADING
+			vecTextures.emplace_back( 32, 29, PX_XOR( LR"(PX Logo Small.png)" ) ); // TEXTURE_LOGO
+			vecTextures.emplace_back( 720, 394, PX_XOR( LR"(PX Loading.png)" ) ); // TEXTURE_LOGO_LOADING
 			vecTextures.emplace_back( 100, 100, PX_XOR( LR"(Game Icons\CSGO Sized.png)" ) ); // TEXTURE_ICON_CSGO
 			vecTextures.emplace_back( 100, 100, PX_XOR( LR"(Game Icons\PUBG Sized.png)" ) ); // TEXTURE_ICON_PUBG
 			vecTextures.emplace_back( 100, 100, PX_XOR( LR"(Game Icons\RSIX Sized.png)" ) ); // TEXTURE_ICON_RSIX
@@ -744,8 +744,8 @@ namespace PX::UI
 			struct text_t
 			{
 				struct nk_vec2 vecSize;
-				std::string strText;
-				text_t( struct nk_vec2 _vecSize, std::string _strText )
+				str_t strText;
+				text_t( struct nk_vec2 _vecSize, str_t _strText )
 				{
 					vecSize = _vecSize;
 					strText = _strText;
@@ -754,7 +754,7 @@ namespace PX::UI
 
 			std::deque< text_t > wrdWords;
 			std::deque< text_t > dqLines;
-			std::string strWord;
+			str_t strWord;
 			const auto sTextLength = strlen( szTooltip );
 
 			for ( auto z = 0u; z <= sTextLength; z++ )
@@ -772,7 +772,7 @@ namespace PX::UI
 			{
 				static unsigned uUsedSpace = 0u;
 				static auto bNewLine = true;
-				static std::string strLine;
+				static str_t strLine;
 				auto wrdCurrent = wrdWords[ z ];
 
 				auto fnAddLine = [ & ]( )
@@ -1082,7 +1082,7 @@ namespace PX::UI
 			SetFont( FONT_TAHOMA );
 			nk_label_colored( pContext, *bActive ? ICON_FA_CHECK_SQUARE : ICON_FA_SQUARE, NK_TEXT_CENTERED, *bActive ? clrBlue : bHovering && !pActiveEditColor ? ( bClicking ? clrBlue : clrBlue ) : clrTextDormant );
 			nk_layout_row_push( pContext, CalculateTextBounds( szText, 15 ).x );
-			nk_label_colored( pContext, ( szText + std::string( PX_XOR( "  " ) ) ).c_str( ), NK_TEXT_LEFT, clrTextDormant );
+			nk_label_colored( pContext, ( szText + str_t( PX_XOR( "  " ) ) ).c_str( ), NK_TEXT_LEFT, clrTextDormant );
 		}
 
 		int PX_API Tabs( unsigned uStartX, unsigned uStartY, const std::deque< cstr_t >& dqButtons, unsigned uActiveButton )
@@ -1164,7 +1164,7 @@ namespace PX::UI
 			{
 				pContext->current->bounds.x + _uWindowWidth / 2 - flColorPickerWidth / 2, pContext->current->bounds.y + _uWindowHeight / 2 - flColorPickerHeight / 2, flColorPickerWidth, flColorPickerHeight
 			};
-			const static std::string strBaseTitle = PX_XOR( R"(Color of ')" );
+			const static str_t strBaseTitle = PX_XOR( R"(Color of ')" );
 
 			static struct nk_colorf clrChosenColor;
 			static auto bNewColor = true;
