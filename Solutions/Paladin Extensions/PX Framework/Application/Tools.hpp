@@ -25,7 +25,7 @@ namespace PX::Tools
 	Types::ptr_t PX_API GetModuleEnd( HMODULE hm );
 	HMODULE PX_API FindAddressOrigin( Types::ptr_t ptrAddress );
 
-	struct CHook
+	class CStandardHook
 	{
 	private:
 		DWORD dwOldProtection;
@@ -36,8 +36,8 @@ namespace PX::Tools
 		bool bSetNewTable;
 
 	public:
-		CHook( void* pVirtualTable );
-		~CHook( );
+		CStandardHook( void* pVirtualTable );
+		~CStandardHook( );
 
 		bool Succeeded( );
 		bool HookIndex( unsigned uIndex, void* pNewFunction );
@@ -49,32 +49,43 @@ namespace PX::Tools
 		void Cleanup( );
 	};
 
-	struct CTrampolineHook
+	class CTrampolineHook
 	{
 	private:
-		static constexpr std::size_t STUB_SIZE = 6;
-		static constexpr unsigned char STUB[ 6 ] {
+		uintptr_t* pOldTable = nullptr,
+			*pNewTable = nullptr;
+		std::size_t sTable = 0;
+		DWORD dwTableProtection = NULL;
+		HMODULE hTableOrigin = nullptr;
+		bool bInitialized = false, bSetProtection = false;
+
+		struct stub_t
+		{
+			static constexpr std::size_t STUB_SIZE = 6;
+			static constexpr unsigned char STUB[ ] {
 												0x68, 0xCC, 0xCC, 0xCC, 0xCC,	// push 0xCCCCCCCC
-												0xC3							// ret
+												0xC3							// retn
+			};
+
+			uintptr_t ptrAddress;
+			DWORD dwProtect;
 		};
-		std::size_t zTableLength { }, zTableSize { };
-		void* pTable;
-		Types::ptr_t* pOldTable;
-		HMODULE hAllocationModule;
-		std::vector< Types::ptr_t > vecStubs;
+		std::vector< stub_t > vecStubs { };
 
 	public:
-		CTrampolineHook( void* pVirtualTable );
+		CTrampolineHook( ) = default;
+		CTrampolineHook( void* pTable );
 		~CTrampolineHook( );
 
+		void Setup( void* pTable );
 		bool Succeeded( );
-		bool HookIndex( unsigned uIndex, void* pNewFunction );
-		void UnhookIndex( unsigned uIndex );
+		bool SetProtection( );
+		bool HookIndex( unsigned uIndex, void* pAddress );
+		bool ResetProtection( );
 
-		void ResetTable( );
 		template< typename _fn > _fn GetOriginalFunction( unsigned uIndex );
 
-		void Cleanup( );
+		void UnhookAll( );
 	};
 
 	void PX_API OpenLink( Types::cstr_t szLink );

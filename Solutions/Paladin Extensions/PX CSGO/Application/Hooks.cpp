@@ -19,22 +19,26 @@ namespace PX
 				&& hkClientBase->HookIndex( uFrameStageNotify, reinterpret_cast< void* >( FrameStageNotify ) )
 				&& hkClientBase->HookIndex( uCreateMove, reinterpret_cast< void* >( CreateMove ) )
 				&& hkClientMode->HookIndex( uDoPostScreenEffects, reinterpret_cast< void* >( DoPostScreenEffects ) )
-				&& hkPanel->HookIndex( uPaintTraverse, reinterpret_cast< void* >( PaintTraverse ) );
+				&& hkPanel->HookIndex( uPaintTraverse, reinterpret_cast< void* >( PaintTraverse ) )
+				&& hkClientBase->ResetProtection( )
+				&& hkClientMode->ResetProtection( )
+				&& hkPanel->ResetProtection( );
 		}
 
 		bool PX_API InitializeHooks( )
 		{
 			//hkDirectXDevice	= new Tools::CHook( pDevice );
-			hkDirectXDevice = new Tools::CTrampolineHook( pDevice );
-			hkClientBase	= new Tools::CHook( pClientBase );
-			hkClientMode	= new Tools::CHook( pClientMode );
-			hkPanel			= new Tools::CHook( pPanel );
+			hkDirectXDevice = new Tools::CStandardHook( pDevice );
+			hkClientBase	= new Tools::CTrampolineHook( pClientBase );
+			hkClientMode	= new Tools::CTrampolineHook( pClientMode );
+			hkPanel			= new Tools::CTrampolineHook( pPanel );
 
-			return hkClientBase->Succeeded( )
-				&& hkClientMode->Succeeded( )
-				&& hkPanel->Succeeded( ) ?
-				SetHooks( ) 
-			: false;
+			return hkDirectXDevice->Succeeded( )
+				&& hkClientBase->Succeeded( ) && hkClientBase->SetProtection( )
+				&& hkClientMode->Succeeded( ) && hkClientMode->SetProtection(  )
+				&& hkPanel->Succeeded( ) && hkPanel->SetProtection( ) ?
+				SetHooks( )
+				: false;
 		}
 
 		void PX_API Destruct( )

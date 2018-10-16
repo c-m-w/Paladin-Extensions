@@ -10,7 +10,7 @@ namespace PX::Tools
 		return _ChildClassObject;
 	}
 
-	template< typename _fn > _fn CHook::GetOriginalFunction( unsigned uIndex )
+	template< typename _fn > _fn CStandardHook::GetOriginalFunction( unsigned uIndex )
 	{
 		px_assert( uIndex >= 0 && uIndex <= zTableLength );
 		return reinterpret_cast< _fn >( pOldTable[ uIndex ] );
@@ -79,7 +79,7 @@ namespace PX::Tools
 
 	template< typename _fn > _fn CTrampolineHook::GetOriginalFunction( unsigned uIndex )
 	{
-		return reinterpret_cast< _fn >( pOldTable[ uIndex ] );
+		return reinterpret_cast< _fn >( uIndex == 0 || uIndex > sTable ? ptr_t( ) : pOldTable[ uIndex ] );
 	}
 
 	template< typename _To, typename _From > _To PX_API string_cast( const _From& _Source )

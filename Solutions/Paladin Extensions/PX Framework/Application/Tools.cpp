@@ -82,7 +82,7 @@ namespace PX::Tools
 		return nullptr;
 	}
 
-	CHook::CHook( void* pVirtualTable ): dwOldProtection( 0u ), zTableLength( 0u ), zTableSize( 0u ), pClassBase( pVirtualTable ),
+	CStandardHook::CStandardHook( void* pVirtualTable ): dwOldProtection( 0u ), zTableLength( 0u ), zTableSize( 0u ), pClassBase( pVirtualTable ),
 		pOldTable( nullptr ), pNewTable( nullptr ), hAllocationModule( HMODULE( ) ), bSetNewTable( false )
 	{
 		// Ensure that we are hooking a valid virtual table and that the length is valid( there are proper permissions to read and write to it ).
@@ -118,17 +118,17 @@ namespace PX::Tools
 		bSetNewTable = true;
 	}
 
-	CHook::~CHook( )
+	CStandardHook::~CStandardHook( )
 	{
 		Cleanup( );
 	}
 
-	bool CHook::Succeeded( )
+	bool CStandardHook::Succeeded( )
 	{
 		return bSetNewTable;
 	}
 
-	bool CHook::HookIndex( unsigned uIndex, void* pNewFunction )
+	bool CStandardHook::HookIndex( unsigned uIndex, void* pNewFunction )
 	{
 		if ( uIndex >= 0 && uIndex <= zTableLength )
 		{
@@ -138,18 +138,18 @@ namespace PX::Tools
 		return false;
 	}
 
-	void CHook::UnhookIndex( unsigned uIndex )
+	void CStandardHook::UnhookIndex( unsigned uIndex )
 	{
 		if ( uIndex >= 0 && uIndex < zTableLength )
 			pNewTable[ uIndex ] = pOldTable[ uIndex ];
 	}
 
-	void CHook::ResetTable( )
+	void CStandardHook::ResetTable( )
 	{
 		memcpy( pNewTable, pOldTable, zTableSize );
 	}
 
-	void CHook::Cleanup( )
+	void CStandardHook::Cleanup( )
 	{
 		// Reset the virtual function address array first, before we set the memory to 0 in case that function is called between and causes a crash.
 		if ( bSetNewTable )
@@ -162,51 +162,74 @@ namespace PX::Tools
 		}
 	}
 
-	CTrampolineHook::CTrampolineHook( void* pVirtualTable ): zTableLength( 0u ), zTableSize( 0u ), pTable( *reinterpret_cast< void** >( pVirtualTable ) ),
-		pOldTable( nullptr ), hAllocationModule( HMODULE( ) )
+	CTrampolineHook::CTrampolineHook( void* pTable )
 	{
-		if ( pTable == nullptr ||
-			( zTableLength = EstimateTableLength( pOldTable = reinterpret_cast< ptr_t* >( pTable ) ) ) <= 0 )
+		if ( !( bInitialized = nullptr != pTable
+				&& nullptr != ( pNewTable = *reinterpret_cast< ptr_t** >( pTable ) )
+				&& 0 < ( sTable = EstimateTableLength( pNewTable ) )
+				&& nullptr != ( hTableOrigin = FindAddressOrigin( ptr_t( *reinterpret_cast< void** >( pNewTable ) ) ) ) ) )
 			return;
-
-		zTableSize = zTableLength * sizeof( ptr_t );
-		pOldTable = new ptr_t[ zTableLength ];
-		memcpy( pOldTable, pTable, zTableSize );
-		if ( ( hAllocationModule = FindAddressOrigin( ptr_t( *reinterpret_cast< void** >( pOldTable ) ) ) ) == nullptr )
-			return;
+		pOldTable = new uintptr_t[ sTable ];
+		memcpy( pOldTable, pNewTable, sTable * sizeof( uintptr_t ) );
 	}
 
 	CTrampolineHook::~CTrampolineHook( )
 	{
-		memcpy( pTable, pOldTable, zTableSize );
-		delete[ ] pOldTable;
-
-		for ( auto& stub : vecStubs )
-		{
-			DWORD dwBuffer;
-			VirtualProtect( reinterpret_cast< void* >( stub ), STUB_SIZE, PAGE_READWRITE, &dwBuffer );
-			sys::WipeMemory( reinterpret_cast< void* >( stub ), STUB_SIZE );
-		}
-		vecStubs.clear( );
+		UnhookAll( );
 	}
 
-	bool CTrampolineHook::HookIndex( unsigned uIndex, void* pNewFunction )
+	void CTrampolineHook::Setup( void* pTable )
 	{
-		const auto ptrStubAddress = FindFreeMemory( hAllocationModule, STUB_SIZE );
-		const auto pAddress = reinterpret_cast< void* >( ptr_t( pTable ) + uIndex * sizeof( ptr_t ) );
-		DWORD dwOldProtection, dwStubProtection;
-		unsigned char bNewStub[ 6 ];
+		*this = CTrampolineHook( pTable );
+	}
 
-		memcpy( bNewStub, STUB, STUB_SIZE );
-		*reinterpret_cast< ptr_t* >( ptr_t( bNewStub ) + 1 ) = ptr_t( pNewFunction );
-		memcpy( reinterpret_cast< void* >( ptrStubAddress ), bNewStub, STUB_SIZE );
-		VirtualProtect( reinterpret_cast< void* >( ptrStubAddress ), STUB_SIZE, PAGE_EXECUTE, &dwStubProtection );
+	bool CTrampolineHook::Succeeded( )
+	{
+		return bInitialized;
+	}
 
-		if ( FALSE == VirtualProtect( pAddress, sizeof( ptr_t ), PAGE_READWRITE, &dwOldProtection ) )
+	bool CTrampolineHook::SetProtection( )
+	{
+		return bSetProtection = bInitialized
+								  && TRUE == VirtualProtect( pNewTable, sTable * sizeof( uintptr_t ), PAGE_READWRITE, &dwTableProtection );
+	}
+
+	bool CTrampolineHook::HookIndex( unsigned uIndex, void* pAddress )
+	{
+		if ( !bSetProtection )
 			return false;
-		reinterpret_cast< void** >( pTable )[ uIndex ] = reinterpret_cast< void* >( ptrStubAddress );
-		VirtualProtect( pAddress, sizeof( ptr_t ), dwOldProtection, &dwOldProtection );
+		vecStubs.emplace_back( stub_t( ) );
+		auto& stub = vecStubs.back( );
+		stub.ptrAddress = FindFreeMemory( hTableOrigin, stub_t::STUB_SIZE );
+
+		if ( FALSE == VirtualProtect( reinterpret_cast< void* >( stub.ptrAddress ), stub_t::STUB_SIZE, PAGE_EXECUTE_READWRITE, &stub.dwProtect ) )
+			return false;
+		memcpy( reinterpret_cast< void* >( stub.ptrAddress ), stub_t::STUB, stub_t::STUB_SIZE );
+		*reinterpret_cast< uintptr_t* >( stub.ptrAddress + 1 ) = uintptr_t( pAddress );
+		pNewTable[ uIndex ] = stub.ptrAddress;
 		return true;
+	}
+
+	bool CTrampolineHook::ResetProtection( )
+	{
+		DWORD dwBuffer;
+		return bSetProtection = TRUE == VirtualProtect( pNewTable, sTable * sizeof( uintptr_t ), dwTableProtection, &dwBuffer );
+	}
+
+	void CTrampolineHook::UnhookAll( )
+	{
+		DWORD dwBuffer;
+
+		SetProtection( );
+		memcpy( pNewTable, pOldTable, sTable * sizeof( uintptr_t ) );
+		ResetProtection( );
+
+		delete[ ] pOldTable;
+		for ( auto& stub : vecStubs )
+		{
+			memset( reinterpret_cast< void* >( stub.ptrAddress ), 0, stub_t::STUB_SIZE );
+			VirtualProtect( reinterpret_cast< void* >( stub.ptrAddress ), stub_t::STUB_SIZE, stub.dwProtect, &dwBuffer );
+		}
 	}
 
 	void PX_API OpenLink( cstr_t szLink )

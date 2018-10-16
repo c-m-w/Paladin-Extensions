@@ -31,10 +31,10 @@ namespace PX
 		void PX_API Destruct( );
 
 		//PX_SDK Tools::CHook* hkDirectXDevice;
-		PX_SDK Tools::CTrampolineHook* hkDirectXDevice;
-		PX_SDK Tools::CHook* hkClientBase;
-		PX_SDK Tools::CHook* hkClientMode;
-		PX_SDK Tools::CHook* hkPanel;
+		PX_SDK Tools::CStandardHook* hkDirectXDevice;
+		PX_SDK Tools::CTrampolineHook* hkClientBase;
+		PX_SDK Tools::CTrampolineHook* hkClientMode;
+		PX_SDK Tools::CTrampolineHook* hkPanel;
 
 		// Device
 		HRESULT __stdcall BeginScene( IDirect3DDevice9* pThis );
