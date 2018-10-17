@@ -201,7 +201,6 @@
     <None Include="Application\Types.inl" />
     <None Include="Design\User Interface.inl" />
     <None Include="Security\Cryptography.inl" />
-    <None Include="Application\Types.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

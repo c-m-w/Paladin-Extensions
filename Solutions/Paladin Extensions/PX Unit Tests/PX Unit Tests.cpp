@@ -5,7 +5,8 @@
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 #define PX_USE_NAMESPACES
 #include "../PX Framework/PX Framework.hpp"
-#define PX_ASSERT_INFO new __LineInfo( _T( __FILE__ ), __func__, __LINE__ )
+__LineInfo lInfo( L"", "", 0 );
+#define PX_ASSERT_INFO &( lInfo = __LineInfo( L"PX Unit Tests.cpp", __func__, __LINE__ ) )
 
 namespace PX::UnitTests
 {
@@ -501,15 +502,19 @@ void OnDetach( )
 					{
 						std::ofstream ofLogFile;
 						ofLogFile.open( str_t( getenv( "APPDATA" ) ) + R"(\\PX\\UnitTest.log)", std::iostream::trunc );
+						Assert::IsTrue( ofLogFile.is_open( ) && ofLogFile.good( ), L"Log file clear filed", PX_ASSERT_INFO );
 						ofLogFile.close( );
 					}
 
 					STARTUPINFO si { sizeof( STARTUPINFO ) };
 					PROCESS_INFORMATION pi;
 
-					auto fnCleanUp = [ & ]( )
+					auto fnCleanUp = [ & ]( bool bWait )
 					{
-						TerminateProcess( pi.hProcess, 0 );
+						if ( bWait )
+							Pause( 1000 ), TerminateProcess( pi.hProcess, 0 );
+						else
+							TerminateProcess( pi.hProcess, 0 );
 						CloseHandle( pi.hProcess );
 						CloseHandle( pi.hThread );
 					};
@@ -517,19 +522,19 @@ void OnDetach( )
 					Assert::AreNotEqual( 0, CreateProcess( LR"(C:\Users\Jeremiah\Documents\Paladin-Extensions\Solutions\Paladin Extensions\PX Unit Tests\Unit Test Empty.exe)",
 													nullptr, nullptr, nullptr, FALSE, 0x0, nullptr, nullptr, &si, &pi ), L"CreateProcess failed", PX_ASSERT_INFO );
 
-					if ( !sys::LoadLibraryEx( L"Unit Test Empty.exe", LR"(C:\Users\Jeremiah\Documents\Paladin-Extensions\Solutions\Paladin Extensions\PX Unit Tests\Unit Test Test.dll)" ) )
+					if ( !sys::LoadLibraryEx( L"Unit Test Empty.exe", LR"(C:\Users\Jeremiah\Documents\Paladin-Extensions\Solutions\Paladin Extensions\PX Unit Tests\Unit Test Log.dll)" ) )
 					{
-						fnCleanUp( );
+						fnCleanUp( false );
 						Assert::Fail( L"LoadLibraryEx failed", PX_ASSERT_INFO );
 					}
 
-					Pause( 100 ); // give the process some time to run
-
-					fnCleanUp( );
+					fnCleanUp( true );
 
 					Assert::AreEqual( R"([OPN] Attached
 [NFO] Detaching
-[CLS] Detached)", GlobalTools::GetFileData( LR"(C:\Users\Jeremiah\AppData\Roaming\PX\UnitTest.log)" ).c_str( ), L"Log check failed", PX_ASSERT_INFO );
+[CLS] Detached and terminating host)", GlobalTools::GetFileData( ( wstr_t( _wgetenv( L"APPDATA" ) ) + LR"(\\PX\\UnitTest.log)" ).c_str( ) ).c_str( ), L"Log check failed", PX_ASSERT_INFO );
+
+					Assert::AreNotEqual( 0, DeleteFile( LR"(C:\Users\Jeremiah\AppData\Roaming\PX\UnitTest.log)" ), L"Delete file failed", PX_ASSERT_INFO );
 				}
 			};
 		}
