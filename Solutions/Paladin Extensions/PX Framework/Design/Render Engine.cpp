@@ -93,7 +93,7 @@ namespace PX::Render
 		wndWindow.hInstance = GetModuleHandle( nullptr );
 
 		const auto strResourceDirectory = GetPXDirectory( ) + PX_XOR( LR"(Resources\)" );
-		wndWindow.hIcon = HICON( LoadImage( nullptr, ( strResourceDirectory + PX_XOR( LR"(Paladin Logo.ico)" ) ).c_str( ),
+		wndWindow.hIcon = HICON( LoadImage( nullptr, ( strResourceDirectory + PX_XOR( LR"(PX Logo.ico)" ) ).c_str( ),
 		                                    IMAGE_ICON, 0, 0, LR_LOADFROMFILE | LR_DEFAULTSIZE | LR_SHARED ) );
 
 		wndWindow.lpszClassName = wszWindowTitle;

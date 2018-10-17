@@ -6,38 +6,37 @@ namespace PX::Files
 {
 	// INFO: Gets directory with specified directories upward
 	// PARAM: Levels to escape
-	std::wstring PX_API GetExecutablePath( );
-	std::wstring PX_API GetExecutableDirectory( );
-	std::wstring PX_API GetExecutableName( );
-	std::wstring PX_API GetPXDirectory( );
+	Types::wstr_t PX_API GetExecutablePath( );
+	Types::wstr_t PX_API GetExecutableDirectory( );
+	Types::wstr_t PX_API GetExecutableName( );
+	Types::wstr_t PX_API GetPXDirectory( );
 
 	namespace Resources
 	{
-		PX_SDK std::string strLogoICO;
-		PX_SDK std::string strLogoPNG;
+		PX_SDK Types::str_t strLogoICO;
 
-		PX_SDK std::string strCursorArrow;
-		PX_SDK std::string strCursorHand;
-		PX_SDK std::string strCursorIBeam;
+		PX_SDK Types::str_t strCursorArrow;
+		PX_SDK Types::str_t strCursorHand;
+		PX_SDK Types::str_t strCursorIBeam;
 
-		PX_SDK std::string strFontsEnvy;
-		PX_SDK std::string strFontsFontAwesome;
-		PX_SDK std::string strFontsRoboto;
-		PX_SDK std::string strFontsRobotoBold;
-		PX_SDK std::string strFontsTahoma;
-		PX_SDK std::string strFontsTahomaBold;
+		PX_SDK Types::str_t strFontsEnvy;
+		PX_SDK Types::str_t strFontsFontAwesome;
+		PX_SDK Types::str_t strFontsRoboto;
+		PX_SDK Types::str_t strFontsRobotoBold;
+		PX_SDK Types::str_t strFontsTahoma;
+		PX_SDK Types::str_t strFontsTahomaBold;
 
-		PX_SDK std::string strGameIconsCSGO;
-		PX_SDK std::string strGameIconsPUBG;
-		PX_SDK std::string strGameIconsRSIX;
+		PX_SDK Types::str_t strGameIconsCSGO;
+		PX_SDK Types::str_t strGameIconsPUBG;
+		PX_SDK Types::str_t strGameIconsRSIX;
 
-		PX_SDK std::string strGameIconsCSGOSized;
-		PX_SDK std::string strGameIconsPUBGSized;
-		PX_SDK std::string strGameIconsRSIXSized;
+		PX_SDK Types::str_t strGameIconsCSGOSized;
+		PX_SDK Types::str_t strGameIconsPUBGSized;
+		PX_SDK Types::str_t strGameIconsRSIXSized;
 
 		// INFO: Verifies vital resources have not been modified, then loads them
 		// PARAM: Hash of resources
-		bool LoadResources( const std::string& );
+		bool LoadResources( const Types::str_t& );
 	}
 
 	class CConfig: public Tools::ASingleton< CConfig >
@@ -58,8 +57,8 @@ namespace PX::Files
 		bool PX_API ChangeConfiguration( Types::wcstr_t );
 	};
 
-	bool PX_API FileRead( std::wstring wstrPath, std::wstring& wstrData, bool bRelativePath, bool bBase64 = true );
-	bool PX_API FileWrite( std::wstring wstrPath, const std::wstring& wstrData, bool bRelativePath, bool bBase64 = true );
+	bool PX_API FileRead( Types::wstr_t wstrPath, Types::wstr_t& wstrData, bool bRelativePath, bool bBase64 = true );
+	bool PX_API FileWrite( Types::wstr_t wstrPath, const Types::wstr_t& wstrData, bool bRelativePath, bool bBase64 = true );
 }
 
 #if defined PX_USE_NAMESPACES

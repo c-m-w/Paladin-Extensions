@@ -5,5 +5,5 @@
 namespace Manager
 {
 	extensions_t PX_API RetrieveExtensionInformation( );
-	std::string* PX_API RetrieveLaunchInformation( );
+	PX::Types::str_t* PX_API RetrieveLaunchInformation( );
 }

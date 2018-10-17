@@ -6,17 +6,17 @@
 
 namespace PX::Net
 {
-	std::string strCookieFile = PX_XOR( R"(cookie.px)" );
+	str_t strCookieFile = PX_XOR( R"(cookie.px)" );
 
 	static size_t WriteCallback( void *contents, size_t size, size_t nmemb, void *userp )
 	{
-		static_cast< std::string* >( userp )->append( static_cast< char* >( contents ), size * nmemb );
+		static_cast< str_t* >( userp )->append( static_cast< char* >( contents ), size * nmemb );
 		return size * nmemb;
 	}
 
-	std::string PX_API GeneratePostData( const post_data_t& dqPostData )
+	str_t PX_API GeneratePostData( const post_data_t& dqPostData )
 	{
-		std::string strFormattedData { };
+		str_t strFormattedData { };
 		for each ( auto pdPostData in dqPostData )
 		{
 			if ( !strFormattedData.empty( ) )
@@ -41,14 +41,14 @@ namespace PX::Net
 		return curl_easy_cleanup( pConnection );
 	}
 
-	std::string PX_API Request( const std::string& _strSite, const post_data_t& dqPostData )
+	str_t PX_API Request( const str_t& _strSite, const post_data_t& dqPostData )
 	{
 		const static auto szAppdata = getenv( PX_XOR( "APPDATA" ) );
 		const static auto strCookieDirectory = szAppdata + ( PX_XOR( R"(\PX\)" ) + strCookieFile );
-		std::string strResponseBuffer, strPostDataBuffer = GeneratePostData( dqPostData );
+		str_t strResponseBuffer, strPostDataBuffer = GeneratePostData( dqPostData );
 
 #ifdef _DEBUG
-		std::string strErrorBuffer;
+		str_t strErrorBuffer;
 		strErrorBuffer.resize( CURL_ERROR_SIZE );
 		px_assert( CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_ERRORBUFFER, &strErrorBuffer[ 0 ] ) );
 #endif
@@ -74,7 +74,7 @@ namespace PX::Net
 		return strResponseBuffer;
 	}
 
-	std::string PX_API RequestExtension( unsigned uGameID, bool bInformation )
+	str_t PX_API RequestExtension( unsigned uGameID, bool bInformation )
 	{
 		post_data_t dqPostData;
 		dqPostData.emplace_back( strExtensionIdentifier, std::to_string( uGameID ) );
@@ -83,7 +83,7 @@ namespace PX::Net
 		return Request( strDownloadURL, dqPostData );
 	}
 
-	std::wstring wstrCredentialsFile = PX_XOR( L"license.px" );
+	wstr_t wstrCredentialsFile = PX_XOR( L"license.px" );
 
 	nlohmann::json jsCredentials = nlohmann::json::parse( PX_XOR( R"(
 	{
@@ -111,8 +111,7 @@ namespace PX::Net
 		if ( strResponse.empty( ) )
 			return false;
 
-		FileWrite( PX_APPDATA + wstrCredentialsFile, string_cast< std::wstring >( strResponse ), false, false );
-		return true;
+		return FileWrite( PX_APPDATA + wstrCredentialsFile, string_cast< wstr_t >( strResponse ), false, false );
 	}
 
 	ELogin PX_API Login( bool* bHasExtension /*= nullptr*/ )
@@ -120,7 +119,7 @@ namespace PX::Net
 		constexpr int iGroupIDS[ PX_EXTENSION_MAX ] { -1, -1, 7, 8, 10 };
 		static auto bCreatedLicenseFile = false;
 		static auto bRecalled = false;
-		std::wstring wstrFile { };
+		wstr_t wstrFile { };
 
 		if ( bRecalled )
 			bAttemptedLicenceCreation = false;
@@ -130,7 +129,7 @@ namespace PX::Net
 
 		try
 		{
-			jsCredentials = nlohmann::json::parse( string_cast< std::string >( wstrFile ) );
+			jsCredentials = nlohmann::json::parse( string_cast< str_t >( wstrFile ) );
 		}
 		catch ( nlohmann::detail::parse_error& )
 		{
@@ -159,8 +158,8 @@ namespace PX::Net
 		}
 
 		post_data_t dqLoginData;
-		dqLoginData.emplace_back( strUserIDIdentifier, jsCredentials[ strUserIDIdentifier ].get< std::string >( ) );
-		dqLoginData.emplace_back( strSecretKeyIdentifier, jsCredentials[ strSecretKeyIdentifier ].get< std::string >( ) );
+		dqLoginData.emplace_back( strUserIDIdentifier, jsCredentials[ strUserIDIdentifier ].get< str_t >( ) );
+		dqLoginData.emplace_back( strSecretKeyIdentifier, jsCredentials[ strSecretKeyIdentifier ].get< str_t >( ) );
 		dqLoginData.emplace_back( strHardwareIdentifier, sys::GetSystemInfo( ).dump( ) );
 
 		px_assert( InitializeConnection( )
@@ -171,16 +170,16 @@ namespace PX::Net
 			return LOGIN_CONNECTION_FAILURE;
 
 		auto jsResponse = nlohmann::json::parse( Decrypt( strResponse ) );
-		const auto strSecondaryGroups = jsResponse[ "Secondary Groups" ].get< std::string >( );
+		const auto strSecondaryGroups = jsResponse[ "Secondary Groups" ].get< str_t >( );
 
 		if ( bHasExtension != nullptr )
-			for ( auto i = PX_EXTENSION_CSGO; i <= PX_EXTENSION_RSIX; i++ )
-				bHasExtension[ i ] = strSecondaryGroups.find( std::to_string( iGroupIDS[ i ] ) ) != std::string::npos;
+			for ( auto i = PX_EXTENSION_CSGO; i < PX_EXTENSION_MAX; i++ )
+				bHasExtension[ i ] = strSecondaryGroups.find( std::to_string( iGroupIDS[ i ] ) ) != str_t::npos;
 
-		return ELogin( std::stoi( jsResponse[ "Return Code" ].get< std::string >( ) ) );
+		return ELogin( std::stoi( jsResponse[ "Return Code" ].get< str_t >( ) ) );
 	}
 
-	std::string PX_API RequestExtensionInformation( unsigned uExtension )
+	str_t PX_API RequestExtensionInformation( unsigned uExtension )
 	{
 		auto jsFileInformation = nlohmann::json::parse( Decrypt( RequestExtension( uExtension, false ) ) );
 		CleanupConnection( );
@@ -195,11 +194,11 @@ namespace PX::Net
 		for ( auto u = 0u; u < uStubSize; u++ )
 			bStub[ u ] = byte_t( jsFileInformation[ PX_XOR( "Functions" ) ][ PX_XOR( "Stub" ) ][ PX_XOR( "Shellcode" ) ][ u ].get< int >( ) );
 
-		std::array< std::string, PX_EXTENSION_SECTIONS > strFileSections;
-		std::string strAssembledFile { };
+		std::array< str_t, PX_EXTENSION_SECTIONS > strFileSections;
+		str_t strAssembledFile { };
 
 		for ( int i { }; i < PX_EXTENSION_SECTIONS; i++ )
-			strFileSections.at( jsFileInformation[ PX_XOR( "DLL" ) ][ PX_XOR( "Order" ) ][ i ].get< int >( ) ) = Decrypt( jsFileInformation[ PX_XOR( "DLL" ) ][ PX_XOR( "Sections" ) ][ i ].get< std::string >( ) );
+			strFileSections.at( jsFileInformation[ PX_XOR( "DLL" ) ][ PX_XOR( "Order" ) ][ i ].get< int >( ) ) = Decrypt( jsFileInformation[ PX_XOR( "DLL" ) ][ PX_XOR( "Sections" ) ][ i ].get< str_t >( ) );
 
 		for each ( const auto& strSection in strFileSections )
 			strAssembledFile += strSection;
