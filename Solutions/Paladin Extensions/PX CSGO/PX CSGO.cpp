@@ -46,6 +46,8 @@ bool PX_API Initialize( )
 
 void PX_API OnAttach( )
 {
+	// todo check hash to that of the servers.
+
 	if ( !Initialize( ) )
 		ExitProcess( -1 );
 #if defined _DEBUG

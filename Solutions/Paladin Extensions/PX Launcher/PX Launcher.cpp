@@ -49,6 +49,8 @@ void LoadManager( )
 
 void PX_API OnLaunch( )
 {
+	// todo check hash to that of the servers.
+
 	if ( !EnsureElevation( ) )
 		Popup( EMBType::FATAL_ERROR, PX_XOR( L"You must run the program as administrator." ) );
 

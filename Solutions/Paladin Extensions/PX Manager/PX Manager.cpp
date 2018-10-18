@@ -361,6 +361,8 @@ void PX_API OnDetach( )
 
 void PX_API OnLaunch( )
 {
+	// todo check hash to that of the servers.
+
 	px_assert( !EnsureElevation( ) ); // todo something with not elevated
 
 #if defined _NDEBUG

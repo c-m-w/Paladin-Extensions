@@ -90,12 +90,47 @@ namespace PX::Functionality
 
 	void PX_API Install( )
 	{
-		
+		if ( !bCancelInstallation )
+		{
+			
+		}
+		uProgress = 1u;
+		if ( !bCancelInstallation )
+		{
+			
+		}
 	}
 
 	void PX_API Rollback( )
 	{
-		
+		bCancelInstallation = true;
+		switch ( uProgress )
+		{
+			case 1u:
+			{
+				
+			}
+			case 2u:
+			{
+				
+			}
+			case 3u:
+			{
+				
+			}
+			case 4u:
+			{
+				
+			}
+			case 5u:
+			{
+				
+			}
+			default: 
+			{
+				return;
+			}
+		}
 	}
 
 	void PX_API Uninstall( )
