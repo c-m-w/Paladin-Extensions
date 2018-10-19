@@ -169,6 +169,7 @@
     <ClCompile Include="Features\Features.cpp" />
     <ClCompile Include="PX CSGO.cpp" />
     <ClCompile Include="SDK\Tools.cpp" />
+    <ClCompile Include="SDK\Types.cpp" />
     <ClCompile Include="SDK\Valve\Math\Vector2D.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
@@ -210,6 +211,7 @@
     <ClInclude Include="SDK\Definitions.hpp" />
     <ClInclude Include="SDK\SDK.hpp" />
     <ClInclude Include="SDK\Tools.hpp" />
+    <ClInclude Include="SDK\Types.hpp" />
     <ClInclude Include="SDK\Valve\Interfaces\CClientState.hpp" />
     <ClInclude Include="SDK\Valve\Interfaces\IAppSystem.hpp" />
     <ClInclude Include="SDK\Valve\Interfaces\IBaseClientDll.hpp" />

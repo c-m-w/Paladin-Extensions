@@ -61,7 +61,7 @@ namespace PX::UI
 			dqFonts.emplace_back( AddFont( PX_XOR( "TahomaBold.ttf" ), 16 ) );
 			dqFonts.emplace_back( AddFont( PX_XOR( "Roboto.ttf" ), 26 ) );
 			dqFonts.emplace_back( AddFont( PX_XOR( "RobotoBold.ttf" ), 24 ) );
-			dqFonts.emplace_back( AddFont( PX_XOR( "Roboto.ttf" ), 16, 14 ) );
+			dqFonts.emplace_back( AddFont( PX_XOR( "Roboto.ttf" ), 14, 14 ) );
 			dqFonts.emplace_back( AddFont( PX_XOR( "RobotoBold.ttf" ), 16, 18 ) );
 			dqFonts.emplace_back( AddFont( PX_XOR( "Envy.ttf" ), 14 ) );
 			nk_d3d9_font_stash_end( );

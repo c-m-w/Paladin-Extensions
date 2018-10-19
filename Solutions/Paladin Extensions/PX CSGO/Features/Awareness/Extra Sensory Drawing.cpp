@@ -13,7 +13,7 @@ namespace PX::Features::Awareness
 	auto esdConfig = &_Settings._Awareness._ExtraSensoryDrawing;
 	auto esdEntityConfig = &esdConfig->_Players[ TEAM ];
 	CBasePlayer* pLocalPlayer = nullptr;
-	PX_DEF iMaxHealth = 100;
+	PX_DEF MAX_HEALTH = 100;
 
 	enum
 	{
@@ -59,7 +59,7 @@ namespace PX::Features::Awareness
 			if ( i == iLocalPlayerIndex )
 				continue;
 
-			const auto pEntity = reinterpret_cast< CBaseEntity* >( pEntityList->GetClientEntity( i ) );
+			const auto pEntity = entity_ptr_t( pEntityList->GetClientEntity( i ) );
 			if ( !pEntity || !ValidPlayer( pEntity ) )
 				continue;
 
@@ -72,9 +72,8 @@ namespace PX::Features::Awareness
 					info.iSettingIndex = info.bTeammate ? TEAM : ENEMY;
 					esdEntityConfig = &esdConfig->_Players[ info.iSettingIndex ];
 					info.bIsPlayer = true;
-					info.iHealth = reinterpret_cast< CBasePlayer* >( pEntity )->m_iHealth( );
+					info.iHealth = player_ptr_t( pEntity )->m_iHealth( );
 					break;
-				// TODO: add rest of options for esp.
 				default:
 					continue;
 			}
@@ -87,12 +86,8 @@ namespace PX::Features::Awareness
 
 			if ( pEntity->IsDormant( ) )
 				info.iState = STATE_DORMANT;
-			else if ( pLocalPlayer->PositionInSight( !info.bIsPlayer ? info.vecLocation : reinterpret_cast< CBasePlayer* >( info.pEntity )->GetHitboxPosition( HITBOX_HEAD ),
-													 esdEntityConfig->bMindSmoke, info.pEntity )
-					  || info.bIsPlayer && ( pLocalPlayer->PositionInSight( reinterpret_cast< CBasePlayer* >( info.pEntity )->GetHitboxPosition( HITBOX_LEFT_FOOT ),
-														esdEntityConfig->bMindSmoke, info.pEntity )
-					  || pLocalPlayer->PositionInSight( reinterpret_cast< CBasePlayer* >( info.pEntity )->GetHitboxPosition( HITBOX_RIGHT_FOOT ),
-														esdEntityConfig->bMindSmoke, info.pEntity ) ) )
+			else if ( info.bIsPlayer ? pLocalPlayer->CanSeePlayer( player_ptr_t( info.pEntity ), esdEntityConfig->bMindSmoke ) : 
+									pLocalPlayer->PositionInSight( info.vecLocation, esdEntityConfig->bMindSmoke ) )
 				info.iState = STATE_VISIBLE;
 			else
 				info.iState = STATE_INVISIBLE;
@@ -110,7 +105,7 @@ namespace PX::Features::Awareness
 	{
 		Vector vecPoints[ ] { info.vecLocation, info.vecLocation, info.vecLocation, info.vecLocation };
 		const Vector2D vecRotationPoint { info.vecLocation.x, info.vecLocation.y };
-		const auto vecViewPosition = info.vecLocation + reinterpret_cast< CBasePlayer* >( info.pEntity )->m_vecViewOffset( );
+		const auto vecViewPosition = info.vecLocation + player_ptr_t( info.pEntity )->m_vecViewOffset( );
 
 		vecPoints[ BOTTOMRIGHT ].y -= 20.f; // Bottom right
 		vecPoints[ BOTTOMRIGHT ].z -= 5.f;
@@ -122,7 +117,7 @@ namespace PX::Features::Awareness
 		vecPoints[ TOPLEFT ].z = vecViewPosition.z + 10.f;
 
 		const auto flRotation = pClientState->viewangles.y - ( pClientState->viewangles.y -
-															   CalcAngle( pLocalPlayer->GetViewPosition( ), reinterpret_cast< CBasePlayer* >( info.pEntity )->GetViewPosition( ) ).y );
+															   CalcAngle( pLocalPlayer->GetViewPosition( ), player_ptr_t( info.pEntity )->GetViewPosition( ) ).y );
 		info.bBoxInSight = true;
 		for ( auto i = 0; i < 4; i++ )
 		{
@@ -164,7 +159,7 @@ namespace PX::Features::Awareness
 				vertex_t vtxFillPoints[ 4 ];
 				if ( esdEntityConfig->bHealthBasedFillColor )
 				{
-					const auto flZDifference = ( info.vecWorldBoundingBoxCorners[ TOPLEFT ].z - info.vecWorldBoundingBoxCorners[ BOTTOMLEFT ].z ) * ( float( info.iHealth ) / float( iMaxHealth ) );
+					const auto flZDifference = ( info.vecWorldBoundingBoxCorners[ TOPLEFT ].z - info.vecWorldBoundingBoxCorners[ BOTTOMLEFT ].z ) * ( float( info.iHealth ) / float( MAX_HEALTH ) );
 					auto vecMiddleLeft = info.vecWorldBoundingBoxCorners[ BOTTOMLEFT ],
 						vecMiddleRight = info.vecWorldBoundingBoxCorners[ BOTTOMRIGHT ];
 					vecMiddleLeft.z += flZDifference;
@@ -175,7 +170,7 @@ namespace PX::Features::Awareness
 					WorldToScreen( vecMiddleLeft, vecScreenMiddleLeft );
 					WorldToScreen( vecMiddleRight, vecScreenMiddleRight );
 
-					if ( info.iHealth < iMaxHealth )
+					if ( info.iHealth < MAX_HEALTH )
 					{
 						const auto dwTop = clrTop.GetARGB( );
 						vtxFillPoints[ 0 ] = vertex_t( info.vecBoundingBoxCorners[ TOPLEFT ].x, info.vecBoundingBoxCorners[ TOPLEFT ].y, esdEntityConfig->bSolidHealthFill ? dwTop : 0 );
@@ -239,9 +234,9 @@ namespace PX::Features::Awareness
 			return;
 
 		Vector vecEntity, vecEnd;
-		auto& gtRay = reinterpret_cast< CBasePlayer* >( info.pEntity )->TraceRayFromView( );
+		auto& gtRay = player_ptr_t( info.pEntity )->TraceRayFromView( );
 
-		if ( !WorldToScreen( reinterpret_cast< CBasePlayer* >( info.pEntity )->GetHitboxPosition( HITBOX_HEAD ), vecEntity )
+		if ( !WorldToScreen( player_ptr_t( info.pEntity )->GetHitboxPosition( HITBOX_HEAD ), vecEntity )
 			 || !WorldToScreen( gtRay.endpos, vecEnd ) )
 			return;
 
@@ -299,7 +294,7 @@ namespace PX::Features::Awareness
 
 		Vector vecHitboxes[ HITBOX_MAX ];
 		for ( auto e = int( HITBOX_HEAD ); e < HITBOX_MAX; e++ )
-			if ( bUsedBone[ e ] && !WorldToScreen( reinterpret_cast< CBasePlayer* >( info.pEntity )->GetHitboxPosition( EHitbox( e ) ), vecHitboxes[ e ] ) )
+			if ( bUsedBone[ e ] && !WorldToScreen( player_ptr_t( info.pEntity )->GetHitboxPosition( EHitbox( e ) ), vecHitboxes[ e ] ) )
 				 return;
 
 		const D3DXVECTOR2 vecLegs[ ] // 7
@@ -413,14 +408,14 @@ namespace PX::Features::Awareness
 					const auto dwTop = clrTop.GetARGB( );
 					vertex_t vtxTop[ 4 ], vtxBottom[ 4 ];
 					Vector vecBar[ 4 ];
-					const auto flHealthRatio = float( info.iHealth ) / float( iMaxHealth );
+					const auto flHealthRatio = float( info.iHealth ) / float( MAX_HEALTH );
 					auto fl = 23.f;
 
 					Vector vecPoints[ ] { info.vecLocation, info.vecLocation, info.vecLocation, info.vecLocation };
 					const Vector2D vecRotationPoint { info.vecLocation.x, info.vecLocation.y };
-					const auto vecViewOffset = reinterpret_cast< CBasePlayer* >( info.pEntity )->m_vecViewOffset( );
+					const auto vecViewOffset = player_ptr_t( info.pEntity )->m_vecViewOffset( );
 					const auto flRotation = pClientState->viewangles.y - ( pClientState->viewangles.y -
-																		   CalcAngle( pLocalPlayer->GetViewPosition( ), reinterpret_cast< CBasePlayer* >( info.pEntity )->GetViewPosition( ) ).y );
+																		   CalcAngle( pLocalPlayer->GetViewPosition( ), player_ptr_t( info.pEntity )->GetViewPosition( ) ).y );
 					auto fl2 = 13.f + vecViewOffset.z;
 					vertex_t vtxOutline[ 4 ];
 
@@ -612,7 +607,7 @@ namespace PX::Features::Awareness
 			wchar_t wszName[ zPlayerNameMaxLength ];
 
 			if ( info.bIsPlayer )
-				wcscpy( wszName, string_cast< wstr_t >( Types::str_t( reinterpret_cast< CBasePlayer* >( info.pEntity )->GetPlayerInformation( ).szName ) ).c_str( ) );
+				wcscpy( wszName, string_cast< wstr_t >( Types::str_t( player_ptr_t( info.pEntity )->GetPlayerInformation( ).szName ) ).c_str( ) );
 			else
 				return;
 			Text( ED3DFont::FONT_TAHOMA, vecInformationStart.x, vecInformationStart.y, wszName, bDoOutline, dwAlignment, dwColor, dwOutline );

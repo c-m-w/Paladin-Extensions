@@ -312,7 +312,7 @@ namespace PX::UI
 		/** \brief  */
 		/** \param szData  */
 		/** \param zLength  */
-		void PX_API DisplayBox( cstr_t szData, std::size_t zLength );
+		void PX_API DisplayBox( Types::cstr_t szData, std::size_t zLength );
 	}
 }
 

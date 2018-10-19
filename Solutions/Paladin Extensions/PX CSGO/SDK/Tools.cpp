@@ -336,7 +336,7 @@ namespace PX::Tools
 		return piPlayer;
 	}
 
-	bool CBasePlayer::PositionInSight( Vector& vecPosition, bool bMindSmoke, void* pEntity /*= nullptr*/ )
+	bool CBasePlayer::PositionInSight( Vector vecPosition, bool bMindSmoke, void* pEntity /*= nullptr*/ )
 	{
 		const auto vecStart = GetViewPosition( );
 		if ( bMindSmoke && LineGoesThroughSmoke( vecStart, vecPosition ) )
@@ -350,9 +350,14 @@ namespace PX::Tools
 		rRay.Init( vecStart, vecPosition );
 		pEngineTrace->TraceRay( rRay, PX_MASK_VISIBLE, &tfFilter, &gtRay );
 
-		if ( gtRay.fraction == 1.f )
-			return true;
-		return gtRay.hit_entity == pEntity;
+		return gtRay.fraction == 1.f || gtRay.hit_entity == pEntity;
+	}
+
+	bool CBasePlayer::CanSeePlayer( CBasePlayer* pPlayer, bool bMindSmoke )
+	{
+		return PositionInSight( pPlayer->GetHitboxPosition( HITBOX_HEAD ), bMindSmoke, pPlayer )
+			|| PositionInSight( pPlayer->GetHitboxPosition( HITBOX_LEFT_FOOT ), bMindSmoke, pPlayer )
+			|| PositionInSight( pPlayer->GetHitboxPosition( HITBOX_RIGHT_FOOT ), bMindSmoke, pPlayer );
 	}
 
 	CGameTrace& CBasePlayer::TraceRayFromView( )
