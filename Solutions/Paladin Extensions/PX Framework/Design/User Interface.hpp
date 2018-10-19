@@ -118,12 +118,14 @@ namespace PX::UI
 		/** \brief Used for buttons, to indicate which corners should and should not be rounded.\n
 						LEFT - Rightmost corners will not be rounded, leftmost will be.\n
 						CENTER - No corners will be rounded.\n
-						RIGHT - Rightmost corners will be rounded, leftmost will not be. */
+						RIGHT - Rightmost corners will be rounded, leftmost will not be.\n
+						NONE - All corners will be rounded. */
 		enum class EPosition
 		{
 			LEFT,
 			CENTER,
-			RIGHT
+			RIGHT,
+			NONE
 		};
 
 		/** \brief Type of row to begin.\n
@@ -305,7 +307,7 @@ namespace PX::UI
 		/**	\param uStartY Y coordinate modification relative to where the next widget would be drawn if the row wasn't being modified. */
 		/**	\param uWidth New width. */
 		/**	\param uHeight New height. */
-		void PX_API PushCustomRow( unsigned uStartX, unsigned uStartY, unsigned uWidth, unsigned uHeight );
+		void PX_API PushCustomRow( int iStartX, int iStartY, unsigned uWidth, unsigned uHeight );
 
 		/** \brief  */
 		/** \param szData  */

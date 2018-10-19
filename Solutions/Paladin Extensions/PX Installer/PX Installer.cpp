@@ -164,37 +164,42 @@ It will also terminate immediately if you fail to comply with any term of this E
 
 * Governing Law *
 This EULA, and any dispute arising out of or in connection with this EULA, shall be governed by and construed in accordance with the laws of the United States of America.)" ) };
-				auto uLength = strlen( szWarningAndEULA[ 0 ] );
-				auto uLength2 = strlen( szWarningAndEULA[ 1 ] );
+#define _CONST const const const
+#define FAKE_CONSTEXPR const const _CONST const
+				const FAKE_CONSTEXPR static const auto const const _CONST uLength = strlen( szWarningAndEULA[ 0 ] );
+				const static auto uLength2 = strlen( szWarningAndEULA[ 1 ] );
 				SetFont( FONT_ENVY );
-				static bool bShowNextPage = false;
+				static auto bShowNextPage = false;
 				BeginRow( 30u, 1u, ROW_CUSTOM );
-				PushCustomRow( 10u, 0u, uWindowDimensions[ 0 ] - 20u, uWindowDimensions[ 1 ] - 95 );
+				PushCustomRow( 10, -7, uWindowDimensions[ 0 ] - 20u, uWindowDimensions[ 1 ] - 95 );
 				if ( !bShowNextPage )
 				{
 					DisplayBox( szWarningAndEULA[ 0 ], uLength );
 					EndRow( );
-					BeginRow( 30u, 2u, ROW_CUSTOM );
-					PushCustomRow( 10u, 100u, 100u, uWindowDimensions[ 1 ] - 90 );
+					BeginRow( 25u, 2u, ROW_CUSTOM );
+					PushCustomRow( 259u, 325u, 100u, 25u );
 					Button( EPosition::LEFT, PX_XOR( "Previous Page" ), false, true, PX_XOR( "Return to the previous page of the EULA.") );
-					PushCustomRow( 110u, 100u, 10u, uWindowDimensions[ 1 ] - 90 );
-					if ( Button( EPosition::LEFT, PX_XOR( "Next Page" ), false, false, PX_XOR( "Return to the previous page of the EULA." ) ) )
+					PushCustomRow( 361u, 325u, 100u, 25u );
+					if ( Button( EPosition::RIGHT, PX_XOR( "Next Page" ), false, false, PX_XOR( "Return to the previous page of the EULA." ) ) )
 						bShowNextPage = true;
 				}
 				else
 				{
 					DisplayBox( szWarningAndEULA[ 1 ], uLength2 );
 					EndRow( );
-					BeginRow( 30u, 2u, ROW_CUSTOM );
-					PushCustomRow( 10u, 100u, 100u, uWindowDimensions[ 1 ] - 90 );
+					BeginRow( 25u, 2u, ROW_CUSTOM );
+					PushCustomRow( 259u, 325u, 100u, 25u );
 					if ( Button( EPosition::LEFT, PX_XOR( "Previous Page" ), false, false, PX_XOR( "Return to the previous page of the EULA." ) ) )
-						bShowNextPage = true;
-					PushCustomRow( 110u, 100u, 10u, uWindowDimensions[ 1 ] - 90 );
-					Button( EPosition::LEFT, PX_XOR( "Next Page" ), false, true, PX_XOR( "Return to the previous page of the EULA." ) );
+						bShowNextPage = false;
+					PushCustomRow( 361u, 325u, 100u, 25u );
+					Button( EPosition::RIGHT, PX_XOR( "Next Page" ), false, true, PX_XOR( "Return to the previous page of the EULA." ) );
 				}
 				EndRow( );
 
-			// if button pressed, iScreen = 2;
+				BeginRow( 25u, 1u, ROW_CUSTOM );
+				PushCustomRow( 611u, 295u, 100u, 25u );
+				if ( Button( EPosition::NONE, PX_XOR( "I Accept" ), false, !bShowNextPage, PX_XOR( "Accept the EULA." ) ) )
+					iScreen = 2;
 				break;
 			}
 			case 2:
@@ -242,7 +247,7 @@ This EULA, and any dispute arising out of or in connection with this EULA, shall
 
 void PX_API DrawWindow( )
 {
-	unsigned uDimensions[ 2 ] { 720, 435 };
+	unsigned uDimensions[ 2 ] { 720, 450 };
 	InitializeRenderTarget( uDimensions, PX_XOR( L"Paladin Extensions" ) );
 	InitializeUI( PX_XOR( "Installer" ) );
 

@@ -1047,6 +1047,12 @@ namespace PX::UI
 					nk_fill_rect( pOutput, nk_rect( recBoundaries.x, recBoundaries.y, 5, recBoundaries.h ), 0.f, clrCurrentColor );
 					break;
 				}
+				case EPosition::NONE:
+				{
+					
+				}
+				break;
+
 				default:
 					return false;
 			}
@@ -1648,10 +1654,10 @@ namespace PX::UI
 			EndRow( );
 		}
 
-		void PX_API PushCustomRow( unsigned uStartX, unsigned uStartY, unsigned uWidth, unsigned uHeight )
+		void PX_API PushCustomRow( int iStartX, int iStartY, unsigned uWidth, unsigned uHeight )
 		{
 			px_assert( rowLastRowType == ROW_CUSTOM );
-			return nk_layout_space_push( pContext, nk_rect( float( uStartX ), float( uStartY ), float( uWidth ), float( uHeight ) ) );
+			return nk_layout_space_push( pContext, nk_rect( float( iStartX ), float( iStartY ), float( uWidth ), float( uHeight ) ) );
 		}
 
 		void PX_API DisplayBox( cstr_t szData, std::size_t zLength )
