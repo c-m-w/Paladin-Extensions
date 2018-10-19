@@ -46,13 +46,13 @@ void PX_API Manager::SetLayout( )
 	Header( PX_XOR( "Paladin Extensions" ), PX_XOR( "Installer" ), 600u, nullptr, fnClose );
 	if ( !Functionality::bLoggedIn && Functionality::iLoginStatus == -1 ) // Connecting to server.
 	{
-		const str_t strLoading = PX_XOR( "Loading" );
+		const auto strLoading = PX_XOR( "Loading" );
 
 		SetFont( FONT_ROBOTOSMALL );
 		BeginRow( 30u, 1u, ROW_CUSTOM );
-		auto vecTextSize = CalculateTextBounds( strLoading.c_str( ), 30u );
+		auto vecTextSize = CalculateTextBounds( strLoading, 30u );
 		PushCustomRow( unsigned( float( uWindowDimensions[ 0 ] ) / 2.f - vecTextSize.x / 2.f ), unsigned( float( uWindowDimensions[ 1 ] / 3.f ) ), unsigned( vecTextSize.x ), 30u );
-		Text( strLoading.c_str( ), { 190, 220, 5, 255 } );
+		Text( strLoading, { 220, 190, 5, 255 } );
 		EndRow( );
 
 		BeginRow( 30u, 3u, ROW_CUSTOM );
@@ -114,12 +114,14 @@ void PX_API Manager::SetLayout( )
 	else
 	{
 		static int iScreen = 1;
+		str_t strInstallDirectory;
 		switch ( iScreen )
 		{
 			case 1: // WARNING + EULA
 			{
 				cstr_t szWarningAndEULA[ ] = { PX_XOR(
-R"(WARNING: This computer program is protected by copyright law and international treaties. Unauthorized
+R"(* Warning *
+This computer program is protected by copyright law and international treaties. Unauthorized
 duplication or distribution of this program, or any portion of it or its installation products, may
 result in severe civil or criminal penalties, and will be prosecuted to the maximum extent possible
 under the law.
@@ -133,6 +135,7 @@ installation process and using the PX Installer, PX Manager, PX CSGO, PX PUBG, P
 provides a license to use the PX Installer, PX Manager, PX CSGO, PX PUBG, PX RSIX software and contains
 warranty information and liability disclaimers.
 
+* Acknowledgement and Agreement *
 By clicking "accept" or installing and/or using the PX Installer, PX Manager, PX CSGO, PX PUBG, PX RSIX
 software, you are confirming your acceptance of the Software and agreeing to become bound by the terms
 of this EULA. If you are entering into this EULA on behalf of a company or other legal entity, you
@@ -141,29 +144,32 @@ conditions. If you do not have such authority or if you do not agree with the te
 this EULA, do not install or use the Software, and you must not accept this EULA. This EULA shall apply
 only to the Software supplied by Paladin Extensions herewith regardless of whether other software is
 referred to or described herein. The terms also apply to any Paladin Extensions updates, supplements,
-Internet-based services, and support services for the Software, unless other terms accompany those
-items on delivery. If so, those terms apply.)" ),
+Internet-based services, and support services for the Software, unless otherwise specified.)" ),
 PX_XOR( R"(* License Grant *
 Paladin Extensions hereby grants you a personal, non-transferable, non-exclusive licence to use the PX
-Installer, PX Manager, PX CSGO, PX PUBG, PX RSIX software on your device in accordance with the terms of this EULA.
-You are permitted to load the PX Installer, PX Manager, PX CSGO, PX PUBG, PX RSIX software (for example a PC, laptop, mobile or tablet) under your control. You are responsible for ensuring your device meets the minimum requirements of the PX Installer, PX Manager, PX CSGO, PX PUBG, PX RSIX software.
+Installer, PX Manager, PX CSGO, PX PUBG, PX RSIX software on your device in accordance with the terms of
+this EULA. You are permitted to load the PX Installer, PX Manager, PX CSGO, PX PUBG, PX RSIX software
+(for example a PC, laptop, mobile or tablet) under your control. You are responsible for ensuring your
+device meets the minimum requirements of the PX Installer, PX Manager, PX CSGO, PX PUBG, PX RSIX software.
 You are not permitted to:
-- Edit, alter, modify, adapt, translate or otherwise change the whole or any part of the Software nor permit the whole or any part of the Software to be combined with or become incorporated in any other software, nor decompile, disassemble or reverse engineer the Software or attempt to do any such things
+- Edit, alter, modify, adapt, translate or otherwise change the whole or any part of the Software nor
+  permit the whole or any part of the Software to be combined with or become incorporated in any other
+  software, nor decompile, disassemble or reverse engineer the Software or attempt to do any such things
 - Reproduce, copy, distribute, resell or otherwise use the Software for any purpose, commercial or personal
 - Allow any third party to use the Software on behalf of or for the benefit of any third party
-- Use the Software in any way which breaches any applicable local, national or international law
 - Use the Software for any purpose that Paladin Extensions considers is a breach of this EULA
 
 * Intellectual Property and Ownership *
-Paladin Extensions shall at all times retain ownership of the Software as originally downloaded by you and all subsequent downloads of the Software by you. The Software (and the copyright, and other intellectual property rights of whatever nature in the Software, including any modifications made thereto) are and shall remain the property of Paladin Extensions.
-Paladin Extensions reserves the right to grant licences to use the Software to third parties.
+Paladin Extensions shall at all times retain ownership of the Software as originally downloaded by you
+and all subsequent downloads of the Software by you. The Software (and the copyright, and other
+intellectual property rights of whatever nature in the Software, including any modifications made
+thereto) are and shall remain the property of Paladin Extensions.
 
 * Termination *
-This EULA is effective from the date you first use the Software and shall continue until terminated. You may terminate it at any time upon written notice to Paladin Extensions.
-It will also terminate immediately if you fail to comply with any term of this EULA. Upon such termination, the licenses granted by this EULA will immediately terminate and you agree to stop all access and use of the Software. The provisions that by their nature continue and survive will survive any termination of this EULA.
-
-* Governing Law *
-This EULA, and any dispute arising out of or in connection with this EULA, shall be governed by and construed in accordance with the laws of the United States of America.)" ) };
+This EULA will terminate immediately if you fail to comply with any term of this EULA. Upon such
+termination, the licenses granted by this EULA will immediately terminate and you agree to stop all
+access and use of the Software. The provisions that by their nature continue and survive will survive
+any termination of this EULA.)" ) };
 #define _CONST const const const
 #define FAKE_CONSTEXPR const const _CONST const
 				const FAKE_CONSTEXPR static const auto const const _CONST uLength = strlen( szWarningAndEULA[ 0 ] );
@@ -180,7 +186,7 @@ This EULA, and any dispute arising out of or in connection with this EULA, shall
 					PushCustomRow( 259u, 325u, 100u, 25u );
 					Button( EPosition::LEFT, PX_XOR( "Previous Page" ), false, true, PX_XOR( "Return to the previous page of the EULA.") );
 					PushCustomRow( 361u, 325u, 100u, 25u );
-					if ( Button( EPosition::RIGHT, PX_XOR( "Next Page" ), false, false, PX_XOR( "Return to the previous page of the EULA." ) ) )
+					if ( Button( EPosition::RIGHT, PX_XOR( "Next Page" ), false, false, PX_XOR( "Continue to the next page of the EULA." ) ) )
 						bShowNextPage = true;
 				}
 				else
@@ -192,13 +198,13 @@ This EULA, and any dispute arising out of or in connection with this EULA, shall
 					if ( Button( EPosition::LEFT, PX_XOR( "Previous Page" ), false, false, PX_XOR( "Return to the previous page of the EULA." ) ) )
 						bShowNextPage = false;
 					PushCustomRow( 361u, 325u, 100u, 25u );
-					Button( EPosition::RIGHT, PX_XOR( "Next Page" ), false, true, PX_XOR( "Return to the previous page of the EULA." ) );
+					Button( EPosition::RIGHT, PX_XOR( "Next Page" ), false, true, PX_XOR( "Continue to the next page of the EULA." ) );
 				}
 				EndRow( );
 
 				BeginRow( 25u, 1u, ROW_CUSTOM );
 				PushCustomRow( 611u, 295u, 100u, 25u );
-				if ( Button( EPosition::NONE, PX_XOR( "I Accept" ), false, !bShowNextPage, PX_XOR( "Accept the EULA." ) ) )
+				if ( Button( EPosition::NONE, PX_XOR( "Accept" ), false, !bShowNextPage, PX_XOR( "Accept the EULA." ) ) )
 					iScreen = 2;
 				break;
 			}
@@ -211,6 +217,7 @@ This EULA, and any dispute arising out of or in connection with this EULA, shall
 				}
 
 				// * GET INSTALL DIRECTORY & DESIRED PRODUCTS
+				strInstallDirectory = "a";
 				// You may only install this on type FAT drives!
 				// * Opens the windows select directory garbage.
 				// * Ensure that the direction has USN Journal disabled.
@@ -221,6 +228,7 @@ This EULA, and any dispute arising out of or in connection with this EULA, shall
 			{
 				// Please ensure that these selected preferences match!
 				// - *Display directory
+				strInstallDirectory;
 				// - Display size going to be taken
 				// - Fonts to be installed
 				// - Products to be installed

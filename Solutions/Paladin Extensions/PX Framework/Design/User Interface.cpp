@@ -1664,7 +1664,7 @@ namespace PX::UI
 		{
 			int iLength = zLength;
 			iCurrentRowUsedColumns++;
-			nk_edit_string( pContext, NK_EDIT_SELECTABLE | NK_EDIT_CLIPBOARD | NK_EDIT_MULTILINE, const_cast< char* >( szData ), &iLength, iLength + 1, nk_filter_ascii );
+			nk_edit_string( pContext, NK_EDIT_READ_ONLY | NK_EDIT_MULTILINE, const_cast< char* >( szData ), &iLength, iLength + 1, nk_filter_ascii );
 		}												  
 	}
 }
