@@ -1653,5 +1653,12 @@ namespace PX::UI
 			px_assert( rowLastRowType == ROW_CUSTOM );
 			return nk_layout_space_push( pContext, nk_rect( float( uStartX ), float( uStartY ), float( uWidth ), float( uHeight ) ) );
 		}
+
+		void PX_API DisplayBox( cstr_t szData, std::size_t zLength )
+		{
+			int iLength = zLength;
+			iCurrentRowUsedColumns++;
+			nk_edit_string( pContext, NK_EDIT_SELECTABLE | NK_EDIT_CLIPBOARD | NK_EDIT_MULTILINE, const_cast< char* >( szData ), &iLength, iLength + 1, nk_filter_ascii );
+		}												  
 	}
 }

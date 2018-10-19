@@ -118,64 +118,83 @@ void PX_API Manager::SetLayout( )
 		{
 			case 1: // WARNING + EULA
 			{
-				const str_t str[ ] = { PX_XOR( "WARNING: This computer program is protected by copyright law and international treaties."
-											   "Unauthorized duplication or distribution of this program, or any portion of it or its installation products, "
-											   "may result in severe civil or criminal penalties, and will be prosecuted to the maximum extent possible under the law." ),
-									   PX_XOR( R"(End-User License Agreement (EULA) of PX Installer, PX Manager, PX CSGO, PX PUBG, PX RSIX
-This End-User License Agreement ("EULA") is a legal agreement between you and Paladin Extensions
+				cstr_t szWarningAndEULA[ ] = { PX_XOR(
+R"(WARNING: This computer program is protected by copyright law and international treaties. Unauthorized
+duplication or distribution of this program, or any portion of it or its installation products, may
+result in severe civil or criminal penalties, and will be prosecuted to the maximum extent possible
+under the law.
 
-This EULA governs your acquisition and use of our PX Installer, PX Manager, PX CSGO, PX PUBG, PX RSIX software ("Software") directly from Paladin Extensions or indirectly through a Paladin Extensions authorized reseller or distributor (a "Reseller").
+* End-User License Agreement (EULA) of PX Installer, PX Manager, PX CSGO, PX PUBG, PX RSIX *
+This End-User License Agreement ("EULA") is a legal agreement between you and Paladin Extensions.
+This EULA governs your acquisition and use of our PX Installer, PX Manager, PX CSGO, PX PUBG, PX RSIX
+software ("Software") directly from Paladin Extensions or indirectly through a Paladin Extensions
+authorized reseller or distributor (a "Reseller"). Please read this EULA carefully before completing the
+installation process and using the PX Installer, PX Manager, PX CSGO, PX PUBG, PX RSIX software. It
+provides a license to use the PX Installer, PX Manager, PX CSGO, PX PUBG, PX RSIX software and contains
+warranty information and liability disclaimers.
 
-Please read this EULA carefully before completing the installation process and using the PX Installer, PX Manager, PX CSGO, PX PUBG, PX RSIX software. It provides a license to use the PX Installer, PX Manager, PX CSGO, PX PUBG, PX RSIX software and contains warranty information and liability disclaimers.
-
-By clicking "accept" or installing and/or using the PX Installer, PX Manager, PX CSGO, PX PUBG, PX RSIX software, you are confirming your acceptance of the Software and agreeing to become bound by the terms of this EULA.
-
-If you are entering into this EULA on behalf of a company or other legal entity, you represent that you have the authority to bind such entity and its affiliates to these terms and conditions. If you do not have such authority or if you do not agree with the terms and conditions of this EULA, do not install or use the Software, and you must not accept this EULA.
-
-This EULA shall apply only to the Software supplied by Paladin Extensions herewith regardless of whether other software is referred to or described herein. The terms also apply to any Paladin Extensions updates, supplements, Internet-based services, and support services for the Software, unless other terms accompany those items on delivery. If so, those terms apply.
-
-License Grant
-Paladin Extensions hereby grants you a personal, non-transferable, non-exclusive licence to use the PX Installer, PX Manager, PX CSGO, PX PUBG, PX RSIX software on your devices in accordance with the terms of this EULA.
-
+By clicking "accept" or installing and/or using the PX Installer, PX Manager, PX CSGO, PX PUBG, PX RSIX
+software, you are confirming your acceptance of the Software and agreeing to become bound by the terms
+of this EULA. If you are entering into this EULA on behalf of a company or other legal entity, you
+represent that you have the authority to bind such entity and its affiliates to these terms and
+conditions. If you do not have such authority or if you do not agree with the terms and conditions of
+this EULA, do not install or use the Software, and you must not accept this EULA. This EULA shall apply
+only to the Software supplied by Paladin Extensions herewith regardless of whether other software is
+referred to or described herein. The terms also apply to any Paladin Extensions updates, supplements,
+Internet-based services, and support services for the Software, unless other terms accompany those
+items on delivery. If so, those terms apply.)" ),
+PX_XOR( R"(* License Grant *
+Paladin Extensions hereby grants you a personal, non-transferable, non-exclusive licence to use the PX
+Installer, PX Manager, PX CSGO, PX PUBG, PX RSIX software on your device in accordance with the terms of this EULA.
 You are permitted to load the PX Installer, PX Manager, PX CSGO, PX PUBG, PX RSIX software (for example a PC, laptop, mobile or tablet) under your control. You are responsible for ensuring your device meets the minimum requirements of the PX Installer, PX Manager, PX CSGO, PX PUBG, PX RSIX software.
-
 You are not permitted to:
-• Edit, alter, modify, adapt, translate or otherwise change the whole or any part of the Software nor permit the whole or any part of the Software to be combined with or become incorporated in any other software, nor decompile, disassemble or reverse engineer the Software or attempt to do any such things
-• Reproduce, copy, distribute, resell or otherwise use the Software for any purpose, commercial or personal
-• Allow any third party to use the Software on behalf of or for the benefit of any third party
-• Use the Software in any way which breaches any applicable local, national or international law
-• Use the Software for any purpose that Paladin Extensions considers is a breach of this EULA
+- Edit, alter, modify, adapt, translate or otherwise change the whole or any part of the Software nor permit the whole or any part of the Software to be combined with or become incorporated in any other software, nor decompile, disassemble or reverse engineer the Software or attempt to do any such things
+- Reproduce, copy, distribute, resell or otherwise use the Software for any purpose, commercial or personal
+- Allow any third party to use the Software on behalf of or for the benefit of any third party
+- Use the Software in any way which breaches any applicable local, national or international law
+- Use the Software for any purpose that Paladin Extensions considers is a breach of this EULA
 
-Intellectual Property and Ownership
+* Intellectual Property and Ownership *
 Paladin Extensions shall at all times retain ownership of the Software as originally downloaded by you and all subsequent downloads of the Software by you. The Software (and the copyright, and other intellectual property rights of whatever nature in the Software, including any modifications made thereto) are and shall remain the property of Paladin Extensions.
-
 Paladin Extensions reserves the right to grant licences to use the Software to third parties.
 
-Termination
+* Termination *
 This EULA is effective from the date you first use the Software and shall continue until terminated. You may terminate it at any time upon written notice to Paladin Extensions.
-
 It will also terminate immediately if you fail to comply with any term of this EULA. Upon such termination, the licenses granted by this EULA will immediately terminate and you agree to stop all access and use of the Software. The provisions that by their nature continue and survive will survive any termination of this EULA.
 
-Governing Law
+* Governing Law *
 This EULA, and any dispute arising out of or in connection with this EULA, shall be governed by and construed in accordance with the laws of the United States of America.)" ) };
-
-				SetFont( FONT_ROBOTOSMALL );
+				auto uLength = strlen( szWarningAndEULA[ 0 ] );
+				auto uLength2 = strlen( szWarningAndEULA[ 1 ] );
+				SetFont( FONT_ENVY );
+				static bool bShowNextPage = false;
+				BeginRow( 30u, 1u, ROW_CUSTOM );
+				PushCustomRow( 10u, 0u, uWindowDimensions[ 0 ] - 20u, uWindowDimensions[ 1 ] - 95 );
+				if ( !bShowNextPage )
 				{
-					BeginRow( 30u, 1u, ROW_CUSTOM );
-					auto vecTextSize = CalculateTextBounds( str[ 0 ].c_str( ), 30u );
-					PushCustomRow( unsigned( float( uWindowDimensions[ 0 ] ) / 2.f - vecTextSize.x / 2.f ), unsigned( float( uWindowDimensions[ 1 ] / 3.f ) ), unsigned( vecTextSize.x ), 30u );
-					Text( str[ 0 ].c_str( ), { 255, 255, 255, 255 } );
+					DisplayBox( szWarningAndEULA[ 0 ], uLength );
 					EndRow( );
+					BeginRow( 30u, 2u, ROW_CUSTOM );
+					PushCustomRow( 10u, 100u, 100u, uWindowDimensions[ 1 ] - 90 );
+					Button( EPosition::LEFT, PX_XOR( "Previous Page" ), false, true, PX_XOR( "Return to the previous page of the EULA.") );
+					PushCustomRow( 110u, 100u, 10u, uWindowDimensions[ 1 ] - 90 );
+					if ( Button( EPosition::LEFT, PX_XOR( "Next Page" ), false, false, PX_XOR( "Return to the previous page of the EULA." ) ) )
+						bShowNextPage = true;
 				}
+				else
 				{
-					BeginRow( 30u, 1u, ROW_CUSTOM );
-					auto vecTextSize = CalculateTextBounds( str[ 1 ].c_str( ), 30u );
-					PushCustomRow( unsigned( float( uWindowDimensions[ 0 ] ) / 2.f - vecTextSize.x / 2.f ), unsigned( float( uWindowDimensions[ 1 ] / 3.f ) ), unsigned( vecTextSize.x ), 30u );
-					Text( str[ 1 ].c_str( ), { 255, 255, 255, 255 } );
+					DisplayBox( szWarningAndEULA[ 1 ], uLength2 );
 					EndRow( );
+					BeginRow( 30u, 2u, ROW_CUSTOM );
+					PushCustomRow( 10u, 100u, 100u, uWindowDimensions[ 1 ] - 90 );
+					if ( Button( EPosition::LEFT, PX_XOR( "Previous Page" ), false, false, PX_XOR( "Return to the previous page of the EULA." ) ) )
+						bShowNextPage = true;
+					PushCustomRow( 110u, 100u, 10u, uWindowDimensions[ 1 ] - 90 );
+					Button( EPosition::LEFT, PX_XOR( "Next Page" ), false, true, PX_XOR( "Return to the previous page of the EULA." ) );
 				}
+				EndRow( );
 
-				// if button pressed, iScreen = 2;
+			// if button pressed, iScreen = 2;
 				break;
 			}
 			case 2:
@@ -253,7 +272,7 @@ void PX_API OnLaunch( )
 	std::thread tDraw( DrawWindow );
 	tDraw.detach( );
 
-	// review MAKE SURE TO UNCOMMENT THIS BEFORE RELEASING
+	// review MAKE SURE TO UNCOMMENT _NDEBUG THIS BEFORE RELEASING
 #if defined _NDEBUG
 	if ( !CheckForAllAnalysis( ) )
 		Request( PX_XOR( "https://www.paladin.rip/ban.php" ), { } ),

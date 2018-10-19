@@ -26,11 +26,12 @@ namespace PX::Types
 
 	PX_EXT PX_INL const byte_t* operator""_b( cstr_t szSource, const std::size_t zSize )
 	{
-		byte_t* b = new byte_t[ zSize ];
+		byte_t* b = new byte_t[ zSize + 1 ];
 		for ( std::size_t z = 0u; z < zSize; z++ )
 		{
 			b[ z ] = static_cast< byte_t >( szSource[ z ] );
 		}
+		b[ zSize ] = '\0';
 		return const_cast< const byte_t* >( b );
 	}
 
@@ -41,6 +42,7 @@ namespace PX::Types
 		{
 			b[ z ] = static_cast< byte_t >( sz16Source[ z ] );
 		}
+		b[ zSize ] = '\0';
 		return const_cast< const byte_t* >( b );
 	}
 
@@ -51,6 +53,7 @@ namespace PX::Types
 		{
 			b[ z ] = static_cast< byte_t >( sz32Source[ z ] );
 		}
+		b[ zSize ] = '\0';
 		return const_cast< const byte_t* >( b );
 	}
 
@@ -61,6 +64,7 @@ namespace PX::Types
 		{
 			b[ z ] = static_cast< byte_t >( wszSource[ z ] );
 		}
+		b[ zSize ] = '\0';
 		return const_cast< const byte_t* >( b );
 	}
 }

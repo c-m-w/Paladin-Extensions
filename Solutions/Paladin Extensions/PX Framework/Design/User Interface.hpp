@@ -306,6 +306,11 @@ namespace PX::UI
 		/**	\param uWidth New width. */
 		/**	\param uHeight New height. */
 		void PX_API PushCustomRow( unsigned uStartX, unsigned uStartY, unsigned uWidth, unsigned uHeight );
+
+		/** \brief  */
+		/** \param szData  */
+		/** \param zLength  */
+		void PX_API DisplayBox( cstr_t szData, std::size_t zLength );
 	}
 }
 

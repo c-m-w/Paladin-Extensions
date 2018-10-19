@@ -258,55 +258,159 @@ namespace PX::UnitTests
 
 				TEST_METHOD( StringCast )
 				{
-#define PX_STR "the quick brown fox jumps over the lazy dog"
-#define PX_STR16 u"the quick brown fox jumps over the lazy dog"
-#define PX_STR32 U"the quick brown fox jumps over the lazy dog"
-#define PX_WSTR L"the quick brown fox jumps over the lazy dog"
-#define PX_BSTR "the quick brown fox jumps over the lazy dog\0"_b
-					cstr_t sz = PX_STR;
-					cstr16_t usz = PX_STR16;
-					cstr32_t Usz = PX_STR32;
-					wcstr_t wsz = PX_WSTR;
-					bcstr_t bsz = PX_BSTR;
-					str_t str = PX_STR;
-					str16_t ustr = PX_STR16;
-					str32_t Ustr = PX_STR32;
-					wstr_t wstr = PX_WSTR;
-					bstr_t bstr = PX_BSTR;
+					cstr_t sz = "`1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./~!@#$%^&*()_+QWERTYUIOP{}|ASDFGHJKL:\"ZXCVBNM<>?\n\t\0";
+					cstr16_t usz = u"`1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./~!@#$%^&*()_+QWERTYUIOP{}|ASDFGHJKL:\"ZXCVBNM<>?\n\t\0";
+					cstr32_t Usz = U"`1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./~!@#$%^&*()_+QWERTYUIOP{}|ASDFGHJKL:\"ZXCVBNM<>?\n\t\0";
+					wcstr_t wsz = L"`1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./~!@#$%^&*()_+QWERTYUIOP{}|ASDFGHJKL:\"ZXCVBNM<>?\n\t\0";
+					bcstr_t bsz = "`1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./~!@#$%^&*()_+QWERTYUIOP{}|ASDFGHJKL:\"ZXCVBNM<>?\n\t\0"_b;
 
-					// todo: implement c16, c32, wc converter: https://en.cppreference.com/w/cpp/locale/codecvt
-#define PX_S__CHECK( s_, _str_t ) \
-					{ \
-						Assert::IsTrue( string_cast< str_t >( s_ ) == sz, L"\""#_str_t"\" to \"cstr_t\" cast check failed)", PX_ASSERT_INFO ); \
-						/*Assert::IsTrue( string_cast< str16_t >( s_ ) == usz, L"\""#_str_t"\" to \"cstr16_t\" cast check failed)", PX_ASSERT_INFO );*/ \
-						/*Assert::IsTrue( string_cast< str32_t >( s_ ) == Usz, L"\""#_str_t"\" to \"cstr32_t\" cast check failed)", PX_ASSERT_INFO );*/ \
-						Assert::IsTrue( string_cast< wstr_t >( s_ ) == wsz, L"\""#_str_t"\" to \"wcstr_t\" cast check failed)", PX_ASSERT_INFO ); \
-						/*Assert::IsTrue( string_cast< bstr_t >( s_ ) == bsz, L"\""#_str_t"\" to \"bcstr_t\" cast check failed)", PX_ASSERT_INFO );*/ \
-						\
-						Assert::IsTrue( string_cast< str_t >( s_ ) == str, L"\""#_str_t"\" to  to \"str_t\" cast check failed)", PX_ASSERT_INFO ); \
-						/*Assert::IsTrue( string_cast< str16_t >( s_ ) == ustr, L"\""#_str_t"\" to  to \"str16_t\" cast check failed)", PX_ASSERT_INFO );*/ \
-						/*Assert::IsTrue( string_cast< str32_t >( s_ ) == Ustr, L"\""#_str_t"\" to  to \"str32_t\" cast check failed)", PX_ASSERT_INFO );*/ \
-						Assert::IsTrue( string_cast< wstr_t >( s_ ) == wstr, L"\""#_str_t"\" to  to \"wstr_t\" cast check failed)", PX_ASSERT_INFO ); \
-						/*Assert::IsTrue( string_cast< bstr_t >( s_ ) == bstr, L"\""#_str_t"\" to  to \"bstr_t\" cast check failed)", PX_ASSERT_INFO );*/ \
-					}
+					str_t str = sz;
+					str16_t ustr = usz;
+					str32_t Ustr = Usz;
+					wstr_t wstr = wsz;
+					bstr_t bstr = bsz;
 
-					PX_S__CHECK( sz, cstr_t );
-					//PX_S__CHECK( usz, cstr16_t );
-					//PX_S__CHECK( Usz, cstr32_t );
-					PX_S__CHECK( wsz, wcstr_t );
-					//PX_S__CHECK( bsz, bcstr_t );
+					// cstr_t
+					{
+						Assert::IsTrue( string_cast< str_t >( sz ) == sz, L"\"""cstr_t""\" to \"cstr_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< str16_t >( sz ) == usz, L"\"""cstr_t""\" to \"cstr16_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< str32_t >( sz ) == Usz, L"\"""cstr_t""\" to \"cstr32_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< wstr_t >( sz ) == wsz, L"\"""cstr_t""\" to \"wcstr_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< bstr_t >( sz ) == bsz, L"\"""cstr_t""\" to \"bcstr_t\" cast check failed)", PX_ASSERT_INFO );
 
-					PX_S__CHECK( str, str_t );
-					//PX_S__CHECK( ustr, str16_t );
-					//PX_S__CHECK( Ustr, str32_t );
-					PX_S__CHECK( wstr, wstr_t );
-					//PX_S__CHECK( bstr, bstr_t );
-#undef PX_STR
-#undef PX_STR16
-#undef PX_STR32
-#undef PX_WSTR
-#undef PX_BSTR
-#undef PX_S__CHECK
+						Assert::IsTrue( string_cast< str_t >( sz ) == str, L"\"""cstr_t""\" to  to \"str_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< str16_t >( sz ) == ustr, L"\"""cstr_t""\" to  to \"str16_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< str32_t >( sz ) == Ustr, L"\"""cstr_t""\" to  to \"str32_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< wstr_t >( sz ) == wstr, L"\"""cstr_t""\" to  to \"wstr_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< bstr_t >( sz ) == bstr, L"\"""cstr_t""\" to  to \"bstr_t\" cast check failed)", PX_ASSERT_INFO );
+					};
+					// cstr16_t
+					{
+						Assert::IsTrue( string_cast< str_t >( usz ) == sz, L"\"""cstr16_t""\" to \"cstr_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< str16_t >( usz ) == usz, L"\"""cstr16_t""\" to \"cstr16_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< str32_t >( usz ) == Usz, L"\"""cstr16_t""\" to \"cstr32_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< wstr_t >( usz ) == wsz, L"\"""cstr16_t""\" to \"wcstr_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< bstr_t >( usz ) == bsz, L"\"""cstr16_t""\" to \"bcstr_t\" cast check failed)", PX_ASSERT_INFO );
+
+						Assert::IsTrue( string_cast< str_t >( usz ) == str, L"\"""cstr16_t""\" to  to \"str_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< str16_t >( usz ) == ustr, L"\"""cstr16_t""\" to  to \"str16_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< str32_t >( usz ) == Ustr, L"\"""cstr16_t""\" to  to \"str32_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< wstr_t >( usz ) == wstr, L"\"""cstr16_t""\" to  to \"wstr_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< bstr_t >( usz ) == bstr, L"\"""cstr16_t""\" to  to \"bstr_t\" cast check failed)", PX_ASSERT_INFO );
+					};
+					// cstr32_t
+					{
+						Assert::IsTrue( string_cast< str_t >( Usz ) == sz, L"\"""cstr32_t""\" to \"cstr_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< str16_t >( Usz ) == usz, L"\"""cstr32_t""\" to \"cstr16_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< str32_t >( Usz ) == Usz, L"\"""cstr32_t""\" to \"cstr32_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< wstr_t >( Usz ) == wsz, L"\"""cstr32_t""\" to \"wcstr_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< bstr_t >( Usz ) == bsz, L"\"""cstr32_t""\" to \"bcstr_t\" cast check failed)", PX_ASSERT_INFO );
+
+						Assert::IsTrue( string_cast< str_t >( Usz ) == str, L"\"""cstr32_t""\" to  to \"str_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< str16_t >( Usz ) == ustr, L"\"""cstr32_t""\" to  to \"str16_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< str32_t >( Usz ) == Ustr, L"\"""cstr32_t""\" to  to \"str32_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< wstr_t >( Usz ) == wstr, L"\"""cstr32_t""\" to  to \"wstr_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< bstr_t >( Usz ) == bstr, L"\"""cstr32_t""\" to  to \"bstr_t\" cast check failed)", PX_ASSERT_INFO );
+					};
+					// wcstr_t
+					{
+						Assert::IsTrue( string_cast< str_t >( wsz ) == sz, L"\"""wcstr_t""\" to \"cstr_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< str16_t >( wsz ) == usz, L"\"""wcstr_t""\" to \"cstr16_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< str32_t >( wsz ) == Usz, L"\"""wcstr_t""\" to \"cstr32_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< wstr_t >( wsz ) == wsz, L"\"""wcstr_t""\" to \"wcstr_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< bstr_t >( wsz ) == bsz, L"\"""wcstr_t""\" to \"bcstr_t\" cast check failed)", PX_ASSERT_INFO );
+
+						Assert::IsTrue( string_cast< str_t >( wsz ) == str, L"\"""wcstr_t""\" to  to \"str_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< str16_t >( wsz ) == ustr, L"\"""wcstr_t""\" to  to \"str16_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< str32_t >( wsz ) == Ustr, L"\"""wcstr_t""\" to  to \"str32_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< wstr_t >( wsz ) == wstr, L"\"""wcstr_t""\" to  to \"wstr_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< bstr_t >( wsz ) == bstr, L"\"""wcstr_t""\" to  to \"bstr_t\" cast check failed)", PX_ASSERT_INFO );
+					};
+					// bcstr_t
+					{
+						Assert::IsTrue( string_cast< str_t >( bsz ) == sz, L"\"""bcstr_t""\" to \"cstr_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< str16_t >( bsz ) == usz, L"\"""bcstr_t""\" to \"cstr16_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< str32_t >( bsz ) == Usz, L"\"""bcstr_t""\" to \"cstr32_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< wstr_t >( bsz ) == wsz, L"\"""bcstr_t""\" to \"wcstr_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< bstr_t >( bsz ) == bsz, L"\"""bcstr_t""\" to \"bcstr_t\" cast check failed)", PX_ASSERT_INFO );
+
+						Assert::IsTrue( string_cast< str_t >( bsz ) == str, L"\"""bcstr_t""\" to  to \"str_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< str16_t >( bsz ) == ustr, L"\"""bcstr_t""\" to  to \"str16_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< str32_t >( bsz ) == Ustr, L"\"""bcstr_t""\" to  to \"str32_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< wstr_t >( bsz ) == wstr, L"\"""bcstr_t""\" to  to \"wstr_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< bstr_t >( bsz ) == bstr, L"\"""bcstr_t""\" to  to \"bstr_t\" cast check failed)", PX_ASSERT_INFO );
+					};
+
+					// str_t
+					{
+						Assert::IsTrue( string_cast< str_t >( str ) == sz, L"\"""str_t""\" to \"cstr_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< str16_t >( str ) == usz, L"\"""str_t""\" to \"cstr16_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< str32_t >( str ) == Usz, L"\"""str_t""\" to \"cstr32_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< wstr_t >( str ) == wsz, L"\"""str_t""\" to \"wcstr_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< bstr_t >( str ) == bsz, L"\"""str_t""\" to \"bcstr_t\" cast check failed)", PX_ASSERT_INFO );
+
+						Assert::IsTrue( string_cast< str_t >( str ) == str, L"\"""str_t""\" to  to \"str_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< str16_t >( str ) == ustr, L"\"""str_t""\" to  to \"str16_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< str32_t >( str ) == Ustr, L"\"""str_t""\" to  to \"str32_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< wstr_t >( str ) == wstr, L"\"""str_t""\" to  to \"wstr_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< bstr_t >( str ) == bstr, L"\"""str_t""\" to  to \"bstr_t\" cast check failed)", PX_ASSERT_INFO );
+					};
+					// str16_t
+					{
+						Assert::IsTrue( string_cast< str_t >( ustr ) == sz, L"\"""str16_t""\" to \"cstr_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< str16_t >( ustr ) == usz, L"\"""str16_t""\" to \"cstr16_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< str32_t >( ustr ) == Usz, L"\"""str16_t""\" to \"cstr32_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< wstr_t >( ustr ) == wsz, L"\"""str16_t""\" to \"wcstr_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< bstr_t >( ustr ) == bsz, L"\"""str16_t""\" to \"bcstr_t\" cast check failed)", PX_ASSERT_INFO );
+
+						Assert::IsTrue( string_cast< str_t >( ustr ) == str, L"\"""str16_t""\" to  to \"str_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< str16_t >( ustr ) == ustr, L"\"""str16_t""\" to  to \"str16_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< str32_t >( ustr ) == Ustr, L"\"""str16_t""\" to  to \"str32_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< wstr_t >( ustr ) == wstr, L"\"""str16_t""\" to  to \"wstr_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< bstr_t >( ustr ) == bstr, L"\"""str16_t""\" to  to \"bstr_t\" cast check failed)", PX_ASSERT_INFO );
+					};
+					// str32_t
+					{
+						Assert::IsTrue( string_cast< str_t >( Ustr ) == sz, L"\"""str32_t""\" to \"cstr_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< str16_t >( Ustr ) == usz, L"\"""str32_t""\" to \"cstr16_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< str32_t >( Ustr ) == Usz, L"\"""str32_t""\" to \"cstr32_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< wstr_t >( Ustr ) == wsz, L"\"""str32_t""\" to \"wcstr_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< bstr_t >( Ustr ) == bsz, L"\"""str32_t""\" to \"bcstr_t\" cast check failed)", PX_ASSERT_INFO );
+
+						Assert::IsTrue( string_cast< str_t >( Ustr ) == str, L"\"""str32_t""\" to  to \"str_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< str16_t >( Ustr ) == ustr, L"\"""str32_t""\" to  to \"str16_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< str32_t >( Ustr ) == Ustr, L"\"""str32_t""\" to  to \"str32_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< wstr_t >( Ustr ) == wstr, L"\"""str32_t""\" to  to \"wstr_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< bstr_t >( Ustr ) == bstr, L"\"""str32_t""\" to  to \"bstr_t\" cast check failed)", PX_ASSERT_INFO );
+					};
+					// wstr_t
+					{
+						Assert::IsTrue( string_cast< str_t >( wstr ) == sz, L"\"""wstr_t""\" to \"cstr_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< str16_t >( wstr ) == usz, L"\"""wstr_t""\" to \"cstr16_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< str32_t >( wstr ) == Usz, L"\"""wstr_t""\" to \"cstr32_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< wstr_t >( wstr ) == wsz, L"\"""wstr_t""\" to \"wcstr_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< bstr_t >( wstr ) == bsz, L"\"""wstr_t""\" to \"bcstr_t\" cast check failed)", PX_ASSERT_INFO );
+
+						Assert::IsTrue( string_cast< str_t >( wstr ) == str, L"\"""wstr_t""\" to  to \"str_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< str16_t >( wstr ) == ustr, L"\"""wstr_t""\" to  to \"str16_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< str32_t >( wstr ) == Ustr, L"\"""wstr_t""\" to  to \"str32_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< wstr_t >( wstr ) == wstr, L"\"""wstr_t""\" to  to \"wstr_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< bstr_t >( wstr ) == bstr, L"\"""wstr_t""\" to  to \"bstr_t\" cast check failed)", PX_ASSERT_INFO );
+					};
+					// bstr_t
+					{
+						Assert::IsTrue( string_cast< str_t >( bstr ) == sz, L"\"""bstr_t""\" to \"cstr_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< str16_t >( bstr ) == usz, L"\"""bstr_t""\" to \"cstr16_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< str32_t >( bstr ) == Usz, L"\"""bstr_t""\" to \"cstr32_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< wstr_t >( bstr ) == wsz, L"\"""bstr_t""\" to \"wcstr_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< bstr_t >( bstr ) == bsz, L"\"""bstr_t""\" to \"bcstr_t\" cast check failed)", PX_ASSERT_INFO );
+
+						Assert::IsTrue( string_cast< str_t >( bstr ) == str, L"\"""bstr_t""\" to  to \"str_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< str16_t >( bstr ) == ustr, L"\"""bstr_t""\" to  to \"str16_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< str32_t >( bstr ) == Ustr, L"\"""bstr_t""\" to  to \"str32_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< wstr_t >( bstr ) == wstr, L"\"""bstr_t""\" to  to \"wstr_t\" cast check failed)", PX_ASSERT_INFO );
+						Assert::IsTrue( string_cast< bstr_t >( bstr ) == bstr, L"\"""bstr_t""\" to  to \"bstr_t\" cast check failed)", PX_ASSERT_INFO );
+					};
 				}
 				// todo: @cole tests for EstimateTableLength, GetModuleEnd, FindAddressOrigin, CHook, OpenLink, FormatShellcode
 			};
