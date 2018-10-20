@@ -156,7 +156,8 @@ namespace PX
 			const auto pCmd = Tools::GetUserCmd( sequence_number );
 
 			if ( nullptr == pLocalPlayer
-				 || nullptr == pCmd )
+				 || nullptr == pCmd
+				 || pCmd->command_number == 0 )
 				return;
 
 			{
