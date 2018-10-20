@@ -2,7 +2,7 @@
 
 #define NOMINMAX
 #include <Windows.h>
-#include <stdio.h>
+#include <cstdio>
 #include <cassert>
 
 //-----------------------------------------------------------------------------

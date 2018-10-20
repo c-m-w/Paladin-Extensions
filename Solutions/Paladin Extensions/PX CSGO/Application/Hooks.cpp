@@ -183,7 +183,7 @@ namespace PX
 
 		void __stdcall PaintTraverse( vgui::VPANEL panel, bool forceRepaint, bool allowForce )
 		{
-			auto szDesiredPanelName = PX_XOR( "FocusOverlayPanel" );
+			const auto szDesiredPanelName = PX_XOR( "FocusOverlayPanel" );
 			static auto fnOriginal = hkPanel->GetOriginalFunction< paint_traverse_t >( uPaintTraverse );
 			static auto vpDesiredPanelID = vgui::VPANEL( 0u );
 

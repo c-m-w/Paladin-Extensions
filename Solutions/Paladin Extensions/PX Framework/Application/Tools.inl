@@ -67,6 +67,11 @@ namespace PX::Tools
 		return reinterpret_cast< _fn >( uIndex == 0 || uIndex > sTable ? ptr_t( ) : pOldTable[ uIndex ] );
 	}
 
+	template< typename _t > PX_EXT PX_INL void Wait( Types::moment_t mmtTime )
+	{
+		std::this_thread::sleep_for( _t( mmtTime ) );
+	}
+
 	template< typename _To, typename _From > _To PX_API string_cast( const _From& _Source )
 	{
 		return AStringCastImplementation< _To, _From >::Cast( _Source );

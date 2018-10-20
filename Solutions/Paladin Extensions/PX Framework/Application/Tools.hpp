@@ -119,6 +119,8 @@ namespace PX::Tools
 	/** \param mmtPauseLength Length to pause in milliseconds */
 	void PX_API Pause( Types::moment_t mmtPauseLength = 1ull );
 
+	template< typename _t = std::chrono::milliseconds > PX_EXT PX_INL void Wait( Types::moment_t mmtTime );
+
 	// Get main screen dimensions
 	unsigned* GetScreenDimensions( );
 

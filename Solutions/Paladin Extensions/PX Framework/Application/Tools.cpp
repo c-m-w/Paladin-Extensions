@@ -322,6 +322,7 @@ namespace PX::Tools
 		// WinAPI resolution is only in tenths of a microsecond
 		return std::chrono::duration_cast< std::chrono::nanoseconds >( std::chrono::system_clock::now( ).time_since_epoch( ) ).count( ) / 100;
 	}
+
 	PX_EXT PX_INL void PX_API Pause( const moment_t mmtPauseLength /*= 1ull*/ ) // only accept time in milliseconds as that's all we can guarantee
 	{
 		if ( 0 == mmtPauseLength )

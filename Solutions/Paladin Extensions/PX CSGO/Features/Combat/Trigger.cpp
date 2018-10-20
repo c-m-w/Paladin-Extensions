@@ -15,7 +15,7 @@ namespace PX::Features::Combat
 		CGameTrace gtRay;
 
 		Tools::TransformAngle( pCmd->viewangles, vecEnd );
-		vecEnd *= 8192;
+		vecEnd *= 8192.f;
 		vecEnd += pLocalPlayer->GetViewPosition( );
 		tfFilter.pSkip = pLocalPlayer;
 		rRay.Init( pLocalPlayer->GetViewPosition( ), vecEnd );

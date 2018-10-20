@@ -8,6 +8,7 @@
 /// Only use a load library injector that creates a new thread in debug mode.
 #ifdef _DEBUG
 #define PX_INSECURE_INITIALIZATION
+std::atomic< bool > bUnload = false;
 #endif
 
 #define PX_INSTANCE_ID L"CSGO"
@@ -51,8 +52,13 @@ void PX_API OnAttach( )
 	if ( !Initialize( ) )
 		ExitProcess( -1 );
 #if defined _DEBUG
-	while ( !GetAsyncKeyState( VK_END ) )
-		PX::Tools::Pause( 1 );
+	PX_INPUT.AddKeyCallback( VK_END, [ ]( bool bPressed )
+	{
+		bUnload = true;
+	} );
+
+	while ( !bUnload )
+		PX::Tools::Wait( 1ull );
 	PX::Hooks::Destruct( );
 	PX::UI::Manager::Destruct( );
 	PX::Render::Destruct( );
@@ -63,4 +69,5 @@ void PX_API OnAttach( )
 
 void PX_API OnDetach( )
 {
+
 }
