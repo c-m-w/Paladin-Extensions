@@ -7,6 +7,8 @@
 #include "CGlobalVars.hpp"
 #include "CHandle.hpp"
 #include "characterset.hpp"
+#include "checksum_crc.hpp"
+#include "checksum_md5.hpp"
 #include "ClientClass.hpp"
 #include "Color.hpp"
 #include "CUserCmd.hpp"

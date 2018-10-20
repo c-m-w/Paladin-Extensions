@@ -13,6 +13,8 @@ namespace PX::Tools
 	void PX_API OnPaintTraverse( );
 	CBasePlayer* PX_API GetLocalPlayer( );
 	CUserCmd* PX_API GetUserCmd( int iSequenceNumber );
+	CVerifiedUserCmd* PX_API GetVerifiedUserCmd( int iSequenceNumber );
+	CRC32_t PX_API GetCmdHash( CUserCmd* pCmd );
 	bool PX_API ValidPlayer( void* pEntity );
 
 	// Game fucntions

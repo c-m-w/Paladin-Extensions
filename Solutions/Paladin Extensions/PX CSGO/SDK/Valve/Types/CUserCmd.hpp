@@ -60,7 +60,6 @@ public:
 
 class CVerifiedUserCmd
 {
-	typedef unsigned int CRC32_t;
 public:
 	CUserCmd m_cmd;
 	CRC32_t  m_crc;

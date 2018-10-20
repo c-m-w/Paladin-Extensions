@@ -154,15 +154,20 @@ namespace PX
 
 			const auto pLocalPlayer = Tools::GetLocalPlayer( );
 			const auto pCmd = Tools::GetUserCmd( sequence_number );
+			const auto pVerifiedCmd = Tools::GetVerifiedUserCmd( sequence_number );
 
 			if ( nullptr == pLocalPlayer
 				 || nullptr == pCmd
-				 || pCmd->command_number == 0 )
+				 || pCmd->command_number == 0
+				 || nullptr == pVerifiedCmd )
 				return;
 
 			{
 				Features::Combat::Trigger( pLocalPlayer, pCmd );
 			}
+
+			pVerifiedCmd->m_cmd = *pCmd;
+			pVerifiedCmd->m_crc = Tools::GetCmdHash( pCmd );
 		}
 
 		int __stdcall DoPostScreenEffects( int iUnknown )

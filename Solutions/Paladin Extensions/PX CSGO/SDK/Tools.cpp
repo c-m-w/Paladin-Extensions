@@ -29,6 +29,35 @@ namespace PX::Tools
 		return &pInput->m_pCommands[ iSequenceNumber % MULTIPLAYER_BACKUP ];
 	}
 
+	CVerifiedUserCmd* PX_API GetVerifiedUserCmd( int iSequenceNumber )
+	{
+		return &pInput->m_pVerifiedCommands[ iSequenceNumber % MULTIPLAYER_BACKUP ];
+	}
+
+	CRC32_t GetCmdHash( CUserCmd* pCmd )
+	{
+		CRC32_t crcHash;
+
+		CRC32_Init( &crcHash );
+		CRC32_ProcessBuffer( &crcHash, &pCmd->command_number, sizeof( pCmd->command_number ) );
+		CRC32_ProcessBuffer( &crcHash, &pCmd->tick_count, sizeof( pCmd->tick_count ) );
+		CRC32_ProcessBuffer( &crcHash, &pCmd->viewangles, sizeof( pCmd->viewangles ) );
+		CRC32_ProcessBuffer( &crcHash, &pCmd->aimdirection, sizeof( pCmd->aimdirection ) );
+		CRC32_ProcessBuffer( &crcHash, &pCmd->forwardmove, sizeof( pCmd->forwardmove ) );
+		CRC32_ProcessBuffer( &crcHash, &pCmd->sidemove, sizeof( pCmd->sidemove ) );
+		CRC32_ProcessBuffer( &crcHash, &pCmd->upmove, sizeof( pCmd->upmove ) );
+		CRC32_ProcessBuffer( &crcHash, &pCmd->buttons, sizeof( pCmd->buttons ) );
+		CRC32_ProcessBuffer( &crcHash, &pCmd->impulse, sizeof( pCmd->impulse ) );
+		CRC32_ProcessBuffer( &crcHash, &pCmd->weaponselect, sizeof( pCmd->weaponselect ) );
+		CRC32_ProcessBuffer( &crcHash, &pCmd->weaponsubtype, sizeof( pCmd->weaponsubtype ) );
+		CRC32_ProcessBuffer( &crcHash, &pCmd->random_seed, sizeof( pCmd->random_seed ) );
+		CRC32_ProcessBuffer( &crcHash, &pCmd->mousedx, sizeof( pCmd->mousedx ) );
+		CRC32_ProcessBuffer( &crcHash, &pCmd->mousedy, sizeof( pCmd->mousedy ) );
+		CRC32_Final( &crcHash );
+
+		return crcHash;
+	}
+
 	bool PX_API ValidPlayer( void* pEntity )
 	{
 		if ( !pEntity )
