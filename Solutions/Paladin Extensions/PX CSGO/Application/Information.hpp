@@ -82,13 +82,14 @@ namespace PX::Information
 		PX_SDK IBaseClientDLL* pClientBase = nullptr;
 		PX_SDK IClientMode* pClientMode = nullptr;
 		PX_SDK CGlowObjectManager* pGlowObjectManager = nullptr;
+		PX_SDK IInputSystem* pInputSystem = nullptr;
 		PX_SDK IVEngineClient* pEngineClient = nullptr;
 		PX_SDK ISurface* pSurface = nullptr;
 		PX_SDK IPanel* pPanel = nullptr;
 		PX_SDK IClientEntityList* pEntityList = nullptr;
 		PX_SDK IEngineTrace* pEngineTrace = nullptr;
 		PX_SDK IVModelInfoClient* pModelInfo = nullptr;
-		PX_SDK IInputSystem* pInputSystem = nullptr;
+		PX_SDK CInput* pInput = nullptr;
 	}
 
 	namespace NetworkedVariableManager // http://www.bailopan.net/table_dump.txt

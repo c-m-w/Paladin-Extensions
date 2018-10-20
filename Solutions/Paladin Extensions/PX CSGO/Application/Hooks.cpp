@@ -153,12 +153,14 @@ namespace PX
 			fnOriginal( sequence_number, input_sample_frametime, active );
 
 			const auto pLocalPlayer = Tools::GetLocalPlayer( );
-			if ( nullptr == pLocalPlayer )
+			const auto pCmd = Tools::GetUserCmd( sequence_number );
+
+			if ( nullptr == pLocalPlayer
+				 || nullptr == pCmd )
 				return;
-			const auto pCmd = Tools::
 
 			{
-				
+				Features::Combat::Trigger( pLocalPlayer, pCmd );
 			}
 		}
 

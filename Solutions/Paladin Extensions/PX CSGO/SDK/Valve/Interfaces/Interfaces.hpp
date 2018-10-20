@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CClientState.hpp"
+#include "CInput.hpp"
 #include "IAppSystem.hpp"
 #include "IBaseClientDll.hpp"
 #include "IBaseInterface.hpp"

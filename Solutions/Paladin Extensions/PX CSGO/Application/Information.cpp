@@ -81,6 +81,8 @@ namespace PX::Information
 																			   + jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Client Mode" ) ].get< int >( ) );
 			pGlowObjectManager = *reinterpret_cast< CGlowObjectManager** >( Modules::mClient.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Glow Object Manager" ) ].get< str_t >( ) )
 															  + jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Glow Object Manager" ) ].get< int >( ) );
+			pInput = *reinterpret_cast< CInput** >( Modules::mClient.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Input" ) ].get< str_t >( ) )
+																+ jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Input" ) ].get< int >( ) );
 
 			pClientBase = reinterpret_cast< IBaseClientDLL* >( Modules::mClient.ciFactory( 
 				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Client Base" ) ].get< str_t >( ).c_str( ), nullptr ) );
@@ -104,6 +106,7 @@ namespace PX::Information
 				&& nullptr != pDevice
 				&& nullptr != pClientMode
 				&& nullptr != pGlowObjectManager
+				&& nullptr != pInput
 				&& nullptr != pClientState
 				&& nullptr != pClientBase
 				&& nullptr != pEngineClient

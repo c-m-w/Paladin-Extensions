@@ -14,6 +14,7 @@
             "Client Mode": 1,
             "Glow Object Manager": 3,
             "Client State": 1,
+            "Input": 1,
             "Send Packets": 1,
             "Global Variables":  1,
             "Line Goes Through Smoke": 0,
@@ -22,19 +23,20 @@
             "Set Clantag": 0,
             "Reveal Ranks": 0
         },
-        "Signatures": {
+      "Signatures": {
             "Device": "A1 ? ? ? ? 50 8B 08 FF 51 0C",
             "Client Mode": "A1 ? ? ? ? 8B 80 ? ? ? ? 5D",
             "Glow Object Manager": "0F 11 05 ? ? ? ? 83 C8 01",
             "Client State": "A1 ? ? ? ? 8B 80 ? ? ? ? C3",
-            "Send Packets":  "B3 01 8B 01 8B 40 10 FF D0 84 C0 74 0F 80 BF",
+            "Input": "B9 ? ? ? ? 8B 40 38 FF D0 84 C0 0F 85",
+            "Send Packets": "B3 01 8B 01 8B 40 10 FF D0 84 C0 74 0F 80 BF",
             "Global Variables": "A1 ? ? ? ? 5E 8B 40 10",
             "Line Goes Through Smoke": "55 8B EC 83 EC 08 8B 15 ? ? ? ? 0F 57 C0",
             "Get CS Weapon Data": "55 8B EC 81 EC ? ? ? ? 53 8B D9 56 57 8D 8B",
             "Is Reloading": "C6 87 ? ? ? ? ? 8B 06 8B CE FF 90",
             "Set Clantag": "53 56 57 8B DA 8B F9 FF 15",
             "Reveal Ranks": "55 8B EC 8B 0D ? ? ? ? 68"
-        }
+      }
     },
     "Versions": {
         "Client Base": "VClient018",
