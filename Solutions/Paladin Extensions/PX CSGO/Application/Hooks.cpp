@@ -155,6 +155,11 @@ namespace PX
 			const auto pLocalPlayer = Tools::GetLocalPlayer( );
 			if ( nullptr == pLocalPlayer )
 				return;
+			const auto pCmd = Tools::
+
+			{
+				
+			}
 		}
 
 		int __stdcall DoPostScreenEffects( int iUnknown )

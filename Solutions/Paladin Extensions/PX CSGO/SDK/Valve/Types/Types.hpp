@@ -9,6 +9,7 @@
 #include "characterset.hpp"
 #include "ClientClass.hpp"
 #include "Color.hpp"
+#include "CUserCmd.hpp"
 #include "Enumerations.hpp"
 #include "GlowOutlineEffect.hpp"
 #include "IHandleEntity.hpp"

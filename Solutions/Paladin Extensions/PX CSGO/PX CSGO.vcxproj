@@ -166,6 +166,7 @@
     <ClCompile Include="Design\User Interface.cpp" />
     <ClCompile Include="Features\Awareness\Extra Sensory Drawing.cpp" />
     <ClCompile Include="Features\Awareness\Glow.cpp" />
+    <ClCompile Include="Features\Combat\Trigger.cpp" />
     <ClCompile Include="Features\Features.cpp" />
     <ClCompile Include="PX CSGO.cpp" />
     <ClCompile Include="SDK\Tools.cpp" />
@@ -206,6 +207,7 @@
     <ClInclude Include="Design\User Interface.hpp" />
     <ClInclude Include="Features\Awareness\Extra Sensory Drawing.hpp" />
     <ClInclude Include="Features\Awareness\Glow.hpp" />
+    <ClInclude Include="Features\Combat\Trigger.hpp" />
     <ClInclude Include="Features\Features.hpp" />
     <ClInclude Include="PX CSGO.hpp" />
     <ClInclude Include="SDK\Definitions.hpp" />
@@ -213,6 +215,7 @@
     <ClInclude Include="SDK\Tools.hpp" />
     <ClInclude Include="SDK\Types.hpp" />
     <ClInclude Include="SDK\Valve\Interfaces\CClientState.hpp" />
+    <ClInclude Include="SDK\Valve\Interfaces\CInput.hpp" />
     <ClInclude Include="SDK\Valve\Interfaces\IAppSystem.hpp" />
     <ClInclude Include="SDK\Valve\Interfaces\IBaseClientDll.hpp" />
     <ClInclude Include="SDK\Valve\Interfaces\IBaseInterface.hpp" />
@@ -244,6 +247,7 @@
     <ClInclude Include="SDK\Valve\Types\characterset.hpp" />
     <ClInclude Include="SDK\Valve\Types\ClientClass.hpp" />
     <ClInclude Include="SDK\Valve\Types\Color.hpp" />
+    <ClInclude Include="SDK\Valve\Types\CUserCmd.hpp" />
     <ClInclude Include="SDK\Valve\Types\Enumerations.hpp" />
     <ClInclude Include="SDK\Valve\Types\GlowOutlineEffect.hpp" />
     <ClInclude Include="SDK\Valve\Types\IHandleEntity.hpp" />

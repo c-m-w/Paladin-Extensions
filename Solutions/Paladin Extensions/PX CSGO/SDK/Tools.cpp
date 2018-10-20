@@ -24,6 +24,11 @@ namespace PX::Tools
 		return reinterpret_cast< CBasePlayer* >( pEntityList->GetClientEntity( pEngineClient->GetLocalPlayer( ) ) );
 	}
 
+	CUserCmd* GetUserCmd( int iSequenceNumber )
+	{
+		return &pEn
+	}
+
 	bool PX_API ValidPlayer( void* pEntity )
 	{
 		if ( !pEntity )

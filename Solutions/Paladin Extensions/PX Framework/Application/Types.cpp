@@ -272,6 +272,11 @@ namespace PX::Types
 	//	return !( *this == rhs );
 	//}
 
+	SColorSequence::SColorSequence( ) PX_NOX
+	{
+		PutNewColorSequence( { 0, 0, 0, 255 }, 1000 );
+	}
+
 	SColorSequence::SColorSequence( color_t clrFirstSequence, moment_t mmtFirstSequence )
 	{
 		PutNewColorSequence( clrFirstSequence, mmtFirstSequence );
@@ -295,7 +300,7 @@ namespace PX::Types
 		mmtTotalDuration = 0;
 		for ( std::size_t z = 0u; z < zSequences; z++ )
 			mmtTotalDuration += sqInfo[ z ].mmtDuration;
-		auto mmtCurrentProgress = GetMoment( ) % mmtTotalDuration;
+		auto mmtCurrentProgress = GetMoment( ) / 10000ull % mmtTotalDuration;
 		auto mmtPassedProgress = 0ull;
 
 		for ( std::size_t z = 0u; z < zSequences; z++ )

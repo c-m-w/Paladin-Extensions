@@ -272,10 +272,7 @@ namespace PX::Types
 
 	public:
 		std::size_t zSequences = 0u;
-		SColorSequence( ) PX_NOX
-		{
-			PutNewColorSequence( { 0, 0, 0, 255 }, 1000 );
-		}
+		SColorSequence( ) PX_NOX;
 		SColorSequence( color_t clrFirstSequence, moment_t mmtFirstSequence );
 		SColorSequence( color_t* clrColors, moment_t* mmtDurations, std::size_t zSequences );
 
