@@ -10,8 +10,10 @@ using namespace Pointers;
 
 namespace PX::Features::Awareness
 {
-	auto esdConfig = &_Settings._Awareness._ExtraSensoryDrawing;
-	auto esdEntityConfig = &esdConfig->_Players[ TEAM ];
+	auto esdDrawingConfigf = &_Settings._Awareness._ExtraSensoryDrawing;
+	auto esdPlayerConfig = &esdDrawingConfigf->_Players[ SETTING_TEAM ];
+	auto esdWeaponConfig = &esdDrawingConfigf->_Weapons[ SETTING_WEAPON ];
+	settings_t::awareness_t::extra_sensory_drawing_t::extra_sensory_drawing_base_t* esdConfig = esdPlayerConfig;
 	CBasePlayer* pLocalPlayer = nullptr;
 	PX_DEF MAX_HEALTH = 100;
 
@@ -69,16 +71,37 @@ namespace PX::Features::Awareness
 			switch ( info.cClass )
 			{
 				case ClassID_CCSPlayer:
-					info.iSettingIndex = info.bTeammate ? TEAM : ENEMY;
-					esdEntityConfig = &esdConfig->_Players[ info.iSettingIndex ];
+				{
+					info.iSettingIndex = info.bTeammate ? SETTING_TEAM : SETTING_ENEMY;
+					esdPlayerConfig = &esdDrawingConfigf->_Players[ info.iSettingIndex ];
 					info.bIsPlayer = true;
 					info.iHealth = player_ptr_t( pEntity )->m_iHealth( );
-					break;
+					esdConfig = esdPlayerConfig;
+				}
+				break;
+
+				case ClassID_CC4:
+				case ClassID_CPlantedC4:
+				{
+					info.bIsPlayer = false;
+					info.iSettingIndex = SETTING_C4;
+					esdWeaponConfig = &esdDrawingConfigf->_Weapons[ SETTING_WEAPON ];
+					esdConfig = esdWeaponConfig;
+				}
+				break;
 				default:
-					continue;
+				{
+					if ( !info.pEntity->IsWeapon( ) )
+						continue;
+					info.bIsPlayer = false;
+					info.iSettingIndex = SETTING_WEAPON;
+					esdWeaponConfig = &esdDrawingConfigf->_Weapons[ SETTING_WEAPON ];
+					esdConfig = esdWeaponConfig;
+				}
+				break;
 			}
 
-			if ( !esdEntityConfig->bEnabled )
+			if ( !esdPlayerConfig->bEnabled )
 				continue;
 
 			info.pEntity = pEntity;
@@ -86,8 +109,8 @@ namespace PX::Features::Awareness
 
 			if ( pEntity->IsDormant( ) )
 				info.iState = STATE_DORMANT;
-			else if ( info.bIsPlayer ? pLocalPlayer->CanSeePlayer( player_ptr_t( info.pEntity ), esdEntityConfig->bMindSmoke ) : 
-									pLocalPlayer->PositionInSight( info.vecLocation, esdEntityConfig->bMindSmoke ) )
+			else if ( info.bIsPlayer ? pLocalPlayer->CanSeePlayer( player_ptr_t( info.pEntity ), esdPlayerConfig->bMindSmoke ) : 
+									pLocalPlayer->PositionInSight( info.vecLocation, esdPlayerConfig->bMindSmoke ) )
 				info.iState = STATE_VISIBLE;
 			else
 				info.iState = STATE_INVISIBLE;
@@ -103,43 +126,101 @@ namespace PX::Features::Awareness
 
 	PX_EXT PX_INL void PX_API CalculateBoundingBox( )
 	{
-		Vector vecPoints[ ] { info.vecLocation, info.vecLocation, info.vecLocation, info.vecLocation };
-		const Vector2D vecRotationPoint { info.vecLocation.x, info.vecLocation.y };
-		const auto vecViewPosition = info.vecLocation + player_ptr_t( info.pEntity )->m_vecViewOffset( );
-
-		vecPoints[ BOTTOMRIGHT ].y -= 20.f; // Bottom right
-		vecPoints[ BOTTOMRIGHT ].z -= 5.f;
-		vecPoints[ BOTTOMLEFT ].y += 20.f; // Bottom left
-		vecPoints[ BOTTOMLEFT ].z -= 5.f;
-		vecPoints[ TOPRIGHT ].y -= 20.f; // Top right
-		vecPoints[ TOPRIGHT ].z = vecViewPosition.z + 10.f;
-		vecPoints[ TOPLEFT ].y += 20.f; // Top left
-		vecPoints[ TOPLEFT ].z = vecViewPosition.z + 10.f;
-
-		const auto flRotation = pClientState->viewangles.y - ( pClientState->viewangles.y -
-															   CalcAngle( pLocalPlayer->GetViewPosition( ), player_ptr_t( info.pEntity )->GetViewPosition( ) ).y );
 		info.bBoxInSight = true;
-		for ( auto i = 0; i < 4; i++ )
+		if ( info.bIsPlayer && esdPlayerConfig->iBoxMode == BOX_DYNAMIC )
 		{
-			vecPoints[ i ].Rotate2D( flRotation, vecRotationPoint );
-			if ( !WorldToScreen( vecPoints[ i ], info.vecBoundingBoxCorners[ i ] ) )
-				info.bBoxInSight = false;
+			Vector vecPoints[ ] { info.vecLocation, info.vecLocation, info.vecLocation, info.vecLocation };
+			const Vector2D vecRotationPoint { info.vecLocation.x, info.vecLocation.y };
+			const auto vecViewPosition = info.vecLocation + player_ptr_t( info.pEntity )->m_vecViewOffset( );
+
+			vecPoints[ BOTTOMRIGHT ].y -= 20.f; // Bottom right
+			vecPoints[ BOTTOMRIGHT ].z -= 5.f;
+			vecPoints[ BOTTOMLEFT ].y += 20.f; // Bottom left
+			vecPoints[ BOTTOMLEFT ].z -= 5.f;
+			vecPoints[ TOPRIGHT ].y -= 20.f; // Top right
+			vecPoints[ TOPRIGHT ].z = vecViewPosition.z + 10.f;
+			vecPoints[ TOPLEFT ].y += 20.f; // Top left
+			vecPoints[ TOPLEFT ].z = vecViewPosition.z + 10.f;
+
+			const auto flRotation = pClientState->viewangles.y - ( pClientState->viewangles.y -
+																   CalcAngle( pLocalPlayer->GetViewPosition( ), player_ptr_t( info.pEntity )->GetViewPosition( ) ).y );
+			for ( auto i = 0; i < 4; i++ )
+			{
+				vecPoints[ i ].Rotate2D( flRotation, vecRotationPoint );
+				if ( !WorldToScreen( vecPoints[ i ], info.vecBoundingBoxCorners[ i ] ) )
+					info.bBoxInSight = false;
+			}
+			memcpy( info.vecWorldBoundingBoxCorners, vecPoints, sizeof( Vector ) * 4 );
 		}
-		memcpy( info.vecWorldBoundingBoxCorners, vecPoints, sizeof( Vector ) * 4 );
+		else
+		{
+			const auto pCollidable = info.pEntity->GetCollideable( );
+			const auto vecMinimum = pCollidable->OBBMins( );
+			const auto vecMaximum = pCollidable->OBBMaxs( );
+			const auto mtxTransformation = info.pEntity->m_rgflCoordinateFrame( );
+
+			Vector vecPoints[ ]
+			{
+				Vector( vecMinimum.x, vecMinimum.y, vecMinimum.z ),
+				Vector( vecMinimum.x, vecMaximum.y, vecMinimum.z ),
+				Vector( vecMaximum.x, vecMaximum.y, vecMinimum.z ),
+				Vector( vecMaximum.x, vecMinimum.y, vecMinimum.z ),
+				Vector( vecMaximum.x, vecMaximum.y, vecMaximum.z ),
+				Vector( vecMinimum.x, vecMaximum.y, vecMaximum.z ),
+				Vector( vecMinimum.x, vecMinimum.y, vecMaximum.z ),
+				Vector( vecMaximum.x, vecMinimum.y, vecMaximum.z )
+			}, vecTransformedPoints[ 8 ], vecScreenPoints[ 8 ];
+
+			for ( auto i = 0; i < 8; i++ )
+			{
+				TransformVector( vecPoints[ i ], mtxTransformation, vecTransformedPoints[ i ] );
+				if ( !WorldToScreen( vecTransformedPoints[ i ], vecScreenPoints[ i ] ) )
+					info.bBoxInSight = false;
+			}
+
+			auto flTop = vecScreenPoints[ 0 ].y, flRight = vecScreenPoints[ 0 ].x, flBottom = vecScreenPoints[ 0 ].y, flLeft = vecScreenPoints[ 0 ].x;
+			for ( const auto& vecScreenPoint: vecScreenPoints )
+			{
+				if ( flLeft > vecScreenPoint.x )
+					flLeft = vecScreenPoint.x;
+				if ( flTop < vecScreenPoint.y )
+					flTop = vecScreenPoint.y;
+				if ( flRight < vecScreenPoint.x )
+					flRight = vecScreenPoint.x;
+				if ( flBottom > vecScreenPoint.y )
+					flBottom = vecScreenPoint.y;
+			}
+
+			info.vecBoundingBoxCorners[ TOPLEFT ] = { flLeft, flTop, 0.f };
+			info.vecBoundingBoxCorners[ TOPRIGHT ] = { flRight, flTop, 0.f };
+			info.vecBoundingBoxCorners[ BOTTOMRIGHT ] = { flRight, flBottom, 0.f };
+			info.vecBoundingBoxCorners[ BOTTOMLEFT ] = { flLeft, flBottom, 0.f };
+		}
 	}
 
 	PX_EXT PX_INL void PX_API Box( )
 	{
-		if ( esdEntityConfig->iBoxMode == BOX_NONE || !info.bBoxInSight )
+		if ( esdPlayerConfig->iBoxMode == BOX_NONE || !info.bBoxInSight )
 			return;
-		const auto clrBox = esdEntityConfig->seqBox[ info.iState ].GetCurrentColor( ),
-					clrFill = esdEntityConfig->bHealthBasedFillColor ? color_t( ) : esdEntityConfig->seqFill[ info.iState ].GetCurrentColor( ),
-					clrBottom = esdEntityConfig->bHealthBasedFillColor ? esdEntityConfig->seqHealthFill[ 0 ][ info.iState ].GetCurrentColor( ) : color_t( ),
-					clrTop = esdEntityConfig->bHealthBasedFillColor ? esdEntityConfig->seqHealthFill[ 1 ][ info.iState ].GetCurrentColor( ) : color_t( );
-		if ( clrBox.a == 0 && esdEntityConfig->bHealthBasedFillColor ? clrBottom.a == 0 && clrTop.a == 0 : clrFill.a == 0 )
+		SColor clrBox { }, clrFill { }, clrBottom { }, clrTop { };
+
+		if( info.bIsPlayer )
+		{
+			clrBox = esdConfig->seqBox[ info.iState ].GetCurrentColor( );
+			clrFill = esdPlayerConfig->bHealthBasedFillColor ? color_t( ) : esdPlayerConfig->seqFill[ info.iState ].GetCurrentColor( );
+			clrBottom = esdPlayerConfig->bHealthBasedFillColor ? esdPlayerConfig->seqHealthFill[ 0 ][ info.iState ].GetCurrentColor( ) : color_t( );
+			clrTop = esdPlayerConfig->bHealthBasedFillColor ? esdPlayerConfig->seqHealthFill[ 1 ][ info.iState ].GetCurrentColor( ) : color_t( );
+		}
+		else
+		{
+			clrBox = esdConfig->seqBox[ info.iState ].GetCurrentColor( );
+			clrFill = esdConfig->seqFill[ info.iState ].GetCurrentColor( );
+		}
+
+		if ( clrBox.a == 0 && esdPlayerConfig->bHealthBasedFillColor ? clrBottom.a == 0 && clrTop.a == 0 : clrFill.a == 0 )
 			return;
 
-		if ( esdEntityConfig->bThreeDimensional ) // 3d box
+		if ( info.bIsPlayer && esdPlayerConfig->bThreeDimensional ) // 3d box
 		{
 			
 		}
@@ -154,47 +235,54 @@ namespace PX::Features::Awareness
 				D3DXVECTOR2( info.vecBoundingBoxCorners[ BOTTOMRIGHT ].x, info.vecBoundingBoxCorners[ BOTTOMRIGHT ].y )
 			};
 
-			if ( esdEntityConfig->bFill )
+			if ( esdConfig->iBoxMode == BOX_DYNAMIC )
 			{
-				vertex_t vtxFillPoints[ 4 ];
-				if ( esdEntityConfig->bHealthBasedFillColor )
+				if ( esdConfig->bFill )
 				{
-					const auto flZDifference = ( info.vecWorldBoundingBoxCorners[ TOPLEFT ].z - info.vecWorldBoundingBoxCorners[ BOTTOMLEFT ].z ) * ( float( info.iHealth ) / float( MAX_HEALTH ) );
-					auto vecMiddleLeft = info.vecWorldBoundingBoxCorners[ BOTTOMLEFT ],
-						vecMiddleRight = info.vecWorldBoundingBoxCorners[ BOTTOMRIGHT ];
-					vecMiddleLeft.z += flZDifference;
-					vecMiddleRight.z += flZDifference;
-					Vector vecScreenMiddleLeft, vecScreenMiddleRight;
-					const auto dwBottom = clrBottom.GetARGB( );
-
-					WorldToScreen( vecMiddleLeft, vecScreenMiddleLeft );
-					WorldToScreen( vecMiddleRight, vecScreenMiddleRight );
-
-					if ( info.iHealth < MAX_HEALTH )
+					vertex_t vtxFillPoints[ 4 ];
+					if ( info.bIsPlayer && esdPlayerConfig->bHealthBasedFillColor )
 					{
-						const auto dwTop = clrTop.GetARGB( );
-						vtxFillPoints[ 0 ] = vertex_t( info.vecBoundingBoxCorners[ TOPLEFT ].x, info.vecBoundingBoxCorners[ TOPLEFT ].y, esdEntityConfig->bSolidHealthFill ? dwTop : 0 );
-						vtxFillPoints[ 1 ] = vertex_t( info.vecBoundingBoxCorners[ TOPRIGHT ].x, info.vecBoundingBoxCorners[ TOPRIGHT ].y, esdEntityConfig->bSolidHealthFill ? dwTop : 0 );
-						vtxFillPoints[ 2 ] = vertex_t( vecScreenMiddleRight.x, vecScreenMiddleRight.y, dwTop );
-						vtxFillPoints[ 3 ] = vertex_t( vecScreenMiddleLeft.x, vecScreenMiddleLeft.y, dwTop );
+						const auto flZDifference = ( info.vecWorldBoundingBoxCorners[ TOPLEFT ].z - info.vecWorldBoundingBoxCorners[ BOTTOMLEFT ].z ) * ( float( info.iHealth ) / float( MAX_HEALTH ) );
+						auto vecMiddleLeft = info.vecWorldBoundingBoxCorners[ BOTTOMLEFT ],
+							vecMiddleRight = info.vecWorldBoundingBoxCorners[ BOTTOMRIGHT ];
+						vecMiddleLeft.z += flZDifference;
+						vecMiddleRight.z += flZDifference;
+						Vector vecScreenMiddleLeft, vecScreenMiddleRight;
+						const auto dwBottom = clrBottom.GetARGB( );
+
+						WorldToScreen( vecMiddleLeft, vecScreenMiddleLeft );
+						WorldToScreen( vecMiddleRight, vecScreenMiddleRight );
+
+						if ( info.iHealth < MAX_HEALTH )
+						{
+							const auto dwTop = clrTop.GetARGB( );
+							vtxFillPoints[ 0 ] = vertex_t( info.vecBoundingBoxCorners[ TOPLEFT ].x, info.vecBoundingBoxCorners[ TOPLEFT ].y, esdPlayerConfig->bSolidHealthFill ? dwTop : 0 );
+							vtxFillPoints[ 1 ] = vertex_t( info.vecBoundingBoxCorners[ TOPRIGHT ].x, info.vecBoundingBoxCorners[ TOPRIGHT ].y, esdPlayerConfig->bSolidHealthFill ? dwTop : 0 );
+							vtxFillPoints[ 2 ] = vertex_t( vecScreenMiddleRight.x, vecScreenMiddleRight.y, dwTop );
+							vtxFillPoints[ 3 ] = vertex_t( vecScreenMiddleLeft.x, vecScreenMiddleLeft.y, dwTop );
+							Drawing::Polygon( vtxFillPoints, 4, 2 );
+						}
+
+						vtxFillPoints[ 0 ] = vertex_t( vecScreenMiddleLeft.x, vecScreenMiddleLeft.y, dwBottom );
+						vtxFillPoints[ 1 ] = vertex_t( vecScreenMiddleRight.x, vecScreenMiddleRight.y, dwBottom );
+						vtxFillPoints[ 2 ] = vertex_t( info.vecBoundingBoxCorners[ BOTTOMRIGHT ].x, info.vecBoundingBoxCorners[ BOTTOMRIGHT ].y, esdPlayerConfig->bSolidHealthFill ? dwBottom : 0 );
+						vtxFillPoints[ 3 ] = vertex_t( info.vecBoundingBoxCorners[ BOTTOMLEFT ].x, info.vecBoundingBoxCorners[ BOTTOMLEFT ].y, esdPlayerConfig->bSolidHealthFill ? dwBottom : 0 );
 						Drawing::Polygon( vtxFillPoints, 4, 2 );
 					}
-
-					vtxFillPoints[ 0 ] = vertex_t( vecScreenMiddleLeft.x, vecScreenMiddleLeft.y, dwBottom );
-					vtxFillPoints[ 1 ] = vertex_t( vecScreenMiddleRight.x, vecScreenMiddleRight.y, dwBottom );
-					vtxFillPoints[ 2 ] = vertex_t( info.vecBoundingBoxCorners[ BOTTOMRIGHT ].x, info.vecBoundingBoxCorners[ BOTTOMRIGHT ].y, esdEntityConfig->bSolidHealthFill ? dwBottom : 0 );
-					vtxFillPoints[ 3 ] = vertex_t( info.vecBoundingBoxCorners[ BOTTOMLEFT ].x, info.vecBoundingBoxCorners[ BOTTOMLEFT ].y, esdEntityConfig->bSolidHealthFill ? dwBottom : 0 );
-					Drawing::Polygon( vtxFillPoints, 4, 2 );
+					else
+					{
+						const auto dwColor = clrFill.GetARGB( );
+						vtxFillPoints[ 0 ] = vertex_t( info.vecBoundingBoxCorners[ TOPLEFT ].x, info.vecBoundingBoxCorners[ TOPLEFT ].y, dwColor );
+						vtxFillPoints[ 1 ] = vertex_t( info.vecBoundingBoxCorners[ TOPRIGHT ].x, info.vecBoundingBoxCorners[ TOPRIGHT ].y, dwColor );
+						vtxFillPoints[ 2 ] = vertex_t( info.vecBoundingBoxCorners[ BOTTOMRIGHT ].x, info.vecBoundingBoxCorners[ BOTTOMRIGHT ].y, dwColor );
+						vtxFillPoints[ 3 ] = vertex_t( info.vecBoundingBoxCorners[ BOTTOMLEFT ].x, info.vecBoundingBoxCorners[ BOTTOMLEFT ].y, dwColor );
+						Drawing::Polygon( vtxFillPoints, 4, 2 );
+					}
 				}
-				else
-				{
-					const auto dwColor = clrFill.GetARGB( );
-					vtxFillPoints[ 0 ] = vertex_t( info.vecBoundingBoxCorners[ TOPLEFT ].x, info.vecBoundingBoxCorners[ TOPLEFT ].y, dwColor );
-					vtxFillPoints[ 1 ] = vertex_t( info.vecBoundingBoxCorners[ TOPRIGHT ].x, info.vecBoundingBoxCorners[ TOPRIGHT ].y, dwColor );
-					vtxFillPoints[ 2 ] = vertex_t( info.vecBoundingBoxCorners[ BOTTOMRIGHT ].x, info.vecBoundingBoxCorners[ BOTTOMRIGHT ].y, dwColor );
-					vtxFillPoints[ 3 ] = vertex_t( info.vecBoundingBoxCorners[ BOTTOMLEFT ].x, info.vecBoundingBoxCorners[ BOTTOMLEFT ].y, dwColor );
-					Drawing::Polygon( vtxFillPoints, 4, 2 );
-				}
+			}
+			else
+			{
+				
 			}
 			Line( vecScreenPoints, 5, 2, clrBox.GetARGB( ) );
 		}
@@ -202,10 +290,10 @@ namespace PX::Features::Awareness
 
 	PX_EXT PX_INL void PX_API SnapLine( )
 	{
-		if ( !esdEntityConfig->bSnaplines )
+		if ( !esdPlayerConfig->bSnaplines )
 			return;
 
-		const auto clrSnapLine = esdEntityConfig->seqSnaplines[ info.iState ].GetCurrentColor( );
+		const auto clrSnapLine = esdPlayerConfig->seqSnaplines[ info.iState ].GetCurrentColor( );
 		if ( clrSnapLine.a == 0 )
 			return;
 
@@ -221,15 +309,15 @@ namespace PX::Features::Awareness
 			D3DXVECTOR2( iWidth / 2.f, iHeight )
 		};
 
-		Line( vecScreenPoints, 2, esdEntityConfig->flSnaplineWidth, clrSnapLine.GetARGB( ) );
+		Line( vecScreenPoints, 2, esdPlayerConfig->flSnaplineWidth, clrSnapLine.GetARGB( ) );
 	}
 
 	void PX_API ViewLine( )
 	{
-		if ( !esdEntityConfig->bViewLines )
+		if ( !esdPlayerConfig->bViewLines )
 			return;
 
-		const auto clrViewline = esdEntityConfig->seqViewLines[ info.iState ].GetCurrentColor( );
+		const auto clrViewline = esdPlayerConfig->seqViewLines[ info.iState ].GetCurrentColor( );
 		if ( clrViewline.a == 0 )
 			return;
 
@@ -246,9 +334,9 @@ namespace PX::Features::Awareness
 			D3DXVECTOR2( vecEnd.x, vecEnd.y )
 		};
 		const auto dwColor = clrViewline.GetARGB( );
-		const auto flBoxSize = esdEntityConfig->flViewLineWidth + 1.5f;
+		const auto flBoxSize = esdPlayerConfig->flViewLineWidth + 1.5f;
 
-		Line( vecScreenPoints, 2, esdEntityConfig->flViewLineWidth, dwColor );
+		Line( vecScreenPoints, 2, esdPlayerConfig->flViewLineWidth, dwColor );
 
 		vertex_t vtxBox[ ]
 		{
@@ -285,10 +373,10 @@ namespace PX::Features::Awareness
 			true
 		};
 
-		if ( !esdEntityConfig->bSkeleton )
+		if ( !esdPlayerConfig->bSkeleton )
 			return;
 
-		const auto clrSkeleton = esdEntityConfig->seqSkeleton[ info.iState ].GetCurrentColor( );
+		const auto clrSkeleton = esdPlayerConfig->seqSkeleton[ info.iState ].GetCurrentColor( );
 		if ( clrSkeleton.a == 0 )
 			return;
 
@@ -329,20 +417,20 @@ namespace PX::Features::Awareness
 		};
 
 		const auto dwColor = clrSkeleton.GetARGB( );
-		Line( vecLegs, 7, esdEntityConfig->flSkeletonWidth, dwColor );
-		Line( vecArms, 7, esdEntityConfig->flSkeletonWidth, dwColor );
-		Line( vecTorso, 5, esdEntityConfig->flSkeletonWidth, dwColor );
+		Line( vecLegs, 7, esdPlayerConfig->flSkeletonWidth, dwColor );
+		Line( vecArms, 7, esdPlayerConfig->flSkeletonWidth, dwColor );
+		Line( vecTorso, 5, esdPlayerConfig->flSkeletonWidth, dwColor );
 	}
 
 	PX_EXT PX_INL void PX_API Information( )
 	{
-		if ( !esdEntityConfig->bShowInformation || !info.bBoxInSight )
+		if ( !esdPlayerConfig->bShowInformation || !info.bBoxInSight )
 			return;
-		const auto clrInformation = esdEntityConfig->seqInformation[ info.iState ].GetCurrentColor( );
+		const auto clrInformation = esdPlayerConfig->seqInformation[ info.iState ].GetCurrentColor( );
 		if ( clrInformation.a == 0 )
 			return;
-		const auto clrOutline = esdEntityConfig->bInformationOutline ? esdEntityConfig->seqInformationOutline[ info.iState ].GetCurrentColor( ) : color_t( );
-		const auto bDoOutline = esdEntityConfig->bInformationOutline && clrOutline.a != 0;
+		const auto clrOutline = esdPlayerConfig->bInformationOutline ? esdPlayerConfig->seqInformationOutline[ info.iState ].GetCurrentColor( ) : color_t( );
+		const auto bDoOutline = esdPlayerConfig->bInformationOutline && clrOutline.a != 0;
 		const auto dwOutline = bDoOutline ? clrOutline.GetARGB( ) : 0;
 		const auto dwColor = clrInformation.GetARGB( );
 		Vector vecInformationStart;
@@ -351,7 +439,7 @@ namespace PX::Features::Awareness
 		auto flTextHeight = 16.f;
 		auto bSmartAlign = false;
 
-		switch ( esdEntityConfig->iInformationAlignment )
+		switch ( esdPlayerConfig->iInformationAlignment )
 		{
 			case ALIGNMENT_LEFT:
 			{
@@ -394,12 +482,12 @@ namespace PX::Features::Awareness
 
 		}
 
-		if ( esdEntityConfig->bShowHealth )
+		if ( esdPlayerConfig->bShowHealth )
 		{
-			if ( esdEntityConfig->bHealthBar )
+			if ( esdPlayerConfig->bHealthBar )
 			{
-				const auto clrBottom = esdEntityConfig->seqHealthBar[ 0 ][ info.iState ].GetCurrentColor( );
-				const auto clrTop = esdEntityConfig->seqHealthBar[ 1 ][ info.iState ].GetCurrentColor( );
+				const auto clrBottom = esdPlayerConfig->seqHealthBar[ 0 ][ info.iState ].GetCurrentColor( );
+				const auto clrTop = esdPlayerConfig->seqHealthBar[ 1 ][ info.iState ].GetCurrentColor( );
 
 				if ( clrBottom.a != 0 && clrTop.a != 0 )
 				{
@@ -419,7 +507,7 @@ namespace PX::Features::Awareness
 					auto fl2 = 13.f + vecViewOffset.z;
 					vertex_t vtxOutline[ 4 ];
 
-					switch ( esdEntityConfig->iInformationAlignment )
+					switch ( esdPlayerConfig->iInformationAlignment )
 					{
 						case ALIGNMENT_RIGHT:
 						{
@@ -479,7 +567,7 @@ namespace PX::Features::Awareness
 								vtxOutline[ 3 ] = vertex_t( vecBar[ BOTTOMLEFT ].x, vecBar[ BOTTOMLEFT ].y, 0 );
 							}
 
-							if ( esdEntityConfig->iInformationAlignment == ALIGNMENT_LEFT )
+							if ( esdPlayerConfig->iInformationAlignment == ALIGNMENT_LEFT )
 							{
 								vecInformationStart = vecBar[ TOPLEFT ];
 								vecInformationStart.x -= flPadding;
@@ -544,7 +632,7 @@ namespace PX::Features::Awareness
 									WorldToScreen( vecPoints[ i ], vecBar[ i ] );
 								}
 
-							if ( esdEntityConfig->iInformationAlignment == ALIGNMENT_BOTTOM )
+							if ( esdPlayerConfig->iInformationAlignment == ALIGNMENT_BOTTOM )
 							{
 								vecInformationStart.x = ( vecBar[ BOTTOMRIGHT ].x + vecBar[ BOTTOMLEFT ].x ) / 2.f;
 								vecInformationStart.y = ( vecBar[ BOTTOMRIGHT].y + vecBar[ BOTTOMLEFT ].y ) / 2.f + flPadding;
@@ -601,7 +689,7 @@ namespace PX::Features::Awareness
 			}
 		}
 
-		if( esdEntityConfig->bShowName )
+		if( esdPlayerConfig->bShowName )
 		{
 			constexpr auto zPlayerNameMaxLength = std::size_t( 128u );
 			wchar_t wszName[ zPlayerNameMaxLength ];
@@ -614,12 +702,12 @@ namespace PX::Features::Awareness
 			vecInformationStart.y += 16.f + flPadding;
 		}
 
-		if ( esdEntityConfig->bShowRank )
+		if ( esdPlayerConfig->bShowRank )
 		{
 
 		}
 
-		if ( esdEntityConfig->bShowWeapon )
+		if ( esdPlayerConfig->bShowWeapon )
 		{
 
 		}
