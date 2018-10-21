@@ -164,6 +164,7 @@ namespace PX
 
 			{
 				Features::Combat::Trigger( pLocalPlayer, pCmd );
+				Features::Miscellaneous::AutoJump( pLocalPlayer, pCmd );
 			}
 
 			pVerifiedCmd->m_cmd = *pCmd;

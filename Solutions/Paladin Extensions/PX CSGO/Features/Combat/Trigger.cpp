@@ -9,6 +9,9 @@ namespace PX::Features::Combat
 {
 	void PX_API Trigger( player_ptr_t pLocalPlayer, CUserCmd* pCmd )
 	{
+		if ( PX_INPUT.GetKeyState( VK_XBUTTON1 ) == false )
+			return;
+
 		Vector vecEnd;
 		CTraceFilter tfFilter;
 		Ray_t rRay;
