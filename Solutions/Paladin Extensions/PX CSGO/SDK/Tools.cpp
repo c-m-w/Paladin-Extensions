@@ -106,10 +106,9 @@ namespace PX::Tools
 	{
 		int iWidth, iHeight;
 		pEngineClient->GetScreenSize( iWidth, iHeight );
-	// OVERFLOW
 		const auto dbTemp = double( vmMatrix[ 3 ][ 0 ] * vecWorld.x + vmMatrix[ 3 ][ 1 ] * vecWorld.y + vmMatrix[ 3 ][ 2 ] * vecWorld.z + vmMatrix[ 3 ][ 3 ] );
 
-		if ( dbTemp <= 0.01 ) /// no .f cause we need double for DECIMAL PRECISION
+		if ( dbTemp <= 0.01 )
 			return false;
 
 		const auto flTemp = float( dbTemp );
@@ -398,11 +397,23 @@ namespace PX::Tools
 		return gtRay.fraction == 1.f || gtRay.hit_entity == pEntity;
 	}
 
+	inline struct player_sight_t
+	{
+		int iTick = 0;
+		bool bVisible = false;
+		player_sight_t( bool _bVisible ): iTick( pGlobalVariables->m_iTickCount ), bVisible( _bVisible )
+		{ }
+		player_sight_t( ) = default;
+	} _PlayerSight[ 64 ][ 64 ];
+
 	bool CBasePlayer::CanSeePlayer( CBasePlayer* pPlayer, bool bMindSmoke )
 	{
-		return PositionInSight( pPlayer->GetHitboxPosition( HITBOX_HEAD ), bMindSmoke, pPlayer )
-			|| PositionInSight( pPlayer->GetHitboxPosition( HITBOX_LEFT_FOOT ), bMindSmoke, pPlayer )
-			|| PositionInSight( pPlayer->GetHitboxPosition( HITBOX_RIGHT_FOOT ), bMindSmoke, pPlayer );
+		const auto iPlayerIndex = EntIndex( ), iTargetIndex = pPlayer->EntIndex( );
+		if ( _PlayerSight[ iPlayerIndex ][ iTargetIndex ].iTick == pGlobalVariables->m_iTickCount )
+			return _PlayerSight[ iPlayerIndex ][ iTargetIndex ].bVisible;
+		return ( _PlayerSight[ iPlayerIndex ][ iTargetIndex ] = player_sight_t( PositionInSight( pPlayer->GetHitboxPosition( HITBOX_HEAD ), bMindSmoke, pPlayer )
+																				|| PositionInSight( pPlayer->GetHitboxPosition( HITBOX_LEFT_FOOT ), bMindSmoke, pPlayer )
+																				|| PositionInSight( pPlayer->GetHitboxPosition( HITBOX_RIGHT_FOOT ), bMindSmoke, pPlayer ) ) ).bVisible;
 	}
 
 	CGameTrace& CBasePlayer::TraceRayFromView( )
