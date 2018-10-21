@@ -6,57 +6,64 @@
 
 namespace PX
 {
-	void PX_API CInputManager::ProcessKey( unsigned uKey, UINT uMessage )
+	void PX_API CInputManager::ProcessKey( unsigned uKey, bool bKeyDown )
 	{
-		ksKeys[ uKey ] = uMessage % 2 ? CKeyState::DOWN : CKeyState::UP;
-		if ( ksKeys[ uKey ] )
+		if ( ( ksKeys[ uKey ] = bKeyDown ? CKeyState::DOWN : CKeyState::UP ) == true)
 		{
 			mmtKeyDownTime[ uKey ] = GetMoment( );
 			uLastKeyPressed = uKey;
 		}
 
 		for each ( auto fnCallback in vecfnKeyCallback[ uKey ] )
-			fnCallback( bool( ksKeys[ uKey ] ) );
+			fnCallback( bKeyDown );
 
 		for each ( auto fnCallback in vecfnGlobalCallbacks )
-			fnCallback( uKey, bool( ksKeys[ uKey ] ) );
+			fnCallback( uKey, bKeyDown );
 	}
 
-	void PX_API CInputManager::ProcessMouseMessage( UINT uMessage, WPARAM wParam, LPARAM lParam ) // lParam is unused
+	void PX_API CInputManager::ProcessMouseMessage( UINT uMessage, WPARAM wParam )
 	{
 		unsigned uKey;
+		auto bKeyDown = false;
 
 		switch ( uMessage )
 		{
 			case WM_MBUTTONDOWN:
+				bKeyDown = true;
 			case WM_MBUTTONUP:
 				uKey = VK_MBUTTON;
 				break;
 			case WM_RBUTTONDOWN:
+				bKeyDown = true;
 			case WM_RBUTTONUP:
 				uKey = VK_RBUTTON;
 				break;
 			case WM_LBUTTONDOWN:
+				bKeyDown = true;
 			case WM_LBUTTONUP:
 				uKey = VK_LBUTTON;
 				break;
 			case WM_XBUTTONDOWN:
+				bKeyDown = true;
 			case WM_XBUTTONUP:
-				uKey = HIWORD( wParam );
+				uKey = HIWORD( wParam ) == XBUTTON1 ? VK_XBUTTON1 : VK_XBUTTON2;
 				break;
 			default:
 				return;
 		}
 
-		ProcessKey( uKey, uMessage );
+		ProcessKey( uKey, bKeyDown );
 	}
 
-	void PX_API CInputManager::ProcessKeyboardMessage( UINT uMessage, WPARAM wParam, LPARAM lParam ) // lParam is unused
+	void PX_API CInputManager::ProcessKeyboardMessage( UINT uMessage, WPARAM wParam ) // lParam is unused
 	{
+		auto bKeyDown = false;
+
 		switch ( uMessage )
 		{
 			case WM_KEYDOWN:
 			case WM_SYSKEYDOWN:
+				bKeyDown = true;
 			case WM_KEYUP:
 			case WM_SYSKEYUP:
 				break;
@@ -64,7 +71,7 @@ namespace PX
 				return;
 		}
 
-		ProcessKey( wParam, uMessage );
+		ProcessKey( wParam, bKeyDown );
 	}
 
 	CInputManager::CInputManager( ) PX_NOX: ksKeys( ), mmtKeyDownTime( ), uLastKeyPressed( )
@@ -94,13 +101,13 @@ namespace PX
 			case WM_RBUTTONUP:
 			case WM_LBUTTONUP:
 			case WM_XBUTTONUP:
-				ProcessMouseMessage( uMessage, wParam, lParam );
+				ProcessMouseMessage( uMessage, wParam );
 				break;
 			case WM_KEYDOWN:
 			case WM_KEYUP:
 			case WM_SYSKEYDOWN:
 			case WM_SYSKEYUP:
-				ProcessKeyboardMessage( uMessage, wParam, lParam );
+				ProcessKeyboardMessage( uMessage, wParam );
 				break;
 			default:
 				break;

@@ -63,9 +63,9 @@ namespace PX
 		std::vector< std::function< void( PX_API )( bool ) > > vecfnKeyCallback[ PX_MAX_KEY ];
 		std::vector< std::function< void( PX_API )( unsigned, bool ) > > vecfnGlobalCallbacks;
 
-		void PX_API ProcessKey( unsigned, UINT );
-		void PX_API ProcessMouseMessage( UINT, WPARAM, LPARAM );
-		void PX_API ProcessKeyboardMessage( UINT, WPARAM, LPARAM );
+		void PX_API ProcessKey( unsigned, bool );
+		void PX_API ProcessMouseMessage( UINT, WPARAM );
+		void PX_API ProcessKeyboardMessage( UINT, WPARAM );
 
 	public:
 		CInputManager( ) PX_NOX;
