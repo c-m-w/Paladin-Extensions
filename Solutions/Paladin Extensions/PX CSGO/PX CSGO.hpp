@@ -14,6 +14,7 @@
 #include "Features/Awareness/Extra Sensory Drawing.hpp"
 #include "Features/Awareness/Glow.hpp"
 #include "Features/Combat/Trigger.hpp"
+#include "Features/Miscellaneous/Movement.hpp"
 
 #include "Application/Hooks.hpp"
 

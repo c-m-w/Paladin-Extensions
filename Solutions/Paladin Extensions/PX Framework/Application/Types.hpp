@@ -13,6 +13,8 @@ namespace PX::Types
 	typedef unsigned long long moment_t;
 	/** \brief Paladin byte datatype. Stores one byte of data. */
 	typedef unsigned char byte_t;
+	/** \brief Paladin key datatype. Stores a virtual key code. */
+	typedef unsigned int key_t;
 
 	/** \brief Paladin constant char string. */
 	typedef const char* cstr_t;

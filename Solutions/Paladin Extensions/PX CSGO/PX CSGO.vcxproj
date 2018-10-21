@@ -168,6 +168,7 @@
     <ClCompile Include="Features\Awareness\Glow.cpp" />
     <ClCompile Include="Features\Combat\Trigger.cpp" />
     <ClCompile Include="Features\Features.cpp" />
+    <ClCompile Include="Features\Miscellaneous\Movement.cpp" />
     <ClCompile Include="PX CSGO.cpp" />
     <ClCompile Include="SDK\Tools.cpp" />
     <ClCompile Include="SDK\Types.cpp" />
@@ -215,6 +216,7 @@
     <ClInclude Include="Features\Awareness\Glow.hpp" />
     <ClInclude Include="Features\Combat\Trigger.hpp" />
     <ClInclude Include="Features\Features.hpp" />
+    <ClInclude Include="Features\Miscellaneous\Movement.hpp" />
     <ClInclude Include="PX CSGO.hpp" />
     <ClInclude Include="SDK\Definitions.hpp" />
     <ClInclude Include="SDK\SDK.hpp" />
