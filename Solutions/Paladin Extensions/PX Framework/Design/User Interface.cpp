@@ -1460,7 +1460,7 @@ namespace PX::UI
 
 				if ( bHoveringInputBox )
 					SetWidgetActive( CURSOR_IBEAM );
-				if ( !bHoveringInputBox && bClicking )
+				if ( PX_INPUT.GetKeyState( VK_RETURN ) == true || !bHoveringInputBox && bClicking )
 				{
 					bSetEditValue = strlen( szInputBuffer ) > 0;
 					bInEdit = false;
@@ -1543,7 +1543,7 @@ namespace PX::UI
 				if ( bHoveringInputBox )
 					SetWidgetActive( CURSOR_IBEAM );
 
-				if ( !bHoveringInputBox && bClicking )
+				if ( PX_INPUT.GetKeyState( VK_RETURN ) == true || !bHoveringInputBox && bClicking )
 				{
 					siCurrent.bSetEditValue = strlen( szInputBuffer ) > 0;
 					siCurrent.bInEdit = false;

@@ -156,20 +156,20 @@ namespace PX::UI::Manager
 			MATERIALS
 		};
 
-		int iEntity = TEAM;
+		int iEntity = SETTING_TEAM;
 
 		switch ( iSubtab )
 		{
 			case EXTRA_SENSORY_DRAWING_2:
 			{
-				iEntity = ENEMY;
+				iEntity = SETTING_ENEMY;
 			}
 
 			case EXTRA_SENSORY_DRAWING_1:
 			{
 				auto& esdConfig = _Settings._Awareness._ExtraSensoryDrawing;
 
-				if ( BeginGroupbox( 200, 150, 500, 420, iEntity == TEAM ? PX_XOR( "Teammates" ) : PX_XOR( "Enemies" ) ) )
+				if ( BeginGroupbox( 200, 150, 500, 420, iEntity == SETTING_TEAM ? PX_XOR( "Teammates" ) : PX_XOR( "Enemies" ) ) )
 				{
 					{
 						BeginRow( 30, 3, ROW_STATIC );
