@@ -108,7 +108,7 @@ namespace PX::Tools
 		pEngineClient->GetScreenSize( iWidth, iHeight );
 	// OVERFLOW
 		const auto dbTemp = double( vmMatrix[ 3 ][ 0 ] * vecWorld.x + vmMatrix[ 3 ][ 1 ] * vecWorld.y + vmMatrix[ 3 ][ 2 ] * vecWorld.z + vmMatrix[ 3 ][ 3 ] );
-	
+
 		if ( dbTemp <= 0.01 ) /// no .f cause we need double for DECIMAL PRECISION
 			return false;
 
@@ -219,6 +219,17 @@ namespace PX::Tools
 	bool CBaseEntity::IsDefuseKit( )
 	{
 		return GetClientClass( )->m_ClassID == ClassID_CBaseAnimating;
+	}
+
+	bool CBaseEntity::IsGrenade( )
+	{
+		const auto iClassID = GetClientClass( )->m_ClassID;
+		return iClassID == ClassID_CMolotovGrenade
+			|| iClassID == ClassID_CIncendiaryGrenade
+			|| iClassID == ClassID_CDecoyGrenade
+			|| iClassID == ClassID_CHEGrenade
+			|| iClassID == ClassID_CFlashbang
+			|| iClassID == ClassID_CSmokeGrenade;
 	}
 
 	float CBaseEntity::GetBombTimer( )

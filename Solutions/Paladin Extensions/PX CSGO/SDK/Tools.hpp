@@ -59,6 +59,7 @@ namespace PX::Tools
 		bool IsWeapon( );
 		bool IsPlantedC4( );
 		bool IsDefuseKit( );
+		bool IsGrenade( );
 		float GetBombTimer( );
 		float GetDefuseTimer( );
 		Vector* BoundingBox( );

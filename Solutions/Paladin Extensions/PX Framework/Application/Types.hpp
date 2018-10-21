@@ -105,7 +105,7 @@ namespace PX::Types
 		~toggle_t( ) = default;
 
 		void AddToList( );
-		bool& Get( );
+		bool& Get( ); 
 		bool& UseKeyBinds( );
 		std::vector< keybind_t >& GetBinds( );
 

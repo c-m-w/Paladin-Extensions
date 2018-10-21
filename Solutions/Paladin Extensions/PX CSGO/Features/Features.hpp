@@ -87,6 +87,37 @@ namespace PX::Features
 					toggle_t bShowWeapon = false; // player only
 				} _Players[ 2 ];
 			} _ExtraSensoryDrawing;
+
+			struct glow_t
+			{
+				struct player_t
+				{
+					toggle_t bEnabled = false;
+
+					toggle_t bStates[ STATE_MAX ] { false, false, false };
+					toggle_t bMindSmoke = false;
+
+					color_sequence_t seqColor[ STATE_MAX ] { };
+
+					toggle_t bHealthBasedColor = false;
+					int iGlowStyle = 0;
+					toggle_t bFullBloom = false;
+					float flFullBloomAmount = 1.f;
+				} _Players[ 2 ]; // team, enemy
+
+				struct entity_t
+				{
+					toggle_t bEnabled = false;
+					toggle_t bStates[ STATE_MAX ] { false, false, false };
+					toggle_t bMindSmoke = false;
+
+					color_sequence_t seqColor[ STATE_MAX ] { };
+
+					int iGlowStyle = 0;
+					toggle_t bFullBloom = false;
+					float flFullBloomAmount = 1.f;
+				} _Entities[ 4 ]; // weapons, c4, defuse kit, grenade
+			} _Glow;
 		} _Awareness;
 
 		struct miscellaneous_t

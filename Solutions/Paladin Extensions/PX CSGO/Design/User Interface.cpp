@@ -156,17 +156,12 @@ namespace PX::UI::Manager
 			MATERIALS
 		};
 
-		int iEntity = SETTING_TEAM;
-
 		switch ( iSubtab )
 		{
 			case EXTRA_SENSORY_DRAWING_2:
-			{
-				iEntity = SETTING_ENEMY;
-			}
-
 			case EXTRA_SENSORY_DRAWING_1:
 			{
+				auto iEntity = iSubtab == EXTRA_SENSORY_DRAWING_2 ? SETTING_ENEMY : SETTING_TEAM;
 				auto& esdConfig = _Settings._Awareness._ExtraSensoryDrawing;
 
 				if ( BeginGroupbox( 200, 150, 500, 420, iEntity == SETTING_TEAM ? PX_XOR( "Teammates" ) : PX_XOR( "Enemies" ) ) )
@@ -368,7 +363,173 @@ namespace PX::UI::Manager
 
 			case GLOW:
 			{
+				auto& esdConfig = _Settings._Awareness._Glow;
+				std::deque< cstr_t > dqGlowStyles
+				{
+					PX_XOR( "Default" ),
+					PX_XOR( "Pulsate" ),
+					PX_XOR( "Thin" ),
+					PX_XOR( "Thin Pulsate" )
+				};
 
+				if ( BeginGroupbox( 200, 150, 500, 220, PX_XOR( "Players" ) ) )
+				{
+					static auto iEntity = 0;
+					{
+						std::deque< cstr_t > dqEntities
+						{
+							PX_XOR( "Teammates" ),
+							PX_XOR( "Enemies" )
+						};
+
+						VerticalSpacing( );
+
+						BeginRow( 30, 2, ROW_STATIC );
+						SetRowWidth( 10 );
+						Spacing( );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH );
+
+						fnSetValue( iEntity, Combobox( 30, PX_XOR( "Settings" ), dqEntities, iEntity ) );
+						EndRow( );
+					}
+
+					{
+						BeginRow( 30, 3, ROW_STATIC );
+						SetRowWidth( 5 );
+						Spacing( );
+
+						Checkbox( PX_XOR( "Enabled" ), &esdConfig._Players[ iEntity ].bEnabled, PX_XOR( "Enable glow." ) );
+
+						EndRow( );
+					}
+
+					{
+						BeginRow( 30, 13, ROW_STATIC );
+						SetRowWidth( 5 );
+						Spacing( );
+
+						Checkbox( PX_XOR( "Visible" ), &esdConfig._Players[ iEntity ].bStates[ STATE_VISIBLE ], PX_XOR( "Enable visible." ) );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Visible" ), 30 ).x - COLOR_BUTTON_PADDING * 2 - COLOR_BUTTON_WIDTH );
+						Spacing( );
+						SetRowWidth( COLOR_BUTTON_WIDTH );
+						ColorButton( PX_XOR( "Glow Visible" ), &esdConfig._Players[ iEntity ].seqColor[ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+
+						Checkbox( PX_XOR( "Invisible" ), &esdConfig._Players[ iEntity ].bStates[ STATE_INVISIBLE ].Get( ), PX_XOR( "Enable invisible." ) );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Invisible" ), 30 ).x - COLOR_BUTTON_PADDING * 2 - COLOR_BUTTON_WIDTH );
+						Spacing( );
+						SetRowWidth( COLOR_BUTTON_WIDTH );
+						ColorButton( PX_XOR( "Glow Invisible" ), &esdConfig._Players[ iEntity ].seqColor[ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+
+						Checkbox( PX_XOR( "Dormant" ), &esdConfig._Players[ iEntity ].bStates[ STATE_DORMANT ].Get( ), PX_XOR( "Enable dormant." ) );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Dormant" ), 30 ).x - COLOR_BUTTON_PADDING * 2 - COLOR_BUTTON_WIDTH );
+						Spacing( );
+						SetRowWidth( COLOR_BUTTON_WIDTH );
+						ColorButton( PX_XOR( "Glow Dormant" ), &esdConfig._Players[ iEntity ].seqColor[ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
+
+						EndRow( );
+					}
+
+					{
+						BeginRow( 30, 8, ROW_STATIC );
+						SetRowWidth( 5 );
+						Spacing( );
+
+						Checkbox( PX_XOR( "Health Based Color" ), &esdConfig._Players[ iEntity ].bHealthBasedColor, PX_XOR( "Use health to calculate the color." ) );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Health Based Color" ), 30 ).x );
+						Spacing( );
+
+						Checkbox( PX_XOR( "Full Bloom" ), &esdConfig._Players[ iEntity ].bFullBloom, PX_XOR( "Apply full bloom to the entity." ) );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Full Bloom" ), 30 ).x );
+						Spacing( );
+
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH );
+						fnSetValue( esdConfig._Players[ iEntity ].iGlowStyle, Combobox( 30, PX_XOR( "Glow Style" ), dqGlowStyles, esdConfig._Players[ iEntity ].iGlowStyle ) );
+
+						EndRow( );
+					}
+
+					{
+						static char szFullbloomAmount[ 64 ] { };
+
+						BeginRow( 30, 3, ROW_CUSTOM );
+
+						esdConfig._Players[ iEntity ].flFullBloomAmount = Slider( PX_XOR( "Fullbloom Amount" ), szFullbloomAmount, 0.f, 1.f, esdConfig._Players[ iEntity ].flFullBloomAmount, 15, 0, GROUPBOX_COLUMN_WIDTH, 30, 1 );
+
+						EndRow( );
+					}
+					EndGroupbox( );
+				}
+
+				if ( BeginGroupbox( 400, 285, 500, 220, PX_XOR( "Entities" ) ) )
+				{
+					static auto iEntity = 0;
+					{
+						std::deque< cstr_t > dqEntities
+						{
+							PX_XOR( "Weapons" ),
+							PX_XOR( "C4" ),
+							PX_XOR( "Defuse Kit" ),
+							PX_XOR( "Grenade" )
+						};
+
+						VerticalSpacing( );
+
+						BeginRow( 30, 2, ROW_STATIC );
+						SetRowWidth( 10 );
+						Spacing( );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH );
+
+						fnSetValue( iEntity, Combobox( 30, PX_XOR( "Settings" ), dqEntities, iEntity ) );
+						EndRow( );
+					}
+
+					{
+						BeginRow( 30, 3, ROW_STATIC );
+						SetRowWidth( 5 );
+						Spacing( );
+
+						Checkbox( PX_XOR( "Enabled" ), &esdConfig._Entities[ iEntity ].bEnabled, PX_XOR( "Enable glow." ) );
+
+						EndRow( );
+					}
+
+					{
+						BeginRow( 30, 11, ROW_STATIC );
+						SetRowWidth( 5 );
+						Spacing( );
+
+						Checkbox( PX_XOR( "Visible" ), &esdConfig._Entities[ iEntity ].bStates[ STATE_VISIBLE ], PX_XOR( "Enable visible." ) );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Visible" ), 30 ).x - COLOR_BUTTON_PADDING * 2 - COLOR_BUTTON_WIDTH );
+						Spacing( );
+						SetRowWidth( COLOR_BUTTON_WIDTH );
+						ColorButton( PX_XOR( "Glow Visible" ), &esdConfig._Entities[ iEntity ].seqColor[ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+
+						Checkbox( PX_XOR( "Invisible" ), &esdConfig._Entities[ iEntity ].bStates[ STATE_INVISIBLE ].Get( ), PX_XOR( "Enable invisible." ) );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Invisible" ), 30 ).x - COLOR_BUTTON_PADDING * 2 - COLOR_BUTTON_WIDTH );
+						Spacing( );
+						SetRowWidth( COLOR_BUTTON_WIDTH );
+						ColorButton( PX_XOR( "Glow Invisible" ), &esdConfig._Entities[ iEntity ].seqColor[ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+
+						Checkbox( PX_XOR( "Full Bloom" ), &esdConfig._Entities[ iEntity ].bFullBloom, PX_XOR( "Apply full bloom to the entity." ) );
+
+						EndRow( );
+					}
+
+					{
+						static char szFullbloomAmount[ 64 ] { };
+
+						BeginRow( 30, 4, ROW_CUSTOM );
+
+						esdConfig._Entities[ iEntity ].flFullBloomAmount = Slider( PX_XOR( "Fullbloom Amount" ), szFullbloomAmount, 0.f, 1.f, esdConfig._Entities[ iEntity ].flFullBloomAmount, 15, 0, GROUPBOX_COLUMN_WIDTH, 30, 1 );
+						
+						PushCustomRow( GROUPBOX_COLUMN_WIDTH + 30, 0, GROUPBOX_COLUMN_WIDTH, 30 );
+						fnSetValue( esdConfig._Entities[ iEntity ].iGlowStyle, Combobox( 30, PX_XOR( "Glow Style" ), dqGlowStyles, esdConfig._Entities[ iEntity ].iGlowStyle ) );
+
+						EndRow( );
+					}
+
+					EndGroupbox( );
+				}
 			}
 			break;
 
