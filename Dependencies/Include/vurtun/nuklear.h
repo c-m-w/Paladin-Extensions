@@ -17645,9 +17645,9 @@ nk_layout_row_end(struct nk_context *ctx)
 
     win = ctx->current;
     layout = win->layout;
-    //NK_ASSERT(layout->row.type == NK_LAYOUT_STATIC_ROW || layout->row.type == NK_LAYOUT_DYNAMIC_ROW);
-    //if (layout->row.type != NK_LAYOUT_STATIC_ROW && layout->row.type != NK_LAYOUT_DYNAMIC_ROW)
-    //    return;
+    NK_ASSERT(layout->row.type == NK_LAYOUT_STATIC_ROW || layout->row.type == NK_LAYOUT_DYNAMIC_ROW);
+    if (layout->row.type != NK_LAYOUT_STATIC_ROW && layout->row.type != NK_LAYOUT_DYNAMIC_ROW)
+        return;
     layout->row.item_width = 0;
     layout->row.item_offset = 0;
 }
