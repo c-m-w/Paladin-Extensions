@@ -149,6 +149,8 @@ namespace PX::UI
 		PX_SDK int iCurrentRowMaxColumns;
 		/** \brief Color pointer that is being edited. */
 		PX_SDK Types::color_sequence_t* pActiveEditColor = nullptr;
+		/** \brief Toggle pointer that is being edited. */
+		PX_SDK Types::toggle_t* pActiveEditToggle = nullptr;
 
 		/** \brief Checks whether or not the mouse is hovering the next widget's render bounds. */
 		/**	\return true - Mouse is hovering next widget.\n false - Mouse is not hovering next widget. */
@@ -193,6 +195,8 @@ namespace PX::UI
 		/**	\param szText Text the label will display. */
 		/**	\param bActive Whether or not the checkbox is active. */
 		void PX_API Checkbox( Types::cstr_t szText, bool *bActive, Types::cstr_t szTooltip = nullptr );
+		void PX_API PopupCheckbox( Types::cstr_t szText, bool *bActive );
+		void PX_API Checkbox( Types::cstr_t szText, Types::toggle_t *bActive, Types::cstr_t szTooltip = nullptr );
 
 		/** \brief Creates primary tabs for navigation, using previously defined widgets.
 			\n Not to be put in a row. */
@@ -224,6 +228,8 @@ namespace PX::UI
 
 		/** \brief Edit the color that was associated with the color button that was clicked, whose address was stored in a pointer.\n A popup window will be created above everything else and be handled at the end of Render( ) automatically. */
 		void PX_API ColorPicker( );
+		void PX_API ToggleEditor( struct nk_rect recMainWindow );
+		bool PX_API PopupActive( );
 		/** \brief Creates a color button that the user can set the color for if clicked.
 			\n The color picker is handled automatically if the button is clicked.
 		'	\n Uses one column. */

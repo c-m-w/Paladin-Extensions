@@ -523,10 +523,15 @@ namespace PX::UI
 
 				if ( pActiveEditColor != nullptr )
 					ColorPicker( );
+				else if( pActiveEditToggle != nullptr )
+					nk_fill_rect( nk_window_get_canvas( pContext ), nk_rect( pContext->current->bounds.x, pContext->current->bounds.y, pContext->current->bounds.w, pContext->current->bounds.h ), 0, nk_rgba( 0, 0, 0, 180 ) );
 			}
 			else
 				bShouldDrawUserInterface = false;
 			nk_end( pContext );
+
+			if ( pActiveEditToggle != nullptr )
+				ToggleEditor( recWindow );
 
 			if ( bCreatedWindow )
 			{
@@ -551,7 +556,7 @@ namespace PX::UI
 				pDevice->Present( nullptr, nullptr, nullptr, nullptr );
 			}
 			uTooltipCounter = uSliderIntCounter = uSliderFloatCounter = 0u;
-			if ( !bCreatedWindow && !pActiveEditColor && PX_INPUT.GetKeyState( VK_LBUTTON ) == true )
+			if ( !bCreatedWindow && !PopupActive( ) && PX_INPUT.GetKeyState( VK_LBUTTON ) == true )
 				nk_d3d9_handle_event( hwWindowHandle, WM_LBUTTONUP, 0, int( pContext->input.mouse.pos.x ) | int( pContext->input.mouse.pos.y ) << 16 );
 			return bShouldDrawUserInterface;
 		}
@@ -711,7 +716,7 @@ namespace PX::UI
 
 		void PX_API Tooltip( bool bShowTooltip, cstr_t szTooltip )
 		{
-			constexpr auto mmtWaitTime = 1000ull; // ms
+			constexpr auto mmtWaitTime = 1000000ull; // micro seconds
 			constexpr auto uLineHeight = 22u;
 			constexpr auto uRowHeight = 15u;
 
@@ -730,7 +735,7 @@ namespace PX::UI
 			if ( mmtStart[ uThisTooltipID ] == 0ull )
 				mmtStart[ uThisTooltipID ] = GetMoment( );
 
-			if ( GetMoment( ) - mmtStart[ uThisTooltipID ] <= mmtWaitTime )
+			if ( GetMoment( ) - mmtStart[ uThisTooltipID ] <= mmtWaitTime || PopupActive( ) )
 				return;
 
 			constexpr auto uMaxTooltipWidth = 210u;
@@ -1070,12 +1075,12 @@ namespace PX::UI
 			const auto bHovering = nk_input_is_mouse_hovering_rect( &pContext->input, recBoundaries );
 			const auto bClicking = PX_INPUT.GetKeyState( VK_LBUTTON ) == true;
 
-			if ( bHovering && !pActiveEditColor )
+			if ( bHovering && !PopupActive( ) )
 				SetWidgetActive( CURSOR_HAND );
 
-			if ( bClicking && bHovering && !pActiveEditColor )
+			if ( bClicking && bHovering && !PopupActive( ) )
 			{
-				if ( !bWasClicking && !pActiveEditColor )
+				if ( !bWasClicking && !PopupActive( ) )
 					*bActive = !*bActive;
 				bWasClicking = true;
 			}
@@ -1086,7 +1091,72 @@ namespace PX::UI
 				Tooltip( bHovering, szTooltip );
 
 			SetFont( FONT_TAHOMA );
-			nk_label_colored( pContext, *bActive ? ICON_FA_CHECK_SQUARE : ICON_FA_SQUARE, NK_TEXT_CENTERED, *bActive ? clrBlue : bHovering && !pActiveEditColor ? ( bClicking ? clrBlue : clrBlue ) : clrTextDormant );
+			nk_label_colored( pContext, *bActive ? ICON_FA_CHECK_SQUARE : ICON_FA_SQUARE, NK_TEXT_CENTERED, *bActive ? clrBlue : bHovering && !PopupActive( ) ? ( bClicking ? clrBlue : clrBlue ) : clrTextDormant );
+			nk_layout_row_push( pContext, CalculateTextBounds( szText, 15 ).x );
+			nk_label_colored( pContext, ( szText + str_t( PX_XOR( "  " ) ) ).c_str( ), NK_TEXT_LEFT, clrTextDormant );
+		}
+
+		void PX_API PopupCheckbox( cstr_t szText, bool *bActive )
+		{
+			iCurrentRowUsedColumns += 2;
+
+			static auto bWasClicking = false;
+
+			nk_layout_row_push( pContext, CHECKBOX_ICON_WIDTH );
+			const auto recBoundaries = nk_widget_bounds( pContext );
+			const auto bHovering = nk_input_is_mouse_hovering_rect( &pContext->input, recBoundaries );
+			const auto bClicking = PX_INPUT.GetKeyState( VK_LBUTTON ) == true;
+
+			if ( bHovering )
+				SetWidgetActive( CURSOR_HAND );
+
+			if ( bClicking && bHovering )
+			{
+				if ( !bWasClicking )
+					*bActive = !*bActive;
+				bWasClicking = true;
+			}
+			else if ( !bClicking )
+				bWasClicking = false;
+
+			SetFont( FONT_TAHOMA );
+			nk_label_colored( pContext, *bActive ? ICON_FA_CHECK_SQUARE : ICON_FA_SQUARE, NK_TEXT_CENTERED, *bActive ? clrBlue : bHovering ? ( bClicking ? clrBlue : clrBlue ) : clrTextDormant );
+			nk_layout_row_push( pContext, CalculateTextBounds( szText, 15 ).x );
+			nk_label_colored( pContext, ( szText + str_t( PX_XOR( "  " ) ) ).c_str( ), NK_TEXT_LEFT, clrTextDormant );
+		}
+
+		void PX_API Checkbox( cstr_t szText, toggle_t *bActive, cstr_t szTooltip /*= nullptr*/ )
+		{
+			iCurrentRowUsedColumns += 2;
+
+			static auto bWasClicking = false;
+
+			nk_layout_row_push( pContext, CHECKBOX_ICON_WIDTH );
+			const auto recBoundaries = nk_widget_bounds( pContext );
+			const auto bHovering = nk_input_is_mouse_hovering_rect( &pContext->input, recBoundaries );
+			const auto bClicking = PX_INPUT.GetKeyState( VK_LBUTTON ) == true;
+
+			if ( bHovering && !PopupActive( ) )
+			{
+				SetWidgetActive( CURSOR_HAND );
+				if ( PX_INPUT.GetKeyState( VK_RBUTTON ) )
+					pActiveEditToggle = bActive;
+			}
+
+			if ( bClicking && bHovering && !PopupActive( ) )
+			{
+				if ( !bWasClicking && !PopupActive( ) )
+					*bActive = !*bActive;
+				bWasClicking = true;
+			}
+			else if ( !bClicking )
+				bWasClicking = false;
+
+			if ( szTooltip )
+				Tooltip( bHovering, szTooltip );
+
+			SetFont( FONT_TAHOMA );
+			nk_label_colored( pContext, !!*bActive ? ICON_FA_CHECK_SQUARE : ICON_FA_SQUARE, NK_TEXT_CENTERED, !!*bActive ? clrBlue : bHovering && !PopupActive( ) ? ( bClicking ? clrBlue : clrBlue ) : clrTextDormant );
 			nk_layout_row_push( pContext, CalculateTextBounds( szText, 15 ).x );
 			nk_label_colored( pContext, ( szText + str_t( PX_XOR( "  " ) ) ).c_str( ), NK_TEXT_LEFT, clrTextDormant );
 		}
@@ -1161,14 +1231,14 @@ namespace PX::UI
 			return nk_group_end( pContext );
 		}
 
+		constexpr float flPopupWidth = 305.f, flPopupHeight = 440.f;
+
 		void PX_API ColorPicker( )
 		{
-			constexpr float flColorPickerWidth = 305.f, flColorPickerHeight = 440.f;
-
 			const auto _uWindowWidth = pContext->current->bounds.w, _uWindowHeight = pContext->current->bounds.h;
 			const struct nk_rect recColorPickerBoundaries
 			{
-				pContext->current->bounds.x + _uWindowWidth / 2 - flColorPickerWidth / 2, pContext->current->bounds.y + _uWindowHeight / 2 - flColorPickerHeight / 2, flColorPickerWidth, flColorPickerHeight
+				pContext->current->bounds.x + _uWindowWidth / 2 - flPopupWidth / 2, pContext->current->bounds.y + _uWindowHeight / 2 - flPopupHeight / 2, flPopupWidth, flPopupHeight
 			};
 			const static str_t strBaseTitle = PX_XOR( R"(Color of ')" );
 
@@ -1200,8 +1270,7 @@ namespace PX::UI
 			}
 			bNewColor = false;
 
-			const auto pOutput = nk_window_get_canvas( pContext );
-			nk_fill_rect( pOutput, nk_rect( pContext->current->bounds.x, pContext->current->bounds.y, _uWindowWidth, _uWindowHeight ), 0, nk_rgba( 0, 0, 0, 180 ) );
+			nk_fill_rect( nk_window_get_canvas( pContext ), nk_rect( pContext->current->bounds.x, pContext->current->bounds.y, _uWindowWidth, _uWindowHeight ), 0, nk_rgba( 0, 0, 0, 180 ) );
 
 			if ( bShouldClose )
 			{
@@ -1209,11 +1278,13 @@ namespace PX::UI
 				pActiveEditColor = nullptr;
 			}
 
+			SetFont( FONT_ROBOTOBOLD );
 			if ( bStoppedClicking && nk_popup_begin( pContext, NK_POPUP_DYNAMIC, ( strBaseTitle + szColorPickerSubject + "'" ).c_str( ),
 								 NK_WINDOW_BORDER | NK_WINDOW_TITLE | NK_WINDOW_NO_SCROLLBAR,
 								 nk_rect( recColorPickerBoundaries.x - pContext->current->bounds.x, recColorPickerBoundaries.y - pContext->current->bounds.y,
 										  recColorPickerBoundaries.w, recColorPickerBoundaries.h ), pActiveEditColor == nullptr ) )
 			{
+				SetFont( FONT_ROBOTOSMALL );
 				nk_layout_row_static( pContext, 255, 295, 1 );
 				clrChosenColor = nk_color_picker( pContext, clrChosenColor, NK_RGBA );
 				nk_layout_row_dynamic( pContext, 5, 0 );
@@ -1257,7 +1328,7 @@ namespace PX::UI
 					}
 				}
 
-				auto uPadding = flColorPickerWidth - COLOR_BUTTON_WIDTH * pActiveEditColor->zSequences - COLOR_BUTTON_PADDING * pActiveEditColor->zSequences * 2 - 170;
+				auto uPadding = flPopupWidth - COLOR_BUTTON_WIDTH * pActiveEditColor->zSequences - COLOR_BUTTON_PADDING * pActiveEditColor->zSequences * 2 - 170;
 				nk_layout_row_push( pContext, uPadding );
 				nk_spacing( pContext, 1 );
 				nk_layout_row_push( pContext, 75 );
@@ -1292,7 +1363,7 @@ namespace PX::UI
 				pActiveEditColor->GetDuration( uCurrentSequence ) = Slider( PX_XOR( "Duration" ), szSliderBuffer, 100, 1000, int( pActiveEditColor->GetDuration( uCurrentSequence ) ), 0, 0, 290, 30, true );
 				nk_layout_space_end( pContext );
 
-				nk_layout_row_static( pContext, 25.f, int( flColorPickerWidth - 5 ), 1 );
+				nk_layout_row_static( pContext, 25.f, int( flPopupWidth - 5 ), 1 );
 				if ( Button( EPosition::LEFT, PX_XOR( "EXIT" ), false, false ) )
 				{
 					bShouldClose = true;
@@ -1306,6 +1377,230 @@ namespace PX::UI
 			bWasClicking = PX_INPUT.GetKeyState( VK_LBUTTON ) == true;
 			bNewColor = true;
 			bStoppedClicking = false;
+		}
+
+		void PX_API ToggleEditor( struct nk_rect recMainWindow )
+		{
+			const static std::map< int, std::string > mpCustomKeyNames
+			{
+				{ 0x0, "UNASSIGNED" },
+				{ 0x01, "LMB" },
+				{ 0x02, "RMB" },
+				{ 0x03, "CNCL" },
+				{ 0x04, "MMB" },
+				{ 0x05, "X1" },
+				{ 0x06, "X2" },
+				{ 0x07, "UNDF" },
+				{ 0x08, "BK" },
+				{ 0x09, "TAB" },
+				{ 0x0C, "CLR" },
+				{ 0x0D, "RTN" },
+				{ 0x10, "SHFT" },
+				{ 0x11, "CTRL" },
+				{ 0x12, "ALT" },
+				{ 0x13, "PS" },
+				{ 0x14, "CAPS" },
+				{ 0x15, "KANA" },
+				{ 0x16, "UNDF" },
+				{ 0x17, "JNJ" },
+				{ 0x18, "FNL" },
+				{ 0x19, "HNJ" },
+				{ 0x1A, "UNDF" },
+				{ 0x1B, "ESC" },
+				{ 0x1C, "CONV" },
+				{ 0x1D, "NCNV" },
+				{ 0x1E, "ACPT" },
+				{ 0x1F, "CHNG" },
+				{ 0x20, "SPCE" },
+				{ 0x21, "PGUP" },
+				{ 0x22, "PGDN" },
+				{ 0x23, "END" },
+				{ 0x24, "HOME" },
+				{ 0x25, "LEFT" },
+				{ 0x26, "UP" },
+				{ 0x27, "RGHT" },
+				{ 0x28, "DOWN" },
+				{ 0x29, "SLCT" },
+				{ 0x2A, "PRNT" },
+				{ 0x2B, "EXEC" },
+				{ 0x2C, "PRNT" },
+				{ 0x2D, "-" },
+				{ 0x2E, "DEL" },
+				{ 0x2F, "HELP" },
+				{ 0x5B, "LWIN" },
+				{ 0x5C, "RWIN" },
+				{ 0x5D, "APPS" },
+				{ 0x5F, "SLP" },
+				{ 0x60, "NUM0" },
+				{ 0x61, "NUM1" },
+				{ 0x62, "NUM2" },
+				{ 0x63, "NUM3" },
+				{ 0x64, "NUM4" },
+				{ 0x65, "NUM5" },
+				{ 0x66, "NUM6" },
+				{ 0x67, "NUM7" },
+				{ 0x68, "NUM8" },
+				{ 0x69, "NUM9" },
+				{ 0x6A, "*" },
+				{ 0x6B, "+" },
+				{ 0x6C, "SEP" },
+				{ 0x6D, "-" },
+				{ 0x6E, "." },
+				{ 0x6F, "/" },
+				{ 0x70, "F1" },
+				{ 0x71, "F2" },
+				{ 0x72, "F3" },
+				{ 0x73, "F4" },
+				{ 0x74, "F5" },
+				{ 0x75, "F6" },
+				{ 0x76, "F7" },
+				{ 0x77, "F8" },
+				{ 0x78, "F9" },
+				{ 0x79, "F10" },
+				{ 0x7A, "F11" },
+				{ 0x7B, "F12" },
+				{ 0x90, "NMLK" },
+				{ 0x91, "SCLK" },
+				{ 0xA0, "LSHF" },
+				{ 0xA1, "RSHF" },
+				{ 0xA2, "LCTL" },
+				{ 0xA3, "RCTL" },
+				{ 0xA4, "LMNU" },
+				{ 0xA5, "RMNU" },
+				{ 0xA6, "BACK" },
+				{ 0xA7, "FRWD" },
+				{ 0xA8, "RFRS" },
+				{ 0xA9, "STOP" },
+				{ 0xAA, "SRCH" }
+			};
+
+			const auto fnGetKeyName = [ ]( key_t kKey )
+			{
+				const auto pSearch = mpCustomKeyNames.find( kKey );
+				if ( pSearch == mpCustomKeyNames.end( ) )
+					return PX_XOR( "INVALID" );
+				return pSearch->second.c_str( );
+			};
+
+			const static std::deque< cstr_t > dqBindModes
+			{
+				PX_XOR( "Inactive" ),
+				PX_XOR( "Toggle" ),
+				PX_XOR( "Enable While Pressed" ),
+				PX_XOR( "Disable While Pressed" ),
+				PX_XOR( "Enable" ),
+				PX_XOR( "Disable" )
+			};
+
+			const auto _uWindowWidth = recMainWindow.w, _uWindowHeight = recMainWindow.h;
+			const struct nk_rect recPopupBoundaries
+			{
+				recMainWindow.x + _uWindowWidth / 2 - flPopupWidth / 2, recMainWindow.y + _uWindowHeight / 2 - flPopupHeight / 2, flPopupWidth, 315.f
+			};
+			static auto bStoppedClicking = false;
+			static auto bWasClicking = false;
+			static auto iCurrentBindIndex = 0;
+			static auto bSetGlobalKeyCallback = false;
+			static key_t* pCurrentEditKey = nullptr;
+
+			if( !bSetGlobalKeyCallback )
+			{
+				bSetGlobalKeyCallback = true;
+				PX_INPUT.AddGlobalCallback( [ ]( unsigned uKey, bool bPressed )
+				{
+					if ( bPressed && pCurrentEditKey != nullptr )
+					{
+						*pCurrentEditKey = uKey;
+						pCurrentEditKey = nullptr;
+					}
+				} );
+			}
+
+			if ( !nk_input_is_mouse_hovering_rect( &pContext->input, recPopupBoundaries ) && PX_INPUT.GetKeyState( VK_LBUTTON ) && bStoppedClicking && !bWasClicking )
+			{
+				pActiveEditToggle = nullptr;
+				iCurrentBindIndex = 0;
+				return;
+			}
+
+			SetFont( FONT_ROBOTOBOLD );
+			if( bStoppedClicking && nk_begin( pContext, PX_XOR( "Keybind Editor" ), recPopupBoundaries, NK_WINDOW_NO_SCROLLBAR | NK_WINDOW_TITLE ) )
+			{
+				nk_layout_row_begin( pContext, NK_STATIC, 25, 3 );
+				nk_layout_row_push( pContext, 5.f );
+				nk_spacing( pContext, 1 );
+				nk_layout_row_push( pContext, 140.f );
+				if( Button( EPosition::LEFT, PX_XOR( "+" ), false, pActiveEditToggle->GetBinds( ).size( ) >= 7 ) && !bWasClicking )
+					pActiveEditToggle->GetBinds( ).emplace_back( toggle_t::keybind_t( ) );
+				if ( Button( EPosition::RIGHT, PX_XOR( "-" ), false, pActiveEditToggle->GetBinds( ).empty( ) ) && !bWasClicking )
+				{
+					pActiveEditToggle->GetBinds( ).erase( pActiveEditToggle->GetBinds( ).begin( ) + iCurrentBindIndex );
+					iCurrentBindIndex = 0;
+				}
+				nk_layout_row_end( pContext );
+
+				nk_layout_row_begin( pContext, NK_STATIC, 30, 3 );
+				nk_layout_row_push( pContext, 5.f );
+				nk_spacing( pContext, 1 );
+				PopupCheckbox( PX_XOR( "Use Keybinds" ), &pActiveEditToggle->UseKeyBinds( ) );
+				nk_layout_row_end( pContext );
+
+				if( !pActiveEditToggle->GetBinds( ).empty( ) )
+				{
+					std::deque< cstr_t > dqKeys;
+					for ( auto& keybind : pActiveEditToggle->GetBinds( ) )
+						dqKeys.emplace_back( fnGetKeyName( keybind.kKey ) );
+
+					nk_layout_row_begin( pContext, NK_STATIC, 30, 3 );
+					nk_layout_row_push( pContext, 5.f );
+					nk_spacing( pContext, 1 );
+					nk_layout_row_push( pContext, 184.f );
+					const auto iNewIndex = Combobox( 25, PX_XOR( "Keys" ), dqKeys, iCurrentBindIndex );
+					if ( iNewIndex > -1 )
+					{
+						iCurrentBindIndex = iNewIndex;
+						nk_popup_end( pContext );
+					}
+
+					auto& bind = pActiveEditToggle->GetBinds( ).at( iCurrentBindIndex );
+					nk_layout_row_push( pContext, 97.f );
+					if( Button( EPosition::NONE, fnGetKeyName( bind.kKey ), false, false ) )
+					{
+						bind.kKey = 0x2D;
+						pCurrentEditKey = &bind.kKey;
+					}
+					nk_layout_row_end( pContext );
+
+					nk_layout_row_begin( pContext, NK_STATIC, 30, 2 );
+					nk_layout_row_push( pContext, 5.f );
+					nk_spacing( pContext, 1 );
+					nk_layout_row_push( pContext, 184.f );
+					const auto iNewBindType = Combobox( 25, PX_XOR( "Mode" ), dqBindModes, bind.iKeyBindMode );
+					if ( iNewBindType > -1 )
+						bind.iKeyBindMode = iNewBindType;
+					nk_layout_row_end( pContext );
+				}
+
+				if ( bDrawComboboxArrow )
+				{
+					const auto pDrawBuffer = nk_window_get_canvas( pContext );
+					nk_stroke_line( pDrawBuffer, recComboboxWindowBounds.x, recComboboxWindowBounds.y - 2, recComboboxWindowBounds.x + recComboboxWindowBounds.w, recComboboxWindowBounds.y - 2, 2, clrBorder );
+					recComboboxWindowBounds.y -= 3;
+					nk_fill_triangle( pDrawBuffer, recComboboxWindowBounds.x + recComboboxWindowBounds.w - 3, recComboboxWindowBounds.y, recComboboxWindowBounds.x + recComboboxWindowBounds.w - 10, recComboboxWindowBounds.y - 7, recComboboxWindowBounds.x + recComboboxWindowBounds.w - 17, recComboboxWindowBounds.y, clrBackground );
+					recComboboxWindowBounds.y += 3;
+				}
+
+				nk_end( pContext );
+			}
+
+			if ( !bWasClicking )
+				bStoppedClicking = true;
+			bWasClicking = PX_INPUT.GetKeyState( VK_LBUTTON ) == true;
+		}
+
+		bool PX_API PopupActive( )
+		{
+			return pActiveEditColor != nullptr || pActiveEditToggle != nullptr;
 		}
 
 		void PX_API ColorButton( cstr_t szSubject, color_sequence_t* pSequence, float flVerticalPadding /*= 0.f*/ )
@@ -1350,6 +1645,8 @@ namespace PX::UI
 				}
 				nk_combo_end( pContext );
 				bDrewCombo = true;
+				if( PopupActive( ) )
+					nk_d3d9_handle_event( hwWindowHandle, WM_LBUTTONUP, 0, int( pContext->input.mouse.pos.x ) | int( pContext->input.mouse.pos.y ) << 16 );
 			}
 			HoverCheck( CURSOR_HAND );
 			nk_fill_triangle( pOutput, recComboboxBounds.x + recComboboxBounds.w - 10, recComboboxBounds.y + recComboboxBounds.h / 2 - 3, recComboboxBounds.x + recComboboxBounds.w - 14, recComboboxBounds.y + recComboboxBounds.h / 2 + 3, recComboboxBounds.x + recComboboxBounds.w - 18, recComboboxBounds.y + recComboboxBounds.h / 2 - 3, nk_input_is_mouse_prev_hovering_rect( &pContext->input, recComboboxBounds ) && !bDrewCombo ? clrTextActive : clrTextDormant );
@@ -1478,7 +1775,7 @@ namespace PX::UI
 			PushCustomRow( uStartX, uStartY + unsigned( vecTextSize.y ) + 3, uWidth, uHeight - unsigned( vecTextSize.y ) - 3 );
 
 			const auto recSliderBounds = nk_widget_bounds( pContext );
-			if ( nk_input_is_mouse_hovering_rect( &pContext->input, recSliderBounds ) && bClicking && ( !pActiveEditColor || bIgnorePopup ) || bWasClickingInBoundaries && bWasClicking )
+			if ( nk_input_is_mouse_hovering_rect( &pContext->input, recSliderBounds ) && bClicking && ( PopupActive( ) || bIgnorePopup ) || bWasClickingInBoundaries && bWasClicking )
 			{
 				bWasClickingInBoundaries = true;
 				iCurrentValue = int( iMin + ( pContext->input.mouse.pos.x - recSliderBounds.x ) / recSliderBounds.w * ( iMax - iMin ) );
@@ -1561,7 +1858,7 @@ namespace PX::UI
 			PushCustomRow( uStartX, uStartY + unsigned( vecTextSize.y ) + 3, uWidth, uHeight - unsigned( vecTextSize.y ) - 3 );
 
 			const auto recSliderBounds = nk_widget_bounds( pContext );
-			if ( nk_input_is_mouse_hovering_rect( &pContext->input, recSliderBounds ) && bClicking && !pActiveEditColor || siCurrent.bWasClickingInBoundaries && siCurrent.bWasClicking )
+			if ( nk_input_is_mouse_hovering_rect( &pContext->input, recSliderBounds ) && bClicking && !PopupActive( ) || siCurrent.bWasClickingInBoundaries && siCurrent.bWasClicking )
 			{
 				siCurrent.bWasClickingInBoundaries = true;
 				flCurrentValue = flMin + ( pContext->input.mouse.pos.x - recSliderBounds.x ) / recSliderBounds.w * ( flMax - flMin );
@@ -1571,7 +1868,7 @@ namespace PX::UI
 
 			siCurrent.bWasClicking = bool( PX_INPUT.GetKeyState( VK_LBUTTON ) );
 
-			if ( nk_input_is_mouse_hovering_rect( &pContext->input, recSliderBounds ) && bClicking && !pActiveEditColor )
+			if ( nk_input_is_mouse_hovering_rect( &pContext->input, recSliderBounds ) && bClicking && !PopupActive( ) )
 				flCurrentValue = flMin + ( pContext->input.mouse.pos.x - recSliderBounds.x ) / recSliderBounds.w * ( flMax - flMin );
 
 			const auto flNewValue = nk_slide_float( pContext, flMin, flCurrentValue, flMax, ( flMax - flMin ) / 20.f );

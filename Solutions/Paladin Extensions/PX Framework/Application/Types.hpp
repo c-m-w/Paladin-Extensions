@@ -75,6 +75,44 @@ namespace PX::Types
 	/** \return byte_t version of array */
 	const byte_t* operator""_b( wcstr_t wszSource, std::size_t zSize );
 
+	enum EKeyBindMode
+	{
+		KEYBIND_INACTIVE,
+		KEYBIND_TOGGLE,
+		KEYBIND_WHILE_PRESSED,
+		KEYBIND_WHILE_NOT_PRESSED,
+		KEYBIND_ENABLE,
+		KEYBIND_DISABLE
+	};
+
+	struct toggle_t
+	{
+		struct keybind_t
+		{
+			int iKeyBindMode = KEYBIND_INACTIVE;
+			Types::key_t kKey { };
+		};
+
+		inline static std::vector< toggle_t* > vecToggles;
+	private:
+		bool bEnabled = false, bAddedToList = false, bUseKeybinds = true;
+		std::vector< keybind_t > vecKeyBinds { };
+
+	public:
+
+		toggle_t( );
+		toggle_t( bool _bEnabled );
+		~toggle_t( ) = default;
+
+		void AddToList( );
+		bool& Get( );
+		bool& UseKeyBinds( );
+		std::vector< keybind_t >& GetBinds( );
+
+		toggle_t& operator=( bool _bEnabled );
+		bool operator!( );
+	};
+
 	struct SPostData
 	{
 		str_t strIdentifier, strValue;

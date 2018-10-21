@@ -274,10 +274,10 @@ namespace PX::UI::Manager
 					{
 						std::deque< bool* > dqInformationOptions
 						{
-							&esdConfig._Players[ iEntity ].bShowHealth,
-							&esdConfig._Players[ iEntity ].bShowName,
-							&esdConfig._Players[ iEntity ].bShowRank,
-							&esdConfig._Players[ iEntity ].bShowWeapon
+							&esdConfig._Players[ iEntity ].bShowHealth.Get( ),
+							&esdConfig._Players[ iEntity ].bShowName.Get( ),
+							&esdConfig._Players[ iEntity ].bShowRank.Get( ),
+							&esdConfig._Players[ iEntity ].bShowWeapon.Get( )
 						};
 
 						static std::deque< cstr_t > dqInformationText

@@ -6,6 +6,52 @@
 
 namespace PX::Types
 {
+	toggle_t::toggle_t( ): bEnabled( false ), vecKeyBinds( { } )
+	{ }
+
+	toggle_t::toggle_t( bool _bEnabled ) : bEnabled( _bEnabled ), vecKeyBinds( { } )
+	{ }
+
+	void toggle_t::AddToList( )
+	{
+		if( !bAddedToList )
+		{
+			bAddedToList = true;
+			vecToggles.emplace_back( this );
+		}
+	}
+
+	bool& toggle_t::Get( )
+	{
+		AddToList( );
+		return bEnabled;
+	}
+
+	bool& toggle_t::UseKeyBinds( )
+	{
+		AddToList( );
+		return bUseKeybinds;
+	}
+
+	std::vector<toggle_t::keybind_t>& toggle_t::GetBinds( )
+	{
+		AddToList( );
+		return vecKeyBinds;
+	}
+
+	toggle_t& toggle_t::operator=( bool _bEnabled )
+	{
+		AddToList( );
+		bEnabled = _bEnabled;
+		return *this;
+	}
+
+	bool toggle_t::operator!( )
+	{
+		AddToList( );
+		return !bEnabled;
+	}
+
 	line_t::line_t( const D3DXVECTOR2* _pVertices, std::size_t _sVertices, float _flWidth, DWORD _dwColor, BOOL _bAntiAlias /*= TRUE*/ ): drawing_t< D3DXVECTOR2 >( _pVertices, _sVertices )
 	{
 		dwColor = _dwColor;

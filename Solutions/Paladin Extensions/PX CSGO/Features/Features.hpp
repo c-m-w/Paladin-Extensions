@@ -39,52 +39,52 @@ namespace PX::Features
 			{
 				struct extra_sensory_drawing_base_t
 				{
-					bool bEnabled = false;
-					bool bVisible = false;
-					bool bInvisible = false;
+					toggle_t bEnabled = false;
+					toggle_t bVisible = false;
+					toggle_t bInvisible = false;
 
-					bool bMindSmoke = false;
+					toggle_t bMindSmoke = false;
 					int iBoxMode = BOX_NONE; // only static
 					color_sequence_t seqBox[ STATE_MAX ];
-					bool bFill = false;
+					toggle_t bFill = false;
 					color_sequence_t seqFill[ STATE_MAX ];
 
-					bool bSnaplines = false;
+					toggle_t bSnaplines = false;
 					color_sequence_t seqSnaplines[ STATE_MAX ];
 					float flSnaplineWidth = 1.f;
 
-					bool bShowInformation = false;
+					toggle_t bShowInformation = false;
 					color_sequence_t seqInformation[ STATE_MAX ];
-					bool bShowName = false;
-					bool bWeaponText = false;
+					toggle_t bShowName = false;
+					toggle_t bWeaponText = false;
 					int iInformationAlignment = ALIGNMENT_BOTTOM;
-					bool bInformationOutline = false;
+					toggle_t bInformationOutline = false;
 					color_sequence_t seqInformationOutline[ STATE_MAX ];
 				} _Weapons[ 2 ];
 
 				struct: extra_sensory_drawing_base_t
 				{
-					bool bDormant = false;
+					toggle_t bDormant = false;
 
-					bool bThreeDimensional = false;
+					toggle_t bThreeDimensional = false;
 
-					bool bHealthBasedFillColor = false; // player only
+					toggle_t bHealthBasedFillColor = false; // player only
 					color_sequence_t seqHealthFill[ 2 ][ STATE_MAX ]; // player only
-					bool bSolidHealthFill = false; // player only
+					toggle_t bSolidHealthFill = false; // player only
 
-					bool bViewLines = false; // player only
+					toggle_t bViewLines = false; // player only
 					color_sequence_t seqViewLines[ STATE_MAX ]; // player only
 					float flViewLineWidth = 1.f; // player only
 
-					bool bSkeleton = false; // player only
+					toggle_t bSkeleton = false; // player only
 					color_sequence_t seqSkeleton[ STATE_MAX ]; // player only
 					float flSkeletonWidth = 1.f; // player only
 
-					bool bShowHealth = false; // player only
-					bool bHealthBar = false; // player only
+					toggle_t bShowHealth = false; // player only
+					toggle_t bHealthBar = false; // player only
 					color_sequence_t seqHealthBar[ 2 ][ STATE_MAX ]; // player only
-					bool bShowRank = false; // player only
-					bool bShowWeapon = false; // player only
+					toggle_t bShowRank = false; // player only
+					toggle_t bShowWeapon = false; // player only
 				} _Players[ 2 ];
 			} _ExtraSensoryDrawing;
 		} _Awareness;
@@ -93,9 +93,9 @@ namespace PX::Features
 		{
 			struct movement_t
 			{
-				bool bAutoJump = false;
+				toggle_t bAutoJump = false;
 				key_t kAutoJumpKey = VK_SPACE;
-				bool bEdgeJump = false;
+				toggle_t bEdgeJump = false;
 				key_t kEdgeJumpKey = 0;
 
 			} _Movement;

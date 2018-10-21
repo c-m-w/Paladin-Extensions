@@ -21,7 +21,7 @@ namespace PX::Features::Miscellaneous
 		}
 		else if( pCmd->buttons & IN_JUMP )
 		{
-			if( pLocalPlayer->m_fFlags(  ) & FL_ONGROUND )
+			if( pLocalPlayer->m_fFlags( ) & FL_ONGROUND )
 			{
 				bShouldJump = true;
 				bJumped = true;
