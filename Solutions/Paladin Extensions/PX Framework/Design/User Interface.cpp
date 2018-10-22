@@ -1474,6 +1474,8 @@ namespace PX::UI
 				{ 0xAA, "SRCH" }
 			};
 
+			constexpr auto flEditorHeight = 315.f, flEditorWidth = 305.f;
+
 			const auto fnGetKeyName = [ ]( key_t kKey )
 			{
 				const auto pSearch = mpCustomKeyNames.find( kKey );
@@ -1492,10 +1494,9 @@ namespace PX::UI
 				PX_XOR( "Disable" )
 			};
 
-			const auto _uWindowWidth = recMainWindow.w, _uWindowHeight = recMainWindow.h;
 			const struct nk_rect recPopupBoundaries
 			{
-				recMainWindow.x + _uWindowWidth / 2 - flPopupWidth / 2, recMainWindow.y + _uWindowHeight / 2 - flPopupHeight / 2, flPopupWidth, 315.f
+				recMainWindow.x + recMainWindow.w / 2 - flEditorWidth / 2, recMainWindow.y + recMainWindow.h / 2 - flEditorHeight / 2, flEditorWidth, flEditorHeight
 			};
 			static auto bStoppedClicking = false;
 			static auto bWasClicking = false;
@@ -1555,7 +1556,7 @@ namespace PX::UI
 					nk_layout_row_push( pContext, 5.f );
 					nk_spacing( pContext, 1 );
 					nk_layout_row_push( pContext, 184.f );
-					const auto iNewIndex = Combobox( 25, PX_XOR( "Keys" ), dqKeys, iCurrentBindIndex );
+					const auto iNewIndex = Combobox( 30, PX_XOR( "Keys" ), dqKeys, iCurrentBindIndex );
 					if ( iNewIndex > -1 )
 					{
 						iCurrentBindIndex = iNewIndex;
@@ -1575,7 +1576,7 @@ namespace PX::UI
 					nk_layout_row_push( pContext, 5.f );
 					nk_spacing( pContext, 1 );
 					nk_layout_row_push( pContext, 184.f );
-					const auto iNewBindType = Combobox( 25, PX_XOR( "Mode" ), dqBindModes, bind.iKeyBindMode );
+					const auto iNewBindType = Combobox( 30, PX_XOR( "Mode" ), dqBindModes, bind.iKeyBindMode );
 					if ( iNewBindType > -1 )
 						bind.iKeyBindMode = iNewBindType;
 					nk_layout_row_end( pContext );
