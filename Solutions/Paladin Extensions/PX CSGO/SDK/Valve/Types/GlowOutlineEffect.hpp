@@ -46,24 +46,20 @@ public:
 class CGlowObjectManager
 {
 public:
-	int RegisterGlowObject( IClientEntity *pEntity, const Vector &vGlowColor, float flGlowAlpha, bool bRenderWhenOccluded, bool bRenderWhenUnoccluded, int nSplitScreenSlot )
+
+	int RegisterGlowObject( IClientEntity* pEntity, int nSplitScreenSlot )
 	{
 		int nIndex;
 		if ( m_nFirstFreeSlot == GlowObjectDefinition_t::END_OF_FREE_LIST )
-		{
 			nIndex = m_GlowObjectDefinitions.AddToTail( );
-		}
 		else
 		{
 			nIndex = m_nFirstFreeSlot;
 			m_nFirstFreeSlot = m_GlowObjectDefinitions[ nIndex ].m_nNextFreeSlot;
 		}
 
+		
 		m_GlowObjectDefinitions[ nIndex ].m_pEntity = pEntity;
-		m_GlowObjectDefinitions[ nIndex ].m_vGlowColor = vGlowColor;
-		m_GlowObjectDefinitions[ nIndex ].m_flAlpha = flGlowAlpha;
-		m_GlowObjectDefinitions[ nIndex ].m_bRenderWhenOccluded = bRenderWhenOccluded;
-		m_GlowObjectDefinitions[ nIndex ].m_bRenderWhenUnoccluded = bRenderWhenUnoccluded;
 		m_GlowObjectDefinitions[ nIndex ].m_nSplitScreenSlot = nSplitScreenSlot;
 		m_GlowObjectDefinitions[ nIndex ].m_nNextFreeSlot = GlowObjectDefinition_t::ENTRY_IN_USE;
 
@@ -73,7 +69,7 @@ public:
 	void UnregisterGlowObject( int nGlowObjectHandle )
 	{
 		m_GlowObjectDefinitions[ nGlowObjectHandle ].m_nNextFreeSlot = m_nFirstFreeSlot;
-		m_GlowObjectDefinitions[ nGlowObjectHandle ].m_pEntity = NULL;
+		m_GlowObjectDefinitions[ nGlowObjectHandle ].m_pEntity = nullptr;
 		m_nFirstFreeSlot = nGlowObjectHandle;
 	}
 
@@ -110,13 +106,9 @@ public:
 
 	bool HasGlowEffect( IClientEntity *pEntity ) const
 	{
-		for ( int i = 0; i < m_GlowObjectDefinitions.Count( ); ++i )
-		{
+		for ( auto i = 0; i < m_GlowObjectDefinitions.Count( ); i++ )
 			if ( !m_GlowObjectDefinitions[ i ].IsUnused( ) && m_GlowObjectDefinitions[ i ].m_pEntity == pEntity )
-			{
 				return true;
-			}
-		}
 
 		return false;
 	}

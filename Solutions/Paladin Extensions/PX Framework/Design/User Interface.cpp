@@ -845,7 +845,7 @@ namespace PX::UI
 		void PX_API Header( cstr_t szTitle, cstr_t _szApplicationTitle, unsigned uFillHeight /*= 102u*/, callback_t fnMinimizeCallback /*= nullptr*/, callback_t fnCloseCallback /*= nullptr*/ )
 		{
 			auto recMainWindow = pContext->current->bounds;
-			vecImageQueue.emplace_back( TEXTURE_LOGO, D3DXVECTOR3( recMainWindow.x + 5.f, recMainWindow.y + 5.f, 0.f ), pActiveEditColor != nullptr ? D3DCOLOR_ARGB( 170, 170, 170, 170 ) : 0xFFFFFFFF );
+			vecImageQueue.emplace_back( TEXTURE_LOGO, D3DXVECTOR3( recMainWindow.x + 5.f, recMainWindow.y + 5.f, 0.f ), PopupActive( ) ? D3DCOLOR_ARGB( 170, 170, 170, 170 ) : 0xFFFFFFFF );
 
 			nk_layout_row_dynamic( pContext, 30, 0 );
 			auto pOutput = nk_window_get_canvas( pContext );

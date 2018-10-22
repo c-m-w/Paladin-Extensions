@@ -11,6 +11,7 @@ namespace PX::Features::Awareness
 {
 	auto glwConfig = &_Settings._Awareness._Glow;
 
+	void PX_API FormGlowArray( );
 	void PX_API GlowPlayer( player_ptr_t pLocalPlayer, player_ptr_t pPlayer, GlowObjectDefinition_t* pObject );
 	void PX_API GlowEntity( player_ptr_t pLocalPlayer, entity_ptr_t pEntity, GlowObjectDefinition_t* pObject, int iSettingIndex );
 	void PX_API ResetDefinition( GlowObjectDefinition_t* pObject );
@@ -21,6 +22,7 @@ namespace PX::Features::Awareness
 		if ( nullptr == pLocalPlayer )
 			return;
 
+		FormGlowArray( );
 		GlowObjectDefinition_t* pObject;
 		for( auto i = 0; i < pGlowObjectManager->m_GlowObjectDefinitions.Count( ) 
 			 && nullptr != ( pObject = &pGlowObjectManager->m_GlowObjectDefinitions[ i ] ); i++ )
@@ -64,6 +66,26 @@ namespace PX::Features::Awareness
 		}
 	}
 
+	void PX_API FormGlowArray( )
+	{
+		for( auto i = 0; i < pEntityList->GetMaxEntities( ); i++ )
+		{
+			const auto pEntity = entity_ptr_t( pEntityList->GetClientEntity( i ) );
+			if ( nullptr == pEntity )
+				continue;
+
+			const auto iClassID = pEntity->GetClientClass( )->m_ClassID;
+			if ( iClassID != ClassID_CCSPlayer
+				 && iClassID != ClassID_CC4
+				 && iClassID != ClassID_CPlantedC4
+				 && iClassID != ClassID_CBaseAnimating
+				 && !pEntity->IsWeapon( ) )
+				continue;
+			if ( !pGlowObjectManager->HasGlowEffect( pEntity ) )
+				*reinterpret_cast< int* >( ptr_t( pEntity ) + 0xA330 ) = pGlowObjectManager->RegisterGlowObject( pEntity, -1 );
+		}
+	}
+
 	void PX_API GlowPlayer( player_ptr_t pLocalPlayer, player_ptr_t pPlayer, GlowObjectDefinition_t* pObject )
 	{
 		if ( !pPlayer->IsAlive( ) )
@@ -74,7 +96,9 @@ namespace PX::Features::Awareness
 			return;
 
 		const auto iState = pPlayer->IsDormant( ) ? STATE_DORMANT : pLocalPlayer->CanSeePlayer( pPlayer, _Current.bMindSmoke.Get( ) ) ? STATE_VISIBLE : STATE_INVISIBLE;
-		if ( !_Current.bStates[ iState ] )
+		const auto clrCurrent = _Current.seqColor[ iState ].GetCurrentColor( );
+
+		if ( clrCurrent.a == 0 )
 			return ResetDefinition( pObject );
 
 		if( _Current.bHealthBasedColor.Get( ) )
@@ -83,11 +107,10 @@ namespace PX::Features::Awareness
 			pObject->m_flRed = ( 100.f - iHealth ) / 100.f;
 			pObject->m_flGreen = 1.f - pObject->m_flRed;
 			pObject->m_flBlue = 0.f;
-			pObject->m_flAlpha = 1.f;
+			pObject->m_flAlpha = clrCurrent.afl;
 		}
 		else
 		{
-			const auto clrCurrent = _Current.seqColor[ iState ].GetCurrentColor( );
 			pObject->m_flRed = clrCurrent.GetRedFloat( );
 			pObject->m_flGreen = clrCurrent.GetGreenFloat( );
 			pObject->m_flBlue = clrCurrent.GetBlueFloat( );
@@ -107,10 +130,10 @@ namespace PX::Features::Awareness
 			return;
 
 		const auto iState = pLocalPlayer->PositionInSight( pEntity->m_vecOrigin( ), _Current.bMindSmoke.Get( ), pEntity ) ? STATE_VISIBLE : STATE_INVISIBLE;
-		if ( !_Current.bStates[ iState ] )
+		const auto clrCurrent = _Current.seqColor[ iState ].GetCurrentColor( );
+		if ( clrCurrent.a == 0 )
 			return ResetDefinition( pObject );
 
-		const auto clrCurrent = _Current.seqColor[ iState ].GetCurrentColor( );
 		pObject->m_flRed = clrCurrent.GetRedFloat( );
 		pObject->m_flGreen = clrCurrent.GetGreenFloat( );
 		pObject->m_flBlue = clrCurrent.GetBlueFloat( );

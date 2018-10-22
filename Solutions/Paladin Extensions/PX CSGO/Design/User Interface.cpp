@@ -394,36 +394,16 @@ namespace PX::UI::Manager
 					}
 
 					{
-						BeginRow( 30, 3, ROW_STATIC );
+						BeginRow( 30, 7, ROW_STATIC );
 						SetRowWidth( 5 );
 						Spacing( );
 
 						Checkbox( PX_XOR( "Enabled" ), &esdConfig._Players[ iEntity ].bEnabled, PX_XOR( "Enable glow." ) );
-
-						EndRow( );
-					}
-
-					{
-						BeginRow( 30, 13, ROW_STATIC );
-						SetRowWidth( 5 );
-						Spacing( );
-
-						Checkbox( PX_XOR( "Visible" ), &esdConfig._Players[ iEntity ].bStates[ STATE_VISIBLE ], PX_XOR( "Enable visible." ) );
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Visible" ), 30 ).x - COLOR_BUTTON_PADDING * 2 - COLOR_BUTTON_WIDTH );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Enabled" ), 30 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 3 );
 						Spacing( );
 						SetRowWidth( COLOR_BUTTON_WIDTH );
 						ColorButton( PX_XOR( "Glow Visible" ), &esdConfig._Players[ iEntity ].seqColor[ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
-
-						Checkbox( PX_XOR( "Invisible" ), &esdConfig._Players[ iEntity ].bStates[ STATE_INVISIBLE ].Get( ), PX_XOR( "Enable invisible." ) );
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Invisible" ), 30 ).x - COLOR_BUTTON_PADDING * 2 - COLOR_BUTTON_WIDTH );
-						Spacing( );
-						SetRowWidth( COLOR_BUTTON_WIDTH );
 						ColorButton( PX_XOR( "Glow Invisible" ), &esdConfig._Players[ iEntity ].seqColor[ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
-
-						Checkbox( PX_XOR( "Dormant" ), &esdConfig._Players[ iEntity ].bStates[ STATE_DORMANT ].Get( ), PX_XOR( "Enable dormant." ) );
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Dormant" ), 30 ).x - COLOR_BUTTON_PADDING * 2 - COLOR_BUTTON_WIDTH );
-						Spacing( );
-						SetRowWidth( COLOR_BUTTON_WIDTH );
 						ColorButton( PX_XOR( "Glow Dormant" ), &esdConfig._Players[ iEntity ].seqColor[ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
 
 						EndRow( );
@@ -484,33 +464,31 @@ namespace PX::UI::Manager
 					}
 
 					{
-						BeginRow( 30, 3, ROW_STATIC );
+						BeginRow( 30, 6, ROW_STATIC );
 						SetRowWidth( 5 );
 						Spacing( );
 
 						Checkbox( PX_XOR( "Enabled" ), &esdConfig._Entities[ iEntity ].bEnabled, PX_XOR( "Enable glow." ) );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Enabled" ), 30 ).x - COLOR_BUTTON_PADDING * 4 - COLOR_BUTTON_WIDTH * 2 );
+						Spacing( );
+						SetRowWidth( COLOR_BUTTON_WIDTH );
+						ColorButton( PX_XOR( "Glow Visible" ), &esdConfig._Entities[ iEntity ].seqColor[ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+						ColorButton( PX_XOR( "Glow Invisible" ), &esdConfig._Entities[ iEntity ].seqColor[ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
 
 						EndRow( );
 					}
 
 					{
-						BeginRow( 30, 11, ROW_STATIC );
+						BeginRow( 30, 5, ROW_STATIC );
 						SetRowWidth( 5 );
 						Spacing( );
 
-						Checkbox( PX_XOR( "Visible" ), &esdConfig._Entities[ iEntity ].bStates[ STATE_VISIBLE ], PX_XOR( "Enable visible." ) );
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Visible" ), 30 ).x - COLOR_BUTTON_PADDING * 2 - COLOR_BUTTON_WIDTH );
-						Spacing( );
-						SetRowWidth( COLOR_BUTTON_WIDTH );
-						ColorButton( PX_XOR( "Glow Visible" ), &esdConfig._Entities[ iEntity ].seqColor[ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
-
-						Checkbox( PX_XOR( "Invisible" ), &esdConfig._Entities[ iEntity ].bStates[ STATE_INVISIBLE ].Get( ), PX_XOR( "Enable invisible." ) );
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Invisible" ), 30 ).x - COLOR_BUTTON_PADDING * 2 - COLOR_BUTTON_WIDTH );
-						Spacing( );
-						SetRowWidth( COLOR_BUTTON_WIDTH );
-						ColorButton( PX_XOR( "Glow Invisible" ), &esdConfig._Entities[ iEntity ].seqColor[ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
-
 						Checkbox( PX_XOR( "Full Bloom" ), &esdConfig._Entities[ iEntity ].bFullBloom, PX_XOR( "Apply full bloom to the entity." ) );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Full Bloom" ), 30 ).x );
+						Spacing( );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH );
+
+						fnSetValue( esdConfig._Entities[ iEntity ].iGlowStyle, Combobox( 30, PX_XOR( "Glow Style" ), dqGlowStyles, esdConfig._Entities[ iEntity ].iGlowStyle ) );
 
 						EndRow( );
 					}
@@ -518,12 +496,9 @@ namespace PX::UI::Manager
 					{
 						static char szFullbloomAmount[ 64 ] { };
 
-						BeginRow( 30, 4, ROW_CUSTOM );
+						BeginRow( 30, 3, ROW_CUSTOM );
 
-						esdConfig._Entities[ iEntity ].flFullBloomAmount = Slider( PX_XOR( "Fullbloom Amount" ), szFullbloomAmount, 0.f, 1.f, esdConfig._Entities[ iEntity ].flFullBloomAmount, 15, 0, GROUPBOX_COLUMN_WIDTH, 30, 1 );
-						
-						PushCustomRow( GROUPBOX_COLUMN_WIDTH + 30, 0, GROUPBOX_COLUMN_WIDTH, 30 );
-						fnSetValue( esdConfig._Entities[ iEntity ].iGlowStyle, Combobox( 30, PX_XOR( "Glow Style" ), dqGlowStyles, esdConfig._Entities[ iEntity ].iGlowStyle ) );
+						esdConfig._Entities[ iEntity ].flFullBloomAmount = Slider( PX_XOR( "Fullbloom Amount" ), szFullbloomAmount, 0.f, 1.f, esdConfig._Entities[ iEntity ].flFullBloomAmount, 15, 0, GROUPBOX_COLUMN_WIDTH, 30, 1 );						
 
 						EndRow( );
 					}

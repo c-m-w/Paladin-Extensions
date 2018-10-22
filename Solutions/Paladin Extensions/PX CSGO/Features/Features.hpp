@@ -40,8 +40,6 @@ namespace PX::Features
 				struct extra_sensory_drawing_base_t
 				{
 					toggle_t bEnabled = false;
-					toggle_t bVisible = false;
-					toggle_t bInvisible = false;
 
 					toggle_t bMindSmoke = false;
 					int iBoxMode = BOX_NONE; // only static
@@ -64,8 +62,6 @@ namespace PX::Features
 
 				struct: extra_sensory_drawing_base_t
 				{
-					toggle_t bDormant = false;
-
 					toggle_t bThreeDimensional = false;
 
 					toggle_t bHealthBasedFillColor = false; // player only
@@ -93,8 +89,6 @@ namespace PX::Features
 				struct player_t
 				{
 					toggle_t bEnabled = false;
-
-					toggle_t bStates[ STATE_MAX ] { false, false, false };
 					toggle_t bMindSmoke = false;
 
 					color_sequence_t seqColor[ STATE_MAX ] { };
@@ -108,7 +102,6 @@ namespace PX::Features
 				struct entity_t
 				{
 					toggle_t bEnabled = false;
-					toggle_t bStates[ STATE_MAX ] { false, false, false };
 					toggle_t bMindSmoke = false;
 
 					color_sequence_t seqColor[ STATE_MAX ] { };
