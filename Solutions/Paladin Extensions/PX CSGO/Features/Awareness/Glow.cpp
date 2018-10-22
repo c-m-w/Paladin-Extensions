@@ -13,6 +13,7 @@ namespace PX::Features::Awareness
 
 	void PX_API GlowPlayer( player_ptr_t pLocalPlayer, player_ptr_t pPlayer, GlowObjectDefinition_t* pObject );
 	void PX_API GlowEntity( player_ptr_t pLocalPlayer, entity_ptr_t pEntity, GlowObjectDefinition_t* pObject, int iSettingIndex );
+	void PX_API ResetDefinition( GlowObjectDefinition_t* pObject );
 
 	void PX_API GlowEntities( )
 	{
@@ -74,7 +75,7 @@ namespace PX::Features::Awareness
 
 		const auto iState = pPlayer->IsDormant( ) ? STATE_DORMANT : pLocalPlayer->CanSeePlayer( pPlayer, _Current.bMindSmoke.Get( ) ) ? STATE_VISIBLE : STATE_INVISIBLE;
 		if ( !_Current.bStates[ iState ] )
-			return;
+			return ResetDefinition( pObject );
 
 		if( _Current.bHealthBasedColor.Get( ) )
 		{
@@ -107,7 +108,7 @@ namespace PX::Features::Awareness
 
 		const auto iState = pLocalPlayer->PositionInSight( pEntity->m_vecOrigin( ), _Current.bMindSmoke.Get( ), pEntity ) ? STATE_VISIBLE : STATE_INVISIBLE;
 		if ( !_Current.bStates[ iState ] )
-			return;
+			return ResetDefinition( pObject );
 
 		const auto clrCurrent = _Current.seqColor[ iState ].GetCurrentColor( );
 		pObject->m_flRed = clrCurrent.GetRedFloat( );
@@ -119,5 +120,12 @@ namespace PX::Features::Awareness
 		pObject->m_nGlowStyle = _Current.iGlowStyle;
 		pObject->m_bRenderWhenOccluded = true;
 		pObject->m_bRenderWhenUnoccluded = false;
+	}
+
+	void PX_API ResetDefinition( GlowObjectDefinition_t* pObject )
+	{
+		pObject->m_flRed = pObject->m_flGreen = pObject->m_flBlue = pObject->m_flAlpha = pObject->m_flFullBloomAmount = 0.f;
+		pObject->m_bRenderWhenOccluded = pObject->m_bRenderWhenUnoccluded = pObject->m_bFullBloomRender = false;
+		pObject->m_nGlowStyle = 0;
 	}
 }
