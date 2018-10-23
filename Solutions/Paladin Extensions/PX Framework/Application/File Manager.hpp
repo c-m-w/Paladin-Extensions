@@ -41,20 +41,19 @@ namespace PX::Files
 
 	class CConfig: public Tools::ASingleton< CConfig >
 	{
+		inline const static std::wstring wstrExtension = PX_XOR( L".pxcfg" );
+		inline const static std::wstring wstrExtensionFolderNames[ ] { PX_XOR( L"CSGO\\Configurations\\" ), PX_XOR( L"PUBG\\Configurations\\" ), PX_XOR( L"RSIX\\Configurations\\" ) };
+		inline const static std::wstring wstrGlobalFileName = PX_XOR( L"global" );
 	public:
-		// INFO: Contains global information generally used for program initialization
-		nlohmann::json jsGlobal;
-		// INFO: Contains user-defined information generally used for program customization
-		nlohmann::json jsCurrent;
-		// INFO: Name of current configuration
-		Types::wcstr_t wszCurrent = static_cast< wchar_t* >( malloc( 32 ) );
+		constexpr static std::size_t MAX_FILE_NAME_SIZE = 32;
 
-		CConfig( );
-		// INFO: Saves json configurations
-		void PX_API SaveInformation( );
-		// INFO: Changes json configuration to reference desired configuration
-		// *return*: false if path does not exist or there was an issue prcoessing the file, true if changed/is same file
-		bool PX_API ChangeConfiguration( Types::wcstr_t );
+		CConfig( ) = default;
+
+		PX_RET static std::wstring PX_API GetConfigDirectory( int iExtension );
+		void PX_API SaveConfiguration( int iExtensionID, Types::wcstr_t wszFileName, void* pConfigStructure, std::size_t zConfigStructureSize );
+		bool PX_API LoadDefaultConfiguration( int iExtensionID, void* pConfigStructure, std::size_t zConfigStructureSize );
+		void PX_API SetDefaultConfiguration( int iExtensionID, Types::wcstr_t wszFileName );
+		bool PX_API LoadConfiguration( int iExtensionID, Types::wcstr_t wszFileName, void* pConfigStructure, std::size_t zConfigStructureSize );
 	};
 
 	bool PX_API FileRead( Types::wstr_t wstrPath, Types::wstr_t& wstrData, bool bRelativePath, bool bBase64 = true );

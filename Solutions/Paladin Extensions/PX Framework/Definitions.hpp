@@ -141,8 +141,6 @@
 /** \brief Input interface singleton access macro */
 #define PX_INPUT PX::CInputManager::Get( )
 /** \brief File manager class singleton access macro */
-#define PX_FILES PX::Files::CConfig::Get( )
-/** \brief Configuration access macro for convenience */
-#define PX_CONFIG PX_FILES.jsCurrent
+#define PX_CONFIG PX::Files::CConfig::Get( )
 /** \brief Undocumented WINAPI Manager */
 #define PX_WINAPI PX::sys::SWindowsAPI::Get( )

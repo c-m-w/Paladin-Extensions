@@ -380,7 +380,7 @@ namespace PX::Tools
 		return piPlayer;
 	}
 
-	bool CBasePlayer::PositionInSight( Vector vecPosition, bool bMindSmoke, void* pEntity /*= nullptr*/ )
+	bool CBasePlayer::CanSeePosition( Vector vecPosition, bool bMindSmoke, void* pEntity /*= nullptr*/ )
 	{
 		const auto vecStart = GetViewPosition( );
 		if ( bMindSmoke && LineGoesThroughSmoke( vecStart, vecPosition ) )
@@ -411,9 +411,9 @@ namespace PX::Tools
 		const auto iPlayerIndex = EntIndex( ), iTargetIndex = pPlayer->EntIndex( );
 		if ( _PlayerSight[ iPlayerIndex ][ iTargetIndex ].iTick == pGlobalVariables->m_iTickCount )
 			return _PlayerSight[ iPlayerIndex ][ iTargetIndex ].bVisible;
-		return ( _PlayerSight[ iPlayerIndex ][ iTargetIndex ] = player_sight_t( PositionInSight( pPlayer->GetHitboxPosition( HITBOX_HEAD ), bMindSmoke, pPlayer )
-																				|| PositionInSight( pPlayer->GetHitboxPosition( HITBOX_LEFT_FOOT ), bMindSmoke, pPlayer )
-																				|| PositionInSight( pPlayer->GetHitboxPosition( HITBOX_RIGHT_FOOT ), bMindSmoke, pPlayer ) ) ).bVisible;
+		return ( _PlayerSight[ iPlayerIndex ][ iTargetIndex ] = player_sight_t( CanSeePosition( pPlayer->GetHitboxPosition( HITBOX_HEAD ), bMindSmoke, pPlayer )
+																				|| CanSeePosition( pPlayer->GetHitboxPosition( HITBOX_LEFT_FOOT ), bMindSmoke, pPlayer )
+																				|| CanSeePosition( pPlayer->GetHitboxPosition( HITBOX_RIGHT_FOOT ), bMindSmoke, pPlayer ) ) ).bVisible;
 	}
 
 	CGameTrace& CBasePlayer::TraceRayFromView( )

@@ -145,7 +145,7 @@ namespace PX::Tools
 		bool IsLocalPlayer( );
 		Vector GetViewPosition( );
 		player_info_t GetPlayerInformation( );
-		bool PositionInSight( Vector vecPosition, bool bMindSmoke, void* pEntity = nullptr );
+		bool CanSeePosition( Vector vecPosition, bool bMindSmoke, void* pEntity = nullptr );
 		bool CanSeePlayer( CBasePlayer* pPlayer, bool bMindSmoke );
 		CGameTrace& TraceRayFromView( );
 		Vector GetHitboxPosition( EHitbox hHitboxID );
