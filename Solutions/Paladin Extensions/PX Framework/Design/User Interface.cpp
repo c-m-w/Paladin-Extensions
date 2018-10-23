@@ -1628,7 +1628,7 @@ namespace PX::UI
 			const auto recComboboxBounds = nk_widget_bounds( pContext );
 
 			const auto pOutput = nk_window_get_canvas( pContext );
-			if ( nk_combo_begin_label( pContext, szTitle, nk_vec2( recComboboxBounds.w, float( uButtonHeight ) * dqOptions.size( ) + 5 * ( dqOptions.size( ) - 1 ) - 3 ) ) )
+			if ( nk_combo_begin_label( pContext, szTitle, nk_vec2( recComboboxBounds.w, float( uButtonHeight ) * dqOptions.size( ) + 4 * ( dqOptions.size( ) - 1 ) ) ) )
 			{
 				bDrawComboboxArrow = true;
 				recComboboxWindowBounds = pContext->current->bounds;
@@ -1652,6 +1652,77 @@ namespace PX::UI
 			HoverCheck( CURSOR_HAND );
 			nk_fill_triangle( pOutput, recComboboxBounds.x + recComboboxBounds.w - 10, recComboboxBounds.y + recComboboxBounds.h / 2 - 3, recComboboxBounds.x + recComboboxBounds.w - 14, recComboboxBounds.y + recComboboxBounds.h / 2 + 3, recComboboxBounds.x + recComboboxBounds.w - 18, recComboboxBounds.y + recComboboxBounds.h / 2 - 3, nk_input_is_mouse_prev_hovering_rect( &pContext->input, recComboboxBounds ) && !bDrewCombo ? clrTextActive : clrTextDormant );
 			return iSelectedOption;
+		}
+
+		void PX_API TabbedCombobox( unsigned uButtonHeight, cstr_t szTitle, const std::deque< cstr_t >& dqTabs, const std::deque< cstr_t >* pItems, unsigned& uSelectedOption )
+		{
+			const auto fnGetTrueIndex = [ ]( const std::deque< cstr_t >* pTabs, unsigned uCurrentTab, unsigned uIndex )
+			{
+				auto uReturn = 0u;
+				for ( auto u = 0u; u < uCurrentTab; u++ )
+					uReturn += pTabs[ u ].size( );
+				return uReturn + uIndex;
+			};
+
+			auto uTab = 0u, d = uSelectedOption;
+			for ( auto u = 0u; u < dqTabs.size( ); u++ )
+			{
+				if ( d < pItems[ u ].size( ) )
+				{
+					uTab = u;
+					break;
+				}
+				d -= pItems[ u ].size( );
+			}
+
+			iCurrentRowUsedColumns++;
+
+			auto bDrewCombo = false;
+			SetFont( FONT_TAHOMA );
+			const auto recComboboxBounds = nk_widget_bounds( pContext );
+			const auto pOutput = nk_window_get_canvas( pContext );
+
+			auto dqCurrentItems = pItems[ uTab ];
+			if ( nk_combo_begin_label( pContext, szTitle, nk_vec2( recComboboxBounds.w, float( uButtonHeight ) * ( dqCurrentItems.size( ) + 1u ) + 4 * dqCurrentItems.size( ) ) ) )
+			{
+				bDrawComboboxArrow = true;
+				recComboboxWindowBounds = pContext->current->bounds;
+				const int iButtonWidth = ( recComboboxBounds.w - 10 - ( dqTabs.size( ) - 1 ) * 4 ) / dqTabs.size( );
+				nk_layout_row_begin( pContext, NK_STATIC, float( uButtonHeight ), dqTabs.size( ) + 1 );
+				nk_layout_row_push( pContext, 0 );
+				nk_spacing( pContext, 1 );
+				nk_layout_row_push( pContext, iButtonWidth );
+				for ( auto u = 0u; u < dqTabs.size( ); u++ )
+					if ( Button( dqTabs.size( ) == 1 ? EPosition::NONE : ( u == 0 ? EPosition::LEFT : ( u == ( dqTabs.size( ) - 1 ) ? EPosition::RIGHT : EPosition::CENTER ) ), dqTabs[ u ], false, u == uTab ) )
+					{
+						dqCurrentItems = pItems[ ( uTab = u ) ];
+						uSelectedOption = fnGetTrueIndex( pItems, uTab, 0u );
+					}
+				iCurrentRowUsedColumns -= dqTabs.size( );
+				nk_layout_row_end( pContext );
+				SetFont( FONT_TAHOMA );
+
+				for ( unsigned i { }; i < dqCurrentItems.size( ); i++ )
+				{
+					if ( i == d )
+						pContext->style.contextual_button = btnComboActive;
+					else
+						pContext->style.contextual_button = btnCombo;
+
+					nk_layout_row_dynamic( pContext, float( uButtonHeight ), 1 );
+					if ( nk_combo_item_label( pContext, dqCurrentItems.at( i ), NK_TEXT_LEFT ) )
+					{
+						uSelectedOption = fnGetTrueIndex( pItems, uTab, i );
+					}
+					HoverCheck( CURSOR_HAND );
+				}
+				nk_combo_end( pContext );
+				bDrewCombo = true;
+				if ( PopupActive( ) )
+					nk_d3d9_handle_event( hwWindowHandle, WM_LBUTTONUP, 0, int( pContext->input.mouse.pos.x ) | int( pContext->input.mouse.pos.y ) << 16 );
+			}
+			HoverCheck( CURSOR_HAND );
+			nk_fill_triangle( pOutput, recComboboxBounds.x + recComboboxBounds.w - 10, recComboboxBounds.y + recComboboxBounds.h / 2 - 3, recComboboxBounds.x + recComboboxBounds.w - 14, recComboboxBounds.y + recComboboxBounds.h / 2 + 3, recComboboxBounds.x + recComboboxBounds.w - 18, recComboboxBounds.y + recComboboxBounds.h / 2 - 3, nk_input_is_mouse_prev_hovering_rect( &pContext->input, recComboboxBounds ) && !bDrewCombo ? clrTextActive : clrTextDormant );
 		}
 
 		void PX_API ComboboxMulti( unsigned uButtonHeight, cstr_t szTitle, const std::deque< cstr_t >& dqOptions, std::deque< bool* >& dqEnabledOptions )

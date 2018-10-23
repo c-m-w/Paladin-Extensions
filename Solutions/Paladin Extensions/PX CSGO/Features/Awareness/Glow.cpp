@@ -33,6 +33,8 @@ namespace PX::Features::Awareness
 			const auto pEntity = entity_ptr_t( pObject->m_pEntity );
 			if ( nullptr == pEntity )
 				continue;
+			if ( std::string( pEntity->GetClientClass( )->m_pNetworkName ).find( "Projectile" ) != std::string::npos )
+				std::cout << pEntity->GetClientClass( )->m_pNetworkName << " : " << pEntity->GetClientClass( )->m_ClassID << std::endl;
 			switch( pEntity->GetClientClass( )->m_ClassID )
 			{
 				case ClassID_CCSPlayer:
@@ -42,24 +44,85 @@ namespace PX::Features::Awareness
 				break;
 
 				case ClassID_CC4:
+				{
+					GlowEntity( pLocalPlayer, pEntity, pObject, SETTING_GLOW_ENTITY_C4 );
+				}
+				break;
+
 				case ClassID_CPlantedC4:
 				{
-					GlowEntity( pLocalPlayer, pEntity, pObject, 1 );
+					GlowEntity( pLocalPlayer, pEntity, pObject, SETTING_GLOW_ENTITY_PLANTED_C4 );
 				}
 				break;
 
 				case ClassID_CBaseAnimating:
 				{
-					GlowEntity( pLocalPlayer, pEntity, pObject, 2 );
+					GlowEntity( pLocalPlayer, pEntity, pObject, SETTING_GLOW_ENTITY_DEFUSER );
+				}
+				break;
+
+				case ClassID_CHEGrenade:
+				{
+					GlowEntity( pLocalPlayer, pEntity, pObject, SETTING_GLOW_ENTITY_GRENADE_HE );
+				}
+				break;
+
+				case ClassID_CFlashbang:
+				{
+					GlowEntity( pLocalPlayer, pEntity, pObject, SETTING_GLOW_ENTITY_GRENADE_FLASH );
+				}
+				break;
+
+				case ClassID_CSmokeGrenade:
+				{
+					GlowEntity( pLocalPlayer, pEntity, pObject, SETTING_GLOW_ENTITY_GRENADE_SMOKE );
+				}
+				break;
+
+				case ClassID_CDecoyGrenade:
+				{
+					GlowEntity( pLocalPlayer, pEntity, pObject, SETTING_GLOW_ENTITY_GRENADE_DECOY );
+				}
+				break;
+
+				case ClassID_CIncendiaryGrenade:
+				{
+					GlowEntity( pLocalPlayer, pEntity, pObject, SETTING_GLOW_ENTITY_GRENADE_INCENDIARY );
+				}
+				break;
+
+				case ClassID_CBaseCSGrenadeProjectile: // hegrenade & flashbang
+				{
+					const auto iModelIndex = reinterpret_cast< CBaseViewModel* >( pEntity )->m_nModelIndex( );
+					if( iModelIndex == 313 )
+						GlowEntity( pLocalPlayer, pEntity, pObject, SETTING_GLOW_ENTITY_GRENADE_PROJECTILE_FLASH );
+					else if( iModelIndex == 312 )
+						GlowEntity( pLocalPlayer, pEntity, pObject, SETTING_GLOW_ENTITY_GRENADE_PROJECTILE_HE );
+				}
+				break;
+
+				case ClassID_CSmokeGrenadeProjectile:
+				{
+					GlowEntity( pLocalPlayer, pEntity, pObject, SETTING_GLOW_ENTITY_GRENADE_PROJECTILE_SMOKE );
+				}
+				break;
+
+				case ClassID_CDecoyProjectile:
+				{
+					GlowEntity( pLocalPlayer, pEntity, pObject, SETTING_GLOW_ENTITY_GRENADE_PROJECTILE_DECOY );
+				}
+				break;
+
+				case ClassID_CMolotovProjectile:
+				{
+					GlowEntity( pLocalPlayer, pEntity, pObject, SETTING_GLOW_ENTITY_GRENADE_PROJECTILE_INCENDIARY );
 				}
 				break;
 
 				default:
 				{
-					if ( pEntity->IsGrenade( ) )
-						GlowEntity( pLocalPlayer, pEntity, pObject, 3 );
-					else if ( pEntity->IsWeapon( ) )
-						GlowEntity( pLocalPlayer, pEntity, pObject, 0 );
+					if ( pEntity->IsWeapon( ) )
+						GlowEntity( pLocalPlayer, pEntity, pObject, SETTING_GLOW_ENTITY_WEAPONS );
 				}
 				break;
 			}

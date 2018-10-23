@@ -29,6 +29,28 @@ namespace PX::Features
 		ALIGNMENT_MAX
 	};
 
+	enum
+	{
+		SETTING_GLOW_PLAYER_TEAM,
+		SETTING_GLOW_PLAYER_ENEMY,
+		SETTING_GLOW_PLAYER_MAX,
+		SETTING_GLOW_ENTITY_WEAPONS = 0,
+		SETTING_GLOW_ENTITY_C4,
+		SETTING_GLOW_ENTITY_PLANTED_C4,
+		SETTING_GLOW_ENTITY_DEFUSER,
+		SETTING_GLOW_ENTITY_GRENADE_HE,
+		SETTING_GLOW_ENTITY_GRENADE_FLASH,
+		SETTING_GLOW_ENTITY_GRENADE_SMOKE,
+		SETTING_GLOW_ENTITY_GRENADE_DECOY,
+		SETTING_GLOW_ENTITY_GRENADE_INCENDIARY,
+		SETTING_GLOW_ENTITY_GRENADE_PROJECTILE_HE,
+		SETTING_GLOW_ENTITY_GRENADE_PROJECTILE_FLASH,
+		SETTING_GLOW_ENTITY_GRENADE_PROJECTILE_SMOKE,
+		SETTING_GLOW_ENTITY_GRENADE_PROJECTILE_DECOY,
+		SETTING_GLOW_ENTITY_GRENADE_PROJECTILE_INCENDIARY,
+		SETTING_GLOW_ENTITY_MAX
+	};
+
 	inline struct settings_t
 	{
 		struct awareness_t
@@ -95,7 +117,7 @@ namespace PX::Features
 					int iGlowStyle = 0;
 					toggle_t bFullBloom = false;
 					float flFullBloomAmount = 1.f;
-				} _Players[ 2 ]; // team, enemy
+				} _Players[ SETTING_GLOW_PLAYER_MAX ]; // team, enemy
 
 				struct entity_t
 				{
@@ -107,7 +129,7 @@ namespace PX::Features
 					int iGlowStyle = 0;
 					toggle_t bFullBloom = false;
 					float flFullBloomAmount = 1.f;
-				} _Entities[ 4 ]; // weapons, c4, defuse kit, grenade
+				} _Entities[ SETTING_GLOW_ENTITY_MAX ]; // weapons, c4, defuse kit, grenade
 			} _Glow;
 		} _Awareness;
 

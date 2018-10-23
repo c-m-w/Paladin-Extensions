@@ -105,7 +105,7 @@ namespace PX::Tools
 	class CBaseViewModel: public CBaseEntity
 	{
 	public:
-		PX_NETVAR_REFERENCE( int32_t, m_nModelIndex,PX_XOR( "DT_BaseViewModel" ), PX_XOR( "m_nModelIndex" ) );
+		PX_NETVAR_REFERENCE( int32_t, m_nModelIndex, PX_XOR( "DT_BaseViewModel" ), PX_XOR( "m_nModelIndex" ) );
 		PX_NETVAR_REFERENCE( int32_t, m_nViewModelIndex,PX_XOR( "DT_BaseViewModel" ), PX_XOR( "m_nViewModelIndex" ) );
 		PX_NETVAR_REFERENCE( CHandle<CBaseCombatWeapon>, m_hWeapon,PX_XOR( "DT_BaseViewModel" ), PX_XOR( "m_hWeapon" ) );
 		PX_NETVAR_REFERENCE( CHandle<CBasePlayer>, m_hOwner,PX_XOR( "DT_BaseViewModel" ), PX_XOR( "m_hOwner" ) );
