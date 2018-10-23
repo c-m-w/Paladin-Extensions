@@ -129,7 +129,7 @@ namespace PX::Features::Awareness
 		if ( !_Current.bEnabled )
 			return;
 
-		const auto iState = pLocalPlayer->PositionInSight( pEntity->m_vecOrigin( ), _Current.bMindSmoke.Get( ), pEntity ) ? STATE_VISIBLE : STATE_INVISIBLE;
+		const auto iState = pLocalPlayer->CanSeePosition( pEntity->m_vecOrigin( ), _Current.bMindSmoke.Get( ), pEntity ) ? STATE_VISIBLE : STATE_INVISIBLE;
 		const auto clrCurrent = _Current.seqColor[ iState ].GetCurrentColor( );
 		if ( clrCurrent.a == 0 )
 			return ResetDefinition( pObject );

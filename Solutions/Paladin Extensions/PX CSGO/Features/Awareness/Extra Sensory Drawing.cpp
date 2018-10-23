@@ -110,7 +110,7 @@ namespace PX::Features::Awareness
 			if ( pEntity->IsDormant( ) )
 				info.iState = STATE_DORMANT;
 			else if ( info.bIsPlayer ? pLocalPlayer->CanSeePlayer( player_ptr_t( info.pEntity ), !!esdPlayerConfig->bMindSmoke ) : 
-									pLocalPlayer->PositionInSight( info.vecLocation, !!esdPlayerConfig->bMindSmoke ) )
+									pLocalPlayer->CanSeePosition( info.vecLocation, !!esdPlayerConfig->bMindSmoke ) )
 				info.iState = STATE_VISIBLE;
 			else
 				info.iState = STATE_INVISIBLE;

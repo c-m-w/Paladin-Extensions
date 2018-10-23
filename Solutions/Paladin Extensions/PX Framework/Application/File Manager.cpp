@@ -50,6 +50,86 @@ namespace PX::Files
 		return wstrInstallDirectory;
 	}
 
+	PX_RET std::wstring PX_API CConfig::GetConfigDirectory( int iExtension )
+	{
+		static std::wstring wstrConfigDirectory;
+		if ( wstrConfigDirectory.empty( ) )
+			wstrConfigDirectory = GetPXDirectory( ) + PX_XOR( L"Resources\\Extensions Data\\" );
+		return wstrConfigDirectory + wstrExtensionFolderNames[ iExtension ];
+	}
+
+	void PX_API CConfig::SaveConfiguration( int iExtensionID, wcstr_t wszFileName, void* pConfigStructure, std::size_t zConfigStructureSize )
+	{
+		nlohmann::json jsConfiguration;
+		jsConfiguration[ PX_XOR( "Size" ) ] = zConfigStructureSize;
+		for ( auto u = 0u; u < zConfigStructureSize; u++ )
+			jsConfiguration[ PX_XOR( "Bytes" ) ][ u ] = *reinterpret_cast< byte_t* >( ptr_t( pConfigStructure ) + u );
+		FileWrite( GetConfigDirectory( iExtensionID ) + wszFileName + wstrExtension, string_cast< std::wstring >( jsConfiguration.dump( 4 ) ), false, true );
+	}
+
+	bool PX_API CConfig::LoadDefaultConfiguration( int iExtensionID, void* pConfigStructure, std::size_t zConfigStructureSize )
+	{
+		std::wstring wstrData;
+		if ( !FileRead( GetConfigDirectory( iExtensionID ) + wstrGlobalFileName + wstrExtension, wstrData, false, true ) )
+			return false;
+		nlohmann::json jsData;
+		try
+		{
+			jsData = nlohmann::json::parse( string_cast< std::string >( wstrData ) );
+		}
+		catch( nlohmann::json::parse_error& )
+		{
+			return false;
+		}
+#define large_char_t unsigned __int128
+		try
+		{
+			return LoadConfiguration( iExtensionID, string_cast< std::wstring >( jsData[ PX_XOR( "Default Configuration" ) ].get< std::string >( ) ).c_str( ), pConfigStructure, zConfigStructureSize );
+		}
+		catch( nlohmann::json::type_error& )
+		{
+			return false;
+		}
+	}
+
+	void CConfig::SetDefaultConfiguration( int iExtensionID, wcstr_t wszFileName )
+	{
+		nlohmann::json jsGlobal;
+		jsGlobal[ PX_XOR( "Default Configuration" ) ] = string_cast< std::string >( std::wstring( wszFileName ) );
+		FileWrite( GetConfigDirectory( iExtensionID ) + wstrGlobalFileName + wstrExtension, string_cast< std::wstring >( jsGlobal.dump( 4 ) ), false, true );
+	}
+
+	bool PX_API CConfig::LoadConfiguration( int iExtensionID, Types::wcstr_t wszFileName, void* pConfigStructure, std::size_t zConfigStructureSize )
+	{
+		std::wstring wstrData;
+		if ( !FileRead( GetConfigDirectory( iExtensionID ) + wszFileName + wstrExtension, wstrData, false, true ) )
+			return false;
+		const auto strData = string_cast< std::string >( wstrData );
+		nlohmann::json jsConfig;
+
+		try
+		{
+			jsConfig = nlohmann::json::parse( strData );
+		}
+		catch( nlohmann::json::parse_error& )
+		{
+			return false;
+		}
+
+		try
+		{
+			if ( jsConfig[ PX_XOR( "Size" ) ].get< std::size_t >( ) != zConfigStructureSize )
+				;// config outdated
+			for ( auto u = 0u; u < jsConfig[ PX_XOR( "Size" ) ].get< std::size_t >( ); u++ )
+				*reinterpret_cast< byte_t* >( ptr_t( pConfigStructure ) + u ) = jsConfig[ PX_XOR( "Bytes" ) ][ u ].get< byte_t >( );
+		}
+		catch( nlohmann::json::type_error& )
+		{
+			return false;
+		}
+		return true;
+	}
+
 	namespace Resources
 	{
 		// todo: shouldn't have a parameter, should be hash from server
@@ -145,59 +225,6 @@ namespace PX::Files
 		}
 	}
 
-	CConfig::CConfig( )
-	{
-		std::ifstream ifGlobalConfiguration( GetPXDirectory( ) + PX_XOR( LR"(Configurations\global.px)" ) );
-		px_assert( ifGlobalConfiguration.good( ) );
-		std::stringstream ssBuffer;
-		ssBuffer << ifGlobalConfiguration.rdbuf( );
-		jsGlobal = nlohmann::json::parse( Base64< CryptoPP::Base64Decoder >( ssBuffer.str( ) ) );
-
-		wszCurrent = &string_cast< wstr_t >( jsGlobal[ PX_XOR( "Default Configuration" ) ].get_ref< str_t& >( ) )[ 0 ];
-
-		ChangeConfiguration( wszCurrent );
-	}
-
-	void PX_API CConfig::SaveInformation( )
-	{
-		std::ofstream ofGlobalConfiguration( GetPXDirectory( ) + PX_XOR( LR"(Configurations\global.px)" ) );
-		px_assert( ofGlobalConfiguration.good( ) );
-		ofGlobalConfiguration << Base64< CryptoPP::Base64Encoder >( jsGlobal.dump( 4 ) );
-
-		std::ofstream ofCurrentConfiguration( GetPXDirectory( ) + PX_XOR( LR"(Configurations\)" ) + wszCurrent + PX_XOR( L".px" ) );
-		px_assert( ofCurrentConfiguration.good( ) );
-		ofCurrentConfiguration << Base64< CryptoPP::Base64Encoder >( jsCurrent.dump( 4 ) );
-	}
-
-	bool PX_API CConfig::ChangeConfiguration( wcstr_t wszConfig )
-	{
-		if ( wszCurrent == wszConfig )
-			return true;
-
-		if ( std::filesystem::exists( ( GetPXDirectory( ) + PX_XOR( LR"(Configurations\)" ) + wszConfig + PX_XOR( L".px" ) ).c_str( ) ) )
-		{
-			std::ifstream ifNewConfiguration( GetPXDirectory( ) + PX_XOR( LR"(Configurations\)" ) + wszConfig + PX_XOR( L".px" ) );
-			px_assert( ifNewConfiguration.good( ) );
-				try
-				{
-					std::stringstream ssBuffer;
-					ssBuffer << ifNewConfiguration.rdbuf( );
-					jsCurrent = nlohmann::json::parse( Base64< CryptoPP::Base64Decoder >( ssBuffer.str( ) ) );
-				}
-				catch ( nlohmann::detail::parse_error& )
-				{
-					return false; // Formatting Errors
-				}
-				catch ( nlohmann::detail::type_error& )
-				{
-					return false; // Missing Errors
-				}
-
-			wszCurrent = wszConfig;
-			return true;
-		}
-		return false;
-	}
 
 	bool PX_API FileRead( wstr_t wstrPath, wstr_t& wstrData, bool bRelativePath, bool bBase64 /*= true*/ )
 	{
@@ -210,7 +237,11 @@ namespace PX::Files
 
 		std::stringstream ssReturn { };
 		ssReturn << fFile.rdbuf( );
-		wstrData = string_cast< wstr_t >( bBase64 ? Base64< CryptoPP::Base64Decoder >( ssReturn.str( ) ) : ssReturn.str( ) );
+		fFile.close( );
+		const auto str = ssReturn.str( );
+		if ( str.empty( ) )
+			return false;
+		wstrData = string_cast< wstr_t >( bBase64 ? Base64< CryptoPP::Base64Decoder >( str ) : ssReturn.str( ) );
 		return true;
 	}
 

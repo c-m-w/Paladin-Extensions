@@ -4,8 +4,6 @@
 
 namespace PX::Features
 {
-	extern nlohmann::json jsConfig;
-
 	enum EBox
 	{
 		BOX_NONE,

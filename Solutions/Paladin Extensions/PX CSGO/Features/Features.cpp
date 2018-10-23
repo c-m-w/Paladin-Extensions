@@ -54,6 +54,8 @@ namespace PX::Features
 									break;
 							}
 		} );
+
+		PX_CONFIG.LoadDefaultConfiguration( PX_EXTENSION_CSGO, &_Settings, sizeof( settings_t ) );
 		return true;
 	}
 }
