@@ -5,8 +5,6 @@
 
 namespace PX::Features
 {
-	nlohmann::json jsConfig;
-
 	bool PX_API InitializeFeatures( )
 	{
 		PX_INPUT.AddGlobalCallback( [ ]( unsigned uKey, bool bPressed )
