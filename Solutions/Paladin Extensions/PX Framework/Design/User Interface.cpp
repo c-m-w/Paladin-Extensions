@@ -1381,7 +1381,7 @@ namespace PX::UI
 
 		void PX_API ToggleEditor( struct nk_rect recMainWindow )
 		{
-			const static std::map< int, std::string > mpCustomKeyNames
+			const static std::map< int, str_t > mpCustomKeyNames
 			{
 				{ 0x0, "UNASSIGNED" },
 				{ 0x01, "LMB" },

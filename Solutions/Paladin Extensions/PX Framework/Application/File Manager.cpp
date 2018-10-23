@@ -50,9 +50,12 @@ namespace PX::Files
 		return wstrInstallDirectory;
 	}
 
-	PX_RET std::wstring PX_API CConfig::GetConfigDirectory( int iExtension )
+	CConfig::CConfig( ): wstrExtension( PX_XOR( L".pxcfg" ) ), wstrExtensionFolderNames { PX_XOR( L"CSGO\\Configurations\\" ), PX_XOR( L"PUBG\\Configurations\\" ), PX_XOR( L"RSIX\\Configurations\\" ) } , wstrGlobalFileName( PX_XOR( L"global" ) )
+	{ }
+
+	PX_RET wstr_t PX_API CConfig::GetConfigDirectory( int iExtension )
 	{
-		static std::wstring wstrConfigDirectory;
+		static wstr_t wstrConfigDirectory;
 		if ( wstrConfigDirectory.empty( ) )
 			wstrConfigDirectory = GetPXDirectory( ) + PX_XOR( L"Resources\\Extensions Data\\" );
 		return wstrConfigDirectory + wstrExtensionFolderNames[ iExtension ];
@@ -64,18 +67,18 @@ namespace PX::Files
 		jsConfiguration[ PX_XOR( "Size" ) ] = zConfigStructureSize;
 		for ( auto u = 0u; u < zConfigStructureSize; u++ )
 			jsConfiguration[ PX_XOR( "Bytes" ) ][ u ] = *reinterpret_cast< byte_t* >( ptr_t( pConfigStructure ) + u );
-		FileWrite( GetConfigDirectory( iExtensionID ) + wszFileName + wstrExtension, string_cast< std::wstring >( jsConfiguration.dump( 4 ) ), false, true );
+		FileWrite( GetConfigDirectory( iExtensionID ) + wszFileName + wstrExtension, string_cast< wstr_t >( jsConfiguration.dump( 4 ) ), false, true );
 	}
 
 	bool PX_API CConfig::LoadDefaultConfiguration( int iExtensionID, void* pConfigStructure, std::size_t zConfigStructureSize )
 	{
-		std::wstring wstrData;
+		wstr_t wstrData;
 		if ( !FileRead( GetConfigDirectory( iExtensionID ) + wstrGlobalFileName + wstrExtension, wstrData, false, true ) )
 			return false;
 		nlohmann::json jsData;
 		try
 		{
-			jsData = nlohmann::json::parse( string_cast< std::string >( wstrData ) );
+			jsData = nlohmann::json::parse( string_cast< str_t >( wstrData ) );
 		}
 		catch( nlohmann::json::parse_error& )
 		{
@@ -84,7 +87,7 @@ namespace PX::Files
 #define large_char_t unsigned __int128
 		try
 		{
-			return LoadConfiguration( iExtensionID, string_cast< std::wstring >( jsData[ PX_XOR( "Default Configuration" ) ].get< std::string >( ) ).c_str( ), pConfigStructure, zConfigStructureSize );
+			return LoadConfiguration( iExtensionID, string_cast< wstr_t >( jsData[ PX_XOR( "Default Configuration" ) ].get< str_t >( ) ).c_str( ), pConfigStructure, zConfigStructureSize );
 		}
 		catch( nlohmann::json::type_error& )
 		{
@@ -95,16 +98,16 @@ namespace PX::Files
 	void CConfig::SetDefaultConfiguration( int iExtensionID, wcstr_t wszFileName )
 	{
 		nlohmann::json jsGlobal;
-		jsGlobal[ PX_XOR( "Default Configuration" ) ] = string_cast< std::string >( std::wstring( wszFileName ) );
-		FileWrite( GetConfigDirectory( iExtensionID ) + wstrGlobalFileName + wstrExtension, string_cast< std::wstring >( jsGlobal.dump( 4 ) ), false, true );
+		jsGlobal[ PX_XOR( "Default Configuration" ) ] = string_cast< str_t >( wstr_t( wszFileName ) );
+		FileWrite( GetConfigDirectory( iExtensionID ) + wstrGlobalFileName + wstrExtension, string_cast< wstr_t >( jsGlobal.dump( 4 ) ), false, true );
 	}
 
 	bool PX_API CConfig::LoadConfiguration( int iExtensionID, Types::wcstr_t wszFileName, void* pConfigStructure, std::size_t zConfigStructureSize )
 	{
-		std::wstring wstrData;
+		wstr_t wstrData;
 		if ( !FileRead( GetConfigDirectory( iExtensionID ) + wszFileName + wstrExtension, wstrData, false, true ) )
 			return false;
-		const auto strData = string_cast< std::string >( wstrData );
+		const auto strData = string_cast< str_t >( wstrData );
 		nlohmann::json jsConfig;
 
 		try

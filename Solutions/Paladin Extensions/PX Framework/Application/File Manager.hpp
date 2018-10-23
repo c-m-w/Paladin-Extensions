@@ -41,15 +41,15 @@ namespace PX::Files
 
 	class CConfig: public Tools::ASingleton< CConfig >
 	{
-		inline const static std::wstring wstrExtension = PX_XOR( L".pxcfg" );
-		inline const static std::wstring wstrExtensionFolderNames[ ] { PX_XOR( L"CSGO\\Configurations\\" ), PX_XOR( L"PUBG\\Configurations\\" ), PX_XOR( L"RSIX\\Configurations\\" ) };
-		inline const static std::wstring wstrGlobalFileName = PX_XOR( L"global" );
+		const Types::wstr_t wstrExtension;
+		const Types::wstr_t wstrExtensionFolderNames[ 3 ];
+		const Types::wstr_t wstrGlobalFileName;
 	public:
 		constexpr static std::size_t MAX_FILE_NAME_SIZE = 32;
 
-		CConfig( ) = default;
+		CConfig( );
 
-		PX_RET static std::wstring PX_API GetConfigDirectory( int iExtension );
+		PX_RET Types::wstr_t PX_API GetConfigDirectory( int iExtension );
 		void PX_API SaveConfiguration( int iExtensionID, Types::wcstr_t wszFileName, void* pConfigStructure, std::size_t zConfigStructureSize );
 		bool PX_API LoadDefaultConfiguration( int iExtensionID, void* pConfigStructure, std::size_t zConfigStructureSize );
 		void PX_API SetDefaultConfiguration( int iExtensionID, Types::wcstr_t wszFileName );
