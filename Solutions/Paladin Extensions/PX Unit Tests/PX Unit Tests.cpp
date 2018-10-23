@@ -77,7 +77,6 @@ namespace PX::UnitTests
 
 						for ( std::size_t z = 0; z < 4; z++ )
 						{
-							auto asdf = bstr[ z ];
 							Assert::IsTrue( b[ z ] == bstr[ z ], L"bstr operator''b check failed", PX_ASSERT_INFO );
 							Assert::IsTrue( bstrszcmp( bstrs[ z ], bsz[ z ] ), L"bstr operator\"\"b check failed", PX_ASSERT_INFO );
 						}

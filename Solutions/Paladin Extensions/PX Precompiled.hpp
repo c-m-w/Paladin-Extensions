@@ -3,16 +3,17 @@
 #pragma once
 
 // Compiler
-#pragma warning( push, 0 )
-
-// Standard C++ Library
+#pragma warning( push, 0 ) // warning level set to 0
 #define _CRT_SECURE_NO_WARNINGS
-#define _SILENCE_ALL_CXX17_DEPRECATION_WARNINGS // review Uncomment?
+
+// Standard C++
+#define _SILENCE_CXX17_UNCAUGHT_EXCEPTION_DEPRECATION_WARNING // crypto++
 #include <Jeremia-h/Standard Library.hpp>
+#undef _SILENCE_CXX17_UNCAUGHT_EXCEPTION_DEPRECATION_WARNING
 
 // Windows
-#define WIN32_LEAN_AND_MEAN
-#define NOMINMAX
+#define WIN32_LEAN_AND_MEAN // remove unnecessary includes
+#define NOMINMAX // disable min/max macros
 #include <Windows.h>
 #undef LoadLibraryEx
 #include <tchar.h>
@@ -41,7 +42,7 @@
 #pragma comment( lib, "cryptlib.lib" )
 
 // cURL
-#define CURL_STATICLIB
+#define CURL_STATICLIB // specify cURL is lib, not dll
 #include <curl/curl.h>
 #pragma comment( lib, "Ws2_32.lib" )
 #pragma comment( lib, "wldap32.lib" )
@@ -58,14 +59,14 @@
 #pragma comment( lib, "d3dx9.lib" )
 #pragma comment( lib, "d3d9.lib" )
 
-// Fonts
-#include <IconFontCppHeaders/IconsFontAwesome5-Solid.hpp>
-
 // Json
 #include <nlohmann/json.hpp>
 #undef xor
 
-// Compiler
-#pragma warning( pop )
-#pragma warning( disable: 4098 4099 4100 4307 4309 4996 )
+// Fonts
+#include <IconFontCppHeaders/IconsFontAwesome5-Solid.hpp>
 
+// Compiler
+#pragma warning( pop ) // reset warning level
+#pragma warning( push )
+#pragma warning( disable: 4100 4307 4309 ) // unreferenced parameter; overflow; truncation

@@ -128,6 +128,7 @@
 #define PX_ERR if constexpr ( PX_SHOW_ALL_DEBUG || PX_SHOW_ERR_DEBUG ) \
 				   PX::dbg::SDebugStream::Get( ) << "\n[ERR] "
 #else
+#define PX_LOG /##/
 #define PX_NFO /##/
 #define PX_DBG /##/
 #define PX_SCS /##/

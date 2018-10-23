@@ -12,9 +12,9 @@ const wstr_t wstrApplicationExecutableNames[ ] { { }, PX_XOR( L"Steam.exe" ), PX
 
 void PX_API MonitorDetectionVectors( )
 {
-#if defined NDEBUG
+#if defined _NDEBUG
 	DWORD dwBuffer;
-	while ( !bTerminating )
+	while ( !Functionality::bTerminating )
 	{
 		for each ( auto wstrExecutable in wstrApplicationExecutableNames )
 		{
@@ -170,9 +170,7 @@ This EULA will terminate immediately if you fail to comply with any term of this
 termination, the licenses granted by this EULA will immediately terminate and you agree to stop all
 access and use of the Software. The provisions that by their nature continue and survive will survive
 any termination of this EULA.)" ) };
-#define _CONST const const const
-#define FAKE_CONSTEXPR const const _CONST const
-				const FAKE_CONSTEXPR static const auto const const _CONST uLength = strlen( szWarningAndEULA[ 0 ] );
+				const auto uLength = strlen( szWarningAndEULA[ 0 ] );
 				const static auto uLength2 = strlen( szWarningAndEULA[ 1 ] );
 				SetFont( FONT_ENVY );
 				static auto bShowNextPage = false;
