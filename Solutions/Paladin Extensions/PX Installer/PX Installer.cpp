@@ -2,10 +2,7 @@
 
 #include "PX Precompiled.hpp"
 
-#define PX_ENTRY_AS_WIN
 #define PX_INSTANCE_ID L"Installer"
-#include <Jeremia-h/Entry Manager.hpp>
-
 #include "PX Installer.hpp"
 
 const wstr_t wstrApplicationExecutableNames[ ] { { }, PX_XOR( L"Steam.exe" ), PX_XOR( L"csgo.exe" ), PX_XOR( L"pubg.exe" ), PX_XOR( L"rsix.exe" ) };

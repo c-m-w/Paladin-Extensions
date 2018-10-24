@@ -2,9 +2,7 @@
 
 #include "PX Precompiled.hpp"
 
-#define PX_ENTRY_AS_WIN
 #define PX_INSTANCE_ID L"Launcher"
-#include <Jeremia-h/Entry Manager.hpp>
 
 #include "PX Launcher.hpp"
 

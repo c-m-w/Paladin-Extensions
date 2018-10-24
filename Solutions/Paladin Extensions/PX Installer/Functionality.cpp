@@ -70,22 +70,23 @@ namespace Resources
 
 namespace PX::Functionality
 {
-	byte* PX_API ParseResource( int RESOURCE_ID )
+	byte* PX_API ParseResource( int iResourceID )
 	{
-		HMODULE hModule = GetModuleHandle( nullptr );
-		HRSRC hResource = FindResource( hModule, MAKEINTRESOURCE( RESOURCE_ID ), MAKEINTRESOURCE( RESOURCE_ID ) );
-		HGLOBAL hMemory = LoadResource( hModule, hResource );
-		DWORD dwSize = SizeofResource( hModule, hResource );
+		HRSRC hResource = FindResource( PX::hinstWin, MAKEINTRESOURCE( iResourceID ), MAKEINTRESOURCE( iResourceID ) );
+		HGLOBAL hMemory = LoadResource( PX::hinstWin, hResource );
+		DWORD dwSize = SizeofResource( PX::hinstWin, hResource );
 		LPVOID lpAddress = LockResource( hMemory );
 
-		byte *bytes = new byte[ dwSize ];
-		memcpy( bytes, lpAddress, dwSize );
-		return bytes;
+		bstr_t bData;
+		bData.resize( dwSize );
+		memcpy( &bData[ 0 ], lpAddress, dwSize );
+		return bData.c_str( );
 	}
 
 	void PX_API ParseResources( )
 	{
 		::Resources::bLogoICO = ParseResource( IDI_ICON1 );
+		PX::UI::vecTextures;
 	}
 
 	void PX_API Install( )
