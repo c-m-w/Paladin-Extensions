@@ -31,6 +31,7 @@ namespace
 
 void PX_API OnLaunch( );
 
+#if defined PX_INSTANCE_ID
 int APIENTRY
 #if defined UNICODE
 wWinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine,
@@ -40,14 +41,8 @@ WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR 
 		 _In_ int nCmdShow )
 {
 #if defined UNICODE
-#if !defined PX_INSTANCE_ID
-#define PX_INSTANCE_ID L"0"
-#endif
 	hSingleInstanceMutex = CreateMutex( nullptr, TRUE, L"Paladin Extensions " PX_INSTANCE_ID );
 #else
-#if !defined PX_INSTANCE_ID
-#define PX_INSTANCE_ID "0"
-#endif
 	hSingleInstanceMutex = CreateMutex( nullptr, TRUE, "Paladin Extensions " PX_INSTANCE_ID );
 #endif
 	if ( hSingleInstanceMutex == nullptr
@@ -72,6 +67,7 @@ WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR 
 	CloseHandle( hSingleInstanceMutex );
 	return 0;
 }
+#endif
 
 #if defined PX_STAND_ALONE
 #undef PX_EXT
