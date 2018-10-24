@@ -100,6 +100,8 @@ namespace PX::Information
 				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Model Info" ) ].get< str_t >( ).c_str( ), nullptr ) );
 			pInputSystem = reinterpret_cast< IInputSystem* >( Modules::mInput.ciFactory(
 				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Input" ) ].get< str_t >( ).c_str( ), nullptr ) );
+			pModelRender = reinterpret_cast< IVModelRender* >( Modules::mEngine.ciFactory(
+				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Model Render" ) ].get< str_t >( ).c_str( ), nullptr ) );
 
 			return nullptr != pSendPackets
 				&& nullptr != pGlobalVariables
@@ -115,7 +117,8 @@ namespace PX::Information
 				&& nullptr != pEntityList
 				&& nullptr != pEngineTrace
 				&& nullptr != pModelInfo
-				&& nullptr != pInputSystem;
+				&& nullptr != pInputSystem
+				&& nullptr != pModelRender;
 		}
 	}
 

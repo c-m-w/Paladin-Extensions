@@ -23,6 +23,9 @@ namespace PX
 
 		// Panel
 		typedef void( __thiscall* paint_traverse_t )( IPanel*, vgui::VPANEL, bool, bool );
+
+		// ModelRender
+		typedef void( __thiscall* draw_model_execute_t )( IVModelRender*, IMatRenderContext*, const DrawModelState_t&, const ModelRenderInfo_t&, matrix3x4_t* );
 	}
 
 	namespace Hooks
@@ -30,11 +33,11 @@ namespace PX
 		bool PX_API InitializeHooks( );
 		void PX_API Destruct( );
 
-		//PX_SDK Tools::CHook* hkDirectXDevice;
 		PX_SDK Tools::CStandardHook* hkDirectXDevice;
 		PX_SDK Tools::CTrampolineHook* hkClientBase;
 		PX_SDK Tools::CTrampolineHook* hkClientMode;
 		PX_SDK Tools::CTrampolineHook* hkPanel;
+		PX_SDK Tools::CTrampolineHook* hkModelRender;
 
 		// Device
 		HRESULT __stdcall BeginScene( IDirect3DDevice9* pThis );
@@ -50,5 +53,8 @@ namespace PX
 
 		// Panel
 		void __stdcall PaintTraverse( vgui::VPANEL panel, bool forceRepaint, bool allowForce );
+
+		// ModelRender
+		void __stdcall DrawModelExecute( IMatRenderContext* pContext, const DrawModelState_t& state, const ModelRenderInfo_t& pInfo, matrix3x4_t* pCustomBoneToWorld );
 	}
 }

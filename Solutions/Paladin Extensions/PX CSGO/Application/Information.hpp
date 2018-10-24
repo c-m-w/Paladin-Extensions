@@ -32,6 +32,9 @@ namespace PX::Information
 			// Panel
 			PX_DEF uPaintTraverse = 41u;
 
+			// ModelRender
+			PX_DEF uDrawModelExecute = 21u;
+
 			// CBaseEntity
 			PX_DEF uIsPlayer = 152u;
 			PX_DEF uIsWeapon = 160u;
@@ -90,6 +93,7 @@ namespace PX::Information
 		PX_SDK IEngineTrace* pEngineTrace = nullptr;
 		PX_SDK IVModelInfoClient* pModelInfo = nullptr;
 		PX_SDK CInput* pInput = nullptr;
+		PX_SDK IVModelRender* pModelRender = nullptr;
 	}
 
 	namespace NetworkedVariableManager // http://www.bailopan.net/table_dump.txt

@@ -51,6 +51,29 @@ namespace PX::Features
 		SETTING_GLOW_ENTITY_MAX
 	};
 
+	enum
+	{
+		SETTING_MATERIALS_TEAM,
+		SETTING_MATERIALS_ENEMY,
+		SETTING_MATERIALS_WEAPONS,
+		SETTING_MATERIALS_ARMS,
+		SETTING_MATERIALS_SLEEVES,
+		SETTING_MATERIALS_C4,
+		SETTING_MATERIALS_PLANTED_C4,
+		SETTING_MATERIALS_DEFUSER,
+		SETTING_MATERIALS_HE,
+		SETTING_MATERIALS_FLASH,
+		SETTING_MATERIALS_SMOKE,
+		SETTING_MATERIALS_DECOY,
+		SETTING_MATERIALS_INCENDIARY,
+		SETTING_MATERIALS_PROJECTILE_HE,
+		SETTING_MATERIALS_PROJECTILE_FLASH,
+		SETTING_MATERIALS_PROJECTILE_SMOKE,
+		SETTING_MATERIALS_PROJECTILE_DECOY,
+		SETTING_MATERIALS_PROJECTILE_INCENDIARY,
+		SETTING_MATERIALS_MAX
+	};
+
 	inline struct settings_t
 	{
 		struct awareness_t
@@ -131,6 +154,17 @@ namespace PX::Features
 					float flFullBloomAmount = 1.f;
 				} _Entities[ SETTING_GLOW_ENTITY_MAX ]; // weapons, c4, defuse kit, grenade
 			} _Glow;
+
+			struct materials_t
+			{
+				struct entity_t
+				{
+					toggle_t bEnabled = false;
+					toggle_t bMindSmoke = false;
+
+					color_sequence_t seqColor[ STATE_MAX ] { };
+				} _Entities[ SETTING_MATERIALS_MAX ];
+			} _Materials;
 		} _Awareness;
 
 		struct miscellaneous_t

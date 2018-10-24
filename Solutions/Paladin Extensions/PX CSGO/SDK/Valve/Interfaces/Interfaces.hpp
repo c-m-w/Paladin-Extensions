@@ -21,3 +21,4 @@
 #include "IPanel.hpp"
 #include "ISurface.hpp"
 #include "IVModelInfoClient.hpp"
+#include "IVModelRender.hpp"

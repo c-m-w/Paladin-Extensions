@@ -38,14 +38,15 @@
             "Reveal Ranks": "55 8B EC 8B 0D ? ? ? ? 68"
       }
     },
-    "Versions": {
-        "Client Base": "VClient018",
-        "Engine Client": "VEngineClient014",
-        "VGUI Surface":  "VGUI_Surface031",
-        "VGUI Panel": "VGUI_Panel009",
-        "Entity List": "VClientEntityList003",
-        "Engine Trace": "EngineTraceClient004",
-        "Model Info": "VModelInfoClient004",
-        "Input": "InputSystemVersion001"
-    }
+      "Versions": {
+            "Client Base": "VClient018",
+            "Engine Client": "VEngineClient014",
+            "VGUI Surface": "VGUI_Surface031",
+            "VGUI Panel": "VGUI_Panel009",
+            "Entity List": "VClientEntityList003",
+            "Engine Trace": "EngineTraceClient004",
+            "Model Info": "VModelInfoClient004",
+            "Input": "InputSystemVersion001",
+            "Model Render": "VEngineModel016"
+  }
 }

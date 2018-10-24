@@ -168,6 +168,7 @@
     <ClCompile Include="Design\User Interface.cpp" />
     <ClCompile Include="Features\Awareness\Extra Sensory Drawing.cpp" />
     <ClCompile Include="Features\Awareness\Glow.cpp" />
+    <ClCompile Include="Features\Awareness\Materials.cpp" />
     <ClCompile Include="Features\Combat\Trigger.cpp" />
     <ClCompile Include="Features\Features.cpp" />
     <ClCompile Include="Features\Miscellaneous\Movement.cpp" />
@@ -218,6 +219,7 @@
     <ClInclude Include="Design\User Interface.hpp" />
     <ClInclude Include="Features\Awareness\Extra Sensory Drawing.hpp" />
     <ClInclude Include="Features\Awareness\Glow.hpp" />
+    <ClInclude Include="Features\Awareness\Materials.hpp" />
     <ClInclude Include="Features\Combat\Trigger.hpp" />
     <ClInclude Include="Features\Features.hpp" />
     <ClInclude Include="Features\Miscellaneous\Movement.hpp" />
@@ -246,6 +248,7 @@
     <ClInclude Include="SDK\Valve\Interfaces\ISurface.hpp" />
     <ClInclude Include="SDK\Valve\Interfaces\IVEngineClient.hpp" />
     <ClInclude Include="SDK\Valve\Interfaces\IVModelInfoClient.hpp" />
+    <ClInclude Include="SDK\Valve\Interfaces\IVModelRender.hpp" />
     <ClInclude Include="SDK\Valve\Math\Math.hpp" />
     <ClInclude Include="SDK\Valve\Math\QAngle.hpp" />
     <ClInclude Include="SDK\Valve\Math\Vector.hpp" />

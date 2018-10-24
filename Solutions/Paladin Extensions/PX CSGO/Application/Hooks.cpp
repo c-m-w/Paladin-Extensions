@@ -20,23 +20,26 @@ namespace PX
 				&& hkClientBase->HookIndex( uCreateMove, reinterpret_cast< void* >( CreateMove ) )
 				&& hkClientMode->HookIndex( uDoPostScreenEffects, reinterpret_cast< void* >( DoPostScreenEffects ) )
 				&& hkPanel->HookIndex( uPaintTraverse, reinterpret_cast< void* >( PaintTraverse ) )
+				&& hkModelRender->HookIndex( uDrawModelExecute, reinterpret_cast< void* >( DrawModelExecute ) )
 				&& hkClientBase->ResetProtection( )
 				&& hkClientMode->ResetProtection( )
-				&& hkPanel->ResetProtection( );
+				&& hkPanel->ResetProtection( )
+				&& hkModelRender->ResetProtection( );
 		}
 
 		bool PX_API InitializeHooks( )
 		{
-			//hkDirectXDevice	= new Tools::CHook( pDevice );
 			hkDirectXDevice = new Tools::CStandardHook( pDevice );
 			hkClientBase	= new Tools::CTrampolineHook( pClientBase );
 			hkClientMode	= new Tools::CTrampolineHook( pClientMode );
 			hkPanel			= new Tools::CTrampolineHook( pPanel );
+			hkModelRender	= new Tools::CTrampolineHook( pModelRender );
 
 			return hkDirectXDevice->Succeeded( )
 				&& hkClientBase->Succeeded( ) && hkClientBase->SetProtection( )
 				&& hkClientMode->Succeeded( ) && hkClientMode->SetProtection(  )
-				&& hkPanel->Succeeded( ) && hkPanel->SetProtection( ) ?
+				&& hkPanel->Succeeded( ) && hkPanel->SetProtection( )
+				&& hkModelRender->Succeeded( ) && hkModelRender->SetProtection( ) ?
 				SetHooks( )
 				: false;
 		}
@@ -197,6 +200,22 @@ namespace PX
 			{
 				Tools::OnPaintTraverse( );
 			}
+		}
+
+		void __stdcall DrawModelExecute( IMatRenderContext* pContext, const DrawModelState_t& state, const ModelRenderInfo_t& pInfo, matrix3x4_t* pCustomBoneToWorld )
+		{
+			static auto fnOriginal = hkModelRender->GetOriginalFunction< draw_model_execute_t >( uDrawModelExecute );
+			const auto pLocalPlayer = Tools::GetLocalPlayer( );
+			auto bShouldOverride = false;
+
+			if( nullptr != pLocalPlayer )
+			{
+				bShouldOverride = Features::Awareness::OverrideMaterial( pLocalPlayer, pContext, state, pInfo, pCustomBoneToWorld, fnOriginal );
+			}
+
+			fnOriginal( pModelRender, pContext, state, pInfo, pCustomBoneToWorld );
+			if ( bShouldOverride )
+				pModelRender->ForcedMaterialOverride( nullptr );
 		}
 	}
 }
