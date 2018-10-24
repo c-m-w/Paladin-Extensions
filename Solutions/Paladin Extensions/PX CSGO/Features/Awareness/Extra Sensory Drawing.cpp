@@ -154,47 +154,12 @@ namespace PX::Features::Awareness
 		}
 		else
 		{
-			const auto pCollidable = info.pEntity->GetCollideable( );
-			const auto vecMinimum = pCollidable->OBBMins( );
-			const auto vecMaximum = pCollidable->OBBMaxs( );
-			const auto mtxTransformation = info.pEntity->m_rgflCoordinateFrame( );
-
-			Vector vecPoints[ ]
+			auto buf = info.pEntity->BoundingBox( );
+			if ( buf )
 			{
-				Vector( vecMinimum.x, vecMinimum.y, vecMinimum.z ),
-				Vector( vecMinimum.x, vecMaximum.y, vecMinimum.z ),
-				Vector( vecMaximum.x, vecMaximum.y, vecMinimum.z ),
-				Vector( vecMaximum.x, vecMinimum.y, vecMinimum.z ),
-				Vector( vecMaximum.x, vecMaximum.y, vecMaximum.z ),
-				Vector( vecMinimum.x, vecMaximum.y, vecMaximum.z ),
-				Vector( vecMinimum.x, vecMinimum.y, vecMaximum.z ),
-				Vector( vecMaximum.x, vecMinimum.y, vecMaximum.z )
-			}, vecTransformedPoints[ 8 ], vecScreenPoints[ 8 ];
-
-			for ( auto i = 0; i < 8; i++ )
-			{
-				TransformVector( vecPoints[ i ], mtxTransformation, vecTransformedPoints[ i ] );
-				if ( !WorldToScreen( vecTransformedPoints[ i ], vecScreenPoints[ i ] ) )
-					info.bBoxInSight = false;
+				memcpy( info.vecBoundingBoxCorners, buf, sizeof( Vector ) * 4 );
+				delete[ ] buf;
 			}
-
-			auto flTop = vecScreenPoints[ 0 ].y, flRight = vecScreenPoints[ 0 ].x, flBottom = vecScreenPoints[ 0 ].y, flLeft = vecScreenPoints[ 0 ].x;
-			for ( const auto& vecScreenPoint: vecScreenPoints )
-			{
-				if ( flLeft > vecScreenPoint.x )
-					flLeft = vecScreenPoint.x;
-				if ( flTop < vecScreenPoint.y )
-					flTop = vecScreenPoint.y;
-				if ( flRight < vecScreenPoint.x )
-					flRight = vecScreenPoint.x;
-				if ( flBottom > vecScreenPoint.y )
-					flBottom = vecScreenPoint.y;
-			}
-
-			info.vecBoundingBoxCorners[ TOPLEFT ] = { flLeft, flTop, 0.f };
-			info.vecBoundingBoxCorners[ TOPRIGHT ] = { flRight, flTop, 0.f };
-			info.vecBoundingBoxCorners[ BOTTOMRIGHT ] = { flRight, flBottom, 0.f };
-			info.vecBoundingBoxCorners[ BOTTOMLEFT ] = { flLeft, flBottom, 0.f };
 		}
 	}
 
@@ -478,8 +443,7 @@ namespace PX::Features::Awareness
 			{
 				bSmartAlign = true;
 			}
-				break;
-
+			break;
 		}
 
 		if ( !!esdPlayerConfig->bShowHealth )
@@ -506,7 +470,7 @@ namespace PX::Features::Awareness
 																		   CalcAngle( pLocalPlayer->GetViewPosition( ), player_ptr_t( info.pEntity )->GetViewPosition( ) ).y );
 					auto fl2 = 13.f + vecViewOffset.z;
 					vertex_t vtxOutline[ 4 ];
-
+					if ( esdConfig->iBoxMode == BOX_DYNAMIC )
 					switch ( esdPlayerConfig->iInformationAlignment )
 					{
 						case ALIGNMENT_RIGHT:
@@ -657,16 +621,67 @@ namespace PX::Features::Awareness
 								}
 						}
 					}
+					else
+					{
+						auto fnSetVecBarVert = [ & ]( int enumRightID )
+						{
+							vecBar[ TOPLEFT ] = info.vecBoundingBoxCorners[ enumRightID + 1 ];
+							vecBar[ TOPLEFT ].y += ( enumRightID ? -1.f : 1.f ) * flPadding;
+							vecBar[ TOPRIGHT ] = info.vecBoundingBoxCorners[ enumRightID ];
+							vecBar[ TOPRIGHT ].y += ( enumRightID ? -1.f : 1.f ) * flPadding;
+
+							vecBar[ BOTTOMLEFT ] = info.vecBoundingBoxCorners[ enumRightID + 1 ];
+							vecBar[ BOTTOMLEFT ].y += ( enumRightID ? 1.f : -1.f ) * ( flPadding + flHealthbarWidth );
+							vecBar[ BOTTOMRIGHT ] = info.vecBoundingBoxCorners[ enumRightID ];
+							vecBar[ BOTTOMRIGHT ].y += ( enumRightID ? 1.f : -1.f ) * ( flPadding + flHealthbarWidth );
+						};
+						auto fnSetVecBarHori = [ & ]( int enumRightID )
+						{
+							vecBar[ TOPLEFT ] = info.vecBoundingBoxCorners[ enumRightID ];
+							vecBar[ TOPLEFT ].y += ( enumRightID - 2 ? 1.f : -1.f ) * flPadding;
+							vecBar[ TOPRIGHT ] = info.vecBoundingBoxCorners[ enumRightID ];
+							vecBar[ TOPRIGHT ].y += ( enumRightID - 2 ? 1.f : -1.f ) * flPadding;
+
+							vecBar[ BOTTOMLEFT ] = info.vecBoundingBoxCorners[ enumRightID + 1 ];
+							vecBar[ BOTTOMLEFT ].y += ( enumRightID - 2 ? -1.f : 1.f ) * ( flPadding + flHealthbarWidth );
+							vecBar[ BOTTOMRIGHT ] = info.vecBoundingBoxCorners[ enumRightID ];
+							vecBar[ BOTTOMRIGHT ].y += ( enumRightID - 2 ? -1.f : 1.f ) * ( flPadding + flHealthbarWidth );
+						};
+
+						switch ( esdPlayerConfig->iInformationAlignment )
+						{
+							case ALIGNMENT_BOTTOM:
+							{
+								fnSetVecBarVert( BOTTOMRIGHT );
+							}
+							break;
+							case ALIGNMENT_TOP:
+							{
+								fnSetVecBarVert( TOPRIGHT );
+							}
+							break;
+							case ALIGNMENT_LEFT:
+							{
+								fnSetVecBarHori( TOPLEFT );
+							}
+							break;
+							case ALIGNMENT_RIGHT:
+							{
+								fnSetVecBarHori( TOPRIGHT );
+							}
+							break;
+						}
+					}
 					if ( bDoOutline )
 					{
-						vtxOutline[ 0 ].flVectors[ 0 ] -= 1.f;
-						vtxOutline[ 0 ].flVectors[ 1 ] -= 1.f;
-						vtxOutline[ 1 ].flVectors[ 0 ] += 1.f;
-						vtxOutline[ 1 ].flVectors[ 1 ] -= 1.f;
-						vtxOutline[ 2 ].flVectors[ 0 ] += 1.f;
-						vtxOutline[ 2 ].flVectors[ 1 ] += 1.f;
-						vtxOutline[ 3 ].flVectors[ 0 ] -= 1.f;
-						vtxOutline[ 3 ].flVectors[ 1 ] += 1.f;
+						vtxOutline[ 0 ].flVectors[ 0 ] = vecBar[ TOPLEFT ].x- 1.f;
+						vtxOutline[ 0 ].flVectors[ 1 ] = vecBar[ TOPLEFT ].y- 1.f;
+						vtxOutline[ 1 ].flVectors[ 0 ] = vecBar[ TOPRIGHT ].x+ 1.f;
+						vtxOutline[ 1 ].flVectors[ 1 ] = vecBar[ TOPRIGHT ].y- 1.f;
+						vtxOutline[ 2 ].flVectors[ 0 ] = vecBar[ BOTTOMRIGHT ].x+ 1.f;
+						vtxOutline[ 2 ].flVectors[ 1 ] = vecBar[ BOTTOMRIGHT ].y+ 1.f;
+						vtxOutline[ 3 ].flVectors[ 0 ] = vecBar[ BOTTOMLEFT ].x- 1.f;
+						vtxOutline[ 3 ].flVectors[ 1 ] = vecBar[ BOTTOMLEFT ].y+ 1.f;
 						vtxOutline[ 0 ].dwColor = vtxOutline[ 1 ].dwColor = vtxOutline[ 2 ].dwColor = vtxOutline[ 3 ].dwColor = dwOutline;
 						Polygon( vtxOutline, 4, 2 );
 					}
