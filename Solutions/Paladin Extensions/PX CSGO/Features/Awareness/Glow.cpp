@@ -33,8 +33,6 @@ namespace PX::Features::Awareness
 			const auto pEntity = entity_ptr_t( pObject->m_pEntity );
 			if ( nullptr == pEntity )
 				continue;
-			if ( std::string( pEntity->GetClientClass( )->m_pNetworkName ).find( "Projectile" ) != std::string::npos )
-				std::cout << pEntity->GetClientClass( )->m_pNetworkName << " : " << pEntity->GetClientClass( )->m_ClassID << std::endl;
 			switch( pEntity->GetClientClass( )->m_ClassID )
 			{
 				case ClassID_CCSPlayer:
@@ -94,9 +92,9 @@ namespace PX::Features::Awareness
 				case ClassID_CBaseCSGrenadeProjectile: // hegrenade & flashbang
 				{
 					const auto iModelIndex = reinterpret_cast< CBaseViewModel* >( pEntity )->m_nModelIndex( );
-					if( iModelIndex == 313 )
+					if( iModelIndex == pModelInfo->GetModelIndex( PX_XOR( "models/Weapons/w_eq_flashbang_dropped.mdl" ) ) )
 						GlowEntity( pLocalPlayer, pEntity, pObject, SETTING_GLOW_ENTITY_GRENADE_PROJECTILE_FLASH );
-					else if( iModelIndex == 312 )
+					else if( iModelIndex == pModelInfo->GetModelIndex( PX_XOR( "models/Weapons/w_eq_fraggrenade_dropped.mdl" ) ) )
 						GlowEntity( pLocalPlayer, pEntity, pObject, SETTING_GLOW_ENTITY_GRENADE_PROJECTILE_HE );
 				}
 				break;
