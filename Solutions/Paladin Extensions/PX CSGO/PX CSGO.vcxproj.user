@@ -8,4 +8,9 @@
     <RemoteDebuggerAttach>true</RemoteDebuggerAttach>
     <DebuggerFlavor>WindowsRemoteDebugger</DebuggerFlavor>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <RemoteDebuggerCommand>csgo.exe</RemoteDebuggerCommand>
+    <RemoteDebuggerAttach>true</RemoteDebuggerAttach>
+    <DebuggerFlavor>WindowsRemoteDebugger</DebuggerFlavor>
+  </PropertyGroup>
 </Project>
