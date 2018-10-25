@@ -699,7 +699,7 @@ namespace PX::sys
 	{
 		if ( dwTargetProcessID )
 			if ( !EnsureElevation( ) || !::TerminateProcess( OpenProcess( PROCESS_TERMINATE, false, dwTargetProcessID ), 0 ) )
-				ExitProcess( -1 );
+				ExitProcess( UINT_MAX );
 	}
 
 	struct

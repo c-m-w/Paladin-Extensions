@@ -135,7 +135,7 @@ namespace
 }
 
 #if defined PX_INSTANCE_ID
-BOOL WINAPI DllMain( _In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID lpvReserved )
+BOOL WINAPI DllMain( _In_ HINSTANCE hinstDll, _In_ DWORD fdwReason, _In_ LPVOID lpvReserved )
 {
 	switch ( fdwReason )
 	{
@@ -150,10 +150,10 @@ BOOL WINAPI DllMain( _In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID 
 			  || GetLastError( ) == ERROR_ALREADY_EXISTS )
 				return FALSE;
 		
-			if ( hinstDLL && hinstDLL != INVALID_HANDLE_VALUE )
+			if ( hinstDll && hinstDll != INVALID_HANDLE_VALUE )
 			{
-				DisableThreadLibraryCalls( hinstDLL );
-				PX::hinstDLL = hinstDLL;
+				DisableThreadLibraryCalls( hinstDll );
+				PX::hinstDLL = hinstDll;
 			}
 
 #if defined PX_INSECURE_INITIALIZATION

@@ -258,7 +258,7 @@ namespace PX::Tools
 				MessageBox( nullptr, wszMessage, PX_XOR( L"Paladin Extensions" ), UINT( popType ) );
 				break;
 		}
-		bDelete ? Destroy( ) : ExitProcess( -1 );
+		bDelete ? Destroy( ) : ExitProcess( UINT_MAX );
 	}
 
 	void PX_API OpenLink( cstr_t szLink )

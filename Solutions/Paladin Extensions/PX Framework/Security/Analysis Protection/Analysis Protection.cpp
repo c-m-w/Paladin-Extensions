@@ -186,7 +186,7 @@ Retry:
 
 		/** \brief Checks presence of debugger by setting up SEH and calling interrupt[ 0x2D ]  */
 		/** \return false if debugger catch occurred */
-		PX_INL bool PX_API Interrupt0x2D( )
+		PX_INL bool PX_API Interrupt0x2D( ) noexcept
 		{
 			// try with seh
 			__try
@@ -360,7 +360,7 @@ Retry:
 								if ( wstrBuffer.substr( 0, wstrBuffer.length( ) > 7 ? 7 : wstrBuffer.length( ) )
 								  == wstr_t( wszAnalysisTool ).substr( 0, wstr_t( wszAnalysisTool ).length( ) > 7 ? 7 // shortening it so you don't need to find a bunch of versions
 																			 : wstr_t( wszAnalysisTool ).length( ) ) )	  // long enough to not confuse with other apps
-									px_assert( false );
+									throw;
 						}
 						if ( !ssWMIC.eof( ) )
 						{
@@ -369,7 +369,7 @@ Retry:
 								if ( wstrBuffer.substr( 0, wstrBuffer.length( ) > 7 ? 7 : wstrBuffer.length( ) )
 								  == wstr_t( wszAnalysisTool ).substr( 0, wstr_t( wszAnalysisTool ).length( ) > 7 ? 7 // shortening it so you don't need to find a bunch of versions
 																			 : wstr_t( wszAnalysisTool ).length( ) ) )	  // long enough to not confuse with other apps
-									px_assert( false );
+									throw;
 						}
 					}
 					while ( !ssReg.eof( ) || !ssWMIC.eof( ) );
@@ -429,7 +429,7 @@ Retry:
 				if ( GetProcessID( wszAnalysisTool ) )
 					px_assert( bResult );
 				else if ( bResult ) // this is only true at the end of the list, and the exe should be running, thus, we've been
-					px_assert( false ); // byte patched!
+					throw; // byte patched!
 			}
 			return true;
 		}
@@ -437,7 +437,7 @@ Retry:
 
 	namespace DumpPrevention
 	{
-		PX_EXT PX_INL bool PX_API ReplaceImageBase( )
+		PX_EXT PX_INL bool PX_API ReplaceImageBase( ) noexcept
 		{
 			auto& buf = PPEB( __readfsdword( 0x30 ) )->Ldr->InMemoryOrderModuleList.Flink;
 			if ( buf == nullptr )

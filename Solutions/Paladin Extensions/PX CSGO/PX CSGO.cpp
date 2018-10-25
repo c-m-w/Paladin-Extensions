@@ -49,7 +49,7 @@ void PX_API OnAttach( )
 	// todo check hash to that of the servers.
 
 	if ( !Initialize( ) )
-		ExitProcess( -1 );
+		ExitProcess( UINT_MAX );
 #if defined _DEBUG
 	while ( PX_INPUT.GetKeyState( VK_END ) == false )
 		PX::Tools::Wait( 1ull );

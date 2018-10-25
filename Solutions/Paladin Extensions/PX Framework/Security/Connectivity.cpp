@@ -31,12 +31,12 @@ namespace PX::Net
 		return strFormattedData;
 	}
 
-	bool PX_API InitializeConnection( )
+	bool PX_API InitializeConnection( ) noexcept
 	{
 		return curl_global_init( CURL_GLOBAL_ALL ) == CURLE_OK && ( pConnection = curl_easy_init( ) ) != nullptr;
 	}
 
-	void PX_API CleanupConnection( )
+	void PX_API CleanupConnection( ) noexcept
 	{
 		return curl_easy_cleanup( pConnection );
 	}

@@ -88,7 +88,7 @@ void PX_API UI::Manager::SetLayout( )
 {
 	const auto fnClose = [ ]( )
 	{
-		ExitProcess( -1 );
+		ExitProcess( UINT_MAX );
 	};
 
 	const static D3DXVECTOR3 vecLogoPosition = { 0.f, 41.f, 0.f };
@@ -459,7 +459,7 @@ void PX_API OnAttach( )
 			strDLL.clear( );
 
 			// todo put safety here, check that everything is loading properly/return is success
-			bool buf = LoadRawLibraryEx( pBuffer, wstrApplicationExecutableNames[ iSelectedExtension ], new injection_info_t, &hStartProcess, &hStartThread );
+			LoadRawLibraryEx( pBuffer, wstrApplicationExecutableNames[ iSelectedExtension ], new injection_info_t, &hStartProcess, &hStartThread );
 			WipeMemory( pBuffer, sDLL );
 			bShouldClose = true;
 		}
@@ -475,5 +475,4 @@ void PX_API OnAttach( )
 		CloseHandle( hStartProcess );
 	if ( hStartThread )
 		CloseHandle( hStartThread );
-	ExitProcess( 0 );
 }

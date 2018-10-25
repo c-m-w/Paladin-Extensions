@@ -122,7 +122,7 @@ namespace PX::Files
 		try
 		{
 			if ( jsConfig[ PX_XOR( "Size" ) ].get< std::size_t >( ) != zConfigStructureSize )
-				;// config outdated
+				{ };// config outdated
 			for ( auto u = 0u; u < jsConfig[ PX_XOR( "Size" ) ].get< std::size_t >( ); u++ )
 				*reinterpret_cast< byte_t* >( ptr_t( pConfigStructure ) + u ) = jsConfig[ PX_XOR( "Bytes" ) ][ u ].get< byte_t >( );
 		}

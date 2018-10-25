@@ -1687,11 +1687,11 @@ namespace PX::UI
 			{
 				bDrawComboboxArrow = true;
 				recComboboxWindowBounds = pContext->current->bounds;
-				const int iButtonWidth = ( recComboboxBounds.w - 10 - ( dqTabs.size( ) - 1 ) * 4 ) / dqTabs.size( );
+				const int iButtonWidth = int( ( recComboboxBounds.w - 10 - ( dqTabs.size( ) - 1 ) * 4 ) / dqTabs.size( ) );
 				nk_layout_row_begin( pContext, NK_STATIC, float( uButtonHeight ), dqTabs.size( ) + 1 );
 				nk_layout_row_push( pContext, 0 );
 				nk_spacing( pContext, 1 );
-				nk_layout_row_push( pContext, iButtonWidth );
+				nk_layout_row_push( pContext, float( iButtonWidth ) );
 				for ( auto u = 0u; u < dqTabs.size( ); u++ )
 					if ( Button( dqTabs.size( ) == 1 ? EPosition::NONE : ( u == 0 ? EPosition::LEFT : ( u == ( dqTabs.size( ) - 1 ) ? EPosition::RIGHT : EPosition::CENTER ) ), dqTabs[ u ], false, u == uTab ) )
 					{

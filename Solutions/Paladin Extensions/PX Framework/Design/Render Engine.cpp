@@ -43,25 +43,6 @@ namespace PX::Render
 				break;
 
 			case WM_SIZE:
-				if ( false && pDevice )
-				{
-					const auto uWidth = LOWORD( llParam );
-					const auto uHeight = HIWORD( llParam );
-					if ( uWidth != 0 && uHeight != 0 &&
-						( uWidth != dxParameters.BackBufferWidth || uHeight != dxParameters.BackBufferHeight ) )
-					{
-						if ( !bCreatedWindow )
-						{
-							uWindowWidth = uWidth;
-							uWindowHeight = uHeight;
-							break;
-						}
-						dxParameters.BackBufferWidth = uWidth;
-						dxParameters.BackBufferHeight = uHeight;
-						px_assert( SUCCEEDED( pDevice->Reset( &dxParameters ) ) );
-						OnSuccessfulReset( uWidth , uHeight );
-					}
-				}
 				break;
 			default:
 				break;

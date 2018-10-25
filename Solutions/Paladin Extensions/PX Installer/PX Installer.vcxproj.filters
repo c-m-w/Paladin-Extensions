@@ -24,12 +24,18 @@
     <ClInclude Include="Functionality.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="..\PX Precompiled.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PX Installer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Functionality.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\PX Precompiled.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
