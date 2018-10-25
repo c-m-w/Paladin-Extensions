@@ -68,14 +68,14 @@ namespace PX::UI
 		/** \brief Available fonts. */
 		enum EFont
 		{
-			FONT_TAHOMA,
-			FONT_TAHOMABOLD,
-			FONT_ROBOTO,
-			FONT_ROBOTOBOLD,
-			FONT_ROBOTOSMALL,
-			FONT_ROBOTOBOLDSMALL,
-			FONT_ENVY,
-			FONT_MAX
+			FNT_TAHOMA,
+			FNT_TAHOMA_BOLD,
+			FNT_ROBOTO,
+			FNT_ROBOTO_BOLD,
+			FNT_ROBOTO_SMALL,
+			FNT_ROBOTO_BOLD_SMALL,
+			FNT_ENVY,
+			FNT_MAX
 		};
 
 		void PX_API InitializeNuklear( );

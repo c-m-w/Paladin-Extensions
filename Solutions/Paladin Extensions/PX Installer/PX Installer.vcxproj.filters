@@ -18,10 +18,7 @@
     <ClInclude Include="PX Installer.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\PX Precompiled.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="resource.h">
+    <ClInclude Include="PX Resource.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Functionality.hpp">
@@ -30,9 +27,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="PX Installer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\PX Precompiled.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Functionality.cpp">

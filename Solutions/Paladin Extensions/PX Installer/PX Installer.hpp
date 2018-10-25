@@ -8,6 +8,6 @@
 #define PX_ENTRY_AS_WIN
 #include <Jeremia-h/Entry Manager.hpp>
 
-#include "resource.h"
+#include "PX Resource.hpp"
 
 #include "Functionality.hpp"

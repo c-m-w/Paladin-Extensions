@@ -699,7 +699,7 @@ namespace PX::Features::Awareness
 			}
 			else
 			{
-				Text( ED3DFont::FONT_TAHOMA, vecInformationStart.x, vecInformationStart.y, ( std::to_wstring( info.iHealth ) + PX_XOR( L" HP" ) ).c_str( ), bDoOutline, dwAlignment, dwColor, dwOutline );
+				Text( ED3DFont::FNT_TAHOMA, vecInformationStart.x, vecInformationStart.y, ( std::to_wstring( info.iHealth ) + PX_XOR( L" HP" ) ).c_str( ), bDoOutline, dwAlignment, dwColor, dwOutline );
 				vecInformationStart.y += flTextHeight + flPadding;
 			}
 		}
@@ -713,7 +713,7 @@ namespace PX::Features::Awareness
 				wcscpy( wszName, string_cast< wstr_t >( Types::str_t( player_ptr_t( info.pEntity )->GetPlayerInformation( ).szName ) ).c_str( ) );
 			else
 				return;
-			Text( ED3DFont::FONT_TAHOMA, vecInformationStart.x, vecInformationStart.y, wszName, bDoOutline, dwAlignment, dwColor, dwOutline );
+			Text( ED3DFont::FNT_TAHOMA, vecInformationStart.x, vecInformationStart.y, wszName, bDoOutline, dwAlignment, dwColor, dwOutline );
 			vecInformationStart.y += 16.f + flPadding;
 		}
 

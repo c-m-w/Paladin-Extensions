@@ -8,3 +8,5 @@
 #define PX_ENTRY_AS_WIN
 #include <Jeremia-h/Entry Manager.hpp>
 
+#include "PX Resource.hpp"
+

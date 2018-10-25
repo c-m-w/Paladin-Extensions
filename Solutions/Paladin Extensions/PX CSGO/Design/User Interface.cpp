@@ -141,7 +141,7 @@ namespace PX::UI::Manager
 		Header( PX_XOR( "Paladin Extensions" ), szNuklearWindowTitle, 102, CSGO::ChangeVisibility, [](){exit( -1 );} );
 		fnSetValue( iCurrentTab, Tabs( 10, 0, dqPrimaryTabs, iCurrentTab ) );
 		Separator( 61, 65, 72, 100 );
-		SetFont( FONT_ROBOTOSMALL );
+		SetFont( FNT_ROBOTO_SMALL );
 		fnSetValue( iCurrentSubTab[ iCurrentTab ], SubTabs( 10, 60, 175, 30, dqSubTabs[ iCurrentTab ], iCurrentSubTab[ iCurrentTab ] ) );
 		fnTabCallbacks[ iCurrentTab ]( iCurrentSubTab[ iCurrentTab ] );
 	}

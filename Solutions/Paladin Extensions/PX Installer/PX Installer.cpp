@@ -45,7 +45,7 @@ void PX_API Manager::SetLayout( )
 	{
 		const auto strLoading = PX_XOR( "Loading" );
 
-		SetFont( FONT_ROBOTOSMALL );
+		SetFont( FNT_ROBOTO_SMALL );
 		BeginRow( 30u, 1u, ROW_CUSTOM );
 		auto vecTextSize = CalculateTextBounds( strLoading, 30u );
 		PushCustomRow( unsigned( float( uWindowDimensions[ 0 ] ) / 2.f - vecTextSize.x / 2.f ), unsigned( float( uWindowDimensions[ 1 ] / 3.f ) ), unsigned( vecTextSize.x ), 30u );
@@ -88,7 +88,7 @@ void PX_API Manager::SetLayout( )
 			{ 190, 220, 5, 255 }
 		};
 
-		SetFont( FONT_ROBOTOSMALL );
+		SetFont( FNT_ROBOTO_SMALL );
 		BeginRow( 30u, 1u, ROW_CUSTOM );
 		auto vecTextSize = CalculateTextBounds( strErrorMessages[ Functionality::iLoginStatus ].c_str( ), 30u );
 		PushCustomRow( unsigned( float( uWindowDimensions[ 0 ] ) / 2.f - vecTextSize.x / 2.f ), unsigned( float( uWindowDimensions[ 1 ] ) - 140.f ), unsigned( vecTextSize.x ), 30u );
@@ -169,7 +169,7 @@ PX_XOR( "\nany termination of this EULA.)" ) } };
 					uLength += strlen( cstr );
 				for each ( auto cstr in szWarningAndEULA[ 1 ] )
 					uLength2 += strlen( cstr );
-				SetFont( FONT_ENVY );
+				SetFont( FNT_ENVY );
 				static auto bShowNextPage = false;
 				BeginRow( 30u, 1u, ROW_CUSTOM );
 				PushCustomRow( 10, -7, uWindowDimensions[ 0 ] - 20u, uWindowDimensions[ 1 ] - 95 );

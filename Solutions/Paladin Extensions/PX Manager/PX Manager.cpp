@@ -1,10 +1,8 @@
 /// PX Loader.cpp
 
 #include "PX Precompiled.hpp"
-#define PX_ENTRY_AS_WIN
-#define PX_INSTANCE_ID L"Manager"
-#include <Jeremia-h/Entry Manager.hpp>
 
+#define PX_INSTANCE_ID L"Manager"
 #include "PX Manager.hpp"
 
 //void TestDebug( )
@@ -138,7 +136,7 @@ void PX_API UI::Manager::SetLayout( )
 				{ 190, 220, 5, 255 }
 			};
 
-			SetFont( FONT_ROBOTOSMALL );
+			SetFont( FNT_ROBOTO_SMALL );
 			BeginRow( 30u, 1u, ROW_CUSTOM );
 			auto vecTextSize = CalculateTextBounds( strErrorMessages[ iLoginStatus ].c_str( ), 30u );
 			PushCustomRow( unsigned( float( uWindowDimensions[ 0 ] ) / 2.f - vecTextSize.x / 2.f ), unsigned( float( uWindowDimensions[ 1 ] ) - 140.f ), unsigned( vecTextSize.x ), 30u );
@@ -290,7 +288,7 @@ void PX_API UI::Manager::SetLayout( )
 			Checkbox( PX_XOR( "Prefer Beta" ), &bPreferBeta, PX_XOR( "If the beta is available, choose it over the regular build. Warning: The beta may be less stable." ) );
 		EndRow( );
 
-		SetFont( FONT_ROBOTOBOLDSMALL );
+		SetFont( FNT_ROBOTO_BOLD_SMALL );
 		BeginRow( 25u, 3, ROW_CUSTOM );
 
 		const auto flBaseButtonPosition = float( uWindowDimensions[ 0 ] ) / 2.f;
@@ -359,7 +357,7 @@ void PX_API OnDetach( )
 	// ideally, should never be called
 }
 
-void PX_API OnLaunch( )
+void PX_API OnAttach( )
 {
 	// todo check hash to that of the servers.
 

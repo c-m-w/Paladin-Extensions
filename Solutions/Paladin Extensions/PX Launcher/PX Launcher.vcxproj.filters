@@ -18,7 +18,7 @@
     <ClInclude Include="PX Launcher.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
+    <ClInclude Include="PX Resource.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\PX Precompiled.hpp">

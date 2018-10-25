@@ -158,7 +158,7 @@
     <ClInclude Include="..\PX Precompiled.hpp" />
     <ClInclude Include="Functionality.hpp" />
     <ClInclude Include="PX Installer.hpp" />
-    <ClInclude Include="resource.h" />
+    <ClInclude Include="PX Resource.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\PX Precompiled.cpp">

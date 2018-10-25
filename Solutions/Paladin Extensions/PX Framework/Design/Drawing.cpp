@@ -16,9 +16,9 @@ namespace PX::Drawing
 	bool PX_API InitializeDrawing( )
 	{
 		return D3D_OK == D3DXCreateFont( pDevice, 16, 0, FW_BOLD, 1, FALSE, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS,
-										 NONANTIALIASED_QUALITY, DEFAULT_PITCH, PX_XOR( L"Tahoma" ), &pFonts[ FONT_TAHOMA ] )
+										 NONANTIALIASED_QUALITY, DEFAULT_PITCH, PX_XOR( L"Tahoma" ), &pFonts[ FNT_TAHOMA ] )
 			&& D3D_OK == D3DXCreateFont( pDevice, 16, 0, FW_NORMAL, 1, FALSE, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS,
-										 ANTIALIASED_QUALITY, DEFAULT_PITCH, PX_XOR( L"Roboto" ), &pFonts[ FONT_ROBOTO ] )
+										 ANTIALIASED_QUALITY, DEFAULT_PITCH, PX_XOR( L"Roboto" ), &pFonts[ FNT_ROBOTO ] )
 			&& D3D_OK == D3DXCreateSprite( pDevice, &pTextSprite )
 			&& D3D_OK == D3DXCreateLine( pDevice, &pLine );
 	}

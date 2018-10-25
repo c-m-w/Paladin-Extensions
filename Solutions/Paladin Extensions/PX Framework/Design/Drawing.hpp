@@ -6,13 +6,13 @@ namespace PX::Drawing
 {
 	enum class ED3DFont: int
 	{
-		FONT_TAHOMA,
-		FONT_ROBOTO,
+		FNT_TAHOMA,
+		FNT_ROBOTO,
 		//FONT_ICON,
-		FONT_MAX
+		FNT_MAX
 	};
 
-	PX_SDK ID3DXFont* pFonts[ ED3DFont::FONT_MAX ];
+	PX_SDK ID3DXFont* pFonts[ ED3DFont::FNT_MAX ];
 
 	bool PX_API InitializeDrawing( );
 	void PX_API Destruct( );

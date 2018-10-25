@@ -66,7 +66,7 @@ namespace PX::UI
 			dqFonts.emplace_back( AddFont( PX_XOR( "Envy.ttf" ), 14 ) );
 			nk_d3d9_font_stash_end( );
 
-			px_assert( dqFonts.size( ) == FONT_MAX );
+			px_assert( dqFonts.size( ) == FNT_MAX );
 
 			clrColorTable[ NK_COLOR_TEXT ] = nk_rgba( 255, 255, 255, 255 );
 			clrColorTable[ NK_COLOR_WINDOW ] = nk_rgba( 45, 50, 56, 255 );
@@ -323,7 +323,7 @@ namespace PX::UI
 		void PX_API SetFont( EFont fntDesiredFont )
 		{
 			//std::deque< nk_font* > dqFonts { pTahoma, pTahomaBold, pRoboto, pRobotoBold, pRobotoSmall, pRobotoBoldSmall, pEnvy };
-			px_assert( fntDesiredFont >= 0 && fntDesiredFont < FONT_MAX );
+			px_assert( fntDesiredFont >= 0 && fntDesiredFont < FNT_MAX );
 			nk_style_set_font( pContext, &dqFonts[ fntDesiredFont ]->handle );
 		}
 
@@ -498,7 +498,7 @@ namespace PX::UI
 		{
 			auto bShouldDrawUserInterface = true;
 			bDrawComboboxArrow = false;
-			SetFont( FONT_ROBOTO );
+			SetFont( FNT_ROBOTO );
 
 			if ( bCreatedWindow )
 				recWindow.x = recWindow.y = 0.f;
@@ -509,7 +509,7 @@ namespace PX::UI
 					HandleWindowMovement( recWindow, 0 );
 
 				nk_layout_row_dynamic( pContext, 10, 0 );
-				SetFont( FONT_ROBOTO );
+				SetFont( FNT_ROBOTO );
 				SetLayout( );
 
 				if ( bDrawComboboxArrow )
@@ -616,7 +616,7 @@ namespace PX::UI
 			// Separate the primary tabs from the rest of the application.
 			Separator( 61, 65, 72, 100 );
 			// Set the font for Nuklear to render in.
-			SetFont( FONT_ROBOTOSMALL );
+			SetFont( FNT_ROBOTO_SMALL );
 
 			// Create subtabs.
 			fnSetTabValue( jsWidgets[ PX_XOR( "SubTab" ) ].get_ref< int& >( ), SubTabs( 10, 60, 150, 30, dqSubTabs, jsWidgets[ PX_XOR( "SubTab" ) ] ) );
@@ -741,7 +741,7 @@ namespace PX::UI
 			constexpr auto uMaxTooltipWidth = 210u;
 			constexpr auto uTooltipPadding = 14u;
 			constexpr struct nk_text txtTooltip { { 5, 2 }, { 0, 0, 0, 0 }, { 255, 255, 255 ,255 } };
-			SetFont( FONT_TAHOMA );
+			SetFont( FNT_TAHOMA );
 
 			const auto vecMousePos = pContext->input.mouse.pos;
 			const auto flUsableSpaceX = pContext->current->bounds.w - vecMousePos.x;
@@ -860,10 +860,10 @@ namespace PX::UI
 			nk_fill_rect( pOutput, nk_rect( recMainWindow.x, recMainWindow.y, flWidth, float( uFillHeight ) ), 0.f, clrHeader );
 			nk_stroke_line( pOutput, recMainWindow.x, recMainWindow.y + 40, recMainWindow.x + flWidth, recMainWindow.y + 40, 1, clrColorTable[ NK_COLOR_BORDER ] );
 
-			SetFont( FONT_ROBOTOBOLD );
+			SetFont( FNT_ROBOTO_BOLD );
 			auto vecTitle = CalculateTextBounds( szTitle, 30 );
 			nk_widget_text( pOutput, nk_rect( recMainWindow.x + 10.f + vecTextures[ TEXTURE_LOGO ].uWidth, recMainWindow.y + 7, vecTitle.x, 30 ), szTitle, strlen( szTitle ), &txtTitle, NK_TEXT_CENTERED, pContext->style.font );
-			SetFont( FONT_ROBOTO );
+			SetFont( FNT_ROBOTO );
 			auto vecApplicationTitle = CalculateTextBounds( _szApplicationTitle, 30 );
 			nk_widget_text( pOutput, nk_rect( recMainWindow.x + 13.f + vecTextures[ TEXTURE_LOGO ].uWidth + vecTitle.x, recMainWindow.y + 7, vecApplicationTitle.x, 30 ), _szApplicationTitle, strlen( _szApplicationTitle ), &txtApplication, NK_TEXT_CENTERED, pContext->style.font );
 
@@ -933,14 +933,14 @@ namespace PX::UI
 
 				recBoundaries.w += recBoundaries.x;
 				recBoundaries.h += recBoundaries.y;
-				SetFont( FONT_TAHOMABOLD );
+				SetFont( FNT_TAHOMA_BOLD );
 				const auto bResult = nk_button_label_styled( pContext, &btnRegularActive, szText );
 				HoverCheck( CURSOR_HAND );
-				SetFont( FONT_TAHOMA );
+				SetFont( FNT_TAHOMA );
 				nk_stroke_line( pOutput, recBoundaries.x, recBoundaries.y, recBoundaries.x, recBoundaries.h, 2, clrBlue );
 				return bResult;
 			}
-			SetFont( FONT_TAHOMA );
+			SetFont( FNT_TAHOMA );
 			const auto bReturn = nk_button_label_styled( pContext, &btnRegular, szText );
 			HoverCheck( CURSOR_HAND );
 			return bReturn;
@@ -967,7 +967,7 @@ namespace PX::UI
 			auto uPosition = uLinkTextSpacing + uLinkTextHeight / 2u;
 			const auto uYPosition = uLinkTextHeight / 2u;
 
-			SetFont( FONT_ROBOTOSMALL );
+			SetFont( FNT_ROBOTO_SMALL );
 			BeginRow( 15, pLinkList->size( ), ROW_CUSTOM );
 			for each ( const auto& link in *pLinkList )
 			{
@@ -996,7 +996,7 @@ namespace PX::UI
 		{
 			iCurrentRowUsedColumns++;
 
-			SetFont( FONT_ROBOTOBOLDSMALL );
+			SetFont( FNT_ROBOTO_BOLD_SMALL );
 			const auto recBoundaries = nk_widget_bounds( pContext );
 			const auto pOutput = nk_window_get_canvas( pContext );
 			auto bHover = false;
@@ -1090,7 +1090,7 @@ namespace PX::UI
 			if ( szTooltip )
 				Tooltip( bHovering, szTooltip );
 
-			SetFont( FONT_TAHOMA );
+			SetFont( FNT_TAHOMA );
 			nk_label_colored( pContext, *bActive ? ICON_FA_CHECK_SQUARE : ICON_FA_SQUARE, NK_TEXT_CENTERED, *bActive ? clrBlue : bHovering && !PopupActive( ) ? ( bClicking ? clrBlue : clrBlue ) : clrTextDormant );
 			nk_layout_row_push( pContext, CalculateTextBounds( szText, 15 ).x );
 			nk_label_colored( pContext, ( szText + str_t( PX_XOR( "  " ) ) ).c_str( ), NK_TEXT_LEFT, clrTextDormant );
@@ -1119,7 +1119,7 @@ namespace PX::UI
 			else if ( !bClicking )
 				bWasClicking = false;
 
-			SetFont( FONT_TAHOMA );
+			SetFont( FNT_TAHOMA );
 			nk_label_colored( pContext, *bActive ? ICON_FA_CHECK_SQUARE : ICON_FA_SQUARE, NK_TEXT_CENTERED, *bActive ? clrBlue : bHovering ? ( bClicking ? clrBlue : clrBlue ) : clrTextDormant );
 			nk_layout_row_push( pContext, CalculateTextBounds( szText, 15 ).x );
 			nk_label_colored( pContext, ( szText + str_t( PX_XOR( "  " ) ) ).c_str( ), NK_TEXT_LEFT, clrTextDormant );
@@ -1155,7 +1155,7 @@ namespace PX::UI
 			if ( szTooltip )
 				Tooltip( bHovering, szTooltip );
 
-			SetFont( FONT_TAHOMA );
+			SetFont( FNT_TAHOMA );
 			nk_label_colored( pContext, !!*bActive ? ICON_FA_CHECK_SQUARE : ICON_FA_SQUARE, NK_TEXT_CENTERED, !!*bActive ? clrBlue : bHovering && !PopupActive( ) ? ( bClicking ? clrBlue : clrBlue ) : clrTextDormant );
 			nk_layout_row_push( pContext, CalculateTextBounds( szText, 15 ).x );
 			nk_label_colored( pContext, ( szText + str_t( PX_XOR( "  " ) ) ).c_str( ), NK_TEXT_LEFT, clrTextDormant );
@@ -1166,7 +1166,7 @@ namespace PX::UI
 			PX_DEF pxTabSpace = 24; // 12 * 2 - 12 px on either side.
 			auto iPressedButton = -1;
 			auto iXIncrement = 0;
-			SetFont( FONT_ROBOTOBOLDSMALL );
+			SetFont( FNT_ROBOTO_BOLD_SMALL );
 			BeginRow( 45, dqButtons.size( ), ROW_CUSTOM );
 			for ( unsigned i { }; i < dqButtons.size( ); i++ )
 			{
@@ -1197,7 +1197,7 @@ namespace PX::UI
 
 		bool PX_API BeginGroupbox( unsigned uStartX, unsigned uStartY, unsigned uBoxWidth, unsigned uBoxHeight, cstr_t szTitle )
 		{
-			SetFont( FONT_TAHOMA );
+			SetFont( FNT_TAHOMA );
 			nk_layout_space_begin( pContext, NK_STATIC, float( uBoxHeight ), 1 );
 			const auto recBoundaries = nk_widget_bounds( pContext );
 			nk_layout_space_push( pContext, nk_rect( pContext->current->bounds.x + float( uStartX - recBoundaries.x ), pContext->current->bounds.y + float( uStartY - recBoundaries.y ), float( uBoxWidth ), float( uBoxHeight ) ) );
@@ -1222,7 +1222,7 @@ namespace PX::UI
 			nk_label( pContext, szTitle, NK_TEXT_LEFT );
 			VerticalSpacing( 5 );
 
-			SetFont( FONT_ROBOTOSMALL );
+			SetFont( FNT_ROBOTO_SMALL );
 			return true;
 		}
 
@@ -1278,13 +1278,13 @@ namespace PX::UI
 				pActiveEditColor = nullptr;
 			}
 
-			SetFont( FONT_ROBOTOBOLD );
+			SetFont( FNT_ROBOTO_BOLD );
 			if ( bStoppedClicking && nk_popup_begin( pContext, NK_POPUP_DYNAMIC, ( strBaseTitle + szColorPickerSubject + "'" ).c_str( ),
 								 NK_WINDOW_BORDER | NK_WINDOW_TITLE | NK_WINDOW_NO_SCROLLBAR,
 								 nk_rect( recColorPickerBoundaries.x - pContext->current->bounds.x, recColorPickerBoundaries.y - pContext->current->bounds.y,
 										  recColorPickerBoundaries.w, recColorPickerBoundaries.h ), pActiveEditColor == nullptr ) )
 			{
-				SetFont( FONT_ROBOTOSMALL );
+				SetFont( FNT_ROBOTO_SMALL );
 				nk_layout_row_static( pContext, 255, 295, 1 );
 				clrChosenColor = nk_color_picker( pContext, clrChosenColor, NK_RGBA );
 				nk_layout_row_dynamic( pContext, 5, 0 );
@@ -1524,7 +1524,7 @@ namespace PX::UI
 				return;
 			}
 
-			SetFont( FONT_ROBOTOBOLD );
+			SetFont( FNT_ROBOTO_BOLD );
 			if( bStoppedClicking && nk_begin( pContext, PX_XOR( "Keybind Editor" ), recPopupBoundaries, NK_WINDOW_NO_SCROLLBAR | NK_WINDOW_TITLE ) )
 			{
 				nk_layout_row_begin( pContext, NK_STATIC, 25, 3 );
@@ -1624,7 +1624,7 @@ namespace PX::UI
 
 			auto iSelectedOption = -1;
 			auto bDrewCombo = false;
-			SetFont( FONT_TAHOMA );
+			SetFont( FNT_TAHOMA );
 			const auto recComboboxBounds = nk_widget_bounds( pContext );
 
 			const auto pOutput = nk_window_get_canvas( pContext );
@@ -1678,7 +1678,7 @@ namespace PX::UI
 			iCurrentRowUsedColumns++;
 
 			auto bDrewCombo = false;
-			SetFont( FONT_TAHOMA );
+			SetFont( FNT_TAHOMA );
 			const auto recComboboxBounds = nk_widget_bounds( pContext );
 			const auto pOutput = nk_window_get_canvas( pContext );
 
@@ -1700,7 +1700,7 @@ namespace PX::UI
 					}
 				iCurrentRowUsedColumns -= dqTabs.size( );
 				nk_layout_row_end( pContext );
-				SetFont( FONT_TAHOMA );
+				SetFont( FNT_TAHOMA );
 
 				for ( unsigned i { }; i < dqCurrentItems.size( ); i++ )
 				{
@@ -1730,7 +1730,7 @@ namespace PX::UI
 			iCurrentRowUsedColumns++;
 
 			auto bDrewCombo = false;
-			SetFont( FONT_TAHOMA );
+			SetFont( FNT_TAHOMA );
 			auto recComboboxBounds = nk_widget_bounds( pContext );
 
 			const auto pOutput = nk_window_get_canvas( pContext );
@@ -1796,7 +1796,7 @@ namespace PX::UI
 			auto szText = szTexta.c_str( );
 			static auto bInEdit = false, bSetEditValue = false, bWasClickingInBoundaries = false, bWasClicking = false;
 
-			SetFont( FONT_ROBOTOSMALL );
+			SetFont( FNT_ROBOTO_SMALL );
 			const auto vecTitleSize = CalculateTextBounds( szTitle, 10 );
 			auto vecTextSize = CalculateTextBounds( szText, 10 );
 			PushCustomRow( uStartX + 5, uStartY, unsigned( vecTitleSize.x ), unsigned( vecTitleSize.y ) );
@@ -1861,7 +1861,7 @@ namespace PX::UI
 			if ( !bInEdit )
 				iCurrentValue = iNewValue;
 			HoverCheck( CURSOR_HAND );
-			SetFont( FONT_ROBOTOSMALL );
+			SetFont( FNT_ROBOTO_SMALL );
 			return iCurrentValue;
 		}
 
@@ -1879,7 +1879,7 @@ namespace PX::UI
 			auto szTexta = std::to_string( flCurrentValue ).substr( 0, std::to_string( int( flCurrentValue ) ).size( ) + ( flCurrentValue < 0.f ? 2 : 1 ) + uDigits );
 			auto szText = szTexta.c_str( );
 
-			SetFont( FONT_ROBOTOSMALL );
+			SetFont( FNT_ROBOTO_SMALL );
 			auto vecTitleSize = CalculateTextBounds( szTitle, 10 );
 			auto vecTextSize = CalculateTextBounds( szText, 10 );
 			PushCustomRow( uStartX + 5, uStartY, unsigned( vecTitleSize.x ), unsigned( vecTitleSize.y ) );
@@ -1947,7 +1947,7 @@ namespace PX::UI
 			if ( !siCurrent.bInEdit )
 				flCurrentValue = flNewValue;
 			HoverCheck( CURSOR_HAND );
-			SetFont( FONT_ROBOTOSMALL );
+			SetFont( FNT_ROBOTO_SMALL );
 			return flCurrentValue;
 		}
 
