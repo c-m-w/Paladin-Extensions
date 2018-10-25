@@ -2,4 +2,4 @@
 .gitattributes text
 .gitignore text
 *.md text
-*.rc text
+*.rc diff
