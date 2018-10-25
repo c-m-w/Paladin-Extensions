@@ -134,6 +134,7 @@ namespace
 	}
 }
 
+#if defined PX_INSTANCE_ID
 BOOL WINAPI DllMain( _In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID lpvReserved )
 {
 	switch ( fdwReason )
@@ -141,14 +142,8 @@ BOOL WINAPI DllMain( _In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID 
 		case DLL_PROCESS_ATTACH:
 		{
 #if defined UNICODE
-#if !defined PX_INSTANCE_ID
-#define PX_INSTANCE_ID L"0"
-#endif
 			hSingleInstanceMutex = CreateMutex( nullptr, TRUE, L"Paladin Extensions " PX_INSTANCE_ID );
 #else
-#if !defined PX_INSTANCE_ID
-#define PX_INSTANCE_ID "0"
-#endif
 			hSingleInstanceMutex = CreateMutex( nullptr, TRUE, "Paladin Extensions " PX_INSTANCE_ID );
 #endif
 			if ( hSingleInstanceMutex == nullptr
@@ -179,6 +174,7 @@ BOOL WINAPI DllMain( _In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID 
 		}
 	}
 }
+#endif
 
 #if defined PX_STAND_ALONE
 #undef PX_EXT
