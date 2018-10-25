@@ -5,25 +5,27 @@
 
 namespace Resources
 {
-	byte_t* bLogoICO;
-			
-	byte_t* bCursorArrow;
-	byte_t* bCursorHand;
-	byte_t* bCursorIBeam;
-			
-	byte_t* bFontsEnvy;
-	byte_t* bFontsFontAwesome;
-	byte_t* bFontsRoboto;
-	byte_t* bFontsRobotoBold;
-	byte_t* bFontsTahoma;
-	byte_t* bFontsTahomaBold;
-			
-	byte_t* bGameIconsCSGO;
-	byte_t* bGameIconsCSGOSized;
-	byte_t* bGameIconsPUBG;
-	byte_t* bGameIconsPUBGSized;
-	byte_t* bGameIconsRSIX;
-	byte_t* bGameIconsRSIXSized;
+	bstr_t bLogoICO;
+	bstr_t bLogoPNG;
+	bstr_t bLogoLoading;
+	
+	bstr_t bCursorArrow;
+	bstr_t bCursorHand;
+	bstr_t bCursorIBeam;
+	
+	bstr_t bFontsEnvy;
+	bstr_t bFontsFontAwesome;
+	bstr_t bFontsRoboto;
+	bstr_t bFontsRobotoBold;
+	bstr_t bFontsTahoma;
+	bstr_t bFontsTahomaBold;
+	
+	bstr_t bGameIconsCSGO;
+	bstr_t bGameIconsCSGOSized;
+	bstr_t bGameIconsPUBG;
+	bstr_t bGameIconsPUBGSized;
+	bstr_t bGameIconsRSIX;
+	bstr_t bGameIconsRSIXSized;
 
 	namespace ExtensionData
 	{
@@ -70,7 +72,7 @@ namespace Resources
 
 namespace PX::Functionality
 {
-	byte* PX_API ParseResource( int iResourceID )
+	bstr_t PX_API ParseResource( int iResourceID )
 	{
 		HRSRC hResource = FindResource( PX::hinstWin, MAKEINTRESOURCE( iResourceID ), MAKEINTRESOURCE( iResourceID ) );
 		HGLOBAL hMemory = LoadResource( PX::hinstWin, hResource );
@@ -80,13 +82,32 @@ namespace PX::Functionality
 		bstr_t bData;
 		bData.resize( dwSize );
 		memcpy( &bData[ 0 ], lpAddress, dwSize );
-		return bData.c_str( );
+		return bData += '\0'_b;
 	}
 
 	void PX_API ParseResources( )
 	{
-		::Resources::bLogoICO = ParseResource( IDI_ICON1 );
-		PX::UI::vecTextures;
+		::Resources::bLogoICO = ParseResource( LOGO_ICO );
+		::Resources::bLogoPNG = ParseResource( LOGO_PNG );
+		::Resources::bLogoLoading = ParseResource( LOGO_LOADING );
+
+		::Resources::bCursorArrow = ParseResource( CUR_ARROW );
+		::Resources::bCursorHand = ParseResource( CUR_HAND );
+		::Resources::bCursorIBeam = ParseResource( CUR_IBEAM );
+
+		/*::Resources::bFontsEnvy = ParseResource( );
+		::Resources::bFontsFontAwesome = ParseResource( );
+		::Resources::bFontsRoboto = ParseResource( );
+		::Resources::bFontsRobotoBold = ParseResource( );
+		::Resources::bFontsTahoma = ParseResource( );
+		::Resources::bFontsTahomaBold = ParseResource( );
+
+		::Resources::bGameIconsCSGO = ParseResource( );
+		::Resources::bGameIconsCSGOSized = ParseResource( );
+		::Resources::bGameIconsPUBG = ParseResource( );
+		::Resources::bGameIconsPUBGSized = ParseResource( );
+		::Resources::bGameIconsRSIX = ParseResource( );
+		::Resources::bGameIconsRSIXSized = ParseResource( );*/
 	}
 
 	void PX_API Install( )

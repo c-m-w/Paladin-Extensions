@@ -292,7 +292,7 @@ namespace PX::UI
 			uNuklearWindowHeight = uHeight;
 			InitializeNuklear( );
 
-			vecTextures.emplace_back( 32, 29, PX_XOR( LR"(PX Logo Small.png)" ) ); // TEXTURE_LOGO
+			vecTextures.emplace_back( 32, 29, PX_XOR( LR"(PX Logo.png)" ) ); // TEXTURE_LOGO
 			vecTextures.emplace_back( 720, 394, PX_XOR( LR"(PX Loading.png)" ) ); // TEXTURE_LOGO_LOADING
 			vecTextures.emplace_back( 100, 100, PX_XOR( LR"(Game Icons\CSGO Sized.png)" ) ); // TEXTURE_ICON_CSGO
 			vecTextures.emplace_back( 100, 100, PX_XOR( LR"(Game Icons\PUBG Sized.png)" ) ); // TEXTURE_ICON_PUBG

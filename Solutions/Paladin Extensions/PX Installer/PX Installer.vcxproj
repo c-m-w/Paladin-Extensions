@@ -176,9 +176,6 @@
   <ItemGroup>
     <ResourceCompile Include="PX Installer.rc" />
   </ItemGroup>
-  <ItemGroup>
-    <Image Include="..\Resources\PX Logo.ico" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
