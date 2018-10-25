@@ -31,17 +31,17 @@ namespace PX::Net
 		return strFormattedData;
 	}
 
-	bool PX_API InitializeConnection( ) noexcept
+	bool PX_API InitializeConnection( ) PX_NOX
 	{
 		return curl_global_init( CURL_GLOBAL_ALL ) == CURLE_OK && ( pConnection = curl_easy_init( ) ) != nullptr;
 	}
 
-	void PX_API CleanupConnection( ) noexcept
+	void PX_API CleanupConnection( ) PX_NOX
 	{
 		return curl_easy_cleanup( pConnection );
 	}
 
-	str_t PX_API Request( const str_t& _strSite, const post_data_t& dqPostData )
+	str_t PX_API Request( const str_t& _strSite, const post_data_t& dqPostData /*= { }*/ )
 	{
 		const static auto szAppdata = getenv( PX_XOR( "APPDATA" ) );
 		const static auto strCookieDirectory = szAppdata + ( PX_XOR( R"(\PX\)" ) + strCookieFile );

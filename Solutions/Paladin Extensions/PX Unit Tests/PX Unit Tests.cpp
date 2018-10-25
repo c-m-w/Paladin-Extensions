@@ -1,11 +1,19 @@
 /// PX Unit Tests.cpp
 
 #include "PX Precompiled.hpp"
+
+#pragma warning( push, 0 )
+#pragma warning( disable: ALL_CODE_ANALYSIS_WARNINGS )
 #include "CppUnitTest.h"
+#pragma warning( pop )
+
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
+
 #define PX_USE_NAMESPACES
 #include "../PX Framework/PX Framework.hpp"
+
 __LineInfo lInfo( L"", "", 0 );
+
 #define PX_ASSERT_INFO &( lInfo = __LineInfo( L"PX Unit Tests.cpp", __func__, __LINE__ ) )
 
 namespace PX::UnitTests
@@ -217,6 +225,7 @@ namespace PX::UnitTests
 								&/*szWeekDay*/szMonth, &szMonth, &tmCompileTime.tm_mday,
 								&tmCompileTime.tm_hour, &tmCompileTime.tm_min, &tmCompileTime.tm_sec,
 								&tmCompileTime.tm_year );
+						szMonth[ 3 ] = '\0';
 						static const char szWeekDays[ ] = "SunMonTueWedThuFriSat";
 						static const char szMonths[ ] = "JanFebMarAprMayJunJulAugSepOctNovDec";
 						tmCompileTime.tm_year -= 1900;
@@ -622,7 +631,7 @@ void OnDetach( )
 						CloseHandle( pi.hThread );
 					};
 
-					Assert::AreNotEqual( 0, CreateProcess( LR"(C:\Users\Jeremiah\Documents\Paladin-Extensions\Solutions\Paladin Extensions\PX Unit Tests\Unit Test Empty.exe)",
+					Assert::AreNotEqual( 0, CreateProcess( LR"(C:\Users\Jeremiah\Documents\Paladin Extensions\Solutions\Paladin Extensions\PX Unit Tests\Unit Test Empty.exe)",
 													nullptr, nullptr, nullptr, FALSE, 0x0, nullptr, nullptr, &si, &pi ), L"CreateProcess failed", PX_ASSERT_INFO );
 
 					if ( !sys::LoadLibraryEx( L"Unit Test Empty.exe", LR"(C:\Users\Jeremiah\Documents\Paladin-Extensions\Solutions\Paladin Extensions\PX Unit Tests\Unit Test Log.dll)" ) )
@@ -670,6 +679,16 @@ void OnDetach( )
 				};
 			}
 		}
+	}
+
+	namespace Installer
+	{
+		
+	}
+
+	namespace Launcher
+	{
+		
 	}
 
 	namespace Manager

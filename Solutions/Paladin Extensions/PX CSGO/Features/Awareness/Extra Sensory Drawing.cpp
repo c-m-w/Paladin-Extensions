@@ -27,7 +27,7 @@ namespace PX::Features::Awareness
 
 	struct
 	{
-		CBaseEntity* pEntity;
+		CBaseEntity* pEntity { };
 		bool bTeammate = false, bIsPlayer = false;
 		int iSettingIndex = 0;
 		Vector vecLocation = Vector( );

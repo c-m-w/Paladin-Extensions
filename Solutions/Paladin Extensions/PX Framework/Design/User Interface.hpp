@@ -40,13 +40,9 @@ namespace PX::UI
 			IDirect3DTexture9* pTexture;
 			D3DXIMAGE_INFO iiImage;
 			Types::wstr_t wstrFileName;
-			texture_t( unsigned _uWidth, unsigned _uHeight, Types::wstr_t _wstrFileName, IDirect3DTexture9* _pTexture = nullptr ): iiImage( D3DXIMAGE_INFO( ) )
-			{
-				uWidth = _uWidth;
-				uHeight = _uHeight;
-				pTexture = _pTexture;
-				wstrFileName = _wstrFileName;
-			}
+			// review why even have a constructor here? just use initializer braces...
+			texture_t( unsigned uWidth, unsigned uHeight, Types::wstr_t wstrFileName, IDirect3DTexture9* pTexture = nullptr ): iiImage( D3DXIMAGE_INFO( ) ), uWidth( uWidth ), uHeight( uHeight ), pTexture( pTexture ), wstrFileName( wstrFileName )
+			{ }
 		};
 
 		struct texture_queue_t

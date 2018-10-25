@@ -106,7 +106,7 @@ namespace PX::Information
 			std::vector< RecvProp* > vecChildProps;
 			std::vector< networked_variable_table_t > vecChildTables;
 
-			networked_variable_table_t( ) = default;
+			networked_variable_table_t( ) = default; // review why even have constructors here? just use initializer lists
 			networked_variable_table_t( Types::cstr_t _szName, RecvProp* _pProp = nullptr, Types::ptr_t _ptrOffset = 0u ):
 				szName( _szName ), pProp( _pProp ), ptrOffset( _ptrOffset ) { }
 		};

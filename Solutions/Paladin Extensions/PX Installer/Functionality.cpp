@@ -77,7 +77,11 @@ namespace PX::Functionality
 	bstr_t PX_API ParseResource( int iResourceID )
 	{
 		HRSRC hResource = FindResource( PX::hinstWin, MAKEINTRESOURCE( iResourceID ), MAKEINTRESOURCE( iResourceID ) );
+		if ( !hResource )
+			return { };
 		HGLOBAL hMemory = LoadResource( PX::hinstWin, hResource );
+		if ( !hMemory )
+			return { };
 		DWORD dwSize = SizeofResource( PX::hinstWin, hResource );
 		LPVOID lpAddress = LockResource( hMemory );
 

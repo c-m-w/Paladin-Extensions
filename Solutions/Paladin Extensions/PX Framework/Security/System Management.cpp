@@ -178,10 +178,7 @@ namespace PX::sys
 
 		auto hSnapshot = CreateToolhelp32Snapshot( TH32CS_SNAPPROCESS, NULL );
 		if ( hSnapshot == nullptr || hSnapshot == INVALID_HANDLE_VALUE )
-		{
-			CloseHandle( hSnapshot );
 			return 0;
-		}
 
 		if ( Process32First( hSnapshot, &peTarget ) != TRUE )
 		{
@@ -214,10 +211,7 @@ namespace PX::sys
 		SetLastError( 0u );
 
 		if ( hSnapshot == nullptr || hSnapshot == INVALID_HANDLE_VALUE )
-		{
-			CloseHandle( hSnapshot );
 			return INVALID_HANDLE_VALUE;
-		}
 
 		if ( Thread32First( hSnapshot, &teThread ) == TRUE )
 		{
@@ -389,7 +383,7 @@ namespace PX::sys
 		std::unique_ptr< byte_t[ ] > pZeroMemoryBuffer( new byte_t[ zSize ]( ) );
 		WriteProcessMemory( hTarget, pAddress, pZeroMemoryBuffer.get( ), zSize, nullptr );
 		VirtualProtectEx( hTarget, pAddress, zSize, PAGE_NOACCESS, &dwBuffer );
-		VirtualFreeEx( hTarget, pAddress, zSize, MEM_DECOMMIT ); // todo should we be calling this with MEM_RELEASE? this might cause address space leaks
+		VirtualFreeEx( hTarget, pAddress, zSize, MEM_DECOMMIT ); // todo should we be calling this with MEM_RELEASE? this might cause address space leaks. documentation says this will free the memory, but not the address descriptors (VADs)
 	}
 
 	void PX_API WipeMemory( LPVOID pAddress, std::size_t zSize )
@@ -398,7 +392,7 @@ namespace PX::sys
 		std::unique_ptr< byte_t[ ] > pZeroMemoryBuffer( new byte_t[ zSize ]( ) );
 		memcpy( pAddress, pZeroMemoryBuffer.get( ), zSize );
 		VirtualProtect( pAddress, zSize, PAGE_NOACCESS, &dwBuffer );
-		VirtualFree( pAddress, zSize, MEM_DECOMMIT );
+		VirtualFree( pAddress, zSize, MEM_DECOMMIT ); // see above todo
 	}
 
 	bool PX_API LoadLibraryEx( const wstr_t& wstrExecutableName, const wstr_t& wstrDLLPath )
@@ -681,7 +675,7 @@ namespace PX::sys
 		NTSTATUS ntsResult;
 		constexpr auto ulSystemHandleInfoFlags = 1 << 4;
 		while ( ( ntsResult = fnQuerySystemInfo( ulSystemHandleInfoFlags, pHandleInfo, ulHandleInfoSize, nullptr ) ) == STATUS_INFO_LENGTH_MISMATCH )
-			pHandleInfo = reinterpret_cast< SWindowsAPI::PSYSTEM_HANDLE_INFORMATION >( realloc( pHandleInfo, ulHandleInfoSize *= 2 ) );
+			pHandleInfo = reinterpret_cast< SWindowsAPI::PSYSTEM_HANDLE_INFORMATION >( realloc( pHandleInfo, ulHandleInfoSize *= 2 ) ); // review realloc can return nullptr...
 
 		px_assert( NT_SUCCESS( ntsResult ) );
 

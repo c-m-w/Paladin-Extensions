@@ -86,21 +86,21 @@ namespace PX::Features
 
 					toggle_t bMindSmoke = false;
 					int iBoxMode = BOX_NONE; // only static
-					color_sequence_t seqBox[ STATE_MAX ];
+					color_sequence_t seqBox[ STATE_MAX ] { };
 					toggle_t bFill = false;
-					color_sequence_t seqFill[ STATE_MAX ];
+					color_sequence_t seqFill[ STATE_MAX ] { };
 
 					toggle_t bSnaplines = false;
-					color_sequence_t seqSnaplines[ STATE_MAX ];
+					color_sequence_t seqSnaplines[ STATE_MAX ] { };
 					float flSnaplineWidth = 1.f;
 
 					toggle_t bShowInformation = false;
-					color_sequence_t seqInformation[ STATE_MAX ];
+					color_sequence_t seqInformation[ STATE_MAX ] { };
 					toggle_t bShowName = false;
 					toggle_t bWeaponText = false;
 					int iInformationAlignment = ALIGNMENT_BOTTOM;
 					toggle_t bInformationOutline = false;
-					color_sequence_t seqInformationOutline[ STATE_MAX ];
+					color_sequence_t seqInformationOutline[ STATE_MAX ] { };
 				} _Weapons[ 2 ];
 
 				struct: extra_sensory_drawing_base_t
@@ -124,7 +124,7 @@ namespace PX::Features
 					color_sequence_t seqHealthBar[ 2 ][ STATE_MAX ]; // player only
 					toggle_t bShowRank = false; // player only
 					toggle_t bShowWeapon = false; // player only
-				} _Players[ 2 ];
+				} _Players[ 2 ] { };
 			} _ExtraSensoryDrawing;
 
 			struct glow_t
@@ -140,7 +140,7 @@ namespace PX::Features
 					int iGlowStyle = 0;
 					toggle_t bFullBloom = false;
 					float flFullBloomAmount = 1.f;
-				} _Players[ SETTING_GLOW_PLAYER_MAX ]; // team, enemy
+				} _Players[ SETTING_GLOW_PLAYER_MAX ] { }; // team, enemy
 
 				struct entity_t
 				{
@@ -152,8 +152,8 @@ namespace PX::Features
 					int iGlowStyle = 0;
 					toggle_t bFullBloom = false;
 					float flFullBloomAmount = 1.f;
-				} _Entities[ SETTING_GLOW_ENTITY_MAX ]; // weapons, c4, defuse kit, grenade
-			} _Glow;
+				} _Entities[ SETTING_GLOW_ENTITY_MAX ] { }; // weapons, c4, defuse kit, grenade
+			} _Glow { };
 
 			struct materials_t
 			{
@@ -163,7 +163,7 @@ namespace PX::Features
 					toggle_t bMindSmoke = false;
 
 					color_sequence_t seqColor[ STATE_MAX ] { };
-				} _Entities[ SETTING_MATERIALS_MAX ];
+				} _Entities[ SETTING_MATERIALS_MAX ] { };
 			} _Materials;
 		} _Awareness;
 

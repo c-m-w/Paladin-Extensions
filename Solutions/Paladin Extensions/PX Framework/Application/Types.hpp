@@ -196,21 +196,21 @@ namespace PX::Types
 
 	struct polygon_t: drawing_t< vertex_t >
 	{
-		std::size_t sPrimitives;
-		D3DPRIMITIVETYPE ptType;
+		std::size_t sPrimitives { };
+		D3DPRIMITIVETYPE ptType { };
 
-		polygon_t( ) = default;
+		polygon_t( ) = default; // review why even have constructors here? just use initializer braces
 		polygon_t( const vertex_t* _pVertices, std::size_t _sVertices, std::size_t _sPrimitives, D3DPRIMITIVETYPE _ptType = D3DPT_TRIANGLEFAN );
 	};
 
 	struct text_t
 	{
-		int iFont;
+		int iFont { };
 		int x, y;
 		Types::wstr_t wstrText;
 		bool bOutlined;
 		DWORD dwFlags, dwColor, dwOutline;
-		text_t( ) = default;
+		text_t( ) = default; // review why even have constructors here? just use initializer braces
 		text_t( int _iFont, int _x, int _y, const wchar_t* _wszText, bool _bOutlined, DWORD _dwFlags, DWORD _dwColor, DWORD _dwOutline );
 	};
 

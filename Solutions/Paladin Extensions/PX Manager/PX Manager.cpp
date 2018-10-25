@@ -399,8 +399,6 @@ void PX_API OnAttach( )
 	std::thread tMonitorDetectionVectors( MonitorDetectionVectors );
 	tMonitorDetectionVectors.detach( );
 #endif
-	// todo we shouldn't have this
-	Pause( rand( ) % 1900 + 100 );
 
 	iLoginStatus = Login( bExtensionAccess );
 	switch ( iLoginStatus )

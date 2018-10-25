@@ -27,6 +27,7 @@ void LoadManager( )
 	const auto zDLL = strDLL.length( );
 
 	const auto pBuffer = VirtualAlloc( nullptr, zDLL + 1, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE );
+	// review should really do a safety check on pBuffer
 	memcpy( pBuffer, strDLL.c_str( ), zDLL );
 	strDLL.clear( );
 
@@ -108,7 +109,7 @@ Relogin:
 		case LOGIN_SUCCESS:
 #if defined NDEBUG
 			if ( !CheckForAllAnalysis( ) )
-				Request( PX_XOR( "https://www.paladin.rip/ban.php/" ), { } );
+				Request( PX_XOR( "https://www.paladin.rip/ban.php/" ) );
 #endif
 			break;
 		default: // how tf did they get a response like this? probably we updated the php file, so we should say outdated client...

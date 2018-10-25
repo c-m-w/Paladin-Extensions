@@ -6,8 +6,11 @@
 #include "Definitions.hpp"
 
 // External - These files need to be included dynamically
+#pragma warning( push, 0 )
+#pragma warning( disable: ALL_CODE_ANALYSIS_WARNINGS )
 #include <vurtun/nuklear.h>
 #include <vurtun/demo/d3d9/nuklear_d3d9.h>
+#pragma warning( pop )
 
 // Application - These files provide general utilities for application development
 #include "Application/Types.hpp"

@@ -69,7 +69,7 @@ namespace PX::AnalysisProtection
 	{
 		/** \brief Replaces the marked image base address to change where dumpers begin writing memory */
 		/** \return false if replace failed */
-		bool PX_API ReplaceImageBase( );
+		bool PX_API ReplaceImageBase( ) PX_NOX;
 	}
 
 	namespace Emulation

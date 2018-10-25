@@ -148,7 +148,7 @@ namespace PX::Types
 			pColor->b[ u ] = byte_t( initInput );
 			u++;
 		}
-		for ( auto uu = 4u; uu > u + 1; uu-- )
+		for ( auto uu = 3u; uu >= u + 1; uu-- )
 			pColor->b[ uu ] = UCHAR_MAX;
 	}
 
@@ -161,7 +161,7 @@ namespace PX::Types
 			pColor->b[ u ] = byte_t( initInput > 1.f ? initInput : initInput * 255.f );
 			u++;
 		}
-		for ( auto uu = 4u; uu > u + 1; uu-- )
+		for ( auto uu = 3u; uu >= u + 1; uu-- )
 			pColor->b[ uu ] = UCHAR_MAX;
 	}
 

@@ -750,11 +750,9 @@ namespace PX::UI
 			{
 				struct nk_vec2 vecSize;
 				str_t strText;
-				text_t( struct nk_vec2 _vecSize, str_t _strText )
-				{
-					vecSize = _vecSize;
-					strText = _strText;
-				}
+				// review why even have a constructor here? just use initializer braces
+				text_t( struct nk_vec2 vecSize, str_t strText ): vecSize( vecSize ), strText( strText )
+				{ }
 			};
 
 			std::deque< text_t > wrdWords;

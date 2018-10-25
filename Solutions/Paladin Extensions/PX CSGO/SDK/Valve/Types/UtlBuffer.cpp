@@ -1,3 +1,6 @@
+#include <codeanalysis/warnings.h>
+#pragma warning( push, 0 )
+#pragma warning( disable: ALL_CODE_ANALYSIS_WARNINGS )
 //===== Copyright © 1996-2005, Valve Corporation, All rights reserved. ======//
 //
 // $Header: $
@@ -1638,3 +1641,4 @@ END_CUSTOM_CHAR_CONVERSION(CUtlCStringConversion, s_StringCharConversion, "\"", 
             }
             return pszLine;
         }
+#pragma warning( pop )

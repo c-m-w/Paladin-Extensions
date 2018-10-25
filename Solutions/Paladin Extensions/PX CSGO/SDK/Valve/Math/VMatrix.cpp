@@ -1,3 +1,6 @@
+#include <codeanalysis/warnings.h>
+#pragma warning( push, 0 )
+#pragma warning( disable: ALL_CODE_ANALYSIS_WARNINGS )
 #include "VMatrix.hpp"
 
 //-----------------------------------------------------------------------------
@@ -357,3 +360,4 @@ inline Vector VMatrix::ApplyRotation(const Vector &vVec) const
 {
     return VMul3x3(vVec);
 }
+#pragma warning( pop )

@@ -1,3 +1,6 @@
+#include <codeanalysis/warnings.h>
+#pragma warning( push, 0 )
+#pragma warning( disable: ALL_CODE_ANALYSIS_WARNINGS )
 #include "Color.hpp"
 
 Color Color::Black(0, 0, 0, 255);
@@ -60,3 +63,4 @@ Color& Color::operator=(const Color &rhs)
     SetRawColor(rhs.GetRawColor());
     return *this;
 }
+#pragma warning( pop )

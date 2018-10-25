@@ -1,3 +1,6 @@
+#include <codeanalysis/warnings.h>
+#pragma warning( push, 0 )
+#pragma warning( disable: ALL_CODE_ANALYSIS_WARNINGS )
 #include "Vector4D.hpp"
 
 #include <cmath>
@@ -289,3 +292,4 @@ Vector4D operator*(float fl, const Vector4D& v)
 {
     return v * fl;
 }
+#pragma warning( pop )

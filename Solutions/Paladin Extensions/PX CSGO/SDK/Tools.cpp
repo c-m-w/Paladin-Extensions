@@ -106,6 +106,7 @@ namespace PX::Tools
 	{
 		int iWidth, iHeight;
 		pEngineClient->GetScreenSize( iWidth, iHeight );
+		// note OVERFLOW. cast first operand to 8byte var, then do operations on it.
 		const auto dbTemp = double( vmMatrix[ 3 ][ 0 ] * vecWorld.x + vmMatrix[ 3 ][ 1 ] * vecWorld.y + vmMatrix[ 3 ][ 2 ] * vecWorld.z + vmMatrix[ 3 ][ 3 ] );
 
 		if ( dbTemp <= 0.01 )

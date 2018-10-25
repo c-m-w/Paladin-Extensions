@@ -186,7 +186,7 @@ Retry:
 
 		/** \brief Checks presence of debugger by setting up SEH and calling interrupt[ 0x2D ]  */
 		/** \return false if debugger catch occurred */
-		PX_INL bool PX_API Interrupt0x2D( ) noexcept
+		PX_INL bool PX_API Interrupt0x2D( ) PX_NOX
 		{
 			// try with seh
 			__try
@@ -437,7 +437,7 @@ Retry:
 
 	namespace DumpPrevention
 	{
-		PX_EXT PX_INL bool PX_API ReplaceImageBase( ) noexcept
+		PX_EXT PX_INL bool PX_API ReplaceImageBase( ) PX_NOX
 		{
 			auto& buf = PPEB( __readfsdword( 0x30 ) )->Ldr->InMemoryOrderModuleList.Flink;
 			if ( buf == nullptr )

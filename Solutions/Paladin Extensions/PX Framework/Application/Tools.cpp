@@ -271,7 +271,7 @@ namespace PX::Tools
 		if ( mmtTime == 0ull )
 			return PX_XOR( "Never" );
 
-		static char szBuffer[ 32 ];
+		static char szBuffer[ 80 ];
 		time_t tmBuffer = mmtTime;
 
 		time( &tmBuffer );

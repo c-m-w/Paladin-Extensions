@@ -4,6 +4,8 @@
 
 // Compiler
 #pragma warning( push, 0 ) // warning level set to 0
+#include <codeanalysis/warnings.h>
+#pragma warning( disable: ALL_CODE_ANALYSIS_WARNINGS )
 #define _CRT_SECURE_NO_WARNINGS
 
 // Standard C++

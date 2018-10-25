@@ -28,7 +28,7 @@ namespace PX
 			_t _Cryption( reinterpret_cast< Types::byte_t* >( const_cast< char* >( Tools::string_cast< Types::str_t >( strEncryptionKey ).c_str( ) ) ),
 						  strEncryptionKey.length( ), reinterpret_cast< Types::byte_t* >( const_cast< char* >( strInitializationVector.c_str( ) ) ) );
 			CryptoPP::StringSource( Tools::string_cast< Types::str_t >( strPlainText ), true, new
-									CryptoPP::StreamTransformationFilter( _Cryption, new CryptoPP::StringSink( strOutput ) ) );
+									CryptoPP::StreamTransformationFilter( _Cryption, new CryptoPP::StringSink( strOutput ) ) ); // review should we store this var somewhere?
 			// should we be declaring an object of StringSource type??
 			return strOutput;
 		}

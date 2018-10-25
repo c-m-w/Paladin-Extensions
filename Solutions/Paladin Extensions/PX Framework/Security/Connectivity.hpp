@@ -24,14 +24,14 @@ namespace PX::Net
 	Types::str_t PX_API GeneratePostData( const Types::post_data_t& dqPostData );
 	/** \brief Attempts to initialize cURL. */
 	/**	\return true - Initialization was successful.\n false - Initialization was not successful. */
-	bool PX_API InitializeConnection( );
+	bool PX_API InitializeConnection( ) PX_NOX;
 	/** \brief Shuts cURL down to clean up the connection pointer.\n Call this when you are done doing anything with connectivity. */
-	void PX_API CleanupConnection( );
+	void PX_API CleanupConnection( ) PX_NOX;
 	/** \brief Makes a request to a site. */
 	/**	\param strSite Site to make the request to.	*/
 	/** \param dqPostData Post data to send to the site. */
 	/**	\return What the site sends back from the request. */
-	Types::str_t PX_API Request( const Types::str_t& strSite, const Types::post_data_t& dqPostData );
+	Types::str_t PX_API Request( const Types::str_t& strSite, const Types::post_data_t& dqPostData = { } );
 
 	Types::str_t PX_API RequestExtension( unsigned uGameID, bool bInformation );
 

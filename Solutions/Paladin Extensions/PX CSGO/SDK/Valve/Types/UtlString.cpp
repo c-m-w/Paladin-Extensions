@@ -1,3 +1,7 @@
+#include <codeanalysis/warnings.h>
+#pragma warning( push, 0 )
+#pragma warning( disable: ALL_CODE_ANALYSIS_WARNINGS )
+
 #include "UtlString.hpp"
 
 #define NOMINMAX
@@ -308,3 +312,4 @@ void CUtlString::StripTrailingSlash()
         m_Storage.SetLength(m_Storage.Length() - 1);
     }
 }
+#pragma warning( pop )
