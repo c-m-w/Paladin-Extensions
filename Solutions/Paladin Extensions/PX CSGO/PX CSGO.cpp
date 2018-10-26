@@ -52,7 +52,7 @@ void PX_API OnAttach( )
 		ExitProcess( UINT_MAX );
 #if defined _DEBUG
 	while ( PX_INPUT.GetKeyState( VK_END ) == false )
-		PX::Tools::Wait( 1ull );
+		PX::Tools::Wait( 100ull );
 	PX::Hooks::Destruct( );
 	PX::UI::Manager::Destruct( );
 	PX::Render::Destruct( );

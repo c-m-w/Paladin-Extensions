@@ -3,6 +3,8 @@
 #include "PX Precompiled.hpp"
 #include "../../PX CSGO.hpp"
 
+bool bInvertedFill = false;
+
 using namespace PX::Tools;
 using namespace PX::Information;
 using namespace PX::Drawing;
@@ -154,12 +156,47 @@ namespace PX::Features::Awareness
 		}
 		else
 		{
-			auto buf = info.pEntity->BoundingBox( );
-			if ( buf )
+			const auto pCollidable = info.pEntity->GetCollideable( );
+			const auto vecMinimum = pCollidable->OBBMins( );
+			const auto vecMaximum = pCollidable->OBBMaxs( );
+			const auto mtxTransformation = info.pEntity->m_rgflCoordinateFrame( );
+
+			Vector vecPoints[ ]
 			{
-				memcpy( info.vecBoundingBoxCorners, buf, sizeof( Vector ) * 4 );
-				delete[ ] buf;
+				Vector( vecMinimum.x, vecMinimum.y, vecMinimum.z ),
+				Vector( vecMinimum.x, vecMaximum.y, vecMinimum.z ),
+				Vector( vecMaximum.x, vecMaximum.y, vecMinimum.z ),
+				Vector( vecMaximum.x, vecMinimum.y, vecMinimum.z ),
+				Vector( vecMaximum.x, vecMaximum.y, vecMaximum.z ),
+				Vector( vecMinimum.x, vecMaximum.y, vecMaximum.z ),
+				Vector( vecMinimum.x, vecMinimum.y, vecMaximum.z ),
+				Vector( vecMaximum.x, vecMinimum.y, vecMaximum.z )
+			}, vecTransformedPoints[ 8 ], vecScreenPoints[ 8 ];
+
+			for ( auto i = 0; i < 8; i++ )
+			{
+				TransformVector( vecPoints[ i ], mtxTransformation, vecTransformedPoints[ i ] );
+				if ( !WorldToScreen( vecTransformedPoints[ i ], vecScreenPoints[ i ] ) )
+					info.bBoxInSight = false;
 			}
+
+			auto flTop = vecScreenPoints[ 0 ].y, flRight = vecScreenPoints[ 0 ].x, flBottom = vecScreenPoints[ 0 ].y, flLeft = vecScreenPoints[ 0 ].x;
+			for ( const auto& vecScreenPoint : vecScreenPoints )
+			{
+				if ( flLeft > vecScreenPoint.x )
+					flLeft = vecScreenPoint.x;
+				if ( flTop < vecScreenPoint.y )
+					flTop = vecScreenPoint.y;
+				if ( flRight < vecScreenPoint.x )
+					flRight = vecScreenPoint.x;
+				if ( flBottom > vecScreenPoint.y )
+					flBottom = vecScreenPoint.y;
+			}
+
+			info.vecBoundingBoxCorners[ TOPLEFT ] = { flLeft, flTop, 0.f };
+			info.vecBoundingBoxCorners[ TOPRIGHT ] = { flRight, flTop, 0.f };
+			info.vecBoundingBoxCorners[ BOTTOMRIGHT ] = { flRight, flBottom, 0.f };
+			info.vecBoundingBoxCorners[ BOTTOMLEFT ] = { flLeft, flBottom, 0.f };
 		}
 	}
 
@@ -247,7 +284,6 @@ namespace PX::Features::Awareness
 			}
 			else
 			{
-				
 			}
 			Line( vecScreenPoints, 5, 2, clrBox.GetARGB( ) );
 		}
@@ -623,51 +659,108 @@ namespace PX::Features::Awareness
 					}
 					else
 					{
-						auto fnSetVecBarVert = [ & ]( int enumRightID )
-						{
-							vecBar[ TOPLEFT ] = info.vecBoundingBoxCorners[ enumRightID + 1 ];
-							vecBar[ TOPLEFT ].y += ( enumRightID ? -1.f : 1.f ) * flPadding;
-							vecBar[ TOPRIGHT ] = info.vecBoundingBoxCorners[ enumRightID ];
-							vecBar[ TOPRIGHT ].y += ( enumRightID ? -1.f : 1.f ) * flPadding;
-
-							vecBar[ BOTTOMLEFT ] = info.vecBoundingBoxCorners[ enumRightID + 1 ];
-							vecBar[ BOTTOMLEFT ].y += ( enumRightID ? 1.f : -1.f ) * ( flPadding + flHealthbarWidth );
-							vecBar[ BOTTOMRIGHT ] = info.vecBoundingBoxCorners[ enumRightID ];
-							vecBar[ BOTTOMRIGHT ].y += ( enumRightID ? 1.f : -1.f ) * ( flPadding + flHealthbarWidth );
-						};
-						auto fnSetVecBarHori = [ & ]( int enumRightID )
-						{
-							vecBar[ TOPLEFT ] = info.vecBoundingBoxCorners[ enumRightID ];
-							vecBar[ TOPLEFT ].y += ( enumRightID - 2 ? 1.f : -1.f ) * flPadding;
-							vecBar[ TOPRIGHT ] = info.vecBoundingBoxCorners[ enumRightID ];
-							vecBar[ TOPRIGHT ].y += ( enumRightID - 2 ? 1.f : -1.f ) * flPadding;
-
-							vecBar[ BOTTOMLEFT ] = info.vecBoundingBoxCorners[ enumRightID + 1 ];
-							vecBar[ BOTTOMLEFT ].y += ( enumRightID - 2 ? -1.f : 1.f ) * ( flPadding + flHealthbarWidth );
-							vecBar[ BOTTOMRIGHT ] = info.vecBoundingBoxCorners[ enumRightID ];
-							vecBar[ BOTTOMRIGHT ].y += ( enumRightID - 2 ? -1.f : 1.f ) * ( flPadding + flHealthbarWidth );
-						};
-
+					float flFillWidth = 0.f;
 						switch ( esdPlayerConfig->iInformationAlignment )
 						{
 							case ALIGNMENT_BOTTOM:
 							{
-								fnSetVecBarVert( BOTTOMRIGHT );
+								vecBar[ TOPLEFT ] = info.vecBoundingBoxCorners[ BOTTOMLEFT ];
+								vecBar[ TOPLEFT ].y +=  flPadding;
+								vecBar[ BOTTOMLEFT ] = vecBar[ TOPLEFT ];
+								vecBar[ BOTTOMLEFT ].y += flHealthbarWidth;
+
+								vecBar[ TOPRIGHT ] = info.vecBoundingBoxCorners[ BOTTOMRIGHT ];
+								vecBar[ TOPRIGHT ].y += flPadding;
+								vecBar[ BOTTOMRIGHT ] = vecBar[ TOPRIGHT ];
+								vecBar[ BOTTOMRIGHT ].y += flHealthbarWidth;
+
+								if ( bInvertedFill )
+								{
+									flFillWidth = flHealthRatio * ( vecBar[ TOPRIGHT ].x - vecBar[ TOPLEFT ].x );
+									vecBar[ TOPRIGHT ].x = vecBar[ TOPLEFT ].x + flFillWidth;
+									vecBar[ BOTTOMRIGHT ].x = vecBar[ BOTTOMLEFT ].x + flFillWidth;
+								}
+								else
+								{
+									flFillWidth = ( 1 - flHealthRatio ) * ( vecBar[ TOPRIGHT ].x - vecBar[ TOPLEFT ].x );
+									vecBar[ TOPLEFT ].x = vecBar[ TOPLEFT ].x + flFillWidth;
+									vecBar[ BOTTOMLEFT ].x = vecBar[ BOTTOMLEFT ].x + flFillWidth;
+								}
 							}
 							break;
 							case ALIGNMENT_TOP:
 							{
-								fnSetVecBarVert( TOPRIGHT );
+								vecBar[ BOTTOMLEFT ] = info.vecBoundingBoxCorners[ TOPLEFT ];
+								vecBar[ BOTTOMLEFT ].y -= flPadding;
+								vecBar[ TOPLEFT ] = vecBar[ BOTTOMLEFT ];
+								vecBar[ TOPLEFT ].y -= flHealthbarWidth;
+
+								vecBar[ BOTTOMRIGHT ] = info.vecBoundingBoxCorners[ TOPRIGHT ];
+								vecBar[ BOTTOMRIGHT ].y -= flPadding;
+								vecBar[ TOPRIGHT ] = vecBar[ BOTTOMRIGHT ];
+								vecBar[ TOPRIGHT ].y -= flHealthbarWidth;
+								if ( bInvertedFill )
+								{
+									flFillWidth = flHealthRatio * ( vecBar[ TOPRIGHT ].x - vecBar[ TOPLEFT ].x );
+									vecBar[ TOPRIGHT ].x = vecBar[ TOPLEFT ].x + flFillWidth;
+									vecBar[ BOTTOMRIGHT ].x = vecBar[ BOTTOMLEFT ].x + flFillWidth;
+								}
+								else
+								{
+									flFillWidth = ( 1 - flHealthRatio ) * ( vecBar[ TOPRIGHT ].x - vecBar[ TOPLEFT ].x );
+									vecBar[ TOPLEFT ].x = vecBar[ TOPLEFT ].x + flFillWidth;
+									vecBar[ BOTTOMLEFT ].x = vecBar[ BOTTOMLEFT ].x + flFillWidth;
+								}
 							}
 							break;
 							case ALIGNMENT_LEFT:
 							{
-								fnSetVecBarHori( TOPLEFT );
+								vecBar[ TOPRIGHT ] = info.vecBoundingBoxCorners[ TOPLEFT ];
+								vecBar[ TOPRIGHT ].y -= flPadding;
+								vecBar[ TOPLEFT ] = vecBar[ TOPRIGHT ];
+								vecBar[ TOPLEFT ].y -= flHealthbarWidth;
+
+								vecBar[ BOTTOMRIGHT ] = info.vecBoundingBoxCorners[ BOTTOMLEFT ];
+								vecBar[ BOTTOMRIGHT ].y -= flPadding;
+								vecBar[ BOTTOMLEFT ] = vecBar[ TOPLEFT ];
+								vecBar[ BOTTOMLEFT ].y -= flHealthbarWidth;
+								if ( bInvertedFill )
+								{
+									flFillWidth = flHealthRatio * ( vecBar[ TOPRIGHT ].x - vecBar[ BOTTOMRIGHT ].x );
+									vecBar[ BOTTOMRIGHT ].y = vecBar[ TOPRIGHT ].y + flFillWidth;
+									vecBar[ BOTTOMLEFT ].y = vecBar[ TOPLEFT ].y + flFillWidth;
+								}
+								else
+								{
+									flFillWidth = ( 1 - flHealthRatio ) * ( vecBar[ TOPRIGHT ].x - vecBar[ BOTTOMRIGHT ].x );
+									vecBar[ TOPRIGHT ].y = vecBar[ BOTTOMRIGHT ].y - flFillWidth;
+									vecBar[ TOPLEFT ].y = vecBar[ BOTTOMLEFT ].y - flFillWidth;
+								}
 							}
 							break;
 							case ALIGNMENT_RIGHT:
 							{
-								fnSetVecBarHori( TOPRIGHT );
+								vecBar[ TOPLEFT ] = info.vecBoundingBoxCorners[ TOPRIGHT ];
+								vecBar[ TOPLEFT ].y += flPadding;
+								vecBar[ TOPRIGHT ] = vecBar[ TOPLEFT ];
+								vecBar[ TOPRIGHT ].y += flHealthbarWidth;
+
+								vecBar[ BOTTOMLEFT ] = info.vecBoundingBoxCorners[ BOTTOMRIGHT ];
+								vecBar[ BOTTOMLEFT ].y += flPadding;
+								vecBar[ BOTTOMRIGHT ] = vecBar[ BOTTOMLEFT ];
+								vecBar[ BOTTOMRIGHT ].y += flHealthbarWidth;
+								if ( bInvertedFill )
+								{
+									flFillWidth = flHealthRatio * ( vecBar[ TOPRIGHT ].x - vecBar[ BOTTOMRIGHT ].x );
+									vecBar[ BOTTOMRIGHT ].y = vecBar[ TOPRIGHT ].y + flFillWidth;
+									vecBar[ BOTTOMLEFT ].y = vecBar[ TOPLEFT ].y + flFillWidth;
+								}
+								else
+								{
+									flFillWidth = ( 1 - flHealthRatio ) * ( vecBar[ TOPRIGHT ].x - vecBar[ BOTTOMRIGHT ].x );
+									vecBar[ TOPRIGHT ].y = vecBar[ BOTTOMRIGHT ].y - flFillWidth;
+									vecBar[ TOPLEFT ].y = vecBar[ BOTTOMLEFT ].y - flFillWidth;
+								}
 							}
 							break;
 						}
