@@ -35,6 +35,9 @@ namespace PX::Information
 			// ModelRender
 			PX_DEF uDrawModelExecute = 21u;
 
+			// View Render
+			PX_DEF uSceneEnd = 9u;
+
 			// CBaseEntity
 			PX_DEF uIsPlayer = 152u;
 			PX_DEF uIsWeapon = 160u;
@@ -71,6 +74,7 @@ namespace PX::Information
 		PX_SDK SModule mVGUI;
 		PX_SDK SModule mVGUI2;
 		PX_SDK SModule mInput;
+		PX_SDK SModule mMaterialSystem;
 	}
 
 	namespace Pointers
@@ -94,6 +98,8 @@ namespace PX::Information
 		PX_SDK IVModelInfoClient* pModelInfo = nullptr;
 		PX_SDK CInput* pInput = nullptr;
 		PX_SDK IVModelRender* pModelRender = nullptr;
+		PX_SDK IMaterialSystem* pMaterialSystem = nullptr;
+		PX_SDK IViewRender* pViewRender = nullptr;
 	}
 
 	namespace NetworkedVariableManager // http://www.bailopan.net/table_dump.txt

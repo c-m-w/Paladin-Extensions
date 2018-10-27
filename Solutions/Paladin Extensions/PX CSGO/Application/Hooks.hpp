@@ -26,6 +26,9 @@ namespace PX
 
 		// ModelRender
 		typedef void( __thiscall* draw_model_execute_t )( IVModelRender*, IMatRenderContext*, const DrawModelState_t&, const ModelRenderInfo_t&, matrix3x4_t* );
+
+		// View Render
+		typedef void( __thiscall* scene_end_t )( IViewRender* );
 	}
 
 	namespace Hooks
@@ -38,6 +41,7 @@ namespace PX
 		PX_SDK Tools::CTrampolineHook* hkClientMode;
 		PX_SDK Tools::CTrampolineHook* hkPanel;
 		PX_SDK Tools::CTrampolineHook* hkModelRender;
+		PX_SDK Tools::CTrampolineHook* hkViewRender;
 
 		// Device
 		HRESULT __stdcall BeginScene( IDirect3DDevice9* pThis );
@@ -56,5 +60,8 @@ namespace PX
 
 		// ModelRender
 		void __stdcall DrawModelExecute( IMatRenderContext* pContext, const DrawModelState_t& state, const ModelRenderInfo_t& pInfo, matrix3x4_t* pCustomBoneToWorld );
+
+		// View Render
+		void __stdcall SceneEnd( );
 	}
 }

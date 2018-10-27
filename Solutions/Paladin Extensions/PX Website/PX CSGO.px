@@ -6,7 +6,8 @@
         "Overlay":  "GameOverlayRenderer.dll",
         "VGUI":  "vguimatsurface.dll",
         "VGUI2": "vgui2.dll",
-        "Input": "inputsystem.dll"
+        "Input": "inputsystem.dll",
+		"Material System": "materialsystem.dll"
     },
     "Patterns": {
         "Offsets": {
@@ -15,6 +16,7 @@
             "Glow Object Manager": 3,
             "Client State": 1,
             "Input": 1,
+			"View Render": 1,
             "Send Packets": 1,
             "Global Variables":  1,
             "Line Goes Through Smoke": 0,
@@ -29,6 +31,7 @@
             "Glow Object Manager": "0F 11 05 ? ? ? ? 83 C8 01",
             "Client State": "A1 ? ? ? ? 8B 80 ? ? ? ? C3",
             "Input": "B9 ? ? ? ? 8B 40 38 FF D0 84 C0 0F 85",
+			"View Render": "A1 ? ? ? ? B9 ? ? ? ? C7 05 ? ? ? ? ? ? ? ? FF 10",
             "Send Packets": "B3 01 8B 01 8B 40 10 FF D0 84 C0 74 0F 80 BF",
             "Global Variables": "A1 ? ? ? ? 5E 8B 40 10",
             "Line Goes Through Smoke": "55 8B EC 83 EC 08 8B 15 ? ? ? ? 0F 57 C0",
@@ -47,6 +50,7 @@
             "Engine Trace": "EngineTraceClient004",
             "Model Info": "VModelInfoClient004",
             "Input": "InputSystemVersion001",
-            "Model Render": "VEngineModel016"
+            "Model Render": "VEngineModel016",
+			"Material System": "VMaterialSystem080"
   }
 }

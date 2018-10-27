@@ -54,6 +54,11 @@ namespace PX::Features
 		} );
 
 		PX_CONFIG.LoadDefaultConfiguration( PX_EXTENSION_CSGO, &_Settings, sizeof( settings_t ) );
-		return true;
+		return Awareness::CreateMaterials( );
+	}
+
+	void PX_API ShutdownFeatures( )
+	{
+		return Awareness::RemoveMaterials( );
 	}
 }

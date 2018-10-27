@@ -53,11 +53,10 @@ namespace PX::Features
 
 	enum
 	{
+		SETTING_MATERIALS_SELF,
 		SETTING_MATERIALS_TEAM,
 		SETTING_MATERIALS_ENEMY,
 		SETTING_MATERIALS_WEAPONS,
-		SETTING_MATERIALS_ARMS,
-		SETTING_MATERIALS_SLEEVES,
 		SETTING_MATERIALS_C4,
 		SETTING_MATERIALS_PLANTED_C4,
 		SETTING_MATERIALS_DEFUSER,
@@ -160,7 +159,9 @@ namespace PX::Features
 				struct entity_t
 				{
 					toggle_t bEnabled = false;
-					toggle_t bMindSmoke = false;
+					toggle_t bFlat = false;
+					toggle_t bDrawAboveAll = false;
+					toggle_t bWireFrame = false;
 
 					color_sequence_t seqColor[ STATE_MAX ] { };
 				} _Entities[ SETTING_MATERIALS_MAX ] { };
@@ -181,6 +182,7 @@ namespace PX::Features
 	} _Settings;
 
 	bool PX_API InitializeFeatures( );
+	void PX_API ShutdownFeatures( );
 
 	enum
 	{

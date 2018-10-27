@@ -21,10 +21,12 @@ namespace PX
 				&& hkClientMode->HookIndex( uDoPostScreenEffects, reinterpret_cast< void* >( DoPostScreenEffects ) )
 				&& hkPanel->HookIndex( uPaintTraverse, reinterpret_cast< void* >( PaintTraverse ) )
 				&& hkModelRender->HookIndex( uDrawModelExecute, reinterpret_cast< void* >( DrawModelExecute ) )
+				&& hkViewRender->HookIndex( uSceneEnd, reinterpret_cast< void* >( SceneEnd ) )
 				&& hkClientBase->ResetProtection( )
 				&& hkClientMode->ResetProtection( )
 				&& hkPanel->ResetProtection( )
-				&& hkModelRender->ResetProtection( );
+				&& hkModelRender->ResetProtection( )
+				&& hkViewRender->ResetProtection( );
 		}
 
 		bool PX_API InitializeHooks( )
@@ -34,12 +36,14 @@ namespace PX
 			hkClientMode	= new Tools::CTrampolineHook( pClientMode );
 			hkPanel			= new Tools::CTrampolineHook( pPanel );
 			hkModelRender	= new Tools::CTrampolineHook( pModelRender );
+			hkViewRender	= new Tools::CTrampolineHook( pViewRender );
 
 			return hkDirectXDevice->Succeeded( )
 				&& hkClientBase->Succeeded( ) && hkClientBase->SetProtection( )
-				&& hkClientMode->Succeeded( ) && hkClientMode->SetProtection(  )
+				&& hkClientMode->Succeeded( ) && hkClientMode->SetProtection( )
 				&& hkPanel->Succeeded( ) && hkPanel->SetProtection( )
-				&& hkModelRender->Succeeded( ) && hkModelRender->SetProtection( ) ?
+				&& hkModelRender->Succeeded( ) && hkModelRender->SetProtection( )
+				&& hkViewRender->Succeeded( ) && hkViewRender->SetProtection( ) ?
 				SetHooks( )
 				: false;
 		}
@@ -50,6 +54,8 @@ namespace PX
 			delete hkClientBase;
 			delete hkClientMode;
 			delete hkPanel;
+			delete hkModelRender;
+			delete hkViewRender;
 		}
 
 		HRESULT __stdcall BeginScene( IDirect3DDevice9* pThis )
@@ -213,9 +219,25 @@ namespace PX
 				bShouldOverride = Features::Awareness::OverrideMaterial( pLocalPlayer, pContext, state, pInfo, pCustomBoneToWorld, fnOriginal );
 			}
 
-			fnOriginal( pModelRender, pContext, state, pInfo, pCustomBoneToWorld );
 			if ( bShouldOverride )
 				pModelRender->ForcedMaterialOverride( nullptr );
+			else
+				if( pContext && ptr_t( pContext ) != 0xffffffff )
+					fnOriginal( pModelRender, pContext, state, pInfo, pCustomBoneToWorld );
+		}
+
+		void __stdcall SceneEnd( )
+		{
+			static auto fnOriginal = hkViewRender->GetOriginalFunction< scene_end_t >( uSceneEnd );
+			fnOriginal( pViewRender );
+			
+			{
+				const auto pLocalPlayer = Tools::GetLocalPlayer( );
+				if ( nullptr == pLocalPlayer )
+					return;
+			
+				Features::Awareness::RenderEntities( pLocalPlayer );
+			}
 		}
 	}
 }

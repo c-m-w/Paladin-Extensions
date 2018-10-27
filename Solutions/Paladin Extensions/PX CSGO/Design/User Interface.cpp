@@ -410,7 +410,7 @@ namespace PX::UI::Manager
 					}
 
 					{
-						BeginRow( 30, 8, ROW_STATIC );
+						BeginRow( 30, 9, ROW_STATIC );
 						SetRowWidth( 5 );
 						Spacing( );
 
@@ -420,6 +420,16 @@ namespace PX::UI::Manager
 
 						Checkbox( PX_XOR( "Full Bloom" ), &esdConfig._Players[ iEntity ].bFullBloom, PX_XOR( "Apply full bloom to the entity." ) );
 						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Full Bloom" ), 30 ).x );
+						Spacing( );
+
+						Checkbox( PX_XOR( "Smoke Check" ), &esdConfig._Players[ iEntity ].bMindSmoke, PX_XOR( "Check to see if the entity is behind a smoke grenade. " ) );
+
+						EndRow( );
+					}
+
+					{
+						BeginRow( 30, 2, ROW_STATIC );
+						SetRowWidth( 10 );
 						Spacing( );
 
 						SetRowWidth( GROUPBOX_COLUMN_WIDTH );
@@ -451,7 +461,7 @@ namespace PX::UI::Manager
 							PX_XOR( "Projectiles" )
 						};
 
-						std::deque< cstr_t > dqItems[]
+						std::deque< cstr_t > dqItems[ ]
 						{
 							{
 								PX_XOR( "Weapons" ),
@@ -502,15 +512,19 @@ namespace PX::UI::Manager
 					}
 
 					{
-						BeginRow( 30, 5, ROW_STATIC );
+						BeginRow( 30, 8, ROW_STATIC );
 						SetRowWidth( 5 );
 						Spacing( );
 
 						Checkbox( PX_XOR( "Full Bloom" ), &esdConfig._Entities[ uEntity ].bFullBloom, PX_XOR( "Apply full bloom to the entity." ) );
 						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Full Bloom" ), 30 ).x );
 						Spacing( );
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH );
 
+						Checkbox( PX_XOR( "Smoke Check" ), &esdConfig._Entities[ uEntity ].bMindSmoke, PX_XOR( "Check if the entity is behind a smoke grenade." ) );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Smoke Check" ), 30 ).x );
+						Spacing( );
+
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH );
 						fnSetValue( esdConfig._Entities[ uEntity ].iGlowStyle, Combobox( 30, PX_XOR( "Glow Style" ), dqGlowStyles, esdConfig._Entities[ uEntity ].iGlowStyle ) );
 
 						EndRow( );
@@ -533,7 +547,96 @@ namespace PX::UI::Manager
 
 			case MATERIALS:
 			{
+				auto& esdConfig = _Settings._Awareness._Materials;
 
+				if ( BeginGroupbox( 200, 150, 500, 220, PX_XOR( "Players" ) ) )
+				{
+					static auto uEntity = 0u;
+					{
+						std::deque< cstr_t > dqTabs
+						{
+							PX_XOR( "Players" ),
+							PX_XOR( "Entities" ),
+							PX_XOR( "Grenades" ),
+							PX_XOR( "Projectiles" )
+						};
+
+						std::deque< cstr_t > dqItems[ ]
+						{
+							{
+								PX_XOR( "Self" ),
+								PX_XOR( "Teammates" ),
+								PX_XOR( "Enemies" )
+							},
+							{
+								PX_XOR( "Weapons" ),
+								PX_XOR( "C4" ),
+								PX_XOR( "Planted C4" ),
+								PX_XOR( "Defuse Kit" )
+							},
+							{
+								PX_XOR( "HE" ),
+								PX_XOR( "Flash" ),
+								PX_XOR( "Smoke" ),
+								PX_XOR( "Decoy" ),
+								PX_XOR( "Incendiary" )
+							},
+							{
+								PX_XOR( "Thrown HE" ),
+								PX_XOR( "Thrown Flash" ),
+								PX_XOR( "Thrown Smoke" ),
+								PX_XOR( "Thrown Decoy" ),
+								PX_XOR( "Thrown Incendiary" )
+							}
+						};
+
+						VerticalSpacing( );
+
+						BeginRow( 30, 2, ROW_STATIC );
+						SetRowWidth( 10 );
+						Spacing( );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH * 2 );
+
+						TabbedCombobox( 30, PX_XOR( "Settings" ), dqTabs, dqItems, uEntity );
+						EndRow( );
+					}
+
+					{
+						BeginRow( 30, 7, ROW_STATIC );
+						SetRowWidth( 5 );
+						Spacing( );
+
+						Checkbox( PX_XOR( "Enabled" ), &esdConfig._Entities[ uEntity ].bEnabled, PX_XOR( "Enable materials." ) );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Enabled" ), 30 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 3 );
+						Spacing( );
+						SetRowWidth( COLOR_BUTTON_WIDTH );
+						ColorButton( PX_XOR( "Material Visible" ), &esdConfig._Entities[ uEntity ].seqColor[ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+						ColorButton( PX_XOR( "Material Invisible" ), &esdConfig._Entities[ uEntity ].seqColor[ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+						ColorButton( PX_XOR( "Material Dormant" ), &esdConfig._Entities[ uEntity ].seqColor[ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
+
+						EndRow( );
+					}
+
+					{
+						BeginRow( 30, 9, ROW_STATIC );
+						SetRowWidth( 5 );
+						Spacing( );
+
+						Checkbox( PX_XOR( "Flat" ), &esdConfig._Entities[ uEntity ].bFlat, PX_XOR( "Make materials flat." ) );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Flat" ), 30 ).x );
+						Spacing( );
+
+						Checkbox( PX_XOR( "Draw Above All" ), &esdConfig._Entities[ uEntity ].bDrawAboveAll, PX_XOR( "Draw the material above all others." ) );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Draw Above All" ), 30 ).x );
+						Spacing( );
+
+						Checkbox( PX_XOR( "Wireframe" ), &esdConfig._Entities[ uEntity ].bWireFrame, PX_XOR( "Render the material with a wireframe texture." ) );
+
+						EndRow( );
+					}
+
+					EndGroupbox( );
+				}
 			}
 			break;
 
