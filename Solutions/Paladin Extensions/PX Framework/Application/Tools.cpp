@@ -200,7 +200,11 @@ namespace PX::Tools
 			return false;
 		vecStubs.emplace_back( stub_t( ) );
 		auto& stub = vecStubs.back( );
+#if defined _DEBUG
+		stub.ptrAddress = ptr_t( VirtualAlloc( nullptr, stub_t::STUB_SIZE, MEM_COMMIT, PAGE_EXECUTE_READWRITE ) );
+#else
 		stub.ptrAddress = FindFreeMemory( hTableOrigin, stub_t::STUB_SIZE );
+#endif
 
 		if ( FALSE == VirtualProtect( reinterpret_cast< void* >( stub.ptrAddress ), stub_t::STUB_SIZE, PAGE_EXECUTE_READWRITE, &stub.dwProtect ) )
 			return false;

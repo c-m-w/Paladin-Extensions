@@ -99,7 +99,7 @@ namespace PX::Information
 		PX_SDK CInput* pInput = nullptr;
 		PX_SDK IVModelRender* pModelRender = nullptr;
 		PX_SDK IMaterialSystem* pMaterialSystem = nullptr;
-		PX_SDK IViewRender* pViewRender = nullptr;
+		PX_SDK IViewRender* pEngineRenderView = nullptr;
 	}
 
 	namespace NetworkedVariableManager // http://www.bailopan.net/table_dump.txt

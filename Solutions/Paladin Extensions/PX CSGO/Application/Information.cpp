@@ -83,8 +83,8 @@ namespace PX::Information
 															  + jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Glow Object Manager" ) ].get< int >( ) );
 			pInput = *reinterpret_cast< CInput** >( Modules::mClient.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Input" ) ].get< str_t >( ) )
 																+ jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Input" ) ].get< int >( ) );
-			pViewRender = *reinterpret_cast< IViewRender** >( Modules::mClient.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "View Render" ) ].get< str_t >( ) )
-													+ jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "View Render" ) ].get< int >( ) );
+			//pEngineRenderView = *reinterpret_cast< IViewRender** >( Modules::mClient.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "View Render" ) ].get< str_t >( ) )
+			//										+ jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "View Render" ) ].get< int >( ) );
 
 			pClientBase = reinterpret_cast< IBaseClientDLL* >( Modules::mClient.ciFactory( 
 				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Client Base" ) ].get< str_t >( ).c_str( ), nullptr ) );
@@ -106,6 +106,8 @@ namespace PX::Information
 				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Model Render" ) ].get< str_t >( ).c_str( ), nullptr ) );
 			pMaterialSystem = reinterpret_cast< IMaterialSystem* >( Modules::mMaterialSystem.ciFactory(
 				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Material System" ) ].get< str_t >( ).c_str( ), nullptr ) );
+			pEngineRenderView = reinterpret_cast< IViewRender* >( Modules::mEngine.ciFactory(
+				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Engine Render View" ) ].get< str_t >( ).c_str( ), nullptr ) );
 
 			return nullptr != pSendPackets
 				&& nullptr != pGlobalVariables
@@ -113,7 +115,6 @@ namespace PX::Information
 				&& nullptr != pClientMode
 				&& nullptr != pGlowObjectManager
 				&& nullptr != pInput
-				&& nullptr != pViewRender
 				&& nullptr != pClientState
 				&& nullptr != pClientBase
 				&& nullptr != pEngineClient
@@ -124,7 +125,8 @@ namespace PX::Information
 				&& nullptr != pModelInfo
 				&& nullptr != pInputSystem
 				&& nullptr != pModelRender
-				&& nullptr != pMaterialSystem;
+				&& nullptr != pMaterialSystem
+				&& nullptr != pEngineRenderView;
 		}
 	}
 

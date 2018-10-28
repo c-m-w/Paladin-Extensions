@@ -570,6 +570,8 @@ namespace PX::UI::Manager
 							},
 							{
 								PX_XOR( "Weapons" ),
+								PX_XOR( "Held Weapons" ),
+								PX_XOR( "Players' Weapons" ),
 								PX_XOR( "C4" ),
 								PX_XOR( "Planted C4" ),
 								PX_XOR( "Defuse Kit" )

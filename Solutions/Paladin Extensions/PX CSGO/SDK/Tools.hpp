@@ -5,6 +5,11 @@
 using namespace PX::Information::NetworkedVariableManager;
 using namespace PX::Types;
 
+inline IHandleEntity* CBaseHandle::Get( ) const
+{
+	return PX::Information::Pointers::pEntityList->GetClientEntityFromHandle( *this );
+}
+
 namespace PX::Tools
 {
 	class CBasePlayer;
@@ -51,7 +56,7 @@ namespace PX::Tools
 		PX_NETVAR_REFERENCE( int32_t, m_iTeamNum,PX_XOR( "DT_BaseEntity" ), PX_XOR( "m_iTeamNum" ) );
 		PX_NETVAR_REFERENCE( Vector, m_vecOrigin,PX_XOR( "DT_BaseEntity" ), PX_XOR( "m_vecOrigin" ) );
 		PX_NETVAR_REFERENCE( bool, m_bShouldGlow,PX_XOR( "DT_DynamicProp" ), PX_XOR( "m_bShouldGlow" ) );
-		PX_NETVAR_REFERENCE( CHandle< CBasePlayer >, m_hOwnerEntity,PX_XOR( "DT_BaseEntity" ), PX_XOR( "m_hOwnerEntity" ) );
+		PX_NETVAR_REFERENCE( CBasePlayer*, m_hOwnerEntity,PX_XOR( "DT_BaseEntity" ), PX_XOR( "m_hOwnerEntity" ) );
 		PX_NETVAR_REFERENCE( float, m_flSimulationTime,PX_XOR( "DT_BaseEntity" ), PX_XOR( "m_flSimulationTime" ) );
 		PX_NETVAR_REFERENCE_OFFSET( matrix3x4_t, m_rgflCoordinateFrame,PX_XOR( "DT_BaseEntity" ), PX_XOR( "m_CollisionGroup" ),  -int( 0x30 ) );
 
@@ -137,8 +142,8 @@ namespace PX::Tools
 		PX_NETVAR_REFERENCE( float, m_flMaxspeed,PX_XOR( "DT_BasePlayer" ), PX_XOR( "m_flMaxspeed" ) );
 		PX_NETVAR_REFERENCE( CHandle<CBasePlayer>, m_hObserverTarget,PX_XOR( "DT_BasePlayer" ), PX_XOR( "m_hObserverTarget" ) );
 		PX_NETVAR_REFERENCE( int, m_iObserverMode,PX_XOR( "DT_BasePlayer" ), PX_XOR( "m_iObserverMode" ) );
-		PX_NETVAR_REFERENCE( CHandle<CBaseCombatWeapon>, m_hActiveWeapon,PX_XOR( "DT_BaseCombatCharacter" ), PX_XOR( "m_hActiveWeapon" ) );
-		PX_NETVAR_POINTER( CHandle<CBaseCombatWeapon>, m_hMyWeapons,PX_XOR( "DT_BaseCombatCharacter" ), PX_XOR( "m_hMyWeapons" ) );
+		PX_NETVAR_REFERENCE( CHandle< CBaseCombatWeapon >, m_hActiveWeapon,PX_XOR( "DT_BaseCombatCharacter" ), PX_XOR( "m_hActiveWeapon" ) );
+		PX_NETVAR_POINTER( CHandle< CBaseCombatWeapon >, m_hMyWeapons,PX_XOR( "DT_BaseCombatCharacter" ), PX_XOR( "m_hMyWeapons" ) );
 		PX_NETVAR_POINTER( CHandle<CBaseAttributableItem>, m_hMyWearables,PX_XOR( "DT_BaseCombatCharacter" ), PX_XOR( "m_hMyWearables" ) );
 
 		bool IsAlive( );

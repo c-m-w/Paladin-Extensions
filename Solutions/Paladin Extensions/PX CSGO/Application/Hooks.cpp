@@ -36,7 +36,7 @@ namespace PX
 			hkClientMode	= new Tools::CTrampolineHook( pClientMode );
 			hkPanel			= new Tools::CTrampolineHook( pPanel );
 			hkModelRender	= new Tools::CTrampolineHook( pModelRender );
-			hkViewRender	= new Tools::CTrampolineHook( pViewRender );
+			hkViewRender	= new Tools::CTrampolineHook( pEngineRenderView );
 
 			return hkDirectXDevice->Succeeded( )
 				&& hkClientBase->Succeeded( ) && hkClientBase->SetProtection( )
@@ -219,17 +219,14 @@ namespace PX
 				bShouldOverride = Features::Awareness::OverrideMaterial( pLocalPlayer, pContext, state, pInfo, pCustomBoneToWorld, fnOriginal );
 			}
 
-			if ( bShouldOverride )
-				pModelRender->ForcedMaterialOverride( nullptr );
-			else
-				if( pContext && ptr_t( pContext ) != 0xffffffff )
-					fnOriginal( pModelRender, pContext, state, pInfo, pCustomBoneToWorld );
+			if ( !bShouldOverride )
+				fnOriginal( pModelRender, pContext, state, pInfo, pCustomBoneToWorld );
 		}
 
 		void __stdcall SceneEnd( )
 		{
 			static auto fnOriginal = hkViewRender->GetOriginalFunction< scene_end_t >( uSceneEnd );
-			fnOriginal( pViewRender );
+			fnOriginal( pEngineRenderView );
 			
 			{
 				const auto pLocalPlayer = Tools::GetLocalPlayer( );
