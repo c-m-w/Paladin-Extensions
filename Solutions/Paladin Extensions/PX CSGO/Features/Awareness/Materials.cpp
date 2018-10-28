@@ -130,16 +130,28 @@ R"#("UnlitGeneric"
 			 || strstr( _Info.pModel->szName, PX_XOR( "sleeve" ) ) != nullptr )
 			return SetMaterial( pContext, _State, _Info, pMatrix, draw_model_execute_t( fnDrawModelExecute ), nullptr, SETTING_MATERIALS_SELF );
 
+		if( strstr( _Info.pModel->szName, PX_XOR( R"(chicken/chicken)" ) ) != nullptr )
+			return SetMaterial( pContext, _State, _Info, pMatrix, draw_model_execute_t( fnDrawModelExecute ), nullptr, SETTING_MATERIALS_CHICKEN );
+
 		const auto pEntity = entity_ptr_t( pEntityList->GetClientEntity( _Info.entity_index ) );
 		if ( pEntity ) // a player's active weapons are rendered with the entity index of the posessing player.
 		{
 			if ( strstr( _Info.pModel->szName, PX_XOR( R"(weapons/)" ) ) != nullptr )
+			{
+				if( strstr( _Info.pModel->szName, PX_XOR( R"(_dropped)" ) ) != nullptr )
+					return SetMaterial( pContext, _State, _Info, pMatrix, draw_model_execute_t( fnDrawModelExecute ),
+										nullptr, SETTING_MATERIALS_WEAPONS );
 				return SetMaterial( pContext, _State, _Info, pMatrix, draw_model_execute_t( fnDrawModelExecute ),
 									nullptr, strstr( _Info.pModel->szName, PX_XOR( "v_" ) ) != nullptr ? SETTING_MATERIALS_HELD_WEAPONS : SETTING_MATERIALS_PLAYER_WEAPONS );
+			}
 			if( player_ptr_t( pEntity )->IsAlive( ) )
 				return SetMaterial( pContext, _State, _Info, pMatrix, draw_model_execute_t( fnDrawModelExecute ),
 									nullptr, player_ptr_t( pEntity )->m_iTeamNum( ) != pLocalPlayer->m_iTeamNum( ) ? SETTING_MATERIALS_ENEMY : SETTING_MATERIALS_TEAM );
 		}
+		//if ( strstr( _Info.pModel->szName, PX_XOR( R"(weapons/)" ) ) != nullptr
+		//	 &&  strstr( _Info.pModel->szName, PX_XOR( R"(_dropped)" ) ) != nullptr )
+		//	return SetMaterial( pContext, _State, _Info, pMatrix, draw_model_execute_t( fnDrawModelExecute ),
+		//						nullptr, SETTING_MATERIALS_WEAPONS );
 
 		return false;
 	}
@@ -306,8 +318,9 @@ R"#("UnlitGeneric"
 				break;
 			}
 
-			vecRenderables.emplace_back( pEntity->GetClientRenderable( ) );
-			fnDrawEntity( _Settings._Awareness._Materials._Entities[ iSettingIndex ], pEntity );
+			pEntity->DrawModel( 1, 255 );
+			//vecRenderables.emplace_back( pEntity->GetClientRenderable( ) );
+			//fnDrawEntity( _Settings._Awareness._Materials._Entities[ iSettingIndex ], pEntity );
 		}
 	}
 

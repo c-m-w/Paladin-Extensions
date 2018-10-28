@@ -21,6 +21,6 @@
 #include "IVEngineClient.hpp"
 #include "IPanel.hpp"
 #include "ISurface.hpp"
-#include "IViewRender.hpp"
+#include "IVRenderView.hpp"
 #include "IVModelInfoClient.hpp"
 #include "IVModelRender.hpp"

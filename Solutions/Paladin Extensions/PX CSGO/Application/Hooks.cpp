@@ -221,6 +221,8 @@ namespace PX
 
 			if ( !bShouldOverride )
 				fnOriginal( pModelRender, pContext, state, pInfo, pCustomBoneToWorld );
+			else
+				pModelRender->ForcedMaterialOverride( nullptr );
 		}
 
 		void __stdcall SceneEnd( )
@@ -234,6 +236,7 @@ namespace PX
 					return;
 			
 				Features::Awareness::RenderEntities( );
+				pModelRender->ForcedMaterialOverride( nullptr );
 			}
 		}
 	}
