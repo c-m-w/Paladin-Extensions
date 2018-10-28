@@ -637,6 +637,21 @@ namespace PX::UI::Manager
 						EndRow( );
 					}
 
+					{
+						BeginRow( 30, 7, ROW_STATIC );
+						SetRowWidth( 5 );
+						Spacing( );
+
+						Checkbox( PX_XOR( "Wireframe Overlay" ), &esdConfig._Entities[ uEntity ].bFlat, PX_XOR( "Render a wireframe material overtop of the entity." ) );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Wireframe Overlay" ), 30 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 3 );
+						Spacing( );
+						ColorButton( PX_XOR( "Wireframe Overlay Visible" ), &esdConfig._Entities[ uEntity ].seqWireFrameOverlay[ STATE_VISIBLE ] );
+						ColorButton( PX_XOR( "Wireframe Overlay Invisible" ), &esdConfig._Entities[ uEntity ].seqWireFrameOverlay[ STATE_INVISIBLE ] );
+						ColorButton( PX_XOR( "Wireframe Overlay Dormant" ), &esdConfig._Entities[ uEntity ].seqWireFrameOverlay[ STATE_DORMANT ] );
+
+						EndRow( );
+					}
+
 					EndGroupbox( );
 				}
 			}

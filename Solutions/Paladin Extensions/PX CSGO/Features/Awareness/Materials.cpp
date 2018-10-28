@@ -32,7 +32,7 @@ namespace PX::Features::Awareness
 		material_t( PX_XOR( 
 R"#("VertexLitGeneric"
 {
-  "$basetexture" "vgui/white_additive"
+  "$basetexture" "trash/hr_t/hr_trash_a"
   "$ignorez"      "0"
   "$envmap"       ""
   "$nofog"        "1"
@@ -194,7 +194,10 @@ R"#("UnlitGeneric"
 					{
 						const auto hWeapon = hWeapons[ h ];
 						if ( hWeapon && hWeapon != hActiveWeapon )
+						{
+							vecRenderables.emplace_back( hWeapon->GetClientRenderable( ) );
 							fnDrawEntity( _Settings._Awareness._Materials._Entities[ SETTING_MATERIALS_PLAYER_WEAPONS ], hWeapon );
+						}
 					}
 					continue;
 				}
@@ -286,8 +289,8 @@ R"#("UnlitGeneric"
 				break;
 			}
 
-			fnDrawEntity( _Settings._Awareness._Materials._Entities[ iSettingIndex ], pEntity );
 			vecRenderables.emplace_back( pEntity->GetClientRenderable( ) );
+			fnDrawEntity( _Settings._Awareness._Materials._Entities[ iSettingIndex ], pEntity );
 		}
 	}
 
@@ -308,7 +311,7 @@ R"#("UnlitGeneric"
 			pCurrent->AlphaModulate( clrInvisible.afl );
 			pCurrent->ColorModulate( clrInvisible.rfl, clrInvisible.gfl, clrInvisible.bfl );
 			pModelRender->ForcedMaterialOverride( pCurrent );
-			fnDrawModelExecute( pModelRender, pContext, _State, _Info, pMatrix );			
+			fnDrawModelExecute( pModelRender, pContext, _State, _Info, pMatrix );
 		}
 
 		const auto pCurrent = _Config.bFlat.Get( ) ? matMaterials[ MATERIAL_FLAT ].pMaterial : matMaterials[ MATERIAL_DEFAULT ].pMaterial;

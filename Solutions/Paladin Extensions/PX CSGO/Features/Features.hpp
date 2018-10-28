@@ -164,8 +164,10 @@ namespace PX::Features
 					toggle_t bFlat = false;
 					toggle_t bDrawAboveAll = false;
 					toggle_t bWireFrame = false;
+					toggle_t bWireFrameOverlay = false;
 
 					color_sequence_t seqColor[ STATE_MAX ] { };
+					color_sequence_t seqWireFrameOverlay[ STATE_MAX ] { };
 				} _Entities[ SETTING_MATERIALS_MAX ] { };
 			} _Materials;
 		} _Awareness;
