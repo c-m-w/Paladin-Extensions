@@ -3,7 +3,9 @@
 #include "PX Precompiled.hpp"
 #include "../../PX CSGO.hpp"
 
-bool bInvertedFill = false;
+bool bInvertedFill = true;
+float flLineThickness = 5.f;
+
 
 using namespace PX::Tools;
 using namespace PX::Information;
@@ -193,10 +195,10 @@ namespace PX::Features::Awareness
 					flBottom = vecScreenPoint.y;
 			}
 
-			info.vecBoundingBoxCorners[ TOPLEFT ] = { flLeft, flTop, 0.f };
-			info.vecBoundingBoxCorners[ TOPRIGHT ] = { flRight, flTop, 0.f };
-			info.vecBoundingBoxCorners[ BOTTOMRIGHT ] = { flRight, flBottom, 0.f };
-			info.vecBoundingBoxCorners[ BOTTOMLEFT ] = { flLeft, flBottom, 0.f };
+			info.vecBoundingBoxCorners[ TOPLEFT ] = { flLeft, flBottom, 0.f };
+			info.vecBoundingBoxCorners[ TOPRIGHT ] = { flRight, flBottom, 0.f };
+			info.vecBoundingBoxCorners[ BOTTOMRIGHT ] = { flRight, flTop, 0.f };
+			info.vecBoundingBoxCorners[ BOTTOMLEFT ] = { flLeft, flTop, 0.f };
 		}
 	}
 
@@ -491,7 +493,7 @@ namespace PX::Features::Awareness
 
 				if ( clrBottom.a != 0 && clrTop.a != 0 )
 				{
-					constexpr auto flHealthbarWidth = -5.f;
+					constexpr auto flHealthbarWidth = 5.f;
 					const auto dwBottom = clrBottom.GetARGB( );
 					const auto dwTop = clrTop.GetARGB( );
 					vertex_t vtxTop[ 4 ], vtxBottom[ 4 ];
@@ -517,11 +519,11 @@ namespace PX::Features::Awareness
 						{
 							vecPoints[ BOTTOMRIGHT ].y += fl; // Bottom right
 							vecPoints[ BOTTOMRIGHT ].z -= 5.f;
-							vecPoints[ BOTTOMLEFT ].y += fl - flHealthbarWidth; // Bottom left
+							vecPoints[ BOTTOMLEFT ].y += fl + flHealthbarWidth; // Bottom left
 							vecPoints[ BOTTOMLEFT ].z -= 5.f;
 							vecPoints[ TOPRIGHT ].y += fl; // Top right
 							vecPoints[ TOPRIGHT ].z = info.vecLocation.z + vecViewOffset.z + 10.f;
-							vecPoints[ TOPLEFT ].y += fl - flHealthbarWidth; // Top left
+							vecPoints[ TOPLEFT ].y += fl + flHealthbarWidth; // Top left
 							vecPoints[ TOPLEFT ].z = info.vecLocation.z + vecViewOffset.z + 10.f;
 
 							for ( auto i = 0; i < 4; i++ )
@@ -582,7 +584,7 @@ namespace PX::Features::Awareness
 
 						case ALIGNMENT_BOTTOM:
 						{
-							fl2 = -8.f + flHealthbarWidth;
+							fl2 = -8.f - flHealthbarWidth;
 						}
 						case ALIGNMENT_TOP:
 						{
@@ -591,9 +593,9 @@ namespace PX::Features::Awareness
 							vecPoints[ BOTTOMLEFT ].y += 20.f; // Bottom left
 							vecPoints[ BOTTOMLEFT ].z += fl2;
 							vecPoints[ TOPRIGHT ].y -= 20.f; // Top right
-							vecPoints[ TOPRIGHT ].z += fl2 - flHealthbarWidth;
+							vecPoints[ TOPRIGHT ].z += fl2 + flHealthbarWidth;
 							vecPoints[ TOPLEFT ].y += 20.f; // Top left
-							vecPoints[ TOPLEFT ].z += fl2 - flHealthbarWidth;
+							vecPoints[ TOPLEFT ].z += fl2 + flHealthbarWidth;
 
 							if ( flHealthRatio != 1.f )
 							{
@@ -665,7 +667,7 @@ namespace PX::Features::Awareness
 							case ALIGNMENT_BOTTOM:
 							{
 								vecBar[ TOPLEFT ] = info.vecBoundingBoxCorners[ BOTTOMLEFT ];
-								vecBar[ TOPLEFT ].y +=  flPadding;
+								vecBar[ TOPLEFT ].y += flPadding;
 								vecBar[ BOTTOMLEFT ] = vecBar[ TOPLEFT ];
 								vecBar[ BOTTOMLEFT ].y += flHealthbarWidth;
 
@@ -686,8 +688,8 @@ namespace PX::Features::Awareness
 									vecBar[ TOPLEFT ].x = vecBar[ TOPLEFT ].x + flFillWidth;
 									vecBar[ BOTTOMLEFT ].x = vecBar[ BOTTOMLEFT ].x + flFillWidth;
 								}
+								break;
 							}
-							break;
 							case ALIGNMENT_TOP:
 							{
 								vecBar[ BOTTOMLEFT ] = info.vecBoundingBoxCorners[ TOPLEFT ];
@@ -711,58 +713,58 @@ namespace PX::Features::Awareness
 									vecBar[ TOPLEFT ].x = vecBar[ TOPLEFT ].x + flFillWidth;
 									vecBar[ BOTTOMLEFT ].x = vecBar[ BOTTOMLEFT ].x + flFillWidth;
 								}
+								break;
 							}
-							break;
 							case ALIGNMENT_LEFT:
 							{
 								vecBar[ TOPRIGHT ] = info.vecBoundingBoxCorners[ TOPLEFT ];
-								vecBar[ TOPRIGHT ].y -= flPadding;
+								vecBar[ TOPRIGHT ].x -= flPadding;
 								vecBar[ TOPLEFT ] = vecBar[ TOPRIGHT ];
-								vecBar[ TOPLEFT ].y -= flHealthbarWidth;
+								vecBar[ TOPLEFT ].x -= flHealthbarWidth;
 
 								vecBar[ BOTTOMRIGHT ] = info.vecBoundingBoxCorners[ BOTTOMLEFT ];
-								vecBar[ BOTTOMRIGHT ].y -= flPadding;
-								vecBar[ BOTTOMLEFT ] = vecBar[ TOPLEFT ];
-								vecBar[ BOTTOMLEFT ].y -= flHealthbarWidth;
+								vecBar[ BOTTOMRIGHT ].x -= flPadding;
+								vecBar[ BOTTOMLEFT ] = vecBar[ BOTTOMRIGHT ];
+								vecBar[ BOTTOMLEFT ].x -= flHealthbarWidth;
 								if ( bInvertedFill )
 								{
-									flFillWidth = flHealthRatio * ( vecBar[ TOPRIGHT ].x - vecBar[ BOTTOMRIGHT ].x );
-									vecBar[ BOTTOMRIGHT ].y = vecBar[ TOPRIGHT ].y + flFillWidth;
-									vecBar[ BOTTOMLEFT ].y = vecBar[ TOPLEFT ].y + flFillWidth;
+									flFillWidth = ( 1 - flHealthRatio ) * ( vecBar[ BOTTOMRIGHT ].y - vecBar[ TOPRIGHT ].y );
+									vecBar[ BOTTOMRIGHT ].y -= flFillWidth;
+									vecBar[ BOTTOMLEFT ].y -= flFillWidth;
 								}
 								else
 								{
-									flFillWidth = ( 1 - flHealthRatio ) * ( vecBar[ TOPRIGHT ].x - vecBar[ BOTTOMRIGHT ].x );
-									vecBar[ TOPRIGHT ].y = vecBar[ BOTTOMRIGHT ].y - flFillWidth;
-									vecBar[ TOPLEFT ].y = vecBar[ BOTTOMLEFT ].y - flFillWidth;
+									flFillWidth = flHealthRatio * ( vecBar[ BOTTOMRIGHT ].y - vecBar[ TOPRIGHT ].y );
+									vecBar[ BOTTOMRIGHT ].y = vecBar[ TOPRIGHT ].y + flFillWidth;
+									vecBar[ BOTTOMLEFT ].y = vecBar[ TOPRIGHT ].y + flFillWidth;
 								}
+								break;
 							}
-							break;
 							case ALIGNMENT_RIGHT:
 							{
 								vecBar[ TOPLEFT ] = info.vecBoundingBoxCorners[ TOPRIGHT ];
-								vecBar[ TOPLEFT ].y += flPadding;
+								vecBar[ TOPLEFT ].x += flPadding;
 								vecBar[ TOPRIGHT ] = vecBar[ TOPLEFT ];
-								vecBar[ TOPRIGHT ].y += flHealthbarWidth;
+								vecBar[ TOPRIGHT ].x += flHealthbarWidth;
 
 								vecBar[ BOTTOMLEFT ] = info.vecBoundingBoxCorners[ BOTTOMRIGHT ];
-								vecBar[ BOTTOMLEFT ].y += flPadding;
+								vecBar[ BOTTOMLEFT ].x += flPadding;
 								vecBar[ BOTTOMRIGHT ] = vecBar[ BOTTOMLEFT ];
-								vecBar[ BOTTOMRIGHT ].y += flHealthbarWidth;
+								vecBar[ BOTTOMRIGHT ].x += flHealthbarWidth;
 								if ( bInvertedFill )
 								{
-									flFillWidth = flHealthRatio * ( vecBar[ TOPRIGHT ].x - vecBar[ BOTTOMRIGHT ].x );
-									vecBar[ BOTTOMRIGHT ].y = vecBar[ TOPRIGHT ].y + flFillWidth;
-									vecBar[ BOTTOMLEFT ].y = vecBar[ TOPLEFT ].y + flFillWidth;
+									flFillWidth = ( 1 - flHealthRatio ) * ( vecBar[ BOTTOMRIGHT ].y - vecBar[ TOPRIGHT ].y );
+									vecBar[ BOTTOMRIGHT ].y -= flFillWidth;
+									vecBar[ BOTTOMLEFT ].y -= flFillWidth;
 								}
 								else
 								{
-									flFillWidth = ( 1 - flHealthRatio ) * ( vecBar[ TOPRIGHT ].x - vecBar[ BOTTOMRIGHT ].x );
-									vecBar[ TOPRIGHT ].y = vecBar[ BOTTOMRIGHT ].y - flFillWidth;
-									vecBar[ TOPLEFT ].y = vecBar[ BOTTOMLEFT ].y - flFillWidth;
+									flFillWidth = flHealthRatio * ( vecBar[ BOTTOMRIGHT ].y - vecBar[ TOPRIGHT ].y );
+									vecBar[ BOTTOMRIGHT ].y = vecBar[ TOPRIGHT ].y + flFillWidth;
+									vecBar[ BOTTOMLEFT ].y = vecBar[ TOPLEFT ].y + flFillWidth;
 								}
+								break;
 							}
-							break;
 						}
 					}
 					if ( bDoOutline )
@@ -778,7 +780,7 @@ namespace PX::Features::Awareness
 						vtxOutline[ 0 ].dwColor = vtxOutline[ 1 ].dwColor = vtxOutline[ 2 ].dwColor = vtxOutline[ 3 ].dwColor = dwOutline;
 						Polygon( vtxOutline, 4, 2 );
 					}
-					if( flHealthRatio != 1.f )
+					if( flHealthRatio != 1.f && esdConfig->iBoxMode == BOX_DYNAMIC )
 						Polygon( vtxTop, 4, 2 );
 					else
 					{
