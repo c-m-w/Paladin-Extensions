@@ -59,6 +59,11 @@ namespace PX::Features::Awareness
 				}
 				break;
 
+				case ClassID_CChicken:
+				{
+					GlowEntity( pLocalPlayer, pEntity, pObject, SETTING_GLOW_ENTITY_CHICKEN );
+				}
+
 				case ClassID_CHEGrenade:
 				{
 					GlowEntity( pLocalPlayer, pEntity, pObject, SETTING_GLOW_ENTITY_GRENADE_HE );
@@ -190,7 +195,9 @@ namespace PX::Features::Awareness
 		if ( !_Current.bEnabled )
 			return;
 
-		const auto iState = pLocalPlayer->CanSeePosition( pEntity->m_vecOrigin( ), _Current.bMindSmoke.Get( ), pEntity ) ? STATE_VISIBLE : STATE_INVISIBLE;
+		auto vecLocation = pEntity->m_vecOrigin( );
+		vecLocation.z += 0.5f;
+		const auto iState = pLocalPlayer->CanSeePosition( vecLocation, _Current.bMindSmoke.Get( ), pEntity ) ? STATE_VISIBLE : STATE_INVISIBLE;
 		const auto clrCurrent = _Current.seqColor[ iState ].GetCurrentColor( );
 		if ( clrCurrent.a == 0 )
 			return ResetDefinition( pObject );

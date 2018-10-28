@@ -233,7 +233,7 @@ namespace PX
 				if ( nullptr == pLocalPlayer )
 					return;
 			
-				Features::Awareness::RenderEntities( pLocalPlayer );
+				Features::Awareness::RenderEntities( );
 			}
 		}
 	}

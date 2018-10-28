@@ -38,6 +38,7 @@ namespace PX::Features
 		SETTING_GLOW_ENTITY_C4,
 		SETTING_GLOW_ENTITY_PLANTED_C4,
 		SETTING_GLOW_ENTITY_DEFUSER,
+		SETTING_GLOW_ENTITY_CHICKEN,
 		SETTING_GLOW_ENTITY_GRENADE_HE,
 		SETTING_GLOW_ENTITY_GRENADE_FLASH,
 		SETTING_GLOW_ENTITY_GRENADE_SMOKE,
@@ -56,6 +57,7 @@ namespace PX::Features
 		SETTING_MATERIALS_SELF,
 		SETTING_MATERIALS_TEAM,
 		SETTING_MATERIALS_ENEMY,
+		SETTING_MATERIALS_CHICKEN,
 		SETTING_MATERIALS_WEAPONS,
 		SETTING_MATERIALS_HELD_WEAPONS,
 		SETTING_MATERIALS_PLAYER_WEAPONS,
@@ -165,9 +167,11 @@ namespace PX::Features
 					toggle_t bDrawAboveAll = false;
 					toggle_t bWireFrame = false;
 					toggle_t bWireFrameOverlay = false;
+					toggle_t bWireFrameUnderlay = false;
 
-					color_sequence_t seqColor[ STATE_MAX ] { };
+					color_sequence_t seqColor[ STATE_MAX ] { }; 
 					color_sequence_t seqWireFrameOverlay[ STATE_MAX ] { };
+					color_sequence_t seqWireFrameUnderlay[ STATE_MAX ] { };
 				} _Entities[ SETTING_MATERIALS_MAX ] { };
 			} _Materials;
 		} _Awareness;

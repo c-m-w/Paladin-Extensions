@@ -467,7 +467,8 @@ namespace PX::UI::Manager
 								PX_XOR( "Weapons" ),
 								PX_XOR( "C4" ),
 								PX_XOR( "Planted C4" ),
-								PX_XOR( "Defuse Kit" )
+								PX_XOR( "Defuse Kit" ),
+								PX_XOR( "Chicken" )
 							},
 							{
 								PX_XOR( "HE" ),
@@ -566,7 +567,8 @@ namespace PX::UI::Manager
 							{
 								PX_XOR( "Self" ),
 								PX_XOR( "Teammates" ),
-								PX_XOR( "Enemies" )
+								PX_XOR( "Enemies" ),
+								PX_XOR( "Chicken" )
 							},
 							{
 								PX_XOR( "Weapons" ),
@@ -638,16 +640,25 @@ namespace PX::UI::Manager
 					}
 
 					{
-						BeginRow( 30, 7, ROW_STATIC );
+						BeginRow( 30, 13, ROW_STATIC );
 						SetRowWidth( 5 );
 						Spacing( );
 
-						Checkbox( PX_XOR( "Wireframe Overlay" ), &esdConfig._Entities[ uEntity ].bFlat, PX_XOR( "Render a wireframe material overtop of the entity." ) );
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Wireframe Overlay" ), 30 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 3 );
+						Checkbox( PX_XOR( "Wireframe Overlay" ), &esdConfig._Entities[ uEntity ].bWireFrameOverlay, PX_XOR( "Render a wireframe material overtop of the entity." ) );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH * 3.f / 2.f - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Wireframe Overlay" ), 30 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 3 );
 						Spacing( );
-						ColorButton( PX_XOR( "Wireframe Overlay Visible" ), &esdConfig._Entities[ uEntity ].seqWireFrameOverlay[ STATE_VISIBLE ] );
-						ColorButton( PX_XOR( "Wireframe Overlay Invisible" ), &esdConfig._Entities[ uEntity ].seqWireFrameOverlay[ STATE_INVISIBLE ] );
-						ColorButton( PX_XOR( "Wireframe Overlay Dormant" ), &esdConfig._Entities[ uEntity ].seqWireFrameOverlay[ STATE_DORMANT ] );
+						SetRowWidth( COLOR_BUTTON_WIDTH );
+						ColorButton( PX_XOR( "Wireframe Overlay Visible" ), &esdConfig._Entities[ uEntity ].seqWireFrameOverlay[ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+						ColorButton( PX_XOR( "Wireframe Overlay Invisible" ), &esdConfig._Entities[ uEntity ].seqWireFrameOverlay[ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+						ColorButton( PX_XOR( "Wireframe Overlay Dormant" ), &esdConfig._Entities[ uEntity ].seqWireFrameOverlay[ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
+
+						Checkbox( PX_XOR( "Wireframe Underlay" ), &esdConfig._Entities[ uEntity ].bWireFrameUnderlay, PX_XOR( "Render a wireframe material under the entity, creating an outline effect." ) );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH * 3.f / 2.f - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Wireframe Underlay" ), 30 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 3 );
+						Spacing( );
+						SetRowWidth( COLOR_BUTTON_WIDTH );
+						ColorButton( PX_XOR( "Wireframe Overlay Visible" ), &esdConfig._Entities[ uEntity ].seqWireFrameUnderlay[ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+						ColorButton( PX_XOR( "Wireframe Overlay Invisible" ), &esdConfig._Entities[ uEntity ].seqWireFrameUnderlay[ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+						ColorButton( PX_XOR( "Wireframe Overlay Dormant" ), &esdConfig._Entities[ uEntity ].seqWireFrameUnderlay[ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
 
 						EndRow( );
 					}

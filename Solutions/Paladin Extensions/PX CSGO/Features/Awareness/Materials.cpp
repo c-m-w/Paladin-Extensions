@@ -32,7 +32,7 @@ namespace PX::Features::Awareness
 		material_t( PX_XOR( 
 R"#("VertexLitGeneric"
 {
-  "$basetexture" "trash/hr_t/hr_trash_a"
+  "$basetexture" "vgui/white_additive"
   "$ignorez"      "0"
   "$envmap"       ""
   "$nofog"        "1"
@@ -113,7 +113,7 @@ R"#("UnlitGeneric"
 			std::remove( ( PX_XOR( "csgo\\materials\\" ) + material.wstrFileName + PX_XOR( ".vmt" ) ).c_str( ) );
 	}
 
-	bool PX_API SetMaterial( player_ptr_t pLocalPlayer, IMatRenderContext* pContext, const DrawModelState_t& _State, const ModelRenderInfo_t& _Info, matrix3x4_t* pMatrix, draw_model_execute_t fnDrawModelExecute, entity_ptr_t pEntity, int iSettingIndex );
+	bool PX_API SetMaterial( IMatRenderContext* pContext, const DrawModelState_t& _State, const ModelRenderInfo_t& _Info, matrix3x4_t* pMatrix, draw_model_execute_t fnDrawModelExecute, entity_ptr_t pEntity, int iSettingIndex );
 
 	bool PX_API OverrideMaterial( player_ptr_t pLocalPlayer, IMatRenderContext* pContext, const DrawModelState_t& _State, const ModelRenderInfo_t& _Info, matrix3x4_t* pMatrix, void* fnDrawModelExecute )
 	{
@@ -128,51 +128,62 @@ R"#("UnlitGeneric"
 
 		if ( strstr( _Info.pModel->szName, PX_XOR( "arms" ) ) != nullptr
 			 || strstr( _Info.pModel->szName, PX_XOR( "sleeve" ) ) != nullptr )
-			return SetMaterial( pLocalPlayer, pContext, _State, _Info, pMatrix, draw_model_execute_t( fnDrawModelExecute ), nullptr, SETTING_MATERIALS_SELF );
+			return SetMaterial( pContext, _State, _Info, pMatrix, draw_model_execute_t( fnDrawModelExecute ), nullptr, SETTING_MATERIALS_SELF );
 
 		const auto pEntity = entity_ptr_t( pEntityList->GetClientEntity( _Info.entity_index ) );
 		if ( pEntity ) // a player's active weapons are rendered with the entity index of the posessing player.
 		{
 			if ( strstr( _Info.pModel->szName, PX_XOR( R"(weapons/)" ) ) != nullptr )
-				return SetMaterial( pLocalPlayer, pContext, _State, _Info, pMatrix, draw_model_execute_t( fnDrawModelExecute ),
+				return SetMaterial( pContext, _State, _Info, pMatrix, draw_model_execute_t( fnDrawModelExecute ),
 									nullptr, strstr( _Info.pModel->szName, PX_XOR( "v_" ) ) != nullptr ? SETTING_MATERIALS_HELD_WEAPONS : SETTING_MATERIALS_PLAYER_WEAPONS );
 			if( player_ptr_t( pEntity )->IsAlive( ) )
-				return SetMaterial( pLocalPlayer, pContext, _State, _Info, pMatrix, draw_model_execute_t( fnDrawModelExecute ),
+				return SetMaterial( pContext, _State, _Info, pMatrix, draw_model_execute_t( fnDrawModelExecute ),
 									nullptr, player_ptr_t( pEntity )->m_iTeamNum( ) != pLocalPlayer->m_iTeamNum( ) ? SETTING_MATERIALS_ENEMY : SETTING_MATERIALS_TEAM );
 		}
 
 		return false;
 	}
 
-	void PX_API RenderEntities( player_ptr_t pLocalPlayer )
+	void PX_API RenderEntities( )
 	{
 		const auto fnDrawEntity = [ ]( settings_t::awareness_t::materials_t::entity_t& _Config, entity_ptr_t pEntity )
 		{
+			const auto fnDrawModel = [ & ]( bool bFlat, bool bWireFrame, bool bIgnoreZ, const color_t& clrVisible, const color_t& clrInvisible, bool bDrawForeground = true )
+			{
+				if ( bIgnoreZ )
+				{
+					const auto pCurrent = bFlat ? matMaterials[ MATERIAL_FLAT_IGNOREZ ].pMaterial : matMaterials[ MATERIAL_IGNOREZ ].pMaterial;
+
+					pCurrent->SetMaterialVarFlag( MATERIAL_VAR_WIREFRAME, bWireFrame );
+					pCurrent->AlphaModulate( clrInvisible.afl );
+					pCurrent->ColorModulate( clrInvisible.rfl, clrInvisible.gfl, clrInvisible.bfl );
+					pModelRender->ForcedMaterialOverride( pCurrent );
+					pEntity->DrawModel( 1, 255 );
+				}
+
+				if ( bDrawForeground )
+				{
+					const auto pCurrent = bFlat ? matMaterials[ MATERIAL_FLAT ].pMaterial : matMaterials[ MATERIAL_DEFAULT ].pMaterial;
+
+					pCurrent->SetMaterialVarFlag( MATERIAL_VAR_WIREFRAME, bWireFrame );
+					pCurrent->AlphaModulate( clrVisible.afl );
+					pCurrent->ColorModulate( clrVisible.rfl, clrVisible.gfl, clrVisible.bfl );
+					pModelRender->ForcedMaterialOverride( pCurrent );
+					pEntity->DrawModel( 1, 255 );
+				}
+				pModelRender->ForcedMaterialOverride( nullptr );
+			};
+
 			if ( !_Config.bEnabled.Get( ) )
 				return;
 
-			const auto clrVisible = _Config.seqColor[ STATE_VISIBLE ].GetCurrentColor( );
+			if ( _Config.bWireFrameUnderlay.Get( ) )
+				fnDrawModel( _Config.bFlat.Get( ), true, true, _Config.seqWireFrameUnderlay[ STATE_VISIBLE ].GetCurrentColor( ), _Config.seqWireFrameUnderlay[ STATE_INVISIBLE ].GetCurrentColor( ), false );
 
-			if ( _Config.bDrawAboveAll.Get( ) )
-			{
-				const auto clrInvisible = _Config.seqColor[ STATE_INVISIBLE ].GetCurrentColor( );
-				const auto pCurrent = _Config.bFlat.Get( ) ? matMaterials[ MATERIAL_FLAT_IGNOREZ ].pMaterial : matMaterials[ MATERIAL_IGNOREZ ].pMaterial;
+			fnDrawModel( _Config.bFlat.Get( ), _Config.bWireFrame.Get( ), _Config.bDrawAboveAll.Get( ), _Config.seqColor[ STATE_VISIBLE ].GetCurrentColor( ), _Config.seqColor[ STATE_INVISIBLE ].GetCurrentColor( ) );
 
-				pCurrent->SetMaterialVarFlag( MATERIAL_VAR_WIREFRAME, _Config.bWireFrame.Get( ) );
-				pCurrent->AlphaModulate( clrInvisible.afl );
-				pCurrent->ColorModulate( clrInvisible.rfl, clrInvisible.gfl, clrInvisible.bfl );
-				pModelRender->ForcedMaterialOverride( pCurrent );
-				pEntity->DrawModel( 1, 255 );
-			}
-
-			const auto pCurrent = _Config.bFlat.Get( ) ? matMaterials[ MATERIAL_FLAT ].pMaterial : matMaterials[ MATERIAL_DEFAULT ].pMaterial;
-
-			pCurrent->SetMaterialVarFlag( MATERIAL_VAR_WIREFRAME, _Config.bWireFrame.Get( ) );
-			pCurrent->AlphaModulate( clrVisible.afl );
-			pCurrent->ColorModulate( clrVisible.rfl, clrVisible.gfl, clrVisible.bfl );
-			pModelRender->ForcedMaterialOverride( pCurrent );
-			pEntity->DrawModel( 1, 255 );
-			pModelRender->ForcedMaterialOverride( nullptr );
+			if ( _Config.bWireFrameOverlay.Get( ) )
+				fnDrawModel( _Config.bFlat.Get( ), true, _Config.bDrawAboveAll.Get( ), _Config.seqWireFrameOverlay[ STATE_VISIBLE ].GetCurrentColor( ), _Config.seqWireFrameOverlay[ STATE_INVISIBLE ].GetCurrentColor( ) );
 		};
 
 		vecRenderables.clear( );
@@ -279,6 +290,12 @@ R"#("UnlitGeneric"
 				}
 				break;
 
+				case ClassID_CChicken:
+				{
+					iSettingIndex = SETTING_MATERIALS_CHICKEN;
+				}
+				break;
+
 				default:
 				{
 					if ( pEntity->IsWeapon( ) )
@@ -294,34 +311,46 @@ R"#("UnlitGeneric"
 		}
 	}
 
-	bool PX_API SetMaterial( player_ptr_t pLocalPlayer, IMatRenderContext* pContext, const DrawModelState_t& _State, const ModelRenderInfo_t& _Info, matrix3x4_t* pMatrix, draw_model_execute_t fnDrawModelExecute, entity_ptr_t pEntity, int iSettingIndex )
+	bool PX_API SetMaterial( IMatRenderContext* pContext, const DrawModelState_t& _State, const ModelRenderInfo_t& _Info, matrix3x4_t* pMatrix, draw_model_execute_t fnDrawModelExecute, entity_ptr_t pEntity, int iSettingIndex )
 	{
+		const auto fnDrawModel = [ & ]( bool bFlat, bool bWireFrame, bool bIgnoreZ, const color_t& clrVisible, const color_t& clrInvisible, bool bDrawForeground = true )
+		{
+			if( bIgnoreZ )
+			{
+				const auto pCurrent = bFlat ? matMaterials[ MATERIAL_FLAT_IGNOREZ ].pMaterial : matMaterials[ MATERIAL_IGNOREZ ].pMaterial;
+
+				pCurrent->SetMaterialVarFlag( MATERIAL_VAR_WIREFRAME, bWireFrame );
+				pCurrent->AlphaModulate( clrInvisible.afl );
+				pCurrent->ColorModulate( clrInvisible.rfl, clrInvisible.gfl, clrInvisible.bfl );
+				pModelRender->ForcedMaterialOverride( pCurrent );
+				fnDrawModelExecute( pModelRender, pContext, _State, _Info, pMatrix );
+			}
+
+			if ( bDrawForeground )
+			{
+				const auto pCurrent = bFlat ? matMaterials[ MATERIAL_FLAT ].pMaterial : matMaterials[ MATERIAL_DEFAULT ].pMaterial;
+
+				pCurrent->SetMaterialVarFlag( MATERIAL_VAR_WIREFRAME, bWireFrame );
+				pCurrent->AlphaModulate( clrVisible.afl );
+				pCurrent->ColorModulate( clrVisible.rfl, clrVisible.gfl, clrVisible.bfl );
+				pModelRender->ForcedMaterialOverride( pCurrent );
+				fnDrawModelExecute( pModelRender, pContext, _State, _Info, pMatrix );
+			}
+			pModelRender->ForcedMaterialOverride( nullptr );
+		};
+
 		auto& _Config = _Settings._Awareness._Materials._Entities[ iSettingIndex ];
 		if ( !_Config.bEnabled.Get( ) )
 			return false;
 
-		const auto clrVisible = _Config.seqColor[ STATE_VISIBLE ].GetCurrentColor( );
+		if ( _Config.bWireFrameUnderlay.Get( ) )
+			fnDrawModel( _Config.bFlat.Get( ), true, true, _Config.seqWireFrameUnderlay[ STATE_VISIBLE ].GetCurrentColor( ), _Config.seqWireFrameUnderlay[ STATE_INVISIBLE ].GetCurrentColor( ), false );
 
-		if( _Config.bDrawAboveAll.Get( ) )
-		{
-			const auto clrInvisible = _Config.seqColor[ STATE_INVISIBLE ].GetCurrentColor( );
-			const auto pCurrent = _Config.bFlat.Get( ) ? matMaterials[ MATERIAL_FLAT_IGNOREZ ].pMaterial : matMaterials[ MATERIAL_IGNOREZ ].pMaterial;
+		fnDrawModel( _Config.bFlat.Get( ), _Config.bWireFrame.Get( ), _Config.bDrawAboveAll.Get( ), _Config.seqColor[ STATE_VISIBLE ].GetCurrentColor( ), _Config.seqColor[ STATE_INVISIBLE ].GetCurrentColor( ) );
 
-			pCurrent->SetMaterialVarFlag( MATERIAL_VAR_WIREFRAME, _Config.bWireFrame.Get( ) );
-			pCurrent->AlphaModulate( clrInvisible.afl );
-			pCurrent->ColorModulate( clrInvisible.rfl, clrInvisible.gfl, clrInvisible.bfl );
-			pModelRender->ForcedMaterialOverride( pCurrent );
-			fnDrawModelExecute( pModelRender, pContext, _State, _Info, pMatrix );
-		}
+		if( _Config.bWireFrameOverlay.Get( ) )
+			fnDrawModel( _Config.bFlat.Get( ), true, _Config.bDrawAboveAll.Get( ), _Config.seqWireFrameOverlay[ STATE_VISIBLE ].GetCurrentColor( ), _Config.seqWireFrameOverlay[ STATE_INVISIBLE ].GetCurrentColor( ) );
 
-		const auto pCurrent = _Config.bFlat.Get( ) ? matMaterials[ MATERIAL_FLAT ].pMaterial : matMaterials[ MATERIAL_DEFAULT ].pMaterial;
-
-		pCurrent->SetMaterialVarFlag( MATERIAL_VAR_WIREFRAME, _Config.bWireFrame.Get( ) );
-		pCurrent->AlphaModulate( clrVisible.afl );
-		pCurrent->ColorModulate( clrVisible.rfl , clrVisible.gfl, clrVisible.bfl );
-		pModelRender->ForcedMaterialOverride( pCurrent );
-		fnDrawModelExecute( pModelRender, pContext, _State, _Info, pMatrix );
-		pModelRender->ForcedMaterialOverride( nullptr );
 		return true;
 	}
 }
