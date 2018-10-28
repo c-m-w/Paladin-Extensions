@@ -4,15 +4,18 @@
 
 namespace PX::Types
 {
-
 	/** \brief Paladin virtual memory address variable. */
 	typedef uintptr_t ptr_t;
+	/** \brief Paladin virtual memory address variable. */
+	typedef ptrdiff_t off_t;
 	/** \brief Paladin callback function type. */
 	typedef void( PX_API* callback_t )( );
 	/** \brief Paladin time datatype, wide enough to hold any time type, with sig figs up to a tenth of a microsecond. */
 	typedef unsigned long long moment_t;
 	/** \brief Paladin byte datatype. Stores one byte of data. */
 	typedef unsigned char byte_t;
+	/** \brief Paladin flag datatype. Stores flags usually from an enum. */
+	typedef byte_t flags_t;
 	/** \brief Paladin key datatype. Stores a virtual key code. */
 	typedef unsigned int key_t;
 

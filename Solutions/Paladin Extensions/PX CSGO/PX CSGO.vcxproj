@@ -105,6 +105,7 @@
     <ClCompile Include="Design\User Interface.cpp" />
     <ClCompile Include="Features\Awareness\Extra Sensory Drawing.cpp" />
     <ClCompile Include="Features\Awareness\Glow.cpp" />
+    <ClCompile Include="Features\Awareness\Statistics.cpp" />
     <ClCompile Include="Features\Awareness\Materials.cpp" />
     <ClCompile Include="Features\Combat\Trigger.cpp" />
     <ClCompile Include="Features\Features.cpp" />
@@ -156,6 +157,7 @@
     <ClInclude Include="Design\User Interface.hpp" />
     <ClInclude Include="Features\Awareness\Extra Sensory Drawing.hpp" />
     <ClInclude Include="Features\Awareness\Glow.hpp" />
+    <ClInclude Include="Features\Awareness\Statistics.hpp" />
     <ClInclude Include="Features\Awareness\Materials.hpp" />
     <ClInclude Include="Features\Combat\Trigger.hpp" />
     <ClInclude Include="Features\Features.hpp" />

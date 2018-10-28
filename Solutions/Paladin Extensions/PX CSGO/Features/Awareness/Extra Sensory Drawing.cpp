@@ -18,7 +18,7 @@ namespace PX::Features::Awareness
 	auto esdPlayerConfig = &esdDrawingConfigf->_Players[ SETTING_TEAM ];
 	auto esdWeaponConfig = &esdDrawingConfigf->_Weapons[ SETTING_WEAPON ];
 	settings_t::awareness_t::extra_sensory_drawing_t::extra_sensory_drawing_base_t* esdConfig = esdPlayerConfig;
-	CBasePlayer* pLocalPlayer = nullptr;
+	CBasePlayer* pLocalPlayer_ = nullptr;
 	PX_DEF MAX_HEALTH = 100;
 
 	enum
@@ -54,11 +54,11 @@ namespace PX::Features::Awareness
 	{
 		if ( !pEngineClient->IsInGame( ) )
 			return;
-		pLocalPlayer = GetLocalPlayer( );
-		if ( !pLocalPlayer )
+		pLocalPlayer_ = GetLocalPlayer( );
+		if ( !pLocalPlayer_ )
 			return;
-		const auto iLocalPlayerIndex = pLocalPlayer->EntIndex( );
-		const auto iLocalPlayerTeam = pLocalPlayer->m_iTeamNum( );
+		const auto iLocalPlayerIndex = pLocalPlayer_->EntIndex( );
+		const auto iLocalPlayerTeam = pLocalPlayer_->m_iTeamNum( );
 
 		for ( auto i = 0; i < pEntityList->GetMaxEntities( ); i++ )
 		{
@@ -113,8 +113,8 @@ namespace PX::Features::Awareness
 
 			if ( pEntity->IsDormant( ) )
 				info.iState = STATE_DORMANT;
-			else if ( info.bIsPlayer ? pLocalPlayer->CanSeePlayer( player_ptr_t( info.pEntity ), !!esdPlayerConfig->bMindSmoke ) : 
-									pLocalPlayer->CanSeePosition( info.vecLocation, !!esdPlayerConfig->bMindSmoke ) )
+			else if ( info.bIsPlayer ? pLocalPlayer_->CanSeePlayer( player_ptr_t( info.pEntity ), !!esdPlayerConfig->bMindSmoke ) : 
+									pLocalPlayer_->CanSeePosition( info.vecLocation, !!esdPlayerConfig->bMindSmoke ) )
 				info.iState = STATE_VISIBLE;
 			else
 				info.iState = STATE_INVISIBLE;
@@ -147,7 +147,7 @@ namespace PX::Features::Awareness
 			vecPoints[ TOPLEFT ].z = vecViewPosition.z + 10.f;
 
 			const auto flRotation = pClientState->viewangles.y - ( pClientState->viewangles.y -
-																   CalcAngle( pLocalPlayer->GetViewPosition( ), player_ptr_t( info.pEntity )->GetViewPosition( ) ).y );
+																   CalcAngle( pLocalPlayer_->GetViewPosition( ), player_ptr_t( info.pEntity )->GetViewPosition( ) ).y );
 			for ( auto i = 0; i < 4; i++ )
 			{
 				vecPoints[ i ].Rotate2D( flRotation, vecRotationPoint );
@@ -309,7 +309,7 @@ namespace PX::Features::Awareness
 		const D3DXVECTOR2 vecScreenPoints[ ]
 		{
 			D3DXVECTOR2( vecEntity.x, vecEntity.y ),
-			D3DXVECTOR2( iWidth / 2.f, iHeight )
+			D3DXVECTOR2( iWidth / 2.f, FLOAT( iHeight ) )
 		};
 
 		Line( vecScreenPoints, 2, esdPlayerConfig->flSnaplineWidth, clrSnapLine.GetARGB( ) );
@@ -505,7 +505,7 @@ namespace PX::Features::Awareness
 					const Vector2D vecRotationPoint { info.vecLocation.x, info.vecLocation.y };
 					const auto vecViewOffset = player_ptr_t( info.pEntity )->m_vecViewOffset( );
 					const auto flRotation = pClientState->viewangles.y - ( pClientState->viewangles.y -
-																		   CalcAngle( pLocalPlayer->GetViewPosition( ), player_ptr_t( info.pEntity )->GetViewPosition( ) ).y );
+																		   CalcAngle( pLocalPlayer_->GetViewPosition( ), player_ptr_t( info.pEntity )->GetViewPosition( ) ).y );
 					auto fl2 = 13.f + vecViewOffset.z;
 					vertex_t vtxOutline[ 4 ];
 					if ( esdConfig->iBoxMode == BOX_DYNAMIC )
