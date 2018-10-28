@@ -68,6 +68,7 @@ namespace PX::Tools
 		float GetBombTimer( );
 		float GetDefuseTimer( );
 		Vector* BoundingBox( );
+		void SetABSOrigin( Vector& vecOrigin );
 	};
 
 	class CBaseAttributableItem: public CBaseEntity

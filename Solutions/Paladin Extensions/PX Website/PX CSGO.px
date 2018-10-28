@@ -23,7 +23,8 @@
 			"Get CS Weapon Data": 0,
 			"Is Reloading": 2,
 			"Set Clantag": 0,
-			"Reveal Ranks": 0
+			"Reveal Ranks": 0,
+			"Set ABS Origin": 0
         },
       "Signatures": {
 			"Device": "A1 ? ? ? ? 50 8B 08 FF 51 0C",
@@ -38,7 +39,8 @@
 			"Get CS Weapon Data": "55 8B EC 81 EC ? ? ? ? 53 8B D9 56 57 8D 8B",
 			"Is Reloading": "C6 87 ? ? ? ? ? 8B 06 8B CE FF 90",
 			"Set Clantag": "53 56 57 8B DA 8B F9 FF 15",
-			"Reveal Ranks": "55 8B EC 8B 0D ? ? ? ? 68"
+			"Reveal Ranks": "55 8B EC 8B 0D ? ? ? ? 68",
+			"Set ABS Origin": "55 8B EC 83 E4 F8 51 53 56 57 8B F1 E8"
       }
     },
     "Versions": {

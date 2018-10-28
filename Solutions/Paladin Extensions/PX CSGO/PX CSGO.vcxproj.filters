@@ -278,10 +278,10 @@
     <ClInclude Include="SDK\Valve\Interfaces\IMaterialSystem.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SDK\Valve\Interfaces\IViewRender.hpp">
+    <ClInclude Include="Features\Awareness\Statistics.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Features\Awareness\Statistics.hpp">
+    <ClInclude Include="SDK\Valve\Interfaces\IVRenderView.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

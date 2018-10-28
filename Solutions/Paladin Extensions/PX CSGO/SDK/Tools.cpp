@@ -211,6 +211,13 @@ namespace PX::Tools
 		return reinterpret_cast< bool( __thiscall* )( CBaseEntity* ) >( ( *reinterpret_cast< void*** >( this ) )[ uIsWeapon ] )( this );
 	}
 
+	void CBaseEntity::SetABSOrigin( Vector& vecOrigin )
+	{
+		static auto ptrSetABSOrigin = mClient.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Set ABS Origin" ) ].get< str_t >( ) )
+			+ jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Set ABS Origin" ) ].get< int >( );
+		return reinterpret_cast< void( __thiscall* )( CBaseEntity*, Vector& ) >( ptrSetABSOrigin )( this, vecOrigin );
+	}
+
 	bool CBaseEntity::IsPlantedC4( )
 	{
 		return GetClientClass( )->m_ClassID == ClassID_CPlantedC4;

@@ -28,7 +28,8 @@ namespace PX
 		typedef void( __thiscall* draw_model_execute_t )( IVModelRender*, IMatRenderContext*, const DrawModelState_t&, const ModelRenderInfo_t&, matrix3x4_t* );
 
 		// View Render
-		typedef void( __thiscall* scene_end_t )( IViewRender* );
+		typedef void( __thiscall* scene_end_t )( IVRenderView* );
+		typedef void( __thiscall* scene_begin_t )( IVRenderView* );
 	}
 
 	namespace Hooks
@@ -63,5 +64,6 @@ namespace PX
 
 		// View Render
 		void __stdcall SceneEnd( );
+		void __stdcall SceneBegin( );
 	}
 }
