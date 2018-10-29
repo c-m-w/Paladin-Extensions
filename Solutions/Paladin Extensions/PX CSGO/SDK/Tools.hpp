@@ -144,7 +144,8 @@ namespace PX::Tools
 		PX_NETVAR_REFERENCE( int, m_iObserverMode,PX_XOR( "DT_BasePlayer" ), PX_XOR( "m_iObserverMode" ) );
 		PX_NETVAR_REFERENCE( CHandle< CBaseCombatWeapon >, m_hActiveWeapon,PX_XOR( "DT_BaseCombatCharacter" ), PX_XOR( "m_hActiveWeapon" ) );
 		PX_NETVAR_POINTER( CHandle< CBaseCombatWeapon >, m_hMyWeapons,PX_XOR( "DT_BaseCombatCharacter" ), PX_XOR( "m_hMyWeapons" ) );
-		PX_NETVAR_POINTER( CHandle<CBaseAttributableItem>, m_hMyWearables,PX_XOR( "DT_BaseCombatCharacter" ), PX_XOR( "m_hMyWearables" ) );
+		PX_NETVAR_POINTER( CHandle<CBaseAttributableItem>, m_hMyWearables, PX_XOR( "DT_BaseCombatCharacter" ), PX_XOR( "m_hMyWearables" ) );
+		PX_NETVAR_POINTER( bool, m_bSpotted, PX_XOR( "DT_CSPlayerResource" ), PX_XOR( "m_bSpotted" ) );
 
 		bool IsAlive( );
 		bool IsLocalPlayer( );
@@ -154,6 +155,7 @@ namespace PX::Tools
 		bool CanSeePlayer( CBasePlayer* pPlayer, bool bMindSmoke );
 		CGameTrace& TraceRayFromView( );
 		Vector GetHitboxPosition( EHitbox hHitboxID );
+		bool IsVulnerable( );
 	};
 
 	class CPlantedC4

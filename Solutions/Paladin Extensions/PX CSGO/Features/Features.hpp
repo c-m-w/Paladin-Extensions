@@ -16,7 +16,11 @@ namespace PX::Features
 		STATE_VISIBLE,
 		STATE_INVISIBLE,
 		STATE_DORMANT,
-		STATE_MAX
+		STATE_MAX,
+	//	STATE_PLAYER_VULNERABLE = STATE_MAX,
+	//	STATE_PLAYER_SPOTTED,
+	//	STATE_PLAYER_HEARD,
+		STATE_PLAYER_MAX = STATE_MAX
 	};
 
 	enum EAlignment
@@ -97,21 +101,32 @@ namespace PX::Features
 	{
 		struct awareness_t
 		{
-			struct information_t
+			struct statistics_t
 			{
-				struct player_t
+				struct a_statistics_base
 				{
 					toggle_t bEnabled = false;
-					toggle_t bOutline = false;
-					float flOutlineThickness = 1.f;
+					toggle_t bSmokeCheck = false;
+
+					toggle_t bSnapline = false;
+					toggle_t bSnaplineOutline = false;
+					float flSnaplineThickness = 1.f;
+					float flSnaplineOutlineThickness = 1.f;
+					color_sequence_t seqSnaplineOutline { };
+					toggle_t bSnaplineOrigin = false; // false is bottom, true is top
+					toggle_t bSnaplineDestination = false; // false is bottom, true is top
 
 					toggle_t bBox = false;
+					toggle_t bBoxOutline = false;
+					float flBoxOutlineThickness = 1.f;
+					color_sequence_t seqBoxOutline { };
 					toggle_t bDimesMode = false; // false is two, true is three
 					toggle_t bDisplayMode = false; // false is screen, true is world
 					float flBoxThickness = 1.f;
 					float flBoxCornerLength = 1.f; // odd input only allowed
 
-					toggle_t bStatistics = false;
+					toggle_t bInformation = false;
+					color_sequence_t seqInformationOutline { };
 					enum
 					{
 						LEFT,
@@ -121,45 +136,57 @@ namespace PX::Features
 						SMART
 					};
 					flags_t fAlignment = SMART;
-					toggle_t bName = false;
+					toggle_t bIdentifier = false;
 					toggle_t bDistance = false;
-					toggle_t bWeapon = false;
-					toggle_t bAmmo = false;
-					toggle_t bHealth = false;
-					toggle_t bArmor = false;
+				};
 
-					toggle_t bBones = false;
-					toggle_t bOrientation = false;
+				struct player_t: a_statistics_base
+				{
+					color_t clrHighestHealth = { 0x00, 0xFF, 0x00, 0xFF };
+					color_t clrLowestHealth = { 0xFF, 0x00, 0x00, 0xFF };
+
+					color_sequence_t seqSnapline[ STATE_PLAYER_MAX ] { };
+					color_sequence_t seqBox[ STATE_PLAYER_MAX ] { };
+
+					toggle_t bWeapon = false;
+					toggle_t bWeaponIcon = false;
+					color_sequence_t seqWeapon[ STATE_PLAYER_MAX ] { };
+					toggle_t bAmmo = false;
+					color_sequence_t seqAmmo[ STATE_PLAYER_MAX ] { };
+					toggle_t bHealth = false;
+					toggle_t bHealthColoredByHealth = false;
+					color_sequence_t seqHealth[ STATE_PLAYER_MAX ] { };
+					toggle_t bArmor = false;
+					toggle_t bArmorIcon = false;
+					toggle_t bArmorColoredByArmor = false;
+					color_sequence_t seqArmor[ STATE_PLAYER_MAX ] { };
 
 					toggle_t bDamageIndication = false;
-				} _Players[ 2 ];
+					toggle_t bDamageIndicationColoredByDamage = false;
+					color_sequence_t seqDamageIndication[ STATE_PLAYER_MAX ] { };
 
-				struct entity_t
+					toggle_t bBone = false;
+					toggle_t bBoneOutline = false;
+					float flBoneThickness = 1.f;
+					float flBoneOutlineThickness = 1.f;
+					toggle_t bBoneColoredByHealth = false;
+					color_sequence_t seqBone[ STATE_PLAYER_MAX ] { };
+
+					toggle_t bOrientation = false;
+					toggle_t bOrientationOutline = false;
+					float flOrientationThickness = 1.f;
+					float flOrientationOutlineThickness = 1.f;
+					color_sequence_t seqOrientation[ STATE_PLAYER_MAX ] { };
+				} _Players[ SETTING_PLAYER_MAX ];
+
+				struct entity_t: a_statistics_base
 				{
-					toggle_t bEnabled = false;
-					toggle_t bOutline = false;
-					float flOutlineThickness = 1.f;
-
-					toggle_t bBox = false;
-					toggle_t bDimesMode = false; // false is two, true is three
-					toggle_t bDisplayMode = false; // false is screen, true is world
-					float flBoxThickness = 1.f;
-					float flBoxCornerLength = 1.f; // odd input only allowed
-
-					toggle_t bStatistics = false;
-					enum
-					{
-						LEFT,
-						RIGHT,
-						TOP,
-						BOTTOM,
-						SMART
-					};
-					flags_t fAlignment = SMART;
-					toggle_t bWeaponName = false;
-					toggle_t bDistance = false;
-				} _Entity [ SETTING_ENTITY_MAX ];
-			} _Information;
+					toggle_t bIdentifierIcon = false;
+					color_sequence_t seqInformation[ STATE_MAX ] { };
+					color_sequence_t seqSnapline[ STATE_MAX ] { };
+					color_sequence_t seqBox[ STATE_MAX ] { };
+				} _Entities [ SETTING_ENTITY_MAX ];
+			} _Statistics;
 			struct extra_sensory_drawing_t
 			{
 				struct extra_sensory_drawing_base_t
@@ -206,7 +233,7 @@ namespace PX::Features
 					color_sequence_t seqHealthBar[ 2 ][ STATE_MAX ]; // player only
 					toggle_t bShowRank = false; // player only
 					toggle_t bShowWeapon = false; // player only
-				} _Players[ 2 ] { };
+				} _Players[ SETTING_PLAYER_MAX ] { };
 			} _ExtraSensoryDrawing;
 
 			struct glow_t

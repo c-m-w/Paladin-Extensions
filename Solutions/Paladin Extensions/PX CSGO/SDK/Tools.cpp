@@ -464,4 +464,16 @@ namespace PX::Tools
 		TransformVector( pHitbox->bbmax, pmPlayer.mtxBones[ pHitbox->bone ], vecMax );
 		return ( vecMin + vecMax ) / 2.f;
 	}
+
+	bool CBasePlayer::IsVulnerable( )
+	{
+		const auto& hActiveWeapon = m_hActiveWeapon( );
+		return m_flFlashDuration( ) // cant see
+			|| hActiveWeapon.Get( )
+			&& ( !hActiveWeapon->CanFire( ) // cant fire
+				 || hActiveWeapon->GetCSWeaponData( )->WeaponType == ITEM_NONE // no weapon (tpose)
+				 || hActiveWeapon->GetCSWeaponData( )->WeaponType > ITEM_WEAPON_SSG08 // useless weapon/nade
+				 && hActiveWeapon->GetCSWeaponData( )->WeaponType < ITEM_WEAPON_M4A1S // useless weapon/nade
+				 || hActiveWeapon->GetCSWeaponData( )->WeaponType > ITEM_WEAPON_TACTICALAWARENESSGRENADE ); // knife model/gloves/other
+	}
 }
