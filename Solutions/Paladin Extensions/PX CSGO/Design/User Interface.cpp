@@ -123,7 +123,8 @@ namespace PX::UI::Manager
 				"Materials"
 			},
 			{
-				"Tab"
+				"Trigger",
+				"Aim"
 			},
 			{
 				"Tab"
@@ -132,7 +133,6 @@ namespace PX::UI::Manager
 				"Tab"
 			}
 		};
-
 
 		static auto iCurrentTab = 0;
 		static int iCurrentSubTab[ iTabCount ] { };
@@ -677,11 +677,227 @@ namespace PX::UI::Manager
 	{
 		enum
 		{
-
+			TRIGGER,
+			AIM
 		};
 
 		switch ( iSubtab )
 		{
+			case TRIGGER:
+			{
+				static auto iWeaponGroup = int( WEAPONTYPE_PISTOL );
+				static auto iItemDefinitionIndex = int( ITEM_WEAPON_DEAGLE );
+				auto& _Config = _Settings._Combat._Trigger;
+				auto _Current = &_Config._All;
+
+				if ( BeginGroupbox( 200, 150, 500, 420, PX_XOR( "Trigger" ) ) )
+				{
+					{
+						constexpr int ITEM_DEFINITION_INDICIES[ 7 ][ 10 ]
+						{
+							{ },
+							{ // PISTOLS
+								ITEM_WEAPON_DEAGLE,
+								ITEM_WEAPON_ELITE,
+								ITEM_WEAPON_FIVESEVEN,
+								ITEM_WEAPON_GLOCK,
+								ITEM_WEAPON_P250,
+								ITEM_WEAPON_TEC9,
+								ITEM_WEAPON_CZ75AUTO,
+								ITEM_WEAPON_R8REVOLVER,
+								ITEM_WEAPON_P2000,
+								ITEM_WEAPON_USPS
+							},
+							{ // SMGS
+								ITEM_WEAPON_MAC10,
+								ITEM_WEAPON_MP7,
+								ITEM_WEAPON_MP5SD,
+								ITEM_WEAPON_UMP45,
+								ITEM_WEAPON_PPBIZON,
+								ITEM_WEAPON_P90,
+								ITEM_WEAPON_MP9
+							},
+							{ // RIFLES
+								ITEM_WEAPON_GALILAR,
+								ITEM_WEAPON_AK47,
+								ITEM_WEAPON_SG553,
+								ITEM_WEAPON_FAMAS,
+								ITEM_WEAPON_M4A1,
+								ITEM_WEAPON_M4A1S,
+								ITEM_WEAPON_AUG
+							},
+							{ // SHOTGUNS
+								ITEM_WEAPON_NOVA,
+								ITEM_WEAPON_XM1014,
+								ITEM_WEAPON_SAWEDOFF,
+								ITEM_WEAPON_MAG7
+							},
+							{ // SNIPER RIFLES
+								ITEM_WEAPON_SSG08,
+								ITEM_WEAPON_AWP,
+								ITEM_WEAPON_SCAR20,
+								ITEM_WEAPON_G3SG1
+							},
+							{ // MACHINEGUN
+								ITEM_WEAPON_NEGEV,
+								ITEM_WEAPON_M249
+							}
+						};
+						std::deque< cstr_t > dqTypes
+						{
+							nullptr,
+							PX_XOR( "Pistols" ),
+							PX_XOR( "SMGs" ),
+							PX_XOR( "Rifles" ),
+							PX_XOR( "Shotguns" ),
+							PX_XOR( "Snipers" ),
+							PX_XOR( "Machine Guns" )
+						};
+
+						std::deque< cstr_t > dqWeapons[ WEAPONTYPE_MACHINEGUN + 1 ]
+						{
+							{ },
+							{ // WEAPONTYPE_PISTOL
+								PX_XOR( "Deagle" ),
+								PX_XOR( "Elites" ),
+								PX_XOR( "FiveSeveN" ),
+								PX_XOR( "Glock" ),
+								PX_XOR( "P250" ),
+								PX_XOR( "Tec-9" ),
+								PX_XOR( "CZ75-Auto" ),
+								PX_XOR( "R8 Revolver" ),
+								PX_XOR( "P2000" ),
+								PX_XOR( "USP-S" )
+							},
+							{ // WEAPONTYPE_SUBMACHINEGUN
+								PX_XOR( "MAC-10" ),
+								PX_XOR( "MP7" ),
+								PX_XOR( "MP5-SD" ),
+								PX_XOR( "UMP-45" ),
+								PX_XOR( "PP-Bizon" ),
+								PX_XOR( "P90" ),
+								PX_XOR( "MP9" )
+							},
+							{ // WEAPONTYPE_RIFLE
+								PX_XOR( "Galil AR" ),
+								PX_XOR( "AK47" ),
+								PX_XOR( "SG 553" ),
+								PX_XOR( "FAMAS" ),
+								PX_XOR( "M4A4" ),
+								PX_XOR( "M4A1-S" ),
+								PX_XOR( "AUG" )
+							},
+							{ // WEAPONTYPE_SHOTGUN
+								PX_XOR( "Nova" ),
+								PX_XOR( "XM1014" ),
+								PX_XOR( "Sawed-Off" ),
+								PX_XOR( "MAG-7" )
+							},
+							{ // WEAPONTYPE_SNIPER_RIFLE
+								PX_XOR( "SSG-08" ),
+								PX_XOR( "AWP" ),
+								PX_XOR( "SCAR-20" ),
+								PX_XOR( "G3SG1" )
+							},
+							{ // WEAPONTYPE_MACHINEGUN
+								PX_XOR( "Negev" ),
+								PX_XOR( "M249" )
+							}
+						};
+
+						static auto iCurrentWeapon = 0;
+
+						VerticalSpacing( 3 );
+
+						BeginRow( 30, 4, ROW_STATIC );
+						SetRowWidth( 10 );
+						Spacing( );
+
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH );
+						const auto iOldWeaponGroup = iWeaponGroup;
+						fnSetValue( iWeaponGroup, Combobox( 30, PX_XOR( "Group" ), dqTypes, iWeaponGroup ) );
+						if ( iOldWeaponGroup != iWeaponGroup )
+							iCurrentWeapon = 0;
+
+						SetRowWidth( 5 );
+						Spacing( );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH );
+
+						fnSetValue( iCurrentWeapon, Combobox( 30, PX_XOR( "Weapon" ), dqWeapons[ iWeaponGroup ], iCurrentWeapon ) );
+
+						EndRow( );
+
+						iItemDefinitionIndex = ITEM_DEFINITION_INDICIES[ iWeaponGroup ][ iCurrentWeapon ];
+					}
+
+					{
+						BeginRow( 30, 6, ROW_STATIC );
+						SetRowWidth( 5 );
+						Spacing( );
+
+						Checkbox( PX_XOR( "Use Group Separately" ), &_Config._WeaponTypes[ iWeaponGroup ].bUseSeparate, PX_XOR( "Use the weapon group rather than the global setting." ) );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Use Group Separately" ), 30 ).x );
+						Spacing( );
+
+						Checkbox( PX_XOR( "Use Weapon Separately" ), &_Config._IndividualWeapons[ iItemDefinitionIndex ].bUseSeparate, PX_XOR( "Use the weapon index rather than the global / group setting." ) );
+
+						EndRow( );
+
+						_Current = _Config._IndividualWeapons[ iItemDefinitionIndex ].bUseSeparate.Get( ) ? &_Config._IndividualWeapons[ iItemDefinitionIndex ] :
+							_Config._WeaponTypes[ iWeaponGroup ].bUseSeparate.Get( ) ? &_Config._WeaponTypes[ iWeaponGroup ]
+							: &_Config._All;
+					}
+						
+					{
+						BeginRow( 30, 9, ROW_STATIC );
+						SetRowWidth( 5 );
+						Spacing( );
+
+						Checkbox( PX_XOR( "Teammates" ), &_Current->bTeammates, PX_XOR( "Fire at teammates." ) );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Teammates" ), 30 ).x );
+						Spacing( );
+
+						Checkbox( PX_XOR( "Enemies" ), &_Current->bEnemies, PX_XOR( "Fire at enemies." ) );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Enemies" ), 30 ).x );
+						Spacing( );
+
+						Checkbox( PX_XOR( "Mind Smoke" ), &_Current->bMindSmoke, PX_XOR( "Don't shoot through the smoke." ) );
+
+						EndRow( );
+					}
+
+					{
+						std::deque< cstr_t > dqHitgroupText
+						{
+							nullptr,
+							PX_XOR( "Head" ),
+							PX_XOR( "Upper Body" ),
+							PX_XOR( "Lower Body" ),
+							PX_XOR( "Left Arm" ),
+							PX_XOR( "Right Arm" ),
+							PX_XOR( "Left Leg" ),
+							PX_XOR( "Right Leg" )
+						};
+						std::deque< bool* > dqHitgroups;
+
+						for ( auto& hitgroup : _Current->bHitGroups )
+							dqHitgroups.emplace_back( &hitgroup.Get( ) );
+
+						BeginRow( 30, 2, ROW_STATIC );
+						SetRowWidth( 10 );
+						Spacing( );
+
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH );
+						ComboboxMulti( 30, PX_XOR( "Hitgroups" ), dqHitgroupText, dqHitgroups );
+
+						EndRow( );
+					}
+					
+					EndGroupbox( );
+				}
+			}
+			break;
+
 			default:
 				break;
 		}

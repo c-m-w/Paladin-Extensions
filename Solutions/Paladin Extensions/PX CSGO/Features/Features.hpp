@@ -255,15 +255,32 @@ namespace PX::Features
 			} _Materials;
 		} _Awareness;
 
+		struct combat_t
+		{
+			struct trigger_t
+			{
+				struct weapon_t
+				{
+					toggle_t bTeammates = false;
+					toggle_t bEnemies = false;
+					toggle_t bHitGroups[ HITGROUP_MAX ] { };
+					toggle_t bMindSmoke = false;
+					toggle_t bUseSeparate = false; // only for _WeaponTypes and _IndividualWeapons to use separate from the rest
+				} _All, _WeaponTypes[ WEAPONTYPE_MACHINEGUN + 1 ] { }, _IndividualWeapons[ ITEM_MAX ] { };
+			} _Trigger;
+
+			struct aim_t
+			{
+				
+			} _Aim;
+		} _Combat;
+
 		struct miscellaneous_t
 		{
 			struct movement_t
 			{
 				toggle_t bAutoJump = false;
-				key_t kAutoJumpKey = VK_SPACE;
 				toggle_t bEdgeJump = false;
-				key_t kEdgeJumpKey = 0;
-
 			} _Movement;
 		} _Miscellaneous;
 	} PX_SDK _Settings;

@@ -1632,6 +1632,8 @@ namespace PX::UI
 				recComboboxWindowBounds = pContext->current->bounds;
 				for ( unsigned i { }; i < dqOptions.size( ); i++ )
 				{
+					if ( !dqOptions.at( i ) )
+						continue;
 					if ( i == uSelectedOption )
 						pContext->style.contextual_button = btnComboActive;
 					else
@@ -1738,6 +1740,8 @@ namespace PX::UI
 				recComboboxWindowBounds = pContext->current->bounds;
 				for ( unsigned i { }; i < dqOptions.size( ); i++ )
 				{
+					if ( !dqOptions[ i ] )
+						continue;
 					nk_layout_row_dynamic( pContext, float( uButtonHeight ), 1 );
 					if ( nk_button_label_styled( pContext, *dqEnabledOptions.at( i ) ? &btnComboActive : &btnCombo, dqOptions.at( i ) ) )
 						*dqEnabledOptions.at( i ) = !*dqEnabledOptions.at( i );
