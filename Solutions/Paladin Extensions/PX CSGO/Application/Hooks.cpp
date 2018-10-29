@@ -21,6 +21,7 @@ namespace PX
 				&& hkClientMode->HookIndex( uDoPostScreenEffects, reinterpret_cast< void* >( DoPostScreenEffects ) )
 				&& hkPanel->HookIndex( uPaintTraverse, reinterpret_cast< void* >( PaintTraverse ) )
 				&& hkModelRender->HookIndex( uDrawModelExecute, reinterpret_cast< void* >( DrawModelExecute ) )
+				&& hkViewRender->HookIndex( uSceneBegin, reinterpret_cast< void* >( SceneBegin ) )
 				&& hkViewRender->HookIndex( uSceneEnd, reinterpret_cast< void* >( SceneEnd ) )
 				&& hkClientBase->ResetProtection( )
 				&& hkClientMode->ResetProtection( )
@@ -221,6 +222,8 @@ namespace PX
 
 			if ( !bShouldOverride )
 				fnOriginal( pModelRender, pContext, state, pInfo, pCustomBoneToWorld );
+			else
+				pModelRender->ForcedMaterialOverride( nullptr );
 		}
 
 		void __stdcall SceneEnd( )
@@ -235,6 +238,17 @@ namespace PX
 			
 				Features::Awareness::RenderEntities( );
 			}
+		}
+
+		void __stdcall SceneBegin( )
+		{
+			static auto fnOriginal = hkViewRender->GetOriginalFunction< scene_begin_t >( uSceneBegin );
+
+			{
+				Features::Awareness::SetEntityLocations( );
+			}
+
+			fnOriginal( pEngineRenderView );
 		}
 	}
 }

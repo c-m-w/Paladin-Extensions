@@ -159,7 +159,7 @@ namespace PX::Features::Awareness
 
 		auto& _Current = glwConfig->_Players[ pLocalPlayer->m_iTeamNum( ) == pPlayer->m_iTeamNum( ) ? 0 : 1 ];
 		if ( !_Current.bEnabled )
-			return;
+			return ResetDefinition( pObject );
 
 		const auto iState = pPlayer->IsDormant( ) ? STATE_DORMANT : pLocalPlayer->CanSeePlayer( pPlayer, _Current.bMindSmoke.Get( ) ) ? STATE_VISIBLE : STATE_INVISIBLE;
 		const auto clrCurrent = _Current.seqColor[ iState ].GetCurrentColor( );
@@ -193,7 +193,7 @@ namespace PX::Features::Awareness
 	{
 		auto& _Current = glwConfig->_Entities[ iSettingIndex ];
 		if ( !_Current.bEnabled )
-			return;
+			return ResetDefinition( pObject );
 
 		auto vecLocation = pEntity->m_vecOrigin( );
 		vecLocation.z += 0.5f;

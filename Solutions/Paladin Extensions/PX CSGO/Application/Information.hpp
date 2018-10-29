@@ -36,6 +36,7 @@ namespace PX::Information
 			PX_DEF uDrawModelExecute = 21u;
 
 			// View Render
+			PX_DEF uSceneBegin = 8u;
 			PX_DEF uSceneEnd = 9u;
 
 			// CBaseEntity
@@ -99,7 +100,7 @@ namespace PX::Information
 		PX_SDK CInput* pInput = nullptr;
 		PX_SDK IVModelRender* pModelRender = nullptr;
 		PX_SDK IMaterialSystem* pMaterialSystem = nullptr;
-		PX_SDK IViewRender* pEngineRenderView = nullptr;
+		PX_SDK IVRenderView* pEngineRenderView = nullptr;
 	}
 
 	namespace NetworkedVariableManager // http://www.bailopan.net/table_dump.txt
