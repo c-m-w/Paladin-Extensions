@@ -300,13 +300,12 @@ namespace PX::Tools
 
 	bool CBaseCombatWeapon::HasBullets( )
 	{
-		return false;
-		//return !IsReloading( ) && m_iClip1( ) > 0;
+		return !IsReloading( ) && m_iClip1( ) > 0;
 	}
 
 	bool CBaseCombatWeapon::CanFire( )
 	{
-		return m_iClip1( ) > 0 && m_flNextPrimaryAttack( ) <= pGlobalVariables->m_flCurrentTime;
+		return HasBullets( ) && m_flNextPrimaryAttack( ) <= pGlobalVariables->m_flCurrentTime;
 	}
 
 	bool CBaseCombatWeapon::IsGrenade( )
@@ -345,9 +344,9 @@ namespace PX::Tools
 
 	bool CBaseCombatWeapon::IsReloading( )
 	{
-		//static auto ptrIsReloading = mClient.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Is Reloading" ) ].get< str_t >( ) )
-		//	+ jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Is Reloading" ) ].get< int >( );
-		return *reinterpret_cast< bool* >( this + 0x3275 );
+		static auto ptrIsReloading = *reinterpret_cast< ptr_t* >( mClient.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Is Reloading" ) ].get< str_t >( ) )
+			+ jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Is Reloading" ) ].get< int >( ) );
+		return *reinterpret_cast< bool* >( ptr_t( this ) + ptrIsReloading );
 	}
 
 	float CBaseCombatWeapon::GetInaccuracy( )
@@ -477,7 +476,7 @@ namespace PX::Tools
 		const auto iWeaponType = hActiveWeapon->GetCSWeaponData( )->WeaponType;
 		return m_flFlashDuration( ) // cant see
 			|| !hActiveWeapon
-			&& ( !hActiveWeapon->CanFire( ) // cant fire
+			&& ( !hActiveWeapon->HasBullets( ) // cant fire
 				 || iWeaponType == ITEM_NONE // no weapon (tpose)
 				 || iWeaponType > ITEM_WEAPON_SSG08 // useless weapon/nade
 				 && iWeaponType < ITEM_WEAPON_M4A1S // useless weapon/nade

@@ -685,64 +685,67 @@ namespace PX::UI::Manager
 		{
 			case TRIGGER:
 			{
-				static auto iWeaponGroup = int( WEAPONTYPE_PISTOL );
-				static auto iItemDefinitionIndex = int( ITEM_WEAPON_DEAGLE );
-				auto& _Config = _Settings._Combat._Trigger;
-				auto _Current = &_Config._All;
-
-				if ( BeginGroupbox( 200, 150, 500, 420, PX_XOR( "Trigger" ) ) )
+				const auto fnDrawTriggerOptions = [ ]( settings_t::combat_t::trigger_t::weapon_t* pConfig )
 				{
 					{
-						constexpr int ITEM_DEFINITION_INDICIES[ 7 ][ 10 ]
+						BeginRow( 30, 9, ROW_STATIC );
+						SetRowWidth( 5 );
+						Spacing( );
+
+						Checkbox( PX_XOR( "Teammates" ), &pConfig->bTeammates, PX_XOR( "Fire at teammates." ) );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Teammates" ), 30 ).x );
+						Spacing( );
+
+						Checkbox( PX_XOR( "Enemies" ), &pConfig->bEnemies, PX_XOR( "Fire at enemies." ) );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Enemies" ), 30 ).x );
+						Spacing( );
+
+						Checkbox( PX_XOR( "Mind Smoke" ), &pConfig->bMindSmoke, PX_XOR( "Don't shoot through the smoke." ) );
+
+						EndRow( );
+					}
+
+					{
+						std::deque< cstr_t > dqHitgroupText
 						{
-							{ },
-							{ // PISTOLS
-								ITEM_WEAPON_DEAGLE,
-								ITEM_WEAPON_ELITE,
-								ITEM_WEAPON_FIVESEVEN,
-								ITEM_WEAPON_GLOCK,
-								ITEM_WEAPON_P250,
-								ITEM_WEAPON_TEC9,
-								ITEM_WEAPON_CZ75AUTO,
-								ITEM_WEAPON_R8REVOLVER,
-								ITEM_WEAPON_P2000,
-								ITEM_WEAPON_USPS
-							},
-							{ // SMGS
-								ITEM_WEAPON_MAC10,
-								ITEM_WEAPON_MP7,
-								ITEM_WEAPON_MP5SD,
-								ITEM_WEAPON_UMP45,
-								ITEM_WEAPON_PPBIZON,
-								ITEM_WEAPON_P90,
-								ITEM_WEAPON_MP9
-							},
-							{ // RIFLES
-								ITEM_WEAPON_GALILAR,
-								ITEM_WEAPON_AK47,
-								ITEM_WEAPON_SG553,
-								ITEM_WEAPON_FAMAS,
-								ITEM_WEAPON_M4A1,
-								ITEM_WEAPON_M4A1S,
-								ITEM_WEAPON_AUG
-							},
-							{ // SHOTGUNS
-								ITEM_WEAPON_NOVA,
-								ITEM_WEAPON_XM1014,
-								ITEM_WEAPON_SAWEDOFF,
-								ITEM_WEAPON_MAG7
-							},
-							{ // SNIPER RIFLES
-								ITEM_WEAPON_SSG08,
-								ITEM_WEAPON_AWP,
-								ITEM_WEAPON_SCAR20,
-								ITEM_WEAPON_G3SG1
-							},
-							{ // MACHINEGUN
-								ITEM_WEAPON_NEGEV,
-								ITEM_WEAPON_M249
-							}
+							nullptr,
+							PX_XOR( "Head" ),
+							PX_XOR( "Upper Body" ),
+							PX_XOR( "Lower Body" ),
+							PX_XOR( "Left Arm" ),
+							PX_XOR( "Right Arm" ),
+							PX_XOR( "Left Leg" ),
+							PX_XOR( "Right Leg" )
 						};
+						std::deque< bool* > dqHitgroups;
+
+						for ( auto& hitgroup : pConfig->bHitGroups )
+							dqHitgroups.emplace_back( &hitgroup.Get( ) );
+
+						BeginRow( 30, 2, ROW_STATIC );
+						SetRowWidth( 10 );
+						Spacing( );
+
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH );
+						ComboboxMulti( 30, PX_XOR( "Hitgroups" ), dqHitgroupText, dqHitgroups );
+
+						EndRow( );
+					}
+				};
+
+				if ( BeginGroupbox( 200, 150, 500, 113, PX_XOR( "Global Configuration" ) ) )
+				{
+					{
+						fnDrawTriggerOptions( &_Settings._Combat._Trigger._All );
+					}
+					
+					EndGroupbox( );
+				}
+
+				if ( BeginGroupbox( 400, 236, 500, 158, PX_XOR( "Group Configurations" ) ) )
+				{
+					static int iWeaponGroup = WEAPONTYPE_PISTOL;
+					{
 						std::deque< cstr_t > dqTypes
 						{
 							nullptr,
@@ -751,12 +754,78 @@ namespace PX::UI::Manager
 							PX_XOR( "Rifles" ),
 							PX_XOR( "Shotguns" ),
 							PX_XOR( "Snipers" ),
-							PX_XOR( "Machine Guns" )
+							PX_XOR( "Heavy" )
 						};
 
+						VerticalSpacing( );
+
+						BeginRow( 30, 5, ROW_STATIC );
+						SetRowWidth( 10 );
+						Spacing( );
+
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH );
+						fnSetValue( iWeaponGroup, Combobox( 30, PX_XOR( "Group" ), dqTypes, iWeaponGroup ) );
+
+						SetRowWidth( -1.f );
+						Spacing( );
+
+						Checkbox( PX_XOR( "Use Group Configuration" ), &_Settings._Combat._Trigger._WeaponTypes[ iWeaponGroup ].bUseSeparate, PX_XOR( "Use the weapon group rather than the global setting." ) );
+
+						EndRow( );
+					}
+
+					{
+						fnDrawTriggerOptions( &_Settings._Combat._Trigger._WeaponTypes[ iWeaponGroup ] );
+					}
+
+					EndGroupbox( );
+				}
+
+				if ( BeginGroupbox( 400, 381, 500, 190, PX_XOR( "Weapon Configurations" ) ) )
+				{
+					constexpr int ITEM_DEFINITION_INDICIES[ ]
+					{
+						ITEM_WEAPON_DEAGLE,
+						ITEM_WEAPON_ELITE,
+						ITEM_WEAPON_FIVESEVEN,
+						ITEM_WEAPON_GLOCK,
+						ITEM_WEAPON_P250,
+						ITEM_WEAPON_TEC9,
+						ITEM_WEAPON_CZ75AUTO,
+						ITEM_WEAPON_R8REVOLVER,
+						ITEM_WEAPON_P2000,
+						ITEM_WEAPON_USPS,
+						ITEM_WEAPON_MAC10,
+						ITEM_WEAPON_MP7,
+						ITEM_WEAPON_MP5SD,
+						ITEM_WEAPON_UMP45,
+						ITEM_WEAPON_PPBIZON,
+						ITEM_WEAPON_P90,
+						ITEM_WEAPON_MP9,
+						ITEM_WEAPON_GALILAR,
+						ITEM_WEAPON_AK47,
+						ITEM_WEAPON_SG553,
+						ITEM_WEAPON_FAMAS,
+						ITEM_WEAPON_M4A1,
+						ITEM_WEAPON_M4A1S,
+						ITEM_WEAPON_AUG,
+						ITEM_WEAPON_NOVA,
+						ITEM_WEAPON_XM1014,
+						ITEM_WEAPON_SAWEDOFF,
+						ITEM_WEAPON_MAG7,
+						ITEM_WEAPON_SSG08,
+						ITEM_WEAPON_AWP,
+						ITEM_WEAPON_SCAR20,
+						ITEM_WEAPON_G3SG1,
+						ITEM_WEAPON_NEGEV,
+						ITEM_WEAPON_M249
+					};
+
+					static auto uCurrentWeapon = 0u;
+
+					{
 						std::deque< cstr_t > dqWeapons[ WEAPONTYPE_MACHINEGUN + 1 ]
 						{
-							{ },
 							{ // WEAPONTYPE_PISTOL
 								PX_XOR( "Deagle" ),
 								PX_XOR( "Elites" ),
@@ -805,94 +874,42 @@ namespace PX::UI::Manager
 							}
 						};
 
-						static auto iCurrentWeapon = 0;
-
-						VerticalSpacing( 3 );
-
-						BeginRow( 30, 4, ROW_STATIC );
-						SetRowWidth( 10 );
-						Spacing( );
-
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH );
-						const auto iOldWeaponGroup = iWeaponGroup;
-						fnSetValue( iWeaponGroup, Combobox( 30, PX_XOR( "Group" ), dqTypes, iWeaponGroup ) );
-						if ( iOldWeaponGroup != iWeaponGroup )
-							iCurrentWeapon = 0;
-
-						SetRowWidth( 5 );
-						Spacing( );
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH );
-
-						fnSetValue( iCurrentWeapon, Combobox( 30, PX_XOR( "Weapon" ), dqWeapons[ iWeaponGroup ], iCurrentWeapon ) );
-
-						EndRow( );
-
-						iItemDefinitionIndex = ITEM_DEFINITION_INDICIES[ iWeaponGroup ][ iCurrentWeapon ];
-					}
-
-					{
-						BeginRow( 30, 6, ROW_STATIC );
-						SetRowWidth( 5 );
-						Spacing( );
-
-						Checkbox( PX_XOR( "Use Group Separately" ), &_Config._WeaponTypes[ iWeaponGroup ].bUseSeparate, PX_XOR( "Use the weapon group rather than the global setting." ) );
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Use Group Separately" ), 30 ).x );
-						Spacing( );
-
-						Checkbox( PX_XOR( "Use Weapon Separately" ), &_Config._IndividualWeapons[ iItemDefinitionIndex ].bUseSeparate, PX_XOR( "Use the weapon index rather than the global / group setting." ) );
-
-						EndRow( );
-
-						_Current = _Config._IndividualWeapons[ iItemDefinitionIndex ].bUseSeparate.Get( ) ? &_Config._IndividualWeapons[ iItemDefinitionIndex ] :
-							_Config._WeaponTypes[ iWeaponGroup ].bUseSeparate.Get( ) ? &_Config._WeaponTypes[ iWeaponGroup ]
-							: &_Config._All;
-					}
-						
-					{
-						BeginRow( 30, 9, ROW_STATIC );
-						SetRowWidth( 5 );
-						Spacing( );
-
-						Checkbox( PX_XOR( "Teammates" ), &_Current->bTeammates, PX_XOR( "Fire at teammates." ) );
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Teammates" ), 30 ).x );
-						Spacing( );
-
-						Checkbox( PX_XOR( "Enemies" ), &_Current->bEnemies, PX_XOR( "Fire at enemies." ) );
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Enemies" ), 30 ).x );
-						Spacing( );
-
-						Checkbox( PX_XOR( "Mind Smoke" ), &_Current->bMindSmoke, PX_XOR( "Don't shoot through the smoke." ) );
-
-						EndRow( );
-					}
-
-					{
-						std::deque< cstr_t > dqHitgroupText
+						std::deque< cstr_t > dqTypes
 						{
-							nullptr,
-							PX_XOR( "Head" ),
-							PX_XOR( "Upper Body" ),
-							PX_XOR( "Lower Body" ),
-							PX_XOR( "Left Arm" ),
-							PX_XOR( "Right Arm" ),
-							PX_XOR( "Left Leg" ),
-							PX_XOR( "Right Leg" )
+							PX_XOR( "Pistols" ),
+							PX_XOR( "SMGs" ),
+							PX_XOR( "Rifles" ),
+							PX_XOR( "Shotguns" ),
+							PX_XOR( "Snipers" ),
+							PX_XOR( "Heavy" )
 						};
-						std::deque< bool* > dqHitgroups;
 
-						for ( auto& hitgroup : _Current->bHitGroups )
-							dqHitgroups.emplace_back( &hitgroup.Get( ) );
+						VerticalSpacing( );
 
 						BeginRow( 30, 2, ROW_STATIC );
 						SetRowWidth( 10 );
 						Spacing( );
 
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH );
-						ComboboxMulti( 30, PX_XOR( "Hitgroups" ), dqHitgroupText, dqHitgroups );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH * 3.f + 29.f );
+						TabbedCombobox( 30, PX_XOR( "Weapons" ), dqTypes, dqWeapons, uCurrentWeapon );
 
 						EndRow( );
 					}
-					
+
+					{
+						BeginRow( 30, 3, ROW_STATIC );
+						SetRowWidth( 5 );
+						Spacing( );
+
+						Checkbox( PX_XOR( "Use Weapon Configuration" ), &_Settings._Combat._Trigger._IndividualWeapons[ ITEM_DEFINITION_INDICIES[ uCurrentWeapon ] ].bUseSeparate, PX_XOR( "Use the weapon's configuration rather than the group or global configuration." ) );
+
+						EndRow( );
+					}
+
+					{
+						fnDrawTriggerOptions( &_Settings._Combat._Trigger._IndividualWeapons[ ITEM_DEFINITION_INDICIES[ uCurrentWeapon ] ] );
+					}
+
 					EndGroupbox( );
 				}
 			}
