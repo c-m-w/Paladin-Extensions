@@ -474,12 +474,13 @@ namespace PX::Tools
 	bool CBasePlayer::IsVulnerable( )
 	{
 		const auto& hActiveWeapon = m_hActiveWeapon( );
+		const auto iWeaponType = hActiveWeapon->GetCSWeaponData( )->WeaponType;
 		return m_flFlashDuration( ) // cant see
-			|| hActiveWeapon.Get( )
+			|| !hActiveWeapon
 			&& ( !hActiveWeapon->CanFire( ) // cant fire
-				 || hActiveWeapon->GetCSWeaponData( )->WeaponType == ITEM_NONE // no weapon (tpose)
-				 || hActiveWeapon->GetCSWeaponData( )->WeaponType > ITEM_WEAPON_SSG08 // useless weapon/nade
-				 && hActiveWeapon->GetCSWeaponData( )->WeaponType < ITEM_WEAPON_M4A1S // useless weapon/nade
-				 || hActiveWeapon->GetCSWeaponData( )->WeaponType > ITEM_WEAPON_TACTICALAWARENESSGRENADE ); // knife model/gloves/other
+				 || iWeaponType == ITEM_NONE // no weapon (tpose)
+				 || iWeaponType > ITEM_WEAPON_SSG08 // useless weapon/nade
+				 && iWeaponType < ITEM_WEAPON_M4A1S // useless weapon/nade
+				 || iWeaponType > ITEM_WEAPON_TACTICALAWARENESSGRENADE ); // knife model/gloves/other
 	}
 }
