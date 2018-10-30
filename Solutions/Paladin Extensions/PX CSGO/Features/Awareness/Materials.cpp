@@ -14,21 +14,14 @@ namespace PX::Features::Awareness
 	enum
 	{
 		MATERIAL_DEFAULT,
-		MATERIAL_DEFAULT_IGNOREZ,
-		MATERIAL_DEFAULT_FLAT,
-		MATERIAL_DEFAULT_FLAT_IGNOREZ,
+		MATERIAL_IGNOREZ,
+		MATERIAL_FLAT,
+		MATERIAL_FLAT_IGNOREZ,
 		MATERIAL_REFLECTIVE,
-		MATERIAL_REFLECTIVE_IGNOREZ,
-		MATERIAL_REFLECTIVE_FLAT,
-		MATERIAL_REFLECTIVE_FLAT_IGNOREZ,
-		MATERIAL_GLOW,
-		MATERIAL_GLOW_IGNOREZ,
-		MATERIAL_GLOW_FLAT,
-		MATERIAL_GLOW_FLAT_IGNOREZ,
+		//MATERIAL_GLOW,
 		MATERIAL_GLASS,
-		MATERIAL_GLASS_IGNOREZ,
-		MATERIAL_GLASS_FLAT,
-		MATERIAL_GLASS_FLAT_IGNOREZ,
+		MATERIAL_CRYSTAL,
+		MATERIAL_GOLD,
 		MATERIAL_MAX
 	};
 
@@ -36,7 +29,11 @@ namespace PX::Features::Awareness
 	{
 		std::string wstrData, wstrFileName;
 		IMaterial* pMaterial;
-		material_t( std::string w, std::string f ): wstrData( w ), wstrFileName( f ), pMaterial( nullptr )
+		bool bCreateFile;
+		material_t( std::string w, std::string f ): wstrData( w ), wstrFileName( f ), pMaterial( nullptr ), bCreateFile( true )
+		{ }
+
+		material_t( std::string f ): wstrFileName( f ), pMaterial( nullptr ), bCreateFile( false )
 		{ }
 	};
 
@@ -108,201 +105,11 @@ R"#("UnlitGeneric"
 
 		///
 
-		material_t( PX_XOR( // MATERIAL_REFLECTIVE
-R"#("VertexLitGeneric"
-{
-  "$basetexture" "models/player/ct_fbi/ct_fbi_glass"
-  "$ignorez"      "0"
-  "$envmap"       ""
-  "$nofog"        "1"
-  "$model"        "1"
-  "$nocull"       "0"
-  "$selfillum"    "1"
-  "$halflambert"  "1"
-  "$znearer"      "0"
-  "$flat"         "0"
-}
-)#" ), PX_XOR( "reflective" ) ),
-
-		material_t( PX_XOR( // MATERIAL_REFLECTIVE_IGNOREZ
-R"#("VertexLitGeneric"
-{
-  "$basetexture" "models/player/ct_fbi/ct_fbi_glass"
-  "$ignorez"      "1"
-  "$envmap"       ""
-  "$nofog"        "1"
-  "$model"        "1"
-  "$nocull"       "0"
-  "$selfillum"    "1"
-  "$halflambert"  "1"
-  "$znearer"      "0"
-  "$flat"         "0"
-}
-)#" ), PX_XOR( "reflective_ignorez" ) ),
-
-		material_t( PX_XOR( // MATERIAL_REFLECTIVE_FLAT
-R"#("UnlitGeneric"
-{
-  "$basetexture" "models/player/ct_fbi/ct_fbi_glass"
-  "$ignorez"      "0"
-  "$envmap"       ""
-  "$nofog"        "1"
-  "$model"        "1"
-  "$nocull"       "0"
-  "$selfillum"    "1"
-  "$halflambert"  "1"
-  "$znearer"      "0"
-  "$flat"         "1"
-}
-)#" ), PX_XOR( "reflective_flat" ) ),
-
-	material_t( PX_XOR( // MATERIAL_REFLECTIVE_FLAT_IGNOREZ
-R"#("UnlitGeneric"
-{
-  "$basetexture" "models/player/ct_fbi/ct_fbi_glass"
-  "$ignorez"      "1"
-  "$envmap"       ""
-  "$nofog"        "1"
-  "$model"        "1"
-  "$nocull"       "0"
-  "$selfillum"    "1"
-  "$halflambert"  "1"
-  "$znearer"      "0"
-  "$flat"         "1"
-}
-)#" ), PX_XOR( "reflective_flat_ignorez" ) ),
-
-		///
-
-		material_t( PX_XOR( // MATERIAL_GLOW
-		R"#("VertexLitGeneric"
-{
-  "$basetexture" "vgui/achievements/glow"
-  "$ignorez"      "0"
-  "$envmap"       ""
-  "$nofog"        "1"
-  "$model"        "1"
-  "$nocull"       "0"
-  "$selfillum"    "1"
-  "$halflambert"  "1"
-  "$znearer"      "0"
-  "$flat"         "0"
-}
-)#" ), PX_XOR( "glow" ) ),
-
-material_t( PX_XOR( // MATERIAL_GLOW_IGNOREZ
-R"#("VertexLitGeneric"
-{
-  "$basetexture" "vgui/achievements/glow"
-  "$ignorez"      "1"
-  "$envmap"       ""
-  "$nofog"        "1"
-  "$model"        "1"
-  "$nocull"       "0"
-  "$selfillum"    "1"
-  "$halflambert"  "1"
-  "$znearer"      "0"
-  "$flat"         "0"
-}
-)#" ), PX_XOR( "glow_ignorez" ) ),
-
-material_t( PX_XOR( // MATERIAL_GLOW_FLAT
-R"#("UnlitGeneric"
-{
-  "$basetexture" "vgui/achievements/glow"
-  "$ignorez"      "0"
-  "$envmap"       ""
-  "$nofog"        "1"
-  "$model"        "1"
-  "$nocull"       "0"
-  "$selfillum"    "1"
-  "$halflambert"  "1"
-  "$znearer"      "0"
-  "$flat"         "1"
-}
-)#" ), PX_XOR( "glow_flat" ) ),
-
-material_t( PX_XOR( // MATERIAL_GLOW_FLAT_IGNOREZ
-R"#("UnlitGeneric"
-{
-  "$basetexture" "vgui/achievements/glow"
-  "$ignorez"      "1"
-  "$envmap"       ""
-  "$nofog"        "1"
-  "$model"        "1"
-  "$nocull"       "0"
-  "$selfillum"    "1"
-  "$halflambert"  "1"
-  "$znearer"      "0"
-  "$flat"         "1"
-}
-)#" ), PX_XOR( "glow_flat_ignorez" ) ),
-
-		///
-
-			material_t( PX_XOR( // MATERIAL_GLASS
-R"#("VertexLitGeneric"
-{
-  "$basetexture" "models/inventory_items/cologne_prediction/cologne_prediction_glass"
-  "$ignorez"      "0"
-  "$envmap"       ""
-  "$nofog"        "1"
-  "$model"        "1"
-  "$nocull"       "0"
-  "$selfillum"    "1"
-  "$halflambert"  "1"
-  "$znearer"      "0"
-  "$flat"         "0"
-}
-)#" ), PX_XOR( "glass" ) ),
-
-material_t( PX_XOR( // MATERIAL_GLASS_IGNOREZ
-					R"#("VertexLitGeneric"
-{
-  "$basetexture" "models/inventory_items/cologne_prediction/cologne_prediction_glass"
-  "$ignorez"      "1"
-  "$envmap"       ""
-  "$nofog"        "1"
-  "$model"        "1"
-  "$nocull"       "0"
-  "$selfillum"    "1"
-  "$halflambert"  "1"
-  "$znearer"      "0"
-  "$flat"         "0"
-}
-)#" ), PX_XOR( "glass_ignorez" ) ),
-
-material_t( PX_XOR( // MATERIAL_GLASS_FLAT
-					R"#("UnlitGeneric"
-{
-  "$basetexture" "models/inventory_items/cologne_prediction/cologne_prediction_glass"
-  "$ignorez"      "0"
-  "$envmap"       ""
-  "$nofog"        "1"
-  "$model"        "1"
-  "$nocull"       "0"
-  "$selfillum"    "1"
-  "$halflambert"  "1"
-  "$znearer"      "0"
-  "$flat"         "1"
-}
-)#" ), PX_XOR( "glass_flat" ) ),
-
-material_t( PX_XOR( // MATERIAL_GLASS_FLAT_IGNOREZ
-					R"#("UnlitGeneric"
-{
-  "$basetexture" "models/inventory_items/cologne_prediction/cologne_prediction_glass"
-  "$ignorez"      "1"
-  "$envmap"       ""
-  "$nofog"        "1"
-  "$model"        "1"
-  "$nocull"       "0"
-  "$selfillum"    "1"
-  "$halflambert"  "1"
-  "$znearer"      "0"
-  "$flat"         "1"
-}
-)#" ), PX_XOR( "glass_flat_ignorez" ) )
+		material_t( PX_XOR( R"(models/player/ct_fbi/ct_fbi_glass)" ) ),
+		//material_t( PX_XOR( R"(vgui/achievements/glow)" ) ),
+		material_t( PX_XOR( R"(models/inventory_items/cologne_prediction/cologne_prediction_glass)" ) ),
+		material_t( PX_XOR( R"(models/inventory_items/trophy_majors/crystal_clear)" ) ),
+		material_t( PX_XOR( R"(models/inventory_items/trophy_majors/gold)" ) )
 	};
 
 	std::vector< std::pair< int, Vector > > vecLocations { };
@@ -311,8 +118,9 @@ material_t( PX_XOR( // MATERIAL_GLASS_FLAT_IGNOREZ
 	{
 		for ( auto& material : matMaterials )
 		{
-			std::ofstream( PX_XOR( "csgo\\materials\\" ) + material.wstrFileName + PX_XOR( ".vmt" ) ) << material.wstrData;
-			if ( ( material.pMaterial = pMaterialSystem->FindMaterial( string_cast< str_t >( material.wstrFileName ).c_str( ), TEXTURE_GROUP_MODEL ) ) == nullptr )
+			if( material.bCreateFile )
+				std::ofstream( PX_XOR( "csgo\\materials\\" ) + material.wstrFileName + PX_XOR( ".vmt" ) ) << material.wstrData;
+			if ( ( material.pMaterial = pMaterialSystem->FindMaterial( string_cast< str_t >( material.wstrFileName ).c_str( ), material.bCreateFile ? TEXTURE_GROUP_MODEL : TEXTURE_GROUP_OTHER ) ) == nullptr )
 				return false;
 		}
 		return true;
@@ -527,13 +335,14 @@ material_t( PX_XOR( // MATERIAL_GLASS_FLAT_IGNOREZ
 
 	bool PX_API SetMaterial( IMatRenderContext* pContext, const DrawModelState_t& _State, const ModelRenderInfo_t& _Info, matrix3x4_t* pMatrix, draw_model_execute_t fnDrawModelExecute, entity_ptr_t pEntity, int iSettingIndex )
 	{
-		const auto fnDrawModel = [ & ]( int iMaterialSetting, bool bFlat, bool bWireFrame, bool bIgnoreZ, const color_t& clrVisible, const color_t& clrInvisible, bool bDrawForeground = true )
+		const auto fnDrawModel = [ & ]( int iMaterialSetting, bool bWireFrame, color_t clrVisible, const color_t& clrInvisible, bool bDrawForeground = true )
 		{
-			iMaterialSetting *= 4;
+			IMaterial* pForeground = nullptr;
 
-			if( bIgnoreZ )
+			if( iMaterialSetting == MATERIAL_IGNOREZ || iMaterialSetting == MATERIAL_FLAT_IGNOREZ )
 			{
-				const auto pCurrent = bFlat ? matMaterials[ iMaterialSetting + 3 ].pMaterial : matMaterials[ iMaterialSetting + 1 ].pMaterial;
+				const auto pCurrent = matMaterials[ iMaterialSetting ].pMaterial;
+				pForeground = matMaterials[ iMaterialSetting == MATERIAL_IGNOREZ ? MATERIAL_DEFAULT : MATERIAL_FLAT ].pMaterial;
 
 				pCurrent->SetMaterialVarFlag( MATERIAL_VAR_WIREFRAME, bWireFrame );
 				pCurrent->AlphaModulate( clrInvisible.afl );
@@ -544,12 +353,13 @@ material_t( PX_XOR( // MATERIAL_GLASS_FLAT_IGNOREZ
 
 			if ( bDrawForeground )
 			{
-				const auto pCurrent = bFlat ? matMaterials[ iMaterialSetting + 2 ].pMaterial : matMaterials[ iMaterialSetting ].pMaterial;
+				if ( !pForeground )
+					pForeground = matMaterials[ iMaterialSetting ].pMaterial;
 
-				pCurrent->SetMaterialVarFlag( MATERIAL_VAR_WIREFRAME, bWireFrame );
-				pCurrent->AlphaModulate( clrVisible.afl );
-				pCurrent->ColorModulate( clrVisible.rfl, clrVisible.gfl, clrVisible.bfl );
-				pModelRender->ForcedMaterialOverride( pCurrent );
+				pForeground->SetMaterialVarFlag( MATERIAL_VAR_WIREFRAME, bWireFrame );
+				pForeground->AlphaModulate( clrVisible.afl );
+				pForeground->ColorModulate( clrVisible.rfl, clrVisible.gfl, clrVisible.bfl );
+				pModelRender->ForcedMaterialOverride( pForeground );
 				fnDrawModelExecute( pModelRender, pContext, _State, _Info, pMatrix );
 			}
 			pModelRender->ForcedMaterialOverride( nullptr );
@@ -560,12 +370,12 @@ material_t( PX_XOR( // MATERIAL_GLASS_FLAT_IGNOREZ
 			return false;
 
 		if ( _Config.bWireFrameUnderlay.Get( ) )
-			fnDrawModel( _Config.iMaterial, _Config.bFlat.Get( ), true, true, _Config.seqWireFrameUnderlay[ STATE_VISIBLE ].GetCurrentColor( ), _Config.seqWireFrameUnderlay[ STATE_INVISIBLE ].GetCurrentColor( ), false );
+			fnDrawModel( MATERIAL_FLAT_IGNOREZ, true, _Config.seqWireFrameUnderlay[ STATE_VISIBLE ].GetCurrentColor( ), _Config.seqWireFrameUnderlay[ STATE_INVISIBLE ].GetCurrentColor( ), false );
 
-		fnDrawModel( _Config.iMaterial, _Config.bFlat.Get( ), _Config.bWireFrame.Get( ), _Config.bDrawAboveAll.Get( ), _Config.seqColor[ STATE_VISIBLE ].GetCurrentColor( ), _Config.seqColor[ STATE_INVISIBLE ].GetCurrentColor( ) );
+		fnDrawModel( _Config.iMaterial, _Config.bWireFrame.Get( ), _Config.seqColor[ STATE_VISIBLE ].GetCurrentColor( ), _Config.seqColor[ STATE_INVISIBLE ].GetCurrentColor( ) );
 
 		if( _Config.bWireFrameOverlay.Get( ) )
-			fnDrawModel( _Config.iMaterial, _Config.bFlat.Get( ), true, _Config.bDrawAboveAll.Get( ), _Config.seqWireFrameOverlay[ STATE_VISIBLE ].GetCurrentColor( ), _Config.seqWireFrameOverlay[ STATE_INVISIBLE ].GetCurrentColor( ) );
+			fnDrawModel( MATERIAL_FLAT_IGNOREZ, true, _Config.seqWireFrameOverlay[ STATE_VISIBLE ].GetCurrentColor( ), _Config.seqWireFrameOverlay[ STATE_INVISIBLE ].GetCurrentColor( ) );
 
 		return true;
 	}

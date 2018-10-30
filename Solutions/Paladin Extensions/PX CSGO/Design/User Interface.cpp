@@ -622,16 +622,8 @@ namespace PX::UI::Manager
 					}
 
 					{
-						BeginRow( 30, 9, ROW_STATIC );
+						BeginRow( 30, 3, ROW_STATIC );
 						SetRowWidth( 5 );
-						Spacing( );
-
-						Checkbox( PX_XOR( "Flat" ), &esdConfig._Entities[ uEntity ].bFlat, PX_XOR( "Make materials flat." ) );
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Flat" ), 30 ).x );
-						Spacing( );
-
-						Checkbox( PX_XOR( "Draw Above All" ), &esdConfig._Entities[ uEntity ].bDrawAboveAll, PX_XOR( "Draw the material above all others." ) );
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Draw Above All" ), 30 ).x );
 						Spacing( );
 
 						Checkbox( PX_XOR( "Wireframe" ), &esdConfig._Entities[ uEntity ].bWireFrame, PX_XOR( "Render the material with a wireframe texture." ) );
@@ -667,9 +659,14 @@ namespace PX::UI::Manager
 						std::deque< cstr_t > dqMaterials
 						{
 							PX_XOR( "Default" ),
+							PX_XOR( "Ignore Walls" ),
+							PX_XOR( "Flat" ),
+							PX_XOR( "Flat Ignore Walls" ),
 							PX_XOR( "Reflective" ),
-							PX_XOR( "Glow" ),
-							PX_XOR( "Glass" )
+							//PX_XOR( "Glow" ),
+							PX_XOR( "Glass" ),
+							PX_XOR( "Crystal" ),
+							PX_XOR( "Gold" )
 						};
 
 						BeginRow( 30, 2, ROW_STATIC );
