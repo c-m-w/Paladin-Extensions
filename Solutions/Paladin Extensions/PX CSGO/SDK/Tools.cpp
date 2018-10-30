@@ -430,7 +430,7 @@ namespace PX::Tools
 		static CGameTrace gtRay;
 
 		TransformAngle( m_angEyeAngles( ), vecEnd );
-		vecEnd *= 8192;
+		vecEnd *= 8192.f;
 		vecEnd += GetViewPosition( );
 		tfFilter.pSkip = this;
 		rRay.Init( GetViewPosition( ), vecEnd );

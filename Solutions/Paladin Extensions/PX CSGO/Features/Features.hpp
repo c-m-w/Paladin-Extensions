@@ -94,7 +94,12 @@ namespace PX::Features
 		SETTING_MATERIALS_PROJECTILE_SMOKE,
 		SETTING_MATERIALS_PROJECTILE_DECOY,
 		SETTING_MATERIALS_PROJECTILE_INCENDIARY,
-		SETTING_MATERIALS_MAX
+		SETTING_MATERIALS_MAX,
+		SETTING_MATERIALS_MATERIAL_DEFAULT = 0,
+		SETTING_MATERIALS_MATERIAL_REFLECTIVE,
+		SETTING_MATERIALS_MATERIAL_GLOW,
+		SETTING_MATERIALS_MATERIAL_GLASS,
+		SETTING_MATERIALS_MATERIAL_MAX
 	};
 
 	struct settings_t
@@ -274,6 +279,7 @@ namespace PX::Features
 					toggle_t bWireFrame = false;
 					toggle_t bWireFrameOverlay = false;
 					toggle_t bWireFrameUnderlay = false;
+					int iMaterial = SETTING_MATERIALS_MATERIAL_DEFAULT;
 
 					color_sequence_t seqColor[ STATE_MAX ] { }; 
 					color_sequence_t seqWireFrameOverlay[ STATE_MAX ] { };

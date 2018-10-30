@@ -14,9 +14,21 @@ namespace PX::Features::Awareness
 	enum
 	{
 		MATERIAL_DEFAULT,
-		MATERIAL_IGNOREZ,
-		MATERIAL_FLAT,
-		MATERIAL_FLAT_IGNOREZ,
+		MATERIAL_DEFAULT_IGNOREZ,
+		MATERIAL_DEFAULT_FLAT,
+		MATERIAL_DEFAULT_FLAT_IGNOREZ,
+		MATERIAL_REFLECTIVE,
+		MATERIAL_REFLECTIVE_IGNOREZ,
+		MATERIAL_REFLECTIVE_FLAT,
+		MATERIAL_REFLECTIVE_FLAT_IGNOREZ,
+		MATERIAL_GLOW,
+		MATERIAL_GLOW_IGNOREZ,
+		MATERIAL_GLOW_FLAT,
+		MATERIAL_GLOW_FLAT_IGNOREZ,
+		MATERIAL_GLASS,
+		MATERIAL_GLASS_IGNOREZ,
+		MATERIAL_GLASS_FLAT,
+		MATERIAL_GLASS_FLAT_IGNOREZ,
 		MATERIAL_MAX
 	};
 
@@ -30,7 +42,7 @@ namespace PX::Features::Awareness
 
 	material_t matMaterials[ MATERIAL_MAX ]
 	{
-		material_t( PX_XOR(
+		material_t( PX_XOR( // MATERIAL_DEFAULT
 R"#("VertexLitGeneric"
 {
   "$basetexture" "vgui/white_additive"
@@ -46,7 +58,7 @@ R"#("VertexLitGeneric"
 }
 )#" ), PX_XOR( "default" ) ),
 
-		material_t( PX_XOR(
+		material_t( PX_XOR( // MATERIAL_DEFAULT_IGNOREZ
 R"#("VertexLitGeneric"
 {
   "$basetexture" "vgui/white_additive"
@@ -60,9 +72,9 @@ R"#("VertexLitGeneric"
   "$znearer"      "0"
   "$flat"         "1"
 }
-)#" ), PX_XOR( "ignorez" ) ),
+)#" ), PX_XOR( "default_ignorez" ) ),
 
-		material_t( PX_XOR(
+		material_t( PX_XOR( // MATERIAL_DEFAULT_FLAT
 R"#("UnlitGeneric"
 {
   "$basetexture" "vgui/white_additive"
@@ -76,9 +88,9 @@ R"#("UnlitGeneric"
   "$znearer"      "0"
   "$flat"         "1"
 }
-)#" ), PX_XOR( "flat" ) ),
+)#" ), PX_XOR( "default_flat" ) ),
 
-		material_t( PX_XOR(
+		material_t( PX_XOR( // MATERIAL_DEFAULT_FLAT_IGNOREZ
 R"#("UnlitGeneric"
 {
   "$basetexture" "vgui/white_additive"
@@ -92,7 +104,205 @@ R"#("UnlitGeneric"
   "$znearer"      "0"
   "$flat"         "1"
 }
-)#" ), PX_XOR( "flat_ignorez" ) )
+)#" ), PX_XOR( "default_flat_ignorez" ) ),
+
+		///
+
+		material_t( PX_XOR( // MATERIAL_REFLECTIVE
+R"#("VertexLitGeneric"
+{
+  "$basetexture" "models/player/ct_fbi/ct_fbi_glass"
+  "$ignorez"      "0"
+  "$envmap"       ""
+  "$nofog"        "1"
+  "$model"        "1"
+  "$nocull"       "0"
+  "$selfillum"    "1"
+  "$halflambert"  "1"
+  "$znearer"      "0"
+  "$flat"         "0"
+}
+)#" ), PX_XOR( "reflective" ) ),
+
+		material_t( PX_XOR( // MATERIAL_REFLECTIVE_IGNOREZ
+R"#("VertexLitGeneric"
+{
+  "$basetexture" "models/player/ct_fbi/ct_fbi_glass"
+  "$ignorez"      "1"
+  "$envmap"       ""
+  "$nofog"        "1"
+  "$model"        "1"
+  "$nocull"       "0"
+  "$selfillum"    "1"
+  "$halflambert"  "1"
+  "$znearer"      "0"
+  "$flat"         "0"
+}
+)#" ), PX_XOR( "reflective_ignorez" ) ),
+
+		material_t( PX_XOR( // MATERIAL_REFLECTIVE_FLAT
+R"#("UnlitGeneric"
+{
+  "$basetexture" "models/player/ct_fbi/ct_fbi_glass"
+  "$ignorez"      "0"
+  "$envmap"       ""
+  "$nofog"        "1"
+  "$model"        "1"
+  "$nocull"       "0"
+  "$selfillum"    "1"
+  "$halflambert"  "1"
+  "$znearer"      "0"
+  "$flat"         "1"
+}
+)#" ), PX_XOR( "reflective_flat" ) ),
+
+	material_t( PX_XOR( // MATERIAL_REFLECTIVE_FLAT_IGNOREZ
+R"#("UnlitGeneric"
+{
+  "$basetexture" "models/player/ct_fbi/ct_fbi_glass"
+  "$ignorez"      "1"
+  "$envmap"       ""
+  "$nofog"        "1"
+  "$model"        "1"
+  "$nocull"       "0"
+  "$selfillum"    "1"
+  "$halflambert"  "1"
+  "$znearer"      "0"
+  "$flat"         "1"
+}
+)#" ), PX_XOR( "reflective_flat_ignorez" ) ),
+
+		///
+
+		material_t( PX_XOR( // MATERIAL_GLOW
+		R"#("VertexLitGeneric"
+{
+  "$basetexture" "vgui/achievements/glow"
+  "$ignorez"      "0"
+  "$envmap"       ""
+  "$nofog"        "1"
+  "$model"        "1"
+  "$nocull"       "0"
+  "$selfillum"    "1"
+  "$halflambert"  "1"
+  "$znearer"      "0"
+  "$flat"         "0"
+}
+)#" ), PX_XOR( "glow" ) ),
+
+material_t( PX_XOR( // MATERIAL_GLOW_IGNOREZ
+R"#("VertexLitGeneric"
+{
+  "$basetexture" "vgui/achievements/glow"
+  "$ignorez"      "1"
+  "$envmap"       ""
+  "$nofog"        "1"
+  "$model"        "1"
+  "$nocull"       "0"
+  "$selfillum"    "1"
+  "$halflambert"  "1"
+  "$znearer"      "0"
+  "$flat"         "0"
+}
+)#" ), PX_XOR( "glow_ignorez" ) ),
+
+material_t( PX_XOR( // MATERIAL_GLOW_FLAT
+R"#("UnlitGeneric"
+{
+  "$basetexture" "vgui/achievements/glow"
+  "$ignorez"      "0"
+  "$envmap"       ""
+  "$nofog"        "1"
+  "$model"        "1"
+  "$nocull"       "0"
+  "$selfillum"    "1"
+  "$halflambert"  "1"
+  "$znearer"      "0"
+  "$flat"         "1"
+}
+)#" ), PX_XOR( "glow_flat" ) ),
+
+material_t( PX_XOR( // MATERIAL_GLOW_FLAT_IGNOREZ
+R"#("UnlitGeneric"
+{
+  "$basetexture" "vgui/achievements/glow"
+  "$ignorez"      "1"
+  "$envmap"       ""
+  "$nofog"        "1"
+  "$model"        "1"
+  "$nocull"       "0"
+  "$selfillum"    "1"
+  "$halflambert"  "1"
+  "$znearer"      "0"
+  "$flat"         "1"
+}
+)#" ), PX_XOR( "glow_flat_ignorez" ) ),
+
+		///
+
+			material_t( PX_XOR( // MATERIAL_GLASS
+R"#("VertexLitGeneric"
+{
+  "$basetexture" "models/inventory_items/cologne_prediction/cologne_prediction_glass"
+  "$ignorez"      "0"
+  "$envmap"       ""
+  "$nofog"        "1"
+  "$model"        "1"
+  "$nocull"       "0"
+  "$selfillum"    "1"
+  "$halflambert"  "1"
+  "$znearer"      "0"
+  "$flat"         "0"
+}
+)#" ), PX_XOR( "glass" ) ),
+
+material_t( PX_XOR( // MATERIAL_GLASS_IGNOREZ
+					R"#("VertexLitGeneric"
+{
+  "$basetexture" "models/inventory_items/cologne_prediction/cologne_prediction_glass"
+  "$ignorez"      "1"
+  "$envmap"       ""
+  "$nofog"        "1"
+  "$model"        "1"
+  "$nocull"       "0"
+  "$selfillum"    "1"
+  "$halflambert"  "1"
+  "$znearer"      "0"
+  "$flat"         "0"
+}
+)#" ), PX_XOR( "glass_ignorez" ) ),
+
+material_t( PX_XOR( // MATERIAL_GLASS_FLAT
+					R"#("UnlitGeneric"
+{
+  "$basetexture" "models/inventory_items/cologne_prediction/cologne_prediction_glass"
+  "$ignorez"      "0"
+  "$envmap"       ""
+  "$nofog"        "1"
+  "$model"        "1"
+  "$nocull"       "0"
+  "$selfillum"    "1"
+  "$halflambert"  "1"
+  "$znearer"      "0"
+  "$flat"         "1"
+}
+)#" ), PX_XOR( "glass_flat" ) ),
+
+material_t( PX_XOR( // MATERIAL_GLASS_FLAT_IGNOREZ
+					R"#("UnlitGeneric"
+{
+  "$basetexture" "models/inventory_items/cologne_prediction/cologne_prediction_glass"
+  "$ignorez"      "1"
+  "$envmap"       ""
+  "$nofog"        "1"
+  "$model"        "1"
+  "$nocull"       "0"
+  "$selfillum"    "1"
+  "$halflambert"  "1"
+  "$znearer"      "0"
+  "$flat"         "1"
+}
+)#" ), PX_XOR( "glass_flat_ignorez" ) )
 	};
 
 	std::vector< std::pair< int, Vector > > vecLocations { };
@@ -317,11 +527,13 @@ R"#("UnlitGeneric"
 
 	bool PX_API SetMaterial( IMatRenderContext* pContext, const DrawModelState_t& _State, const ModelRenderInfo_t& _Info, matrix3x4_t* pMatrix, draw_model_execute_t fnDrawModelExecute, entity_ptr_t pEntity, int iSettingIndex )
 	{
-		const auto fnDrawModel = [ & ]( bool bFlat, bool bWireFrame, bool bIgnoreZ, const color_t& clrVisible, const color_t& clrInvisible, bool bDrawForeground = true )
+		const auto fnDrawModel = [ & ]( int iMaterialSetting, bool bFlat, bool bWireFrame, bool bIgnoreZ, const color_t& clrVisible, const color_t& clrInvisible, bool bDrawForeground = true )
 		{
+			iMaterialSetting *= 4;
+
 			if( bIgnoreZ )
 			{
-				const auto pCurrent = bFlat ? matMaterials[ MATERIAL_FLAT_IGNOREZ ].pMaterial : matMaterials[ MATERIAL_IGNOREZ ].pMaterial;
+				const auto pCurrent = bFlat ? matMaterials[ iMaterialSetting + 3 ].pMaterial : matMaterials[ iMaterialSetting + 1 ].pMaterial;
 
 				pCurrent->SetMaterialVarFlag( MATERIAL_VAR_WIREFRAME, bWireFrame );
 				pCurrent->AlphaModulate( clrInvisible.afl );
@@ -332,7 +544,7 @@ R"#("UnlitGeneric"
 
 			if ( bDrawForeground )
 			{
-				const auto pCurrent = bFlat ? matMaterials[ MATERIAL_FLAT ].pMaterial : matMaterials[ MATERIAL_DEFAULT ].pMaterial;
+				const auto pCurrent = bFlat ? matMaterials[ iMaterialSetting + 2 ].pMaterial : matMaterials[ iMaterialSetting ].pMaterial;
 
 				pCurrent->SetMaterialVarFlag( MATERIAL_VAR_WIREFRAME, bWireFrame );
 				pCurrent->AlphaModulate( clrVisible.afl );
@@ -348,12 +560,12 @@ R"#("UnlitGeneric"
 			return false;
 
 		if ( _Config.bWireFrameUnderlay.Get( ) )
-			fnDrawModel( _Config.bFlat.Get( ), true, true, _Config.seqWireFrameUnderlay[ STATE_VISIBLE ].GetCurrentColor( ), _Config.seqWireFrameUnderlay[ STATE_INVISIBLE ].GetCurrentColor( ), false );
+			fnDrawModel( _Config.iMaterial, _Config.bFlat.Get( ), true, true, _Config.seqWireFrameUnderlay[ STATE_VISIBLE ].GetCurrentColor( ), _Config.seqWireFrameUnderlay[ STATE_INVISIBLE ].GetCurrentColor( ), false );
 
-		fnDrawModel( _Config.bFlat.Get( ), _Config.bWireFrame.Get( ), _Config.bDrawAboveAll.Get( ), _Config.seqColor[ STATE_VISIBLE ].GetCurrentColor( ), _Config.seqColor[ STATE_INVISIBLE ].GetCurrentColor( ) );
+		fnDrawModel( _Config.iMaterial, _Config.bFlat.Get( ), _Config.bWireFrame.Get( ), _Config.bDrawAboveAll.Get( ), _Config.seqColor[ STATE_VISIBLE ].GetCurrentColor( ), _Config.seqColor[ STATE_INVISIBLE ].GetCurrentColor( ) );
 
 		if( _Config.bWireFrameOverlay.Get( ) )
-			fnDrawModel( _Config.bFlat.Get( ), true, _Config.bDrawAboveAll.Get( ), _Config.seqWireFrameOverlay[ STATE_VISIBLE ].GetCurrentColor( ), _Config.seqWireFrameOverlay[ STATE_INVISIBLE ].GetCurrentColor( ) );
+			fnDrawModel( _Config.iMaterial, _Config.bFlat.Get( ), true, _Config.bDrawAboveAll.Get( ), _Config.seqWireFrameOverlay[ STATE_VISIBLE ].GetCurrentColor( ), _Config.seqWireFrameOverlay[ STATE_INVISIBLE ].GetCurrentColor( ) );
 
 		return true;
 	}

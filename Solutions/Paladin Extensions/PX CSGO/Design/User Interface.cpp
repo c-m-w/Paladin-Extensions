@@ -550,7 +550,7 @@ namespace PX::UI::Manager
 			{
 				auto& esdConfig = _Settings._Awareness._Materials;
 
-				if ( BeginGroupbox( 200, 150, 500, 220, PX_XOR( "Players" ) ) )
+				if ( BeginGroupbox( 200, 150, 500, 220, PX_XOR( "Entities" ) ) )
 				{
 					static auto uEntity = 0u;
 					{
@@ -659,6 +659,25 @@ namespace PX::UI::Manager
 						ColorButton( PX_XOR( "Wireframe Overlay Visible" ), &esdConfig._Entities[ uEntity ].seqWireFrameUnderlay[ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
 						ColorButton( PX_XOR( "Wireframe Overlay Invisible" ), &esdConfig._Entities[ uEntity ].seqWireFrameUnderlay[ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
 						ColorButton( PX_XOR( "Wireframe Overlay Dormant" ), &esdConfig._Entities[ uEntity ].seqWireFrameUnderlay[ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
+
+						EndRow( );
+					}
+
+					{
+						std::deque< cstr_t > dqMaterials
+						{
+							PX_XOR( "Default" ),
+							PX_XOR( "Reflective" ),
+							PX_XOR( "Glow" ),
+							PX_XOR( "Glass" )
+						};
+
+						BeginRow( 30, 2, ROW_STATIC );
+						SetRowWidth( 10 );
+						Spacing( );
+
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH );
+						fnSetValue( esdConfig._Entities[ uEntity ].iMaterial, Combobox( 30, PX_XOR( "Material" ), dqMaterials, esdConfig._Entities[ uEntity ].iMaterial ) );
 
 						EndRow( );
 					}
