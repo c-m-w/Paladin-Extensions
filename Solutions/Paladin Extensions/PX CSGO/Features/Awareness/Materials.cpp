@@ -27,13 +27,13 @@ namespace PX::Features::Awareness
 
 	struct material_t
 	{
-		std::string wstrData, wstrFileName;
+		std::string wstrData, wstrFileName, strTextureGroup;
 		IMaterial* pMaterial;
 		bool bCreateFile;
-		material_t( std::string w, std::string f ): wstrData( w ), wstrFileName( f ), pMaterial( nullptr ), bCreateFile( true )
+		material_t( std::string w, std::string f, std::string g ): wstrData( w ), wstrFileName( f ), strTextureGroup( g ), pMaterial( nullptr ), bCreateFile( true )
 		{ }
 
-		material_t( std::string f ): wstrFileName( f ), pMaterial( nullptr ), bCreateFile( false )
+		material_t( std::string f, std::string g ): wstrFileName( f ), strTextureGroup( g ), pMaterial( nullptr ), bCreateFile( false )
 		{ }
 	};
 
@@ -53,7 +53,7 @@ R"#("VertexLitGeneric"
   "$znearer"      "0"
   "$flat"         "1"
 }
-)#" ), PX_XOR( "default" ) ),
+)#" ), PX_XOR( "default" ), TEXTURE_GROUP_MODEL ),
 
 		material_t( PX_XOR( // MATERIAL_DEFAULT_IGNOREZ
 R"#("VertexLitGeneric"
@@ -69,7 +69,7 @@ R"#("VertexLitGeneric"
   "$znearer"      "0"
   "$flat"         "1"
 }
-)#" ), PX_XOR( "default_ignorez" ) ),
+)#" ), PX_XOR( "default_ignorez" ), TEXTURE_GROUP_MODEL ),
 
 		material_t( PX_XOR( // MATERIAL_DEFAULT_FLAT
 R"#("UnlitGeneric"
@@ -85,7 +85,7 @@ R"#("UnlitGeneric"
   "$znearer"      "0"
   "$flat"         "1"
 }
-)#" ), PX_XOR( "default_flat" ) ),
+)#" ), PX_XOR( "default_flat" ), TEXTURE_GROUP_MODEL ),
 
 		material_t( PX_XOR( // MATERIAL_DEFAULT_FLAT_IGNOREZ
 R"#("UnlitGeneric"
@@ -101,15 +101,15 @@ R"#("UnlitGeneric"
   "$znearer"      "0"
   "$flat"         "1"
 }
-)#" ), PX_XOR( "default_flat_ignorez" ) ),
+)#" ), PX_XOR( "default_flat_ignorez" ), TEXTURE_GROUP_MODEL ),
 
 		///
 
-		material_t( PX_XOR( R"(models/player/ct_fbi/ct_fbi_glass)" ) ),
-		//material_t( PX_XOR( R"(vgui/achievements/glow)" ) ),
-		material_t( PX_XOR( R"(models/inventory_items/cologne_prediction/cologne_prediction_glass)" ) ),
-		material_t( PX_XOR( R"(models/inventory_items/trophy_majors/crystal_clear)" ) ),
-		material_t( PX_XOR( R"(models/inventory_items/trophy_majors/gold)" ) )
+		material_t( PX_XOR( R"(models/player/ct_fbi/ct_fbi_glass)" ), TEXTURE_GROUP_OTHER ),
+		//material_t( PX_XOR( R"(vgui/achievements/glow)" ), "" ),
+		material_t( PX_XOR( R"(models/inventory_items/cologne_prediction/cologne_prediction_glass)" ), TEXTURE_GROUP_OTHER ),
+		material_t( PX_XOR( R"(models/inventory_items/trophy_majors/crystal_clear)" ), TEXTURE_GROUP_OTHER ),
+		material_t( PX_XOR( R"(models/inventory_items/trophy_majors/gold)" ), TEXTURE_GROUP_OTHER )
 	};
 
 	std::vector< std::pair< int, Vector > > vecLocations { };
@@ -120,7 +120,7 @@ R"#("UnlitGeneric"
 		{
 			if( material.bCreateFile )
 				std::ofstream( PX_XOR( "csgo\\materials\\" ) + material.wstrFileName + PX_XOR( ".vmt" ) ) << material.wstrData;
-			if ( ( material.pMaterial = pMaterialSystem->FindMaterial( string_cast< str_t >( material.wstrFileName ).c_str( ), material.bCreateFile ? TEXTURE_GROUP_MODEL : TEXTURE_GROUP_OTHER ) ) == nullptr )
+			if ( ( material.pMaterial = pMaterialSystem->FindMaterial( material.wstrFileName.empty( ) ? nullptr : material.wstrFileName.c_str( ), material.bCreateFile ? TEXTURE_GROUP_MODEL : TEXTURE_GROUP_OTHER ) ) == nullptr )
 				return false;
 		}
 		return true;
