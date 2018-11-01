@@ -154,6 +154,21 @@ namespace PX
 		void __stdcall FrameStageNotify( ClientFrameStage_t cfsStage )
 		{
 			static auto fnOriginal = hkClientBase->GetOriginalFunction< frame_stage_notify_t >( uFrameStageNotify );
+
+			{
+				switch( cfsStage )
+				{
+					case FRAME_NET_UPDATE_POSTDATAUPDATE_END:
+					{
+						Features::Miscellaneous::DarkenWorld( );
+					}
+					break;
+
+					default:
+					break;
+				}
+			}
+
 			return fnOriginal( cfsStage );
 		}
 
@@ -246,7 +261,6 @@ namespace PX
 
 			{
 				Features::Awareness::SetEntityLocations( );
-				Features::Miscellaneous::DarkenWorld( );
 			}
 
 			fnOriginal( pEngineRenderView );

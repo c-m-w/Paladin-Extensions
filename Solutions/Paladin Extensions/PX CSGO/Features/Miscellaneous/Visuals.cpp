@@ -36,10 +36,13 @@ namespace PX::Features::Miscellaneous
 		}
 
 		bModifiedMaterials = !bModifiedMaterials;
+		const static auto pInvalidMaterial = reinterpret_cast< MaterialHandle_t( __thiscall* )( IMaterialSystem* ) >( ( *reinterpret_cast< void*** >( pMaterialSystem ) )[ 88 ] )( pMaterialSystem );
 
-		for ( auto m = pMaterialSystem->FirstMaterial(  ); m != pMaterialSystem->InvalidMaterial(  ); m = pMaterialSystem->NextMaterial( m ) )
+		for ( auto m = reinterpret_cast< MaterialHandle_t( __thiscall* )( IMaterialSystem* ) >( ( *reinterpret_cast< void*** >( pMaterialSystem ) )[ 86 ] )( pMaterialSystem );
+			  m != pInvalidMaterial; 
+			  m = reinterpret_cast< MaterialHandle_t( __thiscall* )( IMaterialSystem*, MaterialHandle_t ) >( ( *reinterpret_cast< void*** >( pMaterialSystem ) )[ 87 ] )( pMaterialSystem, m ) )
 		{
-			const auto pMaterial = pMaterialSystem->GetMaterial( m );
+			const auto pMaterial = reinterpret_cast< IMaterial*( __thiscall* )( IMaterialSystem*, MaterialHandle_t ) >( ( *reinterpret_cast< void*** >( pMaterialSystem ) )[ 89 ] )( pMaterialSystem, m );
 			if ( pMaterial == nullptr
 				 || pMaterial->IsErrorMaterial( ) )
 				continue;
