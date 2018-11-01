@@ -17,6 +17,7 @@
 #include "Features/Awareness/Materials.hpp"
 #include "Features/Combat/Trigger.hpp"
 #include "Features/Miscellaneous/Movement.hpp"
+#include "Features/Miscellaneous/Visuals.hpp"
 
 #include "Application/Hooks.hpp"
 

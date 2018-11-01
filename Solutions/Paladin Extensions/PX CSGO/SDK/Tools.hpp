@@ -4,6 +4,9 @@
 
 using namespace PX::Information::NetworkedVariableManager;
 using namespace PX::Types;
+using namespace PX::Information::Pointers;
+
+// SDK functions
 
 inline IHandleEntity* CBaseHandle::Get( ) const
 {

@@ -11,6 +11,7 @@
 #include "checksum_md5.hpp"
 #include "ClientClass.hpp"
 #include "Color.hpp"
+#include "ConVar.hpp"
 #include "CUserCmd.hpp"
 #include "Enumerations.hpp"
 #include "GlowOutlineEffect.hpp"

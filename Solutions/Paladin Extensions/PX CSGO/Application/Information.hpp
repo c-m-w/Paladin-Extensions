@@ -76,6 +76,7 @@ namespace PX::Information
 		PX_SDK SModule mVGUI2;
 		PX_SDK SModule mInput;
 		PX_SDK SModule mMaterialSystem;
+		PX_SDK SModule mValveStandardLibrary;
 	}
 
 	namespace Pointers
@@ -101,6 +102,7 @@ namespace PX::Information
 		PX_SDK IVModelRender* pModelRender = nullptr;
 		PX_SDK IMaterialSystem* pMaterialSystem = nullptr;
 		PX_SDK IVRenderView* pEngineRenderView = nullptr;
+		PX_SDK ICvar* pConVar = nullptr;
 	}
 
 	namespace NetworkedVariableManager // http://www.bailopan.net/table_dump.txt

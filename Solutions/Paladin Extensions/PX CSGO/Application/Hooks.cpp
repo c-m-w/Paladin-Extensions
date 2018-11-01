@@ -246,6 +246,7 @@ namespace PX
 
 			{
 				Features::Awareness::SetEntityLocations( );
+				Features::Miscellaneous::DarkenWorld( );
 			}
 
 			fnOriginal( pEngineRenderView );

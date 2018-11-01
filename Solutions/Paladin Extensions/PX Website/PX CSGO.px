@@ -7,7 +7,8 @@
 		"VGUI":  "vguimatsurface.dll",
 		"VGUI2": "vgui2.dll",
 		"Input": "inputsystem.dll",
-		"Material System": "materialsystem.dll"
+		"Material System": "materialsystem.dll",
+		"Valve Standard Library": "vstdlib.dll"
     },
     "Patterns": {
         "Offsets": {
@@ -54,6 +55,7 @@
 		"Input": "InputSystemVersion001",
 		"Model Render": "VEngineModel016",
 		"Material System": "VMaterialSystem080",
-		"Engine Render View": "VEngineRenderView014"
+		"Engine Render View": "VEngineRenderView014",
+		"CVar": "VEngineCvar007"
   }
 }

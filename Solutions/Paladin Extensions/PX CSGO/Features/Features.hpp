@@ -318,6 +318,11 @@ namespace PX::Features
 				toggle_t bAutoJump = false;
 				toggle_t bEdgeJump = false;
 			} _Movement;
+
+			struct visuals_t
+			{
+				toggle_t bDarkenWorld = false;
+			} _Visuals;
 		} _Miscellaneous;
 	} PX_SDK _Settings;
 

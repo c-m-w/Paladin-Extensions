@@ -110,6 +110,7 @@
     <ClCompile Include="Features\Combat\Trigger.cpp" />
     <ClCompile Include="Features\Features.cpp" />
     <ClCompile Include="Features\Miscellaneous\Movement.cpp" />
+    <ClCompile Include="Features\Miscellaneous\Visuals.cpp" />
     <ClCompile Include="PX CSGO.cpp" />
     <ClCompile Include="SDK\Tools.cpp" />
     <ClCompile Include="SDK\Types.cpp" />
@@ -141,6 +142,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="SDK\Valve\Types\ConVar.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Use</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="SDK\Valve\Types\UtlBuffer.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
@@ -162,6 +166,7 @@
     <ClInclude Include="Features\Combat\Trigger.hpp" />
     <ClInclude Include="Features\Features.hpp" />
     <ClInclude Include="Features\Miscellaneous\Movement.hpp" />
+    <ClInclude Include="Features\Miscellaneous\Visuals.hpp" />
     <ClInclude Include="PX CSGO.hpp" />
     <ClInclude Include="SDK\Definitions.hpp" />
     <ClInclude Include="SDK\SDK.hpp" />
@@ -180,6 +185,8 @@
     <ClInclude Include="SDK\Valve\Interfaces\IClientThinkable.hpp" />
     <ClInclude Include="SDK\Valve\Interfaces\IClientUnknown.hpp" />
     <ClInclude Include="SDK\Valve\Interfaces\ICollideable.hpp" />
+    <ClInclude Include="SDK\Valve\Interfaces\IConVar.hpp" />
+    <ClInclude Include="SDK\Valve\Interfaces\ICVar.hpp" />
     <ClInclude Include="SDK\Valve\Interfaces\IEngineTrace.hpp" />
     <ClInclude Include="SDK\Valve\Interfaces\IInputSystem.hpp" />
     <ClInclude Include="SDK\Valve\Interfaces\IMaterialSystem.hpp" />
@@ -205,6 +212,7 @@
     <ClInclude Include="SDK\Valve\Types\checksum_md5.hpp" />
     <ClInclude Include="SDK\Valve\Types\ClientClass.hpp" />
     <ClInclude Include="SDK\Valve\Types\Color.hpp" />
+    <ClInclude Include="SDK\Valve\Types\ConVar.hpp" />
     <ClInclude Include="SDK\Valve\Types\CUserCmd.hpp" />
     <ClInclude Include="SDK\Valve\Types\Enumerations.hpp" />
     <ClInclude Include="SDK\Valve\Types\GlowOutlineEffect.hpp" />

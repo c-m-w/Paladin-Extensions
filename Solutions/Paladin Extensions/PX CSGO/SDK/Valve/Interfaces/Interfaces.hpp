@@ -15,6 +15,8 @@
 #include "IClientThinkable.hpp"
 #include "IClientUnknown.hpp"
 #include "ICollideable.hpp"
+#include "IConVar.hpp"
+#include "ICVar.hpp"
 #include "IEngineTrace.hpp"
 #include "IInputSystem.hpp"
 #include "IMaterialSystem.hpp"
