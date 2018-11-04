@@ -1015,7 +1015,7 @@ namespace PX::UI::Manager
 						Spacing( );
 
 						SetRowWidth( GROUPBOX_COLUMN_WIDTH );
-						TabbedComboboxMulti( 30, PX_XOR( "Hitgroups" ), dqHitboxTabs, dqHitboxText, dqHitboxes, uCurrentTab );
+						TabbedComboboxMulti( 30, PX_XOR( "Hitboxes" ), dqHitboxTabs, dqHitboxText, dqHitboxes, uCurrentTab );
 
 						SetRowWidth( 5 );
 						Spacing( );

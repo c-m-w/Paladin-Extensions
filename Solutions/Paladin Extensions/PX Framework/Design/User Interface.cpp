@@ -1757,7 +1757,7 @@ namespace PX::UI
 						nk_spacing( pContext, 1 );
 						continue;
 					}
-					nk_layout_space_push( pContext, nk_rect( y == 0 ? 0.f : 5.f, y, recComboboxWindowBounds.w, uButtonHeight ) );
+					nk_layout_space_push( pContext, nk_rect( 0.f, y, recComboboxWindowBounds.w, uButtonHeight ) );
 					if ( nk_button_label_styled( pContext, *dqEnabledOptions.at( i ) ? &btnComboActive : &btnCombo, dqOptions.at( i ) ) )
 						*dqEnabledOptions.at( i ) = !*dqEnabledOptions.at( i );
 					y += uButtonHeight;
