@@ -111,6 +111,7 @@ namespace PX::UI
 			pContext->style.button.border_color = nk_rgba( 34, 37, 41, 255 );
 
 			pContext->style.window.tooltip_border = 0.f;
+			pContext->style.window.background = clrHeader;
 
 			pContext->style.combo.label_active = nk_rgba( 255, 255, 255, 255 );
 			pContext->style.combo.label_hover = nk_rgba( 255, 255, 255, 255 );
@@ -944,13 +945,12 @@ namespace PX::UI
 			return bReturn;
 		}
 
-		void PX_API Separator( int iRed, int iGreen, int iBlue, unsigned uStartHeight, const links_t* pLinkList /*= nullptr*/, bool bUpperBorder /*= false*/ )
+		void PX_API Separator( int iRed, int iGreen, int iBlue, unsigned uStartHeight, const links_t* pLinkList /*= nullptr*/, bool bUpperBorder /*= false*/, float flHeight /*= 42.f*/ )
 		{
-			constexpr auto uSeparatorHeight = 42u;
 			constexpr struct nk_color clrBorderColor = { 85, 88, 94, 255 };
 			const auto pDrawBuffer = nk_window_get_canvas( pContext );
-			nk_fill_rect( pDrawBuffer, nk_rect( pContext->current->bounds.x, pContext->current->bounds.y + float( uStartHeight ), float( uNuklearWindowWidth ), float( uSeparatorHeight ) ), 0.f, nk_rgba( iRed, iGreen, iBlue, 255 ) );
-			nk_stroke_line( pDrawBuffer, pContext->current->bounds.x, pContext->current->bounds.y + float( uStartHeight + uSeparatorHeight - 1 ), pContext->current->bounds.x + float( pContext->current->bounds.w ), pContext->current->bounds.y + float( uStartHeight + uSeparatorHeight - 1 ), 0.5f, clrBorderColor );
+			nk_fill_rect( pDrawBuffer, nk_rect( pContext->current->bounds.x, pContext->current->bounds.y + float( uStartHeight ), pContext->current->bounds.w, flHeight ), 0.f, nk_rgba( iRed, iGreen, iBlue, 255 ) );
+			nk_stroke_line( pDrawBuffer, pContext->current->bounds.x, pContext->current->bounds.y + float( uStartHeight + flHeight - 1 ), pContext->current->bounds.x + float( pContext->current->bounds.w ), pContext->current->bounds.y + float( uStartHeight + flHeight - 1 ), 0.5f, clrBorderColor );
 
 			if ( bUpperBorder )
 				nk_stroke_line( pDrawBuffer, pContext->current->bounds.x, pContext->current->bounds.y + float( uStartHeight + 1 ), pContext->current->bounds.x + float( pContext->current->bounds.w ), pContext->current->bounds.y + float( uStartHeight + 1 ), 0.5f, clrBorderColor );
@@ -1630,20 +1630,27 @@ namespace PX::UI
 			{
 				bDrawComboboxArrow = true;
 				recComboboxWindowBounds = pContext->current->bounds;
+				nk_layout_space_begin( pContext, NK_STATIC, uButtonHeight, dqOptions.size( ) );
+				auto y = -1;
 				for ( unsigned i { }; i < dqOptions.size( ); i++ )
 				{
 					if ( !dqOptions.at( i ) )
+					{
+						nk_spacing( pContext, 1 );
 						continue;
+					}
 					if ( i == uSelectedOption )
 						pContext->style.contextual_button = btnComboActive;
 					else
 						pContext->style.contextual_button = btnCombo;
 
-					nk_layout_row_dynamic( pContext, float( uButtonHeight ), 1 );
+					nk_layout_space_push( pContext, nk_rect( i == 0 ? 0.f : 5.f, y, recComboboxWindowBounds.w, uButtonHeight ) );
 					if ( nk_combo_item_label( pContext, dqOptions.at( i ), NK_TEXT_LEFT ) )
 						iSelectedOption = i;
+					y += uButtonHeight;
 					HoverCheck( CURSOR_HAND );
 				}
+				nk_layout_space_end( pContext );
 				nk_combo_end( pContext );
 				bDrewCombo = true;
 				if( PopupActive( ) )
@@ -1693,15 +1700,18 @@ namespace PX::UI
 				nk_spacing( pContext, 1 );
 				nk_layout_row_push( pContext, float( iButtonWidth ) );
 				for ( auto u = 0u; u < dqTabs.size( ); u++ )
-					if ( Button( dqTabs.size( ) == 1 ? EPosition::NONE : ( u == 0 ? EPosition::LEFT : ( u == ( dqTabs.size( ) - 1 ) ? EPosition::RIGHT : EPosition::CENTER ) ), dqTabs[ u ], false, u == uTab ) )
+					if ( PrimaryTab( dqTabs[ u ], u == uTab ) )
 					{
 						dqCurrentItems = pItems[ ( uTab = u ) ];
 						uSelectedOption = fnGetTrueIndex( pItems, uTab, 0u );
 					}
 				iCurrentRowUsedColumns -= dqTabs.size( );
 				nk_layout_row_end( pContext );
+				Separator( 61, 65, 72, uButtonHeight - 2.f, nullptr, false, 6.f );
 				SetFont( FNT_TAHOMA );
 
+				nk_layout_space_begin( pContext, NK_STATIC, 30, dqCurrentItems.size( ) );
+				auto y = -1;
 				for ( unsigned i { }; i < dqCurrentItems.size( ); i++ )
 				{
 					if ( i == d )
@@ -1709,13 +1719,13 @@ namespace PX::UI
 					else
 						pContext->style.contextual_button = btnCombo;
 
-					nk_layout_row_dynamic( pContext, float( uButtonHeight ), 1 );
+					nk_layout_space_push( pContext, nk_rect( i == 0 ? 0.f : 5.f, y, recComboboxWindowBounds.w, uButtonHeight ) );
 					if ( nk_combo_item_label( pContext, dqCurrentItems.at( i ), NK_TEXT_LEFT ) )
-					{
 						uSelectedOption = fnGetTrueIndex( pItems, uTab, i );
-					}
+					y += uButtonHeight;
 					HoverCheck( CURSOR_HAND );
 				}
+				nk_layout_space_end( pContext );
 				nk_combo_end( pContext );
 				bDrewCombo = true;
 				if ( PopupActive( ) )
@@ -1731,22 +1741,93 @@ namespace PX::UI
 
 			auto bDrewCombo = false;
 			SetFont( FNT_TAHOMA );
-			auto recComboboxBounds = nk_widget_bounds( pContext );
+			const auto recComboboxBounds = nk_widget_bounds( pContext );
 
 			const auto pOutput = nk_window_get_canvas( pContext );
 			if ( nk_combo_begin_label( pContext, szTitle, nk_vec2( recComboboxBounds.w, float( uButtonHeight ) * dqOptions.size( ) + 5 * ( dqOptions.size( ) - 1 ) - 3 ) ) )
 			{
 				bDrawComboboxArrow = true;
 				recComboboxWindowBounds = pContext->current->bounds;
+				auto y = -1;
+				nk_layout_space_begin( pContext, NK_STATIC, uButtonHeight, dqOptions.size( ) );
 				for ( unsigned i { }; i < dqOptions.size( ); i++ )
 				{
 					if ( !dqOptions[ i ] )
+					{
+						nk_spacing( pContext, 1 );
 						continue;
-					nk_layout_row_dynamic( pContext, float( uButtonHeight ), 1 );
+					}
+					nk_layout_space_push( pContext, nk_rect( y == 0 ? 0.f : 5.f, y, recComboboxWindowBounds.w, uButtonHeight ) );
 					if ( nk_button_label_styled( pContext, *dqEnabledOptions.at( i ) ? &btnComboActive : &btnCombo, dqOptions.at( i ) ) )
 						*dqEnabledOptions.at( i ) = !*dqEnabledOptions.at( i );
+					y += uButtonHeight;
 					HoverCheck( CURSOR_HAND );
 				}
+				nk_layout_space_end( pContext );
+				nk_combo_end( pContext );
+				bDrewCombo = true;
+			}
+			HoverCheck( CURSOR_HAND );
+			nk_fill_triangle( pOutput, recComboboxBounds.x + recComboboxBounds.w - 10, recComboboxBounds.y + recComboboxBounds.h / 2 - 3, recComboboxBounds.x + recComboboxBounds.w - 14, recComboboxBounds.y + recComboboxBounds.h / 2 + 3, recComboboxBounds.x + recComboboxBounds.w - 18, recComboboxBounds.y + recComboboxBounds.h / 2 - 3, nk_input_is_mouse_prev_hovering_rect( &pContext->input, recComboboxBounds ) && !bDrewCombo ? clrTextActive : clrTextDormant );
+		}
+
+		void PX_API TabbedComboboxMulti( unsigned uButtonHeight, Types::cstr_t szTitle, const std::deque< Types::cstr_t >& dqTabs, const std::deque< Types::cstr_t >* pItems, std::deque< bool* >& dqEnabledOptions, unsigned& uCurrentTab )
+		{
+			const auto fnGetTrueIndex = [ ]( const std::deque< cstr_t >* pTabs, unsigned uCurrentTab, unsigned uIndex )
+			{
+				auto uReturn = 0u;
+				for ( auto u = 0u; u < uCurrentTab; u++ )
+					uReturn += pTabs[ u ].size( );
+				return uReturn + uIndex;
+			};
+
+			auto d = fnGetTrueIndex( pItems, uCurrentTab, 0 );
+
+			iCurrentRowUsedColumns++;
+
+			auto bDrewCombo = false;
+			SetFont( FNT_TAHOMA );
+			const auto recComboboxBounds = nk_widget_bounds( pContext );
+
+			const auto pOutput = nk_window_get_canvas( pContext );
+			auto dqCurrentItems = pItems[ uCurrentTab ];
+			if ( nk_combo_begin_label( pContext, szTitle, nk_vec2( recComboboxBounds.w, float( uButtonHeight ) * ( dqCurrentItems.size( ) + 1u ) + 4.f * dqCurrentItems.size( ) + 10.f ) ) )
+			{
+				bDrawComboboxArrow = true;
+				recComboboxWindowBounds = pContext->current->bounds;
+				const int iButtonWidth = int( ( recComboboxBounds.w - 10 - ( dqTabs.size( ) - 1 ) * 4 ) / dqTabs.size( ) );
+				nk_layout_row_begin( pContext, NK_STATIC, float( uButtonHeight ), dqTabs.size( ) + 1 );
+				nk_layout_row_push( pContext, 0 );
+				nk_spacing( pContext, 1 );
+				nk_layout_row_push( pContext, float( iButtonWidth ) );
+				for ( auto u = 0u; u < dqTabs.size( ); u++ )
+					if ( PrimaryTab( dqTabs[ u ], u == uCurrentTab ) )
+					{
+						dqCurrentItems = pItems[ ( uCurrentTab = u ) ];
+						d = fnGetTrueIndex( pItems, uCurrentTab, 0 );
+					}
+				iCurrentRowUsedColumns -= dqTabs.size( );
+				nk_layout_row_end( pContext );
+				Separator( 61, 65, 72, uButtonHeight - 2.f, nullptr, false, 6.f );
+				SetFont( FNT_TAHOMA );
+
+				nk_layout_space_begin( pContext, NK_STATIC, 30, dqCurrentItems.size( ) );
+				auto y = -1;
+				for ( unsigned i { }; i < dqCurrentItems.size( ); i++, d++ )
+				{
+					if ( !dqCurrentItems[ i ] )
+					{
+						nk_spacing( pContext, 1 );
+						continue;
+					}
+
+					nk_layout_space_push( pContext, nk_rect( 0, y, recComboboxWindowBounds.w, uButtonHeight ) );
+					if ( nk_button_label_styled( pContext, *dqEnabledOptions.at( d ) ? &btnComboActive : &btnCombo, dqCurrentItems.at( i ) ) )
+						*dqEnabledOptions.at( d ) = !*dqEnabledOptions.at( d );
+					y += uButtonHeight;
+					HoverCheck( CURSOR_HAND );
+				}
+				nk_layout_space_end( pContext );
 				nk_combo_end( pContext );
 				bDrewCombo = true;
 			}
@@ -1764,7 +1845,6 @@ namespace PX::UI
 		{
 			iCurrentRowUsedColumns++;
 			nk_edit_string_zero_terminated( pContext, NK_EDIT_FIELD, szBuffer, uMaxCharacters, nk_filter_decimal );
-			// suspicious
 			if ( strlen( szBuffer ) > 0 && strcmp( szBuffer, PX_XOR( "-" ) ) )
 				return std::stoi( szBuffer );
 			return 0;

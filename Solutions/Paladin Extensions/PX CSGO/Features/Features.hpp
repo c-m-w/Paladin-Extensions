@@ -107,6 +107,29 @@ namespace PX::Features
 		SETTING_MATERIALS_MATERIAL_MAX
 	};
 
+	enum
+	{
+		AIMTYPE_DEFAULT,
+		AIMTYPE_SMOOTH,
+		AIMTYPE_SILENT
+	};
+
+	enum
+	{
+		SMOOTH_LINEAR,
+		SMOOTH_PARABOLIC,
+		SMOOTH_RADICAL,
+		SMOOTH_INVERSE,
+		SMOOTH_RANDOMIZE
+	};
+
+	enum
+	{
+		TARGETING_DISTANCE,
+		TARGETING_CROSSHAIR_DISTANCE,
+		TARGETING_LOWEST_HEALTH
+	};
+
 	struct settings_t
 	{
 		struct awareness_t
@@ -307,7 +330,19 @@ namespace PX::Features
 
 			struct aim_t
 			{
-				
+				struct weapon_t
+				{
+					toggle_t bTeammates = false;
+					toggle_t bEnemies = false;
+					toggle_t bHitboxes[ HITBOX_MAX ] { };
+					toggle_t bMindSmoke = false;
+					toggle_t bUseSeparate = false;
+					int iAimType = AIMTYPE_DEFAULT;
+					float flMaxCrosshairDistance = 1.f;
+					float flSmoothFactor = 1.f;
+					int iSmoothMode = SMOOTH_LINEAR;
+					int iTargeting = TARGETING_DISTANCE;
+				} _All, _WeaponTypes[ WEAPONTYPE_MACHINEGUN + 1 ] { }, _IndividualWeapons[ ITEM_MAX ] { };
 			} _Aim;
 		} _Combat;
 

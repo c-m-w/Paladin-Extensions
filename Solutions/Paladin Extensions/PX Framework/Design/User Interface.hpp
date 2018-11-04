@@ -179,7 +179,7 @@ namespace PX::UI
 		/**	\param uStartHeight Y value of where the separator should begin. */
 		/** \param pLinkList List of links to have in the separator for users to click for quick access to the site for convenience. */
 		/**	\param bUpperBorder Whether or not a border should be drawn on the top of the separator, as a partial outline. */
-		void PX_API Separator( int iRed, int iGreen, int iBlue, unsigned uStartHeight, const Types::links_t* pLinkList = nullptr, bool bUpperBorder = false );
+		void PX_API Separator( int iRed, int iGreen, int iBlue, unsigned uStartHeight, const Types::links_t* pLinkList = nullptr, bool bUpperBorder = false, float flHeight = 42.f );
 			/** \brief General purpose button.\n Uses one column. */
 		/**	\param pPosition Position of the button which controls rounding. */
 		/**	\param szText Text the button will display. */
@@ -247,6 +247,7 @@ namespace PX::UI
 		/**	\param dqOptions Options that should be available inside the combobox. */
 		/**	\param dqEnabledOptions List of the options that are enabled in the combobox. */
 		void PX_API ComboboxMulti( unsigned uButtonHeight, Types::cstr_t szTitle, const std::deque< Types::cstr_t >& dqOptions, std::deque< bool* >& dqEnabledOptions );
+		void PX_API TabbedComboboxMulti( unsigned uButtonHeight, Types::cstr_t szTitle, const std::deque< Types::cstr_t >& dqTabs, const std::deque< Types::cstr_t >* pItems, std::deque< bool* >& dqEnabledOptions, unsigned& uCurrentTab );
 
 		/** \brief Creates a box for the user to input data.
 			\n Uses one column. */

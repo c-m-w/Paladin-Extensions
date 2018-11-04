@@ -17115,7 +17115,8 @@ nk_contextual_end(struct nk_context *ctx)
         }
         {int pressed = nk_input_is_mouse_pressed(&ctx->input, NK_BUTTON_LEFT);
         int in_body = nk_input_is_mouse_hovering_rect(&ctx->input, body);
-        if (pressed && in_body)
+        if (pressed && in_body
+			 && !( ctx->last_widget_state & NK_WIDGET_STATE_ACTIVE || ctx->last_widget_state & NK_WIDGET_STATE_HOVER ))
             popup->flags |= NK_WINDOW_HIDDEN;
         }
     }
