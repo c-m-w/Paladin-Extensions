@@ -1,13 +1,16 @@
-#include "PX Precompiled.hpp"
-#include "../../../PX CSGO.hpp"
-
-#include "../../../Application/Information.hpp"
-
+#include <codeanalysis/warnings.h>
+#pragma warning( push, 0 )
+#pragma warning( disable: ALL_CODE_ANALYSIS_WARNINGS )
+#include <cstdio>
 #include "characterset.hpp"
 #include "UtlBuffer.hpp"
+#include "ConVar.hpp"
 
+namespace PX::Information::Pointers
+{
+	extern ICvar* pConVar;
+}
 using PX::Information::Pointers::pConVar;
-
 #define ALIGN_VALUE( val, alignment ) ( ( val + alignment - 1 ) & ~( alignment - 1 ) ) 
 #define stackalloc( _size )		_alloca( ALIGN_VALUE( _size, 16 ) )
 
@@ -807,3 +810,4 @@ const char *ConVar::GetDefault( void ) const
 {
 	return m_pParent->m_pszDefaultValue;
 }
+#pragma warning( pop )

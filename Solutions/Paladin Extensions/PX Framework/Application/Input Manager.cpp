@@ -77,7 +77,7 @@ namespace PX
 	CInputManager::CInputManager( ) PX_NOX: ksKeys( ), mmtKeyDownTime( ), uLastKeyPressed( )
 	{ }
 
-	void PX_API CInputManager::OnEvent( HWND hwWindowHandle, UINT uMessage, WPARAM wParam, LPARAM lParam ) // hwWindowHandle is unused
+	void PX_API CInputManager::OnEvent( HWND _hwWindowHandle, UINT uMessage, WPARAM wParam, LPARAM lParam )
 	{
 		if ( uMessage == WM_SIZE && wParam == SIZE_MINIMIZED )
 		{

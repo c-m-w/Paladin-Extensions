@@ -4,5 +4,5 @@
 
 namespace PX::Features::Awareness
 {
-	void PX_API DrawInformation( );
+	void PX_API DrawStatistics( );
 }

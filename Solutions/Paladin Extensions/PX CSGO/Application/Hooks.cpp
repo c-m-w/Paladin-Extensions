@@ -72,7 +72,7 @@ namespace PX
 			}
 
 			if ( ptrDesiredReturnAddress == ptrReturnAddress )
-				Features::Awareness::Draw( );
+				Features::Awareness::DrawStatistics( );
 
 			return fnOriginal( pThis );
 		}

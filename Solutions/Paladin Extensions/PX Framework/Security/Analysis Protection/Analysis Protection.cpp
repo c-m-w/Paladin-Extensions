@@ -248,24 +248,24 @@ Retry:
 		{
 			px_assert( !( ( nullptr == hExtensionThreads ) ^ ( 0u == zExtensionThreads ) ) );
 
-			auto pContext = new CONTEXT { CONTEXT_DEBUG_REGISTERS };
+			auto pThreadContext = new CONTEXT { CONTEXT_DEBUG_REGISTERS };
 
 			if ( nullptr != hExtensionThreads
 			  && 0u != zExtensionThreads )
 				for ( auto z = 0u; z < zExtensionThreads; z++ )
 				{
-					px_assert( 0 != GetThreadContext( hExtensionThreads[ z ], pContext ) );
+					px_assert( 0 != GetThreadContext( hExtensionThreads[ z ], pThreadContext ) );
 
-					if ( pContext->Dr0 != 0 || pContext->Dr1 != 0 || pContext->Dr2 != 0
-					  || pContext->Dr3 != 0 || pContext->Dr6 != 0 || pContext->Dr7 != 0 )
+					if ( pThreadContext->Dr0 != 0 || pThreadContext->Dr1 != 0 || pThreadContext->Dr2 != 0
+					  || pThreadContext->Dr3 != 0 || pThreadContext->Dr6 != 0 || pThreadContext->Dr7 != 0 )
 						return false;
 				}
 			else
 			{
-				px_assert( 0 != GetThreadContext( GetCurrentThread( ), pContext ) );
+				px_assert( 0 != GetThreadContext( GetCurrentThread( ), pThreadContext ) );
 
-				if ( pContext->Dr0 != 0 || pContext->Dr1 != 0 || pContext->Dr2 != 0
-				  || pContext->Dr3 != 0 || pContext->Dr6 != 0 || pContext->Dr7 != 0 )
+				if ( pThreadContext->Dr0 != 0 || pThreadContext->Dr1 != 0 || pThreadContext->Dr2 != 0
+				  || pThreadContext->Dr3 != 0 || pThreadContext->Dr6 != 0 || pThreadContext->Dr7 != 0 )
 					return false;
 			}
 

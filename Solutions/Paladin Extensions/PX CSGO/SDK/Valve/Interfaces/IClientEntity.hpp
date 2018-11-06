@@ -11,4 +11,8 @@ class IClientEntity : public IClientUnknown, public IClientRenderable, public IC
 {
 public:
     virtual void Release(void) = 0;
+    QAngle& GetABSAngles( )
+	{
+		return reinterpret_cast< QAngle&( __thiscall* )( void* ) >( ( *reinterpret_cast< void*** >( this ) )[ 11 ] )( this );
+	}
 };

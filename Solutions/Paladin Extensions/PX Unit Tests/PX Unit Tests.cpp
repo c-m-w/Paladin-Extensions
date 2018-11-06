@@ -612,10 +612,10 @@ void OnDetach( )
 				TEST_METHOD( LoadLibraryEx )
 				{
 					{
-						std::ofstream ofLogFile;
-						ofLogFile.open( str_t( getenv( "APPDATA" ) ) + R"(\\PX\\UnitTest.log)", std::iostream::trunc );
-						Assert::IsTrue( ofLogFile.is_open( ) && ofLogFile.good( ), L"Log file clear filed", PX_ASSERT_INFO );
-						ofLogFile.close( );
+						std::ofstream ofLog;
+						ofLog.open( str_t( getenv( "APPDATA" ) ) + R"(\\PX\\UnitTest.log)", std::iostream::trunc );
+						Assert::IsTrue( ofLog.is_open( ) && ofLog.good( ), L"Log file clear filed", PX_ASSERT_INFO );
+						ofLog.close( );
 					}
 
 					STARTUPINFO si { sizeof( STARTUPINFO ) };
