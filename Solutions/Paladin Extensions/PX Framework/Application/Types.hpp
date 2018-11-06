@@ -97,8 +97,17 @@ namespace PX::Types
 		};
 
 		inline static std::vector< toggle_t* > vecToggles;
+
+		static void Initialize( void* _pConfigStructure, std::size_t _zConfigStructureSize )
+		{
+			pConfigStructure = _pConfigStructure;
+			zConfigStructureSize = _zConfigStructureSize;
+		}
+
 	private:
-		bool bEnabled = false, bAddedToList = false, bUseKeybinds = true;
+		inline static void* pConfigStructure = nullptr;
+		inline static std::size_t zConfigStructureSize = 0;
+		bool bEnabled = false, bAddedToList = false, bAttemptedToAddToList = false, bUseKeybinds = true;
 		std::vector< keybind_t > vecKeyBinds { };
 
 	public:

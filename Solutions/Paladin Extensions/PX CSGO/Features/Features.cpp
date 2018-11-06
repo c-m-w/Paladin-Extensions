@@ -7,6 +7,7 @@ namespace PX::Features
 {
 	bool PX_API InitializeFeatures( )
 	{
+		toggle_t::Initialize( &_Settings, sizeof( settings_t ) );
 		PX_INPUT.AddGlobalCallback( [ ]( unsigned uKey, bool bPressed )
 		{
 			for( auto& toggle : toggle_t::vecToggles )

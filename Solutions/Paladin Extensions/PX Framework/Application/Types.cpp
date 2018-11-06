@@ -14,11 +14,16 @@ namespace PX::Types
 
 	void toggle_t::AddToList( )
 	{
+		px_assert( pConfigStructure != nullptr && zConfigStructureSize > 0 );
+		if ( bAttemptedToAddToList || this < pConfigStructure || ptr_t( this ) > ptr_t( pConfigStructure ) + zConfigStructureSize )
+			return;
+
 		if( !bAddedToList )
 		{
 			bAddedToList = true;
 			vecToggles.emplace_back( this );
 		}
+		bAttemptedToAddToList = true;
 	}
 
 	bool& toggle_t::Get( )
