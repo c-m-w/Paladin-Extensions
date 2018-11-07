@@ -31,3 +31,12 @@
         static int ptrOffset = PX::Information::NetworkedVariableManager::FindOffset( table, netvar );		\
         return reinterpret_cast< type* >( PX::Types::ptr_t( this ) + ptrOffset + offset );					\
     }
+
+#define PX_REVOLUTION 360.f
+#define PX_MIN_PITCH -89.f
+#define PX_MAX_PITCH 89.f
+#define PX_MIN_YAW -180.f
+#define PX_MAX_YAW 180.f
+#define PX_MIN_ROLL -50.f
+#define PX_MAX_ROLL 50.f
+

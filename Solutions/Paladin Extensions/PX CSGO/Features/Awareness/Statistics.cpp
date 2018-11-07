@@ -221,15 +221,15 @@ namespace PX::Features::Awareness
 		if ( !cfg.bSnaplineDestination ) // bottom
 		{
 			vecSnapline[ DESTINATION ] = { pEntity.vecBox[ BASE ][ BOTTOMLEFT ].x, pEntity.vecBox[ BASE ][ BOTTOMLEFT ].y };
-			vecSnapline[ DESTINATION ].x += pEntity.vecBox[ BASE ][ BOTTOMRIGHT ].x - pEntity.vecBox[ BASE ][ BOTTOMLEFT ].x;
-			vecSnapline[ DESTINATION ].y += pEntity.vecBox[ BASE ][ BOTTOMRIGHT ].y - pEntity.vecBox[ BASE ][ BOTTOMLEFT ].y;
+			vecSnapline[ DESTINATION ].x += ( pEntity.vecBox[ BASE ][ BOTTOMRIGHT ].x - pEntity.vecBox[ BASE ][ BOTTOMLEFT ].x ) / 2.f;
+			vecSnapline[ DESTINATION ].y += ( pEntity.vecBox[ BASE ][ BOTTOMRIGHT ].y - pEntity.vecBox[ BASE ][ BOTTOMLEFT ].y ) / 2.f;
 		}
 		else // top
 		{
 			auto enumIndex = !cfg.bDimesMode ? BASE : SECONDARY;
 			vecSnapline[ DESTINATION ] = { pEntity.vecBox[ enumIndex ][ TOPLEFT ].x, pEntity.vecBox[ BASE ][ TOPLEFT ].y };
-			vecSnapline[ DESTINATION ].x += pEntity.vecBox[ enumIndex ][ TOPRIGHT ].x - pEntity.vecBox[ BASE ][ TOPLEFT ].x;
-			vecSnapline[ DESTINATION ].y += pEntity.vecBox[ enumIndex ][ TOPRIGHT ].y - pEntity.vecBox[ BASE ][ TOPLEFT ].y;
+			vecSnapline[ DESTINATION ].x += ( pEntity.vecBox[ enumIndex ][ TOPRIGHT ].x - pEntity.vecBox[ BASE ][ TOPLEFT ].x ) / 2.f;
+			vecSnapline[ DESTINATION ].y += ( pEntity.vecBox[ enumIndex ][ TOPRIGHT ].y - pEntity.vecBox[ BASE ][ TOPLEFT ].y ) / 2.f;
 		}
 
 		Line( vecSnapline, ORIGIN_DESTINATION_MAX, cfg.flSnaplineThickness, clrSnapline.GetARGB( ) );
@@ -269,7 +269,10 @@ namespace PX::Features::Awareness
 									{ pEntity.vecBox[ BASE ][ TOPRIGHT ].x, pEntity.vecBox[ BASE ][ TOPRIGHT ].y },
 									{ pEntity.vecBox[ BASE ][ BOTTOMLEFT ].x, pEntity.vecBox[ BASE ][ BOTTOMLEFT ].y },
 									{ pEntity.vecBox[ BASE ][ BOTTOMRIGHT ].x, pEntity.vecBox[ BASE ][ BOTTOMRIGHT ].y } };
-			Line( buf, TLRB_MAX, cfg.flBoxThickness, clrBox.GetARGB( ) );
+			//Line( new D3DXVECTOR2[ 2 ] { buf[ TOPLEFT ], buf[ TOPRIGHT ] }, 2, cfg.flBoxThickness, clrBox.GetARGB( ) );
+			//Line( new D3DXVECTOR2[ 2 ] { buf[ TOPRIGHT ], buf[ BOTTOMRIGHT ] }, 2, cfg.flBoxThickness, clrBox.GetARGB( ) );
+			//Line( new D3DXVECTOR2[ 2 ] { buf[ BOTTOMRIGHT ], buf[ BOTTOMLEFT ] }, 2, cfg.flBoxThickness, clrBox.GetARGB( ) );
+			//Line( new D3DXVECTOR2[ 2 ] { buf[ BOTTOMLEFT ], buf[ TOPLEFT ] }, 2, cfg.flBoxThickness, clrBox.GetARGB( ) );
 
 			if ( !cfg.bBoxOutline )
 				return;
@@ -278,7 +281,10 @@ namespace PX::Features::Awareness
 			if ( clrBoxOutline.a == 0 )
 				return;
 
-			Line( buf, TLRB_MAX, cfg.flBoxThickness, clrBoxOutline.GetARGB( ) );
+			//Line( new D3DXVECTOR2[ 2 ] { buf[ TOPLEFT ], buf[ TOPRIGHT ] }, 2, cfg.flBoxOutlineThickness, clrBox.GetARGB( ) );
+			//Line( new D3DXVECTOR2[ 2 ] { buf[ TOPRIGHT ], buf[ BOTTOMRIGHT ] }, 2, cfg.flBoxOutlineThickness, clrBox.GetARGB( ) );
+			//Line( new D3DXVECTOR2[ 2 ] { buf[ BOTTOMRIGHT ], buf[ BOTTOMLEFT ] }, 2, cfg.flBoxOutlineThickness, clrBox.GetARGB( ) );
+			//Line( new D3DXVECTOR2[ 2 ] { buf[ BOTTOMLEFT ], buf[ TOPLEFT ] }, 2, cfg.flBoxOutlineThickness, clrBox.GetARGB( ) );
 		}
 		else // 3d
 		{
@@ -326,14 +332,14 @@ namespace PX::Features::Awareness
 										{ _buf[ BASE ][ TOPRIGHT ].x,   _buf[ BASE ][ TOPRIGHT ].y },
 										{ _buf[ BASE ][ BOTTOMLEFT ].x, _buf[ BASE ][ BOTTOMLEFT ].y },
 										{ _buf[ BASE ][ BOTTOMRIGHT ].x,_buf[ BASE ][ BOTTOMRIGHT ].y } };
-				Line( buf, TLRB_MAX, cfg.flBoxThickness, clrBoxOutline.GetARGB( ) );
+				Line( buf, TLRB_MAX, cfg.flBoxOutlineThickness, clrBoxOutline.GetARGB( ) );
 			}
 			{
 				D3DXVECTOR2 buf[ ] = { { _buf[ SECONDARY ][ TOPLEFT ].x, _buf[ SECONDARY ][ TOPLEFT ].y },
 										{ _buf[ SECONDARY ][ TOPRIGHT ].x,   _buf[ SECONDARY ][ TOPRIGHT ].y },
 										{ _buf[ SECONDARY ][ BOTTOMLEFT ].x, _buf[ SECONDARY ][ BOTTOMLEFT ].y },
 										{ _buf[ SECONDARY ][ BOTTOMRIGHT ].x,_buf[ SECONDARY ][ BOTTOMRIGHT ].y } };
-				Line( buf, TLRB_MAX, cfg.flBoxThickness, clrBoxOutline.GetARGB( ) );
+				Line( buf, TLRB_MAX, cfg.flBoxOutlineThickness, clrBoxOutline.GetARGB( ) );
 			}
 			{
 				D3DXVECTOR2 buf[ ] = { { _buf[ BASE ][ TOPLEFT ].x,   _buf[ SECONDARY ][ TOPLEFT ].y },
@@ -341,7 +347,7 @@ namespace PX::Features::Awareness
 						{   _buf[ BASE ][ BOTTOMLEFT ].x,  _buf[ SECONDARY ][ BOTTOMLEFT ].y },
 						{   _buf[ BASE ][ BOTTOMRIGHT ].x, _buf[ SECONDARY ][ BOTTOMRIGHT ].y } };
 
-				Line( buf, TLRB_MAX, cfg.flBoxThickness, clrBoxOutline.GetARGB( ) );
+				Line( buf, TLRB_MAX, cfg.flBoxOutlineThickness, clrBoxOutline.GetARGB( ) );
 			}
 		}
 	}
@@ -353,21 +359,17 @@ namespace PX::Features::Awareness
 
 	void PX_API DrawStatistics( )
 	{
-		static bool bSetUpTestConfig = false;
-
-		if ( !bSetUpTestConfig )
 		{
-			_cfg = new byte_t[ sizeof( settings_t::awareness_t::statistics_t::player_t ) > sizeof( settings_t::awareness_t::statistics_t::entity_t )
-				? sizeof( settings_t::awareness_t::statistics_t::player_t )
-				: sizeof( settings_t::awareness_t::statistics_t::entity_t ) ];
-			ZeroMemory( _cfg, sizeof _cfg );
 			{
 				_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].bEnabled = true;
 
-				_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].bSnapline = true;
+				_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].bSnapline = false;
+				_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].bSnaplineOrigin = false;
+				_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].bSnaplineDestination = true;
+				_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].bSnaplineDestination = true;
 				_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].seqSnapline[ STATE_VISIBLE ].PutNewColorSequence( { 255, 255, 255, 255 }, 1000ull );
 				_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].bSnaplineOutline = true;
-				_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].seqSnaplineOutline.PutNewColorSequence( { 255, 255, 255, 255 }, 1000ull );
+				_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].seqSnaplineOutline.PutNewColorSequence( { 0, 0, 0, 0 }, 1000ull );
 				_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].flSnaplineOutlineThickness = 3.f;
 
 				_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].bBox = true;
@@ -392,8 +394,6 @@ namespace PX::Features::Awareness
 				_Settings._Awareness._Statistics._Players[ SETTING_ENTITY_GRENADE_PROJECTILE_FLASH ].bSnapline = true;
 				_Settings._Awareness._Statistics._Players[ SETTING_ENTITY_GRENADE_PROJECTILE_FLASH ].bBox = true;
 			}
-
-			bSetUpTestConfig = true;
 		}
 
 		// check that game is setup properly

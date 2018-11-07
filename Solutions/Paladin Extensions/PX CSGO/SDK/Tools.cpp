@@ -91,15 +91,16 @@ namespace PX::Tools
 
 	void PX_API ClampAngles( QAngle& qAngles )
 	{
-		while ( qAngles.yaw >= 180.f )
-			qAngles.yaw -= 180.f;
-		while ( qAngles.yaw <= -180.f )
-			qAngles.yaw += 180.f;
+		if ( std::isnan( qAngles.pitch ) || std::isnan( qAngles.yaw ) || std::isnan( qAngles.roll )
+			 || std::isinf( qAngles.pitch ) || std::isinf( qAngles.yaw ) || std::isinf( qAngles.roll ) )
+			return ( void )( qAngles.pitch = 0.f, qAngles.yaw = 0.f, qAngles.roll = 0.f );
 
-		while ( qAngles.pitch >= 90.f )
-			qAngles.pitch -= 90.f;
-		while ( qAngles.pitch <= -90.f )
-			qAngles.pitch += 90.f;
+		qAngles.pitch = std::clamp( qAngles.pitch, PX_MIN_PITCH, PX_MAX_PITCH );
+
+		if ( qAngles.yaw < PX_MIN_YAW || qAngles.yaw > PX_MAX_YAW )
+			qAngles.yaw += std::floor( qAngles.yaw / ( PX_REVOLUTION / 2 ) ) * PX_REVOLUTION;
+
+		qAngles.roll = std::clamp( qAngles.roll, PX_MIN_ROLL, PX_MAX_ROLL );
 	}
 
 	bool PX_API WorldToScreen( const Vector& vecWorld, Vector &vecScreen )

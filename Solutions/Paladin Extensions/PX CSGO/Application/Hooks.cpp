@@ -71,8 +71,8 @@ namespace PX
 					ptrDesiredReturnAddress = ptrReturnAddress;
 			}
 
-			//if ( ptrDesiredReturnAddress == ptrReturnAddress )
-			//	Features::Awareness::DrawStatistics( );
+			if ( ptrDesiredReturnAddress == ptrReturnAddress )
+				Features::Awareness::DrawStatistics( );
 
 			return fnOriginal( pThis );
 		}
