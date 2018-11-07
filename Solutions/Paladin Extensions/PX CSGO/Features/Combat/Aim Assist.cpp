@@ -58,7 +58,7 @@ namespace PX::Features::Combat
 			return;
 
 		auto qTargetAngle = CalculateAngle( pLocalPlayer, pTarget, _AimContext.iHitbox, pCmd, false );
-		//ClampAngles( qTargetAngle );
+		ClampAngles( qTargetAngle );
 		switch( _Config.iAimType )
 		{
 			case AIMTYPE_DEFAULT:
