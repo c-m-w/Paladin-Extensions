@@ -423,7 +423,7 @@ namespace PX::Features::Awareness
 				continue;
 
 			// check that the config for that ent is enabled
-#define buffer_macro( _Sub, enumExist ) memcpy( _cfg, &_Settings._Awareness._Statistics.##_Sub[ enumExist ], sizeof _Settings._Awareness._Statistics.##_Sub[ enumExist ] ); if ( !_Settings._Awareness._Statistics.##_Sub[ enumExist ].bEnabled  ) continue;
+#define buffer_macro( _Sub, enumExist ) _cfg = &_Settings._Awareness._Statistics.##_Sub[ enumExist ]; if ( !_Settings._Awareness._Statistics.##_Sub[ enumExist ].bEnabled  ) continue;
 			switch ( pEntity->GetClientClass( )->m_ClassID )
 			{
 				case ClassID_CCSPlayer:
