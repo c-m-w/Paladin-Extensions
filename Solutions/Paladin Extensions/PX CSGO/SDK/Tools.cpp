@@ -201,6 +201,40 @@ namespace PX::Tools
 		return recReturn;
 	}
 
+	float PX_API CalculateVectorDistance( const Vector& vecPositionOne, const Vector& vecPositionTwo )
+	{
+		const auto vecNew = vecPositionOne - vecPositionTwo;
+		return sqrt( pow( vecNew.z, 2.0 ) + pow( vecNew.x, 2.0 ) + pow( vecNew.y, 2.0 ) );
+	}
+
+	QAngle PX_API CalculateAngle( CBasePlayer* pLocalPlayer, CBasePlayer* pPlayer, int iHitbox, CUserCmd* pCmd, bool bAccountForRecoil, float flRecoilPrecision /*= 0.f*/ )
+	{
+		QAngle qReturn;
+		const auto vecRelativePosition = pPlayer->GetHitboxPosition( iHitbox ) - pLocalPlayer->GetViewPosition( );
+		const auto fl2DDistance = sqrt( pow( vecRelativePosition.x, 2.f ) + pow( vecRelativePosition.y, 2.f ) );
+
+		qReturn.pitch = atan2( vecRelativePosition.z, fl2DDistance ) * -180.f / D3DX_PI;
+		qReturn.yaw = atan2( vecRelativePosition.y, vecRelativePosition.x ) * 180.f / D3DX_PI;
+		if ( qReturn.yaw < 0.f )
+			qReturn.yaw += 360.f;
+		qReturn.roll = pCmd->viewangles.roll;
+		if ( bAccountForRecoil )
+			qReturn += pLocalPlayer->m_aimPunchAngle( ) * 2.f * ( flRecoilPrecision / 100.f );
+		return qReturn;
+	}
+
+	float PX_API CalculateCrosshairDistance( CBasePlayer* pLocalPlayer, CBasePlayer* pPlayer, int iHitbox, CUserCmd* pCmd, bool bWorldlyDistance )
+	{
+		auto qNonGayAngles = pCmd->viewangles;
+		if ( qNonGayAngles.yaw < 0.f )
+			qNonGayAngles.yaw += 360.f;
+
+		const auto qNewAngles = qNonGayAngles - CalculateAngle( pLocalPlayer, pPlayer, iHitbox, pCmd, false );
+		return bWorldlyDistance
+			? sin( atan2( qNewAngles.yaw, qNewAngles.pitch ) ) * CalculateVectorDistance( pLocalPlayer->GetViewPosition( ), pPlayer->GetHitboxPosition( iHitbox ) )
+			: sqrt( pow( qNewAngles.yaw, 2.f ) + pow( qNewAngles.pitch, 2.f ) );
+	}
+
 	bool CBaseEntity::IsPlayer( )
 	{
 		return reinterpret_cast< bool( __thiscall* )( CBaseEntity* ) >( ( *reinterpret_cast< void*** >( this ) )[ uIsPlayer ] )( this );
@@ -446,7 +480,7 @@ namespace PX::Tools
 		mstudiohitboxset_t* pHitboxSet = nullptr;
 	} _PlayerModels[ 64 ];
 
-	Vector CBasePlayer::GetHitboxPosition( EHitbox hHitboxID )
+	Vector CBasePlayer::GetHitboxPosition( int hHitboxID )
 	{
 		auto& pmPlayer = _PlayerModels[ EntIndex( ) ];
 
@@ -481,5 +515,10 @@ namespace PX::Tools
 				 || iWeaponType > ITEM_WEAPON_SSG08 // useless weapon/nade
 				 && iWeaponType < ITEM_WEAPON_M4A1S // useless weapon/nade
 				 || iWeaponType > ITEM_WEAPON_TACTICALAWARENESSGRENADE ); // knife model/gloves/other
+	}
+
+	float CBasePlayer::DistanceFromPlayer( CBasePlayer* pPlayer )
+	{
+		return CalculateVectorDistance( m_vecOrigin( ), pPlayer->m_vecOrigin( ) );
 	}
 }

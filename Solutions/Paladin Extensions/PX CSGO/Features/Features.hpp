@@ -337,6 +337,9 @@ namespace PX::Features
 					toggle_t bHitboxes[ HITBOX_MAX ] { };
 					toggle_t bMindSmoke = false;
 					toggle_t bUseSeparate = false;
+					toggle_t bWorldlyCrosshairDistance = false;
+					int iReferenceHitbox = HITBOX_HEAD; // hitbox to use as reference for seeing which players are within crosshair distance.
+					int iPriorityHitbox = HITBOX_HEAD;
 					int iAimType = AIMTYPE_DEFAULT;
 					float flMaxCrosshairDistance = 1.f;
 					float flSmoothFactor = 1.f;

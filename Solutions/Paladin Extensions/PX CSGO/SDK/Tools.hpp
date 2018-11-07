@@ -40,6 +40,9 @@ namespace PX::Tools
 	float PX_API GetAngleDistance( Vector vecCurrentAngles, Vector vecPosOne, Vector vecPosTwo );
 	RECT PX_API CalculateRenderBounds( Vector* vecScreenPoints );
 	RECT PX_API CalculateRenderBounds( CBaseEntity* pEntity );
+	float PX_API CalculateVectorDistance( const Vector& vecPositionOne, const Vector& vecPositionTwo );
+	QAngle PX_API CalculateAngle( CBasePlayer* pLocalPlayer, CBasePlayer* pPlayer, int iHitbox, CUserCmd* pCmd, bool bAccountForRecoil, float flRecoilPrecision = 0.f );
+	float PX_API CalculateCrosshairDistance( CBasePlayer* pLocalPlayer, CBasePlayer* pPlayer, int iHitbox, CUserCmd* pCmd, bool bWorldlyDistance );
 
 	class CEconomyItemView
 	{
@@ -158,8 +161,9 @@ namespace PX::Tools
 		bool CanSeePosition( Vector vecPosition, bool bMindSmoke, void* pEntity = nullptr );
 		bool CanSeePlayer( CBasePlayer* pPlayer, bool bMindSmoke );
 		CGameTrace& TraceRayFromView( );
-		Vector GetHitboxPosition( EHitbox hHitboxID );
+		Vector GetHitboxPosition( int hHitboxID );
 		bool IsVulnerable( );
+		float DistanceFromPlayer( CBasePlayer* pPlayer );
 	};
 
 	class CPlantedC4

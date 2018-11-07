@@ -90,6 +90,9 @@
     <ClCompile Include="SDK\Valve\Types\ConVar.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Features\Combat\Aim Assist.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PX CSGO.hpp">
@@ -300,6 +303,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SDK\Valve\Types\ConVar.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Features\Combat\Aim Assist.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

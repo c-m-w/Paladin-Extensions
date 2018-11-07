@@ -107,6 +107,7 @@
     <ClCompile Include="Features\Awareness\Glow.cpp" />
     <ClCompile Include="Features\Awareness\Statistics.cpp" />
     <ClCompile Include="Features\Awareness\Materials.cpp" />
+    <ClCompile Include="Features\Combat\Aim Assist.cpp" />
     <ClCompile Include="Features\Combat\Trigger.cpp" />
     <ClCompile Include="Features\Features.cpp" />
     <ClCompile Include="Features\Miscellaneous\Movement.cpp" />
@@ -164,6 +165,7 @@
     <ClInclude Include="Features\Awareness\Glow.hpp" />
     <ClInclude Include="Features\Awareness\Statistics.hpp" />
     <ClInclude Include="Features\Awareness\Materials.hpp" />
+    <ClInclude Include="Features\Combat\Aim Assist.hpp" />
     <ClInclude Include="Features\Combat\Trigger.hpp" />
     <ClInclude Include="Features\Features.hpp" />
     <ClInclude Include="Features\Miscellaneous\Movement.hpp" />

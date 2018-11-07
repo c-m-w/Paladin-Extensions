@@ -71,8 +71,8 @@ namespace PX
 					ptrDesiredReturnAddress = ptrReturnAddress;
 			}
 
-			if ( ptrDesiredReturnAddress == ptrReturnAddress )
-				Features::Awareness::DrawStatistics( );
+			//if ( ptrDesiredReturnAddress == ptrReturnAddress )
+			//	Features::Awareness::DrawStatistics( );
 
 			return fnOriginal( pThis );
 		}
@@ -188,6 +188,7 @@ namespace PX
 				return;
 
 			{
+				Features::Combat::AimAssist( pLocalPlayer, pCmd );
 				Features::Combat::Trigger( pLocalPlayer, pCmd );
 				Features::Miscellaneous::AutoJump( pLocalPlayer, pCmd );
 			}
