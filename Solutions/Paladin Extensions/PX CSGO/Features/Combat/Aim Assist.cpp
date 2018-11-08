@@ -157,9 +157,7 @@ namespace PX::Features::Combat
 				 || !pLocalPlayer->CanSeePlayer( pCurrentEntity, _Config.bMindSmoke.Get( ) ) )
 				continue;
 
-			auto flCrosshairDistance = CalculateCrosshairDistance( pLocalPlayer, pCurrentEntity, _Config.iReferenceHitbox, pCmd, _Config.bWorldlyCrosshairDistance.Get( ) );
-			if ( flCrosshairDistance > 254.558441227f )
-				flCrosshairDistance = fabsf( flCrosshairDistance -= 360.f );
+			const auto flCrosshairDistance = CalculateCrosshairDistance( pLocalPlayer, pCurrentEntity, _Config.iReferenceHitbox, pCmd, _Config.bWorldlyCrosshairDistance.Get( ) );
 			if ( flCrosshairDistance > _Config.flMaxCrosshairDistance )
 				continue;
 

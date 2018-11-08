@@ -94,12 +94,12 @@ namespace PX::Tools
 		if ( std::isnan( qAngles.pitch ) || std::isnan( qAngles.yaw ) || std::isnan( qAngles.roll )
 			 || std::isinf( qAngles.pitch ) || std::isinf( qAngles.yaw ) || std::isinf( qAngles.roll ) )
 			return ( void )( qAngles.pitch = 0.f, qAngles.yaw = 0.f, qAngles.roll = 0.f );
-
+		
 		qAngles.pitch = std::clamp( qAngles.pitch, PX_MIN_PITCH, PX_MAX_PITCH );
-
+		
 		if ( qAngles.yaw < PX_MIN_YAW || qAngles.yaw > PX_MAX_YAW )
 			qAngles.yaw += std::floor( qAngles.yaw / ( PX_REVOLUTION / 2 ) ) * PX_REVOLUTION;
-
+		
 		qAngles.roll = std::clamp( qAngles.roll, PX_MIN_ROLL, PX_MAX_ROLL );
 	}
 
@@ -108,12 +108,12 @@ namespace PX::Tools
 		if ( std::isnan( vecAngles.x ) || std::isnan( vecAngles.y ) || std::isnan( vecAngles.z )
 			 || std::isinf( vecAngles.x ) || std::isinf( vecAngles.y ) || std::isinf( vecAngles.z ) )
 			return ( void )( vecAngles.x = 0.f, vecAngles.y = 0.f, vecAngles.z = 0.f );
-
+		
 		vecAngles.x = std::clamp( vecAngles.x, PX_MIN_PITCH, PX_MAX_PITCH );
-
+		
 		if ( vecAngles.y < PX_MIN_YAW || vecAngles.y > PX_MAX_YAW )
 			vecAngles.y += std::floor( vecAngles.y / ( PX_REVOLUTION / 2 ) ) * PX_REVOLUTION;
-
+		
 		vecAngles.z = std::clamp( vecAngles.z, PX_MIN_ROLL, PX_MAX_ROLL );
 	}
 
@@ -243,9 +243,10 @@ namespace PX::Tools
 			qNonGayAngles.yaw += 360.f;
 
 		const auto qNewAngles = qNonGayAngles - CalculateAngle( pLocalPlayer, pPlayer, iHitbox, pCmd, false );
-		return bWorldlyDistance
-			? sin( atan2( qNewAngles.yaw, qNewAngles.pitch ) ) * CalculateVectorDistance( pLocalPlayer->GetViewPosition( ), pPlayer->GetHitboxPosition( iHitbox ) )
-			: sqrt( pow( qNewAngles.yaw, 2.f ) + pow( qNewAngles.pitch, 2.f ) );
+		if ( bWorldlyDistance )
+			return sin( atan2( qNewAngles.yaw, qNewAngles.pitch ) ) * CalculateVectorDistance( pLocalPlayer->GetViewPosition( ), pPlayer->GetHitboxPosition( iHitbox ) );
+		const auto flDistance = sqrt( pow( qNewAngles.yaw, 2.f ) + pow( qNewAngles.pitch, 2.f ) );
+		return flDistance > 254.558441227f ? fabs( flDistance - 360.f ) : flDistance;
 	}
 
 	bool CBaseEntity::IsPlayer( )
