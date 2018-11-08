@@ -99,10 +99,9 @@ namespace PX::Tools
 		
 		if ( qAngles.yaw < PX_MIN_YAW || qAngles.yaw > PX_MAX_YAW )
 			qAngles.yaw += -qAngles.yaw / fabs( qAngles.yaw ) * floorf( qAngles.yaw / ( PX_REVOLUTION / 2.f ) ) * PX_REVOLUTION;
-		
 		if ( qAngles.yaw < PX_MIN_YAW || qAngles.yaw > PX_MAX_YAW )
 			qAngles.yaw = 0.f;
-		men are so hot
+
 		qAngles.roll = std::clamp( qAngles.roll, PX_MIN_ROLL, PX_MAX_ROLL );
 	}
 
@@ -116,6 +115,8 @@ namespace PX::Tools
 		
 		if ( vecAngles.y < PX_MIN_YAW || vecAngles.y > PX_MAX_YAW )
 			vecAngles.y += -vecAngles.y / fabs( vecAngles.y ) * floorf( vecAngles.y / ( PX_REVOLUTION / 2.f ) ) * PX_REVOLUTION;
+		if ( vecAngles.y < PX_MIN_YAW || vecAngles.y > PX_MAX_YAW )
+			vecAngles.y = 0.f;
 		
 		vecAngles.z = std::clamp( vecAngles.z, PX_MIN_ROLL, PX_MAX_ROLL );
 	}

@@ -204,12 +204,14 @@ namespace PX::Features
 					float flBoneOutlineThickness = 1.f;
 					toggle_t bBoneColoredByHealth = false;
 					color_sequence_t seqBone[ STATE_PLAYER_MAX ] { };
+					color_sequence_t seqBoneOutline { };
 
 					toggle_t bOrientation = false;
 					toggle_t bOrientationOutline = false;
 					float flOrientationThickness = 1.f;
 					float flOrientationOutlineThickness = 1.f;
 					color_sequence_t seqOrientation[ STATE_PLAYER_MAX ] { };
+					color_sequence_t seqOrientationOutline { };
 				} _Players[ SETTING_PLAYER_MAX ];
 
 				struct entity_t: a_statistics_base

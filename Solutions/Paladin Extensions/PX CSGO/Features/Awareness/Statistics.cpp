@@ -60,7 +60,20 @@ namespace PX::Features::Awareness
 
 	static void PX_API DrawPlayerBone( )
 	{
+		if ( !bVariantID )
+			return;
+		auto& cfg = *reinterpret_cast< settings_t::awareness_t::statistics_t::player_t* >( _cfg );
+		if ( !cfg.bBone )
+			return;
+		const auto clrBox = cfg.seqBone[ pEntity.enumExistence ].GetCurrentColor( );
+		if ( clrBox.a == 0 )
+			return;
 
+		D3DXVECTOR2 buf[ ] = { { }, { } };
+		Vector _buf[ ] = { { }, { } };
+
+
+		if ( !WorldToScreen( _buf[ 0 ], _buf[ 1 ] ) ) return;
 	}
 
 	static void PX_API DrawPlayerOrientation( )
@@ -97,8 +110,8 @@ namespace PX::Features::Awareness
 
 				for ( auto i = 0; i < 8; i++ )
 				{
-					TransformVector( vecPoints[ i ], mtxTransformation, vecTransformedPoints[ i  ] ) ) return;
-					pEntity.bBoxVisibility &= WorldToScreen( vecTransformedPoints[ i ], vecScreenPoints[ i  ] ) ) return;
+					TransformVector( vecPoints[ i ], mtxTransformation, vecTransformedPoints[ i ] );
+					pEntity.bBoxVisibility &= WorldToScreen( vecTransformedPoints[ i ], vecScreenPoints[ i ] );
 				}
 
 				auto flTop = vecScreenPoints[ 0 ].y, flRight = vecScreenPoints[ 0 ].x, flBottom = vecScreenPoints[ 0 ].y, flLeft = vecScreenPoints[ 0 ].x;
@@ -122,28 +135,31 @@ namespace PX::Features::Awareness
 			else // world
 			{
 				auto& vecOrigin = pEntity->m_vecOrigin( );
-				Vector vecPoints[ ] { vecOrigin, vecOrigin, vecOrigin, vecOrigin };
+				for each ( auto& vecBox in pEntity.vecBox[ BASE ] )
+					vecBox = vecOrigin;
 				const Vector2D vecRotationPoint { vecOrigin.x, vecOrigin.y };
 				const auto vecViewPosition = vecOrigin + player_ptr_t( pEntity.p )->m_vecViewOffset( );
 
-				vecPoints[ BOTTOMRIGHT ].y -= 20.f; // Bottom right
-				vecPoints[ BOTTOMRIGHT ].z -= 5.f;
-				vecPoints[ BOTTOMLEFT ].y += 20.f; // Bottom left
-				vecPoints[ BOTTOMLEFT ].z -= 5.f;
-				vecPoints[ TOPRIGHT ].y -= 20.f; // Top right
-				vecPoints[ TOPRIGHT ].z = vecViewPosition.z + 10.f;
-				vecPoints[ TOPLEFT ].y += 20.f; // Top left
-				vecPoints[ TOPLEFT ].z = vecViewPosition.z + 10.f;
+				pEntity.vecBox[ BASE ][ BOTTOMRIGHT ].y -= 20.f; // Bottom right
+				pEntity.vecBox[ BASE ][ BOTTOMRIGHT ].z -= 5.f;
+				pEntity.vecBox[ BASE ][ BOTTOMLEFT ].y += 20.f; // Bottom left
+				pEntity.vecBox[ BASE ][ BOTTOMLEFT ].z -= 5.f;
+				pEntity.vecBox[ BASE ][ TOPRIGHT ].y -= 20.f; // Top right
+				pEntity.vecBox[ BASE ][ TOPRIGHT ].z = vecViewPosition.z + 10.f;
+				pEntity.vecBox[ BASE ][ TOPLEFT ].y += 20.f; // Top left
+				pEntity.vecBox[ BASE ][ TOPLEFT ].z = vecViewPosition.z + 10.f;
 
-				const auto flRotation = pClientState->viewangles.y;// - ( pClientState->viewangles.y - \
-																	   CalcAngle( pLocalPlayer->GetViewPosition( ), player_ptr_t( pEntity.p )->GetViewPosition( ) ).y );
+				//const auto flRotation = pEntity.p->GetABSAngles( ).yaw;
+				//const auto flRotation = pClientState->viewangles.y;
+				const auto flRotation = pClientState->viewangles.y - ( pClientState->viewangles.y - CalcAngle( pLocalPlayer->GetViewPosition( ), player_ptr_t( pEntity.p )->GetViewPosition( ) ).y );
 
 				for ( auto i = 0; i < TLRB_MAX; i++ )
 				{
-					vecPoints[ i ].Rotate2D( flRotation, vecRotationPoint );
-					pEntity.bBoxVisibility &= WorldToScreen( vecPoints[ i ], pEntity.vecBox[ BASE ][ i  ] ) ) return;
+					pEntity.vecBox[ BASE ][ i ].Rotate2D( flRotation, vecRotationPoint );
+					Vector buf;
+					pEntity.bBoxVisibility &= WorldToScreen( pEntity.vecBox[ BASE ][ i ], buf );
+					pEntity.vecBox[ BASE ][ i ] = buf;
 				}
-				memcpy( pEntity.vecBox, vecPoints, sizeof( Vector ) * 4 );
 			}
 		}
 		else // 3d
@@ -158,21 +174,25 @@ namespace PX::Features::Awareness
 
 			vecPoints[ BASE ][ TOPLEFT ].x -= 20.f;
 			vecPoints[ BASE ][ TOPLEFT ].y += 20.f;
+			vecPoints[ BASE ][ TOPLEFT ].z -= 5.f;
 			vecPoints[ BASE ][ TOPRIGHT ].x += 20.f;
 			vecPoints[ BASE ][ TOPRIGHT ].y += 20.f;
+			vecPoints[ BASE ][ TOPRIGHT ].z -= 5.f;
 			vecPoints[ BASE ][ BOTTOMLEFT ].x -= 20.f;
 			vecPoints[ BASE ][ BOTTOMLEFT ].y -= 20.f;
+			vecPoints[ BASE ][ BOTTOMLEFT ].z -= 5.f;
 			vecPoints[ BASE ][ BOTTOMRIGHT ].x += 20.f;
 			vecPoints[ BASE ][ BOTTOMRIGHT ].y -= 20.f;
+			vecPoints[ BASE ][ BOTTOMRIGHT ].z -= 5.f;
 
 			vecPoints[ SECONDARY ][ TOPLEFT ] = vecPoints[ BASE ][ TOPLEFT ];
-			vecPoints[ SECONDARY ][ TOPLEFT ].z = vecViewPosition;
+			vecPoints[ SECONDARY ][ TOPLEFT ].z = vecViewPosition + 10.f;
 			vecPoints[ SECONDARY ][ TOPRIGHT ] = vecPoints[ BASE ][ TOPRIGHT ];
-			vecPoints[ SECONDARY ][ TOPRIGHT ].z = vecViewPosition;
+			vecPoints[ SECONDARY ][ TOPRIGHT ].z = vecViewPosition + 10.f;
 			vecPoints[ SECONDARY ][ BOTTOMLEFT ] = vecPoints[ BASE ][ BOTTOMLEFT ];
-			vecPoints[ SECONDARY ][ BOTTOMLEFT ].z = vecViewPosition;
+			vecPoints[ SECONDARY ][ BOTTOMLEFT ].z = vecViewPosition + 10.f;
 			vecPoints[ SECONDARY ][ BOTTOMRIGHT ] = vecPoints[ BASE ][ BOTTOMRIGHT ];
-			vecPoints[ SECONDARY ][ BOTTOMRIGHT ].z = vecViewPosition;
+			vecPoints[ SECONDARY ][ BOTTOMRIGHT ].z = vecViewPosition + 10.f;
 
 			const auto flRotation = pEntity->GetABSAngles( ).yaw;
 
@@ -182,7 +202,7 @@ namespace PX::Features::Awareness
 				vecPoints[ SECONDARY ][ i ].Rotate2D( flRotation, vecRotationPoint );
 				pEntity.bBoxVisibility |= pLocalPlayer->CanSeePosition( vecPoints[ BASE ][ i ], !!cfg.bSmokeCheck ) || pLocalPlayer->CanSeePosition( vecPoints[ SECONDARY ][ i ], !!cfg.bSmokeCheck );
 			}
-			memcpy( pEntity.vecBox, vecPoints, sizeof( Vector ) * 4 );
+			memcpy( pEntity.vecBox, vecPoints, sizeof( Vector ) * 8 );
 		}
 	}
 
@@ -213,7 +233,7 @@ namespace PX::Features::Awareness
 
 		D3DXVECTOR2 vecSnapline[ ORIGIN_DESTINATION_MAX ] { };
 		int iDimes[ 2 ];
-		pEngineClient->GetScreenSize( iDimes[ 0 ], iDimes[ 1  ] ) ) return;
+		pEngineClient->GetScreenSize( iDimes[ 0 ], iDimes[ 1 ] );
 
 		vecSnapline[ ORIGIN ].x = float( iDimes[ 0 ] ) / 2.f;
 		vecSnapline[ ORIGIN ].y = !cfg.bSnaplineOrigin ? iDimes[ 1 ] : 0.f;
@@ -289,76 +309,76 @@ namespace PX::Features::Awareness
 			D3DXVECTOR2 buf[ ] = { { }, { } };
 			const auto clrBoxOutline = cfg.seqBoxOutline.GetCurrentColor( );
 
-			if ( !WorldToScreen( pEntity.vecBox[ BASE ][ TOPLEFT ], _buf[ 0  ] ) ) return;
-			if ( !WorldToScreen( pEntity.vecBox[ BASE ][ TOPRIGHT ], _buf[ 1  ] ) ) return;
+			if ( !WorldToScreen( pEntity.vecBox[ BASE ][ TOPLEFT ], _buf[ 0 ] ) ) return;
+			if ( !WorldToScreen( pEntity.vecBox[ BASE ][ TOPRIGHT ], _buf[ 1 ] ) ) return;
 			buf[ 0 ] = { _buf[ 0 ].x, _buf[ 0 ].y };
 			buf[ 1 ] = { _buf[ 1 ].x, _buf[ 1 ].y };
 			!!cfg.bBoxOutline && clrBoxOutline.a != 0 ? Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) ) : ( void )0;
 			Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) );
-			if ( !WorldToScreen( pEntity.vecBox[ BASE ][ TOPRIGHT ], _buf[ 0  ] ) ) return;
-			if ( !WorldToScreen( pEntity.vecBox[ BASE ][ BOTTOMRIGHT ], _buf[ 1  ] ) ) return;
+			if ( !WorldToScreen( pEntity.vecBox[ BASE ][ TOPRIGHT ], _buf[ 0 ] ) ) return;
+			if ( !WorldToScreen( pEntity.vecBox[ BASE ][ BOTTOMRIGHT ], _buf[ 1 ] ) ) return;
 			buf[ 0 ] = { _buf[ 0 ].x, _buf[ 0 ].y };
 			buf[ 1 ] = { _buf[ 1 ].x, _buf[ 1 ].y };
 			!!cfg.bBoxOutline && clrBoxOutline.a != 0 ? Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) ) : ( void )0;
 			Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) );
-			if ( !WorldToScreen( pEntity.vecBox[ BASE ][ BOTTOMRIGHT ], _buf[ 0  ] ) ) return;
-			if ( !WorldToScreen( pEntity.vecBox[ BASE ][ BOTTOMLEFT ], _buf[ 1  ] ) ) return;
+			if ( !WorldToScreen( pEntity.vecBox[ BASE ][ BOTTOMRIGHT ], _buf[ 0 ] ) ) return;
+			if ( !WorldToScreen( pEntity.vecBox[ BASE ][ BOTTOMLEFT ], _buf[ 1 ] ) ) return;
 			buf[ 0 ] = { _buf[ 0 ].x, _buf[ 0 ].y };
 			buf[ 1 ] = { _buf[ 1 ].x, _buf[ 1 ].y };
 			!!cfg.bBoxOutline && clrBoxOutline.a != 0 ? Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) ) : ( void )0;
 			Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) );
-			if ( !WorldToScreen( pEntity.vecBox[ BASE ][ BOTTOMLEFT ], _buf[ 0  ] ) ) return;
-			if ( !WorldToScreen( pEntity.vecBox[ BASE ][ TOPLEFT ], _buf[ 1  ] ) ) return;
-			buf[ 0 ] = { _buf[ 0 ].x, _buf[ 0 ].y };
-			buf[ 1 ] = { _buf[ 1 ].x, _buf[ 1 ].y };
-			!!cfg.bBoxOutline && clrBoxOutline.a != 0 ? Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) ) : ( void )0;
-			Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) );
-
-			if ( !WorldToScreen( pEntity.vecBox[ SECONDARY ][ TOPLEFT ], _buf[ 0  ] ) ) return;
-			if ( !WorldToScreen( pEntity.vecBox[ SECONDARY ][ TOPRIGHT ], _buf[ 1  ] ) ) return;
-			buf[ 0 ] = { _buf[ 0 ].x, _buf[ 0 ].y };
-			buf[ 1 ] = { _buf[ 1 ].x, _buf[ 1 ].y };
-			!!cfg.bBoxOutline && clrBoxOutline.a != 0 ? Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) ) : ( void )0;
-			Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) );
-			if ( !WorldToScreen( pEntity.vecBox[ SECONDARY ][ TOPRIGHT ], _buf[ 0  ] ) ) return;
-			if ( !WorldToScreen( pEntity.vecBox[ SECONDARY ][ BOTTOMRIGHT ], _buf[ 1  ] ) ) return;
-			buf[ 0 ] = { _buf[ 0 ].x, _buf[ 0 ].y };
-			buf[ 1 ] = { _buf[ 1 ].x, _buf[ 1 ].y };
-			!!cfg.bBoxOutline && clrBoxOutline.a != 0 ? Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) ) : ( void )0;
-			Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) );
-			if ( !WorldToScreen( pEntity.vecBox[ SECONDARY ][ BOTTOMRIGHT ], _buf[ 0  ] ) ) return;
-			if ( !WorldToScreen( pEntity.vecBox[ SECONDARY ][ BOTTOMLEFT ], _buf[ 1  ] ) ) return;
-			buf[ 0 ] = { _buf[ 0 ].x, _buf[ 0 ].y };
-			buf[ 1 ] = { _buf[ 1 ].x, _buf[ 1 ].y };
-			!!cfg.bBoxOutline && clrBoxOutline.a != 0 ? Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) ) : ( void )0;
-			Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) );
-			if ( !WorldToScreen( pEntity.vecBox[ SECONDARY ][ BOTTOMLEFT ], _buf[ 0  ] ) ) return;
-			if ( !WorldToScreen( pEntity.vecBox[ SECONDARY ][ TOPLEFT ], _buf[ 1  ] ) ) return;
+			if ( !WorldToScreen( pEntity.vecBox[ BASE ][ BOTTOMLEFT ], _buf[ 0 ] ) ) return;
+			if ( !WorldToScreen( pEntity.vecBox[ BASE ][ TOPLEFT ], _buf[ 1 ] ) ) return;
 			buf[ 0 ] = { _buf[ 0 ].x, _buf[ 0 ].y };
 			buf[ 1 ] = { _buf[ 1 ].x, _buf[ 1 ].y };
 			!!cfg.bBoxOutline && clrBoxOutline.a != 0 ? Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) ) : ( void )0;
 			Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) );
 
-			if ( !WorldToScreen( pEntity.vecBox[ BASE ][ TOPLEFT ], _buf[ 0  ] ) ) return;
-			if ( !WorldToScreen( pEntity.vecBox[ SECONDARY ][ TOPLEFT ], _buf[ 1  ] ) ) return;
+			if ( !WorldToScreen( pEntity.vecBox[ SECONDARY ][ TOPLEFT ], _buf[ 0 ] ) ) return;
+			if ( !WorldToScreen( pEntity.vecBox[ SECONDARY ][ TOPRIGHT ], _buf[ 1 ] ) ) return;
 			buf[ 0 ] = { _buf[ 0 ].x, _buf[ 0 ].y };
 			buf[ 1 ] = { _buf[ 1 ].x, _buf[ 1 ].y };
 			!!cfg.bBoxOutline && clrBoxOutline.a != 0 ? Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) ) : ( void )0;
 			Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) );
-			if ( !WorldToScreen( pEntity.vecBox[ BASE ][ TOPRIGHT ], _buf[ 0  ] ) ) return;
-			if ( !WorldToScreen( pEntity.vecBox[ SECONDARY ][ TOPRIGHT ], _buf[ 1  ] ) ) return;
+			if ( !WorldToScreen( pEntity.vecBox[ SECONDARY ][ TOPRIGHT ], _buf[ 0 ] ) ) return;
+			if ( !WorldToScreen( pEntity.vecBox[ SECONDARY ][ BOTTOMRIGHT ], _buf[ 1 ] ) ) return;
 			buf[ 0 ] = { _buf[ 0 ].x, _buf[ 0 ].y };
 			buf[ 1 ] = { _buf[ 1 ].x, _buf[ 1 ].y };
 			!!cfg.bBoxOutline && clrBoxOutline.a != 0 ? Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) ) : ( void )0;
 			Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) );
-			if ( !WorldToScreen( pEntity.vecBox[ BASE ][ BOTTOMRIGHT ], _buf[ 0  ] ) ) return;
-			if ( !WorldToScreen( pEntity.vecBox[ SECONDARY ][ BOTTOMRIGHT ], _buf[ 1  ] ) ) return;
+			if ( !WorldToScreen( pEntity.vecBox[ SECONDARY ][ BOTTOMRIGHT ], _buf[ 0 ] ) ) return;
+			if ( !WorldToScreen( pEntity.vecBox[ SECONDARY ][ BOTTOMLEFT ], _buf[ 1 ] ) ) return;
 			buf[ 0 ] = { _buf[ 0 ].x, _buf[ 0 ].y };
 			buf[ 1 ] = { _buf[ 1 ].x, _buf[ 1 ].y };
 			!!cfg.bBoxOutline && clrBoxOutline.a != 0 ? Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) ) : ( void )0;
 			Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) );
-			if ( !WorldToScreen( pEntity.vecBox[ BASE ][ BOTTOMLEFT ], _buf[ 0  ] ) ) return;
-			if ( !WorldToScreen( pEntity.vecBox[ SECONDARY ][ BOTTOMLEFT ], _buf[ 1  ] ) ) return;
+			if ( !WorldToScreen( pEntity.vecBox[ SECONDARY ][ BOTTOMLEFT ], _buf[ 0 ] ) ) return;
+			if ( !WorldToScreen( pEntity.vecBox[ SECONDARY ][ TOPLEFT ], _buf[ 1 ] ) ) return;
+			buf[ 0 ] = { _buf[ 0 ].x, _buf[ 0 ].y };
+			buf[ 1 ] = { _buf[ 1 ].x, _buf[ 1 ].y };
+			!!cfg.bBoxOutline && clrBoxOutline.a != 0 ? Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) ) : ( void )0;
+			Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) );
+
+			if ( !WorldToScreen( pEntity.vecBox[ BASE ][ TOPLEFT ], _buf[ 0 ] ) ) return;
+			if ( !WorldToScreen( pEntity.vecBox[ SECONDARY ][ TOPLEFT ], _buf[ 1 ] ) ) return;
+			buf[ 0 ] = { _buf[ 0 ].x, _buf[ 0 ].y };
+			buf[ 1 ] = { _buf[ 1 ].x, _buf[ 1 ].y };
+			!!cfg.bBoxOutline && clrBoxOutline.a != 0 ? Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) ) : ( void )0;
+			Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) );
+			if ( !WorldToScreen( pEntity.vecBox[ BASE ][ TOPRIGHT ], _buf[ 0 ] ) ) return;
+			if ( !WorldToScreen( pEntity.vecBox[ SECONDARY ][ TOPRIGHT ], _buf[ 1 ] ) ) return;
+			buf[ 0 ] = { _buf[ 0 ].x, _buf[ 0 ].y };
+			buf[ 1 ] = { _buf[ 1 ].x, _buf[ 1 ].y };
+			!!cfg.bBoxOutline && clrBoxOutline.a != 0 ? Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) ) : ( void )0;
+			Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) );
+			if ( !WorldToScreen( pEntity.vecBox[ BASE ][ BOTTOMRIGHT ], _buf[ 0 ] ) ) return;
+			if ( !WorldToScreen( pEntity.vecBox[ SECONDARY ][ BOTTOMRIGHT ], _buf[ 1 ] ) ) return;
+			buf[ 0 ] = { _buf[ 0 ].x, _buf[ 0 ].y };
+			buf[ 1 ] = { _buf[ 1 ].x, _buf[ 1 ].y };
+			!!cfg.bBoxOutline && clrBoxOutline.a != 0 ? Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) ) : ( void )0;
+			Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) );
+			if ( !WorldToScreen( pEntity.vecBox[ BASE ][ BOTTOMLEFT ], _buf[ 0 ] ) ) return;
+			if ( !WorldToScreen( pEntity.vecBox[ SECONDARY ][ BOTTOMLEFT ], _buf[ 1 ] ) ) return;
 			buf[ 0 ] = { _buf[ 0 ].x, _buf[ 0 ].y };
 			buf[ 1 ] = { _buf[ 1 ].x, _buf[ 1 ].y };
 			!!cfg.bBoxOutline && clrBoxOutline.a != 0 ? Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) ) : ( void )0;
@@ -392,7 +412,9 @@ namespace PX::Features::Awareness
 				_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].flSnaplineOutlineThickness = 15.f;
 
 				_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].bBox = true;
-				_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].bDimesMode = true;
+				//_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].bDimesMode = ( GetMoment( ) / 10000000ull ) % 20 > 10 ? true : false;
+				//_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].bDisplayMode = ( GetMoment( ) / 10000000ull ) % 10 < 5 ? true : false;
+				_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].bDimesMode = false;
 				_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].bDisplayMode = true;
 				bDeleteOnce ? _Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].seqBox[ STATE_VISIBLE ].DeleteColorSequence( 0 ) : ( void )0;
 				bDeleteOnce ? _Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].seqBox[ STATE_VISIBLE ].PutNewColorSequence( { 255, 255, 255, 255 }, 1000ull ) : ( void )0;
