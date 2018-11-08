@@ -71,23 +71,51 @@ namespace PX::Features::Combat
 
 			case AIMTYPE_SMOOTH:
 			{
+				const auto vecViewAngles = pClientState->viewangles;
+				auto vecTemp = vecViewAngles, vecTemp2 = Vector( qTargetAngle.pitch, qTargetAngle.yaw, qTargetAngle.roll );
+				if ( fabsf( vecTemp.y ) > 90.f && fabsf( vecTemp2.y ) > 90.f )
+				{
+					if ( vecTemp.y < 0.f )
+						vecTemp.y += 360.f;
+					if ( vecTemp2.y < 0.f )
+						vecTemp2.y += 360.f;
+				}
+				auto vecRelativeSmoothedAngles = vecViewAngles - ( vecTemp - vecTemp2 ) / _Config.flSmoothFactor;
+
 				switch( _Config.iSmoothMode )
 				{
 					case SMOOTH_LINEAR:
 					{
-						auto vecTemp = pClientState->viewangles, vecTemp2 = Vector( qTargetAngle.pitch, qTargetAngle.yaw, qTargetAngle.roll );
-						if( fabsf( vecTemp.y ) > 90.f && fabsf( vecTemp2.y ) > 90.f )
-						{
-							if ( vecTemp.y < 0.f )
-								vecTemp.y += 360.f;
-							if ( vecTemp2.y < 0.f )
-								vecTemp2.y += 360.f;
-						}
+						ClampAngles( vecRelativeSmoothedAngles );
+						pClientState->viewangles = vecRelativeSmoothedAngles;
+					}
+					break;
 
-						auto vecNewAngles = pClientState->viewangles - ( vecTemp - vecTemp2 ) / _Config.flSmoothFactor;
+					case SMOOTH_PARABOLIC:
+					{
+						Vector vecNewAngles;
+
+						vecNewAngles.x = vecRelativeSmoothedAngles.x;
+						const auto flTemp = ( vecTemp2.y - vecTemp.y ) / pow( vecTemp2.x - vecNewAngles.x, 2.f );
+						vecNewAngles.y = flTemp * pow( vecNewAngles.x - vecTemp.x, 2.f ) + vecTemp.y;
+						vecNewAngles.z = vecViewAngles.z;
 						ClampAngles( vecNewAngles );
 						pClientState->viewangles = vecNewAngles;
 					}
+					break;
+
+					case SMOOTH_RADICAL:
+					{
+						Vector vecNewAngles;
+
+						vecNewAngles.x = vecRelativeSmoothedAngles.x;
+						const auto flTemp = ( vecTemp2.y - vecTemp.y ) / cbrtf( vecTemp2.x - vecNewAngles.x );
+						vecNewAngles.y = flTemp * cbrtf( vecNewAngles.x - vecTemp.x ) + vecTemp.y;
+						vecNewAngles.z = vecViewAngles.z;
+						ClampAngles( vecNewAngles );
+						pClientState->viewangles = vecNewAngles;
+					}
+					break;
 
 					default:
 					{
@@ -95,6 +123,7 @@ namespace PX::Features::Combat
 					}
 				}
 			}
+			break;
 
 			case AIMTYPE_SILENT:
 			{
