@@ -933,7 +933,7 @@ namespace PX::UI::Manager
 
 			case AIM:
 			{
-				const auto fnDrawAimOptions = [ ]( settings_t::combat_t::aim_t::weapon_t* pConfig, char* szSmoothFactor, char* szCrosshairDistance )
+				const auto fnDrawAimOptions = [ ]( settings_t::combat_t::aim_t::weapon_t* pConfig, char* szSmoothFactor, char* szCrosshairDistance, char* szIntensity )
 				{
 					{
 						BeginRow( 30, 9, ROW_STATIC );
@@ -1049,13 +1049,21 @@ namespace PX::UI::Manager
 
 						EndRow( );
 					}
+
+					{
+						BeginRow( 30, 3, ROW_CUSTOM );
+
+						pConfig->flRadicalSmoothIntensity = Slider( PX_XOR( "Smooth Factor" ), szSmoothFactor, 0.10f, 10.00f, pConfig->flRadicalSmoothIntensity, 10, 5, GROUPBOX_COLUMN_WIDTH, 30, 2 );
+					
+						EndRow( );
+					}
 				};
 
 				if ( BeginGroupbox( 200, 150, 500, 200, PX_XOR( "Global Configuration" ) ) )
 				{
-					static char szSmooth[ 32 ] { }, szCrosshairDistance[ 32 ] { };
+					static char szSmooth[ 32 ] { }, szCrosshairDistance[ 32 ] { }, szIntensity[ 32 ] {};
 					{
-						fnDrawAimOptions( &_Settings._Combat._Aim._All, szSmooth, szCrosshairDistance );
+						fnDrawAimOptions( &_Settings._Combat._Aim._All, szSmooth, szCrosshairDistance, szIntensity );
 					}
 
 					EndGroupbox( );

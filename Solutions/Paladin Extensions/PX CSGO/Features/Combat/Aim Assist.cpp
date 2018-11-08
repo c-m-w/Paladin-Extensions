@@ -109,8 +109,8 @@ namespace PX::Features::Combat
 						Vector vecNewAngles;
 
 						vecNewAngles.x = vecRelativeSmoothedAngles.x;
-						const auto flTemp = ( vecTemp2.y - vecTemp.y ) / cbrtf( vecTemp2.x - vecNewAngles.x );
-						vecNewAngles.y = flTemp * cbrtf( vecNewAngles.x - vecTemp.x ) + vecTemp.y;
+						const auto flTemp = ( vecTemp2.y - vecTemp.y ) / cbrtf( _Config.flRadicalSmoothIntensity * ( vecTemp2.x - vecNewAngles.x ) );
+						vecNewAngles.y = flTemp * cbrtf( _Config.flRadicalSmoothIntensity * ( vecNewAngles.x - vecTemp.x ) ) + vecTemp.y;
 						vecNewAngles.z = vecViewAngles.z;
 						ClampAngles( vecNewAngles );
 						pClientState->viewangles = vecNewAngles;
