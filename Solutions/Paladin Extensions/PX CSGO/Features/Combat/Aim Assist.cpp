@@ -25,7 +25,9 @@ namespace PX::Features::Combat
 		/** \brief The amount to aim each time AimAssist is called.\n
 					Used for slow aim with a constant factor.\n
 					Value is calculated when the target is first selected. */
-		QAngle qConstantAimFactor { };
+		QAngle qOldAngles { };
+		float flOldForward = 0.f, flOldSide = 0.f, flOldUp = 0.f;
+		bool bRestoreAngle = false;
 	} _AimContext;
 	const decltype( _AimContext ) DEFAULT;
 
@@ -67,6 +69,71 @@ namespace PX::Features::Combat
 			}
 			break;
 
+			case AIMTYPE_SMOOTH:
+			{
+				switch( _Config.iSmoothMode )
+				{
+					case SMOOTH_LINEAR:
+					{
+						auto vecTemp = pClientState->viewangles, vecTemp2 = Vector( qTargetAngle.pitch, qTargetAngle.yaw, qTargetAngle.roll );
+						if( fabsf( vecTemp.y ) > 90.f && fabsf( vecTemp2.y ) > 90.f )
+						{
+							if ( vecTemp.y < 0.f )
+								vecTemp.y += 360.f;
+							if ( vecTemp2.y < 0.f )
+								vecTemp2.y += 360.f;
+						}
+
+						auto vecNewAngles = pClientState->viewangles - ( vecTemp - vecTemp2 ) / _Config.flSmoothFactor;
+						ClampAngles( vecNewAngles );
+						pClientState->viewangles = vecNewAngles;
+					}
+
+					default:
+					{
+						return;
+					}
+				}
+			}
+
+			case AIMTYPE_SILENT:
+			{
+				const auto fnDoSilent = [ & ]( )
+				{
+					_AimContext.qOldAngles = pCmd->viewangles;
+					_AimContext.flOldForward = pCmd->forwardmove;
+					_AimContext.flOldSide = pCmd->sidemove;
+					_AimContext.flOldUp = pCmd->upmove;
+					pCmd->viewangles = qTargetAngle;
+					_AimContext.bRestoreAngle = true;
+				};
+
+				const auto fnRestore = [ & ]( )
+				{
+					pCmd->viewangles = _AimContext.qOldAngles;
+					pCmd->forwardmove = _AimContext.flOldForward;
+					pCmd->sidemove = _AimContext.flOldSide;
+					pCmd->upmove = _AimContext.flOldUp;
+					_AimContext.bRestoreAngle = false;
+				};
+
+				if ( _AimContext.bRestoreAngle )
+					fnRestore( ); // restore angle
+				else if ( hWeapon->CanFire( ) ) // if we should restore and can fire
+				{
+					if ( pCmd->buttons & IN_ATTACK ) // if were already attacking, attack
+						fnDoSilent( );
+					else
+					{
+						fnDoSilent( );							// set viewangles and see if triggerbot will shoot,
+						Trigger( pLocalPlayer, pCmd );			// if it doesn't, restore the angles.
+						if ( !( pCmd->buttons & IN_ATTACK ) )
+							fnRestore( );
+					}
+				}
+			}
+			break;
+
 			default:
 			{
 				return;
@@ -90,7 +157,9 @@ namespace PX::Features::Combat
 				 || !pLocalPlayer->CanSeePlayer( pCurrentEntity, _Config.bMindSmoke.Get( ) ) )
 				continue;
 
-			const auto flCrosshairDistance = CalculateCrosshairDistance( pLocalPlayer, pCurrentEntity, _Config.iReferenceHitbox, pCmd, _Config.bWorldlyCrosshairDistance.Get( ) );
+			auto flCrosshairDistance = CalculateCrosshairDistance( pLocalPlayer, pCurrentEntity, _Config.iReferenceHitbox, pCmd, _Config.bWorldlyCrosshairDistance.Get( ) );
+			if ( flCrosshairDistance > 254.558441227f )
+				flCrosshairDistance = fabsf( flCrosshairDistance -= 360.f );
 			if ( flCrosshairDistance > _Config.flMaxCrosshairDistance )
 				continue;
 

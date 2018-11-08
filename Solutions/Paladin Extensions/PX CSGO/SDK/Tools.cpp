@@ -103,6 +103,20 @@ namespace PX::Tools
 		qAngles.roll = std::clamp( qAngles.roll, PX_MIN_ROLL, PX_MAX_ROLL );
 	}
 
+	void PX_API ClampAngles( Vector& vecAngles )
+	{
+		if ( std::isnan( vecAngles.x ) || std::isnan( vecAngles.y ) || std::isnan( vecAngles.z )
+			 || std::isinf( vecAngles.x ) || std::isinf( vecAngles.y ) || std::isinf( vecAngles.z ) )
+			return ( void )( vecAngles.x = 0.f, vecAngles.y = 0.f, vecAngles.z = 0.f );
+
+		vecAngles.x = std::clamp( vecAngles.x, PX_MIN_PITCH, PX_MAX_PITCH );
+
+		if ( vecAngles.y < PX_MIN_YAW || vecAngles.y > PX_MAX_YAW )
+			vecAngles.y += std::floor( vecAngles.y / ( PX_REVOLUTION / 2 ) ) * PX_REVOLUTION;
+
+		vecAngles.z = std::clamp( vecAngles.z, PX_MIN_ROLL, PX_MAX_ROLL );
+	}
+
 	bool PX_API WorldToScreen( const Vector& vecWorld, Vector &vecScreen )
 	{
 		int iWidth, iHeight;
@@ -216,8 +230,6 @@ namespace PX::Tools
 
 		qReturn.pitch = atan2( vecRelativePosition.z, fl2DDistance ) * -180.f / D3DX_PI;
 		qReturn.yaw = atan2( vecRelativePosition.y, vecRelativePosition.x ) * 180.f / D3DX_PI;
-		if ( qReturn.yaw < 0.f )
-			qReturn.yaw += 360.f;
 		qReturn.roll = pCmd->viewangles.roll;
 		if ( bAccountForRecoil )
 			qReturn += pLocalPlayer->m_aimPunchAngle( ) * 2.f * ( flRecoilPrecision / 100.f );

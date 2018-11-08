@@ -342,6 +342,7 @@ namespace PX::Features
 					int iPriorityHitbox = HITBOX_HEAD;
 					int iAimType = AIMTYPE_DEFAULT;
 					float flMaxCrosshairDistance = 1.f;
+					float flMaxWorldCrosshairDistance = 1.f;
 					float flSmoothFactor = 1.f;
 					int iSmoothMode = SMOOTH_LINEAR;
 					int iTargeting = TARGETING_DISTANCE;

@@ -32,6 +32,7 @@ namespace PX::Tools
 
 	// Math
 	void PX_API ClampAngles( QAngle& qAngles );
+	void PX_API ClampAngles( Vector& vecAngles );
 	bool PX_API WorldToScreen( const Vector& vecWorld, Vector &vecScreen );
 	void PX_API TransformVector( Vector vecInput, matrix3x4_t mtxInput, Vector &vecOutput );
 	void PX_API TransformAngle( const QAngle &qAngles, Vector& vecForward );

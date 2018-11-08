@@ -12,10 +12,14 @@ namespace PX::Features::Combat
 {
 	void PX_API Trigger( player_ptr_t pLocalPlayer, CUserCmd* pCmd )
 	{
+		if ( pCmd->buttons & IN_ATTACK )
+			return;
+
 		const auto hActiveWeapon = pLocalPlayer->m_hActiveWeapon( ).Get( );
 		if ( hActiveWeapon == nullptr
 			 || !hActiveWeapon->CanFire( ) )
 			return;
+
 		const auto iItemDefinitionIndex = hActiveWeapon->m_Item( )->m_iItemDefinitionIndex( );
 		const auto pWeaponData = hActiveWeapon->GetCSWeaponData( );
 		if ( !pWeaponData )
