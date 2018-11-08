@@ -97,8 +97,8 @@ namespace PX::Features::Awareness
 
 				for ( auto i = 0; i < 8; i++ )
 				{
-					TransformVector( vecPoints[ i ], mtxTransformation, vecTransformedPoints[ i ] );
-					pEntity.bBoxVisibility &= WorldToScreen( vecTransformedPoints[ i ], vecScreenPoints[ i ] );
+					TransformVector( vecPoints[ i ], mtxTransformation, vecTransformedPoints[ i  ] ) ) return;
+					pEntity.bBoxVisibility &= WorldToScreen( vecTransformedPoints[ i ], vecScreenPoints[ i  ] ) ) return;
 				}
 
 				auto flTop = vecScreenPoints[ 0 ].y, flRight = vecScreenPoints[ 0 ].x, flBottom = vecScreenPoints[ 0 ].y, flLeft = vecScreenPoints[ 0 ].x;
@@ -141,7 +141,7 @@ namespace PX::Features::Awareness
 				for ( auto i = 0; i < TLRB_MAX; i++ )
 				{
 					vecPoints[ i ].Rotate2D( flRotation, vecRotationPoint );
-					pEntity.bBoxVisibility &= WorldToScreen( vecPoints[ i ], pEntity.vecBox[ BASE ][ i ] );
+					pEntity.bBoxVisibility &= WorldToScreen( vecPoints[ i ], pEntity.vecBox[ BASE ][ i  ] ) ) return;
 				}
 				memcpy( pEntity.vecBox, vecPoints, sizeof( Vector ) * 4 );
 			}
@@ -213,7 +213,7 @@ namespace PX::Features::Awareness
 
 		D3DXVECTOR2 vecSnapline[ ORIGIN_DESTINATION_MAX ] { };
 		int iDimes[ 2 ];
-		pEngineClient->GetScreenSize( iDimes[ 0 ], iDimes[ 1 ] );
+		pEngineClient->GetScreenSize( iDimes[ 0 ], iDimes[ 1  ] ) ) return;
 
 		vecSnapline[ ORIGIN ].x = float( iDimes[ 0 ] ) / 2.f;
 		vecSnapline[ ORIGIN ].y = !cfg.bSnaplineOrigin ? iDimes[ 1 ] : 0.f;
@@ -232,16 +232,14 @@ namespace PX::Features::Awareness
 			vecSnapline[ DESTINATION ].y += ( pEntity.vecBox[ enumIndex ][ TOPRIGHT ].y - pEntity.vecBox[ BASE ][ TOPLEFT ].y ) / 2.f;
 		}
 
+		if ( !!cfg.bSnaplineOutline )
+		{
+			const auto clrSnaplineOutline = cfg.seqSnaplineOutline.GetCurrentColor( );
+			if ( clrSnaplineOutline.a != 0 )
+				Line( vecSnapline, ORIGIN_DESTINATION_MAX, cfg.flSnaplineOutlineThickness, clrSnaplineOutline.GetARGB( ) );
+		}
+
 		Line( vecSnapline, ORIGIN_DESTINATION_MAX, cfg.flSnaplineThickness, clrSnapline.GetARGB( ) );
-		
-		if ( !cfg.bSnaplineOutline )
-			return;
-
-		const auto clrSnaplineOutline = cfg.seqSnaplineOutline.GetCurrentColor( );
-		if ( clrSnaplineOutline.a == 0 )
-			return;
-
-		Line( vecSnapline, ORIGIN_DESTINATION_MAX, cfg.flSnaplineOutlineThickness, clrSnaplineOutline.GetARGB( ) );
 	}
 
 	static void PX_API DrawBox( )
@@ -265,90 +263,106 @@ namespace PX::Features::Awareness
 
 		if ( !cfg.bDimesMode ) // 2d
 		{
-			D3DXVECTOR2 buf[ ] = { { pEntity.vecBox[ BASE ][ TOPLEFT ].x, pEntity.vecBox[ BASE ][ TOPLEFT ].y },
-									{ pEntity.vecBox[ BASE ][ TOPRIGHT ].x, pEntity.vecBox[ BASE ][ TOPRIGHT ].y },
-									{ pEntity.vecBox[ BASE ][ BOTTOMLEFT ].x, pEntity.vecBox[ BASE ][ BOTTOMLEFT ].y },
-									{ pEntity.vecBox[ BASE ][ BOTTOMRIGHT ].x, pEntity.vecBox[ BASE ][ BOTTOMRIGHT ].y } };
-			//Line( new D3DXVECTOR2[ 2 ] { buf[ TOPLEFT ], buf[ TOPRIGHT ] }, 2, cfg.flBoxThickness, clrBox.GetARGB( ) );
-			//Line( new D3DXVECTOR2[ 2 ] { buf[ TOPRIGHT ], buf[ BOTTOMRIGHT ] }, 2, cfg.flBoxThickness, clrBox.GetARGB( ) );
-			//Line( new D3DXVECTOR2[ 2 ] { buf[ BOTTOMRIGHT ], buf[ BOTTOMLEFT ] }, 2, cfg.flBoxThickness, clrBox.GetARGB( ) );
-			//Line( new D3DXVECTOR2[ 2 ] { buf[ BOTTOMLEFT ], buf[ TOPLEFT ] }, 2, cfg.flBoxThickness, clrBox.GetARGB( ) );
-
-			if ( !cfg.bBoxOutline )
-				return;
-
+			D3DXVECTOR2 buf[ ] = { { }, { } };
 			const auto clrBoxOutline = cfg.seqBoxOutline.GetCurrentColor( );
-			if ( clrBoxOutline.a == 0 )
-				return;
 
-			//Line( new D3DXVECTOR2[ 2 ] { buf[ TOPLEFT ], buf[ TOPRIGHT ] }, 2, cfg.flBoxOutlineThickness, clrBox.GetARGB( ) );
-			//Line( new D3DXVECTOR2[ 2 ] { buf[ TOPRIGHT ], buf[ BOTTOMRIGHT ] }, 2, cfg.flBoxOutlineThickness, clrBox.GetARGB( ) );
-			//Line( new D3DXVECTOR2[ 2 ] { buf[ BOTTOMRIGHT ], buf[ BOTTOMLEFT ] }, 2, cfg.flBoxOutlineThickness, clrBox.GetARGB( ) );
-			//Line( new D3DXVECTOR2[ 2 ] { buf[ BOTTOMLEFT ], buf[ TOPLEFT ] }, 2, cfg.flBoxOutlineThickness, clrBox.GetARGB( ) );
+			buf[ 0 ] = { pEntity.vecBox[ BASE ][ TOPLEFT ].x, pEntity.vecBox[ BASE ][ TOPLEFT ].y };
+			buf[ 1 ] = { pEntity.vecBox[ BASE ][ TOPRIGHT ].x, pEntity.vecBox[ BASE ][ TOPRIGHT ].y };
+			!!cfg.bBoxOutline && clrBoxOutline.a != 0 ? Line( buf, 2, cfg.flBoxOutlineThickness, clrBoxOutline.GetARGB( ) ) : ( void )0;
+			Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) );
+			buf[ 0 ] = { pEntity.vecBox[ BASE ][ TOPRIGHT ].x, pEntity.vecBox[ BASE ][ TOPRIGHT ].y };
+			buf[ 1 ] = { pEntity.vecBox[ BASE ][ BOTTOMRIGHT ].x, pEntity.vecBox[ BASE ][ BOTTOMRIGHT ].y };
+			!!cfg.bBoxOutline && clrBoxOutline.a != 0 ? Line( buf, 2, cfg.flBoxOutlineThickness, clrBoxOutline.GetARGB( ) ) : ( void )0;
+			Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) );
+			buf[ 0 ] = { pEntity.vecBox[ BASE ][ BOTTOMRIGHT ].x, pEntity.vecBox[ BASE ][ BOTTOMRIGHT ].y };
+			buf[ 1 ] = { pEntity.vecBox[ BASE ][ BOTTOMLEFT ].x, pEntity.vecBox[ BASE ][ BOTTOMLEFT ].y };
+			!!cfg.bBoxOutline && clrBoxOutline.a != 0 ? Line( buf, 2, cfg.flBoxOutlineThickness, clrBoxOutline.GetARGB( ) ) : ( void )0;
+			Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) );
+			buf[ 0 ] = { pEntity.vecBox[ BASE ][ BOTTOMLEFT ].x, pEntity.vecBox[ BASE ][ BOTTOMLEFT ].y };
+			buf[ 1 ] = { pEntity.vecBox[ BASE ][ TOPLEFT ].x, pEntity.vecBox[ BASE ][ TOPLEFT ].y };
+			!!cfg.bBoxOutline && clrBoxOutline.a != 0 ? Line( buf, 2, cfg.flBoxOutlineThickness, clrBoxOutline.GetARGB( ) ) : ( void )0;
+			Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) );
 		}
 		else // 3d
 		{
-			Vector _buf[ FC_MAX ][ TLRB_MAX ] { };
-			{
-				WorldToScreen( pEntity.vecBox[ BASE ][ TOPLEFT ], _buf[ BASE ][ TOPLEFT ] );
-				WorldToScreen( pEntity.vecBox[ BASE ][ TOPRIGHT ], _buf[ BASE ][ TOPRIGHT ] );
-				WorldToScreen( pEntity.vecBox[ BASE ][ BOTTOMLEFT ], _buf[ BASE ][ BOTTOMLEFT ] );
-				WorldToScreen( pEntity.vecBox[ BASE ][ BOTTOMRIGHT ], _buf[ BASE ][ BOTTOMRIGHT ] );
-				D3DXVECTOR2 buf[ ] = { { _buf[ BASE ][ TOPLEFT ].x, _buf[ BASE ][ TOPLEFT ].y },
-										{ _buf[ BASE ][ TOPRIGHT ].x,   _buf[ BASE ][ TOPRIGHT ].y },
-										{ _buf[ BASE ][ BOTTOMLEFT ].x, _buf[ BASE ][ BOTTOMLEFT ].y },
-										{ _buf[ BASE ][ BOTTOMRIGHT ].x,_buf[ BASE ][ BOTTOMRIGHT ].y } };
-				Line( buf, TLRB_MAX, cfg.flBoxThickness, clrBox.GetARGB( ) );
-			}
-			{
-				WorldToScreen( pEntity.vecBox[ SECONDARY ][ TOPLEFT ], _buf[ SECONDARY ][ TOPLEFT ] );
-				WorldToScreen( pEntity.vecBox[ SECONDARY ][ TOPRIGHT ], _buf[ SECONDARY ][ TOPRIGHT ] );
-				WorldToScreen( pEntity.vecBox[ SECONDARY ][ BOTTOMLEFT ], _buf[ SECONDARY ][ BOTTOMLEFT ] );
-				WorldToScreen( pEntity.vecBox[ SECONDARY ][ BOTTOMRIGHT ], _buf[ SECONDARY ][ BOTTOMRIGHT ] );
-				D3DXVECTOR2 buf[ ] = { { _buf[ SECONDARY ][ TOPLEFT ].x, _buf[ SECONDARY ][ TOPLEFT ].y },
-										{ _buf[ SECONDARY ][ TOPRIGHT ].x,   _buf[ SECONDARY ][ TOPRIGHT ].y },
-										{ _buf[ SECONDARY ][ BOTTOMLEFT ].x, _buf[ SECONDARY ][ BOTTOMLEFT ].y },
-										{ _buf[ SECONDARY ][ BOTTOMRIGHT ].x,_buf[ SECONDARY ][ BOTTOMRIGHT ].y } };
-				Line( buf, TLRB_MAX, cfg.flBoxThickness, clrBox.GetARGB( ) );
-			}
-			{
-				D3DXVECTOR2 buf[ ] = { { _buf[ BASE ][ TOPLEFT ].x,   _buf[ SECONDARY ][ TOPLEFT ].y },
-						{   _buf[ BASE ][ TOPRIGHT ].x,    _buf[ SECONDARY ][ TOPRIGHT ].y },
-						{   _buf[ BASE ][ BOTTOMLEFT ].x,  _buf[ SECONDARY ][ BOTTOMLEFT ].y },
-						{   _buf[ BASE ][ BOTTOMRIGHT ].x, _buf[ SECONDARY ][ BOTTOMRIGHT ].y } };
-
-				Line( buf, TLRB_MAX, cfg.flBoxThickness, clrBox.GetARGB( ) );
-			}
-
-			if ( !cfg.bBoxOutline )
-				return;
-
+			Vector _buf[ ] = { { }, { } };
+			D3DXVECTOR2 buf[ ] = { { }, { } };
 			const auto clrBoxOutline = cfg.seqBoxOutline.GetCurrentColor( );
-			if ( clrBoxOutline.a == 0 )
-				return;
 
-			{
-				D3DXVECTOR2 buf[ ] = { { _buf[ BASE ][ TOPLEFT ].x, _buf[ BASE ][ TOPLEFT ].y },
-										{ _buf[ BASE ][ TOPRIGHT ].x,   _buf[ BASE ][ TOPRIGHT ].y },
-										{ _buf[ BASE ][ BOTTOMLEFT ].x, _buf[ BASE ][ BOTTOMLEFT ].y },
-										{ _buf[ BASE ][ BOTTOMRIGHT ].x,_buf[ BASE ][ BOTTOMRIGHT ].y } };
-				Line( buf, TLRB_MAX, cfg.flBoxOutlineThickness, clrBoxOutline.GetARGB( ) );
-			}
-			{
-				D3DXVECTOR2 buf[ ] = { { _buf[ SECONDARY ][ TOPLEFT ].x, _buf[ SECONDARY ][ TOPLEFT ].y },
-										{ _buf[ SECONDARY ][ TOPRIGHT ].x,   _buf[ SECONDARY ][ TOPRIGHT ].y },
-										{ _buf[ SECONDARY ][ BOTTOMLEFT ].x, _buf[ SECONDARY ][ BOTTOMLEFT ].y },
-										{ _buf[ SECONDARY ][ BOTTOMRIGHT ].x,_buf[ SECONDARY ][ BOTTOMRIGHT ].y } };
-				Line( buf, TLRB_MAX, cfg.flBoxOutlineThickness, clrBoxOutline.GetARGB( ) );
-			}
-			{
-				D3DXVECTOR2 buf[ ] = { { _buf[ BASE ][ TOPLEFT ].x,   _buf[ SECONDARY ][ TOPLEFT ].y },
-						{   _buf[ BASE ][ TOPRIGHT ].x,    _buf[ SECONDARY ][ TOPRIGHT ].y },
-						{   _buf[ BASE ][ BOTTOMLEFT ].x,  _buf[ SECONDARY ][ BOTTOMLEFT ].y },
-						{   _buf[ BASE ][ BOTTOMRIGHT ].x, _buf[ SECONDARY ][ BOTTOMRIGHT ].y } };
+			if ( !WorldToScreen( pEntity.vecBox[ BASE ][ TOPLEFT ], _buf[ 0  ] ) ) return;
+			if ( !WorldToScreen( pEntity.vecBox[ BASE ][ TOPRIGHT ], _buf[ 1  ] ) ) return;
+			buf[ 0 ] = { _buf[ 0 ].x, _buf[ 0 ].y };
+			buf[ 1 ] = { _buf[ 1 ].x, _buf[ 1 ].y };
+			!!cfg.bBoxOutline && clrBoxOutline.a != 0 ? Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) ) : ( void )0;
+			Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) );
+			if ( !WorldToScreen( pEntity.vecBox[ BASE ][ TOPRIGHT ], _buf[ 0  ] ) ) return;
+			if ( !WorldToScreen( pEntity.vecBox[ BASE ][ BOTTOMRIGHT ], _buf[ 1  ] ) ) return;
+			buf[ 0 ] = { _buf[ 0 ].x, _buf[ 0 ].y };
+			buf[ 1 ] = { _buf[ 1 ].x, _buf[ 1 ].y };
+			!!cfg.bBoxOutline && clrBoxOutline.a != 0 ? Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) ) : ( void )0;
+			Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) );
+			if ( !WorldToScreen( pEntity.vecBox[ BASE ][ BOTTOMRIGHT ], _buf[ 0  ] ) ) return;
+			if ( !WorldToScreen( pEntity.vecBox[ BASE ][ BOTTOMLEFT ], _buf[ 1  ] ) ) return;
+			buf[ 0 ] = { _buf[ 0 ].x, _buf[ 0 ].y };
+			buf[ 1 ] = { _buf[ 1 ].x, _buf[ 1 ].y };
+			!!cfg.bBoxOutline && clrBoxOutline.a != 0 ? Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) ) : ( void )0;
+			Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) );
+			if ( !WorldToScreen( pEntity.vecBox[ BASE ][ BOTTOMLEFT ], _buf[ 0  ] ) ) return;
+			if ( !WorldToScreen( pEntity.vecBox[ BASE ][ TOPLEFT ], _buf[ 1  ] ) ) return;
+			buf[ 0 ] = { _buf[ 0 ].x, _buf[ 0 ].y };
+			buf[ 1 ] = { _buf[ 1 ].x, _buf[ 1 ].y };
+			!!cfg.bBoxOutline && clrBoxOutline.a != 0 ? Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) ) : ( void )0;
+			Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) );
 
-				Line( buf, TLRB_MAX, cfg.flBoxOutlineThickness, clrBoxOutline.GetARGB( ) );
-			}
+			if ( !WorldToScreen( pEntity.vecBox[ SECONDARY ][ TOPLEFT ], _buf[ 0  ] ) ) return;
+			if ( !WorldToScreen( pEntity.vecBox[ SECONDARY ][ TOPRIGHT ], _buf[ 1  ] ) ) return;
+			buf[ 0 ] = { _buf[ 0 ].x, _buf[ 0 ].y };
+			buf[ 1 ] = { _buf[ 1 ].x, _buf[ 1 ].y };
+			!!cfg.bBoxOutline && clrBoxOutline.a != 0 ? Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) ) : ( void )0;
+			Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) );
+			if ( !WorldToScreen( pEntity.vecBox[ SECONDARY ][ TOPRIGHT ], _buf[ 0  ] ) ) return;
+			if ( !WorldToScreen( pEntity.vecBox[ SECONDARY ][ BOTTOMRIGHT ], _buf[ 1  ] ) ) return;
+			buf[ 0 ] = { _buf[ 0 ].x, _buf[ 0 ].y };
+			buf[ 1 ] = { _buf[ 1 ].x, _buf[ 1 ].y };
+			!!cfg.bBoxOutline && clrBoxOutline.a != 0 ? Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) ) : ( void )0;
+			Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) );
+			if ( !WorldToScreen( pEntity.vecBox[ SECONDARY ][ BOTTOMRIGHT ], _buf[ 0  ] ) ) return;
+			if ( !WorldToScreen( pEntity.vecBox[ SECONDARY ][ BOTTOMLEFT ], _buf[ 1  ] ) ) return;
+			buf[ 0 ] = { _buf[ 0 ].x, _buf[ 0 ].y };
+			buf[ 1 ] = { _buf[ 1 ].x, _buf[ 1 ].y };
+			!!cfg.bBoxOutline && clrBoxOutline.a != 0 ? Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) ) : ( void )0;
+			Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) );
+			if ( !WorldToScreen( pEntity.vecBox[ SECONDARY ][ BOTTOMLEFT ], _buf[ 0  ] ) ) return;
+			if ( !WorldToScreen( pEntity.vecBox[ SECONDARY ][ TOPLEFT ], _buf[ 1  ] ) ) return;
+			buf[ 0 ] = { _buf[ 0 ].x, _buf[ 0 ].y };
+			buf[ 1 ] = { _buf[ 1 ].x, _buf[ 1 ].y };
+			!!cfg.bBoxOutline && clrBoxOutline.a != 0 ? Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) ) : ( void )0;
+			Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) );
+
+			if ( !WorldToScreen( pEntity.vecBox[ BASE ][ TOPLEFT ], _buf[ 0  ] ) ) return;
+			if ( !WorldToScreen( pEntity.vecBox[ SECONDARY ][ TOPLEFT ], _buf[ 1  ] ) ) return;
+			buf[ 0 ] = { _buf[ 0 ].x, _buf[ 0 ].y };
+			buf[ 1 ] = { _buf[ 1 ].x, _buf[ 1 ].y };
+			!!cfg.bBoxOutline && clrBoxOutline.a != 0 ? Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) ) : ( void )0;
+			Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) );
+			if ( !WorldToScreen( pEntity.vecBox[ BASE ][ TOPRIGHT ], _buf[ 0  ] ) ) return;
+			if ( !WorldToScreen( pEntity.vecBox[ SECONDARY ][ TOPRIGHT ], _buf[ 1  ] ) ) return;
+			buf[ 0 ] = { _buf[ 0 ].x, _buf[ 0 ].y };
+			buf[ 1 ] = { _buf[ 1 ].x, _buf[ 1 ].y };
+			!!cfg.bBoxOutline && clrBoxOutline.a != 0 ? Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) ) : ( void )0;
+			Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) );
+			if ( !WorldToScreen( pEntity.vecBox[ BASE ][ BOTTOMRIGHT ], _buf[ 0  ] ) ) return;
+			if ( !WorldToScreen( pEntity.vecBox[ SECONDARY ][ BOTTOMRIGHT ], _buf[ 1  ] ) ) return;
+			buf[ 0 ] = { _buf[ 0 ].x, _buf[ 0 ].y };
+			buf[ 1 ] = { _buf[ 1 ].x, _buf[ 1 ].y };
+			!!cfg.bBoxOutline && clrBoxOutline.a != 0 ? Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) ) : ( void )0;
+			Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) );
+			if ( !WorldToScreen( pEntity.vecBox[ BASE ][ BOTTOMLEFT ], _buf[ 0  ] ) ) return;
+			if ( !WorldToScreen( pEntity.vecBox[ SECONDARY ][ BOTTOMLEFT ], _buf[ 1  ] ) ) return;
+			buf[ 0 ] = { _buf[ 0 ].x, _buf[ 0 ].y };
+			buf[ 1 ] = { _buf[ 1 ].x, _buf[ 1 ].y };
+			!!cfg.bBoxOutline && clrBoxOutline.a != 0 ? Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) ) : ( void )0;
+			Line( buf, 2, cfg.flBoxThickness, clrBox.GetARGB( ) );
 		}
 	}
 
@@ -359,6 +373,7 @@ namespace PX::Features::Awareness
 
 	void PX_API DrawStatistics( )
 	{
+		static bool bDeleteOnce = false;
 		{
 			{
 				_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].bEnabled = true;
@@ -367,34 +382,43 @@ namespace PX::Features::Awareness
 				_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].bSnaplineOrigin = false;
 				_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].bSnaplineDestination = true;
 				_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].bSnaplineDestination = true;
-				_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].seqSnapline[ STATE_VISIBLE ].PutNewColorSequence( { 255, 255, 255, 255 }, 1000ull );
+
+				bDeleteOnce ? _Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].seqSnapline[ STATE_VISIBLE ].DeleteColorSequence( 0 ) : ( void )0;
+				bDeleteOnce ? _Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].seqSnapline[ STATE_VISIBLE ].PutNewColorSequence( { 255, 255, 255, 255 }, 1000ull ) : ( void )0;
+				
 				_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].bSnaplineOutline = true;
-				_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].seqSnaplineOutline.PutNewColorSequence( { 0, 0, 0, 0 }, 1000ull );
-				_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].flSnaplineOutlineThickness = 3.f;
+				bDeleteOnce ? _Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].seqSnaplineOutline.DeleteColorSequence( 0 ) : ( void )0;
+				bDeleteOnce ? _Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].seqSnaplineOutline.PutNewColorSequence( { 0, 0, 0, 255 }, 1000ull ) : ( void )0;
+				_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].flSnaplineOutlineThickness = 15.f;
 
 				_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].bBox = true;
-				_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].seqBox[ STATE_VISIBLE ].PutNewColorSequence( { 255, 255, 255, 255 }, 1000ull );
+				_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].bDimesMode = true;
+				_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].bDisplayMode = true;
+				bDeleteOnce ? _Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].seqBox[ STATE_VISIBLE ].DeleteColorSequence( 0 ) : ( void )0;
+				bDeleteOnce ? _Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].seqBox[ STATE_VISIBLE ].PutNewColorSequence( { 255, 255, 255, 255 }, 1000ull ) : ( void )0;
 				_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].flBoxThickness = 2.f;
 			}
 
 			{
-				_Settings._Awareness._Statistics._Entities[ SETTING_ENTITY_WEAPONS ].bEnabled = true;
+				_Settings._Awareness._Statistics._Entities[ SETTING_ENTITY_WEAPONS ].bEnabled = false;
 				_Settings._Awareness._Statistics._Entities[ SETTING_ENTITY_WEAPONS ].bSnapline = true;
 				_Settings._Awareness._Statistics._Entities[ SETTING_ENTITY_WEAPONS ].bBox = true;
 
-				_Settings._Awareness._Statistics._Entities[ SETTING_ENTITY_CHICKEN ].bEnabled = true;
+				_Settings._Awareness._Statistics._Entities[ SETTING_ENTITY_CHICKEN ].bEnabled = false;
 				_Settings._Awareness._Statistics._Entities[ SETTING_ENTITY_CHICKEN ].bSnapline = true;
 				_Settings._Awareness._Statistics._Entities[ SETTING_ENTITY_CHICKEN ].bBox = true;
+				_Settings._Awareness._Statistics._Entities[ SETTING_ENTITY_CHICKEN ].bDimesMode = true;
 
-				_Settings._Awareness._Statistics._Players[ SETTING_ENTITY_GRENADE_FLASH ].bEnabled = true;
+				_Settings._Awareness._Statistics._Players[ SETTING_ENTITY_GRENADE_FLASH ].bEnabled = false;
 				_Settings._Awareness._Statistics._Players[ SETTING_ENTITY_GRENADE_FLASH ].bSnapline = true;
 				_Settings._Awareness._Statistics._Players[ SETTING_ENTITY_GRENADE_FLASH ].bBox = true;
 
-				_Settings._Awareness._Statistics._Players[ SETTING_ENTITY_GRENADE_PROJECTILE_FLASH ].bEnabled = true;
+				_Settings._Awareness._Statistics._Players[ SETTING_ENTITY_GRENADE_PROJECTILE_FLASH ].bEnabled = false;
 				_Settings._Awareness._Statistics._Players[ SETTING_ENTITY_GRENADE_PROJECTILE_FLASH ].bSnapline = true;
 				_Settings._Awareness._Statistics._Players[ SETTING_ENTITY_GRENADE_PROJECTILE_FLASH ].bBox = true;
 			}
 		}
+		bDeleteOnce = true;
 
 		// check that game is setup properly
 		if ( !pEngineClient->IsInGame( ) )

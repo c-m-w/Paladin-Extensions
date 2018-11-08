@@ -91,28 +91,30 @@ namespace PX::Tools
 
 	void PX_API ClampAngles( QAngle& qAngles )
 	{
-		if ( std::isnan( qAngles.pitch ) || std::isnan( qAngles.yaw ) || std::isnan( qAngles.roll )
-			 || std::isinf( qAngles.pitch ) || std::isinf( qAngles.yaw ) || std::isinf( qAngles.roll ) )
+		if ( isnan( qAngles.pitch ) || isnan( qAngles.yaw ) || isnan( qAngles.roll )
+			 || isinf( qAngles.pitch ) || isinf( qAngles.yaw ) || isinf( qAngles.roll ) )
 			return ( void )( qAngles.pitch = 0.f, qAngles.yaw = 0.f, qAngles.roll = 0.f );
 
 		qAngles.pitch = std::clamp( qAngles.pitch, PX_MIN_PITCH, PX_MAX_PITCH );
 
 		if ( qAngles.yaw < PX_MIN_YAW || qAngles.yaw > PX_MAX_YAW )
-			qAngles.yaw += std::floor( qAngles.yaw / ( PX_REVOLUTION / 2 ) ) * PX_REVOLUTION;
+			qAngles.yaw += -qAngles.yaw / fabs( qAngles.yaw ) * floorf( qAngles.yaw / ( PX_REVOLUTION / 2.f ) ) * PX_REVOLUTION;
+		if ( qAngles.yaw < PX_MIN_YAW || qAngles.yaw > PX_MAX_YAW )
+			qAngles.yaw = 0.f;
 
 		qAngles.roll = std::clamp( qAngles.roll, PX_MIN_ROLL, PX_MAX_ROLL );
 	}
 
 	void PX_API ClampAngles( Vector& vecAngles )
 	{
-		if ( std::isnan( vecAngles.x ) || std::isnan( vecAngles.y ) || std::isnan( vecAngles.z )
-			 || std::isinf( vecAngles.x ) || std::isinf( vecAngles.y ) || std::isinf( vecAngles.z ) )
+		if ( isnan( vecAngles.x ) || isnan( vecAngles.y ) || isnan( vecAngles.z )
+			 || isinf( vecAngles.x ) || isinf( vecAngles.y ) || isinf( vecAngles.z ) )
 			return ( void )( vecAngles.x = 0.f, vecAngles.y = 0.f, vecAngles.z = 0.f );
 
 		vecAngles.x = std::clamp( vecAngles.x, PX_MIN_PITCH, PX_MAX_PITCH );
 
 		if ( vecAngles.y < PX_MIN_YAW || vecAngles.y > PX_MAX_YAW )
-			vecAngles.y += std::floor( vecAngles.y / ( PX_REVOLUTION / 2 ) ) * PX_REVOLUTION;
+			vecAngles.y += -vecAngles.y / fabs( vecAngles.y ) * floorf( vecAngles.y / ( PX_REVOLUTION / 2.f ) ) * PX_REVOLUTION;
 
 		vecAngles.z = std::clamp( vecAngles.z, PX_MIN_ROLL, PX_MAX_ROLL );
 	}
