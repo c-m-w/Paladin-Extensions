@@ -119,7 +119,8 @@ namespace PX::Features
 		SMOOTH_LINEAR,
 		SMOOTH_PARABOLIC,
 		SMOOTH_RADICAL,
-		SMOOTH_INVERSE,
+		SMOOTH_SINUSOIDAL,
+		SMOOTH_BEZIER,
 		SMOOTH_RANDOMIZE
 	};
 
@@ -346,7 +347,8 @@ namespace PX::Features
 					float flMaxCrosshairDistance = 1.f;
 					float flMaxWorldCrosshairDistance = 1.f;
 					float flSmoothFactor = 1.f;
-					float flRadicalSmoothIntensity = 0.1f; // min 0.1f, max 10.f
+					float flBisectionPoint = 0.f; // 0 to 1.00
+					float flBezierDistance = 1.f;
 					int iSmoothMode = SMOOTH_LINEAR;
 					int iTargeting = TARGETING_DISTANCE;
 				} _All, _WeaponTypes[ WEAPONTYPE_MACHINEGUN + 1 ] { }, _IndividualWeapons[ ITEM_MAX ] { };

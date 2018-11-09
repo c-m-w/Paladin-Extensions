@@ -28,6 +28,7 @@ namespace PX::Features::Combat
 		QAngle qOldAngles { };
 		float flOldForward = 0.f, flOldSide = 0.f, flOldUp = 0.f;
 		bool bRestoreAngle = false;
+		float flBezierRatio = 0.f;
 	} _AimContext;
 	const decltype( _AimContext ) DEFAULT;
 
@@ -38,26 +39,27 @@ namespace PX::Features::Combat
 				 nullptr is returned if no target was found. */
 	player_ptr_t PX_API FindTarget( player_ptr_t pLocalPlayer, CUserCmd* pCmd );
 	int PX_API FindHitbox( player_ptr_t pLocalPlayer, player_ptr_t pTarget, CUserCmd* pCmd );
+	void PX_API ResetContext( );
 	void PX_API OnNewTarget( player_ptr_t pLocalPlayer, player_ptr_t pTarget, CUserCmd* pCmd );
 
 	void PX_API AimAssist( player_ptr_t pLocalPlayer, CUserCmd* pCmd )
 	{
 		if ( !pLocalPlayer->IsAlive( ) )
-			return;
+			return ResetContext( );
 
 		const auto hWeapon = pLocalPlayer->m_hActiveWeapon( );
 		if ( !hWeapon )
-			return;
+			return ResetContext( );
 
 		const auto pTarget = FindTarget( pLocalPlayer, pCmd );
 		if ( nullptr == pTarget
 			 || !( pTarget->m_iTeamNum( ) == pLocalPlayer->m_iTeamNum( ) ? _Config.bTeammates : _Config.bEnemies ) )
-			return;
+			return ResetContext( );
 
 		if ( _AimContext.iEntityIndex != pTarget->EntIndex( ) )
 			OnNewTarget( pLocalPlayer, pTarget, pCmd );
 		if ( _AimContext.iHitbox == -1 )
-			return;
+			return ResetContext( );
 
 		auto qTargetAngle = CalculateAngle( pLocalPlayer, pTarget, _AimContext.iHitbox, pCmd, false );
 		ClampAngles( qTargetAngle );
@@ -81,6 +83,7 @@ namespace PX::Features::Combat
 						vecTemp2.y += 360.f;
 				}
 				auto vecRelativeSmoothedAngles = vecViewAngles - ( vecTemp - vecTemp2 ) / _Config.flSmoothFactor;
+				Vector vecNewAngles;
 
 				switch( _Config.iSmoothMode )
 				{
@@ -93,8 +96,6 @@ namespace PX::Features::Combat
 
 					case SMOOTH_PARABOLIC:
 					{
-						Vector vecNewAngles;
-
 						vecNewAngles.x = vecRelativeSmoothedAngles.x;
 						const auto flTemp = ( vecTemp2.y - vecTemp.y ) / pow( vecTemp2.x - vecNewAngles.x, 2.f );
 						vecNewAngles.y = flTemp * pow( vecNewAngles.x - vecTemp.x, 2.f ) + vecTemp.y;
@@ -106,12 +107,44 @@ namespace PX::Features::Combat
 
 					case SMOOTH_RADICAL:
 					{
-						Vector vecNewAngles;
-
 						vecNewAngles.x = vecRelativeSmoothedAngles.x;
-						const auto flTemp = ( vecTemp2.y - vecTemp.y ) / cbrtf( _Config.flRadicalSmoothIntensity * ( vecTemp2.x - vecNewAngles.x ) );
-						vecNewAngles.y = flTemp * cbrtf( _Config.flRadicalSmoothIntensity * ( vecNewAngles.x - vecTemp.x ) ) + vecTemp.y;
+						const auto flTemp = ( vecTemp2.y - vecTemp.y ) / cbrtf( vecTemp2.x - vecNewAngles.x );
+						vecNewAngles.y = flTemp * cbrtf( vecNewAngles.x - vecTemp.x ) + vecTemp.y;
 						vecNewAngles.z = vecViewAngles.z;
+						ClampAngles( vecNewAngles );
+						pClientState->viewangles = vecNewAngles;
+					}
+					break;
+
+					case SMOOTH_SINUSOIDAL:
+					{
+						vecNewAngles.x = vecRelativeSmoothedAngles.x;
+						const auto fl = D3DX_PI / 2.f / ( vecNewAngles.x - vecTemp2.x );
+						const auto flTemp = ( vecTemp2.y - vecTemp.y ) / sinf( fl * ( vecTemp2.x - vecNewAngles.x ) );
+						vecNewAngles.y = flTemp * sinf( fl * ( vecNewAngles.x - vecTemp.x ) ) + vecTemp.y;
+						vecNewAngles.z = vecViewAngles.z;
+						ClampAngles( vecNewAngles );
+						pClientState->viewangles = vecNewAngles;
+					}
+					break;
+
+					case SMOOTH_BEZIER:
+					{
+						Vector vecLinePoints[ 2 ];
+						if ( _AimContext.flBezierRatio < 1.f )
+							_AimContext.flBezierRatio += fabsf( _Config.flSmoothFactor - 51.f ) / 50.f;
+						if ( _AimContext.flBezierRatio > 1.f )
+							_AimContext.flBezierRatio = 1.f;
+
+						const auto vecDifference = vecTemp - vecTemp2;
+						const auto flAngle = atan2( vecDifference.x, vecDifference.y );
+						const auto vecBisection = vecTemp + vecDifference * _Config.flBisectionPoint;
+						auto vecIntersection = vecBisection;
+						vecIntersection.y += sin( flAngle ) * _Config.flBezierDistance;
+						vecIntersection.x += cos( flAngle ) * _Config.flBezierDistance;
+						vecLinePoints[ 0 ] = vecTemp + ( vecTemp - vecIntersection ) / _AimContext.flBezierRatio;
+						vecLinePoints[ 1 ] = vecIntersection + ( vecIntersection - vecTemp2 ) / _AimContext.flBezierRatio;
+						vecNewAngles = vecLinePoints[ 0 ] + ( vecLinePoints[ 0 ] - vecLinePoints[ 1 ] ) / _AimContext.flBezierRatio;
 						ClampAngles( vecNewAngles );
 						pClientState->viewangles = vecNewAngles;
 					}
@@ -258,9 +291,14 @@ namespace PX::Features::Combat
 		return iClosestHitbox;
 	}
 
-	void PX_API OnNewTarget( player_ptr_t pLocalPlayer, player_ptr_t pNewTarget, CUserCmd* pCmd )
+	void PX_API ResetContext( )
 	{
 		_AimContext = DEFAULT;
+	}
+
+	void PX_API OnNewTarget( player_ptr_t pLocalPlayer, player_ptr_t pNewTarget, CUserCmd* pCmd )
+	{
+		ResetContext( );
 		if ( ( _AimContext.iHitbox = FindHitbox( pLocalPlayer, pNewTarget, pCmd ) ) == -1 )
 			return;
 		_AimContext.pTarget = pNewTarget;

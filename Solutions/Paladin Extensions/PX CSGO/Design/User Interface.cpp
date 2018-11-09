@@ -933,7 +933,7 @@ namespace PX::UI::Manager
 
 			case AIM:
 			{
-				const auto fnDrawAimOptions = [ ]( settings_t::combat_t::aim_t::weapon_t* pConfig, char* szSmoothFactor, char* szCrosshairDistance, char* szIntensity )
+				const auto fnDrawAimOptions = [ ]( settings_t::combat_t::aim_t::weapon_t* pConfig, char* szSmoothFactor, char* szCrosshairDistance, char* szBisection, char* szDistance )
 				{
 					{
 						BeginRow( 30, 9, ROW_STATIC );
@@ -1006,7 +1006,8 @@ namespace PX::UI::Manager
 							PX_XOR( "Linear" ),
 							PX_XOR( "Parabolic" ),
 							PX_XOR( "Radical" ),
-							PX_XOR( "Inverse" ),
+							PX_XOR( "Sinusoidal" ),
+							PX_XOR( "Bezier" ),
 							PX_XOR( "Randomize" )
 						};
 
@@ -1051,19 +1052,21 @@ namespace PX::UI::Manager
 					}
 
 					{
-						BeginRow( 30, 3, ROW_CUSTOM );
+						BeginRow( 30, 6, ROW_CUSTOM );
 
-						pConfig->flRadicalSmoothIntensity = Slider( PX_XOR( "Smooth Factor" ), szSmoothFactor, 0.10f, 10.00f, pConfig->flRadicalSmoothIntensity, 10, 5, GROUPBOX_COLUMN_WIDTH, 30, 2 );
-					
+						pConfig->flBisectionPoint = Slider( PX_XOR( "Bisection Point" ), szBisection, 0.01f, 1.00f, pConfig->flBisectionPoint, 10, 5, GROUPBOX_COLUMN_WIDTH, 30, 2 );
+
+						pConfig->flBezierDistance = Slider( PX_XOR( "Bezier Distance" ), szDistance, 0.00f, 254.558441227f, pConfig->flBezierDistance, GROUPBOX_COLUMN_WIDTH + 30, 5, GROUPBOX_COLUMN_WIDTH, 30, 2 );
+
 						EndRow( );
 					}
 				};
 
 				if ( BeginGroupbox( 200, 150, 500, 200, PX_XOR( "Global Configuration" ) ) )
 				{
-					static char szSmooth[ 32 ] { }, szCrosshairDistance[ 32 ] { }, szIntensity[ 32 ] {};
+					static char szSmooth[ 32 ] { }, szCrosshairDistance[ 32 ] { }, szBisect[ 32 ] {}, szDistance[32] {};
 					{
-						fnDrawAimOptions( &_Settings._Combat._Aim._All, szSmooth, szCrosshairDistance, szIntensity );
+						fnDrawAimOptions( &_Settings._Combat._Aim._All, szSmooth, szCrosshairDistance, szBisect, szDistance );
 					}
 
 					EndGroupbox( );
