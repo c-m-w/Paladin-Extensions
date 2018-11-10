@@ -1032,6 +1032,18 @@ namespace PX::UI::Manager
 					}
 
 					{
+						BeginRow( 30, 6, ROW_STATIC );
+						SetRowWidth( 5 );
+						Spacing( );
+
+						Checkbox( PX_XOR( "Static Target" ), &pConfig->bStaticTarget, PX_XOR( "Keep the same target until aimbot is re-activated." ) );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CalculateTextBounds( PX_XOR( "Static Target" ), 30 ).x - CHECKBOX_ICON_WIDTH );
+						Spacing( );
+
+						Checkbox( PX_XOR( "Validate Target" ), &pConfig->bValidateTarget, PX_XOR( "Ensure the target is within valid activation parameters after selection. Only applies when Static Target is enabled." ) );
+					}
+
+					{
 						std::deque< cstr_t > dqTargetingModes
 						{
 							PX_XOR( "Distance" ),
@@ -1054,9 +1066,9 @@ namespace PX::UI::Manager
 					{
 						BeginRow( 30, 6, ROW_CUSTOM );
 
-						pConfig->flBisectionPoint = Slider( PX_XOR( "Bisection Point" ), szBisection, 0.01f, 1.00f, pConfig->flBisectionPoint, 10, 5, GROUPBOX_COLUMN_WIDTH, 30, 2 );
+						pConfig->flBisectionPoint = Slider( PX_XOR( "Bisection Point" ), szBisection, 0.01f, 1.50f, pConfig->flBisectionPoint, 10, 5, GROUPBOX_COLUMN_WIDTH, 30, 2 );
 
-						pConfig->flBezierDistance = Slider( PX_XOR( "Bezier Distance" ), szDistance, 0.00f, 254.558441227f, pConfig->flBezierDistance, GROUPBOX_COLUMN_WIDTH + 30, 5, GROUPBOX_COLUMN_WIDTH, 30, 2 );
+						pConfig->flBezierDistance = Slider( PX_XOR( "Bezier Distance" ), szDistance, -20.00f, 20.00f, pConfig->flBezierDistance, GROUPBOX_COLUMN_WIDTH + 30, 5, GROUPBOX_COLUMN_WIDTH, 30, 2 );
 
 						EndRow( );
 					}
@@ -1064,7 +1076,7 @@ namespace PX::UI::Manager
 
 				if ( BeginGroupbox( 200, 150, 500, 200, PX_XOR( "Global Configuration" ) ) )
 				{
-					static char szSmooth[ 32 ] { }, szCrosshairDistance[ 32 ] { }, szBisect[ 32 ] {}, szDistance[32] {};
+					static char szSmooth[ 32 ] { }, szCrosshairDistance[ 32 ] { }, szBisect[ 32 ] { }, szDistance[ 32 ] { };
 					{
 						fnDrawAimOptions( &_Settings._Combat._Aim._All, szSmooth, szCrosshairDistance, szBisect, szDistance );
 					}

@@ -171,8 +171,16 @@ namespace PX::Types
 
 	struct vertex_t
 	{
-		float flVectors[ 4 ] { };
+		union
+		{
+			float flVectors[ 4 ] { };
+			struct
+			{
+				float x, y, z, rhw;
+			} _Vectors;
+		};
 		DWORD dwColor { };
+
 		vertex_t( ) = default;
 		vertex_t( float x, float y, DWORD _dwColor )
 		{
@@ -181,6 +189,16 @@ namespace PX::Types
 			flVectors[ 2 ] = 0.f;
 			flVectors[ 3 ] = 1.f;
 			dwColor = _dwColor;
+		}
+		void Rotate2D( const vertex_t& vtxRotationPoint, float flAngle )
+		{
+			const auto flRadians = D3DXToRadian( flAngle );
+			const auto flSin = sin( flRadians );
+			const auto flCos = cos( flRadians );
+			const D3DXVECTOR2 vecRelative { _Vectors.x - vtxRotationPoint._Vectors.x, _Vectors.y - vtxRotationPoint._Vectors.y };
+
+			_Vectors.x = ( vecRelative.x * flCos ) - ( vecRelative.y * flSin ) + vtxRotationPoint._Vectors.x;
+			_Vectors.y = ( vecRelative.x * flSin ) + ( vecRelative.y * flCos ) + vtxRotationPoint._Vectors.y;
 		}
 	};
 

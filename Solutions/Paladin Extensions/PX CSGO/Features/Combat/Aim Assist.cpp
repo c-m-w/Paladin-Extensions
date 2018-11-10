@@ -29,8 +29,19 @@ namespace PX::Features::Combat
 		float flOldForward = 0.f, flOldSide = 0.f, flOldUp = 0.f;
 		bool bRestoreAngle = false;
 		float flBezierRatio = 0.f;
+		bool bResetBezierOrigin = true;
+		Vector vecBezierOrigin { }, vecBezierEnd { };
 	} _AimContext;
 	const decltype( _AimContext ) DEFAULT;
+
+	struct
+	{
+		std::atomic< std::pair< vertex_t, vertex_t >* > pLines = nullptr;
+		std::atomic< std::size_t > zLines = 0u;
+
+		std::atomic< vertex_t* > pPoints = nullptr;
+		std::atomic< std::size_t > zPoints = 0u;
+	} _AimPath;
 
 	/** \brief Finds a target to aim at. */
 	/** \param pLocalPlayer Pointer to the local player. */
@@ -39,22 +50,62 @@ namespace PX::Features::Combat
 				 nullptr is returned if no target was found. */
 	player_ptr_t PX_API FindTarget( player_ptr_t pLocalPlayer, CUserCmd* pCmd );
 	int PX_API FindHitbox( player_ptr_t pLocalPlayer, player_ptr_t pTarget, CUserCmd* pCmd );
+	bool PX_API ValidateTarget( player_ptr_t pLocalPlayer, player_ptr_t pTarget, CUserCmd* pCmd );
 	void PX_API ResetContext( );
 	void PX_API OnNewTarget( player_ptr_t pLocalPlayer, player_ptr_t pTarget, CUserCmd* pCmd );
 
 	void PX_API AimAssist( player_ptr_t pLocalPlayer, CUserCmd* pCmd )
 	{
+		static bool* pLast = nullptr;
+		static auto bReleasedKey = true;
+
 		if ( !pLocalPlayer->IsAlive( ) )
 			return ResetContext( );
 
 		const auto hWeapon = pLocalPlayer->m_hActiveWeapon( );
 		if ( !hWeapon )
 			return ResetContext( );
+		if ( pLast != nullptr && !*pLast )
+			bReleasedKey = true;
 
-		const auto pTarget = FindTarget( pLocalPlayer, pCmd );
-		if ( nullptr == pTarget
-			 || !( pTarget->m_iTeamNum( ) == pLocalPlayer->m_iTeamNum( ) ? _Config.bTeammates : _Config.bEnemies ) )
+		player_ptr_t pTarget = nullptr;
+		if ( _Config.bStaticTarget.Get( ) )
+		{
+			if ( _AimContext.iEntityIndex != -1 )
+			{
+				pTarget = player_ptr_t( pEntityList->GetClientEntity( _AimContext.iEntityIndex ) );
+				if ( !pTarget->IsAlive( ) )
+				{
+					_AimContext.iEntityIndex = -1;
+					return;
+				}
+
+				if ( !ValidateTarget( pLocalPlayer, pTarget, pCmd ) )
+				{
+					if ( _Config.bValidateTarget.Get( ) && !bReleasedKey )
+						return;
+				}
+				else if ( bReleasedKey )
+					pTarget = FindTarget( pLocalPlayer, pCmd );
+			}
+			else if ( bReleasedKey )
+				pTarget = FindTarget( pLocalPlayer, pCmd );
+			else
+				return;
+		}
+		else 
+			pTarget = FindTarget( pLocalPlayer, pCmd );
+
+		if ( nullptr == pTarget )
 			return ResetContext( );
+
+		pLast = &( pTarget->m_iTeamNum( ) == pLocalPlayer->m_iTeamNum( ) ? _Config.bTeammates.Get( ) : _Config.bEnemies.Get( ) );
+		if ( !*pLast )
+		{
+			bReleasedKey = true;
+			return ResetContext( );
+		}
+		bReleasedKey = false;
 
 		if ( _AimContext.iEntityIndex != pTarget->EntIndex( ) )
 			OnNewTarget( pLocalPlayer, pTarget, pCmd );
@@ -130,23 +181,94 @@ namespace PX::Features::Combat
 
 					case SMOOTH_BEZIER:
 					{
+						std::vector< std::pair< vertex_t, vertex_t > > vecLines;
+						std::vector< vertex_t > vecDots;
+
+						const auto fnDrawDot = [ & ]( Vector vecAngle, DWORD dwColor )
+						{
+							Vector vecPos, vecScreen;
+							TransformAngle( vecAngle, vecPos );
+							vecPos *= 8192.f;
+							vecPos += pLocalPlayer->GetViewPosition( );
+							if ( !WorldToScreen( vecPos, vecScreen ) )
+								return;
+							vecDots.emplace_back( vertex_t( vecScreen.x, vecScreen.y, dwColor ) );
+						};
+
+						const auto fnDrawLine = [ & ]( Vector vecStartAngle, Vector vecEndAngle, DWORD dwColor )
+						{
+							Vector vecPosOne, vecScreenOne;
+							TransformAngle( vecStartAngle, vecPosOne );
+							vecPosOne *= 8192.f;
+							vecPosOne += pLocalPlayer->GetViewPosition( );
+							if ( !WorldToScreen( vecPosOne, vecScreenOne ) )
+								return;
+
+							Vector vecPosTwo, vecScreenTwo;
+							TransformAngle( vecEndAngle, vecPosTwo );
+							vecPosTwo *= 8192.f;
+							vecPosTwo += pLocalPlayer->GetViewPosition( );
+							if ( !WorldToScreen( vecPosTwo, vecScreenTwo ) )
+								return;
+
+							vecLines.emplace_back( vertex_t( vecScreenOne.x, vecScreenOne.y, dwColor ), vertex_t( vecScreenTwo.x, vecScreenTwo.y, dwColor ) );
+						};
+
 						Vector vecLinePoints[ 2 ];
+						const auto vecEndDifference = _AimContext.vecBezierEnd - vecTemp2;
+						if ( _AimContext.flBezierRatio > 0.5f && sqrt( powf( vecEndDifference.x, 2.f ) + powf( vecEndDifference.y, 2.f ) ) > 1.f )
+							_AimContext.bResetBezierOrigin = true;
+						if ( _AimContext.bResetBezierOrigin )
+						{
+							_AimContext.vecBezierOrigin = vecTemp;
+							_AimContext.vecBezierEnd = vecTemp2;
+							_AimContext.flBezierRatio = 0.f;
+							_AimContext.bResetBezierOrigin = false;
+						}
+						vecTemp = _AimContext.vecBezierOrigin;
+
+						const auto vecDifference = vecTemp - vecTemp2;
 						if ( _AimContext.flBezierRatio < 1.f )
 							_AimContext.flBezierRatio += fabsf( _Config.flSmoothFactor - 51.f ) / 50.f;
 						if ( _AimContext.flBezierRatio > 1.f )
 							_AimContext.flBezierRatio = 1.f;
 
-						const auto vecDifference = vecTemp - vecTemp2;
+						fnDrawDot( vecTemp, 0xFF000000 );
+						fnDrawDot( vecTemp2, 0xFFFF0000 );
+
+						fnDrawLine( vecTemp, vecTemp2, 0xFFFF0000 );
 						const auto flAngle = atan2( vecDifference.x, vecDifference.y );
-						const auto vecBisection = vecTemp + vecDifference * _Config.flBisectionPoint;
+						const auto vecBisection = vecTemp - vecDifference * _Config.flBisectionPoint;
+						fnDrawDot( vecBisection, 0xFF909000 );
 						auto vecIntersection = vecBisection;
-						vecIntersection.y += sin( flAngle ) * _Config.flBezierDistance;
+						vecIntersection.y -= sin( flAngle ) * _Config.flBezierDistance;
 						vecIntersection.x += cos( flAngle ) * _Config.flBezierDistance;
-						vecLinePoints[ 0 ] = vecTemp + ( vecTemp - vecIntersection ) / _AimContext.flBezierRatio;
-						vecLinePoints[ 1 ] = vecIntersection + ( vecIntersection - vecTemp2 ) / _AimContext.flBezierRatio;
-						vecNewAngles = vecLinePoints[ 0 ] + ( vecLinePoints[ 0 ] - vecLinePoints[ 1 ] ) / _AimContext.flBezierRatio;
+						vecLinePoints[ 0 ] = vecTemp - ( vecTemp - vecIntersection ) * _AimContext.flBezierRatio;
+						vecLinePoints[ 1 ] = vecIntersection - ( vecIntersection - vecTemp2 ) * _AimContext.flBezierRatio;
+						vecNewAngles = vecLinePoints[ 0 ] - ( vecLinePoints[ 0 ] - vecLinePoints[ 1 ] ) * _AimContext.flBezierRatio;
+						fnDrawLine( vecTemp, vecIntersection, 0xFFFFFFFF );
+						fnDrawLine( vecIntersection, vecTemp2, 0xFFFFFFFF );
+						fnDrawLine( vecLinePoints[ 0 ], vecLinePoints[ 1 ], 0xFF0000FF );
+						fnDrawDot( vecIntersection, 0xFF00FF00 );
+						fnDrawDot( vecNewAngles, 0xFFFFFFFF );
 						ClampAngles( vecNewAngles );
 						pClientState->viewangles = vecNewAngles;
+
+						const auto pNewDots = new vertex_t[ vecDots.size( ) ];
+						const auto pNewLines = new std::pair< vertex_t, vertex_t >[ vecLines.size( ) ];
+						memcpy( pNewLines, &vecLines[ 0 ], vecLines.size( ) * sizeof( std::pair< vertex_t, vertex_t > ) );
+						memcpy( pNewDots, &vecDots[ 0 ], vecDots.size( ) * sizeof( vertex_t ) );
+
+						const auto pOldDots = _AimPath.pPoints.load( );
+						_AimPath.pPoints = pNewDots;
+						delete[ ] pOldDots;
+
+						const auto pOldLines = _AimPath.pLines.load( );
+						_AimPath.pLines = pNewLines;
+						delete[ ] pOldLines;
+
+						_AimPath.zPoints = vecDots.size( );
+						_AimPath.zLines = vecLines.size( );
 					}
 					break;
 
@@ -201,6 +323,24 @@ namespace PX::Features::Combat
 				return;
 			}
 		}
+	}
+
+	void PX_API DrawAimPath( )
+	{
+		const auto pLines = _AimPath.pLines.load( );
+		const auto pDots = _AimPath.pPoints.load( );
+		D3DXVECTOR2 vecCurrent[ 2 ] { };
+
+		for ( auto z = 0u; z < _AimPath.zLines.load( ); z++ )
+		{
+			vecCurrent[ 0 ] = D3DXVECTOR2( pLines[ z ].first._Vectors.x, pLines[ z ].first._Vectors.y );
+			vecCurrent[ 1 ] = D3DXVECTOR2( pLines[ z ].second._Vectors.x, pLines[ z ].second._Vectors.y );
+
+			Drawing::Line( vecCurrent, 2, 3.f, pLines[ z ].first.dwColor );
+		}
+
+		for ( auto z = 0u; z < _AimPath.zPoints.load( ); z++ )
+			Drawing::Circle( D3DXVECTOR2( pDots[ z ]._Vectors.x, pDots[ z ]._Vectors.y ), 3.f, pDots[ z ].dwColor, pDots[ z ].dwColor, 8 );
 	}
 
 	player_ptr_t PX_API FindTarget( player_ptr_t pLocalPlayer, CUserCmd* pCmd )
@@ -289,6 +429,14 @@ namespace PX::Features::Combat
 			}
 		}
 		return iClosestHitbox;
+	}
+
+	bool PX_API ValidateTarget( player_ptr_t pLocalPlayer, player_ptr_t pTarget, CUserCmd* pCmd )
+	{
+		if ( _AimContext.iHitbox != -1 )
+			if ( CalculateCrosshairDistance( pLocalPlayer, pTarget, _AimContext.iHitbox, pCmd, _Config.bWorldlyCrosshairDistance.Get( ) ) )
+				return true;
+		return -1 != ( _AimContext.iHitbox = FindHitbox( pLocalPlayer, pTarget, pCmd ) );
 	}
 
 	void PX_API ResetContext( )

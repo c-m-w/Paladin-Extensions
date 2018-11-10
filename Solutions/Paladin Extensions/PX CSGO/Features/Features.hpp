@@ -341,6 +341,8 @@ namespace PX::Features
 					toggle_t bMindSmoke = false;
 					toggle_t bUseSeparate = false;
 					toggle_t bWorldlyCrosshairDistance = false;
+					toggle_t bStaticTarget = false;
+					toggle_t bValidateTarget = false;
 					int iReferenceHitbox = HITBOX_HEAD; // hitbox to use as reference for seeing which players are within crosshair distance.
 					int iPriorityHitbox = HITBOX_HEAD;
 					int iAimType = AIMTYPE_DEFAULT;

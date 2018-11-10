@@ -50,6 +50,23 @@ namespace PX::Drawing
 		vecPolygonList.emplace_back( polygon_t( pVertices, zVertexCount, zPrimitiveCount, ptDrawingType ) );
 	}
 
+	PX_EXT PX_INL void PX_API Circle( const D3DXVECTOR2& vecLocation, float flRadius, DWORD dwInnerColor, DWORD dwOuterColor, std::size_t zResolution )
+	{
+		const auto pVertices = new vertex_t[ zResolution + 2 ];
+		const auto flAngle = 360.f / float( zResolution );
+		
+		pVertices[ 0 ] = vertex_t( vecLocation.x, vecLocation.y, dwInnerColor );
+		pVertices[ 1 ] = vertex_t( vecLocation.x, vecLocation.y - flRadius, dwOuterColor );
+		for( auto u = 2u; u <= zResolution + 1; u++ )
+		{
+			pVertices[ u ] = pVertices[ u - 1 ];
+			pVertices[ u ].Rotate2D( pVertices[ 0 ], flAngle );
+		}
+		Polygon( pVertices, zResolution + 2, zResolution );
+
+		delete[ ] pVertices;
+	}
+
 	PX_EXT PX_INL void PX_API Line( const D3DXVECTOR2* pPoints, std::size_t sPointCount, float flWidth, DWORD dwColor )
 	{
 		// using primitives > ID3DXLine speed-wise.
