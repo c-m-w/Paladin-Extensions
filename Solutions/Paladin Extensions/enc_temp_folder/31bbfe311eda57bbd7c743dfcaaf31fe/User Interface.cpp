@@ -1157,13 +1157,13 @@ namespace PX::UI::Manager
 						SetRowWidth( 5 );
 						Spacing( );
 
-						Checkbox( PX_XOR( "Use Weapon Configuration" ), &_Settings._Combat._Aim._IndividualWeapons[ ITEM_DEFINITION_INDICIES[ uCurrentWeapon ] ].bUseSeparate, PX_XOR( "Use the weapon's configuration rather than the group or global configuration." ) );
+						Checkbox( PX_XOR( "Use Weapon Configuration" ), &_Settings._Combat._Trigger._IndividualWeapons[ ITEM_DEFINITION_INDICIES[ uCurrentWeapon ] ].bUseSeparate, PX_XOR( "Use the weapon's configuration rather than the group or global configuration." ) );
 
 						EndRow( );
 					}
 
 					{
-						fnDrawAimOptions( &_Settings._Combat._Aim._IndividualWeapons[ ITEM_DEFINITION_INDICIES[ uCurrentWeapon ] ], szSmooth, szCrosshairDistance, szBisect, szDistance, szOverCompensation );
+						fnDrawAimOptions( &_Settings._Combat._Aim._WeaponTypes[ uCurrentWeapon ], szSmooth, szCrosshairDistance, szBisect, szDistance, szOverCompensation );
 					}
 
 					EndGroupbox( );

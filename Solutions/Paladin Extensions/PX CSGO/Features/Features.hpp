@@ -348,6 +348,7 @@ namespace PX::Features
 					int iReferenceHitbox = HITBOX_HEAD; // hitbox to use as reference for seeing which players are within crosshair distance.
 					int iPriorityHitbox = HITBOX_HEAD;
 					int iAimType = AIMTYPE_DEFAULT;
+					float flOverCompensation = 0.f; // +- xyz
 					float flMaxCrosshairDistance = 1.f;
 					float flMaxWorldCrosshairDistance = 1.f;
 					float flSmoothFactor = SMOOTHING_MIN;
@@ -408,5 +409,3 @@ namespace PX::Features
 		SETTING_C4
 	};
 }
-
-#include "Features.inl"

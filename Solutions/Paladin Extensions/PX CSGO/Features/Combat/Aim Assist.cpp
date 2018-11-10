@@ -30,7 +30,7 @@ namespace PX::Features::Combat
 		bool bRestoreAngle = false;
 		float flBezierRatio = 0.f;
 		bool bResetBezierOrigin = true;
-		Vector vecBezierOrigin { }, vecBezierEnd { };
+		Vector vecOverCompensation { }, vecBezierOrigin { }, vecBezierEnd { };
 	} _AimContext;
 	const decltype( _AimContext ) DEFAULT;
 
@@ -113,7 +113,7 @@ namespace PX::Features::Combat
 		if ( _AimContext.iHitbox == -1 )
 			return ResetContext( );
 
-		auto qTargetAngle = CalculateAngle( pLocalPlayer, pTarget, _AimContext.iHitbox, pCmd, false );
+		auto qTargetAngle = CalculateAngle( pLocalPlayer, pTarget, _AimContext.iHitbox, pCmd, false, &_AimContext.vecOverCompensation );
 		ClampAngles( qTargetAngle );
 		switch( _Config->iAimType )
 		{
@@ -471,5 +471,9 @@ namespace PX::Features::Combat
 			return;
 		_AimContext.pTarget = pNewTarget;
 		_AimContext.iEntityIndex = pNewTarget->EntIndex( );
+		srand( pGlobalVariables->m_iTickCount );
+		_AimContext.vecOverCompensation.x = float( rand() ) / float( RAND_MAX / ( 2 * _Config->flOverCompensation ) ) - _Config->flOverCompensation;
+		_AimContext.vecOverCompensation.y = float( rand() ) / float( RAND_MAX / ( 2 * _Config->flOverCompensation ) ) - _Config->flOverCompensation;
+		_AimContext.vecOverCompensation.z = float( rand() ) / float( RAND_MAX / ( 2 * _Config->flOverCompensation ) ) - _Config->flOverCompensation;
 	}
 }

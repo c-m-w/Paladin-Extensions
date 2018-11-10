@@ -114,7 +114,7 @@ namespace PX
 						   && D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_MINFILTER, D3DTADDRESS_WRAP )
 						   && D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_SRGBTEXTURE, NULL ) );
 
-				//Features::Combat::DrawAimPath( );
+				Features::Combat::DrawAimPath( );
 				Drawing::DrawQueue( );
 				UI::Manager::CSGO::OnEndScene( );
 

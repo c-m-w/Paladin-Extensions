@@ -232,10 +232,13 @@ namespace PX::Tools
 		return sqrt( pow( vecNew.z, 2.0 ) + pow( vecNew.x, 2.0 ) + pow( vecNew.y, 2.0 ) );
 	}
 
-	QAngle PX_API CalculateAngle( CBasePlayer* pLocalPlayer, CBasePlayer* pPlayer, int iHitbox, CUserCmd* pCmd, bool bAccountForRecoil, float flRecoilPrecision /*= 0.f*/ )
+	QAngle PX_API CalculateAngle( CBasePlayer* pLocalPlayer, CBasePlayer* pPlayer, int iHitbox, CUserCmd* pCmd, bool bAccountForRecoil, Vector* vecOverCompensation, float flRecoilPrecision /*= 0.f*/ )
 	{
 		QAngle qReturn;
-		const auto vecRelativePosition = pPlayer->GetHitboxPosition( iHitbox ) - pLocalPlayer->GetViewPosition( );
+		auto vecHitboxPosition = pPlayer->GetHitboxPosition( iHitbox );
+		if ( vecOverCompensation != nullptr )
+			vecHitboxPosition += *vecOverCompensation;
+		const auto vecRelativePosition = vecHitboxPosition - pLocalPlayer->GetViewPosition( );
 		const auto fl2DDistance = sqrt( pow( vecRelativePosition.x, 2.f ) + pow( vecRelativePosition.y, 2.f ) );
 
 		qReturn.pitch = atan2( vecRelativePosition.z, fl2DDistance ) * -180.f / D3DX_PI;
@@ -252,7 +255,7 @@ namespace PX::Tools
 		if ( qNonGayAngles.yaw < 0.f )
 			qNonGayAngles.yaw += 360.f;
 
-		const auto qNewAngles = qNonGayAngles - CalculateAngle( pLocalPlayer, pPlayer, iHitbox, pCmd, false );
+		const auto qNewAngles = qNonGayAngles - CalculateAngle( pLocalPlayer, pPlayer, iHitbox, pCmd, false, nullptr );
 		if ( bWorldlyDistance )
 			return sin( atan2( qNewAngles.yaw, qNewAngles.pitch ) ) * CalculateVectorDistance( pLocalPlayer->GetViewPosition( ), pPlayer->GetHitboxPosition( iHitbox ) );
 		const auto flDistance = sqrt( pow( qNewAngles.yaw, 2.f ) + pow( qNewAngles.pitch, 2.f ) );
