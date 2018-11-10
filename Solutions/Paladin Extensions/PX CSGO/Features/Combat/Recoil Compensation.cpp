@@ -22,11 +22,13 @@ namespace PX::Features::Combat
 		if ( !hActiveWeapon )
 			return;
 
-		const auto pConfig = GetWeaponConfig< recoil_config_t >( hActiveWeapon, _Settings._Combat._RecoilCompensation );
-		if ( !pConfig->bStandalone || pConfig->bOnlyWhileShooting.Get( ) && !( pCmd->buttons & IN_ATTACK ) )
+		recoil_config_t* _Config;
+		PX_GET_WEAPON_CONFIG( hActiveWeapon, _Config, _Settings._Combat._RecoilCompensation );
+
+		if ( !_Config->bStandalone || _Config->bOnlyWhileShooting.Get( ) && !( pCmd->buttons & IN_ATTACK ) )
 			return;
 
-		const auto qCurrentRecoil = pLocalPlayer->m_viewPunchAngle( ) * GetRecoilScale( ) * pConfig->flCompensationAmount;
+		const auto qCurrentRecoil = pLocalPlayer->m_viewPunchAngle( ) * GetRecoilScale( ) * _Config->flCompensationAmount;
 		auto qNewRecoil = qCurrentRecoil - qOldRecoil;
 		qOldRecoil = qCurrentRecoil;
 		ClampAngles( qNewRecoil );

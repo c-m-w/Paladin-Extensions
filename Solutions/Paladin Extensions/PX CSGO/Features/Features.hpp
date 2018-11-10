@@ -351,8 +351,12 @@ namespace PX::Features
 					float flMaxCrosshairDistance = 1.f;
 					float flMaxWorldCrosshairDistance = 1.f;
 					float flSmoothFactor = SMOOTHING_MIN;
-					float flBisectionPoint = 0.f; // 0 to 1.00
-					float flBezierDistance = 1.f;
+					struct
+					{
+						float flBisectionPoint = 0.5f;
+						float flDistance = 5.f;
+					} _BezierOrders[ 7 ];
+					int iCurrentOrders = 1;
 					int iSmoothMode = SMOOTH_LINEAR;
 					int iTargeting = TARGETING_DISTANCE;
 				} _All, _WeaponTypes[ WEAPONTYPE_MACHINEGUN + 1 ] { }, _IndividualWeapons[ ITEM_MAX ] { };

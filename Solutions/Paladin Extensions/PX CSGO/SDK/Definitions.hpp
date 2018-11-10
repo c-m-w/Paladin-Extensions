@@ -40,3 +40,9 @@
 #define PX_MIN_ROLL -50.f
 #define PX_MAX_ROLL 50.f
 
+#define PX_GET_WEAPON_CONFIG( Weapon, CurrentConfig, BaseConfig )                                               \
+     const auto def_index = Weapon->m_Item( )->m_iItemDefinitionIndex( );                                               \
+     const auto wep_type = Weapon->GetCSWeaponData( )->WeaponType;                                                     \
+    CurrentConfig = BaseConfig._IndividualWeapons[ def_index ].bUseSeparate.Get( ) ? &BaseConfig._IndividualWeapons[ def_index ] \
+                    : BaseConfig._WeaponTypes[ wep_type ].bUseSeparate.Get( ) ? &BaseConfig._WeaponTypes[ wep_type ]           \
+                    : &BaseConfig._All;

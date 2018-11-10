@@ -105,6 +105,8 @@ namespace PX::UI
 		void PX_API SetLayout( );
 		/** \brief Draws an example demonstrating usage of all widgets. */
 		void PX_API Example( );
+		void PX_API SetMainWindowHeight( unsigned uHeight );
+		void PX_API SetMainWindowWidth( unsigned uWidth );
 		bool PX_API MouseHoveringRectangle( unsigned x, unsigned y, unsigned width, unsigned height );
 		void PX_API SetWidgetPosition( unsigned x, unsigned y );
 	}
@@ -240,6 +242,7 @@ namespace PX::UI
 		/**	\param uSelectedOption Currently selected option. */
 		/**	\return -1 - Nothing was selected.\n >= 0 - Something was selected, the index for the option inside the deque of options. */
 		int PX_API Combobox( unsigned uButtonHeight, Types::cstr_t szTitle, const std::deque< Types::cstr_t >& dqOptions, unsigned uSelectedOption );
+		int PX_API IncrementalCombobox( unsigned uButtonHeight, Types::cstr_t szTitle, const std::deque<Types::cstr_t>& dqOptions, int& iIncrement, int iMax, unsigned uSelectedOption );
 		void PX_API TabbedCombobox( unsigned uButtonHeight, Types::cstr_t szTitle, const std::deque< Types::cstr_t >& dqTabs, const std::deque< Types::cstr_t >* pItems, unsigned& uSelectedOption );
 		/** \brief Creates a combobox with multiple options which can all be enabled or disabled.\n Uses one column. */
 		/**	\param uButtonHeight Height of each of the buttons inside the combobox. */

@@ -114,6 +114,7 @@ namespace PX
 						   && D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_MINFILTER, D3DTADDRESS_WRAP )
 						   && D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_SRGBTEXTURE, NULL ) );
 
+				Features::Combat::DrawAimPath( );
 				Drawing::DrawQueue( );
 				UI::Manager::CSGO::OnEndScene( );
 
@@ -192,7 +193,6 @@ namespace PX
 				Features::Combat::AimAssist( pLocalPlayer, pCmd );
 				Features::Combat::Trigger( pLocalPlayer, pCmd );
 				Features::Miscellaneous::AutoJump( pLocalPlayer, pCmd );
-				pClientState->viewangles.z = 45.f * sin( pGlobalVariables->m_flRealTime / 3.f );
 			}
 
 			pVerifiedCmd->m_cmd = *pCmd;

@@ -14,6 +14,7 @@ namespace PX::UI::Manager
 {
 	namespace CSGO
 	{
+		PX_DEF uWindowWidth = 720u, uWindowHeight = 600u;
 		void PX_API ChangeVisibility( )
 		{
 			static HWND* pOldWindowHandle = nullptr;
@@ -70,7 +71,7 @@ namespace PX::UI::Manager
 			} );
 
 			return Render::InitializeRenderTarget( pDevice, uDimensions )
-				&& InitializeUI( PX_XOR( "CSGO" ), 720u, 600u );
+				&& InitializeUI( PX_XOR( "CSGO" ), uWindowWidth, uWindowHeight );
 		}
 
 		void PX_API OnEndScene( )
@@ -139,6 +140,8 @@ namespace PX::UI::Manager
 		static int iCurrentSubTab[ iTabCount ] { };
 		const static std::function< void( PX_API )( int ) > fnTabCallbacks[ iTabCount ] { LayoutAwareness, LayoutCombat, LayoutMiscellaneous, LayoutSettings };
 
+		SetMainWindowWidth( CSGO::uWindowWidth );
+		SetMainWindowHeight( CSGO::uWindowHeight );
 		Header( PX_XOR( "Paladin Extensions" ), szNuklearWindowTitle, 102, CSGO::ChangeVisibility, [](){exit( -1 );} );
 		fnSetValue( iCurrentTab, Tabs( 10, 0, dqPrimaryTabs, iCurrentTab ) );
 		Separator( 61, 65, 72, 100 );
@@ -869,7 +872,7 @@ namespace PX::UI::Manager
 					EndGroupbox( );
 				}
 
-				if ( BeginGroupbox( 400, 236, 500, 158, PX_XOR( "Group Configurations" ) ) )
+				if ( BeginGroupbox( 400, 206, 500, 158, PX_XOR( "Group Configurations" ) ) )
 				{
 					static int iWeaponGroup = WEAPONTYPE_PISTOL;
 					{
@@ -897,7 +900,7 @@ namespace PX::UI::Manager
 					EndGroupbox( );
 				}
 
-				if ( BeginGroupbox( 400, 381, 500, 190, PX_XOR( "Weapon Configurations" ) ) )
+				if ( BeginGroupbox( 400, 350, 500, 190, PX_XOR( "Weapon Configurations" ) ) )
 				{
 					static auto uCurrentWeapon = 0u;
 
@@ -935,6 +938,8 @@ namespace PX::UI::Manager
 
 			case AIM:
 			{
+				SetMainWindowHeight( 637u );
+				SetMainWindowWidth( 1231u );
 				const auto fnDrawAimOptions = [ ]( settings_t::combat_t::aim_t::weapon_t* pConfig, char* szSmoothFactor, char* szCrosshairDistance, char* szBisection, char* szDistance )
 				{
 					{
@@ -1034,7 +1039,19 @@ namespace PX::UI::Manager
 					}
 
 					{
-						BeginRow( 30, 6, ROW_STATIC );
+						std::deque< cstr_t > dqTargetingModes
+						{
+							PX_XOR( "Distance" ),
+							PX_XOR( "Crosshair Distance" ),
+							PX_XOR( "Health" )
+						};
+
+						BeginRow( 30, 8, ROW_STATIC );
+						SetRowWidth( 10 );
+						Spacing( );
+
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH );
+						fnSetValue( pConfig->iTargeting, Combobox( 30, PX_XOR( "Targeting" ), dqTargetingModes, pConfig->iTargeting ) );
 						SetRowWidth( 5 );
 						Spacing( );
 
@@ -1046,31 +1063,32 @@ namespace PX::UI::Manager
 					}
 
 					{
-						std::deque< cstr_t > dqTargetingModes
-						{
-							PX_XOR( "Distance" ),
-							PX_XOR( "Crosshair Distance" ),
-							PX_XOR( "Health" )
-						};
+						BeginRow( 30, 6, ROW_CUSTOM );
 
-						BeginRow( 30, 7, ROW_CUSTOM );
+						pConfig->flSmoothFactor = Slider( PX_XOR( "Smooth Factor" ), szSmoothFactor, settings_t::combat_t::SMOOTHING_MIN, settings_t::combat_t::SMOOTHING_MAX, pConfig->flSmoothFactor, 10, 10, GROUPBOX_COLUMN_WIDTH, 30, 2 );
 
-						PushCustomRow( 15, 5, GROUPBOX_COLUMN_WIDTH, 30 );
-						fnSetValue( pConfig->iTargeting, Combobox( 30, PX_XOR( "Targeting" ), dqTargetingModes, pConfig->iTargeting ) );
-
-						pConfig->flSmoothFactor = Slider( PX_XOR( "Smooth Factor" ), szSmoothFactor, settings_t::combat_t::SMOOTHING_MIN, settings_t::combat_t::SMOOTHING_MAX, pConfig->flSmoothFactor, GROUPBOX_COLUMN_WIDTH + 30, 5, GROUPBOX_COLUMN_WIDTH, 30, 2 );
-
-						pConfig->flMaxCrosshairDistance = Slider( PX_XOR( "Max Distance" ), szCrosshairDistance, 0.f, 254.558441227f, pConfig->flMaxCrosshairDistance, GROUPBOX_COLUMN_WIDTH * 2 + 40, 5, GROUPBOX_COLUMN_WIDTH, 30, 2 );
+						pConfig->flMaxCrosshairDistance = Slider( PX_XOR( "Max Distance" ), szCrosshairDistance, 0.f, 254.558441227f, pConfig->flMaxCrosshairDistance, GROUPBOX_COLUMN_WIDTH + 30, 10, GROUPBOX_COLUMN_WIDTH, 30, 2 );
 
 						EndRow( );
 					}
 
 					{
-						BeginRow( 30, 6, ROW_CUSTOM );
+						cstr_t pStrings[ 7 ] { "1", "2", "3", "4", "5", "6", "7" };
 
-						pConfig->flBisectionPoint = Slider( PX_XOR( "Bisection Point" ), szBisection, 0.01f, 1.50f, pConfig->flBisectionPoint, 10, 10, GROUPBOX_COLUMN_WIDTH, 30, 2 );
+						static auto iSelectedOrder = 0;
+						std::deque< cstr_t > dqOrders;
+						for ( auto i = 0; i <= pConfig->iCurrentOrders; i++ )
+							dqOrders.emplace_back( pStrings[ i ] );
 
-						pConfig->flBezierDistance = Slider( PX_XOR( "Bezier Distance" ), szDistance, -20.00f, 20.00f, pConfig->flBezierDistance, GROUPBOX_COLUMN_WIDTH + 30, 10, GROUPBOX_COLUMN_WIDTH, 30, 2 );
+						BeginRow( 30, 7, ROW_CUSTOM );
+
+						PushCustomRow( 10, 5, GROUPBOX_COLUMN_WIDTH, 30 );
+						fnSetValue( iSelectedOrder, IncrementalCombobox( 30, PX_XOR( "Bezier Orders" ), dqOrders, pConfig->iCurrentOrders, 7, iSelectedOrder ) );
+						auto& pCurrentOrder = pConfig->_BezierOrders[ iSelectedOrder ];
+
+						pCurrentOrder.flBisectionPoint = Slider( PX_XOR( "Bisection Point" ), szBisection, 0.01f, 1.50f, pCurrentOrder.flBisectionPoint, GROUPBOX_COLUMN_WIDTH + 30, 5, GROUPBOX_COLUMN_WIDTH, 30, 2 );
+
+						pCurrentOrder.flDistance = Slider( PX_XOR( "Distance" ), szDistance, -20.00f, 20.00f, pCurrentOrder.flDistance, GROUPBOX_COLUMN_WIDTH * 2 + 40, 5, GROUPBOX_COLUMN_WIDTH, 30, 2 );
 
 						EndRow( );
 					}
@@ -1081,6 +1099,69 @@ namespace PX::UI::Manager
 					static char szSmooth[ 32 ] { }, szCrosshairDistance[ 32 ] { }, szBisect[ 32 ] { }, szDistance[ 32 ] { };
 					{
 						fnDrawAimOptions( &_Settings._Combat._Aim._All, szSmooth, szCrosshairDistance, szBisect, szDistance );
+					}
+
+					EndGroupbox( );
+				}
+
+				if ( BeginGroupbox( 400, 313, 500, 260, PX_XOR( "Group Configurations" ) ) )
+				{
+					static char szSmooth[ 32 ] { }, szCrosshairDistance[ 32 ] { }, szBisect[ 32 ] { }, szDistance[ 32 ] { };
+					static int iWeaponGroup = WEAPONTYPE_PISTOL;
+					{
+						VerticalSpacing( );
+
+						BeginRow( 30, 5, ROW_STATIC );
+						SetRowWidth( 10 );
+						Spacing( );
+
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH );
+						fnSetValue( iWeaponGroup, Combobox( 30, PX_XOR( "Group" ), dqTypes, iWeaponGroup ) );
+
+						SetRowWidth( -1.f );
+						Spacing( );
+
+						Checkbox( PX_XOR( "Use Group Configuration" ), &_Settings._Combat._Aim._WeaponTypes[ iWeaponGroup ].bUseSeparate, PX_XOR( "Use the weapon group rather than the global setting." ) );
+
+						EndRow( );
+					}
+
+					{
+						fnDrawAimOptions( &_Settings._Combat._Aim._WeaponTypes[ iWeaponGroup ], szSmooth, szCrosshairDistance, szBisect, szDistance );
+					}
+
+					EndGroupbox( );
+				}
+
+				if ( BeginGroupbox( 914, 88, 500, 290, PX_XOR( "Weapon Configurations" ) ) )
+				{
+					static char szSmooth[ 32 ] { }, szCrosshairDistance[ 32 ] { }, szBisect[ 32 ] { }, szDistance[ 32 ] { };
+					static auto uCurrentWeapon = 0u;
+					{
+						VerticalSpacing( );
+
+						BeginRow( 30, 2, ROW_STATIC );
+						SetRowWidth( 10 );
+						Spacing( );
+
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH * 3.f + 29.f );
+						TabbedCombobox( 30, PX_XOR( "Weapons" ), dqComboboxHeaderTypes, dqWeapons, uCurrentWeapon );
+
+						EndRow( );
+					}
+
+					{
+						BeginRow( 30, 3, ROW_STATIC );
+						SetRowWidth( 5 );
+						Spacing( );
+
+						Checkbox( PX_XOR( "Use Weapon Configuration" ), &_Settings._Combat._Trigger._IndividualWeapons[ ITEM_DEFINITION_INDICIES[ uCurrentWeapon ] ].bUseSeparate, PX_XOR( "Use the weapon's configuration rather than the group or global configuration." ) );
+
+						EndRow( );
+					}
+
+					{
+						fnDrawAimOptions( &_Settings._Combat._Aim._WeaponTypes[ uCurrentWeapon ], szSmooth, szCrosshairDistance, szBisect, szDistance );
 					}
 
 					EndGroupbox( );
