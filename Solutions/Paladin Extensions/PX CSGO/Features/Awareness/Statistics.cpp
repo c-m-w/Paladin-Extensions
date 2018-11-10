@@ -58,6 +58,7 @@ namespace PX::Features::Awareness
 	bool bVariantID = false; // false is ent, true is player.
 	void* _cfg;
 
+	// todo
 	static void PX_API DrawPlayerBone( )
 	{
 		auto& cfg = *reinterpret_cast< settings_t::awareness_t::statistics_t::player_t* >( _cfg );
@@ -93,6 +94,7 @@ namespace PX::Features::Awareness
 			}
 	}
 
+	// todo
 	static void PX_API DrawPlayerOrientation( )
 	{
 
@@ -108,6 +110,7 @@ namespace PX::Features::Awareness
 			pEntity.bBoxVisibility = true;
 			if ( !cfg.bDisplayMode ) // screen
 			{
+				// todo wip, will make this bone/hitbox based...
 				const auto pCollidable = pEntity->GetCollideable( );
 				const auto vecMinimum = pCollidable->OBBMins( );
 				const auto vecMaximum = pCollidable->OBBMaxs( );
@@ -148,6 +151,17 @@ namespace PX::Features::Awareness
 				pEntity.vecBox[ BASE ][ TOPRIGHT ] = { flRight, flBottom, 0.f };
 				pEntity.vecBox[ BASE ][ BOTTOMRIGHT ] = { flRight, flTop, 0.f };
 				pEntity.vecBox[ BASE ][ BOTTOMLEFT ] = { flLeft, flTop, 0.f };
+
+			//	auto& vecOrigin = pEntity->m_vecOrigin( );
+			//	Vector min { }, max { };
+			//	pEntity->GetRenderBounds( min, max );
+			//	min += vecOrigin;
+			//	max += vecOrigin;
+			//
+			//	WorldToScreen( min, pEntity.vecBox[ BASE ][ BOTTOMLEFT ] );
+			//	WorldToScreen( max, pEntity.vecBox[ BASE ][ TOPRIGHT ] );
+			//	pEntity.vecBox[ BASE ][ BOTTOMRIGHT ] = { pEntity.vecBox[ BASE ][ TOPRIGHT ].x, pEntity.vecBox[ BASE ][ BOTTOMLEFT ].y, 0.f };
+			//	pEntity.vecBox[ BASE ][ TOPLEFT ] = { pEntity.vecBox[ BASE ][ BOTTOMLEFT ].x, pEntity.vecBox[ BASE ][ TOPRIGHT ].y, 0.f };
 			}
 			else // world
 			{
@@ -403,63 +417,25 @@ namespace PX::Features::Awareness
 		}
 	}
 
+	// todo
 	static void PX_API DrawInformation( )
 	{
 		
 	}
 
+	// todo entities
 	void PX_API DrawStatistics( )
 	{
 		static bool bDeleteOnce = false;
 		{
-			{
-				_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].bEnabled = true;
+			_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].bEnabled = true;
 
-				_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].bBone = true;
-				bDeleteOnce ? _Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].seqBone[ STATE_VISIBLE ].DeleteColorSequence( 0 ) : ( void )0;
-				bDeleteOnce ? _Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].seqBone[ STATE_VISIBLE ].PutNewColorSequence( { 255, 255, 255, 255 }, 1000ull ) : ( void )0;
-				bDeleteOnce ? _Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].seqBoneOutline.DeleteColorSequence( 0 ) : ( void )0;
-				bDeleteOnce ? _Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].seqBoneOutline.PutNewColorSequence( { 0, 0, 0, 255 }, 1000ull ) : ( void )0;
-
-				_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].bSnapline = false;
-				_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].bSnaplineOrigin = false;
-				_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].bSnaplineDestination = true;
-				_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].bSnaplineDestination = true;
-
-				bDeleteOnce ? _Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].seqSnapline[ STATE_VISIBLE ].DeleteColorSequence( 0 ) : ( void )0;
-				bDeleteOnce ? _Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].seqSnapline[ STATE_VISIBLE ].PutNewColorSequence( { 255, 255, 255, 255 }, 1000ull ) : ( void )0;
-				
-				_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].bSnaplineOutline = true;
-				bDeleteOnce ? _Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].seqSnaplineOutline.DeleteColorSequence( 0 ) : ( void )0;
-				bDeleteOnce ? _Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].seqSnaplineOutline.PutNewColorSequence( { 0, 0, 0, 255 }, 1000ull ) : ( void )0;
-				_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].flSnaplineOutlineThickness = 15.f;
-
-				_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].bBox = true;
-				_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].bDimesMode = GetMoment( ) / 10000000ull % 20 > 12 ? true : false;
-				_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].bDisplayMode = GetMoment( ) / 10000000ull % 10 < 5 ? true : false;
-				bDeleteOnce ? _Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].seqBox[ STATE_VISIBLE ].DeleteColorSequence( 0 ) : ( void )0;
-				bDeleteOnce ? _Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].seqBox[ STATE_VISIBLE ].PutNewColorSequence( { 255, 255, 255, 255 }, 1000ull ) : ( void )0;
-				_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].flBoxThickness = 2.f;
-			}
-
-			{
-				_Settings._Awareness._Statistics._Entities[ SETTING_ENTITY_WEAPONS ].bEnabled = false;
-				_Settings._Awareness._Statistics._Entities[ SETTING_ENTITY_WEAPONS ].bSnapline = true;
-				_Settings._Awareness._Statistics._Entities[ SETTING_ENTITY_WEAPONS ].bBox = true;
-
-				_Settings._Awareness._Statistics._Entities[ SETTING_ENTITY_CHICKEN ].bEnabled = false;
-				_Settings._Awareness._Statistics._Entities[ SETTING_ENTITY_CHICKEN ].bSnapline = true;
-				_Settings._Awareness._Statistics._Entities[ SETTING_ENTITY_CHICKEN ].bBox = true;
-				_Settings._Awareness._Statistics._Entities[ SETTING_ENTITY_CHICKEN ].bDimesMode = true;
-
-				_Settings._Awareness._Statistics._Players[ SETTING_ENTITY_GRENADE_FLASH ].bEnabled = false;
-				_Settings._Awareness._Statistics._Players[ SETTING_ENTITY_GRENADE_FLASH ].bSnapline = true;
-				_Settings._Awareness._Statistics._Players[ SETTING_ENTITY_GRENADE_FLASH ].bBox = true;
-
-				_Settings._Awareness._Statistics._Players[ SETTING_ENTITY_GRENADE_PROJECTILE_FLASH ].bEnabled = false;
-				_Settings._Awareness._Statistics._Players[ SETTING_ENTITY_GRENADE_PROJECTILE_FLASH ].bSnapline = true;
-				_Settings._Awareness._Statistics._Players[ SETTING_ENTITY_GRENADE_PROJECTILE_FLASH ].bBox = true;
-			}
+			_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].bBox = true;
+			_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].bDimesMode = GetMoment( ) / 10000000ull % 10 > 6 ? true : false;
+			_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].bDisplayMode = GetMoment( ) / 10000000ull % 10 > 3 ? true : false;
+			bDeleteOnce ? _Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].seqBox[ STATE_VISIBLE ].DeleteColorSequence( 0 ) : ( void )0;
+			bDeleteOnce ? _Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].seqBox[ STATE_VISIBLE ].PutNewColorSequence( { 255, 255, 255, 255 }, 1000ull ) : ( void )0;
+			_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].flBoxThickness = 2.f;
 		}
 		bDeleteOnce = true;
 
