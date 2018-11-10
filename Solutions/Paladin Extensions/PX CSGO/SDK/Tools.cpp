@@ -67,6 +67,12 @@ namespace PX::Tools
 		return pPlayer->IsPlayer( ) && pPlayer->IsAlive( );
 	}
 
+	float PX_API GetRecoilScale( )
+	{
+		static auto pRecoilFactor = pConVar->FindVar( PX_XOR( "weapon_recoil_scale" ) );
+		return pRecoilFactor != nullptr ? pRecoilFactor->GetFloat( ) : 2.f;
+	}
+
 	bool PX_API LineGoesThroughSmoke( Vector vecStartPos, Vector vecEndPos )
 	{
 		static auto ptrLineGoesThroughSmoke = mClient.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Line Goes Through Smoke" ) ].get< str_t >( ) )
@@ -236,7 +242,7 @@ namespace PX::Tools
 		qReturn.yaw = atan2( vecRelativePosition.y, vecRelativePosition.x ) * 180.f / D3DX_PI;
 		qReturn.roll = pCmd->viewangles.roll;
 		if ( bAccountForRecoil )
-			qReturn += pLocalPlayer->m_aimPunchAngle( ) * 2.f * ( flRecoilPrecision / 100.f );
+			qReturn += pLocalPlayer->m_aimPunchAngle( ) * 2.f * flRecoilPrecision;
 		return qReturn;
 	}
 

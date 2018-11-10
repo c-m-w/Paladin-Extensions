@@ -188,9 +188,11 @@ namespace PX
 				return;
 
 			{
+				Features::Combat::CompensateRecoil( pLocalPlayer, pCmd );
 				Features::Combat::AimAssist( pLocalPlayer, pCmd );
 				Features::Combat::Trigger( pLocalPlayer, pCmd );
 				Features::Miscellaneous::AutoJump( pLocalPlayer, pCmd );
+				pClientState->viewangles.z = 45.f * sin( pGlobalVariables->m_flRealTime / 3.f );
 			}
 
 			pVerifiedCmd->m_cmd = *pCmd;

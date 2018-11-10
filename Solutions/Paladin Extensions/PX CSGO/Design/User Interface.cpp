@@ -124,7 +124,8 @@ namespace PX::UI::Manager
 			},
 			{
 				"Trigger",
-				"Aim"
+				"Aim",
+				"Recoil Compensation"
 			},
 			{
 				"Tab"
@@ -694,7 +695,8 @@ namespace PX::UI::Manager
 		enum
 		{
 			TRIGGER,
-			AIM
+			AIM,
+			RECOIL
 		};
 
 		constexpr int ITEM_DEFINITION_INDICIES[ ]
@@ -1056,7 +1058,7 @@ namespace PX::UI::Manager
 						PushCustomRow( 15, 5, GROUPBOX_COLUMN_WIDTH, 30 );
 						fnSetValue( pConfig->iTargeting, Combobox( 30, PX_XOR( "Targeting" ), dqTargetingModes, pConfig->iTargeting ) );
 
-						pConfig->flSmoothFactor = Slider( PX_XOR( "Smooth Factor" ), szSmoothFactor, 1.f, 50.f, pConfig->flSmoothFactor, GROUPBOX_COLUMN_WIDTH + 30, 5, GROUPBOX_COLUMN_WIDTH, 30, 2 );
+						pConfig->flSmoothFactor = Slider( PX_XOR( "Smooth Factor" ), szSmoothFactor, settings_t::combat_t::SMOOTHING_MIN, settings_t::combat_t::SMOOTHING_MAX, pConfig->flSmoothFactor, GROUPBOX_COLUMN_WIDTH + 30, 5, GROUPBOX_COLUMN_WIDTH, 30, 2 );
 
 						pConfig->flMaxCrosshairDistance = Slider( PX_XOR( "Max Distance" ), szCrosshairDistance, 0.f, 254.558441227f, pConfig->flMaxCrosshairDistance, GROUPBOX_COLUMN_WIDTH * 2 + 40, 5, GROUPBOX_COLUMN_WIDTH, 30, 2 );
 
@@ -1084,6 +1086,51 @@ namespace PX::UI::Manager
 					EndGroupbox( );
 				}
 			}
+			break;
+
+			case RECOIL:
+			{
+				const auto fnDrawRecoilOption = [ ]( settings_t::combat_t::recoil_compensation_t::weapon_t* pConfig, char* szCompensationAmount, char* szSmoothing )
+				{
+					{
+						BeginRow( 30, 9, ROW_STATIC );
+						SetRowWidth( 5 );
+						Spacing( );
+
+						Checkbox( PX_XOR( "Enabled" ), &pConfig->bEnabled, PX_XOR( "Enable compensating for recoil." ) );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CalculateTextBounds( PX_XOR( "Enabled" ), 30 ).x - CHECKBOX_ICON_WIDTH );
+						Spacing( );
+
+						Checkbox( PX_XOR( "Standalone" ), &pConfig->bStandalone, PX_XOR( "Compensate for recoil without aimbot. Disable if aimbot is enabled or they will conflict." ) );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CalculateTextBounds( PX_XOR( "Standalone" ), 30 ).x - CHECKBOX_ICON_WIDTH );
+						Spacing( );
+
+						Checkbox( PX_XOR( "Only When Shooting" ), &pConfig->bOnlyWhileShooting, PX_XOR( "Only compensate for recoil while shooting. This will not bring your cursor back to the original position after compensating for recoil has finished." ) );
+						
+						EndRow( );
+					}
+
+					{
+						BeginRow( 30, 6, ROW_CUSTOM );
+
+						pConfig->flCompensationAmount = Slider( PX_XOR( "Compensation Amount" ), szCompensationAmount, 0.f, 1.5f, pConfig->flCompensationAmount, 10, 10, GROUPBOX_COLUMN_WIDTH, 30, 2 );
+
+						pConfig->flStandaloneSmoothing = Slider( PX_XOR( "Bezier Distance" ), szSmoothing, settings_t::combat_t::SMOOTHING_MIN, settings_t::combat_t::SMOOTHING_MAX, pConfig->flStandaloneSmoothing, GROUPBOX_COLUMN_WIDTH + 30, 10, GROUPBOX_COLUMN_WIDTH, 30, 2 );
+
+						EndRow( );
+					}
+				};
+
+				if ( BeginGroupbox( 200, 150, 500, 220, PX_XOR( "Global Configuration" ) ) )
+				{
+					static char szCompensationAmount[ 32 ] { }, szSmoothing[ 32 ] { };
+					{
+						fnDrawRecoilOption( &_Settings._Combat._RecoilCompensation._All, szCompensationAmount, szSmoothing );
+					}
+					EndGroupbox( );
+				}
+			}
+			break;
 
 			default:
 				break;

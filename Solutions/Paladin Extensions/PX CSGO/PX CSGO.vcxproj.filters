@@ -93,6 +93,9 @@
     <ClCompile Include="Features\Combat\Aim Assist.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Features\Combat\Recoil Compensation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="PX CSGO.hpp">
@@ -308,5 +311,13 @@
     <ClInclude Include="Features\Combat\Aim Assist.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Features\Combat\Recoil Compensation.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Features\Features.inl">
+      <Filter>Header Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

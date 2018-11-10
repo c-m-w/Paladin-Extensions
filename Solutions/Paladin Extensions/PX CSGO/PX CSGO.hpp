@@ -16,6 +16,7 @@
 #include "Features/Awareness/Glow.hpp"
 #include "Features/Awareness/Materials.hpp"
 #include "Features/Combat/Aim Assist.hpp"
+#include "Features/Combat/Recoil Compensation.hpp"
 #include "Features/Combat/Trigger.hpp"
 #include "Features/Miscellaneous/Movement.hpp"
 #include "Features/Miscellaneous/Visuals.hpp"

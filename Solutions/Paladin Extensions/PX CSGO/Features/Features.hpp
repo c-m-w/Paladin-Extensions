@@ -319,6 +319,8 @@ namespace PX::Features
 
 		struct combat_t
 		{
+			constexpr static float SMOOTHING_MIN = 1.f;
+			constexpr static float SMOOTHING_MAX = 100.f;
 			struct trigger_t
 			{
 				struct weapon_t
@@ -348,13 +350,26 @@ namespace PX::Features
 					int iAimType = AIMTYPE_DEFAULT;
 					float flMaxCrosshairDistance = 1.f;
 					float flMaxWorldCrosshairDistance = 1.f;
-					float flSmoothFactor = 1.f;
+					float flSmoothFactor = SMOOTHING_MIN;
 					float flBisectionPoint = 0.f; // 0 to 1.00
 					float flBezierDistance = 1.f;
 					int iSmoothMode = SMOOTH_LINEAR;
 					int iTargeting = TARGETING_DISTANCE;
 				} _All, _WeaponTypes[ WEAPONTYPE_MACHINEGUN + 1 ] { }, _IndividualWeapons[ ITEM_MAX ] { };
 			} _Aim;
+
+			struct recoil_compensation_t
+			{
+				struct weapon_t
+				{
+					toggle_t bEnabled = false;
+					toggle_t bStandalone = false;
+					toggle_t bOnlyWhileShooting = false;
+					toggle_t bUseSeparate = false;
+					float flCompensationAmount = 1.f; // 0.f to 2.f
+					float flStandaloneSmoothing = SMOOTHING_MIN;
+				} _All, _WeaponTypes[ WEAPONTYPE_MACHINEGUN + 1 ] { }, _IndividualWeapons[ ITEM_MAX ] { };
+			} _RecoilCompensation;
 		} _Combat;
 
 		struct miscellaneous_t
@@ -375,6 +390,12 @@ namespace PX::Features
 	bool PX_API InitializeFeatures( );
 	void PX_API ShutdownFeatures( );
 
+	using trigger_config_t = settings_t::combat_t::trigger_t::weapon_t;
+	using aim_config_t = settings_t::combat_t::aim_t::weapon_t;
+	using recoil_config_t = settings_t::combat_t::recoil_compensation_t::weapon_t;
+
+	template< typename _r, typename _t > _r* PX_API GetWeaponConfig( CHandle< Tools::CBaseCombatWeapon > hWeapon, _t _Config );
+
 	enum
 	{
 		SETTING_TEAM,
@@ -383,3 +404,5 @@ namespace PX::Features
 		SETTING_C4
 	};
 }
+
+#include "Features.inl"

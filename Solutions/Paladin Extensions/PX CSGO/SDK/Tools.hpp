@@ -25,6 +25,9 @@ namespace PX::Tools
 	CRC32_t PX_API GetCmdHash( CUserCmd* pCmd );
 	bool PX_API ValidPlayer( void* pEntity );
 
+	// CVars
+	float PX_API GetRecoilScale( );
+
 	// Game fucntions
 	bool PX_API LineGoesThroughSmoke( Vector vecStartPos, Vector vecEndPos );
 	void PX_API SetClantag( cstr_t szTag );

@@ -10,7 +10,7 @@ using namespace Tools;
 
 namespace PX::Features::Combat
 {
-	auto& _Config = _Settings._Combat._Aim._All;
+	auto _Config = &_Settings._Combat._Aim._All;
 	/** \brief Holds information about the target. */
 	struct
 	{
@@ -59,8 +59,9 @@ namespace PX::Features::Combat
 		if ( pLast != nullptr && !*pLast )
 			bReleasedKey = true;
 
+		_Config = GetWeaponConfig< aim_config_t >( hWeapon, _Settings._Combat._Aim );
 		player_ptr_t pTarget = nullptr;
-		if ( _Config.bStaticTarget.Get( ) )
+		if ( _Config->bStaticTarget.Get( ) )
 		{
 			if ( _AimContext.iEntityIndex != -1 )
 			{
@@ -73,7 +74,7 @@ namespace PX::Features::Combat
 
 				if ( !ValidateTarget( pLocalPlayer, pTarget, pCmd ) )
 				{
-					if ( _Config.bValidateTarget.Get( ) && !bReleasedKey )
+					if ( _Config->bValidateTarget.Get( ) && !bReleasedKey )
 						return;
 				}
 				else if ( bReleasedKey )
@@ -90,7 +91,7 @@ namespace PX::Features::Combat
 		if ( nullptr == pTarget )
 			return ResetContext( );
 
-		pLast = &( pTarget->m_iTeamNum( ) == pLocalPlayer->m_iTeamNum( ) ? _Config.bTeammates.Get( ) : _Config.bEnemies.Get( ) );
+		pLast = &( pTarget->m_iTeamNum( ) == pLocalPlayer->m_iTeamNum( ) ? _Config->bTeammates.Get( ) : _Config->bEnemies.Get( ) );
 		if ( !*pLast )
 		{
 			bReleasedKey = true;
@@ -105,7 +106,7 @@ namespace PX::Features::Combat
 
 		auto qTargetAngle = CalculateAngle( pLocalPlayer, pTarget, _AimContext.iHitbox, pCmd, false );
 		ClampAngles( qTargetAngle );
-		switch( _Config.iAimType )
+		switch( _Config->iAimType )
 		{
 			case AIMTYPE_DEFAULT:
 			{
@@ -124,10 +125,10 @@ namespace PX::Features::Combat
 					if ( vecTemp2.y < 0.f )
 						vecTemp2.y += 360.f;
 				}
-				auto vecRelativeSmoothedAngles = vecViewAngles - ( vecTemp - vecTemp2 ) / _Config.flSmoothFactor;
+				auto vecRelativeSmoothedAngles = vecViewAngles - ( vecTemp - vecTemp2 ) / _Config->flSmoothFactor;
 				Vector vecNewAngles;
 
-				switch( _Config.iSmoothMode )
+				switch( _Config->iSmoothMode )
 				{
 					case SMOOTH_LINEAR:
 					{
@@ -190,15 +191,16 @@ namespace PX::Features::Combat
 
 						const auto vecDifference = vecTemp - vecTemp2;
 						if ( _AimContext.flBezierRatio < 1.f )
-							_AimContext.flBezierRatio += fabsf( _Config.flSmoothFactor - 51.f ) / 50.f;
+							_AimContext.flBezierRatio += fabsf( _Config->flSmoothFactor -
+							( settings_t::combat_t::SMOOTHING_MAX + settings_t::combat_t::SMOOTHING_MIN ) / settings_t::combat_t::SMOOTHING_MAX );
 						if ( _AimContext.flBezierRatio > 1.f )
 							_AimContext.flBezierRatio = 1.f;
 
 						const auto flAngle = atan2( vecDifference.x, vecDifference.y );
-						const auto vecBisection = vecTemp - vecDifference * _Config.flBisectionPoint;
+						const auto vecBisection = vecTemp - vecDifference * _Config->flBisectionPoint;
 						auto vecIntersection = vecBisection;
-						vecIntersection.y -= sin( flAngle ) * _Config.flBezierDistance;
-						vecIntersection.x += cos( flAngle ) * _Config.flBezierDistance;
+						vecIntersection.y -= sin( flAngle ) * _Config->flBezierDistance;
+						vecIntersection.x += cos( flAngle ) * _Config->flBezierDistance;
 						vecLinePoints[ 0 ] = vecTemp - ( vecTemp - vecIntersection ) * _AimContext.flBezierRatio;
 						vecLinePoints[ 1 ] = vecIntersection - ( vecIntersection - vecTemp2 ) * _AimContext.flBezierRatio;
 						vecNewAngles = vecLinePoints[ 0 ] - ( vecLinePoints[ 0 ] - vecLinePoints[ 1 ] ) * _AimContext.flBezierRatio;
@@ -273,14 +275,14 @@ namespace PX::Features::Combat
 				 || pCurrentEntity == pLocalPlayer
 				 || !pCurrentEntity->IsPlayer( )
 				 || !pCurrentEntity->IsAlive( )
-				 || !pLocalPlayer->CanSeePlayer( pCurrentEntity, _Config.bMindSmoke.Get( ) ) )
+				 || !pLocalPlayer->CanSeePlayer( pCurrentEntity, _Config->bMindSmoke.Get( ) ) )
 				continue;
 
-			const auto flCrosshairDistance = CalculateCrosshairDistance( pLocalPlayer, pCurrentEntity, _Config.iReferenceHitbox, pCmd, _Config.bWorldlyCrosshairDistance.Get( ) );
-			if ( flCrosshairDistance > _Config.flMaxCrosshairDistance )
+			const auto flCrosshairDistance = CalculateCrosshairDistance( pLocalPlayer, pCurrentEntity, _Config->iReferenceHitbox, pCmd, _Config->bWorldlyCrosshairDistance.Get( ) );
+			if ( flCrosshairDistance > _Config->flMaxCrosshairDistance )
 				continue;
 
-			switch( _Config.iTargeting )
+			switch( _Config->iTargeting )
 			{
 				case TARGETING_DISTANCE:
 				{
@@ -329,14 +331,14 @@ namespace PX::Features::Combat
 
 		for( int i = HITBOX_HEAD; i < HITBOX_MAX; i++ )
 		{
-			if ( !_Config.bHitboxes[ i ] )
+			if ( !_Config->bHitboxes[ i ] )
 				continue;
 
-			const auto flCurrentDistance = CalculateCrosshairDistance( pLocalPlayer, pTarget, i, pCmd, _Config.bWorldlyCrosshairDistance.Get( ) );
-			if ( flCurrentDistance > _Config.flMaxCrosshairDistance )
+			const auto flCurrentDistance = CalculateCrosshairDistance( pLocalPlayer, pTarget, i, pCmd, _Config->bWorldlyCrosshairDistance.Get( ) );
+			if ( flCurrentDistance > _Config->flMaxCrosshairDistance )
 				continue;
 
-			if ( i == _Config.iPriorityHitbox )
+			if ( i == _Config->iPriorityHitbox )
 				return i;
 
 			if( flCurrentDistance < flClosestHitboxDistance )
@@ -351,7 +353,7 @@ namespace PX::Features::Combat
 	bool PX_API ValidateTarget( player_ptr_t pLocalPlayer, player_ptr_t pTarget, CUserCmd* pCmd )
 	{
 		if ( _AimContext.iHitbox != -1 )
-			if ( CalculateCrosshairDistance( pLocalPlayer, pTarget, _AimContext.iHitbox, pCmd, _Config.bWorldlyCrosshairDistance.Get( ) ) )
+			if ( CalculateCrosshairDistance( pLocalPlayer, pTarget, _AimContext.iHitbox, pCmd, _Config->bWorldlyCrosshairDistance.Get( ) ) )
 				return true;
 		return -1 != ( _AimContext.iHitbox = FindHitbox( pLocalPlayer, pTarget, pCmd ) );
 	}
