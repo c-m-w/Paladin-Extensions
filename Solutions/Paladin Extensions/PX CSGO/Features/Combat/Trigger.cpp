@@ -25,7 +25,8 @@ namespace PX::Features::Combat
 		if ( !pWeaponData )
 			return;
 
-		auto _Config = GetWeaponConfig< trigger_config_t >( hActiveWeapon, _Settings._Combat._Trigger );
+		trigger_config_t* _Config;
+		PX_GET_WEAPON_CONFIG( hActiveWeapon, _Config, _Settings._Combat._Trigger );
 
 		if ( !_Config->bEnemies.Get( ) && !_Config->bTeammates.Get( ) ) // dont bother tracing a ray if we wont shoot anyway
 			return;

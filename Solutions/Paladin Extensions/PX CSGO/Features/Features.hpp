@@ -348,11 +348,16 @@ namespace PX::Features
 					int iReferenceHitbox = HITBOX_HEAD; // hitbox to use as reference for seeing which players are within crosshair distance.
 					int iPriorityHitbox = HITBOX_HEAD;
 					int iAimType = AIMTYPE_DEFAULT;
+					float flOverCompensation = 0.f; // +- xyz
 					float flMaxCrosshairDistance = 1.f;
 					float flMaxWorldCrosshairDistance = 1.f;
 					float flSmoothFactor = SMOOTHING_MIN;
-					float flBisectionPoint = 0.f; // 0 to 1.00
-					float flBezierDistance = 1.f;
+					struct
+					{
+						float flBisectionPoint = 0.5f;
+						float flDistance = 5.f;
+					} _BezierOrders[ 7 ];
+					int iCurrentOrders = 1;
 					int iSmoothMode = SMOOTH_LINEAR;
 					int iTargeting = TARGETING_DISTANCE;
 				} _All, _WeaponTypes[ WEAPONTYPE_MACHINEGUN + 1 ] { }, _IndividualWeapons[ ITEM_MAX ] { };
@@ -405,5 +410,3 @@ namespace PX::Features
 		SETTING_C4
 	};
 }
-
-#include "Features.inl"

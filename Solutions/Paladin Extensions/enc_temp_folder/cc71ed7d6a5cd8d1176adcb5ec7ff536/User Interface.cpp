@@ -118,7 +118,8 @@ namespace PX::UI::Manager
 		{
 			
 			{
-				"Statistics",
+				"Extra Sensory Drawing 1",
+				"Extra Sensory Drawing 2",
 				"Glow",
 				"Materials"
 			},
@@ -153,46 +154,14 @@ namespace PX::UI::Manager
 	{
 		enum
 		{
-			STATISTICS,
+			EXTRA_SENSORY_DRAWING_1,
+			EXTRA_SENSORY_DRAWING_2,
 			GLOW,
 			MATERIALS
 		};
 
 		switch ( iSubtab )
 		{
-			case STATISTICS:
-			{
-				auto& cfg = _Settings._Awareness._Statistics;
-				if ( BeginGroupbox( 200, 150, 500, 420, PX_XOR( "Players" ) ) )
-				{
-					std::deque< cstr_t > dqPlayerTargets
-					{
-						PX_XOR( "Teammates" ),
-						PX_XOR( "Enemies" ),
-					};
-
-					int iTargetEntity = SETTING_PLAYER_TEAM;
-
-					BeginRow( 30, 15, ROW_STATIC );
-					SetRowWidth( 10 );
-					Spacing( );
-
-					SetRowWidth( GROUPBOX_COLUMN_WIDTH - COLOR_BUTTON_PADDING * 7 - COLOR_BUTTON_WIDTH * 3 );
-					fnSetValue( iTargetEntity, Combobox( 25, PX_XOR( "Player Type" ), dqPlayerTargets, iTargetEntity ) );
-					EndRow( );
-
-					BeginRow( 30, 3, ROW_STATIC );
-					SetRowWidth( 5 );
-					Spacing( );
-
-					Checkbox( PX_XOR( "Enabled" ), &cfg._Players[ iTargetEntity ].bEnabled, PX_XOR( "Enable drawing statistics for selected player type." ) );
-
-					EndRow( );
-				}
-
-			}
-			break;
-			/*
 			case EXTRA_SENSORY_DRAWING_2:
 			case EXTRA_SENSORY_DRAWING_1:
 			{
@@ -395,7 +364,6 @@ namespace PX::UI::Manager
 				}
 			}
 			break;
-			*/
 
 			case GLOW:
 			{
@@ -1189,13 +1157,13 @@ namespace PX::UI::Manager
 						SetRowWidth( 5 );
 						Spacing( );
 
-						Checkbox( PX_XOR( "Use Weapon Configuration" ), &_Settings._Combat._Aim._IndividualWeapons[ ITEM_DEFINITION_INDICIES[ uCurrentWeapon ] ].bUseSeparate, PX_XOR( "Use the weapon's configuration rather than the group or global configuration." ) );
+						Checkbox( PX_XOR( "Use Weapon Configuration" ), &_Settings._Combat._Trigger._IndividualWeapons[ ITEM_DEFINITION_INDICIES[ uCurrentWeapon ] ].bUseSeparate, PX_XOR( "Use the weapon's configuration rather than the group or global configuration." ) );
 
 						EndRow( );
 					}
 
 					{
-						fnDrawAimOptions( &_Settings._Combat._Aim._IndividualWeapons[ ITEM_DEFINITION_INDICIES[ uCurrentWeapon ] ], szSmooth, szCrosshairDistance, szBisect, szDistance, szOverCompensation );
+						fnDrawAimOptions( &_Settings._Combat._Aim._WeaponTypes[ ITEM_DEFINITION_INDICIES[ uCurrentWeapon ] ], szSmooth, szCrosshairDistance, szBisect, szDistance, szOverCompensation );
 					}
 
 					EndGroupbox( );
