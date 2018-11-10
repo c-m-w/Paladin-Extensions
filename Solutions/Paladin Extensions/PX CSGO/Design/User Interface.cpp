@@ -1066,15 +1066,15 @@ namespace PX::UI::Manager
 					{
 						BeginRow( 30, 6, ROW_CUSTOM );
 
-						pConfig->flBisectionPoint = Slider( PX_XOR( "Bisection Point" ), szBisection, 0.01f, 1.50f, pConfig->flBisectionPoint, 10, 5, GROUPBOX_COLUMN_WIDTH, 30, 2 );
+						pConfig->flBisectionPoint = Slider( PX_XOR( "Bisection Point" ), szBisection, 0.01f, 1.50f, pConfig->flBisectionPoint, 10, 10, GROUPBOX_COLUMN_WIDTH, 30, 2 );
 
-						pConfig->flBezierDistance = Slider( PX_XOR( "Bezier Distance" ), szDistance, -20.00f, 20.00f, pConfig->flBezierDistance, GROUPBOX_COLUMN_WIDTH + 30, 5, GROUPBOX_COLUMN_WIDTH, 30, 2 );
+						pConfig->flBezierDistance = Slider( PX_XOR( "Bezier Distance" ), szDistance, -20.00f, 20.00f, pConfig->flBezierDistance, GROUPBOX_COLUMN_WIDTH + 30, 10, GROUPBOX_COLUMN_WIDTH, 30, 2 );
 
 						EndRow( );
 					}
 				};
 
-				if ( BeginGroupbox( 200, 150, 500, 200, PX_XOR( "Global Configuration" ) ) )
+				if ( BeginGroupbox( 200, 150, 500, 220, PX_XOR( "Global Configuration" ) ) )
 				{
 					static char szSmooth[ 32 ] { }, szCrosshairDistance[ 32 ] { }, szBisect[ 32 ] { }, szDistance[ 32 ] { };
 					{

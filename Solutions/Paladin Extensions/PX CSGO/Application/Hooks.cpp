@@ -71,8 +71,8 @@ namespace PX
 					ptrDesiredReturnAddress = ptrReturnAddress;
 			}
 
-			if ( ptrDesiredReturnAddress == ptrReturnAddress )
-				Features::Awareness::DrawStatistics( );
+			//if ( ptrDesiredReturnAddress == ptrReturnAddress )
+			//	Features::Awareness::DrawStatistics( );
 
 			return fnOriginal( pThis );
 		}
@@ -114,7 +114,6 @@ namespace PX
 						   && D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_MINFILTER, D3DTADDRESS_WRAP )
 						   && D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_SRGBTEXTURE, NULL ) );
 
-				Features::Combat::DrawAimPath( );
 				Drawing::DrawQueue( );
 				UI::Manager::CSGO::OnEndScene( );
 
