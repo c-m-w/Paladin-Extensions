@@ -377,6 +377,7 @@ namespace PX::Features
 			struct movement_t
 			{
 				toggle_t bAutoJump = false;
+				int flMissChance = 0.f; // 0.f -> 1.f
 				toggle_t bEdgeJump = false;
 			} _Movement;
 

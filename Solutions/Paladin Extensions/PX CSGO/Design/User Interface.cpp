@@ -117,8 +117,7 @@ namespace PX::UI::Manager
 		{
 			
 			{
-				"Extra Sensory Drawing 1",
-				"Extra Sensory Drawing 2",
+				"Statistics",
 				"Glow",
 				"Materials"
 			},
@@ -151,14 +150,46 @@ namespace PX::UI::Manager
 	{
 		enum
 		{
-			EXTRA_SENSORY_DRAWING_1,
-			EXTRA_SENSORY_DRAWING_2,
+			STATISTICS,
 			GLOW,
 			MATERIALS
 		};
 
 		switch ( iSubtab )
 		{
+			case STATISTICS:
+			{
+				auto& cfg = _Settings._Awareness._Statistics;
+				if ( BeginGroupbox( 200, 150, 500, 420, PX_XOR( "Players" ) ) )
+				{
+					std::deque< cstr_t > dqPlayerTargets
+					{
+						PX_XOR( "Teammates" ),
+						PX_XOR( "Enemies" ),
+					};
+
+					int iTargetEntity = SETTING_PLAYER_TEAM;
+
+					BeginRow( 30, 15, ROW_STATIC );
+					SetRowWidth( 10 );
+					Spacing( );
+
+					SetRowWidth( GROUPBOX_COLUMN_WIDTH - COLOR_BUTTON_PADDING * 7 - COLOR_BUTTON_WIDTH * 3 );
+					fnSetValue( iTargetEntity, Combobox( 25, PX_XOR( "Player Type" ), dqPlayerTargets, iTargetEntity ) );
+					EndRow( );
+
+					BeginRow( 30, 3, ROW_STATIC );
+					SetRowWidth( 5 );
+					Spacing( );
+
+					Checkbox( PX_XOR( "Enabled" ), &cfg._Players[ iTargetEntity ].bEnabled, PX_XOR( "Enable drawing statistics for selected player type." ) );
+
+					EndRow( );
+				}
+
+			}
+			break;
+			/*
 			case EXTRA_SENSORY_DRAWING_2:
 			case EXTRA_SENSORY_DRAWING_1:
 			{
@@ -361,6 +392,7 @@ namespace PX::UI::Manager
 				}
 			}
 			break;
+			*/
 
 			case GLOW:
 			{

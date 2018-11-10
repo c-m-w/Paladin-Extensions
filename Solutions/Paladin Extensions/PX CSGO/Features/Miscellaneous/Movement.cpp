@@ -10,31 +10,10 @@ namespace PX::Features::Miscellaneous
 		if ( !_Settings._Miscellaneous._Movement.bAutoJump
 			 || !pLocalPlayer->IsAlive( ) )
 			return;
-		
-		static auto bShouldJump = false, bJumped = false;
-		
-		if( !bJumped && bShouldJump )
-		{
-			bShouldJump = false;
-			pCmd->buttons |= IN_JUMP;
-		}
-		else if( pCmd->buttons & IN_JUMP )
-		{
-			if( pLocalPlayer->m_fFlags( ) & FL_ONGROUND )
-			{
-				bShouldJump = true;
-				bJumped = true;
-			}
-			else
-			{
-				pCmd->buttons &= ~IN_JUMP;
-				bJumped = false;
-			}
-		}
-		else
-		{
-			bShouldJump = false;
-			bJumped = false;
-		}
+
+		if ( pCmd->buttons & IN_JUMP )
+			if ( !( pLocalPlayer->m_fFlags( ) & FL_ONGROUND ) )
+				if ( !( pGlobalVariables->m_iTickCount % ( int( _Settings._Miscellaneous._Movement.flMissChance / pGlobalVariables->m_flIntervalPerTick ) + 1 ) ) )
+					pCmd->buttons &= ~IN_JUMP;
 	}
 }
