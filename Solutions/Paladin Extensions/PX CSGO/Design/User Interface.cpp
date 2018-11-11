@@ -141,7 +141,7 @@ namespace PX::UI::Manager
 
 		SetMainWindowWidth( CSGO::uWindowWidth );
 		SetMainWindowHeight( CSGO::uWindowHeight );
-		Header( PX_XOR( "Paladin Extensions" ), szNuklearWindowTitle, 102, CSGO::ChangeVisibility, [](){exit( -1 );} );
+		Header( PX_XOR( "Paladin Extensions" ), szNuklearWindowTitle, 102, CSGO::ChangeVisibility, [ ]( ){ exit( 0 ); } );
 		fnSetValue( iCurrentTab, Tabs( 10, 0, dqPrimaryTabs, iCurrentTab ) );
 		Separator( 61, 65, 72, 100 );
 		SetFont( FNT_ROBOTO_SMALL );
@@ -162,6 +162,7 @@ namespace PX::UI::Manager
 		{
 			case STATISTICS:
 			{
+				break;
 				auto& cfg = _Settings._Awareness._Statistics;
 				if ( BeginGroupbox( 200, 150, 500, 420, PX_XOR( "Players" ) ) )
 				{
