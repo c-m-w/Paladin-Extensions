@@ -98,6 +98,15 @@ namespace PX::Tools
 		INFO = MB_ICONASTERISK | MB_OK | MB_HELP,
 	};
 
+	struct bezier_order_t
+	{
+		float flBisectionPoint = 0.5f;
+		float flDistance = 5.f;
+	};
+
+	std::vector< D3DXVECTOR2 > PX_API GetBezierPoints( D3DXVECTOR2 vecStart, D3DXVECTOR2 vecEnd, bezier_order_t* pOrders, std::size_t zOrders );
+	D3DXVECTOR2 PX_API GetBezierPoint( std::vector< D3DXVECTOR2 > vecPoints, float flRatio );
+
 	// returns true if selected YES on EMBType::QUERY or selected RETRY on EMBType::ERROR
 	bool Popup( EMBType popType, const wchar_t* wszMessage, bool bDelete = false );
 

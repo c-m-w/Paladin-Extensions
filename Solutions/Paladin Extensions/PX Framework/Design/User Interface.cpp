@@ -683,6 +683,11 @@ namespace PX::UI
 			pContext->current->layout->at_x = float( x );
 			pContext->current->layout->at_y = float( y );
 		}
+
+		struct nk_rect PX_API GetActiveWindowBounds( )
+		{
+			return pContext->current->bounds;
+		}
 	}
 
 	namespace Widgets
@@ -853,7 +858,7 @@ namespace PX::UI
 
 		void PX_API Header( cstr_t szTitle, cstr_t _szApplicationTitle, unsigned uFillHeight /*= 102u*/, callback_t fnMinimizeCallback /*= nullptr*/, callback_t fnCloseCallback /*= nullptr*/ )
 		{
-			auto recMainWindow = pContext->current->bounds;
+			const auto recMainWindow = GetActiveWindowBounds( );
 			vecImageQueue.emplace_back( TEXTURE_LOGO, D3DXVECTOR3( recMainWindow.x + 5.f, recMainWindow.y + 5.f, 0.f ), PopupActive( ) ? D3DCOLOR_ARGB( 170, 170, 170, 170 ) : 0xFFFFFFFF );
 
 			nk_layout_row_dynamic( pContext, 30, 0 );
@@ -1203,7 +1208,7 @@ namespace PX::UI
 			return iButtonPressed;
 		}
 
-		bool PX_API BeginGroupbox( unsigned uStartX, unsigned uStartY, unsigned uBoxWidth, unsigned uBoxHeight, cstr_t szTitle )
+		bool PX_API BeginGroupbox( int uStartX, int uStartY, int uBoxWidth, int uBoxHeight, cstr_t szTitle )
 		{
 			SetFont( FNT_TAHOMA );
 			nk_layout_space_begin( pContext, NK_STATIC, float( uBoxHeight ), 1 );
@@ -2190,6 +2195,53 @@ namespace PX::UI
 			int iLength = zLength;
 			iCurrentRowUsedColumns++;
 			nk_edit_string( pContext, NK_EDIT_READ_ONLY | NK_EDIT_MULTILINE, const_cast< char* >( szData ), &iLength, iLength + 1, nk_filter_ascii );
-		}												  
+		}
+
+		void PX_API Graph( float x, float y, float w, float h, int iVerticalGridlines, int iHorizontalGridlines, const struct nk_vec2* vecPoints, std::size_t zPoints, const struct nk_vec2* vecDots, std::size_t zDots )
+		{
+			const auto pOutput = nk_window_get_canvas( pContext );
+			const auto recLocation = nk_rect( x, y, w, h );
+			struct nk_vec2 vecCurrent[ 2 ] { };
+
+			nk_fill_rect( pOutput, nk_rect( recLocation.x - 1.f, recLocation.y - 1.f, recLocation.w + 2.f, recLocation.h + 2.f ), 0.f, clrLightBackground );
+			nk_fill_rect( pOutput, recLocation, 0.f, clrDarkBackground );
+			for( auto i = 0; i < iVerticalGridlines; i++ )
+			{
+				const auto flRatio = float( i ) / float( iVerticalGridlines );
+				nk_stroke_line( pOutput, recLocation.x + recLocation.w * flRatio, recLocation.y, recLocation.x + recLocation.w * flRatio, recLocation.y + recLocation.h, 1.f, clrLightBackground );
+			}
+
+			for( auto i = 0; i < iHorizontalGridlines; i++ )
+			{
+				const auto flRatio = float( i ) / float( iHorizontalGridlines );
+				nk_stroke_line( pOutput, recLocation.x, recLocation.y + recLocation.h * flRatio, recLocation.x + recLocation.w, recLocation.y + recLocation.h * flRatio, 1.f, clrLightBackground );
+			}
+
+			for ( auto z = 0u; z < zDots; z++ )
+			{
+				auto vecPoint = vecDots[ z ];
+				vecPoint.y *= -1.f;
+				vecPoint.y += recLocation.y + recLocation.h;
+				vecPoint.x += recLocation.x;
+				nk_fill_circle( pOutput, nk_rect( vecPoint.x - 2.5f, vecPoint.y - 2.5f, 4.f, 4.f ), clrBlue );
+			}
+
+			for( auto z = 0u; z < zPoints - 1; z++ )
+			{
+				vecCurrent[ 0 ] = vecPoints[ z ];
+				vecCurrent[ 0 ].y *= -1.f;
+				vecCurrent[ 0 ].x += recLocation.x;
+				vecCurrent[ 0 ].y += recLocation.y + recLocation.h;
+
+				if ( z != 0 )
+					nk_stroke_line( pOutput, vecCurrent[ 0 ].x, vecCurrent[ 0 ].y, vecCurrent[ 1 ].x, vecCurrent[ 1 ].y, 1.f, clrBlueActive );
+
+				vecCurrent[ 1 ] = vecPoints[ z + 1 ];
+				vecCurrent[ 1 ].y *= -1.f;
+				vecCurrent[ 1 ].x += recLocation.x;
+				vecCurrent[ 1 ].y += recLocation.y + recLocation.h;
+				nk_stroke_line( pOutput, vecCurrent[ 0 ].x, vecCurrent[ 0 ].y, vecCurrent[ 1 ].x, vecCurrent[ 1 ].y, 1.f, clrBlue );
+			}
+		}
 	}
 }

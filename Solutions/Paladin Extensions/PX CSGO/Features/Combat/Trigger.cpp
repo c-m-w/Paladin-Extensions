@@ -68,7 +68,7 @@ namespace PX::Features::Combat
 		for( auto i = 0; i < iRays; i++ )
 		{
 			const auto flSpread = ( pWeapon->GetInaccuracy( ) + pWeapon->GetSpread( ) ) / 2.f;
-			const auto vecRandom = vecViewPosition + pWeapon->GetCSWeaponData()->flRange * ( Vector( GenerateRandomNumber( -flSpread, flSpread ), GenerateRandomNumber( -flSpread, flSpread ), GenerateRandomNumber( -flSpread, flSpread ) ) + vecForward );
+			const auto vecRandom = vecViewPosition + pWeapon->GetCSWeaponData( )->flRange * ( Vector( GenerateRandomNumber( -flSpread, flSpread ), GenerateRandomNumber( -flSpread, flSpread ), GenerateRandomNumber( -flSpread, flSpread ) ) + vecForward );
 			CTraceFilter tfFilter;
 			Ray_t rRay;
 			CGameTrace gtRay;

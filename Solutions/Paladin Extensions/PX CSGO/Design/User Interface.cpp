@@ -1129,11 +1129,14 @@ namespace PX::UI::Manager
 
 						pCurrentOrder.flBisectionPoint = Slider( PX_XOR( "Bisection Point" ), szBisection, 0.01f, 1.50f, pCurrentOrder.flBisectionPoint, GROUPBOX_COLUMN_WIDTH + 30, 5, GROUPBOX_COLUMN_WIDTH, 30, 2 );
 
-						pCurrentOrder.flDistance = Slider( PX_XOR( "Distance" ), szDistance, -20.00f, 20.00f, pCurrentOrder.flDistance, GROUPBOX_COLUMN_WIDTH * 2 + 40, 5, GROUPBOX_COLUMN_WIDTH, 30, 2 );
+						pCurrentOrder.flDistance = Slider( PX_XOR( "Distance" ), szDistance, -1.50f, 1.50f, pCurrentOrder.flDistance, GROUPBOX_COLUMN_WIDTH * 2 + 40, 5, GROUPBOX_COLUMN_WIDTH, 30, 2 );
 
 						EndRow( );
 					}
 				};
+
+				static auto uCurrentWeapon = 0u;
+				static int iWeaponGroup = WEAPONTYPE_PISTOL;
 
 				if ( BeginGroupbox( 200, 150, 500, 220, PX_XOR( "Global Configuration" ) ) )
 				{
@@ -1148,7 +1151,6 @@ namespace PX::UI::Manager
 				if ( BeginGroupbox( 400, 313, 500, 260, PX_XOR( "Group Configurations" ) ) )
 				{
 					static char szSmooth[ 32 ] { }, szCrosshairDistance[ 32 ] { }, szBisect[ 32 ] { }, szDistance[ 32 ] { }, szOverCompensation[ 32 ] { };
-					static int iWeaponGroup = WEAPONTYPE_PISTOL;
 					{
 						VerticalSpacing( );
 
@@ -1177,7 +1179,6 @@ namespace PX::UI::Manager
 				if ( BeginGroupbox( 914, 88, 500, 290, PX_XOR( "Weapon Configurations" ) ) )
 				{
 					static char szSmooth[ 32 ] { }, szCrosshairDistance[ 32 ] { }, szBisect[ 32 ] { }, szDistance[ 32 ] { }, szOverCompensation[ 32 ] { };
-					static auto uCurrentWeapon = 0u;
 					{
 						VerticalSpacing( );
 
@@ -1205,6 +1206,124 @@ namespace PX::UI::Manager
 						fnDrawAimOptions( &_Settings._Combat._Aim._IndividualWeapons[ ITEM_DEFINITION_INDICIES[ uCurrentWeapon ] ], szSmooth, szCrosshairDistance, szBisect, szDistance, szOverCompensation );
 					}
 
+					EndGroupbox( );
+				}
+
+				if ( BeginGroupbox( 1427, -107, 500, 192, PX_XOR( "Aim Path Preview" ) ) )
+				{
+					static auto iConfig = 0;
+					{
+						std::deque< cstr_t > dqConfigs
+						{
+							PX_XOR( "Global" ),
+							PX_XOR( "Selected Group" ),
+							PX_XOR( "Selected Weapon" )
+						};
+
+						VerticalSpacing( );
+						
+						BeginRow( 30, 2, ROW_STATIC );
+						SetRowWidth( 10 );
+						Spacing( );
+
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH );
+						fnSetValue( iConfig, Combobox( 30, PX_XOR( "Configuration" ), dqConfigs, iConfig ) );
+
+						EndRow( );
+					}
+
+					{
+						constexpr struct nk_vec2 vecStart { 0.f, 0.f }, vecEnd { 200.f, 130.f };
+						constexpr struct nk_vec2 vecDots[ ] { { 0.f, 0.f }, { 200.f, 130.f } };
+						constexpr struct nk_vec2 vecDistance = { vecStart.x - vecEnd.x, vecStart.y - vecEnd.y };
+						const auto pConfig = iConfig == 0 ? &_Settings._Combat._Aim._All
+							: iConfig == 1 ? &_Settings._Combat._Aim._WeaponTypes[ iWeaponGroup ]
+							: &_Settings._Combat._Aim._IndividualWeapons[ ITEM_DEFINITION_INDICIES[ uCurrentWeapon ] ];
+						static auto flRatio = 0.f, flWaitTime = 0.f;
+						static auto bDoneWaiting = false;
+						static std::vector< struct nk_vec2 > vecLinePoints { };
+						
+						if( pConfig->iAimType == AIMTYPE_DEFAULT || pConfig->iAimType == AIMTYPE_SILENT )
+						{
+							vecLinePoints.clear( );
+							vecLinePoints.emplace_back( vecStart );
+							vecLinePoints.emplace_back( vecEnd );
+						}
+						else
+						{
+							if( flRatio == 1.f )
+							{
+								if( bDoneWaiting )
+								{
+									bDoneWaiting = false;
+									flWaitTime = pGlobalVariables->m_flCurrentTime + 1.f;
+								} 
+								else if( pGlobalVariables->m_flCurrentTime > flWaitTime )
+								{
+									bDoneWaiting = true;
+									flRatio = 0.f;
+									vecLinePoints.clear( );
+								}
+							}
+							else
+							{
+								flRatio += fabsf( pConfig->flSmoothFactor -
+									( settings_t::combat_t::SMOOTHING_MAX + settings_t::combat_t::SMOOTHING_MIN ) ) / ( settings_t::combat_t::SMOOTHING_MAX * 5.f );
+								flRatio = std::clamp( flRatio, 0.f, 1.f );
+							}
+
+							const struct nk_vec2 vecDefaultSmoothed	{ vecStart.x - vecDistance.x * flRatio, vecStart.y - vecDistance.y * flRatio };
+
+							switch( pConfig->iSmoothMode )
+							{
+								case SMOOTH_LINEAR:
+								{
+									vecLinePoints.emplace_back( vecDefaultSmoothed );
+								}
+								break;
+
+								case SMOOTH_PARABOLIC:
+								{
+									const auto flTemp = ( vecEnd.y - vecStart.y ) / pow( vecEnd.x - vecStart.x, 2.f );
+									const struct nk_vec2 vecNew = { vecDefaultSmoothed.x, flTemp * pow( vecDefaultSmoothed.x - vecStart.x, 2.f ) + vecStart.y };
+									vecLinePoints.emplace_back( vecNew );
+								}
+								break;
+
+								case SMOOTH_RADICAL:
+								{
+									const auto flTemp = ( vecEnd.y - vecStart.y ) / cbrtf( vecEnd.x - vecStart.x );
+									const struct nk_vec2 vecNew = { vecDefaultSmoothed.x, flTemp * cbrtf( vecDefaultSmoothed.x - vecStart.x ) + vecStart.y };
+									vecLinePoints.emplace_back( vecNew );
+								}
+								break;
+
+								case SMOOTH_SINUSOIDAL:
+								{
+									const auto fl = D3DX_PI / 2.f / ( vecStart.x - vecEnd.x );
+									const auto flTemp = ( vecEnd.y - vecStart.y ) / sinf( fl * ( vecEnd.x - vecStart.x ) );
+									const struct nk_vec2 vecNew = { vecDefaultSmoothed.x, flTemp * sinf( fl * ( vecDefaultSmoothed.x - vecStart.x ) ) + vecStart.y };
+									vecLinePoints.emplace_back( vecNew );
+								}
+								break;
+
+								case SMOOTH_BEZIER:
+								{
+									const auto vecBezierPoints = Tools::GetBezierPoints( D3DXVECTOR2( vecStart.x, vecStart.y ), D3DXVECTOR2( vecEnd.x, vecEnd.y ), pConfig->_BezierOrders, pConfig->iCurrentOrders + 1 );
+									const auto vecPoint = Tools::GetBezierPoint( vecBezierPoints, flRatio );
+									const struct nk_vec2 vecNew = { vecPoint.x, vecPoint.y };
+									vecLinePoints.emplace_back( vecNew );
+								}
+								break;
+
+								default:
+									break;
+							}
+						}
+
+						const auto recMainWindow = GetActiveWindowBounds( );
+						Graph( recMainWindow.x + 900.f, recMainWindow.y + 460.f, 300.f, 150, 10, 5, &vecLinePoints[ 0 ], vecLinePoints.size( ), vecDots, 2u );
+					}
 					EndGroupbox( );
 				}
 			}

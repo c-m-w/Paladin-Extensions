@@ -176,8 +176,6 @@ namespace PX::Features::Combat
 
 					case SMOOTH_BEZIER:
 					{
-						std::vector< Vector > vecBezierPoints;
-					
 						const auto vecEndDifference = _AimContext.vecBezierEnd - vecTemp2;
 						if ( _AimContext.flBezierRatio > 0.5f && sqrt( powf( vecEndDifference.x, 2.f ) + powf( vecEndDifference.y, 2.f ) ) > 1.f )
 							_AimContext.bResetBezierOrigin = true;
@@ -198,35 +196,39 @@ namespace PX::Features::Combat
 						if ( _AimContext.flBezierRatio > 1.f )
 							_AimContext.flBezierRatio = 1.f;
 
-						const auto flAngle = atan2( vecDifference.x, vecDifference.y );
-						float flSine, flCosine;
-						DirectX::XMScalarSinCos( &flSine, &flCosine, flAngle );
-						vecBezierPoints.emplace_back( vecTemp );
+						const auto vecBezierPoints = Tools::GetBezierPoints( vecTemp, vecTemp2, _Config->_BezierOrders, _Config->iCurrentOrders + 1 );
+						const auto vecPoint = GetBezierPoint( vecBezierPoints, _AimContext.flBezierRatio );
 
-						for( auto i = 0; i <= _Config->iCurrentOrders; i++ )
-						{
-							const auto& _Order = _Config->_BezierOrders[ i ];
-							const auto vecBisection = vecTemp - vecDifference * _Order.flBisectionPoint;
-							auto vecCurrent = vecBisection;
-							vecCurrent.y -= flSine * _Order.flDistance;
-							vecCurrent.x += flCosine * _Order.flDistance;
-							vecBezierPoints.emplace_back( vecCurrent );
-						}
+						//const auto flAngle = atan2( vecDifference.x, vecDifference.y );
+						//float flSine, flCosine;
+						//DirectX::XMScalarSinCos( &flSine, &flCosine, flAngle );
+						//vecBezierPoints.emplace_back( vecTemp );
+						//
+						//for( auto i = 0; i <= _Config->iCurrentOrders; i++ )
+						//{
+						//	const auto& _Order = _Config->_BezierOrders[ i ];
+						//	const auto vecBisection = vecTemp - vecDifference * _Order.flBisectionPoint;
+						//	auto vecCurrent = vecBisection;
+						//	vecCurrent.y -= flSine * _Order.flDistance;
+						//	vecCurrent.x += flCosine * _Order.flDistance;
+						//	vecBezierPoints.emplace_back( vecCurrent );
+						//}
+						//
+						//vecBezierPoints.emplace_back( vecTemp2 );
+						//
+						//do
+						//{
+						//	std::vector< Vector > vecNewPoints { };
+						//	for ( auto i = 0; i < vecBezierPoints.size( ) - 1; i++ )
+						//	{
+						//		const auto& vecPointOne = vecBezierPoints[ i ], vecPointTwo = vecBezierPoints[ i + 1 ];
+						//		vecNewPoints.emplace_back( vecPointOne - ( vecPointOne - vecPointTwo ) * _AimContext.flBezierRatio );
+						//	}
+						//	vecBezierPoints = vecNewPoints;
+						//} while ( vecBezierPoints.size( ) > 1 );
 
-						vecBezierPoints.emplace_back( vecTemp2 );
-
-						do
-						{
-							std::vector< Vector > vecNewPoints { };
-							for ( auto i = 0; i < vecBezierPoints.size( ) - 1; i++ )
-							{
-								const auto& vecPointOne = vecBezierPoints[ i ], vecPointTwo = vecBezierPoints[ i + 1 ];
-								vecNewPoints.emplace_back( vecPointOne - ( vecPointOne - vecPointTwo ) * _AimContext.flBezierRatio );
-							}
-							vecBezierPoints = vecNewPoints;
-						} while ( vecBezierPoints.size( ) > 1 );
-
-						vecNewAngles = vecBezierPoints[ 0 ];
+						vecNewAngles = vecPoint;
+						vecNewAngles.z = pClientState->viewangles.z;
 						ClampAngles( vecNewAngles );
 						pClientState->viewangles = vecNewAngles;
 					}
@@ -330,7 +332,7 @@ namespace PX::Features::Combat
 
 				case TARGETING_LOWEST_HEALTH:
 				{
-					if( pCurrentEntity->m_iHealth(  ) < iLowestHealth )
+					if( pCurrentEntity->m_iHealth( ) < iLowestHealth )
 					{
 						iLowestHealth = pCurrentEntity->m_iHealth( );
 						pEntity = pCurrentEntity;

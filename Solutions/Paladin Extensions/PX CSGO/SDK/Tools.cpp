@@ -265,6 +265,24 @@ namespace PX::Tools
 		return flDistance > 254.558441227f ? fabs( flDistance - 360.f ) : flDistance;
 	}
 
+	std::vector<Vector> PX_API GetBezierPoints( Vector vecStart, Vector vecEnd, bezier_order_t* pOrders, std::size_t zOrders )
+	{
+		const auto vecPoints = GetBezierPoints( D3DXVECTOR2( vecStart.x, vecStart.y ), D3DXVECTOR2( vecEnd.x, vecEnd.y ), pOrders, zOrders );
+		std::vector< Vector > vecReturn;
+		for ( const auto& point : vecPoints )
+			vecReturn.emplace_back( Vector( point.x, point.y, 0.f ) );
+		return vecReturn;
+	}
+
+	Vector PX_API GetBezierPoint( std::vector<Vector> vecPoints, float flRatio )
+	{
+		std::vector< D3DXVECTOR2 > vecNewPoints;
+		for ( const auto& point : vecPoints )
+			vecNewPoints.emplace_back( D3DXVECTOR2( point.x, point.y ) );
+		const auto vecPoint = GetBezierPoint( vecNewPoints, flRatio );
+		return Vector( vecPoint.x, vecPoint.y, 0.f );
+	}
+
 	bool CBaseEntity::IsPlayer( )
 	{
 		return reinterpret_cast< bool( __thiscall* )( CBaseEntity* ) >( ( *reinterpret_cast< void*** >( this ) )[ uIsPlayer ] )( this );

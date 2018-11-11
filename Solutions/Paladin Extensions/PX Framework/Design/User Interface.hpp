@@ -109,6 +109,7 @@ namespace PX::UI
 		void PX_API SetMainWindowWidth( unsigned uWidth );
 		bool PX_API MouseHoveringRectangle( unsigned x, unsigned y, unsigned width, unsigned height );
 		void PX_API SetWidgetPosition( unsigned x, unsigned y );
+		struct nk_rect PX_API GetActiveWindowBounds( );
 	}
 
 	namespace Widgets
@@ -220,7 +221,7 @@ namespace PX::UI
 		/**	\param uBoxWidth Width of the groupbox. */
 		/**	\param uBoxHeight Height of the groupbox. */
 		/**	\param szTitle Title of the groupbox. */
-		bool PX_API BeginGroupbox( unsigned uStartX, unsigned uStartY, unsigned uBoxWidth, unsigned uBoxHeight, Types::cstr_t szTitle );
+		bool PX_API BeginGroupbox( int uStartX, int uStartY, int uBoxWidth, int uBoxHeight, Types::cstr_t szTitle );
 		/** \brief Ends a groupbox. Must be called after BeginGroupbox( ) else an exception will be thrown. */
 		void PX_API EndGroupbox( );
 
@@ -320,6 +321,8 @@ namespace PX::UI
 		/** \param szData  */
 		/** \param zLength  */
 		void PX_API DisplayBox( Types::cstr_t szData, std::size_t zLength );
+
+		void PX_API Graph( float x, float y, float w, float h, int iVerticalGridlines, int iHorizontalGridlines, const struct nk_vec2* vecPoints, std::size_t zPoints, const struct nk_vec2* vecDots, std::size_t zDots );
 	}
 }
 

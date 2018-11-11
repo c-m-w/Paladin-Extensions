@@ -49,6 +49,9 @@ namespace PX::Tools
 	QAngle PX_API CalculateAngle( CBasePlayer* pLocalPlayer, CBasePlayer* pPlayer, int iHitbox, CUserCmd* pCmd, Vector* vecOverCompensation );
 	float PX_API CalculateCrosshairDistance( CBasePlayer* pLocalPlayer, CBasePlayer* pPlayer, int iHitbox, CUserCmd* pCmd, bool bWorldlyDistance );
 
+	std::vector< Vector > PX_API GetBezierPoints( Vector vecStart, Vector vecEnd, bezier_order_t* pOrders, std::size_t zOrders );
+	Vector PX_API GetBezierPoint( std::vector< Vector > vecPoints, float flRatio );
+
 	class CEconomyItemView
 	{
 	public:

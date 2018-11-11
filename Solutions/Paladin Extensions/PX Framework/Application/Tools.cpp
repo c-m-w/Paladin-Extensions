@@ -236,6 +236,44 @@ namespace PX::Tools
 		}
 	}
 
+	std::vector< D3DXVECTOR2 > PX_API GetBezierPoints( D3DXVECTOR2 vecStart, D3DXVECTOR2 vecEnd, bezier_order_t* pOrders, std::size_t zOrders )
+	{
+		const auto vecDifference = vecStart - vecEnd;
+		const auto flDifference = sqrtf( powf( vecDifference.x, 2.f ) + powf( vecDifference.y, 2.f ) );
+		float flSine, flCosine;
+		DirectX::XMScalarSinCos( &flSine, &flCosine, atan2( vecDifference.x, vecDifference.y ) );
+		std::vector< D3DXVECTOR2 > vecReturn { };
+
+		vecReturn.emplace_back( vecStart );
+		for( auto z = 0u; z < zOrders; z++ )
+		{
+			const auto& _Order = pOrders[ z ];
+			const auto vecBisection = vecStart - vecDifference * _Order.flBisectionPoint;
+			auto vecCurrent = vecBisection;
+			vecCurrent.y -= flSine * _Order.flDistance * flDifference;
+			vecCurrent.x += flCosine * _Order.flDistance * flDifference;
+			vecReturn.emplace_back( vecCurrent );
+		}
+		vecReturn.emplace_back( vecEnd );
+
+		return vecReturn;
+	}
+
+	D3DXVECTOR2 PX_API GetBezierPoint( std::vector< D3DXVECTOR2 > vecPoints, float flRatio )
+	{
+		do
+		{
+			std::vector< D3DXVECTOR2 > vecNewPoints { };
+			for( auto i = 0; i < vecPoints.size( ) - 1; i++ )
+			{
+				const auto& vecPointOne = vecPoints[ i ], vecPointTwo = vecPoints[ i + 1 ];
+				vecNewPoints.emplace_back( vecPointOne - ( vecPointOne - vecPointTwo ) * flRatio );
+			}
+			vecPoints = vecNewPoints;
+		} while ( vecPoints.size( ) > 1u );
+		return vecPoints[ 0 ];
+	}
+
 	bool Popup( EMBType popType, const wchar_t *wszMessage, const bool bDelete )
 	{
 		switch ( popType )
