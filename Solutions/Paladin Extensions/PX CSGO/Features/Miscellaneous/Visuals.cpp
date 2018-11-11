@@ -110,25 +110,32 @@ namespace PX::Features::Miscellaneous
 
 		const auto vecViewPos = pLocalPlayer->GetViewPosition( );
 		const auto flRange = hActiveWeapon->GetCSWeaponData( )->flRange;
-		Vector vecMiddle { }, vecMiddleWorld { }, vecNewWorld { }, vecScreenMiddle { }, vecScreenNew { };
+		const auto qRecoil = pLocalPlayer->m_aimPunchAngle( );
+		Vector vecMiddle { }, vecRecoil { }, vecMiddleWorld { }, vecRecoilWorld { }, vecNewWorld { }, vecScreenMiddle { }, vecScreenRecoil { }, vecScreenNew { };
 		vecMiddle = pClientState->viewangles;
+		vecRecoil = vecMiddle + Vector( qRecoil.pitch, qRecoil.yaw, qRecoil.roll );
 		TransformAngle( vecMiddle, vecMiddleWorld );
+		TransformAngle( vecRecoil, vecRecoilWorld );
+
 		vecNewWorld = vecMiddleWorld;
 		vecNewWorld += hActiveWeapon->GetInaccuracy( ) + hActiveWeapon->GetSpread( );
+		vecRecoilWorld *= flRange;
 		vecMiddleWorld *= flRange;
 		vecNewWorld *= flRange;
 		vecNewWorld += vecViewPos;
 		vecMiddleWorld += vecViewPos;
+		vecRecoilWorld += vecViewPos;
 
 		WorldToScreen( vecMiddleWorld, vecScreenMiddle );
 		WorldToScreen( vecNewWorld, vecScreenNew );
+		WorldToScreen( vecRecoilWorld, vecScreenRecoil );
 
+		const auto vecRecoilDifference = vecScreenMiddle - vecScreenRecoil;
 		auto radius = sqrt( powf( vecScreenNew.x - vecScreenMiddle.x, 2.f ) + powf( vecScreenNew.y - vecScreenMiddle.y, 2.f ) );
 		int iWidth, iHeight;
 		pEngineClient->GetScreenSize( iWidth, iHeight );
 		radius = std::clamp( radius, 0.f, sqrt( powf( iWidth / 2.f, 2.f ) + powf( iHeight / 2.f, 2.f ) ) );
 
-		Drawing::Circle( D3DXVECTOR2( iWidth / 2.f, iHeight / 2.f ), radius, _Settings._Miscellaneous._Visuals.seqSpread[ 0 ].GetCurrentColor( ).GetARGB( ), _Settings._Miscellaneous._Visuals.seqSpread[ 1 ].GetCurrentColor( ).GetARGB( ), int( 2 * D3DX_PI * radius / 4.f ) );
-
+		Drawing::Circle( D3DXVECTOR2( iWidth / 2.f - vecRecoilDifference.x, iHeight / 2.f - vecRecoilDifference.y ), radius, _Settings._Miscellaneous._Visuals.seqSpread[ 0 ].GetCurrentColor( ).GetARGB( ), _Settings._Miscellaneous._Visuals.seqSpread[ 1 ].GetCurrentColor( ).GetARGB( ), int( 2 * D3DX_PI * radius / 4.f ) );
 	}
 }
