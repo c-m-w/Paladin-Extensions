@@ -45,7 +45,7 @@ namespace PX::Tools
 	RECT PX_API CalculateRenderBounds( Vector* vecScreenPoints );
 	RECT PX_API CalculateRenderBounds( CBaseEntity* pEntity );
 	float PX_API CalculateVectorDistance( const Vector& vecPositionOne, const Vector& vecPositionTwo );
-	QAngle PX_API CalculateAngle( CBasePlayer* pLocalPlayer, CBasePlayer* pPlayer, int iHitbox, CUserCmd* pCmd, bool bAccountForRecoil, Vector* vecOverCompensation, float flRecoilPrecision = 0.f );
+	QAngle PX_API CalculateAngle( CBasePlayer* pLocalPlayer, CBasePlayer* pPlayer, int iHitbox, CUserCmd* pCmd, Vector* vecOverCompensation );
 	float PX_API CalculateCrosshairDistance( CBasePlayer* pLocalPlayer, CBasePlayer* pPlayer, int iHitbox, CUserCmd* pCmd, bool bWorldlyDistance );
 
 	class CEconomyItemView
@@ -116,6 +116,7 @@ namespace PX::Tools
 		float GetInaccuracy( );
 		float GetSpread( );
 		void UpdateAccuracyPenalty( );
+		float GetNextShotTime( );
 	};
 
 	class CBaseViewModel: public CBaseEntity

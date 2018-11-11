@@ -107,7 +107,7 @@ namespace PX::Features::Combat
 		if ( _AimContext.iHitbox == -1 )
 			return ResetContext( );
 
-		auto qTargetAngle = CalculateAngle( pLocalPlayer, pTarget, _AimContext.iHitbox, pCmd, _RecoilControlConfig->bEnabled.Get( ) && !_RecoilControlConfig->bStandalone, &_AimContext.vecOverCompensation, _RecoilControlConfig->flCompensationAmount );
+		auto qTargetAngle = CalculateAngle( pLocalPlayer, pTarget, _AimContext.iHitbox, pCmd, &_AimContext.vecOverCompensation );
 		ClampAngles( qTargetAngle );
 		switch( _Config->iAimType )
 		{
@@ -394,8 +394,8 @@ namespace PX::Features::Combat
 		_AimContext.pTarget = pNewTarget;
 		_AimContext.iEntityIndex = pNewTarget->EntIndex( );
 		srand( pGlobalVariables->m_iTickCount );
-		_AimContext.vecOverCompensation.x = float( rand() ) / float( RAND_MAX / ( 2 * _Config->flOverCompensation ) ) - _Config->flOverCompensation;
-		_AimContext.vecOverCompensation.y = float( rand() ) / float( RAND_MAX / ( 2 * _Config->flOverCompensation ) ) - _Config->flOverCompensation;
-		_AimContext.vecOverCompensation.z = float( rand() ) / float( RAND_MAX / ( 2 * _Config->flOverCompensation ) ) - _Config->flOverCompensation;
+		_AimContext.vecOverCompensation.x = float( rand( ) ) / float( RAND_MAX / ( 2 * _Config->flOverCompensation ) ) - _Config->flOverCompensation;
+		_AimContext.vecOverCompensation.y = float( rand( ) ) / float( RAND_MAX / ( 2 * _Config->flOverCompensation ) ) - _Config->flOverCompensation;
+		_AimContext.vecOverCompensation.z = float( rand( ) ) / float( RAND_MAX / ( 2 * _Config->flOverCompensation ) ) - _Config->flOverCompensation;
 	}
 }

@@ -232,7 +232,7 @@ namespace PX::Tools
 		return sqrt( pow( vecNew.z, 2.0 ) + pow( vecNew.x, 2.0 ) + pow( vecNew.y, 2.0 ) );
 	}
 
-	QAngle PX_API CalculateAngle( CBasePlayer* pLocalPlayer, CBasePlayer* pPlayer, int iHitbox, CUserCmd* pCmd, bool bAccountForRecoil, Vector* vecOverCompensation, float flRecoilPrecision /*= 0.f*/ )
+	QAngle PX_API CalculateAngle( CBasePlayer* pLocalPlayer, CBasePlayer* pPlayer, int iHitbox, CUserCmd* pCmd, Vector* vecOverCompensation )
 	{
 		QAngle qReturn;
 		auto vecHitboxPosition = pPlayer->GetHitboxPosition( iHitbox );
@@ -244,14 +244,12 @@ namespace PX::Tools
 		qReturn.pitch = atan2( vecRelativePosition.z, fl2DDistance ) * -180.f / D3DX_PI;
 		qReturn.yaw = atan2( vecRelativePosition.y, vecRelativePosition.x ) * 180.f / D3DX_PI;
 		qReturn.roll = pCmd->viewangles.roll;
-		if ( bAccountForRecoil )
-			qReturn -= pLocalPlayer->m_aimPunchAngle( ) * GetRecoilScale( ) * flRecoilPrecision;
 		return qReturn;
 	}
 
 	float PX_API CalculateCrosshairDistance( CBasePlayer* pLocalPlayer, CBasePlayer* pPlayer, int iHitbox, CUserCmd* pCmd, bool bWorldlyDistance )
 	{
-		const auto qNewAngles = pCmd->viewangles - CalculateAngle( pLocalPlayer, pPlayer, iHitbox, pCmd, false, nullptr );
+		const auto qNewAngles = pCmd->viewangles - CalculateAngle( pLocalPlayer, pPlayer, iHitbox, pCmd, nullptr );
 		if ( bWorldlyDistance )
 			return sin( atan2( qNewAngles.yaw, qNewAngles.pitch ) ) * CalculateVectorDistance( pLocalPlayer->GetViewPosition( ), pPlayer->GetHitboxPosition( iHitbox ) );
 		const auto flDistance = sqrt( pow( qNewAngles.yaw, 2.f ) + pow( qNewAngles.pitch, 2.f ) );
@@ -419,6 +417,11 @@ namespace PX::Tools
 	void CBaseCombatWeapon::UpdateAccuracyPenalty( )
 	{
 		return reinterpret_cast< void( __thiscall* )( CBaseCombatWeapon* ) >( ( *reinterpret_cast< void*** >( this ) )[ uUpdateAccuracyPenalty ] )( this );
+	}
+
+	float CBaseCombatWeapon::GetNextShotTime( )
+	{
+		return m_flNextPrimaryAttack( ) - pGlobalVariables->m_flCurrentTime;
 	}
 
 	bool CBasePlayer::IsAlive( )

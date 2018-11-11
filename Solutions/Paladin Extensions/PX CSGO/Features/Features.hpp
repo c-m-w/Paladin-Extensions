@@ -357,7 +357,7 @@ namespace PX::Features
 						float flBisectionPoint = 0.5f;
 						float flDistance = 5.f;
 					} _BezierOrders[ 7 ];
-					int iCurrentOrders = 1;
+					int iCurrentOrders = 0;
 					int iSmoothMode = SMOOTH_LINEAR;
 					int iTargeting = TARGETING_DISTANCE;
 				} _All, _WeaponTypes[ WEAPONTYPE_MACHINEGUN + 1 ] { }, _IndividualWeapons[ ITEM_MAX ] { };

@@ -59,6 +59,7 @@ namespace PX::Features::Miscellaneous
 
 	void PX_API DrawAimbotFOV( )
 	{
+		return;
 		const auto pLocalPlayer = GetLocalPlayer( );
 		if ( !pLocalPlayer
 			 || !pLocalPlayer->IsAlive( ) )
