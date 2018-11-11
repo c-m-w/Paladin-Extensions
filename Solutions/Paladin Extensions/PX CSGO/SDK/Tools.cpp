@@ -245,17 +245,13 @@ namespace PX::Tools
 		qReturn.yaw = atan2( vecRelativePosition.y, vecRelativePosition.x ) * 180.f / D3DX_PI;
 		qReturn.roll = pCmd->viewangles.roll;
 		if ( bAccountForRecoil )
-			qReturn += pLocalPlayer->m_aimPunchAngle( ) * 2.f * flRecoilPrecision;
+			qReturn -= pLocalPlayer->m_aimPunchAngle( ) * GetRecoilScale( ) * flRecoilPrecision;
 		return qReturn;
 	}
 
 	float PX_API CalculateCrosshairDistance( CBasePlayer* pLocalPlayer, CBasePlayer* pPlayer, int iHitbox, CUserCmd* pCmd, bool bWorldlyDistance )
 	{
-		auto qNonGayAngles = pCmd->viewangles;
-		if ( qNonGayAngles.yaw < 0.f )
-			qNonGayAngles.yaw += 360.f;
-
-		const auto qNewAngles = qNonGayAngles - CalculateAngle( pLocalPlayer, pPlayer, iHitbox, pCmd, false, nullptr );
+		const auto qNewAngles = pCmd->viewangles - CalculateAngle( pLocalPlayer, pPlayer, iHitbox, pCmd, false, nullptr );
 		if ( bWorldlyDistance )
 			return sin( atan2( qNewAngles.yaw, qNewAngles.pitch ) ) * CalculateVectorDistance( pLocalPlayer->GetViewPosition( ), pPlayer->GetHitboxPosition( iHitbox ) );
 		const auto flDistance = sqrt( pow( qNewAngles.yaw, 2.f ) + pow( qNewAngles.pitch, 2.f ) );

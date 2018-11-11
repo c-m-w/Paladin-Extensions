@@ -25,14 +25,14 @@ namespace PX::Features::Combat
 		recoil_config_t* _Config;
 		PX_GET_WEAPON_CONFIG( hActiveWeapon, _Config, _Settings._Combat._RecoilCompensation );
 
-		if ( !_Config->bStandalone || _Config->bOnlyWhileShooting.Get( ) && !( pCmd->buttons & IN_ATTACK ) )
+		if ( !_Config->bEnabled || !_Config->bStandalone || _Config->bOnlyWhileShooting.Get( ) && !( pCmd->buttons & IN_ATTACK ) )
 			return;
 
-		const auto qCurrentRecoil = pLocalPlayer->m_viewPunchAngle( ) * GetRecoilScale( ) * _Config->flCompensationAmount;
+		const auto qCurrentRecoil = pLocalPlayer->m_aimPunchAngle( ) * GetRecoilScale( ) * _Config->flCompensationAmount;
 		auto qNewRecoil = qCurrentRecoil - qOldRecoil;
 		qOldRecoil = qCurrentRecoil;
 		ClampAngles( qNewRecoil );
 
-		pClientState->viewangles += Vector( qNewRecoil.pitch, qNewRecoil.yaw, qNewRecoil.roll );
+		pClientState->viewangles -= Vector( qNewRecoil.pitch, qNewRecoil.yaw, qNewRecoil.roll );
 	}
 }

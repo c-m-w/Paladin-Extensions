@@ -56,4 +56,41 @@ namespace PX::Features::Miscellaneous
 			}
 		}
 	}
+
+	void PX_API DrawAimbotFOV( )
+	{
+		const auto pLocalPlayer = GetLocalPlayer( );
+		if ( !pLocalPlayer
+			 || !pLocalPlayer->IsAlive( ) )
+			return;
+
+		const auto hActiveWeapon = pLocalPlayer->m_hActiveWeapon( );
+		if ( !hActiveWeapon )
+			return;
+
+		const auto def_index = hActiveWeapon->m_Item( )->m_iItemDefinitionIndex( ); 
+		const auto wep_type = hActiveWeapon->GetCSWeaponData( )->WeaponType; 
+		auto pConfig = _Settings._Combat._Aim._IndividualWeapons[ def_index ].bUseSeparate.Get( ) ? &_Settings._Combat._Aim._IndividualWeapons[ def_index ] : _Settings._Combat._Aim._WeaponTypes[ wep_type ].bUseSeparate.Get( ) ? &_Settings._Combat._Aim._WeaponTypes[ wep_type ] : &_Settings._Combat._Aim._All;;
+
+		const auto vecViewPos = pLocalPlayer->GetViewPosition( );
+		Vector vecMiddle { }, vecNew { }, vecWorldMiddle { }, vecWorldNew { }, vecScreenMiddle { }, vecScreenNew { };
+		vecMiddle = pClientState->viewangles;
+		vecNew = pClientState->viewangles;
+		vecNew.y += pConfig->flMaxCrosshairDistance;
+
+		TransformAngle( vecMiddle, vecWorldMiddle );
+		TransformAngle( vecNew, vecWorldNew );
+
+		vecWorldMiddle *= 8192.f;
+		vecWorldNew *= 8192.f;
+		vecWorldMiddle += vecViewPos;
+		vecWorldNew += vecViewPos;
+		WorldToScreen( vecWorldMiddle, vecScreenMiddle );
+		WorldToScreen( vecWorldNew, vecScreenNew );
+		const auto radius = fabs( vecScreenNew.x - vecScreenMiddle.x );
+		int iWidth, iHeight;
+		pEngineClient->GetScreenSize( iWidth, iHeight );
+
+		Drawing::Circle( D3DXVECTOR2( iWidth / 2.f, iHeight / 2.f ), radius, 0x80000000, 0x80505050, 36 );
+	}
 }

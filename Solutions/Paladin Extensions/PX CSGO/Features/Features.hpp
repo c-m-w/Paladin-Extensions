@@ -400,8 +400,6 @@ namespace PX::Features
 	using aim_config_t = settings_t::combat_t::aim_t::weapon_t;
 	using recoil_config_t = settings_t::combat_t::recoil_compensation_t::weapon_t;
 
-	template< typename _r, typename _t > _r* PX_API GetWeaponConfig( CHandle< Tools::CBaseCombatWeapon > hWeapon, _t _Config );
-
 	enum
 	{
 		SETTING_TEAM,
