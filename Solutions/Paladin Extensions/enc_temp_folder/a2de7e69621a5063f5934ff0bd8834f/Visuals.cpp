@@ -118,7 +118,7 @@ namespace PX::Features::Miscellaneous
 		vecMiddleWorld *= flRange;
 		vecNewWorld *= flRange;
 		vecNewWorld += vecViewPos;
-		vecMiddleWorld += vecViewPos;
+		vecMiddle += vecViewPos;
 
 		WorldToScreen( vecMiddleWorld, vecScreenMiddle );
 		WorldToScreen( vecNewWorld, vecScreenNew );

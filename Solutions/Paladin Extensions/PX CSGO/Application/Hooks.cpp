@@ -115,6 +115,7 @@ namespace PX
 						   && D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_SRGBTEXTURE, NULL ) );
 
 				Features::Miscellaneous::DrawAimbotFOV( );
+				Features::Miscellaneous::VisualizeSpread( );
 				Drawing::DrawQueue( );
 				UI::Manager::CSGO::OnEndScene( );
 

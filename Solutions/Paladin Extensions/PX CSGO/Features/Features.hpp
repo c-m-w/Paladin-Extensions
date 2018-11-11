@@ -382,13 +382,17 @@ namespace PX::Features
 			struct movement_t
 			{
 				toggle_t bAutoJump = false;
-				int flMissChance = 0.f; // 0.f -> 1.f
+				float flMissChance = 0.f; // 0.f -> 1.f
 				toggle_t bEdgeJump = false;
 			} _Movement;
 
 			struct visuals_t
 			{
 				toggle_t bDarkenWorld = false;
+				toggle_t bDrawAimFOV = false;
+				color_sequence_t seqAimFOV[ 2 ] { }; // inner, outer
+				toggle_t bVisualizeSpread = false;
+				color_sequence_t seqSpread[ 2 ] { }; // inner, outer
 			} _Visuals;
 		} _Miscellaneous;
 	} PX_SDK _Settings;

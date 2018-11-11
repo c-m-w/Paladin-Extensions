@@ -145,6 +145,15 @@ namespace PX::Tools
 		return true;
 	}
 
+	bool PX_API AngleToScreen( const Vector& vecAngle, const Vector& vecOrigin, Vector& vecScreen )
+	{
+		Vector vecWorld;
+		TransformAngle( vecAngle, vecWorld );
+		vecWorld *= 8192.f;
+		vecWorld += vecOrigin;
+		return WorldToScreen( vecWorld, vecScreen );
+	}
+
 	void PX_API TransformVector( Vector vecInput, matrix3x4_t mtxInput, Vector& vecOutput )
 	{
 		vecOutput[ 0 ] = vecInput.Dot( mtxInput[ 0 ] ) + mtxInput[ 0 ][ 3 ];

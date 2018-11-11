@@ -128,7 +128,8 @@ namespace PX::UI::Manager
 				"Recoil Compensation"
 			},
 			{
-				"Tab"
+				"Movement",
+				"Visuals"
 			},
 			{
 				"Tab"
@@ -1257,11 +1258,79 @@ namespace PX::UI::Manager
 	{
 		enum
 		{
-
+			MOVEMENT,
+			VISUALS
 		};
 
 		switch ( iSubtab )
 		{
+			case MOVEMENT:
+			{
+				if ( BeginGroupbox( 200, 150, 500, 220, PX_XOR( "Movement" ) ) )
+				{
+					static char szMissChance[ 32 ] { };
+
+					{
+						BeginRow( 30, 7, ROW_STATIC );
+						SetRowWidth( 5 );
+						Spacing( );
+
+						Checkbox( PX_XOR( "Auto Jump" ), &_Settings._Miscellaneous._Movement.bAutoJump, PX_XOR( "Automatically jump." ) );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Auto Jump" ), 30 ).x );
+						Spacing( );
+
+						Checkbox( PX_XOR( "Edge Jump" ), &_Settings._Miscellaneous._Movement.bEdgeJump, PX_XOR( "Automatically jump when at the edge of a platform." ) );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Edge Jump" ), 30 ).x );
+						Spacing( );
+
+						EndRow( );
+					}
+
+					{
+						BeginRow( 30, 3, ROW_CUSTOM );
+
+						_Settings._Miscellaneous._Movement.flMissChance = Slider( PX_XOR( "Jump Miss Chance" ), szMissChance, 0.f, 1.f, _Settings._Miscellaneous._Movement.flMissChance, 10, 10, GROUPBOX_COLUMN_WIDTH, 30, 2 );
+
+						EndRow( );
+					}
+
+					EndGroupbox( );
+				}
+			}
+			break;
+
+			case VISUALS:
+			{
+				if ( BeginGroupbox( 200, 150, 500, 220, PX_XOR( "Visuals" ) ) )
+				{
+					{
+						BeginRow( 30, 13, ROW_STATIC );
+						SetRowWidth( 5 );
+						Spacing( );
+
+						Checkbox( PX_XOR( "Draw Aim FOV" ), &_Settings._Miscellaneous._Visuals.bDrawAimFOV, PX_XOR( "Draw a circle to indicate what the boundaries of your aimbot FOV are.") );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Draw Aim FOV" ), 30 ).x - COLOR_BUTTON_PADDING * 4 - COLOR_BUTTON_WIDTH * 2 );
+						Spacing( );
+						SetRowWidth( COLOR_BUTTON_WIDTH );
+						ColorButton( PX_XOR( "Inner Circle" ), &_Settings._Miscellaneous._Visuals.seqAimFOV[ 0 ], COLOR_BUTTON_VERTICAL_PADDING );
+						ColorButton( PX_XOR( "Outer Circle" ), &_Settings._Miscellaneous._Visuals.seqAimFOV[ 1 ], COLOR_BUTTON_VERTICAL_PADDING );
+
+						Checkbox( PX_XOR( "Visualize Spread" ), &_Settings._Miscellaneous._Visuals.bVisualizeSpread, PX_XOR( "Draw a circle to visualize spread." ) );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Visualize Spread" ), 30 ).x - COLOR_BUTTON_PADDING * 4 - COLOR_BUTTON_WIDTH * 2 );
+						Spacing( );
+						SetRowWidth( COLOR_BUTTON_WIDTH );
+						ColorButton( PX_XOR( "Inner Circle" ), &_Settings._Miscellaneous._Visuals.seqSpread[ 0 ], COLOR_BUTTON_VERTICAL_PADDING );
+						ColorButton( PX_XOR( "Outer Circle" ), &_Settings._Miscellaneous._Visuals.seqSpread[ 1 ], COLOR_BUTTON_VERTICAL_PADDING );
+
+						Checkbox( PX_XOR( "Darken World" ), &_Settings._Miscellaneous._Visuals.bDarkenWorld, PX_XOR( "Darken the world." ) );
+
+						EndRow( );
+					}
+					EndGroupbox( );
+				}
+			}
+			break;
+
 			default:
 				break;
 		}

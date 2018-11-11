@@ -118,12 +118,12 @@ namespace PX::Features::Miscellaneous
 		vecMiddleWorld *= flRange;
 		vecNewWorld *= flRange;
 		vecNewWorld += vecViewPos;
-		vecMiddleWorld += vecViewPos;
+		vecMiddle += vecViewPos;
 
 		WorldToScreen( vecMiddleWorld, vecScreenMiddle );
 		WorldToScreen( vecNewWorld, vecScreenNew );
 
-		auto radius = sqrt( powf( vecScreenNew.x - vecScreenMiddle.x, 2.f ) + powf( vecScreenNew.y - vecScreenMiddle.y, 2.f ) );
+		auto radius = fabs( vecScreenNew.x - vecScreenMiddle.x );
 		int iWidth, iHeight;
 		pEngineClient->GetScreenSize( iWidth, iHeight );
 		radius = std::clamp( radius, 0.f, sqrt( powf( iWidth / 2.f, 2.f ) + powf( iHeight / 2.f, 2.f ) ) );

@@ -114,11 +114,11 @@ namespace PX::Features::Miscellaneous
 		vecMiddle = pClientState->viewangles;
 		TransformAngle( vecMiddle, vecMiddleWorld );
 		vecNewWorld = vecMiddleWorld;
-		vecNewWorld += hActiveWeapon->GetInaccuracy( ) + hActiveWeapon->GetSpread( );
+		vecNewWorld += ( hActiveWeapon->GetInaccuracy( ) + hActiveWeapon->GetSpread( ) * 5.f ) / 3.f;
 		vecMiddleWorld *= flRange;
 		vecNewWorld *= flRange;
 		vecNewWorld += vecViewPos;
-		vecMiddleWorld += vecViewPos;
+		vecMiddle += vecViewPos;
 
 		WorldToScreen( vecMiddleWorld, vecScreenMiddle );
 		WorldToScreen( vecNewWorld, vecScreenNew );
