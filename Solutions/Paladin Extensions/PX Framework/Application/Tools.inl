@@ -80,4 +80,11 @@ namespace PX::Tools
 	{
 		return AStringCastImplementation< _To, typename AStringTypeOfCharacter< const _From* >::wrap_t >::Cast( _Source );
 	}
-}
+
+	template< typename _t > _t GenerateRandomNumber( _t _Min, _t _Max, unsigned uSeed /*= 0u*/ )
+	{
+		if ( uSeed != 0u )
+			srand( uSeed );
+		return _t( rand( ) ) / _t( RAND_MAX / ( _Max - _Min ) ) + _Min;
+	}		   
+}			   

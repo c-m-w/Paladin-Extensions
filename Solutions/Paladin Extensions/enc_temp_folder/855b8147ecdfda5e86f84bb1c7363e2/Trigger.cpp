@@ -53,7 +53,7 @@ namespace PX::Features::Combat
 			 || !( player_ptr_t( gtRay.hit_entity )->m_iTeamNum( ) == pLocalPlayer->m_iTeamNum( ) ? _Config->bTeammates.Get( ) : _Config->bEnemies.Get( ) )
 			 || _Config->bMindSmoke.Get( ) && LineGoesThroughSmoke( vecStart, gtRay.endpos ) )
 			 return;
-		if ( _Config->flHitChance != 0.f && CalculateHitchance( pLocalPlayer, player_ptr_t( gtRay.hit_entity ), gtRay.hitgroup, hActiveWeapon, pCmd, _Config->iRays ) < _Config->flHitChance )
+		if ( _Config->flHitChance != 0.f && CalculateHitchance( pLocalPlayer, player_ptr_t( gtRay.hit_entity ), gtRay.hitgroup, hActiveWeapon, pCmd, _Config->iRays ) )
 			return;
 
 		pCmd->buttons |= IN_ATTACK;

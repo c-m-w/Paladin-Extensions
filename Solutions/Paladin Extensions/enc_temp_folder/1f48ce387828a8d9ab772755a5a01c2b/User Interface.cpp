@@ -2010,9 +2010,6 @@ namespace PX::UI
 
 			siCurrent.bWasClicking = bool( PX_INPUT.GetKeyState( VK_LBUTTON ) );
 
-			if ( nk_input_is_mouse_hovering_rect( &pContext->input, recSliderBounds ) && bClicking && !PopupActive( ) )
-				iCurrentValue = iMin + ( pContext->input.mouse.pos.x - recSliderBounds.x ) / recSliderBounds.w * ( iMax - iMin );
-
 			const auto iNewValue = nk_slide_int( pContext, iMin, iCurrentValue, iMax, ( iMax - iMin ) / 20 );
 			if ( !siCurrent.bInEdit )
 				iCurrentValue = iNewValue;

@@ -330,6 +330,8 @@ namespace PX::Features
 					toggle_t bHitGroups[ HITGROUP_MAX ] { };
 					toggle_t bMindSmoke = false;
 					toggle_t bUseSeparate = false; // only for _WeaponTypes and _IndividualWeapons to use separate from the rest
+					float flHitChance = 0.f;
+					int iRays = 100; // 100 to 255
 				} _All, _WeaponTypes[ WEAPONTYPE_MACHINEGUN + 1 ] { }, _IndividualWeapons[ ITEM_MAX ] { };
 			} _Trigger;
 

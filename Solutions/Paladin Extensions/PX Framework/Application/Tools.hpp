@@ -134,6 +134,8 @@ namespace PX::Tools
 	/** \tparam _From Current string */
 	/** \return Converted string in desired type */
 	template< typename _To, typename _From > _To PX_API string_cast( _From* );
+
+	template< typename _t > _t GenerateRandomNumber( _t _Min, _t _Max, unsigned uSeed = 0u );
 }
 
 #include "Tools.inl"

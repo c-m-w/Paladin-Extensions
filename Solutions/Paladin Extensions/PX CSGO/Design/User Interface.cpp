@@ -849,7 +849,7 @@ namespace PX::UI::Manager
 		{
 			case TRIGGER:
 			{
-				const auto fnDrawTriggerOptions = [ ]( settings_t::combat_t::trigger_t::weapon_t* pConfig )
+				const auto fnDrawTriggerOptions = [ ]( settings_t::combat_t::trigger_t::weapon_t* pConfig, char* szHitchance, char* szRays )
 				{
 					{
 						BeginRow( 30, 9, ROW_STATIC );
@@ -886,12 +886,14 @@ namespace PX::UI::Manager
 						for ( auto& hitgroup : pConfig->bHitGroups )
 							dqHitgroups.emplace_back( &hitgroup.Get( ) );
 
-						BeginRow( 30, 2, ROW_STATIC );
-						SetRowWidth( 10 );
-						Spacing( );
+						BeginRow( 30, 7, ROW_CUSTOM );
 
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH );
+						PushCustomRow( 10, 0, GROUPBOX_COLUMN_WIDTH, 30 );
 						ComboboxMulti( 30, PX_XOR( "Hitgroups" ), dqHitgroupText, dqHitgroups );
+
+						pConfig->flHitChance = Slider( PX_XOR( "Hitchance" ), szHitchance, 0.00f, 1.00f, pConfig->flHitChance, GROUPBOX_COLUMN_WIDTH + 30, 10, GROUPBOX_COLUMN_WIDTH, 30, 2 );
+
+						pConfig->iRays = Slider( PX_XOR( "Rays" ), szRays, 100, 255, pConfig->iRays, GROUPBOX_COLUMN_WIDTH * 2 + 40, 10, GROUPBOX_COLUMN_WIDTH, 30 );
 
 						EndRow( );
 					}
@@ -899,8 +901,9 @@ namespace PX::UI::Manager
 
 				if ( BeginGroupbox( 200, 150, 500, 113, PX_XOR( "Global Configuration" ) ) )
 				{
+					static char szHitchance[ 32 ] { }, szRays[ 32 ] { };
 					{
-						fnDrawTriggerOptions( &_Settings._Combat._Trigger._All );
+						fnDrawTriggerOptions( &_Settings._Combat._Trigger._All, szHitchance, szRays );
 					}
 					
 					EndGroupbox( );
@@ -908,6 +911,7 @@ namespace PX::UI::Manager
 
 				if ( BeginGroupbox( 400, 206, 500, 158, PX_XOR( "Group Configurations" ) ) )
 				{
+					static char szHitchance[ 32 ] { }, szRays[ 32 ] { };
 					static int iWeaponGroup = WEAPONTYPE_PISTOL;
 					{
 						VerticalSpacing( );
@@ -928,7 +932,7 @@ namespace PX::UI::Manager
 					}
 
 					{
-						fnDrawTriggerOptions( &_Settings._Combat._Trigger._WeaponTypes[ iWeaponGroup ] );
+						fnDrawTriggerOptions( &_Settings._Combat._Trigger._WeaponTypes[ iWeaponGroup ], szHitchance, szRays );
 					}
 
 					EndGroupbox( );
@@ -936,6 +940,7 @@ namespace PX::UI::Manager
 
 				if ( BeginGroupbox( 400, 350, 500, 190, PX_XOR( "Weapon Configurations" ) ) )
 				{
+					static char szHitchance[ 32 ] { }, szRays[ 32 ] { };
 					static auto uCurrentWeapon = 0u;
 
 					{
@@ -962,7 +967,7 @@ namespace PX::UI::Manager
 					}
 
 					{
-						fnDrawTriggerOptions( &_Settings._Combat._Trigger._IndividualWeapons[ ITEM_DEFINITION_INDICIES[ uCurrentWeapon ] ] );
+						fnDrawTriggerOptions( &_Settings._Combat._Trigger._IndividualWeapons[ ITEM_DEFINITION_INDICIES[ uCurrentWeapon ] ], szHitchance, szRays );
 					}
 
 					EndGroupbox( );

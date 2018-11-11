@@ -393,9 +393,8 @@ namespace PX::Features::Combat
 			return;
 		_AimContext.pTarget = pNewTarget;
 		_AimContext.iEntityIndex = pNewTarget->EntIndex( );
-		srand( pGlobalVariables->m_iTickCount );
-		_AimContext.vecOverCompensation.x = float( rand( ) ) / float( RAND_MAX / ( 2 * _Config->flOverCompensation ) ) - _Config->flOverCompensation;
-		_AimContext.vecOverCompensation.y = float( rand( ) ) / float( RAND_MAX / ( 2 * _Config->flOverCompensation ) ) - _Config->flOverCompensation;
-		_AimContext.vecOverCompensation.z = float( rand( ) ) / float( RAND_MAX / ( 2 * _Config->flOverCompensation ) ) - _Config->flOverCompensation;
+		_AimContext.vecOverCompensation.x = GenerateRandomNumber( -_Config->flOverCompensation, _Config->flOverCompensation, int( pGlobalVariables->m_flRealTime * 100.f ) );
+		_AimContext.vecOverCompensation.y = GenerateRandomNumber( -_Config->flOverCompensation, _Config->flOverCompensation, int( pGlobalVariables->m_flRealTime * 100.f ) );
+		_AimContext.vecOverCompensation.z = GenerateRandomNumber( -_Config->flOverCompensation, _Config->flOverCompensation, int( pGlobalVariables->m_flRealTime * 100.f ) );
 	}
 }
