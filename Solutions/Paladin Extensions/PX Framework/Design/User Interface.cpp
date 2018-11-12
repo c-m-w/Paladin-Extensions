@@ -1676,7 +1676,66 @@ namespace PX::UI
 			return iSelectedOption;
 		}
 
-		int PX_API IncrementalCombobox( unsigned uButtonHeight, Types::cstr_t szTitle, const std::deque<Types::cstr_t>& dqOptions, int& iIncrement, int iMax, unsigned uSelectedOption )
+		int PX_API FilteredCombobox( unsigned uButtonHeight, Types::cstr_t szTitle, const std::deque<Types::cstr_t>& dqOptions, unsigned uSelectedOption, unsigned uDisplayCount, char* szInput )
+		{
+			iCurrentRowUsedColumns++;
+
+			auto iSelectedOption = -1;
+			auto bDrewCombo = false;
+			SetFont( FNT_TAHOMA );
+			const auto recComboboxBounds = nk_widget_bounds( pContext );
+
+			const auto pOutput = nk_window_get_canvas( pContext );
+			if ( nk_combo_begin_label( pContext, szTitle, nk_vec2( recComboboxBounds.w, float( uButtonHeight ) * dqOptions.size( ) + 4 * ( dqOptions.size( ) - 1 ) ) ) )
+			{
+				auto iCount = 0;
+				std::vector< int > vecIndicies;
+				std::vector< cstr_t > vecStrings;
+				for ( auto z = 0u; z < dqOptions.size( ) && iCount < uDisplayCount; z++ )
+				{
+					if ( strlen( szInput ) == 0
+						 || strstr( dqOptions[ z ], szInput ) != nullptr )
+					{
+						vecIndicies.emplace_back( z );
+						vecStrings.emplace_back( dqOptions[ z ] );
+						iCount++;
+					}
+				}
+
+				bDrawComboboxArrow = true;
+				recComboboxWindowBounds = pContext->current->bounds;
+				nk_layout_space_begin( pContext, NK_STATIC, uButtonHeight, dqOptions.size( ) + 1 );
+				nk_layout_space_push( pContext, nk_rect( 0.f, 1.f, recComboboxWindowBounds.w, uButtonHeight ) );
+				Inputbox( 32, szInput );
+				iCurrentRowUsedColumns--;
+				auto y = uButtonHeight + 2u;
+				for ( unsigned i { }; i < vecStrings.size( ); i++ )
+				{
+					if ( vecIndicies[ i ] == uSelectedOption )
+						pContext->style.contextual_button = btnComboActive;
+					else
+						pContext->style.contextual_button = btnCombo;
+
+					nk_layout_space_push( pContext, nk_rect( 5.f, y, recComboboxWindowBounds.w, uButtonHeight ) );
+					if ( nk_combo_item_label( pContext, vecStrings.at( i ), NK_TEXT_LEFT ) )
+						iSelectedOption = vecIndicies[ i ];
+					y += uButtonHeight;
+					HoverCheck( CURSOR_HAND );
+				}
+				nk_layout_space_end( pContext );
+				nk_combo_end( pContext );
+				bDrewCombo = true;
+				if ( PopupActive( ) )
+					nk_d3d9_handle_event( hwWindowHandle, WM_LBUTTONUP, 0, int( pContext->input.mouse.pos.x ) | int( pContext->input.mouse.pos.y ) << 16 );
+			}
+			else
+				memset( szInput, 0, 32 );
+			HoverCheck( CURSOR_HAND );
+			nk_fill_triangle( pOutput, recComboboxBounds.x + recComboboxBounds.w - 10, recComboboxBounds.y + recComboboxBounds.h / 2 - 3, recComboboxBounds.x + recComboboxBounds.w - 14, recComboboxBounds.y + recComboboxBounds.h / 2 + 3, recComboboxBounds.x + recComboboxBounds.w - 18, recComboboxBounds.y + recComboboxBounds.h / 2 - 3, nk_input_is_mouse_prev_hovering_rect( &pContext->input, recComboboxBounds ) && !bDrewCombo ? clrTextActive : clrTextDormant );
+			return iSelectedOption;
+		}
+
+		int PX_API IncrementalCombobox( unsigned uButtonHeight, Types::cstr_t szTitle, const std::deque< Types::cstr_t >& dqOptions, int& iIncrement, int iMax, unsigned uSelectedOption )
 		{
 			iCurrentRowUsedColumns++;
 

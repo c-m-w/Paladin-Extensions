@@ -243,7 +243,8 @@ namespace PX::UI
 		/**	\param uSelectedOption Currently selected option. */
 		/**	\return -1 - Nothing was selected.\n >= 0 - Something was selected, the index for the option inside the deque of options. */
 		int PX_API Combobox( unsigned uButtonHeight, Types::cstr_t szTitle, const std::deque< Types::cstr_t >& dqOptions, unsigned uSelectedOption );
-		int PX_API IncrementalCombobox( unsigned uButtonHeight, Types::cstr_t szTitle, const std::deque<Types::cstr_t>& dqOptions, int& iIncrement, int iMax, unsigned uSelectedOption );
+		int PX_API FilteredCombobox( unsigned uButtonHeight, Types::cstr_t szTitle, const std::deque<Types::cstr_t>& dqOptions, unsigned uSelectedOption, unsigned uDisplayCount, char* szInput );
+		int PX_API IncrementalCombobox( unsigned uButtonHeight, Types::cstr_t szTitle, const std::deque< Types::cstr_t >& dqOptions, int& iIncrement, int iMax, unsigned uSelectedOption );
 		void PX_API TabbedCombobox( unsigned uButtonHeight, Types::cstr_t szTitle, const std::deque< Types::cstr_t >& dqTabs, const std::deque< Types::cstr_t >* pItems, unsigned& uSelectedOption );
 		/** \brief Creates a combobox with multiple options which can all be enabled or disabled.\n Uses one column. */
 		/**	\param uButtonHeight Height of each of the buttons inside the combobox. */

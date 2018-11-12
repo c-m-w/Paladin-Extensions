@@ -10,6 +10,65 @@ using namespace PX::UI;
 using namespace Widgets;
 using namespace PX::Features;
 
+constexpr int ITEM_DEFINITION_INDICIES[ ]
+{
+	ITEM_WEAPON_DEAGLE,
+	ITEM_WEAPON_ELITE,
+	ITEM_WEAPON_FIVESEVEN,
+	ITEM_WEAPON_GLOCK,
+	ITEM_WEAPON_P250,
+	ITEM_WEAPON_TEC9,
+	ITEM_WEAPON_CZ75AUTO,
+	ITEM_WEAPON_R8REVOLVER,
+	ITEM_WEAPON_P2000,
+	ITEM_WEAPON_USPS,
+	ITEM_WEAPON_MAC10,
+	ITEM_WEAPON_MP7,
+	ITEM_WEAPON_MP5SD,
+	ITEM_WEAPON_UMP45,
+	ITEM_WEAPON_PPBIZON,
+	ITEM_WEAPON_P90,
+	ITEM_WEAPON_MP9,
+	ITEM_WEAPON_GALILAR,
+	ITEM_WEAPON_AK47,
+	ITEM_WEAPON_SG553,
+	ITEM_WEAPON_FAMAS,
+	ITEM_WEAPON_M4A1,
+	ITEM_WEAPON_M4A1S,
+	ITEM_WEAPON_AUG,
+	ITEM_WEAPON_NOVA,
+	ITEM_WEAPON_XM1014,
+	ITEM_WEAPON_SAWEDOFF,
+	ITEM_WEAPON_MAG7,
+	ITEM_WEAPON_SSG08,
+	ITEM_WEAPON_AWP,
+	ITEM_WEAPON_SCAR20,
+	ITEM_WEAPON_G3SG1,
+	ITEM_WEAPON_NEGEV,
+	ITEM_WEAPON_M249,
+	ITEM_WEAPON_KNIFE_BAYONET,
+	ITEM_WEAPON_KNIFE_FLIP,
+	ITEM_WEAPON_KNIFE_GUT,
+	ITEM_WEAPON_KNIFE_KARAMBIT,
+	ITEM_WEAPON_KNIFE_M9_BAYONET,
+	ITEM_WEAPON_KNIFE_TACTICAL,
+	ITEM_WEAPON_KNIFE_FALCHION,
+	ITEM_WEAPON_KNIFE_SURVIVAL_BOWIE,
+	ITEM_WEAPON_KNIFE_BUTTERFLY,
+	ITEM_WEAPON_KNIFE_SHADOW_DAGGERS,
+	ITEM_WEAPON_KNIFE_URSUS,
+	ITEM_WEAPON_KNIFE_NAVAJA,
+	ITEM_WEAPON_KNIFE_STILLETTO,
+	ITEM_WEAPON_KNIFE_TALON,
+	ITEM_GLOVE_BLOODHOUND,
+	ITEM_GLOVE_SPORTY,
+	ITEM_GLOVE_DRIVER,
+	ITEM_GLOVE_HAND_WRAP,
+	ITEM_GLOVE_MOTORCYCLE,
+	ITEM_GLOVE_SPECIALIST,
+	ITEM_GLOVE_HYDRA
+};
+
 namespace PX::UI::Manager
 {
 	namespace CSGO
@@ -129,7 +188,8 @@ namespace PX::UI::Manager
 			},
 			{
 				"Movement",
-				"Visuals"
+				"Visuals",
+				"Inventory"
 			},
 			{
 				"Tab"
@@ -736,55 +796,6 @@ namespace PX::UI::Manager
 			RECOIL
 		};
 
-		constexpr int ITEM_DEFINITION_INDICIES[ ]
-		{
-			ITEM_WEAPON_DEAGLE,
-			ITEM_WEAPON_ELITE,
-			ITEM_WEAPON_FIVESEVEN,
-			ITEM_WEAPON_GLOCK,
-			ITEM_WEAPON_P250,
-			ITEM_WEAPON_TEC9,
-			ITEM_WEAPON_CZ75AUTO,
-			ITEM_WEAPON_R8REVOLVER,
-			ITEM_WEAPON_P2000,
-			ITEM_WEAPON_USPS,
-			ITEM_WEAPON_MAC10,
-			ITEM_WEAPON_MP7,
-			ITEM_WEAPON_MP5SD,
-			ITEM_WEAPON_UMP45,
-			ITEM_WEAPON_PPBIZON,
-			ITEM_WEAPON_P90,
-			ITEM_WEAPON_MP9,
-			ITEM_WEAPON_GALILAR,
-			ITEM_WEAPON_AK47,
-			ITEM_WEAPON_SG553,
-			ITEM_WEAPON_FAMAS,
-			ITEM_WEAPON_M4A1,
-			ITEM_WEAPON_M4A1S,
-			ITEM_WEAPON_AUG,
-			ITEM_WEAPON_NOVA,
-			ITEM_WEAPON_XM1014,
-			ITEM_WEAPON_SAWEDOFF,
-			ITEM_WEAPON_MAG7,
-			ITEM_WEAPON_SSG08,
-			ITEM_WEAPON_AWP,
-			ITEM_WEAPON_SCAR20,
-			ITEM_WEAPON_G3SG1,
-			ITEM_WEAPON_NEGEV,
-			ITEM_WEAPON_M249
-		};
-
-		std::deque< cstr_t > dqTypes
-		{
-			nullptr,
-			PX_XOR( "Pistols" ),
-			PX_XOR( "SMGs" ),
-			PX_XOR( "Rifles" ),
-			PX_XOR( "Shotguns" ),
-			PX_XOR( "Snipers" ),
-			PX_XOR( "Heavy" )
-		};
-
 		std::deque< cstr_t > dqWeapons[ WEAPONTYPE_MACHINEGUN + 1 ]
 		{
 			{ // WEAPONTYPE_PISTOL
@@ -833,6 +844,17 @@ namespace PX::UI::Manager
 				PX_XOR( "Negev" ),
 				PX_XOR( "M249" )
 			}
+		};
+
+		std::deque< cstr_t > dqTypes
+		{
+			nullptr,
+			PX_XOR( "Pistols" ),
+			PX_XOR( "SMGs" ),
+			PX_XOR( "Rifles" ),
+			PX_XOR( "Shotguns" ),
+			PX_XOR( "Snipers" ),
+			PX_XOR( "Heavy" )
 		};
 
 		std::deque< cstr_t > dqComboboxHeaderTypes
@@ -1383,7 +1405,98 @@ namespace PX::UI::Manager
 		enum
 		{
 			MOVEMENT,
-			VISUALS
+			VISUALS,
+			INVENTORY
+		};
+
+		std::deque< cstr_t > dqCategories
+		{
+			PX_XOR( "Pistols" ),
+			PX_XOR( "SMG" ),
+			PX_XOR( "Rifle" ),
+			PX_XOR( "Shotty" ),
+			PX_XOR( "Sniper" ),
+			PX_XOR( "Heavy" ),
+			PX_XOR( "Knives" ),
+			PX_XOR( "Knives [2]" ),
+			PX_XOR( "Gloves" )
+		};
+
+		std::deque< cstr_t > dqWeapons[ ]
+		{
+			{ // WEAPONTYPE_PISTOL
+				PX_XOR( "Deagle" ),
+				PX_XOR( "Elites" ),
+				PX_XOR( "FiveSeveN" ),
+				PX_XOR( "Glock" ),
+				PX_XOR( "P250" ),
+				PX_XOR( "Tec-9" ),
+				PX_XOR( "CZ75-Auto" ),
+				PX_XOR( "R8 Revolver" ),
+				PX_XOR( "P2000" ),
+				PX_XOR( "USP-S" )
+			},
+			{ // WEAPONTYPE_SUBMACHINEGUN
+				PX_XOR( "MAC-10" ),
+				PX_XOR( "MP7" ),
+				PX_XOR( "MP5-SD" ),
+				PX_XOR( "UMP-45" ),
+				PX_XOR( "PP-Bizon" ),
+				PX_XOR( "P90" ),
+				PX_XOR( "MP9" )
+			},
+			{ // WEAPONTYPE_RIFLE
+				PX_XOR( "Galil AR" ),
+				PX_XOR( "AK47" ),
+				PX_XOR( "SG 553" ),
+				PX_XOR( "FAMAS" ),
+				PX_XOR( "M4A4" ),
+				PX_XOR( "M4A1-S" ),
+				PX_XOR( "AUG" )
+			},
+			{ // WEAPONTYPE_SHOTGUN
+				PX_XOR( "Nova" ),
+				PX_XOR( "XM1014" ),
+				PX_XOR( "Sawed-Off" ),
+				PX_XOR( "MAG-7" )
+			},
+			{ // WEAPONTYPE_SNIPER_RIFLE
+				PX_XOR( "SSG-08" ),
+				PX_XOR( "AWP" ),
+				PX_XOR( "SCAR-20" ),
+				PX_XOR( "G3SG1" )
+			},
+			{ // WEAPONTYPE_MACHINEGUN
+				PX_XOR( "Negev" ),
+				PX_XOR( "M249" )
+			},
+			{ // knives 
+				PX_XOR( "Bayonet" ),
+				PX_XOR( "Flip" ),
+				PX_XOR( "Gut" ),
+				PX_XOR( "Karambit" ),
+				PX_XOR( "M9 Bayonet" ),
+				PX_XOR( "Huntsman" ),
+				PX_XOR( "Falchion" ),
+				PX_XOR( "Bowie" ),
+				PX_XOR( "Butterfly" ),
+				PX_XOR( "Shadow Daggers" )
+			},
+			{ // knives cont'd
+				PX_XOR( "Ursus" ),
+				PX_XOR( "Navaja" ),
+				PX_XOR( "Stilletto" ),
+				PX_XOR( "Talon" )
+			},
+			{ // gloves
+				PX_XOR( "Bloodhound" ),
+				PX_XOR( "Sport" ),
+				PX_XOR( "Driver" ),
+				PX_XOR( "Hand Wrap" ),
+				PX_XOR( "Moto" ),
+				PX_XOR( "Specialist" ),
+				PX_XOR( "Hydra" )
+			}
 		};
 
 		switch ( iSubtab )
@@ -1447,6 +1560,109 @@ namespace PX::UI::Manager
 						ColorButton( PX_XOR( "Outer Circle" ), &_Settings._Miscellaneous._Visuals.seqSpread[ 1 ], COLOR_BUTTON_VERTICAL_PADDING );
 
 						Checkbox( PX_XOR( "Darken World" ), &_Settings._Miscellaneous._Visuals.bDarkenWorld, PX_XOR( "Darken the world." ) );
+
+						EndRow( );
+					}
+					EndGroupbox( );
+				}
+			}
+			break;
+
+			case INVENTORY:
+			{
+				static settings_t::miscellaneous_t::inventory_t::team_t* pConfig = nullptr;
+				static unsigned iSelectedWeapon = 0;
+				static auto iSelectedPaintKit = 0;
+
+				const auto fnSetSelectedPaintKit = [ & ]( int iKitID )
+				{
+					for ( auto z = 0u; z < Other::vecPaintKits.size( ); z++ )
+						if ( Other::vecPaintKits[ z ].iIdentifier == iKitID )
+							iSelectedPaintKit = z;
+				};
+
+				if ( BeginGroupbox( 200, 150, 500, 112, PX_XOR( "Configuration" ) ) )
+				{
+					static auto iTeam = 0;
+					{
+						std::deque<cstr_t> dqTeams
+						{
+							PX_XOR( "Terrorist" ),
+							PX_XOR( "Counter-Terrorist" )
+						};
+
+						VerticalSpacing( );
+
+						BeginRow( 30, 2, ROW_STATIC );
+						SetRowWidth( 10 );
+						Spacing( );
+
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH );
+						const auto buf = iTeam;
+						fnSetValue( iTeam, Combobox( 30, PX_XOR( "Team" ), dqTeams, iTeam ) );
+
+						EndRow( );
+
+						pConfig = iTeam == 0 ? &_Settings._Miscellaneous._Inventory._Terrorist : &_Settings._Miscellaneous._Inventory._CounterTerrorist;
+						if ( buf != iTeam )
+							fnSetSelectedPaintKit( pConfig->_PaintKits[ ITEM_DEFINITION_INDICIES[ iSelectedWeapon ] ].iPaintKitID );
+					}
+
+					{
+						BeginRow( 30, 10, ROW_STATIC );
+						SetRowWidth( 5 );
+						Spacing( );
+
+						Checkbox( PX_XOR( "Modify Inventory" ), &pConfig->bModifyInventory );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Modify Inventory" ), 30 ).x );
+						Spacing( );
+
+						Checkbox( PX_XOR( "Modify Knife Model" ), &pConfig->bModifyKnifeModel );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Modify Knife Model" ), 30 ).x );
+						Spacing( );
+
+						Checkbox( PX_XOR( "Modify Glove Model" ), &pConfig->bModifyGloveModel );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Modify Glove Model" ), 30 ).x );
+						Spacing( );
+
+						EndRow( );
+					}
+
+					EndGroupbox( );
+				}
+
+				if ( BeginGroupbox( 401, 205, 500, 220, PX_XOR( "Paint Kits" ) ) )
+				{
+					{
+						VerticalSpacing( );
+
+						BeginRow( 30, 2, ROW_STATIC );
+						SetRowWidth( 10 );
+						Spacing( );
+
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH * 3.f + 29.f );
+						const auto buf = iSelectedWeapon;
+						TabbedCombobox( 30, PX_XOR( "Weapons" ), dqCategories, dqWeapons, iSelectedWeapon );
+						if( buf != iSelectedWeapon )
+							fnSetSelectedPaintKit( pConfig->_PaintKits[ ITEM_DEFINITION_INDICIES[ iSelectedWeapon ] ].iPaintKitID );
+
+						EndRow( );
+					}
+
+					{
+						static std::deque< cstr_t > dqPaintKits;
+						static char szSearch[ 32 ] { };
+						if ( dqPaintKits.empty( ) )
+							for ( const auto& kit : Other::vecPaintKits )
+								dqPaintKits.emplace_back( kit.strName.c_str( ) );
+
+						BeginRow( 30, 2, ROW_STATIC );
+						SetRowWidth( 10 );
+						Spacing( );
+
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH );
+						fnSetValue( iSelectedPaintKit, FilteredCombobox( 30, PX_XOR( "Paintkit" ), dqPaintKits, iSelectedPaintKit, 10, szSearch ) );
+						pConfig->_PaintKits[ ITEM_DEFINITION_INDICIES[ iSelectedWeapon ] ].iPaintKitID = Other::vecPaintKits[ iSelectedPaintKit ].iIdentifier;
 
 						EndRow( );
 					}
