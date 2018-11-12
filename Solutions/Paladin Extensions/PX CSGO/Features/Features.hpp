@@ -398,11 +398,27 @@ namespace PX::Features
 
 			struct inventory_t
 			{
-				struct
+				struct team_t
 				{
-					
+					toggle_t bModifyInventory = false;
+					toggle_t bModifyKnifeModel = false;
+					toggle_t bModifyGloveModel = false;
+
+					struct
+					{
+						int iPaintKitID = 2, iStatTrakCounter = -1;
+						toggle_t bSouvenier = false;
+						float flWear = 0.f;
+						int iSeed = 0;
+						char szName[ 32 ] { };
+					} _PaintKits[ ITEM_MAX ];
+
+					struct
+					{
+						int iKnifeModel = 0, iGloveModel = 0;
+					} _Models;
 				} _Terrorist, _CounterTerrorist;
-			};
+			} _Inventory;
 		} _Miscellaneous;
 	} PX_SDK _Settings;
 

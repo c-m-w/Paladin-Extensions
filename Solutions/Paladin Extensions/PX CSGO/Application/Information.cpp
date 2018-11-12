@@ -221,74 +221,66 @@ namespace PX::Information
 			const auto pItemSchema = reinterpret_cast< CCStrike15ItemSchema* >( ptr_t( pItemSystem( ) ) + 0x4 );
 			const auto pHead = reinterpret_cast< Head_t* >( ptr_t( pItemSchema ) + ptrHeadOffset );
 
-			std::wstring w { };
-			for( auto i = 0; i < pHead->nLastElement; i++ )
+			std::map< int, std::string > mpCustomNames
+			{
+				{ 42, "Dragon King" }
+			};
+
+			std::map< int, paint_kit_t::info_t > mpInfo
+			{
+				{ 42, { 2, QUALITY_DEFAULT } }
+			};
+
+			for( auto i = 1; i < pHead->nLastElement; i++ )
 			{
 				const auto pPaintKit = pHead->pMemory[ i ].pPaintKit;
 
 				if ( pPaintKit->iIndex == 9001 )
 					continue;
 
-				const wchar_t* wszBuffer = pLocalize->Find( pPaintKit->Tag.szBuffer + 0x1 );
-				vecPaintKits.emplace_back( paint_kit_t( pPaintKit->iIndex, wszBuffer ) );
-				w += std::to_wstring( pPaintKit->iIndex ) + L": " + wszBuffer + L"\n";
-			}
+				const auto pSearch = mpCustomNames.find( pPaintKit->iIndex );
+				const auto strBuffer = pSearch == mpCustomNames.end( )
+					? Tools::string_cast< std::string >( pLocalize->Find( pPaintKit->Tag.szBuffer + 0x1 ) )
+					: pSearch->second;
+				const auto pSearch2 = mpInfo.find( pPaintKit->iIndex );
+				if ( pSearch2 == mpInfo.end( ) )
+					throw std::exception( "jeremy you fucked up" );
 
-			mpWeaponSkins = decltype( mpWeaponSkins ) 
-			{
-				{
-					ITEM_WEAPON_DEAGLE,
-					{
-						{ FindPaintKit( 711 ), GRADE_COVERT },
-						{ FindPaintKit( 185 ), GRADE_COVERT },
-						{ FindPaintKit( 527 ), GRADE_CLASSIFIED },
-						{ FindPaintKit( 351 ), GRADE_CLASSIFIED },
-						{ FindPaintKit( 231 ), GRADE_CLASSIFIED },
-						{ FindPaintKit( 61 ), GRADE_CLASSIFIED },
-						{ FindPaintKit( 603 ), GRADE_RESTRICTED },
-						{ FindPaintKit( 397 ), GRADE_RESTRICTED },
-						{ FindPaintKit( 12 ), GRADE_RESTRICTED },
-						{ FindPaintKit( 273 ), GRADE_RESTRICTED },
-						{ FindPaintKit( 469 ), GRADE_RESTRICTED },
-						{ FindPaintKit( 470 ), GRADE_RESTRICTED },
-						{ FindPaintKit( 328 ), GRADE_RESTRICTED },
-						{ FindPaintKit( 347 ), GRADE_RESTRICTED },
-						{ FindPaintKit( 37 ), GRADE_RESTRICTED },
-						{ FindPaintKit( 706 ), GRADE_MILSPEC },
-						{ FindPaintKit( 509 ), GRADE_MILSPEC },
-						{ FindPaintKit( 425 ), GRADE_MILSPEC },
-						{ FindPaintKit( 296 ), GRADE_MILSPEC },
-						{ FindPaintKit( 237 ), GRADE_MILSPEC },
-						{ FindPaintKit( 40 ), GRADE_MILSPEC },
-						{ FindPaintKit( 468 ), GRADE_MILSPEC },
-						{ FindPaintKit( 17 ), GRADE_MILSPEC },
-						{ FindPaintKit( 90 ), GRADE_MILSPEC }
-					}
-				}
-			};
+				vecPaintKits.emplace_back( paint_kit_t( pPaintKit->iIndex, strBuffer, pSearch2->second ) );
+			}
 
 			return !vecPaintKits.empty( );
 		}
 
-		paint_kit_t PX_API FindPaintKit( int iIndex )
+		std::vector< paint_kit_t > PX_API FindPaintKit( int iIndex )
 		{
+			std::vector< paint_kit_t > vecReturn;
 			for ( const auto& paintkit : vecPaintKits )
 				if ( paintkit.iIdentifier == iIndex )
-					return paintkit;
-			return { };
+					vecReturn.emplace_back( paintkit );
+			return vecReturn;
 		}
 
-		paint_kit_t PX_API FindPaintKit( wcstr_t wszName )
+		std::vector< paint_kit_t > PX_API FindPaintKit( wcstr_t wszName )
 		{
+			return FindPaintKit( Tools::string_cast< str_t >( std::wstring( wszName ) ).c_str( ) );
+		}
+
+		std::vector< paint_kit_t > PX_API FindPaintKit( cstr_t szName )
+		{
+			std::vector< paint_kit_t > vecReturn;
 			for ( const auto& paintkit : vecPaintKits )
-				if ( !wcscmp( paintkit.wszName, wszName ) )
-					return paintkit;
-			return { };
+				if ( paintkit.strName == szName )
+					vecReturn.emplace_back( paintkit );
+			return vecReturn;
 		}
 
-		paint_kit_t PX_API FindPaintKit( cstr_t szName )
+		std::vector< std::pair< paint_kit_t, int > > PX_API FindWeaponPaintKits( short sDefinitionIndex )
 		{
-			return FindPaintKit( Tools::string_cast< wstr_t >( std::string( szName ) ).c_str( ) );
+			const auto pSearch = mpWeaponSkins.find( sDefinitionIndex );
+			if ( pSearch == mpWeaponSkins.end( ) )
+				return { };
+			return pSearch->second;
 		}
 	}
 }

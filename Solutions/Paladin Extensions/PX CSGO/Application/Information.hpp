@@ -145,17 +145,22 @@ namespace PX::Information
 		struct paint_kit_t
 		{
 			int iIdentifier;
-			Types::wcstr_t wszName;
+			std::string strName;
+			struct info_t
+			{
+				int iGrade, iQuality;
+			} _Info;
 
 			paint_kit_t( ) = default;
-			paint_kit_t( int i, Types::wcstr_t w ): iIdentifier( i ), wszName( w )
+			paint_kit_t( int i, std::string s, info_t _ ): iIdentifier( i ), strName( s ), _Info( _ )
 			{ }
 		};
 
 		bool PX_API RetrievePaintKits( );
-		paint_kit_t PX_API FindPaintKit( int iIndex );
-		paint_kit_t PX_API FindPaintKit( Types::wcstr_t wszName );
-		paint_kit_t PX_API FindPaintKit( Types::cstr_t szName );
+		std::vector< paint_kit_t > PX_API FindPaintKit( int iIndex );
+		std::vector< paint_kit_t > PX_API FindPaintKit( Types::wcstr_t wszName );
+		std::vector< paint_kit_t > PX_API FindPaintKit( Types::cstr_t szName );
+		std::vector< std::pair< paint_kit_t, int > > PX_API FindWeaponPaintKits( short sDefinitionIndex );
 
 		PX_SDK std::vector< paint_kit_t > vecPaintKits;
 		PX_SDK std::map< short, std::vector< std::pair< paint_kit_t, int > > > mpWeaponSkins;

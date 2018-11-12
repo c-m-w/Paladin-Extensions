@@ -6,6 +6,17 @@ struct CPaintKit;
 struct Node_t;
 struct Head_t;
 
+enum Grade
+{
+	GRADE_CONSUMER,
+	GRADE_INDUSTRIAL,
+	GRADE_MILSPEC,
+	GRADE_RESTRICTED,
+	GRADE_CLASSIFIED,
+	GRADE_COVERT,
+	GRADE_CONTRABAND
+};
+
 struct Head_t
 {
 	Node_t* pMemory;		//0x0000
@@ -43,5 +54,5 @@ struct CPaintKit
 	String_t Tag;			//0x0024
 	String_t ShortName;		//0x0034
 	String_t _unknown;		//0x0044
-	char pad_0x0054[ 0x8C ];	//0x0054
+	int pad_0x0054[ 0x23 ];	//0x0054
 }; //Size=0x00E0
