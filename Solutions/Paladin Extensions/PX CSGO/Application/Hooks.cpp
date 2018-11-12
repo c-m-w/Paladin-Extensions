@@ -179,6 +179,12 @@ namespace PX
 			{
 				switch( cfsStage )
 				{
+					case FRAME_START:
+					{
+						Other::UpdateModelIndicies( );
+					}
+					break;
+
 					case FRAME_NET_UPDATE_POSTDATAUPDATE_END:
 					{
 						Features::Miscellaneous::DarkenWorld( );
