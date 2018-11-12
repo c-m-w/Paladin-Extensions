@@ -16,6 +16,7 @@
 #include "Enumerations.hpp"
 #include "GlowOutlineEffect.hpp"
 #include "IHandleEntity.hpp"
+#include "PaintKit.hpp"
 #include "platform.hpp"
 #include "Recv.hpp"
 #include "Studio.hpp"

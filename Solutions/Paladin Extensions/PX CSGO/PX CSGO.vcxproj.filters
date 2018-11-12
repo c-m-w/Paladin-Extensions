@@ -314,5 +314,11 @@
     <ClInclude Include="Features\Combat\Recoil Compensation.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\Valve\Types\PaintKit.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\Valve\Interfaces\ILocalize.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

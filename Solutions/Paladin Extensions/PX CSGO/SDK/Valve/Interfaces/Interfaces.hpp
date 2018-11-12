@@ -19,6 +19,7 @@
 #include "ICVar.hpp"
 #include "IEngineTrace.hpp"
 #include "IInputSystem.hpp"
+#include "ILocalize.hpp"
 #include "IMaterialSystem.hpp"
 #include "IVEngineClient.hpp"
 #include "IPanel.hpp"

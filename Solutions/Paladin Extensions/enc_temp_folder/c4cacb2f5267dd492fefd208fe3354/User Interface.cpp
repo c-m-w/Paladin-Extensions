@@ -2240,7 +2240,6 @@ namespace PX::UI
 
 						vecDots[ z ].x = std::clamp( vecDots[ z ].x, recDot.w / 2.f, recLocation.w - recDot.w / 2.f );
 						vecDots[ z ].y = std::clamp( vecDots[ z ].y, recDot.h / 2.f, recLocation.h - recDot.h / 2.f );
-						iDraggingDot = z;
 					}
 				}
 			}

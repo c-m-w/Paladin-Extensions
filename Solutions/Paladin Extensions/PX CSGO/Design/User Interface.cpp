@@ -1233,21 +1233,21 @@ namespace PX::UI::Manager
 					}
 
 					{
-						constexpr struct nk_vec2 vecStart { 0.f, 0.f }, vecEnd { 200.f, 130.f };
-						constexpr struct nk_vec2 vecDots[ ] { { 0.f, 0.f }, { 200.f, 130.f } };
-						constexpr struct nk_vec2 vecDistance = { vecStart.x - vecEnd.x, vecStart.y - vecEnd.y };
 						const auto pConfig = iConfig == 0 ? &_Settings._Combat._Aim._All
 							: iConfig == 1 ? &_Settings._Combat._Aim._WeaponTypes[ iWeaponGroup ]
 							: &_Settings._Combat._Aim._IndividualWeapons[ ITEM_DEFINITION_INDICIES[ uCurrentWeapon ] ];
+						static struct nk_vec2 vecDots[ ] { { 0.f, 0.f }, { 200.f, 130.f } };
 						static auto flRatio = 0.f, flWaitTime = 0.f;
 						static auto bDoneWaiting = false;
+						static auto i = -1;
 						static std::vector< struct nk_vec2 > vecLinePoints { };
+						struct nk_vec2 vecDistance = { vecDots[0].x - vecDots[1].x, vecDots[0].y - vecDots[1].y };
 						
 						if( pConfig->iAimType == AIMTYPE_DEFAULT || pConfig->iAimType == AIMTYPE_SILENT )
 						{
 							vecLinePoints.clear( );
-							vecLinePoints.emplace_back( vecStart );
-							vecLinePoints.emplace_back( vecEnd );
+							vecLinePoints.emplace_back( vecDots[0] );
+							vecLinePoints.emplace_back( vecDots[1] );
 						}
 						else
 						{
@@ -1272,7 +1272,7 @@ namespace PX::UI::Manager
 								flRatio = std::clamp( flRatio, 0.f, 1.f );
 							}
 
-							const struct nk_vec2 vecDefaultSmoothed	{ vecStart.x - vecDistance.x * flRatio, vecStart.y - vecDistance.y * flRatio };
+							const struct nk_vec2 vecDefaultSmoothed	{ vecDots[0].x - vecDistance.x * flRatio, vecDots[0].y - vecDistance.y * flRatio };
 
 							switch( pConfig->iSmoothMode )
 							{
@@ -1284,32 +1284,32 @@ namespace PX::UI::Manager
 
 								case SMOOTH_PARABOLIC:
 								{
-									const auto flTemp = ( vecEnd.y - vecStart.y ) / pow( vecEnd.x - vecStart.x, 2.f );
-									const struct nk_vec2 vecNew = { vecDefaultSmoothed.x, flTemp * pow( vecDefaultSmoothed.x - vecStart.x, 2.f ) + vecStart.y };
+									const auto flTemp = ( vecDots[1].y - vecDots[0].y ) / pow( vecDots[1].x - vecDots[0].x, 2.f );
+									const struct nk_vec2 vecNew = { vecDefaultSmoothed.x, flTemp * pow( vecDefaultSmoothed.x - vecDots[0].x, 2.f ) + vecDots[0].y };
 									vecLinePoints.emplace_back( vecNew );
 								}
 								break;
 
 								case SMOOTH_RADICAL:
 								{
-									const auto flTemp = ( vecEnd.y - vecStart.y ) / cbrtf( vecEnd.x - vecStart.x );
-									const struct nk_vec2 vecNew = { vecDefaultSmoothed.x, flTemp * cbrtf( vecDefaultSmoothed.x - vecStart.x ) + vecStart.y };
+									const auto flTemp = ( vecDots[1].y - vecDots[0].y ) / cbrtf( vecDots[1].x - vecDots[0].x );
+									const struct nk_vec2 vecNew = { vecDefaultSmoothed.x, flTemp * cbrtf( vecDefaultSmoothed.x - vecDots[0].x ) + vecDots[0].y };
 									vecLinePoints.emplace_back( vecNew );
 								}
 								break;
 
 								case SMOOTH_SINUSOIDAL:
 								{
-									const auto fl = D3DX_PI / 2.f / ( vecStart.x - vecEnd.x );
-									const auto flTemp = ( vecEnd.y - vecStart.y ) / sinf( fl * ( vecEnd.x - vecStart.x ) );
-									const struct nk_vec2 vecNew = { vecDefaultSmoothed.x, flTemp * sinf( fl * ( vecDefaultSmoothed.x - vecStart.x ) ) + vecStart.y };
+									const auto fl = D3DX_PI / 2.f / ( vecDots[0].x - vecDots[1].x );
+									const auto flTemp = ( vecDots[1].y - vecDots[0].y ) / sinf( fl * ( vecDots[1].x - vecDots[0].x ) );
+									const struct nk_vec2 vecNew = { vecDefaultSmoothed.x, flTemp * sinf( fl * ( vecDefaultSmoothed.x - vecDots[0].x ) ) + vecDots[0].y };
 									vecLinePoints.emplace_back( vecNew );
 								}
 								break;
 
 								case SMOOTH_BEZIER:
 								{
-									const auto vecBezierPoints = Tools::GetBezierPoints( D3DXVECTOR2( vecStart.x, vecStart.y ), D3DXVECTOR2( vecEnd.x, vecEnd.y ), pConfig->_BezierOrders, pConfig->iCurrentOrders + 1 );
+									const auto vecBezierPoints = Tools::GetBezierPoints( D3DXVECTOR2( vecDots[0].x, vecDots[0].y ), D3DXVECTOR2( vecDots[1].x, vecDots[1].y ), pConfig->_BezierOrders, pConfig->iCurrentOrders + 1 );
 									const auto vecPoint = Tools::GetBezierPoint( vecBezierPoints, flRatio );
 									const struct nk_vec2 vecNew = { vecPoint.x, vecPoint.y };
 									vecLinePoints.emplace_back( vecNew );
@@ -1322,7 +1322,7 @@ namespace PX::UI::Manager
 						}
 
 						const auto recMainWindow = GetActiveWindowBounds( );
-						Graph( recMainWindow.x + 900.f, recMainWindow.y + 460.f, 300.f, 150, 10, 5, &vecLinePoints[ 0 ], vecLinePoints.size( ), vecDots, 2u );
+						Graph( recMainWindow.x + 900.f, recMainWindow.y + 460.f, 300.f, 150, 10, 5, &vecLinePoints[ 0 ], vecLinePoints.size( ), vecDots, 2u, i );
 					}
 					EndGroupbox( );
 				}

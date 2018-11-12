@@ -322,7 +322,7 @@ namespace PX::UI
 		/** \param zLength  */
 		void PX_API DisplayBox( Types::cstr_t szData, std::size_t zLength );
 
-		void PX_API Graph( float x, float y, float w, float h, int iVerticalGridlines, int iHorizontalGridlines, const struct nk_vec2* vecPoints, std::size_t zPoints, const struct nk_vec2* vecDots, std::size_t zDots );
+		void PX_API Graph( float x, float y, float w, float h, int iVerticalGridlines, int iHorizontalGridlines, const struct nk_vec2* vecPoints, std::size_t zPoints, struct nk_vec2* vecDots, std::size_t zDots, int& iDraggingDot );
 	}
 }
 

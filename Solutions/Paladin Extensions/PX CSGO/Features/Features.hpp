@@ -392,6 +392,14 @@ namespace PX::Features
 				toggle_t bVisualizeSpread = false;
 				color_sequence_t seqSpread[ 2 ] { }; // inner, outer
 			} _Visuals;
+
+			struct inventory_t
+			{
+				struct
+				{
+					
+				} _Terrorist, _CounterTerrorist;
+			};
 		} _Miscellaneous;
 	} PX_SDK _Settings;
 

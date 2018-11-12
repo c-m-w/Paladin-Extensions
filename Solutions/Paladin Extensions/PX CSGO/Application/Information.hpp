@@ -77,6 +77,7 @@ namespace PX::Information
 		PX_SDK SModule mInput;
 		PX_SDK SModule mMaterialSystem;
 		PX_SDK SModule mValveStandardLibrary;
+		PX_SDK SModule mLocalize;
 	}
 
 	namespace Pointers
@@ -103,6 +104,7 @@ namespace PX::Information
 		PX_SDK IMaterialSystem* pMaterialSystem = nullptr;
 		PX_SDK IVRenderView* pEngineRenderView = nullptr;
 		PX_SDK ICvar* pConVar = nullptr;
+		PX_SDK ILocalize* pLocalize = nullptr;
 	}
 
 	namespace NetworkedVariableManager // http://www.bailopan.net/table_dump.txt
@@ -124,5 +126,38 @@ namespace PX::Information
 
 		bool PX_API FindNetworkedVariables( );
 		Types::ptr_t PX_API FindOffset( Types::cstr_t szTable, Types::cstr_t szVariable );
+	}
+
+	namespace Other
+	{
+		enum
+		{
+			GRADE_CONSUMER,
+			GRADE_INDUSTRIAL,
+			GRADE_MILSPEC,
+			GRADE_RESTRICTED,
+			GRADE_CLASSIFIED,
+			GRADE_COVERT,
+			GRADE_KNIFE,
+			GRADE_CONTRABAND
+		};
+
+		struct paint_kit_t
+		{
+			int iIdentifier;
+			Types::wcstr_t wszName;
+
+			paint_kit_t( ) = default;
+			paint_kit_t( int i, Types::wcstr_t w ): iIdentifier( i ), wszName( w )
+			{ }
+		};
+
+		bool PX_API RetrievePaintKits( );
+		paint_kit_t PX_API FindPaintKit( int iIndex );
+		paint_kit_t PX_API FindPaintKit( Types::wcstr_t wszName );
+		paint_kit_t PX_API FindPaintKit( Types::cstr_t szName );
+
+		PX_SDK std::vector< paint_kit_t > vecPaintKits;
+		PX_SDK std::map< short, std::vector< std::pair< paint_kit_t, int > > > mpWeaponSkins;
 	}
 }

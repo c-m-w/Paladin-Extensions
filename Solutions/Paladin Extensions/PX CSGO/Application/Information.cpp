@@ -11,8 +11,9 @@ namespace PX::Information
 	{
 		return Memory::Setup( )
 			&& Modules::Setup( )
-			&& Pointers::FindPointers( )
-			&& FindNetworkedVariables( );
+			&& FindPointers( )
+			&& FindNetworkedVariables( )
+			&& Other::RetrievePaintKits( );
 	}
 
 	namespace Memory
@@ -60,7 +61,8 @@ namespace PX::Information
 					  || !mVGUI2.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "VGUI2" ) ].get< Types::str_t >( ) ) )
 					  || !mInput.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Input" ) ].get< Types::str_t >( ) ) )
 					  || !mMaterialSystem.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Material System" ) ].get< Types::str_t >( ) ) ) 
-					  || !mValveStandardLibrary.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Valve Standard Library" ) ].get< Types::str_t >( ) ) ) );
+					  || !mValveStandardLibrary.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Valve Standard Library" ) ].get< Types::str_t >( ) ) )
+					  || !mLocalize .Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Localize" ) ].get< Types::str_t >( ) ) ) );
 			return true;
 		}
 	}
@@ -111,6 +113,8 @@ namespace PX::Information
 				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Engine Render View" ) ].get< str_t >( ).c_str( ), nullptr ) );
 			pConVar = reinterpret_cast< ICvar* >( Modules::mValveStandardLibrary.ciFactory(
 				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "CVar" ) ].get< str_t >( ).c_str( ), nullptr ) );
+			pLocalize = reinterpret_cast< ILocalize* >( Modules::mLocalize.ciFactory(
+				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Localize" ) ].get< str_t >( ).c_str( ), nullptr ) );
 
 			return nullptr != pSendPackets
 				&& nullptr != pGlobalVariables
@@ -130,7 +134,8 @@ namespace PX::Information
 				&& nullptr != pModelRender
 				&& nullptr != pMaterialSystem
 				&& nullptr != pEngineRenderView
-				&& nullptr != pConVar;
+				&& nullptr != pConVar
+				&& nullptr != pLocalize;
 		}
 	}
 
@@ -198,6 +203,92 @@ namespace PX::Information
 						return ptrResult;
 				}
 			return 0u;
+		}
+	}
+
+	namespace Other
+	{
+		bool PX_API RetrievePaintKits( )
+		{
+			const auto ptrAddress = ptr_t( Modules::mClient.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Paint Kits" ) ].get< str_t >( ) )
+				+ jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Paint Kits" ) ].get< int >( ) );
+			const auto ptrItemSystemOffset = *reinterpret_cast< ptr_t* >( ptrAddress + 0x1 );
+			const auto pItemSystem = reinterpret_cast< CCStrike15ItemSystem*( *)( ) >( ptrAddress + 0x5 + ptrItemSystemOffset );
+			const auto ptrGetPaintKitDefinitionOffset = *reinterpret_cast< ptr_t* >( ptrAddress + 0xC );
+			const auto fnGetPaintKitDefinition = reinterpret_cast< CPaintKit*( __thiscall* )( int ) >( ptrAddress + 0x10 + ptrGetPaintKitDefinitionOffset );
+			const auto ptrStartElementOffset = *reinterpret_cast< ptr_t* >( ptr_t( fnGetPaintKitDefinition ) + 0xA );
+			const auto ptrHeadOffset = ptrStartElementOffset - 0xC;
+			const auto pItemSchema = reinterpret_cast< CCStrike15ItemSchema* >( ptr_t( pItemSystem( ) ) + 0x4 );
+			const auto pHead = reinterpret_cast< Head_t* >( ptr_t( pItemSchema ) + ptrHeadOffset );
+
+			std::wstring w { };
+			for( auto i = 0; i < pHead->nLastElement; i++ )
+			{
+				const auto pPaintKit = pHead->pMemory[ i ].pPaintKit;
+
+				if ( pPaintKit->iIndex == 9001 )
+					continue;
+
+				const wchar_t* wszBuffer = pLocalize->Find( pPaintKit->Tag.szBuffer + 0x1 );
+				vecPaintKits.emplace_back( paint_kit_t( pPaintKit->iIndex, wszBuffer ) );
+				w += std::to_wstring( pPaintKit->iIndex ) + L": " + wszBuffer + L"\n";
+			}
+
+			mpWeaponSkins = decltype( mpWeaponSkins ) 
+			{
+				{
+					ITEM_WEAPON_DEAGLE,
+					{
+						{ FindPaintKit( 711 ), GRADE_COVERT },
+						{ FindPaintKit( 185 ), GRADE_COVERT },
+						{ FindPaintKit( 527 ), GRADE_CLASSIFIED },
+						{ FindPaintKit( 351 ), GRADE_CLASSIFIED },
+						{ FindPaintKit( 231 ), GRADE_CLASSIFIED },
+						{ FindPaintKit( 61 ), GRADE_CLASSIFIED },
+						{ FindPaintKit( 603 ), GRADE_RESTRICTED },
+						{ FindPaintKit( 397 ), GRADE_RESTRICTED },
+						{ FindPaintKit( 12 ), GRADE_RESTRICTED },
+						{ FindPaintKit( 273 ), GRADE_RESTRICTED },
+						{ FindPaintKit( 469 ), GRADE_RESTRICTED },
+						{ FindPaintKit( 470 ), GRADE_RESTRICTED },
+						{ FindPaintKit( 328 ), GRADE_RESTRICTED },
+						{ FindPaintKit( 347 ), GRADE_RESTRICTED },
+						{ FindPaintKit( 37 ), GRADE_RESTRICTED },
+						{ FindPaintKit( 706 ), GRADE_MILSPEC },
+						{ FindPaintKit( 509 ), GRADE_MILSPEC },
+						{ FindPaintKit( 425 ), GRADE_MILSPEC },
+						{ FindPaintKit( 296 ), GRADE_MILSPEC },
+						{ FindPaintKit( 237 ), GRADE_MILSPEC },
+						{ FindPaintKit( 40 ), GRADE_MILSPEC },
+						{ FindPaintKit( 468 ), GRADE_MILSPEC },
+						{ FindPaintKit( 17 ), GRADE_MILSPEC },
+						{ FindPaintKit( 90 ), GRADE_MILSPEC }
+					}
+				}
+			};
+
+			return !vecPaintKits.empty( );
+		}
+
+		paint_kit_t PX_API FindPaintKit( int iIndex )
+		{
+			for ( const auto& paintkit : vecPaintKits )
+				if ( paintkit.iIdentifier == iIndex )
+					return paintkit;
+			return { };
+		}
+
+		paint_kit_t PX_API FindPaintKit( wcstr_t wszName )
+		{
+			for ( const auto& paintkit : vecPaintKits )
+				if ( !wcscmp( paintkit.wszName, wszName ) )
+					return paintkit;
+			return { };
+		}
+
+		paint_kit_t PX_API FindPaintKit( cstr_t szName )
+		{
+			return FindPaintKit( Tools::string_cast< wstr_t >( std::string( szName ) ).c_str( ) );
 		}
 	}
 }

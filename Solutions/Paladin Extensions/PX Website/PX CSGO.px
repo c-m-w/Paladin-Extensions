@@ -8,7 +8,8 @@
 		"VGUI2": "vgui2.dll",
 		"Input": "inputsystem.dll",
 		"Material System": "materialsystem.dll",
-		"Valve Standard Library": "vstdlib.dll"
+		"Valve Standard Library": "vstdlib.dll",
+		"Localize": "localize.dll"
     },
     "Patterns": {
         "Offsets": {
@@ -25,7 +26,8 @@
 			"Is Reloading": 2,
 			"Set Clantag": 0,
 			"Reveal Ranks": 0,
-			"Set ABS Origin": 0
+			"Set ABS Origin": 0,
+			"Paint Kits": 0
         },
       "Signatures": {
 			"Device": "A1 ? ? ? ? 50 8B 08 FF 51 0C",
@@ -41,7 +43,8 @@
 			"Is Reloading": "C6 87 ? ? ? ? ? 8B 06 8B CE FF 90",
 			"Set Clantag": "53 56 57 8B DA 8B F9 FF 15",
 			"Reveal Ranks": "55 8B EC 8B 0D ? ? ? ? 68",
-			"Set ABS Origin": "55 8B EC 83 E4 F8 51 53 56 57 8B F1 E8"
+			"Set ABS Origin": "55 8B EC 83 E4 F8 51 53 56 57 8B F1 E8",
+			"Paint Kits": "E8 ? ? ? ? FF 76 0C 8D 48 04 E8"
       }
     },
     "Versions": {
@@ -56,6 +59,7 @@
 		"Model Render": "VEngineModel016",
 		"Material System": "VMaterialSystem080",
 		"Engine Render View": "VEngineRenderView014",
-		"CVar": "VEngineCvar007"
+		"CVar": "VEngineCvar007",
+		"Localize": "Localize_001"
   }
 }
