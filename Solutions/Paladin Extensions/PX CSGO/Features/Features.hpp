@@ -379,9 +379,12 @@ namespace PX::Features
 		{
 			struct movement_t
 			{
-				toggle_t bAutoJump = false;
+				toggle_t bAutomaticJump = false;
 				float flMissChance = 0.f; // 0.f -> 1.f
 				toggle_t bEdgeJump = false;
+				toggle_t bAutomaticStrafe = false;
+				float flSync = 0.f; // 0.f -> 100.f
+				toggle_t bAutonomousStrafe = false; // one or the other
 			} _Movement;
 
 			struct visuals_t

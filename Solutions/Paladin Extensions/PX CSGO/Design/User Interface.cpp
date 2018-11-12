@@ -1399,7 +1399,7 @@ namespace PX::UI::Manager
 						SetRowWidth( 5 );
 						Spacing( );
 
-						Checkbox( PX_XOR( "Auto Jump" ), &_Settings._Miscellaneous._Movement.bAutoJump, PX_XOR( "Automatically jump." ) );
+						Checkbox( PX_XOR( "Auto Jump" ), &_Settings._Miscellaneous._Movement.bAutomaticJump, PX_XOR( "Automatically jump." ) );
 						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Auto Jump" ), 30 ).x );
 						Spacing( );
 

@@ -20,12 +20,14 @@ namespace PX::Features::Combat
 {
 	void PX_API CompensateRecoil( player_ptr_t pLocalPlayer, CUserCmd* pCmd )
 	{
+		return;
+
 		static QAngle angPreviousBulletRecoil;
 		static QAngle angStartAimAngle;
 		QAngle angRecoil;
-		if ( !pLocalPlayer )
-			return;
 		const auto hActiveWeapon = pLocalPlayer->m_hActiveWeapon( );
+		if ( !hActiveWeapon )
+			return;
 
 		recoil_config_t* _Config;
 		PX_GET_WEAPON_CONFIG( hActiveWeapon, _Config, _Settings._Combat._RecoilCompensation );
