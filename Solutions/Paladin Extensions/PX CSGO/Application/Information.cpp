@@ -253,7 +253,13 @@ namespace PX::Information
 
 			std::map< int, std::string > mpCustomNames
 			{
-				{ 42, "Dragon King" }
+				{ 415, "Doppler (Ruby)" },
+				{ 416, "Doppler (Sapphire)" },
+				{ 417, "Doppler (Black Pearl)" },
+				{ 418, "Doppler (Phase 1)" },
+				{ 419, "Doppler (Phase 2)" },
+				{ 420, "Doppler (Phase 3)" },
+				{ 421, "Doppler (Phase 4)" },
 			};
 
 			std::map< int, int > mpInfo
