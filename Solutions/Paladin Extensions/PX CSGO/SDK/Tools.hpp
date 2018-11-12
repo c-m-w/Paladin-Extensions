@@ -36,6 +36,8 @@ namespace PX::Tools
 	// Math
 	void PX_API ClampAngles( QAngle& qAngles );
 	void PX_API ClampAngles( Vector& vecAngles );
+	void PX_API HumanizeAngles( QAngle& qAngles, PX::Tools::CBasePlayer* pLocalPlayer );
+	void PX_API HumanizeAngles( Vector& vecAngles, PX::Tools::CBasePlayer* pLocalPlayer );
 	bool PX_API WorldToScreen( const Vector& vecWorld, Vector &vecScreen );
 	bool PX_API AngleToScreen( const Vector& vecAngle, const Vector& vecOrigin, Vector& vecScreen );
 	void PX_API TransformVector( Vector vecInput, matrix3x4_t mtxInput, Vector &vecOutput );

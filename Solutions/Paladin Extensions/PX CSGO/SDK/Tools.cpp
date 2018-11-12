@@ -97,34 +97,110 @@ namespace PX::Tools
 
 	void PX_API ClampAngles( QAngle& qAngles )
 	{
-		//if ( isnan( qAngles.pitch ) || isnan( qAngles.yaw ) || isnan( qAngles.roll )
-		//	 || isinf( qAngles.pitch ) || isinf( qAngles.yaw ) || isinf( qAngles.roll ) )
-		//	return ( void )( qAngles.pitch = 0.f, qAngles.yaw = 0.f, qAngles.roll = 0.f );
-		//
-		//qAngles.pitch = std::clamp( qAngles.pitch, PX_MIN_PITCH, PX_MAX_PITCH );
-		//
-		//if ( qAngles.yaw < PX_MIN_YAW || qAngles.yaw > PX_MAX_YAW )
-		//	qAngles.yaw += -qAngles.yaw / fabs( qAngles.yaw ) * floorf( qAngles.yaw / ( PX_REVOLUTION / 2.f ) ) * PX_REVOLUTION;
-		//if ( qAngles.yaw < PX_MIN_YAW || qAngles.yaw > PX_MAX_YAW )
-		//	qAngles.yaw = 0.f;
-		//
-		//qAngles.roll = std::clamp( qAngles.roll, PX_MIN_ROLL, PX_MAX_ROLL );
+		// test for input validity
+		if ( isnan( qAngles.pitch ) || isnan( qAngles.yaw ) || isnan( qAngles.roll )
+			 || isinf( qAngles.pitch ) || isinf( qAngles.yaw ) || isinf( qAngles.roll ) )
+			return ( void )( qAngles.pitch = 0.f, qAngles.yaw = 0.f, qAngles.roll = 0.f );
+		
+		qAngles.pitch = std::clamp( qAngles.pitch, PX_MIN_PITCH, PX_MAX_PITCH );
+
+		// orient horizontal axis into valid ranges
+		if ( qAngles.yaw < PX_MIN_YAW || qAngles.yaw > PX_MAX_YAW )
+			qAngles.yaw += -qAngles.yaw / fabs( qAngles.yaw ) * floorf( qAngles.yaw / ( PX_REVOLUTION / 2.f ) ) * PX_REVOLUTION;
+		if ( qAngles.yaw < PX_MIN_YAW || qAngles.yaw > PX_MAX_YAW )
+			qAngles.yaw = 0.f;
+		
+		qAngles.roll = std::clamp( qAngles.roll, PX_MIN_ROLL, PX_MAX_ROLL );
 	}
 
 	void PX_API ClampAngles( Vector& vecAngles )
 	{
-		//if ( isnan( vecAngles.x ) || isnan( vecAngles.y ) || isnan( vecAngles.z )
-		//	 || isinf( vecAngles.x ) || isinf( vecAngles.y ) || isinf( vecAngles.z ) )
-		//	return ( void )( vecAngles.x = 0.f, vecAngles.y = 0.f, vecAngles.z = 0.f );
-		//
-		//vecAngles.x = std::clamp( vecAngles.x, PX_MIN_PITCH, PX_MAX_PITCH );
-		//
-		//if ( vecAngles.y < PX_MIN_YAW || vecAngles.y > PX_MAX_YAW )
-		//	vecAngles.y += -vecAngles.y / fabs( vecAngles.y ) * floorf( vecAngles.y / ( PX_REVOLUTION / 2.f ) ) * PX_REVOLUTION;
-		//if ( vecAngles.y < PX_MIN_YAW || vecAngles.y > PX_MAX_YAW )
-		//	vecAngles.y = 0.f;
-		//
-		//vecAngles.z = std::clamp( vecAngles.z, PX_MIN_ROLL, PX_MAX_ROLL );
+		// test for input validity
+		if ( isnan( vecAngles.x ) || isnan( vecAngles.y ) || isnan( vecAngles.z )
+			 || isinf( vecAngles.x ) || isinf( vecAngles.y ) || isinf( vecAngles.z ) )
+			return ( void )( vecAngles.x = 0.f, vecAngles.y = 0.f, vecAngles.z = 0.f );
+		
+		vecAngles.x = std::clamp( vecAngles.x, PX_MIN_PITCH, PX_MAX_PITCH );
+
+		// orient horizontal axis into valid ranges
+		if ( vecAngles.y < PX_MIN_YAW || vecAngles.y > PX_MAX_YAW )
+			vecAngles.y += -vecAngles.y / fabs( vecAngles.y ) * floorf( vecAngles.y / ( PX_REVOLUTION / 2.f ) ) * PX_REVOLUTION;
+		if ( vecAngles.y < PX_MIN_YAW || vecAngles.y > PX_MAX_YAW )
+			vecAngles.y = 0.f; // just in case something messes up
+		
+		vecAngles.z = std::clamp( vecAngles.z, PX_MIN_ROLL, PX_MAX_ROLL );
+	}
+
+	void PX_API HumanizeAngles( QAngle& qAngles, player_ptr_t pLocalPlayer )
+	{
+		// test for input validity
+		if ( isnan( qAngles.pitch ) || isnan( qAngles.yaw ) || isnan( qAngles.roll )
+			 || isinf( qAngles.pitch ) || isinf( qAngles.yaw ) || isinf( qAngles.roll ) )
+			return ( void )( qAngles.pitch = 0.f, qAngles.yaw = 0.f, qAngles.roll = 0.f );
+
+		// assure delta is max sensitivity, 10000
+		const auto angView = QAngle( pClientState->viewangles.x, pClientState->viewangles.y, 0.f );
+		auto angDelta = qAngles - angView;
+		angDelta.roll = 0.f;
+		const auto flDelta = sqrtf( powf( angDelta.pitch, 2.f ) * powf( angDelta.yaw, 2.f ) );
+
+		if ( flDelta > PX_MAX_ANGLE_DELTA )
+			angDelta *= PX_MAX_ANGLE_DELTA / flDelta;
+
+		// assure delta is divisible by current sensitivity
+		static auto sensitivity = pConVar->FindVar( PX_XOR( "sensitivity" ) );
+		static auto m_pitch = pConVar->FindVar( PX_XOR( "m_pitch" ) );
+		static auto m_yaw = pConVar->FindVar( PX_XOR( "m_yaw" ) );
+		static auto zoom_sensitivity_ratio_mouse = pConVar->FindVar( PX_XOR( "zoom_sensitivity_ratio_mouse" ) );
+		int iWindowsSensitivity;
+		const auto flWindowsSensitivity = SystemParametersInfo( SPI_GETMOUSESPEED, 0, &iWindowsSensitivity, false ) ? float( iWindowsSensitivity ) / 20.f : 1.f;
+		const auto flStepUnscaled = sensitivity->GetFloat( ) * flWindowsSensitivity * pLocalPlayer->m_bIsScoped( ) ? zoom_sensitivity_ratio_mouse->GetFloat( ) : 1.f;
+		const auto flStepPitch = m_pitch->GetFloat( ) * flStepUnscaled;
+		const auto flStepYaw = m_yaw->GetFloat( ) * flStepUnscaled;
+
+		angDelta.pitch = flStepPitch * floorf( angDelta.pitch / flStepPitch );
+		angDelta.yaw = flStepYaw * floorf( angDelta.yaw / flStepYaw );
+
+		// assign and exit
+		return ( void )( qAngles = angView + angDelta, qAngles.roll = pClientState->viewangles.z );
+	}
+
+	void PX_API HumanizeAngles( Vector& vecAngles, player_ptr_t pLocalPlayer )
+	{
+		if ( isnan( vecAngles.x ) || isnan( vecAngles.y ) || isnan( vecAngles.z )
+			 || isinf( vecAngles.x ) || isinf( vecAngles.y ) || isinf( vecAngles.z ) )
+			return ( void )( vecAngles.x = 0.f, vecAngles.y = 0.f, vecAngles.z = 0.f );
+
+		// test for input validity
+		if ( isnan( vecAngles.x ) || isnan( vecAngles.y ) || isnan( vecAngles.z )
+			 || isinf( vecAngles.x ) || isinf( vecAngles.y ) || isinf( vecAngles.z ) )
+			return ( void )( vecAngles.x = 0.f, vecAngles.y = 0.f, vecAngles.z = 0.f );
+
+		// assure delta is max sensitivity, 10000
+		auto vecView = pClientState->viewangles;
+		auto vecDelta = vecAngles - vecView;
+		vecDelta.z = 0.f;
+		auto flDelta = sqrtf( powf( vecDelta.x, 2.f ) * powf( vecDelta.y, 2.f ) );
+
+		if ( flDelta > PX_MAX_ANGLE_DELTA )
+			vecDelta *= PX_MAX_ANGLE_DELTA / flDelta;
+
+		// assure delta is divisible by current sensitivity
+		static auto sensitivity = pConVar->FindVar( PX_XOR( "sensitivity" ) );
+		static auto m_pitch = pConVar->FindVar( PX_XOR( "m_pitch" ) );
+		static auto m_yaw = pConVar->FindVar( PX_XOR( "m_yaw" ) );
+		static auto zoom_sensitivity_ratio_mouse = pConVar->FindVar( PX_XOR( "zoom_sensitivity_ratio_mouse" ) );
+		int iWindowsSensitivity;
+		const auto flWindowsSensitivity = SystemParametersInfo( SPI_GETMOUSESPEED, 0, &iWindowsSensitivity, false ) != 0 ? float( iWindowsSensitivity ) / 20.f : 1.f;
+		const auto flStepUnscaled = sensitivity->GetFloat( ) * flWindowsSensitivity * pLocalPlayer->m_bIsScoped( ) ? zoom_sensitivity_ratio_mouse->GetFloat( ) : 1.f;
+		const auto flStepPitch = m_pitch->GetFloat( ) * flStepUnscaled;
+		const auto flStepYaw = m_yaw->GetFloat( ) * flStepUnscaled;
+
+		vecDelta.x = flStepPitch * floorf( vecDelta.x / flStepPitch );
+		vecDelta.y = flStepYaw * floorf( vecDelta.y / flStepYaw );
+
+		// assign and exit
+		return ( void )( vecAngles = vecView + vecDelta, vecAngles.z = pClientState->viewangles.z );
 	}
 
 	bool PX_API WorldToScreen( const Vector& vecWorld, Vector &vecScreen )
