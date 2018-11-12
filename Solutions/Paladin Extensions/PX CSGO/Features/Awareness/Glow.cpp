@@ -97,9 +97,9 @@ namespace PX::Features::Awareness
 				case ClassID_CBaseCSGrenadeProjectile: // hegrenade & flashbang
 				{
 					const auto iModelIndex = reinterpret_cast< CBaseViewModel* >( pEntity )->m_nModelIndex( );
-					if( iModelIndex == pModelInfo->GetModelIndex( PX_XOR( "models/Weapons/w_eq_flashbang_dropped.mdl" ) ) )
+					if( iModelIndex == Other::GetModelIndex( ITEM_WEAPON_FLASHBANG ) )
 						GlowEntity( pLocalPlayer, pEntity, pObject, SETTING_ENTITY_GRENADE_PROJECTILE_FLASH );
-					else if( iModelIndex == pModelInfo->GetModelIndex( PX_XOR( "models/Weapons/w_eq_fraggrenade_dropped.mdl" ) ) )
+					else if( iModelIndex == Other::GetModelIndex( ITEM_WEAPON_HEGRENADE ) )
 						GlowEntity( pLocalPlayer, pEntity, pObject, SETTING_ENTITY_GRENADE_PROJECTILE_HE );
 				}
 				break;

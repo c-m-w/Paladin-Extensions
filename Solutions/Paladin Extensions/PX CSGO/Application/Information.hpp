@@ -130,29 +130,15 @@ namespace PX::Information
 
 	namespace Other
 	{
-		enum
-		{
-			GRADE_CONSUMER,
-			GRADE_INDUSTRIAL,
-			GRADE_MILSPEC,
-			GRADE_RESTRICTED,
-			GRADE_CLASSIFIED,
-			GRADE_COVERT,
-			GRADE_KNIFE,
-			GRADE_CONTRABAND
-		};
-
 		struct paint_kit_t
 		{
 			int iIdentifier;
 			std::string strName;
-			struct info_t
-			{
-				int iGrade, iQuality;
-			} _Info;
+			int iQuality;
+
 
 			paint_kit_t( ) = default;
-			paint_kit_t( int i, std::string s, info_t _ ): iIdentifier( i ), strName( s ), _Info( _ )
+			paint_kit_t( int i, std::string s, int q ): iIdentifier( i ), strName( s ),iQuality(q)
 			{ }
 		};
 
@@ -160,9 +146,12 @@ namespace PX::Information
 		std::vector< paint_kit_t > PX_API FindPaintKit( int iIndex );
 		std::vector< paint_kit_t > PX_API FindPaintKit( Types::wcstr_t wszName );
 		std::vector< paint_kit_t > PX_API FindPaintKit( Types::cstr_t szName );
-		std::vector< std::pair< paint_kit_t, int > > PX_API FindWeaponPaintKits( short sDefinitionIndex );
 
 		PX_SDK std::vector< paint_kit_t > vecPaintKits;
-		PX_SDK std::map< short, std::vector< std::pair< paint_kit_t, int > > > mpWeaponSkins;
+
+		// Models
+		void PX_API UpdateModelIndicies( );
+		int PX_API GetModelIndex( short sItemDefIndex );
+		int PX_API GetModelIndex( Types::cstr_t szName );
 	}
 }

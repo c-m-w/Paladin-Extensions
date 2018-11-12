@@ -30,6 +30,8 @@ namespace PX
 		// View Render
 		typedef void( __thiscall* scene_end_t )( IVRenderView* );
 		typedef void( __thiscall* scene_begin_t )( IVRenderView* );
+
+		typedef void( __cdecl* m_n_sequence_t )( const CRecvProxyData*, void*, void* );
 	}
 
 	namespace Hooks
@@ -65,5 +67,7 @@ namespace PX
 		// View Render
 		void __stdcall SceneEnd( );
 		void __stdcall SceneBegin( );
+
+		void __cdecl m_nSequence( const CRecvProxyData* pData, void *pStructure, void *pOutput );
 	}
 }

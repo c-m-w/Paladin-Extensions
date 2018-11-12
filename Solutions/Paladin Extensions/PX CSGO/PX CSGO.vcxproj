@@ -111,6 +111,7 @@
     <ClCompile Include="Features\Combat\Recoil Compensation.cpp" />
     <ClCompile Include="Features\Combat\Trigger.cpp" />
     <ClCompile Include="Features\Features.cpp" />
+    <ClCompile Include="Features\Miscellaneous\Inventory.cpp" />
     <ClCompile Include="Features\Miscellaneous\Movement.cpp" />
     <ClCompile Include="Features\Miscellaneous\Visuals.cpp" />
     <ClCompile Include="PX CSGO.cpp" />
@@ -170,6 +171,7 @@
     <ClInclude Include="Features\Combat\Recoil Compensation.hpp" />
     <ClInclude Include="Features\Combat\Trigger.hpp" />
     <ClInclude Include="Features\Features.hpp" />
+    <ClInclude Include="Features\Miscellaneous\Inventory.hpp" />
     <ClInclude Include="Features\Miscellaneous\Movement.hpp" />
     <ClInclude Include="Features\Miscellaneous\Visuals.hpp" />
     <ClInclude Include="PX CSGO.hpp" />

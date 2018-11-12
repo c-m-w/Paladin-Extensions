@@ -208,6 +208,36 @@ namespace PX::Information
 
 	namespace Other
 	{
+		std::map< Types::cstr_t /* short name */, short /* item def index */ > mpItemDefinitionIndicies
+		{
+			{ "Flashbang", ITEM_WEAPON_FLASHBANG },
+			{ "HE Grenade", ITEM_WEAPON_HEGRENADE },
+			{ "CT Knife", ITEM_WEAPON_CTKNIFE },
+			{ "T Knife", ITEM_WEAPON_TKNIFE },
+			{ "Bayonet", ITEM_WEAPON_KNIFE_BAYONET },
+			{ "Flip", ITEM_WEAPON_KNIFE_FLIP },
+			{ "Gut", ITEM_WEAPON_KNIFE_GUT },
+			{ "Karambit", ITEM_WEAPON_KNIFE_KARAMBIT },
+			{ "M9 Bayonet", ITEM_WEAPON_KNIFE_M9_BAYONET },
+			{ "Huntsman", ITEM_WEAPON_KNIFE_TACTICAL },
+			{ "Falchion", ITEM_WEAPON_KNIFE_FALCHION },
+			{ "Bowie", ITEM_WEAPON_KNIFE_SURVIVAL_BOWIE },
+			{ "Butterfly", ITEM_WEAPON_KNIFE_BUTTERFLY },
+			{ "Shadow Daggers", ITEM_WEAPON_KNIFE_SHADOW_DAGGERS },
+			{ "Ursus", ITEM_WEAPON_KNIFE_URSUS },
+			{ "Navaja", ITEM_WEAPON_KNIFE_NAVAJA },
+			{ "Stilletto", ITEM_WEAPON_KNIFE_STILLETTO },
+			{ "Talon", ITEM_WEAPON_KNIFE_TALON },
+			{ "Bloodhound", ITEM_GLOVE_BLOODHOUND },
+			{ "Sport", ITEM_GLOVE_SPORTY },
+			{ "Driver", ITEM_GLOVE_DRIVER },
+			{ "Hand Wrap", ITEM_GLOVE_HAND_WRAP },
+			{ "Moto", ITEM_GLOVE_MOTORCYCLE },
+			{ "Specialist", ITEM_GLOVE_SPECIALIST },
+			{ "Hydra", ITEM_GLOVE_HYDRA }
+		};
+		std::map< short /* item def index */, int /* model index */ > mpModelIndicies;
+
 		bool PX_API RetrievePaintKits( )
 		{
 			const auto ptrAddress = ptr_t( Modules::mClient.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Paint Kits" ) ].get< str_t >( ) )
@@ -226,9 +256,9 @@ namespace PX::Information
 				{ 42, "Dragon King" }
 			};
 
-			std::map< int, paint_kit_t::info_t > mpInfo
+			std::map< int, int > mpInfo
 			{
-				{ 42, { 2, QUALITY_DEFAULT } }
+				{ 42, QUALITY_DEFAULT }
 			};
 
 			for( auto i = 1; i < pHead->nLastElement; i++ )
@@ -243,13 +273,13 @@ namespace PX::Information
 					? Tools::string_cast< std::string >( pLocalize->Find( pPaintKit->Tag.szBuffer + 0x1 ) )
 					: pSearch->second;
 				const auto pSearch2 = mpInfo.find( pPaintKit->iIndex );
-				if ( pSearch2 == mpInfo.end( ) )
-					throw std::exception( "jeremy you fucked up" );
-
-				vecPaintKits.emplace_back( paint_kit_t( pPaintKit->iIndex, strBuffer, pSearch2->second ) );
+				//if ( pSearch2 == mpInfo.end( ) )
+				//	throw std::exception( "jeremy you fucked up" );
+				//
+				//vecPaintKits.emplace_back( paint_kit_t( pPaintKit->iIndex, strBuffer, pSearch2->second ) );
 			}
 
-			return !vecPaintKits.empty( );
+			return !!vecPaintKits.empty( );
 		}
 
 		std::vector< paint_kit_t > PX_API FindPaintKit( int iIndex )
@@ -275,12 +305,64 @@ namespace PX::Information
 			return vecReturn;
 		}
 
-		std::vector< std::pair< paint_kit_t, int > > PX_API FindWeaponPaintKits( short sDefinitionIndex )
+		void PX_API UpdateModelIndicies( )
 		{
-			const auto pSearch = mpWeaponSkins.find( sDefinitionIndex );
-			if ( pSearch == mpWeaponSkins.end( ) )
-				return { };
-			return pSearch->second;
+			static auto bUpdated = false;
+
+			if ( !pEngineClient->IsInGame( ) )
+			{
+				bUpdated = false;
+				return;
+			}
+
+			if ( bUpdated
+				 || pClientState->m_nSignonState != SIGNONSTATE_FULL )
+				return;
+
+			mpModelIndicies = decltype( mpModelIndicies )
+			{
+				{ ITEM_WEAPON_FLASHBANG, pModelInfo->GetModelIndex( PX_XOR( "models/Weapons/w_eq_flashbang_dropped.mdl" ) ) },
+				{ ITEM_WEAPON_HEGRENADE, pModelInfo->GetModelIndex( PX_XOR( "models/Weapons/w_eq_fraggrenade_dropped.mdl" ) ) },
+				{ ITEM_WEAPON_CTKNIFE, pModelInfo->GetModelIndex( PX_XOR( "models/weapons/v_knife_default_ct.mdl" ) ) },
+				{ ITEM_WEAPON_TKNIFE, pModelInfo->GetModelIndex( PX_XOR( "models/weapons/v_knife_default_t.mdl" ) ) },
+				{ ITEM_WEAPON_KNIFE_BAYONET, pModelInfo->GetModelIndex( PX_XOR( "models/weapons/v_knife_bayonet.mdl" ) ) },
+				{ ITEM_WEAPON_KNIFE_FLIP, pModelInfo->GetModelIndex( PX_XOR( "models/weapons/v_knife_flip.mdl" ) ) },
+				{ ITEM_WEAPON_KNIFE_GUT, pModelInfo->GetModelIndex( PX_XOR( "models/weapons/v_knife_gut.mdl" ) ) },
+				{ ITEM_WEAPON_KNIFE_KARAMBIT, pModelInfo->GetModelIndex( PX_XOR( "models/weapons/v_knife_karam.mdl" ) ) },
+				{ ITEM_WEAPON_KNIFE_M9_BAYONET, pModelInfo->GetModelIndex( PX_XOR( "models/weapons/v_knife_m9_bay.mdl" ) ) },
+				{ ITEM_WEAPON_KNIFE_TACTICAL, pModelInfo->GetModelIndex( PX_XOR( "models/weapons/v_knife_tactical.mdl" ) ) },
+				{ ITEM_WEAPON_KNIFE_FALCHION, pModelInfo->GetModelIndex( PX_XOR( "models/weapons/v_knife_falchion_advanced.mdl" ) ) },
+				{ ITEM_WEAPON_KNIFE_SURVIVAL_BOWIE, pModelInfo->GetModelIndex( PX_XOR( "models/weapons/v_knife_survival_bowie.mdl" ) ) },
+				{ ITEM_WEAPON_KNIFE_BUTTERFLY, pModelInfo->GetModelIndex( PX_XOR( "models/weapons/v_knife_butterfly.mdl" ) ) },
+				{ ITEM_WEAPON_KNIFE_SHADOW_DAGGERS, pModelInfo->GetModelIndex( PX_XOR( "models/weapons/v_knife_push.mdl" ) ) },
+				{ ITEM_WEAPON_KNIFE_URSUS, pModelInfo->GetModelIndex( PX_XOR( "models/weapons/v_knife_ursus.mdl" ) ) },
+				{ ITEM_WEAPON_KNIFE_NAVAJA, pModelInfo->GetModelIndex( PX_XOR( "models/weapons/v_knife_gypsy_jackknife.mdl") ) },
+				{ ITEM_WEAPON_KNIFE_STILLETTO, pModelInfo->GetModelIndex( PX_XOR( "models/weapons/v_knife_stiletto.mdl" ) ) },
+				{ ITEM_WEAPON_KNIFE_TALON, pModelInfo->GetModelIndex( PX_XOR( "models/weapons/v_knife_widowmaker.mdl" ) ) },
+				{ ITEM_GLOVE_BLOODHOUND, pModelInfo->GetModelIndex( PX_XOR( "models/weapons/v_models/arms/glove_bloodhound/v_glove_bloodhound.mdl" ) ) },
+				{ ITEM_GLOVE_SPORTY, pModelInfo->GetModelIndex( PX_XOR( "models/weapons/v_models/arms/glove_sporty/v_glove_sporty.mdl" ) ) },
+				{ ITEM_GLOVE_DRIVER, pModelInfo->GetModelIndex( PX_XOR( "models/weapons/v_models/arms/glove_slick/v_glove_slick.mdl" ) ) },
+				{ ITEM_GLOVE_HAND_WRAP, pModelInfo->GetModelIndex( PX_XOR( "models/weapons/v_models/arms/glove_handwrap_leathery/v_glove_handwrap_leathery.mdl" ) ) },
+				{ ITEM_GLOVE_MOTORCYCLE, pModelInfo->GetModelIndex( PX_XOR( "models/weapons/v_models/arms/glove_motorcycle/v_glove_motorcycle.mdl" ) ) },
+				{ ITEM_GLOVE_SPECIALIST, pModelInfo->GetModelIndex( PX_XOR( "models/weapons/v_models/arms/glove_specialist/v_glove_specialist.mdl" )) },
+				{ ITEM_GLOVE_HYDRA, pModelInfo->GetModelIndex( PX_XOR( "models/weapons/v_models/arms/glove_bloodhound/v_glove_bloodhound_hydra.mdl" ) ) }
+			};
+		}
+
+		int PX_API GetModelIndex( short sItemDefIndex )
+		{
+			const auto pSecond = mpModelIndicies.find( sItemDefIndex );
+			if ( pSecond != mpModelIndicies.end( ) )
+				return pSecond->second;
+			return 0;
+		}
+
+		int PX_API GetModelIndex( cstr_t szModel )
+		{
+			const auto pFirst = mpItemDefinitionIndicies.find( szModel );
+			if( pFirst != mpItemDefinitionIndicies.end( ) )
+				return GetModelIndex( pFirst->second );
+			return 0;
 		}
 	}
 }
