@@ -11,28 +11,29 @@ namespace PX
 {
 	namespace Hooks
 	{
-		m_n_sequence_t fnSequence;
+		m_n_sequence_t fnSequence = nullptr;
+		std::vector< std::pair< RecvVarProxyFn*, RecvVarProxyFn > > vecSetProxies;
 
 		bool PX_API SetHooks( )
 		{
-			auto bFound = false;
-			for( auto pClass = pClientBase->GetAllClasses(  ); pClass != nullptr && !bFound; pClass = pClass->m_pNext )
+			for( auto pClass = pClientBase->GetAllClasses( ); pClass != nullptr; pClass = pClass->m_pNext )
 			{
-				auto pTable = pClass->m_pRecvTable;
+				const auto pTable = pClass->m_pRecvTable;
 				for( auto i = 0; i < pTable->m_nProps; i++ )
 				{
 					auto& pProp = pTable->m_pProps[ i ];
 					if( 0 == strcmp( pProp.m_pVarName, PX_XOR( "m_nSequence" ) ) )
 					{
+						vecSetProxies.emplace_back( &pProp.m_ProxyFn, pProp.m_ProxyFn  );
 						fnSequence = pProp.m_ProxyFn;
 						pProp.m_ProxyFn = m_nSequence;
-						bFound = true;
 						break;
 					}
 				}
 			}
 
-			return hkDirectXDevice->HookIndex( uBeginScene, reinterpret_cast< void* >( BeginScene ) )
+			return fnSequence != nullptr 
+				&& hkDirectXDevice->HookIndex( uBeginScene, reinterpret_cast< void* >( BeginScene ) )
 				&& hkDirectXDevice->HookIndex( uEndScene, reinterpret_cast< void* >( EndScene ) )
 				&& hkDirectXDevice->HookIndex( uReset, reinterpret_cast< void* >( Reset ) )
 				&& hkClientBase->HookIndex( uFrameStageNotify, reinterpret_cast< void* >( FrameStageNotify ) )
@@ -70,6 +71,9 @@ namespace PX
 
 		void PX_API Destruct( )
 		{
+			for ( auto& proxy : vecSetProxies )
+				*proxy.first = proxy.second;
+
 			delete hkDirectXDevice;
 			delete hkClientBase;
 			delete hkClientMode;
@@ -182,6 +186,12 @@ namespace PX
 					case FRAME_START:
 					{
 						Other::UpdateModelIndicies( );
+					}
+					break;
+
+					case FRAME_NET_UPDATE_POSTDATAUPDATE_START:
+					{
+						Features::Miscellaneous::ModifyInventory( );
 					}
 					break;
 
@@ -298,6 +308,10 @@ namespace PX
 		void __cdecl m_nSequence( const CRecvProxyData* pConst, void* pStructure, void* pOutput )
 		{
 			auto pData = const_cast< CRecvProxyData* >( pConst );
+
+			{
+				Features::Miscellaneous::SetModelSequence( pData, reinterpret_cast< Tools::CBaseViewModel* >( pStructure ) );
+			}
 
 			fnSequence( pData, pStructure, pOutput );
 		}

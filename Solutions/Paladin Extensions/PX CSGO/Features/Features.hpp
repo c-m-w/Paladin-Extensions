@@ -408,6 +408,7 @@ namespace PX::Features
 					{
 						int iPaintKitID = 2, iStatTrakCounter = -1;
 						toggle_t bSouvenier = false;
+						toggle_t bStatTrak = false;
 						float flWear = 0.f;
 						int iSeed = 0;
 						char szName[ 32 ] { };
