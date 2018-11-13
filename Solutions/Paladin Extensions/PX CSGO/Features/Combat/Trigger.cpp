@@ -22,7 +22,6 @@ namespace PX::Features::Combat
 			 || !hActiveWeapon->CanFire( ) )
 			return;
 
-		const auto iItemDefinitionIndex = hActiveWeapon->m_Item( )->m_iItemDefinitionIndex( );
 		const auto pWeaponData = hActiveWeapon->GetCSWeaponData( );
 		if ( !pWeaponData )
 			return;

@@ -60,8 +60,8 @@ namespace PX::Features::Combat
 		if ( pLast != nullptr && !*pLast )
 			bReleasedKey = true;
 
-		PX_GET_WEAPON_CONFIG( hWeapon, _Config, _Settings._Combat._Aim );
-		_RecoilControlConfig = _Settings._Combat._RecoilCompensation._IndividualWeapons[ def_index ].bUseSeparate.Get( ) ? &_Settings._Combat._RecoilCompensation._IndividualWeapons[ def_index ] : _Settings._Combat._RecoilCompensation._WeaponTypes[ wep_type ].bUseSeparate.Get( ) ? &_Settings._Combat._RecoilCompensation._WeaponTypes[ wep_type ] : &_Settings._Combat._RecoilCompensation._All;;
+		//PX_GET_WEAPON_CONFIG( hWeapon, _Config, _Settings._Combat._Aim );
+		//_RecoilControlConfig = _Settings._Combat._RecoilCompensation._IndividualWeapons[ def_index ].bUseSeparate.Get( ) ? &_Settings._Combat._RecoilCompensation._IndividualWeapons[ def_index ] : _Settings._Combat._RecoilCompensation._WeaponTypes[ wep_type ].bUseSeparate.Get( ) ? &_Settings._Combat._RecoilCompensation._WeaponTypes[ wep_type ] : &_Settings._Combat._RecoilCompensation._All;;
 
 		player_ptr_t pTarget = nullptr;
 		if ( _Config->bStaticTarget.Get( ) )

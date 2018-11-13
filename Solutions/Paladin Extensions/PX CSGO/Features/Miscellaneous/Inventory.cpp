@@ -15,6 +15,7 @@ namespace PX::Features::Miscellaneous
 
 	struct
 	{
+		bool bForceUpdate = false;
 		CBaseHandle hGlove { };
 	} _InventoryContext;
 
@@ -25,7 +26,7 @@ namespace PX::Features::Miscellaneous
 
 	void PX_API ModifyInventory( )
 	{
-		static ptr_t ptrOldWeapons[ 8 ] { };
+		static int iOldWeapons[ 8 ] { };
 		if ( !pEngineClient->IsInGame( ) )
 			return;
 
@@ -37,7 +38,6 @@ namespace PX::Features::Miscellaneous
 		pConfig = pLocalPlayer->m_iTeamNum( ) == 3
 			? &_Settings._Miscellaneous._Inventory._CounterTerrorist
 			: &_Settings._Miscellaneous._Inventory._Terrorist;
-		auto bForceUpdate = false;
 
 		const auto hActiveWeapon = pLocalPlayer->m_hActiveWeapon( );
 
@@ -45,51 +45,60 @@ namespace PX::Features::Miscellaneous
 		{
 			if ( hActiveWeapon->IsKnife( ) )
 				if ( ModifyKnifeModel( pLocalPlayer, hActiveWeapon.Get( ) ) )
-					bForceUpdate = true;
+					_InventoryContext.bForceUpdate = true;
 		}
 
 		const auto hWeapons = pLocalPlayer->m_hMyWeapons( );
-		const auto iLocalPlayerIndex = pLocalPlayer->EntIndex( );
-		for( auto i = 0; i < 8; i++ )
+		const auto iXuidLow = pLocalPlayer->GetPlayerInformation( ).xuid_low;
+		for ( auto i = 0; i < 8; i++ )
 		{
 			const auto hWeapon = hWeapons[ i ];
-			const auto pOwner = pEntityList->GetClientEntityFromHandle( hWeapon );
-			if ( pOwner != nullptr )
-				if( pOwner->EntIndex( ) == iLocalPlayerIndex )
-					if( ModifyPaintKit( reinterpret_cast< CBaseAttributableItem* >( pEntityList->GetClientEntityFromHandle( hWeapon ) ) )
-						&& ptr_t( hWeapon.Get( ) ) != ptrOldWeapons[ i ] )
-						bForceUpdate = true;
-
-			ptrOldWeapons[ i ] = ptr_t( hWeapon.Get( ) );
+			if ( hWeapon != nullptr )
+			{
+				const auto iEntityIndex = hWeapon->EntIndex( );
+				if ( hWeapon->m_OriginalOwnerXuidLow( ) == iXuidLow
+					 && !hWeapon->IsGrenade( )
+					 && hWeapon->IsWeapon( )
+					 && hWeapon->GetClientClass( )->m_ClassID != ClassID_CC4 )
+				{
+					ModifyPaintKit( reinterpret_cast< CBaseAttributableItem* >( pEntityList->GetClientEntityFromHandle( hWeapon ) ) );
+					if ( iEntityIndex != iOldWeapons[ i ] )
+						_InventoryContext.bForceUpdate = true;
+				}
+				iOldWeapons[ i ] = iEntityIndex;
+			}
+			else
+				iOldWeapons[ i ] = -1;
 		}
 
 		if ( _InventoryContext.hGlove != nullptr )
 			if ( ModifyPaintKit( reinterpret_cast< CBaseAttributableItem* >( pEntityList->GetClientEntityFromHandle( _InventoryContext.hGlove ) ) ) )
-				bForceUpdate = true;
+				_InventoryContext.bForceUpdate = true;
 
 		if ( ModifyGloveModel( pLocalPlayer ) )
-			bForceUpdate = true;
+			_InventoryContext.bForceUpdate = true;
 
-		if ( bForceUpdate )
+		if ( _InventoryContext.bForceUpdate )
 			pClientState->ForceFullUpdate( );
+		_InventoryContext.bForceUpdate = false;
+	}
+
+	void PX_API ForceUpdate( )
+	{
+		_InventoryContext.bForceUpdate = true;
 	}
 
 	bool PX_API ModifyPaintKit( CBaseAttributableItem* pEntity )
 	{
+		if ( !pConfig->bModifyInventory )
+			return false;
+
 		const auto pItem = pEntity->m_Item( );
 		const auto iIndex = pItem->m_iItemDefinitionIndex( );
 		const auto pCurrentConfig = &pConfig->_PaintKits[ iIndex ];
 		auto bReturn = false;
 
-		if ( pCurrentConfig->iPaintKitID != pEntity->m_nFallbackPaintKit( )
-			 || pCurrentConfig->bStatTrak.Get( )
-			 && pCurrentConfig->iStatTrakCounter != pEntity->m_nFallbackStatTrak( )
-			 || pCurrentConfig->bSouvenier.Get( )
-			 && pItem->m_iEntityQuality( ) != QUALITY_SOUVENIER
-			 || pCurrentConfig->flWear != pEntity->m_flFallbackWear( )
-			 || pCurrentConfig->iSeed != pEntity->m_nFallbackSeed( ) )
-			bReturn = true;
-
+		pItem->m_iItemIDHigh( ) = -1;
 		pEntity->m_nFallbackPaintKit( ) = pCurrentConfig->iPaintKitID;
 		if ( pCurrentConfig->bStatTrak.Get( ) )
 		{
@@ -101,7 +110,7 @@ namespace PX::Features::Miscellaneous
 		if ( pCurrentConfig->bSouvenier.Get( ) )
 			pItem->m_iEntityQuality( ) = QUALITY_SOUVENIER;
 
-		if ( reinterpret_cast< CBaseCombatWeapon* >( pEntity )->IsKnife( ) )
+		if ( pEntity->IsWeapon( ) && reinterpret_cast< CBaseCombatWeapon* >( pEntity )->IsKnife( ) )
 			pItem->m_iEntityQuality( ) = QUALITY_KNIFE;
 
 		if ( strlen( pCurrentConfig->szName ) != 0 )
@@ -205,23 +214,14 @@ namespace PX::Features::Miscellaneous
 			_InventoryContext.hGlove = *hWearables = CBaseHandle( iModelEntry | iSerialNumber << 16 );
 
 			const auto pNewGlove = reinterpret_cast< CBaseCombatWeapon* >( pEntityList->GetClientEntityFromHandle( *hWearables ) );
-			const auto pViewModel = reinterpret_cast< CBaseViewModel* >( pNewGlove );
-			const auto pItem = pNewGlove->m_Item( );
 			const auto pNetworkClient = pNewGlove->GetClientNetworkable( );
 			auto vecPos = Vector( 10000.f, 10000.f, 1000.f );
 
-			//pItem->m_iItemIDHigh( ) = -1;
-			//pItem->m_iItemDefinitionIndex( ) = pConfig->_Models.iGloveModel;
-			//pItem->m_iEntityQuality( ) = QUALITY_GLOVE;
-			//pItem->m_iAccountID( ) = pLocalPlayer->GetPlayerInformation( ).xuid_low;
-			//pViewModel->m_nModelIndex( ) = iModelIndex;
-			//reinterpret_cast< void( __thiscall* )( void*, int ) >( ( *reinterpret_cast< void*** >( pNewGlove ) )[ 75 ] )( pViewModel, iModelIndex );
-
 			fnUpdateGlove( pNewGlove, pLocalPlayer, pConfig->_Models.iGloveModel, iModelIndex );
+			ModifyPaintKit( pNewGlove );
 
 			pNetworkClient->PreDataUpdate( 0 );
 			pNewGlove->SetABSOrigin( vecPos );
-			//pNewGlove->GetIndex( ) = -1;
 			return true;
 		}
 		return false;

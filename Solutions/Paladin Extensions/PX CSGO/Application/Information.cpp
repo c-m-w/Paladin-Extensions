@@ -236,7 +236,6 @@ namespace PX::Information
 			{ "Specialist", ITEM_GLOVE_SPECIALIST },
 			{ "Hydra", ITEM_GLOVE_HYDRA }
 		};
-		std::map< short /* item def index */, int /* model index */ > mpModelIndicies;
 
 		bool PX_API RetrievePaintKits( )
 		{
@@ -262,95 +261,95 @@ namespace PX::Information
 				{ 421, "Doppler (Phase 4)" },
 			};
 
-			struct skin_info
-			{
-				int max_quality_type, // QUALITY_MAX = stattrak
-					grade;
-				bool at_least_one_has_exclusive_different_quality,
-					 at_least_one_different_grade;
-			};
+			//struct skin_info
+			//{
+			//	int max_quality_type, // QUALITY_MAX = stattrak
+			//		grade;
+			//	bool at_least_one_has_exclusive_different_quality,
+			//		 at_least_one_different_grade;
+			//};
 
 			// https://csgostash.com/family/ add name, spaces are needed in url.
 			// https://csgostash.com/skin-rarity/Consumer+Grade?name=&has_st=1&no_st=1&has_souv=1&no_souv=1&sort=date_added&order=asc&page=1 change consumer grade to whatever grade u want
-			std::map< int /*id*/, skin_info > mpInfo
-			{
-				// page one of rarity consumer
-				{ 22,    { QUALITY_DEFAULT,   GRADE_CONSUMER,   false, false } },
-				{ 93,    { QUALITY_DEFAULT,   GRADE_CONSUMER,   false, false } },
-				{ 101,   { QUALITY_DEFAULT,   GRADE_CONSUMER,   true,  true  } }, // review: tornado, two skins, multiple qualities and grades
-				{ 206,   { QUALITY_SOUVENIR,  GRADE_INDUSTRIAL, true,  true  } }, // review: tornado, two skins, multiple qualities and grades
-				{ 26,    { QUALITY_DEFAULT,   GRADE_CONSUMER,   false, false } },
-				{ 17,    { QUALITY_DEFAULT,   GRADE_CONSUMER,   true,  true  } }, // review: urban ddpat, multiple qualities and grades
-				{ 171,   { QUALITY_SOUVENIR,  GRADE_CONSUMER,   false, false } },
-				{ 25,    { QUALITY_DEFAULT,   GRADE_CONSUMER,   true,  true  } }, // review: forest leaves, multiple qualities and grades
-				{ 151,   { QUALITY_DEFAULT,   GRADE_CONSUMER,   false, false } }, // review: jundle, two skins
-				{ 205,   { QUALITY_DEFAULT,   GRADE_CONSUMER,   false, false } }, // review: jundle, two skins
-				{ 135,   { QUALITY_DEFAULT,   GRADE_CONSUMER,   false, false } },
-				{ 158,   { QUALITY_SOUVENIR,  GRADE_CONSUMER,   false, false } },
-				{ 99,    { QUALITY_SOUVENIR,  GRADE_CONSUMER,   true,  true  } }, // review: sand dune, two skins, multiple qualities and grades
-				{ 208,   { QUALITY_DEFAULT,   GRADE_INDUSTRIAL, true,  true  } }, // review: sand dune, two skins, multiple qualities and grades
-				{ 2,     { QUALITY_SOUVENIR,  GRADE_CONSUMER,   true,  true  } }, // review: groundwater, two skins, multiple qualities and grades
-				{ 209,   { QUALITY_SOUVENIR,  GRADE_INDUSTRIAL, true,  true  } }, // review: groundwater, two skins, multiple qualities and grades
-				{ 210,   { QUALITY_DEFAULT,   GRADE_CONSUMER,   false, false } },
-				{ 202,   { QUALITY_DEFAULT,   GRADE_CONSUMER,   false, false } },
-				{ 199,   { QUALITY_DEFAULT,   GRADE_CONSUMER,   false, false } },
-				{ 47,    { QUALITY_SOUVENIR,  GRADE_CONSUMER,   false, false } },
-				{ 96,    { QUALITY_SOUVENIR,  GRADE_CONSUMER,   false, false } },
-				{ 77,    { QUALITY_SOUVENIR,  GRADE_CONSUMER,   true,  true  } }, // review: KNIFE, SOUVENIR/STATTRAK, QUALITIES, GRADES, AHHHH
-				{ 147,   { QUALITY_SOUVENIR,  GRADE_CONSUMER,   false, false } },
-				// page two of rarity consumer
-				// page three of rarity consumer
-				// page four of rarity consumer
+			//std::map< int /*id*/, skin_info > mpInfo
+			//{
+			//	// page one of rarity consumer
+			//	{ 22,    { QUALITY_DEFAULT,   GRADE_CONSUMER,   false, false } },
+			//	{ 93,    { QUALITY_DEFAULT,   GRADE_CONSUMER,   false, false } },
+			//	{ 101,   { QUALITY_DEFAULT,   GRADE_CONSUMER,   true,  true  } }, // review: tornado, two skins, multiple qualities and grades
+			//	{ 206,   { QUALITY_SOUVENIER,  GRADE_INDUSTRIAL, true,  true  } }, // review: tornado, two skins, multiple qualities and grades
+			//	{ 26,    { QUALITY_DEFAULT,   GRADE_CONSUMER,   false, false } },
+			//	{ 17,    { QUALITY_DEFAULT,   GRADE_CONSUMER,   true,  true  } }, // review: urban ddpat, multiple qualities and grades
+			//	{ 171,   { QUALITY_SOUVENIER,  GRADE_CONSUMER,   false, false } },
+			//	{ 25,    { QUALITY_DEFAULT,   GRADE_CONSUMER,   true,  true  } }, // review: forest leaves, multiple qualities and grades
+			//	{ 151,   { QUALITY_DEFAULT,   GRADE_CONSUMER,   false, false } }, // review: jundle, two skins
+			//	{ 205,   { QUALITY_DEFAULT,   GRADE_CONSUMER,   false, false } }, // review: jundle, two skins
+			//	{ 135,   { QUALITY_DEFAULT,   GRADE_CONSUMER,   false, false } },
+			//	{ 158,   { QUALITY_SOUVENIER,  GRADE_CONSUMER,   false, false } },
+			//	{ 99,    { QUALITY_SOUVENIER,  GRADE_CONSUMER,   true,  true  } }, // review: sand dune, two skins, multiple qualities and grades
+			//	{ 208,   { QUALITY_DEFAULT,   GRADE_INDUSTRIAL, true,  true  } }, // review: sand dune, two skins, multiple qualities and grades
+			//	{ 2,     { QUALITY_SOUVENIER,  GRADE_CONSUMER,   true,  true  } }, // review: groundwater, two skins, multiple qualities and grades
+			//	{ 209,   { QUALITY_SOUVENIER,  GRADE_INDUSTRIAL, true,  true  } }, // review: groundwater, two skins, multiple qualities and grades
+			//	{ 210,   { QUALITY_DEFAULT,   GRADE_CONSUMER,   false, false } },
+			//	{ 202,   { QUALITY_DEFAULT,   GRADE_CONSUMER,   false, false } },
+			//	{ 199,   { QUALITY_DEFAULT,   GRADE_CONSUMER,   false, false } },
+			//	{ 47,    { QUALITY_SOUVENIER,  GRADE_CONSUMER,   false, false } },
+			//	{ 96,    { QUALITY_SOUVENIER,  GRADE_CONSUMER,   false, false } },
+			//	{ 77,    { QUALITY_SOUVENIER,  GRADE_CONSUMER,   true,  true  } }, // review: KNIFE, SOUVENIR/STATTRAK, QUALITIES, GRADES, AHHHH
+			//	{ 147,   { QUALITY_SOUVENIER,  GRADE_CONSUMER,   false, false } },
+			//	// page two of rarity consumer
+			//	// page three of rarity consumer
+			//	// page four of rarity consumer
+			//
+			//	// page one of rarity industrial
+			//	// page two of rarity industrial
+			//	// page three of rarity industrial
+			//	// page four of rarity industrial
+			//
+			//	// page one of rarity milspec
+			//	// page two of rarity milspec
+			//	// page three of rarity milspec
+			//	// page four of rarity milspec
+			//	// page five of rarity milspec
+			//	// page six of rarity milspec
+			//	// page seven of rarity milspec
+			//	// page eight of rarity milspec
+			//	// page nine of rarity milspec
+			//
+			//	// page one of rarity restricted
+			//	// page two of rarity restricted
+			//	// page three of rarity restricted
+			//	// page four of rarity restricted
+			//	// page five of rarity restricted
+			//	// page six of rarity restricted
+			//	// page seven of rarity restricted
+			//
+			//	// page one of rarity classified
+			//	// page two of rarity classified
+			//	// page three of rarity classified
+			//	// page four of rarity classified
+			//
+			//	// page one of rarity covert
+			//	// page two of rarity covert
+			//	// page three of rarity covert
+			//	// page four of rarity covert
+			//
+			//	// page one of rarity knife
+			//	// page two of rarity knife
+			//	// page three of rarity knife
+			//	// page four of rarity knife
+			//	// page five of rarity knife
+			//	// page six of rarity knife
+			//	// page seven of rarity knife
+			//	// page eight of rarity knife
+			//	// page nine of rarity knife
+			//	// page ten of rarity knife
+			//
+			//	// page one of rarity contraband
+			//	{ 309,   { QUALITY_MAX,       GRADE_CONSUMER,   false, false } }
+			//};
 
-				// page one of rarity industrial
-				// page two of rarity industrial
-				// page three of rarity industrial
-				// page four of rarity industrial
-
-				// page one of rarity milspec
-				// page two of rarity milspec
-				// page three of rarity milspec
-				// page four of rarity milspec
-				// page five of rarity milspec
-				// page six of rarity milspec
-				// page seven of rarity milspec
-				// page eight of rarity milspec
-				// page nine of rarity milspec
-
-				// page one of rarity restricted
-				// page two of rarity restricted
-				// page three of rarity restricted
-				// page four of rarity restricted
-				// page five of rarity restricted
-				// page six of rarity restricted
-				// page seven of rarity restricted
-
-				// page one of rarity classified
-				// page two of rarity classified
-				// page three of rarity classified
-				// page four of rarity classified
-
-				// page one of rarity covert
-				// page two of rarity covert
-				// page three of rarity covert
-				// page four of rarity covert
-
-				// page one of rarity knife
-				// page two of rarity knife
-				// page three of rarity knife
-				// page four of rarity knife
-				// page five of rarity knife
-				// page six of rarity knife
-				// page seven of rarity knife
-				// page eight of rarity knife
-				// page nine of rarity knife
-				// page ten of rarity knife
-
-				// page one of rarity contraband
-				{ 309,   { QUALITY_MAX,       GRADE_CONSUMER,   false, false } }
-			};
-
-			for( auto i = 1; i < pHead->nLastElement; i++ )
+			for( auto i = 0; i < pHead->nLastElement; i++ )
 			{
 				const auto pPaintKit = pHead->pMemory[ i ].pPaintKit;
 
@@ -361,14 +360,30 @@ namespace PX::Information
 				const auto strBuffer = pSearch == mpCustomNames.end( )
 					? Tools::string_cast< std::string >( pLocalize->Find( pPaintKit->Tag.szBuffer + 0x1 ) )
 					: pSearch->second;
-				const auto pSearch2 = mpInfo.find( pPaintKit->iIndex );
+				std::string strNew { };
+				for ( auto _char : strBuffer )
+					if ( _char >= 49
+						 || _char <= 122 )
+						strNew += _char;
+
+				//const auto pSearch2 = mpInfo.find( pPaintKit->iIndex );
 				//if ( pSearch2 == mpInfo.end( ) )
 				//	throw std::exception( "jeremy you fucked up" );
 				//
-				//vecPaintKits.emplace_back( paint_kit_t( pPaintKit->iIndex, strBuffer, pSearch2->second ) );
+				vecPaintKits.emplace_back( paint_kit_t( pPaintKit->iIndex, strNew ) );
 			}
 
-			return !!vecPaintKits.empty( );
+			//std::map< short /* item def index */, std::vector< paint_kit_t > /* applicable kits */ > mpModelIndicies
+			//{
+			//	{
+			//		ITEM_WEAPON_DEAGLE,
+			//		{
+			//			//paint_kit_t( ,  )
+			//		}
+			//	}
+			//};
+
+			return !vecPaintKits.empty( );
 		}
 
 		std::vector< paint_kit_t > PX_API FindPaintKit( int iIndex )

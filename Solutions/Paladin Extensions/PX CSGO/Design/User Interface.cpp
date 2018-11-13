@@ -1633,45 +1633,50 @@ namespace PX::UI::Manager
 					EndGroupbox( );
 				}
 
-				//if ( BeginGroupbox( 401, 205, 500, 220, PX_XOR( "Paint Kits" ) ) )
-				//{
-				//	{
-				//		VerticalSpacing( );
-				//
-				//		BeginRow( 30, 2, ROW_STATIC );
-				//		SetRowWidth( 10 );
-				//		Spacing( );
-				//
-				//		SetRowWidth( GROUPBOX_COLUMN_WIDTH * 3.f + 29.f );
-				//		const auto buf = iSelectedWeapon;
-				//		TabbedCombobox( 30, PX_XOR( "Weapons" ), dqCategories, dqWeapons, iSelectedWeapon );
-				//		if( buf != iSelectedWeapon )
-				//			fnSetSelectedPaintKit( pConfig->_PaintKits[ ITEM_DEFINITION_INDICIES[ iSelectedWeapon ] ].iPaintKitID );
-				//
-				//		EndRow( );
-				//	}
-				//
-				//	{
-				//		static std::deque< cstr_t > dqPaintKits;
-				//		static char szSearch[ 32 ] { };
-				//		if ( dqPaintKits.empty( ) )
-				//			for ( const auto& kit : Other::vecPaintKits )
-				//				dqPaintKits.emplace_back( kit.strName.c_str( ) );
-				//
-				//		BeginRow( 30, 2, ROW_STATIC );
-				//		SetRowWidth( 10 );
-				//		Spacing( );
-				//
-				//		SetRowWidth( GROUPBOX_COLUMN_WIDTH );
-				//		fnSetValue( iSelectedPaintKit, FilteredCombobox( 30, PX_XOR( "Paintkit" ), dqPaintKits, iSelectedPaintKit, 10, szSearch ) );
-				//		pConfig->_PaintKits[ ITEM_DEFINITION_INDICIES[ iSelectedWeapon ] ].iPaintKitID = Other::vecPaintKits[ iSelectedPaintKit ].iIdentifier;
-				//
-				//		EndRow( );
-				//	}
-				//	EndGroupbox( );
-				//}
+				if ( BeginGroupbox( 401, 205, 500, 220, PX_XOR( "Paint Kits" ) ) )
+				{
+					{
+						VerticalSpacing( );
+				
+						BeginRow( 30, 2, ROW_STATIC );
+						SetRowWidth( 10 );
+						Spacing( );
+				
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH * 3.f + 29.f );
+						const auto buf = iSelectedWeapon;
+						TabbedCombobox( 30, PX_XOR( "Weapons" ), dqCategories, dqWeapons, iSelectedWeapon );
+						if( buf != iSelectedWeapon )
+							fnSetSelectedPaintKit( pConfig->_PaintKits[ ITEM_DEFINITION_INDICIES[ iSelectedWeapon ] ].iPaintKitID );
+				
+						EndRow( );
+					}
+				
+					{
+						constexpr auto w = ( GROUPBOX_COLUMN_WIDTH * 3.f + 29.f ) / 2.f;
+						static std::deque< cstr_t > dqPaintKits;
+						static char szSearch[ 32 ] { };
+						if ( dqPaintKits.empty( ) )
+							for ( const auto& kit : Other::vecPaintKits )
+								dqPaintKits.emplace_back( kit.strName.c_str( ) );
+				
+						BeginRow( 30, 2, ROW_STATIC );
+						SetRowWidth( 10 );
+						Spacing( );
+				
+						SetRowWidth( w );
+						fnSetValue( iSelectedPaintKit, FilteredCombobox( 30, PX_XOR( "All Paintkits" ), dqPaintKits, iSelectedPaintKit, 10, szSearch ) );
+						const auto iCurrent = pConfig->_PaintKits[ ITEM_DEFINITION_INDICIES[ iSelectedWeapon ] ].iPaintKitID;
+						pConfig->_PaintKits[ ITEM_DEFINITION_INDICIES[ iSelectedWeapon ] ].iPaintKitID = Other::vecPaintKits[ iSelectedPaintKit ].iIdentifier;
+						if ( iCurrent != pConfig->_PaintKits[ ITEM_DEFINITION_INDICIES[ iSelectedWeapon ] ].iPaintKitID )
+							Features::Miscellaneous::ForceUpdate( );
 
-				if ( BeginGroupbox( 401, 205, 500, 220, PX_XOR( "Models" ) ) )
+						EndRow( );
+					}
+
+					EndGroupbox( );
+				}
+
+				if ( BeginGroupbox( 401, 360, 500, 120, PX_XOR( "Models" ) ) )
 				{
 					{
 						std::deque< cstr_t > dqPages
@@ -1683,19 +1688,19 @@ namespace PX::UI::Manager
 						cstr_t szKnives[ ]
 						{
 							PX_XOR( "Bayonet" ),
-								PX_XOR( "Flip" ),
-								PX_XOR( "Gut" ),
-								PX_XOR( "Karambit" ),
-								PX_XOR( "M9 Bayonet" ),
-								PX_XOR( "Huntsman" ),
-								PX_XOR( "Falchion" ),
-								PX_XOR( "Bowie" ),
-								PX_XOR( "Butterfly" ),
-								PX_XOR( "Shadow Daggers" ),
+							PX_XOR( "Flip" ),
+							PX_XOR( "Gut" ),
+							PX_XOR( "Karambit" ),
+							PX_XOR( "M9 Bayonet" ),
+							PX_XOR( "Huntsman" ),
+							PX_XOR( "Falchion" ),
+							PX_XOR( "Bowie" ),
+							PX_XOR( "Butterfly" ),
+							PX_XOR( "Shadow Daggers" ),
 							PX_XOR( "Ursus" ),
-								PX_XOR( "Navaja" ),
-								PX_XOR( "Stilletto" ),
-								PX_XOR( "Talon" )
+							PX_XOR( "Navaja" ),
+							PX_XOR( "Stilletto" ),
+							PX_XOR( "Talon" )
 						};
 
 						std::deque< cstr_t > dqKnives[ ]

@@ -134,11 +134,11 @@ namespace PX::Information
 		{
 			int iIdentifier;
 			std::string strName;
+			int iGrade;
 			int iQuality;
 
-
 			paint_kit_t( ) = default;
-			paint_kit_t( int i, std::string s, int q ): iIdentifier( i ), strName( s ),iQuality(q)
+			paint_kit_t( int i, std::string s, int g = GRADE_DEFAULT, int q = -1 ): iIdentifier( i ), strName( s ), iGrade(g), iQuality( -1 )
 			{ }
 		};
 
