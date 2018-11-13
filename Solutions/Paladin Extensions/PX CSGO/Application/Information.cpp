@@ -252,15 +252,246 @@ namespace PX::Information
 			const auto pItemSchema = reinterpret_cast< CCStrike15ItemSchema* >( ptr_t( pItemSystem( ) ) + 0x4 );
 			const auto pHead = reinterpret_cast< Head_t* >( ptr_t( pItemSchema ) + ptrHeadOffset );
 
+			// todo xor
 			std::map< int, std::string > mpCustomNames
 			{
-				{ 415, "Doppler (Ruby)" },
-				{ 416, "Doppler (Sapphire)" },
-				{ 417, "Doppler (Black Pearl)" },
-				{ 418, "Doppler (Phase 1)" },
-				{ 419, "Doppler (Phase 2)" },
-				{ 420, "Doppler (Phase 3)" },
-				{ 421, "Doppler (Phase 4)" },
+				{ 415, ( "Doppler [Ruby]" ) },
+				{ 416, ( "Doppler [Sapphire]" ) },
+				{ 417, ( "Doppler [Black Pearl]" ) },
+				{ 418, ( "Doppler [Phase 1]" ) },
+				{ 419, ( "Doppler [Phase 2]" ) },
+				{ 420, ( "Doppler [Phase 3]" ) },
+				{ 421, ( "Doppler [Phase 4]" ) },
+
+				{ 172, ( "Black Laminate [AK]" ) },
+				{ 563, ( "Black Laminate [Bayonet]" ) },
+				{ 564, ( "Black Laminate [Flip]" ) },
+				{ 565, ( "Black Laminate [Gut]" ) },
+				{ 566, ( "Black Laminate [Karambit]" ) },
+				{ 567, ( "Black Laminate [M9]" ) },
+
+				{ 558, ( "Lore [Bayonet]" ) },
+				{ 559, ( "Lore [Flip]" ) },
+				{ 560, ( "Lore [Gut]" ) },
+				{ 561, ( "Lore [Karambit]" ) },
+				{ 562, ( "Lore [M9]" ) },
+
+				{ 568, ( "Gamma Doppler [Emerald]" ) },
+				{ 569, ( "Gamma Doppler [Phase 1]" ) },
+				{ 570, ( "Gamma Doppler [Phase 2]" ) },
+				{ 571, ( "Gamma Doppler [Phase 3]" ) },
+				{ 572, ( "Gamma Doppler [Phase 4]" ) },
+
+				{ 573, ( "Autotronic [Bayonet]" ) },
+				{ 574, ( "Autotronic [Flip]" ) },
+				{ 575, ( "Autotronic [Gut]" ) },
+				{ 576, ( "Autotronic [Karambit]" ) },
+				{ 577, ( "Autotronic [M9]" ) },
+
+				{ 38, ( "Fade [Glock/Knife]" ) },
+				{ 522, ( "Fade [R8]" ) },
+				{ 752, ( "Fade [MP7]" ) },
+				{ 10063, ( "Fade [Glove]" ) },
+
+				{ 203, ( "Rust Coat [Bizon]" ) },
+				{ 323, ( "Rust Coat [Sawed-Off]" ) },
+				{ 414, ( "Rust Coat [Knife]" ) },
+				{ 754, ( "Rust Coat [MAG-7]" ) },
+
+				{ 255, ( "Asiimov [M4A4]" ) },
+				{ 279, ( "Asiimov [AWP]" ) },
+				{ 359, ( "Asiimov [P90]" ) },
+				{ 551, ( "Asiimov [P250]" ) },
+
+				{ 312, ( "Cyrex [SCAR]" ) },
+				{ 360, ( "Cyrex [M4A1]" ) },
+				{ 487, ( "Cyrex [SG]" ) },
+				{ 637, ( "Cyrex [USP]" ) },
+
+				{ 430, ( "Hyper Beast [M4A1]" ) },
+				{ 475, ( "Hyper Beast [AWP]" ) },
+				{ 537, ( "Hyper Beast [Nova]" ) },
+				{ 660, ( "Hyper Beast [Five-SeveN]" ) },
+
+				{ 12, ( "Crimson Web [Knife]" ) },
+				{ 232, ( "Crimson Web [SCAR/Deagle]" ) },
+				{ 10061, ( "Crimson Web [Glove]" ) },
+
+				{ 98, ( "Ultraviolet [SG/Knife]" ) },
+				{ 620, ( "Ultraviolet [Huntsman]" ) },
+				{ 621, ( "Ultraviolet [Falchion]" ) },
+
+				{ 189, ( "Bright Water [M4A1]" ) },
+				{ 578, ( "Bright Water [Knife]" ) },
+				{ 579, ( "Bright Water [M9]" ) },
+
+				{ 196, ( "Emerald [SCAR]" ) },
+				{ 453, ( "Emerald [CZ]" ) },
+				{ 10057, ( "Emerald [Glove]" ) },
+
+				{ 247, ( "Damascus Steel [SG]" ) },
+				{ 410, ( "Damascus Steel [Bright??]" ) }, // todo review texture
+				{ 411, ( "Damascus Steel [Dark  ??]" ) }, // todo review texture
+
+				{ 254, ( "Nitro [M4A1/Five-SeveN]" ) },
+				{ 322, ( "Nitro [CZ]" ) },
+				{ 798, ( "Nitro [R8]" ) },
+
+				{ 260, ( "Pulse [FAMAS]" ) },
+				{ 287, ( "Pulse [SG]" ) },
+				{ 338, ( "Pulse [P2000]" ) },
+
+				{ 354, ( "Urban Hazard [MP7]" ) },
+				{ 387, ( "Urban Hazard [Five-SeveN]" ) },
+				{ 700, ( "Urban Hazard [P2000]" ) },
+
+				{ 388, ( "Cartel [P250]" ) },
+				{ 394, ( "Cartel [AK]" ) },
+				{ 528, ( "Cartel [Elites]" ) },
+
+				{ 422, ( "Elite Build [AK]" ) },
+				{ 486, ( "Elite Build [P90]" ) },
+				{ 525, ( "Elite Build [AWP]" ) },
+
+				{ 580, ( "Freehand [Knife]" ) },
+				{ 581, ( "Freehand [M9]" ) },
+				{ 582, ( "Freehand [Karambit]" ) },
+
+				{ 597, ( "Bloodsport [SCAR]" ) },
+				{ 639, ( "Bloodsport [AK]" ) },
+				{ 696, ( "Bloodsport [MP7]" ) },
+
+				{ 2, ( "Bloodsport [TEC/Glock]" ) },
+				{ 209, ( "Bloodsport [MP7]" ) },
+
+				{ 5, ( "Forest DDPAT [MP7/Knife/Sawed-Off]" ) },
+				{ 10030, ( "Forest DDPAT [Glove]" ) },
+
+				{ 28, ( "Anodized Navy [SG/MP7/Negev/Elites]" ) },
+				{ 197, ( "Anodized Navy [AUG]" ) },
+
+				{ 33, ( "Hot Rod [AUG/MP9]" ) },
+				{ 445, ( "Hot Rod [M4A1]" ) },
+
+				{ 44, ( "Case Hardened [AK/Knife/Five-SeveN]" ) },
+				{ 10060, ( "Case Hardened [Glove]" ) },
+
+				{ 59, ( "Slaughter [Knife]" ) },
+				{ 10021, ( "Slaughter [Glove]" ) },
+
+				{ 99, ( "Sand Dune [SSG/MAG-7/Nova/P250]" ) },
+				{ 208, ( "Sand Dune [Glock]" ) },
+
+				{ 101, ( "Tornado [SG/Mac/M4A4]" ) },
+				{ 206, ( "Tornado [TEC]" ) },
+
+				{ 151, ( "Jungle [Five-SeveN]" ) },
+				{ 205, ( "Jungle [XM]" ) },
+
+				{ 157, ( "Palm [Mac/SCAR]" ) },
+				{ 201, ( "Palm [Negev]" ) },
+
+				{ 167, ( "Radiation Hazard [M4A4]" ) },
+				{ 375, ( "Radiation Hazard [AUG]" ) },
+
+				{ 168, ( "Nuclear Threat [P250]" ) },
+				{ 179, ( "Nuclear Threat [TEC]" ) },
+
+				{ 169, ( "Fallout Warning [XM/UMP/P90]" ) },
+				{ 378, ( "Fallout Warning [SG]" ) },
+
+				{ 174, ( "BOOM [AWP]" ) },
+				{ 10027, ( "Boom! [Glove]" ) },
+
+				{ 181, ( "Corticera [AWP]" ) },
+				{ 184, ( "Corticera [P2000]" ) },
+
+				{ 211, ( "Ocean Foam [P2000]" ) },
+				{ 213, ( "Ocean Foam [MP7]" ) },
+
+				{ 212, ( "Graphite [AWP]" ) },
+				{ 214, ( "Graphite [Nova]" ) },
+
+				{ 246, ( "Amber Fade [Mac/P2000/Sawed-Off]" ) },
+				{ 523, ( "Amber Fade [R8]" ) },
+				  
+				{ 000, ( " []" ) },
+				{ 000, ( " []" ) },
+				  
+				{ 000, ( " []" ) },
+				{ 000, ( " []" ) },
+				  
+				{ 000, ( " []" ) },
+				{ 000, ( " []" ) },
+				  
+				{ 000, ( " []" ) },
+				{ 000, ( " []" ) },
+				  
+				{ 000, ( " []" ) },
+				{ 000, ( " []" ) },
+
+				{ 000, ( " []" ) },
+				{ 000, ( " []" ) },
+
+				{ 000, ( " []" ) },
+				{ 000, ( " []" ) },
+
+				{ 000, ( " []" ) },
+				{ 000, ( " []" ) },
+
+				{ 000, ( " []" ) },
+				{ 000, ( " []" ) },
+
+				{ 000, ( " []" ) },
+				{ 000, ( " []" ) },
+
+				{ 000, ( " []" ) },
+				{ 000, ( " []" ) },
+
+				{ 000, ( " []" ) },
+				{ 000, ( " []" ) },
+
+				{ 000, ( " []" ) },
+				{ 000, ( " []" ) },
+
+				{ 395, ( "Man-o'-war [AWP]" ) },
+				{ 432, ( "Man-o'-war [Negev]" ) },
+
+				{ 000, ( " []" ) },
+				{ 000, ( " []" ) },
+
+				{ 000, ( " []" ) },
+				{ 000, ( " []" ) },
+
+				{ 000, ( " []" ) },
+				{ 000, ( " []" ) },
+
+				{ 000, ( " []" ) },
+				{ 000, ( " []" ) },
+
+				{ 000, ( " []" ) },
+				{ 000, ( " []" ) },
+
+				{ 000, ( " []" ) },
+				{ 000, ( " []" ) },
+
+				{ 000, ( " []" ) },
+				{ 000, ( " []" ) },
+
+				{ 000, ( " []" ) },
+				{ 000, ( " []" ) },
+
+				{ 000, ( " []" ) },
+				{ 000, ( " []" ) },
+
+				{ 000, ( " []" ) },
+				{ 000, ( " []" ) },
+
+				{ 000, ( " []" ) },
+				{ 000, ( " []" ) },
+
+				{ 000, ( " []" ) },
+				{ 000, ( " []" ) },
 			};
 
 			//struct skin_info
