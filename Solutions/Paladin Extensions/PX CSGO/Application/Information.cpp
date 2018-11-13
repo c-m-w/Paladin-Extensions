@@ -380,7 +380,87 @@ namespace PX::Information
 				{
 					ITEM_WEAPON_DEAGLE,
 					{
-						//paint_kit_t( ,  )
+						paint_kit_t( 711, PX_XOR( "Code Red" ), GRADE_COVERT, QUALITY_STATTRAK ),
+						paint_kit_t( 182, "Golden Koi", GRADE_COVERT, QUALITY_STATTRAK ),
+						paint_kit_t( 527, "Kumicho Dragon", GRADE_CLASSIFIED, QUALITY_STATTRAK ),
+						paint_kit_t( 351, "Conspiracy", GRADE_CLASSIFIED, QUALITY_STATTRAK ),
+						paint_kit_t( 231, "Cobalt Disruption", GRADE_CLASSIFIED, QUALITY_STATTRAK ),
+						paint_kit_t( 61, "Hypnotic", GRADE_CLASSIFIED, QUALITY_STATTRAK ),
+						paint_kit_t( 603, "Directive", GRADE_RESTRICTED, QUALITY_STATTRAK ),
+						paint_kit_t( 397, "Naga", GRADE_RESTRICTED, QUALITY_STATTRAK ),
+						paint_kit_t( 12, "Crimson Web", GRADE_RESTRICTED, QUALITY_STATTRAK ),
+						paint_kit_t( 273, "Heirloom", GRADE_RESTRICTED, QUALITY_STATTRAK),
+						paint_kit_t( 469, "Sunset Storm [1]", GRADE_RESTRICTED, QUALITY_DEFAULT ),
+						paint_kit_t( 470, "Sunset Storm [2]", GRADE_RESTRICTED, QUALITY_DEFAULT),
+						paint_kit_t(328, "Hand Cannon", GRADE_RESTRICTED, QUALITY_SOUVENIER ),
+						paint_kit_t(347, "Pilot", GRADE_RESTRICTED, QUALITY_DEFAULT ),
+						paint_kit_t(37, "Blaze", GRADE_RESTRICTED, QUALITY_DEFAULT),
+						paint_kit_t(645, "Oxide Blaze", GRADE_MILSPEC, QUALITY_STATTRAK), // todo: check to make sure that this is the correct oxide blaze id
+						paint_kit_t(509, "Corinthian", GRADE_MILSPEC, QUALITY_STATTRAK),
+						paint_kit_t(425, "Bronze Deco", GRADE_MILSPEC, QUALITY_STATTRAK),
+						paint_kit_t(296, "Meteorite", GRADE_MILSPEC, QUALITY_DEFAULT ),
+						paint_kit_t(237, "Urban Rubble", GRADE_MILSPEC, QUALITY_SOUVENIER),
+						paint_kit_t(40,"Night",GRADE_INDUSTRIAL, QUALITY_DEFAULT),
+						paint_kit_t(468,"Midnight Storm", GRADE_INDUSTRIAL, QUALITY_DEFAULT),
+						paint_kit_t(17,"Urban DDPAT", GRADE_INDUSTRIAL, QUALITY_SOUVENIER),
+						paint_kit_t(90,"Mudder",GRADE_INDUSTRIAL,QUALITY_SOUVENIER)
+					}
+				},
+				{
+					ITEM_WEAPON_ELITE,
+					{
+						paint_kit_t(658,"Cobra Strike", GRADE_CLASSIFIED, QUALITY_STATTRAK),
+						paint_kit_t(747,"Twin Turbo", GRADE_CLASSIFIED, QUALITY_SOUVENIER),
+						paint_kit_t(625,"Royal Consorts", GRADE_RESTRICTED,QUALITY_STATTRAK),
+						paint_kit_t(396,"Urban Shock", GRADE_RESTRICTED, QUALITY_STATTRAK),
+						paint_kit_t(261,"Marina",GRADE_RESTRICTED,QUALITY_STATTRAK),
+						paint_kit_t(220,"Hemoglobin",GRADE_RESTRICTED,QUALITY_STATTRAK),
+						paint_kit_t(447,"Duelist",GRADE_RESTRICTED,QUALITY_DEFAULT),
+						paint_kit_t(249,"Cobalt Quartz", GRADE_RESTRICTED,QUALITY_SOUVENIER),
+						paint_kit_t(153,"Demolition",GRADE_RESTRICTED,QUALITY_DEFAULT),
+						paint_kit_t(710,"Shred",GRADE_MILSPEC,QUALITY_STATTRAK),
+						paint_kit_t(544,"Ventilators",GRADE_MILSPEC,QUALITY_STATTRAK),
+						paint_kit_t(528,"Cartel",GRADE_MILSPEC,QUALITY_STATTRAK),
+						paint_kit_t(491,"Dualing Dragons",GRADE_MILSPEC,QUALITY_STATTRAK),
+						paint_kit_t(307,"Retribution",GRADE_MILSPEC,QUALITY_STATTRAK),
+						paint_kit_t(276,"Panther",GRADE_MILSPEC,QUALITY_STATTRAK),
+						paint_kit_t(190,"Black Limba",GRADE_MILSPEC,QUALITY_STATTRAK),
+						paint_kit_t(197,"Anodized Navy",GRADE_MILSPEC,QUALITY_SOUVENIER), // todo
+						paint_kit_t(43,"Stained",GRADE_INDUSTRIAL,QUALITY_SOUVENIER),
+						paint_kit_t(450,"Moon in Libra",GRADE_CONSUMER,QUALITY_DEFAULT),
+						paint_kit_t(330,"Briar",GRADE_CONSUMER,QUALITY_SOUVENIER),
+						paint_kit_t(46,"Contractor",GRADE_CONSUMER,QUALITY_SOUVENIER),
+						paint_kit_t(47,"Colony",GRADE_CONSUMER,QUALITY_SOUVENIER)
+					}
+				},
+				{
+					ITEM_WEAPON_FIVESEVEN,
+					{
+						paint_kit_t(660,"Hyper Beast",GRADE_COVERT,QUALITY_STATTRAK), // todo
+						paint_kit_t(427,"Monkey Business",GRADE_CLASSIFIED,QUALITY_STATTRAK),
+						paint_kit_t(325,"Fowl Play",GRADE_CLASSIFIED,QUALITY_STATTRAK),
+						paint_kit_t(530,"Triumvirate",GRADE_RESTRICTED,QUALITY_STATTRAK),
+						paint_kit_t(510,"Retrobution",GRADE_RESTRICTED,QUALITY_STATTRAK),
+						paint_kit_t(274,"Copper Galaxy",GRADE_RESTRICTED,QUALITY_STATTRAK),
+						paint_kit_t(44,"Case Hardened",GRADE_RESTRICTED,QUALITY_STATTRAK),
+						paint_kit_t(464,"Neon Kimono",GRADE_RESTRICTED,QUALITY_DEFAULT),
+						paint_kit_t(693,"Flame Test",GRADE_MILSPEC,QUALITY_STATTRAK),
+						paint_kit_t(646,"Capillary",GRADE_MILSPEC,QUALITY_STATTRAK), // todo
+						paint_kit_t(505,"Scumbria",GRADE_MILSPEC,QUALITY_STATTRAK), // todo
+						paint_kit_t(585,"Violent Daimyo",GRADE_MILSPEC,QUALITY_STATTRAK),
+						paint_kit_t(700,"Urban Hazard",GRADE_MILSPEC,QUALITY_STATTRAK),
+						paint_kit_t(223,"Nightshade",GRADE_MILSPEC,QUALITY_STATTRAK),
+						paint_kit_t(265,"Kami",GRADE_MILSPEC,QUALITY_STATTRAK),
+						paint_kit_t(254,"Nitro",GRADE_MILSPEC,QUALITY_DEFAULT),
+						paint_kit_t(252,"Silver Quartz",GRADE_MILSPEC,QUALITY_SOUVENIER),
+						paint_kit_t(377,"Hot Shot",GRADE_INDUSTRIAL,QUALITY_SOUVENIER),
+						paint_kit_t(141,"Orange Peel",GRADE_INDUSTRIAL,QUALITY_SOUVENIER),
+						paint_kit_t(3,"Candy Apple",GRADE_INDUSTRIAL,QUALITY_DEFAULT),
+						paint_kit_t(784,"Coolant",GRADE_CONSUMER,QUALITY_SOUVENIER),
+						paint_kit_t(46,"Contractor",GRADE_CONSUMER,QUALITY_SOUVENIER),
+						paint_kit_t(78,"Forest Night",GRADE_CONSUMER,QUALITY_SOUVENIER),
+						paint_kit_t(210,"Anodized Gunmetal",GRADE_CONSUMER,QUALITY_DEFAULT),
+						paint_kit_t(151,"Jungle",GRADE_CONSUMER,QUALITY_DEFAULT),
 					}
 				}
 			};
