@@ -5,11 +5,11 @@
 
 namespace PX::Features::Miscellaneous
 {
-	void PX_API AutoJump( player_ptr_t pLocalPlayer, CUserCmd* pCmd )
+	void PX_API AutoJump( player_ptr_t pLocalPlayer, CUserCmd *pCmd )
 	{
 		return;
 		if ( !_Settings._Miscellaneous._Movement.bAutomaticJump
-			 || !pLocalPlayer->IsAlive( ) )
+			|| !pLocalPlayer->IsAlive( ) )
 			return;
 
 		// need movetype...
@@ -41,8 +41,8 @@ namespace PX::Features::Miscellaneous
 			static int iLastMotionlessTick;
 			static auto cl_sidespeed = pConVar->FindVar( PX_XOR( "cl_sidespeed" ) );
 			if ( !( pLocalPlayer->m_fFlags( ) & FL_ONGROUND )
-				 && ( abs( pCmd->mousedx ) > 0
-					  && iLastMotionlessTick - pGlobalVariables->m_iTickCount > 100.f - _Settings._Miscellaneous._Movement.flSync ) )
+				&& ( abs( pCmd->mousedx ) > 0
+					&& iLastMotionlessTick - pGlobalVariables->m_iTickCount > 100.f - _Settings._Miscellaneous._Movement.flSync ) )
 				return ( void )( pCmd->sidemove = float( abs( pCmd->mousedx ) / pCmd->mousedx ) * cl_sidespeed->GetFloat( ), pCmd->forwardmove = 0.f );
 
 			iLastMotionlessTick = pGlobalVariables->m_iTickCount;

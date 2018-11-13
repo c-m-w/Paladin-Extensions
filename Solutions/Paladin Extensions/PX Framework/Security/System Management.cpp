@@ -10,7 +10,7 @@ namespace PX::sys
 	/** \param bszDevice Device name, generally Win32_ */
 	/** \param wszDeviceProperty Property to find from index */
 	/** \return Property of device */
-	wstr_t PX_API RetrieveInfo( const _bstr_t& bszDevice, wcstr_t wszDeviceProperty = PX_XOR( L"Name" ) )
+	wstr_t PX_API RetrieveInfo( const _bstr_t &bszDevice, wcstr_t wszDeviceProperty = PX_XOR( L"Name" ) )
 	{
 		{
 			const auto hrReturn = CoInitialize( nullptr );
@@ -24,18 +24,18 @@ namespace PX::sys
 				return PX_XOR( L"0" );
 		}
 
-		IWbemLocator* pLocator;
-		if ( CoCreateInstance( CLSID_WbemLocator, nullptr, CLSCTX_INPROC_SERVER, IID_IWbemLocator, reinterpret_cast< LPVOID* >( &pLocator ) ) != S_OK
-			 || pLocator == nullptr )
+		IWbemLocator *pLocator;
+		if ( CoCreateInstance( CLSID_WbemLocator, nullptr, CLSCTX_INPROC_SERVER, IID_IWbemLocator, reinterpret_cast< LPVOID * >( &pLocator ) ) != S_OK
+			|| pLocator == nullptr )
 			return PX_XOR( L"1" );
 
-		IWbemServices* pServices;
+		IWbemServices *pServices;
 		pLocator->ConnectServer( _bstr_t( PX_XOR( L"ROOT\\CIMV2" ) ), nullptr, nullptr, nullptr, 0, nullptr, nullptr, &pServices );
 		if ( pServices == nullptr
-			 || CoSetProxyBlanket( pServices, RPC_C_AUTHN_WINNT, RPC_C_AUTHZ_NONE, nullptr, RPC_C_AUTHN_LEVEL_CALL, RPC_C_IMP_LEVEL_IMPERSONATE, nullptr, EOAC_NONE ) != S_OK )
+			|| CoSetProxyBlanket( pServices, RPC_C_AUTHN_WINNT, RPC_C_AUTHZ_NONE, nullptr, RPC_C_AUTHN_LEVEL_CALL, RPC_C_IMP_LEVEL_IMPERSONATE, nullptr, EOAC_NONE ) != S_OK )
 			return PX_XOR( L"2" );
 
-		IEnumWbemClassObject* pEnumerator;
+		IEnumWbemClassObject *pEnumerator;
 		pServices->ExecQuery( _bstr_t( PX_XOR( L"WQL" ) ), bszDevice, WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY, nullptr, &pEnumerator );
 		if ( pEnumerator == nullptr )
 			return PX_XOR( L"3" );
@@ -43,7 +43,7 @@ namespace PX::sys
 		wstr_t wstrInfo;
 		while ( pEnumerator )
 		{
-			IWbemClassObject* pClassObject;
+			IWbemClassObject *pClassObject;
 			ULONG uReturn;
 			pEnumerator->Next( WBEM_INFINITE, 1, &pClassObject, &uReturn );
 			if ( !uReturn )
@@ -77,14 +77,14 @@ namespace PX::sys
 		wstrSystemParts[ SYS_BOARD ] = RetrieveInfo( PX_XOR( L"SELECT * FROM Win32_BaseBoard" ), PX_XOR( L"Product" ) );
 
 		px_assert( !wstrSystemParts[ SYS_CPU ].empty( )
-				   && !wstrSystemParts[ SYS_GPU ].empty( )
-				   && !wstrSystemParts[ SYS_DISPLAY ].empty( )
-				   && !wstrSystemParts[ SYS_PC ].empty( )
-				   && !wstrSystemParts[ SYS_OS ].empty( )
-				   && !wstrSystemParts[ SYS_DRIVE ].empty( )
-				   && !wstrSystemParts[ SYS_BOARD ].empty( ) );
+			&& !wstrSystemParts[ SYS_GPU ].empty( )
+			&& !wstrSystemParts[ SYS_DISPLAY ].empty( )
+			&& !wstrSystemParts[ SYS_PC ].empty( )
+			&& !wstrSystemParts[ SYS_OS ].empty( )
+			&& !wstrSystemParts[ SYS_DRIVE ].empty( )
+			&& !wstrSystemParts[ SYS_BOARD ].empty( ) );
 
-		for each( auto &wstr in wstrSystemParts )
+		for each ( auto &wstr in wstrSystemParts )
 			if ( wstr.length( ) > 100 )
 				wstr = wstr.substr( 0, 100 );
 
@@ -120,7 +120,7 @@ namespace PX::sys
 		for ( int i { }; i < PX_EXTENSION_SECTIONS; i++ )
 			strFileSections.at( jsFileInformation[ PX_XOR( "DLL" ) ][ PX_XOR( "Order" ) ][ i ].get< int >( ) ) = Decrypt( jsFileInformation[ PX_XOR( "DLL" ) ][ PX_XOR( "Sections" ) ][ i ].get< str_t >( ) );
 
-		for each ( const auto& strSection in strFileSections )
+		for each ( const auto &strSection in strFileSections )
 			strAssembledFile += strSection;
 
 		return strAssembledFile;
@@ -133,8 +133,8 @@ namespace PX::sys
 		DWORD dwReturnLength;
 
 		if ( 0 == OpenProcessToken( hProcess, TOKEN_QUERY | TOKEN_ADJUST_PRIVILEGES, &hTokenSelf )
-		  || !hTokenSelf
-		  || 0 == GetTokenInformation( hTokenSelf, TokenElevation, &teSelf, sizeof( TOKEN_ELEVATION ), &dwReturnLength ) )
+			|| !hTokenSelf
+			|| 0 == GetTokenInformation( hTokenSelf, TokenElevation, &teSelf, sizeof( TOKEN_ELEVATION ), &dwReturnLength ) )
 		{
 			hTokenSelf && CloseHandle( hTokenSelf );
 			return false;
@@ -150,9 +150,9 @@ namespace PX::sys
 		tpNewShutdown.Privileges[ 0 ].Attributes = SE_PRIVILEGE_ENABLED;
 
 		if ( 0 == LookupPrivilegeValue( nullptr, SE_DEBUG_NAME, &tpNewDebug.Privileges[ 0 ].Luid )
-		  || 0 == LookupPrivilegeValue( nullptr, SE_SHUTDOWN_NAME, &tpNewShutdown.Privileges[ 0 ].Luid )
-		  || 0 == AdjustTokenPrivileges( hTokenSelf, FALSE, &tpNewDebug, 0, nullptr, nullptr )
-		  || 0 == AdjustTokenPrivileges( hTokenSelf, FALSE, &tpNewShutdown, 0, nullptr, nullptr ) )
+			|| 0 == LookupPrivilegeValue( nullptr, SE_SHUTDOWN_NAME, &tpNewShutdown.Privileges[ 0 ].Luid )
+			|| 0 == AdjustTokenPrivileges( hTokenSelf, FALSE, &tpNewDebug, 0, nullptr, nullptr )
+			|| 0 == AdjustTokenPrivileges( hTokenSelf, FALSE, &tpNewShutdown, 0, nullptr, nullptr ) )
 		{
 			hTokenSelf && CloseHandle( hTokenSelf );
 			return false;
@@ -160,7 +160,7 @@ namespace PX::sys
 
 		// todo check for tpNewDebug & tpNewShutdown being set properly token info
 		if ( 0 == GetTokenInformation( hTokenSelf, TokenElevation, &teSelf, sizeof( TOKEN_ELEVATION ), &dwReturnLength )
-		  || 0 == teSelf.TokenIsElevated )
+			|| 0 == teSelf.TokenIsElevated )
 		{
 			hTokenSelf && CloseHandle( hTokenSelf );
 			return false;
@@ -169,7 +169,7 @@ namespace PX::sys
 		return true;
 	}
 
-	DWORD PX_API GetProcessID( const wstr_t& wstrExecutableName )
+	DWORD PX_API GetProcessID( const wstr_t &wstrExecutableName )
 	{
 		PROCESSENTRY32 peTarget { sizeof peTarget };
 
@@ -237,7 +237,7 @@ namespace PX::sys
 		return INVALID_HANDLE_VALUE;
 	}
 
-	HMODULE FindModuleEx( const wstr_t& wstrModule, DWORD dwProcessID )
+	HMODULE FindModuleEx( const wstr_t &wstrModule, DWORD dwProcessID )
 	{
 		const auto hSnapshot = CreateToolhelp32Snapshot( TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, dwProcessID );
 
@@ -259,7 +259,7 @@ namespace PX::sys
 		return hmSearch;
 	}
 
-	bool PX_API IsProcessOpen( const wstr_t& wstrExecutableName )
+	bool PX_API IsProcessOpen( const wstr_t &wstrExecutableName )
 	{
 		return GetProcessID( wstrExecutableName ) != 0u;
 	}
@@ -283,7 +283,7 @@ namespace PX::sys
 	// Resolves imports and calls DLLMain.
 	DWORD WINAPI LoadDLL( _In_ LPVOID lpParameter )
 	{
-		auto* injInfo = static_cast< injection_info_t* >( lpParameter );
+		auto *injInfo = static_cast< injection_info_t * >( lpParameter );
 
 		// Mark starting address in header
 		auto pBaseRelocation = injInfo->pBaseRelocation;
@@ -344,7 +344,7 @@ namespace PX::sys
 		// Call DLLMain
 		if ( injInfo->pNTHeaders->OptionalHeader.AddressOfEntryPoint )
 		{
-			auto fnEntry = reinterpret_cast< BOOL( WINAPI* )( HMODULE, DWORD, PVOID ) > ( LPBYTE( injInfo->pImageBase ) + injInfo->pNTHeaders->OptionalHeader.AddressOfEntryPoint );
+			auto fnEntry = reinterpret_cast< BOOL( WINAPI*)( HMODULE, DWORD, PVOID ) >( LPBYTE( injInfo->pImageBase ) + injInfo->pNTHeaders->OptionalHeader.AddressOfEntryPoint );
 			return fnEntry( HMODULE( injInfo->pImageBase ), DLL_PROCESS_ATTACH, nullptr );
 		}
 
@@ -395,7 +395,7 @@ namespace PX::sys
 		VirtualFree( pAddress, zSize, MEM_DECOMMIT ); // see above todo
 	}
 
-	bool PX_API LoadLibraryEx( const wstr_t& wstrExecutableName, const wstr_t& wstrDLLPath )
+	bool PX_API LoadLibraryEx( const wstr_t &wstrExecutableName, const wstr_t &wstrDLLPath )
 	{
 		if ( !EnsureElevation( ) )
 			return false;
@@ -416,10 +416,10 @@ namespace PX::sys
 
 		/* men */
 		if ( nullptr == ( hTarget = OpenProcess( PROCESS_CREATE_THREAD | PROCESS_QUERY_INFORMATION | PROCESS_VM_OPERATION | PROCESS_VM_WRITE | PROCESS_VM_READ, FALSE, GetProcessID( wstrExecutableName ) ) )
-			 || nullptr == ( pPath = VirtualAllocEx( hTarget, nullptr, PX_PAGE, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE ) )
-			 || 0 == WriteProcessMemory( hTarget, pPath, &wstrDLLPath[ 0 ], wstrDLLPath.length( ) * sizeof( wchar_t ), nullptr )
-			 || nullptr == ( hThread = CreateRemoteThread( hTarget, nullptr, NULL, LPTHREAD_START_ROUTINE( LoadLibrary ), pPath, NULL, nullptr ) )
-			 || WaitForSingleObject( hThread, INFINITE ) == WAIT_TIMEOUT )
+			|| nullptr == ( pPath = VirtualAllocEx( hTarget, nullptr, PX_PAGE, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE ) )
+			|| 0 == WriteProcessMemory( hTarget, pPath, &wstrDLLPath[ 0 ], wstrDLLPath.length( ) * sizeof( wchar_t ), nullptr )
+			|| nullptr == ( hThread = CreateRemoteThread( hTarget, nullptr, NULL, LPTHREAD_START_ROUTINE( LoadLibrary ), pPath, NULL, nullptr ) )
+			|| WaitForSingleObject( hThread, INFINITE ) == WAIT_TIMEOUT )
 		{
 			fnCleanup( );
 			return false;
@@ -429,11 +429,11 @@ namespace PX::sys
 		return true;
 	}
 
-	bool PX_API LoadRawLibraryEx( const LPVOID& pDLL, const wstr_t& wstrExecutableName, injection_info_t* injInfo, HANDLE* hTarget /*= nullptr*/, HANDLE* hThread /*= nullptr*/ )
+	bool PX_API LoadRawLibraryEx( const LPVOID &pDLL, const wstr_t &wstrExecutableName, injection_info_t *injInfo, HANDLE *hTarget /*= nullptr*/, HANDLE *hThread /*= nullptr*/ )
 	{
 		LPVOID pImage { },
-			pMemory { },
-			pStub { };
+			   pMemory { },
+			   pStub { };
 
 		bool bKeepTargetHandle = true, bKeepThreadHandle = true;
 		if ( hTarget == nullptr )
@@ -486,7 +486,7 @@ namespace PX::sys
 
 		auto pNTHeader = PIMAGE_NT_HEADERS( PBYTE( pDLL ) + pDOSHeader->e_lfanew );
 		if ( pNTHeader->Signature != IMAGE_NT_SIGNATURE
-			 || !( pNTHeader->FileHeader.Characteristics & IMAGE_FILE_DLL ) )
+			|| !( pNTHeader->FileHeader.Characteristics & IMAGE_FILE_DLL ) )
 			return false;
 
 		// open handle to target process
@@ -515,7 +515,7 @@ namespace PX::sys
 
 		auto pSectionHeader = PIMAGE_SECTION_HEADER( pNTHeader + 1 );
 		for ( WORD w = 0; w < pNTHeader->FileHeader.NumberOfSections; w++ )
-			if ( !WriteProcessMemory( *hTarget, reinterpret_cast< void* >( ptr_t( pImage ) + pSectionHeader[ w ].VirtualAddress ), reinterpret_cast< void* >( ptr_t( pDLL ) + pSectionHeader[ w ].PointerToRawData ), pSectionHeader[ w ].SizeOfRawData, nullptr ) )
+			if ( !WriteProcessMemory( *hTarget, reinterpret_cast< void * >( ptr_t( pImage ) + pSectionHeader[ w ].VirtualAddress ), reinterpret_cast< void * >( ptr_t( pDLL ) + pSectionHeader[ w ].PointerToRawData ), pSectionHeader[ w ].SizeOfRawData, nullptr ) )
 			{
 				fnCleanup( );
 				return false;
@@ -531,8 +531,8 @@ namespace PX::sys
 		// allocate memory in & write data to target process
 		pMemory = VirtualAllocEx( *hTarget, nullptr, PX_PAGE, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE );
 		if ( !pMemory ||
-			 !WriteProcessMemory( *hTarget, pMemory, injInfo, INJECTION_INFO_SIZE, nullptr ) ||
-			 !WriteProcessMemory( *hTarget, reinterpret_cast< void* >( ptr_t( pMemory ) + sizeof( injection_info_t ) ), bLoadDLL, uLoadDLLSize, nullptr ) )
+			!WriteProcessMemory( *hTarget, pMemory, injInfo, INJECTION_INFO_SIZE, nullptr ) ||
+			!WriteProcessMemory( *hTarget, reinterpret_cast< void * >( ptr_t( pMemory ) + sizeof( injection_info_t ) ), bLoadDLL, uLoadDLLSize, nullptr ) )
 		{
 			fnCleanup( );
 			return false;
@@ -543,7 +543,7 @@ namespace PX::sys
 
 		CONTEXT ctxThread { CONTEXT_FULL };
 		if ( ( *hThread ? *hThread : *hThread = FindProcessThread( dwProcessID ) ) == INVALID_HANDLE_VALUE
-		  || SuspendThread( *hThread ) == UINT_MAX )
+			|| SuspendThread( *hThread ) == UINT_MAX )
 		{
 			fnCleanup( );
 			return false;
@@ -568,7 +568,7 @@ namespace PX::sys
 		for ( auto u = 0u; u < uStubSize - sizeof( ptr_t ); u++ )
 		{
 			const auto bOperator = bStub[ u ];
-			const auto ptrOperand = reinterpret_cast< ptr_t* >( &bStub[ u + 1 ] );
+			const auto ptrOperand = reinterpret_cast< ptr_t * >( &bStub[ u + 1 ] );
 
 			if ( *ptrOperand == PX_UNITIALIZED_STACK_MEMORY )
 				switch ( bOperator )
@@ -610,7 +610,7 @@ namespace PX::sys
 		// Wipe discardable sections
 		for ( WORD w = 0; w < pNTHeader->FileHeader.NumberOfSections; w++ )
 			if ( pSectionHeader[ w ].Characteristics & IMAGE_SCN_MEM_DISCARDABLE ) // If the section's characteristics are marked as discardable, wipe them and free the memory, and set it back to its' previous state.
-				WipeMemoryEx( *hTarget, reinterpret_cast< void* > ( ptr_t( pImage ) + pSectionHeader[ w ].VirtualAddress ), pSectionHeader[ w ].SizeOfRawData );
+				WipeMemoryEx( *hTarget, reinterpret_cast< void * >( ptr_t( pImage ) + pSectionHeader[ w ].VirtualAddress ), pSectionHeader[ w ].SizeOfRawData );
 
 		// Wipe our CallDLLThread function that we wrote in
 		WipeMemoryEx( *hTarget, pMemory, PX_PAGE );
@@ -620,7 +620,7 @@ namespace PX::sys
 		return true;
 	}
 
-	bool PX_API LoadRawLibrary( const LPVOID& pDLL, injection_info_t* injInfo )
+	bool PX_API LoadRawLibrary( const LPVOID &pDLL, injection_info_t *injInfo )
 	{
 		// set up headers & ensure their validity against pre - defined signatures / characteristics
 		const auto pDOSHeader = PIMAGE_DOS_HEADER( pDLL );
@@ -634,14 +634,14 @@ namespace PX::sys
 			return false;
 
 		if ( pNTHeader->Signature != IMAGE_NT_SIGNATURE
-			 || !( pNTHeader->FileHeader.Characteristics & IMAGE_FILE_DLL ) )
+			|| !( pNTHeader->FileHeader.Characteristics & IMAGE_FILE_DLL ) )
 			return false;
 
 		memcpy( pImage, pDLL, pNTHeader->OptionalHeader.SizeOfHeaders );
 
 		for ( WORD w = 0; w < pNTHeader->FileHeader.NumberOfSections; w++ )
-			memcpy( reinterpret_cast< void* >( ptr_t( pImage ) + pSectionHeader[ w ].VirtualAddress ),
-					reinterpret_cast< void* >( ptr_t( pDLL ) + pSectionHeader[ w ].PointerToRawData ), pSectionHeader[ w ].SizeOfRawData );
+			memcpy( reinterpret_cast< void * >( ptr_t( pImage ) + pSectionHeader[ w ].VirtualAddress ),
+					reinterpret_cast< void * >( ptr_t( pDLL ) + pSectionHeader[ w ].PointerToRawData ), pSectionHeader[ w ].SizeOfRawData );
 
 		injInfo->pImageBase = pImage;
 		injInfo->pNTHeaders = PIMAGE_NT_HEADERS( ptr_t( pImage ) + pDOSHeader->e_lfanew );
@@ -659,15 +659,15 @@ namespace PX::sys
 		// Wipe discardable sections
 		for ( WORD w = 0; w < pNTHeader->FileHeader.NumberOfSections; w++ )
 			if ( pSectionHeader[ w ].Characteristics & IMAGE_SCN_MEM_DISCARDABLE ) // If the section's characteristics are marked as discardable, wipe them and free the memory, and set it back to its' previous state.
-				WipeMemory( reinterpret_cast< void* >( ptr_t( pImage ) + pSectionHeader[ w ].VirtualAddress ), pSectionHeader[ w ].SizeOfRawData );
+				WipeMemory( reinterpret_cast< void * >( ptr_t( pImage ) + pSectionHeader[ w ].VirtualAddress ), pSectionHeader[ w ].SizeOfRawData );
 
 		return true;
 	}
 
 	HANDLE FindInternalHandle( const DWORD dwTargetProcessID )
 	{
-		const auto fnQuerySystemInfo = reinterpret_cast< NTSTATUS( NTAPI* )( ULONG, PVOID, ULONG, PULONG ) >
-			( GetProcAddress( GetModuleHandle( PX_XOR( L"ntdll.dll" ) ), PX_XOR( "NtQuerySystemInformation" ) ) );
+		const auto fnQuerySystemInfo = reinterpret_cast< NTSTATUS( NTAPI*)( ULONG, PVOID, ULONG, PULONG ) >
+				( GetProcAddress( GetModuleHandle( PX_XOR( L"ntdll.dll" ) ), PX_XOR( "NtQuerySystemInformation" ) ) );
 		auto ulHandleInfoSize = 0x10000ul;
 		auto pHandleInfo = reinterpret_cast< SWindowsAPI::PSYSTEM_HANDLE_INFORMATION >( malloc( ulHandleInfoSize ) );
 		px_assert( pHandleInfo );
@@ -682,7 +682,7 @@ namespace PX::sys
 		for ( auto ul = 0ul; ul < pHandleInfo->HandleCount; ul++ )
 		{
 			if ( pHandleInfo->Handles[ ul ].ProcessId == GetCurrentProcessId( )
-				 && dwTargetProcessID == GetProcessId( reinterpret_cast< HANDLE >( pHandleInfo->Handles[ ul ].Handle ) ) )
+				&& dwTargetProcessID == GetProcessId( reinterpret_cast< HANDLE >( pHandleInfo->Handles[ ul ].Handle ) ) )
 				return reinterpret_cast< HANDLE >( pHandleInfo->Handles[ ul ].Handle );
 		}
 		free( pHandleInfo );
@@ -699,39 +699,39 @@ namespace PX::sys
 	struct
 	{
 		SWindowsAPI::EFuncs efnID;
-		const wchar_t* wszLibrary;
-		const char* szFunctionSymbolName;
+		const wchar_t *wszLibrary;
+		const char *szFunctionSymbolName;
 		bool bAvailable = false;
-		void* pPointer;
+		void *pPointer;
 	} fndAPIFunctionsData[ SWindowsAPI::FUNC_MAX ]
 	{
 		/* Function Identifier								Library						Exported Symbol Name					*/
-		{ SWindowsAPI::EFuncs::EnumSystemFirmwareTables,	PX_XOR( L"kernel32.dll" ),	PX_XOR( "EnumSystemFirmwareTables" )	},
-		{ SWindowsAPI::EFuncs::GetSystemFirmwareTable,		PX_XOR( L"kernel32.dll" ),	PX_XOR( "GetSystemFirmwareTable" )		},
-		{ SWindowsAPI::EFuncs::GetNativeSystemInfo,			PX_XOR( L"kernel32.dll" ),	PX_XOR( "GetNativeSystemInfo" )			},
-		{ SWindowsAPI::EFuncs::GetProductInfo,				PX_XOR( L"kernel32.dll" ),	PX_XOR( "GetProductInfo" )				},
-		{ SWindowsAPI::EFuncs::IsWow64Process,				PX_XOR( L"kernel32.dll" ),	PX_XOR( "IsWow64Process" )				},
-		{ SWindowsAPI::EFuncs::LdrEnumerateLoadedModules,	PX_XOR( L"ntdll.dll" ),		PX_XOR( "LdrEnumerateLoadedModules" )	},
-		{ SWindowsAPI::EFuncs::NtClose,						PX_XOR( L"ntdll.dll" ),		PX_XOR( "NtClose" )						},
-		{ SWindowsAPI::EFuncs::NtCreateDebugObject,			PX_XOR( L"ntdll.dll" ),		PX_XOR( "NtCreateDebugObject" )			},
-		{ SWindowsAPI::EFuncs::NtCreateThreadEx,			PX_XOR( L"ntdll.dll" ),		PX_XOR( "NtCreateThreadEx" )			},
-		{ SWindowsAPI::EFuncs::NtDelayExecution,			PX_XOR( L"ntdll.dll" ),		PX_XOR( "NtDelayExecution" )			},
-		{ SWindowsAPI::EFuncs::NtQueryInformationThread,	PX_XOR( L"ntdll.dll" ),		PX_XOR( "NtQueryInformationThread" )	},
-		{ SWindowsAPI::EFuncs::NtQueryInformationProcess,	PX_XOR( L"ntdll.dll" ),		PX_XOR( "NtQueryInformationProcess" )	},
-		{ SWindowsAPI::EFuncs::NtQueryObject,				PX_XOR( L"ntdll.dll" ),		PX_XOR( "NtQueryObject" )				},
-		{ SWindowsAPI::EFuncs::NtQuerySystemInformation,	PX_XOR( L"ntdll.dll" ),		PX_XOR( "NtQuerySystemInformation" )	},
-		{ SWindowsAPI::EFuncs::NtSetInformationThread,		PX_XOR( L"ntdll.dll" ),		PX_XOR( "NtSetInformationThread" )		},
-		{ SWindowsAPI::EFuncs::NtWow64QueryVirtualMemory64,	PX_XOR( L"ntdll.dll" ),		PX_XOR( "NtWow64QueryVirtualMemory64" ) },
-		{ SWindowsAPI::EFuncs::NtWow64ReadVirtualMemory64,	PX_XOR( L"ntdll.dll" ),		PX_XOR( "NtWow64ReadVirtualMemory64" )	},
-		{ SWindowsAPI::EFuncs::NtUnmapViewOfSection,		PX_XOR( L"ntdll.dll" ),		PX_XOR( "NtUnmapViewOfSection" )		},
-		{ SWindowsAPI::EFuncs::NtYieldExecution,			PX_XOR( L"ntdll.dll" ),		PX_XOR( "NtYieldExecution" )			},
-		{ SWindowsAPI::EFuncs::RtlGetVersion,				PX_XOR( L"ntdll.dll" ),		PX_XOR( "RtlGetVersion" )				},
-		{ SWindowsAPI::EFuncs::RtlCreateUserThread,			PX_XOR( L"ntdll.dll" ),		PX_XOR( "RtlCreateUserThread" )			}
+		{ SWindowsAPI::EFuncs::EnumSystemFirmwareTables, PX_XOR( L"kernel32.dll" ), PX_XOR( "EnumSystemFirmwareTables" ) },
+		{ SWindowsAPI::EFuncs::GetSystemFirmwareTable, PX_XOR( L"kernel32.dll" ), PX_XOR( "GetSystemFirmwareTable" ) },
+		{ SWindowsAPI::EFuncs::GetNativeSystemInfo, PX_XOR( L"kernel32.dll" ), PX_XOR( "GetNativeSystemInfo" ) },
+		{ SWindowsAPI::EFuncs::GetProductInfo, PX_XOR( L"kernel32.dll" ), PX_XOR( "GetProductInfo" ) },
+		{ SWindowsAPI::EFuncs::IsWow64Process, PX_XOR( L"kernel32.dll" ), PX_XOR( "IsWow64Process" ) },
+		{ SWindowsAPI::EFuncs::LdrEnumerateLoadedModules, PX_XOR( L"ntdll.dll" ), PX_XOR( "LdrEnumerateLoadedModules" ) },
+		{ SWindowsAPI::EFuncs::NtClose, PX_XOR( L"ntdll.dll" ), PX_XOR( "NtClose" ) },
+		{ SWindowsAPI::EFuncs::NtCreateDebugObject, PX_XOR( L"ntdll.dll" ), PX_XOR( "NtCreateDebugObject" ) },
+		{ SWindowsAPI::EFuncs::NtCreateThreadEx, PX_XOR( L"ntdll.dll" ), PX_XOR( "NtCreateThreadEx" ) },
+		{ SWindowsAPI::EFuncs::NtDelayExecution, PX_XOR( L"ntdll.dll" ), PX_XOR( "NtDelayExecution" ) },
+		{ SWindowsAPI::EFuncs::NtQueryInformationThread, PX_XOR( L"ntdll.dll" ), PX_XOR( "NtQueryInformationThread" ) },
+		{ SWindowsAPI::EFuncs::NtQueryInformationProcess, PX_XOR( L"ntdll.dll" ), PX_XOR( "NtQueryInformationProcess" ) },
+		{ SWindowsAPI::EFuncs::NtQueryObject, PX_XOR( L"ntdll.dll" ), PX_XOR( "NtQueryObject" ) },
+		{ SWindowsAPI::EFuncs::NtQuerySystemInformation, PX_XOR( L"ntdll.dll" ), PX_XOR( "NtQuerySystemInformation" ) },
+		{ SWindowsAPI::EFuncs::NtSetInformationThread, PX_XOR( L"ntdll.dll" ), PX_XOR( "NtSetInformationThread" ) },
+		{ SWindowsAPI::EFuncs::NtWow64QueryVirtualMemory64, PX_XOR( L"ntdll.dll" ), PX_XOR( "NtWow64QueryVirtualMemory64" ) },
+		{ SWindowsAPI::EFuncs::NtWow64ReadVirtualMemory64, PX_XOR( L"ntdll.dll" ), PX_XOR( "NtWow64ReadVirtualMemory64" ) },
+		{ SWindowsAPI::EFuncs::NtUnmapViewOfSection, PX_XOR( L"ntdll.dll" ), PX_XOR( "NtUnmapViewOfSection" ) },
+		{ SWindowsAPI::EFuncs::NtYieldExecution, PX_XOR( L"ntdll.dll" ), PX_XOR( "NtYieldExecution" ) },
+		{ SWindowsAPI::EFuncs::RtlGetVersion, PX_XOR( L"ntdll.dll" ), PX_XOR( "RtlGetVersion" ) },
+		{ SWindowsAPI::EFuncs::RtlCreateUserThread, PX_XOR( L"ntdll.dll" ), PX_XOR( "RtlCreateUserThread" ) }
 	};
 
 	SWindowsAPI::SWindowsAPI( ) PX_NOX
 	{
-		for each ( auto& fndAPIFunctionData in fndAPIFunctionsData )
+		for each ( auto &fndAPIFunctionData in fndAPIFunctionsData )
 		{
 			// cant load the library means OS is messed up bad
 			const auto hLibrary = LoadLibrary( fndAPIFunctionData.wszLibrary );
@@ -747,9 +747,9 @@ namespace PX::sys
 		}
 	}
 
-	void* PX_API SWindowsAPI::GetFunctionPointer( EFuncs enfRequest ) const PX_NOX
+	void * PX_API SWindowsAPI::GetFunctionPointer( EFuncs enfRequest ) const PX_NOX
 	{
-		for each ( auto& fndAPIFunctionData in fndAPIFunctionsData )
+		for each ( auto &fndAPIFunctionData in fndAPIFunctionsData )
 			if ( fndAPIFunctionData.efnID == enfRequest )
 				return fndAPIFunctionData.bAvailable ? fndAPIFunctionData.pPointer : nullptr;
 		return nullptr; // somehow the EFunc passed wasn't in our enum...

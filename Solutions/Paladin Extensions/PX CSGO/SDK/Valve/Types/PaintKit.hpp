@@ -21,7 +21,7 @@ enum EItemGrade
 
 struct Head_t
 {
-	Node_t* pMemory;		//0x0000
+	Node_t *pMemory;		//0x0000
 	int nAllocationCount;	//0x0004
 	int nGrowSize;			//0x0008
 	int nStartElement;		//0x000C
@@ -34,15 +34,15 @@ struct Node_t
 {
 	int nPreviousId;		//0x0000
 	int nNextId;			//0x0004
-	void* _unknown_ptr;		//0x0008
+	void *_unknown_ptr;		//0x0008
 	int _unknown;			//0x000C
 	int iPaintKitId;		//0x0010
-	CPaintKit* pPaintKit;	//0x0014
+	CPaintKit *pPaintKit;	//0x0014
 }; //Size=0x0018
 
 struct String_t
 {
-	char* szBuffer;	//0x0000 
+	char *szBuffer;	//0x0000 
 	int nCapacity;	//0x0004 
 	int _unknown;	//0x0008 
 	int nLength;	//0x000C 

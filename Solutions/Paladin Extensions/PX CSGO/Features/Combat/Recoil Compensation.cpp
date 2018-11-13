@@ -9,16 +9,16 @@ using namespace Information;
 using namespace Pointers;
 using namespace Tools;
 
-bool operator!=( const QAngle& lhs, const QAngle& rhs )
+bool operator!=( const QAngle &lhs, const QAngle &rhs )
 {
 	return lhs.pitch != rhs.pitch ||
-		lhs.yaw != rhs.yaw ||
-		lhs.roll != rhs.roll;
+			lhs.yaw != rhs.yaw ||
+			lhs.roll != rhs.roll;
 }
 
 namespace PX::Features::Combat
 {
-	void PX_API CompensateRecoil( player_ptr_t pLocalPlayer, CUserCmd* pCmd )
+	void PX_API CompensateRecoil( player_ptr_t pLocalPlayer, CUserCmd *pCmd )
 	{
 		return;
 
@@ -29,7 +29,7 @@ namespace PX::Features::Combat
 		if ( !hActiveWeapon )
 			return;
 
-		recoil_config_t* _Config;
+		recoil_config_t *_Config;
 		PX_GET_WEAPON_CONFIG( hActiveWeapon, _Config, _Settings._Combat._RecoilCompensation );
 		if ( !_Config->bEnabled || _Config->bOnlyWhileShooting.Get( ) && !( pCmd->buttons & IN_ATTACK ) )
 			return;

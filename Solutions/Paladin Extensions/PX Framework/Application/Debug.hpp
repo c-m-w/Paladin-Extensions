@@ -7,7 +7,7 @@ namespace PX::dbg
 {
 	struct SDebugStream: PX::Tools::ASingleton< SDebugStream >
 	{
-		template< typename _t > SDebugStream& PX_API operator<<( const _t& _Log );
+		template< typename _t > SDebugStream & PX_API operator<<( const _t &_Log );
 	};
 }
 

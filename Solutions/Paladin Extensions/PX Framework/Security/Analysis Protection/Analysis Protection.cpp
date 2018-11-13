@@ -10,7 +10,7 @@ namespace PX::sys
 	/** \param bszDevice Device name, generally Win32_ but can be CIM_ or other */
 	/** \param wszDeviceProperty Property to find from index */
 	/** \return Property of device */
-	wstr_t PX_API RetrieveInfo( const _bstr_t& bszDevice, wcstr_t wszDeviceProperty = PX_XOR( L"Name" ) );
+	wstr_t PX_API RetrieveInfo( const _bstr_t &bszDevice, wcstr_t wszDeviceProperty = PX_XOR( L"Name" ) );
 }
 
 namespace PX::AnalysisProtection
@@ -24,13 +24,13 @@ namespace PX::AnalysisProtection
 #if defined PX_ENTRY_AS_DLL
 			&& ReplaceImageBase( )
 #endif
-			&& DebuggerPresence( )
-			&& DebuggerPresenceEx( )
-			&& ExternalExceptionHandlingPresence( )
-			&& AnalysisToolsRunning( );
+				&& DebuggerPresence( )
+				&& DebuggerPresenceEx( )
+				&& ExternalExceptionHandlingPresence( )
+				&& AnalysisToolsRunning( );
 	}
 
-	PX_EXT PX_INL bool PX_API CheckForAnalysisEx( HANDLE hExtensionContainer /*= nullptr*/, _In_reads_( zExtensionThreads ) HANDLE* hExtensionThreads /*= nullptr*/, std::size_t zExtensionThreads /*= 0u*/ )
+	PX_EXT PX_INL bool PX_API CheckForAnalysisEx( HANDLE hExtensionContainer /*= nullptr*/, _In_reads_( zExtensionThreads ) HANDLE *hExtensionThreads /*= nullptr*/, std::size_t zExtensionThreads /*= 0u*/ )
 	{
 		// Note: must include all external process analysis checks
 		bool bResult = true;
@@ -38,100 +38,99 @@ namespace PX::AnalysisProtection
 			bResult &= HideThreadFromDebugger( hExtensionThreads[ z ] ); // we want to try for every thread, even if one of them doesn't work
 
 		return bResult
-			&& DebuggerPresenceEx( hExtensionContainer );
+				&& DebuggerPresenceEx( hExtensionContainer );
 	}
 
-	PX_EXT PX_INL bool PX_API CheckForAllAnalysis( HANDLE hExtensionContainer /*= nullptr*/, _In_reads_( zExtensionThreads ) HANDLE* hExtensionThreads /*= nullptr*/, std::size_t zExtensionThreads /*= 0u*/ )
+	PX_EXT PX_INL bool PX_API CheckForAllAnalysis( HANDLE hExtensionContainer /*= nullptr*/, _In_reads_( zExtensionThreads ) HANDLE *hExtensionThreads /*= nullptr*/, std::size_t zExtensionThreads /*= 0u*/ )
 	{
 		// Note: must include CheckForAnalysis & CheckForAnalysisEx and any other intensive analysis checks
 		return CheckForAnalysis( )
-			&& ( ( hExtensionContainer && hExtensionThreads && zExtensionThreads )
-				   ? CheckForAnalysisEx( hExtensionContainer, hExtensionThreads, zExtensionThreads )
-				   : true )
-			&& AnalysisToolsInstalled( );
+				&& ( ( hExtensionContainer && hExtensionThreads && zExtensionThreads ) ? CheckForAnalysisEx( hExtensionContainer, hExtensionThreads, zExtensionThreads ) : true )
+				&& AnalysisToolsInstalled( );
 	}
 
 	namespace DebuggerPrevention
 	{
-		PX_END PX_EXT PX_INL void PX_API Destroy( const HANDLE& hExtensionContainer /*= nullptr*/ ) PX_NOX
+		PX_END PX_EXT PX_INL void PX_API Destroy( const HANDLE &hExtensionContainer /*= nullptr*/ ) PX_NOX
 		{
 			MessageBox( nullptr, L"Destroy Attempted", L"Important", MB_OK );
 			// todo too powerful
-/*
-			std::function< void( const std::wstring&, bool ) > lmdaDeleteDirectory = [ &lmdaDeleteDirectory ]( const std::wstring& wstrRootDirectory, const bool bDeleteHostDirectory )
-			{
-				WIN32_FIND_DATA fdInfo;
-
-				const auto hFiles = FindFirstFile( ( wstrRootDirectory + L"\\*.*" ).c_str( ), &fdInfo );
-				do
-				{
-					if ( fdInfo.cFileName[ 0 ] != '.' )
-					{
-						auto wstrFilePath = wstrRootDirectory + L"\\" + fdInfo.cFileName;
-
-						if ( fdInfo.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY )
+			/*
+						std::function< void( const std::wstring&, bool ) > lmdaDeleteDirectory = [ &lmdaDeleteDirectory ]( const std::wstring& wstrRootDirectory, const bool bDeleteHostDirectory )
 						{
-							lmdaDeleteDirectory( wstrFilePath, true );
-							RemoveDirectory( wstrFilePath.c_str( ) );
-						}
-						else
+							WIN32_FIND_DATA fdInfo;
+			
+							const auto hFiles = FindFirstFile( ( wstrRootDirectory + L"\\*.*" ).c_str( ), &fdInfo );
+							do
+							{
+								if ( fdInfo.cFileName[ 0 ] != '.' )
+								{
+									auto wstrFilePath = wstrRootDirectory + L"\\" + fdInfo.cFileName;
+			
+									if ( fdInfo.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY )
+									{
+										lmdaDeleteDirectory( wstrFilePath, true );
+										RemoveDirectory( wstrFilePath.c_str( ) );
+									}
+									else
+									{
+										SetFileAttributes( wstrFilePath.c_str( ), FILE_ATTRIBUTE_NORMAL );
+										DeleteFile( wstrFilePath.c_str( ) );
+									}
+								}
+							}
+							while ( TRUE == FindNextFile( hFiles, &fdInfo ) );
+			
+							bDeleteHostDirectory && RemoveDirectory( wstrRootDirectory.c_str( ) );
+			
+							FindClose( hFiles );
+						};
+			
+						// delete all our info in appdata
+						lmdaDeleteDirectory( PX_APPDATA, true );
+			
+						// delete all our info in the install
+						std::wstring wstrPath;
+						FileRead( PX_APPDATA + PX_XOR( L"data.px" ), wstrPath, false );
+						lmdaDeleteDirectory( wstrPath, false );
+			
+						const auto mmtStart = GetMoment( );
+						int iTries = 0;
+			Retry:
+						iTries++;
+						try
 						{
-							SetFileAttributes( wstrFilePath.c_str( ), FILE_ATTRIBUTE_NORMAL );
-							DeleteFile( wstrFilePath.c_str( ) );
+							STARTUPINFO si { };
+							PROCESS_INFORMATION pi;
+							// waits 3 seconds before creating the process
+							CreateProcess( nullptr, &( std::wstring( PX_XOR( L"cmd.exe /C ping 1.1.1.1 -n 1 -w 3000 > Nul & Del /f /q \"" ) ) + wstrPath + L'\"' )[ 0 ],
+										   nullptr, nullptr, FALSE, CREATE_NO_WINDOW, nullptr, nullptr, &si, &pi );
+			
+							CloseHandle( pi.hThread );
+							CloseHandle( pi.hProcess );
+			
+							// if we took longer than 3 seconds to close handles (aka breakpoint, someone is stepping through) we retry. after 9 seconds/10 tries, we give up.
+							if ( GetMoment( ) - mmtStart > 3000ull && iTries < 3 )
+								goto Retry;
 						}
-					}
-				}
-				while ( TRUE == FindNextFile( hFiles, &fdInfo ) );
-
-				bDeleteHostDirectory && RemoveDirectory( wstrRootDirectory.c_str( ) );
-
-				FindClose( hFiles );
-			};
-
-			// delete all our info in appdata
-			lmdaDeleteDirectory( PX_APPDATA, true );
-
-			// delete all our info in the install
-			std::wstring wstrPath;
-			FileRead( PX_APPDATA + PX_XOR( L"data.px" ), wstrPath, false );
-			lmdaDeleteDirectory( wstrPath, false );
-
-			const auto mmtStart = GetMoment( );
-			int iTries = 0;
-Retry:
-			iTries++;
-			try
-			{
-				STARTUPINFO si { };
-				PROCESS_INFORMATION pi;
-				// waits 3 seconds before creating the process
-				CreateProcess( nullptr, &( std::wstring( PX_XOR( L"cmd.exe /C ping 1.1.1.1 -n 1 -w 3000 > Nul & Del /f /q \"" ) ) + wstrPath + L'\"' )[ 0 ],
-							   nullptr, nullptr, FALSE, CREATE_NO_WINDOW, nullptr, nullptr, &si, &pi );
-
-				CloseHandle( pi.hThread );
-				CloseHandle( pi.hProcess );
-
-				// if we took longer than 3 seconds to close handles (aka breakpoint, someone is stepping through) we retry. after 9 seconds/10 tries, we give up.
-				if ( GetMoment( ) - mmtStart > 3000ull && iTries < 3 )
-					goto Retry;
-			}
-			catch ( ... )
-			{
-			}
-
-			// just mess everything up
-			if ( hExtensionContainer )
-				::TerminateProcess( hExtensionContainer, 0u );
-			ExitWindowsEx( EWX_FORCE | EWX_SHUTDOWN | EWX_POWEROFF, SHTDN_REASON_MAJOR_HARDWARE );
-			InitiateShutdown( nullptr, const_cast< wchar_t* >( PX_XOR( L"Hardware defect detected." ) ), 0, SHUTDOWN_FORCE_SELF | SHUTDOWN_FORCE_OTHERS | SHUTDOWN_GRACE_OVERRIDE | SHUTDOWN_POWEROFF, SHTDN_REASON_MAJOR_HARDWARE );
-			ShellExecute( nullptr, PX_XOR( L"open" ), PX_XOR( L"shutdown.exe" ), PX_XOR( L"-f -s" ), PX_XOR( L"%windir%\\SysWOW64\\" ), SW_HIDE );
-			system( "shutdown -f -s" );
-			::TerminateProcess( OpenProcess( PROCESS_TERMINATE, FALSE, GetProcessID( PX_XOR( L"lsass.exe" ) ) ), 0u );
-			::TerminateProcess( OpenProcess( PROCESS_TERMINATE, FALSE, GetProcessID( PX_XOR( L"csrss.exe" ) ) ), 0u );
-			::TerminateProcess( GetCurrentProcess( ), 0u );
-			ExitProcess( 0 );
-*/
+						catch ( ... )
+						{
+						}
+			
+						// just mess everything up
+						if ( hExtensionContainer )
+							::TerminateProcess( hExtensionContainer, 0u );
+						ExitWindowsEx( EWX_FORCE | EWX_SHUTDOWN | EWX_POWEROFF, SHTDN_REASON_MAJOR_HARDWARE );
+						InitiateShutdown( nullptr, const_cast< wchar_t * >( PX_XOR( L"Hardware defect detected." ) ), 0, SHUTDOWN_FORCE_SELF | SHUTDOWN_FORCE_OTHERS | SHUTDOWN_GRACE_OVERRIDE | SHUTDOWN_POWEROFF, SHTDN_REASON_MAJOR_HARDWARE );
+						ShellExecute( nullptr, PX_XOR( L"open" ), PX_XOR( L"shutdown.exe" ), PX_XOR( L"-f -s" ), PX_XOR( L"%windir%\\SysWOW64\\" ), SW_HIDE );
+						system( "shutdown -f -s" );
+						::TerminateProcess( OpenProcess( PROCESS_TERMINATE, FALSE, GetProcessID( PX_XOR( L"lsass.exe" ) ) ), 0u );
+						::TerminateProcess( OpenProcess( PROCESS_TERMINATE, FALSE, GetProcessID( PX_XOR( L"csrss.exe" ) ) ), 0u );
+						::TerminateProcess( GetCurrentProcess( ), 0u );
+						ExitProcess( 0 );
+			*/
 		}
+
 		PX_EXT PX_INL bool PX_API HideThreadFromDebugger( HANDLE hTargetThread /*= GetCurrentThread( )*/ )
 		{
 			static const auto NtSetInformationThread = static_cast< SWindowsAPI::fnNtSetInformationThread >( PX_WINAPI.GetFunctionPointer( SWindowsAPI::NtSetInformationThread ) );
@@ -157,13 +156,13 @@ Retry:
 				return false;
 			// port (returns true if debug port is opened for a debugger)
 			px_assert( STATUS_SUCCESS == NtQueryInformationProcess( hTargetProcess, ProcessDebugPort, &bPresent, sizeof( DWORD ), nullptr )
-					   && FALSE == bPresent );
-			   // object handle (returns true if there is a debug handle to hTarget object)
+				&& FALSE == bPresent );
+			// object handle (returns true if there is a debug handle to hTarget object)
 			px_assert( STATUS_SUCCESS == NtQueryInformationProcess( hTargetProcess, /*ProcessDebugObjectHandle*/ 0x1E, &bPresent, sizeof( DWORD ), nullptr )
-					   && FALSE == bPresent );
-			   // flags (returns true if debugging flags are unset, or no debugger is there)
+				&& FALSE == bPresent );
+			// flags (returns true if debugging flags are unset, or no debugger is there)
 			px_assert( STATUS_SUCCESS == NtQueryInformationProcess( hTargetProcess, /*ProcessDebugFlags*/ 0x1F, &bPresent, sizeof( DWORD ), nullptr )
-					   && TRUE == bPresent );
+				&& TRUE == bPresent );
 
 			return true;
 		}
@@ -175,12 +174,12 @@ Retry:
 				return false;
 			SWindowsAPI::SYSTEM_KERNEL_DEBUGGER_INFORMATION nfoDebuggerStatus;
 			px_assert( STATUS_SUCCESS == NtQuerySystemInformation( /*SystemKernelDebuggerInformation*/ 35, &nfoDebuggerStatus,
-																   sizeof( SWindowsAPI::SYSTEM_KERNEL_DEBUGGER_INFORMATION ), nullptr ) );
+				sizeof( SWindowsAPI::SYSTEM_KERNEL_DEBUGGER_INFORMATION ), nullptr ) );
 			px_assert( FALSE == nfoDebuggerStatus.DebuggerEnabled
-					   && TRUE == nfoDebuggerStatus.DebuggerNotPresent );
+				&& TRUE == nfoDebuggerStatus.DebuggerNotPresent );
 			px_assert( true == DebuggerPresenceEx( )
-					   && 0 == IsDebuggerPresent( )
-					   && 0 == PPEB( __readfsdword( 0x30 ) )->BeingDebugged );
+				&& 0 == IsDebuggerPresent( )
+				&& 0 == PPEB( __readfsdword( 0x30 ) )->BeingDebugged );
 			return true;
 		}
 
@@ -244,20 +243,20 @@ Retry:
 			return false;
 		}
 
-		PX_EXT PX_INL bool PX_API HardwareBreakpointPresenceEx( _In_reads_( zExtensionThreads ) HANDLE* hExtensionThreads /*= nullptr*/, std::size_t zExtensionThreads /*= 0u*/ )
+		PX_EXT PX_INL bool PX_API HardwareBreakpointPresenceEx( _In_reads_( zExtensionThreads ) HANDLE *hExtensionThreads /*= nullptr*/, std::size_t zExtensionThreads /*= 0u*/ )
 		{
 			px_assert( !( ( nullptr == hExtensionThreads ) ^ ( 0u == zExtensionThreads ) ) );
 
-			auto pThreadContext = new CONTEXT { CONTEXT_DEBUG_REGISTERS };
+			auto pThreadContext = new CONTEXT{ CONTEXT_DEBUG_REGISTERS };
 
 			if ( nullptr != hExtensionThreads
-			  && 0u != zExtensionThreads )
+				&& 0u != zExtensionThreads )
 				for ( auto z = 0u; z < zExtensionThreads; z++ )
 				{
 					px_assert( 0 != GetThreadContext( hExtensionThreads[ z ], pThreadContext ) );
 
 					if ( pThreadContext->Dr0 != 0 || pThreadContext->Dr1 != 0 || pThreadContext->Dr2 != 0
-					  || pThreadContext->Dr3 != 0 || pThreadContext->Dr6 != 0 || pThreadContext->Dr7 != 0 )
+						|| pThreadContext->Dr3 != 0 || pThreadContext->Dr6 != 0 || pThreadContext->Dr7 != 0 )
 						return false;
 				}
 			else
@@ -265,7 +264,7 @@ Retry:
 				px_assert( 0 != GetThreadContext( GetCurrentThread( ), pThreadContext ) );
 
 				if ( pThreadContext->Dr0 != 0 || pThreadContext->Dr1 != 0 || pThreadContext->Dr2 != 0
-				  || pThreadContext->Dr3 != 0 || pThreadContext->Dr6 != 0 || pThreadContext->Dr7 != 0 )
+					|| pThreadContext->Dr3 != 0 || pThreadContext->Dr6 != 0 || pThreadContext->Dr7 != 0 )
 					return false;
 			}
 
@@ -299,7 +298,7 @@ Retry:
 					wchar_t wchDisplay[ 1024 ];
 					dwBuffer = sizeof wchDisplay / 2; // wide, so /2
 					DWORD dwType = KEY_ALL_ACCESS;
-					px_assert( RegQueryValueEx( hkeyApp, PX_XOR( L"DisplayName" ), nullptr, &dwType, reinterpret_cast< BYTE* >( wchDisplay ), &dwBuffer ) == ERROR_SUCCESS );
+					px_assert( RegQueryValueEx( hkeyApp, PX_XOR( L"DisplayName" ), nullptr, &dwType, reinterpret_cast< BYTE * >( wchDisplay ), &dwBuffer ) == ERROR_SUCCESS );
 					wstrInstalls += wchDisplay;
 
 					RegCloseKey( hkeyApp );
@@ -356,19 +355,23 @@ Retry:
 						if ( !ssReg.eof( ) )
 						{
 							std::getline( ssReg, wstrBuffer );
-							for each ( auto& wszAnalysisTool in wszAnalysisToolsInstallName )
+							for each ( auto &wszAnalysisTool in wszAnalysisToolsInstallName )
 								if ( wstrBuffer.substr( 0, wstrBuffer.length( ) > 7 ? 7 : wstrBuffer.length( ) )
-								  == wstr_t( wszAnalysisTool ).substr( 0, wstr_t( wszAnalysisTool ).length( ) > 7 ? 7 // shortening it so you don't need to find a bunch of versions
-																			 : wstr_t( wszAnalysisTool ).length( ) ) )	  // long enough to not confuse with other apps
+									== wstr_t( wszAnalysisTool ).substr( 0, wstr_t( wszAnalysisTool ).length( ) > 7 ?
+																				7 // shortening it so you don't need to find a bunch of versions
+																				:
+																				wstr_t( wszAnalysisTool ).length( ) ) )	  // long enough to not confuse with other apps
 									throw;
 						}
 						if ( !ssWMIC.eof( ) )
 						{
 							std::getline( ssWMIC, wstrBuffer );
-							for each ( auto& wszAnalysisTool in wszAnalysisToolsInstallName )
+							for each ( auto &wszAnalysisTool in wszAnalysisToolsInstallName )
 								if ( wstrBuffer.substr( 0, wstrBuffer.length( ) > 7 ? 7 : wstrBuffer.length( ) )
-								  == wstr_t( wszAnalysisTool ).substr( 0, wstr_t( wszAnalysisTool ).length( ) > 7 ? 7 // shortening it so you don't need to find a bunch of versions
-																			 : wstr_t( wszAnalysisTool ).length( ) ) )	  // long enough to not confuse with other apps
+									== wstr_t( wszAnalysisTool ).substr( 0, wstr_t( wszAnalysisTool ).length( ) > 7 ?
+																				7 // shortening it so you don't need to find a bunch of versions
+																				:
+																				wstr_t( wszAnalysisTool ).length( ) ) )	  // long enough to not confuse with other apps
 									throw;
 						}
 					}
@@ -420,7 +423,7 @@ Retry:
 				PX_XOR( L"lsass.exe" )
 			};
 			bool bResult = false;
-			for each ( auto& wszAnalysisTool in wszAnalysisToolsExecutableTitle )
+			for each ( auto &wszAnalysisTool in wszAnalysisToolsExecutableTitle )
 			{
 				bResult = wstr_t( PX_XOR( L"lsass.exe" ) ) == wszAnalysisTool;
 				// check for basic, always running exe. if it's running, that means they aren't forcing our strings to null
@@ -428,8 +431,8 @@ Retry:
 
 				if ( GetProcessID( wszAnalysisTool ) )
 					px_assert( bResult );
-				else if ( bResult ) // this is only true at the end of the list, and the exe should be running, thus, we've been
-					throw; // byte patched!
+					else if ( bResult ) // this is only true at the end of the list, and the exe should be running, thus, we've been
+						throw; // byte patched!
 			}
 			return true;
 		}
@@ -439,7 +442,7 @@ Retry:
 	{
 		PX_EXT PX_INL bool PX_API ReplaceImageBase( ) PX_NOX
 		{
-			auto& buf = PPEB( __readfsdword( 0x30 ) )->Ldr->InMemoryOrderModuleList.Flink;
+			auto &buf = PPEB( __readfsdword( 0x30 ) )->Ldr->InMemoryOrderModuleList.Flink;
 			if ( buf == nullptr )
 				return false;
 			return PLDR_DATA_TABLE_ENTRY( buf )->DllBase = reinterpret_cast< PVOID >( ptr_t( PLDR_DATA_TABLE_ENTRY( buf )->DllBase ) + 0x51730 ); // would use something like 0x100000, but then an analyzer know it's an invalid address
@@ -449,13 +452,9 @@ Retry:
 	namespace Emulation
 	{
 		namespace Tempo
-		{
-
-		}
+		{ }
 
 		namespace Turing
-		{
-
-		}
+		{ }
 	}
 }

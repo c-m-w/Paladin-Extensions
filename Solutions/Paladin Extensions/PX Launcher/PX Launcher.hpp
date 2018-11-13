@@ -9,4 +9,3 @@
 #include <Jeremia-h/Entry Manager.hpp>
 
 #include "PX Resource.hpp"
-

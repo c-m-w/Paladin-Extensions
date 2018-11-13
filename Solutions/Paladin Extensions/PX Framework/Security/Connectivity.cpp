@@ -10,11 +10,11 @@ namespace PX::Net
 
 	static size_t WriteCallback( void *contents, size_t size, size_t nmemb, void *userp )
 	{
-		static_cast< str_t* >( userp )->append( static_cast< char* >( contents ), size * nmemb );
+		static_cast< str_t * >( userp )->append( static_cast< char * >( contents ), size * nmemb );
 		return size * nmemb;
 	}
 
-	str_t PX_API GeneratePostData( const post_data_t& dqPostData )
+	str_t PX_API GeneratePostData( const post_data_t &dqPostData )
 	{
 		str_t strFormattedData { };
 		for each ( auto pdPostData in dqPostData )
@@ -41,7 +41,7 @@ namespace PX::Net
 		return curl_easy_cleanup( pConnection );
 	}
 
-	str_t PX_API Request( const str_t& _strSite, const post_data_t& dqPostData /*= { }*/ )
+	str_t PX_API Request( const str_t &_strSite, const post_data_t &dqPostData /*= { }*/ )
 	{
 		const static auto szAppdata = getenv( PX_XOR( "APPDATA" ) );
 		const static auto strCookieDirectory = szAppdata + ( PX_XOR( R"(\PX\)" ) + strCookieFile );
@@ -54,22 +54,22 @@ namespace PX::Net
 #endif
 
 		px_assert( CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_URL, _strSite.c_str( ) )
-				   && CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_POST, 1L )
-				   && CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_POSTFIELDS, strPostDataBuffer.c_str( ) )
-				   && CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_FOLLOWLOCATION, 1L )
-				   // The cookie jar and file do not contain anything stored in the session, only information about the session.
-				   // Information stored in $_SESSION is not accessible client side, only server side.
-				   // http://php.net/manual/en/intro.session.php
-				   && CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_COOKIESESSION, true )
-				   && CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_COOKIEFILE, strCookieDirectory.c_str( ) )
-				   && CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_COOKIEJAR, strCookieDirectory.c_str( ) )
-				   && CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_WRITEFUNCTION, WriteCallback )
-				   && CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_WRITEDATA, &strResponseBuffer )
-				   // cURL has issues communicating with the revocation server for validating an SSL certificate.
-				   // Since we only connect to our site, this isn't an issue so we can just disable the check.
-				   && CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_SSL_OPTIONS, CURLSSLOPT_NO_REVOKE )
-				   && CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_TIMEOUT, 5L )
-				   && CURLE_OK == curl_easy_perform( pConnection ) );
+			&& CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_POST, 1L )
+			&& CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_POSTFIELDS, strPostDataBuffer.c_str( ) )
+			&& CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_FOLLOWLOCATION, 1L )
+			// The cookie jar and file do not contain anything stored in the session, only information about the session.
+			// Information stored in $_SESSION is not accessible client side, only server side.
+			// http://php.net/manual/en/intro.session.php
+			&& CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_COOKIESESSION, true )
+			&& CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_COOKIEFILE, strCookieDirectory.c_str( ) )
+			&& CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_COOKIEJAR, strCookieDirectory.c_str( ) )
+			&& CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_WRITEFUNCTION, WriteCallback )
+			&& CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_WRITEDATA, &strResponseBuffer )
+			// cURL has issues communicating with the revocation server for validating an SSL certificate.
+			// Since we only connect to our site, this isn't an issue so we can just disable the check.
+			&& CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_SSL_OPTIONS, CURLSSLOPT_NO_REVOKE )
+			&& CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_TIMEOUT, 5L )
+			&& CURLE_OK == curl_easy_perform( pConnection ) );
 
 		return strResponseBuffer;
 	}
@@ -114,7 +114,7 @@ namespace PX::Net
 		return FileWrite( PX_APPDATA + wstrCredentialsFile, string_cast< wstr_t >( strResponse ), false, false );
 	}
 
-	ELogin PX_API Login( bool* bHasExtension /*= nullptr*/ )
+	ELogin PX_API Login( bool *bHasExtension /*= nullptr*/ )
 	{
 		constexpr int iGroupIDS[ PX_EXTENSION_MAX ] { -1, -1, 7, 8, 10 };
 		static auto bCreatedLicenseFile = false;
@@ -131,20 +131,20 @@ namespace PX::Net
 		{
 			jsCredentials = nlohmann::json::parse( string_cast< str_t >( wstrFile ) );
 		}
-		catch ( nlohmann::detail::parse_error& )
+		catch ( nlohmann::detail::parse_error & )
 		{
 			if ( !bCreatedLicenseFile )
 				bCreatedLicenseFile = CreateLicenseFile( );
 		}
-		catch ( nlohmann::detail::type_error& )
+		catch ( nlohmann::detail::type_error & )
 		{
 			if ( !bCreatedLicenseFile )
 				bCreatedLicenseFile = CreateLicenseFile( );
 		}
 
 		if ( !bCreatedLicenseFile
-		&& ( jsCredentials[ strUserIDIdentifier ].is_null( )
-		  || jsCredentials[ strSecretKeyIdentifier ].is_null( ) ) )
+			&& ( jsCredentials[ strUserIDIdentifier ].is_null( )
+				|| jsCredentials[ strSecretKeyIdentifier ].is_null( ) ) )
 			bCreatedLicenseFile = CreateLicenseFile( );
 
 		if ( bAttemptedLicenceCreation )
@@ -163,7 +163,7 @@ namespace PX::Net
 		dqLoginData.emplace_back( strHardwareIdentifier, sys::GetSystemInfo( ).dump( ) );
 
 		px_assert( InitializeConnection( )
-				   && InitializeEncryption( ) );
+			&& InitializeEncryption( ) );
 
 		const auto strResponse = Request( strLoginURL, dqLoginData );
 		if ( strResponse.empty( ) )
@@ -200,7 +200,7 @@ namespace PX::Net
 		for ( int i { }; i < PX_EXTENSION_SECTIONS; i++ )
 			strFileSections.at( jsFileInformation[ PX_XOR( "DLL" ) ][ PX_XOR( "Order" ) ][ i ].get< int >( ) ) = Decrypt( jsFileInformation[ PX_XOR( "DLL" ) ][ PX_XOR( "Sections" ) ][ i ].get< str_t >( ) );
 
-		for each ( const auto& strSection in strFileSections )
+		for each ( const auto &strSection in strFileSections )
 			strAssembledFile += strSection;
 
 		return strAssembledFile;

@@ -16,15 +16,15 @@ namespace PX
 
 		bool PX_API SetHooks( )
 		{
-			for( auto pClass = pClientBase->GetAllClasses( ); pClass != nullptr; pClass = pClass->m_pNext )
+			for ( auto pClass = pClientBase->GetAllClasses( ); pClass != nullptr; pClass = pClass->m_pNext )
 			{
 				const auto pTable = pClass->m_pRecvTable;
-				for( auto i = 0; i < pTable->m_nProps; i++ )
+				for ( auto i = 0; i < pTable->m_nProps; i++ )
 				{
-					auto& pProp = pTable->m_pProps[ i ];
-					if( 0 == strcmp( pProp.m_pVarName, PX_XOR( "m_nSequence" ) ) )
+					auto &pProp = pTable->m_pProps[ i ];
+					if ( 0 == strcmp( pProp.m_pVarName, PX_XOR( "m_nSequence" ) ) )
 					{
-						vecSetProxies.emplace_back( &pProp.m_ProxyFn, pProp.m_ProxyFn  );
+						vecSetProxies.emplace_back( &pProp.m_ProxyFn, pProp.m_ProxyFn );
 						fnSequence = pProp.m_ProxyFn;
 						pProp.m_ProxyFn = m_nSequence;
 						break;
@@ -32,46 +32,46 @@ namespace PX
 				}
 			}
 
-			return fnSequence != nullptr 
-				&& hkDirectXDevice->HookIndex( uBeginScene, reinterpret_cast< void* >( BeginScene ) )
-				&& hkDirectXDevice->HookIndex( uEndScene, reinterpret_cast< void* >( EndScene ) )
-				&& hkDirectXDevice->HookIndex( uReset, reinterpret_cast< void* >( Reset ) )
-				&& hkClientBase->HookIndex( uFrameStageNotify, reinterpret_cast< void* >( FrameStageNotify ) )
-				&& hkClientBase->HookIndex( uCreateMove, reinterpret_cast< void* >( CreateMove ) )
-				&& hkClientMode->HookIndex( uDoPostScreenEffects, reinterpret_cast< void* >( DoPostScreenEffects ) )
-				&& hkPanel->HookIndex( uPaintTraverse, reinterpret_cast< void* >( PaintTraverse ) )
-				&& hkModelRender->HookIndex( uDrawModelExecute, reinterpret_cast< void* >( DrawModelExecute ) )
-				&& hkViewRender->HookIndex( uSceneBegin, reinterpret_cast< void* >( SceneBegin ) )
-				&& hkViewRender->HookIndex( uSceneEnd, reinterpret_cast< void* >( SceneEnd ) )
-				&& hkClientBase->ResetProtection( )
-				&& hkClientMode->ResetProtection( )
-				&& hkPanel->ResetProtection( )
-				&& hkModelRender->ResetProtection( )
-				&& hkViewRender->ResetProtection( );
+			return fnSequence != nullptr
+					&& hkDirectXDevice->HookIndex( uBeginScene, reinterpret_cast< void * >( BeginScene ) )
+					&& hkDirectXDevice->HookIndex( uEndScene, reinterpret_cast< void * >( EndScene ) )
+					&& hkDirectXDevice->HookIndex( uReset, reinterpret_cast< void * >( Reset ) )
+					&& hkClientBase->HookIndex( uFrameStageNotify, reinterpret_cast< void * >( FrameStageNotify ) )
+					&& hkClientBase->HookIndex( uCreateMove, reinterpret_cast< void * >( CreateMove ) )
+					&& hkClientMode->HookIndex( uDoPostScreenEffects, reinterpret_cast< void * >( DoPostScreenEffects ) )
+					&& hkPanel->HookIndex( uPaintTraverse, reinterpret_cast< void * >( PaintTraverse ) )
+					&& hkModelRender->HookIndex( uDrawModelExecute, reinterpret_cast< void * >( DrawModelExecute ) )
+					&& hkViewRender->HookIndex( uSceneBegin, reinterpret_cast< void * >( SceneBegin ) )
+					&& hkViewRender->HookIndex( uSceneEnd, reinterpret_cast< void * >( SceneEnd ) )
+					&& hkClientBase->ResetProtection( )
+					&& hkClientMode->ResetProtection( )
+					&& hkPanel->ResetProtection( )
+					&& hkModelRender->ResetProtection( )
+					&& hkViewRender->ResetProtection( );
 		}
 
 		bool PX_API InitializeHooks( )
 		{
 			hkDirectXDevice = new Tools::CStandardHook( pDevice );
-			hkClientBase	= new Tools::CTrampolineHook( pClientBase );
-			hkClientMode	= new Tools::CTrampolineHook( pClientMode );
-			hkPanel			= new Tools::CTrampolineHook( pPanel );
-			hkModelRender	= new Tools::CTrampolineHook( pModelRender );
-			hkViewRender	= new Tools::CTrampolineHook( pEngineRenderView );
+			hkClientBase = new Tools::CTrampolineHook( pClientBase );
+			hkClientMode = new Tools::CTrampolineHook( pClientMode );
+			hkPanel = new Tools::CTrampolineHook( pPanel );
+			hkModelRender = new Tools::CTrampolineHook( pModelRender );
+			hkViewRender = new Tools::CTrampolineHook( pEngineRenderView );
 
 			return hkDirectXDevice->Succeeded( )
-				&& hkClientBase->Succeeded( ) && hkClientBase->SetProtection( )
-				&& hkClientMode->Succeeded( ) && hkClientMode->SetProtection( )
-				&& hkPanel->Succeeded( ) && hkPanel->SetProtection( )
-				&& hkModelRender->Succeeded( ) && hkModelRender->SetProtection( )
-				&& hkViewRender->Succeeded( ) && hkViewRender->SetProtection( ) ?
-				SetHooks( )
-				: false;
+				   && hkClientBase->Succeeded( ) && hkClientBase->SetProtection( )
+				   && hkClientMode->Succeeded( ) && hkClientMode->SetProtection( )
+				   && hkPanel->Succeeded( ) && hkPanel->SetProtection( )
+				   && hkModelRender->Succeeded( ) && hkModelRender->SetProtection( )
+				   && hkViewRender->Succeeded( ) && hkViewRender->SetProtection( ) ?
+					   SetHooks( ) :
+					   false;
 		}
 
 		void PX_API Destruct( )
 		{
-			for ( auto& proxy : vecSetProxies )
+			for ( auto &proxy: vecSetProxies )
 				*proxy.first = proxy.second;
 
 			delete hkDirectXDevice;
@@ -82,7 +82,7 @@ namespace PX
 			delete hkViewRender;
 		}
 
-		HRESULT __stdcall BeginScene( IDirect3DDevice9* pThis )
+		HRESULT __stdcall BeginScene( IDirect3DDevice9 *pThis )
 		{
 			static auto fnOriginal = hkDirectXDevice->GetOriginalFunction< begin_scene_t >( uBeginScene );
 			static auto ptrDesiredReturnAddress = 0u;
@@ -100,7 +100,7 @@ namespace PX
 			return fnOriginal( pThis );
 		}
 
-		HRESULT __stdcall EndScene( IDirect3DDevice9* pThis )
+		HRESULT __stdcall EndScene( IDirect3DDevice9 *pThis )
 		{
 			static auto fnOriginal = hkDirectXDevice->GetOriginalFunction< end_scene_t >( uEndScene );
 			static auto ptrDesiredReturnAddress = 0u;
@@ -114,28 +114,28 @@ namespace PX
 
 			if ( ptrDesiredReturnAddress == ptrReturnAddress )
 			{
-				IDirect3DStateBlock9* pNewState = nullptr;
-				IDirect3DVertexDeclaration9* pVertexDeclaration = nullptr;
-				IDirect3DVertexShader9* pVertexShader = nullptr;
+				IDirect3DStateBlock9 *pNewState = nullptr;
+				IDirect3DVertexDeclaration9 *pVertexDeclaration = nullptr;
+				IDirect3DVertexShader9 *pVertexShader = nullptr;
 				DWORD dwColorWrite, dwSRGBWrite;
 
 				pDevice->CreateStateBlock( D3DSBT_PIXELSTATE, &pNewState );
 
 				px_assert( D3D_OK == pDevice->GetVertexDeclaration( &pVertexDeclaration )
-						   && D3D_OK == pDevice->GetVertexShader( &pVertexShader )
+					&& D3D_OK == pDevice->GetVertexShader( &pVertexShader )
 
-						   && D3D_OK == pDevice->GetRenderState( D3DRS_COLORWRITEENABLE, &dwColorWrite )
-						   && D3D_OK == pDevice->GetRenderState( D3DRS_SRGBWRITEENABLE, &dwSRGBWrite )
-						   && D3D_OK == pDevice->SetRenderState( D3DRS_COLORWRITEENABLE, UINT_MAX )
-						   && D3D_OK == pDevice->SetRenderState( D3DRS_SRGBWRITEENABLE, NULL )
-						   && D3D_OK == pDevice->SetRenderState( D3DRS_DESTBLEND, D3DBLEND_ZERO )
+					&& D3D_OK == pDevice->GetRenderState( D3DRS_COLORWRITEENABLE, &dwColorWrite )
+					&& D3D_OK == pDevice->GetRenderState( D3DRS_SRGBWRITEENABLE, &dwSRGBWrite )
+					&& D3D_OK == pDevice->SetRenderState( D3DRS_COLORWRITEENABLE, UINT_MAX )
+					&& D3D_OK == pDevice->SetRenderState( D3DRS_SRGBWRITEENABLE, NULL )
+					&& D3D_OK == pDevice->SetRenderState( D3DRS_DESTBLEND, D3DBLEND_ZERO )
 
-						   && D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP )
-						   && D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_ADDRESSV, D3DTADDRESS_WRAP )
-						   && D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_ADDRESSW, D3DTADDRESS_WRAP )
-						   && D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_MAGFILTER, D3DTADDRESS_WRAP )
-						   && D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_MINFILTER, D3DTADDRESS_WRAP )
-						   && D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_SRGBTEXTURE, NULL ) );
+					&& D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP )
+					&& D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_ADDRESSV, D3DTADDRESS_WRAP )
+					&& D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_ADDRESSW, D3DTADDRESS_WRAP )
+					&& D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_MAGFILTER, D3DTADDRESS_WRAP )
+					&& D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_MINFILTER, D3DTADDRESS_WRAP )
+					&& D3D_OK == pDevice->SetSamplerState( NULL, D3DSAMP_SRGBTEXTURE, NULL ) );
 
 				Features::Miscellaneous::DrawAimbotFOV( );
 				Features::Miscellaneous::VisualizeSpread( );
@@ -143,9 +143,9 @@ namespace PX
 				UI::Manager::CSGO::OnEndScene( );
 
 				px_assert( D3D_OK == pDevice->SetVertexDeclaration( pVertexDeclaration )
-						   && D3D_OK == pDevice->SetVertexShader( pVertexShader )
-						   && D3D_OK == pDevice->SetRenderState( D3DRS_COLORWRITEENABLE, dwColorWrite )
-						   && D3D_OK == pDevice->SetRenderState( D3DRS_SRGBWRITEENABLE, dwSRGBWrite ) );
+					&& D3D_OK == pDevice->SetVertexShader( pVertexShader )
+					&& D3D_OK == pDevice->SetRenderState( D3DRS_COLORWRITEENABLE, dwColorWrite )
+					&& D3D_OK == pDevice->SetRenderState( D3DRS_SRGBWRITEENABLE, dwSRGBWrite ) );
 
 				pNewState->Apply( );
 				pNewState->Release( );
@@ -154,9 +154,9 @@ namespace PX
 			return fnOriginal( pThis );
 		}
 
-		HRESULT __stdcall Reset( IDirect3DDevice9* pThis, D3DPRESENT_PARAMETERS* pParams )
+		HRESULT __stdcall Reset( IDirect3DDevice9 *pThis, D3DPRESENT_PARAMETERS *pParams )
 		{
-			static auto fnOriginal = hkDirectXDevice->GetOriginalFunction< reset_t  >( uReset );
+			static auto fnOriginal = hkDirectXDevice->GetOriginalFunction< reset_t >( uReset );
 
 			{
 				UI::Manager::CSGO::OnReset( );
@@ -181,7 +181,7 @@ namespace PX
 			static auto fnOriginal = hkClientBase->GetOriginalFunction< frame_stage_notify_t >( uFrameStageNotify );
 
 			{
-				switch( cfsStage )
+				switch ( cfsStage )
 				{
 					case FRAME_START:
 					{
@@ -202,7 +202,7 @@ namespace PX
 					break;
 
 					default:
-					break;
+						break;
 				}
 			}
 
@@ -219,9 +219,9 @@ namespace PX
 			const auto pVerifiedCmd = Tools::GetVerifiedUserCmd( sequence_number );
 
 			if ( nullptr == pLocalPlayer
-				 || nullptr == pCmd
-				 || pCmd->command_number == 0
-				 || nullptr == pVerifiedCmd )
+				|| nullptr == pCmd
+				|| pCmd->command_number == 0
+				|| nullptr == pVerifiedCmd )
 				return;
 
 			{
@@ -263,13 +263,13 @@ namespace PX
 			}
 		}
 
-		void __stdcall DrawModelExecute( IMatRenderContext* pContext, const DrawModelState_t& state, const ModelRenderInfo_t& pInfo, matrix3x4_t* pCustomBoneToWorld )
+		void __stdcall DrawModelExecute( IMatRenderContext *pContext, const DrawModelState_t &state, const ModelRenderInfo_t &pInfo, matrix3x4_t *pCustomBoneToWorld )
 		{
 			static auto fnOriginal = hkModelRender->GetOriginalFunction< draw_model_execute_t >( uDrawModelExecute );
 			const auto pLocalPlayer = Tools::GetLocalPlayer( );
 			auto bShouldOverride = false;
 
-			if( nullptr != pLocalPlayer )
+			if ( nullptr != pLocalPlayer )
 			{
 				bShouldOverride = Features::Awareness::OverrideMaterial( pLocalPlayer, pContext, state, pInfo, pCustomBoneToWorld, fnOriginal );
 			}
@@ -284,7 +284,7 @@ namespace PX
 		{
 			static auto fnOriginal = hkViewRender->GetOriginalFunction< scene_end_t >( uSceneEnd );
 			fnOriginal( pEngineRenderView );
-			
+
 			{
 				const auto pLocalPlayer = Tools::GetLocalPlayer( );
 				if ( nullptr == pLocalPlayer )
@@ -305,12 +305,12 @@ namespace PX
 			fnOriginal( pEngineRenderView );
 		}
 
-		void __cdecl m_nSequence( const CRecvProxyData* pConst, void* pStructure, void* pOutput )
+		void __cdecl m_nSequence( const CRecvProxyData *pConst, void *pStructure, void *pOutput )
 		{
-			auto pData = const_cast< CRecvProxyData* >( pConst );
+			auto pData = const_cast< CRecvProxyData * >( pConst );
 
 			{
-				Features::Miscellaneous::SetModelSequence( pData, reinterpret_cast< Tools::CBaseViewModel* >( pStructure ) );
+				Features::Miscellaneous::SetModelSequence( pData, reinterpret_cast< Tools::CBaseViewModel * >( pStructure ) );
 			}
 
 			fnSequence( pData, pStructure, pOutput );

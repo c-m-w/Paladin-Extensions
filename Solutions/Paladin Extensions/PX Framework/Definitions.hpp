@@ -16,16 +16,16 @@
 #endif
 
 #if defined _DEBUG
-	/** \brief Evaluates if parameter is equivalent to empty initialized version of parameter
-		(false) and throws an exception if the evaluation succeeds */
-	/** \param _ToAssert Value to assert. */
+/** \brief Evaluates if parameter is equivalent to empty initialized version of parameter
+	(false) and throws an exception if the evaluation succeeds */
+/** \param _ToAssert Value to assert. */
 #define px_assert( _ToAssert ) \
 		if ( ( _ToAssert ) == decltype( _ToAssert )( ) ) \
 			throw std::exception( ( PX::Types::str_t( "Failed to assert " ) + #_ToAssert + " in function " + __func__ \
 			+ " from line " + std::to_string( unsigned( __LINE__ ) ) + " in file " + ##( __FILE__ ) + "." ).c_str( ) )
 #else
-	/** \brief Evaluates if parameter is equivalent to empty initialized version of parameter
-		(false) and throws an exception if the evaluation succeeds */
+/** \brief Evaluates if parameter is equivalent to empty initialized version of parameter
+	(false) and throws an exception if the evaluation succeeds */
 	/** \param _ToAssert Value to assert. */
 #define px_assert( _ToAssert ) \
 		if ( ( _ToAssert ) == decltype( _ToAssert )( ) ) \

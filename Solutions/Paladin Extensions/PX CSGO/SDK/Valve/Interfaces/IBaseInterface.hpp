@@ -3,6 +3,6 @@
 class IBaseInterface
 {
 public:
-	virtual	~IBaseInterface( )
+	virtual ~IBaseInterface( )
 	{ }
 };

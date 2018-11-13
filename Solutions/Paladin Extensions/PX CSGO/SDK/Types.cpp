@@ -4,6 +4,4 @@
 #include "../PX CSGO.hpp"
 
 namespace PX::Types
-{
-
-}
+{}

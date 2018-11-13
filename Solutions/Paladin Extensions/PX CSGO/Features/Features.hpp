@@ -17,9 +17,9 @@ namespace PX::Features
 		STATE_INVISIBLE,
 		STATE_DORMANT,
 		STATE_MAX,
-	//	STATE_PLAYER_VULNERABLE = STATE_MAX,
-	//	STATE_PLAYER_SPOTTED,
-	//	STATE_PLAYER_HEARD,
+		//	STATE_PLAYER_VULNERABLE = STATE_MAX,
+		//	STATE_PLAYER_SPOTTED,
+		//	STATE_PLAYER_HEARD,
 		STATE_PLAYER_MAX = STATE_MAX
 	};
 
@@ -42,9 +42,9 @@ namespace PX::Features
 		// Entity
 		// Entity Weapons
 		SETTING_ENTITY_WEAPONS = 0,
-	//	SETTING_ENTITY_WEAPONS_MATERIALS_HELD_WEAPONS,
-	//	SETTING_ENTITY_WEAPONS_MATERIALS_PLAYER_WEAPONS,
-	//	SETTING_ENTITY_WEAPONS_MATERIALS_MAX,
+		//	SETTING_ENTITY_WEAPONS_MATERIALS_HELD_WEAPONS,
+		//	SETTING_ENTITY_WEAPONS_MATERIALS_PLAYER_WEAPONS,
+		//	SETTING_ENTITY_WEAPONS_MATERIALS_MAX,
 		SETTING_ENTITY_C4,
 		SETTING_ENTITY_PLANTED_C4,
 		SETTING_ENTITY_DEFUSER,
@@ -61,15 +61,15 @@ namespace PX::Features
 		SETTING_ENTITY_GRENADE_PROJECTILE_INCENDIARY,
 		SETTING_ENTITY_MAX,
 		// Weapon
-	//	SETTING_WEAPON_PISTOLS,
-	//	SETTING_WEAPON_SHOTGUNS,
-	//	SETTING_WEAPON_SMGS,
-	//	SETTING_WEAPON_RIFLES,
-	//	SETTING_WEAPON_LMGS,
-	//	SETTING_WEAPON_BOLT_SNIPERS,
-	//	SETTING_WEAPON_AUTO_SNIPERS,
-	//	SETTING_WEAPON_OTHERS,
-	//	SETTING_WEAPON_MAX,
+		//	SETTING_WEAPON_PISTOLS,
+		//	SETTING_WEAPON_SHOTGUNS,
+		//	SETTING_WEAPON_SMGS,
+		//	SETTING_WEAPON_RIFLES,
+		//	SETTING_WEAPON_LMGS,
+		//	SETTING_WEAPON_BOLT_SNIPERS,
+		//	SETTING_WEAPON_AUTO_SNIPERS,
+		//	SETTING_WEAPON_OTHERS,
+		//	SETTING_WEAPON_MAX,
 	};
 
 	enum
@@ -161,6 +161,7 @@ namespace PX::Features
 
 					toggle_t bInformation = false;
 					color_sequence_t seqInformationOutline { };
+
 					enum
 					{
 						LEFT,
@@ -169,6 +170,7 @@ namespace PX::Features
 						BOTTOM,
 						SMART
 					};
+
 					flags_t fAlignment = SMART;
 					toggle_t bIdentifier = false;
 					toggle_t bDistance = false;
@@ -223,6 +225,7 @@ namespace PX::Features
 					color_sequence_t seqBox[ STATE_MAX ] { };
 				} _Entities [ SETTING_ENTITY_MAX ];
 			} _Statistics;
+
 			struct extra_sensory_drawing_t
 			{
 				struct extra_sensory_drawing_base_t
@@ -310,7 +313,7 @@ namespace PX::Features
 					toggle_t bWireFrameUnderlay = false;
 					int iMaterial = SETTING_MATERIALS_MATERIAL_DEFAULT;
 
-					color_sequence_t seqColor[ STATE_MAX ] { }; 
+					color_sequence_t seqColor[ STATE_MAX ] { };
 					color_sequence_t seqWireFrameOverlay[ STATE_MAX ] { };
 					color_sequence_t seqWireFrameUnderlay[ STATE_MAX ] { };
 				} _Entities[ SETTING_MATERIALS_MAX ] { };
@@ -321,6 +324,7 @@ namespace PX::Features
 		{
 			constexpr static float SMOOTHING_MIN = 1.f;
 			constexpr static float SMOOTHING_MAX = 100.f;
+
 			struct trigger_t
 			{
 				struct weapon_t

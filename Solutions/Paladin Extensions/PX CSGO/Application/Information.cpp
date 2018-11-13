@@ -72,49 +72,49 @@ namespace PX::Information
 	{
 		bool PX_API FindPointers( )
 		{
-			pSendPackets = reinterpret_cast< bool* >( Modules::mEngine.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Send Packets" ) ].get< str_t >( ) )
+			pSendPackets = reinterpret_cast< bool * >( Modules::mEngine.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Send Packets" ) ].get< str_t >( ) )
 				+ jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Send Packets" ) ].get< int >( ) );
-			pGlobalVariables = **reinterpret_cast< CGlobalVarsBase*** >( Modules::mClient.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Global Variables" ) ].get< str_t >( ) )
+			pGlobalVariables = **reinterpret_cast< CGlobalVarsBase* ** >( Modules::mClient.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Global Variables" ) ].get< str_t >( ) )
 				+ jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Global Variables" ) ].get< int >( ) );
-			pClientState = **reinterpret_cast< CClientState*** >( Modules::mEngine.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Client State" ) ].get< str_t >( ) )
+			pClientState = **reinterpret_cast< CClientState* ** >( Modules::mEngine.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Client State" ) ].get< str_t >( ) )
 				+ jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Client State" ) ].get< int >( ) );
 			// Interfaces
-			pDevice = **reinterpret_cast< IDirect3DDevice9*** >( Modules::mDirectX.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Device" ) ].get< str_t >( ) )
+			pDevice = **reinterpret_cast< IDirect3DDevice9* ** >( Modules::mDirectX.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Device" ) ].get< str_t >( ) )
 				+ jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Device" ) ].get< int >( ) );
-			pClientMode = *reinterpret_cast< IClientMode** >( Modules::mClient.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Client Mode" ) ].get< str_t >( ) )
+			pClientMode = *reinterpret_cast< IClientMode ** >( Modules::mClient.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Client Mode" ) ].get< str_t >( ) )
 				+ jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Client Mode" ) ].get< int >( ) );
-			pGlowObjectManager = *reinterpret_cast< CGlowObjectManager** >( Modules::mClient.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Glow Object Manager" ) ].get< str_t >( ) )
+			pGlowObjectManager = *reinterpret_cast< CGlowObjectManager ** >( Modules::mClient.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Glow Object Manager" ) ].get< str_t >( ) )
 				+ jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Glow Object Manager" ) ].get< int >( ) );
-			pInput = *reinterpret_cast< CInput** >( Modules::mClient.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Input" ) ].get< str_t >( ) )
+			pInput = *reinterpret_cast< CInput ** >( Modules::mClient.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Input" ) ].get< str_t >( ) )
 				+ jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Input" ) ].get< int >( ) );
-			//pEngineRenderView = *reinterpret_cast< IViewRender** >( Modules::mClient.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "View Render" ) ].get< str_t >( ) )
+			//pEngineRenderView = *reinterpret_cast< IViewRender ** >( Modules::mClient.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "View Render" ) ].get< str_t >( ) )
 			//										+ jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "View Render" ) ].get< int >( ) );
 
-			pClientBase = reinterpret_cast< IBaseClientDLL* >( Modules::mClient.ciFactory(
+			pClientBase = reinterpret_cast< IBaseClientDLL * >( Modules::mClient.ciFactory(
 																						  jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Client Base" ) ].get< str_t >( ).c_str( ), nullptr ) );
-			pEngineClient = reinterpret_cast< IVEngineClient* >( Modules::mEngine.ciFactory(
+			pEngineClient = reinterpret_cast< IVEngineClient * >( Modules::mEngine.ciFactory(
 																						    jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Engine Client" ) ].get< str_t >( ).c_str( ), nullptr ) );
-			pSurface = reinterpret_cast< ISurface* >( Modules::mVGUI.ciFactory(
+			pSurface = reinterpret_cast< ISurface * >( Modules::mVGUI.ciFactory(
 																			   jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "VGUI Surface" ) ].get< str_t >( ).c_str( ), nullptr ) );
-			pPanel = reinterpret_cast< IPanel* >( Modules::mVGUI2.ciFactory(
+			pPanel = reinterpret_cast< IPanel * >( Modules::mVGUI2.ciFactory(
 																		    jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "VGUI Panel" ) ].get< str_t >( ).c_str( ), nullptr ) );
-			pEntityList = reinterpret_cast< IClientEntityList* >( Modules::mClient.ciFactory(
+			pEntityList = reinterpret_cast< IClientEntityList * >( Modules::mClient.ciFactory(
 																							 jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Entity List" ) ].get< str_t >( ).c_str( ), nullptr ) );
-			pEngineTrace = reinterpret_cast< IEngineTrace* >( Modules::mEngine.ciFactory(
+			pEngineTrace = reinterpret_cast< IEngineTrace * >( Modules::mEngine.ciFactory(
 																						 jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Engine Trace" ) ].get< str_t >( ).c_str( ), nullptr ) );
-			pModelInfo = reinterpret_cast< IVModelInfoClient* >( Modules::mEngine.ciFactory(
+			pModelInfo = reinterpret_cast< IVModelInfoClient * >( Modules::mEngine.ciFactory(
 																						    jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Model Info" ) ].get< str_t >( ).c_str( ), nullptr ) );
-			pInputSystem = reinterpret_cast< IInputSystem* >( Modules::mInput.ciFactory(
+			pInputSystem = reinterpret_cast< IInputSystem * >( Modules::mInput.ciFactory(
 																					    jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Input" ) ].get< str_t >( ).c_str( ), nullptr ) );
-			pModelRender = reinterpret_cast< IVModelRender* >( Modules::mEngine.ciFactory(
+			pModelRender = reinterpret_cast< IVModelRender * >( Modules::mEngine.ciFactory(
 																						  jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Model Render" ) ].get< str_t >( ).c_str( ), nullptr ) );
-			pMaterialSystem = reinterpret_cast< IMaterialSystem* >( Modules::mMaterialSystem.ciFactory(
+			pMaterialSystem = reinterpret_cast< IMaterialSystem * >( Modules::mMaterialSystem.ciFactory(
 																									   jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Material System" ) ].get< str_t >( ).c_str( ), nullptr ) );
-			pEngineRenderView = reinterpret_cast< IVRenderView* >( Modules::mEngine.ciFactory(
+			pEngineRenderView = reinterpret_cast< IVRenderView * >( Modules::mEngine.ciFactory(
 																							  jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Engine Render View" ) ].get< str_t >( ).c_str( ), nullptr ) );
-			pConVar = reinterpret_cast< ICvar* >( Modules::mValveStandardLibrary.ciFactory(
+			pConVar = reinterpret_cast< ICvar * >( Modules::mValveStandardLibrary.ciFactory(
 																						   jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "CVar" ) ].get< str_t >( ).c_str( ), nullptr ) );
-			pLocalize = reinterpret_cast< ILocalize* >( Modules::mLocalize.ciFactory(
+			pLocalize = reinterpret_cast< ILocalize * >( Modules::mLocalize.ciFactory(
 																					 jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Localize" ) ].get< str_t >( ).c_str( ), nullptr ) );
 
 			return nullptr != pSendPackets
@@ -244,14 +244,14 @@ namespace PX::Information
 		{
 			const auto ptrAddress = ptr_t( Modules::mClient.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Paint Kits" ) ].get< str_t >( ) )
 										  + jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Paint Kits" ) ].get< int >( ) );
-			const auto ptrItemSystemOffset = *reinterpret_cast< ptr_t* >( ptrAddress + 0x1 );
+			const auto ptrItemSystemOffset = *reinterpret_cast< ptr_t * >( ptrAddress + 0x1 );
 			const auto pItemSystem = reinterpret_cast< CCStrike15ItemSystem*( *)( ) >( ptrAddress + 0x5 + ptrItemSystemOffset );
-			const auto ptrGetPaintKitDefinitionOffset = *reinterpret_cast< ptr_t* >( ptrAddress + 0xC );
+			const auto ptrGetPaintKitDefinitionOffset = *reinterpret_cast< ptr_t * >( ptrAddress + 0xC );
 			const auto fnGetPaintKitDefinition = reinterpret_cast< CPaintKit*( __thiscall*)( int ) >( ptrAddress + 0x10 + ptrGetPaintKitDefinitionOffset );
-			const auto ptrStartElementOffset = *reinterpret_cast< ptr_t* >( ptr_t( fnGetPaintKitDefinition ) + 0xA );
+			const auto ptrStartElementOffset = *reinterpret_cast< ptr_t * >( ptr_t( fnGetPaintKitDefinition ) + 0xA );
 			const auto ptrHeadOffset = ptrStartElementOffset - 0xC;
-			const auto pItemSchema = reinterpret_cast< CCStrike15ItemSchema* >( ptr_t( pItemSystem( ) ) + 0x4 );
-			const auto pHead = reinterpret_cast< Head_t* >( ptr_t( pItemSchema ) + ptrHeadOffset );
+			const auto pItemSchema = reinterpret_cast< CCStrike15ItemSchema * >( ptr_t( pItemSystem( ) ) + 0x4 );
+			const auto pHead = reinterpret_cast< Head_t * >( ptr_t( pItemSchema ) + ptrHeadOffset );
 
 			// todo xor
 			std::map< int, std::string > mpCustomNames

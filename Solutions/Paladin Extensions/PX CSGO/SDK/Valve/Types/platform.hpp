@@ -26,7 +26,6 @@
 // place the defines for these in here.
 //-----------------------------------------------------------------------------
 
-
 //-----------------------------------------------------------------------------
 // Set up platform defines.
 //-----------------------------------------------------------------------------
@@ -211,7 +210,6 @@
 #define offsetof(s,m)	(size_t)&(((s *)0)->m)
 #endif
 
-
 #define  FLOAT32_MIN		FLT_MIN
 #define  FLOAT64_MIN		DBL_MIN
 
@@ -292,11 +290,10 @@
 
 #if !defined( NO_THREAD_LOCAL )
 #define DECL_THREAD_LOCAL		__declspec(thread)
-#endif 
+#endif
 
 #define DISABLE_VC_WARNING( x ) __pragma(warning(disable:4310) )
 #define DEFAULT_VC_WARNING( x ) __pragma(warning(default:4310) )
-
 
 #elif defined ( COMPILER_GCC )
 
@@ -505,7 +502,7 @@
 #define DebuggerBreak()		__asm { int 3 }
 #elif COMPILER_MSVCX360
 #define DebuggerBreak()		DebugBreak()
-#elif COMPILER_GCC 
+#elif COMPILER_GCC
 #if defined( PLATFORM_CYGWIN ) || defined( PLATFORM_POSIX )
 #define DebuggerBreak()		__asm__( "int $0x3;")
 #else
@@ -576,7 +573,7 @@
 //-----------------------------------------------------------------------------
 
 // need macro for constant expression
-#define ALIGN_VALUE( val, alignment ) ( ( val + alignment - 1 ) & ~( alignment - 1 ) ) 
+#define ALIGN_VALUE( val, alignment ) ( ( val + alignment - 1 ) & ~( alignment - 1 ) )
 
 // Force a function call site -not- to inlined. (useful for profiling)
 #define DONT_INLINE(a) (((int)(a)+1)?(a):(a))
@@ -681,7 +678,7 @@ inline void SetupFPUControlWord( )
 	// (cannot assemble, must use op-code form)
 	__emit( 0xFF80010C );	// mtfsfi  7,0
 
-							// Favour compatibility over speed (make sure the VPU Set to Java-compliant mode)
+// Favour compatibility over speed (make sure the VPU Set to Java-compliant mode)
 							// NOTE: the VPU *always* uses round-to-nearest
 	__vector4  a = { 0.0f, 0.0f, 0.0f, 0.0f };
 	a;				//	Avoid compiler warning
@@ -702,8 +699,7 @@ inline void SetupFPUControlWord( )
 // Basic swaps
 //-------------------------------------
 
-template <typename T>
-inline T WordSwapC( T w )
+template< typename T > inline T WordSwapC( T w )
 {
 	uint16 temp;
 
@@ -713,8 +709,7 @@ inline T WordSwapC( T w )
 	return *( ( T* )&temp );
 }
 
-template <typename T>
-inline T DWordSwapC( T dw )
+template< typename T > inline T DWordSwapC( T dw )
 {
 	uint32_t temp;
 
@@ -1011,50 +1006,42 @@ inline const char *GetPlatformExt( void )
 // Methods to invoke the constructor, copy constructor, and destructor
 //-----------------------------------------------------------------------------
 
-template <class T>
-inline T* Construct( T* pMemory )
+template< class T > inline T *Construct( T *pMemory )
 {
 	return ::new( pMemory ) T;
 }
 
-template <class T, typename ARG1>
-inline T* Construct( T* pMemory, ARG1 a1 )
+template< class T, typename ARG1 > inline T *Construct( T *pMemory, ARG1 a1 )
 {
 	return ::new( pMemory ) T( a1 );
 }
 
-template <class T, typename ARG1, typename ARG2>
-inline T* Construct( T* pMemory, ARG1 a1, ARG2 a2 )
+template< class T, typename ARG1, typename ARG2 > inline T *Construct( T *pMemory, ARG1 a1, ARG2 a2 )
 {
 	return ::new( pMemory ) T( a1, a2 );
 }
 
-template <class T, typename ARG1, typename ARG2, typename ARG3>
-inline T* Construct( T* pMemory, ARG1 a1, ARG2 a2, ARG3 a3 )
+template< class T, typename ARG1, typename ARG2, typename ARG3 > inline T *Construct( T *pMemory, ARG1 a1, ARG2 a2, ARG3 a3 )
 {
 	return ::new( pMemory ) T( a1, a2, a3 );
 }
 
-template <class T, typename ARG1, typename ARG2, typename ARG3, typename ARG4>
-inline T* Construct( T* pMemory, ARG1 a1, ARG2 a2, ARG3 a3, ARG4 a4 )
+template< class T, typename ARG1, typename ARG2, typename ARG3, typename ARG4 > inline T *Construct( T *pMemory, ARG1 a1, ARG2 a2, ARG3 a3, ARG4 a4 )
 {
 	return ::new( pMemory ) T( a1, a2, a3, a4 );
 }
 
-template <class T, typename ARG1, typename ARG2, typename ARG3, typename ARG4, typename ARG5>
-inline T* Construct( T* pMemory, ARG1 a1, ARG2 a2, ARG3 a3, ARG4 a4, ARG5 a5 )
+template< class T, typename ARG1, typename ARG2, typename ARG3, typename ARG4, typename ARG5 > inline T *Construct( T *pMemory, ARG1 a1, ARG2 a2, ARG3 a3, ARG4 a4, ARG5 a5 )
 {
 	return ::new( pMemory ) T( a1, a2, a3, a4, a5 );
 }
 
-template <class T>
-inline T* CopyConstruct( T* pMemory, T const& src )
+template< class T > inline T *CopyConstruct( T *pMemory, T const &src )
 {
 	return ::new( pMemory ) T( src );
 }
 
-template <class T>
-inline void Destruct( T* pMemory )
+template< class T > inline void Destruct( T *pMemory )
 {
 	pMemory->~T( );
 
@@ -1149,7 +1136,6 @@ FunctionWrapper<9>::Function
 
 PLATFORM_INTERFACE bool vtune( bool resume );
 
-
 #define TEMPLATE_FUNCTION_TABLE(RETURN_TYPE, NAME, ARGS, COUNT)			  \
                                                                       \
 typedef RETURN_TYPE (FASTCALL *__Type_##NAME) ARGS;						        \
@@ -1187,7 +1173,6 @@ const __Type_##NAME* NAME::functions = (__Type_##NAME*)&m;				    \
 template<const int nArgument>													                \
 RETURN_TYPE FASTCALL __Function_##NAME<nArgument>::Run ARGS
 
-
 #define LOOP_INTERCHANGE(BOOLEAN, CODE)\
 	if( (BOOLEAN) )\
 	{\
@@ -1202,14 +1187,17 @@ FORCEINLINE uint32_t RotateBitsLeft32( uint32_t nValue, int nRotateBits )
 {
 	return _rotl( nValue, nRotateBits );
 }
+
 FORCEINLINE uint64_t RotateBitsLeft64( uint64_t nValue, int nRotateBits )
 {
 	return _rotl64( nValue, nRotateBits );
 }
+
 FORCEINLINE uint32_t RotateBitsRight32( uint32_t nValue, int nRotateBits )
 {
 	return _rotr( nValue, nRotateBits );
 }
+
 FORCEINLINE uint64_t RotateBitsRight64( uint64_t nValue, int nRotateBits )
 {
 	return _rotr64( nValue, nRotateBits );

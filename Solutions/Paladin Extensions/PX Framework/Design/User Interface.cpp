@@ -10,29 +10,28 @@ namespace PX::UI
 {
 	namespace Manager
 	{
-		cstr_t	szWindowTitle = PX_XOR( "Paladin Extensions" );
-		auto	szApplicationTitle = static_cast< char* >( malloc( 32 ) );
+		cstr_t szWindowTitle = PX_XOR( "Paladin Extensions" );
+		auto szApplicationTitle = static_cast< char * >( malloc( 32 ) );
 		unsigned uNuklearWindowWidth, uNuklearWindowHeight;
 		struct nk_rect recWindow;
 
-		nk_font_atlas* pAtlas;
-		std::deque< nk_font* > dqFonts;
+		nk_font_atlas *pAtlas;
+		std::deque< nk_font * > dqFonts;
 		struct nk_rect recComboboxWindowBounds;
 		bool bDrawComboboxArrow = false;
 
 		unsigned uTooltipCounter, uSliderIntCounter, uSliderFloatCounter;
 		std::deque< moment_t > mmtStart;
 		constexpr nk_color clrTextActive { 255, 255, 255, 255 }, clrBlue { 33, 150, 243, 255 }, clrDarkBlue { 43, 60, 75, 255 }, clrBackground { 56, 60, 66, 255 }, clrLightBackground { 61, 65, 72, 255 },
-			clrDarkBackground { 45, 50, 56, 255 }, clrBorder { 80, 84, 89, 255 }, clrToolbox { 42, 44, 48, 255 }, clrHeader { 33, 36, 40, 255 }, clrBlueActive { 54, 70, 84, 255 },
-			clrBlueHover { 54, 70, 84, 200 }, clrBlueDormant { 43, 60, 75, 255 }, clrTextDormant { 175, 180, 187, 255 }, clrDisabled { 54, 64, 73, 255 };
+						   clrDarkBackground { 45, 50, 56, 255 }, clrBorder { 80, 84, 89, 255 }, clrToolbox { 42, 44, 48, 255 }, clrHeader { 33, 36, 40, 255 }, clrBlueActive { 54, 70, 84, 255 },
+						   clrBlueHover { 54, 70, 84, 200 }, clrBlueDormant { 43, 60, 75, 255 }, clrTextDormant { 175, 180, 187, 255 }, clrDisabled { 54, 64, 73, 255 };
 		nk_color clrColorTable[ NK_COLOR_COUNT ] { };
 
 		nk_style_button btnTopActive { }, btnTop { }, btnRegularActive { }, btnRegular { }, btnDisabled { }, btnSpecialActive { }, btnSpecial { }, btnCombo { }, btnComboActive { };
 
 		LPD3DXSPRITE pBufferSprite;
 
-
-		nk_font* PX_API AddFont( Types::str_t strFontFileName, unsigned uFontSize, unsigned uFontAwesomeSize = 0 )
+		nk_font * PX_API AddFont( Types::str_t strFontFileName, unsigned uFontSize, unsigned uFontAwesomeSize = 0 )
 		{
 			Types::str_t strFontDirectory( PX_XOR( R"(C:\Windows\Fonts\)" ) );
 
@@ -261,13 +260,13 @@ namespace PX::UI
 
 		bool PX_API CreateSpriteTextures( )
 		{
-			for each( auto& texTexture in vecTextures )
+			for each ( auto &texTexture in vecTextures )
 			{
 				const auto wstrFile = GetPXDirectory( ) + PX_XOR( LR"(\Resources\)" ) + texTexture.wstrFileName;
 				if ( D3D_OK != D3DXCreateTextureFromFileEx( pDevice, wstrFile.c_str( ),
 															texTexture.uWidth, texTexture.uHeight, D3DX_FROM_FILE, D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE,
-															D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL, const_cast< D3DXIMAGE_INFO* >( &texTexture.iiImage ),
-															nullptr, const_cast< IDirect3DTexture9** >( &texTexture.pTexture ) ) )
+															D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL, const_cast< D3DXIMAGE_INFO * >( &texTexture.iiImage ),
+															nullptr, const_cast< IDirect3DTexture9 ** >( &texTexture.pTexture ) ) )
 					return false;
 			}
 			return true;
@@ -275,7 +274,7 @@ namespace PX::UI
 
 		void PX_API DestroySpriteTextures( )
 		{
-			texture_t* texTexture;
+			texture_t *texTexture;
 			for ( auto u = 0u; u < vecTextures.size( )
 				  && nullptr != ( texTexture = &vecTextures[ u ] ); u++ )
 				if ( texTexture->pTexture )
@@ -323,7 +322,7 @@ namespace PX::UI
 
 		void PX_API SetFont( EFont fntDesiredFont )
 		{
-			//std::deque< nk_font* > dqFonts { pTahoma, pTahomaBold, pRoboto, pRobotoBold, pRobotoSmall, pRobotoBoldSmall, pEnvy };
+			//std::deque< nk_font * > dqFonts { pTahoma, pTahomaBold, pRoboto, pRobotoBold, pRobotoSmall, pRobotoBoldSmall, pEnvy };
 			px_assert( fntDesiredFont >= 0 && fntDesiredFont < FNT_MAX );
 			nk_style_set_font( pContext, &dqFonts[ fntDesiredFont ]->handle );
 		}
@@ -380,10 +379,11 @@ namespace PX::UI
 					if ( pntCursorPosRelative.x > 0 && pntCursorPosRelative.x <= signed( uWindowWidth ) && pntCursorPosRelative.y > 0 && pntCursorPosRelative.y <= 30 || bDrag )
 					{
 						bDrag = true;
-						if ( !pntOldCursorPosRelative.x || !pntOldCursorPosRelative.y ) pntOldCursorPosRelative = pntCursorPosRelative;
+						if ( !pntOldCursorPosRelative.x || !pntOldCursorPosRelative.y )
+							pntOldCursorPosRelative = pntCursorPosRelative;
 
 						SetWindowPos( hwWindowHandle, nullptr, recWindowPos.left - pntOldCursorPosRelative.x + pntCursorPosRelative.x,
-							recWindowPos.top - pntOldCursorPosRelative.y + pntCursorPosRelative.y, uWindowWidth, uWindowHeight, 0 );
+									  recWindowPos.top - pntOldCursorPosRelative.y + pntCursorPosRelative.y, uWindowWidth, uWindowHeight, 0 );
 						UpdateWindow( hwWindowHandle );
 					}
 				}
@@ -416,7 +416,7 @@ namespace PX::UI
 		{
 			if ( pBufferSprite->Begin( D3DXSPRITE_ALPHABLEND ) == D3D_OK )
 			{
-				for each( const auto& texture in vecImageQueue )
+				for each ( const auto &texture in vecImageQueue )
 					if ( vecTextures[ texture.iTexture ].pTexture )
 						pBufferSprite->Draw( vecTextures[ texture.iTexture ].pTexture, nullptr, nullptr, &texture.vecLocation, texture.clrColor );
 				pBufferSprite->End( );
@@ -442,7 +442,7 @@ namespace PX::UI
 			pntMousePosition.y -= recWindow.top;
 
 			if ( ( nk_input_is_mouse_hovering_rect( &pContext->input, nk_rect( recInterfaceWindow.x, recInterfaceWindow.y, recInterfaceWindow.w, 30 ) )
-				   && PX_INPUT.GetKeyState( VK_LBUTTON ) == true ) || bClicking[ iWindow ] )
+				&& PX_INPUT.GetKeyState( VK_LBUTTON ) == true ) || bClicking[ iWindow ] )
 			{
 				if ( PX_INPUT.GetKeyState( VK_LBUTTON ) == false )
 				{
@@ -524,7 +524,7 @@ namespace PX::UI
 
 				if ( pActiveEditColor != nullptr )
 					ColorPicker( );
-				else if( pActiveEditToggle != nullptr )
+				else if ( pActiveEditToggle != nullptr )
 					nk_fill_rect( nk_window_get_canvas( pContext ), nk_rect( pContext->current->bounds.x, pContext->current->bounds.y, pContext->current->bounds.w, pContext->current->bounds.h ), 0, nk_rgba( 0, 0, 0, 180 ) );
 			}
 			else
@@ -543,7 +543,7 @@ namespace PX::UI
 			else
 				nk_window_set_bounds( pContext, szNuklearWindowTitle, recWindow );
 
-			IDirect3DStateBlock9* pState;
+			IDirect3DStateBlock9 *pState;
 			pDevice->CreateStateBlock( bCreatedWindow ? D3DSBT_ALL : D3DSBT_PIXELSTATE, &pState );
 			nk_d3d9_render( NK_ANTI_ALIASING_ON );
 			pState->Apply( );
@@ -586,7 +586,7 @@ namespace PX::UI
 				"Subtab Four"
 			};
 
-			static const auto fnSetTabValue = [ ]( int& iCurrentValue, const int iNewValue )
+			static const auto fnSetTabValue = [ ]( int &iCurrentValue, const int iNewValue )
 			{
 				iCurrentValue = iNewValue >= 0 ? iNewValue : iCurrentValue;
 			};
@@ -638,19 +638,19 @@ namespace PX::UI
 				SetRowWidth( 5 );
 				Spacing( );
 				SetRowWidth( CHECKBOX_ICON_WIDTH + CalculateTextBounds( PX_XOR( "Checkbox" ), 30 ).x );
-				Checkbox( PX_XOR( "Checkbox" ), jsWidgets[ PX_XOR( "First" ) ].get_ptr< bool* >( ) );
+				Checkbox( PX_XOR( "Checkbox" ), jsWidgets[ PX_XOR( "First" ) ].get_ptr< bool * >( ) );
 				SetRowWidth( GROUPBOX_COLUMN_WIDTH - iCheckboxTextWidth - CHECKBOX_ICON_WIDTH - COLOR_BUTTON_WIDTH - COLOR_BUTTON_PADDING * 2 );
 				Spacing( );
 				SetRowWidth( COLOR_BUTTON_WIDTH );
 				ColorButton( "Color 1", &clrFirst );
 				SetRowWidth( CHECKBOX_ICON_WIDTH + CalculateTextBounds( PX_XOR( "Checkbox" ), 30 ).x );
-				Checkbox( PX_XOR( "Checkbox" ), jsWidgets[ PX_XOR( "Second" ) ].get_ptr< bool* >( ) );
+				Checkbox( PX_XOR( "Checkbox" ), jsWidgets[ PX_XOR( "Second" ) ].get_ptr< bool * >( ) );
 				SetRowWidth( GROUPBOX_COLUMN_WIDTH - iCheckboxTextWidth - CHECKBOX_ICON_WIDTH - COLOR_BUTTON_WIDTH * 2 - COLOR_BUTTON_PADDING * 4 );
 				Spacing( );
 				SetRowWidth( COLOR_BUTTON_WIDTH );
 				ColorButton( "Color 2", &clrSecond );
 				ColorButton( "Color 3", &clrThird );
-				Checkbox( PX_XOR( "Checkbox" ), jsWidgets[ PX_XOR( "Third" ) ].get_ptr< bool* >( ) );
+				Checkbox( PX_XOR( "Checkbox" ), jsWidgets[ PX_XOR( "Third" ) ].get_ptr< bool * >( ) );
 				EndRow( );
 
 				VerticalSpacing( );
@@ -702,7 +702,7 @@ namespace PX::UI
 			return nk_input_is_mouse_prev_hovering_rect( &pContext->input, nk_widget_bounds( pContext ) );
 		}
 
-		nk_flags PX_API EditTextBox( nk_context* ctx, nk_flags flags, char* buffer, int max, nk_plugin_filter filter )
+		nk_flags PX_API EditTextBox( nk_context *ctx, nk_flags flags, char *buffer, int max, nk_plugin_filter filter )
 		{
 			return nk_edit_string_zero_terminated( ctx, flags, buffer, max, filter );
 		}
@@ -756,7 +756,7 @@ namespace PX::UI
 
 			constexpr auto uMaxTooltipWidth = 210u;
 			constexpr auto uTooltipPadding = 14u;
-			constexpr struct nk_text txtTooltip { { 5, 2 }, { 0, 0, 0, 0 }, { 255, 255, 255 ,255 } };
+			constexpr struct nk_text txtTooltip { { 5, 2 }, { 0, 0, 0, 0 }, { 255, 255, 255, 255 } };
 			SetFont( FNT_TAHOMA );
 
 			const auto vecMousePos = pContext->input.mouse.pos;
@@ -825,10 +825,10 @@ namespace PX::UI
 				bNewLine = false;
 			}
 
-			struct nk_rect recTooltip {	vecMousePos.x - pContext->current->layout->clip.x + 20.f, vecMousePos.y - pContext->current->layout->clip.y + 20.f, float( uMaxTooltipWidth ), dqLines.size( ) * uLineHeight + 13.f };
-			const auto& recWindowBounds = pContext->current->bounds;
+			struct nk_rect recTooltip { vecMousePos.x - pContext->current->layout->clip.x + 20.f, vecMousePos.y - pContext->current->layout->clip.y + 20.f, float( uMaxTooltipWidth ), dqLines.size( ) * uLineHeight + 13.f };
+			const auto &recWindowBounds = pContext->current->bounds;
 			const struct nk_rect recRealTooltip { recTooltip.x + pContext->current->layout->clip.x, recTooltip.y + pContext->current->layout->clip.y, recTooltip.w, recTooltip.h };
-			
+
 			if ( recRealTooltip.y + recRealTooltip.h > recWindowBounds.y + recWindowBounds.h )
 				recTooltip.y = recWindowBounds.y + recWindowBounds.h - recTooltip.h - pContext->current->layout->clip.y;
 			if ( recRealTooltip.x + recRealTooltip.w > recWindowBounds.x + recWindowBounds.w )
@@ -844,7 +844,7 @@ namespace PX::UI
 				pContext->current->popup.type = NK_PANEL_TOOLTIP;
 				pContext->current->layout->type = NK_PANEL_TOOLTIP;
 
-				for each ( auto& dqLine in dqLines )
+				for each ( auto &dqLine in dqLines )
 				{
 					nk_layout_row_dynamic( pContext, uRowHeight, 1 );
 					nk_label( pContext, dqLine.strText.c_str( ), NK_TEXT_LEFT );
@@ -891,8 +891,8 @@ namespace PX::UI
 			nk_widget_text( pOutput, recCloseButton, ICON_FA_TIMES, strlen( ICON_FA_TIMES ), &txtCloseButton, NK_TEXT_CENTERED, pContext->style.font );
 
 			const bool bHoveringMinimize = nk_input_is_mouse_hovering_rect( &pContext->input, nk_rect( recMinimize.x + 8, recMinimize.y, recMinimize.w + 2, recMinimize.h ) ),
-				bHoveringClose = nk_input_is_mouse_hovering_rect( &pContext->input, recCloseButton ),
-				bClicking = PX_INPUT.GetKeyState( VK_LBUTTON ) == true;
+					   bHoveringClose = nk_input_is_mouse_hovering_rect( &pContext->input, recCloseButton ),
+					   bClicking = PX_INPUT.GetKeyState( VK_LBUTTON ) == true;
 
 			if ( GetActiveWindow( ) != hwWindowHandle || bMinimized )
 				return;
@@ -960,7 +960,7 @@ namespace PX::UI
 			return bReturn;
 		}
 
-		void PX_API Separator( int iRed, int iGreen, int iBlue, unsigned uStartHeight, const links_t* pLinkList /*= nullptr*/, bool bUpperBorder /*= false*/, float flHeight /*= 42.f*/ )
+		void PX_API Separator( int iRed, int iGreen, int iBlue, unsigned uStartHeight, const links_t *pLinkList /*= nullptr*/, bool bUpperBorder /*= false*/, float flHeight /*= 42.f*/ )
 		{
 			constexpr struct nk_color clrBorderColor = { 85, 88, 94, 255 };
 			const auto pDrawBuffer = nk_window_get_canvas( pContext );
@@ -982,7 +982,7 @@ namespace PX::UI
 
 			SetFont( FNT_ROBOTO_SMALL );
 			BeginRow( 15, pLinkList->size( ), ROW_CUSTOM );
-			for each ( const auto& link in *pLinkList )
+			for each ( const auto &link in *pLinkList )
 			{
 				auto vecTextSize = CalculateTextBounds( link.szTitle, uLinkTextHeight );
 				PushCustomRow( uPosition, uYPosition, unsigned( vecTextSize.x ), uLinkTextHeight );
@@ -1005,7 +1005,7 @@ namespace PX::UI
 			bWasClicking = PX_INPUT.GetKeyState( VK_LBUTTON ) == true;
 		}
 
-		bool PX_API Button( EPosition pPosition, const char* szText, bool bActive, bool bDisabled, cstr_t szTooltip /*= nullptr*/ )
+		bool PX_API Button( EPosition pPosition, const char *szText, bool bActive, bool bDisabled, cstr_t szTooltip /*= nullptr*/ )
 		{
 			iCurrentRowUsedColumns++;
 
@@ -1066,9 +1066,7 @@ namespace PX::UI
 					break;
 				}
 				case EPosition::NONE:
-				{
-					
-				}
+				{ }
 				break;
 
 				default:
@@ -1174,7 +1172,7 @@ namespace PX::UI
 			nk_label_colored( pContext, ( szText + str_t( PX_XOR( "  " ) ) ).c_str( ), NK_TEXT_LEFT, clrTextDormant );
 		}
 
-		int PX_API Tabs( unsigned uStartX, unsigned uStartY, const std::deque< cstr_t >& dqButtons, unsigned uActiveButton )
+		int PX_API Tabs( unsigned uStartX, unsigned uStartY, const std::deque< cstr_t > &dqButtons, unsigned uActiveButton )
 		{
 			PX_DEF pxTabSpace = 24; // 12 * 2 - 12 px on either side.
 			auto iPressedButton = -1;
@@ -1193,7 +1191,7 @@ namespace PX::UI
 			return iPressedButton;
 		}
 
-		int PX_API SubTabs( unsigned uStartX, unsigned uStartY, unsigned uButtonWidth, unsigned uButtonHeight, const std::deque< cstr_t >& dqButtons, unsigned uActiveButton )
+		int PX_API SubTabs( unsigned uStartX, unsigned uStartY, unsigned uButtonWidth, unsigned uButtonHeight, const std::deque< cstr_t > &dqButtons, unsigned uActiveButton )
 		{
 			nk_layout_space_begin( pContext, NK_STATIC, float( uButtonHeight * dqButtons.size( ) ), dqButtons.size( ) );
 			auto iButtonPressed = -1;
@@ -1275,10 +1273,12 @@ namespace PX::UI
 			if ( bNewColor && pActiveEditColor )
 			{
 				uCurrentSequence = 0u;
-				clrChosenColor = { pActiveEditColor->GetColor( uCurrentSequence ).rfl,
+				clrChosenColor = {
+					pActiveEditColor->GetColor( uCurrentSequence ).rfl,
 					pActiveEditColor->GetColor( uCurrentSequence ).gfl,
 					pActiveEditColor->GetColor( uCurrentSequence ).bfl,
-					pActiveEditColor->GetColor( uCurrentSequence ).afl };
+					pActiveEditColor->GetColor( uCurrentSequence ).afl
+				};
 				sprintf( szSliderBuffer, "%llu", pActiveEditColor->GetDuration( uCurrentSequence ) );
 			}
 			bNewColor = false;
@@ -1293,9 +1293,9 @@ namespace PX::UI
 
 			SetFont( FNT_ROBOTO_BOLD );
 			if ( bStoppedClicking && nk_popup_begin( pContext, NK_POPUP_DYNAMIC, ( strBaseTitle + szColorPickerSubject + "'" ).c_str( ),
-								 NK_WINDOW_BORDER | NK_WINDOW_TITLE | NK_WINDOW_NO_SCROLLBAR,
-								 nk_rect( recColorPickerBoundaries.x - pContext->current->bounds.x, recColorPickerBoundaries.y - pContext->current->bounds.y,
-										  recColorPickerBoundaries.w, recColorPickerBoundaries.h ), pActiveEditColor == nullptr ) )
+													 NK_WINDOW_BORDER | NK_WINDOW_TITLE | NK_WINDOW_NO_SCROLLBAR,
+													 nk_rect( recColorPickerBoundaries.x - pContext->current->bounds.x, recColorPickerBoundaries.y - pContext->current->bounds.y,
+															  recColorPickerBoundaries.w, recColorPickerBoundaries.h ), pActiveEditColor == nullptr ) )
 			{
 				SetFont( FNT_ROBOTO_SMALL );
 				nk_layout_row_static( pContext, 255, 295, 1 );
@@ -1325,10 +1325,12 @@ namespace PX::UI
 															 pActiveEditColor->GetColor( u ).a ) ) )
 					{
 						uCurrentSequence = u;
-						clrChosenColor = { pActiveEditColor->GetColor( uCurrentSequence ).rfl,
+						clrChosenColor = {
+							pActiveEditColor->GetColor( uCurrentSequence ).rfl,
 							pActiveEditColor->GetColor( uCurrentSequence ).gfl,
 							pActiveEditColor->GetColor( uCurrentSequence ).bfl,
-							pActiveEditColor->GetColor( uCurrentSequence ).afl };
+							pActiveEditColor->GetColor( uCurrentSequence ).afl
+						};
 						sprintf( szSliderBuffer, "%llu", pActiveEditColor->GetDuration( uCurrentSequence ) );
 					}
 					if ( u == uCurrentSequence )
@@ -1350,19 +1352,23 @@ namespace PX::UI
 				{
 					pActiveEditColor->PutNewColorSequence( color_t( ), 1000u );
 					uCurrentSequence = pActiveEditColor->zSequences - 1;
-					clrChosenColor = { pActiveEditColor->GetColor( uCurrentSequence ).rfl,
+					clrChosenColor = {
+						pActiveEditColor->GetColor( uCurrentSequence ).rfl,
 						pActiveEditColor->GetColor( uCurrentSequence ).gfl,
 						pActiveEditColor->GetColor( uCurrentSequence ).bfl,
-						pActiveEditColor->GetColor( uCurrentSequence ).afl };
+						pActiveEditColor->GetColor( uCurrentSequence ).afl
+					};
 				}
 				if ( Button( EPosition::RIGHT, PX_XOR( "-" ), false, false ) && !bWasClicking && pActiveEditColor->zSequences > 1 )
 				{
 					pActiveEditColor->DeleteColorSequence( uCurrentSequence );
 					uCurrentSequence = 0u;
-					clrChosenColor = { pActiveEditColor->GetColor( uCurrentSequence ).rfl,
+					clrChosenColor = {
+						pActiveEditColor->GetColor( uCurrentSequence ).rfl,
 						pActiveEditColor->GetColor( uCurrentSequence ).gfl,
 						pActiveEditColor->GetColor( uCurrentSequence ).bfl,
-						pActiveEditColor->GetColor( uCurrentSequence ).afl };
+						pActiveEditColor->GetColor( uCurrentSequence ).afl
+					};
 				}
 
 				nk_layout_row_end( pContext );
@@ -1515,19 +1521,19 @@ namespace PX::UI
 			static auto bWasClicking = false;
 			static auto iCurrentBindIndex = 0;
 			static auto bSetGlobalKeyCallback = false;
-			static key_t* pCurrentEditKey = nullptr;
+			static key_t *pCurrentEditKey = nullptr;
 
-			if( !bSetGlobalKeyCallback )
+			if ( !bSetGlobalKeyCallback )
 			{
 				bSetGlobalKeyCallback = true;
 				PX_INPUT.AddGlobalCallback( [ ]( unsigned uKey, bool bPressed )
-				{
-					if ( bPressed && pCurrentEditKey != nullptr )
-					{
-						*pCurrentEditKey = uKey;
-						pCurrentEditKey = nullptr;
-					}
-				} );
+						{
+							if ( bPressed && pCurrentEditKey != nullptr )
+							{
+								*pCurrentEditKey = uKey;
+								pCurrentEditKey = nullptr;
+							}
+						} );
 			}
 
 			if ( !nk_input_is_mouse_hovering_rect( &pContext->input, recPopupBoundaries ) && PX_INPUT.GetKeyState( VK_LBUTTON ) && bStoppedClicking && !bWasClicking )
@@ -1538,13 +1544,13 @@ namespace PX::UI
 			}
 
 			SetFont( FNT_ROBOTO_BOLD );
-			if( bStoppedClicking && nk_begin( pContext, PX_XOR( "Keybind Editor" ), recPopupBoundaries, NK_WINDOW_NO_SCROLLBAR | NK_WINDOW_TITLE ) )
+			if ( bStoppedClicking && nk_begin( pContext, PX_XOR( "Keybind Editor" ), recPopupBoundaries, NK_WINDOW_NO_SCROLLBAR | NK_WINDOW_TITLE ) )
 			{
 				nk_layout_row_begin( pContext, NK_STATIC, 25, 3 );
 				nk_layout_row_push( pContext, 5.f );
 				nk_spacing( pContext, 1 );
 				nk_layout_row_push( pContext, 140.f );
-				if( Button( EPosition::LEFT, PX_XOR( "+" ), false, pActiveEditToggle->GetBinds( ).size( ) >= 7 ) && !bWasClicking )
+				if ( Button( EPosition::LEFT, PX_XOR( "+" ), false, pActiveEditToggle->GetBinds( ).size( ) >= 7 ) && !bWasClicking )
 					pActiveEditToggle->GetBinds( ).emplace_back( toggle_t::keybind_t( ) );
 				if ( Button( EPosition::RIGHT, PX_XOR( "-" ), false, pActiveEditToggle->GetBinds( ).empty( ) ) && !bWasClicking )
 				{
@@ -1559,10 +1565,10 @@ namespace PX::UI
 				PopupCheckbox( PX_XOR( "Use Keybinds" ), &pActiveEditToggle->UseKeyBinds( ) );
 				nk_layout_row_end( pContext );
 
-				if( !pActiveEditToggle->GetBinds( ).empty( ) )
+				if ( !pActiveEditToggle->GetBinds( ).empty( ) )
 				{
 					std::deque< cstr_t > dqKeys;
-					for ( auto& keybind : pActiveEditToggle->GetBinds( ) )
+					for ( auto &keybind: pActiveEditToggle->GetBinds( ) )
 						dqKeys.emplace_back( fnGetKeyName( keybind.kKey ) );
 
 					nk_layout_row_begin( pContext, NK_STATIC, 30, 3 );
@@ -1576,9 +1582,9 @@ namespace PX::UI
 						nk_popup_end( pContext );
 					}
 
-					auto& bind = pActiveEditToggle->GetBinds( ).at( iCurrentBindIndex );
+					auto &bind = pActiveEditToggle->GetBinds( ).at( iCurrentBindIndex );
 					nk_layout_row_push( pContext, 97.f );
-					if( Button( EPosition::NONE, fnGetKeyName( bind.kKey ), false, false ) )
+					if ( Button( EPosition::NONE, fnGetKeyName( bind.kKey ), false, false ) )
 					{
 						bind.kKey = 0x2D;
 						pCurrentEditKey = &bind.kKey;
@@ -1617,7 +1623,7 @@ namespace PX::UI
 			return pActiveEditColor != nullptr || pActiveEditToggle != nullptr;
 		}
 
-		void PX_API ColorButton( cstr_t szSubject, color_sequence_t* pSequence, float flVerticalPadding /*= 0.f*/ )
+		void PX_API ColorButton( cstr_t szSubject, color_sequence_t *pSequence, float flVerticalPadding /*= 0.f*/ )
 		{
 			iCurrentRowUsedColumns++;
 
@@ -1631,7 +1637,7 @@ namespace PX::UI
 			HoverCheck( CURSOR_HAND );
 		}
 
-		int PX_API Combobox( unsigned uButtonHeight, cstr_t szTitle, const std::deque< cstr_t >& dqOptions, unsigned uSelectedOption )
+		int PX_API Combobox( unsigned uButtonHeight, cstr_t szTitle, const std::deque< cstr_t > &dqOptions, unsigned uSelectedOption )
 		{
 			iCurrentRowUsedColumns++;
 
@@ -1668,7 +1674,7 @@ namespace PX::UI
 				nk_layout_space_end( pContext );
 				nk_combo_end( pContext );
 				bDrewCombo = true;
-				if( PopupActive( ) )
+				if ( PopupActive( ) )
 					nk_d3d9_handle_event( hwWindowHandle, WM_LBUTTONUP, 0, int( pContext->input.mouse.pos.x ) | int( pContext->input.mouse.pos.y ) << 16 );
 			}
 			HoverCheck( CURSOR_HAND );
@@ -1676,7 +1682,7 @@ namespace PX::UI
 			return iSelectedOption;
 		}
 
-		int PX_API FilteredCombobox( unsigned uButtonHeight, Types::cstr_t szTitle, const std::deque<Types::cstr_t>& dqOptions, unsigned uSelectedOption, unsigned uDisplayCount, char* szInput )
+		int PX_API FilteredCombobox( unsigned uButtonHeight, Types::cstr_t szTitle, const std::deque< Types::cstr_t > &dqOptions, unsigned uSelectedOption, unsigned uDisplayCount, char *szInput )
 		{
 			iCurrentRowUsedColumns++;
 
@@ -1694,7 +1700,7 @@ namespace PX::UI
 				for ( auto z = 0u; z < dqOptions.size( ) && iCount < uDisplayCount; z++ )
 				{
 					if ( strlen( szInput ) == 0
-						 || strstr( dqOptions[ z ], szInput ) != nullptr )
+						|| strstr( dqOptions[ z ], szInput ) != nullptr )
 					{
 						vecIndicies.emplace_back( z );
 						vecStrings.emplace_back( dqOptions[ z ] );
@@ -1735,7 +1741,7 @@ namespace PX::UI
 			return iSelectedOption;
 		}
 
-		int PX_API IncrementalCombobox( unsigned uButtonHeight, Types::cstr_t szTitle, const std::deque< Types::cstr_t >& dqOptions, int& iIncrement, int iMax, unsigned uSelectedOption )
+		int PX_API IncrementalCombobox( unsigned uButtonHeight, Types::cstr_t szTitle, const std::deque< Types::cstr_t > &dqOptions, int &iIncrement, int iMax, unsigned uSelectedOption )
 		{
 			iCurrentRowUsedColumns++;
 
@@ -1790,9 +1796,9 @@ namespace PX::UI
 			return iSelectedOption;
 		}
 
-		void PX_API TabbedCombobox( unsigned uButtonHeight, cstr_t szTitle, const std::deque< cstr_t >& dqTabs, const std::deque< cstr_t >* pItems, unsigned& uSelectedOption )
+		void PX_API TabbedCombobox( unsigned uButtonHeight, cstr_t szTitle, const std::deque< cstr_t > &dqTabs, const std::deque< cstr_t > *pItems, unsigned &uSelectedOption )
 		{
-			const auto fnGetTrueIndex = [ ]( const std::deque< cstr_t >* pTabs, unsigned uCurrentTab, unsigned uIndex )
+			const auto fnGetTrueIndex = [ ]( const std::deque< cstr_t > *pTabs, unsigned uCurrentTab, unsigned uIndex )
 			{
 				auto uReturn = 0u;
 				for ( auto u = 0u; u < uCurrentTab; u++ )
@@ -1864,7 +1870,7 @@ namespace PX::UI
 			nk_fill_triangle( pOutput, recComboboxBounds.x + recComboboxBounds.w - 10, recComboboxBounds.y + recComboboxBounds.h / 2 - 3, recComboboxBounds.x + recComboboxBounds.w - 14, recComboboxBounds.y + recComboboxBounds.h / 2 + 3, recComboboxBounds.x + recComboboxBounds.w - 18, recComboboxBounds.y + recComboboxBounds.h / 2 - 3, nk_input_is_mouse_prev_hovering_rect( &pContext->input, recComboboxBounds ) && !bDrewCombo ? clrTextActive : clrTextDormant );
 		}
 
-		void PX_API ComboboxMulti( unsigned uButtonHeight, cstr_t szTitle, const std::deque< cstr_t >& dqOptions, std::deque< bool* >& dqEnabledOptions )
+		void PX_API ComboboxMulti( unsigned uButtonHeight, cstr_t szTitle, const std::deque< cstr_t > &dqOptions, std::deque< bool * > &dqEnabledOptions )
 		{
 			iCurrentRowUsedColumns++;
 
@@ -1900,9 +1906,9 @@ namespace PX::UI
 			nk_fill_triangle( pOutput, recComboboxBounds.x + recComboboxBounds.w - 10, recComboboxBounds.y + recComboboxBounds.h / 2 - 3, recComboboxBounds.x + recComboboxBounds.w - 14, recComboboxBounds.y + recComboboxBounds.h / 2 + 3, recComboboxBounds.x + recComboboxBounds.w - 18, recComboboxBounds.y + recComboboxBounds.h / 2 - 3, nk_input_is_mouse_prev_hovering_rect( &pContext->input, recComboboxBounds ) && !bDrewCombo ? clrTextActive : clrTextDormant );
 		}
 
-		void PX_API TabbedComboboxMulti( unsigned uButtonHeight, Types::cstr_t szTitle, const std::deque< Types::cstr_t >& dqTabs, const std::deque< Types::cstr_t >* pItems, std::deque< bool* >& dqEnabledOptions, unsigned& uCurrentTab )
+		void PX_API TabbedComboboxMulti( unsigned uButtonHeight, Types::cstr_t szTitle, const std::deque< Types::cstr_t > &dqTabs, const std::deque< Types::cstr_t > *pItems, std::deque< bool * > &dqEnabledOptions, unsigned &uCurrentTab )
 		{
-			const auto fnGetTrueIndex = [ ]( const std::deque< cstr_t >* pTabs, unsigned uCurrentTab, unsigned uIndex )
+			const auto fnGetTrueIndex = [ ]( const std::deque< cstr_t > *pTabs, unsigned uCurrentTab, unsigned uIndex )
 			{
 				auto uReturn = 0u;
 				for ( auto u = 0u; u < uCurrentTab; u++ )
@@ -1964,13 +1970,13 @@ namespace PX::UI
 			nk_fill_triangle( pOutput, recComboboxBounds.x + recComboboxBounds.w - 10, recComboboxBounds.y + recComboboxBounds.h / 2 - 3, recComboboxBounds.x + recComboboxBounds.w - 14, recComboboxBounds.y + recComboboxBounds.h / 2 + 3, recComboboxBounds.x + recComboboxBounds.w - 18, recComboboxBounds.y + recComboboxBounds.h / 2 - 3, nk_input_is_mouse_prev_hovering_rect( &pContext->input, recComboboxBounds ) && !bDrewCombo ? clrTextActive : clrTextDormant );
 		}
 
-		void PX_API Inputbox( unsigned uMaxCharacters, char* szBuffer )
+		void PX_API Inputbox( unsigned uMaxCharacters, char *szBuffer )
 		{
 			iCurrentRowUsedColumns++;
 			nk_edit_string_zero_terminated( pContext, NK_EDIT_FIELD, szBuffer, uMaxCharacters, nk_filter_ascii );
 		}
 
-		int PX_API InputboxInteger( unsigned uMaxCharacters, char* szBuffer )
+		int PX_API InputboxInteger( unsigned uMaxCharacters, char *szBuffer )
 		{
 			iCurrentRowUsedColumns++;
 			nk_edit_string_zero_terminated( pContext, NK_EDIT_FIELD, szBuffer, uMaxCharacters, nk_filter_decimal );
@@ -1979,12 +1985,12 @@ namespace PX::UI
 			return 0;
 		}
 
-		bool ValidFloat( char* szFloat )
+		bool ValidFloat( char *szFloat )
 		{
 			return strlen( szFloat ) > 0 && strcmp( szFloat, PX_XOR( "-" ) ) && strcmp( szFloat, PX_XOR( "." ) ) && strcmp( szFloat, PX_XOR( "-." ) );
 		}
 
-		float PX_API InputboxFloat( unsigned uMaxCharacters, char* szBuffer )
+		float PX_API InputboxFloat( unsigned uMaxCharacters, char *szBuffer )
 		{
 			iCurrentRowUsedColumns++;
 			nk_edit_string_zero_terminated( pContext, NK_EDIT_FIELD, szBuffer, uMaxCharacters, nk_filter_float );
@@ -1998,12 +2004,12 @@ namespace PX::UI
 			bool bInEdit = false, bSetEditValue = false, bWasClickingInBoundaries = false, bWasClicking = false;
 		};
 
-		int PX_API Slider( cstr_t szTitle, char* szInputBuffer, int iMin, int iMax, int iCurrentValue, unsigned uStartX, unsigned uStartY, unsigned uWidth, unsigned uHeight, bool bIgnorePopup /*= false*/ )
+		int PX_API Slider( cstr_t szTitle, char *szInputBuffer, int iMin, int iMax, int iCurrentValue, unsigned uStartX, unsigned uStartY, unsigned uWidth, unsigned uHeight, bool bIgnorePopup /*= false*/ )
 		{
 			static std::vector< slider_info_t > vecSliderInfo;
 			if ( uSliderIntCounter >= vecSliderInfo.size( ) )
 				vecSliderInfo.emplace_back( slider_info_t( ) );
-			auto& siCurrent = vecSliderInfo.at( uSliderIntCounter );
+			auto &siCurrent = vecSliderInfo.at( uSliderIntCounter );
 
 			uSliderIntCounter++;
 
@@ -2085,12 +2091,12 @@ namespace PX::UI
 			return iCurrentValue;
 		}
 
-		float PX_API Slider( cstr_t szTitle, char* szInputBuffer, float flMin, float flMax, float flCurrentValue, unsigned uStartX, unsigned uStartY, unsigned uWidth, unsigned uHeight, unsigned uDigits )
+		float PX_API Slider( cstr_t szTitle, char *szInputBuffer, float flMin, float flMax, float flCurrentValue, unsigned uStartX, unsigned uStartY, unsigned uWidth, unsigned uHeight, unsigned uDigits )
 		{
 			static std::vector< slider_info_t > vecSliderInfo;
 			if ( uSliderFloatCounter >= vecSliderInfo.size( ) )
 				vecSliderInfo.emplace_back( slider_info_t( ) );
-			auto& siCurrent = vecSliderInfo.at( uSliderFloatCounter );
+			auto &siCurrent = vecSliderInfo.at( uSliderFloatCounter );
 
 			uSliderFloatCounter++;
 			iCurrentRowUsedColumns += 3;
@@ -2194,7 +2200,7 @@ namespace PX::UI
 
 		void PX_API BeginRow( unsigned uRowHeight, unsigned uColumns, ERowType rowType )
 		{
-			typedef void( PX_API* fn_begin_row_t )( nk_context*, nk_layout_format, float, int );
+			typedef void ( PX_API* fn_begin_row_t )( nk_context *, nk_layout_format, float, int );
 			static fn_begin_row_t fnBeginRow[ ROW_MAX ]
 			{
 				nk_layout_row_begin,
@@ -2211,7 +2217,7 @@ namespace PX::UI
 
 		void PX_API EndRow( )
 		{
-			typedef void( PX_API* fn_end_row_t )( nk_context* );
+			typedef void ( PX_API* fn_end_row_t )( nk_context * );
 			static fn_end_row_t fnEndRow[ ROW_MAX ]
 			{
 				nk_layout_row_end,
@@ -2253,10 +2259,10 @@ namespace PX::UI
 		{
 			int iLength = zLength;
 			iCurrentRowUsedColumns++;
-			nk_edit_string( pContext, NK_EDIT_READ_ONLY | NK_EDIT_MULTILINE, const_cast< char* >( szData ), &iLength, iLength + 1, nk_filter_ascii );
+			nk_edit_string( pContext, NK_EDIT_READ_ONLY | NK_EDIT_MULTILINE, const_cast< char * >( szData ), &iLength, iLength + 1, nk_filter_ascii );
 		}
 
-		void PX_API Graph( float x, float y, float w, float h, int iVerticalGridlines, int iHorizontalGridlines, const struct nk_vec2* vecPoints, std::size_t zPoints, struct nk_vec2* vecDots, std::size_t zDots, int& iDraggingDot )
+		void PX_API Graph( float x, float y, float w, float h, int iVerticalGridlines, int iHorizontalGridlines, const struct nk_vec2 *vecPoints, std::size_t zPoints, struct nk_vec2 *vecDots, std::size_t zDots, int &iDraggingDot )
 		{
 			const auto pOutput = nk_window_get_canvas( pContext );
 			const auto recLocation = nk_rect( x, y, w, h );
@@ -2265,13 +2271,13 @@ namespace PX::UI
 
 			nk_fill_rect( pOutput, nk_rect( recLocation.x - 1.f, recLocation.y - 1.f, recLocation.w + 2.f, recLocation.h + 2.f ), 0.f, clrLightBackground );
 			nk_fill_rect( pOutput, recLocation, 0.f, clrDarkBackground );
-			for( auto i = 0; i < iVerticalGridlines; i++ )
+			for ( auto i = 0; i < iVerticalGridlines; i++ )
 			{
 				const auto flRatio = float( i ) / float( iVerticalGridlines );
 				nk_stroke_line( pOutput, recLocation.x + recLocation.w * flRatio, recLocation.y, recLocation.x + recLocation.w * flRatio, recLocation.y + recLocation.h, 1.f, clrLightBackground );
 			}
 
-			for( auto i = 0; i < iHorizontalGridlines; i++ )
+			for ( auto i = 0; i < iHorizontalGridlines; i++ )
 			{
 				const auto flRatio = float( i ) / float( iHorizontalGridlines );
 				nk_stroke_line( pOutput, recLocation.x, recLocation.y + recLocation.h * flRatio, recLocation.x + recLocation.w, recLocation.y + recLocation.h * flRatio, 1.f, clrLightBackground );
@@ -2286,16 +2292,16 @@ namespace PX::UI
 				const auto recDot = nk_rect( vecPoint.x - 2.5f, vecPoint.y - 2.5f, 4.f, 4.f );
 				nk_fill_circle( pOutput, recDot, clrBlue );
 				if ( nk_input_is_mouse_hovering_rect( &pContext->input, recDot )
-					 || iDraggingDot == z )
+					|| iDraggingDot == z )
 				{
 					SetWidgetActive( ECursor::CURSOR_HAND );
 					if ( !bHoveringDot
-						 && PX_INPUT.GetKeyState( VK_LBUTTON ) == true )
+						&& PX_INPUT.GetKeyState( VK_LBUTTON ) == true )
 					{
 						bHoveringDot = true;
 						vecDots[ z ] = pContext->input.mouse.pos;
 						vecDots[ z ].x -= recLocation.x;
-						vecDots[ z ].y = recLocation.h - recLocation.h * ( ( vecDots[z].y - recLocation.y ) / recLocation.h );
+						vecDots[ z ].y = recLocation.h - recLocation.h * ( ( vecDots[ z ].y - recLocation.y ) / recLocation.h );
 
 						vecDots[ z ].x = std::clamp( vecDots[ z ].x, recDot.w / 2.f, recLocation.w - recDot.w / 2.f );
 						vecDots[ z ].y = std::clamp( vecDots[ z ].y, recDot.h / 2.f, recLocation.h - recDot.h / 2.f );
@@ -2307,7 +2313,7 @@ namespace PX::UI
 			if ( !bHoveringDot )
 				iDraggingDot = -1;
 
-			for( auto z = 0u; z < zPoints - 1; z++ )
+			for ( auto z = 0u; z < zPoints - 1; z++ )
 			{
 				vecCurrent[ 0 ] = vecPoints[ z ];
 				vecCurrent[ 0 ].y *= -1.f;

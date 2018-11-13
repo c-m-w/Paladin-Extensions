@@ -23,7 +23,7 @@
 //
 //void Uncalled( )
 //{
-//	UI::Widgets::Inputbox< char* >( 20, new char[ 6 ] { "Hello" } );
+//	UI::Widgets::Inputbox< char * >( 20, new char[ 6 ] { "Hello" } );
 //	UI::Widgets::Inputbox< int >( 20, new char[ 6 ] { "Hello" } );
 //	UI::Widgets::Inputbox< float >( 20, new char[ 6 ] { "Hello" } );
 //}
@@ -80,7 +80,7 @@ extensions_t extInfo;
 const wstr_t wstrApplicationExecutableNames[ ] { { }, PX_XOR( L"Steam.exe" ), PX_XOR( L"csgo.exe" ), PX_XOR( L"pubg.exe" ), PX_XOR( L"rsix.exe" ) };
 constexpr bool bExtensionDisabled[ PX_EXTENSION_MAX ] { true, true, false, true, true };
 const str_t strExtensionNames[ PX_EXTENSION_MAX ] { { }, PX_XOR( "Manager" ), PX_XOR( "CSGO" ), PX_XOR( "PUBG" ), PX_XOR( "RSIX" ) },
-*strLastLaunchTimes;
+		*strLastLaunchTimes;
 bool bExtensionAccess[ PX_EXTENSION_MAX ] { false, false, false, false, false };
 std::array< unsigned, 2 > uWindowDimensions;
 
@@ -160,7 +160,7 @@ void PX_API UI::Manager::SetLayout( )
 	}
 	else
 	{
-		static const auto fnSetTabValue = [ ]( int& iCurrentValue, const int iNewValue )
+		static const auto fnSetTabValue = [ ]( int &iCurrentValue, const int iNewValue )
 		{
 			iCurrentValue = iNewValue >= 0 ? iNewValue : iCurrentValue;
 		};
@@ -215,12 +215,12 @@ void PX_API UI::Manager::SetLayout( )
 			}
 
 		auto uHoverColor = D3DCOLOR_ARGB( 255 - bLogoAlpha, 255, 255, 255 ),
-			uDormantColor = D3DCOLOR_ARGB( 255 - bLogoAlpha, 200, 200, 200 );
+			 uDormantColor = D3DCOLOR_ARGB( 255 - bLogoAlpha, 200, 200, 200 );
 
 		const static color_t clrText { 255, 255, 255, 255 },
-			clrGold { 255, 192, 0, 255 },
-			clrGreen { 32, 200, 32, 255 },
-			clrPurple { 192, 0, 255, 255 };
+							 clrGold { 255, 192, 0, 255 },
+							 clrGreen { 32, 200, 32, 255 },
+							 clrPurple { 192, 0, 255, 255 };
 
 		Header( PX_XOR( "Paladin Extensions" ), PX_XOR( "Manager" ), 102u, nullptr, fnClose );
 
@@ -417,7 +417,7 @@ void PX_API OnAttach( )
 				break;
 			}
 
-			for ( const auto& ext : extInfo )
+			for ( const auto &ext: extInfo )
 				if ( !ext.bInitialized ) // issue getting info, connection error or someone has messed with the loader to get here and the php session hasn't started
 				{
 					iLoginStatus = LOGIN_CONNECTION_FAILURE;
@@ -445,8 +445,8 @@ void PX_API OnAttach( )
 				Pause( 10 );
 			}
 			while ( dwProcessID == 0ul
-				 || !IsProcessThreadRunning( dwProcessID )
-				 || !NecessaryModulesLoaded( dwProcessID ) );
+				|| !IsProcessThreadRunning( dwProcessID )
+				|| !NecessaryModulesLoaded( dwProcessID ) );
 
 			auto strDLL = AssembleExtensionInformation( strEncryptedDLL );
 			const auto sDLL = strDLL.size( );

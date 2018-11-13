@@ -14,10 +14,10 @@ namespace PX::Cryptography
 		return !strEncryptionKey.empty( );
 	}
 
-	str_t PX_API GenerateHash( const str_t& strPlainText )
+	str_t PX_API GenerateHash( const str_t &strPlainText )
 	{
 		byte_t bOutput[ CryptoPP::SHA1::DIGESTSIZE ];
-		CryptoPP::SHA1( ).CalculateDigest( bOutput, reinterpret_cast< byte_t* >( const_cast< char* >( strPlainText.c_str( ) ) ), strPlainText.length( ) );
+		CryptoPP::SHA1( ).CalculateDigest( bOutput, reinterpret_cast< byte_t * >( const_cast< char * >( strPlainText.c_str( ) ) ), strPlainText.length( ) );
 
 		CryptoPP::HexEncoder hHash;
 		str_t strOutput;
@@ -29,17 +29,17 @@ namespace PX::Cryptography
 		return strOutput;
 	}
 
-	str_t PX_API Encrypt( const str_t& strPlainText )
+	str_t PX_API Encrypt( const str_t &strPlainText )
 	{
 		return Base64< CryptoPP::Base64Encoder >( AES256CBC< CryptoPP::CBC_Mode< CryptoPP::AES >::Encryption >( strPlainText ) );
 	}
 
-	str_t PX_API Decrypt( const str_t& strCipherText )
+	str_t PX_API Decrypt( const str_t &strCipherText )
 	{
 		return AES256CBC< CryptoPP::CBC_Mode< CryptoPP::AES >::Decryption >( Base64< CryptoPP::Base64Decoder >( strCipherText ) );
 	}
 
-	str_t PX_API GenerateIdentifier( const str_t& strIdentifier )
+	str_t PX_API GenerateIdentifier( const str_t &strIdentifier )
 	{
 		return GenerateHash( GenerateHash( strInitializationVector ) + GenerateHash( strIdentifier ) ).substr( 0, 16 );
 	}

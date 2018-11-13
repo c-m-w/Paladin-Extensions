@@ -36,12 +36,12 @@ bool PX_API Initialize( )
 #else
 	return
 #endif
-		   PX::Information::InitializeInformation( )
-		&& PX::Files::Resources::LoadResources( { } )
-		&& PX::UI::Manager::CSGO::Initialize( )
-		&& PX::Features::InitializeFeatures( )
-		&& PX::Drawing::InitializeDrawing( )
-		&& PX::Hooks::InitializeHooks( );
+			PX::Information::InitializeInformation( )
+			&& PX::Files::Resources::LoadResources( { } )
+			&& PX::UI::Manager::CSGO::Initialize( )
+			&& PX::Features::InitializeFeatures( )
+			&& PX::Drawing::InitializeDrawing( )
+			&& PX::Hooks::InitializeHooks( );
 }
 
 void PX_API OnAttach( )
@@ -63,6 +63,4 @@ void PX_API OnAttach( )
 }
 
 void PX_API OnDetach( )
-{
-
-}
+{}

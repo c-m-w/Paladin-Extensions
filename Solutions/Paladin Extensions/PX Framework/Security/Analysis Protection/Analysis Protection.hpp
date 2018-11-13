@@ -14,18 +14,18 @@ namespace PX::AnalysisProtection
 	/** \param zExtensionThreads Size of thread array */
 	/** \param hExtensionContainer Target of extension container to check for analysis */
 	/** \return false analysis can occur */
-	bool PX_API CheckForAnalysisEx( HANDLE hExtensionContainer = nullptr, _In_reads_( zExtensionThreads ) HANDLE* hExtensionThreads = nullptr, std::size_t zExtensionThreads = 0u );
+	bool PX_API CheckForAnalysisEx( HANDLE hExtensionContainer = nullptr, _In_reads_( zExtensionThreads ) HANDLE *hExtensionThreads = nullptr, std::size_t zExtensionThreads = 0u );
 	/** \brief Calls all AnalysisProtection functions, including those for external processes */
 	/** \param hExtensionContainer Target of extension container to check for analysis */
 	/** \param hExtensionThreads Array of threads to check */
 	/** \param zExtensionThreads Size of thread array */
 	/** \return false analysis can occur */
-	bool PX_API CheckForAllAnalysis( HANDLE hExtensionContainer = nullptr, _In_reads_( zExtensionThreads ) HANDLE* hExtensionThreads = nullptr, std::size_t zExtensionThreads = 0u );
+	bool PX_API CheckForAllAnalysis( HANDLE hExtensionContainer = nullptr, _In_reads_( zExtensionThreads ) HANDLE *hExtensionThreads = nullptr, std::size_t zExtensionThreads = 0u );
 
 	namespace DebuggerPrevention
 	{
 		/** \brief Forcefully deletes PX data and shuts down */
-		PX_END void PX_API Destroy( const HANDLE& hExtensionContainer = nullptr ) PX_NOX;
+		PX_END void PX_API Destroy( const HANDLE &hExtensionContainer = nullptr ) PX_NOX;
 		/** \brief Sets HideThreadFromDebugger flag so that debuggers cannot see thread */
 		/** \param hTargetThread Target to set the HideThreadFromDebugger flag */
 		/** \return false if setting failed */
@@ -51,7 +51,7 @@ namespace PX::AnalysisProtection
 		/** \param hExtensionThreads Array of threads to check */
 		/** \param zExtensionThreads Size of thread array */
 		/** \return false if breakpoints exist */
-		bool PX_API HardwareBreakpointPresenceEx( _In_reads_( zExtensionThreads ) HANDLE* hExtensionThreads = nullptr, std::size_t zExtensionThreads = 0u );
+		bool PX_API HardwareBreakpointPresenceEx( _In_reads_( zExtensionThreads ) HANDLE *hExtensionThreads = nullptr, std::size_t zExtensionThreads = 0u );
 	}
 
 	namespace AnalysisSoftwareDetection
@@ -75,14 +75,10 @@ namespace PX::AnalysisProtection
 	namespace Emulation
 	{
 		namespace Tempo
-		{
-			
-		}
+		{ }
 
 		namespace Turing
-		{
-			
-		}
+		{ }
 	}
 }
 

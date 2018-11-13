@@ -8,7 +8,7 @@ using namespace PX::Information::Pointers;
 
 // SDK functions
 
-inline IHandleEntity* CBaseHandle::Get( ) const
+inline IHandleEntity *CBaseHandle::Get( ) const
 {
 	return PX::Information::Pointers::pEntityList->GetClientEntityFromHandle( *this );
 }
@@ -19,11 +19,11 @@ namespace PX::Tools
 	class CBaseEntity;
 
 	void PX_API OnPaintTraverse( );
-	CBasePlayer* PX_API GetLocalPlayer( );
-	CUserCmd* PX_API GetUserCmd( int iSequenceNumber );
-	CVerifiedUserCmd* PX_API GetVerifiedUserCmd( int iSequenceNumber );
-	CRC32_t PX_API GetCmdHash( CUserCmd* pCmd );
-	bool PX_API ValidPlayer( void* pEntity );
+	CBasePlayer * PX_API GetLocalPlayer( );
+	CUserCmd * PX_API GetUserCmd( int iSequenceNumber );
+	CVerifiedUserCmd * PX_API GetVerifiedUserCmd( int iSequenceNumber );
+	CRC32_t PX_API GetCmdHash( CUserCmd *pCmd );
+	bool PX_API ValidPlayer( void *pEntity );
 
 	// CVars
 	float PX_API GetRecoilScale( );
@@ -34,24 +34,24 @@ namespace PX::Tools
 	void PX_API RevealRanks( );
 
 	// Math
-	void PX_API ClampAngles( QAngle& qAngles );
-	void PX_API ClampAngles( Vector& vecAngles );
-	void PX_API HumanizeAngles( QAngle& qAngles, PX::Tools::CBasePlayer* pLocalPlayer );
-	void PX_API HumanizeAngles( Vector& vecAngles, PX::Tools::CBasePlayer* pLocalPlayer );
-	bool PX_API WorldToScreen( const Vector& vecWorld, Vector &vecScreen );
-	bool PX_API AngleToScreen( const Vector& vecAngle, const Vector& vecOrigin, Vector& vecScreen );
+	void PX_API ClampAngles( QAngle &qAngles );
+	void PX_API ClampAngles( Vector &vecAngles );
+	void PX_API HumanizeAngles( QAngle &qAngles, PX::Tools::CBasePlayer *pLocalPlayer );
+	void PX_API HumanizeAngles( Vector &vecAngles, PX::Tools::CBasePlayer *pLocalPlayer );
+	bool PX_API WorldToScreen( const Vector &vecWorld, Vector &vecScreen );
+	bool PX_API AngleToScreen( const Vector &vecAngle, const Vector &vecOrigin, Vector &vecScreen );
 	void PX_API TransformVector( Vector vecInput, matrix3x4_t mtxInput, Vector &vecOutput );
-	void PX_API TransformAngle( const QAngle &qAngles, Vector& vecForward );
-	void PX_API TransformAngle( const Vector &vecAngles, Vector& vecForward );
+	void PX_API TransformAngle( const QAngle &qAngles, Vector &vecForward );
+	void PX_API TransformAngle( const Vector &vecAngles, Vector &vecForward );
 	Vector2D PX_API CalcAngle( Vector vecPosOne, Vector vecPosTwo );
 	float PX_API GetAngleDistance( Vector vecCurrentAngles, Vector vecPosOne, Vector vecPosTwo );
-	RECT PX_API CalculateRenderBounds( Vector* vecScreenPoints );
-	RECT PX_API CalculateRenderBounds( CBaseEntity* pEntity );
-	float PX_API CalculateVectorDistance( const Vector& vecPositionOne, const Vector& vecPositionTwo );
-	QAngle PX_API CalculateAngle( CBasePlayer* pLocalPlayer, CBasePlayer* pPlayer, int iHitbox, CUserCmd* pCmd, Vector* vecOverCompensation );
-	float PX_API CalculateCrosshairDistance( CBasePlayer* pLocalPlayer, CBasePlayer* pPlayer, int iHitbox, CUserCmd* pCmd, bool bWorldlyDistance );
+	RECT PX_API CalculateRenderBounds( Vector *vecScreenPoints );
+	RECT PX_API CalculateRenderBounds( CBaseEntity *pEntity );
+	float PX_API CalculateVectorDistance( const Vector &vecPositionOne, const Vector &vecPositionTwo );
+	QAngle PX_API CalculateAngle( CBasePlayer *pLocalPlayer, CBasePlayer *pPlayer, int iHitbox, CUserCmd *pCmd, Vector *vecOverCompensation );
+	float PX_API CalculateCrosshairDistance( CBasePlayer *pLocalPlayer, CBasePlayer *pPlayer, int iHitbox, CUserCmd *pCmd, bool bWorldlyDistance );
 
-	std::vector< Vector > PX_API GetBezierPoints( Vector vecStart, Vector vecEnd, bezier_order_t* pOrders, std::size_t zOrders );
+	std::vector< Vector > PX_API GetBezierPoints( Vector vecStart, Vector vecEnd, bezier_order_t *pOrders, std::size_t zOrders );
 	Vector PX_API GetBezierPoint( std::vector< Vector > vecPoints, float flRatio );
 
 	class CEconomyItemView
@@ -74,7 +74,7 @@ namespace PX::Tools
 		PX_NETVAR_REFERENCE( bool, m_bShouldGlow,PX_XOR( "DT_DynamicProp" ), PX_XOR( "m_bShouldGlow" ) );
 		PX_NETVAR_REFERENCE( CBasePlayer*, m_hOwnerEntity,PX_XOR( "DT_BaseEntity" ), PX_XOR( "m_hOwnerEntity" ) );
 		PX_NETVAR_REFERENCE( float, m_flSimulationTime,PX_XOR( "DT_BaseEntity" ), PX_XOR( "m_flSimulationTime" ) );
-		PX_NETVAR_REFERENCE_OFFSET( matrix3x4_t, m_rgflCoordinateFrame, PX_XOR( "DT_BaseEntity" ), PX_XOR( "m_CollisionGroup" ),  -int( 0x30 ) );
+		PX_NETVAR_REFERENCE_OFFSET( matrix3x4_t, m_rgflCoordinateFrame, PX_XOR( "DT_BaseEntity" ), PX_XOR( "m_CollisionGroup" ), -int( 0x30 ) );
 		PX_NETVAR_REFERENCE_OFFSET( int32_t, GetIndex, PX_XOR( "CBaseEntity" ), PX_XOR( "m_bIsAutoaimTarget" ), 0x4 );
 
 		bool IsPlayer( );
@@ -84,8 +84,8 @@ namespace PX::Tools
 		bool IsGrenade( );
 		float GetBombTimer( );
 		float GetDefuseTimer( );
-		Vector* BoundingBox( );
-		void SetABSOrigin( Vector& vecOrigin );
+		Vector *BoundingBox( );
+		void SetABSOrigin( Vector &vecOrigin );
 	};
 
 	class CBaseAttributableItem: public CBaseEntity
@@ -100,7 +100,7 @@ namespace PX::Tools
 		PX_NETVAR_REFERENCE( float_t, m_flFallbackWear,PX_XOR( "DT_BaseAttributableItem" ), PX_XOR( "m_flFallbackWear" ) );
 		PX_NETVAR_REFERENCE( char*, m_szCustomName, PX_XOR( "DT_BaseAttributableItem" ), PX_XOR( "m_szCustomName" ) );
 
-		CEconomyItemView* m_Item( );
+		CEconomyItemView *m_Item( );
 	};
 
 	class CBaseCombatWeapon: public CBaseAttributableItem
@@ -112,7 +112,7 @@ namespace PX::Tools
 		PX_NETVAR_REFERENCE( int32_t, m_iClip2,PX_XOR( "DT_BaseCombatWeapon" ), PX_XOR( "m_iClip2" ) );
 		PX_NETVAR_REFERENCE( float_t, m_flRecoilIndex,PX_XOR( "DT_WeaponCSBase" ), PX_XOR( "m_flRecoilIndex" ) );
 
-		CCSWeaponInfo* GetCSWeaponData( );
+		CCSWeaponInfo *GetCSWeaponData( );
 		bool HasBullets( );
 		bool CanFire( );
 		bool IsGrenade( );
@@ -171,12 +171,12 @@ namespace PX::Tools
 		bool IsLocalPlayer( );
 		Vector GetViewPosition( );
 		player_info_t GetPlayerInformation( );
-		bool CanSeePosition( Vector vecPosition, bool bMindSmoke, void* pEntity = nullptr );
-		bool CanSeePlayer( CBasePlayer* pPlayer, bool bMindSmoke );
-		CGameTrace& TraceRayFromView( );
+		bool CanSeePosition( Vector vecPosition, bool bMindSmoke, void *pEntity = nullptr );
+		bool CanSeePlayer( CBasePlayer *pPlayer, bool bMindSmoke );
+		CGameTrace &TraceRayFromView( );
 		Vector GetHitboxPosition( int hHitboxID );
 		bool IsVulnerable( );
-		float DistanceFromPlayer( CBasePlayer* pPlayer );
+		float DistanceFromPlayer( CBasePlayer *pPlayer );
 	};
 
 	class CPlantedC4
