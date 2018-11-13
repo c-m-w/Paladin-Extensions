@@ -415,83 +415,101 @@ namespace PX::Information
 				{ 246, ( "Amber Fade [Mac/P2000/Sawed-Off]" ) },
 				{ 523, ( "Amber Fade [R8]" ) },
 				  
-				{ 000, ( " []" ) },
-				{ 000, ( " []" ) },
+				{ 257, ( "Guardian [M4A1]" ) },
+				{ 290, ( "Guardian [USP]" ) },
 				  
-				{ 000, ( " []" ) },
-				{ 000, ( " []" ) },
+				{ 259, ( "Redline [AWP]" ) },
+				{ 282, ( "Redline [AK]" ) },
 				  
-				{ 000, ( " []" ) },
-				{ 000, ( " []" ) },
+				{ 264, ( "Sandstorm [Galil]" ) },
+				{ 289, ( "Sandstorm [TEC]" ) },
 				  
-				{ 000, ( " []" ) },
-				{ 000, ( " []" ) },
+				{ 265, ( "Kami [Five-SeveN]" ) },
+				{ 308, ( "Kami [Galil]" ) },
 				  
-				{ 000, ( " []" ) },
-				{ 000, ( " []" ) },
+				{ 284, ( "Heat [Mac]" ) },
+				{ 431, ( "Heat [MAG-7]" ) },
 
-				{ 000, ( " []" ) },
-				{ 000, ( " []" ) },
+				{ 286, ( "Antique [Nova]" ) },
+				{ 306, ( "Antique [Bizon]" ) },
 
-				{ 000, ( " []" ) },
-				{ 000, ( " []" ) },
+				{ 291, ( "Heaven Guard [MAG-7]" ) },
+				{ 314, ( "Heaven Guard [XM]" ) },
 
-				{ 000, ( " []" ) },
-				{ 000, ( " []" ) },
+				{ 305, ( "Torque [AUG]" ) },
+				{ 489, ( "Torque [USP]" ) },
 
-				{ 000, ( " []" ) },
-				{ 000, ( " []" ) },
+				{ 336, ( "Desert-Strike [M4A4]" ) },
+				{ 355, ( "Desert-Strike [Negev]" ) },
 
-				{ 000, ( " []" ) },
-				{ 000, ( " []" ) },
+				{ 341, ( "First Class [AK]" ) },
+				{ 345, ( "First Class [Sawed-Off]" ) },
 
-				{ 000, ( " []" ) },
-				{ 000, ( " []" ) },
+				{ 342, ( "Leather [P90]" ) },
+				{ 10009, ( "Leather [Glove]" ) },
 
-				{ 000, ( " []" ) },
-				{ 000, ( " []" ) },
+				{ 372, ( "Nuclear Garden [Mac]" ) },
+				{ 789, ( "Nuclear Garden [Glock]" ) },
 
-				{ 000, ( " []" ) },
-				{ 000, ( " []" ) },
+				{ 380, ( "Wasteland Rebel [AK]" ) },
+				{ 586, ( "Wasteland Rebel [Glock]" ) },
 
 				{ 395, ( "Man-o'-war [AWP]" ) },
 				{ 432, ( "Man-o'-war [Negev]" ) },
 
-				{ 000, ( " []" ) },
-				{ 000, ( " []" ) },
+				{ 426, ( "Valence [P250]" ) },
+				{ 529, ( "Valence [FAMAS]" ) },
 
-				{ 000, ( " []" ) },
-				{ 000, ( " []" ) },
+				{ 428, ( "Eco [Galil]" ) },
+				{ 709, ( "Eco [CZ]" ) },
 
-				{ 000, ( " []" ) },
-				{ 000, ( " []" ) },
+				{ 433, ( "Neon Rider [Mac]" ) },
+				{ 707, ( "Neon Rider [AK]" ) },
 
-				{ 000, ( " []" ) },
-				{ 000, ( " []" ) },
+				{ 448, ( "Pandora's Box [MP9]" ) },
+				{ 10037, ( "Pandora's Box [Glove]" ) },
 
-				{ 000, ( " []" ) },
-				{ 000, ( " []" ) },
+				{ 446, ( "Crimson Kimono [P250]" ) },
+				{ 10033, ( "Crimson Kimono [Glove]" ) },
 
-				{ 000, ( " []" ) },
-				{ 000, ( " []" ) },
+				{ 505, ( "Scumbria [XM]" ) },
+				{ 605, ( "Scumbria [Five-SeveN]" ) },
 
-				{ 000, ( " []" ) },
-				{ 000, ( " []" ) },
+				{ 524, ( "Fuel Injector [AK]" ) },
+				{ 614, ( "Fuel Injector [TEC]" ) },
 
-				{ 000, ( " []" ) },
-				{ 000, ( " []" ) },
+				{ 550, ( "Oceanic [P2000]" ) },
+				{ 682, ( "Oceanic [Mac]" ) },
 
-				{ 000, ( " []" ) },
-				{ 000, ( " []" ) },
+				{ 587, ( "Mecha Industries [M4A1]" ) },
+				{ 626, ( "Mecha Industries [FAMAS]" ) },
 
-				{ 000, ( " []" ) },
-				{ 000, ( " []" ) },
+				{ 612, ( "Powercore [SCAR]" ) },
+				{ 719, ( "Powercore [MP7]" ) },
 
-				{ 000, ( " []" ) },
-				{ 000, ( " []" ) },
+				{ 615, ( "Briefing [UMP]" ) },
+				{ 663, ( "Briefing [M4A1]" ) },
 
-				{ 000, ( " []" ) },
-				{ 000, ( " []" ) },
+				{ 629, ( "Black Sand [Galil]" ) },
+				{ 697, ( "Black Sand [MP9]" ) },
+
+				{ 641, ( "Jungle Slipstream [Bizon]" ) },
+				{ 685, ( "Jungle Slipstream [SCAR]" ) },
+
+				{ 642, ( "Blueprint [SCAR]" ) },
+				{ 657, ( "Blueprint [USP]" ) },
+
+				{ 645, ( "Oxide Blaze [Deagle]" ) },
+				{ 706, ( "Oxide Blaze [XM]" ) },
+
+				{ 646, ( "Capillary [Five-SeveN]" ) },
+				{ 715, ( "Capillary [MP9]" ) },
+
+				{ 653, ( "Neo-Noir [USP]" ) },
+				{ 695, ( "Neo-Noir [M4A4]" ) },
+
+				{ 665, ( "Aloha [Mac]" ) },
+				{ 702, ( "Aloha [SG]" ) },
 			};
 
 			//struct skin_info
