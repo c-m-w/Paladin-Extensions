@@ -406,7 +406,7 @@ namespace PX::Features
 
 					struct
 					{
-						int iPaintKitID = 2, iStatTrakCounter = -1;
+						int iPaintKitID = 0, iStatTrakCounter = -1;
 						toggle_t bSouvenier = false;
 						toggle_t bStatTrak = false;
 						float flWear = 0.f;

@@ -46,16 +46,16 @@ namespace PX::Features::Miscellaneous
 			const auto hWeapon = hWeapons[ i ];
 			if ( hWeapon != nullptr )
 			{
-				if ( hWeapon->IsKnife( ) )
-					if ( ModifyKnifeModel( pLocalPlayer, hWeapon.Get( ) ) )
-						_InventoryContext.bForceUpdate = true;
-
 				const auto iEntityIndex = hWeapon->EntIndex( );
 				if ( hWeapon->m_OriginalOwnerXuidLow( ) == iXuidLow
 					 && !hWeapon->IsGrenade( )
 					 && hWeapon->IsWeapon( )
 					 && hWeapon->GetClientClass( )->m_ClassID != ClassID_CC4 )
 				{
+					if( hWeapon->IsKnife( ) )
+						if ( ModifyKnifeModel( pLocalPlayer, hWeapon.Get( ) ) )
+							_InventoryContext.bForceUpdate = true;
+
 					ModifyPaintKit( pLocalPlayer, reinterpret_cast< CBaseAttributableItem* >( pEntityList->GetClientEntityFromHandle( hWeapon ) ) );
 					if ( iEntityIndex != iOldWeapons[ i ] )
 						_InventoryContext.bForceUpdate = _InventoryContext.bClearHud = true;

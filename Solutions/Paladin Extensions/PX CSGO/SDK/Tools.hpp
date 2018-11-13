@@ -32,6 +32,14 @@ namespace PX::Tools
 	bool PX_API LineGoesThroughSmoke( Vector vecStartPos, Vector vecEndPos );
 	void PX_API SetClantag( cstr_t szTag );
 	void PX_API RevealRanks( );
+	template< typename _t > _t* FindHudElement( Types::cstr_t szName )
+	{
+		static auto pHudInterface = *reinterpret_cast<void**>( Information::Modules::mClient.FindPattern( Information::jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Hud Interface" ) ].get< str_t >( ) )
+										   + Information::jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Hud Interface" ) ].get< int >( ) );
+		static auto ptrFindHudElement = ptr_t( Information::Modules::mClient.FindPattern( Information::jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Find Hud Element" ) ].get< str_t >( ) )
+			+ Information::jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Find Hud Element" ) ].get< int >( ) );
+		return reinterpret_cast< _t* >( reinterpret_cast< void*( __thiscall* )( void*, Types::cstr_t ) >( ptrFindHudElement )( pHudInterface, szName ) );
+	}
 
 	// Math
 	void PX_API ClampAngles( QAngle& qAngles );

@@ -236,6 +236,13 @@ namespace PX::UI
 		/**	\param pSequence Pointer to the color that will be edited if the button is clicked. */
 		void PX_API ColorButton( Types::cstr_t szSubject, Types::color_sequence_t* pSequence, float flVerticalPadding = 0.f );
 
+		struct colored_text_t
+		{
+			Types::cstr_t szText;
+			struct nk_color clrText;
+			colored_text_t( Types::cstr_t s, nk_color clr ): szText(s), clrText( clr ){ }
+		};
+
 		/** \brief Creates a combobox for the user to select an option within.\n Uses one column. */
 		/**	\param uButtonHeight Height of each of the buttons inside the combobox. */
 		/** \param szTitle Title of the combobox. */
@@ -246,6 +253,7 @@ namespace PX::UI
 		int PX_API FilteredCombobox( unsigned uButtonHeight, Types::cstr_t szTitle, const std::deque<Types::cstr_t>& dqOptions, unsigned uSelectedOption, unsigned uDisplayCount, char* szInput );
 		int PX_API IncrementalCombobox( unsigned uButtonHeight, Types::cstr_t szTitle, const std::deque< Types::cstr_t >& dqOptions, int& iIncrement, int iMax, unsigned uSelectedOption );
 		void PX_API TabbedCombobox( unsigned uButtonHeight, Types::cstr_t szTitle, const std::deque< Types::cstr_t >& dqTabs, const std::deque< Types::cstr_t >* pItems, unsigned& uSelectedOption );
+		bool PX_API TabbedCombobox( unsigned uButtonHeight, Types::cstr_t szTitle, const std::deque< Types::cstr_t >& dqTabs, const std::deque< colored_text_t >* pItems, unsigned& uSelectedOption );
 		/** \brief Creates a combobox with multiple options which can all be enabled or disabled.\n Uses one column. */
 		/**	\param uButtonHeight Height of each of the buttons inside the combobox. */
 		/**	\param szTitle Title of the combobox. */

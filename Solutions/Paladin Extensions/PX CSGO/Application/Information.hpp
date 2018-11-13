@@ -146,6 +146,7 @@ namespace PX::Information
 		std::vector< paint_kit_t > PX_API FindPaintKit( int iIndex );
 		std::vector< paint_kit_t > PX_API FindPaintKit( Types::wcstr_t wszName );
 		std::vector< paint_kit_t > PX_API FindPaintKit( Types::cstr_t szName );
+		std::vector< paint_kit_t > PX_API GetWeaponKits( short sIndex );
 
 		PX_SDK std::vector< paint_kit_t > vecPaintKits;
 
