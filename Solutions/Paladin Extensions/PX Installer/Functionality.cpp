@@ -34,28 +34,40 @@ namespace Resources
 		namespace CSGO
 		{
 			namespace Resources
-			{ }
+			{
+				
+			}
 
 			namespace Configurations
-			{ }
+			{
+				
+			}
 		}
 
 		namespace PUBG
 		{
 			namespace Resources
-			{ }
+			{
+
+			}
 
 			namespace Configurations
-			{ }
+			{
+
+			}
 		}
 
 		namespace RSIX
 		{
 			namespace Resources
-			{ }
+			{
+
+			}
 
 			namespace Configurations
-			{ }
+			{
+
+			}
 		}
 	}
 }
@@ -109,10 +121,14 @@ namespace PX::Functionality
 	void PX_API Install( )
 	{
 		if ( !bCancelInstallation )
-		{ }
+		{
+			
+		}
 		uProgress = 1u;
 		if ( !bCancelInstallation )
-		{ }
+		{
+			
+		}
 	}
 
 	void PX_API Rollback( )
@@ -121,16 +137,26 @@ namespace PX::Functionality
 		switch ( uProgress )
 		{
 			case 1u:
-			{ }
+			{
+				
+			}
 			case 2u:
-			{ }
+			{
+				
+			}
 			case 3u:
-			{ }
+			{
+				
+			}
 			case 4u:
-			{ }
+			{
+				
+			}
 			case 5u:
-			{ }
-			default:
+			{
+				
+			}
+			default: 
 			{
 				return;
 			}
@@ -138,5 +164,7 @@ namespace PX::Functionality
 	}
 
 	void PX_API Uninstall( )
-	{ }
+	{
+		
+	}
 }

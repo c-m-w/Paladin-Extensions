@@ -4,7 +4,7 @@
 #include "../Types/UtlVector.hpp"
 #include "IBaseInterface.hpp"
 
-class SurfacePlat;
+class SurfacePlat; 
 class KeyValues;
 class IClientPanel;
 class CDmxElement;
@@ -27,7 +27,7 @@ public:
 	virtual void SetMinimumSize( vgui::VPANEL vguiPanel, int wide, int tall ) = 0;
 	virtual void GetMinimumSize( vgui::VPANEL vguiPanel, int &wide, int &tall ) = 0;
 	virtual void SetZPos( vgui::VPANEL vguiPanel, int z ) = 0;
-	virtual int GetZPos( vgui::VPANEL vguiPanel ) = 0;
+	virtual int  GetZPos( vgui::VPANEL vguiPanel ) = 0;
 
 	virtual void GetAbsPos( vgui::VPANEL vguiPanel, int &x, int &y ) = 0;
 	virtual void GetClipRect( vgui::VPANEL vguiPanel, int &x0, int &y0, int &x1, int &y1 ) = 0;
@@ -75,43 +75,43 @@ public:
 
 	// these pass through to the IClientPanel
 	virtual void Think( vgui::VPANEL vguiPanel ) = 0;
-	virtual void PerformApplySchemeSettings( vgui::VPANEL vguiPanel ) = 0;
-	virtual void PaintTraverse( vgui::VPANEL vguiPanel, bool forceRepaint, bool allowForce = true ) = 0;
-	virtual void Repaint( vgui::VPANEL vguiPanel ) = 0;
-	virtual vgui::VPANEL IsWithinTraverse( vgui::VPANEL vguiPanel, int x, int y, bool traversePopups ) = 0;
-	virtual void OnChildAdded( vgui::VPANEL vguiPanel, vgui::VPANEL child ) = 0;
-	virtual void OnSizeChanged( vgui::VPANEL vguiPanel, int newWide, int newTall ) = 0;
+	virtual void PerformApplySchemeSettings(vgui::VPANEL vguiPanel ) = 0;
+	virtual void PaintTraverse(vgui::VPANEL vguiPanel, bool forceRepaint, bool allowForce = true ) = 0;
+	virtual void Repaint(vgui::VPANEL vguiPanel ) = 0;
+	virtual vgui::VPANEL IsWithinTraverse(vgui::VPANEL vguiPanel, int x, int y, bool traversePopups ) = 0;
+	virtual void OnChildAdded(vgui::VPANEL vguiPanel,vgui::VPANEL child ) = 0;
+	virtual void OnSizeChanged(vgui::VPANEL vguiPanel, int newWide, int newTall ) = 0;
 
-	virtual void InternalFocusChanged( vgui::VPANEL vguiPanel, bool lost ) = 0;
-	virtual bool RequestInfo( vgui::VPANEL vguiPanel, KeyValues *outputData ) = 0;
-	virtual void RequestFocus( vgui::VPANEL vguiPanel, int direction = 0 ) = 0;
-	virtual bool RequestFocusPrev( vgui::VPANEL vguiPanel, vgui::VPANEL existingPanel ) = 0;
-	virtual bool RequestFocusNext( vgui::VPANEL vguiPanel, vgui::VPANEL existingPanel ) = 0;
-	virtual vgui::VPANEL GetCurrentKeyFocus( vgui::VPANEL vguiPanel ) = 0;
-	virtual int GetTabPosition( vgui::VPANEL vguiPanel ) = 0;
+	virtual void InternalFocusChanged(vgui::VPANEL vguiPanel, bool lost ) = 0;
+	virtual bool RequestInfo(vgui::VPANEL vguiPanel, KeyValues *outputData ) = 0;
+	virtual void RequestFocus(vgui::VPANEL vguiPanel, int direction = 0 ) = 0;
+	virtual bool RequestFocusPrev(vgui::VPANEL vguiPanel,vgui::VPANEL existingPanel ) = 0;
+	virtual bool RequestFocusNext(vgui::VPANEL vguiPanel,vgui::VPANEL existingPanel ) = 0;
+	virtual vgui::VPANEL GetCurrentKeyFocus(vgui::VPANEL vguiPanel ) = 0;
+	virtual int GetTabPosition(vgui::VPANEL vguiPanel ) = 0;
 
 	// used by ISurface to store platform-specific data
-	virtual SurfacePlat *Plat( vgui::VPANEL vguiPanel ) = 0;
-	virtual void SetPlat( vgui::VPANEL vguiPanel, SurfacePlat *Plat ) = 0;
+	virtual SurfacePlat *Plat(vgui::VPANEL vguiPanel ) = 0;
+	virtual void SetPlat(vgui::VPANEL vguiPanel, SurfacePlat *Plat ) = 0;
 
 	// returns a pointer to the vgui controls baseclass Panel *
 	// destinationModule needs to be passed in to verify that the returned Panel * is from the same module
 	// it must be from the same module since Panel * vtbl may be different in each module
-	virtual Panel *GetPanel( vgui::VPANEL vguiPanel, const char *destinationModule ) = 0;
+	virtual Panel *GetPanel(vgui::VPANEL vguiPanel, const char *destinationModule ) = 0;
 
-	virtual bool IsEnabled( vgui::VPANEL vguiPanel ) = 0;
-	virtual void SetEnabled( vgui::VPANEL vguiPanel, bool state ) = 0;
+	virtual bool IsEnabled(vgui::VPANEL vguiPanel ) = 0;
+	virtual void SetEnabled(vgui::VPANEL vguiPanel, bool state ) = 0;
 
 	// Used by the drag/drop manager to always draw on top
-	virtual bool IsTopmostPopup( vgui::VPANEL vguiPanel ) = 0;
-	virtual void SetTopmostPopup( vgui::VPANEL vguiPanel, bool state ) = 0;
+	virtual bool IsTopmostPopup(vgui::VPANEL vguiPanel ) = 0;
+	virtual void SetTopmostPopup(vgui::VPANEL vguiPanel, bool state ) = 0;
 
-	virtual void SetMessageContextId( vgui::VPANEL vguiPanel, int nContextId ) = 0;
-	virtual int GetMessageContextId( vgui::VPANEL vguiPanel ) = 0;
+	virtual void SetMessageContextId(vgui::VPANEL vguiPanel, int nContextId ) = 0;
+	virtual int GetMessageContextId(vgui::VPANEL vguiPanel ) = 0;
 
-	virtual const DmxElementUnpackStructure_t *GetUnpackStructure( vgui::VPANEL vguiPanel ) const = 0;
-	virtual void OnUnserialized( vgui::VPANEL vguiPanel, CDmxElement *pElement ) = 0;
+	virtual const DmxElementUnpackStructure_t *GetUnpackStructure(vgui::VPANEL vguiPanel ) const = 0;
+	virtual void OnUnserialized(vgui::VPANEL vguiPanel, CDmxElement *pElement ) = 0;
 
 	// sibling pins
-	virtual void SetSiblingPin( vgui::VPANEL vguiPanel, vgui::VPANEL newSibling, unsigned char iMyCornerToPin = 0, unsigned char iSiblingCornerToPinTo = 0 ) = 0;
+	virtual void SetSiblingPin(vgui::VPANEL vguiPanel,vgui::VPANEL newSibling, unsigned char iMyCornerToPin = 0, unsigned char iSiblingCornerToPinTo = 0 ) = 0;
 };

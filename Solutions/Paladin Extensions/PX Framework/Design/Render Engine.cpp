@@ -75,7 +75,7 @@ namespace PX::Render
 
 		const auto strResourceDirectory = GetPXDirectory( ) + PX_XOR( LR"(Resources\)" );
 		wndWindow.hIcon = HICON( LoadImage( nullptr, ( strResourceDirectory + PX_XOR( LR"(PX Logo.ico)" ) ).c_str( ),
-											IMAGE_ICON, 0, 0, LR_LOADFROMFILE | LR_DEFAULTSIZE | LR_SHARED ) );
+		                                    IMAGE_ICON, 0, 0, LR_LOADFROMFILE | LR_DEFAULTSIZE | LR_SHARED ) );
 
 		wndWindow.lpszClassName = wszWindowTitle;
 		const auto atInstance = RegisterClassEx( &wndWindow );
@@ -86,8 +86,8 @@ namespace PX::Render
 		const auto uScreenDimensions = GetScreenDimensions( );
 		bCreatedWindow = true;
 		hwWindowHandle = CreateWindowEx( WS_EX_APPWINDOW, wszWindowTitle, wszWindowTitle, WS_VISIBLE | WS_POPUP,
-										 CW_USEDEFAULT, CW_USEDEFAULT, uWindowWidth, uWindowHeight,
-										 nullptr, nullptr, wndWindow.hInstance, nullptr );
+		                                 CW_USEDEFAULT, CW_USEDEFAULT, uWindowWidth, uWindowHeight,
+		                                 nullptr, nullptr, wndWindow.hInstance, nullptr );
 		px_assert( hwWindowHandle != nullptr );
 		ShowWindow( hwWindowHandle, SW_SHOWDEFAULT );
 		SetWindowPos( hwWindowHandle, nullptr, uScreenDimensions[ 0 ] / 2 - uWindowWidth / 2, uScreenDimensions[ 1 ] / 2 - uWindowHeight / 2, uWindowWidth, uWindowHeight, NULL );
@@ -120,7 +120,7 @@ namespace PX::Render
 		}
 	}
 
-	void PX_API InitializeRenderTarget( unsigned *pDimensions, wcstr_t szNewWindowTitle )
+	void PX_API InitializeRenderTarget( unsigned* pDimensions, wcstr_t szNewWindowTitle )
 	{
 		wszWindowTitle = szNewWindowTitle;
 		SetWindowSize( pDimensions[ 0 ], pDimensions[ 1 ] );
@@ -128,9 +128,9 @@ namespace PX::Render
 		InitializeDirectX( );
 	}
 
-	bool PX_API InitializeRenderTarget( IDirect3DDevice9 *pNewDevice, unsigned *pDimensions )
+	bool PX_API InitializeRenderTarget( IDirect3DDevice9* pNewDevice, unsigned* pDimensions )
 	{
-		if ( !lOldWindowProc )
+		if( !lOldWindowProc )
 			SetWindowProc( pNewDevice );
 
 		uWindowWidth = pDimensions[ 0 ];
@@ -140,7 +140,7 @@ namespace PX::Render
 
 	void PX_API Destruct( )
 	{
-		if ( !bCreatedWindow )
+		if( !bCreatedWindow )
 			SetWindowProc( pDevice, lOldWindowProc );
 		else
 		{
@@ -149,7 +149,7 @@ namespace PX::Render
 		}
 	}
 
-	void PX_API SetWindowProc( IDirect3DDevice9 *pTargetDevice, long lWindowProc /*= reinterpret_cast< long >( WindowProc )*/ )
+	void PX_API SetWindowProc( IDirect3DDevice9* pTargetDevice, long lWindowProc /*= reinterpret_cast< long >( WindowProc )*/ )
 	{
 		// todo new way to get window of game
 		D3DDEVICE_CREATION_PARAMETERS cpParameters;

@@ -28,9 +28,8 @@ namespace PX::Features::Awareness
 	struct material_t
 	{
 		std::string wstrData, wstrFileName, strTextureGroup;
-		IMaterial *pMaterial;
+		IMaterial* pMaterial;
 		bool bCreateFile;
-
 		material_t( std::string w, std::string f, std::string g ): wstrData( w ), wstrFileName( f ), strTextureGroup( g ), pMaterial( nullptr ), bCreateFile( true )
 		{ }
 
@@ -41,7 +40,7 @@ namespace PX::Features::Awareness
 	material_t matMaterials[ MATERIAL_MAX ]
 	{
 		material_t( PX_XOR( // MATERIAL_DEFAULT
-					   R"#("VertexLitGeneric"
+R"#("VertexLitGeneric"
 {
   "$basetexture" "vgui/white_additive"
   "$ignorez"      "0"
@@ -57,7 +56,7 @@ namespace PX::Features::Awareness
 )#" ), PX_XOR( "default" ), TEXTURE_GROUP_MODEL ),
 
 		material_t( PX_XOR( // MATERIAL_DEFAULT_IGNOREZ
-					   R"#("VertexLitGeneric"
+R"#("VertexLitGeneric"
 {
   "$basetexture" "vgui/white_additive"
   "$ignorez"      "1"
@@ -73,7 +72,7 @@ namespace PX::Features::Awareness
 )#" ), PX_XOR( "default_ignorez" ), TEXTURE_GROUP_MODEL ),
 
 		material_t( PX_XOR( // MATERIAL_DEFAULT_FLAT
-					   R"#("UnlitGeneric"
+R"#("UnlitGeneric"
 {
   "$basetexture" "vgui/white_additive"
   "$ignorez"      "0"
@@ -89,7 +88,7 @@ namespace PX::Features::Awareness
 )#" ), PX_XOR( "default_flat" ), TEXTURE_GROUP_MODEL ),
 
 		material_t( PX_XOR( // MATERIAL_DEFAULT_FLAT_IGNOREZ
-					   R"#("UnlitGeneric"
+R"#("UnlitGeneric"
 {
   "$basetexture" "vgui/white_additive"
   "$ignorez"      "1"
@@ -117,9 +116,9 @@ namespace PX::Features::Awareness
 
 	bool PX_API CreateMaterials( )
 	{
-		for ( auto &material: matMaterials )
+		for ( auto& material : matMaterials )
 		{
-			if ( material.bCreateFile )
+			if( material.bCreateFile )
 				std::ofstream( PX_XOR( "csgo\\materials\\" ) + material.wstrFileName + PX_XOR( ".vmt" ) ) << material.wstrData;
 			if ( ( material.pMaterial = pMaterialSystem->FindMaterial( material.wstrFileName.empty( ) ? nullptr : material.wstrFileName.c_str( ), material.bCreateFile ? TEXTURE_GROUP_MODEL : TEXTURE_GROUP_OTHER ) ) == nullptr )
 				return false;
@@ -129,12 +128,12 @@ namespace PX::Features::Awareness
 
 	void PX_API RemoveMaterials( )
 	{
-		for ( auto &material: matMaterials )
+		for ( auto& material : matMaterials )
 			std::remove( ( PX_XOR( "csgo\\materials\\" ) + material.wstrFileName + PX_XOR( ".vmt" ) ).c_str( ) );
 	}
 
 	int PX_API GetSettingIndex( entity_ptr_t pEntity );
-	bool PX_API SetMaterial( IMatRenderContext *pContext, const DrawModelState_t &_State, const ModelRenderInfo_t &_Info, matrix3x4_t *pMatrix, draw_model_execute_t fnDrawModelExecute, entity_ptr_t pEntity, int iSettingIndex );
+	bool PX_API SetMaterial( IMatRenderContext* pContext, const DrawModelState_t& _State, const ModelRenderInfo_t& _Info, matrix3x4_t* pMatrix, draw_model_execute_t fnDrawModelExecute, entity_ptr_t pEntity, int iSettingIndex );
 
 	void PX_API SetEntityLocations( )
 	{
@@ -151,7 +150,7 @@ namespace PX::Features::Awareness
 			if ( _Settings._Awareness._Materials._Entities[ iSettingIndex ].bEnabled.Get( ) )
 			{
 				vecLocations.emplace_back( );
-				auto &location = vecLocations.back( );
+				auto& location = vecLocations.back( );
 				location.first = pEntity->EntIndex( );
 				location.second = pEntity->m_vecOrigin( );
 				pEntity->m_vecOrigin( ) = Vector( 0, 0, 0 );
@@ -160,13 +159,13 @@ namespace PX::Features::Awareness
 		}
 	}
 
-	bool PX_API OverrideMaterial( player_ptr_t pLocalPlayer, IMatRenderContext *pContext, const DrawModelState_t &_State, const ModelRenderInfo_t &_Info, matrix3x4_t *pMatrix, void *fnDrawModelExecute )
+	bool PX_API OverrideMaterial( player_ptr_t pLocalPlayer, IMatRenderContext* pContext, const DrawModelState_t& _State, const ModelRenderInfo_t& _Info, matrix3x4_t* pMatrix, void* fnDrawModelExecute )
 	{
 		if ( pModelRender->IsForcedMaterialOverride( ) )
 			return false;
 
 		if ( strstr( _Info.pModel->szName, PX_XOR( "arms" ) ) != nullptr
-			|| strstr( _Info.pModel->szName, PX_XOR( "sleeve" ) ) != nullptr )
+			 || strstr( _Info.pModel->szName, PX_XOR( "sleeve" ) ) != nullptr )
 			return SetMaterial( pContext, _State, _Info, pMatrix, draw_model_execute_t( fnDrawModelExecute ), nullptr, SETTING_MATERIALS_SELF );
 
 		if ( strstr( _Info.pModel->szName, PX_XOR( R"(chicken/chicken)" ) ) != nullptr )
@@ -291,7 +290,7 @@ namespace PX::Features::Awareness
 
 			case ClassID_CBaseCSGrenadeProjectile: // hegrenade & flashbang
 			{
-				const auto iModelIndex = reinterpret_cast< CBaseViewModel * >( pEntity )->m_nModelIndex( );
+				const auto iModelIndex = reinterpret_cast< CBaseViewModel* >( pEntity )->m_nModelIndex( );
 				if ( iModelIndex == pModelInfo->GetModelIndex( PX_XOR( "models/Weapons/w_eq_flashbang_dropped.mdl" ) ) )
 					iSettingIndex = SETTING_MATERIALS_PROJECTILE_FLASH;
 				else if ( iModelIndex == pModelInfo->GetModelIndex( PX_XOR( "models/Weapons/w_eq_fraggrenade_dropped.mdl" ) ) )
@@ -328,19 +327,19 @@ namespace PX::Features::Awareness
 				if ( pEntity->IsWeapon( ) )
 					iSettingIndex = SETTING_MATERIALS_WEAPONS;
 			}
-				break;
+			break;
 		}
 
 		return iSettingIndex;
 	}
 
-	bool PX_API SetMaterial( IMatRenderContext *pContext, const DrawModelState_t &_State, const ModelRenderInfo_t &_Info, matrix3x4_t *pMatrix, draw_model_execute_t fnDrawModelExecute, entity_ptr_t pEntity, int iSettingIndex )
+	bool PX_API SetMaterial( IMatRenderContext* pContext, const DrawModelState_t& _State, const ModelRenderInfo_t& _Info, matrix3x4_t* pMatrix, draw_model_execute_t fnDrawModelExecute, entity_ptr_t pEntity, int iSettingIndex )
 	{
-		const auto fnDrawModel = [ & ]( int iMaterialSetting, bool bWireFrame, color_t clrVisible, const color_t &clrInvisible, bool bDrawForeground = true )
+		const auto fnDrawModel = [ & ]( int iMaterialSetting, bool bWireFrame, color_t clrVisible, const color_t& clrInvisible, bool bDrawForeground = true )
 		{
-			IMaterial *pForeground = nullptr;
+			IMaterial* pForeground = nullptr;
 
-			if ( iMaterialSetting == MATERIAL_IGNOREZ || iMaterialSetting == MATERIAL_FLAT_IGNOREZ )
+			if( iMaterialSetting == MATERIAL_IGNOREZ || iMaterialSetting == MATERIAL_FLAT_IGNOREZ )
 			{
 				const auto pCurrent = matMaterials[ iMaterialSetting ].pMaterial;
 				pForeground = matMaterials[ iMaterialSetting == MATERIAL_IGNOREZ ? MATERIAL_DEFAULT : MATERIAL_FLAT ].pMaterial;
@@ -366,7 +365,7 @@ namespace PX::Features::Awareness
 			pModelRender->ForcedMaterialOverride( nullptr );
 		};
 
-		auto &_Config = _Settings._Awareness._Materials._Entities[ iSettingIndex ];
+		auto& _Config = _Settings._Awareness._Materials._Entities[ iSettingIndex ];
 		if ( !_Config.bEnabled.Get( ) )
 			return false;
 
@@ -375,7 +374,7 @@ namespace PX::Features::Awareness
 
 		fnDrawModel( _Config.iMaterial, _Config.bWireFrame.Get( ), _Config.seqColor[ STATE_VISIBLE ].GetCurrentColor( ), _Config.seqColor[ STATE_INVISIBLE ].GetCurrentColor( ) );
 
-		if ( _Config.bWireFrameOverlay.Get( ) )
+		if( _Config.bWireFrameOverlay.Get( ) )
 			fnDrawModel( MATERIAL_FLAT_IGNOREZ, true, _Config.seqWireFrameOverlay[ STATE_VISIBLE ].GetCurrentColor( ), _Config.seqWireFrameOverlay[ STATE_INVISIBLE ].GetCurrentColor( ) );
 
 		return true;

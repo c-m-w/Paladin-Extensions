@@ -12,7 +12,7 @@
 
 struct characterset_t
 {
-	char Set[256];
+    char Set[256];
 };
 
 
@@ -22,7 +22,7 @@ struct characterset_t
 // Input  : *pSetBuffer - pointer to the buffer for the group
 //			*pSetString - list of characters to flag
 //-----------------------------------------------------------------------------
-extern void CharacterSetBuild( characterset_t *pSetBuffer, const char *pSetString );
+extern void CharacterSetBuild(characterset_t *pSetBuffer, const char *pSetString);
 
 
 //-----------------------------------------------------------------------------

@@ -31,13 +31,13 @@ public:
 	uint32_t m_nClientTick;     //0x004C
 }; //Size: 0x0050
 
-// This struct is most likely wrong
-// Only fields that I know to be valid are:
-// - m_NetChannel
-// - m_nCurrentSequence
-// - m_nDeltaTick
-// - m_nMaxClients
-// - viewangles
+   // This struct is most likely wrong
+   // Only fields that I know to be valid are:
+   // - m_NetChannel
+   // - m_nCurrentSequence
+   // - m_nDeltaTick
+   // - m_nMaxClients
+   // - viewangles
 class CClientState
 {
 public:
@@ -78,8 +78,8 @@ public:
 
 #pragma pack(pop)
 
-/*static_assert(FIELD_OFFSET(CClientState, m_NetChannel)       == 0x009C, "Wrong struct offset");
-static_assert(FIELD_OFFSET(CClientState, m_nCurrentSequence) == 0x011C, "Wrong struct offset");
-static_assert(FIELD_OFFSET(CClientState, m_nDeltaTick)       == 0x0174, "Wrong struct offset");
-static_assert(FIELD_OFFSET(CClientState, m_nMaxClients)      == 0x0310, "Wrong struct offset");
-static_assert(FIELD_OFFSET(CClientState, viewangles)         == 0x4D10, "Wrong struct offset");*/
+   /*static_assert(FIELD_OFFSET(CClientState, m_NetChannel)       == 0x009C, "Wrong struct offset");
+   static_assert(FIELD_OFFSET(CClientState, m_nCurrentSequence) == 0x011C, "Wrong struct offset");
+   static_assert(FIELD_OFFSET(CClientState, m_nDeltaTick)       == 0x0174, "Wrong struct offset");
+   static_assert(FIELD_OFFSET(CClientState, m_nMaxClients)      == 0x0310, "Wrong struct offset");
+   static_assert(FIELD_OFFSET(CClientState, viewangles)         == 0x4D10, "Wrong struct offset");*/

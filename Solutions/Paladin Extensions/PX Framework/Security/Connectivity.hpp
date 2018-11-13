@@ -4,24 +4,24 @@
 
 namespace PX::Net
 {
-	PX_SDK Types::str_t strUserIDIdentifier = PX_XOR( "id" );
-	PX_SDK Types::str_t strExtensionIdentifier = PX_XOR( "ext" );
-	PX_SDK Types::str_t strFileIdentifier = PX_XOR( "file" );
-	PX_SDK Types::str_t strHardwareIdentifier = PX_XOR( "hw" );
-	PX_SDK Types::str_t strSecretKeyIdentifier = PX_XOR( "sk" );
-	PX_SDK Types::str_t strUniqueIDIdentifier = PX_XOR( "uid" );
-
-	PX_SDK Types::str_t strLoginURL = PX_XOR( "https://www.paladin.rip/auth/auth.php/" );
-	PX_SDK Types::str_t strKeyURL = PX_XOR( "https://www.paladin.rip/auth/key.php/" );
-	PX_SDK Types::str_t strDownloadURL = PX_XOR( "https://www.paladin.rip/auth/download.php/" );
+	PX_SDK Types::str_t strUserIDIdentifier		= PX_XOR( "id" );
+	PX_SDK Types::str_t strExtensionIdentifier	= PX_XOR( "ext" );
+	PX_SDK Types::str_t strFileIdentifier		= PX_XOR( "file" );
+	PX_SDK Types::str_t strHardwareIdentifier	= PX_XOR( "hw" );
+	PX_SDK Types::str_t strSecretKeyIdentifier	= PX_XOR( "sk" );
+	PX_SDK Types::str_t strUniqueIDIdentifier	= PX_XOR( "uid" );
+	
+	PX_SDK Types::str_t strLoginURL		= PX_XOR( "https://www.paladin.rip/auth/auth.php/" );
+	PX_SDK Types::str_t strKeyURL		= PX_XOR( "https://www.paladin.rip/auth/key.php/" );
+	PX_SDK Types::str_t strDownloadURL	= PX_XOR( "https://www.paladin.rip/auth/download.php/" );
 
 	/** \brief Pointer where the connection information is stored. */
-	PX_SDK CURL *pConnection = nullptr;
+	PX_SDK CURL* pConnection = nullptr;
 
 	/** \brief Formats passed post data into a string that can be used as post data in a connection. */
 	/**	\param dqPostData All of the elements that are to be included in the formatted data. */
 	/**	\return Formatted post data string. */
-	Types::str_t PX_API GeneratePostData( const Types::post_data_t &dqPostData );
+	Types::str_t PX_API GeneratePostData( const Types::post_data_t& dqPostData );
 	/** \brief Attempts to initialize cURL. */
 	/**	\return true - Initialization was successful.\n false - Initialization was not successful. */
 	bool PX_API InitializeConnection( ) PX_NOX;
@@ -31,7 +31,7 @@ namespace PX::Net
 	/**	\param strSite Site to make the request to.	*/
 	/** \param dqPostData Post data to send to the site. */
 	/**	\return What the site sends back from the request. */
-	Types::str_t PX_API Request( const Types::str_t &strSite, const Types::post_data_t &dqPostData = { } );
+	Types::str_t PX_API Request( const Types::str_t& strSite, const Types::post_data_t& dqPostData = { } );
 
 	Types::str_t PX_API RequestExtension( unsigned uGameID, bool bInformation );
 
@@ -59,7 +59,7 @@ namespace PX::Net
 	/** \brief Logs in using the credentials in the license file. */
 	/** \param bHasExtension Which extensions the user has access to. */
 	/**	\return Login status. */
-	ELogin PX_API Login( bool *bHasExtension = nullptr );
+	ELogin PX_API Login( bool* bHasExtension = nullptr );
 	Types::str_t PX_API RequestExtensionInformation( unsigned uExtension );
 }
 

@@ -19,7 +19,7 @@ namespace PX
 	public:
 		CKeyState( ) = default;
 
-		CKeyState( const EKeyState &_KeyState )
+		CKeyState( const EKeyState& _KeyState )
 		{
 			ksKeyState = _KeyState;
 		}
@@ -34,22 +34,22 @@ namespace PX
 			return ksKeyState;
 		}
 
-		bool operator==( const bool &rhs ) const
+		bool operator==( const bool& rhs ) const
 		{
 			return bool( *this ) == rhs;
 		}
 
-		bool operator!=( const bool &rhs ) const
+		bool operator!=( const bool& rhs ) const
 		{
 			return !( *this == rhs );
 		}
 
-		bool operator==( const int &rhs ) const
+		bool operator==( const int& rhs ) const
 		{
 			return int( *this ) == rhs;
 		}
 
-		bool operator!=( const int &rhs ) const
+		bool operator!=( const int& rhs ) const
 		{
 			return !( *this == rhs );
 		}
@@ -60,8 +60,8 @@ namespace PX
 		CKeyState ksKeys[ PX_MAX_KEY ];
 		Types::moment_t mmtKeyDownTime[ PX_MAX_KEY ];
 		unsigned uLastKeyPressed;
-		std::vector< std::function< void( PX_API)( bool ) > > vecfnKeyCallback[ PX_MAX_KEY ];
-		std::vector< std::function< void( PX_API)( unsigned, bool ) > > vecfnGlobalCallbacks;
+		std::vector< std::function< void( PX_API )( bool ) > > vecfnKeyCallback[ PX_MAX_KEY ];
+		std::vector< std::function< void( PX_API )( unsigned, bool ) > > vecfnGlobalCallbacks;
 
 		void PX_API ProcessKey( unsigned, bool );
 		void PX_API ProcessMouseMessage( UINT, WPARAM );

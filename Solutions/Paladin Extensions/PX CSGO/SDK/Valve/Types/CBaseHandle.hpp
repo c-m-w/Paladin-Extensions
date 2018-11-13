@@ -32,22 +32,22 @@ public:
 	int ToInt( ) const;
 	bool operator !=( const CBaseHandle &other ) const;
 	bool operator ==( const CBaseHandle &other ) const;
-	bool operator ==( const IHandleEntity *pEnt ) const;
-	bool operator !=( const IHandleEntity *pEnt ) const;
+	bool operator ==( const IHandleEntity* pEnt ) const;
+	bool operator !=( const IHandleEntity* pEnt ) const;
 	bool operator <( const CBaseHandle &other ) const;
-	bool operator <( const IHandleEntity *pEnt ) const;
+	bool operator <( const IHandleEntity* pEnt ) const;
 
 	// Assign a value to the handle.
-	const CBaseHandle &operator=( const IHandleEntity *pEntity );
-	const CBaseHandle &Set( const IHandleEntity *pEntity );
+	const CBaseHandle& operator=( const IHandleEntity *pEntity );
+	const CBaseHandle& Set( const IHandleEntity *pEntity );
 
 	// Use this to dereference the handle.
 	// Note: this is implemented in game code (ehandle.h)
-	IHandleEntity *Get( ) const;
+	IHandleEntity* Get( ) const;
 protected:
 	// The low NUM_SERIAL_BITS hold the index. If this value is less than MAX_EDICTS, then the entity is networkable.
 	// The high NUM_SERIAL_NUM_BITS bits are the serial number.
-	unsigned long m_Index;
+	unsigned long	m_Index;
 };
 
 inline CBaseHandle::CBaseHandle( )
@@ -110,12 +110,12 @@ inline bool CBaseHandle::operator ==( const CBaseHandle &other ) const
 	return m_Index == other.m_Index;
 }
 
-inline bool CBaseHandle::operator ==( const IHandleEntity *pEnt ) const
+inline bool CBaseHandle::operator ==( const IHandleEntity* pEnt ) const
 {
 	return Get( ) == pEnt;
 }
 
-inline bool CBaseHandle::operator !=( const IHandleEntity *pEnt ) const
+inline bool CBaseHandle::operator !=( const IHandleEntity* pEnt ) const
 {
 	return Get( ) != pEnt;
 }
@@ -131,12 +131,12 @@ inline bool CBaseHandle::operator <( const IHandleEntity *pEntity ) const
 	return m_Index < otherIndex;
 }
 
-inline const CBaseHandle &CBaseHandle::operator=( const IHandleEntity *pEntity )
+inline const CBaseHandle& CBaseHandle::operator=( const IHandleEntity *pEntity )
 {
 	return Set( pEntity );
 }
 
-inline const CBaseHandle &CBaseHandle::Set( const IHandleEntity *pEntity )
+inline const CBaseHandle& CBaseHandle::Set( const IHandleEntity *pEntity )
 {
 	if ( pEntity )
 	{

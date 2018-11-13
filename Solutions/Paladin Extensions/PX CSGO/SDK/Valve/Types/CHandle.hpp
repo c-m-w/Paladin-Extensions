@@ -6,7 +6,8 @@
 // -------------------------------------------------------------------------------------------------- //
 // CHandle.
 // -------------------------------------------------------------------------------------------------- //
-template< class T > class CHandle: public CBaseHandle
+template< class T >
+class CHandle: public CBaseHandle
 {
 public:
 
@@ -16,20 +17,20 @@ public:
 	CHandle( T *pVal );
 
 	// The index should have come from a call to ToInt(). If it hasn't, you're in trouble.
-	static CHandle< T > FromIndex( int index );
+	static CHandle<T> FromIndex( int index );
 
-	T *Get( ) const;
-	void Set( const T *pVal );
+	T*		Get( ) const;
+	void	Set( const T* pVal );
 
 	operator T*( );
 	operator T*( ) const;
 
-	bool operator !( ) const;
-	bool operator==( T *val ) const;
-	bool operator!=( T *val ) const;
-	const CBaseHandle &operator=( const T *val );
+	bool	operator !( ) const;
+	bool	operator==( T *val ) const;
+	bool	operator!=( T *val ) const;
+	const CBaseHandle& operator=( const T *val );
 
-	T *operator->( ) const;
+	T*		operator->( ) const;
 };
 
 
@@ -37,72 +38,94 @@ public:
 // Inlines.
 // ----------------------------------------------------------------------- //
 
-template< class T > CHandle< T >::CHandle( )
+template<class T>
+CHandle<T>::CHandle( )
 { }
 
-template< class T > CHandle< T >::CHandle( int iEntry, int iSerialNumber )
+
+template<class T>
+CHandle<T>::CHandle( int iEntry, int iSerialNumber )
 {
 	Init( iEntry, iSerialNumber );
 }
 
-template< class T > CHandle< T >::CHandle( const CBaseHandle &handle ) : CBaseHandle( handle )
+
+template<class T>
+CHandle<T>::CHandle( const CBaseHandle &handle )
+	: CBaseHandle( handle )
 { }
 
-template< class T > CHandle< T >::CHandle( T *pObj )
+
+template<class T>
+CHandle<T>::CHandle( T *pObj )
 {
 	Term( );
 	Set( pObj );
 }
 
-template< class T > inline CHandle< T > CHandle< T >::FromIndex( int index )
+
+template<class T>
+inline CHandle<T> CHandle<T>::FromIndex( int index )
 {
-	CHandle< T > ret;
+	CHandle<T> ret;
 	ret.m_Index = index;
 	return ret;
 }
 
-template< class T > inline T *CHandle< T >::Get( ) const
+
+template<class T>
+inline T* CHandle<T>::Get( ) const
 {
 	return ( T* )CBaseHandle::Get( );
 }
 
-template< class T > inline CHandle< T >::operator T *( )
+
+template<class T>
+inline CHandle<T>::operator T *( )
 {
 	return Get( );
 }
 
-template< class T > inline CHandle< T >::operator T *( ) const
+template<class T>
+inline CHandle<T>::operator T *( ) const
 {
 	return Get( );
 }
 
-template< class T > inline bool CHandle< T >::operator !( ) const
+
+template<class T>
+inline bool CHandle<T>::operator !( ) const
 {
 	return !Get( );
 }
 
-template< class T > inline bool CHandle< T >::operator==( T *val ) const
+template<class T>
+inline bool CHandle<T>::operator==( T *val ) const
 {
 	return Get( ) == val;
 }
 
-template< class T > inline bool CHandle< T >::operator!=( T *val ) const
+template<class T>
+inline bool CHandle<T>::operator!=( T *val ) const
 {
 	return Get( ) != val;
 }
 
-template< class T > void CHandle< T >::Set( const T *pVal )
+template<class T>
+void CHandle<T>::Set( const T* pVal )
 {
-	CBaseHandle::Set( reinterpret_cast< const IHandleEntity * >( pVal ) );
+	CBaseHandle::Set( reinterpret_cast<const IHandleEntity*>( pVal ) );
 }
 
-template< class T > inline const CBaseHandle &CHandle< T >::operator=( const T *val )
+template<class T>
+inline const CBaseHandle& CHandle<T>::operator=( const T *val )
 {
 	Set( val );
 	return *this;
 }
 
-template< class T > T *CHandle< T >::operator ->( ) const
+template<class T>
+T* CHandle<T>::operator -> ( ) const
 {
 	return Get( );
 }

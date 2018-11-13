@@ -31,18 +31,18 @@ namespace PX::sys
 	/** \brief Gets process identifier for any running executable */
 	/** \param wstrExecutableName Executable name for target process */
 	/** \return Process ID */
-	DWORD PX_API GetProcessID( const Types::wstr_t &wstrExecutableName );
+	DWORD PX_API GetProcessID( const Types::wstr_t& wstrExecutableName );
 	HANDLE PX_API FindProcessThread( DWORD dwProcessID );
-	HMODULE PX_API FindModuleEx( const Types::wstr_t &wstrModule, DWORD dwProcessID );
-	bool PX_API IsProcessOpen( const Types::wstr_t &wstrExecutableName );
+	HMODULE PX_API FindModuleEx( const Types::wstr_t& wstrModule, DWORD dwProcessID );
+	bool PX_API IsProcessOpen( const Types::wstr_t& wstrExecutableName );
 	bool PX_API IsProcessThreadRunning( DWORD dwProcessID );
 	bool PX_API NecessaryModulesLoaded( DWORD dwProcessID );
 
 	PX_DEF INJECTION_INFO_SIZE = 24u;
 	PX_SDK unsigned uLoadDLLSize = 0u;
 	PX_SDK unsigned uStubSize = 0u;
-	PX_SDK Types::byte_t *bLoadDLL = nullptr;
-	PX_SDK Types::byte_t *bStub = nullptr;
+	PX_SDK Types::byte_t* bLoadDLL = nullptr;
+	PX_SDK Types::byte_t* bStub = nullptr;
 
 	/** \brief Information for manually mapping a DLL into a process. */
 	typedef struct
@@ -57,18 +57,18 @@ namespace PX::sys
 
 	void PX_API WipeMemoryEx( HANDLE hTarget, LPVOID pAddress, std::size_t zSize );
 	void PX_API WipeMemory( LPVOID pAddress, std::size_t zSize );
-	bool PX_API LoadLibraryEx( const Types::wstr_t &wstrExecutableName, const Types::wstr_t &wstrDLLPath );
+	bool PX_API LoadLibraryEx( const Types::wstr_t& wstrExecutableName, const Types::wstr_t& wstrDLLPath );
 	/** \brief Manually maps and calls desired DLL into any running executable */
 	/** \param pDLL Data for DLL to be mapped */
 	/** \param wstrExecutableName Executable name for target process */
 	/** \param injInfo Object to store information of injection. */
 	/** \return True if successful, false if failed. */
-	bool PX_API LoadRawLibraryEx( const LPVOID &pDLL, const Types::wstr_t &wstrExecutableName, injection_info_t *injInfo, HANDLE *hTarget = nullptr, HANDLE *hThread = nullptr );
+	bool PX_API LoadRawLibraryEx( const LPVOID& pDLL, const Types::wstr_t& wstrExecutableName, injection_info_t* injInfo, HANDLE* hTarget = nullptr, HANDLE* hThread = nullptr );
 	/** \brief Manually maps and calls desired DLL into self */
 	/** \param pDLL Data for DLL to be mapped */
 	/** \param injInfo Object to store information of injection. */
 	/** \return True if successful, false if failed. */
-	bool PX_API LoadRawLibrary( const LPVOID &pDLL, injection_info_t *injInfo );
+	bool PX_API LoadRawLibrary( const LPVOID& pDLL, injection_info_t* injInfo );
 
 	HANDLE PX_API FindInternalHandle( DWORD dwTargetProcessID );
 
@@ -95,6 +95,7 @@ namespace PX::sys
 			ULONG HandleCount;
 			SYSTEM_HANDLE Handles[ 1 ];
 		} SYSTEM_HANDLE_INFORMATION, *PSYSTEM_HANDLE_INFORMATION;
+
 
 		typedef struct _SYSTEM_KERNEL_DEBUGGER_INFORMATION
 		{
@@ -170,7 +171,7 @@ namespace PX::sys
 		} LDR_DATA_TABLE_ENTRY64, *PLDR_DATA_TABLE_ENTRY64;
 
 		// functions
-		typedef VOID ( NTAPI LDR_ENUM_CALLBACK )( PLDR_DATA_TABLE_ENTRY, PVOID, BOOLEAN * );
+		typedef VOID ( NTAPI LDR_ENUM_CALLBACK )( PLDR_DATA_TABLE_ENTRY, PVOID, BOOLEAN* );
 		typedef LDR_ENUM_CALLBACK *PLDR_ENUM_CALLBACK;
 
 		typedef UINT ( WINAPI* fnEnumSystemFirmwareTables )( DWORD, PVOID, DWORD );
@@ -184,7 +185,7 @@ namespace PX::sys
 		typedef NTSTATUS ( NTAPI* fnNtCreateThreadEx )( PHANDLE, ACCESS_MASK, LPVOID, HANDLE, LPTHREAD_START_ROUTINE, LPVOID, BOOL, DWORD, DWORD, DWORD, LPVOID );
 		typedef NTSTATUS ( NTAPI* fnNtDelayExecution )( BOOLEAN, PLARGE_INTEGER );
 		typedef NTSTATUS ( NTAPI* fnNtQueryInformationThread )( HANDLE, UINT, PVOID, ULONG, PULONG );
-		typedef NTSTATUS ( NTAPI* fnNtQueryInformationProcess )( HANDLE, UINT, PVOID, ULONG, PULONG );
+		typedef NTSTATUS ( NTAPI* fnNtQueryInformationProcess )(  HANDLE,  UINT, PVOID, ULONG, PULONG );
 		typedef NTSTATUS ( NTAPI* fnNtQueryObject )( HANDLE, UINT, PVOID, ULONG, PULONG );
 		typedef NTSTATUS ( NTAPI* fnNtQuerySystemInformation )( UINT, PVOID, ULONG, PULONG );
 		typedef NTSTATUS ( NTAPI* fnNtSetInformationThread )( HANDLE, UINT, PVOID, ULONG );
@@ -192,7 +193,7 @@ namespace PX::sys
 		typedef NTSTATUS ( NTAPI* fnNtWow64QueryVirtualMemory64 )( HANDLE, PVOID64, DWORD, PMEMORY_BASIC_INFORMATION64, ULONG64, PULONG64 );
 		typedef NTSTATUS ( NTAPI* fnNtUnmapViewOfSection )( HANDLE, PVOID );
 		typedef NTSTATUS ( NTAPI* fnNtYieldExecution )( );
-		typedef NTSTATUS ( WINAPI* fnRtlGetVersion )( RTL_OSVERSIONINFOEXW * );
+		typedef NTSTATUS ( WINAPI* fnRtlGetVersion )( RTL_OSVERSIONINFOEXW* );
 		typedef DWORD ( WINAPI* fnRtlCreateUserThread )( HANDLE, PSECURITY_DESCRIPTOR, BOOL, ULONG, PULONG, PULONG, LPVOID, LPVOID, HANDLE, LPVOID );
 
 		enum EFuncs
@@ -222,7 +223,7 @@ namespace PX::sys
 		};
 
 		SWindowsAPI( ) PX_NOX;
-		void * PX_API GetFunctionPointer( EFuncs enfRequest ) const PX_NOX;
+		void* PX_API GetFunctionPointer( EFuncs enfRequest ) const PX_NOX;
 	};
 }
 

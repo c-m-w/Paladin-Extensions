@@ -8,16 +8,15 @@
 
 namespace PX::Information::Pointers
 {
-	extern ICvar *pConVar;
+	extern ICvar* pConVar;
 }
-
 using PX::Information::Pointers::pConVar;
-#define ALIGN_VALUE( val, alignment ) ( ( val + alignment - 1 ) & ~( alignment - 1 ) )
+#define ALIGN_VALUE( val, alignment ) ( ( val + alignment - 1 ) & ~( alignment - 1 ) ) 
 #define stackalloc( _size )		_alloca( ALIGN_VALUE( _size, 16 ) )
 
 ConCommandBase *ConCommandBase::s_pConCommandBases = NULL;
 ConCommandBase *ConCommandBase::s_pRegisteredCommands = NULL;
-IConCommandBaseAccessor *ConCommandBase::s_pAccessor = NULL;
+IConCommandBaseAccessor	*ConCommandBase::s_pAccessor = NULL;
 static int s_nDLLIdentifier = -1;
 static int s_nCVarFlag = 0;
 static bool s_bRegistered = false;
@@ -183,8 +182,8 @@ ConCommandBase *ConCommandBase::GetNext( void )
 
 char *ConCommandBase::CopyString( const char *from )
 {
-	int len;
-	char *to;
+	int		len;
+	char	*to;
 
 	len = strlen( from );
 	if ( len <= 0 )
@@ -276,7 +275,7 @@ void CCommand::Reset( )
 	m_pArgSBuffer[ 0 ] = 0;
 }
 
-characterset_t *CCommand::DefaultBreakSet( )
+characterset_t* CCommand::DefaultBreakSet( )
 {
 	return &s_BreakSet;
 }
@@ -299,7 +298,7 @@ bool CCommand::Tokenize( const char *pCommand, characterset_t *pBreakSet )
 	int nLen = strlen( pCommand );
 	if ( nLen >= COMMAND_MAX_LENGTH - 1 )
 	{
-		//Warning("CCommand::Tokenize: Encountered command which overflows the tokenizer buffer.. Skipping!\n");
+//Warning("CCommand::Tokenize: Encountered command which overflows the tokenizer buffer.. Skipping!\n");
 		return false;
 	}
 
@@ -313,7 +312,7 @@ bool CCommand::Tokenize( const char *pCommand, characterset_t *pBreakSet )
 		char *pArgvBuf = &m_pArgvBuffer[ nArgvBufferSize ];
 		int nMaxLen = COMMAND_MAX_LENGTH - nArgvBufferSize;
 		int nStartGet = bufParse.TellGet( );
-		int nSize = bufParse.ParseToken( pBreakSet, pArgvBuf, nMaxLen );
+		int	nSize = bufParse.ParseToken( pBreakSet, pArgvBuf, nMaxLen );
 		if ( nSize < 0 )
 			break;
 
@@ -326,7 +325,7 @@ bool CCommand::Tokenize( const char *pCommand, characterset_t *pBreakSet )
 
 		if ( m_nArgc == 1 )
 		{
-			// Deal with the case where the arguments were quoted
+// Deal with the case where the arguments were quoted
 			m_nArgv0Size = bufParse.TellGet( );
 			bool bFoundEndQuote = m_pArgSBuffer[ m_nArgv0Size - 1 ] == '\"';
 			if ( bFoundEndQuote )
@@ -349,7 +348,7 @@ bool CCommand::Tokenize( const char *pCommand, characterset_t *pBreakSet )
 		m_ppArgv[ m_nArgc++ ] = pArgvBuf;
 		if ( m_nArgc >= COMMAND_MAX_ARGC )
 		{
-			//Warning("CCommand::Tokenize: Encountered command which overflows the argument buffer.. Clamped!\n");
+//Warning("CCommand::Tokenize: Encountered command which overflows the argument buffer.. Clamped!\n");
 		}
 
 		nArgvBufferSize += nSize + 1;
@@ -359,7 +358,7 @@ bool CCommand::Tokenize( const char *pCommand, characterset_t *pBreakSet )
 	return true;
 }
 
-const char *CCommand::FindArg( const char *pName ) const
+const char* CCommand::FindArg( const char *pName ) const
 {
 	int nArgC = ArgC( );
 	for ( int i = 1; i < nArgC; i++ )
@@ -462,7 +461,7 @@ void ConCommand::Dispatch( const CCommand &command )
 	//AssertMsg(0, ("Encountered ConCommand without a callback!\n"));
 }
 
-int ConCommand::AutoCompleteSuggest( const char *partial, CUtlVector< CUtlString > &commands )
+int	ConCommand::AutoCompleteSuggest( const char *partial, CUtlVector< CUtlString > &commands )
 {
 	if ( m_bUsingCommandCallbackInterface )
 	{
@@ -537,12 +536,12 @@ void ConVar::InstallChangeCallback( FnChangeCallback_t callback, bool bInvoke )
 		}
 		else
 		{
-			//Warning("InstallChangeCallback ignoring duplicate change callback!!!\n");
+			 //Warning("InstallChangeCallback ignoring duplicate change callback!!!\n");
 		}
 	}
 	else
 	{
-		//Warning("InstallChangeCallback called with NULL callback, ignoring!!!\n");
+	 //Warning("InstallChangeCallback called with NULL callback, ignoring!!!\n");
 	}
 }
 
@@ -603,8 +602,8 @@ int ConVar::GetSplitScreenPlayerSlot( void ) const
 void ConVar::InternalSetValue( const char *value )
 {
 	float fNewValue;
-	char tempVal[ 32 ];
-	char *val;
+	char  tempVal[ 32 ];
+	char  *val;
 
 	auto temp = *( uint32_t* )&m_Value.m_fValue ^ ( uint32_t )this;
 	float flOldValue = *( float* )( &temp );
@@ -630,7 +629,7 @@ void ConVar::InternalSetValue( const char *value )
 
 void ConVar::ChangeStringValue( const char *tempVal, float flOldValue )
 {
-	char *pszOldValue = ( char* )stackalloc( m_Value.m_StringLength );
+	char* pszOldValue = ( char* )stackalloc( m_Value.m_StringLength );
 	memcpy( pszOldValue, m_Value.m_pszString, m_Value.m_StringLength );
 
 	int len = strlen( tempVal ) + 1;
@@ -658,7 +657,7 @@ void ConVar::ChangeStringValue( const char *tempVal, float flOldValue )
 		pConVar->CallGlobalChangeCallbacks( this, pszOldValue, flOldValue );
 }
 
-bool ConVar::ClampValue( float &value )
+bool ConVar::ClampValue( float& value )
 {
 	if ( m_bHasMin && ( value < m_fMinVal ) )
 	{
@@ -695,7 +694,7 @@ void ConVar::InternalSetFloatValue( float fNewValue )
 	}
 	else
 	{
-		//assert(m_fnChangeCallbacks.Count() == 0);
+	 //assert(m_fnChangeCallbacks.Count() == 0);
 	}
 }
 
@@ -723,7 +722,7 @@ void ConVar::InternalSetIntValue( int nValue )
 	}
 	else
 	{
-		//assert(m_fnChangeCallbacks.Count() == 0);
+	 //assert(m_fnChangeCallbacks.Count() == 0);
 	}
 }
 
@@ -795,13 +794,13 @@ void ConVar::Revert( void )
 	var->SetValue( var->m_pszDefaultValue );
 }
 
-bool ConVar::GetMin( float &minVal ) const
+bool ConVar::GetMin( float& minVal ) const
 {
 	minVal = m_pParent->m_fMinVal;
 	return m_pParent->m_bHasMin;
 }
 
-bool ConVar::GetMax( float &maxVal ) const
+bool ConVar::GetMax( float& maxVal ) const
 {
 	maxVal = m_pParent->m_fMaxVal;
 	return m_pParent->m_bHasMax;

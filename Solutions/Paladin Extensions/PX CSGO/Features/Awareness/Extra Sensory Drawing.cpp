@@ -6,6 +6,7 @@
 bool bInvertedFill = true;
 float flLineThickness = 5.f;
 
+
 using namespace PX::Tools;
 using namespace PX::Information;
 using namespace PX::Drawing;
@@ -16,8 +17,8 @@ namespace PX::Features::Awareness
 	auto esdDrawingConfigf = &_Settings._Awareness._ExtraSensoryDrawing;
 	auto esdPlayerConfig = &esdDrawingConfigf->_Players[ SETTING_TEAM ];
 	auto esdWeaponConfig = &esdDrawingConfigf->_Weapons[ SETTING_WEAPON ];
-	settings_t::awareness_t::extra_sensory_drawing_t::extra_sensory_drawing_base_t *esdConfig = esdPlayerConfig;
-	CBasePlayer *pLocalPlayer_ = nullptr;
+	settings_t::awareness_t::extra_sensory_drawing_t::extra_sensory_drawing_base_t* esdConfig = esdPlayerConfig;
+	CBasePlayer* pLocalPlayer_ = nullptr;
 	PX_DEF MAX_HEALTH = 100;
 
 	enum
@@ -30,7 +31,7 @@ namespace PX::Features::Awareness
 
 	struct
 	{
-		CBaseEntity *pEntity { };
+		CBaseEntity* pEntity { };
 		bool bTeammate = false, bIsPlayer = false;
 		int iSettingIndex = 0;
 		Vector vecLocation = Vector( );
@@ -91,7 +92,7 @@ namespace PX::Features::Awareness
 					esdWeaponConfig = &esdDrawingConfigf->_Weapons[ SETTING_WEAPON ];
 					esdConfig = esdWeaponConfig;
 				}
-					break;
+				break;
 				default:
 				{
 					if ( !info.pEntity->IsWeapon( ) )
@@ -101,7 +102,7 @@ namespace PX::Features::Awareness
 					esdWeaponConfig = &esdDrawingConfigf->_Weapons[ SETTING_WEAPON ];
 					esdConfig = esdWeaponConfig;
 				}
-					break;
+				break;
 			}
 
 			if ( !esdPlayerConfig->bEnabled )
@@ -112,9 +113,8 @@ namespace PX::Features::Awareness
 
 			if ( pEntity->IsDormant( ) )
 				info.iState = STATE_DORMANT;
-			else if ( info.bIsPlayer ?
-						  pLocalPlayer_->CanSeePlayer( player_ptr_t( info.pEntity ), !!esdPlayerConfig->bMindSmoke ) :
-						  pLocalPlayer_->CanSeePosition( info.vecLocation, !!esdPlayerConfig->bMindSmoke ) )
+			else if ( info.bIsPlayer ? pLocalPlayer_->CanSeePlayer( player_ptr_t( info.pEntity ), !!esdPlayerConfig->bMindSmoke ) : 
+									pLocalPlayer_->CanSeePosition( info.vecLocation, !!esdPlayerConfig->bMindSmoke ) )
 				info.iState = STATE_VISIBLE;
 			else
 				info.iState = STATE_INVISIBLE;
@@ -147,7 +147,7 @@ namespace PX::Features::Awareness
 			vecPoints[ TOPLEFT ].z = vecViewPosition.z + 10.f;
 
 			const auto flRotation = pClientState->viewangles.y - ( pClientState->viewangles.y -
-				CalcAngle( pLocalPlayer_->GetViewPosition( ), player_ptr_t( info.pEntity )->GetViewPosition( ) ).y );
+																   CalcAngle( pLocalPlayer_->GetViewPosition( ), player_ptr_t( info.pEntity )->GetViewPosition( ) ).y );
 			for ( auto i = 0; i < 4; i++ )
 			{
 				vecPoints[ i ].Rotate2D( flRotation, vecRotationPoint );
@@ -183,7 +183,7 @@ namespace PX::Features::Awareness
 			}
 
 			auto flTop = vecScreenPoints[ 0 ].y, flRight = vecScreenPoints[ 0 ].x, flBottom = vecScreenPoints[ 0 ].y, flLeft = vecScreenPoints[ 0 ].x;
-			for ( const auto &vecScreenPoint: vecScreenPoints )
+			for ( const auto& vecScreenPoint : vecScreenPoints )
 			{
 				if ( flLeft > vecScreenPoint.x )
 					flLeft = vecScreenPoint.x;
@@ -208,7 +208,7 @@ namespace PX::Features::Awareness
 			return;
 		SColor clrBox { }, clrFill { }, clrBottom { }, clrTop { };
 
-		if ( info.bIsPlayer )
+		if( info.bIsPlayer )
 		{
 			clrBox = esdConfig->seqBox[ info.iState ].GetCurrentColor( );
 			clrFill = !!esdPlayerConfig->bHealthBasedFillColor ? color_t( ) : esdPlayerConfig->seqFill[ info.iState ].GetCurrentColor( );
@@ -225,7 +225,9 @@ namespace PX::Features::Awareness
 			return;
 
 		if ( info.bIsPlayer && !!esdPlayerConfig->bThreeDimensional ) // 3d box
-		{ }
+		{
+			
+		}
 		else // 2d box
 		{
 			const D3DXVECTOR2 vecScreenPoints[ ]
@@ -246,7 +248,7 @@ namespace PX::Features::Awareness
 					{
 						const auto flZDifference = ( info.vecWorldBoundingBoxCorners[ TOPLEFT ].z - info.vecWorldBoundingBoxCorners[ BOTTOMLEFT ].z ) * ( float( info.iHealth ) / float( MAX_HEALTH ) );
 						auto vecMiddleLeft = info.vecWorldBoundingBoxCorners[ BOTTOMLEFT ],
-							 vecMiddleRight = info.vecWorldBoundingBoxCorners[ BOTTOMRIGHT ];
+							vecMiddleRight = info.vecWorldBoundingBoxCorners[ BOTTOMRIGHT ];
 						vecMiddleLeft.z += flZDifference;
 						vecMiddleRight.z += flZDifference;
 						Vector vecScreenMiddleLeft, vecScreenMiddleRight;
@@ -283,7 +285,8 @@ namespace PX::Features::Awareness
 				}
 			}
 			else
-			{ }
+			{
+			}
 			Line( vecScreenPoints, 5, 2, clrBox.GetARGB( ) );
 		}
 	}
@@ -322,10 +325,10 @@ namespace PX::Features::Awareness
 			return;
 
 		Vector vecEntity, vecEnd;
-		auto &gtRay = player_ptr_t( info.pEntity )->TraceRayFromView( );
+		auto& gtRay = player_ptr_t( info.pEntity )->TraceRayFromView( );
 
 		if ( !WorldToScreen( player_ptr_t( info.pEntity )->GetHitboxPosition( HITBOX_HEAD ), vecEntity )
-			|| !WorldToScreen( gtRay.endpos, vecEnd ) )
+			 || !WorldToScreen( gtRay.endpos, vecEnd ) )
 			return;
 
 		const D3DXVECTOR2 vecScreenPoints[ ]
@@ -383,7 +386,7 @@ namespace PX::Features::Awareness
 		Vector vecHitboxes[ HITBOX_MAX ];
 		for ( auto e = int( HITBOX_HEAD ); e < HITBOX_MAX; e++ )
 			if ( bUsedBone[ e ] && !WorldToScreen( player_ptr_t( info.pEntity )->GetHitboxPosition( EHitbox( e ) ), vecHitboxes[ e ] ) )
-				return;
+				 return;
 
 		const D3DXVECTOR2 vecLegs[ ] // 7
 		{
@@ -478,7 +481,7 @@ namespace PX::Features::Awareness
 			{
 				bSmartAlign = true;
 			}
-				break;
+			break;
 		}
 
 		if ( !!esdPlayerConfig->bShowHealth )
@@ -502,26 +505,105 @@ namespace PX::Features::Awareness
 					const Vector2D vecRotationPoint { info.vecLocation.x, info.vecLocation.y };
 					const auto vecViewOffset = player_ptr_t( info.pEntity )->m_vecViewOffset( );
 					const auto flRotation = pClientState->viewangles.y - ( pClientState->viewangles.y -
-						CalcAngle( pLocalPlayer_->GetViewPosition( ), player_ptr_t( info.pEntity )->GetViewPosition( ) ).y );
+																		   CalcAngle( pLocalPlayer_->GetViewPosition( ), player_ptr_t( info.pEntity )->GetViewPosition( ) ).y );
 					auto fl2 = 13.f + vecViewOffset.z;
 					vertex_t vtxOutline[ 4 ];
 					if ( esdConfig->iBoxMode == BOX_DYNAMIC )
-						switch ( esdPlayerConfig->iInformationAlignment )
+					switch ( esdPlayerConfig->iInformationAlignment )
+					{
+						case ALIGNMENT_RIGHT:
 						{
-							case ALIGNMENT_RIGHT:
+							fl = -28.f;
+						}
+						case ALIGNMENT_LEFT:
+						{
+							vecPoints[ BOTTOMRIGHT ].y += fl; // Bottom right
+							vecPoints[ BOTTOMRIGHT ].z -= 5.f;
+							vecPoints[ BOTTOMLEFT ].y += fl + flHealthbarWidth; // Bottom left
+							vecPoints[ BOTTOMLEFT ].z -= 5.f;
+							vecPoints[ TOPRIGHT ].y += fl; // Top right
+							vecPoints[ TOPRIGHT ].z = info.vecLocation.z + vecViewOffset.z + 10.f;
+							vecPoints[ TOPLEFT ].y += fl + flHealthbarWidth; // Top left
+							vecPoints[ TOPLEFT ].z = info.vecLocation.z + vecViewOffset.z + 10.f;
+
+							for ( auto i = 0; i < 4; i++ )
 							{
-								fl = -28.f;
+								vecPoints[ i ].Rotate2D( flRotation, vecRotationPoint );
+								WorldToScreen( vecPoints[ i ], vecBar[ i ] );
 							}
-							case ALIGNMENT_LEFT:
+
+							if ( flHealthRatio != 1.f )
 							{
-								vecPoints[ BOTTOMRIGHT ].y += fl; // Bottom right
-								vecPoints[ BOTTOMRIGHT ].z -= 5.f;
-								vecPoints[ BOTTOMLEFT ].y += fl + flHealthbarWidth; // Bottom left
-								vecPoints[ BOTTOMLEFT ].z -= 5.f;
-								vecPoints[ TOPRIGHT ].y += fl; // Top right
-								vecPoints[ TOPRIGHT ].z = info.vecLocation.z + vecViewOffset.z + 10.f;
-								vecPoints[ TOPLEFT ].y += fl + flHealthbarWidth; // Top left
-								vecPoints[ TOPLEFT ].z = info.vecLocation.z + vecViewOffset.z + 10.f;
+								const auto flZDifference = ( vecPoints[ TOPLEFT ].z - vecPoints[ BOTTOMLEFT ].z ) * flHealthRatio;
+								auto vecMiddleLeft = vecPoints[ BOTTOMLEFT ],
+									vecMiddleRight = vecPoints[ BOTTOMRIGHT ];
+								vecMiddleLeft.z += flZDifference;
+								vecMiddleRight.z += flZDifference;
+
+								Vector vecScreenMiddleLeft, vecScreenMiddleRight;
+								WorldToScreen( vecMiddleLeft, vecScreenMiddleLeft );
+								WorldToScreen( vecMiddleRight, vecScreenMiddleRight );
+
+								vtxTop[ 0 ] = vertex_t( vecBar[ TOPLEFT ].x, vecBar[ TOPLEFT ].y, dwTop );
+								vtxTop[ 1 ] = vertex_t( vecBar[ TOPRIGHT ].x, vecBar[ TOPRIGHT ].y, dwTop );
+								vtxTop[ 2 ] = vertex_t( vecScreenMiddleRight.x, vecScreenMiddleRight.y, dwTop );
+								vtxTop[ 3 ] = vertex_t( vecScreenMiddleLeft.x, vecScreenMiddleLeft.y, dwTop );
+
+								vtxBottom[ 0 ] = vertex_t( vecScreenMiddleLeft.x, vecScreenMiddleLeft.y, dwBottom );
+								vtxBottom[ 1 ] = vertex_t( vecScreenMiddleRight.x, vecScreenMiddleRight.y, dwBottom );
+								vtxBottom[ 2 ] = vertex_t( vecBar[ BOTTOMRIGHT ].x, vecBar[ BOTTOMRIGHT ].y, dwBottom );
+								vtxBottom[ 3 ] = vertex_t( vecBar[ BOTTOMLEFT ].x, vecBar[ BOTTOMLEFT ].y, dwBottom );
+
+								if ( bDoOutline )
+								{
+									const auto uSize = sizeof( vertex_t ) * 2u;
+									memcpy( vtxOutline, vtxTop, uSize );
+									memcpy( &vtxOutline[ 2 ], &vtxBottom[ 2 ], uSize );
+								}
+							}
+							else if ( bDoOutline )
+							{
+								vtxOutline[ 0 ] = vertex_t( vecBar[ TOPLEFT ].x, vecBar[ TOPLEFT ].y, 0 );
+								vtxOutline[ 1 ] = vertex_t( vecBar[ TOPRIGHT ].x, vecBar[ TOPRIGHT ].y, 0 );
+								vtxOutline[ 2 ] = vertex_t( vecBar[ BOTTOMRIGHT ].x, vecBar[ BOTTOMRIGHT ].y, 0 );
+								vtxOutline[ 3 ] = vertex_t( vecBar[ BOTTOMLEFT ].x, vecBar[ BOTTOMLEFT ].y, 0 );
+							}
+
+							if ( esdPlayerConfig->iInformationAlignment == ALIGNMENT_LEFT )
+							{
+								vecInformationStart = vecBar[ TOPLEFT ];
+								vecInformationStart.x -= flPadding;
+							}
+							else
+							{
+								vecInformationStart = vecBar[ TOPRIGHT ];
+								vecInformationStart.x += flPadding;
+							}
+						}
+						break;
+
+						case ALIGNMENT_BOTTOM:
+						{
+							fl2 = -8.f - flHealthbarWidth;
+						}
+						case ALIGNMENT_TOP:
+						{
+							vecPoints[ BOTTOMRIGHT ].y -= 20.f; // Bottom right
+							vecPoints[ BOTTOMRIGHT ].z += fl2;
+							vecPoints[ BOTTOMLEFT ].y += 20.f; // Bottom left
+							vecPoints[ BOTTOMLEFT ].z += fl2;
+							vecPoints[ TOPRIGHT ].y -= 20.f; // Top right
+							vecPoints[ TOPRIGHT ].z += fl2 + flHealthbarWidth;
+							vecPoints[ TOPLEFT ].y += 20.f; // Top left
+							vecPoints[ TOPLEFT ].z += fl2 + flHealthbarWidth;
+
+							if ( flHealthRatio != 1.f )
+							{
+								const auto flYDifference = ( vecPoints[ TOPLEFT ].y - vecPoints[ TOPRIGHT ].y ) * ( 1.f - flHealthRatio );
+								auto vecMiddleTop = vecPoints[ TOPLEFT ],
+									vecMiddleBottom = vecPoints[ BOTTOMLEFT ];
+								vecMiddleTop.y -= flYDifference;
+								vecMiddleBottom.y -= flYDifference;
 
 								for ( auto i = 0; i < 4; i++ )
 								{
@@ -529,136 +611,57 @@ namespace PX::Features::Awareness
 									WorldToScreen( vecPoints[ i ], vecBar[ i ] );
 								}
 
-								if ( flHealthRatio != 1.f )
-								{
-									const auto flZDifference = ( vecPoints[ TOPLEFT ].z - vecPoints[ BOTTOMLEFT ].z ) * flHealthRatio;
-									auto vecMiddleLeft = vecPoints[ BOTTOMLEFT ],
-										 vecMiddleRight = vecPoints[ BOTTOMRIGHT ];
-									vecMiddleLeft.z += flZDifference;
-									vecMiddleRight.z += flZDifference;
+								vecMiddleTop.Rotate2D( flRotation, vecRotationPoint );
+								vecMiddleBottom.Rotate2D( flRotation, vecRotationPoint );
+								Vector vecScreenMiddleTop, vecScreenMiddleBottom;
+								WorldToScreen( vecMiddleTop, vecScreenMiddleTop );
+								WorldToScreen( vecMiddleBottom, vecScreenMiddleBottom );
 
-									Vector vecScreenMiddleLeft, vecScreenMiddleRight;
-									WorldToScreen( vecMiddleLeft, vecScreenMiddleLeft );
-									WorldToScreen( vecMiddleRight, vecScreenMiddleRight );
+								vtxTop[ 0 ] = vertex_t( vecBar[ TOPLEFT ].x, vecBar[ TOPLEFT ].y, dwTop );
+								vtxTop[ 1 ] = vertex_t( vecScreenMiddleTop.x, vecScreenMiddleTop.y, dwTop );
+								vtxTop[ 2 ] = vertex_t( vecScreenMiddleBottom.x, vecScreenMiddleBottom.y, dwTop );
+								vtxTop[ 3 ] = vertex_t( vecBar[ BOTTOMLEFT ].x, vecBar[ BOTTOMLEFT ].y, dwTop );
 
-									vtxTop[ 0 ] = vertex_t( vecBar[ TOPLEFT ].x, vecBar[ TOPLEFT ].y, dwTop );
-									vtxTop[ 1 ] = vertex_t( vecBar[ TOPRIGHT ].x, vecBar[ TOPRIGHT ].y, dwTop );
-									vtxTop[ 2 ] = vertex_t( vecScreenMiddleRight.x, vecScreenMiddleRight.y, dwTop );
-									vtxTop[ 3 ] = vertex_t( vecScreenMiddleLeft.x, vecScreenMiddleLeft.y, dwTop );
-
-									vtxBottom[ 0 ] = vertex_t( vecScreenMiddleLeft.x, vecScreenMiddleLeft.y, dwBottom );
-									vtxBottom[ 1 ] = vertex_t( vecScreenMiddleRight.x, vecScreenMiddleRight.y, dwBottom );
-									vtxBottom[ 2 ] = vertex_t( vecBar[ BOTTOMRIGHT ].x, vecBar[ BOTTOMRIGHT ].y, dwBottom );
-									vtxBottom[ 3 ] = vertex_t( vecBar[ BOTTOMLEFT ].x, vecBar[ BOTTOMLEFT ].y, dwBottom );
-
-									if ( bDoOutline )
-									{
-										const auto uSize = sizeof( vertex_t ) * 2u;
-										memcpy( vtxOutline, vtxTop, uSize );
-										memcpy( &vtxOutline[ 2 ], &vtxBottom[ 2 ], uSize );
-									}
-								}
-								else if ( bDoOutline )
-								{
-									vtxOutline[ 0 ] = vertex_t( vecBar[ TOPLEFT ].x, vecBar[ TOPLEFT ].y, 0 );
-									vtxOutline[ 1 ] = vertex_t( vecBar[ TOPRIGHT ].x, vecBar[ TOPRIGHT ].y, 0 );
-									vtxOutline[ 2 ] = vertex_t( vecBar[ BOTTOMRIGHT ].x, vecBar[ BOTTOMRIGHT ].y, 0 );
-									vtxOutline[ 3 ] = vertex_t( vecBar[ BOTTOMLEFT ].x, vecBar[ BOTTOMLEFT ].y, 0 );
-								}
-
-								if ( esdPlayerConfig->iInformationAlignment == ALIGNMENT_LEFT )
-								{
-									vecInformationStart = vecBar[ TOPLEFT ];
-									vecInformationStart.x -= flPadding;
-								}
-								else
-								{
-									vecInformationStart = vecBar[ TOPRIGHT ];
-									vecInformationStart.x += flPadding;
-								}
+								vtxBottom[ 0 ] = vertex_t( vecScreenMiddleTop.x, vecScreenMiddleTop.y, dwBottom );
+								vtxBottom[ 1 ] = vertex_t( vecBar[ TOPRIGHT ].x, vecBar[ TOPRIGHT ].y, dwBottom );
+								vtxBottom[ 2 ] = vertex_t( vecBar[ BOTTOMRIGHT ].x, vecBar[ BOTTOMRIGHT ].y, dwBottom );
+								vtxBottom[ 3 ] = vertex_t( vecScreenMiddleBottom.x, vecScreenMiddleBottom.y, dwBottom );
 							}
-							break;
+							else
+								for ( auto i = 0; i < 4; i++ )
+								{
+									vecPoints[ i ].Rotate2D( flRotation, vecRotationPoint );
+									WorldToScreen( vecPoints[ i ], vecBar[ i ] );
+								}
 
-							case ALIGNMENT_BOTTOM:
+							if ( esdPlayerConfig->iInformationAlignment == ALIGNMENT_BOTTOM )
 							{
-								fl2 = -8.f - flHealthbarWidth;
+								vecInformationStart.x = ( vecBar[ BOTTOMRIGHT ].x + vecBar[ BOTTOMLEFT ].x ) / 2.f;
+								vecInformationStart.y = ( vecBar[ BOTTOMRIGHT].y + vecBar[ BOTTOMLEFT ].y ) / 2.f + flPadding;
 							}
-							case ALIGNMENT_TOP:
+							else
 							{
-								vecPoints[ BOTTOMRIGHT ].y -= 20.f; // Bottom right
-								vecPoints[ BOTTOMRIGHT ].z += fl2;
-								vecPoints[ BOTTOMLEFT ].y += 20.f; // Bottom left
-								vecPoints[ BOTTOMLEFT ].z += fl2;
-								vecPoints[ TOPRIGHT ].y -= 20.f; // Top right
-								vecPoints[ TOPRIGHT ].z += fl2 + flHealthbarWidth;
-								vecPoints[ TOPLEFT ].y += 20.f; // Top left
-								vecPoints[ TOPLEFT ].z += fl2 + flHealthbarWidth;
-
-								if ( flHealthRatio != 1.f )
-								{
-									const auto flYDifference = ( vecPoints[ TOPLEFT ].y - vecPoints[ TOPRIGHT ].y ) * ( 1.f - flHealthRatio );
-									auto vecMiddleTop = vecPoints[ TOPLEFT ],
-										 vecMiddleBottom = vecPoints[ BOTTOMLEFT ];
-									vecMiddleTop.y -= flYDifference;
-									vecMiddleBottom.y -= flYDifference;
-
-									for ( auto i = 0; i < 4; i++ )
-									{
-										vecPoints[ i ].Rotate2D( flRotation, vecRotationPoint );
-										WorldToScreen( vecPoints[ i ], vecBar[ i ] );
-									}
-
-									vecMiddleTop.Rotate2D( flRotation, vecRotationPoint );
-									vecMiddleBottom.Rotate2D( flRotation, vecRotationPoint );
-									Vector vecScreenMiddleTop, vecScreenMiddleBottom;
-									WorldToScreen( vecMiddleTop, vecScreenMiddleTop );
-									WorldToScreen( vecMiddleBottom, vecScreenMiddleBottom );
-
-									vtxTop[ 0 ] = vertex_t( vecBar[ TOPLEFT ].x, vecBar[ TOPLEFT ].y, dwTop );
-									vtxTop[ 1 ] = vertex_t( vecScreenMiddleTop.x, vecScreenMiddleTop.y, dwTop );
-									vtxTop[ 2 ] = vertex_t( vecScreenMiddleBottom.x, vecScreenMiddleBottom.y, dwTop );
-									vtxTop[ 3 ] = vertex_t( vecBar[ BOTTOMLEFT ].x, vecBar[ BOTTOMLEFT ].y, dwTop );
-
-									vtxBottom[ 0 ] = vertex_t( vecScreenMiddleTop.x, vecScreenMiddleTop.y, dwBottom );
-									vtxBottom[ 1 ] = vertex_t( vecBar[ TOPRIGHT ].x, vecBar[ TOPRIGHT ].y, dwBottom );
-									vtxBottom[ 2 ] = vertex_t( vecBar[ BOTTOMRIGHT ].x, vecBar[ BOTTOMRIGHT ].y, dwBottom );
-									vtxBottom[ 3 ] = vertex_t( vecScreenMiddleBottom.x, vecScreenMiddleBottom.y, dwBottom );
-								}
-								else
-									for ( auto i = 0; i < 4; i++ )
-									{
-										vecPoints[ i ].Rotate2D( flRotation, vecRotationPoint );
-										WorldToScreen( vecPoints[ i ], vecBar[ i ] );
-									}
-
-								if ( esdPlayerConfig->iInformationAlignment == ALIGNMENT_BOTTOM )
-								{
-									vecInformationStart.x = ( vecBar[ BOTTOMRIGHT ].x + vecBar[ BOTTOMLEFT ].x ) / 2.f;
-									vecInformationStart.y = ( vecBar[ BOTTOMRIGHT ].y + vecBar[ BOTTOMLEFT ].y ) / 2.f + flPadding;
-								}
-								else
-								{
-									vecInformationStart.x = ( vecBar[ TOPRIGHT ].x + vecBar[ TOPLEFT ].x ) / 2.f;
-									vecInformationStart.y = ( vecBar[ TOPRIGHT ].y + vecBar[ TOPLEFT ].y ) / 2.f + flTextHeight;
-								}
-
-								if ( bDoOutline )
-									for ( auto i = 0; i < 4; i++ )
-									{
-										vtxOutline[ 0 ].flVectors[ 0 ] = vecBar[ TOPLEFT ].x;
-										vtxOutline[ 0 ].flVectors[ 1 ] = vecBar[ TOPLEFT ].y;
-										vtxOutline[ 1 ].flVectors[ 0 ] = vecBar[ TOPRIGHT ].x;
-										vtxOutline[ 1 ].flVectors[ 1 ] = vecBar[ TOPRIGHT ].y;
-										vtxOutline[ 2 ].flVectors[ 0 ] = vecBar[ BOTTOMRIGHT ].x;
-										vtxOutline[ 2 ].flVectors[ 1 ] = vecBar[ BOTTOMRIGHT ].y;
-										vtxOutline[ 3 ].flVectors[ 0 ] = vecBar[ BOTTOMLEFT ].x;
-										vtxOutline[ 3 ].flVectors[ 1 ] = vecBar[ BOTTOMLEFT ].y;
-									}
+								vecInformationStart.x = ( vecBar[ TOPRIGHT ].x + vecBar[ TOPLEFT ].x ) / 2.f;
+								vecInformationStart.y = ( vecBar[ TOPRIGHT ].y + vecBar[ TOPLEFT ].y ) / 2.f + flTextHeight;
 							}
+
+							if ( bDoOutline )
+								for ( auto i = 0; i < 4; i++ )
+								{
+									vtxOutline[ 0 ].flVectors[ 0 ] = vecBar[ TOPLEFT ].x;
+									vtxOutline[ 0 ].flVectors[ 1 ] = vecBar[ TOPLEFT ].y;
+									vtxOutline[ 1 ].flVectors[ 0 ] = vecBar[ TOPRIGHT ].x;
+									vtxOutline[ 1 ].flVectors[ 1 ] = vecBar[ TOPRIGHT ].y;
+									vtxOutline[ 2 ].flVectors[ 0 ] = vecBar[ BOTTOMRIGHT ].x;
+									vtxOutline[ 2 ].flVectors[ 1 ] = vecBar[ BOTTOMRIGHT ].y;
+									vtxOutline[ 3 ].flVectors[ 0 ] = vecBar[ BOTTOMLEFT ].x;
+									vtxOutline[ 3 ].flVectors[ 1 ] = vecBar[ BOTTOMLEFT ].y;
+								}
 						}
+					}
 					else
 					{
-						float flFillWidth = 0.f;
+					float flFillWidth = 0.f;
 						switch ( esdPlayerConfig->iInformationAlignment )
 						{
 							case ALIGNMENT_BOTTOM:
@@ -766,18 +769,18 @@ namespace PX::Features::Awareness
 					}
 					if ( bDoOutline )
 					{
-						vtxOutline[ 0 ].flVectors[ 0 ] = vecBar[ TOPLEFT ].x - 1.f;
-						vtxOutline[ 0 ].flVectors[ 1 ] = vecBar[ TOPLEFT ].y - 1.f;
-						vtxOutline[ 1 ].flVectors[ 0 ] = vecBar[ TOPRIGHT ].x + 1.f;
-						vtxOutline[ 1 ].flVectors[ 1 ] = vecBar[ TOPRIGHT ].y - 1.f;
-						vtxOutline[ 2 ].flVectors[ 0 ] = vecBar[ BOTTOMRIGHT ].x + 1.f;
-						vtxOutline[ 2 ].flVectors[ 1 ] = vecBar[ BOTTOMRIGHT ].y + 1.f;
-						vtxOutline[ 3 ].flVectors[ 0 ] = vecBar[ BOTTOMLEFT ].x - 1.f;
-						vtxOutline[ 3 ].flVectors[ 1 ] = vecBar[ BOTTOMLEFT ].y + 1.f;
+						vtxOutline[ 0 ].flVectors[ 0 ] = vecBar[ TOPLEFT ].x- 1.f;
+						vtxOutline[ 0 ].flVectors[ 1 ] = vecBar[ TOPLEFT ].y- 1.f;
+						vtxOutline[ 1 ].flVectors[ 0 ] = vecBar[ TOPRIGHT ].x+ 1.f;
+						vtxOutline[ 1 ].flVectors[ 1 ] = vecBar[ TOPRIGHT ].y- 1.f;
+						vtxOutline[ 2 ].flVectors[ 0 ] = vecBar[ BOTTOMRIGHT ].x+ 1.f;
+						vtxOutline[ 2 ].flVectors[ 1 ] = vecBar[ BOTTOMRIGHT ].y+ 1.f;
+						vtxOutline[ 3 ].flVectors[ 0 ] = vecBar[ BOTTOMLEFT ].x- 1.f;
+						vtxOutline[ 3 ].flVectors[ 1 ] = vecBar[ BOTTOMLEFT ].y+ 1.f;
 						vtxOutline[ 0 ].dwColor = vtxOutline[ 1 ].dwColor = vtxOutline[ 2 ].dwColor = vtxOutline[ 3 ].dwColor = dwOutline;
 						Polygon( vtxOutline, 4, 2 );
 					}
-					if ( flHealthRatio != 1.f && esdConfig->iBoxMode == BOX_DYNAMIC )
+					if( flHealthRatio != 1.f && esdConfig->iBoxMode == BOX_DYNAMIC )
 						Polygon( vtxTop, 4, 2 );
 					else
 					{
@@ -796,7 +799,7 @@ namespace PX::Features::Awareness
 			}
 		}
 
-		if ( !!esdPlayerConfig->bShowName )
+		if( !!esdPlayerConfig->bShowName )
 		{
 			constexpr auto zPlayerNameMaxLength = std::size_t( 128u );
 			wchar_t wszName[ zPlayerNameMaxLength ];
@@ -810,9 +813,13 @@ namespace PX::Features::Awareness
 		}
 
 		if ( !!esdPlayerConfig->bShowRank )
-		{ }
+		{
+
+		}
 
 		if ( !!esdPlayerConfig->bShowWeapon )
-		{ }
+		{
+
+		}
 	}
 }

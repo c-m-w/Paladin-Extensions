@@ -36,7 +36,7 @@ namespace PX::Files
 
 		// INFO: Verifies vital resources have not been modified, then loads them
 		// PARAM: Hash of resources
-		bool LoadResources( const Types::str_t & );
+		bool LoadResources( const Types::str_t& );
 	}
 
 	class CConfig: public Tools::ASingleton< CConfig >
@@ -50,14 +50,14 @@ namespace PX::Files
 		CConfig( );
 
 		PX_RET Types::wstr_t PX_API GetConfigDirectory( int iExtension );
-		void PX_API SaveConfiguration( int iExtensionID, Types::wcstr_t wszFileName, void *pConfigStructure, std::size_t zConfigStructureSize );
-		bool PX_API LoadDefaultConfiguration( int iExtensionID, void *pConfigStructure, std::size_t zConfigStructureSize );
+		void PX_API SaveConfiguration( int iExtensionID, Types::wcstr_t wszFileName, void* pConfigStructure, std::size_t zConfigStructureSize );
+		bool PX_API LoadDefaultConfiguration( int iExtensionID, void* pConfigStructure, std::size_t zConfigStructureSize );
 		void PX_API SetDefaultConfiguration( int iExtensionID, Types::wcstr_t wszFileName );
-		bool PX_API LoadConfiguration( int iExtensionID, Types::wcstr_t wszFileName, void *pConfigStructure, std::size_t zConfigStructureSize );
+		bool PX_API LoadConfiguration( int iExtensionID, Types::wcstr_t wszFileName, void* pConfigStructure, std::size_t zConfigStructureSize );
 	};
 
-	bool PX_API FileRead( Types::wstr_t wstrPath, Types::wstr_t &wstrData, bool bRelativePath, bool bBase64 = true );
-	bool PX_API FileWrite( Types::wstr_t wstrPath, const Types::wstr_t &wstrData, bool bRelativePath, bool bBase64 = true );
+	bool PX_API FileRead( Types::wstr_t wstrPath, Types::wstr_t& wstrData, bool bRelativePath, bool bBase64 = true );
+	bool PX_API FileWrite( Types::wstr_t wstrPath, const Types::wstr_t& wstrData, bool bRelativePath, bool bBase64 = true );
 }
 
 #if defined PX_USE_NAMESPACES

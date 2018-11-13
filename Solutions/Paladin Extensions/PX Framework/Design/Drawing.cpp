@@ -9,30 +9,30 @@ namespace PX::Drawing
 	std::vector< polygon_t > vecPolygonList;
 	std::vector< text_t > vecTextList;
 	std::vector< line_t > vecLineList;
-	IDirect3DVertexBuffer9 *pVertexBuffer = nullptr;;
+	IDirect3DVertexBuffer9* pVertexBuffer = nullptr;;
 	LPD3DXSPRITE pTextSprite = nullptr;
-	ID3DXLine *pLine = nullptr;
+	ID3DXLine* pLine = nullptr;
 
 	bool PX_API InitializeDrawing( )
 	{
 		return D3D_OK == D3DXCreateFont( pDevice, 16, 0, FW_BOLD, 1, FALSE, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS,
 										 NONANTIALIASED_QUALITY, DEFAULT_PITCH, PX_XOR( L"Tahoma" ), &pFonts[ FNT_TAHOMA ] )
-				&& D3D_OK == D3DXCreateFont( pDevice, 16, 0, FW_NORMAL, 1, FALSE, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS,
-											 ANTIALIASED_QUALITY, DEFAULT_PITCH, PX_XOR( L"Roboto" ), &pFonts[ FNT_ROBOTO ] )
-				&& D3D_OK == D3DXCreateSprite( pDevice, &pTextSprite )
-				&& D3D_OK == D3DXCreateLine( pDevice, &pLine );
+			&& D3D_OK == D3DXCreateFont( pDevice, 16, 0, FW_NORMAL, 1, FALSE, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS,
+										 ANTIALIASED_QUALITY, DEFAULT_PITCH, PX_XOR( L"Roboto" ), &pFonts[ FNT_ROBOTO ] )
+			&& D3D_OK == D3DXCreateSprite( pDevice, &pTextSprite )
+			&& D3D_OK == D3DXCreateLine( pDevice, &pLine );
 	}
 
 	void PX_API Destruct( )
 	{
-		for ( auto &font: pFonts )
-			if ( font )
+		for( auto& font : pFonts )
+			if( font )
 			{
 				font->Release( );
 				font = nullptr;
 			}
 
-		if ( pTextSprite )
+		if( pTextSprite )
 		{
 			pTextSprite->Release( );
 			pTextSprite = nullptr;
@@ -45,19 +45,19 @@ namespace PX::Drawing
 		}
 	}
 
-	PX_EXT PX_INL void PX_API Polygon( vertex_t *pVertices, std::size_t zVertexCount, std::size_t zPrimitiveCount, D3DPRIMITIVETYPE ptDrawingType /*= D3DPT_TRIANGLEFAN*/ )
+	PX_EXT PX_INL void PX_API Polygon( vertex_t* pVertices, std::size_t zVertexCount, std::size_t zPrimitiveCount, D3DPRIMITIVETYPE ptDrawingType /*= D3DPT_TRIANGLEFAN*/ )
 	{
 		vecPolygonList.emplace_back( polygon_t( pVertices, zVertexCount, zPrimitiveCount, ptDrawingType ) );
 	}
 
-	PX_EXT PX_INL void PX_API Circle( const D3DXVECTOR2 &vecLocation, float flRadius, DWORD dwInnerColor, DWORD dwOuterColor, std::size_t zResolution )
+	PX_EXT PX_INL void PX_API Circle( const D3DXVECTOR2& vecLocation, float flRadius, DWORD dwInnerColor, DWORD dwOuterColor, std::size_t zResolution )
 	{
 		const auto pVertices = new vertex_t[ zResolution + 2 ];
 		const auto flAngle = 360.f / float( zResolution );
-
+		
 		pVertices[ 0 ] = vertex_t( vecLocation.x, vecLocation.y, dwInnerColor );
 		pVertices[ 1 ] = vertex_t( vecLocation.x, vecLocation.y - flRadius, dwOuterColor );
-		for ( auto u = 2u; u <= zResolution + 1; u++ )
+		for( auto u = 2u; u <= zResolution + 1; u++ )
 		{
 			pVertices[ u ] = pVertices[ u - 1 ];
 			pVertices[ u ].Rotate2D( pVertices[ 0 ], flAngle );
@@ -67,7 +67,7 @@ namespace PX::Drawing
 		delete[ ] pVertices;
 	}
 
-	PX_EXT PX_INL void PX_API Line( const D3DXVECTOR2 *pPoints, std::size_t sPointCount, float flWidth, DWORD dwColor )
+	PX_EXT PX_INL void PX_API Line( const D3DXVECTOR2* pPoints, std::size_t sPointCount, float flWidth, DWORD dwColor )
 	{
 		// using primitives > ID3DXLine speed-wise.
 		auto fnRotateVector = [ ]( D3DXVECTOR2 vecRotatee, D3DXVECTOR2 vecRotationPoint, float flAngle )
@@ -76,7 +76,7 @@ namespace PX::Drawing
 			const auto flSin = sin( flRadians );
 			const auto flCos = cos( flRadians );
 			const D3DXVECTOR2 vecRelative { vecRotatee.x - vecRotationPoint.x, vecRotatee.y - vecRotationPoint.y };
-
+		
 			vecRotatee.x = ( vecRelative.x * flCos ) - ( vecRelative.y * flSin ) + vecRotationPoint.x;
 			vecRotatee.y = ( vecRelative.x * flSin ) + ( vecRelative.y * flCos ) + vecRotationPoint.y;
 			return vecRotatee;
@@ -89,9 +89,9 @@ namespace PX::Drawing
 			const auto flAngle = D3DXToDegree( atan2( vecDifference.x, vecDifference.y ) );
 			const auto flHalf = flWidth / 2.f;
 			const auto vecTopRight = fnRotateVector( D3DXVECTOR2( pPoints[ z + 1 ].x + flHalf, pPoints[ z + 1 ].y + flHalf ), pPoints[ z + 1 ], 180.f - flAngle ),
-					   vecBottomRight = fnRotateVector( D3DXVECTOR2( pPoints[ z ].x + flHalf, pPoints[ z ].y + flHalf ), pPoints[ z ], 180.f - flAngle ),
-					   vecTopLeft = fnRotateVector( D3DXVECTOR2( pPoints[ z + 1 ].x - flHalf, pPoints[ z + 1 ].y - flHalf ), pPoints[ z + 1 ], 180.f - flAngle ),
-					   vecBottomLeft = fnRotateVector( D3DXVECTOR2( pPoints[ z ].x - flHalf, pPoints[ z ].y - flHalf ), pPoints[ z ], 180.f - flAngle );
+				vecBottomRight = fnRotateVector( D3DXVECTOR2( pPoints[ z ].x + flHalf, pPoints[ z ].y + flHalf ), pPoints[ z ], 180.f - flAngle ),
+				vecTopLeft = fnRotateVector( D3DXVECTOR2( pPoints[ z + 1 ].x - flHalf, pPoints[ z + 1 ].y - flHalf ), pPoints[ z + 1 ], 180.f - flAngle ),
+				vecBottomLeft = fnRotateVector( D3DXVECTOR2( pPoints[ z ].x - flHalf, pPoints[ z ].y - flHalf ), pPoints[ z ], 180.f - flAngle );
 
 			pVertices[ z ][ 0 ].flVectors[ 0 ] = vecTopLeft.x;
 			pVertices[ z ][ 0 ].flVectors[ 1 ] = vecTopLeft.y;
@@ -129,16 +129,16 @@ namespace PX::Drawing
 
 		vecPolygonList.clear( );
 		vecTextList.clear( );
-
+		
 		if ( D3D_OK == pDevice->SetRenderState( D3DRS_ALPHABLENDENABLE, TRUE )
-			&& D3D_OK == pDevice->SetRenderState( D3DRS_ANTIALIASEDLINEENABLE, TRUE )
-			&& D3D_OK == pDevice->SetRenderState( D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA )
-			&& D3D_OK == pDevice->SetRenderState( D3DRS_CULLMODE, D3DCULL_NONE )
-			&& D3D_OK == pDevice->SetPixelShader( nullptr )
-			&& D3D_OK == pDevice->SetVertexShader( nullptr )
-			&& D3D_OK == pDevice->SetTexture( NULL, nullptr )
-			&& D3D_OK == pDevice->SetFVF( PX_CUSTOM_FVF ) )
-			for each ( auto &polPolygon in vecPolygons )
+			 && D3D_OK == pDevice->SetRenderState( D3DRS_ANTIALIASEDLINEENABLE, TRUE )
+			 && D3D_OK == pDevice->SetRenderState( D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA )
+			 && D3D_OK == pDevice->SetRenderState( D3DRS_CULLMODE, D3DCULL_NONE )
+			 && D3D_OK == pDevice->SetPixelShader( nullptr )
+			 && D3D_OK == pDevice->SetVertexShader( nullptr )
+			 && D3D_OK == pDevice->SetTexture( NULL, nullptr )
+			 && D3D_OK == pDevice->SetFVF( PX_CUSTOM_FVF ) )
+			for each ( auto& polPolygon in vecPolygons )
 			{
 				const auto sVertexSize = sizeof( vertex_t ) * polPolygon.vecVertices.size( );
 				if ( D3D_OK != pDevice->CreateVertexBuffer( sVertexSize, NULL, PX_CUSTOM_FVF, D3DPOOL_DEFAULT, &pVertexBuffer, nullptr ) )
@@ -151,7 +151,7 @@ namespace PX::Drawing
 					return;
 				}
 
-				void *pVertexMemory;
+				void* pVertexMemory;
 				pVertexBuffer->Lock( 0, sVertexSize, &pVertexMemory, 0 );
 				memcpy( pVertexMemory, &polPolygon.vecVertices[ 0 ], sVertexSize );
 				pVertexBuffer->Unlock( );
@@ -200,21 +200,19 @@ namespace PX::Drawing
 
 		if ( pTextSprite && pTextSprite->Begin( D3DXSPRITE_ALPHABLEND ) == D3D_OK )
 		{
-			for ( auto &text: vecText )
+			for ( auto& text : vecText )
 			{
 				if ( !pFonts[ text.iFont ] )
 					continue;
 				RECT recText { text.x - 1, text.y - 1, text.x, text.y };
 				if ( text.bOutlined )
 				{
-					RECT recOutline[ ] {
-						{ text.x - 2l, text.y - 2l, text.x - 1l, text.y - 1l },
+					RECT recOutline[ ] { { text.x - 2l, text.y - 2l, text.x - 1l, text.y - 1l },
 						{ text.x, text.y - 2l, text.x + 1l, text.y - 1l },
 						{ text.x - 2l, text.y, text.x - 1l, text.y + 1l },
-						{ text.x, text.y, text.x + 1l, text.y + 1l }
-					};
+						{ text.x, text.y, text.x + 1l, text.y + 1l } };
 
-					for ( auto &rect: recOutline )
+					for ( auto& rect : recOutline )
 						px_assert( NULL != pFonts[ text.iFont ]->DrawText( pTextSprite, text.wstrText.c_str( ), -1, &rect, text.dwFlags, text.dwOutline ) );
 				}
 				px_assert( NULL != pFonts[ text.iFont ]->DrawText( pTextSprite, text.wstrText.c_str( ), -1, &recText, text.dwFlags, text.dwColor ) );

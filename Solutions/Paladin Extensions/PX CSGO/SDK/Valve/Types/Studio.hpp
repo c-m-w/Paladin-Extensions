@@ -21,8 +21,8 @@ typedef float RadianEuler[ 3 ];
 #define BONE_USED_BY_ATTACHMENT         0x00000200    // bone (or child) is used by an attachment point
 #define BONE_USED_BY_VERTEX_MASK        0x0003FC00
 #define BONE_USED_BY_VERTEX_LOD0        0x00000400    // bone (or child) is used by the toplevel model via skinned vertex
-#define BONE_USED_BY_VERTEX_LOD1        0x00000800
-#define BONE_USED_BY_VERTEX_LOD2        0x00001000
+#define BONE_USED_BY_VERTEX_LOD1        0x00000800    
+#define BONE_USED_BY_VERTEX_LOD2        0x00001000  
 #define BONE_USED_BY_VERTEX_LOD3        0x00002000
 #define BONE_USED_BY_VERTEX_LOD4        0x00004000
 #define BONE_USED_BY_VERTEX_LOD5        0x00008000
@@ -42,6 +42,7 @@ typedef float RadianEuler[ 3 ];
 #define BONE_HAS_SAVEFRAME_POS          0x00200000    // Vector48
 #define BONE_HAS_SAVEFRAME_ROT64        0x00400000    // Quaternion64
 #define BONE_HAS_SAVEFRAME_ROT32        0x00800000    // Quaternion32
+
 
 enum modtype_t
 {
@@ -92,72 +93,70 @@ typedef unsigned short MDLHandle_t;
 
 struct mstudiobone_t
 {
-	int sznameindex;
-	int parent;		// parent bone
-	int bonecontroller[ 6 ];	// bone controller index, -1 == none
-	Vector pos;
-	Quaternion quat;
+	int     sznameindex;
+	int     parent;		// parent bone
+	int     bonecontroller[ 6 ];	// bone controller index, -1 == none
+	Vector  pos;
+	Quaternion  quat;
 	RadianEuler rot;
-	Vector posscale;
-	Vector rotscale;
+	Vector      posscale;
+	Vector      rotscale;
 
 	matrix3x4_t poseToBone;
-	Quaternion qAlignment;
-	int flags;
+	Quaternion  qAlignment;
+	int					flags;
 };
+
 
 struct mstudiobbox_t
 {
-	int bone;
-	int group;
-	Vector bbmin;
-	Vector bbmax;
-	int szhitboxnameindex;
-	int32_t m_iPad01[ 3 ];
-	float m_flRadius;
-	int32_t m_iPad02[ 4 ];
+	int         bone;
+	int         group;
+	Vector      bbmin;
+	Vector      bbmax;
+	int         szhitboxnameindex;
+	int32_t     m_iPad01[ 3 ];
+	float       m_flRadius;
+	int32_t     m_iPad02[ 4 ];
 
-	const char *GetName( )
+	const char* GetName( )
 	{
-		if ( !szhitboxnameindex )
-			return nullptr;
+		if ( !szhitboxnameindex ) return nullptr;
 		return ( const char* )( ( uint8_t* )this + szhitboxnameindex );
 	}
 };
 
 struct mstudiohitboxset_t
 {
-	int sznameindex;
-	int numhitboxes;
-	int hitboxindex;
+	int    sznameindex;
+	int    numhitboxes;
+	int    hitboxindex;
 
-	const char *GetName( )
+	const char* GetName( )
 	{
-		if ( !sznameindex )
-			return nullptr;
+		if ( !sznameindex ) return nullptr;
 		return ( const char* )( ( uint8_t* )this + sznameindex );
 	}
 
-	mstudiobbox_t *GetHitbox( int i )
+	mstudiobbox_t* GetHitbox( int i )
 	{
-		if ( i > numhitboxes )
-			return nullptr;
+		if ( i > numhitboxes ) return nullptr;
 		return ( mstudiobbox_t* )( ( uint8_t* )this + hitboxindex ) + i;
 	}
 };
 
 struct model_t
 {
-	void *fnHandle;               //0x0000 
-	char szName[ 260 ];            //0x0004 
+	void*   fnHandle;               //0x0000 
+	char    szName[ 260 ];            //0x0004 
 	__int32 nLoadFlags;             //0x0108 
 	__int32 nServerCount;           //0x010C 
 	__int32 type;                   //0x0110 
 	__int32 flags;                  //0x0114 
-	Vector vecMins;                //0x0118 
-	Vector vecMaxs;                //0x0124 
-	float radius;                 //0x0130 
-	char pad[ 0x1C ];              //0x0134
+	Vector  vecMins;                //0x0118 
+	Vector  vecMaxs;                //0x0124 
+	float   radius;                 //0x0130 
+	char    pad[ 0x1C ];              //0x0134
 };//Size=0x0150
 
 class studiohdr_t
@@ -165,15 +164,15 @@ class studiohdr_t
 public:
 	__int32 id;                     //0x0000 
 	__int32 version;                //0x0004 
-	long checksum;               //0x0008 
-	char szName[ 64 ];             //0x000C 
+	long    checksum;               //0x0008 
+	char    szName[ 64 ];             //0x000C 
 	__int32 length;                 //0x004C 
-	Vector vecEyePos;              //0x0050 
-	Vector vecIllumPos;            //0x005C 
-	Vector vecHullMin;             //0x0068 
-	Vector vecHullMax;             //0x0074 
-	Vector vecBBMin;               //0x0080 
-	Vector vecBBMax;               //0x008C 
+	Vector  vecEyePos;              //0x0050 
+	Vector  vecIllumPos;            //0x005C 
+	Vector  vecHullMin;             //0x0068 
+	Vector  vecHullMax;             //0x0074 
+	Vector  vecBBMin;               //0x0080 
+	Vector  vecBBMax;               //0x008C 
 	__int32 flags;                  //0x0098 
 	__int32 numbones;               //0x009C 
 	__int32 boneindex;              //0x00A0 
@@ -190,17 +189,15 @@ public:
 	__int32 numtextures;            //0x00CC 
 	__int32 textureindex;           //0x00D0
 
-	mstudiohitboxset_t *GetHitboxSet( int i )
+	mstudiohitboxset_t* GetHitboxSet( int i )
 	{
-		if ( i > numhitboxsets )
-			return nullptr;
+		if ( i > numhitboxsets ) return nullptr;
 		return ( mstudiohitboxset_t* )( ( uint8_t* )this + hitboxsetindex ) + i;
 	}
-
-	mstudiobone_t *GetBone( int i )
+	mstudiobone_t* GetBone( int i )
 	{
-		if ( i > numbones )
-			return nullptr;
+		if ( i > numbones ) return nullptr;
 		return ( mstudiobone_t* )( ( uint8_t* )this + boneindex ) + i;
 	}
+
 };//Size=0x00D4
