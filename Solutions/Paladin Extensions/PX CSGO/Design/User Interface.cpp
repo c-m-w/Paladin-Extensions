@@ -64,7 +64,7 @@ constexpr int ITEM_DEFINITION_INDICIES[ ]
 	ITEM_GLOVE_SPORTY,
 	ITEM_GLOVE_DRIVER,
 	ITEM_GLOVE_HAND_WRAP,
-	ITEM_GLOVE_MOTORCYCLE,
+	ITEM_GLOVE_MOTO,
 	ITEM_GLOVE_SPECIALIST,
 	ITEM_GLOVE_HYDRA
 };
@@ -1582,6 +1582,7 @@ namespace PX::UI::Manager
 					for ( auto z = 0u; z < Other::vecPaintKits.size( ); z++ )
 						if ( Other::vecPaintKits[ z ].iIdentifier == iKitID )
 							iSelectedPaintKit = z;
+					uSelectedWeaponPaintKit = 0u;
 				};
 
 				const auto fnSetModels = [ & ]( int iGlove, int iKnife )
@@ -1612,7 +1613,7 @@ namespace PX::UI::Manager
 						}
 						break;
 
-						case ITEM_GLOVE_MOTORCYCLE:
+						case ITEM_GLOVE_MOTO:
 						{
 							iSelectedGlove = 4;
 						}
@@ -1806,8 +1807,8 @@ namespace PX::UI::Manager
 							{ 0x88, 0x47, 0xFF, 0xFF },
 							{ 0xD3, 0x2E, 0xE6, 0xFF },
 							{ 0xEB, 0x4B, 0x4B, 0xFF },
-							{ 0xFF, 0xAE, 0x39, 0xFF },
 							{ 0xEB, 0x4B, 0x4B, 0xFF },
+							{ 0xFF, 0xAE, 0x39, 0xFF },
 						};
 						constexpr char* szPageNumbers[ ] { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 						constexpr auto flWidth = ( GROUPBOX_COLUMN_WIDTH * 3.f + 29.f ) / 2.f;

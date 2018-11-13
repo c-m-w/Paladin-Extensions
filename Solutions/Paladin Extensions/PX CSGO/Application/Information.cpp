@@ -232,7 +232,7 @@ namespace PX::Information
 			{ "Sport", ITEM_GLOVE_SPORTY },
 			{ "Driver", ITEM_GLOVE_DRIVER },
 			{ "Hand Wrap", ITEM_GLOVE_HAND_WRAP },
-			{ "Moto", ITEM_GLOVE_MOTORCYCLE },
+			{ "Moto", ITEM_GLOVE_MOTO },
 			{ "Specialist", ITEM_GLOVE_SPECIALIST },
 			{ "Hydra", ITEM_GLOVE_HYDRA }
 		};
@@ -1517,6 +1517,89 @@ namespace PX::Information
 					paint_kit_t( 175,PX_XOR( "Scorched" ), GRADE_KNIFE, QUALITY_STATTRAK ),
 					paint_kit_t( 72,PX_XOR( "Safari Mesh" ), GRADE_KNIFE, QUALITY_STATTRAK )
 				}
+			},
+			{
+				ITEM_GLOVE_BLOODHOUND,
+				{
+					paint_kit_t( 10007, PX_XOR( "Snakebite" ), GRADE_COVERT, QUALITY_DEFAULT ),
+					paint_kit_t( 10008, PX_XOR( "Bronzed" ), GRADE_COVERT, QUALITY_DEFAULT ),
+					paint_kit_t( 10039, PX_XOR( "Guerrilla" ), GRADE_COVERT, QUALITY_DEFAULT ),
+					paint_kit_t( 10006, PX_XOR( "Charred" ), GRADE_COVERT, QUALITY_DEFAULT )
+				}
+			},
+			{
+				ITEM_GLOVE_SPORTY,
+				{
+					paint_kit_t( 10047, PX_XOR( "Omega" ), GRADE_COVERT, QUALITY_DEFAULT ),
+					paint_kit_t( 10048, PX_XOR( "Vice" ), GRADE_COVERT, QUALITY_DEFAULT ),
+					paint_kit_t( 10045, PX_XOR( "Amphibious" ), GRADE_COVERT, QUALITY_DEFAULT ),
+					paint_kit_t( 10046, PX_XOR( "Bronze Morph" ), GRADE_COVERT, QUALITY_DEFAULT ),
+					paint_kit_t( 10037, PX_XOR( "Pandora&#039;s Box" ), GRADE_COVERT, QUALITY_DEFAULT ),
+					paint_kit_t( 10019, PX_XOR( "Arid" ), GRADE_COVERT, QUALITY_DEFAULT ),
+					paint_kit_t( 10018, PX_XOR( "Superconductor" ), GRADE_COVERT, QUALITY_DEFAULT ),
+					paint_kit_t( 10038, PX_XOR( "Hedge Maze" ), GRADE_COVERT, QUALITY_DEFAULT )
+				}
+			},
+			{
+				ITEM_GLOVE_DRIVER,
+				{
+					paint_kit_t( 10041, PX_XOR( "King Snake" ), GRADE_COVERT, QUALITY_DEFAULT ),
+					paint_kit_t( 10042, PX_XOR( "Imperial Plaid" ), GRADE_COVERT, QUALITY_DEFAULT ),
+					paint_kit_t( 10043, PX_XOR( "Overtake" ), GRADE_COVERT, QUALITY_DEFAULT ),
+					paint_kit_t( 10044, PX_XOR( "Racing Green" ), GRADE_COVERT, QUALITY_DEFAULT ),
+					paint_kit_t( 10040, PX_XOR( "Diamondback" ), GRADE_COVERT, QUALITY_DEFAULT ),
+					paint_kit_t( 10016, PX_XOR( "Crimson Weave" ), GRADE_COVERT, QUALITY_DEFAULT ),
+					paint_kit_t( 10015, PX_XOR( "Convoy" ), GRADE_COVERT, QUALITY_DEFAULT ),
+					paint_kit_t( 10013, PX_XOR( "Lunar Weave" ), GRADE_COVERT, QUALITY_DEFAULT )
+				}
+			},
+			{
+				ITEM_GLOVE_HAND_WRAP,
+				{
+					paint_kit_t( 10053, PX_XOR( "Cobalt Skulls" ), GRADE_COVERT, QUALITY_DEFAULT ),
+					paint_kit_t( 10054, PX_XOR( "Overprint" ), GRADE_COVERT, QUALITY_DEFAULT ),
+					paint_kit_t( 10055, PX_XOR( "Duct Tape" ), GRADE_COVERT, QUALITY_DEFAULT ),
+					paint_kit_t( 10056, PX_XOR( "Arboreal" ), GRADE_COVERT, QUALITY_DEFAULT ),
+					paint_kit_t( 10021, PX_XOR( "Slaughter" ), GRADE_COVERT, QUALITY_DEFAULT ),
+					paint_kit_t( 10009, PX_XOR( "Leather" ), GRADE_COVERT, QUALITY_DEFAULT ),
+					paint_kit_t( 10036, PX_XOR( "Badlands" ), GRADE_COVERT, QUALITY_DEFAULT ),
+					paint_kit_t( 10010, PX_XOR( "Spruce DDPAT" ), GRADE_COVERT, QUALITY_DEFAULT )
+				}
+			},
+			{
+				ITEM_GLOVE_MOTO,
+				{
+					paint_kit_t( 10049, PX_XOR( "POW!" ), GRADE_COVERT, QUALITY_DEFAULT ),
+					paint_kit_t( 10050, PX_XOR( "Turtle" ), GRADE_COVERT, QUALITY_DEFAULT ),
+					paint_kit_t( 10051, PX_XOR( "Transport" ), GRADE_COVERT, QUALITY_DEFAULT ),
+					paint_kit_t( 10052, PX_XOR( "Polygon" ), GRADE_COVERT, QUALITY_DEFAULT ),
+					paint_kit_t( 10028, PX_XOR( "Cool Mint" ), GRADE_COVERT, QUALITY_DEFAULT ),
+					paint_kit_t( 10027, PX_XOR( "Boom!" ), GRADE_COVERT, QUALITY_DEFAULT ),
+					paint_kit_t( 10026, PX_XOR( "Spearmint" ), GRADE_COVERT, QUALITY_DEFAULT ),
+					paint_kit_t( 10024, PX_XOR( "Eclipse" ), GRADE_COVERT, QUALITY_DEFAULT )
+				}
+			},
+			{
+				ITEM_GLOVE_SPECIALIST,
+				{
+					paint_kit_t( 10063, PX_XOR( "Fade" ), GRADE_COVERT, QUALITY_DEFAULT ),
+					paint_kit_t( 10061, PX_XOR( "Crimson Web" ), GRADE_COVERT, QUALITY_DEFAULT ),
+					paint_kit_t( 10064, PX_XOR( "Mogul" ), GRADE_COVERT, QUALITY_DEFAULT ),
+					paint_kit_t( 10062, PX_XOR( "Buckshot" ), GRADE_COVERT, QUALITY_DEFAULT ),
+					paint_kit_t( 10035, PX_XOR( "Foundation" ), GRADE_COVERT, QUALITY_DEFAULT ),
+					paint_kit_t( 10033, PX_XOR( "Crimson Kimono" ), GRADE_COVERT, QUALITY_DEFAULT ),
+					paint_kit_t( 10034, PX_XOR( "Emerald Web" ), GRADE_COVERT, QUALITY_DEFAULT ),
+					paint_kit_t( 10030, PX_XOR( "Forest DDPAT" ), GRADE_COVERT, QUALITY_DEFAULT )
+				}
+			},
+			{
+				ITEM_GLOVE_HYDRA,
+				{
+					paint_kit_t( 10060, PX_XOR( "Case Hardened" ), GRADE_COVERT, QUALITY_DEFAULT ),
+					paint_kit_t( 10057, PX_XOR( "Emerald" ), GRADE_COVERT, QUALITY_DEFAULT ),
+					paint_kit_t( 10059, PX_XOR( "Rattler" ), GRADE_COVERT, QUALITY_DEFAULT ),
+					paint_kit_t( 10058, PX_XOR( "Mangrove" ), GRADE_COVERT, QUALITY_DEFAULT )
+				}
 			}
 		};
 
@@ -1978,7 +2061,7 @@ namespace PX::Information
 				{ ITEM_GLOVE_SPORTY, pModelInfo->GetModelIndex( PX_XOR( "models/weapons/v_models/arms/glove_sporty/v_glove_sporty.mdl" ) ) },
 				{ ITEM_GLOVE_DRIVER, pModelInfo->GetModelIndex( PX_XOR( "models/weapons/v_models/arms/glove_slick/v_glove_slick.mdl" ) ) },
 				{ ITEM_GLOVE_HAND_WRAP, pModelInfo->GetModelIndex( PX_XOR( "models/weapons/v_models/arms/glove_handwrap_leathery/v_glove_handwrap_leathery.mdl" ) ) },
-				{ ITEM_GLOVE_MOTORCYCLE, pModelInfo->GetModelIndex( PX_XOR( "models/weapons/v_models/arms/glove_motorcycle/v_glove_motorcycle.mdl" ) ) },
+				{ ITEM_GLOVE_MOTO, pModelInfo->GetModelIndex( PX_XOR( "models/weapons/v_models/arms/glove_motorcycle/v_glove_motorcycle.mdl" ) ) },
 				{ ITEM_GLOVE_SPECIALIST, pModelInfo->GetModelIndex( PX_XOR( "models/weapons/v_models/arms/glove_specialist/v_glove_specialist.mdl" )) },
 				{ ITEM_GLOVE_HYDRA, pModelInfo->GetModelIndex( PX_XOR( "models/weapons/v_models/arms/glove_bloodhound/v_glove_bloodhound_hydra.mdl" ) ) }
 			};
