@@ -237,6 +237,8 @@ namespace PX::Information
 			{ "Hydra", ITEM_GLOVE_HYDRA }
 		};
 
+		std::map< short /* item def index */, int /* applicable kits */ > mpModelIndicies;
+
 		bool PX_API RetrievePaintKits( )
 		{
 			const auto ptrAddress = ptr_t( Modules::mClient.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Paint Kits" ) ].get< str_t >( ) )
@@ -373,15 +375,15 @@ namespace PX::Information
 				vecPaintKits.emplace_back( paint_kit_t( pPaintKit->iIndex, strNew ) );
 			}
 
-			//std::map< short /* item def index */, std::vector< paint_kit_t > /* applicable kits */ > mpModelIndicies
-			//{
-			//	{
-			//		ITEM_WEAPON_DEAGLE,
-			//		{
-			//			//paint_kit_t( ,  )
-			//		}
-			//	}
-			//};
+			std::map< short /* item def index */, std::vector< paint_kit_t > /* applicable kits */ > mpWeaponKits
+			{
+				{
+					ITEM_WEAPON_DEAGLE,
+					{
+						//paint_kit_t( ,  )
+					}
+				}
+			};
 
 			return !vecPaintKits.empty( );
 		}

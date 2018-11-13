@@ -1652,6 +1652,7 @@ namespace PX::UI::Manager
 					}
 				
 					{
+						static char sz[ 32 ] { };
 						constexpr auto w = ( GROUPBOX_COLUMN_WIDTH * 3.f + 29.f ) / 2.f;
 						static std::deque< cstr_t > dqPaintKits;
 						static char szSearch[ 32 ] { };
@@ -1659,14 +1660,16 @@ namespace PX::UI::Manager
 							for ( const auto& kit : Other::vecPaintKits )
 								dqPaintKits.emplace_back( kit.strName.c_str( ) );
 				
-						BeginRow( 30, 2, ROW_STATIC );
+						BeginRow( 30, 3, ROW_STATIC );
 						SetRowWidth( 10 );
 						Spacing( );
 				
 						SetRowWidth( w );
 						fnSetValue( iSelectedPaintKit, FilteredCombobox( 30, PX_XOR( "All Paintkits" ), dqPaintKits, iSelectedPaintKit, 10, szSearch ) );
-						const auto iCurrent = pConfig->_PaintKits[ ITEM_DEFINITION_INDICIES[ iSelectedWeapon ] ].iPaintKitID;
 						pConfig->_PaintKits[ ITEM_DEFINITION_INDICIES[ iSelectedWeapon ] ].iPaintKitID = Other::vecPaintKits[ iSelectedPaintKit ].iIdentifier;
+
+						const auto iCurrent = pConfig->_PaintKits[ ITEM_DEFINITION_INDICIES[ iSelectedWeapon ] ].iPaintKitID;
+						pConfig->_PaintKits[ ITEM_DEFINITION_INDICIES[ iSelectedWeapon ] ].iPaintKitID = InputboxInteger( 32, sz );
 						if ( iCurrent != pConfig->_PaintKits[ ITEM_DEFINITION_INDICIES[ iSelectedWeapon ] ].iPaintKitID )
 							Features::Miscellaneous::ForceUpdate( );
 
