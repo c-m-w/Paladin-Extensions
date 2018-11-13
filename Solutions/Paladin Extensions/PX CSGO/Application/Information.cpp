@@ -288,7 +288,7 @@ namespace PX::Information
 				{ 576, ( "Autotronic [Karambit]" ) },
 				{ 577, ( "Autotronic [M9]" ) },
 
-				{ 38, ( "Fade [Knife/Glock]" ) },
+				{ 38, ( "Fade [Glock/Knife]" ) },
 				{ 522, ( "Fade [R8]" ) },
 				{ 752, ( "Fade [MP7]" ) },
 				{ 10063, ( "Fade [Glove]" ) },
@@ -314,7 +314,7 @@ namespace PX::Information
 				{ 660, ( "Hyper Beast [Five-SeveN]" ) },
 
 				{ 12, ( "Crimson Web [Knife]" ) },
-				{ 232, ( "Crimson Web [Deagle/SCAR]" ) },
+				{ 232, ( "Crimson Web [SCAR/Deagle]" ) },
 				{ 10061, ( "Crimson Web [Glove]" ) },
 
 				{ 98, ( "Ultraviolet [SG/Knife]" ) },
@@ -330,8 +330,8 @@ namespace PX::Information
 				{ 10057, ( "Emerald [Glove]" ) },
 
 				{ 247, ( "Damascus Steel [SG]" ) },
-				{ 410, ( "Damascus Steel [Broght??]" ) }, // todo review texture
-				{ 411, ( "Damascus Steel [Dark??]" ) },
+				{ 410, ( "Damascus Steel [Bright??]" ) }, // todo review texture
+				{ 411, ( "Damascus Steel [Dark  ??]" ) }, // todo review texture
 
 				{ 254, ( "Nitro [M4A1/Five-SeveN]" ) },
 				{ 322, ( "Nitro [CZ]" ) },
@@ -361,7 +361,137 @@ namespace PX::Information
 				{ 639, ( "Bloodsport [AK]" ) },
 				{ 696, ( "Bloodsport [MP7]" ) },
 
+				{ 2, ( "Bloodsport [TEC/Glock]" ) },
+				{ 209, ( "Bloodsport [MP7]" ) },
 
+				{ 5, ( "Forest DDPAT [MP7/Knife/Sawed-Off]" ) },
+				{ 10030, ( "Forest DDPAT [Glove]" ) },
+
+				{ 28, ( "Anodized Navy [SG/MP7/Negev/Elites]" ) },
+				{ 197, ( "Anodized Navy [AUG]" ) },
+
+				{ 33, ( "Hot Rod [AUG/MP9]" ) },
+				{ 445, ( "Hot Rod [M4A1]" ) },
+
+				{ 44, ( "Case Hardened [AK/Knife/Five-SeveN]" ) },
+				{ 10060, ( "Case Hardened [Glove]" ) },
+
+				{ 59, ( "Slaughter [Knife]" ) },
+				{ 10021, ( "Slaughter [Glove]" ) },
+
+				{ 99, ( "Sand Dune [SSG/MAG-7/Nova/P250]" ) },
+				{ 208, ( "Sand Dune [Glock]" ) },
+
+				{ 101, ( "Tornado [SG/Mac/M4A4]" ) },
+				{ 206, ( "Tornado [TEC]" ) },
+
+				{ 151, ( "Jungle [Five-SeveN]" ) },
+				{ 205, ( "Jungle [XM]" ) },
+
+				{ 157, ( "Palm [Mac/SCAR]" ) },
+				{ 201, ( "Palm [Negev]" ) },
+
+				{ 167, ( "Radiation Hazard [M4A4]" ) },
+				{ 375, ( "Radiation Hazard [AUG]" ) },
+
+				{ 168, ( "Nuclear Threat [P250]" ) },
+				{ 179, ( "Nuclear Threat [TEC]" ) },
+
+				{ 169, ( "Fallout Warning [XM/UMP/P90]" ) },
+				{ 378, ( "Fallout Warning [SG]" ) },
+
+				{ 174, ( "BOOM [AWP]" ) },
+				{ 10027, ( "Boom! [Glove]" ) },
+
+				{ 181, ( "Corticera [AWP]" ) },
+				{ 184, ( "Corticera [P2000]" ) },
+
+				{ 211, ( "Ocean Foam [P2000]" ) },
+				{ 213, ( "Ocean Foam [MP7]" ) },
+
+				{ 212, ( "Graphite [AWP]" ) },
+				{ 214, ( "Graphite [Nova]" ) },
+
+				{ 246, ( "Amber Fade [Mac/P2000/Sawed-Off]" ) },
+				{ 523, ( "Amber Fade [R8]" ) },
+				  
+				{ 000, ( " []" ) },
+				{ 000, ( " []" ) },
+				  
+				{ 000, ( " []" ) },
+				{ 000, ( " []" ) },
+				  
+				{ 000, ( " []" ) },
+				{ 000, ( " []" ) },
+				  
+				{ 000, ( " []" ) },
+				{ 000, ( " []" ) },
+				  
+				{ 000, ( " []" ) },
+				{ 000, ( " []" ) },
+
+				{ 000, ( " []" ) },
+				{ 000, ( " []" ) },
+
+				{ 000, ( " []" ) },
+				{ 000, ( " []" ) },
+
+				{ 000, ( " []" ) },
+				{ 000, ( " []" ) },
+
+				{ 000, ( " []" ) },
+				{ 000, ( " []" ) },
+
+				{ 000, ( " []" ) },
+				{ 000, ( " []" ) },
+
+				{ 000, ( " []" ) },
+				{ 000, ( " []" ) },
+
+				{ 000, ( " []" ) },
+				{ 000, ( " []" ) },
+
+				{ 000, ( " []" ) },
+				{ 000, ( " []" ) },
+
+				{ 395, ( "Man-o'-war [AWP]" ) },
+				{ 432, ( "Man-o'-war [Negev]" ) },
+
+				{ 000, ( " []" ) },
+				{ 000, ( " []" ) },
+
+				{ 000, ( " []" ) },
+				{ 000, ( " []" ) },
+
+				{ 000, ( " []" ) },
+				{ 000, ( " []" ) },
+
+				{ 000, ( " []" ) },
+				{ 000, ( " []" ) },
+
+				{ 000, ( " []" ) },
+				{ 000, ( " []" ) },
+
+				{ 000, ( " []" ) },
+				{ 000, ( " []" ) },
+
+				{ 000, ( " []" ) },
+				{ 000, ( " []" ) },
+
+				{ 000, ( " []" ) },
+				{ 000, ( " []" ) },
+
+				{ 000, ( " []" ) },
+				{ 000, ( " []" ) },
+
+				{ 000, ( " []" ) },
+				{ 000, ( " []" ) },
+
+				{ 000, ( " []" ) },
+				{ 000, ( " []" ) },
+
+				{ 000, ( " []" ) },
+				{ 000, ( " []" ) },
 			};
 
 			//struct skin_info
