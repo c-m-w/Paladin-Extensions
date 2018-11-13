@@ -250,15 +250,116 @@ namespace PX::Information
 			const auto pItemSchema = reinterpret_cast< CCStrike15ItemSchema* >( ptr_t( pItemSystem( ) ) + 0x4 );
 			const auto pHead = reinterpret_cast< Head_t* >( ptr_t( pItemSchema ) + ptrHeadOffset );
 
+			// todo xor
 			std::map< int, std::string > mpCustomNames
 			{
-				{ 415, "Doppler (Ruby)" },
-				{ 416, "Doppler (Sapphire)" },
-				{ 417, "Doppler (Black Pearl)" },
-				{ 418, "Doppler (Phase 1)" },
-				{ 419, "Doppler (Phase 2)" },
-				{ 420, "Doppler (Phase 3)" },
-				{ 421, "Doppler (Phase 4)" },
+				{ 415, ( "Doppler [Ruby]" ) },
+				{ 416, ( "Doppler [Sapphire]" ) },
+				{ 417, ( "Doppler [Black Pearl]" ) },
+				{ 418, ( "Doppler [Phase 1]" ) },
+				{ 419, ( "Doppler [Phase 2]" ) },
+				{ 420, ( "Doppler [Phase 3]" ) },
+				{ 421, ( "Doppler [Phase 4]" ) },
+
+				{ 172, ( "Black Laminate [AK]" ) },
+				{ 563, ( "Black Laminate [Bayonet]" ) },
+				{ 564, ( "Black Laminate [Flip]" ) },
+				{ 565, ( "Black Laminate [Gut]" ) },
+				{ 566, ( "Black Laminate [Karambit]" ) },
+				{ 567, ( "Black Laminate [M9]" ) },
+
+				{ 558, ( "Lore [Bayonet]" ) },
+				{ 559, ( "Lore [Flip]" ) },
+				{ 560, ( "Lore [Gut]" ) },
+				{ 561, ( "Lore [Karambit]" ) },
+				{ 562, ( "Lore [M9]" ) },
+
+				{ 568, ( "Gamma Doppler [Emerald]" ) },
+				{ 569, ( "Gamma Doppler [Phase 1]" ) },
+				{ 570, ( "Gamma Doppler [Phase 2]" ) },
+				{ 571, ( "Gamma Doppler [Phase 3]" ) },
+				{ 572, ( "Gamma Doppler [Phase 4]" ) },
+
+				{ 573, ( "Autotronic [Bayonet]" ) },
+				{ 574, ( "Autotronic [Flip]" ) },
+				{ 575, ( "Autotronic [Gut]" ) },
+				{ 576, ( "Autotronic [Karambit]" ) },
+				{ 577, ( "Autotronic [M9]" ) },
+
+				{ 38, ( "Fade [Knife/Glock]" ) },
+				{ 522, ( "Fade [R8]" ) },
+				{ 752, ( "Fade [MP7]" ) },
+				{ 10063, ( "Fade [Glove]" ) },
+
+				{ 203, ( "Rust Coat [Bizon]" ) },
+				{ 323, ( "Rust Coat [Sawed-Off]" ) },
+				{ 414, ( "Rust Coat [Knife]" ) },
+				{ 754, ( "Rust Coat [MAG-7]" ) },
+
+				{ 255, ( "Asiimov [M4A4]" ) },
+				{ 279, ( "Asiimov [AWP]" ) },
+				{ 359, ( "Asiimov [P90]" ) },
+				{ 551, ( "Asiimov [P250]" ) },
+
+				{ 312, ( "Cyrex [SCAR]" ) },
+				{ 360, ( "Cyrex [M4A1]" ) },
+				{ 487, ( "Cyrex [SG]" ) },
+				{ 637, ( "Cyrex [USP]" ) },
+
+				{ 430, ( "Hyper Beast [M4A1]" ) },
+				{ 475, ( "Hyper Beast [AWP]" ) },
+				{ 537, ( "Hyper Beast [Nova]" ) },
+				{ 660, ( "Hyper Beast [Five-SeveN]" ) },
+
+				{ 12, ( "Crimson Web [Knife]" ) },
+				{ 232, ( "Crimson Web [Deagle/SCAR]" ) },
+				{ 10061, ( "Crimson Web [Glove]" ) },
+
+				{ 98, ( "Ultraviolet [SG/Knife]" ) },
+				{ 620, ( "Ultraviolet [Huntsman]" ) },
+				{ 621, ( "Ultraviolet [Falchion]" ) },
+
+				{ 189, ( "Bright Water [M4A1]" ) },
+				{ 578, ( "Bright Water [Knife]" ) },
+				{ 579, ( "Bright Water [M9]" ) },
+
+				{ 196, ( "Emerald [SCAR]" ) },
+				{ 453, ( "Emerald [CZ]" ) },
+				{ 10057, ( "Emerald [Glove]" ) },
+
+				{ 247, ( "Damascus Steel [SG]" ) },
+				{ 410, ( "Damascus Steel [Broght??]" ) }, // todo review texture
+				{ 411, ( "Damascus Steel [Dark??]" ) },
+
+				{ 254, ( "Nitro [M4A1/Five-SeveN]" ) },
+				{ 322, ( "Nitro [CZ]" ) },
+				{ 798, ( "Nitro [R8]" ) },
+
+				{ 260, ( "Pulse [FAMAS]" ) },
+				{ 287, ( "Pulse [SG]" ) },
+				{ 338, ( "Pulse [P2000]" ) },
+
+				{ 354, ( "Urban Hazard [MP7]" ) },
+				{ 387, ( "Urban Hazard [Five-SeveN]" ) },
+				{ 700, ( "Urban Hazard [P2000]" ) },
+
+				{ 388, ( "Cartel [P250]" ) },
+				{ 394, ( "Cartel [AK]" ) },
+				{ 528, ( "Cartel [Elites]" ) },
+
+				{ 422, ( "Elite Build [AK]" ) },
+				{ 486, ( "Elite Build [P90]" ) },
+				{ 525, ( "Elite Build [AWP]" ) },
+
+				{ 580, ( "Freehand [Knife]" ) },
+				{ 581, ( "Freehand [M9]" ) },
+				{ 582, ( "Freehand [Karambit]" ) },
+
+				{ 597, ( "Bloodsport [SCAR]" ) },
+				{ 639, ( "Bloodsport [AK]" ) },
+				{ 696, ( "Bloodsport [MP7]" ) },
+
+
 			};
 
 			//struct skin_info
