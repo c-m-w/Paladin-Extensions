@@ -6,7 +6,7 @@ struct CPaintKit;
 struct Node_t;
 struct Head_t;
 
-enum Grade
+enum EItemGrade
 {
 	GRADE_CONSUMER,
 	GRADE_INDUSTRIAL,
