@@ -153,5 +153,7 @@ namespace PX::Information
 		void PX_API UpdateModelIndicies( );
 		int PX_API GetModelIndex( short sItemDefIndex );
 		int PX_API GetModelIndex( Types::cstr_t szName );
+		short PX_API GetDefinitionIndex( int iModelIndex );
+		int PX_API GetItemDefinitionIndex( Types::cstr_t szName );
 	}
 }

@@ -74,7 +74,8 @@ namespace PX::Tools
 		PX_NETVAR_REFERENCE( bool, m_bShouldGlow,PX_XOR( "DT_DynamicProp" ), PX_XOR( "m_bShouldGlow" ) );
 		PX_NETVAR_REFERENCE( CBasePlayer*, m_hOwnerEntity,PX_XOR( "DT_BaseEntity" ), PX_XOR( "m_hOwnerEntity" ) );
 		PX_NETVAR_REFERENCE( float, m_flSimulationTime,PX_XOR( "DT_BaseEntity" ), PX_XOR( "m_flSimulationTime" ) );
-		PX_NETVAR_REFERENCE_OFFSET( matrix3x4_t, m_rgflCoordinateFrame,PX_XOR( "DT_BaseEntity" ), PX_XOR( "m_CollisionGroup" ),  -int( 0x30 ) );
+		PX_NETVAR_REFERENCE_OFFSET( matrix3x4_t, m_rgflCoordinateFrame, PX_XOR( "DT_BaseEntity" ), PX_XOR( "m_CollisionGroup" ),  -int( 0x30 ) );
+		PX_NETVAR_REFERENCE_OFFSET( int32_t, GetIndex, PX_XOR( "CBaseEntity" ), PX_XOR( "m_bIsAutoaimTarget" ), 0x4 );
 
 		bool IsPlayer( );
 		bool IsWeapon( );
@@ -97,6 +98,7 @@ namespace PX::Tools
 		PX_NETVAR_REFERENCE( int32_t, m_nFallbackPaintKit,PX_XOR( "DT_BaseAttributableItem" ), PX_XOR( "m_nFallbackPaintKit" ) );
 		PX_NETVAR_REFERENCE( int32_t, m_nFallbackSeed,PX_XOR( "DT_BaseAttributableItem" ), PX_XOR( "m_nFallbackSeed" ) );
 		PX_NETVAR_REFERENCE( float_t, m_flFallbackWear,PX_XOR( "DT_BaseAttributableItem" ), PX_XOR( "m_flFallbackWear" ) );
+		PX_NETVAR_REFERENCE( char*, m_szCustomName, PX_XOR( "DT_BaseAttributableItem" ), PX_XOR( "m_szCustomName" ) );
 
 		CEconomyItemView* m_Item( );
 	};

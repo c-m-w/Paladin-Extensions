@@ -370,5 +370,21 @@ namespace PX::Information
 				return GetModelIndex( pFirst->second );
 			return 0;
 		}
+
+		short PX_API GetDefinitionIndex( int iModelIndex )
+		{
+			for ( const auto& iterator : mpModelIndicies )
+				if ( iterator.second == iModelIndex )
+					return iterator.first;
+			return 0;
+		}
+
+		int PX_API GetItemDefinitionIndex( cstr_t szName )
+		{
+			const auto pFirst = mpItemDefinitionIndicies.find( szName );
+			if ( pFirst != mpItemDefinitionIndicies.end( ) )
+				return pFirst->second;
+			return 0;
+		}
 	}
 }

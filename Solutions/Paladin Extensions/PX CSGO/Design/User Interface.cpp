@@ -1573,6 +1573,8 @@ namespace PX::UI::Manager
 				static settings_t::miscellaneous_t::inventory_t::team_t* pConfig = nullptr;
 				static unsigned iSelectedWeapon = 0;
 				static auto iSelectedPaintKit = 0;
+				static auto uSelectedKnife = 0u;
+				static auto iSelectedGlove = 0;
 
 				const auto fnSetSelectedPaintKit = [ & ]( int iKitID )
 				{
@@ -1631,38 +1633,114 @@ namespace PX::UI::Manager
 					EndGroupbox( );
 				}
 
-				if ( BeginGroupbox( 401, 205, 500, 220, PX_XOR( "Paint Kits" ) ) )
+				//if ( BeginGroupbox( 401, 205, 500, 220, PX_XOR( "Paint Kits" ) ) )
+				//{
+				//	{
+				//		VerticalSpacing( );
+				//
+				//		BeginRow( 30, 2, ROW_STATIC );
+				//		SetRowWidth( 10 );
+				//		Spacing( );
+				//
+				//		SetRowWidth( GROUPBOX_COLUMN_WIDTH * 3.f + 29.f );
+				//		const auto buf = iSelectedWeapon;
+				//		TabbedCombobox( 30, PX_XOR( "Weapons" ), dqCategories, dqWeapons, iSelectedWeapon );
+				//		if( buf != iSelectedWeapon )
+				//			fnSetSelectedPaintKit( pConfig->_PaintKits[ ITEM_DEFINITION_INDICIES[ iSelectedWeapon ] ].iPaintKitID );
+				//
+				//		EndRow( );
+				//	}
+				//
+				//	{
+				//		static std::deque< cstr_t > dqPaintKits;
+				//		static char szSearch[ 32 ] { };
+				//		if ( dqPaintKits.empty( ) )
+				//			for ( const auto& kit : Other::vecPaintKits )
+				//				dqPaintKits.emplace_back( kit.strName.c_str( ) );
+				//
+				//		BeginRow( 30, 2, ROW_STATIC );
+				//		SetRowWidth( 10 );
+				//		Spacing( );
+				//
+				//		SetRowWidth( GROUPBOX_COLUMN_WIDTH );
+				//		fnSetValue( iSelectedPaintKit, FilteredCombobox( 30, PX_XOR( "Paintkit" ), dqPaintKits, iSelectedPaintKit, 10, szSearch ) );
+				//		pConfig->_PaintKits[ ITEM_DEFINITION_INDICIES[ iSelectedWeapon ] ].iPaintKitID = Other::vecPaintKits[ iSelectedPaintKit ].iIdentifier;
+				//
+				//		EndRow( );
+				//	}
+				//	EndGroupbox( );
+				//}
+
+				if ( BeginGroupbox( 401, 205, 500, 220, PX_XOR( "Models" ) ) )
 				{
 					{
-						VerticalSpacing( );
+						std::deque< cstr_t > dqPages
+						{
+							PX_XOR( "Page 1" ),
+							PX_XOR( "Page 2" )
+						};
 
-						BeginRow( 30, 2, ROW_STATIC );
-						SetRowWidth( 10 );
-						Spacing( );
+						cstr_t szKnives[ ]
+						{
+							PX_XOR( "Bayonet" ),
+								PX_XOR( "Flip" ),
+								PX_XOR( "Gut" ),
+								PX_XOR( "Karambit" ),
+								PX_XOR( "M9 Bayonet" ),
+								PX_XOR( "Huntsman" ),
+								PX_XOR( "Falchion" ),
+								PX_XOR( "Bowie" ),
+								PX_XOR( "Butterfly" ),
+								PX_XOR( "Shadow Daggers" ),
+							PX_XOR( "Ursus" ),
+								PX_XOR( "Navaja" ),
+								PX_XOR( "Stilletto" ),
+								PX_XOR( "Talon" )
+						};
 
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH * 3.f + 29.f );
-						const auto buf = iSelectedWeapon;
-						TabbedCombobox( 30, PX_XOR( "Weapons" ), dqCategories, dqWeapons, iSelectedWeapon );
-						if( buf != iSelectedWeapon )
-							fnSetSelectedPaintKit( pConfig->_PaintKits[ ITEM_DEFINITION_INDICIES[ iSelectedWeapon ] ].iPaintKitID );
+						std::deque< cstr_t > dqKnives[ ]
+						{
+							{
+								PX_XOR( "Bayonet" ),
+								PX_XOR( "Flip" ),
+								PX_XOR( "Gut" ),
+								PX_XOR( "Karambit" ),
+								PX_XOR( "M9 Bayonet" ),
+								PX_XOR( "Huntsman" ),
+								PX_XOR( "Falchion" ),
+								PX_XOR( "Bowie" ),
+								PX_XOR( "Butterfly" ),
+								PX_XOR( "Shadow Daggers" )
+							},
+							{
+								PX_XOR( "Ursus" ),
+								PX_XOR( "Navaja" ),
+								PX_XOR( "Stilletto" ),
+								PX_XOR( "Talon" )
+							}
+						};
 
-						EndRow( );
-					}
-
-					{
-						static std::deque< cstr_t > dqPaintKits;
-						static char szSearch[ 32 ] { };
-						if ( dqPaintKits.empty( ) )
-							for ( const auto& kit : Other::vecPaintKits )
-								dqPaintKits.emplace_back( kit.strName.c_str( ) );
-
-						BeginRow( 30, 2, ROW_STATIC );
+						std::deque< cstr_t > dqGloves
+						{
+							PX_XOR( "Bloodhound" ),
+							PX_XOR( "Sport" ),
+							PX_XOR( "Driver" ),
+							PX_XOR( "Hand Wrap" ),
+							PX_XOR( "Moto" ),
+							PX_XOR( "Specialist" ),
+							PX_XOR( "Hydra" )
+						};
+					
+						BeginRow( 30, 3, ROW_STATIC );
 						SetRowWidth( 10 );
 						Spacing( );
 
 						SetRowWidth( GROUPBOX_COLUMN_WIDTH );
-						fnSetValue( iSelectedPaintKit, FilteredCombobox( 30, PX_XOR( "Paintkit" ), dqPaintKits, iSelectedPaintKit, 10, szSearch ) );
-						pConfig->_PaintKits[ ITEM_DEFINITION_INDICIES[ iSelectedWeapon ] ].iPaintKitID = Other::vecPaintKits[ iSelectedPaintKit ].iIdentifier;
+						TabbedCombobox( 30, PX_XOR( "Knife Model" ), dqPages, dqKnives, uSelectedKnife );
+						pConfig->_Models.iKnifeModel = Other::GetItemDefinitionIndex( szKnives[ uSelectedKnife ] );
+
+						fnSetValue( iSelectedGlove, Combobox( 30, PX_XOR( "Glove Model" ), dqGloves, iSelectedGlove ) );
+						pConfig->_Models.iGloveModel = Other::GetItemDefinitionIndex( dqGloves[ iSelectedGlove ] );
 
 						EndRow( );
 					}
