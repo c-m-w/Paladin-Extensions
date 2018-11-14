@@ -9,6 +9,7 @@
 #include "Application/Information.hpp"
 #include "SDK/Tools.hpp"
 #include "SDK/Types.hpp"
+#include "Application/Engine Prediction.hpp"
 #include "Application/Game Events.hpp"
 
 #include "Features/Features.hpp"

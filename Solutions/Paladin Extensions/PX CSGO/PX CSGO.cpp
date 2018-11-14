@@ -41,7 +41,8 @@ bool PX_API Initialize( )
 		&& PX::UI::Manager::CSGO::Initialize( )
 		&& PX::Features::InitializeFeatures( )
 		&& PX::Drawing::InitializeDrawing( )
-		&& PX::Hooks::InitializeHooks( );
+		&& PX::Hooks::InitializeHooks( )
+		&& PX::Prediction::InitializePrediction( );
 }
 
 void PX_API OnAttach( )

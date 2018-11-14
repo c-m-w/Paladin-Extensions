@@ -62,7 +62,7 @@ namespace PX::Features
 
 	void PX_API ShutdownFeatures( )
 	{
-		return Awareness::RemoveMaterials( )
-			&& Miscellaneous::RemoveHitsoundFiles( );
+		Awareness::RemoveMaterials( );
+		Miscellaneous::RemoveHitsoundFiles( );
 	}
 }

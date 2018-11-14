@@ -46,6 +46,34 @@ namespace PX::Features::Combat
 	void PX_API ResetContext( );
 	void PX_API OnNewTarget( player_ptr_t pLocalPlayer, player_ptr_t pTarget, CUserCmd* pCmd );
 
+	void CorrectMovement( QAngle vOldAngles, CUserCmd* pCmd, float fOldForward, float fOldSidemove )
+	{
+		// side/forward move correction
+		float deltaView;
+		float f1;
+		float f2;
+
+		if ( vOldAngles.yaw < 0.f )
+			f1 = 360.0f + vOldAngles.yaw;
+		else
+			f1 = vOldAngles.yaw;
+
+		if ( pCmd->viewangles.yaw < 0.0f )
+			f2 = 360.0f + pCmd->viewangles.yaw;
+		else
+			f2 = pCmd->viewangles.yaw;
+
+		if ( f2 < f1 )
+			deltaView = abs( f2 - f1 );
+		else
+			deltaView = 360.0f - abs( f1 - f2 );
+
+		deltaView = 360.0f - deltaView;
+
+		pCmd->forwardmove = cos( D3DXToRadian( deltaView ) ) * fOldForward + cos( D3DXToRadian( deltaView + 90.f ) ) * fOldSidemove;
+		pCmd->sidemove = sin( D3DXToRadian( deltaView ) ) * fOldForward + sin( D3DXToRadian( deltaView + 90.f ) ) * fOldSidemove;
+	}
+
 	void PX_API AimAssist( player_ptr_t pLocalPlayer, CUserCmd* pCmd )
 	{
 		static bool* pLast = nullptr;
@@ -246,13 +274,13 @@ namespace PX::Features::Combat
 			{
 				const auto fnDoSilent = [ & ]( )
 				{
-					*pSendPackets = false;
 					_AimContext.qOldAngles = pCmd->viewangles;
 					_AimContext.flOldForward = pCmd->forwardmove;
 					_AimContext.flOldSide = pCmd->sidemove;
 					_AimContext.flOldUp = pCmd->upmove;
 					pCmd->viewangles = qTargetAngle;
 					_AimContext.bRestoreAngle = true;
+					CorrectMovement( _AimContext.qOldAngles, pCmd, _AimContext.flOldForward, _AimContext.flOldSide );
 				};
 
 				const auto fnRestore = [ & ]( )
@@ -262,7 +290,6 @@ namespace PX::Features::Combat
 					pCmd->sidemove = _AimContext.flOldSide;
 					pCmd->upmove = _AimContext.flOldUp;
 					_AimContext.bRestoreAngle = false;
-					*pSendPackets = true;
 				};
 
 				if ( _AimContext.bRestoreAngle )

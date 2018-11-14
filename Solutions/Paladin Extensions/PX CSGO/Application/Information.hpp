@@ -106,6 +106,9 @@ namespace PX::Information
 		PX_SDK ICvar* pConVar = nullptr;
 		PX_SDK ILocalize* pLocalize = nullptr;
 		PX_SDK IGameEventManager2* pEvents = nullptr;
+		PX_SDK IMoveHelperServer* pMoveHelper = nullptr;
+		PX_SDK IGameMovement* pGameMovement = nullptr;
+		PX_SDK IPrediction* pPrediction = nullptr;
 	}
 
 	namespace NetworkedVariableManager // http://www.bailopan.net/table_dump.txt

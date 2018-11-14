@@ -225,10 +225,12 @@ namespace PX
 				return;
 
 			{
+				Prediction::Start( pLocalPlayer, pCmd );
 				Features::Combat::CompensateRecoil( pLocalPlayer, pCmd );
 				Features::Combat::AimAssist( pLocalPlayer, pCmd );
 				Features::Combat::Trigger( pLocalPlayer, pCmd );
 				Features::Miscellaneous::AutoJump( pLocalPlayer, pCmd );
+				Prediction::End( pLocalPlayer );
 			}
 
 			pVerifiedCmd->m_cmd = *pCmd;

@@ -199,6 +199,7 @@ namespace PX::Tools
 		PX_NETVAR_POINTER( CHandle< CBaseCombatWeapon >, m_hMyWeapons,PX_XOR( "DT_BaseCombatCharacter" ), PX_XOR( "m_hMyWeapons" ) );
 		PX_NETVAR_POINTER( CHandle<CBaseAttributableItem>, m_hMyWearables, PX_XOR( "DT_BaseCombatCharacter" ), PX_XOR( "m_hMyWearables" ) );
 		PX_NETVAR_POINTER( bool, m_bSpotted, PX_XOR( "DT_CSPlayerResource" ), PX_XOR( "m_bSpotted" ) );
+		PX_NETVAR_REFERENCE_OFFSET( CUserCmd*, m_pCurrentCommand, PX_XOR( "DT_BasePlayer" ), PX_XOR( "m_hConstraintEntity" ), -int( 0xC ) );
 
 		bool IsAlive( );
 		bool IsLocalPlayer( );

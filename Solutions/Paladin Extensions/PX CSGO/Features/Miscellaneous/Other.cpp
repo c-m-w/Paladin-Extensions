@@ -17,14 +17,16 @@ namespace PX::Features::Miscellaneous
 
 	bool PX_API CopyHitsoundFiles( )
 	{
-		std::filesystem::copy( string_cast< std::string >( Files::GetPXDirectory( ) ) + strHitsound, strSoundDirectory );
-		std::filesystem::copy( string_cast< std::string >( Files::GetPXDirectory( ) ) + strHitsoundHead, strSoundDirectory );
-		return std::filesystem::exists( strSoundDirectory + PX_XOR( "\\" ) + strHitsound	)
-			&& std::filesystem::exists( strSoundDirectory + PX_XOR( "\\" ) + strHitsoundHead );
+		return true;
+		//std::filesystem::copy( string_cast< std::string >( Files::GetPXDirectory( ) ) + strHitsound, strSoundDirectory );
+		//std::filesystem::copy( string_cast< std::string >( Files::GetPXDirectory( ) ) + strHitsoundHead, strSoundDirectory );
+		//return std::filesystem::exists( strSoundDirectory + PX_XOR( "\\" ) + strHitsound	)
+		//	&& std::filesystem::exists( strSoundDirectory + PX_XOR( "\\" ) + strHitsoundHead );
 	}
 
 	void PX_API RemoveHitsoundFiles( )
 	{
+		return;
 		std::remove( ( strSoundDirectory + PX_XOR( "\\" ) + strHitsound ).c_str( ) );
 		std::remove( ( strSoundDirectory + PX_XOR( "\\" ) + strHitsoundHead ).c_str( ) );
 	}

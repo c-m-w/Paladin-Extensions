@@ -33,7 +33,10 @@
 			"Clear Hud Weapon": 0,
 			"m_CustomMaterials": 2,
 			"m_bCustomMaterialInitialized": 2,
-			"m_VisualsDataProcessors": 2
+			"m_VisualsDataProcessors": 2,
+			"Prediction Player": 2,
+			"Prediction Seed": 2,
+			"Move Helper": 2
         },
       "Signatures": {
 			"Device": "A1 ? ? ? ? 50 8B 08 FF 51 0C",
@@ -56,7 +59,10 @@
 			"Clear Hud Weapon": "55 8B EC 51 53 56 8B 75 08 8B D9 57 6B FE 2C",
 			"m_CustomMaterials": "83 BE ? ? ? ? ? 7F 67",
 			"m_bCustomMaterialInitialized": "C6 86 ? ? ? ? ? FF 50 04",
-			"m_VisualsDataProcessors": "81 C7 ? ? ? ? 8B 4F 0C 8B 57 04 89 4C 24 0C"
+			"m_VisualsDataProcessors": "81 C7 ? ? ? ? 8B 4F 0C 8B 57 04 89 4C 24 0C",
+			"Prediction Player": "89 35 ? ? ? ? F3 0F 10 48 20",
+			"Prediction Seed": "8B 0D ? ? ? ? BA ? ? ? ? E8 ? ? ? ? 83 C4 04",
+			"Move Helper": "8B 0D ? ? ? ? 8B 46 08 68"
       }
     },
     "Versions": {
@@ -73,6 +79,8 @@
 		"Engine Render View": "VEngineRenderView014",
 		"CVar": "VEngineCvar007",
 		"Localize": "Localize_001",
-		"Events": "GAMEEVENTSMANAGER002"
+		"Events": "GAMEEVENTSMANAGER002",
+		"Game Movement": "GameMovement001",
+		"Prediction": "VClientPrediction001"
   }
 }
