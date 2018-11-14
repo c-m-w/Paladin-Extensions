@@ -115,6 +115,8 @@ namespace PX::Information
 				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "CVar" ) ].get< str_t >( ).c_str( ), nullptr ) );
 			pLocalize = reinterpret_cast< ILocalize* >( Modules::mLocalize.ciFactory(
 				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Localize" ) ].get< str_t >( ).c_str( ), nullptr ) );
+			pEvents = reinterpret_cast< IGameEventManager2* >( Modules::mEngine.ciFactory(
+				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Events" ) ].get< str_t >( ).c_str( ), nullptr ) );
 
 			return nullptr != pSendPackets
 				&& nullptr != pGlobalVariables
@@ -135,7 +137,8 @@ namespace PX::Information
 				&& nullptr != pMaterialSystem
 				&& nullptr != pEngineRenderView
 				&& nullptr != pConVar
-				&& nullptr != pLocalize;
+				&& nullptr != pLocalize
+				&& nullptr != pEvents;
 		}
 	}
 

@@ -423,6 +423,11 @@ namespace PX::Features
 					} _Models;
 				} _Terrorist, _CounterTerrorist;
 			} _Inventory;
+
+			struct other_t
+			{
+				toggle_t bHitSound = false;
+			} _Other;
 		} _Miscellaneous;
 	} PX_SDK _Settings;
 

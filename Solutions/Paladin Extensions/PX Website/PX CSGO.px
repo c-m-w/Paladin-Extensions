@@ -72,6 +72,7 @@
 		"Material System": "VMaterialSystem080",
 		"Engine Render View": "VEngineRenderView014",
 		"CVar": "VEngineCvar007",
-		"Localize": "Localize_001"
+		"Localize": "Localize_001",
+		"Events": "GAMEEVENTSMANAGER002"
   }
 }

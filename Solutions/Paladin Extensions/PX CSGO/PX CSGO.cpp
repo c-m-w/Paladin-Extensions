@@ -36,7 +36,7 @@ bool PX_API Initialize( )
 #else
 	return
 #endif
-		   PX::Information::InitializeInformation( )
+		PX::Information::InitializeInformation( )
 		&& PX::Files::Resources::LoadResources( { } )
 		&& PX::UI::Manager::CSGO::Initialize( )
 		&& PX::Features::InitializeFeatures( )

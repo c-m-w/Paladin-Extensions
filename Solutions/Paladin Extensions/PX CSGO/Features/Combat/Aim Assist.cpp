@@ -246,6 +246,7 @@ namespace PX::Features::Combat
 			{
 				const auto fnDoSilent = [ & ]( )
 				{
+					*pSendPackets = false;
 					_AimContext.qOldAngles = pCmd->viewangles;
 					_AimContext.flOldForward = pCmd->forwardmove;
 					_AimContext.flOldSide = pCmd->sidemove;
@@ -261,6 +262,7 @@ namespace PX::Features::Combat
 					pCmd->sidemove = _AimContext.flOldSide;
 					pCmd->upmove = _AimContext.flOldUp;
 					_AimContext.bRestoreAngle = false;
+					*pSendPackets = true;
 				};
 
 				if ( _AimContext.bRestoreAngle )

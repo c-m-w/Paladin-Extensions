@@ -18,6 +18,7 @@
 #include "IConVar.hpp"
 #include "ICVar.hpp"
 #include "IEngineTrace.hpp"
+#include "IGameEventManager.hpp"
 #include "IInputSystem.hpp"
 #include "ILocalize.hpp"
 #include "IMaterialSystem.hpp"

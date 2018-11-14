@@ -55,11 +55,14 @@ namespace PX::Features
 		} );
 
 		PX_CONFIG.LoadDefaultConfiguration( PX_EXTENSION_CSGO, &_Settings, sizeof( settings_t ) );
-		return Awareness::CreateMaterials( );
+		return Awareness::CreateMaterials( )
+			&& Events::AddEventCallback( Miscellaneous::Hitsound, PX_XOR( "player_hurt" ), false )
+			&& Miscellaneous::CopyHitsoundFiles( );
 	}
 
 	void PX_API ShutdownFeatures( )
 	{
-		return Awareness::RemoveMaterials( );
+		return Awareness::RemoveMaterials( )
+			&& Miscellaneous::RemoveHitsoundFiles( );
 	}
 }

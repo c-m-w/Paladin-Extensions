@@ -9,6 +9,7 @@
 #include "Application/Information.hpp"
 #include "SDK/Tools.hpp"
 #include "SDK/Types.hpp"
+#include "Application/Game Events.hpp"
 
 #include "Features/Features.hpp"
 #include "Features/Awareness/Extra Sensory Drawing.hpp"
@@ -20,6 +21,7 @@
 #include "Features/Combat/Trigger.hpp"
 #include "Features/Miscellaneous/Inventory.hpp"
 #include "Features/Miscellaneous/Movement.hpp"
+#include "Features/Miscellaneous/Other.hpp"
 #include "Features/Miscellaneous/Visuals.hpp"
 
 #include "Application/Hooks.hpp"
