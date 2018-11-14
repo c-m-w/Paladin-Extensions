@@ -46,31 +46,32 @@ namespace PX::Features::Combat
 	void PX_API ResetContext( );
 	void PX_API OnNewTarget( player_ptr_t pLocalPlayer, player_ptr_t pTarget, CUserCmd* pCmd );
 
-	void PX_API CorrectMovement( QAngle qOldAngles, CUserCmd* pCmd, float flOldForward, float flOldSide )
+	void CorrectMovement( QAngle vOldAngles, CUserCmd* pCmd, float fOldForward, float fOldSidemove )
 	{
-		float flDelta;
+		// side/forward move correction
+		float deltaView;
 		float f1;
 		float f2;
 
-		if ( qOldAngles.yaw < 0.f )
-			f1 = 360.f + qOldAngles.yaw;
+		if ( vOldAngles.yaw < 0.f )
+			f1 = 360.0f + vOldAngles.yaw;
 		else
-			f1 = qOldAngles.yaw;
+			f1 = vOldAngles.yaw;
 
 		if ( pCmd->viewangles.yaw < 0.0f )
-			f2 = 360.f + pCmd->viewangles.yaw;
+			f2 = 360.0f + pCmd->viewangles.yaw;
 		else
 			f2 = pCmd->viewangles.yaw;
 
 		if ( f2 < f1 )
-			flDelta = abs( f2 - f1 );
+			deltaView = abs( f2 - f1 );
 		else
-			flDelta = 360.f - abs( f1 - f2 );
+			deltaView = 360.0f - abs( f1 - f2 );
 
-		flDelta = 360.f - flDelta;
+		deltaView = 360.0f - deltaView;
 
-		pCmd->forwardmove = cos( D3DXToRadian( flDelta ) ) * flOldForward + cos( D3DXToRadian( flDelta + 90.f ) ) * flOldSide;
-		pCmd->sidemove = sin( D3DXToRadian( flDelta ) ) * flOldForward + sin( D3DXToRadian( flDelta + 90.f ) ) * flOldSide;
+		pCmd->forwardmove = cos( D3DXToRadian( deltaView ) ) * fOldForward + cos( D3DXToRadian( deltaView + 90.f ) ) * fOldSidemove;
+		pCmd->sidemove = sin( D3DXToRadian( deltaView ) ) * fOldForward + sin( D3DXToRadian( deltaView + 90.f ) ) * fOldSidemove;
 	}
 
 	void PX_API AimAssist( player_ptr_t pLocalPlayer, CUserCmd* pCmd )
