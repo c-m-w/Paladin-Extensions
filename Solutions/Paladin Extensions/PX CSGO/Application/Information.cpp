@@ -555,8 +555,8 @@ namespace PX::Information
 				ITEM_WEAPON_M4A1,
 				{
 					paint_kit_t( 0, PX_XOR( "None" ), GRADE_CONSUMER, QUALITY_DEFAULT ),
-					paint_kit_t( 309,PX_XOR( "Howl" ), GRADE_COVERT, QUALITY_STATTRAK ),
-					paint_kit_t( 695,PX_XOR( "Ne" ), GRADE_COVERT, QUALITY_STATTRAK ),
+					paint_kit_t( 309,PX_XOR( "Howl" ), GRADE_CONTRABAND, QUALITY_STATTRAK ),
+					paint_kit_t( 695,PX_XOR( "Neo-Noir" ), GRADE_COVERT, QUALITY_STATTRAK ),
 					paint_kit_t( 632,PX_XOR( "Buzz Kill" ), GRADE_COVERT, QUALITY_STATTRAK ),
 					paint_kit_t( 533,PX_XOR( "The Battlestar" ), GRADE_COVERT, QUALITY_STATTRAK ),
 					paint_kit_t( 512,PX_XOR( "Royal Paladin" ), GRADE_COVERT, QUALITY_STATTRAK ),

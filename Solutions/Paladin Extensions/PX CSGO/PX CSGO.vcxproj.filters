@@ -326,5 +326,8 @@
     <ClInclude Include="Features\Miscellaneous\Inventory.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\Valve\Interfaces\IRefCounted.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

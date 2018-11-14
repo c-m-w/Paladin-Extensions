@@ -23,6 +23,7 @@ namespace PX::Features::Miscellaneous
 	bool PX_API ModifyKnifeModel( player_ptr_t pLocalPlayer, CBaseCombatWeapon* pWeapon );
 	bool PX_API ModifyGloveModel( player_ptr_t pLocalPlayer );
 	void PX_API DestroyWearables( player_ptr_t pLocalPlayer );
+	void PX_API ForceEntityUpdate( CBaseCombatWeapon* pEntity );
 
 	void PX_API ModifyInventory( )
 	{
@@ -41,6 +42,7 @@ namespace PX::Features::Miscellaneous
 
 		const auto hWeapons = pLocalPlayer->m_hMyWeapons( );
 		const auto iXuidLow = pLocalPlayer->GetPlayerInformation( ).xuid_low;
+
 		for ( auto i = 0; i < 8; i++ )
 		{
 			const auto hWeapon = hWeapons[ i ];
@@ -114,6 +116,7 @@ namespace PX::Features::Miscellaneous
 		const auto pItem = pEntity->m_Item( );
 		const auto iIndex = pItem->m_iItemDefinitionIndex( );
 		const auto pCurrentConfig = &pConfig->_PaintKits[ iIndex ];
+		const auto bIsKnife = pEntity->IsWeapon( ) && reinterpret_cast< CBaseCombatWeapon* >( pEntity )->IsKnife( );
 		auto bReturn = false;
 
 		pItem->m_iItemIDHigh( ) = -1;
@@ -128,14 +131,15 @@ namespace PX::Features::Miscellaneous
 		if ( pCurrentConfig->bSouvenier.Get( ) )
 			pItem->m_iEntityQuality( ) = QUALITY_SOUVENIER;
 
-		if ( pEntity->IsWeapon( ) && reinterpret_cast< CBaseCombatWeapon* >( pEntity )->IsKnife( ) )
+		if ( bIsKnife )
 			pItem->m_iEntityQuality( ) = QUALITY_KNIFE;
 
-		if ( strlen( pCurrentConfig->szName ) != 0 )
-			pEntity->m_szCustomName( ) = pCurrentConfig->szName;
-		else
-			pEntity->m_szCustomName( ) = nullptr;
-
+		char szName[ 161 ] { };
+		if ( pCurrentConfig->bUseCustomName.Get( ) )
+			for ( auto i = 0; i < strlen( pCurrentConfig->szName ); i++ )
+				szName[ i ] = pCurrentConfig->szName[ i ];
+		memcpy( &pEntity->m_szCustomName( ), szName, 161 );
+		// = pCurrentConfig->bUseCustomName.Get( ) ? pCurrentConfig->szName : nullptr;
 		pEntity->m_flFallbackWear( ) = pCurrentConfig->flWear;
 		pEntity->m_nFallbackSeed( ) = pCurrentConfig->iSeed;
 		pEntity->m_OriginalOwnerXuidHigh( ) = 0;
@@ -265,6 +269,20 @@ namespace PX::Features::Miscellaneous
 			pNetworkable->Release( );
 			*hWearables = nullptr;
 		}
+	}
+
+	void PX_API ForceEntityUpdate( CBaseCombatWeapon* pEntity )
+	{
+		const auto pItem = pEntity->m_Item( );
+		std::cout << pEntity->GetCSWeaponData( )->szWeaponName << std::endl;
+
+		pEntity->m_bCustomMaterialInitialized( ) = pEntity->m_nFallbackPaintKit( ) <= 0;
+		pEntity->m_CustomMaterials( )->RemoveAll( );
+		pItem->m_CustomMaterials( )->RemoveAll( );
+		ClearRefCountedVector( pItem->m_VisualsDataProcessors( ) );
+
+		pEntity->PostDataUpdate( 0 );
+		pEntity->OnDataChanged( 0 );
 	}
 
 	void PX_API SetModelSequence( CRecvProxyData* pData, CBaseViewModel* pViewModel )

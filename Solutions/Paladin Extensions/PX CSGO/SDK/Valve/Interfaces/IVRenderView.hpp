@@ -69,13 +69,6 @@ struct WorldListInfo_t
 	LeafFogVolume_t*	m_pLeafFogVolume;
 };
 
-class IRefCounted
-{
-public:
-	virtual int AddRef( ) = 0;
-	virtual int Release( ) = 0;
-};
-
 class IWorldRenderList: public IRefCounted
 { };
 

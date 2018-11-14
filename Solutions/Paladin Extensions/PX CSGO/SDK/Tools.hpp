@@ -72,6 +72,18 @@ namespace PX::Tools
 		PX_NETVAR_REFERENCE( int32_t, m_iItemIDLow,PX_XOR( "DT_BaseAttributableItem" ), PX_XOR( "m_iItemIDLow" ) );
 		PX_NETVAR_REFERENCE( int32_t, m_iItemIDHigh,PX_XOR( "DT_BaseAttributableItem" ), PX_XOR( "m_iItemIDHigh" ) );
 		PX_NETVAR_REFERENCE( int32_t, m_iEntityQuality,PX_XOR( "DT_BaseAttributableItem" ), PX_XOR( "m_iEntityQuality" ) );
+		CUtlVector< IRefCounted* >* m_CustomMaterials()
+		{
+			return reinterpret_cast< CUtlVector<IRefCounted*>* >( ptr_t( this ) + 0x14 );
+		}
+
+		CUtlVector<IRefCounted*>* m_VisualsDataProcessors()
+		{
+			//static const auto ptrOffset = *reinterpret_cast< ptr_t* >( Information::Modules::mClient.FindPattern( Information::jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "m_VisualsDataProcessors" ) ].get< str_t >( ) )
+			//							 + Information::jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "m_VisualsDataProcessors" ) ].get< int >( ) );
+			//return reinterpret_cast< CUtlVector<IRefCounted*>* >( ptr_t( this ) + ptrOffset );
+			return reinterpret_cast< CUtlVector< IRefCounted* >* >( ptr_t( this ) + 0x0220 );
+		}
 	};
 
 	class CBaseEntity: public IClientEntity
@@ -119,6 +131,19 @@ namespace PX::Tools
 		PX_NETVAR_REFERENCE( int32_t, m_iClip1,PX_XOR( "DT_BaseCombatWeapon" ), PX_XOR( "m_iClip1" ) );
 		PX_NETVAR_REFERENCE( int32_t, m_iClip2,PX_XOR( "DT_BaseCombatWeapon" ), PX_XOR( "m_iClip2" ) );
 		PX_NETVAR_REFERENCE( float_t, m_flRecoilIndex,PX_XOR( "DT_WeaponCSBase" ), PX_XOR( "m_flRecoilIndex" ) );
+		CUtlVector< IRefCounted* >* m_CustomMaterials( )
+		{
+			static const auto ptrOffset = ptr_t( *reinterpret_cast< ptr_t* >( Information::Modules::mClient.FindPattern( Information::jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "m_CustomMaterials" ) ].get< str_t >( ) )
+																 + Information::jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "m_CustomMaterials" ) ].get< int >( ) ) ) - 12;
+			return reinterpret_cast< CUtlVector< IRefCounted* >* >( ptr_t( this ) + ptrOffset );
+		}
+
+		bool& m_bCustomMaterialInitialized( )
+		{
+			static const auto ptrOffset = *reinterpret_cast< ptr_t* >( Information::Modules::mClient.FindPattern( Information::jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "m_bCustomMaterialInitialized" ) ].get< str_t >( ) )
+																 + Information::jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "m_bCustomMaterialInitialized" ) ].get< int >( ) );
+			return *reinterpret_cast< bool* >( ptr_t( this ) + ptrOffset );
+		}
 
 		CCSWeaponInfo* GetCSWeaponData( );
 		bool HasBullets( );

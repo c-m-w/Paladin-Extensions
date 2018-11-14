@@ -1091,9 +1091,9 @@ namespace PX::UI
 			if ( bHovering && !PopupActive( ) )
 				SetWidgetActive( CURSOR_HAND );
 
-			if ( bClicking && bHovering && !PopupActive( ) )
+			if ( bClicking && bHovering && !PopupActive( ) && pContext->current != nullptr && pContext->current->popup.win == nullptr )
 			{
-				if ( !bWasClicking && !PopupActive( ) )
+				if ( !bWasClicking && !PopupActive( ) && pContext->current != nullptr && pContext->current->popup.win == nullptr )
 					*bActive = !*bActive;
 				bWasClicking = true;
 			}
@@ -1104,7 +1104,7 @@ namespace PX::UI
 				Tooltip( bHovering, szTooltip );
 
 			SetFont( FNT_TAHOMA );
-			nk_label_colored( pContext, *bActive ? ICON_FA_CHECK_SQUARE : ICON_FA_SQUARE, NK_TEXT_CENTERED, *bActive ? clrBlue : bHovering && !PopupActive( ) ? ( bClicking ? clrBlue : clrBlue ) : clrTextDormant );
+			nk_label_colored( pContext, *bActive ? ICON_FA_CHECK_SQUARE : ICON_FA_SQUARE, NK_TEXT_CENTERED, *bActive ? clrBlue : bHovering && !PopupActive( ) && pContext->current != nullptr && pContext->current->popup.win == nullptr ? ( bClicking ? clrBlue : clrBlue ) : clrTextDormant );
 			nk_layout_row_push( pContext, CalculateTextBounds( szText, 15 ).x );
 			nk_label_colored( pContext, ( szText + str_t( PX_XOR( "  " ) ) ).c_str( ), NK_TEXT_LEFT, clrTextDormant );
 		}
@@ -1149,16 +1149,16 @@ namespace PX::UI
 			const auto bHovering = nk_input_is_mouse_hovering_rect( &pContext->input, recBoundaries );
 			const auto bClicking = PX_INPUT.GetKeyState( VK_LBUTTON ) == true;
 
-			if ( bHovering && !PopupActive( ) )
+			if ( bHovering && !PopupActive( ) && pContext->current != nullptr && pContext->current->popup.win == nullptr )
 			{
 				SetWidgetActive( CURSOR_HAND );
 				if ( PX_INPUT.GetKeyState( VK_RBUTTON ) )
 					pActiveEditToggle = bActive;
 			}
 
-			if ( bClicking && bHovering && !PopupActive( ) )
+			if ( bClicking && bHovering && !PopupActive( ) && pContext->current != nullptr && pContext->current->popup.win == nullptr )
 			{
-				if ( !bWasClicking && !PopupActive( ) )
+				if ( !bWasClicking && !PopupActive( ) && pContext->current != nullptr && pContext->current->popup.win == nullptr )
 					*bActive = !*bActive;
 				bWasClicking = true;
 			}
@@ -1169,7 +1169,7 @@ namespace PX::UI
 				Tooltip( bHovering, szTooltip );
 
 			SetFont( FNT_TAHOMA );
-			nk_label_colored( pContext, !!*bActive ? ICON_FA_CHECK_SQUARE : ICON_FA_SQUARE, NK_TEXT_CENTERED, !!*bActive ? clrBlue : bHovering && !PopupActive( ) ? ( bClicking ? clrBlue : clrBlue ) : clrTextDormant );
+			nk_label_colored( pContext, !!*bActive ? ICON_FA_CHECK_SQUARE : ICON_FA_SQUARE, NK_TEXT_CENTERED, !!*bActive ? clrBlue : bHovering && !PopupActive( ) && pContext->current != nullptr && pContext->current->popup.win == nullptr ? ( bClicking ? clrBlue : clrBlue ) : clrTextDormant );
 			nk_layout_row_push( pContext, CalculateTextBounds( szText, 15 ).x );
 			nk_label_colored( pContext, ( szText + str_t( PX_XOR( "  " ) ) ).c_str( ), NK_TEXT_LEFT, clrTextDormant );
 		}
@@ -2075,7 +2075,7 @@ namespace PX::UI
 
 		struct slider_info_t
 		{
-			bool bInEdit = false, bSetEditValue = false, bWasClickingInBoundaries = false, bWasClicking = false;
+			bool bInEdit = false, bSetEditValue = false, bWasClickingInBoundaries = false, bWasClicking = false, bWaitForClickingToStopToDrag = false;
 		};
 
 		int PX_API Slider( cstr_t szTitle, char* szInputBuffer, int iMin, int iMax, int iCurrentValue, unsigned uStartX, unsigned uStartY, unsigned uWidth, unsigned uHeight, bool bIgnorePopup /*= false*/ )
@@ -2088,6 +2088,10 @@ namespace PX::UI
 			uSliderIntCounter++;
 
 			iCurrentRowUsedColumns += 3;
+			if ( pContext->current != nullptr && pContext->current->popup.win != nullptr && !bIgnorePopup )
+				siCurrent.bWaitForClickingToStopToDrag = true;
+			else if ( siCurrent.bWaitForClickingToStopToDrag && !siCurrent.bWasClicking )
+				siCurrent.bWaitForClickingToStopToDrag = false;
 
 			px_assert( iMax > iMin );
 			auto szTexta = std::to_string( iCurrentValue ).substr( 0, std::to_string( iCurrentValue ).size( ) );
@@ -2146,16 +2150,27 @@ namespace PX::UI
 			const auto recSliderBounds = nk_widget_bounds( pContext );
 			if ( nk_input_is_mouse_hovering_rect( &pContext->input, recSliderBounds ) && bClicking && ( PopupActive( ) || bIgnorePopup ) || siCurrent.bWasClickingInBoundaries && siCurrent.bWasClicking )
 			{
-				siCurrent.bWasClickingInBoundaries = true;
-				iCurrentValue = int( iMin + ( pContext->input.mouse.pos.x - recSliderBounds.x ) / recSliderBounds.w * ( iMax - iMin ) );
+				if ( bIgnorePopup || !siCurrent.bWaitForClickingToStopToDrag )
+				{
+					siCurrent.bWasClickingInBoundaries = true;
+					iCurrentValue = int( iMin + ( pContext->input.mouse.pos.x - recSliderBounds.x ) / recSliderBounds.w * ( iMax - iMin ) );
+				}
 			}
 			else
 				siCurrent.bWasClickingInBoundaries = false;
 
 			siCurrent.bWasClicking = bool( PX_INPUT.GetKeyState( VK_LBUTTON ) );
 
-			if ( nk_input_is_mouse_hovering_rect( &pContext->input, recSliderBounds ) && bClicking && !PopupActive( ) )
+			if ( nk_input_is_mouse_hovering_rect( &pContext->input, recSliderBounds ) && bClicking && !PopupActive( ) && !siCurrent.bWaitForClickingToStopToDrag )
 				iCurrentValue = iMin + ( pContext->input.mouse.pos.x - recSliderBounds.x ) / recSliderBounds.w * ( iMax - iMin );
+
+			if( siCurrent.bWasClickingInBoundaries && siCurrent.bWasClicking && !siCurrent.bWaitForClickingToStopToDrag )
+			{
+				if ( pContext->input.mouse.pos.x > recSliderBounds.x + recSliderBounds.w )
+					iCurrentValue = iMax;
+				else if ( pContext->input.mouse.pos.x < recSliderBounds.x )
+					iCurrentValue = iMin;
+			}
 
 			const auto iNewValue = nk_slide_int( pContext, iMin, iCurrentValue, iMax, ( iMax - iMin ) / 20 );
 			if ( !siCurrent.bInEdit )
@@ -2173,6 +2188,10 @@ namespace PX::UI
 			auto& siCurrent = vecSliderInfo.at( uSliderFloatCounter );
 
 			uSliderFloatCounter++;
+			if ( pContext->current != nullptr && pContext->current->popup.win != nullptr )
+				siCurrent.bWaitForClickingToStopToDrag = true;
+			else if ( siCurrent.bWaitForClickingToStopToDrag && !siCurrent.bWasClicking )
+				siCurrent.bWaitForClickingToStopToDrag = false;
 			iCurrentRowUsedColumns += 3;
 
 			px_assert( flMax > flMin );
@@ -2230,7 +2249,8 @@ namespace PX::UI
 			PushCustomRow( uStartX, uStartY + unsigned( vecTextSize.y ) + 3, uWidth, uHeight - unsigned( vecTextSize.y ) - 3 );
 
 			const auto recSliderBounds = nk_widget_bounds( pContext );
-			if ( nk_input_is_mouse_hovering_rect( &pContext->input, recSliderBounds ) && bClicking && !PopupActive( ) || siCurrent.bWasClickingInBoundaries && siCurrent.bWasClicking )
+			if ( ( nk_input_is_mouse_hovering_rect( &pContext->input, recSliderBounds ) && bClicking && !PopupActive( ) || siCurrent.bWasClickingInBoundaries && siCurrent.bWasClicking )
+				 && !siCurrent.bWaitForClickingToStopToDrag )
 			{
 				siCurrent.bWasClickingInBoundaries = true;
 				flCurrentValue = flMin + ( pContext->input.mouse.pos.x - recSliderBounds.x ) / recSliderBounds.w * ( flMax - flMin );
@@ -2240,8 +2260,17 @@ namespace PX::UI
 
 			siCurrent.bWasClicking = bool( PX_INPUT.GetKeyState( VK_LBUTTON ) );
 
-			if ( nk_input_is_mouse_hovering_rect( &pContext->input, recSliderBounds ) && bClicking && !PopupActive( ) )
+			if ( nk_input_is_mouse_hovering_rect( &pContext->input, recSliderBounds ) && bClicking && !PopupActive( )
+				 && !siCurrent.bWaitForClickingToStopToDrag )
 				flCurrentValue = flMin + ( pContext->input.mouse.pos.x - recSliderBounds.x ) / recSliderBounds.w * ( flMax - flMin );
+
+			if ( siCurrent.bWasClickingInBoundaries && siCurrent.bWasClicking && !siCurrent.bWaitForClickingToStopToDrag )
+			{
+				if ( pContext->input.mouse.pos.x > recSliderBounds.x + recSliderBounds.w )
+					flCurrentValue = flMax;
+				else if ( pContext->input.mouse.pos.x < recSliderBounds.x )
+					flCurrentValue = flMin;
+			}
 
 			const auto flNewValue = nk_slide_float( pContext, flMin, flCurrentValue, flMax, ( flMax - flMin ) / 20.f );
 			if ( !siCurrent.bInEdit )

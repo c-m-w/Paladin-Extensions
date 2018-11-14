@@ -406,12 +406,15 @@ namespace PX::Features
 
 					struct
 					{
-						int iPaintKitID = 0, iStatTrakCounter = -1;
+						int iPaintKitID = 0;
 						toggle_t bSouvenier = false;
 						toggle_t bStatTrak = false;
+						toggle_t bUseCustomName = false;
+						char szName[ 32 ] { };
+						wchar_t wszName[ 32 ] { };
 						float flWear = 0.f;
 						int iSeed = 0;
-						char szName[ 32 ] { };
+						int iStatTrakCounter = -1;
 					} _PaintKits[ ITEM_MAX ];
 
 					struct

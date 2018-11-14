@@ -1570,6 +1570,7 @@ namespace PX::UI::Manager
 
 			case INVENTORY:
 			{
+				SetMainWindowHeight( 800 );
 				static settings_t::miscellaneous_t::inventory_t::team_t* pConfig = nullptr;
 				static unsigned iSelectedWeapon = 0;
 				static auto iSelectedPaintKit = 0;
@@ -1811,7 +1812,7 @@ namespace PX::UI::Manager
 							{ 0xFF, 0xAE, 0x39, 0xFF },
 						};
 						constexpr char* szPageNumbers[ ] { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
-						constexpr auto flWidth = ( GROUPBOX_COLUMN_WIDTH * 3.f + 29.f ) / 2.f;
+						constexpr auto flWidth = ( GROUPBOX_COLUMN_WIDTH * 3.f + 29.f ) / 2.f - 1.f;
 						static std::deque< cstr_t > dqPaintKits;
 						static char szSearch[ 32 ] { };
 						if ( dqPaintKits.empty( ) )
@@ -1854,10 +1855,56 @@ namespace PX::UI::Manager
 						delete[ ] dqItems;
 					}
 
+					{
+						BeginRow( 30, 9, ROW_STATIC );
+						SetRowWidth( 5 );
+						Spacing( );
+
+						Checkbox( PX_XOR( "Souvenir" ), &pConfig->_PaintKits[ ITEM_DEFINITION_INDICIES[ iSelectedWeapon ] ].bSouvenier );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Souvenir" ), 30 ).x );
+						Spacing( );
+
+						Checkbox( PX_XOR( "StatTrak" ), &pConfig->_PaintKits[ ITEM_DEFINITION_INDICIES[ iSelectedWeapon ] ].bStatTrak );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Souvenir" ), 30 ).x );
+						Spacing( );
+
+						Checkbox( PX_XOR( "Use Custom Name" ), &pConfig->_PaintKits[ ITEM_DEFINITION_INDICIES[ iSelectedWeapon ] ].bUseCustomName );
+
+						EndRow( );
+					}
+
+					{
+						BeginRow( 30, 3, ROW_STATIC );
+						SetRowWidth( 10 );
+						Spacing( );
+
+						SetRowWidth( CalculateTextBounds( PX_XOR( "Name: " ), 30 ).x );
+						Text( PX_XOR( "Name: " ), color_t( { 255, 255, 255, 255 } ) );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CalculateTextBounds( PX_XOR( "Name: " ), 30 ).x );
+						Inputbox( 32, pConfig->_PaintKits[ ITEM_DEFINITION_INDICIES[ iSelectedWeapon ] ].szName );
+						mbstowcs( pConfig->_PaintKits[ ITEM_DEFINITION_INDICIES[ iSelectedWeapon ] ].wszName, pConfig->_PaintKits[ ITEM_DEFINITION_INDICIES[ iSelectedWeapon ] ].szName, 32 );
+
+						EndRow( );
+					}
+
+					{
+						static char szStatTrak[ 32 ], szSeed[ 32 ], szWear[ 32 ];
+
+						BeginRow( 30, 9, ROW_CUSTOM );
+
+						pConfig->_PaintKits[ ITEM_DEFINITION_INDICIES[ iSelectedWeapon ] ].iStatTrakCounter = Slider( PX_XOR( "StatTrak" ), szStatTrak, 0, 999999, pConfig->_PaintKits[ ITEM_DEFINITION_INDICIES[ iSelectedWeapon ] ].iStatTrakCounter, 10, 10, GROUPBOX_COLUMN_WIDTH, 30 );
+
+						pConfig->_PaintKits[ ITEM_DEFINITION_INDICIES[ iSelectedWeapon ] ].flWear = Slider( PX_XOR( "Wear" ), szWear, 0.01f, 1.f, pConfig->_PaintKits[ ITEM_DEFINITION_INDICIES[ iSelectedWeapon ] ].flWear, GROUPBOX_COLUMN_WIDTH + 30, 10, GROUPBOX_COLUMN_WIDTH, 30, 2 );
+
+						pConfig->_PaintKits[ ITEM_DEFINITION_INDICIES[ iSelectedWeapon ] ].iSeed = Slider( PX_XOR( "Seed" ), szSeed, 0, 1000, pConfig->_PaintKits[ ITEM_DEFINITION_INDICIES[ iSelectedWeapon ] ].iSeed, GROUPBOX_COLUMN_WIDTH * 2 + 40, 10, GROUPBOX_COLUMN_WIDTH, 30 );
+
+						EndRow( );
+					}
+
 					EndGroupbox( );
 				}
 
-				if ( BeginGroupbox( 401, 360, 500, 120, PX_XOR( "Models" ) ) )
+				if ( BeginGroupbox( 401, 500, 500, 120, PX_XOR( "Models" ) ) )
 				{
 					{
 						std::deque< cstr_t > dqPages

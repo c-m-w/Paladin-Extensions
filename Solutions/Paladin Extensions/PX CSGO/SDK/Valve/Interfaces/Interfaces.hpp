@@ -23,6 +23,7 @@
 #include "IMaterialSystem.hpp"
 #include "IVEngineClient.hpp"
 #include "IPanel.hpp"
+#include "IRefCounted.hpp"
 #include "ISurface.hpp"
 #include "IVRenderView.hpp"
 #include "IVModelInfoClient.hpp"
