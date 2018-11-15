@@ -1567,7 +1567,7 @@ namespace PX::UI::Manager
 					}
 
 					{
-						BeginRow( 30, 9, ROW_STATIC );
+						BeginRow( 30, 14, ROW_STATIC );
 						SetRowWidth( 5 );
 						Spacing( );
 
@@ -1582,18 +1582,49 @@ namespace PX::UI::Manager
 						ColorButton( PX_XOR( "Bullet Beam Miss" ), &_Settings._Miscellaneous._Visuals.seqBulletBeams[ 0 ], COLOR_BUTTON_VERTICAL_PADDING );
 						ColorButton( PX_XOR( "Bullet Beam Hit" ), &_Settings._Miscellaneous._Visuals.seqBulletBeams[ 1 ], COLOR_BUTTON_VERTICAL_PADDING );
 
+						Checkbox( PX_XOR( "Hitmarkers" ), &_Settings._Miscellaneous._Visuals.bHitmarkers );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Hitmarkers" ), 30 ).x - COLOR_BUTTON_WIDTH * 2 - COLOR_BUTTON_PADDING * 4 );
+						Spacing( );
+						SetRowWidth( COLOR_BUTTON_WIDTH );
+						ColorButton( PX_XOR( "Hitmarker Team" ), &_Settings._Miscellaneous._Visuals.seqHitmarkers[ 0 ], COLOR_BUTTON_VERTICAL_PADDING );
+						ColorButton( PX_XOR( "Hitmarker Enemy" ), &_Settings._Miscellaneous._Visuals.seqHitmarkers[ 1 ], COLOR_BUTTON_VERTICAL_PADDING );
+
 						EndRow( );
 					}
 
 					{
-						static char szViewmodelFOV[ 32 ] { }, szRenderFOV[ 32 ] { };
+						BeginRow( 30, 4, ROW_STATIC );
+						SetRowWidth( 5 );
+						Spacing( );
 
-						BeginRow( 30, 6, ROW_CUSTOM );
+						Checkbox( PX_XOR( "Fade Hitmarkers" ), &_Settings._Miscellaneous._Visuals.bHitmarkerFade );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Fade Hitmarkers" ), 30 ).x );
+						Spacing( );
+
+						EndRow( );
+					}
+
+					{
+						static char szViewmodelFOV[ 32 ] { }, szRenderFOV[ 32 ] { }, szHitmarkerLength[32] { };
+
+						BeginRow( 30, 9, ROW_CUSTOM );
 
 						_Settings._Miscellaneous._Visuals.flViewmodelFOV = Slider( PX_XOR( "Viewmodel FOV" ), szViewmodelFOV, 0.f, 180.f, _Settings._Miscellaneous._Visuals.flViewmodelFOV, 10, 10, GROUPBOX_COLUMN_WIDTH, 30, 1 );
 					
 						_Settings._Miscellaneous._Visuals.flRenderFOV = Slider( PX_XOR( "Render FOV" ), szRenderFOV, 0.f, 180.f, _Settings._Miscellaneous._Visuals.flRenderFOV, GROUPBOX_COLUMN_WIDTH + 30, 10, GROUPBOX_COLUMN_WIDTH, 30, 1 );
-					
+
+						_Settings._Miscellaneous._Visuals.flHitmarkerLifetime = Slider( PX_XOR( "Hitmarker Length" ), szHitmarkerLength, 0.1f, 10.f, _Settings._Miscellaneous._Visuals.flHitmarkerLifetime, GROUPBOX_COLUMN_WIDTH * 2 + 40, 10, GROUPBOX_COLUMN_WIDTH, 30, 1 );
+
+						EndRow( );
+					}
+
+					{
+						static char szHitmarkerFade[ 32 ] { };
+
+						BeginRow( 30, 3, ROW_CUSTOM );
+
+						_Settings._Miscellaneous._Visuals.flHitmarkerFadeTime = Slider( PX_XOR( "Hitmarker Fade" ), szHitmarkerFade, 0.f, _Settings._Miscellaneous._Visuals.flHitmarkerLifetime, _Settings._Miscellaneous._Visuals.flHitmarkerFadeTime, 10, 10, GROUPBOX_COLUMN_WIDTH, 30, 1 );
+
 						EndRow( );
 					}
 

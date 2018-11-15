@@ -10,7 +10,41 @@ using namespace Tools;
 
 namespace PX::Features::Miscellaneous
 {
-	std::vector< BeamInfo_t > vecBeamsToDraw { };
+	struct hitmarker_t
+	{
+		Vector vecPosition;
+		float flStartTime;
+		bool bEnemy;
+
+		hitmarker_t( ) = default;
+		hitmarker_t( const Vector& _vecPosition, bool _bEnemy ): vecPosition( _vecPosition ), flStartTime( pGlobalVariables->m_flCurrentTime ), bEnemy( _bEnemy ) { }
+		~hitmarker_t( ) = default;
+
+		byte_t GetAlpha( ) const
+		{
+			if ( pGlobalVariables->m_flCurrentTime < flStartTime + _Settings._Miscellaneous._Visuals.flHitmarkerFadeTime )
+				return UCHAR_MAX;
+
+			return UCHAR_MAX / ( _Settings._Miscellaneous._Visuals.flHitmarkerLifetime - _Settings._Miscellaneous._Visuals.flHitmarkerFadeTime )
+				* ( flStartTime + _Settings._Miscellaneous._Visuals.flHitmarkerFadeTime - pGlobalVariables->m_flCurrentTime );
+		}
+
+		bool Over( ) const
+		{
+			return flStartTime + _Settings._Miscellaneous._Visuals.flHitmarkerLifetime < pGlobalVariables->m_flCurrentTime;
+		}
+
+		bool GetScreenPosition( Vector& vecScreen ) const
+		{
+			return WorldToScreen( vecPosition, vecScreen );
+		}
+
+		bool IsEnemy( ) const
+		{
+			return bEnemy;
+		}
+	};
+	std::vector< hitmarker_t > vecHitmarkers { };
 
 	void PX_API DarkenWorld( )
 	{
@@ -197,22 +231,64 @@ namespace PX::Features::Miscellaneous
 		biBeam.m_nSegments = 2;
 		biBeam.m_bRenderable = true;
 		biBeam.m_nFlags = 0;
-		biBeam.m_vecStart = pLocalPlayer->GetViewPosition( );
-		biBeam.m_vecEnd = bHitPlayer ? player_ptr_t( gtRay.hit_entity )->GetHitboxPosition( gtRay.hitbox ) : gtRay.endpos;
-		//vecBeamsToDraw.emplace_back( biBeam );
+		biBeam.m_vecStart = gtRay.startpos;
+		biBeam.m_vecEnd = gtRay.endpos;
 		const auto pBeam = pRenderBeams->CreateBeamPoints( biBeam );
 		if ( pBeam != nullptr )
 			pRenderBeams->DrawBeam( pBeam );
 	}
 
-	void PX_API DrawBulletBeams( )
+	void PX_API CreateHitmarker( IGameEvent* pEvent )
 	{
-		for ( auto& beam : vecBeamsToDraw )
+		if ( !_Settings._Miscellaneous._Visuals.bHitmarkers )
+			return;
+
+		const auto pLocalPlayer = GetLocalPlayer( );
+		if ( pLocalPlayer == nullptr
+			 || pLocalPlayer->EntIndex( ) != pEngineClient->GetPlayerForUserID( pEvent->GetInt( PX_XOR( "attacker" ) ) ) )
+			return;
+
+		auto& gtRay = pLocalPlayer->TraceRayFromView( &GetLastUserCmd( ) );
+		if ( !gtRay.DidHit( )
+			 || !gtRay.hit_entity
+			 || !player_ptr_t( gtRay.hit_entity )->IsPlayer( ) )
+			return;
+
+		vecHitmarkers.emplace_back( gtRay.endpos, player_ptr_t( gtRay.hit_entity )->m_iTeamNum( ) != pLocalPlayer->m_iTeamNum( ) );
+	}
+
+	void PX_API DrawHitmarkers( )
+	{
+		for( auto z = 0u; z < vecHitmarkers.size( ); z++ )
 		{
-			const auto pBeam = pRenderBeams->CreateBeamPoints( beam );
-			if ( pBeam != nullptr )
-				pRenderBeams->DrawBeam( pBeam );
+			const auto& hitmarker = vecHitmarkers[ z ];
+			if( hitmarker.Over( ) )
+			{
+				vecHitmarkers.erase( vecHitmarkers.begin( ) + z );
+				continue;
+			}
+			Vector vecScreen { };
+			if ( !hitmarker.GetScreenPosition( vecScreen ) )
+				continue;
+
+			D3DXVECTOR2 vecPoints[ 2 ][ 2 ]
+			{
+				{
+					D3DXVECTOR2( vecScreen.x - 5.f, vecScreen.y - 5.f ),
+					D3DXVECTOR2( vecScreen.x + 5.f, vecScreen.y + 5.f )
+				},
+				{
+					D3DXVECTOR2( vecScreen.x + 5.f, vecScreen.y - 5.f ),
+					D3DXVECTOR2( vecScreen.x - 5.f, vecScreen.y + 5.f )
+				}
+			};
+
+			const auto clrCurrent = _Settings._Miscellaneous._Visuals.seqHitmarkers[ hitmarker.IsEnemy( ) ].GetCurrentColor( );
+			const auto flTemp = ( _Settings._Miscellaneous._Visuals.bHitmarkerFade.Get( ) ? hitmarker.GetAlpha( ) : clrCurrent.a ) / 255.f;
+			const auto dwColor = D3DCOLOR_ARGB( byte_t( flTemp * 255.f ), byte_t( clrCurrent.a * flTemp ), byte_t( clrCurrent.g * flTemp ), byte_t( clrCurrent.b * flTemp ) );
+
+			Drawing::Line( vecPoints[ 0 ], 2, 2.f,dwColor );
+			Drawing::Line( vecPoints[ 1 ], 2, 2.f,dwColor );
 		}
-		vecBeamsToDraw.clear( );
 	}
 }

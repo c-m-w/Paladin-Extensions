@@ -2277,7 +2277,7 @@ namespace PX::UI
 				flCurrentValue = flNewValue;
 			HoverCheck( CURSOR_HAND );
 			SetFont( FNT_ROBOTO_SMALL );
-			return flCurrentValue;
+			return std::clamp( flCurrentValue, flMin, flMax );
 		}
 
 		void PX_API Text( cstr_t szText, color_t clrText )

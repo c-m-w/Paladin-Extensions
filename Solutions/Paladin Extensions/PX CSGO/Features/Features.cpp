@@ -58,6 +58,7 @@ namespace PX::Features
 		return Awareness::CreateMaterials( )
 			&& Events::AddEventCallback( Miscellaneous::Hitsound, PX_XOR( "player_hurt" ), false )
 			&& Events::AddEventCallback( Miscellaneous::BulletBeam, PX_XOR( "weapon_fire" ), false )
+			&& Events::AddEventCallback( Miscellaneous::CreateHitmarker, PX_XOR( "player_hurt" ), false )
 			&& Miscellaneous::CopyHitsoundFiles( );
 	}
 

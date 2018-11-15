@@ -397,6 +397,11 @@ namespace PX::Features
 				toggle_t bModifyFOV = false;
 				toggle_t bBulletBeams = false;
 				color_sequence_t seqBulletBeams[ 2 ] { }; // miss, hit
+				toggle_t bHitmarkers = false;
+				color_sequence_t seqHitmarkers[ 2 ] { }; // team, enemy
+				toggle_t bHitmarkerFade = false;
+				float flHitmarkerLifetime = 2.f; // 0.1f -> 10.f
+				float flHitmarkerFadeTime = 0.5f; // 0.f -> flHitmarkerLifeTime
 				float flRenderFOV = 90.f;
 				float flViewmodelFOV = 84.f;
 			} _Visuals;

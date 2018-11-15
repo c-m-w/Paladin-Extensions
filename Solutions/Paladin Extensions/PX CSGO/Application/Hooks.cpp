@@ -146,6 +146,7 @@ namespace PX
 
 				Features::Miscellaneous::DrawAimbotFOV( );
 				Features::Miscellaneous::VisualizeSpread( );
+				Features::Miscellaneous::DrawHitmarkers( );
 				Drawing::DrawQueue( );
 				UI::Manager::CSGO::OnEndScene( );
 
