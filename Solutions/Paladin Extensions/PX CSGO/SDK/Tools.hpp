@@ -58,6 +58,7 @@ namespace PX::Tools
 	RECT PX_API CalculateRenderBounds( Vector* vecScreenPoints );
 	RECT PX_API CalculateRenderBounds( CBaseEntity* pEntity );
 	float PX_API CalculateVectorDistance( const Vector& vecPositionOne, const Vector& vecPositionTwo );
+	QAngle PX_API CalculateAngle( const Vector& vecFirst, const Vector& vecSecond );
 	QAngle PX_API CalculateAngle( CBasePlayer* pLocalPlayer, CBasePlayer* pPlayer, int iHitbox, CUserCmd* pCmd, Vector* vecOverCompensation );
 	float PX_API CalculateCrosshairDistance( CBasePlayer* pLocalPlayer, CBasePlayer* pPlayer, int iHitbox, CUserCmd* pCmd, bool bWorldlyDistance );
 
@@ -209,7 +210,8 @@ namespace PX::Tools
 		player_info_t GetPlayerInformation( );
 		bool CanSeePosition( Vector vecPosition, bool bMindSmoke, void* pEntity = nullptr );
 		bool CanSeePlayer( CBasePlayer* pPlayer, bool bMindSmoke );
-		CGameTrace& CBasePlayer::TraceRayFromView( CUserCmd* pCmd = nullptr );
+		CGameTrace& TraceRayFromAngle( const QAngle& qAngle );
+		CGameTrace& TraceRayFromView( CUserCmd* pCmd = nullptr );
 		Vector GetHitboxPosition( int hHitboxID );
 		bool IsVulnerable( );
 		float DistanceFromPlayer( CBasePlayer* pPlayer );

@@ -341,19 +341,25 @@ namespace PX::Tools
 		return sqrt( pow( vecNew.z, 2.0 ) + pow( vecNew.x, 2.0 ) + pow( vecNew.y, 2.0 ) );
 	}
 
+	QAngle PX_API CalculateAngle( const Vector& vecFirst, const Vector& vecSecond )
+	{
+		const auto vecRelative = vecSecond - vecFirst;
+		const auto fl2DDistance = sqrt( pow( vecRelative.x, 2.f ) + pow( vecRelative.y, 2.f ) );
+		QAngle qReturn;
+
+		qReturn.pitch = atan2( vecRelative.z, fl2DDistance ) * -180.f / D3DX_PI;
+		qReturn.yaw = atan2( vecRelative.y, vecRelative.x ) * 180.f / D3DX_PI;
+		qReturn.roll = 0.f;
+		return qReturn;
+	}
+
 	QAngle PX_API CalculateAngle( CBasePlayer* pLocalPlayer, CBasePlayer* pPlayer, int iHitbox, CUserCmd* pCmd, Vector* vecOverCompensation )
 	{
 		QAngle qReturn;
 		auto vecHitboxPosition = pPlayer->GetHitboxPosition( iHitbox );
 		if ( vecOverCompensation != nullptr )
 			vecHitboxPosition += *vecOverCompensation;
-		const auto vecRelativePosition = vecHitboxPosition - pLocalPlayer->GetViewPosition( );
-		const auto fl2DDistance = sqrt( pow( vecRelativePosition.x, 2.f ) + pow( vecRelativePosition.y, 2.f ) );
-
-		qReturn.pitch = atan2( vecRelativePosition.z, fl2DDistance ) * -180.f / D3DX_PI;
-		qReturn.yaw = atan2( vecRelativePosition.y, vecRelativePosition.x ) * 180.f / D3DX_PI;
-		qReturn.roll = pCmd->viewangles.roll;
-		return qReturn;
+		return CalculateAngle( pLocalPlayer->GetViewPosition( ), vecHitboxPosition );
 	}
 
 	float PX_API CalculateCrosshairDistance( CBasePlayer* pLocalPlayer, CBasePlayer* pPlayer, int iHitbox, CUserCmd* pCmd, bool bWorldlyDistance )
@@ -609,20 +615,25 @@ namespace PX::Tools
 																				|| CanSeePosition( pPlayer->GetHitboxPosition( HITBOX_RIGHT_FOOT ), bMindSmoke, pPlayer ) ) ).bVisible;
 	}
 
-	CGameTrace& CBasePlayer::TraceRayFromView( CUserCmd* pCmd /*= nullptr*/ )
+	CGameTrace& CBasePlayer::TraceRayFromAngle( const QAngle& qAngle )
 	{
 		Vector vecEnd;
 		CTraceFilter tfFilter;
 		Ray_t rRay;
 		static CGameTrace gtRay;
 
-		TransformAngle( pCmd == nullptr ? m_angEyeAngles( ) : pCmd->viewangles, vecEnd );
+		TransformAngle( qAngle, vecEnd );
 		vecEnd *= 8192.f;
 		vecEnd += GetViewPosition( );
 		tfFilter.pSkip = this;
 		rRay.Init( GetViewPosition( ), vecEnd );
 		pEngineTrace->TraceRay( rRay, PX_MASK_VISIBLE, &tfFilter, &gtRay );
 		return gtRay;
+	}
+
+	CGameTrace& CBasePlayer::TraceRayFromView( CUserCmd* pCmd /*= nullptr*/ )
+	{
+		return TraceRayFromAngle( pCmd == nullptr ? m_angEyeAngles( ) : pCmd->viewangles );		
 	}
 
 	struct player_model_t

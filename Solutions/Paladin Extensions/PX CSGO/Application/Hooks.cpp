@@ -205,6 +205,7 @@ namespace PX
 				Features::Combat::AimAssist( pLocalPlayer, pCmd );
 				Features::Combat::Trigger( pLocalPlayer, pCmd );
 				Features::Miscellaneous::AutoJump( pLocalPlayer, pCmd );
+				Features::Miscellaneous::CircleStrafe( pLocalPlayer, pCmd );
 				Prediction::End( pLocalPlayer );
 			}
 

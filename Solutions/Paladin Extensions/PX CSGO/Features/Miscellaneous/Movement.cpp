@@ -20,6 +20,39 @@ namespace PX::Features::Miscellaneous
 					pCmd->buttons &= ~IN_JUMP;
 	}
 
+	void PX_API CircleStrafe( player_ptr_t pLocalPlayer, CUserCmd* pCmd )
+	{
+		constexpr auto flStrafeRadius = 500.f;
+		volatile static auto bWasEnabled = false;
+		volatile static auto flYaw = 0.f, flOldYaw = 0.f;
+		const auto vecVelocity = pLocalPlayer->m_vecVelocity( );
+		const auto flVelocity = D3DXToDegree( atan2f( vecVelocity.y, vecVelocity.x ) ),
+			flNetVelocity = sqrtf( powf( vecVelocity.x, 2.f ) + powf( vecVelocity.y, 2.f ) );
+		const auto flTicks = flStrafeRadius / flNetVelocity / pGlobalVariables->m_flIntervalPerTick;
+		const auto flStep = 90.f / flTicks;
+
+
+		std::cout << flVelocity << std::endl;
+		if ( !_Settings._Miscellaneous._Movement.bCircleStrafe
+			 && ( fabsf( flVelocity - pCmd->viewangles.yaw ) < flStep || !bWasEnabled ) )
+		{
+			bWasEnabled = false;
+			return;
+		}
+
+		if ( !bWasEnabled )
+			flYaw = flVelocity;
+		else
+			flYaw += flStep;
+
+		flYaw -= pCmd->viewangles.yaw - flOldYaw;
+		pCmd->forwardmove = sin( D3DXToRadian( flYaw ) ) * 450.f;
+		pCmd->sidemove = cos( D3DXToRadian( flYaw ) ) * 450.f;
+
+		bWasEnabled = true;
+		flOldYaw = pCmd->viewangles.yaw;
+	}
+
 	void AutoEdgeJump( CUserCmd *pCmd )
 	{
 		return;

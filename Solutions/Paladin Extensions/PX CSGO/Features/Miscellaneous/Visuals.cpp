@@ -245,10 +245,11 @@ namespace PX::Features::Miscellaneous
 
 		const auto pLocalPlayer = GetLocalPlayer( );
 		if ( pLocalPlayer == nullptr
-			 || pLocalPlayer->EntIndex( ) != pEngineClient->GetPlayerForUserID( pEvent->GetInt( PX_XOR( "attacker" ) ) ) )
+			 || pLocalPlayer->EntIndex( ) != pEngineClient->GetPlayerForUserID( pEvent->GetInt( PX_XOR( "userid" ) ) ) )
 			return;
 
-		auto& gtRay = pLocalPlayer->TraceRayFromView( &GetLastUserCmd( ) );
+		const auto vecImpact = Vector( pEvent->GetFloat( PX_XOR( "x" ) ), pEvent->GetFloat( PX_XOR( "y" ) ), pEvent->GetFloat( PX_XOR( "z" ) ) );
+		auto& gtRay = pLocalPlayer->TraceRayFromAngle( CalculateAngle( pLocalPlayer->GetViewPosition( ), vecImpact ) );
 		if ( !gtRay.DidHit( )
 			 || !gtRay.hit_entity
 			 || !player_ptr_t( gtRay.hit_entity )->IsPlayer( ) )
@@ -285,7 +286,7 @@ namespace PX::Features::Miscellaneous
 
 			const auto clrCurrent = _Settings._Miscellaneous._Visuals.seqHitmarkers[ hitmarker.IsEnemy( ) ].GetCurrentColor( );
 			const auto flTemp = ( _Settings._Miscellaneous._Visuals.bHitmarkerFade.Get( ) ? hitmarker.GetAlpha( ) : clrCurrent.a ) / 255.f;
-			const auto dwColor = D3DCOLOR_ARGB( byte_t( flTemp * 255.f ), byte_t( clrCurrent.a * flTemp ), byte_t( clrCurrent.g * flTemp ), byte_t( clrCurrent.b * flTemp ) );
+			const auto dwColor = D3DCOLOR_ARGB( byte_t( flTemp * 255.f ), byte_t( clrCurrent.r * flTemp ), byte_t( clrCurrent.g * flTemp ), byte_t( clrCurrent.b * flTemp ) );
 
 			Drawing::Line( vecPoints[ 0 ], 2, 2.f,dwColor );
 			Drawing::Line( vecPoints[ 1 ], 2, 2.f,dwColor );

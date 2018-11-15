@@ -381,6 +381,7 @@ namespace PX::Features
 			{
 				toggle_t bAutomaticJump = false;
 				float flMissChance = 0.f; // 0.f -> 1.f
+				toggle_t bCircleStrafe = false;
 				toggle_t bEdgeJump = false;
 				toggle_t bAutomaticStrafe = false;
 				float flSync = 0.f; // 0.f -> 100.f

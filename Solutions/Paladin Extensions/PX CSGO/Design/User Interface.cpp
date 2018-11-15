@@ -1510,7 +1510,7 @@ namespace PX::UI::Manager
 					static char szMissChance[ 32 ] { };
 
 					{
-						BeginRow( 30, 7, ROW_STATIC );
+						BeginRow( 30, 9, ROW_STATIC );
 						SetRowWidth( 5 );
 						Spacing( );
 
@@ -1521,6 +1521,8 @@ namespace PX::UI::Manager
 						Checkbox( PX_XOR( "Edge Jump" ), &_Settings._Miscellaneous._Movement.bEdgeJump, PX_XOR( "Automatically jump when at the edge of a platform." ) );
 						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Edge Jump" ), 30 ).x );
 						Spacing( );
+
+						Checkbox( PX_XOR( "Circle Strafe" ), &_Settings._Miscellaneous._Movement.bCircleStrafe );
 
 						EndRow( );
 					}
