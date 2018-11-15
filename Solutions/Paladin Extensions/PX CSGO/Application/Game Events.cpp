@@ -26,11 +26,22 @@ namespace PX::Events
 
 	bool PX_API AddEventCallback( event_callback_t fnCallback, cstr_t szEventName, bool bServerSide )
 	{
+		auto bAddNewCallback = true;
 		for ( const auto& strEvent : vecAddedCallbacks )
 			if ( strEvent == szEventName )
-				return false;
+				bAddNewCallback = false;
 
 		vecEventCallbacks.emplace_back( fnCallback, szEventName );
-		return pEvents->AddListener( &event_listener, szEventName, bServerSide );
+		if ( bAddNewCallback )
+		{
+			vecAddedCallbacks.emplace_back( szEventName );
+			return pEvents->AddListener( &event_listener, szEventName, bServerSide );
+		}
+		return true;
+	}
+
+	void PX_API RemoveEventCallbacks( )
+	{
+		pEvents->RemoveListener( &event_listener );
 	}
 }

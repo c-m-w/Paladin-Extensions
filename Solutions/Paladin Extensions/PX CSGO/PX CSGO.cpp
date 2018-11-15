@@ -58,6 +58,7 @@ void PX_API OnAttach( )
 	PX::UI::Manager::Destruct( );
 	PX::Render::Destruct( );
 	PX::Drawing::Destruct( );
+	PX::Events::RemoveEventCallbacks( );
 	PX::Features::ShutdownFeatures( );
 	Detach( );
 #endif

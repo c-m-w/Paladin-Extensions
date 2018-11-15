@@ -88,8 +88,8 @@ namespace PX::Information
 																+ jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Input" ) ].get< int >( ) );
 			pMoveHelper = **reinterpret_cast< IMoveHelperServer*** >( Modules::mClient.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Move Helper" ) ].get< str_t >( ) )
 													+ jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Move Helper" ) ].get< int >( ) );
-			//pEngineRenderView = *reinterpret_cast< IViewRender** >( Modules::mClient.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "View Render" ) ].get< str_t >( ) )
-			//										+ jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "View Render" ) ].get< int >( ) );
+			pRenderBeams = *reinterpret_cast< IViewRenderBeams** >( Modules::mClient.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Render Beams" ) ].get< str_t >( ) )
+																	  + jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Render Beams" ) ].get< int >( ) );
 
 			pClientBase = reinterpret_cast< IBaseClientDLL* >( Modules::mClient.ciFactory( 
 				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Client Base" ) ].get< str_t >( ).c_str( ), nullptr ) );
@@ -123,6 +123,8 @@ namespace PX::Information
 				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Game Movement" ) ].get< str_t >( ).c_str( ), nullptr ) );
 			pPrediction = reinterpret_cast< IPrediction* >( Modules::mClient.ciFactory(
 				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Prediction" ) ].get< str_t >( ).c_str( ), nullptr ) );
+			pEngineSound = reinterpret_cast< IEngineSound* >( Modules::mEngine.ciFactory(
+				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Engine Sound" ) ].get< str_t >( ).c_str( ), nullptr ) );
 
 			return nullptr != pSendPackets
 				&& nullptr != pGlobalVariables
@@ -147,7 +149,9 @@ namespace PX::Information
 				&& nullptr != pEvents
 				&& nullptr != pMoveHelper
 				&& nullptr != pGameMovement
-				&& nullptr != pPrediction;
+				&& nullptr != pPrediction
+				&& nullptr != pEngineSound
+				&& nullptr != pRenderBeams;
 		}
 	}
 

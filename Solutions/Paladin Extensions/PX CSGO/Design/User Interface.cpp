@@ -189,7 +189,8 @@ namespace PX::UI::Manager
 			{
 				"Movement",
 				"Visuals",
-				"Inventory"
+				"Inventory",
+				"Other"
 			},
 			{
 				"Tab"
@@ -1406,7 +1407,8 @@ namespace PX::UI::Manager
 		{
 			MOVEMENT,
 			VISUALS,
-			INVENTORY
+			INVENTORY,
+			OTHER
 		};
 
 		std::deque< cstr_t > dqCategories
@@ -1563,6 +1565,38 @@ namespace PX::UI::Manager
 
 						EndRow( );
 					}
+
+					{
+						BeginRow( 30, 9, ROW_STATIC );
+						SetRowWidth( 5 );
+						Spacing( );
+
+						Checkbox( PX_XOR( "Modify FOV" ), &_Settings._Miscellaneous._Visuals.bModifyFOV );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Modify FOV" ), 30 ).x );
+						Spacing( );
+
+						Checkbox( PX_XOR( "Bullet Beams" ), &_Settings._Miscellaneous._Visuals.bBulletBeams );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Bullet Beams" ), 30 ).x - COLOR_BUTTON_WIDTH * 2 - COLOR_BUTTON_PADDING * 4 );
+						Spacing( );
+						SetRowWidth( COLOR_BUTTON_WIDTH );
+						ColorButton( PX_XOR( "Bullet Beam Miss" ), &_Settings._Miscellaneous._Visuals.seqBulletBeams[ 0 ], COLOR_BUTTON_VERTICAL_PADDING );
+						ColorButton( PX_XOR( "Bullet Beam Hit" ), &_Settings._Miscellaneous._Visuals.seqBulletBeams[ 1 ], COLOR_BUTTON_VERTICAL_PADDING );
+
+						EndRow( );
+					}
+
+					{
+						static char szViewmodelFOV[ 32 ] { }, szRenderFOV[ 32 ] { };
+
+						BeginRow( 30, 6, ROW_CUSTOM );
+
+						_Settings._Miscellaneous._Visuals.flViewmodelFOV = Slider( PX_XOR( "Viewmodel FOV" ), szViewmodelFOV, 0.f, 180.f, _Settings._Miscellaneous._Visuals.flViewmodelFOV, 10, 10, GROUPBOX_COLUMN_WIDTH, 30, 1 );
+					
+						_Settings._Miscellaneous._Visuals.flRenderFOV = Slider( PX_XOR( "Render FOV" ), szRenderFOV, 0.f, 180.f, _Settings._Miscellaneous._Visuals.flRenderFOV, GROUPBOX_COLUMN_WIDTH + 30, 10, GROUPBOX_COLUMN_WIDTH, 30, 1 );
+					
+						EndRow( );
+					}
+
 					EndGroupbox( );
 				}
 			}
@@ -1570,7 +1604,7 @@ namespace PX::UI::Manager
 
 			case INVENTORY:
 			{
-				SetMainWindowHeight( 800 );
+				SetMainWindowHeight( 603 );
 				static settings_t::miscellaneous_t::inventory_t::team_t* pConfig = nullptr;
 				static unsigned iSelectedWeapon = 0;
 				static auto iSelectedPaintKit = 0;
@@ -1904,7 +1938,7 @@ namespace PX::UI::Manager
 					EndGroupbox( );
 				}
 
-				if ( BeginGroupbox( 401, 500, 500, 120, PX_XOR( "Models" ) ) )
+				if ( BeginGroupbox( 401, 409, 500, 120, PX_XOR( "Models" ) ) )
 				{
 					{
 						std::deque< cstr_t > dqPages
@@ -1978,6 +2012,23 @@ namespace PX::UI::Manager
 						EndRow( );
 					}
 					EndGroupbox( );
+				}
+			}
+			break;
+
+			case OTHER:
+			{
+				if ( BeginGroupbox( 200, 150, 500, 112, PX_XOR( "Other" ) ) )
+				{
+					{
+						BeginRow( 30, 3, ROW_STATIC );
+						SetRowWidth( 5 );
+						Spacing( );
+
+						Checkbox( PX_XOR( "Hitsound" ), &_Settings._Miscellaneous._Other.bHitSound );
+
+						EndRow( );
+					}
 				}
 			}
 			break;

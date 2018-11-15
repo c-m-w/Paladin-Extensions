@@ -10,6 +10,8 @@ using namespace Tools;
 
 namespace PX::Features::Miscellaneous
 {
+	std::vector< BeamInfo_t > vecBeamsToDraw { };
+
 	void PX_API DarkenWorld( )
 	{
 		static auto bModifiedMaterials = false;
@@ -137,5 +139,80 @@ namespace PX::Features::Miscellaneous
 		radius = std::clamp( radius, 0.f, sqrt( powf( iWidth / 2.f, 2.f ) + powf( iHeight / 2.f, 2.f ) ) );
 
 		Drawing::Circle( D3DXVECTOR2( iWidth / 2.f - vecRecoilDifference.x, iHeight / 2.f - vecRecoilDifference.y ), radius, _Settings._Miscellaneous._Visuals.seqSpread[ 0 ].GetCurrentColor( ).GetARGB( ), _Settings._Miscellaneous._Visuals.seqSpread[ 1 ].GetCurrentColor( ).GetARGB( ), int( 2 * D3DX_PI * radius / 4.f ) );
+	}
+
+	void PX_API ModifyRenderFOV( CViewSetup* pViewSetup )
+	{
+		if ( !_Settings._Miscellaneous._Visuals.bModifyFOV )
+			return;
+
+		const auto pLocalPlayer = GetLocalPlayer( );
+		if ( pLocalPlayer == nullptr
+			 || pLocalPlayer->m_bIsScoped( ) )
+			return;
+
+		pViewSetup->fov = _Settings._Miscellaneous._Visuals.flRenderFOV;
+	}
+
+	void PX_API ModifyViewmodelFOV( float* pFOV )
+	{
+		if ( !_Settings._Miscellaneous._Visuals.bModifyFOV )
+			return;
+
+		*pFOV = _Settings._Miscellaneous._Visuals.flViewmodelFOV;
+	}
+
+	void PX_API BulletBeam( IGameEvent* pEvent )
+	{
+		if ( !_Settings._Miscellaneous._Visuals.bBulletBeams )
+			return;
+
+		const auto pLocalPlayer = GetLocalPlayer( );
+		if ( pLocalPlayer == nullptr
+			 || pLocalPlayer->EntIndex( ) != pEngineClient->GetPlayerForUserID( pEvent->GetInt( PX_XOR( "userid" ) ) ) )
+			return;
+
+		auto& gtRay = pLocalPlayer->TraceRayFromView( &GetLastUserCmd( ) );
+		const auto bHitPlayer = gtRay.hit_entity != nullptr
+			&& entity_ptr_t( gtRay.hit_entity )->IsPlayer( );
+		const auto clrBeam = _Settings._Miscellaneous._Visuals.seqBulletBeams[ bHitPlayer ].GetCurrentColor( );
+		BeamInfo_t biBeam { };
+
+		biBeam.m_nType = TE_BEAMPOINTS;
+		biBeam.m_pszModelName = PX_XOR( "sprites/physbeam.vmt" );
+		biBeam.m_nModelIndex = -1; // will be set by CreateBeamPoints if its -1
+		biBeam.m_flHaloScale = 0.0f;
+		biBeam.m_flLife = 10.f;
+		biBeam.m_flWidth = 5.f;
+		biBeam.m_flEndWidth = 2.0f;
+		biBeam.m_flFadeLength = 5.f;
+		biBeam.m_flAmplitude = 2.0f;
+		biBeam.m_flBrightness = 255.f;
+		biBeam.m_flSpeed = 0.2f;
+		biBeam.m_nStartFrame = 0;
+		biBeam.m_flFrameRate = 0.f;
+		biBeam.m_flRed = clrBeam.rfl * 255.f;
+		biBeam.m_flGreen = clrBeam.gfl * 255.f;
+		biBeam.m_flBlue = clrBeam.bfl * 255.f;
+		biBeam.m_nSegments = 2;
+		biBeam.m_bRenderable = true;
+		biBeam.m_nFlags = 0;
+		biBeam.m_vecStart = pLocalPlayer->GetViewPosition( );
+		biBeam.m_vecEnd = bHitPlayer ? player_ptr_t( gtRay.hit_entity )->GetHitboxPosition( gtRay.hitbox ) : gtRay.endpos;
+		//vecBeamsToDraw.emplace_back( biBeam );
+		const auto pBeam = pRenderBeams->CreateBeamPoints( biBeam );
+		if ( pBeam != nullptr )
+			pRenderBeams->DrawBeam( pBeam );
+	}
+
+	void PX_API DrawBulletBeams( )
+	{
+		for ( auto& beam : vecBeamsToDraw )
+		{
+			const auto pBeam = pRenderBeams->CreateBeamPoints( beam );
+			if ( pBeam != nullptr )
+				pRenderBeams->DrawBeam( pBeam );
+		}
+		vecBeamsToDraw.clear( );
 	}
 }

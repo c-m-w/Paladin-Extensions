@@ -49,6 +49,7 @@ namespace PX::Features::Combat
 			return;
 		if ( gtRay.hit_entity == nullptr
 			 || !player_ptr_t( gtRay.hit_entity )->IsPlayer( )
+			 || player_ptr_t( gtRay.hit_entity )->m_bGunGameImmunity( )
 			 || !( player_ptr_t( gtRay.hit_entity )->m_iTeamNum( ) == pLocalPlayer->m_iTeamNum( ) ? _Config->bTeammates.Get( ) : _Config->bEnemies.Get( ) )
 			 || _Config->bMindSmoke.Get( ) && LineGoesThroughSmoke( vecStart, gtRay.endpos ) )
 			 return;

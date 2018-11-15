@@ -13,6 +13,7 @@ using namespace Pointers;
 namespace PX::Tools
 {
 	VMatrix vmMatrix;
+	CUserCmd cmdLast;
 
 	void PX_API OnPaintTraverse( )
 	{
@@ -26,12 +27,17 @@ namespace PX::Tools
 
 	CUserCmd* PX_API GetUserCmd( int iSequenceNumber )
 	{
-		return &pInput->m_pCommands[ iSequenceNumber % MULTIPLAYER_BACKUP ];
+		return &( cmdLast = pInput->m_pCommands[ iSequenceNumber % MULTIPLAYER_BACKUP ] );
 	}
 
 	CVerifiedUserCmd* PX_API GetVerifiedUserCmd( int iSequenceNumber )
 	{
 		return &pInput->m_pVerifiedCommands[ iSequenceNumber % MULTIPLAYER_BACKUP ];
+	}
+
+	CUserCmd& PX_API GetLastUserCmd( )
+	{
+		return cmdLast;
 	}
 
 	CRC32_t GetCmdHash( CUserCmd* pCmd )
@@ -65,6 +71,24 @@ namespace PX::Tools
 
 		const auto pPlayer = reinterpret_cast< CBasePlayer* >( pEntity );
 		return pPlayer->IsPlayer( ) && pPlayer->IsAlive( );
+	}
+
+	void PX_API RepairBoneRendering( )
+	{
+		const auto iLocalPlayerIndex = pEngineClient->GetLocalPlayer( );
+
+		for( auto i = 1; i < pGlobalVariables->m_iMaxClients; i++ )
+		{
+			if ( i == iLocalPlayerIndex )
+				continue;
+
+			const auto pEntity = pEntityList->GetClientEntity( i );
+			if ( pEntity == nullptr )
+				continue;
+
+			*reinterpret_cast< int* >( ptr_t( pEntity ) + 0xA30 ) = pGlobalVariables->m_iFrameCount;
+			*reinterpret_cast< int* >( ptr_t( pEntity ) + 0xA28 ) = 0;
+		}
 	}
 
 	float PX_API GetRecoilScale( )
@@ -585,14 +609,14 @@ namespace PX::Tools
 																				|| CanSeePosition( pPlayer->GetHitboxPosition( HITBOX_RIGHT_FOOT ), bMindSmoke, pPlayer ) ) ).bVisible;
 	}
 
-	CGameTrace& CBasePlayer::TraceRayFromView( )
+	CGameTrace& CBasePlayer::TraceRayFromView( CUserCmd* pCmd /*= nullptr*/ )
 	{
 		Vector vecEnd;
 		CTraceFilter tfFilter;
 		Ray_t rRay;
 		static CGameTrace gtRay;
 
-		TransformAngle( m_angEyeAngles( ), vecEnd );
+		TransformAngle( pCmd == nullptr ? m_angEyeAngles( ) : pCmd->viewangles, vecEnd );
 		vecEnd *= 8192.f;
 		vecEnd += GetViewPosition( );
 		tfFilter.pSkip = this;

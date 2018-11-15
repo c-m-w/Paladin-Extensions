@@ -11,22 +11,25 @@ using namespace Tools;
 namespace PX::Features::Miscellaneous
 {
 	const std::string strSoundDirectory = PX_XOR( "csgo\\sound" ),
-	strHitsound = PX_XOR( "hitsound.mp3" ),
-		strHitsoundHead = PX_XOR( "head_hitsound.mp3" ),
+	strHitsound = PX_XOR( "hitsound.wav" ),
+		strHitsoundHead = PX_XOR( "head_hitsound.wav" ),
 	strPrefix = PX_XOR( "*" );
 
 	bool PX_API CopyHitsoundFiles( )
 	{
-		return true;
-		//std::filesystem::copy( string_cast< std::string >( Files::GetPXDirectory( ) ) + strHitsound, strSoundDirectory );
-		//std::filesystem::copy( string_cast< std::string >( Files::GetPXDirectory( ) ) + strHitsoundHead, strSoundDirectory );
-		//return std::filesystem::exists( strSoundDirectory + PX_XOR( "\\" ) + strHitsound	)
-		//	&& std::filesystem::exists( strSoundDirectory + PX_XOR( "\\" ) + strHitsoundHead );
+		if ( !std::filesystem::exists( string_cast< std::string >( Files::GetPXDirectory( ) ) + PX_XOR( "Resources\\" ) + strHitsound )
+			 || !std::filesystem::exists( string_cast< std::string >( Files::GetPXDirectory( ) ) + PX_XOR( "Resources\\" ) + strHitsoundHead ) )
+			return false;
+
+		RemoveHitsoundFiles( );
+		std::filesystem::copy( string_cast< std::string >( Files::GetPXDirectory( ) ) + PX_XOR( "Resources\\" ) + strHitsound, strSoundDirectory );
+		std::filesystem::copy( string_cast< std::string >( Files::GetPXDirectory( ) ) + PX_XOR( "Resources\\" ) + strHitsoundHead, strSoundDirectory );
+		return std::filesystem::exists( strSoundDirectory + PX_XOR( "\\" ) + strHitsound	)
+			&& std::filesystem::exists( strSoundDirectory + PX_XOR( "\\" ) + strHitsoundHead );
 	}
 
 	void PX_API RemoveHitsoundFiles( )
 	{
-		return;
 		std::remove( ( strSoundDirectory + PX_XOR( "\\" ) + strHitsound ).c_str( ) );
 		std::remove( ( strSoundDirectory + PX_XOR( "\\" ) + strHitsoundHead ).c_str( ) );
 	}
@@ -37,7 +40,7 @@ namespace PX::Features::Miscellaneous
 			return;
 
 		const auto iLocalPlayer = pEngineClient->GetLocalPlayer( ),
-					iAttacker = pEngineClient->GetPlayerForUserID( pEvent->GetInt( PX_XOR( "userid" ) ) );
+					iAttacker = pEngineClient->GetPlayerForUserID( pEvent->GetInt( PX_XOR( "attacker" ) ) );
 		if ( iLocalPlayer != iAttacker )
 			return;
 

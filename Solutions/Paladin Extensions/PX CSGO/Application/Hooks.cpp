@@ -32,22 +32,26 @@ namespace PX
 				}
 			}
 
-			return fnSequence != nullptr 
+			return fnSequence != nullptr
 				&& hkDirectXDevice->HookIndex( uBeginScene, reinterpret_cast< void* >( BeginScene ) )
 				&& hkDirectXDevice->HookIndex( uEndScene, reinterpret_cast< void* >( EndScene ) )
 				&& hkDirectXDevice->HookIndex( uReset, reinterpret_cast< void* >( Reset ) )
-				&& hkClientBase->HookIndex( uFrameStageNotify, reinterpret_cast< void* >( FrameStageNotify ) )
 				&& hkClientBase->HookIndex( uCreateMove, reinterpret_cast< void* >( CreateMove ) )
+				&& hkClientBase->HookIndex( uFrameStageNotify, reinterpret_cast< void* >( FrameStageNotify ) )
+				&& hkClientMode->HookIndex( uOverrideView, reinterpret_cast< void* >( OverrideView ) )
+				&& hkClientMode->HookIndex( uGetViewmodelFOV, reinterpret_cast< void* >( GetViewmodelFOV ) )
 				&& hkClientMode->HookIndex( uDoPostScreenEffects, reinterpret_cast< void* >( DoPostScreenEffects ) )
 				&& hkPanel->HookIndex( uPaintTraverse, reinterpret_cast< void* >( PaintTraverse ) )
 				&& hkModelRender->HookIndex( uDrawModelExecute, reinterpret_cast< void* >( DrawModelExecute ) )
 				&& hkViewRender->HookIndex( uSceneBegin, reinterpret_cast< void* >( SceneBegin ) )
 				&& hkViewRender->HookIndex( uSceneEnd, reinterpret_cast< void* >( SceneEnd ) )
+				&& hkEngineSound->HookIndex( uEmitSoundATT, reinterpret_cast< void* >( EmitSoundATT ) )
 				&& hkClientBase->ResetProtection( )
 				&& hkClientMode->ResetProtection( )
 				&& hkPanel->ResetProtection( )
 				&& hkModelRender->ResetProtection( )
-				&& hkViewRender->ResetProtection( );
+				&& hkViewRender->ResetProtection( )
+				&& hkEngineSound->ResetProtection( );
 		}
 
 		bool PX_API InitializeHooks( )
@@ -58,13 +62,15 @@ namespace PX
 			hkPanel			= new Tools::CTrampolineHook( pPanel );
 			hkModelRender	= new Tools::CTrampolineHook( pModelRender );
 			hkViewRender	= new Tools::CTrampolineHook( pEngineRenderView );
+			hkEngineSound	= new Tools::CTrampolineHook( pEngineSound );
 
 			return hkDirectXDevice->Succeeded( )
 				&& hkClientBase->Succeeded( ) && hkClientBase->SetProtection( )
 				&& hkClientMode->Succeeded( ) && hkClientMode->SetProtection( )
 				&& hkPanel->Succeeded( ) && hkPanel->SetProtection( )
 				&& hkModelRender->Succeeded( ) && hkModelRender->SetProtection( )
-				&& hkViewRender->Succeeded( ) && hkViewRender->SetProtection( ) ?
+				&& hkViewRender->Succeeded( ) && hkViewRender->SetProtection( ) 
+				&& hkEngineSound->Succeeded( ) && hkEngineSound->SetProtection( ) ?
 				SetHooks( )
 				: false;
 		}
@@ -80,6 +86,7 @@ namespace PX
 			delete hkPanel;
 			delete hkModelRender;
 			delete hkViewRender;
+			delete hkEngineSound;
 		}
 
 		HRESULT __stdcall BeginScene( IDirect3DDevice9* pThis )
@@ -176,39 +183,6 @@ namespace PX
 			return hrReset;
 		}
 
-		void __stdcall FrameStageNotify( ClientFrameStage_t cfsStage )
-		{
-			static auto fnOriginal = hkClientBase->GetOriginalFunction< frame_stage_notify_t >( uFrameStageNotify );
-
-			{
-				switch( cfsStage )
-				{
-					case FRAME_START:
-					{
-						Other::UpdateModelIndicies( );
-					}
-					break;
-
-					case FRAME_NET_UPDATE_POSTDATAUPDATE_START:
-					{
-						Features::Miscellaneous::ModifyInventory( );
-					}
-					break;
-
-					case FRAME_NET_UPDATE_POSTDATAUPDATE_END:
-					{
-						Features::Miscellaneous::DarkenWorld( );
-					}
-					break;
-
-					default:
-					break;
-				}
-			}
-
-			return fnOriginal( cfsStage );
-		}
-
 		void __stdcall CreateMove( int sequence_number, float input_sample_frametime, bool active )
 		{
 			static auto fnOriginal = hkClientBase->GetOriginalFunction< create_move_t >( uCreateMove );
@@ -235,6 +209,68 @@ namespace PX
 
 			pVerifiedCmd->m_cmd = *pCmd;
 			pVerifiedCmd->m_crc = Tools::GetCmdHash( pCmd );
+		}
+
+		void __stdcall FrameStageNotify( ClientFrameStage_t cfsStage )
+		{
+			static auto fnOriginal = hkClientBase->GetOriginalFunction< frame_stage_notify_t >( uFrameStageNotify );
+
+			{
+				switch ( cfsStage )
+				{
+					case FRAME_START:
+					{
+						Other::UpdateModelIndicies( );
+					}
+					break;
+
+					case FRAME_RENDER_START:
+					{
+						Tools::RepairBoneRendering( );
+					}
+					break;
+
+					case FRAME_NET_UPDATE_POSTDATAUPDATE_START:
+					{
+						Features::Miscellaneous::ModifyInventory( );
+					}
+					break;
+
+					case FRAME_NET_UPDATE_POSTDATAUPDATE_END:
+					{
+						Features::Miscellaneous::DarkenWorld( );
+					}
+					break;
+
+					default:
+						break;
+				}
+			}
+
+			return fnOriginal( cfsStage );
+		}
+
+		void __stdcall OverrideView( CViewSetup* pViewSetup )
+		{
+			static auto fnOriginal = hkClientMode->GetOriginalFunction< override_view_t >( uOverrideView );
+
+			{
+				Features::Miscellaneous::ModifyRenderFOV( pViewSetup );
+			}
+
+			fnOriginal( pClientMode, pViewSetup );
+		}
+
+		float __stdcall GetViewmodelFOV( )
+		{
+			static auto fnOriginal = hkClientMode->GetOriginalFunction< get_viewmodel_fov_t >( uGetViewmodelFOV );
+			auto flReturn = fnOriginal( pClientMode );
+
+			{
+				Features::Miscellaneous::ModifyViewmodelFOV( &flReturn );
+			}
+
+			return flReturn;
 		}
 
 		int __stdcall DoPostScreenEffects( int iUnknown )
@@ -316,6 +352,15 @@ namespace PX
 			}
 
 			fnSequence( pData, pStructure, pOutput );
+		}
+
+		void __stdcall EmitSoundATT( IRecipientFilter& filter, int iEntIndex, int iChannel, const char* pSoundEntry, unsigned nSoundEntryHash, const char* pSample, float flVolume, float flAttenuation, int nSeed, int iFlags, int iPitch, const Vector* pOrigin, const Vector* pDirection, CUtlVector<Vector>* pUtlVecOrigins, bool bUpdatePositions, float soundtime, int speakerentity, void* pUnknown )
+		{
+			static auto fnOriginal = hkEngineSound->GetOriginalFunction< emit_sound_att_t >( uEmitSoundATT );
+
+
+
+			fnOriginal( pEngineSound, filter, iEntIndex, iChannel, pSoundEntry, nSoundEntryHash, pSample, flVolume, flAttenuation, nSeed, iFlags, iPitch, pOrigin, pDirection, pUtlVecOrigins, bUpdatePositions, soundtime, speakerentity, pUnknown );
 		}
 	}
 }

@@ -36,7 +36,8 @@
 			"m_VisualsDataProcessors": 2,
 			"Prediction Player": 2,
 			"Prediction Seed": 2,
-			"Move Helper": 2
+			"Move Helper": 2,
+			"Render Beams": 1
         },
       "Signatures": {
 			"Device": "A1 ? ? ? ? 50 8B 08 FF 51 0C",
@@ -62,7 +63,8 @@
 			"m_VisualsDataProcessors": "81 C7 ? ? ? ? 8B 4F 0C 8B 57 04 89 4C 24 0C",
 			"Prediction Player": "89 35 ? ? ? ? F3 0F 10 48 20",
 			"Prediction Seed": "8B 0D ? ? ? ? BA ? ? ? ? E8 ? ? ? ? 83 C4 04",
-			"Move Helper": "8B 0D ? ? ? ? 8B 46 08 68"
+			"Move Helper": "8B 0D ? ? ? ? 8B 46 08 68",
+			"Render Beams": "B9 ? ? ? ? A1 ? ? ? ? FF 10 A1 ? ? ? ? B9"
       }
     },
     "Versions": {
@@ -81,6 +83,7 @@
 		"Localize": "Localize_001",
 		"Events": "GAMEEVENTSMANAGER002",
 		"Game Movement": "GameMovement001",
-		"Prediction": "VClientPrediction001"
+		"Prediction": "VClientPrediction001",
+		"Engine Sound": "IEngineSoundClient003"
   }
 }

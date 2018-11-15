@@ -328,6 +328,7 @@ namespace PX::Features::Combat
 				 || pCurrentEntity == pLocalPlayer
 				 || !pCurrentEntity->IsPlayer( )
 				 || !pCurrentEntity->IsAlive( )
+				 || pCurrentEntity->m_bGunGameImmunity( )
 				 || !pLocalPlayer->CanSeePlayer( pCurrentEntity, _Config->bMindSmoke.Get( ) ) )
 				continue;
 

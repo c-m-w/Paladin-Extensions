@@ -16,6 +16,8 @@ namespace PX
 		typedef void( __stdcall* create_move_t )( int, float, bool );
 
 		// Client Mode
+		typedef void( __thiscall* override_view_t )( IClientMode*, CViewSetup* );
+		typedef float( __thiscall* get_viewmodel_fov_t )( IClientMode* );
 		typedef int( __thiscall* do_post_screen_effects_t )( IClientMode*, int );
 
 		// Surface
@@ -32,6 +34,9 @@ namespace PX
 		typedef void( __thiscall* scene_begin_t )( IVRenderView* );
 
 		typedef void( __cdecl* m_n_sequence_t )( const CRecvProxyData*, void*, void* );
+
+		// Engine Sound
+		typedef void( __thiscall* emit_sound_att_t )( IEngineSound*, IRecipientFilter&, int, int, const char*, unsigned, const char*, float, float, int, int, int, const Vector*, const Vector*, CUtlVector< Vector >*, bool, float, int, void* );
 	}
 
 	namespace Hooks
@@ -45,6 +50,7 @@ namespace PX
 		PX_SDK Tools::CTrampolineHook* hkPanel;
 		PX_SDK Tools::CTrampolineHook* hkModelRender;
 		PX_SDK Tools::CTrampolineHook* hkViewRender;
+		PX_SDK Tools::CTrampolineHook* hkEngineSound;
 
 		// Device
 		HRESULT __stdcall BeginScene( IDirect3DDevice9* pThis );
@@ -52,10 +58,12 @@ namespace PX
 		HRESULT __stdcall Reset( IDirect3DDevice9* pThis, D3DPRESENT_PARAMETERS* pParams );
 
 		// Client Base
-		void __stdcall FrameStageNotify( ClientFrameStage_t cfsStage );
 		void __stdcall CreateMove( int sequence_number, float input_sample_frametime, bool active );
+		void __stdcall FrameStageNotify( ClientFrameStage_t cfsStage );
 
 		// Client Mode
+		void __stdcall OverrideView( CViewSetup* pViewSetup );
+		float __stdcall GetViewmodelFOV( );
 		int __stdcall DoPostScreenEffects( int iUnknown );
 
 		// Panel
@@ -69,5 +77,8 @@ namespace PX
 		void __stdcall SceneBegin( );
 
 		void __cdecl m_nSequence( const CRecvProxyData* pData, void *pStructure, void *pOutput );
+
+		// Engine Sound
+		void __stdcall EmitSoundATT( IRecipientFilter& filter, int iEntIndex, int iChannel, const char* pSoundEntry, unsigned int nSoundEntryHash, const char* pSample, float flVolume, float flAttenuation, int nSeed, int iFlags, int iPitch, const Vector* pOrigin, const Vector* pDirection, CUtlVector<Vector>* pUtlVecOrigins, bool bUpdatePositions, float soundtime, int speakerentity, void *pUnknown );
 	}
 }

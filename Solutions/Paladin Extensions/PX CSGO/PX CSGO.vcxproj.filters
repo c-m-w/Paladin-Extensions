@@ -359,5 +359,11 @@
     <ClInclude Include="SDK\Valve\Interfaces\IPrediction.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\Valve\Interfaces\IEngineSound.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\Valve\Interfaces\IViewRenderBeams.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

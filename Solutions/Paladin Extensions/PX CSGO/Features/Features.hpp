@@ -394,6 +394,11 @@ namespace PX::Features
 				color_sequence_t seqAimFOV[ 2 ] { }; // inner, outer
 				toggle_t bVisualizeSpread = false;
 				color_sequence_t seqSpread[ 2 ] { }; // inner, outer
+				toggle_t bModifyFOV = false;
+				toggle_t bBulletBeams = false;
+				color_sequence_t seqBulletBeams[ 2 ] { }; // miss, hit
+				float flRenderFOV = 90.f;
+				float flViewmodelFOV = 84.f;
 			} _Visuals;
 
 			struct inventory_t

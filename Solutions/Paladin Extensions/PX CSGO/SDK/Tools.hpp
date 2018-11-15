@@ -22,8 +22,10 @@ namespace PX::Tools
 	CBasePlayer* PX_API GetLocalPlayer( );
 	CUserCmd* PX_API GetUserCmd( int iSequenceNumber );
 	CVerifiedUserCmd* PX_API GetVerifiedUserCmd( int iSequenceNumber );
+	CUserCmd& PX_API GetLastUserCmd( );
 	CRC32_t PX_API GetCmdHash( CUserCmd* pCmd );
 	bool PX_API ValidPlayer( void* pEntity );
+	void PX_API RepairBoneRendering( );
 
 	// CVars
 	float PX_API GetRecoilScale( );
@@ -207,7 +209,7 @@ namespace PX::Tools
 		player_info_t GetPlayerInformation( );
 		bool CanSeePosition( Vector vecPosition, bool bMindSmoke, void* pEntity = nullptr );
 		bool CanSeePlayer( CBasePlayer* pPlayer, bool bMindSmoke );
-		CGameTrace& TraceRayFromView( );
+		CGameTrace& CBasePlayer::TraceRayFromView( CUserCmd* pCmd = nullptr );
 		Vector GetHitboxPosition( int hHitboxID );
 		bool IsVulnerable( );
 		float DistanceFromPlayer( CBasePlayer* pPlayer );

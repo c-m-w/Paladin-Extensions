@@ -20,10 +20,12 @@ namespace PX::Information
 			PX_DEF uReset = 16u;
 
 			// Client Base
-			PX_DEF uFrameStageNotify = 37u;
 			PX_DEF uCreateMove = 22u;
+			PX_DEF uFrameStageNotify = 37u;
 
 			// Client Mode
+			PX_DEF uOverrideView = 18u;
+			PX_DEF uGetViewmodelFOV = 35u;
 			PX_DEF uDoPostScreenEffects = 44u;
 
 			// Surface
@@ -38,6 +40,9 @@ namespace PX::Information
 			// View Render
 			PX_DEF uSceneBegin = 8u;
 			PX_DEF uSceneEnd = 9u;
+
+			// Engine Sound
+			PX_DEF uEmitSoundATT = 5u;
 
 			// CBaseEntity
 			PX_DEF uIsPlayer = 152u;
@@ -109,6 +114,8 @@ namespace PX::Information
 		PX_SDK IMoveHelperServer* pMoveHelper = nullptr;
 		PX_SDK IGameMovement* pGameMovement = nullptr;
 		PX_SDK IPrediction* pPrediction = nullptr;
+		PX_SDK IEngineSound* pEngineSound = nullptr;
+		PX_SDK IViewRenderBeams* pRenderBeams = nullptr;
 	}
 
 	namespace NetworkedVariableManager // http://www.bailopan.net/table_dump.txt
