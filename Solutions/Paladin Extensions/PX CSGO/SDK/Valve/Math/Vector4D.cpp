@@ -164,7 +164,7 @@ void Vector4D::CopyToArray(float* rgfl) const
 //-----------------------------------------------------------------------------
 // standard Math operations
 //-----------------------------------------------------------------------------
-// #pragma message("TODO: these should be SSE")
+// #pragma message("these should be SSE")
 
 void Vector4D::Negate()
 {

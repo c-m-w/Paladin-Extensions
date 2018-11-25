@@ -10,7 +10,7 @@ class CUtlBinaryBlock
 public:
     CUtlBinaryBlock(int growSize = 0, int initSize = 0);
 
-    // NOTE: nInitialLength indicates how much of the buffer starts full
+    // NOTICE: nInitialLength indicates how much of the buffer starts full
     CUtlBinaryBlock(void* pMemory, int nSizeInBytes, int nInitialLength);
     CUtlBinaryBlock(const void* pMemory, int nSizeInBytes);
     CUtlBinaryBlock(const CUtlBinaryBlock& src);
@@ -93,7 +93,7 @@ inline void CUtlBinaryBlock::Purge()
 
 //-----------------------------------------------------------------------------
 // Simple string class. 
-// NOTE: This is *not* optimal! Use in tools, but not runtime code
+// NOTICE: This is *not* optimal! Use in tools, but not runtime code
 //-----------------------------------------------------------------------------
 class CUtlString
 {
@@ -123,7 +123,7 @@ public:
     bool        IsEmpty() const;
 
     // Sets the length (used to serialize into the buffer )
-    // Note: If nLen != 0, then this adds an extra uint8_t for a null-terminator.    
+    // Notice: If nLen != 0, then this adds an extra uint8_t for a null-terminator.    
     void        SetLength(int nLen);
     char        *Get();
     void        Clear();

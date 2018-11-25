@@ -359,7 +359,7 @@ public:
 
     unsigned char	GetFlags() const;
 
-    // NOTE: This will assert if you attempt to recast it in a way that
+    // NOTICE: This will assert if you attempt to recast it in a way that
     // is not compatible. The only valid conversion is binary-> text w/CRLF
     void			SetBufferType(bool bIsText, bool bContainsCRLF);
 
@@ -420,14 +420,14 @@ public:
     char			GetDelimitedChar(CUtlCharConversion *pConv);
 
     // This will return the # of characters of the string about to be read out
-    // NOTE: The count will *include* the terminating 0!!
+    // NOTICE: The count will *include* the terminating 0!!
     // In binary mode, it's the number of characters until the next 0
     // In text mode, it's the number of characters until the next space.
     int				PeekStringLength();
 
     // This version of PeekStringLength converts \" to \\ and " to \, etc.
     // It also reads a " at the beginning and end of the string
-    // NOTE: The count will *include* the terminating 0!!
+    // NOTICE: The count will *include* the terminating 0!!
     // In binary mode, it's the number of characters until the next 0
     // In text mode, it's the number of characters between "s (checking for \")
     // Specifying false for bActualSize will return the pre-translated number of characters
@@ -503,7 +503,7 @@ public:
     int TellMaxPut() const;
 
     // How many bytes remain to be read?
-    // NOTE: This is not accurate for streaming text files; it overshoots
+    // NOTICE: This is not accurate for streaming text files; it overshoots
     int GetBytesRemaining() const;
 
     // Change where I'm writing (put)/reading (Get)
@@ -708,10 +708,10 @@ public:
     //
     // If end of file is reached or upon error returns "false".
     //
-    // Note:	the returned length of the line is at least one character because the
+    // Notice:	the returned length of the line is at least one character because the
     //			trailing newline characters are also included as part of the line.
     //
-    // Note:	the pointer returned points into the local memory of this buffer, in
+    // Notice:	the pointer returned points into the local memory of this buffer, in
     //			case the buffer gets relocated or destroyed the pointer becomes invalid.
     //
     // e.g.:	-------------
@@ -740,7 +740,7 @@ public:
     //
     // If end of file is reached or upon error returns NULL.
     //
-    // Note:	the pointer returned points into the local memory of this buffer, in
+    // Notice:	the pointer returned points into the local memory of this buffer, in
     //			case the buffer gets relocated or destroyed the pointer becomes invalid.
     //
     // e.g.:	-------------

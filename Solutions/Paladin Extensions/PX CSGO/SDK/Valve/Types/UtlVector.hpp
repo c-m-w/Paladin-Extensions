@@ -56,7 +56,7 @@ public:
     // Calls RemoveAll() then AddMultipleToTail.
     void SetSize(int size);
     void SetCount(int count);
-    void SetCountNonDestructively(int count); //sets count by adding or removing elements to tail TODO: This should probably be the default behavior for SetCount
+    void SetCountNonDestructively(int count); //sets count by adding or removing elements to tail
     void CopyArray(const T *pArray, int size); //Calls SetSize and copies each element.
                                                // Fast swap
     void Swap(CUtlVector< T, A > &vec);

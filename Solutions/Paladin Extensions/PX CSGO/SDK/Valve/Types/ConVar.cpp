@@ -293,7 +293,7 @@ bool CCommand::Tokenize( const char *pCommand, characterset_t *pBreakSet )
 	}
 
 	// Copy the current command into a temp buffer
-	// NOTE: This is here to avoid the pointers returned by DequeueNextCommand
+	// NOTICE: This is here to avoid the pointers returned by DequeueNextCommand
 	// to become invalid by calling AddText. Is there a way we can avoid the memcpy?
 	int nLen = strlen( pCommand );
 	if ( nLen >= COMMAND_MAX_LENGTH - 1 )

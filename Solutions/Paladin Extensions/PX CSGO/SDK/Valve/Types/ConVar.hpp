@@ -221,7 +221,7 @@ public:
 	virtual void    Dispatch( const CCommand &command );
 
 	//private:
-	// NOTE: To maintain backward compat, we have to be very careful:
+	// NOTICE: To maintain backward compat, we have to be very careful:
 	// All public virtual methods must appear in the same order always
 	// since engine code will be calling into this code, which *does not match*
 	// in the mod code; it's using slightly different, but compatible versions

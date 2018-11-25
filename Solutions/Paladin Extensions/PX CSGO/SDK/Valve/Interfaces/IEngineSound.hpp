@@ -83,7 +83,7 @@ enum soundlevel_t
 	SNDLVL_150dB = 150,	    // 0.2
 	SNDLVL_180dB = 180,		// rocket launching
 
-							// NOTE: Valid soundlevel_t values are 0-255.
+							// NOTICE: Valid soundlevel_t values are 0-255.
 							//       256-511 are reserved for sounds using goldsrc compatibility attenuation.
 };
 
@@ -112,7 +112,7 @@ public:
 	// EmitSound with pitch != 100 should be used sparingly, as it's not quite as
 	// fast (the pitchshift mixer is not native coded).
 
-	// NOTE: setting iEntIndex to -1 will cause the sound to be emitted from the local
+	// NOTICE: setting iEntIndex to -1 will cause the sound to be emitted from the local
 	// player (client-side only)
 	virtual int EmitSound( IRecipientFilter& filter, int iEntIndex, int iChannel, const char *pSoundEntry, unsigned int nSoundEntryHash, const char *pSample,
 						   float flVolume, float flAttenuation, int nSeed, int iFlags = 0, int iPitch = PITCH_NORM,

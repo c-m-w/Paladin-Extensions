@@ -17,7 +17,6 @@ public:
 
     // Initialization
     void Init(vec_t ix = 0.0f, vec_t iy = 0.0f, vec_t iz = 0.0f, vec_t iw = 0.0f);
-    // TODO (Ilya): Should there be an init that takes a single float for consistency?
 
     // Got any nasty NAN's?
     bool IsValid() const;
@@ -140,7 +139,7 @@ public:
     vec_t DistTo(const Vector4D &vOther) const;
 
     // Get the distance from this vector to the other one squared.
-    // NJS: note, VC wasn't inlining it correctly in several deeply nested inlines due to being an 'out of line' .  
+    // NJS: notice, VC wasn't inlining it correctly in several deeply nested inlines due to being an 'out of line' .  
     // may be able to tidy this up after switching to VC7
     vec_t DistToSqr(const Vector4D &vOther) const
     {

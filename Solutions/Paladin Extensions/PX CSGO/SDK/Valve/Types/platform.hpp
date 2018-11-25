@@ -18,7 +18,7 @@
 #define COMPILER_MSVC
 
 //-----------------------------------------------------------------------------
-// NOTE: All compiler defines are Set up in the base VPC scripts
+// NOTICE: All compiler defines are Set up in the base VPC scripts
 // COMPILER_MSVC, COMPILER_MSVC32, COMPILER_MSVC64, COMPILER_MSVCX360
 // COMPILER_GCC
 // The rationale for this is that we need COMPILER_MSVC for the pragma blocks
@@ -269,7 +269,7 @@
 // in certain situations.  Several compilers other than MSVC also have an equivilent
 // construct.
 //
-// Essentially the 'Hint' is that the condition specified is assumed to be true at
+// Essentially the 'Hin t' is that the condition specified is assumed to be true at
 // that point in the compilation.  If '0' is passed, then the compiler assumes that
 // any subsequent code in the same 'basic block' is unreachable, and thus usually
 // removed.
@@ -314,7 +314,7 @@
 #define  FORCEINLINE		inline
 #endif
 
-// GCC 3.4.1 has a bug in supporting forced inline of templated functions
+// GCC 3.4.1 has a bu g in supporting forced inline of templated functions
 // this macro lets us not force inlining in that case
 #define FORCEINLINE_TEMPLATE	inline
 #define SINGLE_INHERITANCE
@@ -402,7 +402,7 @@
 //
 // MSDN __declspec(novtable) documentation: http://msdn.microsoft.com/library/default.asp?url=/library/en-us/vclang/html/_langref_novtable.asp
 //
-// Note: NJS: This is not enabled for regular PC, due to not knowing the implications of exporting a class with no no vtable.
+// Notice: NJS: This is not enabled for regular PC, due to not knowing the implications of exporting a class with no no vtable.
 //       It's probable that this shouldn't be an issue, but an experiment should be done to verify this.
 //
 #ifndef COMPILER_MSVCX360
@@ -682,7 +682,7 @@ inline void SetupFPUControlWord( )
 	__emit( 0xFF80010C );	// mtfsfi  7,0
 
 							// Favour compatibility over speed (make sure the VPU Set to Java-compliant mode)
-							// NOTE: the VPU *always* uses round-to-nearest
+							// NOTICE: the VPU *always* uses round-to-nearest
 	__vector4  a = { 0.0f, 0.0f, 0.0f, 0.0f };
 	a;				//	Avoid compiler warning
 	__asm
@@ -844,7 +844,7 @@ inline T DWordSwapAsm( T dw )
 
 #else
 
-// @Note (toml 05-02-02): this technique expects the compiler to
+// @Notice (toml 05-02-02): this technique expects the compiler to
 // optimize the expression and eliminate the other path. On any new
 // platform/compiler this should be tested.
 inline short BigShort( short val )
@@ -1074,7 +1074,7 @@ inline void Destruct( T* pMemory )
 //
 //	class COuter
 //	{
-//		class CInner // Note: this does not need to be a nested class to work
+//		class CInner // Notice: this does not need to be a nested class to work
 //		{
 //			void PrintAddressOfOuter()
 //			{
@@ -1092,7 +1092,7 @@ inline void Destruct( T* pMemory )
 
 /*	TEMPLATE_FUNCTION_TABLE()
 
-(Note added to platform.h so platforms that correctly support templated
+(Notice added to platform.h so platforms that correctly support templated
 functions can handle portions as templated functions rather than wrapped
 functions)
 
@@ -1109,7 +1109,7 @@ return argument * argument;
 
 is equivilent to the following:
 
-(NOTE: the function has to be wrapped in a class due to code
+(NOTICE: the function has to be wrapped in a class due to code
 generation bugs involved with directly specializing a function
 based on a constant.)
 

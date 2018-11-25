@@ -485,7 +485,7 @@ END_CUSTOM_CHAR_CONVERSION(CUtlCStringConversion, s_StringCharConversion, "\"", 
             do {
                 int nPeekAmount = 128;
 
-                // NOTE: Add 1 for the terminating zero!
+                // NOTICE: Add 1 for the terminating zero!
                 if(!CheckArbitraryPeekGet(nOffset, nPeekAmount)) {
                     if(nOffset == nStartingOffset)
                         return 0;
@@ -528,7 +528,7 @@ END_CUSTOM_CHAR_CONVERSION(CUtlCStringConversion, s_StringCharConversion, "\"", 
             do {
                 int nPeekAmount = 128;
 
-                // NOTE: Add 1 for the terminating zero!
+                // NOTICE: Add 1 for the terminating zero!
                 if(!CheckArbitraryPeekGet(nOffset, nPeekAmount)) {
                     if(nOffset == nStartingOffset)
                         return 0;
@@ -817,7 +817,7 @@ END_CUSTOM_CHAR_CONVERSION(CUtlCStringConversion, s_StringCharConversion, "\"", 
                 nIncrement = TellMaxPut() - TellGet() - nOffset;
             }
 
-            // NOTE: CheckPeekGet could modify TellMaxPut for streaming files
+            // NOTICE: CheckPeekGet could modify TellMaxPut for streaming files
             // We have to call TellMaxPut again here
             CheckPeekGet(nOffset, nIncrement);
             int nMaxGet = TellMaxPut() - TellGet();
@@ -924,7 +924,7 @@ END_CUSTOM_CHAR_CONVERSION(CUtlCStringConversion, s_StringCharConversion, "\"", 
                             {
                                 int* i = va_arg(list, int *);
 
-                                // NOTE: This is not bullet-proof; it assumes numbers are < 128 characters
+                                // NOTICE: This is not bullet-proof; it assumes numbers are < 128 characters
                                 nLength = 128;
                                 if(!CheckArbitraryPeekGet(0, nLength)) {
                                     *i = 0;
@@ -943,7 +943,7 @@ END_CUSTOM_CHAR_CONVERSION(CUtlCStringConversion, s_StringCharConversion, "\"", 
                             {
                                 int* i = va_arg(list, int *);
 
-                                // NOTE: This is not bullet-proof; it assumes numbers are < 128 characters
+                                // NOTICE: This is not bullet-proof; it assumes numbers are < 128 characters
                                 nLength = 128;
                                 if(!CheckArbitraryPeekGet(0, nLength)) {
                                     *i = 0;
@@ -962,7 +962,7 @@ END_CUSTOM_CHAR_CONVERSION(CUtlCStringConversion, s_StringCharConversion, "\"", 
                             {
                                 unsigned int* u = va_arg(list, unsigned int *);
 
-                                // NOTE: This is not bullet-proof; it assumes numbers are < 128 characters
+                                // NOTICE: This is not bullet-proof; it assumes numbers are < 128 characters
                                 nLength = 128;
                                 if(!CheckArbitraryPeekGet(0, nLength)) {
                                     *u = 0;
@@ -981,7 +981,7 @@ END_CUSTOM_CHAR_CONVERSION(CUtlCStringConversion, s_StringCharConversion, "\"", 
                             {
                                 float* f = va_arg(list, float *);
 
-                                // NOTE: This is not bullet-proof; it assumes numbers are < 128 characters
+                                // NOTICE: This is not bullet-proof; it assumes numbers are < 128 characters
                                 nLength = 128;
                                 if(!CheckArbitraryPeekGet(0, nLength)) {
                                     *f = 0.0f;
@@ -1095,7 +1095,7 @@ END_CUSTOM_CHAR_CONVERSION(CUtlCStringConversion, s_StringCharConversion, "\"", 
         // Parse a token from the buffer:
         // Grab all text that lies between a starting delimiter + ending delimiter
         // (skipping whitespace that leads + trails both delimiters).
-        // Note the delimiter checks are case-insensitive.
+        // Notice the delimiter checks are case-insensitive.
         // If successful, the Get index is advanced and the function returns true,
         // otherwise the index is not advanced and the function returns false.
         //-----------------------------------------------------------------------------
@@ -1456,7 +1456,7 @@ END_CUSTOM_CHAR_CONVERSION(CUtlCStringConversion, s_StringCharConversion, "\"", 
             // FIXME: We could make this more optimal potentially by writing out
             // the entire buffer if you seek outside the current range
 
-            // NOTE: This call will write and will also seek the file to nNextPut.
+            // NOTICE: This call will write and will also seek the file to nNextPut.
             OnPutOverflow(-nNextPut - 1);
             m_Put = nNextPut;
 
