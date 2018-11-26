@@ -22,30 +22,32 @@ namespace PX::Features::Miscellaneous
 
 	void PX_API CircleStrafe( player_ptr_t pLocalPlayer, CUserCmd* pCmd )
 	{
-		constexpr auto flStrafeRadius = 500.f;
+		constexpr auto flAcceleration = 30.f;
 		volatile static auto bWasEnabled = false;
-		volatile static auto flYaw = 0.f, flOldYaw = 0.f;
+		volatile static auto flYaw = 0.f, flOldYaw = 0.f, flLastVelocity = 0.f;
 		const auto vecVelocity = pLocalPlayer->m_vecVelocity( );
-		const auto flVelocity = D3DXToDegree( atan2f( vecVelocity.y, vecVelocity.x ) ),
-			flNetVelocity = sqrtf( powf( vecVelocity.x, 2.f ) + powf( vecVelocity.y, 2.f ) );
-		const auto flTicks = flStrafeRadius / flNetVelocity / pGlobalVariables->m_flIntervalPerTick;
+		const auto flNetVelocity = sqrtf( powf( vecVelocity.x, 2.f ) + powf( vecVelocity.y, 2.f ) );
+		const auto flStrafeRadius = powf( powf( ( flAcceleration + 0.2769974f ) / 479.8696974f, 0.52318110855f ) * 19.23914f / 62.1f, 2.f ); // max vel = 62.1 * sqrtf(x)
+		//const auto flMaxVelocity = 6.21f * sqrtf( flStrafeRadius ); // acceleration = -0.2769974 + (479.5927 - -0.2769974)/(1 + (max vel/19.23914)^1.911384)
+		const auto flTicks = flStrafeRadius * .5f * D3DX_PI / flNetVelocity / pGlobalVariables->m_flIntervalPerTick;
 		const auto flStep = 90.f / flTicks;
+		auto flVelocity = D3DXToDegree( atan2f( vecVelocity.y, vecVelocity.x ) );
 
-
-		std::cout << flVelocity << std::endl;
 		if ( !_Settings._Miscellaneous._Movement.bCircleStrafe
-			 && ( fabsf( flVelocity - pCmd->viewangles.yaw ) < flStep || !bWasEnabled ) )
+			 && ( fabsf( flVelocity - pCmd->viewangles.yaw ) < flStep || !bWasEnabled )
+			 || !( pCmd->buttons & IN_JUMP ) )
 		{
 			bWasEnabled = false;
 			return;
 		}
+		if ( vecVelocity.x < 0.f && vecVelocity.y < 0.f ) // q3
+			flVelocity += 180.f;
 
 		if ( !bWasEnabled )
-			flYaw = flVelocity;
+			flYaw = flVelocity + pCmd->viewangles.yaw < 0.f ? 180.f : 0.f;
 		else
-			flYaw += flStep;
+			flYaw -= flStep + pCmd->viewangles.yaw - flOldYaw;
 
-		flYaw -= pCmd->viewangles.yaw - flOldYaw;
 		pCmd->forwardmove = sin( D3DXToRadian( flYaw ) ) * 450.f;
 		pCmd->sidemove = cos( D3DXToRadian( flYaw ) ) * 450.f;
 
