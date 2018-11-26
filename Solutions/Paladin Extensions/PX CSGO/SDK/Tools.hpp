@@ -99,6 +99,7 @@ namespace PX::Tools
 		PX_NETVAR_REFERENCE( float, m_flSimulationTime,PX_XOR( "DT_BaseEntity" ), PX_XOR( "m_flSimulationTime" ) );
 		PX_NETVAR_REFERENCE_OFFSET( matrix3x4_t, m_rgflCoordinateFrame, PX_XOR( "DT_BaseEntity" ), PX_XOR( "m_CollisionGroup" ),  -int( 0x30 ) );
 		PX_NETVAR_REFERENCE_OFFSET( int32_t, GetIndex, PX_XOR( "CBaseEntity" ), PX_XOR( "m_bIsAutoaimTarget" ), 0x4 );
+		PX_NETVAR_REFERENCE( int32_t, movetype, PX_XOR( "DT_BaseEntity" ), PX_XOR( "movetype" ) );
 
 		bool IsPlayer( );
 		bool IsWeapon( );
@@ -167,6 +168,7 @@ namespace PX::Tools
 	{
 	public:
 		PX_NETVAR_REFERENCE( int32_t, m_nModelIndex, PX_XOR( "DT_BaseViewModel" ), PX_XOR( "m_nModelIndex" ) );
+		PX_NETVAR_REFERENCE( int32_t, m_nWorldModelIndex, PX_XOR( "DT_BaseViewModel" ), PX_XOR( "m_nWorldModelIndex" ) );
 		PX_NETVAR_REFERENCE( int32_t, m_nViewModelIndex,PX_XOR( "DT_BaseViewModel" ), PX_XOR( "m_nViewModelIndex" ) );
 		PX_NETVAR_REFERENCE( CHandle<CBaseCombatWeapon>, m_hWeapon,PX_XOR( "DT_BaseViewModel" ), PX_XOR( "m_hWeapon" ) );
 		PX_NETVAR_REFERENCE( CHandle<CBasePlayer>, m_hOwner,PX_XOR( "DT_BaseViewModel" ), PX_XOR( "m_hOwner" ) );
