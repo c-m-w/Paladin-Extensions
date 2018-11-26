@@ -7,16 +7,14 @@ namespace PX::Features::Miscellaneous
 {
 	void PX_API AutoJump( player_ptr_t pLocalPlayer, CUserCmd* pCmd )
 	{
-		return;
-		if ( !_Settings._Miscellaneous._Movement.bAutomaticJump
-			 || !pLocalPlayer->IsAlive( ) )
+		if ( !_Settings._Miscellaneous._Movement.bAutomaticJump )
 			return;
 
-		// need movetype...
-
-		if ( pCmd->buttons & IN_JUMP )
-			if ( !( pLocalPlayer->m_fFlags( ) & FL_ONGROUND ) )
-				if ( !( pGlobalVariables->m_iTickCount % ( int( _Settings._Miscellaneous._Movement.flMissChance / pGlobalVariables->m_flIntervalPerTick ) + 1 ) ) )
+		const auto movetype = pLocalPlayer->movetype( );
+		if ( movetype != MOVETYPE_NOCLIP && movetype != MOVETYPE_LADDER )
+			if ( _Settings._Miscellaneous._Movement.bAutomaticJumpMode.Get( ) || pCmd->buttons & IN_JUMP )
+				if ( !( pLocalPlayer->m_fFlags( ) & FL_ONGROUND )
+ 					 || pGlobalVariables->m_iTickCount % ( _Settings._Miscellaneous._Movement.iMissTicks + 1 ) )
 					pCmd->buttons &= ~IN_JUMP;
 	}
 
@@ -55,17 +53,19 @@ namespace PX::Features::Miscellaneous
 		flOldYaw = pCmd->viewangles.yaw;
 	}
 
-	void AutoEdgeJump( CUserCmd *pCmd )
+	void PX_API AutoEdgeJump( player_ptr_t pLocalPlayer, CUserCmd *pCmd, int32_t fFlagsUnpredicted )
 	{
-		return;
-		// engine prediction
-		// https://www.unknowncheats.me/forum/1338060-post2.html
-		// ray trace downward is also an option, but it's ghetto
+		if ( !_Settings._Miscellaneous._Movement.bEdgeJump )
+			return;
+
+		if ( fFlagsUnpredicted & FL_ONGROUND && !( pLocalPlayer->m_fFlags( ) & FL_ONGROUND ) )
+			pCmd->buttons |= IN_JUMP;
+		else
+			pCmd->buttons &= ~IN_JUMP;
 	}
 
-	void AutoStrafe( player_ptr_t pLocalPlayer, CUserCmd *pCmd )
+	void PX_API AutoStrafe( player_ptr_t pLocalPlayer, CUserCmd *pCmd )
 	{
-		return;
 		if ( !_Settings._Miscellaneous._Movement.bAutomaticStrafe && !_Settings._Miscellaneous._Movement.bAutonomousStrafe )
 			return;
 
@@ -76,9 +76,9 @@ namespace PX::Features::Miscellaneous
 			static int iLastMotionlessTick;
 			static auto cl_sidespeed = pConVar->FindVar( PX_XOR( "cl_sidespeed" ) );
 			if ( !( pLocalPlayer->m_fFlags( ) & FL_ONGROUND )
-				 && ( abs( pCmd->mousedx ) > 0
-					  && iLastMotionlessTick - pGlobalVariables->m_iTickCount > 100.f - _Settings._Miscellaneous._Movement.flSync ) )
-				return ( void )( pCmd->sidemove = float( abs( pCmd->mousedx ) / pCmd->mousedx ) * cl_sidespeed->GetFloat( ), pCmd->forwardmove = 0.f );
+				 && abs( pCmd->mousedx ) > 0
+				 && 100.f - _Settings._Miscellaneous._Movement.flSync < ( pGlobalVariables->m_iTickCount - iLastMotionlessTick ) * 100 / 16 + 1 )
+				return ( void )( pCmd->sidemove = cl_sidespeed->GetFloat( ) * ( ( pCmd->mousedx > 0 ) - ( pCmd->mousedx < 0 ) ), pCmd->forwardmove = 0.f );
 
 			iLastMotionlessTick = pGlobalVariables->m_iTickCount;
 		}
@@ -86,7 +86,6 @@ namespace PX::Features::Miscellaneous
 		{
 			// b1g method of doing it silently based on airaccel. it's broken bad, though...
 			// https://www.unknowncheats.me/forum/1394519-post1.html
-			//if ( autonomous_strafe_key )
 		}
 	}
 

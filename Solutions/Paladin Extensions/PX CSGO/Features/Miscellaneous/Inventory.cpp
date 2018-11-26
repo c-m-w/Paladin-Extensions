@@ -153,6 +153,7 @@ namespace PX::Features::Miscellaneous
 	{
 		constexpr auto fnSetModelIndex = [ ]( CBaseViewModel* vm, int i )
 		{
+		//	vm->m_nWorldModelIndex( ) = i + 1;
 			vm->m_nModelIndex( ) = i;
 			vm->m_nViewModelIndex( ) = i;
 		};
