@@ -12,9 +12,9 @@ namespace PX::Features::Miscellaneous
 
 		const auto movetype = pLocalPlayer->movetype( );
 		if ( movetype != MOVETYPE_NOCLIP && movetype != MOVETYPE_LADDER )
-			if ( pCmd->buttons & IN_JUMP )
+			if ( _Settings._Miscellaneous._Movement.bAutomaticJumpMode.Get( ) || pCmd->buttons & IN_JUMP )
 				if ( !( pLocalPlayer->m_fFlags( ) & FL_ONGROUND )
- 					 || pGlobalVariables->m_iTickCount % ( int( _Settings._Miscellaneous._Movement.flMissChance / pGlobalVariables->m_flIntervalPerTick ) + 1 ) )
+ 					 || pGlobalVariables->m_iTickCount % ( _Settings._Miscellaneous._Movement.iMissTicks + 1 ) )
 					pCmd->buttons &= ~IN_JUMP;
 	}
 
@@ -29,7 +29,6 @@ namespace PX::Features::Miscellaneous
 		const auto flTicks = flStrafeRadius / flNetVelocity / pGlobalVariables->m_flIntervalPerTick;
 		const auto flStep = 90.f / flTicks;
 
-		std::cout << flVelocity << std::endl;
 		if ( !_Settings._Miscellaneous._Movement.bCircleStrafe
 			 && ( fabsf( flVelocity - pCmd->viewangles.yaw ) < flStep || !bWasEnabled ) )
 		{
@@ -59,9 +58,6 @@ namespace PX::Features::Miscellaneous
 			pCmd->buttons |= IN_JUMP;
 		else
 			pCmd->buttons &= ~IN_JUMP;
-		// engine prediction
-		// https://www.unknowncheats.me/forum/1338060-post2.html
-		// ray trace downward is also an option, but it's ghetto
 	}
 
 	void PX_API AutoStrafe( player_ptr_t pLocalPlayer, CUserCmd *pCmd )
@@ -76,8 +72,9 @@ namespace PX::Features::Miscellaneous
 			static int iLastMotionlessTick;
 			static auto cl_sidespeed = pConVar->FindVar( PX_XOR( "cl_sidespeed" ) );
 			if ( !( pLocalPlayer->m_fFlags( ) & FL_ONGROUND )
-				 && abs( pCmd->mousedx ) > 0 )
-				return ( void )( pCmd->sidemove = float( abs( pCmd->mousedx ) / pCmd->mousedx ) * cl_sidespeed->GetFloat( ), pCmd->forwardmove = 0.f );
+				 && abs( pCmd->mousedx ) > 0
+				 && 100.f - _Settings._Miscellaneous._Movement.flSync < ( pGlobalVariables->m_iTickCount - iLastMotionlessTick ) * 100 / 16 + 1 )
+				return ( void )( pCmd->sidemove = cl_sidespeed->GetFloat( ) * ( ( pCmd->mousedx > 0 ) - ( pCmd->mousedx < 0 ) ), pCmd->forwardmove = 0.f );
 
 			iLastMotionlessTick = pGlobalVariables->m_iTickCount;
 		}
