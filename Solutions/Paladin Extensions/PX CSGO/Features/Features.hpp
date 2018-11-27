@@ -160,6 +160,7 @@ namespace PX::Features
 					float flBoxCornerLength = 1.f; // odd input only allowed
 
 					toggle_t bInformation = false;
+					toggle_t bInformationOutline = false;
 					color_sequence_t seqInformationOutline { };
 					enum
 					{

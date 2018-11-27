@@ -517,7 +517,7 @@ namespace PX::Features::Awareness
 					{
 						if ( !cfg.bDisplayMode ) // screen
 						{
-							Text( ED3DFont::FNT_TAHOMA, pEntity.vecBox[ BASE ][ TOPLEFT ].x + ( pEntity.vecBox[ BASE ][ TOPRIGHT ].x - pEntity.vecBox[ BASE ][ TOPLEFT ].x ) / 2 , pEntity.vecBox[ BASE ][ TOPRIGHT ].y - 15,
+							Text( ED3DFont::FNT_TAHOMA, pEntity.vecBox[ BASE ][ TOPLEFT ].x + ( pEntity.vecBox[ BASE ][ TOPRIGHT ].x - pEntity.vecBox[ BASE ][ TOPLEFT ].x ) / 2 , pEntity.vecBox[ BASE ][ TOPRIGHT ].y + 10,
 								  string_cast< wstr_t >( bVariantID ? player_ptr_t( pEntity.p )->GetPlayerInformation( ).szName : pEntity->GetModel( )->szName ).c_str( ),
 								  cfg.bInformationOutline.Get( ), dwAlignment, 0xFFFFFFFF );
 						}
@@ -536,24 +536,25 @@ namespace PX::Features::Awareness
 			case settings_t::awareness_t::statistics_t::a_statistics_base::BOTTOM:
 			{
 				dwAlignment = DT_CENTER | DT_NOCLIP;
-
-				if ( !cfg.bDimesMode ) // 2d
+				if ( !!cfg.bIdentifier )
 				{
-					if ( !cfg.bDisplayMode ) // screen
+					if ( !cfg.bDimesMode ) // 2d
 					{
-						if ( !!cfg.bIdentifier )
-							Text( ED3DFont::FNT_TAHOMA, pEntity.vecBox[ BASE ][ BOTTOMLEFT ].x + ( pEntity.vecBox[ BASE ][ BOTTOMRIGHT ].x - pEntity.vecBox[ BASE ][ BOTTOMLEFT ].x ) / 2, pEntity.vecBox[ BASE ][ BOTTOMRIGHT ].y,
+						if ( !cfg.bDisplayMode ) // screen
+						{
+							Text( ED3DFont::FNT_TAHOMA, pEntity.vecBox[ BASE ][ BOTTOMRIGHT ].x + ( pEntity.vecBox[ BASE ][ BOTTOMRIGHT ].x - pEntity.vecBox[ BASE ][ BOTTOMRIGHT ].x ) / 2, pEntity.vecBox[ BASE ][ BOTTOMRIGHT ].y - 10,
 								  string_cast< wstr_t >( bVariantID ? player_ptr_t( pEntity.p )->GetPlayerInformation( ).szName : pEntity->GetModel( )->szName ).c_str( ),
 								  cfg.bInformationOutline.Get( ), dwAlignment, 0xFFFFFFFF );
+						}
+						else // world
+						{
+
+						}
 					}
-					else // world
+					else // 3d
 					{
 
 					}
-				}
-				else // 3d
-				{
-
 				}
 				break;
 			}
@@ -572,7 +573,7 @@ namespace PX::Features::Awareness
 			_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].bEnabled = true;
 			_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].bInformation = true;
 			_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].bIdentifier = true;
-			_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].fAlignment = settings_t::awareness_t::statistics_t::a_statistics_base::BOTTOM;
+			_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].fAlignment = settings_t::awareness_t::statistics_t::a_statistics_base::LEFT;
 			_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].bOrientation = true;
 			_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].bBone = true;
 			_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].bSnapline = true;

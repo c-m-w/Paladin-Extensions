@@ -1530,7 +1530,7 @@ namespace PX::UI::Manager
 					{
 						BeginRow( 30, 3, ROW_CUSTOM );
 
-						_Settings._Miscellaneous._Movement.flMissChance = Slider( PX_XOR( "Jump Miss Chance" ), szMissChance, 0.f, 1.f, _Settings._Miscellaneous._Movement.flMissChance, 10, 10, GROUPBOX_COLUMN_WIDTH, 30, 2 );
+						_Settings._Miscellaneous._Movement.iMissTicks = Slider( PX_XOR( "Jump Miss Chance" ), szMissChance, 0, 15, _Settings._Miscellaneous._Movement.iMissTicks, 10, 10, GROUPBOX_COLUMN_WIDTH, 30 );
 
 						EndRow( );
 					}
