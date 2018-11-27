@@ -354,6 +354,8 @@ namespace PX::Features
 					float flOverCompensation = 0.f; // +- xyz
 					float flMaxCrosshairDistance = 1.f;
 					float flMaxWorldCrosshairDistance = 1.f;
+					float flAimTime = 1.5f; // 0.f -> 1.5f
+					float flAimAcceleration = 0.f; // -1.f -> 1.f degrees/sec^2
 					float flSmoothFactor = SMOOTHING_MIN;
 					Tools::bezier_order_t _BezierOrders[ 7 ];
 					int iCurrentOrders = 0;
