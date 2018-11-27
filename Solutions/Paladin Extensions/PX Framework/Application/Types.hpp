@@ -90,6 +90,11 @@ namespace PX::Types
 
 	struct toggle_t
 	{
+		explicit operator bool( ) const
+		{
+			return bEnabled;
+		}
+
 		struct keybind_t
 		{
 			int iKeyBindMode = KEYBIND_INACTIVE;
