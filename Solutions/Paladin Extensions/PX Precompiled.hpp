@@ -41,7 +41,7 @@
 #include <cryptopp/modes.h>
 #include <cryptopp/sha.h>
 #include <cryptopp/aes.h>
-#pragma comment( lib, "cryptlib.lib" )
+#pragma comment( lib, "cryptlib.lib" ) // todo @cole compile as /MT not /MD, /MDd, or /MTd
 
 // cURL
 #define CURL_STATICLIB // specify cURL is lib, not dll
