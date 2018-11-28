@@ -538,7 +538,7 @@ R"()"
 					post_data_t dqPostData;
 					dqPostData.emplace_back( "input", "ret" );
 
-					Assert::AreEqual( "ret", Decrypt( Request( "https://www.paladin.rip/auth/test_safe.php", dqPostData ) ).c_str( ), L"Encrypted request return check failed", PX_ASSERT_INFO );
+					Assert::AreEqual( "ret", Decrypt( Request( "https://www.paladin-extensions.com/auth/test_safe.php", dqPostData ) ).c_str( ), L"Encrypted request return check failed", PX_ASSERT_INFO );
 
 					CleanupConnection( );
 				}
