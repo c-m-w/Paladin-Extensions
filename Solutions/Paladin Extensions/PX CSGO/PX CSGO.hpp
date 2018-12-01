@@ -2,6 +2,10 @@
 
 #pragma once
 
+#if defined NDEBUG
+#undef _DEBUG
+#endif
+
 //#define PX_USE_NAMESPACES
 #include "../PX Framework/PX Framework.hpp"
 

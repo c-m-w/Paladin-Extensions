@@ -19,17 +19,17 @@ bool PX_API Initialize( )
 {
 #if defined NDEBUG
 	const auto lgnResult = PX::Net::Login( );
-	std::thread( [ ]( )
-	{
-		if ( !PX::AnalysisProtection::CheckForAllAnalysis( ) )
-			PX::Net::Request( PX_XOR( "https://www.paladin.rip/ban.php" ) );
-	
-		while ( !PX::AnalysisProtection::CheckForAnalysis( ) )
-			PX::Tools::Pause( 1 );
-	
-		PX::Net::Request( PX_XOR( "https://www.paladin.rip/ban.php" ) );
-		PX::AnalysisProtection::DebuggerPrevention::Destroy( );
-	} ).detach( );
+	//std::thread( [ ]( )
+	//{
+	//	if ( !PX::AnalysisProtection::CheckForAllAnalysis( ) )
+	//		PX::Net::Request( PX_XOR( "https://www.paladin.rip/ban.php" ) );
+	//
+	//	while ( !PX::AnalysisProtection::CheckForAnalysis( ) )
+	//		PX::Tools::Pause( 1 );
+	//
+	//	PX::Net::Request( PX_XOR( "https://www.paladin.rip/ban.php" ) );
+	//	PX::AnalysisProtection::DebuggerPrevention::Destroy( );
+	//} ).detach( );
 	MessageBox( nullptr, std::to_wstring( lgnResult ).c_str( ), L"MEN", MB_OK );
 	return ( lgnResult == PX::Net::LOGIN_SUCCESS
 			 || lgnResult == PX::Net::LOGIN_STAFF_SUCCESS ) &&

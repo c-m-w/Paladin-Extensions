@@ -27,6 +27,8 @@ namespace PX::Features::Combat
 					Used for slow aim with a constant factor.\n
 					Value is calculated when the target is first selected. */
 		QAngle qOldAngles { };
+		QAngle qTargetAngle { };
+		Vector vecAimVelocity { }, vecAcceleration { }, vecTargetAngle { }, vecCurrentAngle { };
 		float flOldForward = 0.f, flOldSide = 0.f, flOldUp = 0.f;
 		bool bRestoreAngle = false;
 		float flBezierRatio = 0.f;
@@ -43,6 +45,7 @@ namespace PX::Features::Combat
 	player_ptr_t PX_API FindTarget( player_ptr_t pLocalPlayer, CUserCmd* pCmd );
 	int PX_API FindHitbox( player_ptr_t pLocalPlayer, player_ptr_t pTarget, CUserCmd* pCmd );
 	bool PX_API ValidateTarget( player_ptr_t pLocalPlayer, player_ptr_t pTarget, CUserCmd* pCmd );
+	void PX_API ResetAimPosition( player_ptr_t pLocalPlayer, CUserCmd* pCmd );
 	void PX_API ResetContext( );
 	void PX_API OnNewTarget( player_ptr_t pLocalPlayer, player_ptr_t pTarget, CUserCmd* pCmd );
 
@@ -131,31 +134,24 @@ namespace PX::Features::Combat
 
 		if ( _AimContext.iEntityIndex != pTarget->EntIndex( ) )
 			OnNewTarget( pLocalPlayer, pTarget, pCmd );
-		if ( _AimContext.iHitbox == -1 )
-			return ResetContext( );
+		else
+		{
+			if ( _AimContext.iHitbox == -1 )
+				return ResetContext( );
+			ResetAimPosition( pLocalPlayer, pCmd );
+		}
 
-		auto qTargetAngle = CalculateAngle( pLocalPlayer, pTarget, _AimContext.iHitbox, pCmd, &_AimContext.vecOverCompensation );
-		ClampAngles( qTargetAngle );
 		switch( _Config->iAimType )
 		{
 			case AIMTYPE_DEFAULT:
 			{
-				pClientState->viewangles = { qTargetAngle.pitch, qTargetAngle.yaw, qTargetAngle.roll };
+				pClientState->viewangles = { _AimContext.qTargetAngle.pitch, _AimContext.qTargetAngle.yaw, _AimContext.qTargetAngle.roll };
 			}
 			break;
 
 			case AIMTYPE_SMOOTH:
 			{
-				const auto vecViewAngles = pClientState->viewangles;
-				auto vecTemp = vecViewAngles, vecTemp2 = Vector( qTargetAngle.pitch, qTargetAngle.yaw, qTargetAngle.roll );
-				if ( fabsf( vecTemp.y ) > 90.f && fabsf( vecTemp2.y ) > 90.f )
-				{
-					if ( vecTemp.y < 0.f )
-						vecTemp.y += 360.f;
-					if ( vecTemp2.y < 0.f )
-						vecTemp2.y += 360.f;
-				}
-				auto vecRelativeSmoothedAngles = vecViewAngles - ( vecTemp - vecTemp2 ) / _Config->flSmoothFactor;
+				auto vecRelativeSmoothedAngles = pClientState->viewangles - _AimContext.vecAimVelocity;
 				Vector vecNewAngles;
 
 				switch( _Config->iSmoothMode )
@@ -170,9 +166,9 @@ namespace PX::Features::Combat
 					case SMOOTH_PARABOLIC:
 					{
 						vecNewAngles.x = vecRelativeSmoothedAngles.x;
-						const auto flTemp = ( vecTemp2.y - vecTemp.y ) / pow( vecTemp2.x - vecNewAngles.x, 2.f );
-						vecNewAngles.y = flTemp * pow( vecNewAngles.x - vecTemp.x, 2.f ) + vecTemp.y;
-						vecNewAngles.z = vecViewAngles.z;
+						const auto flTemp = ( _AimContext.vecTargetAngle.y - _AimContext.vecCurrentAngle.y ) / pow( _AimContext.vecTargetAngle.x - vecNewAngles.x, 2.f );
+						vecNewAngles.y = flTemp * pow( vecNewAngles.x - _AimContext.vecCurrentAngle.x, 2.f ) + _AimContext.vecCurrentAngle.y;
+						vecNewAngles.z = _AimContext.vecCurrentAngle.z;
 						ClampAngles( vecNewAngles );
 						pClientState->viewangles = vecNewAngles;
 					}
@@ -181,9 +177,9 @@ namespace PX::Features::Combat
 					case SMOOTH_RADICAL:
 					{
 						vecNewAngles.x = vecRelativeSmoothedAngles.x;
-						const auto flTemp = ( vecTemp2.y - vecTemp.y ) / cbrtf( vecTemp2.x - vecNewAngles.x );
-						vecNewAngles.y = flTemp * cbrtf( vecNewAngles.x - vecTemp.x ) + vecTemp.y;
-						vecNewAngles.z = vecViewAngles.z;
+						const auto flTemp = ( _AimContext.vecTargetAngle.y - _AimContext.vecCurrentAngle.y ) / cbrtf( _AimContext.vecTargetAngle.x - vecNewAngles.x );
+						vecNewAngles.y = flTemp * cbrtf( vecNewAngles.x - _AimContext.vecCurrentAngle.x ) + _AimContext.vecCurrentAngle.y;
+						vecNewAngles.z = _AimContext.vecCurrentAngle.z;
 						ClampAngles( vecNewAngles );
 						pClientState->viewangles = vecNewAngles;
 					}
@@ -192,10 +188,10 @@ namespace PX::Features::Combat
 					case SMOOTH_SINUSOIDAL:
 					{
 						vecNewAngles.x = vecRelativeSmoothedAngles.x;
-						const auto fl = D3DX_PI / 2.f / ( vecNewAngles.x - vecTemp2.x );
-						const auto flTemp = ( vecTemp2.y - vecTemp.y ) / sinf( fl * ( vecTemp2.x - vecNewAngles.x ) );
-						vecNewAngles.y = flTemp * sinf( fl * ( vecNewAngles.x - vecTemp.x ) ) + vecTemp.y;
-						vecNewAngles.z = vecViewAngles.z;
+						const auto fl = D3DX_PI / 2.f / ( vecNewAngles.x - _AimContext.vecTargetAngle.x );
+						const auto flTemp = ( _AimContext.vecTargetAngle.y - _AimContext.vecCurrentAngle.y ) / sinf( fl * ( _AimContext.vecTargetAngle.x - vecNewAngles.x ) );
+						vecNewAngles.y = flTemp * sinf( fl * ( vecNewAngles.x - _AimContext.vecCurrentAngle.x ) ) + _AimContext.vecCurrentAngle.y;
+						vecNewAngles.z = _AimContext.vecCurrentAngle.z;
 						ClampAngles( vecNewAngles );
 						pClientState->viewangles = vecNewAngles;
 					}
@@ -203,56 +199,27 @@ namespace PX::Features::Combat
 
 					case SMOOTH_BEZIER:
 					{
-						const auto vecEndDifference = _AimContext.vecBezierEnd - vecTemp2;
+						const auto vecEndDifference = _AimContext.vecBezierEnd - _AimContext.vecTargetAngle;
 						if ( _AimContext.flBezierRatio > 0.5f && sqrt( powf( vecEndDifference.x, 2.f ) + powf( vecEndDifference.y, 2.f ) ) > 1.f )
 							_AimContext.bResetBezierOrigin = true;
 						if ( _AimContext.bResetBezierOrigin )
 						{
-							_AimContext.vecBezierOrigin = vecTemp;
-							_AimContext.vecBezierEnd = vecTemp2;
+							_AimContext.vecBezierOrigin = _AimContext.vecCurrentAngle;
+							_AimContext.vecBezierEnd = _AimContext.vecTargetAngle;
 							_AimContext.flBezierRatio = 0.f;
 							_AimContext.bResetBezierOrigin = false;
 						}
-						vecTemp = _AimContext.vecBezierOrigin;
-						vecTemp2 = _AimContext.vecBezierEnd;
+						_AimContext.vecCurrentAngle = _AimContext.vecBezierOrigin;
+						_AimContext.vecTargetAngle = _AimContext.vecBezierEnd;
 						
-						const auto vecDifference = vecTemp - vecTemp2;
 						if ( _AimContext.flBezierRatio < 1.f )
 							_AimContext.flBezierRatio += fabsf( _Config->flSmoothFactor -
 							( settings_t::combat_t::SMOOTHING_MAX + settings_t::combat_t::SMOOTHING_MIN ) ) / ( settings_t::combat_t::SMOOTHING_MAX * 5.f );
 						if ( _AimContext.flBezierRatio > 1.f )
 							_AimContext.flBezierRatio = 1.f;
 
-						const auto vecBezierPoints = Tools::GetBezierPoints( vecTemp, vecTemp2, _Config->_BezierOrders, _Config->iCurrentOrders + 1 );
+						const auto vecBezierPoints = GetBezierPoints( _AimContext.vecCurrentAngle, _AimContext.vecTargetAngle, _Config->_BezierOrders, _Config->iCurrentOrders + 1 );
 						const auto vecPoint = GetBezierPoint( vecBezierPoints, _AimContext.flBezierRatio );
-
-						//const auto flAngle = atan2( vecDifference.x, vecDifference.y );
-						//float flSine, flCosine;
-						//DirectX::XMScalarSinCos( &flSine, &flCosine, flAngle );
-						//vecBezierPoints.emplace_back( vecTemp );
-						//
-						//for( auto i = 0; i <= _Config->iCurrentOrders; i++ )
-						//{
-						//	const auto& _Order = _Config->_BezierOrders[ i ];
-						//	const auto vecBisection = vecTemp - vecDifference * _Order.flBisectionPoint;
-						//	auto vecCurrent = vecBisection;
-						//	vecCurrent.y -= flSine * _Order.flDistance;
-						//	vecCurrent.x += flCosine * _Order.flDistance;
-						//	vecBezierPoints.emplace_back( vecCurrent );
-						//}
-						//
-						//vecBezierPoints.emplace_back( vecTemp2 );
-						//
-						//do
-						//{
-						//	std::vector< Vector > vecNewPoints { };
-						//	for ( auto i = 0; i < vecBezierPoints.size( ) - 1; i++ )
-						//	{
-						//		const auto& vecPointOne = vecBezierPoints[ i ], vecPointTwo = vecBezierPoints[ i + 1 ];
-						//		vecNewPoints.emplace_back( vecPointOne - ( vecPointOne - vecPointTwo ) * _AimContext.flBezierRatio );
-						//	}
-						//	vecBezierPoints = vecNewPoints;
-						//} while ( vecBezierPoints.size( ) > 1 );
 
 						vecNewAngles = vecPoint;
 						vecNewAngles.z = pClientState->viewangles.z;
@@ -277,7 +244,7 @@ namespace PX::Features::Combat
 					_AimContext.flOldForward = pCmd->forwardmove;
 					_AimContext.flOldSide = pCmd->sidemove;
 					_AimContext.flOldUp = pCmd->upmove;
-					pCmd->viewangles = qTargetAngle;
+					pCmd->viewangles = _AimContext.qTargetAngle;
 					_AimContext.bRestoreAngle = true;
 					CorrectMovement( _AimContext.qOldAngles, pCmd, _AimContext.flOldForward, _AimContext.flOldSide );
 				};
@@ -410,6 +377,32 @@ namespace PX::Features::Combat
 			if ( CalculateCrosshairDistance( pLocalPlayer, pTarget, _AimContext.iHitbox, pCmd, _Config->bWorldlyCrosshairDistance.Get( ) ) )
 				return true;
 		return -1 != ( _AimContext.iHitbox = FindHitbox( pLocalPlayer, pTarget, pCmd ) );
+	}
+
+	void PX_API ResetAimPosition( player_ptr_t pLocalPlayer, CUserCmd* pCmd )
+	{
+		_AimContext.vecCurrentAngle = pClientState->viewangles;
+		_AimContext.vecTargetAngle = Vector( _AimContext.qTargetAngle.pitch, _AimContext.qTargetAngle.yaw, _AimContext.qTargetAngle.roll );
+
+		if ( fabsf( _AimContext.vecCurrentAngle.y ) > 90.f && fabsf( _AimContext.vecTargetAngle.y ) > 90.f )
+		{
+			if ( _AimContext.vecCurrentAngle.y < 0.f )
+				_AimContext.vecCurrentAngle.y += 360.f;
+			if ( _AimContext.vecTargetAngle.y < 0.f )
+				_AimContext.vecTargetAngle.y += 360.f;
+		}
+
+		auto& gtRay = pLocalPlayer->TraceRayFromAngle( _AimContext.qTargetAngle );
+		if ( gtRay.hit_entity != nullptr
+			 && gtRay.hit_entity->EntIndex( ) == _AimContext.iEntityIndex
+			 && gtRay.hitbox == _AimContext.iHitbox )
+			return ( void )( _AimContext.vecAimVelocity += _AimContext.vecAcceleration );
+
+		_AimContext.qTargetAngle = CalculateAngle( pLocalPlayer, _AimContext.pTarget, _AimContext.iHitbox, pCmd, &_AimContext.vecOverCompensation );
+		ClampAngles( _AimContext.qTargetAngle );
+
+		_AimContext.vecAimVelocity = ( _AimContext.vecCurrentAngle - _AimContext.vecTargetAngle ) / _Config->flAimTime;
+		_AimContext.vecAcceleration = _AimContext.vecAimVelocity / _Config->flAimAcceleration;
 	}
 
 	void PX_API ResetContext( )
