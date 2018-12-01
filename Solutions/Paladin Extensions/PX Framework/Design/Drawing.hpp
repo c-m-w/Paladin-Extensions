@@ -8,7 +8,7 @@ namespace PX::Drawing
 	{
 		FNT_TAHOMA,
 		FNT_ROBOTO,
-		//FONT_ICON,
+		FNT_ICON,
 		FNT_MAX
 	};
 

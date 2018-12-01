@@ -19,6 +19,8 @@ namespace PX::Drawing
 										 NONANTIALIASED_QUALITY, DEFAULT_PITCH, PX_XOR( L"Tahoma" ), &pFonts[ FNT_TAHOMA ] )
 			&& D3D_OK == D3DXCreateFont( pDevice, 16, 0, FW_NORMAL, 1, FALSE, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS,
 										 ANTIALIASED_QUALITY, DEFAULT_PITCH, PX_XOR( L"Roboto" ), &pFonts[ FNT_ROBOTO ] )
+			&& D3D_OK == D3DXCreateFont( pDevice, 16, 0, FW_NORMAL, 1, FALSE, DEFAULT_CHARSET, OUT_DEFAULT_PRECIS,
+										 ANTIALIASED_QUALITY, DEFAULT_PITCH, PX_XOR( L"csgo_icons Regular" ), &pFonts[ FNT_CSGO_ICON ] )
 			&& D3D_OK == D3DXCreateSprite( pDevice, &pTextSprite )
 			&& D3D_OK == D3DXCreateLine( pDevice, &pLine );
 	}

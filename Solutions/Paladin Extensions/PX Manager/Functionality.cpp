@@ -7,7 +7,7 @@ namespace Manager
 {
 	extensions_t PX_API RetrieveExtensionInformation( )
 	{
-		auto strSecurityBuffer = Decrypt( Request( PX_XOR( "https://www.paladin.rip/auth/extensions.php/" ), post_data_t { } ) );
+		auto strSecurityBuffer = Decrypt( Request( PX_XOR( "https://www.paladin-extensions.com/auth/extensions.php/" ), post_data_t { } ) );
 		if ( strSecurityBuffer.empty( ) )
 			return { };
 
@@ -24,7 +24,7 @@ namespace Manager
 
 	str_t* PX_API RetrieveLaunchInformation( )
 	{
-		auto strSecurityBuffer = Decrypt( Request( PX_XOR( "https://www.paladin.rip/auth/lastlaunch.php/" ), post_data_t { } ) );
+		auto strSecurityBuffer = Decrypt( Request( PX_XOR( "https://www.paladin-extensions.com/auth/lastlaunch.php/" ), post_data_t { } ) );
 		if ( strSecurityBuffer.empty( ) )
 			return nullptr;
 

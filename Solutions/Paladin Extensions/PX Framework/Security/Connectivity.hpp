@@ -11,9 +11,9 @@ namespace PX::Net
 	PX_SDK Types::str_t strSecretKeyIdentifier	= PX_XOR( "sk" );
 	PX_SDK Types::str_t strUniqueIDIdentifier	= PX_XOR( "uid" );
 	
-	PX_SDK Types::str_t strLoginURL		= PX_XOR( "https://www.paladin.rip/auth/auth.php/" );
-	PX_SDK Types::str_t strKeyURL		= PX_XOR( "https://www.paladin.rip/auth/key.php/" );
-	PX_SDK Types::str_t strDownloadURL	= PX_XOR( "https://www.paladin.rip/auth/download.php/" );
+	PX_SDK Types::str_t strLoginURL		= PX_XOR( "https://www.paladin-extensions.com/auth/auth.php/" );
+	PX_SDK Types::str_t strKeyURL		= PX_XOR( "https://www.paladin-extensions.com/auth/key.php/" );
+	PX_SDK Types::str_t strDownloadURL	= PX_XOR( "https://www.paladin-extensions.com/auth/download.php/" );
 
 	/** \brief Pointer where the connection information is stored. */
 	PX_SDK CURL* pConnection = nullptr;

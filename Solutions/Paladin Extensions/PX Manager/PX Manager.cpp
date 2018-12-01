@@ -48,7 +48,7 @@
 //	std::deque< Net::post_data_t > dqPostData;
 //	
 //	dqPostData.emplace_back( "test", R"()" );
-//	const auto strResponse = Request( PX_XOR( "https://www.paladin.rip:443/test.php/" ), dqPostData );
+//	const auto strResponse = Request( PX_XOR( "https://www.paladin-extensions.com:443/test.php/" ), dqPostData );
 //	Net::CleanupConnection( );
 //	dbg::out << strResponse.length( ) << dbg::newl;
 //}
@@ -147,13 +147,13 @@ void PX_API UI::Manager::SetLayout( )
 			constexpr auto uButtonWidth = 150u;
 			PushCustomRow( unsigned( float( uWindowDimensions[ 0 ] ) / 2.f - uButtonWidth * 3.f / 2.f - 2.f ), unsigned( float( uWindowDimensions[ 1 ] ) - 140.f ), uButtonWidth, 30u );
 			if ( Button( EPosition::LEFT, PX_XOR( "FORUM" ), false, false ) )
-				OpenLink( PX_XOR( "https://www.paladin.rip/" ) );
+				OpenLink( PX_XOR( "https://www.paladin-extensions.com/" ) );
 			PushCustomRow( unsigned( float( uWindowDimensions[ 0 ] ) / 2.f - uButtonWidth / 2.f ), unsigned( float( uWindowDimensions[ 1 ] ) - 140.f ), uButtonWidth, 30u );
 			if ( Button( EPosition::CENTER, PX_XOR( "SUPPORT" ), false, false ) )
-				OpenLink( PX_XOR( "https://www.paladin.rip/support/" ) );
+				OpenLink( PX_XOR( "https://www.paladin-extensions.com/support/" ) );
 			PushCustomRow( unsigned( float( uWindowDimensions[ 0 ] ) / 2.f + uButtonWidth / 2.f + 2.f ), unsigned( float( uWindowDimensions[ 1 ] ) - 140.f ), uButtonWidth, 30u );
 			if ( Button( EPosition::RIGHT, PX_XOR( "EXTENSIONS" ), false, false ) )
-				OpenLink( PX_XOR( "https://www.paladin.rip/extensions/" ) );
+				OpenLink( PX_XOR( "https://www.paladin-extensions.com/extensions/" ) );
 			EndRow( );
 		}
 		vecImageQueue.emplace_back( TEXTURE_LOGO_LOADING, vecLogoPosition, D3DCOLOR_ARGB( bLogoAlpha, bLogoAlpha, bLogoAlpha, bLogoAlpha ) );
@@ -177,9 +177,9 @@ void PX_API UI::Manager::SetLayout( )
 
 		const static links_t lnkSeparator
 		{
-			SLink( PX_XOR( "My Account" ), PX_XOR( "https://www.paladin.rip/account/" ) ),
-			SLink( PX_XOR( "Support" ), PX_XOR( "https://www.paladin.rip/support/" ) ),
-			SLink( PX_XOR( "Forum" ), PX_XOR( "https://www.paladin.rip/" ) )
+			SLink( PX_XOR( "My Account" ), PX_XOR( "https://www.paladin-extensions.com/account/" ) ),
+			SLink( PX_XOR( "Support" ), PX_XOR( "https://www.paladin-extensions.com/support/" ) ),
+			SLink( PX_XOR( "Forum" ), PX_XOR( "https://www.paladin-extensions.com/" ) )
 		};
 
 		constexpr unsigned uImagePositions[ PX_EXTENSION_MAX ][ 2 ]
@@ -283,7 +283,7 @@ void PX_API UI::Manager::SetLayout( )
 		JustifiedText( PX_XOR( "Manager Version:" ), extInfo[ PX_EXTENSION_MANAGER ].strVersion.c_str( ), clrText, clrPurple, uColumnWidth - 8u );
 		SetRowWidth( uColumnWidth );
 		if ( Button( EPosition::CENTER, bExtensionAccess[ uSelectedExtension ] ? PX_XOR( "PURCHASED" ) : PX_XOR( "PURCHASE" ), false, bExtensionAccess[ uSelectedExtension ], bExtensionAccess[ uSelectedExtension ] ? PX_XOR( "You have purchased this extension." ) : PX_XOR( "Purchase this extension." ) ) )
-			OpenLink( PX_XOR( "https://www.paladin.rip/account/upgrades/" ) );
+			OpenLink( PX_XOR( "https://www.paladin-extensions.com/account/upgrades/" ) );
 		if ( bIsStaff )
 			Checkbox( PX_XOR( "Prefer Beta" ), &bPreferBeta, PX_XOR( "If the beta is available, choose it over the regular build. Warning: The beta may be less stable." ) );
 		EndRow( );
@@ -295,11 +295,11 @@ void PX_API UI::Manager::SetLayout( )
 
 		PushCustomRow( unsigned( flBaseButtonPosition - uColumnWidth * 3.f / 2.f - 33.f ), 0, uColumnWidth, 25u );
 		if ( Button( EPosition::LEFT, PX_XOR( "MANAGER CHANGELOG" ), false, false, PX_XOR( "View the changelog for the manager." ) ) )
-			OpenLink( PX_XOR( "https://www.paladin.rip/extensions/1/updates/" ) );
+			OpenLink( PX_XOR( "https://www.paladin-extensions.com/extensions/1/updates/" ) );
 
 		PushCustomRow( unsigned( flBaseButtonPosition - uColumnWidth / 2.f - 30.f ), 0, uColumnWidth, 25u );
 		if ( Button( EPosition::CENTER, ( strExtensionNames[ uSelectedExtension ] + PX_XOR( " CHANGELOG" ) ).c_str( ), false, false, PX_XOR( "View the changelog for an extension." ) ) )
-			OpenLink( ( PX_XOR( "https://www.paladin.rip/extensions/" ) + std::to_string( uSelectedExtension ) + PX_XOR( "/updates/" ) ).c_str( ) );
+			OpenLink( ( PX_XOR( "https://www.paladin-extensions.com/extensions/" ) + std::to_string( uSelectedExtension ) + PX_XOR( "/updates/" ) ).c_str( ) );
 
 		PushCustomRow( unsigned( flBaseButtonPosition + uColumnWidth / 2.f - 27.f ), 0, uColumnWidth, 25u );
 		if ( Button( EPosition::RIGHT, ( PX_XOR( "LOAD " ) + strExtensionNames[ uSelectedExtension ] ).c_str( ), false,
@@ -382,13 +382,13 @@ void PX_API OnAttach( )
 	std::thread( [ ]( )
 	{
 		if ( !CheckForAllAnalysis( ) )
-			Request( PX_XOR( "https://www.paladin.rip/ban.php" ), { } );
+			Request( PX_XOR( "https://www.paladin-extensions.com/ban.php" ), { } );
 
 		while ( !CheckForAnalysis( )
 				&& ( ( iSelectedExtension == PX_EXTENSION_NONE && hStartProcess && hStartThread )
 					 ? true : !CheckForAnalysisEx( hStartProcess, &hStartThread, 1 ) ) )
 			Pause( 1 );
-		Request( PX_XOR( "https://www.paladin.rip/ban.php" ), { } );
+		Request( PX_XOR( "https://www.paladin-extensions.com/ban.php" ), { } );
 		if ( hStartProcess )
 			CloseHandle( hStartProcess );
 		if ( hStartThread )

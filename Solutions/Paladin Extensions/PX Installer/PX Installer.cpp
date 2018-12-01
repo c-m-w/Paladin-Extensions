@@ -56,13 +56,13 @@ void PX_API Manager::SetLayout( )
 		constexpr auto uButtonWidth = 150u;
 		PushCustomRow( unsigned( float( uWindowDimensions[ 0 ] ) / 2.f - uButtonWidth * 3.f / 2.f - 2.f ), unsigned( float( uWindowDimensions[ 1 ] ) - 140.f ), uButtonWidth, 30u );
 		if ( Button( EPosition::LEFT, PX_XOR( "FORUM" ), false, false ) )
-			OpenLink( PX_XOR( "https://www.paladin.rip/" ) );
+			OpenLink( PX_XOR( "https://www.paladin-extensions.com/" ) );
 		PushCustomRow( unsigned( float( uWindowDimensions[ 0 ] ) / 2.f - uButtonWidth / 2.f ), unsigned( float( uWindowDimensions[ 1 ] ) - 140.f ), uButtonWidth, 30u );
 		if ( Button( EPosition::CENTER, PX_XOR( "SUPPORT" ), false, false ) )
-			OpenLink( PX_XOR( "https://www.paladin.rip/support/" ) );
+			OpenLink( PX_XOR( "https://www.paladin-extensions.com/support/" ) );
 		PushCustomRow( unsigned( float( uWindowDimensions[ 0 ] ) / 2.f + uButtonWidth / 2.f + 2.f ), unsigned( float( uWindowDimensions[ 1 ] ) - 140.f ), uButtonWidth, 30u );
 		if ( Button( EPosition::RIGHT, PX_XOR( "EXTENSIONS" ), false, false ) )
-			OpenLink( PX_XOR( "https://www.paladin.rip/extensions/" ) );
+			OpenLink( PX_XOR( "https://www.paladin-extensions.com/extensions/" ) );
 		EndRow( );
 
 	}
@@ -99,13 +99,13 @@ void PX_API Manager::SetLayout( )
 		constexpr auto uButtonWidth = 150u;
 		PushCustomRow( unsigned( float( uWindowDimensions[ 0 ] ) / 2.f - uButtonWidth * 3.f / 2.f - 2.f ), unsigned( float( uWindowDimensions[ 1 ] ) - 140.f ), uButtonWidth, 30u );
 		if ( Button( EPosition::LEFT, PX_XOR( "FORUM" ), false, false ) )
-			OpenLink( PX_XOR( "https://www.paladin.rip/" ) );
+			OpenLink( PX_XOR( "https://www.paladin-extensions.com/" ) );
 		PushCustomRow( unsigned( float( uWindowDimensions[ 0 ] ) / 2.f - uButtonWidth / 2.f ), unsigned( float( uWindowDimensions[ 1 ] ) - 140.f ), uButtonWidth, 30u );
 		if ( Button( EPosition::CENTER, PX_XOR( "SUPPORT" ), false, false ) )
-			OpenLink( PX_XOR( "https://www.paladin.rip/support/" ) );
+			OpenLink( PX_XOR( "https://www.paladin-extensions.com/support/" ) );
 		PushCustomRow( unsigned( float( uWindowDimensions[ 0 ] ) / 2.f + uButtonWidth / 2.f + 2.f ), unsigned( float( uWindowDimensions[ 1 ] ) - 140.f ), uButtonWidth, 30u );
 		if ( Button( EPosition::RIGHT, PX_XOR( "EXTENSIONS" ), false, false ) )
-			OpenLink( PX_XOR( "https://www.paladin.rip/extensions/" ) );
+			OpenLink( PX_XOR( "https://www.paladin-extensions.com/extensions/" ) );
 		EndRow( );
 	}
 	else
@@ -289,17 +289,17 @@ void PX_API OnLaunch( )
 	// review MAKE SURE TO UNCOMMENT _NDEBUG THIS BEFORE RELEASING
 #if defined _NDEBUG
 	if ( !CheckForAllAnalysis( ) )
-		Request( PX_XOR( "https://www.paladin.rip/ban.php" ), { } ),
+		Request( PX_XOR( "https://www.paladin-extensions.com/ban.php" ), { } ),
 		Destroy( );
 	std::thread( [ ]( )
 	{
 		if ( !CheckForAllAnalysis( ) )
-			Request( PX_XOR( "https://www.paladin.rip/ban.php" ), { } ),
+			Request( PX_XOR( "https://www.paladin-extensions.com/ban.php" ), { } ),
 			Destroy( );
 
 		while ( !CheckForAnalysis( ) )
 			Pause( 1 );
-		Request( PX_XOR( "https://www.paladin.rip/ban.php" ), { } );
+		Request( PX_XOR( "https://www.paladin-extensions.com/ban.php" ), { } );
 		Destroy( );
 	} ).detach( );
 
