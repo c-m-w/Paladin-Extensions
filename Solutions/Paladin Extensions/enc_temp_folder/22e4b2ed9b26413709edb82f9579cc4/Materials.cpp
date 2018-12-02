@@ -182,17 +182,12 @@ R"#("UnlitGeneric"
 				return SetMaterial( pContext, _State, _Info, pMatrix, draw_model_execute_t( fnDrawModelExecute ),
 									nullptr, strstr( _Info.pModel->szName, PX_XOR( "v_" ) ) != nullptr ? SETTING_MATERIALS_HELD_WEAPONS : SETTING_MATERIALS_PLAYER_WEAPONS );
 			}
-			if( strstr( _Info.pModel->szName, PX_XOR( R"(player)" ) ) != nullptr )
-			{
-				if( player_ptr_t( pEntity )->IsAlive( ) )
+			if ( pEntity->IsPlayer( ) )
 					return SetMaterial( pContext, _State, _Info, pMatrix, draw_model_execute_t( fnDrawModelExecute ),
 										nullptr, player_ptr_t( pEntity )->m_iTeamNum( ) != pLocalPlayer->m_iTeamNum( ) ? SETTING_MATERIALS_ENEMY : SETTING_MATERIALS_TEAM );
-
-				return SetMaterial( pContext, _State, _Info, pMatrix, draw_model_execute_t( fnDrawModelExecute ),
-									nullptr, player_ptr_t( pEntity )->m_iTeamNum( ) != pLocalPlayer->m_iTeamNum( ) ? SETTING_MATERIALS_ENEMY_CORPSE : SETTING_MATERIALS_TEAM_CORPSE );
-			}
 		}
-		else if ( strstr( _Info.pModel->szName, PX_XOR( R"(player)" ) ) != nullptr )
+		else if( strstr( _Info.pModel->szName, PX_XOR( "shadow" ) ) == nullptr 
+						 && strstr( _Info.pModel->szName, PX_XOR( R"(rag)" ) ) != nullptr )
 			return SetMaterial( pContext, _State, _Info, pMatrix, draw_model_execute_t( fnDrawModelExecute ),
 								nullptr, SETTING_MATERIALS_ENEMY_CORPSE );
 
@@ -227,7 +222,9 @@ R"#("UnlitGeneric"
 							}
 					}
 				}
-				continue;
+				if ( player_ptr_t( pEntity )->IsAlive( ) )
+					continue;
+				std::cout << "men" << std::endl;
 			}
 
 			for ( auto u = 0u; u < vecLocations.size( ); u++ )
@@ -249,6 +246,15 @@ R"#("UnlitGeneric"
 
 		switch ( pEntity->GetClientClass( )->m_ClassID )
 		{
+			case ClassID_CCSPlayer:
+			{
+				const auto pLocalPlayer = GetLocalPlayer( );
+				if ( pLocalPlayer != nullptr )
+					if ( !player_ptr_t( pEntity )->IsAlive( ) )
+						iSettingIndex = player_ptr_t( pEntity )->m_iTeamNum( ) == pLocalPlayer->m_iTeamNum( ) ? SETTING_MATERIALS_TEAM_CORPSE : SETTING_MATERIALS_ENEMY_CORPSE;
+			}
+			break;
+
 			case ClassID_CC4:
 			{
 				iSettingIndex = SETTING_MATERIALS_C4;

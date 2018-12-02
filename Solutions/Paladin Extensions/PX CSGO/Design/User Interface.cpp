@@ -667,6 +667,8 @@ namespace PX::UI::Manager
 								PX_XOR( "Self" ),
 								PX_XOR( "Teammates" ),
 								PX_XOR( "Enemies" ),
+								PX_XOR( "Team Corpse" ),
+								PX_XOR( "Enemy Corpse" ),
 								PX_XOR( "Chicken" )
 							},
 							{
@@ -762,7 +764,7 @@ namespace PX::UI::Manager
 							PX_XOR( "Flat" ),
 							PX_XOR( "Flat Ignore Walls" ),
 							PX_XOR( "Reflective" ),
-							//PX_XOR( "Glow" ),
+							PX_XOR( "Glow" ),
 							PX_XOR( "Glass" ),
 							PX_XOR( "Crystal" ),
 							PX_XOR( "Gold" )

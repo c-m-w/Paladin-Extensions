@@ -192,9 +192,6 @@ R"#("UnlitGeneric"
 									nullptr, player_ptr_t( pEntity )->m_iTeamNum( ) != pLocalPlayer->m_iTeamNum( ) ? SETTING_MATERIALS_ENEMY_CORPSE : SETTING_MATERIALS_TEAM_CORPSE );
 			}
 		}
-		else if ( strstr( _Info.pModel->szName, PX_XOR( R"(player)" ) ) != nullptr )
-			return SetMaterial( pContext, _State, _Info, pMatrix, draw_model_execute_t( fnDrawModelExecute ),
-								nullptr, SETTING_MATERIALS_ENEMY_CORPSE );
 
 		return false;
 	}
