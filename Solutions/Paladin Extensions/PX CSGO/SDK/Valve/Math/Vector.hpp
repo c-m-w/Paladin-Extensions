@@ -201,6 +201,10 @@ public:
     {
         return Vector(x / v.x, y / v.y, z / v.z);
     }
+    bool operator<=(const Vector& v) const
+    {
+		return x <= v.x && y <= v.y && z <= v.z;
+    }
 	void Rotate2D( float flDegrees, Vector2D vecSubtractVector ) 
 	{
 		float flRadians = D3DXToRadian( flDegrees );
@@ -212,6 +216,10 @@ public:
 
 		x = ( vecOld.x * flCos ) - ( vecOld.y * flSin ) + vecSubtractVector.x;
 		y = ( vecOld.x * flSin ) + ( vecOld.y * flCos ) + vecSubtractVector.y;
+    }
+    Vector Absolute()
+    {
+		return { fabsf( x ), fabsf( y ), fabsf( z ) };
     }
 
     float x, y, z;

@@ -322,8 +322,6 @@ namespace PX::Features
 
 		struct combat_t
 		{
-			constexpr static float SMOOTHING_MIN = 1.f;
-			constexpr static float SMOOTHING_MAX = 100.f;
 			struct trigger_t
 			{
 				struct weapon_t
@@ -358,7 +356,6 @@ namespace PX::Features
 					float flMaxWorldCrosshairDistance = 1.f;
 					float flAimTime = 1.5f; // 0.f -> 1.5f
 					float flAimAcceleration = 0.f; // -1.f -> 1.f degrees/sec^2
-					float flSmoothFactor = SMOOTHING_MIN;
 					Tools::bezier_order_t _BezierOrders[ 7 ];
 					int iCurrentOrders = 0;
 					int iSmoothMode = SMOOTH_LINEAR;
@@ -375,7 +372,6 @@ namespace PX::Features
 					toggle_t bOnlyWhileShooting = false;
 					toggle_t bUseSeparate = false;
 					float flCompensationAmount = 1.f; // 0.f to 2.f
-					float flStandaloneSmoothing = SMOOTHING_MIN;
 				} _All, _WeaponTypes[ WEAPONTYPE_MACHINEGUN + 1 ] { }, _IndividualWeapons[ ITEM_MAX ] { };
 			} _RecoilCompensation;
 		} _Combat;

@@ -1002,7 +1002,7 @@ namespace PX::UI::Manager
 
 			case AIM:
 			{
-				SetMainWindowHeight( 637u );
+				SetMainWindowHeight( 687u );
 				SetMainWindowWidth( 1231u );
 				const auto fnDrawAimOptions = [ ]( settings_t::combat_t::aim_t::weapon_t* pConfig, char* szSmoothFactor, char* szCrosshairDistance, char* szBisection, char* szDistance, char* szOverCompensation )
 				{
@@ -1129,11 +1129,19 @@ namespace PX::UI::Manager
 					{
 						BeginRow( 30, 9, ROW_CUSTOM );
 
-						pConfig->flSmoothFactor = Slider( PX_XOR( "Smooth Factor" ), szSmoothFactor, settings_t::combat_t::SMOOTHING_MIN, settings_t::combat_t::SMOOTHING_MAX, pConfig->flSmoothFactor, 10, 10, GROUPBOX_COLUMN_WIDTH, 30, 2 );
+						pConfig->flAimTime = Slider( PX_XOR( "Aim Time" ), szSmoothFactor, 0.01f, 1.50f, pConfig->flAimTime, 10, 10, GROUPBOX_COLUMN_WIDTH, 30, 2 );
 
-						pConfig->flMaxCrosshairDistance = Slider( PX_XOR( "Max Distance" ), szCrosshairDistance, 0.f, 254.558441227f, pConfig->flMaxCrosshairDistance, GROUPBOX_COLUMN_WIDTH + 30, 10, GROUPBOX_COLUMN_WIDTH, 30, 2 );
+						pConfig->flAimAcceleration = Slider( PX_XOR( "Aim Acceleration" ), szSmoothFactor, -5.f, 5.f, pConfig->flAimAcceleration, GROUPBOX_COLUMN_WIDTH + 30, 10, GROUPBOX_COLUMN_WIDTH, 30, 2 );
 
-						pConfig->flOverCompensation = Slider( PX_XOR( "Over Compensation" ), szOverCompensation, 0.f, 5.f, pConfig->flOverCompensation, GROUPBOX_COLUMN_WIDTH * 2 + 40, 10, GROUPBOX_COLUMN_WIDTH, 30, 2 );
+						pConfig->flMaxCrosshairDistance = Slider( PX_XOR( "Max Distance" ), szCrosshairDistance, 0.f, 254.558441227f, pConfig->flMaxCrosshairDistance, GROUPBOX_COLUMN_WIDTH * 2 + 40, 10, GROUPBOX_COLUMN_WIDTH, 30, 2 );
+
+						EndRow( );
+					}
+
+					{
+						BeginRow( 30, 3, ROW_CUSTOM );
+						
+						pConfig->flOverCompensation = Slider( PX_XOR( "Over Compensation" ), szOverCompensation, 0.f, 5.f, pConfig->flOverCompensation, 10, 10, GROUPBOX_COLUMN_WIDTH, 30, 2 );
 
 						EndRow( );
 					}
@@ -1163,7 +1171,7 @@ namespace PX::UI::Manager
 				static auto uCurrentWeapon = 0u;
 				static int iWeaponGroup = WEAPONTYPE_PISTOL;
 
-				if ( BeginGroupbox( 200, 150, 500, 220, PX_XOR( "Global Configuration" ) ) )
+				if ( BeginGroupbox( 200, 150, 500, 250, PX_XOR( "Global Configuration" ) ) )
 				{
 					static char szSmooth[ 32 ] { }, szCrosshairDistance[ 32 ] { }, szBisect[ 32 ] { }, szDistance[ 32 ] { }, szOverCompensation[ 32 ] { };
 					{
@@ -1173,7 +1181,7 @@ namespace PX::UI::Manager
 					EndGroupbox( );
 				}
 
-				if ( BeginGroupbox( 400, 313, 500, 260, PX_XOR( "Group Configurations" ) ) )
+				if ( BeginGroupbox( 400, 343, 500, 290, PX_XOR( "Group Configurations" ) ) )
 				{
 					static char szSmooth[ 32 ] { }, szCrosshairDistance[ 32 ] { }, szBisect[ 32 ] { }, szDistance[ 32 ] { }, szOverCompensation[ 32 ] { };
 					{
@@ -1201,7 +1209,7 @@ namespace PX::UI::Manager
 					EndGroupbox( );
 				}
 
-				if ( BeginGroupbox( 914, 88, 500, 290, PX_XOR( "Weapon Configurations" ) ) )
+				if ( BeginGroupbox( 914, 88, 500, 320, PX_XOR( "Weapon Configurations" ) ) )
 				{
 					static char szSmooth[ 32 ] { }, szCrosshairDistance[ 32 ] { }, szBisect[ 32 ] { }, szDistance[ 32 ] { }, szOverCompensation[ 32 ] { };
 					{
@@ -1234,7 +1242,7 @@ namespace PX::UI::Manager
 					EndGroupbox( );
 				}
 
-				if ( BeginGroupbox( 1427, -107, 500, 192, PX_XOR( "Aim Path Preview" ) ) )
+				if ( BeginGroupbox( 1427, -137, 500, 192, PX_XOR( "Aim Path Preview" ) ) )
 				{
 					static auto iConfig = 0;
 					{
@@ -1292,8 +1300,8 @@ namespace PX::UI::Manager
 							}
 							else
 							{
-								flRatio += fabsf( pConfig->flSmoothFactor -
-									( settings_t::combat_t::SMOOTHING_MAX + settings_t::combat_t::SMOOTHING_MIN ) ) / ( settings_t::combat_t::SMOOTHING_MAX * 5.f );
+								//flRatio += fabsf( pConfig->flSmoothFactor -
+								//	( settings_t::combat_t::SMOOTHING_MAX + settings_t::combat_t::SMOOTHING_MIN ) ) / ( settings_t::combat_t::SMOOTHING_MAX * 5.f );
 								flRatio = std::clamp( flRatio, 0.f, 1.f );
 							}
 
@@ -1347,7 +1355,7 @@ namespace PX::UI::Manager
 						}
 
 						const auto recMainWindow = GetActiveWindowBounds( );
-						Graph( recMainWindow.x + 900.f, recMainWindow.y + 460.f, 300.f, 150, 10, 5, &vecLinePoints[ 0 ], vecLinePoints.size( ), vecDots, 2u, i );
+						Graph( recMainWindow.x + 900.f, recMainWindow.y + 490.f, 300.f, 150, 10, 5, &vecLinePoints[ 0 ], vecLinePoints.size( ), vecDots, 2u, i );
 					}
 					EndGroupbox( );
 				}
@@ -1377,12 +1385,10 @@ namespace PX::UI::Manager
 					}
 
 					{
-						BeginRow( 30, 6, ROW_CUSTOM );
+						BeginRow( 30, 3, ROW_CUSTOM );
 
 						pConfig->flCompensationAmount = Slider( PX_XOR( "Compensation Amount" ), szCompensationAmount, 0.f, 1.5f, pConfig->flCompensationAmount, 10, 10, GROUPBOX_COLUMN_WIDTH, 30, 2 );
-
-						pConfig->flStandaloneSmoothing = Slider( PX_XOR( "Bezier Distance" ), szSmoothing, settings_t::combat_t::SMOOTHING_MIN, settings_t::combat_t::SMOOTHING_MAX, pConfig->flStandaloneSmoothing, GROUPBOX_COLUMN_WIDTH + 30, 10, GROUPBOX_COLUMN_WIDTH, 30, 2 );
-
+						
 						EndRow( );
 					}
 				};

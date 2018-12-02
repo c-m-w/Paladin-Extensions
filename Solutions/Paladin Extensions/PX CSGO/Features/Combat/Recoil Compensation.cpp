@@ -42,11 +42,11 @@ namespace PX::Features::Combat
 		if ( hActiveWeapon->CanFire( ) )
 		{
 			angPreviousBulletRecoil = pLocalPlayer->m_aimPunchAngle( );
-			if ( !_Config->bOnlyWhileShooting.Get( ) && !( pCmd->buttons & IN_ATTACK ) )
-				angRecoil = ( angStartAimAngle - QAngle( pClientState->viewangles.x, pClientState->viewangles.y, pClientState->viewangles.z ) ) / settings_t::combat_t::SMOOTHING_MIN / _Config->flStandaloneSmoothing;
-			else
-				// review flIdleInterval or flCycleTime, not sure
-				angRecoil = angPreviousBulletRecoil / ceilf( hActiveWeapon->GetCSWeaponData( )->flCycleTime / pGlobalVariables->m_flIntervalPerTick );
+			//if ( !_Config->bOnlyWhileShooting.Get( ) && !( pCmd->buttons & IN_ATTACK ) )
+			//	angRecoil = ( angStartAimAngle - QAngle( pClientState->viewangles.x, pClientState->viewangles.y, pClientState->viewangles.z ) ) / settings_t::combat_t::SMOOTHING_MIN / _Config->flStandaloneSmoothing;
+			//else
+			//	// review flIdleInterval or flCycleTime, not sure
+			//	angRecoil = angPreviousBulletRecoil / ceilf( hActiveWeapon->GetCSWeaponData( )->flCycleTime / pGlobalVariables->m_flIntervalPerTick );
 		}
 		ClampAngles( angRecoil );
 		HumanizeAngles( angRecoil, pLocalPlayer );
