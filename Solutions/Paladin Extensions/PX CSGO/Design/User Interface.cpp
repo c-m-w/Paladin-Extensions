@@ -1131,7 +1131,7 @@ namespace PX::UI::Manager
 
 						pConfig->flAimTime = Slider( PX_XOR( "Aim Time" ), szSmoothFactor, 0.01f, 1.50f, pConfig->flAimTime, 10, 10, GROUPBOX_COLUMN_WIDTH, 30, 2 );
 
-						pConfig->flAimAcceleration = Slider( PX_XOR( "Aim Acceleration" ), szSmoothFactor, -5.f, 5.f, pConfig->flAimAcceleration, GROUPBOX_COLUMN_WIDTH + 30, 10, GROUPBOX_COLUMN_WIDTH, 30, 2 );
+						pConfig->flAimAcceleration = Slider( PX_XOR( "Acceleration Factor" ), szSmoothFactor, -0.99f, 0.99f, pConfig->flAimAcceleration, GROUPBOX_COLUMN_WIDTH + 30, 10, GROUPBOX_COLUMN_WIDTH, 30, 2 );
 
 						pConfig->flMaxCrosshairDistance = Slider( PX_XOR( "Max Distance" ), szCrosshairDistance, 0.f, 254.558441227f, pConfig->flMaxCrosshairDistance, GROUPBOX_COLUMN_WIDTH * 2 + 40, 10, GROUPBOX_COLUMN_WIDTH, 30, 2 );
 

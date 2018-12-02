@@ -361,16 +361,19 @@ namespace PX::Features::Combat
 
 	void PX_API ResetAimPosition( player_ptr_t pLocalPlayer, CUserCmd* pCmd )
 	{
+		constexpr auto fnGetAcceleration = [ ]( float flFirst, float flSecond, float flVelocity, float flTime, float flFactor )
+		{
+			const auto flDistance = flFirst - flSecond;
+			if ( flDistance == 0.f )
+				return 0.f;
+
+			const auto flFinalVelocity = flVelocity * ( 1.f + flFactor );
+			const auto flAcceleration = ( powf( flFinalVelocity, 2.f ) - powf( flVelocity, 2.f ) ) / ( 2.f * flDistance );
+			return flAcceleration;
+		};
+
 		_AimContext.vecCurrentAngle = pClientState->viewangles;
 		_AimContext.vecTargetAngle = Vector( _AimContext.qTargetAngle.pitch, _AimContext.qTargetAngle.yaw, _AimContext.qTargetAngle.roll );
-
-		//if ( _AimContext.vecCurrentAngle.y > 90.f && _AimContext.vecTargetAngle.y > 90.f )
-		//{
-		//	if ( _AimContext.vecCurrentAngle.y < 0.f )
-		//		_AimContext.vecCurrentAngle.y += 360.f;
-		//	if ( _AimContext.vecTargetAngle.y < 0.f )
-		//		_AimContext.vecTargetAngle.y += 360.f;
-		//}
 
 		auto& gtRay = pLocalPlayer->TraceRayFromAngle( _AimContext.qTargetAngle );
 		if ( gtRay.hit_entity != nullptr
@@ -379,6 +382,8 @@ namespace PX::Features::Combat
 		{
 			if ( _AimContext.vecAimAngle != _AimContext.vecTargetAngle )
 			{
+				_AimContext.vecAimVelocity += _AimContext.vecAimAcceleration * pGlobalVariables->m_flIntervalPerTick;
+
 				if ( ( _AimContext.vecAimAngle - _AimContext.vecTargetAngle ).Absolute( ) <= ( _AimContext.vecAimVelocity * pGlobalVariables->m_flIntervalPerTick ).Absolute( ) )
 				{
 					_AimContext.vecAimAngle = _AimContext.vecTargetAngle;
@@ -386,18 +391,20 @@ namespace PX::Features::Combat
 					_AimContext.vecAimVelocity.Zero( );
 				}
 				else
-					_AimContext.vecAimAngle -= ( _AimContext.vecAimVelocity += _AimContext.vecAimAcceleration * pGlobalVariables->m_flIntervalPerTick ) * pGlobalVariables->m_flIntervalPerTick;
+					_AimContext.vecAimAngle -= _AimContext.vecAimVelocity * pGlobalVariables->m_flIntervalPerTick;
 			}
 
 			if( _AimContext.flBezierRatio != 1.f )
 			{
+				_AimContext.flBezierVelocity += _AimContext.flBezierAcceleration * pGlobalVariables->m_flIntervalPerTick;
+
 				if ( _AimContext.flBezierRatio + _AimContext.flBezierVelocity * pGlobalVariables->m_flIntervalPerTick >= 1.f )
 				{
 					_AimContext.flBezierRatio = 1.f;
 					_AimContext.flBezierVelocity = _AimContext.flBezierAcceleration = 0.f;
 				}
 				else
-					_AimContext.flBezierRatio += ( _AimContext.flBezierVelocity += _AimContext.flBezierAcceleration * pGlobalVariables->m_flIntervalPerTick ) * pGlobalVariables->m_flIntervalPerTick;
+					_AimContext.flBezierRatio += _AimContext.flBezierVelocity * pGlobalVariables->m_flIntervalPerTick;
 			}
 
 			return;
@@ -410,8 +417,10 @@ namespace PX::Features::Combat
 
 		_AimContext.vecAimVelocity = ( _AimContext.vecCurrentAngle - _AimContext.vecTargetAngle ) / _Config->flAimTime;
 		_AimContext.flBezierVelocity = powf( _Config->flAimTime, -1.f );
-		_AimContext.vecAimAcceleration = _AimContext.vecAimVelocity * _Config->flAimAcceleration;
-		_AimContext.flBezierAcceleration = _AimContext.flBezierVelocity * _Config->flAimAcceleration;
+		_AimContext.vecAimAcceleration = Vector( fnGetAcceleration( _AimContext.vecStartPos.x, _AimContext.vecTargetAngle.x, _AimContext.vecAimVelocity.x, _Config->flAimTime, _Config->flAimAcceleration ),
+												 fnGetAcceleration( _AimContext.vecStartPos.y, _AimContext.vecTargetAngle.y, _AimContext.vecAimVelocity.y, _Config->flAimTime, _Config->flAimAcceleration ),
+												 fnGetAcceleration( _AimContext.vecStartPos.z, _AimContext.vecTargetAngle.z, _AimContext.vecAimVelocity.z, _Config->flAimTime, _Config->flAimAcceleration ) );
+		_AimContext.flBezierAcceleration = fnGetAcceleration( 1.f, 0.f, _AimContext.flBezierVelocity, _Config->flAimTime, _Config->flAimAcceleration );
 		_AimContext.vecAimAngle = _AimContext.vecCurrentAngle;
 	}
 
