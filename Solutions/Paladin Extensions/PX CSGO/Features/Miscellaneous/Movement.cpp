@@ -12,7 +12,7 @@ namespace PX::Features::Miscellaneous
 
 		const auto movetype = pLocalPlayer->movetype( );
 		if ( movetype != MOVETYPE_NOCLIP && movetype != MOVETYPE_LADDER )
-			if ( _Settings._Miscellaneous._Movement.bAutomaticJumpMode.Get( ) || pCmd->buttons & IN_JUMP )
+			if ( _Settings._Miscellaneous._Movement.bAutomaticJumpMode.Get( ) )
 				if ( !( pLocalPlayer->m_fFlags( ) & FL_ONGROUND )
  					 || pGlobalVariables->m_iTickCount % ( _Settings._Miscellaneous._Movement.iMissTicks + 1 ) )
 					pCmd->buttons &= ~IN_JUMP;

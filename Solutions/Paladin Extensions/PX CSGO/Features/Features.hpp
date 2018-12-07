@@ -369,7 +369,7 @@ namespace PX::Features
 				{
 					toggle_t bEnabled = false;
 					toggle_t bStandalone = false;
-					toggle_t bOnlyWhileShooting = false;
+					toggle_t bNoRefractoryCompensation = false;
 					toggle_t bUseSeparate = false;
 					float flCompensationAmount = 1.f; // 0.f to 2.f
 				} _All, _WeaponTypes[ WEAPONTYPE_MACHINEGUN + 1 ] { }, _IndividualWeapons[ ITEM_MAX ] { };

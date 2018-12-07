@@ -44,7 +44,7 @@ public:
 	QAngle              m_angPreviousViewAnglesTilt;    //0xD0
 	float               m_flLastForwardMove;            //0xDC
 	int                 m_nClearInputState;             //0xE0
-	char                pad_0xE4[ 0x8 ];                  //0xE4
-	CUserCmd*           m_pCommands;                    //0xEC
-	CVerifiedUserCmd*   m_pVerifiedCommands;            //0xF0
+	char                pad_0xE4[ 0x10 ];               //0xE4
+	CUserCmd*           m_pCommands;                    //0xF4
+	CVerifiedUserCmd*   m_pVerifiedCommands;            //0xF8
 };

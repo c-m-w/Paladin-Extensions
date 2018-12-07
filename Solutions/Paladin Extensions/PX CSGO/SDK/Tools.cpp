@@ -177,7 +177,7 @@ namespace PX::Tools
 		static auto m_yaw = pConVar->FindVar( PX_XOR( "m_yaw" ) );
 		static auto zoom_sensitivity_ratio_mouse = pConVar->FindVar( PX_XOR( "zoom_sensitivity_ratio_mouse" ) );
 		int iWindowsSensitivity;
-		const auto flWindowsSensitivity = SystemParametersInfo( SPI_GETMOUSESPEED, 0, &iWindowsSensitivity, false ) ? float( iWindowsSensitivity ) / 20.f : 1.f;
+		const auto flWindowsSensitivity = SystemParametersInfo( SPI_GETMOUSESPEED, 0, &iWindowsSensitivity, false ) ? float( iWindowsSensitivity ) / 10.f : 1.f;
 		const auto flStepUnscaled = sensitivity->GetFloat( ) * flWindowsSensitivity * pLocalPlayer->m_bIsScoped( ) ? zoom_sensitivity_ratio_mouse->GetFloat( ) : 1.f;
 		const auto flStepPitch = m_pitch->GetFloat( ) * flStepUnscaled;
 		const auto flStepYaw = m_yaw->GetFloat( ) * flStepUnscaled;

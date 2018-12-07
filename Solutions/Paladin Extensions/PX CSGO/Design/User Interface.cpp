@@ -1379,7 +1379,7 @@ namespace PX::UI::Manager
 						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CalculateTextBounds( PX_XOR( "Standalone" ), 30 ).x - CHECKBOX_ICON_WIDTH );
 						Spacing( );
 
-						Checkbox( PX_XOR( "Only When Shooting" ), &pConfig->bOnlyWhileShooting, PX_XOR( "Only compensate for recoil while shooting. This will not bring your cursor back to the original position after compensating for recoil has finished." ) );
+						Checkbox( PX_XOR( "Only When Shooting" ), &pConfig->bNoRefractoryCompensation, PX_XOR( "Only compensate for recoil while shooting. This will not bring your cursor back to the original position after compensating for recoil has finished." ) );
 						
 						EndRow( );
 					}

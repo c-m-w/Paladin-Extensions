@@ -4,7 +4,7 @@
 #include "PX Debug Injector.hpp"
 
 const wstr_t wstrApplication = LR"(csgo.exe)";
-const wstr_t wstrLibraryPath = LR"(C:\Users\Cole\Documents\GitHub\Paladin-Extensions\Solutions\Paladin Extensions\Debug\PX CSGO.dll)";
+const wstr_t wstrLibraryPath = LR"(C:\Users\Jeremiah\Documents\Paladin Extensions\Solutions\Paladin Extensions\Debug\PX CSGO.dll)";
 
 int main( )
 {
