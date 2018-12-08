@@ -129,11 +129,8 @@ namespace PX::Tools
 		qAngles.pitch = std::clamp( qAngles.pitch, PX_MIN_PITCH, PX_MAX_PITCH );
 
 		// orient horizontal axis into valid ranges
-		if ( qAngles.yaw < PX_MIN_YAW || qAngles.yaw > PX_MAX_YAW )
-			qAngles.yaw += -qAngles.yaw / fabs( qAngles.yaw ) * floorf( qAngles.yaw / ( PX_REVOLUTION / 2.f ) ) * PX_REVOLUTION;
-		if ( qAngles.yaw < PX_MIN_YAW || qAngles.yaw > PX_MAX_YAW )
-			qAngles.yaw = 0.f;
-		
+		qAngles.yaw -= copysign( floorf( ( fabsf( qAngles.yaw ) + PX_REVOLUTION / 2.f ) / PX_REVOLUTION ) * PX_REVOLUTION, qAngles.yaw );
+
 		qAngles.roll = std::clamp( qAngles.roll, PX_MIN_ROLL, PX_MAX_ROLL );
 	}
 
@@ -147,10 +144,7 @@ namespace PX::Tools
 		vecAngles.x = std::clamp( vecAngles.x, PX_MIN_PITCH, PX_MAX_PITCH );
 
 		// orient horizontal axis into valid ranges
-		if ( vecAngles.y < PX_MIN_YAW || vecAngles.y > PX_MAX_YAW )
-			vecAngles.y += -vecAngles.y / fabs( vecAngles.y ) * floorf( vecAngles.y / ( PX_REVOLUTION / 2.f ) ) * PX_REVOLUTION;
-		if ( vecAngles.y < PX_MIN_YAW || vecAngles.y > PX_MAX_YAW )
-			vecAngles.y = 0.f; // just in case something messes up
+		vecAngles.y -= copysign( floorf( ( fabsf( vecAngles.y ) + PX_REVOLUTION / 2.f ) / PX_REVOLUTION ) * PX_REVOLUTION, vecAngles.y );
 		
 		vecAngles.z = std::clamp( vecAngles.z, PX_MIN_ROLL, PX_MAX_ROLL );
 	}
@@ -165,8 +159,9 @@ namespace PX::Tools
 		// assure delta is max sensitivity, 10000
 		const auto angView = QAngle( pClientState->viewangles.x, pClientState->viewangles.y, 0.f );
 		auto angDelta = qAngles - angView;
+		ClampAngles( angDelta );
 		angDelta.roll = 0.f;
-		const auto flDelta = sqrtf( powf( angDelta.pitch, 2.f ) * powf( angDelta.yaw, 2.f ) );
+		const auto flDelta = sqrtf( powf( angDelta.pitch, 2.f ) + powf( angDelta.yaw, 2.f ) );
 
 		if ( flDelta > PX_MAX_ANGLE_DELTA )
 			angDelta *= PX_MAX_ANGLE_DELTA / flDelta;
@@ -178,7 +173,7 @@ namespace PX::Tools
 		static auto zoom_sensitivity_ratio_mouse = pConVar->FindVar( PX_XOR( "zoom_sensitivity_ratio_mouse" ) );
 		int iWindowsSensitivity;
 		const auto flWindowsSensitivity = SystemParametersInfo( SPI_GETMOUSESPEED, 0, &iWindowsSensitivity, false ) ? float( iWindowsSensitivity ) / 10.f : 1.f;
-		const auto flStepUnscaled = sensitivity->GetFloat( ) * flWindowsSensitivity * pLocalPlayer->m_bIsScoped( ) ? zoom_sensitivity_ratio_mouse->GetFloat( ) : 1.f;
+		const auto flStepUnscaled = sensitivity->GetFloat( ) * flWindowsSensitivity * ( pLocalPlayer->m_bIsScoped( ) ? zoom_sensitivity_ratio_mouse->GetFloat( ) : 1.f );
 		const auto flStepPitch = m_pitch->GetFloat( ) * flStepUnscaled;
 		const auto flStepYaw = m_yaw->GetFloat( ) * flStepUnscaled;
 

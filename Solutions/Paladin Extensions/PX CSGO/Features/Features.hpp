@@ -381,7 +381,6 @@ namespace PX::Features
 			struct movement_t
 			{
 				toggle_t bAutomaticJump = false;
-				toggle_t bAutomaticJumpMode = false; // false is +jump based, true is keybind based
 				int iMissTicks = 0; // 0 -> 15
 				toggle_t bCircleStrafe = false;
 				toggle_t bEdgeJump = false;

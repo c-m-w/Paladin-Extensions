@@ -30,20 +30,36 @@ namespace PX::Features::Combat
 		if ( !_Config->bEnabled )
 			return;
 
-		QAngle angCompensation { pClientState->viewangles.x, pClientState->viewangles.y ,0.f };
-
+		static QAngle angPunch { };
+		static QAngle angPunchOld { };
 		if ( pCmd->buttons & IN_ATTACK )
 		{
-			static QAngle angPunchOld { };
-			QAngle angPunch = pLocalPlayer->m_aimPunchAngle( );
+			static bool bCompOnce = false;
 
-			angCompensation -= ( angPunch - angPunchOld ) * GetRecoilScale( ) * _Config->flCompensationAmount;
-			angPunchOld = angPunch;
+			if ( hActiveWeapon->CanFire( ) )
+			{
+				angPunch = pLocalPlayer->m_aimPunchAngle( );
+				bCompOnce = true;
+			}
+			else if ( bCompOnce )
+			{
+				QAngle angCompensation { pClientState->viewangles.x, pClientState->viewangles.y ,0.f };
 
-			ClampAngles( angCompensation );
-			//HumanizeAngles( angCompensation, pLocalPlayer );
-			pClientState->viewangles = Vector( angCompensation.pitch, angCompensation.yaw, pClientState->viewangles.z );
+				auto buffer = ( angPunch - angPunchOld ) * GetRecoilScale( ) * _Config->flCompensationAmount;
+				buffer.pitch *= 1;
+				buffer.yaw *= .6;
+				angCompensation -= buffer;
+				angPunchOld = angPunch;
+				bCompOnce = false;
+
+				ClampAngles( angCompensation );
+				HumanizeAngles( angCompensation, pLocalPlayer );
+				pClientState->viewangles = Vector( angCompensation.pitch, angCompensation.yaw, pClientState->viewangles.z );
+			}
+
 		}
+		else
+			angPunchOld = angPunch = { };
 	}
 
 	void PX_API CompensateRecoilz( const player_ptr_t pLocalPlayer, CUserCmd* pCmd )
@@ -52,6 +68,8 @@ namespace PX::Features::Combat
 		/*static QAngle angPunchCompensated { };*/
 		static QAngle angPunchLastFireable { };
 		static QAngle angPunchLastFireableCompensated { };
+		static float flMaxYAW = 0.f;
+		static float flMaxPITCH = 0.f;
 		/*static auto bResetRefractoryCompensation = false;*/
 
 		// safety and other basic checks
@@ -79,23 +97,29 @@ namespace PX::Features::Combat
 			// if we can fire, we have our recoil amount to compensate for
 			if ( hActiveWeapon->m_flNextPrimaryAttack( ) - pGlobalVariables->m_flCurrentTime <= pGlobalVariables->m_flIntervalPerTick * 2 )
 			{
-				bCompen = true;
+				//bCompen = true;
 				angPunchLastFireableCompensated = angPunchLastFireable;
 				angPunchLastFireable = pLocalPlayer->m_aimPunchAngle( );
 			}
 			else if ( hActiveWeapon->HasBullets( ) )
 			{
-				if ( bCompen )
-					angCompensation -= ( angPunchLastFireable - angPunchLastFireableCompensated ) * 2.f * _Config->flCompensationAmount;
-				bCompen = false;
-				/*
+				//if ( bCompen )
+				//	angCompensation -= ( angPunchLastFireable - angPunchLastFireableCompensated ) * 2.f * _Config->flCompensationAmount;
+				//bCompen = false;
+				
 				// we ideally only want to compensate over the length of the shot. this is as smooth as recoil control can be without lagging behind
 				// drawback: we're always 1 shot behind in our recoil control
 				const auto flTicksPerShot = hActiveWeapon->GetCSWeaponData( )->flCycleTimeAlt / pGlobalVariables->m_flIntervalPerTick;
 				const auto angCompensationAmount = ( angPunchLastFireable - angPunchLastFireableCompensated ) * GetRecoilScale( ) * _Config->flCompensationAmount / flTicksPerShot;
 
-				angCompensation -= angCompensationAmount;
-				angPunchCompensated += angCompensationAmount;*/
+				if ( flMaxYAW < angCompensationAmount.yaw )
+					flMaxYAW = angCompensationAmount.yaw;
+
+				if ( flMaxPITCH < angCompensationAmount.pitch )
+					flMaxPITCH = angCompensationAmount.pitch;
+
+				//angCompensation -= angCompensationAmount;
+				//angPunchCompensated += angCompensationAmount;
 			}
 			else
 			{
@@ -137,7 +161,7 @@ namespace PX::Features::Combat
 		{
 			//ClampAngles( angCompensation );
 			//HumanizeAngles( angCompensation, pLocalPlayer );
-			pClientState->viewangles = Vector( angCompensation.pitch, angCompensation.yaw, pClientState->viewangles.z );
+			//pClientState->viewangles = Vector( angCompensation.pitch, angCompensation.yaw, pClientState->viewangles.z );
 		}
 	}
 }

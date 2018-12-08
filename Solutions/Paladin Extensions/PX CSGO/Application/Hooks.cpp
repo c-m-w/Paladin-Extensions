@@ -201,12 +201,12 @@ namespace PX
 
 			{
 				const auto fFlagsUnpredicted = pLocalPlayer->m_fFlags( );
+				Features::Miscellaneous::AutoJump( pLocalPlayer, pCmd );
+				Features::Combat::CompensateRecoilz( pLocalPlayer, pCmd );
 				Prediction::Start( pLocalPlayer, pCmd );
 				Features::Combat::AimAssist( pLocalPlayer, pCmd );
-				Features::Combat::CompensateRecoil( pLocalPlayer, pCmd );
 				Features::Combat::Trigger( pLocalPlayer, pCmd );
 				Features::Miscellaneous::AutoEdgeJump( pLocalPlayer, pCmd, fFlagsUnpredicted );
-				Features::Miscellaneous::AutoJump( pLocalPlayer, pCmd );
 				Features::Miscellaneous::AutoStrafe( pLocalPlayer, pCmd );
 				Features::Miscellaneous::CircleStrafe( pLocalPlayer, pCmd );
 				Prediction::End( pLocalPlayer );

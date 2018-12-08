@@ -11,11 +11,12 @@ namespace PX::Features::Miscellaneous
 			return;
 
 		const auto movetype = pLocalPlayer->movetype( );
-		if ( movetype != MOVETYPE_NOCLIP && movetype != MOVETYPE_LADDER )
-			if ( _Settings._Miscellaneous._Movement.bAutomaticJumpMode.Get( ) )
-				if ( !( pLocalPlayer->m_fFlags( ) & FL_ONGROUND )
- 					 || pGlobalVariables->m_iTickCount % ( _Settings._Miscellaneous._Movement.iMissTicks + 1 ) )
-					pCmd->buttons &= ~IN_JUMP;
+		if ( movetype != MOVETYPE_NOCLIP && movetype != MOVETYPE_LADDER ) // don't change anything in these states
+			if ( !( pLocalPlayer->m_fFlags( ) & FL_ONGROUND )
+				 || pGlobalVariables->m_iTickCount % ( _Settings._Miscellaneous._Movement.iMissTicks + 1 ) ) // if they aren't on the ground or if they missed, stop jumping
+				pCmd->buttons &= ~IN_JUMP;
+			else
+				pCmd->buttons |= IN_JUMP;
 	}
 
 	void PX_API CircleStrafe( player_ptr_t pLocalPlayer, CUserCmd* pCmd )
