@@ -49,7 +49,7 @@ namespace PX::Information
 			PX_DEF uIsWeapon = 160u;
 
 			// CBaseCombatWeapon
-			PX_DEF uGetInaccuracy = 467u;
+			PX_DEF uGetInaccuracy = 471u;
 			PX_DEF uGetSpread = 436u;
 			PX_DEF uUpdateAccuracyPenalty = 468u;
 		}
