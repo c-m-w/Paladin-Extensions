@@ -371,7 +371,9 @@ namespace PX::Features
 					toggle_t bStandalone = false;
 					toggle_t bNoRefractoryCompensation = false;
 					toggle_t bUseSeparate = false;
+					int iStartBullet = 1; // 0 - 150
 					float flCompensationAmount = 1.f; // 0.f to 2.f
+					float flSmoothness = 1.f; // 0.f to 1.f
 				} _All, _WeaponTypes[ WEAPONTYPE_MACHINEGUN + 1 ] { }, _IndividualWeapons[ ITEM_MAX ] { };
 			} _RecoilCompensation;
 		} _Combat;
@@ -381,7 +383,6 @@ namespace PX::Features
 			struct movement_t
 			{
 				toggle_t bAutomaticJump = false;
-				toggle_t bAutomaticJumpMode = false; // false is +jump based, true is keybind based
 				int iMissTicks = 0; // 0 -> 15
 				toggle_t bCircleStrafe = false;
 				toggle_t bEdgeJump = false;

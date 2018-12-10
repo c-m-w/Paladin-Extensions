@@ -1364,7 +1364,7 @@ namespace PX::UI::Manager
 
 			case RECOIL:
 			{
-				const auto fnDrawRecoilOption = [ ]( settings_t::combat_t::recoil_compensation_t::weapon_t* pConfig, char* szCompensationAmount, char* szSmoothing )
+				const auto fnDrawRecoilOption = [ ]( settings_t::combat_t::recoil_compensation_t::weapon_t* pConfig, char* szCompensationAmount, char* szSmoothness, char* szStartBullet )
 				{
 					{
 						BeginRow( 30, 9, ROW_STATIC );
@@ -1385,9 +1385,13 @@ namespace PX::UI::Manager
 					}
 
 					{
-						BeginRow( 30, 3, ROW_CUSTOM );
+						BeginRow( 30, 9, ROW_CUSTOM );
 
 						pConfig->flCompensationAmount = Slider( PX_XOR( "Compensation Amount" ), szCompensationAmount, 0.f, 1.5f, pConfig->flCompensationAmount, 10, 10, GROUPBOX_COLUMN_WIDTH, 30, 2 );
+
+						pConfig->flSmoothness = Slider( PX_XOR( "Smoothness" ), szCompensationAmount, 0.f, 1.f, pConfig->flSmoothness, 175, 10, GROUPBOX_COLUMN_WIDTH, 30, 3 );
+
+						pConfig->iStartBullet = Slider( PX_XOR( "Start Compensation at Shot" ), szCompensationAmount, 0, 150, pConfig->iStartBullet, 350, 10, GROUPBOX_COLUMN_WIDTH, 30 );
 						
 						EndRow( );
 					}
@@ -1395,9 +1399,9 @@ namespace PX::UI::Manager
 
 				if ( BeginGroupbox( 200, 150, 500, 220, PX_XOR( "Global Configuration" ) ) )
 				{
-					static char szCompensationAmount[ 32 ] { }, szSmoothing[ 32 ] { };
+					static char szCompensationAmount[ 32 ] { }, szSmoothness[ 32 ] { }, szStartBullet[ 32 ] { };
 					{
-						fnDrawRecoilOption( &_Settings._Combat._RecoilCompensation._All, szCompensationAmount, szSmoothing );
+						fnDrawRecoilOption( &_Settings._Combat._RecoilCompensation._All, szCompensationAmount, szSmoothness, szStartBullet );
 					}
 					EndGroupbox( );
 				}
