@@ -45,7 +45,7 @@ namespace PX::Information
 			PX_DEF uEmitSoundATT = 5u;
 
 			// CBaseEntity
-			PX_DEF uIsPlayer = 152u;
+			PX_DEF uIsPlayer = 153u;
 			PX_DEF uIsWeapon = 160u;
 
 			// CBaseCombatWeapon
