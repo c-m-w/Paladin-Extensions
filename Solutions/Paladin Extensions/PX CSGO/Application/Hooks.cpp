@@ -202,7 +202,7 @@ namespace PX
 			{
 				const auto fFlagsUnpredicted = pLocalPlayer->m_fFlags( );
 				Features::Miscellaneous::AutoJump( pLocalPlayer, pCmd );
-				Features::Combat::CompensateRecoilz( pLocalPlayer, pCmd );
+				Features::Combat::CompensateRecoil( pLocalPlayer, pCmd );
 				Prediction::Start( pLocalPlayer, pCmd );
 				Features::Combat::AimAssist( pLocalPlayer, pCmd );
 				Features::Combat::Trigger( pLocalPlayer, pCmd );

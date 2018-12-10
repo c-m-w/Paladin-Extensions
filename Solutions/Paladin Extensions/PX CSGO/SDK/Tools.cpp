@@ -177,8 +177,8 @@ namespace PX::Tools
 		const auto flStepPitch = m_pitch->GetFloat( ) * flStepUnscaled;
 		const auto flStepYaw = m_yaw->GetFloat( ) * flStepUnscaled;
 
-		angDelta.pitch = flStepPitch * floorf( angDelta.pitch / flStepPitch );
-		angDelta.yaw = flStepYaw * floorf( angDelta.yaw / flStepYaw );
+		angDelta.pitch = flStepPitch * roundf( angDelta.pitch / flStepPitch );
+		angDelta.yaw = flStepYaw * roundf( angDelta.yaw / flStepYaw );
 
 		// assign and exit
 		return ( void )( qAngles = angView + angDelta, qAngles.roll = pClientState->viewangles.z );

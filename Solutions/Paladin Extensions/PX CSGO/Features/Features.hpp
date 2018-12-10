@@ -371,7 +371,9 @@ namespace PX::Features
 					toggle_t bStandalone = false;
 					toggle_t bNoRefractoryCompensation = false;
 					toggle_t bUseSeparate = false;
+					int iStartBullet = 1; // 0 - 150
 					float flCompensationAmount = 1.f; // 0.f to 2.f
+					float flSmoothness = 1.f; // 0.f to 1.f
 				} _All, _WeaponTypes[ WEAPONTYPE_MACHINEGUN + 1 ] { }, _IndividualWeapons[ ITEM_MAX ] { };
 			} _RecoilCompensation;
 		} _Combat;
