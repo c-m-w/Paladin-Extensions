@@ -39,6 +39,7 @@ namespace PX::Features::Combat
 			{
 				QAngle angPunch = pLocalPlayer->m_aimPunchAngle( );
 				auto buffer = ( angPunch - angPunchOld ) * GetRecoilScale( ) * _Config->flCompensationAmount * ( 1.f - _Config->flSmoothness );
+				angDeltaCompensation += buffer;
 				angPunchCompensated -= buffer;
 				//angPunchTotalCompensated += buffer;
 				angPunchOld = angPunch - ( angPunch - angPunchOld ) * _Config->flSmoothness;
@@ -46,7 +47,7 @@ namespace PX::Features::Combat
 		}
 		else
 		{
-			angPunchOld = { 0.f, 0.f, 0.f };
+			angDeltaCompensation = angPunchOld = { 0.f, 0.f, 0.f };
 		}
 
 		ClampAngles( angPunchCompensated );

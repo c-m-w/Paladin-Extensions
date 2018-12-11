@@ -137,7 +137,14 @@ namespace PX::Features::Combat
 		if ( _AimContext.iHitbox == -1 )
 			return ResetContext( );
 
-		auto qTargetAngle = CalculateAngle( pLocalPlayer, pTarget, _AimContext.iHitbox, pCmd, &_AimContext.vecOverCompensation );
+		const auto hActiveWeapon = pLocalPlayer->m_hActiveWeapon( );
+		if ( !hActiveWeapon || !hActiveWeapon.IsValid( ) )
+			return;
+		recoil_config_t* _ConfigRecoil;
+		PX_GET_WEAPON_CONFIG( hActiveWeapon, _ConfigRecoil, _Settings._Combat._RecoilCompensation );
+		auto buffer = ( !_ConfigRecoil->bEnabled ? pLocalPlayer->m_aimPunchAngle( ) : angDeltaCompensation );
+
+		auto qTargetAngle = CalculateAngle( pLocalPlayer, pTarget, _AimContext.iHitbox, pCmd, &_AimContext.vecOverCompensation ) - buffer;
 		ClampAngles( qTargetAngle );
 		ResetAimPosition( pLocalPlayer, pCmd );
 		switch ( _Config->iAimType )
@@ -157,6 +164,8 @@ namespace PX::Features::Combat
 				{
 					case SMOOTH_LINEAR:
 					{
+						_AimContext.vecAimAngle.x -= buffer.pitch;
+						_AimContext.vecAimAngle.y -= buffer.yaw;
 						ClampAngles( _AimContext.vecAimAngle );
 						pClientState->viewangles = _AimContext.vecAimAngle;
 					}
@@ -168,6 +177,8 @@ namespace PX::Features::Combat
 						vecNewAngles.y = _AimContext.vecAimAngle.y;
 						vecNewAngles.x = flTemp * powf( vecNewAngles.y - _AimContext.vecTargetAngle.y, 2.f ) + _AimContext.vecTargetAngle.x;
 						vecNewAngles.z = _AimContext.vecAimAngle.z;
+						vecNewAngles.x -= buffer.pitch;
+						vecNewAngles.y -= buffer.yaw;
 						ClampAngles( vecNewAngles );
 						pClientState->viewangles = vecNewAngles;
 					}
@@ -179,6 +190,8 @@ namespace PX::Features::Combat
 						vecNewAngles.y = _AimContext.vecAimAngle.y;
 						vecNewAngles.x = flTemp * cbrtf( _AimContext.vecAimAngle.y - _AimContext.vecTargetAngle.y ) + _AimContext.vecTargetAngle.x;
 						vecNewAngles.z = _AimContext.vecAimAngle.z;
+						vecNewAngles.x -= buffer.pitch;
+						vecNewAngles.y -= buffer.yaw;
 						ClampAngles( vecNewAngles );
 						pClientState->viewangles = vecNewAngles;
 					}
@@ -191,6 +204,8 @@ namespace PX::Features::Combat
 						vecNewAngles.x = _AimContext.vecAimAngle.x;
 						vecNewAngles.y = flTemp * sinf( flMultiplier * ( vecNewAngles.x - _AimContext.vecCurrentAngle.x ) ) + _AimContext.vecCurrentAngle.y;
 						vecNewAngles.z = _AimContext.vecCurrentAngle.z;
+						vecNewAngles.x -= buffer.pitch;
+						vecNewAngles.y -= buffer.yaw;
 						ClampAngles( vecNewAngles );
 						pClientState->viewangles = vecNewAngles;
 					}
@@ -203,6 +218,8 @@ namespace PX::Features::Combat
 						
 						vecNewAngles = vecPoint;
 						vecNewAngles.z = _AimContext.vecTargetAngle.z;
+						vecNewAngles.x -= buffer.pitch;
+						vecNewAngles.y -= buffer.yaw;
 						ClampAngles( vecNewAngles );
 						pClientState->viewangles = vecNewAngles;
 					}
