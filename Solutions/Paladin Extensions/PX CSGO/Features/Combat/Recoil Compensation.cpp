@@ -31,17 +31,15 @@ namespace PX::Features::Combat
 			return;
 
 		static QAngle angPunchOld { };
-		//static QAngle angPunchTotalCompensated { };
 		QAngle angPunchCompensated { pClientState->viewangles.x, pClientState->viewangles.y, pClientState->viewangles.z };
 		if ( !_Config->bNoRefractoryCompensation || pCmd->buttons & IN_ATTACK )
 		{
-			if ( !_Config->bNoRefractoryCompensation && !(pCmd->buttons & IN_ATTACK) || (_Config->iStartBullet < pLocalPlayer->m_iShotsFired( )) )
+			if ( !_Config->bNoRefractoryCompensation && !( pCmd->buttons & IN_ATTACK ) || _Config->iStartBullet < pLocalPlayer->m_iShotsFired( ) )
 			{
 				QAngle angPunch = pLocalPlayer->m_aimPunchAngle( );
 				auto buffer = ( angPunch - angPunchOld ) * GetRecoilScale( ) * _Config->flCompensationAmount * ( 1.f - _Config->flSmoothness );
 				angDeltaCompensation += buffer;
 				angPunchCompensated -= buffer;
-				//angPunchTotalCompensated += buffer;
 				angPunchOld = angPunch - ( angPunch - angPunchOld ) * _Config->flSmoothness;
 			}
 		}

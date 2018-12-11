@@ -142,7 +142,7 @@ namespace PX::Features::Combat
 			return;
 		recoil_config_t* _ConfigRecoil;
 		PX_GET_WEAPON_CONFIG( hActiveWeapon, _ConfigRecoil, _Settings._Combat._RecoilCompensation );
-		auto buffer = ( !_ConfigRecoil->bEnabled ? pLocalPlayer->m_aimPunchAngle( ) : angDeltaCompensation );
+		auto buffer = !_ConfigRecoil->bEnabled ? pLocalPlayer->m_aimPunchAngle( ) * GetRecoilScale( ) : angDeltaCompensation;
 
 		auto qTargetAngle = CalculateAngle( pLocalPlayer, pTarget, _AimContext.iHitbox, pCmd, &_AimContext.vecOverCompensation ) - buffer;
 		ClampAngles( qTargetAngle );
@@ -168,6 +168,8 @@ namespace PX::Features::Combat
 						_AimContext.vecAimAngle.y -= buffer.yaw;
 						ClampAngles( _AimContext.vecAimAngle );
 						pClientState->viewangles = _AimContext.vecAimAngle;
+						_AimContext.vecAimAngle.x += buffer.pitch;
+						_AimContext.vecAimAngle.y += buffer.yaw;
 					}
 					break;
 
