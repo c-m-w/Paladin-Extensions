@@ -292,4 +292,32 @@ namespace PX::Features::Miscellaneous
 			Drawing::Line( vecPoints[ 1 ], 2, 2.f,dwColor );
 		}
 	}
+
+	void PX_API MinimizeFlash( )
+	{
+		//switch
+		// Clamp: if flash is greater than FLASH_CLAMP, set to FLASH_CLAMP (0.f -> 1.f or 0 -> 255 or 0% to 100%)
+		// Scale: scale flash alpha by FLASH_MINIMIZE_FACTOR (0% -> 100%)
+		// Clarity: if flash is less than 255, scale flash alpha by FLASH_MINIMIZE_FACTOR (0% -> 100%)
+	}
+
+	void PX_API SmokeWireframe( )
+	{
+		// https://www.unknowncheats.me/forum/2021077-post20.html
+		// https://www.unknowncheats.me/forum/2022778-post23.html
+	}
+
+	void PX_API ScopeWireframe( )
+	{
+		// disable drawing scope
+		// draw scope lines all the way across screen
+		// draw two circles, one at the outer blur, where the black alpha just hits 255
+		//					 one at the inner blur, where the black alpha just hits 0
+		// https://i.imgur.com/XlQRTPU.jpg concept art
+	}
+
+	void PX_API MaximizeRadarVisibility( )
+	{
+		// just set all the players bSpotted
+	}
 }

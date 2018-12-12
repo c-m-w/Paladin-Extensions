@@ -12,4 +12,9 @@ namespace PX::Features::Miscellaneous
 	void PX_API BulletBeam( IGameEvent* pEvent );
 	void PX_API CreateHitmarker( IGameEvent* pEvent );
 	void PX_API DrawHitmarkers( );
+
+	void PX_API MinimizeFlash( player_ptr_t pLocalPlayer );
+	void PX_API SmokeWireframe( );
+	void PX_API ScopeWireframe( );
+	void PX_API MaximizeRadarVisibility( );
 }
