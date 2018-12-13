@@ -440,7 +440,9 @@ namespace PX::Features
 
 			struct other_t
 			{
+				toggle_t bAutomaticFire = false;
 				toggle_t bHitSound = false;
+				int iChoke = 0; // 0 -> 15
 			} _Other;
 		} _Miscellaneous;
 	} PX_SDK _Settings;

@@ -14,7 +14,7 @@ namespace PX::Features::Combat
 
 	void PX_API Trigger( player_ptr_t pLocalPlayer, CUserCmd* pCmd )
 	{
-		if ( pCmd->buttons & IN_ATTACK )
+		if ( pCmd->buttons & IN_ATTACK || _Settings._Miscellaneous._Other.bAutomaticFire.Get( ) )
 			return;
 
 		const auto hActiveWeapon = pLocalPlayer->m_hActiveWeapon( ).Get( );

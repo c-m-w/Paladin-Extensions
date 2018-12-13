@@ -15,6 +15,10 @@ public:
     {
         Init(clr[0], clr[1], clr[2]);
     }
+    QAngle(Vector r)
+    {
+        Init(r.x, r.y, r.z);
+    }
 
     void Init(float ix = 0.0f, float iy = 0.0f, float iz = 0.0f)
     {
