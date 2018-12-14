@@ -209,7 +209,16 @@ namespace PX
 				Features::Miscellaneous::AutoEdgeJump( pLocalPlayer, pCmd, fFlagsUnpredicted );
 				Features::Miscellaneous::AutoStrafe( pLocalPlayer, pCmd );
 				Features::Miscellaneous::CircleStrafe( pLocalPlayer, pCmd );
+
+				Features::Miscellaneous::StaminaBug( pLocalPlayer, pCmd, fFlagsUnpredicted );
+				Features::Miscellaneous::AutomaticFire( pLocalPlayer, pCmd );
+				Features::Miscellaneous::NoTeamDamage( pLocalPlayer, pCmd );
+				//Features::Miscellaneous::ChokeStream( );
+				//Features::Miscellaneous::LastMomentDefuse( pLocalPlayer, pCmd );
+
 				Prediction::End( pLocalPlayer );
+
+				Features::Miscellaneous::PXClanTag( );
 			}
 
 			pVerifiedCmd->m_cmd = *pCmd;

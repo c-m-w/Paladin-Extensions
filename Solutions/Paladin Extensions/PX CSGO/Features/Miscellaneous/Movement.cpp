@@ -65,6 +65,34 @@ namespace PX::Features::Miscellaneous
 			pCmd->buttons &= ~IN_JUMP;
 	}
 
+	void PX_API StaminaBug( player_ptr_t pLocalPlayer, CUserCmd *pCmd, int32_t fFlagsUnpredicted )
+	{
+		if ( fFlagsUnpredicted & FL_ONGROUND
+			 || !( pCmd->buttons & IN_DUCK ) )
+			return;
+
+		Ray_t rRay;
+		auto vecOrigin = pLocalPlayer->m_vecOrigin( );
+		auto flDelta = -pLocalPlayer->m_vecVelocity( ).z * pGlobalVariables->m_flIntervalPerTick;
+		rRay.Init( vecOrigin, vecOrigin - Vector( 0, 0, flDelta ) );
+
+		CTraceFilter tfFilter;
+		tfFilter.pSkip = pLocalPlayer;
+
+		CGameTrace gtRay;
+		pEngineTrace->TraceRay( rRay, MASK_PLAYERSOLID, &tfFilter, &gtRay );
+
+		if ( gtRay.fraction < 1.0f )
+			pCmd->buttons &= ~IN_DUCK;
+		/*else
+		{
+			rRay.Init( vecOrigin, vecOrigin - Vector( 0, 0, 2.f * flDelta ) );
+			pEngineTrace->TraceRay( rRay, MASK_PLAYERSOLID, &tfFilter, &gtRay );
+			if ( gtRay.fraction < 1.0f )
+				pCmd->buttons |= IN_DUCK;
+		}*/
+	}
+
 	void PX_API AutoStrafe( player_ptr_t pLocalPlayer, CUserCmd *pCmd )
 	{
 		if ( !_Settings._Miscellaneous._Movement.bAutomaticStrafe && !_Settings._Miscellaneous._Movement.bAutonomousStrafe )

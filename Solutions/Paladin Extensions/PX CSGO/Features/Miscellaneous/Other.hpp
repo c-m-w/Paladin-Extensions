@@ -16,5 +16,5 @@ namespace PX::Features::Miscellaneous
 
 	void PX_API AutomaticFire( player_ptr_t pLocalPlayer, CUserCmd *pCmd );
 
-	void PX_API StaminaBug( player_ptr_t pLocalPlayer, int32_t fFlagsUnpredicted, CUserCmd *pCmd );
+	void PX_API PXClanTag( );
 }
