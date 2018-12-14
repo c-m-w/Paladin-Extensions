@@ -67,17 +67,16 @@ namespace PX::Features::Miscellaneous
 
 	void PX_API StaminaBug( player_ptr_t pLocalPlayer, CUserCmd *pCmd, int32_t fFlagsUnpredicted )
 	{
-		static Vector vecVelocityPrevious { };
-		const auto vecVelocity = pLocalPlayer->m_vecVelocity( );
+		if ( fFlagsUnpredicted & FL_ONGROUND || !( pCmd->buttons & IN_DUCK ) )
+			return;
 
-		if ( fFlagsUnpredicted & FL_ONGROUND || !( pCmd->buttons & IN_DUCK ) || vecVelocity.z > vecVelocityPrevious.z )
-			return ( void )( vecVelocityPrevious = vecVelocity );
+		const auto flVelocityZ = pLocalPlayer->m_vecVelocity( ).z;
+		if ( flVelocityZ >= 0.f )
+			return;
 
 		Ray_t rRay;
-		const auto vecViewOffset = pLocalPlayer->m_vecViewOffset( );
-		const auto vecOrigin = pLocalPlayer->m_vecOrigin( ) + vecViewOffset;
-		const auto flDelta = -vecVelocity.z * pGlobalVariables->m_flIntervalPerTick;
-		rRay.Init( vecOrigin, vecOrigin - vecViewOffset - Vector( 0, 0, flDelta ) );
+		const auto vecOrigin = pLocalPlayer->m_vecOrigin( );
+		rRay.Init( vecOrigin, vecOrigin + Vector( 0, 0, -100.f ) );
 
 		CTraceFilter tfFilter;
 		tfFilter.pSkip = pLocalPlayer;
@@ -85,15 +84,16 @@ namespace PX::Features::Miscellaneous
 		CGameTrace gtRay;
 		pEngineTrace->TraceRay( rRay, MASK_PLAYERSOLID, &tfFilter, &gtRay );
 
-		if ( gtRay.fraction < 1.0f )
-			pCmd->buttons &= ~IN_DUCK;
-		//else
-		//{
-		//	rRay.Init( vecOrigin, vecOrigin - vecViewOffset - Vector( 0, 0, 3.f * flDelta ) );
-		//	pEngineTrace->TraceRay( rRay, MASK_PLAYERSOLID, &tfFilter, &gtRay );
-		//	if ( gtRay.fraction < 1.0f )
-		//		pCmd->buttons |= IN_DUCK;
-		//}
+		if ( gtRay.fraction >= 100.f )
+			return;
+
+		static auto flDeltaPrevious = 0.f;
+		const auto flDelta = gtRay.fraction * 100.f + flVelocityZ * pGlobalVariables->m_flIntervalPerTick;
+
+		if ( flDelta < flDeltaPrevious - flDelta )
+			std::cout << "unducking: ", pCmd->buttons &= ~IN_DUCK;
+		std::cout << flDelta << ", " << flDeltaPrevious << '\n';
+		flDeltaPrevious = flDelta;
 	}
 
 	void PX_API AutoStrafe( player_ptr_t pLocalPlayer, CUserCmd *pCmd )
