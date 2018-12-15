@@ -90,9 +90,11 @@ namespace PX::Features::Miscellaneous
 		static auto flDeltaPrevious = 0.f;
 		const auto flDelta = gtRay.fraction * 100.f + flVelocityZ * pGlobalVariables->m_flIntervalPerTick;
 
-		if ( flDelta < flDeltaPrevious - flDelta )
-			std::cout << "unducking: ", pCmd->buttons &= ~IN_DUCK;
-		std::cout << flDelta << ", " << flDeltaPrevious << '\n';
+		rRay.Init( vecOrigin, vecOrigin + Vector( 0, 0, -8.f ) );
+		pEngineTrace->TraceRay( rRay, MASK_PLAYERSOLID, &tfFilter, &gtRay );
+		if ( gtRay.fraction < 1.f )//( gtRay.fraction * 100 < 8.f )//( flDelta < flDeltaPrevious - flDelta )
+			std::cout << "Unducking: ", pCmd->buttons &= ~IN_DUCK;
+		std::cout << "V" << flDelta << ", \tW" << flDeltaPrevious << ", \t" << gtRay.fraction * 100 << "%\n";
 		flDeltaPrevious = flDelta;
 	}
 
