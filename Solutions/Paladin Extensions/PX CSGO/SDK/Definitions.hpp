@@ -41,6 +41,9 @@
 #define PX_MAX_ROLL 50.f
 #define PX_MAX_ANGLE_DELTA 22.f
 #define PX_MAX_CLAN_LENGTH 16u
+#define PX_LEG_EXTEND 9.f
+#define PX_HEAD_EXTEND 9.f
+#define PX_CROUCH_EXTEND ( PX_HEAD_EXTEND + PX_LEG_EXTEND )
 
 #define PX_GET_WEAPON_CONFIG( Weapon, CurrentConfig, BaseConfig )                                               \
      const auto def_index = Weapon->m_Item( )->m_iItemDefinitionIndex( );                                               \

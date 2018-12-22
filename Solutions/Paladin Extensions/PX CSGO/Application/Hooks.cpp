@@ -203,6 +203,7 @@ namespace PX
 				const auto fFlagsUnpredicted = pLocalPlayer->m_fFlags( );
 				Features::Miscellaneous::AutoJump( pLocalPlayer, pCmd );
 				Features::Combat::CompensateRecoil( pLocalPlayer, pCmd );
+				Features::Miscellaneous::StaminaBug( pLocalPlayer, pCmd );
 				Prediction::Start( pLocalPlayer, pCmd );
 				Features::Combat::AimAssist( pLocalPlayer, pCmd );
 				Features::Combat::Trigger( pLocalPlayer, pCmd );
@@ -210,7 +211,6 @@ namespace PX
 				Features::Miscellaneous::AutoStrafe( pLocalPlayer, pCmd );
 				Features::Miscellaneous::CircleStrafe( pLocalPlayer, pCmd );
 
-				Features::Miscellaneous::StaminaBug( pLocalPlayer, pCmd, fFlagsUnpredicted );
 				Features::Miscellaneous::AutomaticFire( pLocalPlayer, pCmd );
 				Features::Miscellaneous::NoTeamDamage( pLocalPlayer, pCmd );
 				//Features::Miscellaneous::ChokeStream( );

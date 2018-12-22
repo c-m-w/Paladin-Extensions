@@ -45,6 +45,8 @@ namespace PX::Features::Combat
 		}
 		else
 		{
+			// angPunchOld = angPunch
+			// angPunchDeltaCompensation += pLocalPlayer->m_aimPunchAngle( );
 			angDeltaCompensation = angPunchOld = { 0.f, 0.f, 0.f };
 		}
 

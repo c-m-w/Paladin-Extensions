@@ -65,9 +65,9 @@ namespace PX::Features::Miscellaneous
 			pCmd->buttons &= ~IN_JUMP;
 	}
 
-	void PX_API StaminaBug( player_ptr_t pLocalPlayer, CUserCmd *pCmd, int32_t fFlagsUnpredicted )
+	void PX_API StaminaBug( player_ptr_t pLocalPlayer, CUserCmd *pCmd )
 	{
-		if ( fFlagsUnpredicted & FL_ONGROUND || !( pCmd->buttons & IN_DUCK ) )
+		if ( pLocalPlayer->m_fFlags( ) & FL_ONGROUND || !( pCmd->buttons & IN_DUCK ) )
 			return;
 
 		const auto flVelocityZ = pLocalPlayer->m_vecVelocity( ).z;
@@ -76,7 +76,7 @@ namespace PX::Features::Miscellaneous
 
 		Ray_t rRay;
 		const auto vecOrigin = pLocalPlayer->m_vecOrigin( );
-		rRay.Init( vecOrigin, vecOrigin + Vector( 0, 0, -100.f ) );
+		rRay.Init( vecOrigin, vecOrigin + Vector( 0, 0, -( abs( flVelocityZ ) * pGlobalVariables->m_flIntervalPerTick + PX_LEG_EXTEND ) ) );
 
 		CTraceFilter tfFilter;
 		tfFilter.pSkip = pLocalPlayer;
@@ -84,18 +84,8 @@ namespace PX::Features::Miscellaneous
 		CGameTrace gtRay;
 		pEngineTrace->TraceRay( rRay, MASK_PLAYERSOLID, &tfFilter, &gtRay );
 
-		if ( gtRay.fraction >= 100.f )
-			return;
-
-		static auto flDeltaPrevious = 0.f;
-		const auto flDelta = gtRay.fraction * 100.f + flVelocityZ * pGlobalVariables->m_flIntervalPerTick;
-
-		rRay.Init( vecOrigin, vecOrigin + Vector( 0, 0, -8.f ) );
-		pEngineTrace->TraceRay( rRay, MASK_PLAYERSOLID, &tfFilter, &gtRay );
-		if ( gtRay.fraction < 1.f )//( gtRay.fraction * 100 < 8.f )//( flDelta < flDeltaPrevious - flDelta )
-			std::cout << "Unducking: ", pCmd->buttons &= ~IN_DUCK;
-		std::cout << "V" << flDelta << ", \tW" << flDeltaPrevious << ", \t" << gtRay.fraction * 100 << "%\n";
-		flDeltaPrevious = flDelta;
+		if ( gtRay.fraction < 1.f )
+			pCmd->buttons &= ~IN_DUCK;
 	}
 
 	void PX_API AutoStrafe( player_ptr_t pLocalPlayer, CUserCmd *pCmd )
