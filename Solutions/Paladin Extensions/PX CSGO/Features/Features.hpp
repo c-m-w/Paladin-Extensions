@@ -443,6 +443,7 @@ namespace PX::Features
 				toggle_t bAutomaticFire = false;
 				toggle_t bHitSound = false;
 				int iChoke = 0; // 0 -> 15
+				float flClanTagSpeed = 1.f; // 0.f -> 1.f
 			} _Other;
 		} _Miscellaneous;
 	} PX_SDK _Settings;

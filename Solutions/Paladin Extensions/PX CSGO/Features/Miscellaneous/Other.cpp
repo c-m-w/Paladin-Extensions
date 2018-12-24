@@ -103,7 +103,7 @@ namespace PX::Features::Miscellaneous
 
 	void PXClanTag( )
 	{
-		if ( pGlobalVariables->m_iTickCount % int( 1.f / ( 3.f * pGlobalVariables->m_flIntervalPerTick ) ) )
+		if ( pGlobalVariables->m_iTickCount % int( ceilf( 1.f / ( _Settings._Miscellaneous._Other.flClanTagSpeed * 2.6666666f * pGlobalVariables->m_flIntervalPerTick ) ) ) )
 			return;
 
 		static str_t strTagUnchanged = PX_XOR( "www.paladin-extensions.com" );
