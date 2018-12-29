@@ -359,7 +359,7 @@ namespace PX::Tools
 
 	float PX_API CalculateCrosshairDistance( CBasePlayer* pLocalPlayer, CBasePlayer* pPlayer, int iHitbox, CUserCmd* pCmd, bool bWorldlyDistance )
 	{
-		const auto qNewAngles = pCmd->viewangles - CalculateAngle( pLocalPlayer, pPlayer, iHitbox, pCmd, nullptr );
+		const auto qNewAngles = pCmd->viewangles + pLocalPlayer->m_aimPunchAngle( ) * GetRecoilScale( ) - CalculateAngle( pLocalPlayer, pPlayer, iHitbox, pCmd, nullptr );
 		if ( bWorldlyDistance )
 			return sin( atan2( qNewAngles.yaw, qNewAngles.pitch ) ) * CalculateVectorDistance( pLocalPlayer->GetViewPosition( ), pPlayer->GetHitboxPosition( iHitbox ) );
 		const auto flDistance = sqrt( pow( qNewAngles.yaw, 2.f ) + pow( qNewAngles.pitch, 2.f ) );
