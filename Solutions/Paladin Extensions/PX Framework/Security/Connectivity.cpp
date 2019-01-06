@@ -143,8 +143,8 @@ namespace PX::Net
 		}
 
 		if ( !bCreatedLicenseFile
-		&& ( jsCredentials[ strUserIDIdentifier ].is_null( )
-		  || jsCredentials[ strSecretKeyIdentifier ].is_null( ) ) )
+			 && ( jsCredentials[ strUserIDIdentifier ].is_null( )
+				  || jsCredentials[ strSecretKeyIdentifier ].is_null( ) ) )
 			bCreatedLicenseFile = CreateLicenseFile( );
 
 		if ( bAttemptedLicenceCreation )
@@ -166,10 +166,15 @@ namespace PX::Net
 				   && InitializeEncryption( ) );
 
 		const auto strResponse = Request( strLoginURL, dqLoginData );
+
 		if ( strResponse.empty( ) )
 			return LOGIN_CONNECTION_FAILURE;
 
-		auto jsResponse = nlohmann::json::parse( Decrypt( strResponse ) );
+		const auto strDecrypted = Decrypt( strResponse );
+		if ( strDecrypted.length( ) == 1 && std::stoi( Decrypt( strResponse ) ) == LOGIN_CONNECTION_FAILURE )
+			return LOGIN_CONNECTION_FAILURE;
+
+		auto jsResponse = nlohmann::json::parse( strDecrypted );
 		const auto strSecondaryGroups = jsResponse[ "Secondary Groups" ].get< str_t >( );
 
 		if ( bHasExtension != nullptr )

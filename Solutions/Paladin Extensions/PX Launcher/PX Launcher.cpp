@@ -104,7 +104,7 @@ Relogin:
 			Popup( EMBType::FATAL_ERROR, PX_XOR( L"Your hardware has changed. Please create a ticket to get your unique identifier updated to match your current hardware at https://www.paladin-extensions.com/support/." ) );
 		// BUG they should be able to receive the manager without being premium. Premium checks should really just not be in this manager at all
 		case LOGIN_INACTIVE_PREMIUM:
-			Popup( EMBType::FATAL_ERROR, PX_XOR( L"You do not currently have an active premium subscription to any of our products. Purchase one at https://www.paladin-extensions.com/premium/." ) );
+			Popup( EMBType::FATAL_ERROR, PX_XOR( L"You do not currently have an active premium subscription to any of our products. Purchase one at https://www.paladin-extensions.com/extensions/." ) );
 		case LOGIN_STAFF_SUCCESS:
 		case LOGIN_SUCCESS:
 #if defined NDEBUG
