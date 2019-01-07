@@ -7,7 +7,7 @@
 #include "PX Launcher.hpp"
 
 // todo title + windowproc
-const wchar_t* wszWindowTitle = PX_XOR( L"Paladin Extensions Manager" );
+const wchar_t *wszWindowTitle = PX_XOR( L"Paladin Extensions Manager" );
 
 LRESULT WINAPI WindowProc( _In_ HWND _hwWindowHandle, _In_ UINT uMessage, _In_ WPARAM uwParam, _In_ LPARAM llParam )
 {
@@ -77,8 +77,8 @@ void PX_API OnLaunch( )
 	// check for debugger/any of that jazz
 
 	Popup( EMBType::INFO, PX_XOR( L"The Manager setup will begin once you click OK.\n"
-								 "Please wait up to 60 seconds for it to complete before the window appears.\n"
-								 "Contact support if a window doesn't appear." ) );
+			   "Please wait up to 60 seconds for it to complete before the window appears.\n"
+			   "Contact support if a window doesn't appear." ) );
 #endif
 Relogin:
 	const auto iLoginStatus = Login( );
@@ -99,10 +99,10 @@ Relogin:
 			Popup( EMBType::FATAL_ERROR, PX_XOR( L"Your client is outdated. Please download the updated version at https://www.paladin-extensions.com/extensions/1/." ) );
 		case LOGIN_BANNED:
 			Popup( EMBType::FATAL_ERROR, PX_XOR( L"You are banned and may not use Paladin Extensions software. E-mail support@paladin-extensions.com if you believe this to be an error." ), bDelete );
-		// BUG they should be able to receive the manager without checking for HWID. HWID should really just not be in this launcher at all
+			// BUG they should be able to receive the manager without checking for HWID. HWID should really just not be in this launcher at all
 		case LOGIN_HARDWARE_MISMATCH:
 			Popup( EMBType::FATAL_ERROR, PX_XOR( L"Your hardware has changed. Please create a ticket to get your unique identifier updated to match your current hardware at https://www.paladin-extensions.com/support/." ) );
-		// BUG they should be able to receive the manager without being premium. Premium checks should really just not be in this manager at all
+			// BUG they should be able to receive the manager without being premium. Premium checks should really just not be in this manager at all
 		case LOGIN_INACTIVE_PREMIUM:
 			Popup( EMBType::FATAL_ERROR, PX_XOR( L"You do not currently have an active premium subscription to any of our products. Purchase one at https://www.paladin-extensions.com/extensions/." ) );
 		case LOGIN_STAFF_SUCCESS:

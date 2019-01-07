@@ -17,7 +17,10 @@ namespace PX::Features::Miscellaneous
 		bool bEnemy;
 
 		hitmarker_t( ) = default;
-		hitmarker_t( const Vector& _vecPosition, bool _bEnemy ): vecPosition( _vecPosition ), flStartTime( pGlobalVariables->m_flCurrentTime ), bEnemy( _bEnemy ) { }
+
+		hitmarker_t( const Vector &_vecPosition, bool _bEnemy ): vecPosition( _vecPosition ), flStartTime( pGlobalVariables->m_flCurrentTime ), bEnemy( _bEnemy )
+		{ }
+
 		~hitmarker_t( ) = default;
 
 		byte_t GetAlpha( ) const
@@ -26,7 +29,7 @@ namespace PX::Features::Miscellaneous
 				return UCHAR_MAX;
 
 			return UCHAR_MAX / ( _Settings._Miscellaneous._Visuals.flHitmarkerLifetime - _Settings._Miscellaneous._Visuals.flHitmarkerFadeTime )
-				* ( flStartTime + _Settings._Miscellaneous._Visuals.flHitmarkerFadeTime - pGlobalVariables->m_flCurrentTime );
+					* ( flStartTime + _Settings._Miscellaneous._Visuals.flHitmarkerFadeTime - pGlobalVariables->m_flCurrentTime );
 		}
 
 		bool Over( ) const
@@ -34,7 +37,7 @@ namespace PX::Features::Miscellaneous
 			return flStartTime + _Settings._Miscellaneous._Visuals.flHitmarkerLifetime < pGlobalVariables->m_flCurrentTime;
 		}
 
-		bool GetScreenPosition( Vector& vecScreen ) const
+		bool GetScreenPosition( Vector &vecScreen ) const
 		{
 			return WorldToScreen( vecPosition, vecScreen );
 		}
@@ -44,6 +47,7 @@ namespace PX::Features::Miscellaneous
 			return bEnemy;
 		}
 	};
+
 	std::vector< hitmarker_t > vecHitmarkers { };
 
 	void PX_API DarkenWorld( )
@@ -61,7 +65,7 @@ namespace PX::Features::Miscellaneous
 		float flColorModifier;
 		char szNewSky[ MAX_PATH ];
 
-		if( bModifiedMaterials )
+		if ( bModifiedMaterials )
 		{
 			strcpy( szNewSky, const_cast< const char* >( szOldSky ) );
 			flColorModifier = 1.f;
@@ -74,19 +78,19 @@ namespace PX::Features::Miscellaneous
 		}
 
 		bModifiedMaterials = !bModifiedMaterials;
-		const static auto pInvalidMaterial = reinterpret_cast< MaterialHandle_t( __thiscall* )( IMaterialSystem* ) >( ( *reinterpret_cast< void*** >( pMaterialSystem ) )[ 88 ] )( pMaterialSystem );
+		const static auto pInvalidMaterial = reinterpret_cast< MaterialHandle_t( __thiscall*)( IMaterialSystem * ) >( ( *reinterpret_cast< void*** >( pMaterialSystem ) )[ 88 ] )( pMaterialSystem );
 
-		for ( auto m = reinterpret_cast< MaterialHandle_t( __thiscall* )( IMaterialSystem* ) >( ( *reinterpret_cast< void*** >( pMaterialSystem ) )[ 86 ] )( pMaterialSystem );
-			  m != pInvalidMaterial; 
-			  m = reinterpret_cast< MaterialHandle_t( __thiscall* )( IMaterialSystem*, MaterialHandle_t ) >( ( *reinterpret_cast< void*** >( pMaterialSystem ) )[ 87 ] )( pMaterialSystem, m ) )
+		for ( auto m = reinterpret_cast< MaterialHandle_t( __thiscall*)( IMaterialSystem * ) >( ( *reinterpret_cast< void*** >( pMaterialSystem ) )[ 86 ] )( pMaterialSystem );
+			  m != pInvalidMaterial;
+			  m = reinterpret_cast< MaterialHandle_t( __thiscall*)( IMaterialSystem *, MaterialHandle_t ) >( ( *reinterpret_cast< void*** >( pMaterialSystem ) )[ 87 ] )( pMaterialSystem, m ) )
 		{
-			const auto pMaterial = reinterpret_cast< IMaterial*( __thiscall* )( IMaterialSystem*, MaterialHandle_t ) >( ( *reinterpret_cast< void*** >( pMaterialSystem ) )[ 89 ] )( pMaterialSystem, m );
+			const auto pMaterial = reinterpret_cast< IMaterial*( __thiscall*)( IMaterialSystem *, MaterialHandle_t ) >( ( *reinterpret_cast< void*** >( pMaterialSystem ) )[ 89 ] )( pMaterialSystem, m );
 			if ( pMaterial == nullptr
-				 || pMaterial->IsErrorMaterial( ) )
+				|| pMaterial->IsErrorMaterial( ) )
 				continue;
 			std::cout << pMaterial->GetTextureGroupName( ) << std::endl;
-			if( strstr( pMaterial->GetTextureGroupName(  ), PX_XOR( "World" ) ) != nullptr
-				|| strstr( pMaterial->GetTextureGroupName(  ), PX_XOR( "StaticProp" ) ) != nullptr )
+			if ( strstr( pMaterial->GetTextureGroupName( ), PX_XOR( "World" ) ) != nullptr
+				|| strstr( pMaterial->GetTextureGroupName( ), PX_XOR( "StaticProp" ) ) != nullptr )
 			{
 				pSkyModel->SetValue( szNewSky );
 				pMaterial->ColorModulate( flColorModifier, flColorModifier, flColorModifier );
@@ -103,15 +107,15 @@ namespace PX::Features::Miscellaneous
 
 		const auto pLocalPlayer = GetLocalPlayer( );
 		if ( !pLocalPlayer
-			 || !pLocalPlayer->IsAlive( ) )
+			|| !pLocalPlayer->IsAlive( ) )
 			return;
 
 		const auto hActiveWeapon = pLocalPlayer->m_hActiveWeapon( );
 		if ( !hActiveWeapon )
 			return;
 
-		const auto def_index = hActiveWeapon->m_Item( )->m_iItemDefinitionIndex( ); 
-		const auto wep_type = hActiveWeapon->GetCSWeaponData( )->WeaponType; 
+		const auto def_index = hActiveWeapon->m_Item( )->m_iItemDefinitionIndex( );
+		const auto wep_type = hActiveWeapon->GetCSWeaponData( )->WeaponType;
 		auto pConfig = _Settings._Combat._Aim._IndividualWeapons[ def_index ].bUseSeparate.Get( ) ? &_Settings._Combat._Aim._IndividualWeapons[ def_index ] : _Settings._Combat._Aim._WeaponTypes[ wep_type ].bUseSeparate.Get( ) ? &_Settings._Combat._Aim._WeaponTypes[ wep_type ] : &_Settings._Combat._Aim._All;;
 
 		const auto vecViewPos = pLocalPlayer->GetViewPosition( );
@@ -127,7 +131,7 @@ namespace PX::Features::Miscellaneous
 		pEngineClient->GetScreenSize( iWidth, iHeight );
 		radius = std::clamp( radius, 0.f, sqrt( powf( iWidth / 2.f, 2.f ) + powf( iHeight / 2.f, 2.f ) ) );
 
-		Drawing::Circle( D3DXVECTOR2( iWidth / 2.f, iHeight / 2.f ), radius, _Settings._Miscellaneous._Visuals.seqAimFOV[0].GetCurrentColor(  ).GetARGB(  ), _Settings._Miscellaneous._Visuals.seqAimFOV[ 1 ].GetCurrentColor( ).GetARGB( ), int( 2 * D3DX_PI * radius / 4.f ) );
+		Drawing::Circle( D3DXVECTOR2( iWidth / 2.f, iHeight / 2.f ), radius, _Settings._Miscellaneous._Visuals.seqAimFOV[ 0 ].GetCurrentColor( ).GetARGB( ), _Settings._Miscellaneous._Visuals.seqAimFOV[ 1 ].GetCurrentColor( ).GetARGB( ), int( 2 * D3DX_PI * radius / 4.f ) );
 	}
 
 	void PX_API VisualizeSpread( )
@@ -137,7 +141,7 @@ namespace PX::Features::Miscellaneous
 
 		const auto pLocalPlayer = GetLocalPlayer( );
 		if ( !pLocalPlayer
-			 || !pLocalPlayer->IsAlive( ) )
+			|| !pLocalPlayer->IsAlive( ) )
 			return;
 
 		const auto hActiveWeapon = pLocalPlayer->m_hActiveWeapon( );
@@ -175,20 +179,20 @@ namespace PX::Features::Miscellaneous
 		Drawing::Circle( D3DXVECTOR2( iWidth / 2.f - vecRecoilDifference.x, iHeight / 2.f - vecRecoilDifference.y ), radius, _Settings._Miscellaneous._Visuals.seqSpread[ 0 ].GetCurrentColor( ).GetARGB( ), _Settings._Miscellaneous._Visuals.seqSpread[ 1 ].GetCurrentColor( ).GetARGB( ), int( 2 * D3DX_PI * radius / 4.f ) );
 	}
 
-	void PX_API ModifyRenderFOV( CViewSetup* pViewSetup )
+	void PX_API ModifyRenderFOV( CViewSetup *pViewSetup )
 	{
 		if ( !_Settings._Miscellaneous._Visuals.bModifyFOV )
 			return;
 
 		const auto pLocalPlayer = GetLocalPlayer( );
 		if ( pLocalPlayer == nullptr
-			 || pLocalPlayer->m_bIsScoped( ) )
+			|| pLocalPlayer->m_bIsScoped( ) )
 			return;
 
 		pViewSetup->fov = _Settings._Miscellaneous._Visuals.flRenderFOV;
 	}
 
-	void PX_API ModifyViewmodelFOV( float* pFOV )
+	void PX_API ModifyViewmodelFOV( float *pFOV )
 	{
 		if ( !_Settings._Miscellaneous._Visuals.bModifyFOV )
 			return;
@@ -196,19 +200,19 @@ namespace PX::Features::Miscellaneous
 		*pFOV = _Settings._Miscellaneous._Visuals.flViewmodelFOV;
 	}
 
-	void PX_API BulletBeam( IGameEvent* pEvent )
+	void PX_API BulletBeam( IGameEvent *pEvent )
 	{
 		if ( !_Settings._Miscellaneous._Visuals.bBulletBeams )
 			return;
 
 		const auto pLocalPlayer = GetLocalPlayer( );
 		if ( pLocalPlayer == nullptr
-			 || pLocalPlayer->EntIndex( ) != pEngineClient->GetPlayerForUserID( pEvent->GetInt( PX_XOR( "userid" ) ) ) )
+			|| pLocalPlayer->EntIndex( ) != pEngineClient->GetPlayerForUserID( pEvent->GetInt( PX_XOR( "userid" ) ) ) )
 			return;
 
-		auto& gtRay = pLocalPlayer->TraceRayFromView( &GetLastUserCmd( ) );
+		auto &gtRay = pLocalPlayer->TraceRayFromView( &GetLastUserCmd( ) );
 		const auto bHitPlayer = gtRay.hit_entity != nullptr
-			&& entity_ptr_t( gtRay.hit_entity )->IsPlayer( );
+				&& entity_ptr_t( gtRay.hit_entity )->IsPlayer( );
 		const auto clrBeam = _Settings._Miscellaneous._Visuals.seqBulletBeams[ bHitPlayer ].GetCurrentColor( );
 		BeamInfo_t biBeam { };
 
@@ -238,21 +242,21 @@ namespace PX::Features::Miscellaneous
 			pRenderBeams->DrawBeam( pBeam );
 	}
 
-	void PX_API CreateHitmarker( IGameEvent* pEvent )
+	void PX_API CreateHitmarker( IGameEvent *pEvent )
 	{
 		if ( !_Settings._Miscellaneous._Visuals.bHitmarkers )
 			return;
 
 		const auto pLocalPlayer = GetLocalPlayer( );
 		if ( pLocalPlayer == nullptr
-			 || pLocalPlayer->EntIndex( ) != pEngineClient->GetPlayerForUserID( pEvent->GetInt( PX_XOR( "userid" ) ) ) )
+			|| pLocalPlayer->EntIndex( ) != pEngineClient->GetPlayerForUserID( pEvent->GetInt( PX_XOR( "userid" ) ) ) )
 			return;
 
 		const auto vecImpact = Vector( pEvent->GetFloat( PX_XOR( "x" ) ), pEvent->GetFloat( PX_XOR( "y" ) ), pEvent->GetFloat( PX_XOR( "z" ) ) );
-		auto& gtRay = pLocalPlayer->TraceRayFromAngle( CalculateAngle( pLocalPlayer->GetViewPosition( ), vecImpact ) );
+		auto &gtRay = pLocalPlayer->TraceRayFromAngle( CalculateAngle( pLocalPlayer->GetViewPosition( ), vecImpact ) );
 		if ( !gtRay.DidHit( )
-			 || !gtRay.hit_entity
-			 || !player_ptr_t( gtRay.hit_entity )->IsPlayer( ) )
+			|| !gtRay.hit_entity
+			|| !player_ptr_t( gtRay.hit_entity )->IsPlayer( ) )
 			return;
 
 		vecHitmarkers.emplace_back( gtRay.endpos, player_ptr_t( gtRay.hit_entity )->m_iTeamNum( ) != pLocalPlayer->m_iTeamNum( ) );
@@ -260,10 +264,10 @@ namespace PX::Features::Miscellaneous
 
 	void PX_API DrawHitmarkers( )
 	{
-		for( auto z = 0u; z < vecHitmarkers.size( ); z++ )
+		for ( auto z = 0u; z < vecHitmarkers.size( ); z++ )
 		{
-			const auto& hitmarker = vecHitmarkers[ z ];
-			if( hitmarker.Over( ) )
+			const auto &hitmarker = vecHitmarkers[ z ];
+			if ( hitmarker.Over( ) )
 			{
 				vecHitmarkers.erase( vecHitmarkers.begin( ) + z );
 				continue;
@@ -288,8 +292,8 @@ namespace PX::Features::Miscellaneous
 			const auto flTemp = ( _Settings._Miscellaneous._Visuals.bHitmarkerFade.Get( ) ? hitmarker.GetAlpha( ) : clrCurrent.a ) / 255.f;
 			const auto dwColor = D3DCOLOR_ARGB( byte_t( flTemp * 255.f ), byte_t( clrCurrent.r * flTemp ), byte_t( clrCurrent.g * flTemp ), byte_t( clrCurrent.b * flTemp ) );
 
-			Drawing::Line( vecPoints[ 0 ], 2, 2.f,dwColor );
-			Drawing::Line( vecPoints[ 1 ], 2, 2.f,dwColor );
+			Drawing::Line( vecPoints[ 0 ], 2, 2.f, dwColor );
+			Drawing::Line( vecPoints[ 1 ], 2, 2.f, dwColor );
 		}
 	}
 

@@ -8,7 +8,7 @@ using namespace PX::Information::Pointers;
 
 // SDK functions
 
-inline IHandleEntity* CBaseHandle::Get( ) const
+inline IHandleEntity *CBaseHandle::Get( ) const
 {
 	return PX::Information::Pointers::pEntityList->GetClientEntityFromHandle( *this );
 }
@@ -19,12 +19,12 @@ namespace PX::Tools
 	class CBaseEntity;
 
 	void PX_API OnPaintTraverse( );
-	CBasePlayer* PX_API GetLocalPlayer( );
-	CUserCmd* PX_API GetUserCmd( int iSequenceNumber );
-	CVerifiedUserCmd* PX_API GetVerifiedUserCmd( int iSequenceNumber );
-	CUserCmd& PX_API GetLastUserCmd( );
-	CRC32_t PX_API GetCmdHash( CUserCmd* pCmd );
-	bool PX_API ValidPlayer( void* pEntity );
+	CBasePlayer * PX_API GetLocalPlayer( );
+	CUserCmd * PX_API GetUserCmd( int iSequenceNumber );
+	CVerifiedUserCmd * PX_API GetVerifiedUserCmd( int iSequenceNumber );
+	CUserCmd & PX_API GetLastUserCmd( );
+	CRC32_t PX_API GetCmdHash( CUserCmd *pCmd );
+	bool PX_API ValidPlayer( void *pEntity );
 	void PX_API RepairBoneRendering( );
 
 	// CVars
@@ -34,35 +34,36 @@ namespace PX::Tools
 	bool PX_API LineGoesThroughSmoke( Vector vecStartPos, Vector vecEndPos );
 	void PX_API SetClantag( cstr_t szTag );
 	void PX_API RevealRanks( );
-	template< typename _t > _t* FindHudElement( Types::cstr_t szName )
+
+	template< typename _t > _t *FindHudElement( Types::cstr_t szName )
 	{
-		static auto pHudInterface = *reinterpret_cast<void**>( Information::Modules::mClient.FindPattern( Information::jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Hud Interface" ) ].get< str_t >( ) )
-										   + Information::jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Hud Interface" ) ].get< int >( ) );
+		static auto pHudInterface = *reinterpret_cast< void** >( Information::Modules::mClient.FindPattern( Information::jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Hud Interface" ) ].get< str_t >( ) )
+			+ Information::jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Hud Interface" ) ].get< int >( ) );
 		static auto ptrFindHudElement = ptr_t( Information::Modules::mClient.FindPattern( Information::jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Find Hud Element" ) ].get< str_t >( ) )
-			+ Information::jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Find Hud Element" ) ].get< int >( ) );
-		return reinterpret_cast< _t* >( reinterpret_cast< void*( __thiscall* )( void*, Types::cstr_t ) >( ptrFindHudElement )( pHudInterface, szName ) );
+											  + Information::jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Find Hud Element" ) ].get< int >( ) );
+		return reinterpret_cast< _t* >( reinterpret_cast< void*( __thiscall*)( void *, Types::cstr_t ) >( ptrFindHudElement )( pHudInterface, szName ) );
 	}
 
 	// Math
-	void PX_API ClampAngles( QAngle& qAngles );
-	void PX_API ClampAngles( Vector& vecAngles );
-	void PX_API HumanizeAngles( QAngle& qAngles, PX::Tools::CBasePlayer* pLocalPlayer );
-	void PX_API HumanizeAngles( Vector& vecAngles, PX::Tools::CBasePlayer* pLocalPlayer );
-	bool PX_API WorldToScreen( const Vector& vecWorld, Vector &vecScreen );
-	bool PX_API AngleToScreen( const Vector& vecAngle, const Vector& vecOrigin, Vector& vecScreen );
+	void PX_API ClampAngles( QAngle &qAngles );
+	void PX_API ClampAngles( Vector &vecAngles );
+	void PX_API HumanizeAngles( QAngle &qAngles, PX::Tools::CBasePlayer *pLocalPlayer );
+	void PX_API HumanizeAngles( Vector &vecAngles, PX::Tools::CBasePlayer *pLocalPlayer );
+	bool PX_API WorldToScreen( const Vector &vecWorld, Vector &vecScreen );
+	bool PX_API AngleToScreen( const Vector &vecAngle, const Vector &vecOrigin, Vector &vecScreen );
 	void PX_API TransformVector( Vector vecInput, matrix3x4_t mtxInput, Vector &vecOutput );
-	void PX_API TransformAngle( const QAngle &qAngles, Vector& vecForward );
-	void PX_API TransformAngle( const Vector &vecAngles, Vector& vecForward );
+	void PX_API TransformAngle( const QAngle &qAngles, Vector &vecForward );
+	void PX_API TransformAngle( const Vector &vecAngles, Vector &vecForward );
 	Vector2D PX_API CalcAngle( Vector vecPosOne, Vector vecPosTwo );
 	float PX_API GetAngleDistance( Vector vecCurrentAngles, Vector vecPosOne, Vector vecPosTwo );
-	RECT PX_API CalculateRenderBounds( Vector* vecScreenPoints );
-	RECT PX_API CalculateRenderBounds( CBaseEntity* pEntity );
-	float PX_API CalculateVectorDistance( const Vector& vecPositionOne, const Vector& vecPositionTwo );
-	QAngle PX_API CalculateAngle( const Vector& vecFirst, const Vector& vecSecond );
-	QAngle PX_API CalculateAngle( CBasePlayer* pLocalPlayer, CBasePlayer* pPlayer, int iHitbox, CUserCmd* pCmd, Vector* vecOverCompensation );
-	float PX_API CalculateCrosshairDistance( CBasePlayer* pLocalPlayer, CBasePlayer* pPlayer, int iHitbox, CUserCmd* pCmd, bool bWorldlyDistance );
+	RECT PX_API CalculateRenderBounds( Vector *vecScreenPoints );
+	RECT PX_API CalculateRenderBounds( CBaseEntity *pEntity );
+	float PX_API CalculateVectorDistance( const Vector &vecPositionOne, const Vector &vecPositionTwo );
+	QAngle PX_API CalculateAngle( const Vector &vecFirst, const Vector &vecSecond );
+	QAngle PX_API CalculateAngle( CBasePlayer *pLocalPlayer, CBasePlayer *pPlayer, int iHitbox, CUserCmd *pCmd, Vector *vecOverCompensation );
+	float PX_API CalculateCrosshairDistance( CBasePlayer *pLocalPlayer, CBasePlayer *pPlayer, int iHitbox, CUserCmd *pCmd, bool bWorldlyDistance );
 
-	std::vector< Vector > PX_API GetBezierPoints( Vector vecStart, Vector vecEnd, bezier_order_t* pOrders, std::size_t zOrders );
+	std::vector< Vector > PX_API GetBezierPoints( Vector vecStart, Vector vecEnd, bezier_order_t *pOrders, std::size_t zOrders );
 	Vector PX_API GetBezierPoint( std::vector< Vector > vecPoints, float flRatio );
 
 	class CEconomyItemView
@@ -75,12 +76,13 @@ namespace PX::Tools
 		PX_NETVAR_REFERENCE( int32_t, m_iItemIDLow,PX_XOR( "DT_BaseAttributableItem" ), PX_XOR( "m_iItemIDLow" ) );
 		PX_NETVAR_REFERENCE( int32_t, m_iItemIDHigh,PX_XOR( "DT_BaseAttributableItem" ), PX_XOR( "m_iItemIDHigh" ) );
 		PX_NETVAR_REFERENCE( int32_t, m_iEntityQuality,PX_XOR( "DT_BaseAttributableItem" ), PX_XOR( "m_iEntityQuality" ) );
-		CUtlVector< IRefCounted* >* m_CustomMaterials()
+
+		CUtlVector< IRefCounted* > *m_CustomMaterials( )
 		{
-			return reinterpret_cast< CUtlVector<IRefCounted*>* >( ptr_t( this ) + 0x14 );
+			return reinterpret_cast< CUtlVector< IRefCounted* >* >( ptr_t( this ) + 0x14 );
 		}
 
-		CUtlVector<IRefCounted*>* m_VisualsDataProcessors()
+		CUtlVector< IRefCounted* > *m_VisualsDataProcessors( )
 		{
 			//static const auto ptrOffset = *reinterpret_cast< ptr_t* >( Information::Modules::mClient.FindPattern( Information::jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "m_VisualsDataProcessors" ) ].get< str_t >( ) )
 			//							 + Information::jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "m_VisualsDataProcessors" ) ].get< int >( ) );
@@ -97,7 +99,7 @@ namespace PX::Tools
 		PX_NETVAR_REFERENCE( bool, m_bShouldGlow,PX_XOR( "DT_DynamicProp" ), PX_XOR( "m_bShouldGlow" ) );
 		PX_NETVAR_REFERENCE( CBasePlayer*, m_hOwnerEntity,PX_XOR( "DT_BaseEntity" ), PX_XOR( "m_hOwnerEntity" ) );
 		PX_NETVAR_REFERENCE( float, m_flSimulationTime,PX_XOR( "DT_BaseEntity" ), PX_XOR( "m_flSimulationTime" ) );
-		PX_NETVAR_REFERENCE_OFFSET( matrix3x4_t, m_rgflCoordinateFrame, PX_XOR( "DT_BaseEntity" ), PX_XOR( "m_CollisionGroup" ),  -int( 0x30 ) );
+		PX_NETVAR_REFERENCE_OFFSET( matrix3x4_t, m_rgflCoordinateFrame, PX_XOR( "DT_BaseEntity" ), PX_XOR( "m_CollisionGroup" ), -int( 0x30 ) );
 		PX_NETVAR_REFERENCE_OFFSET( int32_t, GetIndex, PX_XOR( "CBaseEntity" ), PX_XOR( "m_bIsAutoaimTarget" ), 0x4 );
 		PX_NETVAR_REFERENCE( int32_t, movetype, PX_XOR( "DT_BaseEntity" ), PX_XOR( "movetype" ) );
 
@@ -108,8 +110,8 @@ namespace PX::Tools
 		bool IsGrenade( );
 		float GetBombTimer( );
 		float GetDefuseTimer( );
-		Vector* BoundingBox( );
-		void SetABSOrigin( Vector& vecOrigin );
+		Vector *BoundingBox( );
+		void SetABSOrigin( Vector &vecOrigin );
 	};
 
 	class CBaseAttributableItem: public CBaseEntity
@@ -124,7 +126,7 @@ namespace PX::Tools
 		PX_NETVAR_REFERENCE( float_t, m_flFallbackWear,PX_XOR( "DT_BaseAttributableItem" ), PX_XOR( "m_flFallbackWear" ) );
 		PX_NETVAR_REFERENCE( char*, m_szCustomName, PX_XOR( "DT_BaseAttributableItem" ), PX_XOR( "m_szCustomName" ) );
 
-		CEconomyItemView* m_Item( );
+		CEconomyItemView *m_Item( );
 	};
 
 	class CBaseCombatWeapon: public CBaseAttributableItem
@@ -135,21 +137,22 @@ namespace PX::Tools
 		PX_NETVAR_REFERENCE( int32_t, m_iClip1,PX_XOR( "DT_BaseCombatWeapon" ), PX_XOR( "m_iClip1" ) );
 		PX_NETVAR_REFERENCE( int32_t, m_iClip2,PX_XOR( "DT_BaseCombatWeapon" ), PX_XOR( "m_iClip2" ) );
 		PX_NETVAR_REFERENCE( float_t, m_flRecoilIndex,PX_XOR( "DT_WeaponCSBase" ), PX_XOR( "m_flRecoilIndex" ) );
-		CUtlVector< IRefCounted* >* m_CustomMaterials( )
+
+		CUtlVector< IRefCounted* > *m_CustomMaterials( )
 		{
 			static const auto ptrOffset = ptr_t( *reinterpret_cast< ptr_t* >( Information::Modules::mClient.FindPattern( Information::jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "m_CustomMaterials" ) ].get< str_t >( ) )
-																 + Information::jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "m_CustomMaterials" ) ].get< int >( ) ) ) - 12;
+												    + Information::jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "m_CustomMaterials" ) ].get< int >( ) ) ) - 12;
 			return reinterpret_cast< CUtlVector< IRefCounted* >* >( ptr_t( this ) + ptrOffset );
 		}
 
-		bool& m_bCustomMaterialInitialized( )
+		bool &m_bCustomMaterialInitialized( )
 		{
 			static const auto ptrOffset = *reinterpret_cast< ptr_t* >( Information::Modules::mClient.FindPattern( Information::jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "m_bCustomMaterialInitialized" ) ].get< str_t >( ) )
-																 + Information::jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "m_bCustomMaterialInitialized" ) ].get< int >( ) );
+				+ Information::jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "m_bCustomMaterialInitialized" ) ].get< int >( ) );
 			return *reinterpret_cast< bool* >( ptr_t( this ) + ptrOffset );
 		}
 
-		CCSWeaponInfo* GetCSWeaponData( );
+		CCSWeaponInfo *GetCSWeaponData( );
 		bool HasBullets( );
 		bool CanFire( );
 		bool IsGrenade( );
@@ -210,13 +213,13 @@ namespace PX::Tools
 		bool IsLocalPlayer( );
 		Vector GetViewPosition( );
 		player_info_t GetPlayerInformation( );
-		bool CanSeePosition( Vector vecPosition, bool bMindSmoke, void* pEntity = nullptr );
-		bool CanSeePlayer( CBasePlayer* pPlayer, bool bMindSmoke );
-		CGameTrace& TraceRayFromAngle( const QAngle& qAngle );
-		CGameTrace& TraceRayFromView( CUserCmd* pCmd = nullptr );
+		bool CanSeePosition( Vector vecPosition, bool bMindSmoke, void *pEntity = nullptr );
+		bool CanSeePlayer( CBasePlayer *pPlayer, bool bMindSmoke );
+		CGameTrace &TraceRayFromAngle( const QAngle &qAngle );
+		CGameTrace &TraceRayFromView( CUserCmd *pCmd = nullptr );
 		Vector GetHitboxPosition( int hHitboxID );
 		bool IsVulnerable( );
-		float DistanceFromPlayer( CBasePlayer* pPlayer );
+		float DistanceFromPlayer( CBasePlayer *pPlayer );
 	};
 
 	class CPlantedC4

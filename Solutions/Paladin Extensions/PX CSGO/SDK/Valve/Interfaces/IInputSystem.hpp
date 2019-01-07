@@ -4,13 +4,13 @@
 
 struct InputEvent_t;
 
-class IInputSystem : public IAppSystem
+class IInputSystem: public IAppSystem
 {
 public:
 	// Attach, detach input system from a particular window
 	// This window should be the root window for the application
 	// Only 1 window should be attached at any given time.
-	virtual void AttachToWindow( void* hWnd ) = 0;
+	virtual void AttachToWindow( void *hWnd ) = 0;
 	virtual void DetachFromWindow( ) = 0;
 
 	// Enables/disables input. PollInputState will not update current 
@@ -44,7 +44,7 @@ public:
 
 	// Returns the input events since the last poll
 	virtual int GetEventCount( ) const = 0;
-	virtual const InputEvent_t* GetEventData( ) const = 0;
+	virtual const InputEvent_t *GetEventData( ) const = 0;
 
 	// Posts a user-defined event into the event queue; this is expected
 	// to be called in overridden wndprocs connected to the root panel.
@@ -99,7 +99,7 @@ public:
 	virtual void SetNovintPure( bool bPure ) = 0;
 
 	// read and clear accumulated raw input values
-	virtual bool GetRawMouseAccumulators( int& accumX, int& accumY ) = 0;
+	virtual bool GetRawMouseAccumulators( int &accumX, int &accumY ) = 0;
 
 	// tell the input system that we're not a game, we're console text mode.
 	// this is used for dedicated servers to not initialize joystick system.

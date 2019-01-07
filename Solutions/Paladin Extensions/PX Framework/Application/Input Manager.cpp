@@ -8,7 +8,7 @@ namespace PX
 {
 	void PX_API CInputManager::ProcessKey( unsigned uKey, bool bKeyDown )
 	{
-		if ( ( ksKeys[ uKey ] = bKeyDown ? CKeyState::DOWN : CKeyState::UP ) == true)
+		if ( ( ksKeys[ uKey ] = bKeyDown ? CKeyState::DOWN : CKeyState::UP ) == true )
 		{
 			mmtKeyDownTime[ uKey ] = GetMoment( );
 			uLastKeyPressed = uKey;
@@ -82,7 +82,7 @@ namespace PX
 		if ( uMessage == WM_SIZE && wParam == SIZE_MINIMIZED )
 		{
 			// When the window is minimized, set all the key states to up so that when the window becomes back in focus it won't be fucked up.
-			for each( auto& key in ksKeys )
+			for each ( auto &key in ksKeys )
 				key = CKeyState::UP;
 			return;
 		}

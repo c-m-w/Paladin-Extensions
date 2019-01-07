@@ -11,21 +11,21 @@ using namespace Tools;
 namespace PX::Features::Miscellaneous
 {
 	const std::string strSoundDirectory = PX_XOR( "csgo\\sound" ),
-	strHitsound = PX_XOR( "hitsound.wav" ),
-		strHitsoundHead = PX_XOR( "head_hitsound.wav" ),
-	strPrefix = PX_XOR( "*" );
+					  strHitsound = PX_XOR( "hitsound.wav" ),
+					  strHitsoundHead = PX_XOR( "head_hitsound.wav" ),
+					  strPrefix = PX_XOR( "*" );
 
 	bool PX_API CopyHitsoundFiles( )
 	{
 		if ( !std::filesystem::exists( string_cast< std::string >( Files::GetPXDirectory( ) ) + PX_XOR( "Resources\\" ) + strHitsound )
-			 || !std::filesystem::exists( string_cast< std::string >( Files::GetPXDirectory( ) ) + PX_XOR( "Resources\\" ) + strHitsoundHead ) )
+			|| !std::filesystem::exists( string_cast< std::string >( Files::GetPXDirectory( ) ) + PX_XOR( "Resources\\" ) + strHitsoundHead ) )
 			return false;
 
 		RemoveHitsoundFiles( );
 		std::filesystem::copy( string_cast< std::string >( Files::GetPXDirectory( ) ) + PX_XOR( "Resources\\" ) + strHitsound, strSoundDirectory );
 		std::filesystem::copy( string_cast< std::string >( Files::GetPXDirectory( ) ) + PX_XOR( "Resources\\" ) + strHitsoundHead, strSoundDirectory );
-		return std::filesystem::exists( strSoundDirectory + PX_XOR( "\\" ) + strHitsound	)
-			&& std::filesystem::exists( strSoundDirectory + PX_XOR( "\\" ) + strHitsoundHead );
+		return std::filesystem::exists( strSoundDirectory + PX_XOR( "\\" ) + strHitsound )
+				&& std::filesystem::exists( strSoundDirectory + PX_XOR( "\\" ) + strHitsoundHead );
 	}
 
 	void PX_API RemoveHitsoundFiles( )
@@ -34,20 +34,20 @@ namespace PX::Features::Miscellaneous
 		std::remove( ( strSoundDirectory + PX_XOR( "\\" ) + strHitsoundHead ).c_str( ) );
 	}
 
-	void PX_API Hitsound( IGameEvent* pEvent )
+	void PX_API Hitsound( IGameEvent *pEvent )
 	{
 		if ( !_Settings._Miscellaneous._Other.bHitSound )
 			return;
 
 		const auto iLocalPlayer = pEngineClient->GetLocalPlayer( ),
-					iAttacker = pEngineClient->GetPlayerForUserID( pEvent->GetInt( PX_XOR( "attacker" ) ) );
+				   iAttacker = pEngineClient->GetPlayerForUserID( pEvent->GetInt( PX_XOR( "attacker" ) ) );
 		if ( iLocalPlayer != iAttacker )
 			return;
 
 		pSurface->PlaySound_( ( strPrefix + ( pEvent->GetInt( PX_XOR( "hitgroup" ) ) == HITGROUP_HEAD ? strHitsoundHead : strHitsound ) ).c_str( ) );
 	}
 
-	void PX_API NoTeamDamage( player_ptr_t pLocalPlayer, CUserCmd* pCmd )
+	void PX_API NoTeamDamage( player_ptr_t pLocalPlayer, CUserCmd *pCmd )
 	{
 		if ( pCmd->buttons & IN_ATTACK )
 			if ( pLocalPlayer->m_iTeamNum( ) == pLocalPlayer->TraceRayFromAngle( QAngle( pClientState->viewangles ) + pLocalPlayer->m_aimPunchAngle( ) ).hit_entity->GetBaseEntity( )->m_iTeamNum( ) )
@@ -62,7 +62,7 @@ namespace PX::Features::Miscellaneous
 		if ( !pLocalPlayer->IsAlive( ) /*|| bomb != planted*/ ) // safety and optimization
 			return;
 
-		IClientEntity* pC4Entity { };
+		IClientEntity *pC4Entity { };
 		for ( auto u = 0u; u < pEntityList->GetMaxEntities( ); u++ ) // find bomb
 			if ( ( pC4Entity = pEntityList->GetClientEntity( u ) ) != nullptr ? pC4Entity->GetClientClass( )->m_ClassID == ClassID_CPlantedC4 : false )
 				break;
@@ -77,7 +77,7 @@ namespace PX::Features::Miscellaneous
 		{
 			auto buffer = pC4->m_flC4Blow( ) - pGlobalVariables->m_flCurrentTime;
 			if ( buffer <= ( pLocalPlayer->m_bHasDefuser( ) ? 5.f : 10.f ) // if the time is less than defuse time
-				 && buffer >= pLocalPlayer->GetDefuseTimer( ) ) // and we are faster than the ticker
+				&& buffer >= pLocalPlayer->GetDefuseTimer( ) ) // and we are faster than the ticker
 				pCmd->buttons |= IN_USE; // defuse
 
 			// todo, check if bomb is within defusing distance
@@ -105,7 +105,7 @@ namespace PX::Features::Miscellaneous
 	{
 		if ( _Settings._Miscellaneous._Other.flClanTagSpeed == 0.f ) // divide by zero safety
 			_Settings._Miscellaneous._Other.flClanTagSpeed = FLT_EPSILON;
-		
+
 		if ( pGlobalVariables->m_iTickCount % int( ceilf( 1.f / ( _Settings._Miscellaneous._Other.flClanTagSpeed * 2.6666666f * pGlobalVariables->m_flIntervalPerTick ) ) ) )
 			return;
 
@@ -123,7 +123,7 @@ namespace PX::Features::Miscellaneous
 		if ( strTag.substr( 0, PX_MAX_CLAN_LENGTH ) == strTagUnchanged.substr( 0, PX_MAX_CLAN_LENGTH ) )
 			bDirection = true;
 		else if ( strTag.substr( 0, PX_MAX_CLAN_LENGTH )
-				  == strTagUnchanged.substr( strTagUnchanged.length( ) - PX_MAX_CLAN_LENGTH, strTagUnchanged.length( ) ) )
+			== strTagUnchanged.substr( strTagUnchanged.length( ) - PX_MAX_CLAN_LENGTH, strTagUnchanged.length( ) ) )
 			bDirection = false;
 
 		if ( bDirection )

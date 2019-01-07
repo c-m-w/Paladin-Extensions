@@ -5,7 +5,7 @@
 
 namespace PX::Features::Miscellaneous
 {
-	void PX_API AutoJump( player_ptr_t pLocalPlayer, CUserCmd* pCmd )
+	void PX_API AutoJump( player_ptr_t pLocalPlayer, CUserCmd *pCmd )
 	{
 		if ( !_Settings._Miscellaneous._Movement.bAutomaticJump )
 			return;
@@ -13,13 +13,13 @@ namespace PX::Features::Miscellaneous
 		const auto movetype = pLocalPlayer->movetype( );
 		if ( movetype != MOVETYPE_NOCLIP && movetype != MOVETYPE_LADDER ) // don't change anything in these states
 			if ( !( pLocalPlayer->m_fFlags( ) & FL_ONGROUND )
-				 || pGlobalVariables->m_iTickCount % ( _Settings._Miscellaneous._Movement.iMissTicks + 1 ) ) // if they aren't on the ground or if they missed, stop jumping
+				|| pGlobalVariables->m_iTickCount % ( _Settings._Miscellaneous._Movement.iMissTicks + 1 ) ) // if they aren't on the ground or if they missed, stop jumping
 				pCmd->buttons &= ~IN_JUMP;
 			else
 				pCmd->buttons |= IN_JUMP;
 	}
 
-	void PX_API CircleStrafe( player_ptr_t pLocalPlayer, CUserCmd* pCmd )
+	void PX_API CircleStrafe( player_ptr_t pLocalPlayer, CUserCmd *pCmd )
 	{
 		constexpr auto flAcceleration = 30.f;
 		volatile static auto bWasEnabled = false;
@@ -33,8 +33,8 @@ namespace PX::Features::Miscellaneous
 		auto flVelocity = D3DXToDegree( atan2f( vecVelocity.y, vecVelocity.x ) );
 
 		if ( !_Settings._Miscellaneous._Movement.bCircleStrafe
-			 && ( fabsf( flVelocity - pCmd->viewangles.yaw ) < flStep || !bWasEnabled )
-			 || !( pCmd->buttons & IN_JUMP ) )
+			&& ( fabsf( flVelocity - pCmd->viewangles.yaw ) < flStep || !bWasEnabled )
+			|| !( pCmd->buttons & IN_JUMP ) )
 		{
 			bWasEnabled = false;
 			return;
@@ -100,8 +100,8 @@ namespace PX::Features::Miscellaneous
 			static int iLastMotionlessTick;
 			static auto cl_sidespeed = pConVar->FindVar( PX_XOR( "cl_sidespeed" ) );
 			if ( !( pLocalPlayer->m_fFlags( ) & FL_ONGROUND )
-				 && abs( pCmd->mousedx ) > 0
-				 && 100.f - _Settings._Miscellaneous._Movement.flSync < ( pGlobalVariables->m_iTickCount - iLastMotionlessTick ) * 100 / 16 + 1 )
+				&& abs( pCmd->mousedx ) > 0
+				&& 100.f - _Settings._Miscellaneous._Movement.flSync < ( pGlobalVariables->m_iTickCount - iLastMotionlessTick ) * 100 / 16 + 1 )
 				return ( void )( pCmd->sidemove = cl_sidespeed->GetFloat( ) * ( ( pCmd->mousedx > 0 ) - ( pCmd->mousedx < 0 ) ), pCmd->forwardmove = 0.f );
 
 			iLastMotionlessTick = pGlobalVariables->m_iTickCount;

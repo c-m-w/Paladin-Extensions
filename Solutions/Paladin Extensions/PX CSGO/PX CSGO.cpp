@@ -32,17 +32,17 @@ bool PX_API Initialize( )
 	//} ).detach( );
 	MessageBox( nullptr, std::to_wstring( lgnResult ).c_str( ), L"MEN", MB_OK );
 	return ( lgnResult == PX::Net::LOGIN_SUCCESS
-			 || lgnResult == PX::Net::LOGIN_STAFF_SUCCESS ) &&
+				|| lgnResult == PX::Net::LOGIN_STAFF_SUCCESS ) &&
 #else
 	return
 #endif
-		PX::Information::InitializeInformation( )
-		&& PX::Files::Resources::LoadResources( { } )
-		&& PX::UI::Manager::CSGO::Initialize( )
-		&& PX::Features::InitializeFeatures( )
-		&& PX::Drawing::InitializeDrawing( )
-		&& PX::Hooks::InitializeHooks( )
-		&& PX::Prediction::InitializePrediction( );
+			PX::Information::InitializeInformation( )
+			&& PX::Files::Resources::LoadResources( { } )
+			&& PX::UI::Manager::CSGO::Initialize( )
+			&& PX::Features::InitializeFeatures( )
+			&& PX::Drawing::InitializeDrawing( )
+			&& PX::Hooks::InitializeHooks( )
+			&& PX::Prediction::InitializePrediction( );
 }
 
 void PX_API OnAttach( )
@@ -65,6 +65,4 @@ void PX_API OnAttach( )
 }
 
 void PX_API OnDetach( )
-{
-
-}
+{}

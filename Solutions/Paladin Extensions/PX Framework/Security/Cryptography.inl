@@ -6,7 +6,7 @@ namespace PX
 {
 	namespace Cryptography
 	{
-		template< typename _t > Types::str_t PX_API Base64( const Types::str_t& strSubject )
+		template< typename _t > Types::str_t PX_API Base64( const Types::str_t &strSubject )
 		{
 			px_assert( !strSubject.empty( ) );
 			_t _Coder;
@@ -21,7 +21,7 @@ namespace PX
 			return strProcessedText;
 		}
 
-		template< typename _t > Types::str_t PX_API AES256CBC( const Types::str_t& strPlainText )
+		template< typename _t > Types::str_t PX_API AES256CBC( const Types::str_t &strPlainText )
 		{
 			px_assert( !strEncryptionKey.empty( ) && !strInitializationVector.empty( ) );
 			Types::str_t strOutput;
@@ -46,13 +46,15 @@ namespace PX
 		};
 
 		template< typename > px_abstract_class ACStringTraits;
-		template< std::size_t i > px_abstract_class ACStringTraits< char const( & )[ i ] >
+
+		template< std::size_t i > px_abstract_class ACStringTraits< char const( &)[ i ] >
 		{
 		public:
 			static PX_DEF int_trait_t = 1;
 			typedef char char_trait_t;
 		};
-		template< std::size_t i > px_abstract_class ACStringTraits< wchar_t const( & )[ i ] >
+
+		template< std::size_t i > px_abstract_class ACStringTraits< wchar_t const( &)[ i ] >
 		{
 		public:
 			static PX_DEF int_trait_t = 2;
@@ -65,6 +67,7 @@ namespace PX
 			static PX_DEF int_trait_t = 1;
 			typedef char char_trait_t;
 		};
+
 		template< > px_abstract_class ACStringTraits< const wchar_t* >
 		{
 		public:
@@ -75,6 +78,7 @@ namespace PX
 		template< int... > px_abstract_class AIndexList;
 
 		template< typename, int > px_abstract_class AAppend;
+
 		template< int... iLeft, int iRight > px_abstract_class AAppend< AIndexList< iLeft... >, iRight >
 		{
 		public:
@@ -86,6 +90,7 @@ namespace PX
 		public:
 			typedef typename AAppend< typename AConstructIndexList< i - 1 >::result_t, i - 1 >::result_t result_t;
 		};
+
 		template< > px_abstract_class AConstructIndexList< 0 >
 		{
 		public:
@@ -93,9 +98,10 @@ namespace PX
 		};
 
 		template< typename, typename > px_abstract_class AXorString;
+
 		template< typename _char, int... iIndex > px_abstract_class AXorString< _char, AIndexList< iIndex... > >
 		{
-			_char _chValue[ sizeof... ( iIndex ) + 1 ];
+			_char _chValue[ sizeof...( iIndex ) + 1 ];
 
 			static const _char _chXorKey = static_cast< _char >( AEnsureCompileTime< LinearCongruentialGenerator( 10 ) >::VALUE % 0x10000 );
 
@@ -105,22 +111,22 @@ namespace PX
 			}
 
 		public:
-			explicit constexpr AXorString( const _char* const _String ): _chValue { EncryptCharacter( _String[ iIndex ], iIndex )... }
+			explicit constexpr AXorString( const _char * const _String ): _chValue { EncryptCharacter( _String[ iIndex ], iIndex )... }
 			{ }
 
-			const _char* PX_API Decrypt( )
+			const _char * PX_API Decrypt( )
 			{
-				for ( auto u = 0u; u < sizeof... ( iIndex ); u++ )
+				for ( auto u = 0u; u < sizeof...( iIndex ); u++ )
 				{
 					_chValue[ u ] ^= ( _chXorKey + u );
 				}
 
-				_chValue[ sizeof... ( iIndex ) ] = static_cast< _char >( 0 );
+				_chValue[ sizeof...( iIndex ) ] = static_cast< _char >( 0 );
 
 				return _chValue;
 			}
 
-			const _char* PX_API Get( )
+			const _char * PX_API Get( )
 			{
 				return _chValue;
 			}

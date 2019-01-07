@@ -50,7 +50,7 @@ namespace PX::Files
 		return wstrInstallDirectory;
 	}
 
-	CConfig::CConfig( ): wstrExtension( PX_XOR( L".pxcfg" ) ), wstrExtensionFolderNames { PX_XOR( L"CSGO\\Configurations\\" ), PX_XOR( L"PUBG\\Configurations\\" ), PX_XOR( L"RSIX\\Configurations\\" ) } , wstrGlobalFileName( PX_XOR( L"global" ) )
+	CConfig::CConfig( ): wstrExtension( PX_XOR( L".pxcfg" ) ), wstrExtensionFolderNames { PX_XOR( L"CSGO\\Configurations\\" ), PX_XOR( L"PUBG\\Configurations\\" ), PX_XOR( L"RSIX\\Configurations\\" ) }, wstrGlobalFileName( PX_XOR( L"global" ) )
 	{ }
 
 	PX_RET wstr_t PX_API CConfig::GetConfigDirectory( int iExtension )
@@ -61,7 +61,7 @@ namespace PX::Files
 		return wstrConfigDirectory + wstrExtensionFolderNames[ iExtension ];
 	}
 
-	void PX_API CConfig::SaveConfiguration( int iExtensionID, wcstr_t wszFileName, void* pConfigStructure, std::size_t zConfigStructureSize )
+	void PX_API CConfig::SaveConfiguration( int iExtensionID, wcstr_t wszFileName, void *pConfigStructure, std::size_t zConfigStructureSize )
 	{
 		nlohmann::json jsConfiguration;
 		jsConfiguration[ PX_XOR( "Size" ) ] = zConfigStructureSize;
@@ -70,7 +70,7 @@ namespace PX::Files
 		FileWrite( GetConfigDirectory( iExtensionID ) + wszFileName + wstrExtension, string_cast< wstr_t >( jsConfiguration.dump( 4 ) ), false, true );
 	}
 
-	bool PX_API CConfig::LoadDefaultConfiguration( int iExtensionID, void* pConfigStructure, std::size_t zConfigStructureSize )
+	bool PX_API CConfig::LoadDefaultConfiguration( int iExtensionID, void *pConfigStructure, std::size_t zConfigStructureSize )
 	{
 		wstr_t wstrData;
 		if ( !FileRead( GetConfigDirectory( iExtensionID ) + wstrGlobalFileName + wstrExtension, wstrData, false, true ) )
@@ -80,7 +80,7 @@ namespace PX::Files
 		{
 			jsData = nlohmann::json::parse( string_cast< str_t >( wstrData ) );
 		}
-		catch( nlohmann::json::parse_error& )
+		catch ( nlohmann::json::parse_error & )
 		{
 			return false;
 		}
@@ -89,7 +89,7 @@ namespace PX::Files
 		{
 			return LoadConfiguration( iExtensionID, string_cast< wstr_t >( jsData[ PX_XOR( "Default Configuration" ) ].get< str_t >( ) ).c_str( ), pConfigStructure, zConfigStructureSize );
 		}
-		catch( nlohmann::json::type_error& )
+		catch ( nlohmann::json::type_error & )
 		{
 			return false;
 		}
@@ -102,7 +102,7 @@ namespace PX::Files
 		FileWrite( GetConfigDirectory( iExtensionID ) + wstrGlobalFileName + wstrExtension, string_cast< wstr_t >( jsGlobal.dump( 4 ) ), false, true );
 	}
 
-	bool PX_API CConfig::LoadConfiguration( int iExtensionID, Types::wcstr_t wszFileName, void* pConfigStructure, std::size_t zConfigStructureSize )
+	bool PX_API CConfig::LoadConfiguration( int iExtensionID, Types::wcstr_t wszFileName, void *pConfigStructure, std::size_t zConfigStructureSize )
 	{
 		wstr_t wstrData;
 		if ( !FileRead( GetConfigDirectory( iExtensionID ) + wszFileName + wstrExtension, wstrData, false, true ) )
@@ -114,7 +114,7 @@ namespace PX::Files
 		{
 			jsConfig = nlohmann::json::parse( strData );
 		}
-		catch( nlohmann::json::parse_error& )
+		catch ( nlohmann::json::parse_error & )
 		{
 			return false;
 		}
@@ -122,11 +122,11 @@ namespace PX::Files
 		try
 		{
 			if ( jsConfig[ PX_XOR( "Size" ) ].get< std::size_t >( ) != zConfigStructureSize )
-				{ };// config outdated
+			{ };// config outdated
 			for ( auto u = 0u; u < jsConfig[ PX_XOR( "Size" ) ].get< std::size_t >( ); u++ )
 				*reinterpret_cast< byte_t* >( ptr_t( pConfigStructure ) + u ) = jsConfig[ PX_XOR( "Bytes" ) ][ u ].get< byte_t >( );
 		}
-		catch( nlohmann::json::type_error& )
+		catch ( nlohmann::json::type_error & )
 		{
 			return false;
 		}
@@ -136,30 +136,30 @@ namespace PX::Files
 	namespace Resources
 	{
 		// todo: shouldn't have a parameter, should be hash from server
-		bool LoadResources( const str_t& strHash )
+		bool LoadResources( const str_t &strHash )
 		{
 			wstr_t wstrPath = GetPXDirectory( ) + PX_XOR( LR"(Resources\)" );
 
 			bool bFilesExist = std::filesystem::exists( ( wstrPath + PX_XOR( LR"(PX Logo.ico)" ) ).c_str( ) )
 
-				&& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Cursor\Arrow.png)" ) ).c_str( ) )
-				&& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Cursor\Hand.png)" ) ).c_str( ) )
-				&& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Cursor\I Beam.png)" ) ).c_str( ) )
+					&& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Cursor\Arrow.png)" ) ).c_str( ) )
+					&& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Cursor\Hand.png)" ) ).c_str( ) )
+					&& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Cursor\I Beam.png)" ) ).c_str( ) )
 
-				//& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Fonts\Envy.ttf)" ) ).c_str( ) )
-				//& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Fonts\Font Awesome.ttf)" ) ).c_str( ) )
-				//& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Fonts\Roboto.ttf)" ) ).c_str( ) )
-				//& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Fonts\Roboto Bold.ttf)" ) ).c_str( ) )
-				//& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Fonts\Tahoma.ttf)" ) ).c_str( ) )
-				//& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Fonts\Tahoma Bold.ttf)" ) ).c_str( ) )
+					//& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Fonts\Envy.ttf)" ) ).c_str( ) )
+					//& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Fonts\Font Awesome.ttf)" ) ).c_str( ) )
+					//& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Fonts\Roboto.ttf)" ) ).c_str( ) )
+					//& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Fonts\Roboto Bold.ttf)" ) ).c_str( ) )
+					//& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Fonts\Tahoma.ttf)" ) ).c_str( ) )
+					//& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Fonts\Tahoma Bold.ttf)" ) ).c_str( ) )
 
-				&& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Game Icons\CSGO.png)" ) ).c_str( ) )
-				&& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Game Icons\PUBG.png)" ) ).c_str( ) )
-				&& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Game Icons\RSIX.png)" ) ).c_str( ) )
+					&& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Game Icons\CSGO.png)" ) ).c_str( ) )
+					&& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Game Icons\PUBG.png)" ) ).c_str( ) )
+					&& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Game Icons\RSIX.png)" ) ).c_str( ) )
 
-				&& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Game Icons\CSGO Sized.png)" ) ).c_str( ) )
-				&& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Game Icons\PUBG Sized.png)" ) ).c_str( ) )
-				&& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Game Icons\RSIX Sized.png)" ) ).c_str( ) );
+					&& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Game Icons\CSGO Sized.png)" ) ).c_str( ) )
+					&& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Game Icons\PUBG Sized.png)" ) ).c_str( ) )
+					&& std::filesystem::exists( ( wstrPath + PX_XOR( LR"(Game Icons\RSIX Sized.png)" ) ).c_str( ) );
 
 			if ( !bFilesExist )
 				return false;
@@ -204,32 +204,31 @@ namespace PX::Files
 
 			auto strResourcesHash = GenerateHash( strLogoICO )
 
-				+ GenerateHash( strCursorArrow )
-				+ GenerateHash( strCursorHand )
-				+ GenerateHash( strCursorIBeam )
+					+ GenerateHash( strCursorArrow )
+					+ GenerateHash( strCursorHand )
+					+ GenerateHash( strCursorIBeam )
 
-				//+ GenerateHash( strFontsEnvy )
-				//+ GenerateHash( strFontsFontAwesome )
-				//+ GenerateHash( strFontsRoboto )
-				//+ GenerateHash( strFontsRobotoBold )
-				//+ GenerateHash( strFontsTahoma )
-				//+ GenerateHash( strFontsTahomaBold )
+					//+ GenerateHash( strFontsEnvy )
+					//+ GenerateHash( strFontsFontAwesome )
+					//+ GenerateHash( strFontsRoboto )
+					//+ GenerateHash( strFontsRobotoBold )
+					//+ GenerateHash( strFontsTahoma )
+					//+ GenerateHash( strFontsTahomaBold )
 
-				+ GenerateHash( strGameIconsCSGO )
-				+ GenerateHash( strGameIconsPUBG )
-				+ GenerateHash( strGameIconsRSIX )
-			
-				+ GenerateHash( strGameIconsCSGOSized )
-				+ GenerateHash( strGameIconsPUBGSized )
-				+ GenerateHash( strGameIconsRSIXSized );
+					+ GenerateHash( strGameIconsCSGO )
+					+ GenerateHash( strGameIconsPUBG )
+					+ GenerateHash( strGameIconsRSIX )
+
+					+ GenerateHash( strGameIconsCSGOSized )
+					+ GenerateHash( strGameIconsPUBGSized )
+					+ GenerateHash( strGameIconsRSIXSized );
 
 			return true;
 			//return strHash == strResourcesHash;
 		}
 	}
 
-
-	bool PX_API FileRead( wstr_t wstrPath, wstr_t& wstrData, bool bRelativePath, bool bBase64 /*= true*/ )
+	bool PX_API FileRead( wstr_t wstrPath, wstr_t &wstrData, bool bRelativePath, bool bBase64 /*= true*/ )
 	{
 		px_assert( !wstrPath.empty( ) );
 
@@ -248,7 +247,7 @@ namespace PX::Files
 		return true;
 	}
 
-	bool PX_API FileWrite( wstr_t wstrPath, const wstr_t& wstrData, bool bRelativePath, bool bBase64 /*= true*/ )
+	bool PX_API FileWrite( wstr_t wstrPath, const wstr_t &wstrData, bool bRelativePath, bool bBase64 /*= true*/ )
 	{
 		if ( wstrPath.empty( ) || wstrData.empty( ) )
 			return false;

@@ -13,7 +13,7 @@ class CCommand;
 // ConVar flags
 //-----------------------------------------------------------------------------
 // The default, no flags at all
-#define FCVAR_NONE                0 
+#define FCVAR_NONE                0
 
 // Command to ConVars and ConCommands
 // ConVar Systems
@@ -53,13 +53,13 @@ class CCommand;
 #define FCVAR_CLIENTCMD_CAN_EXECUTE     (1<<30) // IVEngineClient::ClientCmd is allowed to execute this command. 
 #define FCVAR_MEME_DLL                  (1<<31)
 
-#define FCVAR_MATERIAL_THREAD_MASK ( FCVAR_RELOAD_MATERIALS | FCVAR_RELOAD_TEXTURES | FCVAR_MATERIAL_SYSTEM_THREAD )    
+#define FCVAR_MATERIAL_THREAD_MASK ( FCVAR_RELOAD_MATERIALS | FCVAR_RELOAD_TEXTURES | FCVAR_MATERIAL_SYSTEM_THREAD )
 
 //-----------------------------------------------------------------------------
 // Called when a ConVar changes value
 // NOTICE: For FCVAR_NEVER_AS_STRING ConVars, pOldValue == NULL
 //-----------------------------------------------------------------------------
-typedef void( *FnChangeCallback_t )( IConVar *var, const char *pOldValue, float flOldValue );
+typedef void ( *FnChangeCallback_t )( IConVar *var, const char *pOldValue, float flOldValue );
 
 
 //-----------------------------------------------------------------------------

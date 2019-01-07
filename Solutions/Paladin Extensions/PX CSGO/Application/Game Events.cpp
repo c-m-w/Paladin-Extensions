@@ -10,10 +10,10 @@ namespace PX::Events
 
 	class CListener: public IGameEventListener2
 	{
-		void FireGameEvent( IGameEvent* pEvent ) override
+		void FireGameEvent( IGameEvent *pEvent ) override
 		{
 			const std::string strName = pEvent->GetName( );
-			for ( const auto& callback : vecEventCallbacks )
+			for ( const auto &callback: vecEventCallbacks )
 				if ( callback.second == strName )
 					callback.first( pEvent );
 		}
@@ -27,7 +27,7 @@ namespace PX::Events
 	bool PX_API AddEventCallback( event_callback_t fnCallback, cstr_t szEventName, bool bServerSide )
 	{
 		auto bAddNewCallback = true;
-		for ( const auto& strEvent : vecAddedCallbacks )
+		for ( const auto &strEvent: vecAddedCallbacks )
 			if ( strEvent == szEventName )
 				bAddNewCallback = false;
 

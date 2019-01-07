@@ -35,6 +35,7 @@ namespace PX::Features::Combat
 		bool bResetBezierOrigin = true;
 		Vector vecOverCompensation { };
 	} _AimContext;
+
 	const decltype( _AimContext ) DEFAULT;
 
 	/** \brief Finds a target to aim at. */
@@ -42,14 +43,14 @@ namespace PX::Features::Combat
 	/** \param pCmd User commands of the local player. */
 	/** \return Pointer to player to aim at.\n
 				 nullptr is returned if no target was found. */
-	player_ptr_t PX_API FindTarget( player_ptr_t pLocalPlayer, CUserCmd* pCmd );
-	int PX_API FindHitbox( player_ptr_t pLocalPlayer, player_ptr_t pTarget, CUserCmd* pCmd );
-	bool PX_API ValidateTarget( player_ptr_t pLocalPlayer, player_ptr_t pTarget, CUserCmd* pCmd );
-	void PX_API ResetAimPosition( player_ptr_t pLocalPlayer, CUserCmd* pCmd );
+	player_ptr_t PX_API FindTarget( player_ptr_t pLocalPlayer, CUserCmd *pCmd );
+	int PX_API FindHitbox( player_ptr_t pLocalPlayer, player_ptr_t pTarget, CUserCmd *pCmd );
+	bool PX_API ValidateTarget( player_ptr_t pLocalPlayer, player_ptr_t pTarget, CUserCmd *pCmd );
+	void PX_API ResetAimPosition( player_ptr_t pLocalPlayer, CUserCmd *pCmd );
 	void PX_API ResetContext( );
-	void PX_API OnNewTarget( player_ptr_t pLocalPlayer, player_ptr_t pTarget, CUserCmd* pCmd );
+	void PX_API OnNewTarget( player_ptr_t pLocalPlayer, player_ptr_t pTarget, CUserCmd *pCmd );
 
-	void PX_API CorrectMovement( QAngle qOldAngles, CUserCmd* pCmd, float flOldForward, float flOldSide )
+	void PX_API CorrectMovement( QAngle qOldAngles, CUserCmd *pCmd, float flOldForward, float flOldSide )
 	{
 		float flDelta;
 		float f1;
@@ -76,9 +77,9 @@ namespace PX::Features::Combat
 		pCmd->sidemove = sin( D3DXToRadian( flDelta ) ) * flOldForward + sin( D3DXToRadian( flDelta + 90.f ) ) * flOldSide;
 	}
 
-	void PX_API AimAssist( player_ptr_t pLocalPlayer, CUserCmd* pCmd )
+	void PX_API AimAssist( player_ptr_t pLocalPlayer, CUserCmd *pCmd )
 	{
-		static bool* pLast = nullptr;
+		static bool *pLast = nullptr;
 		static auto bReleasedKey = true;
 
 		if ( !pLocalPlayer->IsAlive( ) )
@@ -140,7 +141,7 @@ namespace PX::Features::Combat
 		const auto hActiveWeapon = pLocalPlayer->m_hActiveWeapon( );
 		if ( !hActiveWeapon || !hActiveWeapon.IsValid( ) )
 			return;
-		recoil_config_t* _ConfigRecoil;
+		recoil_config_t *_ConfigRecoil;
 		PX_GET_WEAPON_CONFIG( hActiveWeapon, _ConfigRecoil, _Settings._Combat._RecoilCompensation );
 		auto buffer = !_ConfigRecoil->bEnabled ? pLocalPlayer->m_aimPunchAngle( ) * GetRecoilScale( ) : angDeltaCompensation;
 
@@ -217,7 +218,7 @@ namespace PX::Features::Combat
 					{
 						const auto vecBezierPoints = GetBezierPoints( _AimContext.vecStartPos, _AimContext.vecTargetAngle, _Config->_BezierOrders, _Config->iCurrentOrders + 1 );
 						const auto vecPoint = GetBezierPoint( vecBezierPoints, _AimContext.flBezierRatio );
-						
+
 						vecNewAngles = vecPoint;
 						vecNewAngles.z = _AimContext.vecTargetAngle.z;
 						vecNewAngles.x -= buffer.pitch;
@@ -281,7 +282,7 @@ namespace PX::Features::Combat
 		}
 	}
 
-	player_ptr_t PX_API FindTarget( player_ptr_t pLocalPlayer, CUserCmd* pCmd )
+	player_ptr_t PX_API FindTarget( player_ptr_t pLocalPlayer, CUserCmd *pCmd )
 	{
 		auto flClosestDistance = FLT_MAX;
 		auto iLowestHealth = INT_MAX;
@@ -291,11 +292,11 @@ namespace PX::Features::Combat
 		{
 			const auto pCurrentEntity = player_ptr_t( pEntityList->GetClientEntity( i ) );
 			if ( pCurrentEntity == nullptr
-				 || pCurrentEntity == pLocalPlayer
-				 || !pCurrentEntity->IsPlayer( )
-				 || !pCurrentEntity->IsAlive( )
-				 || pCurrentEntity->m_bGunGameImmunity( )
-				 || !pLocalPlayer->CanSeePlayer( pCurrentEntity, _Config->bMindSmoke.Get( ) ) )
+				|| pCurrentEntity == pLocalPlayer
+				|| !pCurrentEntity->IsPlayer( )
+				|| !pCurrentEntity->IsAlive( )
+				|| pCurrentEntity->m_bGunGameImmunity( )
+				|| !pLocalPlayer->CanSeePlayer( pCurrentEntity, _Config->bMindSmoke.Get( ) ) )
 				continue;
 
 			const auto flCrosshairDistance = CalculateCrosshairDistance( pLocalPlayer, pCurrentEntity, _Config->iReferenceHitbox, pCmd, _Config->bWorldlyCrosshairDistance.Get( ) );
@@ -344,7 +345,7 @@ namespace PX::Features::Combat
 		return pEntity;
 	}
 
-	int PX_API FindHitbox( player_ptr_t pLocalPlayer, player_ptr_t pTarget, CUserCmd* pCmd )
+	int PX_API FindHitbox( player_ptr_t pLocalPlayer, player_ptr_t pTarget, CUserCmd *pCmd )
 	{
 		auto flClosestHitboxDistance = FLT_MAX;
 		auto iClosestHitbox = -1;
@@ -370,7 +371,7 @@ namespace PX::Features::Combat
 		return iClosestHitbox;
 	}
 
-	bool PX_API ValidateTarget( player_ptr_t pLocalPlayer, player_ptr_t pTarget, CUserCmd* pCmd )
+	bool PX_API ValidateTarget( player_ptr_t pLocalPlayer, player_ptr_t pTarget, CUserCmd *pCmd )
 	{
 		if ( _AimContext.iHitbox != -1 )
 			if ( CalculateCrosshairDistance( pLocalPlayer, pTarget, _AimContext.iHitbox, pCmd, _Config->bWorldlyCrosshairDistance.Get( ) ) )
@@ -378,7 +379,7 @@ namespace PX::Features::Combat
 		return -1 != ( _AimContext.iHitbox = FindHitbox( pLocalPlayer, pTarget, pCmd ) );
 	}
 
-	void PX_API ResetAimPosition( player_ptr_t pLocalPlayer, CUserCmd* pCmd )
+	void PX_API ResetAimPosition( player_ptr_t pLocalPlayer, CUserCmd *pCmd )
 	{
 		constexpr auto fnGetAcceleration = [ ]( float flFirst, float flSecond, float flVelocity, float flTime, float flFactor )
 		{
@@ -394,10 +395,10 @@ namespace PX::Features::Combat
 		_AimContext.vecCurrentAngle = pClientState->viewangles;
 		_AimContext.vecTargetAngle = Vector( _AimContext.qTargetAngle.pitch, _AimContext.qTargetAngle.yaw, _AimContext.qTargetAngle.roll );
 
-		auto& gtRay = pLocalPlayer->TraceRayFromAngle( _AimContext.qTargetAngle );
+		auto &gtRay = pLocalPlayer->TraceRayFromAngle( _AimContext.qTargetAngle );
 		if ( gtRay.hit_entity != nullptr
-			 && gtRay.hit_entity->EntIndex( ) == _AimContext.iEntityIndex
-			 && gtRay.hitbox == _AimContext.iHitbox )
+			&& gtRay.hit_entity->EntIndex( ) == _AimContext.iEntityIndex
+			&& gtRay.hitbox == _AimContext.iHitbox )
 		{
 			if ( _AimContext.vecAimAngle != _AimContext.vecTargetAngle )
 			{
@@ -413,7 +414,7 @@ namespace PX::Features::Combat
 					_AimContext.vecAimAngle -= _AimContext.vecAimVelocity * pGlobalVariables->m_flIntervalPerTick;
 			}
 
-			if( _AimContext.flBezierRatio != 1.f )
+			if ( _AimContext.flBezierRatio != 1.f )
 			{
 				_AimContext.flBezierVelocity += _AimContext.flBezierAcceleration * pGlobalVariables->m_flIntervalPerTick;
 
@@ -448,7 +449,7 @@ namespace PX::Features::Combat
 		_AimContext = DEFAULT;
 	}
 
-	void PX_API OnNewTarget( player_ptr_t pLocalPlayer, player_ptr_t pNewTarget, CUserCmd* pCmd )
+	void PX_API OnNewTarget( player_ptr_t pLocalPlayer, player_ptr_t pNewTarget, CUserCmd *pCmd )
 	{
 		ResetContext( );
 		if ( ( _AimContext.iHitbox = FindHitbox( pLocalPlayer, pNewTarget, pCmd ) ) == -1 )

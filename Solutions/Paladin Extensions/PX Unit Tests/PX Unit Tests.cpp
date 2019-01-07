@@ -440,7 +440,7 @@ namespace PX::UnitTests
 					PX_WRN << "Unit Test Log";
 					PX_ERR << "Unit Test Log";
 					PX_LOG << "\tAppended Unit Test Log";
-					
+
 					Assert::AreEqual(
 #if defined _DEBUG
 R"([OPN] Begin new logging session
@@ -450,9 +450,9 @@ R"([OPN] Begin new logging session
 [WRN] Unit Test Log
 [ERR] Unit Test Log	Appended Unit Test Log)"
 #else
-R"()"
+									 R"()"
 #endif
-						, GlobalTools::GetFileData( L"C:/debug.log" ).c_str( ), L"Log comparison failed", PX_ASSERT_INFO );
+									 , GlobalTools::GetFileData( L"C:/debug.log" ).c_str( ), L"Log comparison failed", PX_ASSERT_INFO );
 				}
 			};
 
@@ -478,18 +478,18 @@ R"()"
 				{
 					// multi xor
 					Assert::AreNotEqual( R"(ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`1234567890-=[]\;',./~!@#$%^&*()_+{}|:"<>?)",
-									  ( PX::XOR::AXorString< PX::XOR::ACStringTraits< decltype( R"(ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`1234567890-=[]\;',./~!@#$%^&*()_+{}|:"<>?)" )
-									  >::char_trait_t, PX::XOR::AConstructIndexList< ( sizeof( R"(ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`1234567890-=[]\;',./~!@#$%^&*()_+{}|:"<>?)" ) - 1 )
-										/ PX::XOR::ACStringTraits< decltype( R"(ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`1234567890-=[]\;',./~!@#$%^&*()_+{}|:"<>?)" ) >::int_trait_t >::result_t >
-										( R"(ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`1234567890-=[]\;',./~!@#$%^&*()_+{}|:"<>?)" ).Get( ) ),
-									  L"Multi-byte XOR inequality check failed", PX_ASSERT_INFO );
+										 ( PX::XOR::AXorString< PX::XOR::ACStringTraits< decltype( R"(ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`1234567890-=[]\;',./~!@#$%^&*()_+{}|:"<>?)" )
+																>::char_trait_t, PX::XOR::AConstructIndexList< ( sizeof( R"(ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`1234567890-=[]\;',./~!@#$%^&*()_+{}|:"<>?)" ) - 1 )
+																	/ PX::XOR::ACStringTraits< decltype( R"(ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`1234567890-=[]\;',./~!@#$%^&*()_+{}|:"<>?)" ) >::int_trait_t >::result_t >
+											 ( R"(ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`1234567890-=[]\;',./~!@#$%^&*()_+{}|:"<>?)" ).Get( ) ),
+										 L"Multi-byte XOR inequality check failed", PX_ASSERT_INFO );
 					// wide xor
 					Assert::AreNotEqual( LR"(ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`1234567890-=[]\;',./~!@#$%^&*()_+{}|:"<>?)",
-									  ( PX::XOR::AXorString< PX::XOR::ACStringTraits< decltype( LR"(ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`1234567890-=[]\;',./~!@#$%^&*()_+{}|:"<>?)" )
-									  >::char_trait_t, PX::XOR::AConstructIndexList< ( sizeof( LR"(ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`1234567890-=[]\;',./~!@#$%^&*()_+{}|:"<>?)" ) - 1 )
-										/ PX::XOR::ACStringTraits< decltype( LR"(ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`1234567890-=[]\;',./~!@#$%^&*()_+{}|:"<>?)" ) >::int_trait_t >::result_t >
-										( LR"(ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`1234567890-=[]\;',./~!@#$%^&*()_+{}|:"<>?)" ).Get( ) ),
-									  L"Wide XOR inequality check failed", PX_ASSERT_INFO );
+										 ( PX::XOR::AXorString< PX::XOR::ACStringTraits< decltype( LR"(ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`1234567890-=[]\;',./~!@#$%^&*()_+{}|:"<>?)" )
+																>::char_trait_t, PX::XOR::AConstructIndexList< ( sizeof( LR"(ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`1234567890-=[]\;',./~!@#$%^&*()_+{}|:"<>?)" ) - 1 )
+																	/ PX::XOR::ACStringTraits< decltype( LR"(ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`1234567890-=[]\;',./~!@#$%^&*()_+{}|:"<>?)" ) >::int_trait_t >::result_t >
+											 ( LR"(ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`1234567890-=[]\;',./~!@#$%^&*()_+{}|:"<>?)" ).Get( ) ),
+										 L"Wide XOR inequality check failed", PX_ASSERT_INFO );
 
 					// multi unxor
 					Assert::AreEqual( R"(ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz`1234567890-=[]\;',./~!@#$%^&*()_+{}|:"<>?)",
@@ -632,7 +632,7 @@ void OnDetach( )
 					};
 
 					Assert::AreNotEqual( 0, CreateProcess( LR"(C:\Users\Jeremiah\Documents\Paladin Extensions\Solutions\Paladin Extensions\PX Unit Tests\Unit Test Empty.exe)",
-													nullptr, nullptr, nullptr, FALSE, 0x0, nullptr, nullptr, &si, &pi ), L"CreateProcess failed", PX_ASSERT_INFO );
+														   nullptr, nullptr, nullptr, FALSE, 0x0, nullptr, nullptr, &si, &pi ), L"CreateProcess failed", PX_ASSERT_INFO );
 
 					if ( !sys::LoadLibraryEx( L"Unit Test Empty.exe", LR"(C:\Users\Jeremiah\Documents\Paladin-Extensions\Solutions\Paladin Extensions\PX Unit Tests\Unit Test Log.dll)" ) )
 					{
@@ -672,6 +672,7 @@ void OnDetach( )
 				public:
 					// todo: @cole InitializeNuklear, InitializeUI, Destruct, CalculateTextBounds, SetFont, OnReset, OnSuccessfulReset, HandleEvent, Render, SetLayout, MouseHoveringRectangle, SetWidgetPosition
 				};
+
 				TEST_CLASS( Widgets )
 				{
 				public:
@@ -682,14 +683,10 @@ void OnDetach( )
 	}
 
 	namespace Installer
-	{
-		
-	}
+	{ }
 
 	namespace Launcher
-	{
-		
-	}
+	{ }
 
 	namespace Manager
 	{

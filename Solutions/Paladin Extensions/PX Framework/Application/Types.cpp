@@ -18,7 +18,7 @@ namespace PX::Types
 		if ( bAttemptedToAddToList || this < pConfigStructure || ptr_t( this ) > ptr_t( pConfigStructure ) + zConfigStructureSize )
 			return;
 
-		if( !bAddedToList )
+		if ( !bAddedToList )
 		{
 			bAddedToList = true;
 			vecToggles.emplace_back( this );
@@ -26,25 +26,25 @@ namespace PX::Types
 		bAttemptedToAddToList = true;
 	}
 
-	bool& toggle_t::Get( )
+	bool &toggle_t::Get( )
 	{
 		AddToList( );
 		return bEnabled;
 	}
 
-	bool& toggle_t::UseKeyBinds( )
+	bool &toggle_t::UseKeyBinds( )
 	{
 		AddToList( );
 		return bUseKeybinds;
 	}
 
-	std::vector<toggle_t::keybind_t>& toggle_t::GetBinds( )
+	std::vector< toggle_t::keybind_t > &toggle_t::GetBinds( )
 	{
 		AddToList( );
 		return vecKeyBinds;
 	}
 
-	toggle_t& toggle_t::operator=( bool _bEnabled )
+	toggle_t &toggle_t::operator=( bool _bEnabled )
 	{
 		AddToList( );
 		bEnabled = _bEnabled;
@@ -57,21 +57,20 @@ namespace PX::Types
 		return !bEnabled;
 	}
 
-	line_t::line_t( const D3DXVECTOR2* _pVertices, std::size_t _sVertices, float _flWidth, DWORD _dwColor, BOOL _bAntiAlias /*= TRUE*/ ): drawing_t< D3DXVECTOR2 >( _pVertices, _sVertices )
+	line_t::line_t( const D3DXVECTOR2 *_pVertices, std::size_t _sVertices, float _flWidth, DWORD _dwColor, BOOL _bAntiAlias /*= TRUE*/ ): drawing_t< D3DXVECTOR2 >( _pVertices, _sVertices )
 	{
 		dwColor = _dwColor;
 		flWidth = _flWidth;
 		bAntiAlias = _bAntiAlias;
 	}
 
-	polygon_t::polygon_t( const vertex_t* _pVertices, std::size_t _sVertices, std::size_t _sPrimitives, D3DPRIMITIVETYPE _ptType ): drawing_t< vertex_t >( _pVertices, _sVertices )
+	polygon_t::polygon_t( const vertex_t *_pVertices, std::size_t _sVertices, std::size_t _sPrimitives, D3DPRIMITIVETYPE _ptType ): drawing_t< vertex_t >( _pVertices, _sVertices )
 	{
 		sPrimitives = _sPrimitives;
 		ptType = _ptType;
 	}
 
-	text_t::text_t( int _iFont, int _x, int _y, const wchar_t* _wszText, bool _bOutlined, DWORD _dwFlags, DWORD _dwColor, DWORD _dwOutline )
-		: iFont( _iFont ), x( _x ), y( _y ), wstrText( _wszText ), bOutlined( _bOutlined ), dwFlags( _dwFlags ), dwColor( _dwColor ), dwOutline( _dwOutline )
+	text_t::text_t( int _iFont, int _x, int _y, const wchar_t *_wszText, bool _bOutlined, DWORD _dwFlags, DWORD _dwColor, DWORD _dwOutline ) : iFont( _iFont ), x( _x ), y( _y ), wstrText( _wszText ), bOutlined( _bOutlined ), dwFlags( _dwFlags ), dwColor( _dwColor ), dwOutline( _dwOutline )
 	{ }
 
 	module_t::module_t( wstr_t _wstrName )
@@ -93,7 +92,7 @@ namespace PX::Types
 			auto iCurrentByteCount = 0;
 			char szCurrentBytes[ 2 ] { };
 
-			for each( auto& ch in strPattern )
+			for each ( auto &ch in strPattern )
 			{
 				if ( ch == '?' )
 					vecBytes.emplace_back( -1 );
@@ -103,7 +102,7 @@ namespace PX::Types
 					iCurrentByteCount++;
 					if ( iCurrentByteCount == 2 )
 					{
-						char* szBuffer;
+						char *szBuffer;
 						vecBytes.emplace_back( strtol( szCurrentBytes, &szBuffer, 16 ) );
 						iCurrentByteCount = 0;
 					}
@@ -307,10 +306,12 @@ namespace PX::Types
 	color_t SColorSequence::GetGradient( color_t clrStart, color_t clrEnd, float flProgress )
 	{
 		px_assert( flProgress >= 0.f && flProgress <= 1.f );
-		return { clrStart.r + byte_t( ( clrEnd.r - clrStart.r ) * flProgress ),
-					clrStart.g + byte_t( ( clrEnd.g - clrStart.g ) * flProgress ),
-					clrStart.b + byte_t( ( clrEnd.b - clrStart.b ) * flProgress ),
-					clrStart.a + byte_t( ( clrEnd.a - clrStart.a ) * flProgress ) };
+		return {
+			clrStart.r + byte_t( ( clrEnd.r - clrStart.r ) * flProgress ),
+			clrStart.g + byte_t( ( clrEnd.g - clrStart.g ) * flProgress ),
+			clrStart.b + byte_t( ( clrEnd.b - clrStart.b ) * flProgress ),
+			clrStart.a + byte_t( ( clrEnd.a - clrStart.a ) * flProgress )
+		};
 	}
 
 	//bool SColor::operator==( const SColor& rhs ) const
@@ -333,7 +334,7 @@ namespace PX::Types
 		PutNewColorSequence( clrFirstSequence, mmtFirstSequence );
 	}
 
-	SColorSequence::SColorSequence( color_t* clrColors, moment_t* mmtDurations, std::size_t zSequences )
+	SColorSequence::SColorSequence( color_t *clrColors, moment_t *mmtDurations, std::size_t zSequences )
 	{
 		for ( std::size_t z = 0; z < zSequences; z++ )
 		{
@@ -364,19 +365,19 @@ namespace PX::Types
 		return { };
 	}
 
-	color_t& SColorSequence::GetColor( unsigned uColor )
+	color_t &SColorSequence::GetColor( unsigned uColor )
 	{
 		px_assert( zSequences > uColor );
 		return sqInfo[ uColor ].clrColor;
 	}
 
-	moment_t& SColorSequence::GetDuration( unsigned uDuration )
+	moment_t &SColorSequence::GetDuration( unsigned uDuration )
 	{
 		px_assert( zSequences > uDuration );
 		return sqInfo[ uDuration ].mmtDuration;
 	}
 
-	void SColorSequence::PutNewColorSequence( const color_t& clrNewColor, moment_t mmtDuration )
+	void SColorSequence::PutNewColorSequence( const color_t &clrNewColor, moment_t mmtDuration )
 	{
 		if ( zSequences >= 7 )
 			return; //review can we use? DeleteColorSequence( 0 );

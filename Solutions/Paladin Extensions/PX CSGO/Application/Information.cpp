@@ -10,16 +10,16 @@ namespace PX::Information
 	bool PX_API InitializeInformation( )
 	{
 		return Memory::Setup( )
-			&& Modules::Setup( )
-			&& FindPointers( )
-			&& FindNetworkedVariables( )
-			&& Other::RetrievePaintKits( );
+				&& Modules::Setup( )
+				&& FindPointers( )
+				&& FindNetworkedVariables( )
+				&& Other::RetrievePaintKits( );
 	}
 
 	namespace Memory
 	{
 		bool PX_API Setup( )
-		{		
+		{
 #ifdef _DEBUG
 			wstr_t wstrBuffer;
 			Files::FileRead( Files::GetPXDirectory( ) + LR"(PX Website\PX CSGO.px)", wstrBuffer, false, false );
@@ -53,16 +53,17 @@ namespace PX::Information
 			{
 				if ( Tools::GetMoment( ) - mmtStart >= mmtMaxWaitTime )
 					return false;
-			} while ( !mEngine.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Engine" ) ].get< Types::str_t >( ) ) )
-					  || !mClient.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Client" ) ].get< Types::str_t >( ) ) )
-					  || !mDirectX.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "DirectX API" ) ].get< Types::str_t >( ) ) )
-					  || !mOverlay.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Overlay" ) ].get< Types::str_t >( ) ) )
-					  || !mVGUI.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "VGUI" ) ].get< Types::str_t >( ) ) )
-					  || !mVGUI2.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "VGUI2" ) ].get< Types::str_t >( ) ) )
-					  || !mInput.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Input" ) ].get< Types::str_t >( ) ) )
-					  || !mMaterialSystem.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Material System" ) ].get< Types::str_t >( ) ) ) 
-					  || !mValveStandardLibrary.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Valve Standard Library" ) ].get< Types::str_t >( ) ) )
-					  || !mLocalize .Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Localize" ) ].get< Types::str_t >( ) ) ) );
+			}
+			while ( !mEngine.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Engine" ) ].get< Types::str_t >( ) ) )
+				|| !mClient.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Client" ) ].get< Types::str_t >( ) ) )
+				|| !mDirectX.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "DirectX API" ) ].get< Types::str_t >( ) ) )
+				|| !mOverlay.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Overlay" ) ].get< Types::str_t >( ) ) )
+				|| !mVGUI.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "VGUI" ) ].get< Types::str_t >( ) ) )
+				|| !mVGUI2.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "VGUI2" ) ].get< Types::str_t >( ) ) )
+				|| !mInput.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Input" ) ].get< Types::str_t >( ) ) )
+				|| !mMaterialSystem.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Material System" ) ].get< Types::str_t >( ) ) )
+				|| !mValveStandardLibrary.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Valve Standard Library" ) ].get< Types::str_t >( ) ) )
+				|| !mLocalize.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Localize" ) ].get< Types::str_t >( ) ) ) );
 			return true;
 		}
 	}
@@ -72,92 +73,92 @@ namespace PX::Information
 		bool PX_API FindPointers( )
 		{
 			pSendPackets = reinterpret_cast< bool* >( Modules::mEngine.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Send Packets" ) ].get< str_t >( ) )
-													  + jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Send Packets" ) ].get< int >( ) );
+				+ jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Send Packets" ) ].get< int >( ) );
 			pGlobalVariables = **reinterpret_cast< CGlobalVarsBase*** >( Modules::mClient.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Global Variables" ) ].get< str_t >( ) )
-																		 + jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Global Variables" ) ].get< int >( ) );
+				+ jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Global Variables" ) ].get< int >( ) );
 			pClientState = **reinterpret_cast< CClientState*** >( Modules::mEngine.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Client State" ) ].get< str_t >( ) )
-																  + jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Client State" ) ].get< int >( ) );
+				+ jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Client State" ) ].get< int >( ) );
 			// Interfaces
 			pDevice = **reinterpret_cast< IDirect3DDevice9*** >( Modules::mDirectX.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Device" ) ].get< str_t >( ) )
-																 + jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Device" ) ].get< int >( ) );
+				+ jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Device" ) ].get< int >( ) );
 			pClientMode = *reinterpret_cast< IClientMode** >( Modules::mClient.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Client Mode" ) ].get< str_t >( ) )
-																			   + jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Client Mode" ) ].get< int >( ) );
+				+ jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Client Mode" ) ].get< int >( ) );
 			pGlowObjectManager = *reinterpret_cast< CGlowObjectManager** >( Modules::mClient.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Glow Object Manager" ) ].get< str_t >( ) )
-															  + jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Glow Object Manager" ) ].get< int >( ) );
+				+ jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Glow Object Manager" ) ].get< int >( ) );
 			pInput = *reinterpret_cast< CInput** >( Modules::mClient.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Input" ) ].get< str_t >( ) )
-																+ jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Input" ) ].get< int >( ) );
+				+ jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Input" ) ].get< int >( ) );
 			pMoveHelper = **reinterpret_cast< IMoveHelperServer*** >( Modules::mClient.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Move Helper" ) ].get< str_t >( ) )
-													+ jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Move Helper" ) ].get< int >( ) );
+				+ jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Move Helper" ) ].get< int >( ) );
 			pRenderBeams = *reinterpret_cast< IViewRenderBeams** >( Modules::mClient.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Render Beams" ) ].get< str_t >( ) )
-																	  + jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Render Beams" ) ].get< int >( ) );
+				+ jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Render Beams" ) ].get< int >( ) );
 
-			pClientBase = reinterpret_cast< IBaseClientDLL* >( Modules::mClient.ciFactory( 
-				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Client Base" ) ].get< str_t >( ).c_str( ), nullptr ) );
+			pClientBase = reinterpret_cast< IBaseClientDLL* >( Modules::mClient.ciFactory(
+																						  jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Client Base" ) ].get< str_t >( ).c_str( ), nullptr ) );
 			pEngineClient = reinterpret_cast< IVEngineClient* >( Modules::mEngine.ciFactory(
-				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Engine Client" ) ].get< str_t >( ).c_str( ), nullptr ) );
+																						    jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Engine Client" ) ].get< str_t >( ).c_str( ), nullptr ) );
 			pSurface = reinterpret_cast< ISurface* >( Modules::mVGUI.ciFactory(
-				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "VGUI Surface" ) ].get< str_t >( ).c_str( ), nullptr ) );
+																			   jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "VGUI Surface" ) ].get< str_t >( ).c_str( ), nullptr ) );
 			pPanel = reinterpret_cast< IPanel* >( Modules::mVGUI2.ciFactory(
-				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "VGUI Panel" ) ].get< str_t >( ).c_str( ), nullptr ) );
+																		    jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "VGUI Panel" ) ].get< str_t >( ).c_str( ), nullptr ) );
 			pEntityList = reinterpret_cast< IClientEntityList* >( Modules::mClient.ciFactory(
-				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Entity List" ) ].get< str_t >( ).c_str( ), nullptr ) );
+																							 jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Entity List" ) ].get< str_t >( ).c_str( ), nullptr ) );
 			pEngineTrace = reinterpret_cast< IEngineTrace* >( Modules::mEngine.ciFactory(
-				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Engine Trace" ) ].get< str_t >( ).c_str( ), nullptr ) );
+																						 jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Engine Trace" ) ].get< str_t >( ).c_str( ), nullptr ) );
 			pModelInfo = reinterpret_cast< IVModelInfoClient* >( Modules::mEngine.ciFactory(
-				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Model Info" ) ].get< str_t >( ).c_str( ), nullptr ) );
+																						    jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Model Info" ) ].get< str_t >( ).c_str( ), nullptr ) );
 			pInputSystem = reinterpret_cast< IInputSystem* >( Modules::mInput.ciFactory(
-				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Input" ) ].get< str_t >( ).c_str( ), nullptr ) );
+																					    jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Input" ) ].get< str_t >( ).c_str( ), nullptr ) );
 			pModelRender = reinterpret_cast< IVModelRender* >( Modules::mEngine.ciFactory(
-				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Model Render" ) ].get< str_t >( ).c_str( ), nullptr ) );
+																						  jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Model Render" ) ].get< str_t >( ).c_str( ), nullptr ) );
 			pMaterialSystem = reinterpret_cast< IMaterialSystem* >( Modules::mMaterialSystem.ciFactory(
-				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Material System" ) ].get< str_t >( ).c_str( ), nullptr ) );
+																									   jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Material System" ) ].get< str_t >( ).c_str( ), nullptr ) );
 			pEngineRenderView = reinterpret_cast< IVRenderView* >( Modules::mEngine.ciFactory(
-				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Engine Render View" ) ].get< str_t >( ).c_str( ), nullptr ) );
+																							  jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Engine Render View" ) ].get< str_t >( ).c_str( ), nullptr ) );
 			pConVar = reinterpret_cast< ICvar* >( Modules::mValveStandardLibrary.ciFactory(
-				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "CVar" ) ].get< str_t >( ).c_str( ), nullptr ) );
+																						   jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "CVar" ) ].get< str_t >( ).c_str( ), nullptr ) );
 			pLocalize = reinterpret_cast< ILocalize* >( Modules::mLocalize.ciFactory(
-				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Localize" ) ].get< str_t >( ).c_str( ), nullptr ) );
+																					 jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Localize" ) ].get< str_t >( ).c_str( ), nullptr ) );
 			pEvents = reinterpret_cast< IGameEventManager2* >( Modules::mEngine.ciFactory(
-				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Events" ) ].get< str_t >( ).c_str( ), nullptr ) );
+																						  jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Events" ) ].get< str_t >( ).c_str( ), nullptr ) );
 			pGameMovement = reinterpret_cast< IGameMovement* >( Modules::mClient.ciFactory(
-				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Game Movement" ) ].get< str_t >( ).c_str( ), nullptr ) );
+																						   jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Game Movement" ) ].get< str_t >( ).c_str( ), nullptr ) );
 			pPrediction = reinterpret_cast< IPrediction* >( Modules::mClient.ciFactory(
-				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Prediction" ) ].get< str_t >( ).c_str( ), nullptr ) );
+																					   jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Prediction" ) ].get< str_t >( ).c_str( ), nullptr ) );
 			pEngineSound = reinterpret_cast< IEngineSound* >( Modules::mEngine.ciFactory(
-				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Engine Sound" ) ].get< str_t >( ).c_str( ), nullptr ) );
+																						 jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Engine Sound" ) ].get< str_t >( ).c_str( ), nullptr ) );
 
 			return nullptr != pSendPackets
-				&& nullptr != pGlobalVariables
-				&& nullptr != pDevice
-				&& nullptr != pClientMode
-				&& nullptr != pGlowObjectManager
-				&& nullptr != pInput
-				&& nullptr != pClientState
-				&& nullptr != pClientBase
-				&& nullptr != pEngineClient
-				&& nullptr != pSurface
-				&& nullptr != pPanel
-				&& nullptr != pEntityList
-				&& nullptr != pEngineTrace
-				&& nullptr != pModelInfo
-				&& nullptr != pInputSystem
-				&& nullptr != pModelRender
-				&& nullptr != pMaterialSystem
-				&& nullptr != pEngineRenderView
-				&& nullptr != pConVar
-				&& nullptr != pLocalize
-				&& nullptr != pEvents
-				&& nullptr != pMoveHelper
-				&& nullptr != pGameMovement
-				&& nullptr != pPrediction
-				&& nullptr != pEngineSound
-				&& nullptr != pRenderBeams;
+					&& nullptr != pGlobalVariables
+					&& nullptr != pDevice
+					&& nullptr != pClientMode
+					&& nullptr != pGlowObjectManager
+					&& nullptr != pInput
+					&& nullptr != pClientState
+					&& nullptr != pClientBase
+					&& nullptr != pEngineClient
+					&& nullptr != pSurface
+					&& nullptr != pPanel
+					&& nullptr != pEntityList
+					&& nullptr != pEngineTrace
+					&& nullptr != pModelInfo
+					&& nullptr != pInputSystem
+					&& nullptr != pModelRender
+					&& nullptr != pMaterialSystem
+					&& nullptr != pEngineRenderView
+					&& nullptr != pConVar
+					&& nullptr != pLocalize
+					&& nullptr != pEvents
+					&& nullptr != pMoveHelper
+					&& nullptr != pGameMovement
+					&& nullptr != pPrediction
+					&& nullptr != pEngineSound
+					&& nullptr != pRenderBeams;
 		}
 	}
 
 	namespace NetworkedVariableManager
 	{
-		networked_variable_table_t PX_API ParseTable( RecvTable* pTable )
+		networked_variable_table_t PX_API ParseTable( RecvTable *pTable )
 		{
 			networked_variable_table_t nvtCurrent( pTable->m_pNetTableName );
 
@@ -165,8 +166,8 @@ namespace PX::Information
 			{
 				const auto pProp = &pTable->m_pProps[ i ];
 				if ( nullptr == pProp
-					 || std::isdigit( pProp->m_pVarName[ 0 ] )
-					 || !strcmp( pProp->m_pVarName, PX_XOR( "baseclass" ) ) )
+					|| std::isdigit( pProp->m_pVarName[ 0 ] )
+					|| !strcmp( pProp->m_pVarName, PX_XOR( "baseclass" ) ) )
 					continue;
 				if ( pProp->m_RecvType == DPT_DataTable && pProp->m_pDataTable != nullptr )
 				{
@@ -189,20 +190,20 @@ namespace PX::Information
 			return !vecNetworkedVariables.empty( );
 		}
 
-		ptr_t PX_API FindOffset( networked_variable_table_t& nvtTable, cstr_t szVariable )
+		ptr_t PX_API FindOffset( networked_variable_table_t &nvtTable, cstr_t szVariable )
 		{
-			for each ( auto& pProp in nvtTable.vecChildProps )
+			for each ( auto &pProp in nvtTable.vecChildProps )
 				if ( !strcmp( pProp->m_pVarName, szVariable ) )
 					return nvtTable.ptrOffset + pProp->m_Offset;
 
 			for each ( networked_variable_table_t pChild in nvtTable.vecChildTables )
 			{
 				auto ptrPropOffset = FindOffset( pChild, szVariable );
-				if( ptrPropOffset != 0 )
+				if ( ptrPropOffset != 0 )
 					return nvtTable.ptrOffset + ptrPropOffset;
 			}
 
-			for each ( auto& pChild in nvtTable.vecChildTables )
+			for each ( auto &pChild in nvtTable.vecChildTables )
 				if ( !strcmp( pChild.pProp->m_pVarName, szVariable ) )
 					return nvtTable.ptrOffset + pChild.ptrOffset;
 
@@ -211,8 +212,8 @@ namespace PX::Information
 
 		ptr_t PX_API FindOffset( cstr_t szTable, cstr_t szVariable )
 		{
-			for each( auto pTable in vecNetworkedVariables )
-				if( !strcmp( pTable.szName, szTable ) )
+			for each ( auto pTable in vecNetworkedVariables )
+				if ( !strcmp( pTable.szName, szTable ) )
 				{
 					const auto ptrResult = FindOffset( pTable, szVariable );
 					if ( 0u != ptrResult )
@@ -1022,24 +1023,24 @@ namespace PX::Information
 				ITEM_WEAPON_SCAR20,
 				{
 					paint_kit_t( 0, PX_XOR( "None" ), GRADE_CONSUMER, QUALITY_DEFAULT ),
-					paint_kit_t( 597,PX_XOR( "Bloodsport" ),GRADE_CLASSIFIED,QUALITY_STATTRAK ),
-					paint_kit_t( 391,PX_XOR( "Cardiac" ),GRADE_CLASSIFIED,QUALITY_STATTRAK ),
-					paint_kit_t( 312,PX_XOR( "Cyrex" ),GRADE_CLASSIFIED,QUALITY_STATTRAK ),
-					paint_kit_t( 165,PX_XOR( "Splash Jam" ),GRADE_CLASSIFIED,QUALITY_DEFAULT ),
-					paint_kit_t( 612,PX_XOR( "Powercore" ),GRADE_RESTRICTED,QUALITY_STATTRAK ),
-					paint_kit_t( 196,PX_XOR( "Emerald" ),GRADE_RESTRICTED,QUALITY_DEFAULT ),
-					paint_kit_t( 685,PX_XOR( "Jungle Slipstream" ),GRADE_MILSPEC,QUALITY_STATTRAK ),
-					paint_kit_t( 642,PX_XOR( "Blueprint" ),GRADE_MILSPEC,QUALITY_STATTRAK ),
-					paint_kit_t( 518,PX_XOR( "Outbreak" ),GRADE_MILSPEC,QUALITY_STATTRAK ),
-					paint_kit_t( 502,PX_XOR( "Green Marine" ),GRADE_MILSPEC,QUALITY_STATTRAK ),
-					paint_kit_t( 406,PX_XOR( "Grotto" ),GRADE_MILSPEC,QUALITY_STATTRAK ),
-					paint_kit_t( 232,PX_XOR( "Crimson Web" ),GRADE_MILSPEC,QUALITY_STATTRAK ),
-					paint_kit_t( 70,PX_XOR( "Carbon Fiber" ),GRADE_INDUSTRIAL,QUALITY_SOUVENIER ),
-					paint_kit_t( 157,PX_XOR( "Palm" ),GRADE_INDUSTRIAL,QUALITY_DEFAULT ),
-					paint_kit_t( 298,PX_XOR( "Army Sheen" ),GRADE_CONSUMER,QUALITY_DEFAULT ),
-					paint_kit_t( 100,PX_XOR( "Storm" ),GRADE_CONSUMER,QUALITY_SOUVENIER ),
-					paint_kit_t( 46,PX_XOR( "Contractor" ),GRADE_CONSUMER,QUALITY_SOUVENIER ),
-					paint_kit_t( 116,PX_XOR( "Sand Mesh" ),GRADE_CONSUMER,QUALITY_SOUVENIER )
+					paint_kit_t( 597,PX_XOR( "Bloodsport" ), GRADE_CLASSIFIED, QUALITY_STATTRAK ),
+					paint_kit_t( 391,PX_XOR( "Cardiac" ), GRADE_CLASSIFIED, QUALITY_STATTRAK ),
+					paint_kit_t( 312,PX_XOR( "Cyrex" ), GRADE_CLASSIFIED, QUALITY_STATTRAK ),
+					paint_kit_t( 165,PX_XOR( "Splash Jam" ), GRADE_CLASSIFIED, QUALITY_DEFAULT ),
+					paint_kit_t( 612,PX_XOR( "Powercore" ), GRADE_RESTRICTED, QUALITY_STATTRAK ),
+					paint_kit_t( 196,PX_XOR( "Emerald" ), GRADE_RESTRICTED, QUALITY_DEFAULT ),
+					paint_kit_t( 685,PX_XOR( "Jungle Slipstream" ), GRADE_MILSPEC, QUALITY_STATTRAK ),
+					paint_kit_t( 642,PX_XOR( "Blueprint" ), GRADE_MILSPEC, QUALITY_STATTRAK ),
+					paint_kit_t( 518,PX_XOR( "Outbreak" ), GRADE_MILSPEC, QUALITY_STATTRAK ),
+					paint_kit_t( 502,PX_XOR( "Green Marine" ), GRADE_MILSPEC, QUALITY_STATTRAK ),
+					paint_kit_t( 406,PX_XOR( "Grotto" ), GRADE_MILSPEC, QUALITY_STATTRAK ),
+					paint_kit_t( 232,PX_XOR( "Crimson Web" ), GRADE_MILSPEC, QUALITY_STATTRAK ),
+					paint_kit_t( 70,PX_XOR( "Carbon Fiber" ), GRADE_INDUSTRIAL, QUALITY_SOUVENIER ),
+					paint_kit_t( 157,PX_XOR( "Palm" ), GRADE_INDUSTRIAL, QUALITY_DEFAULT ),
+					paint_kit_t( 298,PX_XOR( "Army Sheen" ), GRADE_CONSUMER, QUALITY_DEFAULT ),
+					paint_kit_t( 100,PX_XOR( "Storm" ), GRADE_CONSUMER, QUALITY_SOUVENIER ),
+					paint_kit_t( 46,PX_XOR( "Contractor" ), GRADE_CONSUMER, QUALITY_SOUVENIER ),
+					paint_kit_t( 116,PX_XOR( "Sand Mesh" ), GRADE_CONSUMER, QUALITY_SOUVENIER )
 				}
 			},
 			{
@@ -1197,13 +1198,13 @@ namespace PX::Information
 				{
 					paint_kit_t( 0, PX_XOR( "None" ), GRADE_CONSUMER, QUALITY_DEFAULT ),
 					paint_kit_t( 558,PX_XOR( "Lore" ), GRADE_KNIFE, QUALITY_STATTRAK ),
-					paint_kit_t( 568,PX_XOR( "Gamma Doppler [Emerald]" ), GRADE_KNIFE, QUALITY_STATTRAK ),                 paint_kit_t( 569,PX_XOR( "Gamma Doppler [Phase 1]" ), GRADE_KNIFE, QUALITY_STATTRAK ),                        paint_kit_t( 570,PX_XOR( "Gamma Doppler [Phase 2]" ), GRADE_KNIFE, QUALITY_STATTRAK ),                        paint_kit_t( 571,PX_XOR( "Gamma Doppler [Phase 3]" ), GRADE_KNIFE, QUALITY_STATTRAK ),                        paint_kit_t( 572,PX_XOR( "Gamma Doppler [Phase 4]" ), GRADE_KNIFE, QUALITY_STATTRAK ), // todo
+					paint_kit_t( 568,PX_XOR( "Gamma Doppler [Emerald]" ), GRADE_KNIFE, QUALITY_STATTRAK ), paint_kit_t( 569,PX_XOR( "Gamma Doppler [Phase 1]" ), GRADE_KNIFE, QUALITY_STATTRAK ), paint_kit_t( 570,PX_XOR( "Gamma Doppler [Phase 2]" ), GRADE_KNIFE, QUALITY_STATTRAK ), paint_kit_t( 571,PX_XOR( "Gamma Doppler [Phase 3]" ), GRADE_KNIFE, QUALITY_STATTRAK ), paint_kit_t( 572,PX_XOR( "Gamma Doppler [Phase 4]" ), GRADE_KNIFE, QUALITY_STATTRAK ), // todo
 					paint_kit_t( 573,PX_XOR( "Autotronic" ), GRADE_KNIFE, QUALITY_STATTRAK ),
 					paint_kit_t( 563,PX_XOR( "Black Laminate" ), GRADE_KNIFE, QUALITY_STATTRAK ),
 					paint_kit_t( 580,PX_XOR( "Freehand" ), GRADE_KNIFE, QUALITY_STATTRAK ),
 					paint_kit_t( 578,PX_XOR( "Bright Water" ), GRADE_KNIFE, QUALITY_STATTRAK ),
 					paint_kit_t( 413,PX_XOR( "Marble Fade" ), GRADE_KNIFE, QUALITY_STATTRAK ),
-					 paint_kit_t( 415,PX_XOR( "Doppler [Ruby]" ), GRADE_KNIFE, QUALITY_STATTRAK ),                        paint_kit_t( 416,PX_XOR( "Doppler [Sapphire]" ), GRADE_KNIFE, QUALITY_STATTRAK ), // todo
+					paint_kit_t( 415,PX_XOR( "Doppler [Ruby]" ), GRADE_KNIFE, QUALITY_STATTRAK ), paint_kit_t( 416,PX_XOR( "Doppler [Sapphire]" ), GRADE_KNIFE, QUALITY_STATTRAK ), // todo
 					paint_kit_t( 409,PX_XOR( "Tiger Tooth" ), GRADE_KNIFE, QUALITY_STATTRAK ),
 					paint_kit_t( 98,PX_XOR( "Ultraviolet" ), GRADE_KNIFE, QUALITY_STATTRAK ),
 					paint_kit_t( 410,PX_XOR( "Damascus Steel" ), GRADE_KNIFE, QUALITY_STATTRAK ),
@@ -1226,7 +1227,7 @@ namespace PX::Information
 				ITEM_WEAPON_KNIFE_FLIP,
 				{
 					paint_kit_t( 0, PX_XOR( "None" ), GRADE_CONSUMER, QUALITY_DEFAULT ),
-					paint_kit_t( 568,PX_XOR( "Gamma Doppler [Emerald]" ), GRADE_KNIFE, QUALITY_STATTRAK ),                 paint_kit_t( 569,PX_XOR( "Gamma Doppler [Phase 1]" ), GRADE_KNIFE, QUALITY_STATTRAK ),                        paint_kit_t( 570,PX_XOR( "Gamma Doppler [Phase 2]" ), GRADE_KNIFE, QUALITY_STATTRAK ),                        paint_kit_t( 571,PX_XOR( "Gamma Doppler [Phase 3]" ), GRADE_KNIFE, QUALITY_STATTRAK ),                        paint_kit_t( 572,PX_XOR( "Gamma Doppler [Phase 4]" ), GRADE_KNIFE, QUALITY_STATTRAK ), // todo
+					paint_kit_t( 568,PX_XOR( "Gamma Doppler [Emerald]" ), GRADE_KNIFE, QUALITY_STATTRAK ), paint_kit_t( 569,PX_XOR( "Gamma Doppler [Phase 1]" ), GRADE_KNIFE, QUALITY_STATTRAK ), paint_kit_t( 570,PX_XOR( "Gamma Doppler [Phase 2]" ), GRADE_KNIFE, QUALITY_STATTRAK ), paint_kit_t( 571,PX_XOR( "Gamma Doppler [Phase 3]" ), GRADE_KNIFE, QUALITY_STATTRAK ), paint_kit_t( 572,PX_XOR( "Gamma Doppler [Phase 4]" ), GRADE_KNIFE, QUALITY_STATTRAK ), // todo
 					paint_kit_t( 574,PX_XOR( "Autotronic" ), GRADE_KNIFE, QUALITY_STATTRAK ),
 					paint_kit_t( 559,PX_XOR( "Lore" ), GRADE_KNIFE, QUALITY_STATTRAK ),
 					paint_kit_t( 580,PX_XOR( "Freehand" ), GRADE_KNIFE, QUALITY_STATTRAK ),
@@ -1234,7 +1235,7 @@ namespace PX::Information
 					paint_kit_t( 564,PX_XOR( "Black Laminate" ), GRADE_KNIFE, QUALITY_STATTRAK ),
 					paint_kit_t( 413,PX_XOR( "Marble Fade" ), GRADE_KNIFE, QUALITY_STATTRAK ),
 					paint_kit_t( 409,PX_XOR( "Tiger Tooth" ), GRADE_KNIFE, QUALITY_STATTRAK ),
-					 paint_kit_t( 415,PX_XOR( "Doppler [Ruby]" ), GRADE_KNIFE, QUALITY_STATTRAK ),                        paint_kit_t( 416,PX_XOR( "Doppler [Sapphire]" ), GRADE_KNIFE, QUALITY_STATTRAK ), // todo
+					paint_kit_t( 415,PX_XOR( "Doppler [Ruby]" ), GRADE_KNIFE, QUALITY_STATTRAK ), paint_kit_t( 416,PX_XOR( "Doppler [Sapphire]" ), GRADE_KNIFE, QUALITY_STATTRAK ), // todo
 					paint_kit_t( 98,PX_XOR( "Ultraviolet" ), GRADE_KNIFE, QUALITY_STATTRAK ),
 					paint_kit_t( 410,PX_XOR( "Damascus Steel" ), GRADE_KNIFE, QUALITY_STATTRAK ),
 					paint_kit_t( 414,PX_XOR( "Rust Coat" ), GRADE_KNIFE, QUALITY_STATTRAK ),
@@ -1258,14 +1259,14 @@ namespace PX::Information
 					paint_kit_t( 0, PX_XOR( "None" ), GRADE_CONSUMER, QUALITY_DEFAULT ),
 					paint_kit_t( 560,PX_XOR( "Lore" ), GRADE_KNIFE, QUALITY_STATTRAK ),
 					paint_kit_t( 575,PX_XOR( "Autotronic" ), GRADE_KNIFE, QUALITY_STATTRAK ),
-					paint_kit_t( 568,PX_XOR( "Gamma Doppler [Emerald]" ), GRADE_KNIFE, QUALITY_STATTRAK ),                 paint_kit_t( 569,PX_XOR( "Gamma Doppler [Phase 1]" ), GRADE_KNIFE, QUALITY_STATTRAK ),                        paint_kit_t( 570,PX_XOR( "Gamma Doppler [Phase 2]" ), GRADE_KNIFE, QUALITY_STATTRAK ),                        paint_kit_t( 571,PX_XOR( "Gamma Doppler [Phase 3]" ), GRADE_KNIFE, QUALITY_STATTRAK ),                        paint_kit_t( 572,PX_XOR( "Gamma Doppler [Phase 4]" ), GRADE_KNIFE, QUALITY_STATTRAK ), // todo
+					paint_kit_t( 568,PX_XOR( "Gamma Doppler [Emerald]" ), GRADE_KNIFE, QUALITY_STATTRAK ), paint_kit_t( 569,PX_XOR( "Gamma Doppler [Phase 1]" ), GRADE_KNIFE, QUALITY_STATTRAK ), paint_kit_t( 570,PX_XOR( "Gamma Doppler [Phase 2]" ), GRADE_KNIFE, QUALITY_STATTRAK ), paint_kit_t( 571,PX_XOR( "Gamma Doppler [Phase 3]" ), GRADE_KNIFE, QUALITY_STATTRAK ), paint_kit_t( 572,PX_XOR( "Gamma Doppler [Phase 4]" ), GRADE_KNIFE, QUALITY_STATTRAK ), // todo
 					paint_kit_t( 565,PX_XOR( "Black Laminate" ), GRADE_KNIFE, QUALITY_STATTRAK ),
 					paint_kit_t( 580,PX_XOR( "Freehand" ), GRADE_KNIFE, QUALITY_STATTRAK ),
 					paint_kit_t( 578,PX_XOR( "Bright Water" ), GRADE_KNIFE, QUALITY_STATTRAK ),
 					paint_kit_t( 98,PX_XOR( "Ultraviolet" ), GRADE_KNIFE, QUALITY_STATTRAK ),
 					paint_kit_t( 409,PX_XOR( "Tiger Tooth" ), GRADE_KNIFE, QUALITY_STATTRAK ),
 					paint_kit_t( 413,PX_XOR( "Marble Fade" ), GRADE_KNIFE, QUALITY_STATTRAK ),
-					 paint_kit_t( 415,PX_XOR( "Doppler [Ruby]" ), GRADE_KNIFE, QUALITY_STATTRAK ),                        paint_kit_t( 416,PX_XOR( "Doppler [Sapphire]" ), GRADE_KNIFE, QUALITY_STATTRAK ), // todo
+					paint_kit_t( 415,PX_XOR( "Doppler [Ruby]" ), GRADE_KNIFE, QUALITY_STATTRAK ), paint_kit_t( 416,PX_XOR( "Doppler [Sapphire]" ), GRADE_KNIFE, QUALITY_STATTRAK ), // todo
 					paint_kit_t( 414,PX_XOR( "Rust Coat" ), GRADE_KNIFE, QUALITY_STATTRAK ),
 					paint_kit_t( 410,PX_XOR( "Damascus Steel" ), GRADE_KNIFE, QUALITY_STATTRAK ),
 					paint_kit_t( 12,PX_XOR( "Crimson Web" ), GRADE_KNIFE, QUALITY_STATTRAK ),
@@ -1287,14 +1288,14 @@ namespace PX::Information
 				{
 					paint_kit_t( 0, PX_XOR( "None" ), GRADE_CONSUMER, QUALITY_DEFAULT ),
 					paint_kit_t( 561,PX_XOR( "Lore" ), GRADE_KNIFE, QUALITY_STATTRAK ),
-					paint_kit_t( 568,PX_XOR( "Gamma Doppler [Emerald]" ), GRADE_KNIFE, QUALITY_STATTRAK ),                 paint_kit_t( 569,PX_XOR( "Gamma Doppler [Phase 1]" ), GRADE_KNIFE, QUALITY_STATTRAK ),                        paint_kit_t( 570,PX_XOR( "Gamma Doppler [Phase 2]" ), GRADE_KNIFE, QUALITY_STATTRAK ),                        paint_kit_t( 571,PX_XOR( "Gamma Doppler [Phase 3]" ), GRADE_KNIFE, QUALITY_STATTRAK ),                        paint_kit_t( 572,PX_XOR( "Gamma Doppler [Phase 4]" ), GRADE_KNIFE, QUALITY_STATTRAK ), // todo 
+					paint_kit_t( 568,PX_XOR( "Gamma Doppler [Emerald]" ), GRADE_KNIFE, QUALITY_STATTRAK ), paint_kit_t( 569,PX_XOR( "Gamma Doppler [Phase 1]" ), GRADE_KNIFE, QUALITY_STATTRAK ), paint_kit_t( 570,PX_XOR( "Gamma Doppler [Phase 2]" ), GRADE_KNIFE, QUALITY_STATTRAK ), paint_kit_t( 571,PX_XOR( "Gamma Doppler [Phase 3]" ), GRADE_KNIFE, QUALITY_STATTRAK ), paint_kit_t( 572,PX_XOR( "Gamma Doppler [Phase 4]" ), GRADE_KNIFE, QUALITY_STATTRAK ), // todo 
 					paint_kit_t( 576,PX_XOR( "Autotronic" ), GRADE_KNIFE, QUALITY_STATTRAK ),
 					paint_kit_t( 566,PX_XOR( "Black Laminate" ), GRADE_KNIFE, QUALITY_STATTRAK ),
 					paint_kit_t( 582,PX_XOR( "Freehand" ), GRADE_KNIFE, QUALITY_STATTRAK ),
 					paint_kit_t( 578,PX_XOR( "Bright Water" ), GRADE_KNIFE, QUALITY_STATTRAK ),
 					paint_kit_t( 413,PX_XOR( "Marble Fade" ), GRADE_KNIFE, QUALITY_STATTRAK ),
 					paint_kit_t( 409,PX_XOR( "Tiger Tooth" ), GRADE_KNIFE, QUALITY_STATTRAK ),
-					 paint_kit_t( 415,PX_XOR( "Doppler [Ruby]" ), GRADE_KNIFE, QUALITY_STATTRAK ),                        paint_kit_t( 416,PX_XOR( "Doppler [Sapphire]" ), GRADE_KNIFE, QUALITY_STATTRAK ), // todo
+					paint_kit_t( 415,PX_XOR( "Doppler [Ruby]" ), GRADE_KNIFE, QUALITY_STATTRAK ), paint_kit_t( 416,PX_XOR( "Doppler [Sapphire]" ), GRADE_KNIFE, QUALITY_STATTRAK ), // todo
 					paint_kit_t( 410,PX_XOR( "Damascus Steel" ), GRADE_KNIFE, QUALITY_STATTRAK ),
 					paint_kit_t( 98,PX_XOR( "Ultraviolet" ), GRADE_KNIFE, QUALITY_STATTRAK ),
 					paint_kit_t( 414,PX_XOR( "Rust Coat" ), GRADE_KNIFE, QUALITY_STATTRAK ),
@@ -1318,12 +1319,12 @@ namespace PX::Information
 					paint_kit_t( 0, PX_XOR( "None" ), GRADE_CONSUMER, QUALITY_DEFAULT ),
 					paint_kit_t( 562,PX_XOR( "Lore" ), GRADE_KNIFE, QUALITY_STATTRAK ),
 					paint_kit_t( 577,PX_XOR( "Autotronic" ), GRADE_KNIFE, QUALITY_STATTRAK ),
-					paint_kit_t( 568,PX_XOR( "Gamma Doppler [Emerald]" ), GRADE_KNIFE, QUALITY_STATTRAK ),                 paint_kit_t( 569,PX_XOR( "Gamma Doppler [Phase 1]" ), GRADE_KNIFE, QUALITY_STATTRAK ),                        paint_kit_t( 570,PX_XOR( "Gamma Doppler [Phase 2]" ), GRADE_KNIFE, QUALITY_STATTRAK ),                        paint_kit_t( 571,PX_XOR( "Gamma Doppler [Phase 3]" ), GRADE_KNIFE, QUALITY_STATTRAK ),                        paint_kit_t( 572,PX_XOR( "Gamma Doppler [Phase 4]" ), GRADE_KNIFE, QUALITY_STATTRAK ), // todo
+					paint_kit_t( 568,PX_XOR( "Gamma Doppler [Emerald]" ), GRADE_KNIFE, QUALITY_STATTRAK ), paint_kit_t( 569,PX_XOR( "Gamma Doppler [Phase 1]" ), GRADE_KNIFE, QUALITY_STATTRAK ), paint_kit_t( 570,PX_XOR( "Gamma Doppler [Phase 2]" ), GRADE_KNIFE, QUALITY_STATTRAK ), paint_kit_t( 571,PX_XOR( "Gamma Doppler [Phase 3]" ), GRADE_KNIFE, QUALITY_STATTRAK ), paint_kit_t( 572,PX_XOR( "Gamma Doppler [Phase 4]" ), GRADE_KNIFE, QUALITY_STATTRAK ), // todo
 					paint_kit_t( 581,PX_XOR( "Freehand" ), GRADE_KNIFE, QUALITY_STATTRAK ),
 					paint_kit_t( 567,PX_XOR( "Black Laminate" ), GRADE_KNIFE, QUALITY_STATTRAK ),
 					paint_kit_t( 579,PX_XOR( "Bright Water" ), GRADE_KNIFE, QUALITY_STATTRAK ),
 					paint_kit_t( 413,PX_XOR( "Marble Fade" ), GRADE_KNIFE, QUALITY_STATTRAK ),
-					 paint_kit_t( 415,PX_XOR( "Doppler [Ruby]" ), GRADE_KNIFE, QUALITY_STATTRAK ),                        paint_kit_t( 416,PX_XOR( "Doppler [Sapphire]" ), GRADE_KNIFE, QUALITY_STATTRAK ), // todo
+					paint_kit_t( 415,PX_XOR( "Doppler [Ruby]" ), GRADE_KNIFE, QUALITY_STATTRAK ), paint_kit_t( 416,PX_XOR( "Doppler [Sapphire]" ), GRADE_KNIFE, QUALITY_STATTRAK ), // todo
 					paint_kit_t( 414,PX_XOR( "Rust Coat" ), GRADE_KNIFE, QUALITY_STATTRAK ),
 					paint_kit_t( 409,PX_XOR( "Tiger Tooth" ), GRADE_KNIFE, QUALITY_STATTRAK ),
 					paint_kit_t( 411,PX_XOR( "Damascus Steel" ), GRADE_KNIFE, QUALITY_STATTRAK ),
@@ -1346,7 +1347,7 @@ namespace PX::Information
 				ITEM_WEAPON_KNIFE_TACTICAL,
 				{
 					paint_kit_t( 0, PX_XOR( "None" ), GRADE_CONSUMER, QUALITY_DEFAULT ),
-					 paint_kit_t( 415,PX_XOR( "Doppler [Ruby]" ), GRADE_KNIFE, QUALITY_STATTRAK ),                        paint_kit_t( 416,PX_XOR( "Doppler [Sapphire]" ), GRADE_KNIFE, QUALITY_STATTRAK ), // todo
+					paint_kit_t( 415,PX_XOR( "Doppler [Ruby]" ), GRADE_KNIFE, QUALITY_STATTRAK ), paint_kit_t( 416,PX_XOR( "Doppler [Sapphire]" ), GRADE_KNIFE, QUALITY_STATTRAK ), // todo
 					paint_kit_t( 413,PX_XOR( "Marble Fade" ), GRADE_KNIFE, QUALITY_STATTRAK ),
 					paint_kit_t( 409,PX_XOR( "Tiger Tooth" ), GRADE_KNIFE, QUALITY_STATTRAK ),
 					paint_kit_t( 411,PX_XOR( "Damascus Steel" ), GRADE_KNIFE, QUALITY_STATTRAK ),
@@ -1373,7 +1374,7 @@ namespace PX::Information
 					paint_kit_t( 414,PX_XOR( "Rust Coat" ), GRADE_KNIFE, QUALITY_STATTRAK ),
 					paint_kit_t( 413,PX_XOR( "Marble Fade" ), GRADE_KNIFE, QUALITY_STATTRAK ),
 					paint_kit_t( 409,PX_XOR( "Tiger Tooth" ), GRADE_KNIFE, QUALITY_STATTRAK ),
-					 paint_kit_t( 415,PX_XOR( "Doppler [Ruby]" ), GRADE_KNIFE, QUALITY_STATTRAK ),                        paint_kit_t( 416,PX_XOR( "Doppler [Sapphire]" ), GRADE_KNIFE, QUALITY_STATTRAK ), // todo
+					paint_kit_t( 415,PX_XOR( "Doppler [Ruby]" ), GRADE_KNIFE, QUALITY_STATTRAK ), paint_kit_t( 416,PX_XOR( "Doppler [Sapphire]" ), GRADE_KNIFE, QUALITY_STATTRAK ), // todo
 					paint_kit_t( 621,PX_XOR( "Ultraviolet" ), GRADE_KNIFE, QUALITY_STATTRAK ),
 					paint_kit_t( 411,PX_XOR( "Damascus Steel" ), GRADE_KNIFE, QUALITY_STATTRAK ),
 					paint_kit_t( 38,PX_XOR( "Fade" ), GRADE_KNIFE, QUALITY_STATTRAK ),
@@ -1396,7 +1397,7 @@ namespace PX::Information
 					paint_kit_t( 0, PX_XOR( "None" ), GRADE_CONSUMER, QUALITY_DEFAULT ),
 					paint_kit_t( 414,PX_XOR( "Rust Coat" ), GRADE_KNIFE, QUALITY_STATTRAK ),
 					paint_kit_t( 413,PX_XOR( "Marble Fade" ), GRADE_KNIFE, QUALITY_STATTRAK ),
-					 paint_kit_t( 415,PX_XOR( "Doppler [Ruby]" ), GRADE_KNIFE, QUALITY_STATTRAK ),                        paint_kit_t( 416,PX_XOR( "Doppler [Sapphire]" ), GRADE_KNIFE, QUALITY_STATTRAK ), // todo
+					paint_kit_t( 415,PX_XOR( "Doppler [Ruby]" ), GRADE_KNIFE, QUALITY_STATTRAK ), paint_kit_t( 416,PX_XOR( "Doppler [Sapphire]" ), GRADE_KNIFE, QUALITY_STATTRAK ), // todo
 					paint_kit_t( 409,PX_XOR( "Tiger Tooth" ), GRADE_KNIFE, QUALITY_STATTRAK ),
 					paint_kit_t( 98,PX_XOR( "Ultraviolet" ), GRADE_KNIFE, QUALITY_STATTRAK ),
 					paint_kit_t( 411,PX_XOR( "Damascus Steel" ), GRADE_KNIFE, QUALITY_STATTRAK ),
@@ -1418,7 +1419,7 @@ namespace PX::Information
 				ITEM_WEAPON_KNIFE_BUTTERFLY,
 				{
 					paint_kit_t( 0, PX_XOR( "None" ), GRADE_CONSUMER, QUALITY_DEFAULT ),
-					 paint_kit_t( 415,PX_XOR( "Doppler [Ruby]" ), GRADE_KNIFE, QUALITY_STATTRAK ),                        paint_kit_t( 416,PX_XOR( "Doppler [Sapphire]" ), GRADE_KNIFE, QUALITY_STATTRAK ), // todo
+					paint_kit_t( 415,PX_XOR( "Doppler [Ruby]" ), GRADE_KNIFE, QUALITY_STATTRAK ), paint_kit_t( 416,PX_XOR( "Doppler [Sapphire]" ), GRADE_KNIFE, QUALITY_STATTRAK ), // todo
 					paint_kit_t( 413,PX_XOR( "Marble Fade" ), GRADE_KNIFE, QUALITY_STATTRAK ),
 					paint_kit_t( 409,PX_XOR( "Tiger Tooth" ), GRADE_KNIFE, QUALITY_STATTRAK ),
 					paint_kit_t( 411,PX_XOR( "Damascus Steel" ), GRADE_KNIFE, QUALITY_STATTRAK ),
@@ -1442,7 +1443,7 @@ namespace PX::Information
 				ITEM_WEAPON_KNIFE_SHADOW_DAGGERS,
 				{
 					paint_kit_t( 0, PX_XOR( "None" ), GRADE_CONSUMER, QUALITY_DEFAULT ),
-					 paint_kit_t( 415,PX_XOR( "Doppler [Ruby]" ), GRADE_KNIFE, QUALITY_STATTRAK ),                        paint_kit_t( 416,PX_XOR( "Doppler [Sapphire]" ), GRADE_KNIFE, QUALITY_STATTRAK ), // todo
+					paint_kit_t( 415,PX_XOR( "Doppler [Ruby]" ), GRADE_KNIFE, QUALITY_STATTRAK ), paint_kit_t( 416,PX_XOR( "Doppler [Sapphire]" ), GRADE_KNIFE, QUALITY_STATTRAK ), // todo
 					paint_kit_t( 413,PX_XOR( "Marble Fade" ), GRADE_KNIFE, QUALITY_STATTRAK ),
 					paint_kit_t( 409,PX_XOR( "Tiger Tooth" ), GRADE_KNIFE, QUALITY_STATTRAK ),
 					paint_kit_t( 414,PX_XOR( "Rust Coat" ), GRADE_KNIFE, QUALITY_STATTRAK ),
@@ -1622,11 +1623,11 @@ namespace PX::Information
 		bool PX_API RetrievePaintKits( )
 		{
 			const auto ptrAddress = ptr_t( Modules::mClient.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Paint Kits" ) ].get< str_t >( ) )
-				+ jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Paint Kits" ) ].get< int >( ) );
+										  + jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Paint Kits" ) ].get< int >( ) );
 			const auto ptrItemSystemOffset = *reinterpret_cast< ptr_t* >( ptrAddress + 0x1 );
 			const auto pItemSystem = reinterpret_cast< CCStrike15ItemSystem*( *)( ) >( ptrAddress + 0x5 + ptrItemSystemOffset );
 			const auto ptrGetPaintKitDefinitionOffset = *reinterpret_cast< ptr_t* >( ptrAddress + 0xC );
-			const auto fnGetPaintKitDefinition = reinterpret_cast< CPaintKit*( __thiscall* )( int ) >( ptrAddress + 0x10 + ptrGetPaintKitDefinitionOffset );
+			const auto fnGetPaintKitDefinition = reinterpret_cast< CPaintKit*( __thiscall*)( int ) >( ptrAddress + 0x10 + ptrGetPaintKitDefinitionOffset );
 			const auto ptrStartElementOffset = *reinterpret_cast< ptr_t* >( ptr_t( fnGetPaintKitDefinition ) + 0xA );
 			const auto ptrHeadOffset = ptrStartElementOffset - 0xC;
 			const auto pItemSchema = reinterpret_cast< CCStrike15ItemSchema* >( ptr_t( pItemSystem( ) ) + 0x4 );
@@ -1635,7 +1636,7 @@ namespace PX::Information
 			// todo xor
 			std::map< int, std::string > mpCustomNames
 			{
-				{ 0,   ( "None" ) },
+				{ 0, ( "None" ) },
 				{ 415, ( "Doppler [Ruby]" ) },
 				{ 416, ( "Doppler [Sapphire]" ) },
 				{ 417, ( "Doppler [Black Pearl]" ) },
@@ -1795,19 +1796,19 @@ namespace PX::Information
 
 				{ 246, ( "Amber Fade [Mac/P2000/Sawed-Off]" ) },
 				{ 523, ( "Amber Fade [R8]" ) },
-				  
+
 				{ 257, ( "Guardian [M4A1]" ) },
 				{ 290, ( "Guardian [USP]" ) },
-				  
+
 				{ 259, ( "Redline [AWP]" ) },
 				{ 282, ( "Redline [AK]" ) },
-				  
+
 				{ 264, ( "Sandstorm [Galil]" ) },
 				{ 289, ( "Sandstorm [TEC]" ) },
-				  
+
 				{ 265, ( "Kami [Five-SeveN]" ) },
 				{ 308, ( "Kami [Galil]" ) },
-				  
+
 				{ 284, ( "Heat [Mac]" ) },
 				{ 431, ( "Heat [MAG-7]" ) },
 
@@ -1981,7 +1982,7 @@ namespace PX::Information
 			//	{ 309,   { QUALITY_MAX,       GRADE_CONSUMER,   false, false } }
 			//};
 
-			for( auto i = 0; i < pHead->nLastElement; i++ )
+			for ( auto i = 0; i < pHead->nLastElement; i++ )
 			{
 				const auto pPaintKit = pHead->pMemory[ i ].pPaintKit;
 
@@ -1989,13 +1990,11 @@ namespace PX::Information
 					continue;
 
 				const auto pSearch = mpCustomNames.find( pPaintKit->iIndex );
-				const auto strBuffer = pSearch == mpCustomNames.end( )
-					? Tools::string_cast< std::string >( pLocalize->Find( pPaintKit->Tag.szBuffer + 0x1 ) )
-					: pSearch->second;
+				const auto strBuffer = pSearch == mpCustomNames.end( ) ? Tools::string_cast< std::string >( pLocalize->Find( pPaintKit->Tag.szBuffer + 0x1 ) ) : pSearch->second;
 				std::string strNew { };
-				for ( auto _char : strBuffer )
+				for ( auto _char: strBuffer )
 					if ( _char >= 49
-						 || _char <= 122 )
+						|| _char <= 122 )
 						strNew += _char;
 
 				//const auto pSearch2 = mpInfo.find( pPaintKit->iIndex );
@@ -2011,7 +2010,7 @@ namespace PX::Information
 		std::vector< paint_kit_t > PX_API FindPaintKit( int iIndex )
 		{
 			std::vector< paint_kit_t > vecReturn;
-			for ( const auto& paintkit : vecPaintKits )
+			for ( const auto &paintkit: vecPaintKits )
 				if ( paintkit.iIdentifier == iIndex )
 					vecReturn.emplace_back( paintkit );
 			return vecReturn;
@@ -2025,7 +2024,7 @@ namespace PX::Information
 		std::vector< paint_kit_t > PX_API FindPaintKit( cstr_t szName )
 		{
 			std::vector< paint_kit_t > vecReturn;
-			for ( const auto& paintkit : vecPaintKits )
+			for ( const auto &paintkit: vecPaintKits )
 				if ( paintkit.strName == szName )
 					vecReturn.emplace_back( paintkit );
 			return vecReturn;
@@ -2050,7 +2049,7 @@ namespace PX::Information
 			}
 
 			if ( bUpdated
-				 || pClientState->m_nSignonState != SIGNONSTATE_FULL )
+				|| pClientState->m_nSignonState != SIGNONSTATE_FULL )
 				return;
 
 			mpModelIndicies = decltype( mpModelIndicies )
@@ -2078,7 +2077,7 @@ namespace PX::Information
 				{ ITEM_GLOVE_DRIVER, pModelInfo->GetModelIndex( PX_XOR( "models/weapons/v_models/arms/glove_slick/v_glove_slick.mdl" ) ) },
 				{ ITEM_GLOVE_HAND_WRAP, pModelInfo->GetModelIndex( PX_XOR( "models/weapons/v_models/arms/glove_handwrap_leathery/v_glove_handwrap_leathery.mdl" ) ) },
 				{ ITEM_GLOVE_MOTO, pModelInfo->GetModelIndex( PX_XOR( "models/weapons/v_models/arms/glove_motorcycle/v_glove_motorcycle.mdl" ) ) },
-				{ ITEM_GLOVE_SPECIALIST, pModelInfo->GetModelIndex( PX_XOR( "models/weapons/v_models/arms/glove_specialist/v_glove_specialist.mdl" )) },
+				{ ITEM_GLOVE_SPECIALIST, pModelInfo->GetModelIndex( PX_XOR( "models/weapons/v_models/arms/glove_specialist/v_glove_specialist.mdl" ) ) },
 				{ ITEM_GLOVE_HYDRA, pModelInfo->GetModelIndex( PX_XOR( "models/weapons/v_models/arms/glove_bloodhound/v_glove_bloodhound_hydra.mdl" ) ) }
 			};
 		}
@@ -2094,14 +2093,14 @@ namespace PX::Information
 		int PX_API GetModelIndex( cstr_t szModel )
 		{
 			const auto pFirst = mpItemDefinitionIndicies.find( szModel );
-			if( pFirst != mpItemDefinitionIndicies.end( ) )
+			if ( pFirst != mpItemDefinitionIndicies.end( ) )
 				return GetModelIndex( pFirst->second );
 			return 0;
 		}
 
 		short PX_API GetDefinitionIndex( int iModelIndex )
 		{
-			for ( const auto& iterator : mpModelIndicies )
+			for ( const auto &iterator: mpModelIndicies )
 				if ( iterator.second == iModelIndex )
 					return iterator.first;
 			return 0;

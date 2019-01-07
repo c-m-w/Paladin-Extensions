@@ -74,11 +74,12 @@ namespace PX::UI::Manager
 	namespace CSGO
 	{
 		PX_DEF uWindowWidth = 720u, uWindowHeight = 600u;
+
 		void PX_API ChangeVisibility( )
 		{
-			static HWND* pOldWindowHandle = nullptr;
+			static HWND *pOldWindowHandle = nullptr;
 			static HCURSOR hOldCursor;
-			
+
 			Render::bShouldRender = !Render::bShouldRender;
 			static const auto ptrOffset = *reinterpret_cast< ptr_t* >( ptr_t( ( *reinterpret_cast< void*** >( pInputSystem ) )[ 10 ] ) + 0x5 );
 			std::swap( pOldWindowHandle, *reinterpret_cast< HWND** >( reinterpret_cast< byte_t* >( pInputSystem ) + ptrOffset ) );
@@ -102,35 +103,35 @@ namespace PX::UI::Manager
 			Render::bShouldRender = false;
 
 			PX_INPUT.AddGlobalCallback( [ = ]( unsigned uKey, bool bIsPressed )
-			{
-				PX_DEF uKeyPressSequenceSize = 11u;
-				const static unsigned uKeyPresses[ uKeyPressSequenceSize ] { VK_UP, VK_UP, VK_DOWN, VK_DOWN, VK_LEFT, VK_RIGHT, VK_LEFT, VK_RIGHT, 'B', 'A', VK_RETURN };
-				static std::deque< unsigned > dqKeyPresses;
-				if ( bIsPressed )
-				{
-					if ( uKey == VK_HOME )
 					{
-						ChangeVisibility( );
-						return;
-					}
+						PX_DEF uKeyPressSequenceSize = 11u;
+						const static unsigned uKeyPresses[ uKeyPressSequenceSize ] { VK_UP, VK_UP, VK_DOWN, VK_DOWN, VK_LEFT, VK_RIGHT, VK_LEFT, VK_RIGHT, 'B', 'A', VK_RETURN };
+						static std::deque< unsigned > dqKeyPresses;
+						if ( bIsPressed )
+						{
+							if ( uKey == VK_HOME )
+							{
+								ChangeVisibility( );
+								return;
+							}
 
-					dqKeyPresses.emplace_back( uKey );
-					if ( dqKeyPresses.size( ) > uKeyPressSequenceSize )
-						dqKeyPresses.pop_front( );
-					if ( dqKeyPresses.size( ) == uKeyPressSequenceSize )
-					{
-						auto bCorrectSequence = true;
-						for ( auto u = 0u; u < uKeyPressSequenceSize; u++ )
-							if ( uKeyPresses[ u ] != dqKeyPresses[ u ] )
-								bCorrectSequence = false;
-						if ( bCorrectSequence )
-							ChangeVisibility( );
-					}
-				}
-			} );
+							dqKeyPresses.emplace_back( uKey );
+							if ( dqKeyPresses.size( ) > uKeyPressSequenceSize )
+								dqKeyPresses.pop_front( );
+							if ( dqKeyPresses.size( ) == uKeyPressSequenceSize )
+							{
+								auto bCorrectSequence = true;
+								for ( auto u = 0u; u < uKeyPressSequenceSize; u++ )
+									if ( uKeyPresses[ u ] != dqKeyPresses[ u ] )
+										bCorrectSequence = false;
+								if ( bCorrectSequence )
+									ChangeVisibility( );
+							}
+						}
+					} );
 
 			return Render::InitializeRenderTarget( pDevice, uDimensions )
-				&& InitializeUI( PX_XOR( "CSGO" ), uWindowWidth, uWindowHeight );
+					&& InitializeUI( PX_XOR( "CSGO" ), uWindowWidth, uWindowHeight );
 		}
 
 		void PX_API OnEndScene( )
@@ -157,7 +158,7 @@ namespace PX::UI::Manager
 	void PX_API LayoutSettings( int iSubtab );
 	constexpr auto COLOR_BUTTON_VERTICAL_PADDING = 7.5f;
 
-	static const auto fnSetValue = [ ]( int& iCurrentValue, const int iNewValue )
+	static const auto fnSetValue = [ ]( int &iCurrentValue, const int iNewValue )
 	{
 		iCurrentValue = iNewValue >= 0 ? iNewValue : iCurrentValue;
 	};
@@ -175,7 +176,7 @@ namespace PX::UI::Manager
 
 		static const std::deque< std::deque< cstr_t > > dqSubTabs
 		{
-			
+
 			{
 				"Statistics",
 				"Glow",
@@ -199,11 +200,14 @@ namespace PX::UI::Manager
 
 		static auto iCurrentTab = 0;
 		static int iCurrentSubTab[ iTabCount ] { };
-		const static std::function< void( PX_API )( int ) > fnTabCallbacks[ iTabCount ] { LayoutAwareness, LayoutCombat, LayoutMiscellaneous, LayoutSettings };
+		const static std::function< void( PX_API)( int ) > fnTabCallbacks[ iTabCount ] { LayoutAwareness, LayoutCombat, LayoutMiscellaneous, LayoutSettings };
 
 		SetMainWindowWidth( CSGO::uWindowWidth );
 		SetMainWindowHeight( CSGO::uWindowHeight );
-		Header( PX_XOR( "Paladin Extensions" ), szNuklearWindowTitle, 102, CSGO::ChangeVisibility, [ ]( ){ exit( 0 ); } );
+		Header( PX_XOR( "Paladin Extensions" ), szNuklearWindowTitle, 102, CSGO::ChangeVisibility, [ ]( )
+		{
+			exit( 0 );
+		} );
 		fnSetValue( iCurrentTab, Tabs( 10, 0, dqPrimaryTabs, iCurrentTab ) );
 		Separator( 61, 65, 72, 100 );
 		SetFont( FNT_ROBOTO_SMALL );
@@ -225,7 +229,7 @@ namespace PX::UI::Manager
 			case STATISTICS:
 			{
 				break;
-				auto& cfg = _Settings._Awareness._Statistics;
+				auto &cfg = _Settings._Awareness._Statistics;
 				if ( BeginGroupbox( 200, 150, 500, 420, PX_XOR( "Players" ) ) )
 				{
 					std::deque< cstr_t > dqPlayerTargets
@@ -252,217 +256,216 @@ namespace PX::UI::Manager
 
 					EndRow( );
 				}
-
 			}
 			break;
-			/*
-			case EXTRA_SENSORY_DRAWING_2:
-			case EXTRA_SENSORY_DRAWING_1:
-			{
-				auto iEntity = iSubtab == EXTRA_SENSORY_DRAWING_2 ? SETTING_ENEMY : SETTING_TEAM;
-				auto& esdConfig = _Settings._Awareness._ExtraSensoryDrawing;
-
-				if ( BeginGroupbox( 200, 150, 500, 420, iEntity == SETTING_TEAM ? PX_XOR( "Teammates" ) : PX_XOR( "Enemies" ) ) )
+				/*
+				case EXTRA_SENSORY_DRAWING_2:
+				case EXTRA_SENSORY_DRAWING_1:
 				{
+					auto iEntity = iSubtab == EXTRA_SENSORY_DRAWING_2 ? SETTING_ENEMY : SETTING_TEAM;
+					auto& esdConfig = _Settings._Awareness._ExtraSensoryDrawing;
+	
+					if ( BeginGroupbox( 200, 150, 500, 420, iEntity == SETTING_TEAM ? PX_XOR( "Teammates" ) : PX_XOR( "Enemies" ) ) )
 					{
-						BeginRow( 30, 3, ROW_STATIC );
-						SetRowWidth( 5 );
-						Spacing( );
-
-						Checkbox( PX_XOR( "Enabled" ), &esdConfig._Players[ iEntity ].bEnabled, PX_XOR( "Enable teammate extra sensory drawing." ) );
-
-						EndRow( );
-					}
-
-					{
-						std::deque< cstr_t > dqBoxModes
 						{
-							PX_XOR( "None" ),
-							PX_XOR( "Dynamic" ),
-							PX_XOR( "Static" )
-						};
-
-						BeginRow( 30, 15, ROW_STATIC );
-						SetRowWidth( 10 );
-						Spacing( );
-
-						//Checkbox( PX_XOR( "Box" ), &esdConfig._Players[ iEntity ].bBox, PX_XOR( "Enable drawing a box overtop of your teammates." ) );
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH - COLOR_BUTTON_PADDING * 7 - COLOR_BUTTON_WIDTH * 3 );
-						fnSetValue( esdConfig._Players[ iEntity ].iBoxMode, Combobox( 25, PX_XOR( "Box" ), dqBoxModes, esdConfig._Players[ iEntity ].iBoxMode ) );
-						SetRowWidth( 1 );
-						Spacing( );
-						SetRowWidth( COLOR_BUTTON_WIDTH );
-						ColorButton( PX_XOR( "Box Visible" ), &esdConfig._Players[ iEntity ].seqBox[ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
-						ColorButton( PX_XOR( "Box Invisible" ), &esdConfig._Players[ iEntity ].seqBox[ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
-						ColorButton( PX_XOR( "Box Dormant" ), &esdConfig._Players[ iEntity ].seqBox[ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
-
-						Checkbox( PX_XOR( "Three Dimensional" ), &esdConfig._Players[ iEntity ].bThreeDimensional, PX_XOR( "Render a three dimensional prism overtop of your teammates." ) );
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Three Dimensional" ), 30 ).x );
-						Spacing( );
-
-						Checkbox( PX_XOR( "Fill" ), &esdConfig._Players[ iEntity ].bFill, PX_XOR( "Enable filling in the box drawn overtop of your temmates." ) );
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Fill" ), 30 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 3 );
-						Spacing( );
-						SetRowWidth( COLOR_BUTTON_WIDTH );
-						ColorButton( PX_XOR( "Box Fill Visible" ), &esdConfig._Players[ iEntity ].seqFill[ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
-						ColorButton( PX_XOR( "Box Fill Invisible" ), &esdConfig._Players[ iEntity ].seqFill[ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
-						ColorButton( PX_XOR( "Box Fill Dormant" ), &esdConfig._Players[ iEntity ].seqFill[ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
-
-						EndRow( );
-					}
-
-					{
-						BeginRow( 30, 12, ROW_STATIC );
-						SetRowWidth( 5 );
-						Spacing( );
-
-						Checkbox( PX_XOR( "Health-Based Fill" ), &esdConfig._Players[ iEntity ].bHealthBasedFillColor, PX_XOR( "Use your teammate's health to color the box fill." ) );
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH * 2 - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Health-Based Fill" ), 30 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 6 );
-						Spacing( );
-						SetRowWidth( COLOR_BUTTON_WIDTH );
-						ColorButton( PX_XOR( "Box Fill Health Bottom Visible" ), &esdConfig._Players[ iEntity ].seqHealthFill[ 0 ][ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
-						ColorButton( PX_XOR( "Box Fill Health Bottom Invisible" ), &esdConfig._Players[ iEntity ].seqHealthFill[ 0 ][ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
-						ColorButton( PX_XOR( "Box Fill Health Bottom Dormant" ), &esdConfig._Players[ iEntity ].seqHealthFill[ 0 ][ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
-						ColorButton( PX_XOR( "Box Fill Health Top Visible" ), &esdConfig._Players[ iEntity ].seqHealthFill[ 1 ][ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
-						ColorButton( PX_XOR( "Box Fill Health Top Invisible" ), &esdConfig._Players[ iEntity ].seqHealthFill[ 1 ][ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
-						ColorButton( PX_XOR( "Box Fill Health Top Dormant" ), &esdConfig._Players[ iEntity ].seqHealthFill[ 1 ][ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
-
-						Checkbox( PX_XOR( "Solid" ), &esdConfig._Players[ iEntity ].bSolidHealthFill, PX_XOR( "Don't apply a transparent gradient to the health fill." ) );
-
-						EndRow( );
-					}
-
-					{
-						BeginRow( 30, 19, ROW_STATIC );
-						SetRowWidth( 5 );
-						Spacing( );
-
-						Checkbox( PX_XOR( "Snaplines" ), &esdConfig._Players[ iEntity ].bSnaplines, PX_XOR( "Draw a line from the bottom of your screen to your teammates." ) );
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Snaplines" ), 30 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 3 );
-						Spacing( );
-						SetRowWidth( COLOR_BUTTON_WIDTH );
-						ColorButton( PX_XOR( "Snapline Visible" ), &esdConfig._Players[ iEntity ].seqSnaplines[ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
-						ColorButton( PX_XOR( "Snapline Invisible" ), &esdConfig._Players[ iEntity ].seqSnaplines[ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
-						ColorButton( PX_XOR( "Snapline Dormant" ), &esdConfig._Players[ iEntity ].seqSnaplines[ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
-
-						Checkbox( PX_XOR( "Viewlines" ), &esdConfig._Players[ iEntity ].bViewLines, PX_XOR( "Draw a line from where your teammate is looking until it hits a surface." ) );
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Viewlines" ), 30 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 3 );
-						Spacing( );
-						SetRowWidth( COLOR_BUTTON_WIDTH );
-						ColorButton( PX_XOR( "Viewline Visible" ), &esdConfig._Players[ iEntity ].seqViewLines[ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
-						ColorButton( PX_XOR( "Viewline Invisible" ), &esdConfig._Players[ iEntity ].seqViewLines[ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
-						ColorButton( PX_XOR( "Viewline Dormant" ), &esdConfig._Players[ iEntity ].seqViewLines[ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
-
-						Checkbox( PX_XOR( "Skeleton" ), &esdConfig._Players[ iEntity ].bSkeleton, PX_XOR( "Draw a skeleton overtop of your teammates." ) );
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Skeleton" ), 30 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 3 );
-						Spacing( );
-						SetRowWidth( COLOR_BUTTON_WIDTH );
-						ColorButton( PX_XOR( "Skeleton Visible" ), &esdConfig._Players[ iEntity ].seqSkeleton[ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
-						ColorButton( PX_XOR( "Skeleton Invisible" ), &esdConfig._Players[ iEntity ].seqSkeleton[ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
-						ColorButton( PX_XOR( "Skeleton Dormant" ), &esdConfig._Players[ iEntity ].seqSkeleton[ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
-
-						EndRow( );
-					}
-
-					{
-						std::deque< bool* > dqInformationOptions
+							BeginRow( 30, 3, ROW_STATIC );
+							SetRowWidth( 5 );
+							Spacing( );
+	
+							Checkbox( PX_XOR( "Enabled" ), &esdConfig._Players[ iEntity ].bEnabled, PX_XOR( "Enable teammate extra sensory drawing." ) );
+	
+							EndRow( );
+						}
+	
 						{
-							&esdConfig._Players[ iEntity ].bShowHealth.Get( ),
-							&esdConfig._Players[ iEntity ].bShowName.Get( ),
-							&esdConfig._Players[ iEntity ].bShowRank.Get( ),
-							&esdConfig._Players[ iEntity ].bShowWeapon.Get( )
-						};
-
-						static std::deque< cstr_t > dqInformationText
+							std::deque< cstr_t > dqBoxModes
+							{
+								PX_XOR( "None" ),
+								PX_XOR( "Dynamic" ),
+								PX_XOR( "Static" )
+							};
+	
+							BeginRow( 30, 15, ROW_STATIC );
+							SetRowWidth( 10 );
+							Spacing( );
+	
+							//Checkbox( PX_XOR( "Box" ), &esdConfig._Players[ iEntity ].bBox, PX_XOR( "Enable drawing a box overtop of your teammates." ) );
+							SetRowWidth( GROUPBOX_COLUMN_WIDTH - COLOR_BUTTON_PADDING * 7 - COLOR_BUTTON_WIDTH * 3 );
+							fnSetValue( esdConfig._Players[ iEntity ].iBoxMode, Combobox( 25, PX_XOR( "Box" ), dqBoxModes, esdConfig._Players[ iEntity ].iBoxMode ) );
+							SetRowWidth( 1 );
+							Spacing( );
+							SetRowWidth( COLOR_BUTTON_WIDTH );
+							ColorButton( PX_XOR( "Box Visible" ), &esdConfig._Players[ iEntity ].seqBox[ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+							ColorButton( PX_XOR( "Box Invisible" ), &esdConfig._Players[ iEntity ].seqBox[ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+							ColorButton( PX_XOR( "Box Dormant" ), &esdConfig._Players[ iEntity ].seqBox[ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
+	
+							Checkbox( PX_XOR( "Three Dimensional" ), &esdConfig._Players[ iEntity ].bThreeDimensional, PX_XOR( "Render a three dimensional prism overtop of your teammates." ) );
+							SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Three Dimensional" ), 30 ).x );
+							Spacing( );
+	
+							Checkbox( PX_XOR( "Fill" ), &esdConfig._Players[ iEntity ].bFill, PX_XOR( "Enable filling in the box drawn overtop of your temmates." ) );
+							SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Fill" ), 30 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 3 );
+							Spacing( );
+							SetRowWidth( COLOR_BUTTON_WIDTH );
+							ColorButton( PX_XOR( "Box Fill Visible" ), &esdConfig._Players[ iEntity ].seqFill[ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+							ColorButton( PX_XOR( "Box Fill Invisible" ), &esdConfig._Players[ iEntity ].seqFill[ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+							ColorButton( PX_XOR( "Box Fill Dormant" ), &esdConfig._Players[ iEntity ].seqFill[ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
+	
+							EndRow( );
+						}
+	
 						{
-							PX_XOR( "Health" ),
-							PX_XOR( "Name" ),
-							PX_XOR( "Rank" ),
-							PX_XOR( "Weapon" )
-						};
-
-						static std::deque< cstr_t > dqAlignment
+							BeginRow( 30, 12, ROW_STATIC );
+							SetRowWidth( 5 );
+							Spacing( );
+	
+							Checkbox( PX_XOR( "Health-Based Fill" ), &esdConfig._Players[ iEntity ].bHealthBasedFillColor, PX_XOR( "Use your teammate's health to color the box fill." ) );
+							SetRowWidth( GROUPBOX_COLUMN_WIDTH * 2 - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Health-Based Fill" ), 30 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 6 );
+							Spacing( );
+							SetRowWidth( COLOR_BUTTON_WIDTH );
+							ColorButton( PX_XOR( "Box Fill Health Bottom Visible" ), &esdConfig._Players[ iEntity ].seqHealthFill[ 0 ][ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+							ColorButton( PX_XOR( "Box Fill Health Bottom Invisible" ), &esdConfig._Players[ iEntity ].seqHealthFill[ 0 ][ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+							ColorButton( PX_XOR( "Box Fill Health Bottom Dormant" ), &esdConfig._Players[ iEntity ].seqHealthFill[ 0 ][ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
+							ColorButton( PX_XOR( "Box Fill Health Top Visible" ), &esdConfig._Players[ iEntity ].seqHealthFill[ 1 ][ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+							ColorButton( PX_XOR( "Box Fill Health Top Invisible" ), &esdConfig._Players[ iEntity ].seqHealthFill[ 1 ][ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+							ColorButton( PX_XOR( "Box Fill Health Top Dormant" ), &esdConfig._Players[ iEntity ].seqHealthFill[ 1 ][ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
+	
+							Checkbox( PX_XOR( "Solid" ), &esdConfig._Players[ iEntity ].bSolidHealthFill, PX_XOR( "Don't apply a transparent gradient to the health fill." ) );
+	
+							EndRow( );
+						}
+	
 						{
-							PX_XOR( "Left" ),
-							PX_XOR( "Top" ),
-							PX_XOR( "Right" ),
-							PX_XOR( "Bottom" ),
-							PX_XOR( "Smart" )
-						};
-
-						BeginRow( 30, 11, ROW_STATIC );
-						SetRowWidth( 5 );
-						Spacing( );
-
-						Checkbox( PX_XOR( "Information" ), &esdConfig._Players[ iEntity ].bShowInformation, PX_XOR( "Draw informational text/icons around your teammates." ) );
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Information" ), 30 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 3 );
-						Spacing( );
-						SetRowWidth( COLOR_BUTTON_WIDTH );
-						ColorButton( PX_XOR( "Information Visible" ), &esdConfig._Players[ iEntity ].seqInformation[ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
-						ColorButton( PX_XOR( "Information Invisible" ), &esdConfig._Players[ iEntity ].seqInformation[ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
-						ColorButton( PX_XOR( "Information Dormant" ), &esdConfig._Players[ iEntity ].seqInformation[ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
-
-						SetRowWidth( 3 );
-						Spacing( );
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH );
-						ComboboxMulti( 25, PX_XOR( "Information" ), dqInformationText, dqInformationOptions );
-
-						SetRowWidth( 3 );
-						Spacing( );
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH );
-						fnSetValue( esdConfig._Players[ iEntity ].iInformationAlignment, Combobox( 25, PX_XOR( "Alignment" ), dqAlignment, esdConfig._Players[ iEntity ].iInformationAlignment ) );
-
-						EndRow( );
+							BeginRow( 30, 19, ROW_STATIC );
+							SetRowWidth( 5 );
+							Spacing( );
+	
+							Checkbox( PX_XOR( "Snaplines" ), &esdConfig._Players[ iEntity ].bSnaplines, PX_XOR( "Draw a line from the bottom of your screen to your teammates." ) );
+							SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Snaplines" ), 30 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 3 );
+							Spacing( );
+							SetRowWidth( COLOR_BUTTON_WIDTH );
+							ColorButton( PX_XOR( "Snapline Visible" ), &esdConfig._Players[ iEntity ].seqSnaplines[ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+							ColorButton( PX_XOR( "Snapline Invisible" ), &esdConfig._Players[ iEntity ].seqSnaplines[ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+							ColorButton( PX_XOR( "Snapline Dormant" ), &esdConfig._Players[ iEntity ].seqSnaplines[ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
+	
+							Checkbox( PX_XOR( "Viewlines" ), &esdConfig._Players[ iEntity ].bViewLines, PX_XOR( "Draw a line from where your teammate is looking until it hits a surface." ) );
+							SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Viewlines" ), 30 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 3 );
+							Spacing( );
+							SetRowWidth( COLOR_BUTTON_WIDTH );
+							ColorButton( PX_XOR( "Viewline Visible" ), &esdConfig._Players[ iEntity ].seqViewLines[ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+							ColorButton( PX_XOR( "Viewline Invisible" ), &esdConfig._Players[ iEntity ].seqViewLines[ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+							ColorButton( PX_XOR( "Viewline Dormant" ), &esdConfig._Players[ iEntity ].seqViewLines[ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
+	
+							Checkbox( PX_XOR( "Skeleton" ), &esdConfig._Players[ iEntity ].bSkeleton, PX_XOR( "Draw a skeleton overtop of your teammates." ) );
+							SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Skeleton" ), 30 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 3 );
+							Spacing( );
+							SetRowWidth( COLOR_BUTTON_WIDTH );
+							ColorButton( PX_XOR( "Skeleton Visible" ), &esdConfig._Players[ iEntity ].seqSkeleton[ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+							ColorButton( PX_XOR( "Skeleton Invisible" ), &esdConfig._Players[ iEntity ].seqSkeleton[ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+							ColorButton( PX_XOR( "Skeleton Dormant" ), &esdConfig._Players[ iEntity ].seqSkeleton[ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
+	
+							EndRow( );
+						}
+	
+						{
+							std::deque< bool* > dqInformationOptions
+							{
+								&esdConfig._Players[ iEntity ].bShowHealth.Get( ),
+								&esdConfig._Players[ iEntity ].bShowName.Get( ),
+								&esdConfig._Players[ iEntity ].bShowRank.Get( ),
+								&esdConfig._Players[ iEntity ].bShowWeapon.Get( )
+							};
+	
+							static std::deque< cstr_t > dqInformationText
+							{
+								PX_XOR( "Health" ),
+								PX_XOR( "Name" ),
+								PX_XOR( "Rank" ),
+								PX_XOR( "Weapon" )
+							};
+	
+							static std::deque< cstr_t > dqAlignment
+							{
+								PX_XOR( "Left" ),
+								PX_XOR( "Top" ),
+								PX_XOR( "Right" ),
+								PX_XOR( "Bottom" ),
+								PX_XOR( "Smart" )
+							};
+	
+							BeginRow( 30, 11, ROW_STATIC );
+							SetRowWidth( 5 );
+							Spacing( );
+	
+							Checkbox( PX_XOR( "Information" ), &esdConfig._Players[ iEntity ].bShowInformation, PX_XOR( "Draw informational text/icons around your teammates." ) );
+							SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Information" ), 30 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 3 );
+							Spacing( );
+							SetRowWidth( COLOR_BUTTON_WIDTH );
+							ColorButton( PX_XOR( "Information Visible" ), &esdConfig._Players[ iEntity ].seqInformation[ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+							ColorButton( PX_XOR( "Information Invisible" ), &esdConfig._Players[ iEntity ].seqInformation[ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+							ColorButton( PX_XOR( "Information Dormant" ), &esdConfig._Players[ iEntity ].seqInformation[ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
+	
+							SetRowWidth( 3 );
+							Spacing( );
+							SetRowWidth( GROUPBOX_COLUMN_WIDTH );
+							ComboboxMulti( 25, PX_XOR( "Information" ), dqInformationText, dqInformationOptions );
+	
+							SetRowWidth( 3 );
+							Spacing( );
+							SetRowWidth( GROUPBOX_COLUMN_WIDTH );
+							fnSetValue( esdConfig._Players[ iEntity ].iInformationAlignment, Combobox( 25, PX_XOR( "Alignment" ), dqAlignment, esdConfig._Players[ iEntity ].iInformationAlignment ) );
+	
+							EndRow( );
+						}
+	
+						{
+							BeginRow( 30, 16, ROW_STATIC );
+							SetRowWidth( 5 );
+							Spacing( );
+	
+							Checkbox( PX_XOR( "Health Bar" ), &esdConfig._Players[ iEntity ].bHealthBar, PX_XOR( "Draw a health bar rather than text for your teammates." ) );
+							SetRowWidth( GROUPBOX_COLUMN_WIDTH * 2 - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Health Bar" ), 30 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 6 );
+							Spacing( );
+							SetRowWidth( COLOR_BUTTON_WIDTH );
+							ColorButton( PX_XOR( "Healthbar Bottom Visible" ), &esdConfig._Players[ iEntity ].seqHealthBar[ 0 ][ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+							ColorButton( PX_XOR( "Healthbar Bottom Invisible" ), &esdConfig._Players[ iEntity ].seqHealthBar[ 0 ][ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+							ColorButton( PX_XOR( "Healthbar Bottom Dormant" ), &esdConfig._Players[ iEntity ].seqHealthBar[ 0 ][ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
+							ColorButton( PX_XOR( "Healthbar Top Visible" ), &esdConfig._Players[ iEntity ].seqHealthBar[ 1 ][ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+							ColorButton( PX_XOR( "Healthbar Top Invisible" ), &esdConfig._Players[ iEntity ].seqHealthBar[ 1 ][ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+							ColorButton( PX_XOR( "Healthbar Top Dormant" ), &esdConfig._Players[ iEntity ].seqHealthBar[ 1 ][ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
+	
+							Checkbox( PX_XOR( "Outline Info" ), &esdConfig._Players[ iEntity ].bInformationOutline, PX_XOR( "Draw an outline over information for your teammates." ) );
+							SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Outline Info" ), 30 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 3 );
+							Spacing( );
+							SetRowWidth( COLOR_BUTTON_WIDTH );
+							ColorButton( PX_XOR( "Info. Outline Visible" ), &esdConfig._Players[ iEntity ].seqInformationOutline[ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+							ColorButton( PX_XOR( "Info. Outline Invisible" ), &esdConfig._Players[ iEntity ].seqInformationOutline[ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+							ColorButton( PX_XOR( "Info. Outline Dormant" ), &esdConfig._Players[ iEntity ].seqInformationOutline[ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
+	
+							EndRow( );
+						}
+	
+						{
+							static char szSnaplineWidth[ 64 ] { }, szViewlineWidth[ 64 ] { }, szSkeletonWidth[ 64 ] { }, szInformationOutlineWidth[ 64 ] { };
+	
+							BeginRow( 30, 9, ROW_CUSTOM );
+	
+							esdConfig._Players[ iEntity ].flSnaplineWidth = Slider( PX_XOR( "Snapline Width" ), szSnaplineWidth, 1.f, 5.f, esdConfig._Players[ iEntity ].flSnaplineWidth, 15, 0, GROUPBOX_COLUMN_WIDTH, 30, 1 );
+							esdConfig._Players[ iEntity ].flViewLineWidth = Slider( PX_XOR( "Viewline Width" ), szViewlineWidth, 1.f, 5.f, esdConfig._Players[ iEntity ].flViewLineWidth, GROUPBOX_COLUMN_WIDTH + 30, 0, GROUPBOX_COLUMN_WIDTH, 30, 1 );
+							esdConfig._Players[ iEntity ].flSkeletonWidth = Slider( PX_XOR( "Skeleton Width" ), szSkeletonWidth, 1.f, 5.f, esdConfig._Players[ iEntity ].flSkeletonWidth, GROUPBOX_COLUMN_WIDTH * 2 + 40, 0, GROUPBOX_COLUMN_WIDTH, 30, 1 );
+	
+							EndRow( );
+						}
+	
+						EndGroupbox( );
 					}
-
-					{
-						BeginRow( 30, 16, ROW_STATIC );
-						SetRowWidth( 5 );
-						Spacing( );
-
-						Checkbox( PX_XOR( "Health Bar" ), &esdConfig._Players[ iEntity ].bHealthBar, PX_XOR( "Draw a health bar rather than text for your teammates." ) );
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH * 2 - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Health Bar" ), 30 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 6 );
-						Spacing( );
-						SetRowWidth( COLOR_BUTTON_WIDTH );
-						ColorButton( PX_XOR( "Healthbar Bottom Visible" ), &esdConfig._Players[ iEntity ].seqHealthBar[ 0 ][ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
-						ColorButton( PX_XOR( "Healthbar Bottom Invisible" ), &esdConfig._Players[ iEntity ].seqHealthBar[ 0 ][ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
-						ColorButton( PX_XOR( "Healthbar Bottom Dormant" ), &esdConfig._Players[ iEntity ].seqHealthBar[ 0 ][ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
-						ColorButton( PX_XOR( "Healthbar Top Visible" ), &esdConfig._Players[ iEntity ].seqHealthBar[ 1 ][ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
-						ColorButton( PX_XOR( "Healthbar Top Invisible" ), &esdConfig._Players[ iEntity ].seqHealthBar[ 1 ][ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
-						ColorButton( PX_XOR( "Healthbar Top Dormant" ), &esdConfig._Players[ iEntity ].seqHealthBar[ 1 ][ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
-
-						Checkbox( PX_XOR( "Outline Info" ), &esdConfig._Players[ iEntity ].bInformationOutline, PX_XOR( "Draw an outline over information for your teammates." ) );
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( PX_XOR( "Outline Info" ), 30 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 3 );
-						Spacing( );
-						SetRowWidth( COLOR_BUTTON_WIDTH );
-						ColorButton( PX_XOR( "Info. Outline Visible" ), &esdConfig._Players[ iEntity ].seqInformationOutline[ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
-						ColorButton( PX_XOR( "Info. Outline Invisible" ), &esdConfig._Players[ iEntity ].seqInformationOutline[ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
-						ColorButton( PX_XOR( "Info. Outline Dormant" ), &esdConfig._Players[ iEntity ].seqInformationOutline[ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
-
-						EndRow( );
-					}
-
-					{
-						static char szSnaplineWidth[ 64 ] { }, szViewlineWidth[ 64 ] { }, szSkeletonWidth[ 64 ] { }, szInformationOutlineWidth[ 64 ] { };
-
-						BeginRow( 30, 9, ROW_CUSTOM );
-
-						esdConfig._Players[ iEntity ].flSnaplineWidth = Slider( PX_XOR( "Snapline Width" ), szSnaplineWidth, 1.f, 5.f, esdConfig._Players[ iEntity ].flSnaplineWidth, 15, 0, GROUPBOX_COLUMN_WIDTH, 30, 1 );
-						esdConfig._Players[ iEntity ].flViewLineWidth = Slider( PX_XOR( "Viewline Width" ), szViewlineWidth, 1.f, 5.f, esdConfig._Players[ iEntity ].flViewLineWidth, GROUPBOX_COLUMN_WIDTH + 30, 0, GROUPBOX_COLUMN_WIDTH, 30, 1 );
-						esdConfig._Players[ iEntity ].flSkeletonWidth = Slider( PX_XOR( "Skeleton Width" ), szSkeletonWidth, 1.f, 5.f, esdConfig._Players[ iEntity ].flSkeletonWidth, GROUPBOX_COLUMN_WIDTH * 2 + 40, 0, GROUPBOX_COLUMN_WIDTH, 30, 1 );
-
-						EndRow( );
-					}
-
-					EndGroupbox( );
 				}
-			}
-			break;
-			*/
+				break;
+				*/
 
 			case GLOW:
 			{
-				auto& esdConfig = _Settings._Awareness._Glow;
+				auto &esdConfig = _Settings._Awareness._Glow;
 				std::deque< cstr_t > dqGlowStyles
 				{
 					PX_XOR( "Default" ),
@@ -647,7 +650,7 @@ namespace PX::UI::Manager
 
 			case MATERIALS:
 			{
-				auto& esdConfig = _Settings._Awareness._Materials;
+				auto &esdConfig = _Settings._Awareness._Materials;
 
 				if ( BeginGroupbox( 200, 150, 500, 220, PX_XOR( "Entities" ) ) )
 				{
@@ -874,7 +877,7 @@ namespace PX::UI::Manager
 		{
 			case TRIGGER:
 			{
-				const auto fnDrawTriggerOptions = [ ]( settings_t::combat_t::trigger_t::weapon_t* pConfig, char* szHitchance, char* szRays )
+				const auto fnDrawTriggerOptions = [ ]( settings_t::combat_t::trigger_t::weapon_t *pConfig, char *szHitchance, char *szRays )
 				{
 					{
 						BeginRow( 30, 9, ROW_STATIC );
@@ -908,7 +911,7 @@ namespace PX::UI::Manager
 						};
 						std::deque< bool* > dqHitgroups;
 
-						for ( auto& hitgroup : pConfig->bHitGroups )
+						for ( auto &hitgroup: pConfig->bHitGroups )
 							dqHitgroups.emplace_back( &hitgroup.Get( ) );
 
 						BeginRow( 30, 7, ROW_CUSTOM );
@@ -930,7 +933,7 @@ namespace PX::UI::Manager
 					{
 						fnDrawTriggerOptions( &_Settings._Combat._Trigger._All, szHitchance, szRays );
 					}
-					
+
 					EndGroupbox( );
 				}
 
@@ -1004,7 +1007,7 @@ namespace PX::UI::Manager
 			{
 				SetMainWindowHeight( 687u );
 				SetMainWindowWidth( 1231u );
-				const auto fnDrawAimOptions = [ ]( settings_t::combat_t::aim_t::weapon_t* pConfig, char* szSmoothFactor, char* szCrosshairDistance, char* szBisection, char* szDistance, char* szOverCompensation )
+				const auto fnDrawAimOptions = [ ]( settings_t::combat_t::aim_t::weapon_t *pConfig, char *szSmoothFactor, char *szCrosshairDistance, char *szBisection, char *szDistance, char *szOverCompensation )
 				{
 					{
 						BeginRow( 30, 9, ROW_STATIC );
@@ -1062,7 +1065,7 @@ namespace PX::UI::Manager
 						};
 						std::deque< bool* > dqHitboxes;
 
-						for ( auto& hitgroup : pConfig->bHitboxes )
+						for ( auto &hitgroup: pConfig->bHitboxes )
 							dqHitboxes.emplace_back( &hitgroup.Get( ) );
 
 						std::deque< cstr_t > dqAimTypes
@@ -1140,7 +1143,7 @@ namespace PX::UI::Manager
 
 					{
 						BeginRow( 30, 3, ROW_CUSTOM );
-						
+
 						pConfig->flOverCompensation = Slider( PX_XOR( "Over Compensation" ), szOverCompensation, 0.f, 5.f, pConfig->flOverCompensation, 10, 10, GROUPBOX_COLUMN_WIDTH, 30, 2 );
 
 						EndRow( );
@@ -1158,7 +1161,7 @@ namespace PX::UI::Manager
 
 						PushCustomRow( 10, 5, GROUPBOX_COLUMN_WIDTH, 30 );
 						fnSetValue( iSelectedOrder, IncrementalCombobox( 30, PX_XOR( "Bezier Orders" ), dqOrders, pConfig->iCurrentOrders, 7, iSelectedOrder ) );
-						auto& pCurrentOrder = pConfig->_BezierOrders[ iSelectedOrder ];
+						auto &pCurrentOrder = pConfig->_BezierOrders[ iSelectedOrder ];
 
 						pCurrentOrder.flBisectionPoint = Slider( PX_XOR( "Bisection Point" ), szBisection, 0.01f, 1.50f, pCurrentOrder.flBisectionPoint, GROUPBOX_COLUMN_WIDTH + 30, 5, GROUPBOX_COLUMN_WIDTH, 30, 2 );
 
@@ -1254,7 +1257,7 @@ namespace PX::UI::Manager
 						};
 
 						VerticalSpacing( );
-						
+
 						BeginRow( 30, 2, ROW_STATIC );
 						SetRowWidth( 10 );
 						Spacing( );
@@ -1266,32 +1269,30 @@ namespace PX::UI::Manager
 					}
 
 					{
-						const auto pConfig = iConfig == 0 ? &_Settings._Combat._Aim._All
-							: iConfig == 1 ? &_Settings._Combat._Aim._WeaponTypes[ iWeaponGroup ]
-							: &_Settings._Combat._Aim._IndividualWeapons[ ITEM_DEFINITION_INDICIES[ uCurrentWeapon ] ];
+						const auto pConfig = iConfig == 0 ? &_Settings._Combat._Aim._All : iConfig == 1 ? &_Settings._Combat._Aim._WeaponTypes[ iWeaponGroup ] : &_Settings._Combat._Aim._IndividualWeapons[ ITEM_DEFINITION_INDICIES[ uCurrentWeapon ] ];
 						static struct nk_vec2 vecDots[ ] { { 0.f, 0.f }, { 200.f, 130.f } };
 						static auto flRatio = 0.f, flWaitTime = 0.f;
 						static auto bDoneWaiting = false;
 						static auto i = -1;
 						static std::vector< struct nk_vec2 > vecLinePoints { };
-						struct nk_vec2 vecDistance = { vecDots[0].x - vecDots[1].x, vecDots[0].y - vecDots[1].y };
-						
-						if( pConfig->iAimType == AIMTYPE_DEFAULT || pConfig->iAimType == AIMTYPE_SILENT )
+						struct nk_vec2 vecDistance = { vecDots[ 0 ].x - vecDots[ 1 ].x, vecDots[ 0 ].y - vecDots[ 1 ].y };
+
+						if ( pConfig->iAimType == AIMTYPE_DEFAULT || pConfig->iAimType == AIMTYPE_SILENT )
 						{
 							vecLinePoints.clear( );
-							vecLinePoints.emplace_back( vecDots[0] );
-							vecLinePoints.emplace_back( vecDots[1] );
+							vecLinePoints.emplace_back( vecDots[ 0 ] );
+							vecLinePoints.emplace_back( vecDots[ 1 ] );
 						}
 						else
 						{
-							if( flRatio == 1.f )
+							if ( flRatio == 1.f )
 							{
-								if( bDoneWaiting )
+								if ( bDoneWaiting )
 								{
 									bDoneWaiting = false;
 									flWaitTime = pGlobalVariables->m_flCurrentTime + 1.f;
-								} 
-								else if( pGlobalVariables->m_flCurrentTime > flWaitTime )
+								}
+								else if ( pGlobalVariables->m_flCurrentTime > flWaitTime )
 								{
 									bDoneWaiting = true;
 									flRatio = 0.f;
@@ -1305,9 +1306,9 @@ namespace PX::UI::Manager
 								flRatio = std::clamp( flRatio, 0.f, 1.f );
 							}
 
-							const struct nk_vec2 vecDefaultSmoothed	{ vecDots[0].x - vecDistance.x * flRatio, vecDots[0].y - vecDistance.y * flRatio };
+							const struct nk_vec2 vecDefaultSmoothed { vecDots[ 0 ].x - vecDistance.x * flRatio, vecDots[ 0 ].y - vecDistance.y * flRatio };
 
-							switch( pConfig->iSmoothMode )
+							switch ( pConfig->iSmoothMode )
 							{
 								case SMOOTH_LINEAR:
 								{
@@ -1317,32 +1318,32 @@ namespace PX::UI::Manager
 
 								case SMOOTH_PARABOLIC:
 								{
-									const auto flTemp = ( vecDots[1].y - vecDots[0].y ) / pow( vecDots[1].x - vecDots[0].x, 2.f );
-									const struct nk_vec2 vecNew = { vecDefaultSmoothed.x, flTemp * pow( vecDefaultSmoothed.x - vecDots[0].x, 2.f ) + vecDots[0].y };
+									const auto flTemp = ( vecDots[ 1 ].y - vecDots[ 0 ].y ) / pow( vecDots[ 1 ].x - vecDots[ 0 ].x, 2.f );
+									const struct nk_vec2 vecNew = { vecDefaultSmoothed.x, flTemp * pow( vecDefaultSmoothed.x - vecDots[ 0 ].x, 2.f ) + vecDots[ 0 ].y };
 									vecLinePoints.emplace_back( vecNew );
 								}
 								break;
 
 								case SMOOTH_RADICAL:
 								{
-									const auto flTemp = ( vecDots[1].y - vecDots[0].y ) / cbrtf( vecDots[1].x - vecDots[0].x );
-									const struct nk_vec2 vecNew = { vecDefaultSmoothed.x, flTemp * cbrtf( vecDefaultSmoothed.x - vecDots[0].x ) + vecDots[0].y };
+									const auto flTemp = ( vecDots[ 1 ].y - vecDots[ 0 ].y ) / cbrtf( vecDots[ 1 ].x - vecDots[ 0 ].x );
+									const struct nk_vec2 vecNew = { vecDefaultSmoothed.x, flTemp * cbrtf( vecDefaultSmoothed.x - vecDots[ 0 ].x ) + vecDots[ 0 ].y };
 									vecLinePoints.emplace_back( vecNew );
 								}
 								break;
 
 								case SMOOTH_SINUSOIDAL:
 								{
-									const auto fl = D3DX_PI / 2.f / ( vecDots[0].x - vecDots[1].x );
-									const auto flTemp = ( vecDots[1].y - vecDots[0].y ) / sinf( fl * ( vecDots[1].x - vecDots[0].x ) );
-									const struct nk_vec2 vecNew = { vecDefaultSmoothed.x, flTemp * sinf( fl * ( vecDefaultSmoothed.x - vecDots[0].x ) ) + vecDots[0].y };
+									const auto fl = D3DX_PI / 2.f / ( vecDots[ 0 ].x - vecDots[ 1 ].x );
+									const auto flTemp = ( vecDots[ 1 ].y - vecDots[ 0 ].y ) / sinf( fl * ( vecDots[ 1 ].x - vecDots[ 0 ].x ) );
+									const struct nk_vec2 vecNew = { vecDefaultSmoothed.x, flTemp * sinf( fl * ( vecDefaultSmoothed.x - vecDots[ 0 ].x ) ) + vecDots[ 0 ].y };
 									vecLinePoints.emplace_back( vecNew );
 								}
 								break;
 
 								case SMOOTH_BEZIER:
 								{
-									const auto vecBezierPoints = Tools::GetBezierPoints( D3DXVECTOR2( vecDots[0].x, vecDots[0].y ), D3DXVECTOR2( vecDots[1].x, vecDots[1].y ), pConfig->_BezierOrders, pConfig->iCurrentOrders + 1 );
+									const auto vecBezierPoints = Tools::GetBezierPoints( D3DXVECTOR2( vecDots[ 0 ].x, vecDots[ 0 ].y ), D3DXVECTOR2( vecDots[ 1 ].x, vecDots[ 1 ].y ), pConfig->_BezierOrders, pConfig->iCurrentOrders + 1 );
 									const auto vecPoint = Tools::GetBezierPoint( vecBezierPoints, flRatio );
 									const struct nk_vec2 vecNew = { vecPoint.x, vecPoint.y };
 									vecLinePoints.emplace_back( vecNew );
@@ -1364,7 +1365,7 @@ namespace PX::UI::Manager
 
 			case RECOIL:
 			{
-				const auto fnDrawRecoilOption = [ ]( settings_t::combat_t::recoil_compensation_t::weapon_t* pConfig, char* szCompensationAmount, char* szSmoothness, char* szStartBullet )
+				const auto fnDrawRecoilOption = [ ]( settings_t::combat_t::recoil_compensation_t::weapon_t *pConfig, char *szCompensationAmount, char *szSmoothness, char *szStartBullet )
 				{
 					{
 						BeginRow( 30, 9, ROW_STATIC );
@@ -1380,7 +1381,7 @@ namespace PX::UI::Manager
 						Spacing( );
 
 						Checkbox( PX_XOR( "Only When Shooting" ), &pConfig->bNoRefractoryCompensation, PX_XOR( "Only compensate for recoil while shooting. This will not bring your cursor back to the original position after compensating for recoil has finished." ) );
-						
+
 						EndRow( );
 					}
 
@@ -1392,7 +1393,7 @@ namespace PX::UI::Manager
 						pConfig->flSmoothness = Slider( PX_XOR( "Smoothness" ), szCompensationAmount, 0.f, 1.f, pConfig->flSmoothness, 175, 10, GROUPBOX_COLUMN_WIDTH, 30, 3 );
 
 						pConfig->iStartBullet = Slider( PX_XOR( "Start Compensation at Shot" ), szCompensationAmount, 0, 150, pConfig->iStartBullet, 350, 10, GROUPBOX_COLUMN_WIDTH, 30 );
-						
+
 						EndRow( );
 					}
 				};
@@ -1624,7 +1625,7 @@ namespace PX::UI::Manager
 						BeginRow( 30, 9, ROW_CUSTOM );
 
 						_Settings._Miscellaneous._Visuals.flViewmodelFOV = Slider( PX_XOR( "Viewmodel FOV" ), szViewmodelFOV, 0.f, 180.f, _Settings._Miscellaneous._Visuals.flViewmodelFOV, 10, 10, GROUPBOX_COLUMN_WIDTH, 30, 1 );
-					
+
 						_Settings._Miscellaneous._Visuals.flRenderFOV = Slider( PX_XOR( "Render FOV" ), szRenderFOV, 0.f, 180.f, _Settings._Miscellaneous._Visuals.flRenderFOV, GROUPBOX_COLUMN_WIDTH + 30, 10, GROUPBOX_COLUMN_WIDTH, 30, 1 );
 
 						_Settings._Miscellaneous._Visuals.flHitmarkerLifetime = Slider( PX_XOR( "Hitmarker Length" ), szHitmarkerLength, 0.1f, 10.f, _Settings._Miscellaneous._Visuals.flHitmarkerLifetime, GROUPBOX_COLUMN_WIDTH * 2 + 40, 10, GROUPBOX_COLUMN_WIDTH, 30, 1 );
@@ -1650,7 +1651,7 @@ namespace PX::UI::Manager
 			case INVENTORY:
 			{
 				SetMainWindowHeight( 603 );
-				static settings_t::miscellaneous_t::inventory_t::team_t* pConfig = nullptr;
+				static settings_t::miscellaneous_t::inventory_t::team_t *pConfig = nullptr;
 				static unsigned iSelectedWeapon = 0;
 				static auto iSelectedPaintKit = 0;
 				static auto uSelectedKnife = 0u;
@@ -1667,7 +1668,7 @@ namespace PX::UI::Manager
 
 				const auto fnSetModels = [ & ]( int iGlove, int iKnife )
 				{
-					switch( iGlove )
+					switch ( iGlove )
 					{
 						case ITEM_GLOVE_BLOODHOUND:
 						{
@@ -1715,7 +1716,7 @@ namespace PX::UI::Manager
 							break;
 					}
 
-					switch( iKnife )
+					switch ( iKnife )
 					{
 						case ITEM_WEAPON_KNIFE_BAYONET:
 						{
@@ -1810,7 +1811,7 @@ namespace PX::UI::Manager
 				{
 					static auto iTeam = 0;
 					{
-						std::deque<cstr_t> dqTeams
+						std::deque< cstr_t > dqTeams
 						{
 							PX_XOR( "Terrorist" ),
 							PX_XOR( "Counter-Terrorist" )
@@ -1863,20 +1864,20 @@ namespace PX::UI::Manager
 				{
 					{
 						VerticalSpacing( );
-				
+
 						BeginRow( 30, 2, ROW_STATIC );
 						SetRowWidth( 10 );
 						Spacing( );
-				
+
 						SetRowWidth( GROUPBOX_COLUMN_WIDTH * 3.f + 29.f );
 						const auto buf = iSelectedWeapon;
 						TabbedCombobox( 30, PX_XOR( "Weapons" ), dqCategories, dqWeapons, iSelectedWeapon );
-						if( buf != iSelectedWeapon )
+						if ( buf != iSelectedWeapon )
 							fnSetSelectedPaintKit( pConfig->_PaintKits[ ITEM_DEFINITION_INDICIES[ iSelectedWeapon ] ].iPaintKitID );
-				
+
 						EndRow( );
 					}
-				
+
 					{
 						constexpr struct nk_color clrText[ GRADE_CONTRABAND + 1]
 						{
@@ -1890,14 +1891,13 @@ namespace PX::UI::Manager
 							{ 0xEB, 0x4B, 0x4B, 0xFF },
 							{ 0xFF, 0xAE, 0x39, 0xFF },
 						};
-						constexpr char* szPageNumbers[ ] { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+						constexpr char *szPageNumbers[ ] { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 						constexpr auto flWidth = ( GROUPBOX_COLUMN_WIDTH * 3.f + 29.f ) / 2.f - 1.f;
 						static std::deque< cstr_t > dqPaintKits;
 						static char szSearch[ 32 ] { };
 						if ( dqPaintKits.empty( ) )
-							for ( const auto& kit : Other::vecPaintKits )
+							for ( const auto &kit: Other::vecPaintKits )
 								dqPaintKits.emplace_back( kit.strName.c_str( ) );
-
 
 						const auto vecWeaponKits = Other::GetWeaponKits( ITEM_DEFINITION_INDICIES[ iSelectedWeapon ] );
 						const auto iPages = int( ceil( vecWeaponKits.size( ) / 7.f ) );
@@ -1909,20 +1909,20 @@ namespace PX::UI::Manager
 						for ( auto i = 0; i < iPages; i++ )
 							for ( auto j = i * 7; j < i * 7 + 7 && j < vecWeaponKits.size( ); j++ )
 								dqItems[ i ].emplace_back( colored_text_t( vecWeaponKits[ j ].strName.c_str( ), clrText[ vecWeaponKits[ j ].iGrade ] ) );
-				
+
 						BeginRow( 30, 3, ROW_STATIC );
 						SetRowWidth( 10 );
 						Spacing( );
-				
+
 						SetRowWidth( flWidth );
 						const auto iResult = FilteredCombobox( 30, PX_XOR( "All Paintkits" ), dqPaintKits, iSelectedPaintKit, 10, szSearch );
-						if( iResult >= 0 )
+						if ( iResult >= 0 )
 						{
 							iSelectedPaintKit = iResult;
 							pConfig->_PaintKits[ ITEM_DEFINITION_INDICIES[ iSelectedWeapon ] ].iPaintKitID = Other::vecPaintKits[ iSelectedPaintKit ].iIdentifier;
 							Miscellaneous::ForceUpdate( );
 						}
-						
+
 						if ( TabbedCombobox( 30, PX_XOR( "Weapon Paintkits" ), dqPages, dqItems, uSelectedWeaponPaintKit ) )
 						{
 							Miscellaneous::ForceUpdate( );
@@ -2042,7 +2042,7 @@ namespace PX::UI::Manager
 							PX_XOR( "Specialist" ),
 							PX_XOR( "Hydra" )
 						};
-					
+
 						BeginRow( 30, 3, ROW_STATIC );
 						SetRowWidth( 10 );
 						Spacing( );
@@ -2086,9 +2086,7 @@ namespace PX::UI::Manager
 	void PX_API LayoutSettings( int iSubtab )
 	{
 		enum
-		{
-
-		};
+		{ };
 
 		switch ( iSubtab )
 		{

@@ -15,11 +15,11 @@ public:
 	}
 };
 
-inline void ClearRefCountedVector( CUtlVector< IRefCounted* >* vecRef )
+inline void ClearRefCountedVector( CUtlVector< IRefCounted* > *vecRef )
 {
 	for ( auto i = 0; i < vecRef->m_Size; i++ )
 	{
-		auto& pElement = vecRef->m_pElements[ i ];
+		auto &pElement = vecRef->m_pElements[ i ];
 		if ( pElement != nullptr )
 		{
 			pElement->Unreference( );

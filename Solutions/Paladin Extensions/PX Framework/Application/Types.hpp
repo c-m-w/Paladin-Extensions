@@ -9,7 +9,7 @@ namespace PX::Types
 	/** \brief Paladin virtual memory address variable. */
 	typedef ptrdiff_t off_t;
 	/** \brief Paladin callback function type. */
-	typedef void( PX_API* callback_t )( );
+	typedef void ( PX_API* callback_t )( );
 	/** \brief Paladin time datatype, wide enough to hold any time type, with sig figs up to a tenth of a microsecond. */
 	typedef unsigned long long moment_t;
 	/** \brief Paladin byte datatype. Stores one byte of data. */
@@ -20,15 +20,15 @@ namespace PX::Types
 	typedef unsigned int key_t;
 
 	/** \brief Paladin constant char string. */
-	typedef const char* cstr_t;
+	typedef const char *cstr_t;
 	/** \brief Paladin char-16 constant char string. */
-	typedef const char16_t* cstr16_t;
+	typedef const char16_t *cstr16_t;
 	/** \brief Paladin char-32 constant char string. */
-	typedef const char32_t* cstr32_t;
+	typedef const char32_t *cstr32_t;
 	/** \brief Paladin wide constant char string. */
-	typedef const wchar_t* wcstr_t;
+	typedef const wchar_t *wcstr_t;
 	/** \brief Paladin byte constant string */
-	typedef const byte_t* bcstr_t;
+	typedef const byte_t *bcstr_t;
 
 	/** \brief Paladin string datatype */
 	typedef std::basic_string< char > str_t;
@@ -45,38 +45,38 @@ namespace PX::Types
 	/** \param chSource Character */
 	/** \return byte_t version of array */
 	byte_t operator""_b( char chSource );
-   /** \brief Unsigned char string literal identifier */
-   /** \param ch16Source Character */
-   /** \return byte_t version of array */
+	/** \brief Unsigned char string literal identifier */
+	/** \param ch16Source Character */
+	/** \return byte_t version of array */
 	byte_t operator""_b( char16_t ch16Source );
-   /** \brief Unsigned char string literal identifier */
-   /** \param ch32Source Character */
-   /** \return byte_t version of array */
+	/** \brief Unsigned char string literal identifier */
+	/** \param ch32Source Character */
+	/** \return byte_t version of array */
 	byte_t operator""_b( char32_t ch32Source );
-   /** \brief Unsigned char string literal identifier */
-   /** \param wchSource Character */
-   /** \return byte_t version of array */
+	/** \brief Unsigned char string literal identifier */
+	/** \param wchSource Character */
+	/** \return byte_t version of array */
 	byte_t operator""_b( wchar_t wchSource );
-   /** \brief Unsigned char string literal identifier */
-   /** \param szSource Array of characters */
-   /** \param zSize Length of array */
-   /** \return byte_t version of array */
-	const byte_t* operator""_b( cstr_t szSource, std::size_t zSize );
+	/** \brief Unsigned char string literal identifier */
+	/** \param szSource Array of characters */
+	/** \param zSize Length of array */
+	/** \return byte_t version of array */
+	const byte_t *operator""_b( cstr_t szSource, std::size_t zSize );
 	/** \brief Unsigned char string literal identifier */
 	/** \param sz16Source Array of characters */
 	/** \param zSize Length of array */
 	/** \return byte_t version of array */
-	const byte_t* operator""_b( cstr16_t sz16Source, std::size_t zSize );
+	const byte_t *operator""_b( cstr16_t sz16Source, std::size_t zSize );
 	/** \brief Unsigned char string literal identifier */
 	/** \param sz32Source Array of characters */
 	/** \param zSize Length of array */
 	/** \return byte_t version of array */
-	const byte_t* operator""_b( cstr32_t sz32Source, std::size_t zSize );
+	const byte_t *operator""_b( cstr32_t sz32Source, std::size_t zSize );
 	/** \brief Unsigned char string literal identifier */
 	/** \param wszSource Array of characters */
 	/** \param zSize Length of array */
 	/** \return byte_t version of array */
-	const byte_t* operator""_b( wcstr_t wszSource, std::size_t zSize );
+	const byte_t *operator""_b( wcstr_t wszSource, std::size_t zSize );
 
 	enum EKeyBindMode
 	{
@@ -103,14 +103,14 @@ namespace PX::Types
 
 		inline static std::vector< toggle_t* > vecToggles;
 
-		static void Initialize( void* _pConfigStructure, std::size_t _zConfigStructureSize )
+		static void Initialize( void *_pConfigStructure, std::size_t _zConfigStructureSize )
 		{
 			pConfigStructure = _pConfigStructure;
 			zConfigStructureSize = _zConfigStructureSize;
 		}
 
 	private:
-		inline static void* pConfigStructure = nullptr;
+		inline static void *pConfigStructure = nullptr;
 		inline static std::size_t zConfigStructureSize = 0;
 		bool bEnabled = false, bAddedToList = false, bAttemptedToAddToList = false, bUseKeybinds = true;
 		std::vector< keybind_t > vecKeyBinds { };
@@ -122,17 +122,18 @@ namespace PX::Types
 		~toggle_t( ) = default;
 
 		void AddToList( );
-		bool& Get( ); 
-		bool& UseKeyBinds( );
-		std::vector< keybind_t >& GetBinds( );
+		bool &Get( );
+		bool &UseKeyBinds( );
+		std::vector< keybind_t > &GetBinds( );
 
-		toggle_t& operator=( bool _bEnabled );
+		toggle_t &operator=( bool _bEnabled );
 		bool operator!( );
 	};
 
 	struct SPostData
 	{
 		str_t strIdentifier, strValue;
+
 		SPostData( str_t strIdentifier, str_t strValue )
 		{
 			this->strIdentifier = strIdentifier;
@@ -145,12 +146,14 @@ namespace PX::Types
 	struct SLink
 	{
 		char szTitle[ 32 ], szLink[ MAX_PATH ];
+
 		SLink( cstr_t szTitle, cstr_t szLink )
 		{
 			strcpy( this->szTitle, szTitle );
 			strcpy( this->szLink, szLink );
 		}
 	};
+
 	typedef std::deque< SLink > links_t;
 
 	struct SExtensionInfo
@@ -172,6 +175,7 @@ namespace PX::Types
 			strVersion = _strVersion;
 		}
 	};
+
 	typedef std::deque< SExtensionInfo > extensions_t;
 
 	struct vertex_t
@@ -179,14 +183,17 @@ namespace PX::Types
 		union
 		{
 			float flVectors[ 4 ] { };
+
 			struct
 			{
 				float x, y, z, rhw;
 			} _Vectors;
 		};
+
 		DWORD dwColor { };
 
 		vertex_t( ) = default;
+
 		vertex_t( float x, float y, DWORD _dwColor )
 		{
 			flVectors[ 0 ] = x;
@@ -195,7 +202,8 @@ namespace PX::Types
 			flVectors[ 3 ] = 1.f;
 			dwColor = _dwColor;
 		}
-		void Rotate2D( const vertex_t& vtxRotationPoint, float flAngle )
+
+		void Rotate2D( const vertex_t &vtxRotationPoint, float flAngle )
 		{
 			const auto flRadians = D3DXToRadian( flAngle );
 			const auto flSin = sin( flRadians );
@@ -212,7 +220,8 @@ namespace PX::Types
 		std::vector< _t > vecVertices;
 
 		drawing_t( ) = default;
-		drawing_t( const _t* pVertices, std::size_t _sVertices )
+
+		drawing_t( const _t *pVertices, std::size_t _sVertices )
 		{
 			for ( auto z = 0u; z < _sVertices; z++ )
 				vecVertices.emplace_back( pVertices[ z ] );
@@ -226,7 +235,7 @@ namespace PX::Types
 		BOOL bAntiAlias;
 
 		line_t( ) = default;
-		line_t( const D3DXVECTOR2* _pVertices, std::size_t _sVertices, float _flWidth, DWORD _dwColor, BOOL _bAntiAlias = TRUE );
+		line_t( const D3DXVECTOR2 *_pVertices, std::size_t _sVertices, float _flWidth, DWORD _dwColor, BOOL _bAntiAlias = TRUE );
 	};
 
 	struct polygon_t: drawing_t< vertex_t >
@@ -235,7 +244,7 @@ namespace PX::Types
 		D3DPRIMITIVETYPE ptType { };
 
 		polygon_t( ) = default; // review why even have constructors here? just use initializer braces
-		polygon_t( const vertex_t* _pVertices, std::size_t _sVertices, std::size_t _sPrimitives, D3DPRIMITIVETYPE _ptType = D3DPT_TRIANGLEFAN );
+		polygon_t( const vertex_t *_pVertices, std::size_t _sVertices, std::size_t _sPrimitives, D3DPRIMITIVETYPE _ptType = D3DPT_TRIANGLEFAN );
 	};
 
 	struct text_t
@@ -246,7 +255,7 @@ namespace PX::Types
 		bool bOutlined;
 		DWORD dwFlags, dwColor, dwOutline;
 		text_t( ) = default; // review why even have constructors here? just use initializer braces
-		text_t( int _iFont, int _x, int _y, const wchar_t* _wszText, bool _bOutlined, DWORD _dwFlags, DWORD _dwColor, DWORD _dwOutline );
+		text_t( int _iFont, int _x, int _y, const wchar_t *_wszText, bool _bOutlined, DWORD _dwFlags, DWORD _dwColor, DWORD _dwOutline );
 	};
 
 	struct module_t
@@ -279,7 +288,7 @@ namespace PX::Types
 		{
 			unsigned u;
 			byte_t b[ COLOR_MAX ];
-		} *pColor = new UColor { UINT_MAX };
+		} *pColor = new UColor{ UINT_MAX };
 
 	public:
 		SColor( ) = default;
@@ -328,8 +337,8 @@ namespace PX::Types
 
 		byte_t operator[ ]( int iColor ) const;
 		float operator[ ]( float flColor ) const;
-		bool operator==( const SColor& rhs ) const;
-		bool operator!=( const SColor& rhs ) const;
+		bool operator==( const SColor &rhs ) const;
+		bool operator!=( const SColor &rhs ) const;
 	} color_t;
 
 	typedef struct SColorSequence
@@ -342,6 +351,7 @@ namespace PX::Types
 			color_t clrColor;
 			moment_t mmtDuration = 0;
 		} sequence_info_t;
+
 		sequence_info_t sqInfo[ 7 ];
 		moment_t mmtTotalDuration = 0;
 
@@ -349,15 +359,15 @@ namespace PX::Types
 		std::size_t zSequences = 0u;
 		SColorSequence( ) PX_NOX;
 		SColorSequence( color_t clrFirstSequence, moment_t mmtFirstSequence );
-		SColorSequence( color_t* clrColors, moment_t* mmtDurations, std::size_t zSequences );
+		SColorSequence( color_t *clrColors, moment_t *mmtDurations, std::size_t zSequences );
 
 		color_t GetCurrentColor( );
 		void PutCurrentColor( ) = delete;
 
-		color_t& GetColor( unsigned uColor );
-		moment_t& GetDuration( unsigned uDuration );
+		color_t &GetColor( unsigned uColor );
+		moment_t &GetDuration( unsigned uDuration );
 
-		void PutNewColorSequence( const color_t& clrNewColor, moment_t mmtDuration ); // todo: overload <<, make sequence_info_t public
+		void PutNewColorSequence( const color_t &clrNewColor, moment_t mmtDuration ); // todo: overload <<, make sequence_info_t public
 		void DeleteColorSequence( unsigned uPosition ); // todo: overload >>
 
 		//void operator<<( sequence_info_t );

@@ -12,9 +12,9 @@ namespace PX::Features::Awareness
 	auto glwConfig = &_Settings._Awareness._Glow;
 
 	void PX_API FormGlowArray( );
-	void PX_API GlowPlayer( player_ptr_t pLocalPlayer, player_ptr_t pPlayer, GlowObjectDefinition_t* pObject );
-	void PX_API GlowEntity( player_ptr_t pLocalPlayer, entity_ptr_t pEntity, GlowObjectDefinition_t* pObject, int iSettingIndex );
-	void PX_API ResetDefinition( GlowObjectDefinition_t* pObject );
+	void PX_API GlowPlayer( player_ptr_t pLocalPlayer, player_ptr_t pPlayer, GlowObjectDefinition_t *pObject );
+	void PX_API GlowEntity( player_ptr_t pLocalPlayer, entity_ptr_t pEntity, GlowObjectDefinition_t *pObject, int iSettingIndex );
+	void PX_API ResetDefinition( GlowObjectDefinition_t *pObject );
 
 	void PX_API GlowEntities( )
 	{
@@ -23,17 +23,17 @@ namespace PX::Features::Awareness
 			return;
 
 		FormGlowArray( );
-		GlowObjectDefinition_t* pObject;
-		for( auto i = 0; i < pGlowObjectManager->m_GlowObjectDefinitions.Count( ) 
-			 && nullptr != ( pObject = &pGlowObjectManager->m_GlowObjectDefinitions[ i ] ); i++ )
+		GlowObjectDefinition_t *pObject;
+		for ( auto i = 0; i < pGlowObjectManager->m_GlowObjectDefinitions.Count( )
+			  && nullptr != ( pObject = &pGlowObjectManager->m_GlowObjectDefinitions[ i ] ); i++ )
 		{
 			if ( pObject->IsUnused( ) )
 				continue;
-		
+
 			const auto pEntity = entity_ptr_t( pObject->m_pEntity );
 			if ( nullptr == pEntity )
 				continue;
-			switch( pEntity->GetClientClass( )->m_ClassID )
+			switch ( pEntity->GetClientClass( )->m_ClassID )
 			{
 				case ClassID_CCSPlayer:
 				{
@@ -97,9 +97,9 @@ namespace PX::Features::Awareness
 				case ClassID_CBaseCSGrenadeProjectile: // hegrenade & flashbang
 				{
 					const auto iModelIndex = reinterpret_cast< CBaseViewModel* >( pEntity )->m_nModelIndex( );
-					if( iModelIndex == Other::GetModelIndex( ITEM_WEAPON_FLASHBANG ) )
+					if ( iModelIndex == Other::GetModelIndex( ITEM_WEAPON_FLASHBANG ) )
 						GlowEntity( pLocalPlayer, pEntity, pObject, SETTING_ENTITY_GRENADE_PROJECTILE_FLASH );
-					else if( iModelIndex == Other::GetModelIndex( ITEM_WEAPON_HEGRENADE ) )
+					else if ( iModelIndex == Other::GetModelIndex( ITEM_WEAPON_HEGRENADE ) )
 						GlowEntity( pLocalPlayer, pEntity, pObject, SETTING_ENTITY_GRENADE_PROJECTILE_HE );
 				}
 				break;
@@ -127,14 +127,14 @@ namespace PX::Features::Awareness
 					if ( pEntity->IsWeapon( ) )
 						GlowEntity( pLocalPlayer, pEntity, pObject, SETTING_ENTITY_WEAPONS );
 				}
-				break;
+					break;
 			}
 		}
 	}
 
 	void PX_API FormGlowArray( )
 	{
-		for( auto i = 0; i < pEntityList->GetMaxEntities( ); i++ )
+		for ( auto i = 0; i < pEntityList->GetMaxEntities( ); i++ )
 		{
 			const auto pEntity = entity_ptr_t( pEntityList->GetClientEntity( i ) );
 			if ( nullptr == pEntity )
@@ -142,22 +142,22 @@ namespace PX::Features::Awareness
 
 			const auto iClassID = pEntity->GetClientClass( )->m_ClassID;
 			if ( iClassID != ClassID_CCSPlayer
-				 && iClassID != ClassID_CC4
-				 && iClassID != ClassID_CPlantedC4
-				 && iClassID != ClassID_CBaseAnimating
-				 && !pEntity->IsWeapon( ) )
+				&& iClassID != ClassID_CC4
+				&& iClassID != ClassID_CPlantedC4
+				&& iClassID != ClassID_CBaseAnimating
+				&& !pEntity->IsWeapon( ) )
 				continue;
 			if ( !pGlowObjectManager->HasGlowEffect( pEntity ) )
 				*reinterpret_cast< int* >( ptr_t( pEntity ) + 0xA330 ) = pGlowObjectManager->RegisterGlowObject( pEntity, -1 );
 		}
 	}
 
-	void PX_API GlowPlayer( player_ptr_t pLocalPlayer, player_ptr_t pPlayer, GlowObjectDefinition_t* pObject )
+	void PX_API GlowPlayer( player_ptr_t pLocalPlayer, player_ptr_t pPlayer, GlowObjectDefinition_t *pObject )
 	{
 		if ( !pPlayer->IsAlive( ) )
 			return;
 
-		auto& _Current = glwConfig->_Players[ pLocalPlayer->m_iTeamNum( ) == pPlayer->m_iTeamNum( ) ? 0 : 1 ];
+		auto &_Current = glwConfig->_Players[ pLocalPlayer->m_iTeamNum( ) == pPlayer->m_iTeamNum( ) ? 0 : 1 ];
 		if ( !_Current.bEnabled )
 			return ResetDefinition( pObject );
 
@@ -167,7 +167,7 @@ namespace PX::Features::Awareness
 		if ( clrCurrent.a == 0 )
 			return ResetDefinition( pObject );
 
-		if( _Current.bHealthBasedColor.Get( ) )
+		if ( _Current.bHealthBasedColor.Get( ) )
 		{
 			const auto iHealth = pPlayer->m_iHealth( );
 			pObject->m_flRed = ( 100.f - iHealth ) / 100.f;
@@ -189,9 +189,9 @@ namespace PX::Features::Awareness
 		pObject->m_bRenderWhenUnoccluded = false;
 	}
 
-	void PX_API GlowEntity( player_ptr_t pLocalPlayer, entity_ptr_t pEntity, GlowObjectDefinition_t* pObject, int iSettingIndex )
+	void PX_API GlowEntity( player_ptr_t pLocalPlayer, entity_ptr_t pEntity, GlowObjectDefinition_t *pObject, int iSettingIndex )
 	{
-		auto& _Current = glwConfig->_Entities[ iSettingIndex ];
+		auto &_Current = glwConfig->_Entities[ iSettingIndex ];
 		if ( !_Current.bEnabled )
 			return ResetDefinition( pObject );
 
@@ -213,7 +213,7 @@ namespace PX::Features::Awareness
 		pObject->m_bRenderWhenUnoccluded = false;
 	}
 
-	void PX_API ResetDefinition( GlowObjectDefinition_t* pObject )
+	void PX_API ResetDefinition( GlowObjectDefinition_t *pObject )
 	{
 		pObject->m_flRed = pObject->m_flGreen = pObject->m_flBlue = pObject->m_flAlpha = pObject->m_flFullBloomAmount = 0.f;
 		pObject->m_bRenderWhenOccluded = pObject->m_bRenderWhenUnoccluded = pObject->m_bFullBloomRender = false;

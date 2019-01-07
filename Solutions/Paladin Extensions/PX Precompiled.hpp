@@ -17,7 +17,7 @@
 #define WIN32_LEAN_AND_MEAN // remove unnecessary includes
 #define NOMINMAX // disable min/max macros
 #include <Windows.h>
-#undef LoadLibraryEx
+#undef LoadLibraryEx // we have our own LoadLibraryEx func (PX::sys)
 #include <tchar.h>
 #include <VersionHelpers.h>
 #include <shellapi.h>
@@ -30,7 +30,7 @@
 #include <TlHelp32.h>
 #include <Psapi.h>
 #include <comdef.h>
-#undef bstr_t
+#undef bstr_t // we have our own bstr_t (PX::Types)
 #include <WbemIdl.h>
 #pragma comment( lib, "wbemuuid.lib" )
 

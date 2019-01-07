@@ -10,24 +10,24 @@ using namespace Tools;
 
 namespace PX::Prediction
 {
-	ptr_t* pPlayer = nullptr;
-	int* pPredictionSeed = nullptr;
+	ptr_t *pPlayer = nullptr;
+	int *pPredictionSeed = nullptr;
 	auto flOldCurtime = 0.f;
 	auto flOldFrametime = 0.f;
 	CMoveData mdCurrent { };
 
 	bool PX_API InitializePrediction( )
 	{
-	pPlayer = *reinterpret_cast< ptr_t** >( Modules::mClient.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Prediction Player" ) ].get< str_t >( ) )
-		+ jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Prediction Player" ) ].get< int >( ) );
+		pPlayer = *reinterpret_cast< ptr_t** >( Modules::mClient.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Prediction Player" ) ].get< str_t >( ) )
+			+ jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Prediction Player" ) ].get< int >( ) );
 		pPredictionSeed = *reinterpret_cast< int** >( Modules::mClient.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Prediction Seed" ) ].get< str_t >( ) )
-													  + jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Prediction Seed" ) ].get< int >( ) );
+			+ jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Prediction Seed" ) ].get< int >( ) );
 
 		return pPlayer != nullptr
-			&& pPredictionSeed != nullptr;
+				&& pPredictionSeed != nullptr;
 	}
 
-	void PX_API Start( player_ptr_t pLocalPlayer, CUserCmd* pCmd )
+	void PX_API Start( player_ptr_t pLocalPlayer, CUserCmd *pCmd )
 	{
 		if ( pPredictionSeed == nullptr )
 			InitializePrediction( );

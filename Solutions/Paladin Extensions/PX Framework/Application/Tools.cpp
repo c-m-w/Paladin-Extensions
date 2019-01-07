@@ -20,23 +20,22 @@ namespace PX::Tools
 		return true;
 	}
 
-	std::size_t PX_API EstimateTableLength( ptr_t* pVirtualTable )
+	std::size_t PX_API EstimateTableLength( ptr_t *pVirtualTable )
 	{
 		auto uReturn = 0u;
 		MEMORY_BASIC_INFORMATION mbiTable { };
-		for ( ; VirtualQuery( reinterpret_cast<LPCVOID>( pVirtualTable[ uReturn ] ), &mbiTable, sizeof mbiTable ) &&
-			  mbiTable.BaseAddress != nullptr &&
-			  mbiTable.Type != NULL &&
-			  mbiTable.Protect & ( PAGE_EXECUTE | PAGE_EXECUTE_READ | PAGE_EXECUTE_READWRITE | PAGE_EXECUTE_WRITECOPY ) &&
-			  !( mbiTable.Protect & ( PAGE_GUARD | PAGE_NOACCESS ) ); uReturn++ )
-		{
-		}
+		for ( ; VirtualQuery( reinterpret_cast< LPCVOID >( pVirtualTable[ uReturn ] ), &mbiTable, sizeof mbiTable ) &&
+				mbiTable.BaseAddress != nullptr &&
+				mbiTable.Type != NULL &&
+				mbiTable.Protect & ( PAGE_EXECUTE | PAGE_EXECUTE_READ | PAGE_EXECUTE_READWRITE | PAGE_EXECUTE_WRITECOPY ) &&
+				!( mbiTable.Protect & ( PAGE_GUARD | PAGE_NOACCESS ) ); uReturn++ )
+		{ }
 		return uReturn;
 	}
 
 	ptr_t PX_API GetModuleEnd( HMODULE hModule )
 	{
-		return reinterpret_cast< ptr_t >( hModule ) + reinterpret_cast< PIMAGE_NT_HEADERS > ( reinterpret_cast< byte_t* >( hModule ) + reinterpret_cast< PIMAGE_DOS_HEADER > ( hModule )->e_lfanew )->OptionalHeader.SizeOfImage;
+		return reinterpret_cast< ptr_t >( hModule ) + reinterpret_cast< PIMAGE_NT_HEADERS >( reinterpret_cast< byte_t* >( hModule ) + reinterpret_cast< PIMAGE_DOS_HEADER >( hModule )->e_lfanew )->OptionalHeader.SizeOfImage;
 	}
 
 	ptr_t FindFreeMemory( HMODULE hLocation, std::size_t zMinimumSize )
@@ -47,12 +46,12 @@ namespace PX::Tools
 		{
 			MEMORY_BASIC_INFORMATION mbiPage;
 			if ( VirtualQuery( reinterpret_cast< LPCVOID >( ptrAddress ), &mbiPage, sizeof mbiPage ) == NULL ||
-				 mbiPage.AllocationBase == nullptr ||
-				 mbiPage.BaseAddress == nullptr ||
-				 !( mbiPage.State & MEM_COMMIT ) ||
-				 mbiPage.Protect & ( PAGE_GUARD | PAGE_NOACCESS ) ||
-				 !( mbiPage.Protect & ( PAGE_EXECUTE_READWRITE | PAGE_READWRITE ) ) ||
-				 mbiPage.RegionSize < zMinimumSize )
+				mbiPage.AllocationBase == nullptr ||
+				mbiPage.BaseAddress == nullptr ||
+				!( mbiPage.State & MEM_COMMIT ) ||
+				mbiPage.Protect & ( PAGE_GUARD | PAGE_NOACCESS ) ||
+				!( mbiPage.Protect & ( PAGE_EXECUTE_READWRITE | PAGE_READWRITE ) ) ||
+				mbiPage.RegionSize < zMinimumSize )
 				continue;
 
 			auto bMemoryInUse = false;
@@ -75,15 +74,15 @@ namespace PX::Tools
 		if ( vecModules.empty( ) )
 			px_assert( FindModules( ) );
 
-		for ( const auto& hm : vecModules )
+		for ( const auto &hm: vecModules )
 			if ( ptrAddress > ptr_t( hm ) && ptrAddress < GetModuleEnd( hm ) )
 				return hm;
 
 		return nullptr;
 	}
 
-	CStandardHook::CStandardHook( void* pVirtualTable ): dwOldProtection( 0u ), zTableLength( 0u ), zTableSize( 0u ), pClassBase( pVirtualTable ),
-		pOldTable( nullptr ), pNewTable( nullptr ), hAllocationModule( HMODULE( ) ), bSetNewTable( false )
+	CStandardHook::CStandardHook( void *pVirtualTable ): dwOldProtection( 0u ), zTableLength( 0u ), zTableSize( 0u ), pClassBase( pVirtualTable ),
+														 pOldTable( nullptr ), pNewTable( nullptr ), hAllocationModule( HMODULE( ) ), bSetNewTable( false )
 	{
 		// Ensure that we are hooking a valid virtual table and that the length is valid( there are proper permissions to read and write to it ).
 		// Set the address of pOldTable to the address of the first virtual function.
@@ -98,7 +97,7 @@ namespace PX::Tools
 #if defined _DEBUG
 			  || ( pNewTable = new ptr_t[ zTableLength + 1 ] ) == nullptr )
 #else
-			  || ( pNewTable = reinterpret_cast< ptr_t* >( FindFreeMemory( hAllocationModule, zTableSize + sizeof( ptr_t ) ) ) ) == nullptr )
+			|| ( pNewTable = reinterpret_cast< ptr_t* >( FindFreeMemory( hAllocationModule, zTableSize + sizeof( ptr_t ) ) ) ) == nullptr )
 #endif
 			return;
 
@@ -128,7 +127,7 @@ namespace PX::Tools
 		return bSetNewTable;
 	}
 
-	bool CStandardHook::HookIndex( unsigned uIndex, void* pNewFunction )
+	bool CStandardHook::HookIndex( unsigned uIndex, void *pNewFunction )
 	{
 		if ( uIndex >= 0 && uIndex <= zTableLength )
 		{
@@ -162,12 +161,12 @@ namespace PX::Tools
 		}
 	}
 
-	CTrampolineHook::CTrampolineHook( void* pTable )
+	CTrampolineHook::CTrampolineHook( void *pTable )
 	{
 		if ( !( bInitialized = nullptr != pTable
-				&& nullptr != ( pNewTable = *reinterpret_cast< ptr_t** >( pTable ) )
-				&& 0 < ( sTable = EstimateTableLength( pNewTable ) )
-				&& nullptr != ( hTableOrigin = FindAddressOrigin( ptr_t( *reinterpret_cast< void** >( pNewTable ) ) ) ) ) )
+			&& nullptr != ( pNewTable = *reinterpret_cast< ptr_t** >( pTable ) )
+			&& 0 < ( sTable = EstimateTableLength( pNewTable ) )
+			&& nullptr != ( hTableOrigin = FindAddressOrigin( ptr_t( *reinterpret_cast< void** >( pNewTable ) ) ) ) ) )
 			return;
 		pOldTable = new uintptr_t[ sTable ];
 		memcpy( pOldTable, pNewTable, sTable * sizeof( uintptr_t ) );
@@ -178,7 +177,7 @@ namespace PX::Tools
 		UnhookAll( );
 	}
 
-	void CTrampolineHook::Setup( void* pTable )
+	void CTrampolineHook::Setup( void *pTable )
 	{
 		*this = CTrampolineHook( pTable );
 	}
@@ -191,15 +190,15 @@ namespace PX::Tools
 	bool CTrampolineHook::SetProtection( )
 	{
 		return bSetProtection = bInitialized
-								  && TRUE == VirtualProtect( pNewTable, sTable * sizeof( uintptr_t ), PAGE_READWRITE, &dwTableProtection );
+				&& TRUE == VirtualProtect( pNewTable, sTable * sizeof( uintptr_t ), PAGE_READWRITE, &dwTableProtection );
 	}
 
-	bool CTrampolineHook::HookIndex( unsigned uIndex, void* pAddress )
+	bool CTrampolineHook::HookIndex( unsigned uIndex, void *pAddress )
 	{
 		if ( !bSetProtection )
 			return false;
 		vecStubs.emplace_back( stub_t( ) );
-		auto& stub = vecStubs.back( );
+		auto &stub = vecStubs.back( );
 #if defined _DEBUG
 		stub.ptrAddress = ptr_t( VirtualAlloc( nullptr, stub_t::STUB_SIZE, MEM_COMMIT, PAGE_EXECUTE_READWRITE ) );
 #else
@@ -229,14 +228,14 @@ namespace PX::Tools
 		ResetProtection( );
 
 		delete[ ] pOldTable;
-		for ( auto& stub : vecStubs )
+		for ( auto &stub: vecStubs )
 		{
 			memset( reinterpret_cast< void* >( stub.ptrAddress ), 0, stub_t::STUB_SIZE );
 			VirtualProtect( reinterpret_cast< void* >( stub.ptrAddress ), stub_t::STUB_SIZE, stub.dwProtect, &dwBuffer );
 		}
 	}
 
-	std::vector< D3DXVECTOR2 > PX_API GetBezierPoints( D3DXVECTOR2 vecStart, D3DXVECTOR2 vecEnd, bezier_order_t* pOrders, std::size_t zOrders )
+	std::vector< D3DXVECTOR2 > PX_API GetBezierPoints( D3DXVECTOR2 vecStart, D3DXVECTOR2 vecEnd, bezier_order_t *pOrders, std::size_t zOrders )
 	{
 		const auto vecDifference = vecStart - vecEnd;
 		const auto flDifference = sqrtf( powf( vecDifference.x, 2.f ) + powf( vecDifference.y, 2.f ) );
@@ -245,9 +244,9 @@ namespace PX::Tools
 		std::vector< D3DXVECTOR2 > vecReturn { };
 
 		vecReturn.emplace_back( vecStart );
-		for( auto z = 0u; z < zOrders; z++ )
+		for ( auto z = 0u; z < zOrders; z++ )
 		{
-			const auto& _Order = pOrders[ z ];
+			const auto &_Order = pOrders[ z ];
 			const auto vecBisection = vecStart - vecDifference * _Order.flBisectionPoint;
 			auto vecCurrent = vecBisection;
 			vecCurrent.y -= flSine * _Order.flDistance * flDifference;
@@ -264,13 +263,14 @@ namespace PX::Tools
 		do
 		{
 			std::vector< D3DXVECTOR2 > vecNewPoints { };
-			for( auto i = 0; i < vecPoints.size( ) - 1; i++ )
+			for ( auto i = 0; i < vecPoints.size( ) - 1; i++ )
 			{
-				const auto& vecPointOne = vecPoints[ i ], vecPointTwo = vecPoints[ i + 1 ];
+				const auto &vecPointOne = vecPoints[ i ], vecPointTwo = vecPoints[ i + 1 ];
 				vecNewPoints.emplace_back( vecPointOne - ( vecPointOne - vecPointTwo ) * flRatio );
 			}
 			vecPoints = vecNewPoints;
-		} while ( vecPoints.size( ) > 1u );
+		}
+		while ( vecPoints.size( ) > 1u );
 		return vecPoints[ 0 ];
 	}
 
@@ -319,7 +319,7 @@ namespace PX::Tools
 		time( &tmBuffer );
 		const auto tmTime = localtime( &tmBuffer );
 
-		const char* szDaySuffix;
+		const char *szDaySuffix;
 
 		switch ( tmTime->tm_mday % 10 )
 		{
@@ -347,7 +347,7 @@ namespace PX::Tools
 		return szBuffer;
 	}
 
-	str_t PX_API FormatShellcode( byte_t* bByteArray, unsigned uSize )
+	str_t PX_API FormatShellcode( byte_t *bByteArray, unsigned uSize )
 	{
 		str_t strFormatted { };
 		for ( auto u = 0u; u < uSize; u++ )
@@ -383,7 +383,7 @@ namespace PX::Tools
 			NtDelayExecution( FALSE, &liDelayInterval );
 	}
 
-	unsigned* GetScreenDimensions( )
+	unsigned *GetScreenDimensions( )
 	{
 		static unsigned uScreenDimensions[ 2 ];
 		uScreenDimensions[ 0 ] = GetSystemMetrics( SM_CXSCREEN );

@@ -16,7 +16,7 @@
 #define TE_BEAMCYLINDER		3		// cylinder that expands to max radius over lifetime
 #define TE_BEAMFOLLOW		4		// create a line of decaying beam segments until entity stops moving
 #define TE_BEAMRING			5		// connect a beam ring to two entities
-#define TE_BEAMSPLINE		6		
+#define TE_BEAMSPLINE		6
 #define TE_BEAMRINGPOINT	7
 #define	TE_BEAMLASER		8		// Fades according to viewpoint
 #define TE_BEAMTESLA		9
@@ -61,82 +61,82 @@ public:
 	// has a vftable but not interested.
 
 	// Bounding box...
-	Vector			m_Mins;
-	Vector			m_Maxs;
-	void		   *m_queryHandleHalo;
-	float			m_haloProxySize;
+	Vector m_Mins;
+	Vector m_Maxs;
+	void *m_queryHandleHalo;
+	float m_haloProxySize;
 
 	// Data is below..
 
 	// Next beam in list
-	Beam_t*			next;
+	Beam_t *next;
 
 	// Type of beam
-	int				type;
-	int				flags;
+	int type;
+	int flags;
 
 	// Control points for the beam
-	int				numAttachments;
-	Vector			attachment[ MAX_BEAM_ENTS ];
-	Vector			delta;
+	int numAttachments;
+	Vector attachment[ MAX_BEAM_ENTS ];
+	Vector delta;
 
 	// 0 .. 1 over lifetime of beam
-	float			t;
-	float			freq;
+	float t;
+	float freq;
 
 	// Time when beam should die
-	float			die;
-	float			width;
-	float			endWidth;
-	float			fadeLength;
-	float			amplitude;
-	float			life;
+	float die;
+	float width;
+	float endWidth;
+	float fadeLength;
+	float amplitude;
+	float life;
 
 	// Color
-	float			r, g, b;
-	float			brightness;
+	float r, g, b;
+	float brightness;
 
 	// Speed
-	float			speed;
+	float speed;
 
 	// Animation
-	float			frameRate;
-	float			frame;
-	int				segments;
+	float frameRate;
+	float frame;
+	int segments;
 
 	// Attachment entities for the beam
-	int				entity[ MAX_BEAM_ENTS ]; // the fucks an ehandle, rearrange if fucked.
-	int				attachmentIndex[ MAX_BEAM_ENTS ];
+	int entity[ MAX_BEAM_ENTS ]; // the fucks an ehandle, rearrange if fucked.
+	int attachmentIndex[ MAX_BEAM_ENTS ];
 
 	// Model info
-	int				modelIndex;
-	int				haloIndex;
+	int modelIndex;
+	int haloIndex;
 
-	float			haloScale;
-	int				frameCount;
+	float haloScale;
+	int frameCount;
 
-	float			rgNoise[ NOISE_DIVISIONS + 1 ];
+	float rgNoise[ NOISE_DIVISIONS + 1 ];
 
 	// Popcorn trail for beam follows to use
-	BeamTrail_t*	trail;
+	BeamTrail_t *trail;
 
 	// for TE_BEAMRINGPOINT
-	float			start_radius;
-	float			end_radius;
+	float start_radius;
+	float end_radius;
 
 	// for FBEAM_ONLYNOISEONCE
-	bool			m_bCalculatedNoise;
+	bool m_bCalculatedNoise;
 
-	float			m_flHDRColorScale;
+	float m_flHDRColorScale;
 };
 
 struct BeamTrail_t
 {
 	// NOTICE:  Don't add user defined fields except after these four fields.
-	BeamTrail_t*	next;
-	float			die;
-	Vector			org;
-	Vector			vel;
+	BeamTrail_t *next;
+	float die;
+	Vector org;
+	Vector vel;
 };
 
 //-----------------------------------------------------------------------------
@@ -144,51 +144,51 @@ struct BeamTrail_t
 //-----------------------------------------------------------------------------
 struct BeamInfo_t
 {
-	int			m_nType;
+	int m_nType;
 
 	// Entities
-	C_BaseEntity* m_pStartEnt;
-	int			m_nStartAttachment;
-	C_BaseEntity* m_pEndEnt;
-	int			m_nEndAttachment;
+	C_BaseEntity *m_pStartEnt;
+	int m_nStartAttachment;
+	C_BaseEntity *m_pEndEnt;
+	int m_nEndAttachment;
 
 	// Points
-	Vector		m_vecStart;
-	Vector		m_vecEnd;
+	Vector m_vecStart;
+	Vector m_vecEnd;
 
-	int			m_nModelIndex;
-	const char	*m_pszModelName;
+	int m_nModelIndex;
+	const char *m_pszModelName;
 
-	int			m_nHaloIndex;
-	const char	*m_pszHaloName;
-	float		m_flHaloScale;
+	int m_nHaloIndex;
+	const char *m_pszHaloName;
+	float m_flHaloScale;
 
-	float		m_flLife;
-	float		m_flWidth;
-	float		m_flEndWidth;
-	float		m_flFadeLength;
-	float		m_flAmplitude;
+	float m_flLife;
+	float m_flWidth;
+	float m_flEndWidth;
+	float m_flFadeLength;
+	float m_flAmplitude;
 
-	float		m_flBrightness;
-	float		m_flSpeed;
+	float m_flBrightness;
+	float m_flSpeed;
 
-	int			m_nStartFrame;
-	float		m_flFrameRate;
+	int m_nStartFrame;
+	float m_flFrameRate;
 
-	float		m_flRed;
-	float		m_flGreen;
-	float		m_flBlue;
+	float m_flRed;
+	float m_flGreen;
+	float m_flBlue;
 
-	bool		m_bRenderable;
+	bool m_bRenderable;
 
-	int			m_nSegments;
+	int m_nSegments;
 
-	int			m_nFlags;
+	int m_nFlags;
 
 	// Rings
-	Vector		m_vecCenter;
-	float		m_flStartRadius;
-	float		m_flEndRadius;
+	Vector m_vecCenter;
+	float m_flStartRadius;
+	float m_flEndRadius;
 
 	BeamInfo_t( )
 	{
@@ -209,64 +209,63 @@ public:
 	// Construction
 public:
 	IViewRenderBeams( void );
-	virtual				~IViewRenderBeams( void );
+	virtual ~IViewRenderBeams( void );
 
 	// Implement IViewRenderBeams
 public:
-	virtual	void		InitBeams( void );
-	virtual	void		ShutdownBeams( void );
-	virtual	void		ClearBeams( void );
+	virtual void InitBeams( void );
+	virtual void ShutdownBeams( void );
+	virtual void ClearBeams( void );
 
 	// Updates the state of the temp ent beams
-	virtual void		UpdateTempEntBeams( );
+	virtual void UpdateTempEntBeams( );
 
-	virtual void		DrawBeam( Beam_t *pbeam );
-	virtual void		DrawBeam( void* pbeam, ITraceFilter *pEntityBeamTraceFilter = NULL );
+	virtual void DrawBeam( Beam_t *pbeam );
+	virtual void DrawBeam( void *pbeam, ITraceFilter *pEntityBeamTraceFilter = NULL );
 
-	virtual	void		KillDeadBeams( IClientEntity *pDeadEntity );
+	virtual void KillDeadBeams( IClientEntity *pDeadEntity );
 
-	virtual	void		CreateBeamEnts( int startEnt, int endEnt, int modelIndex, int haloIndex, float haloScale,
-										float life, float width, float endWidth, float fadeLength, float amplitude,
-										float brightness, float speed, int startFrame,
-										float framerate, float r, float g, float b, int type = -1 );
-	virtual Beam_t		*CreateBeamEnts( BeamInfo_t &beamInfo );
+	virtual void CreateBeamEnts( int startEnt, int endEnt, int modelIndex, int haloIndex, float haloScale,
+								 float life, float width, float endWidth, float fadeLength, float amplitude,
+								 float brightness, float speed, int startFrame,
+								 float framerate, float r, float g, float b, int type = -1 );
+	virtual Beam_t *CreateBeamEnts( BeamInfo_t &beamInfo );
 
-	virtual	void		CreateBeamEntPoint( int	nStartEntity, const Vector *pStart, int nEndEntity, const Vector* pEnd,
-											int modelIndex, int haloIndex, float haloScale,
-											float life, float width, float endWidth, float fadeLength, float amplitude,
-											float brightness, float speed, int startFrame,
-											float framerate, float r, float g, float b );
-	virtual Beam_t		*CreateBeamEntPoint( BeamInfo_t &beamInfo );
+	virtual void CreateBeamEntPoint( int nStartEntity, const Vector *pStart, int nEndEntity, const Vector *pEnd,
+									 int modelIndex, int haloIndex, float haloScale,
+									 float life, float width, float endWidth, float fadeLength, float amplitude,
+									 float brightness, float speed, int startFrame,
+									 float framerate, float r, float g, float b );
+	virtual Beam_t *CreateBeamEntPoint( BeamInfo_t &beamInfo );
 
-	virtual	void		CreateBeamPoints( Vector& start, Vector& end, int modelIndex, int haloIndex, float haloScale,
-										  float life, float width, float endWidth, float fadeLength, float amplitude,
-										  float brightness, float speed, int startFrame,
-										  float framerate, float r, float g, float b );
-	virtual	Beam_t		*CreateBeamPoints( BeamInfo_t &beamInfo );
+	virtual void CreateBeamPoints( Vector &start, Vector &end, int modelIndex, int haloIndex, float haloScale,
+								   float life, float width, float endWidth, float fadeLength, float amplitude,
+								   float brightness, float speed, int startFrame,
+								   float framerate, float r, float g, float b );
+	virtual Beam_t *CreateBeamPoints( BeamInfo_t &beamInfo );
 
-	virtual	void		CreateBeamRing( int startEnt, int endEnt, int modelIndex, int haloIndex, float haloScale,
-										float life, float width, float endWidth, float fadeLength, float amplitude,
-										float brightness, float speed, int startFrame,
-										float framerate, float r, float g, float b, int flags );
-	virtual Beam_t		*CreateBeamRing( BeamInfo_t &beamInfo );
+	virtual void CreateBeamRing( int startEnt, int endEnt, int modelIndex, int haloIndex, float haloScale,
+								 float life, float width, float endWidth, float fadeLength, float amplitude,
+								 float brightness, float speed, int startFrame,
+								 float framerate, float r, float g, float b, int flags );
+	virtual Beam_t *CreateBeamRing( BeamInfo_t &beamInfo );
 
-	virtual void		CreateBeamRingPoint( const Vector& center, float start_radius, float end_radius, int modelIndex, int haloIndex, float haloScale,
-											 float life, float width, float m_nEndWidth, float m_nFadeLength, float amplitude,
-											 float brightness, float speed, int startFrame,
-											 float framerate, float r, float g, float b, int flags );
-	virtual Beam_t		*CreateBeamRingPoint( BeamInfo_t &beamInfo );
+	virtual void CreateBeamRingPoint( const Vector &center, float start_radius, float end_radius, int modelIndex, int haloIndex, float haloScale,
+									  float life, float width, float m_nEndWidth, float m_nFadeLength, float amplitude,
+									  float brightness, float speed, int startFrame,
+									  float framerate, float r, float g, float b, int flags );
+	virtual Beam_t *CreateBeamRingPoint( BeamInfo_t &beamInfo );
 
-	virtual	void		CreateBeamCirclePoints( int type, Vector& start, Vector& end,
-												int modelIndex, int haloIndex, float haloScale, float life, float width,
-												float endWidth, float fadeLength, float amplitude, float brightness, float speed,
-												int startFrame, float framerate, float r, float g, float b );
-	virtual Beam_t		*CreateBeamCirclePoints( BeamInfo_t &beamInfo );
+	virtual void CreateBeamCirclePoints( int type, Vector &start, Vector &end,
+										 int modelIndex, int haloIndex, float haloScale, float life, float width,
+										 float endWidth, float fadeLength, float amplitude, float brightness, float speed,
+										 int startFrame, float framerate, float r, float g, float b );
+	virtual Beam_t *CreateBeamCirclePoints( BeamInfo_t &beamInfo );
 
-	virtual	void		CreateBeamFollow( int startEnt, int modelIndex, int haloIndex, float haloScale,
-										  float life, float width, float endWidth, float fadeLength, float r, float g, float b,
-										  float brightness );
-	virtual Beam_t		*CreateBeamFollow( BeamInfo_t &beamInfo );
-
+	virtual void CreateBeamFollow( int startEnt, int modelIndex, int haloIndex, float haloScale,
+								   float life, float width, float endWidth, float fadeLength, float r, float g, float b,
+								   float brightness );
+	virtual Beam_t *CreateBeamFollow( BeamInfo_t &beamInfo );
 };
 
 //class IViewRenderBeams
