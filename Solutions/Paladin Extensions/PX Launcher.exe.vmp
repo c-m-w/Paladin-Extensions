@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Document Version="2">
+    <Protection InputFileName="PX Launcher.exe" Options="1023944">
+        <Messages>
+            <Message Id="0">A connection cannot be established with https://www.paladin-extensions.com/ currently. Please try again later. Contact support if this issue persists.</Message>
+            <Message Id="1">You must run the program as administrator.</Message>
+            <Message Id="2">Your client is outdated. Please download the updated version at https://www.paladin-extensions.com/extensions/1/.</Message>
+            <Message Id="3">You do not currently have an active premium subscription to any of our products. Purchase one at https://www.paladin-extensions.com/extensions/.</Message>
+        </Messages>
+        <Folders>
+            <Folder Name="General/Initialization" />
+            <Folder Name="Framework" />
+            <Folder Name="Tools" Parent="1" />
+            <Folder Name="File Manager" Parent="1" />
+            <Folder Name="Cryptography" Parent="1" />
+            <Folder Name="System Management" Parent="1" />
+            <Folder Name="Connectivity" Parent="1" />
+        </Folders>
+        <Procedures>
+            <Procedure MapAddress="_wWinMain@16" Options="0" Folder="0" CompilationType="2" />
+            <Procedure MapAddress="OnLaunch(void)" Options="0" Folder="0" CompilationType="2" />
+            <Procedure MapAddress="PX::Tools::string_cast&lt;class std::basic_string&lt;wchar_t,struct std::char_traits&lt;wchar_t&gt;,class std::allocator&lt;wchar_t&gt; &gt;,class std::basic_string&lt;char,struct std::char_traits&lt;char&gt;,class std::allocator&lt;char&gt; &gt; &gt;(class std::basic_string&lt;char,struct std::char_traits&lt;char&gt;,class std::allocator&lt;char&gt; &gt; const &amp;)" Options="0" Folder="2" CompilationType="2" />
+            <Procedure MapAddress="PX::Files::GetExecutableDirectory(void)" Options="0" Folder="3" CompilationType="2" />
+            <Procedure MapAddress="PX::Files::GetPXDirectory(void)" Options="0" Folder="3" CompilationType="2" />
+            <Procedure MapAddress="PX::Files::FileRead(class std::basic_string&lt;wchar_t,struct std::char_traits&lt;wchar_t&gt;,class std::allocator&lt;wchar_t&gt; &gt;,class std::basic_string&lt;wchar_t,struct std::char_traits&lt;wchar_t&gt;,class std::allocator&lt;wchar_t&gt; &gt; &amp;,bool,bool)" Options="0" Folder="3" CompilationType="2" />
+            <Procedure MapAddress="PX::Files::FileWrite(class std::basic_string&lt;wchar_t,struct std::char_traits&lt;wchar_t&gt;,class std::allocator&lt;wchar_t&gt; &gt;,class std::basic_string&lt;wchar_t,struct std::char_traits&lt;wchar_t&gt;,class std::allocator&lt;wchar_t&gt; &gt; const &amp;,bool,bool)" Options="0" Folder="3" CompilationType="2" />
+            <Procedure MapAddress="PX::Cryptography::InitializeEncryption(void)" Options="0" Folder="4" CompilationType="2" />
+            <Procedure MapAddress="PX::Cryptography::GenerateHash(class std::basic_string&lt;char,struct std::char_traits&lt;char&gt;,class std::allocator&lt;char&gt; &gt; const &amp;)" Options="0" Folder="4" CompilationType="2" />
+            <Procedure MapAddress="PX::Cryptography::Decrypt(class std::basic_string&lt;char,struct std::char_traits&lt;char&gt;,class std::allocator&lt;char&gt; &gt; const &amp;)" Options="0" Folder="4" CompilationType="2" />
+            <Procedure MapAddress="PX::sys::GetSystemInfo(void)" Options="0" Folder="5" CompilationType="2" />
+            <Procedure MapAddress="PX::sys::AssembleExtensionInformation(class std::basic_string&lt;char,struct std::char_traits&lt;char&gt;,class std::allocator&lt;char&gt; &gt;)" Options="0" Folder="6" CompilationType="2" />
+            <Procedure MapAddress="PX::sys::WipeMemory(void *,unsigned int)" Options="0" Folder="5" CompilationType="2" />
+            <Procedure MapAddress="PX::sys::SWindowsAPI::GetFunctionPointer(enum PX::sys::SWindowsAPI::EFuncs)" Options="0" Folder="5" CompilationType="2" />
+            <Procedure MapAddress="PX::Net::GeneratePostData(class std::deque&lt;struct PX::Types::SPostData,class std::allocator&lt;struct PX::Types::SPostData&gt; &gt; const &amp;)" Options="0" Folder="6" CompilationType="2" />
+            <Procedure MapAddress="PX::Net::Request(class std::basic_string&lt;char,struct std::char_traits&lt;char&gt;,class std::allocator&lt;char&gt; &gt; const &amp;,class std::deque&lt;struct PX::Types::SPostData,class std::allocator&lt;struct PX::Types::SPostData&gt; &gt; const &amp;)" Options="0" Folder="6" CompilationType="2" />
+            <Procedure MapAddress="PX::Net::RequestExtension(unsigned int,bool)" Options="0" Folder="6" CompilationType="2" />
+            <Procedure MapAddress="PX::Net::Login(bool *)" Options="0" Folder="6" CompilationType="2" />
+            <Procedure MapAddress="PX::sys::LoadDLL(void *)" Options="0" Folder="5" CompilationType="2" />
+            <Procedure MapAddress="PX::Net::CreateLicenseFile(void)" Options="0" Folder="6" CompilationType="2" />
+            <Procedure MapAddress="PX::sys::RetrieveInfo(class _bstr_t const &amp;,wchar_t const *)" Options="0" Folder="1" CompilationType="2" />
+            <Procedure MapAddress="LoadManager(void)" Options="0" Folder="0" CompilationType="2" />
+        </Procedures>
+        <Objects />
+    </Protection>
+    <DLLBox>
+        <Folders />
+    </DLLBox>
+    <Script />
+    <LicenseManager />
+</Document>
