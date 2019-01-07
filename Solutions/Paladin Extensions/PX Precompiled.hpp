@@ -41,7 +41,11 @@
 #include <cryptopp/modes.h>
 #include <cryptopp/sha.h>
 #include <cryptopp/aes.h>
-#pragma comment( lib, "cryptlib.lib" ) // todo @cole compile as /MT not /MD, /MDd, or /MTd
+#if defined _DEBUG
+#pragma comment( lib, "cryptlibd.lib" )
+#else
+#pragma comment( lib, "cryptlib.lib" )
+#endif
 
 // cURL
 #define CURL_STATICLIB // specify cURL is lib, not dll
@@ -50,7 +54,12 @@
 #pragma comment( lib, "wldap32.lib" )
 #pragma comment( lib, "Crypt32.lib" )
 #pragma comment( lib, "Normaliz.lib" )
-#pragma comment( lib, "libcurl_a.lib" )
+#if defined _DEBUG
+#pragma comment( lib, "libcurld.lib" )
+#else
+#pragma comment( lib, "libcurl.lib" )
+#endif
+
 
 // Direct X
 #include <d3d9.h>
