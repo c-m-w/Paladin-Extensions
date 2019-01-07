@@ -1,3 +1,6 @@
+#include <codeanalysis/warnings.h>
+#pragma warning( push, 0 )
+#pragma warning( disable: ALL_CODE_ANALYSIS_WARNINGS )
 #include "checksum_md5.hpp"
 
 #include <windows.h>
@@ -246,3 +249,4 @@ unsigned int MD5_PseudoRandom(unsigned int nSeed)
 
     return *(unsigned int*)(digest + 6);	// use 4 middle bytes for random value
 }
+#pragma warning( pop )
