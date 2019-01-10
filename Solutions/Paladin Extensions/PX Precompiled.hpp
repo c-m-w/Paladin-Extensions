@@ -34,17 +34,13 @@
 #include <WbemIdl.h>
 #pragma comment( lib, "wbemuuid.lib" )
 
-// Crypto++
-#include <cryptopp/base64.h>
-#include <cryptopp/filters.h>
-#include <cryptopp/hex.h>
-#include <cryptopp/modes.h>
-#include <cryptopp/sha.h>
-#include <cryptopp/aes.h>
+// OpenSSL
 #if defined _DEBUG
-#pragma comment( lib, "cryptlibd.lib" )
+#pragma comment( lib, "libcryptod.lib" )
+#pragma comment( lib, "libssld.lib" )
 #else
-#pragma comment( lib, "cryptlib.lib" )
+#pragma comment( lib, "libcrypto.lib" )
+#pragma comment( lib, "libssl.lib" )
 #endif
 
 // cURL
@@ -60,6 +56,18 @@
 #pragma comment( lib, "libcurl.lib" )
 #endif
 
+// Crypto++
+#include <cryptopp/base64.h>
+#include <cryptopp/filters.h>
+#include <cryptopp/hex.h>
+#include <cryptopp/modes.h>
+#include <cryptopp/sha.h>
+#include <cryptopp/aes.h>
+#if defined _DEBUG
+#pragma comment( lib, "cryptlibd.lib" )
+#else
+#pragma comment( lib, "cryptlib.lib" )
+#endif
 
 // Direct X
 #include <d3d9.h>
