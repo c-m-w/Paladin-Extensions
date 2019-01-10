@@ -36,7 +36,7 @@ public:
 
 	bool IsValid( ) const
 	{
-		return std::isfinite( x ) && std::isfinite( y ) && std::isfinite( z );
+		return isfinite( x ) && isfinite( y ) && isfinite( z );
 	}
 
 	void Invalidate( )
