@@ -95,6 +95,7 @@ Relogin:
 		case LOGIN_CONNECTION_FAILURE:
 			if ( Popup( EMBType::RETRY_ERROR, PX_XOR( L"A connection cannot be established with https://www.paladin-extensions.com/ currently. Please try again later. Contact support if this issue persists." ) ) )
 				goto Relogin;
+			ExitProcess( UINT_MAX );
 		case LOGIN_INVALID_HASH:
 			Popup( EMBType::FATAL_ERROR, PX_XOR( L"Your client is outdated. Please download the updated version at https://www.paladin-extensions.com/extensions/1/." ) );
 		case LOGIN_BANNED:
