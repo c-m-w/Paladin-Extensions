@@ -55,6 +55,8 @@ public:
 	/// \since Crypto++ 6.0
 #if defined(CRYPTOPP_DOXYGEN_PROCESSING)
 	static const size_type ELEMS_MAX = ...;
+#elif defined(_MSC_VER) && (_MSC_VER <= 1400)
+	static const size_type ELEMS_MAX = (~(size_type)0)/sizeof(T);
 #elif defined(CRYPTOPP_CXX11_ENUM)
 	enum : size_type {ELEMS_MAX = SIZE_MAX/sizeof(T)};
 #else
@@ -71,22 +73,22 @@ public:
 
 #if defined(CRYPTOPP_CXX11_VARIADIC_TEMPLATES) || defined(CRYPTOPP_DOXYGEN_PROCESSING)
 
-	/// \brief Constructs a new U using variadic arguments
-	/// \tparam U the type to be forwarded
+	/// \brief Constructs a new V using variadic arguments
+	/// \tparam V the type to be forwarded
 	/// \tparam Args the arguments to be forwarded
-	/// \param ptr pointer to type U
+	/// \param ptr pointer to type V
 	/// \param args variadic arguments
 	/// \details This is a C++11 feature. It is available when CRYPTOPP_CXX11_VARIADIC_TEMPLATES
 	///   is defined. The define is controlled by compiler versions detected in config.h.
-    template<typename U, typename... Args>
-    void construct(U* ptr, Args&&... args) {::new ((void*)ptr) U(std::forward<Args>(args)...);}
+    template<typename V, typename... Args>
+    void construct(V* ptr, Args&&... args) {::new ((void*)ptr) V(std::forward<Args>(args)...);}
 
-	/// \brief Destroys an U constructed with variadic arguments
-	/// \tparam U the type to be forwarded
+	/// \brief Destroys an V constructed with variadic arguments
+	/// \tparam V the type to be forwarded
 	/// \details This is a C++11 feature. It is available when CRYPTOPP_CXX11_VARIADIC_TEMPLATES
 	///   is defined. The define is controlled by compiler versions detected in config.h.
-    template<typename U>
-    void destroy(U* ptr) {if (ptr) ptr->~U();}
+    template<typename V>
+    void destroy(V* ptr) {if (ptr) ptr->~V();}
 
 #endif
 
@@ -198,10 +200,10 @@ public:
 #if CRYPTOPP_BOOL_ALIGN16
 		// TODO: Does this need the test 'size*sizeof(T) >= 16'?
 		if (T_Align16 && size)
-			return (pointer)AlignedAllocate(size*sizeof(T));
+			return reinterpret_cast<pointer>(AlignedAllocate(size*sizeof(T)));
 #endif
 
-		return (pointer)UnalignedAllocate(size*sizeof(T));
+		return reinterpret_cast<pointer>(UnalignedAllocate(size*sizeof(T)));
 	}
 
 	/// \brief Deallocates a block of memory
@@ -217,7 +219,7 @@ public:
 		// This will fire if SetMark(0) was called in the SecBlock
 		//  Our self tests exercise it, disable it now.
 		// CRYPTOPP_ASSERT((ptr && size) || !(ptr || size));
-		SecureWipeArray((pointer)ptr, size);
+		SecureWipeArray(reinterpret_cast<pointer>(ptr), size);
 
 #if CRYPTOPP_BOOL_ALIGN16
 		if (T_Align16 && size)
@@ -247,16 +249,16 @@ public:
 	}
 
 	/// \brief Template class memeber Rebind
-	/// \tparam U bound class or type
+	/// \tparam V bound class or type
 	/// \details Rebind allows a container class to allocate a different type of object
 	///   to store elements. For example, a std::list will allocate std::list_node to
 	///   store elements in the list.
 	/// \details VS.NET STL enforces the policy of "All STL-compliant allocators
 	///   have to provide a template class member called rebind".
-    template <class U> struct rebind { typedef AllocatorWithCleanup<U, T_Align16> other; };
+    template <class V> struct rebind { typedef AllocatorWithCleanup<V, T_Align16> other; };
 #if _MSC_VER >= 1500
 	AllocatorWithCleanup() {}
-	template <class U, bool A> AllocatorWithCleanup(const AllocatorWithCleanup<U, A> &) {}
+	template <class V, bool A> AllocatorWithCleanup(const AllocatorWithCleanup<V, A> &) {}
 #endif
 };
 
@@ -307,7 +309,8 @@ public:
 /// \brief Static secure memory block with cleanup
 /// \tparam T class or type
 /// \tparam S fixed-size of the stack-based memory block, in elements
-/// \tparam T_Align16 boolean that determines whether allocations should be aligned on a 16-byte boundary
+/// \tparam T_Align16 boolean that determines whether allocations should
+///    be aligned on a 16-byte boundary
 /// \details FixedSizeAllocatorWithCleanup provides a fixed-size, stack-
 ///    based allocation at compile time. The class can grow its memory
 ///    block at runtime if a suitable allocator is available. If size
@@ -317,6 +320,26 @@ public:
 ///   they require that all objects of the same allocator type are equivalent.
 template <class T, size_t S, class A = NullAllocator<T>, bool T_Align16 = false>
 class FixedSizeAllocatorWithCleanup : public AllocatorBase<T>
+{
+	// The body of FixedSizeAllocatorWithCleanup is provided in the two
+	// partial specializations that follow. The two specialiations
+	// pivot on the boolean template parameter T_Align16. AIX, Solaris,
+	// IBM XLC and SunCC receive a little extra help. We managed to
+	// clear most of the warnings.
+};
+
+/// \brief Static secure memory block with cleanup
+/// \tparam T class or type
+/// \tparam S fixed-size of the stack-based memory block, in elements
+/// \details FixedSizeAllocatorWithCleanup provides a fixed-size, stack-
+///    based allocation at compile time. The class can grow its memory
+///    block at runtime if a suitable allocator is available. If size
+///    grows beyond S and a suitable allocator is available, then the
+///    statically allocated array is obsoleted.
+/// \note This allocator can't be used with standard collections because
+///   they require that all objects of the same allocator type are equivalent.
+template <class T, size_t S, class A>
+class FixedSizeAllocatorWithCleanup<T, S, A, true> : public AllocatorBase<T>
 {
 public:
 	CRYPTOPP_INHERIT_ALLOCATOR_TYPES
@@ -385,6 +408,10 @@ public:
 	{
 		if (ptr == GetAlignedArray())
 		{
+			// If the m_allocated assert fires then the bit twiddling for
+			// GetAlignedArray() is probably incorrect for the platform.
+			// Be sure to check CRYPTOPP_ALIGN_DATA(8). The platform may
+			// not have a way to declaritively align data to 8.
 			CRYPTOPP_ASSERT(size <= S);
 			CRYPTOPP_ASSERT(m_allocated);
 			m_allocated = false;
@@ -398,7 +425,8 @@ public:
 	/// \param oldPtr the previous allocation
 	/// \param oldSize the size of the previous allocation
 	/// \param newSize the new, requested size
-	/// \param preserve flag that indicates if the old allocation should be preserved
+	/// \param preserve flag that indicates if the old allocation should
+	///   be preserved
 	/// \returns pointer to the new memory block
 	/// \details FixedSizeAllocatorWithCleanup provides a fixed-size, stack-
 	///   based allocation at compile time. If size is less than or equal to
@@ -431,17 +459,217 @@ public:
 		return newPointer;
 	}
 
-	CRYPTOPP_CONSTEXPR size_type max_size() const {return STDMAX(m_fallbackAllocator.max_size(), S);}
+	CRYPTOPP_CONSTEXPR size_type max_size() const
+	{
+		return STDMAX(m_fallbackAllocator.max_size(), S);
+	}
 
 private:
 
-#ifdef __BORLANDC__
-	T* GetAlignedArray() {return m_array;}
-	T m_array[S];
+#if defined(CRYPTOPP_BOOL_ALIGN16) && (defined(_M_X64) || defined(__x86_64__))
+	// Before we can add additional platforms we need to check the
+	// linker documentation for alignment behavior for stack variables.
+	// CRYPTOPP_ALIGN_DATA(16) is known OK on Linux, OS X, Solaris.
+	// Also see http://stackoverflow.com/a/1468656/608639.
+	T* GetAlignedArray() {
+		CRYPTOPP_ASSERT(IsAlignedOn(m_array, 16));
+		return m_array;
+	}
+	CRYPTOPP_ALIGN_DATA(16) T m_array[S];
+
+#elif defined(CRYPTOPP_BOOL_ALIGN16)
+
+	// There be demons here... We cannot use CRYPTOPP_ALIGN_DATA(16)
+	// because linkers on 32-bit machines (and some 64-bit machines)
+	// align the stack to 8-bytes or less by default, not 16-bytes as
+	// requested. Additionally, the AIX linker seems to use 4-bytes
+	// by default. However, all linkers tested appear to honor
+	// CRYPTOPP_ALIGN_DATA(8). Also see
+	// http://stackoverflow.com/a/1468656/608639.
+	//
+	// The 16-byte alignment is achieved by padding the requested
+	// size with extra elements so we have at least 16-bytes of slack
+	// to work with. Then the pointer is moved down to achieve a
+	// 16-byte alignment (stacks grow down).
+	//
+	// The additional 16-bytes introduces a small secondary issue.
+	// The secondary issue is, a large T results in 0 = 8/sizeof(T).
+	// The library is OK but users may hit it. So we need to guard
+	// for a large T, and that is what PAD achieves.
+	T* GetAlignedArray() {
+		T* p_array = (T*)(void*)(((byte*)m_array) + (0-(size_t)m_array)%16);
+		// Verify the 16-byte alignment
+		CRYPTOPP_ASSERT(IsAlignedOn(p_array, 16));
+		// Verify allocated array with pad is large enough.
+		CRYPTOPP_ASSERT(p_array+S <= m_array+(S+PAD));
+		return p_array;
+	}
+
+#   if defined(_AIX)
+	// PAD is elements, not bytes, and rounded up to ensure no overflow.
+	enum { Q = sizeof(T), PAD = (Q >= 16) ? 1 : (Q >= 8) ? 2 : (Q >= 4) ? 4 : (Q >= 2) ? 8 : 16 };
+	CRYPTOPP_ALIGN_DATA(8) T m_array[S+PAD];
+#   else
+	// PAD is elements, not bytes, and rounded up to ensure no overflow.
+	enum { Q = sizeof(T), PAD = (Q >= 8) ? 1 : (Q >= 4) ? 2 : (Q >= 2) ? 4 : 8 };
+	CRYPTOPP_ALIGN_DATA(8) T m_array[S+PAD];
+#   endif
+
 #else
-	T* GetAlignedArray() {return (CRYPTOPP_BOOL_ALIGN16 && T_Align16) ? (T*)(void *)(((byte *)m_array) + (0-(size_t)m_array)%16) : m_array;}
-	CRYPTOPP_ALIGN_DATA(8) T m_array[(CRYPTOPP_BOOL_ALIGN16 && T_Align16) ? S+8/sizeof(T) : S];
+
+	// CRYPTOPP_BOOL_ALIGN16 is 0. Use natural alignment of T.
+	T* GetAlignedArray() {return m_array;}
+	CRYPTOPP_ALIGN_DATA(4) T m_array[S];
+
 #endif
+
+	A m_fallbackAllocator;
+	bool m_allocated;
+};
+
+/// \brief Static secure memory block with cleanup
+/// \tparam T class or type
+/// \tparam S fixed-size of the stack-based memory block, in elements
+/// \details FixedSizeAllocatorWithCleanup provides a fixed-size, stack-
+///    based allocation at compile time. The class can grow its memory
+///    block at runtime if a suitable allocator is available. If size
+///    grows beyond S and a suitable allocator is available, then the
+///    statically allocated array is obsoleted.
+/// \note This allocator can't be used with standard collections because
+///   they require that all objects of the same allocator type are equivalent.
+template <class T, size_t S, class A>
+class FixedSizeAllocatorWithCleanup<T, S, A, false> : public AllocatorBase<T>
+{
+public:
+	CRYPTOPP_INHERIT_ALLOCATOR_TYPES
+
+	/// \brief Constructs a FixedSizeAllocatorWithCleanup
+	FixedSizeAllocatorWithCleanup() : m_allocated(false) {}
+
+	/// \brief Allocates a block of memory
+	/// \param size the count elements in the memory block
+	/// \details FixedSizeAllocatorWithCleanup provides a fixed-size, stack-based
+	///   allocation at compile time. If size is less than or equal to
+	///   <tt>S</tt>, then a pointer to the static array is returned.
+	/// \details The class can grow its memory block at runtime if a suitable
+	///   allocator is available. If size grows beyond S and a suitable
+	///   allocator is available, then the statically allocated array is
+	///   obsoleted. If a suitable allocator is not available, as with a
+	///   NullAllocator, then the function returns NULL and a runtime error
+	///   eventually occurs.
+	/// \sa reallocate(), SecBlockWithHint
+	pointer allocate(size_type size)
+	{
+		CRYPTOPP_ASSERT(IsAlignedOn(m_array, 8));
+
+		if (size <= S && !m_allocated)
+		{
+			m_allocated = true;
+			return GetAlignedArray();
+		}
+		else
+			return m_fallbackAllocator.allocate(size);
+	}
+
+	/// \brief Allocates a block of memory
+	/// \param size the count elements in the memory block
+	/// \param hint an unused hint
+	/// \details FixedSizeAllocatorWithCleanup provides a fixed-size, stack-
+	///   based allocation at compile time. If size is less than or equal to
+	///   S, then a pointer to the static array is returned.
+	/// \details The class can grow its memory block at runtime if a suitable
+	///   allocator is available. If size grows beyond S and a suitable
+	///   allocator is available, then the statically allocated array is
+	///   obsoleted. If a suitable allocator is not available, as with a
+	///   NullAllocator, then the function returns NULL and a runtime error
+	///   eventually occurs.
+	/// \sa reallocate(), SecBlockWithHint
+	pointer allocate(size_type size, const void *hint)
+	{
+		if (size <= S && !m_allocated)
+		{
+			m_allocated = true;
+			return GetAlignedArray();
+		}
+		else
+			return m_fallbackAllocator.allocate(size, hint);
+	}
+
+	/// \brief Deallocates a block of memory
+	/// \param ptr a pointer to the memory block to deallocate
+	/// \param size the count elements in the memory block
+	/// \details The memory block is wiped or zeroized before deallocation.
+	///   If the statically allocated memory block is active, then no
+	///   additional actions are taken after the wipe.
+	/// \details If a dynamic memory block is active, then the pointer and
+	///   size are passed to the allocator for deallocation.
+	void deallocate(void *ptr, size_type size)
+	{
+		if (ptr == GetAlignedArray())
+		{
+			// If the m_allocated assert fires then
+			// something overwrote the flag.
+			CRYPTOPP_ASSERT(size <= S);
+			CRYPTOPP_ASSERT(m_allocated);
+			m_allocated = false;
+			SecureWipeArray((pointer)ptr, size);
+		}
+		else
+			m_fallbackAllocator.deallocate(ptr, size);
+	}
+
+	/// \brief Reallocates a block of memory
+	/// \param oldPtr the previous allocation
+	/// \param oldSize the size of the previous allocation
+	/// \param newSize the new, requested size
+	/// \param preserve flag that indicates if the old allocation should
+	///   be preserved
+	/// \returns pointer to the new memory block
+	/// \details FixedSizeAllocatorWithCleanup provides a fixed-size, stack-
+	///   based allocation at compile time. If size is less than or equal to
+	///   S, then a pointer to the static array is returned.
+	/// \details The class can grow its memory block at runtime if a suitable
+	///   allocator is available. If size grows beyond S and a suitable
+	///   allocator is available, then the statically allocated array is
+	///   obsoleted. If a suitable allocator is not available, as with a
+	///   NullAllocator, then the function returns NULL and a runtime error
+	///   eventually occurs.
+	/// \note size is the count of elements, and not the number of bytes.
+	/// \sa reallocate(), SecBlockWithHint
+	pointer reallocate(pointer oldPtr, size_type oldSize, size_type newSize, bool preserve)
+	{
+		if (oldPtr == GetAlignedArray() && newSize <= S)
+		{
+			CRYPTOPP_ASSERT(oldSize <= S);
+			if (oldSize > newSize)
+				SecureWipeArray(oldPtr+newSize, oldSize-newSize);
+			return oldPtr;
+		}
+
+		pointer newPointer = allocate(newSize, NULLPTR);
+		if (preserve && newSize)
+		{
+			const size_t copySize = STDMIN(oldSize, newSize);
+			memcpy_s(newPointer, sizeof(T)*newSize, oldPtr, sizeof(T)*copySize);
+		}
+		deallocate(oldPtr, oldSize);
+		return newPointer;
+	}
+
+	CRYPTOPP_CONSTEXPR size_type max_size() const
+	{
+		return STDMAX(m_fallbackAllocator.max_size(), S);
+	}
+
+private:
+
+	// The 8-byte alignments follows convention of Linux and Windows.
+	// Linux and Windows receives most testing. Duplicate it here for
+	// other platforms like AIX and Solaris. AIX and Solaris often use
+	// alignments smaller than expected. In fact AIX caught us by
+	// surprise with word16 and word32.
+	T* GetAlignedArray() {return m_array;}
+	CRYPTOPP_ALIGN_DATA(8) T m_array[S];
 
 	A m_fallbackAllocator;
 	bool m_allocated;
@@ -473,6 +701,8 @@ public:
 	/// \since Crypto++ 6.0
 #if defined(CRYPTOPP_DOXYGEN_PROCESSING)
 	static const size_type ELEMS_MAX = ...;
+#elif defined(_MSC_VER) && (_MSC_VER <= 1400)
+	static const size_type ELEMS_MAX = (~(size_type)0)/sizeof(T);
 #elif defined(CRYPTOPP_CXX11_ENUM)
 	enum : size_type {ELEMS_MAX = A::ELEMS_MAX};
 #else
@@ -866,10 +1096,10 @@ public:
 	explicit SecBlockWithHint(size_t size) : SecBlock<T, A>(size) {}
 };
 
-template<class T, bool A, class U, bool B>
-inline bool operator==(const CryptoPP::AllocatorWithCleanup<T, A>&, const CryptoPP::AllocatorWithCleanup<U, B>&) {return (true);}
-template<class T, bool A, class U, bool B>
-inline bool operator!=(const CryptoPP::AllocatorWithCleanup<T, A>&, const CryptoPP::AllocatorWithCleanup<U, B>&) {return (false);}
+template<class T, bool A, class V, bool B>
+inline bool operator==(const CryptoPP::AllocatorWithCleanup<T, A>&, const CryptoPP::AllocatorWithCleanup<V, B>&) {return (true);}
+template<class T, bool A, class V, bool B>
+inline bool operator!=(const CryptoPP::AllocatorWithCleanup<T, A>&, const CryptoPP::AllocatorWithCleanup<V, B>&) {return (false);}
 
 NAMESPACE_END
 

@@ -13,9 +13,12 @@ NAMESPACE_BEGIN(CryptoPP)
 
 /// \brief HMAC information
 /// \details HMAC_Base derives from VariableKeyLength and MessageAuthenticationCode
+/// \since Crypto++ 2.1
 class CRYPTOPP_DLL CRYPTOPP_NO_VTABLE HMAC_Base : public VariableKeyLength<16, 0, INT_MAX>, public MessageAuthenticationCode
 {
 public:
+	virtual ~HMAC_Base() {}
+
 	/// \brief Construct a HMAC_Base
 	HMAC_Base() : m_innerHashKeyed(false) {}
 	void UncheckedSetKey(const byte *userKey, unsigned int keylength, const NameValuePairs &params);
@@ -44,12 +47,15 @@ private:
 /// \details HMAC derives from MessageAuthenticationCodeImpl. It calculates the HMAC using
 ///   <tt>HMAC(K, text) = H(K XOR opad, H(K XOR ipad, text))</tt>.
 /// \sa <a href="http://www.weidai.com/scan-mirror/mac.html#HMAC">HMAC</a>
+/// \since Crypto++ 2.1
 template <class T>
 class HMAC : public MessageAuthenticationCodeImpl<HMAC_Base, HMAC<T> >
 {
 public:
 	CRYPTOPP_CONSTANT(DIGESTSIZE=T::DIGESTSIZE)
 	CRYPTOPP_CONSTANT(BLOCKSIZE=T::BLOCKSIZE)
+
+	virtual ~HMAC() {}
 
 	/// \brief Construct a HMAC
 	HMAC() {}
@@ -61,6 +67,7 @@ public:
 
 	static std::string StaticAlgorithmName() {return std::string("HMAC(") + T::StaticAlgorithmName() + ")";}
 	std::string AlgorithmName() const {return std::string("HMAC(") + m_hash.AlgorithmName() + ")";}
+	std::string AlgorithmProvider() const {return m_hash.AlgorithmProvider();}
 
 private:
 	HashTransformation & AccessHash() {return m_hash;}

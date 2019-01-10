@@ -2,8 +2,8 @@
 
 /// \file sha.h
 /// \brief Classes for SHA-1 and SHA-2 family of message digests
-/// \since SHA1 since Crypto++ 1.0, SHA2 since Crypto++ 4.0,
-///   ARM SHA since Crypto++ 6.0, Intel SHA since Crypto++ 6.0
+/// \since SHA1 since Crypto++ 1.0, SHA2 since Crypto++ 4.0, ARMv8 SHA since
+///   Crypto++ 6.0, Intel SHA since Crypto++ 6.0, Power8 SHA since Crypto++ 6.1
 
 #ifndef CRYPTOPP_SHA_H
 #define CRYPTOPP_SHA_H
@@ -11,17 +11,18 @@
 #include "config.h"
 #include "iterhash.h"
 
-#if (CRYPTOPP_BOOL_X86)
-#  define SHA_X86_ALIGN16  true
-#else
-#  define SHA_X86_ALIGN16  false
+// Clang 3.3 integrated assembler crash on Linux. Clang 3.4 due to compiler
+// error with .intel_syntax, http://llvm.org/bugs/show_bug.cgi?id=24232
+#if CRYPTOPP_BOOL_X32 || defined(CRYPTOPP_DISABLE_MIXED_ASM)
+# define CRYPTOPP_DISABLE_SHA_ASM 1
 #endif
 
 NAMESPACE_BEGIN(CryptoPP)
 
 /// \brief SHA-1 message digest
 /// \sa <a href="http://www.weidai.com/scan-mirror/md.html#SHA-1">SHA-1</a>
-/// \since Crypto++ 1.0, Intel SHA extensions since Crypto++ 6.0
+/// \since SHA1 since Crypto++ 1.0, SHA2 since Crypto++ 4.0, ARMv8 SHA since
+///   Crypto++ 6.0, Intel SHA since Crypto++ 6.0
 class CRYPTOPP_DLL SHA1 : public IteratedHashWithStaticTransform<word32, BigEndian, 64, 20, SHA1>
 {
 public:
@@ -49,6 +50,8 @@ public:
 	/// \brief The algorithm name
 	/// \returns C-style string "SHA-1"
 	CRYPTOPP_STATIC_CONSTEXPR const char* CRYPTOPP_API StaticAlgorithmName() {return "SHA-1";}
+	// Algorithm class
+	std::string AlgorithmProvider() const;
 
 protected:
 	size_t HashMultipleBlocks(const HashWordType *input, size_t length);
@@ -56,7 +59,8 @@ protected:
 
 /// \brief SHA-256 message digest
 /// \sa <a href="http://www.weidai.com/scan-mirror/md.html#SHA-256">SHA-256</a>
-/// \since Crypto++ 4.0, Intel SHA extensions since Crypto++ 6.0
+/// \since SHA2 since Crypto++ 4.0, ARMv8 SHA since Crypto++ 6.0,
+///   Intel SHA since Crypto++ 6.0, Power8 SHA since Crypto++ 6.1
 class CRYPTOPP_DLL SHA256 : public IteratedHashWithStaticTransform<word32, BigEndian, 64, 32, SHA256, 32, true>
 {
 public:
@@ -85,13 +89,17 @@ public:
 	/// \returns C-style string "SHA-256"
 	CRYPTOPP_STATIC_CONSTEXPR const char* CRYPTOPP_API StaticAlgorithmName() {return "SHA-256";}
 
+	// Algorithm class
+	std::string AlgorithmProvider() const;
+
 protected:
 	size_t HashMultipleBlocks(const HashWordType *input, size_t length);
 };
 
 /// \brief SHA-224 message digest
 /// \sa <a href="http://www.weidai.com/scan-mirror/md.html#SHA-224">SHA-224</a>
-/// \since Crypto++ 4.0, Intel SHA extensions since Crypto++ 6.0
+/// \since SHA2 since Crypto++ 4.0, ARMv8 SHA since Crypto++ 6.0,
+///   Intel SHA since Crypto++ 6.0, Power8 SHA since Crypto++ 6.1
 class CRYPTOPP_DLL SHA224 : public IteratedHashWithStaticTransform<word32, BigEndian, 64, 32, SHA224, 28, true>
 {
 public:
@@ -120,14 +128,17 @@ public:
 	/// \returns C-style string "SHA-224"
 	CRYPTOPP_STATIC_CONSTEXPR const char* CRYPTOPP_API StaticAlgorithmName() {return "SHA-224";}
 
+	// Algorithm class
+	std::string AlgorithmProvider() const;
+
 protected:
 	size_t HashMultipleBlocks(const HashWordType *input, size_t length);
 };
 
 /// \brief SHA-512 message digest
 /// \sa <a href="http://www.weidai.com/scan-mirror/md.html#SHA-512">SHA-512</a>
-/// \since Crypto++ 4.0
-class CRYPTOPP_DLL SHA512 : public IteratedHashWithStaticTransform<word64, BigEndian, 128, 64, SHA512, 64, SHA_X86_ALIGN16>
+/// \since SHA2 since Crypto++ 4.0, Power8 SHA since Crypto++ 6.1
+class CRYPTOPP_DLL SHA512 : public IteratedHashWithStaticTransform<word64, BigEndian, 128, 64, SHA512, 64, true>
 {
 public:
 	/// \brief Initialize state array
@@ -154,12 +165,15 @@ public:
 	/// \brief The algorithm name
 	/// \returns C-style string "SHA-512"
 	CRYPTOPP_STATIC_CONSTEXPR const char* CRYPTOPP_API StaticAlgorithmName() {return "SHA-512";}
+
+	// Algorithm class
+	std::string AlgorithmProvider() const;
 };
 
 /// \brief SHA-384 message digest
 /// \sa <a href="http://www.weidai.com/scan-mirror/md.html#SHA-384">SHA-384</a>
-/// \since Crypto++ 4.0
-class CRYPTOPP_DLL SHA384 : public IteratedHashWithStaticTransform<word64, BigEndian, 128, 64, SHA384, 48, SHA_X86_ALIGN16>
+/// \since SHA2 since Crypto++ 4.0, Power8 SHA since Crypto++ 6.1
+class CRYPTOPP_DLL SHA384 : public IteratedHashWithStaticTransform<word64, BigEndian, 128, 64, SHA384, 48, true>
 {
 public:
 	/// \brief Initialize state array
@@ -186,6 +200,9 @@ public:
 	/// \brief The algorithm name
 	/// \returns C-style string "SHA-384"
 	CRYPTOPP_STATIC_CONSTEXPR const char* CRYPTOPP_API StaticAlgorithmName() {return "SHA-384";}
+
+	// Algorithm class
+	std::string AlgorithmProvider() const;
 };
 
 NAMESPACE_END

@@ -258,6 +258,7 @@ DL_PrivateKey_EC<EC>::~DL_PrivateKey_EC() {}
 /// \tparam EC elliptic curve field
 /// \tparam COFACTOR_OPTION cofactor multiplication option
 /// \sa CofactorMultiplicationOption, <a href="http://www.weidai.com/scan-mirror/ka.html#ECDH">Elliptic Curve Diffie-Hellman, AKA ECDH</a>
+/// \since Crypto++ 3.0
 template <class EC, class COFACTOR_OPTION = typename DL_GroupParameters_EC<EC>::DefaultCofactorOption>
 struct ECDH
 {
@@ -324,6 +325,7 @@ struct ECDSA;
 
 /// \brief Elliptic Curve DSA keys
 /// \tparam EC elliptic curve field
+/// \since Crypto++ 3.2
 template <class EC>
 struct DL_Keys_ECDSA
 {
@@ -333,6 +335,7 @@ struct DL_Keys_ECDSA
 
 /// \brief Elliptic Curve DSA (ECDSA) signature algorithm
 /// \tparam EC elliptic curve field
+/// \since Crypto++ 3.2
 template <class EC>
 class DL_Algorithm_ECDSA : public DL_Algorithm_GDSA<typename EC::Point>
 {
@@ -365,6 +368,7 @@ public:
 /// \tparam EC elliptic curve field
 /// \tparam H HashTransformation derived class
 /// \sa <a href="http://www.weidai.com/scan-mirror/sig.html#ECDSA">ECDSA</a>
+/// \since Crypto++ 3.2
 template <class EC, class H>
 struct ECDSA : public DL_SS<DL_Keys_ECDSA<EC>, DL_Algorithm_ECDSA<EC>, DL_SignatureMessageEncodingMethod_DSA, H>
 {
@@ -375,6 +379,7 @@ struct ECDSA : public DL_SS<DL_Keys_ECDSA<EC>, DL_Algorithm_ECDSA<EC>, DL_Signat
 /// \tparam H HashTransformation derived class
 /// \sa <a href="http://tools.ietf.org/rfc/rfc6979.txt">Deterministic Usage of the
 ///   Digital Signature Algorithm (DSA) and Elliptic Curve Digital Signature Algorithm (ECDSA)</a>
+/// \since Crypto++ 6.0
 template <class EC, class H>
 struct ECDSA_RFC6979 : public DL_SS<
 	DL_Keys_ECDSA<EC>,
@@ -397,21 +402,21 @@ struct ECNR : public DL_SS<DL_Keys_EC<EC>, DL_Algorithm_ECNR<EC>, DL_SignatureMe
 // ******************************************
 
 template <class EC>
-class DL_PublicKey_ECGDSA_ISO15946;
+class DL_PublicKey_ECGDSA;
 template <class EC>
-class DL_PrivateKey_ECGDSA_ISO15946;
+class DL_PrivateKey_ECGDSA;
 
 /// \brief Elliptic Curve German DSA key for ISO/IEC 15946
 /// \tparam EC elliptic curve field
-/// \sa ECGDSA_ISO15946
+/// \sa ECGDSA
 /// \since Crypto++ 6.0
 template <class EC>
-class DL_PrivateKey_ECGDSA_ISO15946 : public DL_PrivateKeyImpl<DL_GroupParameters_EC<EC> >
+class DL_PrivateKey_ECGDSA : public DL_PrivateKeyImpl<DL_GroupParameters_EC<EC> >
 {
 public:
 	typedef typename EC::Point Element;
 
-	virtual ~DL_PrivateKey_ECGDSA_ISO15946() {}
+	virtual ~DL_PrivateKey_ECGDSA() {}
 
 	/// \brief Initialize an EC Private Key using {GP,x}
 	/// \param params group parameters
@@ -457,7 +462,7 @@ public:
 	void Initialize(RandomNumberGenerator &rng, const EC &ec, const Element &G, const Integer &n)
 		{this->GenerateRandom(rng, DL_GroupParameters_EC<EC>(ec, G, n));}
 
-	virtual void MakePublicKey(DL_PublicKey_ECGDSA_ISO15946<EC> &pub) const
+	virtual void MakePublicKey(DL_PublicKey_ECGDSA<EC> &pub) const
 	{
 		const DL_GroupParameters<Element>& params = this->GetAbstractGroupParameters();
 		pub.AccessAbstractGroupParameters().AssignFrom(params);
@@ -468,14 +473,14 @@ public:
 
 	virtual bool GetVoidValue(const char *name, const std::type_info &valueType, void *pValue) const
 	{
-		return GetValueHelper<DL_PrivateKey_ECGDSA_ISO15946<EC>,
-			DL_PrivateKey_ECGDSA_ISO15946<EC> >(this, name, valueType, pValue).Assignable();
+		return GetValueHelper<DL_PrivateKey_ECGDSA<EC>,
+			DL_PrivateKey_ECGDSA<EC> >(this, name, valueType, pValue).Assignable();
 	}
 
 	virtual void AssignFrom(const NameValuePairs &source)
 	{
-		AssignFromHelper<DL_PrivateKey_ECGDSA_ISO15946<EC>,
-			DL_PrivateKey_ECGDSA_ISO15946<EC> >(this, source);
+		AssignFromHelper<DL_PrivateKey_ECGDSA<EC>,
+			DL_PrivateKey_ECGDSA<EC> >(this, source);
 	}
 
 	// PKCS8PrivateKey
@@ -485,17 +490,17 @@ public:
 
 /// \brief Elliptic Curve German DSA key for ISO/IEC 15946
 /// \tparam EC elliptic curve field
-/// \sa ECGDSA_ISO15946
+/// \sa ECGDSA
 /// \since Crypto++ 6.0
 template <class EC>
-class DL_PublicKey_ECGDSA_ISO15946 : public DL_PublicKeyImpl<DL_GroupParameters_EC<EC> >
+class DL_PublicKey_ECGDSA : public DL_PublicKeyImpl<DL_GroupParameters_EC<EC> >
 {
-	typedef DL_PublicKey_ECGDSA_ISO15946<EC> ThisClass;
+	typedef DL_PublicKey_ECGDSA<EC> ThisClass;
 
 public:
 	typedef typename EC::Point Element;
 
-	virtual ~DL_PublicKey_ECGDSA_ISO15946() {}
+	virtual ~DL_PublicKey_ECGDSA() {}
 
 	/// \brief Initialize an EC Public Key using {GP,Q}
 	/// \param params group parameters
@@ -515,7 +520,7 @@ public:
 
 	virtual void AssignFrom(const NameValuePairs &source)
 	{
-		DL_PrivateKey_ECGDSA_ISO15946<EC> *pPrivateKey = NULLPTR;
+		DL_PrivateKey_ECGDSA<EC> *pPrivateKey = NULLPTR;
 		if (source.GetThisPointer(pPrivateKey))
 			pPrivateKey->MakePublicKey(*this);
 		else
@@ -537,21 +542,21 @@ public:
 
 /// \brief Elliptic Curve German DSA keys for ISO/IEC 15946
 /// \tparam EC elliptic curve field
-/// \sa ECGDSA_ISO15946
+/// \sa ECGDSA
 /// \since Crypto++ 6.0
 template <class EC>
-struct DL_Keys_ECGDSA_ISO15946
+struct DL_Keys_ECGDSA
 {
-	typedef DL_PublicKey_ECGDSA_ISO15946<EC> PublicKey;
-	typedef DL_PrivateKey_ECGDSA_ISO15946<EC> PrivateKey;
+	typedef DL_PublicKey_ECGDSA<EC> PublicKey;
+	typedef DL_PrivateKey_ECGDSA<EC> PrivateKey;
 };
 
 /// \brief Elliptic Curve German DSA signature algorithm
 /// \tparam EC elliptic curve field
-/// \sa ECGDSA_ISO15946
+/// \sa ECGDSA
 /// \since Crypto++ 6.0
 template <class EC>
-class DL_Algorithm_ECGDSA_ISO15946 : public DL_Algorithm_GDSA_ISO15946<typename EC::Point>
+class DL_Algorithm_ECGDSA : public DL_Algorithm_GDSA_ISO15946<typename EC::Point>
 {
 public:
   CRYPTOPP_STATIC_CONSTEXPR const char* CRYPTOPP_API StaticAlgorithmName() {return "ECGDSA";}
@@ -566,8 +571,8 @@ public:
 /// \since Crypto++ 6.0
 template <class EC, class H>
 struct ECGDSA : public DL_SS<
-	DL_Keys_ECGDSA_ISO15946<EC>,
-	DL_Algorithm_ECGDSA_ISO15946<EC>,
+	DL_Keys_ECGDSA<EC>,
+	DL_Algorithm_ECGDSA<EC>,
 	DL_SignatureMessageEncodingMethod_DSA,
 	H>
 {
@@ -636,14 +641,14 @@ CRYPTOPP_DLL_TEMPLATE_CLASS DL_PublicKeyImpl<DL_GroupParameters_EC<ECP> >;
 CRYPTOPP_DLL_TEMPLATE_CLASS DL_PublicKeyImpl<DL_GroupParameters_EC<EC2N> >;
 CRYPTOPP_DLL_TEMPLATE_CLASS DL_PublicKey_EC<ECP>;
 CRYPTOPP_DLL_TEMPLATE_CLASS DL_PublicKey_EC<EC2N>;
-CRYPTOPP_DLL_TEMPLATE_CLASS DL_PublicKey_ECGDSA_ISO15946<ECP>;
-CRYPTOPP_DLL_TEMPLATE_CLASS DL_PublicKey_ECGDSA_ISO15946<EC2N>;
+CRYPTOPP_DLL_TEMPLATE_CLASS DL_PublicKey_ECGDSA<ECP>;
+CRYPTOPP_DLL_TEMPLATE_CLASS DL_PublicKey_ECGDSA<EC2N>;
 CRYPTOPP_DLL_TEMPLATE_CLASS DL_PrivateKeyImpl<DL_GroupParameters_EC<ECP> >;
 CRYPTOPP_DLL_TEMPLATE_CLASS DL_PrivateKeyImpl<DL_GroupParameters_EC<EC2N> >;
 CRYPTOPP_DLL_TEMPLATE_CLASS DL_PrivateKey_EC<ECP>;
 CRYPTOPP_DLL_TEMPLATE_CLASS DL_PrivateKey_EC<EC2N>;
-CRYPTOPP_DLL_TEMPLATE_CLASS DL_PrivateKey_ECGDSA_ISO15946<ECP>;
-CRYPTOPP_DLL_TEMPLATE_CLASS DL_PrivateKey_ECGDSA_ISO15946<EC2N>;
+CRYPTOPP_DLL_TEMPLATE_CLASS DL_PrivateKey_ECGDSA<ECP>;
+CRYPTOPP_DLL_TEMPLATE_CLASS DL_PrivateKey_ECGDSA<EC2N>;
 CRYPTOPP_DLL_TEMPLATE_CLASS DL_Algorithm_GDSA<ECP::Point>;
 CRYPTOPP_DLL_TEMPLATE_CLASS DL_Algorithm_GDSA<EC2N::Point>;
 CRYPTOPP_DLL_TEMPLATE_CLASS DL_PrivateKey_WithSignaturePairwiseConsistencyTest<DL_PrivateKey_EC<ECP>, ECDSA<ECP, SHA256> >;

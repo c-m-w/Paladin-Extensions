@@ -3,7 +3,6 @@
 /// \file algparam.h
 /// \brief Classes for working with NameValuePairs
 
-
 #ifndef CRYPTOPP_ALGPARAM_H
 #define CRYPTOPP_ALGPARAM_H
 
@@ -29,7 +28,7 @@ public:
 	ConstByteArrayParameter(const char *data = NULLPTR, bool deepCopy = false)
 		: m_deepCopy(false), m_data(NULLPTR), m_size(0)
 	{
-		Assign((const byte *)data, data ? strlen(data) : 0, deepCopy);
+		Assign(reinterpret_cast<const byte *>(data), data ? strlen(data) : 0, deepCopy);
 	}
 
 	/// \brief Construct a ConstByteArrayParameter
@@ -45,8 +44,8 @@ public:
 	}
 
 	/// \brief Construct a ConstByteArrayParameter
-	/// \tparam T a std::basic_string<char> class
-	/// \param string a std::basic_string<char> class
+	/// \tparam T a std::basic_string<char> or std::vector<byte> class
+	/// \param string a std::basic_string<char> or std::vector<byte> object
 	/// \param deepCopy flag indicating whether the data should be copied
 	/// \details The deepCopy option is used when the NameValuePairs object can't
 	///   keep a copy of the data available
@@ -54,7 +53,7 @@ public:
 		: m_deepCopy(false), m_data(NULLPTR), m_size(0)
 	{
 		CRYPTOPP_COMPILE_ASSERT(sizeof(typename T::value_type) == 1);
-		Assign((const byte *)string.data(), string.size(), deepCopy);
+		Assign(reinterpret_cast<const byte *>(&string[0]), string.size(), deepCopy);
 	}
 
 	/// \brief Assign contents from a memory buffer
@@ -309,8 +308,11 @@ public:
 
 	virtual ~AlgorithmParametersBase() CRYPTOPP_THROW
 	{
-#ifdef CRYPTOPP_UNCAUGHT_EXCEPTION_AVAILABLE
-		if (!std::uncaught_exception())
+
+#if defined(CRYPTOPP_CXX17_EXCEPTIONS)
+		if (std::uncaught_exceptions() == 0)
+#elif defined(CRYPTOPP_UNCAUGHT_EXCEPTION_AVAILABLE)
+		if (std::uncaught_exception() == false)
 #else
 		try
 #endif
@@ -318,7 +320,7 @@ public:
 			if (m_throwIfNotUsed && !m_used)
 				throw ParameterNotUsed(m_name);
 		}
-#ifndef CRYPTOPP_UNCAUGHT_EXCEPTION_AVAILABLE
+#if !defined(CRYPTOPP_CXX17_EXCEPTIONS) && !defined(CRYPTOPP_UNCAUGHT_EXCEPTION_AVAILABLE)
 		catch(const Exception&)
 		{
 		}
