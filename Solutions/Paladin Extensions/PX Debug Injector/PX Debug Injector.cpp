@@ -3,10 +3,10 @@
 #include "PX Precompiled.hpp"
 #include "PX Debug Injector.hpp"
 
-const wstr_t wstrApplication = LR"(Empty.exe)";
+const wstr_t wstrApplication = LR"(csgo.exe)";
 //= LR"(csgo.exe)";
 //= LR"(Empty.exe)";
-const wstr_t wstrLibraryPath = LR"(C:\Users\Jeremiah\Desktop\MSGBOX & PXLOG Release.vmp.dll)";
+const wstr_t wstrLibraryPath = LR"(C:\Users\Jeremiah\Desktop\PX CSGO.dll)";
 //= LR"(C:\Users\Jeremiah\Documents\Paladin Extensions\Solutions\Paladin Extensions\Debug\PX CSGO.dll)";
 //= LR"(C:\Users\Jeremiah\Desktop\MSGBOX & PXLOG Debug.dll)";
 //= LR"(C:\Users\Jeremiah\Desktop\MSGBOX & PXLOG Release.dll)";

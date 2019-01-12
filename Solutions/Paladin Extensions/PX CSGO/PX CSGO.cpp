@@ -30,7 +30,6 @@ bool PX_API Initialize( )
 	//	PX::Net::Request( PX_XOR( "https://www.paladin-extensions.com/ban.php" ) );
 	//	PX::AnalysisProtection::DebuggerPrevention::Destroy( );
 	//} ).detach( );
-	MessageBox( nullptr, std::to_wstring( lgnResult ).c_str( ), L"MEN", MB_OK );
 	return ( lgnResult == PX::Net::LOGIN_SUCCESS
 				|| lgnResult == PX::Net::LOGIN_STAFF_SUCCESS ) &&
 #else
