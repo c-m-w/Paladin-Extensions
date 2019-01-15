@@ -35,6 +35,7 @@ void PX_API Manager::SetLayout( )
 			return;
 
 		Functionality::Rollback( );
+		Functionality::bTerminating = true;
 		ExitProcess( 0u );
 	};
 
@@ -110,7 +111,6 @@ void PX_API Manager::SetLayout( )
 	else
 	{
 		static int iScreen = 1;
-		str_t strInstallDirectory;
 		switch ( iScreen )
 		{
 			case 1: // WARNING + EULA
@@ -167,11 +167,6 @@ void PX_API Manager::SetLayout( )
 						PX_XOR( "\nany termination of this EULA.)" )
 					}
 				};
-				static auto uLength = 0u, uLength2 = 0u;
-				for each ( auto cstr in szWarningAndEULA[ 0 ] )
-					uLength += strlen( cstr );
-				for each ( auto cstr in szWarningAndEULA[ 1 ] )
-					uLength2 += strlen( cstr );
 				SetFont( FNT_ENVY );
 				static auto bShowNextPage = false;
 				BeginRow( 30u, 1u, ROW_CUSTOM );
@@ -181,7 +176,7 @@ void PX_API Manager::SetLayout( )
 					str_t str = "";
 					for each ( auto cstr in szWarningAndEULA[ 0 ] )
 						str += cstr;
-					DisplayBox( str.c_str( ), uLength );
+					DisplayBox( str.c_str( ), str.length( ) );
 					EndRow( );
 					BeginRow( 25u, 2u, ROW_CUSTOM );
 					PushCustomRow( 259u, 325u, 100u, 25u );
@@ -195,7 +190,7 @@ void PX_API Manager::SetLayout( )
 					str_t str = "";
 					for each ( auto cstr in szWarningAndEULA[ 1 ] )
 						str += cstr;
-					DisplayBox( str.c_str( ), uLength2 );
+					DisplayBox( str.c_str( ), str.length( ) );
 					EndRow( );
 					BeginRow( 25u, 2u, ROW_CUSTOM );
 					PushCustomRow( 259u, 325u, 100u, 25u );
@@ -216,28 +211,37 @@ void PX_API Manager::SetLayout( )
 			{
 				if ( PathFileExists( ( PX_APPDATA + PX_XOR( LR"(\PX\data.px)" ) ).c_str( ) ) )
 				{
-					// Something is already installed!
-					// uninstall?
+					// check hash to our hash
+					// if hash mismatch
+					//		Something is already installed!
+					//		update?
+					//		install()
+					// else
+					//		Something is already installed!
+					//		uninstall or reinstall?
+					//		uninstall()  install()
 				}
 
 				// * GET INSTALL DIRECTORY & DESIRED PRODUCTS
-				strInstallDirectory = "a";
+				Functionality::strInstallDirectory = "a";
 				// You may only install this on type FAT drives!
 				// * Opens the windows select directory garbage.
 				// * Ensure that the direction has USN Journal disabled.
 
 				// if everything checks out and is entered, iScreen = 3;
+				break;
 			}
 			case 3:
 			{
 				// Please ensure that these selected preferences match!
 				// - *Display directory
-				strInstallDirectory;
+				Functionality::strInstallDirectory;
 				// - Display size going to be taken
 				// - Fonts to be installed
 				// - Products to be installed
 
 				// if they're okay with it, iScreen = 4;
+				break;
 			}
 			case 4:
 			{
@@ -245,6 +249,7 @@ void PX_API Manager::SetLayout( )
 				// You can cancel the installation by clicking the X button at the top left corner!
 
 				// * install()
+				break;
 			}
 			case 5:
 			{
@@ -252,6 +257,7 @@ void PX_API Manager::SetLayout( )
 				// The Manager is now fully installed.
 				// * Checkbox to run manager.
 				// * Checkbox to open website for first run support.
+				break;
 			}
 		}
 	}
@@ -283,8 +289,9 @@ void PX_API OnLaunch( )
 	if ( !EnsureElevation( ) )
 		Popup( EMBType::FATAL_ERROR, PX_XOR( L"You must run the program as administrator." ) );
 
-	if ( !FileWrite( PX_APPDATA + PX_XOR( L"data.px" ), GetExecutableDirectory( ), false ) )
-		return;
+	// do not uncomment, we use this for the previous install check
+	//if ( !FileWrite( PX_APPDATA + PX_XOR( L"data.px" ), GetExecutableDirectory( ), false ) )
+	//	return;
 
 	std::thread tDraw( DrawWindow );
 	tDraw.detach( );

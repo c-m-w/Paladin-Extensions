@@ -96,7 +96,6 @@ namespace PX::Functionality
 		::Resources::bstrFontsTahoma = ParseResource( FNT_TAHOMA );
 		::Resources::bstrFontsTahomaBold = ParseResource( FONT_TAHOMA_BOLD );
 		::Resources::bstrFontsCSGO = ParseResource( FONT_CSGO );
-		::Resources::bstrFontsCSGO2 = ParseResource( FONT_CSGO2 );
 
 		::Resources::bstrGameIconsCSGO = ParseResource( GAME_CSGO );
 		::Resources::bstrGameIconsCSGOSized = ParseResource( GAME_CSGO_SIZED );
@@ -108,11 +107,36 @@ namespace PX::Functionality
 
 	void PX_API Install( )
 	{
-		if ( !bCancelInstallation )
-		{ }
-		uProgress = 1u;
-		if ( !bCancelInstallation )
-		{ }
+		{
+			if ( bCancelInstallation ) return;
+			// write to file Launcher.exe
+			uProgress = 1u;
+		}
+		{
+			if ( bCancelInstallation ) return;
+				// write to file all logos
+			uProgress = 2u;
+		}
+		{
+			if ( bCancelInstallation ) return;
+				// write to file all cursor
+			uProgress = 3u;
+		}
+		{
+			if ( bCancelInstallation ) return;
+				// write to file all fonts
+			uProgress = 4u;
+		}
+		{
+			if ( bCancelInstallation ) return;
+				// write to file all game icons
+			uProgress = 5u;
+		}
+		{
+			if ( bCancelInstallation ) return;
+			// write to file configs based on bExtensionAccess[ PX_EXTENSIONS_... ]
+			uProgress = 6u;
+		}
 	}
 
 	void PX_API Rollback( )
@@ -120,23 +144,28 @@ namespace PX::Functionality
 		bCancelInstallation = true;
 		switch ( uProgress )
 		{
-			case 1u:
-			{ }
-			case 2u:
-			{ }
-			case 3u:
-			{ }
-			case 4u:
-			{ }
-			case 5u:
-			{ }
-			default:
+			case 6u:
 			{
-				return;
+				// delete configs
 			}
+			case 5u:
+			case 4u:
+			case 3u:
+			case 2u:
+			{
+				// delete resources
+			}
+			case 1u:
+			{
+				// delete exe
+			}
+			default: ;
 		}
 	}
 
 	void PX_API Uninstall( )
-	{ }
+	{
+		// delete Paladin Extensions data from appdata/PX/data.px
+		// delete appdata/PX folder
+	}
 }

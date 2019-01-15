@@ -18,7 +18,6 @@
 #define FONT_TAHOMA                     111
 #define FONT_TAHOMA_BOLD                112
 #define FONT_CSGO                       113
-#define FONT_CSGO2                      114
 
 #define GAME_CSGO                       115
 #define GAME_CSGO_SIZED                 116
