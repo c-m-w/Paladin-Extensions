@@ -84,6 +84,7 @@ namespace PX::Information
 		PX_SDK SModule mMaterialSystem;
 		PX_SDK SModule mValveStandardLibrary;
 		PX_SDK SModule mLocalize;
+		PX_SDK SModule mFileSystem;
 	}
 
 	namespace Pointers
@@ -117,6 +118,7 @@ namespace PX::Information
 		PX_SDK IPrediction *pPrediction = nullptr;
 		PX_SDK IEngineSound *pEngineSound = nullptr;
 		PX_SDK IViewRenderBeams *pRenderBeams = nullptr;
+		PX_SDK IFileSystem *pFileSystem = nullptr;
 	}
 
 	namespace NetworkedVariableManager // http://www.bailopan.net/table_dump.txt

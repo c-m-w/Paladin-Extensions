@@ -9,7 +9,8 @@
 		"Input": "inputsystem.dll",
 		"Material System": "materialsystem.dll",
 		"Valve Standard Library": "vstdlib.dll",
-		"Localize": "localize.dll"
+		"Localize": "localize.dll",
+		"File System": "filesystem_stdio.dll"
     },
     "Patterns": {
         "Offsets": {
@@ -84,6 +85,7 @@
 		"Events": "GAMEEVENTSMANAGER002",
 		"Game Movement": "GameMovement001",
 		"Prediction": "VClientPrediction001",
-		"Engine Sound": "IEngineSoundClient003"
+		"Engine Sound": "IEngineSoundClient003",
+		"File System": "VFileSystem017"
   }
 }

@@ -19,6 +19,7 @@
 #include "ICVar.hpp"
 #include "IEngineSound.hpp"
 #include "IEngineTrace.hpp"
+#include "IFileSystem.hpp"
 #include "IGameEventManager.hpp"
 #include "IGameMovement.hpp"
 #include "IInputSystem.hpp"

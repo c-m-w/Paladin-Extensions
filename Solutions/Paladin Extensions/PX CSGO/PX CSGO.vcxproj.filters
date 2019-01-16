@@ -365,5 +365,8 @@
     <ClInclude Include="SDK\Valve\Interfaces\IViewRenderBeams.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\Valve\Interfaces\IFileSystem.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
