@@ -12,9 +12,7 @@ using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 #define PX_USE_NAMESPACES
 #include "../PX Framework/PX Framework.hpp"
 
-__LineInfo lInfo( L"", "", 0 );
-
-#define PX_ASSERT_INFO &( lInfo = __LineInfo( L"PX Unit Tests.cpp", __func__, __LINE__ ) )
+#define PX_ASSERT_INFO std::unique_ptr< __LineInfo >( std::make_unique< __LineInfo >( __LineInfo( L"PX Unit Tests.cpp", __func__, __LINE__ ) ) ).get( )
 
 namespace PX::UnitTests
 {
@@ -647,6 +645,55 @@ void OnDetach( )
 [CLS] Detached and terminating host)", GlobalTools::GetFileData( ( wstr_t( _wgetenv( L"APPDATA" ) ) + LR"(\\PX\\UnitTest.log)" ).c_str( ) ).c_str( ), L"Log check failed", PX_ASSERT_INFO );
 
 					Assert::AreNotEqual( 0, DeleteFile( LR"(C:\Users\Jeremiah\AppData\Roaming\PX\UnitTest.log)" ), L"Delete file failed", PX_ASSERT_INFO );
+				}
+			};
+		
+			TEST_CLASS( AnalysisProtection )
+			{
+			public:
+				TEST_METHOD( ThreadHide )
+				{
+					Assert::IsTrue( HideThreadFromDebugger( ), L"Couldn't hide thread.", PX_ASSERT_INFO );
+				}
+
+				TEST_METHOD( AnalysisCheck )
+				{
+					wstr_t wstrPath;
+					FileRead( PX_APPDATA + PX_XOR( L"data.px" ), wstrPath, false );
+					Assert::AreEqual( L"", wstrPath.c_str( ) );
+					return;
+					Assert::IsTrue( CheckForAnalysis( ) );
+
+					return;
+#if defined _DEBUG
+					try
+					{
+#endif
+						BOOL bPresent = false;
+						static const auto NtQueryInformationProcess = static_cast< SWindowsAPI::fnNtQueryInformationProcess >( PX_WINAPI.GetFunctionPointer( SWindowsAPI::NtQueryInformationProcess ) );
+						MessageBox( nullptr, L"3", L"3", 0 );
+						if ( NtQueryInformationProcess == nullptr )
+							__debugbreak();
+						auto bob = NtQueryInformationProcess( GetCurrentProcess(), /*ProcessDebugObjectHandle*/ 0x1E, &bPresent, sizeof( DWORD ), nullptr);
+						MessageBox( nullptr, L"2", L"2", 0 );
+						if ( bob != STATUS_SUCCESS )
+							__debugbreak( );
+						MessageBox( nullptr, L"1", L"1", 0 );
+						if ( bPresent == FALSE )
+							Assert::Fail( );//__debugbreak( );
+
+						MessageBox( nullptr, L"0", L"0", 0 );
+						return;
+						Assert::IsTrue( CheckForAnalysis( ), L"Analysis can occur locally.", PX_ASSERT_INFO );
+						Assert::IsTrue( CheckForAnalysisEx( ), L"Analysis can occur on remote process.", PX_ASSERT_INFO );
+						Assert::IsTrue( CheckForAllAnalysis( ), L"Analysis can occur someway.", PX_ASSERT_INFO );
+#if defined _DEBUG
+					}
+					catch (	const std::exception& e	)
+					{
+						Assert::Fail( L"Unknown analysis-detected failure", PX_ASSERT_INFO );
+					}
+#endif
 				}
 			};
 		}

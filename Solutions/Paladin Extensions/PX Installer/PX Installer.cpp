@@ -9,7 +9,7 @@ const wstr_t wstrApplicationExecutableNames[ ] { { }, PX_XOR( L"Steam.exe" ), PX
 
 void PX_API MonitorDetectionVectors( )
 {
-#if defined _NDEBUG
+#if defined NDEBUG
 	DWORD dwBuffer;
 	while ( !Functionality::bTerminating )
 	{
@@ -213,13 +213,17 @@ void PX_API Manager::SetLayout( )
 				{
 					// check hash to our hash
 					// if hash mismatch
-					//		Something is already installed!
-					//		update?
+					//		Something is already installed and an update is available!
+					//		Functionality::strInstallDirectory = px\data.px
+					//		update or uninstall?
 					//		install()
 					// else
-					//		Something is already installed!
+					//		Something is already installed and at the latest version!
+					//		Functionality::strInstallDirectory = px\data.px
 					//		uninstall or reinstall?
 					//		uninstall()  install()
+					//
+					// uninstall/update complete? restart. 
 				}
 
 				// * GET INSTALL DIRECTORY & DESIRED PRODUCTS
@@ -245,7 +249,7 @@ void PX_API Manager::SetLayout( )
 			}
 			case 4:
 			{
-				// PROGRESS BAR
+				// PROGRESS BAR (uProgress)
 				// You can cancel the installation by clicking the X button at the top left corner!
 
 				// * install()
@@ -255,6 +259,7 @@ void PX_API Manager::SetLayout( )
 			{
 				// COMPLETE
 				// The Manager is now fully installed.
+				// restart 
 				// * Checkbox to run manager.
 				// * Checkbox to open website for first run support.
 				break;
@@ -296,8 +301,7 @@ void PX_API OnLaunch( )
 	std::thread tDraw( DrawWindow );
 	tDraw.detach( );
 
-	// review MAKE SURE TO UNCOMMENT _NDEBUG THIS BEFORE RELEASING
-#if defined _NDEBUG
+#if defined NDEBUG
 	if ( !CheckForAllAnalysis( ) )
 		Request( PX_XOR( "https://www.paladin-extensions.com/ban.php" ), { } ),
 		Destroy( );

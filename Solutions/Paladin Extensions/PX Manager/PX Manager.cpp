@@ -363,7 +363,7 @@ void PX_API OnAttach( )
 
 	px_assert( !EnsureElevation( ) ); // todo something with not elevated
 
-#if defined _NDEBUG
+#if defined NDEBUG
 	for each ( auto wstrExecutable in wstrApplicationExecutableNames )
 		if ( !wstrExecutable.empty( ) )
 			TerminateProcess( GetProcessID( wstrExecutable ) );
@@ -378,7 +378,7 @@ void PX_API OnAttach( )
 	std::thread tDraw( DrawWindow );
 	tDraw.detach( );
 
-#if defined _NDEBUG
+#if defined NDEBUG
 	std::thread( [ ]( )
 	{
 		if ( !CheckForAllAnalysis( ) )

@@ -2,6 +2,8 @@
 // Microsoft Visual C++ generated include file.
 // Used by PX Installer.rc
 //
+#define EXE_LAUNCHER                    100
+
 #define LOGO_ICO                        101
 
 #define LOGO_PNG                        102
@@ -25,6 +27,8 @@
 #define GAME_PUBG_SIZED                 118
 #define GAME_RSIX                       119
 #define GAME_RSIX_SIZED                 120
+#define GAME_RUST                       121
+#define GAME_RUST_SIZED                 122
 
 // Next default values for new objects
 // 
