@@ -95,7 +95,7 @@ namespace PX::Tools
 		// Ensure that the module that has been entered is valid and find free memory inside of that module to point the class base to.
 		if ( ( hAllocationModule = FindAddressOrigin( ptr_t( *reinterpret_cast< void** >( pOldTable ) ) ) ) == nullptr
 #if defined _DEBUG
-			  || ( pNewTable = new ptr_t[ zTableLength + 1 ] ) == nullptr )
+			|| ( pNewTable = new ptr_t[ zTableLength + 1 ] ) == nullptr )
 #else
 			|| ( pNewTable = reinterpret_cast< ptr_t* >( FindFreeMemory( hAllocationModule, zTableSize + sizeof( ptr_t ) ) ) ) == nullptr )
 #endif

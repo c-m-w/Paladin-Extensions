@@ -18,7 +18,7 @@
 #if defined _DEBUG
 /** \brief Evaluates if parameter is equivalent to empty initialized version of parameter
 	(false) and throws an exception if the evaluation succeeds */
-	/** \param _ToAssert Value to assert. */
+/** \param _ToAssert Value to assert. */
 #define px_assert( _ToAssert ) \
 		if ( ( _ToAssert ) == decltype( _ToAssert )( ) ) \
 			throw std::exception( ( PX::Types::str_t( "Failed to assert " ) + #_ToAssert + " in function " + __func__ \

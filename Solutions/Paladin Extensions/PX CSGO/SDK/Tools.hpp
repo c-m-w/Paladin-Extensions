@@ -141,7 +141,7 @@ namespace PX::Tools
 		CUtlVector< IRefCounted* > *m_CustomMaterials( )
 		{
 			static const auto ptrOffset = ptr_t( *reinterpret_cast< ptr_t* >( Information::Modules::mClient.FindPattern( Information::jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "m_CustomMaterials" ) ].get< str_t >( ) )
-												    + Information::jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "m_CustomMaterials" ) ].get< int >( ) ) ) - 12;
+													+ Information::jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "m_CustomMaterials" ) ].get< int >( ) ) ) - 12;
 			return reinterpret_cast< CUtlVector< IRefCounted* >* >( ptr_t( this ) + ptrOffset );
 		}
 

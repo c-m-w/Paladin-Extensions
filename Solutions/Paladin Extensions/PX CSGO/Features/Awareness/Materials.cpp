@@ -40,7 +40,7 @@ namespace PX::Features::Awareness
 
 	material_t matMaterials[ MATERIAL_MAX ]
 	{
-		material_t( PX_XOR( // MATERIAL_DEFAULT
+		material_t(					   PX_XOR( // MATERIAL_DEFAULT
 					   R"#("VertexLitGeneric"
 {
   "$basetexture" "vgui/white_additive"
@@ -56,7 +56,7 @@ namespace PX::Features::Awareness
 }
 )#" ), PX_XOR( "default" ), TEXTURE_GROUP_MODEL ),
 
-		material_t( PX_XOR( // MATERIAL_DEFAULT_IGNOREZ
+		material_t(					   PX_XOR( // MATERIAL_DEFAULT_IGNOREZ
 					   R"#("VertexLitGeneric"
 {
   "$basetexture" "vgui/white_additive"
@@ -72,7 +72,7 @@ namespace PX::Features::Awareness
 }
 )#" ), PX_XOR( "default_ignorez" ), TEXTURE_GROUP_MODEL ),
 
-		material_t( PX_XOR( // MATERIAL_DEFAULT_FLAT
+		material_t(					   PX_XOR( // MATERIAL_DEFAULT_FLAT
 					   R"#("UnlitGeneric"
 {
   "$basetexture" "vgui/white_additive"
@@ -88,7 +88,7 @@ namespace PX::Features::Awareness
 }
 )#" ), PX_XOR( "default_flat" ), TEXTURE_GROUP_MODEL ),
 
-		material_t( PX_XOR( // MATERIAL_DEFAULT_FLAT_IGNOREZ
+		material_t(					   PX_XOR( // MATERIAL_DEFAULT_FLAT_IGNOREZ
 					   R"#("UnlitGeneric"
 {
   "$basetexture" "vgui/white_additive"

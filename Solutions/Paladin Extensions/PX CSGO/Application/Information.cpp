@@ -53,17 +53,18 @@ namespace PX::Information
 			{
 				if ( Tools::GetMoment( ) - mmtStart >= mmtMaxWaitTime )
 					return false;
-			} while ( !mEngine.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Engine" ) ].get< Types::str_t >( ) ) )
-					  || !mClient.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Client" ) ].get< Types::str_t >( ) ) )
-					  || !mDirectX.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "DirectX API" ) ].get< Types::str_t >( ) ) )
-					  || !mOverlay.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Overlay" ) ].get< Types::str_t >( ) ) )
-					  || !mVGUI.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "VGUI" ) ].get< Types::str_t >( ) ) )
-					  || !mVGUI2.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "VGUI2" ) ].get< Types::str_t >( ) ) )
-					  || !mInput.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Input" ) ].get< Types::str_t >( ) ) )
-					  || !mMaterialSystem.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Material System" ) ].get< Types::str_t >( ) ) )
-					  || !mValveStandardLibrary.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Valve Standard Library" ) ].get< Types::str_t >( ) ) )
-					  || !mLocalize.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Localize" ) ].get< Types::str_t >( ) ) )
-					  || !mFileSystem.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "File System" ) ].get< Types::str_t >( ) ) ) );
+			}
+			while ( !mEngine.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Engine" ) ].get< Types::str_t >( ) ) )
+				|| !mClient.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Client" ) ].get< Types::str_t >( ) ) )
+				|| !mDirectX.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "DirectX API" ) ].get< Types::str_t >( ) ) )
+				|| !mOverlay.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Overlay" ) ].get< Types::str_t >( ) ) )
+				|| !mVGUI.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "VGUI" ) ].get< Types::str_t >( ) ) )
+				|| !mVGUI2.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "VGUI2" ) ].get< Types::str_t >( ) ) )
+				|| !mInput.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Input" ) ].get< Types::str_t >( ) ) )
+				|| !mMaterialSystem.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Material System" ) ].get< Types::str_t >( ) ) )
+				|| !mValveStandardLibrary.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Valve Standard Library" ) ].get< Types::str_t >( ) ) )
+				|| !mLocalize.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Localize" ) ].get< Types::str_t >( ) ) )
+				|| !mFileSystem.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "File System" ) ].get< Types::str_t >( ) ) ) );
 			return true;
 		}
 	}
@@ -92,42 +93,24 @@ namespace PX::Information
 			pRenderBeams = *reinterpret_cast< IViewRenderBeams** >( Modules::mClient.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Render Beams" ) ].get< str_t >( ) )
 				+ jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Render Beams" ) ].get< int >( ) );
 
-			pClientBase = reinterpret_cast< IBaseClientDLL* >( Modules::mClient.ciFactory(
-																						  jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Client Base" ) ].get< str_t >( ).c_str( ), nullptr ) );
-			pEngineClient = reinterpret_cast< IVEngineClient* >( Modules::mEngine.ciFactory(
-																						    jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Engine Client" ) ].get< str_t >( ).c_str( ), nullptr ) );
-			pSurface = reinterpret_cast< ISurface* >( Modules::mVGUI.ciFactory(
-																			   jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "VGUI Surface" ) ].get< str_t >( ).c_str( ), nullptr ) );
-			pPanel = reinterpret_cast< IPanel* >( Modules::mVGUI2.ciFactory(
-																		    jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "VGUI Panel" ) ].get< str_t >( ).c_str( ), nullptr ) );
-			pEntityList = reinterpret_cast< IClientEntityList* >( Modules::mClient.ciFactory(
-																							 jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Entity List" ) ].get< str_t >( ).c_str( ), nullptr ) );
-			pEngineTrace = reinterpret_cast< IEngineTrace* >( Modules::mEngine.ciFactory(
-																						 jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Engine Trace" ) ].get< str_t >( ).c_str( ), nullptr ) );
-			pModelInfo = reinterpret_cast< IVModelInfoClient* >( Modules::mEngine.ciFactory(
-																						    jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Model Info" ) ].get< str_t >( ).c_str( ), nullptr ) );
-			pInputSystem = reinterpret_cast< IInputSystem* >( Modules::mInput.ciFactory(
-																					    jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Input" ) ].get< str_t >( ).c_str( ), nullptr ) );
-			pModelRender = reinterpret_cast< IVModelRender* >( Modules::mEngine.ciFactory(
-																						  jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Model Render" ) ].get< str_t >( ).c_str( ), nullptr ) );
-			pMaterialSystem = reinterpret_cast< IMaterialSystem* >( Modules::mMaterialSystem.ciFactory(
-																									   jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Material System" ) ].get< str_t >( ).c_str( ), nullptr ) );
-			pEngineRenderView = reinterpret_cast< IVRenderView* >( Modules::mEngine.ciFactory(
-																							  jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Engine Render View" ) ].get< str_t >( ).c_str( ), nullptr ) );
-			pConVar = reinterpret_cast< ICvar* >( Modules::mValveStandardLibrary.ciFactory(
-																						   jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "CVar" ) ].get< str_t >( ).c_str( ), nullptr ) );
-			pLocalize = reinterpret_cast< ILocalize* >( Modules::mLocalize.ciFactory(
-																					 jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Localize" ) ].get< str_t >( ).c_str( ), nullptr ) );
-			pEvents = reinterpret_cast< IGameEventManager2* >( Modules::mEngine.ciFactory(
-																						  jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Events" ) ].get< str_t >( ).c_str( ), nullptr ) );
-			pGameMovement = reinterpret_cast< IGameMovement* >( Modules::mClient.ciFactory(
-																						   jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Game Movement" ) ].get< str_t >( ).c_str( ), nullptr ) );
-			pPrediction = reinterpret_cast< IPrediction* >( Modules::mClient.ciFactory(
-																					   jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Prediction" ) ].get< str_t >( ).c_str( ), nullptr ) );
-			pEngineSound = reinterpret_cast< IEngineSound* >( Modules::mEngine.ciFactory(
-																						 jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Engine Sound" ) ].get< str_t >( ).c_str( ), nullptr ) );
-			pFileSystem = reinterpret_cast< IFileSystem* >( Modules::mFileSystem.ciFactory(
-				jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "File System" ) ].get< str_t >( ).c_str( ), nullptr ) );
+			pClientBase = reinterpret_cast< IBaseClientDLL* >( Modules::mClient.ciFactory( jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Client Base" ) ].get< str_t >( ).c_str( ), nullptr ) );
+			pEngineClient = reinterpret_cast< IVEngineClient* >( Modules::mEngine.ciFactory( jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Engine Client" ) ].get< str_t >( ).c_str( ), nullptr ) );
+			pSurface = reinterpret_cast< ISurface* >( Modules::mVGUI.ciFactory( jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "VGUI Surface" ) ].get< str_t >( ).c_str( ), nullptr ) );
+			pPanel = reinterpret_cast< IPanel* >( Modules::mVGUI2.ciFactory( jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "VGUI Panel" ) ].get< str_t >( ).c_str( ), nullptr ) );
+			pEntityList = reinterpret_cast< IClientEntityList* >( Modules::mClient.ciFactory( jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Entity List" ) ].get< str_t >( ).c_str( ), nullptr ) );
+			pEngineTrace = reinterpret_cast< IEngineTrace* >( Modules::mEngine.ciFactory( jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Engine Trace" ) ].get< str_t >( ).c_str( ), nullptr ) );
+			pModelInfo = reinterpret_cast< IVModelInfoClient* >( Modules::mEngine.ciFactory( jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Model Info" ) ].get< str_t >( ).c_str( ), nullptr ) );
+			pInputSystem = reinterpret_cast< IInputSystem* >( Modules::mInput.ciFactory( jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Input" ) ].get< str_t >( ).c_str( ), nullptr ) );
+			pModelRender = reinterpret_cast< IVModelRender* >( Modules::mEngine.ciFactory( jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Model Render" ) ].get< str_t >( ).c_str( ), nullptr ) );
+			pMaterialSystem = reinterpret_cast< IMaterialSystem* >( Modules::mMaterialSystem.ciFactory( jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Material System" ) ].get< str_t >( ).c_str( ), nullptr ) );
+			pEngineRenderView = reinterpret_cast< IVRenderView* >( Modules::mEngine.ciFactory( jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Engine Render View" ) ].get< str_t >( ).c_str( ), nullptr ) );
+			pConVar = reinterpret_cast< ICvar* >( Modules::mValveStandardLibrary.ciFactory( jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "CVar" ) ].get< str_t >( ).c_str( ), nullptr ) );
+			pLocalize = reinterpret_cast< ILocalize* >( Modules::mLocalize.ciFactory( jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Localize" ) ].get< str_t >( ).c_str( ), nullptr ) );
+			pEvents = reinterpret_cast< IGameEventManager2* >( Modules::mEngine.ciFactory( jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Events" ) ].get< str_t >( ).c_str( ), nullptr ) );
+			pGameMovement = reinterpret_cast< IGameMovement* >( Modules::mClient.ciFactory( jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Game Movement" ) ].get< str_t >( ).c_str( ), nullptr ) );
+			pPrediction = reinterpret_cast< IPrediction* >( Modules::mClient.ciFactory( jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Prediction" ) ].get< str_t >( ).c_str( ), nullptr ) );
+			pEngineSound = reinterpret_cast< IEngineSound* >( Modules::mEngine.ciFactory( jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Engine Sound" ) ].get< str_t >( ).c_str( ), nullptr ) );
+			pFileSystem = reinterpret_cast< IFileSystem* >( Modules::mFileSystem.ciFactory( jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "File System" ) ].get< str_t >( ).c_str( ), nullptr ) );
 
 			return nullptr != pSendPackets
 					&& nullptr != pGlobalVariables
@@ -2071,7 +2054,7 @@ namespace PX::Information
 				{ ITEM_WEAPON_KNIFE_BUTTERFLY, pModelInfo->GetModelIndex( PX_XOR( "models/weapons/v_knife_butterfly.mdl" ) ) },
 				{ ITEM_WEAPON_KNIFE_SHADOW_DAGGERS, pModelInfo->GetModelIndex( PX_XOR( "models/weapons/v_knife_push.mdl" ) ) },
 				{ ITEM_WEAPON_KNIFE_URSUS, pModelInfo->GetModelIndex( PX_XOR( "models/weapons/v_knife_ursus.mdl" ) ) },
-				{ ITEM_WEAPON_KNIFE_NAVAJA, pModelInfo->GetModelIndex( PX_XOR( "models/weapons/v_knife_gypsy_jackknife.mdl") ) },
+				{ ITEM_WEAPON_KNIFE_NAVAJA, pModelInfo->GetModelIndex( PX_XOR( "models/weapons/v_knife_gypsy_jackknife.mdl" ) ) },
 				{ ITEM_WEAPON_KNIFE_STILLETTO, pModelInfo->GetModelIndex( PX_XOR( "models/weapons/v_knife_stiletto.mdl" ) ) },
 				{ ITEM_WEAPON_KNIFE_TALON, pModelInfo->GetModelIndex( PX_XOR( "models/weapons/v_knife_widowmaker.mdl" ) ) },
 				{ ITEM_GLOVE_BLOODHOUND, pModelInfo->GetModelIndex( PX_XOR( "models/weapons/v_models/arms/glove_bloodhound/v_glove_bloodhound.mdl" ) ) },

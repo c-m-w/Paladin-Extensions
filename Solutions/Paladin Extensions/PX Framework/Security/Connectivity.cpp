@@ -53,29 +53,29 @@ namespace PX::Net
 		px_assert( CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_ERRORBUFFER, &strErrorBuffer[ 0 ] ) );
 #endif
 
-		       CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_URL, _strSite.c_str( ) ) ? (void)0 : throw std::exception( "1" );
-			   CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_POST, 1L ) ? ( void )0 : throw std::exception( "2" );
-			   CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_POSTFIELDS, strPostDataBuffer.c_str( ) ) ? ( void )0 : throw std::exception( "3" );
-			   CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_FOLLOWLOCATION, 1L ) ? ( void )0 : throw std::exception( "4" );
-			// The cookie jar and file do not contain anything stored in the session, only information about the session.
-			// Information stored in $_SESSION is not accessible client side, only server side.
-			// http://php.net/manual/en/intro.session.php
-			   CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_COOKIESESSION, true ) ? ( void )0 : throw std::exception( "5" );
-			   CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_COOKIEFILE, strCookieDirectory.c_str( ) ) ? ( void )0 : throw std::exception( "6" );
-			   CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_COOKIEJAR, strCookieDirectory.c_str( ) ) ? ( void )0 : throw std::exception( "7" );
-			   CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_WRITEFUNCTION, WriteCallback ) ? ( void )0 : throw std::exception( "8" );
-			   CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_WRITEDATA, &strResponseBuffer ) ? ( void )0 : throw std::exception( "9" );
-			// cURL has issues communicating with the revocation server for validating an SSL certificate.
-			// Since we only connect to our site, this isn't an issue so we can just disable the check.
-			   CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_SSL_OPTIONS, CURLSSLOPT_NO_REVOKE ) ? ( void )0 : throw std::exception( "10" );
-			   CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_TIMEOUT, 5L ) ? ( void )0 : throw std::exception( "11" );
+		CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_URL, _strSite.c_str( ) ) ? ( void )0 : throw std::exception( "1" );
+		CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_POST, 1L ) ? ( void )0 : throw std::exception( "2" );
+		CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_POSTFIELDS, strPostDataBuffer.c_str( ) ) ? ( void )0 : throw std::exception( "3" );
+		CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_FOLLOWLOCATION, 1L ) ? ( void )0 : throw std::exception( "4" );
+		// The cookie jar and file do not contain anything stored in the session, only information about the session.
+		// Information stored in $_SESSION is not accessible client side, only server side.
+		// http://php.net/manual/en/intro.session.php
+		CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_COOKIESESSION, true ) ? ( void )0 : throw std::exception( "5" );
+		CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_COOKIEFILE, strCookieDirectory.c_str( ) ) ? ( void )0 : throw std::exception( "6" );
+		CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_COOKIEJAR, strCookieDirectory.c_str( ) ) ? ( void )0 : throw std::exception( "7" );
+		CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_WRITEFUNCTION, WriteCallback ) ? ( void )0 : throw std::exception( "8" );
+		CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_WRITEDATA, &strResponseBuffer ) ? ( void )0 : throw std::exception( "9" );
+		// cURL has issues communicating with the revocation server for validating an SSL certificate.
+		// Since we only connect to our site, this isn't an issue so we can just disable the check.
+		CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_SSL_OPTIONS, CURLSSLOPT_NO_REVOKE ) ? ( void )0 : throw std::exception( "10" );
+		CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_TIMEOUT, 5L ) ? ( void )0 : throw std::exception( "11" );
 
 		// REVIEW to remove
-			   CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_SSL_VERIFYHOST, 0 )? ( void )0 : throw std::exception( "12" );
-			   CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_SSL_VERIFYPEER, 0 )? ( void )0 : throw std::exception( "13" );
+		CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_SSL_VERIFYHOST, 0 ) ? ( void )0 : throw std::exception( "12" );
+		CURLE_OK == curl_easy_setopt( pConnection, CURLOPT_SSL_VERIFYPEER, 0 ) ? ( void )0 : throw std::exception( "13" );
 		// REVIEW to remove
 
-			   auto bob = curl_easy_perform( pConnection );// ? ( void )0 : throw std::exception( "12" );
+		auto bob = curl_easy_perform( pConnection );// ? ( void )0 : throw std::exception( "12" );
 
 		return strResponseBuffer;
 	}

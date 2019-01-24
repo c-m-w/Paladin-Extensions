@@ -19,6 +19,7 @@ const wstr_t wstrLibraryPath = LR"(C:\Users\Jeremiah\Desktop\PX CSGO.dll)";
 
 int main( )
 {
+#if defined PX_USE_RAW
 	PX::Net::Login( );
 	PX::Net::RequestExtensionInformation( PX_EXTENSION_CSGO );
 	auto pFile = _wfopen( wstrLibraryPath.c_str( ), L"rb" );
@@ -28,12 +29,18 @@ int main( )
 	const auto pData = new char[ sSize ];
 	fread( pData, sizeof( char ), sSize, pFile );
 	fclose( pFile );
-	return PX::sys::LoadRawLibraryEx( pData, wstrApplication, new injection_info_t( ), nullptr, nullptr );
-
+	if ( !PX::sys::LoadRawLibraryEx( pData, wstrApplication, new injection_info_t( ), nullptr, nullptr ) )
+	{
+		std::wcout << "Loading library " << wstrLibraryPath.substr( wstrLibraryPath.find_last_of( L'\\' ) + 1 ) << " into process " << wstrApplication << " failed." << std::endl;
+		std::cout << "Error code: 0x" << std::hex << GetLastError( ) << std::endl;
+		system( "pause" );
+	}
+#else
 	if ( !PX::sys::LoadLibraryEx( wstrApplication, wstrLibraryPath ) )
 	{
 		std::wcout << "Loading library " << wstrLibraryPath.substr( wstrLibraryPath.find_last_of( L'\\' ) + 1 ) << " into process " << wstrApplication << " failed." << std::endl;
 		std::cout << "Error code: 0x" << std::hex << GetLastError( ) << std::endl;
 		system( "pause" );
 	}
+#endif
 }

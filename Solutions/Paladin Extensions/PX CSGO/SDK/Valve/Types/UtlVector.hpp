@@ -331,7 +331,7 @@ template< typename T, class A > void CUtlVector< T, A >::ShiftElementsLeft( int 
 		memmove( &Element( elem ), &Element( elem + num ), numToMove * sizeof( T ) );
 
 #ifdef _DEBUG
-        memset(&Element(m_Size - num), 0xDD, num * sizeof(T));
+		memset( &Element( m_Size - num ), 0xDD, num * sizeof( T ) );
 #endif
 	}
 }
@@ -448,9 +448,8 @@ template< typename T, class A > void CUtlVector< T, A >::SetCountNonDestructivel
 	int delta = count - m_Size;
 	if ( delta > 0 )
 		AddMultipleToTail( delta );
-	else
-		if ( delta < 0 )
-			RemoveMultipleFromTail( -delta );
+	else if ( delta < 0 )
+		RemoveMultipleFromTail( -delta );
 }
 
 template< typename T, class A > void CUtlVector< T, A >::CopyArray( const T *pArray, int size )
@@ -729,7 +728,7 @@ public:
 		AddToTail( pNewStr );
 	}
 
-	static int __cdecl SortFunc( char * const *sz1, char * const *sz2 )
+	static int __cdecl SortFunc( char *const *sz1, char *const *sz2 )
 	{
 		return strcmp( *sz1, *sz2 );
 	}

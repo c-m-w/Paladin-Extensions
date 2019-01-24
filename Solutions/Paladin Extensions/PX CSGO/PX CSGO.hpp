@@ -6,6 +6,8 @@
 #undef _DEBUG
 #endif
 
+#define mb( ) MessageBox( nullptr, PX::Tools::string_cast< std::wstring >( __func__ ).c_str( ), L"DBG", 0 )
+
 //#define PX_USE_NAMESPACES
 #include "../PX Framework/PX Framework.hpp"
 

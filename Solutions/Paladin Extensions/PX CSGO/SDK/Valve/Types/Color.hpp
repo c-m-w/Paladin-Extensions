@@ -11,10 +11,10 @@ public:
 	{}
 
 	Color( float _r, float _g, float _b, float _a ) : Color(
-														    static_cast< int >( _r * 255.0f ),
-														    static_cast< int >( _g * 255.0f ),
-														    static_cast< int >( _b * 255.0f ),
-														    static_cast< int >( _a * 255.0f ) )
+															static_cast< int >( _r * 255.0f ),
+															static_cast< int >( _g * 255.0f ),
+															static_cast< int >( _b * 255.0f ),
+															static_cast< int >( _a * 255.0f ) )
 	{ }
 
 	explicit Color( float *rgb ) : Color( rgb[ 0 ], rgb[ 1 ], rgb[ 2 ], 1.0f )

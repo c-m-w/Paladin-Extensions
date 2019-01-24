@@ -111,7 +111,7 @@ namespace PX
 			}
 
 		public:
-			explicit constexpr AXorString( const _char * const _String ): _chValue { EncryptCharacter( _String[ iIndex ], iIndex )... }
+			explicit constexpr AXorString( const _char *const _String ): _chValue { EncryptCharacter( _String[ iIndex ], iIndex )... }
 			{ }
 
 			const _char * PX_API Decrypt( )

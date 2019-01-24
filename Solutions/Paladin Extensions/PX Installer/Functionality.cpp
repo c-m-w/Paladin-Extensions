@@ -121,30 +121,34 @@ namespace PX::Functionality
 		};
 
 		{
-			if ( bCancelInstallation ) return;
-				// write to file Launcher.exe
+			if ( bCancelInstallation )
+				return;
+			// write to file Launcher.exe
 			fnCreateFile( PX_XOR( "\\PX Launcher.exe" ), ::Resources::bstrLauncherEXE );
 			uProgress = 1u;
 		}
 		{
-			if ( bCancelInstallation ) return;
-				// write to file all logos
+			if ( bCancelInstallation )
+				return;
+			// write to file all logos
 			fnCreateFile( PX_XOR( "\\PX Logo.ico" ), ::Resources::bstrLogoICO );
 			fnCreateFile( PX_XOR( "\\PX Logo.png" ), ::Resources::bstrLogoPNG );
 			fnCreateFile( PX_XOR( "\\PX Loading.png" ), ::Resources::bstrLogoLoading );
 			uProgress = 2u;
 		}
 		{
-			if ( bCancelInstallation ) return;
-				// write to file all cursor
+			if ( bCancelInstallation )
+				return;
+			// write to file all cursor
 			fnCreateFile( PX_XOR( "\\Cursor\\Arrow.png" ), ::Resources::bstrCursorArrow );
 			fnCreateFile( PX_XOR( "\\Cursor\\Hand.png" ), ::Resources::bstrCursorHand );
 			fnCreateFile( PX_XOR( "\\Cursor\\I Beam.png" ), ::Resources::bstrCursorIBeam );
 			uProgress = 3u;
 		}
 		{
-			if ( bCancelInstallation ) return;
-				// write to file all fonts
+			if ( bCancelInstallation )
+				return;
+			// write to file all fonts
 			fnCreateFile( PX_XOR( "\\Fonts\\csgo_icons.ttf" ), ::Resources::bstrCursorArrow );
 			fnCreateFile( PX_XOR( "\\Fonts\\Envy.ttf" ), ::Resources::bstrCursorHand );
 			fnCreateFile( PX_XOR( "\\Fonts\\FontAwesome.ttf" ), ::Resources::bstrCursorIBeam );
@@ -155,8 +159,9 @@ namespace PX::Functionality
 			uProgress = 4u;
 		}
 		{
-			if ( bCancelInstallation ) return;
-				// write to file all game icons
+			if ( bCancelInstallation )
+				return;
+			// write to file all game icons
 			fnCreateFile( PX_XOR( "\\Game Icons\\CSGO.png" ), ::Resources::bstrCursorArrow );
 			fnCreateFile( PX_XOR( "\\Game Icons\\PUBG.png" ), ::Resources::bstrCursorHand );
 			fnCreateFile( PX_XOR( "\\Game Icons\\RSIX.png" ), ::Resources::bstrCursorIBeam );
@@ -168,7 +173,8 @@ namespace PX::Functionality
 			uProgress = 5u;
 		}
 		{
-			if ( bCancelInstallation ) return;
+			if ( bCancelInstallation )
+				return;
 			// write to file configs based on bExtensionAccess[ PX_EXTENSIONS_... ]
 			Wait< std::chrono::seconds >( 2 );
 			uProgress = 6u;
@@ -177,15 +183,14 @@ namespace PX::Functionality
 
 	// https://stackoverflow.com/questions/734717/how-to-delete-a-folder-in-c
 	int DeleteDirectory( const std::string &refcstrRootDirectory,
-						 bool              bDeleteSubdirectories = true )
+						 bool bDeleteSubdirectories = true )
 	{
-		bool            bSubdirectory = false;       // Flag, indicating whether
-													 // subdirectories have been found
-		HANDLE          hFile;                       // Handle to directory
-		std::string     strFilePath;                 // Filepath
-		std::string     strPattern;                  // Pattern
+		bool bSubdirectory = false;       // Flag, indicating whether
+		// subdirectories have been found
+		HANDLE hFile;                       // Handle to directory
+		std::string strFilePath;                 // Filepath
+		std::string strPattern;                  // Pattern
 		WIN32_FIND_DATAA FileInformation;             // File information
-
 
 		strPattern = refcstrRootDirectory + "\\*.*";
 		hFile = ::FindFirstFileA( strPattern.c_str( ), &FileInformation );
@@ -202,7 +207,7 @@ namespace PX::Functionality
 					{
 						if ( bDeleteSubdirectories )
 						{
-						  // Delete subdirectory
+							// Delete subdirectory
 							int iRC = DeleteDirectory( strFilePath, bDeleteSubdirectories );
 							if ( iRC )
 								return iRC;
@@ -212,17 +217,18 @@ namespace PX::Functionality
 					}
 					else
 					{
-					  // Set file attributes
+						// Set file attributes
 						if ( ::SetFileAttributesA( strFilePath.c_str( ),
-												  FILE_ATTRIBUTE_NORMAL ) == FALSE )
+												   FILE_ATTRIBUTE_NORMAL ) == FALSE )
 							return ::GetLastError( );
 
-						  // Delete file
+						// Delete file
 						if ( ::DeleteFileA( strFilePath.c_str( ) ) == FALSE )
 							return ::GetLastError( );
 					}
 				}
-			} while ( ::FindNextFileA( hFile, &FileInformation ) == TRUE );
+			}
+			while ( ::FindNextFileA( hFile, &FileInformation ) == TRUE );
 
 			// Close handle
 			::FindClose( hFile );
@@ -234,12 +240,12 @@ namespace PX::Functionality
 			{
 				if ( !bSubdirectory )
 				{
-				  // Set directory attributes
+					// Set directory attributes
 					if ( ::SetFileAttributesA( refcstrRootDirectory.c_str( ),
-											  FILE_ATTRIBUTE_NORMAL ) == FALSE )
+											   FILE_ATTRIBUTE_NORMAL ) == FALSE )
 						return ::GetLastError( );
 
-					  // Delete directory
+					// Delete directory
 					if ( ::RemoveDirectoryA( refcstrRootDirectory.c_str( ) ) == FALSE )
 						return ::GetLastError( );
 				}

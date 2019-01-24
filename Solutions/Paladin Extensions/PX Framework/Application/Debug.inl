@@ -11,7 +11,7 @@ namespace PX::dbg
 		bool bNotFirstPrint;
 	}
 
-	template< typename _t > PX_INL SDebugStream&PX_API SDebugStream::operator<<( const _t &_Log )
+	template< typename _t > PX_INL SDebugStream &PX_API SDebugStream::operator<<( const _t &_Log )
 	{
 		if ( !bNotFirstPrint )
 		{

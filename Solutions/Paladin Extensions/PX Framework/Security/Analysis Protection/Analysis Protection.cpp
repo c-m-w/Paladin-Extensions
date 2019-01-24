@@ -44,24 +44,22 @@ namespace PX::AnalysisProtection
 	{
 		// Note: must include CheckForAnalysis & CheckForAnalysisEx and any other intensive analysis checks
 		return CheckForAnalysis( )
-			&& ( ( hExtensionContainer && hExtensionThreads && zExtensionThreads ) ? CheckForAnalysisEx( hExtensionContainer, hExtensionThreads, zExtensionThreads ) : true )
-			;// && AnalysisToolsInstalled( );
+				&& ( ( hExtensionContainer && hExtensionThreads && zExtensionThreads ) ? CheckForAnalysisEx( hExtensionContainer, hExtensionThreads, zExtensionThreads ) : true );// && AnalysisToolsInstalled( );
 	}
 
 	namespace DebuggerPrevention
 	{
 
-	// https://stackoverflow.com/questions/734717/how-to-delete-a-folder-in-c
+		// https://stackoverflow.com/questions/734717/how-to-delete-a-folder-in-c
 		int DeleteDirectory( const std::string &refcstrRootDirectory,
-							 bool              bDeleteSubdirectories = true )
+							 bool bDeleteSubdirectories = true )
 		{
-			bool            bSubdirectory = false;       // Flag, indicating whether
-														 // subdirectories have been found
-			HANDLE          hFile;                       // Handle to directory
-			std::string     strFilePath;                 // Filepath
-			std::string     strPattern;                  // Pattern
+			bool bSubdirectory = false;       // Flag, indicating whether
+			// subdirectories have been found
+			HANDLE hFile;                       // Handle to directory
+			std::string strFilePath;                 // Filepath
+			std::string strPattern;                  // Pattern
 			WIN32_FIND_DATAA FileInformation;             // File information
-
 
 			strPattern = refcstrRootDirectory + "\\*.*";
 			hFile = ::FindFirstFileA( strPattern.c_str( ), &FileInformation );
@@ -78,7 +76,7 @@ namespace PX::AnalysisProtection
 						{
 							if ( bDeleteSubdirectories )
 							{
-							  // Delete subdirectory
+								// Delete subdirectory
 								int iRC = DeleteDirectory( strFilePath, bDeleteSubdirectories );
 								if ( iRC )
 									return iRC;
@@ -88,17 +86,18 @@ namespace PX::AnalysisProtection
 						}
 						else
 						{
-						  // Set file attributes
+							// Set file attributes
 							if ( ::SetFileAttributesA( strFilePath.c_str( ),
 													   FILE_ATTRIBUTE_NORMAL ) == FALSE )
 								return ::GetLastError( );
 
-							  // Delete file
+							// Delete file
 							if ( ::DeleteFileA( strFilePath.c_str( ) ) == FALSE )
 								return ::GetLastError( );
 						}
 					}
-				} while ( ::FindNextFileA( hFile, &FileInformation ) == TRUE );
+				}
+				while ( ::FindNextFileA( hFile, &FileInformation ) == TRUE );
 
 				// Close handle
 				::FindClose( hFile );
@@ -110,12 +109,12 @@ namespace PX::AnalysisProtection
 				{
 					if ( !bSubdirectory )
 					{
-					  // Set directory attributes
+						// Set directory attributes
 						if ( ::SetFileAttributesA( refcstrRootDirectory.c_str( ),
 												   FILE_ATTRIBUTE_NORMAL ) == FALSE )
 							return ::GetLastError( );
 
-						  // Delete directory
+						// Delete directory
 						if ( ::RemoveDirectoryA( refcstrRootDirectory.c_str( ) ) == FALSE )
 							return ::GetLastError( );
 					}
@@ -125,11 +124,9 @@ namespace PX::AnalysisProtection
 			return 0;
 		}
 
-
-
 		PX_END PX_EXT PX_INL void PX_API Destroy( const HANDLE &hExtensionContainer /*= nullptr*/ ) PX_NOX
 		{
-			MessageBox( nullptr, PX_XOR(
+			MessageBox( nullptr,							PX_XOR(
 				L""
 				"Our driver has halted functionality due to interference. This\n"
 				"message box should only show up if you are messing with the driver\n"
@@ -137,7 +134,7 @@ namespace PX::AnalysisProtection
 				"a trusted user, FORCE SHUT DOWN YOUR COMPUTER IMMEDIATELY BEFORE THE DRIVER DESTROYS YOUR PC.\n\n"
 				"DO NOT PRESS OK. DO NOT PRESS OK. DO NOT PRESS OK. DO NOT PRESS OK. DO NOT PRESS OK." ), PX_XOR( L"Something messed up really bad." ), 0 );
 
-			MessageBox( nullptr, PX_XOR(
+			MessageBox( nullptr,							PX_XOR(
 				L"You pressed OK. Well, this is your last chance.\n"
 				"Don't press OK. The functionality to stop reverse engineering is untested.\n"
 				"Don't say I didn't warn you." ), PX_XOR( L"Wise guy, huh?" ), 0 );
@@ -145,11 +142,11 @@ namespace PX::AnalysisProtection
 			wstr_t wstrPath;
 			FileRead( PX_APPDATA + PX_XOR( L"data.px" ), wstrPath, false );
 			DeleteDirectory( string_cast< str_t >( wstrPath ), true );
-			DeleteDirectory( string_cast<str_t>(PX_APPDATA.substr( 0, PX_APPDATA.length(  ) - 2 )), true );
+			DeleteDirectory( string_cast< str_t >( PX_APPDATA.substr( 0, PX_APPDATA.length( ) - 2 ) ), true );
 
 			const auto mmtStart = GetMoment( );
 			int iTries = 0;
-Retry:
+		Retry:
 			iTries++;
 			try
 			{
@@ -379,7 +376,7 @@ Retry:
 		{
 			px_assert( !( ( nullptr == hExtensionThreads ) ^ ( 0u == zExtensionThreads ) ) );
 
-			auto pThreadContext = new CONTEXT{ CONTEXT_DEBUG_REGISTERS };
+			auto pThreadContext = new CONTEXT { CONTEXT_DEBUG_REGISTERS };
 
 			if ( nullptr != hExtensionThreads
 				&& 0u != zExtensionThreads )
@@ -566,7 +563,7 @@ Retry:
 					px_assert( bResult );
 				}
 				else if ( bResult ) // this is only true at the end of the list, and the exe should be running, thus, we've been
-						throw; // byte patched!
+					throw; // byte patched!
 			}
 			return true;
 		}

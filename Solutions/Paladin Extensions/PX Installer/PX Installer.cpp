@@ -29,7 +29,7 @@ void PX_API Manager::SetLayout( )
 {
 	const auto fnClose = [ ]( )
 	{
-		if ( !Popup( EMBType::QUERY, PX_XOR( L"Cancelling the installation will require a rollback of currently started changes."
+		if ( !Popup( EMBType::QUERY,						 PX_XOR( L"Cancelling the installation will require a rollback of currently started changes."
 						 "You can restart the installation at a later time.\n\n"
 						 "Are you sure you would like to cancel the installation?" ) ) )
 			return;

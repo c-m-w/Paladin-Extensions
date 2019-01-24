@@ -441,7 +441,7 @@ namespace PX::UnitTests
 
 					Assert::AreEqual(
 #if defined _DEBUG
-R"([OPN] Begin new logging session
+									 R"([OPN] Begin new logging session
 [NFO] Unit Test Log
 [DBG] Unit Test Log
 [SCS] Unit Test Log
@@ -647,7 +647,7 @@ void OnDetach( )
 					Assert::AreNotEqual( 0, DeleteFile( LR"(C:\Users\Jeremiah\AppData\Roaming\PX\UnitTest.log)" ), L"Delete file failed", PX_ASSERT_INFO );
 				}
 			};
-		
+
 			TEST_CLASS( AnalysisProtection )
 			{
 			public:
@@ -673,8 +673,8 @@ void OnDetach( )
 						static const auto NtQueryInformationProcess = static_cast< SWindowsAPI::fnNtQueryInformationProcess >( PX_WINAPI.GetFunctionPointer( SWindowsAPI::NtQueryInformationProcess ) );
 						MessageBox( nullptr, L"3", L"3", 0 );
 						if ( NtQueryInformationProcess == nullptr )
-							__debugbreak();
-						auto bob = NtQueryInformationProcess( GetCurrentProcess(), /*ProcessDebugObjectHandle*/ 0x1E, &bPresent, sizeof( DWORD ), nullptr);
+							__debugbreak( );
+						auto bob = NtQueryInformationProcess( GetCurrentProcess( ), /*ProcessDebugObjectHandle*/ 0x1E, &bPresent, sizeof( DWORD ), nullptr );
 						MessageBox( nullptr, L"2", L"2", 0 );
 						if ( bob != STATUS_SUCCESS )
 							__debugbreak( );
@@ -689,7 +689,7 @@ void OnDetach( )
 						Assert::IsTrue( CheckForAllAnalysis( ), L"Analysis can occur someway.", PX_ASSERT_INFO );
 #if defined _DEBUG
 					}
-					catch (	const std::exception& e	)
+					catch ( const std::exception &e )
 					{
 						Assert::Fail( L"Unknown analysis-detected failure", PX_ASSERT_INFO );
 					}

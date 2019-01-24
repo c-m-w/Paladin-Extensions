@@ -315,20 +315,28 @@ CUtlBuffer::CUtlBuffer( const void *pBuffer, int nSize, int nFlags ) :
 void CUtlBuffer::SetBufferType( bool bIsText, bool bContainsCRLF )
 {
 #ifdef _DEBUG
-            // If the buffer is empty, there is no opportunity for this stuff to fail
-            if(TellMaxPut() != 0) {
-                if(IsText()) {
-                    if(bIsText) {
-                        assert(ContainsCRLF() == bContainsCRLF);
-                    } else {
-                        assert(ContainsCRLF());
-                    }
-                } else {
-                    if(bIsText) {
-                        assert(bContainsCRLF);
-                    }
-                }
-            }
+	// If the buffer is empty, there is no opportunity for this stuff to fail
+	if ( TellMaxPut( ) != 0 )
+	{
+		if ( IsText( ) )
+		{
+			if ( bIsText )
+			{
+				assert(ContainsCRLF() == bContainsCRLF);
+			}
+			else
+			{
+				assert(ContainsCRLF());
+			}
+		}
+		else
+		{
+			if ( bIsText )
+			{
+				assert(bContainsCRLF);
+			}
+		}
+	}
 #endif
 
 	if ( bIsText )
