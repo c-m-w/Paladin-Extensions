@@ -7,10 +7,10 @@
 55 /home/palavpvb/tmp/horde
 1 /home/palavpvb/tmp/analog
 1 /home/palavpvb/tmp/webalizerftp
-8 /home/palavpvb/tmp/awstats
+10 /home/palavpvb/tmp/awstats
 2 /home/palavpvb/tmp/cpbandwidth
 1 /home/palavpvb/tmp/webalizer
-76 /home/palavpvb/tmp
+78 /home/palavpvb/tmp
 2 /home/palavpvb/.sqmaildata
 8 /home/palavpvb/.trash
 6 /home/palavpvb/perl5/lib
@@ -19,7 +19,7 @@
 3 /home/palavpvb/Extensions
 2 /home/palavpvb/.nc_plugin/hidden
 3 /home/palavpvb/.nc_plugin
-3 /home/palavpvb/logs
+5 /home/palavpvb/logs
 3 /home/palavpvb/var/cpanel
 4 /home/palavpvb/var
 1 /home/palavpvb/.htpasswds/Extensions
@@ -41,7 +41,7 @@
 135 /home/palavpvb/public_html/data
 6259 /home/palavpvb/public_html/src
 15016 /home/palavpvb/public_html
-35 /home/palavpvb/backups
+36 /home/palavpvb/backups
 8 /home/palavpvb/etc/paladin-extensions.com
 11 /home/palavpvb/etc
 1 /home/palavpvb/.softaculous/tmp
@@ -73,5 +73,5 @@
 5 /home/palavpvb/.cphorde
 1 /home/palavpvb/.ssh
 3 /home/palavpvb/.cl.selector
-15498 /home/palavpvb
-Last modified: Tue Jan  1 05:33:17 EST 2019
+15503 /home/palavpvb
+Last modified: Wed Jan  2 05:33:31 EST 2019
