@@ -10,7 +10,7 @@ phpopenbasedirprotect: 1
 port: 444
 secruleengineoff: ~
 serveradmin: webmaster@paladin-extensions.com
-serveralias: mail.paladin-extensions.com www.paladin-extensions.com
+serveralias: www.paladin-extensions.com mail.paladin-extensions.com
 servername: paladin-extensions.com
 ssl: 1
 usecanonicalname: 'Off'

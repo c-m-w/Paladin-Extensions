@@ -1,8 +1,8 @@
--- MySQL dump 10.16  Distrib 10.1.36-MariaDB, for Linux (x86_64)
+-- MySQL dump 10.16  Distrib 10.1.37-MariaDB, for Linux (x86_64)
 --
 -- Host: localhost    Database: roundcube
 -- ------------------------------------------------------
--- Server version	10.1.36-MariaDB-cll-lve
+-- Server version	10.1.37-MariaDB-cll-lve
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -37,7 +37,7 @@ CREATE TABLE `users` (
   `failed_login_counter` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `username` (`username`,`mail_host`)
-) ENGINE=InnoDB AUTO_INCREMENT=563 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=583 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -74,7 +74,7 @@ CREATE TABLE `identities` (
   KEY `user_identities_index` (`user_id`,`del`),
   KEY `email_identities_index` (`email`,`del`),
   CONSTRAINT `user_id_fk_identities` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=564 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=584 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -108,7 +108,7 @@ CREATE TABLE `contacts` (
   PRIMARY KEY (`contact_id`),
   KEY `user_contacts_index` (`user_id`,`del`),
   CONSTRAINT `user_id_fk_contacts` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1224 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1225 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -158,12 +158,12 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-12-19  0:00:43
--- MySQL dump 10.16  Distrib 10.1.36-MariaDB, for Linux (x86_64)
+-- Dump completed on 2018-12-20  0:00:41
+-- MySQL dump 10.16  Distrib 10.1.37-MariaDB, for Linux (x86_64)
 --
 -- Host: localhost    Database: roundcube
 -- ------------------------------------------------------
--- Server version	10.1.36-MariaDB-cll-lve
+-- Server version	10.1.37-MariaDB-cll-lve
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -216,4 +216,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-12-19  0:00:43
+-- Dump completed on 2018-12-20  0:00:41

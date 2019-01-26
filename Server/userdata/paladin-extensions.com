@@ -19,7 +19,9 @@ scriptalias:
     path: /home/palavpvb/public_html/cgi-bin
     url: /cgi-bin/
 serveradmin: webmaster@paladin-extensions.com
-serveralias: mail.paladin-extensions.com www.paladin-extensions.com
+serveralias: www.paladin-extensions.com mail.paladin-extensions.com
 servername: paladin-extensions.com
+ssl: 1
 usecanonicalname: 'Off'
 user: palavpvb
+userdirprotect: ''
