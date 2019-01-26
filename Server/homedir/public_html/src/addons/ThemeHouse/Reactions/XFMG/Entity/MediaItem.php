@@ -2,6 +2,10 @@
 
 namespace ThemeHouse\Reactions\XFMG\Entity;
 
+/**
+ * Class MediaItem
+ * @package ThemeHouse\Reactions\XFMG\Entity
+ */
 class MediaItem extends XFCP_MediaItem
 {
     public function getReactUsers()

@@ -2,14 +2,22 @@
 
 namespace ThemeHouse\Reactions\Service;
 
+use ThemeHouse\Reactions\Entity\Reaction;
 use XF\Mvc\Entity\Entity;
+use XF\Service\AbstractService;
 
-class Import extends \XF\Service\AbstractService
+class Import extends AbstractService
 {
-	public function importReactionTypes(array $reactionTypes, &$errors = [])
-	{
-		$this->db()->beginTransaction();
+    /**
+     * @param array $reactionTypes
+     * @param array $errors
+     * @throws \XF\PrintableException
+     */
+    public function importReactionTypes(array $reactionTypes, &$errors = [])
+    {
+        $this->db()->beginTransaction();
 
+        $entityManagers = [];
         if (!empty($reactionTypes)) {
             foreach ($reactionTypes AS $reactionTypeId => $reactionType) {
                 $reactionTypeEm = $this->em()->create('ThemeHouse\Reactions:ReactionType');
@@ -34,12 +42,18 @@ class Import extends \XF\Service\AbstractService
                 $this->db()->rollback();
             }
         }
-	}
+    }
 
-	public function importReactions(array $reactions, &$errors = [])
-	{
-		$this->db()->beginTransaction();
+    /**
+     * @param array $reactions
+     * @param array $errors
+     * @throws \XF\PrintableException
+     */
+    public function importReactions(array $reactions, &$errors = [])
+    {
+        $this->db()->beginTransaction();
 
+        $entityManagers = [];
         if (!empty($reactions)) {
             foreach ($reactions AS $reactionId => $reaction) {
                 $reactionEm = $this->em()->create('ThemeHouse\Reactions:Reaction');
@@ -64,53 +78,63 @@ class Import extends \XF\Service\AbstractService
                 $this->db()->rollback();
             }
         }
-	}
+    }
 
-	public function getReactionTypeFromXml(\SimpleXMLElement $xml)
-	{
-		$reactionTypes = [];
-		$i = 0;
+    /**
+     * @param \SimpleXMLElement $xml
+     * @return array
+     */
+    public function getReactionTypeFromXml(\SimpleXMLElement $xml)
+    {
+        $reactionTypes = [];
+        $i = 0;
 
-		foreach ($xml->reactionTypes->reactionType AS $reactionType) {
-			$reactionTypes[$i] = [
-				'reaction_type_id' => (string) $reactionType['reaction_type_id'],
-				'title' => (string) $reactionType['title'],
-				'display_order' => (int) $reactionType['display_order'],
-				'color' => (string) $reactionType['color'],
-			];
+        foreach ($xml->reactionTypes->reactionType AS $reactionType) {
+            $reactionTypes[$i] = [
+                'reaction_type_id' => (string)$reactionType['reaction_type_id'],
+                'title' => (string)$reactionType['title'],
+                'display_order' => (int)$reactionType['display_order'],
+                'color' => (string)$reactionType['color'],
+            ];
 
-			$i++;
-		}
+            $i++;
+        }
 
         return $reactionTypes;
-	}
+    }
 
-	public function getReactionFromXml(\SimpleXMLElement $xml)
-	{
-		$reactions = [];
-		$i = 0;
+    /**
+     * @param \SimpleXMLElement $xml
+     * @return array
+     */
+    public function getReactionFromXml(\SimpleXMLElement $xml)
+    {
+        $reactions = [];
+        $i = 0;
 
-		foreach ($xml->reactions->reaction AS $reaction) {
-			$reactions[$i] = [
-				'title' => (string) $reaction['title'],
-				'display_order' => (int) $reaction['display_order'],
-				'like_wrapper' => ((int) $reaction['like_wrapper'] ? 1 : 0),
-				'random' => ((int) $reaction['random'] ? 1 : 0),
-				'enabled' => ((int) $reaction['enabled'] ? 1 : 0),
-				'reaction_type_id' => (string) $reaction->reaction_type_id,
-				'styling_type' => (string) $reaction->styling_type,
-				'reaction_text' => (string) $reaction->reaction_text,
-				'image_url' => (string) $reaction->image_url,
-				'image_url_2x' => (string) $reaction->image_url_2x,
-				'styling' => @unserialize($reaction->styling),
-				'user_criteria' => @unserialize($reaction->user_criteria),
-				'react_handler' => @unserialize($reaction->react_handler),
-				'options' => @unserialize($reaction->options),
-			];
+        foreach ($xml->reactions->reaction AS $reaction) {
+            /** @var Reaction $reaction */
+            $reactions[$i] = [
+                'title' => (string)$reaction['title'],
+                'display_order' => (int)$reaction['display_order'],
+                'like_wrapper' => ((int)$reaction['like_wrapper'] ? 1 : 0),
+                'is_default' => ((int)$reaction['is_default'] ? 1 : 0),
+                'random' => ((int)$reaction['random'] ? 1 : 0),
+                'enabled' => ((int)$reaction['enabled'] ? 1 : 0),
+                'reaction_type_id' => (string)$reaction->reaction_type_id,
+                'styling_type' => (string)$reaction->styling_type,
+                'reaction_text' => (string)$reaction->reaction_text,
+                'image_url' => (string)$reaction->image_url,
+                'image_url_2x' => (string)$reaction->image_url_2x,
+                'styling' => @unserialize($reaction->styling),
+                'user_criteria' => @unserialize($reaction->user_criteria),
+                'react_handler' => @unserialize($reaction->react_handler),
+                'options' => @unserialize($reaction->options),
+            ];
 
-			$i++;
-		}
+            $i++;
+        }
 
         return $reactions;
-	}
+    }
 }

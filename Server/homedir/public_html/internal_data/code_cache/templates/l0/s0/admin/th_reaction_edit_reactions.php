@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: f151fa2b294390e07173f717f4f5709e
+// FROM HASH: 6d07774b7343467762b274e78f50d942
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -93,7 +93,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'name' => 'display_order',
 		'value' => $__vars['reaction']['display_order'],
 		'min' => '0',
-		'step' => '10',
+		'step' => '1',
 		'type' => 'number',
 	), array(
 		'label' => 'Display order',
@@ -130,6 +130,13 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'label' => 'Like wrapper',
 		'selected' => $__vars['reaction']['like_wrapper'],
 		'hint' => 'The reaction will be stored within the default XenForo like handler.',
+		'_type' => 'option',
+	),
+	array(
+		'name' => 'is_default',
+		'label' => 'Default reaction',
+		'selected' => $__vars['reaction']['is_default'],
+		'hint' => 'The default reaction to be used when clicking on the reaction trigger. If no reaction is selected, clicking the trigger will only open the reaction bar',
 		'_type' => 'option',
 	)), array(
 	)) . '

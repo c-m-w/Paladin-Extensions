@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 1dbebd5e25690adac98d2e8a7ef5dabd
+// FROM HASH: 28b57acbb4907a4b98d176dec726df25
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -41,7 +41,5 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		$__finalCompiled .= '
 ';
 	}
-	$__finalCompiled .= '
-';
 	return $__finalCompiled;
 });

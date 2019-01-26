@@ -302,6 +302,7 @@ return array('macros' => array('item' => function($__templater, array $__argumen
 			'id' => 'first_post_id',
 			'content' => $__vars['thread'],
 			'reactUsers' => $__templater->method($__vars['thread'], 'getReactUsers', array()),
+			'limit' => true,
 		), $__vars) . '
 ';
 	}

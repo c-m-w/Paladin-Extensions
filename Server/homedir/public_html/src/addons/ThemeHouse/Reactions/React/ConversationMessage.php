@@ -42,6 +42,11 @@ class ConversationMessage extends AbstractHandler
         ];
     }
 
+    public function render(ReactedContent $react)
+    {
+        return false;
+    }
+
     public function canReactContent(Entity $entity, ReactedContent $react = null, &$error = null)
     {
         $visitor = \XF::visitor();

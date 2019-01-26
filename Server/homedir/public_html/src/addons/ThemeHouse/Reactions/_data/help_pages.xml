@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<help_pages>
+  <help_page page_id="threactions" page_name="threactions" display_order="10" callback_class="ThemeHouse\Reactions\Help\Reactions" callback_method="renderReactions" advanced_mode="1" active="1"/>
+</help_pages>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<content_type_fields>
+  <field content_type="post" field_name="sv_user_log_handler_class">SV\UserEssentials\UserLog\Post</field>
+  <field content_type="thread" field_name="sv_user_log_handler_class">SV\UserEssentials\UserLog\Thread</field>
+  <field content_type="unc" field_name="alert_handler_class">SV\UserEssentials\Alert\UsernameChange</field>
+  <field content_type="unc" field_name="approval_queue_handler_class">SV\UserEssentials\ApprovalQueue\UsernameChange</field>
+  <field content_type="unc" field_name="entity">SV\UserEssentials:UsernameChange</field>
+  <field content_type="unc" field_name="moderator_log_handler_class">SV\UserEssentials\ModeratorLog\UsernameChange</field>
+  <field content_type="user" field_name="sv_user_log_handler_class">SV\UserEssentials\UserLog\User</field>
+  <field content_type="user" field_name="tag_handler_class">SV\UserEssentials\Tag\User</field>
+</content_type_fields>

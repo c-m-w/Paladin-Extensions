@@ -17,35 +17,35 @@ class UserReactionCount extends AbstractJob
     {
         $db = $this->app->db();
 
-		if ($this->data['truncate']) {
+        if ($this->data['truncate']) {
             $db->query('
                 TRUNCATE xf_th_reaction_user_count
             ');
 
-			$this->data['truncate'] = false;
-		}
+            $this->data['truncate'] = false;
+        }
 
         $start = microtime(true);
 
         $this->data['steps']++;
 
         $ids = $db->fetchAllColumn($db->limit(
-            "
+                "
                 SELECT DISTINCT react_user_id AS user_id
                 FROM xf_th_reacted_content
                 WHERE react_user_id > ?
                 ORDER BY react_user_id
             ", $this->data['batch']
-        ), $this->data['start'])
-        +
-        $db->fetchAllColumn($db->limit(
-            "
+            ), $this->data['start'])
+            +
+            $db->fetchAllColumn($db->limit(
+                "
                 SELECT DISTINCT content_user_id AS user_id
                 FROM xf_th_reacted_content
                 WHERE content_user_id > ?
                 ORDER BY content_user_id
             ", $this->data['batch']
-        ), $this->data['start']);
+            ), $this->data['start']);
 
         if (empty($ids)) {
             return $this->complete();
@@ -95,7 +95,13 @@ class UserReactionCount extends AbstractJob
             $done++;
         }
 
-        $this->data['batch'] = $this->calculateOptimalBatch($this->data['batch'], $done, $start, $maxRunTime, 1000);
+        /* Rebuilding for the current batch might've taken a lot less longer than the next batch will,
+         * due to the fact that the current batch doesn't have any reactions. Trying to account for that
+         * by halfing the calculated optimal. Not guaranteed to solve the memory problem, but should help
+         * out.
+         */
+        $this->data['batch'] = (int)($this->calculateOptimalBatch($this->data['batch'], $done, $start, $maxRunTime,
+                1000) / 2);
 
         return $this->resume();
     }

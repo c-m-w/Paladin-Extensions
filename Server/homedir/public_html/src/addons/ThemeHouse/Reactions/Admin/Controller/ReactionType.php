@@ -2,12 +2,18 @@
 
 namespace ThemeHouse\Reactions\Admin\Controller;
 
+use XF\Admin\Controller\AbstractController;
 use XF\Http\Request;
 use XF\Mvc\FormAction;
 use XF\Mvc\ParameterBag;
 
-class ReactionType extends \XF\Admin\Controller\AbstractController
+class ReactionType extends AbstractController
 {
+    /**
+     * @param $action
+     * @param ParameterBag $params
+     * @throws \XF\Mvc\Reply\Exception
+     */
     protected function preDispatchController($action, ParameterBag $params)
     {
         $this->assertAdminPermission('thReactions');
@@ -33,6 +39,11 @@ class ReactionType extends \XF\Admin\Controller\AbstractController
         return $this->view('ThemeHouse\Reactions:ReactionType\Edit', 'th_reaction_type_edit_reactions', $viewParams);
     }
 
+    /**
+     * @param ParameterBag $params
+     * @return \XF\Mvc\Reply\View
+     * @throws \XF\Mvc\Reply\Exception
+     */
     public function actionEdit(ParameterBag $params)
     {
         $reactionType = $this->assertReactionTypeExists($params['reaction_type_id']);
@@ -41,6 +52,7 @@ class ReactionType extends \XF\Admin\Controller\AbstractController
 
     public function actionAdd()
     {
+        /** @var \ThemeHouse\Reactions\Entity\ReactionType $reactionType */
         $reactionType = $this->em()->create('ThemeHouse\Reactions:ReactionType');
 
         return $this->reactionTypeAddEdit($reactionType);
@@ -62,6 +74,12 @@ class ReactionType extends \XF\Admin\Controller\AbstractController
         return $form;
     }
 
+    /**
+     * @param ParameterBag $params
+     * @return \XF\Mvc\Reply\Redirect
+     * @throws \XF\Mvc\Reply\Exception
+     * @throws \XF\PrintableException
+     */
     public function actionSave(ParameterBag $params)
     {
         $this->assertPostOnly();
@@ -77,6 +95,12 @@ class ReactionType extends \XF\Admin\Controller\AbstractController
         return $this->redirect($this->buildLink('reaction-types'));
     }
 
+    /**
+     * @param ParameterBag $params
+     * @return \XF\Mvc\Reply\Error|\XF\Mvc\Reply\Redirect|\XF\Mvc\Reply\View
+     * @throws \XF\PrintableException
+     * @throws \XF\Mvc\Reply\Exception
+     */
     public function actionDelete(ParameterBag $params)
     {
         $reactionType = $this->assertReactionTypeExists($params['reaction_type_id']);
@@ -86,7 +110,7 @@ class ReactionType extends \XF\Admin\Controller\AbstractController
 
         if ($this->isPost()) {
             $reactionType->delete();
-            return $this->redirect($this->buildLink('reactions'));
+            return $this->redirect($this->buildLink('reaction-types'));
         } else {
             $viewParams = [
                 'reactionType' => $reactionType
@@ -102,9 +126,11 @@ class ReactionType extends \XF\Admin\Controller\AbstractController
      * @param null|string $phraseKey
      *
      * @return \ThemeHouse\Reactions\Entity\ReactionType
+     * @throws \XF\Mvc\Reply\Exception
      */
     protected function assertReactionTypeExists($id, $with = null, $phraseKey = null)
     {
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
         return $this->assertRecordExists('ThemeHouse\Reactions:ReactionType', $id, $with, $phraseKey);
     }
 
@@ -113,6 +139,7 @@ class ReactionType extends \XF\Admin\Controller\AbstractController
      */
     protected function getReactionTypeRepo()
     {
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
         return $this->repository('ThemeHouse\Reactions:ReactionType');
     }
 }

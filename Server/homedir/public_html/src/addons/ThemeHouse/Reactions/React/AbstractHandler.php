@@ -26,7 +26,8 @@ abstract class AbstractHandler
         $this->contentType = $contentType;
         try {
             $this->reactions = \XF::app()->container('reactions');
-        } catch (\Exception $e) {}
+        } catch (\Exception $e) {
+        }
 
         $this->buildGlobalData();
     }
@@ -53,7 +54,7 @@ abstract class AbstractHandler
         $reactRepo = \XF::repository('ThemeHouse\Reactions:ReactedContent');
 
         if (empty($this->globalData['userReactCount'])) {
-            $this->globalData['userReactCount'] = $reactRepo->getUserReactCountDaily($visitor->user_id);  
+            $this->globalData['userReactCount'] = $reactRepo->getUserReactCountDaily($visitor->user_id);
         }
     }
 
@@ -68,37 +69,44 @@ abstract class AbstractHandler
         $reactions = \XF::app()->container('reactions');
         foreach ($reactions as $reactionId => $reaction) {
             if (!$reaction['enabled']) {
-                unset($reactions[$reactionId]); continue;
+                unset($reactions[$reactionId]);
+                continue;
             }
 
             $userCriteria = \XF::app()->criteria('XF:User', $reaction['user_criteria']);
             if (!$userCriteria->isMatched($visitor)) {
-                unset($reactions[$reactionId]); continue;
+                unset($reactions[$reactionId]);
+                continue;
             }
 
             $reactHandler = (array) $reaction['react_handler'];
             if (!in_array($this->contentType, $reactHandler)) {
-                unset($reactions[$reactionId]); continue;
+                unset($reactions[$reactionId]);
+                continue;
             }
 
 
             if ($action == 'react' || $action == 'all') {
                 if ($this->getContent()) {
                     if (!$this->canReactContent($this->getContent()) || !$this->canReactWithReaction($reactionId)) {
-                        unset($reactions[$reactionId]); continue;
+                        unset($reactions[$reactionId]);
+                        continue;
                     }
-                } else if (!$this->canReactWithReaction($reactionId)) {
-                    unset($reactions[$reactionId]); continue;
+                } elseif (!$this->canReactWithReaction($reactionId)) {
+                    unset($reactions[$reactionId]);
+                    continue;
                 }
             }
 
             if ($action == 'unreact' || $action == 'all') {
                 if ($this->getContent()) {
                     if (!$this->canUnreactContent($this->getContent()) || !$this->canUnreactWithReaction($reactionId)) {
-                        unset($reactions[$reactionId]); continue;
+                        unset($reactions[$reactionId]);
+                        continue;
                     }
-                } else if (!$this->canUnreactWithReaction($reactionId)) {
-                    unset($reactions[$reactionId]); continue;
+                } elseif (!$this->canUnreactWithReaction($reactionId)) {
+                    unset($reactions[$reactionId]);
+                    continue;
                 }
             }
         }
@@ -145,8 +153,11 @@ abstract class AbstractHandler
     {
         $reaction = $this->getReactionById($reactionId);
         if ($reaction && isset($this->globalData['userReactCount'][$reactionId])) {
-            if (isset($reaction['options']['user_max_per_day']) && $reaction['options']['user_max_per_day'] && $this->globalData['userReactCount'][$reactionId] >= $reaction['options']['user_max_per_day']) {
-                $error = \XF::phraseDeferred('th_exceeded_daily_reacts_for_x_reactions', ['title' => $reaction['title']]);
+            if (isset($reaction['options']['user_max_per_day']) && $reaction['options']['user_max_per_day']
+                    && $this->globalData['userReactCount'][$reactionId] >= $reaction['options']['user_max_per_day']) {
+                $error = \XF::phraseDeferred('th_exceeded_daily_reacts_for_x_reactions', [
+                    'title' => $reaction['title']
+                ]);
                 $this->removeReactionById($reactionId);
                 return false;
             }
@@ -192,7 +203,7 @@ abstract class AbstractHandler
         }
 
         $dailyReactLimit = $visitor->hasPermission('thReactions', 'dailyReactLimit');
-        if ($dailyReactLimit > 0 && $dailyReactLimit >= $this->globalData['userReactCount']['total']) {
+        if ($dailyReactLimit > 0 && $dailyReactLimit <= $this->globalData['userReactCount']['total']) {
             $error = \XF::phraseDeferred('th_exceeded_daily_reacts_reactions');
             return false;
         }
@@ -251,7 +262,8 @@ abstract class AbstractHandler
             return false;
         }
 
-        if (!$visitor->hasPermission('thReactionsModerator', 'canRemoveAllReacts') && !$visitor->hasPermission('thReactions', 'canRemoveOwnReacts')) {
+        if (!$visitor->hasPermission('thReactionsModerator', 'canRemoveAllReacts')
+                && !$visitor->hasPermission('thReactions', 'canRemoveOwnReacts')) {
             $error = \XF::phraseDeferred('th_no_permission_to_remove_reacts_reactions');
             return false;
         }
@@ -261,7 +273,7 @@ abstract class AbstractHandler
                 $error = \XF::phraseDeferred('th_react_x_cannot_be_removed_reactions', ['title' => $reaction['title']]);
                 return false;
             }
-        } else if (!$visitor->hasPermission('thReactionsModerator', 'canRemoveAllReacts')) {
+        } elseif (!$visitor->hasPermission('thReactionsModerator', 'canRemoveAllReacts')) {
             $error = \XF::phraseDeferred('th_react_x_cannot_be_removed_reactions', ['title' => $reaction['title']]);
             return false;
         }
@@ -300,8 +312,7 @@ abstract class AbstractHandler
 
     public function updateFirstContentCache(Entity $entity, $latestReacts)
     {
-        $cacheField = isset($this->contentCacheFields['first_cache']) ? $this->contentCacheFields['first_cache'] : false;
-        if (!$cacheField) {
+        if (empty($this->contentCacheFields['first_cache'])) {
             return false;
         }
 
@@ -352,6 +363,27 @@ abstract class AbstractHandler
         return $output;
     }
 
+    public function render(ReactedContent $react)
+    {
+        if (!$react->Content || !$react->Content->canView()) {
+            return false;
+        }
+
+        $templater = \XF::app()->templater();
+
+        $vieWParams = [
+            'user' => $react->Reactor,
+            'content' => $react->Content,
+            'newsFeed' => [
+                'event_date' => $react->react_date,
+                'extra_data' => [
+                    'reaction_id' => $react->reaction_id,
+                ],
+            ],
+        ];
+        return $templater->renderTemplate('public:news_feed_item_' . $this->contentType . '_react', $vieWParams);
+    }
+
     public function renderOptions(\XF\Mvc\Renderer\AbstractRenderer $renderer, &$params)
     {
         return false;
@@ -365,11 +397,11 @@ abstract class AbstractHandler
     public function sendReactAlert(ReactedContent $react, Entity $content)
     {
         $reaction = $this->getReactionById($react->reaction_id);
-        if (isset($reaction['options']['alert']) && !$reaction['options']['alert']) {
+        if (isset($reaction['options']['alerts']) && !$reaction['options']['alerts']) {
             return false;
         }
 
-        $canView = \XF::asVisitor($react->Owner, function() use ($content, $react) {
+        $canView = \XF::asVisitor($react->Owner, function () use ($content, $react) {
             return $this->canViewContent($content, $react);
         });
 
@@ -379,7 +411,14 @@ abstract class AbstractHandler
 
         /** @var \XF\Repository\UserAlert $alertRepo */
         $alertRepo = \XF::repository('XF:UserAlert');
-        return $alertRepo->alertFromUser($react->Owner, $react->Reactor, $this->contentType, $react->content_id, 'react', ['reaction_id' => $react->reaction_id]);
+        return $alertRepo->alertFromUser(
+            $react->Owner,
+            $react->Reactor,
+            $this->contentType,
+            $react->content_id,
+            'react',
+            ['reaction_id' => $react->reaction_id]
+        );
     }
 
     public function removeReactAlert(ReactedContent $react)
@@ -398,7 +437,15 @@ abstract class AbstractHandler
 
         /** @var \XF\Repository\NewsFeed $newsFeedRepo */
         $newsFeedRepo = \XF::repository('XF:NewsFeed');
-        $newsFeedRepo->publish($this->contentType, $react->content_id, 'react', $react->Reactor->user_id, $react->Reactor->username, ['reaction_id' => $react->reaction_id], $react->react_date);
+        $newsFeedRepo->publish(
+            $this->contentType,
+            $react->content_id,
+            'react',
+            $react->Reactor->user_id,
+            $react->Reactor->username,
+            ['reaction_id' => $react->reaction_id],
+            $react->react_date
+        );
     }
 
     public function unpublishReactNewsFeed(ReactedContent $react)
@@ -457,7 +504,7 @@ abstract class AbstractHandler
     {
         if (isset($entity->user_id)) {
             return $entity->user_id;
-        } else if (isset($entity->User)) {
+        } elseif (isset($entity->User)) {
             $user = $entity->User;
             if ($user instanceof \XF\Entity\User) {
                 return $user->user_id;
@@ -481,7 +528,10 @@ abstract class AbstractHandler
             $contentId = $contentId->getEntityId();
         }
 
-        return \XF::app()->router('public')->buildLink('reactions/react/', ['content_type' => $this->contentType, 'content_id' => $contentId, 'reaction_id' => $reactionId]);
+        return \XF::app()->router('public')->buildLink(
+            'reactions/react/',
+            ['content_type' => $this->contentType, 'content_id' => $contentId, 'reaction_id' => $reactionId]
+        );
     }
 
     public function getUnreactSingleLink($reactId)
@@ -495,7 +545,10 @@ abstract class AbstractHandler
             $contentId = $contentId->getEntityId();
         }
 
-        return \XF::app()->router('public')->buildLink('reactions/unreacts/', ['content_type' => $this->contentType, 'content_id' => $contentId]);
+        return \XF::app()->router('public')->buildLink(
+            'reactions/unreacts/',
+            ['content_type' => $this->contentType, 'content_id' => $contentId]
+        );
     }
 
     public function getModifyReactLink($contentId)
@@ -504,7 +557,10 @@ abstract class AbstractHandler
             $contentId = $contentId->getEntityId();
         }
 
-        return \XF::app()->router('public')->buildLink('reactions/modify/', ['content_type' => $this->contentType, 'content_id' => $contentId]);
+        return \XF::app()->router('public')->buildLink(
+            'reactions/modify/',
+            ['content_type' => $this->contentType, 'content_id' => $contentId]
+        );
     }
 
     public function getListLink($contentId, $simple = false)
@@ -517,7 +573,10 @@ abstract class AbstractHandler
             $contentId = $contentId->getEntityId();
         }
 
-        return \XF::app()->router('public')->buildLink('reactions/list/', ['content_type' => $this->contentType, 'content_id' => $contentId]);
+        return \XF::app()->router('public')->buildLink(
+            'reactions/list/',
+            ['content_type' => $this->contentType, 'content_id' => $contentId]
+        );
     }
 
     public function getListTitle(Entity $entity)

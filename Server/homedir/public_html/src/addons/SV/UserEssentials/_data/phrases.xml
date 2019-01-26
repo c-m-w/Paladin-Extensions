@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<phrases>
+  <phrase title="admin_navigation.sv_ue_loginAttemptLog" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Login attempt log]]></phrase>
+  <phrase title="admin_navigation.sv_ue_userLog" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[User log]]></phrase>
+  <phrase title="alert_opt_out.unc_approved_other" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Approves someone else's user name change]]></phrase>
+  <phrase title="alert_opt_out.unc_approved_own" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Approves your user name change]]></phrase>
+  <phrase title="alert_opt_out.unc_denied_own" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Rejects your user name change]]></phrase>
+  <phrase title="cron_entry.sv_ue_cleanUpDaily" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Daily clean up (User essentials)]]></phrase>
+  <phrase title="mod_log.unc_approved" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[User name change approved]]></phrase>
+  <phrase title="mod_log.unc_denied" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[User name change rejected]]></phrase>
+  <phrase title="option.svCustomUpgradeMaximum" version_id="3000012" version_string="3.0.0 Beta 2"><![CDATA[Custom upgrade amount maximum]]></phrase>
+  <phrase title="option.svCustomUpgradeMinimum" version_id="3000012" version_string="3.0.0 Beta 2"><![CDATA[Custom upgrade amount minimum]]></phrase>
+  <phrase title="option.svDisplayMiniAvatars" version_id="3000037" version_string="3.0.0 Beta 7"><![CDATA[Display mini-avatars]]></phrase>
+  <phrase title="option.svSendEditedInMentions" version_id="3000041" version_string="3.0.0 Beta 11"><![CDATA[Send edited in mentions]]></phrase>
+  <phrase title="option.uncAllowPreviousNames" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Allow re-use of old user names]]></phrase>
+  <phrase title="option.uncCustomTitleDays" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[User name change custom title duration]]></phrase>
+  <phrase title="option.uncDisplayChangesViaACP" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Display administrator user name changes in previous user name list]]></phrase>
+  <phrase title="option.uncMaxChanges" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Maximum user name changes]]></phrase>
+  <phrase title="option.uncMaxPostCount" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Maximum message count for user name changes]]></phrase>
+  <phrase title="option.uncModerate" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Moderate user name changes]]></phrase>
+  <phrase title="option.uncModerateAlert" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Notify moderators of user name changes]]></phrase>
+  <phrase title="option.uncResetDays" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[User name change interval]]></phrase>
+  <phrase title="option.useressDisplayProfileTab" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Display previous user name list to]]></phrase>
+  <phrase title="option.useressLastEditedByPosition" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Last edit message alignment]]></phrase>
+  <phrase title="option.useressLogLength" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[User log length]]></phrase>
+  <phrase title="option.useressPostEditHistory" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Post Edit History]]></phrase>
+  <phrase title="option.useressPostEditMinChars" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Edit Post Minimum Characters]]></phrase>
+  <phrase title="option.useressPreventPrimaryGroupChange" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Prevent administrators changing the primary group]]></phrase>
+  <phrase title="option.useressSeparateTitleEdit" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Separate thread title and post edit time limits]]></phrase>
+  <phrase title="option.useress_acp_unc_notices_default" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Send user name change notifications on administrator edit by default]]></phrase>
+  <phrase title="option.useress_acp_unc_private_default" version_id="3000041" version_string="3.0.0 Beta 11"><![CDATA[Private by default for user name change on administrator edit]]></phrase>
+  <phrase title="option.useress_conversationWrapper" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Wrap conversation area pages in the account wrapper]]></phrase>
+  <phrase title="option.useress_notmatchregex" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[User name not match regular expression]]></phrase>
+  <phrase title="option.useress_watchedWrapper" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Wrap watched content pages in the account wrapper]]></phrase>
+  <phrase title="option_explain.svCustomUpgradeMaximum" version_id="3000012" version_string="3.0.0 Beta 2"><![CDATA[The maximum value to accept for a custom upgrade amount.<br/>
+<br/>
+This maximum is not arbitrary, some payment providers error on values over 999.99]]></phrase>
+  <phrase title="option_explain.svCustomUpgradeMinimum" version_id="3000012" version_string="3.0.0 Beta 2"><![CDATA[The minimum value to accept for a custom upgrade amount]]></phrase>
+  <phrase title="option_explain.svDisplayMiniAvatars" version_id="3000037" version_string="3.0.0 Beta 7"><![CDATA[Display mini-avatars next to a user mention or user group mention. Adds 1 extra query per page load for content which supports mini-avatars.]]></phrase>
+  <phrase title="option_explain.svSendEditedInMentions" version_id="3000041" version_string="3.0.0 Beta 11"><![CDATA[If enabled, send edited in mentions for supported content. Requires mention tracking to be re-build for new installs.<br>
+Run: <pre style="margin: 1em 2em">php cmd.php xf-rebuild:sv-mentions</pre>, and once it completes this setting will be enabled.<br/>
+If this setting is enabled for new installs without running the above, unexpected duplicate alerts will be sent when editing content with a quote or mention.]]></phrase>
+  <phrase title="option_explain.uncAllowPreviousNames" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[If enabled, users will be able to register and change their user name to a user name previously used by another member. Allowing user name re-use can cause confusion, particularly for older quoted messages. This restriction does not apply to administrator user creation and edits.]]></phrase>
+  <phrase title="option_explain.uncCustomTitleDays" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[After a user name change, users will receive a custom title displaying their previous user name for this many days. You may edit the phrase '<i>sv_ue_username_change_user_title</i>' to customize the title. Use 0 to disable.]]></phrase>
+  <phrase title="option_explain.uncDisplayChangesViaACP" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[If enabled, user name changes applied by administrators will be shown in the list of previous user names for a user.]]></phrase>
+  <phrase title="option_explain.uncMaxChanges" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[The maximum number of times a user can change their user name. Use 0 to disable.]]></phrase>
+  <phrase title="option_explain.uncMaxPostCount" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[The maximum number of messages a user may have before being unable to change their user name. If set, this option overrides the maximum user name changes option. Use 0 to disable.]]></phrase>
+  <phrase title="option_explain.uncModerate" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[If enabled, all user name changes must be approved by moderators before being applied.]]></phrase>
+  <phrase title="option_explain.uncModerateAlert" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[If enabled, moderators will be notified when a user name change takes place.]]></phrase>
+  <phrase title="option_explain.uncResetDays" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Users will not be able to submit more than the maximum number of user name changes within this many days. For example, a maximum of 1 change every 7 days. To cause the maximum to be permanent, use 0 to disable.]]></phrase>
+  <phrase title="option_explain.useressDisplayProfileTab" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[This option controls who will be able to view a user's previous user names.]]></phrase>
+  <phrase title="option_explain.useressLastEditedByPosition" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Controls which side of a post the last edit message is aligned to.]]></phrase>
+  <phrase title="option_explain.useressLogLength" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[The number of days that user log records will be kept for. Use 0 to keep the records permanently.]]></phrase>
+  <phrase title="option_explain.useressPostEditHistory" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Do you want to keep track of message content with each post edit?<br />Selecting "Yes" will save a copy of each post prior to it being edited, thus allowing you to view the pre-edited version via the <i>Last edited by</i> link.<br />This will slightly increase the amount of disk space used.]]></phrase>
+  <phrase title="option_explain.useressPostEditMinChars" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Minimum number of characters (including BB Code) that need to be added to or removed from the message, or changed within words (line swaps), in order to trigger the logging of the edit post action. This allows for the correction of spelling mistakes or grammatical errors without considering the post as edited. Zero (0) means the action will always be logged (after taking the Grace Period permission into consideration).]]></phrase>
+  <phrase title="option_explain.useressPreventPrimaryGroupChange" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Depending on the permissions scheme, changing the primary user group breaks accounts and should not be done.]]></phrase>
+  <phrase title="option_explain.useressSeparateTitleEdit" version_id="3000035" version_string="3.0.0 Beta 5"><![CDATA[If enabled, users will be allowed to edit thread titles even after the post edit time limit has expired, provided the thread title time limit has not expired.<br/>
+This can result in being able to edit some aspects of a thread but not the title!]]></phrase>
+  <phrase title="option_explain.useress_acp_unc_notices_default" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[If enabled, notifications will be sent when an administrator manually edits a member's user name by default. Administrators can override this setting when editing a user.]]></phrase>
+  <phrase title="option_explain.useress_acp_unc_private_default" version_id="3000041" version_string="3.0.0 Beta 11"><![CDATA[If enabled, user name changes triggered by an admin will be private by default. Administrators can override this setting when editing a user.]]></phrase>
+  <phrase title="option_explain.useress_conversationWrapper" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[If enabled, the conversation area will be wrapped in the account wrapper.]]></phrase>
+  <phrase title="option_explain.useress_notmatchregex" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[This requires user names to <strong>not</strong> match the given <a href="http://www.regular-expressions.info/tutorial.html">regular expression</a>. <strong>Note:</strong> use a full expression, including delimiters and switches.]]></phrase>
+  <phrase title="option_explain.useress_watchedWrapper" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[If enabled, watched content pages will be wrapped in the account wrapper.]]></phrase>
+  <phrase title="option_group.sv_ue" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[User Essentials]]></phrase>
+  <phrase title="option_group_description.sv_ue" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Options that control the behavior of user name changes, user logging, and more.]]></phrase>
+  <phrase title="permission.forum_createPoll" version_id="3000035" version_string="3.0.0 Beta 5"><![CDATA[[UserEss] Create polls]]></phrase>
+  <phrase title="permission.forum_editOwnThreadTitleLimit" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[[UserEss] Time limit on editing own thread title (minutes)]]></phrase>
+  <phrase title="permission.forum_lockUnlockOwnThread" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[[UserEss] Lock / unlock own thread]]></phrase>
+  <phrase title="permission.forum_userEssReplyToOthers" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[[UserEss] Post replies in other's threads]]></phrase>
+  <phrase title="permission.forum_userEssThreadReplyBan" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[[UserEss] Ban users from replying to own thread]]></phrase>
+  <phrase title="permission.forum_useressDelPostsOwnThread" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[[UserEss] Delete posts in own thread]]></phrase>
+  <phrase title="permission.forum_useressEditPostsOwnThread" version_id="3010000" version_string="3.1.0"><![CDATA[[UserEss] Edit posts in own thread]]></phrase>
+  <phrase title="permission.general_canUserNameChange" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[[UserEss] Change own user name]]></phrase>
+  <phrase title="permission.general_manageUserNameChange" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[[UserEss] Approve / reject user name changes]]></phrase>
+  <phrase title="permission.general_svEditUncPrivacy" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[[UserEss] Edit user name change privacy]]></phrase>
+  <phrase title="permission.general_useressGoInvisible" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[[UserEss] Hide online status]]></phrase>
+  <phrase title="permission.general_useress_managealltags" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[[UserEss] Manage tags on any profile]]></phrase>
+  <phrase title="permission.general_useress_manageowntags" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[[UserEss] Manage tags on own profile]]></phrase>
+  <phrase title="sv_ue_admins_and_mods_only" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Administrators and moderators only]]></phrase>
+  <phrase title="sv_ue_admins_mods_and_user_only" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Administrators, moderators, and the user only]]></phrase>
+  <phrase title="sv_ue_alert_unc_approved_other" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[<b><i>{oldName}</i></b> changed their user name to <a href="{link}">{name}</a>.
+]]></phrase>
+  <phrase title="sv_ue_alert_unc_approved_other_note_x" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[<b><i>{oldName}</i></b> changed their user name to <a href="{link}">{name}</a>. Note: {note}
+]]></phrase>
+  <phrase title="sv_ue_alert_unc_approved_own" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Your user name has been changed to <b><i>{name}</i></b>.
+]]></phrase>
+  <phrase title="sv_ue_alert_unc_approved_own_note_x" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Your user name has been changed to <b><i>{name}</i></b>. Note: {note}
+]]></phrase>
+  <phrase title="sv_ue_alert_unc_denied_own" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Your request to change your user name to <b><i>{name}</i></b> has been rejected.
+]]></phrase>
+  <phrase title="sv_ue_alert_unc_denied_own_note_x" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Your request to change your user name to <b><i>{name}</i></b> has been rejected. Note: {note}
+]]></phrase>
+  <phrase title="sv_ue_and_x_more" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[and {count} more.]]></phrase>
+  <phrase title="sv_ue_approved" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Approved]]></phrase>
+  <phrase title="sv_ue_change_user_name" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Change user name]]></phrase>
+  <phrase title="sv_ue_clear_all_login_attempts_for_ip" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Clear all login attempts for this IP address]]></phrase>
+  <phrase title="sv_ue_clear_all_login_attempts_for_login" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Clear all login attempts for this login]]></phrase>
+  <phrase title="sv_ue_content_mentions" version_id="3000040" version_string="3.0.0 Beta 10"><![CDATA[Content mentions - {type}]]></phrase>
+  <phrase title="sv_ue_from_name" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[From name]]></phrase>
+  <phrase title="sv_ue_likes_given" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Likes given]]></phrase>
+  <phrase title="sv_ue_lock_thread" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Lock thread]]></phrase>
+  <phrase title="sv_ue_lock_thread_explain" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[If enabled, the thread starter will be able to lock this thread even if it was unlocked by a moderator.]]></phrase>
+  <phrase title="sv_ue_login" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Login]]></phrase>
+  <phrase title="sv_ue_login_attempt" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Login attempt]]></phrase>
+  <phrase title="sv_ue_login_attempt_log" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Login attempt log]]></phrase>
+  <phrase title="sv_ue_login_attempts" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Login attempts]]></phrase>
+  <phrase title="sv_ue_login_attempts_logged_for_x" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Login attempts logged for {name}]]></phrase>
+  <phrase title="sv_ue_manage_reply_bans" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Manage reply bans]]></phrase>
+  <phrase title="sv_ue_manage_reply_bans_explain" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[If enabled, the thread starter will be able manage reply bans for this thread.]]></phrase>
+  <phrase title="sv_ue_no_login_attempts_for_requested_user" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[No login attempts were found for the requested user.]]></phrase>
+  <phrase title="sv_ue_please_enter_a_valid_price_to_continue_with_your_purchase" version_id="3000012" version_string="3.0.0 Beta 2"><![CDATA[Please enter a valid price between {min} and {max} to continue with your purchase.]]></phrase>
+  <phrase title="sv_ue_please_enter_another_name_previous" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Please enter another name. The specified user name was previously used by another user.]]></phrase>
+  <phrase title="sv_ue_previous_names" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Previous names]]></phrase>
+  <phrase title="sv_ue_private_admin_user_name_change" version_id="3000041" version_string="3.0.0 Beta 11"><![CDATA[Private user name change]]></phrase>
+  <phrase title="sv_ue_private_explain" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[If selected, this user name change will only be visible to staff and the user.]]></phrase>
+  <phrase title="sv_ue_profile_tags" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Profile tags]]></phrase>
+  <phrase title="sv_ue_quantity" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Quantity]]></phrase>
+  <phrase title="sv_ue_quantity_explain" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[The maximum number of purchases that can be made for this upgrade. Use 0 to disable.]]></phrase>
+  <phrase title="sv_ue_rebuild_content_mentions" version_id="3000034" version_string="3.0.0 Beta 4"><![CDATA[Rebuild content mentions]]></phrase>
+  <phrase title="sv_ue_recurring_user_upgrades_cannot_have_a_quantity" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Recurring user upgrades cannot have a quantity.]]></phrase>
+  <phrase title="sv_ue_request_date" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Request date]]></phrase>
+  <phrase title="sv_ue_requester" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Requester]]></phrase>
+  <phrase title="sv_ue_revert_user_name_change_title" version_id="3000040" version_string="3.0.0 Beta 10"><![CDATA[Revert user name change title]]></phrase>
+  <phrase title="sv_ue_send_user_name_change_notifications" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Send user name change notifications]]></phrase>
+  <phrase title="sv_ue_sure_you_want_to_clear_user_log" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Are you sure you want to clear the user log?]]></phrase>
+  <phrase title="sv_ue_this_is_name_that_will_be_shown_with_your_messages" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[This is the name that will be shown with your messages. You may use any name you wish.]]></phrase>
+  <phrase title="sv_ue_this_member_has_not_changed_their_user_name" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[This member has not changed their user name.]]></phrase>
+  <phrase title="sv_ue_this_note_will_be_included_in_user_notification" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[This note will be included in the notification sent to users.]]></phrase>
+  <phrase title="sv_ue_thread_starter_permissions" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Thread starter permissions]]></phrase>
+  <phrase title="sv_ue_title_edit_time_limit_expired" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[The time limit to edit this thread title ({minutes} minutes) has expired.]]></phrase>
+  <phrase title="sv_ue_to_name" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[To name]]></phrase>
+  <phrase title="sv_ue_total_changes" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Total changes]]></phrase>
+  <phrase title="sv_ue_unlock_thread" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Unlock thread]]></phrase>
+  <phrase title="sv_ue_unlock_thread_explain" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[If enabled, the thread starter will be able to unlock this thread even if it was locked by a moderator.]]></phrase>
+  <phrase title="sv_ue_user_log" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[User log]]></phrase>
+  <phrase title="sv_ue_user_log_entry" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[User log entry]]></phrase>
+  <phrase title="sv_ue_user_name_change" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[User name change]]></phrase>
+  <phrase title="sv_ue_user_name_change_approved_body_html" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[<p>Your user name on {board} has been changed to {name}.</p>]]></phrase>
+  <phrase title="sv_ue_user_name_change_approved_subject" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[User name changed on {board_title}]]></phrase>
+  <phrase title="sv_ue_user_name_change_denied_body_html" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[<p>{username}, your request to change your user name on {board} to {toName} has been rejected.</p>]]></phrase>
+  <phrase title="sv_ue_user_name_change_denied_subject" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[User name change rejected on {board_title}]]></phrase>
+  <phrase title="sv_ue_user_name_change_for" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[User name change for {name}]]></phrase>
+  <phrase title="sv_ue_user_name_change_pending" version_id="3000041" version_string="3.0.0 Beta 11"><![CDATA[Pending change to {newName}]]></phrase>
+  <phrase title="sv_ue_user_note_explain" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Provide a note to assist moderators with approving your user name change.]]></phrase>
+  <phrase title="sv_ue_user_was_merged" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[The user was merged into this user.]]></phrase>
+  <phrase title="sv_ue_username_change_user_title" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Formerly '{oldName}']]></phrase>
+  <phrase title="sv_ue_username_explain" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[This is the name that is shown with your messages. You may use any name you wish. Your former user name will still be displayed in any prior quoted messages.]]></phrase>
+  <phrase title="sv_ue_view_conversations" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[View conversations]]></phrase>
+  <phrase title="sv_ue_you_can_change_your_user_name_x_more_times" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[You can change your user name {remaining} more time(s).]]></phrase>
+  <phrase title="sv_ue_you_can_change_your_user_name_x_more_times_before_y" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[You can change your user name {remaining} more time(s) before {periodEnd}.]]></phrase>
+  <phrase title="sv_ue_you_can_change_your_user_name_x_times" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[You can change your user name {max} time(s).]]></phrase>
+  <phrase title="sv_ue_you_can_change_your_user_name_x_times_every_y_days" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[You can change your user name {max} time(s) every {period} days.]]></phrase>
+  <phrase title="sv_ue_you_can_not_change_your_user_name_after_you_post_more_than_x_messages" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[You can not change your user name after you post more than {max} messages.]]></phrase>
+  <phrase title="sv_ue_you_can_not_change_your_user_name_again_until_x" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[You can not change your user name again until {periodEnd}.]]></phrase>
+  <phrase title="sv_ue_you_currently_have_a_user_name_change_pending_approval" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[You currently have a user name change pending approval.]]></phrase>
+  <phrase title="sv_ue_you_have_not_given_any_content_any_likes_yet" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[You have not given any content any likes yet.]]></phrase>
+  <phrase title="sv_ue_your_user_name_cannot_be_changed_while_your_account_does_not_have_password" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Your user name cannot be changed while your account does not have a password.]]></phrase>
+  <phrase title="sv_ue_your_user_name_change_must_be_approved_by_a_moderator" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[Your user name change must be approved by a moderator.]]></phrase>
+</phrases>

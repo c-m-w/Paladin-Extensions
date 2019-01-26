@@ -79,7 +79,11 @@ class DarkPostRatings extends AbstractReactionImporter
             if ($ratingMap > 0) {
                 $this->log('th_reaction', $postRating['id'], $ratingMap);
             } else {
-                $reactionTypeId = $this->baseConfig['reaction_type_map'][$postRating['type']];
+                if (empty($this->baseConfig['reaction_type_map'][$postRating['type']])) {
+                    $reactionTypeId = 'neutral'; // Assume it's neutral if nothing else matches
+                } else {
+                    $reactionTypeId = $this->baseConfig['reaction_type_map'][$postRating['type']];
+                }
                 $data = $this->mapKeys($postRating, [
                     'title',
                     'name' => 'image_url',

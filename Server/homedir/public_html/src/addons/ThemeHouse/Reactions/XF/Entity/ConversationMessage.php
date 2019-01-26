@@ -5,6 +5,12 @@ namespace ThemeHouse\Reactions\XF\Entity;
 use XF\Mvc\Entity\Entity;
 use XF\Mvc\Entity\Structure;
 
+/**
+ * Class ConversationMessage
+ * @package ThemeHouse\Reactions\XF\Entity
+ *
+ * @property array react_users
+ */
 class ConversationMessage extends XFCP_ConversationMessage
 {
     public function getReactUsers()
@@ -46,5 +52,10 @@ class ConversationMessage extends XFCP_ConversationMessage
         }
 
         return false;
+    }
+
+    protected function _postDelete()
+    {
+        parent::_postDelete();
     }
 }

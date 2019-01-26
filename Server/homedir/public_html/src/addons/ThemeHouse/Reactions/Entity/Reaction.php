@@ -2,11 +2,39 @@
 
 namespace ThemeHouse\Reactions\Entity;
 
+use ThemeHouse\Reactions\React\AbstractHandler;
 use XF\Mvc\Entity\Entity;
 use XF\Mvc\Entity\Structure;
 
+/**
+ * Class Reaction
+ * @package ThemeHouse\Reactions\Entity
+ *
+ *
+ * @property integer reaction_id
+ * @property string title
+ * @property string reaction_type_id
+ * @property string styling_type
+ * @property string reaction_text
+ * @property string image_url
+ * @property string image_url_2x
+ * @property string image_type
+ * @property string|array styling
+ * @property AbstractHandler|array|string react_handler
+ * @property string|array user_criteria
+ * @property string|array $options
+ * @property integer display_order
+ * @property boolean like_wrapper
+ * @property boolean random
+ * @property boolean enabled
+ * @property boolean is_default
+ */
 class Reaction extends Entity
 {
+    /**
+     * @return array|mixed|null
+     * @throws \Exception
+     */
     public function getReactHandler()
     {
         if (isset($this->react_handler)) {
@@ -18,6 +46,12 @@ class Reaction extends Entity
         }
     }
 
+    /**
+     * @param $options
+     * @param $key
+     * @return bool
+     * @throws \Exception
+     */
     protected function verifyOptions(&$options, $key)
     {
         foreach ($this->getReactHandler() as $reactHandler) {
@@ -34,9 +68,13 @@ class Reaction extends Entity
         return true;
     }
 
+    /**
+     * @param $reactionParams
+     * @return bool
+     */
     protected function verifyReactionParams(&$reactionParams)
     {
-        array_walk($reactionParams, function($value, $key) {
+        array_walk($reactionParams, function ($value, $key) {
             if ($key != 'bs') {
                 $value = intval($value);
             }
@@ -47,6 +85,10 @@ class Reaction extends Entity
         return true;
     }
 
+    /**
+     * @param $criteria
+     * @return bool
+     */
     protected function verifyUserCriteria(&$criteria)
     {
         $userCriteria = $this->app()->criteria('XF:User', $criteria);
@@ -54,31 +96,62 @@ class Reaction extends Entity
         return true;
     }
 
-	protected function verifyLikeWrapper($value, $key)
-	{
-        if ($value && \XF::finder('ThemeHouse\Reactions:Reaction')->where(['like_wrapper' => 1, ['reaction_id', '!=', $this->reaction_id]])->fetch()->count()) {
-			$this->error(\XF::phrase('th_only_one_reaction_can_like_wrapper_reactions'), $key);
-			return false;
+    /**
+     * @param $value
+     * @param $key
+     * @return bool
+     */
+    protected function verifyLikeWrapper($value, $key)
+    {
+        if ($value && \XF::finder('ThemeHouse\Reactions:Reaction')->where([
+                'like_wrapper' => 1,
+                ['reaction_id', '!=', $this->reaction_id]
+            ])->fetch()->count()) {
+            $this->error(\XF::phrase('th_only_one_reaction_can_like_wrapper_reactions'), $key);
+            return false;
         }
 
-		return true;
-	}
+        return true;
+    }
 
-	protected function verifyRandom($value, $key)
-	{
+    /**
+     * @param $value
+     * @param $key
+     * @return bool
+     */
+    protected function verifyIsDefault($value, $key)
+    {
+        if ($value && \XF::Finder('ThemeHouse\Reactions:Reaction')->where([
+                'is_default' => 1,
+                ['reaction_id', '!=', $this->reaction_id]
+            ])->fetch()->count()) {
+            $this->error(\XF::phrase('threact_only_one_reaction_can_be_selected_as_the_default'), $key);
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * @param $value
+     * @param $key
+     * @return bool
+     */
+    protected function verifyRandom($value, $key)
+    {
         if ($value && \XF::finder('ThemeHouse\Reactions:Reaction')->limit(5)->fetch()->count() < 3) {
-			$this->error(\XF::phrase('th_at_least_x_reactions_needed_for_random_reactions', ['amount' => 3]), $key);
-			return false;
+            $this->error(\XF::phrase('th_at_least_x_reactions_needed_for_random_reactions', ['amount' => 3]), $key);
+            return false;
         }
 
-		return true;
-	}
+        return true;
+    }
 
     protected function _preSave()
     {
         if (!$this->random && empty($this->reaction_type_id)) {
-			$this->error(\XF::phrase('th_please_choose_valid_reaction_type_reactions'), 'reaction_type_id');
-			return false;
+            $this->error(\XF::phrase('th_please_choose_valid_reaction_type_reactions'), 'reaction_type_id');
+            return false;
         }
 
         if ($this->image_type == 'sprite') {
@@ -105,11 +178,15 @@ class Reaction extends Entity
                 return false;
             }
         }
+
+        return parent::_preSave();
     }
 
     protected function _postSave()
     {
         $this->rebuildReactionCache();
+
+        return parent::_postSave();
     }
 
     protected function _postDelete()
@@ -133,7 +210,7 @@ class Reaction extends Entity
     {
         $repo = $this->getReactionRepo();
 
-        \XF::runOnce('reactionCache', function() use ($repo) {
+        \XF::runOnce('reactionCache', function () use ($repo) {
             $repo->rebuildReactionCache();
         });
     }
@@ -161,6 +238,10 @@ class Reaction extends Entity
         ];
     }
 
+    /**
+     * @param Structure $structure
+     * @return Structure
+     */
     public static function getStructure(Structure $structure)
     {
         $structure->table = 'xf_th_reaction';
@@ -168,13 +249,20 @@ class Reaction extends Entity
         $structure->primaryKey = 'reaction_id';
         $structure->columns = [
             'reaction_id' => ['type' => self::UINT, 'autoIncrement' => true],
-            'title' => ['type' => self::STR, 'maxLength' => 50,
+            'title' => [
+                'type' => self::STR,
+                'maxLength' => 50,
                 'required' => 'please_enter_valid_title'
             ],
             'reaction_type_id' => ['type' => self::STR, 'maxLength' => 25, 'match' => 'alphanumeric'],
-            'styling_type' => ['type' => self::STR, 'default' => 'image',
+            'styling_type' => [
+                'type' => self::STR,
+                'default' => 'image',
                 'allowedValues' => [
-                    'image', 'text', 'css_class', 'html_css'
+                    'image',
+                    'text',
+                    'css_class',
+                    'html_css'
                 ]
             ],
             'reaction_text' => ['type' => self::STR, 'maxLength' => 10, 'default' => ''],
@@ -182,23 +270,38 @@ class Reaction extends Entity
             'image_url_2x' => ['type' => self::STR, 'maxLength' => 200, 'default' => ''],
             'image_type' => ['type' => self::STR, 'maxLength' => 25, 'default' => 'normal'],
             'styling' => ['type' => self::SERIALIZED_ARRAY, 'default' => []],
-            'user_criteria' => ['type' => self::SERIALIZED_ARRAY, 'default' => [],
+            'user_criteria' => [
+                'type' => self::SERIALIZED_ARRAY,
+                'default' => [],
                 'verify' => 'verifyUserCriteria'
             ],
-            'react_handler' => ['type' => self::LIST_COMMA, 'default' => ['all'],
+            'react_handler' => [
+                'type' => self::LIST_COMMA,
+                'default' => ['all'],
                 'list' => ['type' => 'str', 'unique' => true, 'sort' => SORT_STRING],
             ],
-            'options' => ['type' => self::SERIALIZED_ARRAY, 'default' => [],
+            'options' => [
+                'type' => self::SERIALIZED_ARRAY,
+                'default' => [],
                 'verify' => 'verifyOptions',
             ],
             'display_order' => ['type' => self::UINT, 'default' => 10],
-            'like_wrapper' => ['type' => self::BOOL, 'default' => false,
+            'like_wrapper' => [
+                'type' => self::BOOL,
+                'default' => false,
                 'verify' => 'verifyLikeWrapper',
             ],
-            'random' => ['type' => self::BOOL, 'default' => false,
+            'random' => [
+                'type' => self::BOOL,
+                'default' => false,
                 'verify' => 'verifyRandom',
             ],
-            'enabled' => ['type' => self::BOOL, 'default' => true]
+            'enabled' => ['type' => self::BOOL, 'default' => true],
+            'is_default' => [
+                'type' => self::BOOL,
+                'default' => false,
+                'verify' => 'verifyIsDefault',
+            ],
         ];
         $structure->getters = [
             'react_handler' => true
@@ -220,6 +323,7 @@ class Reaction extends Entity
      */
     protected function getReactionRepo()
     {
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
         return $this->repository('ThemeHouse\Reactions:Reaction');
     }
 
@@ -228,6 +332,7 @@ class Reaction extends Entity
      */
     protected function getReactionTypeRepo()
     {
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
         return $this->repository('ThemeHouse\Reactions:ReactionType');
     }
 
@@ -236,6 +341,7 @@ class Reaction extends Entity
      */
     protected function getReactHandlerRepo()
     {
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
         return $this->repository('ThemeHouse\Reactions:ReactHandler');
     }
 }

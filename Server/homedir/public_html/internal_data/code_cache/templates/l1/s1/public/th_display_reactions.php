@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 4f22024e2877ecc329fff817398e64da
+// FROM HASH: 72a0b09ecf4433c8da0239c14397ec37
 return array('macros' => array('reactions_bar' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -16,6 +16,7 @@ return array('macros' => array('reactions_bar' => function($__templater, array $
 		';
 		$__templater->includeCss('th_reactions.less');
 		$__finalCompiled .= '
+		' . $__templater->includeTemplate('th_xfrm_jsOptions', $__vars) . '
 		';
 		$__templater->includeJs(array(
 			'src' => 'themehouse/reactions/react.js',
@@ -28,13 +29,14 @@ return array('macros' => array('reactions_bar' => function($__templater, array $
 		$__compilerTemp1 .= '
 					';
 		$__compilerTemp2 = $__vars;
-		$__compilerTemp2['reactionContentList'] = $__templater->fn('reaction_content_list', array($__vars['content'], $__templater->method($__vars['content'], 'getReactUsers', array()), array($__vars['type'], $__vars['content'][$__vars['id']], $__vars['content']['user_id'], ), true, $__templater->fn('property', array('thMaxReactionsMin', ), false), ), false);
+		$__compilerTemp2['reactionContentList'] = $__templater->fn('reaction_content_list', array($__vars['content'], $__templater->method($__vars['content'], 'getReactUsers', array()), array($__vars['type'], $__vars['content'][$__vars['id']], $__vars['content']['user_id'], ), true, $__templater->fn('property', array('thMaxReactionsMin', ), false), 0, ), false);
 		$__compilerTemp2['reactionList'] = $__templater->fn('reaction_list', array($__vars['content'], $__templater->method($__vars['content'], 'getReactUsers', array()), array($__vars['type'], $__vars['content'][$__vars['id']], $__vars['content']['user_id'], ), ), false);
 		$__compilerTemp1 .= $__templater->includeTemplate('th_display_bar_internal_reactions', $__compilerTemp2) . '
 				';
 		if (strlen(trim($__compilerTemp1)) > 0) {
 			$__finalCompiled .= '
-			<div class="reactions-bar reactions-bar--' . $__templater->fn('property', array('thReactionsAnimation', ), true) . ' content" id="reactions-bar-' . $__templater->escape($__vars['content'][$__vars['id']]) . '">
+			<div class="reactions-bar reactions-bar--' . $__templater->fn('property', array('thReactionsAnimation', ), true) . ' content"
+				 id="reactions-bar-' . $__templater->escape($__vars['content'][$__vars['id']]) . '">
 				' . $__compilerTemp1 . '
 			</div>
 		';
@@ -58,22 +60,28 @@ return array('macros' => array('reactions_bar' => function($__templater, array $
 	), $__arguments, $__vars);
 	$__finalCompiled .= '
 	';
-	$__templater->includeCss('th_reactions.less');
-	$__finalCompiled .= '
-
-	';
-	$__compilerTemp1 = '';
-	$__compilerTemp1 .= '
-				';
-	$__compilerTemp2 = $__vars;
-	$__compilerTemp2['reactionContentList'] = $__templater->fn('reaction_content_list', array($__vars['content'], $__vars['reactUsers'], array($__vars['type'], $__vars['content'][$__vars['id']], $__vars['content']['user_id'], ), false, 3, '', true, ), false);
-	$__compilerTemp1 .= $__templater->includeTemplate('th_display_bar_internal_reactions', $__compilerTemp2) . '
-			';
-	if (strlen(trim($__compilerTemp1)) > 0) {
+	if ($__templater->fn('property', array('th_reactions_showOnThreadList', ), false)) {
 		$__finalCompiled .= '
-		<div class="reactions-bar bit-list" id="reactions-bar-' . $__templater->escape($__vars['content'][$__vars['id']]) . '">
-			' . $__compilerTemp1 . '
-		</div>
+		';
+		$__templater->includeCss('th_reactions.less');
+		$__finalCompiled .= '
+
+		';
+		$__compilerTemp1 = '';
+		$__compilerTemp1 .= '
+					';
+		$__compilerTemp2 = $__vars;
+		$__compilerTemp2['reactionContentList'] = $__templater->fn('reaction_content_list', array($__vars['content'], $__vars['reactUsers'], array($__vars['type'], $__vars['content'][$__vars['id']], $__vars['content']['user_id'], ), false, 3, $__vars['xf']['options']['th_reactionsLimit'], '', true, ), false);
+		$__compilerTemp1 .= $__templater->includeTemplate('th_display_bar_internal_reactions', $__compilerTemp2) . '
+				';
+		if (strlen(trim($__compilerTemp1)) > 0) {
+			$__finalCompiled .= '
+			<div class="reactions-bar bit-list" id="reactions-bar-' . $__templater->escape($__vars['content'][$__vars['id']]) . '">
+				' . $__compilerTemp1 . '
+			</div>
+		';
+		}
+		$__finalCompiled .= '
 	';
 	}
 	$__finalCompiled .= '
@@ -150,9 +158,14 @@ return array('macros' => array('reactions_bar' => function($__templater, array $
 			$__vars['rtTotal'] = ($__templater->fn('is_array', array($__vars['reacts'][$__vars['reactionTypeId']], ), false) ? $__templater->fn('count', array($__vars['reacts'][$__vars['reactionTypeId']], ), false) : $__vars['reacts'][$__vars['reactionTypeId']]);
 			$__compilerTemp1 .= '
 							';
-			$__vars['segmentPerc'] = ((($__templater->fn('is_array', array($__vars['reacts'][$__vars['reactionTypeId']], ), false) ? $__templater->fn('count', array($__vars['reacts'][$__vars['reactionTypeId']], ), false) : $__vars['reacts'][$__vars['reactionTypeId']]) / $__vars['reactsCount']) * 100) . '%';
+			$__vars['segmentPerc'] = ((($__templater->fn('is_array', array($__vars['reacts'][$__vars['reactionTypeId']], ), false) ? $__templater->fn('count', array($__vars['reacts'][$__vars['reactionTypeId']], ), false) : $__vars['reacts'][$__vars['reactionTypeId']]) / ($__vars['reactsCount'] ? $__vars['reactsCount'] : 1)) * 100) . '%';
 			$__compilerTemp1 .= '
-							<span data-xf-init="tooltip" title="' . $__templater->escape($__vars['reactionType']['title']) . '" class="reacts_total_perc__reactionType reacts_total_perc__reactionType--' . $__templater->escape($__vars['reactionTypeId']) . '" style="color: ' . $__templater->escape($__vars['reactionType']['color']) . '">' . $__templater->filter($__vars['segmentPerc'], array(array('number', array()),), true) . '%</span>
+							<span data-xf-init="tooltip"
+								  title="' . $__templater->escape($__vars['reactionType']['title']) . '"
+								  class="reacts_total_perc__reactionType reacts_total_perc__reactionType--' . $__templater->escape($__vars['reactionTypeId']) . '"
+								  style="color: ' . $__templater->escape($__vars['reactionType']['color']) . '">
+								' . $__templater->filter($__vars['segmentPerc'], array(array('number', array()),), true) . '%
+							</span>
 						';
 		}
 	}
@@ -194,13 +207,18 @@ return array('macros' => array('reactions_bar' => function($__templater, array $
 							';
 			$__vars['rtTotal'] = ($__templater->fn('is_array', array($__vars['reacts'][$__vars['reactionTypeId']], ), false) ? $__templater->fn('count', array($__vars['reacts'][$__vars['reactionTypeId']], ), false) : $__vars['reacts'][$__vars['reactionTypeId']]);
 			$__compilerTemp1 .= '
-							<span data-xf-init="tooltip" title="' . $__templater->escape($__vars['reactionType']['title']) . '" class="reacts_total_text__reactionType reacts_total_text__reactionType--' . $__templater->escape($__vars['reactionTypeId']) . '" style="color: ' . $__templater->escape($__vars['reactionType']['color']) . '">' . $__templater->filter($__vars['rtTotal'], array(array('number', array()),), true) . '</span>
+							<span data-xf-init="tooltip"
+								  title="' . $__templater->escape($__vars['reactionType']['title']) . '"
+								  class="reacts_total_text__reactionType reacts_total_text__reactionType--' . $__templater->escape($__vars['reactionTypeId']) . '" style="color: ' . $__templater->escape($__vars['reactionType']['color']) . '">' . $__templater->filter($__vars['rtTotal'], array(array('number', array()),), true) . '</span>
 						';
 		}
 	}
 	$__compilerTemp1 .= '
 					';
 	if (strlen(trim($__compilerTemp1)) > 0) {
+		$__finalCompiled .= '
+		';
+		$__templater->includeCss('th_reactions.less');
 		$__finalCompiled .= '
 		<div class="reacts_total_text reacts_total_text--' . $__templater->escape($__vars['displayLocation']) . '">
 			<div class="pairs pairs--justified">

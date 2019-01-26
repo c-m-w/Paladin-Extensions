@@ -32,7 +32,9 @@ class UserReactTotal extends AbstractJob
             return $this->complete();
         }
 
+        /** @var \ThemeHouse\Reactions\Repository\ReactedContent $reactRepo */
         $reactRepo = $this->app->repository('ThemeHouse\Reactions:ReactedContent');
+        /** @var \ThemeHouse\Reactions\Repository\Reaction $reactionRepo */
         $reactionRepo = $this->app->repository('ThemeHouse\Reactions:Reaction');
 
         $done = 0;

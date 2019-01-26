@@ -1,129 +1,180 @@
 <?php
-// FROM HASH: 149a5ffdd75889c5f68a1aaa06ff84e1
-return array('macros' => array(), 'code' => function($__templater, array $__vars)
+// FROM HASH: 4f1825098b829aec5e1396b3e26a54e9
+return array('macros' => array('visitor_panel_row' => function($__templater, array $__arguments, array $__vars)
 {
+	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
 	$__finalCompiled = '';
-	$__finalCompiled .= '<div class="menu-row menu-row--highlighted">
-	<xf:macro name="visitor_panel_row" />
-</div>
-
-<xf:macro name="visitor_panel_row">
-	<div class="contentRow contentRow--alignMiddle">
+	$__vars = $__templater->mergeMacroArguments(array(), $__arguments, $__vars);
+	$__finalCompiled .= '
+	<div class="contentRow">
 		<div class="contentRow-figure">
-			<xf:avatar user="{$xf.visitor}" size="s" href="" notooltip="true" update="{{ link(\'account/avatar\', $xf.visitor) }}" />
+			' . $__templater->fn('avatar', array($__vars['xf']['visitor'], 's', false, array(
+		'href' => '',
+		'notooltip' => 'true',
+		'update' => $__templater->fn('link', array('account/avatar', $__vars['xf']['visitor'], ), false),
+	))) . '
 		</div>
 		<div class="contentRow-main">
-			<h3 class="contentRow-header"><xf:username user="$xf.visitor" rich="true" notooltip="true" /></h3>
+			<h3 class="contentRow-header">' . $__templater->fn('username_link', array($__vars['xf']['visitor'], true, array(
+		'notooltip' => 'true',
+	))) . '</h3>
 			<div class="contentRow-lesser">
-				<xf:usertitle user="$xf.visitor" />
+				' . $__templater->fn('user_title', array($__vars['xf']['visitor'], false, array(
+	))) . '
+			</div>
+
+			<div class="contentRow-minor">
+				' . '
+				<dl class="pairs pairs--justified fauxBlockLink">
+					<dt>' . 'Messages' . '</dt>
+					<dd>
+						<a href="' . $__templater->fn('link', array('search/member', null, array('user_id' => $__vars['xf']['visitor']['user_id'], ), ), true) . '" class="fauxBlockLink-linkRow u-concealed">
+							' . $__templater->filter($__vars['xf']['visitor']['message_count'], array(array('number', array()),), true) . '
+						</a>
+					</dd>
+				</dl>
+				<!--\\[XF:stats_pairs:above_likes]-->
+' . $__templater->callMacro('th_display_reactions', 'react_total_text', array(
+		'reacts' => $__vars['xf']['visitor']['react_count'],
+		'reactsCount' => $__templater->method($__vars['xf']['visitor'], 'getReactTotalCount', array()),
+	), $__vars) . '
+				' . '
+';
+	if ($__vars['xf']['options']['siropuReferralContestsDisplayReferralCount']) {
+		$__finalCompiled .= '
+	<dl class="pairs pairs--justified fauxBlockLink">
+		<dt>' . 'Referrals' . '</dt>
+		<dd>
+			<a href="' . $__templater->fn('link', array('referrals/users', $__vars['xf']['visitor'], ), true) . '" class="fauxBlockLink-linkRow u-concealed" data-xf-click="overlay">' . $__templater->filter($__vars['xf']['visitor']['siropu_referral_count'], array(array('number', array()),), true) . '</a>
+		</dd>
+	</dl>
+';
+	}
+	$__finalCompiled .= '
+				';
+	if ($__vars['xf']['options']['enableTrophies']) {
+		$__finalCompiled .= '
+					<dl class="pairs pairs--justified fauxBlockLink">
+						<dt>' . 'Trophy points' . '</dt>
+						<dd>
+							<a href="' . $__templater->fn('link', array('members/trophies', $__vars['xf']['visitor'], ), true) . '" data-xf-click="overlay" class="fauxBlockLink-linkRow u-concealed">
+								' . $__templater->filter($__vars['xf']['visitor']['trophy_points'], array(array('number', array()),), true) . '
+							</a>
+						</dd>
+					</dl>
+				';
+	}
+	$__finalCompiled .= '
 			</div>
 		</div>
 	</div>
-	<div class="contentRow-minor">
-		<!--[XF:stats_pairs:above_messages]-->
-		<dl class="pairs pairs--justified fauxBlockLink">
-			<xf:if is="property(\'uix_visitorPanelIcons\')">
-				<xf:macro template="uix_icons.less" name="icon" arg-icon="messages" />
-				<xf:else />
-				<dt>{{ phrase(\'messages\') }}</dt>
-			</xf:if>
-			<dd>
-				<a href="{{ link(\'search/member\', null, {\'user_id\': $xf.visitor.user_id}) }}" class="fauxBlockLink-linkRow u-concealed">
-					{$xf.visitor.message_count|number}
-				</a>
-			</dd>
-		</dl>
+';
+	return $__finalCompiled;
+},), 'code' => function($__templater, array $__vars)
+{
+	$__finalCompiled = '';
+	$__finalCompiled .= '<div class="menu-row menu-row--highlighted">
+	' . $__templater->callMacro(null, 'visitor_panel_row', array(), $__vars) . '
+</div>
 
-		<!--[XF:stats_pairs:above_likes]-->
-		<dl class="pairs pairs--justified fauxBlockLink">
-			<xf:if is="property(\'uix_visitorPanelIcons\')">
-				<xf:macro template="uix_icons.less" name="icon" arg-icon="like" />
-				<xf:else />
-				<dt>{{ phrase(\'likes\') }}</dt>
-			</xf:if>
-			<dd>
-				<a href="{{ link(\'account/likes\') }}" class="fauxBlockLink-linkRow u-concealed">
-					{$xf.visitor.like_count|number}
-				</a>
-			</dd>
-		</dl>
-		<!--[XF:stats_pairs:above_points]-->
-		<xf:if is="$xf.options.enableTrophies">
-			<dl class="pairs pairs--justified fauxBlockLink">
-				<xf:if is="property(\'uix_visitorPanelIcons\')">
-					<xf:macro template="uix_icons.less" name="icon" arg-icon="trophy" />
-					<xf:else />
-					<dt>{{ phrase(\'trophy_points\') }}</dt>
-				</xf:if>
-				<dd>
-					<a href="{{ link(\'members/trophies\', $xf.visitor) }}" data-xf-click="overlay" class="fauxBlockLink-linkRow u-concealed">
-						{$xf.visitor.trophy_points|number}
-					</a>
-				</dd>
-			</dl>
-		</xf:if>
-	</div>
-</xf:macro>
+' . '
 
-<!--[XF:menu_separator:below_visitor_panel]-->
+' . '
 <hr class="menu-separator menu-separator--hard" />
 
 <ul class="listPlain listColumns listColumns--narrow listColumns--together">
-	<!--[XF:content_links:top]-->
-	<xf:if is="$xf.options.enableNewsFeed">
-		<li><a href="{{ link(\'whats-new/news-feed\') }}" class="menu-linkRow">{{ phrase(\'news_feed\') }}</a></li>
-	</xf:if>
-	<li><a href="{{ link(\'search/member\', null, {\'user_id\': $xf.visitor.user_id}) }}" class="menu-linkRow">{{ phrase(\'your_content\') }}</a></li>
-	<li><a href="{{ link(\'account/likes\') }}" class="menu-linkRow">{{ phrase(\'likes_received\') }}</a></li>
-	<li><a href="{{ link(\'conversations\') }}" class="menu-linkRow">{{ phrase(\'conversations\') }}</a></li>
-	<li><a href="{{ link(\'account/alerts\') }}" class="menu-linkRow">{{ phrase(\'alerts\') }}</a></li>
-	<!--[XF:content_links:bottom]-->
+	' . '
+	';
+	if ($__vars['xf']['options']['enableNewsFeed']) {
+		$__finalCompiled .= '
+		<li><a href="' . $__templater->fn('link', array('whats-new/news-feed', ), true) . '" class="menu-linkRow">' . 'News feed' . '</a></li>
+	';
+	}
+	$__finalCompiled .= '
+	<li><a href="' . $__templater->fn('link', array('search/member', null, array('user_id' => $__vars['xf']['visitor']['user_id'], ), ), true) . '" class="menu-linkRow">' . 'Your content' . '</a></li>
+	<li><a href="' . $__templater->fn('link', array('account/likes', ), true) . '" class="menu-linkRow">' . 'Likes received' . '</a></li>
+	' . '
+';
+	if ($__templater->method($__vars['xf']['visitor'], 'hasPermission', array('siropuReferralContests', 'refer', ))) {
+		$__finalCompiled .= '
+	';
+		if ($__vars['xf']['options']['siropuReferralContestsInvitationOnly']) {
+			$__finalCompiled .= '
+		<li><a href="' . (($__templater->method($__vars['xf']['visitor'], 'hasPermission', array('siropuReferralContests', 'sendInvitations', )) != 0) ? $__templater->fn('link', array('account/invitations/create', ), true) : $__templater->fn('link', array('account/invitations/list', ), true)) . '" class="menu-linkRow">' . 'Your invitations' . '</a></li>
+	';
+		} else {
+			$__finalCompiled .= '
+		<li><a href="' . $__templater->fn('link', array('account/referrals', ), true) . '" class="menu-linkRow">' . 'Your referrals' . '</a></li>
+	';
+		}
+		$__finalCompiled .= '
+';
+	}
+	$__finalCompiled .= '
 </ul>
 
-<!--[XF:menu_separator:below_content_links]-->
+' . '
 <hr class="menu-separator" />
 
 <ul class="listPlain listColumns listColumns--narrow listColumns--together">
-	<!--[XF:account_links:top]-->
-	<li><a href="{{ link(\'account/account-details\') }}" class="menu-linkRow">{{ phrase(\'account_details\') }}</a></li>
-	<li><a href="{{ link(\'account/security\') }}" class="menu-linkRow">{{ phrase(\'password_and_security\') }}</a></li>
-	<li><a href="{{ link(\'account/privacy\') }}" class="menu-linkRow">{{ phrase(\'privacy\') }}</a></li>
-	<li><a href="{{ link(\'account/preferences\') }}" class="menu-linkRow">{{ phrase(\'preferences\') }}</a></li>
-	<xf:if is="$xf.visitor.canEditSignature()">
-		<li><a href="{{ link(\'account/signature\') }}" class="menu-linkRow">{{ phrase(\'signature\') }}</a></li>
-	</xf:if>
-	<xf:if is="$xf.app.userUpgradeCount">
-		<li><a href="{{ link(\'account/upgrades\') }}" class="menu-linkRow">{{ phrase(\'account_upgrades\') }}</a></li>
-	</xf:if>
-	<xf:if is="$xf.app.connectedAccountCount">
-		<li><a href="{{ link(\'account/connected-accounts\') }}" class="menu-linkRow">{{ phrase(\'connected_accounts\') }}</a></li>
-	</xf:if>
-	<li><a href="{{ link(\'account/following\') }}" class="menu-linkRow">{{ phrase(\'following\') }}</a></li>
-	<li><a href="{{ link(\'account/ignored\') }}" class="menu-linkRow">{{ phrase(\'ignoring\') }}</a></li>
-	<!--[XF:account_links:bottom]-->
+	' . '
+	<li><a href="' . $__templater->fn('link', array('account/account-details', ), true) . '" class="menu-linkRow">' . 'Account details' . '</a></li>
+	<li><a href="' . $__templater->fn('link', array('account/security', ), true) . '" class="menu-linkRow">' . 'Password and security' . '</a></li>
+	<li><a href="' . $__templater->fn('link', array('account/privacy', ), true) . '" class="menu-linkRow">' . 'Privacy' . '</a></li>
+	<li><a href="' . $__templater->fn('link', array('account/preferences', ), true) . '" class="menu-linkRow">' . 'Preferences' . '</a></li>
+	';
+	if ($__templater->method($__vars['xf']['visitor'], 'canEditSignature', array())) {
+		$__finalCompiled .= '
+		<li><a href="' . $__templater->fn('link', array('account/signature', ), true) . '" class="menu-linkRow">' . 'Signature' . '</a></li>
+	';
+	}
+	$__finalCompiled .= '
+	';
+	if ($__vars['xf']['app']['userUpgradeCount']) {
+		$__finalCompiled .= '
+		<li><a href="' . $__templater->fn('link', array('account/upgrades', ), true) . '" class="menu-linkRow">' . 'Account upgrades' . '</a></li>
+	';
+	}
+	$__finalCompiled .= '
+	';
+	if ($__vars['xf']['app']['connectedAccountCount']) {
+		$__finalCompiled .= '
+		<li><a href="' . $__templater->fn('link', array('account/connected-accounts', ), true) . '" class="menu-linkRow">' . 'Connected accounts' . '</a></li>
+	';
+	}
+	$__finalCompiled .= '
+	<li><a href="' . $__templater->fn('link', array('account/following', ), true) . '" class="menu-linkRow">' . 'Following' . '</a></li>
+	<li><a href="' . $__templater->fn('link', array('account/ignored', ), true) . '" class="menu-linkRow">' . 'Ignoring' . '</a></li>
+	';
+	if ($__templater->method($__vars['xf']['visitor'], 'hasPermission', array('countdown', 'admin', ))) {
+		$__finalCompiled .= '
+<li><a href="' . $__templater->fn('link', array('countdown/admin/', ), true) . '" class="menu-linkRow" >' . 'Countdown admin' . '</a></li>
+';
+	}
+	$__finalCompiled .= '
+' . $__templater->includeTemplate('th_account_visitor_menu_bookmarkLink_bookmarks', $__vars) . '
+';
+	if ($__templater->method($__vars['xf']['visitor'], 'hasPermission', array('conversationView', 'view', ))) {
+		$__finalCompiled .= '
+<li><a href="' . $__templater->fn('link', array('conversationview', ), true) . '" class="menu-linkRow" >' . 'Conversation view' . '</a></li>
+';
+	}
+	$__finalCompiled .= '
+';
+	if ($__templater->method($__vars['xf']['visitor'], 'hasPermission', array('emailLog', 'view', ))) {
+		$__finalCompiled .= '
+<li><a href="' . $__templater->fn('link', array('emaillog/', ), true) . '" class="menu-linkRow" >' . 'Email log' . '</a></li>
+';
+	}
+	$__finalCompiled .= '
+' . '
 </ul>
 
-<!--[XF:menu_separator:below_account_links]-->
+' . '
 <hr class="menu-separator" />
 
-<a href="{{ link(\'logout\', null, {\'t\': csrf_token()}) }}" class="menu-linkRow">{{ phrase(\'log_out\') }}</a>
+<a href="' . $__templater->fn('link', array('logout', null, array('t' => $__templater->fn('csrf_token', array(), false), ), ), true) . '" class="menu-linkRow">' . 'Log out' . '</a>
 
-<xf:if is="$xf.visitor.canPostOnProfile()">
-	<xf:form action="{{ link(\'members/post\', $xf.visitor) }}" ajax="true"
-		data-redirect="off"
-		data-reset-complete="true"
-		data-no-auto-focus="true"
-		class="menu-footer">
-
-		<span class="u-srOnly" id="ctrl_message">{{ phrase(\'update_your_status:\') }}</span>
-		<xf:textarea name="message" rows="1" autosize="true"
-			maxlength="{$xf.options.profilePostMaxLength}"
-			placeholder="{{ phrase(\'update_your_status...\') }}"
-			data-xf-init="focus-trigger user-mentioner" data-display="< :next" aria-labelledby="ctrl_message" />
-		<div class="u-hidden u-hidden--transition u-inputSpacer">
-			<xf:button type="submit" class="button--primary">{{ phrase(\'post_verb\') }}</xf:button>
-		</div>
-	</xf:form>
-</xf:if>';
+';
 	return $__finalCompiled;
 });

@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 1de315d346a215c06bde8fe464ad76a6
+// FROM HASH: 10e278a41508c310d9935bd1363f0a61
 return array('macros' => array('react_block' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -98,6 +98,7 @@ return array('macros' => array('react_block' => function($__templater, array $__
 ';
 	$__templater->includeCss('th_reactions.less');
 	$__finalCompiled .= '
+' . $__templater->includeTemplate('th_xfrm_jsOptions', $__vars) . '
 ';
 	$__templater->includeJs(array(
 		'src' => 'themehouse/reactions/react.js',

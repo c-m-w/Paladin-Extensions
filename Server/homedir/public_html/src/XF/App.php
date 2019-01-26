@@ -97,7 +97,7 @@ class App implements \ArrayAccess
 				'sslVerify' => null,
 				'proxy' => null
 			],
-			'globalSalt' => 'NulledTeam.com Sorry you cant found the license token for user :3',
+			'globalSalt' => 'Nulled by NulledTeam.com',
 			'superAdmins' => '', // keep this for upgrade purposes
 			'internalDataPath' => 'internal_data',
 			'codeCachePath' => '%s/code_cache',
@@ -174,7 +174,7 @@ class App implements \ArrayAccess
 
 		$container['jsVersion'] = function (Container $c)
 		{
-			return substr(md5(\XF::$versionId . $c['options']->jsLastUpdate), 0, 8);
+			return substr(md5(\XF::$versionId . $c['options']['jsLastUpdate']), 0, 8);
 		};
 
 		$container['avatarSizeMap'] = [
@@ -503,10 +503,7 @@ class App implements \ArrayAccess
 
 		$container['options'] = $this->fromRegistry('options',
 			function(Container $c) { return $c['em']->getRepository('XF:Option')->rebuildOptionCache(); },
-			function(array $options)
-			{
-				return new \ArrayObject($options, \ArrayObject::ARRAY_AS_PROPS);
-			}
+			function(array $options) { return new \ArrayObject($options, \ArrayObject::ARRAY_AS_PROPS); }
 		);
 
 		$container['codeEventListeners'] = $this->fromRegistry('codeEventListeners',
@@ -565,9 +562,7 @@ class App implements \ArrayAccess
 		$container['notices'] = $this->fromRegistry('notices',
 			function(Container $c) { return $c['em']->getRepository('XF:Notice')->rebuildNoticeCache(); }
 		);
-		$container['notices.lastReset'] = $this->fromRegistry('noticesLastReset',
-			function(Container $c) { return $c['em']->getRepository('XF:Notice')->rebuildNoticeLastResetCache(); }
-		);
+		$container['notices.lastReset'] = $this->fromRegistry('noticesLastReset', function() { return 0; });
 
 		$container->factory('criteria', function($class, array $params, Container $c)
 		{
@@ -964,7 +959,7 @@ class App implements \ArrayAccess
 			$cache = $c['language.cache'];
 			if (!$id || !isset($cache[$id]))
 			{
-				$id = $c['options']->defaultLanguageId;
+				$id = $c['options']['defaultLanguageId'];
 			}
 
 			if (isset($cache[$id]))
@@ -1008,7 +1003,7 @@ class App implements \ArrayAccess
 			$cache = $c['style.cache'];
 			if (!$id || !isset($cache[$id]))
 			{
-				$id = $c['options']->defaultStyleId;
+				$id = $c['options']['defaultStyleId'];
 			}
 
 			if (isset($cache[$id]))
@@ -1389,35 +1384,31 @@ class App implements \ArrayAccess
 		$this->initializeExtra();
 	}
 
-	/**
-	 * @param               $key
-	 * @param \Closure      $rebuildFunction
-	 * @param \Closure|null $decoratorFunction
-	 *
-	 * @return \Closure
-	 * @throws \XF\Db\Exception
-	 */
 	public function fromRegistry($key, \Closure $rebuildFunction, \Closure $decoratorFunction = null)
 	{
 		return function(Container $c) use ($key, $rebuildFunction, $decoratorFunction)
 		{
-			$data = $this->container['registry'][$key];
-
-			if ($data === null)
+			try
 			{
-				$data = $rebuildFunction($c, $key);
+				$data = $this->container['registry'][$key];
+				if ($data === null)
+				{
+					$data = $rebuildFunction($c, $key);
+				}
+				return $decoratorFunction ? $decoratorFunction($data, $c, $key) : $data;
 			}
-
-			return $decoratorFunction ? $decoratorFunction($data, $c, $key) : $data;
+			catch (\XF\Db\Exception $e)
+			{
+				return [];
+			}
 		};
 	}
 
 	/**
 	 * @param Container $c
-	 * @param string    $class
+	 * @param string $class
 	 *
 	 * @return Templater
-	 * @throws \Exception
 	 */
 	public function setupTemplaterObject(Container $c, $class)
 	{
@@ -1450,7 +1441,6 @@ class App implements \ArrayAccess
 
 		$templater->setJquerySource($c['jQueryVersion'], $options->jQuerySource);
 		$templater->setJsVersion($c['jsVersion']);
-		$templater->setJsBaseUrl($config['javaScriptUrl']);
 
 		$templater->setDynamicDefaultAvatars($options->dynamicAvatarEnable);
 
@@ -1608,7 +1598,6 @@ class App implements \ArrayAccess
 			'app' => $this,
 			'request' => $request,
 			'uri' => $request->getRequestUri(),
-			'fullUri' => $request->getFullRequestUri(),
 			'time' => \XF::$time,
 			'timeDetails' => $language->getDayStartTimestamps(),
 			'debug' => \XF::$debugMode,

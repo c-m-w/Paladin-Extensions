@@ -445,6 +445,8 @@ return array('macros' => array('user_tabs' => function($__templater, array $__ar
 
 			' . '
 
+' . $__templater->includeTemplate('threact_criteria_user', $__vars) . '
+
 			' . $__templater->formCheckBoxRow(array(
 	), array(array(
 		'name' => 'user_criteria[messages_posted][rule]',

@@ -2,12 +2,7 @@
 
 namespace ThemeHouse\Reactions\XF\Template;
 
-use XF\App;
-use XF\Language;
 use XF\Mvc\Entity\Entity;
-use XF\Mvc\Entity\AbstractCollection;
-use XF\Mvc\Router;
-use XF\Util\Arr;
 
 class Templater extends XFCP_Templater
 {
@@ -35,7 +30,12 @@ class Templater extends XFCP_Templater
         switch ($styleProperties['triggerType']) {
             case 'image_path':
                 // {{ base_url(property('th_triggerValue_reactions'), false) }}
-                return '<img src="' . $this->fnBaseUrl($templater, $escape, $styleProperties['triggerValue'], false) . '" class="th_reactions__trigger__image">';
+                return '<img src="' . $this->fnBaseUrl(
+                    $templater,
+                    $escape,
+                    $styleProperties['triggerValue'],
+                    false
+                ) . '" class="th_reactions__trigger__image">';
             case 'glyph_class':
                 return '<i class="' . $styleProperties['triggerValue'] . '" aria-hidden="true"></i>';
             case 'template':
@@ -44,18 +44,59 @@ class Templater extends XFCP_Templater
         }
     }
 
-    public function fnReacts($templater, &$escape, Entity $content, $reacts, array $contentDetails, array $templateVars = [])
-    {
+    /**
+     * @param $templater
+     * @param $escape
+     * @param Entity $content
+     * @param $reacts
+     * @param array $contentDetails
+     * @param array $templateVars
+     * @return string
+     * @throws \Exception
+     */
+    public function fnReacts(
+        $templater,
+        &$escape,
+        Entity $content,
+        $reacts,
+        array $contentDetails,
+        $showReactLink = false,
+        array $templateVars = []
+    ) {
         $escape = false;
 
         return $this->renderTemplate('public:th_display_bar_internal_reactions', array_merge([
-            'reactionList' => $this->preEscaped($this->fnReactionList($templater, $escape, $content, $reacts, $contentDetails), 'html'),
-            'reactionContentList' => $this->preEscaped($this->fnReactionContentList($templater, $escape, $content, $reacts, $contentDetails), 'html'),
+            'reactionList' => $this->preEscaped($this->fnReactionList(
+                $templater,
+                $escape,
+                $content,
+                $reacts,
+                $contentDetails
+            ), 'html'),
+            'reactionContentList' => $this->preEscaped($this->fnReactionContentList(
+                $templater,
+                $escape,
+                $content,
+                $reacts,
+                $contentDetails,
+                $showReactLink
+            ), 'html'),
         ], $templateVars));
     }
 
-    public function fnReaction($templater, &$escape, $reaction, $class = '', $hideDimensions = false)
-    {
+    /**
+     * @param $templater
+     * @param $escape
+     * @param $reaction
+     * @param string $class
+     * @return bool|mixed
+     */
+    public function fnReaction(
+        $templater,
+        &$escape,
+        $reaction,
+        $class = ''
+    ) {
         if (is_scalar($reaction)) {
             $reactions = $this->app->container('reactions');
             if (array_key_exists($reaction, $reactions)) {
@@ -67,10 +108,20 @@ class Templater extends XFCP_Templater
 
         $escape = false;
 
+        /** @var \ThemeHouse\Reactions\XF\Str\Formatter $formatter */
         $formatter = $this->app->stringFormatter();
-        return $formatter->getReactionHtml($reaction, $this->getReactionStyleProperties(), $class, $hideDimensions);
+        return $formatter->getReactionHtml($reaction, $this->getReactionStyleProperties(), $class);
     }
 
+    /**
+     * @param $templater
+     * @param $escape
+     * @param Entity $content
+     * @param $reactUsers
+     * @param array $contentDetails
+     * @return bool|string
+     * @throws \Exception
+     */
     public function fnReactionList($templater, &$escape, Entity $content, $reactUsers, array $contentDetails)
     {
         $escape = false;
@@ -78,7 +129,11 @@ class Templater extends XFCP_Templater
         $this->processContentDetails($contentDetails);
 
         $visitor = \XF::visitor();
-        if (!$this->fnReactHandlerStatus($templater, $escape, $contentDetails['contentType']) || !$visitor->user_id || $visitor->user_id == $contentDetails['contentUserId']) {
+        if (!$this->fnReactHandlerStatus(
+            $templater,
+            $escape,
+            $contentDetails['contentType']
+        ) || !$visitor->user_id || $visitor->user_id == $contentDetails['contentUserId']) {
             return false;
         }
 
@@ -92,7 +147,8 @@ class Templater extends XFCP_Templater
                 if ($reactUser->react_user_id == $visitor->user_id) {
                     $userReacts[] = $reactUser;
                     if (!$reactHandler->canUnreactContent($content, $reactUser)) {
-                        $cannotUnreact[] = $reactUser->reaction_id; continue;
+                        $cannotUnreact[] = $reactUser->reaction_id;
+                        continue;
                     }
 
                     if (array_key_exists($reactUser->reaction_id, $reactions)) {
@@ -112,6 +168,7 @@ class Templater extends XFCP_Templater
             'modifyReactLink' => false
         ];
 
+        /** @var \ThemeHouse\Reactions\XF\Str\Formatter $formatter */
         $formatter = $this->app->stringFormatter();
 
         if (!$exceedsMax) {
@@ -126,7 +183,11 @@ class Templater extends XFCP_Templater
 
                 $output['reactions'][$reaction['reaction_id']] = [
                     'url' => $reactHandler->getReactLink($contentDetails['contentId'], $reactionId),
-                    'rendered' => $this->preEscaped($formatter->getReactionHtml($reaction, $this->getReactionStyleProperties()), 'html')
+                    'rendered' => $this->preEscaped($formatter->getReactionHtml(
+                        $reaction,
+                        $this->getReactionStyleProperties()
+                    ), 'html'),
+                    'is_default' => $reaction['is_default'],
                 ];
             }
         }
@@ -142,13 +203,40 @@ class Templater extends XFCP_Templater
         return $this->renderTemplate('public:th_reaction_list_reactions', $output);
     }
 
-    public function fnReactionContentList($templater, &$escape, Entity $content, $contentReactions, array $contentDetails, $showReactLink=false, $limit = 3, $class = '', $forceMinimal = false)
-    {
+    /**
+     * @param $templater
+     * @param $escape
+     * @param Entity $content
+     * @param $contentReactions
+     * @param array $contentDetails
+     * @param bool $showReactLink
+     * @param int $limit
+     * @param string $class
+     * @param bool $forceMinimal
+     * @return bool|string
+     * @throws \Exception
+     */
+    public function fnReactionContentList(
+        $templater,
+        &$escape,
+        Entity $content,
+        $contentReactions,
+        array $contentDetails,
+        $showReactLink = false,
+        $limit = 3,
+        $cutOff = 0,
+        $class = '',
+        $forceMinimal = false
+    ) {
         $escape = false;
 
         $this->processContentDetails($contentDetails);
 
-        if (!$this->fnReactHandlerStatus($templater, $escape, $contentDetails['contentType']) || empty($contentReactions)) {
+        if (!$this->fnReactHandlerStatus(
+            $templater,
+            $escape,
+            $contentDetails['contentType']
+        ) || empty($contentReactions)) {
             return false;
         }
 
@@ -176,6 +264,7 @@ class Templater extends XFCP_Templater
             return false;
         }
 
+        /** @var \ThemeHouse\Reactions\XF\Str\Formatter $formatter */
         $formatter = $this->app->stringFormatter();
 
         foreach ($reactionsCount as $reactionId => $count) {
@@ -186,7 +275,11 @@ class Templater extends XFCP_Templater
             $reaction = $reactions[$reactionId];
             $itemOutput = [
                 'count' => $count,
-                'rendered' => $this->preEscaped($formatter->getReactionHtml($reaction, $this->getReactionStyleProperties(), $class), 'html'),
+                'rendered' => $this->preEscaped($formatter->getReactionHtml(
+                    $reaction,
+                    $this->getReactionStyleProperties(),
+                    $class
+                ), 'html'),
                 'title' => ((count($reactionsCount) < $limit && !$forceMinimal) ? $reaction['title'] : null),
             ];
 
@@ -198,15 +291,37 @@ class Templater extends XFCP_Templater
             $output['reacts'][] = $itemOutput;
         }
 
+        usort($output['reacts'], function ($a, $b) {
+            return $a['count'] <= $b['count'];
+        });
+
+        if ($cutOff) {
+            $output['reacts'] = array_slice($output['reacts'], 0, $cutOff);
+        }
+
         return $this->renderTemplate('public:th_reaction_content_list_reactions', $output);
     }
 
+    /**
+     * @param $templater
+     * @param $escape
+     * @param $contentType
+     * @return bool|int|null|string
+     * @throws \Exception
+     */
     public function fnReactionBarPosition($templater, &$escape, $contentType)
     {
-        if (!$positions = $this->getReactHandlerByType($contentType)->getReactionBarPositions()) {
+        $reactHandler = $this->getReactHandlerByType($contentType);
+
+        if (!$reactHandler) {
             return false;
         }
 
+        if (!$positions = $reactHandler->getReactionBarPositions()) {
+            return false;
+        }
+
+        /** @var array $positions */
         $styleProperties = $this->getReactionStyleProperties();
         if (empty($styleProperties['reactionBarPositions'][$contentType])) {
             reset($positions);
@@ -216,6 +331,13 @@ class Templater extends XFCP_Templater
         return $styleProperties['reactionBarPositions'][$contentType];
     }
 
+    /**
+     * @param $templater
+     * @param $escape
+     * @param $contentType
+     * @return bool
+     * @throws \Exception
+     */
     public function fnReactHandlerStatus($templater, &$escape, $contentType)
     {
         $reactHandler = $this->getReactHandlerByType($contentType);
@@ -226,11 +348,20 @@ class Templater extends XFCP_Templater
         return $reactHandler->getStatus();
     }
 
+    /**
+     * @param $templater
+     * @param $escape
+     * @return \ThemeHouse\Reactions\React\AbstractHandler[]
+     * @throws \Exception
+     */
     public function fnReactHandlers($templater, &$escape)
     {
         return $this->getReactHandlerRepo()->getReactHandlers();
     }
 
+    /**
+     * @param array $contentDetails
+     */
     protected function processContentDetails(array &$contentDetails)
     {
         if (!count(array_filter(array_keys($contentDetails), 'is_string')) > 0) {
@@ -242,41 +373,59 @@ class Templater extends XFCP_Templater
         }
     }
 
+    /**
+     * @return array
+     */
     protected function getReactionStyleProperties()
     {
-        // This should be impossible, but some add-ons are breaking people's boards.
-        if (!$this->style) {
-            $this->setStyle(\XF::app()->container->style);
+        $style = $this->getStyle();
+        if (!$style) {
+            $style = \XF::app()->container('style.fallback');
         }
 
         return [
-            'imageDimensions' => $this->style->getProperty('thReactionsImageDimensions'),
-            'triggerType' => $this->style->getProperty('th_triggerType_reactions'),
-            'triggerValue' => $this->style->getProperty('th_triggerValue_reactions'),
-            'reactionBarPositions' => $this->style->getProperty('th_reactionBar_location_reactions')
+            'imageDimensions' => $style->getProperty('thReactionsImageDimensions'),
+            'triggerType' => $style->getProperty('th_triggerType_reactions'),
+            'triggerValue' => $style->getProperty('th_triggerValue_reactions'),
+            'reactionBarPositions' => $style->getProperty('th_reactionBar_location_reactions')
         ];
     }
 
+
+    /**
+     * @return \ThemeHouse\Reactions\Repository\Reaction
+     */
     protected function getReactionRepo()
     {
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
         return \XF::Repository('ThemeHouse\Reactions:Reaction');
     }
 
+    /**
+     * @return \ThemeHouse\Reactions\Repository\ReactedContent
+     */
+
     protected function getReactedContentRepo()
     {
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
         return \XF::Repository('ThemeHouse\Reactions:ReactedContent');
     }
 
+    /**
+     * @return \ThemeHouse\Reactions\Repository\ReactHandler
+     */
     protected function getReactHandlerRepo()
     {
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
         return \XF::Repository('ThemeHouse\Reactions:ReactHandler');
     }
 
     /**
      * @param $entity
      * @return \ThemeHouse\Reactions\React\AbstractHandler
+     * @throws \Exception
      */
-    protected function getReactHandlerByEntity(\XF\Mvc\Entity\Entity $entity)
+    protected function getReactHandlerByEntity(Entity $entity)
     {
         return $this->getReactHandlerRepo()->getReactHandlerByEntity($entity, false);
     }
@@ -284,6 +433,7 @@ class Templater extends XFCP_Templater
     /**
      * @param $contentType
      * @return \ThemeHouse\Reactions\React\AbstractHandler
+     * @throws \Exception
      */
     protected function getReactHandlerByType($contentType)
     {

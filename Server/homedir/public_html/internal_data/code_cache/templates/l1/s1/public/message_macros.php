@@ -120,8 +120,8 @@ return array('macros' => array('user_info' => function($__templater, array $__ar
 		if ($__vars['extras']['like_count']) {
 			$__compilerTemp1 .= '
 						<dl class="pairs pairs--justified">
-							<dt>' . 'Likes' . '</dt>
-							<dd>' . $__templater->filter($__vars['user']['like_count'], array(array('number', array()),), true) . '</dd>
+							<dt>' . 'Reactions' . '</dt>
+							<dd>' . $__templater->filter($__templater->method($__vars['user'], 'getReactTotalCount', array()), array(array('number', array()),), true) . '</dd>
 						</dl>
 					';
 		}

@@ -1,12 +1,12 @@
 <?php
-// FROM HASH: b40b433075d564476f110f6e2f0ffeb5
+// FROM HASH: d58a6082d790c44f922b1368c84bec48
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
-	$__finalCompiled .= '<svg width="22px" height="30px" viewBox="0 0 256 219" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+	$__finalCompiled .= '<svg width="22px" height="22px" viewBox="0 0 256 219" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 	<!-- Generator: Sketch 47 (45396) - http://www.bohemiancoding.com/sketch -->
-	<title>Reactions</title>
-	<desc>Created with Sketch.</desc>
+	<title>' . 'Reactions' . '</title>
+	<desc></desc>
 	<defs></defs>
 	<g id="Migration-Case-Studies" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
 		<g id="Reactions" transform="translate(-1.000000, -19.000000)">

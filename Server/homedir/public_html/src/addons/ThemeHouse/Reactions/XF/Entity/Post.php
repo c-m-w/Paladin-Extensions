@@ -5,6 +5,12 @@ namespace ThemeHouse\Reactions\XF\Entity;
 use XF\Mvc\Entity\Entity;
 use XF\Mvc\Entity\Structure;
 
+/**
+ * Class Post
+ * @package ThemeHouse\Reactions\XF\Entity
+ *
+ * @property array react_users
+ */
 class Post extends XFCP_Post
 {
     public function getReactUsers()
@@ -28,5 +34,16 @@ class Post extends XFCP_Post
 
             return $reacts;
         }
+
+        return false;
+    }
+
+    protected function _postDelete()
+    {
+        parent::_postDelete();
+
+        /** @var \ThemeHouse\Reactions\Repository\ReactedContent $repo */
+        $repo = \XF::app()->repository('ThemeHouse\Reactions:ReactedContent');
+        $repo->fastDeleteReacts($this->getEntityContentType(), $this->getEntityId());
     }
 }

@@ -4,5 +4,6 @@ return array (
   'help_page_title.cookies' => 'Cookie usage',
   'help_page_title.smilies' => 'Smilies',
   'help_page_title.terms' => 'Terms and rules',
+  'help_page_title.threactions' => 'Reactions',
   'help_page_title.trophies' => 'Trophies',
 );

@@ -1,376 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <templates>
-  <template type="public" title="alert_conversation_message_react" version_id="1000391" version_string="1.0.3 Patch Level 1"><![CDATA[<xf:css src="th_reactions.less" />
-
-{{ phrase('th_x_reacted_y_to_your_message_in_conversation_z_reactions', {
-	'name': username_link($sender, false, {'defaultname': $alert.username}),
-	'title': '<a href="' . link('conversations/messages', $content) . '">' . $content.Conversation.title . '</a>',
-	'reaction': reaction($alert.extra_data.reaction_id, 'alert')
-}) }}]]></template>
-  <template type="public" title="alert_post_react" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[<xf:css src="th_reactions.less" />
-
-{{ phrase('th_x_reacted_y_to_your_post_in_thread_z_reactions', {
-	'name': username_link($sender, false, {'defaultname': $alert.username}),
-	'reaction': reaction($alert.extra_data.reaction_id, 'alert'),
-	'title': '<a href="' . link('posts', $content) . '" class="fauxBlockLink-blockLink">' . prefix('thread', $content.Thread) . $content.Thread.title . '</a>'
-}) }}]]></template>
-  <template type="public" title="alert_profile_post_comment_react" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[<xf:css src="th_reactions.less" />
-
-<xf:if is="$xf.visitor.user_id == $content.ProfilePost.user_id">
-	{{ phrase('th_x_reacted_y_your_comment_on_your_profile_post_reactions', {
-		'name': username_link($user, false, {'defaultname': $alert.username}),
-		'reaction': reaction($alert.extra_data.reaction_id, 'alert'),
-		'post_attributes': 'href="' . link('profile-posts/comments', $content) . '" class="fauxBlockLink-blockLink"'
-	}) }}
-<xf:else />
-	{{ phrase('th_x_reacted_y_your_comment_on_zs_profile_post_reactions', {
-		'name': username_link($user, false, {'defaultname': $alert.username}),
-		'reaction': reaction($alert.extra_data.reaction_id, 'alert'),
-		'post_attributes': 'href="' . link('profile-posts/comments', $content) . '" class="fauxBlockLink-blockLink"',
-		'poster': $content.ProfilePost.username
-	}) }}
-</xf:if>]]></template>
-  <template type="public" title="alert_profile_post_react" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[<xf:css src="th_reactions.less" />
-
-<xf:if is="$xf.visitor.user_id == $content.ProfileUser.user_id">
-	{{ phrase('th_x_reacted_y_your_status_reactions', {
-		'name': username_link($user, false, {'defaultname': $alert.username}),
-		'reaction': reaction($alert.extra_data.reaction_id, 'alert'),
-		'status_attributes': 'href="' . link('profile-posts', $content) . '" class="fauxBlockLink-blockLink"'
-	}) }}
-<xf:else />
-	{{ phrase('th_x_reacted_y_your_post_on_zs_profile_reactions', {
-		'name': username_link($user, false, {'defaultname': $alert.username}),
-		'reaction': reaction($alert.extra_data.reaction_id, 'alert'),
-		'post_attributes': 'href="' . link('profile-posts', $content) . '" class="fauxBlockLink-blockLink"',
-		'profile': $content.ProfileUser.username
-	}) }}
-</xf:if>]]></template>
-  <template type="public" title="alert_resource_update_react" version_id="1000870" version_string="1.0.8"><![CDATA[<xf:css src="th_reactions.less" />
-
-{{ phrase('th_x_reacted_y_your_resource_z_reactions', {
-'name': username_link($sender, false, {'defaultname': $alert.username}),
-'reaction': reaction($alert.extra_data.reaction_id, 'alert'),
-'title': '<a href="' . link('resources', $content.Resource) . '" class="fauxBlockLink-blockLink">' . $content.title . '</a>'
-}) }}]]></template>
-  <template type="public" title="alert_xfmg_media_react" version_id="1000870" version_string="1.0.8"><![CDATA[<xf:css src="th_reactions.less" />
-
-{{ phrase('th_x_reacted_y_your_media_z_reactions', {
-'name': username_link($sender, false, {'defaultname': $alert.username}),
-'reaction': reaction($alert.extra_data.reaction_id, 'alert'),
-'title': '<a href="' . link('media', $content) . '" class="fauxBlockLink-blockLink">' . $content.title . '</a>'
-}) }}]]></template>
-  <template type="public" title="news_feed_item_post_react" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[<xf:css src="th_reactions.less" />
-
-<div class="contentRow-title">
-	<xf:if is="$content.user_id == $xf.visitor.user_id">
-		{{ phrase('th_x_reacted_y_your_post_in_the_thread_z_reactions', {
-		'name': username_link($user, false, {'defaultname': $fallbackName}),
-		'reaction': reaction($newsFeed.extra_data.reaction_id, 'newsfeed'),
-		'title': '<a href="' . link('posts', $content) . '">' . prefix('thread', $content.Thread) . $content.Thread.title . '</a>'
-		}) }}
-		<xf:else />
-		{{ phrase('th_w_reacted_x_ys_post_in_the_thread_z_reactions', {
-		'name': username_link($user, false, {'defaultname': $fallbackName}),
-		'reaction': reaction($newsFeed.extra_data.reaction_id, 'newsfeed'),
-		'posterParams': 'href="' . link('posts', $content) . '"',
-		'poster': $content.username,
-		'title': '<a href="' . link('posts', $content) . '">' . prefix('thread', $content.Thread) . $content.Thread.title . '</a>'
-		}) }}
-	</xf:if>
-</div>
-
-<div class="contentRow-snippet">{{
-	snippet($content.message, $xf.options.newsFeedMessageSnippetLength, {'stripQuote': true})
-	}}</div>
-
-<div class="contentRow-minor"><xf:date time="{$newsFeed.event_date}" /></div>]]></template>
-  <template type="public" title="news_feed_item_profile_post_comment_react" version_id="1000391" version_string="1.0.3 Patch Level 1"><![CDATA[<xf:css src="th_reactions.less" />
-
-<xf:set var="$fallbackName" value="{{ phrase('unknown_member') }}" />
-
-<div class="contentRow-title">
-	<xf:if is="$content.user_id == $xf.visitor.user_id">
-		{{ phrase('th_x_reacted_y_your_comment_on_zs_profile_post_reactions', {
-			'name': username_link($user, false, {'defaultname': $fallbackName}),
-			'post_attributes': 'href="' . link('profile-posts/comments', $content) . '"',
-			'poster': $content.ProfilePost.username,
-			'reaction': reaction($newsFeed.extra_data.reaction_id, 'newsfeed')
-		}) }}
-		<xf:elseif is="$content.ProfilePost.user_id == $xf.visitor.user_id" />
-		{{ phrase('th_x_reacted_y_your_comment_on_zs_profile_post_reactions', {
-			'name': username_link($user, false, {'defaultname': $fallbackName}),
-			'post_attributes': 'href="' . link('profile-posts/comments', $content) . '"',
-			'poster': $content.ProfilePost.username,
-			'reaction': reaction($newsFeed.extra_data.reaction_id, 'newsfeed')
-			}) }}
-		<xf:else />
-		{{ phrase('th_x_reacted_y_zs_comment_on_zzs_profile_post_reactions', {
-			'name': username_link($user, false, {'defaultname': $fallbackName}),
-			'post_params': 'href="' . link('profile-posts/comments', $content) . '"',
-			'poster': $content.username,
-			'profile': $content.ProfilePost.username,
-			'reaction': reaction($newsFeed.extra_data.reaction_id, 'newsfeed')
-		}) }}
-	</xf:if>
-</div>
-
-<div class="contentRow-snippet">{{
-	snippet($content.message, $xf.options.newsFeedMessageSnippetLength, {'stripQuote': true})
-	}}</div>
-
-<div class="contentRow-minor"><xf:date time="{$newsFeed.event_date}" /></div>]]></template>
-  <template type="public" title="news_feed_item_profile_post_react" version_id="1000391" version_string="1.0.3 Patch Level 1"><![CDATA[<xf:css src="th_reactions.less" />
-
-<xf:set var="$fallbackName" value="{{ phrase('unknown_member') }}" />
-
-<div class="contentRow-title">
-	<xf:if is="$content.user_id == $content.profile_user_id">
-		<xf:if is="$content.user_id == $xf.visitor.user_id">
-			{{ phrase('th_x_reacted_y_your_status_reactions', {
-				'name': username_link($liker, false, {'defaultname': $fallbackName}),
-				'status_attributes': 'href="' . link('profile-posts', $profilePost) . '"',
-				'reaction': reaction($newsFeed.extra_data.reaction_id, 'newsfeed')
-			}) }}
-			<xf:else />
-			{{ phrase('th_x_reacted_y_zs_status_reactions', {
-				'name': username_link($user, false, {'defaultname': $fallbackName}),
-				'status_params': 'href="' . link('profile-posts', $content) . '"',
-				'poster': $content.username,
-				'reaction': reaction($newsFeed.extra_data.reaction_id, 'newsfeed')
-			}) }}
-		</xf:if>
-		<xf:else />
-		<xf:if is="$content.user_id == $xf.visitor.user_id">
-			{{ phrase('th_x_reacted_y_your_post_on_zs_profile_reactions', {
-				'name': username_link($user, false, {'defaultname': $fallbackName}),
-				'post_attributes': 'href="' . link('profile-posts', $content) . '"',
-				'profile': $content.ProfileUser.username,
-				'reaction': reaction($newsFeed.extra_data.reaction_id, 'newsfeed')
-			}) }}
-			<xf:elseif is="$content.ProfileUser.user_id == $xf.visitor.user_id" />
-			{{ phrase('th_x_reacted_y_zs_post_on_your_profile_reactions', {
-				'name': username_link($user, false, {'defaultname': $fallbackName}),
-				'post_params': 'href="' . link('profile-posts', $content) . '"',
-				'poster': $content.username,
-				'reaction': reaction($newsFeed.extra_data.reaction_id, 'newsfeed')
-			}) }}
-			<xf:else />
-			{{ phrase('th_x_reacted_y_zs_post_on_zzs_profile_reactions', {
-				'name': username_link($user, false, {'defaultname': $fallbackName}),
-				'post_params': 'href="' . link('profile-posts', $content) . '"',
-				'poster': $content.username,
-				'profile': $content.ProfileUser.username,
-				'reaction': reaction($newsFeed.extra_data.reaction_id, 'newsfeed')
-			}) }}
-		</xf:if>
-	</xf:if>
-</div>
-
-<div class="contentRow-snippet">{{
-	snippet($content.message, $xf.options.newsFeedMessageSnippetLength, {'stripQuote': true})
-	}}</div>
-
-<div class="contentRow-minor"><xf:date time="{$newsFeed.event_date}" /></div>]]></template>
-  <template type="public" title="news_feed_item_resource_update_react" version_id="1000870" version_string="1.0.8"><![CDATA[<xf:css src="th_reactions.less" />
-
-<div class="contentRow-title">
-	<xf:if is="$content.user_id == $xf.visitor.user_id">
-		{{ phrase('th_x_reacted_y_your_resource_z_reactions', {
-		'name': username_link($user, false, {'defaultname': $fallbackName}),
-		'reaction': reaction($newsFeed.extra_data.reaction_id, 'newsfeed'),
-		'title': '<a href="' . link('resources', $content.Resource) . '">' . $content.Resource.title . '</a>'
-		}) }}
-		<xf:else />
-		{{ phrase('th_w_reacted_x_ys_resource_z_reactions', {
-		'name': username_link($user, false, {'defaultname': $fallbackName}),
-		'reaction': reaction($newsFeed.extra_data.reaction_id, 'newsfeed'),
-		'poster': $content.Resource.username,
-		'title': '<a href="' . link('resources', $content.Resource) . '">' . $content.Resource.title . '</a>'
-		}) }}
-	</xf:if>
-</div>
-
-<xf:comment>
-	<div class="contentRow-snippet">{{
-		snippet($content.description, $xf.options.newsFeedMessageSnippetLength, {'stripQuote': true})
-		}}</div>
-</xf:comment>
-
-<div class="contentRow-minor"><xf:date time="{$newsFeed.event_date}" /></div>]]></template>
-  <template type="public" title="news_feed_item_xfmg_media_react" version_id="1000870" version_string="1.0.8"><![CDATA[<xf:css src="th_reactions.less" />
-
-<div class="contentRow-title">
-	<xf:if is="$content.user_id == $xf.visitor.user_id">
-		{{ phrase('th_x_reacted_y_your_media_z_reactions', {
-		'name': username_link($user, false, {'defaultname': $fallbackName}),
-		'reaction': reaction($newsFeed.extra_data.reaction_id, 'newsfeed'),
-		'title': '<a href="' . link('media', $content) . '">' . $content.title . '</a>'
-		}) }}
-		<xf:else />
-		{{ phrase('th_w_reacted_x_ys_media_z_reactions', {
-		'name': username_link($user, false, {'defaultname': $fallbackName}),
-		'reaction': reaction($newsFeed.extra_data.reaction_id, 'newsfeed'),
-		'poster': $content.username,
-		'title': '<a href="' . link('media', $content) . '">' . $content.title . '</a>'
-		}) }}
-	</xf:if>
-</div>
-
-<xf:comment>
-<div class="contentRow-snippet">{{
-	snippet($content.description, $xf.options.newsFeedMessageSnippetLength, {'stripQuote': true})
-	}}</div>
-</xf:comment>
-
-<div class="contentRow-minor"><xf:date time="{$newsFeed.event_date}" /></div>]]></template>
-  <template type="public" title="th_confirm_reactions" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[<xf:title>{{ $isReacted ? phrase('th_unreact_x_content_reactions', {'contentType': $contentType}) : phrase('th_react_x_content_reactions', {'contentType': $contentType}) }}</xf:title>
-
-<xf:form action="{$confirmUrl}" class="block">
-	<div class="block-container">
-		<div class="block-body">
-			<xf:inforow rowtype="confirm">
-				<xf:if is="$isReacted">
-					<xf:if is="$reactionId">
-						{{ phrase('th_you_sure_you_want_to_unreact_x_this_content_reactions', {
-							'reaction': reaction($reactionId, 'alert')
-						}) }}
-					<xf:else />
-						{{ phrase('th_you_sure_you_want_to_unreact_this_content_reactions') }}
-					</xf:if>
-				<xf:else />
-					{{ phrase('th_you_sure_you_want_to_react_x_to_this_content_reactions', {
-						'reaction': reaction($reactionId, 'alert')
-					}) }}
-					<xf:if is="$contentTitle"><strong>{$contentTitle}</strong></xf:if>
-				</xf:if>
-			</xf:inforow>
-		</div>
-
-		<xf:submitrow icon="save" rowtype="simple" />
-	</div>
-</xf:form>]]></template>
-  <template type="public" title="th_display_bar_internal_reactions" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[<xf:if is="{$reactionContentList}">
-	<xf:if contentcheck="true">
-		<div class="reactions-left">
-			<xf:contentcheck>
-				{$reactionContentList|raw}
-			</xf:contentcheck>
-		</div>
-	</xf:if>
-</xf:if>
-
-
-<xf:if is="{$reactionList}">
-	<xf:if contentcheck="true">
-		<div class="reactions-right">
-			<xf:contentcheck>
-				{$reactionList|raw}
-			</xf:contentcheck>
-		</div>
-	</xf:if>
-</xf:if>
-]]></template>
-  <template type="public" title="th_display_reactions" version_id="1000892" version_string="1.0.8 Patch Level 2"><![CDATA[<xf:macro name="reactions_bar" arg-type="!" arg-id="!" arg-content="!">
-	<xf:if is="{{ react_handler_status($type) }}">
-		<xf:css src="th_reactions.less" />
-		<xf:js src="themehouse/reactions/react.js" addon="ThemeHouse/Reactions"/>
-
-		<xf:if contentcheck="true">
-			<div class="reactions-bar reactions-bar--{{ property('thReactionsAnimation') }} content" id="reactions-bar-{{ $content.{$id} }}">
-				<xf:contentcheck>
-					<xf:include template="th_display_bar_internal_reactions">
-						<xf:set var="$reactionContentList" value="{{ reaction_content_list($content, $content.getReactUsers(), [$type, $content.{$id}, $content.user_id], true, property('thMaxReactionsMin')) }}" />
-						<xf:set var="$reactionList" value="{{ reaction_list($content, $content.getReactUsers(), [$type, $content.{$id}, $content.user_id]) }}" />
-					</xf:include>
-				</xf:contentcheck>
-			</div>
-		</xf:if>
-	</xf:if>
-</xf:macro>
-
-<xf:macro name="reactions_bit_list" arg-type="!" arg-id="!" arg-content="!" arg-reactUsers="!">
-	<xf:css src="th_reactions.less" />
-
-	<xf:if contentcheck="true">
-		<div class="reactions-bar bit-list" id="reactions-bar-{{ $content.{$id} }}">
-			<xf:contentcheck>
-				<xf:include template="th_display_bar_internal_reactions">
-					<xf:set var="$reactionContentList" value="{{ reaction_content_list($content, $reactUsers, [$type, $content.{$id}, $content.user_id], false, 3, '', true) }}" />
-				</xf:include>
-			</xf:contentcheck>
-		</div>
-	</xf:if>
-</xf:macro>
-
-<xf:macro name="react_postbit" arg-reacts="!" arg-reactsCount="!" arg-displayType="!" arg-displayLocation="other">
-	<xf:if is="$displayType === 'bar'">
-		<xf:macro name="react_total_bar" arg-reacts="{$reacts}" arg-reactsCount="{$reactsCount}" arg-displayLocation="{$displayLocation}" />
-	</xf:if>
-
-	<xf:if is="$displayType === 'text'">
-		<xf:macro name="react_total_text" arg-reacts="{$reacts}" arg-reactsCount="{$reactsCount}" arg-displayLocation="{$displayLocation}" />
-	</xf:if>
-
-	<xf:if is="$displayType === 'percentage'">
-		<xf:macro name="react_total_percentage" arg-reacts="{$reacts}" arg-reactsCount="{$reactsCount}" arg-displayLocation="{$displayLocation}" />
-	</xf:if>
-</xf:macro>
-
-<xf:macro name="react_total_percentage" arg-reacts="!" arg-reactsCount="!" arg-displayLocation="other">
-	<xf:if contentcheck="true">
-		<div class="reacts_total_perc reacts_total_perc--{$displayLocation}">
-			<div class="pairs pairs--justified">
-				<dt>{{ phrase('th_reactions') }}</dt>
-				<dd>
-					<xf:contentcheck>
-						<xf:foreach loop="$xf.reactionTypes" key="$reactionTypeId" value="$reactionType">
-							<xf:set var="$rtTotal" value="{{ is_array($reacts.{$reactionTypeId}) ? count($reacts.{$reactionTypeId}) : $reacts.{$reactionTypeId} }}" />
-							<xf:set var="$segmentPerc" value="{{ ((is_array($reacts.{$reactionTypeId}) ? count($reacts.{$reactionTypeId}) : $reacts.{$reactionTypeId}) / {$reactsCount}) * 100 }}%" />
-							<span data-xf-init="tooltip" title="{$reactionType.title}" class="reacts_total_perc__reactionType reacts_total_perc__reactionType--{$reactionTypeId}" style="color: {$reactionType.color}">{$segmentPerc|number}%</span>
-						</xf:foreach>
-					</xf:contentcheck>
-				</dd>
-			</div>
-		</div>
-	</xf:if>
-</xf:macro>
-
-<xf:macro name="react_total_text" arg-reacts="!" arg-reactsCount="!" arg-displayLocation="other">
-	<xf:if contentcheck="true">
-		<div class="reacts_total_text reacts_total_text--{$displayLocation}">
-			<div class="pairs pairs--justified">
-				<dt>{{ phrase('th_reactions') }}</dt>
-				<dd>
-					<xf:contentcheck>
-						<xf:foreach loop="$xf.reactionTypes" key="$reactionTypeId" value="$reactionType">
-							<xf:set var="$rtTotal" value="{{ is_array($reacts.{$reactionTypeId}) ? count($reacts.{$reactionTypeId}) : $reacts.{$reactionTypeId} }}" />
-							<span data-xf-init="tooltip" title="{$reactionType.title}" class="reacts_total_text__reactionType reacts_total_text__reactionType--{$reactionTypeId}" style="color: {$reactionType.color}">{$rtTotal|number}</span>
-						</xf:foreach>
-					</xf:contentcheck>
-				</dd>
-			</div>
-		</div>
-	</xf:if>
-</xf:macro>
-
-<xf:macro name="react_total_bar" arg-reacts="!" arg-reactsCount="!" arg-class="" arg-width="100%" arg-displayLocation="other">
-	<xf:if is="$reactsCount">
-		<xf:if contentcheck="true">
-			<div class="react_total_bar react_total_bar--{$displayLocation} {{ $class }}">
-				<xf:contentcheck>
-					<xf:comment>Removed new lines since they break the total bar!</xf:comment>
-					<xf:foreach loop="$xf.reactionTypes" key="$reactionTypeId" value="$reactionType">
-						<xf:set var="$rtTotal">{{ is_array($reacts.{$reactionTypeId}) ? count($reacts.{$reactionTypeId}) : $reacts.{$reactionTypeId} }}</xf:set>
-						<xf:set var="$segmentWidth" value="{{ ((is_array($reacts.{$reactionTypeId}) ? count($reacts.{$reactionTypeId}) : $reacts.{$reactionTypeId}) / {$reactsCount}) * 100 }}%" />
-						<div class="react_bar_segment react_bar_{{ $reactionTypeId }} Tooltip" title="{{ phrase('th_x_reactions_y_reactions', {'reactionType': $reactionType.title, 'total': (empty($rtTotal) ? '0' : $rtTotal) }) }}" style="background-color: {{ $reactionType.color }}; width: {$segmentWidth}" data-xf-init="tooltip"></div>
-					</xf:foreach>
-				</xf:contentcheck>
-			</div>
-		</xf:if>
-	</xf:if>
-</xf:macro>]]></template>
-  <template type="admin" title="th_import_config_dpr_reactions" version_id="1000292" version_string="1.0.2 Patch Level 2"><![CDATA[<h3 class="block-header">
+  <template type="admin" title="th_import_config_dpr_reactions" version_id="1001191" version_string="1.0.11 Patch Level 1"><![CDATA[<h3 class="block-header">
 	{{ phrase('th_map_reactions_reactions') }}
 </h3>
 <xf:foreach loop="$postRatings" value="$rating">
@@ -396,37 +26,9 @@
 			<xf:option value="{$reactionType.reaction_type_id}">{$reactionType.title}</xf:option>
 		</xf:foreach>
 	</xf:selectrow>
-</xf:macro>
-]]></template>
-  <template type="admin" title="th_import_step_config_dpr_reactions" version_id="1000100" version_string="1.0.1"><![CDATA[]]></template>
-  <template type="public" title="th_reaction_content_list_reactions" version_id="1000891" version_string="1.0.8 Patch Level 1"><![CDATA[<ul>
-	<xf:foreach loop="$reacts" value="$react" if="$reacts">
-		<li class="th_reactions__listItem">
-			<xf:if is="$react.canReact">
-				<a href="{$react.url}" data-xf-click="react" data-reaction-bar="< .message | .reactions-bar">{$react.rendered}</a>
-				<xf:else />
-				{$react.rendered}
-			</xf:if>
-
-			<xf:if is="{{ property('th_reactions__showTitles') }}">
-				<xf:if is="$react.title">
-					<span class="reaction-title">{$react.title}</span>
-				</xf:if>
-			</xf:if>
-			<xf:if is="{{ property('thReactionsDivider') != '' }}">
-				<span class="reaction-divider"> {{ property('thReactionsDivider') }} </span>
-			</xf:if>
-			<span class="reaction-count">{$react.count}</span>
-		</li>
-	</xf:foreach>
-
-	<xf:if is="$reactionListUrl">
-		<li>
-			<a class="list-reacts" href="{$reactionListUrl}" data-xf-click="overlay" data-nocache="true">{{ phrase('th_list_reactions_reactions') }}</a>
-		</li>
-	</xf:if>
-</ul>]]></template>
-  <template type="admin" title="th_reaction_delete_reactions" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[<xf:title>{{ phrase('confirm_action') }}</xf:title>
+</xf:macro>]]></template>
+  <template type="admin" title="th_import_step_config_dpr_reactions" version_id="1001191" version_string="1.0.11 Patch Level 1"><![CDATA[]]></template>
+  <template type="admin" title="th_reaction_delete_reactions" version_id="1001191" version_string="1.0.11 Patch Level 1"><![CDATA[<xf:title>{{ phrase('confirm_action') }}</xf:title>
 
 <xf:form action="{{ link('reactions/delete', $reaction) }}" ajax="true" class="block">
 	<div class="block-container">
@@ -439,7 +41,7 @@
 		<xf:submitrow rowtype="simple" icon="delete" />
 	</div>
 </xf:form>]]></template>
-  <template type="admin" title="th_reaction_edit_reactions" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[<xf:if is="$reaction.isInsert()">
+  <template type="admin" title="th_reaction_edit_reactions" version_id="1001191" version_string="1.0.11 Patch Level 1"><![CDATA[<xf:if is="$reaction.isInsert()">
 	<xf:title>{{ phrase('th_add_reaction_reactions') }}</xf:title>
 <xf:else />
 	<xf:title>{{ phrase('th_edit_reaction_reactions') }}: {$reaction.title}</xf:title>
@@ -471,7 +73,7 @@
 				<hr class="formRowSep" />
 
 				<xf:textboxrow label="{{ phrase('display_order') }}" name="display_order"
-							   value="{$reaction.display_order}" min="0" step="10" type="number" />
+							   value="{$reaction.display_order}" min="0" step="1" type="number" />
 
 				<xf:selectrow label="{{ phrase('th_reaction_type_reactions') }}" name="reaction_type_id" value="{$reaction.reaction_type_id}">
 					<xf:option />
@@ -485,6 +87,7 @@
 					<xf:option name="enabled" label="{{ phrase('enabled') }}" selected="$reaction.enabled" hint="{{ phrase('th_enabled_hint_reactions') }}" />
 					<xf:option name="random" label="{{ phrase('th_random_reaction_reactions') }}" selected="$reaction.random" hint="{{ phrase('th_random_reaction_hint_reactions') }}" />
 					<xf:option name="like_wrapper" label="{{ phrase('th_like_wrapper_reactions') }}" selected="$reaction.like_wrapper" hint="{{ phrase('th_like_wrapper_hint_reactions') }}" />
+					<xf:option name="is_default" label="{{ phrase('threact_default_reaction') }}" selected="$reaction.is_default" hint="{{ phrase('threact_default_reaction_hint') }}" />
 				</xf:checkboxrow>
 			</div>
 		</li>
@@ -818,7 +421,7 @@ $(document).ready(function () {
 	generatePreview();
 });
 </xf:js>]]></template>
-  <template type="admin" title="th_reaction_handler_post_reactions" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[<xf:formrow rowtype="input" label="{{ phrase('th_allowed_forums_reactions') }}">
+  <template type="admin" title="th_reaction_handler_post_reactions" version_id="1001191" version_string="1.0.11 Patch Level 1"><![CDATA[<xf:formrow rowtype="input" label="{{ phrase('th_allowed_forums_reactions') }}">
 	<ul class="inputList">
 		<li>
 			<xf:select name="options[allowed_node_ids][]" value="{$reaction.options.allowed_node_ids}" size="7" multiple="multiple" class="js-applicableForums">
@@ -855,7 +458,7 @@ $(document).ready(function () {
 		<xf:hiddenval name="nodeCount">{{ count($nodeTree.getFlattened(0)) }}</xf:hiddenval>
 	</ul>
 </xf:formrow>]]></template>
-  <template type="admin" title="th_reaction_import_reactions" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[<xf:title>{{ phrase('th_import_reactions_reactions') }}</xf:title>
+  <template type="admin" title="th_reaction_import_reactions" version_id="1001191" version_string="1.0.11 Patch Level 1"><![CDATA[<xf:title>{{ phrase('th_import_reactions_reactions') }}</xf:title>
 
 <xf:form action="{{ link('reactions/import') }}" upload="true" ajax="true" class="block">
 	<div class="block-container">
@@ -867,7 +470,7 @@ $(document).ready(function () {
 		<xf:submitrow submit="{{ phrase('proceed...') }}" />
 	</div>
 </xf:form>]]></template>
-  <template type="admin" title="th_reaction_list_reactions" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[<xf:title>{{ phrase('th_reactions') }}</xf:title>
+  <template type="admin" title="th_reaction_list_reactions" version_id="1001191" version_string="1.0.11 Patch Level 1"><![CDATA[<xf:title>{{ phrase('th_reactions') }}</xf:title>
 
 <xf:pageaction>
 	<div class="buttonGroup">
@@ -933,51 +536,7 @@ $(document).ready(function () {
 <xf:else />
 	<div class="blockMessage">{{ phrase('th_no_reactions_have_been_added_yet_reactions') }}</div>
 </xf:if>]]></template>
-  <template type="public" title="th_reaction_list_reactions" version_id="1000892" version_string="1.0.8 Patch Level 2"><![CDATA[<ul class="reactions-right__list">
-	<xf:if is="$modifyReactLink">
-		<li class="modify_reacts">
-			<a href="{$modifyReactLink}"
-			   data-xf-click="menu"
-			   data-menu-pos-ref="< .modify_reacts"
-			   aria-expanded="true"
-			   aria-haspopup="true">
-				<span>{{ phrase('th_undo_reactions_reactions') }}</span>
-			</a>
-			<div class="menu menu--modify-reacts" data-menu="menu" aria-hidden="true"
-				 data-href="{$modifyReactLink}"
-				 data-load-target=".js-modifyReactsMenuBody"
-				 data-nocache="true">
-				<div class="menu-content js-modifyReactsMenuBody">
-					<div class="menu-row">
-						{{ phrase('loading...') }}
-					</div>
-				</div>
-			</div>
-		</li>
-	</xf:if>
-
-	<xf:foreach loop="$reactions" value="$reaction" if="$reactions">
-		<li>
-			<a href="{$reaction.url}" data-xf-click="react" data-reaction-bar="< .message | .reactions-bar">
-				{$reaction.rendered}
-			</a>
-		</li>
-	</xf:foreach>
-</ul>
-
-
-<xf:if is="$unreactLink">
-	<div>
-		<a class="unreact-link" href="{$unreactLink}" title="{{ phrase('th_undo_reactions_reactions') }}" data-xf-click="react" data-reaction-bar="< .message | .reactions-bar">{{ phrase('th_undo_reactions_reactions') }}</a>
-	</div>
-<xf:else />
-	<xf:if is="$reactions && property('thReactionsAnimation') !== 'none'">
-		<div class="th_reactions__trigger">
-			{{ reaction_trigger_icon() }}
-		</div>
-	</xf:if>
-</xf:if>]]></template>
-  <template type="admin" title="th_reaction_tool_list_reactions" version_id="1000771" version_string="1.0.7 Alpha 1"><![CDATA[<xf:title>{{ phrase('th_reaction_tools_reactions') }}</xf:title>
+  <template type="admin" title="th_reaction_tool_list_reactions" version_id="1001191" version_string="1.0.11 Patch Level 1"><![CDATA[<xf:title>{{ phrase('th_reaction_tools_reactions') }}</xf:title>
 
 <xf:if is="$success">
 	<div class="blockMessage blockMessage--success blockMessage--iconic">{{ phrase('cache_rebuilt_successfully') }}</div>
@@ -1060,38 +619,21 @@ $(document).ready(function () {
 	<xf:hiddenval name="job">ThemeHouse\Reactions:UserReactionCount</xf:hiddenval>
 </xf:form>
 
+<xf:form action="{{ link('tools/rebuild') }}" class="block">
+	<div class="block-container">
+		<h2 class="block-header">{{ phrase('th_remove_unassociated_reactions_reactions') }}</h2>
+		<xf:submitrow submit="{{ phrase('rebuild_now') }}" />
+	</div>
+	<xf:hiddenval name="job">ThemeHouse\Reactions:RemoveUnassociatedReactions</xf:hiddenval>
+</xf:form>
+
 <xf:form action="{{ link('reaction-tools/addon') }}" class="block">
 	<div class="block-container">
 		<h2 class="block-header">{{ phrase('th_rebuild_addon_columns_reactions') }}</h2>
 		<xf:submitrow submit="{{ phrase('rebuild_now') }}" />
 	</div>
 </xf:form>]]></template>
-  <template type="public" title="th_reaction_trigger_reactions" version_id="1000594" version_string="1.0.5 Patch Level 4"><![CDATA[<svg width="22px" height="30px" viewBox="0 0 256 219" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-	<!-- Generator: Sketch 47 (45396) - http://www.bohemiancoding.com/sketch -->
-	<title>Reactions</title>
-	<desc>Created with Sketch.</desc>
-	<defs></defs>
-	<g id="Migration-Case-Studies" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-		<g id="Reactions" transform="translate(-1.000000, -19.000000)">
-			<rect id="Bounds" transform="translate(128.000000, 128.000000) scale(-1, 1) rotate(-180.000000) translate(-128.000000, -128.000000) " x="0" y="0" width="256" height="256"></rect>
-			<g id="Icon" transform="translate(1.000000, 19.000000)" fill-rule="nonzero" fill="#2577B1">
-				<g id="Group">
-					<path d="M12.6792453,128 L12.6792453,128 L12.6792453,128 C5.67669147,128 -6.69081694e-15,122.323309 -1.0658141e-14,115.320755 L0,69.4339623 L-1.77635684e-15,69.4339623 C-2.63392235e-15,62.4314085 5.67669147,56.754717 12.6792453,56.754717 L12.6792453,56.754717 L12.6792453,56.754717 C19.6817991,56.754717 25.3584906,62.4314085 25.3584906,69.4339623 L25.3584906,115.320755 L25.3584906,115.320755 C25.3584906,122.323309 19.6817991,128 12.6792453,128 Z" id="Path"></path>
-					<g id="Group-2" transform="translate(30.188679, 0.000000)">
-						<g id="Path">
-							<path d="M92.1177324,49.1300158 C96.2977966,52.1298941 98.4774016,57.5059136 97.6115311,62.8522314 L89.6395515,113.434338 C88.1765291,125.344746 79.0699606,127.839694 71.6652754,127.839694 L14.2545795,127.839694 C6.49160314,127.839694 0.191649229,121.572621 0.191649229,113.850162 L0.191649229,59.9714097 L0.191649229,59.9714097 C0.191649229,58.4097219 1.18928789,57.0226086 2.66983015,56.5257554 L2.66983015,56.5257554 C3.53570059,56.2881412 10.1939457,54.2684212 16.9417636,49.486437 C26.5260537,42.7144345 31.601846,33.655396 31.601846,23.2894799 L31.601846,9.08478039 L31.6018298,9.08478039 C31.6018298,4.27346418 35.5021722,0.373121764 40.3134884,0.373121764 C42.1623866,0.373121764 43.9633399,0.961357158 45.455773,2.05271774 C45.455773,2.05271774 45.455773,2.05271774 45.455773,2.05271774 C49.277546,4.84468368 51.2182901,10.0424926 51.2182901,17.4976357 L51.2182901,43.8431016 C51.2182901,45.3281898 52.4424518,46.5459622 53.9353318,46.5459622 L83.9666072,46.5459622 C86.9225098,46.5162604 89.7291243,47.4073134 92.1177324,49.1300158 Z" id="path-1"></path>
-						</g>
-					</g>
-				</g>
-				<g id="Group" transform="translate(192.000000, 154.566038) rotate(180.000000) translate(-192.000000, -154.566038) translate(128.000000, 90.566038)">
-					<path d="M12.6792453,128 L12.6792453,128 L12.6792453,128 C5.67669147,128 7.96299287e-15,122.323309 7.10542736e-15,115.320755 L0,69.4339623 L1.77635684e-15,69.4339623 C9.18791329e-16,62.4314085 5.67669147,56.754717 12.6792453,56.754717 L12.6792453,56.754717 L12.6792453,56.754717 C19.6817991,56.754717 25.3584906,62.4314085 25.3584906,69.4339623 L25.3584906,115.320755 L25.3584906,115.320755 C25.3584906,122.323309 19.6817991,128 12.6792453,128 Z" id="Path"></path>
-					<path d="M122.306411,49.1300158 C126.486476,52.1298941 128.666081,57.5059136 127.80021,62.8522314 L119.82823,113.434338 C118.365208,125.344746 109.25864,127.839694 101.853954,127.839694 L44.4432585,127.839694 C36.6802821,127.839694 30.3803282,121.572621 30.3803282,113.850162 L30.3803282,59.9714097 L30.3803282,59.9714097 C30.3803282,58.4097219 31.3779669,57.0226086 32.8585092,56.5257554 L32.8585092,56.5257554 C33.7243796,56.2881412 40.3826247,54.2684212 47.1304426,49.486437 C56.7147327,42.7144345 61.790525,33.655396 61.790525,23.2894799 L61.790525,9.08478039 L61.7905088,9.08478039 C61.7905088,4.27346418 65.6908512,0.373121764 70.5021674,0.373121764 C72.3510656,0.373121764 74.1520189,0.961357158 75.644452,2.05271774 C75.644452,2.05271774 75.644452,2.05271774 75.644452,2.05271774 C79.466225,4.84468368 81.4069691,10.0424926 81.4069691,17.4976357 L81.4069691,43.8431016 C81.4069691,45.3281898 82.6311308,46.5459622 84.1240108,46.5459622 L114.155286,46.5459622 C117.111189,46.5162604 119.917803,47.4073134 122.306411,49.1300158 Z" id="path-3"></path>
-				</g>
-			</g>
-		</g>
-	</g>
-</svg>]]></template>
-  <template type="admin" title="th_reaction_type_delete_reactions" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[<xf:title>{{ phrase('confirm_action') }}</xf:title>
+  <template type="admin" title="th_reaction_type_delete_reactions" version_id="1001191" version_string="1.0.11 Patch Level 1"><![CDATA[<xf:title>{{ phrase('confirm_action') }}</xf:title>
 
 <xf:form action="{{ link('reaction-types/delete', $reactionType) }}" ajax="true" class="block">
 	<div class="block-container">
@@ -1104,7 +646,7 @@ $(document).ready(function () {
 		<xf:submitrow rowtype="simple" icon="delete" />
 	</div>
 </xf:form>]]></template>
-  <template type="admin" title="th_reaction_type_edit_reactions" version_id="1000771" version_string="1.0.7 Alpha 1"><![CDATA[<xf:if is="$reactionType.isInsert()">
+  <template type="admin" title="th_reaction_type_edit_reactions" version_id="1001191" version_string="1.0.11 Patch Level 1"><![CDATA[<xf:if is="$reactionType.isInsert()">
 	<xf:title>{{ phrase('th_add_reaction_type_reactions') }}</xf:title>
 <xf:else />
 	<xf:title>{{ phrase('th_edit_reaction_type_reactions') }}: {$reactionType.title}</xf:title>
@@ -1156,7 +698,7 @@ $(document).ready(function () {
 
 	<xf:submitrow sticky="true" icon="save" />
 </xf:form>]]></template>
-  <template type="admin" title="th_reaction_type_list_reactions" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[<xf:title>{{ phrase('th_reaction_types_reactions') }}</xf:title>
+  <template type="admin" title="th_reaction_type_list_reactions" version_id="1001191" version_string="1.0.11 Patch Level 1"><![CDATA[<xf:title>{{ phrase('th_reaction_types_reactions') }}</xf:title>
 
 <xf:pageaction>
 	<div class="buttonGroup">
@@ -1197,28 +739,768 @@ $(document).ready(function () {
 <xf:else />
 	<div class="blockMessage">{{ phrase('th_no_reactions_types_have_been_added_yet_reactions') }}</div>
 </xf:if>]]></template>
-  <template type="public" title="th_reactions.less" version_id="1000970" version_string="1.0.9"><![CDATA[.reactions-bar
+  <template type="admin" title="th_style_property_reaction_bar_position_reactions" version_id="1001191" version_string="1.0.11 Patch Level 1"><![CDATA[<xf:formrow label="{$titleHtml}" hint="{$hintHtml}" rowclass="{$rowClass}" explain="{$property.description}" rowtype="input">
+	<div class="inputGroup">
+		<xf:foreach loop="{{ react_handlers() }}" key="$contentType" value="$reactHandler">
+			<xf:if is="$reactHandler.object.getReactionBarPositions()">
+				<xf:radiorow label="{{ $reactHandler.object.getTitle() }}" name="{$formBaseKey}[{$contentType}]">
+					<xf:foreach loop="$reactHandler.object.getReactionBarPositions()" key="$positionId" value="$positionPhrase">
+						<xf:option value="{{ $positionId }}" label="{{ $positionPhrase }}" selected="{$property.property_value.{$contentType}} == $positionId"/>
+					</xf:foreach>
+				</xf:radiorow>
+			</xf:if>
+		</xf:foreach>
+	</div>
+</xf:formrow>]]></template>
+  <template type="admin" title="th_style_property_template_dimensions_reactions" version_id="1001191" version_string="1.0.11 Patch Level 1"><![CDATA[<xf:formrow label="{$titleHtml}" hint="{$hintHtml}" rowclass="{$rowClass}" explain="{$property.description}" rowtype="input">
+	<div class="inputGroup">
+		<xf:textbox name="{$formBaseKey}[width]" value="{$property.property_value.width}" min="1"
+					title="{{ phrase('width') }}" type="number" data-xf-init="tooltip" />
+		<span class="inputGroup-text">x</span>
+		<xf:textbox name="{$formBaseKey}[height]" value="{$property.property_value.height}" min="1"
+					title="{{ phrase('height') }}" type="number" data-xf-init="tooltip" />
+		<span class="inputGroup-text">|</span>
+		<xf:textbox name="{$formBaseKey}[unit]" value="{$property.property_value.unit}"
+					placeholder="{{ phrase('unit') }}" />
+	</div>
+</xf:formrow>]]></template>
+  <template type="admin" title="threact_criteria_user" version_id="1001191" version_string="1.0.11 Patch Level 1"><![CDATA[<xf:checkboxrow label="{{ phrase('threact_reactions') }}">
+
+	<xf:option name="user_criteria[threact_min_reactions][rule]" value="threact_min_reactions" selected="{$criteria.threact_min_reactions}"
+			   label="{{ phrase('threact_user_has_received_at_least_x_reactions:') }}">
+		<xf:numberbox name="user_criteria[threact_min_reactions][data][reactions]" value="{$criteria.threact_min_reactions.reactions}"
+					  size="5" min="0" step="1" />
+	</xf:option>
+
+	<xf:option name="user_criteria[threact_max_reactions][rule]" value="threact_max_reactions" selected="{$criteria.threact_max_reactions}"
+			   label="{{ phrase('threact_user_has_received_no_more_than_x_reactions:') }}">
+		<xf:numberbox name="user_criteria[threact_max_reactions][data][reactions]" value="{$criteria.threact_max_reactions.reactions}"
+					  size="5" min="0" step="1" />
+	</xf:option>
+</xf:checkboxrow>
+
+<hr class="formRowSep" />]]></template>
+  <template type="admin" title="widget_def_options_th_memberReact_reactions" version_id="1001191" version_string="1.0.11 Patch Level 1"><![CDATA[]]></template>
+  <template type="public" title="_help_page_threactions" version_id="1001370" version_string="1.0.13"><![CDATA[<xf:if is="$reactions is not empty">
+	<xf:foreach loop="$reaction_types" value="$reaction_type">
+		<div class="block">
+			<div class="block-container">
+				<xf:datalist data-xf-init="responsive-data-list">
+					<xf:datarow rowtype="header">
+						<xf:cell class="dataList-cell--min" style="background-color: {$reaction_type.color};">
+							<img src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==">
+						</xf:cell>
+						<xf:cell>{$reaction_type.title}</xf:cell>
+					</xf:datarow>
+					<xf:foreach loop="{$reactions.{$reaction_type.reaction_type_id}}" value="$reaction">
+						<xf:datarow rowclass="dataList-row--noHover">
+							<xf:cell class="dataList-cell--min dataList-cell--imageSmall dataList-cell--alt">
+								<img src="/{$reaction.image_url}" />
+							</xf:cell>
+							<xf:main label="{$reaction.title}" />
+						</xf:datarow>
+					</xf:foreach>
+				</xf:datalist>
+			</div>
+		</div>
+	</xf:foreach>
+	<xf:else />
+	<div class="blockMessage">{{ phrase('no_items_have_been_created_yet') }}</div>
+</xf:if>]]></template>
+  <template type="public" title="alert_conversation_message_react" version_id="1001191" version_string="1.0.11 Patch Level 1"><![CDATA[<xf:css src="th_reactions.less" />
+
+{{ phrase('th_x_reacted_y_to_your_message_in_conversation_z_reactions', {
+	'name': username_link($sender, false, {'defaultname': $alert.username}),
+	'title': '<a href="' . link('conversations/messages', $content) . '">' . $content.Conversation.title . '</a>',
+	'reaction': reaction($alert.extra_data.reaction_id, 'alert')
+}) }}]]></template>
+  <template type="public" title="alert_post_react" version_id="1001191" version_string="1.0.11 Patch Level 1"><![CDATA[<xf:css src="th_reactions.less" />
+
+{{ phrase('th_x_reacted_y_to_your_post_in_thread_z_reactions', {
+	'name': username_link($sender, false, {'defaultname': $alert.username}),
+	'reaction': reaction($alert.extra_data.reaction_id, 'alert'),
+	'title': '<a href="' . link('posts', $content) . '" class="fauxBlockLink-blockLink">' . prefix('thread', $content.Thread) . $content.Thread.title . '</a>'
+}) }}]]></template>
+  <template type="public" title="alert_profile_post_comment_react" version_id="1001191" version_string="1.0.11 Patch Level 1"><![CDATA[<xf:css src="th_reactions.less" />
+
+<xf:if is="$xf.visitor.user_id == $content.ProfilePost.user_id">
+	{{ phrase('th_x_reacted_y_your_comment_on_your_profile_post_reactions', {
+		'name': username_link($user, false, {'defaultname': $alert.username}),
+		'reaction': reaction($alert.extra_data.reaction_id, 'alert'),
+		'post_attributes': 'href="' . link('profile-posts/comments', $content) . '" class="fauxBlockLink-blockLink"'
+	}) }}
+<xf:else />
+	{{ phrase('th_x_reacted_y_your_comment_on_zs_profile_post_reactions', {
+		'name': username_link($user, false, {'defaultname': $alert.username}),
+		'reaction': reaction($alert.extra_data.reaction_id, 'alert'),
+		'post_attributes': 'href="' . link('profile-posts/comments', $content) . '" class="fauxBlockLink-blockLink"',
+		'poster': $content.ProfilePost.username
+	}) }}
+</xf:if>]]></template>
+  <template type="public" title="alert_profile_post_react" version_id="1001191" version_string="1.0.11 Patch Level 1"><![CDATA[<xf:css src="th_reactions.less" />
+
+<xf:if is="$xf.visitor.user_id == $content.ProfileUser.user_id">
+	{{ phrase('th_x_reacted_y_your_status_reactions', {
+		'name': username_link($user, false, {'defaultname': $alert.username}),
+		'reaction': reaction($alert.extra_data.reaction_id, 'alert'),
+		'status_attributes': 'href="' . link('profile-posts', $content) . '" class="fauxBlockLink-blockLink"'
+	}) }}
+<xf:else />
+	{{ phrase('th_x_reacted_y_your_post_on_zs_profile_reactions', {
+		'name': username_link($user, false, {'defaultname': $alert.username}),
+		'reaction': reaction($alert.extra_data.reaction_id, 'alert'),
+		'post_attributes': 'href="' . link('profile-posts', $content) . '" class="fauxBlockLink-blockLink"',
+		'profile': $content.ProfileUser.username
+	}) }}
+</xf:if>]]></template>
+  <template type="public" title="alert_resource_update_react" version_id="1001191" version_string="1.0.11 Patch Level 1"><![CDATA[<xf:css src="th_reactions.less" />
+
+{{ phrase('th_x_reacted_y_your_resource_z_reactions', {
+'name': username_link($sender, false, {'defaultname': $alert.username}),
+'reaction': reaction($alert.extra_data.reaction_id, 'alert'),
+'title': '<a href="' . link('resources', $content.Resource) . '" class="fauxBlockLink-blockLink">' . $content.title . '</a>'
+}) }}]]></template>
+  <template type="public" title="alert_xfmg_album_react" version_id="1001392" version_string="1.0.13 Patch Level 2"><![CDATA[<xf:css src="th_reactions.less" />
+
+{{ phrase('threactions_x_reacted_y_your_album_z', {
+'name': username_link($sender, false, {'defaultname': $alert.username}),
+'reaction': reaction($alert.extra_data.reaction_id, 'alert'),
+'title': '<a href="' . link('album', $content) . '" class="fauxBlockLink-blockLink">' . $content.title . '</a>'
+}) }}]]></template>
+  <template type="public" title="alert_xfmg_comment_react" version_id="1001370" version_string="1.0.13"><![CDATA[<xf:css src="th_reactions.less" />
+
+{{ phrase('threactions_x_reacted_y_to_your_comment_on_z', {
+	'name': username_link($sender, false, {'defaultname': $alert.username}),
+	'title': '<a href="' . link($content.content_type === 'xfmg_media' ? 'media/comments' : 'album/comments', $content) . '">' . ($content.content_type === 'xfmg_media' ? $content.Media.title : $content.Album.title) . '</a>',
+	'reaction': reaction($alert.extra_data.reaction_id, 'alert')
+}) }}]]></template>
+  <template type="public" title="alert_xfmg_media_react" version_id="1001191" version_string="1.0.11 Patch Level 1"><![CDATA[<xf:css src="th_reactions.less" />
+
+{{ phrase('th_x_reacted_y_your_media_z_reactions', {
+'name': username_link($sender, false, {'defaultname': $alert.username}),
+'reaction': reaction($alert.extra_data.reaction_id, 'alert'),
+'title': '<a href="' . link('media', $content) . '" class="fauxBlockLink-blockLink">' . $content.title . '</a>'
+}) }}]]></template>
+  <template type="public" title="news_feed_item_post_react" version_id="1001191" version_string="1.0.11 Patch Level 1"><![CDATA[<xf:css src="th_reactions.less" />
+
+<div class="contentRow-title">
+	<xf:if is="$content.user_id == $xf.visitor.user_id">
+		{{ phrase('th_x_reacted_y_your_post_in_the_thread_z_reactions', {
+		'name': username_link($user, false, {'defaultname': $fallbackName}),
+		'reaction': reaction($newsFeed.extra_data.reaction_id, 'newsfeed'),
+		'title': '<a href="' . link('posts', $content) . '">' . prefix('thread', $content.Thread) . $content.Thread.title . '</a>'
+		}) }}
+		<xf:else />
+		{{ phrase('th_w_reacted_x_ys_post_in_the_thread_z_reactions', {
+		'name': username_link($user, false, {'defaultname': $fallbackName}),
+		'reaction': reaction($newsFeed.extra_data.reaction_id, 'newsfeed'),
+		'posterParams': 'href="' . link('posts', $content) . '"',
+		'poster': $content.username,
+		'title': '<a href="' . link('posts', $content) . '">' . prefix('thread', $content.Thread) . $content.Thread.title . '</a>'
+		}) }}
+	</xf:if>
+</div>
+
+<div class="contentRow-snippet">{{
+	snippet($content.message, $xf.options.newsFeedMessageSnippetLength, {'stripQuote': true})
+	}}</div>
+
+<div class="contentRow-minor"><xf:date time="{$newsFeed.event_date}" /></div>]]></template>
+  <template type="public" title="news_feed_item_profile_post_comment_react" version_id="1001191" version_string="1.0.11 Patch Level 1"><![CDATA[<xf:css src="th_reactions.less" />
+
+<xf:set var="$fallbackName" value="{{ phrase('unknown_member') }}" />
+
+<div class="contentRow-title">
+	<xf:if is="$content.user_id == $xf.visitor.user_id">
+		{{ phrase('th_x_reacted_y_your_comment_on_zs_profile_post_reactions', {
+			'name': username_link($user, false, {'defaultname': $fallbackName}),
+			'post_attributes': 'href="' . link('profile-posts/comments', $content) . '"',
+			'poster': $content.ProfilePost.username,
+			'reaction': reaction($newsFeed.extra_data.reaction_id, 'newsfeed')
+		}) }}
+		<xf:elseif is="$content.ProfilePost.user_id == $xf.visitor.user_id" />
+		{{ phrase('th_x_reacted_y_your_comment_on_zs_profile_post_reactions', {
+			'name': username_link($user, false, {'defaultname': $fallbackName}),
+			'post_attributes': 'href="' . link('profile-posts/comments', $content) . '"',
+			'poster': $content.ProfilePost.username,
+			'reaction': reaction($newsFeed.extra_data.reaction_id, 'newsfeed')
+			}) }}
+		<xf:else />
+		{{ phrase('th_x_reacted_y_zs_comment_on_zzs_profile_post_reactions', {
+			'name': username_link($user, false, {'defaultname': $fallbackName}),
+			'post_params': 'href="' . link('profile-posts/comments', $content) . '"',
+			'poster': $content.username,
+			'profile': $content.ProfilePost.username,
+			'reaction': reaction($newsFeed.extra_data.reaction_id, 'newsfeed')
+		}) }}
+	</xf:if>
+</div>
+
+<div class="contentRow-snippet">{{
+	snippet($content.message, $xf.options.newsFeedMessageSnippetLength, {'stripQuote': true})
+	}}</div>
+
+<div class="contentRow-minor"><xf:date time="{$newsFeed.event_date}" /></div>]]></template>
+  <template type="public" title="news_feed_item_profile_post_react" version_id="1001191" version_string="1.0.11 Patch Level 1"><![CDATA[<xf:css src="th_reactions.less" />
+
+<xf:set var="$fallbackName" value="{{ phrase('unknown_member') }}" />
+
+<div class="contentRow-title">
+	<xf:if is="$content.user_id == $content.profile_user_id">
+		<xf:if is="$content.user_id == $xf.visitor.user_id">
+			{{ phrase('th_x_reacted_y_your_status_reactions', {
+				'name': username_link($liker, false, {'defaultname': $fallbackName}),
+				'status_attributes': 'href="' . link('profile-posts', $profilePost) . '"',
+				'reaction': reaction($newsFeed.extra_data.reaction_id, 'newsfeed')
+			}) }}
+			<xf:else />
+			{{ phrase('th_x_reacted_y_zs_status_reactions', {
+				'name': username_link($user, false, {'defaultname': $fallbackName}),
+				'status_params': 'href="' . link('profile-posts', $content) . '"',
+				'poster': $content.username,
+				'reaction': reaction($newsFeed.extra_data.reaction_id, 'newsfeed')
+			}) }}
+		</xf:if>
+		<xf:else />
+		<xf:if is="$content.user_id == $xf.visitor.user_id">
+			{{ phrase('th_x_reacted_y_your_post_on_zs_profile_reactions', {
+				'name': username_link($user, false, {'defaultname': $fallbackName}),
+				'post_attributes': 'href="' . link('profile-posts', $content) . '"',
+				'profile': $content.ProfileUser.username,
+				'reaction': reaction($newsFeed.extra_data.reaction_id, 'newsfeed')
+			}) }}
+			<xf:elseif is="$content.ProfileUser.user_id == $xf.visitor.user_id" />
+			{{ phrase('th_x_reacted_y_zs_post_on_your_profile_reactions', {
+				'name': username_link($user, false, {'defaultname': $fallbackName}),
+				'post_params': 'href="' . link('profile-posts', $content) . '"',
+				'poster': $content.username,
+				'reaction': reaction($newsFeed.extra_data.reaction_id, 'newsfeed')
+			}) }}
+			<xf:else />
+			{{ phrase('th_x_reacted_y_zs_post_on_zzs_profile_reactions', {
+				'name': username_link($user, false, {'defaultname': $fallbackName}),
+				'post_params': 'href="' . link('profile-posts', $content) . '"',
+				'poster': $content.username,
+				'profile': $content.ProfileUser.username,
+				'reaction': reaction($newsFeed.extra_data.reaction_id, 'newsfeed')
+			}) }}
+		</xf:if>
+	</xf:if>
+</div>
+
+<div class="contentRow-snippet">{{
+	snippet($content.message, $xf.options.newsFeedMessageSnippetLength, {'stripQuote': true})
+	}}</div>
+
+<div class="contentRow-minor"><xf:date time="{$newsFeed.event_date}" /></div>]]></template>
+  <template type="public" title="news_feed_item_resource_update_react" version_id="1001191" version_string="1.0.11 Patch Level 1"><![CDATA[<xf:css src="th_reactions.less" />
+
+<div class="contentRow-title">
+	<xf:if is="$content.user_id == $xf.visitor.user_id">
+		{{ phrase('th_x_reacted_y_your_resource_z_reactions', {
+		'name': username_link($user, false, {'defaultname': $fallbackName}),
+		'reaction': reaction($newsFeed.extra_data.reaction_id, 'newsfeed'),
+		'title': '<a href="' . link('resources', $content.Resource) . '">' . $content.Resource.title . '</a>'
+		}) }}
+		<xf:else />
+		{{ phrase('th_w_reacted_x_ys_resource_z_reactions', {
+		'name': username_link($user, false, {'defaultname': $fallbackName}),
+		'reaction': reaction($newsFeed.extra_data.reaction_id, 'newsfeed'),
+		'poster': $content.Resource.username,
+		'title': '<a href="' . link('resources', $content.Resource) . '">' . $content.Resource.title . '</a>'
+		}) }}
+	</xf:if>
+</div>
+
+<xf:comment>
+	<div class="contentRow-snippet">{{
+		snippet($content.description, $xf.options.newsFeedMessageSnippetLength, {'stripQuote': true})
+		}}</div>
+</xf:comment>
+
+<div class="contentRow-minor"><xf:date time="{$newsFeed.event_date}" /></div>]]></template>
+  <template type="public" title="news_feed_item_xfmg_album_react" version_id="1001392" version_string="1.0.13 Patch Level 2"><![CDATA[<xf:css src="th_reactions.less" />
+
+<div class="contentRow-title">
+	<xf:if is="$content.user_id == $xf.visitor.user_id">
+		{{ phrase('threactions_x_reacted_y_your_album_z', {
+		'name': username_link($user, false, {'defaultname': $fallbackName}),
+		'reaction': reaction($newsFeed.extra_data.reaction_id, 'newsfeed'),
+		'title': '<a href="' . link('album', $content) . '">' . $content.title . '</a>'
+		}) }}
+		<xf:else />
+		{{ phrase('threactions_w_reacted_x_ys_album_z', {
+		'name': username_link($user, false, {'defaultname': $fallbackName}),
+		'reaction': reaction($newsFeed.extra_data.reaction_id, 'newsfeed'),
+		'poster': $content.username,
+		'title': '<a href="' . link('album', $content) . '">' . $content.title . '</a>'
+		}) }}
+	</xf:if>
+</div>
+
+<xf:comment>
+	<div class="contentRow-snippet">{{
+		snippet($content.description, $xf.options.newsFeedMessageSnippetLength, {'stripQuote': true})
+		}}</div>
+</xf:comment>
+
+<div class="contentRow-minor"><xf:date time="{$newsFeed.event_date}" /></div>]]></template>
+  <template type="public" title="news_feed_item_xfmg_comment_react" version_id="1001392" version_string="1.0.13 Patch Level 2"><![CDATA[<xf:css src="th_reactions.less" />
+
+<div class="contentRow-title">
+	<xf:if is="$content.user_id == $xf.visitor.user_id">
+		{{ phrase('threactions_x_reacted_y_to_your_comment_on_z', {
+		'name': username_link($user, false, {'defaultname': $fallbackName}),
+		'reaction': reaction($newsFeed.extra_data.reaction_id, 'newsfeed'),
+		'title': '<a href="' . link('media', $content.Media) . '">' . $content.Media.title . '</a>'
+		}) }}
+		<xf:else />
+		{{ phrase('threactions_w_reacted_x_ys_media_z', {
+		'name': username_link($user, false, {'defaultname': $fallbackName}),
+		'reaction': reaction($newsFeed.extra_data.reaction_id, 'newsfeed'),
+		'poster': $content.Media.username,
+		'title': '<a href="' . link('media', $content.Media) . '">' . $content.Media.title . '</a>'
+		}) }}
+	</xf:if>
+</div>
+
+<xf:comment>
+	<div class="contentRow-snippet">{{
+		snippet($content.description, $xf.options.newsFeedMessageSnippetLength, {'stripQuote': true})
+		}}</div>
+</xf:comment>
+
+<div class="contentRow-minor"><xf:date time="{$newsFeed.event_date}" /></div>]]></template>
+  <template type="public" title="news_feed_item_xfmg_media_react" version_id="1001392" version_string="1.0.13 Patch Level 2"><![CDATA[<xf:css src="th_reactions.less" />
+
+<div class="contentRow-title">
+	<xf:if is="$content.user_id == $xf.visitor.user_id">
+		{{ phrase('th_x_reacted_y_your_media_z_reactions', {
+		'name': username_link($user, false, {'defaultname': $fallbackName}),
+		'reaction': reaction($newsFeed.extra_data.reaction_id, 'newsfeed'),
+		'title': '<a href="' . link('media', $content) . '">' . $content.title . '</a>'
+		}) }}
+		<xf:else />
+		{{ phrase('th_w_reacted_x_ys_media_z_reactions', {
+		'name': username_link($user, false, {'defaultname': $fallbackName}),
+		'reaction': reaction($newsFeed.extra_data.reaction_id, 'newsfeed'),
+		'poster': $content.username,
+		'title': '<a href="' . link('media', $content) . '">' . $content.title . '</a>'
+		}) }}
+	</xf:if>
+</div>
+
+<xf:comment>
+<div class="contentRow-snippet">{{
+	snippet($content.description, $xf.options.newsFeedMessageSnippetLength, {'stripQuote': true})
+	}}</div>
+</xf:comment>
+
+<div class="contentRow-minor"><xf:date time="{$newsFeed.event_date}" /></div>]]></template>
+  <template type="public" title="th_confirm_reactions" version_id="1001191" version_string="1.0.11 Patch Level 1"><![CDATA[<xf:title>{{ $isReacted ? phrase('th_unreact_x_content_reactions', {'contentType': $contentType}) : phrase('th_react_x_content_reactions', {'contentType': $contentType}) }}</xf:title>
+
+<xf:form action="{$confirmUrl}" class="block">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:inforow rowtype="confirm">
+				<xf:if is="$isReacted">
+					<xf:if is="$reactionId">
+						{{ phrase('th_you_sure_you_want_to_unreact_x_this_content_reactions', {
+							'reaction': reaction($reactionId, 'alert')
+						}) }}
+					<xf:else />
+						{{ phrase('th_you_sure_you_want_to_unreact_this_content_reactions') }}
+					</xf:if>
+				<xf:else />
+					{{ phrase('th_you_sure_you_want_to_react_x_to_this_content_reactions', {
+						'reaction': reaction($reactionId, 'alert')
+					}) }}
+					<xf:if is="$contentTitle"><strong>{$contentTitle}</strong></xf:if>
+				</xf:if>
+			</xf:inforow>
+		</div>
+
+		<xf:submitrow icon="save" rowtype="simple" />
+	</div>
+</xf:form>]]></template>
+  <template type="public" title="th_display_bar_internal_reactions" version_id="1001191" version_string="1.0.11 Patch Level 1"><![CDATA[<xf:if is="{$reactionContentList}">
+	<xf:if contentcheck="true">
+		<div class="reactions-left">
+			<xf:contentcheck>
+				{$reactionContentList|raw}
+			</xf:contentcheck>
+		</div>
+	</xf:if>
+</xf:if>
+
+
+<xf:if is="{$reactionList}">
+	<xf:if contentcheck="true">
+		<div class="reactions-right">
+			<xf:contentcheck>
+				{$reactionList|raw}
+			</xf:contentcheck>
+		</div>
+	</xf:if>
+</xf:if>]]></template>
+  <template type="public" title="th_display_reactions" version_id="1001370" version_string="1.0.13"><![CDATA[<xf:macro name="reactions_bar"
+		  arg-type="!"
+		  arg-id="!"
+		  arg-content="!">
+	<xf:if is="{{ react_handler_status($type) }}">
+		<xf:css src="th_reactions.less" />
+		<xf:include template="th_xfrm_jsOptions" />
+		<xf:js src="themehouse/reactions/react.js"
+			   addon="ThemeHouse/Reactions"/>
+
+		<xf:if contentcheck="true">
+			<div class="reactions-bar reactions-bar--{{ property('thReactionsAnimation') }} content"
+				 id="reactions-bar-{{ $content.{$id} }}">
+				<xf:contentcheck>
+					<xf:include template="th_display_bar_internal_reactions">
+						<xf:set var="$reactionContentList"
+								value="{{ reaction_content_list($content, $content.getReactUsers(), [$type, $content.{$id}, $content.user_id], true, property('thMaxReactionsMin'), 0) }}" />
+						<xf:set var="$reactionList"
+								value="{{ reaction_list($content, $content.getReactUsers(), [$type, $content.{$id}, $content.user_id]) }}" />
+					</xf:include>
+				</xf:contentcheck>
+			</div>
+		</xf:if>
+	</xf:if>
+</xf:macro>
+
+<xf:macro name="reactions_bit_list"
+		  arg-type="!"
+		  arg-id="!"
+		  arg-content="!"
+		  arg-reactUsers="!">
+	<xf:if is="{{ property('th_reactions_showOnThreadList') }}">
+		<xf:css src="th_reactions.less" />
+
+		<xf:if contentcheck="true">
+			<div class="reactions-bar bit-list" id="reactions-bar-{{ $content.{$id} }}">
+				<xf:contentcheck>
+					<xf:include template="th_display_bar_internal_reactions">
+						<xf:set var="$reactionContentList"
+								value="{{ reaction_content_list($content, $reactUsers, [$type, $content.{$id}, $content.user_id], false, 3, {$xf.options.th_reactionsLimit}, '', true) }}" />
+					</xf:include>
+				</xf:contentcheck>
+			</div>
+		</xf:if>
+	</xf:if>
+</xf:macro>
+
+<xf:macro name="react_postbit"
+		  arg-reacts="!"
+		  arg-reactsCount="!"
+		  arg-displayType="!"
+		  arg-displayLocation="other">
+	<xf:if is="$displayType === 'bar'">
+		<xf:macro name="react_total_bar"
+				  arg-reacts="{$reacts}"
+				  arg-reactsCount="{$reactsCount}"
+				  arg-displayLocation="{$displayLocation}" />
+	</xf:if>
+
+	<xf:if is="$displayType === 'text'">
+		<xf:macro name="react_total_text"
+				  arg-reacts="{$reacts}"
+				  arg-reactsCount="{$reactsCount}"
+				  arg-displayLocation="{$displayLocation}" />
+	</xf:if>
+
+	<xf:if is="$displayType === 'percentage'">
+		<xf:macro name="react_total_percentage"
+				  arg-reacts="{$reacts}"
+				  arg-reactsCount="{$reactsCount}"
+				  arg-displayLocation="{$displayLocation}" />
+	</xf:if>
+</xf:macro>
+
+<xf:macro name="react_total_percentage" arg-reacts="!" arg-reactsCount="!" arg-displayLocation="other">
+	<xf:if contentcheck="true">
+		<div class="reacts_total_perc reacts_total_perc--{$displayLocation}">
+			<div class="pairs pairs--justified">
+				<dt>{{ phrase('th_reactions') }}</dt>
+				<dd>
+					<xf:contentcheck>
+						<xf:foreach loop="$xf.reactionTypes"
+									key="$reactionTypeId"
+									value="$reactionType">
+							<xf:set var="$rtTotal"
+									value="{{ is_array($reacts.{$reactionTypeId}) ? count($reacts.{$reactionTypeId}) : $reacts.{$reactionTypeId} }}" />
+							<xf:set var="$segmentPerc"
+									value="{{ ((is_array($reacts.{$reactionTypeId}) ? count($reacts.{$reactionTypeId}) : $reacts.{$reactionTypeId}) / ($reactsCount ? $reactsCount : 1)) * 100 }}%" />
+							<span data-xf-init="tooltip"
+								  title="{$reactionType.title}"
+								  class="reacts_total_perc__reactionType reacts_total_perc__reactionType--{$reactionTypeId}"
+								  style="color: {$reactionType.color}">
+								{$segmentPerc|number}%
+							</span>
+						</xf:foreach>
+					</xf:contentcheck>
+				</dd>
+			</div>
+		</div>
+	</xf:if>
+</xf:macro>
+
+<xf:macro name="react_total_text" arg-reacts="!" arg-reactsCount="!" arg-displayLocation="other">
+	<xf:if contentcheck="true">
+		<xf:css src="th_reactions.less" />
+		<div class="reacts_total_text reacts_total_text--{$displayLocation}">
+			<div class="pairs pairs--justified">
+				<dt>{{ phrase('th_reactions') }}</dt>
+				<dd>
+					<xf:contentcheck>
+						<xf:foreach loop="$xf.reactionTypes" key="$reactionTypeId" value="$reactionType">
+							<xf:set var="$rtTotal" value="{{ is_array($reacts.{$reactionTypeId}) ? count($reacts.{$reactionTypeId}) : $reacts.{$reactionTypeId} }}" />
+							<span data-xf-init="tooltip"
+								  title="{$reactionType.title}"
+								  class="reacts_total_text__reactionType reacts_total_text__reactionType--{$reactionTypeId}" style="color: {$reactionType.color}">{$rtTotal|number}</span>
+						</xf:foreach>
+					</xf:contentcheck>
+				</dd>
+			</div>
+		</div>
+	</xf:if>
+</xf:macro>
+
+<xf:macro name="react_total_bar"
+		  arg-reacts="!"
+		  arg-reactsCount="!"
+		  arg-class=""
+		  arg-width="100%"
+		  arg-displayLocation="other">
+	<xf:if is="$reactsCount">
+		<xf:if contentcheck="true">
+			<div class="react_total_bar react_total_bar--{$displayLocation} {{ $class }}">
+				<xf:contentcheck>
+					<xf:comment>Removed new lines since they break the total bar!</xf:comment>
+					<xf:foreach loop="$xf.reactionTypes" key="$reactionTypeId" value="$reactionType">
+						<xf:set var="$rtTotal">{{ is_array($reacts.{$reactionTypeId}) ? count($reacts.{$reactionTypeId}) : $reacts.{$reactionTypeId} }}</xf:set>
+						<xf:set var="$segmentWidth" value="{{ ((is_array($reacts.{$reactionTypeId}) ? count($reacts.{$reactionTypeId}) : $reacts.{$reactionTypeId}) / {$reactsCount}) * 100 }}%" />
+						<div class="react_bar_segment react_bar_{{ $reactionTypeId }} Tooltip" title="{{ phrase('th_x_reactions_y_reactions', {'reactionType': $reactionType.title, 'total': (empty($rtTotal) ? '0' : $rtTotal) }) }}" style="background-color: {{ $reactionType.color }}; width: {$segmentWidth}" data-xf-init="tooltip"></div>
+					</xf:foreach>
+				</xf:contentcheck>
+			</div>
+		</xf:if>
+	</xf:if>
+</xf:macro>]]></template>
+  <template type="public" title="th_reaction_content_list_reactions" version_id="1001191" version_string="1.0.11 Patch Level 1"><![CDATA[<ul>
+	<xf:foreach loop="$reacts" value="$react" if="$reacts">
+		<li class="th_reactions__listItem">
+			<xf:if is="$react.canReact">
+				<a href="{$react.url}" data-xf-click="react" data-reaction-bar="< .message | .reactions-bar">
+					{$react.rendered}
+				</a>
+			<xf:else />
+				<xf:comment> -- KC ideally want something like this
+				<a href="{{ $react.getHandler().getUnreactSingleLink($react.react_id) }}" data-xf-click="overlay">
+					{$react.rendered}
+				</a>
+				</xf:comment>
+				{$react.rendered}
+			</xf:if>
+
+			<xf:if is="{{ property('th_reactions__showTitles') }}">
+				<xf:if is="$react.title">
+					<span class="reaction-title">{$react.title}</span>
+				</xf:if>
+			</xf:if>
+			<xf:if is="{{ property('thReactionsDivider') != '' }}">
+				<span class="reaction-divider"> {{ property('thReactionsDivider') }} </span>
+			</xf:if>
+			<span class="reaction-count">{$react.count}</span>
+		</li>
+	</xf:foreach>
+
+	<xf:if is="$reactionListUrl">
+		<li>
+			<a class="list-reacts" href="{$reactionListUrl}" data-xf-click="overlay" data-nocache="true" rel="nofollow">{{ phrase('th_list_reactions_reactions') }}</a>
+		</li>
+	</xf:if>
+</ul>]]></template>
+  <template type="public" title="th_reaction_list_reactions" version_id="1001392" version_string="1.0.13 Patch Level 2"><![CDATA[<div class="th_reactions__scrollContainer">
+	<div class="th_reactions__scroll th_reactions__leftScrollLeft">
+		<div class="th_reactions__scroll__iconWrap th_reactions__leftScrollLeft__iconWrap">
+			<i class="fa fa-chevron-left"></i>
+		</div>
+	</div>
+
+	<ul class="reactions-right__list">
+		<xf:comment> -- changed to undo by clicking on display KC
+			<xf:if is="$modifyReactLink">
+				<li class="modify_reacts">
+					<a href="{$modifyReactLink}"
+					   data-xf-click="menu"
+					   data-menu-pos-ref="< .modify_reacts"
+					   aria-expanded="true"
+					   aria-haspopup="true">
+						<span>{{ phrase('th_undo_reactions_reactions') }}</span>
+					</a>
+					<div class="menu menu--modify-reacts" data-menu="menu" aria-hidden="true"
+						 data-href="{$modifyReactLink}"
+						 data-load-target=".js-modifyReactsMenuBody"
+						 data-nocache="true">
+						<div class="menu-content js-modifyReactsMenuBody">
+							<div class="menu-row">
+								{{ phrase('loading...') }}
+							</div>
+						</div>
+					</div>
+				</li>
+			</xf:if>
+		</xf:comment>
+
+		<xf:comment> Show Default Reaction first in list </xf:comment>
+		<xf:foreach loop="$reactions" value="$reaction" if="$reactions">
+			<xf:if is="$reaction.is_default">
+				<li class="th_reactions__reaction">
+					<a href="{$reaction.url}" data-xf-click="react" data-reaction-bar="< .message | .reactions-bar">
+						{$reaction.rendered}
+					</a>
+				</li>
+			</xf:if>
+		</xf:foreach>
+
+		<xf:foreach loop="$reactions" value="$reaction" if="$reactions">
+			<xf:if is="!$reaction.is_default">
+				<li class="th_reactions__reaction">
+					<a href="{$reaction.url}" data-xf-click="react" data-reaction-bar="< .message | .reactions-bar">
+						{$reaction.rendered}
+					</a>
+				</li>
+			</xf:if>
+		</xf:foreach>
+	</ul>
+
+	<div class="th_reactions__scroll th_reactions__rightScrollRight">
+		<div class="th_reactions__scroll__iconWrap th_reactions__rightScrollRight__iconWrap">
+			<i class="fa fa-chevron-right"></i>
+		</div>
+	</div>
+</div>
+
+<xf:if is="$unreactLink || $modifyReactLink">
+	<div class="modify_reacts">
+		<a data-xf-click="menu"
+			data-menu-pos-ref="< .modify_reacts"
+			aria-expanded="true"
+			aria-haspopup="true">
+			<span>{{ phrase('th_undo_reactions_reactions') }}</span>
+		</a>
+		<div class="menu menu--modify-reacts" data-menu="menu" aria-hidden="true"
+				data-href="{{ $unreactLink ?: $modifyReactLink }}"
+				data-load-target=".js-modifyReactsMenuBody"
+				data-nocache="true">
+			<div class="menu-content js-modifyReactsMenuBody">
+				<div class="menu-row">
+					{{ phrase('loading...') }}
+				</div>
+			</div>
+		</div>
+	</div>
+</xf:if>
+
+<xf:if is="!$unreactLink && $reactions && property('thReactionsAnimation') !== 'none'">
+	<xf:set var="$th_reactions_defaultTrigger" value="0" />
+	<xf:foreach loop="$reactions" value="$reaction" if="$reactions">
+		<xf:if is="$reaction.is_default">
+			<xf:set var="$th_reactions_defaultTrigger" value="1" />
+			<div class="th_reactions__trigger th_reactions__triggerPrimary">
+				<span href="{$reaction.url}" data-xf-click="react" data-reaction-bar="< .message | .reactions-bar">
+					{$reaction.rendered}
+				</span>
+			</div>
+		</xf:if>
+	</xf:foreach>
+
+	<xf:if is="!$th_reactions_defaultTrigger || property('th_reactions_secondaryTrigger')">
+		<div class="th_reactions__trigger th_reactions__triggerSecondary">
+			{{ reaction_trigger_icon() }}
+		</div>
+	</xf:if>
+</xf:if>]]></template>
+  <template type="public" title="th_reaction_trigger_reactions" version_id="1001191" version_string="1.0.11 Patch Level 1"><![CDATA[<svg width="22px" height="22px" viewBox="0 0 256 219" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<!-- Generator: Sketch 47 (45396) - http://www.bohemiancoding.com/sketch -->
+	<title>{{ phrase('th_reactions') }}</title>
+	<desc></desc>
+	<defs></defs>
+	<g id="Migration-Case-Studies" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+		<g id="Reactions" transform="translate(-1.000000, -19.000000)">
+			<rect id="Bounds" transform="translate(128.000000, 128.000000) scale(-1, 1) rotate(-180.000000) translate(-128.000000, -128.000000) " x="0" y="0" width="256" height="256"></rect>
+			<g id="Icon" transform="translate(1.000000, 19.000000)" fill-rule="nonzero" fill="#2577B1">
+				<g id="Group">
+					<path d="M12.6792453,128 L12.6792453,128 L12.6792453,128 C5.67669147,128 -6.69081694e-15,122.323309 -1.0658141e-14,115.320755 L0,69.4339623 L-1.77635684e-15,69.4339623 C-2.63392235e-15,62.4314085 5.67669147,56.754717 12.6792453,56.754717 L12.6792453,56.754717 L12.6792453,56.754717 C19.6817991,56.754717 25.3584906,62.4314085 25.3584906,69.4339623 L25.3584906,115.320755 L25.3584906,115.320755 C25.3584906,122.323309 19.6817991,128 12.6792453,128 Z" id="Path"></path>
+					<g id="Group-2" transform="translate(30.188679, 0.000000)">
+						<g id="Path">
+							<path d="M92.1177324,49.1300158 C96.2977966,52.1298941 98.4774016,57.5059136 97.6115311,62.8522314 L89.6395515,113.434338 C88.1765291,125.344746 79.0699606,127.839694 71.6652754,127.839694 L14.2545795,127.839694 C6.49160314,127.839694 0.191649229,121.572621 0.191649229,113.850162 L0.191649229,59.9714097 L0.191649229,59.9714097 C0.191649229,58.4097219 1.18928789,57.0226086 2.66983015,56.5257554 L2.66983015,56.5257554 C3.53570059,56.2881412 10.1939457,54.2684212 16.9417636,49.486437 C26.5260537,42.7144345 31.601846,33.655396 31.601846,23.2894799 L31.601846,9.08478039 L31.6018298,9.08478039 C31.6018298,4.27346418 35.5021722,0.373121764 40.3134884,0.373121764 C42.1623866,0.373121764 43.9633399,0.961357158 45.455773,2.05271774 C45.455773,2.05271774 45.455773,2.05271774 45.455773,2.05271774 C49.277546,4.84468368 51.2182901,10.0424926 51.2182901,17.4976357 L51.2182901,43.8431016 C51.2182901,45.3281898 52.4424518,46.5459622 53.9353318,46.5459622 L83.9666072,46.5459622 C86.9225098,46.5162604 89.7291243,47.4073134 92.1177324,49.1300158 Z" id="path-1"></path>
+						</g>
+					</g>
+				</g>
+				<g id="Group" transform="translate(192.000000, 154.566038) rotate(180.000000) translate(-192.000000, -154.566038) translate(128.000000, 90.566038)">
+					<path d="M12.6792453,128 L12.6792453,128 L12.6792453,128 C5.67669147,128 7.96299287e-15,122.323309 7.10542736e-15,115.320755 L0,69.4339623 L1.77635684e-15,69.4339623 C9.18791329e-16,62.4314085 5.67669147,56.754717 12.6792453,56.754717 L12.6792453,56.754717 L12.6792453,56.754717 C19.6817991,56.754717 25.3584906,62.4314085 25.3584906,69.4339623 L25.3584906,115.320755 L25.3584906,115.320755 C25.3584906,122.323309 19.6817991,128 12.6792453,128 Z" id="Path"></path>
+					<path d="M122.306411,49.1300158 C126.486476,52.1298941 128.666081,57.5059136 127.80021,62.8522314 L119.82823,113.434338 C118.365208,125.344746 109.25864,127.839694 101.853954,127.839694 L44.4432585,127.839694 C36.6802821,127.839694 30.3803282,121.572621 30.3803282,113.850162 L30.3803282,59.9714097 L30.3803282,59.9714097 C30.3803282,58.4097219 31.3779669,57.0226086 32.8585092,56.5257554 L32.8585092,56.5257554 C33.7243796,56.2881412 40.3826247,54.2684212 47.1304426,49.486437 C56.7147327,42.7144345 61.790525,33.655396 61.790525,23.2894799 L61.790525,9.08478039 L61.7905088,9.08478039 C61.7905088,4.27346418 65.6908512,0.373121764 70.5021674,0.373121764 C72.3510656,0.373121764 74.1520189,0.961357158 75.644452,2.05271774 C75.644452,2.05271774 75.644452,2.05271774 75.644452,2.05271774 C79.466225,4.84468368 81.4069691,10.0424926 81.4069691,17.4976357 L81.4069691,43.8431016 C81.4069691,45.3281898 82.6311308,46.5459622 84.1240108,46.5459622 L114.155286,46.5459622 C117.111189,46.5162604 119.917803,47.4073134 122.306411,49.1300158 Z" id="path-3"></path>
+				</g>
+			</g>
+		</g>
+	</g>
+</svg>]]></template>
+  <template type="public" title="th_reactions.less" version_id="1001392" version_string="1.0.13 Patch Level 2"><![CDATA[<xf:comment>Fix for animation flicker of other elements</xf:comment>
+.p-body {
+	-webkit-backface-visibility: hidden;
+	backface-visibility: hidden;
+ }
+
+.modify_reacts {
+	margin:  4px 0 4px 10px;
+	display: inline-block;
+}
+
+.th_reactions__triggerSecondary {
+	margin-left: 10px;
+}
+
+.th_reactions__triggerPrimary img {
+	pointer-events: none;
+}
+
+.reactions-bar
 {
 	.m-clearFix();
 
 	display: flex;
-	flex-wrap: wrap;
 	align-items: center;
 	justify-content: space-between;
+	margin: 10px 0;
 }
+
 .reactions-bar.content
 {
-	margin: 10px 0;
+	margin: 0;
 	.xf-th_reactions__barStyle();
+	padding-top: 0;
+	padding-bottom: 0;
 }
 .reactions-bar.bit-list
 {
 	float: right;
-	transform: scale(.75);
+	margin: 0;
+
+	.reactions-left {
+		margin-right: -5px;
+		
+		.th_reactions__listItem {
+			// transform: scale(.75);
+
+			img {height: 14px; width: 14px;}
+		}
+	}
 }
-.reactions-bar.bit-list
-{
-	margin: -1px;
+
+.structItem-minor {
+	// clear: both;
 }
 
 .reactions-bar ul
@@ -1232,6 +1514,18 @@ $(document).ready(function () {
 	align-items: center;
 }
 
+.reactions-left > ul { flex-wrap: wrap; }
+
+.structItem .reactions-bar {
+	margin-top: 0;
+	font-size: 12px;
+	margin-left: 5px;
+	
+	ul {max-height: 21px;}
+	
+	.reactions-left .th_reactions__listItem {line-height: 16px;}
+}
+
 .reactions-bar li
 {
 	display: flex;
@@ -1239,9 +1533,13 @@ $(document).ready(function () {
 
 	img {
 		vertical-align: middle;
-		height: 22px;
+		height: 18px;
 	}
 
+}
+
+.th_reactions__reaction {
+	flex: 0 0 auto;
 }
 
 .reactions-bar .reactions-left
@@ -1259,7 +1557,7 @@ $(document).ready(function () {
 		.xf-th_reactions__listItemStyle();
 
 		span {
-			padding: 2px 5px;
+			padding: 2px;
 			vertical-align: middle;
 		}
 
@@ -1291,6 +1589,11 @@ $(document).ready(function () {
 
 .th_reactions__trigger {
 	cursor: pointer;
+	-webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 	.xf-th_reactions__triggerStyle();
 
 	.th_reactions__trigger__image {
@@ -1300,9 +1603,13 @@ $(document).ready(function () {
 	svg path {
 		fill: @xf-th_reactions__triggerStyle--color;
 	}
-}
 
-.th_reactions__trigger, .reactions-right__list li img {
+	span {
+		display: flex;
+		align-items: center;
+	}
+
+	/*
 	&:hover {
 		transform: scale(1, 1);
 		animation-name: th_reactions_triggerHover;
@@ -1317,6 +1624,7 @@ $(document).ready(function () {
 		animation-direction: reverse;
 		animation-fill-mode: both;
 	}
+	*/
 }
 
 .reactions-bar .list-reactions
@@ -1480,6 +1788,17 @@ $(document).ready(function () {
 				{
 					{$reaction.image_sprite_css|raw}
 				}
+			<xf:elseif is="$reaction.image_type == 'normal' && $reaction.image_url" />
+				.reaction--normal.reaction--normal{$reactionId}
+				{
+					<xf:if is="$reaction.styling.image_normal.style_dimensions">
+						width: @{thReactionsImageDimensions[width]}@{thReactionsImageDimensions[unit]};
+						height: @{thReactionsImageDimensions[height]}@{thReactionsImageDimensions[unit]};
+					<xf:else />
+						width: {$reaction.styling.image_normal.w}{$reaction.styling.image_normal.u};
+						height: {$reaction.styling.image_normal.h}{$reaction.styling.image_normal.u};
+					</xf:if>
+				}
 			</xf:if>
 		</xf:if>
 
@@ -1489,6 +1808,16 @@ $(document).ready(function () {
 	</xf:foreach>
 </xf:if>
 
+
+//linear
+.linear(@start, @end, @ratio) {
+	@linear: @start + ((@end - @start) * @ratio)
+}
+
+//ease
+.ease(@start, @end, @ratio) {
+	@ease: @start + ((@end - @start) * (pow(@ratio, 2) / (pow(@ratio, 2) + pow((1 - @ratio), 2))))
+}
 
 // wobbly
 .tween(@start, @end, @ratio) {
@@ -1536,20 +1865,46 @@ $(document).ready(function () {
 	.th_reactions_triggerHover(100);
 }
 
+.th_reactions_triggerHoverLarge(@n, @i: 0) when (@i =< @n) {
+	@selector: e('@{i}%');
+    @{selector}{
+		.tween(1, 1.5, (@i / @n));
+		transform: scale(@tween, @tween)
+
+	}
+	.th_reactions_triggerHoverLarge(@n, (@i + 1));
+}
+
+@keyframes th_reactions_triggerHoverLarge {
+	.th_reactions_triggerHoverLarge(100);
+}
+
 
 
 .reactions-bar .reactions-right__list {
-	margin: 10px;
+	margin: 0 10px;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.reactions-bar--modal .reactions-right__list {
+	justify-content: center;
 	flex-wrap: wrap;
+	margin: 10px;
+	width: 250px;
+}
+
+.reactions-bar--modal .th_reactions__scrollContainer {
+	border-radius: 6px;
 }
 
 .reactions-bar--out .reactions-right__list {
-	will-change: transform;
 	transform: none;
 	opacity: 0;
 	transform-origin: 100% 50%;
 	transform-style: flat;
-	display: none;
+	display: inline-flex;
+	pointer-events: none;
 }
 
 .th_reactions_expandShow(@n, @i: 0) when (@i =< @n) {
@@ -1560,18 +1915,22 @@ $(document).ready(function () {
 		transform: scale(@tweenGentle, @tweenGentle2);
 		opacity: (0.1 + ((@i / @n) * 1.5));
 		& when (@i = 0) {
-			display: none;
-			width: 0;
-			height: 0;
+			pointer-events: none;
+			overflow-x: hidden !important;
+			will-change: unset;
 		}
 		& when (@i = 1) {
-			display: inline-flex;
-			width: auto;
-			height: auto;
+			will-change: transform;
+		}
+		& when (@i = 99) {
+			overflow-x: hidden !important;
+			will-change: transform;
 		}
 		& when (@i = 100) {
-			display: inline-flex;
 			transform: scale(1, 1);
+			overflow-x: auto !important;
+			pointer-events: all;
+			will-change: unset;
 		}
 	}
 	.th_reactions_expandShow(@n, (@i + 1));
@@ -1606,7 +1965,6 @@ $(document).ready(function () {
 		transform: translateY(20px);
 		transform-origin: center;
 		transform-style: flat;
-		display: none;
 		visibility: hidden;
 	}
 
@@ -1661,20 +2019,19 @@ $(document).ready(function () {
 
 
 .th_reactions_delay(@n, @i: 0) when (@i =< @n) {
-	@selector: e('.reactions-bar--up .reactions-bar--show li:nth-last-of-type(@{i}), .reactions-bar--up .reactions-bar--show a:nth-last-of-type(@{i})');
+	@selector: e('.reactions-bar--up .reactions-right:not(.th_reactions__reactionsBar--overflowing) .reactions-bar--show li:nth-last-of-type(@{i}), .reactions-bar--up .reactions-right:not(.th_reactions__reactionsBar--overflowing) .reactions-bar--show a:nth-last-of-type(@{i})');
     @{selector}{
 		animation-delay: (0.025s * @i);
 	}
 	.th_reactions_delay(@n, (@i + 1));
 }
 
-.th_reactions_delay(50);
+// .th_reactions_delay(50);
 
 
 
 .reactions-bar--up .reactions-bar--show {
 	li {
-		//opacity: 1;
 		animation-name: th_reactions_slideUpShow;
 		animation-duration: 0.5s;
 		animation-direction: normal;
@@ -1684,7 +2041,6 @@ $(document).ready(function () {
 	}
 
 	a {
-		//opacity: 1;
 		animation-name: th_reactions_slideExpandShow;
 		animation-duration: 0.5s;
 		animation-direction: normal;
@@ -1699,7 +2055,6 @@ $(document).ready(function () {
 
 .reactions-bar--up .reactions-bar--hide {
 	li {
-		//opacity: 1;
 		animation-name: th_reactions_slideUpShow;
 		animation-duration: 0.5s;
 		animation-direction: reverse;
@@ -1709,12 +2064,216 @@ $(document).ready(function () {
 	}
 
 	a {
-		//opacity: 1;
 		animation-name: th_reactions_slideExpandShow;
 		animation-duration: 0.5s;
 		animation-direction: reverse;
 		animation-fill-mode: both;
 
+	}
+}
+
+.reactions-bar--out .reactions-right__list,
+.reactions-bar--up .reactions-right__list,
+.reactions-bar--none .reactions-right__list {
+	@media(max-width: @xf-responsiveWide) {
+		margin-top: 3px;
+		margin-bottom: 3px;
+		flex-wrap: nowrap;
+		a {
+			padding: @xf-paddingSmall;
+		}
+		overflow: hidden;
+	}
+}
+
+.reactions-bar--none .reactions-right__list {
+	overflow-x: auto;
+}
+
+.reactions-right {
+	position: relative;
+	max-width: 100%;
+}
+
+.th_reactions__scroll {
+	display: none;
+}
+
+.th_reactions__scroll__iconWrap {
+	transition: opacity 0.3s, color 0.3s;
+	opacity: 0;
+	color: @xf-linkColor;
+}
+
+@keyframes th_reactions__modalBackground {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+
+.reactions-right__list {
+	li.th_reactions__reaction {
+		padding: 5px;
+		z-index: 2;
+	}
+
+	@media(max-width: @xf-responsiveMedium) {
+		li.th_reactions__reaction {
+			padding: 0 9px;
+		}
+
+		a {
+			padding: @xf-paddingSmall;
+		}
+	}
+
+	li.th_reactions__reaction:first-of-type {
+		padding-left: 5px;
+	}
+
+	li.th_reactions__reaction:last-of-type {
+		padding-right: 5px;
+	}
+}
+
+.reactions-bar:not(.reactions-bar--none) .th_reactions__scrollContainer {
+	opacity: 0;
+	pointer-events: none;
+
+	&.reactions-barChildren--show {
+		opacity: 1;
+		pointer-events: all;
+	}
+}
+
+:not(.reactions-bar--none) .th_reactions__scrollContainer,
+.reactions-bar--modal .th_reactions__scrollContainer {
+	position: absolute;
+	transition: opacity 0.2s;
+	.xf-th_reactions__modalStyle();
+}
+
+.th_reactions__scrollContainer {
+	justify-content: space-between;
+	display: flex;
+
+	min-height: 50px;
+	overflow: hidden;
+	border-radius: 1000px;
+	.xf-th_reactions__modalWrapperStyle();
+}
+
+.th_reactions__reactionsBar--overflowing {
+	.th_reactions__scrollContainer {
+		width: calc(~"100vw - 30px");
+	}
+
+	.th_reactions__scroll {
+		display: flex;
+		padding: 10px 14px;
+		font-size: 16px;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.reactions-right__list {
+		margin: 0;
+	}
+
+	& .reactions-barChildren--show .th_reactions__scroll__iconWrap,
+	.reactions-bar--none & .th_reactions__scroll__iconWrap {
+		opacity: 1;
+	}
+
+	&.th_reactions__rightScroll--inactive .reactions-barChildren--show .th_reactions__rightScrollRight__iconWrap,
+	.reactions-bar--none &.th_reactions__rightScroll--inactive .th_reactions__rightScrollRight__iconWrap,
+	&.th_reactions__leftScroll--inactive .reactions-barChildren--show .th_reactions__leftScrollLeft__iconWrap,
+	.reactions-bar--none &.th_reactions__leftScroll--inactive .th_reactions__leftScrollLeft__iconWrap {
+		color: @xf-textColorMuted;
+		opacity: 0.4;
+	}
+}
+
+
+@keyframes th_reactions__label {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+.th_reactions__reactionLabel {
+	text-align: center;
+	opacity: 0;
+	animation-name: th_reactions__label;
+	animation-duration: 0.2s;
+	animation-fill-mode: both;
+	animation-direction: normal;
+	pointer-events: none;
+	position: absolute;
+	transform: translate(-50%, 0);
+	padding: 3px 8px;
+	font-size: 12px;
+	border-radius: 1000px;
+	background: rgba(0, 0, 0, 0.6);
+	color: #FFF;
+	margin-top: -@xf-paddingMedium;
+	z-index: 10;
+}
+
+.th_reactions__reactionLabel--out {
+	opacity: 1;
+	animation-name: th_reactions__label;
+	animation-duration: 0.1s;
+	animation-fill-mode: both;
+	animation-direction: reverse;
+}
+
+/*
+.th_reactions__reaction--hovered {
+	img {
+		transform: scale(1, 1);
+		animation-name: th_reactions_triggerHoverLarge;
+		animation-duration: 0.3s;
+		animation-direction: normal;
+		animation-fill-mode: both;
+	}
+}
+
+.th_reactions__reaction--hoveredOut {
+	img {
+		transform: scale(1.5, 1.5);
+		animation-name: th_reactions_triggerHoverLarge;
+		animation-duration: 0.3s;
+		animation-direction: reverse;
+		animation-fill-mode: forwards;
+	}
+}
+*/
+
+.reactions-bar--modal {
+	.reactions-bar--show {
+		li.th_reactions__reaction {
+			animation-name: th_reactions_slideUpShow;
+			animation-duration: 0.5s;
+			animation-direction: normal;
+			animation-fill-mode: both;
+			display: inline-flex;
+			visibility: visible;;
+		}
+
+		a {
+			animation-name: th_reactions_slideExpandShow;
+			animation-duration: 0.5s;
+			animation-direction: normal;
+			animation-fill-mode: both;
+		}
 	}
 }
 
@@ -1739,7 +2298,7 @@ $(document).ready(function () {
 		text-align: right;
 	}
 }]]></template>
-  <template type="public" title="th_reactions_list_reactions" version_id="1000891" version_string="1.0.8 Patch Level 1"><![CDATA[<xf:if is="$title">
+  <template type="public" title="th_reactions_list_reactions" version_id="1001191" version_string="1.0.11 Patch Level 1"><![CDATA[<xf:if is="$title">
 	<xf:title>{$title}</xf:title>
 <xf:else />
 	<xf:title>{{ phrase('th_members_who_reacted_this_reactions') }}</xf:title>
@@ -1750,6 +2309,7 @@ $(document).ready(function () {
 </xf:if>
 
 <xf:css src="th_reactions.less" />
+<xf:include template="th_xfrm_jsOptions" />
 <xf:js src="themehouse/reactions/react.js" addon="ThemeHouse/Reactions"/>
 
 <div class="block js-reactList js-reactList-{$type}{$id}">
@@ -1835,7 +2395,7 @@ $(document).ready(function () {
 		</li>
 	</xf:if>
 </xf:macro>]]></template>
-  <template type="public" title="th_reactions_modify_reactions" version_id="1000470" version_string="1.0.4"><![CDATA[<div class="react-modify">
+  <template type="public" title="th_reactions_modify_reactions" version_id="1001191" version_string="1.0.11 Patch Level 1"><![CDATA[<div class="react-modify">
 	<div class="menu-row">
 		<ul class="listPlain">
 			<xf:foreach loop="$reacts" value="$react">
@@ -1849,47 +2409,22 @@ $(document).ready(function () {
 		</ul>
 	</div>
 </div>]]></template>
-  <template type="admin" title="th_style_property_reaction_bar_position_reactions" version_id="1000892" version_string="1.0.8 Patch Level 2"><![CDATA[<xf:formrow label="{$titleHtml}" hint="{$hintHtml}" rowclass="{$rowClass}" explain="{$property.description}" rowtype="input">
-	<div class="inputGroup">
-		<xf:foreach loop="{{ react_handlers() }}" key="$contentType" value="$reactHandler">
-			<xf:if is="$reactHandler.object.getReactionBarPositions()">
-				<xf:radiorow label="{{ $reactHandler.object.getTitle() }}" name="{$formBaseKey}[{$contentType}]">
-					<xf:foreach loop="$reactHandler.object.getReactionBarPositions()" key="$positionId" value="$positionPhrase">
-						<xf:option value="{{ $positionId }}" label="{{ $positionPhrase }}" selected="{$property.property_value.{$contentType}} == $positionId"/>
-					</xf:foreach>
-				</xf:radiorow>
-			</xf:if>
-		</xf:foreach>
-	</div>
-</xf:formrow>]]></template>
-  <template type="admin" title="th_style_property_template_dimensions_reactions" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[<xf:formrow label="{$titleHtml}" hint="{$hintHtml}" rowclass="{$rowClass}" explain="{$property.description}" rowtype="input">
-	<div class="inputGroup">
-		<xf:textbox name="{$formBaseKey}[width]" value="{$property.property_value.width}" min="1"
-					title="{{ phrase('width') }}" type="number" data-xf-init="tooltip" />
-		<span class="inputGroup-text">x</span>
-		<xf:textbox name="{$formBaseKey}[height]" value="{$property.property_value.height}" min="1"
-					title="{{ phrase('height') }}" type="number" data-xf-init="tooltip" />
-		<span class="inputGroup-text">|</span>
-		<xf:textbox name="{$formBaseKey}[unit]" value="{$property.property_value.unit}"
-					placeholder="{{ phrase('unit') }}" />
-	</div>
-</xf:formrow>]]></template>
-  <template type="public" title="th_widget_member_reactions" version_id="1000711" version_string="1.0.7 Alpha 1"><![CDATA[<div class="block" data-widget-section="memberReactions"{{ widget_data($widget) }}>
+  <template type="public" title="th_widget_member_reactions" version_id="1001191" version_string="1.0.11 Patch Level 1"><![CDATA[<div class="block" data-widget-section="memberReactions"{{ widget_data($widget) }}>
 	<div class="block-container">
 		<div class="block-minorHeader">{$title}</div>
 		<div class="block-body">
 			<div class="block-row">
 				<div class="reactionCount">
 					<div class="reactionCount-row reactionCount-row--heading">
-						<div class="reactionCount-row-cell reactionCount-row-cell--primary">{{ phrase('th_reaction_reactions') }}</div>
-						<div class="reactionCount-row-cell reactionCount-row-cell--secondary">{{ phrase('th_given_reactions') }}</div>
-						<div class="reactionCount-row-cell reactionCount-row-cell--secondary">{{ phrase('th_received_reactions') }}</div>
+						<div class="reactionCount-row-cell">{{ phrase('th_reaction_reactions') }}</div>
+						<div class="reactionCount-row-cell">{{ phrase('th_given_reactions') }}</div>
+						<div class="reactionCount-row-cell">{{ phrase('th_received_reactions') }}</div>
 					</div>
 					<xf:foreach loop="$reactionCounts" value="$reactionCount">
 						<div class="reactionCount-row">
-							<div class="reactionCount-row-cell reactionCount-row-cell--primary">{{ reaction($reactionCount.reaction) }}</div>
-							<div class="reactionCount-row-cell reactionCount-row-cell--secondary">{$reactionCount.count_given|number}</div>
-							<div class="reactionCount-row-cell reactionCount-row-cell--secondary">{$reactionCount.count_received|number}</div>
+							<div class="reactionCount-row-cell">{{ reaction($reactionCount.reaction) }}</div>
+							<div class="reactionCount-row-cell"><a href="{{ link('members/reactions', $user, {'type': 'given', 'reaction_id': $reactionCount.reaction.reaction_id}) }}">{$reactionCount.count_given|number_short}</a></div>
+							<div class="reactionCount-row-cell"><a href="{{ link('members/reactions', $user, {'type': 'received', 'reaction_id': $reactionCount.reaction.reaction_id}) }}">{$reactionCount.count_received|number_short}</a></div>
 						</div>
 					</xf:foreach>
 				</div>
@@ -1899,5 +2434,155 @@ $(document).ready(function () {
 </div>
 
 <xf:css src="th_reactions.less" />]]></template>
-  <template type="admin" title="widget_def_options_th_memberReact_reactions" version_id="1000892" version_string="1.0.8 Patch Level 2"><![CDATA[]]></template>
+  <template type="public" title="th_xfrm_jsOptions" version_id="1001191" version_string="1.0.11 Patch Level 1"><![CDATA[<script>
+	window.th_reactionsEnableHover = !!{$xf.options.th_reactionsEnableHover};
+	window.th_reactionsSecondaryTrigger = !!{{property('th_reactions_secondaryTrigger')}};
+</script>
+]]></template>
+  <template type="public" title="threact_member_reactions" version_id="1001393" version_string="1.0.13 Patch Level 3"><![CDATA[<xf:if is="$type === 'given'">
+	<xf:title>{{ phrase('threact_reactions_given_by_x', { 'username': $user.username }) }}</xf:title>
+	<xf:elseif is="$type === 'received'" />
+	<xf:title>{{ phrase('threact_reactions_received_by_x', { 'username': $user.username }) }}</xf:title>
+	<xf:else />
+	<xf:title>{{ phrase('th_xs_reactions_reactions', { 'name': $user.username }) }}</xf:title>
+</xf:if>
+
+<xf:breadcrumb href="{{ link('members', $user) }}">{$user.username}</xf:breadcrumb>
+
+<div class="block">
+	<div class="block-outer">
+		<xf:pagenav page="{$page}" perpage="{$perPage}" total="{$total}"
+					link="members/reactions" data="{$user}" params="{$filters}" />
+	</div>
+
+	<div class="block-container">
+		<ul class="block-body">
+			<xf:if is="$reactedContent is not empty">
+				<xf:if contentcheck="true">
+					<xf:contentcheck>
+						<xf:foreach loop="$reactedContent" value="$react">
+							<xf:if contentcheck="true">
+								<li class="block-row block-row--separated">
+									<div class="contentRow">
+										<span class="contentRow-figure">
+											<xf:avatar user="$react.Reactor" size="s" defaultname="{$item.username}" />
+										</span>
+										<div class="contentRow-main">
+											<xf:contentcheck>
+												{$react->render()|raw}
+											</xf:contentcheck>
+										</div>
+									</div>
+								</li>
+							</xf:if>
+						</xf:foreach>
+					</xf:contentcheck>
+					<xf:else />
+					<li class="block-row">
+						{{ phrase('threact_no_viewable_reactions_on_this_page') }}
+					</li>
+				</xf:if>
+				<xf:else />
+				<li class="block-row">
+					{{ phrase('threact_no_reactions_to_display') }}
+				</li>
+			</xf:if>
+		</ul>
+	</div>
+
+	<div class="block-outer block-outer--after">
+		<xf:pagenav page="{$page}" perpage="{$perPage}" total="{$total}"
+					link="members/reactions" data="{$user}" params="{$filters}" />
+	</div>
+</div>]]></template>
+  <template type="public" title="threactions_member_react_stats" version_id="1001370" version_string="1.0.13"><![CDATA[<xf:title>{$user.username}</xf:title>
+
+<xf:css src="threactions_profile.less" />
+<div class="block">
+	<div class="block-container">
+		<div class="block-body">
+			<div class="block-row">
+				<div class="reactionCount reactionCount--profile">
+					<div class="reactionCount-row reactionCount-row--heading">
+						<div class="reactionCount-row-cell">{{ phrase('th_reaction_reactions') }}</div>
+						<div class="reactionCount-row-cell">{{ phrase('th_given_reactions') }}</div>
+						<div class="reactionCount-row-cell">{{ phrase('th_received_reactions') }}</div>
+					</div>
+					<div class="reactionCount-row reactionCount-row--heading">
+						<div class="reactionCount-row-cell">{{ phrase('th_reaction_reactions') }}</div>
+						<div class="reactionCount-row-cell">{{ phrase('th_given_reactions') }}</div>
+						<div class="reactionCount-row-cell">{{ phrase('th_received_reactions') }}</div>
+					</div>
+					<div class="reactionCount-row reactionCount-row--heading">
+						<div class="reactionCount-row-cell">{{ phrase('th_reaction_reactions') }}</div>
+						<div class="reactionCount-row-cell">{{ phrase('th_given_reactions') }}</div>
+						<div class="reactionCount-row-cell">{{ phrase('th_received_reactions') }}</div>
+					</div>
+					<xf:foreach loop="$reactionCounts" value="$reactionCount">
+						<div class="reactionCount-row">
+							<div class="reactionCount-row-cell">{{ reaction($reactionCount.reaction) }}</div>
+							<div class="reactionCount-row-cell"><a href="{{ link('members/reactions', $user, {'type': 'given', 'reaction_id': $reactionCount.reaction.reaction_id}) }}">{$reactionCount.count_given|number_short}</a></div>
+							<div class="reactionCount-row-cell"><a href="{{ link('members/reactions', $user, {'type': 'received', 'reaction_id': $reactionCount.reaction.reaction_id}) }}">{$reactionCount.count_received|number_short}</a></div>
+						</div>
+					</xf:foreach>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<xf:css src="th_reactions.less" />]]></template>
+  <template type="public" title="threactions_profile.less" version_id="1001370" version_string="1.0.13"><![CDATA[.reactionCount--profile {
+	display: flex;
+	flex-wrap: wrap;
+
+	.reactionCount-row {
+		display: flex;
+		flex-grow: 0;
+		flex-basis: 33%;
+
+		&--heading {
+			font-weight: bold;
+			padding-bottom: @xf-paddingSmall;
+		}
+
+		&-cell {
+			flex-grow: 0;
+			flex-basis: 33%;
+			text-align: center;
+		}
+	}
+}
+
+@media (max-width: @xf-responsiveMedium) {
+	.reactionCount--profile {
+		.reactionCount-row {
+			flex-basis: 50%;
+
+			&--heading:nth-child(3) {
+				display: none;
+			}
+
+			&-cell {
+				flex-basis: 50%;
+			}
+		}
+	}
+}
+
+@media (max-width: @xf-responsiveNarrow) {
+	.reactionCount--profile {
+		.reactionCount-row {
+			flex-basis: 100%;
+
+			&--heading:nth-child(2) {
+				display: none;
+			}
+
+			&-cell {
+				flex-basis: 100%;
+			}
+		}
+	}
+}]]></template>
 </templates>

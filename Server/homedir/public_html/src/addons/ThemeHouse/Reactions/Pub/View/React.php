@@ -14,7 +14,7 @@ class React extends View
         $templateVars = $this->params['templateVars'];
 
         $templater = $this->renderer->getTemplater();
-        $html = $templater->fn('reacts', [$content, $reacts, $contentDetails, $templateVars]);
+        $html = $templater->fn('reacts', [$content, $reacts, $contentDetails, true, $templateVars]);
 
         return [
             'html' => $this->renderer->getHtmlOutputStructure($html)

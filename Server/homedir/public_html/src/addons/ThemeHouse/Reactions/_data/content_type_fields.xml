@@ -6,5 +6,7 @@
   <field content_type="profile_post_comment" field_name="react_handler_class">ThemeHouse\Reactions\React\ProfilePostComment</field>
   <field content_type="reaction" field_name="stats_handler_class">ThemeHouse\Reactions\Stats\Reaction</field>
   <field content_type="resource_update" field_name="react_handler_class">ThemeHouse\Reactions\React\ResourceUpdate</field>
+  <field content_type="xfmg_album" field_name="react_handler_class">ThemeHouse\Reactions\React\Album</field>
+  <field content_type="xfmg_comment" field_name="react_handler_class">ThemeHouse\Reactions\React\MediaComment</field>
   <field content_type="xfmg_media" field_name="react_handler_class">ThemeHouse\Reactions\React\MediaItem</field>
 </content_type_fields>

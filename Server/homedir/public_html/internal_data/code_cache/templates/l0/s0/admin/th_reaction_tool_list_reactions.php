@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 55f398449c4a9d60c177e8360d6fb939
+// FROM HASH: efe0532fa44c1614f1d8f94586b02140
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -151,6 +151,21 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	)) . '
 	</div>
 	' . $__templater->formHiddenVal('job', 'ThemeHouse\\Reactions:UserReactionCount', array(
+	)) . '
+', array(
+		'action' => $__templater->fn('link', array('tools/rebuild', ), false),
+		'class' => 'block',
+	)) . '
+
+' . $__templater->form('
+	<div class="block-container">
+		<h2 class="block-header">' . 'Remove unassociated reactions' . '</h2>
+		' . $__templater->formSubmitRow(array(
+		'submit' => 'Rebuild now',
+	), array(
+	)) . '
+	</div>
+	' . $__templater->formHiddenVal('job', 'ThemeHouse\\Reactions:RemoveUnassociatedReactions', array(
 	)) . '
 ', array(
 		'action' => $__templater->fn('link', array('tools/rebuild', ), false),

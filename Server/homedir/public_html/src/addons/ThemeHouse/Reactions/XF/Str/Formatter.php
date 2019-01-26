@@ -2,19 +2,19 @@
 
 namespace ThemeHouse\Reactions\XF\Str;
 
-class Formatter extends \XF\Str\Formatter
+class Formatter extends XFCP_Formatter
 {
     protected $reactionCache = [];
 
-    public function getReactionHtml($reaction, $styleProperties, $class = '', $hideDimensions = false)
+    public function getReactionHtml($reaction, $styleProperties, $class = '')
     {
-        if (isset($reactionCache[$reaction['reaction_id']])) {
-            return $reactionCache[$reaction['reaction_id']];
+        if (isset($this->reactionCache[$reaction['reaction_id']])) {
+            return $this->reactionCache[$reaction['reaction_id']];
         }
 
         $pather = $this->smilieHtmlPather;
 
-        $openingTag = '<span class="reaction reaction' . (empty($class) ?: ' ' . $class) . '" title="' . $reaction['title'] . '" data-xf-init="tooltip">'; $closingTag = '</span>';
+        $openingTag = '<span class="reaction reaction' . (empty($class) ?: ' ' . $class) . '" title="' . $reaction['title'] . '">'; $closingTag = '</span>';
 
         if ($reaction['styling_type'] == 'image') {
             if ($reaction['image_type'] == 'normal') {
@@ -25,19 +25,9 @@ class Formatter extends \XF\Str\Formatter
                     $srcSet = 'srcset="' . $url2x . ' 2x"';
                 }
 
-                $width = $reaction['styling']['image_normal']['w'];
-                $height = $reaction['styling']['image_normal']['h'];
-                $unit = $reaction['styling']['image_normal']['u'];
-
-                if (isset($reaction['styling']['image_normal']['style_dimensions'])) {
-                    $width = $styleProperties['imageDimensions']['width'];
-                    $height = $styleProperties['imageDimensions']['height'];
-                    $unit = $styleProperties['imageDimensions']['unit'];
-                }
-
                 $reactionCache[$reaction['reaction_id']] = $openingTag . '<img src="' . $url . '" ' . $srcSet . ' class="reaction--normal reaction--normal' . $reaction['reaction_id']
                     . '" alt="' . $reaction['title'] . '"'
-                    . ($hideDimensions ? '' : ' width="' . $width . $unit . '" height="' . $height . $unit . '"') . '/>' . $closingTag;
+                    . '/>' . $closingTag;
             }
 
             if ($reaction['image_type'] == 'sprite') {

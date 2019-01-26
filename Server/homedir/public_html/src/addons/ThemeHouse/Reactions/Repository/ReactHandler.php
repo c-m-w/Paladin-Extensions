@@ -2,6 +2,7 @@
 
 namespace ThemeHouse\Reactions\Repository;
 
+use ThemeHouse\Reactions\React\AbstractHandler;
 use XF\Mvc\Entity\Entity;
 use XF\Mvc\Entity\Repository;
 
@@ -11,6 +12,7 @@ class ReactHandler extends Repository
 
     /**
      * @return \ThemeHouse\Reactions\React\AbstractHandler[]
+     * @throws \Exception
      */
     public function getReactHandlers()
     {
@@ -35,7 +37,9 @@ class ReactHandler extends Repository
     }
 
     /**
+     * @param array $options
      * @return array
+     * @throws \Exception
      */
     public function getReactHandlersList(array $options = [])
     {
@@ -57,6 +61,12 @@ class ReactHandler extends Repository
         return $list;
     }
 
+    /**
+     * @param Entity $entity
+     * @param bool $throw
+     * @return null
+     * @throws \Exception
+     */
     public function getReactHandlerByEntity(Entity $entity, $throw = false)
     {
         $reactHandler = $this->getReactHandlerByType($entity->getEntityContentType(), $throw);
@@ -73,13 +83,27 @@ class ReactHandler extends Repository
         return $reactHandler;
     }
 
+    /**
+     * @param $type
+     * @param bool $throw
+     * @return AbstractHandler
+     * @throws \Exception
+     */
     public function getReactHandlerByType($type, $throw = false)
     {
-        if (is_array($this->reactHandlers) && isset($this->reactHandlers[$type])) {
-            $handlerClass = $this->reactHandlers[$type]['oclass'];
-        } else {
-            $handlerClass = \XF::app()->getContentTypeFieldValue($type, 'react_handler_class');
+//        if (is_array($this->reactHandlers) && isset($this->reactHandlers[$type])) {
+//            $handlerClass = $this->reactHandlers[$type]['oclass'];
+//        } else {
+//            $handlerClass = \XF::app()->getContentTypeFieldValue($type, 'react_handler_class');
+//        }
+
+        $handlers = $this->getReactHandlers();
+
+        if(empty($handlers[$type]['oclass'])) {
+            return null;
         }
+
+        $handlerClass = $handlers[$type]['oclass'];
 
         if (!$handlerClass) {
             if ($throw) {
@@ -98,16 +122,17 @@ class ReactHandler extends Repository
         }
 
         $handlerClass = \XF::extendClass($handlerClass);
+        return new $handlerClass($type);
 
-        if (!isset($this->reactHandlers[$type])) {
-            $eclass = \XF::extendClass($handlerClass);
-            $this->reactHandlers[$type] = [
-                'oclass' => $handlerClass,
-                'eclass' => $eclass,
-                'object' => new $eclass($type)
-            ];
-        }
-
-        return $this->reactHandlers[$type]['object'];
+//        if (!isset($this->reactHandlers[$type])) {
+//            $eclass = \XF::extendClass($handlerClass);
+//            $this->reactHandlers[$type] = [
+//                'oclass' => $handlerClass,
+//                'eclass' => $eclass,
+//                'object' => new $eclass($type)
+//            ];
+//        }
+//
+//        return $this->reactHandlers[$type]['object'];
     }
 }

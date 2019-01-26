@@ -2,12 +2,41 @@
 
 namespace ThemeHouse\Reactions\Entity;
 
+use ThemeHouse\Reactions\React\AbstractHandler;
+use ThemeHouse\Reactions\XF\Entity\User;
 use XF\Mvc\Entity\Entity;
 use XF\Mvc\Entity\Structure;
 use XF\Repository;
 
+/**
+ * Class ReactedContent
+ * @package ThemeHouse\Reactions\Entity#
+ *
+ * @property integer react_id
+ * @property integer reaction_id
+ * @property string content_type
+ * @property integer content_id
+ * @property integer react_user_id
+ * @property integer react_date
+ * @property integer content_user_id
+ * @property boolean is_counted
+ *
+ * @property mixed Content
+ * @property mixed NewReactCount
+ *
+ * @property User User
+ * @property UserReactionCount UserReactorCount
+ * @property UserReactionCount UserReactedCount
+ * @property User Owner
+ * @property Reaction Reaction
+ */
 class ReactedContent extends Entity
 {
+    /**
+     * @param null $error
+     * @return bool
+     * @throws \Exception
+     */
     public function canView(&$error = null)
     {
         $handler = $this->getHandler();
@@ -20,6 +49,11 @@ class ReactedContent extends Entity
         }
     }
 
+    /**
+     * @param null $error
+     * @return bool
+     * @throws \Exception
+     */
     public function canReact(&$error = null)
     {
         $handler = $this->getHandler();
@@ -32,6 +66,11 @@ class ReactedContent extends Entity
         }
     }
 
+    /**
+     * @param null $error
+     * @return bool
+     * @throws \Exception
+     */
     public function canUnreact(&$error = null)
     {
         $handler = $this->getHandler();
@@ -44,6 +83,10 @@ class ReactedContent extends Entity
         }
     }
 
+    /**
+     * @return AbstractHandler
+     * @throws \Exception
+     */
     public function getHandler()
     {
         return $this->getReactHandlerRepo()->getReactHandlerByType($this->content_type);
@@ -51,6 +94,7 @@ class ReactedContent extends Entity
 
     /**
      * @return null|Entity
+     * @throws \Exception
      */
     public function getContent()
     {
@@ -58,11 +102,17 @@ class ReactedContent extends Entity
         return $handler ? $handler->getContent($this->content_id) : null;
     }
 
+    /**
+     * @param Entity|null $content
+     */
     public function setContent(Entity $content = null)
     {
         $this->_getterCache['Content'] = $content;
     }
 
+    /**
+     * @return bool
+     */
     public function getNewReactCount()
     {
         if (array_key_exists('NewReactCount', $this->_getterCache)) {
@@ -72,11 +122,18 @@ class ReactedContent extends Entity
         return false;
     }
 
+    /**
+     * @param array $newReactCount
+     */
     public function setNewReactCount(array $newReactCount = [])
     {
         $this->_getterCache['NewReactCount'] = $newReactCount;
     }
 
+    /**
+     * @return bool|string
+     * @throws \Exception
+     */
     public function render()
     {
         $handler = $this->getHandler();
@@ -109,6 +166,9 @@ class ReactedContent extends Entity
         }
     }
 
+    /**
+     * @throws \Exception
+     */
     protected function _postDelete()
     {
 		if ($this->is_counted) {
@@ -126,6 +186,11 @@ class ReactedContent extends Entity
         $this->toggleLike(false);
     }
 
+    /**
+     * @param bool $isCreate
+     * @return bool
+     * @throws \XF\PrintableException
+     */
     public function toggleLike($isCreate = true)
     {
         if (!$this->Reaction) {
@@ -140,16 +205,26 @@ class ReactedContent extends Entity
             $existingLike = $likeRepo->getLikeByContentAndLiker($this->content_type, $this->content_id, $this->react_user_id);
 
             if ($isCreate && !$existingLike && $this->Reactor instanceof \XF\Entity\User) {
-                $likeRepo->insertLike($this->content_type, $this->content_id, $this->Reactor, false);
+                try {
+                    $likeRepo->insertLike($this->content_type, $this->content_id, $this->Reactor, false);
+                } catch (\Exception $e) {}
             }
 
             if (!$isCreate && $existingLike) {
-                $existingLike->delete();
+                $existingLike->delete(false);
             }
         }
     }
 
-	protected function adjustReactCount($reactorUserId, $reactedUserId, $reactionId, $contentId, $contentType, $amount)
+    /**
+     * @param $reactorUserId
+     * @param $reactedUserId
+     * @param $reactionId
+     * @param $contentId
+     * @param $contentType
+     * @param $amount
+     */
+    protected function adjustReactCount($reactorUserId, $reactedUserId, $reactionId, $contentId, $contentType, $amount)
 	{
 		if (!$reactorUserId && !$reactedUserId) {
 			return;
@@ -185,6 +260,10 @@ class ReactedContent extends Entity
         ]);
 	}
 
+    /**
+     * @param $reactionId
+     * @param $amount
+     */
     protected function adjustUserReactCount($reactionId, $amount)
     {
         if (empty($this->Owner)) {
@@ -213,6 +292,10 @@ class ReactedContent extends Entity
         $repo->rebuildContentReactCache($this->content_type, $this->content_id, $this->reaction_id);
     }
 
+    /**
+     * @param Structure $structure
+     * @return Structure
+     */
     public static function getStructure(Structure $structure)
     {
         $structure->table = 'xf_th_reacted_content';
@@ -283,6 +366,7 @@ class ReactedContent extends Entity
      */
     protected function getReactRepo()
     {
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
         return $this->repository('ThemeHouse\Reactions:ReactedContent');
     }
 
@@ -291,6 +375,7 @@ class ReactedContent extends Entity
      */
     protected function getReactionRepo()
     {
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
         return $this->repository('ThemeHouse\Reactions:Reaction');
     }
 
@@ -299,6 +384,7 @@ class ReactedContent extends Entity
      */
     protected function getReactionTypeRepo()
     {
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
         return $this->repository('ThemeHouse\Reactions:ReactionType');
     }
 
@@ -307,6 +393,7 @@ class ReactedContent extends Entity
      */
     protected function getReactHandlerRepo()
     {
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
         return $this->repository('ThemeHouse\Reactions:ReactHandler');
     }
 }

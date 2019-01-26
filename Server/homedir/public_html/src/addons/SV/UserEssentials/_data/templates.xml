@@ -1,0 +1,790 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates>
+  <template type="admin" title="sv_ue_log_login_attempt_list" version_id="3000037" version_string="3.0.0 Beta 7"><![CDATA[<xf:title>{{ phrase('sv_ue_login_attempt_log') }}</xf:title>
+
+<xf:form action="{{ link('logs/login-attempt') }}" class="block">
+	<div class="block-container">
+		<div class="block-body block-row">
+			<xf:textbox name="login" placeholder="{{ phrase('sv_ue_login...') }}" type="search"
+				value="{{ $linkFilters.login }}"
+				class="input--inline" />
+			<xf:textbox name="ip_address" placeholder="{{ phrase('ip_address...') }}" type="search"
+				value="{{ $linkFilters.ip_address }}"
+				class="input--inline" />
+			<xf:button type="submit">{{ phrase('show') }}</xf:button>
+		</div>
+	</div>
+</xf:form>
+
+<xf:if is="$entries is not empty">
+	<div class="block">
+		<div class="block-container">
+			<div class="block-body">
+				<xf:datalist data-xf-init="responsive-data-list">
+					<xf:datarow rowtype="header">
+						<xf:cell>{{ phrase('sv_ue_login') }}</xf:cell>
+						<xf:cell>{{ phrase('ip_address') }}</xf:cell>
+						<xf:cell>{{ phrase('date') }}</xf:cell>
+						<xf:if is="$xf.visitor.hasAdminPermission('user')">
+							<xf:cell class="dataList-cell--min">{{ phrase('delete') }}</xf:cell>
+						</xf:if>
+					</xf:datarow>
+
+					<xf:foreach loop="$entries" value="$entry">
+						<xf:datarow>
+							<xf:cell><a href="{{ link('logs/login-attempt', '', {'login': $entry.login}) }}">{$entry.login}</a></xf:cell>
+							<xf:cell class="u-ltr">
+								<a href="{{ link('logs/login-attempt', '', {'ip_address': $entry.ip_address|ip}) }}">
+									{{ $entry.ip_address|ip }}
+								</a>
+							</xf:cell>
+							<xf:cell><xf:date time="{$entry.attempt_date}" /></xf:cell>
+							<xf:if is="$entry.canDelete()">
+								<xf:delete href="{{ link('logs/login-attempt', $entry) }}" />
+							</xf:if>
+						</xf:datarow>
+					</xf:foreach>
+				</xf:datalist>
+			</div>
+
+			<div class="block-footer">
+				<span class="block-footer-counter">{{ display_totals($entries, $total) }}</span>
+			</div>
+		</div>
+
+		<xf:pagenav page="{$page}" perpage="{$perPage}" total="{$total}"
+			link="logs/login-attempt" params="{$linkFilters}"
+			wrapperclass="block-outer block-outer--after" />
+	</div>
+<xf:else />
+	<div class="blockMessage">{{ phrase('no_entries_have_been_logged') }}</div>
+</xf:if>
+]]></template>
+  <template type="admin" title="sv_ue_log_login_attempt_view" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[<xf:title>{{ phrase('sv_ue_login_attempt') }}</xf:title>
+
+<div class="block">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:formrow label="{{ phrase('sv_ue_login') }}">
+				<a href="{{ link('logs/login-attempt', '', {'login': $entry.login}) }}">{$entry.login}</a>
+			</xf:formrow>
+
+			<xf:formrow label="{{ phrase('ip_address') }}">
+				<a href="{{ link('logs/login-attempt', '', {'ip_address': $entry.ip_address|ip}) }}">{{ $entry.ip_address|ip }}</a>
+			</xf:formrow>
+
+			<xf:formrow label="{{ phrase('date') }}">
+				<xf:date time="{$entry.attempt_date}" />
+			</xf:formrow>
+		</div>
+
+		<xf:if is="$entry.canDelete()">
+			<xf:form action="{{ link('logs/login-attempt', $entry) }}">
+				<xf:checkboxrow>
+					<xf:option name="delete_login" value="1">{{ phrase('sv_ue_clear_all_login_attempts_for_login') }}</xf:option>
+					<xf:option name="delete_ip" value="1">{{ phrase('sv_ue_clear_all_login_attempts_for_ip') }}</xf:option>
+				</xf:checkboxrow>
+				<xf:redirect url="{$redirect}" />
+				<xf:submitrow icon="delete" />
+			</xf:form>
+		</xf:if>
+	</div>
+</div>
+]]></template>
+  <template type="admin" title="sv_ue_log_user_clear" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[<xf:title>{{ phrase('confirm_action') }}</xf:title>
+
+<xf:form action="{{ link('logs/user/clear') }}" class="block" ajax="true">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:inforow rowtype="confirm">
+				{{ phrase('sv_ue_sure_you_want_to_clear_user_log') }}
+			</xf:inforow>
+		</div>
+		<xf:submitrow submit="{{ phrase('clear') }}" rowtype="simple" icon="delete" />
+	</div>
+</xf:form>]]></template>
+  <template type="admin" title="sv_ue_log_user_list" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[<xf:title>{{ phrase('sv_ue_user_log') }}</xf:title>
+
+<xf:pageaction if="$entries is not empty">
+	<xf:button href="{{ link('logs/user/clear') }}" icon="delete" overlay="true">
+		{{ phrase('clear') }}
+	</xf:button>
+</xf:pageaction>
+
+<xf:form action="{{ link('logs/user') }}" class="block">
+	<div class="block-container">
+		<div class="block-body block-row">
+			<xf:textbox name="username" placeholder="{{ phrase('user_name...') }}" type="search"
+				value="{{ $limitUser ? $limitUser.username : '' }}"
+				class="input--inline" />
+			<xf:button type="submit">{{ phrase('show_changes') }}</xf:button>
+		</div>
+	</div>
+</xf:form>
+
+<xf:if is="$entries is not empty">
+	<div class="block">
+		<div class="block-container">
+			<div class="block-body">
+				<xf:datalist data-xf-init="responsive-data-list">
+					<xf:datarow rowtype="header">
+						<xf:cell>{{ phrase('action') }}</xf:cell>
+						<xf:cell>{{ phrase('user') }}</xf:cell>
+						<xf:cell>{{ phrase('ip_address') }}</xf:cell>
+						<xf:cell>{{ phrase('date') }}</xf:cell>
+					</xf:datarow>
+
+					<xf:foreach loop="$entries" value="$entry">
+						<xf:datarow>
+							<xf:cell>
+								<div>
+									<a href="{{ link('logs/user', $entry) }}" data-xf-click="overlay">{$entry.action_text}</a>
+									<div class="dataList-subRow">{$entry.content_title}</div>
+								</div>
+							</xf:cell>
+
+							<xf:cell><xf:username user="$entry.User" href="{{ link('users/edit', $entry.User) }}" /></xf:cell>
+							<xf:cell class="u-ltr">{{ $entry.ip_address ? $entry.ip_address|ip : '' }}</xf:cell>
+							<xf:cell><xf:date time="{$entry.log_date}" /></xf:cell>
+						</xf:datarow>
+					</xf:foreach>
+				</xf:datalist>
+			</div>
+
+			<div class="block-footer">
+				<span class="block-footer-counter">{{ display_totals($entries, $total) }}</span>
+			</div>
+		</div>
+
+		<xf:pagenav page="{$page}" perpage="{$perPage}" total="{$total}"
+			link="logs/user" params="{$linkFilters}"
+			wrapperclass="block-outer block-outer--after" />
+	</div>
+<xf:else />
+	<div class="blockMessage">{{ phrase('no_entries_have_been_logged') }}</div>
+</xf:if>
+]]></template>
+  <template type="admin" title="sv_ue_log_user_view" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[<xf:title>{{ phrase('sv_ue_user_log_entry') }}</xf:title>
+
+<div class="block">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:formrow label="{{ phrase('user') }}">
+				<a href="{{ link('users/edit', $entry.User) }}">{$entry.User.username}</a>
+			</xf:formrow>
+
+			<xf:if is="$entry.ip_address">
+				<xf:formrow label="{{ phrase('ip_address') }}">
+					<a href="{{ link_type('public', 'misc/ip-info', null, {'ip': $entry.ip_address|ip}) }}" target="_blank" class="u-ltr">{$entry.ip_address|ip}</a>
+				</xf:formrow>
+			</xf:if>
+
+			<xf:formrow label="{{ phrase('date') }}">
+				<xf:date time="{$entry.log_date}" />
+			</xf:formrow>
+
+			<xf:formrow label="{{ phrase('action') }}">
+				{$entry.action_text}
+			</xf:formrow>
+
+			<xf:formrow label="{{ phrase('content') }}">
+				<a href="{{ base_url($entry.content_url) }}">{$entry.content_title}</a>
+				<div class="u-muted">{{ phrase('by_user_x', {'name': $entry.content_username}) }}</div>
+			</xf:formrow>
+		</div>
+	</div>
+</div>
+]]></template>
+  <template type="admin" title="sv_ue_tools_rebuild" version_id="3000041" version_string="3.0.0 Beta 11"><![CDATA[<xf:set var="$contentMentionsRepo" value="{$xf.app.em.getRepository('SV\UserEssentials:ContentMentions')}" />
+<xf:set var="$svContentMentionsBody">
+	<xf:selectrow label="{{ phrase('content_type') }}" name="options[type]">
+		<xf:option label="{{ phrase('all') }}" value="" />
+		<xf:options source="{{ $contentMentionsRepo.getSupportedContentTypePhrases(true) }}" />
+	</xf:selectrow>
+</xf:set>
+<xf:macro template="tools_rebuild" name="rebuild_job"
+	arg-header="{{ phrase('sv_ue_rebuild_content_mentions') }}"
+	arg-body="{$svContentMentionsBody}"
+	arg-job="SV\UserEssentials:ContentMentionsAll" />]]></template>
+  <template type="admin" title="sv_ue_user_edit_login_attempts_pane" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[<xf:if is="$user.user_id">
+	<li data-href="{{ link('users/user-login-attempts', $user) }}" role="tabpanel" id="user-login-attempts">
+		<div class="block-body block-row">{{ phrase('loading...') }}</div>
+	</li>
+</xf:if>]]></template>
+  <template type="admin" title="sv_ue_user_edit_login_attempts_tab" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[<a class="tabs-tab" role="tab" tabindex="0" aria-controls="user-login-attempts">{{ phrase('sv_ue_login_attempts') }}</a>]]></template>
+  <template type="admin" title="sv_ue_user_edit_title" version_id="3000040" version_string="3.0.0 Beta 10"><![CDATA[<xf:if is="$previousUsernameChanges is not empty and $user.username_change_title">
+	<xf:checkboxrow>
+		<xf:option name="user[custom_title_revert]"
+			label="{{ phrase('sv_ue_revert_user_name_change_title') }}" />
+	</xf:checkboxrow>
+</xf:if>
+]]></template>
+  <template type="admin" title="sv_ue_user_edit_username" version_id="3000041" version_string="3.0.0 Beta 11"><![CDATA[<xf:if is="$user.isUpdate()">
+	<xf:if is="$previousUsernameChanges is not empty">
+		<xf:formrow label="{{ phrase('sv_ue_previous_names') }}">
+			<ul class="listInline listInline--comma">
+				<xf:foreach loop="$previousUsernameChanges" key="$uncId" value="$previousUsernameChange"><xf:trim>
+					<li><a href="{{ link_type('public', 'members/username-change', '', {'unc_id': $uncId}) }}" data-xf-click="overlay">{$previousUsernameChange.to_username}</a></li>
+				</xf:trim></xf:foreach>
+
+				<xf:if is="$unseenUsernameChanges">
+					<li><a href="{{ link_type('public', 'members/username-changes', $user) }}" data-xf-click="overlay">{{ phrase('sv_ue_and_x_more', {'count': $unseenUsernameChanges}) }}</a></li>
+				</xf:if>
+			</ul>
+		</xf:formrow>
+	</xf:if>
+
+	<xf:checkboxrow>
+		<xf:option name="sv_ue_notify" selected="$xf.options.useress_acp_unc_notices_default"
+			label="{{ phrase('sv_ue_send_user_name_change_notifications') }}" />
+		<xf:option name="sv_ue_private" selected="$xf.options.useress_acp_unc_private_default"
+			label="{{ phrase('sv_ue_private_admin_user_name_change') }}" />
+	</xf:checkboxrow>
+</xf:if>]]></template>
+  <template type="admin" title="sv_ue_user_login_attempt_list" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[<xf:title>{{ phrase('sv_ue_login_attempts_logged_for_x', {'name': $user.username}) }}</xf:title>
+
+<xf:if is="$attempts is not empty">
+	<div class="block">
+		<div class="block-container">
+			<div class="block-body">
+				<xf:datalist data-xf-init="responsive-data-list">
+					<xf:datarow rowtype="header">
+						<xf:cell>{{ phrase('sv_ue_login') }}</xf:cell>
+						<xf:cell>{{ phrase('ip_address') }}</xf:cell>
+						<xf:cell>{{ phrase('date') }}</xf:cell>
+						<xf:if is="$xf.visitor.hasAdminPermission('user')">
+							<xf:cell class="dataList-cell--min">{{ phrase('delete') }}</xf:cell>
+						</xf:if>
+					</xf:datarow>
+
+					<xf:foreach loop="$attempts" value="$attempt">
+						<xf:datarow>
+							<xf:cell><a href="{{ link('logs/login-attempt', '', {'login': $attempt.login}) }}">{$attempt.login}</a></xf:cell>
+							<xf:cell class="u-ltr">
+								<a href="{{ link('logs/login-attempt', '', {'ip_address': $attempt.ip_address|ip}) }}">
+									{{ $attempt.ip_address|ip }}
+								</a>
+							</xf:cell>
+							<xf:cell><xf:date time="{$attempt.attempt_date}" /></xf:cell>
+							<xf:if is="$attempt.canDelete()">
+								<xf:delete href="{{ link('logs/login-attempt', $attempt) }}" />
+							</xf:if>
+						</xf:datarow>
+					</xf:foreach>
+				</xf:datalist>
+			</div>
+		</div>
+	</div>
+<xf:else />
+	<div class="blockMessage">{{ phrase('sv_ue_no_login_attempts_for_requested_user') }}</div>
+</xf:if>
+]]></template>
+  <template type="admin" title="sv_ue_user_upgrade_edit_quantity" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[<xf:numberboxrow name="quantity" value="{$upgrade.quantity}" min="0"
+	label="{{ phrase('sv_ue_quantity') }}"
+	explain="{{ phrase('sv_ue_quantity_explain') }}" />
+]]></template>
+  <template type="email" title="sv_ue_unc_approved" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[<mail:subject>
+	{{ phrase('sv_ue_user_name_change_approved_subject', {'board_title': $xf.options.boardTitle}) }}
+</mail:subject>
+
+{{ phrase('sv_ue_user_name_change_approved_body_html', {
+	'username': $user.username,
+	'board': '<a href="' . link('canonical:index') . '">' . $xf.options.boardTitle . '</a>'
+}) }}
+
+<xf:if is="$note">
+	<p>{{ phrase('note') }} {$note}</p>
+</xf:if>]]></template>
+  <template type="email" title="sv_ue_unc_denied" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[<mail:subject>
+	{{ phrase('sv_ue_user_name_change_denied_subject', {'board_title': $xf.options.boardTitle}) }}
+</mail:subject>
+
+{{ phrase('sv_ue_user_name_change_denied_body_html', {
+	'username': $user.username,
+	'board': '<a href="' . link('canonical:index') . '">' . $xf.options.boardTitle . '</a>',
+	'toName': $name
+}) }}
+
+<xf:if is="$note">
+	<p>{{ phrase('note') }} {$note}</p>
+</xf:if>]]></template>
+  <template type="public" title="bb_code_tag_user" version_id="3000034" version_string="3.0.0 Beta 4"><![CDATA[<xf:avatar user="$user" size="xxs" /> <xf:username user="$user" rich="true" />
+]]></template>
+  <template type="public" title="bb_code_tag_usergroup" version_id="3000034" version_string="3.0.0 Beta 4"><![CDATA[{{ $userGroup.getIconHtml()|raw }} <a class="ug" href="{{ link('members/usergroup', $userGroup)}}">{$userGroup.title}</a>
+]]></template>
+  <template type="public" title="sv_ue.less" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[.message-lastEdit--align-left
+{
+	text-align: left;
+}]]></template>
+  <template type="public" title="sv_ue_account_details_tags" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[<xf:if is="$xf.options.enableTagging and ($xf.visitor.canEditTags() or $xf.visitor.useress_tags)">
+	<xf:formrow label="{{ phrase('sv_ue_profile_tags') }}">
+		<xf:if is="$xf.visitor.useress_tags">
+			<xf:foreach loop="$xf.visitor.useress_tags" value="$tag">
+				<a href="{{ link('tags', $tag) }}" class="tagItem" dir="auto">{$tag.tag}</a>
+			</xf:foreach>
+		<xf:else />
+			{{ phrase('none') }}
+		</xf:if>
+
+		<xf:if is="$xf.visitor.canEditTags()">
+			<a href="{{ link('members/tags', $xf.visitor) }}" class="u-concealed" data-xf-click="overlay"
+				data-xf-init="tooltip" title="{{ phrase('edit_tags')|for_attr }}">
+				<i class="fa fa-pencil" aria-hidden="true"></i>
+				<span class="u-srOnly">{{ phrase('edit') }}</span>
+			</a>
+		</xf:if>
+	</xf:formrow>
+</xf:if>
+]]></template>
+  <template type="public" title="sv_ue_account_details_title" version_id="3000040" version_string="3.0.0 Beta 10"><![CDATA[<xf:if is="$xf.visitor.username_change_title">
+	<xf:checkboxrow>
+		<xf:option name="user[custom_title_revert]"
+			label="{{ phrase('sv_ue_revert_user_name_change_title') }}" />
+	</xf:checkboxrow>
+</xf:if>
+]]></template>
+  <template type="public" title="sv_ue_account_details_username" version_id="3000041" version_string="3.0.0 Beta 11"><![CDATA[<xf:formrow rowtype="button"
+	label="{{ phrase('user_name') }}">
+
+	{$xf.visitor.username}
+
+	<xf:if is="$xf.visitor.pending_username_change">
+		{{ phrase('(sv_ue_user_name_change_pending)', {'newName':$xf.visitor.pending_username_change.to_username}) }}
+	<xf:elseif is="$xf.visitor.canChangeUsername()" />
+		<xf:button href="{{ link('account/username-change') }}" class="button--link" overlay="true">{{ phrase('change') }}</xf:button>
+	</xf:if>
+</xf:formrow>]]></template>
+  <template type="public" title="sv_ue_account_likes_given" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[<xf:title>{{ phrase('sv_ue_likes_given') }}</xf:title>
+
+<xf:wrap template="account_wrapper" />
+
+<xf:if is="$total > 0">
+	<div class="block">
+		<div class="block-container">
+			<ul class="block-body">
+				<xf:foreach loop="$likes" value="$like">
+					<li class="block-row block-row--separated">
+						<div class="contentRow">
+							<span class="contentRow-figure">
+								<xf:avatar user="$like.Liker" size="s" />
+							</span>
+
+							<div class="contentRow-main">
+								{$like.render()|raw}
+							</div>
+						</div>
+					</li>
+				</xf:foreach>
+			</ul>
+		</div>
+
+		<xf:pagenav link="account/likes-given"
+			page="{$page}"
+			perpage="{$perPage}"
+			total="{$total}"
+			wrapperclass="block-outer block-outer--after" />
+	</div>
+<xf:else />
+	<div class="blockMessage">{{ phrase('sv_ue_you_have_not_given_any_content_any_likes_yet') }}</div>
+</xf:if>
+]]></template>
+  <template type="public" title="sv_ue_account_upgrades_cost_input" version_id="3000012" version_string="3.0.0 Beta 2"><![CDATA[<xf:if is="{$upgrade.cost_amount} == '0.00'">
+	<!-- this maximum is not arbitrary, some payment providers error on values over 999.99 -->
+	<xf:numberbox name="cost_amount"placeholder="{{ $upgrade.cost_currency }}" class="input--inline input--number js-numberBoxTextInput" size="4"
+				  value="" min="0" max="999.99" step="0.01" />
+
+	<span class="inputGroup-splitter"></span>
+</xf:if>]]></template>
+  <template type="public" title="sv_ue_account_username" version_id="3000013" version_string="3.0.0 Beta 3"><![CDATA[<xf:title>{{ phrase('sv_ue_change_user_name') }}</xf:title>
+
+<xf:wrap template="account_wrapper" />
+
+<xf:form action="{{ link('account/username-change') }}" ajax="true" class="block">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:textboxrow name="username" value="{$xf.visitor.username}" autofocus="autofocus"
+				maxlength="{{ max_length($xf.visitor, 'username') }}"
+				label="{{ phrase('user_name') }}"
+				explain="{{ phrase('sv_ue_username_explain') }}" />
+
+			<xf:if is="$xf.visitor.isUsernameChangeModerated()">
+				<xf:textarearow name="note" rows="1" autosize="true"
+					maxlength="{{ max_length('SV\UserEssentials:UsernameChange', 'user_note')}}"
+					label="{{ phrase('note') }}"
+					explain="{{ phrase('sv_ue_user_note_explain') }}"/>
+			</xf:if>
+
+			<xf:formrow>
+				<div class="blockMessage blockMessage--important">
+					<ul class="listHeap">
+						<xf:foreach loop="$messageList" value="$message">
+							<li>{$message}</li>
+						</xf:foreach>
+					</ul>
+				</div>
+			</xf:formrow>
+
+			<xf:textboxrow name="password" type="password"
+				label="{{ phrase('current_password') }}" />
+		</div>
+
+		<xf:submitrow icon="save" sticky="true" />
+	</div>
+</xf:form>
+]]></template>
+  <template type="public" title="sv_ue_account_visitor_menu_likes_given" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[<li><a href="{{ link('account/likes-given') }}" class="menu-linkRow">{{ phrase('sv_ue_likes_given') }}</a></li>]]></template>
+  <template type="public" title="sv_ue_account_wrapper_conversations" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[<xf:if is="$xf.options.useress_conversationWrapper">
+	<h3 class="block-minorHeader">{{ phrase('conversations') }}</h3>
+
+	<div class="block-body">
+		<a class="blockLink {{ ($pageSelected == 'conversations_view') ? 'is-selected' : '' }}" href="{{ link('conversations') }}">
+			{{ phrase('sv_ue_view_conversations') }}
+		</a>
+
+		<a class="blockLink {{ ($pageSelected == 'conversations_add') ? 'is-selected' : '' }}" href="{{ link('conversations/add') }}">
+			{{ phrase('start_new_conversation') }}
+		</a>
+	</div>
+</xf:if>
+]]></template>
+  <template type="public" title="sv_ue_account_wrapper_likes_given" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[<a class="blockLink {{ ($pageSelected == 'likes_given') ? 'is-selected' : '' }}" href="{{ link('account/likes-given') }}">
+	{{ phrase('sv_ue_likes_given') }}
+</a>
+]]></template>
+  <template type="public" title="sv_ue_account_wrapper_watched" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[<xf:if is="$xf.options.useress_watchedWrapper">
+	<a class="blockLink {{ ($pageSelected == 'watched_threads') ? 'is-selected' : '' }}" href="{{ link('watched/threads') }}">
+		{{ phrase('watched_threads') }}
+	</a>
+
+	<a class="blockLink {{ ($pageSelected == 'watched_forums') ? 'is-selected' : '' }}" href="{{ link('watched/forums') }}">
+		{{ phrase('watched_forums') }}
+	</a>
+</xf:if>
+]]></template>
+  <template type="public" title="sv_ue_alert_unc_approved_other" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[<xf:if is="$extra.note">
+	{{ phrase('sv_ue_alert_unc_approved_other_note_x', {
+		'oldName': $extra.old_name,
+		'name': $extra.name,
+		'link': link('members', $content) . '#previous-names',
+		'note': $extra.note}) }}
+<xf:else />
+	{{ phrase('sv_ue_alert_unc_approved_other', {
+		'oldName': $extra.old_name,
+		'name': $extra.name,
+		'link': link('members', $content) . '#previous-names'
+	}) }}
+</xf:if>
+]]></template>
+  <template type="public" title="sv_ue_alert_unc_approved_own" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[<xf:if is="$extra.note">
+	{{ phrase('sv_ue_alert_unc_approved_own_note_x', {
+		'name': $extra.name,
+		'note': $extra.note}) }}
+<xf:else />
+	{{ phrase('sv_ue_alert_unc_approved_own', {'name': $extra.name}) }}
+</xf:if>]]></template>
+  <template type="public" title="sv_ue_alert_unc_denied_own" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[<xf:if is="$extra.note">
+	{{ phrase('sv_ue_alert_unc_denied_own_note_x', {
+		'name': $extra.name,
+		'note': $extra.note}) }}
+<xf:else />
+	{{ phrase('sv_ue_alert_unc_denied_own', {'name': $extra.name}) }}
+</xf:if>]]></template>
+  <template type="public" title="sv_ue_approval_item_unc" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[<xf:formrow label="{{ phrase('sv_ue_user_name_change') }}">
+	<xf:username user="$user" username="{$content.to_username}" rich="true" />
+</xf:formrow>
+
+<xf:formrow label="{{ phrase('sv_ue_requester') }}">
+	<xf:username user="$user" rich="true" />
+</xf:formrow>
+
+<xf:if is="$xf.visitor.canViewIps() and $content.ip_address">
+	<xf:formrow label="{{ phrase('ip_address') }}">
+		<a href="{{ link('misc/ip-info', null, {'ip': $content.ip_address|ip}) }}" target="_blank">
+			{$content.ip_address|ip}
+		</a>
+	</xf:formrow>
+</xf:if>
+
+<xf:if is="$previousUsernameChanges is not empty">
+	<xf:formrow label="{{ phrase('sv_ue_previous_names') }}">
+		<ul class="listInline listInline--comma">
+			<xf:foreach loop="$previousUsernameChanges" key="$uncId" value="$previousUsernameChange"><xf:trim>
+				<li><a href="{{ link('members/username-change', '', {'unc_id': $uncId}) }}" data-xf-click="overlay">{$previousUsernameChange.to_username}</a></li>
+			</xf:trim></xf:foreach>
+
+			<xf:if is="$unseenUsernameChanges">
+				<li><a href="{{ link('members/username-changes', $user) }}" data-xf-click="overlay">{{ phrase('sv_ue_and_x_more', {'count': $unseenUsernameChanges}) }}</a></li>
+			</xf:if>
+		</ul>
+	</xf:formrow>
+</xf:if>
+
+<xf:formrow label="{{ phrase('messages') }}">
+	{$user.message_count|number}
+</xf:formrow>
+
+<xf:formrow label="{{ phrase('sv_ue_request_date') }}">
+	<xf:date time="{$content.date}" />
+</xf:formrow>
+
+<xf:if is="$content.user_note">
+	<xf:formrow label="{{ phrase('note') }}">
+		{$content.user_note}
+	</xf:formrow>
+</xf:if>
+
+<xf:radiorow name="queue[{$unapprovedItem.content_type}][{$unapprovedItem.content_id}]"
+	label="{{ phrase('action') }}">
+
+	<xf:option value="" checked="checked" label="{{ phrase('do_nothing') }}" />
+	<xf:option value="approve" label="{{ phrase('approve') }}" />
+	<xf:option value="reject" label="{{ phrase('reject') }}" />
+</xf:radiorow>
+
+<xf:textboxrow name="note[{$unapprovedItem.content_type}][{$unapprovedItem.content_id}]"
+	label="{{ phrase('note') }}"
+	maxlength="{{ max_length($content, 'moderator_note') }}"
+	placeholder="{{ phrase('optional') }}"
+	explain="{{ phrase('sv_ue_this_note_will_be_included_in_user_notification') }}" />
+
+<xf:if is="$content.canEditPrivacy()">
+	<xf:checkboxrow>
+		<xf:option label="{{ phrase('private') }}" name="is_private[{$unapprovedItem.content_type}][{$unapprovedItem.content_id}]" selected="{$content.is_private}" />
+		<xf:explain>{{ phrase('sv_ue_private_explain') }}</xf:explain>
+	</xf:checkboxrow>
+</xf:if>
+]]></template>
+  <template type="public" title="sv_ue_helper_thread_options_permissions" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[<xf:checkboxrow hideempty="true" rowtype="{$rowType}"
+	label="{{ phrase('sv_ue_thread_starter_permissions') }}">
+
+	<xf:if is="$thread.canEditLockPermissions()">
+		<xf:option name="allow_user_lock" value="1" selected="{$thread.ThreadPermissions.allowLockByUser}"
+			label="{{ phrase('sv_ue_lock_thread') }}"
+			hint="{{ phrase('sv_ue_lock_thread_explain') }}">
+
+			<xf:afterhtml>
+				<xf:hiddenval name="_xfSet[allow_user_lock]" value="1" />
+			</xf:afterhtml>
+		</xf:option>
+
+		<xf:option name="allow_user_unlock" value="1" selected="{$thread.ThreadPermissions.allowUnlockByUser}"
+			label="{{ phrase('sv_ue_unlock_thread') }}"
+			hint="{{ phrase('sv_ue_unlock_thread_explain') }}">
+
+			<xf:afterhtml>
+				<xf:hiddenval name="_xfSet[allow_user_unlock]" value="1" />
+			</xf:afterhtml>
+		</xf:option>
+	</xf:if>
+
+	<xf:if is="$thread.canEditReplyBanPermissions()">
+		<xf:option name="allow_user_reply_ban" value="1" selected="{$thread.ThreadPermissions.replyBanInOwnThread}"
+			label="{{ phrase('sv_ue_manage_reply_bans') }}"
+			hint="{{ phrase('sv_ue_manage_reply_bans_explain') }}">
+
+			<xf:afterhtml>
+				<xf:hiddenval name="_xfSet[allow_user_reply_ban]" value="1" />
+			</xf:afterhtml>
+		</xf:option>
+	</xf:if>
+</xf:checkboxrow>
+]]></template>
+  <template type="public" title="sv_ue_member_tags" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[<xf:title>{{ phrase('edit_tags') }}</xf:title>
+
+<xf:macro template="tag_macros" name="edit_form"
+	arg-action="{{ link('members/tags', $user) }}"
+	arg-uneditableTags="{$uneditableTags}"
+	arg-editableTags="{$editableTags}" />
+]]></template>
+  <template type="public" title="sv_ue_member_username_changes" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[<xf:title>{{ phrase('sv_ue_previous_names:') }} {$user.username}</xf:title>
+
+<div class="block">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:datalist data-xf-init="responsive-data-list">
+				<xf:datarow rowtype="header">
+					<xf:cell>{{ phrase('sv_ue_from_name') }}</xf:cell>
+					<xf:cell>{{ phrase('sv_ue_to_name') }}</xf:cell>
+					<xf:cell>{{ phrase('date') }}</xf:cell>
+					<xf:if is="$xf.visitor.canViewUsernameChangeDetails($user.user_id)">
+						<xf:cell>{{ phrase('status') }}</xf:cell>
+					</xf:if>
+				</xf:datarow>
+
+				<xf:foreach loop="$usernameChanges" value="$usernameChange">
+					<xf:datarow>
+						<xf:cell>{$usernameChange.from_username}</xf:cell>
+						<xf:cell>{$usernameChange.to_username}</xf:cell>
+						<xf:cell><xf:date time="{$usernameChange.date}" /></xf:cell>
+						<xf:if is="$xf.visitor.canViewUsernameChangeDetails($user.user_id)">
+							<xf:cell href="{{ link('members/username-change', '', {'unc_id': $usernameChange.unc_id}) }}"
+								overlay="true">
+								<xf:if is="$usernameChange.status == 'approved'">
+									{{ phrase('sv_ue_approved') }}
+								<xf:elseif is="$usernameChange.status == 'denied'" />
+									{{ phrase('rejected') }}
+								<xf:else />
+									{{ phrase('pending') }}
+								</xf:if>
+							</xf:cell>
+						</xf:if>
+					</xf:datarow>
+				</xf:foreach>
+			</xf:datalist>
+		</div>
+
+		<div class="block-footer">
+			<ul class="listInline listInline--bullet">
+				<li>{{ phrase('sv_ue_total_changes:') }} {{ count($usernameChanges)|number }}</li>
+			</ul>
+		</div>
+	</div>
+</div>
+]]></template>
+  <template type="public" title="sv_ue_member_view_tab_pane_previous_names" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[<xf:if is="$xf.visitor.canViewUsernameChanges($user) && $user.has_username_changes">
+	<li data-href="{{ link('members/username-changes', $user) }}"
+		aria-labelledby="previous-names"
+		role="tabpanel">
+
+		<div class="blockMessage">{{ phrase('loading...') }}</div>
+	</li>
+</xf:if>
+]]></template>
+  <template type="public" title="sv_ue_member_view_tab_previous_names" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[<xf:if is="$xf.visitor.canViewUsernameChanges($user) && $user.has_username_changes">
+	<a href="{{ link('members/username-changes', $user) }}"
+		class="tabs-tab"
+		id="previous-names"
+		role="tab">{{ phrase('sv_ue_previous_names') }}</a>
+</xf:if>
+]]></template>
+  <template type="public" title="sv_ue_member_view_tags" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[<xf:if is="$xf.options.enableTagging and ($user.canEditTags() or $user.useress_tags)">
+	<div class="memberHeader-blurb">
+		<i class="fa fa-tags" aria-hidden="true" title="{{ phrase('tags')|for_attr }}"></i>
+		<span class="u-srOnly">{{ phrase('tags') }}</span>
+
+		<xf:if is="$user.useress_tags">
+			<xf:foreach loop="$user.useress_tags" value="$tag">
+				<a href="{{ link('tags', $tag) }}" class="tagItem" dir="auto">{$tag.tag}</a>
+			</xf:foreach>
+		<xf:else />
+			{{ phrase('none') }}
+		</xf:if>
+
+		<xf:if is="$user.canEditTags()">
+			<a href="{{ link('members/tags', $user) }}" class="u-concealed" data-xf-click="overlay"
+				data-xf-init="tooltip" title="{{ phrase('edit_tags')|for_attr }}">
+				<i class="fa fa-pencil" aria-hidden="true"></i>
+				<span class="u-srOnly">{{ phrase('edit') }}</span>
+			</a>
+		</xf:if>
+	</div>
+</xf:if>
+]]></template>
+  <template type="public" title="sv_ue_search_result_user" version_id="3000010" version_string="3.0.0 Alpha"><![CDATA[<li class="block-row block-row--separated {{ $xf.visitor.isIgnoring($user.user_id) ? 'is-ignored' : '' }}" data-author="{{ $user.username }}">
+	<div class="contentRow">
+		<span class="contentRow-figure">
+			<xf:avatar user="{$user}" size="s" />
+		</span>
+
+		<div class="contentRow-main">
+			<h3 class="contentRow-title">
+				<a href="{{ link('members', $user) }}">{{ highlight($user.username, $options.term) }}</a>
+			</h3>
+
+			<div class="contentRow-snippet">
+				<ul class="listInline listInline--bullet">
+					<xf:if is="$xf.options.enableTagging and $user.useress_tags">
+						<li>
+							<i class="fa fa-tags" aria-hidden="true" title="{{ phrase('tags')|for_attr }}"></i>
+							<span class="u-srOnly">{{ phrase('tags') }}</span>
+
+							<xf:if is="$user.useress_tags">
+								<xf:foreach loop="$user.useress_tags" value="$tag">
+									<a href="{{ link('tags', $tag) }}" class="tagItem" dir="auto">{$tag.tag}</a>
+								</xf:foreach>
+							<xf:else />
+								{{ phrase('none') }}
+							</xf:if>
+						</li>
+					</xf:if>
+				</ul>
+			</div>
+
+			<div class="contentRow-minor contentRow-minor--hideLinks">
+				<ul class="listInline listInline--bullet">
+					<li>{{ phrase('user') }}</li>
+					<li><xf:date time="{$user.register_date}" /></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</li>
+]]></template>
+  <template type="public" title="sv_ue_username_change_info" version_id="3000041" version_string="3.0.0 Beta 11"><![CDATA[<xf:title>{{ phrase('sv_ue_user_name_change_for', {'name': $user.username}) }}</xf:title>
+
+<div class="form block">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:formrow label="{{ phrase('name') }}">
+				{$usernameChange.to_username}
+			</xf:formrow>
+
+			<xf:formrow label="{{ phrase('sv_ue_requester') }}">
+				<ul class="listInline listInline--bullet">
+					<li><xf:username user="$user" username="{$usernameChange.from_username}" rich="true" /></li>
+					<xf:if is="$xf.visitor.canViewIps() and $usernameChange.ip_address">
+						<li><a href="{{ link('misc/ip-info', null, {'ip': $usernameChange.ip_address|ip}) }}" target="_blank">
+							{$usernameChange.ip_address|ip}
+						</a></li>
+					</xf:if>
+					<li><xf:date time="{$usernameChange.date}" /></li>
+				</ul>
+
+				<xf:if is="$usernameChange.user_note">
+					<div class="u-muted">{$usernameChange.user_note}</div>
+				</xf:if>
+			</xf:formrow>
+
+			<xf:formrow label="{{ phrase('status') }}">
+				<xf:if is="$usernameChange.status == 'approved'">
+					{{ phrase('sv_ue_approved') }}
+				<xf:elseif is="$usernameChange.status == 'denied'" />
+					{{ phrase('rejected') }}
+				<xf:else />
+					{{ phrase('pending') }}
+				</xf:if>
+			</xf:formrow>
+
+			<xf:if is="$xf.visitor.canApproveRejectUsername() and $moderator">
+				<xf:formrow label="{{ phrase('moderator') }}">
+					<ul class="listInline listInline--bullet">
+						<li><xf:username user="$moderator" rich="true" /></li>
+						<li><xf:date time="{$usernameChange.moderation_date}" /></li>
+					</ul>
+
+					<xf:if is="$usernameChange.moderator_note">
+						<div class="u-muted">{$usernameChange.moderator_note}</div>
+					</xf:if>
+				</xf:formrow>
+			</xf:if>
+		</div>
+
+		<xf:if is="$usernameChange.canEditPrivacy()">
+			<xf:form action="{{ link('members/username-change', $user, {'unc_id': $usernameChange.unc_id}) }}">
+				<xf:checkboxrow>
+					<xf:option label="{{ phrase('private') }}" name="is_private" selected="{$usernameChange.is_private}" />
+					<xf:explain>{{ phrase('sv_ue_private_explain') }}</xf:explain>
+				</xf:checkboxrow>
+
+				<xf:submitrow icon="save" />
+				<xf:redirect url="{$redirect}" />
+			</xf:form>
+		<xf:elseif is="$usernameChange.is_private && $xf.options.useressDisplayProfileTab !== 'nobody'" />
+				<xf:checkboxrow>
+					<xf:option label="{{ phrase('private') }}" name="is_private" selected="{$usernameChange.is_private}" readonly="readonly" disabled="disabled" />
+					<xf:explain>{{ phrase('sv_ue_private_explain') }}</xf:explain>
+				</xf:checkboxrow>
+		</xf:if>
+	</div>
+</div>]]></template>
+</templates>

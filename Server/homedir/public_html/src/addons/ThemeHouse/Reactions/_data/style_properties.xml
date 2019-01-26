@@ -6,7 +6,7 @@
   <style_property property_name="thReactionsAnimation" group_name="thReactions" title="Animation Type" description="This will enable various animations when reacting to content." property_type="value" value_type="select" display_order="50">
     <value_parameters>up=Slide Up
 out=Slide Out
-none=None</value_parameters>
+modal=Modal</value_parameters>
     <value>"up"</value>
   </style_property>
   <style_property property_name="thReactionsDivider" group_name="thReactions" title="Reactions divider text" description="The character or word that is between the reaction and its count when viewing the content list.  Leave blank for no divider." property_type="value" value_type="string" display_order="30">
@@ -16,8 +16,8 @@ none=None</value_parameters>
     <value_parameters>template=th_style_property_template_dimensions_reactions
 type=array</value_parameters>
     <value>{
-    "width": "22",
-    "height": "22",
+    "width": "18",
+    "height": "18",
     "unit": "px"
 }</value>
   </style_property>
@@ -31,13 +31,15 @@ type=array</value_parameters>
   <style_property property_name="th_reactions__barStyle" group_name="thReactions" title="Reactions Bar Style" property_type="css" display_order="0" css_components="text,background,border,border_radius,padding,extra">
     <value>{
     "font-size": "@xf-fontSizeSmaller",
-    "padding": "10px"
+    "extra": "margin-bottom: @xf-messagePaddingSmall;"
 }</value>
   </style_property>
   <style_property property_name="th_reactions__listItemRightStyle" group_name="thReactions" title="List Item Right Style" description="Styling for the right half of listed reactions" property_type="css" display_order="120" css_components="text,background,border,padding,extra">
     <value>{
     "background-color": "@xf-messageUserBlock--background-color",
-    "extra": "line-height: @xf-thReactionsImageDimensions;"
+    "border-left-width": "1px",
+    "border-left-color": "@xf-borderColor",
+    "extra": "display: flex;\nalign-items: center;"
 }</value>
   </style_property>
   <style_property property_name="th_reactions__listItemStyle" group_name="thReactions" title="List Item Style" description="Style of a reaction and it's count" property_type="css" display_order="115" css_components="text,background,border,border_radius,padding,extra">
@@ -45,7 +47,24 @@ type=array</value_parameters>
     "border-width": "1px",
     "border-color": "@xf-borderColor",
     "border-radius": "2px",
-    "extra": "display: flex;\nalign-items: stretch;\noverflow: hidden;\nline-height: 22px;"
+    "extra": "display: flex;\nalign-items: stretch;\noverflow: hidden;\nline-height: @xf-thReactionsImageDimensions;"
+}</value>
+  </style_property>
+  <style_property property_name="th_reactions__modalStyle" group_name="thReactions" title="Modal Style" description="This is the background of the modal, it is separated from the wrapper for animation reasons" property_type="css" display_order="200" css_components="background,border,border_radius,extra">
+    <value>{
+    "background-color": "@xf-contentBg",
+    "border-width": "1px",
+    "border-color": "@xf-borderColor",
+    "extra": "box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);"
+}</value>
+  </style_property>
+  <style_property property_name="th_reactions__modalWrapperStyle" group_name="thReactions" title="Modal Wrapper Style" description="This is a wrapper containing the modal background and content" property_type="css" display_order="210" css_components="padding,extra">
+    <value>{
+    "padding-top": "0",
+    "padding-right": "0",
+    "padding-bottom": "0",
+    "padding-left": "0",
+    "extra": "bottom: 58px;\nright: 0px;"
 }</value>
   </style_property>
   <style_property property_name="th_reactions__showTitles" group_name="thReactions" title="Show Reaction Titles" property_type="value" value_type="boolean" display_order="0">
@@ -53,15 +72,21 @@ type=array</value_parameters>
   </style_property>
   <style_property property_name="th_reactions__triggerStyle" group_name="thReactions" title="Trigger Style" property_type="css" display_order="110" css_components="text,background,border,border_radius,padding,extra">
     <value>{
-    "font-size": "20px",
-    "color": "@xf-linkColor",
-    "background-color": "@xf-pageBg",
+    "font-size": "22px",
+    "color": "@xf-textColorDimmed",
+    "background-color": "@xf-messageUserBlock--background-color",
     "border-width": "1px",
     "border-color": "@xf-borderColor",
-    "border-radius": "1000px",
+    "border-radius": "100%",
     "padding": "5px",
-    "extra": "width: 42px;\nheight: 42px;\nline-height: 32px;\ntext-align: center;"
+    "extra": "text-align: center;\nflex: 0 0 auto;\nline-height: 22px;\nheight: 34px;\nwidth: 34px;\ndisplay: flex;\nalign-items: center;\njustify-content: center;"
 }</value>
+  </style_property>
+  <style_property property_name="th_reactions_secondaryTrigger" group_name="thReactions" title="Always Show Secondary Trigger" description="If this is true, Reactions will show both the default reaction and a secondary trigger to click and expand the list of reactions.  If this is false, the list of reactions can only be accessed hovering / long pressing the default reaction." property_type="value" value_type="boolean" display_order="55">
+    <value>1</value>
+  </style_property>
+  <style_property property_name="th_reactions_showOnThreadList" group_name="thReactions" title="Show Reactions on Threadlist" description="If enabled, will show reactions from the first post on the threadlist" property_type="value" value_type="boolean" display_order="70">
+    <value>1</value>
   </style_property>
   <style_property property_name="th_showReactionsPostbit_displayType_reactions" group_name="thReactions" title="Reaction postbit type" property_type="value" value_type="select" display_order="45">
     <value_parameters>bar={{ phrase('th_bar_reactions') }}
@@ -79,17 +104,16 @@ bottom={{ phrase('bottom') }}</value_parameters>
   </style_property>
   <style_property property_name="th_triggerImageStyling_reactions" group_name="thReactions" title="Trigger image styling" property_type="css" display_order="111" css_components="padding,extra">
     <value>{
-    "padding-top": "4px",
-    "extra": "max-width: 25px;"
+    "extra": "max-width: 22px;\nwidth: 22px;\nheight: 22px;"
 }</value>
   </style_property>
   <style_property property_name="th_triggerType_reactions" group_name="thReactions" title="Trigger type" description="The type of trigger that should be used for reactions" property_type="value" value_type="radio" display_order="60">
     <value_parameters>image_path={{ phrase('th_image_path_reactions') }}
 glyph_class={{ phrase('th_glyph_class_reactions') }}
 template={{ phrase('template') }}</value_parameters>
-    <value>"template"</value>
+    <value>"glyph_class"</value>
   </style_property>
   <style_property property_name="th_triggerValue_reactions" group_name="thReactions" title="Trigger value" description="The path to the image, glyph class to be used or the name of the template" property_type="value" value_type="string" display_order="61">
-    <value>"public:th_reaction_trigger_reactions"</value>
+    <value>"fa fa-smile-o"</value>
   </style_property>
 </style_properties>

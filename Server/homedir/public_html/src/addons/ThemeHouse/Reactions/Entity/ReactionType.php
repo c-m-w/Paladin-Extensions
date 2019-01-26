@@ -51,10 +51,10 @@ class ReactionType extends Entity
 
     protected function _preDelete()
     {
-        if (in_array($this->reaction_type_id, $this->getDefaultReactionTypes())) {
-            $this->error(\XF::phrase('th_cannot_delete_default_reaction_types_reactions'));
-            return false;
-        }
+//        if (in_array($this->reaction_type_id, $this->getDefaultReactionTypes())) {
+//            $this->error(\XF::phrase('th_cannot_delete_default_reaction_types_reactions'));
+//            return false;
+//        }
 
         if (!$this->canDeleteReactionType()) {
             $this->error(\XF::phrase('th_reactions_exist_using_reaction_type_reactions'));

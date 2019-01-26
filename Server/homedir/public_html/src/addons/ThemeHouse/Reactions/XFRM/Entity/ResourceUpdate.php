@@ -2,6 +2,10 @@
 
 namespace ThemeHouse\Reactions\XFRM\Entity;
 
+/**
+ * Class ResourceUpdate
+ * @package ThemeHouse\Reactions\XFRM\Entity
+ */
 class ResourceUpdate extends XFCP_ResourceUpdate
 {
     public function getReactUsers()

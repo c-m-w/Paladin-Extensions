@@ -2,18 +2,21 @@
 
 namespace ThemeHouse\Reactions\Repository;
 
+use XF\Entity\User;
 use XF\Mvc\Entity\Finder;
 use XF\Mvc\Entity\Repository;
 use XF\Mvc\Entity\Entity;
 
 class ReactedContent extends Repository
 {
+    protected $_reactionCountDaily;
+
     /**
      * @param string $contentType
      * @param int $contentId
      * @param int $userId
      *
-     * @return \XF\Entity\ReactedContent|null
+     * @return \XF\Mvc\Entity\ArrayCollection
      */
     public function getReactByContentAndReactor($contentType, $contentId, $userId)
     {
@@ -30,7 +33,7 @@ class ReactedContent extends Repository
      * @param int $contentId
      * @param int $userId
      *
-     * @return \XF\Entity\ReactedContent|null
+     * @return \XF\Mvc\Entity\Entity
      */
     public function getReactByReactionContentReactor($reactionId, $contentType, $contentId, $userId)
     {
@@ -65,7 +68,7 @@ class ReactedContent extends Repository
      */
     public function findReactionsByContentUserId($contentUserId, $counted = 1)
     {
-        if ($contentUserId instanceof \XF\Entity\User) {
+        if ($contentUserId instanceof User) {
             $contentUserId = $contentUserId->user_id;
         }
 
@@ -83,7 +86,7 @@ class ReactedContent extends Repository
      */
     public function findReactionsByReactUserId($reactUserId)
     {
-        if ($reactUserId instanceof \XF\Entity\User) {
+        if ($reactUserId instanceof User) {
             $reactUserId = $reactUserId->user_id;
         }
 
@@ -116,7 +119,8 @@ class ReactedContent extends Repository
     public function deleteReact(Entity $entity, $react)
     {
         if (!$react->react_id) {
-            $existingReacts = $this->getReactByContentAndReactor($react->content_type, $react->content_id, $react->react_user_id);
+            $existingReacts = $this->getReactByContentAndReactor($react->content_type, $react->content_id,
+                $react->react_user_id);
             if (!$existingReacts) {
                 return false;
             }
@@ -130,7 +134,8 @@ class ReactedContent extends Repository
         }
 
         if ($react->react_id) {
-            $existingReact = $this->getReactByReactionContentReactor($react->reaction_id, $react->content_type, $react->content_id, $react->react_user_id);
+            $existingReact = $this->getReactByReactionContentReactor($react->reaction_id, $react->content_type,
+                $react->content_id, $react->react_user_id);
             if (!$existingReact) {
                 return false;
             }
@@ -171,8 +176,10 @@ class ReactedContent extends Repository
         }
     }
 
-    public function convertLikeToReaction(\XF\Entity\LikedContent $like, \ThemeHouse\Reactions\Entity\Reaction $likeReaction = null)
-    {
+    public function convertLikeToReaction(
+        \XF\Entity\LikedContent $like,
+        \ThemeHouse\Reactions\Entity\Reaction $likeReaction = null
+    ) {
         if ($likeReaction === null) {
             $likeReaction = $this->finder('ThemeHouse\Reactions:Reaction')->where('like_wrapper', '=', 1)->fetchOne();
         }
@@ -181,7 +188,8 @@ class ReactedContent extends Repository
             return false;
         }
 
-        $existingReact = $this->getReactByReactionContentReactor($likeReaction->reaction_id, $like->content_type, $like->content_id, $like->like_user_id);
+        $existingReact = $this->getReactByReactionContentReactor($likeReaction->reaction_id, $like->content_type,
+            $like->content_id, $like->like_user_id);
 
         if (!$existingReact && !empty($like->Content)) {
             $react = $this->em->create('ThemeHouse\Reactions:ReactedContent');
@@ -202,7 +210,8 @@ class ReactedContent extends Repository
 
     public function buildReactedContent(Entity $entity, $reactionId = false)
     {
-        $react = $this->getReactByReactionContentReactor($reactionId, $entity->getEntityContentType(), $entity->getEntityId(), \XF::visitor()->user_id);
+        $react = $this->getReactByReactionContentReactor($reactionId, $entity->getEntityContentType(),
+            $entity->getEntityId(), \XF::visitor()->user_id);
 
         $reactHandler = $this->repository('ThemeHouse\Reactions:ReactHandler')->getReactHandlerByEntity($entity, true);
 
@@ -331,11 +340,11 @@ class ReactedContent extends Repository
                 // $operator = $newDbValue ? '+' : '-';
                 // unset($updates[0]);
                 // foreach ($updates AS $userId => $totalChange) {
-                    // $db->query("
-                        // UPDATE xf_user
-                        // SET react_count = GREATEST(0, react_count {$operator} ?)
-                        // WHERE user_id = ?
-                    // ", [$totalChange, $userId]);
+                // $db->query("
+                // UPDATE xf_user
+                // SET react_count = GREATEST(0, react_count {$operator} ?)
+                // WHERE user_id = ?
+                // ", [$totalChange, $userId]);
                 // }
 
                 $db->commit();
@@ -363,29 +372,61 @@ class ReactedContent extends Repository
 
         $db = $this->db();
 
+        $updateReceive = [];
+        $updateGiven = [];
         if ($updateReactCount) {
-            $updates = $db->fetchPairs("
-                SELECT content_user_id, COUNT(*)
+            $updateReceive = $db->fetchAll("
+                SELECT content_user_id, reaction_id, COUNT(*)
                 FROM xf_th_reacted_content
                 WHERE content_type = ?
                     AND content_id IN (" . $db->quote($contentIds) . ")
                     AND is_counted = 1
-                GROUP BY content_user_id
+                GROUP BY content_user_id, reaction_id
             ", $contentType);
-        } else {
-            $updates = [];
+            $updateGiven = $db->fetchAll("
+                SELECT react_user_id, reaction_id, COUNT(*)
+                FROM xf_th_reacted_content
+                WHERE content_type = ?
+                    AND content_id IN (" . $db->quote($contentIds) . ")
+                    AND is_counted = 1
+                GROUP BY react_user_id, reaction_id
+            ", $contentType);
         }
 
         $db->beginTransaction();
-        if ($updates) {
-            // unset($updates[0]);
-            // foreach ($updates AS $userId => $totalChange) {
-                // $db->query("
-                    // UPDATE xf_user
-                    // SET react_count = GREATEST(0, react_count - ?)
-                    // WHERE user_id = ?
-                // ", [$totalChange, $userId]);
-            // }
+        if ($updateReceive) {
+            foreach ($updateReceive AS $changes) {
+                $userId = $changes['content_user_id'];
+                $reactionId = $changes['reaction_id'];
+                $totalChange = end($changes);
+
+                try {
+                    $db->query("
+                     UPDATE xf_th_reaction_user_count
+                     SET count_received = GREATEST(0, count_received - ?)
+                     WHERE user_id = ?
+                      AND reaction_id = ?
+                 ", [$totalChange, $userId, $reactionId]);
+                } catch (\Exception $e) {
+                }
+            }
+        }
+        if ($updateGiven) {
+            foreach ($updateGiven AS $changes) {
+                $userId = $changes['react_user_id'];
+                $reactionId = $changes['reaction_id'];
+                $totalChange = end($changes);
+
+                try {
+                    $db->query("
+                     UPDATE xf_th_reaction_user_count
+                     SET count_given = GREATEST(0, count_given - ?)
+                     WHERE user_id = ?
+                      AND reaction_id = ?
+                 ", [$totalChange, $userId, $reactionId]);
+                } catch (\Exception $e) {
+                }
+            }
         }
 
         $db->delete('xf_th_reacted_content',
@@ -398,7 +439,7 @@ class ReactedContent extends Repository
 
     public function countUserReacts($userId, $content)
     {
-        if ($userId instanceof \XF\Entity\User) {
+        if ($userId instanceof User) {
             $userId = $userId->user_id;
         }
 
@@ -427,17 +468,18 @@ class ReactedContent extends Repository
         }
 
         $maxPerContent = $user->hasPermission('thReactions', 'maxReactsPerContent');
-        $currentMax = $this->countUserReacts($user, $content);
-        if ($maxPerContent > 0 && $currentMax < $maxPerContent) {
-            return false;
+        $currentCount = $this->countUserReacts($user, $content);
+
+        if ($maxPerContent >= 0 && $currentCount >= $maxPerContent) {
+            return true;
         }
 
-        return $currentMax;
+        return false;
     }
 
     public function getUserReactCount($userId)
     {
-        if ($userId instanceof \XF\Entity\User) {
+        if ($userId instanceof User) {
             $userId = $userId->user_id;
         }
 
@@ -451,24 +493,28 @@ class ReactedContent extends Repository
 
     public function getUserReactCountDaily($userId)
     {
-        if ($userId instanceof \XF\Entity\User) {
-            $userId = $userId->user_id;
-        }
+        if (!$this->_reactionCountDaily) {
+            if ($userId instanceof User) {
+                $userId = $userId->user_id;
+            }
 
-        $dailyCounts = $this->db()->fetchPairs("
+            $dailyCounts = $this->db()->fetchPairs("
             SELECT reaction_id, COUNT(*) AS count
             FROM xf_th_reacted_content
             WHERE react_user_id = ?
-                AND DATE(FROM_UNIXTIME(react_date)) = CURDATE()
+                AND react_date >= ?
                 GROUP BY reaction_id
-        ", $userId);
+        ", [$userId, \XF::$time - 86400]);
 
-        $dailyCounts['total'] = 0;
-        foreach ($dailyCounts as $ratingId => $count) {
-            $dailyCounts['total'] = $dailyCounts['total'] + $count;
+            $dailyCounts['total'] = 0;
+            foreach ($dailyCounts as $ratingId => $count) {
+                $dailyCounts['total'] = $dailyCounts['total'] + $count;
+            }
+
+            $this->_reactionCountDaily = $dailyCounts;
         }
 
-        return $dailyCounts;
+        return $this->_reactionCountDaily;
     }
 
     public function sortReactsByType($reacts, $showAll = false)
@@ -524,7 +570,7 @@ class ReactedContent extends Repository
      */
     public function findUserReacts($userId)
     {
-        if ($userId instanceof \XF\Entity\User) {
+        if ($userId instanceof User) {
             $userId = $userId->user_id;
         }
 

@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: dfd1f9b9dccb4c6691ad1f5d2be86fd7
+// FROM HASH: 8315e951e872cfca774a1c70372ceaa6
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -13,10 +13,13 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			';
 				if ($__vars['react']['canReact']) {
 					$__finalCompiled .= '
-				<a href="' . $__templater->escape($__vars['react']['url']) . '" data-xf-click="react" data-reaction-bar="< .message | .reactions-bar">' . $__templater->escape($__vars['react']['rendered']) . '</a>
-				';
+				<a href="' . $__templater->escape($__vars['react']['url']) . '" data-xf-click="react" data-reaction-bar="< .message | .reactions-bar">
+					' . $__templater->escape($__vars['react']['rendered']) . '
+				</a>
+			';
 				} else {
 					$__finalCompiled .= '
+				' . '
 				' . $__templater->escape($__vars['react']['rendered']) . '
 			';
 				}
@@ -54,7 +57,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	if ($__vars['reactionListUrl']) {
 		$__finalCompiled .= '
 		<li>
-			<a class="list-reacts" href="' . $__templater->escape($__vars['reactionListUrl']) . '" data-xf-click="overlay" data-nocache="true">' . 'Show all' . '</a>
+			<a class="list-reacts" href="' . $__templater->escape($__vars['reactionListUrl']) . '" data-xf-click="overlay" data-nocache="true" rel="nofollow">' . 'Show all' . '</a>
 		</li>
 	';
 	}

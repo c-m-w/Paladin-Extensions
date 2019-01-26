@@ -124,6 +124,7 @@ return array (
   'admin_navigation.threadPrompts' => 'Thread prompts',
   'admin_navigation.threadProperties' => 'Thread properties',
   'admin_navigation.threadReplyBans' => 'Thread reply bans',
+  'admin_navigation.thxreactions_options' => 'Options',
   'admin_navigation.tools' => 'Tools',
   'admin_navigation.trophies' => 'Trophies',
   'admin_navigation.userChangeLog' => 'User change log',

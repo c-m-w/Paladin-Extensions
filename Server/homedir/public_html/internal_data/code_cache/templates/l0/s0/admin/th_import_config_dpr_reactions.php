@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: dd2afd079694f9cddd368f81c7409f3a
+// FROM HASH: 787024cc954e6fc6bade415e1d807433
 return array('macros' => array('reaction_type_map_selectrow' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -89,7 +89,6 @@ return array('macros' => array('reaction_type_map_selectrow' => function($__temp
 		'reactionTypes' => $__vars['reactionTypes'],
 	), $__vars) . '
 
-' . '
 ';
 	return $__finalCompiled;
 });

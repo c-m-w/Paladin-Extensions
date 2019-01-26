@@ -41,6 +41,7 @@ class Export extends AbstractXmlExport
                 $reactionNode->setAttribute('title', $reaction['title']);
                 $reactionNode->setAttribute('display_order', $reaction['display_order']);
                 $reactionNode->setAttribute('like_wrapper', ($reaction['like_wrapper'] ? 1 : 0));
+                $reactionNode->setAttribute('is_default', ($reaction['is_default'] ? 1 : 0));
                 $reactionNode->setAttribute('random', ($reaction['random'] ? 1 : 0));
                 $reactionNode->setAttribute('enabled', ($reaction['enabled'] ? 1 : 0));
 

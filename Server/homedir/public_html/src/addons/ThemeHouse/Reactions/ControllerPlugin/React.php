@@ -61,10 +61,20 @@ class React extends \XF\ControllerPlugin\AbstractPlugin
                 return $this->redirect($reactHandler->getReturnLink($entity));
             }
 
+            if ($isReacted) {
+                if ($react->reaction_id) {
+                    $confirmUrl = $reactHandler->getUnreactSingleLink($react->react_id);
+                } else {
+                    $confirmUrl = $reactHandler->getUnreactAllLink($react->content_id);
+                }
+            } else {
+                $confirmUrl = $reactHandler->getReactLink($react->content_id, $react->reaction_id);
+            }
+
             $viewParams = [
                 'reactionId' => $react->reaction_id,
                 'contentType' => $react->content_type,
-                'confirmUrl' => ($isReacted ? $reactHandler->getUnreactSingleLink($react->react_id) : $reactHandler->getReactLink($react->content_id, $react->reaction_id)),
+                'confirmUrl' => $confirmUrl,
                 'isReacted' => $isReacted
             ];
 

@@ -6,6 +6,9 @@ use XF\AddOn\AbstractSetup;
 use XF\AddOn\StepRunnerInstallTrait;
 use XF\AddOn\StepRunnerUninstallTrait;
 use XF\AddOn\StepRunnerUpgradeTrait;
+use XF\Db\Schema\Alter;
+use XF\Db\Schema\Create;
+use XF\Util\Xml;
 
 class Setup extends AbstractSetup
 {
@@ -20,7 +23,7 @@ class Setup extends AbstractSetup
     {
         $schemaManager = $this->db()->getSchemaManager();
 
-        $schemaManager->createTable('xf_th_reaction', function(\XF\Db\Schema\Create $table) {
+        $schemaManager->createTable('xf_th_reaction', function (Create $table) {
             $table->addColumn('reaction_id', 'int')->autoIncrement();
             $table->addColumn('title', 'varchar', 50);
             $table->addColumn('reaction_type_id', 'varchar', 25);
@@ -37,9 +40,10 @@ class Setup extends AbstractSetup
             $table->addColumn('like_wrapper', 'bool')->setDefault(0);
             $table->addColumn('random', 'bool')->setDefault(0);
             $table->addColumn('enabled', 'bool')->setDefault(1);
+            $table->addColumn('is_default', 'bool')->setDefault(0);
         });
 
-        $schemaManager->createTable('xf_th_reaction_type', function(\XF\Db\Schema\Create $table) {
+        $schemaManager->createTable('xf_th_reaction_type', function (Create $table) {
             $table->addColumn('reaction_type_id', 'varchar', 25);
             $table->addColumn('title', 'varchar', 50);
             $table->addColumn('color', 'varchar', 25);
@@ -48,7 +52,7 @@ class Setup extends AbstractSetup
             $table->addPrimaryKey('reaction_type_id');
         });
 
-        $schemaManager->createTable('xf_th_reacted_content', function(\XF\Db\Schema\Create $table) {
+        $schemaManager->createTable('xf_th_reacted_content', function (Create $table) {
             $table->addColumn('react_id', 'int')->autoIncrement();
             $table->addColumn('reaction_id', 'int');
             $table->addColumn('content_type', 'varbinary', 25);
@@ -63,7 +67,7 @@ class Setup extends AbstractSetup
             $table->addKey('react_date', 'react_date');
         });
 
-        $schemaManager->createTable('xf_th_reaction_user_count', function(\XF\Db\Schema\Create $table) {
+        $schemaManager->createTable('xf_th_reaction_user_count', function (Create $table) {
             $table->addColumn('user_id', 'int');
             $table->addColumn('reaction_id', 'int');
             $table->addColumn('content_type', 'varbinary', 25);
@@ -73,7 +77,7 @@ class Setup extends AbstractSetup
             $table->addUniqueKey(['content_type', 'user_id', 'reaction_id'], 'content_type_user_reaction_id');
         });
 
-        $schemaManager->createTable('xf_th_reaction_content_count', function(\XF\Db\Schema\Create $table) {
+        $schemaManager->createTable('xf_th_reaction_content_count', function (Create $table) {
             $table->addColumn('content_id', 'int');
             $table->addColumn('content_type', 'varbinary', 25);
             $table->addColumn('reaction_id', 'int');
@@ -94,32 +98,32 @@ class Setup extends AbstractSetup
         $this->applyGlobalPermissionInt('thReactions', 'maxReactsPerContent', '1');
         $this->applyGlobalPermissionInt('thReactions', 'dailyReactLimit', '-1');
 
-        $schemaManager->alterTable('xf_thread', function(\XF\Db\Schema\Alter $table) {
-            $table->addColumn('first_react_users', 'blob')->nullable();
+        $schemaManager->alterTable('xf_thread', function (Alter $table) {
+            $table->addColumn('first_react_users', 'mediumblob')->nullable();
         });
 
-        $schemaManager->alterTable('xf_conversation_master', function(\XF\Db\Schema\Alter $table) {
-            $table->addColumn('first_react_users', 'blob')->nullable();
+        $schemaManager->alterTable('xf_conversation_master', function (Alter $table) {
+            $table->addColumn('first_react_users', 'mediumblob')->nullable();
         });
 
-        $schemaManager->alterTable('xf_user', function(\XF\Db\Schema\Alter $table) {
-            $table->addColumn('react_count', 'blob')->nullable();
+        $schemaManager->alterTable('xf_user', function (Alter $table) {
+            $table->addColumn('react_count', 'mediumblob')->nullable();
         });
     }
 
     public function installStep3()
     {
         $schemaManager = $this->db()->getSchemaManager();
-        $schemaManager->alterTable('xf_post', function(\XF\Db\Schema\Alter $table) {
-            $table->addColumn('react_users', 'blob')->nullable();
+        $schemaManager->alterTable('xf_post', function (Alter $table) {
+            $table->addColumn('react_users', 'mediumblob')->nullable();
         });
     }
 
     public function installStep4()
     {
         $schemaManager = $this->db()->getSchemaManager();
-        $schemaManager->alterTable('xf_conversation_message', function(\XF\Db\Schema\Alter $table) {
-            $table->addColumn('react_users', 'blob')->nullable();
+        $schemaManager->alterTable('xf_conversation_message', function (Alter $table) {
+            $table->addColumn('react_users', 'mediumblob')->nullable();
         });
     }
 
@@ -127,37 +131,29 @@ class Setup extends AbstractSetup
     {
         $schemaManager = $this->db()->getSchemaManager();
 
-        $schemaManager->alterTable('xf_profile_post', function(\XF\Db\Schema\Alter $table) {
-            $table->addColumn('react_users', 'blob')->nullable();
+        $schemaManager->alterTable('xf_profile_post', function (Alter $table) {
+            $table->addColumn('react_users', 'mediumblob')->nullable();
         });
-        $schemaManager->alterTable('xf_profile_post_comment', function(\XF\Db\Schema\Alter $table) {
-            $table->addColumn('react_users', 'blob')->nullable();
+        $schemaManager->alterTable('xf_profile_post_comment', function (Alter $table) {
+            $table->addColumn('react_users', 'mediumblob')->nullable();
         });
     }
 
     public function installStep6()
     {
-        $schemaManager = $this->schemaManager();
+        /** @var \ThemeHouse\Reactions\Repository\Setup $repo */
+        $repo = \XF::repository('ThemeHouse\Reactions:Setup');
 
         if (!empty($this->app->registry()['addOns']['XFRM'])) {
-            $schemaManager->alterTable('xf_rm_resource_update', function(\XF\Db\Schema\Alter $table) {
-                $table->addColumn('react_users', 'blob')->nullable();
-            });
+            $repo->setupColumnsForAddOn('XFRM');
+        }
+
+        if (!empty($this->app->registry()['addOns']['XFMG'])) {
+            $repo->setupColumnsForAddOn('XFMG');
         }
     }
 
     public function installStep7()
-    {
-        $schemaManager = $this->schemaManager();
-
-        if (!empty($this->app->registry()['addOns']['XFMG'])) {
-            $schemaManager->alterTable('xf_mg_media_item', function(\XF\Db\Schema\Alter $table) {
-                $table->addColumn('react_users', 'blob')->nullable();
-            });
-        }
-    }
-
-    public function installStep8()
     {
         $this->applyDefaultWidgets();
     }
@@ -167,7 +163,7 @@ class Setup extends AbstractSetup
         /** @var \ThemeHouse\Reactions\Service\Import $reactionImporter */
         $reactionImporter = \XF::service('ThemeHouse\Reactions:Import');
 
-        $xml = \XF\Util\Xml::openFile(\XF::getSourceDirectory() . '/addons/ThemeHouse/Reactions/reactions.xml');
+        $xml = Xml::openFile(\XF::getSourceDirectory() . '/addons/ThemeHouse/Reactions/reactions.xml');
         if ($xml) {
             $reactionTypes = $reactionImporter->getReactionTypeFromXml($xml);
             $reactionImporter->importReactionTypes($reactionTypes);
@@ -183,7 +179,7 @@ class Setup extends AbstractSetup
     {
         $schemaManager = $this->schemaManager();
 
-        $schemaManager->alterTable('xf_th_reaction', function(\XF\Db\Schema\Alter $table) {
+        $schemaManager->alterTable('xf_th_reaction', function (Alter $table) {
             $table->changeColumn('user_criteria', 'mediumblob')->nullable();
         });
     }
@@ -192,15 +188,15 @@ class Setup extends AbstractSetup
     {
         $schemaManager = $this->schemaManager();
 
-        $schemaManager->alterTable('xf_thread', function(\XF\Db\Schema\Alter $table) {
+        $schemaManager->alterTable('xf_thread', function (Alter $table) {
             $table->changeColumn('first_react_users', 'blob')->nullable();
         });
 
-        $schemaManager->alterTable('xf_conversation_master', function(\XF\Db\Schema\Alter $table) {
+        $schemaManager->alterTable('xf_conversation_master', function (Alter $table) {
             $table->changeColumn('first_react_users', 'blob')->nullable();
         });
 
-        $schemaManager->alterTable('xf_user', function(\XF\Db\Schema\Alter $table) {
+        $schemaManager->alterTable('xf_user', function (Alter $table) {
             $table->changeColumn('react_count', 'blob')->nullable();
         });
     }
@@ -209,7 +205,7 @@ class Setup extends AbstractSetup
     {
         $schemaManager = $this->schemaManager();
 
-        $schemaManager->alterTable('xf_post', function(\XF\Db\Schema\Alter $table) {
+        $schemaManager->alterTable('xf_post', function (Alter $table) {
             $table->changeColumn('react_users', 'blob')->nullable();
         });
     }
@@ -218,7 +214,7 @@ class Setup extends AbstractSetup
     {
         $schemaManager = $this->db()->getSchemaManager();
 
-        $schemaManager->alterTable('xf_conversation_message', function(\XF\Db\Schema\Alter $table) {
+        $schemaManager->alterTable('xf_conversation_message', function (Alter $table) {
             $table->changeColumn('react_users', 'blob')->nullable();
         });
     }
@@ -227,10 +223,10 @@ class Setup extends AbstractSetup
     {
         $schemaManager = $this->db()->getSchemaManager();
 
-        $schemaManager->alterTable('xf_profile_post', function(\XF\Db\Schema\Alter $table) {
+        $schemaManager->alterTable('xf_profile_post', function (Alter $table) {
             $table->changeColumn('react_users', 'blob')->nullable();
         });
-        $schemaManager->alterTable('xf_profile_post_comment', function(\XF\Db\Schema\Alter $table) {
+        $schemaManager->alterTable('xf_profile_post_comment', function (Alter $table) {
             $table->changeColumn('react_users', 'blob')->nullable();
         });
     }
@@ -241,7 +237,7 @@ class Setup extends AbstractSetup
 
         $schemaManager->renameTable('xf_th_reaction_count', 'xf_th_reaction_user_count');
 
-        $schemaManager->createTable('xf_th_reaction_content_count', function(\XF\Db\Schema\Create $table) {
+        $schemaManager->createTable('xf_th_reaction_content_count', function (Create $table) {
             $table->addColumn('content_id', 'int');
             $table->addColumn('content_type', 'varbinary', 25);
             $table->addColumn('reaction_id', 'int');
@@ -255,7 +251,7 @@ class Setup extends AbstractSetup
         $schemaManager = $this->schemaManager();
 
         if (!empty($this->app->registry()['addOns']['XFRM'])) {
-            $schemaManager->alterTable('xf_rm_resource_update', function(\XF\Db\Schema\Alter $table) {
+            $schemaManager->alterTable('xf_rm_resource_update', function (Alter $table) {
                 $table->addColumn('react_users', 'blob')->nullable();
             });
         }
@@ -266,7 +262,7 @@ class Setup extends AbstractSetup
         $schemaManager = $this->schemaManager();
 
         if (!empty($this->app->registry()['addOns']['XFMG'])) {
-            $schemaManager->alterTable('xf_mg_media_item', function(\XF\Db\Schema\Alter $table) {
+            $schemaManager->alterTable('xf_mg_media_item', function (Alter $table) {
                 $table->addColumn('react_users', 'blob')->nullable();
             });
         }
@@ -276,7 +272,7 @@ class Setup extends AbstractSetup
     {
         $schemaManager = $this->schemaManager();
 
-        $schemaManager->alterTable('xf_th_reaction_type', function(\XF\Db\Schema\Alter $table) {
+        $schemaManager->alterTable('xf_th_reaction_type', function (Alter $table) {
             $table->addColumn('notable_member', 'bool')->setDefault(0);
         });
     }
@@ -285,19 +281,154 @@ class Setup extends AbstractSetup
     {
         $schemaManager = $this->schemaManager();
 
-        $schemaManager->alterTable('xf_th_reaction_user_count', function(\XF\Db\Schema\Alter $table) {
+        $schemaManager->alterTable('xf_th_reaction_user_count', function (Alter $table) {
             $table->dropIndexes('user_reaction_id');
             $table->addKey(['user_id', 'reaction_id'], 'user_reaction_id');
         });
     }
 
-    public function postUpgrade($previousVersion, array &$stateChanges)
+    public function upgrade1001110Step1()
     {
-        $this->addNewContentTypesToExistingreactions($previousVersion);
-        $this->applyDefaultWidgets($previousVersion);
+        $schemaManager = $this->schemaManager();
+
+        $schemaManager->alterTable('xf_th_reaction', function (Alter $table) {
+            $table->addColumn('is_default', 'bool')->setDefault(0);
+        });
+
+        $db = $this->db();
+
+        $db->query('UPDATE xf_th_reaction SET is_default=1 where like_wrapper=1');
     }
 
-    protected function addNewContentTypesToExistingreactions($previousVersion)
+    public function upgrade1001370Step1()
+    {
+        $schemaManager = $this->schemaManager();
+
+        if (!empty($this->app->registry()['addOns']['XFMG'])) {
+            $schemaManager->alterTable('xf_mg_comment', function (Alter $table) {
+                $table->addColumn('react_users', 'blob')->nullable();
+            });
+        }
+    }
+
+    public function upgrade1001370Step2()
+    {
+        if (!empty($this->app->registry()['addOns']['XFMG'])) {
+            $this->db()->rawQuery("UPDATE xf_th_reaction SET react_handler = CONCAT(react_handler, ',xfmg_comment')");
+        }
+    }
+
+    public function upgrade1001391Step1()
+    {
+        $this->schemaManager()->alterTable('xf_thread', function (Alter $table) {
+            $table->changeColumn('first_react_users', 'mediumblob')->nullable();
+        });
+    }
+
+    public function upgrade1001391Step2()
+    {
+        $this->schemaManager()->alterTable('xf_conversation_master', function (Alter $table) {
+            $table->changeColumn('first_react_users', 'mediumblob')->nullable();
+        });
+    }
+
+    public function upgrade1001391Step3()
+    {
+        $this->schemaManager()->alterTable('xf_user', function (Alter $table) {
+            $table->changeColumn('react_count', 'mediumblob')->nullable();
+        });
+    }
+
+    public function upgrade1001391Step4()
+    {
+        $this->schemaManager()->alterTable('xf_post', function (Alter $table) {
+            $table->changeColumn('react_users', 'mediumblob')->nullable();
+        });
+    }
+
+    public function upgrade1001391Step5()
+    {
+        $this->schemaManager()->alterTable('xf_conversation_message', function (Alter $table) {
+            $table->changeColumn('react_users', 'mediumblob')->nullable();
+        });
+    }
+
+    public function upgrade1001391Step6()
+    {
+        $this->schemaManager()->alterTable('xf_profile_post', function (Alter $table) {
+            $table->changeColumn('react_users', 'mediumblob')->nullable();
+        });
+    }
+
+    public function upgrade1001391Step7()
+    {
+        $this->schemaManager()->alterTable('xf_profile_post_comment', function (Alter $table) {
+            $table->changeColumn('react_users', 'mediumblob')->nullable();
+        });
+    }
+
+    public function upgrade1001391Step8()
+    {
+        if (!empty($this->app->registry()['addOns']['XFRM'])) {
+            $this->schemaManager()->alterTable('xf_rm_resource_update', function (Alter $table) {
+                $table->changeColumn('react_users', 'mediumblob')->nullable();
+            });
+        }
+    }
+
+    public function upgrade1001391Step9()
+    {
+        if (!empty($this->app->registry()['addOns']['XFMG'])) {
+            try {
+                $this->schemaManager()->alterTable('xf_mg_media_item', function (Alter $table) {
+                    $table->changeColumn('react_users', 'mediumblob')->nullable();
+                });
+
+                $this->schemaManager()->alterTable('xf_mg_comment', function (Alter $table) {
+                    $table->changeColumn('react_users', 'mediumblob')->nullable();
+                });
+            }
+            catch(\InvalidArgumentException $e) {
+                \XF::repository('ThemeHouse\Reactions:Setup')->setupColumnsForAddOn('XFMG');
+            }
+        }
+    }
+
+    public function upgrade1001392Step1()
+    {
+        if (!empty($this->app->registry()['addOns']['XFMG'])) {
+            $this->schemaManager()->alterTable('xf_mg_album', function (Alter $table) {
+                $table->addColumn('react_users', 'blob')->nullable();
+            });
+        }
+    }
+
+    public function upgrade1001392Step2()
+    {
+        if (!empty($this->app->registry()['addOns']['XFMG'])) {
+            $this->db()->rawQuery("UPDATE xf_th_reaction SET react_handler = CONCAT(react_handler, ',xfmg_album')");
+        }
+    }
+
+    /**
+     * @param $previousVersion
+     * @param array $stateChanges
+     * @throws \XF\PrintableException
+     */
+    public function postUpgrade($previousVersion, array &$stateChanges)
+    {
+        $this->addNewContentTypesToExistingReactions($previousVersion);
+        $this->applyDefaultWidgets($previousVersion);
+
+        /** @noinspection PhpUndefinedMethodInspection */
+        $this->app->repository('ThemeHouse\Reactions:Reaction')->rebuildReactionCache();
+    }
+
+    /**
+     * @param $previousVersion
+     * @throws \XF\PrintableException
+     */
+    protected function addNewContentTypesToExistingReactions($previousVersion)
     {
         $newContentTypes = [];
 
@@ -309,7 +440,6 @@ class Setup extends AbstractSetup
         if (!empty($newContentTypes)) {
             foreach (\XF::finder('ThemeHouse\Reactions:Reaction') as $reaction) {
                 /** @var \ThemeHouse\Reactions\Entity\Reaction $reaction */
-
                 $reactHandler = $reaction->react_handler;
                 foreach ($newContentTypes as $contentType) {
                     if (in_array($contentType, $reactHandler)) {
@@ -374,7 +504,7 @@ class Setup extends AbstractSetup
     {
         $schemaManager = $this->db()->getSchemaManager();
 
-        $schemaManager->alterTable('xf_thread', function(\XF\Db\Schema\Alter $table) {
+        $schemaManager->alterTable('xf_thread', function (Alter $table) {
             $table->dropColumns(['first_react_users']);
         });
     }
@@ -383,7 +513,7 @@ class Setup extends AbstractSetup
     {
         $schemaManager = $this->db()->getSchemaManager();
 
-        $schemaManager->alterTable('xf_post', function(\XF\Db\Schema\Alter $table) {
+        $schemaManager->alterTable('xf_post', function (Alter $table) {
             $table->dropColumns(['react_users']);
         });
     }
@@ -392,7 +522,7 @@ class Setup extends AbstractSetup
     {
         $schemaManager = $this->db()->getSchemaManager();
 
-        $schemaManager->alterTable('xf_conversation_message', function(\XF\Db\Schema\Alter $table) {
+        $schemaManager->alterTable('xf_conversation_message', function (Alter $table) {
             $table->dropColumns(['react_users']);
         });
     }
@@ -401,7 +531,7 @@ class Setup extends AbstractSetup
     {
         $schemaManager = $this->db()->getSchemaManager();
 
-        $schemaManager->alterTable('xf_conversation_master', function(\XF\Db\Schema\Alter $table) {
+        $schemaManager->alterTable('xf_conversation_master', function (Alter $table) {
             $table->dropColumns(['react_users']);
         });
     }
@@ -410,7 +540,7 @@ class Setup extends AbstractSetup
     {
         $schemaManager = $this->db()->getSchemaManager();
 
-        $schemaManager->alterTable('xf_profile_post', function(\XF\Db\Schema\Alter $table) {
+        $schemaManager->alterTable('xf_profile_post', function (Alter $table) {
             $table->dropColumns(['react_users']);
         });
     }
@@ -419,7 +549,7 @@ class Setup extends AbstractSetup
     {
         $schemaManager = $this->db()->getSchemaManager();
 
-        $schemaManager->alterTable('xf_profile_post_comment', function(\XF\Db\Schema\Alter $table) {
+        $schemaManager->alterTable('xf_profile_post_comment', function (Alter $table) {
             $table->dropColumns(['react_users']);
         });
     }
@@ -428,7 +558,7 @@ class Setup extends AbstractSetup
     {
         $schemaManager = $this->db()->getSchemaManager();
 
-        $schemaManager->alterTable('xf_user', function(\XF\Db\Schema\Alter $table) {
+        $schemaManager->alterTable('xf_user', function (Alter $table) {
             $table->dropColumns(['react_count']);
         });
     }
@@ -439,11 +569,18 @@ class Setup extends AbstractSetup
 
         try {
             if (!empty($this->app->registry()['addOns']['XFMG'])) {
-                $schemaManager->alterTable('xf_mg_media_item', function(\XF\Db\Schema\Alter $table) {
+                $schemaManager->alterTable('xf_mg_media_item', function (Alter $table) {
+                    $table->dropColumns(['react_users']);
+                });
+                $schemaManager->alterTable('xf_mg_comment', function (Alter $table) {
+                    $table->dropColumns(['react_users']);
+                });
+                $schemaManager->alterTable('xf_mg_album', function (Alter $table) {
                     $table->dropColumns(['react_users']);
                 });
             }
-        } catch (\Exception $e) {}
+        } catch (\Exception $e) {
+        }
     }
 
     public function uninstallStep10()
@@ -452,11 +589,12 @@ class Setup extends AbstractSetup
 
         try {
             if (!empty($this->app->registry()['addOns']['XFRM'])) {
-                $schemaManager->alterTable('xf_rm_resource_update', function(\XF\Db\Schema\Alter $table) {
+                $schemaManager->alterTable('xf_rm_resource_update', function (Alter $table) {
                     $table->dropColumns(['react_users']);
                 });
             }
-        } catch (\Exception $e) {}
+        } catch (\Exception $e) {
+        }
     }
 
     public function uninstallStep11()

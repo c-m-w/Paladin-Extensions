@@ -22,6 +22,7 @@ class MemberReactions extends AbstractWidget
         $reactionCounts = $this->repository('ThemeHouse\Reactions:UserReactionCount')->getUserReactionCounts($user->user_id);
 
         $viewParams = [
+            'user' => $user,
             'reactionCounts' => $reactionCounts,
         ];
         return $this->renderer('th_widget_member_reactions', $viewParams);

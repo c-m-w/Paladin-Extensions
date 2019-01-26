@@ -210,7 +210,17 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 					id="recent-content"
 					role="tab">' . 'Postings' . '</a>
 
-				' . '
+				';
+	if ($__vars['xf']['options']['threactions_displayProfileTab']) {
+		$__finalCompiled .= '
+	<a href="' . $__templater->fn('link', array('members/reaction-stats', $__vars['user'], ), true) . '"
+	   class="tabs-tab"
+	   id="reaction-stats"
+	   role="tab">' . 'Reactions' . '</a>
+';
+	}
+	$__finalCompiled .= '
+' . '
 
 ';
 	if ($__templater->method($__vars['xf']['visitor'], 'canViewResources', array()) AND $__vars['user']['xfrm_resource_count']) {
@@ -358,7 +368,18 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		<div class="blockMessage">' . 'Loading' . $__vars['xf']['language']['ellipsis'] . '</div>
 	</li>
 
-	' . '
+	';
+	if ($__vars['xf']['options']['threactions_displayProfileTab']) {
+		$__finalCompiled .= '
+	<li data-href="' . $__templater->fn('link', array('members/reaction-stats', $__vars['user'], ), true) . '"
+		role="tabpanel"
+		aria-labelledby="reaction-stats">
+		<div class="blockMessage">' . 'Loading' . $__vars['xf']['language']['ellipsis'] . '</div>
+	</li>
+';
+	}
+	$__finalCompiled .= '
+' . '
 
 ';
 	if ($__templater->method($__vars['xf']['visitor'], 'canViewResources', array()) AND $__vars['user']['xfrm_resource_count']) {

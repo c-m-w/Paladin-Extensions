@@ -76,6 +76,7 @@ class Reaction extends \XF\Admin\Controller\AbstractController
             'like_wrapper' => 'bool',
             'random' => 'bool',
             'enabled' => 'bool',
+            'is_default' => 'bool',
         ]);
 
         $reactHandlerAll = $this->filter('react_handler_all', 'bool');

@@ -106,9 +106,13 @@ class Post extends AbstractHandler
             $options['disabled_node_ids'] = 'none';
         }
 
-        if (is_array($options['allowed_node_ids']) && !empty($options['allowed_node_ids']) && is_array($options['disabled_node_ids']) && !empty($options['disabled_node_ids']) && empty(array_diff($options['allowed_node_ids'], $options['disabled_node_ids']))) {
-            $error = \XF::phrase('th_forum_cannot_be_allowed_and_disabled_same_time_reactions');
-			return false;
+
+        if (is_array($options['allowed_node_ids']) && is_array($options['disabled_node_ids'])) {
+            $aDiff = array_diff($options['allowed_node_ids'], $options['disabled_node_ids']);
+            if (!empty($options['allowed_node_ids']) && is_array($options['disabled_node_ids']) && !empty($options['disabled_node_ids']) && empty($aDiff)) {
+                $error = \XF::phrase('th_forum_cannot_be_allowed_and_disabled_same_time_reactions');
+                return false;
+            }
         }
 
         return true;

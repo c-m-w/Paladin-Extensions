@@ -33,13 +33,11 @@ return array('macros' => array('visitor_panel_row' => function($__templater, arr
 						</a>
 					</dd>
 				</dl>
-				' . '
-				<dl class="pairs pairs--justified fauxBlockLink">
-					' . $__templater->callMacro('th_display_reactions', 'react_total_text', array(
+				<!--\\[XF:stats_pairs:above_likes]-->
+' . $__templater->callMacro('th_display_reactions', 'react_total_text', array(
 		'reacts' => $__vars['xf']['visitor']['react_count'],
 		'reactsCount' => $__templater->method($__vars['xf']['visitor'], 'getReactTotalCount', array()),
 	), $__vars) . '
-				</dl>
 				' . '
 ';
 	if ($__vars['xf']['options']['siropuReferralContestsDisplayReferralCount']) {

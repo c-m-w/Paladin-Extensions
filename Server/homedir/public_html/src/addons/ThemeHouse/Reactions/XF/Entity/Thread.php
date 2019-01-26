@@ -5,6 +5,12 @@ namespace ThemeHouse\Reactions\XF\Entity;
 use XF\Mvc\Entity\Entity;
 use XF\Mvc\Entity\Structure;
 
+/**
+ * Class Thread
+ * @package ThemeHouse\Reactions\XF\Entity
+ *
+ * @property array first_react_users
+ */
 class Thread extends XFCP_Thread
 {
     public function getReactUsers()

@@ -1,30 +1,62 @@
 <?php
-// FROM HASH: 77cd93b89c79fd36912604cca1d714e4
+// FROM HASH: 0d587052e77fb7c7381d59b50436478b
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
-	$__finalCompiled .= '.reactions-bar
+	$__finalCompiled .= '
+.p-body {
+	-webkit-backface-visibility: hidden;
+	backface-visibility: hidden;
+ }
+
+.modify_reacts {
+	margin:  4px 0 4px 10px;
+	display: inline-block;
+}
+
+.th_reactions__triggerSecondary {
+	margin-left: 10px;
+}
+
+.th_reactions__triggerPrimary img {
+	pointer-events: none;
+}
+
+.reactions-bar
 {
 	.m-clearFix();
 
 	display: flex;
-	flex-wrap: wrap;
 	align-items: center;
 	justify-content: space-between;
+	margin: 10px 0;
 }
+
 .reactions-bar.content
 {
-	margin: 10px 0;
+	margin: 0;
 	.xf-th_reactions__barStyle();
+	padding-top: 0;
+	padding-bottom: 0;
 }
 .reactions-bar.bit-list
 {
 	float: right;
-	transform: scale(.75);
+	margin: 0;
+
+	.reactions-left {
+		margin-right: -5px;
+		
+		.th_reactions__listItem {
+			// transform: scale(.75);
+
+			img {height: 14px; width: 14px;}
+		}
+	}
 }
-.reactions-bar.bit-list
-{
-	margin: -1px;
+
+.structItem-minor {
+	// clear: both;
 }
 
 .reactions-bar ul
@@ -38,6 +70,18 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	align-items: center;
 }
 
+.reactions-left > ul { flex-wrap: wrap; }
+
+.structItem .reactions-bar {
+	margin-top: 0;
+	font-size: 12px;
+	margin-left: 5px;
+	
+	ul {max-height: 21px;}
+	
+	.reactions-left .th_reactions__listItem {line-height: 16px;}
+}
+
 .reactions-bar li
 {
 	display: flex;
@@ -45,9 +89,13 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 	img {
 		vertical-align: middle;
-		height: 22px;
+		height: 18px;
 	}
 
+}
+
+.th_reactions__reaction {
+	flex: 0 0 auto;
 }
 
 .reactions-bar .reactions-left
@@ -65,7 +113,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		.xf-th_reactions__listItemStyle();
 
 		span {
-			padding: 2px 5px;
+			padding: 2px;
 			vertical-align: middle;
 		}
 
@@ -97,6 +145,11 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 .th_reactions__trigger {
 	cursor: pointer;
+	-webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 	.xf-th_reactions__triggerStyle();
 
 	.th_reactions__trigger__image {
@@ -106,9 +159,13 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	svg path {
 		fill: @xf-th_reactions__triggerStyle--color;
 	}
-}
 
-.th_reactions__trigger, .reactions-right__list li img {
+	span {
+		display: flex;
+		align-items: center;
+	}
+
+	/*
 	&:hover {
 		transform: scale(1, 1);
 		animation-name: th_reactions_triggerHover;
@@ -123,6 +180,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		animation-direction: reverse;
 		animation-fill-mode: both;
 	}
+	*/
 }
 
 .reactions-bar .list-reactions
@@ -297,6 +355,25 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 					' . $__templater->filter($__vars['reaction']['image_sprite_css'], array(array('raw', array()),), true) . '
 				}
 			';
+					} else if (($__vars['reaction']['image_type'] == 'normal') AND $__vars['reaction']['image_url']) {
+						$__finalCompiled .= '
+				.reaction--normal.reaction--normal' . $__templater->escape($__vars['reactionId']) . '
+				{
+					';
+						if ($__vars['reaction']['styling']['image_normal']['style_dimensions']) {
+							$__finalCompiled .= '
+						width: @{thReactionsImageDimensions[width]}@{thReactionsImageDimensions[unit]};
+						height: @{thReactionsImageDimensions[height]}@{thReactionsImageDimensions[unit]};
+					';
+						} else {
+							$__finalCompiled .= '
+						width: ' . $__templater->escape($__vars['reaction']['styling']['image_normal']['w']) . $__templater->escape($__vars['reaction']['styling']['image_normal']['u']) . ';
+						height: ' . $__templater->escape($__vars['reaction']['styling']['image_normal']['h']) . $__templater->escape($__vars['reaction']['styling']['image_normal']['u']) . ';
+					';
+						}
+						$__finalCompiled .= '
+				}
+			';
 					}
 					$__finalCompiled .= '
 		';
@@ -318,6 +395,16 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	}
 	$__finalCompiled .= '
 
+
+//linear
+.linear(@start, @end, @ratio) {
+	@linear: @start + ((@end - @start) * @ratio)
+}
+
+//ease
+.ease(@start, @end, @ratio) {
+	@ease: @start + ((@end - @start) * (pow(@ratio, 2) / (pow(@ratio, 2) + pow((1 - @ratio), 2))))
+}
 
 // wobbly
 .tween(@start, @end, @ratio) {
@@ -365,20 +452,46 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	.th_reactions_triggerHover(100);
 }
 
+.th_reactions_triggerHoverLarge(@n, @i: 0) when (@i =< @n) {
+	@selector: e(\'@{i}%\');
+    @{selector}{
+		.tween(1, 1.5, (@i / @n));
+		transform: scale(@tween, @tween)
+
+	}
+	.th_reactions_triggerHoverLarge(@n, (@i + 1));
+}
+
+@keyframes th_reactions_triggerHoverLarge {
+	.th_reactions_triggerHoverLarge(100);
+}
+
 
 
 .reactions-bar .reactions-right__list {
-	margin: 10px;
+	margin: 0 10px;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.reactions-bar--modal .reactions-right__list {
+	justify-content: center;
 	flex-wrap: wrap;
+	margin: 10px;
+	width: 250px;
+}
+
+.reactions-bar--modal .th_reactions__scrollContainer {
+	border-radius: 6px;
 }
 
 .reactions-bar--out .reactions-right__list {
-	will-change: transform;
 	transform: none;
 	opacity: 0;
 	transform-origin: 100% 50%;
 	transform-style: flat;
-	display: none;
+	display: inline-flex;
+	pointer-events: none;
 }
 
 .th_reactions_expandShow(@n, @i: 0) when (@i =< @n) {
@@ -389,18 +502,22 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		transform: scale(@tweenGentle, @tweenGentle2);
 		opacity: (0.1 + ((@i / @n) * 1.5));
 		& when (@i = 0) {
-			display: none;
-			width: 0;
-			height: 0;
+			pointer-events: none;
+			overflow-x: hidden !important;
+			will-change: unset;
 		}
 		& when (@i = 1) {
-			display: inline-flex;
-			width: auto;
-			height: auto;
+			will-change: transform;
+		}
+		& when (@i = 99) {
+			overflow-x: hidden !important;
+			will-change: transform;
 		}
 		& when (@i = 100) {
-			display: inline-flex;
 			transform: scale(1, 1);
+			overflow-x: auto !important;
+			pointer-events: all;
+			will-change: unset;
 		}
 	}
 	.th_reactions_expandShow(@n, (@i + 1));
@@ -435,7 +552,6 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		transform: translateY(20px);
 		transform-origin: center;
 		transform-style: flat;
-		display: none;
 		visibility: hidden;
 	}
 
@@ -490,20 +606,19 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 
 .th_reactions_delay(@n, @i: 0) when (@i =< @n) {
-	@selector: e(\'.reactions-bar--up .reactions-bar--show li:nth-last-of-type(@{i}), .reactions-bar--up .reactions-bar--show a:nth-last-of-type(@{i})\');
+	@selector: e(\'.reactions-bar--up .reactions-right:not(.th_reactions__reactionsBar--overflowing) .reactions-bar--show li:nth-last-of-type(@{i}), .reactions-bar--up .reactions-right:not(.th_reactions__reactionsBar--overflowing) .reactions-bar--show a:nth-last-of-type(@{i})\');
     @{selector}{
 		animation-delay: (0.025s * @i);
 	}
 	.th_reactions_delay(@n, (@i + 1));
 }
 
-.th_reactions_delay(50);
+// .th_reactions_delay(50);
 
 
 
 .reactions-bar--up .reactions-bar--show {
 	li {
-		//opacity: 1;
 		animation-name: th_reactions_slideUpShow;
 		animation-duration: 0.5s;
 		animation-direction: normal;
@@ -513,7 +628,6 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	}
 
 	a {
-		//opacity: 1;
 		animation-name: th_reactions_slideExpandShow;
 		animation-duration: 0.5s;
 		animation-direction: normal;
@@ -528,7 +642,6 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 .reactions-bar--up .reactions-bar--hide {
 	li {
-		//opacity: 1;
 		animation-name: th_reactions_slideUpShow;
 		animation-duration: 0.5s;
 		animation-direction: reverse;
@@ -538,12 +651,216 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	}
 
 	a {
-		//opacity: 1;
 		animation-name: th_reactions_slideExpandShow;
 		animation-duration: 0.5s;
 		animation-direction: reverse;
 		animation-fill-mode: both;
 
+	}
+}
+
+.reactions-bar--out .reactions-right__list,
+.reactions-bar--up .reactions-right__list,
+.reactions-bar--none .reactions-right__list {
+	@media(max-width: @xf-responsiveWide) {
+		margin-top: 3px;
+		margin-bottom: 3px;
+		flex-wrap: nowrap;
+		a {
+			padding: @xf-paddingSmall;
+		}
+		overflow: hidden;
+	}
+}
+
+.reactions-bar--none .reactions-right__list {
+	overflow-x: auto;
+}
+
+.reactions-right {
+	position: relative;
+	max-width: 100%;
+}
+
+.th_reactions__scroll {
+	display: none;
+}
+
+.th_reactions__scroll__iconWrap {
+	transition: opacity 0.3s, color 0.3s;
+	opacity: 0;
+	color: @xf-linkColor;
+}
+
+@keyframes th_reactions__modalBackground {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+
+.reactions-right__list {
+	li.th_reactions__reaction {
+		padding: 5px;
+		z-index: 2;
+	}
+
+	@media(max-width: @xf-responsiveMedium) {
+		li.th_reactions__reaction {
+			padding: 0 9px;
+		}
+
+		a {
+			padding: @xf-paddingSmall;
+		}
+	}
+
+	li.th_reactions__reaction:first-of-type {
+		padding-left: 5px;
+	}
+
+	li.th_reactions__reaction:last-of-type {
+		padding-right: 5px;
+	}
+}
+
+.reactions-bar:not(.reactions-bar--none) .th_reactions__scrollContainer {
+	opacity: 0;
+	pointer-events: none;
+
+	&.reactions-barChildren--show {
+		opacity: 1;
+		pointer-events: all;
+	}
+}
+
+:not(.reactions-bar--none) .th_reactions__scrollContainer,
+.reactions-bar--modal .th_reactions__scrollContainer {
+	position: absolute;
+	transition: opacity 0.2s;
+	.xf-th_reactions__modalStyle();
+}
+
+.th_reactions__scrollContainer {
+	justify-content: space-between;
+	display: flex;
+
+	min-height: 50px;
+	overflow: hidden;
+	border-radius: 1000px;
+	.xf-th_reactions__modalWrapperStyle();
+}
+
+.th_reactions__reactionsBar--overflowing {
+	.th_reactions__scrollContainer {
+		width: calc(~"100vw - 30px");
+	}
+
+	.th_reactions__scroll {
+		display: flex;
+		padding: 10px 14px;
+		font-size: 16px;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.reactions-right__list {
+		margin: 0;
+	}
+
+	& .reactions-barChildren--show .th_reactions__scroll__iconWrap,
+	.reactions-bar--none & .th_reactions__scroll__iconWrap {
+		opacity: 1;
+	}
+
+	&.th_reactions__rightScroll--inactive .reactions-barChildren--show .th_reactions__rightScrollRight__iconWrap,
+	.reactions-bar--none &.th_reactions__rightScroll--inactive .th_reactions__rightScrollRight__iconWrap,
+	&.th_reactions__leftScroll--inactive .reactions-barChildren--show .th_reactions__leftScrollLeft__iconWrap,
+	.reactions-bar--none &.th_reactions__leftScroll--inactive .th_reactions__leftScrollLeft__iconWrap {
+		color: @xf-textColorMuted;
+		opacity: 0.4;
+	}
+}
+
+
+@keyframes th_reactions__label {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+.th_reactions__reactionLabel {
+	text-align: center;
+	opacity: 0;
+	animation-name: th_reactions__label;
+	animation-duration: 0.2s;
+	animation-fill-mode: both;
+	animation-direction: normal;
+	pointer-events: none;
+	position: absolute;
+	transform: translate(-50%, 0);
+	padding: 3px 8px;
+	font-size: 12px;
+	border-radius: 1000px;
+	background: rgba(0, 0, 0, 0.6);
+	color: #FFF;
+	margin-top: -@xf-paddingMedium;
+	z-index: 10;
+}
+
+.th_reactions__reactionLabel--out {
+	opacity: 1;
+	animation-name: th_reactions__label;
+	animation-duration: 0.1s;
+	animation-fill-mode: both;
+	animation-direction: reverse;
+}
+
+/*
+.th_reactions__reaction--hovered {
+	img {
+		transform: scale(1, 1);
+		animation-name: th_reactions_triggerHoverLarge;
+		animation-duration: 0.3s;
+		animation-direction: normal;
+		animation-fill-mode: both;
+	}
+}
+
+.th_reactions__reaction--hoveredOut {
+	img {
+		transform: scale(1.5, 1.5);
+		animation-name: th_reactions_triggerHoverLarge;
+		animation-duration: 0.3s;
+		animation-direction: reverse;
+		animation-fill-mode: forwards;
+	}
+}
+*/
+
+.reactions-bar--modal {
+	.reactions-bar--show {
+		li.th_reactions__reaction {
+			animation-name: th_reactions_slideUpShow;
+			animation-duration: 0.5s;
+			animation-direction: normal;
+			animation-fill-mode: both;
+			display: inline-flex;
+			visibility: visible;;
+		}
+
+		a {
+			animation-name: th_reactions_slideExpandShow;
+			animation-duration: 0.5s;
+			animation-direction: normal;
+			animation-fill-mode: both;
+		}
 	}
 }
 

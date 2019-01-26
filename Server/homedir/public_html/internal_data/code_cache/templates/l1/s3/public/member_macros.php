@@ -109,10 +109,12 @@ return array('macros' => array('moderator_menu_actions' => function($__templater
 	$__finalCompiled .= '
 ' . '
 	<dl class="pairs pairs--rows pairs--rows--centered">
-		<dt title="' . $__templater->filter('Likes received', array(array('for_attr', array()),), true) . '">' . 'Likes' . '</dt>
-		<dd>
-			' . $__templater->filter($__vars['user']['like_count'], array(array('number', array()),), true) . '
-		</dd>
+		<dt title="' . 'Reactions received' . '">' . 'Reactions' . '</dt>
+<dd>
+	<a href="' . $__templater->fn('link', array('members/reactions', $__vars['user'], array('type' => 'received', ), ), true) . '" class="fauxBlockLink-linkRow u-concealed">
+	' . $__templater->filter($__templater->method($__vars['user'], 'getReactTotalCount', array()), array(array('number', array()),), true) . '
+	</a>
+</dd>
 	</dl>
 	' . '
 	';

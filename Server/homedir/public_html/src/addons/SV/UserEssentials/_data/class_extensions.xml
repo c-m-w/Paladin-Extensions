@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<class_extensions>
+  <extension from_class="SV\UserMentionsImprovements\bbCode\tagRenderer" to_class="SV\UserEssentials\SV\UserMentionsImprovements\bbCode\tagRenderer" execute_order="0" active="1"/>
+  <extension from_class="XF\Admin\Controller\Log" to_class="SV\UserEssentials\XF\Admin\Controller\Log" execute_order="6272" active="1"/>
+  <extension from_class="XF\Admin\Controller\User" to_class="SV\UserEssentials\XF\Admin\Controller\User" execute_order="6272" active="1"/>
+  <extension from_class="XF\Admin\Controller\UserUpgrade" to_class="SV\UserEssentials\XF\Admin\Controller\UserUpgrade" execute_order="6272" active="1"/>
+  <extension from_class="XF\ApprovalQueue\User" to_class="SV\UserEssentials\XF\ApprovalQueue\User" execute_order="6272" active="1"/>
+  <extension from_class="XF\BbCode\Renderer\Html" to_class="SV\UserEssentials\XF\BbCode\Renderer\Html" execute_order="0" active="1"/>
+  <extension from_class="XF\ControllerPlugin\Login" to_class="SV\UserEssentials\XF\ControllerPlugin\Login" execute_order="6272" active="1"/>
+  <extension from_class="XF\Entity\Forum" to_class="SV\UserEssentials\XF\Entity\Forum" execute_order="6272" active="1"/>
+  <extension from_class="XF\Entity\LoginAttempt" to_class="SV\UserEssentials\XF\Entity\LoginAttempt" execute_order="6272" active="1"/>
+  <extension from_class="XF\Entity\Post" to_class="SV\UserEssentials\XF\Entity\Post" execute_order="6272" active="1"/>
+  <extension from_class="XF\Entity\ProfilePost" to_class="SV\UserEssentials\XF\Entity\ProfilePost" execute_order="10" active="1"/>
+  <extension from_class="XF\Entity\ProfilePostComment" to_class="SV\UserEssentials\XF\Entity\ProfilePostComment" execute_order="10" active="1"/>
+  <extension from_class="XF\Entity\Thread" to_class="SV\UserEssentials\XF\Entity\Thread" execute_order="6272" active="1"/>
+  <extension from_class="XF\Entity\User" to_class="SV\UserEssentials\XF\Entity\User" execute_order="6272" active="1"/>
+  <extension from_class="XF\Entity\UserUpgrade" to_class="SV\UserEssentials\XF\Entity\UserUpgrade" execute_order="6272" active="1"/>
+  <extension from_class="XF\Finder\Post" to_class="SV\UserEssentials\XF\Finder\Post" execute_order="10" active="1"/>
+  <extension from_class="XF\Finder\ProfilePost" to_class="SV\UserEssentials\XF\Finder\ProfilePost" execute_order="10" active="1"/>
+  <extension from_class="XF\Finder\ProfilePostComment" to_class="SV\UserEssentials\XF\Finder\ProfilePostComment" execute_order="10" active="1"/>
+  <extension from_class="XF\Logger" to_class="SV\UserEssentials\XF\Logger" execute_order="6272" active="1"/>
+  <extension from_class="XF\Pub\Controller\Account" to_class="SV\UserEssentials\XF\Pub\Controller\Account" execute_order="6272" active="1"/>
+  <extension from_class="XF\Pub\Controller\Member" to_class="SV\UserEssentials\XF\Pub\Controller\Member" execute_order="6272" active="1"/>
+  <extension from_class="XF\Pub\Controller\Post" to_class="SV\UserEssentials\XF\Pub\Controller\Post" execute_order="10" active="1"/>
+  <extension from_class="XF\Pub\Controller\ProfilePost" to_class="SV\UserEssentials\XF\Pub\Controller\ProfilePost" execute_order="10" active="1"/>
+  <extension from_class="XF\Pub\Controller\Thread" to_class="SV\UserEssentials\XF\Pub\Controller\Thread" execute_order="6272" active="1"/>
+  <extension from_class="XF\Purchasable\UserUpgrade" to_class="SV\UserEssentials\XF\Purchasable\UserUpgrade" execute_order="6272" active="1"/>
+  <extension from_class="XF\Repository\LikedContent" to_class="SV\UserEssentials\XF\Repository\LikedContent" execute_order="6272" active="1"/>
+  <extension from_class="XF\Repository\LoginAttempt" to_class="SV\UserEssentials\XF\Repository\LoginAttempt" execute_order="6272" active="1"/>
+  <extension from_class="XF\Repository\UserUpgrade" to_class="SV\UserEssentials\XF\Repository\UserUpgrade" execute_order="6272" active="1"/>
+  <extension from_class="XF\Service\Poll\Creator" to_class="SV\UserEssentials\XF\Service\Poll\Creator" execute_order="6272" active="1"/>
+  <extension from_class="XF\Service\Post\Editor" to_class="SV\UserEssentials\XF\Service\Post\Editor" execute_order="10" active="1"/>
+  <extension from_class="XF\Service\Post\Notifier" to_class="SV\UserEssentials\XF\Service\Post\Notifier" execute_order="10" active="1"/>
+  <extension from_class="XF\Service\Post\Preparer" to_class="SV\UserEssentials\XF\Service\Post\Preparer" execute_order="10" active="1"/>
+  <extension from_class="XF\Service\ProfilePostComment\Editor" to_class="SV\UserEssentials\XF\Service\ProfilePostComment\Editor" execute_order="10" active="1"/>
+  <extension from_class="XF\Service\ProfilePostComment\Notifier" to_class="SV\UserEssentials\XF\Service\ProfilePostComment\Notifier" execute_order="10" active="1"/>
+  <extension from_class="XF\Service\ProfilePostComment\Preparer" to_class="SV\UserEssentials\XF\Service\ProfilePostComment\Preparer" execute_order="10" active="1"/>
+  <extension from_class="XF\Service\ProfilePost\Editor" to_class="SV\UserEssentials\XF\Service\ProfilePost\Editor" execute_order="10" active="1"/>
+  <extension from_class="XF\Service\ProfilePost\Notifier" to_class="SV\UserEssentials\XF\Service\ProfilePost\Notifier" execute_order="10" active="1"/>
+  <extension from_class="XF\Service\ProfilePost\Preparer" to_class="SV\UserEssentials\XF\Service\ProfilePost\Preparer" execute_order="10" active="1"/>
+  <extension from_class="XF\Service\Thread\Editor" to_class="SV\UserEssentials\XF\Service\Thread\Editor" execute_order="2147483640" active="1"/>
+  <extension from_class="XF\Str\Formatter" to_class="SV\UserEssentials\XF\Str\Formatter" execute_order="0" active="1"/>
+  <extension from_class="XF\Str\MentionFormatter" to_class="SV\UserEssentials\XF\Str\MentionFormatter" execute_order="10" active="1"/>
+  <extension from_class="XF\Validator\Username" to_class="SV\UserEssentials\XF\Validator\Username" execute_order="6272" active="1"/>
+</class_extensions>
