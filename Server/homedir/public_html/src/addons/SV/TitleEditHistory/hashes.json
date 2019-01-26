@@ -1,0 +1,23 @@
+{
+    "src/addons/SV/TitleEditHistory/addon.json": "3e52f1b111a7809012092525c1b548cd72821c09b31fff8f37a1619063768b4a",
+    "src/addons/SV/TitleEditHistory/EditHistory/EditTitleHistoryTrait.php": "2057f391e7139b45c17f286de6d730a69f56b57dc41f8800816d9ac9805d895b",
+    "src/addons/SV/TitleEditHistory/EditHistory/ResourceItem.php": "d2bd428b12bba1aa439ca9cc9e02fd671cf14424d5806981da5d0ecf9422cb34",
+    "src/addons/SV/TitleEditHistory/EditHistory/Thread.php": "be0ec0acd33cef1f317d3d37ce85465d59cc3c9a80602c502044708c54edd655",
+    "src/addons/SV/TitleEditHistory/Entity/IHistoryTrackedTitle.php": "bd12e788a765844bc23506675454b862b396a9a90c17d729fb7116e7a1fa1a97",
+    "src/addons/SV/TitleEditHistory/Pub/Controller/TitleHistoryTrait.php": "3df4ee06ebb40cb9cc6b34b0d91f2bd59f5e55b96ce95ac1827070584192d7d5",
+    "src/addons/SV/TitleEditHistory/Service/Base/EditorInterface.php": "9c1daec09f3ffa8a13ce8d5c612f0e2a380b47cc02b9f3d2b808942095ba8614",
+    "src/addons/SV/TitleEditHistory/Service/Base/EditorTrait.php": "8b65f5492cb1f6bbdc0ef11dcf0da25d030242edae786b8403d235f69d91856d",
+    "src/addons/SV/TitleEditHistory/Setup.php": "e4411b28c4945a3d27ccc739bc8c6d0c7135b89204ea8fd07c4043c5b44b5211",
+    "src/addons/SV/TitleEditHistory/XF/Entity/ConversationMaster.php": "a73aa7de019c256029d904804bf866ca688b91e238241de036e09f9fde0fc2eb",
+    "src/addons/SV/TitleEditHistory/XF/Entity/Thread.php": "34e54942dfe26454348a561a0495b2cbc9e567b36dc970202fc356360a704015",
+    "src/addons/SV/TitleEditHistory/XF/Pub/Controller/Thread.php": "ea01a7f0bd8b08aae5eec1f666599d4921e0503829136a24ad2ccd338e8f5d33",
+    "src/addons/SV/TitleEditHistory/XF/Service/Thread/Editor.php": "460ec56431810ce0576db9aebe870ec79e139297f76832013caecbc4c4847af4",
+    "src/addons/SV/TitleEditHistory/XFRM/Entity/ResourceItem.php": "4d87b3bd55a7c661a21fff5b12c02e520b2e226e66a2c53046996081e92b2202",
+    "src/addons/SV/TitleEditHistory/XFRM/Pub/Controller/ResourceItem.php": "37c32f2738040e1f3eee9a627131084bb354cfdf21c0ba8416faeee68efe2c01",
+    "src/addons/SV/TitleEditHistory/XFRM/Service/ResourceItem/Edit.php": "091b7ab004a26188498618a7fed82b41ec938397db2e724b8f8a71f85ab59486",
+    "src/addons/SV/TitleEditHistory/_data/class_extensions.xml": "6b696791fd4952594dcb37ff4c20d363434cd23cd5ae1dc3d4bba43616344572",
+    "src/addons/SV/TitleEditHistory/_data/content_type_fields.xml": "2576f80f29e997bc9efa15b0ec1ca6574e4e04f8991eb6e537affb6df0f9eed6",
+    "src/addons/SV/TitleEditHistory/_data/phrases.xml": "d7d157fd09c2dfc52f133509cdd8b9cb22b738f98bf1ea93dbff7e94ada0b756",
+    "src/addons/SV/TitleEditHistory/_data/templates.xml": "5fa33c9592993a9bcab99a5173849a85c68c0d509cc62a66c9aa8e59eeb1b239",
+    "src/addons/SV/TitleEditHistory/_data/template_modifications.xml": "76647d1e5ee3f5465563ca8174d950d9bbea1f54818c3ff5c86db31cdc0de2c1"
+}

@@ -3,7 +3,6 @@ return array (
   'cron_entry.EmailLog' => 'Email log',
   'cron_entry.ExUp' => 'Expiring User Upgrades',
   'cron_entry.InactiveMembers' => 'Inactive members',
-  'cron_entry.UserUpgradeReminder' => 'User upgrade reminder',
   'cron_entry.alertExpiringUserUpgrades' => 'Alert user upgrades about to expire',
   'cron_entry.cleanUpDaily' => 'Daily clean up',
   'cron_entry.cleanUpHourly' => 'Hourly clean up',

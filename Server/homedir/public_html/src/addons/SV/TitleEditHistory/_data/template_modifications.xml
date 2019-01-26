@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template_modifications>
+  <modification type="public" template="thread_view" modification_key="thread_view_title_edit_history" execution_order="6158" enabled="1" action="preg_replace">
+    <find><![CDATA[/(<xf:description meta="false">.*?)(<\/ul>\s*<\/xf:description>)/s]]></find>
+    <replace><![CDATA[$1
+<xf:macro template="title_edit_history_macro" 
+		  name="history" 
+		  arg-content="{$thread}" 
+		  arg-path="threads" 
+		  />
+$2]]></replace>
+  </modification>
+  <modification type="public" template="xfrm_resource_wrapper_macros" modification_key="xfrm_resource_wrapper_macros_title_edit_history" execution_order="10" enabled="1" action="preg_replace">
+    <find><![CDATA[#(<div class="p-description">.*?Featured.*?</xf:if>[\t ]*)(.*?</xf:macro>)#si]]></find>
+    <replace><![CDATA[$1
+<xf:macro template="title_edit_history_macro" 
+		  name="history" 
+		  arg-content="{$resource}" 
+		  arg-path="resources" 
+		  />
+$2]]></replace>
+  </modification>
+</template_modifications>

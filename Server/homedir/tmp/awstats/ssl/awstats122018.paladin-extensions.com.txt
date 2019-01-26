@@ -9,32 +9,32 @@ AWSTATS DATA FILE 7.6 (build 20161204)
 BEGIN_MAP 28
 POS_GENERAL 2023                
 POS_TIME 2713                
-POS_VISITOR 3410                
-POS_DAY 3607                
-POS_DOMAIN 3755                
-POS_LOGIN 3982                
-POS_ROBOT 4137                
-POS_WORMS 4433                
-POS_EMAILSENDER 4564                
-POS_EMAILRECEIVER 4707                
-POS_SESSION 4783                
-POS_SIDER 4920                
-POS_FILETYPES 5095                
-POS_DOWNLOADS 5193                
-POS_OS 5241                
-POS_BROWSER 5329                
-POS_SCREENSIZE 5429                
-POS_UNKNOWNREFERER 5503                
-POS_UNKNOWNREFERERBROWSER 5590                
-POS_ORIGIN 5672                
-POS_SEREFERRALS 5804                
-POS_PAGEREFS 5948                
-POS_SEARCHWORDS 6096                
-POS_KEYWORDS 6248                
+POS_VISITOR 8437                
+POS_DAY 9232                
+POS_DOMAIN 3615                
+POS_LOGIN 3885                
+POS_ROBOT 4040                
+POS_WORMS 4465                
+POS_EMAILSENDER 4596                
+POS_EMAILRECEIVER 4739                
+POS_SESSION 9349                
+POS_SIDER 9523                
+POS_FILETYPES 4874                
+POS_DOWNLOADS 5097                
+POS_OS 5145                
+POS_BROWSER 5296                
+POS_SCREENSIZE 5518                
+POS_UNKNOWNREFERER 5592                
+POS_UNKNOWNREFERERBROWSER 5800                
+POS_ORIGIN 6003                
+POS_SEREFERRALS 6143                
+POS_PAGEREFS 6287                
+POS_SEARCHWORDS 6553                
+POS_KEYWORDS 6705                
 POS_MISC 2377                
-POS_ERRORS 6307                
-POS_CLUSTER 3838                
-POS_SIDER_404 6404                
+POS_ERRORS 6764                
+POS_CLUSTER 3741                
+POS_SIDER_404 6902                
 END_MAP
 
 # LastLine    = Date of last record processed - Last record line number in last log - Last record offset in last log - Last record signature value
@@ -46,75 +46,64 @@ END_MAP
 # MonthHostsKnown   = Number of hosts known
 # MonthHostsUnKnown = Number of hosts unknown
 BEGIN_GENERAL 8
-LastLine 20181201024715 11416 2377119 12981241725812
+LastLine 20181202024816 23355 5555065 12946780930937
 FirstTime 20181201000216
-LastTime 20181201024202
-LastUpdate 20181201024752 11416 0 11416 0 0
-TotalVisits 2                   
-TotalUnique 2                   
+LastTime 20181202024319
+LastUpdate 20181202024857 23355 0 23355 0 0
+TotalVisits 23                  
+TotalUnique 15                  
 MonthHostsKnown 0                   
-MonthHostsUnknown 2                   
+MonthHostsUnknown 16                  
 END_GENERAL
 
 # Misc ID - Pages - Hits - Bandwidth
 BEGIN_MISC 10
-RealPlayerSupport 0 0 0
-TotalMisc 0 0 0
-QuickTimeSupport 0 0 0
-WindowsMediaPlayerSupport 0 0 0
-PDFSupport 0 0 0
 DirectorSupport 0 0 0
-FlashSupport 0 0 0
 AddToFavourites 0 0 0
 JavaEnabled 0 0 0
+PDFSupport 0 0 0
+RealPlayerSupport 0 0 0
+TotalMisc 0 0 0
 JavascriptDisabled 0 0 0
+QuickTimeSupport 0 0 0
+FlashSupport 0 0 0
+WindowsMediaPlayerSupport 0 0 0
 END_MISC
 
 # Hour - Pages - Hits - Bandwidth - Not viewed Pages - Not viewed Hits - Not viewed Bandwidth
 BEGIN_TIME 24
-0 2 2 116310 361 366 2673729
-1 3 3 174465 360 369 2638151
-2 36 36 202418 295 297 2150746
-3 0 0 0 0 0 0
-4 0 0 0 0 0 0
-5 0 0 0 0 0 0
-6 0 0 0 0 0 0
-7 0 0 0 0 0 0
-8 0 0 0 0 0 0
-9 0 0 0 0 0 0
-10 0 0 0 0 0 0
-11 0 0 0 0 0 0
-12 0 0 0 0 0 0
-13 0 0 0 0 0 0
-14 0 0 0 0 0 0
-15 0 0 0 0 0 0
-16 0 0 0 0 0 0
-17 0 0 0 0 0 0
-18 0 0 0 0 0 0
-19 0 0 0 0 0 0
-20 0 0 0 0 0 0
-21 0 0 0 0 0 0
-22 0 0 0 0 0 0
-23 0 0 0 0 0 0
+0 1772 1798 2266660 731 740 5287629
+1 3414 3427 6552670 737 747 5324750
+2 531 531 466368 671 673 4844752
+3 4 4 188935 370 373 2780254
+4 2 2 116310 362 363 2643757
+5 3 3 174465 363 363 2641631
+6 2 2 116310 364 364 2658434
+7 3 3 174465 364 364 2629311
+8 3 3 174465 383 390 2835366
+9 6 6 348930 369 369 2629381
+10 2 2 116310 341 342 2355069
+11 2 2 116310 340 340 2447258
+12 3 3 174465 368 368 2670641
+13 3 3 174465 364 364 2652950
+14 1 1 58155 365 365 2669370
+15 384 398 2238891 366 367 2629157
+16 451 451 242262 362 363 2641960
+17 201 214 1648929 381 383 2750006
+18 1087 1141 6249653 393 397 2740440
+19 2584 2653 10720178 429 434 2754327
+20 4 4 174189 364 367 2717573
+21 1551 1582 5799067 395 399 2625862
+22 1435 1435 439429 362 364 2633341
+23 755 760 89128208 399 401 2572320
 END_TIME
-
-# Host - Pages - Hits - Bandwidth - Last visit date - [Start date of last visit] - [Last page of last visit]
-# [Start date of last visit] and [Last page of last visit] are saved only if session is not finished
-# The 25 first Hits must be first (order not required for others)
-BEGIN_VISITOR 2
-24.251.180.38 33 33 27953 20181201021728 20181201021658 /index.php
-18.215.242.212 8 8 465240 20181201024202 20181201000216 /
-END_VISITOR
-
-# Date - Pages - Hits - Bandwidth - Visits
-BEGIN_DAY 1
-20181201 41 41 493193 2
-END_DAY
 
 # Domain - Pages - Hits - Bandwidth
 # The 25 first Pages must be first (order not required for others)
-BEGIN_DOMAIN 1
-us 41 41 493193
+BEGIN_DOMAIN 3
+us 11536 11733 125042447
+ca 2666 2694 2807145
+sc 1 1 10497
 END_DOMAIN
 
 # Cluster ID - Pages - Hits - Bandwidth
@@ -128,11 +117,14 @@ END_LOGIN
 
 # Robot ID - Hits - Bandwidth - Last visit - Hits on robots.txt
 # The 25 first Hits must be first (order not required for others)
-BEGIN_ROBOT 4
-bot[\s_+:,\.\;\/\\-] 504 7363086 20181201024715 0
-Googlebot\-Image/ 12 0 20181201020500 0
-Googlebot/ 4 32549 20181201022501 0
-Baiduspider/ 1 58155 20181201003636 0
+BEGIN_ROBOT 7
+bot[\s_+:,\.\;\/\\-] 4797 69809875 20181202024816 0
+Googlebot/ 37 446003 20181202012049 0
+Googlebot\-Image/ 18 0 20181202003211 0
+Baiduspider/ 6 329969 20181202023410 0
+YandexBot/ 5 92372 20181201201159 0
+YandexImages/ 1 0 20181201080620 0
+Sogou[\x20]web[\x20]spider/ 1 14287 20181202022423 0
 END_ROBOT
 
 # Worm ID - Hits - Bandwidth - Last visit
@@ -150,22 +142,16 @@ END_EMAILSENDER
 BEGIN_EMAILRECEIVER 0
 END_EMAILRECEIVER
 
-# Session range - Number of visits
-BEGIN_SESSION 0
-END_SESSION
-
-# URL - Pages - Bandwidth - Entry - Exit
-# The 25 first Pages must be first (order not required for others)
-BEGIN_SIDER 3
-/index.php 30 3570 0 0
-/ 9 489596 2 0
-/job.php 2 27 0 0
-END_SIDER
-
 # Files type - Hits - Bandwidth - Bandwidth without compression - Bandwidth after compression
-BEGIN_FILETYPES 2
-php 32 3597 0 0
-html 9 489596 0 0
+BEGIN_FILETYPES 8
+jpg 14 44518 0 0
+png 41 2779200 0 0
+html 341 20063460 0 0
+js 169 1748086 0 0
+woff2 1 77160 0 0
+Unknown 251 2225123 0 0
+php 13610 100891981 0 0
+css 1 30561 0 0
 END_FILETYPES
 
 # Downloads - Hits - Bandwidth
@@ -173,15 +159,26 @@ BEGIN_DOWNLOADS 0
 END_DOWNLOADS
 
 # OS ID - Hits
-BEGIN_OS ID - Hits - Pages 2
-macosx 8 8
-win10 33 33
+BEGIN_OS ID - Hits - Pages 7
+win10 14294 14107
+win7 49 13
+linux 4 4
+macosx 73 73
+win8 1 1
+Unknown 6 4
+macosx12 1 1
 END_OS
 
 # Browser ID - Hits - Pages
-BEGIN_BROWSER 2
-chrome65.0.3325.181 8 8
-chrome70.0.3538.110 33 33
+BEGIN_BROWSER 8
+msie8.0 31 8
+chrome65.0.3325.181 74 74
+chrome70.0.3538.67 13 3
+chrome58.0.3029.110 4 4
+firefox63.0 18 5
+chrome70.0.3538.110 14281 14104
+Unknown 6 4
+chrome61.0.3163.100 1 1
 END_BROWSER
 
 # Screen size - Hits
@@ -189,20 +186,24 @@ BEGIN_SCREENSIZE 0
 END_SCREENSIZE
 
 # Unknown referer OS - Last visit date
-BEGIN_UNKNOWNREFERER 0
+BEGIN_UNKNOWNREFERER 2
+XenForo/2.x_(https://www.paladin-extensions.com) 20181201155620
+PayPal_IPN_(_https://www.paypal.com/ipn_) 20181202012031
 END_UNKNOWNREFERER
 
 # Unknown referer Browser - Last visit date
-BEGIN_UNKNOWNREFERERBROWSER 0
+BEGIN_UNKNOWNREFERERBROWSER 2
+PayPal_IPN_(_https://www.paypal.com/ipn_) 20181202012031
+XenForo/2.x_(https://www.paladin-extensions.com) 20181201155620
 END_UNKNOWNREFERERBROWSER
 
 # Origin - Pages - Hits 
 BEGIN_ORIGIN 6
-From0 1 1
+From0 49 75
 From1 0 0
 From2 0 0
-From3 0 0
-From4 40 40
+From3 3 3
+From4 14151 14350
 From5 0 0
 END_ORIGIN
 
@@ -212,7 +213,9 @@ END_SEREFERRALS
 
 # External page referers - Pages - Hits
 # The 25 first Pages must be first (order not required for others)
-BEGIN_PAGEREFS 0
+BEGIN_PAGEREFS 2
+https://www.paypal.com/myaccount/transactions/details/1J340545M8133903Y 2 2
+https://www.paypal.com/webapps/hermes 1 1
 END_PAGEREFS
 
 # Search keyphrases - Number of search
@@ -226,13 +229,165 @@ BEGIN_KEYWORDS 0
 END_KEYWORDS
 
 # Errors - Hits - Bandwidth
-BEGIN_ERRORS 2
-301 508 0
-404 3 8836
+BEGIN_ERRORS 5
+303 117 0
+503 17 141483
+403 17 97461
+404 64 204089
+301 4915 0
 END_ERRORS
 
 # URL with 404 errors - Hits - Last URL referrer
-BEGIN_SIDER_404 2
+BEGIN_SIDER_404 17
+/chat/styles/default/siropu/shoutbox/new.mp3 1 https://www.paladin-extensions.com/chat/
+/wp-admin/setup-config.php 1 -
+/admin.php 2 https://www.paladin-extensions.com/admin.php
+/styles/uix/fonts/icons/material-icons/materialdesignicons-webfont.ttf 7 https://www.paladin-extensions.com/css.php
+/account/upgrades 8 https://www.paladin-extensions.com/
+/forums/announcements.21/similarthreads 1 https://www.paladin-extensions.com/forums/announcements.21/post-thread
+/styles/uix/fonts/icons/material-icons/materialdesignicons-webfont.woff2 7 https://www.paladin-extensions.com/css.php
+/robots.txt 14 -
+/chat/130/edit 1 https://www.paladin-extensions.com/
+/account/visitor-menu 2 https://www.paladin-extensions.com/account/
+/styles/uix/images/welcome-banner.png 8 https://www.paladin-extensions.com/css.php
+/account/invitations/link/123 1 -
+/account/invitations/link 1 -
+/styles/uix/fonts/icons/material-icons/materialdesignicons-webfont.woff 7 https://www.paladin-extensions.com/css.php
+/chat/131/delete 1 https://www.paladin-extensions.com/
 /extensions/paladin-csgo-extension.2/%3Cspan%20%20class=%22avatar%20avatar--s%22%3E%3Cimg%20src=%22/data/resource_icons/0/2.jpg 1 -
-/robots.txt 2 -
+/account/ 1 https://www.paladin-extensions.com/account/
 END_SIDER_404
+
+# Host - Pages - Hits - Bandwidth - Last visit date - [Start date of last visit] - [Last page of last visit]
+# [Start date of last visit] and [Last page of last visit] are saved only if session is not finished
+# The 25 first Hits must be first (order not required for others)
+BEGIN_VISITOR 16
+24.251.180.38 11438 11587 118500626 20181202024319 20181202023513 /index.php
+174.3.135.102 2666 2694 2807145 20181202021258 20181202003002 /login/keep-alive
+52.72.91.30 22 22 1278716 20181201202203
+54.211.49.228 19 19 1086265 20181202024217 20181202000218 /
+54.91.122.120 19 19 1104945 20181201122215
+18.215.242.212 13 13 756015 20181201044206
+65.154.226.109 8 31 893548 20181201214904
+162.213.41.93 5 18 495587 20181201203834
+54.208.161.61 4 4 232620 20181201091443
+173.0.81.1 4 4 146 20181202012031
+66.102.8.223 1 2 139988 20181202011046
+66.102.8.193 1 7 76815 20181202011045
+52.53.201.78 1 1 14604 20181201164219
+66.102.8.221 1 4 192284 20181202011045
+196.19.244.192 1 1 10497 20181201150438
+198.54.120.180 0 2 270288 
+END_VISITOR
+
+# Date - Pages - Hits - Bandwidth - Visits
+BEGIN_DAY 2
+20181201 8527 8713 119067584 15
+20181202 5676 5715 8792505 8
+END_DAY
+
+# Session range - Number of visits
+BEGIN_SESSION 4
+1h+ 9
+30mn-1h 4
+15mn-30mn 1
+0s-30s 6
+END_SESSION
+
+# URL - Pages - Bandwidth - Entry - Exit
+# The 25 first Pages must be first (order not required for others)
+BEGIN_SIDER 93
+/index.php 10917 1531672 0 4
+/admin.php 2040 20043606 0 0
+/job.php 288 3985 1 1
+/css.php 232 2884580 2 3
+/ 192 7009957 18 9
+/proxy.php 112 76403000 0 0
+/account/upgrades 79 883672 0 0
+/account/invitations/create 42 395043 0 0
+/account/visitor-menu 25 131923 0 0
+/account/ 19 233125 0 0
+/install/index.php 17 24992 0 0
+/account/invitations/list 14 154688 0 0
+/misc/login-as-user 14 18889 0 0
+/purchase/user_upgrade/ 13 18813 0 0
+/account/alerts-popup 13 30163 0 0
+/members/skel.2/ 10 103295 0 0
+/members/bhopfu1.1/ 9 90733 0 0
+/members/terry-davis.4/ 6 51168 0 0
+/members/ 5 59964 0 0
+/login/ 5 13890 0 0
+/extensions/ 5 68254 0 0
+/account/security 5 55660 0 0
+/support/ 4 57250 0 0
+/account/alerts 4 43971 0 0
+/payment_callback.php 4 146 1 1
+/attachments/aim-assist-png.31/ 2 11564 0 0
+/chat/132/delete 2 1485 0 0
+/extensions/authors/bhopfu1.1/ 1 17984 0 0
+/emaillog/ 2 23453 0 0
+/attachments/1522448993613-png.15/ 3 3081554 0 0
+/help/smilies/ 1 10497 1 1
+/chat/134/delete 2 1479 0 0
+/threads/installation-guide.18/ 1 20965 0 0
+/extensions/paladin-temporary-external-csgo-extension.5/ 2 37501 0 0
+/attachments/1543728632019-png.53/ 1 12331 0 0
+/attachments/paladin-menu-png.3/ 3 42229 0 0
+/members/2/ 1 5732 0 0
+/account/following 2 21286 0 0
+/forums/discussion.15/ 1 14758 0 0
+/account/ignored 2 21338 0 0
+/account/account-details 4 52208 0 0
+/conversations/popup 2 378 0 0
+/search/18/ 2 30310 0 0
+/extensions/authors/skel.2/ 1 5689 0 0
+/attachments/20180406102648_1-jpg.16/ 3 1106324 0 0
+/members/bhopfu1.1/recent-content 2 52544 0 0
+/attachments/visuals-png.34/ 2 15314 0 0
+/members/robitussin.32/ 1 5752 0 0
+/account/signature 3 35203 0 0
+/members/skel.2/about 1 6386 0 0
+/search/16/ 1 11531 0 0
+/members/jdeez.27/ 1 5490 0 0
+/login/keep-alive 3 438 0 1
+/chat/127/edit 1 1153 0 0
+/account/upgrades/ 3 39161 0 0
+/attachments/1519256544140-png.13/ 3 3251 0 0
+/threads/question-about-paladin.46/ 1 22073 0 0
+/extensions/paladin-rsix-extension.4/ 2 27552 0 0
+/threads/posting-your-media.37/ 1 20654 0 0
+/posts/37/edit 2 31418 0 0
+/account/invitations/ 1 11608 0 0
+/support/post-thread 3 42577 0 0
+/forums/announcements.21/ 2 29080 0 0
+/members/jorgi.12/ 2 11006 0 0
+/attachments/settings-png.33/ 2 9320 0 0
+/chat/133/delete 2 1483 0 0
+/search/17/ 1 13077 0 0
+/attachments/1519256790248-png.14/ 3 3251 0 0
+/account/preferences 4 43191 0 0
+/attachments/misc-png.32/ 2 10203 0 0
+/attachments/paladin-manager-png.52/ 3 104214 0 0
+/members/terry-davis.4/recent-content 2 27519 0 0
+/attachments/0c1634d95a0eb29514e0537ab6ae3ca3-gif.48/ 3 1265428 0 0
+/threads/rep-for-rep.30/ 1 22137 0 0
+/account/invitations 1 11691 0 0
+/account 1 13051 0 0
+/attachments/upload 1 609 0 0
+/search/15/ 4 59906 0 0
+/chat/131/delete 2 1483 0 0
+/search/14/ 1 13282 0 0
+/forums/announcements.21/post-thread 2 24778 0 0
+/members/skel.2/bookmarks/ 1 448 0 0
+/threads/developments.9/ 3 163161 0 0
+/chat/ 1 16734 0 0
+/account/upgrade-purchase 1 10767 0 0
+/threads/installation-guide.18/preview 1 1317 0 0
+/members/skel.2/recent-content 4 68098 0 0
+/styles/fonts/fa/fontawesome-webfont.woff2 1 77160 0 0
+/account/privacy 2 23187 0 0
+/account/likes 1 14564 0 0
+/chat/130/delete 2 1483 0 0
+/attachments/1519093377219-png.11/ 3 6034290 0 0
+/threads/shoutbox-rules.17/ 1 18197 0 0
+END_SIDER

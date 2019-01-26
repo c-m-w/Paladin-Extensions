@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates>
+  <template type="public" title="title_edit_history_macro" version_id="2010000" version_string="2.1.0"><![CDATA[<xf:macro name="history"
+		  arg-content="!"
+		  arg-path="!"
+		  arg-pathSuffix="/title-history">
+	
+<xf:if is="$content.getTitleEditCount() && $content.canViewTitleHistory()">
+	<xf:set var="$link" value="{{ link( $path . $pathSuffix, $content) }}" />
+	<li>
+		<span class="u-muted">
+			<a href="{$link}"
+			   class=""
+			   dir="auto"
+			   data-xf-click="toggle"
+			   data-target=".js-titleHistoryTarget"
+			   data-menu-closer="true"
+			>
+				{{ phrase('title_history') }}
+			</a>
+		</span>
+		<div class="js-titleHistoryTarget toggleTarget"
+			 data-href="{$link}"
+			 data-load-selector=".js-titleHistoryTarget"></div>
+	</li>
+</xf:if>
+</xf:macro>]]></template>
+</templates>

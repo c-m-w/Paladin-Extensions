@@ -3,7 +3,7 @@
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
-	$__finalCompiled .= '<mail:subject>' . 'Receipt for your account upgrade at ' . $__templater->escape($__vars['xf']['options']['boardTitle']) . '' . '</mail:subject>
+	$__finalCompiled .= '<mail:subject>' . 'Receipt for your premium subscription at ' . $__templater->escape($__vars['xf']['options']['boardTitle']) . '' . '</mail:subject>
 
 <p>' . 'Thank you for purchasing an account upgrade at <a href="' . $__templater->fn('link', array('canonical:index', ), true) . '">' . $__templater->escape($__vars['xf']['options']['boardTitle']) . '</a>.' . '</p>
 

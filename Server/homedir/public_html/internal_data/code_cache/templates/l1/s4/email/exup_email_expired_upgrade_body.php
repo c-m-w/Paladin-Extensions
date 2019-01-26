@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: df4e9c4dc42eb4db1116e591b0eb3ce4
+// FROM HASH: a30545b1b96911f55986d73520766761
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -7,7 +7,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	' . '' . $__templater->escape($__vars['boardTitle']) . ' Account Upgrade Expired' . '
 </mail:subject>
 
-' . 'exup_email_expired_user_upgrade_html' . '
+' . '' . $__templater->escape($__vars['username']) . ', your subscription to <i><b>' . $__templater->escape($__vars['upgrade_title']) . '</b></i> has now expired.<br />Thank you for having purchased premium and we hope you have enjoyed the extensions it offered.<br />You may renew your account upgrades <a href="' . $__templater->escape($__vars['upgradeUrl']) . '" style="color: #176093; text-decoration: none">here</a>.<p>Sincerely,<br />
+' . $__templater->escape($__vars['boardTitle']) . '</p>' . '
 
 ' . '<p class="minorText">Please do not reply to this message. You must visit the forum to reply.</p>
 

@@ -246,16 +246,14 @@ return function($__templater, $__selectedNav, array $__vars)
 			$__flat['navSupportCreate'] =& $__tree['navSupportArea']['children']['navSupportCreate'];
 		}
 
-		if ($__vars['xf']['visitor']['user_id']) {
-			$__navTemp = [
+		$__navTemp = [
 		'title' => \XF::phrase('nav.navSupportTickets'),
-		'href' => $__templater->fn('link', array('support', ), false),
+		'href' => $__templater->fn('link', array('support/', ), false),
 		'attributes' => [],
 	];
-			if ($__navTemp) {
-				$__tree['navSupportArea']['children']['navSupportTickets'] = $__navTemp;
-				$__flat['navSupportTickets'] =& $__tree['navSupportArea']['children']['navSupportTickets'];
-			}
+		if ($__navTemp) {
+			$__tree['navSupportArea']['children']['navSupportTickets'] = $__navTemp;
+			$__flat['navSupportTickets'] =& $__tree['navSupportArea']['children']['navSupportTickets'];
 		}
 
 	}
