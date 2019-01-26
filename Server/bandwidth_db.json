@@ -1,1 +1,1 @@
-{"domains":{"paladin-extensions.com":2,"UNKNOWN":1},"metadata":{},"tables":{"bandwidth_daily":1,"bandwidth_5min":1,"bandwidth_hourly":1},"version":3}
+{"version":3,"metadata":{},"domains":{"UNKNOWN":1,"paladin-extensions.com":2},"tables":{"bandwidth_daily":1,"bandwidth_5min":1,"bandwidth_hourly":1}}
