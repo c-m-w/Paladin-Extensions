@@ -8,33 +8,33 @@ AWSTATS DATA FILE 7.6 (build 20161204)
 # update).
 BEGIN_MAP 28
 POS_GENERAL 2023                
-POS_TIME 2697                
-POS_VISITOR 10765               
-POS_DAY 13065               
-POS_DOMAIN 3694                
-POS_LOGIN 4110                
-POS_ROBOT 4265                
-POS_WORMS 4980                
-POS_EMAILSENDER 5111                
-POS_EMAILRECEIVER 5254                
-POS_SESSION 13410               
-POS_SIDER 13617               
-POS_FILETYPES 5389                
-POS_DOWNLOADS 5718                
-POS_OS 5815                
-POS_BROWSER 6080                
-POS_SCREENSIZE 6667                
-POS_UNKNOWNREFERER 6741                
-POS_UNKNOWNREFERERBROWSER 6979                
-POS_ORIGIN 7098                
-POS_SEREFERRALS 7237                
-POS_PAGEREFS 7393                
-POS_SEARCHWORDS 7613                
-POS_KEYWORDS 7765                
-POS_MISC 2361                
-POS_ERRORS 7824                
-POS_CLUSTER 3966                
-POS_SIDER_404 7978                
+POS_TIME 2693                
+POS_VISITOR 10764               
+POS_DAY 13064               
+POS_DOMAIN 3691                
+POS_LOGIN 4107                
+POS_ROBOT 4262                
+POS_WORMS 4978                
+POS_EMAILSENDER 5109                
+POS_EMAILRECEIVER 5252                
+POS_SESSION 13418               
+POS_SIDER 13625               
+POS_FILETYPES 5387                
+POS_DOWNLOADS 5717                
+POS_OS 5814                
+POS_BROWSER 6079                
+POS_SCREENSIZE 6666                
+POS_UNKNOWNREFERER 6740                
+POS_UNKNOWNREFERERBROWSER 6978                
+POS_ORIGIN 7097                
+POS_SEREFERRALS 7236                
+POS_PAGEREFS 7392                
+POS_SEARCHWORDS 7612                
+POS_KEYWORDS 7764                
+POS_MISC 2357                
+POS_ERRORS 7823                
+POS_CLUSTER 3963                
+POS_SIDER_404 7977                
 END_MAP
 
 # LastLine    = Date of last record processed - Last record line number in last log - Last record offset in last log - Last record signature value
@@ -46,11 +46,11 @@ END_MAP
 # MonthHostsKnown   = Number of hosts known
 # MonthHostsUnKnown = Number of hosts unknown
 BEGIN_GENERAL 8
-LastLine 20190112065506 5937 1121303 11314723260568
+LastLine 20190113070641 950 307719 14424347278981
 FirstTime 0
-LastTime 20190112035241
-LastUpdate 20190112071153 5937 0 5937 0 0
-TotalVisits 73                  
+LastTime 20190112165312
+LastUpdate 20190113071756 950 0 950 0 0
+TotalVisits 74                  
 TotalUnique 51                  
 MonthHostsKnown 0                   
 MonthHostsUnknown 57                  
@@ -59,61 +59,61 @@ END_GENERAL
 # Misc ID - Pages - Hits - Bandwidth
 BEGIN_MISC 10
 WindowsMediaPlayerSupport 0 0 0
-FlashSupport 0 0 0
-PDFSupport 0 0 0
-QuickTimeSupport 0 0 0
-TotalMisc 0 0 0
-JavascriptDisabled 0 0 0
 JavaEnabled 0 0 0
+PDFSupport 0 0 0
 AddToFavourites 0 0 0
+TotalMisc 0 0 0
+QuickTimeSupport 0 0 0
 RealPlayerSupport 0 0 0
+FlashSupport 0 0 0
+JavascriptDisabled 0 0 0
 DirectorSupport 0 0 0
 END_MISC
 
 # Hour - Pages - Hits - Bandwidth - Not viewed Pages - Not viewed Hits - Not viewed Bandwidth
 BEGIN_TIME 24
-0 52 82 2123846 4069 4086 32328837
-1 17 20 969752 4100 4115 31959205
-2 14 22 1432320 4078 4097 32291182
-3 175 244 4031420 4116 4142 32480013
-4 967 1067 9238521 4117 4130 37011946
-5 56 59 2162600 4056 4072 36334348
-6 430 435 3731835 4233 4253 37795888
-7 717 722 1908649 4151 4160 36374585
-8 33 34 1788818 4202 4214 37223786
-9 107 140 3320646 4140 4164 36513744
-10 11 11 1001663 4118 4135 36439026
-11 20 20 1620888 4164 4201 37240651
-12 9 9 1039042 4132 4149 35826167
-13 33 71 2184804 4108 4113 35811339
-14 12 12 1187532 4246 4275 36181909
-15 34 78 2529963 4193 4208 37164080
-16 87 140 2714578 4141 4161 36319001
-17 48 70 2120021 4155 4168 36186274
-18 13 13 1265841 4122 4140 36371571
-19 15 15 1501389 4030 4039 35807982
-20 209 244 3283432 4102 4127 36974572
-21 9 9 826505 4052 4065 31658524
-22 1827 1887 3700626 3879 3890 30417669
-23 1214 1364 7946062 3857 3875 30505685
+0 52 82 2123846 4077 4094 32598337
+1 17 20 969752 4104 4119 32112865
+2 14 22 1432320 4081 4100 32406427
+3 175 244 4031420 4120 4146 32633673
+4 967 1067 9238521 4126 4142 37244334
+5 56 59 2162600 4062 4078 36479438
+6 430 435 3731835 4237 4257 37949548
+7 717 722 1908649 4156 4165 36566660
+8 33 34 1788818 4205 4217 37339031
+9 107 140 3320646 4146 4171 36718088
+10 11 11 1001663 4121 4138 36554271
+11 20 20 1620888 4167 4204 37355896
+12 9 9 1039042 4135 4152 35941412
+13 33 71 2184804 4117 4125 36058094
+14 12 12 1187532 4250 4280 36307299
+15 34 78 2529963 4225 4240 37462876
+16 792 900 6665181 4172 4194 36566605
+17 48 70 2120021 4162 4176 36388190
+18 13 13 1265841 4128 4146 36516947
+19 15 15 1501389 4035 4044 35943141
+20 209 244 3283432 4105 4130 37089817
+21 9 9 826505 4058 4071 31783814
+22 1827 1887 3700626 3882 3893 30532914
+23 1214 1364 7946062 3869 3887 30786293
 END_TIME
 
 # Domain - Pages - Hits - Bandwidth
 # The 25 first Pages must be first (order not required for others)
 BEGIN_DOMAIN 13
-us 5561 5993 54617781
+us 6266 6753 58568384
 ca 451 560 3346062
 tr 24 60 1051272
 se 18 50 1194590
 in 17 31 1111515
 ru 12 20 698840
-de 9 36 1156704
 za 9 9 42240
+de 9 36 1156704
 cn 4 5 247138
-id 1 1 11730
+eu 1 1 125179
 ar 1 1 11733
 th 1 1 11173
-eu 1 1 125179
+id 1 1 11730
 END_DOMAIN
 
 # Cluster ID - Pages - Hits - Bandwidth
@@ -129,19 +129,19 @@ END_LOGIN
 # The 25 first Hits must be first (order not required for others)
 BEGIN_ROBOT 14
 bot[\s_+:,\.\;\/\\-] 11694 440016545 20190110204707 0
-Googlebot/ 206 2341609 20190111224330 0
-no_user_agent 84 569386 20190109231844 0
-YandexBot/ 69 939327 20190111075105 0
+Googlebot/ 207 2403693 20190112134654 0
+no_user_agent 130 845350 20190112161530 0
+YandexBot/ 70 951083 20190112095838 0
 Baiduspider/ 46 2545730 20190112041122 0
 baidu 19 996734 20190109162947 0
-SemrushBot/ 11 112579 20190112033648 0
 bingbot/ 11 231430 20190109152752 0
+SemrushBot/ 11 112579 20190112033648 0
 MJ12bot/ 6 303816 20190110122945 0
 (firefox/)([0-9]\.|[0-1][0]\.) 2 237073 20190109085845 0
-DomainSONOCrawler/ 1 37621 20190109123133 0
-BLEXBot/ 1 1208 20190105122400 0
-Sogou[\x20]web[\x20]spider/ 1 37615 20190110064130 0
 Discordbot/ 1 124791 20190108035852 0
+BLEXBot/ 1 1208 20190105122400 0
+DomainSONOCrawler/ 1 37621 20190109123133 0
+Sogou[\x20]web[\x20]spider/ 1 37615 20190110064130 0
 END_ROBOT
 
 # Worm ID - Hits - Bandwidth - Last visit
@@ -161,20 +161,20 @@ END_EMAILRECEIVER
 
 # Files type - Hits - Bandwidth - Bandwidth without compression - Bandwidth after compression
 BEGIN_FILETYPES 14
-ttf 1 168493 0 0
-woff2 19 2131528 0 0
-eot 1 168588 0 0
-Unknown 106 1066635 0 0
+js 357 4036255 0 0
+php 6181 19255204 0 0
+png 101 6473400 0 0
+Unknown 113 1121742 0 0
 map 1 3732 0 0
-css 18 316812 0 0
-svg 97 158864 0 0
-php 5503 17191372 0 0
-js 327 3683065 0 0
-png 90 5901126 0 0
-html 477 32230320 0 0
-jpg 125 433698 0 0
+html 496 32953252 0 0
+jpg 138 472946 0 0
 mp3 2 2398 0 0
+woff2 20 2256912 0 0
 woff 1 166928 0 0
+svg 97 158864 0 0
+ttf 1 168493 0 0
+eot 1 168588 0 0
+css 19 335448 0 0
 END_FILETYPES
 
 # Downloads - Hits - Bandwidth
@@ -184,53 +184,53 @@ END_DOWNLOADS
 
 # OS ID - Hits
 BEGIN_OS ID - Hits - Pages 15
-macosx11 1 1
-winlong 7 6
-win8.1 4 4
-Unknown 2 2
-macosx10 5 0
-win7 22 7
-macosx12 6 6
 linux 20 4
+macosx 189 189
+macosx12 6 6
+linuxubuntu 1 1
+win10 7084 6487
 win8 15 7
 winxp 3 3
-ios_iphone 143 83
-macosx 189 189
+macosx11 1 1
+win7 22 7
+winlong 7 6
+macosx10 5 0
+win8.1 4 4
+Unknown 2 2
 linuxandroid 28 14
-win10 6324 5782
-linuxubuntu 1 1
+ios_iphone 143 83
 END_OS
 
 # Browser ID - Hits - Pages
 BEGIN_BROWSER 28
-firefox40.1 1 1
-firefox49.0 1 1
-msie6.0 3 3
-firefox56.0 2 2
-firefox64.0 1 1
-chrome58.0.3029.110 1 1
-safari 143 83
-chrome68.0.3440.106 48 37
 chrome63.0.3239.132 2 2
-firefox59.0 1 1
-firefox45.0 1 1
-chrome68.0.3440.84 11 11
-chrome71.0.3578.98 6262 5731
-firefox38.0 5 0
-chrome70.0.3538.110 18 4
-chrome65.0.3325.181 190 190
-Unknown 1 1
-chrome71.0.3578.99 28 14
-firefox47.0 1 1
-chrome55.0.2883.87 1 1
-msie10.0 15 7
-msie7.0 3 2
-chrome62.0.3202.94 1 1
 mozilla 1 1
-firefox50.0 19 3
-chrome61.0.3163.100 5 5
-firefox34.0 4 4
+firefox56.0 2 2
+firefox47.0 1 1
 chrome60.0.3112.90 1 0
+chrome65.0.3325.181 190 190
+firefox38.0 5 0
+firefox40.1 1 1
+chrome71.0.3578.98 7022 6436
+chrome70.0.3538.110 18 4
+firefox59.0 1 1
+chrome61.0.3163.100 5 5
+safari 143 83
+chrome68.0.3440.84 11 11
+firefox49.0 1 1
+chrome55.0.2883.87 1 1
+Unknown 1 1
+chrome68.0.3440.106 48 37
+chrome71.0.3578.99 28 14
+firefox34.0 4 4
+msie7.0 3 2
+firefox45.0 1 1
+chrome58.0.3029.110 1 1
+firefox64.0 1 1
+firefox50.0 19 3
+msie10.0 15 7
+msie6.0 3 3
+chrome62.0.3202.94 1 1
 END_BROWSER
 
 # Screen size - Hits
@@ -250,11 +250,11 @@ END_UNKNOWNREFERERBROWSER
 
 # Origin - Pages - Hits 
 BEGIN_ORIGIN 6
-From0 86 109
+From0 87 110
 From1 1 1
 From2 1 1
 From3 1 2
-From4 6020 6657
+From4 6724 7416
 From5 0 0
 END_ORIGIN
 
@@ -282,168 +282,168 @@ END_KEYWORDS
 
 # Errors - Hits - Bandwidth
 BEGIN_ERRORS 6
-404 397 3307956
-301 49495 0
-303 34 0
+404 407 3310036
+301 49503 0
+503 36989 395093944
 500 10 0
+303 39 0
 403 8 86722
-503 36871 391327842
 END_ERRORS
 
 # URL with 404 errors - Hits - Last URL referrer
 BEGIN_SIDER_404 89
-/wp-content/themes/agregado/404.php 1 -
-/forums/administrators.13 1 -
-/wordpress3/wp-login.php 3 -
-/forums/news.5 1 -
-/wp/wp-login.php 3 -
-/wp-content/themes/twentysixteen/404.php 1 -
-/wp-content/themes/bloggingcream/404.php 1 -
-/wp-content/themes/sketch/404.php 1 -
-/wp-content/themes/cache/404.php 1 -
-/extensions/2/ 1 -
-/.well-known/assetlinks.json 3 -
-/test/wp-login.php 3 -
+/wp-content/themes/twentyseventeen/404.php 1 -
 /wordpress2/wp-login.php 3 -
-/administrator/ 5 -
-/robots.txt 240 -
+/blog1/wp-login.php 3 -
 /403.shtml 1 -
-/extensions/paladin-pubg-extension.3/ 1 -
-/support/preorder.1 1 -
-/test3/wp-login.php 3 -
-/wp-content/themes/BlackPower/404.php 1 -
-/wp2/wp-login.php 3 -
-/backup/ 1 -
-/accesson.php 1 -
-/blog/ 1 -
-/admin/images/cal_date_over.gif 1 -
-/fckeditor/editor/filemanager/connectors/php/upload.php 1 -
-/new/ 1 -
-/wp/ 1 -
-/main/ 1 -
-/wp-admin/yt.php 1 -
-/wp1/wp-login.php 3 -
-/wp-admin/includes/index.php 1 -
-/wp-login.php 8 -
-/wp-content/themes/betheme/404.php 1 -
-/yt.php 1 -
-/assets/images/accesson.php 1 -
-/license.php 3 -
-/forums/moderators.19 1 -
-/forums/news.3 1 -
-/extensions/paladin-extension-manager.1/ 2 -
-/demo/ 1 -
-/extensions/categories/free-extensions.2/ 4 -
-/forums/news.1 1 -
-/admin 4 -
-/test/ 1 -
-/test2/wp-login.php 3 -
-/forums/pre-sale-discussion.11 1 -
 /forums/news.4 1 -
-/wp-content/themes/advancesettings/404.php 1 -
-/forums/news.6 1 -
-/members/bananaballs.22/bookmarks/ 1 -
-/extensions/authors/skel.2/ 1 -
-/blog3/wp-login.php 3 -
-/blog/wp-login.php 5 -
-/administrator/index.php 5 https://www.paladin-extensions.com/administrator/
+/forums/news.1 1 -
 /site/ 1 -
 /forums/news.7 1 -
-/test1/wp-login.php 4 -
-/old/ 1 -
-/wp-admin/ 5 https://www.paladin-extensions.com/wp-login.php
-/wp-content/themes/default/404.php 1 -
-/wp-content/themes/CherryFramework/404.php 1 -
-/home/ 1 -
-/templates/system/css/system.css 1 -
-/blog1/wp-login.php 3 -
-/wordpress1/wp-login.php 3 -
-/wp-includes/css/login_wall.php 1 -
-/forums/pre-sale-discussion.10 1 -
-/wp-admin 1 -
-/threads/template.5/ 1 -
-/extensions/paladin-csgo-extension.2/ 1 -
-/support/preorder.2 1 -
-/wp-content/themes/twentyseventeen/404.php 1 -
-/extensions/paladin-extension-manager.1/history 3 -
-/misc/ 1 https://www.paladin-extensions.com/misc/
-/cms/ 1 -
-/tmp/ 1 -
-/blog/wp-admin 1 -
-/wp-admin/maint/index.php 1 -
-/wordpress/ 1 -
-/forums/media.23 1 -
-/wp3/wp-login.php 3 -
-/wordpress/wp-login.php 3 -
-/extensions/categories/premium-extensions.1/featured 3 -
-/support/preorder.3 1 -
-/forums/news.8 1 -
-/admin/login.php 1 -
-/members/penguin.10/bookmarks/ 1 -
+/wp-content/themes/betheme/404.php 1 -
+/forums/news.5 1 -
+/robots.txt 250 -
 /blog2/wp-login.php 3 -
+/wp-content/themes/CherryFramework/404.php 1 -
+/.well-known/assetlinks.json 3 -
+/support/preorder.3 1 -
+/forums/pre-sale-discussion.11 1 -
+/yt.php 1 -
+/extensions/paladin-csgo-extension.2/ 1 -
+/wp-content/themes/sketch/404.php 1 -
+/extensions/paladin-extension-manager.1/ 2 -
+/forums/moderators.19 1 -
+/blog3/wp-login.php 3 -
+/support/preorder.1 1 -
+/extensions/categories/free-extensions.2/ 4 -
+/test3/wp-login.php 3 -
+/wordpress3/wp-login.php 3 -
+/administrator/index.php 5 https://www.paladin-extensions.com/administrator/
+/test1/wp-login.php 4 -
+/extensions/categories/premium-extensions.1/featured 3 -
+/test/wp-login.php 3 -
+/test2/wp-login.php 3 -
+/admin/login.php 1 -
+/wp/wp-login.php 3 -
+/blog/ 1 -
+/forums/news.8 1 -
+/wp-admin/yt.php 1 -
+/misc/ 1 https://www.paladin-extensions.com/misc/
+/wordpress/ 1 -
+/wp-admin/includes/index.php 1 -
+/wordpress/wp-login.php 3 -
+/wp-content/themes/cache/404.php 1 -
+/wp-content/themes/BlackPower/404.php 1 -
+/home/ 1 -
+/test/ 1 -
+/wp-admin/ 5 https://www.paladin-extensions.com/wp-login.php
+/backup/ 1 -
+/blog/wp-login.php 5 -
+/wp3/wp-login.php 3 -
+/forums/pre-sale-discussion.10 1 -
+/cms/ 1 -
+/wp-content/themes/agregado/404.php 1 -
+/admin 4 -
+/wordpress1/wp-login.php 3 -
+/wp-content/themes/advancesettings/404.php 1 -
+/demo/ 1 -
+/extensions/paladin-pubg-extension.3/ 1 -
+/blog/wp-admin 1 -
+/old/ 1 -
+/wp-content/themes/bloggingcream/404.php 1 -
+/admin/images/cal_date_over.gif 1 -
+/extensions/authors/skel.2/ 1 -
+/forums/news.6 1 -
+/extensions/2/ 1 -
+/license.php 3 -
+/wp/ 1 -
+/members/bananaballs.22/bookmarks/ 1 -
+/forums/media.23 1 -
+/wp-admin 1 -
+/forums/administrators.13 1 -
+/administrator/ 5 -
+/templates/system/css/system.css 1 -
+/main/ 1 -
+/wp-admin/maint/index.php 1 -
+/wp-content/themes/default/404.php 1 -
+/extensions/paladin-extension-manager.1/history 3 -
+/wp-includes/css/login_wall.php 1 -
+/wp-content/themes/twentysixteen/404.php 1 -
+/accesson.php 1 -
+/fckeditor/editor/filemanager/connectors/php/upload.php 1 -
+/wp1/wp-login.php 3 -
+/tmp/ 1 -
+/threads/template.5/ 1 -
+/new/ 1 -
+/forums/news.3 1 -
+/support/preorder.2 1 -
+/wp-login.php 8 -
+/members/penguin.10/bookmarks/ 1 -
+/wp2/wp-login.php 3 -
+/assets/images/accesson.php 1 -
 END_SIDER_404
 
 # Host - Pages - Hits - Bandwidth - Last visit date - [Start date of last visit] - [Last page of last visit]
 # [Start date of last visit] and [Last page of last visit] are saved only if session is not finished
 # The 25 first Hits must be first (order not required for others)
 BEGIN_VISITOR 57
-24.251.180.38 5220 5543 26496902 20190110204740
+24.251.180.38 5925 6303 30447505 20190112165312
 174.3.135.102 445 538 2646977 20190109222900
 174.206.3.188 82 142 1605283 20190104170738
 73.51.42.8 37 48 520003 20190107223440
 217.131.92.187 24 60 1051272 20190110133730
 34.207.225.212 23 23 2879115 20190109044705
 52.90.211.23 23 23 2879111 20190108210654
-54.158.116.121 21 21 2628745 20190109192716
 3.88.232.104 21 21 2628990 20190110160723
+54.158.116.121 21 21 2628745 20190109192716
 3.81.65.162 20 20 2503574 20190110020645
 3.87.147.34 20 20 2503576 20190109122733
 54.172.224.112 20 20 2503572 20190110090726
 34.226.248.173 19 19 2378399 20190108132657
 85.194.6.43 14 35 644247 20190109151230
 52.23.176.151 13 13 1627304 20190110204646
-116.203.43.230 11 11 494277 20190106112404
 172.221.47.109 11 35 756711 20190107151009
-71.125.70.203 9 21 556831 20190102233023
+116.203.43.230 11 11 494277 20190106112404
 54.86.248.91 9 9 1126592 20190108070706
+71.125.70.203 9 21 556831 20190102233023
 109.173.101.59 7 15 670073 20190105022515
 116.202.18.27 6 20 617238 20190109090227
-41.13.12.217 5 5 65 20190112035241
 77.0.132.200 5 16 550356 20190111171519
-47.203.57.123 4 18 617174 20190108035900
+41.13.12.217 5 5 65 20190112035241
 90.141.197.159 4 15 550343 20190102233513
-95.165.201.230 1 1 11579 20190108195107
-104.199.114.234 2 2 250358 20190108191220
-180.180.124.248 1 1 11173 20190104022725
-137.226.113.27 1 1 37600 20190108051432
+47.203.57.123 4 18 617174 20190108035900
 60.191.38.77 1 1 125177 20190110181738
-168.227.188.1 1 1 11733 20190106170647
-173.240.254.55 1 1 11578 20190109144630
 151.106.60.151 1 1 37618 20190109042112
-66.70.180.94 0 1 3345 
+196.52.84.22 1 1 41944 20190110173309
+137.226.113.41 3 19 568748 20190108091758
+52.53.201.78 3 3 112854 20190110071923
 95.66.153.160 1 1 3131 20190109175217
+37.235.48.145 1 1 125179 20190109095518
+194.165.19.3 1 1 3131 20190109185249
+168.227.188.1 1 1 11733 20190106170647
+121.101.186.242 1 1 11730 20190106145318
+38.145.113.235 1 1 37614 20190109210646
+95.165.201.230 1 1 11579 20190108195107
+180.180.124.248 1 1 11173 20190104022725
 144.217.64.25 0 1 3345 
 184.175.34.239 1 1 37610 20190108195459
-113.89.53.140 1 1 37612 20190108122756
-208.80.194.30 2 2 250358 20190109064235
-194.165.19.3 1 1 3131 20190109185249
-46.231.214.22 1 1 7795 20190109180313
-137.226.113.41 3 19 568748 20190108091758
-196.52.84.22 1 1 41944 20190110173309
 192.99.233.63 0 1 3345 
-176.119.19.210 1 1 3131 20190109182735
-144.217.64.23 0 1 3345 
-208.80.194.35 1 1 125179 20190108234843
-13.57.233.99 2 2 75233 20190109230835
-154.117.129.2 3 3 231 20190111100855
+66.70.180.94 0 1 3345 
 123.126.113.86 2 3 84349 20190110064324
-142.4.219.214 0 1 3345 
-52.53.201.78 3 3 112854 20190110071923
-204.12.207.162 0 1 112246 
-38.145.113.235 1 1 37614 20190109210646
-37.235.48.145 1 1 125179 20190109095518
+113.89.53.140 1 1 37612 20190108122756
+137.226.113.27 1 1 37600 20190108051432
+208.80.194.30 2 2 250358 20190109064235
 167.114.252.180 1 1 37611 20190108041945
-121.101.186.242 1 1 11730 20190106145318
+154.117.129.2 3 3 231 20190111100855
+46.231.214.22 1 1 7795 20190109180313
+204.12.207.162 0 1 112246 
+208.80.194.35 1 1 125179 20190108234843
+104.199.114.234 2 2 250358 20190108191220
+173.240.254.55 1 1 11578 20190109144630
+144.217.64.23 0 1 3345 
+176.119.19.210 1 1 3131 20190109182735
+13.57.233.99 2 2 75233 20190109230835
+142.4.219.214 0 1 3345 
 END_VISITOR
 
 # Date - Pages - Hits - Bandwidth - Visits
@@ -458,118 +458,125 @@ BEGIN_DAY 11
 20190109 163 229 11602790 20
 20190110 257 350 11626512 11
 20190111 8 19 550587 2
-20190112 5 5 65 1
+20190112 710 765 3950668 2
 END_DAY
 
 # Session range - Number of visits
 BEGIN_SESSION 7
+2mn-5mn 3
+30s-2mn 3
+15mn-30mn 4
+0s-30s 40
 30mn-1h 5
 1h+ 14
-30s-2mn 3
-0s-30s 40
-15mn-30mn 4
-2mn-5mn 3
-5mn-15mn 4
+5mn-15mn 5
 END_SESSION
 
 # URL - Pages - Bandwidth - Entry - Exit
 # The 25 first Pages must be first (order not required for others)
-BEGIN_SIDER 97
-/index.php 4550 526607 0 3
-/admin.php 360 12348678 4 7
-/job.php 321 4285 1 11
-/ 295 29088644 51 33
-/css.php 196 3594261 7 2
-/proxy.php 75 717434 0 2
-/support/ 25 384874 0 0
-/styles/uix_dark/fonts/icons/material-icons/fonts/materialdesignicons-webfont.woff2 19 2131528 0 1
+BEGIN_SIDER 104
+/index.php 5106 591462 0 4
+/admin.php 401 13388011 4 7
+/job.php 351 4681 1 11
+/ 307 29693842 52 33
+/css.php 235 4538622 7 2
+/proxy.php 87 732321 0 2
+/support/ 27 416277 0 0
+/styles/uix_dark/fonts/icons/material-icons/fonts/materialdesignicons-webfont.woff2 20 2256912 0 1
+/extensions/ 16 213219 0 0
 /posts/141/edit 15 224695 0 1
-/extensions/ 15 199588 0 0
 /support/preorder.4/ 13 299014 0 1
+/members/ 12 180497 0 0
 /inline-mod/ 12 23425 0 0
-/members/bigbongrip.11/ 11 109268 0 1
-/members/ 11 164917 0 0
 /threads/announcements.7/ 11 316066 0 0
-/login/lauin 10 67011 0 0
+/members/bigbongrip.11/ 11 109268 0 1
 /account/visitor-menu 10 51800 0 0
+/login/lauin 10 67011 0 0
 /posts/3/edit 8 193256 0 0
+/login/two-step 7 43029 3 0
 /members/bhopfu1.1/ 7 65112 0 0
 /support/open 7 120784 0 0
-/login/two-step 7 43029 3 0
-/login/ 6 63294 1 0
 /posts/137/edit 6 95694 0 0
+/login/ 6 63294 1 0
+/emaillog/ 5 74324 0 0
 /support/departments/payment-support.4/ 5 80146 0 0
-/support/preorder.4/add-reply 5 58813 0 0
-/threads/announcements.7/preview 1 8285 0 0
-/support/messages/11/quote 1 769 0 0
-/countdown/admin/ 2 26574 0 0
-/forums/-/prefixes 2 1150 0 0
-/support/departments/prefixes 1 383 0 0
-/support/pubg-hak.3/ 3 62313 0 0
 /extensions/filters 1 1490 0 1
-/threads/website-launch.6/ 1 21439 0 0
-/posts/17/edit 2 52166 0 0
 /help/bb-codes/ 1 56507 0 0
-/support/departments/website-support.3/ 1 15000 0 0
-/support/departments/custom-fields 1 153 0 0
-/threads/frequently-asked-questions.2/preview 1 5725 0 0
-/support/0/draft 1 201 0 0
-/styles/uix_dark/fonts/icons/material-icons/fonts/materialdesignicons-webfont.eot 1 168588 0 0
-/account/alerts-popup 4 10763 0 0
-/forums/moderators.18/ 1 17162 0 0
-/help/trophies/ 1 44126 0 0
-/threads/open.40/preview 1 251 0 0
-/connected_account.php 1 107 0 1
 /threads/cs-go-external-extension-launch.45/ 1 19596 0 0
 /forums/pre-sale-discussion.9/ 3 62905 0 0
-/forums/administrators.12/ 3 55711 0 0
-/countdown/admin 2 26582 0 0
-/lost-password/ 1 40492 0 0
-/styles/uix_dark/fonts/icons/material-icons/css/materialdesignicons.min.css.map 1 3732 0 0
-/emaillog/ 5 74324 0 0
-/threads/the-giving-season.58/ 1 21346 0 0
-/members/skel.2/ 1 3325 0 0
-/support/messages/9/quote 1 2527 0 0
-/posts/140/edit 2 38251 0 0
-/forums/pre-sale-discussion.9/post-thread 1 17938 0 0
-/threads/announcements.7/add-reply 2 32161 0 0
-/forums/marketplace.17/ 1 17330 0 0
-/members/zel.40/ 1 14715 0 0
-/help/cookies/ 2 85382 0 1
-/support/preorder.4/draft 1 195 0 0
-/styles/uix_dark/fonts/icons/material-icons/fonts/materialdesignicons-webfont.woff 1 166928 0 0
-/help/ 2 82024 1 1
-/forums/media.22/ 3 49758 0 0
-/threads/open.40/ 1 20731 0 0
-/threads/installation-guide.18/ 1 20925 0 0
-/help/smilies/ 3 81036 2 2
-/support/departments/unique-identifier-support.2/ 1 14994 0 0
-/countdown/save 2 406 0 0
-/forums/support/ 1 19118 0 0
-/conversations/popup 1 189 0 0
-/styles/uix_dark/fonts/icons/material-icons/fonts/materialdesignicons-webfont.ttf 1 168493 0 0
-/help/terms/ 4 75421 3 3
-/threads/developments.9/preview 1 270 0 0
-/forums/discussion.15/ 1 17638 0 0
-/forums/announcements.21/ 3 53148 0 0
-/threads/posting-your-media.37/ 1 17239 0 0
-/members/bhopfu1.1/trophies 1 7774 0 0
-/support/example-ticket.1/ 2 42320 0 0
-/threads/payment.42/preview 1 450 0 0
-/support/preorder.4/edit 1 208 0 0
-/forums/suggestions.16/ 1 17833 0 0
-/threads/tell-skel-to-msg-me-on-discord-3.48/preview 1 282 0 0
-/forums/early-access.24/ 1 17451 0 0
-/help/privacy-policy/ 1 42447 0 0
-/reactions/react/post/141/2 1 2148 0 1
 /support/departments/direct-extension-support.1/ 2 29975 0 0
-/forums/news.2/ 3 55353 0 0
 /forums/configurations.14/ 1 17440 0 0
-/help/threactions/ 1 45672 0 0
-/threads/member-only-discord-server.57/ 1 21327 0 0
 /members/terry-davis.4/ 1 5024 0 0
+/chat/96/edit 2 1455 0 0
+/forums/early-access.24/ 1 17451 0 0
+/posts/17/edit 2 52166 0 0
+/forums/administrators.12/ 3 55711 0 0
+/threads/open.40/ 1 20731 0 0
+/styles/uix_dark/fonts/icons/material-icons/fonts/materialdesignicons-webfont.woff 1 166928 0 0
+/lost-password/ 1 40492 0 0
+/support/departments/prefixes 1 383 0 0
+/countdown/save 2 406 0 0
+/forums/moderators.18/ 1 17162 0 0
+/support/messages/9/quote 1 2527 0 0
+/support/preorder.4/draft 1 195 0 0
+/connected_account.php 1 107 0 1
+/forums/support/ 1 19118 0 0
+/threads/frequently-asked-questions.2/preview 1 5725 0 0
+/styles/uix_dark/fonts/icons/material-icons/fonts/materialdesignicons-webfont.ttf 1 168493 0 0
+/members/skel.2/ 1 3325 0 0
+/forums/media.22/ 3 49758 0 0
+/forums/discussion.15/ 1 17638 0 0
+/styles/uix_dark/fonts/icons/material-icons/css/materialdesignicons.min.css.map 1 3732 0 0
+/support/preorder.4/edit 1 208 0 0
+/help/cookies/ 2 85382 0 1
+/forums/marketplace.17/ 1 17330 0 0
+/support/0/draft 1 201 0 0
+/threads/member-only-discord-server.57/ 1 21327 0 0
+/threads/posting-your-media.37/ 1 17239 0 0
 /login/keep-alive 3 594 0 1
+/support/example-ticket.1/ 2 42320 0 0
+/forums/announcements.21/ 3 53148 0 0
+/help/threactions/ 1 45672 0 0
+/forums/pre-sale-discussion.9/post-thread 1 17938 0 0
+/forums/suggestions.16/ 1 17833 0 0
+/posts/140/edit 2 38251 0 0
+/threads/shoutbox-rules.17/edit 2 7953 0 0
+/reactions/react/post/141/2 1 2148 0 1
+/categories/public-area.1/ 1 14321 0 0
+/help/ 2 82024 1 1
+/help/terms/ 4 75421 3 3
+/countdown/admin/ 2 26574 0 0
+/forums/-/prefixes 2 1150 0 0
+/styles/uix_dark/fonts/icons/material-icons/fonts/materialdesignicons-webfont.eot 1 168588 0 0
+/threads/tell-skel-to-msg-me-on-discord-3.48/preview 1 282 0 0
+/threads/developments.9/preview 1 270 0 0
+/threads/open.40/preview 1 251 0 0
 /threads/payment.42/ 1 26911 0 0
-/support/0/open 1 242 0 0
+/help/smilies/ 3 81036 2 2
+/conversations/popup 1 189 0 0
+/threads/announcements.7/preview 1 8285 0 0
+/threads/the-giving-season.58/ 1 21346 0 0
 /threads/frequently-asked-questions.2/ 1 23940 0 0
+/threads/payment.42/preview 1 450 0 0
+/help/privacy-policy/ 1 42447 0 0
+/account/alerts-popup 4 10763 0 0
+/help/trophies/ 1 44126 0 0
+/support/preorder.4/add-reply 5 58813 0 0
+/threads/installation-guide.18/ 1 20925 0 0
+/support/departments/unique-identifier-support.2/ 1 14994 0 0
+/threads/announcements.7/add-reply 2 32161 0 0
+/support/pubg-hak.3/ 3 62313 0 0
+/threads/shoutbox-rules.17/ 1 21388 0 0
+/search/search 1 12695 0 0
+/support/departments/custom-fields 1 153 0 0
+/support/departments/website-support.3/ 1 15000 0 0
+/threads/website-launch.6/ 1 21439 0 0
+/members/zel.40/ 1 14715 0 0
+/countdown/admin 2 26582 0 0
+/forums/news.2/ 3 55353 0 0
+/support/messages/11/quote 1 769 0 0
+/threads/chat-rules.17/ 1 21411 0 0
+/support/0/open 1 242 0 0
+/posts/37/edit 2 33004 0 0
+/members/bhopfu1.1/trophies 1 7774 0 0
 END_SIDER
