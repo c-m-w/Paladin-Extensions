@@ -18,3 +18,11 @@ Dec 28 21:43:14.123591 check[54046]: [ 2] [bootup] Logging initiated LogDebugLev
 Dec 28 21:43:15.619826 check[54046]: [ 3] mail 1 is not known spam.
 Jan 09 21:23:49.134920 check[77605]: [ 2] [bootup] Logging initiated LogDebugLevel=3 to file:/home/palavpvb/.razor/razor-agent.log
 Jan 09 21:23:50.522446 check[77605]: [ 3] mail 1 is not known spam.
+Jan 19 17:07:55.164455 check[679963]: [ 2] [bootup] Logging initiated LogDebugLevel=3 to file:/home/palavpvb/.razor/razor-agent.log
+Jan 19 17:07:56.380423 check[679963]: [ 3] mail 1 is not known spam.
+Jan 19 17:07:57.410628 check[679963]: [ 2] [bootup] Logging initiated LogDebugLevel=3 to file:/home/palavpvb/.razor/razor-agent.log
+Jan 19 17:07:58.315092 check[679963]: [ 3] mail 1 is not known spam.
+Jan 19 17:12:23.872121 check[679963]: [ 2] [bootup] Logging initiated LogDebugLevel=3 to file:/home/palavpvb/.razor/razor-agent.log
+Jan 19 17:12:24.206889 check[679963]: [ 3] mail 1 is not known spam.
+Jan 19 21:27:36.032564 check[30807]: [ 2] [bootup] Logging initiated LogDebugLevel=3 to file:/home/palavpvb/.razor/razor-agent.log
+Jan 19 21:27:36.998923 check[30807]: [ 3] mail 1 is not known spam.
