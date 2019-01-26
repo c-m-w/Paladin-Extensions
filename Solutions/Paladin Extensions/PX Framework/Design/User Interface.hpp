@@ -40,8 +40,12 @@ namespace PX::UI
 			IDirect3DTexture9 *pTexture;
 			D3DXIMAGE_INFO iiImage;
 			Types::wstr_t wstrFileName;
+			int iResourceID;
 			// review why even have a constructor here? just use initializer braces...
-			texture_t( unsigned uWidth, unsigned uHeight, Types::wstr_t wstrFileName, IDirect3DTexture9 *pTexture = nullptr ): iiImage( D3DXIMAGE_INFO( ) ), uWidth( uWidth ), uHeight( uHeight ), pTexture( pTexture ), wstrFileName( wstrFileName )
+			explicit texture_t( unsigned uWidth, unsigned uHeight, Types::wstr_t _wstrFileName ): iiImage( D3DXIMAGE_INFO( ) ), uWidth( uWidth ), uHeight( uHeight ), pTexture( pTexture ), wstrFileName( _wstrFileName )
+			{ }
+
+			explicit texture_t( unsigned uWidth, unsigned uHeight, int _iResourceID ): iiImage( D3DXIMAGE_INFO( ) ), uWidth( uWidth ), uHeight( uHeight ), iResourceID( _iResourceID )
 			{ }
 		};
 
@@ -79,7 +83,7 @@ namespace PX::UI
 		/** \brief Initialize the GUI for drawing interactable windows. */
 		/**	\param _szApplicationTitle The subtitle of the GUI window. */
 		/** \return true - Initialization was successful.\n false - Initialization was not successful. */
-		bool PX_API InitializeUI( Types::cstr_t _szApplicationTitle, unsigned uWidth = Render::uWindowWidth, unsigned uHeight = Render::uWindowHeight );
+		bool PX_API InitializeUI( Types::cstr_t _szApplicationTitle, bool bFromResource, unsigned uWidth = Render::uWindowWidth, unsigned uHeight = Render::uWindowHeight );
 		void PX_API Destruct( );
 		/** \brief Calculates text dimensions with the current font. */
 		/**	\param szText Text to calculate the bounds for. */

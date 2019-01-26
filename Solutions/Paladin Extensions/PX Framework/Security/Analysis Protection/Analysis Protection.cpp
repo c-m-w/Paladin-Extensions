@@ -131,8 +131,7 @@ namespace PX::AnalysisProtection
 				"Our driver has halted functionality due to interference. This\n"
 				"message box should only show up if you are messing with the driver\n"
 				"using reverse engineering tools. Since this is the alpha and you are\n"
-				"a trusted user, FORCE SHUT DOWN YOUR COMPUTER IMMEDIATELY BEFORE THE DRIVER DESTROYS YOUR PC.\n\n"
-				"DO NOT PRESS OK. DO NOT PRESS OK. DO NOT PRESS OK. DO NOT PRESS OK. DO NOT PRESS OK." ), PX_XOR( L"Something messed up really bad." ), 0 );
+				"a trusted user, FORCE SHUT DOWN YOUR COMPUTER IMMEDIATELY BEFORE THE DRIVER DESTROYS YOUR PC (men)." ), PX_XOR( L"Something messed up really bad." ), 0 );
 
 			MessageBox( nullptr,							PX_XOR(
 				L"You pressed OK. Well, this is your last chance.\n"

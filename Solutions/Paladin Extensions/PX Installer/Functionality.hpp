@@ -2,6 +2,11 @@
 
 #pragma once
 
+namespace Resources
+{
+	extern bstr_t bstrLauncherEXE;
+}
+
 namespace PX::Functionality
 {
 	PX_SDK auto bCancelInstallation = false;

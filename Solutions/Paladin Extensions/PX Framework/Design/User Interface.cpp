@@ -272,6 +272,16 @@ namespace PX::UI
 			return true;
 		}
 
+		bool PX_API CreateSpriteTexturesFromResource( )
+		{
+			for each ( auto &texTexture in vecTextures )
+			{
+				if ( D3D_OK != D3DXCreateTextureFromResource( pDevice, GetModuleHandle( nullptr ), MAKEINTRESOURCE( texTexture.iResourceID ), const_cast< IDirect3DTexture9** >( &texTexture.pTexture ) ) )
+					return false;
+			}
+			return true;
+		}
+
 		void PX_API DestroySpriteTextures( )
 		{
 			texture_t *texTexture;
@@ -284,7 +294,7 @@ namespace PX::UI
 				}
 		}
 
-		bool PX_API InitializeUI( cstr_t _szApplicationTitle, unsigned uWidth /*= uWindowWidth*/, unsigned uHeight /*= uWindowHeight*/ )
+		bool PX_API InitializeUI( cstr_t _szApplicationTitle, bool bFromResource, unsigned uWidth /*= uWindowWidth*/, unsigned uHeight /*= uWindowHeight*/ )
 		{
 			szNuklearWindowTitle = new char[ strlen( _szApplicationTitle ) + 1 ];
 			strcpy( szNuklearWindowTitle, _szApplicationTitle );
@@ -292,18 +302,32 @@ namespace PX::UI
 			uNuklearWindowHeight = uHeight;
 			InitializeNuklear( );
 
-			vecTextures.emplace_back( 32, 29, PX_XOR( LR"(PX Logo.png)" ) ); // TEXTURE_LOGO
-			vecTextures.emplace_back( 720, 394, PX_XOR( LR"(PX Loading.png)" ) ); // TEXTURE_LOGO_LOADING
-			vecTextures.emplace_back( 100, 100, PX_XOR( LR"(Game Icons\CSGO Sized.png)" ) ); // TEXTURE_ICON_CSGO
-			vecTextures.emplace_back( 100, 100, PX_XOR( LR"(Game Icons\PUBG Sized.png)" ) ); // TEXTURE_ICON_PUBG
-			vecTextures.emplace_back( 100, 100, PX_XOR( LR"(Game Icons\RSIX Sized.png)" ) ); // TEXTURE_ICON_RSIX
-			vecTextures.emplace_back( 50, 50, PX_XOR( LR"(Cursor\Arrow.png)" ) ); // TEXTURE_CURSOR_ARROW
-			vecTextures.emplace_back( 50, 50, PX_XOR( LR"(Cursor\Hand.png)" ) ); // TEXTURE_CURSOR_HAND
-			vecTextures.emplace_back( 50, 50, PX_XOR( LR"(Cursor\I Beam.png)" ) ); // TEXTURE_CURSOR_IBEAM
-
+			if( bFromResource )
+			{
+				vecTextures.emplace_back( 32, 29, ( 102 ) ); // TEXTURE_LOGO
+				vecTextures.emplace_back( 720, 394, ( 103 ) ); // TEXTURE_LOGO_LOADING
+				vecTextures.emplace_back( 100, 100, ( 116 ) ); // TEXTURE_ICON_CSGO
+				vecTextures.emplace_back( 100, 100, ( 118 ) ); // TEXTURE_ICON_PUBG
+				vecTextures.emplace_back( 100, 100, ( 120 ) ); // TEXTURE_ICON_RSIX
+				vecTextures.emplace_back( 50, 50,  ( 104 )); // TEXTURE_CURSOR_ARROW
+				vecTextures.emplace_back( 50, 50, ( 105 ) ); // TEXTURE_CURSOR_HAND
+				vecTextures.emplace_back( 50, 50, ( 106 ) ); // TEXTURE_CURSOR_IBEAM
+			}
+			else
+			{
+				vecTextures.emplace_back( 32, 29, PX_XOR( LR"(PX Logo.png)" ) ); // TEXTURE_LOGO
+				vecTextures.emplace_back( 720, 394, PX_XOR( LR"(PX Loading.png)" ) ); // TEXTURE_LOGO_LOADING
+				vecTextures.emplace_back( 100, 100, PX_XOR( LR"(Game Icons\CSGO Sized.png)" ) ); // TEXTURE_ICON_CSGO
+				vecTextures.emplace_back( 100, 100, PX_XOR( LR"(Game Icons\PUBG Sized.png)" ) ); // TEXTURE_ICON_PUBG
+				vecTextures.emplace_back( 100, 100, PX_XOR( LR"(Game Icons\RSIX Sized.png)" ) ); // TEXTURE_ICON_RSIX
+				vecTextures.emplace_back( 50, 50, PX_XOR( LR"(Cursor\Arrow.png)" ) ); // TEXTURE_CURSOR_ARROW
+				vecTextures.emplace_back( 50, 50, PX_XOR( LR"(Cursor\Hand.png)" ) ); // TEXTURE_CURSOR_HAND
+				vecTextures.emplace_back( 50, 50, PX_XOR( LR"(Cursor\I Beam.png)" ) ); // TEXTURE_CURSOR_IBEAM
+			}
+			
 			return !vecTextures.empty( )
 					&& D3DXCreateSprite( pDevice, &pBufferSprite ) == D3D_OK
-					&& CreateSpriteTextures( );
+					&& bFromResource ? CreateSpriteTexturesFromResource( ) : CreateSpriteTextures( );
 		}
 
 		void PX_API Destruct( )

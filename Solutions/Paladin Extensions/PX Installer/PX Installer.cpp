@@ -110,7 +110,8 @@ void PX_API Manager::SetLayout( )
 	}
 	else
 	{
-		static int iScreen = 1;
+		static int iScreen = 1,
+			iAction = -1;
 		switch ( iScreen )
 		{
 			case 1: // WARNING + EULA
@@ -209,8 +210,41 @@ void PX_API Manager::SetLayout( )
 			}
 			case 2:
 			{
-				if ( PathFileExists( ( PX_APPDATA + PX_XOR( LR"(\PX\data.px)" ) ).c_str( ) ) )
+				static auto bFileExists = PathFileExists( ( PX_APPDATA + PX_XOR( LR"(\PX\data.px)" ) ).c_str( ) );
+				if ( bFileExists )
 				{
+					static auto bValidInstall = false;
+					if ( Functionality::strInstallDirectory.empty( ) )
+					{
+						std::wstring wstrCurrent { };
+						FileRead( PX_APPDATA + PX_XOR( LR"(\PX\data.px)" ), wstrCurrent, false );
+						Functionality::strInstallDirectory = string_cast< decltype ( Functionality::strInstallDirectory ) >( wstrCurrent ); 
+						bValidInstall = GenerateHash( string_cast< std::string >( ::Resources::bstrLauncherEXE ) )
+							== GenerateHash( string_cast< std::string >( wstrCurrent + L"PX Launcher.exe" ) );
+					}
+
+					SetFont( FNT_ROBOTO_SMALL );
+					BeginRow( 30u, 1u, ROW_CUSTOM );
+					auto vecTextSize = CalculateTextBounds( PX_XOR( "An installation was found." ), 30u );
+					PushCustomRow( unsigned( float( uWindowDimensions[ 0 ] ) / 2.f - vecTextSize.x / 2.f ), unsigned( float( uWindowDimensions[ 1 ] ) - 140.f ), unsigned( vecTextSize.x ), 30u );
+					Text( PX_XOR( "An installation was found." ), color_t( { 255, 255, 255, 255 } ) );
+					EndRow( );
+
+					BeginRow( 30u, 2u, ROW_CUSTOM );
+					constexpr auto uButtonWidth = 150u;
+					PushCustomRow( unsigned( float( uWindowDimensions[ 0 ] ) / 2.f - uButtonWidth - 2.f ), unsigned( float( uWindowDimensions[ 1 ] ) - 140.f ), uButtonWidth, 30u );
+					if ( Button( EPosition::LEFT, PX_XOR( "Uninstall" ), false, false ) )
+					{
+						iScreen = 3;
+						iAction = 0;
+					}
+					PushCustomRow( unsigned( float( uWindowDimensions[ 0 ] ) / 2.f + uButtonWidth ), unsigned( float( uWindowDimensions[ 1 ] ) - 140.f ), uButtonWidth, 30u );
+					if( Button( EPosition::RIGHT, bValidInstall ? PX_XOR( "Reinstall" ) : PX_XOR( "Update" ), false, false ) )
+					{
+						iScreen = 3;
+						iAction = 1;
+					}
+					EndRow( );
 					// check hash to our hash
 					// if hash mismatch
 					//		Something is already installed and an update is available!
@@ -225,9 +259,34 @@ void PX_API Manager::SetLayout( )
 					//
 					// uninstall/update complete? restart. 
 				}
+				else
+				{
+					if ( Functionality::strInstallDirectory.empty( ) )
+						Functionality::strInstallDirectory.resize( MAX_PATH );
 
+					SetFont( FNT_ROBOTO_SMALL );
+					BeginRow( 30u, 2u, ROW_CUSTOM );
+					auto vecTextSize = CalculateTextBounds( PX_XOR( "Enter install path:" ), 30u );
+					PushCustomRow( unsigned( float( uWindowDimensions[ 0 ] ) / 2.f - vecTextSize.x / 2.f ), unsigned( float( uWindowDimensions[ 1 ] ) - 140.f ), unsigned( vecTextSize.x ), 30u );
+					Text( PX_XOR( "Enter install path:" ), color_t( { 255, 255, 255 ,255 } ) );
+					PushCustomRow( unsigned( float( uWindowDimensions[ 0 ] ) / 2.f + vecTextSize.x / 2.f ), unsigned( float( uWindowDimensions[ 1 ] ) - 140.f ), unsigned( vecTextSize.x ), 30u );
+					Inputbox( MAX_PATH, &Functionality::strInstallDirectory[ 0 ] );
+					EndRow( );
+
+					const auto dwFileAttributes = GetFileAttributesA( Functionality::strInstallDirectory.c_str( ) );
+
+					BeginRow( 30u, 1u, ROW_CUSTOM );
+					constexpr auto uButtonWidth = 150u;
+					PushCustomRow( unsigned( float( uWindowDimensions[ 0 ] ) / 2.f - uButtonWidth - 2.f ), unsigned( float( uWindowDimensions[ 1 ] ) - 140.f ), uButtonWidth, 30u );
+					if ( Button( EPosition::CENTER, PX_XOR( "Confirm" ), false, Functionality::strInstallDirectory.find( PX_XOR( "C:\\" ) ) == std::string::npos
+								 && dwFileAttributes != INVALID_FILE_ATTRIBUTES && dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) )
+					{
+						iScreen = 3;
+						iAction = 1;
+					}
+					EndRow( );
+				}
 				// * GET INSTALL DIRECTORY & DESIRED PRODUCTS
-				Functionality::strInstallDirectory = "a";
 				// You may only install this on type FAT drives!
 				// * Opens the windows select directory garbage.
 				// * Ensure that the direction has USN Journal disabled.
@@ -272,7 +331,7 @@ void PX_API DrawWindow( )
 {
 	unsigned uDimensions[ 2 ] { 720, 450 };
 	InitializeRenderTarget( uDimensions, PX_XOR( L"Paladin Extensions" ) );
-	InitializeUI( PX_XOR( "Installer" ) );
+	InitializeUI( PX_XOR( "Installer" ), true );
 
 	DEVMODE pDevMode { };
 	EnumDisplaySettings( nullptr, ENUM_CURRENT_SETTINGS, &pDevMode );
