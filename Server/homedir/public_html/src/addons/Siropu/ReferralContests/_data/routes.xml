@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<routes>
+  <route route_type="admin" route_prefix="referral-contests" format=":int&lt;contest_id&gt;/" controller="Siropu\ReferralContests:Contest" context="siropuReferralContests"/>
+  <route route_type="admin" route_prefix="referral-contests" sub_name="invitations" format="invitations/:str&lt;invitation_code&gt;/" controller="Siropu\ReferralContests:Invitation" context="siropuReferralContests"/>
+  <route route_type="admin" route_prefix="referral-contests" sub_name="referrals" format="referrals/:int&lt;user_id&gt;/" controller="Siropu\ReferralContests:Referral" context="siropuReferralContests"/>
+  <route route_type="admin" route_prefix="referral-contests" sub_name="referrer-log" format="referrer-log" controller="Siropu\ReferralContests:ReferrerLog" context="siropuReferralContests"/>
+  <route route_type="admin" route_prefix="referral-contests" sub_name="reward-types" format="reward-types/:int&lt;reward_type_id&gt;/" controller="Siropu\ReferralContests:RewardType" context="siropuReferralContests"/>
+  <route route_type="admin" route_prefix="referral-contests" sub_name="tools" format="tools/:int&lt;tool_id&gt;/" controller="Siropu\ReferralContests:Tool" context="siropuReferralContests"/>
+  <route route_type="public" route_prefix="account" sub_name="invitations/link" format="invitations/link/:str&lt;invitation_code&gt;/" controller="XF:Account" action_prefix="InvitationsLink"/>
+  <route route_type="public" route_prefix="account" sub_name="referral-tools" format="referral-tools/:int&lt;tool_id&gt;/" controller="XF:Account" action_prefix="referralTools"/>
+  <route route_type="public" route_prefix="invitation" controller="Siropu\ReferralContests:Invitation"/>
+  <route route_type="public" route_prefix="referral-contests" format=":int&lt;contest_id,name&gt;" controller="Siropu\ReferralContests:Contest" context="siropuReferralContests"/>
+  <route route_type="public" route_prefix="referrals" sub_name="users" format="users/:int&lt;user_id,username&gt;/:page" controller="Siropu\ReferralContests:Referral" action_prefix="users"/>
+</routes>

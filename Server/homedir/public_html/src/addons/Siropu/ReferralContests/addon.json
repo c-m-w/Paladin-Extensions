@@ -1,0 +1,14 @@
+{
+    "legacy_addon_id": "siropu_referral_contests",
+    "title": "Referral Contests",
+    "description": "Referral links, referral contests, registration by invitation only.",
+    "version_id": 2014070,
+    "version_string": "2.1.4",
+    "dev": "",
+    "dev_url": "",
+    "faq_url": "",
+    "support_url": "",
+    "extra_urls": [],
+    "require": [],
+    "icon": "fa-trophy"
+}

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<admin_navigation>
+  <admin_navigation_entry navigation_id="siropuReferralContests" display_order="10101" link="referral-contests" icon="fa-trophy" debug_only="0" hide_no_children="0"/>
+  <admin_navigation_entry navigation_id="siropuReferralContestsOpt" parent_navigation_id="siropuReferralContests" display_order="5" link="options/groups/siropuReferralContests/" debug_only="0" hide_no_children="0"/>
+  <admin_navigation_entry navigation_id="srcContests" parent_navigation_id="siropuReferralContests" display_order="1" link="referral-contests" admin_permission_id="siropuReferralContests" debug_only="0" hide_no_children="0"/>
+  <admin_navigation_entry navigation_id="srcContestsCreate" parent_navigation_id="srcContests" display_order="2" link="referral-contests/add" debug_only="0" hide_no_children="0"/>
+  <admin_navigation_entry navigation_id="srcContestsList" parent_navigation_id="srcContests" display_order="1" link="referral-contests" debug_only="0" hide_no_children="0"/>
+  <admin_navigation_entry navigation_id="srcInvitations" parent_navigation_id="siropuReferralContests" display_order="4" link="referral-contests/invitations" admin_permission_id="siropuReferralContests" debug_only="0" hide_no_children="0"/>
+  <admin_navigation_entry navigation_id="srcInvitationsCreate" parent_navigation_id="srcInvitations" display_order="2" link="referral-contests/invitations/add" debug_only="0" hide_no_children="0"/>
+  <admin_navigation_entry navigation_id="srcInvitationsList" parent_navigation_id="srcInvitations" display_order="1" link="referral-contests/invitations" debug_only="0" hide_no_children="0"/>
+  <admin_navigation_entry navigation_id="srcReferrals" parent_navigation_id="siropuReferralContests" display_order="2" link="referral-contests/referrals" admin_permission_id="siropuReferralContests" debug_only="0" hide_no_children="0"/>
+  <admin_navigation_entry navigation_id="srcReferralsList" parent_navigation_id="srcReferrals" display_order="1" link="referral-contests/referrals" debug_only="0" hide_no_children="0"/>
+  <admin_navigation_entry navigation_id="srcReferrerLog" parent_navigation_id="srcReferrals" display_order="2" link="referral-contests/referrer-log" admin_permission_id="siropuReferralContests" debug_only="0" hide_no_children="0"/>
+  <admin_navigation_entry navigation_id="srcRewardTypes" parent_navigation_id="srcReferrals" display_order="4" link="referral-contests/reward-types" admin_permission_id="siropuReferralContests" debug_only="0" hide_no_children="0"/>
+  <admin_navigation_entry navigation_id="srcTools" parent_navigation_id="srcReferrals" display_order="3" link="referral-contests/tools" admin_permission_id="siropuReferralContests" debug_only="0" hide_no_children="0"/>
+</admin_navigation>

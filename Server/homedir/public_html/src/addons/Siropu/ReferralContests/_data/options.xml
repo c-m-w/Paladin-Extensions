@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<options>
+  <option option_id="siropuReferralContestsContestWidget" edit_format="onoff" data_type="boolean">
+    <default_value>1</default_value>
+    <relation group_id="siropuReferralContests" display_order="201"/>
+  </option>
+  <option option_id="siropuReferralContestsCopyToClipboard" edit_format="onoff" data_type="boolean">
+    <default_value>1</default_value>
+    <relation group_id="siropuReferralContests" display_order="6"/>
+  </option>
+  <option option_id="siropuReferralContestsCreateInvitations" edit_format="onoff" data_type="boolean">
+    <default_value>1</default_value>
+    <relation group_id="siropuReferralContests" display_order="11"/>
+  </option>
+  <option option_id="siropuReferralContestsDisplayReferralCount" edit_format="onoff" data_type="boolean">
+    <default_value>1</default_value>
+    <relation group_id="siropuReferralContests" display_order="100"/>
+  </option>
+  <option option_id="siropuReferralContestsDisplayReferrer" edit_format="onoff" data_type="boolean">
+    <default_value>0</default_value>
+    <relation group_id="siropuReferralContests" display_order="101"/>
+  </option>
+  <option option_id="siropuReferralContestsGenerarteLink" edit_format="onoff" data_type="boolean">
+    <default_value>1</default_value>
+    <relation group_id="siropuReferralContests" display_order="10"/>
+  </option>
+  <option option_id="siropuReferralContestsGuestMessage" edit_format="onoff" data_type="boolean">
+    <default_value>0</default_value>
+    <relation group_id="siropuReferralContests" display_order="103"/>
+  </option>
+  <option option_id="siropuReferralContestsInvitationExpirationTime" edit_format="spinbox" data_type="unsigned_integer">
+    <default_value>0</default_value>
+    <edit_format_params>units={{ phrase('days') }}</edit_format_params>
+    <relation group_id="siropuReferralContests" display_order="304"/>
+  </option>
+  <option option_id="siropuReferralContestsInvitationOnly" edit_format="onoff" data_type="boolean" validation_class="Siropu\ReferralContests\Option\InvitationOnly" validation_method="verifyOption">
+    <default_value>0</default_value>
+    <relation group_id="siropuReferralContests" display_order="300"/>
+  </option>
+  <option option_id="siropuReferralContestsInvitationPage" edit_format="onoff" data_type="boolean">
+    <default_value>0</default_value>
+    <relation group_id="siropuReferralContests" display_order="301"/>
+  </option>
+  <option option_id="siropuReferralContestsInvitationPageDescription" edit_format="textbox" data_type="string">
+    <default_value></default_value>
+    <edit_format_params>rows=5</edit_format_params>
+    <relation group_id="siropuReferralContests" display_order="302"/>
+  </option>
+  <option option_id="siropuReferralContestsInvitationUrlParameter" edit_format="textbox" data_type="string">
+    <default_value>invitation</default_value>
+    <relation group_id="siropuReferralContests" display_order="303"/>
+  </option>
+  <option option_id="siropuReferralContestsMemberProfileReferralTab" edit_format="onoff" data_type="boolean">
+    <default_value>1</default_value>
+    <relation group_id="siropuReferralContests" display_order="102"/>
+  </option>
+  <option option_id="siropuReferralContestsPredefinedEmailMessage" edit_format="textbox" data_type="string">
+    <default_value></default_value>
+    <edit_format_params>rows=5</edit_format_params>
+    <relation group_id="siropuReferralContests" display_order="403"/>
+  </option>
+  <option option_id="siropuReferralContestsPredefinedEmailSubject" edit_format="textbox" data_type="string">
+    <default_value></default_value>
+    <relation group_id="siropuReferralContests" display_order="402"/>
+  </option>
+  <option option_id="siropuReferralContestsProfilePageAsReferralLink" edit_format="onoff" data_type="boolean">
+    <default_value>0</default_value>
+    <relation group_id="siropuReferralContests" display_order="7"/>
+  </option>
+  <option option_id="siropuReferralContestsReferralLinkWidget" edit_format="onoff" data_type="boolean">
+    <default_value>1</default_value>
+    <relation group_id="siropuReferralContests" display_order="200"/>
+  </option>
+  <option option_id="siropuReferralContestsReferralUrlParameter" edit_format="textbox" data_type="string">
+    <default_value>referrer</default_value>
+    <relation group_id="siropuReferralContests" display_order="1"/>
+  </option>
+  <option option_id="siropuReferralContestsReferrerAutocomplete" edit_format="onoff" data_type="boolean">
+    <default_value>0</default_value>
+    <relation group_id="siropuReferralContests" display_order="5"/>
+  </option>
+  <option option_id="siropuReferralContestsReferrerUserField" edit_format="onoff" data_type="boolean" validation_class="Siropu\ReferralContests\Option\ReferrerField" validation_method="verifyOption">
+    <default_value>0</default_value>
+    <relation group_id="siropuReferralContests" display_order="4"/>
+  </option>
+  <option option_id="siropuReferralContestsReward" edit_format="callback" data_type="array" validation_class="Siropu\ReferralContests\Option\RewardTypes" validation_method="verifyOption">
+    <default_value>{"reward_amount":"0","reward_type_id":""}</default_value>
+    <edit_format_params>Siropu\ReferralContests\Option\RewardTypes::renderOption</edit_format_params>
+    <sub_options>reward_amount
+reward_type_id</sub_options>
+    <relation group_id="siropuReferralContests" display_order="8"/>
+  </option>
+  <option option_id="siropuReferralContestsRewardMinPosts" edit_format="spinbox" data_type="unsigned_integer">
+    <default_value>0</default_value>
+    <edit_format_params>min=0</edit_format_params>
+    <relation group_id="siropuReferralContests" display_order="9"/>
+  </option>
+  <option option_id="siropuReferralContestsSenderEmail" edit_format="textbox" data_type="string">
+    <default_value></default_value>
+    <relation group_id="siropuReferralContests" display_order="400"/>
+  </option>
+  <option option_id="siropuReferralContestsSenderName" edit_format="textbox" data_type="string">
+    <default_value></default_value>
+    <relation group_id="siropuReferralContests" display_order="401"/>
+  </option>
+  <option option_id="siropuReferralContestsTopReferrersWidget" edit_format="onoff" data_type="boolean">
+    <default_value>1</default_value>
+    <relation group_id="siropuReferralContests" display_order="202"/>
+  </option>
+  <option option_id="siropuReferralContestsTrackHttpReferrer" edit_format="onoff" data_type="boolean">
+    <default_value>1</default_value>
+    <relation group_id="siropuReferralContests" display_order="2"/>
+  </option>
+</options>

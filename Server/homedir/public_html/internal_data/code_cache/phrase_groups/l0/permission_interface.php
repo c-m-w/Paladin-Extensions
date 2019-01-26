@@ -20,6 +20,7 @@ return array (
   'permission_interface.resourcePermissions' => 'Resource permissions',
   'permission_interface.signaturePermissions' => 'Signature permissions',
   'permission_interface.similarThreads' => 'Similar threads',
+  'permission_interface.siropuReferralContests' => 'Referral Contests',
   'permission_interface.siropuShoutbox' => 'Shoutbox',
   'permission_interface.thReactionsModerator' => '[TH] Reactions moderator permissions',
   'permission_interface.thReactionsPermissions' => '[TH] Reactions permissions',

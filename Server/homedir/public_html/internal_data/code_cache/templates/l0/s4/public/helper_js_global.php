@@ -70,6 +70,13 @@ return array('macros' => array('head' => function($__templater, array $__argumen
 	$__finalCompiled .= '
 	' . $__templater->fn('core_js') . '
 	<!--XF:JS-->
+';
+	if ($__vars['xf']['options']['siropuReferralContestsCopyToClipboard'] AND ((!$__vars['xf']['options']['siropuReferralContestsInvitationOnly']) AND $__templater->method($__vars['xf']['visitor'], 'hasPermission', array('siropuReferralContests', 'refer', )))) {
+		$__finalCompiled .= '
+	' . $__templater->includeTemplate('siropu_referral_contests_js', $__vars) . '
+';
+	}
+	$__finalCompiled .= '
 	';
 	if ($__templater->fn('property', array('uix_buttonRipple', ), false)) {
 		$__templater->includeJs(array(

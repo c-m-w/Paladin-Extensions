@@ -129,7 +129,34 @@ return array('macros' => array('moderator_menu_actions' => function($__templater
 	';
 	}
 	$__finalCompiled .= '
-	' . '
+	';
+	if ($__vars['xf']['options']['siropuReferralContestsDisplayReferralCount'] AND $__vars['user']['siropu_referral_count']) {
+		$__finalCompiled .= '
+	<dl class="pairs pairs--rows pairs--rows--centered menu-fauxLinkRow">
+		<dt>' . 'Referrals' . '</dt>
+		<dd>
+			<a href="' . $__templater->fn('link', array('referrals/users', $__vars['user'], ), true) . '" class="fauxBlockLink-linkRow u-concealed" data-xf-click="overlay">' . $__templater->filter($__vars['user']['siropu_referral_count'], array(array('number', array()),), true) . '</a>
+		</dd>
+	</dl>
+';
+	}
+	$__finalCompiled .= '
+';
+	if ($__vars['xf']['options']['siropuReferralContestsDisplayReferrer'] AND $__vars['user']['siropu_referrer_id']) {
+		$__finalCompiled .= '
+	<dl class="pairs pairs--rows pairs--rows--centered menu-fauxLinkRow">
+		<dt>' . 'Referrer' . '</dt>
+		<dd>
+			' . $__templater->fn('username_link', array($__vars['user']['SRC_Referrer'], true, array(
+			'class' => 'fauxBlockLink-linkRow u-concealed',
+			'notooltip' => 'true',
+		))) . '
+		</dd>
+	</dl>
+';
+	}
+	$__finalCompiled .= '
+' . '
 	';
 	if ($__templater->method($__vars['xf']['visitor'], 'canViewWarnings', array()) AND $__vars['user']['warning_points']) {
 		$__finalCompiled .= '

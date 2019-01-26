@@ -29,6 +29,7 @@ return array (
   'nav.registeredMembers' => 'Registered members',
   'nav.searchForums' => 'Search forums',
   'nav.searchProfilePosts' => 'Search profile posts',
+  'nav.siropuReferralContests' => 'Referral Contests',
   'nav.unansweredThreads' => 'Unanswered threads',
   'nav.watched' => 'Watched',
   'nav.watchedForums' => 'Watched forums',

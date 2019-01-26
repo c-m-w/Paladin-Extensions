@@ -32,6 +32,7 @@ return array (
   'option_group.serviceProviders' => 'External service providers',
   'option_group.sharing' => 'Sharing',
   'option_group.similarThreads' => 'Similar threads',
+  'option_group.siropuReferralContests' => 'Referral Contests',
   'option_group.siropuShoutbox' => 'Shoutbox',
   'option_group.sitemap' => 'XML sitemap generation',
   'option_group.spam' => 'Spam management',

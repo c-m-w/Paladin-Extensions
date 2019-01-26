@@ -16,6 +16,7 @@ return array (
   'admin_permission.payment' => 'Manage payment providers',
   'admin_permission.rebuildCache' => 'Rebuild caches',
   'admin_permission.resourceManager' => 'Manage extensions',
+  'admin_permission.siropuReferralContests' => 'Manage Referral Contests',
   'admin_permission.style' => 'Manage styles, style properties, and templates',
   'admin_permission.tags' => 'Manage tags',
   'admin_permission.thReactions' => 'Manage [TH] Reactions',

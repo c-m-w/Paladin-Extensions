@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template_modifications>
+  <modification type="public" template="PAGE_CONTAINER" modification_key="siropu_referral_contests_page_container" description="Add message for referrals." execution_order="10" enabled="1" action="str_replace">
+    <find><![CDATA[{$content|raw}]]></find>
+    <replace><![CDATA[<xf:if is="!in_array($template, ['register_form', 'login', 'siropu_referral_contests_invitation_page'])">
+	{{ siropu_invitation_message() }}
+</xf:if>
+$0]]></replace>
+  </modification>
+  <modification type="public" template="account_details" modification_key="siropu_referral_contests_account_details" description="Fill invitation code field for registered users." execution_order="10" enabled="1" action="str_replace">
+    <find><![CDATA[<xf:wrap template="account_wrapper" />]]></find>
+    <replace><![CDATA[$0
+<xf:if is="$xf.options.siropuReferralContestsInvitationOnly">
+	<xf:js>
+		$(function()
+		{
+			var siropuInvitation = $('.field_siropu_invitation');
+
+			if (siropuInvitation.length)
+			{
+				siropuInvitation.val('--');
+			}
+		});
+	</xf:js>
+</xf:if>]]></replace>
+  </modification>
+  <modification type="public" template="account_visitor_menu" modification_key="siropu_referral_contests_account_visitor_menu" description="Add referral count." execution_order="10" enabled="1" action="str_replace">
+    <find><![CDATA[<!--[XF:stats_pairs:above_points]-->]]></find>
+    <replace><![CDATA[$0
+<xf:if is="$xf.options.siropuReferralContestsDisplayReferralCount">
+	<dl class="pairs pairs--justified fauxBlockLink">
+		<dt>{{ phrase('siropu_referral_contests_referrals') }}</dt>
+		<dd>
+			<a href="{{ link('referrals/users', $xf.visitor) }}" class="fauxBlockLink-linkRow u-concealed" data-xf-click="overlay">{$xf.visitor.siropu_referral_count|number}</a>
+		</dd>
+	</dl>
+</xf:if>]]></replace>
+  </modification>
+  <modification type="public" template="account_visitor_menu" modification_key="siropu_referral_contests_account_visitor_menu_link" description="Add link to visitor menu." execution_order="10" enabled="1" action="str_replace">
+    <find><![CDATA[<!--[XF:content_links:bottom]-->]]></find>
+    <replace><![CDATA[$0
+<xf:if is="$xf.visitor.hasPermission('siropuReferralContests', 'refer')">
+	<xf:if is="$xf.options.siropuReferralContestsInvitationOnly">
+		<li><a href="{{ $xf.visitor.hasPermission('siropuReferralContests', 'sendInvitations') != 0 ? link('account/invitations') : link('account/invitations/list') }}" class="menu-linkRow">{{ phrase('siropu_referral_contests_your_invitations') }}</a></li>
+	<xf:else />
+		<li><a href="{{ link('account/referrals') }}" class="menu-linkRow">{{ phrase('siropu_referral_contests_your_referrals') }}</a></li>
+	</xf:if>
+</xf:if>]]></replace>
+  </modification>
+  <modification type="public" template="account_wrapper" modification_key="siropu_referral_contests_account_wrapper" description="Add account side navigation links." execution_order="10" enabled="1" action="str_replace">
+    <find><![CDATA[<!--[XF:profile_links:bottom]-->]]></find>
+    <replace><![CDATA[$0
+<xf:if is="$xf.visitor.hasPermission('siropuReferralContests', 'refer')">
+	<xf:if is="$xf.options.siropuReferralContestsInvitationOnly">
+		<a class="blockLink {{ $pageSelected == 'invitations' ? 'is-selected' : '' }}" href="{{ $xf.visitor.hasPermission('siropuReferralContests', 'sendInvitations') != 0 ? link('account/invitations') : link('account/invitations/list') }}">
+			{{ phrase('siropu_referral_contests_your_invitations') }}
+		</a>
+	<xf:else />
+		<a class="blockLink {{ $pageSelected == 'referrals' ? 'is-selected' : '' }}" href="{{ link('account/referrals') }}">
+			{{ phrase('siropu_referral_contests_your_referrals') }}
+		</a>
+	</xf:if>
+</xf:if>]]></replace>
+  </modification>
+  <modification type="admin" template="helper_criteria" modification_key="siropu_referral_contests_helper_criteria" description="Add the referral user criteria." execution_order="10" enabled="1" action="str_replace">
+    <find><![CDATA[<!--[XF:user:content_bottom]-->]]></find>
+    <replace><![CDATA[$0
+<xf:option name="user_criteria[siropu_referral_count][rule]" value="siropu_referral_count" selected="{$criteria.siropu_referral_count}"
+	label="{{ phrase('siropu_referral_contests_user_has_at_least_x_referrals:') }}">
+	<xf:numberbox name="user_criteria[siropu_referral_count][data][referrals]" value="{$criteria.siropu_referral_count.referrals}"
+		size="5" min="0" step="1" />
+</xf:option>]]></replace>
+  </modification>
+  <modification type="public" template="helper_js_global" modification_key="siropu_referral_contests_helper_js_global" description="Add the JS template." execution_order="10" enabled="1" action="str_replace">
+    <find><![CDATA[<!--XF:JS-->]]></find>
+    <replace><![CDATA[$0
+<xf:if is="$xf.options.siropuReferralContestsCopyToClipboard AND !$xf.options.siropuReferralContestsInvitationOnly AND $xf.visitor.hasPermission('siropuReferralContests', 'refer')">
+	<xf:include template="siropu_referral_contests_js" />
+</xf:if>]]></replace>
+  </modification>
+  <modification type="public" template="member_list_macros" modification_key="siropu_referral_contests_member_list_macros" description="Add referral count." execution_order="10" enabled="1" action="str_replace">
+    <find><![CDATA[<!--[XF:stats:end]-->]]></find>
+    <replace><![CDATA[$0
+<xf:if is="$xf.options.siropuReferralContestsDisplayReferralCount">
+	<li><dl class="pairs pairs--inline">
+			<dt>{{ phrase('siropu_referral_contests_referrals') }}</dt>
+		<dd>
+			<xf:if is="$user.siropu_referral_count">
+				<a href="{{ link('referrals/users', $user) }}" class="fauxBlockLink-linkRow u-concealed" data-xf-click="overlay">{$user.siropu_referral_count|number}</a>
+			<xf:else />
+				{$user.siropu_referral_count|number}
+			</xf:if>
+		</dd>
+		</dl></li>
+</xf:if>]]></replace>
+  </modification>
+  <modification type="public" template="member_macros" modification_key="siropu_referral_contests_member_macros" description="Add referral count to the member stats." execution_order="10" enabled="1" action="str_replace">
+    <find><![CDATA[<!--[XF:stat_pairs:below_trophies]-->]]></find>
+    <replace><![CDATA[<xf:if is="$xf.options.siropuReferralContestsDisplayReferralCount AND $user.siropu_referral_count">
+	<dl class="pairs pairs--rows pairs--rows--centered menu-fauxLinkRow">
+		<dt>{{ phrase('siropu_referral_contests_referrals') }}</dt>
+		<dd>
+			<a href="{{ link('referrals/users', $user) }}" class="fauxBlockLink-linkRow u-concealed" data-xf-click="overlay">{$user.siropu_referral_count|number}</a>
+		</dd>
+	</dl>
+</xf:if>
+<xf:if is="$xf.options.siropuReferralContestsDisplayReferrer AND $user.siropu_referrer_id">
+	<dl class="pairs pairs--rows pairs--rows--centered menu-fauxLinkRow">
+		<dt>{{ phrase('siropu_referral_contests_referrer') }}</dt>
+		<dd>
+			<xf:username user="$user.SRC_Referrer" class="fauxBlockLink-linkRow u-concealed" rich="true" notooltip="true" />
+		</dd>
+	</dl>
+</xf:if>
+$0]]></replace>
+  </modification>
+  <modification type="public" template="member_view" modification_key="siropu_referral_contests_member_view_tab" description="Add referrals tab" execution_order="10" enabled="1" action="str_replace">
+    <find><![CDATA[<!--[XF:tabs:after_recent_content]-->]]></find>
+    <replace><![CDATA[$0
+
+<xf:if is="$xf.options.siropuReferralContestsMemberProfileReferralTab AND $user.siropu_referral_count">
+	<a href="{{ link('referrals/users', $user) }}"
+	   class="tabs-tab"
+	   id="srcReferrals"
+	   role="tab">{{ phrase('siropu_referral_contests_referrals') }}</a>
+</xf:if>]]></replace>
+  </modification>
+  <modification type="public" template="member_view" modification_key="siropu_referral_contests_member_view_tab_panes" description="Add referrals tab pane." execution_order="10" enabled="1" action="str_replace">
+    <find><![CDATA[<!--[XF:tab_panes:after_recent_content]-->]]></find>
+    <replace><![CDATA[$0
+
+<xf:if is="$xf.options.siropuReferralContestsMemberProfileReferralTab AND $user.siropu_referral_count">
+	<li data-href="{{ link('referrals/users', $user) }}" role="tabpanel" aria-labelledby="srcReferrals">
+		<div class="blockMessage">{{ phrase('loading...') }}</div>
+	</li>
+</xf:if>]]></replace>
+  </modification>
+  <modification type="public" template="register_form" modification_key="siropu_referral_contests_register_form_js" description="Add JS file." execution_order="10" enabled="1" action="str_replace">
+    <find><![CDATA[<xf:js src="xf/login_signup.js" min="1" />]]></find>
+    <replace><![CDATA[$0
+<xf:if is="$xf.options.siropuReferralContestsInvitationOnly || $xf.options.siropuReferralContestsReferrerUserField">
+	<xf:js src="siropu/rc/invitation.js" min="1">
+		XF.siropuInvitationCode = '{{ siropu_invitation_code() }}';
+		XF.siropuReferrerUsername = '{{ siropu_referrer_username() }}';
+		XF.siropuReferrerAutocomplete = {{ $xf.options.siropuReferralContestsReferrerAutocomplete? 'true' : 'false' }};
+		XF.siropuReferralEmail = '{{ siropu_referral_invitation_email() }}';
+	</xf:js>
+</xf:if>]]></replace>
+  </modification>
+</template_modifications>

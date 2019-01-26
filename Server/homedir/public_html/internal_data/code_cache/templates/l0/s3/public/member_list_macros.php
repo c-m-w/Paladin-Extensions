@@ -66,6 +66,28 @@ return array('macros' => array('item' => function($__templater, array $__argumen
 	}
 	$__finalCompiled .= '
 					' . '
+';
+	if ($__vars['xf']['options']['siropuReferralContestsDisplayReferralCount']) {
+		$__finalCompiled .= '
+	<li><dl class="pairs pairs--inline">
+			<dt>' . 'Referrals' . '</dt>
+		<dd>
+			';
+		if ($__vars['user']['siropu_referral_count']) {
+			$__finalCompiled .= '
+				<a href="' . $__templater->fn('link', array('referrals/users', $__vars['user'], ), true) . '" class="fauxBlockLink-linkRow u-concealed" data-xf-click="overlay">' . $__templater->filter($__vars['user']['siropu_referral_count'], array(array('number', array()),), true) . '</a>
+			';
+		} else {
+			$__finalCompiled .= '
+				' . $__templater->filter($__vars['user']['siropu_referral_count'], array(array('number', array()),), true) . '
+			';
+		}
+		$__finalCompiled .= '
+		</dd>
+		</dl></li>
+';
+	}
+	$__finalCompiled .= '
 				</ul>
 			</div>
 		</div>

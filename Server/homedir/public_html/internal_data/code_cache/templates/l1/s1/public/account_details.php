@@ -9,6 +9,25 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 ';
 	$__templater->wrapTemplate('account_wrapper', $__vars);
 	$__finalCompiled .= '
+';
+	if ($__vars['xf']['options']['siropuReferralContestsInvitationOnly']) {
+		$__finalCompiled .= '
+	';
+		$__templater->inlineJs('
+		$(function()
+		{
+			var siropuInvitation = $(\'.field_siropu_invitation\');
+
+			if (siropuInvitation.length)
+			{
+				siropuInvitation.val(\'--\');
+			}
+		});
+	');
+		$__finalCompiled .= '
+';
+	}
+	$__finalCompiled .= '
 
 ';
 	if (!$__templater->method($__vars['xf']['visitor'], 'canEditProfile', array())) {

@@ -1007,7 +1007,14 @@ return array('macros' => array('nav_entry' => function($__templater, array $__ar
 
 			<div class="p-body-content">
 				' . $__templater->callAdsMacro('container_content_above', array(), $__vars) . '
-				<div class="p-body-pageContent">' . $__templater->filter($__vars['content'], array(array('raw', array()),), true) . '</div>
+				<div class="p-body-pageContent">';
+	if (!$__templater->fn('in_array', array($__vars['template'], array('register_form', 'login', 'siropu_referral_contests_invitation_page', ), ), false)) {
+		$__finalCompiled .= '
+	' . $__templater->fn('siropu_invitation_message', array(), true) . '
+';
+	}
+	$__finalCompiled .= '
+' . $__templater->filter($__vars['content'], array(array('raw', array()),), true) . '</div>
 				' . $__templater->callAdsMacro('container_content_below', array(), $__vars) . '
 			</div>
 

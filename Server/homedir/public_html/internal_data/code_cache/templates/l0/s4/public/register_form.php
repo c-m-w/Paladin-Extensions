@@ -9,6 +9,24 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	));
 	$__finalCompiled .= '
 ';
+	if ($__vars['xf']['options']['siropuReferralContestsInvitationOnly'] OR $__vars['xf']['options']['siropuReferralContestsReferrerUserField']) {
+		$__finalCompiled .= '
+	';
+		$__templater->includeJs(array(
+			'src' => 'siropu/rc/invitation.js',
+			'min' => '1',
+		));
+		$__templater->inlineJs('
+		XF.siropuInvitationCode = \'' . $__templater->fn('siropu_invitation_code', array(), false) . '\';
+		XF.siropuReferrerUsername = \'' . $__templater->fn('siropu_referrer_username', array(), false) . '\';
+		XF.siropuReferrerAutocomplete = ' . ($__vars['xf']['options']['siropuReferralContestsReferrerAutocomplete'] ? 'true' : 'false') . ';
+		XF.siropuReferralEmail = \'' . $__templater->fn('siropu_referral_invitation_email', array(), false) . '\';
+	');
+		$__finalCompiled .= '
+';
+	}
+	$__finalCompiled .= '
+';
 	$__templater->setPageParam('uix_hideExtendedFooter', '1');
 	$__finalCompiled .= '
 ';
@@ -162,14 +180,6 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 			' . $__templater->formRowIfContent($__templater->fn('captcha', array(false)), array(
 		'label' => 'Verification',
-	)) . '
-	' . $__templater->formTextBoxRow(array(
-		'name' => 'code',
-		'value' => '',
-		'autocomplete' => 'off',
-	), array(
-		'label' => 'Registration code',
-		'explain' => 'Enter registration code here.',
 	)) . '
 
 			' . $__templater->callMacro('register_macros', 'tos_row', array(), $__vars) . '

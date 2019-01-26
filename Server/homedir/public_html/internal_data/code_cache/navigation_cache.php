@@ -418,6 +418,18 @@ return function($__templater, $__selectedNav, array $__vars)
 
 	}
 
+	if ($__templater->method($__vars['xf']['visitor'], 'hasPermission', array('siropuReferralContests', 'viewContests', ))) {
+		$__navTemp = [
+		'title' => \XF::phrase('nav.siropuReferralContests'),
+		'href' => $__templater->fn('link', array('referral-contests', ), false),
+		'attributes' => [],
+	];
+		if ($__navTemp) {
+			$__tree['siropuReferralContests'] = $__navTemp;
+			$__flat['siropuReferralContests'] =& $__tree['siropuReferralContests'];
+		}
+	}
+
 
 
 	return [

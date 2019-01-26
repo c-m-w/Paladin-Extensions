@@ -18,6 +18,7 @@ return array (
   'cron_entry.siropuShoutboxPrune' => 'Shoutbox: Auto prune',
   'cron_entry.siropuShoutboxShout' => 'Shoutbox: Delete older shouts',
   'cron_entry.sitemap' => 'Rebuild sitemap',
+  'cron_entry.srcContest' => 'Referral Contests: Contest',
   'cron_entry.th_updateCheck_uix' => '[TH] UI.X: Check for updates',
   'cron_entry.trophy' => 'Update user trophies',
   'cron_entry.userGroupPromotions' => 'User group promotions',

@@ -2801,7 +2801,14 @@ return array('macros' => array('uix_search__component' => function($__templater,
 		'location' => 'insideBody',
 		'content' => $__vars['uix_titlebar__component'],
 	), $__vars) . '
-								' . $__templater->filter($__vars['content'], array(array('raw', array()),), true) . '
+								';
+	if (!$__templater->fn('in_array', array($__vars['template'], array('register_form', 'login', 'siropu_referral_contests_invitation_page', ), ), false)) {
+		$__finalCompiled .= '
+	' . $__templater->fn('siropu_invitation_message', array(), true) . '
+';
+	}
+	$__finalCompiled .= '
+' . $__templater->filter($__vars['content'], array(array('raw', array()),), true) . '
 								' . $__templater->callMacro(null, 'uix_bottomBreadcrumb__component', array(
 		'content' => $__vars['uix_bottomBreadcrumb__component'],
 		'location' => 'insideContent',

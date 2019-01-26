@@ -41,6 +41,18 @@ return array('macros' => array('visitor_panel_row' => function($__templater, arr
 	), $__vars) . '
 				</dl>
 				' . '
+';
+	if ($__vars['xf']['options']['siropuReferralContestsDisplayReferralCount']) {
+		$__finalCompiled .= '
+	<dl class="pairs pairs--justified fauxBlockLink">
+		<dt>' . 'Referrals' . '</dt>
+		<dd>
+			<a href="' . $__templater->fn('link', array('referrals/users', $__vars['xf']['visitor'], ), true) . '" class="fauxBlockLink-linkRow u-concealed" data-xf-click="overlay">' . $__templater->filter($__vars['xf']['visitor']['siropu_referral_count'], array(array('number', array()),), true) . '</a>
+		</dd>
+	</dl>
+';
+	}
+	$__finalCompiled .= '
 				';
 	if ($__vars['xf']['options']['enableTrophies']) {
 		$__finalCompiled .= '
@@ -78,6 +90,23 @@ return array('macros' => array('visitor_panel_row' => function($__templater, arr
 	<li><a href="' . $__templater->fn('link', array('search/member', null, array('user_id' => $__vars['xf']['visitor']['user_id'], ), ), true) . '" class="menu-linkRow">' . 'Your content' . '</a></li>
 	<li><a href="' . $__templater->fn('link', array('account/likes', ), true) . '" class="menu-linkRow">' . 'Likes received' . '</a></li>
 	' . '
+';
+	if ($__templater->method($__vars['xf']['visitor'], 'hasPermission', array('siropuReferralContests', 'refer', ))) {
+		$__finalCompiled .= '
+	';
+		if ($__vars['xf']['options']['siropuReferralContestsInvitationOnly']) {
+			$__finalCompiled .= '
+		<li><a href="' . (($__templater->method($__vars['xf']['visitor'], 'hasPermission', array('siropuReferralContests', 'sendInvitations', )) != 0) ? $__templater->fn('link', array('account/invitations', ), true) : $__templater->fn('link', array('account/invitations/list', ), true)) . '" class="menu-linkRow">' . 'Your invitations' . '</a></li>
+	';
+		} else {
+			$__finalCompiled .= '
+		<li><a href="' . $__templater->fn('link', array('account/referrals', ), true) . '" class="menu-linkRow">' . 'Your referrals' . '</a></li>
+	';
+		}
+		$__finalCompiled .= '
+';
+	}
+	$__finalCompiled .= '
 </ul>
 
 ' . '

@@ -8,5 +8,5 @@ $config['db']['dbname'] = 'palavpvb_xenforo';
 $config['removeThemeHouseBranding'] = true;
 
 $config['fullUnicode'] = true;
-$config['debug'] = true;
+#$config['debug'] = true;
 $config['cache']['cacheSessions'] = true;

@@ -16,6 +16,7 @@ return array (
   'widget.member_wrapper_find_member' => '',
   'widget.member_wrapper_newest_members' => '',
   'widget.online_list_online_statistics' => '',
+  'widget.siropu_referral_link' => '',
   'widget.siropu_shoutbox' => '',
   'widget.th_memberReact_reactions' => '',
   'widget.uix_footer_forumStatistics' => '',

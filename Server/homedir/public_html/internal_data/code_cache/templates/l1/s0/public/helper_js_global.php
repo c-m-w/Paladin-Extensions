@@ -62,6 +62,13 @@ return array('macros' => array('head' => function($__templater, array $__argumen
 	$__finalCompiled .= '
 	' . $__templater->fn('core_js') . '
 	<!--XF:JS-->
+';
+	if ($__vars['xf']['options']['siropuReferralContestsCopyToClipboard'] AND ((!$__vars['xf']['options']['siropuReferralContestsInvitationOnly']) AND $__templater->method($__vars['xf']['visitor'], 'hasPermission', array('siropuReferralContests', 'refer', )))) {
+		$__finalCompiled .= '
+	' . $__templater->includeTemplate('siropu_referral_contests_js', $__vars) . '
+';
+	}
+	$__finalCompiled .= '
 	<script>
 		jQuery.extend(true, XF.config, {
 			userId: ' . $__templater->escape($__vars['xf']['visitor']['user_id']) . ',

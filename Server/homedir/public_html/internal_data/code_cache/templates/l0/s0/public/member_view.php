@@ -223,6 +223,17 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	}
 	$__finalCompiled .= '
 
+';
+	if ($__vars['xf']['options']['siropuReferralContestsMemberProfileReferralTab'] AND $__vars['user']['siropu_referral_count']) {
+		$__finalCompiled .= '
+	<a href="' . $__templater->fn('link', array('referrals/users', $__vars['user'], ), true) . '"
+	   class="tabs-tab"
+	   id="srcReferrals"
+	   role="tab">' . 'Referrals' . '</a>
+';
+	}
+	$__finalCompiled .= '
+
 ' . $__templater->callMacro('th_member_view_bookmarkTab_bookmarks', 'tab', array(
 		'user' => $__vars['user'],
 	), $__vars) . '
@@ -353,6 +364,16 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	if ($__templater->method($__vars['xf']['visitor'], 'canViewResources', array()) AND $__vars['user']['xfrm_resource_count']) {
 		$__finalCompiled .= '
 	<li data-href="' . $__templater->fn('link', array('resources/authors', $__vars['user'], ), true) . '" role="tabpanel" aria-labelledby="resources">
+		<div class="blockMessage">' . 'Loading' . $__vars['xf']['language']['ellipsis'] . '</div>
+	</li>
+';
+	}
+	$__finalCompiled .= '
+
+';
+	if ($__vars['xf']['options']['siropuReferralContestsMemberProfileReferralTab'] AND $__vars['user']['siropu_referral_count']) {
+		$__finalCompiled .= '
+	<li data-href="' . $__templater->fn('link', array('referrals/users', $__vars['user'], ), true) . '" role="tabpanel" aria-labelledby="srcReferrals">
 		<div class="blockMessage">' . 'Loading' . $__vars['xf']['language']['ellipsis'] . '</div>
 	</li>
 ';

@@ -558,6 +558,20 @@ return array('macros' => array('user_tabs' => function($__templater, array $__ar
 		'step' => '1',
 	))),
 		'_type' => 'option',
+	),
+	array(
+		'name' => 'user_criteria[siropu_referral_count][rule]',
+		'value' => 'siropu_referral_count',
+		'selected' => $__vars['criteria']['siropu_referral_count'],
+		'label' => 'User has at least X referrals' . $__vars['xf']['language']['label_separator'],
+		'_dependent' => array($__templater->formNumberBox(array(
+		'name' => 'user_criteria[siropu_referral_count][data][referrals]',
+		'value' => $__vars['criteria']['siropu_referral_count']['referrals'],
+		'size' => '5',
+		'min' => '0',
+		'step' => '1',
+	))),
+		'_type' => 'option',
 	)), array(
 		'label' => 'Content and achievements',
 	)) . '

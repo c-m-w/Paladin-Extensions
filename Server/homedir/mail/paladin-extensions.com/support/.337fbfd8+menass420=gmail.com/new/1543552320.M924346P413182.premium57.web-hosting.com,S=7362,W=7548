@@ -1,0 +1,186 @@
+Return-Path: <>
+Delivered-To: support+337fbfd8+menass420=gmail.com@paladin-extensions.com
+Received: from premium57.web-hosting.com
+	by premium57.web-hosting.com with LMTP id QG/8NUC9AFz+TQYAiyxsEQ
+	for <support+337fbfd8+menass420=gmail.com@paladin-extensions.com>; Thu, 29 Nov 2018 23:32:00 -0500
+Return-path: <>
+Envelope-to: support+337fbfd8+menass420=gmail.com@paladin-extensions.com
+Delivery-date: Thu, 29 Nov 2018 23:32:00 -0500
+Received: from mailnull by premium57.web-hosting.com with local (Exim 4.91)
+	id 1gSaTA-001kWh-S1
+	for support+337fbfd8+menass420=gmail.com@paladin-extensions.com; Thu, 29 Nov 2018 23:32:00 -0500
+X-Failed-Recipients: menass420@gmail.com
+Auto-Submitted: auto-replied
+From: Mail Delivery System <Mailer-Daemon@premium57.web-hosting.com>
+To: support+337fbfd8+menass420=gmail.com@paladin-extensions.com
+Content-Type: multipart/report; report-type=delivery-status; boundary=1543552320-eximdsn-1261220211
+MIME-Version: 1.0
+Subject: Mail delivery failed: returning message to sender
+Message-Id: <E1gSaTA-001kWh-S1@premium57.web-hosting.com>
+Date: Thu, 29 Nov 2018 23:32:00 -0500
+
+--1543552320-eximdsn-1261220211
+Content-type: text/plain; charset=us-ascii
+
+This message was created automatically by mail delivery software.
+
+A message that you sent could not be delivered to one or more of its
+recipients. This is a permanent error. The following address(es) failed:
+
+  menass420@gmail.com
+    host gmail-smtp-in.l.google.com [74.125.28.26]
+    SMTP error from remote mail server after RCPT TO:<menass420@gmail.com>:
+    550-5.1.1 The email account that you tried to reach does not exist. Please try
+    550-5.1.1 double-checking the recipient's email address for typos or
+    550-5.1.1 unnecessary spaces. Learn more at
+    550 5.1.1  https://support.google.com/mail/?p=NoSuchUser r10si3767323pgg.143 - gsmtp
+
+--1543552320-eximdsn-1261220211
+Content-type: message/delivery-status
+
+Reporting-MTA: dns; premium57.web-hosting.com
+
+Action: failed
+Final-Recipient: rfc822;menass420@gmail.com
+Status: 5.0.0
+Remote-MTA: dns; gmail-smtp-in.l.google.com
+Diagnostic-Code: smtp; 550-5.1.1 The email account that you tried to reach does not exist. Please try
+ 550-5.1.1 double-checking the recipient's email address for typos or
+ 550-5.1.1 unnecessary spaces. Learn more at
+ 550 5.1.1  https://support.google.com/mail/?p=NoSuchUser r10si3767323pgg.143 - gsmtp
+
+--1543552320-eximdsn-1261220211
+Content-type: message/rfc822
+
+Return-path: <support+337fbfd8+menass420=gmail.com@paladin-extensions.com>
+Received: from palavpvb by premium57.web-hosting.com with local (Exim 4.91)
+	(envelope-from <support+337fbfd8+menass420=gmail.com@paladin-extensions.com>)
+	id 1gSaTA-001kW9-9m
+	for menass420@gmail.com; Thu, 29 Nov 2018 23:32:00 -0500
+Message-ID: <e6836e0ab55ec956abaa2b0f70fb586a@www.paladin-extensions.com>
+Date: Fri, 30 Nov 2018 04:32:00 +0000
+Subject: pretty gay!
+From: terry davis <terrydavis@paladin-extensions.com>
+To: menass420@gmail.com
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="_=_swift_v4_1543552320_af4413b552e8de3dee9119e3ad81fc06_=_"
+X-To-Validate: 337fbfd8+menass420@gmail.com
+Sender:  <palavpvb@premium57.web-hosting.com>
+
+
+--_=_swift_v4_1543552320_af4413b552e8de3dee9119e3ad81fc06_=_
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+a
+
+Your invitation link: https://www.paladin-extensions.com/?invitation=
+=3De7416f90b5651b2111fa94d62619e310788bf832
+
+Your invitation code: e741=
+6f90b5651b2111fa94d62619e310788bf832
+
+-----------------------------
+=
+
+Visit Paladin Extensions: https://www.paladin-extensions.com/
+
+--_=_swift_v4_1543552320_af4413b552e8de3dee9119e3ad81fc06_=_
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE html>
+<html lang=3D"en-US" dir=3D"LTR">
+<head>
+<meta http-e=
+quiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8">
+<base href=
+=3D"https://www.paladin-extensions.com/">
+<meta name=3D"viewport" content=
+=3D"width=3Ddevice-width, initial-scale=3D1">
+<meta http-equiv=3D"X-UA-Co=
+mpatible" content=3D"IE=3Dedge">
+<meta name=3D"format-detection" content=
+=3D"telephone=3Dno">
+<title>pretty gay!</title>
+</head>
+<body dir=3D"=
+LTR" leftmargin=3D"0" topmargin=3D"0" marginwidth=3D"0" marginheight=3D"0" =
+style=3D'margin: 0; padding: 0; word-wrap: break-word; -ms-text-size-adjust=
+: 100%; -webkit-text-size-adjust: 100%; background-color: #2d3238; font-siz=
+e: 13px; font-family: "Roboto",-apple-system,BlinkMacSystemFont,"Segoe UI",=
+"Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",san=
+s-serif; line-height: 1.4; color: #fff;'>
+
+<table id=3D"bodyTable" bord=
+er=3D"0" width=3D"100%" height=3D"100%" cellpadding=3D"0" cellspacing=3D"0"=
+ style=3D"border-spacing: 0; mso-table-lspace: 0pt; mso-table-rspace: 0pt; =
+border-collapse: collapse; height: 100% !important; width: 100% !important;=
+ margin: 0; padding: 0; background-color: #2d3238;"><tr>
+<td align=3D"cen=
+ter" valign=3D"top" id=3D"bodyTableContainer" style=3D"border-collapse: col=
+lapse; background-color: #2d3238;">
+=09=09<table border=3D"0" width=3D"60=
+0" cellpadding=3D"0" cellspacing=3D"0" class=3D"container" dir=3D"LTR" styl=
+e=3D"border-spacing: 0; mso-table-lspace: 0pt; mso-table-rspace: 0pt; borde=
+r-collapse: collapse; width: 100%; max-width: 600px;">
+<tr>
+<td class=
+=3D"header" align=3D"center" valign=3D"top" style=3D'border-collapse: colla=
+pse; color: #fff; padding: 10px 16px; border-top-left-radius: 3px; border-t=
+op-right-radius: 3px; font-family: "Roboto",-apple-system,BlinkMacSystemFon=
+t,"Segoe UI","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvet=
+ica Neue",sans-serif; font-size: 22px; line-height: 1.4;'>
+=09=09=09=09<a=
+ href=3D"https://www.paladin-extensions.com/" style=3D"color: #fff; text-de=
+coration: none;">Paladin Extensions</a>
+=09=09=09</td>
+=09=09</tr>
+<t=
+r>
+<td class=3D"content" align=3D"left" valign=3D"top" style=3D'border-co=
+llapse: collapse; background-color: #383c42; border-radius: 3px; color: #ff=
+f; padding: 16px; font-size: 13px; font-family: "Roboto",-apple-system,Blin=
+kMacSystemFont,"Segoe UI","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid =
+Sans","Helvetica Neue",sans-serif; line-height: 1.4;'>
+
+<p style=3D"mar=
+gin-top: 0;">a</p>
+
+<p>Your invitation link: <a href=3D"https://www.pal=
+adin-extensions.com/?invitation=3De7416f90b5651b2111fa94d62619e310788bf832"=
+ style=3D"color: #2196F3; text-decoration: none;">https://www.paladin-exten=
+sions.com/?invitation=3De7416f90b5651b2111fa94d62619e310788bf832</a></p>
+=
+
+
+=09<p style=3D"margin-bottom: 0;">Your invitation code: e7416f90b5651=
+b2111fa94d62619e310788bf832</p>
+
+=09=09=09</td>
+=09=09</tr>
+<tr>
+=
+<td class=3D"footer" align=3D"center" valign=3D"top" style=3D'border-collap=
+se: collapse; padding: 10px 16px; text-align: center; color: #afb4bb; font-=
+size: 12px; font-family: "Roboto",-apple-system,BlinkMacSystemFont,"Segoe U=
+I","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",=
+sans-serif; line-height: 1.4;'>
+=09=09=09=09<div><a href=3D"https://www.p=
+aladin-extensions.com/" style=3D"color: #afb4bb; text-decoration: underline=
+;">Visit Paladin Extensions</a></div>
+
+=09=09=09=09
+=09=09=09</td>
+=
+=09=09</tr>
+</table>
+</td>
+</tr></table>
+</body>
+</html>
+
+--_=_swift_v4_1543552320_af4413b552e8de3dee9119e3ad81fc06_=_--
+
+--1543552320-eximdsn-1261220211--
