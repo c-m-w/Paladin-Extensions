@@ -9,32 +9,32 @@ AWSTATS DATA FILE 7.6 (build 20161204)
 BEGIN_MAP 28
 POS_GENERAL 2019                
 POS_TIME 2685                
-POS_VISITOR 5898                
-POS_DAY 6007                
-POS_DOMAIN 3289                
-POS_LOGIN 3511                
-POS_ROBOT 3666                
-POS_WORMS 3902                
-POS_EMAILSENDER 4033                
-POS_EMAILRECEIVER 4176                
-POS_SESSION 6082                
-POS_SIDER 6228                
-POS_FILETYPES 4311                
-POS_DOWNLOADS 4389                
-POS_OS 4437                
-POS_BROWSER 4512                
-POS_SCREENSIZE 4585                
-POS_UNKNOWNREFERER 4659                
-POS_UNKNOWNREFERERBROWSER 4746                
-POS_ORIGIN 4828                
-POS_SEREFERRALS 4958                
-POS_PAGEREFS 5102                
-POS_SEARCHWORDS 5250                
-POS_KEYWORDS 5402                
+POS_VISITOR 5934                
+POS_DAY 6080                
+POS_DOMAIN 3292                
+POS_LOGIN 3525                
+POS_ROBOT 3680                
+POS_WORMS 3916                
+POS_EMAILSENDER 4047                
+POS_EMAILRECEIVER 4190                
+POS_SESSION 6174                
+POS_SIDER 6320                
+POS_FILETYPES 4325                
+POS_DOWNLOADS 4403                
+POS_OS 4451                
+POS_BROWSER 4526                
+POS_SCREENSIZE 4621                
+POS_UNKNOWNREFERER 4695                
+POS_UNKNOWNREFERERBROWSER 4782                
+POS_ORIGIN 4864                
+POS_SEREFERRALS 4994                
+POS_PAGEREFS 5138                
+POS_SEARCHWORDS 5286                
+POS_KEYWORDS 5438                
 POS_MISC 2349                
-POS_ERRORS 5461                
-POS_CLUSTER 3367                
-POS_SIDER_404 5572                
+POS_ERRORS 5497                
+POS_CLUSTER 3381                
+POS_SIDER_404 5608                
 END_MAP
 
 # LastLine    = Date of last record processed - Last record line number in last log - Last record offset in last log - Last record signature value
@@ -46,61 +46,62 @@ END_MAP
 # MonthHostsKnown   = Number of hosts known
 # MonthHostsUnKnown = Number of hosts unknown
 BEGIN_GENERAL 8
-LastLine 20190120065824 84 16235 10818250153909
+LastLine 20190121065639 88 17136 10611638569170
 FirstTime 0
-LastTime 20190112164651
-LastUpdate 20190120072237 84 0 84 0 0
-TotalVisits 1                   
-TotalUnique 1                   
+LastTime 20190120145709
+LastUpdate 20190121072735 88 0 88 0 0
+TotalVisits 2                   
+TotalUnique 2                   
 MonthHostsKnown 0                   
-MonthHostsUnknown 1                   
+MonthHostsUnknown 2                   
 END_GENERAL
 
 # Misc ID - Pages - Hits - Bandwidth
 BEGIN_MISC 10
-WindowsMediaPlayerSupport 0 0 0
-JavascriptDisabled 0 0 0
-TotalMisc 0 0 0
-QuickTimeSupport 0 0 0
 PDFSupport 0 0 0
+WindowsMediaPlayerSupport 0 0 0
+FlashSupport 0 0 0
+RealPlayerSupport 0 0 0
 JavaEnabled 0 0 0
 AddToFavourites 0 0 0
-RealPlayerSupport 0 0 0
+TotalMisc 0 0 0
+QuickTimeSupport 0 0 0
+JavascriptDisabled 0 0 0
 DirectorSupport 0 0 0
-FlashSupport 0 0 0
 END_MISC
 
 # Hour - Pages - Hits - Bandwidth - Not viewed Pages - Not viewed Hits - Not viewed Bandwidth
 BEGIN_TIME 24
-0 0 0 0 80 81 208
-1 0 0 0 79 80 33273
-2 0 0 0 82 82 3589
-3 0 0 0 79 83 27668
-4 0 0 0 79 80 208
-5 0 0 0 74 76 16240
-6 0 0 0 105 108 25343
-7 0 0 0 69 69 27319
-8 0 0 0 71 74 15342
-9 0 0 0 75 77 36963
-10 0 0 0 66 66 0
-11 0 0 0 64 66 20795
-12 0 0 0 66 76 16798
-13 0 0 0 70 71 484
-14 0 0 0 63 64 14926
-15 0 0 0 98 102 832
-16 1 1 119 66 67 3837
-17 0 0 0 61 62 208
-18 0 0 0 70 70 19871
-19 0 0 0 67 68 32822
-20 0 0 0 68 71 47953
-21 0 0 0 64 66 416
-22 0 0 0 67 70 18971
-23 0 0 0 65 65 0
+0 0 0 0 84 85 208
+1 0 0 0 84 85 33273
+2 0 0 0 85 85 3589
+3 0 0 0 82 86 27668
+4 0 0 0 82 83 208
+5 0 0 0 77 79 16240
+6 0 0 0 108 111 25343
+7 0 0 0 72 72 27319
+8 0 0 0 74 77 15342
+9 0 0 0 79 81 36963
+10 0 0 0 70 70 0
+11 0 0 0 69 72 21003
+12 0 0 0 72 82 16798
+13 0 0 0 73 74 484
+14 1 1 119 66 67 14926
+15 0 0 0 103 107 832
+16 1 1 119 69 70 3837
+17 0 0 0 65 66 208
+18 0 0 0 74 74 19871
+19 0 0 0 70 71 32822
+20 0 0 0 71 74 47953
+21 0 0 0 67 69 416
+22 0 0 0 70 73 18971
+23 0 0 0 68 68 0
 END_TIME
 
 # Domain - Pages - Hits - Bandwidth
 # The 25 first Pages must be first (order not required for others)
-BEGIN_DOMAIN 1
+BEGIN_DOMAIN 2
+lr 1 1 119
 us 1 1 119
 END_DOMAIN
 
@@ -138,7 +139,7 @@ END_EMAILRECEIVER
 
 # Files type - Hits - Bandwidth - Bandwidth without compression - Bandwidth after compression
 BEGIN_FILETYPES 1
-php 1 119 0 0
+php 2 238 0 0
 END_FILETYPES
 
 # Downloads - Hits - Bandwidth
@@ -147,12 +148,13 @@ END_DOWNLOADS
 
 # OS ID - Hits
 BEGIN_OS ID - Hits - Pages 1
-win10 1 1
+win10 2 2
 END_OS
 
 # Browser ID - Hits - Pages
-BEGIN_BROWSER 1
+BEGIN_BROWSER 2
 chrome71.0.3578.98 1 1
+opera58.0.3135.37 1 1
 END_BROWSER
 
 # Screen size - Hits
@@ -173,7 +175,7 @@ From0 0 0
 From1 0 0
 From2 0 0
 From3 0 0
-From4 1 1
+From4 2 2
 From5 0 0
 END_ORIGIN
 
@@ -198,35 +200,37 @@ END_KEYWORDS
 
 # Errors - Hits - Bandwidth
 BEGIN_ERRORS 3
+404 44 9152
 503 5 40467
-404 43 8944
-301 1710 0
+301 1796 0
 END_ERRORS
 
 # URL with 404 errors - Hits - Last URL referrer
 BEGIN_SIDER_404 1
-/robots.txt 43 -
+/robots.txt 44 -
 END_SIDER_404
 
 # Host - Pages - Hits - Bandwidth - Last visit date - [Start date of last visit] - [Last page of last visit]
 # [Start date of last visit] and [Last page of last visit] are saved only if session is not finished
 # The 25 first Hits must be first (order not required for others)
-BEGIN_VISITOR 1
+BEGIN_VISITOR 2
 24.251.180.38 1 1 119 20190112164651
+196.235.5.140 1 1 119 20190120145709
 END_VISITOR
 
 # Date - Pages - Hits - Bandwidth - Visits
-BEGIN_DAY 1
+BEGIN_DAY 2
 20190112 1 1 119 1
+20190120 1 1 119 1
 END_DAY
 
 # Session range - Number of visits
 BEGIN_SESSION 1
-0s-30s 1
+0s-30s 2
 END_SESSION
 
 # URL - Pages - Bandwidth - Entry - Exit
 # The 25 first Pages must be first (order not required for others)
 BEGIN_SIDER 1
-/index.php 1 119 1 1
+/index.php 2 238 2 2
 END_SIDER

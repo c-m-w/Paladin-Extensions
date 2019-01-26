@@ -26,3 +26,5 @@ Jan 19 17:12:23.872121 check[679963]: [ 2] [bootup] Logging initiated LogDebugLe
 Jan 19 17:12:24.206889 check[679963]: [ 3] mail 1 is not known spam.
 Jan 19 21:27:36.032564 check[30807]: [ 2] [bootup] Logging initiated LogDebugLevel=3 to file:/home/palavpvb/.razor/razor-agent.log
 Jan 19 21:27:36.998923 check[30807]: [ 3] mail 1 is not known spam.
+Jan 21 22:04:24.537138 check[698884]: [ 2] [bootup] Logging initiated LogDebugLevel=3 to file:/home/palavpvb/.razor/razor-agent.log
+Jan 21 22:04:25.792519 check[698884]: [ 3] mail 1 is not known spam.
