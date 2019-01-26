@@ -75,7 +75,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		$__compilerTemp4 = '';
 		if ($__templater->method($__vars['xf']['visitor'], 'hasPermission', array('siropuReferralContests', 'createInvitations', ))) {
 			$__compilerTemp4 .= '
-								' . 'You do not have invitations.' . '
+								' . 'You have no invitation history.' . '
 							';
 		} else {
 			$__compilerTemp4 .= '

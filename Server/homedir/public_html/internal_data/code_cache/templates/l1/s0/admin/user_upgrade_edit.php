@@ -184,6 +184,12 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'selected' => $__vars['upgrade']['can_purchase'],
 		'label' => 'Can be purchased',
 		'_type' => 'option',
+	),
+	array(
+		'name' => 'can_gift',
+		'selected' => $__vars['upgrade']['can_gift'],
+		'label' => 'Can be gifted',
+		'_type' => 'option',
 	)), array(
 	)) . '
 		</div>

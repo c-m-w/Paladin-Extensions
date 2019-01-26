@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<class_extensions>
+  <extension from_class="XF\Admin\Controller\UserUpgrade" to_class="NF\GiftUpgrades\XF\Admin\Controller\UserUpgrade" execute_order="10" active="1"/>
+  <extension from_class="XF\Entity\UserUpgrade" to_class="NF\GiftUpgrades\XF\Entity\UserUpgrade" execute_order="10" active="1"/>
+  <extension from_class="XF\Entity\UserUpgradeActive" to_class="NF\GiftUpgrades\XF\Entity\UserUpgradeActive" execute_order="10" active="1"/>
+  <extension from_class="XF\Entity\UserUpgradeExpired" to_class="NF\GiftUpgrades\XF\Entity\UserUpgradeExpired" execute_order="10" active="1"/>
+  <extension from_class="XF\Pub\Controller\Purchase" to_class="NF\GiftUpgrades\XF\Pub\Controller\Purchase" execute_order="10" active="1"/>
+  <extension from_class="XF\Purchasable\UserUpgrade" to_class="NF\GiftUpgrades\XF\Purchasable\UserUpgrade" execute_order="10" active="1"/>
+  <extension from_class="XF\Repository\UserUpgrade" to_class="NF\GiftUpgrades\XF\Repository\UserUpgrade" execute_order="10" active="1"/>
+  <extension from_class="XF\Service\User\Downgrade" to_class="NF\GiftUpgrades\XF\Service\User\Downgrade" execute_order="10" active="1"/>
+  <extension from_class="XF\Service\User\Upgrade" to_class="NF\GiftUpgrades\XF\Service\User\Upgrade" execute_order="10" active="1"/>
+</class_extensions>

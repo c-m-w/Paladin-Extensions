@@ -18,7 +18,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 		<div class="block-body">
 			' . $__templater->form('
-				' . $__templater->formInfoRow('Create invitation links that you can send without using email. Please note that codes expire after 3 days if no one has registered with the code.', array(
+				' . $__templater->formInfoRow('Create invitation links that you can send to your friends. Please note that codes expire after 3 days if no one has registered with the code.', array(
 	)) . '
 				' . $__templater->formNumberBoxRow(array(
 		'name' => 'count',

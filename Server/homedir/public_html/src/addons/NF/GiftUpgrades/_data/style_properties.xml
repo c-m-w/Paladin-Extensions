@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<style_properties>
+  <style_property property_name="nf_gifted" group_name="general" title="Gifted content" description="The values specified here will be applied to items that have been gifted." property_type="css" display_order="111" css_components="text,background,border,layout,extra">
+    <value>[]</value>
+  </style_property>
+</style_properties>

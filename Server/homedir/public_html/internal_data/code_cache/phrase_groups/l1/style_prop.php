@@ -145,6 +145,7 @@ return array (
   'style_prop.messageUserElements' => 'Message user info elements',
   'style_prop.metaThemeColor' => 'Chrome meta theme color',
   'style_prop.minorBlockContent' => 'Minor internal block content',
+  'style_prop.nf_gifted' => 'Gifted content',
   'style_prop.nodeIconReadColor' => 'Read node icon color',
   'style_prop.nodeIconUnreadColor' => 'Unread node icon color',
   'style_prop.nodeListDescriptionDisplay' => 'Description display style',

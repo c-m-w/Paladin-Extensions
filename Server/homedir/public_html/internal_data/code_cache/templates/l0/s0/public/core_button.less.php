@@ -116,6 +116,7 @@ a.button // needed for specificity over a:link
 		&--reply	    { .m-buttonIcon(@fa-var-mail-reply, 1em); }
 		&--quote	    { .m-buttonIcon(@fa-var-quote-left, .93em); }
 		&--purchase	    { .m-buttonIcon(@fa-var-credit-card, 1.11em); }
+&--nfgift	    { .m-buttonIcon(@fa-var-gift, .8em); }
 		&--payment	    { .m-buttonIcon(@fa-var-credit-card, 1.08em); }
 		&--convert	    { .m-buttonIcon(@fa-var-flash, .5em); }
 		&--search	    { .m-buttonIcon(@fa-var-search, .93em); }

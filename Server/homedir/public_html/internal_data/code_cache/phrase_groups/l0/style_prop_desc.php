@@ -145,6 +145,7 @@ return array (
   'style_prop_desc.messageUserElements' => 'The elements selected here will be displayed in the message user info block. It will not be displayed below the single column width.',
   'style_prop_desc.metaThemeColor' => 'Chrome on Android allows the address bar color to be changed to fit your site colors. If you want this to be changed, enter a color here.',
   'style_prop_desc.minorBlockContent' => 'Content within blocks that is of less importance than the main content may be styled here',
+  'style_prop_desc.nf_gifted' => 'The values specified here will be applied to items that have been gifted.',
   'style_prop_desc.nodeIconReadColor' => 'When the content within a node has been read, its icon will revert to a less attention-grabbing color, defined here',
   'style_prop_desc.nodeIconUnreadColor' => 'Node icons give an at-a-glance indication of whether or not the content housed within the node has been read. The unread icon color should stand out from its background for quick identification',
   'style_prop_desc.nodeListDescriptionDisplay' => 'To save vertical space, it is possible to hide node descriptions until the node title is hovered, at which point they are displayed in a tooltip',

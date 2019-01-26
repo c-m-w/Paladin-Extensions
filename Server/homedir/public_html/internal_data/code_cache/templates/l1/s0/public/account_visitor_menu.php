@@ -96,7 +96,7 @@ return array('macros' => array('visitor_panel_row' => function($__templater, arr
 	';
 		if ($__vars['xf']['options']['siropuReferralContestsInvitationOnly']) {
 			$__finalCompiled .= '
-		<li><a href="' . (($__templater->method($__vars['xf']['visitor'], 'hasPermission', array('siropuReferralContests', 'sendInvitations', )) != 0) ? $__templater->fn('link', array('account/invitations', ), true) : $__templater->fn('link', array('account/invitations/list', ), true)) . '" class="menu-linkRow">' . 'Your invitations' . '</a></li>
+		<li><a href="' . (($__templater->method($__vars['xf']['visitor'], 'hasPermission', array('siropuReferralContests', 'sendInvitations', )) != 0) ? $__templater->fn('link', array('account/invitations/create', ), true) : $__templater->fn('link', array('account/invitations/list', ), true)) . '" class="menu-linkRow">' . 'Your invitations' . '</a></li>
 	';
 		} else {
 			$__finalCompiled .= '

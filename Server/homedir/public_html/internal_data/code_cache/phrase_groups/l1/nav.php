@@ -20,6 +20,7 @@ return array (
   'nav.markForumsRead' => 'Mark forums read',
   'nav.members' => 'Members',
   'nav.navPremium' => '<font size="4"><i class="fa fa-shopping-cart" style="padding-right:7px;"></i></font>Premium',
+  'nav.navPremiumInvitations' => 'Invitations',
   'nav.navPremiumSupport' => 'Payment Support',
   'nav.navSupportArea' => '<font size="4"><i class="fa fa-life-ring" style="padding-right:7px;"></i></font>Support',
   'nav.navSupportCreate' => 'Create New Ticket',

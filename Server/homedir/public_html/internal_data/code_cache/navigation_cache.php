@@ -9,10 +9,6 @@ return function($__templater, $__selectedNav, array $__vars)
 		'title' => \XF::phrase('nav.navSupportArea'),
 		'with_children' => false,
 	]);
-	\XF\Navigation\NodeType::configureDisplay(23, [
-		'title' => \XF::phrase('nav.navPremium'),
-		'with_children' => false,
-	]);
 
 	$__navTemp = [
 		'title' => \XF::phrase('nav._default'),
@@ -240,16 +236,14 @@ return function($__templater, $__selectedNav, array $__vars)
 		$__flat['navSupportArea'] =& $__tree['navSupportArea'];
 		if (empty($__tree['navSupportArea']['children'])) { $__tree['navSupportArea']['children'] = []; }
 
-		if ($__vars['xf']['visitor']['user_id']) {
-			$__navTemp = [
+		$__navTemp = [
 		'title' => \XF::phrase('nav.navSupportCreate'),
 		'href' => $__templater->fn('link', array('support/post-thread', ), false),
 		'attributes' => [],
 	];
-			if ($__navTemp) {
-				$__tree['navSupportArea']['children']['navSupportCreate'] = $__navTemp;
-				$__flat['navSupportCreate'] =& $__tree['navSupportArea']['children']['navSupportCreate'];
-			}
+		if ($__navTemp) {
+			$__tree['navSupportArea']['children']['navSupportCreate'] = $__navTemp;
+			$__flat['navSupportCreate'] =& $__tree['navSupportArea']['children']['navSupportCreate'];
 		}
 
 		if ($__vars['xf']['visitor']['user_id']) {
@@ -400,33 +394,39 @@ return function($__templater, $__selectedNav, array $__vars)
 		}
 	}
 
-	$__navTemp = \XF\Navigation\NodeType::displayNode(23);
-	if ($__navTemp) {
-		$__tree['navPremium'] = $__navTemp;
-		$__flat['navPremium'] =& $__tree['navPremium'];
-		if (empty($__tree['navPremium']['children'])) { $__tree['navPremium']['children'] = []; }
-
+	if ($__vars['xf']['visitor']['user_id']) {
 		$__navTemp = [
+		'title' => \XF::phrase('nav.navPremium'),
+		'href' => $__templater->fn('link', array('account', ), false) . 'upgrades',
+		'attributes' => [],
+	];
+		if ($__navTemp) {
+			$__tree['navPremium'] = $__navTemp;
+			$__flat['navPremium'] =& $__tree['navPremium'];
+			if (empty($__tree['navPremium']['children'])) { $__tree['navPremium']['children'] = []; }
+
+			$__navTemp = [
 		'title' => \XF::phrase('nav.navPremiumSupport'),
 		'href' => $__templater->fn('link', array('support/post-thread?prefix_id=4', ), false),
 		'attributes' => [],
 	];
-		if ($__navTemp) {
-			$__tree['navPremium']['children']['navPremiumSupport'] = $__navTemp;
-			$__flat['navPremiumSupport'] =& $__tree['navPremium']['children']['navPremiumSupport'];
-		}
+			if ($__navTemp) {
+				$__tree['navPremium']['children']['navPremiumSupport'] = $__navTemp;
+				$__flat['navPremiumSupport'] =& $__tree['navPremium']['children']['navPremiumSupport'];
+			}
 
-	}
-
-	if ($__templater->method($__vars['xf']['visitor'], 'hasPermission', array('siropuReferralContests', 'viewContests', ))) {
-		$__navTemp = [
-		'title' => \XF::phrase('nav.siropuReferralContests'),
-		'href' => $__templater->fn('link', array('referral-contests', ), false),
+			if ($__templater->method($__vars['xf']['visitor'], 'hasPermission', array('siropuReferralContests', 'createInvitations', ))) {
+				$__navTemp = [
+		'title' => \XF::phrase('nav.navPremiumInvitations'),
+		'href' => $__templater->fn('link', array('account/invitations/create', ), false),
 		'attributes' => [],
 	];
-		if ($__navTemp) {
-			$__tree['siropuReferralContests'] = $__navTemp;
-			$__flat['siropuReferralContests'] =& $__tree['siropuReferralContests'];
+				if ($__navTemp) {
+					$__tree['navPremium']['children']['navPremiumInvitations'] = $__navTemp;
+					$__flat['navPremiumInvitations'] =& $__tree['navPremium']['children']['navPremiumInvitations'];
+				}
+			}
+
 		}
 	}
 

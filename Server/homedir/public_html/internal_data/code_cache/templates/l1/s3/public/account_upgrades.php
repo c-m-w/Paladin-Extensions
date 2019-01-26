@@ -57,19 +57,63 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 												<span class="inputGroup-splitter"></span>
 
-												' . $__templater->button('', array(
-						'type' => 'submit',
-						'icon' => 'purchase',
-					), '', array(
-					)) . '
+												';
+					if ($__templater->method($__vars['upgrade'], 'canPurchase', array())) {
+						$__compilerTemp2 .= $__templater->button('', array(
+							'type' => 'submit',
+							'icon' => 'purchase',
+						), '', array(
+						));
+					}
+					$__compilerTemp2 .= '
+';
+					if ($__templater->method($__vars['upgrade'], 'canGift', array())) {
+						$__compilerTemp2 .= '
+	';
+						if ($__templater->method($__vars['upgrade'], 'canPurchase', array())) {
+							$__compilerTemp2 .= '<span class="inputGroup-splitter"></span>';
+						}
+						$__compilerTemp2 .= '
+	' . $__templater->button('<font size="4"><i class="fa fa-gift" style="padding-right:7px;"></i></font>Gift', array(
+							'type' => 'submit',
+							'name' => 'gift',
+							'value' => '1',
+							'icon' => 'nfgift',
+						), '', array(
+						)) . '
+';
+					}
+					$__compilerTemp2 .= '
 											';
 				} else {
 					$__compilerTemp2 .= '
-												' . $__templater->button('', array(
-						'type' => 'submit',
-						'icon' => 'purchase',
-					), '', array(
-					)) . '
+												';
+					if ($__templater->method($__vars['upgrade'], 'canPurchase', array())) {
+						$__compilerTemp2 .= $__templater->button('', array(
+							'type' => 'submit',
+							'icon' => 'purchase',
+						), '', array(
+						));
+					}
+					$__compilerTemp2 .= '
+';
+					if ($__templater->method($__vars['upgrade'], 'canGift', array())) {
+						$__compilerTemp2 .= '
+	';
+						if ($__templater->method($__vars['upgrade'], 'canPurchase', array())) {
+							$__compilerTemp2 .= '<span class="inputGroup-splitter"></span>';
+						}
+						$__compilerTemp2 .= '
+	' . $__templater->button('<font size="4"><i class="fa fa-gift" style="padding-right:7px;"></i></font>Gift', array(
+							'type' => 'submit',
+							'name' => 'gift',
+							'value' => '1',
+							'icon' => 'nfgift',
+						), '', array(
+						)) . '
+';
+					}
+					$__compilerTemp2 .= '
 
 												' . $__templater->formHiddenVal('payment_profile_id', $__templater->filter($__vars['upgrade']['payment_profile_ids'], array(array('first', array()),), false), array(
 					)) . '
