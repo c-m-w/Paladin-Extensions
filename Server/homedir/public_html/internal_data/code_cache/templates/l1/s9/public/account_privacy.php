@@ -114,6 +114,7 @@ return array('macros' => array('privacy_option' => function($__templater, array 
 		'name' => 'allow_view_identities',
 		'label' => 'View your identities' . $__vars['xf']['language']['label_separator'],
 	), $__vars) . '
+' . $__templater->includeTemplate('blacktea_steamauth_flags_privacy_view', $__vars) . '
 			', array(
 		'rowtype' => 'inputLabelPair noColon',
 		'label' => 'Allow users to' . $__vars['xf']['language']['ellipsis'],

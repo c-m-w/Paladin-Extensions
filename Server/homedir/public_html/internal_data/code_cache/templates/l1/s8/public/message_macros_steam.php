@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: ce941fa50c296e61a78000eabc0b69b0
+// FROM HASH: 7879ad5141b36860d4286179b11bd130
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -9,7 +9,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		$__templater->includeCss('public:message_macros_steam.less');
 		$__finalCompiled .= '
 	<dl class="steam steam--justified" style="margin-bottom: 5px">
-		<font color="#afb4bb" size="4"><i class="fa fa-steam-square" style="padding-left:1px; padding-right:7px;"></i></font>
+		<font color="#afb4bb" size="4"><i class="fa fa-steam" style="padding-left:1px; padding-right:7px;"></i></font>
 		<dd>
 			<a href="https://steamcommunity.com/profiles/' . $__templater->escape($__vars['user']['Profile']['connected_accounts']['steam']) . '/" target="_blank">
 				';
@@ -19,7 +19,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 				';
 		} else {
 			$__finalCompiled .= '
-					' . 'message_macros_steam_view' . '
+					' . '<font size="4"><i class="fa fa-external-link-square"></i></font>' . '
 				';
 		}
 		$__finalCompiled .= '

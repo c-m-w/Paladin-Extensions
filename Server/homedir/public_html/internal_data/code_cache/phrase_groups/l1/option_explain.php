@@ -47,6 +47,22 @@ Google search will not work until you provide the correct ID!
   'option_explain.attachmentMaxPerMessage' => 'Use 0 to allow an unlimited number of attachments per message. To disable message attachments, use the permissions system.',
   'option_explain.attachmentThumbnailDimensions' => 'The maximum width and height of generated attachment thumbnails. Note that if this value is changed, you must rebuild attachment thumbnails via the "Rebuild caches" system.',
   'option_explain.autoEmbedMedia' => 'Enable this option to have the system attempt to automatically embed media from URLs posted by visitors that point to registered media sites. If you choose to include a link to the content as well, the media embedding may be duplicated when the message is quoted.',
+  'option_explain.blacktea_steamauth_actions' => '',
+  'option_explain.blacktea_steamauth_api_sleep' => 'The amount of time, in seconds, to pause between each Steam API call when performing the game statistics update. If you run a large forum and are experiencing issues with the Steam API, you can try increasing the delay between each API call.',
+  'option_explain.blacktea_steamauth_enabled_pages' => 'Unchecking these will disable visiting the page itself. However, this does not remove the navigation tab for these pages. In order to disable the navigation, please see the built-in XenForo navigation settings under Setup > Navigation > Public navigation.',
+  'option_explain.blacktea_steamauth_force_registration' => 'Force new users to register using their Steam account. This does not prevent existing users from signing in via standard username and password authentication.',
+  'option_explain.blacktea_steamauth_game_update_frequency' => 'The amount of time, in seconds, before the Steam game statistics are updated. You can disable this entirely by visiting the built-in XenForo cron settings.',
+  'option_explain.blacktea_steamauth_message_macro' => 'Displays a link to the user’s Steam profile in the message postbit This is typically located on the left-hand side of posts and private messages.
+
+Please note that once enabled, you will need to configure the Steam permissions for your usergroups. Otherwise, members will not be able to see these links even when this setting is enabled.',
+  'option_explain.blacktea_steamauth_message_macro_steamid' => 'Once enabled, this will replace the standard profile link text shown in messages with the user’s Steam 64-bit ID. This only replaces the text within the link; it does not remove the profile hyperlink itself.
+
+Note that this requires the above setting to be enabled before this takes effect.',
+  'option_explain.blacktea_steamauth_user_banner' => 'This setting controls the display options for the Steam profile banners. These are the little cards that show basic information about the user’s Steam profile (e.g., their avatar, whether or not they are signed-in, and what they are currently playing).
+
+Ticking an option other than “Disable” will result in the profile banner displaying either above or below the user extras respectively. User extras refers to the list of basic profile information typically show on the left-hand side of user posts and private messages (e.g., post count, join date, and location).',
+  'option_explain.blacktea_steamauth_user_update_limit' => 'The amount of users whose Steam statistics will be updated during each run of the analytics cronjob.',
+  'option_explain.blacktea_steamauth_verbose_log' => 'Ticking this box will make error logging significantly more fine-grained. If you are experiencing unexpected issues with add-on, for better debugging, you may try enabling this setting.',
   'option_explain.boardActive' => '',
   'option_explain.boardDescription' => 'Enter a description for your board. This will be placed inside the meta description tag for the forum home page, so avoid using HTML.',
   'option_explain.boardInactiveAllowMember' => '',

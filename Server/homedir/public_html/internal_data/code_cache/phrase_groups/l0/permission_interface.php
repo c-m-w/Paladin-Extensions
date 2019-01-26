@@ -23,6 +23,7 @@ return array (
   'permission_interface.similarThreads' => 'Similar threads',
   'permission_interface.siropuReferralContests' => 'Referral Contests',
   'permission_interface.siropuShoutbox' => 'Shoutbox',
+  'permission_interface.steamauth' => 'Steam Auth',
   'permission_interface.thReactionsModerator' => '[TH] Reactions moderator permissions',
   'permission_interface.thReactionsPermissions' => '[TH] Reactions permissions',
   'permission_interface.th_uix' => 'UI.X Permissions',

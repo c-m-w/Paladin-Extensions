@@ -64,6 +64,13 @@ return array('macros' => array('user_info' => function($__templater, array $__ar
 	if ($__vars['user']['user_id']) {
 		$__finalCompiled .= '
 			';
+		if ($__templater->fn('can_display_steam_user_banner', array('before', ), false)) {
+			$__finalCompiled .= '
+	' . $__templater->fn('steam_user_banner', array($__vars['user'], ), true) . '
+';
+		}
+		$__finalCompiled .= '
+';
 		$__vars['extras'] = $__templater->fn('property', array('messageUserElements', ), false);
 		$__finalCompiled .= '
 			';
@@ -164,7 +171,8 @@ return array('macros' => array('user_info' => function($__templater, array $__ar
 					';
 		}
 		$__compilerTemp2 .= '
-					';
+					' . $__templater->includeTemplate('message_macros_steam', $__vars) . '
+';
 		if ($__vars['extras']['custom_fields']) {
 			$__compilerTemp2 .= '
 						' . $__templater->callMacro('custom_fields_macros', 'custom_fields_values', array(
@@ -216,6 +224,13 @@ return array('macros' => array('user_info' => function($__templater, array $__ar
 	}
 	$__finalCompiled .= '
 		<span class="message-userArrow"></span>
+';
+	if ($__templater->fn('can_display_steam_user_banner', array('after', ), false)) {
+		$__finalCompiled .= '
+	' . $__templater->fn('steam_user_banner', array($__vars['user'], ), true) . '
+';
+	}
+	$__finalCompiled .= '
 	</section>
 ';
 	return $__finalCompiled;

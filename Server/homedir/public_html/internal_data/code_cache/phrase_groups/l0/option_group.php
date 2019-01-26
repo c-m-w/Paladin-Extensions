@@ -10,6 +10,7 @@ return array (
   'option_group.appearance' => 'Appearance',
   'option_group.attachments' => 'Attachments',
   'option_group.basicBoard' => 'Basic board information',
+  'option_group.blacktea_steamauth_options' => 'Steam Auth',
   'option_group.boardActive' => 'Board active',
   'option_group.censoringOptions' => 'Censoring',
   'option_group.debug' => 'Debug options',

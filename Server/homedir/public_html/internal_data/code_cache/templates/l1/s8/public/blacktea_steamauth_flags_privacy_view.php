@@ -6,7 +6,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	if ($__templater->fn('can_change_steam_profile_privacy', array(), false)) {
 		$__finalCompiled .= '
 	<dl class="inputLabelPair">
-		<dt>' . 'allow_view_steam' . ':</dt>
+		<dt>' . 'View your Steam Profile' . ':</dt>
 		<dd>
 			' . $__templater->formSelect(array(
 			'name' => 'privacy[allow_view_steam]',
