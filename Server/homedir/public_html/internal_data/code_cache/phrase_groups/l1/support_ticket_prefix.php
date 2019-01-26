@@ -7,5 +7,5 @@ return array (
   'support_ticket_prefix.5' => 'PX Manager',
   'support_ticket_prefix.6' => 'Subscription',
   'support_ticket_prefix.7' => 'Refund',
-  'support_ticket_prefix.8' => 'Overflow Slot',
+  'support_ticket_prefix.8' => 'Gift',
 );
