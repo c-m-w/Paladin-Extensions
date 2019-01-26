@@ -295,7 +295,7 @@ return array('macros' => array('privacy_select' => function($__templater, array 
 			'href' => $__templater->fn('link', array('users/avatar', $__vars['user'], ), false),
 			'data-xf-click' => 'overlay',
 		))) . '
-							<a href="' . $__templater->fn('link', array('users/avatar', $__vars['user'], ), true) . '" data-xf-click="overlay">' . 'Edit avatar' . '</a>
+							<a href="' . $__templater->fn('link', array('users/avatar', $__vars['user'], ), true) . '" data-xf-click="overlay">' . 'Change' . '</a>
 						', array(
 			'label' => 'Avatar',
 		)) . '
