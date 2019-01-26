@@ -1,0 +1,14 @@
+{
+    "legacy_addon_id": "",
+    "title": "[KL] Auto Merge Double Posts",
+    "description": "Automatically Merges Double Posts.",
+    "version_id": 1000070,
+    "version_string": "1.0.0",
+    "dev": "Katsulynx",
+    "dev_url": "https://xenforo.com/community/members/katsulynx.42496/",
+    "faq_url": "",
+    "support_url": "",
+    "extra_urls": [],
+    "require": [],
+    "icon": "icon.png"
+}

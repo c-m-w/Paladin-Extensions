@@ -1,0 +1,12 @@
+{
+    "src/addons/ahDiscordWidget/addon.json": "cb643063ff7818edce42b622ab667595a6745abd8aad0a4d1f7a10d5e557cce9",
+    "src/addons/ahDiscordWidget/icon.png": "4d1a09ca64838c8d233484216d0eb8733e87e5fdf82471b07c101aec8134197d",
+    "src/addons/ahDiscordWidget/Widget/DiscordWidget.php": "c4adff56ad8de6aa7875d5b02d3b6bf6aecbc0ab5d7ecc7722cdb7cc7ea0c6b7",
+    "src/addons/ahDiscordWidget/_data/options.xml": "e0573394e993522e1c084b7e68fed412beba1d230c19b336f9cca8fbae6b090e",
+    "src/addons/ahDiscordWidget/_data/option_groups.xml": "40c7a5de3bdaf7ea36a54f0295df9be4779fc5c49004490f8fff1c08debb2d63",
+    "src/addons/ahDiscordWidget/_data/phrases.xml": "27e2c1a538e6040daf5093e823055d95ad1612c8775a41a9442df8aeafa72874",
+    "src/addons/ahDiscordWidget/_data/style_properties.xml": "62c6784c1aeb41234f70772d56aa3e42c739cf119b576d79230748f82118ee61",
+    "src/addons/ahDiscordWidget/_data/style_property_groups.xml": "b31f8906c1b5ff50cd81396070ab94a3227daddb3618e83198574c59cb89129d",
+    "src/addons/ahDiscordWidget/_data/templates.xml": "3a75e647dc35835b37d4edfa0de105a7f3813d6eec64bb0c43dc58c7df565f82",
+    "src/addons/ahDiscordWidget/_data/widget_definitions.xml": "a138456f7e1463062045eb37e2b8b4b00b96e53049159c674244d2e1972f6732"
+}

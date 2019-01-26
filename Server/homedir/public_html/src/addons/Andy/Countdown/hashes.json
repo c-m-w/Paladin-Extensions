@@ -1,0 +1,17 @@
+{
+    "src/addons/Andy/Countdown/addon.json": "632ea2d72e5013e8e4f726bedb800501a70bd3df957d38fe463940c4637bd9ad",
+    "src/addons/Andy/Countdown/countdown.js": "c5c68fe32d296762edc3908a06a50285ac57f3beee4fce2bf514eee417ede07b",
+    "src/addons/Andy/Countdown/icon.jpg": "3806d032d6f4a81edd4e8e2a8bbf3d7add0d2bc9ab7e18377fa710e37c4ffb3c",
+    "src/addons/Andy/Countdown/Pub/Controller/Countdown.php": "873939cce29a36fddcbd8897e11ed74b7f8796798c5762f05d21933fd376568e",
+    "src/addons/Andy/Countdown/Setup.php": "08952873874792db97e4c396f7f27d4f07fb2ce0938d41cad24d5e02a8f86546",
+    "src/addons/Andy/Countdown/Widget/Countdown.php": "d41ec8648aedff0ba8e3ca289682641f0549025a2c83994c314e4e1b763901c9",
+    "src/addons/Andy/Countdown/_data/options.xml": "e43f02c82869acd989378dd01df06f03a4f0af9efab37347dbc216e3c9d7f7e5",
+    "src/addons/Andy/Countdown/_data/option_groups.xml": "8854a3e941a61682b0f69a3b94523918f84b447bd416d972bac14a8cf4f6167b",
+    "src/addons/Andy/Countdown/_data/permissions.xml": "56c00bb0cd8283fb2ce269b5da5a3269a6eb3c5e1cf01fd1a9009df0c1cd69ae",
+    "src/addons/Andy/Countdown/_data/permission_interface_groups.xml": "d65104650b0d1f9bb29bd6a452fb1c7b7ab1529ee77c9782b12ae821e8b8e7c9",
+    "src/addons/Andy/Countdown/_data/phrases.xml": "722b0ff4b01c406ad45b2fea73aeaa70c3df84d769290f10f637d6c085fc69b7",
+    "src/addons/Andy/Countdown/_data/routes.xml": "ee03ece7c062111dffce3f99eb2f108f8690fdc3124d27766bac840f2c7aa282",
+    "src/addons/Andy/Countdown/_data/templates.xml": "68b4afe75d413ca9168e7d40ad128df1ec75be1b0683fb913311c234e786117b",
+    "src/addons/Andy/Countdown/_data/template_modifications.xml": "a8e2a11003bf234bb6cea7be81c4772bb95f44c2ba50faadb5b162292bbf19c4",
+    "src/addons/Andy/Countdown/_data/widget_definitions.xml": "06161c5010fdf42e7afb10d79b76d713266fabdad58a01465285730c62e16c97"
+}

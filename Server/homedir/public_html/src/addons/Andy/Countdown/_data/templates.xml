@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates>
+  <template type="public" title="andy_countdown" version_id="13" version_string="1.3"><![CDATA[<xf:css src="andy_countdown.less" />
+
+<script src="{$xf.options.countdownLink}" type="text/javascript"></script>
+
+<div class="block">
+<div class="block-container block-container-countdown">
+	
+<xf:if is="{$link}">
+<h3 class="block-minorHeader">
+<a href="{$link}">{$title}</a>
+</h3>
+</xf:if>
+
+<xf:if is="!{$link}">
+<h3 class="block-minorHeader">
+{$title}
+</h3>
+</xf:if>
+
+<div class="block-countdown">
+<script type="application/javascript">
+var myCountdown = new Countdown(
+{
+	year: "{$year}",
+	month: "{$month}",
+	day: "{$day}",
+	hour: "{$hour}",
+	minute: "{$minute}",
+	rangeHi: "month",
+	hideLine: true,
+	width: 230,
+	height: 40,
+	padding: 0.8, // sets the text size 
+	numbers: 	
+	{
+		font: "Arial",
+		color: "#FFFFFF",
+		bkgd: "#176093",
+		fontSize: 200,
+		rounded: 0.10,	// percentage of size 
+		shadow: 
+		{
+			x : 0,			// x offset (in pixels)
+			y : 3,			// y offset (in pixels)
+			s : 4,			// spread
+			c : "#000000",	// color
+			a : 0.4			// alpha	// <- no comma on last item!
+		}
+	},
+	
+	labels:
+	{
+		textScale: 0.8,
+		color: "#6CB2E4",
+		offset: 5
+	} // <- no comma on last item!
+	
+});
+</script>
+</div>
+</div>
+</div>]]></template>
+  <template type="public" title="andy_countdown.less" version_id="10" version_string="1.0"><![CDATA[.block-container-countdown {
+	padding: 0px 0px 10px 0px;
+}
+
+.block-countdown {
+	padding: 4px 0px 0px 8px;
+}]]></template>
+  <template type="public" title="andy_countdown_admin" version_id="12" version_string="1.2"><![CDATA[<xf:title>{{ phrase('countdown_countdown') }}</xf:title>
+
+{{ phrase('countdown_description') }}
+<br />
+<br />
+
+<xf:form action="{{ link('countdown/save') }}" ajax="true" class="block" data-force-flash-message="true">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:textboxrow label="{{ phrase('countdown_title') }}" name="title" value="{$title}" />
+			<xf:textboxrow label="{{ phrase('countdown_link') }}" name="link" value="{$link}" />
+			<xf:textboxrow label="{{ phrase('countdown_year') }}" name="year" value="{$year}" />
+			<xf:textboxrow label="{{ phrase('countdown_month') }}" name="month" value="{$month}" />
+			<xf:textboxrow label="{{ phrase('countdown_day') }}" name="day" value="{$day}" />
+			<xf:textboxrow label="{{ phrase('countdown_hour') }}" name="hour" value="{$hour}" />
+			<xf:textboxrow label="{{ phrase('countdown_minute') }}" name="minute" value="{$minute}" />
+			<xf:checkboxrow>
+				<xf:option name="active" value="1" checked="{$activeChecked}"
+					label="{{ phrase('countdown_active') }}"
+					hint="{{ phrase('countdown_show_countdown') }}" />
+			</xf:checkboxrow>
+		
+		</div>
+	</div>
+
+	<xf:submitrow submit="{{ phrase('countdown_submit') }}" />
+
+</xf:form>]]></template>
+</templates>

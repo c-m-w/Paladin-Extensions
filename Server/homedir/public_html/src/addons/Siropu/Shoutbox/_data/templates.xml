@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates>
+  <template type="public" title="siropu_shoutbox" version_id="1010470" version_string="1.1.4"><![CDATA[<xf:css src="siropu_shoutbox.less" />
+<xf:js src="siropu/shoutbox/core.js" min="1">
+	jQuery.extend(XF.phrases, {
+		siropu_shoutbox_loading_more_shouts: "{{ phrase('siropu_shoutbox_loading_more_shouts')|escape('js') }}",
+		siropu_shoutbox_shout_delete_confirm: "{{ phrase('siropu_shoutbox_are_you_sure_you_want_to_delete_shout')|escape('js') }}",
+		siropu_shoutbox_placeholder: "{{ phrase('siropu_shoutbox_placeholder')|escape('js') }}",
+		siropu_shoutbox_please_wait: "{{ phrase('siropu_shoutbox_please_wait')|escape('js') }}"
+	});
+</xf:js>
+
+<div class="siropuShoutbox block-container" data-refresh-interval="{{ $xf.options.siropuShoutboxRefreshInterval * 1000 }}" data-last-id="{$shoutbox.lastId}" data-load-more="{{ ($xf.visitor.canUseSiropuShoutbox() AND count($shoutbox.shouts) == $xf.options.siropuShoutboxDisplayLimit) ? 1 : 0 }}" data-last-active="{$xf.time}" data-sound="{{ $shoutbox.sound ? 'on' : 'off' }}" data-reverse="{{ $shoutbox.reverse ? 'true' : 'false' }}" data-collapsed="{{ $shoutbox.collapsed ? 'true' : 'false' }}" data-xf-init="siropu-shoutbox">
+	<div class="block-header">
+		<i class="fa fa-bullhorn" aria-hidden="true"></i> {{ phrase('siropu_shoutbox') }}
+		<span>
+			<xf:if is="$xf.options.siropuShoutboxSound">
+				<a role="button" title="{{ phrase('siropu_shoutbox_toggle_sound') }}" data-xf-click="siropu-shoutbox-toggle-sound" data-xf-init="tooltip"><i class="fa fa-volume-{{ $shoutbox.sound ? 'up' : 'off' }}" aria-hidden="true"></i></a>
+			</xf:if>
+			<a role="button" title="{{ phrase('siropu_shoutbox_toggle_direction') }}" data-xf-click="siropu-shoutbox-toggle-direction" data-xf-init="tooltip"><i class="fa fa-arrow-{{ $shoutbox.reverse ? 'up' : 'down' }}" aria-hidden="true"></i></a>
+			<a role="button" title="{{ phrase('siropu_shoutbox_toggle_visibility') }}" data-xf-click="siropu-shoutbox-toggle-visibility" data-xf-init="tooltip"><i class="fa fa-{{ $shoutbox.collapsed ? 'plus' : 'minus' }}" aria-hidden="true"></i></a>
+		</span>
+	</div>
+	<div class="block-body"{{ $shoutbox.collapsed ? ' style="display: none;"' : '' }}>
+		<xf:if is="$shoutbox.reverse == false">
+			<xf:macro template="siropu_shoutbox_form" name="submit" />
+		</xf:if>
+		<ol class="siropuShoutboxShouts">
+			<xf:if is="$shoutbox.shouts is not empty">
+				<xf:include template="siropu_shoutbox_shout_list" />
+			<xf:else />
+				<li>{{ phrase('siropu_shoutbox_no_shouts') }}</li>
+			</xf:if>
+		</ol>
+		<xf:if is="$shoutbox.reverse == true">
+			<xf:macro template="siropu_shoutbox_form" name="submit" arg-class="siropuShoutboxReverse" />
+		</xf:if>
+		<xf:if is="$xf.options.siropuShoutboxFooter">
+			<div class="siropuShoutboxFooter">
+				{$xf.options.siropuShoutboxFooter|raw}
+			</div>
+		</xf:if>
+	</div>
+</div>]]></template>
+  <template type="public" title="siropu_shoutbox.less" version_id="1010470" version_string="1.1.4"><![CDATA[.siropuShoutbox
+{
+	margin-bottom: 20px;
+
+	.block-header span
+	{
+		float: right;
+	}
+	.block-body
+	{
+		padding: 10px;
+		position: relative;
+	}
+	form
+	{
+		.input
+		{
+			width: 92.5%;
+			display: inline-block;
+		}
+		
+		margin-bottom: 10px;
+
+		&.siropuShoutboxReverse
+		{
+			margin-top: 10px;
+			margin-bottom: 0;
+		}
+	}
+}
+.siropuShoutboxShouts
+{
+	height: 300px;
+	overflow: auto;
+	padding: 0;
+	margin: 0;
+	
+	> li
+	{
+		list-style-type: none;
+		margin-bottom: 5px;
+
+		.bbWrapper
+		{
+			display: inline;
+		}
+		.bbMediaWrapper
+		{
+			margin-top: 5px;
+		}
+		&:last-child
+		{
+			margin-bottom: 0;
+		}
+		.username
+		{
+			font-weight: bold;
+		}
+		time
+		{
+			color: @xf-textColorMuted;
+			font-size: 12px;
+		}
+		a[data-xf-click="overlay"]
+		{
+			display: none;
+			opacity: 0.5;
+
+			&:hover
+			{
+				opacity: 1;
+			}
+		}
+	}
+}
+.siropuShoutboxLoadingMoreShouts
+{
+	position: absolute;
+	bottom: 5px;
+	left: 0;
+	right: 0;
+	text-align: center;
+	font-weight: bold;
+	font-size: 12px;
+	color: @xf-textColorEmphasized;
+
+	&.siropuShoutboxReverse
+	{
+		top: 5px;
+	}
+}
+.siropuShoutboxFooter
+{
+	margin-top: 10px;
+	text-align: center;
+}
+.p-body-sidebar .siropuShoutbox form .input
+{
+	width: 71.5%;
+}]]></template>
+  <template type="public" title="siropu_shoutbox_form" version_id="1010470" version_string="1.1.4"><![CDATA[<xf:macro name="submit" arg-class="">
+	<xf:if is="$xf.visitor.canUseSiropuShoutbox()">
+		<form action="{{ link('shoutbox/submit') }}"{{ $class ? ' class="' . $class . '"' : '' }} data-xf-init="siropu-shoutbox-submit">
+			<input type="text" name="shout" class="input" maxlength="{$xf.options.siropuShoutboxShoutMaxLength}" placeholder="{{ phrase('siropu_shoutbox_placeholder') }}" autocomplete="off" data-xf-init="user-mentioner">
+			<button type="submit" class="button">{{ phrase('siropu_shoutbox_shout') }}</button>
+		</form>
+	</xf:if>
+</xf:macro>]]></template>
+  <template type="public" title="siropu_shoutbox_shout_delete" version_id="10000" version_string="1.0.0"><![CDATA[<xf:title>{{ phrase('confirm_action') }}</xf:title>
+
+<xf:form action="{{ link('shoutbox/delete', $shout) }}" class="block" ajax="true" data-xf-init="siropu-shoutbox-delete-shout">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:inforow rowtype="confirm">
+			<p>{{ phrase('please_confirm_that_you_want_to_delete_following:') }}</p>
+			<strong>{$shout.shout_message}</strong>
+			</xf:inforow>
+		</div>
+		<xf:submitrow icon="delete" rowtype="simple" class="js-overlayClose" />
+	</div>
+</xf:form>]]></template>
+  <template type="public" title="siropu_shoutbox_shout_edit" version_id="10000" version_string="1.0.0"><![CDATA[<xf:title>{{ phrase('siropu_shoutbox_edit_shout') }}</xf:title>
+
+<xf:form action="{{ link('shoutbox/edit', $shout) }}" class="block" data-xf-init="siropu-shoutbox-edit-shout" ajax="true">
+	<div class="block-container">
+		<div class="block-body block-row">
+			<input type="text" name="message" class="input" value="{$shout.shout_message}" autocomplete="off">
+		</div>
+		<xf:submitrow icon="save" rowtype="simple" class="js-overlayClose" />
+	</div>
+</xf:form>]]></template>
+  <template type="public" title="siropu_shoutbox_shout_list" version_id="10000" version_string="1.0.0"><![CDATA[<xf:foreach loop="$shoutbox.shouts" value="$shout">
+	<li data-id="{$shout.shout_id}">
+		<xf:if is="$xf.options.siropuShoutboxUserAvatar">
+			<xf:avatar user="$shout.User" size="xxs" defaultname="{{ phrase('guest') }}" itemprop="image" />
+		</xf:if>
+		<xf:username user="$shout.User" defaultname="{{ phrase('guest') }}" rich="true" />:
+		<span>{{ $xf.options.siropuShoutboxAllowBBCodes ? bb_code($shout.shout_message|censor, 'shoutbox_message', $shout.User)  : $shout.shout_message|censor }}</span>
+		<xf:date time="{$shout.shout_date}" />
+		<xf:if is="$shout.canEdit()">
+			<a href="{{ link('shoutbox/edit', $shout) }}" data-xf-click="overlay" title="{{ phrase('edit') }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+		</xf:if>
+		<xf:if is="$shout.canDelete()">
+			<a href="{{ link('shoutbox/delete', $shout) }}" data-xf-click="overlay" title="{{ phrase('delete') }}"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+		</xf:if>
+	</li>
+</xf:foreach>]]></template>
+  <template type="admin" title="widget_def_options_siropu_shoutbox" version_id="10000" version_string="1.0.0"><![CDATA[]]></template>
+</templates>

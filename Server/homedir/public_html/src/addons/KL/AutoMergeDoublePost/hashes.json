@@ -1,0 +1,9 @@
+{
+    "src/addons/KL/AutoMergeDoublePost/addon.json": "8d7fa27df37ebb06c9604d89d4a8348e871cb48831fb19a31cc0656f576c371e",
+    "src/addons/KL/AutoMergeDoublePost/icon.png": "ad4aeb7cc502cfc35af608e6bad70e86c929d44c7276c8d09bc81141cf6bf3b8",
+    "src/addons/KL/AutoMergeDoublePost/Pub/Controller/Thread.php": "ada384f783ebc218a1b30fbc8bf0c049a757b165f75447db26ea052375953700",
+    "src/addons/KL/AutoMergeDoublePost/_data/class_extensions.xml": "c9c112ff9aea612fd7c2c42c8a5bf3fc4f99259b5135d353c8973a5707d79bb8",
+    "src/addons/KL/AutoMergeDoublePost/_data/permissions.xml": "bd06c61827726cd8e73e123634ad446b14e55cadc7b7a247aa15826c15b6af24",
+    "src/addons/KL/AutoMergeDoublePost/_data/permission_interface_groups.xml": "9fa206de61381ad657936a0c3db5b2360140e16bc7efd95ccb5b7c07a0bf558f",
+    "src/addons/KL/AutoMergeDoublePost/_data/phrases.xml": "6863584b32532a9435b5fde00a4eb8c9e6d8113e267a6413d32e2b9a66d3c2b6"
+}

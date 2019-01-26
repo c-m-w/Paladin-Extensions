@@ -1,0 +1,195 @@
+Return-Path: <>
+Delivered-To: support+5e45e48a+trannygranny=paladin.rip@paladin-extensions.com
+Received: from premium57.web-hosting.com
+	by premium57.web-hosting.com with LMTP id EBydNrDg/Vtm6g0AiyxsEQ
+	for <support+5e45e48a+trannygranny=paladin.rip@paladin-extensions.com>; Tue, 27 Nov 2018 19:26:24 -0500
+Return-path: <>
+Envelope-to: support+5e45e48a+trannygranny=paladin.rip@paladin-extensions.com
+Delivery-date: Tue, 27 Nov 2018 19:26:24 -0500
+Received: from mailnull by premium57.web-hosting.com with local (Exim 4.91)
+	id 1gRngO-003pGH-SN
+	for support+5e45e48a+trannygranny=paladin.rip@paladin-extensions.com; Tue, 27 Nov 2018 19:26:24 -0500
+X-Failed-Recipients: trannygranny@paladin.rip
+Auto-Submitted: auto-replied
+From: Mail Delivery System <Mailer-Daemon@premium57.web-hosting.com>
+To: support+5e45e48a+trannygranny=paladin.rip@paladin-extensions.com
+Content-Type: multipart/report; report-type=delivery-status; boundary=1543364784-eximdsn-332759060
+MIME-Version: 1.0
+Subject: Mail delivery failed: returning message to sender
+Message-Id: <E1gRngO-003pGH-SN@premium57.web-hosting.com>
+Date: Tue, 27 Nov 2018 19:26:24 -0500
+
+--1543364784-eximdsn-332759060
+Content-type: text/plain; charset=us-ascii
+
+This message was created automatically by mail delivery software.
+
+A message that you sent could not be delivered to one or more of its
+recipients. This is a permanent error. The following address(es) failed:
+
+  trannygranny@paladin.rip
+    host mail.paladin.rip [198.54.115.129]
+    SMTP error from remote mail server after RCPT TO:<trannygranny@paladin.rip>:
+    550-No user with that name on this server. Please email support@paladin.rip for
+    550 help."
+
+--1543364784-eximdsn-332759060
+Content-type: message/delivery-status
+
+Reporting-MTA: dns; premium57.web-hosting.com
+
+Action: failed
+Final-Recipient: rfc822;trannygranny@paladin.rip
+Status: 5.0.0
+Remote-MTA: dns; mail.paladin.rip
+Diagnostic-Code: smtp; 550-No user with that name on this server. Please email support@paladin.rip for
+ 550 help."
+
+--1543364784-eximdsn-332759060
+Content-type: message/rfc822
+
+Return-path: <support+5e45e48a+trannygranny=paladin.rip@paladin-extensions.com>
+Received: from palavpvb by premium57.web-hosting.com with local (Exim 4.91)
+	(envelope-from <support+5e45e48a+trannygranny=paladin.rip@paladin-extensions.com>)
+	id 1gRngO-003pFa-5X
+	for trannygranny@paladin.rip; Tue, 27 Nov 2018 19:26:24 -0500
+Message-ID: <2346dd1beb5edf21bcda053c4e1287fc@paladin-extensions.com>
+Date: Wed, 28 Nov 2018 00:26:24 +0000
+Subject: Paladin Extensions - Login verification
+From: Paladin Extensions <support@paladin-extensions.com>
+To: super_developer_56 <trannygranny@paladin.rip>
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="_=_swift_v4_1543364784_a9c17c6c42edbff29f1b91c7a74d430f_=_"
+X-To-Validate: 5e45e48a+trannygranny@paladin.rip
+Sender:  <palavpvb@premium57.web-hosting.com>
+
+
+--_=_swift_v4_1543364784_a9c17c6c42edbff29f1b91c7a74d430f_=_
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+super_developer_56,
+
+To complete the login to your account (or to compl=
+ete two-step verification setup) at Paladin Extensions (https://www.paladin=
+-extensions.com/), you must enter the following code:
+
+****** 749076 **=
+****
+
+This code is valid for 15 minutes.
+
+The login was requested v=
+ia the IP 174.3.135.102. If you did not initiate this request, you should c=
+hange your password urgently.
+
+-----------------------------
+
+Visit=
+ Paladin Extensions: https://www.paladin-extensions.com/
+
+--_=_swift_v4_1543364784_a9c17c6c42edbff29f1b91c7a74d430f_=_
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE html>
+<html lang=3D"en-US" dir=3D"LTR">
+<head>
+<meta http-e=
+quiv=3D"Content-Type" content=3D"text/html; charset=3Dutf-8">
+<base href=
+=3D"https://www.paladin-extensions.com/">
+<meta name=3D"viewport" content=
+=3D"width=3Ddevice-width, initial-scale=3D1">
+<meta http-equiv=3D"X-UA-Co=
+mpatible" content=3D"IE=3Dedge">
+<meta name=3D"format-detection" content=
+=3D"telephone=3Dno">
+<title>Paladin Extensions - Login verification</titl=
+e>
+</head>
+<body dir=3D"LTR" leftmargin=3D"0" topmargin=3D"0" marginwid=
+th=3D"0" marginheight=3D"0" style=3D'margin: 0; padding: 0; word-wrap: brea=
+k-word; -ms-text-size-adjust: 100%; -webkit-text-size-adjust: 100%; backgro=
+und-color: #2d3238; font-size: 13px; font-family: "Roboto",-apple-system,Bl=
+inkMacSystemFont,"Segoe UI","Oxygen","Ubuntu","Cantarell","Fira Sans","Droi=
+d Sans","Helvetica Neue",sans-serif; line-height: 1.4; color: #fff;'>
+
+=
+<table id=3D"bodyTable" border=3D"0" width=3D"100%" height=3D"100%" cellpad=
+ding=3D"0" cellspacing=3D"0" style=3D"border-spacing: 0; mso-table-lspace: =
+0pt; mso-table-rspace: 0pt; border-collapse: collapse; height: 100% !import=
+ant; width: 100% !important; margin: 0; padding: 0; background-color: #2d32=
+38;"><tr>
+<td align=3D"center" valign=3D"top" id=3D"bodyTableContainer" s=
+tyle=3D"border-collapse: collapse; background-color: #2d3238;">
+=09=09<ta=
+ble border=3D"0" width=3D"600" cellpadding=3D"0" cellspacing=3D"0" class=3D=
+"container" dir=3D"LTR" style=3D"border-spacing: 0; mso-table-lspace: 0pt; =
+mso-table-rspace: 0pt; border-collapse: collapse; width: 100%; max-width: 6=
+00px;">
+<tr>
+<td class=3D"header" align=3D"center" valign=3D"top" style=
+=3D'border-collapse: collapse; color: #fff; padding: 10px 16px; border-top-=
+left-radius: 3px; border-top-right-radius: 3px; font-family: "Roboto",-appl=
+e-system,BlinkMacSystemFont,"Segoe UI","Oxygen","Ubuntu","Cantarell","Fira =
+Sans","Droid Sans","Helvetica Neue",sans-serif; font-size: 22px; line-heigh=
+t: 1.4;'>
+=09=09=09=09<a href=3D"https://www.paladin-extensions.com/" sty=
+le=3D"color: #fff; text-decoration: none;">Paladin Extensions</a>
+=09=09=
+=09</td>
+=09=09</tr>
+<tr>
+<td class=3D"content" align=3D"left" valign=
+=3D"top" style=3D'border-collapse: collapse; background-color: #383c42; bor=
+der-radius: 3px; color: #fff; padding: 16px; font-size: 13px; font-family: =
+"Roboto",-apple-system,BlinkMacSystemFont,"Segoe UI","Oxygen","Ubuntu","Can=
+tarell","Fira Sans","Droid Sans","Helvetica Neue",sans-serif; line-height: =
+1.4;'>
+
+<p style=3D"margin-top: 0;">super_developer_56,</p>
+
+<p>To =
+complete the login to your account (or to complete two-step verification se=
+tup) at <a href=3D"https://www.paladin-extensions.com/" style=3D"color: #21=
+96F3; text-decoration: none;">Paladin Extensions</a>, you must enter the fo=
+llowing code:</p>
+
+<h2 style=3D"font-size: 22px; font-weight: normal; m=
+argin: 16px 0; padding: 0;">749076</h2>
+
+<p>This code is valid for 15 m=
+inutes.</p>
+
+<p style=3D"margin-bottom: 0;">The login was requested via=
+ the IP 174.3.135.102. If you did not initiate this request, you should cha=
+nge your password urgently.</p>
+
+=09=09=09</td>
+=09=09</tr>
+<tr>
+=
+<td class=3D"footer" align=3D"center" valign=3D"top" style=3D'border-collap=
+se: collapse; padding: 10px 16px; text-align: center; color: #afb4bb; font-=
+size: 12px; font-family: "Roboto",-apple-system,BlinkMacSystemFont,"Segoe U=
+I","Oxygen","Ubuntu","Cantarell","Fira Sans","Droid Sans","Helvetica Neue",=
+sans-serif; line-height: 1.4;'>
+=09=09=09=09<div><a href=3D"https://www.p=
+aladin-extensions.com/" style=3D"color: #afb4bb; text-decoration: underline=
+;">Visit Paladin Extensions</a></div>
+
+=09=09=09=09
+=09=09=09</td>
+=
+=09=09</tr>
+</table>
+</td>
+</tr></table>
+</body>
+</html>
+
+--_=_swift_v4_1543364784_a9c17c6c42edbff29f1b91c7a74d430f_=_--
+
+--1543364784-eximdsn-332759060--

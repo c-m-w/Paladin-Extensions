@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<phrases>
+  <phrase title="admin_navigation.warning_log" version_id="2000000" version_string="2.0.0"><![CDATA[Warning log]]></phrase>
+  <phrase title="xc_warning_logs_issued_by" version_id="2000000" version_string="2.0.0"><![CDATA[Issued By]]></phrase>
+  <phrase title="xc_warning_logs_issued_to" version_id="2000000" version_string="2.0.0"><![CDATA[Issued To]]></phrase>
+  <phrase title="xc_warning_logs_manage" version_id="2000000" version_string="2.0.0"><![CDATA[Manage]]></phrase>
+  <phrase title="xc_warning_logs_no_warnings_have_been_logged" version_id="2000000" version_string="2.0.0"><![CDATA[No warnings have been logged.]]></phrase>
+  <phrase title="xc_warning_logs_search_for_warnings_issued_by" version_id="2000000" version_string="2.0.0"><![CDATA[Search for warnings issued by]]></phrase>
+  <phrase title="xc_warning_logs_sure_you_want_to_clear_warning_log" version_id="2000000" version_string="2.0.0"><![CDATA[Are you sure you want to clear the warning log?]]></phrase>
+  <phrase title="xc_warning_logs_warning_log" version_id="2000000" version_string="2.0.0"><![CDATA[Warning log]]></phrase>
+</phrases>

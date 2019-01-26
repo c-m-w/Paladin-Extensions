@@ -1,0 +1,11 @@
+{
+    "src/addons/XenConcept/WarningLogs/addon.json": "574795539419dbe7eb0cef15906bcfcb2c9ec539fcd64fc2a7b3ef9d8bc6cbfa",
+    "src/addons/XenConcept/WarningLogs/logo.png": "06e4fdbc5b2a56dcddb9b1570761f9c001f3c44a7a84b2e49a373b8fc79041ec",
+    "src/addons/XenConcept/WarningLogs/Setup.php": "4100463f7d721d7ca87f174b7bc3432fc576cb30e09da25e45a68ccc83f06329",
+    "src/addons/XenConcept/WarningLogs/XF/Admin/Controller/Log.php": "44ca51d5bd54a443be6d341c0ff405ba2d427cc2501cc41020f2678e9970a443",
+    "src/addons/XenConcept/WarningLogs/XF/Repository/Warning.php": "6f3e4e7fa33644a37acf06e105d0f0676eba82260753b137ba8d410faedee807",
+    "src/addons/XenConcept/WarningLogs/_data/admin_navigation.xml": "8c3dbeaab68acc46b8d54f3b8bce7eb0d195011a189673069c214c20a1721c4c",
+    "src/addons/XenConcept/WarningLogs/_data/class_extensions.xml": "f9197158c6ac27b2d6b7e7710a9e7d9286ad6b23b3761bc1e4be92ed989743d1",
+    "src/addons/XenConcept/WarningLogs/_data/phrases.xml": "5737023715d67ac58221f01380392acf0805abbbbbb12c997963b06535593b35",
+    "src/addons/XenConcept/WarningLogs/_data/templates.xml": "d82b9df532ccd4bf91c7a840ab908bd99e3ccb6936f3c28997ed5f99fd5ead45"
+}

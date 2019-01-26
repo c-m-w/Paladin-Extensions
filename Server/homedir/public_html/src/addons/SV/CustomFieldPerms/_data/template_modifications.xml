@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template_modifications>
+  <modification type="admin" template="base_custom_field_edit" modification_key="sedo_user_field_edit_perms_pane" execution_order="6108" enabled="1" action="str_replace">
+    <find><![CDATA[<xf:submitrow]]></find>
+    <replace><![CDATA[<xf:include template="sedo_user_field_edit_perms_pane"/>
+
+$0]]></replace>
+  </modification>
+</template_modifications>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<class_extensions>
+  <extension from_class="XF\Admin\Controller\Log" to_class="XenConcept\WarningLogs\XF\Admin\Controller\Log" execute_order="10" active="1"/>
+  <extension from_class="XF\Repository\Warning" to_class="XenConcept\WarningLogs\XF\Repository\Warning" execute_order="10" active="1"/>
+</class_extensions>

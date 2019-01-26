@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<options>
+  <option option_id="xc_login_as_user_conversation_content" edit_format="textbox" data_type="string">
+    <default_value>Hello {username},
+
+Your account was logged into by the sender of this conversation.
+
+The reason they provided is below:
+
+[quote]{reason}[/quote]
+
+This was an automated message. Reply only if necessary.</default_value>
+    <edit_format_params>rows=3</edit_format_params>
+    <relation group_id="xc_login_as_user" display_order="3"/>
+  </option>
+  <option option_id="xc_login_as_user_conversation_options" edit_format="template" data_type="array">
+    <default_value>{"messageOpenInvite":false,"messageLocked":false}</default_value>
+    <edit_format_params>xc_login_as_user_conversation_options</edit_format_params>
+    <sub_options>messageOpenInvite
+messageLocked</sub_options>
+    <relation group_id="xc_login_as_user" display_order="4"/>
+  </option>
+  <option option_id="xc_login_as_user_conversation_title" edit_format="textbox" data_type="string">
+    <default_value>Your account has been accessed</default_value>
+    <relation group_id="xc_login_as_user" display_order="2"/>
+  </option>
+  <option option_id="xc_login_as_user_enable_stealth_login" edit_format="onoff" data_type="boolean">
+    <default_value>1</default_value>
+    <relation group_id="xc_login_as_user" display_order="10"/>
+  </option>
+  <option option_id="xc_login_as_user_no_display_tabs" edit_format="onoff" data_type="boolean">
+    <default_value>0</default_value>
+    <relation group_id="xc_login_as_user" display_order="11"/>
+  </option>
+  <option option_id="xc_login_as_user_send_conversation" edit_format="onoff" data_type="boolean">
+    <default_value>1</default_value>
+    <relation group_id="xc_login_as_user" display_order="1"/>
+  </option>
+</options>

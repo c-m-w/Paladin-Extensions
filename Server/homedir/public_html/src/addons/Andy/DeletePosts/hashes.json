@@ -1,0 +1,12 @@
+{
+    "src/addons/Andy/DeletePosts/addon.json": "8ecf0d71d6d7c007551b3b6d24de79dfd2d351408ef5919313ef4d55af7f0da1",
+    "src/addons/Andy/DeletePosts/icon.jpg": "dc7f5808ad4cb4fc7093139fc05c7169aecda9ad1408c701831cc1aef270dfd2",
+    "src/addons/Andy/DeletePosts/Pub/Controller/DeletePosts.php": "39bb687643c16ac9029bade041667cf3808abf58a32f6b845d58bf6d0b0bad45",
+    "src/addons/Andy/DeletePosts/_data/options.xml": "2fbd9d4d2f337dd24cb875b3c0b3cb9d1c664db91812e6a13f0128c0c948f5a4",
+    "src/addons/Andy/DeletePosts/_data/option_groups.xml": "97ccace7f0a834753d2a6e308c6f6f1a5e4d9fd9d3a8e043a06edb1cd3a1b0f5",
+    "src/addons/Andy/DeletePosts/_data/permissions.xml": "9fba4fef5a3a6d546ed85e55cb2c968d97ff25f930efa9a36620bb0c055b2c43",
+    "src/addons/Andy/DeletePosts/_data/permission_interface_groups.xml": "ddc649720b52b1a2eb70753e0c0709452831a9f55d85106ca18fc9a73535c201",
+    "src/addons/Andy/DeletePosts/_data/phrases.xml": "b47b8abb41ab17c672b427ff27e5a14e13c919ff1da365f076d34f58e4770306",
+    "src/addons/Andy/DeletePosts/_data/routes.xml": "9bfbee35c2076ca5980047042dfcf90fe96bba5b086a53786992223c64f382e0",
+    "src/addons/Andy/DeletePosts/_data/templates.xml": "799cfd971b908deb1fdaf5a8feb84137f9b8b3455752fd0d4ce32cdd5463a968"
+}

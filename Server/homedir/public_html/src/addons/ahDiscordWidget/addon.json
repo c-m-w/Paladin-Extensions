@@ -1,0 +1,14 @@
+{
+    "legacy_addon_id": "",
+    "title": "[AH] Discord Widget",
+    "description": "Customizable discord widget.",
+    "version_id": 2,
+    "version_string": "2.0.0",
+    "dev": "Matt C.",
+    "dev_url": "https://xenforo.com/community/members/matt-c.157252/",
+    "faq_url": "https://xenforo.com/community/resources/ah-discord-widget.6146/field?field=faq",
+    "support_url": "https://xenforo.com/community/threads/ah-discord-widget.142552/",
+    "extra_urls": [],
+    "require": [],
+    "icon": "icon.png"
+}

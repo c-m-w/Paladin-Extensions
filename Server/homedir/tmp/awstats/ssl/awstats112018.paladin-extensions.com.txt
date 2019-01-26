@@ -1,0 +1,451 @@
+AWSTATS DATA FILE 7.6 (build 20161204)
+# If you remove this file, all statistics for date 201811 will be lost/reset.
+# Last config file used to build this data file was /home/palavpvb/tmp/awstats/ssl/awstats.paladin-extensions.com.conf.
+
+# Position (offset in bytes) in this file for beginning of each section for
+# direct I/O access. If you made changes somewhere in this file, you should
+# also remove completely the MAP section (AWStats will rewrite it at next
+# update).
+BEGIN_MAP 28
+POS_GENERAL 2023                
+POS_TIME 2710                
+POS_VISITOR 8543                
+POS_DAY 9981                
+POS_DOMAIN 3435                
+POS_LOGIN 3729                
+POS_ROBOT 3884                
+POS_WORMS 4208                
+POS_EMAILSENDER 4339                
+POS_EMAILRECEIVER 4482                
+POS_SESSION 10117               
+POS_SIDER 10313               
+POS_FILETYPES 4617                
+POS_DOWNLOADS 4932                
+POS_OS 5031                
+POS_BROWSER 5201                
+POS_SCREENSIZE 5652                
+POS_UNKNOWNREFERER 5726                
+POS_UNKNOWNREFERERBROWSER 6148                
+POS_ORIGIN 6399                
+POS_SEREFERRALS 6539                
+POS_PAGEREFS 6698                
+POS_SEARCHWORDS 6846                
+POS_KEYWORDS 6998                
+POS_MISC 2373                
+POS_ERRORS 7057                
+POS_CLUSTER 3585                
+POS_SIDER_404 7215                
+END_MAP
+
+# LastLine    = Date of last record processed - Last record line number in last log - Last record offset in last log - Last record signature value
+# FirstTime   = Date of first visit for history file
+# LastTime    = Date of last visit for history file
+# LastUpdate  = Date of last update - Nb of parsed records - Nb of parsed old records - Nb of parsed new records - Nb of parsed corrupted - Nb of parsed dropped
+# TotalVisits = Number of visits
+# TotalUnique = Number of unique visitors
+# MonthHostsKnown   = Number of hosts known
+# MonthHostsUnKnown = Number of hosts unknown
+BEGIN_GENERAL 8
+LastLine 20181128022215 1140 299313 13616109069427
+FirstTime 20181126234209
+LastTime 20181128022215
+LastUpdate 20181128022537 1140 0 1140 0 0
+TotalVisits 37                  
+TotalUnique 30                  
+MonthHostsKnown 0                   
+MonthHostsUnknown 35                  
+END_GENERAL
+
+# Misc ID - Pages - Hits - Bandwidth
+BEGIN_MISC 10
+AddToFavourites 0 12 0
+QuickTimeSupport 0 0 0
+FlashSupport 0 0 0
+WindowsMediaPlayerSupport 0 0 0
+RealPlayerSupport 0 0 0
+JavascriptDisabled 0 0 0
+DirectorSupport 0 0 0
+PDFSupport 0 0 0
+TotalMisc 0 0 0
+JavaEnabled 0 0 0
+END_MISC
+
+# Hour - Pages - Hits - Bandwidth - Not viewed Pages - Not viewed Hits - Not viewed Bandwidth
+BEGIN_TIME 24
+0 150 221 3072527 14 17 43902
+1 1369 1682 41881818 23 28 21287
+2 333 459 5686777 0 5 208
+3 581 737 5414081 13 18 12346
+4 32 33 155466 0 0 0
+5 2 2 112968 0 0 0
+6 4 4 183903 0 0 0
+7 3 3 169452 0 0 0
+8 2 2 112968 0 0 0
+9 4 4 183895 10 10 257934
+10 3 3 169452 0 0 0
+11 4 4 183896 0 1 8293
+12 4 4 183904 0 0 0
+13 3 3 169452 0 0 0
+14 10 23 612489 6 9 2376
+15 112 123 537630 1 3 56692
+16 4 4 183908 0 0 0
+17 2 2 112968 0 0 0
+18 4 4 183901 0 0 0
+19 813 977 37563121 22 34 37944
+20 1000 1087 4814488 19 32 122370
+21 1050 1121 2799324 1 8 1612
+22 348 428 4326601 9 26 10337
+23 924 1028 35656453 26 44 692295
+END_TIME
+
+# Domain - Pages - Hits - Bandwidth
+# The 25 first Pages must be first (order not required for others)
+BEGIN_DOMAIN 5
+us 6453 7502 107876222
+ca 302 446 36400012
+fr 4 8 132740
+il 1 1 14452
+cn 1 1 14444
+END_DOMAIN
+
+# Cluster ID - Pages - Hits - Bandwidth
+BEGIN_CLUSTER 0
+END_CLUSTER
+
+# Login - Pages - Hits - Bandwidth - Last visit
+# The 10 first Pages must be first (order not required for others)
+BEGIN_LOGIN 0
+END_LOGIN
+
+# Robot ID - Hits - Bandwidth - Last visit - Hits on robots.txt
+# The 25 first Hits must be first (order not required for others)
+BEGIN_ROBOT 5
+spider 18 656793 20181127234717 0
+Googlebot/ 6 20572 20181128013624 0
+(firefox/)([0-9]\.|[0-1][0]\.) 6 257934 20181127091905 0
+oBot/ 1 56484 20181127150626 0
+Curl/PHP 1 14448 20181128005028 0
+END_ROBOT
+
+# Worm ID - Hits - Bandwidth - Last visit
+# The 5 first Hits must be first (order not required for others)
+BEGIN_WORMS 0
+END_WORMS
+
+# EMail - Hits - Bandwidth - Last visit
+# The 20 first Hits must be first (order not required for others)
+BEGIN_EMAILSENDER 0
+END_EMAILSENDER
+
+# EMail - Hits - Bandwidth - Last visit
+# The 20 first hits must be first (order not required for others)
+BEGIN_EMAILRECEIVER 0
+END_EMAILRECEIVER
+
+# Files type - Hits - Bandwidth - Bandwidth without compression - Bandwidth after compression
+BEGIN_FILETYPES 13
+json 2 190 0 0
+png 172 12379558 0 0
+woff 18 617247 0 0
+css 16 32775 0 0
+eot 4 124470 0 0
+jpg 304 1199813 0 0
+html 307 24954267 0 0
+Unknown 62 491952 0 0
+gif 30 21759 0 0
+php 6352 99063035 0 0
+shtml 16 108578 0 0
+svg 122 219545 0 0
+js 553 5191109 0 0
+END_FILETYPES
+
+# Downloads - Hits - Bandwidth
+BEGIN_DOWNLOADS 1
+/styles/default/siropu/shoutbox/new.mp3 0 14 33572
+END_DOWNLOADS
+
+# OS ID - Hits
+BEGIN_OS ID - Hits - Pages 8
+winxp 1 1
+win10 7616 6579
+macosx12 1 1
+Unknown 14 6
+ios_iphone 21 8
+macosx 59 59
+linux 16 5
+win7 244 102
+END_OS
+
+# Browser ID - Hits - Pages
+BEGIN_BROWSER 21
+chrome65.0.3325.181 58 58
+firefox63.0 237 93
+firefox62.0 1 1
+chrome60.0.3112.113 1 1
+safari11.0 20 7
+mozilla 8 2
+Unknown 6 4
+safari 1 1
+opera56.0.3051.104 14 8
+chrome32.0.1700.107 1 1
+chrome57.0.2987.133 5 5
+firefox40.1 1 1
+msie11.0 7 4
+msie8.0 1 1
+chrome41.0.2272.118 16 5
+chrome66.0.3359.181 4 4
+chrome70.0.3538.110 431 295
+chrome70.0.3538.102 7140 6262
+edge17 6 2
+firefox53.0 1 1
+firefox64.0 13 5
+END_BROWSER
+
+# Screen size - Hits
+BEGIN_SCREENSIZE 0
+END_SCREENSIZE
+
+# Unknown referer OS - Last visit date
+BEGIN_UNKNOWNREFERER 6
+Embedly__support@embed.ly 20181127220447
+PayPal_IPN_(_https://www.paypal.com/ipn_) 20181127193515
+Mozilla/5.0_(compatible;_Embedly/0.2;_snap;__http://support.embed.ly/) 20181127220446
+My_User_Agent_1.0 20181127034852
+Mozilla/5.0_(compatible;_Embedly/0.2;__http://support.embed.ly/) 20181127220445
+python-requests/2.18.4 20181127092308
+END_UNKNOWNREFERER
+
+# Unknown referer Browser - Last visit date
+BEGIN_UNKNOWNREFERERBROWSER 4
+PayPal_IPN_(_https://www.paypal.com/ipn_) 20181127193515
+Embedly__support@embed.ly 20181127220447
+python-requests/2.18.4 20181127092308
+My_User_Agent_1.0 20181127034852
+END_UNKNOWNREFERERBROWSER
+
+# Origin - Pages - Hits 
+BEGIN_ORIGIN 6
+From0 108 131
+From1 0 0
+From2 1 1
+From3 0 0
+From4 6652 7840
+From5 0 0
+END_ORIGIN
+
+# Search engine referers ID - Pages - Hits
+BEGIN_SEREFERRALS 1
+google_com 1 1
+END_SEREFERRALS
+
+# External page referers - Pages - Hits
+# The 25 first Pages must be first (order not required for others)
+BEGIN_PAGEREFS 0
+END_PAGEREFS
+
+# Search keyphrases - Number of search
+# The 10 first number of search must be first (order not required for others)
+BEGIN_SEARCHWORDS 0
+END_SEARCHWORDS
+
+# Search keywords - Number of search
+# The 25 first number of search must be first (order not required for others)
+BEGIN_KEYWORDS 0
+END_KEYWORDS
+
+# Errors - Hits - Bandwidth
+BEGIN_ERRORS 7
+500 24 61941
+301 43 0
+503 11 19183
+403 10 52140
+404 73 107400
+303 11 0
+508 1 2377
+END_ERRORS
+
+# URL with 404 errors - Hits - Last URL referrer
+BEGIN_SIDER_404 21
+/styles/uix/fonts/icons/material-icons/materialdesignicons-webfont.woff2 4 https://paladin-extensions.com/register/
+/404 1 -
+/404.gif 1 -
+/link-forums/premium-link.23/ 1 https://www.paladin-extensions.com/
+/js/xf/chartist.min.js.map 1 -
+/ads.txt 1 http://paladin-extensions.com/ads.txt
+/410.html 1 -
+/404.shtml 1 -
+/styles/uix/fonts/icons/material-icons/materialdesignicons-webfont.svg 2 https://paladin-extensions.com/register/
+/extensions/ 1 https://www.paladin-extensions.com/
+/styles/uix/images/welcome-banner.png 28 https://www.paladin-extensions.com/css.php
+/robots.txt 10 -
+/styles/uix/fonts/icons/material-icons/materialdesignicons-webfont.ttf 4 https://paladin-extensions.com/register/
+/support/ 3 https://www.paladin-extensions.com/
+/500.html 1 -
+/500.shtml 1 -
+/account/visitor-menu 3 https://www.paladin-extensions.com/
+/Error 2 -
+/login/ 2 https://www.paladin-extensions.com/
+/404.html 1 -
+/styles/uix/fonts/icons/material-icons/materialdesignicons-webfont.woff 4 https://paladin-extensions.com/register/
+END_SIDER_404
+
+# Host - Pages - Hits - Bandwidth - Last visit date - [Start date of last visit] - [Last page of last visit]
+# [Start date of last visit] and [Last page of last visit] are saved only if session is not finished
+# The 25 first Hits must be first (order not required for others)
+BEGIN_VISITOR 35
+24.251.180.38 6237 7063 96349708 20181128012824 20181128005828 /index.php
+174.3.135.102 293 426 35886040 20181127233746
+162.213.41.93 136 352 7010297 20181127223149
+54.173.24.135 21 21 1186164 20181127122254
+100.26.203.190 16 16 903744 20181127182223
+54.87.186.189 15 15 853504 20181128010219
+207.228.78.86 7 20 443037 20181127142341
+54.86.129.161 4 4 225968 20181128022215 20181128012158 /
+107.158.218.128 4 4 158711 20181128002257
+66.102.8.193 3 8 243390 20181128005031
+149.202.98.190 2 6 103847 20181127201224
+18.207.131.150 2 2 112968 20181127044206
+34.221.37.101 2 2 28900 20181127154503
+50.116.5.93 2 2 0 20181127034852
+52.34.249.216 2 2 28935 20181127223015
+159.89.111.196 1 1 56492 20181128003725
+54.204.20.249 1 2 61084 20181127024939
+52.39.60.106 1 1 14456 20181127164314
+46.105.92.122 1 1 14444 20181127113156
+23.105.70.177 1 1 14451 20181127061012
+66.102.8.221 1 5 158785 20181128005031
+45.61.170.178 1 1 14798 20181127235058
+158.69.84.29 1 1 14443 20181127092308
+62.210.83.78 1 1 14449 20181127182720
+173.0.81.1 1 1 36 20181127193515
+54.221.198.105 0 1 139974 
+54.225.104.196 0 1 135144 
+52.21.76.65 0 1 139974 
+107.21.253.49 1 2 4314 20181127220445
+218.17.124.178 1 1 14444 20181128010054
+54.221.199.147 0 2 5415 
+66.102.8.223 1 3 26940 20181128005029
+109.66.29.90 1 1 14452 20181127123519
+52.1.109.34 0 1 2070 
+34.219.36.191 1 1 56492 20181128011638
+END_VISITOR
+
+# Date - Pages - Hits - Bandwidth - Visits
+BEGIN_DAY 3
+20181126 2 24 18096 1
+20181127 6687 7850 143045562 26
+20181128 72 84 1407784 10
+END_DAY
+
+# Session range - Number of visits
+BEGIN_SESSION 6
+5mn-15mn 2
+0s-30s 20
+1h+ 9
+15mn-30mn 1
+30mn-1h 1
+30s-2mn 2
+END_SESSION
+
+# URL - Pages - Bandwidth - Entry - Exit
+# The 25 first Pages must be first (order not required for others)
+BEGIN_SIDER 98
+/index.php 4889 582990 0 3
+/admin.php 822 8334537 2 1
+/css.php 445 8128352 1 1
+/ 184 5896114 28 22
+/job.php 160 2191 2 3
+/proxy.php 35 82014929 0 0
+/account/upgrades 16 175881 0 0
+/login/keep-alive 9 1158 0 1
+/systemerror/500/assets/fonts/museo-sans-700-webfont.woff 8 266736 0 1
+/systemerror/500/assets/fonts/museo-sans-300-webfont.woff 8 281928 2 0
+/support/ 7 109795 0 0
+/extensions/ 7 98772 0 0
+/members/ 6 74702 0 0
+/login/ 5 11499 0 0
+/login/two-step 5 27480 0 0
+/members/terry-davis.4/ 4 39370 0 0
+/400.shtml 4 28576 0 0
+/attachments/paladin-manager-png.52/ 4 312642 0 0
+/attachments/0c1634d95a0eb29514e0537ab6ae3ca3-gif.48/ 4 1898142 0 0
+/forums/pre-sale-discussion.9/ 4 65624 0 0
+/attachments/1522448993613-png.15/ 4 4622331 0 0
+/attachments/1519093377219-png.11/ 4 9051435 0 0
+/attachments/1519256544140-png.13/ 4 9753 0 0
+/attachments/1519256790248-png.14/ 4 9753 0 0
+/misc/contact 4 104762 0 1
+/account/visitor-menu 3 14639 0 0
+/403.shtml 1 7159 0 0
+/threads/posting-your-media.37/ 1 17852 0 0
+/threads/forum-testing-thread.10/ 1 21440 0 0
+/threads/website-launch.6/ 1 21332 0 0
+/members/driftloom.37/ 3 25108 0 0
+/402.shtml 1 7165 0 0
+/forums/media.22/ 1 15181 0 0
+/extensions/authors/terry-davis.4/ 1 274 0 0
+/account/account-details 1 13040 0 0
+/members/proxy.33/ 1 2948 0 0
+/members/driftloom.37/recent-content 1 2159 0 0
+/members/bhopfu1.1/ 3 24590 0 0
+/404.shtml 1 7161 0 0
+/threads/quest-shin.33/ 2 74565 0 0
+/501.shtml 3 21486 0 0
+/401.shtml 1 7169 0 0
+/systemerror/500/assets/fonts/museo-sans-300-webfont.eot 1 30063 0 0
+/threads/frequently-asked-questions.2/preview 1 5066 0 0
+/members/driftloom.37/bookmarks/ 1 453 0 0
+/members/penguin.10/ 3 25305 0 0
+/405.shtml 1 7164 0 0
+/threads/registration-code.52/ 3 47118 0 0
+/members/bigbongrip.11/ 1 5513 0 0
+/410.shtml 1 7155 0 0
+/systemerror/500/assets/fonts/museo-sans-700-italic-webfont.eot 1 32308 0 0
+/account/preferences 1 14377 0 0
+/threads/older-users.35/ 1 22328 0 0
+/account/security 1 11201 0 0
+/posts/89/edit 2 25242 0 1
+/members/driftloom.37/latest-activity 1 2052 0 0
+/members/terry-davis.4/recent-content 1 14743 0 0
+/members/terry-davis.4/bookmarks/ 1 455 0 0
+/search/1/ 1 16415 0 0
+/nc_assets/fonts/museo-sans-300-webfont.woff 1 35241 0 0
+/threads/question.39/ 1 22129 0 0
+/systemerror/500/assets/fonts/museo-sans-700-webfont.eot 1 28334 0 0
+/reactions/unreacts/post/128 1 15287 0 0
+/threads/frequently-asked-questions.2/ 3 63469 0 0
+/purchase/user_upgrade/ 3 2001 0 0
+/members/test-user.7/ 1 13862 0 0
+/search/2/ 1 16428 0 0
+/threads/vacnet-proofing.49/ 2 40002 0 0
+/account/two-step/totp/enable 2 11665 0 0
+/members/driftloom.37/about 1 2349 0 0
+/nc_assets/fonts/museo-sans-700-webfont.woff 1 33342 0 0
+/reactions/react/post/128/2 1 1505 0 0
+/cpanel 1 12510 0 0
+/login/password-confirm 1 173 0 0
+/threads/rules.15/ 1 21430 0 0
+/members/terry-davis.4/about 1 5346 0 0
+/parking-page.shtml 1 1223 0 0
+/threads/ques-tion.47/ 1 21838 0 0
+/parking-page.html 1 1219 1 0
+/threads/announcements.13/ 1 18412 0 0
+/threads/payment.42/ 3 61794 0 0
+/500.shtml 2 14320 0 0
+/systemerror/500/assets/fonts/museo-sans-300-italic-webfont.eot 1 33765 0 0
+/posts/88/edit 1 12124 0 0
+/misc/login-as-user 4 5318 0 0
+/attachments/20180406102648_1-jpg.16/ 4 1659486 0 0
+/members/terry-davis.4/latest-activity 1 1960 0 0
+/register/ 3 29690 0 0
+/payment_callback.php 1 36 1 1
+/threads/question-about-paladin.46/ 1 22178 0 0
+/uix/toggle-width.json 2 190 0 0
+/threads/announcements.7/ 1 24912 0 0
+/threads/developments.9/ 4 209143 0 0
+/attachments/paladin-menu-png.3/ 4 126687 0 0
+/extensions/categories/premium-extensions.1/ 3 45034 0 0
+/account/privacy 1 11632 0 0
+/threads/ques-tion.47/preview 1 283 0 0
+/account/two-step/ 3 33744 0 0
+END_SIDER

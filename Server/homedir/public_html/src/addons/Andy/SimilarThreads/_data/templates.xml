@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates>
+  <template type="public" title="andy_similarthreads" version_id="33" version_string="3.3"><![CDATA[<xf:if is="{$similarThreads}">
+
+<xf:css src="andy_similarthreads.less" />
+
+<div class="block similarthreads-wide">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:datalist data-xf-init="responsive-data-list">
+				<xf:datarow rowtype="header">
+					<xf:cell>{{ phrase('similarthreads_thread_starter') }}</xf:cell>
+					<xf:cell>{{ phrase('similarthreads_similar_threads') }}</xf:cell>
+					<xf:cell>{{ phrase('similarthreads_forum') }}</xf:cell>
+					<xf:cell>{{ phrase('similarthreads_replies') }}</xf:cell>
+					<xf:cell>{{ phrase('similarthreads_date') }}</xf:cell>
+				</xf:datarow>
+				<xf:foreach loop="$similarThreads" value="$thread">
+					<xf:datarow rowclass="dataList-row--noHover">
+						<xf:cell>		
+						<span class="contentRow-figure">
+							<xf:avatar user="{$thread.User}" size="xs" defaultname="{$thread.username}" />
+						</span>
+						</xf:cell>
+						<xf:cell href="{{ link('threads/', $thread) }}" target="_blank">{{ prefix('thread', $thread.prefix_id, 'html', '') }} {$thread.title}</xf:cell>	
+						<xf:cell><a href="{{ link('forums', $thread.Forum) }}">{$thread.Forum.title}</a></xf:cell>
+						<xf:cell>{$thread.reply_count}</xf:cell>
+						<xf:cell><xf:date time="{$thread.post_date}" /></xf:cell>
+					</xf:datarow>
+				</xf:foreach>
+			</xf:datalist>
+		</div>
+	</div>
+</div>
+	
+<div class="block similarthreads-narrow">
+	<div class="block-container">
+		<h3 class="block-minorHeader">{{ phrase('similarthreads_similar_threads') }}</h3>
+		<div class="block-body block-row">
+			<ul class="block-body">
+				<xf:foreach loop="$similarThreads" value="$thread">
+					<li class="block-row">
+						<xf:macro template="thread_list_macros" name="item_new_threads"
+						arg-thread="{$thread}" />
+					</li>
+				</xf:foreach>
+			</ul>
+		</div>
+	</div>
+</div>
+	
+</xf:if>]]></template>
+  <template type="public" title="andy_similarthreads.less" version_id="33" version_string="3.3"><![CDATA[.similarthreads-wide
+{
+	display: inline;
+}
+
+.similarthreads-narrow
+{
+	display: none;
+}
+
+.similarthreads-post-thread
+{
+	padding: 10px 0px 0px 0px;
+}
+
+@media (max-width: @xf-responsiveMedium)
+{
+	.similarthreads-wide
+	{
+		display: none;
+	}
+	
+	.similarthreads-narrow
+	{
+		display: inline;
+	}
+	
+	.similarthreads-post-thread
+	{
+		display: none;
+	}
+}]]></template>
+  <template type="public" title="andy_similarthreads_post_thread" version_id="33" version_string="3.3"><![CDATA[<div class="similarthreads-wrapper">
+
+	<xf:css src="andy_similarthreads.less" />
+
+	<div class="block similarthreads-post-thread">
+		<div class="block-container">
+			<div class="block-body">
+				<xf:datalist data-xf-init="responsive-data-list">
+					<xf:datarow rowtype="header">
+						<xf:cell>{{ phrase('similarthreads_thread_starter') }}</xf:cell>
+						<xf:cell>{{ phrase('similarthreads_similar_threads') }}</xf:cell>
+						<xf:cell>{{ phrase('similarthreads_forum') }}</xf:cell>
+						<xf:cell>{{ phrase('similarthreads_replies') }}</xf:cell>
+						<xf:cell>{{ phrase('similarthreads_date') }}</xf:cell>
+					</xf:datarow>
+					<xf:foreach loop="$similarThreads" value="$thread">
+						<xf:datarow rowclass="dataList-row--noHover">
+							<xf:cell>
+							<span class="contentRow-figure">
+								<xf:avatar user="{$thread.User}" size="xs" defaultname="{$thread.username}" />
+							</span>
+							</xf:cell>
+							<xf:cell href="{{ link('threads/', $thread) }}" target="_blank">{{ prefix('thread', $thread.prefix_id, 'html', '') }} {$thread.title}</xf:cell>	
+							<xf:cell><a href="{{ link('forums', $thread.Forum) }}">{$thread.Forum.title}</a></xf:cell>
+							<xf:cell>{$thread.reply_count}</xf:cell>
+							<xf:cell><xf:date time="{$thread.post_date}" /></xf:cell>
+						</xf:datarow>
+					</xf:foreach>
+				</xf:datalist>
+			</div>
+		</div>
+	</div>
+
+</div>]]></template>
+  <template type="public" title="andy_similarthreads_widget" version_id="11" version_string="1.1"><![CDATA[<xf:if is="{$similarThreads}">
+
+<xf:css src="andy_similarthreads.less" />
+
+<div class="block"{{ widget_data($widget) }}>
+	<div class="block-container">
+		<h3 class="block-minorHeader">{{ phrase('similarthreads_similar_threads') }}</h3>
+		<div class="block-body block-row">
+			<ul class="block-body">
+				<xf:foreach loop="$similarThreads" value="$thread">
+					<li class="block-row">
+						<xf:macro template="thread_list_macros" name="item_new_threads"
+						arg-thread="{$thread}" />
+					</li>
+				</xf:foreach>
+			</ul>
+		</div>
+	</div>
+</div>
+	
+</xf:if>]]></template>
+</templates>

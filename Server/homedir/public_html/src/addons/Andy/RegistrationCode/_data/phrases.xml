@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<phrases>
+  <phrase title="option.registrationCodeRegistrationCode" version_id="10" version_string="1.0"><![CDATA[Registration code]]></phrase>
+  <phrase title="option_explain.registrationCodeRegistrationCode" version_id="10" version_string="1.0"><![CDATA[Enter code required to complete registration process.]]></phrase>
+  <phrase title="option_group.registrationCode" version_id="10" version_string="1.0"><![CDATA[Registration code]]></phrase>
+  <phrase title="option_group_description.registrationCode" version_id="10" version_string="1.0"><![CDATA[Options here control the Registration code add-on.]]></phrase>
+  <phrase title="registercode" version_id="10" version_string="1.0"><![CDATA[registrationcode_enter_registration_code_here]]></phrase>
+  <phrase title="registrationcode_enter_registration_code_here" version_id="10" version_string="1.0"><![CDATA[Enter registration code here.]]></phrase>
+  <phrase title="registrationcode_invalid_registration_code_entered" version_id="10" version_string="1.0"><![CDATA[Invalid registration code entered.]]></phrase>
+  <phrase title="registrationcode_registration_code" version_id="10" version_string="1.0"><![CDATA[Registration code]]></phrase>
+</phrases>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<phrases>
+  <phrase title="changeContentOwner_change_album_owner" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Change album owner]]></phrase>
+  <phrase title="changeContentOwner_change_post_author" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Change post author]]></phrase>
+  <phrase title="changeContentOwner_change_profile_post_author" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Change profile post author]]></phrase>
+  <phrase title="changeContentOwner_change_thread_author" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Change thread author]]></phrase>
+  <phrase title="changeContentOwner_change_xfmg_album_owner" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Change album owner]]></phrase>
+  <phrase title="changeContentOwner_change_xfmg_comment_author" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Change comment author]]></phrase>
+  <phrase title="changeContentOwner_change_xfmg_media_author" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Change media author]]></phrase>
+  <phrase title="changeContentOwner_first_post_of_the_thread_is_unavailable" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[First post of the thread is unavailable.]]></phrase>
+  <phrase title="changeContentOwner_new_author_must_be_able_to_view_this_post" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[The new author must be able to view this post.]]></phrase>
+  <phrase title="changeContentOwner_new_author_must_be_able_to_view_this_profile_post" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[The new author must be able to view this profile post.]]></phrase>
+  <phrase title="changeContentOwner_new_author_must_be_able_to_view_this_thread" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[The new author must be able to view this thread.]]></phrase>
+  <phrase title="changeContentOwner_new_author_must_be_able_to_view_this_xfmg_album" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[The new author must be able to view this album.]]></phrase>
+  <phrase title="changeContentOwner_new_author_must_be_able_to_view_this_xfmg_comment" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[The new author must be able to view this comment.]]></phrase>
+  <phrase title="changeContentOwner_new_author_must_be_able_to_view_this_xfmg_media" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[The new author must be able to view this media.]]></phrase>
+  <phrase title="changeContentOwner_new_author_name" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[New author name]]></phrase>
+  <phrase title="changeContentOwner_new_author_name_explain" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Enter the name of the new thread author.]]></phrase>
+  <phrase title="permission.forum_changePostAuthor" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Can change post author]]></phrase>
+  <phrase title="permission.forum_changeThreadAuthor" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Can change thread author]]></phrase>
+  <phrase title="permission.profilePost_changeProfilePostAuthor" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Can change profile post author]]></phrase>
+  <phrase title="permission.xfmg_changeAlbumOwner" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Can change album owner]]></phrase>
+  <phrase title="permission.xfmg_changeCommentAuthor" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Can change comment author]]></phrase>
+  <phrase title="permission.xfmg_changeMediaOwner" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Can change media owner]]></phrase>
+</phrases>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates>
+  <template type="public" title="andy_membernotes" version_id="10" version_string="1.0"><![CDATA[<xf:if is="{{ $xf.visitor.hasPermission('memberNotes', 'view') }}">
+
+<xf:css src="andy_membernotes.less" />
+	
+<div class="block">
+	<div class="block-container">
+		<h3 class="block-minorHeader">{{ phrase('membernotes_member_notes') }}</h3>
+		<div class="block-body block-row">
+			<xf:foreach loop="$results" value="$result">
+				{$result.notes|nl2br}
+			</xf:foreach>
+		</div>
+		<div class="block-footer">
+			<span class="block-footer-counter">
+				<a href="{{ link('membernotes/edit', '', {'user_id': $userId}) }}">{{ phrase('membersnotes_edit') }}</a>
+			</span>
+		</div>
+	</div>
+</div>
+
+</xf:if>]]></template>
+  <template type="public" title="andy_membernotes_edit" version_id="10" version_string="1.0"><![CDATA[<xf:title>{{ phrase('membernotes_member_notes_edit') }}</xf:title>
+
+<xf:form action="{{ link('membernotes/save', '', {'user_id': $userId}) }}" class="block">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:textarearow name="notes" value="{$notes}" rows="5" autosize="true"
+				label="{{ phrase('membernotes_notes') }}"
+				explain="{{ phrase('membernotes_only_staff_can_view_these_notes') }}" />
+		</div>
+	</div>
+
+	<xf:submitrow submit="{{ phrase('membernotes_submit') }}" />
+
+</xf:form>]]></template>
+</templates>

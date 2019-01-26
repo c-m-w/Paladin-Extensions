@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<phrases>
+  <phrase title="mod_log.post_change_date" version_id="2000000" version_string="2.0.0"><![CDATA[Post date changed from {old_date} to {new_date}]]></phrase>
+  <phrase title="moderator_log_post_change_date" version_id="10000" version_string="1.0.0"><![CDATA[Post date changed from {old_date} to {new_date}]]]></phrase>
+  <phrase title="permission.forum_SV_ChangePostDate" version_id="10000" version_string="1.0.0"><![CDATA[Change Post Date]]></phrase>
+  <phrase title="permission_forum_SV_ChangePostDate" version_id="10000" version_string="1.0.0"><![CDATA[Change Post Date]]></phrase>
+  <phrase title="sv_change_date_for_post" version_id="10000" version_string="1.0.0"><![CDATA[Change Date for Post #{number}]]></phrase>
+  <phrase title="sv_change_post_date" version_id="10000" version_string="1.0.0"><![CDATA[Change Post Date]]></phrase>
+  <phrase title="sv_new_date" version_id="10000" version_string="1.0.0"><![CDATA[New Date]]></phrase>
+  <phrase title="sv_please_enter_valid_date_format" version_id="10000" version_string="1.0.0"><![CDATA[Please enter a valid date format]]></phrase>
+  <phrase title="sv_please_select_at_most_one_post" version_id="10000" version_string="1.0.0"><![CDATA[Please select at most one post.]]></phrase>
+</phrases>

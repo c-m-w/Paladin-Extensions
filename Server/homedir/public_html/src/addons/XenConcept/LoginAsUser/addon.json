@@ -1,0 +1,14 @@
+{
+    "legacy_addon_id": "",
+    "title": "[XenConcept] Login As User",
+    "description": "This addon allow  Connect to another user.",
+    "version_id": 2000300,
+    "version_string": "2.0.3",
+    "dev": "Remi C",
+    "dev_url": "https://www.xen-concept.com/",
+    "faq_url": "https://www.xen-concept.com/forums/faqs.13/",
+    "support_url": "https://www.xen-concept.com/forums/bug-reports.7/",
+    "extra_urls": [],
+    "require": [],
+    "icon": "logo.png"
+}

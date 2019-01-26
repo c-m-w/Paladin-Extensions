@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<phrases>
+  <phrase title="snog_forcesecure_about" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[There is an image in your 'About you' from an insecure connection. Only images from HTTPS connections are allowed.]]></phrase>
+  <phrase title="snog_forcesecure_insecure" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[There is an image attached to your post from an insecure connection. Only images from HTTPS connections are allowed.<br /><br />Please consider using "Attach files" and attaching the image to your post.]]></phrase>
+  <phrase title="snog_forcesecure_signature" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[There is an image in your signature from an insecure connection. Only images from HTTPS connections are allowed.]]></phrase>
+</phrases>

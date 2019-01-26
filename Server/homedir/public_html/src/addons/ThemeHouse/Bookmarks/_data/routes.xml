@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<routes>
+  <route route_type="public" route_prefix="bookmarks" format=":int&lt;bookmark_id,note&gt;/" controller="ThemeHouse\Bookmarks:Bookmark" context="th_bookmark"/>
+  <route route_type="public" route_prefix="members" sub_name="bookmarks" format=":int&lt;user_id,username&gt;/bookmarks/:page" controller="XF:Member" context="members" action_prefix="bookmarks"/>
+</routes>

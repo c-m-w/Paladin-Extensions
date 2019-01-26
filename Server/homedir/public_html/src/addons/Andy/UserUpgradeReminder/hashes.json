@@ -1,0 +1,10 @@
+{
+    "src/addons/Andy/UserUpgradeReminder/addon.json": "a211d0689da204cfcee78b37519ae628e50b19b59fcffc1a595d4938c3bdab86",
+    "src/addons/Andy/UserUpgradeReminder/icon.jpg": "46fed92dc10ba31f58da0b581985bb5b46e4bf922c14d796d9d746258cc47317",
+    "src/addons/Andy/UserUpgradeReminder/XF/Cron/UserUpgradeReminder.php": "0ba5730a8abb15a94c573b064176af8839b08fd03db8fa9608709c1e00b6bc73",
+    "src/addons/Andy/UserUpgradeReminder/_data/cron.xml": "7795649fc42a24eaeea87ef78a5d7c4f919ae19870d8050867efdbc423e98715",
+    "src/addons/Andy/UserUpgradeReminder/_data/options.xml": "8980f60ee61c4c535c50ff7399b12bfb02a90f72694e64cf6f1c94c09688bf0a",
+    "src/addons/Andy/UserUpgradeReminder/_data/option_groups.xml": "238c468844d5499af1f99d670249600cf3810c2068232ea08b4dcc2db9069ac8",
+    "src/addons/Andy/UserUpgradeReminder/_data/phrases.xml": "d1f31fd1bc3d5b32ba7592bb5e5c462a0182ca97d47b9c11e02f2192ba0e24c4",
+    "src/addons/Andy/UserUpgradeReminder/_data/templates.xml": "db02321099cc16504300e183f0d84738c0507c39e185320fba3a2177e4b9e80e"
+}

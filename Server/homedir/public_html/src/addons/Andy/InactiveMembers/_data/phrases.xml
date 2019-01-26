@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<phrases>
+  <phrase title="cron_entry.InactiveMembers" version_id="10" version_string="1.0"><![CDATA[Inactive members]]></phrase>
+  <phrase title="inactivemembers_from" version_id="13" version_string="1.3"><![CDATA[]]></phrase>
+  <phrase title="inactivemembers_message" version_id="10" version_string="1.0"><![CDATA[Hi {username},
+<br /><br />
+We look forward to seeing you at {board_title}.
+<br /><br />
+Some of our latest topics include:]]></phrase>
+  <phrase title="inactivemembers_subject" version_id="10" version_string="1.0"><![CDATA[Latest topics]]></phrase>
+  <phrase title="inactivemembers_unsubscribe_link" version_id="10" version_string="1.0"><![CDATA[Click here to unsubscribe.]]></phrase>
+  <phrase title="option.inactiveMembersExcludeForums" version_id="10" version_string="1.0"><![CDATA[Exclude forums]]></phrase>
+  <phrase title="option.inactiveMembersImageUrl" version_id="10" version_string="1.0"><![CDATA[Image URL]]></phrase>
+  <phrase title="option.inactiveMembersLimit" version_id="10" version_string="1.0"><![CDATA[Limit]]></phrase>
+  <phrase title="option.inactiveMembersMaximumDays" version_id="10" version_string="1.0"><![CDATA[Maximum days]]></phrase>
+  <phrase title="option.inactiveMembersMinimumDays" version_id="10" version_string="1.0"><![CDATA[Minimum days]]></phrase>
+  <phrase title="option.inactiveMembersSortForumTitles" version_id="10" version_string="1.0"><![CDATA[Sort forum titles]]></phrase>
+  <phrase title="option.inactiveMembersTestUsername" version_id="10" version_string="1.0"><![CDATA[Test username]]></phrase>
+  <phrase title="option_explain.inactiveMembersExcludeForums" version_id="10" version_string="1.0"><![CDATA[Exclude forums from email.]]></phrase>
+  <phrase title="option_explain.inactiveMembersImageUrl" version_id="10" version_string="1.0"><![CDATA[Add optional image URL here. Allows adding a logo or other image to the top of the email.]]></phrase>
+  <phrase title="option_explain.inactiveMembersLimit" version_id="10" version_string="1.0"><![CDATA[Email topics are limited to this number.]]></phrase>
+  <phrase title="option_explain.inactiveMembersMaximumDays" version_id="10" version_string="1.0"><![CDATA[Email will be sent if inactive less than or equal to this many days.]]></phrase>
+  <phrase title="option_explain.inactiveMembersMinimumDays" version_id="10" version_string="1.0"><![CDATA[Email will be sent if inactive greater than or equal to this many days.]]></phrase>
+  <phrase title="option_explain.inactiveMembersSortForumTitles" version_id="10" version_string="1.0"><![CDATA[By default threads are sorted by most viewed only. To additionally sort by forum title, select this option.]]></phrase>
+  <phrase title="option_explain.inactiveMembersTestUsername" version_id="10" version_string="1.0"><![CDATA[To send a test email, enter username and click Save. Go to Cron entries and run the Inactive members cron manually. Leave blank to disable this function.]]></phrase>
+  <phrase title="option_group.inactiveMembers" version_id="10" version_string="1.0"><![CDATA[Inactive members]]></phrase>
+  <phrase title="option_group_description.inactiveMembers" version_id="10" version_string="1.0"><![CDATA[Options here control the Inactive members add-on.]]></phrase>
+</phrases>

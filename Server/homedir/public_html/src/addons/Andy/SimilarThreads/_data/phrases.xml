@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<phrases>
+  <phrase title="option.similarThreadsEnhancedSearch" version_id="18" version_string="1.8"><![CDATA[Enhanced search]]></phrase>
+  <phrase title="option.similarThreadsExcludeDays" version_id="10" version_string="1.0"><![CDATA[Exclude days]]></phrase>
+  <phrase title="option.similarThreadsExcludeForums" version_id="10" version_string="1.0"><![CDATA[Exclude forums]]></phrase>
+  <phrase title="option.similarThreadsMaximumResults" version_id="19" version_string="1.9"><![CDATA[Maximum results]]></phrase>
+  <phrase title="option.similarThreadsMinimumCommonWordLength" version_id="10" version_string="1.0"><![CDATA[Minimum common word length]]></phrase>
+  <phrase title="option.similarThreadsMultibyte" version_id="10" version_string="1.0"><![CDATA[Multibyte]]></phrase>
+  <phrase title="option.similarThreadsSameForum" version_id="10" version_string="1.0"><![CDATA[Same forum]]></phrase>
+  <phrase title="option.similarThreadsShowBelowFirstPost" version_id="10" version_string="1.0"><![CDATA[Show below first post]]></phrase>
+  <phrase title="option.similarThreadsShowBelowQuickReply" version_id="10" version_string="1.0"><![CDATA[Show below quick reply]]></phrase>
+  <phrase title="option.similarThreadsShowPostThread" version_id="10" version_string="1.0"><![CDATA[Show post thread]]></phrase>
+  <phrase title="option.similarThreadsShowPostThreadQuickThread" version_id="33" version_string="3.3"><![CDATA[Show post thread quick thread]]></phrase>
+  <phrase title="option.similarThreadsStopCharacters" version_id="32" version_string="3.2"><![CDATA[Stop characters]]></phrase>
+  <phrase title="option.similarThreadsStopWords" version_id="10" version_string="1.0"><![CDATA[Stop words]]></phrase>
+  <phrase title="option_explain.similarThreadsEnhancedSearch" version_id="18" version_string="1.8"><![CDATA[Select to use Enhanced search.]]></phrase>
+  <phrase title="option_explain.similarThreadsExcludeDays" version_id="10" version_string="1.0"><![CDATA[Exclude similar threads older than this many days. Enter 0 to disable.]]></phrase>
+  <phrase title="option_explain.similarThreadsExcludeForums" version_id="10" version_string="1.0"><![CDATA[Exclude forums which you don't want to show similar thread results.]]></phrase>
+  <phrase title="option_explain.similarThreadsMaximumResults" version_id="19" version_string="1.9"><![CDATA[Limit similar threads to this many results.]]></phrase>
+  <phrase title="option_explain.similarThreadsMinimumCommonWordLength" version_id="10" version_string="1.0"><![CDATA[Exclude words which are less than this many characters.]]></phrase>
+  <phrase title="option_explain.similarThreadsMultibyte" version_id="10" version_string="1.0"><![CDATA[Include support for multibyte characters. Typically only used for Chinese, Japanese and Russian languages.]]></phrase>
+  <phrase title="option_explain.similarThreadsSameForum" version_id="10" version_string="1.0"><![CDATA[Show similar threads results from same forum as being viewed.]]></phrase>
+  <phrase title="option_explain.similarThreadsShowBelowFirstPost" version_id="10" version_string="1.0"><![CDATA[Show similar threads below first post.]]></phrase>
+  <phrase title="option_explain.similarThreadsShowBelowQuickReply" version_id="10" version_string="1.0"><![CDATA[Show similar threads below quick reply.]]></phrase>
+  <phrase title="option_explain.similarThreadsShowPostThread" version_id="33" version_string="3.3"><![CDATA[Show similar threads when creating a new thread (full page).]]></phrase>
+  <phrase title="option_explain.similarThreadsShowPostThreadQuickThread" version_id="33" version_string="3.3"><![CDATA[Show similar threads when creating a new thread (quick thread).]]></phrase>
+  <phrase title="option_explain.similarThreadsStopCharacters" version_id="32" version_string="3.2"><![CDATA[Separate each character with a space.]]></phrase>
+  <phrase title="option_explain.similarThreadsStopWords" version_id="10" version_string="1.0"><![CDATA[Separate each word with a space.]]></phrase>
+  <phrase title="option_group.similarThreads" version_id="10" version_string="1.0"><![CDATA[Similar threads]]></phrase>
+  <phrase title="option_group_description.similarThreads" version_id="10" version_string="1.0"><![CDATA[Options here control the Similar threads add-on.]]></phrase>
+  <phrase title="permission.similarThreads_view" version_id="10" version_string="1.0"><![CDATA[View]]></phrase>
+  <phrase title="permission_interface.similarThreads" version_id="10" version_string="1.0"><![CDATA[Similar threads]]></phrase>
+  <phrase title="similarthreads_date" version_id="10" version_string="1.0"><![CDATA[Date]]></phrase>
+  <phrase title="similarthreads_forum" version_id="10" version_string="1.0"><![CDATA[Forum]]></phrase>
+  <phrase title="similarthreads_replies" version_id="10" version_string="1.0"><![CDATA[Replies]]></phrase>
+  <phrase title="similarthreads_similar_threads" version_id="10" version_string="1.0"><![CDATA[Similar threads]]></phrase>
+  <phrase title="similarthreads_thread_starter" version_id="13" version_string="1.3"><![CDATA[Thread starter]]></phrase>
+  <phrase title="widget_def.similarThreads" version_id="11" version_string="1.1"><![CDATA[Similar threads]]></phrase>
+  <phrase title="widget_def_desc.similarThreads" version_id="11" version_string="1.1"><![CDATA[Displays a block containing similar threads.]]></phrase>
+</phrases>

@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<widget_definitions>
+  <widget_definition definition_id="ahDiscordWidget" definition_class="ahDiscordWidget\Widget\DiscordWidget"/>
+</widget_definitions>

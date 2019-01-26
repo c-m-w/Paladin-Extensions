@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<phrases>
+  <phrase title="cron_entry.UserUpgradeReminder" version_id="10" version_string="1.0"><![CDATA[User upgrade reminder]]></phrase>
+  <phrase title="option.userUpgradeReminderDays" version_id="10" version_string="1.0"><![CDATA[Days]]></phrase>
+  <phrase title="option_explain.userUpgradeReminderDays" version_id="10" version_string="1.0"><![CDATA[Send email this many days prior to account upgrade expiring.]]></phrase>
+  <phrase title="option_group.userUpgradeReminder" version_id="10" version_string="1.0"><![CDATA[User upgrade reminder]]></phrase>
+  <phrase title="option_group_description.userUpgradeReminder" version_id="10" version_string="1.0"><![CDATA[Options here control the User upgrade reminder add-on.]]></phrase>
+  <phrase title="userupgradereminder_message_part1" version_id="10" version_string="1.0"><![CDATA[Dear]]></phrase>
+  <phrase title="userupgradereminder_message_part2" version_id="10" version_string="1.0"><![CDATA[Please note that your account upgrade at]]></phrase>
+  <phrase title="userupgradereminder_message_part3" version_id="10" version_string="1.0"><![CDATA[is about to expire in]]></phrase>
+  <phrase title="userupgradereminder_message_part4" version_id="10" version_string="1.0"><![CDATA[days.]]></phrase>
+  <phrase title="userupgradereminder_message_part5" version_id="10" version_string="1.0"><![CDATA[Once your account has expired you can upgrade again.]]></phrase>
+  <phrase title="userupgradereminder_message_part6" version_id="10" version_string="1.0"><![CDATA[Thank you for your support. ]]></phrase>
+  <phrase title="userupgradereminder_subject" version_id="10" version_string="1.0"><![CDATA[Upgrade reminder]]></phrase>
+</phrases>

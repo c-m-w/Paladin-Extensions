@@ -1,0 +1,18 @@
+--- 
+documentroot: /home/palavpvb/public_html
+group: palavpvb
+hascgi: 1
+homedir: /home/palavpvb
+ip: 198.54.120.180
+ipv6: ~
+owner: wh
+phpopenbasedirprotect: 1
+port: 444
+secruleengineoff: ~
+serveradmin: webmaster@paladin-extensions.com
+serveralias: mail.paladin-extensions.com www.paladin-extensions.com
+servername: paladin-extensions.com
+ssl: 1
+usecanonicalname: 'Off'
+user: palavpvb
+userdirprotect: ''

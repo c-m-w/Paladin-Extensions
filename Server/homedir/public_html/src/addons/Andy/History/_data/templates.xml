@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates>
+  <template type="public" title="andy_history" version_id="16" version_string="1.6"><![CDATA[<xf:title>{{ phrase('history_history') }}</xf:title>
+
+<div class="block">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:datalist data-xf-init="responsive-data-list">
+				<xf:datarow rowtype="header">
+					<xf:cell>{{ phrase('history_thread_starter') }}</xf:cell>
+					<xf:cell>{{ phrase('history_title') }}</xf:cell>
+					<xf:cell>{{ phrase('history_forum') }}</xf:cell>
+					<xf:cell>{{ phrase('history_replies') }}</xf:cell>
+					<xf:cell>{{ phrase('history_thread_read_date') }}</xf:cell>
+				</xf:datarow>
+				<xf:foreach loop="$threads" value="$thread">
+					<xf:datarow rowclass="dataList-row--noHover">
+						<xf:cell>
+						<span class="contentRow-figure">
+							<xf:avatar user="{$thread.Thread.User}" size="xs" defaultname="{$thread.Thread.username}" />
+						</span>
+						</xf:cell>
+						
+						<xf:if is="{$thread.Thread.last_post_date} <= {$thread.thread_read_date} OR {$thread.Thread.last_post_username} == {$xf.visitor.username}">
+							<xf:cell href="{{ link('threads/', $thread.Thread) }}">{{ prefix('thread', $thread.Thread.prefix_id, 'html', '') }} {$thread.Thread.title}</xf:cell>
+						</xf:if>
+						
+						<xf:if is="{$thread.Thread.last_post_date} > {$thread.thread_read_date} AND {$thread.Thread.last_post_username} != {$xf.visitor.username}">
+							<xf:cell href="{{ link('threads/unread', $thread.Thread) }}" style="font-weight: 700;">{{ prefix('thread', $thread.Thread.prefix_id, 'html', '') }} {$thread.Thread.title}</xf:cell>
+						</xf:if>
+						
+						<xf:cell><a href="{{ link('forums', $thread.Thread.Forum) }}">{$thread.Thread.Forum.title}</a></xf:cell>
+						<xf:cell>{$thread.Thread.reply_count}</xf:cell>
+						<xf:cell><xf:date time="{$thread.thread_read_date}" /></xf:cell>
+					</xf:datarow>
+				</xf:foreach>
+			</xf:datalist>
+		</div>
+	</div>
+</div>]]></template>
+</templates>

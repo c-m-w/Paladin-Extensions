@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<phrases>
+  <phrase title="membernotes_member_notes" version_id="10" version_string="1.0"><![CDATA[Member notes]]></phrase>
+  <phrase title="membernotes_member_notes_edit" version_id="10" version_string="1.0"><![CDATA[Member notes edit]]></phrase>
+  <phrase title="membernotes_notes" version_id="10" version_string="1.0"><![CDATA[Notes]]></phrase>
+  <phrase title="membernotes_only_staff_can_view_these_notes" version_id="10" version_string="1.0"><![CDATA[Only staff can view these notes.]]></phrase>
+  <phrase title="membernotes_submit" version_id="10" version_string="1.0"><![CDATA[Submit]]></phrase>
+  <phrase title="membersnotes_edit" version_id="10" version_string="1.0"><![CDATA[Edit]]></phrase>
+  <phrase title="permission.memberNotes_view" version_id="10" version_string="1.0"><![CDATA[View]]></phrase>
+  <phrase title="permission_interface.memberNotes" version_id="10" version_string="1.0"><![CDATA[Member notes]]></phrase>
+  <phrase title="widget_def.memberNotes" version_id="10" version_string="1.0"><![CDATA[Member notes]]></phrase>
+  <phrase title="widget_def_desc.memberNotes" version_id="10" version_string="1.0"><![CDATA[Displays a block containing member notes.]]></phrase>
+</phrases>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template_modifications>
+  <modification type="public" template="PAGE_CONTAINER" modification_key="xc_login_as_user_page_container" description="Add link moderate bar &quot;Login As User&quot;" execution_order="10" enabled="1" action="str_replace">
+    <find><![CDATA[<xf:if is="$xf.visitor.is_admin">
+					<a href="{{ base_url('admin.php') }}" class="p-staffBar-link" target="_blank">{{ phrase('admin') }}</a>
+				</xf:if>]]></find>
+    <replace><![CDATA[$0
+
+<xf:include template="xc_login_as_user_staff_bar" />]]></replace>
+  </modification>
+  <modification type="public" template="member_macros" modification_key="xc_login_as_user_member_macros" description="Add template for link &quot;Login as user&quot;" execution_order="10" enabled="1" action="str_replace">
+    <find><![CDATA[<!--[XF:action_group_1:end]-->]]></find>
+    <replace><![CDATA[
+<xf:if is="!$xf.options.xc_login_as_user_no_display_tabs">
+
+	<xf:include template="xc_login_as_user_member_macros" />
+
+</xf:if>
+
+$0]]></replace>
+  </modification>
+</template_modifications>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<options>
+  <option option_id="countdownLink" edit_format="textbox" data_type="string">
+    <default_value></default_value>
+    <relation group_id="countdown" display_order="1"/>
+  </option>
+</options>

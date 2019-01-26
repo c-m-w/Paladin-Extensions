@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<options>
+  <option option_id="th_bookmarksPerPage_bookmarks" edit_format="spinbox" data_type="unsigned_integer">
+    <default_value>20</default_value>
+    <relation group_id="th_bookmarks" display_order="5"/>
+  </option>
+  <option option_id="th_enableContentTypes_bookmarks" edit_format="callback" data_type="array">
+    <default_value>["node","post","resource","thread","xfmg_media"]</default_value>
+    <edit_format_params>\ThemeHouse\Bookmarks\Option\BookmarkHandlers::renderCheckbox</edit_format_params>
+    <sub_options>*</sub_options>
+    <relation group_id="th_bookmarks" display_order="1"/>
+  </option>
+  <option option_id="th_navigationDropdown_bookmarks" edit_format="select" data_type="string">
+    <default_value>recent</default_value>
+    <edit_format_params>recent={{ phrase('th_recent_bookmarks_bookmarks') }}
+sticky={{ phrase('th_stuck_bookmarks_bookmarks') }}
+disabled={{ phrase('disabled') }}</edit_format_params>
+    <relation group_id="th_bookmarks" display_order="100"/>
+  </option>
+  <option option_id="th_popupLimit_bookmarks" edit_format="spinbox" data_type="unsigned_integer">
+    <default_value>5</default_value>
+    <relation group_id="th_bookmarks" display_order="105"/>
+  </option>
+</options>

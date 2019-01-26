@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates>
+  <template type="public" title="changeContentOwner_post_change_author" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[<xf:title>{{ phrase('changeContentOwner_change_post_author') }}</xf:title>
+
+<xf:breadcrumb source="$thread.getBreadcrumbs()" />
+
+<xf:form action="{{ link('posts/change-author', $post) }}"
+	class="block"
+	ajax="true">
+
+	<div class="block-container">
+		<div class="block-body">
+			<xf:textboxrow name="new_author_username" value="" ac="true" label="{{ phrase('changeContentOwner_new_author_name') }}" explain="{{ phrase('changeContentOwner_new_author_name_explain') }}" data-single="true" />
+		</div>
+
+		<xf:submitrow icon="save" sticky="true" />
+	</div>
+</xf:form>]]></template>
+  <template type="public" title="changeContentOwner_post_macros_action_bar" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[<xf:if is="$post.canChangeAuthor()">
+												<a href="{{ link('posts/change-author', $post) }}"
+													class="actionBar-action actionBar-action--changePostAuthor"
+													data-xf-click="overlay">{{ phrase('changeContentOwner_change_post_author') }}</a>
+											</xf:if>]]></template>
+  <template type="public" title="changeContentOwner_profile_post_change_author" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[<xf:title>{{ phrase('changeContentOwner_change_profile_post_author') }}</xf:title>
+
+<xf:breadcrumb href="{{ link('members', $profileUser) }}">{$profileUser.username}</xf:breadcrumb>
+
+<xf:form action="{{ link('profile-posts/change-author', $profilePost) }}"
+	class="block"
+	ajax="true">
+
+	<div class="block-container">
+		<div class="block-body">
+			<xf:textboxrow name="new_author_username" value="" ac="true" label="{{ phrase('changeContentOwner_new_author_name') }}" explain="{{ phrase('changeContentOwner_new_author_name_explain') }}" data-single="true" />
+		</div>
+
+		<xf:submitrow icon="save" sticky="true" />
+	</div>
+</xf:form>]]></template>
+  <template type="public" title="changeContentOwner_profile_post_macros_action_bar" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[<xf:if is="$profilePost.canChangeAuthor()">
+												<a href="{{ link('profile-posts/change-author', $profilePost) }}"
+													class="actionBar-action actionBar-action--changeProfilePostAuthor"
+													data-xf-click="overlay">{{ phrase('changeContentOwner_change_profile_post_author') }}</a>
+											</xf:if>]]></template>
+  <template type="public" title="changeContentOwner_thread_change_author" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[<xf:title>{{ phrase('changeContentOwner_change_thread_author') }}</xf:title>
+
+<xf:breadcrumb source="$thread.getBreadcrumbs()" />
+
+<xf:form action="{{ link('threads/change-author', $thread) }}"
+	class="block"
+	ajax="true">
+
+	<div class="block-container">
+		<div class="block-body">
+			<xf:textboxrow name="new_author_username" value="" ac="true" label="{{ phrase('changeContentOwner_new_author_name') }}" explain="{{ phrase('changeContentOwner_new_author_name_explain') }}" data-single="true" />
+		</div>
+
+		<xf:submitrow icon="save" sticky="true" />
+	</div>
+</xf:form>]]></template>
+  <template type="public" title="changeContentOwner_thread_tools_menu_before_footer" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[<xf:if is="$thread.canChangeAuthor()">
+											<a href="{{ link('threads/change-author', $thread) }}" data-xf-click="overlay" class="menu-linkRow">{{ phrase('changeContentOwner_change_thread_author') }}</a>
+										</xf:if>]]></template>
+  <template type="public" title="changeContentOwner_xfmg_album_change_author" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[<xf:title>{{ phrase('changeContentOwner_change_xfmg_album_owner') }}</xf:title>
+
+<xf:breadcrumb source="$album.getBreadcrumbs()" />
+
+<xf:form action="{{ link('media/albums/change-owner', $album) }}" class="block" ajax="true">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:textboxrow name="new_author_username" value="" ac="true" label="{{ phrase('changeContentOwner_new_author_name') }}" explain="{{ phrase('changeContentOwner_new_author_name_explain') }}" data-single="true" />
+		</div>
+
+		<xf:submitrow icon="save" sticky="true" />
+	</div>
+</xf:form>]]></template>
+  <template type="public" title="changeContentOwner_xfmg_album_view_action_bar" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[<xf:if is="$album.canChangeOwner()">
+										<a href="{{ link('media/albums/change-owner', $album) }}"
+											class="actionBar-action actionBar-action--changeXFMGAlbumOwner actionBar-action--menuItem"
+											data-xf-click="overlay">{{ phrase('changeContentOwner_change_xfmg_album_owner') }}</a>
+									</xf:if>]]></template>
+  <template type="public" title="changeContentOwner_xfmg_album_view_album_tools_menu_top" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[<xf:if is="$album.canChangeOwner()">
+														<a href="{{ link('media/albums/change-owner', $album) }}" data-xf-click="overlay" class="menu-linkRow">{{ phrase('changeContentOwner_change_xfmg_album_owner') }}</a>
+													</xf:if>]]></template>
+  <template type="public" title="changeContentOwner_xfmg_comment_change_author" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[<xf:title>{{ phrase('changeContentOwner_change_xfmg_comment_author') }}</xf:title>
+
+<xf:breadcrumb source="$content.getBreadcrumbs()" />
+
+<xf:form action="{{ link('media/comments/change-author', $comment) }}" class="block" ajax="true">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:textboxrow name="new_author_username" value="" ac="true" label="{{ phrase('changeContentOwner_new_author_name') }}" explain="{{ phrase('changeContentOwner_new_author_name_explain') }}" data-single="true" />
+		</div>
+
+		<xf:submitrow icon="save" sticky="true" />
+	</div>
+</xf:form>]]></template>
+  <template type="public" title="changeContentOwner_xfmg_comment_macros_action_bar" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[<xf:if is="$comment.canChangeAuthor()">
+													<a href="{{ link('media/comments/change-author', $comment) }}"
+														class="actionBar-action actionBar-action--changeXFMGCommentAuthor">{{ phrase('changeContentOwner_change_xfmg_comment_author') }}</a>
+												</xf:if>]]></template>
+  <template type="public" title="changeContentOwner_xfmg_media_change_author" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[<xf:title>{{ phrase('changeContentOwner_change_xfmg_media_author') }}</xf:title>
+
+<xf:breadcrumb source="$mediaItem.getBreadcrumbs()" />
+
+<xf:form action="{{ link('media/change-author', $mediaItem) }}" class="block" ajax="true">
+
+	<div class="block-container">
+		<div class="block-body">
+			<xf:textboxrow name="new_author_username" value="" ac="true" label="{{ phrase('changeContentOwner_new_author_name') }}" explain="{{ phrase('changeContentOwner_new_author_name_explain') }}" data-single="true" />
+		</div>
+
+		<xf:submitrow icon="save" sticky="true" />
+	</div>
+</xf:form>]]></template>
+  <template type="public" title="changeContentOwner_xfmg_media_view_action_bar" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[<xf:if is="$mediaItem.canChangeAuthor()">
+										<a href="{{ link('media/change-author', $mediaItem) }}"
+											class="actionBar-action actionBar-action--changeXFMGMediaAuthor actionBar-action--menuItem"
+											data-xf-click="overlay">{{ phrase('changeContentOwner_change_xfmg_media_author') }}</a>
+									</xf:if>]]></template>
+  <template type="public" title="changeContentOwner_xfmg_media_view_tools_menu_top" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[<xf:if is="$mediaItem.canChangeAuthor()">
+														<a href="{{ link('media/change-author', $mediaItem) }}" data-xf-click="overlay" class="menu-linkRow">{{ phrase('changeContentOwner_change_xfmg_media_author') }}</a>
+													</xf:if>]]></template>
+</templates>

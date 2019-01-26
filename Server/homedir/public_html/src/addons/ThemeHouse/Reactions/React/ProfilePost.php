@@ -1,0 +1,49 @@
+<?php
+
+namespace ThemeHouse\Reactions\React;
+
+use XF\Mvc\Entity\Entity;
+use ThemeHouse\Reactions\Entity\ReactedContent;
+
+class ProfilePost extends AbstractHandler
+{
+    protected $statHandlerKey = 'react_prof_post';
+
+    public function reactsCounted(Entity $entity)
+    {
+        return ($entity->message_state == 'visible');
+    }
+
+    public function getListTitle(Entity $entity)
+    {
+        return \XF::phrase('th_members_who_reacted_profile_post_x_reactions', ['position' => $entity->profile_post_id]);
+    }
+
+    public function getLinkDetails()
+    {
+        return [
+            'link' => 'profile-posts'
+        ];
+    }
+
+    public function canReactContent(Entity $entity, ReactedContent $react = null, &$error = null)
+    {
+        $visitor = \XF::visitor();
+
+        if ($entity->message_state != 'visible') {
+            return false;
+        }
+
+        return parent::canReactContent($entity, $react, $error);
+    }
+
+    public function getStateField()
+    {
+        return 'message_state';
+    }
+
+    public function isPublic()
+    {
+        return true;
+    }
+}

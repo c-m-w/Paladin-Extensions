@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<style_properties>
+  <style_property property_name="xfv_threadstarter_avatar_banner_color" group_name="xfv_threadstarter_properties" title="Custom Thread Starter Corner Avatar Banner Color" description="This color selector is for the Corner Avatar Banners." property_type="value" value_type="color" display_order="15">
+    <value>""</value>
+  </style_property>
+  <style_property property_name="xfv_threadstarter_avatar_banner_text_color" group_name="xfv_threadstarter_properties" title="Custom Thread Starter Avatar Banner Text Color" description="This color selector is for the Corner Avatar Banner Text." property_type="value" value_type="color" display_order="17">
+    <value>""</value>
+  </style_property>
+  <style_property property_name="xfv_threadstarter_avatar_banner_text_size" group_name="xfv_threadstarter_properties" title="Custm Banner Text Size" property_type="value" value_type="number" depends_on="xfv_threadstarter_switch" display_order="3">
+    <value_parameters>min=0
+max=50</value_parameters>
+    <value>"15"</value>
+  </style_property>
+  <style_property property_name="xfv_threadstarter_custom_label" group_name="xfv_threadstarter_properties" title="Thread Starter Custom Label" description="Use a custom Thread Starter banner label.&#10;&lt;br&gt;Default label - &lt;b&gt;Thread Starter&lt;/b&gt;&lt;/br&gt;" property_type="value" value_type="unit" value_group="label" display_order="1">
+    <value>"Thread Starter"</value>
+  </style_property>
+  <style_property property_name="xfv_threadstarter_fa_icon" group_name="xfv_threadstarter_properties" title="Font Awesome Icon" description="Default Icon Format - &lt;b&gt;fa-pencil&lt;/b&gt;&#10;&lt;br&gt;Leave blank for no icon.&amp;nbsp&lt;b&gt;&lt;a href=&quot;http://fontawesome.io/cheatsheet/&quot; target=&quot;_blank&quot;&gt;Icon Reference Chart&lt;/a&gt;&lt;/b&gt;&lt;/br&gt;" property_type="value" value_type="unit" value_group="icon" display_order="9">
+    <value>"fa-pencil fa-lg"</value>
+  </style_property>
+  <style_property property_name="xfv_threadstarter_icon_color" group_name="xfv_threadstarter_properties" title="Custom Icon Color" description="Choose a color for the font awesome icon located within the thread starter banner." property_type="value" value_type="color" value_group="icon" display_order="10">
+    <value>"orange"</value>
+  </style_property>
+  <style_property property_name="xfv_threadstarter_locale" group_name="xfv_threadstarter_properties" title="Thread Starter Banner Locations" description="Choose from various locations for the thread starter banner to be placed." property_type="value" value_type="select" value_group="location" display_order="5">
+    <value_parameters>above_avatar=Above Avatar
+below_user_info=Below User Info
+avatar_banner_tl=Avatar Corner Banner (Top Left)
+avatar_banner_tr=Avatar Corner Banner (Top Right)
+top_message_box_l=Top of Message Box (Title Left)
+top_message_box_c=Top of Message Box (Title Center)
+top_message_box_r=Top of Message Box (Title Right)
+bottom_message_l=Bottom Message Box Footer (Title Left)
+bottom_message_r=Bottom Message Box Footer (Title Right)</value_parameters>
+    <value>"top_message_box_l"</value>
+  </style_property>
+  <style_property property_name="xfv_threadstarter_switch" group_name="xfv_threadstarter_properties" title="Thread Starter" description="Enable / Disable Thread Starter." property_type="value" value_type="radio" value_group="enable" display_order="0">
+    <value_parameters>disable=Disabled
+enable=Enable</value_parameters>
+    <value>"enable"</value>
+  </style_property>
+</style_properties>

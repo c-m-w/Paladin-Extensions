@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html id="XF" lang="en-US" dir="LTR"
+   data-app="public"
+   data-template="error"
+   data-container-key=""
+   data-content-key=""
+   data-logged-in="false"
+   data-cookie-prefix="xf_"
+   class="has-no-js template-error  uix_page--fixed "
+   >
+   <head>
+      <meta charset="utf-8" />
+      <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>Oops! We ran into some problems. | Paladin Extensions</title>
+      <meta property="og:site_name" content="Paladin Extensions" />
+      <meta property="og:title" content="Oops! We ran into some problems." />
+      <meta property="twitter:title" content="Oops! We ran into some problems." />
+      <meta name="theme-color" content="#212428" />
+      <meta name="msapplication-TileColor" content="#212428">
+      <script>
+         if (typeof (window.themehouse) !== 'object') {
+         	window.themehouse = {};
+         }
+         if (typeof (window.themehouse.settings) !== 'object') {
+         	window.themehouse.settings = {};
+         }
+         window.themehouse.settings = {
+         	common: {
+         		'20171204': {
+         			init: false,
+         		},
+         	},
+         	data: {
+         		version: '2.0.1.0',
+         		jsVersion: 'No JS Files',
+         		templateVersion: '2.0.1.0_Release',
+         		betaMode: 0,
+         		theme: '',
+         		url: 'https://paladin-extensions.com/',
+         		user: '0',
+         	},
+         	inputSync: {},
+         	minimalSearch: {
+         		breakpoint: "900",
+         		dropdownBreakpoint: "900",
+         	},
+         	sidebar: {
+                    enabled: '',
+         		link: '/uix/toggle-sidebar.json',
+                    state: '',
+         	},
+                sidebarNav: {
+                    enabled: '',
+         		link: '/uix/toggle-sidebar-navigation.json',
+                    state: '',
+         	},
+         	fab: {
+         		enabled: 1,
+         	},
+         	checkRadius: {
+         		enabled: 1,
+         		selectors: '.p-footer-inner, .uix_extendedFooter, .p-nav, .p-sectionLinks, .p-staffBar, .p-header',
+         	},
+         	nodes: {
+         		enabled: 0,
+         	},
+                nodesCollapse: {
+                    enabled: '1',
+         		link: '/uix/toggle-category.json',
+         		state: '',
+                },
+         	widthToggle: {
+         		enabled: '',
+         		link: '/uix/toggle-width.json',
+         		state: 'fixed',
+         	},
+         }
+         
+         window.document.addEventListener('DOMContentLoaded', function() {
+         	
+         		try {
+         		   window.themehouse.common['20171204'].init();
+         		} catch(e) {
+         		   console.log('Error caught', e);
+         		}
+         	
+         
+         
+         	var jsVersionPrefix = 'No JS Files';
+         	if (typeof(window.themehouse.settings.data.jsVersion) === 'string') {
+         		var jsVersionSplit = window.themehouse.settings.data.jsVersion.split('_');
+         		if (jsVersionSplit.length) {
+         			jsVersionPrefix = jsVersionSplit[0];
+         		}
+         	}
+         	var templateVersionPrefix = 'No JS Template Version';
+         	if (typeof(window.themehouse.settings.data.templateVersion) === 'string') {
+         		var templateVersionSplit = window.themehouse.settings.data.templateVersion.split('_');
+         		if (templateVersionSplit.length) {
+         			templateVersionPrefix = templateVersionSplit[0];
+         		}
+         	}
+         	if (jsVersionPrefix !== templateVersionPrefix) {
+         		var splitFileVersion = jsVersionPrefix.split('.');
+         		var splitTemplateVersion = templateVersionPrefix.split('.');
+         		console.log('version mismatch', jsVersionPrefix, templateVersionPrefix);
+         	}
+         
+         });
+      </script>
+      <link rel="stylesheet" href="/css.php?css=public%3Anormalize.css%2Cpublic%3Acore.less%2Cpublic%3Aapp.less&amp;s=4&amp;l=1&amp;d=1535818946&amp;k=56a8f8f98ae4201a1d95aad9f134c20bd812cfeb" />
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+      <link rel="stylesheet" href="//cdn.materialdesignicons.com/2.0.46/css/materialdesignicons.min.css">
+      <link rel="stylesheet" href="/css.php?css=public%3Aextra.less&amp;s=4&amp;l=1&amp;d=1535818946&amp;k=fe6ce56901c5fea24d12bc200f15f2a0f53e2afc" />
+      <link href='//fonts.googleapis.com/css?family=Roboto:300,400,500,600,700' rel='stylesheet' type='text/css'>
+      <script src="/js/xf/preamble-compiled.js?_v=dca873e2"></script>
+      <link rel="icon" type="image/png" href="/styles/uix_dark/images/favicon.png" sizes="32x32" />
+      <script>
+         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+         (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+         m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+         })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+         
+         ga('create', 'UA-129900584-1', 'auto');
+         ga('send', 'pageview');
+      </script>
+      <style>
+         .uix_headerContainer .p-navSticky.is-sticky {
+         top: 0px !important;
+         }
+         @media (max-width: 900px) {
+         .uix_headerContainer .p-navSticky.is-sticky {
+         top: 0px !important;
+         }
+         }
+         .uix_stickyBodyElement:not(.offCanvasMenu) {
+         top: 110px !important;
+         }
+         @media (max-width: 900px) {
+         .uix_stickyBodyElement:not(.offCanvasMenu) {
+         top: 110px !important;
+         }
+         }
+         @media(min-width: 0px) and (max-width: 900px) {
+         .p-sectionLinks {
+         display: none;
+         }
+         .uix_stickyBodyElement:not(.offCanvasMenu) {
+         top: 70px !important;
+         }
+         @media (max-width: 900px) {
+         .uix_stickyBodyElement:not(.offCanvasMenu) {
+         top: 70px !important;
+         }
+         }
+         }
+      </style>
+   </head>
+   <body data-template="error">
+      <div id="jumpToTop"></div>
+      <div class="uix_pageWrapper--fixed">
+         <div class="p-pageWrapper" id="top">
+            <div class="uix_headerContainer">
+               <div class="uix_headerContainer--stickyFix"></div>
+               <header class="p-header" id="header">
+                  <div class="p-header-inner">
+                     <div class="p-header-content">
+                        <div class="p-header-logo p-header-logo--image">
+                           <a class="uix_logo" href="https://www.paladin-extensions.com/">
+                           <img src="/styles/uix_dark/images/uix-logo.png"
+                              alt="Paladin Extensions"
+                              srcset="/styles/uix_dark/images/uix-logo.png 2x" />
+                           </a>
+                           <a class="uix_logoSmall" href="https://www.paladin-extensions.com/">
+                           <img src="/styles/uix_dark/images/uix-brandmark.png"
+                              alt="Paladin Extensions"
+                              />
+                           </a>
+                        </div>
+                        <div class="p-nav-opposite">
+                           <div class="p-navgroup p-discovery">
+                              <div class="uix_searchBar">
+                                 <div class="uix_searchBarInner">
+                                    <form action="/search/search" method="post" class="uix_searchForm" data-xf-init="quick-search">
+                                       <a class="uix_search--close">
+                                       <i class="uix_icon uix_icon--close"></i>
+                                       </a>
+                                       <input type="text" class="input js-uix_syncValue uix_searchInput uix_searchDropdown__trigger" data-uixsync="search" name="keywords" placeholder="Search…" aria-label="Search" data-menu-autofocus="true" />
+                                       <a href="/search/"
+                                          class="uix_search--settings u-ripple"
+                                          data-xf-key="/"
+                                          aria-label="Search"
+                                          aria-expanded="false"
+                                          aria-haspopup="true"
+                                          title="Search">
+                                       <i class="uix_icon uix_icon--settings"></i>
+                                       </a>
+                                       <span class=" uix_searchIcon">
+                                       <i class="uix_icon uix_icon--search"></i>
+                                       </span>
+                                       <input type="hidden" name="_xfToken" value="1543368467,6583be4670c990d90e7462136af1d2d0" />
+                                    </form>
+                                 </div>
+                                 <a class="uix_searchIconTrigger p-navgroup-link p-navgroup-link--iconic p-navgroup-link--search u-ripple"
+                                    aria-label="Search"
+                                    aria-expanded="false"
+                                    aria-haspopup="true"
+                                    title="Search">
+                                 <i aria-hidden="true"></i>
+                                 </a>
+                                 <a href="/search/"
+                                    class="p-navgroup-link p-navgroup-link--iconic p-navgroup-link--search u-ripple js-uix_minimalSearch__target"
+                                    data-xf-click="menu"
+                                    aria-label="Search"
+                                    aria-expanded="false"
+                                    aria-haspopup="true"
+                                    title="Search">
+                                 <i aria-hidden="true"></i>
+                                 </a>
+                                 <div class="menu menu--structural menu--wide" data-menu="menu" aria-hidden="true">
+                                    <form action="/search/search" method="post"
+                                       class="menu-content"
+                                       data-xf-init="quick-search">
+                                       <h3 class="menu-header">Search</h3>
+                                       <div class="menu-row">
+                                          <input type="text" class="input js-uix_syncValue" name="keywords" data-uixsync="search" placeholder="Search…" aria-label="Search" data-menu-autofocus="true" />
+                                       </div>
+                                       <div class="menu-row">
+                                          <label class="iconic iconic--checkbox iconic--labelled"><input type="checkbox"  name="c[title_only]" value="1" /><i aria-hidden="true"></i>Search titles only</label>
+                                       </div>
+                                       <div class="menu-row">
+                                          <div class="inputGroup">
+                                             <span class="inputGroup-text">By:</span>
+                                             <input class="input" name="c[users]" data-xf-init="auto-complete" placeholder="Member" />
+                                          </div>
+                                       </div>
+                                       <div class="menu-footer">
+                                          <span class="menu-footer-controls">
+                                          <button type="submit" class="button--primary button button--icon button--icon--search"><span class="button-text">Search</span></button>
+                                          <a href="/search/" class="button" rel="nofollow"><span class="button-text">Advanced search…</span></a>
+                                          </span>
+                                       </div>
+                                       <input type="hidden" name="_xfToken" value="1543368467,6583be4670c990d90e7462136af1d2d0" />
+                                    </form>
+                                 </div>
+                                 <div class="menu menu--structural menu--wide uix_searchDropdown__menu" aria-hidden="true">
+                                    <form action="/search/search" method="post"
+                                       class="menu-content"
+                                       data-xf-init="quick-search">
+                                       <input name="keywords"
+                                          class="js-uix_syncValue"
+                                          data-uixsync="search"
+                                          placeholder="Search…"
+                                          aria-label="Search"
+                                          type="hidden" />
+                                       <div class="menu-row">
+                                          <label class="iconic iconic--checkbox iconic--labelled"><input type="checkbox"  name="c[title_only]" value="1" /><i aria-hidden="true"></i>Search titles only</label>
+                                       </div>
+                                       <div class="menu-row">
+                                          <div class="inputGroup">
+                                             <span class="inputGroup-text">By:</span>
+                                             <input class="input" name="c[users]" data-xf-init="auto-complete" placeholder="Member" />
+                                          </div>
+                                       </div>
+                                       <div class="menu-footer">
+                                          <span class="menu-footer-controls">
+                                          <button type="submit" class="button--primary button button--icon button--icon--search"><span class="button-text">Search</span></button>
+                                          <a href="/search/" class="button" rel="nofollow"><span class="button-text">Advanced…</span></a>
+                                          </span>
+                                       </div>
+                                       <input type="hidden" name="_xfToken" value="1543368467,6583be4670c990d90e7462136af1d2d0" />
+                                    </form>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </header>
+               <div class="p-navSticky p-navSticky--all uix_stickyBar" data-top-offset-min="0" data-top-offset-max="0" data-top-offset-breakpoint="900px">
+                  <nav class="p-nav">
+                     <div class="p-nav-inner">
+                        <a class="p-nav-menuTrigger" data-xf-click="off-canvas" data-menu=".js-headerOffCanvasMenu" role="button" tabindex="0">
+                        <i aria-hidden="true"></i>
+                        <span class="p-nav-menuText">Menu</span>
+                        </a>
+                        <div class="p-header-logo p-header-logo--image">
+                           <a class="uix_logo" href="https://www.paladin-extensions.com/">
+                           <img src="/styles/uix_dark/images/uix-logo.png"
+                              alt="Paladin Extensions"
+                              srcset="/styles/uix_dark/images/uix-logo.png 2x" />
+                           </a>
+                           <a class="uix_logoSmall" href="https://www.paladin-extensions.com/">
+                           <img src="/styles/uix_dark/images/uix-brandmark.png"
+                              alt="Paladin Extensions"
+                              />
+                           </a>
+                        </div>
+                        <div class="p-nav-scroller hScroller" data-xf-init="h-scroller">
+                           <div class="hScroller-scroll">
+                              <ul class="p-nav-list js-offCanvasNavSource">
+                                 <li>
+                                    <div class="p-navEl u-ripple " data-has-children="true">
+                                       <a href="/"
+                                          class="p-navEl-link p-navEl-link--splitMenu "
+                                          data-nav-id="forums">Forums</a>
+                                       <a data-xf-key="1"
+                                          data-xf-click="menu"
+                                          data-menu-pos-ref="< .p-navEl"
+                                          data-arrow-pos-ref="< .p-navEl"
+                                          class="p-navEl-splitTrigger"
+                                          role="button"
+                                          tabindex="0"
+                                          aria-label="Toggle expanded"
+                                          aria-expanded="false"
+                                          aria-haspopup="true">
+                                       </a>
+                                       <div class="menu menu--structural" data-menu="menu" aria-hidden="true">
+                                          <div class="menu-content">
+                                             <!--<h4 class="menu-header">Forums</h4>-->
+                                             <a href="/whats-new/posts/"
+                                                class="menu-linkRow u-indentDepth0 js-offCanvasCopy "
+                                                data-nav-id="newPosts">New posts</a>
+                                             <a href="/search/?type=post"
+                                                class="menu-linkRow u-indentDepth0 js-offCanvasCopy "
+                                                data-nav-id="searchForums">Search forums</a>
+                                             <a href="/history/"
+                                                class="menu-linkRow u-indentDepth0 js-offCanvasCopy "
+                                                data-nav-id="history">History</a>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </li>
+                                 <li>
+                                    <div class="p-navEl u-ripple " data-has-children="true">
+                                       <a href="/extensions/"
+                                          class="p-navEl-link p-navEl-link--splitMenu "
+                                          data-nav-id="xfrm">Extensions</a>
+                                       <a data-xf-key="2"
+                                          data-xf-click="menu"
+                                          data-menu-pos-ref="< .p-navEl"
+                                          data-arrow-pos-ref="< .p-navEl"
+                                          class="p-navEl-splitTrigger"
+                                          role="button"
+                                          tabindex="0"
+                                          aria-label="Toggle expanded"
+                                          aria-expanded="false"
+                                          aria-haspopup="true">
+                                       </a>
+                                       <div class="menu menu--structural" data-menu="menu" aria-hidden="true">
+                                          <div class="menu-content">
+                                             <!--<h4 class="menu-header">Extensions</h4>-->
+                                             <a href="/extensions/categories/2"
+                                                class="menu-linkRow u-indentDepth0 js-offCanvasCopy "
+                                                data-nav-id="extensionsFreeExtensions">Free Extensions</a>
+                                             <a href="/extensions/categories/1"
+                                                class="menu-linkRow u-indentDepth0 js-offCanvasCopy "
+                                                data-nav-id="extensionsPremiumExtensions">Premium Extensions</a>
+                                             <a href="/search/?type=resource"
+                                                class="menu-linkRow u-indentDepth0 js-offCanvasCopy "
+                                                data-nav-id="xfrmSearchResources">Search extensions</a>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </li>
+                                 <li>
+                                    <div class="p-navEl u-ripple " data-has-children="true">
+                                       <a href="/members/"
+                                          class="p-navEl-link p-navEl-link--splitMenu "
+                                          data-nav-id="members">Members</a>
+                                       <a data-xf-key="3"
+                                          data-xf-click="menu"
+                                          data-menu-pos-ref="< .p-navEl"
+                                          data-arrow-pos-ref="< .p-navEl"
+                                          class="p-navEl-splitTrigger"
+                                          role="button"
+                                          tabindex="0"
+                                          aria-label="Toggle expanded"
+                                          aria-expanded="false"
+                                          aria-haspopup="true">
+                                       </a>
+                                       <div class="menu menu--structural" data-menu="menu" aria-hidden="true">
+                                          <div class="menu-content">
+                                             <!--<h4 class="menu-header">Members</h4>-->
+                                             <a href="/online/"
+                                                class="menu-linkRow u-indentDepth0 js-offCanvasCopy "
+                                                data-nav-id="currentVisitors">Current visitors</a>
+                                             <a href="/whats-new/profile-posts/"
+                                                class="menu-linkRow u-indentDepth0 js-offCanvasCopy "
+                                                rel="nofollow"
+                                                data-nav-id="newProfilePosts">New profile posts</a>
+                                          </div>
+                                       </div>
+                                    </div>
+                                 </li>
+                                 <li>
+                                    <div class="p-navEl u-ripple " >
+                                       <a href="/link-forums/premium-link.23/"
+                                          class="p-navEl-link  "
+                                          data-xf-key="4"
+                                          data-nav-id="navPremium"><font size="4"><i class="fa fa-shopping-cart" style="padding-right:7px;"></i></font>Premium</a>
+                                    </div>
+                                 </li>
+                              </ul>
+                           </div>
+                        </div>
+                        <div class="uix_activeNavTitle">
+                           <span>
+                           </span>
+                        </div>
+                        <div class="p-nav-opposite">
+                           <div class="p-navgroup p-account p-navgroup--guest">
+                              <a href="/login/" class="p-navgroup-link p-navgroup-link--textual p-navgroup-link--logIn" data-xf-click="menu">
+                              <i></i>
+                              <span class="p-navgroup-linkText">Log in</span>
+                              </a>
+                              <div class="menu menu--structural menu--medium" data-menu="menu" aria-hidden="true" data-href="/login/"></div>
+                              <a href="/register/" class="p-navgroup-link u-ripple p-navgroup-link--textual p-navgroup-link--register" rel="nofollow">
+                              <i></i>
+                              <span class="p-navgroup-linkText">Register</span>
+                              </a>
+                           </div>
+                           <div class="p-navgroup p-discovery">
+                              <a href="/whats-new/"
+                                 class="p-navgroup-link p-navgroup-link--iconic p-navgroup-link--whatsnew"
+                                 title="What&#039;s new">
+                              <i aria-hidden="true"></i>
+                              <span class="p-navgroup-linkText">What's new</span>
+                              </a>
+                              <div class="uix_searchBar">
+                                 <div class="uix_searchBarInner">
+                                    <form action="/search/search" method="post" class="uix_searchForm" data-xf-init="quick-search">
+                                       <a class="uix_search--close">
+                                       <i class="uix_icon uix_icon--close"></i>
+                                       </a>
+                                       <input type="text" class="input js-uix_syncValue uix_searchInput uix_searchDropdown__trigger" data-uixsync="search" name="keywords" placeholder="Search…" aria-label="Search" data-menu-autofocus="true" />
+                                       <a href="/search/"
+                                          class="uix_search--settings u-ripple"
+                                          data-xf-key="/"
+                                          aria-label="Search"
+                                          aria-expanded="false"
+                                          aria-haspopup="true"
+                                          title="Search">
+                                       <i class="uix_icon uix_icon--settings"></i>
+                                       </a>
+                                       <span class=" uix_searchIcon">
+                                       <i class="uix_icon uix_icon--search"></i>
+                                       </span>
+                                       <input type="hidden" name="_xfToken" value="1543368467,6583be4670c990d90e7462136af1d2d0" />
+                                    </form>
+                                 </div>
+                                 <a class="uix_searchIconTrigger p-navgroup-link p-navgroup-link--iconic p-navgroup-link--search u-ripple"
+                                    aria-label="Search"
+                                    aria-expanded="false"
+                                    aria-haspopup="true"
+                                    title="Search">
+                                 <i aria-hidden="true"></i>
+                                 </a>
+                                 <a href="/search/"
+                                    class="p-navgroup-link p-navgroup-link--iconic p-navgroup-link--search u-ripple js-uix_minimalSearch__target"
+                                    data-xf-click="menu"
+                                    aria-label="Search"
+                                    aria-expanded="false"
+                                    aria-haspopup="true"
+                                    title="Search">
+                                 <i aria-hidden="true"></i>
+                                 </a>
+                                 <div class="menu menu--structural menu--wide" data-menu="menu" aria-hidden="true">
+                                    <form action="/search/search" method="post"
+                                       class="menu-content"
+                                       data-xf-init="quick-search">
+                                       <h3 class="menu-header">Search</h3>
+                                       <div class="menu-row">
+                                          <input type="text" class="input js-uix_syncValue" name="keywords" data-uixsync="search" placeholder="Search…" aria-label="Search" data-menu-autofocus="true" />
+                                       </div>
+                                       <div class="menu-row">
+                                          <label class="iconic iconic--checkbox iconic--labelled"><input type="checkbox"  name="c[title_only]" value="1" /><i aria-hidden="true"></i>Search titles only</label>
+                                       </div>
+                                       <div class="menu-row">
+                                          <div class="inputGroup">
+                                             <span class="inputGroup-text">By:</span>
+                                             <input class="input" name="c[users]" data-xf-init="auto-complete" placeholder="Member" />
+                                          </div>
+                                       </div>
+                                       <div class="menu-footer">
+                                          <span class="menu-footer-controls">
+                                          <button type="submit" class="button--primary button button--icon button--icon--search"><span class="button-text">Search</span></button>
+                                          <a href="/search/" class="button" rel="nofollow"><span class="button-text">Advanced search…</span></a>
+                                          </span>
+                                       </div>
+                                       <input type="hidden" name="_xfToken" value="1543368467,6583be4670c990d90e7462136af1d2d0" />
+                                    </form>
+                                 </div>
+                                 <div class="menu menu--structural menu--wide uix_searchDropdown__menu" aria-hidden="true">
+                                    <form action="/search/search" method="post"
+                                       class="menu-content"
+                                       data-xf-init="quick-search">
+                                       <input name="keywords"
+                                          class="js-uix_syncValue"
+                                          data-uixsync="search"
+                                          placeholder="Search…"
+                                          aria-label="Search"
+                                          type="hidden" />
+                                       <div class="menu-row">
+                                          <label class="iconic iconic--checkbox iconic--labelled"><input type="checkbox"  name="c[title_only]" value="1" /><i aria-hidden="true"></i>Search titles only</label>
+                                       </div>
+                                       <div class="menu-row">
+                                          <div class="inputGroup">
+                                             <span class="inputGroup-text">By:</span>
+                                             <input class="input" name="c[users]" data-xf-init="auto-complete" placeholder="Member" />
+                                          </div>
+                                       </div>
+                                       <div class="menu-footer">
+                                          <span class="menu-footer-controls">
+                                          <button type="submit" class="button--primary button button--icon button--icon--search"><span class="button-text">Search</span></button>
+                                          <a href="/search/" class="button" rel="nofollow"><span class="button-text">Advanced…</span></a>
+                                          </span>
+                                       </div>
+                                       <input type="hidden" name="_xfToken" value="1543368467,6583be4670c990d90e7462136af1d2d0" />
+                                    </form>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </nav>
+                  <div class="p-sectionLinks">
+                     <div class="pageContent">
+                        <div class="p-sectionLinks--group">
+                           <div class="p-sectionLinks-inner hScroller" data-xf-init="h-scroller">
+                              <div class="hScroller-scroll">
+                                 <ul class="p-sectionLinks-list">
+                                    <li>
+                                       <div class="p-navEl u-ripple " >
+                                          <a href="/register/"
+                                             class="p-navEl-link  "
+                                             data-xf-key="alt+1"
+                                             data-nav-id="defaultRegister">Register</a>
+                                       </div>
+                                    </li>
+                                 </ul>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="offCanvasMenu offCanvasMenu--nav js-headerOffCanvasMenu" data-menu="menu" aria-hidden="true" data-ocm-builder="navigation">
+               <div class="offCanvasMenu-backdrop" data-menu-close="true"></div>
+               <div class="offCanvasMenu-content">
+                  <div class="offCanvasMenu-header">
+                     Menu
+                     <a class="offCanvasMenu-closer" data-menu-close="true" role="button" tabindex="0" aria-label="Close"></a>
+                  </div>
+                  <div class="js-offCanvasNavTarget"></div>
+               </div>
+            </div>
+            <div class="p-body">
+               <div class="p-body-inner">
+                  <!--XF:EXTRA_OUTPUT-->
+                  <div class="uix_titlebar">
+                     <div class="pageContent">
+                        <div class="p-body-header">
+                           <div class="p-title ">
+                              <h1 class="p-title-value">Oops! We ran into some problems.</h1>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <noscript>
+                     <div class="blockMessage blockMessage--important blockMessage--iconic u-noJsOnly">JavaScript is disabled. For a better experience, please enable JavaScript in your browser before proceeding.</div>
+                  </noscript>
+                  <!--[if lt IE 9]>
+                  <div class="blockMessage blockMessage&#45;&#45;important blockMessage&#45;&#45;iconic">You are using an out of date browser. It  may not display this or other websites correctly.<br />You should upgrade or use an <a href="https://www.google.com/chrome/browser/" target="_blank">alternative browser</a>.</div>
+                  <![endif]-->
+                  <div class="uix_contentWrapper">
+                     <div class="p-body-main  ">
+                        <div class="p-body-content">
+                           <div class="p-body-pageContent">
+                              <div class="blockMessage">
+								 <p><b>Error 410</b> (Gone)</p>
+								 <p>Info for Webmaster:</p>
+								 <ul>
+								    <li>Referring URL: <!--#echo var="HTTP_REFERER" --></li>
+                                    <li>IP Address: <!--#echo var="REMOTE_ADDR" --></li>
+                                    <li>Requested URL: <!--#echo var="REQUEST_URI" --></li>
+                                    <li>Server Name: <!--#echo var="HTTP_HOST" --></li>
+                                    <li>Browser: <!--#echo var="HTTP_USER_AGENT" --></li>
+								    <li>Redirect Status Code: <!--#echo var="REDIRECT_STATUS" --></li>
+								 </ul>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <footer class="p-footer" id="footer">
+               <div class="p-footer-inner">
+                  <div class="pageContent">
+                     <div class="p-footer-row">
+                        <div class="p-footer-row-main">
+                           <ul class="p-footer-linkList p-footer-choosers">
+                              <li><a id="uix_widthToggle--trigger" data-xf-init="tooltip" title="Toggle width" >
+                                 <i class="uix_icon uix_icon--collapse"></i>
+                                 </a>
+                              </li>
+                           </ul>
+                        </div>
+                     </div>
+                     <div class="p-footer-row-opposite">
+                        <ul class="p-footer-linkList">
+                           <li><a href="/misc/contact" data-xf-click="overlay">Contact us</a></li>
+                           <li><a href="/help/terms/">Terms and rules</a></li>
+                           <li><a href="/help/">Help</a></li>
+                           <li><a>&copy;2017-2018 Paladin Extensions</a></li>
+                        </ul>
+                     </div>
+                  </div>
+               </div>
+            </footer>
+         </div>
+      </div>
+      <div class="u-bottomFixer js-bottomFixTarget">
+      </div>
+      <div class="u-scrollButtons js-scrollButtons" data-trigger-type="both">
+         <a href="#top" class="button--scroll button" data-xf-click="scroll-to"><span class="button-text"><i class="fa fa-arrow-up"></i></span></a>
+         <a href="#footer" class="button--scroll button" data-xf-click="scroll-to"><span class="button-text"><i class="fa fa-arrow-down"></i></span></a>
+      </div>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script><script>window.jQuery || document.write('<script src="/js/vendor/jquery/jquery-3.2.1.min.js?_v=dca873e2"><\/script>')</script>
+      <script src="/js/vendor/vendor-compiled.js?_v=dca873e2"></script>
+      <script src="/js/xf/core-compiled.js?_v=dca873e2"></script>
+      <script src="/js/themehouse/uix_dark/ripple.js?_v=dca873e2"></script>
+      <script src="/js/themehouse/global/20171204.min.js?_v=dca873e2"></script>
+      <script src="/js/themehouse/uix_dark/index.min.js?_v=dca873e2"></script>
+      <script src="/js/themehouse/uix_dark/defer.min.js?_v=dca873e2"></script>
+      <script>
+         /******** extra info post toggle ***********/
+         
+         $(document).ready(function() {
+         	$('.thThreads__userExtra--trigger').click(function() {
+         		var parent =  $(this).parents('.message-cell--user');
+         	  	var triggerContainer = $(this).parent('.thThreads__userExtra--toggle');
+         		var container = triggerContainer.siblings('.thThreads__message-userExtras');
+         		var child = container.find('.message-userExtras');
+         		var eleHeight = child.height();
+         		if (parent.hasClass('userExtra--expand')) {
+         			container.css({ height: eleHeight });
+         			parent.toggleClass('userExtra--expand');
+         			window.setTimeout(function() {
+         				container.css({ height: '0' });
+         				window.setTimeout(function() {
+         					container.css({ height: '' });
+         				}, 200);
+         			}, 17);
+         
+         		} else {
+         			parent.toggleClass('userExtra--expand');
+         			container.css({ height: eleHeight });
+         			window.setTimeout(function() {
+         				container.css({ height: '' });
+         			}, 200);
+         		}
+         	});
+         });
+         
+         
+         /******** Backstretch images ***********/
+         
+         $(document).ready(function() {
+         	if ( 0 ) {
+         		 $("body").backstretch([
+         			 "styles/uix_dark/images/bg/1.jpg", "styles/uix_dark/images/bg/2.jpg", "styles/uix_dark/images/bg/3.jpg"
+         	  ], {
+         			duration: 4000,
+         			fade: 500
+         		});
+         	}
+         });
+      </script>
+      <script>
+         jQuery.extend(true, XF.config, {
+         	userId: 0,
+         	url: {
+         		fullBase: 'https://paladin-extensions.com/',
+         		basePath: '/',
+         		css: '/css.php?css=__SENTINEL__&s=4&l=1&d=1535818946',
+         		keepAlive: '/login/keep-alive'
+         	},
+         	cookie: {
+         		path: '/',
+         		domain: '',
+         		prefix: 'xf_'
+         	},
+         	csrf: '1543368467,6583be4670c990d90e7462136af1d2d0',
+         	js: {"\/js\/themehouse\/uix_dark\/ripple.js?_v=dca873e2":true,"\/js\/themehouse\/global\/20171204.min.js?_v=dca873e2":true,"\/js\/themehouse\/uix_dark\/index.min.js?_v=dca873e2":true,"\/js\/themehouse\/uix_dark\/defer.min.js?_v=dca873e2":true},
+         	css: {"public:extra.less":true},
+         	time: {
+         		now: 1543368467,
+         		today: 1543305600,
+         		todayDow: 2
+         	},
+         	borderSizeFeature: '2px',
+         	enableRtnProtect: true,
+         	enableFormSubmitSticky: true,
+         	uploadMaxFilesize: 134217728,
+         	visitorCounts: {
+         		conversations_unread: '0',
+         		alerts_unread: '0',
+         		total_unread: '0',
+         		title_count: true,
+         		icon_indicator: true
+         	},
+         	jsState: {}
+         });
+         
+         jQuery.extend(XF.phrases, {
+         	date_x_at_time_y: "{date} at {time}",
+         	day_x_at_time_y:  "{day} at {time}",
+         	yesterday_at_x:   "Yesterday at {time}",
+         	x_minutes_ago:    "{minutes} minutes ago",
+         	one_minute_ago:   "1 minute ago",
+         	a_moment_ago:     "A moment ago",
+         	today_at_x:       "Today at {time}",
+         	in_a_moment:      "In a moment",
+         	in_a_minute:      "In a minute",
+         	in_x_minutes:     "In {minutes} minutes",
+         	later_today_at_x: "Later today at {time}",
+         	tomorrow_at_x:    "Tomorrow at {time}",
+         
+         	day0: "Sunday",
+         	day1: "Monday",
+         	day2: "Tuesday",
+         	day3: "Wednesday",
+         	day4: "Thursday",
+         	day5: "Friday",
+         	day6: "Saturday",
+         
+         	dayShort0: "Sun",
+         	dayShort1: "Mon",
+         	dayShort2: "Tue",
+         	dayShort3: "Wed",
+         	dayShort4: "Thu",
+         	dayShort5: "Fri",
+         	dayShort6: "Sat",
+         
+         	month0: "January",
+         	month1: "February",
+         	month2: "March",
+         	month3: "April",
+         	month4: "May",
+         	month5: "June",
+         	month6: "July",
+         	month7: "August",
+         	month8: "September",
+         	month9: "October",
+         	month10: "November",
+         	month11: "December",
+         
+         	active_user_changed_reload_page: "The active user has changed. Reload the page for the latest version.",
+         	server_did_not_respond_in_time_try_again: "The server did not respond in time. Please try again.",
+         	oops_we_ran_into_some_problems: "Oops! We ran into some problems.",
+         	oops_we_ran_into_some_problems_more_details_console: "Oops! We ran into some problems. Please try again later. More error details may be in the browser console.",
+         	file_too_large_to_upload: "The file is too large to be uploaded.",
+         	files_being_uploaded_are_you_sure: "Files are still being uploaded. Are you sure you want to submit this form?",
+         	close: "Close",
+         
+         	showing_x_of_y_items: "Showing {count} of {total} items",
+         	showing_all_items: "Showing all items",
+         	no_items_to_display: "No items to display"
+         });
+      </script>
+      <form style="display:none" hidden="hidden">
+         <input type="text" name="_xfClientLoadTime" value="" id="_xfClientLoadTime" tabindex="-1" />
+      </form>
+   </body>
+</html>

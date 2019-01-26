@@ -1,0 +1,14 @@
+{
+    "legacy_addon_id": "UserUpgradeReminder",
+    "title": "User upgrade reminder",
+    "description": "Sends an email reminder to users who have an account upgrade about to expire.",
+    "version_id": 10,
+    "version_string": "1.0",
+    "dev": "XF2 Addons",
+    "dev_url": "https://www.xf2addons.com/",
+    "faq_url": "",
+    "support_url": "",
+    "extra_urls": [],
+    "require": [],
+    "icon": "icon.jpg"
+}

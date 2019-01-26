@@ -1,0 +1,14 @@
+{
+    "legacy_addon_id": "",
+    "title": "[xFv] Thread Starter",
+    "description": "Thread Starter allows members see who started the thread they are veiwing with a Thread Starter banner.",
+    "version_id": 1000500,
+    "version_string": "1.0.5",
+    "dev": "http://xfvault.com",
+    "dev_url": "http://xfvault.com",
+    "faq_url": "http://xfvault.com",
+    "support_url": "http://xfvault.com",
+    "extra_urls": [],
+    "require": [],
+    "icon": "icon.jpg"
+}

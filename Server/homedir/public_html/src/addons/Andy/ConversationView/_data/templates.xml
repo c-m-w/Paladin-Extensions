@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates>
+  <template type="public" title="andy_conversationview" version_id="12" version_string="1.2"><![CDATA[<xf:title>{{ phrase('conversationview_conversation_view') }}</xf:title>
+
+<xf:if is="{$username}">
+	{{ phrase('conversationview_conversations_started_by') }}: {$username}
+	<br />
+	{{ phrase('conversationview_limit') }}: {$limit}
+	<br />
+	<br />
+	<a href="{{ link('conversationview') }}">{{ phrase('conversationview_show_all') }}</a>
+</xf:if>
+	
+<xf:if is="!{$username}">
+	{{ phrase('conversationview_conversations_started_by') }}: {{ phrase('conversationview_all') }}
+	<br />
+	{{ phrase('conversationview_limit') }}: {$limit}
+	<br />
+	<br />
+	<a href="{{ link('conversationview/filter') }}">{{ phrase('conversationview_filter') }}</a>
+</xf:if>
+
+<br />
+<br />
+
+<div class="block-container">
+	<div class="block-body">
+		<xf:datalist data-xf-init="responsive-data-list">
+			<xf:datarow rowtype="header">
+				<xf:cell>{{ phrase('conversationview_title') }}</xf:cell>
+				<xf:cell>{{ phrase('conversationview_conversation_starter') }}</xf:cell>
+				<xf:cell>{{ phrase('conversationview_recipients') }}</xf:cell>
+				<xf:cell>{{ phrase('conversationview_last_message_date') }}</xf:cell>
+				<xf:cell>{{ phrase('conversationview_reply_count') }}</xf:cell>
+			</xf:datarow>
+			<xf:foreach loop="$results" value="$result">
+				<xf:datarow rowclass="dataList-row--noHover">
+					<xf:cell href="{{ link('conversationview/conversation', '', {'conversation_id': $result.conversation_id}) }}">{$result.title}</xf:cell>
+					<xf:cell><xf:username user="{$result.user}" /></xf:cell>
+					<xf:cell>{$result.recipients}</xf:cell>
+					<xf:cell><xf:date time="{$result.last_message_date}" /></xf:cell>
+					<xf:cell>{$result.reply_count}</xf:cell>
+				</xf:datarow>
+			</xf:foreach>
+		</xf:datalist>
+	</div>
+</div>]]></template>
+  <template type="public" title="andy_conversationview_attachments" version_id="12" version_string="1.2"><![CDATA[<xf:title>{{ phrase('conversationview_conversation_view') }}</xf:title>
+
+{{ phrase('conversationview_message_id') }}: {$messageId}
+<br /><br />
+{$results|raw}]]></template>
+  <template type="public" title="andy_conversationview_conversation" version_id="12" version_string="1.2"><![CDATA[<xf:title>{{ phrase('conversationview_conversation_view') }}</xf:title>
+
+{{ phrase('conversationview_conversation_id') }}: {$conversationId}
+<br />
+{{ phrase('conversationview_title') }}: {$conversationTitle}
+<br />
+{{ phrase('conversationview_starter') }}: {$starter}
+<br />
+{{ phrase('conversationview_recipients') }}: {$recipients}
+<br /><br />
+
+<a href="{{ link('conversationview/delete/', '', {'conversation_id': $conversationId}) }}">{{ phrase('conversationview_delete_conversation') }}</a>
+<br /><br />
+
+<div class="block-container">
+	<div class="block-body">
+		<xf:datalist data-xf-init="responsive-data-list">
+			<xf:datarow rowtype="header">
+				<xf:cell>{{ phrase('conversationview_message_id') }}</xf:cell>
+				<xf:cell>{{ phrase('conversationview_message_date') }}</xf:cell>
+				<xf:cell>{{ phrase('conversationview_username') }}</xf:cell>
+				<xf:cell>{{ phrase('conversationview_message') }}</xf:cell>
+				<xf:cell>{{ phrase('conversationview_attachments') }}</xf:cell>
+			</xf:datarow>
+			<xf:foreach loop="$messages" value="$message">
+				<xf:datarow rowclass="dataList-row--noHover">
+					<xf:cell>{$message.message_id}</xf:cell>
+					<xf:cell><xf:date time="{$message.message_date}" /></xf:cell>
+					<xf:cell>{$message.username}</xf:cell>
+					<xf:cell>{$message.message|nl2br}</xf:cell>
+					
+					<xf:if is="{$message.attach_count} > 0">
+						<xf:cell href="{{ link('conversationview/viewattachments', '', {'message_id': $message.message_id}) }}">{$message.attach_count}</xf:cell>
+					</xf:if>
+					<xf:if is="{$message.attach_count} == 0">
+						<xf:cell>{$message.attach_count}</xf:cell>
+					</xf:if>
+
+				</xf:datarow>
+			</xf:foreach>
+		</xf:datalist>
+	</div>
+</div>]]></template>
+  <template type="public" title="andy_conversationview_filter" version_id="12" version_string="1.2"><![CDATA[<xf:title>{{ phrase('conversationview_conversation_view') }}</xf:title>
+
+<xf:form action="{{ link('conversationview/') }}" class="block">
+	<div class="block-container">
+		<div class="block-body">
+            <xf:textboxrow name="username" placeholder="{{ phrase('conversationview_member') }}" ac="single" autocomplete="off">
+                <xf:label>{{ phrase('conversationview_conversations_started_by') }}</xf:label>
+            </xf:textboxrow>
+		</div>
+	</div>
+
+	<xf:submitrow submit="{{ phrase('conversationview_submit') }}" />
+
+</xf:form>]]></template>
+</templates>

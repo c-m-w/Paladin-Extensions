@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<options>
+  <option option_id="th_reactHandlers_reactions" edit_format="callback" data_type="array" validation_class="ThemeHouse\Reactions\Option\ReactHandler" validation_method="verifyOption">
+    <default_value>{"conversation_message":true,"post":true,"profile_post":true,"profile_post_comment":true,"resource_update":true}</default_value>
+    <edit_format_params>ThemeHouse\Reactions\Option\ReactHandler::renderCheckbox</edit_format_params>
+    <sub_options>*</sub_options>
+    <relation group_id="thReactions" display_order="10"/>
+  </option>
+</options>

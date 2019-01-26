@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<phrases>
+  <phrase title="permission.xfv_thread_starter_xfv_ts_view" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[View Thread Starter Banner]]></phrase>
+  <phrase title="permission_interface.xfv_thread_starter" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[[xFv] Thread Starter]]></phrase>
+  <phrase title="style_prop.xfv_threadstarter_avatar_banner_color" version_id="1000400" version_string="1.0.4"><![CDATA[Custom Thread Starter Corner Avatar Banner Color]]></phrase>
+  <phrase title="style_prop.xfv_threadstarter_avatar_banner_text_color" version_id="1000400" version_string="1.0.4"><![CDATA[Custom Thread Starter Avatar Banner Text Color]]></phrase>
+  <phrase title="style_prop.xfv_threadstarter_avatar_banner_text_size" version_id="1000500" version_string="1.0.5"><![CDATA[Custm Banner Text Size]]></phrase>
+  <phrase title="style_prop.xfv_threadstarter_custom_label" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Thread Starter Custom Label]]></phrase>
+  <phrase title="style_prop.xfv_threadstarter_fa_icon" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Font Awesome Icon]]></phrase>
+  <phrase title="style_prop.xfv_threadstarter_icon_color" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Custom Icon Color]]></phrase>
+  <phrase title="style_prop.xfv_threadstarter_locale" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Thread Starter Banner Locations]]></phrase>
+  <phrase title="style_prop.xfv_threadstarter_switch" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Thread Starter]]></phrase>
+  <phrase title="style_prop_desc.xfv_threadstarter_avatar_banner_color" version_id="1000400" version_string="1.0.4"><![CDATA[This color selector is for the Corner Avatar Banners.]]></phrase>
+  <phrase title="style_prop_desc.xfv_threadstarter_avatar_banner_text_color" version_id="1000400" version_string="1.0.4"><![CDATA[This color selector is for the Corner Avatar Banner Text.]]></phrase>
+  <phrase title="style_prop_desc.xfv_threadstarter_avatar_banner_text_size" version_id="1000500" version_string="1.0.5"><![CDATA[]]></phrase>
+  <phrase title="style_prop_desc.xfv_threadstarter_custom_label" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Use a custom Thread Starter banner label.
+<br>Default label - <b>Thread Starter</b></br>]]></phrase>
+  <phrase title="style_prop_desc.xfv_threadstarter_fa_icon" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Default Icon Format - <b>fa-pencil</b>
+<br>Leave blank for no icon.&nbsp<b><a href="http://fontawesome.io/cheatsheet/" target="_blank">Icon Reference Chart</a></b></br>]]></phrase>
+  <phrase title="style_prop_desc.xfv_threadstarter_icon_color" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Choose a color for the font awesome icon located within the thread starter banner.]]></phrase>
+  <phrase title="style_prop_desc.xfv_threadstarter_locale" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Choose from various locations for the thread starter banner to be placed.]]></phrase>
+  <phrase title="style_prop_desc.xfv_threadstarter_switch" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[Enable / Disable Thread Starter.]]></phrase>
+  <phrase title="style_prop_group.xfv_threadstarter_properties" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[[xFv] Thread Starter]]></phrase>
+  <phrase title="style_prop_group_desc.xfv_threadstarter_properties" version_id="1000010" version_string="1.0.0 Alpha"><![CDATA[]]></phrase>
+</phrases>

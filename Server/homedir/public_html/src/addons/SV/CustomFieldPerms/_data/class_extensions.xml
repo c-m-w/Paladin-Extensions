@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<class_extensions>
+  <extension from_class="XF\Admin\Controller\UserField" to_class="SV\CustomFieldPerms\XF\Admin\Controller\UserField" execute_order="6108" active="1"/>
+  <extension from_class="XF\Entity\UserField" to_class="SV\CustomFieldPerms\XF\Entity\UserField" execute_order="6108" active="1"/>
+  <extension from_class="XF\Entity\UserProfile" to_class="SV\CustomFieldPerms\XF\Entity\UserProfile" execute_order="6108" active="1"/>
+</class_extensions>

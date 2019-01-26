@@ -1,0 +1,39 @@
+; cPanel first:11.70.0.57 (update_time):1543291591 Cpanel::ZoneFile::VERSION:1.3 hostname:premium57.web-hosting.com latest:11.70.0.57
+; Zone file for paladin-extensions.com
+$TTL 1200
+paladin-extensions.com.	1800000	IN	SOA	dns1.namecheaphosting.com.	cpanel.tech.namecheap.com.	(
+						2018112702 ;Serial Number
+						86400 ;refresh
+						7200 ;retry
+						3600000 ;expire
+						86400	)
+
+paladin-extensions.com.	1800000	IN	NS	dns1.namecheaphosting.com.
+paladin-extensions.com.	1800000	IN	NS	dns2.namecheaphosting.com.
+
+
+paladin-extensions.com.	1200	IN	A	198.54.120.180
+
+paladin-extensions.com.	1200	IN	MX	0	mail.paladin-extensions.com.
+
+mail	1200	IN	A	198.54.120.180
+www	1200	IN	CNAME	paladin-extensions.com.
+ftp	1200	IN	A	198.54.120.180
+_carddavs._tcp	1200	IN	SRV	0	0	2080	premium57.web-hosting.com.
+_carddavs._tcp	1200	IN	TXT	path=/
+cpanel	1200	IN	A	198.54.120.180
+autoconfig	1200	IN	A	198.54.120.180
+_caldavs._tcp	1200	IN	SRV	0	0	2080	premium57.web-hosting.com.
+_caldavs._tcp	1200	IN	TXT	path=/
+_autodiscover._tcp	1200	IN	SRV	0	0	443	cpanelemaildiscovery.cpanel.net.
+cpcalendars	1200	IN	A	198.54.120.180
+_caldav._tcp	1200	IN	SRV	0	0	2079	premium57.web-hosting.com.
+_caldav._tcp	1200	IN	TXT	path=/
+_carddav._tcp	1200	IN	SRV	0	0	2079	premium57.web-hosting.com.
+_carddav._tcp	1200	IN	TXT	path=/
+webdisk	1200	IN	A	198.54.120.180
+whm	1200	IN	A	198.54.120.180
+cpcontacts	1200	IN	A	198.54.120.180
+autodiscover	1200	IN	A	198.54.120.180
+webmail	1200	IN	A	198.54.120.180
+default._domainkey	1200	IN	TXT	"v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA4uVdhTZUkUuA1czdISnVFuOBRj0IRhAO1to9/D4ZQvGp+FjgfJXRmXb+6MAYZVJRBrFJQltZdioWMEXSAs6lz+E3GhhseBTt/Sz5Zwvv8cEHcNd8wCewX2orCvBAXRAxcixFF7B7qPA/YGdXGvQzP/mzTkm6ur3pp5kQWPGZZk45e8J4tAdqz+SzBX+JqnzNP" YakoWwSlRxnJ4wyWefo/kOwZ8zqHUlFa8a1eFazZplDdscSYsVrMCe9oYA2sdZG4eXo6ydjIypHo474283nz+ddLPuzdQlFJggUtEa2vUx9np5e6brlytCVU0FvpSeU1Oq/LLA5SgxUL2ZYnE+nQwIDAQAB\;

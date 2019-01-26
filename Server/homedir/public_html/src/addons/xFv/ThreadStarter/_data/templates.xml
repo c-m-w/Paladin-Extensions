@@ -1,0 +1,374 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates>
+  <template type="public" title="xfv_threadstarter" version_id="1000500" version_string="1.0.5"><![CDATA[<xf:if is="{{ $xf.visitor.hasPermission('xfv_thread_starter', 'xfv_ts_view') }}">
+<xf:css src="xfv_threadstarter.less" />
+
+<xf:if is="property('xfv_threadstarter_switch') == 'enable' AND $thread.user_id == $post.user_id">
+    <div class="TS" data-xf-init="tooltip" title="{{ property('xfv_threadstarter_custom_label') }}"><i class="fa {{ property('xfv_threadstarter_fa_icon') }}" aria-hidden="true"></i> {{ property('xfv_threadstarter_custom_label') }}</div>
+</xf:if>
+</xf:if>]]></template>
+  <template type="public" title="xfv_threadstarter.less" version_id="1000500" version_string="1.0.5"><![CDATA[div.TS .fa
+{
+	color: @xf-xfv_threadstarter_icon_color;
+}
+<xf:if is="property('xfv_threadstarter_locale') == 'top_message_box_l'">
+div.TS
+{
+	width: auto;
+	height: auto;
+	padding: 4px 8px;
+    margin-bottom: 0px;
+    font-weight: 400;
+    text-decoration: none;
+    font-size: {{ property('xfv_threadstarter_avatar_banner_text_size') }}px;
+    color: @xf-paletteColor4;
+    background: @xf-paletteColor1;
+    border-bottom: 1px solid @xf-borderColorLight;
+    background: linear-gradient(0deg, @xf-paletteColor1, @xf-paletteColor1);
+	text-align: left;	
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
+}
+</xf:if>
+<xf:if is="property('xfv_threadstarter_locale') == 'top_message_box_c'">
+div.TS
+{
+	width: auto;
+	height: auto;
+	padding: 4px 8px;
+    margin-bottom: 0px;
+    font-weight: 400;
+    text-decoration: none;
+    font-size: {{ property('xfv_threadstarter_avatar_banner_text_size') }}px;
+    color: @xf-paletteColor4;
+    background: @xf-paletteColor1;
+    border-bottom: 1px solid @xf-borderColorLight;
+    background: linear-gradient(0deg, @xf-paletteColor1, @xf-paletteColor1);
+	text-align: center;	
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
+}
+</xf:if>
+<xf:if is="property('xfv_threadstarter_locale') == 'top_message_box_r'">
+div.TS
+{
+	width: auto;
+	height: auto;
+	padding: 4px 8px;
+    margin-bottom: 0px;
+    font-weight: 400;
+    text-decoration: none;
+    font-size: {{ property('xfv_threadstarter_avatar_banner_text_size') }}px;
+    color: @xf-paletteColor4;
+    background: @xf-paletteColor1;
+    border-bottom: 1px solid @xf-borderColorLight;
+    background: linear-gradient(0deg, @xf-paletteColor1, @xf-paletteColor1);
+	text-align: right;	
+	border-top-left-radius: 4px;
+	border-top-right-radius: 4px;
+}
+</xf:if>
+<xf:if is="property('xfv_threadstarter_locale') == 'above_avatar'">
+div.TS
+{
+	display: block;
+	width: auto;
+	height: auto;
+	text-align: center;
+	padding: 4px 8px;
+    margin-bottom: 8px;
+	margin-top: -2px;
+    font-weight: 400;
+    text-decoration: none;
+    font-size: {{ property('xfv_threadstarter_avatar_banner_text_size') }}px;
+    color: @xf-paletteColor4;
+    background: @xf-paletteColor1;
+    border-bottom: 1px solid @xf-borderColorLight;
+    background: linear-gradient(0deg, @xf-paletteColor1, @xf-paletteColor1);
+	float: ;
+	border-radius: 2px;
+}
+</xf:if>
+<xf:if is="property('xfv_threadstarter_locale') == 'below_user_info'">
+div.TS
+{
+	width: auto;
+	height: auto;
+	text-align: center;
+	padding: 4px 8px;
+	margin-top: 3px;
+    margin-bottom: 0px;
+    font-weight: 400;
+    text-decoration: none;
+    font-size: {{ property('xfv_threadstarter_avatar_banner_text_size') }}px;
+    color: @xf-paletteColor4;
+    background: @xf-paletteColor1;
+    border-bottom: 1px solid @xf-borderColorLight;
+    background: linear-gradient(0deg, @xf-paletteColor1, @xf-paletteColor1);
+	float: ;
+	border-radius: 2px;
+}
+</xf:if>
+<xf:if is="property('xfv_threadstarter_locale') == 'bottom_message_l'">
+div.TS
+{
+	display: inline-block;
+	width: auto;
+	height: auto;
+	text-align: center;
+	padding: 4px 8px;
+	margin-top: 3px;
+    margin-bottom: 0px;
+    font-weight: 400;
+    text-decoration: none;
+    font-size: {{ property('xfv_threadstarter_avatar_banner_text_size') }}px;
+    color: @xf-paletteColor4;
+    background: @xf-paletteColor1;
+    border-bottom: 1px solid @xf-borderColorLight;
+    background: linear-gradient(0deg, @xf-paletteColor1, @xf-paletteColor1);
+	float: ;
+	border-radius: 2px;
+}
+</xf:if>
+<xf:if is="property('xfv_threadstarter_locale') == 'bottom_message_r'">
+div.TS
+{
+	display: inline-block;
+	width: auto;
+	height: auto;
+	text-align: center;
+	padding: 4px 8px;
+	margin-top: 3px;
+    margin-bottom: 0px;
+    font-weight: 400;
+    text-decoration: none;
+    font-size: {{ property('xfv_threadstarter_avatar_banner_text_size') }}px;
+    color: @xf-paletteColor4;
+    background: @xf-paletteColor1;
+    border-bottom: 1px solid @xf-borderColorLight;
+    background: linear-gradient(0deg, @xf-paletteColor1, @xf-paletteColor1);
+	float: right;
+	border-radius: 2px;
+}
+</xf:if>]]></template>
+  <template type="public" title="xfv_threadstarter_corner_banners" version_id="1000500" version_string="1.0.5"><![CDATA[<xf:if is="{{ $xf.visitor.hasPermission('xfv_thread_starter', 'xfv_ts_view') }}">
+   <xf:css src="xfv_threadstarter_corner_banners.less" />
+
+   <xf:if is="$user.user_id == $TS">
+      <div class="box">
+         <div class="ribbon" data-xf-init="tooltip" title="{{ property('xfv_threadstarter_custom_label') }}"><span>{{ property('xfv_threadstarter_custom_label') }}</span></div>		   		  
+     </div>
+   </xf:if>
+</xf:if>]]></template>
+  <template type="public" title="xfv_threadstarter_corner_banners.less" version_id="1000500" version_string="1.0.5"><![CDATA[<xf:if is="property('xfv_threadstarter_locale') == 'avatar_banner_tl'">
+
+.ribbon {
+  position: absolute;
+  left: -5px; top: -6px;
+  z-index: 1;
+  overflow: hidden;
+  width: 75px;
+  height: 75px;
+  text-align: right;
+}
+.ribbon span {
+  font-size: {{ property('xfv_threadstarter_avatar_banner_text_size') }}px;
+  font-weight: bold;
+  <xf:if is="property('xfv_threadstarter_avatar_banner_text_color')">
+  color: @xf-xfv_threadstarter_avatar_banner_text_color;
+  <xf:else />
+  color: @xf-linkColor;
+  </xf:if>
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 20px;
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+  width: 96px;
+  display: block;
+  background: @xf-contentHighlightBg;
+  background: @xf-xfv_threadstarter_avatar_banner_color;
+  background: linear-gradient(@xf-xfv_threadstarter_avatar_banner_color 0%, @xf-contentHighlightBg  100%);
+  box-shadow: 0 6px 10px -5px rgba(0, 0, 0, 0.5);
+  position: absolute;
+  top: 19px; left: -21px;
+}
+.ribbon span::before {
+  content: "";
+  position: absolute; left: 0px; top: 100%;
+  z-index: -1;
+  border-left: 3px solid rgb(116, 116, 116);
+  border-right: 3px solid transparent;
+  border-bottom: 3px solid transparent;
+  border-top: 3px solid rgb(116, 116, 116);
+}
+.ribbon span::after {
+  content: "";
+  position: absolute; right: 0px; top: 100%;
+  z-index: -1;
+  border-left: 3px solid transparent;
+  border-right: 3px solid rgb(116, 116, 116);
+  border-bottom: 3px solid transparent;
+  border-top: 3px solid rgb(116, 116, 116);
+}
+
+@media (max-width: @xf-responsiveMedium)
+{
+
+.ribbon {
+  position: table;
+  left: -0px; top: -0px;
+  z-index: 1;
+  overflow: hidden;
+  width: 48px;
+  height: 48px;
+  text-align: right;
+}
+.ribbon span {
+  font-size: {{ property('xfv_threadstarter_avatar_banner_text_size') }}px;
+  font-weight: bold;
+  <xf:if is="property('xfv_threadstarter_avatar_banner_text_color')">
+  color: @xf-xfv_threadstarter_avatar_banner_text_color;
+  <xf:else />
+  color: @xf-linkColor;
+  </xf:if>
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 20px;
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+  width: 96px;
+  display: block;
+  background: @xf-contentHighlightBg;
+  background: @xf-xfv_threadstarter_avatar_banner_color;
+  background: linear-gradient(@xf-xfv_threadstarter_avatar_banner_color 0%, @xf-contentHighlightBg  100%);
+  box-shadow: 0 6px 10px -5px rgba(0, 0, 0, 0.5);
+  position: absolute;
+  top: 19px; left: -21px;
+}
+.ribbon span::before {
+  content: "";
+  position: absolute; left: 0px; top: 100%;
+  z-index: -1;
+  border-left: 3px solid rgb(116, 116, 116);
+  border-right: 3px solid transparent;
+  border-bottom: 3px solid transparent;
+  border-top: 3px solid rgb(116, 116, 116);
+}
+.ribbon span::after {
+  content: "";
+  position: absolute; right: 0px; top: 100%;
+  z-index: -1;
+  border-left: 3px solid transparent;
+  border-right: 3px solid rgb(116, 116, 116);
+  border-bottom: 3px solid transparent;
+  border-top: 3px solid rgb(116, 116, 116);
+}
+}
+
+</xf:if>
+
+<xf:if is="property('xfv_threadstarter_locale') == 'avatar_banner_tr'">
+.ribbon {
+  position: absolute;
+  right: -5px; top: -6px;
+  z-index: 1;
+  overflow: hidden;
+  width: 75px; height: 75px;
+  text-align: right;
+}
+.ribbon span {
+  font-size: {{ property('xfv_threadstarter_avatar_banner_text_size') }}px;
+  font-weight: bold;
+  <xf:if is="property('xfv_threadstarter_avatar_banner_text_color')">
+  color: @xf-xfv_threadstarter_avatar_banner_text_color;
+  <xf:else />
+  color: @xf-linkColor;
+  </xf:if>
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 20px;
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  width: 96px;
+  display: block;
+  background: @xf-contentHighlightBg;
+  background: @xf-xfv_threadstarter_avatar_banner_color;
+  background: linear-gradient(@xf-xfv_threadstarter_avatar_banner_color 0%, @xf-contentHighlightBg  100%);
+  box-shadow: 0 6px 10px -5px rgba(0, 0, 0, 0.5);
+  position: absolute;
+  top: 19px; right: -21px;
+}
+.ribbon span::before {
+  content: "";
+  position: absolute; left: 0px; top: 100%;
+  z-index: -1;
+  border-left: 3px solid rgb(116, 116, 116);
+  border-right: 3px solid transparent;
+  border-bottom: 3px solid transparent;
+  border-top: 3px solid rgb(116, 116, 116);
+}
+.ribbon span::after {
+  content: "";
+  position: absolute; right: 0px; top: 100%;
+  z-index: -1;
+  border-left: 3px solid transparent;
+  border-right: 3px solid rgb(116, 116, 116);
+  border-bottom: 3px solid transparent;
+  border-top: 3px solid rgb(116, 116, 116);
+}
+@media (max-width: @xf-responsiveMedium)
+{
+
+.ribbon {
+  position: table;
+  left: -0px; top: -0px;
+  z-index: 1;
+  overflow: hidden;
+  width: 48px;
+  height: 48px;
+  text-align: right;
+}
+.ribbon span {
+  font-size: {{ property('xfv_threadstarter_avatar_banner_text_size') }}px;
+  font-weight: bold;
+  <xf:if is="property('xfv_threadstarter_avatar_banner_text_color')">
+  color: @xf-xfv_threadstarter_avatar_banner_text_color;
+  <xf:else />
+  color: @xf-linkColor;
+  </xf:if>
+  text-transform: uppercase;
+  text-align: center;
+  line-height: 20px;
+  transform: rotate(-45deg);
+  -webkit-transform: rotate(-45deg);
+  width: 96px;
+  display: block;
+  background: @xf-contentHighlightBg;
+  background: @xf-xfv_threadstarter_avatar_banner_color;
+  background: linear-gradient(@xf-xfv_threadstarter_avatar_banner_color 0%, @xf-contentHighlightBg  100%);
+  box-shadow: 0 6px 10px -5px rgba(0, 0, 0, 0.5);
+  position: absolute;
+  top: 19px; left: -21px;
+}
+.ribbon span::before {
+  content: "";
+  position: absolute; left: 0px; top: 100%;
+  z-index: -1;
+  border-left: 3px solid rgb(116, 116, 116);
+  border-right: 3px solid transparent;
+  border-bottom: 3px solid transparent;
+  border-top: 3px solid rgb(116, 116, 116);
+}
+.ribbon span::after {
+  content: "";
+  position: absolute; right: 0px; top: 100%;
+  z-index: -1;
+  border-left: 3px solid transparent;
+  border-right: 3px solid rgb(116, 116, 116);
+  border-bottom: 3px solid transparent;
+  border-top: 3px solid rgb(116, 116, 116);
+}
+}
+</xf:if>]]></template>
+</templates>

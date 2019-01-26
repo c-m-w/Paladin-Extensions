@@ -1,0 +1,12 @@
+{
+    "src/addons/xFv/ThreadStarter/addon.json": "080e017fde51cad7208071abf38e881c7cffc72df6383a7641f108ef3ca6321e",
+    "src/addons/xFv/ThreadStarter/icon.jpg": "771aab6e0732c175a87348812080f9dfa4b4df8add1c05ecec5c0f4442e3a9b8",
+    "src/addons/xFv/ThreadStarter/Setup.php": "554b4a735e3640e460a4596fad6d4c73c3d40a8f11ee965437ae305de0cfe5b6",
+    "src/addons/xFv/ThreadStarter/_data/permissions.xml": "bb69686f0f12ab08afb62a031705b2afbf6a876a1aa463bb174b90c9339a4708",
+    "src/addons/xFv/ThreadStarter/_data/permission_interface_groups.xml": "65b4aaaa02194829c25f62719f5fe4360f82d6b2a4188ac83eada30c8a423682",
+    "src/addons/xFv/ThreadStarter/_data/phrases.xml": "c640c5cdd197ea2b1f1a687d58b10bc70a03d5646468445408c6cff38ca51185",
+    "src/addons/xFv/ThreadStarter/_data/style_properties.xml": "53d3af3c326b5d39312fbf9ff001a89e53644787154c8ee604cc0157cc17d3bc",
+    "src/addons/xFv/ThreadStarter/_data/style_property_groups.xml": "ee1b75f28ade698691d1b0295b00928cf0f9b584e1307dc43a3bed927fb1921e",
+    "src/addons/xFv/ThreadStarter/_data/templates.xml": "643c6da83b2415dcde8e1a3b25e330515ffbbf87d77620b54aa61e0f50758852",
+    "src/addons/xFv/ThreadStarter/_data/template_modifications.xml": "9af6c2c7eda7ad737092200377b034b0a2f0e05ddb60a83d0b5b7b1deebda468"
+}

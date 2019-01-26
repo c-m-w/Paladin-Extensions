@@ -1,0 +1,9 @@
+{
+    "src/addons/Justin/EmailCheck/addon.json": "71b7679f4691f403230bb0e28be7aaff8636c06059dcfd42883e16fd69ea4715",
+    "src/addons/Justin/EmailCheck/Setup.php": "898faf1e7dc07771282b9afa271228743ee9bfd721835878000b418b85f7f01c",
+    "src/addons/Justin/EmailCheck/XF/Entity/User.php": "cddcff410fe6e139ecdb3003e1bcf0eaba7a7e75501b1c907faf03db4a122d0e",
+    "src/addons/Justin/EmailCheck/_data/class_extensions.xml": "59ceedd6c6eef21c71b5c6a0b04af702f4ded12ac65ab7527ef037be91f4b7e1",
+    "src/addons/Justin/EmailCheck/_data/options.xml": "9fdfde64ccd094f272d5a1ac5e81021226830dbcbeb9089a6198600fc4845dce",
+    "src/addons/Justin/EmailCheck/_data/option_groups.xml": "4ab21ab8fb56fe491083746fa4df3c70011c1fe8bb484ea53f3ad40e94a1fc75",
+    "src/addons/Justin/EmailCheck/_data/phrases.xml": "162110cc8b8a75c5b455e808f44680f678788b5b032109bd3a1690032c70cd3e"
+}

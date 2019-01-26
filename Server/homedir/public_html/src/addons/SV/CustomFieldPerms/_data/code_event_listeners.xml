@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<code_event_listeners>
+  <listener event_id="templater_macro_pre_render" execute_order="6108" callback_class="SV\CustomFieldPerms\Listener" callback_method="customFieldsEdit" active="1" hint="public:custom_fields_macros:custom_fields_edit" description="public:custom_fields_macros:custom_fields_edit"/>
+  <listener event_id="templater_macro_pre_render" execute_order="6108" callback_class="SV\CustomFieldPerms\Listener" callback_method="customFieldsView" active="1" hint="public:custom_fields_macros:custom_fields_view" description="public:custom_fields_macros:custom_fields_view"/>
+  <listener event_id="templater_macro_pre_render" execute_order="6108" callback_class="SV\CustomFieldPerms\Listener" callback_method="customFieldsViewValues" active="1" hint="public:custom_fields_macros:custom_fields_values" description="public:custom_fields_macros:custom_fields_values"/>
+</code_event_listeners>

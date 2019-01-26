@@ -1,0 +1,14 @@
+{
+    "legacy_addon_id": "snog_force_secure",
+    "title": "Force HTTPS Images",
+    "description": "Forces users to use HTTPS images",
+    "version_id": 2000070,
+    "version_string": "2.0.0",
+    "dev": "Snog",
+    "dev_url": "https://snogssite.com",
+    "faq_url": "",
+    "support_url": "",
+    "extra_urls": [],
+    "require": [],
+    "icon": ""
+}
