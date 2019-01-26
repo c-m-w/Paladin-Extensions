@@ -46,10 +46,10 @@ END_MAP
 # MonthHostsKnown   = Number of hosts known
 # MonthHostsUnKnown = Number of hosts unknown
 BEGIN_GENERAL 8
-LastLine 20190116070159 99 18776 11587148049700
+LastLine 20190117070203 83 15782 10818588491775
 FirstTime 0
 LastTime 20190112164651
-LastUpdate 20190116071037 99 0 99 0 0
+LastUpdate 20190117072120 83 0 83 0 0
 TotalVisits 1                   
 TotalUnique 1                   
 MonthHostsKnown 0                   
@@ -58,44 +58,44 @@ END_GENERAL
 
 # Misc ID - Pages - Hits - Bandwidth
 BEGIN_MISC 10
-QuickTimeSupport 0 0 0
-DirectorSupport 0 0 0
-RealPlayerSupport 0 0 0
-WindowsMediaPlayerSupport 0 0 0
-JavascriptDisabled 0 0 0
-FlashSupport 0 0 0
 TotalMisc 0 0 0
 PDFSupport 0 0 0
+WindowsMediaPlayerSupport 0 0 0
+JavascriptDisabled 0 0 0
 AddToFavourites 0 0 0
+DirectorSupport 0 0 0
+QuickTimeSupport 0 0 0
+RealPlayerSupport 0 0 0
 JavaEnabled 0 0 0
+FlashSupport 0 0 0
 END_MISC
 
 # Hour - Pages - Hits - Bandwidth - Not viewed Pages - Not viewed Hits - Not viewed Bandwidth
 BEGIN_TIME 24
-0 0 0 0 68 69 208
-1 0 0 0 64 64 33065
-2 0 0 0 69 69 3589
-3 0 0 0 66 70 27668
-4 0 0 0 64 64 0
-5 0 0 0 59 61 16240
-6 0 0 0 89 92 25343
-7 0 0 0 58 58 27319
-8 0 0 0 57 58 14926
-9 0 0 0 62 64 36963
-10 0 0 0 55 55 0
-11 0 0 0 52 53 20587
-12 0 0 0 52 62 16798
-13 0 0 0 54 54 276
-14 0 0 0 47 48 14926
-15 0 0 0 86 90 832
-16 1 1 119 51 52 3837
-17 0 0 0 47 47 0
-18 0 0 0 57 57 19871
-19 0 0 0 52 52 32614
-20 0 0 0 55 58 47953
-21 0 0 0 51 53 416
-22 0 0 0 53 56 18971
-23 0 0 0 52 52 0
+0 0 0 0 71 72 208
+1 0 0 0 67 67 33065
+2 0 0 0 72 72 3589
+3 0 0 0 69 73 27668
+4 0 0 0 67 67 0
+5 0 0 0 63 65 16240
+6 0 0 0 93 96 25343
+7 0 0 0 61 61 27319
+8 0 0 0 60 61 14926
+9 0 0 0 66 68 36963
+10 0 0 0 58 58 0
+11 0 0 0 55 56 20587
+12 0 0 0 55 65 16798
+13 0 0 0 57 57 276
+14 0 0 0 52 53 14926
+15 0 0 0 89 93 832
+16 1 1 119 55 56 3837
+17 0 0 0 51 51 0
+18 0 0 0 60 60 19871
+19 0 0 0 56 57 32822
+20 0 0 0 59 62 47953
+21 0 0 0 54 56 416
+22 0 0 0 57 60 18971
+23 0 0 0 55 55 0
 END_TIME
 
 # Domain - Pages - Hits - Bandwidth
@@ -198,14 +198,14 @@ END_KEYWORDS
 
 # Errors - Hits - Bandwidth
 BEGIN_ERRORS 3
-404 35 7280
-301 1382 0
+404 36 7488
+301 1464 0
 503 5 40467
 END_ERRORS
 
 # URL with 404 errors - Hits - Last URL referrer
 BEGIN_SIDER_404 1
-/robots.txt 35 -
+/robots.txt 36 -
 END_SIDER_404
 
 # Host - Pages - Hits - Bandwidth - Last visit date - [Start date of last visit] - [Last page of last visit]
