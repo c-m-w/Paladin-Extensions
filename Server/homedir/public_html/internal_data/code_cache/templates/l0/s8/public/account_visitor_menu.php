@@ -93,14 +93,14 @@ return array('macros' => array('visitor_panel_row' => function($__templater, arr
 	$__finalCompiled .= '
 	<li><a href="' . $__templater->fn('link', array('search/member', null, array('user_id' => $__vars['xf']['visitor']['user_id'], ), ), true) . '" class="menu-linkRow">' . 'Your content' . '</a></li>
 	' . '
-	' . '
+	' . $__templater->includeTemplate('mjst_account_visitor_menu', $__vars) . '
 ';
 	if ($__templater->method($__vars['xf']['visitor'], 'hasPermission', array('siropuReferralContests', 'refer', ))) {
 		$__finalCompiled .= '
 	';
 		if ($__vars['xf']['options']['siropuReferralContestsInvitationOnly']) {
 			$__finalCompiled .= '
-		<li><a href="' . (($__templater->method($__vars['xf']['visitor'], 'hasPermission', array('siropuReferralContests', 'sendInvitations', )) != 0) ? $__templater->fn('link', array('account/invitations/create', ), true) : $__templater->fn('link', array('account/invitations/list', ), true)) . '" class="menu-linkRow">' . 'Your invitations' . '</a></li>
+		<li><a href="' . ($__templater->method($__vars['xf']['visitor'], 'hasPermission', array('siropuReferralContests', 'createInvitations', )) ? $__templater->fn('link', array('account/invitations/create', ), true) : $__templater->fn('link', array('account/invitations/list', ), true)) . '" class="menu-linkRow">' . 'Your invitations' . '</a></li>
 	';
 		} else {
 			$__finalCompiled .= '

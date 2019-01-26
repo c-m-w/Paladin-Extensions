@@ -136,7 +136,7 @@ return array('macros' => array('invitation_form' => function($__templater, array
 			';
 	if ($__templater->method($__vars['xf']['visitor'], 'hasPermission', array('siropuReferralContests', 'sendInvitations', )) != 0) {
 		$__finalCompiled .= '
-				<a href="' . $__templater->fn('link', array('account/invitations', ), true) . '"class="tabs-tab' . (($__vars['activeTab'] == '') ? ' is-active' : '') . '" role="tab" tabindex="0" aria-controls="' . $__templater->fn('unique_id', array('invite_friends', ), true) . '">' . 'Email invitations' . '</a>
+				<a href="' . $__templater->fn('link', array('account/invitations', ), true) . '"class="tabs-tab' . (($__vars['activeTab'] == '') ? ' is-active' : '') . '" role="tab" tabindex="0" aria-controls="' . $__templater->fn('unique_id', array('invite_friends', ), true) . '">' . 'Create invitation links' . '</a>
 			';
 	}
 	$__finalCompiled .= '

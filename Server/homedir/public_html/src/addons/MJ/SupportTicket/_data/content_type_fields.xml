@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<content_type_fields>
+  <field content_type="support_department" field_name="email_stop_class">MJ\SupportTicket\EmailStop\Department</field>
+  <field content_type="support_department" field_name="permission_handler_class">MJ\SupportTicket\Permission\DepartmentPermissions</field>
+  <field content_type="support_kb" field_name="attachment_handler_class">MJ\SupportTicket\Attachment\KnowledgeBase</field>
+  <field content_type="support_kb" field_name="entity">MJ\SupportTicket:KnowledgeBase</field>
+  <field content_type="support_kb" field_name="phrase">mjst_knowledge_base</field>
+  <field content_type="support_kb" field_name="sitemap_handler_class">MJ\SupportTicket\Sitemap\KnowledgeBase</field>
+  <field content_type="support_kb_category" field_name="sitemap_handler_class">MJ\SupportTicket\Sitemap\KnowledgeBaseCategory</field>
+  <field content_type="support_ticket" field_name="alert_handler_class">MJ\SupportTicket\Alert\Ticket</field>
+  <field content_type="support_ticket" field_name="email_stop_class">MJ\SupportTicket\EmailStop\Ticket</field>
+  <field content_type="support_ticket" field_name="entity">MJ\SupportTicket:Ticket</field>
+  <field content_type="support_ticket" field_name="inline_mod_handler_class">MJ\SupportTicket\InlineMod\Ticket</field>
+  <field content_type="support_ticket" field_name="moderator_log_handler_class">MJ\SupportTicket\ModeratorLog\Ticket</field>
+  <field content_type="support_ticket" field_name="phrase">mjst_ticket</field>
+  <field content_type="support_ticket" field_name="search_handler_class">MJ\SupportTicket\Search\Data\Ticket</field>
+  <field content_type="support_ticket_message" field_name="alert_handler_class">MJ\SupportTicket\Alert\TicketMessage</field>
+  <field content_type="support_ticket_message" field_name="attachment_handler_class">MJ\SupportTicket\Attachment\TicketMessage</field>
+  <field content_type="support_ticket_message" field_name="edit_history_handler_class">MJ\SupportTicket\EditHistory\TicketMessage</field>
+  <field content_type="support_ticket_message" field_name="entity">MJ\SupportTicket:TicketMessage</field>
+  <field content_type="support_ticket_message" field_name="inline_mod_handler_class">MJ\SupportTicket\InlineMod\TicketMessage</field>
+  <field content_type="support_ticket_message" field_name="moderator_log_handler_class">MJ\SupportTicket\ModeratorLog\TicketMessage</field>
+  <field content_type="support_ticket_message" field_name="phrase">mjst_message</field>
+  <field content_type="support_ticket_message" field_name="phrase_plural">mjst_messages</field>
+  <field content_type="support_ticket_message" field_name="search_handler_class">MJ\SupportTicket\Search\Data\TicketMessage</field>
+</content_type_fields>

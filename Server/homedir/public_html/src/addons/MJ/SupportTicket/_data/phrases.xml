@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="utf-8"?>
+<phrases>
+  <phrase title="admin_navigation.mjstDepartmentPermissions" version_id="2010670" version_string="1.0.0"><![CDATA[Support department permissions]]></phrase>
+  <phrase title="admin_navigation.mjstDepartments" version_id="2010670" version_string="1.0.0"><![CDATA[Departments]]></phrase>
+  <phrase title="admin_navigation.mjstEscalations" version_id="2010670" version_string="1.0.0"><![CDATA[List escalations]]></phrase>
+  <phrase title="admin_navigation.mjstFields" version_id="2010670" version_string="1.0.0"><![CDATA[Ticket custom fields]]></phrase>
+  <phrase title="admin_navigation.mjstKBList" version_id="2010670" version_string="1.0.0"><![CDATA[List knowledge bases]]></phrase>
+  <phrase title="admin_navigation.mjstKnowledgeBases" version_id="2010670" version_string="1.0.0"><![CDATA[Knowledge bases]]></phrase>
+  <phrase title="admin_navigation.mjstPredefinedReplies" version_id="2010670" version_string="1.0.0"><![CDATA[List predefined replies]]></phrase>
+  <phrase title="admin_navigation.mjstPrefixes" version_id="2010670" version_string="1.0.0"><![CDATA[Ticket prefixes]]></phrase>
+  <phrase title="admin_navigation.mjstStats" version_id="3000034" version_string="3.0.0"><![CDATA[Statistics]]></phrase>
+  <phrase title="admin_navigation.mjstStatuses" version_id="2010670" version_string="1.0.0"><![CDATA[Ticket statuses]]></phrase>
+  <phrase title="admin_navigation.mjstSupport" version_id="2010670" version_string="1.0.0"><![CDATA[Support ticket]]></phrase>
+  <phrase title="admin_navigation.mjstTicketProperties" version_id="2010670" version_string="1.0.0"><![CDATA[Ticket properties]]></phrase>
+  <phrase title="admin_permission.mjstSupport" version_id="2010670" version_string="1.0.0"><![CDATA[[BRST] Manage support tickets]]></phrase>
+  <phrase title="alert_opt_out.support_ticket_message_insert" version_id="3000230" version_string="3.0.2"><![CDATA[[BRST] Replies to a watched ticket]]></phrase>
+  <phrase title="alert_opt_out.support_ticket_message_mention" version_id="3000230" version_string="3.0.2"><![CDATA[[BRST] Mentions you in a message]]></phrase>
+  <phrase title="alert_opt_out.support_ticket_message_quote" version_id="3000230" version_string="3.0.2"><![CDATA[[BRST] Quotes your message]]></phrase>
+  <phrase title="cron_entry.mjstEscalation" version_id="2010670" version_string="1.0.0"><![CDATA[[BRST] Escalations]]></phrase>
+  <phrase title="mjst_actions" version_id="3000030" version_string="3.0.0"><![CDATA[Actions]]></phrase>
+  <phrase title="mjst_active" version_id="3000030" version_string="3.0.0"><![CDATA[Active]]></phrase>
+  <phrase title="mjst_active_tickets" version_id="3000034" version_string="3.0.0"><![CDATA[Active tickets]]></phrase>
+  <phrase title="mjst_add_department" version_id="3000030" version_string="3.0.0"><![CDATA[Add department]]></phrase>
+  <phrase title="mjst_add_escalation" version_id="3000030" version_string="3.0.0"><![CDATA[Add escalation]]></phrase>
+  <phrase title="mjst_add_kb" version_id="3000030" version_string="3.0.0"><![CDATA[Add knowledge base]]></phrase>
+  <phrase title="mjst_add_kb_category" version_id="3000030" version_string="3.0.0"><![CDATA[Add knowledge base category]]></phrase>
+  <phrase title="mjst_add_member" version_id="3000030" version_string="3.0.0"><![CDATA[Add member]]></phrase>
+  <phrase title="mjst_add_pre_reply" version_id="3000030" version_string="3.0.0"><![CDATA[Add predefined reply]]></phrase>
+  <phrase title="mjst_add_pre_reply_group" version_id="3000030" version_string="3.0.0"><![CDATA[Add predefined reply group]]></phrase>
+  <phrase title="mjst_add_reply" version_id="3000030" version_string="3.0.0"><![CDATA[Add reply]]></phrase>
+  <phrase title="mjst_add_ticket_status" version_id="3000030" version_string="3.0.0"><![CDATA[Add ticket status]]></phrase>
+  <phrase title="mjst_all_departments" version_id="3000134" version_string="3.0.1"><![CDATA[All departments]]></phrase>
+  <phrase title="mjst_all_messages_from_other_tickets_will_be_merged_into_this_ticket" version_id="3000030" version_string="3.0.0"><![CDATA[All messages from the other tickets will be merged into this ticket.]]></phrase>
+  <phrase title="mjst_all_tickets_in_destination_department" version_id="3000030" version_string="3.0.0"><![CDATA[All selected tickets are already in the destination department. Please select another department.]]></phrase>
+  <phrase title="mjst_applicable_departments" version_id="3000030" version_string="3.0.0"><![CDATA[Applicable departments]]></phrase>
+  <phrase title="mjst_apply_department_options" version_id="3000030" version_string="3.0.0"><![CDATA[Apply department options]]></phrase>
+  <phrase title="mjst_apply_prefix_to_selected_tickets" version_id="3000030" version_string="3.0.0"><![CDATA[Apply prefix to selected tickets]]></phrase>
+  <phrase title="mjst_apply_ticket_prefix_to_multiple_departments" version_id="3000030" version_string="3.0.0"><![CDATA[The tickets you have selected are located in more than one department. Tickets will only be updated if the chosen prefix is valid in its department.]]></phrase>
+  <phrase title="mjst_assign_ticket" version_id="3000033" version_string="3.0.0"><![CDATA[Assign ticket]]></phrase>
+  <phrase title="mjst_assign_to" version_id="3000033" version_string="3.0.0"><![CDATA[Assign to]]></phrase>
+  <phrase title="mjst_assigned_to" version_id="3000030" version_string="3.0.0"><![CDATA[Assigned to]]></phrase>
+  <phrase title="mjst_captcha_use_only_guest" version_id="3000030" version_string="3.0.0"><![CDATA[Captcha use only guest]]></phrase>
+  <phrase title="mjst_captcha_use_only_guest_explain" version_id="3000030" version_string="3.0.0"><![CDATA[If this option is disabled, the captcha will be required with both users and anonymous guest]]></phrase>
+  <phrase title="mjst_change_ticket_owner_to" version_id="3000033" version_string="3.0.0"><![CDATA[Change ticket owner to]]></phrase>
+  <phrase title="mjst_close" version_id="3000030" version_string="3.0.0"><![CDATA[Close]]></phrase>
+  <phrase title="mjst_close_ticket" version_id="3000030" version_string="3.0.0"><![CDATA[Close ticket]]></phrase>
+  <phrase title="mjst_conditions" version_id="3000030" version_string="3.0.0"><![CDATA[Conditions]]></phrase>
+  <phrase title="mjst_copy_messages" version_id="3000030" version_string="3.0.0"><![CDATA[Copy messages]]></phrase>
+  <phrase title="mjst_create_kb" version_id="3000030" version_string="3.0.0"><![CDATA[Create knowledge base]]></phrase>
+  <phrase title="mjst_creator" version_id="3000030" version_string="3.0.0"><![CDATA[Creator]]></phrase>
+  <phrase title="mjst_current_assigned_to" version_id="3000033" version_string="3.0.0"><![CDATA[Current assigned to]]></phrase>
+  <phrase title="mjst_defaut_department" version_id="3000030" version_string="3.0.0"><![CDATA[Defaut department]]></phrase>
+  <phrase title="mjst_delete_message" version_id="3000030" version_string="3.0.0"><![CDATA[Delete message]]></phrase>
+  <phrase title="mjst_delete_messages" version_id="3000030" version_string="3.0.0"><![CDATA[Delete messages]]></phrase>
+  <phrase title="mjst_delete_ticket" version_id="3000030" version_string="3.0.0"><![CDATA[Delete ticket]]></phrase>
+  <phrase title="mjst_delete_tickets" version_id="3000030" version_string="3.0.0"><![CDATA[Delete tickets]]></phrase>
+  <phrase title="mjst_department" version_id="3000030" version_string="3.0.0"><![CDATA[Department]]></phrase>
+  <phrase title="mjst_department_members" version_id="3000030" version_string="3.0.0"><![CDATA[Department members]]></phrase>
+  <phrase title="mjst_department_permissions" version_id="3000030" version_string="3.0.0"><![CDATA[Department permissions]]></phrase>
+  <phrase title="mjst_department_watched" version_id="3000030" version_string="3.0.0"><![CDATA[Department watched]]></phrase>
+  <phrase title="mjst_departments" version_id="3000030" version_string="3.0.0"><![CDATA[Departments]]></phrase>
+  <phrase title="mjst_destination_department" version_id="3000030" version_string="3.0.0"><![CDATA[Destination department]]></phrase>
+  <phrase title="mjst_destination_ticket" version_id="3000030" version_string="3.0.0"><![CDATA[Destination ticket]]></phrase>
+  <phrase title="mjst_disable_contact_email" version_id="3000030" version_string="3.0.0"><![CDATA[Disable contact email]]></phrase>
+  <phrase title="mjst_disable_contact_email_explain" version_id="3000030" version_string="3.0.0"><![CDATA[Prevent board send an email about new contact.]]></phrase>
+  <phrase title="mjst_display_results_as_support_tickets" version_id="3000134" version_string="3.0.1"><![CDATA[Display results as support tickets]]></phrase>
+  <phrase title="mjst_edit_department" version_id="3000030" version_string="3.0.0"><![CDATA[Edit department]]></phrase>
+  <phrase title="mjst_edit_escalation" version_id="3000030" version_string="3.0.0"><![CDATA[Edit escalation]]></phrase>
+  <phrase title="mjst_edit_kb" version_id="3000030" version_string="3.0.0"><![CDATA[Edit knowledge base]]></phrase>
+  <phrase title="mjst_edit_kb_category" version_id="3000030" version_string="3.0.0"><![CDATA[Edit knowledge base category]]></phrase>
+  <phrase title="mjst_edit_member" version_id="3000030" version_string="3.0.0"><![CDATA[Edit member]]></phrase>
+  <phrase title="mjst_edit_message" version_id="3000030" version_string="3.0.0"><![CDATA[Edit message]]></phrase>
+  <phrase title="mjst_edit_pre_reply" version_id="3000030" version_string="3.0.0"><![CDATA[Edit predefined reply]]></phrase>
+  <phrase title="mjst_edit_pre_reply_group" version_id="3000030" version_string="3.0.0"><![CDATA[Edit predefined reply group]]></phrase>
+  <phrase title="mjst_edit_ticket" version_id="3000030" version_string="3.0.0"><![CDATA[Edit ticket]]></phrase>
+  <phrase title="mjst_edit_ticket_status" version_id="3000030" version_string="3.0.0"><![CDATA[Edit ticket status]]></phrase>
+  <phrase title="mjst_enter_ticket" version_id="3000030" version_string="3.0.0"><![CDATA[Enter ticket]]></phrase>
+  <phrase title="mjst_escalations" version_id="3000030" version_string="3.0.0"><![CDATA[Escalations]]></phrase>
+  <phrase title="mjst_existing_ticket" version_id="3000030" version_string="3.0.0"><![CDATA[Existing ticket]]></phrase>
+  <phrase title="mjst_filters" version_id="3000031" version_string="3.0.0"><![CDATA[Filters]]></phrase>
+  <phrase title="mjst_footer_links" version_id="3000030" version_string="3.0.0"><![CDATA[Footer links]]></phrase>
+  <phrase title="mjst_frequently_asked_questions" version_id="3000030" version_string="3.0.0"><![CDATA[Frequently asked questions]]></phrase>
+  <phrase title="mjst_group_active" version_id="3000030" version_string="3.0.0"><![CDATA[Group active]]></phrase>
+  <phrase title="mjst_group_waiting_reply" version_id="3000030" version_string="3.0.0"><![CDATA[Group waiting reply]]></phrase>
+  <phrase title="mjst_guest" version_id="3000031" version_string="3.0.0"><![CDATA[Guest]]></phrase>
+  <phrase title="mjst_guest_password" version_id="3000030" version_string="3.0.0"><![CDATA[Guest password]]></phrase>
+  <phrase title="mjst_high" version_id="3000030" version_string="3.0.0"><![CDATA[High]]></phrase>
+  <phrase title="mjst_if_selected_users_required_select_prefix_when_creating_editing" version_id="3000032" version_string="3.0.0"><![CDATA[If selected, users will be required to select a prefix when creating or editing a ticket. This will not be enforced for moderators.]]></phrase>
+  <phrase title="mjst_inline_moderation_copy_messages" version_id="3000030" version_string="3.0.0"><![CDATA[Inline moderation - Copy messages]]></phrase>
+  <phrase title="mjst_inline_moderation_delete_messages" version_id="3000030" version_string="3.0.0"><![CDATA[Inline moderation - Delete messages]]></phrase>
+  <phrase title="mjst_inline_moderation_delete_tickets" version_id="3000030" version_string="3.0.0"><![CDATA[Inline moderation - Delete tickets]]></phrase>
+  <phrase title="mjst_inline_moderation_merge_messages" version_id="3000030" version_string="3.0.0"><![CDATA[Inline moderation - Merge messages]]></phrase>
+  <phrase title="mjst_inline_moderation_merge_tickets" version_id="3000030" version_string="3.0.0"><![CDATA[Inline moderation - Merge tickets]]></phrase>
+  <phrase title="mjst_inline_moderation_move_messages" version_id="3000030" version_string="3.0.0"><![CDATA[Inline moderation - Move messages]]></phrase>
+  <phrase title="mjst_inline_moderation_move_tickets" version_id="3000030" version_string="3.0.0"><![CDATA[Inline moderation - Move tickets]]></phrase>
+  <phrase title="mjst_inline_moderation_ticket_prefix" version_id="3000030" version_string="3.0.0"><![CDATA[Inline moderation - Apply ticket prefix]]></phrase>
+  <phrase title="mjst_invalid_ticket_password" version_id="3000030" version_string="3.0.0"><![CDATA[Invalid ticket password.]]></phrase>
+  <phrase title="mjst_it_is_not_possible_to_move_any_of_selected_messages_to_specified_target" version_id="3000030" version_string="3.0.0"><![CDATA[It is not possible to move any of the selected messages to the specified target.]]></phrase>
+  <phrase title="mjst_kb_categories" version_id="3000030" version_string="3.0.0"><![CDATA[Knowledge base categories]]></phrase>
+  <phrase title="mjst_kb_category" version_id="3000030" version_string="3.0.0"><![CDATA[Knowledge base category]]></phrase>
+  <phrase title="mjst_kb_suggestion" version_id="3000032" version_string="3.0.0"><![CDATA[Knowledge Base Suggestions]]></phrase>
+  <phrase title="mjst_kb_suggestion_explain" version_id="3000032" version_string="3.0.0"><![CDATA[The following articles were found in the knowledge base which may answer your question. Please review the suggestions before submission.]]></phrase>
+  <phrase title="mjst_knowledge_base" version_id="3000030" version_string="3.0.0"><![CDATA[Knowledge base]]></phrase>
+  <phrase title="mjst_knowledge_bases" version_id="3000030" version_string="3.0.0"><![CDATA[Knowledge bases]]></phrase>
+  <phrase title="mjst_last_update" version_id="3000030" version_string="3.0.0"><![CDATA[Last update]]></phrase>
+  <phrase title="mjst_low" version_id="3000030" version_string="3.0.0"><![CDATA[Low]]></phrase>
+  <phrase title="mjst_manage_watched_departments" version_id="3000030" version_string="3.0.0"><![CDATA[Manage watched departments]]></phrase>
+  <phrase title="mjst_manage_watched_tickets" version_id="3000030" version_string="3.0.0"><![CDATA[Manage watched tickets]]></phrase>
+  <phrase title="mjst_medium" version_id="3000030" version_string="3.0.0"><![CDATA[Medium]]></phrase>
+  <phrase title="mjst_member" version_id="3000030" version_string="3.0.0"><![CDATA[Member]]></phrase>
+  <phrase title="mjst_members" version_id="3000030" version_string="3.0.0"><![CDATA[Members]]></phrase>
+  <phrase title="mjst_merge_into_message" version_id="3000030" version_string="3.0.0"><![CDATA[Merge into message]]></phrase>
+  <phrase title="mjst_merge_messages" version_id="3000030" version_string="3.0.0"><![CDATA[Merge messages]]></phrase>
+  <phrase title="mjst_merge_tickets" version_id="3000030" version_string="3.0.0"><![CDATA[Merge tickets]]></phrase>
+  <phrase title="mjst_message_in_ticket_x" version_id="3000030" version_string="3.0.0"><![CDATA[Message in ticket {title}]]></phrase>
+  <phrase title="mjst_message_x" version_id="3000134" version_string="3.0.1"><![CDATA[Message {position}]]></phrase>
+  <phrase title="mjst_messages" version_id="3000030" version_string="3.0.0"><![CDATA[Messages]]></phrase>
+  <phrase title="mjst_move_messages" version_id="3000030" version_string="3.0.0"><![CDATA[Move messages]]></phrase>
+  <phrase title="mjst_move_ticket" version_id="3000030" version_string="3.0.0"><![CDATA[Move ticket]]></phrase>
+  <phrase title="mjst_move_tickets" version_id="3000030" version_string="3.0.0"><![CDATA[Move tickets]]></phrase>
+  <phrase title="mjst_nav_account_menu" version_id="3000030" version_string="3.0.0"><![CDATA[Navigation account menu]]></phrase>
+  <phrase title="mjst_nav_tabs" version_id="3000030" version_string="3.0.0"><![CDATA[Navigation tabs]]></phrase>
+  <phrase title="mjst_new_message_in_watched_department_x" version_id="3000031" version_string="3.0.0"><![CDATA[{title} - New message in watched department]]></phrase>
+  <phrase title="mjst_new_open_ticket_email_html" version_id="3000032" version_string="3.0.0"><![CDATA[<p>{replier} opened a new ticket for you at {board}.</p>]]></phrase>
+  <phrase title="mjst_new_ticket" version_id="3000030" version_string="3.0.0"><![CDATA[New ticket]]></phrase>
+  <phrase title="mjst_new_ticket_email_html" version_id="3000032" version_string="3.0.0"><![CDATA[<p>Thank you for contacting our support team. A support ticket has now been opened for your request. You will be notified when a response is made by email. The details of your ticket are shown below.</p>]]></phrase>
+  <phrase title="mjst_new_ticket_in_watched_department_x" version_id="3000032" version_string="3.0.0"><![CDATA[{title} - New ticket in watched department]]></phrase>
+  <phrase title="mjst_new_ticket_received_x" version_id="3000032" version_string="3.0.0"><![CDATA[New ticket received - {title}]]></phrase>
+  <phrase title="mjst_new_ticket_title" version_id="3000030" version_string="3.0.0"><![CDATA[New ticket title]]></phrase>
+  <phrase title="mjst_new_tickets" version_id="3000030" version_string="3.0.0"><![CDATA[New tickets]]></phrase>
+  <phrase title="mjst_no_change" version_id="3000030" version_string="3.0.0"><![CDATA[No change]]></phrase>
+  <phrase title="mjst_no_kbs_have_been_added_to_this_category_yet" version_id="3000030" version_string="3.0.0"><![CDATA[No knowledge bases have been added to this category yet.]]></phrase>
+  <phrase title="mjst_no_kbs_have_been_added_yet" version_id="3000030" version_string="3.0.0"><![CDATA[No knowledge bases have been added yet.]]></phrase>
+  <phrase title="mjst_no_pre_replies_have_been_added_to_this_group_yet" version_id="3000030" version_string="3.0.0"><![CDATA[No predefined replies have been added to this group yet.]]></phrase>
+  <phrase title="mjst_no_pre_replies_have_been_added_yet" version_id="3000030" version_string="3.0.0"><![CDATA[No predefined replies have been added yet.]]></phrase>
+  <phrase title="mjst_no_ticket_could_be_found_with_id_x" version_id="3000033" version_string="3.0.0"><![CDATA[No ticket could be found with the ID {support_ticket_id}.]]></phrase>
+  <phrase title="mjst_no_ticket_id_could_be_found_from_that_url" version_id="3000033" version_string="3.0.0"><![CDATA[No ticket ID could be found from that URL.]]></phrase>
+  <phrase title="mjst_no_ticket_prefixes_available_for_selected_departments" version_id="3000030" version_string="3.0.0"><![CDATA[No ticket prefixes are available for the specified departments.]]></phrase>
+  <phrase title="mjst_no_tickets_have_been_created_yet" version_id="3000030" version_string="3.0.0"><![CDATA[No tickets have been created yet.]]></phrase>
+  <phrase title="mjst_note_ticket_starter_see_alert_even_no_longer_view_ticket" version_id="3000030" version_string="3.0.0"><![CDATA[Note that the ticket starter will see this alert even if they can no longer view their ticket.]]></phrase>
+  <phrase title="mjst_notify_members_watching_destination_department" version_id="3000030" version_string="3.0.0"><![CDATA[Notify members watching the destination department]]></phrase>
+  <phrase title="mjst_notify_ticket_starter_of_this_action" version_id="3000030" version_string="3.0.0"><![CDATA[Notify ticket starter of this action.]]></phrase>
+  <phrase title="mjst_online_viewers" version_id="3000031" version_string="3.0.0"><![CDATA[Online viewers]]></phrase>
+  <phrase title="mjst_open_date" version_id="3000030" version_string="3.0.0"><![CDATA[Open date]]></phrase>
+  <phrase title="mjst_open_ticket" version_id="3000030" version_string="3.0.0"><![CDATA[Open ticket]]></phrase>
+  <phrase title="mjst_open_ticket_for" version_id="3000030" version_string="3.0.0"><![CDATA[Open ticket for]]></phrase>
+  <phrase title="mjst_owner_name" version_id="3000030" version_string="3.0.0"><![CDATA[Owner name]]></phrase>
+  <phrase title="mjst_password" version_id="3000031" version_string="3.0.0"><![CDATA[Password]]></phrase>
+  <phrase title="mjst_password_for_ticket" version_id="3000030" version_string="3.0.0"><![CDATA[Password for ticket]]></phrase>
+  <phrase title="mjst_please_confirm_that_you_want_to_close_following" version_id="3000030" version_string="3.0.0"><![CDATA[Please confirm that you want to close the following]]></phrase>
+  <phrase title="mjst_please_confirm_that_you_want_to_remove_following_member" version_id="3000032" version_string="3.0.0"><![CDATA[Please confirm that you want to remove the following member]]></phrase>
+  <phrase title="mjst_pre_replies" version_id="3000030" version_string="3.0.0"><![CDATA[Predefined replies]]></phrase>
+  <phrase title="mjst_pre_replies_belonging_to_this_group_will_be_disassociated_rather_than_deleted" version_id="3000030" version_string="3.0.0"><![CDATA[Predefined replies belonging to this group will be disassociated, rather than deleted.]]></phrase>
+  <phrase title="mjst_pre_reply_explain" version_id="3000034" version_string="3.0.0"><![CDATA[You may use these placeholders: <br />
+[TICKET_USER] - the ticket submitter's name.<br />
+[BOARD_TITLE] - the board title.<br />
+[SUPPORT_USER] - the supporter name who is replying.<br />]]></phrase>
+  <phrase title="mjst_pre_reply_group" version_id="3000030" version_string="3.0.0"><![CDATA[Predefined reply group]]></phrase>
+  <phrase title="mjst_priorities" version_id="3000030" version_string="3.0.0"><![CDATA[Priorities]]></phrase>
+  <phrase title="mjst_priority" version_id="3000030" version_string="3.0.0"><![CDATA[Priority]]></phrase>
+  <phrase title="mjst_private_department" version_id="3000030" version_string="3.0.0"><![CDATA[Private department]]></phrase>
+  <phrase title="mjst_private_department_hint" version_id="3000030" version_string="3.0.0"><![CDATA[If selected, users will only be able to view this department if they are explicitly granted permissions.]]></phrase>
+  <phrase title="mjst_rate_this_ticket" version_id="3000030" version_string="3.0.0"><![CDATA[Rate this ticket]]></phrase>
+  <phrase title="mjst_rebuild_ticket_departments" version_id="3000030" version_string="3.0.0"><![CDATA[[BRST] Rebuild ticket departments]]></phrase>
+  <phrase title="mjst_rebuild_ticket_embed_metadata" version_id="3000030" version_string="3.0.0"><![CDATA[[BRST] Rebuild ticket embed metadata]]></phrase>
+  <phrase title="mjst_rebuild_tickets" version_id="3000030" version_string="3.0.0"><![CDATA[[BRST] Rebuild tickets]]></phrase>
+  <phrase title="mjst_rebuild_user_ticket_counts" version_id="3000030" version_string="3.0.0"><![CDATA[[BRST] Rebuild user ticket counts]]></phrase>
+  <phrase title="mjst_receive_email_ticket_explain" version_id="3000230" version_string="3.0.2"><![CDATA[Email notifications for new support tickets, replies to existing support tickets, and being added to an existing support ticket.]]></phrase>
+  <phrase title="mjst_receive_email_when_new_ticket_message_is_received" version_id="3000230" version_string="3.0.2"><![CDATA[Receive email when a new support ticket message is received]]></phrase>
+  <phrase title="mjst_receiver" version_id="3000032" version_string="3.0.0"><![CDATA[Receiver]]></phrase>
+  <phrase title="mjst_remove_member" version_id="3000032" version_string="3.0.0"><![CDATA[Remove member]]></phrase>
+  <phrase title="mjst_reply_message" version_id="3000030" version_string="3.0.0"><![CDATA[Reply message]]></phrase>
+  <phrase title="mjst_reply_to_ticket" version_id="3000030" version_string="3.0.0"><![CDATA[Reply to ticket]]></phrase>
+  <phrase title="mjst_reply_to_watched_ticket_x" version_id="3000031" version_string="3.0.0"><![CDATA[{title} - New reply to watched ticket]]></phrase>
+  <phrase title="mjst_requested_department_not_found" version_id="3000030" version_string="3.0.0"><![CDATA[The requested department could not be found.]]></phrase>
+  <phrase title="mjst_requested_kb_category_not_found" version_id="3000030" version_string="3.0.0"><![CDATA[The requested knowledge base category could not be found.]]></phrase>
+  <phrase title="mjst_requested_kb_not_found" version_id="3000030" version_string="3.0.0"><![CDATA[The requested knowledge base could not be found.]]></phrase>
+  <phrase title="mjst_requested_message_not_found" version_id="3000030" version_string="3.0.0"><![CDATA[The requested message could not be found.]]></phrase>
+  <phrase title="mjst_requested_ticket_not_found" version_id="3000030" version_string="3.0.0"><![CDATA[The requested ticket could not be found.]]></phrase>
+  <phrase title="mjst_search_in_departments" version_id="3000134" version_string="3.0.1"><![CDATA[Search in departments]]></phrase>
+  <phrase title="mjst_search_kb" version_id="3000030" version_string="3.0.0"><![CDATA[Search knowledge base]]></phrase>
+  <phrase title="mjst_search_support_tickets" version_id="3000134" version_string="3.0.1"><![CDATA[Search support tickets]]></phrase>
+  <phrase title="mjst_search_tickets" version_id="3000030" version_string="3.0.0"><![CDATA[Search tickets]]></phrase>
+  <phrase title="mjst_status" version_id="3000030" version_string="3.0.0"><![CDATA[Status]]></phrase>
+  <phrase title="mjst_status_color" version_id="3000030" version_string="3.0.0"><![CDATA[Status color]]></phrase>
+  <phrase title="mjst_statuses" version_id="3000030" version_string="3.0.0"><![CDATA[Statuses]]></phrase>
+  <phrase title="mjst_stop_notification_emails_from_all_tickets" version_id="3000032" version_string="3.0.0"><![CDATA[Stop notification emails from all tickets]]></phrase>
+  <phrase title="mjst_stop_watching_ticket_departments" version_id="3000030" version_string="3.0.0"><![CDATA[Stop watching ticket departments]]></phrase>
+  <phrase title="mjst_stop_watching_tickets" version_id="3000030" version_string="3.0.0"><![CDATA[Stop watching tickets]]></phrase>
+  <phrase title="mjst_submitter_info" version_id="3000030" version_string="3.0.0"><![CDATA[Submitter info]]></phrase>
+  <phrase title="mjst_submitter_ip" version_id="3000030" version_string="3.0.0"><![CDATA[Submitter IP]]></phrase>
+  <phrase title="mjst_submitter_rating" version_id="3000030" version_string="3.0.0"><![CDATA[Submitter rating]]></phrase>
+  <phrase title="mjst_support_department_permissions" version_id="3000030" version_string="3.0.0"><![CDATA[Support department permissions]]></phrase>
+  <phrase title="mjst_support_ticket" version_id="3000134" version_string="3.0.1"><![CDATA[Support ticket]]></phrase>
+  <phrase title="mjst_support_ticket_create_successfully" version_id="3000031" version_string="3.0.0"><![CDATA[Support ticket was create successfully]]></phrase>
+  <phrase title="mjst_support_ticket_created" version_id="3000031" version_string="3.0.0"><![CDATA[Support ticket created]]></phrase>
+  <phrase title="mjst_support_tickets" version_id="3000030" version_string="3.0.0"><![CDATA[Support tickets]]></phrase>
+  <phrase title="mjst_there_no_tickets_matching_your_filters" version_id="3000030" version_string="3.0.0"><![CDATA[There are no tickets matching your filters.]]></phrase>
+  <phrase title="mjst_there_no_tickets_to_display" version_id="3000030" version_string="3.0.0"><![CDATA[There are no tickets to display]]></phrase>
+  <phrase title="mjst_this_department" version_id="3000030" version_string="3.0.0"><![CDATA[This department]]></phrase>
+  <phrase title="mjst_this_is_first_message_in_ticket" version_id="3000030" version_string="3.0.0"><![CDATA[This is the first message in the ticket. Deleting it will delete the whole ticket.]]></phrase>
+  <phrase title="mjst_this_ticket" version_id="3000030" version_string="3.0.0"><![CDATA[This ticket]]></phrase>
+  <phrase title="mjst_this_user_not_member_of_this_department" version_id="3000030" version_string="3.0.0"><![CDATA[This user is not a member of this department.]]></phrase>
+  <phrase title="mjst_ticket" version_id="3000030" version_string="3.0.0"><![CDATA[Ticket]]></phrase>
+  <phrase title="mjst_ticket_count" version_id="3000030" version_string="3.0.0"><![CDATA[Ticket count]]></phrase>
+  <phrase title="mjst_ticket_counts" version_id="3000030" version_string="3.0.0"><![CDATA[Ticket counts]]></phrase>
+  <phrase title="mjst_ticket_departments" version_id="3000030" version_string="3.0.0"><![CDATA[Ticket departments]]></phrase>
+  <phrase title="mjst_ticket_escalations" version_id="3000030" version_string="3.0.0"><![CDATA[Ticket escalations]]></phrase>
+  <phrase title="mjst_ticket_fields" version_id="3000030" version_string="3.0.0"><![CDATA[Ticket fields]]></phrase>
+  <phrase title="mjst_ticket_guest_password_email" version_id="3000032" version_string="3.0.0"><![CDATA[<p><b>Ticket Password:</b> {password}</p>]]></phrase>
+  <phrase title="mjst_ticket_id" version_id="3000030" version_string="3.0.0"><![CDATA[Ticket ID]]></phrase>
+  <phrase title="mjst_ticket_info" version_id="3000030" version_string="3.0.0"><![CDATA[Ticket info]]></phrase>
+  <phrase title="mjst_ticket_info_email" version_id="3000032" version_string="3.0.0"><![CDATA[<p><b>Ticket ID:</b> {ticket_id}</p>
+<p><b>Department:</b> {department}</p>
+<p><b>Priority:</b> {priority}</p>
+<p><b>Status:</b> {status}</p>]]></phrase>
+  <phrase title="mjst_ticket_prefixes" version_id="3000030" version_string="3.0.0"><![CDATA[Ticket prefixes]]></phrase>
+  <phrase title="mjst_ticket_statuses" version_id="3000030" version_string="3.0.0"><![CDATA[Ticket statuses]]></phrase>
+  <phrase title="mjst_ticket_sumitter" version_id="3000030" version_string="3.0.0"><![CDATA[Ticket sumitter]]></phrase>
+  <phrase title="mjst_ticket_url" version_id="3000030" version_string="3.0.0"><![CDATA[Ticket url]]></phrase>
+  <phrase title="mjst_ticket_watched" version_id="3000030" version_string="3.0.0"><![CDATA[Ticket watched]]></phrase>
+  <phrase title="mjst_ticket_x_assigned_to_you" version_id="3000033" version_string="3.0.0"><![CDATA[Ticket <b>{title}</b> has been assigned to you]]></phrase>
+  <phrase title="mjst_tickets" version_id="3000030" version_string="3.0.0"><![CDATA[Tickets]]></phrase>
+  <phrase title="mjst_time_elapsed" version_id="3000030" version_string="3.0.0"><![CDATA[Time elapsed]]></phrase>
+  <phrase title="mjst_time_elapsed_explain" version_id="3000031" version_string="3.0.0"><![CDATA[Minutes since last reply]]></phrase>
+  <phrase title="mjst_total_departments" version_id="3000034" version_string="3.0.0"><![CDATA[Total departments]]></phrase>
+  <phrase title="mjst_total_knowledge_bases" version_id="3000034" version_string="3.0.0"><![CDATA[Total knowledge bases]]></phrase>
+  <phrase title="mjst_total_predefined_replies" version_id="3000034" version_string="3.0.0"><![CDATA[Total predefined replies]]></phrase>
+  <phrase title="mjst_total_tickets" version_id="3000034" version_string="3.0.0"><![CDATA[Total tickets]]></phrase>
+  <phrase title="mjst_unassign" version_id="3000033" version_string="3.0.0"><![CDATA[Unassign]]></phrase>
+  <phrase title="mjst_undelete_messages" version_id="3000030" version_string="3.0.0"><![CDATA[Undelete messages]]></phrase>
+  <phrase title="mjst_unwatch_department" version_id="3000030" version_string="3.0.0"><![CDATA[Unwatch department]]></phrase>
+  <phrase title="mjst_unwatch_ticket" version_id="3000030" version_string="3.0.0"><![CDATA[Unwatch ticket]]></phrase>
+  <phrase title="mjst_user" version_id="3000030" version_string="3.0.0"><![CDATA[User]]></phrase>
+  <phrase title="mjst_view_this_ticket" version_id="3000030" version_string="3.0.0"><![CDATA[View this ticket]]></phrase>
+  <phrase title="mjst_viewing_ticket" version_id="3000030" version_string="3.0.0"><![CDATA[Viewing ticket]]></phrase>
+  <phrase title="mjst_vote" version_id="3000030" version_string="3.0.0"><![CDATA[Vote]]></phrase>
+  <phrase title="mjst_waiting_reply_tickets" version_id="3000034" version_string="3.0.0"><![CDATA[Waiting reply tickets]]></phrase>
+  <phrase title="mjst_was_this_answer_helpful" version_id="3000034" version_string="3.0.0"><![CDATA[Was this answer helpful ?]]></phrase>
+  <phrase title="mjst_watch_department" version_id="3000030" version_string="3.0.0"><![CDATA[Watch department]]></phrase>
+  <phrase title="mjst_watch_this_ticket" version_id="3000030" version_string="3.0.0"><![CDATA[Watch this ticket]]></phrase>
+  <phrase title="mjst_watch_ticket" version_id="3000030" version_string="3.0.0"><![CDATA[Watch ticket]]></phrase>
+  <phrase title="mjst_watched_department_email_html_footer" version_id="3000030" version_string="3.0.0"><![CDATA[<p class="minorText">Please do not reply to this message. You must visit the ticket to reply.</p>
+
+<p class="minorText">This message was sent to you because you opted to watch the department "{department}" at {board} with email notification of new tickets or messages. You will not receive any further emails about this thread until you have read the new messages.</p>
+
+<p class="minorText">If you no longer wish to receive these emails, you may <a href="{disable_this_link}">disable emails from this department</a> or <a href="{disable_all_link}">disable all emails</a>.</p>]]></phrase>
+  <phrase title="mjst_watched_department_message_email_html" version_id="3000031" version_string="3.0.0"><![CDATA[<p>{replier} posted a new message to a department you are watching at {board}.</p>]]></phrase>
+  <phrase title="mjst_watched_department_ticket_email_html" version_id="3000031" version_string="3.0.0"><![CDATA[<p>{replier} opened a new ticket to a department you are watching at {board}.</p>]]></phrase>
+  <phrase title="mjst_watched_departments" version_id="3000030" version_string="3.0.0"><![CDATA[Watched departments]]></phrase>
+  <phrase title="mjst_watched_ticket_departments" version_id="3000030" version_string="3.0.0"><![CDATA[Manage watched departments]]></phrase>
+  <phrase title="mjst_watched_ticket_email_html_footer" version_id="3000334" version_string="3.0.3"><![CDATA[<p class="minorText">Please do not reply to this message. You must visit the ticket to reply.</p>
+
+<p class="minorText">This message was sent to you because you opted to watch the ticket {ticket} at {board} with email notification of new replies. You will not receive any further emails about this ticket until you have read the new messages.</p>]]></phrase>
+  <phrase title="mjst_watched_ticket_email_html_footer_disable" version_id="3000334" version_string="3.0.3"><![CDATA[<p class="minorText">If you no longer wish to receive these emails, you may <a href="{disable_this_link}">disable emails from this ticket</a> or <a href="{disable_all_link}">disable all emails</a>.</p>]]></phrase>
+  <phrase title="mjst_watched_ticket_reply_email_html" version_id="3000031" version_string="3.0.0"><![CDATA[<p>{replier} replied to a ticket you are watching at {board}.</p>]]></phrase>
+  <phrase title="mjst_watched_tickets" version_id="3000030" version_string="3.0.0"><![CDATA[Watched tickets]]></phrase>
+  <phrase title="mjst_x_created_ticket_y" version_id="3000030" version_string="3.0.0"><![CDATA[{name} created a ticket called {title}. There may be more messages after this.]]></phrase>
+  <phrase title="mjst_x_mentioned_you_in_message_in_ticket_y" version_id="3000033" version_string="3.0.0"><![CDATA[{name} mentioned your message in the ticket {title}.]]></phrase>
+  <phrase title="mjst_x_opened_ticket_for_you" version_id="3000030" version_string="3.0.0"><![CDATA[{name} opened a ticket called {title} for you.]]></phrase>
+  <phrase title="mjst_x_quoted_you_in_message_in_ticket_y" version_id="3000033" version_string="3.0.0"><![CDATA[{name} quoted your message in the ticket {title}.]]></phrase>
+  <phrase title="mjst_x_replied_to_ticketd_y_may_be_more" version_id="3000030" version_string="3.0.0"><![CDATA[{name} replied to the ticket {title}. There may be more messages after this.]]></phrase>
+  <phrase title="mjst_x_tickets_will_be_deleted_when_these_messages_deleted" version_id="3000030" version_string="3.0.0"><![CDATA[{count} ticket(s) will be deleted when these messages are deleted.]]></phrase>
+  <phrase title="mjst_you_have_already_rated_this_ticket_rerating_remove_existing" version_id="3000031" version_string="3.0.0"><![CDATA[You have already rated this ticket. Re-rating it will remove your existing rating.]]></phrase>
+  <phrase title="mjst_you_may_not_delete_important_default_ticket_statuses" version_id="3000030" version_string="3.0.0"><![CDATA[You may not delete important default ticket statuses]]></phrase>
+  <phrase title="mjst_you_must_enter_name_and_email_for_guest" version_id="3000030" version_string="3.0.0"><![CDATA[You must enter name and email for guest.]]></phrase>
+  <phrase title="mjst_you_not_watching_any_departments" version_id="3000030" version_string="3.0.0"><![CDATA[You are not watching any departments.]]></phrase>
+  <phrase title="mjst_you_not_watching_any_tickets" version_id="3000030" version_string="3.0.0"><![CDATA[You are not watching any tickets.]]></phrase>
+  <phrase title="mjst_you_sure_you_want_to_copy_x_messages_to_new_ticket" version_id="3000030" version_string="3.0.0"><![CDATA[Are you sure you want to copy {count} message(s) to a new ticket?]]></phrase>
+  <phrase title="mjst_you_sure_you_want_to_delete_x_messages" version_id="3000030" version_string="3.0.0"><![CDATA[Are you sure you want to delete {count} message(s)?]]></phrase>
+  <phrase title="mjst_you_sure_you_want_to_delete_x_tickets" version_id="3000030" version_string="3.0.0"><![CDATA[Are you sure you want to delete {count} ticket(s)?]]></phrase>
+  <phrase title="mjst_you_sure_you_want_to_merge_x_messages_together" version_id="3000030" version_string="3.0.0"><![CDATA[Are you sure you want to merge {count} messages together?]]></phrase>
+  <phrase title="mjst_you_sure_you_want_to_merge_x_tickets" version_id="3000030" version_string="3.0.0"><![CDATA[Are you sure you want to delete {total} ticket(s)?]]></phrase>
+  <phrase title="mjst_you_sure_you_want_to_move_x_messages_to_new_ticket" version_id="3000030" version_string="3.0.0"><![CDATA[Are you sure you want to move {count} message(s) to a new ticket?]]></phrase>
+  <phrase title="mjst_you_sure_you_want_to_move_x_tickets" version_id="3000030" version_string="3.0.0"><![CDATA[Are you sure you want to move {count} ticket(s)?]]></phrase>
+  <phrase title="mjst_you_sure_you_want_to_prefix_x_tickets" version_id="3000030" version_string="3.0.0"><![CDATA[Are you sure you want to apply the prefix specified below to the {count} selected tickets?]]></phrase>
+  <phrase title="mjst_you_sure_you_want_to_stop_watching_all_departments" version_id="3000030" version_string="3.0.0"><![CDATA[Are you sure you want to stop watching all departments?]]></phrase>
+  <phrase title="mjst_you_sure_you_want_to_stop_watching_all_tickets" version_id="3000030" version_string="3.0.0"><![CDATA[Are you sure you want to stop watching all tickets?]]></phrase>
+  <phrase title="mjst_you_sure_you_want_to_unwatch_this_department" version_id="3000030" version_string="3.0.0"><![CDATA[Are you sure you want to unwatch this department?]]></phrase>
+  <phrase title="mjst_you_sure_you_want_to_unwatch_this_ticket" version_id="3000030" version_string="3.0.0"><![CDATA[Are you sure you want to unwatch this ticket?]]></phrase>
+  <phrase title="mjst_you_sure_you_want_to_update_notification_settings_for_all_departments" version_id="3000030" version_string="3.0.0"><![CDATA[Are you sure you want to update your email notification settings for <b>all</b> departments?]]></phrase>
+  <phrase title="mjst_you_sure_you_want_to_update_notification_settings_for_all_tickets" version_id="3000030" version_string="3.0.0"><![CDATA[Are you sure you want to update your email notification settings for <b>all</b> tickets?]]></phrase>
+  <phrase title="mjst_your_message_in_ticket_x_was_copied_to_y" version_id="3000031" version_string="3.0.0"><![CDATA[Your message in the ticket {title} was copied to {target}]]></phrase>
+  <phrase title="mjst_your_message_in_ticket_x_was_deleted" version_id="3000031" version_string="3.0.0"><![CDATA[Your message in the ticket {title} was deleted.]]></phrase>
+  <phrase title="mjst_your_message_in_ticket_x_was_edited" version_id="3000031" version_string="3.0.0"><![CDATA[Your message in the ticket {title} was edited.]]></phrase>
+  <phrase title="mjst_your_message_in_ticket_x_was_moved_to_y" version_id="3000031" version_string="3.0.0"><![CDATA[Your message in the ticket {title} was moved to {target}]]></phrase>
+  <phrase title="mjst_your_messages_in_ticket_x_were_merged_together" version_id="3000031" version_string="3.0.0"><![CDATA[Your messages in ticket {source} were merged together]]></phrase>
+  <phrase title="mjst_your_ticket_x_was_deleted" version_id="3000031" version_string="3.0.0"><![CDATA[Your ticket {title} was deleted.]]></phrase>
+  <phrase title="mjst_your_ticket_x_was_merged_into_y" version_id="3000031" version_string="3.0.0"><![CDATA[Your ticket {title} was merged into {target}.]]></phrase>
+  <phrase title="mjst_your_ticket_x_was_moved_to_different_department" version_id="3000031" version_string="3.0.0"><![CDATA[Your ticket {title} was moved to a different department.]]></phrase>
+  <phrase title="mjst_your_tickets" version_id="3000030" version_string="3.0.0"><![CDATA[Your tickets]]></phrase>
+  <phrase title="mod_log.support_ticket_custom_fields_edit" version_id="3000033" version_string="3.0.0"><![CDATA[Ticket custom fields edited]]></phrase>
+  <phrase title="mod_log.support_ticket_delete" version_id="3000033" version_string="3.0.0"><![CDATA[Ticket permanently deleted]]></phrase>
+  <phrase title="mod_log.support_ticket_delete_hard" version_id="3000033" version_string="3.0.0"><![CDATA[Ticket permanently deleted]]></phrase>
+  <phrase title="mod_log.support_ticket_edit" version_id="3000033" version_string="3.0.0"><![CDATA[Ticket edited]]></phrase>
+  <phrase title="mod_log.support_ticket_merge_target" version_id="3000033" version_string="3.0.0"><![CDATA[Ticket modified by merging tickets ({ids})]]></phrase>
+  <phrase title="mod_log.support_ticket_message_copy_source" version_id="3000033" version_string="3.0.0"><![CDATA[Messages from ticket copied to {title}]]></phrase>
+  <phrase title="mod_log.support_ticket_message_copy_target" version_id="3000033" version_string="3.0.0"><![CDATA[Ticket created by copying messages ({ids})]]></phrase>
+  <phrase title="mod_log.support_ticket_message_copy_target_exist" version_id="3000033" version_string="3.0.0"><![CDATA[Messages ({ids}) copied to ticket]]></phrase>
+  <phrase title="mod_log.support_ticket_message_delete_hard" version_id="3000033" version_string="3.0.0"><![CDATA[Message permanently deleted]]></phrase>
+  <phrase title="mod_log.support_ticket_message_delete_soft" version_id="3000033" version_string="3.0.0"><![CDATA[Message removed from public view (reason: {reason})]]></phrase>
+  <phrase title="mod_log.support_ticket_message_edit" version_id="3000033" version_string="3.0.0"><![CDATA[Message edited]]></phrase>
+  <phrase title="mod_log.support_ticket_message_merge_target" version_id="3000033" version_string="3.0.0"><![CDATA[Message modified by merging messages ({ids})]]></phrase>
+  <phrase title="mod_log.support_ticket_message_move_source" version_id="3000033" version_string="3.0.0"><![CDATA[Messages from ticket moved to {title}]]></phrase>
+  <phrase title="mod_log.support_ticket_message_move_target" version_id="3000033" version_string="3.0.0"><![CDATA[Ticket created by moving messages ({ids})]]></phrase>
+  <phrase title="mod_log.support_ticket_message_move_target_exist" version_id="3000033" version_string="3.0.0"><![CDATA[Messages ({ids}) moved to ticket]]></phrase>
+  <phrase title="mod_log.support_ticket_message_undelete" version_id="3000033" version_string="3.0.0"><![CDATA[Message undeleted]]></phrase>
+  <phrase title="mod_log.support_ticket_move" version_id="3000033" version_string="3.0.0"><![CDATA[Ticket moved from forum {from}]]></phrase>
+  <phrase title="mod_log.support_ticket_prefix" version_id="3000033" version_string="3.0.0"><![CDATA[Ticket prefix edited from '{old}']]></phrase>
+  <phrase title="mod_log.support_ticket_title" version_id="3000033" version_string="3.0.0"><![CDATA[Ticket title edited from '{old}']]></phrase>
+  <phrase title="nav.mjstKb" version_id="2010670" version_string="1.0.0"><![CDATA[Knowledge bases]]></phrase>
+  <phrase title="nav.mjstSupportTicket" version_id="3000031" version_string="3.0.0"><![CDATA[Support Ticket]]></phrase>
+  <phrase title="nav.mjstWatched" version_id="3000030" version_string="3.0.0"><![CDATA[Watched]]></phrase>
+  <phrase title="nav.mjstWatchedDepartments" version_id="3000030" version_string="3.0.0"><![CDATA[Watched departments]]></phrase>
+  <phrase title="nav.mjstWatchedTickets" version_id="3000030" version_string="3.0.0"><![CDATA[Watched tickets]]></phrase>
+  <phrase title="nav.mjstYourAssigned" version_id="3000033" version_string="3.0.0"><![CDATA[Your assigned tickets]]></phrase>
+  <phrase title="nav.mjstYourTickets" version_id="3000030" version_string="3.0.0"><![CDATA[Your tickets]]></phrase>
+  <phrase title="no_notifications_department_watch_description" version_id="3000030" version_string="3.0.0"><![CDATA[The department will still be listed on the watched departments page, which can be used to list only the departments you're interested in.]]></phrase>
+  <phrase title="option.mjstContactAsTicket" version_id="3000334" version_string="3.0.3"><![CDATA[Contact us as ticket]]></phrase>
+  <phrase title="option.mjstDefaultSortOrder" version_id="3000030" version_string="3.0.0"><![CDATA[Default sort order]]></phrase>
+  <phrase title="option.mjstDefautDepartment" version_id="2010670" version_string="1.0.0"><![CDATA[Defaut department]]></phrase>
+  <phrase title="option.mjstDefautPriority" version_id="2010670" version_string="1.0.0"><![CDATA[Defaut priority]]></phrase>
+  <phrase title="option.mjstDisableEmail" version_id="3000230" version_string="3.0.2"><![CDATA[Disable email by default]]></phrase>
+  <phrase title="option.mjstDisplayFullKb" version_id="2010670" version_string="1.0.0"><![CDATA[Display full knowledge base]]></phrase>
+  <phrase title="option.mjstDisplayOption" version_id="3000334" version_string="3.0.3"><![CDATA[Display options]]></phrase>
+  <phrase title="option.mjstDisplaySubmitterIp" version_id="2010670" version_string="2.1.6"><![CDATA[Display submitter IP]]></phrase>
+  <phrase title="option.mjstFirstMessageInEmail" version_id="3000030" version_string="3.0.0"><![CDATA[Include first message in notification emails.]]></phrase>
+  <phrase title="option.mjstGuestNotify" version_id="3000430" version_string="3.0.4"><![CDATA[Notify guest about new reply.]]></phrase>
+  <phrase title="option.mjstKbPreLength" version_id="2010670" version_string="1.0.0"><![CDATA[Knowledge preview length]]></phrase>
+  <phrase title="option.mjstKbsPerPage" version_id="3000033" version_string="3.0.0"><![CDATA[Knowledge bases per page]]></phrase>
+  <phrase title="option.mjstNumberFrequently" version_id="2010670" version_string="1.0.0"><![CDATA[Number frequently asked questions]]></phrase>
+  <phrase title="option.mjstNumberSuggestKb" version_id="2010670" version_string="2.1.6"><![CDATA[Number suggested knowledge base]]></phrase>
+  <phrase title="option.mjstOpenTicketOverlay" version_id="2010670" version_string="1.0.0"><![CDATA[Open new ticket using overlay]]></phrase>
+  <phrase title="option.mjstQuickUpdate" version_id="2010670" version_string="2.1.6"><![CDATA[Enable quick update]]></phrase>
+  <phrase title="option.mjstReplySnippetLength" version_id="2010670" version_string="2.1.6"><![CDATA[Predefined reply snippet maximum length]]></phrase>
+  <phrase title="option.mjstRequireCaptcha" version_id="2010670" version_string="2.1.6"><![CDATA[Required captcha for support ticket]]></phrase>
+  <phrase title="option.mjstTicketStatistic" version_id="3000030" version_string="3.0.0"><![CDATA[Enable email ticket statistics]]></phrase>
+  <phrase title="option.mjstTicketsPerPage" version_id="2010670" version_string="1.0.0"><![CDATA[Tickets per page]]></phrase>
+  <phrase title="option.mjstUseKbMessage" version_id="2010670" version_string="2.1.6"><![CDATA[Use Knowledge Base Message for Suggestions]]></phrase>
+  <phrase title="option_explain.mjstContactAsTicket" version_id="2010670" version_string="1.0.0"><![CDATA[Open ticket after user submit new contact form.]]></phrase>
+  <phrase title="option_explain.mjstDefaultSortOrder" version_id="3000030" version_string="3.0.0"><![CDATA[When viewing the support index or department overview pages, this will be the default sort order for tickets.]]></phrase>
+  <phrase title="option_explain.mjstDefautDepartment" version_id="2010670" version_string="1.0.0"><![CDATA[Default department for open new ticket.]]></phrase>
+  <phrase title="option_explain.mjstDefautPriority" version_id="2010670" version_string="1.0.0"><![CDATA[Default priority for open new ticket]]></phrase>
+  <phrase title="option_explain.mjstDisableEmail" version_id="3000230" version_string="3.0.2"><![CDATA[If selected, users will need to enable receive an email when a new support ticket message is received in Email options <a href="/index.php?account/preferences">preferences</a>.]]></phrase>
+  <phrase title="option_explain.mjstDisplayFullKb" version_id="2010670" version_string="1.0.0"><![CDATA[Show full knowledge base content at category view (using collapse instead of the link to kb).]]></phrase>
+  <phrase title="option_explain.mjstDisplayOption" version_id="2010670" version_string="1.0.0"><![CDATA[Display support ticket link on]]></phrase>
+  <phrase title="option_explain.mjstDisplaySubmitterIp" version_id="2010670" version_string="2.1.6"><![CDATA[Display submitter IP at the sidebar of support ticket view page.]]></phrase>
+  <phrase title="option_explain.mjstFirstMessageInEmail" version_id="3000030" version_string="3.0.0"><![CDATA[With this option enabled, notification emails sent to support ticket opener will contain the full text of the message about which they are being notified. With this option disabled, they will need to visit the ticket page to read the message.]]></phrase>
+  <phrase title="option_explain.mjstGuestNotify" version_id="3000430" version_string="3.0.4"><![CDATA[]]></phrase>
+  <phrase title="option_explain.mjstKbPreLength" version_id="2010670" version_string="1.0.0"><![CDATA[The number of characters that will be used to display the knowledge base preview in list view or category view. Use 0 to disable the preview.]]></phrase>
+  <phrase title="option_explain.mjstKbsPerPage" version_id="3000033" version_string="3.0.0"><![CDATA[The number of knowledge bases that will be listed per page.]]></phrase>
+  <phrase title="option_explain.mjstNumberFrequently" version_id="2010670" version_string="1.0.0"><![CDATA[The number of the most viewed knowledge bases. Use 0 to disabled.]]></phrase>
+  <phrase title="option_explain.mjstNumberSuggestKb" version_id="2010670" version_string="2.1.6"><![CDATA[The number of knowledge base suggested to a user when open new ticket. Use 0 to disable the suggest.]]></phrase>
+  <phrase title="option_explain.mjstOpenTicketOverlay" version_id="2010670" version_string="1.0.0"><![CDATA[Use overlay with open support ticket form.]]></phrase>
+  <phrase title="option_explain.mjstQuickUpdate" version_id="3000033" version_string="3.0.0"><![CDATA[Display edit form at support ticket view page sidebar.]]></phrase>
+  <phrase title="option_explain.mjstReplySnippetLength" version_id="2010670" version_string="2.1.6"><![CDATA[When the text of replies is displayed in predefined replies (bbcode), it will be trimmed to the length specified here.]]></phrase>
+  <phrase title="option_explain.mjstRequireCaptcha" version_id="2010670" version_string="2.1.6"><![CDATA[CAPTCHAs help prevent spammers from open support ticket or reply to support ticket.
+Option <a href="admin.php?options/captcha/view" target="_blank">CAPTCHA for Guests</a> must enabled.]]></phrase>
+  <phrase title="option_explain.mjstTicketStatistic" version_id="3000030" version_string="3.0.0"><![CDATA[]]></phrase>
+  <phrase title="option_explain.mjstTicketsPerPage" version_id="2010670" version_string="1.0.0"><![CDATA[The number of tickets that will be listed per page, including on the support and department overview pages.]]></phrase>
+  <phrase title="option_explain.mjstUseKbMessage" version_id="2010670" version_string="2.1.6"><![CDATA[Use knowledge base title and message for suggestions (disabled this will use the only title).]]></phrase>
+  <phrase title="option_group.mjstSupport" version_id="2010670" version_string="1.0.0"><![CDATA[[BR] Support ticket]]></phrase>
+  <phrase title="option_group_description.mjstSupport" version_id="2010670" version_string="1.0.0"><![CDATA[General options for support ticket]]></phrase>
+  <phrase title="permission.mjstKb_create" version_id="2010670" version_string="1.0.0"><![CDATA[Create knowledge base]]></phrase>
+  <phrase title="permission.mjstKb_deleteAnyKb" version_id="2010670" version_string="2.1.6"><![CDATA[Delete any knowledge base]]></phrase>
+  <phrase title="permission.mjstKb_editAnyKb" version_id="2010670" version_string="1.0.0"><![CDATA[Edit any knowledge base]]></phrase>
+  <phrase title="permission.mjstKb_rate" version_id="2010670" version_string="1.0.0"><![CDATA[Rate knowledge base]]></phrase>
+  <phrase title="permission.mjstKb_view" version_id="2010670" version_string="1.0.0"><![CDATA[View knowledge bases]]></phrase>
+  <phrase title="permission.mjstSupport_assignSupportTicket" version_id="2010670" version_string="1.0.0"><![CDATA[Assign ticket]]></phrase>
+  <phrase title="permission.mjstSupport_changeOwner" version_id="2010670" version_string="1.0.0"><![CDATA[Change ticket's owner]]></phrase>
+  <phrase title="permission.mjstSupport_deleteAnyMessage" version_id="2010670" version_string="1.0.0"><![CDATA[Delete any message]]></phrase>
+  <phrase title="permission.mjstSupport_deleteAnyTicket" version_id="2010670" version_string="1.0.0"><![CDATA[Delete any ticket]]></phrase>
+  <phrase title="permission.mjstSupport_deleteOwnMessage" version_id="2010670" version_string="1.0.0"><![CDATA[Delete message by self]]></phrase>
+  <phrase title="permission.mjstSupport_deleteOwnTicket" version_id="2010670" version_string="1.0.0"><![CDATA[Delete own ticket]]></phrase>
+  <phrase title="permission.mjstSupport_editAnyMessage" version_id="2010670" version_string="1.0.0"><![CDATA[Edit any message]]></phrase>
+  <phrase title="permission.mjstSupport_editAnyTicket" version_id="2010670" version_string="1.0.0"><![CDATA[Edit any ticket]]></phrase>
+  <phrase title="permission.mjstSupport_editOwnMessage" version_id="2010670" version_string="1.0.0"><![CDATA[Edit own messages]]></phrase>
+  <phrase title="permission.mjstSupport_editTicketDepartment" version_id="2010670" version_string="1.0.0"><![CDATA[Edit ticket's department]]></phrase>
+  <phrase title="permission.mjstSupport_editTicketStatus" version_id="2010670" version_string="1.0.0"><![CDATA[Edit ticket's status]]></phrase>
+  <phrase title="permission.mjstSupport_hardDeleteAnyMessage" version_id="2010670" version_string="1.0.0"><![CDATA[Hard-delete any message]]></phrase>
+  <phrase title="permission.mjstSupport_inlineMod" version_id="2010670" version_string="1.0.0"><![CDATA[Use inline moderation on tickets]]></phrase>
+  <phrase title="permission.mjstSupport_manageAnyTicket" version_id="2010670" version_string="1.0.0"><![CDATA[Manage (move, merge, etc.) any ticket]]></phrase>
+  <phrase title="permission.mjstSupport_moveTicketForum" version_id="2010670" version_string="1.0.0"><![CDATA[Move ticket to forum]]></phrase>
+  <phrase title="permission.mjstSupport_openSupportTicket" version_id="2010670" version_string="1.0.0"><![CDATA[Open support ticket]]></phrase>
+  <phrase title="permission.mjstSupport_openTicketAnyone" version_id="2010670" version_string="1.0.0"><![CDATA[Open support ticket for anyone]]></phrase>
+  <phrase title="permission.mjstSupport_postReply" version_id="2010670" version_string="1.0.0"><![CDATA[Post replies]]></phrase>
+  <phrase title="permission.mjstSupport_undelete" version_id="2010670" version_string="1.0.0"><![CDATA[Undelete messages]]></phrase>
+  <phrase title="permission.mjstSupport_uploadAttachment" version_id="2010670" version_string="1.0.0"><![CDATA[Upload attachments to messages]]></phrase>
+  <phrase title="permission.mjstSupport_usePredefinedReply" version_id="2010670" version_string="1.0.0"><![CDATA[Use predefined reply]]></phrase>
+  <phrase title="permission.mjstSupport_useTicket" version_id="2010670" version_string="1.0.0"><![CDATA[Use support ticket]]></phrase>
+  <phrase title="permission.mjstSupport_viewAnyTicket" version_id="2010670" version_string="1.0.0"><![CDATA[View any ticket]]></phrase>
+  <phrase title="permission.mjstSupport_viewAssigned" version_id="2010670" version_string="1.0.0"><![CDATA[View assigned staff]]></phrase>
+  <phrase title="permission.mjstSupport_viewAttachment" version_id="2010670" version_string="1.0.0"><![CDATA[View attachments to messages]]></phrase>
+  <phrase title="permission.mjstSupport_viewCurrentViewer" version_id="2010670" version_string="1.0.0"><![CDATA[View current viewer]]></phrase>
+  <phrase title="permission.mjstSupport_viewDeleted" version_id="2010670" version_string="1.0.0"><![CDATA[View deleted messages]]></phrase>
+  <phrase title="permission.mjstSupport_viewSensitive" version_id="2010670" version_string="1.0.0"><![CDATA[View sensitive fields]]></phrase>
+  <phrase title="permission.mjstSupport_viewSubmitterIp" version_id="2010670" version_string="1.0.0"><![CDATA[View submitter IP]]></phrase>
+  <phrase title="permission_interface.mjstKbModeratorPermission" version_id="2010670" version_string="1.0.0"><![CDATA[[BRST] Knowledge base moderator permissions]]></phrase>
+  <phrase title="permission_interface.mjstKbPermission" version_id="2010670" version_string="1.0.0"><![CDATA[[BRST] Knowledge base permissions]]></phrase>
+  <phrase title="permission_interface.mjstTicketModeratorPermission" version_id="2010670" version_string="1.0.0"><![CDATA[[BRST] Support ticket moderator permissions]]></phrase>
+  <phrase title="permission_interface.mjstTicketPermission" version_id="2010670" version_string="1.0.0"><![CDATA[[BRST] Support ticket permissions]]></phrase>
+</phrases>

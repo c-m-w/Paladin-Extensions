@@ -16,6 +16,7 @@ return array (
   'cron_entry.fileCheck' => 'Perform file health check',
   'cron_entry.forumStatistics' => 'Rebuild forum statistics',
   'cron_entry.memberStatsCache' => 'Rebuild member stats cache',
+  'cron_entry.mjstEscalation' => '[BRST] Escalations',
   'cron_entry.run_successfully' => 'Cron entry was run successfully.',
   'cron_entry.siropuShoutboxPrune' => 'Shoutbox: Auto prune',
   'cron_entry.siropuShoutboxShout' => 'Shoutbox: Delete older shouts',

@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 5371a557629e34e2fe30556ecdbbb7ee
+// FROM HASH: a1804d94fd623a5f4ae5c81ef726398e
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -15,10 +15,6 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		' . $__templater->callMacro('siropu_referral_contests_macros', 'invitation_tabs', array(), $__vars) . '
 
 		<div class="block-body">
-			' . $__templater->formRow('', array(
-		'rowtype' => 'fullWidth noLabel noGutte',
-		'html' => 'Use the form below to send email invitations to your friends and invite them join our community.',
-	)) . '
 			' . $__templater->callMacro('siropu_referral_contests_macros', 'invitation_form', array(), $__vars) . '
 		</div>
 	</div>

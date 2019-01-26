@@ -9,7 +9,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	';
 		if ($__vars['xf']['options']['siropuReferralContestsInvitationOnly']) {
 			$__compilerTemp1 .= '
-		<a class="blockLink ' . (($__vars['pageSelected'] == 'invitations') ? 'is-selected' : '') . '" href="' . (($__templater->method($__vars['xf']['visitor'], 'hasPermission', array('siropuReferralContests', 'sendInvitations', )) != 0) ? $__templater->fn('link', array('account/invitations/create', ), true) : $__templater->fn('link', array('account/invitations/list', ), true)) . '">
+		<a class="blockLink ' . (($__vars['pageSelected'] == 'invitations') ? 'is-selected' : '') . '" href="' . ($__templater->method($__vars['xf']['visitor'], 'hasPermission', array('siropuReferralContests', 'createInvitations', )) ? $__templater->fn('link', array('account/invitations/create', ), true) : $__templater->fn('link', array('account/invitations/list', ), true)) . '">
 			' . 'Your invitations' . '
 		</a>
 	';

@@ -1,84 +1,30 @@
 <?php
-// FROM HASH: 0953ffcf18a81b06d746fb8372789d4f
+// FROM HASH: 0f81168911dddd80d5bb76b19be26e4e
 return array('macros' => array('invitation_form' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
 	$__finalCompiled = '';
 	$__vars = $__templater->mergeMacroArguments(array(), $__arguments, $__vars);
 	$__finalCompiled .= '
-	';
-	$__compilerTemp1 = '';
-	if (!$__vars['xf']['options']['siropuReferralContestsSenderName']) {
-		$__compilerTemp1 .= '
-			' . $__templater->formTextBoxRow(array(
-			'name' => 'name',
-			'value' => $__vars['xf']['visitor']['username'],
-		), array(
-			'label' => 'Your name',
-		)) . '
-		';
-	}
-	$__compilerTemp2 = '';
-	if (!$__vars['xf']['options']['siropuReferralContestsSenderEmail']) {
-		$__compilerTemp2 .= '
-			' . $__templater->formRow('', array(
-			'label' => 'Your email',
-			'html' => $__templater->escape($__vars['xf']['visitor']['email']),
-			'autocomplete' => 'off',
-		)) . '
-		';
-	}
-	$__finalCompiled .= $__templater->form('
-		' . $__compilerTemp1 . '
-
-		' . $__compilerTemp2 . '
-
-		<hr class="formRowSep" />
-
-		' . $__templater->formRow('
-			<ul class="listPlain inputGroup-container">
-				<li class="inputGroup" data-xf-init="field-adder" data-increment-format="email[]">
-					' . $__templater->formTextBox(array(
-		'name' => 'email[]',
-		'type' => 'email',
-		'placeholder' => 'Email',
-		'autocomplete' => 'off',
+	' . $__templater->form('
+		' . $__templater->formInfoRow('Create invitation links that you can send to your friends. Please note that codes expire after 3 days if no one has registered with the code.', array(
 	)) . '
-				</li>
-			</ul>
-		', array(
-		'label' => 'Recipient email address',
-		'explain' => 'You can send invitations to multiple emails addresses by placing each email in a separate input field.',
-	)) . '
-
-		<hr class="formRowSep" />
-
-		' . $__templater->formTextBoxRow(array(
-		'name' => 'subject',
-		'value' => $__vars['xf']['options']['siropuReferralContestsPredefinedEmailSubject'],
-		'autocomplete' => 'off',
+		' . $__templater->formNumberBoxRow(array(
+		'name' => 'count',
+		'value' => '1',
+		'min' => '1',
+		'max' => '10',
 	), array(
-		'label' => 'Subject',
+		'label' => 'Number of invitations',
 	)) . '
-
-		' . $__templater->formTextAreaRow(array(
-		'name' => 'message',
-		'value' => $__vars['xf']['options']['siropuReferralContestsPredefinedEmailMessage'],
-		'rows' => '5',
-	), array(
-		'label' => 'Message',
-		'explain' => ($__vars['xf']['options']['siropuReferralContestsInvitationOnly'] ? 'An invitation link with a unique code will be sent with the message.' : 'Your personal referral link will be sent with the message.'),
-	)) . '
-
 		' . $__templater->formSubmitRow(array(
-		'icon' => 'email',
-		'submit' => 'Send invitation',
+		'icon' => 'add',
+		'submit' => 'Create invitation links',
 	), array(
 	)) . '
 	', array(
 		'action' => $__templater->fn('link', array('account/invitations/create', ), false),
 		'ajax' => 'true',
-		'data-force-flash-message' => 'true',
 	)) . '
 ';
 	return $__finalCompiled;
@@ -96,7 +42,7 @@ return array('macros' => array('invitation_form' => function($__templater, array
 		<span class="block-footer-counter">
 			<a href="' . $__templater->fn('link', array('account/referral-tools', ), true) . '" data-xf-click="overlay"><i class="fa fa-cog" aria-hidden="true"></i> ' . 'Tools' . '</a>
 			';
-	if ($__templater->method($__vars['xf']['visitor'], 'hasPermission', array('siropuReferralContests', 'sendInvitations', )) != 0) {
+	if ($__templater->method($__vars['xf']['visitor'], 'hasPermission', array('siropuReferralContests', 'createInvitations', ))) {
 		$__finalCompiled .= '
 				&nbsp; <a href="' . $__templater->fn('link', array('account/invitations/create', ), true) . '" data-xf-click="overlay"><i class="fa fa-users" aria-hidden="true"></i> ' . 'Invite friends' . '</a>
 				';
@@ -141,7 +87,7 @@ return array('macros' => array('invitation_form' => function($__templater, array
 			';
 	}
 	$__finalCompiled .= '
-			<a href="' . $__templater->fn('link', array('account/invitations/list', ), true) . '" class="tabs-tab' . (($__vars['activeTab'] == 'list') ? ' is-active' : '') . '" role="tab" tabindex="0">' . ($__vars['xf']['options']['siropuReferralContestsCreateInvitations'] ? 'Your invitations' : 'Invitations sent') . '</a>
+			<a href="' . $__templater->fn('link', array('account/invitations/list', ), true) . '" class="tabs-tab' . (($__vars['activeTab'] != 'create') ? ' is-active' : '') . '" role="tab" tabindex="0">' . ($__vars['xf']['options']['siropuReferralContestsCreateInvitations'] ? 'Your invitations' : 'Invitations sent') . '</a>
 		</span>
 	</h2>
 ';

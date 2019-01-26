@@ -27,6 +27,7 @@ return array (
   'option_group.logging' => 'Logging options',
   'option_group.mediaEmbedding' => 'Media embedding',
   'option_group.messageOptions' => 'Messages',
+  'option_group.mjstSupport' => '[BR] Support ticket',
   'option_group.newsfeed' => 'News feed',
   'option_group.nodeList' => 'Node & forum list',
   'option_group.performance' => 'Performance',

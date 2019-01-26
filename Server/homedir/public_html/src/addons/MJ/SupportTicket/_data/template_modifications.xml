@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template_modifications>
+  <modification type="public" template="PAGE_CONTAINER" modification_key="mjst_footer_link" description="Add footer link" execution_order="9" enabled="1" action="str_replace">
+    <find><![CDATA[<xf:if is="$xf.visitor.canUseContactForm()">]]></find>
+    <replace><![CDATA[<xf:include template="mjst_footer_link" />$0]]></replace>
+  </modification>
+  <modification type="public" template="PAGE_CONTAINER" modification_key="mjst_moderator_bar" description="Add moderator information" execution_order="10" enabled="1" action="str_replace">
+    <find><![CDATA[<xf:if is="$xf.visitor.is_moderator && !$xf.options.reportIntoForumId && $xf.session.reportCounts.total">]]></find>
+    <replace><![CDATA[<xf:include template="mjst_moderator_bar" />$0]]></replace>
+  </modification>
+  <modification type="public" template="account_preferences" modification_key="mjst_account_preferences" description="Add ticket's email option" execution_order="9" enabled="1" action="str_replace">
+    <find><![CDATA[<xf:macro template="helper_account" name="email_options_row" arg-showConversationOption="{{ true }}" />]]></find>
+    <replace><![CDATA[$0<xf:include template="mjst_account_preferences" />]]></replace>
+  </modification>
+  <modification type="public" template="account_visitor_menu" modification_key="mjst_account_visitor_menu" description="Add your tickets link" execution_order="10" enabled="1" action="str_replace">
+    <find><![CDATA[<!--[XF:content_links:bottom]-->]]></find>
+    <replace><![CDATA[<xf:include template="mjst_account_visitor_menu" />$0]]></replace>
+  </modification>
+  <modification type="public" template="editor" modification_key="mjst_editor_pre_reply" description="Add pre reply button" execution_order="10" enabled="1" action="str_replace">
+    <find><![CDATA[<!--[XF:include_js]-->]]></find>
+    <replace><![CDATA[$0
+<xf:include template="mjst_editor_pre_reply" />]]></replace>
+  </modification>
+  <modification type="admin" template="tools_rebuild" modification_key="mjst_tools_rebuild" description="Append support ticket rebuilds to the end of the rebuild caches system." execution_order="10" enabled="1" action="str_replace">
+    <find><![CDATA[<!--[XF:rebuild_bottom]-->]]></find>
+    <replace><![CDATA[$0
+<xf:include template="mjst_tools_rebuild" />]]></replace>
+  </modification>
+</template_modifications>

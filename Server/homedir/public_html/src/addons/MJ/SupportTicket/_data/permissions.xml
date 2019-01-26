@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<permissions>
+  <permission permission_group_id="mjstKb" permission_id="create" permission_type="flag" interface_group_id="mjstKbPermission" display_order="40"/>
+  <permission permission_group_id="mjstKb" permission_id="deleteAnyKb" permission_type="flag" interface_group_id="mjstKbModeratorPermission" display_order="20"/>
+  <permission permission_group_id="mjstKb" permission_id="editAnyKb" permission_type="flag" interface_group_id="mjstKbModeratorPermission" display_order="10"/>
+  <permission permission_group_id="mjstKb" permission_id="rate" permission_type="flag" interface_group_id="mjstKbPermission" display_order="20"/>
+  <permission permission_group_id="mjstKb" permission_id="view" permission_type="flag" interface_group_id="mjstKbPermission" display_order="10"/>
+  <permission permission_group_id="mjstSupport" permission_id="assignSupportTicket" permission_type="flag" interface_group_id="mjstTicketModeratorPermission" display_order="70"/>
+  <permission permission_group_id="mjstSupport" permission_id="changeOwner" permission_type="flag" interface_group_id="mjstTicketModeratorPermission" display_order="80"/>
+  <permission permission_group_id="mjstSupport" permission_id="deleteAnyMessage" permission_type="flag" interface_group_id="mjstTicketModeratorPermission" display_order="410"/>
+  <permission permission_group_id="mjstSupport" permission_id="deleteAnyTicket" permission_type="flag" interface_group_id="mjstTicketModeratorPermission" display_order="40"/>
+  <permission permission_group_id="mjstSupport" permission_id="deleteOwnMessage" permission_type="flag" interface_group_id="mjstTicketPermission" display_order="150"/>
+  <permission permission_group_id="mjstSupport" permission_id="deleteOwnTicket" permission_type="flag" interface_group_id="mjstTicketPermission" display_order="30"/>
+  <permission permission_group_id="mjstSupport" permission_id="editAnyMessage" permission_type="flag" interface_group_id="mjstTicketModeratorPermission" display_order="400"/>
+  <permission permission_group_id="mjstSupport" permission_id="editAnyTicket" permission_type="flag" interface_group_id="mjstTicketModeratorPermission" display_order="30"/>
+  <permission permission_group_id="mjstSupport" permission_id="editOwnMessage" permission_type="flag" interface_group_id="mjstTicketPermission" display_order="140"/>
+  <permission permission_group_id="mjstSupport" permission_id="editTicketDepartment" permission_type="flag" interface_group_id="mjstTicketModeratorPermission" display_order="60"/>
+  <permission permission_group_id="mjstSupport" permission_id="editTicketStatus" permission_type="flag" interface_group_id="mjstTicketModeratorPermission" display_order="50"/>
+  <permission permission_group_id="mjstSupport" permission_id="hardDeleteAnyMessage" permission_type="flag" interface_group_id="mjstTicketModeratorPermission" display_order="420"/>
+  <permission permission_group_id="mjstSupport" permission_id="inlineMod" permission_type="flag" interface_group_id="mjstTicketPermission" display_order="1005"/>
+  <permission permission_group_id="mjstSupport" permission_id="manageAnyTicket" permission_type="flag" interface_group_id="mjstTicketModeratorPermission" display_order="20"/>
+  <permission permission_group_id="mjstSupport" permission_id="moveTicketForum" permission_type="flag" interface_group_id="mjstTicketModeratorPermission" display_order="310"/>
+  <permission permission_group_id="mjstSupport" permission_id="openSupportTicket" permission_type="flag" interface_group_id="mjstTicketPermission" display_order="20"/>
+  <permission permission_group_id="mjstSupport" permission_id="openTicketAnyone" permission_type="flag" interface_group_id="mjstTicketModeratorPermission" display_order="20"/>
+  <permission permission_group_id="mjstSupport" permission_id="postReply" permission_type="flag" interface_group_id="mjstTicketPermission" display_order="100"/>
+  <permission permission_group_id="mjstSupport" permission_id="undelete" permission_type="flag" interface_group_id="mjstTicketModeratorPermission" display_order="450"/>
+  <permission permission_group_id="mjstSupport" permission_id="uploadAttachment" permission_type="flag" interface_group_id="mjstTicketPermission" display_order="120"/>
+  <permission permission_group_id="mjstSupport" permission_id="usePredefinedReply" permission_type="flag" interface_group_id="mjstTicketModeratorPermission" display_order="300"/>
+  <permission permission_group_id="mjstSupport" permission_id="useTicket" permission_type="flag" interface_group_id="mjstTicketPermission" display_order="10"/>
+  <permission permission_group_id="mjstSupport" permission_id="viewAnyTicket" permission_type="flag" interface_group_id="mjstTicketModeratorPermission" display_order="10"/>
+  <permission permission_group_id="mjstSupport" permission_id="viewAssigned" permission_type="flag" interface_group_id="mjstTicketModeratorPermission" display_order="100"/>
+  <permission permission_group_id="mjstSupport" permission_id="viewAttachment" permission_type="flag" interface_group_id="mjstTicketPermission" display_order="110"/>
+  <permission permission_group_id="mjstSupport" permission_id="viewCurrentViewer" permission_type="flag" interface_group_id="mjstTicketPermission" display_order="130"/>
+  <permission permission_group_id="mjstSupport" permission_id="viewDeleted" permission_type="flag" interface_group_id="mjstTicketModeratorPermission" display_order="440"/>
+  <permission permission_group_id="mjstSupport" permission_id="viewSensitive" permission_type="flag" interface_group_id="mjstTicketModeratorPermission" display_order="210"/>
+  <permission permission_group_id="mjstSupport" permission_id="viewSubmitterIp" permission_type="flag" interface_group_id="mjstTicketModeratorPermission" display_order="220"/>
+</permissions>

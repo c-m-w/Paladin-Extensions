@@ -29,6 +29,7 @@ You may set a user into \'discouraged\' mode by editing their user profile, or d
   'option_group_description.logging' => 'Options that control what data is logged and how long it is maintained.',
   'option_group_description.mediaEmbedding' => 'Contains settings related to embedding external media such as videos, audio clips and social media content.',
   'option_group_description.messageOptions' => 'Options here control messages posted by users to the system, including messages in threads, profile posts, conversations, etc.',
+  'option_group_description.mjstSupport' => 'General options for support ticket',
   'option_group_description.newsfeed' => 'The news feed, or activity stream is a constantly-updated log of things that your registered members do, which can be viewed back by other visitors.<br />
 <br />
 It is possible to filter the news feed down to just users you follow, or a single user.',

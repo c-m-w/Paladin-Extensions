@@ -1614,7 +1614,7 @@ return array('macros' => array('uix_mainTabComponent' => function($__templater, 
 	}
 	$__compilerTemp21 .= '
 
-									';
+									' . $__templater->includeTemplate('mjst_moderator_bar', $__vars);
 	if ($__vars['xf']['visitor']['is_moderator'] AND ((!$__vars['xf']['options']['reportIntoForumId']) AND $__vars['xf']['session']['reportCounts']['total'])) {
 		$__compilerTemp21 .= '
 										<a href="' . $__templater->fn('link', array('reports', ), true) . '"
@@ -1704,7 +1704,7 @@ return array('macros' => array('uix_mainTabComponent' => function($__templater, 
 	}
 	$__compilerTemp23 .= '
 
-													';
+													' . $__templater->includeTemplate('mjst_moderator_bar', $__vars);
 	if ($__vars['xf']['visitor']['is_moderator'] AND ((!$__vars['xf']['options']['reportIntoForumId']) AND $__vars['xf']['session']['reportCounts']['total'])) {
 		$__compilerTemp23 .= '
 														<a href="' . $__templater->fn('link', array('reports', ), true) . '"
@@ -2950,7 +2950,7 @@ return array('macros' => array('uix_mainTabComponent' => function($__templater, 
 					</div>
 					<div class="p-footer-row-opposite">
 						<ul class="p-footer-linkList">
-							';
+							' . $__templater->includeTemplate('mjst_footer_link', $__vars);
 	if ($__templater->method($__vars['xf']['visitor'], 'canUseContactForm', array())) {
 		$__finalCompiled .= '
 								';

@@ -1,0 +1,14 @@
+{
+    "legacy_addon_id": "BR_SupportTicketSystem",
+    "title": "[BR] Support Ticket System",
+    "description": "The support ticket system for XenForo",
+    "version_id": 3010030,
+    "version_string": "3.1.0",
+    "dev": "Brivium",
+    "dev_url": "https://brivium.com/",
+    "faq_url": "https://brivium.com/faqs/",
+    "support_url": "https://brivium.com/support-tickets/",
+    "extra_urls": [],
+    "require": {},
+    "icon": "icon.png"
+}

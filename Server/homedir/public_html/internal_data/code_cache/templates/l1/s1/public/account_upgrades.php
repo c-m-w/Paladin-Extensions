@@ -74,7 +74,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 							$__compilerTemp2 .= '<span class="inputGroup-splitter"></span>';
 						}
 						$__compilerTemp2 .= '
-	' . $__templater->button('<font size="4"><i class="fa fa-gift" style="padding-right:7px;"></i></font>Gift', array(
+	' . $__templater->button('<font size="3"><i class="fa fa-gift" style="padding-right:7px;"></i></font>Gift', array(
 							'type' => 'submit',
 							'name' => 'gift',
 							'value' => '1',
@@ -104,7 +104,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 							$__compilerTemp2 .= '<span class="inputGroup-splitter"></span>';
 						}
 						$__compilerTemp2 .= '
-	' . $__templater->button('<font size="4"><i class="fa fa-gift" style="padding-right:7px;"></i></font>Gift', array(
+	' . $__templater->button('<font size="3"><i class="fa fa-gift" style="padding-right:7px;"></i></font>Gift', array(
 							'type' => 'submit',
 							'name' => 'gift',
 							'value' => '1',

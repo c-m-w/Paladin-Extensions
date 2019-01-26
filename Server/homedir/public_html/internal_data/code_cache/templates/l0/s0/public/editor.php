@@ -31,6 +31,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		}
 		$__finalCompiled .= '
 	' . '
+' . $__templater->includeTemplate('mjst_editor_pre_reply', $__vars) . '
 
 	<script class="js-editorLanguage" type="application/json">
 		{

@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 6ce9013856888a309dbf6bba9d664c33
+// FROM HASH: dcba8157b84d34e1ee6fc8550cbc1401
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -58,42 +58,97 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 												<span class="inputGroup-splitter"></span>
 
 												';
-					$__vars['buffer'] = '1';
-					$__compilerTemp2 .= '
-												';
-					if (!$__templater->test($__vars['purchased'], 'empty', array())) {
+					if ($__templater->method($__vars['xf']['visitor'], 'isMemberOf', array(11, ))) {
 						$__compilerTemp2 .= '
+												';
+					} else {
+						$__compilerTemp2 .= '
+												';
+						$__vars['buffer'] = '1';
+						$__compilerTemp2 .= '
+												';
+						if (!$__templater->test($__vars['purchased'], 'empty', array())) {
+							$__compilerTemp2 .= '
 													';
-						if ($__templater->isTraversable($__vars['purchased'])) {
-							foreach ($__vars['purchased'] AS $__vars['purupgrade']) {
+							if ($__templater->isTraversable($__vars['purchased'])) {
+								foreach ($__vars['purchased'] AS $__vars['purupgrade']) {
+									$__compilerTemp2 .= '
+														';
+									if ($__vars['purupgrade']['user_upgrade_id'] == $__vars['upgrade']['user_upgrade_id']) {
+										$__compilerTemp2 .= '
+															';
+										$__vars['buffer'] = '0';
+										$__compilerTemp2 .= '
+														';
+									}
+									$__compilerTemp2 .= '
+													';
+								}
+							}
+							$__compilerTemp2 .= '
+												';
+						}
+						$__compilerTemp2 .= '
+
+												';
+						if ((($__vars['upgrade']['user_upgrade_id'] == 13) OR ($__vars['upgrade']['user_upgrade_id'] == 18)) OR ($__vars['upgrade']['user_upgrade_id'] == 7)) {
+							$__compilerTemp2 .= '
+													';
+							if ($__templater->method($__vars['xf']['visitor'], 'isMemberOf', array(9, )) OR $__templater->method($__vars['xf']['visitor'], 'isMemberOf', array(3, ))) {
 								$__compilerTemp2 .= '
 														';
-								if ($__vars['purupgrade']['user_upgrade_id'] == $__vars['upgrade']['user_upgrade_id']) {
+								if ($__vars['buffer']) {
 									$__compilerTemp2 .= '
 															';
-									$__vars['buffer'] = '0';
+									if ($__templater->method($__vars['upgrade'], 'canPurchase', array())) {
+										$__compilerTemp2 .= $__templater->button('', array(
+											'type' => 'submit',
+											'icon' => 'purchase',
+										), '', array(
+										));
+									}
 									$__compilerTemp2 .= '
+';
+									if ($__templater->method($__vars['upgrade'], 'canGift', array())) {
+										$__compilerTemp2 .= '
+	';
+										if ($__templater->method($__vars['upgrade'], 'canPurchase', array())) {
+											$__compilerTemp2 .= '<span class="inputGroup-splitter"></span>';
+										}
+										$__compilerTemp2 .= '
+	' . $__templater->button('<font size="3"><i class="fa fa-gift" style="padding-right:7px;"></i></font>Gift', array(
+											'type' => 'submit',
+											'name' => 'gift',
+											'value' => '1',
+											'icon' => 'nfgift',
+										), '', array(
+										)) . '
+';
+									}
+									$__compilerTemp2 .= '
+														';
+								} else {
+									$__compilerTemp2 .= '
+															' . $__templater->button('<font size="3"><i class="fa fa-gift" style="padding-right:7px;"></i></font>Gift', array(
+										'type' => 'submit',
+										'class' => 'button button--icon button--icon--nfgift rippleButton',
+										'name' => 'gift',
+										'value' => '1',
+									), '', array(
+									)) . '
 														';
 								}
 								$__compilerTemp2 .= '
 													';
 							}
-						}
-						$__compilerTemp2 .= '
-												';
-					}
-					$__compilerTemp2 .= '
-
-												';
-					if ((($__vars['upgrade']['user_upgrade_id'] == 13) OR ($__vars['upgrade']['user_upgrade_id'] == 18)) OR ($__vars['upgrade']['user_upgrade_id'] == 7)) {
-						$__compilerTemp2 .= '
-													';
-						if ($__templater->method($__vars['xf']['visitor'], 'isMemberOf', array(9, ))) {
 							$__compilerTemp2 .= '
-														';
+												';
+						} else {
+							$__compilerTemp2 .= '
+													';
 							if ($__vars['buffer']) {
 								$__compilerTemp2 .= '
-															';
+														';
 								if ($__templater->method($__vars['upgrade'], 'canPurchase', array())) {
 									$__compilerTemp2 .= $__templater->button('', array(
 										'type' => 'submit',
@@ -110,7 +165,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 										$__compilerTemp2 .= '<span class="inputGroup-splitter"></span>';
 									}
 									$__compilerTemp2 .= '
-	' . $__templater->button('<font size="4"><i class="fa fa-gift" style="padding-right:7px;"></i></font>Gift', array(
+	' . $__templater->button('<font size="3"><i class="fa fa-gift" style="padding-right:7px;"></i></font>Gift', array(
 										'type' => 'submit',
 										'name' => 'gift',
 										'value' => '1',
@@ -120,66 +175,20 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 ';
 								}
 								$__compilerTemp2 .= '
-														';
+													';
 							} else {
 								$__compilerTemp2 .= '
-															' . $__templater->button('<font size="4"><i class="fa fa-gift" style="padding-right:7px;"></i></font>Gift', array(
+														' . $__templater->button('<font size="3"><i class="fa fa-gift" style="padding-right:7px;"></i></font>Gift', array(
 									'type' => 'submit',
 									'class' => 'button button--icon button--icon--nfgift rippleButton',
 									'name' => 'gift',
 									'value' => '1',
 								), '', array(
 								)) . '
-														';
+													';
 							}
 							$__compilerTemp2 .= '
-													';
-						}
-						$__compilerTemp2 .= '
 												';
-					} else {
-						$__compilerTemp2 .= '
-													';
-						if ($__vars['buffer']) {
-							$__compilerTemp2 .= '
-														';
-							if ($__templater->method($__vars['upgrade'], 'canPurchase', array())) {
-								$__compilerTemp2 .= $__templater->button('', array(
-									'type' => 'submit',
-									'icon' => 'purchase',
-								), '', array(
-								));
-							}
-							$__compilerTemp2 .= '
-';
-							if ($__templater->method($__vars['upgrade'], 'canGift', array())) {
-								$__compilerTemp2 .= '
-	';
-								if ($__templater->method($__vars['upgrade'], 'canPurchase', array())) {
-									$__compilerTemp2 .= '<span class="inputGroup-splitter"></span>';
-								}
-								$__compilerTemp2 .= '
-	' . $__templater->button('<font size="4"><i class="fa fa-gift" style="padding-right:7px;"></i></font>Gift', array(
-									'type' => 'submit',
-									'name' => 'gift',
-									'value' => '1',
-									'icon' => 'nfgift',
-								), '', array(
-								)) . '
-';
-							}
-							$__compilerTemp2 .= '
-													';
-						} else {
-							$__compilerTemp2 .= '
-														' . $__templater->button('<font size="4"><i class="fa fa-gift" style="padding-right:7px;"></i></font>Gift', array(
-								'type' => 'submit',
-								'class' => 'button button--icon button--icon--nfgift rippleButton',
-								'name' => 'gift',
-								'value' => '1',
-							), '', array(
-							)) . '
-													';
 						}
 						$__compilerTemp2 .= '
 												';
@@ -190,49 +199,97 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 				} else {
 					$__compilerTemp2 .= '
 												';
-					$__vars['buffer'] = '1';
-					$__compilerTemp2 .= '
-												';
-					if (!$__templater->test($__vars['purchased'], 'empty', array())) {
+					if ($__templater->method($__vars['xf']['visitor'], 'isMemberOf', array(11, ))) {
 						$__compilerTemp2 .= '
+												';
+					} else {
+						$__compilerTemp2 .= '
+												';
+						$__vars['buffer'] = '1';
+						$__compilerTemp2 .= '
+												';
+						if (!$__templater->test($__vars['purchased'], 'empty', array())) {
+							$__compilerTemp2 .= '
 													';
-						if ($__templater->isTraversable($__vars['purchased'])) {
-							foreach ($__vars['purchased'] AS $__vars['purupgrade']) {
+							if ($__templater->isTraversable($__vars['purchased'])) {
+								foreach ($__vars['purchased'] AS $__vars['purupgrade']) {
+									$__compilerTemp2 .= '
+														';
+									if ($__vars['purupgrade']['user_upgrade_id'] == $__vars['upgrade']['user_upgrade_id']) {
+										$__compilerTemp2 .= '
+															';
+										$__vars['buffer'] = '0';
+										$__compilerTemp2 .= '
+														';
+									}
+									$__compilerTemp2 .= '
+													';
+								}
+							}
+							$__compilerTemp2 .= '
+												';
+						}
+						$__compilerTemp2 .= '
+
+												';
+						if ((($__vars['upgrade']['user_upgrade_id'] == 13) OR ($__vars['upgrade']['user_upgrade_id'] == 18)) OR ($__vars['upgrade']['user_upgrade_id'] == 7)) {
+							$__compilerTemp2 .= '
+													';
+							if ($__templater->method($__vars['xf']['visitor'], 'isMemberOf', array(9, )) OR $__templater->method($__vars['xf']['visitor'], 'isMemberOf', array(3, ))) {
 								$__compilerTemp2 .= '
 														';
-								if ($__vars['purupgrade']['user_upgrade_id'] == $__vars['upgrade']['user_upgrade_id']) {
+								if ($__vars['buffer']) {
 									$__compilerTemp2 .= '
 															';
-									$__vars['buffer'] = '0';
+									if ($__templater->method($__vars['upgrade'], 'canPurchase', array())) {
+										$__compilerTemp2 .= $__templater->button('', array(
+											'type' => 'submit',
+											'icon' => 'purchase',
+										), '', array(
+										));
+									}
 									$__compilerTemp2 .= '
+';
+									if ($__templater->method($__vars['upgrade'], 'canGift', array())) {
+										$__compilerTemp2 .= '
+	';
+										if ($__templater->method($__vars['upgrade'], 'canPurchase', array())) {
+											$__compilerTemp2 .= '<span class="inputGroup-splitter"></span>';
+										}
+										$__compilerTemp2 .= '
+	' . $__templater->button('<font size="3"><i class="fa fa-gift" style="padding-right:7px;"></i></font>Gift', array(
+											'type' => 'submit',
+											'name' => 'gift',
+											'value' => '1',
+											'icon' => 'nfgift',
+										), '', array(
+										)) . '
+';
+									}
+									$__compilerTemp2 .= '
+														';
+								} else {
+									$__compilerTemp2 .= '
+															' . $__templater->button('<font size="3"><i class="fa fa-gift" style="padding-right:7px;"></i></font>Gift', array(
+										'type' => 'submit',
+										'class' => 'button button--icon button--icon--nfgift rippleButton',
+										'name' => 'gift',
+										'value' => '1',
+									), '', array(
+									)) . '
 														';
 								}
 								$__compilerTemp2 .= '
 													';
 							}
-						}
-						$__compilerTemp2 .= '
-												';
-					}
-					$__compilerTemp2 .= '
-
-												';
-					if ((($__vars['upgrade']['user_upgrade_id'] == 13) OR ($__vars['upgrade']['user_upgrade_id'] == 18)) OR ($__vars['upgrade']['user_upgrade_id'] == 7)) {
-						$__compilerTemp2 .= '
-													';
-						if ($__templater->method($__vars['xf']['visitor'], 'isMemberOf', array(90, ))) {
 							$__compilerTemp2 .= '
-														hey
-													';
-						}
-						$__compilerTemp2 .= '
-													';
-						if ($__templater->method($__vars['xf']['visitor'], 'isMemberOf', array(9, ))) {
+												';
+						} else {
 							$__compilerTemp2 .= '
-														';
+													';
 							if ($__vars['buffer']) {
 								$__compilerTemp2 .= '
-															';
+														';
 								if ($__templater->method($__vars['upgrade'], 'canPurchase', array())) {
 									$__compilerTemp2 .= $__templater->button('', array(
 										'type' => 'submit',
@@ -249,7 +306,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 										$__compilerTemp2 .= '<span class="inputGroup-splitter"></span>';
 									}
 									$__compilerTemp2 .= '
-	' . $__templater->button('<font size="4"><i class="fa fa-gift" style="padding-right:7px;"></i></font>Gift', array(
+	' . $__templater->button('<font size="3"><i class="fa fa-gift" style="padding-right:7px;"></i></font>Gift', array(
 										'type' => 'submit',
 										'name' => 'gift',
 										'value' => '1',
@@ -259,66 +316,20 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 ';
 								}
 								$__compilerTemp2 .= '
-														';
+													';
 							} else {
 								$__compilerTemp2 .= '
-															' . $__templater->button('<font size="4"><i class="fa fa-gift" style="padding-right:7px;"></i></font>Gift', array(
+														' . $__templater->button('<font size="3"><i class="fa fa-gift" style="padding-right:7px;"></i></font>Gift', array(
 									'type' => 'submit',
 									'class' => 'button button--icon button--icon--nfgift rippleButton',
 									'name' => 'gift',
 									'value' => '1',
 								), '', array(
 								)) . '
-														';
+													';
 							}
 							$__compilerTemp2 .= '
-													';
-						}
-						$__compilerTemp2 .= '
 												';
-					} else {
-						$__compilerTemp2 .= '
-													';
-						if ($__vars['buffer']) {
-							$__compilerTemp2 .= '
-														';
-							if ($__templater->method($__vars['upgrade'], 'canPurchase', array())) {
-								$__compilerTemp2 .= $__templater->button('', array(
-									'type' => 'submit',
-									'icon' => 'purchase',
-								), '', array(
-								));
-							}
-							$__compilerTemp2 .= '
-';
-							if ($__templater->method($__vars['upgrade'], 'canGift', array())) {
-								$__compilerTemp2 .= '
-	';
-								if ($__templater->method($__vars['upgrade'], 'canPurchase', array())) {
-									$__compilerTemp2 .= '<span class="inputGroup-splitter"></span>';
-								}
-								$__compilerTemp2 .= '
-	' . $__templater->button('<font size="4"><i class="fa fa-gift" style="padding-right:7px;"></i></font>Gift', array(
-									'type' => 'submit',
-									'name' => 'gift',
-									'value' => '1',
-									'icon' => 'nfgift',
-								), '', array(
-								)) . '
-';
-							}
-							$__compilerTemp2 .= '
-													';
-						} else {
-							$__compilerTemp2 .= '
-														' . $__templater->button('<font size="4"><i class="fa fa-gift" style="padding-right:7px;"></i></font>Gift', array(
-								'type' => 'submit',
-								'class' => 'button button--icon button--icon--nfgift rippleButton',
-								'name' => 'gift',
-								'value' => '1',
-							), '', array(
-							)) . '
-													';
 						}
 						$__compilerTemp2 .= '
 												';

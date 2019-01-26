@@ -316,6 +316,7 @@ return array('macros' => array('rebuild_job' => function($__templater, array $__
 
 ' . $__templater->includeTemplate('sv_ue_tools_rebuild', $__vars) . '
 ' . '
+' . $__templater->includeTemplate('mjst_tools_rebuild', $__vars) . '
 ' . $__templater->includeTemplate('xfrm_tools_rebuild', $__vars) . '
 
 ';

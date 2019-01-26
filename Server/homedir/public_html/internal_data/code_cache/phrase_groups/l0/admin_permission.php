@@ -10,6 +10,7 @@ return array (
   'admin_permission.help' => 'Manage help',
   'admin_permission.import' => 'Import data',
   'admin_permission.language' => 'Manage languages and phrases',
+  'admin_permission.mjstSupport' => '[BRST] Manage support tickets',
   'admin_permission.navigation' => 'Manage navigation',
   'admin_permission.node' => 'Manage nodes',
   'admin_permission.notice' => 'Manage notices',

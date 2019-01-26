@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<routes>
+  <route route_type="admin" route_prefix="mjst-support" controller="MJ\SupportTicket:Ticket" context="mjstStats"/>
+  <route route_type="admin" route_prefix="mjst-support" sub_name="departments" format="departments/:int&lt;department_id,title&gt;/" controller="MJ\SupportTicket:Department" context="mjstDepartments"/>
+  <route route_type="admin" route_prefix="mjst-support" sub_name="departments/members" format="departments/members/:int&lt;department_id,title&gt;/" controller="MJ\SupportTicket:Department" context="mjstDepartments" action_prefix="Member"/>
+  <route route_type="admin" route_prefix="mjst-support" sub_name="escalations" format="escalations/:int&lt;ticket_escalation_id,title&gt;/" controller="MJ\SupportTicket:TicketEscalation" context="mjstEscalations"/>
+  <route route_type="admin" route_prefix="mjst-support" sub_name="fields" format="fields/:str&lt;field_id&gt;/" controller="MJ\SupportTicket:TicketField" context="mjstFields"/>
+  <route route_type="admin" route_prefix="mjst-support" sub_name="kb" format="kb/:int&lt;kb_id,title&gt;/" controller="MJ\SupportTicket:KnowledgeBase" context="mjstKnowledgeBases"/>
+  <route route_type="admin" route_prefix="mjst-support" sub_name="kb/category" format="kb/category/:int&lt;kb_category_id,title&gt;/" controller="MJ\SupportTicket:KnowledgeBase" context="mjstKnowledgeBases" action_prefix="Category"/>
+  <route route_type="admin" route_prefix="mjst-support" sub_name="predefined-replies" format="predefined-replies/:int&lt;reply_id,title&gt;/" controller="MJ\SupportTicket:PreReply" context="mjstPredefinedReplies"/>
+  <route route_type="admin" route_prefix="mjst-support" sub_name="predefined-replies/group" format="predefined-replies/group/:int&lt;reply_group_id,title&gt;/" controller="MJ\SupportTicket:PreReply" context="mjstPredefinedReplies" action_prefix="Group"/>
+  <route route_type="admin" route_prefix="mjst-support" sub_name="prefixes" format="prefixes/:int&lt;prefix_id,title&gt;/" controller="MJ\SupportTicket:TicketPrefix" context="mjstPrefixes"/>
+  <route route_type="admin" route_prefix="mjst-support" sub_name="prefixes/group" format="prefixes/group/:int&lt;prefix_group_id,title&gt;/" controller="MJ\SupportTicket:TicketPrefix" context="mjstPrefixes" action_prefix="Group"/>
+  <route route_type="admin" route_prefix="mjst-support" sub_name="statuses" format="statuses/:int&lt;ticket_status_id,title&gt;/" controller="MJ\SupportTicket:TicketStatus" context="mjstStatuses"/>
+  <route route_type="admin" route_prefix="permissions" sub_name="mjst-departments" format="mjst-departments/:int&lt;department_id,title&gt;/" controller="MJ\SupportTicket:Permission" context="mjstDepartmentPermissions" action_prefix="department"/>
+  <route route_type="public" route_prefix="support-tickets" format=":int&lt;support_ticket_id,title&gt;/:page" controller="MJ\SupportTicket:Ticket" context="mjstSupportTicket"/>
+  <route route_type="public" route_prefix="support-tickets" sub_name="departments" format="departments/:int&lt;department_id,title&gt;/:page" controller="MJ\SupportTicket:Department" context="mjstSupportTicket"/>
+  <route route_type="public" route_prefix="support-tickets" sub_name="knowledge-base" format="knowledge-base/:int&lt;kb_id,title&gt;/" controller="MJ\SupportTicket:KnowledgeBase" context="mjstSupportTicket"/>
+  <route route_type="public" route_prefix="support-tickets" sub_name="knowledge-base/category" format="knowledge-base/category/:int&lt;kb_category_id,title&gt;/" controller="MJ\SupportTicket:KnowledgeBase" context="mjstSupportTicket" action_prefix="Category"/>
+  <route route_type="public" route_prefix="support-tickets" sub_name="message" format=":+int&lt;support_ticket_id,title&gt;/message-:+int_p&lt;message_id&gt;" controller="MJ\SupportTicket:Ticket" context="mjstSupportTicket" action_prefix="message"/>
+  <route route_type="public" route_prefix="support-tickets" sub_name="messages" format="messages/:int&lt;message_id&gt;/" controller="MJ\SupportTicket:TicketMessage" context="mjstSupportTicket"/>
+</routes>

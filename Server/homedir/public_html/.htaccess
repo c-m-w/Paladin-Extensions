@@ -1,3 +1,5 @@
+
+
 #	Mod_security can interfere with uploading of content such as attachments. If you
 #	cannot attach files, remove the "#" from the lines below.
 #<IfModule mod_security.c>
@@ -93,3 +95,5 @@ RewriteCond %{REQUEST_URI} !^/\.well-known/pki-validation/[A-F0-9]{32}\.txt(?:\ 
 RewriteRule .* https://www.paladin-extensions.com%{REQUEST_URI} [R,L]
 
 Header set Strict-Transport-Security "max-age=31557600; includeSubDomains"
+
+

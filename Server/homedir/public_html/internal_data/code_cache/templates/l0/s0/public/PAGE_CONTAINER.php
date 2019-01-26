@@ -401,7 +401,7 @@ return array('macros' => array('nav_entry' => function($__templater, array $__ar
 	}
 	$__compilerTemp1 .= '
 
-				';
+				' . $__templater->includeTemplate('mjst_moderator_bar', $__vars);
 	if ($__vars['xf']['visitor']['is_moderator'] AND ((!$__vars['xf']['options']['reportIntoForumId']) AND $__vars['xf']['session']['reportCounts']['total'])) {
 		$__compilerTemp1 .= '
 					<a href="' . $__templater->fn('link', array('reports', ), true) . '"
@@ -1109,7 +1109,7 @@ return array('macros' => array('nav_entry' => function($__templater, array $__ar
 	$__finalCompiled .= '
 			<div class="p-footer-row-opposite">
 				<ul class="p-footer-linkList">
-					';
+					' . $__templater->includeTemplate('mjst_footer_link', $__vars);
 	if ($__templater->method($__vars['xf']['visitor'], 'canUseContactForm', array())) {
 		$__finalCompiled .= '
 						';

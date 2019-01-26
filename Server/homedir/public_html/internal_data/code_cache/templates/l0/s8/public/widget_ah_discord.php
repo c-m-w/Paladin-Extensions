@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 912c7bbd90f3d76bb71679aca1dafb43
+// FROM HASH: 06b8a96c594d1fab5bb81cc7aa2b350d
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -10,6 +10,12 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 ';
 	if ($__vars['xf']['visitor']['user_id']) {
 		$__finalCompiled .= '
+';
+		if ($__templater->method($__vars['xf']['visitor'], 'isMemberOf', array(11, ))) {
+			$__finalCompiled .= '
+';
+		} else {
+			$__finalCompiled .= '
 <div class="block"' . $__templater->fn('widget_data', array($__vars['widget'], ), true) . '>	
 	<div class="block-container">
 		<h3 class="block-minorHeader">' . $__templater->escape($__vars['title']) . '</h3>
@@ -18,6 +24,9 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		</div>
 	</div>
 </div>
+';
+		}
+		$__finalCompiled .= '
 ';
 	}
 	return $__finalCompiled;

@@ -3,7 +3,7 @@
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
-	$__templater->pageParams['pageTitle'] = $__templater->preEscaped('Email invitations');
+	$__templater->pageParams['pageTitle'] = $__templater->preEscaped('Create invitation links');
 	$__finalCompiled .= '
 
 ';

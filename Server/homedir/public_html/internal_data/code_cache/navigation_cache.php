@@ -5,10 +5,6 @@ return function($__templater, $__selectedNav, array $__vars)
 	$__tree = [];
 	$__flat = [];
 
-	\XF\Navigation\NodeType::configureDisplay(20, [
-		'title' => \XF::phrase('nav.navSupportArea'),
-		'with_children' => false,
-	]);
 
 	$__navTemp = [
 		'title' => \XF::phrase('nav._default'),
@@ -230,32 +226,92 @@ return function($__templater, $__selectedNav, array $__vars)
 
 	}
 
-	$__navTemp = \XF\Navigation\NodeType::displayNode(20);
-	if ($__navTemp) {
-		$__tree['navSupportArea'] = $__navTemp;
-		$__flat['navSupportArea'] =& $__tree['navSupportArea'];
-		if (empty($__tree['navSupportArea']['children'])) { $__tree['navSupportArea']['children'] = []; }
-
+	if (($__templater->method($__vars['xf']['visitor'], 'canViewSupportTickets', array()) AND $__vars['xf']['options']['mjstDisplayOption']['nav_tabs'])) {
 		$__navTemp = [
-		'title' => \XF::phrase('nav.navSupportCreate'),
-		'href' => $__templater->fn('link', array('support/post-thread', ), false),
+		'title' => \XF::phrase('nav.mjstSupportTicket'),
+		'href' => $__templater->fn('link', array('support-tickets', ), false),
 		'attributes' => [],
 	];
 		if ($__navTemp) {
-			$__tree['navSupportArea']['children']['navSupportCreate'] = $__navTemp;
-			$__flat['navSupportCreate'] =& $__tree['navSupportArea']['children']['navSupportCreate'];
-		}
+			$__tree['mjstSupportTicket'] = $__navTemp;
+			$__flat['mjstSupportTicket'] =& $__tree['mjstSupportTicket'];
+			if (empty($__tree['mjstSupportTicket']['children'])) { $__tree['mjstSupportTicket']['children'] = []; }
 
-		$__navTemp = [
-		'title' => \XF::phrase('nav.navSupportTickets'),
-		'href' => $__templater->fn('link', array('support/', ), false),
+			if (($__templater->method($__vars['xf']['visitor'], 'canViewSupportTickets', array()) AND $__vars['xf']['visitor']['user_id'])) {
+				$__navTemp = [
+		'title' => \XF::phrase('nav.mjstYourTickets'),
+		'href' => $__templater->fn('link', array('support-tickets/yours', ), false),
 		'attributes' => [],
 	];
-		if ($__navTemp) {
-			$__tree['navSupportArea']['children']['navSupportTickets'] = $__navTemp;
-			$__flat['navSupportTickets'] =& $__tree['navSupportArea']['children']['navSupportTickets'];
-		}
+				if ($__navTemp) {
+					$__tree['mjstSupportTicket']['children']['mjstYourTickets'] = $__navTemp;
+					$__flat['mjstYourTickets'] =& $__tree['mjstSupportTicket']['children']['mjstYourTickets'];
+				}
+			}
 
+			if (($__templater->method($__vars['xf']['visitor'], 'canViewSupportTickets', array()) AND ($__vars['xf']['visitor']['user_id'] AND ($__templater->method($__vars['xf']['visitor'], 'hasPermission', array('mjstSupport', 'viewAnyTicket', )) OR $__vars['xf']['visitor']['mjst_department_ids'])))) {
+				$__navTemp = [
+		'title' => \XF::phrase('nav.mjstYourAssigned'),
+		'href' => $__templater->fn('link', array('support-tickets/assigned', ), false),
+		'attributes' => [],
+	];
+				if ($__navTemp) {
+					$__tree['mjstSupportTicket']['children']['mjstYourAssigned'] = $__navTemp;
+					$__flat['mjstYourAssigned'] =& $__tree['mjstSupportTicket']['children']['mjstYourAssigned'];
+				}
+			}
+
+			if ($__templater->method($__vars['xf']['visitor'], 'canViewKb', array())) {
+				$__navTemp = [
+		'title' => \XF::phrase('nav.mjstKb'),
+		'href' => $__templater->fn('link', array('support-tickets/knowledge-base', ), false),
+		'attributes' => [],
+	];
+				if ($__navTemp) {
+					$__tree['mjstSupportTicket']['children']['mjstKb'] = $__navTemp;
+					$__flat['mjstKb'] =& $__tree['mjstSupportTicket']['children']['mjstKb'];
+				}
+			}
+
+			if ($__vars['xf']['visitor']['user_id']) {
+				$__navTemp = [
+		'title' => \XF::phrase('nav.mjstWatched'),
+		'href' => $__templater->fn('link', array('watched/tickets', ), false),
+		'attributes' => [],
+	];
+				if ($__navTemp) {
+					$__tree['mjstSupportTicket']['children']['mjstWatched'] = $__navTemp;
+					$__flat['mjstWatched'] =& $__tree['mjstSupportTicket']['children']['mjstWatched'];
+					if (empty($__tree['mjstSupportTicket']['children']['mjstWatched']['children'])) { $__tree['mjstSupportTicket']['children']['mjstWatched']['children'] = []; }
+
+					if ($__vars['xf']['visitor']['user_id']) {
+						$__navTemp = [
+		'title' => \XF::phrase('nav.mjstWatchedTickets'),
+		'href' => $__templater->fn('link', array('watched/tickets', ), false),
+		'attributes' => [],
+	];
+						if ($__navTemp) {
+							$__tree['mjstSupportTicket']['children']['mjstWatched']['children']['mjstWatchedTickets'] = $__navTemp;
+							$__flat['mjstWatchedTickets'] =& $__tree['mjstSupportTicket']['children']['mjstWatched']['children']['mjstWatchedTickets'];
+						}
+					}
+
+					if ($__vars['xf']['visitor']['user_id']) {
+						$__navTemp = [
+		'title' => \XF::phrase('nav.mjstWatchedDepartments'),
+		'href' => $__templater->fn('link', array('watched/ticket-departments', ), false),
+		'attributes' => [],
+	];
+						if ($__navTemp) {
+							$__tree['mjstSupportTicket']['children']['mjstWatched']['children']['mjstWatchedDepartments'] = $__navTemp;
+							$__flat['mjstWatchedDepartments'] =& $__tree['mjstSupportTicket']['children']['mjstWatched']['children']['mjstWatchedDepartments'];
+						}
+					}
+
+				}
+			}
+
+		}
 	}
 
 	if ($__templater->method($__vars['xf']['visitor'], 'canViewResources', array())) {
@@ -417,7 +473,7 @@ return function($__templater, $__selectedNav, array $__vars)
 
 			$__navTemp = [
 		'title' => \XF::phrase('nav.navPremiumSupport'),
-		'href' => $__templater->fn('link', array('support/post-thread?prefix_id=4', ), false),
+		'href' => $__templater->fn('link', array('support/open?department_id=4/', ), false),
 		'attributes' => [],
 	];
 			if ($__navTemp) {

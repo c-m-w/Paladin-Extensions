@@ -41,7 +41,7 @@ $0]]></replace>
     <replace><![CDATA[$0
 <xf:if is="$xf.visitor.hasPermission('siropuReferralContests', 'refer')">
 	<xf:if is="$xf.options.siropuReferralContestsInvitationOnly">
-		<li><a href="{{ $xf.visitor.hasPermission('siropuReferralContests', 'sendInvitations') != 0 ? link('account/invitations') : link('account/invitations/list') }}" class="menu-linkRow">{{ phrase('siropu_referral_contests_your_invitations') }}</a></li>
+		<li><a href="{{ $xf.visitor.hasPermission('siropuReferralContests', 'createInvitations') ? link('account/invitations/create') : link('account/invitations/list') }}" class="menu-linkRow">{{ phrase('siropu_referral_contests_your_invitations') }}</a></li>
 	<xf:else />
 		<li><a href="{{ link('account/referrals') }}" class="menu-linkRow">{{ phrase('siropu_referral_contests_your_referrals') }}</a></li>
 	</xf:if>
@@ -52,7 +52,7 @@ $0]]></replace>
     <replace><![CDATA[$0
 <xf:if is="$xf.visitor.hasPermission('siropuReferralContests', 'refer')">
 	<xf:if is="$xf.options.siropuReferralContestsInvitationOnly">
-		<a class="blockLink {{ $pageSelected == 'invitations' ? 'is-selected' : '' }}" href="{{ $xf.visitor.hasPermission('siropuReferralContests', 'sendInvitations') != 0 ? link('account/invitations') : link('account/invitations/list') }}">
+		<a class="blockLink {{ $pageSelected == 'invitations' ? 'is-selected' : '' }}" href="{{ $xf.visitor.hasPermission('siropuReferralContests', 'createInvitations') ? link('account/invitations/create') : link('account/invitations/list') }}">
 			{{ phrase('siropu_referral_contests_your_invitations') }}
 		</a>
 	<xf:else />
