@@ -1,9 +1,9 @@
 1 /home/palavpvb/public_ftp/incoming
 2 /home/palavpvb/public_ftp
 3 /home/palavpvb/.cagefs/tmp
-61 /home/palavpvb/.cagefs/opt
+65 /home/palavpvb/.cagefs/opt
 24 /home/palavpvb/.cagefs/var
-89 /home/palavpvb/.cagefs
+93 /home/palavpvb/.cagefs
 55 /home/palavpvb/tmp/horde
 1 /home/palavpvb/tmp/analog
 1 /home/palavpvb/tmp/webalizerftp
@@ -19,7 +19,7 @@
 3 /home/palavpvb/Extensions
 2 /home/palavpvb/.nc_plugin/hidden
 3 /home/palavpvb/.nc_plugin
-5 /home/palavpvb/logs
+3 /home/palavpvb/logs
 3 /home/palavpvb/var/cpanel
 4 /home/palavpvb/var
 1 /home/palavpvb/.htpasswds/Extensions
@@ -35,19 +35,20 @@
 8 /home/palavpvb/public_html/auth
 3 /home/palavpvb/public_html/library
 181 /home/palavpvb/public_html/styles
-10845 /home/palavpvb/public_html/internal_data
+10844 /home/palavpvb/public_html/internal_data
 399 /home/palavpvb/public_html/js
 1 /home/palavpvb/public_html/cgi-bin
 139 /home/palavpvb/public_html/data
 5535 /home/palavpvb/public_html/src
-17132 /home/palavpvb/public_html
-16 /home/palavpvb/backups
+17131 /home/palavpvb/public_html
+17 /home/palavpvb/backups
 8 /home/palavpvb/etc/paladin-extensions.com
 11 /home/palavpvb/etc
 1 /home/palavpvb/.softaculous/tmp
 1 /home/palavpvb/.softaculous/status
 5 /home/palavpvb/.softaculous
 5 /home/palavpvb/.gnupg
+6 /home/palavpvb/.razor
 2 /home/palavpvb/.subaccounts
 1 /home/palavpvb/mail/new
 6 /home/palavpvb/mail/.Trash
@@ -72,5 +73,5 @@
 5 /home/palavpvb/.cphorde
 1 /home/palavpvb/.ssh
 3 /home/palavpvb/.cl.selector
-17579 /home/palavpvb
-Last modified: Thu Dec 13 05:32:35 EST 2018
+17587 /home/palavpvb
+Last modified: Fri Dec 14 05:32:57 EST 2018

@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: fa1bee386d34aaded2f90c3e2ac7518d
+// FROM HASH: a3420fbbabef7f96396540405223b360
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -12,7 +12,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		</span>
 		<div class="contentRow-main">
 			<h3 class="contentRow-title">
-				<a href="' . $__templater->fn('link', array('support-tickets/message', $__vars['message']['Ticket'], array('message_id' => $__vars['message']['message_id'], ), ), true) . '">' . ($__templater->fn('prefix', array('support_ticket2', $__vars['message']['Ticket'], ), true) . $__templater->fn('highlight', array($__vars['message']['Ticket']['title'], $__vars['options']['term'], ), true)) . '</a>
+				<a href="' . $__templater->fn('link', array('support-tickets/message', $__vars['message']['Ticket'], array('message_id' => $__vars['message']['message_id'], ), ), true) . '">' . ($__templater->fn('prefix', array('support_ticket', $__vars['message']['Ticket'], ), true) . $__templater->fn('highlight', array($__vars['message']['Ticket']['title'], $__vars['options']['term'], ), true)) . '</a>
 			</h3>
 
 			<div class="contentRow-snippet">' . $__templater->fn('snippet', array($__vars['message']['message'], 300, array('term' => $__vars['options']['term'], 'stripQuote' => true, ), ), true) . '</div>
