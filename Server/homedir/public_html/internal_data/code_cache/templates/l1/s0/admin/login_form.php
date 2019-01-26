@@ -35,10 +35,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		<i class="fa fa-key" aria-hidden="true"></i>
 		</dd>
 	</dl>
-	
-' . $__templater->includeTemplate('xc_captcha_login_form', $__vars) . '
- 
-<div class="adminLogin-row adminLogin-row--submit">
+	<div class="adminLogin-row adminLogin-row--submit">
 		' . $__templater->button('Administrator log in', array(
 		'type' => 'submit',
 		'icon' => 'login',
