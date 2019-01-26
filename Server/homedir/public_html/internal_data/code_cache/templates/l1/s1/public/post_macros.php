@@ -218,7 +218,16 @@ return array('macros' => array('post' => function($__templater, array $__argumen
 						';
 	if ($__vars['post']['last_edit_date']) {
 		$__finalCompiled .= '
-							<div class="message-lastEdit">
+							';
+		if ($__vars['xf']['options']['useressLastEditedByPosition'] == 'left') {
+			$__finalCompiled .= '
+	';
+			$__templater->includeCss('sv_ue.less');
+			$__finalCompiled .= '
+';
+		}
+		$__finalCompiled .= '
+<div class="message-lastEdit ' . (($__vars['xf']['options']['useressLastEditedByPosition'] == 'left') ? 'message-lastEdit--align-left' : '') . ' ">
 								';
 		if ($__vars['post']['user_id'] == $__vars['post']['last_edit_user_id']) {
 			$__finalCompiled .= '

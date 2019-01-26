@@ -289,6 +289,14 @@ Note: This option will include a JavaScript library.',
   'option_explain.spamThreadAction' => 'This controls what happens to threads started by spammers when the spam cleaner is applied against them.',
   'option_explain.spamUserCriteria' => 'The spam cleaner will only be available to act against users who meet these criteria. If any of these criteria are set to 0 (zero) they will be ignored.',
   'option_explain.stopForumSpam' => '',
+  'option_explain.svCustomUpgradeMaximum' => 'The maximum value to accept for a custom upgrade amount.<br/>
+<br/>
+This maximum is not arbitrary, some payment providers error on values over 999.99',
+  'option_explain.svCustomUpgradeMinimum' => 'The minimum value to accept for a custom upgrade amount',
+  'option_explain.svDisplayMiniAvatars' => 'Display mini-avatars next to a user mention or user group mention. Adds 1 extra query per page load for content which supports mini-avatars.',
+  'option_explain.svSendEditedInMentions' => 'If enabled, send edited in mentions for supported content. Requires mention tracking to be re-build for new installs.<br>
+Run: <pre style="margin: 1em 2em">php cmd.php xf-rebuild:sv-mentions</pre>, and once it completes this setting will be enabled.<br/>
+If this setting is enabled for new installs without running the above, unexpected duplicate alerts will be sent when editing content with a quote or mention.',
   'option_explain.tagCloud' => 'If enabled, a tag cloud showing the most popular tags will be shown on the tag search page.',
   'option_explain.tagCloudMinUses' => 'Tags will not be shown in the tag cloud unless they have been used at least this many times.',
   'option_explain.tagLength' => 'This controls the minimum and maximum length of tags. Use 0 to disable a limit. Tags may never be longer than 100 characters. These limits only apply when a tag is created. Existing tags may always be used.',
@@ -330,6 +338,14 @@ Note: enabling/disabling this option will have no effect if the "Always Show Sec
   'option_explain.tweet' => 'Enabling this button will allow your visitors to share pages easily using their Twitter account.<br />
 <br />
 You may also specify up to two Twitter accounts to recommend to visitors after they use the Tweet button. <a href="https://dev.twitter.com/web/tweet-button/web-intent" target="_blank">More info...</a>',
+  'option_explain.uncAllowPreviousNames' => 'If enabled, users will be able to register and change their user name to a user name previously used by another member. Allowing user name re-use can cause confusion, particularly for older quoted messages. This restriction does not apply to administrator user creation and edits.',
+  'option_explain.uncCustomTitleDays' => 'After a user name change, users will receive a custom title displaying their previous user name for this many days. You may edit the phrase \'<i>sv_ue_username_change_user_title</i>\' to customize the title. Use 0 to disable.',
+  'option_explain.uncDisplayChangesViaACP' => 'If enabled, user name changes applied by administrators will be shown in the list of previous user names for a user.',
+  'option_explain.uncMaxChanges' => 'The maximum number of times a user can change their user name. Use 0 to disable.',
+  'option_explain.uncMaxPostCount' => 'The maximum number of messages a user may have before being unable to change their user name. If set, this option overrides the maximum user name changes option. Use 0 to disable.',
+  'option_explain.uncModerate' => 'If enabled, all user name changes must be approved by moderators before being applied.',
+  'option_explain.uncModerateAlert' => 'If enabled, moderators will be notified when a user name change takes place.',
+  'option_explain.uncResetDays' => 'Users will not be able to submit more than the maximum number of user name changes within this many days. For example, a maximum of 1 change every 7 days. To cause the maximum to be permanent, use 0 to disable.',
   'option_explain.urlToPageTitle' => 'With this enabled, if a URL is used inside a message and is not given a title by the author, where possible the linked page\'s title will be fetched and used instead.<br />
 <br />
 Use the textbox above to specify a format. <b>{title}</b> will be replaced with the fetched page title and <b>{url}</b> will be replaced with the original URL. If no format is entered, the title itself will be displayed.',
@@ -337,6 +353,19 @@ Use the textbox above to specify a format. <b>{title}</b> will be replaced with 
   'option_explain.userBanners' => '',
   'option_explain.userMentionKeepAt' => 'The @ character is used to initiate user mentions. If this option is disabled, successful user mentions will remove this character.',
   'option_explain.userTitleLadderField' => 'The <a href="admin.php?user-title-ladder/">user title ladder</a> will use this field to determine how people move up the ladder.',
+  'option_explain.useressDisplayProfileTab' => 'This option controls who will be able to view a user\'s previous user names.',
+  'option_explain.useressLastEditedByPosition' => 'Controls which side of a post the last edit message is aligned to.',
+  'option_explain.useressLogLength' => 'The number of days that user log records will be kept for. Use 0 to keep the records permanently.',
+  'option_explain.useressPostEditHistory' => 'Do you want to keep track of message content with each post edit?<br />Selecting "Yes" will save a copy of each post prior to it being edited, thus allowing you to view the pre-edited version via the <i>Last edited by</i> link.<br />This will slightly increase the amount of disk space used.',
+  'option_explain.useressPostEditMinChars' => 'Minimum number of characters (including BB Code) that need to be added to or removed from the message, or changed within words (line swaps), in order to trigger the logging of the edit post action. This allows for the correction of spelling mistakes or grammatical errors without considering the post as edited. Zero (0) means the action will always be logged (after taking the Grace Period permission into consideration).',
+  'option_explain.useressPreventPrimaryGroupChange' => 'Depending on the permissions scheme, changing the primary user group breaks accounts and should not be done.',
+  'option_explain.useressSeparateTitleEdit' => 'If enabled, users will be allowed to edit thread titles even after the post edit time limit has expired, provided the thread title time limit has not expired.<br/>
+This can result in being able to edit some aspects of a thread but not the title!',
+  'option_explain.useress_acp_unc_notices_default' => 'If enabled, notifications will be sent when an administrator manually edits a member\'s user name by default. Administrators can override this setting when editing a user.',
+  'option_explain.useress_acp_unc_private_default' => 'If enabled, user name changes triggered by an admin will be private by default. Administrators can override this setting when editing a user.',
+  'option_explain.useress_conversationWrapper' => 'If enabled, the conversation area will be wrapped in the account wrapper.',
+  'option_explain.useress_notmatchregex' => 'This requires user names to <strong>not</strong> match the given <a href="http://www.regular-expressions.info/tutorial.html">regular expression</a>. <strong>Note:</strong> use a full expression, including delimiters and switches.',
+  'option_explain.useress_watchedWrapper' => 'If enabled, watched content pages will be wrapped in the account wrapper.',
   'option_explain.usernameLength' => 'This controls the minimum and maximum length of user names. Use 0 to disable a limit. User names may never be longer than 50 characters.',
   'option_explain.usernameValidation' => '',
   'option_explain.watchAlertActiveOnly' => 'If enabled, watched content alerts and emails will only be sent to users that have visited within the specified number of days. This can improve performance on large or very active installations.',

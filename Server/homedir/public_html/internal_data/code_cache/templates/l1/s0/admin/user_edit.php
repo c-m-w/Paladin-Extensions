@@ -218,6 +218,7 @@ return array('macros' => array('privacy_select' => function($__templater, array 
 		$__compilerTemp8 .= '
 					<a class="tabs-tab" role="tab" tabindex="0" aria-controls="user-extras">' . 'Extra' . '</a>
 					<a class="tabs-tab" role="tab" tabindex="0" aria-controls="user-ips">' . 'IP addresses' . '</a>
+' . $__templater->includeTemplate('sv_ue_user_edit_login_attempts_tab', $__vars) . '
 					<a class="tabs-tab" role="tab" tabindex="0" aria-controls="user-changes">' . 'Change log' . '</a>
 				';
 	}
@@ -419,7 +420,8 @@ return array('macros' => array('privacy_select' => function($__templater, array 
 		'label' => 'User name',
 	)) . '
 
-					' . $__templater->formTextBoxRow(array(
+					' . $__templater->includeTemplate('sv_ue_user_edit_username', $__vars) . '
+' . $__templater->formTextBoxRow(array(
 		'name' => 'user[email]',
 		'value' => $__vars['user']['email'],
 		'type' => 'email',
@@ -439,6 +441,7 @@ return array('macros' => array('privacy_select' => function($__templater, array 
 
 					' . $__templater->formSelectRow(array(
 		'name' => 'user[user_group_id]',
+		'readonly' => ($__vars['xf']['options']['useressPreventPrimaryGroupChange'] ? '1' : ''),
 		'value' => $__vars['user']['user_group_id'],
 	), $__compilerTemp13, array(
 		'label' => 'User group',
@@ -573,6 +576,7 @@ return array('macros' => array('privacy_select' => function($__templater, array 
 	), array(
 		'label' => 'Custom title',
 	)) . '
+' . $__templater->includeTemplate('sv_ue_user_edit_title', $__vars) . '
 					' . $__templater->formTextAreaRow(array(
 		'name' => 'profile[signature]',
 		'value' => $__vars['user']['Profile']['signature_'],
@@ -839,6 +843,8 @@ return array('macros' => array('privacy_select' => function($__templater, array 
 			' . $__compilerTemp20 . '
 
 			' . $__compilerTemp21 . '
+' . $__templater->includeTemplate('sv_ue_user_edit_login_attempts_pane', $__vars) . '
+
 
 			' . $__compilerTemp22 . '
 			' . '

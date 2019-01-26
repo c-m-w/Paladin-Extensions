@@ -18,5 +18,8 @@ return array (
   'alert_opt_out.resource_update_like' => 'Likes your resource',
   'alert_opt_out.resource_update_mention' => 'Mentions you in a resource',
   'alert_opt_out.trophy_award' => 'Awards you a new trophy',
+  'alert_opt_out.unc_approved_other' => 'Approves someone else\'s user name change',
+  'alert_opt_out.unc_approved_own' => 'Approves your user name change',
+  'alert_opt_out.unc_denied_own' => 'Rejects your user name change',
   'alert_opt_out.user_following' => 'Starts following you',
 );

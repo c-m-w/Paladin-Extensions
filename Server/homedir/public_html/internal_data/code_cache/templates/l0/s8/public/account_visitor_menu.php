@@ -92,6 +92,7 @@ return array('macros' => array('visitor_panel_row' => function($__templater, arr
 	}
 	$__finalCompiled .= '
 	<li><a href="' . $__templater->fn('link', array('search/member', null, array('user_id' => $__vars['xf']['visitor']['user_id'], ), ), true) . '" class="menu-linkRow">' . 'Your content' . '</a></li>
+' . $__templater->includeTemplate('sv_ue_account_visitor_menu_likes_given', $__vars) . '
 	<li><a href="' . $__templater->fn('link', array('account/likes', ), true) . '" class="menu-linkRow">' . 'Likes received' . '</a></li>
 	' . '
 ';

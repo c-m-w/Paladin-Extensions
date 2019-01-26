@@ -3,6 +3,17 @@
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
+	if ($__vars['xf']['options']['useress_watchedWrapper']) {
+		$__finalCompiled .= '
+	';
+		$__compilerTemp1 = $__vars;
+		$__compilerTemp1['pageSelected'] = 'watched_threads';
+		$__templater->wrapTemplate('account_wrapper', $__compilerTemp1);
+		$__finalCompiled .= '
+';
+	}
+	$__finalCompiled .= '
+';
 	$__templater->pageParams['pageTitle'] = $__templater->preEscaped('Watched threads');
 	$__templater->pageParams['pageNumber'] = $__vars['page'];
 	$__finalCompiled .= '
@@ -11,13 +22,13 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	if (!$__templater->test($__vars['threads'], 'empty', array())) {
 		$__finalCompiled .= '
 	';
-		$__compilerTemp1 = '';
+		$__compilerTemp2 = '';
 		if ($__templater->isTraversable($__vars['threads'])) {
 			foreach ($__vars['threads'] AS $__vars['thread']) {
-				$__compilerTemp1 .= '
+				$__compilerTemp2 .= '
 						';
 				$__vars['extra'] = ($__vars['thread']['Watch'][$__vars['xf']['visitor']['user_id']]['email_subscribe'] ? 'Email' : '');
-				$__compilerTemp1 .= '
+				$__compilerTemp2 .= '
 						' . $__templater->callMacro('thread_list_macros', 'item', array(
 					'thread' => $__vars['thread'],
 					'chooseName' => 'thread_ids',
@@ -61,7 +72,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		<div class="block-container">
 			<div class="block-body">
 				<div class="structItemContainer">
-					' . $__compilerTemp1 . '
+					' . $__compilerTemp2 . '
 				</div>
 			</div>
 			<div class="block-footer block-footer--split">

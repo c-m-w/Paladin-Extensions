@@ -85,6 +85,8 @@ return array (
   'mod_log.thread_undelete' => 'Thread undeleted',
   'mod_log.thread_unlock' => 'Thread unlocked',
   'mod_log.thread_unstick' => 'Thread unstuck',
+  'mod_log.unc_approved' => 'User name change approved',
+  'mod_log.unc_denied' => 'User name change rejected',
   'mod_log.user_approved' => 'User account approved',
   'mod_log.user_rejected' => 'User account rejected (reason: {reason})',
   'mod_log.user_spam_clean' => 'User spam cleaned',

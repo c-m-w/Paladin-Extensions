@@ -19,7 +19,7 @@ return array('macros' => array('username_row' => function($__templater, array $_
 		'maxlength' => $__templater->fn('max_length', array($__vars['xf']['visitor'], 'username', ), false),
 	), array(
 		'label' => 'User name',
-		'explain' => 'This is the name that will be shown with your messages. You may use any name you wish. Once set, this cannot be changed.',
+		'explain' => 'This is the name that will be shown with your messages. You may use any name you wish.',
 	)) . '
 ';
 	return $__finalCompiled;

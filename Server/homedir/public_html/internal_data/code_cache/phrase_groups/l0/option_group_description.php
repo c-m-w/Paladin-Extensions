@@ -41,6 +41,7 @@ It is possible to filter the news feed down to just users you follow, or a singl
   'option_group_description.sitemap' => 'These options allow you to control how the XML sitemap is generated and submitted to search engines. The sitemap can be used to speed up search engine indexing of your site.',
   'option_group_description.spam' => 'Default options for the spam cleaner and prevention systems are located here.',
   'option_group_description.stats' => '',
+  'option_group_description.sv_ue' => 'Options that control the behavior of user name changes, user logging, and more.',
   'option_group_description.tagging' => 'Options that control how tags can be applied to content.',
   'option_group_description.thReactions' => 'Options for the [TH] Reactions add-on.',
   'option_group_description.th_bookmarks' => '',

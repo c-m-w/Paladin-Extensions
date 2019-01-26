@@ -81,6 +81,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			' . $__templater->callMacro('display_order_macros', 'row', array(
 		'value' => ($__vars['upgrade']['display_order'] ?: 1),
 	), $__vars) . '
+' . $__templater->includeTemplate('sv_ue_user_upgrade_edit_quantity', $__vars) . '
 
 			' . $__templater->formRow('
 

@@ -7,7 +7,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	' . '' . $__templater->escape($__vars['boardTitle']) . ' Account Upgrade Subscription Expired' . '
 </mail:subject>
 
-' . '' . $__templater->escape($__vars['username']) . ', your account subscription named <i><b>' . $__templater->escape($__vars['upgrade_title']) . '</b></i> at ' . $__templater->escape($__vars['boardTitle']) . ' has now expired.<br />Thank you for having purchased this upgrade and we hope you have enjoyed the benefits it offered.<br />You may renew your account upgrades <a href="' . $__templater->escape($__vars['upgradeUrl']) . '" style="color: #176093; text-decoration: none">here</a>.<p>Sincerely,<br />
+' . '' . $__templater->escape($__vars['username']) . ', your subscription to <i><b>' . $__templater->escape($__vars['upgrade_title']) . '</b></i> at ' . $__templater->escape($__vars['boardTitle']) . ' has now expired.<br />Thank you for having purchased premium and we hope you have enjoyed the extensions it offered.<br />You may view account upgrades <a href="' . $__templater->escape($__vars['upgradeUrl']) . '" style="color: #176093; text-decoration: none">here</a>.<p>Sincerely,<br />
 ' . $__templater->escape($__vars['boardTitle']) . '</p>' . '
 
 ' . '<p class="minorText">Please do not reply to this message. You must visit the forum to reply.</p>

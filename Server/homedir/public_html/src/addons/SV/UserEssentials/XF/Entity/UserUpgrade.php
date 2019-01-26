@@ -41,17 +41,10 @@ class UserUpgrade extends XFCP_UserUpgrade
     protected function getPurchaseCount()
     {
         return $this->db()->fetchOne(
-            'SELECT
-                (
-                    SELECT COUNT(*)
-                        FROM xf_user_upgrade_active
-                        WHERE xf_user_upgrade_active.user_upgrade_id = ?
-                ) + (
-                    SELECT COUNT(*)
-                        FROM xf_user_upgrade_expired
-                        WHERE xf_user_upgrade_expired.user_upgrade_id = ?
-                )',
-            [$this->user_upgrade_id, $this->user_upgrade_id]
+            'SELECT COUNT(*)
+                FROM xf_user_upgrade_active
+                WHERE xf_user_upgrade_active.user_upgrade_id = ?',
+            [$this->user_upgrade_id]
         );
     }
 

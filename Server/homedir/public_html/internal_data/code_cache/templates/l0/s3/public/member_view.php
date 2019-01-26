@@ -272,7 +272,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		';
 	}
 	$__finalCompiled .= '
-		' . '
+		' . $__templater->includeTemplate('sv_ue_member_view_tab_previous_names', $__vars) . '
+' . '
 	</span>
 </h2>
 
@@ -419,7 +420,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	';
 	}
 	$__finalCompiled .= '
-	' . '
+	' . $__templater->includeTemplate('sv_ue_member_view_tab_pane_previous_names', $__vars) . '
+' . '
 </ul>
 
 ';

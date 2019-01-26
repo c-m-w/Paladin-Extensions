@@ -107,6 +107,8 @@ return array('macros' => array('watch_input' => function($__templater, array $__
 		'rowtype' => $__vars['rowType'],
 		'label' => 'Set thread status',
 	)) . '
+
+' . $__templater->includeTemplate('sv_ue_helper_thread_options_permissions', $__vars) . '
 ';
 	return $__finalCompiled;
 },), 'code' => function($__templater, array $__vars)

@@ -124,13 +124,14 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 									' . $__templater->formRow('
 
 										<div class="inputGroup">
+' . $__templater->includeTemplate('sv_ue_account_upgrades_cost_input', $__vars) . '
 
 											' . $__compilerTemp2 . '
 										</div>
 									', array(
 					'rowtype' => 'button',
 					'label' => $__templater->escape($__vars['upgrade']['title']),
-					'hint' => $__templater->escape($__vars['upgrade']['cost_phrase']),
+					'hint' => (($__vars['upgrade']['cost_amount'] != '0.00') ? $__templater->escape($__vars['upgrade']['cost_phrase']) : false),
 					'explain' => $__templater->filter($__vars['upgrade']['description'], array(array('raw', array()),), true),
 				)) . '
 								', array(
@@ -194,7 +195,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 									', array(
 					'rowclass' => 'formRow--noColon',
 					'label' => $__templater->escape($__vars['upgrade']['title']),
-					'hint' => $__templater->escape($__vars['upgrade']['cost_phrase']),
+					'hint' => (($__vars['upgrade']['cost_amount'] != '0.00') ? $__templater->escape($__vars['upgrade']['cost_phrase']) : false),
 					'explain' => $__templater->filter($__vars['upgrade']['description'], array(array('raw', array()),), true),
 				)) . '
 								</div>

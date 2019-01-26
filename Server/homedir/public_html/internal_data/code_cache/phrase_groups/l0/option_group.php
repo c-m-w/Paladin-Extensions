@@ -37,6 +37,7 @@ return array (
   'option_group.sitemap' => 'XML sitemap generation',
   'option_group.spam' => 'Spam management',
   'option_group.stats' => 'Statistics and metrics',
+  'option_group.sv_ue' => 'User Essentials',
   'option_group.tagging' => 'Content tagging',
   'option_group.thReactions' => '[TH] Reactions',
   'option_group.th_bookmarks' => '[TH] Bookmarks',

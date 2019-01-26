@@ -36,23 +36,31 @@ return array('macros' => array('dob_privacy_row' => function($__templater, array
 	$__finalCompiled = '';
 	$__vars = $__templater->mergeMacroArguments(array(), $__arguments, $__vars);
 	$__finalCompiled .= '
+	';
+	if ($__templater->method($__vars['xf']['visitor'], 'canGoInvisible', array())) {
+		$__finalCompiled .= '
+		
 	' . $__templater->formCheckBoxRow(array(
-	), array(array(
-		'name' => 'user[visible]',
-		'checked' => $__vars['xf']['visitor']['visible'],
-		'label' => 'Show your online status',
-		'hint' => 'This will allow other people to see when you are online.',
-		'_dependent' => array($__templater->formCheckBox(array(
-	), array(array(
-		'name' => 'user[activity_visible]',
-		'checked' => $__vars['xf']['visitor']['activity_visible'],
-		'label' => 'Show your current activity',
-		'hint' => 'This will allow other people to see what page you are currently viewing.',
-		'_type' => 'option',
-	)))),
-		'_type' => 'option',
-	)), array(
-	)) . '
+		), array(array(
+			'name' => 'user[visible]',
+			'checked' => $__vars['xf']['visitor']['visible'],
+			'label' => 'Show your online status',
+			'hint' => 'This will allow other people to see when you are online.',
+			'_dependent' => array($__templater->formCheckBox(array(
+		), array(array(
+			'name' => 'user[activity_visible]',
+			'checked' => $__vars['xf']['visitor']['activity_visible'],
+			'label' => 'Show your current activity',
+			'hint' => 'This will allow other people to see what page you are currently viewing.',
+			'_type' => 'option',
+		)))),
+			'_type' => 'option',
+		)), array(
+		)) . '
+
+	';
+	}
+	$__finalCompiled .= '
 ';
 	return $__finalCompiled;
 },), 'code' => function($__templater, array $__vars)

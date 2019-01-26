@@ -19,8 +19,23 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 ';
 	$__compilerTemp1 = '';
+	if ($__templater->method($__vars['thread'], 'canEditTitle', array())) {
+		$__compilerTemp1 .= '
+	' . $__templater->formPrefixInputRow($__vars['prefixes'], array(
+			'type' => 'thread',
+			'prefix-value' => $__vars['thread']['prefix_id'],
+			'textbox-value' => $__vars['thread']['title'],
+			'placeholder' => 'Title' . $__vars['xf']['language']['ellipsis'],
+			'autofocus' => 'autofocus',
+			'maxlength' => $__templater->fn('max_length', array($__vars['thread'], 'title', ), false),
+		), array(
+			'label' => 'Title',
+		)) . '
+';
+	}
 	$__compilerTemp2 = '';
-	$__compilerTemp2 .= '
+	$__compilerTemp3 = '';
+	$__compilerTemp3 .= '
 					' . $__templater->callMacro('custom_fields_macros', 'custom_fields_edit', array(
 		'type' => 'threads',
 		'set' => $__vars['thread']['custom_fields'],
@@ -28,16 +43,16 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'onlyInclude' => $__vars['forum']['field_cache'],
 	), $__vars) . '
 				';
-	if (strlen(trim($__compilerTemp2)) > 0) {
-		$__compilerTemp1 .= '
+	if (strlen(trim($__compilerTemp3)) > 0) {
+		$__compilerTemp2 .= '
 				<hr class="formRowSep" />
-				' . $__compilerTemp2 . '
+				' . $__compilerTemp3 . '
 				<hr class="formRowSep" />
 			';
 	}
-	$__compilerTemp3 = '';
+	$__compilerTemp4 = '';
 	if ($__templater->method($__vars['thread'], 'canDelete', array())) {
-		$__compilerTemp3 .= '
+		$__compilerTemp4 .= '
 					' . $__templater->button('Delete' . $__vars['xf']['language']['ellipsis'], array(
 			'href' => $__templater->fn('link', array('threads/delete', $__vars['thread'], ), false),
 			'icon' => 'delete',
@@ -46,16 +61,16 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		)) . '
 				';
 	}
-	$__compilerTemp4 = '';
+	$__compilerTemp5 = '';
 	if ($__vars['noInlineMod']) {
-		$__compilerTemp4 .= '
+		$__compilerTemp5 .= '
 		' . $__templater->formHiddenVal('_xfNoInlineMod', '1', array(
 		)) . '
 	';
 	}
-	$__compilerTemp5 = '';
+	$__compilerTemp6 = '';
 	if ($__vars['forumName']) {
-		$__compilerTemp5 .= '
+		$__compilerTemp6 .= '
 		' . $__templater->formHiddenVal('_xfForumName', '1', array(
 		)) . '
 	';
@@ -64,18 +79,9 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 	<div class="block-container">
 		<div class="block-body">
-			' . $__templater->formPrefixInputRow($__vars['prefixes'], array(
-		'type' => 'thread',
-		'prefix-value' => $__vars['thread']['prefix_id'],
-		'textbox-value' => $__vars['thread']['title'],
-		'placeholder' => 'Title' . $__vars['xf']['language']['ellipsis'],
-		'autofocus' => 'autofocus',
-		'maxlength' => $__templater->fn('max_length', array($__vars['thread'], 'title', ), false),
-	), array(
-		'label' => 'Title',
-	)) . '
-
 			' . $__compilerTemp1 . '
+
+			' . $__compilerTemp2 . '
 
 			' . $__templater->callMacro('helper_thread_options', 'thread_status', array(
 		'thread' => $__vars['thread'],
@@ -87,13 +93,13 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'sticky' => 'true',
 	), array(
 		'html' => '
-				' . $__compilerTemp3 . '
+				' . $__compilerTemp4 . '
 			',
 	)) . '
 	</div>
 
-	' . $__compilerTemp4 . '
 	' . $__compilerTemp5 . '
+	' . $__compilerTemp6 . '
 ', array(
 		'action' => $__templater->fn('link', array('threads/edit', $__vars['thread'], ), false),
 		'class' => 'block',

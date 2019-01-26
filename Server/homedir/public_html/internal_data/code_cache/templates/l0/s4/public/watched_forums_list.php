@@ -3,6 +3,17 @@
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
+	if ($__vars['xf']['options']['useress_watchedWrapper']) {
+		$__finalCompiled .= '
+	';
+		$__compilerTemp1 = $__vars;
+		$__compilerTemp1['pageSelected'] = 'watched_forums';
+		$__templater->wrapTemplate('account_wrapper', $__compilerTemp1);
+		$__finalCompiled .= '
+';
+	}
+	$__finalCompiled .= '
+';
 	$__templater->pageParams['pageTitle'] = $__templater->preEscaped('Watched forums');
 	$__finalCompiled .= '
 
@@ -14,47 +25,47 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	if (!$__templater->test($__vars['watchedForums'], 'empty', array())) {
 		$__finalCompiled .= '
 	';
-		$__compilerTemp1 = '';
-		$__compilerTemp2 = $__templater->method($__vars['nodeTree'], 'getFlattened', array());
-		if ($__templater->isTraversable($__compilerTemp2)) {
-			foreach ($__compilerTemp2 AS $__vars['id'] => $__vars['treeEntry']) {
-				$__compilerTemp1 .= '
+		$__compilerTemp2 = '';
+		$__compilerTemp3 = $__templater->method($__vars['nodeTree'], 'getFlattened', array());
+		if ($__templater->isTraversable($__compilerTemp3)) {
+			foreach ($__compilerTemp3 AS $__vars['id'] => $__vars['treeEntry']) {
+				$__compilerTemp2 .= '
 					';
 				$__vars['node'] = $__vars['treeEntry']['record'];
-				$__compilerTemp1 .= '
+				$__compilerTemp2 .= '
 					';
 				$__vars['forumWatch'] = $__vars['watchedForums'][$__vars['node']['node_id']];
-				$__compilerTemp1 .= '
+				$__compilerTemp2 .= '
 					';
 				if ($__vars['forumWatch']) {
-					$__compilerTemp1 .= '
+					$__compilerTemp2 .= '
 						';
-					$__compilerTemp3 = '';
+					$__compilerTemp4 = '';
 					if ($__vars['forumWatch']['notify_on'] == 'thread') {
-						$__compilerTemp3 .= '
+						$__compilerTemp4 .= '
 									<li>' . 'New threads' . '</li>
 								';
 					} else if ($__vars['forumWatch']['notify_on'] == 'message') {
-						$__compilerTemp3 .= '
+						$__compilerTemp4 .= '
 									<li>' . 'New messages' . '</li>
 								';
 					}
-					$__compilerTemp4 = '';
-					if ($__vars['forumWatch']['send_alert']) {
-						$__compilerTemp4 .= '<li>' . 'Alerts' . '</li>';
-					}
 					$__compilerTemp5 = '';
+					if ($__vars['forumWatch']['send_alert']) {
+						$__compilerTemp5 .= '<li>' . 'Alerts' . '</li>';
+					}
+					$__compilerTemp6 = '';
 					if ($__vars['forumWatch']['send_email']) {
-						$__compilerTemp5 .= '<li>' . 'Emails' . '</li>';
+						$__compilerTemp6 .= '<li>' . 'Emails' . '</li>';
 					}
 					$__vars['bonusInfo'] = $__templater->preEscaped('
 							<ul class="listInline listInline--bullet">
-								' . $__compilerTemp3 . '
 								' . $__compilerTemp4 . '
 								' . $__compilerTemp5 . '
+								' . $__compilerTemp6 . '
 							</ul>
 						');
-					$__compilerTemp1 .= '
+					$__compilerTemp2 .= '
 						' . $__templater->callMacro('node_list_forum', 'forum', array(
 						'node' => $__vars['node'],
 						'extras' => $__vars['nodeExtras'][$__vars['node']['node_id']],
@@ -66,7 +77,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 					), $__vars) . '
 					';
 				}
-				$__compilerTemp1 .= '
+				$__compilerTemp2 .= '
 				';
 			}
 		}
@@ -96,7 +107,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 		<div class="block-container">
 			<div class="block-body">
-				' . $__compilerTemp1 . '
+				' . $__compilerTemp2 . '
 			</div>
 			<div class="block-footer block-footer--split">
 				<span class="block-footer-counter"></span>

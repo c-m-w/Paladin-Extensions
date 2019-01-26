@@ -112,6 +112,8 @@ return array (
   'admin_navigation.styleProperties' => 'Style properties',
   'admin_navigation.styles' => 'Styles',
   'admin_navigation.stylesAndTemplates' => 'Styles &amp; templates',
+  'admin_navigation.sv_ue_loginAttemptLog' => 'Login attempt log',
+  'admin_navigation.sv_ue_userLog' => 'User log',
   'admin_navigation.tags' => 'Tags',
   'admin_navigation.templateModifications' => 'Template modifications',
   'admin_navigation.templates' => 'Templates',
