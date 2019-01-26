@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: da2b77b71714df2862f94bcec8789403
+// FROM HASH: aa0ec5f5216b99d517580ec5387dab01
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -175,7 +175,9 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 	<div class="block-container">
 		<div class="block-body">
-
+			
+			' . '
+			
 			' . $__templater->formPrefixInputRow($__vars['prefixes'], array(
 		'type' => 'thread',
 		'prefix-value' => ($__vars['forum']['draft_thread']['prefix_id'] ?: ($__vars['thread']['prefix_id'] ?: $__vars['forum']['default_prefix_id'])),

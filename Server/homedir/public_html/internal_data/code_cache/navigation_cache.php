@@ -389,6 +389,18 @@ return function($__templater, $__selectedNav, array $__vars)
 				}
 			}
 
+			if ($__vars['xf']['visitor']['user_id']) {
+				$__navTemp = [
+		'title' => \XF::phrase('nav.membersActivePlayers'),
+		'href' => $__templater->fn('link', array('steam/active-players', ), false),
+		'attributes' => [],
+	];
+				if ($__navTemp) {
+					$__tree['members']['children']['membersActivePlayers'] = $__navTemp;
+					$__flat['membersActivePlayers'] =& $__tree['members']['children']['membersActivePlayers'];
+				}
+			}
+
 		}
 	}
 
@@ -422,35 +434,6 @@ return function($__templater, $__selectedNav, array $__vars)
 				if ($__navTemp) {
 					$__tree['navPremium']['children']['navPremiumInvitations'] = $__navTemp;
 					$__flat['navPremiumInvitations'] =& $__tree['navPremium']['children']['navPremiumInvitations'];
-				}
-			}
-
-		}
-	}
-
-	if (($__vars['xf']['options']['EWRdiscord_navtab'] AND $__templater->method($__vars['xf']['visitor'], 'hasPermission', array('EWRdiscord', 'viewDiscord', )))) {
-		$__navTemp = [
-		'title' => \XF::phrase('nav.EWRdiscord'),
-		'href' => $__templater->fn('link', array('ewr-discord', ), false),
-		'attributes' => [],
-	];
-		if ($__navTemp) {
-			$__tree['EWRdiscord'] = $__navTemp;
-			$__flat['EWRdiscord'] =& $__tree['EWRdiscord'];
-			if (empty($__tree['EWRdiscord']['children'])) { $__tree['EWRdiscord']['children'] = []; }
-
-			if ($__templater->method($__vars['xf']['visitor'], 'hasPermission', array('EWRdiscord', 'botPost', ))) {
-				$__navTemp = [
-		'title' => \XF::phrase('nav.EWRdiscord_botpost'),
-		'href' => $__templater->fn('link', array('ewr-discord/botpost', ), false),
-		'attributes' => [
-			'data-xf-click' => 'overlay',
-			'data-cache' => 'false',
-		],
-	];
-				if ($__navTemp) {
-					$__tree['EWRdiscord']['children']['EWRdiscord_botpost'] = $__navTemp;
-					$__flat['EWRdiscord_botpost'] =& $__tree['EWRdiscord']['children']['EWRdiscord_botpost'];
 				}
 			}
 

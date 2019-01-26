@@ -5,6 +5,7 @@ return array (
   'admin_permission.attachment' => 'Manage attached files',
   'admin_permission.ban' => 'Manage bans',
   'admin_permission.bbCodeSmilie' => 'Manage BB codes and smilies',
+  'admin_permission.blacktea_steamauth' => 'Steam Auth',
   'admin_permission.cron' => 'Manage cron entries',
   'admin_permission.help' => 'Manage help',
   'admin_permission.import' => 'Import data',

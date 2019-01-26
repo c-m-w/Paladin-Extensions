@@ -9,6 +9,7 @@ return array (
   'option_group_description.appearance' => 'These options control how your site appears to your visitors.',
   'option_group_description.attachments' => 'Attachments are files that are uploaded to the board along with messages.',
   'option_group_description.basicBoard' => '',
+  'option_group_description.blacktea_steamauth_options' => 'Login with Steam',
   'option_group_description.boardActive' => 'Turn your board on and off here.',
   'option_group_description.censoringOptions' => 'User-generated text will be subject to the censorship rules you define here.',
   'option_group_description.conversationView' => 'Options here control the Conversation view add-on.',
