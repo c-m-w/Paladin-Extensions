@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<options>
+  <option option_id="EWRdiscord_channels" edit_format="callback" data_type="array">
+    <default_value>[]</default_value>
+    <edit_format_params>EWR\Discord\Option\Channels::renderOption</edit_format_params>
+    <sub_options>*</sub_options>
+    <relation group_id="EWRdiscord" display_order="401"/>
+  </option>
+  <option option_id="EWRdiscord_navtab" edit_format="radio" data_type="string">
+    <default_value>blank</default_value>
+    <edit_format_params>0={{ phrase('EWRdiscord_hide') }}
+blank={{ phrase('EWRdiscord_show') }}
+online={{ phrase('EWRdiscord_with_online_count') }}</edit_format_params>
+    <relation group_id="EWRdiscord" display_order="1"/>
+  </option>
+  <option option_id="EWRdiscord_payload" edit_format="spinbox" data_type="integer">
+    <default_value>300</default_value>
+    <edit_format_params>min=50
+step=50</edit_format_params>
+    <relation group_id="EWRdiscord" display_order="501"/>
+  </option>
+  <option option_id="EWRdiscord_roles" edit_format="callback" data_type="array">
+    <default_value>[]</default_value>
+    <edit_format_params>EWR\Discord\Option\Roles::renderOption</edit_format_params>
+    <sub_options>*</sub_options>
+    <relation group_id="EWRdiscord" display_order="201"/>
+  </option>
+  <option option_id="EWRdiscord_server" edit_format="callback" data_type="string">
+    <default_value></default_value>
+    <edit_format_params>EWR\Discord\Option\Server::renderOption</edit_format_params>
+    <relation group_id="EWRdiscord" display_order="101"/>
+  </option>
+  <option option_id="EWRdiscord_sync_bans" edit_format="onoff" data_type="boolean">
+    <default_value>0</default_value>
+    <relation group_id="EWRdiscord" display_order="303"/>
+  </option>
+  <option option_id="EWRdiscord_sync_nicks" edit_format="onoff" data_type="boolean">
+    <default_value>0</default_value>
+    <relation group_id="EWRdiscord" display_order="302"/>
+  </option>
+  <option option_id="EWRdiscord_sync_roles" edit_format="onoff" data_type="boolean">
+    <default_value>1</default_value>
+    <relation group_id="EWRdiscord" display_order="301"/>
+  </option>
+  <option option_id="EWRdiscord_widgetbot" edit_format="callback" data_type="array">
+    <default_value>{"channel":false,"crate":false,"toast":false}</default_value>
+    <edit_format_params>EWR\Discord\Option\WidgetBot::renderOption</edit_format_params>
+    <sub_options>channel
+crate
+toast
+*</sub_options>
+    <relation group_id="EWRdiscord" display_order="102"/>
+  </option>
+</options>

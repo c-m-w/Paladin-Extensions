@@ -1,0 +1,14 @@
+{
+    "legacy_addon_id": "EWRdiscord",
+    "title": "[8WR] Discord Integration",
+    "description": "Integration with a Discord server. Add-on from 8WAYRUN.",
+    "version_id": 2011,
+    "version_string": "2.0.1.1",
+    "dev": "Jaxel",
+    "dev_url": "https://xenforo.com/community/resources/authors/1295/",
+    "faq_url": "https://xenforo.com/community/resources/6058/field?field=faq",
+    "support_url": "https://xenforo.com/community/resources/6058/",
+    "extra_urls": [],
+    "require": [],
+    "icon": "fa-comments-o"
+}

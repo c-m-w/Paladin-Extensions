@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 6e2060d2c4d96284a215da68a3a714d8
+// FROM HASH: 3706861c524b3a89766b5088fda88a51
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -22,9 +22,9 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	if ($__templater->method($__vars['xf']['visitor'], 'canCreateThread', array())) {
 		$__compilerTemp1 .= '
 		' . $__templater->button('
-			' . 'Post' . $__vars['xf']['language']['ellipsis'] . '
+			' . 'Post' . '
 		', array(
-			'href' => $__templater->fn('link', array('forums/create-thread', ), false),
+			'href' => $__templater->fn('link', array('https://www.paladin-extensions.com/forums/create-thread', ), false),
 			'class' => 'button--cta',
 			'icon' => 'write',
 			'overlay' => 'true',

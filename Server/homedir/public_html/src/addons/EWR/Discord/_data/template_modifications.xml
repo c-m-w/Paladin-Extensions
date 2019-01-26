@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template_modifications>
+  <modification type="public" template="PAGE_CONTAINER" modification_key="EWRdiscord_PAGE_CONTAINER_copyright" description="{{ phrase('extra_copyright') }}" execution_order="10" enabled="1" action="str_replace">
+    <find><![CDATA[{{ phrase('extra_copyright') }}]]></find>
+    <replace><![CDATA[$0
+<div class="discord-copyright">
+	<a href="https://xenforo.com/community/resources/6058/"
+		target="_blank">Discord Integration</a> &copy; Jason Axelrod of
+	<a href="https://8wayrun.com/" target="_blank">8WAYRUN</a>
+</div>]]></replace>
+  </modification>
+  <modification type="public" template="PAGE_CONTAINER" modification_key="EWRdiscord_PAGE_CONTAINER_widgetbot" description="Adds WidgetBot crate button" execution_order="10" enabled="1" action="str_replace">
+    <find><![CDATA[<!-- closing p-pageWrapper -->]]></find>
+    <replace><![CDATA[$0
+
+<xf:if is="$xf.options.EWRdiscord_widgetbot.crate">
+	<script src="https://crate.widgetbot.io/v2" async defer>
+		new Crate({
+			server: '{$xf.options.EWRdiscord_server}',
+			channel: '{$xf.options.EWRdiscord_widgetbot.channel}',
+			options: '00{{ property('styleType')=='light' ? '1' : '0' }}0',
+			scheme: '{{ property('styleType') }}',
+
+			notifications: {
+				toasts: {
+					enable: {{ $xf.options.EWRdiscord_widgetbot.toast ? 1 : 0 }}
+				}
+			}
+		})
+		crate.pulse()
+	</script>
+</xf:if>]]></replace>
+  </modification>
+  <modification type="public" template="core_button.less" modification_key="EWRtwitch_core_button_discord" description="colorizes discord login button" execution_order="10" enabled="1" action="str_replace">
+    <find><![CDATA[&--facebook]]></find>
+    <replace><![CDATA[&--discord
+{
+	.m-buttonColorVariation(#7289DA, white);
+	.m-buttonIcon(@fa-var-comments-o, .93em);
+}
+
+$0]]></replace>
+  </modification>
+  <modification type="admin" template="node_list" modification_key="EWRdiscord_node_list_discord" description="Adds discord link to node list" execution_order="10" enabled="1" action="str_replace">
+    <find><![CDATA[							<xf:action
+								class="{{ {$customPermissions.{$node.node_id}} ? 'dataList-cell--highlighted' : '' }}"
+								href="{{ link('nodes/permissions', $node) }}">
+								{{ phrase('permissions') }}
+							</xf:action>]]></find>
+    <replace><![CDATA[<xf:if is="$node.node_type_id == 'Forum'">
+	<xf:action class="{{ {$node.discord_options} ? 'dataList-cell--highlighted' : '' }}"
+			href="{{ link('nodes/discord', $node) }}">
+		{{ phrase('EWRdiscord_discord') }}
+	</xf:action>
+<xf:else/>
+	<xf:cell />
+</xf:if>
+
+$0]]></replace>
+  </modification>
+</template_modifications>

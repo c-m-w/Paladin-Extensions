@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation>
+  <navigation_entry navigation_id="EWRdiscord" display_order="1000" navigation_type_id="basic" enabled="1"><![CDATA[{"link":"{{ link('ewr-discord') }}","display_condition":"$xf.options.EWRdiscord_navtab && $xf.visitor.hasPermission('EWRdiscord', 'viewDiscord')","extra_attributes":[]}]]></navigation_entry>
+  <navigation_entry navigation_id="EWRdiscord_botpost" parent_navigation_id="EWRdiscord" display_order="1" navigation_type_id="basic" enabled="1"><![CDATA[{"link":"{{ link('ewr-discord\/botpost') }}","display_condition":"$xf.visitor.hasPermission('EWRdiscord', 'botPost')","extra_attributes":{"data-xf-click":"overlay","data-cache":"false"}}]]></navigation_entry>
+</navigation>

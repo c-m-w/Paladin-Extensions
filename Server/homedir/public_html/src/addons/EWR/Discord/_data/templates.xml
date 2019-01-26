@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates>
+  <template type="public" title="EWRdiscord.less" version_id="2010" version_string="2.0.1.0"><![CDATA[.discord-body
+{
+	padding: 150px;
+	text-align: center;
+
+	.discord-join
+	{
+		font-size: 56px;
+		font-weight: bold;
+		padding: 50px;
+	}
+}
+
+
+@media (max-width: @xf-responsiveMedium)
+{
+	.discord-body
+	{
+		padding: 50px;
+		.discord-join { padding: 25px; font-size: 44px; }
+	}
+}
+
+@media (max-width: @xf-responsiveNarrow)
+{
+	.discord-body
+	{
+		padding: 10px;
+		.discord-join { padding: 0; font-size: 32px; }
+	}
+}]]></template>
+  <template type="public" title="EWRdiscord_botpost" version_id="1300" version_string="1.3.0.0"><![CDATA[<xf:title>{{ phrase('EWRdiscord_post_as_bot') }}</xf:title>
+
+<xf:form action="{{ link('ewr-discord/botpost') }}" ajax="true" class="block" data-redirect="off">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:selectrow name="channel" label="{{ phrase('EWRdiscord_channel') }}">
+				<xf:foreach loop="$channels" value="$channel">
+					<xf:option value="{$channel.id}"># {$channel.name}</xf:option>
+				</xf:foreach>
+			</xf:selectrow>
+			
+			<xf:textarearow name="data[content]" label="{{ phrase('message') }}" autosize="true"
+				explain="{{ phrase('EWRdiscord_botpost_explain') }}" />
+			
+			<xf:checkboxrow>
+				<xf:option name="data[tts]" value="1">{{ phrase('EWRdiscord_convert_to_tts') }}</xf:option>
+			</xf:checkboxrow>
+		</div>
+		
+		<xf:submitrow submit="{{ phrase('proceed...') }}" />
+	</div>
+</xf:form>]]></template>
+  <template type="admin" title="EWRdiscord_forum" version_id="1300" version_string="1.3.0.0"><![CDATA[<xf:title>{{ phrase('EWRdiscord_edit_discord_options:') }} {$node.title}</xf:title>
+
+<xf:form action="{{ link('nodes/discord-save', $node) }}" ajax="true" class="block">
+	<div class="block-container">
+		<div class="block-body">
+			<xf:selectrow name="discord[threads][channel]" value="{$node.discord_options.threads.channel}"
+					label="{{ phrase('threads') }}" explain="{{ phrase('EWRdiscord_channels_explain') }}">
+				
+				<xf:option value="0">{{ phrase('(none)') }}</xf:option>
+				<xf:foreach loop="$channels" value="$channel">
+					<xf:option value="{$channel.id}"># {$channel.name}</xf:option>
+				</xf:foreach>
+				<xf:option value="-1">{{ phrase('(disabled)') }}</xf:option>
+				
+			</xf:selectrow>
+			<xf:textarearow name="discord[threads][message]" value="{$node.discord_options.threads.message}" autosize="true"
+					label="{{ phrase('message') }}" explain="{{ phrase('EWRdiscord_message_explain') }}"
+					placeholder="{{ phrase('EWRdiscord_x_posted_new_thread_y') }}" />
+			<xf:numberboxrow name="discord[threads][payload]" value="{$node.discord_options.threads.payload}" min="50" step="50"
+					label="{{ phrase('option.EWRdiscord_payload') }}" explain="{{ phrase('option_explain.EWRdiscord_payload') }}" />
+			
+			<hr class="formRowSep" />
+			
+			<xf:selectrow name="discord[posts][channel]" value="{$node.discord_options.posts.channel}"
+					label="{{ phrase('posts') }}" explain="{{ phrase('EWRdiscord_channels_explain') }}">
+				
+				<xf:option value="0">{{ phrase('(none)') }}</xf:option>
+				<xf:foreach loop="$channels" value="$channel">
+					<xf:option value="{$channel.id}"># {$channel.name}</xf:option>
+				</xf:foreach>
+				<xf:option value="-1">{{ phrase('(disabled)') }}</xf:option>
+				
+			</xf:selectrow>
+			<xf:textarearow name="discord[posts][message]" value="{$node.discord_options.posts.message}" autosize="true"
+					label="{{ phrase('message') }}" explain="{{ phrase('EWRdiscord_message_explain') }}"
+					placeholder="{{ phrase('EWRdiscord_x_posted_new_thread_y') }}" />
+			<xf:numberboxrow name="discord[posts][payload]" value="{$node.discord_options.posts.payload}" min="50" step="50"
+					label="{{ phrase('option.EWRdiscord_payload') }}" explain="{{ phrase('option_explain.EWRdiscord_payload') }}" />
+		</div>
+		
+		<xf:submitrow icon="save" sticky="true" />
+	</div>
+</xf:form>]]></template>
+  <template type="public" title="EWRdiscord_index" version_id="2010" version_string="2.0.1.0"><![CDATA[<xf:title>{{ phrase('EWRdiscord_discord') }}</xf:title>
+
+<xf:css src="EWRdiscord.less" />
+
+<div class="block">
+	<div class="block-container">
+		<xf:if is="$xf.options.EWRdiscord_widgetbot.channel">
+			<embed width="100%" height="600px"
+				src="https://widgetbot.io/embed/{$cache.server}/{$xf.options.EWRdiscord_widgetbot.channel}/00{{ property('styleType')=='light' ? '1' : '0' }}2/" />
+		<xf:else/>
+			<div class="block-body discord-body">
+				{{ phrase('EWRdiscord_index_1') }}
+				<div class="discord-join">
+					{{ phrase('EWRdiscord_index_2', {'invite': $cache.invite}) }}
+				</div>
+				{{ phrase('EWRdiscord_index_3') }}
+			</div>
+		</xf:if>
+	</div>
+</div>
+
+<xf:sidebar>
+	<iframe width="100%" height="600px" scrolling="no" frameborder="0"
+		src="//discordapp.com/widget?id={$cache.server}&theme={{ property('styleType') }}"></iframe>
+</xf:sidebar>]]></template>
+  <template type="public" title="connected_account_associated_discord" version_id="1300" version_string="1.3.0.0"><![CDATA[<xf:if is="$providerData">
+	<a href="https://discordapp.com/channels/@me" target="_blank">
+		<img src="{$providerData.avatar_url}" width="48" alt="" />
+	</a>
+	<div><a href="https://discordapp.com/channels/@me" target="_blank">{$providerData.username} {$providerData.username|parens}</a></div>
+<xf:else />
+	{{ phrase('unknown_account') }}
+</xf:if>]]></template>
+  <template type="admin" title="connected_account_provider_discord" version_id="1300" version_string="1.3.0.0"><![CDATA[<xf:textboxrow name="options[client_id]" value="{$options.client_id}"
+	label="{{ phrase('client_id') }}"
+	hint="{{ phrase('required') }}"
+	explain="{{ phrase('EWRdiscord_con_acc_discord_client_id_explain') }}" />
+
+<xf:textboxrow name="options[client_secret]" value="{$options.client_secret}"
+	label="{{ phrase('client_secret') }}"
+	hint="{{ phrase('required') }}"
+	explain="{{ phrase('EWRdiscord_con_acc_discord_client_secret_explain') }}" />
+
+<xf:textboxrow name="options[bot_token]" value="{$options.bot_token}"
+	label="{{ phrase('EWRdiscord_bot_token') }}"
+	hint="{{ phrase('required') }}"
+	explain="{{ phrase('EWRdiscord_con_acc_discord_bot_token_explain') }}" />]]></template>
+  <template type="admin" title="connected_account_provider_test_discord" version_id="1300" version_string="1.3.0.0"><![CDATA[<xf:if is="!$providerData">
+	<xf:macro template="connected_account_provider_test_macros" name="explain"
+		arg-providerTitle="{$provider.title}"
+		arg-keyName="{{ phrase('client_id') }}"
+		arg-keyValue="{$provider.options.client_id}" />
+<xf:else />
+	<xf:macro template="connected_account_provider_test_macros" name="success" />
+
+	<xf:macro template="connected_account_provider_test_macros" name="display_name"
+		arg-name="{$providerData.username}" />
+
+	<xf:macro template="connected_account_provider_test_macros" name="email"
+		arg-email="{$providerData.email}" />
+
+	<xf:macro template="connected_account_provider_test_macros" name="picture"
+		arg-url="{$providerData.avatar_url}" />
+</xf:if>]]></template>
+  <template type="admin" title="option_template_EWRdiscord_channels" version_id="2010" version_string="2.0.1.0"><![CDATA[<xf:if is="$channels is not empty">
+	
+	<xf:formrow label="{$option.title}" hint="{$hintHtml}" explain="{$explainHtml}" html="{$listedHtml}">
+		<dl class="inputLabelPair">
+			<dt>{{ phrase('new_threads') }}</dt>
+			<dd>
+				<xf:select name="{$inputName}[threads]" value="{$option.option_value.threads}">
+					<xf:option value="0">{{ phrase('(none)') }}</xf:option>
+					<xf:foreach loop="$channels" value="$channel">
+						<xf:option value="{$channel.id}"># {$channel.name}</xf:option>
+					</xf:foreach>
+				</xf:select>
+			</dd>
+		</dl>
+		<dl class="inputLabelPair">
+			<dt>{{ phrase('new_posts') }}</dt>
+			<dd>
+				<xf:select name="{$inputName}[posts]" value="{$option.option_value.posts}">
+					<xf:option value="0">{{ phrase('(none)') }}</xf:option>
+					<xf:foreach loop="$channels" value="$channel">
+						<xf:option value="{$channel.id}"># {$channel.name}</xf:option>
+					</xf:foreach>
+				</xf:select>
+			</dd>
+		</dl>
+		<dl class="inputLabelPair">
+			<dt>{{ phrase('new_profile_posts') }}</dt>
+			<dd>
+				<xf:select name="{$inputName}[profile]" value="{$option.option_value.profile}">
+					<xf:option value="0">{{ phrase('(none)') }}</xf:option>
+					<xf:foreach loop="$channels" value="$channel">
+						<xf:option value="{$channel.id}"># {$channel.name}</xf:option>
+					</xf:foreach>
+				</xf:select>
+			</dd>
+		</dl>
+		<xf:if is="$addons.EWRCarta">
+			<dl class="inputLabelPair">
+				<dt>[8WR] XenCarta > {{ phrase('EWRdiscord_wiki_edits') }}</dt>
+				<dd>
+					<xf:select name="{$inputName}[ewrcarta]" value="{$option.option_value.ewrcarta}">
+						<xf:option value="0">{{ phrase('(none)') }}</xf:option>
+						<xf:foreach loop="$channels" value="$channel">
+							<xf:option value="{$channel.id}"># {$channel.name}</xf:option>
+						</xf:foreach>
+					</xf:select>
+				</dd>
+			</dl>
+		</xf:if>
+		<xf:if is="$addons.EWRMedio">
+			<dl class="inputLabelPair">
+				<dt>[8WR] XenMedio > {{ phrase('EWRdiscord_new_media') }}</dt>
+				<dd>
+					<xf:select name="{$inputName}[ewrmedio]" value="{$option.option_value.ewrmedio}">
+						<xf:option value="0">{{ phrase('(none)') }}</xf:option>
+						<xf:foreach loop="$channels" value="$channel">
+							<xf:option value="{$channel.id}"># {$channel.name}</xf:option>
+						</xf:foreach>
+					</xf:select>
+				</dd>
+			</dl>
+			<dl class="inputLabelPair">
+				<dt>[8WR] XenMedio > {{ phrase('EWRdiscord_new_comments') }}</dt>
+				<dd>
+					<xf:select name="{$inputName}[ewrmediocomments]" value="{$option.option_value.ewrmediocomments}">
+						<xf:option value="0">{{ phrase('(none)') }}</xf:option>
+						<xf:foreach loop="$channels" value="$channel">
+							<xf:option value="{$channel.id}"># {$channel.name}</xf:option>
+						</xf:foreach>
+					</xf:select>
+				</dd>
+			</dl>
+		</xf:if>
+		<xf:if is="$addons.EWRRio">
+			<dl class="inputLabelPair">
+				<dt>[8WR] XenRio > {{ phrase('EWRdiscord_new_streams') }}</dt>
+				<dd>
+					<xf:select name="{$inputName}[ewrrio]" value="{$option.option_value.ewrrio}">
+						<xf:option value="0">{{ phrase('(none)') }}</xf:option>
+						<xf:foreach loop="$channels" value="$channel">
+							<xf:option value="{$channel.id}"># {$channel.name}</xf:option>
+						</xf:foreach>
+					</xf:select>
+				</dd>
+			</dl>
+		</xf:if>
+	</xf:formrow>
+	
+<xf:else/>
+	
+	<xf:inforow rowtype="confirm">
+		{{ phrase('EWRdiscord_discord_connected_account_required', {
+			'link': link('connected-accounts')
+		}) }}
+	</xf:inforow>
+	
+</xf:if>]]></template>
+  <template type="admin" title="option_template_EWRdiscord_roles" version_id="1300" version_string="1.3.0.0"><![CDATA[<xf:if is="$roles is not empty">
+	
+	<xf:formrow label="{$option.title}" hint="{$hintHtml}" explain="{$explainHtml}" html="{$listedHtml}">
+		<xf:foreach loop="$roles" value="$role">
+			<dl class="inputLabelPair">
+				<dt>{$role.name}</dt>
+				<dd>
+					<xf:select name="{$inputName}[{$role.id}]" value="{$role.usergroup}">
+						<xf:foreach loop="$usergroups" value="$usergroup">
+							<xf:option value="{$usergroup.value}">{$usergroup.label}</xf:option>
+						</xf:foreach>
+					</xf:select>
+				</dd>
+			</dl>
+		</xf:foreach>
+	</xf:formrow>
+	
+<xf:else/>
+	
+	<xf:inforow rowtype="confirm">
+		{{ phrase('EWRdiscord_discord_connected_account_required', {
+			'link': link('connected-accounts')
+		}) }}
+	</xf:inforow>
+	
+</xf:if>]]></template>
+  <template type="admin" title="option_template_EWRdiscord_server" version_id="1300" version_string="1.3.0.0"><![CDATA[<xf:if is="$option.option_value && $provider is not empty">
+	
+	<xf:js src="8wayrun/discord/discord.js" />
+	
+	<xf:formrow label="{$option.title}" hint="{$hintHtml}" explain="{$explainHtml}" html="{$listedHtml}">
+		<div class="inputGroup">
+			<xf:textbox name="{$inputName}" value="{$option.option_value}" class="input" />
+			<span class="inputGroup-splitter"></span>
+			<xf:button data-xf-init="discord-botcheck" data-token="{$provider.options.bot_token}">
+				{{ phrase('EWRdiscord_test_connection') }}
+			</xf:button>
+		</div>
+	</xf:formrow>
+	
+<xf:elseif is="$provider is not empty"/>
+	
+	<xf:formrow label="{$option.title}" hint="{$hintHtml}" explain="{$explainHtml}" html="{$listedHtml}">
+		<xf:button href="{$redirect}">
+			{{ phrase('EWRdiscord_assign_discord_application_bot_to_a_guild') }}
+		</xf:button>
+	</xf:formrow>
+	
+<xf:else/>
+	
+	<xf:inforow rowtype="confirm">
+		{{ phrase('EWRdiscord_discord_application_setup_required', {
+			'link': link('connected-accounts'),
+			'redirect': $redirect
+		}) }}
+	</xf:inforow>
+	
+</xf:if>]]></template>
+  <template type="admin" title="option_template_EWRdiscord_widgetbot" version_id="2010" version_string="2.0.1.0"><![CDATA[<xf:checkboxrow label="{$option.title}" hint="{$hintHtml}" explain="{$explainHtml}" html="{$listedHtml}">
+	<xf:option selected="{$option.option_value.channel}">
+		<xf:select name="{$inputName}[channel]" value="{$option.option_value.channel}">
+			<xf:foreach loop="$channels" value="$channel">
+				<xf:option value="{$channel.id}"># {$channel.name}</xf:option>
+			</xf:foreach>
+		</xf:select>
+		<xf:checkbox>
+			<xf:option name="{$inputName}[crate]" value="1" selected="{$option.option_value.crate}"
+				label="{{ phrase('EWRdiscord_enable_crate_popup_wrapper') }}" />
+			<xf:option name="{$inputName}[toast]" value="1" selected="{$option.option_value.toast}"
+				label="{{ phrase('EWRdiscord_enable_crate_toast_notifications') }}" />
+		</xf:checkbox>
+	</xf:option>
+</xf:checkboxrow>]]></template>
+</templates>

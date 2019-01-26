@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<phrases>
+  <phrase title="EWRdiscord_assign_discord_application_bot_to_a_guild" version_id="1300" version_string="1.3.0.0"><![CDATA[Assign Discord application bot to a guild]]></phrase>
+  <phrase title="EWRdiscord_bot_token" version_id="1300" version_string="1.3.0.0"><![CDATA[Bot token]]></phrase>
+  <phrase title="EWRdiscord_botpost_explain" version_id="1300" version_string="1.3.0.0"><![CDATA[This message will be posted directly to your Discord server. As such you may use any markdown available to your bot.]]></phrase>
+  <phrase title="EWRdiscord_channel" version_id="1300" version_string="1.3.0.0"><![CDATA[Channel]]></phrase>
+  <phrase title="EWRdiscord_channels_explain" version_id="1300" version_string="1.3.0.0"><![CDATA[If "<strong>None</strong>", your bot will automatically post to the default channel defined in the options for Discord.<br/>
+You may instead choose to post to a different channel; or "<strong>Disable</strong>" auto-posting for this forum entirely.]]></phrase>
+  <phrase title="EWRdiscord_con_acc_discord_bot_token_explain" version_id="1300" version_string="1.3.0.0"><![CDATA[The token for the "App Bot User" you created for this domain.]]></phrase>
+  <phrase title="EWRdiscord_con_acc_discord_client_id_explain" version_id="1300" version_string="1.3.0.0"><![CDATA[The client ID that is associated with your <a href="https://discordapp.com/developers/applications/me" target="_blank">Discord developer application</a> for this domain.]]></phrase>
+  <phrase title="EWRdiscord_con_acc_discord_client_secret_explain" version_id="1300" version_string="1.3.0.0"><![CDATA[The secret for the Discord application you created for this domain.]]></phrase>
+  <phrase title="EWRdiscord_convert_to_tts" version_id="1300" version_string="1.3.0.0"><![CDATA[ Convert message to text-to-speech]]></phrase>
+  <phrase title="EWRdiscord_discord" version_id="1300" version_string="1.3.0.0"><![CDATA[Discord]]></phrase>
+  <phrase title="EWRdiscord_discord_application_setup_required" version_id="1300" version_string="1.3.0.0"><![CDATA[Before using this addon, you must first set up a <a href="https://discordapp.com/developers/applications/me" target="_blank">Discord Developer Application</a>.<br/>
+When creating your application, be sure to set the following as your "Redirect URIs":<br/>
+<br/>
+<div><code>{redirect}/connected_account.php</code></div>
+<div><code>{redirect}/connected_discord.php</code></div>]]></phrase>
+  <phrase title="EWRdiscord_discord_connected_account_required" version_id="1300" version_string="1.3.0.0"><![CDATA[You must setup Discord in the "<a href="{link}">connected accounts</a>" section of your admin control panel.]]></phrase>
+  <phrase title="EWRdiscord_edit_discord_options" version_id="1300" version_string="1.3.0.0"><![CDATA[Edit Discord options]]></phrase>
+  <phrase title="EWRdiscord_enable_crate_popup_wrapper" version_id="2010" version_string="2.0.1.0"><![CDATA[Enable crate pop-up wrapper]]></phrase>
+  <phrase title="EWRdiscord_enable_crate_toast_notifications" version_id="2010" version_string="2.0.1.0"><![CDATA[Enable crate toast notifications]]></phrase>
+  <phrase title="EWRdiscord_hide" version_id="1300" version_string="1.3.0.0"><![CDATA[Hide]]></phrase>
+  <phrase title="EWRdiscord_index_1" version_id="1300" version_string="1.3.0.0"><![CDATA[We have officially moved our chat room to our own public Discord server!]]></phrase>
+  <phrase title="EWRdiscord_index_2" version_id="1300" version_string="1.3.0.0"><![CDATA[<a href="{invite}">CLICK HERE TO JOIN OUR DISCORD</a>]]></phrase>
+  <phrase title="EWRdiscord_index_3" version_id="1300" version_string="1.3.0.0"><![CDATA[We have officially moved our chat room to our own public Discord server!]]></phrase>
+  <phrase title="EWRdiscord_message_explain" version_id="1300" version_string="1.3.0.0"><![CDATA[Leave blank to use the default phrasing. Available substitution parameters: <strong>{user}</strong>, <strong>{title}</strong> and <strong>{url}</strong>.]]></phrase>
+  <phrase title="EWRdiscord_new_comments" version_id="2010" version_string="2.0.1.0"><![CDATA[New comments]]></phrase>
+  <phrase title="EWRdiscord_new_streams" version_id="2010" version_string="2.0.1.0"><![CDATA[New streams]]></phrase>
+  <phrase title="EWRdiscord_post_as_bot" version_id="1300" version_string="1.3.0.0"><![CDATA[Post as bot]]></phrase>
+  <phrase title="EWRdiscord_show" version_id="1300" version_string="1.3.0.0"><![CDATA[Show]]></phrase>
+  <phrase title="EWRdiscord_test_connection" version_id="1300" version_string="1.3.0.0"><![CDATA[Test connection]]></phrase>
+  <phrase title="EWRdiscord_viewing_discord_information" version_id="2004" version_string="2.0.0.4"><![CDATA[Viewing Discord information]]></phrase>
+  <phrase title="EWRdiscord_with_online_count" version_id="1300" version_string="1.3.0.0"><![CDATA[w/ online count]]></phrase>
+  <phrase title="EWRdiscord_x_commented_on_media_y" version_id="2010" version_string="2.0.1.0"><![CDATA[**{user}** commented on the media: *{title}* (<{url}>)]]></phrase>
+  <phrase title="EWRdiscord_x_edited_the_wiki_page_y" version_id="2010" version_string="2.0.1.0"><![CDATA[**{user}** edited the wiki page: *{title}* (<{url}>)]]></phrase>
+  <phrase title="EWRdiscord_x_now_streaming_y_z" version_id="1300" version_string="1.3.0.0"><![CDATA[**{title}** started streaming: *{status}* (<{url}>)]]></phrase>
+  <phrase title="EWRdiscord_x_posted_new_media_y" version_id="2010" version_string="2.0.1.0"><![CDATA[**{user}** posted new media: *{title}* (<{url}>)]]></phrase>
+  <phrase title="EWRdiscord_x_posted_new_thread_y" version_id="1300" version_string="1.3.0.0"><![CDATA[**{user}** posted a new thread: *{title}* (<{url}>)]]></phrase>
+  <phrase title="EWRdiscord_x_replied_to_thread_y" version_id="1300" version_string="1.3.0.0"><![CDATA[**{user}** replied to the thread: *{title}* (<{url}>)]]></phrase>
+  <phrase title="EWRdiscord_x_updated_status_y" version_id="1300" version_string="1.3.0.0"><![CDATA[**{user}** updated their status: *{title}* (<{url}>)]]></phrase>
+  <phrase title="con_acc.discord" version_id="1300" version_string="1.3.0.0"><![CDATA[Discord]]></phrase>
+  <phrase title="con_acc_desc.discord" version_id="1300" version_string="1.3.0.0"><![CDATA[]]></phrase>
+  <phrase title="cron_entry.ewrDiscord" version_id="1300" version_string="1.3.0.0"><![CDATA[[8WR] Discord Account Sync]]></phrase>
+  <phrase title="nav.EWRdiscord" version_id="1300" version_string="1.3.0.0"><![CDATA[Discord]]></phrase>
+  <phrase title="nav.EWRdiscord_botpost" version_id="1300" version_string="1.3.0.0"><![CDATA[Post as bot]]></phrase>
+  <phrase title="option.EWRdiscord_channels" version_id="1300" version_string="1.3.0.0"><![CDATA[Bot channels]]></phrase>
+  <phrase title="option.EWRdiscord_navtab" version_id="1300" version_string="1.3.0.0"><![CDATA[Navigation]]></phrase>
+  <phrase title="option.EWRdiscord_payload" version_id="1300" version_string="1.3.0.0"><![CDATA[Payload size]]></phrase>
+  <phrase title="option.EWRdiscord_roles" version_id="1300" version_string="1.3.0.0"><![CDATA[Server roles]]></phrase>
+  <phrase title="option.EWRdiscord_server" version_id="1300" version_string="1.3.0.0"><![CDATA[Server ID (guild)]]></phrase>
+  <phrase title="option.EWRdiscord_sync_bans" version_id="1300" version_string="1.3.0.0"><![CDATA[Enable ban syncing]]></phrase>
+  <phrase title="option.EWRdiscord_sync_nicks" version_id="1300" version_string="1.3.0.0"><![CDATA[Enable nick syncing]]></phrase>
+  <phrase title="option.EWRdiscord_sync_roles" version_id="1300" version_string="1.3.0.0"><![CDATA[Enable role syncing]]></phrase>
+  <phrase title="option.EWRdiscord_widgetbot" version_id="2010" version_string="2.0.1.0"><![CDATA[WidgetBot.io]]></phrase>
+  <phrase title="option_explain.EWRdiscord_channels" version_id="1300" version_string="1.3.0.0"><![CDATA[Your bot can automatically post events directly to a specified text chat rooms.]]></phrase>
+  <phrase title="option_explain.EWRdiscord_navtab" version_id="1300" version_string="1.3.0.0"><![CDATA[Hiding the navigation will result in a loss of sub-navigation as well.]]></phrase>
+  <phrase title="option_explain.EWRdiscord_payload" version_id="1300" version_string="1.3.0.0"><![CDATA[The maximum length of the quoted text in a bot auto-posted message.]]></phrase>
+  <phrase title="option_explain.EWRdiscord_roles" version_id="1300" version_string="1.3.0.0"><![CDATA[@everyone and managed roles can not be manually assigned to users.<br/>
+(unspecified roles will remain unaffected during the role sync process)]]></phrase>
+  <phrase title="option_explain.EWRdiscord_server" version_id="2000" version_string="2.0.0.0"><![CDATA[Your server's ID will be determined automatically by which guild you have it join.]]></phrase>
+  <phrase title="option_explain.EWRdiscord_sync_bans" version_id="1300" version_string="1.3.0.0"><![CDATA[When a user is banned, their linked account will also be banned from your Discord server.]]></phrase>
+  <phrase title="option_explain.EWRdiscord_sync_nicks" version_id="1300" version_string="1.3.0.0"><![CDATA[A user's Discord nickname will be force-changed to match their XenForo username.]]></phrase>
+  <phrase title="option_explain.EWRdiscord_sync_roles" version_id="1300" version_string="1.3.0.0"><![CDATA[Users will be assigned roles on your Discord server based on their usergroups in XenForo.]]></phrase>
+  <phrase title="option_explain.EWRdiscord_widgetbot" version_id="2010" version_string="2.0.1.0"><![CDATA[Requires channel configuration and permissions from <a href="https://widgetbot.io/" target="_blank">WidgetBot.io</a>.]]></phrase>
+  <phrase title="option_group.EWRdiscord" version_id="1300" version_string="1.3.0.0"><![CDATA[[8WR] Discord Integration]]></phrase>
+  <phrase title="option_group_description.EWRdiscord" version_id="1300" version_string="1.3.0.0"><![CDATA[Add-on from 8WAYRUN.]]></phrase>
+  <phrase title="permission.EWRdiscord_botPost" version_id="1300" version_string="1.3.0.0"><![CDATA[Post as the bot]]></phrase>
+  <phrase title="permission.EWRdiscord_viewDiscord" version_id="2006" version_string="2.0.0.6"><![CDATA[View Discord]]></phrase>
+  <phrase title="permission_interface.EWRdiscord" version_id="1300" version_string="1.3.0.0"><![CDATA[[8WR] Discord Integration]]></phrase>
+</phrases>

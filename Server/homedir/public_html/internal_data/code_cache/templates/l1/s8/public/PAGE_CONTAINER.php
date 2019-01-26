@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 6f481cc0e9d4480e4558544a96a84d95
+// FROM HASH: efb15b7ceace44539f44efa23a40c875
 return array('macros' => array('uix_mainTabComponent' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
