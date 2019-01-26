@@ -49,8 +49,8 @@ return array (
   'nav.whatsNewNewsFeed' => 'Your news feed',
   'nav.whatsNewPosts' => 'New posts',
   'nav.whatsNewProfilePosts' => 'New profile posts',
-  'nav.xr_pm_products' => 'Products',
-  'nav.xr_pm_products_search' => 'Search products',
+  'nav.xr_pm_products' => 'Extensions',
+  'nav.xr_pm_products_search' => 'Search extensions',
   'nav.xr_pm_your_purchases' => 'Your purchases',
   'nav.yourThreads' => 'Your threads',
 );

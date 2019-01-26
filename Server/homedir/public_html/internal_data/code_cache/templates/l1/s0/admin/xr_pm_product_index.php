@@ -3,7 +3,7 @@
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
-	$__templater->pageParams['pageTitle'] = $__templater->preEscaped('Products');
+	$__templater->pageParams['pageTitle'] = $__templater->preEscaped('Extensions');
 	$__finalCompiled .= '
 
 ';

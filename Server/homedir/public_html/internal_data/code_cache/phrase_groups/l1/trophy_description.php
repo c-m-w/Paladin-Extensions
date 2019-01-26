@@ -2,7 +2,7 @@
 return array (
   'trophy_description.1' => 'Post a message somewhere on the site to receive this.',
   'trophy_description.10' => 'Enable Two-Factor Authentication to secure your account.',
-  'trophy_description.11' => 'You\'ve been with us for one year, woo-hoo! To show our gratitude, you\'re now trusted enough to help us develop our products as a tester.',
+  'trophy_description.11' => 'You\'ve been with us for one year, woo-hoo!',
   'trophy_description.12' => 'Your helpful posts have been appreciated, so you earned this award :)',
   'trophy_description.13' => 'Welcome to the club - welcome, Squidward; welcome, Squidward; welcome, Squidward!',
   'trophy_description.2' => '30 messages posted. You must like it here!',

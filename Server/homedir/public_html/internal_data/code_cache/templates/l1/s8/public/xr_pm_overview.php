@@ -3,7 +3,7 @@
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
-	$__templater->pageParams['pageTitle'] = $__templater->preEscaped('Products');
+	$__templater->pageParams['pageTitle'] = $__templater->preEscaped('Extensions');
 	$__finalCompiled .= '
 
 ' . $__templater->callMacro('metadata_macros', 'canonical_url', array(
@@ -59,11 +59,11 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			';
 	} else if ($__vars['filters']) {
 		$__finalCompiled .= '
-				<div class="block-row">' . 'There are no products matching your filters.' . '</div>
+				<div class="block-row">' . 'There are no extensions matching your filters.' . '</div>
 			';
 	} else {
 		$__finalCompiled .= '
-				<div class="block-row">' . 'No products have been created yet.' . '</div>
+				<div class="block-row">' . 'No extensions have been created yet.' . '</div>
 			';
 	}
 	$__finalCompiled .= '
@@ -125,6 +125,6 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	$__finalCompiled .= '
 
 ';
-	$__templater->setPageParam('searchConstraints', array('Products' => array('search_type' => 'xr_pm_product', ), ));
+	$__templater->setPageParam('searchConstraints', array('Extensions' => array('search_type' => 'xr_pm_product', ), ));
 	return $__finalCompiled;
 });

@@ -8,33 +8,33 @@ AWSTATS DATA FILE 7.6 (build 20161204)
 # update).
 BEGIN_MAP 28
 POS_GENERAL 2019                
-POS_TIME 2685                
-POS_VISITOR 6388                
-POS_DAY 6842                
-POS_DOMAIN 3358                
-POS_LOGIN 3607                
-POS_ROBOT 3762                
-POS_WORMS 4140                
-POS_EMAILSENDER 4271                
-POS_EMAILRECEIVER 4414                
-POS_SESSION 7094                
-POS_SIDER 7262                
-POS_FILETYPES 4549                
-POS_DOWNLOADS 4630                
-POS_OS 4678                
-POS_BROWSER 4798                
-POS_SCREENSIZE 4987                
-POS_UNKNOWNREFERER 5061                
-POS_UNKNOWNREFERERBROWSER 5228                
-POS_ORIGIN 5310                
-POS_SEREFERRALS 5444                
-POS_PAGEREFS 5588                
-POS_SEARCHWORDS 5736                
-POS_KEYWORDS 5888                
-POS_MISC 2349                
-POS_ERRORS 5947                
-POS_CLUSTER 3463                
-POS_SIDER_404 6061                
+POS_TIME 2688                
+POS_VISITOR 6400                
+POS_DAY 6854                
+POS_DOMAIN 3370                
+POS_LOGIN 3619                
+POS_ROBOT 3774                
+POS_WORMS 4152                
+POS_EMAILSENDER 4283                
+POS_EMAILRECEIVER 4426                
+POS_SESSION 7106                
+POS_SIDER 7274                
+POS_FILETYPES 4561                
+POS_DOWNLOADS 4642                
+POS_OS 4690                
+POS_BROWSER 4810                
+POS_SCREENSIZE 4999                
+POS_UNKNOWNREFERER 5073                
+POS_UNKNOWNREFERERBROWSER 5240                
+POS_ORIGIN 5322                
+POS_SEREFERRALS 5456                
+POS_PAGEREFS 5600                
+POS_SEARCHWORDS 5748                
+POS_KEYWORDS 5900                
+POS_MISC 2352                
+POS_ERRORS 5959                
+POS_CLUSTER 3475                
+POS_SIDER_404 6073                
 END_MAP
 
 # LastLine    = Date of last record processed - Last record line number in last log - Last record offset in last log - Last record signature value
@@ -46,10 +46,10 @@ END_MAP
 # MonthHostsKnown   = Number of hosts known
 # MonthHostsUnKnown = Number of hosts unknown
 BEGIN_GENERAL 8
-LastLine 20181225055657 92 17823 10920270027738
+LastLine 20181226101646 111 21454 10629802149333
 FirstTime 0
 LastTime 20181223053702
-LastUpdate 20181225061008 92 0 92 0 0
+LastUpdate 20181226103510 111 0 111 0 0
 TotalVisits 18                  
 TotalUnique 10                  
 MonthHostsKnown 0                   
@@ -59,43 +59,43 @@ END_GENERAL
 # Misc ID - Pages - Hits - Bandwidth
 BEGIN_MISC 10
 RealPlayerSupport 0 0 0
-JavascriptDisabled 0 0 0
-DirectorSupport 0 0 0
-QuickTimeSupport 0 0 0
-AddToFavourites 0 0 0
-TotalMisc 0 0 0
-JavaEnabled 0 0 0
-PDFSupport 0 0 0
 WindowsMediaPlayerSupport 0 0 0
+QuickTimeSupport 0 0 0
+JavascriptDisabled 0 0 0
+TotalMisc 0 0 0
+PDFSupport 0 0 0
 FlashSupport 0 0 0
+AddToFavourites 0 0 0
+JavaEnabled 0 0 0
+DirectorSupport 0 0 0
 END_MISC
 
 # Hour - Pages - Hits - Bandwidth - Not viewed Pages - Not viewed Hits - Not viewed Bandwidth
 BEGIN_TIME 24
-0 1 1 5863 104 124 657681
-1 3 3 5171 104 108 553371
-2 1 1 5863 97 104 15227
-3 0 0 0 93 95 10744
-4 9 9 406 106 121 290673
-5 1 1 119 88 96 104239
-6 0 0 0 87 94 72038
-7 0 0 0 85 86 54544
-8 1 1 5863 87 89 54555
-9 0 0 0 93 100 152809
-10 0 0 0 87 96 26571
-11 0 0 0 80 81 108683
-12 0 0 0 84 110 114004
-13 0 0 0 89 100 318
-14 0 0 0 82 87 194489
-15 2 2 238 94 119 1404900
-16 1 1 119 97 102 157031
-17 3 3 357 86 89 65700
-18 2 2 238 98 102 74919
-19 0 0 0 88 89 20902
-20 1 1 119 99 101 111528
-21 0 0 0 93 95 6454
-22 2 2 238 91 101 27500
-23 0 0 0 93 93 13518
+0 1 1 5863 108 128 657681
+1 3 3 5171 109 113 553371
+2 1 1 5863 102 109 15227
+3 0 0 0 98 100 14357
+4 9 9 406 109 124 290673
+5 1 1 119 91 99 104239
+6 0 0 0 91 98 72038
+7 0 0 0 90 91 54544
+8 1 1 5863 95 97 54555
+9 0 0 0 105 113 153017
+10 0 0 0 91 100 26571
+11 0 0 0 83 84 108683
+12 0 0 0 88 115 114212
+13 0 0 0 94 106 4139
+14 0 0 0 85 90 194489
+15 2 2 238 97 122 1404900
+16 1 1 119 101 106 157031
+17 3 3 357 89 93 65908
+18 2 2 238 101 105 74919
+19 0 0 0 92 93 20902
+20 1 1 119 102 104 111528
+21 0 0 0 98 101 6662
+22 2 2 238 95 105 27500
+23 0 0 0 97 97 16379
 END_TIME
 
 # Domain - Pages - Hits - Bandwidth
@@ -118,12 +118,12 @@ END_LOGIN
 # Robot ID - Hits - Bandwidth - Last visit - Hits on robots.txt
 # The 25 first Hits must be first (order not required for others)
 BEGIN_ROBOT 6
-Baiduspider/ 37 980682 20181224205813 0
+Baiduspider/ 40 990769 20181226031943 0
 baidu 31 2510133 20181219165531 0
 bot[\s_+:,\.\;\/\\-] 17 269312 20181220163713 0
 Googlebot/ 4 57679 20181207153523 0
-(firefox/)([0-9]\.|[0-1][0]\.) 1 9367 20181222181223 0
 BLEXBot/ 1 1270 20181221002907 0
+(firefox/)([0-9]\.|[0-1][0]\.) 1 9367 20181222181223 0
 END_ROBOT
 
 # Worm ID - Hits - Bandwidth - Last visit
@@ -152,22 +152,22 @@ END_DOWNLOADS
 
 # OS ID - Hits
 BEGIN_OS ID - Hits - Pages 5
-win7 5 5
 linux 2 2
-win10 15 15
-Unknown 1 1
 winlong 4 4
+win7 5 5
+Unknown 1 1
+win10 15 15
 END_OS
 
 # Browser ID - Hits - Pages
 BEGIN_BROWSER 7
-firefox63.0 2 2
-firefox34.0 4 4
-mozilla 1 1
 chrome71.0.3578.98 1 1
-chrome70.0.3538.110 16 16
-chrome36.0.1985.125 1 1
 opera57.0.3098.63 2 2
+mozilla 1 1
+chrome70.0.3538.110 16 16
+firefox34.0 4 4
+firefox63.0 2 2
+chrome36.0.1985.125 1 1
 END_BROWSER
 
 # Screen size - Hits
@@ -214,14 +214,14 @@ END_KEYWORDS
 
 # Errors - Hits - Bandwidth
 BEGIN_ERRORS 3
+301 2251 0
+404 134 415073
 503 5 49922
-404 129 414033
-301 2148 0
 END_ERRORS
 
 # URL with 404 errors - Hits - Last URL referrer
 BEGIN_SIDER_404 1
-/robots.txt 129 -
+/robots.txt 134 -
 END_SIDER_404
 
 # Host - Pages - Hits - Bandwidth - Last visit date - [Start date of last visit] - [Last page of last visit]
@@ -230,14 +230,14 @@ END_SIDER_404
 BEGIN_VISITOR 10
 24.251.180.38 13 13 1547 20181223053702
 162.213.41.93 6 6 144 20181207043116
-196.234.191.166 1 1 119 20181208170152
-54.221.198.105 1 1 24 20181207042309
+37.44.44.224 1 1 5863 20181212021948
 130.193.44.51 1 1 5863 20181213084557
 185.46.16.212 1 1 2527 20181212010757
-37.44.44.224 1 1 5863 20181212021948
+54.221.198.105 1 1 24 20181207042309
+196.234.191.166 1 1 119 20181208170152
 196.234.197.58 1 1 119 20181211161210
-37.110.89.199 1 1 5863 20181212004752
 188.168.88.146 1 1 2525 20181212012743
+37.110.89.199 1 1 5863 20181212004752
 END_VISITOR
 
 # Date - Pages - Hits - Bandwidth - Visits
@@ -257,8 +257,8 @@ END_DAY
 # Session range - Number of visits
 BEGIN_SESSION 3
 30mn-1h 1
-0s-30s 16
 5mn-15mn 1
+0s-30s 16
 END_SESSION
 
 # URL - Pages - Bandwidth - Entry - Exit

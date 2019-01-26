@@ -11,7 +11,7 @@ return array('macros' => array('header' => function($__templater, array $__argum
 	$__finalCompiled .= '
 
 	';
-	$__templater->setPageParam('searchConstraints', array('Products' => array('search_type' => 'xr_pm_product', ), 'This category' => array('search_type' => 'xr_pm_product', 'c' => array('categories' => array($__vars['product']['Category']['category_id'], ), 'child_categories' => 1, ), ), ));
+	$__templater->setPageParam('searchConstraints', array('Extensions' => array('search_type' => 'xr_pm_product', ), 'This category' => array('search_type' => 'xr_pm_product', 'c' => array('categories' => array($__vars['product']['Category']['category_id'], ), 'child_categories' => 1, ), ), ));
 	$__finalCompiled .= '
 
 	';

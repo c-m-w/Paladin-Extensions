@@ -187,6 +187,6 @@ return array('macros' => array('purchase_list' => function($__templater, array $
 ' . '
 
 ';
-	$__templater->setPageParam('searchConstraints', array('Products' => array('search_type' => 'xr_pm_product', ), ));
+	$__templater->setPageParam('searchConstraints', array('Extensions' => array('search_type' => 'xr_pm_product', ), ));
 	return $__finalCompiled;
 });

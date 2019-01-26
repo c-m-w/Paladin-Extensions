@@ -70,7 +70,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'_type' => 'option',
 	),
 	array(
-		'label' => 'Purchasing specific products',
+		'label' => 'Purchasing specific extensions',
 		'value' => 'product',
 		'data-hide' => 'on',
 		'_dependent' => array($__templater->formCheckBox(array(
@@ -102,7 +102,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'_type' => 'option',
 	),
 	array(
-		'label' => 'Specific products',
+		'label' => 'Specific extensions',
 		'value' => 'product',
 		'selected' => $__vars['coupon']['coupon_product_ids'],
 		'data-hide' => 'on',

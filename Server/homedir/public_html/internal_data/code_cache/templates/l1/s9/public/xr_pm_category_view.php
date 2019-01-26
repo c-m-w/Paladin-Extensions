@@ -69,11 +69,11 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			';
 	} else if ($__vars['filters']) {
 		$__finalCompiled .= '
-				<div class="block-row">' . 'There are no products matching your filters.' . '</div>
+				<div class="block-row">' . 'There are no extensions matching your filters.' . '</div>
 			';
 	} else {
 		$__finalCompiled .= '
-				<div class="block-row">' . 'No products have been created yet.' . '</div>
+				<div class="block-row">' . 'No extensions have been created yet.' . '</div>
 			';
 	}
 	$__finalCompiled .= '
@@ -135,6 +135,6 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	$__finalCompiled .= '
 
 ';
-	$__templater->setPageParam('searchConstraints', array('Products' => array('search_type' => 'xr_pm_product', ), 'This category' => array('search_type' => 'xr_pm_product', 'c' => array('categories' => array($__vars['category']['category_id'], ), 'child_categories' => 1, ), ), ));
+	$__templater->setPageParam('searchConstraints', array('Extensions' => array('search_type' => 'xr_pm_product', ), 'This category' => array('search_type' => 'xr_pm_product', 'c' => array('categories' => array($__vars['category']['category_id'], ), 'child_categories' => 1, ), ), ));
 	return $__finalCompiled;
 });

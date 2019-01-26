@@ -67,7 +67,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			'value' => $__vars['productIds'],
 			'name' => 'product_ids',
 		), $__compilerTemp5, array(
-			'label' => 'Purchasable with products',
+			'label' => 'Purchasable with extensions',
 		)) . '
 			';
 	}

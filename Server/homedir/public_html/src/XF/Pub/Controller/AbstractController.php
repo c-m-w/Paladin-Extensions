@@ -231,7 +231,7 @@ abstract class AbstractController extends \XF\Mvc\Controller
 	public function assertBoardActive($action)
 	{
 		$options = $this->options();
-		if (!$options->boardActive && !\XF::visitor()->is_admin && !($options->boardInactiveAllowModerator && \XF::visitor()->is_moderator))
+		if (!$options->boardActive && !\XF::visitor()->is_admin && !($options->boardInactiveAllowModerator && \XF::visitor()->is_moderator) && !($options->boardInactiveAllowVerified && \XF::visitor()->isMemberOf(9)) && !($options->boardInactiveAllowPremium && \XF::visitor()->isMemberOf(5)) && !($options->boardInactiveAllowMember && \XF::visitor()->isMemberOf(2)))
 		{
 			throw $this->exception($this->message(new \XF\PreEscaped($options->boardInactiveMessage), 503));
 		}
