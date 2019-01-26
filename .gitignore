@@ -68,3 +68,7 @@ ipch/
 *.gpState
 *.[Rr]e[Ss]harper
 *.DotSettings.user
+
+!/Server/
+!/Server/*
+!/Server/**/*
