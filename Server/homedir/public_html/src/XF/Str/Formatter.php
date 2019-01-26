@@ -274,14 +274,23 @@ class Formatter
 			function (array $match)
 			{
 				$url = $this->removeHtmlPlaceholders($match[0]);
+				$url = htmlspecialchars_decode($url, ENT_QUOTES);
 				$link = $this->prepareAutoLinkedUrl($url);
+
+				if (!$link['url'])
+				{
+					return $url;
+				}
 
 				$linkInfo = $this->getLinkClassTarget($link['url']);
 				$classAttr = $linkInfo['class'] ? " class=\"$linkInfo[class]\"" : '';
 				$targetAttr = $linkInfo['target'] ? " target=\"$linkInfo[target]\"" : '';
 				$noFollowAttr = $linkInfo['trusted'] ? '' : ' rel="nofollow"';
 
-				return '<a href="' . $link['url'] . "\"{$classAttr}{$noFollowAttr}{$targetAttr}>" . $link['linkText'] . '</a>' . $link['suffixText'];
+				return '<a href="' . htmlspecialchars($link['url'], ENT_QUOTES, 'utf-8')
+					. "\"{$classAttr}{$noFollowAttr}{$targetAttr}>"
+					. htmlspecialchars($link['linkText'], ENT_QUOTES, 'utf-8') . '</a>'
+					. htmlspecialchars($link['suffixText'], ENT_QUOTES, 'utf-8');
 			},
 			$string
 		);
@@ -395,6 +404,11 @@ class Formatter
 				}
 				$url = $proxiedUrl;
 			}
+		}
+
+		if (!\XF::app()->validator('Url')->isValid($url))
+		{
+			$url = null;
 		}
 
 		return [
@@ -595,7 +609,7 @@ class Formatter
 		);
 
 		// split the string into possible delimiters and text; even keys (from 0) are strings, odd are delimiters
-		$parts = preg_split('#(\[[a-z0-9]+(?:=[^\]]*)?\]|\[/[a-z0-9]+\])#si', $string, -1, PREG_SPLIT_DELIM_CAPTURE);
+		$parts = preg_split('#(\[[a-z0-9_]+(?:=[^\]]*)?\]|\[/[a-z0-9_]+\])#si', $string, -1, PREG_SPLIT_DELIM_CAPTURE);
 		$total = count($parts);
 		if ($total < 2)
 		{

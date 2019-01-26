@@ -8,33 +8,33 @@ AWSTATS DATA FILE 7.6 (build 20161204)
 # update).
 BEGIN_MAP 28
 POS_GENERAL 2019                
-POS_TIME 2701                
-POS_VISITOR 6728                
-POS_DAY 7244                
-POS_DOMAIN 3327                
-POS_LOGIN 3583                
-POS_ROBOT 3738                
-POS_WORMS 3942                
-POS_EMAILSENDER 4073                
-POS_EMAILRECEIVER 4216                
-POS_SESSION 7389                
-POS_SIDER 7562                
-POS_FILETYPES 4351                
-POS_DOWNLOADS 4570                
-POS_OS 4690                
-POS_BROWSER 4826                
-POS_SCREENSIZE 5077                
-POS_UNKNOWNREFERER 5151                
-POS_UNKNOWNREFERERBROWSER 5318                
-POS_ORIGIN 5400                
-POS_SEREFERRALS 5535                
-POS_PAGEREFS 5679                
-POS_SEARCHWORDS 5827                
-POS_KEYWORDS 5979                
-POS_MISC 2365                
-POS_ERRORS 6038                
-POS_CLUSTER 3439                
-POS_SIDER_404 6160                
+POS_TIME 2698                
+POS_VISITOR 6735                
+POS_DAY 7251                
+POS_DOMAIN 3334                
+POS_LOGIN 3590                
+POS_ROBOT 3745                
+POS_WORMS 3949                
+POS_EMAILSENDER 4080                
+POS_EMAILRECEIVER 4223                
+POS_SESSION 7396                
+POS_SIDER 7569                
+POS_FILETYPES 4358                
+POS_DOWNLOADS 4577                
+POS_OS 4697                
+POS_BROWSER 4833                
+POS_SCREENSIZE 5084                
+POS_UNKNOWNREFERER 5158                
+POS_UNKNOWNREFERERBROWSER 5325                
+POS_ORIGIN 5407                
+POS_SEREFERRALS 5542                
+POS_PAGEREFS 5686                
+POS_SEARCHWORDS 5834                
+POS_KEYWORDS 5986                
+POS_MISC 2362                
+POS_ERRORS 6045                
+POS_CLUSTER 3446                
+POS_SIDER_404 6167                
 END_MAP
 
 # LastLine    = Date of last record processed - Last record line number in last log - Last record offset in last log - Last record signature value
@@ -46,10 +46,10 @@ END_MAP
 # MonthHostsKnown   = Number of hosts known
 # MonthHostsUnKnown = Number of hosts unknown
 BEGIN_GENERAL 8
-LastLine 20181130024252 112 20779 10883197940744
+LastLine 20181201000215 91 17029 10839845092846
 FirstTime 20181126231421
 LastTime 20181129063927
-LastUpdate 20181130024730 112 0 112 0 0
+LastUpdate 20181201024752 91 0 90 0 0
 TotalVisits 17                  
 TotalUnique 11                  
 MonthHostsKnown 0                   
@@ -59,15 +59,15 @@ END_GENERAL
 # Misc ID - Pages - Hits - Bandwidth
 BEGIN_MISC 10
 PDFSupport 0 0 0
+AddToFavourites 0 0 0
+WindowsMediaPlayerSupport 0 0 0
+QuickTimeSupport 0 0 0
 JavaEnabled 0 0 0
 RealPlayerSupport 0 0 0
-TotalMisc 0 0 0
-FlashSupport 0 0 0
-AddToFavourites 0 0 0
-QuickTimeSupport 0 0 0
 JavascriptDisabled 0 0 0
 DirectorSupport 0 0 0
-WindowsMediaPlayerSupport 0 0 0
+FlashSupport 0 0 0
+TotalMisc 0 0 0
 END_MISC
 
 # Hour - Pages - Hits - Bandwidth - Not viewed Pages - Not viewed Hits - Not viewed Bandwidth
@@ -75,27 +75,27 @@ BEGIN_TIME 24
 0 7 17 486274 21 22 8299
 1 22 61 1212659 19 31 15323
 2 33 40 580735 13 15 208
-3 5 6 168542 12 15 935
-4 4 4 181122 12 12 1255
-5 0 0 0 9 9 478
-6 1 1 6775 12 12 956
-7 0 0 0 9 9 717
-8 0 0 0 9 9 717
-9 0 0 0 12 12 1199
-10 0 0 0 12 14 925
-11 0 0 0 11 12 1206
-12 0 0 0 10 10 717
-13 0 0 0 11 11 717
-14 0 0 0 13 13 956
-15 0 0 0 14 16 1652
-16 0 0 0 12 13 1164
-17 0 0 0 16 18 1392
-18 0 0 0 12 12 1255
-19 0 0 0 15 15 1916
-20 0 0 0 20 21 2405
-21 6 18 645409 8 9 234
-22 2 2 56602 18 22 15694
-23 8 63 62327 13 18 0
+3 5 6 168542 16 20 1143
+4 4 4 181122 15 15 1255
+5 0 0 0 12 12 478
+6 1 1 6775 15 15 956
+7 0 0 0 12 12 717
+8 0 0 0 12 12 717
+9 0 0 0 15 15 1199
+10 0 0 0 16 20 1133
+11 0 0 0 20 23 1622
+12 0 0 0 13 13 717
+13 0 0 0 15 17 925
+14 0 0 0 17 17 956
+15 0 0 0 17 19 1652
+16 0 0 0 15 16 1164
+17 0 0 0 23 25 1392
+18 0 0 0 15 15 1255
+19 0 0 0 21 21 1916
+20 0 0 0 23 24 2405
+21 6 18 645409 12 13 234
+22 2 2 56602 23 27 30307
+23 8 63 62327 16 21 0
 END_TIME
 
 # Domain - Pages - Hits - Bandwidth
@@ -118,7 +118,7 @@ END_LOGIN
 # Robot ID - Hits - Bandwidth - Last visit - Hits on robots.txt
 # The 25 first Hits must be first (order not required for others)
 BEGIN_ROBOT 2
-bot[\s_+:,\.\;\/\\-] 2 29080 20181129220224 0
+bot[\s_+:,\.\;\/\\-] 3 43693 20181130220205 0
 curl 1 0 20181127032019 0
 END_ROBOT
 
@@ -139,15 +139,15 @@ END_EMAILRECEIVER
 
 # Files type - Hits - Bandwidth - Bandwidth without compression - Bandwidth after compression
 BEGIN_FILETYPES 9
-png 13 1290058 0 0
-js 41 452536 0 0
-Unknown 7 81132 0 0
-txt 1 98 0 0
-jpg 14 31974 0 0
 gif 50 36265 0 0
-html 30 969064 0 0
+js 41 452536 0 0
 css 5 2880 0 0
+txt 1 98 0 0
 php 51 536438 0 0
+png 13 1290058 0 0
+Unknown 7 81132 0 0
+jpg 14 31974 0 0
+html 30 969064 0 0
 END_FILETYPES
 
 # Downloads - Hits - Bandwidth
@@ -157,26 +157,26 @@ END_DOWNLOADS
 
 # OS ID - Hits
 BEGIN_OS ID - Hits - Pages 6
-win7 140 60
+macosx 16 16
 winlong 4 4
 linux 24 2
-macosx 16 16
-win10 27 5
 Unknown 1 1
+win7 140 60
+win10 27 5
 END_OS
 
 # Browser ID - Hits - Pages
 BEGIN_BROWSER 10
-firefox60.0 24 2
-chrome70.0.3538.102 82 20
-chrome70.0.3538.110 12 1
-msie8.0 4 4
-firefox63.0 36 14
-chrome65.0.3325.181 16 16
-mozilla 1 1
-opera56.0.3051.104 35 28
-opera11.10 1 1
 chrome69.0.3497.100 1 1
+opera56.0.3051.104 35 28
+chrome70.0.3538.102 82 20
+firefox63.0 36 14
+chrome70.0.3538.110 12 1
+chrome65.0.3325.181 16 16
+firefox60.0 24 2
+msie8.0 4 4
+mozilla 1 1
+opera11.10 1 1
 END_BROWSER
 
 # Screen size - Hits
@@ -225,17 +225,17 @@ END_KEYWORDS
 BEGIN_ERRORS 4
 503 6 9741
 500 1 53
-404 23 2730
-301 303 18716
+301 385 18716
+404 30 3770
 END_ERRORS
 
 # URL with 404 errors - Hits - Last URL referrer
 BEGIN_SIDER_404 5
-/members/ 2 http://paladin-extensions.com/
-/uix/toggle-sidebar.json 1 http://paladin-extensions.com/
-/robots.txt 15 -
-/link-forums/premium-link.23/ 1 http://paladin-extensions.com/
 /styles/uix/images/welcome-banner.png 4 http://paladin-extensions.com/css.php
+/uix/toggle-sidebar.json 1 http://paladin-extensions.com/
+/link-forums/premium-link.23/ 1 http://paladin-extensions.com/
+/members/ 2 http://paladin-extensions.com/
+/robots.txt 22 -
 END_SIDER_404
 
 # Host - Pages - Hits - Bandwidth - Last visit date - [Start date of last visit] - [Last page of last visit]
@@ -247,11 +247,11 @@ BEGIN_VISITOR 11
 54.87.186.189 4 4 225911 20181127220202
 24.251.180.38 3 14 33345 20181128005827
 104.238.217.123 2 2 90561 20181127041722
-193.111.60.104 2 24 18096 20181126235343
 104.238.248.15 2 2 90561 20181127045327
-107.21.253.49 1 1 14209 20181127024938
-188.190.218.93 1 1 6775 20181129063927
+193.111.60.104 2 24 18096 20181126235343
 66.102.8.84 1 1 12510 20181127230837
+188.190.218.93 1 1 6775 20181129063927
+107.21.253.49 1 1 14209 20181127024938
 174.3.135.102 1 12 9048 20181126231421
 END_VISITOR
 
@@ -265,10 +265,10 @@ END_DAY
 
 # Session range - Number of visits
 BEGIN_SESSION 4
-30mn-1h 1
-1h+ 3
 0s-30s 12
+1h+ 3
 2mn-5mn 1
+30mn-1h 1
 END_SESSION
 
 # URL - Pages - Bandwidth - Entry - Exit
@@ -280,8 +280,8 @@ BEGIN_SIDER 10
 /job.php 10 137 0 0
 /login/keep-alive 4 480 0 2
 /misc/contact 2 68142 0 2
-/members/ 1 10785 0 0
-/cpanel 1 12510 1 1
 /makebackup.php 1 0 1 1
 /index.php 1 119 1 1
+/cpanel 1 12510 1 1
+/members/ 1 10785 0 0
 END_SIDER

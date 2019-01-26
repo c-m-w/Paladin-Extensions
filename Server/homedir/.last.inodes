@@ -7,10 +7,10 @@
 55 /home/palavpvb/tmp/horde
 1 /home/palavpvb/tmp/analog
 1 /home/palavpvb/tmp/webalizerftp
-6 /home/palavpvb/tmp/awstats
+8 /home/palavpvb/tmp/awstats
 2 /home/palavpvb/tmp/cpbandwidth
 1 /home/palavpvb/tmp/webalizer
-77 /home/palavpvb/tmp
+79 /home/palavpvb/tmp
 2 /home/palavpvb/.sqmaildata
 1 /home/palavpvb/.trash
 6 /home/palavpvb/perl5/lib
@@ -19,7 +19,7 @@
 3 /home/palavpvb/Extensions
 2 /home/palavpvb/.nc_plugin/hidden
 3 /home/palavpvb/.nc_plugin
-3 /home/palavpvb/logs
+5 /home/palavpvb/logs
 3 /home/palavpvb/var/cpanel
 4 /home/palavpvb/var
 1 /home/palavpvb/.htpasswds/Extensions
@@ -37,15 +37,15 @@
 3 /home/palavpvb/public_html/library
 167 /home/palavpvb/public_html/styles
 54 /home/palavpvb/public_html/nc_assets
-7363 /home/palavpvb/public_html/internal_data
+7366 /home/palavpvb/public_html/internal_data
 14 /home/palavpvb/public_html/assets
 352 /home/palavpvb/public_html/js
 1 /home/palavpvb/public_html/cgi-bin
 2 /home/palavpvb/public_html/images
 122 /home/palavpvb/public_html/data
 4850 /home/palavpvb/public_html/src
-12989 /home/palavpvb/public_html
-3 /home/palavpvb/backups
+12992 /home/palavpvb/public_html
+4 /home/palavpvb/backups
 8 /home/palavpvb/etc/paladin-extensions.com
 11 /home/palavpvb/etc
 1 /home/palavpvb/.softaculous/tmp
@@ -76,5 +76,5 @@
 5 /home/palavpvb/.cphorde
 1 /home/palavpvb/.ssh
 3 /home/palavpvb/.cl.selector
-13412 /home/palavpvb
-Last modified: Fri Nov 30 05:32:37 EST 2018
+13420 /home/palavpvb
+Last modified: Sat Dec  1 05:33:31 EST 2018

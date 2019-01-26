@@ -28,6 +28,8 @@ class Templater
 	 */
 	protected $pather;
 
+	protected $jsBaseUrl = 'js';
+
 	/**
 	 * @var Language
 	 */
@@ -122,6 +124,7 @@ class Templater
 		'nl2nl' => 'filterNl2Nl',
 		'number' => 'filterNumber',
 		'number_short' => 'filterNumberShort',
+		'pad' => 'filterPad',
 		'parens' => 'filterParens',
 		'pluck' => 'filterPluck',
 		'preescaped' => 'filterPreEscaped',
@@ -132,7 +135,8 @@ class Templater
 		'to_lower' => 'filterToLower',
 		'to_upper' => 'filterToUpper',
 		'url' => 'filterUrl',
-		'urlencode' => 'filterUrlencode'
+		'urlencode' => 'filterUrlencode',
+		'zerofill' => 'filterZeroFill',
 	];
 
 	protected $defaultFunctions = [
@@ -164,6 +168,7 @@ class Templater
 		'display_totals' => 'fnDisplayTotals',
 		'dump' => 'fnDump',
 		'dump_simple' => 'fnDumpSimple',
+		'empty' => 'fnEmpty',
 		'file_size' => 'fnFileSize',
 		'floor' => 'fnFloor',
 		'gravatar_url' => 'fnGravatarUrl',
@@ -172,6 +177,7 @@ class Templater
 		'is_array' => 'fnIsArray',
 		'is_addon_active' => 'fnIsAddonActive',
 		'is_editor_capable' => 'fnIsEditorCapable',
+		'is_toggled' => 'fnIsToggled',
 		'js_url' => 'fnJsUrl',
 		'last_pages' => 'fnLastPages',
 		'likes' => 'fnLikes',
@@ -188,6 +194,7 @@ class Templater
 		'page_nav' => 'fnPageNav',
 		'page_title' => 'fnPageTitle',
 		'parens' => 'fnParens',
+		'parse_less_color' => 'fnParseLessColor',
 		'prefix' => 'fnPrefix',
 		'prefix_group' => 'fnPrefixGroup',
 		'prefix_title' => 'fnPrefixTitle',
@@ -218,6 +225,13 @@ class Templater
 
 	protected $defaultTests = [
 		'empty' => 'testEmpty'
+	];
+
+	protected $overlayClickOptions = [
+		'data-cache',
+		'data-overlay-config',
+		'data-force-flash-messages',
+		'data-follow-redirects'
 	];
 
 	public function __construct(App $app, Language $language, $compiledPath)
@@ -317,7 +331,7 @@ class Templater
 		}
 
 		$pather = $this->pather;
-		return $pather("js/$js", 'base');
+		return $pather("{$this->jsBaseUrl}/$js", 'base');
 	}
 
 	public function getJsCacheBuster()
@@ -373,6 +387,11 @@ class Templater
 	public function setJsVersion($version)
 	{
 		$this->jsVersion = $version;
+	}
+
+	public function setJsBaseUrl($baseUrl)
+	{
+		$this->jsBaseUrl = rtrim($baseUrl, '/') ?: 'js';
 	}
 
 	public function setDynamicDefaultAvatars($dynamic)
@@ -1605,8 +1624,13 @@ class Templater
 					$noTooltip = true;
 				}
 			}
-			$hrefAttr = $href ? ' href="' . htmlspecialchars($href) . '"' : '';
 			$userId = $user->user_id;
+			if (!$userId)
+			{
+				$href = null;
+				$noTooltip = true;
+			}
+			$hrefAttr = $href ? ' href="' . htmlspecialchars($href) . '"' : '';
 			$avatarType = $forceType ?: $user->getAvatarType();
 
 			$canUpdate = ((bool)$update && $user->user_id == \XF::visitor()->user_id && $user->canUploadAvatar());
@@ -2013,7 +2037,7 @@ class Templater
 
 		list($date, $time) = $this->language->getDateTimeParts($ts);
 		$full = $this->language->getDateTimeOutput($date, $time);
-		$relative = $this->language->getRelativeDateTimeOutput($ts, $date, $time, !empty($attributes['data-full-old-date']));
+		$relative = $this->language->getRelativeDateTimeOutput($ts, $date, $time, !empty($attributes['data-full-date']));
 
 		$class = $this->processAttributeToHtmlAttribute($attributes, 'class', 'u-dt', true);
 
@@ -2068,6 +2092,11 @@ class Templater
 	{
 		$escape = false;
 		return \XF::dumpSimple($value, false);
+	}
+
+	public function fnEmpty($templater, &$escape, $value)
+	{
+		return empty($value);
 	}
 
 	public function fnDisplayTotals($templater, &$escape, $count, $total = null)
@@ -2218,19 +2247,52 @@ class Templater
 			return false;
 		}
 
-		if (preg_match('#android (\d+)\.#i', $ua, $match) && intval($match[1]) < 4)
+		if (preg_match('#android (\d+)\.#i', $ua, $match) && intval($match[1]) < 5)
 		{
-			// only supported in Android 4+
-			return false;
+			// Froala only officially supports Android 6 and above.
+			// However, it seems Froala actually still works on Android 5.1.1 (at least) so we'll go with that.
+			// So far we've only had issues reported with Android 4.x.
+			// Older Android versions do support Chrome and Firefox so if those are installed
+			// They will likely be up to date and work fine with the RTE.
+			if (preg_match('#(Firefox/|Chrome/)#i', $ua))
+			{
+				return true;
+			}
+			else
+			{
+				return false;
+			}
 		}
 
-		if (preg_match('#(iphone|ipod|ipad).+OS (\d+)_#i', $ua, $match) && intval($match[2]) < 7)
+		if (preg_match('#(iphone|ipod|ipad).+OS (\d+)_#i', $ua, $match) && intval($match[2]) < 8)
 		{
-			// only supported in iOS 7+
+			// only supported in iOS 8+
 			return false;
 		}
 
 		return true;
+	}
+
+	public function fnIsToggled($templater, &$escape, $storageKey, $storageContainer = 'toggle')
+	{
+		$cookie = $this->app->request()->getCookie($storageContainer);
+		if (!$cookie)
+		{
+			return false;
+		}
+
+		$cookieDecoded = @json_decode($cookie, true);
+		if (!$cookieDecoded)
+		{
+			return false;
+		}
+
+		if (!isset($cookieDecoded[$storageKey]))
+		{
+			return false;
+		}
+
+		return empty($cookieDecoded[$storageKey][2]);
 	}
 
 	public function fnJsUrl($templater, &$escape, $file)
@@ -2331,7 +2393,7 @@ class Templater
 				$user2 = $this->preEscaped('<bdi>' . \XF::escapeString($users[1]['username']) . '</bdi>', 'html');
 				if (isset($users[2]))
 				{
-					$user3 = $this->preEscaped('<span>' . \XF::escapeString($users[2]['username']) . '</bdi>', 'html');
+					$user3 = $this->preEscaped('<bdi>' . \XF::escapeString($users[2]['username']) . '</bdi>', 'html');
 				}
 			}
 		}
@@ -2402,7 +2464,7 @@ class Templater
 		static $entityCache = [];
 
 		// if $entity is not an entity, expect an entity id string like XF:Thread
-		if (is_string($entity) && preg_match('/^\w+:\w+$/i', $entity))
+		if (is_string($entity) && preg_match('/^\w+(?:\\\w+)?:\w+$/i', $entity))
 		{
 			if (!isset($entityCache[$entity]))
 			{
@@ -2675,6 +2737,16 @@ class Templater
 		return $this->filterParens($templater, $value, $escape);
 	}
 
+	public function fnParseLessColor($templater, &$escape, $value)
+	{
+		/** @var \XF\CssRenderer $renderer */
+		$rendererClass = $this->app->extendClass('XF\CssRenderer');
+		$renderer = new $rendererClass($this->app, $this);
+		$renderer->setStyle($this->style);
+
+		return $renderer->parseLessColorValue($value);
+	}
+
 	public function fnPrefix($templater, &$escape, $contentType, $prefixId, $format = 'html', $append = null)
 	{
 		if (!is_int($prefixId))
@@ -2928,7 +3000,7 @@ class Templater
 		}
 
 		$output = '';
-
+		$hasActivity = false;
 		if ($user->canViewCurrentActivity() && $user->Activity)
 		{
 			if ($user->Activity->description)
@@ -2943,10 +3015,18 @@ class Templater
 				}
 
 				$output .= ' <span role="presentation" aria-hidden="true">&middot;</span> ';
+				$hasActivity = true;
 			}
 		}
 
 		$output .= $this->fnDateDynamic($this, $escape, $user->last_activity);
+
+		if ($hasActivity && $user->Activity->view_state == 'error' && \XF::visitor()->canBypassUserPrivacy())
+		{
+			$output .= ' <span role="presentation" aria-hidden="true">&middot;</span> ';
+			$output .= '<i class="fa fa-warning u-muted" title="' . $this->filterForAttr($this,\XF::phrase('viewing_an_error'), $null) . '" aria-hidden="true"></i>';
+			$output .= ' <span class="u-srOnly">' . \XF::phrase('viewing_an_error') . '</span>';
+		}
 
 		$escape = false;
 
@@ -3035,7 +3115,11 @@ class Templater
 
 		$blurbParts = [];
 
-		$blurbParts[] = $this->fnUserTitle($this, $escape, $user);
+		$userTitle = $this->fnUserTitle($this, $escape, $user);
+		if ($userTitle)
+		{
+			$blurbParts[] = $userTitle;
+		}
 		if ($user->Profile->age)
 		{
 			$blurbParts[] = $user->Profile->age;
@@ -3043,7 +3127,10 @@ class Templater
 		if ($user->Profile->location)
 		{
 			$location = \XF::escapeString($user->Profile->location);
-			$location = '<a href="' . $this->app->router('public')->buildLink('misc/location-info', null, ['location' => $location]) . '" class="u-concealed">' . $location. '</a>';
+			if (\XF::options()->geoLocationUrl)
+			{
+				$location = '<a href="' . $this->app->router('public')->buildLink('misc/location-info', null, ['location' => $location]) . '" class="u-concealed" target="_blank" rel="nofollow noreferrer">' . $location. '</a>';
+			}
 			$blurbParts[] = \XF::phrase('from_x_location', ['location' => new \XF\PreEscaped($location)])->render();
 		}
 
@@ -3459,14 +3546,16 @@ class Templater
 			$output = \XF\Util\Json::jsonEncodePretty($value, false);
 
 			// do limited slash escaping to improve readability
-			$output = preg_replace('#</#', '<\\/', $output);
-
-			return $output;
+			$output = str_replace('</', '<\\/', $output);
 		}
 		else
 		{
-			return json_encode($value);
+			$output = json_encode($value);
 		}
+
+		$output = str_replace('<!', '\u003C!', $output);
+
+		return $output;
 	}
 
 	public function filterLast($templater, $value, &$escape)
@@ -3515,6 +3604,26 @@ class Templater
 	public function filterNumberShort($templater, $value, &$escape)
 	{
 		return $this->language->shortNumberFormat($value);
+	}
+
+	public function filterZeroFill($templater, $value, &$escape, $length = 3)
+	{
+		if (is_int($value))
+		{
+			$length = intval($length);
+			return sprintf("%0{$length}d", $value);
+		}
+
+		return $value;
+	}
+
+	public function filterPad($templater, $value, &$escape, $padChar, $length, $postPad = false)
+	{
+		$length = intval($length);
+		$padChar = substr($padChar, 0, 1);
+		$postPad = $postPad ? '-' : '';
+
+		return sprintf("%{$postPad}'{$padChar}{$length}s", $value);
 	}
 
 	public function filterParens($templater, $value, &$escape)
@@ -4030,6 +4139,19 @@ class Templater
 			if ($labelClassExtra !== '')
 			{
 				$labelClass .= " {$labelClassExtra}";
+			}
+			$hiddenLabel = $this->processAttributeToRaw($choice, 'hiddenlabel');
+			if ($label && $hiddenLabel != '')
+			{
+				$hiddenLabel = true;
+			}
+			else
+			{
+				$hiddenLabel = false;
+			}
+			if ($label && $hiddenLabel)
+			{
+				$label = '<span class="u-srOnly">' . $label . '</span>';
 			}
 
 			$titleAttr = $this->processAttributeToHtmlAttribute($choice, 'title');
@@ -4636,7 +4758,7 @@ class Templater
 			$htmlName = $name . '_html';
 		}
 
-		if ($value)
+		if ($value !== '')
 		{
 			$htmlValue = $this->app->bbCode()->render($value, 'editorHtml', 'editor', null, [
 				'attachments' => $attachments
@@ -4727,12 +4849,22 @@ class Templater
 			'textboxClass' => $textboxClass,
 			'textboxName' => $textboxName ?: 'title',
 			'prefixValue' => $prefixValue ?: 0,
-			'textboxValue' => $textboxValue ?: '',
+			'textboxValue' => $textboxValue ?: $this->zeroValueValid($textboxValue),
 			'href' => $href,
 			'listenTo' => $listenTo,
 			'rows' => $rows,
 			'attrsHtml' => $attrsHtml
 		]);
+	}
+
+	protected function zeroValueValid($var)
+	{
+		if ($var === 0 || $var === '0')
+		{
+			return $var;
+		}
+
+		return '';
 	}
 
 	public function formPrefixInputRow($prefixes, array $controlOptions, array $rowOptions)
@@ -4841,8 +4973,16 @@ class Templater
 			$controlOptions['value'] = trim($controlOptions['value']);
 			if (preg_match('/[^0-9.-]/', $controlOptions['value']))
 			{
-				// value isn't a valid number
-				$value = '';
+				if (preg_match('/^{{(?:\s+)?(?:.*)(?:\s+)?}}$/', $controlOptions['value']))
+				{
+					// not a valid number but looks like a mustache/field adder template
+					$value = $controlOptions['value'];
+				}
+				else
+				{
+					// value isn't a valid number
+					$value = '';
+				}
 			}
 			else
 			{
@@ -5224,7 +5364,6 @@ class Templater
 				'_type' => 'main',
 				'href' => !empty($options['href']) ? $options['href'] : null,
 				'target' => !empty($options['target']) ? $options['target'] : null,
-				'overlay' => (!empty($options['href']) && !empty($options['overlay'])) ? $options['overlay'] : false,
 				'label' => $label,
 				'hint' => (isset($options['hint']) && strlen(trim($options['hint']))) ? $options['hint'] : null,
 				'explain' => (isset($options['explain']) && strlen(trim($options['explain']))) ? $options['explain'] : null,
@@ -5235,6 +5374,18 @@ class Templater
 			if (!empty($options['dir']))
 			{
 				$cell['dir'] = $options['dir'];
+			}
+			if (!empty($options['href']) && !empty($options['overlay']))
+			{
+				$cell['overlay'] = $options['overlay'];
+
+				foreach ($this->overlayClickOptions AS $attributeName)
+				{
+					if (isset($options[$attributeName]))
+					{
+						$cell[$attributeName] = $options[$attributeName];
+					}
+				}
 			}
 			array_unshift($cells, $cell);
 		}
@@ -5263,8 +5414,10 @@ class Templater
 
 		$html = implode("\n", $cellsHtml);
 
+		$unhandledAttrs = $this->processUnhandledAttributes($options);
+
 		return "
-			<tr class=\"dataList-row{$rowClass}\">
+			<tr class=\"dataList-row{$rowClass}\"{$unhandledAttrs}>
 				{$html}
 			</tr>
 		";
@@ -5445,6 +5598,15 @@ class Templater
 				if ($overlay)
 				{
 					$overlay = " data-xf-click=\"overlay\"";
+
+					foreach ($this->overlayClickOptions AS $attributeName)
+					{
+						if (isset($cell[$attributeName]))
+						{
+							$attributeValue = $this->processAttributeToRaw($cell, $attributeName, '', true);
+							$overlay .= " $attributeName=\"{$attributeValue}\"";
+						}
+					}
 
 					if (isset($cell['overlaycache']))
 					{
