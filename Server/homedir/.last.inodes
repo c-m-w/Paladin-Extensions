@@ -24,29 +24,28 @@
 4 /home/palavpvb/var
 1 /home/palavpvb/.htpasswds/Extensions
 2 /home/palavpvb/.htpasswds
-16 /home/palavpvb/.cpanel/datastore
+17 /home/palavpvb/.cpanel/datastore
 10 /home/palavpvb/.cpanel/nvdata
 2 /home/palavpvb/.cpanel/securitypolicy
 16 /home/palavpvb/.cpanel/caches
-49 /home/palavpvb/.cpanel
+50 /home/palavpvb/.cpanel
 2 /home/palavpvb/.spamassassin
 3 /home/palavpvb/public_html/css
-31 /home/palavpvb/public_html/error
 3 /home/palavpvb/public_html/.well-known
 3 /home/palavpvb/public_html/install
 8 /home/palavpvb/public_html/auth
 3 /home/palavpvb/public_html/library
 181 /home/palavpvb/public_html/styles
 54 /home/palavpvb/public_html/nc_assets
-9680 /home/palavpvb/public_html/internal_data
+9681 /home/palavpvb/public_html/internal_data
 14 /home/palavpvb/public_html/assets
 381 /home/palavpvb/public_html/js
 1 /home/palavpvb/public_html/cgi-bin
 2 /home/palavpvb/public_html/images
-122 /home/palavpvb/public_html/data
+123 /home/palavpvb/public_html/data
 5238 /home/palavpvb/public_html/src
-15737 /home/palavpvb/public_html
-8 /home/palavpvb/backups
+15709 /home/palavpvb/public_html
+9 /home/palavpvb/backups
 8 /home/palavpvb/etc/paladin-extensions.com
 11 /home/palavpvb/etc
 1 /home/palavpvb/.softaculous/tmp
@@ -77,5 +76,5 @@
 5 /home/palavpvb/.cphorde
 1 /home/palavpvb/.ssh
 3 /home/palavpvb/.cl.selector
-16164 /home/palavpvb
-Last modified: Wed Dec  5 05:32:44 EST 2018
+16138 /home/palavpvb
+Last modified: Thu Dec  6 05:32:24 EST 2018
