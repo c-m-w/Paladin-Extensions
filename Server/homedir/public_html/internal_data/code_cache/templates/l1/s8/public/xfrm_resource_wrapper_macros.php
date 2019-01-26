@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: d5ee6bfb71f51e7b72166fd4c30ff91d
+// FROM HASH: 15f98a399f98ec1af5657b80e3740995
 return array('macros' => array('header' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -312,19 +312,7 @@ return array('macros' => array('header' => function($__templater, array $__argum
 		'resource' => '!',
 	), $__arguments, $__vars);
 	$__finalCompiled .= '
-	';
-	if ($__templater->method($__vars['resource'], 'canRate', array(false, ))) {
-		$__finalCompiled .= '
-		' . $__templater->button('
-			' . 'Leave a rating' . '
-		', array(
-			'href' => $__templater->fn('link', array('resources/rate', $__vars['resource'], ), false),
-			'overlay' => 'true',
-		), '', array(
-		)) . '
-	';
-	}
-	$__finalCompiled .= '
+	' . '
 	';
 	if ($__templater->method($__vars['resource'], 'canReleaseUpdate', array())) {
 		$__finalCompiled .= '

@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: cfc9fda8eda48308d82a66fa1feed494
+// FROM HASH: 6111ea0b983bcfbf104221a5c47d144d
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -9,7 +9,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 <script src="' . $__templater->escape($__vars['xf']['options']['countdownLink']) . '" type="text/javascript"></script>
 
 <div class="block">
-<div class="block-container block-container-countdown">
+<div class="block-container block-container-countdown" align="center">
 	
 ';
 	if ($__vars['link']) {
@@ -31,7 +31,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	}
 	$__finalCompiled .= '
 
-<div class="block-countdown">
+<div class="block-countdown" style="margin-left: -2em; margin-bottom: 1em">
 <script type="application/javascript">
 var myCountdown = new Countdown(
 {
@@ -42,16 +42,16 @@ var myCountdown = new Countdown(
 	minute: "' . $__templater->escape($__vars['minute']) . '",
 	rangeHi: "month",
 	hideLine: true,
-	width: 230,
-	height: 40,
-	padding: 0.8, // sets the text size 
+	width: 370,
+	height: 70,
+	padding: 0.75, // sets the text size 
 	numbers: 	
 	{
 		font: "Arial",
 		color: "#FFFFFF",
-		bkgd: "#176093",
+		bkgd: "#2196F3",
 		fontSize: 200,
-		rounded: 0.10,	// percentage of size 
+		rounded: 0.20,	// percentage of size 
 		shadow: 
 		{
 			x : 0,			// x offset (in pixels)
@@ -64,8 +64,8 @@ var myCountdown = new Countdown(
 	
 	labels:
 	{
-		textScale: 0.8,
-		color: "#6CB2E4",
+		textScale: 1.0,
+		color: "#2196F3",
 		offset: 5
 	} // <- no comma on last item!
 	

@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: b54f65dc9cf1787873d42559fac75176
+// FROM HASH: 0953ffcf18a81b06d746fb8372789d4f
 return array('macros' => array('invitation_form' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -76,7 +76,7 @@ return array('macros' => array('invitation_form' => function($__templater, array
 	), array(
 	)) . '
 	', array(
-		'action' => $__templater->fn('link', array('account/invitations', ), false),
+		'action' => $__templater->fn('link', array('account/invitations/create', ), false),
 		'ajax' => 'true',
 		'data-force-flash-message' => 'true',
 	)) . '
@@ -98,7 +98,7 @@ return array('macros' => array('invitation_form' => function($__templater, array
 			';
 	if ($__templater->method($__vars['xf']['visitor'], 'hasPermission', array('siropuReferralContests', 'sendInvitations', )) != 0) {
 		$__finalCompiled .= '
-				&nbsp; <a href="' . $__templater->fn('link', array('account/invitations', ), true) . '" data-xf-click="overlay"><i class="fa fa-users" aria-hidden="true"></i> ' . 'Invite friends' . '</a>
+				&nbsp; <a href="' . $__templater->fn('link', array('account/invitations/create', ), true) . '" data-xf-click="overlay"><i class="fa fa-users" aria-hidden="true"></i> ' . 'Invite friends' . '</a>
 				';
 		if ($__vars['invitationsSent']) {
 			$__finalCompiled .= '
@@ -133,13 +133,7 @@ return array('macros' => array('invitation_form' => function($__templater, array
 	$__finalCompiled .= '
 	<h2 class="block-tabHeader tabs hScroller" data-xf-init="h-scroller" role="tablist">
 		<span class="hScroller-scroll">
-			';
-	if ($__templater->method($__vars['xf']['visitor'], 'hasPermission', array('siropuReferralContests', 'sendInvitations', )) != 0) {
-		$__finalCompiled .= '
-				<a href="' . $__templater->fn('link', array('account/invitations', ), true) . '"class="tabs-tab' . (($__vars['activeTab'] == '') ? ' is-active' : '') . '" role="tab" tabindex="0" aria-controls="' . $__templater->fn('unique_id', array('invite_friends', ), true) . '">' . 'Email invitations' . '</a>
-			';
-	}
-	$__finalCompiled .= '
+			' . '
 			';
 	if ($__templater->method($__vars['xf']['visitor'], 'hasPermission', array('siropuReferralContests', 'createInvitations', ))) {
 		$__finalCompiled .= '

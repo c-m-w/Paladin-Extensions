@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 0ef63a333ba17d5b469a3eb21dc7972d
+// FROM HASH: ba8231863a62d46fb2814a7ef9f3a655
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -22,7 +22,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 <div class="siropuShoutbox block-container" data-refresh-interval="' . ($__vars['xf']['options']['siropuShoutboxRefreshInterval'] * 1000) . '" data-last-id="' . $__templater->escape($__vars['shoutbox']['lastId']) . '" data-load-more="' . (($__templater->method($__vars['xf']['visitor'], 'canUseSiropuShoutbox', array()) AND ($__templater->fn('count', array($__vars['shoutbox']['shouts'], ), false) == $__vars['xf']['options']['siropuShoutboxDisplayLimit'])) ? 1 : 0) . '" data-last-active="' . $__templater->escape($__vars['xf']['time']) . '" data-sound="' . ($__vars['shoutbox']['sound'] ? 'on' : 'off') . '" data-reverse="' . ($__vars['shoutbox']['reverse'] ? 'true' : 'false') . '" data-collapsed="' . ($__vars['shoutbox']['collapsed'] ? 'true' : 'false') . '" data-xf-init="siropu-shoutbox">
 	<div class="block-header">
-		<i class="fa fa-bullhorn" aria-hidden="true"></i> ' . 'Shoutbox' . '
+		<i class="fa fa-bullhorn" aria-hidden="true"></i> <a href="https://www.paladin-extensions.com/chat/">' . 'Shoutbox' . '</a>
 		<span>
 			';
 	if ($__vars['xf']['options']['siropuShoutboxSound']) {
@@ -35,6 +35,17 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			<a role="button" title="' . 'Toggle visibility' . '" data-xf-click="siropu-shoutbox-toggle-visibility" data-xf-init="tooltip"><i class="fa fa-' . ($__vars['shoutbox']['collapsed'] ? 'plus' : 'minus') . '" aria-hidden="true"></i></a>
 		</span>
 	</div>
+	';
+	if ($__vars['xf']['options']['siropuShoutboxFooter']) {
+		$__finalCompiled .= '
+		<div style="border-bottom: 1px solid #505459">
+			<div style="padding: 0 0 10px" class="siropuShoutboxFooter">
+				' . $__templater->filter($__vars['xf']['options']['siropuShoutboxFooter'], array(array('raw', array()),), true) . '
+			</div>	
+		</div>
+	';
+	}
+	$__finalCompiled .= '
 	<div class="block-body"' . ($__vars['shoutbox']['collapsed'] ? ' style="display: none;"' : '') . '>
 		';
 	if ($__vars['shoutbox']['reverse'] == false) {
@@ -65,15 +76,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		';
 	}
 	$__finalCompiled .= '
-		';
-	if ($__vars['xf']['options']['siropuShoutboxFooter']) {
-		$__finalCompiled .= '
-			<div class="siropuShoutboxFooter">
-				' . $__templater->filter($__vars['xf']['options']['siropuShoutboxFooter'], array(array('raw', array()),), true) . '
-			</div>
-		';
-	}
-	$__finalCompiled .= '
+		' . '
 	</div>
 </div>';
 	return $__finalCompiled;

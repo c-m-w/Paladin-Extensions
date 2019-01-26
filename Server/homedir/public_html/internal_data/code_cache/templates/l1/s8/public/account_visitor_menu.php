@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 4f1825098b829aec5e1396b3e26a54e9
+// FROM HASH: 2749df560d8b1c02cbb65971b8c70411
 return array('macros' => array('visitor_panel_row' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -92,8 +92,7 @@ return array('macros' => array('visitor_panel_row' => function($__templater, arr
 	}
 	$__finalCompiled .= '
 	<li><a href="' . $__templater->fn('link', array('search/member', null, array('user_id' => $__vars['xf']['visitor']['user_id'], ), ), true) . '" class="menu-linkRow">' . 'Your content' . '</a></li>
-' . $__templater->includeTemplate('sv_ue_account_visitor_menu_likes_given', $__vars) . '
-	<li><a href="' . $__templater->fn('link', array('account/likes', ), true) . '" class="menu-linkRow">' . 'Likes received' . '</a></li>
+	' . '
 	' . '
 ';
 	if ($__templater->method($__vars['xf']['visitor'], 'hasPermission', array('siropuReferralContests', 'refer', ))) {

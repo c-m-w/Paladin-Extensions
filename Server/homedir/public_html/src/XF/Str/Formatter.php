@@ -219,7 +219,7 @@ class Formatter
 			if (!empty($smilie['image_url_2x']))
 			{
 				$url2x = htmlspecialchars($pather ? $pather($smilie['image_url_2x'], 'base') : $smilie['image_url_2x']);
-				$srcSet = 'srcset="' . $url2x . ' 2x"';
+				$srcSet = 'srcset="' . $url . ' 1x, ' . $url2x . ' 2x"';
 			}
 
 			return '<img src="' . $url . '" ' . $srcSet . ' class="smilie" alt="' . $smilieText
@@ -265,6 +265,34 @@ class Formatter
 		return preg_replace("#\x1A\\d+\x1A#", '', $string);
 	}
 
+	public function moveHtmlEntitiesToPlaceholders($string, &$restorerClosure)
+	{
+		$placeholders = [];
+
+		$string = preg_replace_callback(
+			'/&(?:[a-z\d]+|#\d+|#x[a-f\d]+);/i',
+			function ($match) use (&$placeholders, &$placeholderPosition)
+			{
+				$placeholder = "\x1A" . $this->htmlPlaceholderId . "\x1A";
+
+				$placeholders[$placeholder] = $match[0];
+
+				$this->htmlPlaceholderId++;
+
+				return $placeholder;
+			},
+			$string
+		);
+
+		$restorerClosure = function($string) use ($placeholders)
+		{
+			$string = strtr($string, $placeholders);
+			return preg_replace("/(\x1A)<[^>]*>(\d+)<[^>]*>(\x1A)/", "$1$2$3", $string);
+		};
+
+		return $string;
+	}
+
 	public function autoLinkStructuredText($string)
 	{
 		$string = $this->moveHtmlToPlaceholders($string, $restorePlaceholders);
@@ -279,7 +307,7 @@ class Formatter
 
 				if (!$link['url'])
 				{
-					return $url;
+					return htmlspecialchars($url, ENT_QUOTES, 'utf-8');
 				}
 
 				$linkInfo = $this->getLinkClassTarget($link['url']);
@@ -543,10 +571,12 @@ class Formatter
 
 	public function highlightTermForHtml($string, $term, $class = 'textHighlight')
 	{
+		$string = $this->moveHtmlEntitiesToPlaceholders(htmlentities($string, ENT_QUOTES, 'utf-8'), $restorePlaceholders);
+
 		$term = trim(preg_replace('#((^|\s)[+|-]|[/()"~^])#', ' ', strval($term)));
 		if ($term !== '')
 		{
-			return preg_replace(
+			$string = preg_replace(
 				'/(' . preg_replace('#\s+#', '|', preg_quote(htmlspecialchars($term), '/')) . ')/siu',
 				'<em class="' . htmlspecialchars($class) . '">\1</em>',
 				\XF::escapeString($string)
@@ -554,8 +584,12 @@ class Formatter
 		}
 		else
 		{
-			return \XF::escapeString($string);
+			$string = \XF::escapeString($string);
 		}
+
+		$string = $restorePlaceholders($string);
+
+		return $string;
 	}
 
 	public function stripBbCode($string, array $options = [])

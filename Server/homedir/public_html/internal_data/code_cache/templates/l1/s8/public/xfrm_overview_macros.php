@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: acf2015f46b156250cf12726f5c0a74c
+// FROM HASH: c2164e61bbe814fafae8b7bb56f461e4
 return array('macros' => array('featured_carousel' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -56,11 +56,7 @@ return array('macros' => array('featured_carousel' => function($__templater, arr
 									<div class="contentRow-minor contentRow-minor--smaller">
 										<ul class="listInline listInline--bullet">
 											<li>' . ($__templater->escape($__vars['resource']['User']['username']) ?: $__templater->escape($__vars['resource']['username'])) . '</li>
-											<li>
-												' . $__templater->callMacro('rating_macros', 'stars', array(
-					'rating' => $__vars['resource']['rating_avg'],
-				), $__vars) . '
-											</li>
+											' . '
 											<li>' . 'Updated' . $__vars['xf']['language']['label_separator'] . ' ' . $__templater->fn('date_dynamic', array($__vars['resource']['last_update'], array(
 				))) . '</li>
 										</ul>

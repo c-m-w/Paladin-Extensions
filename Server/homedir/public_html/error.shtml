@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html id="XF" lang="en-US" dir="LTR"
+    data-app="public"
+    data-template="error"
+    data-container-key=""
+    data-content-key=""
+    data-logged-in="false"
+    data-cookie-prefix="xf_"
+    class="has-no-js template-error  uix_page--fixed "
+    >
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+        <title>Oops! We ran into some problems. | Paladin Extensions</title>
+        <meta property="og:site_name" content="Paladin Extensions" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Oops! We ran into some problems." />
+        <meta property="twitter:title" content="Oops! We ran into some problems." />
+        <meta property="og:url" content="" />
+        <meta name="theme-color" content="" />
+        <meta name="msapplication-TileColor" content="#212428">
+        <link rel="stylesheet" href="/css.php?css=public%3Anormalize.css%2Cpublic%3Acore.less%2Cpublic%3Aapp.less&amp;s=8&amp;l=1&amp;d=1544053333&amp;k=56a8f8f98ae4201a1d95aad9f134c20bd812cfeb" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+        <link rel="stylesheet" href="/styles/uix_dark/fonts/icons/material-icons/css/materialdesignicons.min.css" />
+        <link rel="stylesheet" href="/css.php?css=public%3Aextra.less&amp;s=8&amp;l=1&amp;d=1544053333&amp;k=fe6ce56901c5fea24d12bc200f15f2a0f53e2afc" />
+        <link href='//fonts.googleapis.com/css?family=Roboto:300,400,500,600,700' rel='stylesheet' type='text/css'>
+        <script src="/js/xf/preamble-compiled.js?_v=fee1b23b"></script>
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="icon" type="image/png" href="https://www.paladin-extensions.com/styles/uix_dark/images/favicon.png" sizes="32x32" />
+        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-129900584-1"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'UA-129900584-1', {});
+        </script>
+        <style>
+            .uix_headerContainer .p-navSticky.is-sticky {
+            top: 0 !important;
+            }
+            .uix_stickyBodyElement:not(.offCanvasMenu) {
+            top: 110px !important;
+            min-height: calc(100vh - 110px) !important;
+            }
+            #XF .u-anchorTarget {
+            height: 110px;
+            margin-top: -110px;
+            }
+            @media (max-width: 900px) {
+            .p-sectionLinks {display: none;}
+            .uix_stickyBodyElement:not(.offCanvasMenu) {
+            top: 70px !important;
+            min-height: calc(100vh - 70px) !important;
+            }
+            #XF .u-anchorTarget {
+            height: 70px;
+            margin-top: -70px;
+            }
+            }
+            .uix_sidebarNav .uix_sidebar--scroller {max-height: calc(100vh - 70px);}
+        </style>
+    </head>
+    <body data-template="error">
+        <div id="jumpToTop"></div>
+        <div class="uix_pageWrapper--fixed">
+            <div class="p-pageWrapper" id="top">
+                <div class="uix_headerContainer">
+                    <div class="uix_headerContainer--stickyFix"></div>
+                    <header class="p-header" id="header">
+                        <div class="p-header-inner">
+                            <div class="p-header-content">
+                                <div class="p-header-logo p-header-logo--image">
+                                    <a class="uix_logo" href="/">
+                                    <img src="/styles/uix_dark/images/uix-logo.png"
+                                        alt="Paladin Extensions"
+                                        srcset="/styles/uix_dark/images/uix-logo.png 2x" />
+                                    </a>
+                                    <a class="uix_logoSmall" href="/">
+                                    <img src="/styles/uix_dark/images/uix-brandmark.png"
+                                        alt="Paladin Extensions"
+                                        />
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </header>
+                    <div class="p-navSticky p-navSticky--all uix_stickyBar" data-top-offset-min="0" data-top-offset-max="0" data-top-offset-breakpoint="900px">
+                        <nav class="p-nav">
+                            <div class="p-nav-inner">
+                                <a class="p-nav-menuTrigger  badgeContainer" data-badge="0" data-xf-click="off-canvas" data-menu=".js-headerOffCanvasMenu" role="button" tabindex="0">
+                                <i aria-hidden="true"></i>
+                                <span class="p-nav-menuText">Menu</span>
+                                </a>
+                                <div class="p-header-logo p-header-logo--image">
+                                    <a class="uix_logo" href="/">
+                                    <img src="/styles/uix_dark/images/uix-logo.png"
+                                        alt="Paladin Extensions"
+                                        srcset="/styles/uix_dark/images/uix-logo.png 2x" />
+                                    </a>
+                                    <a class="uix_logoSmall" href="/">
+                                    <img src="/styles/uix_dark/images/uix-brandmark.png"
+                                        alt="Paladin Extensions"
+                                        />
+                                    </a>
+                                </div>
+                                <div class="p-nav-scroller hScroller" data-xf-init="h-scroller" data-auto-scroll=".p-navEl.is-selected">
+                                    <div class="hScroller-scroll">
+                                        <ul class="p-nav-list js-offCanvasNavSource">
+                                            <li>
+                                                <div class="p-navEl u-ripple " data-has-children="true">
+                                                    <a href="/forums/"
+                                                        class="p-navEl-link p-navEl-link--splitMenu "
+                                                        data-nav-id="forums"><span>Forums</span></a>
+                                                    <a data-xf-key="1"
+                                                        data-xf-click="menu"
+                                                        data-menu-pos-ref="< .p-navEl"
+                                                        data-arrow-pos-ref="< .p-navEl"
+                                                        class="p-navEl-splitTrigger"
+                                                        role="button"
+                                                        tabindex="0"
+                                                        aria-label="Toggle expanded"
+                                                        aria-expanded="false"
+                                                        aria-haspopup="true">
+                                                    </a>
+                                                    <div class="menu menu--structural" data-menu="menu" aria-hidden="true">
+                                                        <div class="menu-content">
+                                                            <!--<h4 class="menu-header">Forums</h4>-->
+                                                            <a href="/whats-new/posts/"
+                                                                class="menu-linkRow u-indentDepth0 js-offCanvasCopy "
+                                                                data-nav-id="newPosts"><span>New posts</span></a>
+                                                            <a href="/search/?type=post"
+                                                                class="menu-linkRow u-indentDepth0 js-offCanvasCopy "
+                                                                data-nav-id="searchForums"><span>Search forums</span></a>
+                                                            <a href="/history/"
+                                                                class="menu-linkRow u-indentDepth0 js-offCanvasCopy "
+                                                                data-nav-id="history"><span>History</span></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="p-navEl u-ripple " data-has-children="true">
+                                                    <a href="/support/"
+                                                        class="p-navEl-link p-navEl-link--splitMenu "
+                                                        data-nav-id="navSupportArea"><span><font size="4"><i class="fa fa-life-ring" style="padding-right:7px;"></i></font>Support</span></a>
+                                                    <a data-xf-key="2"
+                                                        data-xf-click="menu"
+                                                        data-menu-pos-ref="< .p-navEl"
+                                                        data-arrow-pos-ref="< .p-navEl"
+                                                        class="p-navEl-splitTrigger"
+                                                        role="button"
+                                                        tabindex="0"
+                                                        aria-label="Toggle expanded"
+                                                        aria-expanded="false"
+                                                        aria-haspopup="true">
+                                                    </a>
+                                                    <div class="menu menu--structural" data-menu="menu" aria-hidden="true">
+                                                        <div class="menu-content">
+                                                            <!--<h4 class="menu-header"><font size="4"><i class="fa fa-life-ring" style="padding-right:7px;"></i></font>Support</h4>-->
+                                                            <a href="/support/post-thread"
+                                                                class="menu-linkRow u-indentDepth0 js-offCanvasCopy "
+                                                                data-nav-id="navSupportCreate"><span>Create New Ticket</span></a>
+                                                            <a href="/support/"
+                                                                class="menu-linkRow u-indentDepth0 js-offCanvasCopy "
+                                                                data-nav-id="navSupportTickets"><span>View Tickets</span></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="p-navEl u-ripple " data-has-children="true">
+                                                    <a href="/extensions/"
+                                                        class="p-navEl-link p-navEl-link--splitMenu "
+                                                        data-nav-id="xfrm"><span>Extensions</span></a>
+                                                    <a data-xf-key="3"
+                                                        data-xf-click="menu"
+                                                        data-menu-pos-ref="< .p-navEl"
+                                                        data-arrow-pos-ref="< .p-navEl"
+                                                        class="p-navEl-splitTrigger"
+                                                        role="button"
+                                                        tabindex="0"
+                                                        aria-label="Toggle expanded"
+                                                        aria-expanded="false"
+                                                        aria-haspopup="true">
+                                                    </a>
+                                                    <div class="menu menu--structural" data-menu="menu" aria-hidden="true">
+                                                        <div class="menu-content">
+                                                            <!--<h4 class="menu-header">Extensions</h4>-->
+                                                            <a href="/extensions/categories/2"
+                                                                class="menu-linkRow u-indentDepth0 js-offCanvasCopy "
+                                                                data-nav-id="extensionsFreeExtensions"><span>Free Extensions</span></a>
+                                                            <a href="/extensions/categories/1"
+                                                                class="menu-linkRow u-indentDepth0 js-offCanvasCopy "
+                                                                data-nav-id="extensionsPremiumExtensions"><span>Premium Extensions</span></a>
+                                                            <a href="/search/?type=resource"
+                                                                class="menu-linkRow u-indentDepth0 js-offCanvasCopy "
+                                                                data-nav-id="xfrmSearchResources"><span>Search extensions</span></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="p-navEl u-ripple " data-has-children="true">
+                                                    <a href="/members/"
+                                                        class="p-navEl-link p-navEl-link--splitMenu "
+                                                        data-nav-id="members"><span>Members</span></a>
+                                                    <a data-xf-key="4"
+                                                        data-xf-click="menu"
+                                                        data-menu-pos-ref="< .p-navEl"
+                                                        data-arrow-pos-ref="< .p-navEl"
+                                                        class="p-navEl-splitTrigger"
+                                                        role="button"
+                                                        tabindex="0"
+                                                        aria-label="Toggle expanded"
+                                                        aria-expanded="false"
+                                                        aria-haspopup="true">
+                                                    </a>
+                                                    <div class="menu menu--structural" data-menu="menu" aria-hidden="true">
+                                                        <div class="menu-content">
+                                                            <!--<h4 class="menu-header">Members</h4>-->
+                                                            <a href="/online/"
+                                                                class="menu-linkRow u-indentDepth0 js-offCanvasCopy "
+                                                                data-nav-id="currentVisitors"><span>Current visitors</span></a>
+                                                            <a href="/whats-new/profile-posts/"
+                                                                class="menu-linkRow u-indentDepth0 js-offCanvasCopy "
+                                                                rel="nofollow"
+                                                                data-nav-id="newProfilePosts"><span>New profile posts</span></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="uix_activeNavTitle">
+                                    <span>
+                                    </span>
+                                </div>
+                            </div>
+                        </nav>
+                        <div class="p-sectionLinks">
+                            <div class="pageContent">
+                                <div class="p-sectionLinks-inner hScroller" data-xf-init="h-scroller">
+                                    <div class="hScroller-scroll">
+                                        <ul class="p-sectionLinks-list">
+                                            <li>
+                                                <div class="p-navEl u-ripple " >
+                                                    <a href="/"
+                                                        class="p-navEl-link  "
+                                                        data-xf-key="alt+1"
+                                                        data-nav-id="defaultRegister"><span>Home</span></a>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="offCanvasMenu offCanvasMenu--nav js-headerOffCanvasMenu" data-menu="menu" aria-hidden="true" data-ocm-builder="navigation">
+                    <div class="offCanvasMenu-backdrop" data-menu-close="true"></div>
+                    <div class="offCanvasMenu-content">
+                        <div class="sidePanel sidePanel--nav sidePanel--visitor">
+                            <div class="sidePanel__tabPanels">
+                                <div data-content="navigation" class="is-active sidePanel__tabPanel js-navigationTabPanel">
+                                    <div class="offCanvasMenu-header">
+                                        Menu
+                                        <a class="offCanvasMenu-closer" data-menu-close="true" role="button" tabindex="0" aria-label="Close"></a>
+                                    </div>
+                                    <div class="js-offCanvasNavTarget"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-body-header">
+                    <div class="pageContent">
+                        <div class="uix_headerInner">
+                            <div class="p-title ">
+                                <h1 class="p-title-value">Oops! We ran into some problems.</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-body">
+                    <div class="p-body-inner">
+                        <!--XF:EXTRA_OUTPUT-->
+                        <noscript>
+                            <div class="blockMessage blockMessage--important blockMessage--iconic u-noJsOnly">JavaScript is disabled. For a better experience, please enable JavaScript in your browser before proceeding.</div>
+                        </noscript>
+                        <!--[if lt IE 9]>
+                        <div class="blockMessage blockMessage&#45;&#45;important blockMessage&#45;&#45;iconic">You are using an out of date browser. It  may not display this or other websites correctly.<br />You should upgrade or use an <a href="https://www.google.com/chrome/browser/" target="_blank">alternative browser</a>.</div>
+                        <![endif]-->
+                        <div uix_component="MainContainer" class="uix_contentWrapper">
+                            <div class="p-body-main  ">
+                                <div uix_component="MainContent" class="p-body-content">
+                                    <!-- ABOVE MAIN CONTENT -->
+                                    <div class="p-body-pageContent">
+                                        <div class="blockMessage">
+                                            <p><b>Error <!--#echo var="REDIRECT_STATUS" --></b></p>
+                                            <p>Info for Paladin Extensions Staff:</p>
+                                            <ul>
+                                                <li>IP Address: <!--#echo var="REMOTE_ADDR" --></li>
+                                                <li>Requested URL: <!--#echo var="REQUEST_URI" --></li>
+                                                <li>Referring URL: <!--#echo var="HTTP_REFERER" --></li>
+                                                <li>Date and Time: <!--#echo var="DATE_GMT" --></li>
+                                                <li>Browser: <!--#echo var="HTTP_USER_AGENT" --></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <!-- BELOW MAIN CONTENT -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <footer class="p-footer" id="footer">
+                    <div class="p-footer-inner">
+                        <div class="pageContent">
+                            <div class="p-footer-row">
+                            </div>
+                            <div class="p-footer-row-opposite">
+                                <ul class="p-footer-linkList">
+                                    <li><a href="/help/terms/">Terms and rules</a></li>
+                                    <li><a href="/help/">Help</a></li>
+                                    <li><a>&copy; 2017-2019 Paladin Extensions</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+                <div class="uix_fabBar uix_fabBar--active">
+                    <div class="u-scrollButtons js-scrollButtons" data-trigger-type="both">
+                        <a href="#top" class="button--scroll button" data-xf-click="scroll-to"><span class="button-text"><i class="fa fa-arrow-up"></i><span class="u-srOnly">Top</span></span></a>
+                        <a href="#footer" class="button--scroll button" data-xf-click="scroll-to"><span class="button-text"><i class="fa fa-arrow-down"></i><span class="u-srOnly">Bottom</span></span></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="u-bottomFixer js-bottomFixTarget">
+        </div>
+        <script>
+            if (typeof (window.themehouse) !== 'object') {
+            	window.themehouse = {};
+            }
+            if (typeof (window.themehouse.settings) !== 'object') {
+            	window.themehouse.settings = {};
+            }
+            window.themehouse.settings = {
+            	common: {
+            		'20180112': {
+            			init: false,
+            		},
+            	},
+            	data: {
+            		version: '2.0.10.0',
+            		jsVersion: 'No JS Files',
+            		templateVersion: '2.0.10.0_Release',
+            		betaMode: 0,
+            		theme: '',
+            		url: 'https://www.paladin-extensions.com/',
+            		user: '0',
+            	},
+            	inputSync: {},
+            	minimalSearch: {
+            		breakpoint: "900",
+            		dropdownBreakpoint: "900",
+            	},
+            	sidebar: {
+                       enabled: '',
+            		link: '/uix/toggle-sidebar.json',
+                       state: '',
+            	},
+                   sidebarNav: {
+                       enabled: '',
+            		link: '/uix/toggle-sidebar-navigation.json',
+                       state: '',
+            	},
+            	fab: {
+            		enabled: 1,
+            	},
+            	checkRadius: {
+            		enabled: 1,
+            		selectors: '.p-footer-inner, .uix_extendedFooter, .p-nav, .p-sectionLinks, .p-staffBar, .p-header, #wpadminbar',
+            	},
+            	nodes: {
+            		enabled: 0,
+            	},
+                   nodesCollapse: {
+                       enabled: '',
+            		link: '/uix/toggle-category.json',
+            		state: '',
+                   },
+            	widthToggle: {
+            		enabled: '',
+            		link: '/uix/toggle-width.json',
+            		state: 'fixed',
+            	},
+            }
+            
+            window.document.addEventListener('DOMContentLoaded', function() {
+            	
+            		try {
+            		   window.themehouse.common['20180112'].init();
+            		} catch(e) {
+            		   console.log('Error caught', e);
+            		}
+            	
+            
+            
+            	var jsVersionPrefix = 'No JS Files';
+            	if (typeof(window.themehouse.settings.data.jsVersion) === 'string') {
+            		var jsVersionSplit = window.themehouse.settings.data.jsVersion.split('_');
+            		if (jsVersionSplit.length) {
+            			jsVersionPrefix = jsVersionSplit[0];
+            		}
+            	}
+            	var templateVersionPrefix = 'No JS Template Version';
+            	if (typeof(window.themehouse.settings.data.templateVersion) === 'string') {
+            		var templateVersionSplit = window.themehouse.settings.data.templateVersion.split('_');
+            		if (templateVersionSplit.length) {
+            			templateVersionPrefix = templateVersionSplit[0];
+            		}
+            	}
+            	if (jsVersionPrefix !== templateVersionPrefix) {
+            		var splitFileVersion = jsVersionPrefix.split('.');
+            		var splitTemplateVersion = templateVersionPrefix.split('.');
+            		console.log('version mismatch', jsVersionPrefix, templateVersionPrefix);
+            	}
+            
+            });
+        </script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script><script>window.jQuery || document.write('<script src="/js/vendor/jquery/jquery-3.2.1.min.js?_v=fee1b23b"><\/script>')</script>
+        <script src="/js/vendor/vendor-compiled.js?_v=fee1b23b"></script>
+        <script src="/js/xf/core-compiled.js?_v=fee1b23b"></script>
+        <script src="/js/themehouse/uix_dark/ripple.min.js?_v=fee1b23b"></script>
+        <script src="/js/themehouse/global/20180112.min.js?_v=fee1b23b"></script>
+        <script src="/js/themehouse/uix_dark/index.min.js?_v=fee1b23b"></script>
+        <script src="/js/themehouse/uix_dark/defer.min.js?_v=fee1b23b"></script>
+        <script>
+            $(document).ready(function() {
+            	var sidebar = $('.p-body-sidebar');
+            	var backdrop = $('.p-body-sidebar [data-ocm-class="offCanvasMenu-backdrop"]');
+            
+            	$('.uix_sidebarCanvasTrigger').click(function(e) {
+            		e.preventDefault();
+            		sidebar.addClass('offCanvasMenu offCanvasMenu--blocks is-active is-transitioning');
+            
+            		window.setTimeout(function() {
+            			sidebar.removeClass('is-transitioning');
+            		}, 250);
+            
+            		$('.uix_sidebarInner').addClass('offCanvasMenu-content');
+            		backdrop.addClass('offCanvasMenu-backdrop');
+            		$('body').addClass('is-modalOpen');
+            	});
+            
+            	backdrop.click(function() {
+            		sidebar.addClass('is-transitioning');
+            		sidebar.removeClass('is-active');
+            
+            		window.setTimeout(function() {
+            			sidebar.removeClass('offCanvasMenu offCanvasMenu--blocks is-transitioning');
+            			$('.uix_sidebarInner').removeClass('offCanvasMenu-content');
+            			backdrop.removeClass('offCanvasMenu-backdrop');
+            			$('body').removeClass('is-modalOpen');
+            		}, 250);
+            	})
+            });
+            
+        </script>
+        <script>
+            /****** OFF CANVAS ***/
+            $(document).ready(function() {
+            	var panels = {
+            		navigation: {
+            			position: 1
+            		},
+            		account: {
+            			position: 2
+            		},
+            		inbox: {
+            			position: 3
+            		},
+            		alerts: {
+            			position: 4
+            		}
+            	};
+            
+            
+            	var tabsContainer = $('.sidePanel__tabs');
+            
+            	var activeTab = 'navigation';
+            
+            	var activeTabPosition = panels[activeTab].position;
+            
+            	var generateDirections = function() {
+            		$('.sidePanel__tabPanel').each(function() {
+            			var tabPosition = $(this).attr('data-content');
+            			var activeTabPosition = panels[activeTab].position;
+            
+            			if (tabPosition != activeTab) {
+            				if (panels[tabPosition].position < activeTabPosition) {
+            					$(this).addClass('is-left');
+            				}
+            
+            				if (panels[tabPosition].position > activeTabPosition) {
+            					$(this).addClass('is-right');
+            				}
+            			}
+            		});
+            	};
+            
+            	generateDirections();
+            
+            	$('.sidePanel__tab').click(function() {
+            		$(tabsContainer).find('.sidePanel__tab').removeClass('sidePanel__tab--active');
+            		$(this).addClass('sidePanel__tab--active');
+            
+            		activeTab = $(this).attr('data-attr');
+            
+            		$('.sidePanel__tabPanel').removeClass('is-active');
+            
+            		$('.sidePanel__tabPanel[data-content="' + activeTab + '"]').addClass('is-active');
+            		$('.sidePanel__tabPanel').removeClass('is-left').removeClass('is-right');
+            		generateDirections();
+            	});
+            });
+            
+            /******** extra info post toggle ***********/
+            
+            $(document).ready(function() {
+            	$('.thThreads__userExtra--trigger').click(function() {
+            		var parent =  $(this).parents('.message-cell--user');
+            		var triggerContainer = $(this).parent('.thThreads__userExtra--toggle');
+            		var container = triggerContainer.siblings('.thThreads__message-userExtras');
+            		var child = container.find('.message-userExtras');
+            		var eleHeight = child.height();
+            		if (parent.hasClass('userExtra--expand')) {
+            			container.css({ height: eleHeight });
+            			parent.toggleClass('userExtra--expand');
+            			window.setTimeout(function() {
+            				container.css({ height: '0' });
+            				window.setTimeout(function() {
+            					container.css({ height: '' });
+            				}, 200);
+            			}, 17);
+            
+            		} else {
+            			parent.toggleClass('userExtra--expand');
+            			container.css({ height: eleHeight });
+            			window.setTimeout(function() {
+            				container.css({ height: '' });
+            			}, 200);
+            		}
+            	});
+            });
+            
+            /******** Backstretch images ***********/
+            $(document).ready(function() {
+            	if ( 0 ) {
+            
+            		$("body").addClass('uix__hasBackstretch');
+            
+            		 $("body").backstretch([
+            			 "/styles/uix_dark/images/bg/1.jpg","/styles/uix_dark/images/bg/2.jpg","/styles/uix_dark/images/bg/3.jpg"
+            	  ], {
+            			duration: 4000,
+            			fade: 500
+            		});
+            
+            		$("body").css("zIndex","");
+            	}
+            });
+            
+            // sidenav canvas blur fix
+            
+            $(document).ready(function(){
+            	$('.p-body-sideNavTrigger .button').click(function(){
+            		$('body').addClass('sideNav--open');
+            	});
+            })
+            
+            $(document).ready(function(){
+            	$("[data-ocm-class='offCanvasMenu-backdrop']").click(function(){
+            		$('body').removeClass('sideNav--open');
+            	});
+            })
+            
+            $(document).on('editor:start', function (m, ed) {
+            	if (typeof (m) !== 'undefined' && typeof (m.target) !== 'undefined') {
+            		var ele = $(m.target);
+            		if (ele.hasClass('js-editor')) {
+            			var wrapper = ele.closest('.message-editorWrapper');
+            			if (wrapper.length) {
+            				window.setTimeout(function() {
+            					var innerEle = wrapper.find('.fr-element');
+            					if (innerEle.length) {
+            						innerEle.focus(function (e) {
+            							$('html').addClass('uix_editor--focused')
+            						});
+            						innerEle.blur(function (e) {
+            							$('html').removeClass('uix_editor--focused')
+            						});
+            					}
+            				}, 0);
+            			}
+            		}
+            	}
+            });
+            
+        </script>
+        <script>
+            jQuery.extend(true, XF.config, {
+            	// 
+            	userId: 0,
+            	url: {
+            		fullBase: 'https://www.paladin-extensions.com/',
+            		basePath: '/',
+            		css: '/css.php?css=__SENTINEL__&s=8&l=1&d=1544053333',
+            		keepAlive: '/login/keep-alive'
+            	},
+            	cookie: {
+            		path: '/',
+            		domain: '',
+            		prefix: 'xf_',
+            		secure: false
+            	},
+            	csrf: '1544053447,3c7833570e2785440afd8742463bc3ac',
+            	js: {"\/js\/themehouse\/uix_dark\/ripple.min.js?_v=fee1b23b":true,"\/js\/themehouse\/global\/20180112.min.js?_v=fee1b23b":true,"\/js\/themehouse\/uix_dark\/index.min.js?_v=fee1b23b":true,"\/js\/themehouse\/uix_dark\/defer.min.js?_v=fee1b23b":true},
+            	css: {"public:extra.less":true},
+            	time: {
+            		now: 1544053447,
+            		today: 1543996800,
+            		todayDow: 3
+            	},
+            	borderSizeFeature: '2px',
+            	enableRtnProtect: true,
+            	enableFormSubmitSticky: true,
+            	uploadMaxFilesize: 134217728,
+            	visitorCounts: {
+            		conversations_unread: '0',
+            		alerts_unread: '0',
+            		total_unread: '0',
+            		title_count: true,
+            		icon_indicator: true
+            	},
+            	jsState: {}
+            });
+            
+            jQuery.extend(XF.phrases, {
+            	// 
+            	date_x_at_time_y: "{date} at {time}",
+            	day_x_at_time_y:  "{day} at {time}",
+            	yesterday_at_x:   "Yesterday at {time}",
+            	x_minutes_ago:    "{minutes} minutes ago",
+            	one_minute_ago:   "1 minute ago",
+            	a_moment_ago:     "A moment ago",
+            	today_at_x:       "Today at {time}",
+            	in_a_moment:      "In a moment",
+            	in_a_minute:      "In a minute",
+            	in_x_minutes:     "In {minutes} minutes",
+            	later_today_at_x: "Later today at {time}",
+            	tomorrow_at_x:    "Tomorrow at {time}",
+            
+            	day0: "Sunday",
+            	day1: "Monday",
+            	day2: "Tuesday",
+            	day3: "Wednesday",
+            	day4: "Thursday",
+            	day5: "Friday",
+            	day6: "Saturday",
+            
+            	dayShort0: "Sun",
+            	dayShort1: "Mon",
+            	dayShort2: "Tue",
+            	dayShort3: "Wed",
+            	dayShort4: "Thu",
+            	dayShort5: "Fri",
+            	dayShort6: "Sat",
+            
+            	month0: "January",
+            	month1: "February",
+            	month2: "March",
+            	month3: "April",
+            	month4: "May",
+            	month5: "June",
+            	month6: "July",
+            	month7: "August",
+            	month8: "September",
+            	month9: "October",
+            	month10: "November",
+            	month11: "December",
+            
+            	active_user_changed_reload_page: "The active user has changed. Reload the page for the latest version.",
+            	server_did_not_respond_in_time_try_again: "The server did not respond in time. Please try again.",
+            	oops_we_ran_into_some_problems: "Oops! We ran into some problems.",
+            	oops_we_ran_into_some_problems_more_details_console: "Oops! We ran into some problems. Please try again later. More error details may be in the browser console.",
+            	file_too_large_to_upload: "The file is too large to be uploaded.",
+            	uploaded_file_is_too_large_for_server_to_process: "The uploaded file is too large for the server to process.",
+            	files_being_uploaded_are_you_sure: "Files are still being uploaded. Are you sure you want to submit this form?",
+            	attach: "Attach files",
+            	rich_text_box: "Rich text box",
+            	close: "Close",
+            
+            	showing_x_of_y_items: "Showing {count} of {total} items",
+            	showing_all_items: "Showing all items",
+            	no_items_to_display: "No items to display"
+            });
+        </script>
+        <form style="display:none" hidden="hidden">
+            <input type="text" name="_xfClientLoadTime" value="" id="_xfClientLoadTime" title="_xfClientLoadTime" tabindex="-1" />
+        </form>
+    </body>
+</html>

@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 39befc4263996e68a44fe3ef6496ceb5
+// FROM HASH: c82ce7c2dc3f6144550305bf2f2c72c2
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -373,16 +373,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 							<dd>' . $__templater->fn('date_dynamic', array($__vars['resource']['last_update'], array(
 	))) . '</dd>
 						</dl>
-						<dl class="pairs pairs--justified">
-							<dt>' . 'Rating' . '</dt>
-							<dd>
-								' . $__templater->callMacro('rating_macros', 'stars_text', array(
-		'rating' => $__vars['resource']['rating_avg'],
-		'count' => $__vars['resource']['rating_count'],
-		'rowClass' => 'ratingStarsRow--textBlock',
-	), $__vars) . '
-							</dd>
-						</dl>
+						' . '
 					</div>
 
 					';

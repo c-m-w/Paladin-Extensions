@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 533d4e595f583d5efb7e9e189e35f8c9
+// FROM HASH: 4319b5f29ffbea78a9c73afba0811ee2
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -56,65 +56,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	}
 }
 
-.p-footer-copyrightRow {
-	order: @xf-uix_copyrightOrder;
-	.xf-uix_footerCopyrightRow();
-		';
-	if (($__templater->fn('property', array('uix_pageStyle', ), false) != 'covered') AND (!$__templater->fn('property', array('uix_forceCoverCopyright', ), false))) {
-		$__finalCompiled .= '
-			.m-pageWidth();
-		';
-	}
-	$__finalCompiled .= '
-
-	.pageContent {
-		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
-		justify-content: space-between;
-		';
-	if (($__templater->fn('property', array('uix_pageStyle', ), false) == 'covered') OR $__templater->fn('property', array('uix_forceCoverCopyright', ), false)) {
-		$__finalCompiled .= '
-			.m-pageWidth();
-			';
-		if ($__templater->fn('property', array('uix_pageStyle', ), false) != 'wrapped') {
-			$__finalCompiled .= '
-				padding:0;
-			';
-		}
-		$__finalCompiled .= '
-		';
-	}
-	$__finalCompiled .= '
-	}
-
-	.p-footer-debug-list li a {
-		color: inherit;
-
-		&:hover {color: inherit; text-decoration: underline;}
-	}
-}
-
-/* commented out in beta 1 (Ian)
-.p-footer-row
-{
-	.m-clearFix();
-
-	margin-bottom: -@xf-paddingLarge;
-}
-
-.p-footer-row-main
-{
-	float: left;
-	margin-bottom: @xf-paddingLarge;
-}
-
-.p-footer-row-opposite
-{
-	float: right;
-	margin-bottom: @xf-paddingLarge;
-}
-*/
+' . '
 
 .p-footer-linkList
 {

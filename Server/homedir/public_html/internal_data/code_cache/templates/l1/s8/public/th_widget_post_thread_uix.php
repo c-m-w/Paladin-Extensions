@@ -1,10 +1,13 @@
 <?php
-// FROM HASH: fc680b04afc4f4c62bd21768d2869615
+// FROM HASH: 751b7784362f6319047bf285a5eda6ee
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
-	if ($__templater->method($__vars['xf']['visitor'], 'canCreateThread', array())) {
+	if (!$__templater->method($__vars['xf']['visitor'], 'canUseSiropuShoutbox', array())) {
 		$__finalCompiled .= '
+';
+		if ($__templater->method($__vars['xf']['visitor'], 'canCreateThread', array())) {
+			$__finalCompiled .= '
 	<div class="block" ' . $__templater->fn('widget_data', array($__vars['widget'], ), true) . '>
 		<div class="block-container">
 			<div class="block-body uix_postThreadWidget block-row">
@@ -14,15 +17,18 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 				' . $__templater->button('
 					' . 'Post' . '
 				', array(
-			'href' => $__templater->fn('link', array('forums/create-thread', ), false),
-			'class' => 'button--cta',
-			'icon' => 'write',
-			'overlay' => 'true',
-		), '', array(
-		)) . '
+				'href' => $__templater->fn('link', array('https://www.paladin-extensions.com/forums/9/post-thread', ), false),
+				'class' => 'button--cta',
+				'icon' => 'write',
+				'overlay' => 'true',
+			), '', array(
+			)) . '
 			</div>
 		</div>
 	</div>
+';
+		}
+		$__finalCompiled .= '
 ';
 	}
 	$__finalCompiled .= '

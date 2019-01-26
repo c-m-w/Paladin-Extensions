@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 1978828d1c0801eb3a25ef756c947baf
+// FROM HASH: 717f7603b8973ae01250fe94b5f3f932
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -169,7 +169,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 				$__compilerTemp4 = '';
 				if ($__vars['active']['end_date']) {
 					$__compilerTemp4 .= '
-											<p />' . 'Expires' . $__vars['xf']['language']['label_separator'] . ' ' . $__templater->fn('date_dynamic', array($__vars['active']['end_date'], array(
+											' . 'Expires' . $__vars['xf']['language']['label_separator'] . ' ' . $__templater->fn('date_dynamic', array($__vars['active']['end_date'], array(
 					))) . '
 										';
 				} else {

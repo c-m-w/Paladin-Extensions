@@ -5,6 +5,11 @@ return array (
 BCC notification emails on one of the following actions:<br/>
 purchased_upgrade, payment_reversal, upgrade_payment_reversal, expiring_upgrade, expiring_subscription, expired_upgrade',
   'option_explain.ExUp_ShowExtendFailReason' => 'For debugging purposes, determining why an upgrade failed to be extendable can be tricky. This will print the reason the upgrade couldn\'t be extended.',
+  'option_explain.GoogleSearch_id' => '<div class="blockMessage blockMessage--iconic blockMessage--important" style="margin: 0 2px;">
+<b>Register your <a href="https://cse.google.com/cse/create/new" target="_blank">Google Search Engine</a> and put its ID here.</b><br>
+Google search will not work until you provide the correct ID!
+</div>',
+  'option_explain.GoogleSearch_tryAnyways' => 'If enabled, automatically performs Google search if xenForo search engine did not find anything or can\'t perform a search for whatever reason.',
   'option_explain.acpSearchExclude' => 'When using the quick search facility in the control panel, content from the following types will be searched. Disabling content types here may speed-up searching slightly.',
   'option_explain.addBanUserGroup' => 'When a user is banned, they can be added to a specific user group while the ban is active. This allows overrides to their user group styling, for example.',
   'option_explain.adminNotesNotes' => 'Notes here will be displayed in the Admin Control Panel home page. You may use HTML.',

@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 717f7603b8973ae01250fe94b5f3f932
+// FROM HASH: cec7efb88b3831624514597aa01212cc
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -58,63 +58,149 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 												<span class="inputGroup-splitter"></span>
 
 												';
-					if ($__templater->method($__vars['upgrade'], 'canPurchase', array())) {
-						$__compilerTemp2 .= $__templater->button('', array(
-							'type' => 'submit',
-							'icon' => 'purchase',
-						), '', array(
-						));
-					}
+					$__vars['buffer'] = '1';
 					$__compilerTemp2 .= '
-';
-					if ($__templater->method($__vars['upgrade'], 'canGift', array())) {
+												';
+					if (!$__templater->test($__vars['purchased'], 'empty', array())) {
 						$__compilerTemp2 .= '
-	';
-						if ($__templater->method($__vars['upgrade'], 'canPurchase', array())) {
-							$__compilerTemp2 .= '<span class="inputGroup-splitter"></span>';
+													';
+						if ($__templater->isTraversable($__vars['purchased'])) {
+							foreach ($__vars['purchased'] AS $__vars['purupgrade']) {
+								$__compilerTemp2 .= '
+														';
+								if ($__vars['purupgrade']['user_upgrade_id'] == $__vars['upgrade']['user_upgrade_id']) {
+									$__compilerTemp2 .= '
+															';
+									$__vars['buffer'] = '0';
+									$__compilerTemp2 .= '
+														';
+								}
+								$__compilerTemp2 .= '
+													';
+							}
 						}
 						$__compilerTemp2 .= '
+												';
+					}
+					$__compilerTemp2 .= '
+
+												';
+					if ($__vars['buffer']) {
+						$__compilerTemp2 .= '
+													';
+						if ($__templater->method($__vars['upgrade'], 'canPurchase', array())) {
+							$__compilerTemp2 .= $__templater->button('', array(
+								'type' => 'submit',
+								'icon' => 'purchase',
+							), '', array(
+							));
+						}
+						$__compilerTemp2 .= '
+';
+						if ($__templater->method($__vars['upgrade'], 'canGift', array())) {
+							$__compilerTemp2 .= '
+	';
+							if ($__templater->method($__vars['upgrade'], 'canPurchase', array())) {
+								$__compilerTemp2 .= '<span class="inputGroup-splitter"></span>';
+							}
+							$__compilerTemp2 .= '
 	' . $__templater->button('<font size="4"><i class="fa fa-gift" style="padding-right:7px;"></i></font>Gift', array(
+								'type' => 'submit',
+								'name' => 'gift',
+								'value' => '1',
+								'icon' => 'nfgift',
+							), '', array(
+							)) . '
+';
+						}
+						$__compilerTemp2 .= '
+												';
+					} else {
+						$__compilerTemp2 .= '
+													' . $__templater->button('<font size="4"><i class="fa fa-gift" style="padding-right:7px;"></i></font>Gift', array(
 							'type' => 'submit',
+							'class' => 'button button--icon button--icon--nfgift rippleButton',
 							'name' => 'gift',
 							'value' => '1',
-							'icon' => 'nfgift',
 						), '', array(
 						)) . '
-';
+												';
 					}
 					$__compilerTemp2 .= '
 											';
 				} else {
 					$__compilerTemp2 .= '
 												';
-					if ($__templater->method($__vars['upgrade'], 'canPurchase', array())) {
-						$__compilerTemp2 .= $__templater->button('', array(
-							'type' => 'submit',
-							'icon' => 'purchase',
-						), '', array(
-						));
-					}
+					$__vars['buffer'] = '1';
 					$__compilerTemp2 .= '
-';
-					if ($__templater->method($__vars['upgrade'], 'canGift', array())) {
+												';
+					if (!$__templater->test($__vars['purchased'], 'empty', array())) {
 						$__compilerTemp2 .= '
-	';
-						if ($__templater->method($__vars['upgrade'], 'canPurchase', array())) {
-							$__compilerTemp2 .= '<span class="inputGroup-splitter"></span>';
+													';
+						if ($__templater->isTraversable($__vars['purchased'])) {
+							foreach ($__vars['purchased'] AS $__vars['purupgrade']) {
+								$__compilerTemp2 .= '
+														';
+								if ($__vars['purupgrade']['user_upgrade_id'] == $__vars['upgrade']['user_upgrade_id']) {
+									$__compilerTemp2 .= '
+															';
+									$__vars['buffer'] = '0';
+									$__compilerTemp2 .= '
+														';
+								}
+								$__compilerTemp2 .= '
+													';
+							}
 						}
 						$__compilerTemp2 .= '
-	' . $__templater->button('<font size="4"><i class="fa fa-gift" style="padding-right:7px;"></i></font>Gift', array(
-							'type' => 'submit',
-							'name' => 'gift',
-							'value' => '1',
-							'icon' => 'nfgift',
-						), '', array(
-						)) . '
-';
+												';
 					}
 					$__compilerTemp2 .= '
-
+												
+												';
+					if ($__vars['buffer']) {
+						$__compilerTemp2 .= '
+													';
+						if ($__templater->method($__vars['upgrade'], 'canPurchase', array())) {
+							$__compilerTemp2 .= $__templater->button('', array(
+								'type' => 'submit',
+								'icon' => 'purchase',
+							), '', array(
+							));
+						}
+						$__compilerTemp2 .= '
+';
+						if ($__templater->method($__vars['upgrade'], 'canGift', array())) {
+							$__compilerTemp2 .= '
+	';
+							if ($__templater->method($__vars['upgrade'], 'canPurchase', array())) {
+								$__compilerTemp2 .= '<span class="inputGroup-splitter"></span>';
+							}
+							$__compilerTemp2 .= '
+	' . $__templater->button('<font size="4"><i class="fa fa-gift" style="padding-right:7px;"></i></font>Gift', array(
+								'type' => 'submit',
+								'name' => 'gift',
+								'value' => '1',
+								'icon' => 'nfgift',
+							), '', array(
+							)) . '
+';
+						}
+						$__compilerTemp2 .= '
+												';
+					} else {
+						$__compilerTemp2 .= '
+													' . $__templater->button('<font size="4"><i class="fa fa-gift" style="padding-right:7px;"></i></font>Gift', array(
+							'type' => 'submit',
+							'class' => 'button button--icon button--icon--nfgift rippleButton',
+							'name' => 'gift',
+							'value' => '1',
+						), '', array(
+						)) . '
+												';
+					}
+					$__compilerTemp2 .= '
+												
 												' . $__templater->formHiddenVal('payment_profile_id', $__templater->filter($__vars['upgrade']['payment_profile_ids'], array(array('first', array()),), false), array(
 					)) . '
 											';

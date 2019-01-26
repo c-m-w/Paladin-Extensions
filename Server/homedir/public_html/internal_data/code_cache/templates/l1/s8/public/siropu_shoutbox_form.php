@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: a9aeb15fb46664cebe069a5119351452
+// FROM HASH: 261762bc68ca2a6df31d9d19d6bbe69d
 return array('macros' => array('submit' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -13,7 +13,7 @@ return array('macros' => array('submit' => function($__templater, array $__argum
 		$__finalCompiled .= '
 		<form action="' . $__templater->fn('link', array('shoutbox/submit', ), true) . '"' . ($__vars['class'] ? ((' class="' . $__templater->escape($__vars['class'])) . '"') : '') . ' data-xf-init="siropu-shoutbox-submit">
 			<input type="text" name="shout" class="input" maxlength="' . $__templater->escape($__vars['xf']['options']['siropuShoutboxShoutMaxLength']) . '" placeholder="' . 'Speak your mind :)' . '" autocomplete="off" data-xf-init="user-mentioner">
-			<button type="submit" class="button">' . 'Shout!' . '</button>
+			' . '
 		</form>
 	';
 	}

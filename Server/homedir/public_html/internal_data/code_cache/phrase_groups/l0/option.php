@@ -3,6 +3,8 @@ return array (
   'option.ExUp_BccEmail' => 'BCC Email Address',
   'option.ExUp_BccEmail_Action' => 'BCC On Actions',
   'option.ExUp_ShowExtendFailReason' => 'Shows the reason an upgrade can not be extended',
+  'option.GoogleSearch_id' => 'Google Search Engine ID',
+  'option.GoogleSearch_tryAnyways' => '"Try anyways" mode',
   'option.acpSearchExclude' => 'Quick search content types',
   'option.addBanUserGroup' => 'Add user group on ban',
   'option.adminNotesNotes' => 'Notes',

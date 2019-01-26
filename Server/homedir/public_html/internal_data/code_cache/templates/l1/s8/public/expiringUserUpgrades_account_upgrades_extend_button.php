@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: bc44fdcc638734fc2f574768e60b6df9
+// FROM HASH: bf277b915ac41835fe2a45ee2f7da64c
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -46,7 +46,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			';
 		}
 		$__finalCompiled .= $__templater->form('
-		<div class="inputGroup">
+		<div class="inputGroup" style="margin-bottom: 10px">
 			' . $__compilerTemp1 . '
 		</div>
 	', array(

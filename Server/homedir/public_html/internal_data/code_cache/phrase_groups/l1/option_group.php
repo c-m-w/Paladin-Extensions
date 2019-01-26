@@ -1,5 +1,6 @@
 <?php
 return array (
+  'option_group.GoogleSearch_options' => 'Google Search options',
   'option_group.acp' => 'Admin control panel',
   'option_group.adminNotes' => 'Admin notes',
   'option_group.ahDiscordWidget' => '[AH] Discord Widget',
@@ -41,7 +42,7 @@ return array (
   'option_group.tagging' => 'Content tagging',
   'option_group.thReactions' => '[TH] Reactions',
   'option_group.th_bookmarks' => '[TH] Bookmarks',
-  'option_group.th_uix' => '[UI.X] Options',
+  'option_group.th_uix' => '[TH] [UI.X] Options',
   'option_group.users' => 'User options',
   'option_group.usersAndRegistration' => 'User registration',
   'option_group.xc_login_as_user' => '[XenConcept] Login As User',

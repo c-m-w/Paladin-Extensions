@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 6c3f51425b7fe5c00b9eb43aa1c6404b
+// FROM HASH: 355f242217a727a1ccc6a8b3644e58b1
 return array('macros' => array('resource' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -235,14 +235,7 @@ return array('macros' => array('resource' => function($__templater, array $__arg
 	$__finalCompiled .= '
 		</div>
 		<div class="structItem-cell structItem-cell--resourceMeta">
-			<div class="structItem-metaItem  structItem-metaItem--rating">
-				' . $__templater->callMacro('rating_macros', 'stars_text', array(
-		'rating' => $__vars['resource']['rating_avg'],
-		'count' => $__vars['resource']['rating_count'],
-		'rowClass' => 'ratingStarsRow--justified',
-		'starsClass' => 'ratingStars--larger',
-	), $__vars) . '
-			</div>
+			' . '
 
 			';
 	if ($__templater->method($__vars['resource'], 'isDownloadable', array())) {

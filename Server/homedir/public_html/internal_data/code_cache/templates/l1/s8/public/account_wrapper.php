@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 28618570ae0c438a583fb9993224109c
+// FROM HASH: b651c913092a350c2baaaad52a1c6937
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -57,10 +57,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 				<a class="blockLink ' . (($__vars['pageSelected'] == 'alerts') ? 'is-selected' : '') . '" href="' . $__templater->fn('link', array('account/alerts', ), true) . '">
 					' . 'Alerts' . '
 				</a>
-' . $__templater->includeTemplate('sv_ue_account_wrapper_likes_given', $__vars) . '
-				<a class="blockLink ' . (($__vars['pageSelected'] == 'likes') ? 'is-selected' : '') . '" href="' . $__templater->fn('link', array('account/likes', ), true) . '">
-					' . 'Likes received' . '
-				</a>
+				' . '
 				' . $__templater->includeTemplate('sv_ue_account_wrapper_watched', $__vars) . '
 ' . '
 ' . $__compilerTemp1 . '

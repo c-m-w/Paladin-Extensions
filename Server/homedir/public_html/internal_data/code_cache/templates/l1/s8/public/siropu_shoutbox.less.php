@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 917bbc4933708ac93a04f86d51164537
+// FROM HASH: 7a602ad6a834dd30b0f7c1f4a41595b4
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -20,7 +20,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	{
 		.input
 		{
-			width: 92.5%;
+			width: 100.0%;
 			display: inline-block;
 		}
 		
