@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 751b7784362f6319047bf285a5eda6ee
+// FROM HASH: 671be6d2cec8c7c50ec7e4360d708d96
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -17,7 +17,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 				' . $__templater->button('
 					' . 'Post' . '
 				', array(
-				'href' => $__templater->fn('link', array('https://www.paladin-extensions.com/forums/9/post-thread', ), false),
+				'href' => $__templater->fn('link', array('forums/create-thread', ), false),
 				'class' => 'button--cta',
 				'icon' => 'write',
 				'overlay' => 'true',

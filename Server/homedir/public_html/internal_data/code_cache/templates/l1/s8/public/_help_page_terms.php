@@ -19,6 +19,6 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 <p>These terms may be changed at any time without notice.</p>
 
-<p>If you do not agree with these terms, please do not register or use Paladin Extensions. Use of Paladin Extensions constitutes acceptance of these terms. If you wish to close your account, please <a href="https://paladin.rip/misc/contact">contact us</a>.</p>';
+<p>If you do not agree with these terms, please do not register or use Paladin Extensions. Use of Paladin Extensions constitutes acceptance of these terms. If you wish to close your account, please <a href="https://www.paladin-extensions.com/misc/contact">contact us</a>.</p>';
 	return $__finalCompiled;
 });
