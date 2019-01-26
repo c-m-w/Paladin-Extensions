@@ -7,7 +7,7 @@ return array (
   'trophy_description.13' => 'Welcome to the club - welcome, Squidward; welcome, Squidward; welcome, Squidward!',
   'trophy_description.2' => '30 messages posted. You must like it here!',
   'trophy_description.3' => 'You\'ve posted 100 messages. I hope this took you more than a day!',
-  'trophy_description.4' => '1,000 messages? Impressive!',
+  'trophy_description.4' => 'Invite 5 close friends to the community.',
   'trophy_description.5' => 'Somebody out there liked one of your messages. Keep posting like that for more!',
   'trophy_description.6' => 'Your messages have been liked 25 times.',
   'trophy_description.7' => 'Content you have posted has attracted 100 likes.',
