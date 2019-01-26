@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 739a5c4da29e60043ae855a63eeffc31
+// FROM HASH: d4b6ba9a5b9a29653d516aa0db476797
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -118,8 +118,8 @@ a.sidePanel__tab.sidePanel__tab--active {
 ';
 	if ($__templater->fn('property', array('uix_overlayBlur', ), false)) {
 		$__finalCompiled .= '
-	.is-modalOpen:not(.sideNav--open) .p-pageWrapper,
-	.is-modalOpen .offCanvasMenu-backdrop {
+	html:not(.sidebarNav--active) .is-modalOpen:not(.sideNav--open) .p-pageWrapper,
+	html:not(.sidebarNav--active) .is-modalOpen .offCanvasMenu-backdrop {
 		filter: blur(1px);
 	}
 ';

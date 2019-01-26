@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: c06bfd619e279bc66d6ba9d259157d25
+// FROM HASH: 3e0ee9c0c41f89dfab9da750bf0dd643
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -71,7 +71,7 @@ a.bbCodeBlock-sourceJump
 		xf-default(@xf-bbCodeBlock--background-color, transparent),
 		transparent,
 		0%,
-		80%
+		60%
 	);
 
 	a

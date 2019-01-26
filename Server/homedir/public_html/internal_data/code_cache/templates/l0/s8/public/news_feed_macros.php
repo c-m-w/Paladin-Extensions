@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 72e6499292c86f26ddef77e83383eda1
+// FROM HASH: 1a5329b0a4ed53e6b4fe790a08f70aa2
 return array('macros' => array('feed_row' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -24,7 +24,7 @@ return array('macros' => array('feed_row' => function($__templater, array $__arg
 		'item' => '!',
 	), $__arguments, $__vars);
 	$__finalCompiled .= '
-	<div class="contentRow">
+	<div class="contentRow' . ($__templater->method($__vars['item'], 'isVisible', array()) ? '' : ' is-deleted') . '">
 		<span class="contentRow-figure">
 			' . $__templater->fn('avatar', array($__vars['item']['User'], 's', false, array(
 		'defaultname' => $__vars['item']['username'],

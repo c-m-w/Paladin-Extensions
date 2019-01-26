@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: f2f5621dd50fd40b4a1a8628dae29042
+// FROM HASH: 46d6e06af229f5bb84cf0d1e540d3de3
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -11,6 +11,6 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 ';
 	}
 	$__finalCompiled .= '
-<div><a href="https://profile.live.com/' . $__templater->escape($__vars['connectedAccounts']['microsoft']) . '" target="_blank">' . ($__templater->escape($__vars['providerData']['username']) ?: 'Unknown account') . '</a></div>';
+<div><a href="https://profile.live.com/' . $__templater->escape($__vars['connectedAccounts']['microsoft']) . '" target="_blank">' . ($__templater->escape($__vars['providerData']['username']) ?: 'View account') . '</a></div>';
 	return $__finalCompiled;
 });

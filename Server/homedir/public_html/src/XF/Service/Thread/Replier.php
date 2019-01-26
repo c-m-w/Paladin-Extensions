@@ -91,6 +91,12 @@ class Replier extends \XF\Service\AbstractService
 	protected function setPostDefaults()
 	{
 		$forum = $this->thread->Forum;
+
+		if (!$forum)
+		{
+			throw new \LogicException("Thread is not in a valid forum");
+		}
+
 		$this->post->message_state = $forum->getNewContentState($this->thread);
 		$this->post->user_id = $this->user->user_id;
 		$this->post->username = $this->user->username;

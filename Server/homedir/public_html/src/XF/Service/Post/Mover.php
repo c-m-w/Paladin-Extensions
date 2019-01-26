@@ -94,8 +94,15 @@ class Mover extends \XF\Service\AbstractService
 		$sourcePosts = [];
 		$sourceThreads = [];
 
+		$target = $this->target;
+
 		foreach ($sourcePostsRaw AS $sourcePost)
 		{
+			if ($sourcePost->thread_id == $target->thread_id)
+			{
+				continue;
+			}
+
 			$sourcePost->setOption('log_moderator', false);
 			$sourcePosts[$sourcePost->post_id] = $sourcePost;
 
@@ -108,12 +115,16 @@ class Mover extends \XF\Service\AbstractService
 			}
 		}
 
+		if (!$sourcePosts)
+		{
+			return false; // nothing to do
+		}
+
 		$sourcePosts = \XF\Util\Arr::columnSort($sourcePosts, 'post_date');
 
 		$this->sourceThreads = $sourceThreads;
 		$this->sourcePosts = $sourcePosts;
 
-		$target = $this->target;
 		$target->setOption('log_moderator', false);
 
 		if (!$target->thread_id)
@@ -243,6 +254,9 @@ class Mover extends \XF\Service\AbstractService
 		$likesDisable = [];
 		$userMessageCountAdjust = [];
 
+		/** @var \XF\Repository\NewsFeed $newsFeedRepo */
+		$newsFeedRepo = $this->repository('XF:NewsFeed');
+
 		foreach ($this->sourcePosts AS $id => $post)
 		{
 			if ($post->message_state != 'visible')
@@ -285,6 +299,13 @@ class Mover extends \XF\Service\AbstractService
 					$userMessageCountAdjust[$userId]++;
 				}
 			}
+
+			if (!$this->existingTarget)
+			{
+				// if moving to a new thread (which will publish a new feed entry)
+				// unpublish the original reply to prevent a duplicate entry.
+				$newsFeedRepo->unpublish('post', $post->post_id, $post->user_id, 'insert');
+			}
 		}
 
 		if ($likesDisable)
@@ -319,11 +340,6 @@ class Mover extends \XF\Service\AbstractService
 		/** @var \XF\Repository\Post $postRepo */
 		$postRepo = $this->repository('XF:Post');
 
-		$alertExtras = [
-			'targetTitle' => $target->title,
-			'targetLink' => $this->app->router('public')->buildLink('nopath:threads', $target)
-		];
-
 		foreach ($this->sourcePosts AS $sourcePost)
 		{
 			if ($sourcePost->Thread->discussion_state == 'visible'
@@ -331,7 +347,15 @@ class Mover extends \XF\Service\AbstractService
 				&& $sourcePost->user_id != \XF::visitor()->user_id
 			)
 			{
-				$postRepo->sendModeratorActionAlert($sourcePost, 'move', $this->alertReason, $alertExtras);
+				$targetPost = clone $sourcePost;
+				$targetPost->setAsSaved('thread_id', $target->thread_id);
+
+				$alertExtras = [
+					'sourceTitle' => $sourcePost->Thread->title,
+					'targetLink' => $this->app->router('public')->buildLink('nopath:posts', $sourcePost)
+				];
+
+				$postRepo->sendModeratorActionAlert($targetPost, 'move', $this->alertReason, $alertExtras);
 			}
 		}
 	}
@@ -351,7 +375,7 @@ class Mover extends \XF\Service\AbstractService
 
 		if ($this->log)
 		{
-			$this->app->logger()->logModeratorAction('thread', $target,'post_move_target' . ($this->existingTarget ? '_existing' : ''),
+			$this->app->logger()->logModeratorAction('thread', $target, 'post_move_target' . ($this->existingTarget ? '_existing' : ''),
 				['ids' => implode(', ', $postIds)]
 			);
 

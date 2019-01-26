@@ -247,6 +247,7 @@ units={{ phrase('units_hours') }}</edit_format_params>
     <default_value>0</default_value>
     <edit_format_params>XF\Option\Style::renderRadio</edit_format_params>
     <relation group_id="appearance" display_order="120"/>
+    <relation group_id="emailOptions" display_order="510"/>
   </option>
   <option option_id="defaultLanguageId" edit_format="callback" data_type="positive_integer">
     <default_value>1</default_value>
@@ -456,6 +457,13 @@ units={{ phrase('units_seconds') }}</edit_format_params>
     <relation group_id="messageOptions" display_order="540"/>
     <relation group_id="performance" display_order="810"/>
   </option>
+  <option option_id="floodCheckLengthDiscussion" edit_format="spinbox" data_type="unsigned_integer">
+    <default_value>180</default_value>
+    <edit_format_params>min=0
+units={{ phrase('units_seconds') }}</edit_format_params>
+    <relation group_id="messageOptions" display_order="550"/>
+    <relation group_id="performance" display_order="820"/>
+  </option>
   <option option_id="fontAwesomeSource" edit_format="radio" data_type="string">
     <default_value>local</default_value>
     <edit_format_params>local={{ phrase('locally_hosted') }}
@@ -472,6 +480,11 @@ bootstrap=Bootstrap CDN</edit_format_params>
   <option option_id="geoLocationUrl" edit_format="textbox" data_type="string">
     <default_value>https://maps.google.com/maps?q={location}</default_value>
     <relation group_id="serviceProviders" display_order="210"/>
+  </option>
+  <option option_id="googleAnalyticsAnonymize" edit_format="onoff" data_type="boolean">
+    <default_value>0</default_value>
+    <relation group_id="seo" display_order="220"/>
+    <relation group_id="stats" display_order="20"/>
   </option>
   <option option_id="googleAnalyticsWebPropertyId" edit_format="textbox" data_type="string" validation_class="XF\Option\GoogleAnalytics" validation_method="verifyWebPropertyOption">
     <default_value></default_value>
@@ -751,8 +764,20 @@ units={{ phrase('units_minutes') }}</edit_format_params>
     <relation group_id="discourager" display_order="310"/>
     <relation group_id="usersAndRegistration" display_order="930"/>
   </option>
-  <option option_id="privacyPolicyUrl" edit_format="textbox" data_type="string">
+  <option option_id="privacyPolicyForceWhitelist" edit_format="textbox" data_type="string">
     <default_value></default_value>
+    <edit_format_params>rows=2</edit_format_params>
+    <relation group_id="basicBoard" display_order="211"/>
+  </option>
+  <option option_id="privacyPolicyLastUpdate" edit_format="textbox" data_type="unsigned_integer">
+    <default_value>0</default_value>
+    <relation group_id="debug" display_order="2100"/>
+  </option>
+  <option option_id="privacyPolicyUrl" edit_format="template" data_type="array">
+    <default_value>{"type":"default","custom":false}</default_value>
+    <edit_format_params>option_template_privacyPolicyUrl</edit_format_params>
+    <sub_options>type
+custom</sub_options>
     <relation group_id="basicBoard" display_order="210"/>
   </option>
   <option option_id="profilePostMaxLength" edit_format="spinbox" data_type="unsigned_integer">
@@ -794,14 +819,15 @@ email_on_conversation
     <relation group_id="usersAndRegistration" display_order="210"/>
   </option>
   <option option_id="registrationSetup" edit_format="template" data_type="array">
-    <default_value>{"enabled":"1","emailConfirmation":"1","moderation":false,"requireDob":"0","minimumAge":"13","requireLocation":false}</default_value>
+    <default_value>{"enabled":"1","emailConfirmation":"1","moderation":false,"requireDob":"0","minimumAge":"13","requireLocation":false,"requireEmailChoice":false}</default_value>
     <edit_format_params>option_template_registrationSetup</edit_format_params>
     <sub_options>enabled
 emailConfirmation
 moderation
 requireDob
 minimumAge
-requireLocation</sub_options>
+requireLocation
+requireEmailChoice</sub_options>
     <relation group_id="usersAndRegistration" display_order="10"/>
   </option>
   <option option_id="registrationTimer" edit_format="spinbox" data_type="unsigned_integer">
@@ -885,12 +911,12 @@ saveFrequency</sub_options>
     <relation group_id="sitemap" display_order="10"/>
   </option>
   <option option_id="sitemapAutoSubmit" edit_format="onofftextbox" data_type="array">
-    <default_value>{"enabled":"1","urls":"http:\/\/www.google.com\/webmasters\/tools\/ping?sitemap={$url}\nhttp:\/\/www.bing.com\/ping?sitemap={$url}"}</default_value>
+    <default_value>{"enabled":"1","urls":"https:\/\/www.google.com\/webmasters\/tools\/ping?sitemap={$url}\nhttps:\/\/www.bing.com\/ping?sitemap={$url}"}</default_value>
     <edit_format_params>onoff=enabled
 value=urls
 type=textarea
 rows=3
-default=http://www.google.com/webmasters/tools/ping?sitemap={$url}\nhttp://www.bing.com/ping?sitemap={$url}</edit_format_params>
+default=https://www.google.com/webmasters/tools/ping?sitemap={$url}\nhttps://www.bing.com/ping?sitemap={$url}</edit_format_params>
     <sub_options>enabled
 urls</sub_options>
     <relation group_id="sitemap" display_order="20"/>
@@ -997,6 +1023,15 @@ matchRegex</sub_options>
     <edit_format_params>min=0
 units={{ phrase('units_days') }}</edit_format_params>
     <relation group_id="acp" display_order="200"/>
+  </option>
+  <option option_id="termsLastUpdate" edit_format="textbox" data_type="unsigned_integer">
+    <default_value>0</default_value>
+    <relation group_id="debug" display_order="2110"/>
+  </option>
+  <option option_id="tosForceWhitelist" edit_format="textbox" data_type="string">
+    <default_value></default_value>
+    <edit_format_params>rows=2</edit_format_params>
+    <relation group_id="basicBoard" display_order="221"/>
   </option>
   <option option_id="tosUrl" edit_format="template" data_type="array">
     <default_value>{"type":"default","custom":false}</default_value>

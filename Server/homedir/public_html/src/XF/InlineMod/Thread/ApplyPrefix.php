@@ -65,6 +65,11 @@ class ApplyPrefix extends AbstractAction
 			->order('materialized_order')
 			->fetch();
 
+		$prefixes = $prefixes->filter(function(\XF\Entity\ThreadPrefix $prefix)
+		{
+			return $prefix->isUsableByUser();
+		});
+
 		if (!$prefixes->count())
 		{
 			return $controller->error(\XF::phrase('no_thread_prefixes_available_for_selected_forums'));

@@ -1,5 +1,6 @@
 <?php
 return array (
+  'warning_conv_title.0' => 'Inappropriate conduct',
   'warning_conv_title.1' => 'Inappropriate content',
   'warning_conv_title.2' => 'Inappropriate behavior',
   'warning_conv_title.3' => 'Inappropriate language',

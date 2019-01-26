@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 8b4a929c4b51d2b4f746cf10473c92dc
+// FROM HASH: cb44856dcd9321d145b5b89df24035df
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -69,7 +69,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'value' => 'SolveMedia',
 		'data-hide' => 'true',
 		'label' => 'Use Solve Media',
-		'hint' => '<a href="http://www.solvemedia.com/" target="_blank">http://www.solvemedia.com/</a>',
+		'hint' => '<a href="https://www.solvemedia.com/" target="_blank">https://www.solvemedia.com/</a>',
 		'_dependent' => array('
 			<div>' . 'Challenge key' . $__vars['xf']['language']['label_separator'] . '</div>
 			' . $__templater->formTextBox(array(

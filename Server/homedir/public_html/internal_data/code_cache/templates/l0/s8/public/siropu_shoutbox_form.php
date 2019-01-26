@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 261762bc68ca2a6df31d9d19d6bbe69d
+// FROM HASH: 532e964efd4467ac0647c86cbb1878a8
 return array('macros' => array('submit' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -12,8 +12,26 @@ return array('macros' => array('submit' => function($__templater, array $__argum
 	if ($__templater->method($__vars['xf']['visitor'], 'canUseSiropuShoutbox', array())) {
 		$__finalCompiled .= '
 		<form action="' . $__templater->fn('link', array('shoutbox/submit', ), true) . '"' . ($__vars['class'] ? ((' class="' . $__templater->escape($__vars['class'])) . '"') : '') . ' data-xf-init="siropu-shoutbox-submit">
-			<input type="text" name="shout" class="input" maxlength="' . $__templater->escape($__vars['xf']['options']['siropuShoutboxShoutMaxLength']) . '" placeholder="' . 'What\'s on your mind?' . '" autocomplete="off" data-xf-init="user-mentioner">
-			' . '
+			<span>
+				' . $__templater->formTextBox(array(
+			'name' => 'shout',
+			'placeholder' => 'What\'s on your mind?',
+			'maxlength' => $__vars['xf']['options']['siropuShoutboxShoutMaxLength'],
+			'autocomplete' => 'off',
+			'data-xf-init' => 'user-mentioner',
+		)) . '
+				';
+		if ($__vars['xf']['options']['siropuShoutboxAllowBBCodes'] AND $__vars['xf']['options']['siropuShoutboxSmilieButton']) {
+			$__finalCompiled .= '
+					';
+			$__templater->includeCss('editor.less');
+			$__finalCompiled .= '
+					<button type="button" class="button button--link" title="' . $__templater->filter('Smilies', array(array('for_attr', array()),), true) . '" data-xf-init="tooltip siropu-shoutbox-smilies" style="height:31px;"><i class="fa fa-smile-o" aria-hidden="true"></i></button>
+				';
+		}
+		$__finalCompiled .= '
+				<button type="submit" class="button button--link" title="' . $__templater->filter('Shout!', array(array('for_attr', array()),), true) . '" data-xf-init="tooltip" style="height:31px;"><i class="fa fa-bullhorn" aria-hidden="true"></i></button>
+			</span>
 		</form>
 	';
 	}

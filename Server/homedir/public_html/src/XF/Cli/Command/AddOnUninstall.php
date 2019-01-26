@@ -60,6 +60,9 @@ class AddOnUninstall extends Command
 			return 1;
 		}
 
+		// make sure any errors get logged here
+		\XF::app()->error()->setIgnorePendingUpgrade(true);
+
 		$addOn->preUninstall();
 
 		$this->runSubAction($output, $addOn, 'uninstall');

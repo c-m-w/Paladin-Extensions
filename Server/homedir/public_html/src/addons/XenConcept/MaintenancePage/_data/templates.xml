@@ -1,0 +1,456 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates>
+  <template type="public" title="xc_maintenance_page.less" version_id="2000300" version_string="2.0.3"><![CDATA[html {
+	
+	background: url(@xf-xc_maintenance_page_url_bg)
+	
+}
+
+.p-pageWrapper {
+	background: none;
+}
+
+.p-header {
+	
+	background: none;
+	
+	.p-header-logo {
+		
+		position: relative;
+		margin-top: 60px;
+		margin-left: auto;
+		margin-right: auto;
+	}
+	
+	.p-header-logo--text {
+		
+		.xf-xc_maintenance_page_settings_logo_text();
+		
+	}
+}
+
+.primarySection {
+	
+	.titleDescription {
+		.xf-xc_maintenace_page_settings_description_title();
+	}
+	
+	.description {
+		
+		.xf-xc_maintenance_page_settings_description();
+		
+	}
+}
+
+
+.secondarySection {
+	
+	.countdown-container {
+		
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		margin-top: 90px;
+		
+		.countdown-wrapper {
+			
+			width: 200px;
+			height: 200px;
+			padding-top: 15px;
+			margin: 0px 15px 0px 15px;
+			text-align: center;
+			cursor: pointer;
+		
+			&.square {
+				
+				border: 2px solid #fff;
+				display: block;
+				border-radius: 4px;
+				overflow: hidden;
+				
+			}
+			
+			&.round {
+				
+				border: 2px solid #fff;
+				border-radius: 100%;
+				overflow: hidden;
+				
+			}
+			
+		}
+		
+		
+		.timer-figure {
+			color: #fff;
+			font-size: 70px;
+			opacity: 0.75;
+		}
+		
+		.wrapper-figure {
+			color: #fff;
+			font-size: 35px;
+			opacity: 0.75;
+		}
+	}
+}
+@media (max-width: @xf-responsiveMedium)
+{
+	.secondarySection .countdown-container {
+		display: block;
+		width: 100%;
+		position: relative;
+		margin: auto;
+	}
+	
+	.secondarySection .countdown-container .countdown-wrapper {
+		
+		position: relative;
+
+		margin-left: auto;
+		margin-right: auto;
+		
+		margin-top: 10px;
+		margin-bottom: 10px;
+		
+	}
+	
+	.secondarySection .countdown-container .wrapper-figure {
+		color: #fff;
+		font-size: 25px;
+	}
+	.secondarySection .countdown-container .countdown-wrapper {
+		padding-top: 25px;
+	}
+}
+
+@media (max-width: @xf-responsiveNarrow)
+{
+	.secondarySection .countdown-container {
+		display: block;
+		position: relative;
+		margin: auto;
+	}
+	.secondarySection .countdown-container .wrapper-figure {
+		color: #fff;
+		font-size: 25px !important;
+	}
+	.secondarySection .countdown-container .countdown-wrapper {
+		padding-top: 25px;
+	}
+}]]></template>
+  <template type="admin" title="xc_maintenance_page__addon_option_tabbed_macros" version_id="2000300" version_string="2.0.3"><![CDATA[<xf:title>{{ phrase('options:') }} {$addOn.title}</xf:title>
+
+<xf:if is="$groups is not empty">
+	
+	<xf:form action="{{ link('options/update') }}" ajax="true" class="block">
+		<div class="block-container">
+			<xf:foreach loop="$groups" key="$groupId" value="$group">
+				<xf:if is="{$groupedOptions.{$groupId}} is not empty">
+					
+					<xf:macro name="base_addon_options" arg-groups="{$groups}" arg-group="{$group}" />
+					
+					<xf:if is="$groupId === 'xc_maintenance_page'">
+
+						<xf:macro name="xc_options" arg-groups="{$groups}" 
+								  arg-addons="{$addons}"
+								  arg-groupedOptions="{$groupedOptions}" />
+						
+					<xf:else />
+					
+						<xf:macro name="base_options" arg-groups="{$groups}" 
+								  rg-groupedOptions="{$groupedOptions}" />
+					
+					</xf:if>
+				</xf:if>
+			</xf:foreach>
+			<xf:submitrow sticky="true" icon="save" />
+		</div>
+	</xf:form>
+<xf:else />
+	<div class="blockMessage">{{ phrase('no_items_have_been_created_yet') }}</div>
+</xf:if>
+
+<xf:macro name="base_options" arg-groups="!" arg-groupedOptions="!">
+    <div class="block-body {{ $groups.count() > 1 ? 'block-body--collapsible' : '' }} is-active">
+
+        <xf:set var="$hundred" value="0" />
+
+        <xf:foreach loop="{$groupedOptions.{$groupId}}" value="{$option}">
+
+            <xf:if is="$group">
+                <xf:set var="$curHundred" value="{{ floor($option.Relations.{$group.group_id}.display_order / 100) }}" />
+                <xf:if is="{{ $curHundred > $hundred }}">
+                    <xf:set var="$hundred" value="{$curHundred}" />
+                    <hr class="formRowSep" />
+                </xf:if>
+            </xf:if>
+
+            <xf:macro template="option_macros" name="option_row" arg-group="{$group}" arg-option="{$option}" arg-includeAddOnHint="{{ false }}" />
+        </xf:foreach>
+    </div>
+</xf:macro>
+
+<xf:macro name="base_addon_options" arg-groups="!" arg-group="!">
+	<h3 class="block-formSectionHeader">
+		<span class="{{ $groups.count() > 1 ? 'collapseTrigger collapseTrigger--block' : '' }} is-active" data-xf-click="{{ $groups.count() > 1 ? 'toggle' : '' }}" data-target="< :up:next">
+				{$group.title}
+		</span>
+		<span class="block-desc">
+				{$group.description}
+		</span>
+	</h3>
+</xf:macro>
+
+<xf:macro name="xc_options" arg-groups="!" arg-groupedOptions="!">
+	 <h2 class="block-tabHeader tabs" data-xf-init="tabs" role="tablist">
+                    <a class="tabs-tab is-active" role="tab" tabindex="0" aria-controls="generalOptions">{{ phrase('general_options') }}</a>
+                    <a class="tabs-tab" role="tab" tabindex="0" aria-controls="countdownOptions">{{ phrase('xc_maintenance_page_countdown_options') }}</a>
+      
+                </h2>
+                <ul class="tabPanes">
+                    <li class="is-active" role="tabpanel" id="generalOptions">
+                        <div class="block-body">
+                            <xf:foreach loop="{$groupedOptions.xc_maintenance_page}" value="$option">
+                            <xf:if is="$option.Relations.xc_maintenance_page.display_order < 200">
+                                <xf:macro template="option_macros" name="option_row" arg-group="{$group}" arg-option="{$option}" />
+                            </xf:if>
+                            </xf:foreach>
+                        </div>
+                    </li>
+                    <li role="tabpanel" id="coundownOptions">
+                        <div class="block-body">
+                            <xf:foreach loop="{$groupedOptions.xc_maintenance_page}" value="$option">
+                            <xf:if is="$option.Relations.xc_maintenance_page.display_order >= 200 AND $option.Relations.xc_maintenance_page.display_order < 300">
+                                <xf:macro template="option_macros" name="option_row" arg-group="{$group}" arg-option="{$option}" />
+                            </xf:if>
+                            </xf:foreach>
+                        </div>
+                    </li>
+                </ul>
+</xf:macro>]]></template>
+  <template type="public" title="xc_maintenance_page_container" version_id="2000000" version_string="2.0.0"><![CDATA[<!DOCTYPE html>
+<html id="XF" lang="{$xf.language.language_code}" dir="{$xf.language.text_direction}"
+	data-app="public"
+	data-template="{$template}"
+	data-container-key="{$containerKey}"
+	data-content-key="{$contentKey}"
+	data-logged-in="{{ $xf.visitor.user_id ? 'true' : 'false' }}"
+	data-cookie-prefix="{$xf.cookie.prefix}"
+	class="has-no-js{{ $template ? ' template-' . $template : '' }}"
+	{{ $xf.runJobs ? ' data-run-jobs=""' : '' }}>
+<head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<xf:set var="$siteName" value="{$xf.options.boardTitle}" />
+	<xf:set var="$h1"><xf:h1 fallback="{$siteName}" /></xf:set>
+	<xf:set var="$description"><xf:description /></xf:set>
+
+	<title><xf:title formatter="%s | %s" fallback="{$xf.options.boardTitle}" page="{$pageNumber}" /></title>
+
+	<xf:foreach loop="$head" value="$headTag">
+		{$headTag}
+	</xf:foreach>
+
+	<xf:if is="!$head.meta_site_name && $siteName is not empty">
+		<xf:macro template="metadata_macros" name="site_name" arg-siteName="{$siteName}" arg-output="{{ true }}" />
+	</xf:if>
+	<xf:if is="!$head.meta_title">
+		<xf:macro template="metadata_macros" name="title" arg-title="{{ page_title() ?: $siteName }}" arg-output="{{ true }}" />
+	</xf:if>
+	<xf:if is="!$head.meta_description && $description is not empty && $pageDescriptionMeta">
+		<xf:macro template="metadata_macros" name="description" arg-description="{$description}" arg-output="{{ true }}" />
+	</xf:if>
+	<xf:if is="!$head.meta_image_url && property('publicMetadataLogoUrl')">
+		<xf:macro template="metadata_macros" name="image_url"
+			arg-imageUrl="{{ base_url(property('publicMetadataLogoUrl'), true) }}"
+			arg-output="{{ true }}" />
+	</xf:if>
+
+	<xf:if is="property('metaThemeColor')">
+		<meta name="theme-color" content="{{ property('metaThemeColor') }}" />
+	</xf:if>
+
+	<xf:macro template="helper_js_global" name="head" arg-app="public" />
+
+	<xf:if is="property('publicFaviconUrl')">
+		<link rel="icon" type="image/png" href="{{ base_url(property('publicFaviconUrl')) }}" sizes="32x32" />
+	</xf:if>
+	<xf:if is="property('publicMetadataLogoUrl')">
+		<link rel="apple-touch-icon" href="{{ base_url(property('publicMetadataLogoUrl'), true) }}" />
+	</xf:if>
+	<xf:include template="google_analytics" />
+</head>
+<body data-template="{$template}">
+
+<div class="p-pageWrapper" id="top">
+
+<header class="p-header" id="header">
+	<div class="p-header-inner">
+		<div class="p-header-content">
+			
+			<xf:include template="xc_maintenance_page_header" />
+		
+		</div>
+	</div>
+</header>
+
+<div class="p-body">
+	<div class="p-body-inner">
+		<!--XF:EXTRA_OUTPUT-->
+
+		<xf:macro template="browser_warning_macros" name="javascript" />
+		<xf:macro template="browser_warning_macros" name="browser" />
+
+		<div class="p-body-main {{ $sidebar ? 'p-body-main--withSidebar' : '' }} {{ $sideNav ? 'p-body-main--withSideNav' : '' }}">
+			<div class="p-body-content">
+				<xf:ad position="container_content_above" />
+				<div class="p-body-pageContent">{$content|raw}</div>
+				<xf:ad position="container_content_below" />
+			</div>
+		</div>
+		
+	</div>
+</div>
+
+</div> <!-- closing p-pageWrapper -->
+
+<xf:macro template="helper_js_global" name="body" arg-app="public" arg-jsState="{$jsState}" />
+
+{$ldJsonHtml|raw}
+
+</body>
+</html>]]></template>
+  <template type="public" title="xc_maintenance_page_header" version_id="2000000" version_string="2.0.0"><![CDATA[<xf:if is="{{ property('xc_maintenance_page_use_logo_text') }}">
+
+    <div class="p-header-logo p-header-logo--text">
+        <a href="{{ ($xf.options.logoLink && $xf.homePageUrl) ? $xf.homePageUrl : link('index') }}">{{ property('xc_maintenance_page_logo_text') ? property('xc_maintenance_page_logo_text') : $xf.options.boardTitle }}</a>
+    </div>
+
+    <xf:else />
+
+    <div class="p-header-logo p-header-logo--image">
+        <a href="{{ ($xf.options.logoLink && $xf.homePageUrl) ? $xf.homePageUrl : link('index') }}">
+            <img src="{{ base_url(property('publicLogoUrl')) }}"
+                 alt="{$xf.options.boardTitle}"
+                 {{ property('publicLogoUrl2x') ? 'srcset="' . base_url(property('publicLogoUrl2x')) . ' 2x"' : '' }} />
+        </a>
+    </div>
+
+</xf:if>]]></template>
+  <template type="admin" title="xc_maintenance_page_option_template_date" version_id="2000000" version_string="2.0.0"><![CDATA[<xf:dateinputrow name="{$inputName}" value="{$option.option_value}"
+     label="{$option.title}"
+     hint="{$hintHtml}"
+     explain="{$explainHtml}"
+     html="{$listedHtml}" />]]></template>
+  <template type="admin" title="xc_maintenance_page_tabbed_options" version_id="2000200" version_string="2.0.2"><![CDATA[<xf:macro name="option_form_block" arg-group="" arg-options="!" arg-containerBeforeHtml="">
+    <xf:if is="$options is not empty">
+        <xf:form action="{{ link('options/update') }}" ajax="true" class="block">
+            {$containerBeforeHtml|raw}
+            <div class="block-container">
+                <h2 class="block-tabHeader tabs" data-xf-init="tabs" role="tablist">
+                    <a class="tabs-tab is-active" role="tab" tabindex="0" aria-controls="generalOptions">{{ phrase('general_options') }}</a>
+                    <a class="tabs-tab" role="tab" tabindex="0" aria-controls="countdownOptions">{{ phrase('xc_maintenance_page_countdown_options') }}</a>
+      
+                </h2>
+                <ul class="tabPanes">
+                    <li class="is-active" role="tabpanel" id="generalOptions">
+                        <div class="block-body">
+                            <xf:foreach loop="$options" value="$option">
+                            <xf:if is="$option.Relations.xc_maintenance_page.display_order < 200">
+                                <xf:macro template="option_macros" name="option_row" arg-group="{$group}" arg-option="{$option}" />
+                            </xf:if>
+                            </xf:foreach>
+                        </div>
+                    </li>
+                    <li role="tabpanel" id="coundownOptions">
+                        <div class="block-body">
+                            <xf:foreach loop="$options" value="$option">
+                            <xf:if is="$option.Relations.xc_maintenance_page.display_order >= 200 AND $option.Relations.xc_maintenance_page.display_order < 300">
+                                <xf:macro template="option_macros" name="option_row" arg-group="{$group}" arg-option="{$option}" />
+                            </xf:if>
+                            </xf:foreach>
+                        </div>
+                    </li>
+                </ul>
+                <xf:submitrow sticky="true" icon="save" />
+            </div>
+        </xf:form>
+    </xf:if>
+</xf:macro>]]></template>
+  <template type="public" title="xc_maintenance_page_view" version_id="2000200" version_string="2.0.2"><![CDATA[<xf:title>{$xf.options.xc_maintenance_page_title_browser}</xf:title>
+
+<xf:css src="xc_maintenance_page.less" />
+<xf:js src="xenconcept/maintenancepage/core.js" />
+<xf:js src="xenconcept/maintenancepage/jquery/jquery.countdown.js" min="1" />
+
+<div class="primarySection">
+	
+	<div class="titleDescription">
+		<h3>
+			
+			{$xf.options.xc_maintenance_page_title_description}
+			
+		</h3>
+	</div>
+	
+	<div class="description">
+		<p>
+			{$xf.options.xc_maintenance_page_description}
+		</p>
+	</div>
+</div>
+
+<xf:if is="$xf.options.xc_maintenance_page_enable_timer">
+
+<div class="secondarySection">
+	
+    <div class="countdown-container" data-xf-init="countdown" data-countdown="{$xf.options.xc_maintenance_page_date_end}">
+		
+		<div class="countdown-wrapper wrapper--months {{ property('xc_maitenance_block_shape') }}">
+			
+			<span class="timer-figure timer-figure--months"></span>
+			<br />
+			<span class="wrapper-figure wrapper-figure--months">{{ phrase('months') }}</span>
+			
+		</div>
+		
+		<div class="countdown-wrapper wrapper--days {{ property('xc_maitenance_block_shape') }}">
+			
+			<span class="timer-figure timer-figure--days">00</span>
+			<br />
+			<span class="wrapper-figure wrapper-figure--days">{{ phrase('days') }}</span>
+			
+		</div>
+		
+		<div class="countdown-wrapper wrapper--hours {{ property('xc_maitenance_block_shape') }}">
+			
+			<span class="timer-figure timer-figure--hours">00</span>
+			<br />
+			<span class="wrapper-figure wrapper-figure--hours">{{ phrase('hours') }}</span>
+			
+		</div>
+		
+		<div class="countdown-wrapper wrapper--minutes {{ property('xc_maitenance_block_shape') }}">
+			
+			<span class="timer-figure timer-figure--minutes">00</span>
+			<br />
+			<span class="wrapper-figure wrapper-figure--minutes">{{ phrase('minutes') }}</span>
+			
+		</div>
+		
+		<div class="countdown-wrapper wrapper--seconds {{ property('xc_maitenance_block_shape') }}">
+			
+			<span class="timer-figure timer-figure--seconds">00</span>
+			<br />
+			<span class="wrapper-figure wrapper-figure--seconds">{{ phrase('seconds') }}</span>
+			
+		</div>
+	</div>
+	
+</div>
+
+</xf:if>]]></template>
+</templates>

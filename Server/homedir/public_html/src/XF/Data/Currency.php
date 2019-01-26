@@ -65,7 +65,7 @@ class Currency
 			'BOB' => ['code' => 'BOB', 'symbol' => 'BOB',	'precision' => 2, 'phrase' => 'currency.bob'],
 			'BRL' => ['code' => 'BRL', 'symbol' => 'R$',	'precision' => 2, 'phrase' => 'currency.brl'],
 			'BWP' => ['code' => 'BWP', 'symbol' => 'BWP',	'precision' => 2, 'phrase' => 'currency.bwp'],
-			'BYR' => ['code' => 'BYR', 'symbol' => 'BYR',	'precision' => 0, 'phrase' => 'currency.byr'],
+			'BYN' => ['code' => 'BYR', 'symbol' => 'BYR',	'precision' => 0, 'phrase' => 'currency.byn'],
 			'BZD' => ['code' => 'BZD', 'symbol' => 'BZD',	'precision' => 2, 'phrase' => 'currency.bzd'],
 			'CAD' => ['code' => 'CAD', 'symbol' => 'CA$',	'precision' => 2, 'phrase' => 'currency.cad'],
 			'CDF' => ['code' => 'CDF', 'symbol' => 'CDF',	'precision' => 2, 'phrase' => 'currency.cdf'],

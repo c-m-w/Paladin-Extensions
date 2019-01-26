@@ -36,7 +36,10 @@ class Move extends AbstractMoveCopy
 			$mover->setPrefix($options['prefix_id']);
 		}
 
-		$mover->move($entities);
+		if (!$mover->move($entities))
+		{
+			throw new \XF\PrintableException(\XF::phrase('it_is_not_possible_to_move_any_of_selected_posts_to_specified_target'));
+		}
 
 		$this->returnUrl = $this->app()->router('public')->buildLink('threads', $mover->getTarget());
 	}

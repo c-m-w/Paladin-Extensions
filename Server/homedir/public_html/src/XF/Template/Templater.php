@@ -116,6 +116,7 @@ class Templater
 		'first' => 'filterFirst',
 		'hex' => 'filterHex',
 		'host' => 'filterHost',
+		'htmlspecialchars' => 'filterHtmlspecialchars',
 		'ip' => 'filterIp',
 		'join' => 'filterJoin',
 		'json' => 'filterJson',
@@ -2135,7 +2136,7 @@ class Templater
 
 		$escape = false;
 		return '<span class="js-displayTotals" data-count="' . $count . '" data-total="' . $total . '"'
-			. ' data-xf-init="tooltip" title="' . \XF::phrase('there_are_x_items_in_total', ['total' => $params['total']]) . '">'
+			. ' data-xf-init="tooltip" title="' . $this->filterForAttr($this, \XF::phrase('there_are_x_items_in_total', ['total' => $params['total']]), $null) . '">'
 			. \XF::phrase($phrase, $params) . '</span>';
 	}
 
@@ -2631,7 +2632,7 @@ class Templater
 			$wrapper = 'div';
 		}
 
-		$router = $this->router;
+		$router = $this->getRouter();
 
 		$prev = false;
 		if ($current > 1)
@@ -2884,7 +2885,7 @@ class Templater
 
 		$html = '<a href="javascript:"'
 			. ' class="showIgnoredLink is-hidden js-showIgnored' . $class . '" data-xf-init="tooltip"'
-			. ' title="' . \XF::phrase('show_hidden_content_by_x', ['names' => '{{names}}']) . '"'
+			. ' title="' . $this->filterForAttr($this, \XF::phrase('show_hidden_content_by_x', ['names' => '{{names}}']), $null) . '"'
 			. ' ' . $unhandledAttrs . '>' .
 			\XF::phrase('show_ignored_content')
 			. '</a>';
@@ -3482,8 +3483,7 @@ class Templater
 	{
 		// this is a sanity check to make sure even pre-escaped values are escaped and can't break out of
 		// an HTML attribute
-		$escape = false;
-		return htmlspecialchars(strval($value), ENT_QUOTES, 'UTF-8', false);
+		return $this->filterHtmlspecialchars($templater, $value, $escape);
 	}
 
 	public function filterFileSize($templater, $value, &$escape)
@@ -3515,6 +3515,12 @@ class Templater
 	public function filterHost($templater, $value, &$escape)
 	{
 		return \XF\Util\Ip::getHost($value);
+	}
+
+	public function filterHtmlspecialchars($templater, $value, &$escape)
+	{
+		$escape = false;
+		return htmlspecialchars(strval($value), ENT_QUOTES, 'UTF-8', false);
 	}
 
 	public function filterIp($templater, $value, &$escape)
@@ -3916,7 +3922,7 @@ class Templater
 	{
 		if (isset($attributes[$name]))
 		{
-			$value = strval($attributes[$name]);
+			$value = trim(strval($attributes[$name]));
 			if ($value !== '')
 			{
 				if ($escapeValue)
@@ -4180,8 +4186,13 @@ class Templater
 				$valueAttr = ' value="1"';
 			}
 			$selectedAttr = $selected ? ' checked="checked"' : '';
-			$readOnlyAttr = $readOnly ? ' readonly="readonly" onclick="return false"' : '';
 
+			if ($this->processAttributeToRaw($choice, 'readonly'))
+			{
+				$readOnly = true;
+			}
+
+			$readOnlyAttr = $readOnly ? ' readonly="readonly" onclick="return false"' : '';
 			if ($readOnly)
 			{
 				$labelClass .= ' is-readonly';
@@ -4330,8 +4341,13 @@ class Templater
 				$valueAttr = ' value=""';
 			}
 			$selectedAttr = $selected ? ' checked="checked"' : '';
-			$readOnlyAttr = $readOnly ? ' readonly="readonly" onclick="return false"' : '';
 
+			if ($this->processAttributeToRaw($choice, 'readonly'))
+			{
+				$readOnly = true;
+			}
+
+			$readOnlyAttr = $readOnly ? ' readonly="readonly" onclick="return false"' : '';
 			if ($readOnly)
 			{
 				$labelClass .= ' is-readonly';
@@ -5021,9 +5037,12 @@ class Templater
 		$xfInitAttr = $xfInit ? " data-xf-init=\"$xfInit\"" : '';
 		$readOnlyAttr = $this->processAttributeToRaw($controlOptions, 'readonly') ? ' readonly="readonly"' : '';
 
+		$buttonSmaller = $this->processAttributeToRaw($controlOptions, 'data-button-smaller', '', true);
+		$buttonSmallerAttr = $buttonSmaller ? " data-button-smaller=\"$buttonSmaller\"" : '';
+
 		$unhandledAttrs = $this->processUnhandledAttributes($controlOptions);
 
-		$input = "<div class=\"inputGroup inputGroup--numbers inputNumber\" data-xf-init=\"number-box\">"
+		$input = "<div class=\"inputGroup inputGroup--numbers inputNumber\" data-xf-init=\"number-box\"{$buttonSmallerAttr}>"
 			. "<input type=\"{$type}\" pattern=\"{$pattern}\" class=\"input input--number js-numberBoxTextInput{$class}\" value=\"{$value}\" {$minAttr}{$maxAttr}{$stepAttr}{$requiredAttr}{$readOnlyAttr}{$xfInitAttr}{$unhandledAttrs} />"
 			. "</div>";
 
@@ -5585,11 +5604,12 @@ class Templater
 			{
 				$class .= ' dataList-cell--iconic';
 
-				$tooltip = $this->processAttributeToRaw($cell, 'tooltip', '', true);
+				$tooltip = $this->processAttributeToRaw($cell, 'tooltip', '');
 				if (!$tooltip)
 				{
 					$tooltip = \XF::phrase('delete');
 				}
+				$tooltip = $this->filterForAttr($this, $tooltip, $null);
 				$html = "<a href=\"{$href}\" class=\"dataList-delete\" data-xf-init=\"tooltip\" title=\"{$tooltip}\" data-xf-click=\"overlay\"{$target}></a>";
 			}
 			else

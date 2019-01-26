@@ -5,7 +5,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	$__finalCompiled = '';
 	if ($__templater->method($__vars['xf']['visitor'], 'canViewSupportTickets', array()) AND $__vars['xf']['options']['mjstDisplayOption']['footer']) {
 		$__finalCompiled .= '
-	<li><a href="' . $__templater->fn('link', array('support-tickets', ), true) . '">' . 'Support tickets' . '</a></li>
+	<li><a href="' . $__templater->fn('link', array('support-tickets', ), true) . '">' . '<font size="3"><i class="fa fa-life-ring"></i></font>' . '</a></li>
 ';
 	}
 	return $__finalCompiled;

@@ -16,7 +16,8 @@ class Report extends Repository
 	 */
 	public function findReports($state = ['open', 'assigned'], $timeFrame = null)
 	{
-		$finder = $this->finder('XF:Report');
+		$finder = $this->finder('XF:Report')
+			->with('User');
 
 		$finder->inTimeFrame($timeFrame)
 			->order('last_modified_date', 'desc');
@@ -71,19 +72,17 @@ class Report extends Repository
 
 	public function getModeratorsWhoCanHandleReport(\XF\Entity\Report $report)
 	{
-		$handler = $report->getHandler();
-
 		/** @var \XF\Repository\Moderator $moderatorRepo */
 		$moderatorRepo = $this->repository('XF:Moderator');
 
-		$moderators = $moderatorRepo->findModeratorsForList()->fetch();
+		$moderators = $moderatorRepo->findModeratorsForList()->with('User.PermissionCombination')->fetch();
 
 		if ($moderators->count())
 		{
 			foreach ($moderators AS $id => $moderator)
 			{
 				$canView = \XF::asVisitor($moderator->User,
-					function() use ($handler, $report) { return $handler->canView($report); }
+					function() use ($report) { return $report->canView(); }
 				);
 				if (!$canView)
 				{
@@ -96,19 +95,12 @@ class Report extends Repository
 	}
 
 	/**
-	 * @param \XF\Mvc\Entity\ArrayCollection $reports
+	 * @param \XF\Mvc\Entity\ArrayCollection|\XF\Entity\Report[] $reports
+	 * @return \XF\Mvc\Entity\ArrayCollection|\XF\Entity\Report[]
 	 */
 	public function filterViewableReports($reports)
 	{
-		return $reports->filter(function(\XF\Entity\Report $report)
-		{
-			$handler = $this->getReportHandler($report->content_type);
-			if (!$handler)
-			{
-				return false;
-			}
-			return $handler->canView($report);
-		});
+		return $reports->filterViewable();
 	}
 
 	/**

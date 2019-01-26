@@ -8,11 +8,18 @@ class DisplayEntry implements \ArrayAccess
 	public $old;
 	public $new;
 
+	public $protected = false;
+
 	public function __construct($label, $old, $new)
 	{
 		$this->label = $label;
 		$this->old = $old;
 		$this->new = $new;
+	}
+
+	public function setIsProtected($protected)
+	{
+		$this->protected = $protected;
 	}
 
 	public function offsetGet($offset)
@@ -22,6 +29,7 @@ class DisplayEntry implements \ArrayAccess
 			case 'label': return $this->label;
 			case 'old': return $this->old;
 			case 'new': return $this->new;
+			case 'protected': return $this->protected;
 
 			default:
 				trigger_error("Unknown offset '$offset'", E_USER_NOTICE);
@@ -35,6 +43,7 @@ class DisplayEntry implements \ArrayAccess
 			case 'label':
 			case 'old':
 			case 'new':
+			case 'protected':
 				return true;
 
 			default:

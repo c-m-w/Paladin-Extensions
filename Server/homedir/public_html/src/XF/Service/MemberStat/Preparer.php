@@ -64,6 +64,8 @@ class Preparer extends \XF\Service\AbstractService
 		$memberStat->cache_expiry = \XF::$time + ($memberStat->cache_lifetime * 60);
 		$memberStat->cache_results = $results;
 
+		$memberStat->getBehavior('XF:DevOutputWritable')->setOption('write_dev_output', false);
+
 		$memberStat->save();
 
 		return $results;

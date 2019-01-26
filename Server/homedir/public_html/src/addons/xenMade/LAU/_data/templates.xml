@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates>
+  <template type="admin" title="lau_login_delete" version_id="20000" version_string="1.0.0."><![CDATA[<xf:title>{{ phrase('confirm_action') }}</xf:title>
+
+<xf:form action="{{ link('laulogs/delete', $laulog) }}" class="block" ajax="true">
+    <div class="block-container">
+        <div class="block-body">
+            <xf:inforow rowtype="confirm">
+                {{ phrase('please_confirm_that_you_want_to_delete_following:') }}
+                <strong>
+                    {$laulog.from_username} - {$laulog.to_username}: <br />
+                    {{ $laulog.reason ? $laulog.reason : phrase('n_a') }}
+                </strong>
+            </xf:inforow>
+        </div>
+        <xf:submitrow rowtype="simple" icon="delete" />
+    </div>
+</xf:form>]]></template>
+  <template type="admin" title="lau_login_list" version_id="20011" version_string="1.2.1"><![CDATA[<xf:title>{{ phrase('lau_logins') }}</xf:title>
+
+<xf:if is="$laulogs is not empty">
+    <xf:form action="{{ link('laulogs/mass-delete') }}" ajax="true" class="block">
+        <div class="block-container">
+            <div class="block-body">
+
+                <xf:datalist data-xf-init="responsive-data-list">
+
+                    <colgroup>
+                        <col>
+                        <col style="width: 5%">
+                        <col style="width: 5%">
+                        <col style="width: 9%">
+                        <col style="width: 5%">
+                        <col style="width: 15%">
+                        <col>
+                    </colgroup>
+
+                    <xf:datarow rowtype="header">
+                        <xf:cell>
+                            <xf:checkbox standalone="true">
+                                <xf:option check-all="< .block-container" data-xf-init="tooltip" title="{{ phrase('select_all')|for_attr }}" />
+                            </xf:checkbox>
+                        </xf:cell>
+                        <xf:cell>{{ phrase('lau_login_from') }}</xf:cell>
+                        <xf:cell>{{ phrase('lau_login_to') }}</xf:cell>
+                        <xf:cell>{{ phrase('date_time') }}</xf:cell>
+                        <xf:cell>{{ phrase('ip') }}</xf:cell>
+                        <xf:cell>{{ phrase('reason') }}</xf:cell>
+                        <xf:cell>{{ phrase('action') }}</xf:cell>
+                    </xf:datarow>
+
+                    <xf:foreach loop="$laulogs" value="$laulog">
+                        <xf:datarow>
+                            <xf:toggle name="delete[]" value="{$laulog.log_id}" />
+                            <xf:cell><xf:username user="$laulog.FromUser" href="{{ link('users/edit', $laulog.FromUser) }}" /></xf:cell>
+                            <xf:cell><xf:username user="$laulog.ToUser" href="{{ link('users/edit', $laulog.ToUser) }}" /></xf:cell>
+                            <xf:cell><xf:date time="{$laulog.dateline}" /></xf:cell>
+                            <xf:cell class="u-ltr">{{ $laulog.ip_address ? $laulog.ip_address|ip : '' }}</xf:cell>
+                            <xf:cell>{{ $laulog.reason ? $laulog.reason : phrase('n_a') }}</xf:cell>
+                            <xf:delete href="{{ link('laulogs/delete', $laulog) }}" />
+                        </xf:datarow>
+                    </xf:foreach>
+
+                </xf:datalist>
+
+            </div>
+            <div class="block-footer block-footer--split">
+                <span class="block-footer-counter">{{ display_totals($laulogs, $total) }}</span>
+
+                <span class="block-footer-select">
+                    <xf:checkbox standalone="true">
+                        <xf:option check-all="< .block-container" label="{{ phrase('select_all') }}" />
+                    </xf:checkbox>
+                </span>
+
+                <span class="block-footer-controls">
+                    <xf:button type="submit" icon="delete" />
+                </span>
+            </div>
+        </div>
+
+        <xf:pagenav page="{$page}" perpage="{$perPage}" total="{$total}" link="laulogs" wrapperclass="block-outer block-outer--after" />
+    </xf:form>
+    <xf:else />
+    <div class="blockMessage">{{ phrase('no_records_matched') }}</div>
+</xf:if>]]></template>
+  <template type="public" title="lau_login" version_id="20001" version_string="1.1.0."><![CDATA[<xf:title>{{ phrase('lau_login_as_user') }}</xf:title>
+
+<xf:form action="{{ link('login/lauin') }}" class="block" ajax="true">
+    <div class="block-container">
+        <div class="block-body">
+            <xf:textboxrow name="username"
+                           autofocus="{{ !$username ? 'autofocus' : false }}"
+                           maxlength="50"
+                           ac="single"
+                           autocomplete="off"
+                           value="{$username}"
+                           label="{{ phrase('user_name') }}"
+                           required="required"
+                           readonly="{{ {$username} }}" />
+
+            <xf:textboxrow name="reason"
+                           maxlength="255"
+                           autocomplete="off"
+                           required="{{ $xf.options.lau_ReasonRequired ? 'required' : false }}"
+                           label="{{ phrase('reason') }}"
+                           autofocus="{{ $username ? 'autofocus' : false }}"
+                           hint="{{ ($xf.options.lau_ReasonRequired ? phrase('required') : phrase('optional')) }}" />
+        </div>
+        <xf:submitrow submit="{{ phrase('log_in') }}" icon="login" />
+    </div>
+</xf:form>]]></template>
+  <template type="public" title="lau_staff_bar" version_id="20001" version_string="1.1.0."><![CDATA[<xf:if is="{$xf.session.lau_id}">
+
+    <a href="{{ link('logout/lauout') }}" class="p-staffBar-link">
+        {{ phrase('lau_logout_from:') }} {$xf.visitor.username}
+    </a>
+
+    <xf:elseif is="{$xf.visitor.canUseLau()} && $xf.options.lau_DisplayLoginStaffBar"/>
+    <a href="{{ link('login/lauin') }}" class="p-staffBar-link" data-xf-click="overlay">
+        {{ phrase('lau_login_as_user') }}
+    </a>
+
+</xf:if>
+]]></template>
+</templates>

@@ -33,7 +33,7 @@ class InlineMod extends AbstractController
 		$ids = $handler->getCookieIds($this->request);
 		$entities = $handler->getEntities($ids);
 
-		$actions = $handler->getPossibleActions();
+		$actions = $handler->getActions();
 		$available = [];
 		if ($entities->count())
 		{

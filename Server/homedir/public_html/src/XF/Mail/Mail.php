@@ -115,11 +115,11 @@ class Mail
 		return $this;
 	}
 
-	public function setReplyTo($email)
+	public function setReplyTo($email, $name = null)
 	{
 		try
 		{
-			$this->message->setReplyTo($email);
+			$this->message->setReplyTo($email, $name);
 		}
 		catch (\Swift_SwiftException $e)
 		{
@@ -303,6 +303,18 @@ class Mail
 		return $this->language;
 	}
 
+	public function getFromAddress()
+	{
+		$from = $this->message->getFrom();
+
+		if (!$from)
+		{
+			return null;
+		}
+
+		return is_array($from) ? key($from) : $from;
+	}
+
 	public function getMessageObject()
 	{
 		return $this->message;
@@ -342,7 +354,7 @@ class Mail
 			$this->logSetupError($this->setupError);
 			return false;
 		}
-		
+
 		$message = $this->getSendableMessage();
 		if (!$message->getTo())
 		{
@@ -365,10 +377,10 @@ class Mail
 		{
 			throw $e;
 		}
-		
+
 		$this->setupError = $e;
 	}
-	
+
 	protected function logSetupError(\Exception $e)
 	{
 		$to = $this->message->getTo();

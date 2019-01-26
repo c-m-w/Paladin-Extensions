@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 30b8402a7adb771516d196f446e6ee26
+// FROM HASH: 5affeb90b99633789a3f5f4d4d8c918f
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -139,7 +139,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 {
 	padding: @xf-paddingLarge;
 	margin: 0;
-	font-size: @xf-fontSizeLarger;
+	font-size: @xf-fontSizeLarge;
 	font-weight: @xf-fontWeightNormal;
 
 	.m-clearFix();
@@ -306,6 +306,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	.offCanvasMenu-content
 	{
 		// .xf-publicNav();
+		font-size: @xf-fontSizeSmall;
 
 		a
 		{
@@ -317,6 +318,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	{
 		background: @xf-publicHeaderAdjustColor;
 		border-bottom: @xf-borderSize solid fadein(@xf-publicHeaderAdjustColor, 10%);
+		.xf-uix_canvasHeader();
 	}
 
 	.offCanvasMenu-list

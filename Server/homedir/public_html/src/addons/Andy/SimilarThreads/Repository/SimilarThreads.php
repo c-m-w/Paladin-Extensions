@@ -120,7 +120,7 @@ class SimilarThreads extends Repository
 		// get count
 		$count = count($searchWords);
 
-		// return in no searchWords
+		// return if no searchWords
 		if ($count == 0)
 		{
 			return;
@@ -201,10 +201,11 @@ class SimilarThreads extends Repository
 				->where('title', 'LIKE', $finder->escapeLike($searchWord2, '%?%'))
 				->where('title', 'LIKE', $finder->escapeLike($searchWord3, '%?%'))
 				->where('discussion_state', '=', 'visible')
-				->where('discussion_state', '<>', 'redirect')
+				->where('discussion_type', '<>', 'redirect')
 				->where('post_date', '>=', $gte)
 				->where('thread_id', '<>', $currentThreadId)
 				->whereOr($conditionsOr)
+				->order('post_date', 'DESC')
 				->limit($maximumResults1)
 				->fetch();
 
@@ -248,7 +249,7 @@ class SimilarThreads extends Repository
 					->where('title', 'LIKE', $finder->escapeLike($searchWord1, '%?%'))
 					->where('title', 'LIKE', $finder->escapeLike($searchWord2, '%?%'))
 					->where('discussion_state', '=', 'visible')
-					->where('discussion_state', '<>', 'redirect')
+					->where('discussion_type', '<>', 'redirect')
 					->where('post_date', '>=', $gte)
 					->where('thread_id', '<>', $currentThreadId)
 					->where($conditions)
@@ -297,11 +298,12 @@ class SimilarThreads extends Repository
 				$threads3 = $finder
 					->where('title', 'LIKE', $finder->escapeLike($searchWord1, '%?%'))
 					->where('discussion_state', '=', 'visible')
-					->where('discussion_state', '<>', 'redirect')
+					->where('discussion_type', '<>', 'redirect')
 					->where('post_date', '>=', $gte)
 					->where('thread_id', '<>', $currentThreadId)
 					->where($conditions)
 					->whereOr($conditionsOr)
+					->order('post_date', 'DESC')
 					->limit($maximumResults3)
 					->fetch();
 
@@ -317,7 +319,7 @@ class SimilarThreads extends Repository
 				$results = array_merge($results1, $results2, $results3);
 			}
 		}
-		
+
 		//########################################
 		// search 4
 		//########################################
@@ -345,11 +347,12 @@ class SimilarThreads extends Repository
 				$threads4 = $finder
 					->where('title', 'LIKE', $finder->escapeLike($searchWord2, '%?%'))
 					->where('discussion_state', '=', 'visible')
-					->where('discussion_state', '<>', 'redirect')
+					->where('discussion_type', '<>', 'redirect')
 					->where('post_date', '>=', $gte)
 					->where('thread_id', '<>', $currentThreadId)
 					->where($conditions)
 					->whereOr($conditionsOr)
+					->order('post_date', 'DESC')
 					->limit($maximumResults4)
 					->fetch();
 
@@ -393,11 +396,12 @@ class SimilarThreads extends Repository
 				$threads5 = $finder
 					->where('title', 'LIKE', $finder->escapeLike($searchWord2, '%?%'))
 					->where('discussion_state', '=', 'visible')
-					->where('discussion_state', '<>', 'redirect')
+					->where('discussion_type', '<>', 'redirect')
 					->where('post_date', '>=', $gte)
 					->where('thread_id', '<>', $currentThreadId)
 					->where($conditions)
 					->whereOr($conditionsOr)
+					->order('post_date', 'DESC')
 					->limit($maximumResults5)
 					->fetch();
 
@@ -484,7 +488,17 @@ class SimilarThreads extends Repository
 		$stopCharacters = $options->similarThreadsStopCharacters;
 		
 		// get options from Admin CP -> Options -> Similar threads -> Stop words
-		$stopWords = $options->similarThreadsStopWords;			
+		$stopWords = $options->similarThreadsStopWords;
+		
+		// get options from Admin CP -> Options -> Debug options -> xfesEnabled
+		$xfesEnabled = @$options->xfesEnabled;
+		
+		// return error log
+		if (!$xfesEnabled)
+		{
+			\XF::app()->error()->logError("Please deselect Enhanced search in Similar threads options page.");
+			return;
+		}
 
 		//########################################
 		// define variables
@@ -608,6 +622,7 @@ class SimilarThreads extends Repository
 		// get eleasticsearch information
 		//########################################
 		
+		// get configArray
 		$configArray = $options->xfesConfig;
 
 		// get host	
@@ -615,7 +630,7 @@ class SimilarThreads extends Repository
 
 		// get port
 		$port = $configArray['port'];
-		
+
 		// get index
 		$index = $configArray['index'];
 
@@ -693,11 +708,18 @@ class SimilarThreads extends Repository
 											)										
 										)
 									],
-									"must_not" => array(
-										"term" => array(
-											"discussion_id" => $currentThreadId
+									"must_not" => [
+										array(
+											"term" => array(
+												"discussion_id" => $currentThreadId
+											)
+										),
+										array(
+											"term" => array(
+												"hidden" => 'true'
+											)
 										)
-									)                                      
+									]
 								)
 							)
 						)
@@ -748,6 +770,11 @@ class SimilarThreads extends Repository
 										array(
 											"terms" => array(
 												"node" => $excludeNodeIds
+											)
+										),
+										array(
+											"term" => array(
+												"hidden" => 'true'
 											)
 										)
 									]
@@ -866,6 +893,11 @@ class SimilarThreads extends Repository
 											"terms" => array(
 												"discussion_id" => $excludeThreadIds
 											)
+										),
+										array(
+											"term" => array(
+												"hidden" => 'true'
+											)
 										)
 									]                                       
 								)
@@ -918,6 +950,11 @@ class SimilarThreads extends Repository
 										array(
 											"terms" => array(
 												"node" => $excludeNodeIds
+											)
+										),
+										array(
+											"term" => array(
+												"hidden" => 'true'
 											)
 										)
 									]                                      
@@ -1035,6 +1072,11 @@ class SimilarThreads extends Repository
 											"terms" => array(
 												"discussion_id" => $excludeThreadIds
 											)
+										),
+										array(
+											"term" => array(
+												"hidden" => 'true'
+											)
 										)
 									]
 								)
@@ -1087,8 +1129,13 @@ class SimilarThreads extends Repository
 											"terms" => array(
 												"node" => $excludeNodeIds
 											)
+										),
+										array(
+											"term" => array(
+												"hidden" => 'true'
+											)
 										)
-									]                                      
+									] 
 								)
 							)
 						)
@@ -1203,6 +1250,11 @@ class SimilarThreads extends Repository
 											"terms" => array(
 												"discussion_id" => $excludeThreadIds
 											)
+										),
+										array(
+											"term" => array(
+												"hidden" => 'true'
+											)
 										)
 									]                                       
 								)
@@ -1254,6 +1306,11 @@ class SimilarThreads extends Repository
 										array(
 											"terms" => array(
 												"node" => $excludeNodeIds
+											)
+										),
+										array(
+											"term" => array(
+												"hidden" => 'true'
 											)
 										)
 									]                                        
@@ -1371,6 +1428,11 @@ class SimilarThreads extends Repository
 											"terms" => array(
 												"discussion_id" => $excludeThreadIds
 											)
+										),
+										array(
+											"term" => array(
+												"hidden" => 'true'
+											)
 										)
 									]                                      
 								)
@@ -1422,6 +1484,11 @@ class SimilarThreads extends Repository
 										array(
 											"terms" => array(
 												"node" => $excludeNodeIds
+											)
+										),
+										array(
+											"term" => array(
+												"hidden" => 'true'
 											)
 										)
 									]                                       

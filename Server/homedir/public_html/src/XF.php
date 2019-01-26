@@ -12,8 +12,8 @@ class XF
 	 * @var string
 	 * @var integer
 	 */
-	public static $version = '2.0.4';
-	public static $versionId = 2000470; // abbccde = a.b.c d (alpha: 1, beta: 3, RC: 5, stable: 7, PL: 9) e
+	public static $version = '2.0.12';
+	public static $versionId = 2001270; // abbccde = a.b.c d (alpha: 1, beta: 3, RC: 5, stable: 7, PL: 9) e
 
 	protected static $requestCleaned = false;
 
@@ -71,6 +71,10 @@ class XF
 		register_shutdown_function(['XF', 'handleFatalError']);
 
 		date_default_timezone_set('UTC');
+		setlocale(LC_ALL, 'C');
+
+		// if you really need to load a phar file, you can call stream_wrapper_restore('phar');
+		@stream_wrapper_unregister('phar');
 
 		@ini_set('output_buffering', false);
 
@@ -181,7 +185,8 @@ class XF
 		try
 		{
 			self::app()->logException(
-				new ErrorException("Fatal Error: " . $error['message'], $error['type'], 1, $error['file'], $error['line'])
+				new ErrorException("Fatal Error: " . $error['message'], $error['type'], 1, $error['file'], $error['line']),
+				true
 			);
 		}
 		catch (Exception $e) {}
@@ -732,7 +737,7 @@ class XF
 
 	public static function getCopyrightHtml()
 	{
-		return '<a href="https://xenforo.com" class="u-concealed" dir="ltr" target="_blank">Forum software by XenForo&trade; <span class="copyright">&copy; 2010-2018 XenForo Ltd.</span></a>';
+		return '';
 	}
 
 	public static function isPreEscaped($value, $type = 'html')
@@ -800,6 +805,7 @@ class XF
 					"\r" => '\r',
 					"\n" => '\n',
 					'/' => '\\/',
+					'<!' => '\u003C!'
 				]);
 				return $value;
 

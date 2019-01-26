@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 507b29bab95552e830caa59250d51e73
+// FROM HASH: e0bcb202d94ad29fddd90d66c08e84d7
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -9,6 +9,6 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 ';
 	}
 	$__finalCompiled .= '
-<div>' . ($__templater->escape($__vars['providerData']['username']) ?: 'Unknown account') . '</div>';
+<div>' . ($__templater->escape($__vars['providerData']['username']) ?: 'Account associated') . '</div>';
 	return $__finalCompiled;
 });

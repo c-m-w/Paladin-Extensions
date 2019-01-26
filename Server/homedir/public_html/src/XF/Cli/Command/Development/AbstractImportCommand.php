@@ -110,7 +110,7 @@ abstract class AbstractImportCommand extends Command
 
 		$printName = ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE);
 
-		if (!$printName)
+		if (!$printName && $files)
 		{
 			$progress = new ProgressBar($output, count($files));
 			$progress->start();
@@ -126,7 +126,7 @@ abstract class AbstractImportCommand extends Command
 			{
 				$output->writeln("\t$fileName");
 			}
-			else
+			else if ($progress)
 			{
 				$progress->advance();
 			}
@@ -139,7 +139,7 @@ abstract class AbstractImportCommand extends Command
 			unset($map[$title]);
 		}
 
-		if (!$printName)
+		if ($progress)
 		{
 			$progress->finish();
 			$output->writeln("");

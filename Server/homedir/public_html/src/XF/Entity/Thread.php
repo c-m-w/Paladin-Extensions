@@ -780,9 +780,12 @@ class Thread extends Entity
 		$alertRepo = $this->repository('XF:UserAlert');
 		$alertRepo->fastDeleteAlertsForContent('post', $this->post_ids);
 
-		/** @var \XF\Repository\ThreadRedirect $redirectRepo */
-		$redirectRepo = $this->repository('XF:ThreadRedirect');
-		$redirectRepo->deleteRedirectsToThread($this);
+		if ($this->discussion_type != 'redirect')
+		{
+			/** @var \XF\Repository\ThreadRedirect $redirectRepo */
+			$redirectRepo = $this->repository('XF:ThreadRedirect');
+			$redirectRepo->deleteRedirectsToThread($this);
+		}
 	}
 
 	protected function submitHamData()
@@ -843,7 +846,7 @@ class Thread extends Entity
 			{
 				$this->db()->query("
 					UPDATE xf_user
-					SET message_count = GREATEST(0, message_count {$operator} ?)
+					SET message_count = GREATEST(0, CAST(message_count AS SIGNED) {$operator} ?)
 					WHERE user_id = ?
 				", [$adjust, $userId]);
 			}

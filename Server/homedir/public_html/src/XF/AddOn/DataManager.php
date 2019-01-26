@@ -35,16 +35,9 @@ class DataManager
 		{
 			$containerName = $handler->getContainerTag();
 			$container = $document->createElement($containerName);
-			$entriesAdded = $handler->exportAddOnData($addOnId, $container);
-			if ($entriesAdded)
-			{
-				$root->appendChild($container);
-				$containers[] = $containerName;
-			}
-			else
-			{
-				$emptyContainers[] = $containerName;
-			}
+			$handler->exportAddOnData($addOnId, $container);
+			$root->appendChild($container);
+			$containers[] = $containerName;
 		}
 
 		return $document;

@@ -87,16 +87,9 @@ class AdminNavigation extends Entity
 					$phrase->save();
 				}
 			}
-
-			if ($this->isChanged('navigation_id'))
-			{
-				$this->db()->update('xf_admin_navigation',
-					['parent_navigation_id' => $this->navigation_id],
-					'parent_navigation_id = ?', $this->getExistingValue('navigation_id')
-				);
-			}
 		}
 
+		$this->rebuildChildEntries();
 		$this->rebuildNavigationCache();
 	}
 
@@ -124,6 +117,23 @@ class AdminNavigation extends Entity
 		$this->rebuildNavigationCache();
 	}
 
+	protected function rebuildChildEntries()
+	{
+		$existingChildren = $this->getExistingRelation('Children');
+		if ($this->isUpdate() && $this->isChanged('navigation_id') && $existingChildren)
+		{
+			$writeDevOutput = $this->getBehavior('XF:DevOutputWritable')->getOption('write_dev_output');
+
+			/** @var AdminNavigation $child */
+			foreach ($existingChildren AS $child)
+			{
+				$child->getBehavior('XF:DevOutputWritable')->setOption('write_dev_output', $writeDevOutput);
+				$child->parent_navigation_id = $this->navigation_id;
+				$child->save();
+			}
+		}
+	}
+
 	protected function rebuildNavigationCache()
 	{
 		$repo = $this->getNavigationRepo();
@@ -147,12 +157,12 @@ class AdminNavigation extends Entity
 		$structure->shortName = 'XF:AdminNavigation';
 		$structure->primaryKey = 'navigation_id';
 		$structure->columns = [
-			'navigation_id' => ['type' => self::STR, 'maxLength' => 25,
+			'navigation_id' => ['type' => self::STR, 'maxLength' => 50,
 				'required' => 'please_enter_valid_admin_navigation_id',
 				'unique' => 'admin_navigation_ids_must_be_unique',
 				'match' => 'alphanumeric'
 			],
-			'parent_navigation_id' => ['type' => self::STR, 'maxLength' => 25, 'default' => ''],
+			'parent_navigation_id' => ['type' => self::STR, 'maxLength' => 50, 'default' => ''],
 			'display_order' => ['type' => self::UINT, 'default' => 1],
 			'link' => ['type' => self::STR, 'maxLength' => 50, 'default' => ''],
 			'icon' => ['type' => self::STR, 'maxLength' => 50, 'default' => ''],

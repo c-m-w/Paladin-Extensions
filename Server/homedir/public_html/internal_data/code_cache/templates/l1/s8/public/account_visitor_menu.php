@@ -1,13 +1,13 @@
 <?php
-// FROM HASH: 2749df560d8b1c02cbb65971b8c70411
+// FROM HASH: 580dff70c2f08aff27153fee05ed1442
 return array('macros' => array('visitor_panel_row' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
 	$__finalCompiled = '';
 	$__vars = $__templater->mergeMacroArguments(array(), $__arguments, $__vars);
 	$__finalCompiled .= '
-	<div class="contentRow">
-		<div class="contentRow-figure">
+	<div class="contentRow contentRow--alignMiddle">
+		<div class="contentRow-figure" style="margin-bottom:5px">
 			' . $__templater->fn('avatar', array($__vars['xf']['visitor'], 's', false, array(
 		'href' => '',
 		'notooltip' => 'true',
@@ -22,23 +22,37 @@ return array('macros' => array('visitor_panel_row' => function($__templater, arr
 				' . $__templater->fn('user_title', array($__vars['xf']['visitor'], false, array(
 	))) . '
 			</div>
+		</div>
+	</div>
+	<div class="contentRow-minor">
+		' . '
+		<dl class="pairs pairs--justified fauxBlockLink">
+			';
+	if ($__templater->fn('property', array('uix_visitorPanelIcons', ), false)) {
+		$__finalCompiled .= '
+				' . $__templater->callMacro('uix_icons.less', 'icon', array(
+			'icon' => 'messages',
+		), $__vars) . '
+				';
+	} else {
+		$__finalCompiled .= '
+				<dt>' . 'Messages' . '</dt>
+			';
+	}
+	$__finalCompiled .= '
+			<dd>
+				<a href="' . $__templater->fn('link', array('search/member', null, array('user_id' => $__vars['xf']['visitor']['user_id'], ), ), true) . '" class="fauxBlockLink-linkRow u-concealed">
+					' . $__templater->filter($__vars['xf']['visitor']['message_count'], array(array('number', array()),), true) . '
+				</a>
+			</dd>
+		</dl>
 
-			<div class="contentRow-minor">
-				' . '
-				<dl class="pairs pairs--justified fauxBlockLink">
-					<dt>' . 'Messages' . '</dt>
-					<dd>
-						<a href="' . $__templater->fn('link', array('search/member', null, array('user_id' => $__vars['xf']['visitor']['user_id'], ), ), true) . '" class="fauxBlockLink-linkRow u-concealed">
-							' . $__templater->filter($__vars['xf']['visitor']['message_count'], array(array('number', array()),), true) . '
-						</a>
-					</dd>
-				</dl>
-				<!--\\[XF:stats_pairs:above_likes]-->
+		<!--\\[XF:stats_pairs:above_likes]-->
 ' . $__templater->callMacro('th_display_reactions', 'react_total_text', array(
 		'reacts' => $__vars['xf']['visitor']['react_count'],
 		'reactsCount' => $__templater->method($__vars['xf']['visitor'], 'getReactTotalCount', array()),
 	), $__vars) . '
-				' . '
+		' . '
 ';
 	if ($__vars['xf']['options']['siropuReferralContestsDisplayReferralCount']) {
 		$__finalCompiled .= '
@@ -51,22 +65,32 @@ return array('macros' => array('visitor_panel_row' => function($__templater, arr
 ';
 	}
 	$__finalCompiled .= '
-				';
+		';
 	if ($__vars['xf']['options']['enableTrophies']) {
 		$__finalCompiled .= '
-					<dl class="pairs pairs--justified fauxBlockLink">
-						<dt>' . 'Trophy points' . '</dt>
-						<dd>
-							<a href="' . $__templater->fn('link', array('members/trophies', $__vars['xf']['visitor'], ), true) . '" data-xf-click="overlay" class="fauxBlockLink-linkRow u-concealed">
-								' . $__templater->filter($__vars['xf']['visitor']['trophy_points'], array(array('number', array()),), true) . '
-							</a>
-						</dd>
-					</dl>
+			<dl class="pairs pairs--justified fauxBlockLink">
 				';
+		if ($__templater->fn('property', array('uix_visitorPanelIcons', ), false)) {
+			$__finalCompiled .= '
+					' . $__templater->callMacro('uix_icons.less', 'icon', array(
+				'icon' => 'trophy',
+			), $__vars) . '
+					';
+		} else {
+			$__finalCompiled .= '
+					<dt>' . 'Trophy points' . '</dt>
+				';
+		}
+		$__finalCompiled .= '
+				<dd>
+					<a href="' . $__templater->fn('link', array('members/trophies', $__vars['xf']['visitor'], ), true) . '" data-xf-click="overlay" class="fauxBlockLink-linkRow u-concealed">
+						' . $__templater->filter($__vars['xf']['visitor']['trophy_points'], array(array('number', array()),), true) . '
+					</a>
+				</dd>
+			</dl>
+		';
 	}
 	$__finalCompiled .= '
-			</div>
-		</div>
 	</div>
 ';
 	return $__finalCompiled;
@@ -149,13 +173,6 @@ return array('macros' => array('visitor_panel_row' => function($__templater, arr
 	if ($__templater->method($__vars['xf']['visitor'], 'hasPermission', array('countdown', 'admin', ))) {
 		$__finalCompiled .= '
 <li><a href="' . $__templater->fn('link', array('countdown/admin/', ), true) . '" class="menu-linkRow" >' . 'Countdown admin' . '</a></li>
-';
-	}
-	$__finalCompiled .= '
-';
-	if ($__templater->method($__vars['xf']['visitor'], 'hasPermission', array('conversationView', 'view', ))) {
-		$__finalCompiled .= '
-<li><a href="' . $__templater->fn('link', array('conversationview', ), true) . '" class="menu-linkRow" >' . 'Conversation view' . '</a></li>
 ';
 	}
 	$__finalCompiled .= '

@@ -5,7 +5,6 @@ return array (
   'admin_permission.attachment' => 'Manage attached files',
   'admin_permission.ban' => 'Manage bans',
   'admin_permission.bbCodeSmilie' => 'Manage BB codes and smilies',
-  'admin_permission.blacktea_steamauth' => 'Steam Auth',
   'admin_permission.cron' => 'Manage cron entries',
   'admin_permission.help' => 'Manage help',
   'admin_permission.import' => 'Import data',
@@ -17,7 +16,6 @@ return array (
   'admin_permission.option' => 'Manage options',
   'admin_permission.payment' => 'Manage payment providers',
   'admin_permission.rebuildCache' => 'Rebuild caches',
-  'admin_permission.resourceManager' => 'Manage resources',
   'admin_permission.siropuReferralContests' => 'Manage Referral Contests',
   'admin_permission.style' => 'Manage styles, style properties, and templates',
   'admin_permission.tags' => 'Manage tags',
@@ -32,4 +30,5 @@ return array (
   'admin_permission.viewStatistics' => 'View statistics',
   'admin_permission.warning' => 'Manage warnings',
   'admin_permission.widget' => 'Manage widgets',
+  'admin_permission.xr_pm_products' => 'XR Product Manager: Manage products',
 );

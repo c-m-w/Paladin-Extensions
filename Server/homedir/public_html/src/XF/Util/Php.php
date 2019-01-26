@@ -505,4 +505,60 @@ class Php
 			default: return "$code";
 		}
 	}
+
+	public static function getEnvironmentReport()
+	{
+		$env = [
+			'curl_version' => function_exists('curl_version')
+				? curl_version()['version'] : false,
+			'ssl_version' => function_exists('curl_version')
+				? curl_version()['ssl_version'] : false,
+			'suhosin' => extension_loaded('suhosin') || @constant('SUHOSIN_PATCH'),
+			'gzip' => function_exists('gzopen'),
+			'mbstring' => function_exists('mb_get_info'),
+			'exif' => function_exists('exif_read_data'),
+			'imagick' => class_exists('Imagick')
+		];
+
+		if (isset($_SERVER['SERVER_SOFTWARE']) && preg_match('/^(.+\/[\d\.]+)/', $_SERVER['SERVER_SOFTWARE'], $match))
+		{
+			$env['server_software'] = $match[1];
+		}
+		else
+		{
+			$env['server_software'] = false;
+		}
+
+		$env['phpVersion'] = phpversion();
+
+		$db = \XF::db();
+		$env['mysqlVersion'] = $db->getServerVersion();
+
+		try
+		{
+			$mysqlVersionVar = $db->fetchOne('
+				SELECT @@version
+			');
+			if ($env['mysqlVersion'] != $mysqlVersionVar)
+			{
+				$env['mysqlVersion'] = "$env[mysqlVersion] ($mysqlVersionVar)";
+			}
+		}
+		catch (\XF\Db\Exception $e) {}
+
+		$iniVars = [
+			'post_max_size',
+			'upload_max_filesize',
+			'max_input_vars',
+			'max_execution_time'
+		];
+
+		$env['ini'] = [];
+		foreach ($iniVars AS $iniVar)
+		{
+			$env['ini'][$iniVar] = ini_get($iniVar);
+		}
+
+		return $env;
+	}
 }

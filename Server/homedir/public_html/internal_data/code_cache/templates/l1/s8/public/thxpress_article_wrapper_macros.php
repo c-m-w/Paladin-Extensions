@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 6a1e08f3d357a994f5fe2ddb2c681343
+// FROM HASH: 0d09fb59ac6156a17043fc7115be64c8
 return array('macros' => array('header' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -25,18 +25,24 @@ return array('macros' => array('header' => function($__templater, array $__argum
 			'icon' => 'article',
 		), '', array(
 		)) . '
-			' . $__templater->button('
-				' . 'Reply' . '
-			', array(
+		';
+	}
+	$__compilerTemp2 = '';
+	if ($__templater->method($__vars['thread'], 'canReply', array())) {
+		$__compilerTemp2 .= '
+            ' . $__templater->button('
+                ' . 'Reply' . '
+            ', array(
 			'href' => $__templater->fn('link', array('threads/reply', $__vars['thread'], ), false),
 			'class' => 'button--cta uix_quickReply--button',
 			'icon' => 'write',
 		), '', array(
 		)) . '
-		';
+        ';
 	}
 	$__templater->pageParams['pageAction'] = $__templater->preEscaped('
 		' . $__compilerTemp1 . '
+        ' . $__compilerTemp2 . '
 	');
 	$__finalCompiled .= '
 ';

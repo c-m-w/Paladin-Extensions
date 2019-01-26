@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: efb15b7ceace44539f44efa23a40c875
+// FROM HASH: 1568b8033dbd0c6a132db697a29f9b4b
 return array('macros' => array('uix_mainTabComponent' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -511,11 +511,69 @@ return array('macros' => array('uix_mainTabComponent' => function($__templater, 
 ';
 	return $__finalCompiled;
 },
+'uix_footer' => function($__templater, array $__arguments, array $__vars)
+{
+	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
+	$__finalCompiled = '';
+	$__vars = $__templater->mergeMacroArguments(array(
+		'insideContent' => '!',
+		'location' => '!',
+		'content' => '!',
+	), $__arguments, $__vars);
+	$__finalCompiled .= '
+	';
+	if (($__vars['insideContent'] AND ($__vars['location'] == 'insideContent')) OR (($__vars['location'] == 'bottom') AND (!$__vars['insideContent']))) {
+		$__finalCompiled .= '
+		' . $__templater->escape($__vars['content']) . '
+	';
+	}
+	$__finalCompiled .= '
+';
+	return $__finalCompiled;
+},
+'uix_logoBlock' => function($__templater, array $__arguments, array $__vars)
+{
+	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
+	$__finalCompiled = '';
+	$__vars = $__templater->mergeMacroArguments(array(
+		'content' => '',
+	), $__arguments, $__vars);
+	$__finalCompiled .= '
+				';
+	$__compilerTemp1 = '';
+	$__compilerTemp1 .= '
+								' . $__templater->callAdsMacro('container_header', array(), $__vars) . '
+							';
+	if (strlen(trim($__compilerTemp1)) > 0) {
+		$__finalCompiled .= '
+					<header class="p-header p-header--hasExtraContent" id="header">
+						<div class="p-header-inner">
+							' . $__templater->escape($__vars['content']) . '
+							' . $__compilerTemp1 . '
+
+						</div>
+					</header>
+				';
+	} else {
+		$__finalCompiled .= '
+					<header class="p-header" id="header">
+						<div class="p-header-inner">
+							' . $__templater->escape($__vars['content']) . '
+						</div>
+					</header>
+				';
+	}
+	$__finalCompiled .= '
+			';
+	return $__finalCompiled;
+},
 'canvasNavPanel' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
 	$__finalCompiled = '';
-	$__vars = $__templater->mergeMacroArguments(array(), $__arguments, $__vars);
+	$__vars = $__templater->mergeMacroArguments(array(
+		'widgets' => '',
+	), $__arguments, $__vars);
 	$__finalCompiled .= '
 					<div class="offCanvasMenu-header">
 						' . 'Menu' . '
@@ -537,6 +595,28 @@ return array('macros' => array('uix_mainTabComponent' => function($__templater, 
 	}
 	$__finalCompiled .= '
 					<div class="js-offCanvasNavTarget"></div>
+					';
+	if ($__vars['xf']['visitor']['user_id']) {
+		$__finalCompiled .= '
+						<div class="offCanvasMenu-linkHolder u-ripple ' . (($__vars['uix_myAccountLinks'] == 'profile') ? 'is-selected' : '') . '"><div class="p-navEl__inner"><a data-nav-id="profile" href="' . $__templater->fn('link', array('members', $__vars['xf']['visitor'], ), true) . '" class="offCanvasMenu-link">' . 'Profile' . '</a></div></div>
+						<div class="offCanvasMenu-linkHolder u-ripple ' . (($__vars['uix_myAccountLinks'] == 'alerts') ? 'is-selected' : '') . '"><div class="p-navEl__inner"><a data-nav-id="alerts" href="' . $__templater->fn('link', array('account/alerts', ), true) . '" class="offCanvasMenu-link">' . 'Alerts' . '</a></div></div>
+						<div class="offCanvasMenu-linkHolder u-ripple ' . (($__vars['uix_myAccountLinks'] == 'settings') ? 'is-selected' : '') . '"><div class="p-navEl__inner"><a data-nav-id="settings" href="' . $__templater->fn('link', array('account/preferences', ), true) . '" class="offCanvasMenu-link">' . 'Settings' . '</a></div></div>
+					';
+	}
+	$__finalCompiled .= '
+					';
+	$__compilerTemp1 = '';
+	$__compilerTemp1 .= '
+								' . $__templater->filter($__vars['widgets'], array(array('raw', array()),), true) . '
+							';
+	if (strlen(trim($__compilerTemp1)) > 0) {
+		$__finalCompiled .= '
+						<div class="uix_sidebarNav__inner__widgets">
+							' . $__compilerTemp1 . '
+						</div>
+					';
+	}
+	$__finalCompiled .= '
 				';
 	return $__finalCompiled;
 },
@@ -579,7 +659,7 @@ return array('macros' => array('uix_mainTabComponent' => function($__templater, 
 					   class="p-navEl-splitTrigger"
 					   role="button"
 					   tabindex="0"
-					   aria-label="' . 'Toggle expanded' . '"
+					   aria-label="' . $__templater->filter('Toggle expanded', array(array('for_attr', array()),), true) . '"
 					   aria-expanded="false"
 					   aria-haspopup="true">
 					</a>
@@ -902,7 +982,7 @@ return array('macros' => array('uix_mainTabComponent' => function($__templater, 
 		';
 		if ($__templater->fn('property', array('uix_collapsibleSidebar', ), false) AND $__vars['uix_canCollapseSidebar']) {
 			$__compilerTemp3 .= '
-			<a class="uix_sidebarTrigger__component uix_sidebarTrigger button" data-xf-init="tooltip" title="' . 'Sidebar' . '">
+			<a class="uix_sidebarTrigger__component uix_sidebarTrigger ' . (($__templater->fn('property', array('uix_sidebarTriggerPosition', ), false) == 'sectionLinks') ? 'p-navgroup-link' : 'button') . '" data-xf-init="tooltip" title="' . 'Sidebar' . '">
 				<i class="mdi mdi-dots-vertical"></i>
 				<span class="uix_sidebarTrigger--phrase">' . 'Sidebar' . '</span>
 			</a>
@@ -912,7 +992,7 @@ return array('macros' => array('uix_mainTabComponent' => function($__templater, 
 		';
 		if ($__templater->fn('property', array('uix_sidebarMobileCanvas', ), false)) {
 			$__compilerTemp3 .= '
-			<a class="uix_sidebarCanvasTrigger uix_sidebarTrigger__component button" data-xf-init="tooltip" title="' . 'Sidebar' . '">
+			<a class="uix_sidebarCanvasTrigger uix_sidebarTrigger__component ' . (($__templater->fn('property', array('uix_sidebarTriggerPosition', ), false) == 'sectionLinks') ? 'p-navgroup-link' : 'button') . '" data-xf-init="tooltip" title="' . 'Sidebar' . '">
 				<i class="mdi mdi-dots-vertical"></i>
 				<span class="uix_sidebarTrigger--phrase">' . 'Sidebar' . '</span>
 			</a>
@@ -1204,7 +1284,22 @@ return array('macros' => array('uix_mainTabComponent' => function($__templater, 
 
 ' . '
 
-' . '
+';
+	if (!$__templater->fn('property', array('uix_removeWhatsNewButtons', ), false)) {
+		$__finalCompiled .= '
+';
+		$__vars['uix_whatsNew__component'] = $__templater->preEscaped('
+	<a href="' . $__templater->fn('link', array('whats-new', ), true) . '"
+	   class="p-navgroup-link p-navgroup-link--iconic p-navgroup-link--whatsnew"
+	   title="' . $__templater->filter('What\'s new', array(array('for_attr', array()),), true) . '">
+		<i aria-hidden="true"></i>
+		<span class="p-navgroup-linkText">' . 'What\'s new' . '</span>
+	</a>
+');
+		$__finalCompiled .= '
+';
+	}
+	$__finalCompiled .= '
 
 ' . '
 
@@ -1347,9 +1442,15 @@ return array('macros' => array('uix_mainTabComponent' => function($__templater, 
 					<span class="menu-footer-main">
 						<a href="' . $__templater->fn('link', array('conversations', ), true) . '">' . 'Show all' . $__vars['xf']['language']['ellipsis'] . '</a>
 					</span>
-					<span class="menu-footer-opposite">
-						<a href="' . $__templater->fn('link', array('conversations/add', ), true) . '">' . 'Start a new conversation' . '</a>
-					</span>
+					';
+			if ($__templater->method($__vars['xf']['visitor'], 'canStartConversation', array())) {
+				$__compilerTemp9 .= '
+						<span class="menu-footer-opposite">
+							<a href="' . $__templater->fn('link', array('conversations/add', ), true) . '">' . 'Start a new conversation' . '</a>
+						</span>
+					';
+			}
+			$__compilerTemp9 .= '
 				</div>
 			</div>
 		</div>
@@ -1418,7 +1519,7 @@ return array('macros' => array('uix_mainTabComponent' => function($__templater, 
 
 ';
 	$__compilerTemp10 = '';
-	if ((!$__vars['uix_hidePageTitle']) OR ($__vars['pageAction'] AND ((!$__templater->fn('property', array('uix_pageActionBreadcrumb', ), false)) AND ((!$__templater->fn('property', array('uix_removePageAction', ), false)) OR ((!$__templater->fn('in_array', array($__vars['template'], array('forum_list', 'forum_new_posts', ), ), false))))))) {
+	if ((!$__vars['uix_hidePageTitle']) OR ($__vars['pageAction'] AND ((!$__templater->fn('property', array('uix_pageActionBreadcrumb', ), false)) AND ((!$__templater->fn('property', array('uix_removePageAction', ), false)) OR ((!$__templater->fn('in_array', array($__vars['template'], array('forum_list', 'forum_new_posts', 'thtopics_forum_newest_posts', 'thtrending_trending_view', 'thtopics_forum_latest_threads', 'thtopics_topic_list', ), ), false))))))) {
 		$__compilerTemp10 .= '
 		';
 		$__compilerTemp11 = '';
@@ -1605,27 +1706,13 @@ return array('macros' => array('uix_mainTabComponent' => function($__templater, 
 	$__compilerTemp21 = '';
 	$__compilerTemp21 .= '
 									';
-	if ($__vars['xf']['visitor']['is_moderator'] AND $__vars['xf']['session']['unapprovedCounts']['total']) {
+	if ($__vars['xf']['visitor']['is_admin']) {
 		$__compilerTemp21 .= '
-										<a href="' . $__templater->fn('link', array('approval-queue', ), true) . '" class="p-staffBar-link badgeContainer badgeContainer--highlighted" data-badge="' . $__templater->filter($__vars['xf']['session']['unapprovedCounts']['total'], array(array('number', array()),), true) . '">
-											' . 'Approval queue' . '
-										</a>
+										<a href="' . $__templater->fn('base_url', array('admin.php', ), true) . '" class="p-staffBar-link" target="_blank">' . '<font size="3"><i class="fa fa-cog"></i></font>' . '</a>
 									';
 	}
 	$__compilerTemp21 .= '
-
-									' . $__templater->includeTemplate('mjst_moderator_bar', $__vars);
-	if ($__vars['xf']['visitor']['is_moderator'] AND ((!$__vars['xf']['options']['reportIntoForumId']) AND $__vars['xf']['session']['reportCounts']['total'])) {
-		$__compilerTemp21 .= '
-										<a href="' . $__templater->fn('link', array('reports', ), true) . '"
-											class="p-staffBar-link badgeContainer badgeContainer--visible ' . ((($__vars['xf']['session']['reportCounts']['total'] AND ($__vars['xf']['session']['reportCounts']['lastBuilt'] > $__vars['xf']['session']['reportLastRead'])) OR $__vars['xf']['session']['reportCounts']['assigned']) ? ' badgeContainer--highlighted' : '') . '"
-											data-badge="' . ($__vars['xf']['session']['reportCounts']['assigned'] ? (($__templater->filter($__vars['xf']['session']['reportCounts']['assigned'], array(array('number', array()),), true) . ' / ') . $__templater->filter($__vars['xf']['session']['reportCounts']['total'], array(array('number', array()),), true)) : $__templater->filter($__vars['xf']['session']['reportCounts']['total'], array(array('number', array()),), true)) . '"
-											title="' . ($__vars['xf']['session']['reportCounts']['lastBuilt'] ? (('Last report update' . $__vars['xf']['language']['label_separator'] . ' ') . $__templater->fn('date_time', array($__vars['xf']['session']['reportCounts']['lastBuilt'], ), true)) : '') . '">
-											' . 'Reports' . '
-										</a>
-									';
-	}
-	$__compilerTemp21 .= '
+' . $__templater->includeTemplate('lau_staff_bar', $__vars) . '
 
 									';
 	$__compilerTemp22 = '';
@@ -1649,7 +1736,7 @@ return array('macros' => array('uix_mainTabComponent' => function($__templater, 
 												';
 	if (strlen(trim($__compilerTemp22)) > 0) {
 		$__compilerTemp21 .= '
-										<a class="p-staffBar-link menuTrigger" data-xf-key="alt+m" data-xf-click="menu" role="button" tabindex="0" aria-expanded="false" aria-haspopup="true">' . 'Moderator' . '</a>
+										<a class="p-staffBar-link menuTrigger" data-xf-key="alt+m" data-xf-click="menu" role="button" tabindex="0" aria-expanded="false" aria-haspopup="true">' . '<font size="3"><i class="fa fa-gavel"></i></font>' . '</a>
 										<div class="menu" data-menu="menu" aria-hidden="true">
 											<div class="menu-content">
 												<h4 class="menu-header">' . 'Staff tools' . '</h4>
@@ -1661,21 +1748,13 @@ return array('macros' => array('uix_mainTabComponent' => function($__templater, 
 	$__compilerTemp21 .= '
 
 									';
-	if ($__vars['xf']['visitor']['is_admin']) {
-		$__compilerTemp21 .= '
-										<a href="' . $__templater->fn('base_url', array('admin.php', ), true) . '" class="p-staffBar-link" target="_blank">' . 'Admin' . '</a>
-									';
-	}
-	$__compilerTemp21 .= '
-
-									';
 	$__compilerTemp23 = '';
 	$__compilerTemp23 .= '
 													' . '
 													';
 	if ($__vars['xf']['visitor']['is_admin']) {
 		$__compilerTemp23 .= '
-														<a href="' . $__templater->fn('base_url', array('admin.php', ), true) . '" class="menu-linkRow">' . 'Admin' . '</a>
+														<a href="' . $__templater->fn('base_url', array('admin.php', ), true) . '" target="_blank" class="menu-linkRow">' . '<font size="3"><i class="fa fa-cog"></i></font>' . '</a>
 													';
 	}
 	$__compilerTemp23 .= '
@@ -1723,11 +1802,11 @@ return array('macros' => array('uix_mainTabComponent' => function($__templater, 
 											';
 		if ($__vars['xf']['visitor']['is_admin']) {
 			$__compilerTemp21 .= '
-												' . 'Admin' . '
+												' . '<font size="3"><i class="fa fa-cog"></i></font>' . '
 											';
 		} else {
 			$__compilerTemp21 .= '
-												' . 'Moderator' . '
+												' . '<font size="3"><i class="fa fa-gavel"></i></font>' . '
 											';
 		}
 		$__compilerTemp21 .= '
@@ -1738,6 +1817,28 @@ return array('macros' => array('uix_mainTabComponent' => function($__templater, 
 												' . $__compilerTemp23 . '
 											</div>
 										</div>
+									';
+	}
+	$__compilerTemp21 .= '
+									';
+	if ($__vars['xf']['visitor']['is_moderator'] AND $__vars['xf']['session']['unapprovedCounts']['total']) {
+		$__compilerTemp21 .= '
+										<a href="' . $__templater->fn('link', array('approval-queue', ), true) . '" class="p-staffBar-link badgeContainer badgeContainer--highlighted" data-badge="' . $__templater->filter($__vars['xf']['session']['unapprovedCounts']['total'], array(array('number', array()),), true) . '">
+											' . 'Approval queue' . '
+										</a>
+									';
+	}
+	$__compilerTemp21 .= '
+
+									' . $__templater->includeTemplate('mjst_moderator_bar', $__vars);
+	if ($__vars['xf']['visitor']['is_moderator'] AND ((!$__vars['xf']['options']['reportIntoForumId']) AND $__vars['xf']['session']['reportCounts']['total'])) {
+		$__compilerTemp21 .= '
+										<a href="' . $__templater->fn('link', array('reports', ), true) . '"
+											class="p-staffBar-link badgeContainer badgeContainer--visible ' . ((($__vars['xf']['session']['reportCounts']['total'] AND ($__vars['xf']['session']['reportCounts']['lastBuilt'] > $__vars['xf']['session']['reportLastRead'])) OR $__vars['xf']['session']['reportCounts']['assigned']) ? ' badgeContainer--highlighted' : '') . '"
+											data-badge="' . ($__vars['xf']['session']['reportCounts']['assigned'] ? (($__templater->filter($__vars['xf']['session']['reportCounts']['assigned'], array(array('number', array()),), true) . ' / ') . $__templater->filter($__vars['xf']['session']['reportCounts']['total'], array(array('number', array()),), true)) : $__templater->filter($__vars['xf']['session']['reportCounts']['total'], array(array('number', array()),), true)) . '"
+											title="' . ($__vars['xf']['session']['reportCounts']['lastBuilt'] ? (('Last report update' . $__vars['xf']['language']['label_separator'] . ' ') . $__templater->fn('date_time', array($__vars['xf']['session']['reportCounts']['lastBuilt'], ), true)) : '') . '">
+											' . 'Reports' . '
+										</a>
 									';
 	}
 	$__compilerTemp21 .= '
@@ -1838,6 +1939,9 @@ return array('macros' => array('uix_mainTabComponent' => function($__templater, 
 			$__compilerTemp26 .= '
 						';
 			$__vars['uix_subNavContentStatic'] = '1';
+			$__compilerTemp26 .= '
+						';
+			$__vars['uix_htmlClasses'] = $__templater->preEscaped($__templater->escape($__vars['uix_htmlClasses']) . ' uix_hasSectionLinks');
 			$__compilerTemp26 .= '
 						<div class="p-sectionLinks-inner hScroller" data-xf-init="h-scroller">
 							<div class="hScroller-scroll">
@@ -1964,92 +2068,24 @@ return array('macros' => array('uix_mainTabComponent' => function($__templater, 
 				';
 	}
 	$__compilerTemp32 = '';
-	if ($__templater->fn('is_addon_active', array('ThemeHouse/Bookmarks', ), false)) {
-		$__compilerTemp32 .= '
-					';
-		$__compilerTemp33 = '';
-		$__compilerTemp33 .= '
-						';
-		if (!$__templater->test($__templater->method($__vars['xf']['visitor'], 'getLatestThreadBookmarks', array()), 'empty', array())) {
-			$__compilerTemp33 .= '
-							<li class="uix_sidebarNavList__title">Bookmarked threads</li>
-						';
-		}
-		$__compilerTemp33 .= '
-						';
-		$__compilerTemp34 = $__templater->method($__vars['xf']['visitor'], 'getLatestThreadBookmarks', array());
-		if ($__templater->isTraversable($__compilerTemp34)) {
-			foreach ($__compilerTemp34 AS $__vars['thread']) {
-				$__compilerTemp33 .= '
-							<li><div class="p-navEl u-ripple">
-								<div class="p-navEl__inner"><a data-nav-id="forums" href="' . $__templater->escape($__vars['thread']['link']) . '" class="p-navEl-link"><span>' . $__templater->escape($__vars['thread']['title']) . '</span></a></div>
-							</div></li>
-						';
-			}
-		}
-		$__compilerTemp33 .= '
-						';
-		if (strlen(trim($__compilerTemp33)) > 0) {
-			$__compilerTemp32 .= '
-					<ul class="uix_sidebarNavList">
-						' . $__compilerTemp33 . '
-					</ul>
-					';
-		}
-		$__compilerTemp32 .= '
-					';
-		$__compilerTemp35 = '';
-		$__compilerTemp35 .= '
-						';
-		if (!$__templater->test($__templater->method($__vars['xf']['visitor'], 'getLatestNodeBookmarks', array()), 'empty', array())) {
-			$__compilerTemp35 .= '
-							<li class="uix_sidebarNavList__title">Bookmarked nodes</li>
-						';
-		}
-		$__compilerTemp35 .= '
-						';
-		$__compilerTemp36 = $__templater->method($__vars['xf']['visitor'], 'getLatestNodeBookmarks', array());
-		if ($__templater->isTraversable($__compilerTemp36)) {
-			foreach ($__compilerTemp36 AS $__vars['node']) {
-				$__compilerTemp35 .= '
-							<li><div class="p-navEl u-ripple">
-								<div class="p-navEl__inner">
-									<a data-nav-id="forums" href="' . $__templater->escape($__vars['node']['link']) . '" class="p-navEl-link">' . $__templater->filter($__templater->method($__vars['node'], 'renderIcon', array()), array(array('raw', array()),), true) . '<span>' . $__templater->escape($__vars['node']['title']) . '</span></a></div>
-							</div></li>
-						';
-			}
-		}
-		$__compilerTemp35 .= '
-						';
-		if (strlen(trim($__compilerTemp35)) > 0) {
-			$__compilerTemp32 .= '
-					<ul class="uix_sidebarNavList uix_bookmarkedNodesList">
-						' . $__compilerTemp35 . '
-					</ul>
-					';
-		}
-		$__compilerTemp32 .= '
-				';
-	}
-	$__compilerTemp37 = '';
 	if ($__vars['xf']['visitor']['user_id']) {
-		$__compilerTemp37 .= '
+		$__compilerTemp32 .= '
 					<ul class="uix_sidebarNavList">
-						<li><div class="p-navEl u-ripple"><div class="p-navEl__inner"><a data-nav-id="profile" href="' . $__templater->fn('link', array('members', $__vars['xf']['visitor'], ), true) . '" class="p-navEl-link">' . 'Profile' . '</a></div></div></li>
-						<li><div class="p-navEl u-ripple"><div class="p-navEl__inner"><a data-nav-id="alerts" href="' . $__templater->fn('link', array('account/alerts', ), true) . '" class="p-navEl-link">' . 'Alerts' . '</a></div></div></li>
-						<li><div class="p-navEl u-ripple"><div class="p-navEl__inner"><a data-nav-id="settings" href="' . $__templater->fn('link', array('account/preferences', ), true) . '" class="p-navEl-link">' . 'Settings' . '</a></div></div></li>
+						<li><div class="p-navEl u-ripple ' . (($__vars['uix_myAccountLinks'] == 'profile') ? 'is-selected' : '') . '"><div class="p-navEl__inner"><a data-nav-id="profile" href="' . $__templater->fn('link', array('members', $__vars['xf']['visitor'], ), true) . '" class="p-navEl-link">' . 'Profile' . '</a></div></div></li>
+						<li><div class="p-navEl u-ripple ' . (($__vars['uix_myAccountLinks'] == 'alerts') ? 'is-selected' : '') . '"><div class="p-navEl__inner"><a data-nav-id="alerts" href="' . $__templater->fn('link', array('account/alerts', ), true) . '" class="p-navEl-link">' . 'Alerts' . '</a></div></div></li>
+						<li><div class="p-navEl u-ripple ' . (($__vars['uix_myAccountLinks'] == 'settings') ? 'is-selected' : '') . '"><div class="p-navEl__inner"><a data-nav-id="settings" href="' . $__templater->fn('link', array('account/preferences', ), true) . '" class="p-navEl-link">' . 'Settings' . '</a></div></div></li>
 					</ul>
 				';
 	}
-	$__compilerTemp38 = '';
-	$__compilerTemp39 = '';
-	$__compilerTemp39 .= '
+	$__compilerTemp33 = '';
+	$__compilerTemp34 = '';
+	$__compilerTemp34 .= '
 							' . $__templater->filter($__vars['uix_sidebarNavWidgets'], array(array('raw', array()),), true) . '
 						';
-	if (strlen(trim($__compilerTemp39)) > 0) {
-		$__compilerTemp38 .= '
+	if (strlen(trim($__compilerTemp34)) > 0) {
+		$__compilerTemp33 .= '
 					<div class="uix_sidebarNav__inner__widgets">
-						' . $__compilerTemp39 . '
+						' . $__compilerTemp34 . '
 					</div>
 				';
 	}
@@ -2058,9 +2094,9 @@ return array('macros' => array('uix_mainTabComponent' => function($__templater, 
 		<div class="uix_sidebarNav__inner ' . $__compilerTemp29 . '">
 			<div class="uix_sidebar--scroller">
 				' . $__compilerTemp30 . '
+				' . '
 				' . $__compilerTemp32 . '
-				' . $__compilerTemp37 . '
-				' . $__compilerTemp38 . '
+				' . $__compilerTemp33 . '
 			</div>
 		</div>
 	</div>
@@ -2085,12 +2121,12 @@ return array('macros' => array('uix_mainTabComponent' => function($__templater, 
 	';
 		$__vars['position'] = 0;
 		$__vars['rootBreadcrumb'] = $__vars['navTree'][$__vars['xf']['options']['rootBreadcrumb']];
-		$__compilerTemp40 = '';
+		$__compilerTemp35 = '';
 		if ($__vars['rootBreadcrumb'] AND ($__vars['rootBreadcrumb']['href'] != $__vars['xf']['uri'])) {
-			$__compilerTemp40 .= '
+			$__compilerTemp35 .= '
 			';
 			$__vars['position'] = ($__vars['position'] + 1);
-			$__compilerTemp40 .= '
+			$__compilerTemp35 .= '
 			' . $__templater->callMacro(null, 'crumb', array(
 				'position' => $__vars['position'],
 				'href' => $__vars['rootBreadcrumb']['href'],
@@ -2098,12 +2134,12 @@ return array('macros' => array('uix_mainTabComponent' => function($__templater, 
 			), $__vars) . '
 		';
 		}
-		$__compilerTemp41 = '';
+		$__compilerTemp36 = '';
 		if ($__vars['selectedNavEntry'] AND ($__vars['selectedNavEntry']['href'] AND (($__vars['selectedNavEntry']['href'] != $__vars['xf']['uri']) AND ($__vars['selectedNavEntry']['href'] != $__vars['rootBreadcrumb']['href'])))) {
-			$__compilerTemp41 .= '
+			$__compilerTemp36 .= '
 			';
 			$__vars['position'] = ($__vars['position'] + 1);
-			$__compilerTemp41 .= '
+			$__compilerTemp36 .= '
 			' . $__templater->callMacro(null, 'crumb', array(
 				'position' => $__vars['position'],
 				'href' => $__vars['selectedNavEntry']['href'],
@@ -2111,14 +2147,14 @@ return array('macros' => array('uix_mainTabComponent' => function($__templater, 
 			), $__vars) . '
 		';
 		}
-		$__compilerTemp42 = '';
+		$__compilerTemp37 = '';
 		if ($__templater->isTraversable($__vars['breadcrumbs'])) {
 			foreach ($__vars['breadcrumbs'] AS $__vars['breadcrumb']) {
 				if ($__vars['breadcrumb']['href'] != $__vars['xf']['uri']) {
-					$__compilerTemp42 .= '
+					$__compilerTemp37 .= '
 			';
 					$__vars['position'] = ($__vars['position'] + 1);
-					$__compilerTemp42 .= '
+					$__compilerTemp37 .= '
 			' . $__templater->callMacro(null, 'crumb', array(
 						'position' => $__vars['position'],
 						'href' => $__vars['breadcrumb']['href'],
@@ -2132,10 +2168,10 @@ return array('macros' => array('uix_mainTabComponent' => function($__templater, 
 		' . '' . '
 		
 		' . '' . '
-		' . $__compilerTemp40 . '
+		' . $__compilerTemp35 . '
 
-		' . $__compilerTemp41 . '
-		' . $__compilerTemp42 . '
+		' . $__compilerTemp36 . '
+		' . $__compilerTemp37 . '
 	');
 		$__finalCompiled .= '
 ';
@@ -2182,9 +2218,9 @@ return array('macros' => array('uix_mainTabComponent' => function($__templater, 
 ' . '
 
 ';
-	$__compilerTemp43 = '';
+	$__compilerTemp38 = '';
 	if (!$__templater->fn('property', array('uix_removeBottomBreadcrumb', ), false)) {
-		$__compilerTemp43 .= '
+		$__compilerTemp38 .= '
 		' . $__templater->callAdsMacro('container_breadcrumb_bottom_above', array(), $__vars) . '
 		' . $__templater->callMacro(null, 'breadcrumbs', array(
 			'crumbContent' => $__vars['uix_breadcrumbCrumbContent'],
@@ -2195,7 +2231,7 @@ return array('macros' => array('uix_mainTabComponent' => function($__templater, 
 	';
 	}
 	$__vars['uix_bottomBreadcrumb__component'] = $__templater->preEscaped('
-	' . $__compilerTemp43 . '
+	' . $__compilerTemp38 . '
 ');
 	$__finalCompiled .= '
 
@@ -2205,34 +2241,150 @@ return array('macros' => array('uix_mainTabComponent' => function($__templater, 
 ' . '
 
 ';
-	$__compilerTemp44 = '';
+	$__compilerTemp39 = '';
 	if (!$__vars['uix_hideNotices']) {
-		$__compilerTemp44 .= '
+		$__compilerTemp39 .= '
 		';
 		if ($__vars['notices']['block']) {
-			$__compilerTemp44 .= '
+			$__compilerTemp39 .= '
 			' . $__templater->callMacro('notice_macros', 'notice_list', array(
 				'type' => 'block',
 				'notices' => $__vars['notices']['block'],
 			), $__vars) . '
 		';
 		}
-		$__compilerTemp44 .= '
+		$__compilerTemp39 .= '
 
 		';
 		if ($__vars['notices']['scrolling']) {
-			$__compilerTemp44 .= '
+			$__compilerTemp39 .= '
 			' . $__templater->callMacro('notice_macros', 'notice_list', array(
 				'type' => 'scrolling',
 				'notices' => $__vars['notices']['scrolling'],
 			), $__vars) . '
 		';
 		}
-		$__compilerTemp44 .= '
+		$__compilerTemp39 .= '
 	';
 	}
 	$__vars['uix_notices'] = $__templater->preEscaped('
-	' . $__compilerTemp44 . '
+	' . $__compilerTemp39 . '
+');
+	$__finalCompiled .= '
+
+' . '
+
+' . '
+
+';
+	$__compilerTemp40 = '';
+	if ((!$__vars['uix_hideExtendedFooter']) AND $__templater->fn('property', array('uix_enableExtendedFooter', ), false)) {
+		$__compilerTemp40 .= '
+			' . $__templater->includeTemplate('uix_extendedFooter', $__vars) . '
+		';
+	}
+	$__compilerTemp41 = '';
+	$__compilerTemp42 = '';
+	$__compilerTemp42 .= '
+									';
+	if (($__templater->fn('property', array('uix_pageWidthToggle', ), false) != 'disabled') AND $__vars['uix_canTogglePageWidth']) {
+		$__compilerTemp42 .= '
+										<li><a id="uix_widthToggle--trigger" data-xf-init="tooltip" title="' . 'Toggle width' . '" >' . $__templater->callMacro('uix_icons.less', 'icon', array(
+			'icon' => 'collapse',
+		), $__vars) . '</a></li>
+									';
+	}
+	$__compilerTemp42 .= '
+									';
+	if ($__templater->method($__vars['xf']['visitor'], 'canChangeStyle', array()) AND (!$__templater->fn('property', array('uix_hideStyleChoose', ), false))) {
+		$__compilerTemp42 .= '
+										<li><a href="' . $__templater->fn('link', array('misc/style', ), true) . '" data-xf-click="overlay" data-xf-init="tooltip" title="' . 'Style chooser' . '" rel="nofollow">' . $__templater->escape($__vars['xf']['style']['title']) . '</a></li>
+									';
+	}
+	$__compilerTemp42 .= '
+									';
+	if ($__templater->method($__vars['xf']['visitor'], 'canChangeLanguage', array())) {
+		$__compilerTemp42 .= '
+										<li><a href="' . $__templater->fn('link', array('misc/language', ), true) . '" data-xf-click="overlay" data-xf-init="tooltip" title="' . 'Language chooser' . '" rel="nofollow"><i class="fa fa-globe" aria-hidden="true"></i> ' . $__templater->escape($__vars['xf']['language']['title']) . '</a></li>
+									';
+	}
+	$__compilerTemp42 .= '
+								';
+	if (strlen(trim($__compilerTemp42)) > 0) {
+		$__compilerTemp41 .= '
+						<div class="p-footer-row-main">
+							<ul class="p-footer-linkList p-footer-choosers">
+								' . $__compilerTemp42 . '
+							</ul>
+						</div>
+					';
+	}
+	$__compilerTemp43 = '';
+	if ($__templater->method($__vars['xf']['visitor'], 'canUseContactForm', array())) {
+		$__compilerTemp43 .= '
+							';
+		if ($__vars['xf']['contactUrl']) {
+			$__compilerTemp43 .= '
+								<li><a href="' . $__templater->escape($__vars['xf']['contactUrl']) . '" data-xf-click="' . (($__vars['xf']['options']['contactUrl']['overlay'] OR ($__vars['xf']['options']['contactUrl']['type'] == 'default')) ? 'overlay' : '') . '">' . 'Contact us' . '</a></li>
+							';
+		}
+		$__compilerTemp43 .= '
+						';
+	}
+	$__compilerTemp44 = '';
+	if ($__vars['xf']['tosUrl']) {
+		$__compilerTemp44 .= '
+							<li><a href="' . $__templater->escape($__vars['xf']['tosUrl']) . '">' . 'Terms and rules' . '</a></li>
+						';
+	}
+	$__compilerTemp45 = '';
+	if ($__vars['xf']['privacyPolicyUrl']) {
+		$__compilerTemp45 .= '
+							<li><a href="' . $__templater->escape($__vars['xf']['privacyPolicyUrl']) . '">' . 'Privacy policy' . '</a></li>
+						';
+	}
+	$__compilerTemp46 = '';
+	if ($__vars['xf']['helpPageCount']) {
+		$__compilerTemp46 .= '
+							<li><a href="' . $__templater->fn('link', array('help', ), true) . '">' . 'Help' . '</a></li>
+						';
+	}
+	$__compilerTemp47 = '';
+	if ($__vars['xf']['homePageUrl']) {
+		$__compilerTemp47 .= '
+							<li><a href="' . $__templater->escape($__vars['xf']['homePageUrl']) . '">' . 'Home' . '</a></li>
+						';
+	}
+	$__vars['uix_footer'] = $__templater->preEscaped('
+	<footer class="p-footer" id="footer">
+
+		' . $__compilerTemp40 . '
+
+		<div class="p-footer-inner">
+			<div class="pageContent">
+				<div class="p-footer-row">
+					' . $__compilerTemp41 . '
+				</div>
+				<div class="p-footer-row-opposite">
+					<ul class="p-footer-linkList">
+						' . $__templater->includeTemplate('mjst_footer_link', $__vars) . $__compilerTemp43 . '
+
+						' . $__compilerTemp44 . '
+
+						' . $__compilerTemp45 . '
+
+						' . $__compilerTemp46 . '
+
+						' . $__compilerTemp47 . '
+
+						<li><a href="#top" title="' . 'Top' . '" data-xf-click="scroll-to"><i class="fa fa-arrow-up" aria-hidden="true"></i></a></li>
+
+						<li><a href="' . $__templater->fn('link', array('forums/index.rss', '-', ), true) . '" target="_blank" class="p-footer-rssLink" title="' . $__templater->filter('RSS', array(array('for_attr', array()),), true) . '"><span aria-hidden="true"><i class="fa fa-rss"></i><span class="u-srOnly">' . 'RSS' . '</span></span></a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</footer>
 ');
 	$__finalCompiled .= '
 
@@ -2390,22 +2542,22 @@ return array('macros' => array('uix_mainTabComponent' => function($__templater, 
 	), $__vars) . '
 
 			';
-	$__compilerTemp45 = '';
-	$__compilerTemp46 = '';
-	$__compilerTemp46 .= '
+	$__compilerTemp48 = '';
+	$__compilerTemp49 = '';
+	$__compilerTemp49 .= '
 							';
 	if ($__templater->fn('property', array('uix_viewportShowLogoBlock', ), false) != '0') {
-		$__compilerTemp46 .= '
+		$__compilerTemp49 .= '
 								' . $__templater->callMacro(null, 'uix_logo__component', array(
 			'content' => $__vars['uix_logo__component'],
 		), $__vars) . '
 							';
 	}
-	$__compilerTemp46 .= '
+	$__compilerTemp49 .= '
 
 							';
-	$__compilerTemp47 = '';
-	$__compilerTemp47 .= '
+	$__compilerTemp50 = '';
+	$__compilerTemp50 .= '
 										' . $__templater->callMacro(null, 'uix_visitorTabs__component', array(
 		'socialMediaContent' => $__vars['uix_socialMediaContent'],
 		'whatsNewContent' => $__vars['uix_whatsNew__component'],
@@ -2415,97 +2567,83 @@ return array('macros' => array('uix_mainTabComponent' => function($__templater, 
 		'location' => 'header',
 	), $__vars) . '
 									';
-	if (strlen(trim($__compilerTemp47)) > 0) {
-		$__compilerTemp46 .= '
+	if (strlen(trim($__compilerTemp50)) > 0) {
+		$__compilerTemp49 .= '
 								<div class="p-nav-opposite">
-									' . $__compilerTemp47 . '
+									' . $__compilerTemp50 . '
 								</div>
 							';
 	}
-	$__compilerTemp46 .= '
+	$__compilerTemp49 .= '
 						';
-	if (strlen(trim($__compilerTemp46)) > 0) {
-		$__compilerTemp45 .= '
+	if (strlen(trim($__compilerTemp49)) > 0) {
+		$__compilerTemp48 .= '
 					<div class="p-header-content">
-						' . $__compilerTemp46 . '
+						' . $__compilerTemp49 . '
 					</div>
 				';
 	}
 	$__vars['uix_headerContent'] = $__templater->preEscaped('
-				' . $__compilerTemp45 . '
+				' . $__compilerTemp48 . '
 			');
 	$__finalCompiled .= '
 
+			' . '
+			
 			';
-	$__compilerTemp48 = '';
-	$__compilerTemp48 .= '
-							' . $__templater->callAdsMacro('container_header', array(), $__vars) . '
-						';
-	if (strlen(trim($__compilerTemp48)) > 0) {
+	if ((!$__templater->fn('property', array('uix_navAboveHeader', ), false))) {
 		$__finalCompiled .= '
-				<header class="p-header p-header--hasExtraContent" id="header">
-					<div class="p-header-inner">
-						' . $__templater->escape($__vars['uix_headerContent']) . '
-						' . $__compilerTemp48 . '
-
-					</div>
-				</header>
-			';
-	} else {
-		$__finalCompiled .= '
-				<header class="p-header" id="header">
-					<div class="p-header-inner">
-						' . $__templater->escape($__vars['uix_headerContent']) . '
-					</div>
-				</header>
+				' . $__templater->callMacro(null, 'uix_logoBlock', array(
+			'content' => $__vars['uix_headerContent'],
+		), $__vars) . '
 			';
 	}
 	$__finalCompiled .= '
 
 			';
-	$__compilerTemp49 = '';
+	$__compilerTemp51 = '';
 	if (!$__vars['uix_hideNavigation']) {
-		$__compilerTemp49 .= '
+		$__compilerTemp51 .= '
 							';
 		$__vars['uix_badgeCounter'] = ($__vars['xf']['visitor']['conversations_unread'] + $__vars['xf']['visitor']['alerts_unread']);
-		$__compilerTemp49 .= '
+		$__compilerTemp51 .= '
 							';
 		if (($__templater->fn('property', array('uix_visitorTabsMobile', ), false) == 'canvas')) {
-			$__compilerTemp49 .= '
+			$__compilerTemp51 .= '
 								';
 			$__vars['uix_visitorTabCanvas'] = '1';
-			$__compilerTemp49 .= '
+			$__compilerTemp51 .= '
 							';
 		} else {
-			$__compilerTemp49 .= '
+			$__compilerTemp51 .= '
 								';
 			$__vars['uix_visitorTabCanvas'] = '0';
-			$__compilerTemp49 .= '
+			$__compilerTemp51 .= '
 							';
 		}
-		$__compilerTemp49 .= '
+		$__compilerTemp51 .= '
 							<a class="p-nav-menuTrigger  badgeContainer' . (($__vars['uix_visitorTabCanvas'] AND ($__vars['xf']['visitor']['alerts_unread'] OR $__vars['xf']['visitor']['conversations_unread'])) ? ' badgeContainer--highlighted' : '') . '" data-badge="' . $__templater->filter($__vars['uix_badgeCounter'], array(array('number', array()),), true) . '" data-xf-click="off-canvas" data-menu=".js-headerOffCanvasMenu" role="button" tabindex="0">
 								<i aria-hidden="true"></i>
 								<span class="p-nav-menuText">' . 'Menu' . '</span>
 							</a>
 							';
 		if (($__templater->fn('property', array('uix_navigationType', ), false) == 'sidebarNav') AND ($__templater->fn('property', array('uix_pageStyle', ), false) == 'covered')) {
-			$__compilerTemp49 .= '
+			$__compilerTemp51 .= '
 							<a class="p-nav-menuTrigger uix_sidebarNav--trigger" id="uix_sidebarNav--trigger">
 								<i aria-hidden="true"></i>
 								<span class="p-nav-menuText">' . 'Menu' . '</span>
 							</a>
 							';
 		}
-		$__compilerTemp49 .= '
+		$__compilerTemp51 .= '
 						';
 	}
-	$__compilerTemp50 = '';
+	$__compilerTemp52 = '';
 	if (!$__vars['uix_hideNavigation']) {
-		$__compilerTemp50 .= '
+		$__compilerTemp52 .= '
 							';
 		if (($__templater->fn('property', array('uix_navigationType', ), false) != 'sidebarNav') OR ($__templater->fn('property', array('uix_pageStyle', ), false) != 'covered')) {
-			$__compilerTemp50 .= '
+			$__compilerTemp52 .= '
 							<div class="p-nav-scroller hScroller" data-xf-init="h-scroller" data-auto-scroll=".p-navEl.is-selected">
 								<div class="hScroller-scroll">
 									<ul class="p-nav-list js-offCanvasNavSource">
@@ -2515,7 +2653,7 @@ return array('macros' => array('uix_mainTabComponent' => function($__templater, 
 				foreach ($__vars['navTree'] AS $__vars['navSection'] => $__vars['navEntry']) {
 					if (($__vars['navSection'] != $__vars['xf']['app']['defaultNavigationId'])) {
 						$__vars['i']++;
-						$__compilerTemp50 .= '
+						$__compilerTemp52 .= '
 										<li>
 											' . $__templater->callMacro(null, 'nav_entry', array(
 							'navId' => $__vars['navSection'],
@@ -2528,43 +2666,43 @@ return array('macros' => array('uix_mainTabComponent' => function($__templater, 
 					}
 				}
 			}
-			$__compilerTemp50 .= '
+			$__compilerTemp52 .= '
 									</ul>
 								</div>
 							</div>
 							';
 		}
-		$__compilerTemp50 .= '
+		$__compilerTemp52 .= '
 
 							';
 		if ($__templater->fn('property', array('uix_activeNavTitle', ), false)) {
-			$__compilerTemp50 .= '
+			$__compilerTemp52 .= '
 								<div class="uix_activeNavTitle">
 									<span>
 										';
 			if ($__vars['uix_mobileActiveNav']) {
-				$__compilerTemp50 .= '
+				$__compilerTemp52 .= '
 											' . $__templater->escape($__vars['uix_mobileActiveNav']) . '
 										';
 			} else if ($__vars['selectedNavEntry']['href']) {
-				$__compilerTemp50 .= '
+				$__compilerTemp52 .= '
 											' . $__templater->escape($__vars['selectedNavEntry']['title']) . '
 										';
 			} else {
-				$__compilerTemp50 .= '
+				$__compilerTemp52 .= '
 										';
 			}
-			$__compilerTemp50 .= '
+			$__compilerTemp52 .= '
 									</span>
 								</div>
 							';
 		}
-		$__compilerTemp50 .= '
+		$__compilerTemp52 .= '
 						';
 	}
-	$__compilerTemp51 = '';
-	$__compilerTemp52 = '';
-	$__compilerTemp52 .= '
+	$__compilerTemp53 = '';
+	$__compilerTemp54 = '';
+	$__compilerTemp54 .= '
 										' . $__templater->callMacro(null, 'uix_visitorTabs__component', array(
 		'socialMediaContent' => $__vars['uix_socialMediaContent'],
 		'whatsNewContent' => $__vars['uix_whatsNew__component'],
@@ -2578,30 +2716,30 @@ return array('macros' => array('uix_mainTabComponent' => function($__templater, 
 		'location' => 'navigation',
 	), $__vars) . '
 									';
-	if (strlen(trim($__compilerTemp52)) > 0) {
-		$__compilerTemp51 .= '
+	if (strlen(trim($__compilerTemp54)) > 0) {
+		$__compilerTemp53 .= '
 								<div class="p-nav-opposite">
-									' . $__compilerTemp52 . '
+									' . $__compilerTemp54 . '
 								</div>
 							';
 	}
 	$__vars['navHtml'] = $__templater->preEscaped('
 				<nav class="p-nav">
 					<div class="p-nav-inner">
-						' . $__compilerTemp49 . '
+						' . $__compilerTemp51 . '
 
 						' . $__templater->callMacro(null, 'uix_logo__component', array(
 		'content' => $__vars['uix_logo__component'],
 	), $__vars) . '
 
-						' . $__compilerTemp50 . '
+						' . $__compilerTemp52 . '
 
 							' . $__templater->callMacro(null, 'uix_search__component', array(
 		'location' => 'navigationLeft',
 		'content' => $__vars['uix_search__component'],
 	), $__vars) . '
 
-							' . $__compilerTemp51 . '
+							' . $__compilerTemp53 . '
 					</div>
 				</nav>
 			');
@@ -2634,6 +2772,16 @@ return array('macros' => array('uix_mainTabComponent' => function($__templater, 
 		$__finalCompiled .= '
 				' . $__templater->filter($__vars['navHtml'], array(array('raw', array()),), true) . '
 				' . $__templater->filter($__vars['subNavHtml'], array(array('raw', array()),), true) . '
+			';
+	}
+	$__finalCompiled .= '
+			
+			';
+	if ($__templater->fn('property', array('uix_navAboveHeader', ), false)) {
+		$__finalCompiled .= '
+				' . $__templater->callMacro(null, 'uix_logoBlock', array(
+			'content' => $__vars['uix_headerContent'],
+		), $__vars) . '
 			';
 	}
 	$__finalCompiled .= '
@@ -2697,9 +2845,11 @@ return array('macros' => array('uix_mainTabComponent' => function($__templater, 
 					<p>
 						It appears that you do not have the UI.X Add-on installed. Please install this add-on to ensure your style works as expected. You can download the UI.X add-on <a href="https://www.themehouse.com/xenforo/2/addons/uix-addon">here</a>.
 					</p>
-					' . $__templater->button($__templater->callMacro('uix_icons.less', 'icon', array(
+					' . $__templater->button('
+						' . $__templater->callMacro('uix_icons.less', 'icon', array(
 			'icon' => 'warning',
-		), $__vars) . ' View Documention', array(
+		), $__vars) . ' View Documentation
+					', array(
 			'href' => 'https://www.themehouse.com/help/documentation/uix2',
 			'class' => 'button--primary',
 		), '', array(
@@ -2736,7 +2886,17 @@ return array('macros' => array('uix_mainTabComponent' => function($__templater, 
 		'content' => $__vars['uix_mainTabComponent'],
 	), $__vars) . '
 
-				' . $__templater->callMacro('browser_warning_macros', 'javascript', array(), $__vars) . '
+				';
+	if ($__vars['xf']['session']['lau_id']) {
+		$__finalCompiled .= '
+	<div class="blockMessage blockMessage--important blockMessage--iconic">
+		' . '' . $__templater->escape($__vars['xf']['session']['lau_from_name']) . ', you are currently using ' . $__templater->escape($__vars['xf']['session']['lau_to_name']) . '\'s account.' . '
+	</div>
+';
+	}
+	$__finalCompiled .= '
+
+' . $__templater->callMacro('browser_warning_macros', 'javascript', array(), $__vars) . '
 				' . $__templater->callMacro('browser_warning_macros', 'browser', array(), $__vars) . '
 
 				<div uix_component="MainContainer" class="uix_contentWrapper">
@@ -2894,102 +3054,26 @@ return array('macros' => array('uix_mainTabComponent' => function($__templater, 
 		'content' => $__vars['uix_bottomBreadcrumb__component'],
 		'location' => 'belowMainContainer',
 	), $__vars) . '
+				' . $__templater->callMacro(null, 'uix_footer', array(
+		'location' => 'insideContent',
+		'content' => $__vars['uix_footer'],
+		'insideContent' => $__templater->fn('property', array('uix_footerInsideContent', ), false),
+	), $__vars) . '
 			</div>
 		</div>
 
-		<footer class="p-footer" id="footer">
+		' . $__templater->callMacro(null, 'uix_footer', array(
+		'location' => 'bottom',
+		'content' => $__vars['uix_footer'],
+		'insideContent' => $__templater->fn('property', array('uix_footerInsideContent', ), false),
+	), $__vars) . '
 
-			';
-	if ((!$__vars['uix_hideExtendedFooter']) AND $__templater->fn('property', array('uix_enableExtendedFooter', ), false)) {
-		$__finalCompiled .= '
-				' . $__templater->includeTemplate('uix_extendedFooter', $__vars) . '
-			';
-	}
-	$__finalCompiled .= '
-
-			<div class="p-footer-inner">
-				<div class="pageContent">
-					<div class="p-footer-row">
-						';
-	$__compilerTemp53 = '';
-	$__compilerTemp53 .= '
-									';
-	if (($__templater->fn('property', array('uix_pageWidthToggle', ), false) != 'disabled') AND $__vars['uix_canTogglePageWidth']) {
-		$__compilerTemp53 .= '
-										<li><a id="uix_widthToggle--trigger" data-xf-init="tooltip" title="' . 'Toggle width' . '" >' . $__templater->callMacro('uix_icons.less', 'icon', array(
-			'icon' => 'collapse',
-		), $__vars) . '</a></li>
-									';
-	}
-	$__compilerTemp53 .= '
-									' . '
-								';
-	if (strlen(trim($__compilerTemp53)) > 0) {
-		$__finalCompiled .= '
-							<div class="p-footer-row-main">
-								<ul class="p-footer-linkList p-footer-choosers">
-								' . $__compilerTemp53 . '
-								</ul>
-							</div>
-						';
-	}
-	$__finalCompiled .= '
-					</div>
-					<div class="p-footer-row-opposite">
-						<ul class="p-footer-linkList">
-							' . $__templater->includeTemplate('mjst_footer_link', $__vars);
-	if ($__templater->method($__vars['xf']['visitor'], 'canUseContactForm', array())) {
-		$__finalCompiled .= '
-								';
-		if ($__vars['xf']['contactUrl']) {
-			$__finalCompiled .= '
-									<li><a href="' . $__templater->escape($__vars['xf']['contactUrl']) . '" data-xf-click="' . (($__vars['xf']['options']['contactUrl']['overlay'] OR ($__vars['xf']['options']['contactUrl']['type'] == 'default')) ? 'overlay' : '') . '">' . 'Contact us' . '</a></li>
-								';
-		}
-		$__finalCompiled .= '
-							';
-	}
-	$__finalCompiled .= '
-
-							';
-	if ($__vars['xf']['tosUrl']) {
-		$__finalCompiled .= '
-								<li><a href="' . $__templater->escape($__vars['xf']['tosUrl']) . '">' . 'Terms and rules' . '</a></li>
-							';
-	}
-	$__finalCompiled .= '
-
-							';
-	if ($__vars['xf']['privacyPolicyUrl']) {
-		$__finalCompiled .= '
-								<li><a href="' . $__templater->escape($__vars['xf']['privacyPolicyUrl']) . '">' . 'privacy_policy' . '</a></li>
-							';
-	}
-	$__finalCompiled .= '
-
-							';
-	if ($__vars['xf']['helpPageCount']) {
-		$__finalCompiled .= '
-								<li><a href="' . $__templater->fn('link', array('help', ), true) . '">' . 'Help' . '</a></li>
-							';
-	}
-	$__finalCompiled .= '
-
-							' . '
-							<li><a>' . '&copy; 2017-2019 Paladin Extensions' . '</a></li>
-						</ul>
-					</div>
-				</div>
-			</div>
-
-			' . '
-		</footer>
 		';
-	$__compilerTemp54 = '';
-	$__compilerTemp54 .= '
+	$__compilerTemp55 = '';
+	$__compilerTemp55 .= '
 					';
 	if ($__templater->fn('property', array('scrollJumpButtons', ), false)) {
-		$__compilerTemp54 .= '
+		$__compilerTemp55 .= '
 						<div class="u-scrollButtons js-scrollButtons" data-trigger-type="' . $__templater->fn('property', array('scrollJumpButtons', ), true) . '">
 							' . $__templater->button('<i class="fa fa-arrow-up"></i><span class="u-srOnly">' . 'Top' . '</span>', array(
 			'href' => '#top',
@@ -2999,7 +3083,7 @@ return array('macros' => array('uix_mainTabComponent' => function($__templater, 
 		)) . '
 							';
 		if ($__templater->fn('property', array('scrollJumpButtons', ), false) != 'up') {
-			$__compilerTemp54 .= '
+			$__compilerTemp55 .= '
 								' . $__templater->button('<i class="fa fa-arrow-down"></i><span class="u-srOnly">' . 'Bottom' . '</span>', array(
 				'href' => '#footer',
 				'class' => 'button--scroll',
@@ -3008,31 +3092,31 @@ return array('macros' => array('uix_mainTabComponent' => function($__templater, 
 			)) . '
 							';
 		}
-		$__compilerTemp54 .= '
+		$__compilerTemp55 .= '
 						</div>
 					';
 	}
-	$__compilerTemp54 .= '
+	$__compilerTemp55 .= '
 					';
 	if ($__templater->fn('property', array('uix_fab', ), false) != 'never') {
-		$__compilerTemp54 .= '
+		$__compilerTemp55 .= '
 						';
-		$__compilerTemp55 = '';
-		$__compilerTemp55 .= (isset($__templater->pageParams['pageAction']) ? $__templater->pageParams['pageAction'] : '');
-		if (strlen(trim($__compilerTemp55)) > 0) {
-			$__compilerTemp54 .= '
-							<div class="p-title-pageAction">' . $__compilerTemp55 . '</div>
+		$__compilerTemp56 = '';
+		$__compilerTemp56 .= (isset($__templater->pageParams['pageAction']) ? $__templater->pageParams['pageAction'] : '');
+		if (strlen(trim($__compilerTemp56)) > 0) {
+			$__compilerTemp55 .= '
+							<div class="p-title-pageAction">' . $__compilerTemp56 . '</div>
 						';
 		}
-		$__compilerTemp54 .= '
+		$__compilerTemp55 .= '
 					';
 	}
-	$__compilerTemp54 .= '
+	$__compilerTemp55 .= '
 				';
-	if (strlen(trim($__compilerTemp54)) > 0) {
+	if (strlen(trim($__compilerTemp55)) > 0) {
 		$__finalCompiled .= '
 			<div class="uix_fabBar uix_fabBar--active">
-				' . $__compilerTemp54 . '
+				' . $__compilerTemp55 . '
 			</div>
 		';
 	}
@@ -3041,12 +3125,12 @@ return array('macros' => array('uix_mainTabComponent' => function($__templater, 
 	if (($__templater->fn('property', array('uix_fab', ), false) != 'never') AND (!$__templater->fn('property', array('uix_fabScroll', ), false))) {
 		$__finalCompiled .= '
 			';
-		$__compilerTemp56 = '';
-		$__compilerTemp56 .= (isset($__templater->pageParams['pageAction']) ? $__templater->pageParams['pageAction'] : '');
-		if (strlen(trim($__compilerTemp56)) > 0) {
+		$__compilerTemp57 = '';
+		$__compilerTemp57 .= (isset($__templater->pageParams['pageAction']) ? $__templater->pageParams['pageAction'] : '');
+		if (strlen(trim($__compilerTemp57)) > 0) {
 			$__finalCompiled .= '
 				<div class="uix_fabBar uix_fabBar--mirror">
-					<div class="p-title-pageAction">' . $__compilerTemp56 . '</div>
+					<div class="p-title-pageAction">' . $__compilerTemp57 . '</div>
 				</div>
 			';
 		}
@@ -3100,9 +3184,9 @@ return array('macros' => array('uix_mainTabComponent' => function($__templater, 
 	<div class="uix__loginForm uix__loginForm--login">
 		<div class="uix__loginForm--panel">
 			';
-		$__compilerTemp57 = $__vars;
-		$__compilerTemp57['uix_loginPreventAutoFocus'] = '1';
-		$__finalCompiled .= $__templater->includeTemplate('login', $__compilerTemp57) . '
+		$__compilerTemp58 = $__vars;
+		$__compilerTemp58['uix_loginPreventAutoFocus'] = '1';
+		$__finalCompiled .= $__templater->includeTemplate('login', $__compilerTemp58) . '
 		</div>
 		<div class="uix__loginForm--mask"></div>
 	</div>

@@ -1,19 +1,8 @@
 <?php
-// FROM HASH: e82c661f19ee6662f39e5b34cec13ce2
+// FROM HASH: 86db6280ad03906067d54362e5eaf414
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
-	if ($__vars['xf']['options']['useress_watchedWrapper']) {
-		$__finalCompiled .= '
-	';
-		$__compilerTemp1 = $__vars;
-		$__compilerTemp1['pageSelected'] = 'watched_threads';
-		$__templater->wrapTemplate('account_wrapper', $__compilerTemp1);
-		$__finalCompiled .= '
-';
-	}
-	$__finalCompiled .= '
-';
 	$__templater->pageParams['pageTitle'] = $__templater->preEscaped('Watched threads');
 	$__templater->pageParams['pageNumber'] = $__vars['page'];
 	$__finalCompiled .= '
@@ -22,13 +11,13 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	if (!$__templater->test($__vars['threads'], 'empty', array())) {
 		$__finalCompiled .= '
 	';
-		$__compilerTemp2 = '';
+		$__compilerTemp1 = '';
 		if ($__templater->isTraversable($__vars['threads'])) {
 			foreach ($__vars['threads'] AS $__vars['thread']) {
-				$__compilerTemp2 .= '
+				$__compilerTemp1 .= '
 						';
 				$__vars['extra'] = ($__vars['thread']['Watch'][$__vars['xf']['visitor']['user_id']]['email_subscribe'] ? 'Email' : '');
-				$__compilerTemp2 .= '
+				$__compilerTemp1 .= '
 						' . $__templater->callMacro('thread_list_macros', 'item', array(
 					'thread' => $__vars['thread'],
 					'chooseName' => 'thread_ids',
@@ -48,7 +37,6 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			'wrapperclass' => 'block-outer-main',
 			'perPage' => $__vars['perPage'],
 		))) . '
-
 			<div class="block-outer-opposite">
 				' . $__templater->button('Manage watched threads', array(
 			'class' => 'button--link menuTrigger',
@@ -72,7 +60,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		<div class="block-container">
 			<div class="block-body">
 				<div class="structItemContainer">
-					' . $__compilerTemp2 . '
+					' . $__compilerTemp1 . '
 				</div>
 			</div>
 			<div class="block-footer block-footer--split">
@@ -121,6 +109,10 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			'total' => $__vars['total'],
 			'wrapperclass' => 'block-outer block-outer--after',
 			'perPage' => $__vars['perPage'],
+		))) . '
+
+		' . $__templater->fn('show_ignored', array(array(
+			'wrapperclass' => 'block-outer block-outer-opposite block-outer--after',
 		))) . '
 	', array(
 			'action' => $__templater->fn('link', array('watched/threads/update', ), false),

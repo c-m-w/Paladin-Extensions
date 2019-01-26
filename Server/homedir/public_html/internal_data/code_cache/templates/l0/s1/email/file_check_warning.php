@@ -20,7 +20,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 ';
 	} else if ($__vars['fileCheck']['total_inconsistent']) {
 		$__finalCompiled .= '
-	<p>' . 'After checking ' . $__templater->filter($__vars['fileCheck']['total_checked'], array(array('number', array()),), true) . ' files we found ' . $__templater->filter($__vars['fileCheck']['total_inconsistent'], array(array('number', array()),), true) . ' files which contained unexpected contents.' . '</p>
+	<p>' . 'After checking ' . $__templater->filter($__vars['fileCheck']['total_checked'], array(array('number', array()),), true) . ' files we found ' . $__templater->filter($__vars['fileCheck']['total_inconsistent'], array(array('number', array()),), true) . ' files which contained unexpected contents. If you edited these files yourself you may ignore this warning but otherwise you should investigate further as this could be evidence of file corruption or potentially malicious alteration.' . '</p>
 ';
 	}
 	$__finalCompiled .= '

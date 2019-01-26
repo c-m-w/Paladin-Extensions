@@ -66,7 +66,7 @@
 			'-345,-345' : 'Asia/Kathmandu',
 			'-360,-360' : 'Asia/Dhaka',
 			'-360,-420' : 'Asia/Novosibirsk',
-			'-390,-390' : 'Asia/Rangoon',
+			'-390,-390' : 'Asia/Yangon',
 			'-420,-420' : 'Asia/Bangkok',
 			'-420,-480' : 'Asia/Krasnoyarsk',
 			'-480,-480' : 'Asia/Hong_Kong',

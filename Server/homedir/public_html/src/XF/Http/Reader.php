@@ -30,6 +30,8 @@ class Reader
 	protected $untrustedAllowedSchemes = ['http', 'https'];
 	protected $untrustedAllowedPorts = [80, 443];
 
+	protected $lastLocation;
+
 	public function __construct(\GuzzleHttp\Client $clientTrusted, \GuzzleHttp\Client $clientUntrusted)
 	{
 		$this->clientTrusted = $clientTrusted;
@@ -99,6 +101,7 @@ class Reader
 				if ($location != $url)
 				{
 					$url = $location;
+					$this->lastLocation = $location;
 					$continue = true;
 				}
 			}
@@ -106,6 +109,11 @@ class Reader
 		while ($continue && $requests < 5);
 
 		return $response;
+	}
+
+	public function getLastLocation()
+	{
+		return $this->lastLocation;
 	}
 
 	public function isRequestableUntrustedUrl($url, &$error = null)

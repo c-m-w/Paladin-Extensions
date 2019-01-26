@@ -33,7 +33,15 @@ class Post extends AbstractHandler
 			function(Entity $entity)
 			{
 				/** @var \XF\Entity\Post $entity */
-				if ($entity->message_state == 'moderated')
+				if ($entity->isFirstPost())
+				{
+					if ($entity->Thread->discussion_state == 'moderated')
+					{
+						$entity->Thread->discussion_state = 'visible';
+						$entity->Thread->save();
+					}
+				}
+				else if ($entity->message_state == 'moderated')
 				{
 					/** @var \XF\Service\Post\Approver $approver */
 					$approver = \XF::service('XF:Post\Approver', $entity);

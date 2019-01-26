@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <routes>
-  <route route_type="public" route_prefix="shoutbox" format="shoutbox" controller="Siropu\Shoutbox:Shoutbox"/>
+  <route route_type="public" route_prefix="shoutbox" controller="Siropu\Shoutbox:Shoutbox"/>
   <route route_type="public" route_prefix="shoutbox" sub_name="delete" format=":int&lt;shout_id&gt;/delete" controller="Siropu\Shoutbox:Shoutbox" action_prefix="delete"/>
   <route route_type="public" route_prefix="shoutbox" sub_name="edit" format=":int&lt;shout_id&gt;/edit" controller="Siropu\Shoutbox:Shoutbox" action_prefix="edit"/>
 </routes>

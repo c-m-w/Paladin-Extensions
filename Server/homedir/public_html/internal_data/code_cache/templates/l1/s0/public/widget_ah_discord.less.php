@@ -1,9 +1,14 @@
 <?php
-// FROM HASH: 750b85d748bd0798caebf43b38301ccf
+// FROM HASH: 867ef976f9ce4e29558464bd96e21072
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
-	$__finalCompiled .= '.discord-widget {
+	$__finalCompiled .= '.block[data-widget-definition="ahDiscordWidget"] .block-minorHeader {
+	display: flex;
+	align-items: center;
+}
+
+.discord-widget {
 	.xf-ahDW_container();
 	
 	.discord-tree {
@@ -45,12 +50,16 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	}
 	
 	.discord-users-online {
-		.xf-ahDW_usersOnlineText;
+		.xf-ahDW_usersOnlineText();
 	}
 	
 	.discord-join {
 		text-align: center;
-		margin-top: 9px
+		margin-top: 9px;
+			
+		.joinButton {
+			.xf-ahDW_joinServerButton();
+		}
 	}
 }
 

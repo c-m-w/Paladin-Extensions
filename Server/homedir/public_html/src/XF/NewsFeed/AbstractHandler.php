@@ -24,6 +24,16 @@ class AbstractHandler
 		throw new \LogicException("Could not determine content viewability; please override");
 	}
 
+	public function contentIsVisible(Entity $entity, &$error = null)
+	{
+		if (method_exists($entity, 'isVisible'))
+		{
+			return $entity->isVisible($error);
+		}
+
+		return true;
+	}
+
 	public function isPublishable(Entity $entity, $action)
 	{
 		return true;

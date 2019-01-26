@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 5319d1e1b63022e62862fafceb5cdaa0
+// FROM HASH: 22755f1db7089b58dfa2f334932d97a3
 return array('macros' => array('nav_entry' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -32,7 +32,7 @@ return array('macros' => array('nav_entry' => function($__templater, array $__ar
 				class="p-navEl-splitTrigger"
 				role="button"
 				tabindex="0"
-				aria-label="' . 'Toggle expanded' . '"
+				aria-label="' . $__templater->filter('Toggle expanded', array(array('for_attr', array()),), true) . '"
 				aria-expanded="false"
 				aria-haspopup="true"></a>';
 		}
@@ -186,6 +186,9 @@ return array('macros' => array('nav_entry' => function($__templater, array $__ar
 	';
 	$__compilerTemp1 = '';
 	$__compilerTemp1 .= '
+			';
+	$__vars['position'] = 0;
+	$__compilerTemp1 .= '
 
 			';
 	$__vars['rootBreadcrumb'] = $__vars['navTree'][$__vars['xf']['options']['rootBreadcrumb']];
@@ -193,7 +196,11 @@ return array('macros' => array('nav_entry' => function($__templater, array $__ar
 			';
 	if ($__vars['rootBreadcrumb'] AND ($__vars['rootBreadcrumb']['href'] != $__vars['xf']['uri'])) {
 		$__compilerTemp1 .= '
+				';
+		$__vars['position'] = ($__vars['position'] + 1);
+		$__compilerTemp1 .= '
 				' . $__templater->callMacro(null, 'crumb', array(
+			'position' => $__vars['position'],
 			'href' => $__vars['rootBreadcrumb']['href'],
 			'value' => $__vars['rootBreadcrumb']['title'],
 		), $__vars) . '
@@ -204,7 +211,11 @@ return array('macros' => array('nav_entry' => function($__templater, array $__ar
 			';
 	if ($__vars['selectedNavEntry'] AND ($__vars['selectedNavEntry']['href'] AND (($__vars['selectedNavEntry']['href'] != $__vars['xf']['uri']) AND ($__vars['selectedNavEntry']['href'] != $__vars['rootBreadcrumb']['href'])))) {
 		$__compilerTemp1 .= '
+				';
+		$__vars['position'] = ($__vars['position'] + 1);
+		$__compilerTemp1 .= '
 				' . $__templater->callMacro(null, 'crumb', array(
+			'position' => $__vars['position'],
 			'href' => $__vars['selectedNavEntry']['href'],
 			'value' => $__vars['selectedNavEntry']['title'],
 		), $__vars) . '
@@ -216,7 +227,11 @@ return array('macros' => array('nav_entry' => function($__templater, array $__ar
 		foreach ($__vars['breadcrumbs'] AS $__vars['breadcrumb']) {
 			if ($__vars['breadcrumb']['href'] != $__vars['xf']['uri']) {
 				$__compilerTemp1 .= '
+				';
+				$__vars['position'] = ($__vars['position'] + 1);
+				$__compilerTemp1 .= '
 				' . $__templater->callMacro(null, 'crumb', array(
+					'position' => $__vars['position'],
 					'href' => $__vars['breadcrumb']['href'],
 					'value' => $__vars['breadcrumb']['value'],
 				), $__vars) . '
@@ -246,12 +261,18 @@ return array('macros' => array('nav_entry' => function($__templater, array $__ar
 	$__vars = $__templater->mergeMacroArguments(array(
 		'href' => '!',
 		'value' => '!',
+		'position' => 0,
 	), $__arguments, $__vars);
 	$__finalCompiled .= '
 	<li itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
 		<a href="' . $__templater->escape($__vars['href']) . '" itemprop="item">
 			<span itemprop="name">' . $__templater->escape($__vars['value']) . '</span>
 		</a>
+		';
+	if ($__vars['position']) {
+		$__finalCompiled .= '<meta itemprop="position" content="' . $__templater->escape($__vars['position']) . '" />';
+	}
+	$__finalCompiled .= '
 	</li>
 ';
 	return $__finalCompiled;
@@ -371,7 +392,7 @@ return array('macros' => array('nav_entry' => function($__templater, array $__ar
 	';
 	if ($__templater->fn('property', array('publicFaviconUrl', ), false)) {
 		$__finalCompiled .= '
-		<link rel="icon" type="image/png" href="' . $__templater->fn('base_url', array($__templater->fn('property', array('publicFaviconUrl', ), false), ), true) . '" sizes="32x32" />
+		<link rel="icon" type="image/png" href="' . $__templater->fn('base_url', array($__templater->fn('property', array('publicFaviconUrl', ), false), true, ), true) . '" sizes="32x32" />
 	';
 	}
 	$__finalCompiled .= '
@@ -436,7 +457,7 @@ return array('macros' => array('nav_entry' => function($__templater, array $__ar
 							';
 	if (strlen(trim($__compilerTemp2)) > 0) {
 		$__compilerTemp1 .= '
-					<a class="p-staffBar-link menuTrigger" data-xf-click="menu" data-xf-key="alt+m" role="button" tabindex="0" aria-expanded="false" aria-haspopup="true">' . 'Moderator' . '</a>
+					<a class="p-staffBar-link menuTrigger" data-xf-click="menu" data-xf-key="alt+m" role="button" tabindex="0" aria-expanded="false" aria-haspopup="true">' . '<font size="3"><i class="fa fa-gavel"></i></font>' . '</a>
 					<div class="menu" data-menu="menu" aria-hidden="true">
 						<div class="menu-content">
 							<h4 class="menu-header">' . 'Staff tools' . '</h4>
@@ -450,12 +471,11 @@ return array('macros' => array('nav_entry' => function($__templater, array $__ar
 				';
 	if ($__vars['xf']['visitor']['is_admin']) {
 		$__compilerTemp1 .= '
-					<a href="' . $__templater->fn('base_url', array('admin.php', ), true) . '" class="p-staffBar-link" target="_blank">' . 'Admin' . '</a>
+					<a href="' . $__templater->fn('base_url', array('admin.php', ), true) . '" class="p-staffBar-link" target="_blank">' . '<font size="3"><i class="fa fa-cog"></i></font>' . '</a>
 				';
 	}
 	$__compilerTemp1 .= '
-
-' . $__templater->includeTemplate('xc_login_as_user_staff_bar', $__vars) . '
+' . $__templater->includeTemplate('lau_staff_bar', $__vars) . '
 			';
 	if (strlen(trim($__compilerTemp1)) > 0) {
 		$__finalCompiled .= '
@@ -530,7 +550,7 @@ return array('macros' => array('nav_entry' => function($__templater, array $__ar
 							<a href="' . $__templater->fn('link', array('account', ), true) . '"
 								class="p-navgroup-link p-navgroup-link--iconic p-navgroup-link--user"
 								data-xf-click="menu"
-								data-xf-key="' . 'm' . '"
+								data-xf-key="' . $__templater->filter('m', array(array('for_attr', array()),), true) . '"
 								data-menu-pos-ref="< .p-navgroup"
 								aria-expanded="false"
 								aria-haspopup="true">
@@ -553,7 +573,7 @@ return array('macros' => array('nav_entry' => function($__templater, array $__ar
 								class="p-navgroup-link p-navgroup-link--iconic p-navgroup-link--conversations js-badge--conversations badgeContainer' . ($__vars['xf']['visitor']['conversations_unread'] ? ' badgeContainer--highlighted' : '') . '"
 								data-badge="' . $__templater->filter($__vars['xf']['visitor']['conversations_unread'], array(array('number', array()),), true) . '"
 								data-xf-click="menu"
-								data-xf-key="' . ',' . '"
+								data-xf-key="' . $__templater->filter(',', array(array('for_attr', array()),), true) . '"
 								data-menu-pos-ref="< .p-navgroup"
 								aria-expanded="false"
 								aria-haspopup="true">
@@ -573,9 +593,15 @@ return array('macros' => array('nav_entry' => function($__templater, array $__ar
 										<span class="menu-footer-main">
 											<a href="' . $__templater->fn('link', array('conversations', ), true) . '">' . 'Show all' . $__vars['xf']['language']['ellipsis'] . '</a>
 										</span>
-										<span class="menu-footer-opposite">
-											<a href="' . $__templater->fn('link', array('conversations/add', ), true) . '">' . 'Start a new conversation' . '</a>
-										</span>
+										';
+			if ($__templater->method($__vars['xf']['visitor'], 'canStartConversation', array())) {
+				$__compilerTemp4 .= '
+											<span class="menu-footer-opposite">
+												<a href="' . $__templater->fn('link', array('conversations/add', ), true) . '">' . 'Start a new conversation' . '</a>
+											</span>
+										';
+			}
+			$__compilerTemp4 .= '
 									</div>
 								</div>
 							</div>
@@ -584,7 +610,7 @@ return array('macros' => array('nav_entry' => function($__templater, array $__ar
 								class="p-navgroup-link p-navgroup-link--iconic p-navgroup-link--alerts js-badge--alerts badgeContainer' . ($__vars['xf']['visitor']['alerts_unread'] ? ' badgeContainer--highlighted' : '') . '"
 								data-badge="' . $__templater->filter($__vars['xf']['visitor']['alerts_unread'], array(array('number', array()),), true) . '"
 								data-xf-click="menu"
-								data-xf-key="' . '.' . '"
+								data-xf-key="' . $__templater->filter('.', array(array('for_attr', array()),), true) . '"
 								data-menu-pos-ref="< .p-navgroup"
 								aria-expanded="false"
 								aria-haspopup="true">
@@ -616,14 +642,14 @@ return array('macros' => array('nav_entry' => function($__templater, array $__ar
 					';
 	} else {
 		$__compilerTemp4 .= '
-						<a href="' . $__templater->fn('link', array('login', ), true) . '" class="p-navgroup-link p-navgroup-link--textual p-navgroup-link--logIn" rel="nofollow"
+						<a href="' . $__templater->fn('link', array('login', ), true) . '" class="p-navgroup-link p-navgroup-link--textual p-navgroup-link--logIn"
 							data-xf-click="overlay" data-follow-redirects="on">
 							<span class="p-navgroup-linkText">' . 'Log in' . '</span>
 						</a>
 						';
 		if ($__vars['xf']['options']['registrationSetup']['enabled']) {
 			$__compilerTemp4 .= '
-							<a href="' . $__templater->fn('link', array('register', ), true) . '" class="p-navgroup-link p-navgroup-link--textual p-navgroup-link--register" rel="nofollow"
+							<a href="' . $__templater->fn('link', array('register', ), true) . '" class="p-navgroup-link p-navgroup-link--textual p-navgroup-link--register"
 								data-xf-click="overlay" data-follow-redirects="on">
 								<span class="p-navgroup-linkText">' . 'Register' . '</span>
 							</a>
@@ -638,8 +664,8 @@ return array('macros' => array('nav_entry' => function($__templater, array $__ar
 						<a href="' . $__templater->fn('link', array('search', ), true) . '"
 							class="p-navgroup-link p-navgroup-link--iconic p-navgroup-link--search"
 							data-xf-click="menu"
-							data-xf-key="' . '/' . '"
-							aria-label="' . 'Search' . '"
+							data-xf-key="' . $__templater->filter('/', array(array('for_attr', array()),), true) . '"
+							aria-label="' . $__templater->filter('Search', array(array('for_attr', array()),), true) . '"
 							aria-expanded="false"
 							aria-haspopup="true"
 							title="' . $__templater->filter('Search', array(array('for_attr', array()),), true) . '">
@@ -685,7 +711,7 @@ return array('macros' => array('nav_entry' => function($__templater, array $__ar
 				'aria-label' => 'Search within',
 			), $__compilerTemp6) . '
 										</div>
-										';
+									';
 		} else {
 			$__compilerTemp5 .= '
 										' . $__templater->formTextBox(array(
@@ -712,8 +738,8 @@ return array('macros' => array('nav_entry' => function($__templater, array $__ar
 								' . '
 								<div class="menu-row">
 									<div class="inputGroup">
-										<span class="inputGroup-text">' . 'By' . $__vars['xf']['language']['label_separator'] . '</span>
-										<input class="input" name="c[users]" data-xf-init="auto-complete" placeholder="' . 'Member' . '" />
+										<span class="inputGroup-text" id="ctrl_search_menu_by_member">' . 'By' . $__vars['xf']['language']['label_separator'] . '</span>
+										<input class="input" name="c[users]" data-xf-init="auto-complete" placeholder="' . $__templater->filter('Member', array(array('for_attr', array()),), true) . '" aria-labelledby="ctrl_search_menu_by_member" />
 									</div>
 								</div>
 								<div class="menu-footer">
@@ -726,7 +752,6 @@ return array('macros' => array('nav_entry' => function($__templater, array $__ar
 		)) . '
 										' . $__templater->button('Advanced search' . $__vars['xf']['language']['ellipsis'], array(
 			'href' => $__templater->fn('link', array('search', ), false),
-			'rel' => 'nofollow',
 		), '', array(
 		)) . '
 									</span>
@@ -849,7 +874,7 @@ return array('macros' => array('nav_entry' => function($__templater, array $__ar
 	<div class="offCanvasMenu-content">
 		<div class="offCanvasMenu-header">
 			' . 'Menu' . '
-			<a class="offCanvasMenu-closer" data-menu-close="true" role="button" tabindex="0" aria-label="' . 'Close' . '"></a>
+			<a class="offCanvasMenu-closer" data-menu-close="true" role="button" tabindex="0" aria-label="' . $__templater->filter('Close', array(array('for_attr', array()),), true) . '"></a>
 		</div>
 		';
 	if ($__vars['xf']['visitor']['user_id']) {
@@ -870,7 +895,7 @@ return array('macros' => array('nav_entry' => function($__templater, array $__ar
 		$__finalCompiled .= '
 			<div class="p-offCanvasRegisterLink">
 				<div class="offCanvasMenu-linkHolder">
-					<a href="' . $__templater->fn('link', array('login', ), true) . '" class="offCanvasMenu-link" rel="nofollow" data-xf-click="overlay" data-menu-close="true">
+					<a href="' . $__templater->fn('link', array('login', ), true) . '" class="offCanvasMenu-link" data-xf-click="overlay" data-menu-close="true">
 						' . 'Log in' . '
 					</a>
 				</div>
@@ -879,7 +904,7 @@ return array('macros' => array('nav_entry' => function($__templater, array $__ar
 		if ($__vars['xf']['options']['registrationSetup']['enabled']) {
 			$__finalCompiled .= '
 					<div class="offCanvasMenu-linkHolder">
-						<a href="' . $__templater->fn('link', array('register', ), true) . '" class="offCanvasMenu-link" rel="nofollow" data-xf-click="overlay" data-menu-close="true">
+						<a href="' . $__templater->fn('link', array('register', ), true) . '" class="offCanvasMenu-link" data-xf-click="overlay" data-menu-close="true">
 							' . 'Register' . '
 						</a>
 					</div>
@@ -929,7 +954,17 @@ return array('macros' => array('nav_entry' => function($__templater, array $__ar
 	), $__vars) . '
 		' . $__templater->callAdsMacro('container_breadcrumb_top_below', array(), $__vars) . '
 
-		' . $__templater->callMacro('browser_warning_macros', 'javascript', array(), $__vars) . '
+		';
+	if ($__vars['xf']['session']['lau_id']) {
+		$__finalCompiled .= '
+	<div class="blockMessage blockMessage--important blockMessage--iconic">
+		' . '' . $__templater->escape($__vars['xf']['session']['lau_from_name']) . ', you are currently using ' . $__templater->escape($__vars['xf']['session']['lau_to_name']) . '\'s account.' . '
+	</div>
+';
+	}
+	$__finalCompiled .= '
+
+' . $__templater->callMacro('browser_warning_macros', 'javascript', array(), $__vars) . '
 		' . $__templater->callMacro('browser_warning_macros', 'browser', array(), $__vars) . '
 
 		';
@@ -1113,13 +1148,9 @@ return array('macros' => array('nav_entry' => function($__templater, array $__ar
 	if ($__templater->method($__vars['xf']['visitor'], 'canUseContactForm', array())) {
 		$__finalCompiled .= '
 						';
-		if ($__vars['xf']['options']['contactUrl']['type'] == 'default') {
+		if ($__vars['xf']['contactUrl']) {
 			$__finalCompiled .= '
-							<li><a href="' . $__templater->fn('link', array('misc/contact', ), true) . '" data-xf-click="overlay">' . 'Contact us' . '</a></li>
-						';
-		} else if ($__vars['xf']['options']['contactUrl']['type'] == 'custom') {
-			$__finalCompiled .= '
-							<li><a href="' . $__templater->escape($__vars['xf']['options']['contactUrl']['custom']) . '" data-xf-click="' . ($__vars['xf']['options']['contactUrl']['overlay'] ? 'overlay' : '') . '">' . 'Contact us' . '</a></li>
+							<li><a href="' . $__templater->escape($__vars['xf']['contactUrl']) . '" data-xf-click="' . (($__vars['xf']['options']['contactUrl']['overlay'] OR ($__vars['xf']['options']['contactUrl']['type'] == 'default')) ? 'overlay' : '') . '">' . 'Contact us' . '</a></li>
 						';
 		}
 		$__finalCompiled .= '
@@ -1136,9 +1167,9 @@ return array('macros' => array('nav_entry' => function($__templater, array $__ar
 	$__finalCompiled .= '
 
 					';
-	if ($__vars['xf']['options']['privacyPolicyUrl']) {
+	if ($__vars['xf']['privacyPolicyUrl']) {
 		$__finalCompiled .= '
-						<li><a href="' . $__templater->escape($__vars['xf']['options']['privacyPolicyUrl']) . '">' . 'Privacy' . '</a></li>
+						<li><a href="' . $__templater->escape($__vars['xf']['privacyPolicyUrl']) . '">' . 'Privacy policy' . '</a></li>
 					';
 	}
 	$__finalCompiled .= '
@@ -1159,7 +1190,7 @@ return array('macros' => array('nav_entry' => function($__templater, array $__ar
 	}
 	$__finalCompiled .= '
 
-					<li><a href="' . $__templater->fn('link', array('forums/index.rss', '-', ), true) . '" target="_blank" class="p-footer-rssLink" title="' . $__templater->filter('RSS', array(array('for_attr', array()),), true) . '"><span aria-hidden="true"><i class="fa fa-rss"></i></span></a></li>
+					<li><a href="' . $__templater->fn('link', array('forums/index.rss', '-', ), true) . '" target="_blank" class="p-footer-rssLink" title="' . $__templater->filter('RSS', array(array('for_attr', array()),), true) . '"><span aria-hidden="true"><i class="fa fa-rss"></i><span class="u-srOnly">' . 'RSS' . '</span></span></a></li>
 				</ul>
 			</div>
 		</div>
@@ -1168,7 +1199,8 @@ return array('macros' => array('nav_entry' => function($__templater, array $__ar
 	$__compilerTemp12 = '';
 	$__compilerTemp12 .= '
 				' . $__templater->fn('copyright') . '
-				' . '' . '
+				| <a href="http://www.mpm.pm/" title="XenForo Add-ons" target="_blank" class="u-concealed">Email Check by MPM.PM</a>
+
 <div class="discord-copyright">
 	<a href="https://xenforo.com/community/resources/6058/"
 		target="_blank">Discord Integration</a> &copy; Jason Axelrod of
@@ -1219,13 +1251,23 @@ return array('macros' => array('nav_entry' => function($__templater, array $__ar
 	';
 	}
 	$__finalCompiled .= '
+	';
+	if ($__vars['notices']['bottom_fixer']) {
+		$__finalCompiled .= '
+		' . $__templater->callMacro('notice_macros', 'notice_list', array(
+			'type' => 'bottom_fixer',
+			'notices' => $__vars['notices']['bottom_fixer'],
+		), $__vars) . '
+	';
+	}
+	$__finalCompiled .= '
 </div>
 
 ';
 	if ($__templater->fn('property', array('scrollJumpButtons', ), false)) {
 		$__finalCompiled .= '
 	<div class="u-scrollButtons js-scrollButtons" data-trigger-type="' . $__templater->fn('property', array('scrollJumpButtons', ), true) . '">
-		' . $__templater->button('<i class="fa fa-arrow-up"></i>', array(
+		' . $__templater->button('<i class="fa fa-arrow-up"></i><span class="u-srOnly">' . 'Top' . '</span>', array(
 			'href' => '#top',
 			'class' => 'button--scroll',
 			'data-xf-click' => 'scroll-to',
@@ -1234,7 +1276,7 @@ return array('macros' => array('nav_entry' => function($__templater, array $__ar
 		';
 		if ($__templater->fn('property', array('scrollJumpButtons', ), false) != 'up') {
 			$__finalCompiled .= '
-			' . $__templater->button('<i class="fa fa-arrow-down"></i>', array(
+			' . $__templater->button('<i class="fa fa-arrow-down"></i><span class="u-srOnly">' . 'Bottom' . '</span>', array(
 				'href' => '#footer',
 				'class' => 'button--scroll',
 				'data-xf-click' => 'scroll-to',

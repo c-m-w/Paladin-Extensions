@@ -136,11 +136,14 @@ class CodeEventListener extends AbstractDataType
 
 	protected function getAddOnUniqueKeyFromXml(\SimpleXMLElement $entry)
 	{
+		// getSimpleAttributes is used to workaround what appears to be a potential PHP 7.3 bug
+
 		// this should match XF\Entity\CodeEventListener::getAddOnUniqueKey
-		$event = (string)$entry['event_id'];
-		$class = (string)$entry['callback_class'];
-		$method = (string)$entry['callback_method'];
-		$hint = (string)$entry['hint'];
+		$attributes = $this->getSimpleAttributes($entry);
+		$event = $attributes['event_id'];
+		$class = $attributes['callback_class'];
+		$method = $attributes['callback_method'];
+		$hint = isset($attributes['hint']) ? $attributes['hint'] : '';
 
 		return "{$event}-{$class}-{$method}-{$hint}";
 	}

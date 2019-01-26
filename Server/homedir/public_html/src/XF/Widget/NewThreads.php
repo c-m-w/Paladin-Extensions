@@ -38,11 +38,11 @@ class NewThreads extends AbstractWidget
 
 		$threadFinder = $threadRepo->findLatestThreads();
 		$title = \XF::phrase('latest_threads');
-		$link = $router->buildLink('whats-new/posts', null, ['skip' => 1]);
+		$link = $router->buildLink('whats-new');
 
 		$threadFinder
 			->with('Forum.Node.Permissions|' . $visitor->permission_combination_id)
-			->limit(max($limit * 2, 10));
+			->limit(max($limit * 4, 20));
 
 		if ($nodeIds && !in_array(0, $nodeIds))
 		{
@@ -73,7 +73,6 @@ class NewThreads extends AbstractWidget
 				unset($threads[$threadId]);
 			}
 		}
-		$total = $threads->count();
 		$threads = $threads->slice(0, $limit, true);
 
 		$viewParams = [
@@ -81,7 +80,6 @@ class NewThreads extends AbstractWidget
 			'link' => $link,
 			'threads' => $threads,
 			'style' => $options['style'],
-			'hasMore' => $total > $threads->count(),
 			'showExpandedTitle' => $options['show_expanded_title']
 		];
 		return $this->renderer('widget_new_threads', $viewParams);

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<options>
+  <option option_id="lau_DisallowedUsers" edit_format="username" data_type="array">
+    <default_value>[]</default_value>
+    <sub_options>*</sub_options>
+    <relation group_id="lau_settings" display_order="20"/>
+  </option>
+  <option option_id="lau_DisplayLoginCard" edit_format="onoff" data_type="boolean">
+    <default_value>1</default_value>
+    <relation group_id="lau_settings" display_order="30"/>
+  </option>
+  <option option_id="lau_DisplayLoginStaffBar" edit_format="onoff" data_type="boolean">
+    <default_value>1</default_value>
+    <relation group_id="lau_settings" display_order="31"/>
+  </option>
+  <option option_id="lau_ReasonRequired" edit_format="onoff" data_type="boolean">
+    <default_value></default_value>
+    <edit_format_params>0</edit_format_params>
+    <relation group_id="lau_settings" display_order="50"/>
+  </option>
+  <option option_id="lau_Stealth" edit_format="onoff" data_type="boolean">
+    <default_value>1</default_value>
+    <relation group_id="lau_settings" display_order="10"/>
+  </option>
+</options>

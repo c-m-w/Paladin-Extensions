@@ -51,8 +51,8 @@ return array('macros' => array('resource' => function($__templater, array $__arg
 	if ($__vars['resource']['Featured']) {
 		$__compilerTemp1 .= '
 						<li>
-							<i class="structItem-status structItem-status--attention" aria-hidden="true" title="' . $__templater->filter('Featured', array(array('for_attr', array()),), true) . '"></i>
-							<span class="u-srOnly">' . 'Featured' . '</span>
+							<i class="structItem-status structItem-status--attention" aria-hidden="true" title="' . $__templater->filter('xfrm_featured', array(array('for_attr', array()),), true) . '"></i>
+							<span class="u-srOnly">' . 'xfrm_featured' . '</span>
 						</li>
 					';
 	}
@@ -84,15 +84,15 @@ return array('macros' => array('resource' => function($__templater, array $__arg
 		if ($__vars['resource']['Watch'][$__vars['xf']['visitor']['user_id']]) {
 			$__compilerTemp1 .= '
 							<li>
-								<i class="structItem-status structItem-status--watched" aria-hidden="true" title="' . $__templater->filter('Extension watched', array(array('for_attr', array()),), true) . '"></i>
-								<span class="u-srOnly">' . 'Extension watched' . '</span>
+								<i class="structItem-status structItem-status--watched" aria-hidden="true" title="' . $__templater->filter('xfrm_resource_watched', array(array('for_attr', array()),), true) . '"></i>
+								<span class="u-srOnly">' . 'xfrm_resource_watched' . '</span>
 							</li>
 						';
 		} else if ((!$__vars['category']) AND $__vars['resource']['Category']['Watch'][$__vars['xf']['visitor']['user_id']]) {
 			$__compilerTemp1 .= '
 							<li>
-								<i class="structItem-status structItem-status--watched" aria-hidden="true" title="' . $__templater->filter('Category watched', array(array('for_attr', array()),), true) . '"></i>
-								<span class="u-srOnly">' . 'Category watched' . '</span>
+								<i class="structItem-status structItem-status--watched" aria-hidden="true" title="' . $__templater->filter('xfrm_category_watched', array(array('for_attr', array()),), true) . '"></i>
+								<span class="u-srOnly">' . 'xfrm_category_watched' . '</span>
 							</li>
 						';
 		}
@@ -241,7 +241,7 @@ return array('macros' => array('resource' => function($__templater, array $__arg
 	if ($__templater->method($__vars['resource'], 'isDownloadable', array())) {
 		$__finalCompiled .= '
 				<dl class="pairs pairs--justified structItem-minor structItem-metaItem structItem-metaItem--downloads">
-					<dt>' . 'Downloads' . '</dt>
+					<dt>' . 'xfrm_downloads' . '</dt>
 					<dd>' . $__templater->filter($__vars['resource']['download_count'], array(array('number', array()),), true) . '</dd>
 				</dl>
 			';

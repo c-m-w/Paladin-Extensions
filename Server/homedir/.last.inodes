@@ -10,9 +10,9 @@
 8 /home/palavpvb/tmp/awstats
 2 /home/palavpvb/tmp/cpbandwidth
 1 /home/palavpvb/tmp/webalizer
-75 /home/palavpvb/tmp
+76 /home/palavpvb/tmp
 2 /home/palavpvb/.sqmaildata
-6 /home/palavpvb/.trash
+8 /home/palavpvb/.trash
 6 /home/palavpvb/perl5/lib
 1 /home/palavpvb/perl5/bin
 8 /home/palavpvb/perl5
@@ -24,24 +24,24 @@
 4 /home/palavpvb/var
 1 /home/palavpvb/.htpasswds/Extensions
 2 /home/palavpvb/.htpasswds
-18 /home/palavpvb/.cpanel/datastore
+17 /home/palavpvb/.cpanel/datastore
 11 /home/palavpvb/.cpanel/nvdata
 2 /home/palavpvb/.cpanel/securitypolicy
 16 /home/palavpvb/.cpanel/caches
-53 /home/palavpvb/.cpanel
+52 /home/palavpvb/.cpanel
 4 /home/palavpvb/.spamassassin
 3 /home/palavpvb/public_html/.well-known
 3 /home/palavpvb/public_html/install
 8 /home/palavpvb/public_html/auth
 3 /home/palavpvb/public_html/library
-181 /home/palavpvb/public_html/styles
-10828 /home/palavpvb/public_html/internal_data
-399 /home/palavpvb/public_html/js
+184 /home/palavpvb/public_html/styles
+7285 /home/palavpvb/public_html/internal_data
+425 /home/palavpvb/public_html/js
 1 /home/palavpvb/public_html/cgi-bin
-139 /home/palavpvb/public_html/data
-5535 /home/palavpvb/public_html/src
-17115 /home/palavpvb/public_html
-25 /home/palavpvb/backups
+135 /home/palavpvb/public_html/data
+6259 /home/palavpvb/public_html/src
+14323 /home/palavpvb/public_html
+26 /home/palavpvb/backups
 8 /home/palavpvb/etc/paladin-extensions.com
 11 /home/palavpvb/etc
 1 /home/palavpvb/.softaculous/tmp
@@ -73,5 +73,5 @@
 5 /home/palavpvb/.cphorde
 1 /home/palavpvb/.ssh
 3 /home/palavpvb/.cl.selector
-17583 /home/palavpvb
-Last modified: Sat Dec 22 05:32:36 EST 2018
+14795 /home/palavpvb
+Last modified: Sun Dec 23 05:33:17 EST 2018

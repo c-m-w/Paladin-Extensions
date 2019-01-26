@@ -26,7 +26,7 @@ class Template extends AbstractDataType
 		$entries = $this->finder()
 			->where('addon_id', $addOnId)
 			->where('style_id', 0)
-			->order('title')->fetch();
+			->order(['type', 'title'])->fetch();
 		foreach ($entries AS $entry)
 		{
 			$node = $container->ownerDocument->createElement($this->getChildTag());
@@ -116,8 +116,10 @@ class Template extends AbstractDataType
 
 		foreach ($entries AS $entry)
 		{
-			$type = (string)$entry['type'];
-			$title = (string)$entry['title'];
+			// this approach is used to workaround what appears to be a potential PHP 7.3 bug
+			$attributes = $this->getSimpleAttributes($entry);
+			$type = $attributes['type'];
+			$title = $attributes['title'];
 
 			if (isset($existing[$type][$title]))
 			{

@@ -22,7 +22,7 @@ class ConversationMessage extends Finder
 
 	public function forFullView()
 	{
-		$this->with('User');
+		$this->with(['User', 'User.Profile']);
 
 		if ($this->app()->options()->showMessageOnlineStatus)
 		{

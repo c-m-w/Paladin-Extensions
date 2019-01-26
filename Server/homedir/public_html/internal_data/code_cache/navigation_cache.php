@@ -314,90 +314,6 @@ return function($__templater, $__selectedNav, array $__vars)
 		}
 	}
 
-	if ($__templater->method($__vars['xf']['visitor'], 'canViewResources', array())) {
-		$__navTemp = [
-		'title' => \XF::phrase('nav.xfrm'),
-		'href' => $__templater->fn('link', array('resources', ), false),
-		'attributes' => [],
-	];
-		if ($__navTemp) {
-			$__tree['xfrm'] = $__navTemp;
-			$__flat['xfrm'] =& $__tree['xfrm'];
-			if (empty($__tree['xfrm']['children'])) { $__tree['xfrm']['children'] = []; }
-
-			$__navTemp = [
-		'title' => \XF::phrase('nav.extensionsFreeExtensions'),
-		'href' => $__templater->fn('link', array('extensions/categories/2', ), false),
-		'attributes' => [],
-	];
-			if ($__navTemp) {
-				$__tree['xfrm']['children']['extensionsFreeExtensions'] = $__navTemp;
-				$__flat['extensionsFreeExtensions'] =& $__tree['xfrm']['children']['extensionsFreeExtensions'];
-			}
-
-			$__navTemp = [
-		'title' => \XF::phrase('nav.extensionsPremiumExtensions'),
-		'href' => $__templater->fn('link', array('extensions/categories/1', ), false),
-		'attributes' => [],
-	];
-			if ($__navTemp) {
-				$__tree['xfrm']['children']['extensionsPremiumExtensions'] = $__navTemp;
-				$__flat['extensionsPremiumExtensions'] =& $__tree['xfrm']['children']['extensionsPremiumExtensions'];
-			}
-
-			if ($__vars['xf']['visitor']['user_id']) {
-				$__navTemp = [
-		'title' => \XF::phrase('nav.xfrmWatched'),
-		'href' => '',
-		'attributes' => [],
-	];
-				if ($__navTemp) {
-					$__tree['xfrm']['children']['xfrmWatched'] = $__navTemp;
-					$__flat['xfrmWatched'] =& $__tree['xfrm']['children']['xfrmWatched'];
-					if (empty($__tree['xfrm']['children']['xfrmWatched']['children'])) { $__tree['xfrm']['children']['xfrmWatched']['children'] = []; }
-
-					if ($__vars['xf']['visitor']['user_id']) {
-						$__navTemp = [
-		'title' => \XF::phrase('nav.xfrmWatchedResources'),
-		'href' => $__templater->fn('link', array('watched/resources', ), false),
-		'attributes' => [],
-	];
-						if ($__navTemp) {
-							$__tree['xfrm']['children']['xfrmWatched']['children']['xfrmWatchedResources'] = $__navTemp;
-							$__flat['xfrmWatchedResources'] =& $__tree['xfrm']['children']['xfrmWatched']['children']['xfrmWatchedResources'];
-						}
-					}
-
-					if ($__vars['xf']['visitor']['user_id']) {
-						$__navTemp = [
-		'title' => \XF::phrase('nav.xfrmWatchedCategories'),
-		'href' => $__templater->fn('link', array('watched/resource-categories', ), false),
-		'attributes' => [],
-	];
-						if ($__navTemp) {
-							$__tree['xfrm']['children']['xfrmWatched']['children']['xfrmWatchedCategories'] = $__navTemp;
-							$__flat['xfrmWatchedCategories'] =& $__tree['xfrm']['children']['xfrmWatched']['children']['xfrmWatchedCategories'];
-						}
-					}
-
-				}
-			}
-
-			if ($__templater->method($__vars['xf']['visitor'], 'canSearch', array())) {
-				$__navTemp = [
-		'title' => \XF::phrase('nav.xfrmSearchResources'),
-		'href' => $__templater->fn('link', array('search', null, array('type' => 'resource', ), ), false),
-		'attributes' => [],
-	];
-				if ($__navTemp) {
-					$__tree['xfrm']['children']['xfrmSearchResources'] = $__navTemp;
-					$__flat['xfrmSearchResources'] =& $__tree['xfrm']['children']['xfrmSearchResources'];
-				}
-			}
-
-		}
-	}
-
 	if ($__templater->method($__vars['xf']['visitor'], 'canViewMemberList', array())) {
 		$__navTemp = [
 		'title' => \XF::phrase('nav.members'),
@@ -460,36 +376,38 @@ return function($__templater, $__selectedNav, array $__vars)
 		}
 	}
 
-	if ($__vars['xf']['visitor']['user_id']) {
+	if ($__templater->method($__vars['xf']['visitor'], 'canViewProducts', array())) {
 		$__navTemp = [
-		'title' => \XF::phrase('nav.navPremium'),
-		'href' => $__templater->fn('link', array('account', ), false) . 'upgrades',
+		'title' => \XF::phrase('nav.xr_pm_products'),
+		'href' => $__templater->fn('link', array('products', ), false),
 		'attributes' => [],
 	];
 		if ($__navTemp) {
-			$__tree['navPremium'] = $__navTemp;
-			$__flat['navPremium'] =& $__tree['navPremium'];
-			if (empty($__tree['navPremium']['children'])) { $__tree['navPremium']['children'] = []; }
+			$__tree['xr_pm_products'] = $__navTemp;
+			$__flat['xr_pm_products'] =& $__tree['xr_pm_products'];
+			if (empty($__tree['xr_pm_products']['children'])) { $__tree['xr_pm_products']['children'] = []; }
 
-			$__navTemp = [
-		'title' => \XF::phrase('nav.navPremiumSupport'),
-		'href' => $__templater->fn('link', array('support/open?department_id=4/', ), false),
-		'attributes' => [],
-	];
-			if ($__navTemp) {
-				$__tree['navPremium']['children']['navPremiumSupport'] = $__navTemp;
-				$__flat['navPremiumSupport'] =& $__tree['navPremium']['children']['navPremiumSupport'];
-			}
-
-			if ($__templater->method($__vars['xf']['visitor'], 'hasPermission', array('siropuReferralContests', 'createInvitations', ))) {
+			if ($__vars['xf']['visitor']['user_id']) {
 				$__navTemp = [
-		'title' => \XF::phrase('nav.navPremiumInvitations'),
-		'href' => $__templater->fn('link', array('account/invitations/create', ), false),
+		'title' => \XF::phrase('nav.xr_pm_your_purchases'),
+		'href' => $__templater->fn('link', array('products/purchases', ), false),
 		'attributes' => [],
 	];
 				if ($__navTemp) {
-					$__tree['navPremium']['children']['navPremiumInvitations'] = $__navTemp;
-					$__flat['navPremiumInvitations'] =& $__tree['navPremium']['children']['navPremiumInvitations'];
+					$__tree['xr_pm_products']['children']['xr_pm_your_purchases'] = $__navTemp;
+					$__flat['xr_pm_your_purchases'] =& $__tree['xr_pm_products']['children']['xr_pm_your_purchases'];
+				}
+			}
+
+			if ($__templater->method($__vars['xf']['visitor'], 'canSearch', array())) {
+				$__navTemp = [
+		'title' => \XF::phrase('nav.xr_pm_products_search'),
+		'href' => $__templater->fn('link', array('search', null, array('type' => 'xr_pm_product', ), ), false),
+		'attributes' => [],
+	];
+				if ($__navTemp) {
+					$__tree['xr_pm_products']['children']['xr_pm_products_search'] = $__navTemp;
+					$__flat['xr_pm_products_search'] =& $__tree['xr_pm_products']['children']['xr_pm_products_search'];
 				}
 			}
 

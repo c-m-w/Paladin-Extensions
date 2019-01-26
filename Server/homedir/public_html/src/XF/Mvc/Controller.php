@@ -146,7 +146,15 @@ abstract class Controller
 	{
 		if (!$this->validateCsrfToken($token, $error, $validityPeriod))
 		{
-			throw $this->exception($this->error(\XF::phrase('security_error_occurred')));
+			if ($error == 'no_cookie')
+			{
+				$error = \XF::phrase('cookies_required_to_use_this_site');
+			}
+			else
+			{
+				$error = \XF::phrase('security_error_occurred');
+			}
+			throw $this->exception($this->error($error));
 		}
 	}
 
@@ -508,7 +516,17 @@ abstract class Controller
 			$redirectUrl = rtrim($fullBasePath, '/') . '/' . $linkUrlPrefix;
 			if ($requestParams !== false)
 			{
-				$redirectUrl .= (strpos($redirectUrl, '?') === false ? '?' : '&') . $requestParams;
+				$paramsSep = (strpos($redirectUrl, '?') === false ? '?' : '&');
+
+				if (strpos($redirectUrl, '#') !== false)
+				{
+					list ($link, $hash) = explode('#', $redirectUrl, 2);
+					$redirectUrl = $link . $paramsSep . $requestParams . '#' . $hash;
+				}
+				else
+				{
+					$redirectUrl .= $paramsSep . $requestParams;
+				}
 			}
 
 			throw $this->exception($this->redirectPermanently($redirectUrl));

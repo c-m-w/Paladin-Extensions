@@ -20,7 +20,6 @@ class Exporter extends \XF\Service\AbstractService
 	protected $xml;
 
 	protected $containers = [];
-	protected $emptyContainers = [];
 
 	public function __construct(\XF\App $app, AddOn $addOn, $additionalFiles = [])
 	{
@@ -34,15 +33,11 @@ class Exporter extends \XF\Service\AbstractService
 	protected function buildXml()
 	{
 		$dataManager = $this->app->addOnDataManager();
-		$this->xml = $dataManager->exportAddOn($this->addOn, $this->containers, $this->emptyContainers);
+		$this->xml = $dataManager->exportAddOn($this->addOn, $this->containers);
 
 		if (!$this->containers)
 		{
 			$this->deleteDataDirectory();
-		}
-		else if ($this->emptyContainers)
-		{
-			$this->deleteEmpty();
 		}
 	}
 
@@ -91,26 +86,6 @@ class Exporter extends \XF\Service\AbstractService
 		$xml = $newDoc->saveXML();
 
 		file_put_contents($dataDir . DIRECTORY_SEPARATOR . "$containerName.xml", $xml);
-	}
-
-	public function deleteEmpty()
-	{
-		if (!$this->emptyContainers)
-		{
-			return;
-		}
-
-		$addOn = $this->addOn;
-
-		foreach ($this->emptyContainers AS $containerName)
-		{
-			$file = $addOn->getDataDirectory() . DIRECTORY_SEPARATOR . "$containerName.xml";
-
-			if (file_exists($file) && is_writable($file))
-			{
-				@unlink($file);
-			}
-		}
 	}
 
 	public function deleteDataDirectory()

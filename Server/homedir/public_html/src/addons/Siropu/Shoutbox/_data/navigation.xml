@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation>
+  <navigation_entry navigation_id="siropuShoutbox" display_order="900" navigation_type_id="basic" enabled="1"><![CDATA[{"link":"{{ link('shoutbox') }}","display_condition":"$xf.options.siropuShoutboxNavigation AND $xf.visitor.canViewSiropuShoutbox() AND $xf.visitor.hasRequiredAge()","extra_attributes":[]}]]></navigation_entry>
+</navigation>

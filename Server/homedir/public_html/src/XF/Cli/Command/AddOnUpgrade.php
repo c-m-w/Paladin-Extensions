@@ -75,6 +75,9 @@ class AddOnUpgrade extends Command
 			return 1;
 		}
 
+		// make sure any errors get logged here
+		\XF::app()->error()->setIgnorePendingUpgrade(true);
+
 		$addOn->preUpgrade();
 
 		$this->runSubAction($output, $addOn, 'upgrade');

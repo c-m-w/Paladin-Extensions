@@ -68,6 +68,7 @@ class TemplateModification extends AbstractDataType
 
 			$entity = isset($existing[(string)$entry['modification_key']]) ? $existing[(string)$entry['modification_key']] : $this->create();
 			$entity->getBehavior('XF:DevOutputWritable')->setOption('write_dev_output', false);
+			$entity->setOption('hide_errors', true);
 
 			$this->importMappedAttributes($entry, $entity);
 

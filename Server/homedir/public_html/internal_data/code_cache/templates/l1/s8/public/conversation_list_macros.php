@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: eb4126122cf33833fa1b8581c28b8087
+// FROM HASH: 1a7aa7d833c44fd37a7a7c0735d65a5c
 return array('macros' => array('item' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -96,7 +96,7 @@ return array('macros' => array('item' => function($__templater, array $__argumen
 						<ul class="listInline listInline--comma listInline--selfInline">
 							<li>' . $__templater->fn('username_link', array($__vars['userConv']['Master']['Starter'], false, array(
 		'defaultname' => $__vars['userConv']['Master']['username'],
-		'title' => $__templater->filter('Conversation starter', array(array('for_attr', array()),), false),
+		'title' => 'Conversation starter',
 	))) . '</li>' . trim('
 							');
 	if ($__templater->isTraversable($__vars['userConv']['Master']['recipients'])) {
@@ -115,26 +115,25 @@ return array('macros' => array('item' => function($__templater, array $__argumen
 					</li>
 					<li class="structItem-startDate"><a href="' . $__templater->fn('link', array('conversations', $__vars['userConv'], ), true) . '" rel="nofollow">' . $__templater->fn('date_dynamic', array($__vars['userConv']['Master']['start_date'], array(
 	))) . '</a></li>
-				</ul>
-
-				';
+					';
 	if ($__vars['userConv']['reply_count'] >= $__vars['xf']['options']['messagesPerPage']) {
 		$__finalCompiled .= '
-					<span class="structItem-pageJump">
-					';
+						<span class="structItem-pageJump">
+						';
 		$__compilerTemp3 = $__templater->fn('last_pages', array($__vars['userConv']['reply_count'] + 1, $__vars['xf']['options']['messagesPerPage'], ), false);
 		if ($__templater->isTraversable($__compilerTemp3)) {
 			foreach ($__compilerTemp3 AS $__vars['p']) {
 				$__finalCompiled .= '
-						<a href="' . $__templater->fn('link', array('conversations', $__vars['userConv'], array('page' => $__vars['p'], ), ), true) . '">' . $__templater->escape($__vars['p']) . '</a>
-					';
+							<a href="' . $__templater->fn('link', array('conversations', $__vars['userConv'], array('page' => $__vars['p'], ), ), true) . '">' . $__templater->escape($__vars['p']) . '</a>
+						';
 			}
 		}
 		$__finalCompiled .= '
-					</span>
-				';
+						</span>
+					';
 	}
 	$__finalCompiled .= '
+				</ul>
 			</div>
 		</div>
 		<div class="structItem-cell structItem-cell--meta">

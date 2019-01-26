@@ -40,19 +40,16 @@ class TemplateModification extends Entity
 			'error' => 0
 		];
 
-		if ($this->Logs)
+		foreach ($this->Logs AS $log)
 		{
-			foreach ($this->Logs AS $log)
+			$summary['ok'] += $log->apply_count;
+			if ($log->status === 'ok' && $log->apply_count === 0)
 			{
-				$summary['ok'] += $log->apply_count;
-				if ($log->status === 'ok' && $log->apply_count === 0)
-				{
-					$summary['not_found']++;
-				}
-				if (strpos($summary['status'], 'error'))
-				{
-					$summary['error']++;
-				}
+				$summary['not_found']++;
+			}
+			if (strpos($log->status, 'error') !== false)
+			{
+				$summary['error']++;
 			}
 		}
 
@@ -99,7 +96,7 @@ class TemplateModification extends Entity
 				$devOutput->setOption('write_dev_output', false);
 				$designerOutput->setOption('write_designer_output', false);
 
-				$template->reparseTemplate();
+				$template->reparseTemplate($this->getOption('hide_errors'));
 				$template->save();
 
 				$devOutput->resetOptions();
@@ -171,6 +168,7 @@ class TemplateModification extends Entity
 
 		if ($this->getOption('reparse_template'))
 		{
+			$this->setOption('hide_errors', true);
 			$this->reparseTemplate();
 		}
 	}
@@ -242,7 +240,8 @@ class TemplateModification extends Entity
 			]
 		];
 		$structure->options = [
-			'reparse_template' => true
+			'reparse_template' => true,
+			'hide_errors' => false
 		];
 
 		return $structure;

@@ -13,6 +13,7 @@ class StyleProperty extends Repository
 		$finder = $this->finder('XF:StylePropertyMap');
 		$finder->where('style_id', $style->style_id)
 			->with('Property', true)
+			->with('Property.Group')
 			->whereAddOnActive([
 				'relation' => 'Property.AddOn',
 				'column' => 'Property.addon_id'

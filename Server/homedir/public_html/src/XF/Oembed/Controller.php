@@ -25,6 +25,7 @@ class Controller
 	const ERROR_INVALID_REFERRER = 3;
 	const ERROR_DISABLED = 4;
 	const ERROR_FAILED = 5;
+	const ERROR_INVALID_PROVIDER = 6;
 
 	public function __construct(\XF\App $app, Request $request = null)
 	{

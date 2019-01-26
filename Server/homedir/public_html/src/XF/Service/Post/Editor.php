@@ -29,6 +29,11 @@ class Editor extends \XF\Service\AbstractService
 
 	protected $performValidations = true;
 
+	/**
+	 * @var \XF\Service\Thread\Editor|null
+	 */
+	protected $threadEditor = null;
+
 	public function __construct(\XF\App $app, Post $post)
 	{
 		parent::__construct($app);
@@ -74,6 +79,16 @@ class Editor extends \XF\Service\AbstractService
 	public function setIsAutomated()
 	{
 		$this->setPerformValidations(false);
+	}
+
+	public function setThreadEditor(\XF\Service\Thread\Editor $editor = null)
+	{
+		$this->threadEditor = $editor;
+	}
+
+	public function getThreadEditor()
+	{
+		return $this->threadEditor;
 	}
 
 	public function getPostPreparer()
@@ -151,7 +166,14 @@ class Editor extends \XF\Service\AbstractService
 		$this->finalSetup();
 
 		$this->post->preSave();
-		return $this->post->getErrors();
+		$errors = $this->post->getErrors();
+
+		if ($this->threadEditor && !$this->threadEditor->validate($threadErrors))
+		{
+			$errors = array_merge($errors, $threadErrors);
+		}
+
+		return $errors;
 	}
 
 	protected function _save()
@@ -178,6 +200,11 @@ class Editor extends \XF\Service\AbstractService
 			/** @var \XF\Repository\Post $postRepo */
 			$postRepo = $this->repository('XF:Post');
 			$postRepo->sendModeratorActionAlert($post, 'edit', $this->alertReason);
+		}
+
+		if ($this->threadEditor)
+		{
+			$this->threadEditor->save();
 		}
 
 		$db->commit();

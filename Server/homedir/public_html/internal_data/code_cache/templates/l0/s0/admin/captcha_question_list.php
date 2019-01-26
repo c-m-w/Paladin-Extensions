@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 4acb466576f8bfac74a6b01293d34531
+// FROM HASH: c4c6530ccc45242b7f25d859829952e7
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -68,7 +68,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			</div>
 		</div>
 	', array(
-			'action' => 'captcha-questions/toggle',
+			'action' => $__templater->fn('link', array('captcha-questions/toggle', ), false),
 			'class' => 'block',
 			'ajax' => 'true',
 		)) . '

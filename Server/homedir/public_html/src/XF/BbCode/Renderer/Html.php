@@ -431,6 +431,10 @@ class Html extends AbstractRenderer
 		else
 		{
 			$config = [];
+			if ($language == 'rich')
+			{
+				$config['phrase'] = \XF::phrase('code_language.rich');
+			}
 			$language = '';
 		}
 
@@ -642,7 +646,7 @@ class Html extends AbstractRenderer
 		$output = "<$listType>";
 		foreach ($elements AS $element)
 		{
-			$output .= "\n<li>$element</li>";
+			$output .= "\n<li data-xf-list-type=\"$listType\">$element</li>";
 		}
 		$output .= "\n</$listType>";
 
@@ -907,6 +911,11 @@ class Html extends AbstractRenderer
 		{
 			$url = $option;
 			$text = $this->renderSubTree($children, $options);
+
+			if ($text === '')
+			{
+				$text = $url;
+			}
 		}
 		else
 		{

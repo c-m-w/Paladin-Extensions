@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 6fd82568c53e0a75e7de203439a30c4d
+// FROM HASH: 64ae76cffbadde8cae4b85b3949339ef
 return array('macros' => array('navigation_list' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -35,7 +35,7 @@ return array('macros' => array('navigation_list' => function($__templater, array
 	), $__arguments, $__vars);
 	$__finalCompiled .= '
 	<li class="nestable-item" data-id="' . $__templater->escape($__vars['nav']['navigation_id']) . '">
-		<div class="nestable-handle" aria-label="' . 'Drag handle' . '"><i class="fa fa-bars" aria-hidden="true"></i></div>
+		<div class="nestable-handle" aria-label="' . $__templater->filter('Drag handle', array(array('for_attr', array()),), true) . '"><i class="fa fa-bars" aria-hidden="true"></i></div>
 		<div class="nestable-content">' . $__templater->escape($__vars['nav']['title']) . '</div>
 		';
 	if (!$__templater->test($__vars['children'], 'empty', array())) {

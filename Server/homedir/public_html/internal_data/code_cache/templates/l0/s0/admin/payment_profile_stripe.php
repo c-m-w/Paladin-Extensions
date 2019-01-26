@@ -64,7 +64,7 @@ You will also need to set up a webhook endpoint in your Stripe account with the 
 	',
 		'_type' => 'option',
 	)), array(
-		'explain' => 'Requires an Apple Developer account and additional setup in your Stripe Dashboard.',
+		'explain' => 'Requires domain verification using the <a href="https://dashboard.stripe.com/account/apple_pay" target="_blank">Apple Pay page</a> in your Stripe Dashboard.',
 	));
 	return $__finalCompiled;
 });

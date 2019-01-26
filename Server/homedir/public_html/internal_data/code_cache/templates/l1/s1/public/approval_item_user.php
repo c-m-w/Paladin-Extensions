@@ -43,12 +43,6 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'label' => 'Register date',
 	)) . '
 
-' . $__templater->formRow('
-	' . $__templater->fn('date_dynamic', array($__vars['content']['last_activity'], array(
-	))) . '
-', array(
-		'label' => 'Last activity',
-	)) . '
 ';
 	$__vars['fromRegFields'] = $__templater->preEscaped(trim('
 	' . $__templater->callMacro('custom_fields_macros', 'custom_fields_view', array(

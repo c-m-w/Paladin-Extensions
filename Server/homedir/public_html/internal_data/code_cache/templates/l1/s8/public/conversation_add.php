@@ -3,17 +3,6 @@
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
-	if ($__vars['xf']['options']['useress_conversationWrapper']) {
-		$__finalCompiled .= '
-	';
-		$__compilerTemp1 = $__vars;
-		$__compilerTemp1['pageSelected'] = 'conversations_add';
-		$__templater->wrapTemplate('account_wrapper', $__compilerTemp1);
-		$__finalCompiled .= '
-';
-	}
-	$__finalCompiled .= '
-';
 	$__templater->pageParams['pageTitle'] = $__templater->preEscaped('Start conversation');
 	$__finalCompiled .= '
 
@@ -23,54 +12,54 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	$__finalCompiled .= '
 
 ';
-	$__compilerTemp2 = '';
-	$__compilerTemp2 .= '
+	$__compilerTemp1 = '';
+	$__compilerTemp1 .= '
 			';
 	if (!$__templater->test($__vars['errorUsernames'], 'empty', array())) {
-		$__compilerTemp2 .= '
+		$__compilerTemp1 .= '
 				<div>' . 'You can not start a conversation with the following users because of their privacy settings: ' . $__templater->filter($__vars['errorUsernames'], array(array('join', array(', ', )),), true) . '.' . '</div>
 			';
 	}
-	$__compilerTemp2 .= '
+	$__compilerTemp1 .= '
 
 			';
 	if (!$__templater->test($__vars['notFoundUsernames'], 'empty', array())) {
-		$__compilerTemp2 .= '
+		$__compilerTemp1 .= '
 				<div>' . 'The following users could not be found: ' . $__templater->filter($__vars['notFoundUsernames'], array(array('join', array(', ', )),), true) . '.' . '</div>
 			';
 	}
-	$__compilerTemp2 .= '
+	$__compilerTemp1 .= '
 
 			';
 	if ($__vars['recipientLimit']) {
-		$__compilerTemp2 .= '
+		$__compilerTemp1 .= '
 				<div>' . 'You have exceeded the allowed number of recipients (' . $__templater->escape($__vars['recipientLimit']) . ') for this message.' . '</div>
 			';
 	}
-	$__compilerTemp2 .= '
+	$__compilerTemp1 .= '
 		';
-	if (strlen(trim($__compilerTemp2)) > 0) {
+	if (strlen(trim($__compilerTemp1)) > 0) {
 		$__finalCompiled .= '
 	<div class="blockMessage blockMessage--error blockMessage--iconic">
-		' . $__compilerTemp2 . '
+		' . $__compilerTemp1 . '
 	</div>
 ';
 	}
 	$__finalCompiled .= '
 
 ';
-	$__compilerTemp3 = '';
+	$__compilerTemp2 = '';
 	if ($__vars['attachmentData']) {
-		$__compilerTemp3 .= '
+		$__compilerTemp2 .= '
 					' . $__templater->callMacro('helper_attach_upload', 'upload_block', array(
 			'attachmentData' => $__vars['attachmentData'],
 			'forceHash' => $__vars['draft']['attachment_hash'],
 		), $__vars) . '
 				';
 	}
-	$__compilerTemp4 = '';
+	$__compilerTemp3 = '';
 	if ($__vars['xf']['options']['multiQuote']) {
-		$__compilerTemp4 .= '
+		$__compilerTemp3 .= '
 					' . $__templater->callMacro('multi_quote_macros', 'button', array(
 			'href' => $__templater->fn('link', array('conversations/multi-quote', $__vars['conversation'], ), false),
 			'messageSelector' => '.js-message',
@@ -111,9 +100,9 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	)) . '
 
 			' . $__templater->formRow('
-				' . $__compilerTemp3 . '
+				' . $__compilerTemp2 . '
 
-				' . $__compilerTemp4 . '
+				' . $__compilerTemp3 . '
 
 				' . $__templater->button('', array(
 		'class' => 'button--link u-jsOnly',

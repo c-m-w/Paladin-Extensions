@@ -67,6 +67,12 @@ abstract class AbstractHandler
 		return \XF::app()->templater()->renderTemplate($template, $data);
 	}
 
+	public function isAlertRenderable(UserAlert $alert)
+	{
+		$template = $this->getTemplateName($alert->action);
+		return \XF::app()->templater()->isKnownTemplate($template);
+	}
+
 	public function getEntityWith()
 	{
 		return [];

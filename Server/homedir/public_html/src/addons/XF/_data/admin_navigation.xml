@@ -31,6 +31,9 @@
   <admin_navigation_entry navigation_id="cronEntries" parent_navigation_id="tools" display_order="100" link="cron" admin_permission_id="cron" debug_only="0" hide_no_children="0"/>
   <admin_navigation_entry navigation_id="customBbCodes" parent_navigation_id="bbCode" display_order="100" link="bb-codes" admin_permission_id="bbCodeSmilie" debug_only="0" hide_no_children="0"/>
   <admin_navigation_entry navigation_id="dataMaintenance" parent_navigation_id="tools" display_order="400" icon="fa-medkit" debug_only="0" hide_no_children="1"/>
+  <admin_navigation_entry navigation_id="dataPortability" parent_navigation_id="users" display_order="1000" admin_permission_id="user" debug_only="0" hide_no_children="0"/>
+  <admin_navigation_entry navigation_id="dataPortabilityExport" parent_navigation_id="dataPortability" display_order="100" link="data-portability/export" debug_only="0" hide_no_children="0"/>
+  <admin_navigation_entry navigation_id="dataPortabilityImport" parent_navigation_id="dataPortability" display_order="200" link="data-portability/import" debug_only="0" hide_no_children="0"/>
   <admin_navigation_entry navigation_id="devNavigation" parent_navigation_id="development" display_order="2000" icon="fa-map-o" debug_only="0" hide_no_children="0"/>
   <admin_navigation_entry navigation_id="devPermissions" parent_navigation_id="development" display_order="1000" icon="fa-ban" debug_only="0" hide_no_children="0"/>
   <admin_navigation_entry navigation_id="development" display_order="20000" link="development" icon="fa-file-code-o" debug_only="1" hide_no_children="1"/>
@@ -39,10 +42,12 @@
   <admin_navigation_entry navigation_id="emailUsers" parent_navigation_id="contactUsers" display_order="200" link="users/email" admin_permission_id="user" debug_only="0" hide_no_children="0"/>
   <admin_navigation_entry navigation_id="executionManipulation" parent_navigation_id="development" display_order="3000" icon="fa-random" debug_only="0" hide_no_children="0"/>
   <admin_navigation_entry navigation_id="fileCheck" parent_navigation_id="checksAndTests" display_order="300" link="tools/file-check" debug_only="0" hide_no_children="0"/>
+  <admin_navigation_entry navigation_id="forceAgreementPrivacy" parent_navigation_id="help" display_order="400" link="force-agreement/privacy-policy" admin_permission_id="option" debug_only="0" hide_no_children="0"/>
+  <admin_navigation_entry navigation_id="forceAgreementTerms" parent_navigation_id="help" display_order="500" link="force-agreement/terms" admin_permission_id="option" debug_only="0" hide_no_children="0"/>
   <admin_navigation_entry navigation_id="forumNodePermissions" parent_navigation_id="forums" display_order="200" link="permissions/nodes" admin_permission_id="node" debug_only="0" hide_no_children="0"/>
   <admin_navigation_entry navigation_id="forums" display_order="400" link="forums" icon="fa-comments" debug_only="0" hide_no_children="1"/>
   <admin_navigation_entry navigation_id="groupsAndPermissions" display_order="10100" link="groups-permissions" icon="fa-users" debug_only="0" hide_no_children="1"/>
-  <admin_navigation_entry navigation_id="help" parent_navigation_id="communication" display_order="3000" link="help-pages" icon="fa-life-ring" admin_permission_id="help" debug_only="0" hide_no_children="1"/>
+  <admin_navigation_entry navigation_id="help" parent_navigation_id="communication" display_order="3000" icon="fa-life-ring" admin_permission_id="help" debug_only="0" hide_no_children="1"/>
   <admin_navigation_entry navigation_id="helpPages" parent_navigation_id="help" display_order="300" link="help-pages" admin_permission_id="help" debug_only="0" hide_no_children="0"/>
   <admin_navigation_entry navigation_id="imageProxyLog" parent_navigation_id="logsContent" display_order="600" link="logs/image-proxy" admin_permission_id="viewLogs" debug_only="0" hide_no_children="0"/>
   <admin_navigation_entry navigation_id="importData" parent_navigation_id="dataMaintenance" display_order="400" link="import" admin_permission_id="import" debug_only="0" hide_no_children="0"/>

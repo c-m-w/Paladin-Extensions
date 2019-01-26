@@ -11,6 +11,7 @@
 			lastActive: 0,
 			reverse: false,
 			collapsed: false,
+               timeout: 1000,
 			sound: 'on'
 		},
 
@@ -62,6 +63,13 @@
 				{
 					self.options.loadMore = loadMore;
 				}, 1000);
+
+				var smilieBox = $('.siropuShoutbox .editorSmilies');
+
+				if (smilieBox.length)
+				{
+					smilieBox.remove();
+				}
 			});
 
 			$(document).on('shoutbox:collapse', function()
@@ -89,7 +97,14 @@
 					return input.focus();
 				}
 
-				input.val('').attr('placeholder', XF.phrase('siropu_shoutbox_please_wait')).prop('disabled', true);
+                    var placeholder = XF.phrase('siropu_shoutbox_please_wait');
+
+                    if (self.options.timeout > 1000)
+                    {
+                         placeholder = XF.phrase('siropu_shoutbox_please_wait_x_seconds');
+                    }
+
+				input.val('').attr('placeholder', placeholder).prop('disabled', true);
 				self.stopRefreshInterval();
 
 				XF.ajax('POST',
@@ -118,7 +133,7 @@
 				setTimeout(function()
 				{
 					input.prop('disabled', false).attr('placeholder', XF.phrase('siropu_shoutbox_placeholder')).focus();
-				}, 1000);
+				}, self.options.timeout);
 			});
 
 			this.$target.on('mouseover mouseout', '.siropuShoutboxShouts > li[data-id]', function()
@@ -189,6 +204,16 @@
 					);
 				}
 			});
+
+               $(window).resize(function()
+			{
+                    self.adjustContentHeight();
+               });
+
+               setTimeout(function()
+               {
+                    self.adjustContentHeight();
+               }, 500);
 		},
 
 		update: function(data, soundOff)
@@ -248,7 +273,7 @@
 		{
 			var self = this;
 
-			XF.ajax('POST',
+			XF.ajax('GET',
 				XF.canonicalizeUrl('index.php?shoutbox/refresh'),
 				{
 					last_id: self.options.lastId
@@ -258,6 +283,8 @@
 					self.update(data, soundOff);
 				},
 				{
+                         skipDefault: true,
+                         skipDefaultSuccess: true,
 					global: false
 				}
 			);
@@ -288,7 +315,7 @@
 
 		loadAudio: function()
 		{
-			this.audio = new Audio('styles/default/siropu/shoutbox/new.mp3');
+			this.audio = new Audio(XF.config.url.basePath + 'styles/default/siropu/shoutbox/new.mp3');
 		},
 
 		soundOn: function()
@@ -314,7 +341,22 @@
 			{
 				this.audio.play();
 			}
-		}
+		},
+
+          adjustContentHeight: function ()
+		{
+               var shoutbox = this.$target;
+               var content = shoutbox.find('.siropuShoutboxShouts');
+			var windowHeight = $(window).height();
+			var shoutboxHeight = shoutbox.height();
+			var contentHeight = content.height();
+			var diffHeight = windowHeight - shoutboxHeight;
+
+               if ($('#siropuShoutboxFullPage').length)
+               {
+                    content.css('height', (contentHeight + diffHeight) + 'px');
+               }
+    		}
      });
 
 	XF.SiropuShoutboxToggleSound = XF.Click.newHandler({
@@ -457,11 +499,81 @@
 		}
 	});
 
+	XF.SiropuShoutboxSmilies = XF.Element.newHandler({
+		options: {},
+
+		init: function()
+		{
+			var form = this.$target.parents('form');
+
+			this.$target.on('click', function(e)
+			{
+				e.preventDefault();
+
+				var smilieBox = form.find('.editorSmilies');
+
+				if (smilieBox.length)
+				{
+					smilieBox.toggleClass('is-active');
+				}
+				else
+				{
+					smilieBox = $('<div class="editorSmilies" />');
+
+					XF.ajax('GET',
+						XF.canonicalizeUrl('index.php?editor/smilies'),
+						{},
+						function (data)
+						{
+							if (data.html)
+							{
+								XF.setupHtmlInsert(data.html, function($html)
+								{
+									$(smilieBox).on('click', 'img.smilie', function(e)
+									{
+										var input = form.find('input');
+										input.val(input.val() + $(this).attr('alt')).focus();
+									});
+
+									smilieBox.html($html).appendTo(form).addClass('is-active');
+								});
+							}
+						}
+					);
+				}
+			});
+		}
+	});
+
+     XF.SiropuShoutboxPopup = XF.Click.newHandler({
+		eventNameSpace: 'siropuShoutboxPopup',
+
+		init: function() {},
+
+		click: function(e)
+		{
+               e.preventDefault();
+
+               var siropuShoutboxPopup;
+
+               if (siropuShoutboxPopup === undefined || siropuShoutboxPopup.closed)
+               {
+               	siropuShoutboxPopup = window.open(this.$target.attr('href'), 'siropuShoutboxPopup', 'width=800,height=500');
+               }
+               else
+               {
+               	siropuShoutboxPopup.focus();
+               };
+		}
+	});
+
 	XF.Element.register('siropu-shoutbox', 'XF.SiropuShoutbox');
 	XF.Element.register('siropu-shoutbox-submit', 'XF.SiropuShoutboxSubmit');
+	XF.Element.register('siropu-shoutbox-smilies', 'XF.SiropuShoutboxSmilies');
 	XF.Element.register('siropu-shoutbox-edit-shout', 'XF.SiropuShoutboxEdit');
 	XF.Element.register('siropu-shoutbox-delete-shout', 'XF.SiropuShoutboxDelete');
 
+     XF.Click.register('siropu-shoutbox-popup', 'XF.SiropuShoutboxPopup');
 	XF.Click.register('siropu-shoutbox-toggle-sound', 'XF.SiropuShoutboxToggleSound');
 	XF.Click.register('siropu-shoutbox-toggle-direction', 'XF.SiropuShoutboxToggleDirection');
 	XF.Click.register('siropu-shoutbox-toggle-visibility', 'XF.SiropuShoutboxToggleVisibility');

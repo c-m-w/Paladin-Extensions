@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<permissions>
+  <permission permission_group_id="xr_pm" permission_id="buy" permission_type="flag" interface_group_id="xr_pm_user" display_order="300"/>
+  <permission permission_group_id="xr_pm" permission_id="use_coupons" permission_type="flag" interface_group_id="xr_pm_user" display_order="400"/>
+  <permission permission_group_id="xr_pm" permission_id="use_coupons_limit" permission_type="integer" interface_group_id="xr_pm_user" display_order="500"/>
+  <permission permission_group_id="xr_pm" permission_id="view" permission_type="flag" interface_group_id="xr_pm_user" display_order="100"/>
+  <permission permission_group_id="xr_pm" permission_id="view_product_image" permission_type="flag" interface_group_id="xr_pm_user" display_order="200"/>
+</permissions>

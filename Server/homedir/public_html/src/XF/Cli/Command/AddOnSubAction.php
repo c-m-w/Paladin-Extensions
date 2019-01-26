@@ -9,6 +9,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
+use Symfony\Component\Console\Application as ConsoleApplication;
 
 class AddOnSubAction extends Command
 {
@@ -56,48 +57,76 @@ class AddOnSubAction extends Command
 			return 1;
 		}
 
-		switch ($action)
+		// make sure any errors get logged here
+		\XF::app()->error()->setIgnorePendingUpgrade(true);
+
+		try
 		{
-			case 'import':
-				$this->importAddOnData($input, $output, $addOn);
-				break;
+			switch ($action)
+			{
+				case 'import':
+					$this->importAddOnData($input, $output, $addOn);
+					break;
 
-			case 'install':
-				$this->performAddOnAction($input, $output, $addOn, \XF::phrase('installing'), 'install');
-				break;
+				case 'install':
+					$this->performAddOnAction($input, $output, $addOn, \XF::phrase('installing'), 'install');
+					break;
 
-			case 'post-install':
-				$stateChanges = [];
-				$addOn->postInstall($stateChanges);
-				break;
+				case 'post-install':
+					$stateChanges = [];
+					$addOn->postInstall($stateChanges);
+					break;
 
-			case 'upgrade':
-				$this->performAddOnAction($input, $output, $addOn, \XF::phrase('upgrading'), 'upgrade');
-				break;
+				case 'upgrade':
+					$this->performAddOnAction($input, $output, $addOn, \XF::phrase('upgrading'), 'upgrade');
+					break;
 
-			case 'post-upgrade':
-				$stateChanges = [];
-				$addOn->postUpgrade($stateChanges);
-				break;
+				case 'post-upgrade':
+					$stateChanges = [];
+					$addOn->postUpgrade($stateChanges);
+					break;
 
-			case 'uninstall':
-				$this->performAddOnAction($input, $output, $addOn, \XF::phrase('uninstalling'), 'uninstall');
-				break;
+				case 'uninstall':
+					$this->performAddOnAction($input, $output, $addOn, \XF::phrase('uninstalling'), 'uninstall');
+					break;
 
-			case 'post-uninstall':
-				$installed = $addOn->getInstalledAddOn();
-				if ($installed)
-				{
-					$installed->delete();
-				}
-				break;
+				case 'post-uninstall':
+					$installed = $addOn->getInstalledAddOn();
+					if ($installed)
+					{
+						$installed->delete();
+					}
 
-			case 'post-rebuild':
-				$addOn->postRebuild();
-				break;
+					$addOn->postUninstall();
+					break;
 
-			default:
-				throw new \InvalidArgumentException("Unknown action '$action'");
+				case 'post-rebuild':
+					$addOn->postRebuild();
+					break;
+
+				default:
+					throw new \InvalidArgumentException("Unknown action '$action'");
+			}
+		}
+		catch (\Exception $e)
+		{
+			// taking this approach so that we don't get double logging
+			\XF::logException($e, true, '', true);
+
+			$output->setVerbosity(OutputInterface::VERBOSITY_VERBOSE);
+			$this->getApplication()->renderException($e, $output);
+
+			return 222;
+		}
+		catch (\Throwable $e)
+		{
+			// taking this approach so that we don't get double logging
+			\XF::logException($e, true, '', true);
+
+			$output->setVerbosity(OutputInterface::VERBOSITY_VERBOSE);
+			$this->getApplication()->renderException($e, $output);
+
+			return 222;
 		}
 
 		return 0;

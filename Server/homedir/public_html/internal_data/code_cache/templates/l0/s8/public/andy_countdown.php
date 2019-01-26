@@ -1,12 +1,11 @@
 <?php
-// FROM HASH: 6111ea0b983bcfbf104221a5c47d144d
+// FROM HASH: 9bb29b1062157a0b6564034ec8c762d2
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
 	$__templater->includeCss('andy_countdown.less');
 	$__finalCompiled .= '
-
-<script src="' . $__templater->escape($__vars['xf']['options']['countdownLink']) . '" type="text/javascript"></script>
+' . $__templater->includeTemplate('andy_countdown_js', $__vars) . '
 
 <div class="block">
 <div class="block-container block-container-countdown" align="center">

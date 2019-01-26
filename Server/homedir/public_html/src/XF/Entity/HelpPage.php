@@ -80,6 +80,22 @@ class HelpPage extends Entity
 		return $phrase;
 	}
 
+	public function getPublicUrl()
+	{
+		if ($this->page_id == 'terms' && $this->app()['tosUrl'])
+		{
+			return $this->app()['tosUrl'];
+		}
+		else if ($this->page_id == 'privacy_policy' && $this->app()['privacyPolicyUrl'])
+		{
+			return $this->app()['privacyPolicyUrl'];
+		}
+		else
+		{
+			return $this->app()->router('public')->buildLink('help', $this);
+		}
+	}
+
 	public function getTemplateName()
 	{
 		return '_help_page_' . $this->page_id;
@@ -241,7 +257,8 @@ class HelpPage extends Entity
 		];
 		$structure->getters = [
 			'title' => true,
-			'description' => true
+			'description' => true,
+			'public_url' => true,
 		];
 		$structure->relations = [
 			'MasterTitle' => [

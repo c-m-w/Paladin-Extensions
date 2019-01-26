@@ -11,7 +11,7 @@ class IpsForums4X extends AbstractAuth
 
 	public function authenticate($userId, $password)
 	{
-		if (!is_string($password) || $password === '' || empty($this->data) || !$this->data['hash'])
+		if (!is_string($password) || $password === '' || empty($this->data['hash']))
 		{
 			return false;
 		}

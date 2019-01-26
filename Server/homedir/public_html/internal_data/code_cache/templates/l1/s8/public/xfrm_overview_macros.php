@@ -71,7 +71,7 @@ return array('macros' => array('featured_carousel' => function($__templater, arr
 		$__finalCompiled .= '
 			</ul>
 			<div class="carousel-footer">
-				<a href="' . $__templater->escape($__vars['viewAllLink']) . '">' . 'View all featured extensions' . '</a>
+				<a href="' . $__templater->escape($__vars['viewAllLink']) . '">' . 'xfrm_view_all_featured_resources' . '</a>
 			</div>
 		</div>
 	';
@@ -92,7 +92,7 @@ return array('macros' => array('featured_carousel' => function($__templater, arr
 	), $__arguments, $__vars);
 	$__finalCompiled .= '
 	';
-	$__vars['sortOrders'] = array('last_update' => 'Last update', 'resource_date' => 'Submission date', 'rating_weighted' => 'Rating', 'download_count' => 'Downloads', 'title' => 'Title', );
+	$__vars['sortOrders'] = array('last_update' => 'xfrm_last_update', 'resource_date' => 'xfrm_submission_date', 'rating_weighted' => 'Rating', 'download_count' => 'xfrm_downloads', 'title' => 'Title', );
 	$__finalCompiled .= '
 
 	<div class="block-filterBar">
@@ -108,9 +108,9 @@ return array('macros' => array('featured_carousel' => function($__templater, arr
 								<span class="filterBar-filterToggle-label">' . 'Price' . $__vars['xf']['language']['label_separator'] . '</span>
 								';
 		if ($__vars['filters']['type'] == 'free') {
-			$__compilerTemp1 .= 'Free';
+			$__compilerTemp1 .= 'xfrm_free';
 		} else {
-			$__compilerTemp1 .= 'Paid';
+			$__compilerTemp1 .= 'xfrm_paid';
 		}
 		$__compilerTemp1 .= '</a></li>
 						';
@@ -131,7 +131,7 @@ return array('macros' => array('featured_carousel' => function($__templater, arr
 		$__compilerTemp1 .= '
 							<li><a href="' . $__templater->fn('link', array($__vars['baseLinkPath'], $__vars['category'], $__templater->filter($__vars['filters'], array(array('replace', array('creator_id', null, )),), false), ), true) . '"
 								class="filterBar-filterToggle" data-xf-init="tooltip" title="' . $__templater->filter('Remove this filter', array(array('for_attr', array()),), true) . '">
-								<span class="filterBar-filterToggle-label">' . 'Creator' . $__vars['xf']['language']['label_separator'] . '</span>
+								<span class="filterBar-filterToggle-label">' . 'xfrm_creator:' . '</span>
 								' . $__templater->escape($__vars['creatorFilter']['username']) . '</a></li>
 						';
 	}

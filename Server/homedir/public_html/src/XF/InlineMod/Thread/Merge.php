@@ -76,6 +76,8 @@ class Merge extends AbstractAction
 		}
 
 		$merger->merge($source);
+
+		$this->returnUrl = $this->app()->router()->buildLink('threads', $target);
 	}
 
 	protected function applyToEntity(Entity $entity, array $options)

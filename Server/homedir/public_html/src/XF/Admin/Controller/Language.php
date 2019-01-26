@@ -57,6 +57,7 @@ class Language extends AbstractController
 	protected function getQuickEditPhraseNames()
 	{
 		return [
+			'privacy_policy_text',
 			'terms_rules_text',
 			'email_footer_html',
 			'email_footer_text',
@@ -109,7 +110,7 @@ class Language extends AbstractController
 		if ($input['currency_format'] === '')
 		{
 			$input['currency_format'] = $this->filter('currency_format_other', 'str');
-			if (!strpos($input['currency_format'], '{value}'))
+			if (strpos($input['currency_format'], '{value}') === false)
 			{
 				$form->logError(\XF::phrase('currency_format_must_contain_at_least_value'), 'currency_format');
 			}

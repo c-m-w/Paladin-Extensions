@@ -10,6 +10,15 @@ use XF\Mvc\Entity\Structure;
  * @property int node_id
  * @property string link_url
  * @property int redirect_count
+ *
+ * GETTERS
+ * @property string|null node_name
+ * @property string|null title
+ * @property string|null description
+ * @property int depth
+ *
+ * RELATIONS
+ * @property \XF\Entity\Node Node
  */
 class LinkForum extends AbstractNode
 {

@@ -65,6 +65,12 @@ class LikedContent extends Entity
 		return $handler ? $handler->render($this) : '';
 	}
 
+	public function isLikeRenderable()
+	{
+		$handler = $this->getHandler();
+		return $handler ? $handler->isLikeRenderable($this) : '';
+	}
+
 	protected function _postSave()
 	{
 		if ($this->isInsert())

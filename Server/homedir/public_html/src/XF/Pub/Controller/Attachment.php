@@ -64,7 +64,9 @@ class Attachment extends AbstractController
 			return $this->noPermission();
 		}
 
-		$manipulator = new \XF\Attachment\Manipulator($handler, $this->getAttachmentRepo(), $context, $hash);
+		/** @var \XF\Attachment\Manipulator $manipulator */
+		$class = \XF::extendClass('XF\Attachment\Manipulator');
+		$manipulator = new $class($handler, $this->getAttachmentRepo(), $context, $hash);
 
 		if ($this->isPost())
 		{

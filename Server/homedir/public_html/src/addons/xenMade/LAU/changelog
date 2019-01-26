@@ -1,0 +1,33 @@
+1.2.4 // December 18 2018
+    [fixed] Template issue
+
+1.2.3 // December 12 2018
+    [fixed] Template issue
+
+1.2.2 // November 16, 2018
+    [fixed] Disabled IP logging
+
+1.2.1 // October 01, 2018
+    [fixed] The Login-button is visible for your own user
+    [fixed] Template issue
+    [fixed] Other improvements
+
+1.2.0 // September 20, 2018
+    [add] "Login as User" from ACP -> "user edit"
+
+1.1.0 // September 01, 2018
+	[add] Reason
+	[add] Disallowed Users
+	[add] Login Log
+	[add] Stealth Login
+	    [notice] So things that are read are not displayed as such for the user.
+
+	[add] Option: Stealth Login
+	[add] Option: Display "Login-Button" in profile
+	[add] Option: Display "Login-Button" in Staff-Bar
+	[add] Option: Reason is required
+	[add] Notice: That you are in a different profile
+	[*] Several improvements / design/phrasen improvements
+
+1.0.0 // August 30, 2018
+	initial release

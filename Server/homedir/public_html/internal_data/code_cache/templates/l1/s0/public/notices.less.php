@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: b63f3b50d5c07339e0645158231894e1
+// FROM HASH: b52235f0d870e0b6114de969609e311d
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -108,7 +108,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	{
 		.xf-contentAccentBase();
 
-		a
+		a:not(.button--notice)
 		{
 			.xf-contentAccentLink();
 		}
@@ -120,7 +120,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		border: none;
 		background: @_notice-darkBg;
 
-		a
+		a:not(.button--notice)
 		{
 			color: rgb(180, 180, 180);
 		}
@@ -131,9 +131,32 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		color: rgb(20, 20, 20);
 		background: @_notice-lightBg;
 
-		a
+		a:not(.button--notice)
 		{
 			color: rgb(130, 130, 130);
+		}
+	}
+
+	&.notice--cookie
+	{
+		@media (max-width: @xf-responsiveWide)
+		{
+			.notice-content
+			{
+				padding: @xf-paddingSmall @xf-paddingSmall @xf-paddingLarge;
+				font-size: @xf-fontSizeSmaller;
+
+				.button--notice
+				{
+					font-size: @xf-fontSizeSmaller;
+					padding: @xf-paddingSmall @xf-paddingMedium;
+
+					.button-text
+					{
+						font-size: @xf-fontSizeSmaller;
+					}
+				}
+			}
 		}
 	}
 
@@ -169,7 +192,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			background-color: fade(@_notice-lightBg, @_notice-floatingFade);
 		}
 
-		.has-no-js &
+		.has-js &
 		{
 			display: none;
 		}

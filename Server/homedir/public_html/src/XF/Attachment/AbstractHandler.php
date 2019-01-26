@@ -48,6 +48,11 @@ abstract class AbstractHandler
 		return;
 	}
 
+	public function beforeAttachmentDelete(Attachment $attachment, Entity $container = null)
+	{
+		return;
+	}
+
 	public function getContainerFromContext(array $context)
 	{
 		$id = $this->getContainerIdFromContext($context);

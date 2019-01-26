@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: c7aee6b7480fb808ba7a87853203ca69
+// FROM HASH: e6254aac391105cb9d9887280f82fe41
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -22,6 +22,23 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	));
 	$__finalCompiled .= '
 
+';
+	if ($__templater->fn('property', array('uix_clickableThreads', ), false)) {
+		$__finalCompiled .= '
+';
+		$__templater->inlineJs('
+	$(document).ready(function() {
+		$(\'.structItem--thread\').click(function() {
+			var href = $(this).find(\'.structItem-title\').attr(\'uix-data-href\');
+			window.location = href;
+		});
+	});
+');
+		$__finalCompiled .= '
+';
+	}
+	$__finalCompiled .= '
+
 ' . '
 
 ';
@@ -36,6 +53,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			$(\'.uix_sidebarCanvasTrigger\').click(function(e) {
 				e.preventDefault();
 				sidebar.addClass(\'offCanvasMenu offCanvasMenu--blocks is-active is-transitioning\');
+				$(\'body\').addClass(\'sideNav--open\');
 
 				window.setTimeout(function() {
 					sidebar.removeClass(\'is-transitioning\');
@@ -220,5 +238,36 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		$__finalCompiled .= '
 ';
 	}
+	$__finalCompiled .= '
+
+	
+';
+	$__templater->inlineJs('
+	$(document).ready(function() {
+	$(\'.uix_threadCollapseTrigger\').click(function(e) {
+		e.preventDefault();
+		var container = $(\'.uix_stickyContainerOuter\');
+		var child = container.find(\'.structItemContainer-group--sticky\');
+		var eleHeight = child.height();
+		if (container.hasClass(\'uix_threadListSeparator--collapsed\')) {
+			container.toggleClass(\'uix_threadListSeparator--collapsed\');
+			container.css({ height: eleHeight });
+			window.setTimeout(function() {
+				container.css({ height: \'\' });
+			}, 200);
+		} else {
+			container.css({ height: eleHeight });
+			container.toggleClass(\'uix_threadListSeparator--collapsed\');
+			window.setTimeout(function() {
+				container.css({ height: \'0\' });
+				window.setTimeout(function() {
+					container.css({ height: \'\' });
+				}, 200);
+			}, 17);
+
+		}
+	});
+});
+');
 	return $__finalCompiled;
 });

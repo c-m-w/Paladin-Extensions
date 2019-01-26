@@ -2,8 +2,6 @@
 
 namespace XF\ControllerPlugin;
 
-use XF\Mvc\Entity\AbstractCollection;
-
 class InlineMod extends AbstractPlugin
 {
 	public function clearIdFromCookie($type, $id)

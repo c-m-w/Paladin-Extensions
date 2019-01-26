@@ -708,6 +708,10 @@
 				{
 					if (XF.Color.mapVisited[str])
 					{
+						if (firstMapped)
+						{
+							XF.Color.mapVisited = null;
+						}
 						return '';
 					}
 					XF.Color.mapVisited[str] = true;
@@ -721,6 +725,11 @@
 
 					return final;
 				}
+			}
+
+			if (firstMapped)
+			{
+				XF.Color.mapVisited = null;
 			}
 
 			return null;
@@ -805,6 +814,7 @@
 			if (this.inputColor && updateMap)
 			{
 				this.updateMapColor(val);
+				this.$input.trigger('change');
 			}
 		},
 

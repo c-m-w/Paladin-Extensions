@@ -28,6 +28,13 @@ abstract class AbstractJob
 		return array_merge($this->defaultData, $data);
 	}
 
+	protected function saveIncrementalData()
+	{
+		$this->app->db->update('xf_job', [
+			'execute_data' => serialize($this->data)
+		], 'job_id = ?', $this->jobId);
+	}
+
 	public function getData()
 	{
 		return $this->data;

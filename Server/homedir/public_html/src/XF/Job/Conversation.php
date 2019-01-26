@@ -24,8 +24,9 @@ class Conversation extends AbstractRebuildJob
 		$conversation = $this->app->em()->find('XF:ConversationMaster', $id);
 		if ($conversation)
 		{
-			$conversation->rebuildRecipientCache();
-			// TODO: needs support for rebuilding other counters, xf_conversation_user data, etc
+			$conversation->rebuildCounters();
+			$conversation->save();
+
 		}
 	}
 

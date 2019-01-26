@@ -199,6 +199,7 @@
 				});
 
 				var $file = $target.find('input[type=file]');
+				$file.attr('title', XF.htmlspecialchars(XF.phrase('attach')));
 				$file.css('overflow', 'hidden');
 				$file.css(XF.isRtl() ? 'right' : 'left', -1000);
 			});
@@ -223,7 +224,7 @@
 
 			if (XF.config.uploadMaxFilesize > 0 && file.size > XF.config.uploadMaxFilesize)
 			{
-				this.uploadError(file, this.addErrorToJson({}, XF.phrase('file_too_large_to_upload')));
+				this.uploadError(file, this.addErrorToJson({}, XF.phrase('uploaded_file_is_too_large_for_server_to_process')));
 				return false;
 			}
 		},

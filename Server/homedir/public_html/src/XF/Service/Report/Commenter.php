@@ -73,6 +73,7 @@ class Commenter extends \XF\Service\AbstractService
 
 	public function setReportState($newState = null, \XF\Entity\User $assignedUser = null)
 	{
+		$oldState = $this->report->getExistingValue('report_state');
 		if ($newState)
 		{
 			$this->report->report_state = $newState;
@@ -87,7 +88,7 @@ class Commenter extends \XF\Service\AbstractService
 			}
 		}
 
-		if ($newState && $newState != $this->report->getExistingValue('report_state'))
+		if ($newState && ($newState != $oldState || $this->report->isChanged('assigned_user_id')))
 		{
 			$this->comment->state_change = $newState;
 		}

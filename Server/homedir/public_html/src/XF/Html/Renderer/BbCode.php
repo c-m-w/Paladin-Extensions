@@ -126,6 +126,12 @@ class BbCode
 			$html
 		);
 
+		$html = preg_replace_callback('/^<li\s?(?:data-xf-list-type="(ul|ol)")?>.*<\/li>$/is', function(array $match)
+		{
+			$type = isset($match[1]) ? $match[1] : 'ul';
+			return "<$type>$match[0]</$type>";
+		}, $html);
+
 		return $html;
 	}
 
@@ -171,6 +177,18 @@ class BbCode
 		do
 		{
 			$newText = preg_replace('#(\[(font|color|size|url|email)=[^\]]*\])((?:(?>[^\[]+?)|\[(?!\\2))*)\[/\\2\]([\r\n]*)\\1#siU', '\\1\\3\\4', $text);
+			if ($newText === null || $newText == $text)
+			{
+				break;
+			}
+			$text = $newText;
+		}
+		while (true);
+
+		// redo this as the color/size clean up may have exposed this
+		do
+		{
+			$newText = preg_replace('#\[/(b|i|u|s|left|center|right)\]([\r\n]*)\[\\1\]#i', '\\2', $text);
 			if ($newText === null || $newText == $text)
 			{
 				break;
@@ -577,7 +595,7 @@ class BbCode
 			return $text;
 		}
 
-		if (preg_match('#^(data:|blob:|webkit-fake-url:|x-apple-data-detectors:)#i', $href))
+		if (preg_match('#^(data:|blob:|tel:|sms:|webkit-fake-url:|x-apple-data-detectors:)#i', $href))
 		{
 			return $text;
 		}

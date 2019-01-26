@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: c244acd9d880ad722a03bca6fd3bde58
+// FROM HASH: 78b6ebbb714fc6d9c49b9b8293ccbbc7
 return array('macros' => array('option_row' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -377,17 +377,17 @@ return array('macros' => array('option_row' => function($__templater, array $__a
 		'option' => '!',
 	), $__arguments, $__vars);
 	$__finalCompiled .= '
+	';
+	if ($__vars['group']) {
+		$__finalCompiled .= '
+		' . $__templater->escape($__vars['option']['option_id']) . ' ' . $__templater->filter($__vars['option']['Relations'][$__vars['group']['group_id']]['display_order'], array(array('parens', array()),), true) . '
+	';
+	}
+	$__finalCompiled .= '
 	<a href="' . $__templater->fn('link', array('options/edit', $__vars['option'], ($__vars['group'] ? array('group_id' => $__vars['group']['group_id'], ) : array()), ), true) . '"
 		title="' . $__templater->escape($__vars['option']['option_id']) . ($__vars['group'] ? (' / ' . $__templater->escape($__vars['option']['Relations'][$__vars['group']['group_id']]['display_order'])) : '') . '"
 		data-xf-init="tooltip"
 	>' . 'Edit' . '</a>
-	';
-	if ($__vars['group']) {
-		$__finalCompiled .= '
-		[' . $__templater->escape($__vars['option']['Relations'][$__vars['group']['group_id']]['display_order']) . ']
-	';
-	}
-	$__finalCompiled .= '
 ';
 	return $__finalCompiled;
 },
@@ -480,8 +480,8 @@ return array('macros' => array('option_row' => function($__templater, array $__a
 			}
 		}
 		$__finalCompiled .= $__templater->form('
-			' . $__templater->filter($__vars['containerBeforeHtml'], array(array('raw', array()),), true) . '
 			<div class="block-container">
+				' . $__templater->filter($__vars['containerBeforeHtml'], array(array('raw', array()),), true) . '
 				<div class="block-body">
 					' . $__compilerTemp1 . '
 				</div>

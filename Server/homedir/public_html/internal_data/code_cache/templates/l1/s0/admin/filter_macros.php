@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 684ba6c9b92b555f3e0f3a05b6b8b6a2
+// FROM HASH: ecefc1ba5dad046de278fa33b129250b
 return array('macros' => array('quick_filter' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -18,7 +18,7 @@ return array('macros' => array('quick_filter' => function($__templater, array $_
 	$__finalCompiled .= '
 	<div class="' . $__templater->escape($__vars['class']) . ' quickFilter u-jsOnly" data-xf-init="filter" data-key="' . $__templater->escape($__vars['key']) . '" data-ajax="' . $__templater->escape($__vars['ajax']) . '">
 		<div class="inputGroup inputGroup--inline inputGroup--joined">
-			<input type="text" class="input js-filterInput" placeholder="' . 'Filter' . $__vars['xf']['language']['ellipsis'] . '" data-xf-key="' . 'f' . '" />
+			<input type="text" class="input js-filterInput" placeholder="' . $__templater->filter('Filter' . $__vars['xf']['language']['ellipsis'], array(array('for_attr', array()),), true) . '" data-xf-key="' . $__templater->filter('f', array(array('for_attr', array()),), true) . '" />
 			' . $__templater->formCheckBox(array(
 		'standalone' => 'true',
 	), array(array(

@@ -117,7 +117,15 @@ class Conversation extends Repository
 			return [];
 		}
 
-		$first = reset($recipients);
+		if ($recipients instanceof \XF\Mvc\Entity\AbstractCollection)
+		{
+			$first = $recipients->first();
+		}
+		else
+		{
+			$first = reset($recipients);
+		}
+
 		if ($first instanceof \XF\Entity\User)
 		{
 			$type = 'user';

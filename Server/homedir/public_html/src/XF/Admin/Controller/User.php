@@ -331,7 +331,7 @@ class User extends AbstractController
 		{
 			$form->setup(function() use ($fieldSet, $customFields, $customFieldsShown)
 			{
-				$fieldSet->bulkSet($customFields, $customFieldsShown, 'admin');
+				$fieldSet->bulkSet($customFields, $customFieldsShown, 'admin', true);
 			});
 		}
 	}
@@ -594,10 +594,6 @@ class User extends AbstractController
 	public function actionDelete(ParameterBag $params)
 	{
 		$user = $this->assertUserExists($params->user_id);
-		if (!$user->preDelete())
-		{
-			return $this->error($user->getErrors());
-		}
 
 		$this->assertCanEditUser($user);
 
@@ -611,17 +607,68 @@ class User extends AbstractController
 				}
 			}
 
-			$user->delete();
-
-			return $this->redirect(
-				$this->getDynamicRedirectIfNot(
-					$this->buildLink('users/edit', $user),
-					$this->buildLink('users/list')
-				)
+			$redirect = $this->getDynamicRedirectIfNot(
+				$this->buildLink('users/edit', $user),
+				$this->buildLink('users/list')
 			);
+
+			$rename = $this->filter('rename', 'uint');
+			if ($rename)
+			{
+				$user->setOption('enqueue_rename_cleanup', false);
+				$user->setOption('enqueue_delete_cleanup', false);
+
+				$existingUsername = $user->username;
+				$renameTo = $this->filter('rename_to', 'str');
+				if (!$renameTo)
+				{
+					return $this->error(\XF::phrase('please_enter_name_to_rename_this_user_to'));
+				}
+				$user->set('username', $renameTo);
+
+				if (!$user->preSave() || !$user->preDelete())
+				{
+					return $this->error($user->getErrors());
+				}
+
+				$user->save();
+				$user->delete();
+
+				$jobList = [
+					[
+						'XF:UserRenameCleanUp',
+						[
+							'originalUserId' => $user->user_id,
+							'originalUserName' => $existingUsername,
+							'newUserName' => $renameTo
+						]
+					],
+					[
+						'XF:UserDeleteCleanUp',
+						[
+							'userId' => $user->user_id,
+							'username' => $renameTo
+						]
+					]
+				];
+				$this->app->jobManager()->enqueueUnique('userRenameDelete' . $user->user_id, 'XF:Atomic', [
+					'execute' => $jobList
+				]);
+			}
+			else
+			{
+				$user->delete();
+			}
+
+			return $this->redirect($redirect);
 		}
 		else
 		{
+			if (!$user->preDelete())
+			{
+				return $this->error($user->getErrors());
+			}
+
 			$viewParams = [
 				'user' => $user
 			];
@@ -786,11 +833,7 @@ class User extends AbstractController
 	public function actionManageWatchedThreads(ParameterBag $params)
 	{
 		$user = $this->assertUserExists($params->user_id);
-
-		if ($user->is_super_admin)
-		{
-			return $this->noPermission();
-		}
+		$this->assertCanEditUser($user);
 
 		if ($this->isPost())
 		{

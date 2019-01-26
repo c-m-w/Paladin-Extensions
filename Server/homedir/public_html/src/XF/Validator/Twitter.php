@@ -21,6 +21,10 @@ class Twitter extends AbstractValidator
 		{
 			$value = substr($value, 1);
 		}
+		else if (preg_match('#twitter\.com/(?P<id>[a-z0-9\_.]+)$#i', $value, $match))
+		{
+			$value = $match['id'];
+		}
 
 		return $value;
 	}

@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: a90a80f25e64734a443fb3f35fa6c76e
+// FROM HASH: a139484bc0649f0953688fb555d41f22
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -37,7 +37,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			<span class="hScroller-scroll">
 				<a class="tabs-tab is-active" role="tab" tabindex="0" aria-controls="trophy-options">' . 'Trophy options' . '</a>
 				' . $__templater->callMacro('helper_criteria', 'user_tabs', array(
-		'userTabTitle' => $__templater->filter('Award this trophy if...', array(array('for_attr', array()),), false),
+		'userTabTitle' => 'Award this trophy if...',
 	), $__vars) . '
 			</span>
 		</h2>

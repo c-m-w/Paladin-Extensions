@@ -22,6 +22,11 @@ class Html extends AbstractWidget
 	{
 		$widgetConfig = $this->widgetConfig;
 
+		if (!$widgetConfig->widgetKey)
+		{
+			return false;
+		}
+
 		$templateTitle = '_widget_' . $widgetConfig->widgetKey;
 
 		if (!$widgetConfig->widgetId)

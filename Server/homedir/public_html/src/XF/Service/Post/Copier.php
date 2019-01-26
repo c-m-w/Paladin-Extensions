@@ -276,11 +276,6 @@ class Copier extends \XF\Service\AbstractService
 		/** @var \XF\Repository\Post $postRepo */
 		$postRepo = $this->repository('XF:Post');
 
-		$alertExtras = [
-			'targetTitle' => $target->title,
-			'targetLink' => $this->app->router('public')->buildLink('nopath:threads', $target)
-		];
-
 		foreach ($this->sourcePosts AS $sourcePost)
 		{
 			if ($sourcePost->Thread->discussion_state == 'visible'
@@ -288,6 +283,11 @@ class Copier extends \XF\Service\AbstractService
 				&& $sourcePost->user_id != \XF::visitor()->user_id
 			)
 			{
+				$alertExtras = [
+					'targetTitle' => $target->title,
+					'targetLink' => $this->app->router('public')->buildLink('nopath:posts', $sourcePost)
+				];
+
 				$postRepo->sendModeratorActionAlert($sourcePost, 'copy', $this->alertReason, $alertExtras);
 			}
 		}

@@ -1,5 +1,16 @@
 <?php
 return array (
+  'warning_conv_text.0' => 'Hi {name},
+
+Your message ([url={url}]{title}[/url]) contains content that violates our rules:
+[quote]{content}[/quote]
+
+Your message may have been removed or altered.
+
+Your account\'s access may be limited based on these actions. Please keep this in mind when posting or using our site.
+
+Regards,
+{staff}',
   'warning_conv_text.1' => 'Hi {name},
 
 Your message ([url={url}]{title}[/url]) contains inappropriate content:

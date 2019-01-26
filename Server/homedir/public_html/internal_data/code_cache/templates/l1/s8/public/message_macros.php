@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 4ae1d7ad4ce9893d103fddc652edd367
+// FROM HASH: ca2f67e295b3e0544df840187ead23b4
 return array('macros' => array('user_info' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -9,33 +9,19 @@ return array('macros' => array('user_info' => function($__templater, array $__ar
 		'fallbackName' => '',
 		'dateHtml' => '',
 		'linkHtml' => '',
-		'TS' => '',
 	), $__arguments, $__vars);
 	$__finalCompiled .= '
-
 	
 	<span class="message-userArrow"></span>
-';
-	if ($__templater->fn('can_display_steam_user_banner', array('after', ), false)) {
-		$__finalCompiled .= '
-	' . $__templater->fn('steam_user_banner', array($__vars['user'], ), true) . '
-';
-	}
-	$__finalCompiled .= '
 	<section itemscope itemtype="https://schema.org/Person" class="message-user">
 		<div class="message-avatar ' . (($__vars['xf']['options']['showMessageOnlineStatus'] AND ($__vars['user'] AND $__templater->method($__vars['user'], 'isOnline', array()))) ? 'message-avatar--online' : '') . '">
-			';
-	if (($__templater->fn('property', array('xfv_threadstarter_locale', ), false) == 'avatar_banner_tl') OR ($__templater->fn('property', array('xfv_threadstarter_locale', ), false) == 'avatar_banner_tr')) {
-		$__finalCompiled .= '
-<div class="message-avatar-wrapper">
-' . $__templater->includeTemplate('xfv_threadstarter_corner_banners', $__vars) . '
+			<div class="message-avatar-wrapper">
 ';
-	} else {
-		$__finalCompiled .= '                   
-<div class="message-avatar-wrapper">
-';
-	}
-	$__finalCompiled .= '	
+	$__compilerTemp1 = $__vars;
+	$__compilerTemp1['post'] = $__vars['post'];
+	$__compilerTemp1['thread'] = $__vars['thread'];
+	$__compilerTemp1['originalPosterRibbonEnabled'] = $__vars['originalPosterRibbonEnabled'];
+	$__finalCompiled .= $__templater->includeTemplate('aloph_op_ribbon_user_avatar', $__compilerTemp1) . '
 				';
 	if ($__templater->fn('property', array('uix_postBitAvatarSize', ), false) == 'small') {
 		$__finalCompiled .= '
@@ -100,21 +86,14 @@ return array('macros' => array('user_info' => function($__templater, array $__ar
 	if ($__vars['user']['user_id']) {
 		$__finalCompiled .= '
 				';
-		if ($__templater->fn('can_display_steam_user_banner', array('before', ), false)) {
-			$__finalCompiled .= '
-	' . $__templater->fn('steam_user_banner', array($__vars['user'], ), true) . '
-';
-		}
-		$__finalCompiled .= '
-';
 		$__vars['extras'] = $__templater->fn('property', array('messageUserElements', ), false);
 		$__finalCompiled .= '
 				';
-		$__compilerTemp1 = '';
-		$__compilerTemp1 .= '
+		$__compilerTemp2 = '';
+		$__compilerTemp2 .= '
 ';
 		if ($__templater->fn('property', array('th_showReactionsPostbit_reactions', ), false) AND ($__templater->fn('property', array('th_showReactionsPostbit_location_reactions', ), false) == 'top')) {
-			$__compilerTemp1 .= '
+			$__compilerTemp2 .= '
 	' . $__templater->callMacro('th_display_reactions', 'react_postbit', array(
 				'reacts' => $__vars['user']['react_count'],
 				'reactsCount' => $__templater->method($__vars['user'], 'getReactTotalCount', array()),
@@ -123,16 +102,16 @@ return array('macros' => array('user_info' => function($__templater, array $__ar
 			), $__vars) . '
 ';
 		}
-		$__compilerTemp1 .= '
+		$__compilerTemp2 .= '
 
 									';
 		if ($__vars['extras']['register_date']) {
-			$__compilerTemp1 .= '
+			$__compilerTemp2 .= '
 										<dl class="pairs pairs--justified">
 											<dt>
 												';
 			if ($__templater->fn('property', array('uix_postBitIcons', ), false)) {
-				$__compilerTemp1 .= '
+				$__compilerTemp2 .= '
 													<span data-xf-init="tooltip" title="' . 'Joined' . '">
 														' . $__templater->callMacro('uix_icons.less', 'icon', array(
 					'icon' => 'user',
@@ -140,26 +119,26 @@ return array('macros' => array('user_info' => function($__templater, array $__ar
 													</span>
 												';
 			} else {
-				$__compilerTemp1 .= '
+				$__compilerTemp2 .= '
 													' . 'Joined' . '
 												';
 			}
-			$__compilerTemp1 .= '
+			$__compilerTemp2 .= '
 											</dt>
 
 											<dd>' . $__templater->fn('date', array($__vars['user']['register_date'], ), true) . '</dd>
 										</dl>
 									';
 		}
-		$__compilerTemp1 .= '
+		$__compilerTemp2 .= '
 									';
 		if ($__vars['extras']['message_count']) {
-			$__compilerTemp1 .= '
+			$__compilerTemp2 .= '
 										<dl class="pairs pairs--justified">
 											<dt>
 												';
 			if ($__templater->fn('property', array('uix_postBitIcons', ), false)) {
-				$__compilerTemp1 .= '
+				$__compilerTemp2 .= '
 													<span data-xf-init="tooltip" title="' . 'Messages' . '">
 														' . $__templater->callMacro('uix_icons.less', 'icon', array(
 					'icon' => 'messages',
@@ -167,51 +146,80 @@ return array('macros' => array('user_info' => function($__templater, array $__ar
 													</span>
 												';
 			} else {
-				$__compilerTemp1 .= '
+				$__compilerTemp2 .= '
 													' . 'Messages' . '
 												';
 			}
-			$__compilerTemp1 .= '
+			$__compilerTemp2 .= '
 											</dt>
 											<dd>' . $__templater->filter($__vars['user']['message_count'], array(array('number', array()),), true) . '</dd>
 										</dl>
 									';
 		}
-		$__compilerTemp1 .= '
+		$__compilerTemp2 .= '
 									';
 		if ($__vars['extras']['like_count']) {
-			$__compilerTemp1 .= '
-										<dl class="pairs pairs--justified">
-											<dt>
-												';
-			if ($__templater->fn('property', array('uix_postBitIcons', ), false)) {
-				$__compilerTemp1 .= '
-													<span data-xf-init="tooltip" title="' . 'Likes' . '">
-														' . $__templater->callMacro('uix_icons.less', 'icon', array(
-					'icon' => 'like',
-				), $__vars) . '
-													</span>
-												';
+			$__compilerTemp2 .= '
+										';
+			if ($__templater->fn('is_addon_active', array('ThemeHouse/Reactions', ), false)) {
+				$__compilerTemp2 .= '
+											<dl class="pairs pairs--justified">
+												<dt>
+													';
+				if ($__templater->fn('property', array('uix_postBitIcons', ), false)) {
+					$__compilerTemp2 .= '
+														<span data-xf-init="tooltip" title="' . 'Reactions' . '">
+															' . $__templater->callMacro('uix_icons.less', 'icon', array(
+						'icon' => 'like',
+					), $__vars) . '
+														</span>
+													';
+				} else {
+					$__compilerTemp2 .= '
+															' . 'Reactions' . '
+													';
+				}
+				$__compilerTemp2 .= '
+												</dt>
+												<dd>' . $__templater->filter($__templater->method($__vars['user'], 'getReactTotalCount', array()), array(array('number', array()),), true) . '</dd>
+											</dl>
+										';
 			} else {
-				$__compilerTemp1 .= '
-														' . 'Likes' . '
-												';
+				$__compilerTemp2 .= '
+											<dl class="pairs pairs--justified">
+												<dt>
+													';
+				if ($__templater->fn('property', array('uix_postBitIcons', ), false)) {
+					$__compilerTemp2 .= '
+														<span data-xf-init="tooltip" title="' . 'Likes' . '">
+															' . $__templater->callMacro('uix_icons.less', 'icon', array(
+						'icon' => 'like',
+					), $__vars) . '
+														</span>
+													';
+				} else {
+					$__compilerTemp2 .= '
+															' . 'Likes' . '
+													';
+				}
+				$__compilerTemp2 .= '
+												</dt>
+												<dd>' . $__templater->filter($__vars['user']['like_count'], array(array('number', array()),), true) . '</dd>
+											</dl>
+										';
 			}
-			$__compilerTemp1 .= '
-											</dt>
-											<dd>' . $__templater->filter($__vars['user']['like_count'], array(array('number', array()),), true) . '</dd>
-										</dl>
+			$__compilerTemp2 .= '
 									';
 		}
-		$__compilerTemp1 .= '
+		$__compilerTemp2 .= '
 									';
 		if ($__vars['extras']['trophy_points'] AND $__vars['xf']['options']['enableTrophies']) {
-			$__compilerTemp1 .= '
+			$__compilerTemp2 .= '
 										<dl class="pairs pairs--justified">
 											<dt>
 												';
 			if ($__templater->fn('property', array('uix_postBitIcons', ), false)) {
-				$__compilerTemp1 .= '
+				$__compilerTemp2 .= '
 													<span data-xf-init="tooltip" title="' . 'Points' . '">
 														' . $__templater->callMacro('uix_icons.less', 'icon', array(
 					'icon' => 'trophy',
@@ -219,25 +227,25 @@ return array('macros' => array('user_info' => function($__templater, array $__ar
 													</span>
 												';
 			} else {
-				$__compilerTemp1 .= '
+				$__compilerTemp2 .= '
 													' . 'Points' . '
 												';
 			}
-			$__compilerTemp1 .= '
+			$__compilerTemp2 .= '
 											</dt>
 											<dd>' . $__templater->filter($__vars['user']['trophy_points'], array(array('number', array()),), true) . '</dd>
 										</dl>
 									';
 		}
-		$__compilerTemp1 .= '
+		$__compilerTemp2 .= '
 									';
 		if ($__vars['extras']['age'] AND $__vars['user']['Profile']['age']) {
-			$__compilerTemp1 .= '
+			$__compilerTemp2 .= '
 										<dl class="pairs pairs--justified">
 											<dt>
 												';
 			if ($__templater->fn('property', array('uix_postBitIcons', ), false)) {
-				$__compilerTemp1 .= '
+				$__compilerTemp2 .= '
 													<span data-xf-init="tooltip" title="' . 'Age' . '">
 														' . $__templater->callMacro('uix_icons.less', 'icon', array(
 					'icon' => 'birthday',
@@ -245,25 +253,25 @@ return array('macros' => array('user_info' => function($__templater, array $__ar
 													</span>
 												';
 			} else {
-				$__compilerTemp1 .= '
+				$__compilerTemp2 .= '
 													' . 'Age' . '
 												';
 			}
-			$__compilerTemp1 .= '
+			$__compilerTemp2 .= '
 											</dt>
 											<dd>' . $__templater->escape($__vars['user']['Profile']['age']) . '</dd>
 										</dl>
 									';
 		}
-		$__compilerTemp1 .= '
+		$__compilerTemp2 .= '
 									';
 		if ($__vars['extras']['location'] AND $__vars['user']['Profile']['location']) {
-			$__compilerTemp1 .= '
+			$__compilerTemp2 .= '
 										<dl class="pairs pairs--justified">
 											<dt>
 												';
 			if ($__templater->fn('property', array('uix_postBitIcons', ), false)) {
-				$__compilerTemp1 .= '
+				$__compilerTemp2 .= '
 													<span data-xf-init="tooltip" title="' . 'Location' . '">
 														' . $__templater->callMacro('uix_icons.less', 'icon', array(
 					'icon' => 'location',
@@ -271,37 +279,37 @@ return array('macros' => array('user_info' => function($__templater, array $__ar
 													</span>
 												';
 			} else {
-				$__compilerTemp1 .= '
+				$__compilerTemp2 .= '
 													' . 'Location' . '
 												';
 			}
-			$__compilerTemp1 .= '
+			$__compilerTemp2 .= '
 											</dt>
 											<dd>
 												';
 			if ($__vars['xf']['options']['geoLocationUrl']) {
-				$__compilerTemp1 .= '
+				$__compilerTemp2 .= '
 													<a href="' . $__templater->fn('link', array('misc/location-info', '', array('location' => $__vars['user']['Profile']['location'], ), ), true) . '" rel="nofollow noreferrer" target="_blank" class="u-concealed">' . $__templater->escape($__vars['user']['Profile']['location']) . '</a>
 												';
 			} else {
-				$__compilerTemp1 .= '
+				$__compilerTemp2 .= '
 													' . $__templater->escape($__vars['user']['Profile']['location']) . '
 												';
 			}
-			$__compilerTemp1 .= '
+			$__compilerTemp2 .= '
 											</dd>
 										</dl>
 									';
 		}
-		$__compilerTemp1 .= '
+		$__compilerTemp2 .= '
 									';
 		if ($__vars['extras']['website'] AND $__vars['user']['Profile']['website']) {
-			$__compilerTemp1 .= '
+			$__compilerTemp2 .= '
 										<dl class="pairs pairs--justified">
 											<dt>
 												';
 			if ($__templater->fn('property', array('uix_postBitIcons', ), false)) {
-				$__compilerTemp1 .= '
+				$__compilerTemp2 .= '
 													<span data-xf-init="tooltip" title="' . 'Website' . '">
 														' . $__templater->callMacro('uix_icons.less', 'icon', array(
 					'icon' => 'web',
@@ -309,21 +317,20 @@ return array('macros' => array('user_info' => function($__templater, array $__ar
 													</span>
 												';
 			} else {
-				$__compilerTemp1 .= '
+				$__compilerTemp2 .= '
 													' . 'Website' . '
 												';
 			}
-			$__compilerTemp1 .= '
+			$__compilerTemp2 .= '
 											</dt>
 											<dd><a href="' . $__templater->escape($__vars['user']['Profile']['website']) . '" rel="nofollow" target="_blank">' . $__templater->filter($__vars['user']['Profile']['website'], array(array('url', array('host', 'Visit site', )),), true) . '</a></dd>
 										</dl>
 									';
 		}
-		$__compilerTemp1 .= '
-									' . $__templater->includeTemplate('message_macros_steam', $__vars) . '
-';
+		$__compilerTemp2 .= '
+									';
 		if ($__vars['extras']['custom_fields']) {
-			$__compilerTemp1 .= '
+			$__compilerTemp2 .= '
 										' . $__templater->callMacro('custom_fields_macros', 'custom_fields_values', array(
 				'type' => 'users',
 				'group' => 'personal',
@@ -333,7 +340,7 @@ return array('macros' => array('user_info' => function($__templater, array $__ar
 			), $__vars) . '
 										';
 			if ($__templater->method($__vars['user'], 'canViewIdentities', array())) {
-				$__compilerTemp1 .= '
+				$__compilerTemp2 .= '
 											' . $__templater->callMacro('custom_fields_macros', 'custom_fields_view', array(
 					'type' => 'users',
 					'group' => 'contact',
@@ -343,14 +350,14 @@ return array('macros' => array('user_info' => function($__templater, array $__ar
 				), $__vars) . '
 										';
 			}
-			$__compilerTemp1 .= '
+			$__compilerTemp2 .= '
 									';
 		}
-		$__compilerTemp1 .= '
+		$__compilerTemp2 .= '
 								
 ';
 		if ($__templater->fn('property', array('th_showReactionsPostbit_reactions', ), false) AND ($__templater->fn('property', array('th_showReactionsPostbit_location_reactions', ), false) == 'bottom')) {
-			$__compilerTemp1 .= '
+			$__compilerTemp2 .= '
 	' . $__templater->callMacro('th_display_reactions', 'react_postbit', array(
 				'reacts' => $__vars['user']['react_count'],
 				'reactsCount' => $__templater->method($__vars['user'], 'getReactTotalCount', array()),
@@ -359,9 +366,9 @@ return array('macros' => array('user_info' => function($__templater, array $__ar
 			), $__vars) . '
 ';
 		}
-		$__compilerTemp1 .= '
+		$__compilerTemp2 .= '
 ';
-		if (strlen(trim($__compilerTemp1)) > 0) {
+		if (strlen(trim($__compilerTemp2)) > 0) {
 			$__finalCompiled .= '
 					';
 			if ($__templater->fn('property', array('uix_collapseExtraInfo', ), false)) {
@@ -371,7 +378,7 @@ return array('macros' => array('user_info' => function($__templater, array $__ar
 			}
 			$__finalCompiled .= '
 							<div class="message-userExtras">
-								' . $__compilerTemp1 . '
+								' . $__compilerTemp2 . '
 							</div>
 						';
 			if ($__templater->fn('property', array('uix_collapseExtraInfo', ), false)) {
@@ -407,18 +414,7 @@ return array('macros' => array('user_info' => function($__templater, array $__ar
 	<header itemscope itemtype="https://schema.org/Person" class="message-user">
 		<meta itemprop="name" content="' . ($__templater->escape($__vars['user']['username']) ?: $__templater->escape($__vars['fallbackName'])) . '">
 		<div class="message-avatar">
-			';
-	if (($__templater->fn('property', array('xfv_threadstarter_locale', ), false) == 'avatar_banner_tl') OR ($__templater->fn('property', array('xfv_threadstarter_locale', ), false) == 'avatar_banner_tr')) {
-		$__finalCompiled .= '
-<div class="message-avatar-wrapper">
-' . $__templater->includeTemplate('xfv_threadstarter_corner_banners', $__vars) . '
-';
-	} else {
-		$__finalCompiled .= '                   
-<div class="message-avatar-wrapper">
-';
-	}
-	$__finalCompiled .= '	
+			<div class="message-avatar-wrapper">
 				' . $__templater->fn('avatar', array($__vars['user'], 's', false, array(
 		'defaultname' => $__vars['fallbackName'],
 		'itemprop' => 'image',

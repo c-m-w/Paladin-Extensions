@@ -35,7 +35,7 @@ class WidgetPosition extends AbstractHandler
 
 		$widgetPosition = $this->getEntityForImport($name, $addOnId, $json, $options);
 
-		$widgetPosition->bulkSet($json);
+		$widgetPosition->bulkSetIgnore($json);
 		$widgetPosition->position_id = $name;
 		$widgetPosition->addon_id = $addOnId;
 		$widgetPosition->save();

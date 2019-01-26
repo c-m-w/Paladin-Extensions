@@ -74,7 +74,7 @@ class SearchRebuild extends AbstractJob
 		$typePhrase = \XF::phrase('search_index');
 		if ($this->builtType && $this->builtLast)
 		{
-			return sprintf('%s... %s (%s %s)', $actionPhrase, $typePhrase, $this->builtType, $this->builtLast);
+			return sprintf('%s... %s (%s %s)', $actionPhrase, $typePhrase, $this->app->getContentTypePhrase($this->builtType), $this->builtLast);
 		}
 		else
 		{

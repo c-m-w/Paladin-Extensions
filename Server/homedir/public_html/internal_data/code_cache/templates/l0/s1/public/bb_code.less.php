@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 34f9de1e584e3a8ff559fb5d9528f5d0
+// FROM HASH: 2d56a510752a27f74a2251badf4ed656
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -92,6 +92,7 @@ a.bbCodeBlock-sourceJump
 		max-height: 300px;
 		max-height: 70vh;
 		overflow: auto;
+		-webkit-overflow-scrolling: touch;
 	}
 }
 

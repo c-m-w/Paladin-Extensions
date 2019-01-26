@@ -4,20 +4,21 @@
   <phrase title="countdown_countdown" version_id="12" version_string="1.2"><![CDATA[Countdown]]></phrase>
   <phrase title="countdown_countdown_admin" version_id="12" version_string="1.2"><![CDATA[Countdown admin]]></phrase>
   <phrase title="countdown_day" version_id="12" version_string="1.2"><![CDATA[Day]]></phrase>
+  <phrase title="countdown_days" version_id="15" version_string="1.5"><![CDATA[DAYS]]></phrase>
   <phrase title="countdown_description" version_id="12" version_string="1.2"><![CDATA[Enter UTC time.]]></phrase>
   <phrase title="countdown_hour" version_id="12" version_string="1.2"><![CDATA[Hour]]></phrase>
+  <phrase title="countdown_hours" version_id="15" version_string="1.5"><![CDATA[HOURS]]></phrase>
   <phrase title="countdown_link" version_id="12" version_string="1.2"><![CDATA[Link]]></phrase>
   <phrase title="countdown_minute" version_id="12" version_string="1.2"><![CDATA[Minute]]></phrase>
+  <phrase title="countdown_minutes" version_id="15" version_string="1.5"><![CDATA[MINUTES]]></phrase>
   <phrase title="countdown_month" version_id="12" version_string="1.2"><![CDATA[Month]]></phrase>
+  <phrase title="countdown_months" version_id="15" version_string="1.5"><![CDATA[MONTHS]]></phrase>
+  <phrase title="countdown_seconds" version_id="15" version_string="1.5"><![CDATA[SECONDS]]></phrase>
   <phrase title="countdown_show_countdown" version_id="12" version_string="1.2"><![CDATA[Show countdown]]></phrase>
   <phrase title="countdown_submit" version_id="12" version_string="1.2"><![CDATA[Submit]]></phrase>
   <phrase title="countdown_title" version_id="12" version_string="1.2"><![CDATA[Title]]></phrase>
   <phrase title="countdown_year" version_id="12" version_string="1.2"><![CDATA[Year]]></phrase>
-  <phrase title="option.countdownLink" version_id="13" version_string="1.3"><![CDATA[Link]]></phrase>
-  <phrase title="option_explain.countdownLink" version_id="13" version_string="1.3"><![CDATA[Link to countdown.js file.<br /><br />
-Example: https://www.domain.com/js/xf/countdown.js]]></phrase>
-  <phrase title="option_group.countdown" version_id="13" version_string="1.3"><![CDATA[Countdown]]></phrase>
-  <phrase title="option_group_description.countdown" version_id="13" version_string="1.3"><![CDATA[Options here control the Countdown add-on.]]></phrase>
+  <phrase title="countdown_years" version_id="15" version_string="1.5"><![CDATA[YEARS]]></phrase>
   <phrase title="permission.countdown_admin" version_id="12" version_string="1.2"><![CDATA[Admin]]></phrase>
   <phrase title="permission_interface.countdown" version_id="12" version_string="1.2"><![CDATA[Countdown]]></phrase>
   <phrase title="widget_def.countdown" version_id="10" version_string="1.0"><![CDATA[Countdown]]></phrase>

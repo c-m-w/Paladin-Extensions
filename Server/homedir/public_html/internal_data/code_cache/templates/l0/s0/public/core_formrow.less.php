@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: e79e676a1239831ffc60de73dffecf81
+// FROM HASH: 4936b6f792f6d3e505f9af072d01644d
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -142,8 +142,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		{
 			border-top: 0;
 
-			> dt,
-			> dd
+			> dt
 			{
 				padding-top: 0;
 			}
@@ -171,8 +170,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		&.formRow--noPadding + &,
 		&.formRow--noPadding + * > &:first-of-type
 		{
-			> dt,
-			> dd
+			> dt
 			{
 				padding-top: @xf-formRowPaddingV;
 			}

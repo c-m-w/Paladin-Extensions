@@ -5,11 +5,20 @@ namespace XF\Entity;
 use XF\Mvc\Entity\Structure;
 
 /**
- * Class ThreadPrefix
+ * COLUMNS
+ * @property int|null prefix_id
+ * @property int prefix_group_id
+ * @property int display_order
+ * @property int materialized_order
+ * @property string css_class
+ * @property array allowed_user_group_ids
  *
- * @package XF\Entity
+ * GETTERS
+ * @property \XF\Phrase|string title
  *
  * RELATIONS
+ * @property \XF\Entity\Phrase MasterTitle
+ * @property \XF\Entity\ThreadPrefixGroup PrefixGroup
  * @property \XF\Entity\ForumPrefix[] ForumPrefixes
  */
 class ThreadPrefix extends AbstractPrefix

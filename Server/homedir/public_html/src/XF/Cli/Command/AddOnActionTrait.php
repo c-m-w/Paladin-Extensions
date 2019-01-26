@@ -8,6 +8,7 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\PhpExecutableFinder;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Process\ProcessBuilder;
@@ -223,15 +224,30 @@ trait AddOnActionTrait
 
 		/** @var ProcessHelper $processHelper */
 		$processHelper = $this->getHelper('process');
-		$processHelper->mustRun($output, $process, null, function($type, $data) use ($output)
+
+		try
 		{
-			if ($type == Process::OUT)
+			$processHelper->mustRun($output, $process, null, function($type, $data) use ($output)
 			{
-				$output->write($data);
+				if ($type == Process::OUT)
+				{
+					$output->write($data);
+				}
+				// Note that progress bar output is in Process::ERR/stderr, but they get streamed to this callback
+				// interleaved, so displaying both is difficult. Thus, we need to only display stuff sent stdout.
+			});
+		}
+		catch (ProcessFailedException $e)
+		{
+			$process = $e->getProcess();
+			if ($process->getExitCode() !== 0)
+			{
+				// This indicates that the sub-process threw an exception. It will have been printed and logged
+				// so don't trigger the normal exception handling. However, we can't continue so exit.
+				exit(1);
 			}
-			// Note that progress bar output is in Process::ERR/stderr, but they get streamed to this callback
-			// interleaved, so displaying both is difficult. Thus, we need to only display stuff sent stdout.
-		});
+		}
+
 	}
 
 	protected function getVerbosityOption($verbosity)

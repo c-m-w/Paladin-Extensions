@@ -43,7 +43,7 @@ class AdminNavigation extends AbstractHandler
 		$navigation->setOption('verify_parent', false);
 		$navigation->getBehavior('XF:DevOutputWritable')->setOption('write_dev_output', false);
 
-		$navigation->bulkSet($json);
+		$navigation->bulkSetIgnore($json);
 		$navigation->navigation_id = $name;
 		$navigation->addon_id = $addOnId;
 		$navigation->save();

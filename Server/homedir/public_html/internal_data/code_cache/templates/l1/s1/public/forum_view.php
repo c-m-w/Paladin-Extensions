@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: acf6b656b4afae94044e3b4bbad09e09
+// FROM HASH: ae03f09d8c6c67da72c355d64a118f95
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -12,7 +12,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	$__finalCompiled .= '
 
 ' . $__templater->callMacro('metadata_macros', 'canonical_url', array(
-		'canonicalUrl' => $__templater->fn('link', array('canonical:forums', $__vars['forum'], array('page' => $__vars['page'], ), ), false),
+		'canonicalUrl' => $__templater->fn('link', array('canonical:forums', $__vars['forum'], $__vars['canonicalFilters'] + array('page' => $__vars['page'], ), ), false),
 	), $__vars) . '
 
 ';
@@ -288,10 +288,10 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		}
 		$__finalCompiled .= '
 
-					';
+					<div class="structItemContainer-group js-threadList">
+						';
 		if (!$__templater->test($__vars['threads'], 'empty', array())) {
 			$__finalCompiled .= '
-						<div class="structItemContainer-group js-threadList">
 							';
 			if ($__templater->isTraversable($__vars['threads'])) {
 				foreach ($__vars['threads'] AS $__vars['thread']) {
@@ -317,21 +317,25 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 							';
 			}
 			$__finalCompiled .= '
-						</div>
-					';
+						';
 		}
 		$__finalCompiled .= '
+					</div>
 				';
 	} else if ($__vars['filters']) {
 		$__finalCompiled .= '
-					<div class="structItem js-emptyThreadList">
-						<div class="structItem-cell">' . 'There are no threads matching your filters.' . '</div>
+					<div class="structItemContainer-group js-threadList">
+						<div class="structItem js-emptyThreadList">
+							<div class="structItem-cell">' . 'There are no threads matching your filters.' . '</div>
+						</div>
 					</div>
 				';
 	} else {
 		$__finalCompiled .= '
-					<div class="structItem js-emptyThreadList">
-						<div class="structItem-cell">' . 'There are no threads in this forum.' . '</div>
+					<div class="structItemContainer-group js-threadList">
+						<div class="structItem js-emptyThreadList">
+							<div class="structItem-cell">' . 'There are no threads in this forum.' . '</div>
+						</div>
 					</div>
 				';
 	}
@@ -361,7 +365,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		if ($__vars['xf']['visitor']['user_id']) {
 			$__finalCompiled .= '
 					<span class="button is-disabled">
-						' . 'You have insufficient privileges to post here.' . '
+						' . 'You have insufficient privileges to post threads here.' . '
 						<!-- this is not interactive so shouldn\'t be a button element -->
 					</span>
 				';

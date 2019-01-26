@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: c56ede44869fa1e496270f1f06f2b969
+// FROM HASH: f35931e4216942d897ee875c6b640069
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -23,13 +23,13 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		if ($__vars['invalidNotices']) {
 			$__finalCompiled .= '
 		<div class="blockMessage blockMessage--important">
-			' . 'The following notice/s may contain page criteria which is no longer matched' . $__vars['xf']['language']['label_separator'] . '
+			' . 'The following notice(s) may contain page criteria which is no longer matched' . $__vars['xf']['language']['label_separator'] . '
 			<ul class="listInline listInline--comma">
 				';
 			if ($__templater->isTraversable($__vars['invalidNotices'])) {
 				foreach ($__vars['invalidNotices'] AS $__vars['invalidNotice']) {
 					$__finalCompiled .= '
-					<li><a href="' . $__templater->fn('link', array('notice/edit', $__vars['invalidNotice'], ), true) . '">' . $__templater->escape($__vars['invalidNotice']['title']) . '</a></li>
+					<li><a href="' . $__templater->fn('link', array('notices/edit', $__vars['invalidNotice'], ), true) . '">' . $__templater->escape($__vars['invalidNotice']['title']) . '</a></li>
 				';
 				}
 			}

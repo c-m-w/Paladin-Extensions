@@ -370,14 +370,32 @@ step=1</value_parameters>
   <style_property property_name="elementSpacer" group_name="borderSpacing" title="Element spacer" description="This represents the base value for spacing between elements, such as individual blocks." property_type="value" value_type="unit" value_group="spacer" display_order="3000">
     <value>"20px"</value>
   </style_property>
-  <style_property property_name="emailBg" group_name="email" title="Email background color" description="Emails sent in HTML format will have this as its background color" property_type="value" value_type="color" display_order="100">
+  <style_property property_name="emailBg" group_name="email" title="Email background color" description="Emails sent in HTML format will have this as its background color" property_type="value" value_type="color" display_order="1000">
     <value>"@xf-pageBg"</value>
   </style_property>
-  <style_property property_name="emailFont" group_name="email" title="Email font" description="Defines the font (or font list) used for text in HTML emails" property_type="value" value_type="string" display_order="200">
+  <style_property property_name="emailBorderColor" group_name="email" title="Email border color" description="Defines the color used as a border within the email content area" property_type="value" value_type="color" display_order="2000">
+    <value>"@xf-borderColor"</value>
+  </style_property>
+  <style_property property_name="emailContentAltBg" group_name="email" title="Email alternate content background color" description="Defines the alternate color that email content may be displayed on" property_type="value" value_type="color" display_order="1200">
+    <value>"@xf-contentAltBg"</value>
+  </style_property>
+  <style_property property_name="emailContentBg" group_name="email" title="Email content background color" description="Defines the color that the main content of the email will be displayed on" property_type="value" value_type="color" display_order="1100">
+    <value>"@xf-contentBg"</value>
+  </style_property>
+  <style_property property_name="emailFont" group_name="email" title="Email font" description="Defines the font (or font list) used for text in HTML emails" property_type="value" value_type="string" display_order="900">
     <value>"@xf-fontFamilyUi"</value>
   </style_property>
   <style_property property_name="emailHeaderColor" group_name="email" title="Email header text color" description="Defines the color of text in the header bar in HTML email" property_type="value" value_type="color" display_order="300">
     <value>"@xf-textColorFeature"</value>
+  </style_property>
+  <style_property property_name="emailLinkColor" group_name="email" title="Email link color" description="Defines the default link color in HTML emails" property_type="value" value_type="color" display_order="200">
+    <value>"@xf-linkColor"</value>
+  </style_property>
+  <style_property property_name="emailTextColor" group_name="email" title="Email text color" description="Defines the color of the body text of HTML emails" property_type="value" value_type="color" display_order="100">
+    <value>"@xf-textColor"</value>
+  </style_property>
+  <style_property property_name="emailTextColorMuted" group_name="email" title="Email muted text color" description="Defines how muted text will be displayed in emails. This may be used for minor text in the email body and for email footer text" property_type="value" value_type="color" display_order="400">
+    <value>"@xf-textColorMuted"</value>
   </style_property>
   <style_property property_name="findThreadsNavStyle" group_name="misc" title="Find threads navigation style" description="This controls how the navigation is displayed in the &lt;i&gt;Find threads&lt;/i&gt; section." property_type="value" value_type="radio" display_order="260">
     <value_parameters>tabs={{ phrase('tabs') }}
@@ -565,7 +583,8 @@ max=5</value_parameters>
     <value>{
     "background-color": "@xf-contentHighlightBg",
     "border-bottom-width": "@xf-borderSize",
-    "border-bottom-color": "@xf-borderColorLight"
+    "border-bottom-color": "@xf-borderColorLight",
+    "extra": "border-radius: @block-borderRadius-inner @block-borderRadius-inner 0 0;"
 }</value>
   </style_property>
   <style_property property_name="memberHeaderName" group_name="member" title="Member profile header - name" description="The styling of the name of the member whose page is being viewed is controlled here" property_type="css" display_order="20100" css_components="text,extra">

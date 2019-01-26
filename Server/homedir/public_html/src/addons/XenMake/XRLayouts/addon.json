@@ -1,0 +1,14 @@
+{
+    "legacy_addon_id": "",
+    "title": "[XM] XR Product Manager Layout",
+    "description": "The for XR Product Manager is a different layout format plug-in.",
+    "version_id": 1000000,
+    "version_string": "1.0.0",
+    "dev": "XenMake",
+    "dev_url": "https://xenmake.com/",
+    "faq_url": "",
+    "support_url": "https://xenmake.com/",
+    "extra_urls": [],
+    "require": [],
+    "icon": "fa-desktop"
+}

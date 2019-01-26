@@ -18,14 +18,11 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		if ($__templater->isTraversable($__vars['upgrades'])) {
 			foreach ($__vars['upgrades'] AS $__vars['upgrade']) {
 				$__compilerTemp1 .= '
-						';
-				$__vars['_upgrade'] = $__vars['upgrade'];
-				$__compilerTemp1 .= '
-' . $__templater->dataRow(array(
+						' . $__templater->dataRow(array(
 					'rowclass' => 'dataList-row--noHover',
 				), array(array(
 					'_type' => 'cell',
-					'html' => $__templater->escape($__vars['upgrade']['Upgrade']['title']) . ' ' . $__templater->includeTemplate('nixfifty_giftupgrades_giftedby_label', $__vars) . ' ',
+					'html' => $__templater->escape($__vars['upgrade']['Upgrade']['title']),
 				),
 				array(
 					'_type' => 'cell',

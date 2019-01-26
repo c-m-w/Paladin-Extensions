@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 5baf87bbf357d73573db05e68be8d0e8
+// FROM HASH: b5f3dfde3cd6d23a45a0b76bb3bbf0ea
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -81,20 +81,22 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			' . $__templater->callMacro('display_order_macros', 'row', array(
 		'value' => ($__vars['upgrade']['display_order'] ?: 1),
 	), $__vars) . '
-' . $__templater->includeTemplate('sv_ue_user_upgrade_edit_quantity', $__vars) . '
 
 			' . $__templater->formRow('
 
-				' . $__templater->formTextBox(array(
+				<div class="inputGroup">
+					' . $__templater->formTextBox(array(
 		'name' => 'cost_amount',
 		'value' => ($__vars['upgrade']['cost_amount'] ?: 5),
-		'class' => 'input--inline',
-		'size' => '5',
+		'style' => 'width: 120px',
 	)) . '
-				' . $__templater->callMacro('public:currency_macros', 'currency_list', array(
+					<span class="inputGroup-splitter"></span>
+					' . $__templater->callMacro('public:currency_macros', 'currency_list', array(
 		'value' => ($__vars['upgrade']['cost_currency'] ?: 'USD'),
-		'class' => 'input--inline',
+		'class' => 'input--autoSize',
 	), $__vars) . '
+				</div>
+
 				<div class="formRow-explain">' . '<strong>Note:</strong> Ensure your merchant account with the selected payment profiles supports the above currencies. Currency support may vary by region.' . '</div>
 			', array(
 		'rowtype' => 'input',
@@ -185,16 +187,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'selected' => $__vars['upgrade']['can_purchase'],
 		'label' => 'Can be purchased',
 		'_type' => 'option',
-	),
-	array(
-		'name' => 'can_gift',
-		'selected' => $__vars['upgrade']['can_gift'],
-		'label' => 'Can be gifted',
-		'_type' => 'option',
 	)), array(
 	)) . '
-
-' . $__templater->includeTemplate('exup_user_upgrade_edit_1', $__vars) . '
 		</div>
 		' . $__templater->formSubmitRow(array(
 		'icon' => 'save',

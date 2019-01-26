@@ -14,13 +14,6 @@ return array('macros' => array('links' => function($__templater, array $__argume
 	' . '
 	<a class="' . $__templater->escape($__vars['baseClass']) . ' ' . (($__vars['pageSelected'] == 'new_thread') ? $__templater->escape($__vars['selectedClass']) : '') . '" href="' . $__templater->fn('link', array('whats-new/posts', ), true) . '" rel="nofollow">' . 'New posts' . '</a>
 	' . '
-';
-	if ($__templater->method($__vars['xf']['visitor'], 'canViewResources', array())) {
-		$__finalCompiled .= '
-	<a class="' . $__templater->escape($__vars['baseClass']) . ' ' . (($__vars['pageSelected'] == 'new_resource') ? $__templater->escape($__vars['selectedClass']) : '') . '" href="' . $__templater->fn('link', array('whats-new/resources', ), true) . '" rel="nofollow">' . 'New resources' . '</a>
-';
-	}
-	$__finalCompiled .= '
 	';
 	if ($__templater->method($__vars['xf']['visitor'], 'canViewProfilePosts', array())) {
 		$__finalCompiled .= '

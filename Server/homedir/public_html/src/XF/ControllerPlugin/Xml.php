@@ -70,7 +70,7 @@ class Xml extends AbstractPlugin
 			$viewParams = [
 				'urlPrefix' => $urlPrefix
 			];
-			return $this->view($serviceClass ?: $viewClass, 'banning_import', $viewParams);
+			return $this->view($serviceClass ?: $viewClass, 'xml_import', $viewParams);
 		}
 	}
 }

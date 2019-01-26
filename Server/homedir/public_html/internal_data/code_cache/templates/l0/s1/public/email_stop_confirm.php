@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 3b82af0483ca72bd5e8093105fc32588
+// FROM HASH: 7a9c5dfa99a3ef6f3c66064362e5c539
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -44,6 +44,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			'icon' => 'notificationsOff',
 		), array(
 			'rowtype' => 'simple',
+		)) . '
+			' . $__templater->formHiddenVal('stop', 'all', array(
 		)) . '
 		';
 	}

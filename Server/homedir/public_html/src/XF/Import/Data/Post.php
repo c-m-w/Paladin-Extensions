@@ -37,7 +37,7 @@ class Post extends AbstractEmulatedData
 		if ($this->message_state == 'visible' && $this->user_id)
 		{
 			$this->db()->insert('xf_thread_user_post', [
-				'thread_id' => $newId,
+				'thread_id' => $this->thread_id,
 				'user_id' => $this->user_id,
 				'post_count' => 1
 			], false, 'post_count = post_count + VALUES(post_count)');

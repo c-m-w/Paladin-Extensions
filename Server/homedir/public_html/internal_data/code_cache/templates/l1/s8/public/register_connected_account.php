@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: cec52c24a2de2d09fbbb10b3670231db
+// FROM HASH: 0b9623ff41ca0423a27cf0da5ed4e9a7
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -69,6 +69,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 					' . $__compilerTemp3 . '
 
 					' . $__templater->callMacro('register_macros', 'custom_fields', array(), $__vars) . '
+
+					' . $__templater->callMacro('register_macros', 'email_choice_row', array(), $__vars) . '
 
 					' . $__templater->callMacro('register_macros', 'tos_row', array(), $__vars) . '
 				</div>

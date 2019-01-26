@@ -263,7 +263,7 @@ return array('macros' => array('reactions_bar' => function($__templater, array $
 						';
 				$__vars['segmentWidth'] = ((($__templater->fn('is_array', array($__vars['reacts'][$__vars['reactionTypeId']], ), false) ? $__templater->fn('count', array($__vars['reacts'][$__vars['reactionTypeId']], ), false) : $__vars['reacts'][$__vars['reactionTypeId']]) / $__vars['reactsCount']) * 100) . '%';
 				$__compilerTemp1 .= '
-						<div class="react_bar_segment react_bar_' . $__templater->escape($__vars['reactionTypeId']) . ' Tooltip" title="' . '' . $__templater->escape($__vars['reactionType']['title']) . ' reactions: ' . ($__templater->test($__vars['rtTotal'], 'empty', array()) ? '0' : $__templater->escape($__vars['rtTotal'])) . '' . '" style="background-color: ' . $__templater->escape($__vars['reactionType']['color']) . '; width: ' . $__templater->escape($__vars['segmentWidth']) . '" data-xf-init="tooltip"></div>
+						<div class="react_bar_segment react_bar_' . $__templater->escape($__vars['reactionTypeId']) . ' Tooltip" title="' . '' . $__templater->escape($__vars['reactionType']['title']) . ' reactions: ' . ($__templater->fn('empty', array($__vars['rtTotal'])) ? '0' : $__templater->escape($__vars['rtTotal'])) . '' . '" style="background-color: ' . $__templater->escape($__vars['reactionType']['color']) . '; width: ' . $__templater->escape($__vars['segmentWidth']) . '" data-xf-init="tooltip"></div>
 					';
 			}
 		}

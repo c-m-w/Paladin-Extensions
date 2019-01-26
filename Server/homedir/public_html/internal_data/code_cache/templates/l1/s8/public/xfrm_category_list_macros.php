@@ -183,7 +183,7 @@ return array('macros' => array('simple_category_list' => function($__templater, 
 				<div class="node-meta">
 					<div class="node-statsMeta">
 						<dl class="pairs pairs--inline">
-							<dt>' . 'Extensions' . '</dt>
+							<dt>' . 'xfrm_resources' . '</dt>
 							<dd>' . $__templater->filter($__vars['extras']['resource_count'], array(array('number', array()),), true) . '</dd>
 						</dl>
 					</div>
@@ -200,7 +200,7 @@ return array('macros' => array('simple_category_list' => function($__templater, 
 
 			<div class="node-stats node-stats--single">
 				<dl class="pairs pairs--rows">
-					<dt>' . 'Extensions' . '</dt>
+					<dt>' . 'xfrm_resources' . '</dt>
 					<dd>' . $__templater->filter($__vars['extras']['resource_count'], array(array('number', array()),), true) . '</dd>
 				</dl>
 			</div>

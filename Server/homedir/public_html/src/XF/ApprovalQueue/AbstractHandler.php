@@ -107,7 +107,7 @@ abstract class AbstractHandler
 		unset ($args[0]);
 
 		$method = 'action' . ucfirst($action);
-		if (!\XF\Util\Php::validateCallback($this, $method, $error))
+		if (!\XF\Util\Php::validateCallbackPhrased($this, $method, $error))
 		{
 			throw new \LogicException($error);
 		}

@@ -44,7 +44,7 @@ class Rss extends \XF\Mvc\View
 			->setFeedLink($feedLink, 'rss')
 			->setDateModified(\XF::$time)
 			->setLastBuildDate(\XF::$time)
-			->setGenerator($title);
+			->setGenerator($options->boardTitle);
 
 		$parser = $app->bbCode()->parser();
 		$rules = $app->bbCode()->rules('post:rss');
@@ -58,12 +58,22 @@ class Rss extends \XF\Mvc\View
 		/** @var \XF\Entity\Thread $thread */
 		foreach ($this->params['threads'] AS $thread)
 		{
+			$threadForum = $thread->Forum;
 			$entry = $feed->createEntry();
 
-			$entry->setTitle($thread->title)
+			$title = (empty($thread->title) ? \XF::phrase('title:') . ' ' . $thread->title : $thread->title);
+			$entry->setTitle($title)
 				->setLink($router->buildLink('canonical:threads', $thread))
 				->setDateCreated($thread->post_date)
 				->setDateModified($thread->last_post_date);
+
+			if ($threadForum && !$forum)
+			{
+				$entry->addCategory([
+					'term' => $threadForum->title,
+					'scheme' => $router->buildLink('canonical:forums', $threadForum)
+				]);
+			}
 
 			$firstPost = $thread->FirstPost;
 

@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 4f0abc6d0195928ff133bd7f93af26c2
+// FROM HASH: e81573b143ffc42c82818f857d8363f8
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -195,7 +195,6 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			<hr class="formRowSep" />
 
 			' . $__templater->formCheckBoxRow(array(
-		'readonly' => (!$__templater->method($__vars['bbCode'], 'canEdit', array())),
 	), array(array(
 		'name' => 'allow_signature',
 		'value' => '1',

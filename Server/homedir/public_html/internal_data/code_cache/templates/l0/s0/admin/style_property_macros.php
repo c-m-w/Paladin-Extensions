@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 13452491393a5528b5ed8e1fb5e31943
+// FROM HASH: 593e878509e60c2a99fae2baeef074e4
 return array('macros' => array('property_edit' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -79,10 +79,21 @@ return array('macros' => array('property_edit' => function($__templater, array $
 			<a href="' . $__templater->fn('link', array('style-properties/edit', $__vars['property'], ), true) . '">' . 'Edit' . '</a>
 		';
 	}
-	$__vars['hintHtml'] = $__templater->preEscaped('
+	$__compilerTemp4 = '';
+	if ($__vars['property']['addon_id'] AND ($__vars['property']['Group'] AND (($__vars['property']['addon_id'] != $__vars['property']['Group']['addon_id']) AND ($__vars['property']['addon_id'] != 'XF')))) {
+		$__compilerTemp4 .= '
+			<span class="formRow-hint-featured">
+				' . $__templater->escape($__vars['property']['AddOn']['title']) . '
+			</span>
+		';
+	}
+	$__vars['hintHtml'] = $__templater->preEscaped(trim('
 		' . $__compilerTemp1 . '
 ' . $__compilerTemp2 . '
+
 		' . $__compilerTemp3 . '
+
+		' . $__compilerTemp4 . '
 
 		' . $__templater->callMacro(null, 'customization_hint', array(
 		'state' => $__vars['customizationState'],
@@ -93,7 +104,7 @@ return array('macros' => array('property_edit' => function($__templater, array $
 
 		' . $__templater->formHiddenVal($__vars['submitName'] . '_listed[]', $__vars['property']['property_name'], array(
 	)) . '
-	');
+	'));
 	$__finalCompiled .= '
 
 	';
@@ -132,11 +143,11 @@ return array('macros' => array('property_edit' => function($__templater, array $
 		$__finalCompiled .= '
 
 		';
-		$__compilerTemp4 = $__templater->mergeChoiceOptions(array(), $__vars['valueOptions']);
+		$__compilerTemp5 = $__templater->mergeChoiceOptions(array(), $__vars['valueOptions']);
 		$__finalCompiled .= $__templater->formRadioRow(array(
 			'name' => $__vars['formBaseKey'],
 			'value' => $__vars['property']['property_value'],
-		), $__compilerTemp4, array(
+		), $__compilerTemp5, array(
 			'rowclass' => $__vars['rowClass'],
 			'label' => $__templater->escape($__vars['titleHtml']),
 			'hint' => $__templater->escape($__vars['hintHtml']),
@@ -149,11 +160,11 @@ return array('macros' => array('property_edit' => function($__templater, array $
 		$__finalCompiled .= '
 
 		';
-		$__compilerTemp5 = $__templater->mergeChoiceOptions(array(), $__vars['valueOptions']);
+		$__compilerTemp6 = $__templater->mergeChoiceOptions(array(), $__vars['valueOptions']);
 		$__finalCompiled .= $__templater->formSelectRow(array(
 			'name' => $__vars['formBaseKey'],
 			'value' => $__vars['property']['property_value'],
-		), $__compilerTemp5, array(
+		), $__compilerTemp6, array(
 			'rowclass' => $__vars['rowClass'],
 			'label' => $__templater->escape($__vars['titleHtml']),
 			'hint' => $__templater->escape($__vars['hintHtml']),

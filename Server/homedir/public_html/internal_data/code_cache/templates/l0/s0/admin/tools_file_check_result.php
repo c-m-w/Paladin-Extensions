@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 5ae05660a4e5bf2ada93a802c46c1982
+// FROM HASH: 471e948edbaa15cbd31d2019e2f8258b
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -28,7 +28,9 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	} else {
 		$__finalCompiled .= '
 	<div class="blockMessage blockMessage--error blockMessage--iconic">
-		' . 'Check completed on ' . $__templater->filter($__vars['fileCheck']['total_checked'], array(array('number', array()),), true) . ' files. We found some problems with the following files. Please resolve these issues as soon as possible.' . '
+		' . $__templater->filter('Check completed on ' . $__templater->filter($__vars['fileCheck']['total_checked'], array(array('number', array()),), false) . ' files. The files listed below have contents different from those originally downloaded.
+
+If you have edited these files yourself, you may ignore this message, otherwise you should investigate further as this may be evidence of corrupted or altered files.', array(array('nl2br', array()),), true) . '
 	</div>
 
 	';

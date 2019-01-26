@@ -36,7 +36,7 @@ class PermissionInterfaceGroup extends AbstractHandler
 
 		$interfaceGroup = $this->getEntityForImport($name, $addOnId, $json, $options);
 
-		$interfaceGroup->bulkSet($json);
+		$interfaceGroup->bulkSetIgnore($json);
 		$interfaceGroup->interface_group_id = $name;
 		$interfaceGroup->addon_id = $addOnId;
 		$interfaceGroup->save();

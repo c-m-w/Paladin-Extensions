@@ -75,7 +75,6 @@ class Thread extends AbstractSearcher
 			$customFields = array_merge($value, $exactMatchFields);
 			unset($customFields['exact']);
 
-			$conditions = [];
 			foreach ($customFields AS $fieldId => $value)
 			{
 				if ($value === '' || (is_array($value) && !$value))
@@ -85,6 +84,7 @@ class Thread extends AbstractSearcher
 
 				$finder->with('CustomFields|' . $fieldId);
 				$isExact = !empty($exactMatchFields[$fieldId]);
+				$conditions = [];
 
 				foreach ((array)$value AS $possible)
 				{
@@ -98,10 +98,11 @@ class Thread extends AbstractSearcher
 						$conditions[] = [$columnName, 'LIKE', $finder->escapeLike($possible, '%?%')];
 					}
 				}
-			}
-			if ($conditions)
-			{
-				$finder->whereOr($conditions);
+
+				if ($conditions)
+				{
+					$finder->whereOr($conditions);
+				}
 			}
 		}
 

@@ -20,27 +20,33 @@ class Request
 
 	public static $googleIps = [
 		'v4' => [
-			'64.18.0.0/20',
+			'35.190.247.0/24',
+			'35.191.0.0/16',
 			'64.233.160.0/19',
 			'66.102.0.0/20',
 			'66.249.80.0/20',
 			'72.14.192.0/18',
 			'74.125.0.0/16',
 			'108.177.8.0/21',
+			'108.177.96.0/19',
+			'130.211.0.0/22',
 			'172.217.0.0/19',
+			'172.217.32.0/20',
+			'172.217.128.0/19',
+			'172.217.160.0/20',
+			'172.217.192.0/19',
 			'173.194.0.0/16',
-			'207.126.144.0/20',
 			'209.85.128.0/17',
 			'216.58.192.0/19',
-			'216.239.32.0/19',
+			'216.239.32.0/19'
 		],
 		'v6' => [
+			'2a00:1450:4000::/36',
+			'2c0f:fb50:4000::/36',
 			'2001:4860:4000::/36',
 			'2404:6800:4000::/36',
 			'2607:f8b0:4000::/36',
-			'2800:3f0:4000::/36',
-			'2a00:1450:4000::/36',
-			'2c0f:fb50:4000::/36'
+			'2800:3f0:4000::/36'
 		]
 	];
 
@@ -59,16 +65,15 @@ class Request
 			'188.114.96.0/20',
 			'190.93.240.0/20',
 			'197.234.240.0/22',
-			'198.41.128.0/17',
+			'198.41.128.0/17'
 		],
 		'v6' => [
+			'2a06:98c0::/29',
+			'2c0f:f248::/32',
 			'2400:cb00::/32',
-			'2405:8100::/32',
 			'2405:b500::/32',
 			'2606:4700::/32',
-			'2803:f800::/32',
-			'2c0f:f248::/32',
-			'2a06:98c0::/29'
+			'2803:f800::/32'
 		]
 	];
 
@@ -359,7 +364,8 @@ class Request
 				$imageI++;
 			}
 
-			$output[$idx] = new Upload($file['tmp_name'], $file['name'], $file['error']);
+			$class = \XF::extendClass('XF\Http\Upload');
+			$output[$idx] = new $class($file['tmp_name'], $file['name'], $file['error']);
 		}
 
 		if ($multiple)
@@ -374,7 +380,24 @@ class Request
 
 	public function getCookie($key, $fallback = false)
 	{
-		return $this->getCookieRaw($this->cookiePrefix . $key, $fallback);
+		$cookie = $this->getCookieRaw($this->cookiePrefix . $key, $fallback);
+		if (is_array($cookie) && !is_array($fallback))
+		{
+			$cookie = $fallback;
+		}
+
+		return $cookie;
+	}
+
+	public function getCookieArray($key, array $fallback = [])
+	{
+		$cookie = $this->getCookieRaw($this->cookiePrefix . $key, $fallback);
+		if (!is_array($cookie))
+		{
+			$cookie = $fallback;
+		}
+
+		return $cookie;
 	}
 
 	public function getCookies($prefixFiltered = true)

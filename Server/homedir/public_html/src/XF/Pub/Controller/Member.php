@@ -187,6 +187,7 @@ class Member extends AbstractController
 
 		$finder = $searcher->getFinder()
 			->isValidUser()
+			->with(['Profile', 'Option'])
 			->limitByPage($page, $perPage);
 
 		$total = $finder->total();

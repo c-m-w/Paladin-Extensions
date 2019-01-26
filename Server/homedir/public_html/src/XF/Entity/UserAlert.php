@@ -17,6 +17,7 @@ use XF\Mvc\Entity\Structure;
  * @property int event_date
  * @property int view_date
  * @property array extra_data
+ * @property string depends_on_addon_id
  *
  * GETTERS
  * @property Entity|null Content
@@ -24,6 +25,7 @@ use XF\Mvc\Entity\Structure;
  * RELATIONS
  * @property \XF\Entity\User User
  * @property \XF\Entity\User Receiver
+ * @property \XF\Entity\AddOn AddOn
  */
 class UserAlert extends Entity
 {
@@ -67,6 +69,12 @@ class UserAlert extends Entity
 		return $handler ? $handler->render($this) : '';
 	}
 
+	public function isAlertRenderable()
+	{
+		$handler = $this->getHandler();
+		return $handler ? $handler->isAlertRenderable($this) : false;
+	}
+
 	public function isUnviewed()
 	{
 		return !$this->view_date;
@@ -93,7 +101,7 @@ class UserAlert extends Entity
 			{
 				$this->db()->query("
 					UPDATE xf_user
-					SET alerts_unread = GREATEST(0, alerts_unread - 1)
+					SET alerts_unread = GREATEST(0, CAST(alerts_unread AS SIGNED) - 1)
 					WHERE user_id = ?
 				", $this->alerted_user_id);
 			}
@@ -106,7 +114,7 @@ class UserAlert extends Entity
 		{
 			$this->db()->query("
 				UPDATE xf_user
-				SET alerts_unread = GREATEST(0, alerts_unread - 1)
+				SET alerts_unread = GREATEST(0, CAST(alerts_unread AS SIGNED) - 1)
 				WHERE user_id = ?
 			", $this->alerted_user_id);
 		}
@@ -127,7 +135,8 @@ class UserAlert extends Entity
 			'action' => ['type' => self::STR, 'maxLength' => 30, 'required' => true],
 			'event_date' => ['type' => self::UINT, 'default' => \XF::$time],
 			'view_date' => ['type' => self::UINT, 'default' => 0],
-			'extra_data' => ['type' => self::SERIALIZED_ARRAY, 'default' => []]
+			'extra_data' => ['type' => self::SERIALIZED_ARRAY, 'default' => []],
+			'depends_on_addon_id' => ['type' => self::BINARY, 'maxLength' => 50, 'default' => '']
 		];
 		$structure->getters = [
 			'Content' => true
@@ -145,6 +154,12 @@ class UserAlert extends Entity
 				'conditions' =>[['user_id', '=', '$alerted_user_id']],
 				'primary' => true
 			],
+			'AddOn' => [
+				'entity' => 'XF:AddOn',
+				'type' => self::TO_ONE,
+				'conditions' => [['addon_id', '=', '$depends_on_addon_id']],
+				'primary' => true
+			]
 		];
 
 		return $structure;

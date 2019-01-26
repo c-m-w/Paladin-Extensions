@@ -118,7 +118,7 @@ class ThreadRedirect extends Repository
 		$redirect = $thread->Redirect;
 		if ($redirect)
 		{
-			$key = 'thread-' . $thread->thread_id . '-' . $thread->node_id . '-';
+			$key = preg_replace('/^(thread-\d+)-\d+-$/', '$1-' . $thread->node_id . '-', $redirect->redirect_key);
 			if ($key != $redirect->redirect_key)
 			{
 				$redirect->redirect_key = $key;

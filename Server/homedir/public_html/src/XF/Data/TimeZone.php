@@ -85,7 +85,7 @@ class TimeZone
 			'Asia/Novosibirsk' => ['phrase' => 'utc_plus_0600_novosibirsk'],
 			'Asia/Dhaka' => ['phrase' => 'utc_plus_0600_astana'],
 			'Asia/Almaty' => ['phrase' => 'utc_plus_0600_almaty'],
-			'Asia/Rangoon' => ['phrase' => 'utc_plus_0630_yangon'],
+			'Asia/Yangon' => ['phrase' => 'utc_plus_0630_yangon'],
 			'Asia/Krasnoyarsk' => ['phrase' => 'utc_plus_0700_krasnoyarsk'],
 			'Asia/Bangkok' => ['phrase' => 'utc_plus_0700_bangkok'],
 			'Asia/Irkutsk' => ['phrase' => 'utc_plus_0800_irkutsk'],

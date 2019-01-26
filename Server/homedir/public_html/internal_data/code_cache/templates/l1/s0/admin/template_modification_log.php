@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: abfa3f7eb8f176ac9a97bd58caf576c7
+// FROM HASH: 31f3472e3720a15ed893f4eeb959a13a
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -46,20 +46,16 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 					if ($__vars['log']['status'] == 'error_compile') {
 						$__compilerTemp4 .= 'Compiler error (may be from another template modification)' . '
 										';
-						if ($__vars['log']['status'] == 'error_invalid_regex') {
-						}
+					} else if ($__vars['log']['status'] == 'error_invalid_regex') {
 						$__compilerTemp4 .= 'Invalid regular expression' . '
 										';
-						if ($__vars['log']['status'] == 'error_unknown_action') {
-						}
+					} else if ($__vars['log']['status'] == 'error_unknown_action') {
 						$__compilerTemp4 .= 'Unknown action' . '
 										';
-						if ($__vars['log']['status'] == 'error_invalid_callback') {
-						}
+					} else if ($__vars['log']['status'] == 'error_invalid_callback') {
 						$__compilerTemp4 .= 'Invalid callback' . '
 										';
-						if ($__vars['log']['status'] == 'error_callback_failed') {
-						}
+					} else if ($__vars['log']['status'] == 'error_callback_failed') {
 						$__compilerTemp4 .= 'Callback failed' . '
 									';
 					}

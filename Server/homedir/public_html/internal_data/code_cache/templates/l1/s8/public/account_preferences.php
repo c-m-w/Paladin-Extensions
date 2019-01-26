@@ -1,9 +1,12 @@
 <?php
-// FROM HASH: 979bb583edf10c70271363a3d0004a0e
+// FROM HASH: 6de93fdaf2f174a4232cff5b81c71d9d
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
 	$__templater->pageParams['pageTitle'] = $__templater->preEscaped('Preferences');
+	$__finalCompiled .= '
+';
+	$__templater->setPageParam('uix_myAccountLinks', 'settings');
 	$__finalCompiled .= '
 
 ';
@@ -136,6 +139,11 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	), $__compilerTemp7, array(
 		'label' => 'Time zone',
 	)) . '
+
+			' . $__templater->callMacro('helper_account', 'email_options_row', array(
+		'showConversationOption' => true,
+	), $__vars) . $__templater->includeTemplate('mjst_account_preferences', $__vars) . '
+
 			' . $__templater->formCheckBoxRow(array(
 	), array(array(
 		'value' => 'watch_no_email',
@@ -168,25 +176,14 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'_type' => 'option',
 	),
 	array(
-		'name' => 'option[email_on_conversation]',
-		'checked' => $__vars['xf']['visitor']['Option']['email_on_conversation'],
-		'label' => 'Receive email when a new conversation message is received',
-		'_type' => 'option',
-	),
-	array(
-		'name' => 'option[receive_admin_email]',
-		'checked' => $__vars['xf']['visitor']['Option']['receive_admin_email'],
-		'label' => 'Receive site mailings',
-		'hint' => 'You will receive a copy of emails sent by the administrator to all members of the site.',
-		'_type' => 'option',
-	),
-	array(
 		'name' => 'option[content_show_signature]',
 		'checked' => $__vars['xf']['visitor']['Option']['content_show_signature'],
 		'label' => 'Show people\'s signatures with their messages',
 		'_type' => 'option',
 	)), array(
+		'label' => 'Content options',
 	)) . '
+
 			' . $__templater->callMacro('helper_account', 'activity_privacy_row', array(), $__vars) . '
 
 ' . $__templater->includeTemplate('EWRdiscord_account_preferences', $__vars) . '

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<phrases>
+  <phrase title="admin_navigation.lauLog" version_id="20000" version_string="1.0.0."><![CDATA[Login as User (LAU2)]]></phrase>
+  <phrase title="lau_login" version_id="20000" version_string="1.0.0."><![CDATA[Login]]></phrase>
+  <phrase title="lau_login_as_user" version_id="20000" version_string="1.0.0."><![CDATA[Login as User]]></phrase>
+  <phrase title="lau_login_from" version_id="20000" version_string="1.0.0."><![CDATA[Login from]]></phrase>
+  <phrase title="lau_login_to" version_id="20000" version_string="1.0.0."><![CDATA[Login to]]></phrase>
+  <phrase title="lau_logins" version_id="20000" version_string="1.0.0."><![CDATA[Login as User Logs]]></phrase>
+  <phrase title="lau_logout_from" version_id="20000" version_string="1.0.0."><![CDATA[Logout from]]></phrase>
+  <phrase title="lau_not_allowed_login_with_username_x" version_id="20000" version_string="1.0.0."><![CDATA[It is not allowed to log in with {username}]]></phrase>
+  <phrase title="lau_please_enter_reason_for_login_to_user" version_id="20000" version_string="1.0.0."><![CDATA[Please enter a reason for login to this user.]]></phrase>
+  <phrase title="lau_stealth_login" version_id="20000" version_string="1.0.0."><![CDATA[Stealth Login]]></phrase>
+  <phrase title="lau_username_x_you_are_currently_using_username_y_account_click_here_to_go_back_to_your_account" version_id="20015" version_string="1.2.2"><![CDATA["{from_username}", you are currently using "{to_username}" account. Click <a href="{link}">here</a> to go back to your account.]]></phrase>
+  <phrase title="option.lau_DisallowedUsers" version_id="20000" version_string="1.0.0."><![CDATA[Disallowed Users]]></phrase>
+  <phrase title="option.lau_DisplayLoginCard" version_id="20000" version_string="1.0.0."><![CDATA[Display "Login-Button" in profile]]></phrase>
+  <phrase title="option.lau_DisplayLoginStaffBar" version_id="20001" version_string="1.1.0."><![CDATA[Display "Login-Button" in Staff-Bar]]></phrase>
+  <phrase title="option.lau_ReasonRequired" version_id="20000" version_string="1.0.0."><![CDATA[Reason is required]]></phrase>
+  <phrase title="option.lau_Stealth" version_id="20000" version_string="1.0.0."><![CDATA[Stealth Login]]></phrase>
+  <phrase title="option_explain.lau_DisallowedUsers" version_id="20014" version_string="1.2.1"><![CDATA[It is not possible to log in to this user account.]]></phrase>
+  <phrase title="option_explain.lau_DisplayLoginCard" version_id="20000" version_string="1.0.0."><![CDATA[]]></phrase>
+  <phrase title="option_explain.lau_DisplayLoginStaffBar" version_id="20001" version_string="1.1.0."><![CDATA[]]></phrase>
+  <phrase title="option_explain.lau_ReasonRequired" version_id="20000" version_string="1.0.0."><![CDATA[]]></phrase>
+  <phrase title="option_explain.lau_Stealth" version_id="20000" version_string="1.0.0."><![CDATA[]]></phrase>
+  <phrase title="option_group.lau_settings" version_id="20000" version_string="1.0.0."><![CDATA[Login as User (LAU2)]]></phrase>
+  <phrase title="option_group_description.lau_settings" version_id="20000" version_string="1.0.0."><![CDATA[Log in to another user's account with a click]]></phrase>
+  <phrase title="permission.general_canUseLau" version_id="20000" version_string="1.0.0."><![CDATA[Can use "Login as User"]]></phrase>
+</phrases>

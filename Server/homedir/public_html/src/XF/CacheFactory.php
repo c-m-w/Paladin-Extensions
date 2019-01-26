@@ -229,7 +229,7 @@ class CacheFactory
 			$r->select($config['database']);
 		}
 
-		$cache = new \Doctrine\Common\Cache\RedisCache();
+		$cache = new \XF\Cache\RedisCache();
 		$cache->setRedis($r);
 		return $cache;
 	}

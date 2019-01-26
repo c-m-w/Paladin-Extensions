@@ -287,7 +287,7 @@ class Login extends AbstractPlugin
 
 	protected function clearCookieSkipList()
 	{
-		return ['session', 'tfa_trust'];
+		return ['notice_dismiss', 'session', 'tfa_trust'];
 	}
 
 	public function clearCookies()

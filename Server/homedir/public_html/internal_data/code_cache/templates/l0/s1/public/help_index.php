@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 96def6bfed7105e60b74a7878179fa01
+// FROM HASH: c4a21b9aadcb0d079c06a55180796bb7
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -20,10 +20,18 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		if ($__templater->isTraversable($__vars['pages'])) {
 			foreach ($__vars['pages'] AS $__vars['page']) {
 				$__finalCompiled .= '
-					<div class="block-row block-row--separated">
-						<h3 class="block-textHeader"><a href="' . ((($__vars['page']['page_id'] == 'terms') AND $__vars['tosUrl']) ? $__templater->escape($__vars['tosUrl']) : $__templater->fn('link', array('help', $__vars['page'], ), true)) . '">' . $__templater->escape($__vars['page']['title']) . '</a></h3>
-						' . $__templater->escape($__vars['page']['description']) . '
-					</div>
+					';
+				if ((($__vars['page']['page_id'] == 'trophies') AND $__vars['xf']['options']['enableTrophies']) OR ($__vars['page']['page_id'] != 'trophies')) {
+					$__finalCompiled .= '
+						<div class="block-row block-row--separated">
+							<h3 class="block-textHeader">
+								<a href="' . $__templater->escape($__vars['page']['public_url']) . '">' . $__templater->escape($__vars['page']['title']) . '</a>
+							</h3>
+							' . $__templater->escape($__vars['page']['description']) . '
+						</div>
+					';
+				}
+				$__finalCompiled .= '
 				';
 			}
 		}

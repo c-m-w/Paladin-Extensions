@@ -36,7 +36,7 @@ class OptionGroup extends AbstractHandler
 
 		$group = $this->getEntityForImport($name, $addOnId, $json, $options);
 
-		$group->bulkSet($json);
+		$group->bulkSetIgnore($json);
 		$group->group_id = $name;
 		$group->addon_id = $addOnId;
 		$group->save();

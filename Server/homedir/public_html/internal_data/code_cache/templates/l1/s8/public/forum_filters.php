@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: e78bc4c52721d1e8a26e5b1e0d1d4f12
+// FROM HASH: 57c1079b690ae403fa8c0d94cdfaa509
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -40,25 +40,27 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 	' . '
 	<div class="menu-row menu-row--separated">
-		' . 'Started by' . $__vars['xf']['language']['label_separator'] . '
+		<label for="ctrl_started_by">' . 'Started by' . $__vars['xf']['language']['label_separator'] . '</label>
 		<div class="u-inputSpacer">
 			' . $__templater->formTextBox(array(
 		'name' => 'starter',
 		'value' => ($__vars['starterFilter'] ? $__vars['starterFilter']['username'] : ''),
 		'ac' => 'single',
 		'maxlength' => $__templater->fn('max_length', array($__vars['xf']['visitor'], 'username', ), false),
+		'id' => 'ctrl_started_by',
 	)) . '
 		</div>
 	</div>
 
 	' . '
 	<div class="menu-row menu-row--separated">
-		' . 'Last updated' . $__vars['xf']['language']['label_separator'] . '
+		<label for="ctrl_last_updated">' . 'Last updated' . $__vars['xf']['language']['label_separator'] . '</label>
 		<div class="u-inputSpacer">
 			' . $__compilerTemp2 . '
 			' . $__templater->formSelect(array(
 		'name' => 'last_days',
 		'value' => $__vars['lastDays'],
+		'id' => 'ctrl_last_updated',
 	), array(array(
 		'value' => '-1',
 		'label' => 'Any time',
@@ -106,9 +108,11 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	<div class="menu-row menu-row--separated">
 		' . 'Sort by' . $__vars['xf']['language']['label_separator'] . '
 		<div class="inputGroup u-inputSpacer">
+			<span class="u-srOnly" id="ctrl_sort_by">' . 'Sort order' . '</span>
 			' . $__templater->formSelect(array(
 		'name' => 'order',
 		'value' => ($__vars['filters']['order'] ?: $__vars['forum']['default_sort_order']),
+		'aria-labelledby' => 'ctrl_sort_by',
 	), array(array(
 		'value' => 'last_post_date',
 		'label' => 'Last message',
@@ -140,9 +144,11 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'_type' => 'option',
 	))) . '
 			<span class="inputGroup-splitter"></span>
+			<span class="u-srOnly" id="ctrl_sort_direction">' . 'Sort direction' . '</span>
 			' . $__templater->formSelect(array(
 		'name' => 'direction',
 		'value' => ($__vars['filters']['direction'] ?: $__vars['forum']['default_sort_direction']),
+		'aria-labelledby' => 'ctrl_sort_direction',
 	), array(array(
 		'value' => 'desc',
 		'label' => 'Descending',

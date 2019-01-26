@@ -187,6 +187,19 @@ class App extends \XF\App
 		{
 			$session->previousActivity = $visitor->getValue('last_activity'); // skip the getter to get what's in the DB
 		}
+
+		// count unread alerts if last activity was over 30 days ago (the alert expiry cut off)
+		if ($visitor->alerts_unread && !$session->alertCountChecked)
+		{
+			$session->alertCountChecked = true;
+
+			if ($visitor->getValue('last_activity') < \XF::$time - (30 * 86400))
+			{
+				/** @var \XF\Repository\UserAlert $alertRepo */
+				$alertRepo = $this->repository('XF:UserAlert');
+				$alertRepo->updateUnreadCountForUser($visitor);
+			}
+		}
 	}
 
 	protected function updateModeratorCaches()
@@ -538,15 +551,23 @@ class App extends \XF\App
 			);
 		}
 
-		if (
-			$this->options()->showFirstCookieNotice
-			&& $this->request()->getCookie('session') === false
-			&& $this->request()->getCookie('user') === false
-		)
+		if (!$visitor->user_id && $this->options()->showFirstCookieNotice)
 		{
-			$noticeList->addNotice('cookies', 'block',
-				$templater->renderTemplate('public:notice_cookies', $pageParams)
-			);
+			$noticeDismiss = explode(',', $this->request()->getCookie('notice_dismiss'));
+
+			if (!in_array('-1', (array)$noticeDismiss))
+			{
+				$noticeList->addNotice('cookies', 'bottom_fixer',
+					$templater->renderTemplate('public:notice_cookies', $pageParams),
+					[
+						'dismissible' => true,
+						'notice_id' => -1,
+						'custom_dismissible' => true,
+						'display_style' => 'custom',
+						'css_class' => 'notice--primary notice--cookie'
+					]
+				);
+			}
 		}
 	}
 }

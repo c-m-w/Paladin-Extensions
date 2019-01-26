@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: ea1cd6e65822d9abcbc65e08a4ea13a0
+// FROM HASH: 2247b92fafc8207f121b3be26cdce591
 return array('macros' => array('node_list_entry' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -29,7 +29,7 @@ return array('macros' => array('node_list_entry' => function($__templater, array
 			'depth' => $__vars['depth'],
 		), $__vars) . '
 	';
-	} else {
+	} else if ($__vars['nodeTemplate']['template']) {
 		$__finalCompiled .= '
 		' . $__templater->includeTemplate($__vars['nodeTemplate']['template'], $__vars) . '
 	';

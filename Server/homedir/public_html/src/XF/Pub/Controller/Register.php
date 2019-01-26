@@ -47,6 +47,13 @@ class Register extends AbstractController
 		$provider = $this->assertProviderExists($params->provider_id);
 		$handler = $provider->getHandler();
 
+		if (!$provider->isUsable())
+		{
+			throw $this->exception(
+				$this->error(\XF::phrase('this_connected_account_provider_is_not_currently_available'))
+			);
+		}
+
 		$redirect = $this->getDynamicRedirect();
 		$visitor = \XF::visitor();
 
@@ -201,6 +208,13 @@ class Register extends AbstractController
 		$provider = $this->assertProviderExists($params->provider_id);
 		$handler = $provider->getHandler();
 
+		if (!$provider->isUsable())
+		{
+			throw $this->exception(
+				$this->error(\XF::phrase('this_connected_account_provider_is_not_currently_available'))
+			);
+		}
+
 		$storageState = $handler->getStorageState($provider, $visitor);
 		$providerData = $handler->getProviderData($storageState);
 
@@ -255,6 +269,13 @@ class Register extends AbstractController
 		$provider = $this->assertProviderExists($params->provider_id);
 		$handler = $provider->getHandler();
 
+		if (!$provider->isUsable())
+		{
+			throw $this->exception(
+				$this->error(\XF::phrase('this_connected_account_provider_is_not_currently_available'))
+			);
+		}
+
 		$storageState = $handler->getStorageState($provider, $visitor);
 		$providerData = $handler->getProviderData($storageState);
 
@@ -298,6 +319,7 @@ class Register extends AbstractController
 			'dob_month' => 'uint',
 			'dob_year' => 'uint',
 			'custom_fields' => 'array',
+			'email_choice' => 'bool'
 		]);
 
 		$filterer = $this->app->inputFilterer();
@@ -356,6 +378,25 @@ class Register extends AbstractController
 			return $this->redirect($this->buildLink('register'));
 		}
 
+		$privacyPolicyUrl = $this->app->container('privacyPolicyUrl');
+		$tosUrl = $this->app->container('tosUrl');
+
+		if (($privacyPolicyUrl || $tosUrl) && !$this->filter('accept', 'bool'))
+		{
+			if ($privacyPolicyUrl && $tosUrl)
+			{
+				return $this->error(\XF::phrase('please_read_and_accept_our_terms_and_privacy_policy_before_continuing'));
+			}
+			else if ($tosUrl)
+			{
+				return $this->error(\XF::phrase('please_read_and_accept_our_terms_and_rules_before_continuing'));
+			}
+			else
+			{
+				return $this->error(\XF::phrase('please_read_and_accept_our_privacy_policy_before_continuing'));
+			}
+		}
+
 		if (!$this->captchaIsValid())
 		{
 			return $this->error(\XF::phrase('did_not_complete_the_captcha_verification_properly'));
@@ -384,8 +425,13 @@ class Register extends AbstractController
 			'dob_day' => 'uint',
 			'dob_month' => 'uint',
 			'dob_year' => 'uint',
-			'custom_fields' => 'array',
+			'custom_fields' => 'array'
 		]);
+
+		if ($this->options()->registrationSetup['requireEmailChoice'])
+		{
+			$input['email_choice'] = $this->request->filter('email_choice', 'bool');
+		}
 
 		return $input;
 	}

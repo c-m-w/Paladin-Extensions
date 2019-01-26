@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 02fdf92c9be701b28b6d9b0bc7b99932
+// FROM HASH: cda94b03d7460ba30d0d343b6e5e13b9
 return array('macros' => array('depth1' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -19,7 +19,7 @@ return array('macros' => array('depth1' => function($__templater, array $__argum
 				<a href="' . $__templater->fn('link', array('categories', $__vars['node'], ), true) . '">' . $__templater->escape($__vars['node']['title']) . '</a>
 				';
 	if ($__vars['node']['description']) {
-		$__finalCompiled .= '<div class="block-desc">' . $__templater->filter($__vars['node']['description'], array(array('raw', array()),), true) . '</div>';
+		$__finalCompiled .= '<span class="block-desc">' . $__templater->filter($__vars['node']['description'], array(array('raw', array()),), true) . '</span>';
 	}
 	$__finalCompiled .= '
 			</h2>

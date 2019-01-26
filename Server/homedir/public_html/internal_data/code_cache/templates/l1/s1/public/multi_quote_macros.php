@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 7f9e927bf3d1f303ea04556f701ff2b2
+// FROM HASH: 6575a55e3c19a4513ae699881e02dace
 return array('macros' => array('block' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -58,7 +58,7 @@ return array('macros' => array('block' => function($__templater, array $__argume
 									<div class="message message--simple message--bordered message--multiQuoteList message--forceColumns">
 										<div class="message-inner">
 											<div class="message-cell message-cell--closer message-cell--action">
-												<div class="nestable-handle" aria-label="' . 'Drag handle' . '">
+												<div class="nestable-handle" aria-label="' . $__templater->filter('Drag handle', array(array('for_attr', array()),), true) . '">
 													<span class="u-muted"><i class="fa fa-bars fa-2x" aria-hidden="true"></i></span>
 												</div>
 											</div>

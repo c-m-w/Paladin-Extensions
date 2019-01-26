@@ -8,6 +8,7 @@ class EmailStop extends AbstractController
 {
 	public function assertIpNotBanned() {}
 	public function assertViewingPermissions($action) {}
+	public function assertPolicyAcceptance($action) {}
 
 	public function actionIndex(ParameterBag $params)
 	{

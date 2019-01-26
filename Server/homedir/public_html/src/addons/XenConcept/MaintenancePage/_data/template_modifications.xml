@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template_modifications>
+  <modification type="public" template="PAGE_CONTAINER" modification_key="xc_maintenance_page_page_conainter" description="Add a notice if the maintenance page is activated" execution_order="10" enabled="1" action="str_replace">
+    <find><![CDATA[<xf:ad position="container_content_above" />]]></find>
+    <replace><![CDATA[$0
+
+<xf:if is="{$xf.options.xc_maintenance_page_enable_maintenance_page}">
+
+	<div class="blockMessage blockMessage--important">
+		
+		{{ phrase('xc_maintenance_page_the_maintenance_page_is_activated') }}
+		
+		<a href="admin.php?options/groups/xc_maintenance_page">{{ phrase('xc_maintenance_page_disable_maintenance_page_here') }}</a>
+		
+	</div>
+
+</xf:if>]]></replace>
+  </modification>
+</template_modifications>

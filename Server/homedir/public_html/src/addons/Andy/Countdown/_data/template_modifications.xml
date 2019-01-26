@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <template_modifications>
-  <modification type="public" template="account_visitor_menu" modification_key="Countdown_account_visitor_menu" description="Countdown_account_visitor_menu" execution_order="10" enabled="1" action="str_replace">
+  <modification type="public" template="account_visitor_menu" modification_key="Countdown_account_visitor_menu" description="Countdown_account_visitor_menu" execution_order="4" enabled="1" action="str_replace">
     <find><![CDATA[<!--[XF:account_links:bottom]-->]]></find>
     <replace><![CDATA[<xf:if is="{{ $xf.visitor.hasPermission('countdown', 'admin') }}">
 <li><a href="{{ link('countdown/admin/') }}" class="menu-linkRow" >{{ phrase('countdown_countdown_admin') }}</a></li>

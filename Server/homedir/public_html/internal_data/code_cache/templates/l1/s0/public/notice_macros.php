@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 70b517970a0f558d41b10829aa954936
+// FROM HASH: 14abd284cf7744830a70a2761bdd7200
 return array('macros' => array('notice_list' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -94,7 +94,7 @@ return array('macros' => array('notice_list' => function($__templater, array $__
 	$__finalCompiled .= '
 		<div class="notice-content">
 			';
-	if ($__vars['notice']['dismissible']) {
+	if ($__vars['notice']['dismissible'] AND (!$__vars['notice']['custom_dismissible'])) {
 		$__finalCompiled .= '
 				<a href="' . $__templater->fn('link', array('account/dismiss-notice', null, array('notice_id' => $__vars['notice']['notice_id'], ), ), true) . '" class="notice-dismiss js-noticeDismiss" data-xf-init="tooltip" title="' . $__templater->filter('Dismiss notice', array(array('for_attr', array()),), true) . '"></a>
 			';

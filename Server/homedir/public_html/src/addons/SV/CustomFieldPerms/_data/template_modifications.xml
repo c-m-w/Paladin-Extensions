@@ -1,9 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <template_modifications>
-  <modification type="admin" template="base_custom_field_edit" modification_key="sedo_user_field_edit_perms_pane" execution_order="6108" enabled="1" action="str_replace">
+  <modification type="admin" template="base_custom_field_edit" modification_key="custom_field_permissions_pane" execution_order="6108" enabled="1" action="str_replace">
     <find><![CDATA[<xf:submitrow]]></find>
-    <replace><![CDATA[<xf:include template="sedo_user_field_edit_perms_pane"/>
+    <replace><![CDATA[<xf:include template="custom_field_permissions_pane"/>
 
 $0]]></replace>
+  </modification>
+  <modification type="public" template="custom_fields_macros" modification_key="svCustomFieldPerms_custom_fields_macros" description="Ensure custom fields fail-closed and do not display during updates" execution_order="10" enabled="1" action="preg_replace">
+    <find><![CDATA[#(<xf:macro name="custom_fields_values"[^/]*?>.*?<xf:if is=")(.*?</xf:macro>.*?<xf:macro name="custom_field_value"[^/]*?>)(.*?)(</xf:macro>.*?<xf:macro name="custom_fields_edit"[^/]*?>.*?<xf:foreach[^/]*?>)(.*?)(\s*</xf:foreach>.*?</xf:macro>)#msi]]></find>
+    <replace><![CDATA[$1 $fieldDefinition.cfp_v_input_enable !== null && $2
+<xf:if is="$definition.cfp_v_input_enable !== null">
+$3
+</xf:if>
+$4
+<xf:if is="$fieldDefinition.cfp_v_input_enable !== null">
+$5
+</xf:if>
+$6]]></replace>
   </modification>
 </template_modifications>

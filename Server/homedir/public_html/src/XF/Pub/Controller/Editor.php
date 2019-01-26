@@ -147,7 +147,8 @@ class Editor extends AbstractController
 			return [];
 		}
 
-		$manipulator = new \XF\Attachment\Manipulator(
+		$class = \XF::extendClass('XF\Attachment\Manipulator');
+		$manipulator = new $class(
 			$handler, $attachRepo, $attachmentData['context'], $attachmentData['hash']
 		);
 		$existing = $manipulator->getExistingAttachments();

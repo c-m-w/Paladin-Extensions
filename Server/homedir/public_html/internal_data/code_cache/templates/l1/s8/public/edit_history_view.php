@@ -1,9 +1,13 @@
 <?php
-// FROM HASH: 6516e1ae3ddd30d14240514eea4402ad
+// FROM HASH: 9b23d58014796fb147f4edc013d5ec45
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
 	$__templater->pageParams['pageTitle'] = $__templater->preEscaped($__templater->escape($__vars['title']) . ' - ' . 'Content history');
+	$__finalCompiled .= '
+
+';
+	$__templater->breadcrumbs($__vars['breadcrumbs']);
 	$__finalCompiled .= '
 
 <div class="block">

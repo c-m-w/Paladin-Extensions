@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <templates>
-  <template type="public" title="andy_similarthreads" version_id="33" version_string="3.3"><![CDATA[<xf:if is="{$similarThreads}">
+  <template type="public" title="andy_similarthreads" version_id="44" version_string="4.4"><![CDATA[<xf:if is="{$similarThreads}">
 
 <xf:css src="andy_similarthreads.less" />
 
@@ -22,7 +22,7 @@
 							<xf:avatar user="{$thread.User}" size="xs" defaultname="{$thread.username}" />
 						</span>
 						</xf:cell>
-						<xf:cell href="{{ link('threads/', $thread) }}" target="_blank">{{ prefix('thread', $thread.prefix_id, 'html', '') }} {$thread.title}</xf:cell>	
+						<xf:cell href="{{ link('threads/', $thread) }}">{{ prefix('thread', $thread.prefix_id, 'html', '') }} {$thread.title}</xf:cell>	
 						<xf:cell><a href="{{ link('forums', $thread.Forum) }}">{$thread.Forum.title}</a></xf:cell>
 						<xf:cell>{$thread.reply_count}</xf:cell>
 						<xf:cell><xf:date time="{$thread.post_date}" /></xf:cell>
@@ -49,8 +49,10 @@
 	</div>
 </div>
 	
+<br />
+	
 </xf:if>]]></template>
-  <template type="public" title="andy_similarthreads.less" version_id="33" version_string="3.3"><![CDATA[.similarthreads-wide
+  <template type="public" title="andy_similarthreads.less" version_id="43" version_string="4.3"><![CDATA[.similarthreads-wide
 {
 	display: inline;
 }
@@ -82,7 +84,7 @@
 		display: none;
 	}
 }]]></template>
-  <template type="public" title="andy_similarthreads_post_thread" version_id="33" version_string="3.3"><![CDATA[<div class="similarthreads-wrapper">
+  <template type="public" title="andy_similarthreads_post_thread" version_id="37" version_string="3.7"><![CDATA[<div class="similarthreads-wrapper">
 
 	<xf:css src="andy_similarthreads.less" />
 
@@ -104,7 +106,7 @@
 								<xf:avatar user="{$thread.User}" size="xs" defaultname="{$thread.username}" />
 							</span>
 							</xf:cell>
-							<xf:cell href="{{ link('threads/', $thread) }}" target="_blank">{{ prefix('thread', $thread.prefix_id, 'html', '') }} {$thread.title}</xf:cell>	
+							<xf:cell href="{{ link('threads/', $thread) }}">{{ prefix('thread', $thread.prefix_id, 'html', '') }} {$thread.title}</xf:cell>	
 							<xf:cell><a href="{{ link('forums', $thread.Forum) }}">{$thread.Forum.title}</a></xf:cell>
 							<xf:cell>{$thread.reply_count}</xf:cell>
 							<xf:cell><xf:date time="{$thread.post_date}" /></xf:cell>

@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 0a3b4279c69adf6bbf4c27e3fa6791ff
+// FROM HASH: 99fd1e5c51f9002650bba4b9f36d66df
 return array('macros' => array('notice' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -33,7 +33,7 @@ return array('macros' => array('notice' => function($__templater, array $__argum
 		';
 	}
 	$__finalCompiled .= '
-	</ul>
+	</ul>		
 ';
 	return $__finalCompiled;
 },), 'code' => function($__templater, array $__vars)

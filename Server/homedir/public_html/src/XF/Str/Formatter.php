@@ -563,7 +563,7 @@ class Formatter
 				$startPos = 0;
 			}
 
-			$string = $this->wholeWordTrim($string, $maxLength, $startPos);
+			$string = $this->wholeWordTrim($string, $maxLength, $startPos, $ellipsis);
 		}
 
 		return $string;

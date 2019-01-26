@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<code_event_listeners>
+  <listener event_id="app_setup" execute_order="10" callback_class="XR\PM\Listener" callback_method="appSetup" active="1" description="Sets up DIC for product custom fields"/>
+  <listener event_id="entity_structure" execute_order="10" callback_class="XR\PM\Listener" callback_method="entityStructure" active="1" hint="XF\Entity\UserOption" description="Extends the XF UserOption entity structure"/>
+  <listener event_id="templater_setup" execute_order="10" callback_class="XR\PM\Listener" callback_method="templaterSetup" active="1" description="Extends the templater on setup with additional functions/filters."/>
+</code_event_listeners>

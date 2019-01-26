@@ -56,6 +56,9 @@ class Page extends AbstractCriteria
 			$tz = \XF::language()->getTimeZone();
 		}
 
+		$data['hh'] = !empty($data['hh']) ? $data['hh'] : '12';
+		$data['mm'] = !empty($data['mm']) ? $data['mm'] : '00';
+
 		$datetime = new \DateTime("$data[ymd] $data[hh]:$data[mm]", $tz);
 		return (time() >= $datetime->format('U'));
 	}

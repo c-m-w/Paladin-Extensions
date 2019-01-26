@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: ae10165c269d126047a91ea51ef95034
+// FROM HASH: 52a7aa4d5aa6bdc0d1a03eae3812ee7c
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -19,7 +19,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			'name' => $__vars['providerData']['username'],
 		), $__vars) . '
 
-	' . $__templater->callMacro(null, 'picture', array(
+	' . $__templater->callMacro('connected_account_provider_test_macros', 'picture', array(
 			'url' => $__vars['providerData']['avatar_url'],
 		), $__vars) . '
 ';

@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <phrases>
-  <phrase title="sedo_cuf_perms" version_id="2000100" version_string="2.0.1"><![CDATA[Custom field permissions]]></phrase>
+  <phrase title="sedo_cuf_perms_c_output" version_id="2020000" version_string="2.2.0"><![CDATA[Output permissions (Content)]]></phrase>
+  <phrase title="sedo_cuf_perms_c_output_desc" version_id="2020000" version_string="2.2.0"><![CDATA[Activate these permissions to enable viewing this custom field based off content user's usergroups]]></phrase>
   <phrase title="sedo_cuf_perms_enable_perms" version_id="1" version_string="1.0.0"><![CDATA[Enable]]></phrase>
-  <phrase title="sedo_cuf_perms_enable_perms_desc" version_id="2000100" version_string="2.0.1"><![CDATA[Do you want to enable permissions based on below settings?
+  <phrase title="sedo_cuf_perms_enable_perms_desc" version_id="2020000" version_string="2.2.0"><![CDATA[Do you want to enable permissions based on below settings?
 ]]></phrase>
-  <phrase title="sedo_cuf_perms_input" version_id="1" version_string="1.0.0"><![CDATA[Input permissions]]></phrase>
+  <phrase title="sedo_cuf_perms_input" version_id="2020000" version_string="2.2.0"><![CDATA[Input permissions (Viewer)]]></phrase>
   <phrase title="sedo_cuf_perms_input_desc" version_id="1" version_string="1.0.0"><![CDATA[Activate these permissions to select which usergroups can access and edit this custom field ]]></phrase>
-  <phrase title="sedo_cuf_perms_output_pp" version_id="1" version_string="1.0.0"><![CDATA[Output permissions on profile pages]]></phrase>
-  <phrase title="sedo_cuf_perms_output_pp_desc" version_id="1" version_string="1.0.0"><![CDATA[Activate these permissions to select which usergroups can access this custom field on profile pages]]></phrase>
-  <phrase title="sedo_cuf_perms_output_ui" version_id="1" version_string="1.0.0"><![CDATA[Output permissions in message user info
-
-]]></phrase>
-  <phrase title="sedo_cuf_perms_output_ui_desc" version_id="1" version_string="1.0.0"><![CDATA[Activate these permissions to select which usergroups can access this custom field in message user info.]]></phrase>
+  <phrase title="sedo_cuf_perms_output" version_id="2020000" version_string="2.2.0"><![CDATA[Output permissions (Viewer)]]></phrase>
+  <phrase title="sedo_cuf_perms_output_desc" version_id="2020000" version_string="2.2.0"><![CDATA[Activate these permissions to select which usergroups can view this custom field]]></phrase>
+  <phrase title="sedo_cuf_perms_output_pp" version_id="2020000" version_string="2.2.0"><![CDATA[Output permissions: Profile (Viewer)]]></phrase>
+  <phrase title="sedo_cuf_perms_output_pp_desc" version_id="2020000" version_string="2.2.0"><![CDATA[Activate these permissions to select which usergroups can view this custom field on profile pages]]></phrase>
+  <phrase title="sedo_cuf_perms_output_ui" version_id="2020000" version_string="2.2.0"><![CDATA[Output permissions: User info (Viewer)]]></phrase>
+  <phrase title="sedo_cuf_perms_output_ui_desc" version_id="2020000" version_string="2.2.0"><![CDATA[Activate these permissions to select which usergroups can view this custom field in message user info.]]></phrase>
   <phrase title="sedo_cuf_perms_select_usergroups" version_id="1" version_string="1.0.0"><![CDATA[Select Usergroups]]></phrase>
   <phrase title="sedo_cuf_perms_select_usergroups_desc" version_id="2000100" version_string="2.0.1"><![CDATA[Select which usergroups can access this custom field
 ]]></phrase>

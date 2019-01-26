@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: be093f8833d8e4dc645af1408fda4417
+// FROM HASH: ae5f2a7b20c59ff1ae5f27fc87c378a7
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -21,8 +21,14 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 				'defaultname' => 'Guest',
 			))) . ':
 		<span>' . ($__vars['xf']['options']['siropuShoutboxAllowBBCodes'] ? $__templater->fn('bb_code', array($__templater->filter($__vars['shout']['shout_message'], array(array('censor', array()),), false), 'shoutbox_message', $__vars['shout']['User'], ), true) : $__templater->filter($__vars['shout']['shout_message'], array(array('censor', array()),), true)) . '</span>
-		' . $__templater->fn('date_dynamic', array($__vars['shout']['shout_date'], array(
-			))) . '
+		';
+			if ($__vars['options']['hideTimestamp'] == false) {
+				$__finalCompiled .= '
+			' . $__templater->fn('date_dynamic', array($__vars['shout']['shout_date'], array(
+				))) . '
+		';
+			}
+			$__finalCompiled .= '
 		';
 			if ($__templater->method($__vars['shout'], 'canEdit', array())) {
 				$__finalCompiled .= '

@@ -39,6 +39,8 @@ use XF\Mvc\Entity\Structure;
  * @property string custom_title
  * @property int warning_points
  * @property string secret_key
+ * @property int privacy_policy_accepted
+ * @property int terms_accepted
  *
  * GETTERS
  * @property \XF\PermissionSet PermissionSet
@@ -303,7 +305,7 @@ class User extends Entity
 	 */
 	public function getIsSuperAdmin()
 	{
-		if ($this->Admin)
+		if ($this->is_admin && $this->Admin)
 		{
 			return $this->Admin->is_super_admin;
 		}
@@ -356,7 +358,7 @@ class User extends Entity
 
 		$visitor = \XF::visitor();
 
-		if ($this->is_admin && $this->is_super_admin && !$visitor->is_super_admin)
+		if (!$visitor->is_super_admin && $this->is_super_admin)
 		{
 			return false;
 		}
@@ -731,6 +733,11 @@ class User extends Entity
 		if ($this->user_state != 'valid')
 		{
 			return false;
+		}
+
+		if ($this->isFollowing($user))
+		{
+			return true;
 		}
 
 		if (!in_array($user->user_state, ['valid', 'email_confirm', 'email_confirm_edit']))
@@ -1127,6 +1134,13 @@ class User extends Entity
 		$tzs = \DateTimeZone::listIdentifiers();
 		if (!in_array($timezone, $tzs))
 		{
+			if ($timezone == 'Asia/Yangon')
+			{
+				// may have an outdated TZ database containing 'Asia/Rangoon' instead
+				// just let it through.
+				return true;
+			}
+
 			$this->error(\XF::phrase('please_select_valid_time_zone'), 'timezone');
 			return false;
 		}
@@ -1243,7 +1257,7 @@ class User extends Entity
 			$this->rebuildPermissionCombination();
 		}
 
-		if ($this->isUpdate() && $this->isChanged('username') && $this->getExistingValue('username') != null)
+		if ($this->isUpdate() && $this->isChanged('username') && $this->getExistingValue('username') != null && $this->getOption('enqueue_rename_cleanup'))
 		{
 			$this->app()->jobManager()->enqueue('XF:UserRenameCleanUp', [
 				'originalUserId' => $this->user_id,
@@ -1309,10 +1323,13 @@ class User extends Entity
 		$avatar = $this->app()->service('XF:User\Avatar', $this);
 		$avatar->deleteAvatarForUserDelete();
 
-		$this->app()->jobManager()->enqueue('XF:UserDeleteCleanUp', [
-			'userId' => $this->user_id,
-			'username' => $this->username
-		]);
+		if ($this->getOption('enqueue_delete_cleanup'))
+		{
+			$this->app()->jobManager()->enqueue('XF:UserDeleteCleanUp', [
+				'userId' => $this->user_id,
+				'username' => $this->username
+			]);
+		}
 	}
 
 	public function rejectUser($reason = '', User $byUser = null)
@@ -1349,7 +1366,7 @@ class User extends Entity
 
 		$this->user_group_id = self::GROUP_REG;
 		$this->timezone = $options->guestTimeZone;
-		$this->language_id = $options->defaultLanguageId;
+		$this->language_id = \XF::language()->getId();
 	}
 
 	public static function getStructure(Structure $structure)
@@ -1402,7 +1419,9 @@ class User extends Entity
 				'censor' => true
 			],
 			'warning_points' => ['type' => self::UINT, 'forced' => true, 'default' => 0, 'changeLog' => false],
-			'secret_key' => ['type' => self::BINARY, 'maxLength' => 32, 'required' => true, 'changeLog' => false]
+			'secret_key' => ['type' => self::BINARY, 'maxLength' => 32, 'required' => true, 'changeLog' => false],
+			'privacy_policy_accepted' => ['type' => self::UINT, 'default' => 0],
+			'terms_accepted' => ['type' => self::UINT, 'default' => 0]
 		];
 		$structure->behaviors = [
 			'XF:ChangeLoggable' => [] // will pick up content type automatically
@@ -1506,7 +1525,9 @@ class User extends Entity
 			'custom_title_disallowed' => !empty($options->disallowedCustomTitles)
 				? preg_split('/\r?\n/', $options->disallowedCustomTitles)
 				: [],
-			'admin_edit' => false
+			'admin_edit' => false,
+			'enqueue_rename_cleanup' => true,
+			'enqueue_delete_cleanup' => true
 		];
 
 		return $structure;

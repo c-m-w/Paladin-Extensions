@@ -59,7 +59,7 @@ class UserEmail extends AbstractUserCriteriaJob
 		$titleTokens = $this->prepareTokens($user, false);
 		$title = strtr($email['email_title'], $titleTokens);
 
-		$mail = $this->getMail($user);
+		$mail = $this->getMail($user)->setFrom($email['from_email'], $email['from_name']);
 		$mail->setTemplate('prepared_email', [
 			'title' => $title,
 			'htmlBody' => $html,

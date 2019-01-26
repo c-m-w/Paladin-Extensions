@@ -58,14 +58,8 @@ class Forum extends XFCP_Forum
 		if ($enhancedSearch)
 		{
 			$similarThreads = $this->getSimilarThreadsRepo()->getSimilarThreadsEnhanced($currentNodeId, $currentThreadId, $threadTitle);
-		}
-		
-		// return if empty
-		if (empty($similarThreads))
-		{
-			return;
-		}		
-		
+		}	
+
 		// prepare viewParams
 		$viewParams = [
 		   'similarThreads' => $similarThreads

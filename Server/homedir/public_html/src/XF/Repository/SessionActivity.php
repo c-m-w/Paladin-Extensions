@@ -73,8 +73,8 @@ class SessionActivity extends Repository
 			}
 		}
 
-		// run extra query to show all online staff, if preferred and necessary
-		if ($staffQuery && $counts['members'] < $userLimit)
+		// run extra query to show all online staff
+		if ($staffQuery)
 		{
 			$users += $this->getOnlineStaffList()->toArray();
 		}

@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template_modifications>
+  <modification type="public" template="alert_macros" modification_key="sv_warning_improvements_alert_macros" description="Anonymize warning issuer" execution_order="10" enabled="1" action="str_replace">
+    <find><![CDATA[<xf:avatar user="$alert.User" size="xxs" defaultname="{$alert.username}" />]]></find>
+    <replace><![CDATA[<xf:if is="$alert.content_type === 'warning_alert'">
+	<xf:if is="!{$alert.Content.canViewIssuer()}">
+		<xf:avatar user="$alert.Content.getAnonymizedIssuer()" size="xxs" defaultname="{$alert.Content.getAnonymizedIssuer().username}" />
+	<xf:else />
+		$0
+	</xf:if>
+<xf:else />
+	$0
+</xf:if>]]></replace>
+  </modification>
+  <modification type="email" template="conversation_create" modification_key="sv_warningimprovements_conversation_create1" description="Always include full message if the conversation is created when creating warning" execution_order="10" enabled="1" action="str_replace">
+    <find><![CDATA[<xf:if is="$xf.options.emailConversationIncludeMessage">
+	<div class="message">{{ bb_code_type('emailHtml', $message.message, 'conversation_message', $message) }}</div>
+</xf:if>]]></find>
+    <replace><![CDATA[<xf:if is="$conversation.is_conversation_for_warning">
+	<div class="message">{{ bb_code_type('emailHtml', $message.message, 'conversation_message', $message) }}</div>
+<xf:else />
+	$0
+</xf:if>]]></replace>
+  </modification>
+  <modification type="admin" template="helper_criteria" modification_key="sv_warningimprovements_helper_criteria_user" description="Add the warning related user criteria." execution_order="10" enabled="1" action="str_replace">
+    <find><![CDATA[<!--[XF:user:after_content]-->]]></find>
+    <replace><![CDATA[<xf:include template="sv_warningimprovements_criteria" />
+$0]]></replace>
+  </modification>
+  <modification type="public" template="member_view" modification_key="arningimprovements_member_view3" description="Warning count in header" execution_order="10" enabled="1" action="str_replace">
+    <find><![CDATA[{{ phrase('warnings') }}]]></find>
+    <replace><![CDATA[$0 ({$user->warning_count|number})]]></replace>
+  </modification>
+  <modification type="public" template="member_view" modification_key="sv_warningimprovements_member_view1" description="Warning Actions (header)" execution_order="100" enabled="1" action="str_replace">
+    <find><![CDATA[<!--[XF:tabs:end]-->]]></find>
+    <replace><![CDATA[<xf:if is="{$user.warning_actions_count} && {$user.canViewWarningActions()}">
+					<a href="{{ link('members/warning-actions', $user) }}"
+						class="tabs-tab"
+						id="warningsActions"
+						role="tab">{{ phrase('sv_user_warning_actions', {'count': {$user.warning_actions_count}}) }}</a>
+				</xf:if>
+				$0]]></replace>
+  </modification>
+  <modification type="public" template="member_view" modification_key="sv_warningimprovements_member_view2" description="Warning Actions (body)" execution_order="100" enabled="1" action="str_replace">
+    <find><![CDATA[<!--[XF:tab_panes:end]-->]]></find>
+    <replace><![CDATA[<xf:include template="sv_warningimprovements_member_view_warning_actions" />
+	$0]]></replace>
+  </modification>
+  <modification type="public" template="member_warn" modification_key="sv_warningimprovements_member_warn5" description="Setup default content action" execution_order="1" enabled="1" action="preg_replace">
+    <find><![CDATA[#(<xf:radiorow name="content_action" value=)("")#si]]></find>
+    <replace><![CDATA[$1"{{ $user.getWarningDefaultContentAction() }}"]]></replace>
+  </modification>
+  <modification type="public" template="member_warn" modification_key="sv_warningimprovements_member_warn6" description="Add/Remove Sticky attribute to &quot;Warn&quot; button" execution_order="10" enabled="1" action="str_replace">
+    <find><![CDATA[<xf:submitrow submit="{{ phrase('warn') }}" sticky="true" />]]></find>
+    <replace><![CDATA[<xf:if is="$xf.options.sv_warningimprovements_sticky_button">
+	$0
+<xf:else />
+	<xf:submitrow submit="{{ phrase('warn') }}" />
+</xf:if>]]></replace>
+  </modification>
+  <modification type="public" template="member_warn" modification_key="sv_warningimprovements_member_warn2" description="Conversation Inviting" execution_order="10" enabled="1" action="str_replace">
+    <find><![CDATA[<xf:option name="open_invite" value="1"]]></find>
+    <replace><![CDATA[$0 checked="{{ $xf.options.sv_warningimprovements_conversation_invite ? true : false  }}"]]></replace>
+  </modification>
+  <modification type="public" template="member_warn" modification_key="sv_warningimprovements_member_warn1" description="Display warning items by category with select2 support" execution_order="9" enabled="1" action="preg_replace">
+    <find><![CDATA[#<xf:radiorow name="warning_definition_id" value="0"\s*label="{{ phrase\('warning_type'\) }}">.*<\/xf:option>\s*<\/xf:radiorow>#si]]></find>
+    <replace><![CDATA[<xf:include template="sv_member_warn_chooser" />]]></replace>
+  </modification>
+  <modification type="public" template="member_warn" modification_key="sv_warningimprovements_member_warn4" description="Sending Alerts on recieving a warning." execution_order="10" enabled="1" action="str_replace">
+    <find><![CDATA[<xf:submitrow submit="{{ phrase('warn') }}" sticky="true" />]]></find>
+    <replace><![CDATA[<xf:checkboxrow>
+	<xf:option name="send_warning_alert" value="1" checked="{{ $xf.options.sv_warningimprovements_alert_send_default ? true : false  }}" label="{{ phrase('send_alert_on_warning') }}" />
+</xf:checkboxrow>
+
+$0]]></replace>
+  </modification>
+  <modification type="public" template="member_warn" modification_key="sv_warningimprovements_member_warn3" description="Conversation locking" execution_order="10" enabled="1" action="str_replace">
+    <find><![CDATA[<xf:option name="conversation_locked" value="1"]]></find>
+    <replace><![CDATA[$0 checked="{{ $xf.options.sv_warningimprovements_conversation_locked ? true : false  }}"]]></replace>
+  </modification>
+  <modification type="public" template="member_warn" modification_key="sv_warningimprovements_member_warn7" description="Add old warnings for the user before &quot;Member notification&quot;" execution_order="10" enabled="1" action="str_replace">
+    <find><![CDATA[<h2 class="block-formSectionHeader"><span class="block-formSectionHeader-aligner">{{ phrase('member_notification') }}</span></h2>]]></find>
+    <replace><![CDATA[<xf:include template="sv_warningimprovements_member_warn7" />
+$0]]></replace>
+  </modification>
+  <modification type="public" template="member_warn" modification_key="member_warn_hourly" description="Add hourly warning option" execution_order="10" enabled="1" action="preg_replace">
+    <find><![CDATA[#[\t ]*<xf:option value="days"#si]]></find>
+    <replace><![CDATA[<xf:option value="hours">{{ phrase('units_hours') }}</xf:option>
+$0]]></replace>
+  </modification>
+  <modification type="public" template="member_warnings" modification_key="sv_warningimprovements_member_warnings1" description="Use rounded expiry" execution_order="15" enabled="1" action="str_replace">
+    <find><![CDATA[.expiry_date]]></find>
+    <replace><![CDATA[.expiry_date_rounded]]></replace>
+  </modification>
+  <modification type="admin" template="warning_action_edit" modification_key="sv_warningimprovements_warning_action_edit" description="Inject post to thread/form on warning action" execution_order="10" enabled="1" action="str_replace">
+    <find><![CDATA[<xf:radiorow name="action" value="{$action.action}"]]></find>
+    <replace><![CDATA[<xf:include template="sv_warning_action_edit" />
+$0]]></replace>
+  </modification>
+  <modification type="admin" template="warning_action_edit" modification_key="warning_action_edit_hourly" description="Add hourly warning option" execution_order="10" enabled="1" action="preg_replace">
+    <find><![CDATA[#[\t ]*<xf:option value="days"#si]]></find>
+    <replace><![CDATA[<xf:option value="hours">{{ phrase('units_hours') }}</xf:option>
+$0]]></replace>
+  </modification>
+  <modification type="admin" template="warning_edit" modification_key="sv_warningimprovements_warning_edit7" description="Special case editing the Custom Warning - 4" execution_order="10" enabled="1" action="str_replace">
+    <find><![CDATA[you_may_use_placeholders_to_dynamically_insert_warning]]></find>
+    <replace><![CDATA[sv_warning_improvements_you_may_use_placeholders_to_dynamically_insert_warning]]></replace>
+  </modification>
+  <modification type="admin" template="warning_edit" modification_key="sv_warningimprovements_warning_edit5" description="Add category and display order inputs" execution_order="10" enabled="1" action="str_replace">
+    <find><![CDATA[<xf:numberboxrow name="points_default" value="{$warning.points_default}" min="0" max="65535"
+				label="{{ phrase('warning_points') }}" />]]></find>
+    <replace><![CDATA[<xf:include template="sv_warning_edit_inputs" />
+			$0]]></replace>
+  </modification>
+  <modification type="admin" template="warning_edit" modification_key="sv_warningimprovements_warning_edit6" description="Hide delete button if custom warning" execution_order="10" enabled="1" action="str_replace">
+    <find><![CDATA[$warning.isUpdate()]]></find>
+    <replace><![CDATA[$warning.isUpdate() && !$warning.is_custom]]></replace>
+  </modification>
+  <modification type="admin" template="warning_edit" modification_key="sv_warningimprovements_warning_edit3" description="Special case editing the Custom Warning - 3" execution_order="10" enabled="1" action="str_replace">
+    <find><![CDATA[$warning.isInsert()]]></find>
+    <replace><![CDATA[$0 && !$warning.is_custom]]></replace>
+  </modification>
+  <modification type="admin" template="warning_edit" modification_key="sv_warningimprovements_warning_edit4" description="Special case editing the Custom Warning - 4" execution_order="10" enabled="1" action="str_replace">
+    <find><![CDATA[<xf:textboxrow name="title" value="{$warning.MasterTitle.phrase_text}" maxlength="{{ max_length($warning, 'title') }}"
+				label="{{ phrase('title') }}" />]]></find>
+    <replace><![CDATA[<xf:if is="$warning.is_custom">
+	<xf:formrow label="{{ phrase('title') }}">
+		<xf:hiddenval name="title">{$warning.MasterTitle.phrase_text}</xf:hiddenval>
+		{$warning.MasterTitle.phrase_text}
+	</xf:formrow>
+<xf:else />
+	$0
+	<xf:checkboxrow>
+		<xf:option name="sv_custom_title" selected="$warning.sv_custom_title">{{ phrase('sv_custom_warning_title') }}</xf:option>
+	</xf:checkboxrow>
+</xf:if>
+
+<xf:if is="$warning.is_custom">
+	<xf:hiddenval name="is_custom">1</xf:hiddenval>
+<xf:else />
+	<xf:hiddenval name="is_custom">0</xf:hiddenval>
+</xf:if>]]></replace>
+  </modification>
+  <modification type="admin" template="warning_edit" modification_key="sv_warningimprovements_warning_edit1" description="Special case editing the Custom Warning - 1" execution_order="10" enabled="1" action="str_replace">
+    <find><![CDATA[<xf:form action="{{ link('warnings/save', $warning) }}" ajax="true" class="block">]]></find>
+    <replace><![CDATA[<xf:if is="$warning.is_custom">
+	<xf:set var="$formActionUrl">{{ link('warnings/save') }}</xf:set>
+<xf:else />
+	<xf:set var="$formActionUrl">{{ link('warnings/save', $warning) }}</xf:set>
+</xf:if>
+
+<xf:form action="{$formActionUrl}" ajax="true" class="block">]]></replace>
+  </modification>
+  <modification type="admin" template="warning_edit" modification_key="warning_edit_hourly" description="Add hourly warning option" execution_order="10" enabled="1" action="preg_replace">
+    <find><![CDATA[#[\t ]*<xf:option value="days"#si]]></find>
+    <replace><![CDATA[<xf:option value="hours">{{ phrase('units_hours') }}</xf:option>
+$0]]></replace>
+  </modification>
+  <modification type="public" template="warning_info" modification_key="sv_warningimprovements_warning_info1" description="Hide actual warned by user if the visitor has no permission to view it" execution_order="10" enabled="1" action="str_replace">
+    <find><![CDATA[<xf:username user="{$warning.WarnedBy}" />]]></find>
+    <replace><![CDATA[<xf:if is="$warning.canViewIssuer()">
+	<xf:username user="{$warning.WarnedBy}" />
+<xf:else />
+	<xf:username user="{$warning.getAnonymizedIssuer()}" />
+</xf:if>]]></replace>
+  </modification>
+  <modification type="public" template="warning_info" modification_key="sv_warningimprovements_warning_info2" description="Use rounded expiry" execution_order="11" enabled="1" action="str_replace">
+    <find><![CDATA[.expiry_date]]></find>
+    <replace><![CDATA[.expiry_date_rounded]]></replace>
+  </modification>
+  <modification type="admin" template="warning_list" modification_key="sv_warningimprovements_warning_list4" description="Warning Escalating Defaults" execution_order="4156" enabled="1" action="preg_replace">
+    <find><![CDATA[#$#Usi]]></find>
+    <replace><![CDATA[$0
+<xf:include template="sv_warningimprovements_escalating_defaults" />]]></replace>
+  </modification>
+  <modification type="admin" template="warning_list" modification_key="sv_warningimprovements_warning_list1" description="Add &quot;Add category&quot;, &quot;Sort categories&quot; and &quot;Sort warning definitions&quot; button" execution_order="15" enabled="1" action="str_replace">
+    <find><![CDATA[	<xf:button href="{{ link('warnings/add') }}" icon="add">{{ phrase('add_warning') }}</xf:button>
+	<xf:button href="{{ link('warnings/actions/add') }}" icon="add">{{ phrase('add_warning_action') }}</xf:button>]]></find>
+    <replace><![CDATA[<xf:include template="sv_warningimprovements_warning_list1" />]]></replace>
+  </modification>
+  <modification type="admin" template="warning_list" modification_key="sv_warningimprovements_warning_list5" description="Groups warning actions by category" execution_order="30" enabled="1" action="preg_replace">
+    <find><![CDATA[#<xf:if is="\$actions is not empty">.*<!--.*-->.*<\/div>.*<\/div>.*<\/xf:if>#siU]]></find>
+    <replace><![CDATA[<xf:include template="sv_warning_action_list" />]]></replace>
+  </modification>
+  <modification type="admin" template="warning_list" modification_key="sv_warningimprovements_warning_list3" description="Display warning items with category they belong in" execution_order="20" enabled="1" action="preg_replace">
+    <find><![CDATA[#<div class="block">.*?<\/div>\s*<xf:if is="\$actions is not empty">#si]]></find>
+    <replace><![CDATA[<xf:include template="sv_warning_list" />
+<xf:if is="$actions is not empty">]]></replace>
+  </modification>
+</template_modifications>

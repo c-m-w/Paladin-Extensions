@@ -17,7 +17,8 @@ class Birthdays extends AbstractWidget
 
 		$userFinder = $this->finder('XF:User')
 			->isBirthday()
-			->isValidUser(true)
+			->isRecentlyActive(365)
+			->isValidUser()
 			->order('username');
 
 		if ($this->options['limit'])

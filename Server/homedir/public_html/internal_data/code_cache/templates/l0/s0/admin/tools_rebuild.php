@@ -314,10 +314,9 @@ return array('macros' => array('rebuild_job' => function($__templater, array $__
 		'job' => 'XF:Gravatar',
 	), $__vars) . '
 
-' . $__templater->includeTemplate('sv_ue_tools_rebuild', $__vars) . '
 ' . '
+' . $__templater->includeTemplate('xr_pm_tools_rebuild', $__vars) . '
 ' . $__templater->includeTemplate('mjst_tools_rebuild', $__vars) . '
-' . $__templater->includeTemplate('xfrm_tools_rebuild', $__vars) . '
 
 ';
 	return $__finalCompiled;

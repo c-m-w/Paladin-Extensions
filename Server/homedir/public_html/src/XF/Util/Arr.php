@@ -120,13 +120,7 @@ class Arr
 	}
 
 	/**
-	 * Non-PHP 5.5 implementation of array_column
-	 *
-	 * @param array $array
-	 * @param string $column
-	 * @param null $index
-	 *
-	 * @return array
+	 * @deprecated No longer required as of XF 2.1.0 as all installations now run PHP 5.5+
 	 */
 	public static function arrayColumn(array $array, $column, $index = null)
 	{
@@ -353,5 +347,36 @@ class Arr
 		}
 
 		return false;
+	}
+
+	/**
+	 * Split a string to an array based on pattern. Defaults to space/line break pattern.
+	 *
+	 * @param $string
+	 * @param string $pattern
+	 * @param int $limit
+	 *
+	 * @return array
+	 */
+	public static function stringToArray($string, $pattern = '/\s+/', $limit = -1)
+	{
+		return (array)preg_split($pattern, trim($string), $limit, PREG_SPLIT_NO_EMPTY);
+	}
+
+	public static function htmlSpecialCharsDecodeArray($value)
+	{
+		if (is_array($value))
+		{
+			foreach ($value AS $key => $arrayValue)
+			{
+				$value[$key] = self::htmlSpecialCharsDecodeArray($arrayValue);
+			}
+		}
+		else if (is_string($value))
+		{
+			$value = htmlspecialchars_decode($value);
+		}
+
+		return $value;
 	}
 }

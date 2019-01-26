@@ -171,6 +171,11 @@
 				return;
 			}
 
+			if (XF.debug.disableAjaxSubmit)
+			{
+				return;
+			}
+
 			if (this.submitPending)
 			{
 				if (e)
@@ -1293,7 +1298,8 @@
 			controls: 'input, select, textarea, button, .js-attachmentUpload',
 			hide: false,
 			optional: false,
-			invert: false // if true, system will disable on checked
+			invert: false, // if true, system will disable on checked
+			autofocus: true
 		},
 
 		$container: null,
@@ -1330,6 +1336,23 @@
 				// when we move away from the value by firing every radio's handler for every click
 				$context.on('click', 'input:radio[name="' + name + '"]', XF.proxy(this, 'click'));
 			}
+			else if ($input.is('option'))
+			{
+				var self = this;
+				var $select = $input.closest('select');
+				$select.on('change', function(e)
+				{
+					var $this = $(this);
+					var $handler = XF.Element.getHandler($this.find('option:selected').first(), 'disabler');
+
+					if (!$this.find('option:selected').first().is(self.$target) && $handler && $handler.getOption('container') === self.options.container)
+					{
+						return;
+					}
+
+					self.recalculate(false);
+				});
+			}
 			else
 			{
 				$input.click(XF.proxy(this, 'click'));
@@ -1337,6 +1360,9 @@
 
 			// this ensures that nested disablers are disabled properly
 			$input.on('control:enabled control:disabled', XF.proxy(this, 'recalculateAfter'));
+
+			// this ensures that dependent editors are initialised properly as disabled if needed
+			this.$container.one('editor:init', XF.proxy(this, 'recalculateAfter'));
 
 			this.recalculate(true);
 		},
@@ -1368,9 +1394,10 @@
 				$controls = $container.find(this.options.controls).not($input),
 				speed = init ? 0 : XF.config.speed.fast,
 				enable = $input.is(':enabled') && (($input.is(':checked') && !this.options.invert) || (this.options.invert && !$input.is(':checked'))),
+				t = this,
 				select = function()
 				{
-					if (noSelect)
+					if (noSelect || !t.options.autofocus)
 					{
 						return;
 					}
@@ -1475,18 +1502,21 @@
 		init: function()
 		{
 			// Clear the cached values of any child elements (except checkboxes)
-			this.$target.find('input:not(:checkbox), select, textarea').val('');
-
-			this.$clone = this.$target.clone();
+			this.$target.find('input:not(:checkbox), select, textarea').each(function()
+			{
+				var $el = $(this);
+				$el.val($el.data('default-value') || '');
+			});
 
 			var self = this;
-			this.$target.on('keypress change', function(e)
+			this.$target.on('keypress change paste', function(e)
 			{
 				if ($(e.target).prop('readonly'))
 				{
 					return;
 				}
 
+				self.$clone = self.$target.clone();
 				self.$target.off(e);
 				self.create();
 			});
@@ -1878,7 +1908,7 @@
 				}
 				else
 				{
-					this.$target.one('focus', XF.proxy(this, 'setupDelayed'));
+					this.$target.one('focus control:enabled control:disabled', XF.proxy(this, 'setupDelayed'));
 					this.$target.onWithin('toggle:shown overlay:shown tab:shown quick-edit:shown', XF.proxy(this, 'setupDelayed'));
 				}
 
@@ -2052,7 +2082,8 @@
 
 	XF.NumberBox = XF.Element.newHandler({
 		options: {
-			textInput: '.js-numberBoxTextInput'
+			textInput: '.js-numberBoxTextInput',
+			buttonSmaller: false
 		},
 
 		$textInput: null,
@@ -2108,7 +2139,7 @@
 				$down.addClass('is-disabled').prop('disabled', true);
 			}
 
-			if ($textInput.hasClass('input--numberNarrow'))
+			if (this.options.buttonSmaller)
 			{
 				$up.addClass('inputNumber-button--smaller');
 				$down.addClass('inputNumber-button--smaller');
@@ -2145,6 +2176,7 @@
 			if (this.supportsStepFunctions())
 			{
 				$textInput[0][fnName]();
+				$textInput.trigger('change');
 			}
 			else
 			{
@@ -2238,6 +2270,7 @@
 			}
 
 			$textInput.val(value);
+			$textInput.trigger('change');
 		},
 
 		buttonMouseDown: function(e)

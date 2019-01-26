@@ -1,60 +1,66 @@
 <?php
-// FROM HASH: 7ffb9b6d4cb8364391cb4bf41a721788
+// FROM HASH: d1cef95996a75ae591eed7f557b92408
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
 	$__templater->pageParams['pageTitle'] = $__templater->preEscaped('Spam cleaner' . $__vars['xf']['language']['label_separator'] . ' ' . $__templater->escape($__vars['user']['username']));
 	$__finalCompiled .= '
-';
-	$__templater->pageParams['pageH1'] = $__templater->preEscaped('Spam cleaner' . $__vars['xf']['language']['label_separator'] . ' <em>' . $__templater->escape($__vars['user']['username']) . '</em>');
-	$__finalCompiled .= '
 
 ';
 	$__compilerTemp1 = '';
-	if ($__vars['canViewIps']) {
+	if ($__templater->method($__vars['xf']['visitor'], 'hasAdminPermission', array('user', ))) {
 		$__compilerTemp1 .= '
+							<dl class="pairs pairs--columns">
+								<dt>' . 'Email' . '</dt>
+								<dd>' . $__templater->escape($__vars['user']['email']) . '</dd>
+							</dl>
+						';
+	}
+	$__compilerTemp2 = '';
+	if ($__vars['canViewIps']) {
+		$__compilerTemp2 .= '
 							';
 		$__vars['registerIp'] = $__templater->method($__vars['user'], 'getIp', array('register', ));
-		$__compilerTemp1 .= '
+		$__compilerTemp2 .= '
 
 							';
 		if ($__vars['registerIp']) {
-			$__compilerTemp1 .= '
+			$__compilerTemp2 .= '
 								<dl class="pairs pairs--columns">
 									<dt>' . 'Registration IP' . '</dt>
 									<dd><a class="ip concealed" href="' . $__templater->fn('link', array('misc/ip-info', null, array('ip' => $__templater->filter($__vars['registerIp'], array(array('ip', array()),), false), ), ), true) . '" target="_blank">' . $__templater->filter($__vars['registerIp'], array(array('ip', array()),), true) . '</a></dd>
 								</dl>
 							';
 		}
-		$__compilerTemp1 .= '
+		$__compilerTemp2 .= '
 
 							';
 		if ($__vars['contentIp']) {
-			$__compilerTemp1 .= '
+			$__compilerTemp2 .= '
 								<dl class="pairs pairs--columns">
 									<dt>' . 'Content IP' . '</dt>
 									<dd><a class="ip concealed" href="' . $__templater->fn('link', array('misc/ip-info', null, array('ip' => $__templater->filter($__vars['contentIp'], array(array('ip', array()),), false), ), ), true) . '" target="_blank">' . $__templater->filter($__vars['contentIp'], array(array('ip', array()),), true) . '</a></dd>
 								</dl>
 							';
 		}
-		$__compilerTemp1 .= '
+		$__compilerTemp2 .= '
 						';
 	}
-	$__compilerTemp2 = '';
+	$__compilerTemp3 = '';
 	if ($__vars['xf']['options']['spamThreadAction']['action'] == 'move') {
-		$__compilerTemp2 .= '
+		$__compilerTemp3 .= '
 							' . 'Move spammer\'s threads' . '
 						';
 	} else {
-		$__compilerTemp2 .= '
+		$__compilerTemp3 .= '
 							' . 'Delete spammer\'s threads' . '
 						';
 	}
-	$__compilerTemp3 = array(array(
+	$__compilerTemp4 = array(array(
 		'name' => 'action_threads',
 		'checked' => $__vars['xf']['options']['spamDefaultOptions']['action_threads'],
 		'label' => '
-						' . $__compilerTemp2 . '
+						' . $__compilerTemp3 . '
 					',
 		'_type' => 'option',
 	)
@@ -77,7 +83,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'_type' => 'option',
 	));
 	if ($__vars['canViewIps']) {
-		$__compilerTemp3[] = array(
+		$__compilerTemp4[] = array(
 			'name' => 'check_ips',
 			'checked' => $__vars['xf']['options']['spamDefaultOptions']['check_ips'],
 			'label' => 'Check spammer\'s IPs',
@@ -100,12 +106,9 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	))) . '</dd>
 						</dl>
 
-						<dl class="pairs pairs--columns">
-							<dt>' . 'Email' . '</dt>
-							<dd>' . $__templater->escape($__vars['user']['email']) . '</dd>
-						</dl>
-
 						' . $__compilerTemp1 . '
+
+						' . $__compilerTemp2 . '
 					</div>
 				</div>
 			', array(
@@ -123,7 +126,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	)) . '
 
 			' . $__templater->formCheckBoxRow(array(
-	), $__compilerTemp3, array(
+	), $__compilerTemp4, array(
 		'label' => 'Spam cleaner actions',
 	)) . '
 		</div>

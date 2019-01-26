@@ -112,9 +112,9 @@ class ThreadAction extends AbstractJob
 			$thread->node_id = $nodeId;
 		}
 
-		if ($prefixId = $this->getActionValue('prefix_id'))
+		if ($this->getActionValue('apply_thread_prefix'))
 		{
-			$thread->prefix_id = $prefixId;
+			$thread->prefix_id = intval($this->getActionValue('prefix_id'));
 		}
 
 		if ($this->getActionValue('stick'))

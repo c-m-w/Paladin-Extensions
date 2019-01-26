@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 824b75945eb966dffc63b09ded408828
+// FROM HASH: e17e386b8ec05bb076baf4e35901cad7
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -10,6 +10,16 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	if (($__templater->fn('property', array('uix_pageStyle', ), false) != 'covered') AND (!$__templater->fn('property', array('uix_forceCoverExtendedFooter', ), false))) {
 		$__finalCompiled .= '
 		.m-pageWidth();
+	';
+	}
+	$__finalCompiled .= '
+	
+	';
+	if ($__templater->fn('property', array('uix_hideExtendedFooterMobile', ), false)) {
+		$__finalCompiled .= '
+	@media (max-width: @xf-responsiveMedium) {
+		display: none;
+	}
 	';
 	}
 	$__finalCompiled .= '

@@ -274,6 +274,11 @@ class Manager
 				continue;
 			}
 
+			if (strpos($type, '/') !== false)
+			{
+				$type = str_replace('/', '\\', $type);
+			}
+
 			$importers[] = "$type:$className";
 		}
 

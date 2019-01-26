@@ -379,6 +379,11 @@ class Builder
 			$priorityName = 'unset';
 			foreach ($values AS $value)
 			{
+				if (!isset($this->permissionPriority[$value]))
+				{
+					// should only happen if we have some invalid data
+					continue;
+				}
 				$thisPriority = $this->permissionPriority[$value];
 				if ($thisPriority < $priority)
 				{

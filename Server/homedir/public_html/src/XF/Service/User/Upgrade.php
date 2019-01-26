@@ -162,13 +162,7 @@ class Upgrade extends \XF\Service\AbstractService
 		$upgrade = $this->userUpgrade;
 		$user = $this->user;
 
-		if (!$active->user_upgrade_record_id)
-		{
-			if (!$upgrade->canPurchase() && !$this->ignoreUnpurchasable)
-			{
-				return false;
-			}
-		}
+		// no need to check canPurchase -- if we have a payment, we should process the upgrade
 
 		$db = $this->db();
 		$db->beginTransaction();

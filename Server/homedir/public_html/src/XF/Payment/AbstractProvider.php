@@ -82,6 +82,7 @@ abstract class AbstractProvider
 
 	public function validateTransaction(CallbackState $state)
 	{
+		/** @var \XF\Repository\Payment $paymentRepo */
 		$paymentRepo = \XF::repository('XF:Payment');
 		if ($paymentRepo->findLogsByTransactionId($state->transactionId)->total())
 		{
@@ -127,10 +128,12 @@ abstract class AbstractProvider
 
 	public function validatePurchaser(CallbackState $state)
 	{
-		if (!$state->getPurchaser())
+		$handler = $state->getPurchasableHandler();
+
+		if (!$handler->validatePurchaser($state, $error))
 		{
 			$state->logType = 'error';
-			$state->logMessage = 'Could not find user with user_id ' . $state->getPurchaseRequest()->user_id . '.';
+			$state->logMessage = $error;
 			return false;
 		}
 		return true;
@@ -188,6 +191,7 @@ abstract class AbstractProvider
 	{
 		$this->prepareLogData($state);
 
+		/** @var \XF\Repository\Payment $paymentRepo */
 		$paymentRepo = \XF::repository('XF:Payment');
 		$paymentRepo->logCallback(
 			$state->requestKey,

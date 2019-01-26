@@ -69,7 +69,23 @@ class Shout extends Entity
 	}
      protected function _postSave()
 	{
+          $threadId = \XF::options()->siropuShoutboxThreadId;
+          $threadMinMessageLength = \XF::options()->siropuShoutboxThreadMessageMinLength;
 
+          if ($threadId
+               && ($threadMinMessageLength == 0
+                    || strlen($this->app()->stringFormatter()->stripBbCode($this->shout_message)) >= $threadMinMessageLength))
+          {
+               $thread = $this->em()->find('XF:Thread', $threadId);
+
+               if ($thread)
+               {
+                    $replier = $this->app()->service('XF:Thread\Replier', $thread);
+                    $replier->setMessage($this->shout_message);
+                    $replier->setIsAutomated();
+                    $replier->save();
+               }
+          }
 	}
 	protected function _preDelete()
 	{

@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 05ea6016bddf4f00c0df06761fe299b8
+// FROM HASH: 34fb6a3d5d0521d58b0277316935b973
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -31,7 +31,6 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			),
 			array(
 				'href' => $__templater->fn('link', array('threads/', $__vars['thread'], ), false),
-				'target' => '_blank',
 				'_type' => 'cell',
 				'html' => $__templater->fn('prefix', array('thread', $__vars['thread']['prefix_id'], 'html', '', ), true) . ' ' . $__templater->escape($__vars['thread']['title']),
 			),

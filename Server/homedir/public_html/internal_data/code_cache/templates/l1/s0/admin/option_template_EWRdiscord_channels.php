@@ -217,7 +217,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		if ($__vars['addons']['XFRM']) {
 			$__compilerTemp14 .= '
 			<dl class="inputLabelPair">
-				<dt>[XF] Resource Manager > ' . 'New extensions' . '</dt>
+				<dt>[XF] Resource Manager > ' . 'xfrm_new_resources' . '</dt>
 				<dd>
 					';
 			$__compilerTemp15 = array(array(
@@ -241,7 +241,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 				</dd>
 			</dl>
 			<dl class="inputLabelPair">
-				<dt>[XF] Resource Manager > ' . 'Extension updates' . '</dt>
+				<dt>[XF] Resource Manager > ' . 'xfrm_resource_updates' . '</dt>
 				<dd>
 					';
 			$__compilerTemp16 = array(array(

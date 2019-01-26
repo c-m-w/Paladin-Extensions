@@ -15,25 +15,50 @@ class Shoutbox extends AbstractController
 	{
           $this->lastId = $this->filter('last_id', 'uint');
      }
+     public function actionFullPage()
+     {
+          return $this->rerouteController(__CLASS__, 'index', ['fullPage' => true]);
+     }
      public function actionIndex(ParameterBag $params)
      {
           $visitor = \XF::visitor();
 
-          if (!$visitor->canViewSiropuShoutbox())
+          if (!($visitor->canViewSiropuShoutbox() && $visitor->hasRequiredAge()))
           {
                return $this->noPermission();
           }
 
-          return $this->view('Siropu\Shoutbox:Shoutbox', 'siropu_shoutbox', ['shoutbox' => $this->getShoutboxParams()]);
+          $extraParams = [
+               'showTitle'  => true,
+               'isFullPage' => $params->fullPage
+          ];
+
+          $viewParams = [
+               'shoutbox' => $this->getShoutboxParams($extraParams)
+          ];
+
+          return $this->view('Siropu\Shoutbox:Shoutbox', 'siropu_shoutbox', $viewParams);
      }
      public function actionSubmit()
      {
           $visitor = \XF::visitor();
           $options = \XF::options();
 
-          if (!$visitor->canUseSiropuShoutbox())
+          if (!($visitor->canUseSiropuShoutbox() && $visitor->hasRequiredAge()))
           {
                return $this->noPermission();
+          }
+
+          $floodCheckLength = $options->siropuShoutboxFloodCheckLength;
+
+          if ($floodCheckLength)
+          {
+               $lastShout = \XF::app()->request()->getCookie('shoutbox_last_shout');
+
+               if ($lastShout >= \XF::$time - $floodCheckLength)
+               {
+                    return $this->message(\XF::phrase('siropu_shoutbox_please_wait_x_seconds', ['length' => $floodCheckLength]));
+               }
           }
 
           $message    = $this->filter('shout', 'str');
@@ -62,6 +87,11 @@ class Shoutbox extends AbstractController
           $shout = $this->em()->create('Siropu\Shoutbox:Shout');
           $shout->shout_message = $message;
           $shout->save();
+
+          if ($floodCheckLength && !$visitor->canBypassFloodCheckSiropuShoutbox())
+          {
+               \XF::app()->response()->setCookie('shoutbox_last_shout', \XF::$time, 0, null, false);
+          }
 
           return $this->rerouteController(__CLASS__, 'refresh', $viewParams);
      }

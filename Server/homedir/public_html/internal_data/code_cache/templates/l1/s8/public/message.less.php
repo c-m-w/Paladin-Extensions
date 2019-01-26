@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 117fec4ba7a9b514fbd40cf62418f31a
+// FROM HASH: 8932e0d48e4363d10c6810493beff6e5
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -955,6 +955,7 @@ form.message--simple .message-cell--main {
 		font-size: 125%;
 		color: @xf-textColorAttention;
 		vertical-align: middle;
+		font-size: @xf-uix_iconSize !important;
 	}
 
 	&.messageNotice--deleted:before { .m-faContent(@fa-var-trash, .79em); ' . $__templater->callMacro('uix_icons.less', 'content', array(

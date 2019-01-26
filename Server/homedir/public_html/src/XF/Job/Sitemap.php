@@ -24,6 +24,9 @@ class Sitemap extends AbstractJob
 		{
 			$hasMore = $builder->build($timeRemaining);
 
+			$this->data['state'] = $builder->getDataForJob();
+			$this->saveIncrementalData();
+
 			// we need to throw away the previous entity cache to prevent potential memory issues
 			$this->app->em()->clearEntityCache();
 
@@ -35,8 +38,6 @@ class Sitemap extends AbstractJob
 		{
 			return $this->complete();
 		}
-
-		$this->data['state'] = $builder->getDataForJob();
 
 		return $this->resume();
 	}

@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 2faed7c83057fa628415443713991ec0
+// FROM HASH: 61ca96b78e463b6853fee964f4f90953
 return array('macros' => array('body' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -16,6 +16,7 @@ return array('macros' => array('body' => function($__templater, array $__argumen
 		'submitText' => '',
 		'lastDate' => '0',
 		'lastKnownDate' => '0',
+		'placeholder' => 'Write your reply...',
 	), $__arguments, $__vars);
 	$__finalCompiled .= '
 
@@ -50,7 +51,7 @@ return array('macros' => array('body' => function($__templater, array $__argumen
 		'value' => $__vars['message'],
 		'attachments' => ($__vars['attachmentData'] ? $__vars['attachmentData']['attachments'] : array()),
 		'data-min-height' => '100',
-		'placeholder' => 'Write your reply...',
+		'placeholder' => $__vars['placeholder'],
 		'previewable' => '0',
 		'data-xf-key' => 'r',
 	)) . '
@@ -160,8 +161,10 @@ return array('macros' => array('body' => function($__templater, array $__argumen
 			</div>
 		</div>
 		' . $__templater->formHiddenVal('last_date', $__vars['lastDate'], array(
+		'autocomplete' => 'off',
 	)) . '
 		' . $__templater->formHiddenVal('last_known_date', $__vars['lastKnownDate'], array(
+		'autocomplete' => 'off',
 	)) . '
 	</div>
 ';

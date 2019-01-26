@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 0438da364b8c7368ed935d6bb0eacf83
+// FROM HASH: 5d45d5c1d8cd0fc21470ebe166305ec0
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -60,9 +60,11 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 .p-offCanvasAccountLink
 {
 	display: none;
+	
+	.avatar {margin-right: 24px;}
 }
 
-@media (max-width: 359px)
+@media (max-width: @xf-responsiveNarrow)
 {
 	.p-offCanvasAccountLink
 	{

@@ -1,9 +1,13 @@
 <?php
-// FROM HASH: aa0ec5f5216b99d517580ec5387dab01
+// FROM HASH: 0821d76b1d79e41caa16883979269a01
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
 	$__templater->pageParams['pageTitle'] = $__templater->preEscaped('Post');
+	$__finalCompiled .= '
+
+';
+	$__templater->setPageParam('head.' . 'metaNoindex', $__templater->preEscaped('<meta name="robots" content="noindex" />'));
 	$__finalCompiled .= '
 
 ';
@@ -38,7 +42,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 					_xfToken: XF.config.csrf
 				},
 				dataType: "html",
-				timeout: 500,
+				timeout: 5000,
 				success: function(data) 
 				{
 					$(data).find(\'.similarthreads-wrapper\').each(function()
@@ -115,7 +119,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		}
 		$__compilerTemp6 .= $__templater->formTokenInputRow(array(
 			'name' => 'tags',
-			'value' => ($__vars['thread']['tags'] ?: $__vars['forum']['draft_thread']['tags']),
+			'value' => ($__vars['thread']['tags'] ? $__templater->filter($__vars['thread']['tags'], array(array('join', array(', ', )),), false) : $__vars['forum']['draft_thread']['tags']),
 			'href' => $__templater->fn('link', array('misc/tag-auto-complete', ), false),
 			'min-length' => $__vars['xf']['options']['tagLength']['min'],
 			'max-length' => $__vars['xf']['options']['tagLength']['max'],
@@ -175,9 +179,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 	<div class="block-container">
 		<div class="block-body">
-			
-			' . '
-			
+
 			' . $__templater->formPrefixInputRow($__vars['prefixes'], array(
 		'type' => 'thread',
 		'prefix-value' => ($__vars['forum']['draft_thread']['prefix_id'] ?: ($__vars['thread']['prefix_id'] ?: $__vars['forum']['default_prefix_id'])),

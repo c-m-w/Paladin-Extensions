@@ -4,7 +4,7 @@ namespace XF\BbCode\Helper;
 
 class AppleMusic
 {
-	const URL_REGEX = '#\.com/(?P<country>[a-z-]+)/(?P<type>album|playlist|post)/([^/]+/)?id([a-z]{2}\.)?(?P<id>[a-z0-9-]+)(\?i=(?P<song>\d+))?#i';
+	const URL_REGEX = '#\.com/(?P<country>[a-z-]+)/(?P<type>album|playlist|post)/([^/]+/)?(?P<id>[a-z0-9-.]+)(\?i=(?P<song>\d+))?#i';
 
 	public static function matchCallback($url, $matchedId, \XF\Entity\BbCodeMediaSite $site, $siteId)
 	{
@@ -27,11 +27,8 @@ class AppleMusic
 	{
 		switch (strtolower($type))
 		{
-			case 'playlist':
-				return 'pl.';
-
 			case 'post':
-				return 'idsa.';
+				return 'id';
 
 			default:
 				return '';
@@ -52,15 +49,15 @@ class AppleMusic
 		$type = rawurlencode($type);
 		$id = rawurlencode($id);
 
-		$url = "//tools.applemusic.com/embed/v1/{$type}/{$id}?country={$country}";
+		$url = "//embed.music.apple.com/{$country}/{$type}/{$id}?app=music";
 		$style = '';
 		$scrolling = 'auto';
 
 		switch ($type)
 		{
 			case 'post':
-				$height = 104;
-				$url = "//embed.itunes.apple.com/embedded-player/{$country}/{$type}/{$id}?mt=1&app=music&country={$country}";
+				$height = 315;
+				$url = "//embed.itunes.apple.com/embedded-player/{$country}/{$type}/{$id}";
 				$style = 'max-width:760px;width:100%';
 				$scrolling = 'no';
 				break;

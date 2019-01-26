@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 9c2af3401b2419dbf926d9fc629e4b25
+// FROM HASH: 6de99fec894cff40dd63fd1f612ea824
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -116,7 +116,6 @@ a.button // needed for specificity over a:link
 		&--reply	    { .m-buttonIcon(@fa-var-mail-reply, 1em); }
 		&--quote	    { .m-buttonIcon(@fa-var-quote-left, .93em); }
 		&--purchase	    { .m-buttonIcon(@fa-var-credit-card, 1.11em); }
-&--nfgift	    { .m-buttonIcon(@fa-var-gift, .8em); }
 		&--payment	    { .m-buttonIcon(@fa-var-credit-card, 1.08em); }
 		&--convert	    { .m-buttonIcon(@fa-var-flash, .5em); }
 		&--search	    { .m-buttonIcon(@fa-var-search, .93em); }
@@ -139,6 +138,8 @@ a.button // needed for specificity over a:link
 		&--prev			{ .m-buttonIcon(@fa-var-chevron-left, .71em); }
 		&--next			{ .m-buttonIcon(@fa-var-chevron-right, .71em); }
 		&--markRead     { .m-buttonIcon(@fa-var-check-square-o, .93em); }
+		&--user         { .m-buttonIcon(@fa-var-user, .72em); }
+		&--userCircle   { .m-buttonIcon(@fa-var-user-circle, 1em); }
 
 		&--notificationsOn  { .m-buttonIcon(@fa-var-bell-o, 1em); }
 		&--notificationsOff { .m-buttonIcon(@fa-var-bell-slash-o, 1.15em); }

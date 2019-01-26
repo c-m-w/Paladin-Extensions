@@ -45,7 +45,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'explain' => 'This warning action will only be applied when a user crosses the points threshold. As such, users with this many points or more will not have this action applied until their warning point total drops below this threshold and then crosses it again.',
 	)) . '
 
-			' . $__templater->formRadioRow(array(
+			' . $__templater->includeTemplate('sv_warning_action_edit', $__vars) . '
+' . $__templater->formRadioRow(array(
 		'name' => 'action',
 		'value' => $__vars['action']['action'],
 	), array(array(
@@ -100,6 +101,11 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'value' => ((($__vars['action']['action_length_type'] == 'permanent') OR ($__vars['action']['action_length_type'] == 'points')) ? 'months' : $__vars['action']['action_length_type']),
 		'class' => 'input--inline',
 	), array(array(
+		'value' => 'hours',
+		'label' => 'Hours',
+		'_type' => 'option',
+	),
+	array(
 		'value' => 'days',
 		'label' => 'Days',
 		'_type' => 'option',

@@ -50,6 +50,13 @@ class Parser
 			{
 				$this->closeTag($fullMatch, $match[3][0]);
 			}
+			else if ($this->plainTag)
+			{
+				// options below here relate to tag opens, which aren't allowed inside a plain tag, so
+				// eat the [ and continue parsing
+				$this->pushText($fullMatch[0]);
+				$position = $match[0][1] + 1;
+			}
 			else if ($match[2][0] == ']')
 			{
 				// simple, optionless tag

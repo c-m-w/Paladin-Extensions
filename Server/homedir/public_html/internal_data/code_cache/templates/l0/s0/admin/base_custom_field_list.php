@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: dc28f65e85b39f4231fed00e502d63a5
+// FROM HASH: 1d243f7140bd00efe73ad9e045d744c4
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -37,7 +37,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 						foreach ($__vars['fieldsGrouped'][$__vars['displayGroupId']] AS $__vars['field']) {
 							$__compilerTemp1 .= '
 									' . $__templater->dataRow(array(
-								'label' => $__templater->filter($__vars['field']['title'], array(array('strip_tags', array()),), true),
+								'label' => $__templater->filter($__vars['field']['title'], array(array('htmlspecialchars', array()),), true),
 								'href' => $__templater->fn('link', array($__vars['prefix'] . '/edit', $__vars['field'], ), false),
 								'delete' => $__templater->fn('link', array($__vars['prefix'] . '/delete', $__vars['field'], ), false),
 								'hash' => $__vars['field']['field_id'],

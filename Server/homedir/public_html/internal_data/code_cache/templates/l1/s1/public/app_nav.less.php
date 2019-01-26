@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 2248f008544dab4bfff9e29499547bca
+// FROM HASH: a085c43f26c2410f61e276d6bf3c88fa
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -47,7 +47,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 {
 	float: left;
 	.m-transition(all, @_nav-elTransitionSpeed);
-	.m-transitionProperty(opacity, background, color;);
+	.m-transitionProperty(opacity, background;);
 
 	&.p-navEl-link--menuTrigger
 	{

@@ -139,6 +139,13 @@ class Replier extends \XF\Service\AbstractService
 		$db = $this->db();
 		$db->beginTransaction();
 
+		$convLatest = $this->db()->fetchRow("
+			SELECT *
+			FROM xf_conversation_master
+			WHERE conversation_id = ?
+			FOR UPDATE
+		", $message->conversation_id);
+
 		$message->save(true, false);
 
 		$this->messageManager->afterInsert();

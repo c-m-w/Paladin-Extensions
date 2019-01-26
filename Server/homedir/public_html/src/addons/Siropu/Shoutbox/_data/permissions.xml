@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <permissions>
+  <permission permission_group_id="siropuShoutbox" permission_id="bypassFloodCheck" permission_type="flag" interface_group_id="siropuShoutbox" display_order="70"/>
   <permission permission_group_id="siropuShoutbox" permission_id="deleteAny" permission_type="flag" interface_group_id="siropuShoutbox" display_order="5"/>
   <permission permission_group_id="siropuShoutbox" permission_id="deleteOwn" permission_type="flag" interface_group_id="siropuShoutbox" display_order="4"/>
   <permission permission_group_id="siropuShoutbox" permission_id="editAny" permission_type="flag" interface_group_id="siropuShoutbox" display_order="6"/>

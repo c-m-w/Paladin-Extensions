@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 1798363fcb9a569b673024c7a4e7d203
+// FROM HASH: dbb924ce61fbc5724af415c169b48264
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -30,32 +30,9 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
         render: function() {
             if (window.jQuery) {
                 d()
-            } else {
-                var c = document.createElement("script");
-                c.type = "text/javascript";
-                c.src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js";
-                document.head.appendChild(c);
-                c.onload = function() {
-                    d()
-                }
             }
 
             function d() {
-                var k = "";
-                switch (b.theme) {
-                    case "dark":
-                        k = "dark.min.css";
-                        break;
-                    case "light":
-                        k = "light.min.css";
-                        break;
-                    case "none":
-                        k = "none.min.css";
-                        break;
-                    default:
-                        k = "light.min.css"
-                }
-                
                 var h = "https://discordapp.com/api/servers/" + b.serverId + "/embed.json";
                 var i = new XMLHttpRequest();
                 i.onreadystatechange = function() {
@@ -113,11 +90,15 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
                     if (o.game) {
                         n = " - " + o.game.name
                     }
+					var nSanitized = n.replace(/<script[^>]*?>.*?<\\/script>/gi, \'\').
+					 replace(/<[\\/\\!]*?[^<>]*?>/gi, \'\').
+					 replace(/<style[^>]*?>.*?<\\/style>/gi, \'\').
+					 replace(/<![\\s\\S]*?--[ \\t\\n\\r]*>/gi, \'\');
                     if (o.channel_id == m) {
                         if (o.status != "online") {
-                            return \'<li class="discord-user"><img src="\' + o.avatar_url + \'" class="discord-avatar"/><div class="discord-user-status discord-idle"></div>\' + l + "<span>" + n + "</span></li>"
+                            return \'<li class="discord-user"><img src="\' + o.avatar_url + \'" class="discord-avatar"/><div class="discord-user-status discord-idle"></div>\' + l + "<span>" + nSanitized + "</span></li>"
                         } else {
-                            return \'<li class="discord-user"><img src="\' + o.avatar_url + \'" class="discord-avatar"/><div class="discord-user-status discord-online"></div>\' + l + "<span>" + n + "</span></li>"
+                            return \'<li class="discord-user"><img src="\' + o.avatar_url + \'" class="discord-avatar"/><div class="discord-user-status discord-online"></div>\' + l + "<span>" + nSanitized + "</span></li>"
                         }
                     } else {
                         return ""
@@ -215,7 +196,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
                     }
                     var B = "";
                     if (y.instant_invite != "null") {
-                        B = \'<a href="\' + \'' . $__templater->escape($__vars['xf']['options']['ahDW_inviteLink']) . '\' + \'" target="_blank" class="button button--primary">' . $__templater->escape($__vars['xf']['options']['ahDW_joinText']) . '</a>\'
+                        B = \'<a href="\' + \'' . $__templater->escape($__vars['xf']['options']['ahDW_inviteLink']) . '\' + \'" target="_blank" class="button button--primary joinButton">' . $__templater->escape($__vars['xf']['options']['ahDW_joinText']) . '</a>\'
                     }
                     l.innerHTML = u;
                     w.innerHTML = "Users Online: " + y.members.length;
@@ -229,40 +210,44 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
         }
     }
 }());
-							
-							
+
+
 discordWidget.init({
 	serverId: \'' . $__templater->escape($__vars['xf']['options']['ahDW_serverID']) . '\',
-    join: ';
-	if ($__vars['xf']['options']['ahDW_showJoin']) {
-		$__finalCompiled .= 'true';
+	join: ';
+	if ($__vars['xf']['options']['ahDW_joinDisplay'] == 'bottom') {
+		if ($__vars['xf']['options']['ahDW_showJoin']) {
+			$__finalCompiled .= 'true';
+		} else {
+			$__finalCompiled .= 'false';
+		}
 	} else {
 		$__finalCompiled .= 'false';
 	}
 	$__finalCompiled .= ',
-    alphabetical: ';
+	alphabetical: ';
 	if ($__vars['xf']['options']['ahDW_alph']) {
 		$__finalCompiled .= 'true';
 	} else {
 		$__finalCompiled .= 'false';
 	}
 	$__finalCompiled .= ',
-   	theme: \'light\',
-    hideChannels: ';
+	theme: \'light\',
+	hideChannels: ';
 	if ($__vars['xf']['options']['ahDW_hideAll']) {
 		$__finalCompiled .= 'true';
 	} else {
 		$__finalCompiled .= '[' . $__templater->filter($__vars['xf']['options']['ahDW_hideSpecific'], array(array('raw', array()),), true) . ']';
 	}
 	$__finalCompiled .= ',
-    showAllUsers: ';
+	showAllUsers: ';
 	if ($__vars['xf']['options']['ahDW_hideUsers']) {
 		$__finalCompiled .= 'false';
 	} else {
 		$__finalCompiled .= 'true';
 	}
 	$__finalCompiled .= ',
-    allUsersDefaultState: ';
+	allUsersDefaultState: ';
 	if ($__vars['xf']['options']['ahDW_collapseUsers']) {
 		$__finalCompiled .= 'false';
 	} else {
@@ -270,6 +255,7 @@ discordWidget.init({
 	}
 	$__finalCompiled .= '
 });
+
 discordWidget.render();';
 	return $__finalCompiled;
 });

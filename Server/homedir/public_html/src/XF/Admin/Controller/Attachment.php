@@ -11,8 +11,13 @@ class Attachment extends AbstractController
 		$this->assertAdminPermission('attachment');
 	}
 
-	public function actionIndex()
+	public function actionIndex(ParameterBag $params)
 	{
+		if ($params->attachment_id)
+		{
+			return $this->rerouteController(__CLASS__, 'view', $params);
+		}
+
 		$linkFilters = [];
 
 		$page = $this->filterPage();
@@ -67,7 +72,7 @@ class Attachment extends AbstractController
 			$linkFilters['mode'] = $mode;
 		}
 
-		if ($linkFilters && $this->isPost())
+		if ($this->isPost())
 		{
 			return $this->redirect($this->buildLink('attachments', null, $linkFilters), '');
 		}

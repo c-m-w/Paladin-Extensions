@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: a5613d7f723e400ccfa2731c9c76d546
+// FROM HASH: 891d8b208c5eb67752a1b8623a1b9880
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -60,6 +60,11 @@ a.u-concealed:hover,
 .u-pullRight
 {
 	float: right !important;
+}
+
+.u-alignCenter
+{
+	text-align: center;
 }
 
 .u-showWideInline,

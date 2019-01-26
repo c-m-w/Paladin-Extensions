@@ -139,7 +139,6 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 						';
 	}
 	$__finalCompiled .= '
-' . $__templater->includeTemplate('sv_ue_member_view_tags', $__vars) . '
 					</div>
 				</div>
 
@@ -224,17 +223,6 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 ' . '
 
 ';
-	if ($__templater->method($__vars['xf']['visitor'], 'canViewResources', array()) AND $__vars['user']['xfrm_resource_count']) {
-		$__finalCompiled .= '
-	<a href="' . $__templater->fn('link', array('resources/authors', $__vars['user'], ), true) . '"
-	   class="tabs-tab"
-	   id="resources"
-	   role="tab">' . 'Extensions' . '</a>
-';
-	}
-	$__finalCompiled .= '
-
-';
 	if ($__vars['xf']['options']['siropuReferralContestsMemberProfileReferralTab'] AND $__vars['user']['siropu_referral_count']) {
 		$__finalCompiled .= '
 	<a href="' . $__templater->fn('link', array('referrals/users', $__vars['user'], ), true) . '"
@@ -256,12 +244,21 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 					<a href="' . $__templater->fn('link', array('members/warnings', $__vars['user'], ), true) . '"
 						class="tabs-tab"
 						id="warnings"
-						role="tab">' . 'Warnings' . '</a>
+						role="tab">' . 'Warnings' . ' (' . $__templater->filter($__vars['user']->{'warning_count'}, array(array('number', array()),), true) . ')</a>
 				';
 	}
 	$__finalCompiled .= '
-				' . $__templater->includeTemplate('sv_ue_member_view_tab_previous_names', $__vars) . '
-' . '
+				';
+	if ($__vars['user']['warning_actions_count'] AND $__templater->method($__vars['user'], 'canViewWarningActions', array())) {
+		$__finalCompiled .= '
+					<a href="' . $__templater->fn('link', array('members/warning-actions', $__vars['user'], ), true) . '"
+						class="tabs-tab"
+						id="warningsActions"
+						role="tab">' . 'Warning Actions (' . $__templater->escape($__vars['user']['warning_actions_count']) . ')' . '</a>
+				';
+	}
+	$__finalCompiled .= '
+				' . '
 			</span>
 		</h2>
 	</div>
@@ -380,16 +377,6 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 ' . '
 
 ';
-	if ($__templater->method($__vars['xf']['visitor'], 'canViewResources', array()) AND $__vars['user']['xfrm_resource_count']) {
-		$__finalCompiled .= '
-	<li data-href="' . $__templater->fn('link', array('resources/authors', $__vars['user'], ), true) . '" role="tabpanel" aria-labelledby="resources">
-		<div class="blockMessage">' . 'Loading' . $__vars['xf']['language']['ellipsis'] . '</div>
-	</li>
-';
-	}
-	$__finalCompiled .= '
-
-';
 	if ($__vars['xf']['options']['siropuReferralContestsMemberProfileReferralTab'] AND $__vars['user']['siropu_referral_count']) {
 		$__finalCompiled .= '
 	<li data-href="' . $__templater->fn('link', array('referrals/users', $__vars['user'], ), true) . '" role="tabpanel" aria-labelledby="srcReferrals">
@@ -412,8 +399,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	';
 	}
 	$__finalCompiled .= '
-	' . $__templater->includeTemplate('sv_ue_member_view_tab_pane_previous_names', $__vars) . '
-' . '
+	' . $__templater->includeTemplate('sv_warningimprovements_member_view_warning_actions', $__vars) . '
+	' . '
 </ul>
 
 ';

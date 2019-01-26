@@ -8,6 +8,7 @@ use XF\Mvc\Entity\Structure;
 /**
  * COLUMNS
  * @property int node_id
+ * @property int prefix_id
  *
  * RELATIONS
  * @property \XF\Entity\ThreadPrefix Prefix

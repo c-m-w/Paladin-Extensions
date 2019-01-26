@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 271544d424c8f929c5935f839e4f9baa
+// FROM HASH: 9b4187899b20ef9b09c145dc77e82640
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -18,6 +18,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		';
 	}
 	$__finalCompiled .= '
+		
+		&.uix_stickyCategoryStrips {position: sticky;}
 
 		.uix_categoryStrip__icon {
 			align-self: flex-start;
@@ -128,14 +130,14 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 	.node-main {
 		flex-grow: 1;
-		width: calc(~"100% - ' . ($__templater->fn('property', array('uix_nodeIconWidth', ), false) + $__templater->fn('property', array('paddingLarge', ), false)) . 'px");
+		width: calc(~"100% - ' . ($__templater->fn('property', array('uix_nodeIconWidth', ), false) + $__templater->fn('property', array('uix_nodePadding', ), false)) . 'px");
 	}
 
 	@media (max-width: @xf-responsiveMedium) {
 		flex-wrap: wrap;
 		.node-extra {
 			width: 100%;
-			padding-left: ' . ($__templater->fn('property', array('uix_nodeIconWidth', ), false) + $__templater->fn('property', array('paddingLarge', ), false)) . 'px;
+			padding-left: ' . ($__templater->fn('property', array('uix_nodeIconWidth', ), false) + $__templater->fn('property', array('uix_nodePadding', ), false)) . 'px;
 		}
 	}
 }
@@ -315,7 +317,9 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	align-items: center;
 	font-size: @xf-fontSizeSmall;
 	
-	a:not(:hover) {color: @xf-textColorDimmed;}
+	a:not(:hover) {color: inherit;}
+	
+	.node-extra-title:not(:hover) {color: @xf-textColor;}
 
 	.uix_nodeExtra__rows {
 		display: flex;
@@ -336,7 +340,10 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	.listInline {.m-overflowEllipsis();}
 }
 
-.node-extra-title {padding-right: .5em;}
+.node-extra-title {
+	padding-right: .5em; 
+	font-weight: @xf-fontWeightHeavy;
+}
 
 .node-extra-placeholder
 {
@@ -381,7 +388,6 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 .node-meta
 {
-	font-size: @xf-fontSizeSmall;
 	display: inline;
 }
 

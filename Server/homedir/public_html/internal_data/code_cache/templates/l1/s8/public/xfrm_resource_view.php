@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: c82ce7c2dc3f6144550305bf2f2c72c2
+// FROM HASH: a0f2410a0469f9c1998f8345e3af6a7a
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -69,6 +69,14 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	$__finalCompiled .= '
 
 ';
+	if ($__vars['iconError']) {
+		$__finalCompiled .= '
+	<div class="blockMessage blockMessage--error">' . 'xfrm_new_icon_could_not_be_applied_try_later' . '</div>
+';
+	}
+	$__finalCompiled .= '
+
+';
 	$__compilerTemp5 = $__vars;
 	$__compilerTemp5['pageSelected'] = 'overview';
 	$__templater->wrapTemplate('xfrm_resource_wrapper', $__compilerTemp5);
@@ -118,7 +126,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 						' . $__templater->fn('bb_code', array($__vars['trimmedDescription'], 'resource_update', $__vars['description'], ), true) . '
 
 						<div class="block-rowMessage block-rowMessage--important">
-							' . 'You do not have permission to view the full content of this extension.' . '
+							' . 'xfrm_do_not_have_permission_to_view_full_content_of_this_resource' . '
 							';
 		if (!$__vars['xf']['visitor']['user_id']) {
 			$__finalCompiled .= '
@@ -176,6 +184,18 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		}
 		$__finalCompiled .= '
 					';
+	}
+	$__finalCompiled .= '
+					
+					';
+	if (!$__templater->fn('react_handler_status', array('resource_update', ), false)) {
+		$__finalCompiled .= '
+	<div class="likesBar js-likeList ' . ($__vars['description']['likes'] ? 'is-active' : '') . '">
+						' . $__templater->fn('likes_content', array($__vars['description'], $__templater->fn('link', array('resources/update/likes', $__vars['description'], ), false), array(
+			'url' => $__templater->fn('link', array('resources/update/likes', $__vars['description'], ), false),
+		))) . '
+					</div>
+';
 	}
 	$__finalCompiled .= '
 
@@ -330,18 +350,6 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	}
 	$__finalCompiled .= '
 
-					';
-	if (!$__templater->fn('react_handler_status', array('resource_update', ), false)) {
-		$__finalCompiled .= '
-	<div class="likesBar js-likeList ' . ($__vars['description']['likes'] ? 'is-active' : '') . '">
-						' . $__templater->fn('likes_content', array($__vars['description'], $__templater->fn('link', array('resources/update/likes', $__vars['description'], ), false), array(
-			'url' => $__templater->fn('link', array('resources/update/likes', $__vars['description'], ), false),
-		))) . '
-					</div>
-';
-	}
-	$__finalCompiled .= '
-
 					<div class="js-historyTarget toggleTarget" data-href="trigger-href"></div>
 				</article>
 
@@ -357,23 +365,32 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	if ($__templater->method($__vars['resource'], 'isDownloadable', array())) {
 		$__finalCompiled .= '
 							<dl class="pairs pairs--justified">
-								<dt>' . 'Downloads' . '</dt>
+								<dt>' . 'xfrm_downloads' . '</dt>
 								<dd>' . $__templater->filter($__vars['resource']['download_count'], array(array('number', array()),), true) . '</dd>
 							</dl>
 						';
 	}
 	$__finalCompiled .= '
 						<dl class="pairs pairs--justified">
-							<dt>' . 'First release' . '</dt>
+							<dt>' . 'xfrm_first_release' . '</dt>
 							<dd>' . $__templater->fn('date_dynamic', array($__vars['resource']['resource_date'], array(
 	))) . '</dd>
 						</dl>
 						<dl class="pairs pairs--justified">
-							<dt>' . 'Last update' . '</dt>
+							<dt>' . 'xfrm_last_update' . '</dt>
 							<dd>' . $__templater->fn('date_dynamic', array($__vars['resource']['last_update'], array(
 	))) . '</dd>
 						</dl>
-						' . '
+						<dl class="pairs pairs--justified">
+							<dt>' . 'Rating' . '</dt>
+							<dd>
+								' . $__templater->callMacro('rating_macros', 'stars_text', array(
+		'rating' => $__vars['resource']['rating_avg'],
+		'count' => $__vars['resource']['rating_count'],
+		'rowClass' => 'ratingStarsRow--textBlock',
+	), $__vars) . '
+							</dd>
+						</dl>
 					</div>
 
 					';
@@ -382,7 +399,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 								';
 	if ($__templater->method($__vars['resource'], 'hasViewableDiscussion', array())) {
 		$__compilerTemp11 .= '
-									' . $__templater->button('Join the discussion', array(
+									' . $__templater->button('xfrm_join_discussion', array(
 			'href' => $__templater->fn('link', array('threads', $__vars['resource']['Discussion'], ), false),
 			'class' => 'button--fullWidth',
 		), '', array(
@@ -394,7 +411,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 								';
 	if ($__vars['resource']['external_url']) {
 		$__compilerTemp11 .= '
-									' . $__templater->button('More information', array(
+									' . $__templater->button('xfrm_more_information', array(
 			'href' => $__vars['resource']['external_url'],
 			'class' => 'button--link button--fullWidth',
 		), '', array(
@@ -406,7 +423,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 								';
 	if ($__vars['resource']['alt_support_url']) {
 		$__compilerTemp11 .= '
-									' . $__templater->button('Get support', array(
+									' . $__templater->button('xfrm_get_support', array(
 			'href' => $__vars['resource']['alt_support_url'],
 			'class' => 'button--link button--fullWidth',
 		), '', array(
@@ -429,7 +446,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		$__finalCompiled .= '
 						<div class="resourceSidebarGroup">
 							<h4 class="resourceSidebarGroup-title">
-								<a href="' . $__templater->fn('link', array('resources/authors', $__vars['resource']['User'], ), true) . '">' . 'More extensions from ' . $__templater->escape($__vars['resource']['User']['username']) . '' . '</a>
+								<a href="' . $__templater->fn('link', array('resources/authors', $__vars['resource']['User'], ), true) . '">' . 'xfrm_more_resources_from_x' . '</a>
 							</h4>
 							<ul class="resourceSidebarList">
 							';
@@ -462,7 +479,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	if (strlen(trim($__compilerTemp12)) > 0) {
 		$__finalCompiled .= '
 						<div class="resourceSidebarGroup">
-							<h4 class="resourceSidebarGroup-title">' . 'Share this extension' . '</h4>
+							<h4 class="resourceSidebarGroup-title">' . 'xfrm_share_this_resource' . '</h4>
 							' . $__compilerTemp12 . '
 						</div>
 					';
@@ -479,7 +496,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		$__finalCompiled .= '
 	<div class="block">
 		<div class="block-container">
-			<h3 class="block-header">' . 'Latest updates' . '</h3>
+			<h3 class="block-header">' . 'xfrm_latest_updates' . '</h3>
 			<ol class="block-body">
 			';
 		if ($__templater->isTraversable($__vars['latestUpdates'])) {
@@ -496,7 +513,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		$__finalCompiled .= '
 			</ol>
 			<div class="block-footer">
-				<span class="block-footer-controls">' . $__templater->button('Read more' . $__vars['xf']['language']['ellipsis'], array(
+				<span class="block-footer-controls">' . $__templater->button('xfrm_read_more...', array(
 			'class' => 'button--link',
 			'href' => $__templater->fn('link', array('resources/updates', $__vars['resource'], ), false),
 		), '', array(
@@ -513,7 +530,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		$__finalCompiled .= '
 	<div class="block">
 		<div class="block-container">
-			<h3 class="block-header">' . 'Latest reviews' . '</h3>
+			<h3 class="block-header">' . 'xfrm_latest_reviews' . '</h3>
 			<div class="block-body">
 			';
 		if ($__templater->isTraversable($__vars['latestReviews'])) {
@@ -529,7 +546,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		$__finalCompiled .= '
 			</div>
 			<div class="block-footer">
-				<span class="block-footer-controls">' . $__templater->button('Read more' . $__vars['xf']['language']['ellipsis'], array(
+				<span class="block-footer-controls">' . $__templater->button('xfrm_read_more...', array(
 			'class' => 'button--link',
 			'href' => $__templater->fn('link', array('resources/reviews', $__vars['resource'], ), false),
 		), '', array(

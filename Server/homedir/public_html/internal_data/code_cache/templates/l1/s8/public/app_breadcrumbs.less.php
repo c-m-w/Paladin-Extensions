@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 4e4427b678f4e61861ad5f8d37fc9b77
+// FROM HASH: 9cb93cd8aa44e8a2b1fdf8440fc877d8
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -116,6 +116,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			' . $__templater->callMacro('uix_icons.less', 'content', array(
 		'icon' => 'chevron-right',
 	), $__vars) . '
+			font-size: @xf-uix_iconSize;
 			margin-left: .5em;
 		}
 		
@@ -155,9 +156,13 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		> li
 		{
 			font-size: @xf-fontSizeSmallest;
-			.xf-buttonBase();
-			.xf-buttonDefault();
 			display: none;
+			padding-left: 0;
+			
+			a {
+				display: inline-flex;
+				align-items: center;				
+			}
 
 			&:last-child
 			{
@@ -176,7 +181,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 				display: none;
 			}
 
-			&:before
+			a:before
 			{
 				// .m-faContent(@fa-var-chevron-left, .72em, ltr);
 				// .m-faContent(@fa-var-chevron-right, .72em, rtl);

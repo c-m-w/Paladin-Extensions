@@ -107,8 +107,10 @@ class Permission extends AbstractDataType
 
 		foreach ($entries AS $entry)
 		{
-			$groupId = (string)$entry['permission_group_id'];
-			$permissionId = (string)$entry['permission_id'];
+			// this approach is used to workaround what appears to be a potential PHP 7.3 bug
+			$attributes = $this->getSimpleAttributes($entry);
+			$groupId = $attributes['permission_group_id'];
+			$permissionId = $attributes['permission_id'];
 
 			if (isset($existing[$groupId][$permissionId]))
 			{
@@ -124,6 +126,18 @@ class Permission extends AbstractDataType
 				$entity->delete();
 			}
 		});
+	}
+
+	public function rebuildActiveChange(\XF\Entity\AddOn $addOn, array &$jobList)
+	{
+		$hasPerms = $this->finder()
+			->where('addon_id', $addOn->addon_id)
+			->total();
+
+		if (boolval($hasPerms))
+		{
+			$jobList[] = 'XF:PermissionRebuild';
+		}
 	}
 
 	protected function getMappedAttributes()

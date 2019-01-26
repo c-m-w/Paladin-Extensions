@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: d4a59cec96a65f4a0ef4e4aeaaace98e
+// FROM HASH: 6e0d734187ea55e9293e90795c625494
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -9,9 +9,6 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	));
 	$__finalCompiled .= '
 
-';
-	$__templater->includeCss('public:login_steam.less');
-	$__finalCompiled .= '
 ';
 	$__templater->pageParams['pageTitle'] = $__templater->preEscaped('Log in');
 	$__finalCompiled .= '
@@ -84,6 +81,9 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'label' => 'Stay logged in',
 		'_type' => 'option',
 	)), array(
+	)) . '
+
+				' . $__templater->formHiddenVal('_xfRedirect', $__vars['redirect'], array(
 	)) . '
 			</div>
 			' . $__templater->formSubmitRow(array(

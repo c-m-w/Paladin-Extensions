@@ -94,7 +94,7 @@ class Session implements \ArrayAccess
 			$cidr = intval($this->config['ipv6CidrMatch']);
 		}
 
-		if ($cidr <= 0)
+		if (empty($data['userId']) || $cidr <= 0)
 		{
 			return true; // IP check disabled
 		}

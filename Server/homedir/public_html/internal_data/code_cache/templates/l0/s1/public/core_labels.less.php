@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 45bfd0c23a15442411b48154906f04b3
+// FROM HASH: b4e810a18b25398d35da2b7304bb03e1
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -78,6 +78,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	&.label--silver { .m-labelVariation(black, silver); }
 	&.label--yellow { .m-labelVariation(black, #ffff91, #e6e687); }
 	&.label--orange { .m-labelVariation(black, #ffcb00); }
+
+	&.label--error { .m-labelVariation(#c84448, #fde9e9, #c84448); }
 }
 
 .label-append

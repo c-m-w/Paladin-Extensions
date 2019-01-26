@@ -67,7 +67,7 @@ To support recurring billing and automatically reversing purchases when a paymen
 	',
 		'_type' => 'option',
 	)), array(
-		'explain' => 'Requires an Apple Developer account and additional setup in your Braintree Dashboard.',
+		'explain' => 'Requires domain verification using the Settings > Processing page in your Braintree Dashboard.',
 	)) . '
 
 ' . $__templater->formCheckBoxRow(array(

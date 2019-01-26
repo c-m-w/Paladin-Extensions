@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: f6101cfaa090e4c5483df2ed35c23dd4
+// FROM HASH: 791cebf50ccba0a7e7f16cb6e63e8e43
 return array('macros' => array('page_link' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -246,8 +246,8 @@ return array('macros' => array('page_link' => function($__templater, array $__ar
 		</a>
 		<a href="' . $__templater->fn('link', array($__vars['link'], $__vars['data'], $__vars['params'] + array($__vars['pageParam'] => $__vars['totalPages'], ), ), true) . '"
 			class="pageNavSimple-el pageNavSimple-el--last"
-			data-xf-init="tooltip" title="' . 'Last' . '">
-			<i aria-hidden="true"></i> <span class="u-srOnly">' . $__templater->filter('Last', array(array('for_attr', array()),), true) . '</span>
+			data-xf-init="tooltip" title="' . $__templater->filter('Last', array(array('for_attr', array()),), true) . '">
+			<i aria-hidden="true"></i> <span class="u-srOnly">' . 'Last' . '</span>
 		</a>
 	';
 	}

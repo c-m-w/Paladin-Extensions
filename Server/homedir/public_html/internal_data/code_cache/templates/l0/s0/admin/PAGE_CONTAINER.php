@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: b5e537168111b3a35017060fbc7ac183
+// FROM HASH: ad7099e0db35f18573fc9f9167d4dd30
 return array('macros' => array('navigation_list' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -72,7 +72,7 @@ return array('macros' => array('navigation_list' => function($__templater, array
 				<a href="' . $__templater->fn('link', array($__vars['navigation']['link'], ), true) . '" class="p-nav-sectionLink js-navSectionToggle">
 					<i class="fa fa-fw ' . $__templater->escape($__vars['navigation']['icon']) . '" aria-hidden="true"></i> ' . $__templater->escape($__vars['navigation']['title']) . '
 				</a>
-				<a class="p-nav-sectionToggle js-navSectionToggle" role="button" tabindex="0" aria-label="' . 'Toggle expanded' . '"></a>
+				<a class="p-nav-sectionToggle js-navSectionToggle" role="button" tabindex="0" aria-label="' . $__templater->filter('Toggle expanded', array(array('for_attr', array()),), true) . '"></a>
 			</div>
 	';
 	} else if ($__vars['depth'] == 2) {
@@ -168,12 +168,12 @@ return array('macros' => array('navigation_list' => function($__templater, array
 			aria-label="' . 'Menu' . '">
 			<i class="fa fa-bars" aria-hidden="true"></i>
 		</a>
-		<a href="' . $__templater->fn('link', array('index', ), true) . '" class="p-header-button" aria-label="' . 'Home' . '"><i class="fa fa-home" aria-hidden="true"></i></a>
+		<a href="' . $__templater->fn('link', array('index', ), true) . '" class="p-header-button" aria-label="' . $__templater->filter('Home', array(array('for_attr', array()),), true) . '"><i class="fa fa-home" aria-hidden="true"></i></a>
 		<a href="index.php" class="p-header-button p-header-button--title" target="_blank">' . $__templater->escape($__vars['xf']['options']['boardTitle']) . '</a>
 	</div>
 
 	<div class="p-header-buttons p-header-buttons--opposite">
-		<a class="p-header-button" data-xf-key="' . '/' . '" data-xf-click="menu" role="button" tabindex="0"
+		<a class="p-header-button" data-xf-key="' . $__templater->filter('/', array(array('for_attr', array()),), true) . '" data-xf-click="menu" role="button" tabindex="0"
 			aria-label="' . 'Search' . '"
 			aria-expanded="false"
 			aria-haspopup="true">
@@ -202,7 +202,7 @@ return array('macros' => array('navigation_list' => function($__templater, array
 			<div class="p-nav-inner" data-xf-init="admin-nav" data-ocm-class="offCanvasMenu-content">
 				<div class="offCanvasMenu-shown offCanvasMenu-header">
 					' . 'Menu' . '
-					<a class="offCanvasMenu-closer" data-menu-close="true" role="button" tabindex="0" aria-label="' . 'Close' . '"></a>
+					<a class="offCanvasMenu-closer" data-menu-close="true" role="button" tabindex="0" aria-label="' . $__templater->filter('Close', array(array('for_attr', array()),), true) . '"></a>
 				</div>
 				<div class="p-nav-content js-navSticky">
 					' . $__templater->callMacro(null, 'navigation_list', array(

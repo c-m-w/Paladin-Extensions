@@ -37,13 +37,14 @@ class NodeType extends AbstractType
 		$class = '\\' . __CLASS__;
 
 		$nodeId = intval($nav->type_config['node_id']);
+		$navigationIdQuoted = '"' . $nav->navigation_id . '"';
 
 		$indent = $compiler->getIndenter();
 		$entryExpression = "[\n" . $this->getConfigArrayValuesCode($nav, $compiler) . "{$indent}]";
 
-		$dataExpression = "{$class}::displayNode({$nodeId})";
+		$dataExpression = "{$class}::displayNodeExtended({$nodeId}, {$navigationIdQuoted})";
 		$compiled = new CompiledEntry($nav->navigation_id, $dataExpression);
-		$compiled->setGlobalSetup("{$class}::configureDisplay({$nodeId}, {$entryExpression});");
+		$compiled->setGlobalSetup("{$class}::configureDisplayExtended({$nodeId}, {$navigationIdQuoted}, {$entryExpression});");
 
 		return $compiled;
 	}
@@ -88,13 +89,26 @@ class NodeType extends AbstractType
 	];
 	protected static $loaded = [];
 
-	public static function configureDisplay($nodeId, array $config = [])
+	public static function configureDisplayExtended($nodeId, $navigationId, array $config = [])
 	{
 		self::$loadIds[$nodeId] = $nodeId;
-		self::$displayConfig[$nodeId] = array_replace(self::$defaultConfig, $config);
+
+		if ($navigationId === null)
+		{
+			self::$displayConfig[$nodeId] = array_replace(self::$defaultConfig, $config);
+		}
+		else
+		{
+			self::$displayConfig["{$nodeId}-{$navigationId}"] = array_replace(self::$defaultConfig, $config);
+		}
 	}
 
-	public static function displayNode($nodeId)
+	public static function configureDisplay($nodeId, array $config = [])
+	{
+		self::configureDisplayExtended($nodeId, null, $config);
+	}
+
+	public static function displayNodeExtended($nodeId, $navigationId)
 	{
 		self::loadPendingNodeData();
 
@@ -110,7 +124,7 @@ class NodeType extends AbstractType
 			return null;
 		}
 
-		$config = self::$displayConfig[$nodeId];
+		$config = $navigationId === null ? self::$displayConfig[$nodeId] : self::$displayConfig["{$nodeId}-{$navigationId}"];
 		$link = self::getNodeLink($node, $config);
 
 		if ($config['with_children'])
@@ -131,6 +145,11 @@ class NodeType extends AbstractType
 		}
 
 		return $link;
+	}
+
+	public static function displayNode($nodeId)
+	{
+		self::displayNodeExtended($nodeId, null);
 	}
 
 	protected static function getNodeLink(\XF\Entity\Node $node, array $config = [])

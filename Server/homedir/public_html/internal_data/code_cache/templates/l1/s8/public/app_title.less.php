@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: e66b3af27ccb7c4bf7aa97f300941153
+// FROM HASH: 6d4674c5d9922f782c77b09ad85ebd47
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -43,10 +43,12 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		@media(max-width: @xf-responsiveMedium) {
 			flex-wrap: wrap;
 			
+			/* -- commented out as fix for mobile page action button --
 			.uix_headerInner--opposite {
-				width: 100%;
 				flex-grow: 1;
+				width: 100%;
 			}
+			*/
 		}
 	}
 	
@@ -55,7 +57,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	.uix_headerInner {
 		margin: 5px;
 		margin-left: 0;
-		margin-right: auto;
+		// margin-right: auto; -- commented out as fix for mobile page action button --
+		flex-grow: 1;
 	}
 	
 	.uix_headerInner--opposite {
@@ -63,11 +66,12 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		align-items: center;
 		flex-wrap: wrap;
 		justify-content: center;
-		margin: 5px;
 		margin-left: auto;
 		margin-right: 0;
-		
-		@media (max-width: @xf-responsive)
+	}
+	
+	.uix_headerInner + .uix_headerInner--opposite {
+		margin: 5px auto;
 	}
 	
 	.p-title

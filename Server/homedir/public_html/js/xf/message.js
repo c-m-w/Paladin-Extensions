@@ -73,7 +73,11 @@
 		{
 			if (!this.options.href)
 			{
-				console.error('Must be initialized with a data-href attribute.');
+				this.options.href = this.$target.attr('href');
+				if (!this.options.href)
+				{
+					console.error('Must be initialized with a data-href or href attribute.');
+				}
 			}
 		},
 
@@ -179,7 +183,7 @@
 				data['_xfNoInlineMod'] = true;
 			}
 
-			XF.ajax('GET', this.href, data, XF.proxy(this, 'handleAjax'), {skipDefaultSuccessError: true});
+			XF.ajax('GET', this.href, data, XF.proxy(this, 'handleAjax'), { skipDefaultSuccessError: true });
 		},
 
 		handleAjax: function(data)
@@ -187,9 +191,10 @@
 			var $editorTarget = this.$editorTarget,
 				self = this;
 
-			if (data.errors || data.exception)
+			if (data.errors)
 			{
 				this.loading = false;
+				XF.alert(data.errors);
 				return;
 			}
 
@@ -214,7 +219,7 @@
 						$html.trigger('quick-edit:shown');
 
 						var $editContainer = $html.find(self.options.editContainer);
-						if ($editContainer.length)
+						if ($editContainer.length && !XF.isElementVisible($editContainer))
 						{
 							$editContainer.get(0).scrollIntoView(true);
 						}
@@ -360,6 +365,9 @@
 		mqStorage: null,
 		mqOverlay: null,
 
+		removing: false,
+		quoting: false,
+
 		init: function()
 		{
 			this.initButton();
@@ -413,6 +421,13 @@
 		{
 			e.preventDefault();
 
+			if (this.removing)
+			{
+				return;
+			}
+
+			this.removing = true;
+
 			var $item = $(e.target).closest('.nestable-item'),
 				messageId = $item.data('id'),
 				overlay = this.mqOverlay;
@@ -428,16 +443,26 @@
 			{
 				overlay.hide();
 			}
+
+			this.removing = false;
 		},
 
 		quoteMessages: function(e)
 		{
 			e.preventDefault();
 
+			if (this.quoting)
+			{
+				return;
+			}
+
+			this.quoting = true;
+
 			var overlay = this.mqOverlay,
 				$overlay = overlay.getOverlay(),
 				toInsert = $.parseJSON($overlay.find('input[name="message_ids"]').val()),
-				multiQuotes = this.mqStorage;
+				multiQuotes = this.mqStorage,
+				t = this;
 
 			for (var i in toInsert)
 			{
@@ -469,7 +494,10 @@
 			XF.ajax('post', this.options.href, {
 				insert: toInsert,
 				quotes: XF.LocalStorage.get(this.options.storageKey)
-			}, XF.proxy(this, 'insertMessages'));
+			}, XF.proxy(this, 'insertMessages')).always(function()
+			{
+				t.quoting = false;
+			});
 		},
 
 		isValidQuote: function(quote, key)
@@ -490,6 +518,12 @@
 
 		insertMessages: function(data)
 		{
+			var $editor = XF.findRelativeIf('form .js-editor', this.$target);
+			if (!$editor.length)
+			{
+				$editor = $('.js-editor').parent();
+			}
+
 			$.each(data, function(i, quoteObj)
 			{
 				if (!quoteObj.hasOwnProperty('quote') || !quoteObj.hasOwnProperty('quoteHtml'))
@@ -497,7 +531,7 @@
 					return true;
 				}
 
-				XF.insertIntoEditor($('.js-editor').parent(), quoteObj.quoteHtml, quoteObj.quote);
+				XF.insertIntoEditor($editor, quoteObj.quoteHtml, quoteObj.quote);
 			});
 
 			for (var messageId in this.mqStorage)
@@ -841,6 +875,10 @@
 			$tooltip.data('quote-html', this.getSelectionHtml(selection));
 
 			var offset = this.getButtonPositionMarker(selection);
+			if (XF.browser.android)
+			{
+				offset.top += 10;
+			}
 			this.tooltip.setPositioner([offset.left, offset.top]);
 
 			if (this.tooltip.isShown())

@@ -49,6 +49,32 @@ class ValueFormatter
 		}
 	}
 
+	public function decodeValueFromSourceExtended($type, $value, array $columnOptions = [])
+	{
+		if ($value === null)
+		{
+			return $value;
+		}
+
+		$value = $this->decodeValueFromSource($type, $value);
+
+		if (
+			($type == Entity::LIST_COMMA || $type == Entity::LIST_LINES)
+			&& !empty($columnOptions['list']['type'])
+		)
+		{
+			switch ($columnOptions['list']['type'])
+			{
+				case 'int':
+				case 'uint':
+				case 'posint':
+					$value = array_map('intval', $value);
+			}
+		}
+
+		return $value;
+	}
+
 	public function encodeValueForSource($type, $value)
 	{
 		if ($value === null)

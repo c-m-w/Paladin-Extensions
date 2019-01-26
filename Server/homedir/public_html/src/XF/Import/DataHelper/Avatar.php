@@ -31,10 +31,14 @@ class Avatar extends AbstractHelper
 		$avatarService = $this->dataManager->app()->service('XF:User\Avatar', $user);
 		$avatarService->logIp(false);
 		$avatarService->logChange(false);
+		$avatarService->silentRunning(true);
 
 		if ($avatarService->setImage($sourceFile))
 		{
 			$avatarService->updateAvatar();
+			return true;
 		}
+
+		return false;
 	}
 }

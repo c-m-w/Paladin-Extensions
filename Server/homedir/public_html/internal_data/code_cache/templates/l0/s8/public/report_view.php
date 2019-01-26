@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 21e8766ff53759bc88676d5054e1e806
+// FROM HASH: 1abb6800f3c83fd1fd33ced6d0a9fcac
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -88,8 +88,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 		<div class="block-body">
 			';
-	if ($__templater->isTraversable($__vars['report']['Comments'])) {
-		foreach ($__vars['report']['Comments'] AS $__vars['comment']) {
+	if ($__templater->isTraversable($__vars['comments'])) {
+		foreach ($__vars['comments'] AS $__vars['comment']) {
 			$__finalCompiled .= '
 				<article class="message message--simple">
 					<div class="message-inner">

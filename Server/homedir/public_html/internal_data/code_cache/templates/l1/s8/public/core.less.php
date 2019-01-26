@@ -61,6 +61,14 @@ a
 ' . $__templater->includeTemplate('core_blockend.less', $__vars) . '
 ' . $__templater->includeTemplate('core_fixedmessage.less', $__vars) . '
 ' . $__templater->includeTemplate('core_button.less', $__vars) . '
+';
+	if ($__templater->fn('property', array('xm_xrProductManagerOn', ), false) == '1') {
+		$__finalCompiled .= '
+' . $__templater->includeTemplate('xrProductsLayout.less', $__vars) . '
+' . $__templater->includeTemplate('xrProductsHoverEffect.less', $__vars) . '	
+';
+	}
+	$__finalCompiled .= '
 
 // ################################# INPUTS & FORMS #####################
 
@@ -313,6 +321,6 @@ a
 		@media (max-width: @xf-responsiveMedium) { content: "Medium < @{xf-responsiveMedium}"; }
 		@media (max-width: @xf-responsiveNarrow) { content: "Narrow < @{xf-responsiveNarrow}"; }
 	}
-}' . $__templater->includeTemplate('core_xfrm.less', $__vars);
+}' . $__templater->includeTemplate('core_xr_pm.less', $__vars);
 	return $__finalCompiled;
 });

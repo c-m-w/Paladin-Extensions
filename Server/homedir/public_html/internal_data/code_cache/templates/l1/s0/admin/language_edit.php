@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 5647c96b56174969d3f5e36952361a0b
+// FROM HASH: cbdad8ff707e85e35d8a1ae199aa7253
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -112,6 +112,16 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 				</span>
 			</h3>
 			<div class="block-body block-body--collapsible">
+				' . $__templater->formTextAreaRow(array(
+			'name' => 'quick_phrases[privacy_policy_text]',
+			'value' => $__vars['quickPhrases']['privacy_policy_text']['phrase_text'],
+			'autosize' => 'true',
+			'class' => 'input--fitHeight--short',
+		), array(
+			'label' => 'Privacy policy',
+			'hint' => 'You may use HTML',
+		)) . '
+
 				' . $__templater->formTextAreaRow(array(
 			'name' => 'quick_phrases[terms_rules_text]',
 			'value' => $__vars['quickPhrases']['terms_rules_text']['phrase_text'],

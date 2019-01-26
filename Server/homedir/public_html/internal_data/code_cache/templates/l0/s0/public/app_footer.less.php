@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: db5b7555b7003749ac1ef810ee13e2eb
+// FROM HASH: 8c7385683b9478a9b554f78c187644b9
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -71,7 +71,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 .p-footer-rssLink
 {
-	span
+	> span
 	{
 		position: relative;
 		top: -1px;

@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 44acabbd7614d15f7c7827c392c13e1c
+// FROM HASH: 527c6f0ded2a1c2267865275b38bdc2f
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -199,6 +199,41 @@ body.is-modalOpen
 	> .blockMessage:not(:last-child)
 	{
 		.m-borderBottomRadius(0);
+	}
+}
+
+.overlay-content
+{
+	> .blocks > .block > .block-container,
+	> .block > .block-container,
+	> .blockMessage
+	{
+		.m-borderTopRadius(0);
+	}
+
+	> .blocks > .block > .block-container,
+	> .block > .block-container
+	{
+		> :first-child
+		{
+			.m-borderTopRadius(0);
+		}
+
+		> .block-body:first-child > .formRow:first-child
+		{
+			> dt { border-top-left-radius: 0; }
+			> dd { border-top-right-radius: 0; }
+		}
+
+		> .dataList:first-child
+		{
+			tbody:first-child .dataList-row:first-child,
+			thead:first-child .dataList-row:first-child
+			{
+				> .dataList-cell:first-child { border-top-left-radius: 0; }
+				> .dataList-cell:last-child { border-top-right-radius: 0; }
+			}
+		}
 	}
 }';
 	return $__finalCompiled;

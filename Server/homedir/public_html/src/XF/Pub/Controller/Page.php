@@ -126,4 +126,7 @@ class Page extends AbstractController
 			\XF::phrase('viewing_page')
 		);
 	}
+
+	// in case these have custom URL which is a page node
+	public function assertPolicyAcceptance($action) {}
 }

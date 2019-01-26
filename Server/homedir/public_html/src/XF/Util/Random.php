@@ -189,7 +189,11 @@ class Random
 	{
 		$available = [];
 
-		if (function_exists('random_bytes'))
+		// we need to restrict to PHP 7.0 here so we don't unintentionally
+		// use the random_compat library used by some other dependencies which
+		// will throw an exception in cases where we may be able to fallback
+		// to other random source.
+		if (PHP_VERSION_ID >= 70000 && function_exists('random_bytes'))
 		{
 			$available['random_bytes'] = '_genRandomBytes';
 		}

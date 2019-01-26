@@ -150,7 +150,14 @@ abstract class AbstractPermission extends AbstractPlugin
 				));
 			}
 
-			$user = $this->assertRecordExists('XF:User', $this->filter('user_id', 'uint'));
+			$userId = $this->filter('user_id', 'uint');
+
+			if (!$userId)
+			{
+				return $this->error(\XF::phrase('requested_user_not_found'), 404);
+			}
+
+			$user = $this->assertRecordExists('XF:User', $userId);
 			$userGroup = null;
 
 			$typeEntries = isset($entries['users'][$user->user_id])

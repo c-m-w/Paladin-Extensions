@@ -28,7 +28,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			), $__compilerTemp2) . '
 
 				<span class="inputGroup-splitter"></span>
-				' . $__templater->button('Extend', array(
+				' . $__templater->button('exup_extend', array(
 				'type' => 'submit',
 				'icon' => 'purchase',
 			), '', array(
@@ -36,7 +36,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			';
 		} else {
 			$__compilerTemp1 .= '
-				' . $__templater->button('Extend', array(
+				' . $__templater->button('exup_extend', array(
 				'type' => 'submit',
 				'icon' => 'purchase',
 			), '', array(

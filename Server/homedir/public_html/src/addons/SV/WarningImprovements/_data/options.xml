@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<options>
+  <option option_id="svPreviousWarningLimit" edit_format="spinbox" data_type="positive_integer">
+    <default_value>5</default_value>
+    <edit_format_params>min=0</edit_format_params>
+    <relation group_id="SV_WarningImprovements" display_order="2030"/>
+  </option>
+  <option option_id="svWarningRedirect" edit_format="onoff" data_type="boolean">
+    <default_value>1</default_value>
+    <relation group_id="SV_WarningImprovements" display_order="210"/>
+  </option>
+  <option option_id="sv_force_conversation_email_on_warning" edit_format="onoff" data_type="boolean">
+    <default_value>0</default_value>
+    <relation group_id="SV_WarningImprovements" display_order="2000"/>
+  </option>
+  <option option_id="sv_only_force_warning_email_on_banned" edit_format="onoff" data_type="boolean">
+    <default_value>1</default_value>
+    <relation group_id="SV_WarningImprovements" display_order="2020"/>
+  </option>
+  <option option_id="sv_post_warning_summary" edit_format="textbox" data_type="integer">
+    <default_value>0</default_value>
+    <relation group_id="SV_WarningImprovements" display_order="440"/>
+  </option>
+  <option option_id="sv_post_warning_summaryForum" edit_format="callback" data_type="integer">
+    <default_value>0</default_value>
+    <edit_format_params>XF\Option\Forum::renderSelect</edit_format_params>
+    <relation group_id="SV_WarningImprovements" display_order="450"/>
+  </option>
+  <option option_id="sv_respect_receive_admin_email_on_warning" edit_format="onoff" data_type="boolean">
+    <default_value>0</default_value>
+    <relation group_id="SV_WarningImprovements" display_order="2010"/>
+  </option>
+  <option option_id="sv_show_discouraged_warning_actions" edit_format="radio" data_type="unsigned_integer">
+    <default_value>2</default_value>
+    <edit_format_params>0={{ phrase('sv_discouraged_display_all')}}
+1={{ phrase('sv_discouraged_display_moderators')}}
+2={{ phrase('sv_discouraged_display_administrators')}}
+3={{ phrase('sv_discouraged_display_none')}}</edit_format_params>
+    <relation group_id="SV_WarningImprovements" display_order="1000"/>
+  </option>
+  <option option_id="sv_view_own_warnings" edit_format="onoff" data_type="boolean">
+    <default_value>true</default_value>
+    <relation group_id="SV_WarningImprovements" display_order="410"/>
+  </option>
+  <option option_id="sv_warning_date_format" edit_format="textbox" data_type="string">
+    <default_value>F d, Y</default_value>
+    <relation group_id="SV_WarningImprovements" display_order="430"/>
+  </option>
+  <option option_id="sv_warningimprovements_alert_send_default" edit_format="onoff" data_type="boolean">
+    <default_value>1</default_value>
+    <relation group_id="SV_WarningImprovements" display_order="9105"/>
+  </option>
+  <option option_id="sv_warningimprovements_conversation_invite" edit_format="onoff" data_type="boolean">
+    <default_value>0</default_value>
+    <relation group_id="SV_WarningImprovements" display_order="9120"/>
+  </option>
+  <option option_id="sv_warningimprovements_conversation_locked" edit_format="onoff" data_type="boolean">
+    <default_value>0</default_value>
+    <relation group_id="SV_WarningImprovements" display_order="9130"/>
+  </option>
+  <option option_id="sv_warningimprovements_conversation_send_default" edit_format="onoff" data_type="boolean">
+    <default_value>1</default_value>
+    <relation group_id="SV_WarningImprovements" display_order="9110"/>
+  </option>
+  <option option_id="sv_warningimprovements_copy_title" edit_format="onoff" data_type="boolean">
+    <default_value>1</default_value>
+    <relation group_id="SV_WarningImprovements" display_order="9140"/>
+  </option>
+  <option option_id="sv_warningimprovements_default_content_action" edit_format="radio" data_type="string">
+    <default_value>public_warning</default_value>
+    <edit_format_params>none={{ phrase('do_nothing')}}
+delete_content={{ phrase('delete_the_content')}}
+public_warning={{ phrase('post_public_warning')}}</edit_format_params>
+    <relation group_id="SV_WarningImprovements" display_order="9150"/>
+  </option>
+  <option option_id="sv_warningimprovements_sticky_button" edit_format="onoff" data_type="boolean">
+    <default_value>1</default_value>
+    <relation group_id="SV_WarningImprovements" display_order="9100"/>
+  </option>
+  <option option_id="sv_warningimprovements_warning_user" edit_format="username" data_type="integer">
+    <default_value></default_value>
+    <relation group_id="SV_WarningImprovements" display_order="400"/>
+  </option>
+  <option option_id="sv_wi_require_warning_notes" edit_format="onoff" data_type="boolean">
+    <default_value>0</default_value>
+    <relation group_id="SV_WarningImprovements" display_order="350"/>
+  </option>
+  <option option_id="sv_wi_warning_note_chars" edit_format="spinbox" data_type="unsigned_integer">
+    <default_value>0</default_value>
+    <relation group_id="SV_WarningImprovements" display_order="351"/>
+  </option>
+</options>

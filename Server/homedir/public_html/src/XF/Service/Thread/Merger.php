@@ -152,6 +152,11 @@ class Merger extends \XF\Service\AbstractService
 			"thread_id IN ($sourceIdsQuoted)",
 			[], 'IGNORE'
 		);
+		$db->update('xf_tag_content',
+			['content_id' => $target->thread_id],
+			"content_type = 'thread' AND content_id IN ($sourceIdsQuoted)",
+			[], 'IGNORE'
+		);
 	}
 
 	protected function updateTargetData()
@@ -183,6 +188,10 @@ class Merger extends \XF\Service\AbstractService
 		$threadRepo = $this->repository('XF:Thread');
 		$threadRepo->rebuildThreadPostPositions($target->thread_id);
 		$threadRepo->rebuildThreadUserPostCounters($target->thread_id);
+
+		/** @var \XF\Repository\Tag $tagRepo */
+		$tagRepo = $this->repository('XF:Tag');
+		$tagRepo->rebuildContentTagCache('thread', $target->thread_id);
 	}
 
 	protected function updateUserCounters()

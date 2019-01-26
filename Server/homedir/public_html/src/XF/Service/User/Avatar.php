@@ -31,6 +31,8 @@ class Avatar extends \XF\Service\AbstractService
 
 	protected $sizeMap;
 
+	protected $throwErrors = true;
+
 	const HIGH_DPI_THRESHOLD = 384;
 
 	public function __construct(\XF\App $app, User $user)
@@ -45,7 +47,7 @@ class Avatar extends \XF\Service\AbstractService
 	{
 		if (!$user->user_id)
 		{
-			throw new \LogicException("User must be saved");
+			return $this->throwException(new \LogicException("User must be saved"));
 		}
 
 		$this->user = $user;
@@ -64,6 +66,11 @@ class Avatar extends \XF\Service\AbstractService
 	public function getError()
 	{
 		return $this->error;
+	}
+
+	public function silentRunning($runSilent)
+	{
+		$this->throwErrors = !$runSilent;
 	}
 
 	public function setImage($fileName)
@@ -97,7 +104,7 @@ class Avatar extends \XF\Service\AbstractService
 		$path = $this->user->getAbstractedCustomAvatarPath('o');
 		if (!$this->app->fs()->has($path))
 		{
-			throw new \InvalidArgumentException("User does not have an 'o' avatar ($path)");
+			return $this->throwException(new \InvalidArgumentException("User does not have an 'o' avatar ($path)"));
 		}
 
 		$tempFile = \XF\Util\File::copyAbstractedPathToTempFile($path);
@@ -136,11 +143,11 @@ class Avatar extends \XF\Service\AbstractService
 
 		if (!file_exists($fileName))
 		{
-			throw new \InvalidArgumentException("Invalid file '$fileName' passed to avatar service");
+			return $this->throwException(new \InvalidArgumentException("Invalid file '$fileName' passed to avatar service"));
 		}
 		if (!is_readable($fileName))
 		{
-			throw new \InvalidArgumentException("'$fileName' passed to avatar service is not readable");
+			return $this->throwException(new \InvalidArgumentException("'$fileName' passed to avatar service is not readable"));
 		}
 
 		$imageInfo = filesize($fileName) ? @getimagesize($fileName) : false;
@@ -177,11 +184,11 @@ class Avatar extends \XF\Service\AbstractService
 	{
 		if (!$this->fileName)
 		{
-			throw new \LogicException("No source file for avatar set");
+			return $this->throwException(new \LogicException("No source file for avatar set"));
 		}
 		if (!$this->user->exists())
 		{
-			throw new \LogicException("User does not exist, cannot update avatar");
+			return $this->throwException(new \LogicException("User does not exist, cannot update avatar"));
 		}
 
 		$imageManager = $this->app->imageManager();
@@ -203,7 +210,7 @@ class Avatar extends \XF\Service\AbstractService
 			$image->resizeShortEdge($origSize);
 
 			$newTempFile = \XF\Util\File::getTempFile();
-			if ($newTempFile && $image->save($newTempFile))
+			if ($newTempFile && $image->save($newTempFile, null, 95))
 			{
 				$outputFiles['o'] = $newTempFile;
 				$baseFile = $newTempFile;
@@ -212,7 +219,7 @@ class Avatar extends \XF\Service\AbstractService
 			}
 			else
 			{
-				throw new \RuntimeException("Failed to save image to temporary file; check internal_data/data permissions");
+				return $this->throwException(new \RuntimeException("Failed to save image to temporary file; check internal_data/data permissions"));
 			}
 
 			unset($image);
@@ -253,7 +260,7 @@ class Avatar extends \XF\Service\AbstractService
 
 		if (count($outputFiles) != count($this->sizeMap))
 		{
-			throw new \RuntimeException("Failed to save image to temporary file; image may be corrupt or check internal_data/data permissions");
+			return $this->throwException(new \RuntimeException("Failed to save image to temporary file; image may be corrupt or check internal_data/data permissions"));
 		}
 
 		foreach ($outputFiles AS $code => $file)
@@ -499,5 +506,23 @@ class Avatar extends \XF\Service\AbstractService
 		/** @var \XF\Repository\Ip $ipRepo */
 		$ipRepo = $this->repository('XF:Ip');
 		$ipRepo->logIp(\XF::visitor()->user_id, $ip, 'user', $user->user_id, 'avatar_' . $action);
+	}
+
+	/**
+	 * @param \Exception $error
+	 *
+	 * @return bool
+	 * @throws \Exception
+	 */
+	protected function throwException(\Exception $error)
+	{
+		if ($this->throwErrors)
+		{
+			throw $error;
+		}
+		else
+		{
+			return false;
+		}
 	}
 }

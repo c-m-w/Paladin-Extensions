@@ -12,6 +12,15 @@ class Gd extends AbstractDriver
 
 		$image = null;
 
+		// approximately 5 bytes per pixel, times a 1.2 fudge factor, times 2 to support a second copy
+		// (such as for rotation via EXIF data)
+		$memoryBuffer = ($this->width * $this->height * 5) * 1.2 * 2;
+		$availableMemory = \XF::getAvailableMemory();
+		if ($availableMemory && $availableMemory < $memoryBuffer)
+		{
+			\XF::increaseMemoryLimit($memoryBuffer - $availableMemory);
+		}
+
 		switch ($type)
 		{
 			case IMAGETYPE_GIF:
@@ -49,15 +58,6 @@ class Gd extends AbstractDriver
 		}
 
 		$this->setImage($image);
-
-		// approximately 5 bytes per pixel, times a 1.2 fudge factor, times 2 to support a second copy
-		// (such as for rotation via EXIF data)
-		$memoryBuffer = ($this->width * $this->height * 5) * 1.2 * 2;
-		$availableMemory = \XF::getAvailableMemory();
-		if ($availableMemory && $availableMemory < $memoryBuffer)
-		{
-			\XF::increaseMemoryLimit($memoryBuffer - $availableMemory);
-		}
 
 		return true;
 	}

@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 43de4eec4103cc04fc6a4baa72f080a3
+// FROM HASH: 86f75dc7b98d64a55e72dd2792678d22
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -77,7 +77,6 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 				'label' => 'Custom title',
 				'explain' => 'If specified, this will replace the title that displays under your name in your posts.',
 			)) . '
-' . $__templater->includeTemplate('sv_ue_account_details_title', $__vars) . '
 				';
 		}
 		$__compilerTemp3 .= '
@@ -132,7 +131,6 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			'group' => 'personal',
 			'set' => $__vars['xf']['visitor']['Profile']['custom_fields'],
 		), $__vars) . '
-' . $__templater->includeTemplate('sv_ue_account_details_tags', $__vars) . '
 
 				<hr class="formRowSep" />
 
@@ -176,8 +174,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	$__finalCompiled .= $__templater->form('
 	<div class="block-container">
 		<div class="block-body">
-			' . $__templater->includeTemplate('sv_ue_account_details_username', $__vars) . '
-' . $__templater->formRow('
+			' . $__templater->formRow('
 
 				' . $__compilerTemp1 . '
 				' . $__templater->button('Change', array(
@@ -190,6 +187,10 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'rowtype' => 'button',
 		'label' => 'Email',
 	)) . '
+
+			' . $__templater->callMacro('helper_account', 'email_options_row', array(
+		'showExplain' => true,
+	), $__vars) . '
 
 			' . $__compilerTemp2 . '
 

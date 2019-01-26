@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 346cc5e5585699ecad95b5af43d83fa0
+// FROM HASH: 85e80fe9ce323ba27ae7fd04e668e953
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -25,6 +25,12 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 }
 
 ' . '
+
+.block-minorHeader.uix_threadListSeparator {
+	display: flex;
+	align-items: center;
+	.xf-uix_threadListSeparator();
+}
 
 .structItemContainer-group--sticky {
 	.structItem--thread {
@@ -54,7 +60,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		background-color: @xf-uix_discussionListItemEven;
 	}
 
-	&:hover {
+	&--thread:hover {
 		background-color: @xf-uix_discussionListItemHover;
 
 		';
@@ -219,6 +225,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 {
 	font-size: @xf-fontSizeSmaller;
 	color: @xf-textColorMuted;
+	
+	.structItem-cell--main & {clear: both;}
 
 	.m-hiddenLinks();
 }
@@ -432,9 +440,19 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			padding-top: 0;
 			padding-left: 0;
 			display: flex;
-			flex-direction: row-reverse;
 			align-items: center;
 			line-height: 1;
+			flex-wrap: wrap;
+			
+			a {order: 2;}
+			
+			.structItem-minor {
+				order: 1; 
+				
+				&:after {order: 2;}
+			}
+			
+			.uix_mobileNodeTitle {order: 3;}
 
 			&:before
 			{
@@ -449,11 +467,14 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 			.structItem-minor
 			{
-				display: inline-block;
+				display: inline-flex;
 				
-				&:before {' . $__templater->callMacro('uix_icons.less', 'content', array(
+				&:before {
+					' . $__templater->callMacro('uix_icons.less', 'content', array(
 		'icon' => 'reply',
-	), $__vars) . '}
+	), $__vars) . '
+					margin-right: 2px;
+				}
 				
 				&:after {
 					content: " ' . 'replied' . ' ";
@@ -557,7 +578,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 				padding-top: 0;
 				padding-left: 0;
 				display: flex;
-				flex-direction: row-reverse;
+				flex-wrap: wrap;
 				align-items: center;
 				line-height: 1;
 
@@ -616,8 +637,6 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	}
 }
 
-@media (max-width: @xf-responsiveNarrow) {
-	.structItem-cell.structItem-cell--main .structItem-minor {float: none;}
-}';
+';
 	return $__finalCompiled;
 });

@@ -93,10 +93,13 @@ class AutoLink implements FiltererInterface
 			{
 				$output = $this->autoLinkUrl($url);
 
-				// replacing this URL tag with something else
-				$this->adjustTagUsageCount($processor, 'url', -1);
-				$this->incrementMatchedTag($processor, $output);
-				return $output;
+				if ($output)
+				{
+					// replacing this URL tag with something else
+					$this->adjustTagUsageCount($processor, 'url', -1);
+					$this->incrementMatchedTag($processor, $output);
+					return $output;
+				}
 			}
 		}
 
@@ -114,7 +117,11 @@ class AutoLink implements FiltererInterface
 			'#(?<=[^a-z0-9@-]|^)(https?://|www\.)[^\s"<>{}`]+#iu',
 			function ($match) use ($processor)
 			{
-				$output = $this->autoLinkUrl($match[0]);
+				$output = $this->preAutoLinkUrl($match[0], $processor);
+				if (!$output)
+				{
+					return $match[0];
+				}
 				$this->incrementMatchedTag($processor, $output);
 				return $output;
 			},
@@ -138,9 +145,32 @@ class AutoLink implements FiltererInterface
 		return $string;
 	}
 
+	public function preAutoLinkUrl($url, Processor $processor)
+	{
+		// if we have a limit tags filterer and auto embed is enabled, disable
+		// auto embedding if the media tag is disabled, otherwise auto linking
+		// may bypass the limiting of the tag.
+		$limit = $processor->getFilterer('limit');
+
+		if ($limit && $limit instanceof LimitTags && $this->autoEmbed)
+		{
+			if ($limit->isTagDisabled('media'))
+			{
+				$this->autoEmbed = false;
+			}
+		}
+
+		return $this->autoLinkUrl($url);
+	}
+
 	public function autoLinkUrl($url)
 	{
 		$link = $this->app->stringFormatter()->prepareAutoLinkedUrl($url);
+
+		if (!$link['url'])
+		{
+			return null;
+		}
 
 		if ($link['url'] === $link['linkText'])
 		{

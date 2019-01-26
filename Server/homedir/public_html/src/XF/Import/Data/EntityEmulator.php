@@ -119,7 +119,7 @@ class EntityEmulator
 				}
 				else if ($options[self::UNHTML_ENTITIES])
 				{
-					$value = htmlspecialchars_decode(strval($value));
+					$value = html_entity_decode(strval($value), ENT_QUOTES, 'UTF-8');
 				}
 			}
 
@@ -137,7 +137,7 @@ class EntityEmulator
 		}
 		else if ($options[self::UNHTML_ENTITIES] && $this->isStringy($value))
 		{
-			$value = htmlspecialchars_decode(strval($value));
+			$value = html_entity_decode(strval($value), ENT_QUOTES, 'UTF-8');
 		}
 
 		try

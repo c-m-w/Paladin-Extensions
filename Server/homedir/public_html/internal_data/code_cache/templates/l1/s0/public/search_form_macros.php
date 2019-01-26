@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 467f1b31317b65510fe3967e9b6f9059
+// FROM HASH: db7b11ed84080d6e1268bebe7d7f4c62
 return array('macros' => array('keywords' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -8,6 +8,9 @@ return array('macros' => array('keywords' => function($__templater, array $__arg
 		'input' => array(),
 		'canTitleLimit' => true,
 	), $__arguments, $__vars);
+	$__finalCompiled .= '
+	';
+	$__vars['controlId'] = $__templater->preEscaped($__templater->fn('unique_id', array(), true));
 	$__finalCompiled .= '
 	';
 	$__compilerTemp1 = '';
@@ -26,11 +29,18 @@ return array('macros' => array('keywords' => function($__templater, array $__arg
 	$__finalCompiled .= $__templater->formRow('
 
 		<ul class="inputList">
-			<li><input type="search" name="keywords" value="' . $__templater->escape($__vars['input']['keywords']) . '" autofocus="autofocus" class="input" /></li>
+			<li>' . $__templater->formTextBox(array(
+		'type' => 'search',
+		'name' => 'keywords',
+		'value' => $__vars['input']['keywords'],
+		'autofocus' => 'autofocus',
+		'id' => $__vars['controlId'],
+	)) . '</li>
 			' . $__compilerTemp1 . '
 		</ul>
 	', array(
 		'rowtype' => 'input',
+		'controlid' => $__vars['controlId'],
 		'label' => 'Keywords',
 	)) . '
 ';

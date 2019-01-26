@@ -35,7 +35,7 @@ class WidgetDefinition extends AbstractHandler
 
 		$widgetDefinition = $this->getEntityForImport($name, $addOnId, $json, $options);
 
-		$widgetDefinition->bulkSet($json);
+		$widgetDefinition->bulkSetIgnore($json);
 		$widgetDefinition->definition_id = $name;
 		$widgetDefinition->addon_id = $addOnId;
 		$widgetDefinition->save();

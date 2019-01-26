@@ -150,10 +150,23 @@ abstract class AbstractSource
 
 		preg_match_all('/
 			(?<=[' . $splitRange .'\-\+\|]|^)
-			(?P<modifier>\-|\+|\||)
-			[' . $splitRange .']*
+			(?P<modifier>
+				  (?<!\-|\+|\|)\-
+				| (?<!\-|\+|\|)\+
+				| (?<!\-|\+|\|)\|\s+
+				|
+			)
 			(?P<term>"(?P<quoteTerm>[^"]+)"|[^' . $splitRange .'\-\+\|]+)
 		/ix', $keywords, $matches, PREG_SET_ORDER);
+
+		foreach ($matches AS &$match)
+		{
+			if ($match['modifier'])
+			{
+				$match['modifier'] = trim($match['modifier']);
+				$match[1] = trim($match[1]);
+			}
+		}
 
 		return $matches;
 	}

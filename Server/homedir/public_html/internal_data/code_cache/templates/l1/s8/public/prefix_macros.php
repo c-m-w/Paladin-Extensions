@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 025f8f31d8beb01b5b0ff29c44d864b2
+// FROM HASH: 369e34cf5af952d9438a41906bba23f3
 return array('macros' => array('select' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -74,6 +74,7 @@ return array('macros' => array('select' => function($__templater, array $__argum
 		'data-xf-init' => (($__vars['href'] AND $__vars['listenTo']) ? 'prefix-loader' : ''),
 		'data-href' => $__vars['href'],
 		'data-listen-to' => $__vars['listenTo'],
+		'title' => 'Prefix',
 	), $__compilerTemp1) . '
 ';
 	return $__finalCompiled;

@@ -17,6 +17,21 @@ use XF\Mvc\Entity\Structure;
  */
 class ContentTypeField extends Entity
 {
+	protected function _preSave()
+	{
+		if ($this->isInsert())
+		{
+			$exists = $this->em()->findOne('XF:ContentTypeField', [
+				'content_type' => $this->content_type,
+				'field_name' => $this->field_name
+			]);
+			if ($exists)
+			{
+				$this->error(\XF::phrase('please_enter_unique_content_type_field_name_combination'));
+			}
+		}
+	}
+
 	protected function _postSave()
 	{
 		$this->rebuildFieldCache();

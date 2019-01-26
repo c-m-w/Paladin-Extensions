@@ -161,6 +161,21 @@ class Attachment extends Entity
 		}
 	}
 
+	protected function _preDelete()
+	{
+		if ($this->content_id)
+		{
+			/** @var \XF\Repository\Attachment $attachmentRepo */
+			$attachmentRepo = $this->repository('XF:Attachment');
+			$handler = $attachmentRepo->getAttachmentHandler($this->content_type);
+			if ($handler)
+			{
+				$container = $handler->getContainerEntity($this->content_id);
+				$handler->beforeAttachmentDelete($this, $container);
+			}
+		}
+	}
+
 	protected function _postDelete()
 	{
 		/** @var AttachmentData $data */

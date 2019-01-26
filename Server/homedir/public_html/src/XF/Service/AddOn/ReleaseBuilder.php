@@ -22,7 +22,7 @@ class ReleaseBuilder extends \XF\Service\AbstractService
 	protected $tempFile;
 
 	/**
-	 * @var Filesystem
+	 * @var \RecursiveIteratorIterator|\SplFileInfo[]
 	 */
 	protected $localFs;
 
@@ -195,8 +195,10 @@ class ReleaseBuilder extends \XF\Service\AbstractService
 
 	protected function prepareFsAdapters()
 	{
-		$local = new Local($this->buildRoot);
-		$this->localFs = new Filesystem($local);
+		$this->localFs = new \RecursiveIteratorIterator(
+			new \RecursiveDirectoryIterator($this->buildRoot, \FilesystemIterator::SKIP_DOTS),
+			\RecursiveIteratorIterator::SELF_FIRST
+		);
 
 		$this->tempFile = File::getTempFile();
 
@@ -265,7 +267,7 @@ class ReleaseBuilder extends \XF\Service\AbstractService
 		$addOn = $this->addOn;
 
 		$baseBuildJson = @json_decode(file_get_contents($addOn->getBuildJsonPath()), true);
-		if (!$baseBuildJson)
+		if (!is_array($baseBuildJson))
 		{
 			$error = \XF\Util\Json::jsonLastErrorMsg();
 			return false;
@@ -394,29 +396,31 @@ class ReleaseBuilder extends \XF\Service\AbstractService
 
 		// NOTE: any files skipped by generateHashes() won't appear in this loop...
 
-		foreach ($localFs->listContents('', true) AS $info)
+		foreach ($localFs AS $file)
 		{
 			// skip hidden dot files, e.g. .DS_Store, .gitignore etc.
-			if ($this->isExcludedFileName($info['basename']))
+			if ($this->isExcludedFileName($file->getBasename()))
 			{
 				continue;
 			}
 
-			if ($info['type'] == 'dir')
+			$localName = str_replace('\\', '/', substr($file->getPathname(), strlen($this->buildRoot) + 1));
+
+			if ($file->isDir())
 			{
-				$info['path'] .= '/';
-				$zipArchive->addEmptyDir($info['path']);
+				$localName .= '/';
+				$zipArchive->addEmptyDir($localName);
 				$perm = 040755 << 16; // dir: 0755
 			}
 			else
 			{
-				$zipArchive->addFile($this->buildRoot . '/' . $info['path'], $info['path']);
+				$zipArchive->addFile($file->getPathname(), $localName);
 				$perm = 0100644 << 16; // file: 0644
 			}
 
 			if (method_exists($zipArchive, 'setExternalAttributesName'))
 			{
-				$zipArchive->setExternalAttributesName($info['path'], \ZipArchive::OPSYS_UNIX, $perm);
+				$zipArchive->setExternalAttributesName($localName, \ZipArchive::OPSYS_UNIX, $perm);
 			}
 		}
 

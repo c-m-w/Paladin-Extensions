@@ -225,7 +225,7 @@ class Forum extends AbstractController
 		$threadList->where('sticky', 0)
 			->limitByPage($page, $perPage);
 
-		/** @var \XF\Entity\Thread[] $threads */
+		/** @var \XF\Entity\Thread[]|\XF\Mvc\Entity\AbstractCollection $threads */
 		$threads = $threadList->fetch();
 		$totalThreads = $threadList->total();
 
@@ -293,6 +293,21 @@ class Forum extends AbstractController
 		$threadEndOffset = ($page - 1) * $perPage + count($threads);
 		$showDateLimitDisabler = ($isDateLimited && $threadEndOffset >= $totalThreads);
 
+		$canonicalFilters = [];
+		if ($page > 1 && $forum->list_date_limit_days && empty($filters['order']))
+		{
+			$cutOff = \XF::$time - ($forum->list_date_limit_days * 86400);
+			$lastThread = $threads->last();
+			if (
+				$showDateLimitDisabler
+				|| ($lastThread && $lastThread->last_post_date <= $cutOff)
+			)
+			{
+				// we have removed the date limit and the last thread here is only shown because of that
+				$canonicalFilters['no_date_limit'] = 1;
+			}
+		}
+
 		$viewParams = [
 			'forum' => $forum,
 
@@ -309,6 +324,7 @@ class Forum extends AbstractController
 			'total' => $totalThreads,
 
 			'filters' => $filters,
+			'canonicalFilters' => $canonicalFilters,
 			'starterFilter' => $starterFilter,
 			'showDateLimitDisabler' => $showDateLimitDisabler,
 
@@ -727,7 +743,7 @@ class Forum extends AbstractController
 				{
 					return $this->error($errors);
 				}
-				$this->assertNotFlooding('post');
+				$this->assertNotFlooding('thread', $this->app->options()->floodCheckLengthDiscussion ?: null);
 
 
 				/** @var \XF\Entity\Thread $thread */
@@ -992,7 +1008,7 @@ class Forum extends AbstractController
 	{
 		if ($nodeIdOrName === null)
 		{
-			throw new \InvalidArgumentException("Node ID/name not passed in correctly");
+			throw $this->exception($this->notFound(\XF::phrase('requested_forum_not_found')));
 		}
 
 		$visitor = \XF::visitor();

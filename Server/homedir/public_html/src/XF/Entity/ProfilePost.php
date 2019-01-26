@@ -330,7 +330,14 @@ class ProfilePost extends Entity
 	{
 		$this->repository('XF:ProfilePost')->addCommentsToProfilePosts([$this->profile_post_id => $this]);
 
-		return $this->_getterCache['LatestComments'];
+		if (isset($this->_getterCache['LatestComments']))
+		{
+			return $this->_getterCache['LatestComments'];
+		}
+		else
+		{
+			return $this->_em->getBasicCollection([]);
+		}
 	}
 
 	public function setLatestComments(array $latest)

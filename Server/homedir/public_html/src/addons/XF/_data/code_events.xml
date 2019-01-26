@@ -1,5 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
 <code_events>
+  <event event_id="addon_post_install"><![CDATA[<p>Called when the post-install code for an add-on has been run.</p>
+
+<p>Callback signature:</p>
+<blockquote><code><em>\XF\AddOn\AddOn</em> $addOn, <em>\XF\Entity\AddOn</em> $installedAddOn, <em>array</em> $json, <em>array</em> &amp;$stateChanges</code></blockquote>
+
+<p>Arguments:</p>
+<ol>
+	<li><code><em>\XF\AddOn\AddOn</em> $addOn</code> - The AddOn object for the add-on being installed.</li>
+	<li><code><em>\XF\Entity\AddOn</em> $installedAddOn</code> - The newly created add-on entity.</li>
+	<li><code><em>array</em> $json</code> - An array decoded from the add-on's addon.json file.</li>
+	<li><code><em>array</em> &amp;$stateChanges</code> - An array for storing state changes such as post-install controller redirects.</li>
+</ol>
+
+<p><b>Event hint:</b> The add-on ID for the add-on being installed.</p>]]></event>
+  <event event_id="addon_post_rebuild"><![CDATA[<p>Called when the post-rebuild code for an add-on has been run.</p>
+
+<p>Callback signature:</p>
+<blockquote><code><em>\XF\AddOn\AddOn</em> $addOn, <em>\XF\Entity\AddOn</em> $installedAddOn, <em>array</em> $json</code></blockquote>
+
+<p>Arguments:</p>
+<ol>
+	<li><code><em>\XF\AddOn\AddOn</em> $addOn</code> - The AddOn object for the add-on being rebuilt.</li>
+	<li><code><em>\XF\Entity\AddOn</em> $installedAddOn</code> - The add-on entity.</li>
+	<li><code><em>array</em> $json</code> - An array decoded from the add-on's addon.json file.</li>
+</ol>
+
+<p><b>Event hint:</b> The add-on ID for the add-on being rebuilt.</p>]]></event>
+  <event event_id="addon_post_uninstall"><![CDATA[<p>Called when the post-uninstall code for an add-on has been run. Note that the uninstalled add-on entity is no longer available.</p>
+
+<p>Callback signature:</p>
+<blockquote><code><em>\XF\AddOn\AddOn</em> $addOn, $addOnId, <em>array</em> $json</code></blockquote>
+
+<p>Arguments:</p>
+<ol>
+	<li><code><em>\XF\AddOn\AddOn</em> $addOn</code> - The AddOn object for the add-on being uninstalled.</li>
+	<li><code><em>string</em> $addOnId</code> - ID of the now uninstalled add-on.</li>
+	<li><code><em>array</em> $json</code> - An array decoded from the add-on's addon.json file.</li>
+</ol>
+
+<p><b>Event hint:</b> The add-on ID for the add-on being uninstalled.</p>]]></event>
+  <event event_id="addon_post_upgrade"><![CDATA[<p>Called when the post-upgrade code for an add-on has been run.</p>
+
+<p>Callback signature:</p>
+<blockquote><code><em>\XF\AddOn\AddOn</em> $addOn, <em>\XF\Entity\AddOn</em> $installedAddOn, <em>array</em> $json, <em>array</em> &amp;$stateChanges</code></blockquote>
+
+<p>Arguments:</p>
+<ol>
+	<li><code><em>\XF\AddOn\AddOn</em> $addOn</code> - The AddOn object for the add-on being upgraded.</li>
+	<li><code><em>\XF\Entity\AddOn</em> $installedAddOn</code> - The existing add-on entity.</li>
+	<li><code><em>array</em> $json</code> - An array decoded from the add-on's addon.json file.</li>
+	<li><code><em>array</em> &amp;$stateChanges</code> - An array for storing state changes such as post-upgrade controller redirects.</li>
+</ol>
+
+<p><b>Event hint:</b> The add-on ID for the add-on being upgraded.</p>]]></event>
+  <event event_id="addon_pre_install"><![CDATA[<p>Called when the pre-install code for an add-on has been run.</p>
+
+<p>Callback signature:</p>
+<blockquote><code><em>\XF\AddOn\AddOn</em> $addOn, <em>\XF\Entity\AddOn</em> $installedAddOn, <em>array</em> $json</code></blockquote>
+
+<p>Arguments:</p>
+<ol>
+	<li><code><em>\XF\AddOn\AddOn</em> $addOn</code> - The AddOn object for the add-on being installed.</li>
+	<li><code><em>\XF\Entity\AddOn</em> $installedAddOn</code> - The newly created add-on entity.</li>
+	<li><code><em>array</em> $json</code> - An array decoded from the add-on's addon.json file.</li>
+</ol>
+
+<p><b>Event hint:</b> The add-on ID for the add-on being installed.</p>]]></event>
+  <event event_id="addon_pre_rebuild"><![CDATA[<p>Called when the pre-rebuild code for an add-on has been run.</p>
+
+<p>Callback signature:</p>
+<blockquote><code><em>\XF\AddOn\AddOn</em> $addOn, <em>\XF\Entity\AddOn</em> $installedAddOn, <em>array</em> $json</code></blockquote>
+
+<p>Arguments:</p>
+<ol>
+	<li><code><em>\XF\AddOn\AddOn</em> $addOn</code> - The AddOn object for the add-on being rebuilt.</li>
+	<li><code><em>\XF\Entity\AddOn</em> $installedAddOn</code> - The add-on entity.</li>
+	<li><code><em>array</em> $json</code> - An array decoded from the add-on's addon.json file.</li>
+</ol>
+
+<p><b>Event hint:</b> The add-on ID for the add-on being rebuilt.</p>]]></event>
+  <event event_id="addon_pre_uninstall"><![CDATA[<p>Called when the pre-uninstall code for an add-on has been run.</p>
+
+<p>Callback signature:</p>
+<blockquote><code><em>\XF\AddOn\AddOn</em> $addOn, <em>\XF\Entity\AddOn</em> $installedAddOn, <em>array</em> $json</code></blockquote>
+
+<p>Arguments:</p>
+<ol>
+	<li><code><em>\XF\AddOn\AddOn</em> $addOn</code> - The AddOn object for the add-on being uninstalled.</li>
+	<li><code><em>\XF\Entity\AddOn</em> $installedAddOn</code> - The add-on entity.</li>
+	<li><code><em>array</em> $json</code> - An array decoded from the add-on's addon.json file.</li>
+</ol>
+
+<p><b>Event hint:</b> The add-on ID for the add-on being uninstalled.</p>]]></event>
+  <event event_id="addon_pre_upgrade"><![CDATA[<p>Called when the pre-upgrade code for an add-on has been run.</p>
+
+<p>Callback signature:</p>
+<blockquote><code><em>\XF\AddOn\AddOn</em> $addOn, <em>\XF\Entity\AddOn</em> $installedAddOn, <em>array</em> $json</code></blockquote>
+
+<p>Arguments:</p>
+<ol>
+	<li><code><em>\XF\AddOn\AddOn</em> $addOn</code> - The AddOn object for the add-on being upgraded.</li>
+	<li><code><em>\XF\Entity\AddOn</em> $installedAddOn</code> - The existing add-on entity.</li>
+	<li><code><em>array</em> $json</code> - An array decoded from the add-on's addon.json file.</li>
+</ol>
+
+<p><b>Event hint:</b> The add-on ID for the add-on being upgraded.</p>]]></event>
   <event event_id="app_admin_complete"><![CDATA[<p>Called after the admin <code>\XF\Admin\App</code> object has finished running, but before the response is filtered and returned.</p>
 
 <p>Callback signature:</p>

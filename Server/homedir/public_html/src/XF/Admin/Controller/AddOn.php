@@ -22,7 +22,7 @@ class AddOn extends AbstractController
 
 		foreach ($this->getAddOnManager()->getAllAddOns() AS $id => $addOn)
 		{
-			if (isset($skippable[$id]))
+			if (isset($skippable[$id]) || $id == 'XF')
 			{
 				continue;
 			}
@@ -51,13 +51,16 @@ class AddOn extends AbstractController
 			}
 		}
 
+		$addOnRepo = $this->getAddOnRepo();
+
 		$viewParams = [
 			'upgradeable' => $upgradeable,
 			'installed' => $installed,
 			'installable' => $installable,
 			'legacy' => $legacy,
 			'total' => count($upgradeable) + count($installed) + count($installable) + count($legacy),
-			'disabled' => $this->getAddOnRepo()->getDisabledAddOnsCache()
+			'disabled' => $addOnRepo->getDisabledAddOnsCache(),
+			'hasProcessing' => $addOnRepo->hasAddOnsBeingProcessed()
 		];
 		return $this->view('XF:AddOn\Listing', 'addon_list', $viewParams);
 	}
@@ -493,7 +496,7 @@ class AddOn extends AbstractController
 			if ($input['finished'])
 			{
 				$addOn->getInstalledAddOn()->delete();
-				return $this->redirect($this->buildLink('add-ons'));
+				return $this->redirect($this->getFinalizeUrl($addOn, 'uninstall'));
 			}
 			else
 			{
@@ -535,13 +538,21 @@ class AddOn extends AbstractController
 	{
 		$this->assertValidCsrfToken($this->filter('t', 'str'));
 
-		$addOn = $this->assertAddOnAvailable($params->addon_id_url);
+		$addOn = $this->getAddOnIfAvailable($params->addon_id_url);
 		$action = $this->filter('a', 'str');
 
 		// TODO: check whether the the import job is still enqueued. If so, it won't have completed successfully.
 
-		$installed = $addOn->getInstalledAddOn();
-		if ($installed)
+		if ($addOn)
+		{
+			$installed = $addOn->getInstalledAddOn();
+		}
+		else
+		{
+			$installed = null; // legacy add-ons being uninstalled won't have an AddOn class or entity
+		}
+
+		if ($installed && $action != 'uninstall')
 		{
 			// this is a sanity check, it shouldn't happen
 			$installed->is_processing = false;
@@ -551,17 +562,23 @@ class AddOn extends AbstractController
 		$redirect = $this->buildLink('add-ons');
 		$stateChanges = [];
 
-		if ($action == 'upgrade')
+		if ($addOn)
 		{
-			$addOn->postUpgrade($stateChanges);
-		}
-		else if ($action == 'install')
-		{
-			$addOn->postInstall($stateChanges);
-		}
-		else if ($action == 'rebuild')
-		{
-			$addOn->postRebuild();
+			switch ($action)
+			{
+				case 'upgrade':
+					$addOn->postUpgrade($stateChanges);
+					break;
+				case 'install':
+					$addOn->postInstall($stateChanges);
+					break;
+				case 'uninstall':
+					$addOn->postUninstall();
+					break;
+				case 'rebuild':
+					$addOn->postRebuild();
+					break;
+			}
 		}
 
 		if (!empty($stateChanges['redirect']))
@@ -698,6 +715,18 @@ class AddOn extends AbstractController
 		}
 
 		return $addOn;
+	}
+
+	/**
+	 * @param string $id
+	 *
+	 * @return \XF\AddOn\AddOn|null
+	 */
+	protected function getAddOnIfAvailable($id)
+	{
+		$id = $this->getAddOnRepo()->convertAddOnIdUrlVersionToBase($id);
+
+		return $this->getAddOnManager()->getById($id);
 	}
 
 	/**

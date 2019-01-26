@@ -4,9 +4,11 @@ namespace XF\Entity;
 
 use XF\Mvc\Entity\Entity;
 use XF\Mvc\Entity\Structure;
+use XF\PrintableException;
 
 /**
  * COLUMNS
+ *
  * @property int|null ad_id
  * @property string title
  * @property string position_id
@@ -36,6 +38,20 @@ class Advertising extends Entity
 		{
 			$this->getAdvertisingRepo()->writeAdsTemplate();
 		});
+	}
+
+	protected function verifyAdHtml($adHtml)
+	{
+		try
+		{
+			$this->app()->templateCompiler()->compile($adHtml);
+		} catch (PrintableException $e)
+		{
+			$this->error(sprintf("%s %s", \XF::phrase('error_occurred_while_compiling_advertisement_html:'), $e->getMessage()), 'ad_html');
+			return false;
+		}
+
+		return true;
 	}
 
 	public static function getStructure(Structure $structure)

@@ -341,7 +341,7 @@ class CssRenderer
 			return null;
 		}
 
-		preg_match('/^\s+color:\s+(#(?:[0-9a-f]{2}){2,4}|(#[0-9a-f]{3})|(rgb|hsl)a?\((-?\d+%?[,\s]+){2,3}\s*[\d\.]+%?\));$/im', $css, $matches);
+		preg_match('/color:\s*(#(?:[0-9a-f]{2}){2,4}|(#[0-9a-f]{3})|(rgb|hsl)a?\((-?\d+%?[,\s]+){2,3}\s*[\d\.]+%?\))/i', $css, $matches);
 
 		if (!$matches || !isset($matches[1]))
 		{
@@ -533,14 +533,14 @@ class CssRenderer
 				if (strpos($match[1], '.') !== false)
 				{
 					$keys = explode('.', $match[1], 2);
-					$result = $options[$keys[0]][$keys[1]];
+					$result = isset($options[$keys[0]][$keys[1]]) ? $options[$keys[0]][$keys[1]] : null;
 				}
 				else
 				{
-					$result = $options[$match[1]];
+					$result = isset($options[$match[1]]) ? $options[$match[1]] : null;
 				}
 
-				if ($match[2])
+				if ($result && isset($match[2], $match[3]))
 				{
 					$result .= trim($match[3]);
 				}

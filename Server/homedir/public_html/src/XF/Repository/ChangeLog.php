@@ -97,6 +97,7 @@ class ChangeLog extends Repository
 				continue;
 			}
 
+			/** @var \XF\Entity\ChangeLog $entry */
 			$entry = $em->create('XF:ChangeLog');
 			$entry->bulkSet([
 				'content_type' => $contentType,
@@ -106,6 +107,13 @@ class ChangeLog extends Repository
 				'old_value' => $old,
 				'new_value' => $new
 			]);
+
+			$handler = $entry->getHandler();
+			if ($handler)
+			{
+				$entry->protected = $handler->isFieldProtected($field);
+			}
+
 			if ($entry->save(true, false))
 			{
 				$insert[] = $entry;
@@ -130,7 +138,7 @@ class ChangeLog extends Repository
 			$cutOff = \XF::$time - 86400 * $length;
 		}
 
-		return $this->db()->delete('xf_change_log', 'edit_date < ?', $cutOff);
+		return $this->db()->delete('xf_change_log', 'edit_date < ? AND protected = 0', $cutOff);
 	}
 
 	/**

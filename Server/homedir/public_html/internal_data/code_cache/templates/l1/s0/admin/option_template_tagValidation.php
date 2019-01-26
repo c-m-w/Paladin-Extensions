@@ -1,12 +1,12 @@
 <?php
-// FROM HASH: 2547190146c92b321fae3dafce7b804b
+// FROM HASH: 010d33c67ba07720fe912bf503c8a3c3
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
 	$__finalCompiled .= $__templater->formRow('
 
 	<ul class="inputChoices inputChoices--noChoice">
-		<li>
+		<li class="inputChoices-choice">
 			<div>' . 'Disallowed words in tags' . $__vars['xf']['language']['label_separator'] . '</div>
 			' . $__templater->formTextArea(array(
 		'name' => $__vars['inputName'] . '[disallowedWords]',
@@ -15,7 +15,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	)) . '
 			<dfn class="inputChoices-explain">' . 'The words or phrases in this field will not be allowed in any part of tags. Put each word or phrase on its own line. Entering \'tar\' will disallow \'star\' and \'tarnish\' etc.' . '</dfn>
 		</li>
-		<li>
+		<li class="inputChoices-choice">
 			<div>' . 'Tag match regular expression' . $__vars['xf']['language']['label_separator'] . '</div>
 			' . $__templater->formTextBox(array(
 		'name' => $__vars['inputName'] . '[matchRegex]',

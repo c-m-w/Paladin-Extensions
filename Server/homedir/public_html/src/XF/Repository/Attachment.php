@@ -162,14 +162,22 @@ class Attachment extends Repository
 		$db->emptyTable('xf_attachment_view');
 	}
 
+	/**
+	 * @param \XF\Mvc\Entity\ArrayCollection|\XF\Mvc\Entity\Entity[] $content
+	 * @param $contentType
+	 * @param string $countKey
+	 * @param string $relationKey
+	 *
+	 * @return mixed
+	 */
 	public function addAttachmentsToContent($content, $contentType, $countKey = 'attach_count', $relationKey = 'Attachments')
 	{
 		$ids = [];
-		foreach ($content AS $id => $item)
+		foreach ($content AS $item)
 		{
 			if ($item->{$countKey})
 			{
-				$ids[] = $id;
+				$ids[] = $item->getEntityId();
 			}
 		}
 
@@ -184,10 +192,15 @@ class Attachment extends Repository
 				->fetch()
 				->groupBy('content_id');
 
-			foreach ($ids AS $id)
+			foreach ($content AS $item)
 			{
-				$contentAttachments = isset($attachments[$id]) ? $attachments[$id] : [];
-				$content[$id]->hydrateRelation($relationKey, $this->em->getBasicCollection($contentAttachments));
+				$contentId = $item->getEntityId();
+
+				$contentAttachments = isset($attachments[$contentId])
+					? $this->em->getBasicCollection($attachments[$contentId])
+					: $this->em->getEmptyCollection();
+
+				$item->hydrateRelation($relationKey, $contentAttachments);
 			}
 		}
 

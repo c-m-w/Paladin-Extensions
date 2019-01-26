@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: c489379d1bc66537527829b326e0b246
+// FROM HASH: 1c4efa46d2e182c4d280eaa8d7086856
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -83,13 +83,13 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'_type' => 'option',
 	),
 	array(
-		'value' => 'delete',
+		'value' => 'deleted',
 		'label' => 'Leave conversation and accept future messages',
 		'explain' => 'Should this conversation receive further responses in the future, this conversation will be restored to your inbox.',
 		'_type' => 'option',
 	),
 	array(
-		'value' => 'delete_ignore',
+		'value' => 'deleted_ignored',
 		'label' => 'Leave conversation and ignore future messages',
 		'explain' => 'You will not be notified of any future responses and the conversation will remain deleted.',
 		'_type' => 'option',

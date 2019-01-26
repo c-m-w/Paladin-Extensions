@@ -72,7 +72,7 @@ class CodeEventListener extends AbstractHandler
 		$listener = $this->getEntityForImport($name, $addOnId, $json, $options);
 		$listener->setOption('check_duplicate', false);
 
-		$listener->bulkSet($json);
+		$listener->bulkSetIgnore($json);
 		$listener->addon_id = $addOnId;
 		$listener->save();
 		// this will update the metadata itself

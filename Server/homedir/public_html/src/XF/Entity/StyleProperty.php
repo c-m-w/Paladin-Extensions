@@ -33,6 +33,7 @@ use XF\Mvc\Entity\Structure;
  * RELATIONS
  * @property \XF\Entity\AddOn AddOn
  * @property \XF\Entity\Style Style_
+ * @property \XF\Entity\StylePropertyGroup Group
  * @property \XF\Entity\Phrase MasterTitle
  * @property \XF\Entity\Phrase MasterDescription
  */
@@ -572,6 +573,11 @@ class StyleProperty extends Entity
 				'entity' => 'XF:Style',
 				'conditions' => 'style_id',
 				'primary' => true
+			],
+			'Group' => [
+				'type' => self::TO_ONE,
+				'entity' => 'XF:StylePropertyGroup',
+				'conditions' => 'group_name'
 			],
 			'MasterTitle' => [
 				'entity' => 'XF:Phrase',

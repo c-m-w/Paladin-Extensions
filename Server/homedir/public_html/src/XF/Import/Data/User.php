@@ -232,6 +232,12 @@ class User extends AbstractData
 			$user->secret_key = \XF::generateRandomString(32);
 		}
 
+		if (!$user->language_id)
+		{
+			// unless a language ID has been set, set the default (as XF doesn't use 0).
+			$user->language_id = \XF::options()->defaultLanguageId;
+		}
+
 		// TODO: check DoB
 	}
 

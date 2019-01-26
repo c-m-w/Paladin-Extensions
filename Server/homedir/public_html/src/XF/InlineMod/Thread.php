@@ -62,12 +62,9 @@ class Thread extends AbstractHandler
 			'canStickUnstick',
 			function(Entity $entity)
 			{
-				if ($entity->discussion_type != 'redirect')
-				{
-					/** @var \XF\Entity\Thread $entity */
-					$entity->sticky = true;
-					$entity->save();
-				}
+				/** @var \XF\Entity\Thread $entity */
+				$entity->sticky = true;
+				$entity->save();
 			}
 		);
 
@@ -76,12 +73,9 @@ class Thread extends AbstractHandler
 			'canStickUnstick',
 			function(Entity $entity)
 			{
-				if ($entity->discussion_type != 'redirect')
-				{
-					/** @var \XF\Entity\Thread $entity */
-					$entity->sticky = false;
-					$entity->save();
-				}
+				/** @var \XF\Entity\Thread $entity */
+				$entity->sticky = false;
+				$entity->save();
 			}
 		);
 

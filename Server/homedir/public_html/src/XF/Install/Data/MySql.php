@@ -50,8 +50,8 @@ class MySql
 
 		$tables['xf_admin_navigation'] = function(Create $table)
 		{
-			$table->addColumn('navigation_id', 'varbinary', 25);
-			$table->addColumn('parent_navigation_id', 'varbinary', 25);
+			$table->addColumn('navigation_id', 'varbinary', 50);
+			$table->addColumn('parent_navigation_id', 'varbinary', 50);
 			$table->addColumn('display_order', 'int')->setDefault(0);
 			$table->addColumn('link', 'varchar', 50)->setDefault('');
 			$table->addColumn('icon', 'varchar', 50)->setDefault('');
@@ -243,6 +243,7 @@ class MySql
 			$table->addColumn('field', 'varchar', 100)->setDefault('');
 			$table->addColumn('old_value', 'text');
 			$table->addColumn('new_value', 'text');
+			$table->addColumn('protected', 'tinyint')->setDefault(0);
 			$table->addKey(['content_type', 'content_id', 'edit_date'], 'content_type_content_id_date');
 			$table->addKey(['content_type', 'edit_date'], 'content_type_date');
 			$table->addKey('edit_date');
@@ -1973,6 +1974,8 @@ class MySql
 			$table->addColumn('warning_points', 'int')->setDefault(0);
 			$table->addColumn('is_staff', 'tinyint', 3)->setDefault(0);
 			$table->addColumn('secret_key', 'varbinary', 32);
+			$table->addColumn('privacy_policy_accepted', 'int')->setDefault(0);
+			$table->addColumn('terms_accepted', 'int')->setDefault(0);
 			$table->addUniqueKey('username');
 			$table->addKey('email');
 			$table->addKey('user_state');
@@ -1996,6 +1999,7 @@ class MySql
 			$table->addColumn('event_date', 'int');
 			$table->addColumn('view_date', 'int')->setDefault(0)->comment('Time when this was viewed by the alerted user');
 			$table->addColumn('extra_data', 'mediumblob')->comment('Serialized. Stores any extra data relevant to the alert');
+			$table->addColumn('depends_on_addon_id', 'varbinary', 50)->setDefault('');
 			$table->addKey(['alerted_user_id', 'event_date'], 'alertedUserId_eventDate');
 			$table->addKey(['content_type', 'content_id'], 'contentType_contentId');
 			$table->addKey(['view_date', 'event_date'], 'viewDate_eventDate');
@@ -2415,7 +2419,7 @@ class MySql
 					active
 				)
 			VALUES
-				('XF', 'XenForo', '2.0.0 Alpha', 2000010, '', 1)";
+				('XF', 'XenForo', '" . \XF::$version . "', '" . \XF::$versionId . "', '', 1)";
 
 		$data['xf_style'] = "
 			INSERT INTO xf_style
@@ -2671,7 +2675,7 @@ class MySql
 				(3, 0, 'conversation', 'editAnyMessage', 'allow', 0),
 				(3, 0, 'conversation', 'alwaysInvite', 'allow', 0),
 				(3, 0, 'conversation', 'uploadAttachment', 'allow', 0),
-				(3, 0, 'forum', 'maxMentionedUsers', 'use_int', -1),
+				(3, 0, 'general', 'maxMentionedUsers', 'use_int', -1),
 				(3, 0, 'forum', 'deleteOwnThread', 'allow', 0),
 				(3, 0, 'forum', 'manageOthersTagsOwnThread', 'allow', 0),
 				(3, 0, 'forum', 'editOwnPostTimeLimit', 'use_int', -1),
@@ -2679,7 +2683,7 @@ class MySql
 				(3, 0, 'general', 'editCustomTitle', 'allow', 0),
 				(4, 0, 'conversation', 'maxRecipients', 'use_int', -1),
 				(4, 0, 'conversation', 'uploadAttachment', 'allow', 0),
-				(4, 0, 'forum', 'maxMentionedUsers', 'use_int', -1),
+				(4, 0, 'general', 'maxMentionedUsers', 'use_int', -1),
 				(4, 0, 'forum', 'editOwnPostTimeLimit', 'use_int', -1),
 				(4, 0, 'general', 'bypassFloodCheck', 'allow', 0),
 				(4, 0, 'general', 'editCustomTitle', 'allow', 0)

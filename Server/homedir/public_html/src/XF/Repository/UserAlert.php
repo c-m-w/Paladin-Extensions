@@ -17,6 +17,9 @@ class UserAlert extends Repository
 	{
 		$finder = $this->finder('XF:UserAlert')
 			->where('alerted_user_id', $userId)
+			->whereAddOnActive([
+				'column' => 'depends_on_addon_id'
+			])
 			->order('event_date', 'desc')
 			->with('User');
 
@@ -94,6 +97,13 @@ class UserAlert extends Repository
 			return false;
 		}
 
+		$dependsOn = '';
+		if (isset($extra['depends_on_addon_id']))
+		{
+			$dependsOn = $extra['depends_on_addon_id'];
+			unset($extra['depends_on_addon_id']);
+		}
+
 		$alert = $this->em->create('XF:UserAlert');
 		$alert->alerted_user_id = $receiverId;
 		$alert->user_id = $senderId;
@@ -102,6 +112,7 @@ class UserAlert extends Repository
 		$alert->content_id = $contentId;
 		$alert->action = $action;
 		$alert->extra_data = $extra;
+		$alert->depends_on_addon_id = $dependsOn;
 		$alert->save();
 
 		return true;
@@ -177,7 +188,7 @@ class UserAlert extends Repository
 		{
 			$db->query("
 				UPDATE xf_user
-				SET alerts_unread = GREATEST(0, alerts_unread - ?)
+				SET alerts_unread = GREATEST(0, CAST(alerts_unread AS SIGNED) - ?)
 				WHERE user_id = ?
 			", [$change, $userId]);
 		}
@@ -232,6 +243,28 @@ class UserAlert extends Repository
 	}
 
 	/**
+	 * @param \XF\Entity\User $user
+	 *
+	 * @return bool
+	 */
+	public function updateUnreadCountForUser(\XF\Entity\User $user)
+	{
+		if (!$user->user_id)
+		{
+			return false;
+		}
+
+		$count = $this->findAlertsForUser($user->user_id)
+			->where('view_date', 0)
+			->total();
+
+		$user->alerts_unread = $count;
+		$user->saveIfChanged($updated);
+
+		return $updated;
+	}
+
+	/**
 	 * @return \XF\Alert\AbstractHandler[]
 	 */
 	public function getAlertHandlers()
@@ -282,7 +315,7 @@ class UserAlert extends Repository
 	}
 
 	/**
-	 * @param \XF\Entity\UserAlert[] $alerts
+	 * @param \XF\Mvc\Entity\ArrayCollection|\XF\Entity\UserAlert[] $alerts
 	 */
 	public function addContentToAlerts($alerts)
 	{

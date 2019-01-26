@@ -157,7 +157,7 @@ if (window.jQuery === undefined) jQuery = $ = {};
 
 			if (Modernizr.passiveeventlisteners)
 			{
-				this.get(0).addEventListener(eventType, callback);
+				this.get(0).addEventListener(eventType, callback, { passive: true });
 				return this;
 			}
 			else
@@ -835,7 +835,13 @@ if (window.jQuery === undefined) jQuery = $ = {};
 			uploadMaxFilesize: null
 		},
 
+		debug: {
+			disableAjaxSubmit: false
+		},
+
 		counter: 1,
+
+		pageDisplayTime: null,
 
 		phrases: {},
 
@@ -859,6 +865,7 @@ if (window.jQuery === undefined) jQuery = $ = {};
 			XF.KeepAlive.initialize();
 			XF.LinkWatcher.initLinkProxy();
 			XF.LinkWatcher.initExternalWatcher();
+			XF.NoticeWatcher.initialize();
 			XF.BbBlockExpand.watch();
 			XF.ScrollButtons.initialize();
 			XF.KeyboardShortcuts.initialize();
@@ -1838,6 +1845,22 @@ if (window.jQuery === undefined) jQuery = $ = {};
 				{
 					formData.append(submitName, $submitButton.attr('value'));
 				}
+
+				// note: this is to workaround a Safari/iOS bug which falls over on empty file inputs
+				$form.find('input[type="file"]').each(function()
+				{
+					var $input = $(this),
+						files = $input.prop('files');
+
+					if (typeof files !== undefined && files.length === 0)
+					{
+						try
+						{
+							formData.delete($input.attr('name'));
+						}
+						catch (e) {}
+					}
+				});
 			}
 			else
 			{
@@ -2682,6 +2705,28 @@ if (window.jQuery === undefined) jQuery = $ = {};
 			}
 			while (parent = parent.parentNode);
 
+			// fairly ugly workaround for bug #149004
+			// scroll page jump menu into view after keyboard is displayed
+			// if it is not already visible.
+			$focusEl.on('focus', function()
+			{
+				$(window).on('resize', function()
+				{
+					setTimeout(function()
+					{
+						if (!XF.isElementVisible($focusEl))
+						{
+							$focusEl.get(0).scrollIntoView({
+								behavior: 'smooth',
+								block: 'end',
+								inline: 'nearest'
+							});
+							$(window).off('resize');
+						}
+					}, 50);
+				});
+			});
+
 			$focusEl.first().autofocus();
 
 			var el;
@@ -3305,7 +3350,8 @@ if (window.jQuery === undefined) jQuery = $ = {};
 			document.cookie = c.prefix + name + '=' + encodeURIComponent(value)
 				+ (expires === undefined ? '' : ';expires=' + expires.toUTCString())
 				+ (c.path  ? ';path=' + c.path : '')
-				+ (c.domain ? ';domain=' + c.domain : '');
+				+ (c.domain ? ';domain=' + c.domain : '')
+				+ (c.secure ? ';secure' : '');
 		},
 
 		getJson: function(name)
@@ -3338,6 +3384,7 @@ if (window.jQuery === undefined) jQuery = $ = {};
 			document.cookie = c.prefix + name + '='
 				+ (c.path  ? '; path=' + c.path : '')
 				+ (c.domain ? '; domain=' + c.domain : '')
+				+ (c.secure ? '; secure' : '')
 				+ '; expires=Thu, 01-Jan-70 00:00:01 GMT';
 		}
 	};
@@ -4047,7 +4094,7 @@ if (window.jQuery === undefined) jQuery = $ = {};
 
 			if (!localLoadTime)
 			{
-				if (window.performance && window.performance.timing)
+				if (window.performance && window.performance.timing && window.performance.timing.requestStart !== 0)
 				{
 					var timing = window.performance.timing;
 
@@ -5699,6 +5746,40 @@ if (window.jQuery === undefined) jQuery = $ = {};
 		}
 	})();
 
+	// ################################## NOTICE WATCHER ###########################################
+
+	XF.NoticeWatcher = (function()
+	{
+		function initialize()
+		{
+			$(document).on('xf:notice-change xf:layout', XF.proxy(this, 'checkNotices'));
+			this.checkNotices();
+		}
+
+		function checkNotices()
+		{
+			var noticeHeight = 0;
+			var $bottomFixers = $(document).find('.js-bottomFixTarget .js-notice');
+
+			$bottomFixers.each(function()
+			{
+				var $notice = $(this);
+
+				if ($notice.is(':visible'))
+				{
+					noticeHeight += $notice.height();
+				}
+			});
+
+			$(document).find('footer.p-footer').css('margin-bottom', noticeHeight);
+		}
+
+		return {
+			initialize: initialize,
+			checkNotices: checkNotices
+		};
+	})();
+
 	// ################################## BB CODE EXPAND WATCHER ###########################################
 
 	XF.BbBlockExpand = (function()
@@ -6493,6 +6574,15 @@ if (window.jQuery === undefined) jQuery = $ = {};
 		}
 	});
 
+	XF.pageDisplayTime = Date.now();
 	$(XF.onPageLoad);
+
+	$(window).on('pageshow', function()
+	{
+		if (!XF.pageDisplayTime || Date.now() > XF.pageDisplayTime)
+		{
+			XF.pageDisplayTime = Date.now();
+		}
+	});
 }
 (window.jQuery, window, document);

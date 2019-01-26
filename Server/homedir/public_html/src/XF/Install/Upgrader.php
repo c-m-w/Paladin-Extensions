@@ -427,16 +427,23 @@ class Upgrader
 
 		$config = $this->translateLegacyConfig($config);
 		$configPhp = $this->helper()->generateConfig($config);
+		$configFile = $container['config.file'];
 
-		try
+		if (!file_exists($configFile) && is_writable(dirname($configFile)))
 		{
-			$configFile = $container['config.file'];
-			file_put_contents($configFile, $configPhp);
-			\XF\Util\File::makeWritableByFtpUser($configFile);
+			try
+			{
+				file_put_contents($configFile, $configPhp);
+				\XF\Util\File::makeWritableByFtpUser($configFile);
 
-			$written = true;
+				$written = true;
+			}
+			catch (\Exception $e)
+			{
+				$written = false;
+			}
 		}
-		catch (\Exception $e)
+		else
 		{
 			$written = false;
 		}
@@ -508,7 +515,7 @@ class Upgrader
 
 		if ($collectStatsRepo->isEnabled())
 		{
-			$this->app->jobManager()->enqueueUnique('xfCollectStats', 'XF:CollectStats');
+			$this->app->jobManager()->enqueueUnique('xfCollectStats', 'XF:CollectStats', [], false);
 		}
 	}
 }

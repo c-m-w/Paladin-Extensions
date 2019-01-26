@@ -28,6 +28,8 @@ class TemplateModification extends AbstractController
 		}
 
 		$modifications = $templateModRepo->findTemplateModificationsForList($type)->fetch();
+		$modifications = $templateModRepo->addLogsToModifications($modifications);
+
 		$addOns = $modifications->pluckNamed('AddOn', 'addon_id');
 
 		$viewParams = [

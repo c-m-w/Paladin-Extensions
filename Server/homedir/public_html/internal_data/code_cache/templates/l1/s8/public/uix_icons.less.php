@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 1c649e9c347d5d26fbdeaf85272a3f13
+// FROM HASH: 63abe6861afb7a28d08806f1c5e821b9
 return array('macros' => array('content' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -980,13 +980,8 @@ return array('macros' => array('content' => function($__templater, array $__argu
 
 /* -- MATERIAL ICONS -- */
 
-@font-face {
-	font-family: "Material Design Icons";
-	src: url("styles/uix/fonts/icons/material-icons/materialdesignicons-webfont.eot?v=1.8.36");
-	src: url("styles/uix/fonts/icons/material-icons/materialdesignicons-webfont.eot?#iefix&v=1.8.36") format("embedded-opentype"), url("styles/uix/fonts/icons/material-icons/materialdesignicons-webfont.woff2?v=1.8.36") format("woff2"), url("styles/uix/fonts/icons/material-icons/materialdesignicons-webfont.woff?v=1.8.36") format("woff"), url("styles/uix/fonts/icons/material-icons/materialdesignicons-webfont.ttf?v=1.8.36") format("truetype"), url("styles/uix/fonts/icons/material-icons/materialdesignicons-webfont.svg?v=1.8.36#materialdesigniconsregular") format("svg");
-	font-weight: normal;
-	font-style: normal;
-}
+' . '
+
 .mdi:before,
 .uix_icon {
 	display: inline-block;

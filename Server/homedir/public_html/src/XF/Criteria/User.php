@@ -228,6 +228,10 @@ class User extends AbstractCriteria
 
 	protected function _matchConnectedAccounts(array $data, \XF\Entity\User $user)
 	{
+		if (empty($data['provider_ids']))
+		{
+			return false;
+		}
 		foreach ($data['provider_ids'] AS $providerId)
 		{
 			if (isset($user->Profile->connected_accounts[$providerId]))
@@ -240,6 +244,10 @@ class User extends AbstractCriteria
 
 	protected function _matchUserGroups(array $data, \XF\Entity\User $user)
 	{
+		if (empty($data['user_group_ids']))
+		{
+			return false;
+		}
 		return $user->isMemberOf($data['user_group_ids']);
 	}
 

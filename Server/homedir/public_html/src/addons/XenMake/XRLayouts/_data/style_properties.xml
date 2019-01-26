@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<style_properties>
+  <style_property property_name="xm_defaultPerRow" group_name="XenMake_ProductManagerLayout" title="Items per row (Default)" description="The default number of items to display per row on XR Product Manager layout pages. This helps define the percentage width of each item container." property_type="value" value_type="number" depends_on="xrProductManager" value_group="xrProductManagerColumn" display_order="10">
+    <value_parameters>3</value_parameters>
+    <value>"3"</value>
+  </style_property>
+  <style_property property_name="xm_disableProductCategory" group_name="XenMake_ProductManagerLayout" title="Disable product categories?" description="Here you can hide or show product categories." property_type="value" value_type="radio" depends_on="xrProductManager" value_group="productCategory" display_order="50">
+    <value_parameters>1={{ phrase('yes') }}
+0={{ phrase('no') }}</value_parameters>
+    <value>"0"</value>
+  </style_property>
+  <style_property property_name="xm_disableResponsiveProductCategory" group_name="XenMake_ProductManagerLayout" title="Disable responsive product categories?" description="Here you can hide or show product categories for mobile devices." property_type="value" value_type="radio" depends_on="xrProductManager" value_group="productCategory" display_order="60">
+    <value_parameters>1={{ phrase('yes') }}
+0={{ phrase('no') }}</value_parameters>
+    <value>"0"</value>
+  </style_property>
+  <style_property property_name="xm_mediumWidthPerRow" group_name="XenMake_ProductManagerLayout" title="Items per row (Medium)" description="The number of items to display per row on XR Product Manager layout pages when responsive design is at the &quot;medium&quot; width or below. This helps define the percentage width of each item container." property_type="value" value_type="number" depends_on="xrProductManager" value_group="xrProductManagerColumn" display_order="30">
+    <value_parameters>2</value_parameters>
+    <value>"2"</value>
+  </style_property>
+  <style_property property_name="xm_narrowWidthPerRow" group_name="XenMake_ProductManagerLayout" title="Items per row (Narrow)" description="The number of items to display per row on  XR Product Manager layout pages when responsive design is at the &quot;narrow&quot; width or below. This helps define the percentage width of each item container." property_type="value" value_type="number" depends_on="xrProductManager" value_group="xrProductManagerColumn" display_order="40">
+    <value_parameters>1</value_parameters>
+    <value>"1"</value>
+  </style_property>
+  <style_property property_name="xm_productCustomFieldsButtons" group_name="XenMake_ProductManagerLayout" title="Enable Custom Fields Buttons?" description="This feature allows you to create a link for the custom field to be displayed on the XR Product Manager main page. &lt;/br&gt;&lt;/br&gt;Custom Fields create&lt;/br&gt; .../admin.php?product-manager/products/fields/" property_type="value" value_type="radio" depends_on="xrProductManager" value_group="xrProductCustomFieldsButtons" display_order="120">
+    <value_parameters>1={{ phrase('yes') }}
+0={{ phrase('no') }}</value_parameters>
+    <value>"1"</value>
+  </style_property>
+  <style_property property_name="xm_productInfo" group_name="XenMake_ProductManagerLayout" title="Disable product Info?" description="Here you can make product info active or passive." property_type="value" value_type="radio" depends_on="xrProductManager" value_group="xrProductInfo" display_order="100">
+    <value_parameters>1={{ phrase('yes') }}
+0={{ phrase('no') }}</value_parameters>
+    <value>"1"</value>
+  </style_property>
+  <style_property property_name="xm_productMainFeatures" group_name="XenMake_ProductManagerLayout" title="Are the main features disabled?" description="Here you can make the main features active and passive." property_type="value" value_type="radio" depends_on="xrProductManager" value_group="xrProductMainFeatures" display_order="110">
+    <value_parameters>1={{ phrase('yes') }}
+0={{ phrase('no') }}</value_parameters>
+    <value>"0"</value>
+  </style_property>
+  <style_property property_name="xm_productRibbonPrice" group_name="XenMake_ProductManagerLayout" title="Enable price ribbon?" description="Here you can make the price strip active or passive." property_type="value" value_type="radio" depends_on="xrProductManager" value_group="xrProductManagerPrice" display_order="70">
+    <value_parameters>1={{ phrase('yes') }}
+0={{ phrase('no') }}</value_parameters>
+    <value>"1"</value>
+  </style_property>
+  <style_property property_name="xm_productRibbonPriceStyle" group_name="XenMake_ProductManagerLayout" title="Product Ribbon Price" property_type="css" display_order="10" css_components="text,background,padding,extra">
+    <value>{
+    "color": "rgb(255, 255, 255)",
+    "background-color": "rgb(153, 204, 0)",
+    "padding-top": "@xf-paddingMedium",
+    "padding-right": "@xf-paddingMedium",
+    "padding-bottom": "@xf-paddingMedium",
+    "padding-left": "@xf-paddingLarge",
+    "extra": "border-top-left-radius: 0;\nborder-top-right-radius: 4px;\nborder-bottom-right-radius: 4px;\nborder-bottom-left-radius: 0;\ntop: 15px;\nleft: -10px;\nz-index: 10;\n-webkit-border-radius: 0 4px 4px 0;\n-moz-border-radius: 0 4px 4px 0;"
+}</value>
+  </style_property>
+  <style_property property_name="xm_productRibbonPriceStyleBefore" group_name="XenMake_ProductManagerLayout" title="Product Ribbon Price Before" property_type="css" display_order="20" css_components="border,extra">
+    <value>{
+    "border-right-color": "rgb(132, 132, 148)",
+    "extra": "border-style: solid;\nborder-top-width: 0;\nborder-top-color: rgb(0, 0, 0);\nborder-top-color: rgba(0, 0, 0, 0);\n_border-top-color: rgb(0, 0, 0);\nborder-right-width: 10px;\nborder-bottom-width: 10px;\nborder-bottom-color: rgb(0, 0, 0);\nborder-bottom-color: rgba(0, 0, 0, 0);\n_border-bottom-color: rgb(0, 0, 0);\nborder-left-width: 0;\nborder-left-color: transparent;"
+}</value>
+  </style_property>
+  <style_property property_name="xm_productSmallTitle" group_name="XenMake_ProductManagerLayout" title="Disable small header information?" description="Here you can make small header information active or passive." property_type="value" value_type="radio" depends_on="xrProductManager" value_group="xrProductManagerSmallTitle" display_order="90">
+    <value_parameters>1={{ phrase('yes') }}
+0={{ phrase('no') }}</value_parameters>
+    <value>"0"</value>
+  </style_property>
+  <style_property property_name="xm_productsTitle" group_name="XenMake_ProductManagerLayout" title="Disable product titles?" description="Here you can make product titles active or passive." property_type="value" value_type="radio" depends_on="xrProductManager" value_group="xrProductTitle" display_order="80">
+    <value_parameters>1={{ phrase('yes') }}
+0={{ phrase('no') }}</value_parameters>
+    <value>"0"</value>
+  </style_property>
+  <style_property property_name="xm_wideWidthPerRow" group_name="XenMake_ProductManagerLayout" title="Items per row (Wide)" description="The number of items to display per row on XR Product Manager layout pages when responsive design is at the &quot;wide&quot; width or below. This helps define the percentage width of each item container." property_type="value" value_type="number" depends_on="xrProductManager" value_group="xrProductManagerColumn" display_order="20">
+    <value_parameters>3</value_parameters>
+    <value>"3"</value>
+  </style_property>
+  <style_property property_name="xm_xrCustomFieldsButtonsOpen" group_name="XenMake_ProductManagerLayout" title="Open a link in a new window" description="How do you turn on your browser's links? &lt;/br&gt;&lt;/br&gt;&#10;&lt;b&gt;_blank&lt;/b&gt; = Opens the linked document in a new window or tab &lt;/br&gt;&#10;&lt;b&gt;_self&lt;/b&gt; = Opens the linked document in the same frame as it was clicked (this is default)&lt;/br&gt;&#10;&lt;b&gt;_parent&lt;/b&gt; = Opens the linke" property_type="value" value_type="select" depends_on="xrProductManager" value_group="xrProductCustomFieldsButtons" display_order="130">
+    <value_parameters>_blank={{ phrase('xm_link_blank') }}
+_self={{ phrase('xm_link_self') }}
+_parent={{ phrase('xm_link_parent') }}
+_top={{ phrase('xm_link_top') }}</value_parameters>
+    <value>"_blank"</value>
+  </style_property>
+  <style_property property_name="xm_xrImageHoverEffect" group_name="XenMake_ProductManagerLayout" title="Select Image Hover Effect" description="Here you can select transition effects for images, which are located on the XR Product Manager main page." property_type="value" value_type="select" depends_on="xrProductManager" value_group="xrPMImageHoverEffect" display_order="140">
+    <value_parameters>trans-effect top={{ phrase('trans_effect_top') }}
+trans-effect left={{ phrase('trans_effect_left') }}
+trans-effect bottom={{ phrase('trans_effect_bottom') }}
+over-trans-effect top={{ phrase('over_trans_effect_top') }}
+over-trans-effect left={{ phrase('over_trans_effect_left') }}
+over-trans-effect bottom={{ phrase('over_trans_effect_bottom') }}
+zoom-out-effect top={{ phrase('zoom_out_effect_top') }}
+flip-effect top={{ phrase('flip_effect_top') }}
+flip-effect left={{ phrase('flip_effect_left') }}
+flip-effect bottom={{ phrase('flip_effect_bottom') }}
+bubble-effect top={{ phrase('bubble_effect_top') }}
+bubble-effect left={{ phrase('bubble_effect_left') }}
+bubble-effect bottom={{ phrase('bubble_effect_bottom') }}
+zoom-in-effect top={{ phrase('zoom_in_effect') }}
+over-flip-effect top={{ phrase('over_flip_effect_top') }}
+over-flip-effect left={{ phrase('over_flip_effect_left') }}
+over-flip-effect bottom={{ phrase('over_flip_effect_bottom') }}
+swipe-effect top={{ phrase('swipe_effect') }}
+flip-back-effect top={{ phrase('flip_back_effect_top') }}
+flip-back-effect left={{ phrase('flip_back_effect_left') }}
+flip-back-effect bottom={{ phrase('flip_back_effect_bottom') }}</value_parameters>
+    <value>"swipe-effect top"</value>
+  </style_property>
+  <style_property property_name="xm_xrProductManagerOn" group_name="XenMake_ProductManagerLayout" title="Enable Product Manager Layout" description="&lt;div class=&quot;blockMessage blockMessage--success&quot; style=&quot;margin: 0 2px;&quot;&gt;This option is enable or disable &quot;XR Product Manager Layout&quot; add-on.&lt;/div&gt;" property_type="value" value_type="radio" value_group="xrProductManager" display_order="0">
+    <value_parameters>1={{ phrase('yes') }}
+0={{ phrase('no') }}</value_parameters>
+    <value>"1"</value>
+  </style_property>
+  <style_property property_name="xrImageHoverEffectColor" group_name="XenMake_ProductManagerLayout" title="Image Hover Background Color" property_type="value" value_type="color" depends_on="xrProductManager" value_group="xrPMImageHoverEffect" display_order="150">
+    <value_parameters>rgb(44, 59, 65)</value_parameters>
+    <value>"rgb(44, 59, 65)"</value>
+  </style_property>
+</style_properties>

@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: a08cf322c8b26fc8de63dbcae3d8b33a
+// FROM HASH: ed34195bf2e406c6c01e02970a9e526a
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -70,7 +70,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		if ($__templater->isTraversable($__vars['tagCloud'])) {
 			foreach ($__vars['tagCloud'] AS $__vars['cloudEntry']) {
 				$__finalCompiled .= '
-				<a href="' . $__templater->fn('link', array('tags', $__vars['cloudEntry']['tag'], ), true) . '" class="tagCloud-tag tagCloud-tagLevel' . $__templater->escape($__vars['cloudEntry']['level']) . '">' . $__templater->escape($__vars['cloudEntry']['tag']['tag']) . '</a></li>
+				<a href="' . $__templater->fn('link', array('tags', $__vars['cloudEntry']['tag'], ), true) . '" class="tagCloud-tag tagCloud-tagLevel' . $__templater->escape($__vars['cloudEntry']['level']) . '">' . $__templater->escape($__vars['cloudEntry']['tag']['tag']) . '</a>
 			';
 			}
 		}

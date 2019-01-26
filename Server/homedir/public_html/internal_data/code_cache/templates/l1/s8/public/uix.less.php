@@ -1,11 +1,12 @@
 <?php
-// FROM HASH: 06f4239205452c5b63e3fab33f28337c
+// FROM HASH: a0432255eec66fec0e654a12561d7b24
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
 	$__finalCompiled .= $__templater->includeTemplate('uix_icons.less', $__vars) . '
 ' . $__templater->includeTemplate('uix_buttonRipple.less', $__vars) . '
 ' . $__templater->includeTemplate('uix_extendedFooter.less', $__vars) . '
+' . $__templater->includeTemplate('uix_pageAnimations.less', $__vars) . '
 
 .fb-page {
 	width: 100%;
@@ -32,8 +33,18 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	}
 }
 
-.p-nav-menuTrigger.badgeContainer:after {
-	align-self: flex-start;
+.p-nav-menuTrigger {
+	position: relative; 
+	
+	&.badgeContainer:after {
+		position: absolute;
+		left: -5px;
+		top: -5px;
+
+		@media (min-width: @xf-responsiveNarrow) {
+			display: none !important;	
+		}
+	}
 }
 
 .menu-footer-controls {
@@ -125,7 +136,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	align-items: center;
 
 	.structItem-parts {flex-grow: 1;}
-	.structItem-extraInfo {order: 2;}
+	.structItem-extraInfo {order: 2; margin-left: auto;}
 	.structItem-statuses {order: 1;}
 }
 
@@ -352,6 +363,35 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	.thThreads__userExtra--trigger {transform: rotate(-180deg);}
 }
 
+/*------- sticky thread collapse ------- */
+
+.uix_threadCollapseTrigger {
+	transition: ease-in transform .3s;
+	margin-left: auto;
+	font-size: 18px;
+}
+
+.uix_stickyContainerOuter {
+	transition: ease-in height 0.3s, ease-in opacity 0.3s;
+	opacity: 1;
+	
+	.structItemContainer-group {display: block;}
+}
+
+.uix_stickyContainerOuter.uix_threadListSeparator--collapsed {
+	height: 0;
+	opacity: 0;
+    pointer-events: none;
+	transition: ease-in height 0.3s, ease-in opacity 0.3s;
+
+	.uix_block-body--outer {
+    	height: 0 !important;
+		opacity: 0;
+		pointer-events: none;
+	}
+
+	.uix_threadCollapseTrigger {transform: rotate(-180deg);}
+}
 
 /*------- category collapse ------- */
 
@@ -368,6 +408,10 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 .categoryCollapse--trigger {
 	transition: ease-in transform .3s;
+	overflow: hidden;
+	height: 18px;
+	display: inline-flex;
+	align-items: center;
 }
 
 .block--category .uix_block-body--outer {
@@ -377,9 +421,11 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 /*------- Sidebar collapse ------- */
 
-.button.uix_sidebarTrigger__component {
+a.uix_sidebarTrigger__component {
 	display: inline-flex;
 	align-items: center;
+	
+	&:hover {cursor: pointer;}
 
 	';
 	if ($__templater->fn('property', array('uix_viewportWidthRemoveSubNav', ), false) != '100%') {
@@ -426,6 +472,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			font-size: @xf-uix_iconSizeLarge;
 			width: auto;
 			padding: 0;
+			margin: 0;
 		}
 	}
 
@@ -531,60 +578,73 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 /*------- navigation icons------- */
 
-';
-	if ($__templater->fn('property', array('uix_navTabIcons', ), false)) {
-		$__finalCompiled .= '
-
 .p-navEl-link:before, .offCanvasMenu-link:before {
 	.m-faBase();
 	.xf-uix_navTabIconStyle();
 }
 
-.p-nav, .uix_sidebarNav, .offCanvasMenu {
-	.p-navEl-link, .offCanvasMenu-linkHolder > .offCanvasMenu-link:first-child {
-		' . '
-		&[data-nav-id="thxpress"]:before {' . $__templater->callMacro('uix_icons.less', 'content', array(
-			'icon' => '\\f332',
-		), $__vars) . '}
-		&[data-nav-id="th_donate"]:before {' . $__templater->callMacro('uix_icons.less', 'content', array(
-			'icon' => '\\f2a1',
-		), $__vars) . '}
-		&[data-nav-id="home"]:before {' . $__templater->callMacro('uix_icons.less', 'content', array(
-			'icon' => 'home',
-		), $__vars) . '}
-		&[data-nav-id="forums"]:before {' . $__templater->callMacro('uix_icons.less', 'content', array(
-			'icon' => 'forum',
-		), $__vars) . '}
-		&[data-nav-id="whatsNew"]:before {' . $__templater->callMacro('uix_icons.less', 'content', array(
-			'icon' => 'whats-new',
-		), $__vars) . '}
-		&[data-nav-id="members"]:before {' . $__templater->callMacro('uix_icons.less', 'content', array(
-			'icon' => 'user-multiple',
-		), $__vars) . '}
-		&[data-nav-id="profile"]:before {' . $__templater->callMacro('uix_icons.less', 'content', array(
-			'icon' => 'user',
-		), $__vars) . '}
-		&[data-nav-id="alerts"]:before {' . $__templater->callMacro('uix_icons.less', 'content', array(
-			'icon' => 'alert',
-		), $__vars) . '}
-		&[data-nav-id="settings"]:before {' . $__templater->callMacro('uix_icons.less', 'content', array(
-			'icon' => 'settings',
-		), $__vars) . '}
-		&[data-nav-id="xfmg"]:before {' . $__templater->callMacro('uix_icons.less', 'content', array(
-			'icon' => 'media',
-		), $__vars) . '}
-		&[data-nav-id="xfrm"]:before {' . $__templater->callMacro('uix_icons.less', 'content', array(
-			'icon' => 'resource',
-		), $__vars) . '}
-		&[data-nav-id="EWRporta"]:before, &[data-nav-id="blog"]:before, &[data-nav-id="XPRESS"]:before {' . $__templater->callMacro('uix_icons.less', 'content', array(
-			'icon' => 'article',
-		), $__vars) . '}
-	}
-}
-
+';
+	if (!$__templater->fn('property', array('uix_navTabIcons', ), false)) {
+		$__finalCompiled .= '
+.p-navEl-link:before {display: none !important;}
 ';
 	}
 	$__finalCompiled .= '
+
+.p-navEl-link:not(.mdi):not(.fa), .offCanvasMenu-link:not(.mdi):not(.fa) {
+	';
+	if ($__templater->fn('property', array('uix_defaultNavIcon', ), false)) {
+		$__finalCompiled .= '
+	&[data-nav-id]:before {' . $__templater->callMacro('uix_icons.less', 'content', array(
+			'icon' => 'folder',
+		), $__vars) . '}
+	';
+	}
+	$__finalCompiled .= '
+	
+	.offCanvasMenu-link {dislay: none;}
+
+	&[data-nav-id="thxpress"]:before {' . $__templater->callMacro('uix_icons.less', 'content', array(
+		'icon' => '\\f332',
+	), $__vars) . '}
+	&[data-nav-id="th_donate"]:before {' . $__templater->callMacro('uix_icons.less', 'content', array(
+		'icon' => '\\f2a1',
+	), $__vars) . '}
+	&[data-nav-id="home"]:before {' . $__templater->callMacro('uix_icons.less', 'content', array(
+		'icon' => 'home',
+	), $__vars) . '}
+	&[data-nav-id="forums"]:before {' . $__templater->callMacro('uix_icons.less', 'content', array(
+		'icon' => 'forum',
+	), $__vars) . '}
+	&[data-nav-id="whatsNew"]:before {' . $__templater->callMacro('uix_icons.less', 'content', array(
+		'icon' => 'whats-new',
+	), $__vars) . '}
+	&[data-nav-id="members"]:before {' . $__templater->callMacro('uix_icons.less', 'content', array(
+		'icon' => 'user-multiple',
+	), $__vars) . '}
+	&[data-nav-id="profile"]:before {' . $__templater->callMacro('uix_icons.less', 'content', array(
+		'icon' => 'user',
+	), $__vars) . '}
+	&[data-nav-id="alerts"]:before {' . $__templater->callMacro('uix_icons.less', 'content', array(
+		'icon' => 'alert',
+	), $__vars) . '}
+	&[data-nav-id="settings"]:before {' . $__templater->callMacro('uix_icons.less', 'content', array(
+		'icon' => 'settings',
+	), $__vars) . '}
+	&[data-nav-id="xfmg"]:before {' . $__templater->callMacro('uix_icons.less', 'content', array(
+		'icon' => 'media',
+	), $__vars) . '}
+	&[data-nav-id="xfrm"]:before {' . $__templater->callMacro('uix_icons.less', 'content', array(
+		'icon' => 'resource',
+	), $__vars) . '}
+	&[data-nav-id="EWRporta"]:before, &[data-nav-id="blog"]:before, &[data-nav-id="XPRESS"]:before {' . $__templater->callMacro('uix_icons.less', 'content', array(
+		'icon' => 'article',
+	), $__vars) . '}
+}
+
+.p-sectionLinks .p-navEl-link:before,
+.offCanvasMenu-subList .offCanvasMenu-link:before {display: none !important;}
+
 
 /* ---Force header content fluid --- */
 
@@ -628,7 +688,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	$__finalCompiled .= '
 
 .uix_sidebarNav__inner__widgets {
-	padding: @xf-paddingMedium;
+	padding: @xf-paddingLarge;
 }
 
 .sidebarNav--active .uix_sidebarNav {
@@ -852,12 +912,13 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			}
 
 			.uix_sidebarNav--trigger {
-				padding-right: @xf-paddingLarge;
 				font-size: @xf-uix_iconSize;
-				transition: ease-in transform .3s;
 				color: inherit;
+				padding-right: @xf-paddingLarge;
+				
+				.uix_icon {transition: ease-in transform .3s;}
 
-				&.is-expanded {transform: rotate(-180deg);}
+				&.is-expanded .uix_icon {transform: rotate(-180deg);}
 			}
 
 			.p-navEl-splitTrigger {display: none;}
@@ -878,6 +939,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	}
 }
 
+.p-nav .p-navgroup-link:hover {.xf-publicNavTabHover();}
+
 
 /* ---SEARCH BAR --- */
 
@@ -887,7 +950,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	&::placeholder {color: @xf-uix_searchBar--color;}
 }
 
-.uix_searchBar {
+body .uix_searchBar {
 	display: inline-flex;
 	position: relative;
 	flex-shrink: 10;
@@ -1083,6 +1146,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
         display: block;
         opacity: 1;
         pointer-events: all;
+		transform: translateY(0);
     }
 
 	[name="constraints"] {
@@ -1111,7 +1175,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 }
 
 .minimalSearch--active .uix_searchBar .uix_searchBarInner .uix_searchForm {
-	i {
+	i.uix_icon {
 		display: inline-block;
 		padding: 0;
 		line-height: @xf-uix_searchBarHeight;
@@ -1122,10 +1186,12 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 }
 
 .p-navgroup-link--search,
+.uix_sidebarCanvasTrigger,
 .p-navgroup-link {transition: ease opacity .2s .3s; opacity: 1;}
 
 .minimalSearch--active {
 	.p-navgroup-link--search,
+	.uix_sidebarCanvasTrigger,
 	.p-navgroup-link {
 		opacity: 0;
 		transition: ease opacity .2s;
@@ -1133,6 +1199,18 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	}
 
 	.uix_searchBar {position: static;}
+}
+
+@media(max-width: @xf-uix_search_maxResponsiveWidth) {
+	.p-nav-inner > * {transition: ease-in opacity .2s; opacity: 1;}
+
+	.minimalSearch--active.p-nav-inner > *:not(.uix_searchBar),
+	.minimalSearch--active.p-nav-inner .p-account,
+	.minimalSearch--active.p-nav-inner .uix_searchBar .uix_searchIconTrigger,
+	.minimalSearch--active.p-nav-inner .p-discovery > *:not(.uix_searchBar) {opacity: 0;}
+
+	.minimalSearch--active.p-nav-inner .p-discovery,
+	.minimalSearch--active.p-nav-inner .p-nav-opposite {opacity: 1;}
 }
 
 ';
@@ -1248,6 +1326,15 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 /* ---FOOTER --- */
 
 .uix_fabBar {
+	';
+	if (($__templater->fn('property', array('uix_fab', ), false) == 'never') AND ($__templater->fn('property', array('uix_visitorTabsMobile', ), false) == 'tabbar')) {
+		$__finalCompiled .= '
+		 @media (max-width: @xf-responsiveNarrow) {
+			 margin-bottom: calc(60px - @xf-paddingLarge);
+	}
+	';
+	}
+	$__finalCompiled .= '	
 
 	.uix_editor--focused & {
 		display: none;
@@ -1276,10 +1363,10 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		// background-color: @xf-uix_fabBarBackground;
 		// height: 60px;
 		padding: @xf-paddingLarge 0;
-
 	';
 	}
 	$__finalCompiled .= '
+	
 	';
 	if ($__templater->fn('property', array('uix_fab', ), false) == 'mobile') {
 		$__finalCompiled .= '
@@ -1632,6 +1719,11 @@ html.has-flexbox .thNodes__nodeList .block-container {
 		line-height: 1;
 		font-size: 10px;
 		position: relative;
+		
+		&:hover {
+			 text-decoration: none; 
+			color: #fff;
+		}
 	}
 
 	.badgeContainer:after {
@@ -1733,11 +1825,13 @@ html.has-flexbox .thNodes__nodeList .block-container {
 
 // topics
 
+/*
 .topic-filter-container {
 	background: none;
 	box-shadow: none;
 	padding: 0;
 }
+*/
 
 // last post avatar
 
@@ -1905,7 +1999,7 @@ html.has-flexbox .thNodes__nodeList .block-container {
 		';
 		if ($__templater->fn('property', array('uix_sidebarTriggerPosition', ), false) == 'sectionLinks') {
 			$__finalCompiled .= '
-			.breadcrumb  .button.uix_sidebarTrigger__component {display: none;}
+			.breadcrumb  a.uix_sidebarTrigger__component {display: none;}
 		';
 		}
 		$__finalCompiled .= '
@@ -1949,7 +2043,7 @@ html.has-flexbox .thNodes__nodeList .block-container {
 	font-size: 12px;
 }
 
-label.iconic.iconic--labelled > input + i {margin-top: -2px;}
+// label.iconic.iconic--labelled > input + i {margin-top: -2px; width: auto;}
 
 .comment-reply-link:before {
 	' . $__templater->callMacro('uix_icons.less', 'content', array(
@@ -2016,6 +2110,125 @@ label.iconic.iconic--labelled > input + i {margin-top: -2px;}
 		display: flex;
 		flex-direction: column;
 	}	
+}
+
+.uix_mobileNodeTitle {
+	&:before {
+		content: "\\00a0\\00B7\\00a0";
+	}
+	
+	@media (min-width: @xf-uix_discussionListCollapseWidth) {
+		display: none;
+	}
+}
+
+// MENU
+
+.menu {
+	transition: cubic-bezier(0.4,0.0,0.2,1) .26s transform, cubic-bezier(0.4,0.0,0.2,1) .26s opacity;
+	transform: translateY(-10px);
+	opacity: 0;
+
+	&.is-active {
+		transform: translateY(0);
+		opacity: 1;
+	}
+}
+
+.input input {box-shadow: none !important;}
+
+';
+	if ($__templater->fn('property', array('uix_clickableThreads', ), false)) {
+		$__finalCompiled .= '
+.structItem--thread:hover {cursor: pointer;}
+';
+	}
+	$__finalCompiled .= '
+
+.uix_sidebarNav .uix_sidebarNav__inner__widgets,
+.offCanvasMenu-content .uix_sidebarNav__inner__widgets {
+	
+	.block-container,
+	.block-minorHeader,
+	.block-footer,
+	.block-body
+	.block-row {
+		border: none;
+		box-shadow: none;
+		background: none;
+		padding: 0;
+		
+		&:not(:last-child) {
+			padding-bottom: @xf-paddingLarge;			
+		}
+	}
+	
+	.block:not(:last-child) .block-container {
+		border-bottom: 1px solid @xf-borderColor;
+		padding-bottom: @xf-paddingLarge;
+	}
+	
+	.block-minorHeader {
+		font-size: @xf-fontSizeSmaller;
+		color: @xf-textColorMuted;
+		
+		&:before {display: none !important;}
+	}
+	
+	[data-widget-definition="th_bookmarks"] {
+		.bookmarkRow {
+			line-height: 40px;
+			display: flex;
+			align-items: center;
+			color: @xf-textColorDimmed;
+
+			.contentRow-minor, .bookmarkRow-forum {display: none;}
+			
+			.bookmarkRow-content {
+				overflow: hidden;	
+				white-space: nowrap;
+			    text-overflow: ellipsis;
+			}
+		}		
+		
+		.block-row {padding: 0 !important;}
+		
+		.contentRow-main.contentRow-main--close {padding: 0;}
+		
+		i:before, a {color: inherit;}
+		
+		.block-footer, .contentRow-main:before {display: none;}
+		
+		.contentRow-figure {
+			height: 24px;
+			padding-right: 1em;
+			font-size: 24px;
+			
+			.avatar, i {
+				font-size: 24px;
+				width: 24px;
+				height: 24px;
+			    vertical-align: inherit;
+			}
+			
+			.node-icon {
+				width: auto;
+			}
+		}
+	}
+}
+
+';
+	if (!$__templater->fn('property', array('uix_sidebarTriggerPhrase', ), false)) {
+		$__finalCompiled .= '
+	.uix_sidebarTrigger--phrase {display: none;}
+';
+	}
+	$__finalCompiled .= '
+
+.uix_headerInner--opposite a.uix_sidebarTrigger__component {
+	padding: 0 4px;
+	i {margin: 0;}
 }';
 	return $__finalCompiled;
 });

@@ -2,6 +2,7 @@
 
 namespace XF\Db;
 
+use XF\Db\Schema\AbstractDdl;
 use XF\Db\Schema\Alter;
 
 class SchemaManager
@@ -110,6 +111,7 @@ class SchemaManager
 	public function tableExists($tableName)
 	{
 		$status = $this->getTableStatus($tableName);
+
 		return $status ? true : false;
 	}
 
@@ -124,6 +126,7 @@ class SchemaManager
 		if (isset($columns[$column]))
 		{
 			$definition = $columns[$column];
+
 			return true;
 		}
 		else
@@ -139,8 +142,16 @@ class SchemaManager
 	public function alterTable($tableName, \Closure $toApply)
 	{
 		$alter = $this->newAlter($tableName);
-		$toApply($alter);
-		$alter->apply();
+
+		try
+		{
+			$toApply($alter);
+			$alter->apply();
+		}
+		catch (\Exception $e)
+		{
+			$this->handleException($e, $tableName, $alter);
+		}
 	}
 
 	/**
@@ -150,7 +161,15 @@ class SchemaManager
 	public function renameTable($oldTableName, $newTableName)
 	{
 		$alter = $this->newAlter($oldTableName)->renameTo($newTableName);
-		$alter->apply();
+
+		try
+		{
+			$alter->apply();
+		}
+		catch (\Exception $e)
+		{
+			$this->handleException($e, $oldTableName, $alter);
+		}
 	}
 
 	/**
@@ -160,8 +179,16 @@ class SchemaManager
 	public function createTable($tableName, \Closure $toApply)
 	{
 		$create = $this->newTable($tableName);
-		$toApply($create);
-		$create->apply();
+
+		try
+		{
+			$toApply($create);
+			$create->apply();
+		}
+		catch (\Exception $e)
+		{
+			$this->handleException($e, $tableName, $create);
+		}
 	}
 
 	/**
@@ -171,11 +198,19 @@ class SchemaManager
 	public function dropTable($tableName, \Closure $toApply = null)
 	{
 		$drop = $this->newDrop($tableName);
-		if ($toApply)
+
+		try
 		{
-			$toApply($drop);
+			if ($toApply)
+			{
+				$toApply($drop);
+			}
+			$drop->apply();
 		}
-		$drop->apply();
+		catch (\Exception $e)
+		{
+			$this->handleException($e, $tableName, $drop);
+		}
 	}
 
 	/**
@@ -206,5 +241,23 @@ class SchemaManager
 	public function newDrop($tableName)
 	{
 		return new Schema\Drop($this->db, $this, $tableName);
+	}
+
+	protected function handleException($exception, $tableName, AbstractDdl $ddl)
+	{
+		// The exception might have some extra useful stuff in it, so include attempt to modify the message directly.
+
+		try
+		{
+			$reflectionClass = new \ReflectionClass($exception);
+			$messageProperty = $reflectionClass->getProperty('message');
+			$messageProperty->setAccessible(true);
+			$messageProperty->setValue($exception, $tableName . ': ' . $messageProperty->getValue($exception));
+		}
+		catch (\ReflectionException $ignored)
+		{
+		}
+
+		throw $exception;
 	}
 }

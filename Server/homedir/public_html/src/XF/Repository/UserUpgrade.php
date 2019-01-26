@@ -59,6 +59,7 @@ class UserUpgrade extends Repository
 
 		if ($visitor->user_id && $upgrades->count())
 		{
+			/** @var \XF\Entity\UserUpgrade $upgrade */
 			foreach ($upgrades AS $upgradeId => $upgrade)
 			{
 				if (isset($upgrade->Active[$visitor->user_id]))
@@ -73,7 +74,7 @@ class UserUpgrade extends Repository
 						unset($upgrades[$disabledId]);
 					}
 				}
-				else if (!$upgrade->can_purchase)
+				else if (!$upgrade->canPurchase())
 				{
 					unset($upgrades[$upgradeId]);
 				}

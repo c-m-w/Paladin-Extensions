@@ -11,6 +11,7 @@
 			minLength: 2,
 			maxLength: 0,
 			maxTokens: 0,
+			selectOnClose: false,
 			acUrl: ''
 		},
 
@@ -36,7 +37,7 @@
 				minimumInputLength: options.minLength,
 				maximumInputLength: options.maxLength,
 				maximumSelectionLength: options.maxTokens,
-				selectOnClose: true,
+				selectOnClose: options.selectOnClose,
 				disabled: $input.prop('disabled')
 			};
 

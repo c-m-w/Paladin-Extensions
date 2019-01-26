@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 907b516be3b4406a1246daaac9b0a6f3
+// FROM HASH: 22e031159e6825afa5d62bebc0265b04
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -32,21 +32,6 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 				$__finalCompiled .= '
 						</div>
 					</div>
-					';
-				if ($__vars['hasMore']) {
-					$__finalCompiled .= '
-						<div class="block-footer">
-							<span class="block-footer-controls">
-								' . $__templater->button('View more' . $__vars['xf']['language']['ellipsis'], array(
-						'href' => $__vars['link'],
-						'rel' => 'nofollow',
-					), '', array(
-					)) . '
-							</span>
-						</div>
-					';
-				}
-				$__finalCompiled .= '
 				';
 			} else {
 				$__finalCompiled .= '

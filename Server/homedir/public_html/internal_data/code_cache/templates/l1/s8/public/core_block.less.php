@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: f4ceff01f2fe35ee903375d5cfccd1d6
+// FROM HASH: a62d164fa8518b9c120c5ef770ebca0e
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -300,6 +300,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	{
 		padding: @xf-blockPaddingV @xf-blockPaddingH max(0px, @xf-blockPaddingV - @xf-borderSizeFeature);
 		border-bottom: @xf-borderSizeFeature solid transparent;
+		.xf-uix_blockTabHeaderTab();
 
 		&:hover
 		{

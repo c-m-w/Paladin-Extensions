@@ -102,15 +102,24 @@ class GenerateSchemaEntity extends Command
 				}
 			}
 
+			if (isset($column['nullable']))
+			{
+				$string .= '->nullable()';
+			}
+
 			if (isset($column['default']) && $allowedDefault)
 			{
-				if ($column['default'] == \XF::$time)
+				if ($column['default'] === \XF::$time)
 				{
 					$default = 0;
 				}
 				else if (is_string($column['default']))
 				{
 					$default = '\'' . $column['default'] . '\'';
+				}
+				else if (is_bool($column['default']))
+				{
+					$default = ($column['default'] === true) ? 1 : 0;
 				}
 				else
 				{

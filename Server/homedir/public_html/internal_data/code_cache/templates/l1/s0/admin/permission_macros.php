@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: b9fad133083b9f3970d5cfdc5ffe9740
+// FROM HASH: 5c7fe57107e99b72a44c05b4a7a240fd
 return array('macros' => array('edit_outer' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -36,7 +36,7 @@ return array('macros' => array('edit_outer' => function($__templater, array $__a
 	), $__vars) . '
 		</div>
 		<div class="block-outer-opposite quickFilter">
-			<input type="text" class="input js-permissionFilterInput" placeholder="' . 'Filter' . $__vars['xf']['language']['ellipsis'] . '" />
+			<input type="text" class="input js-permissionFilterInput" placeholder="' . $__templater->filter('Filter' . $__vars['xf']['language']['ellipsis'], array(array('for_attr', array()),), true) . '" />
 		</div>
 	</div>
 

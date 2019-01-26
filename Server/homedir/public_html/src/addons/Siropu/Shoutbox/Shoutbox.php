@@ -4,7 +4,7 @@ namespace Siropu\Shoutbox;
 
 trait Shoutbox
 {
-     public function getShoutboxParams()
+     public function getShoutboxParams(array $extra = [])
      {
           $collapsed = \XF::app()->request()->getCookie('siropuShoutboxCollapsed');
           $reverse   = $this->getReverseState();
@@ -40,7 +40,7 @@ trait Shoutbox
                'sound'     => \XF::app()->request()->getCookie('siropuShoutboxNoSound') ? 0 : \XF::options()->siropuShoutboxSound,
                'collapsed' => $collapsed,
                'reverse'   => $reverse
-          ];
+          ] + $extra;
      }
      public function getReverseState()
      {

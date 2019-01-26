@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 6b8596a8cdee45ec5cdf39cd34e4f1dd
+// FROM HASH: bd12f4e22b9f25b4313f79c00417a6c9
 return array('macros' => array('visitor_panel_row' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -92,7 +92,6 @@ return array('macros' => array('visitor_panel_row' => function($__templater, arr
 	}
 	$__finalCompiled .= '
 	<li><a href="' . $__templater->fn('link', array('search/member', null, array('user_id' => $__vars['xf']['visitor']['user_id'], ), ), true) . '" class="menu-linkRow">' . 'Your content' . '</a></li>
-' . $__templater->includeTemplate('sv_ue_account_visitor_menu_likes_given', $__vars) . '
 	<li><a href="' . $__templater->fn('link', array('account/likes', ), true) . '" class="menu-linkRow">' . 'Likes received' . '</a></li>
 	' . $__templater->includeTemplate('mjst_account_visitor_menu', $__vars) . '
 ';
@@ -154,13 +153,6 @@ return array('macros' => array('visitor_panel_row' => function($__templater, arr
 	}
 	$__finalCompiled .= '
 ';
-	if ($__templater->method($__vars['xf']['visitor'], 'hasPermission', array('conversationView', 'view', ))) {
-		$__finalCompiled .= '
-<li><a href="' . $__templater->fn('link', array('conversationview', ), true) . '" class="menu-linkRow" >' . 'Conversation view' . '</a></li>
-';
-	}
-	$__finalCompiled .= '
-';
 	if ($__templater->method($__vars['xf']['visitor'], 'hasPermission', array('emailLog', 'view', ))) {
 		$__finalCompiled .= '
 <li><a href="' . $__templater->fn('link', array('emaillog/', ), true) . '" class="menu-linkRow" >' . 'Email log' . '</a></li>
@@ -180,6 +172,7 @@ return array('macros' => array('visitor_panel_row' => function($__templater, arr
 		$__finalCompiled .= '
 	' . $__templater->form('
 
+		<span class="u-srOnly" id="ctrl_message">' . 'Update your status' . $__vars['xf']['language']['label_separator'] . '</span>
 		' . $__templater->formTextArea(array(
 			'name' => 'message',
 			'rows' => '1',
@@ -188,6 +181,7 @@ return array('macros' => array('visitor_panel_row' => function($__templater, arr
 			'placeholder' => 'Update your status' . $__vars['xf']['language']['ellipsis'],
 			'data-xf-init' => 'focus-trigger user-mentioner',
 			'data-display' => '< :next',
+			'aria-labelledby' => 'ctrl_message',
 		)) . '
 		<div class="u-hidden u-hidden--transition u-inputSpacer">
 			' . $__templater->button('Post', array(

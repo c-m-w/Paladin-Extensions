@@ -29,7 +29,6 @@ class Ignore extends AbstractService
 		$userIgnored = $this->em()->create('XF:UserIgnored');
 		$userIgnored->user_id = $this->ignoredBy->user_id;
 		$userIgnored->ignored_user_id = $this->ignoredUser->user_id;
-		$userIgnored->save(false);
 
 		try
 		{

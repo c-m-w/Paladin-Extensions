@@ -114,7 +114,10 @@ class Widget extends AbstractController
 			$handler = $widget->getHandler();
 			if ($handler && !$handler->verifyOptions($request, $options, $error))
 			{
-				$form->logError($error);
+				if ($error)
+				{
+					$form->logError($error);
+				}
 			}
 			$widget->options = $options;
 		});

@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 3634862faf0ed2d4e5af2e977c153c16
+// FROM HASH: 0e1561a536a7b51a0ae9cc59d29a1ec4
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -55,7 +55,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	&.input--number
 	{
 		text-align: right;
-		width: @_input-numberWidth;
+		max-width: @_input-numberWidth;
 
 		&.input--numberNarrow
 		{
@@ -65,7 +65,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 	&.input--date
 	{
-		width: @_input-numberWidth;
+		max-width: @_input-numberWidth;
 	}
 
 	textarea&
@@ -118,6 +118,9 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		-webkit-appearance: none !important;
 		-moz-appearance: none !important;
 		appearance: none !important;
+
+		overflow-x: hidden; // iOS seems to require this to prevent overflow with long options...
+		overflow-y: auto; // ...and Firefox seems to require this to prevent the above from breaking vertical scroll...
 
 		&[disabled]
 		{
@@ -177,6 +180,8 @@ label.iconic
 	> input
 	{
 		.m-visuallyHidden();
+		width: auto;
+		height: auto;
 		opacity: 0;
 
 		+ i:before
@@ -422,6 +427,7 @@ label.iconic
 		.input:not(.input--autoSize):not(.input--numberNarrow)
 		{
 			width: 100%;
+			min-width: 100px;
 		}
 	}
 
@@ -552,7 +558,7 @@ label.iconic
 	line-height: .75em;
 	vertical-align: -15%;
 
-	width: 35px;
+	width: 45px;
 	justify-content: center;
 	text-align: center;
 
@@ -567,13 +573,7 @@ label.iconic
 	&.inputNumber-button--smaller
 	{
 		vertical-align: 0;
-		width: 25px;
-	}
-
-	@media (max-width: @xf-formResponsive)
-	{
-		vertical-align: 0;
-		width: 25px;
+		width: 35px;
 	}
 
 	&--up::before

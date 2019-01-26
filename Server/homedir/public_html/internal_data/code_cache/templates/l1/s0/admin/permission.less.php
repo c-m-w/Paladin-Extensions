@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 0db303016e83954591b1639a637c227e
+// FROM HASH: abf0f4e35c1e7980badbccaf8e7e0c4e
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -66,13 +66,6 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			color: #c84448;
 		}
 	}
-
-	input[type=radio]
-	{
-		vertical-align: middle;
-		position: relative;
-		top: -2px;
-	}
 }
 
 .permissionChoices--flag
@@ -109,16 +102,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	{
 		position: relative;
 
-		input[type=radio]
-		{
-			position: static;
-			vertical-align: baseline;
-		}
-
 		.inputGroup-text
 		{
-			padding: @xf-paddingSmall;
-
 			&.inputNumber-button
 			{
 				&.inputNumber-button--up

@@ -726,6 +726,11 @@ class Manager
 		return $this->valueFormatter->decodeValueFromSource($type, $value);
 	}
 
+	public function decodeValueFromSourceExtended($type, $value, array $columnOptions = [])
+	{
+		return $this->valueFormatter->decodeValueFromSourceExtended($type, $value, $columnOptions);
+	}
+
 	public function startCascadeEvent($event, Entity $entity)
 	{
 		$id = $entity->getUniqueEntityId();
@@ -796,7 +801,8 @@ class Manager
 		$keys = $entity->getIdentifierValues();
 		if (!$keys)
 		{
-			throw new \LogicException("Cannot detach an entity without a valid primary key");
+			// not attached
+			return;
 		}
 
 		$primary = $this->getEntityCacheLookupString($keys);

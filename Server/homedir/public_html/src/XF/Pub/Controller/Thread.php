@@ -193,10 +193,19 @@ class Thread extends AbstractController
 			'Thread.Forum.Node.Permissions|' . $visitor->permission_combination_id
 		];
 
+		/** @var \XF\Entity\Post $post */
 		$post = $this->em()->find('XF:Post', $postId, $with);
 		if (!$post)
 		{
-			return $this->notFound();
+			$thread = $this->em()->find('XF:Thread', $params->thread_id);
+			if ($thread)
+			{
+				return $this->redirect($this->buildLink('threads', $thread));
+			}
+			else
+			{
+				return $this->notFound();
+			}
 		}
 		if (!$post->canView($error))
 		{
@@ -210,12 +219,26 @@ class Thread extends AbstractController
 	{
 		$thread = $this->assertViewableThread($params->thread_id, ['FirstPost']);
 
+		$after = $this->filter('after', 'uint');
+
 		if (!$this->request->isXhr())
 		{
-			return $this->redirect($this->buildLink('threads', $thread));
+			if (!$after)
+			{
+				return $this->redirect($this->buildLink('threads', $thread));
+			}
+
+			$findFirstUnread = $this->getPostRepo()->findNextPostsInThread($thread, $after);
+			$firstPost = $findFirstUnread->skipIgnored()->fetchOne();
+
+			if (!$firstPost)
+			{
+				$firstPost = $thread->LastPost;
+			}
+
+			return $this->redirect($this->plugin('XF:Thread')->getPostLink($firstPost));
 		}
 
-		$after = $this->filter('after', 'uint');
 		return $this->getNewPostsReply($thread, $after);
 	}
 
@@ -469,7 +492,7 @@ class Thread extends AbstractController
 		// we can show the 'there are more posts' notice
 		if ($posts->count() > $limit)
 		{
-			$firstUnshownPost = $posts->first();
+			$firstUnshownPost = $postRepo->findNextPostsInThread($thread, $lastDate)->skipIgnored()->fetchOne();
 
 			// Remove the extra post
 			$posts = $posts->pop();

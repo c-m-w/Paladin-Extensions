@@ -6,6 +6,8 @@ use XF\AddOn\AbstractSetup;
 use XF\AddOn\StepRunnerInstallTrait;
 use XF\AddOn\StepRunnerUninstallTrait;
 use XF\AddOn\StepRunnerUpgradeTrait;
+use XF\Db\Schema\Alter;
+use XF\Db\Schema\Create;
 
 class Setup extends AbstractSetup
 {
@@ -15,7 +17,7 @@ class Setup extends AbstractSetup
 
 	public function installStep1()
 	{
-		$this->schemaManager()->createTable('xf_siropu_shoutbox_shout', function(\XF\Db\Schema\Create $table)
+		$this->schemaManager()->createTable('xf_siropu_shoutbox_shout', function(Create $table)
 		{
 			$table->addColumn('shout_id', 'int')->autoIncrement();
 			$table->addColumn('shout_user_id', 'int');
@@ -33,17 +35,12 @@ class Setup extends AbstractSetup
 			]
 		]);
 	}
-	public function upgrade(array $stepParams = [])
-	{
-		// TODO: Implement upgrade() method.
-	}
-
-	public function uninstall(array $stepParams = [])
+	public function uninstallStep1()
 	{
 		$this->schemaManager()->dropTable('xf_siropu_shoutbox_shout');
-
-		$this->app->response()->setCookie('siropuShoutboxNoSound', false);
-		$this->app->response()->setCookie('siropuShoutboxReverse', false);
-		$this->app->response()->setCookie('siropuShoutboxCollapsed', false);
+	}
+     public function uninstallStep2()
+	{
+		$this->deleteWidget('siropu_shoutbox');
 	}
 }

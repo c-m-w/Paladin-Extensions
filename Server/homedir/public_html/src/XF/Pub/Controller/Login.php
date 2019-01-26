@@ -22,6 +22,7 @@ class Login extends AbstractController
 
 		$providers = $this->repository('XF:ConnectedAccount')->getUsableProviders(false);
 		$viewParams = [
+			'redirect' => $this->getDynamicRedirect(null, true),
 			'providers' => $providers
 		];
 		return $this->view('XF:Login\Form', 'login', $viewParams);
@@ -197,4 +198,5 @@ class Login extends AbstractController
 	public function assertCorrectVersion($action) {}
 	public function assertBoardActive($action) {}
 	public function assertTfaRequirement($action) {}
+	public function assertPolicyAcceptance($action) {}
 }

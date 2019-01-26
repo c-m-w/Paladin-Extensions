@@ -22,7 +22,6 @@ use XF\Mvc\Entity\Structure;
  *
  * RELATIONS
  * @property \XF\Entity\User User
- * @property \XF\Entity\User ApplyingUser
  */
 class SpamTriggerLog extends Entity
 {
@@ -68,13 +67,7 @@ class SpamTriggerLog extends Entity
 				'type' => self::TO_ONE,
 				'conditions' => 'user_id',
 				'primary' => true
-			],
-			'ApplyingUser' => [
-				'entity' => 'XF:User',
-				'type' => self::TO_ONE,
-				'conditions' => 'applying_user_id',
-				'primary' => true
-			],
+			]
 		];
 
 		return $structure;

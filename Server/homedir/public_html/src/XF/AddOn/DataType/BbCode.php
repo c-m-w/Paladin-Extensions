@@ -126,7 +126,8 @@ class BbCode extends AbstractDataType
 	protected function getMaintainedAttributes()
 	{
 		return [
-			'active'
+			'active',
+			'allow_signature'
 		];
 	}
 }

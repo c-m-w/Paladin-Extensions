@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: c8415f33699f3abf769344d4014860ad
+// FROM HASH: 2508479fc621f3819eff6d033b5f2b22
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -14,16 +14,20 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			'name' => 'username',
 			'autofocus' => 'autofocus',
 			'maxlength' => $__templater->fn('max_length', array($__vars['xf']['visitor'], 'username', ), false),
+			'required' => 'required',
 		), array(
 			'label' => 'Your name',
+			'hint' => 'Required',
 		)) . '
 
 				' . $__templater->formTextBoxRow(array(
 			'name' => 'email',
 			'maxlength' => $__templater->fn('max_length', array($__vars['xf']['visitor'], 'email', ), false),
 			'type' => 'email',
+			'required' => 'required',
 		), array(
 			'label' => 'Your email address',
+			'hint' => 'Required',
 		)) . '
 			';
 	} else {
@@ -46,8 +50,10 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 					' . $__templater->formTextBoxRow(array(
 				'name' => 'email',
 				'type' => 'email',
+				'required' => 'required',
 			), array(
 				'label' => 'Your email address',
+				'hint' => 'Required',
 			)) . '
 
 				';
@@ -62,20 +68,25 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 			' . $__templater->formRowIfContent($__templater->fn('captcha', array(false)), array(
 		'label' => 'Verification',
+		'hint' => 'Required',
 	)) . '
 
 			' . $__templater->formTextBoxRow(array(
 		'name' => 'subject',
+		'required' => 'required',
 	), array(
 		'label' => 'Subject',
+		'hint' => 'Required',
 	)) . '
 
 			' . $__templater->formTextAreaRow(array(
 		'name' => 'message',
 		'rows' => '5',
 		'autosize' => 'true',
+		'required' => 'required',
 	), array(
 		'label' => 'Message',
+		'hint' => 'Required',
 	)) . '
 		</div>
 		' . $__templater->formSubmitRow(array(

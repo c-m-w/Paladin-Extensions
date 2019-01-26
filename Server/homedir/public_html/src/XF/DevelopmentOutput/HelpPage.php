@@ -40,7 +40,7 @@ class HelpPage extends AbstractHandler
 
 		$helpPage = $this->getEntityForImport($name, $addOnId, $json, $options);
 
-		$helpPage->bulkSet($json);
+		$helpPage->bulkSetIgnore($json);
 		$helpPage->page_id = $name;
 		$helpPage->addon_id = $addOnId;
 		$helpPage->save();

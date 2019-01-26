@@ -156,7 +156,7 @@ class Post extends AbstractData
 	{
 		/** @var \XF\Repository\ThreadPrefix $prefixRepo */
 		$prefixRepo = \XF::repository('XF:ThreadPrefix');
-		return $prefixRepo->getPrefixListData();
+		return $prefixRepo->getVisiblePrefixListData();
 	}
 
 	public function applyTypeConstraintsFromInput(\XF\Search\Query\Query $query, \XF\Http\Request $request, array &$urlConstraints)

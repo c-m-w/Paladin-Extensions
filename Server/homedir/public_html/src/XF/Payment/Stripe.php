@@ -9,6 +9,10 @@ use XF\Purchasable\Purchase;
 
 class Stripe extends AbstractProvider
 {
+	// Force a specific Stripe version so we can better control when we are ready for potential code breaking changes.
+	// TODO: Changes required to support new "Billing" system so we can move beyond this API version.
+	protected $stripeVersion = '2018-01-23';
+
 	public function getTitle()
 	{
 		return 'Stripe';
@@ -88,7 +92,7 @@ class Stripe extends AbstractProvider
 
 		try
 		{
-			$client = \XF::app()->http()->client();
+			$client = $this->getHttpClient();
 
 			$customerData = [
 				'email' => $purchase->purchaser->email,
@@ -248,7 +252,8 @@ class Stripe extends AbstractProvider
 
 		try
 		{
-			$client = \XF::app()->http()->client();
+			$client = $this->getHttpClient();
+
 			$response = $client->delete($this->getApiEndpoint() . '/v1/customers/' . $customerId . '/subscriptions/' . $subscriberId, [
 				'auth' => [$secretKey, '']
 			]);
@@ -308,7 +313,7 @@ class Stripe extends AbstractProvider
 		{
 			$state->requestKey = $state->event['metadata']['request_key'];
 		}
-		
+
 		return $state;
 	}
 
@@ -400,7 +405,8 @@ class Stripe extends AbstractProvider
 				{
 					$providerLog = \XF::em()->findOne('XF:PaymentProviderLog', [
 						'provider_id' => $this->providerId,
-						'transaction_id' => $chargeId
+						'transaction_id' => $chargeId,
+						['purchase_request_key', '!=', null]
 					]);
 					if ($providerLog)
 					{
@@ -412,7 +418,8 @@ class Stripe extends AbstractProvider
 			{
 				$providerLog = \XF::em()->findOne('XF:PaymentProviderLog', [
 					'provider_id' => $this->providerId,
-					'subscriber_id' => $state->subscriberId
+					'subscriber_id' => $state->subscriberId,
+					['purchase_request_key', '!=', null]
 				]);
 				if ($providerLog)
 				{
@@ -458,7 +465,8 @@ class Stripe extends AbstractProvider
 
 		try
 		{
-			$client = \XF::app()->http()->client();
+			$client = $this->getHttpClient();
+
 			$response = $client->get($this->getApiEndpoint() . '/v1/events/' . $state->transactionId, [
 				'auth' => [$secretKey, '']
 			]);
@@ -615,5 +623,17 @@ class Stripe extends AbstractProvider
 	public function verifyCurrency(PaymentProfile $paymentProfile, $currencyCode)
 	{
 		return (in_array($currencyCode, $this->supportedCurrencies));
+	}
+
+	protected function getHttpClient()
+	{
+		$client = \XF::app()->http()->client();
+		$this->applyClientDefaults($client);
+		return $client;
+	}
+
+	protected function applyClientDefaults(\GuzzleHttp\Client $client)
+	{
+		$client->setDefaultOption('headers', ['Stripe-Version' => $this->stripeVersion]);
 	}
 }

@@ -59,7 +59,7 @@ class Option extends AbstractHandler
 		$relations = $json['relations'];
 		unset($json['relations']);
 
-		$option->bulkSet($json);
+		$option->bulkSetIgnore($json);
 		$option->option_id = $name;
 		$option->addon_id = $addOnId;
 		$option->save();

@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 1ff027f2a511171b41071ce198255454
+// FROM HASH: 6da94d860f4fd0511702b3488acdd937
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -36,7 +36,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 					$__vars['i']++;
 					$__compilerTemp2 .= '
 								<li class="nestable-item" data-id="' . $__templater->escape($__vars['smilieId']) . '">
-									<div class="nestable-handle nestable-handle--full" aria-label="' . 'Drag handle' . '"><i class="fa fa-bars" aria-hidden="true"></i></div>
+									<div class="nestable-handle nestable-handle--full" aria-label="' . $__templater->filter('Drag handle', array(array('for_attr', array()),), true) . '"><i class="fa fa-bars" aria-hidden="true"></i></div>
 									<div class="nestable-content">' . $__templater->fn('smilie', array($__vars['smilie']['smilie_text_options']['0'], ), true) . ' ' . $__templater->escape($__vars['smilie']['title']) . ' ';
 					if ($__templater->isTraversable($__vars['smilie']['smilie_text_options'])) {
 						foreach ($__vars['smilie']['smilie_text_options'] AS $__vars['smilieText']) {

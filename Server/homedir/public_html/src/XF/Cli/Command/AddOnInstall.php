@@ -74,6 +74,9 @@ class AddOnInstall extends Command
 			return 1;
 		}
 
+		// make sure any errors get logged here
+		\XF::app()->error()->setIgnorePendingUpgrade(true);
+
 		$addOn->preInstall();
 
 		$this->runSubAction($output, $addOn, 'install');

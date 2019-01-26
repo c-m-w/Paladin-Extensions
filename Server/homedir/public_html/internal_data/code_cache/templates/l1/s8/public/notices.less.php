@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 56793f0d27ebab6b1aff87e873c4fccd
+// FROM HASH: d694f635e3f752b3ab29dc5a2c3b6e1d
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -101,6 +101,14 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	';
 	}
 	$__finalCompiled .= '
+	
+	';
+	if ($__templater->fn('property', array('uix_similarScrollNotice', ), false)) {
+		$__finalCompiled .= '
+		.uix_noticeIcon {background: @xf-uix_primaryColor;}
+	';
+	}
+	$__finalCompiled .= '
 
 	.lSSlideWrapper
 	{
@@ -171,6 +179,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		{
 			color: @xf-linkColor;
 		}
+		
+		a.notice-dismiss {color: inherit;}
 	}
 
 	&.notice--light
@@ -221,27 +231,9 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		border-radius: @xf-borderRadiusMedium;
 		box-shadow: @xf-uix_elevation1;
 
-		&.notice--primary
-		{
-			background-color: fade(@xf-contentHighlightBase--background-color, @_notice-floatingFade);
-		}
+		' . '
 
-		&.notice--accent
-		{
-			background-color: fade(@xf-contentAccentBase--background-color, @_notice-floatingFade);
-		}
-
-		&.notice--dark
-		{
-			background-color: fade(@_notice-darkBg, @_notice-floatingFade);
-		}
-
-		&.notice--light
-		{
-			background-color: fade(@_notice-lightBg, @_notice-floatingFade);
-		}
-
-		.has-no-js &
+		.has-js &
 		{
 			display: none;
 		}

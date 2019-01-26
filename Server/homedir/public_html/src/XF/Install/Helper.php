@@ -26,6 +26,7 @@ class Helper
 	protected $recommendedFunctions = [
 		'fsockopen',
 		'exec',
+		'exif_read_data',
 		'escapeshellarg',
 		'proc_open',
 		'popen',

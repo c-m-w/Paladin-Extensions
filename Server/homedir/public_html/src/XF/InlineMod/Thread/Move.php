@@ -69,6 +69,8 @@ class Move extends AbstractAction
 
 	protected function applyToEntity(Entity $entity, array $options)
 	{
+		/** @var \XF\Entity\Thread $entity */
+
 		$node = $this->getTargetForum($options['target_node_id']);
 		if (!$node)
 		{
@@ -88,7 +90,7 @@ class Move extends AbstractAction
 			$mover->setNotifyWatchers();
 		}
 
-		if ($options['redirect'])
+		if ($options['redirect'] && $entity->discussion_type != 'redirect')
 		{
 			$mover->setRedirect(true, $options['redirect_length']);
 		}

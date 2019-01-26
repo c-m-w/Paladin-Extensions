@@ -12,11 +12,17 @@ class Terms
 		$tosUrl = \XF::app()->container('tosUrl');
 		if (!$tosUrl)
 		{
-			return $controller->redirectPermanently($controller->buildLink('index'));
+			throw $controller->exception(
+				$controller->redirectPermanently($controller->buildLink('index'))
+			);
 		}
-		else
+
+		$option = \XF::options()->tosUrl;
+		if ($option['type'] == 'custom')
 		{
-			return $controller->redirectPermanently($controller->buildLink($tosUrl));
+			throw $controller->exception(
+				$controller->redirectPermanently($option['custom'])
+			);
 		}
 	}
 }

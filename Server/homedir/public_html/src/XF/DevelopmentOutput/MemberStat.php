@@ -66,7 +66,7 @@ class MemberStat extends AbstractHandler
 			$json['active'] = $memberStat->active;
 		}
 
-		$memberStat->bulkSet($json);
+		$memberStat->bulkSetIgnore($json);
 		$memberStat->member_stat_key = $name;
 		$memberStat->addon_id = $addOnId;
 		$memberStat->save();

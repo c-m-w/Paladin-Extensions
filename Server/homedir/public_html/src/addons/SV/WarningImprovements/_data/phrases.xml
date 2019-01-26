@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<phrases>
+  <phrase title="WarningStaff" version_id="100" version_string="1.0.0"><![CDATA[Moderation Staff]]></phrase>
+  <phrase title="Warning_Summary_Message" version_id="2000100" version_string="2.0.1"><![CDATA[{points} points to @{username} for [url='{warning_link}']{title}[/url], {report}
+Content: {content_link}
+{notes}]]></phrase>
+  <phrase title="Warning_Summary_Title" version_id="2000100" version_string="2.0.1"><![CDATA[{username} warned {points} points for {title}]]></phrase>
+  <phrase title="Warning_Thread_Message" version_id="1030006" version_string="1.3.0 RC6"><![CDATA[@{username} received {warning_points} warning points and is above the {threshold} warning point threshold, with a total accumulated {points} active warning points. Triggering report: {report}]]></phrase>
+  <phrase title="Warning_Thread_Title" version_id="1020204" version_string="1.2.2 RC4"><![CDATA[{username} has accumulated {points} warning points on {date}]]></phrase>
+  <phrase title="option.svPreviousWarningLimit" version_id="2000005" version_string="2.0.0rc5"><![CDATA[Previous warning limit]]></phrase>
+  <phrase title="option.svWarningRedirect" version_id="2010100" version_string="2.1.1"><![CDATA[After issuing warning, redirect to content]]></phrase>
+  <phrase title="option.sv_force_conversation_email_on_warning" version_id="2000000" version_string="2.0.0 Alpha"><![CDATA[Force conversation email on warning]]></phrase>
+  <phrase title="option.sv_only_force_warning_email_on_banned" version_id="2000000" version_string="2.0.0"><![CDATA[Only send warning email if user is banned]]></phrase>
+  <phrase title="option.sv_post_warning_summary" version_id="2000000" version_string="2.0.0 Alpha"><![CDATA[Post warning summary to thread]]></phrase>
+  <phrase title="option.sv_post_warning_summaryForum" version_id="2000100" version_string="2.0.1"><![CDATA[Post warning summary to a new thread]]></phrase>
+  <phrase title="option.sv_respect_receive_admin_email_on_warning" version_id="2000000" version_string="2.0.0"><![CDATA[Respect receive site mailings setting]]></phrase>
+  <phrase title="option.sv_show_discouraged_warning_actions" version_id="2000000" version_string="2.0.0 Alpha"><![CDATA[Show discouraged warning action]]></phrase>
+  <phrase title="option.sv_view_own_warnings" version_id="2000000" version_string="2.0.0 Alpha"><![CDATA[View own warnings]]></phrase>
+  <phrase title="option.sv_warning_date_format" version_id="2000000" version_string="2.0.0 Alpha"><![CDATA[Warning date format]]></phrase>
+  <phrase title="option.sv_warningimprovements_alert_send_default" version_id="2000000" version_string="2.0.0 Alpha"><![CDATA[Send warning alert by default]]></phrase>
+  <phrase title="option.sv_warningimprovements_conversation_invite" version_id="2000000" version_string="2.0.0 Alpha"><![CDATA[Allow invite into warning conversations by default]]></phrase>
+  <phrase title="option.sv_warningimprovements_conversation_locked" version_id="2000000" version_string="2.0.0 Alpha"><![CDATA[Lock warning conversations]]></phrase>
+  <phrase title="option.sv_warningimprovements_conversation_send_default" version_id="2000000" version_string="2.0.0 Alpha"><![CDATA[Send warning conversations by default]]></phrase>
+  <phrase title="option.sv_warningimprovements_copy_title" version_id="2000000" version_string="2.0.0 Alpha"><![CDATA[Copy warning title to public warning]]></phrase>
+  <phrase title="option.sv_warningimprovements_default_content_action" version_id="2000000" version_string="2.0.0 Alpha"><![CDATA[Default content action]]></phrase>
+  <phrase title="option.sv_warningimprovements_sticky_button" version_id="2000000" version_string="2.0.0 Alpha"><![CDATA[Make "Warn" button sticky]]></phrase>
+  <phrase title="option.sv_warningimprovements_warning_user" version_id="2000000" version_string="2.0.0 Alpha"><![CDATA[Anonymise as]]></phrase>
+  <phrase title="option.sv_wi_require_warning_notes" version_id="2000000" version_string="2.0.0 Alpha"><![CDATA[Require notes for warning]]></phrase>
+  <phrase title="option.sv_wi_warning_note_chars" version_id="2000000" version_string="2.0.0 Alpha"><![CDATA[Minimum note length]]></phrase>
+  <phrase title="option_explain.svPreviousWarningLimit" version_id="2000005" version_string="2.0.0rc5"><![CDATA[When displaying previous warnings, only show upto X warnings.<br/>
+0 to show all.]]></phrase>
+  <phrase title="option_explain.svWarningRedirect" version_id="2010100" version_string="2.1.1"><![CDATA[XF warnings attempt to redirect to the previous page, this sometimes doesn't work as expected. <br/>
+Warnings understand how to link to their own content, so instead of a dynamic redirect this can be used again.]]></phrase>
+  <phrase title="option_explain.sv_force_conversation_email_on_warning" version_id="101001" version_string="1.1.1"><![CDATA[Forces an email to be send when a user receives a warning conversation. Sends email if the user is banned.]]></phrase>
+  <phrase title="option_explain.sv_only_force_warning_email_on_banned" version_id="101001" version_string="1.1.1"><![CDATA[Only send warning emails when the user is in a banned state.]]></phrase>
+  <phrase title="option_explain.sv_post_warning_summary" version_id="1020200" version_string="1.2.2"><![CDATA[Thread Id, Zero to disable.]]></phrase>
+  <phrase title="option_explain.sv_post_warning_summaryForum" version_id="2000100" version_string="2.0.1"><![CDATA[The forum to post threads about new warnings to]]></phrase>
+  <phrase title="option_explain.sv_respect_receive_admin_email_on_warning" version_id="101001" version_string="1.1.1"><![CDATA[Only sends email if the user has allowed "Receive site mailings"]]></phrase>
+  <phrase title="option_explain.sv_show_discouraged_warning_actions" version_id="101000" version_string="1.1.0"><![CDATA[Limits who can see that warning actions with discouragment exist.]]></phrase>
+  <phrase title="option_explain.sv_view_own_warnings" version_id="1020200" version_string="1.2.2"><![CDATA[Allow users to see their own warnings]]></phrase>
+  <phrase title="option_explain.sv_warning_date_format" version_id="1020204" version_string="1.2.2 RC4"><![CDATA[The Date format string, see <a href="http://php.net/manual/en/function.date.php">php.net</a> for details.]]></phrase>
+  <phrase title="option_explain.sv_warningimprovements_alert_send_default" version_id="1030100" version_string="1.3.1"><![CDATA[By Default, sending warning alerts.]]></phrase>
+  <phrase title="option_explain.sv_warningimprovements_conversation_invite" version_id="100010" version_string="1.0.1"><![CDATA[By Default, check inviting others into a warning conversation.]]></phrase>
+  <phrase title="option_explain.sv_warningimprovements_conversation_locked" version_id="2" version_string="0.02"><![CDATA[By Default, lock warning conversations.]]></phrase>
+  <phrase title="option_explain.sv_warningimprovements_conversation_send_default" version_id="100010" version_string="1.0.1"><![CDATA[By Default, sending warning conversations.]]></phrase>
+  <phrase title="option_explain.sv_warningimprovements_copy_title" version_id="2" version_string="0.02"><![CDATA[Pre-fill the content action "Post a public warning" with the title of the warning.]]></phrase>
+  <phrase title="option_explain.sv_warningimprovements_default_content_action" version_id="2" version_string="0.02"><![CDATA[]]></phrase>
+  <phrase title="option_explain.sv_warningimprovements_sticky_button" version_id="2000000" version_string="2.0.0 Alpha"><![CDATA[If checked then the "Warn" button shown during process of warning a user is sticky.]]></phrase>
+  <phrase title="option_explain.sv_warningimprovements_warning_user" version_id="2000000" version_string="2.0.0 Alpha"><![CDATA[Anonymise warnings and warning alerts as a given user if the warned user does not have the 'View warning issuer' permission.<br/>
+If Empty, uses the phrase 'WarningStaff'.<br/>
+Conversations can <b>not</b> be anonymised.<br/>
+Changing this is only retroactive for Warnings, not Warning Alerts.]]></phrase>
+  <phrase title="option_explain.sv_wi_require_warning_notes" version_id="100040" version_string="1.0.4"><![CDATA[Makes the Notes field required when creating a warning]]></phrase>
+  <phrase title="option_explain.sv_wi_warning_note_chars" version_id="2000000" version_string="2.0.0 Alpha"><![CDATA[The minimum amount of characters required for warning notes. Setting this to 0 will disable.<br/>
+<br/>
+Requires "Require Notes for Warning" to be enabled]]></phrase>
+  <phrase title="option_group.SV_WarningImprovements" version_id="2000000" version_string="2.0.0 Alpha"><![CDATA[Warning improvements]]></phrase>
+  <phrase title="option_group_description.SV_WarningImprovements" version_id="100000" version_string="1.0.0"><![CDATA[A collection of improvements and configurables for XF's warning system.]]></phrase>
+  <phrase title="permission.general_sv_editWarningActions" version_id="101000" version_string="1.1.0"><![CDATA[Edit Warning Actions]]></phrase>
+  <phrase title="permission.general_sv_showAllWarningActions" version_id="101000" version_string="1.1.0"><![CDATA[Don't Summarize Warning Actions]]></phrase>
+  <phrase title="permission.general_sv_viewWarningActions" version_id="101000" version_string="1.1.0"><![CDATA[View Warning Actions]]></phrase>
+  <phrase title="permission.general_viewWarning_issuer" version_id="100" version_string="1.0.0"><![CDATA[View warning issuer]]></phrase>
+  <phrase title="permission_general_sv_editWarningActions" version_id="101000" version_string="1.1.0"><![CDATA[Edit Warning Actions]]></phrase>
+  <phrase title="permission_general_sv_showAllWarningActions" version_id="101000" version_string="1.1.0"><![CDATA[Don't Summarize Warning Actions]]></phrase>
+  <phrase title="permission_general_sv_viewWarningActions" version_id="101000" version_string="1.1.0"><![CDATA[View Warning Actions]]></phrase>
+  <phrase title="permission_general_viewWarning_issuer" version_id="100" version_string="1.0.0"><![CDATA[View warning issuer]]></phrase>
+  <phrase title="send_alert_on_warning" version_id="100000" version_string="1.0.0"><![CDATA[Send alert on warning]]></phrase>
+  <phrase title="sv_add_warning_default" version_id="2000000" version_string="2.0.0 Alpha"><![CDATA[Add warning default]]></phrase>
+  <phrase title="sv_all_warnings" version_id="2000005" version_string="2.0.0rc5"><![CDATA[All Warnings ({count} more)]]></phrase>
+  <phrase title="sv_choose_a_warning" version_id="1040000" version_string="1.4.0"><![CDATA[Choose a warning...]]></phrase>
+  <phrase title="sv_confirm_deletion_of_warning_category" version_id="1040000" version_string="1.4.0"><![CDATA[Confirm Deletion of Warning Category]]></phrase>
+  <phrase title="sv_confirm_deletion_of_warning_default" version_id="102001" version_string="1.2.0"><![CDATA[Confirm Deletion of Warning Default.]]></phrase>
+  <phrase title="sv_content_already_warned" version_id="1070100" version_string="1.7.1"><![CDATA[Content is already warned]]></phrase>
+  <phrase title="sv_create_new_warning_category" version_id="1040000" version_string="1.4.0"><![CDATA[Create New Warning Category]]></phrase>
+  <phrase title="sv_create_new_warning_default" version_id="102001" version_string="1.2.0"><![CDATA[Create New Warning Defaults]]></phrase>
+  <phrase title="sv_custom_warning_title" version_id="1070000" version_string="1.7.0"><![CDATA[Allow editable warning title when giving warning]]></phrase>
+  <phrase title="sv_delete_warning_category" version_id="1040000" version_string="1.4.0"><![CDATA[Delete Warning Category]]></phrase>
+  <phrase title="sv_delete_warning_default" version_id="102001" version_string="1.2.0"><![CDATA[Delete Warning Default]]></phrase>
+  <phrase title="sv_discouraged_display_administrators" version_id="101000" version_string="1.1.0"><![CDATA[Administrators]]></phrase>
+  <phrase title="sv_discouraged_display_all" version_id="101000" version_string="1.1.0"><![CDATA[User, moderators, administrator]]></phrase>
+  <phrase title="sv_discouraged_display_moderators" version_id="101000" version_string="1.1.0"><![CDATA[Moderators or administrators]]></phrase>
+  <phrase title="sv_discouraged_display_none" version_id="101000" version_string="1.1.0"><![CDATA[Never]]></phrase>
+  <phrase title="sv_edit_warning_category" version_id="1040000" version_string="1.4.0"><![CDATA[Edit Warning Category]]></phrase>
+  <phrase title="sv_edit_warning_default" version_id="102001" version_string="1.2.0"><![CDATA[Edit Warning Default]]></phrase>
+  <phrase title="sv_global_warning_actions" version_id="1050001" version_string="1.5.0 Alpha 1"><![CDATA[Global Warning Actions]]></phrase>
+  <phrase title="sv_increase_default_expiry_by_x" version_id="102001" version_string="1.2.0"><![CDATA[ increase default expiry by {length}]]></phrase>
+  <phrase title="sv_issued_warning" version_id="1070100" version_string="1.7.1"><![CDATA[Issued Warning]]></phrase>
+  <phrase title="sv_no_permission_to_give_warning" version_id="1040100" version_string="1.4.1"><![CDATA[You don't have permission to give this warning.]]></phrase>
+  <phrase title="sv_no_permission_to_give_warnings" version_id="1040500" version_string="1.4.5"><![CDATA[You don't have permission to any warnings.]]></phrase>
+  <phrase title="sv_no_results_match" version_id="1040000" version_string="1.4.0"><![CDATA[No results match]]></phrase>
+  <phrase title="sv_parent_category" version_id="1040000" version_string="1.4.0"><![CDATA[Parent Category]]></phrase>
+  <phrase title="sv_please_confirm_that_you_want_to_delete_following_warning_category" version_id="1040000" version_string="1.4.0"><![CDATA[Please confirm that you want to delete the following warning category]]></phrase>
+  <phrase title="sv_please_enter_note_for_warning" version_id="2000000" version_string="2.0.0 Alpha"><![CDATA[Please enter a note for this warning.]]></phrase>
+  <phrase title="sv_please_enter_note_with_at_least_x_characters" version_id="2000000" version_string="2.0.0 Alpha"><![CDATA[Please enter a note with at least {count} characters.
+<br />
+Note is under by {under} characters.]]></phrase>
+  <phrase title="sv_please_enter_valid_parent_warning_category_id" version_id="1040000" version_string="1.4.0"><![CDATA[Please enter a valid parent warning category ID.]]></phrase>
+  <phrase title="sv_please_enter_valid_warning_category_id" version_id="1040000" version_string="1.4.0"><![CDATA[Please enter a valid warning category ID.]]></phrase>
+  <phrase title="sv_rename" version_id="1040000" version_string="1.4.0"><![CDATA[Rename]]></phrase>
+  <phrase title="sv_requested_warning_action_not_found" version_id="101000" version_string="1.1.0"><![CDATA[The requested warning action could not be found.]]></phrase>
+  <phrase title="sv_requested_warning_category_not_found" version_id="1040000" version_string="1.4.0"><![CDATA[The requested warning category could not be found.]]></phrase>
+  <phrase title="sv_requested_warning_default_not_found" version_id="102001" version_string="1.2.0"><![CDATA[The requested warning defaults could not be found.]]></phrase>
+  <phrase title="sv_save_warning_category" version_id="1040000" version_string="1.4.0"><![CDATA[Save Warning Category]]></phrase>
+  <phrase title="sv_save_warning_default" version_id="102001" version_string="1.2.0"><![CDATA[Save Warning Default]]></phrase>
+  <phrase title="sv_this_user_has_no_warning_actions" version_id="101000" version_string="1.1.0"><![CDATA[This user has no warning actions]]></phrase>
+  <phrase title="sv_toggle_radio_view" version_id="1040000" version_string="1.4.0"><![CDATA[Use radio view]]></phrase>
+  <phrase title="sv_toggle_select_view" version_id="1040000" version_string="1.4.0"><![CDATA[Use select view]]></phrase>
+  <phrase title="sv_total_warning_actions" version_id="2000000" version_string="2.0.0 Alpha"><![CDATA[Total warning actions]]></phrase>
+  <phrase title="sv_update_warning_action" version_id="101000" version_string="1.1.0"><![CDATA[Update Warning Action]]></phrase>
+  <phrase title="sv_user_warning_actions" version_id="101000" version_string="1.1.0"><![CDATA[Warning Actions ({count})]]></phrase>
+  <phrase title="sv_wa_minutes" version_id="101000" version_string="1.1.0"><![CDATA[Minutes]]></phrase>
+  <phrase title="sv_warning_action_added_to_user_groups" version_id="101000" version_string="1.1.0"><![CDATA[Added to user groups]]></phrase>
+  <phrase title="sv_warning_action_expiry" version_id="101000" version_string="1.1.0"><![CDATA[Warning Action Expiry]]></phrase>
+  <phrase title="sv_warning_action_for_x" version_id="101000" version_string="1.1.0"><![CDATA[Warning action for {name}]]></phrase>
+  <phrase title="sv_warning_action_post_as_user" version_id="1060200" version_string="1.6.2"><![CDATA[The User Id to post as. 0 to user the user triggering the warning.]]></phrase>
+  <phrase title="sv_warning_action_post_new_thread" version_id="2000000" version_string="2.0.0 Alpha"><![CDATA[Post message to a new thread in the given forum when this warning action is triggered. Zero to disable.<br/>
+<br/>
+New Thread trumps replying to a thread. Only the last warning action is applied when posting.<br/>
+<br/>
+Edit the phases:
+<ul class="inputChoices">
+<li><strong>Warning_Thread_Message</strong></li>
+<li><strong>Warning_Thread_Title</strong></li>
+</ul>
+]]></phrase>
+  <phrase title="sv_warning_action_post_thread_reply" version_id="2000000" version_string="2.0.0 Alpha"><![CDATA[Post message to an existing thread when this warning action is triggered. Zero to disable.<br/>
+<br/>
+Edit the phases:
+<ul class="inputChoices">
+<li><strong>Warning_Thread_Message</strong></li>
+</ul>
+]]></phrase>
+  <phrase title="sv_warning_action_result" version_id="101000" version_string="1.1.0"><![CDATA[Result]]></phrase>
+  <phrase title="sv_warning_action_type" version_id="101000" version_string="1.1.0"><![CDATA[Action Type]]></phrase>
+  <phrase title="sv_warning_actions" version_id="101000" version_string="1.1.0"><![CDATA[Warning Actions]]></phrase>
+  <phrase title="sv_warning_categories" version_id="1040000" version_string="1.4.0"><![CDATA[Warning Categories]]></phrase>
+  <phrase title="sv_warning_category" version_id="1040000" version_string="1.4.0"><![CDATA[Warning Category]]></phrase>
+  <phrase title="sv_warning_category_1_title" version_id="1050000" version_string="1.5.0"><![CDATA[Warning]]></phrase>
+  <phrase title="sv_warning_default_applied_crossing_threshold" version_id="1060200" version_string="1.6.2"><![CDATA[This warning default will only be applied when a user is issued a warning with their total warning points above this points threshold. ]]></phrase>
+  <phrase title="sv_warning_default_is_active" version_id="102001" version_string="1.2.0"><![CDATA[Is active]]></phrase>
+  <phrase title="sv_warning_expiry_extension" version_id="102001" version_string="1.2.0"><![CDATA[Expiry Extension]]></phrase>
+  <phrase title="sv_warning_expiry_extension_explain" version_id="102001" version_string="1.2.0"><![CDATA[The duration to add to the warning's default expiry period when above the threshold]]></phrase>
+  <phrase title="sv_warning_improvements_category_title.uncategorized" version_id="2000000" version_string="2.0.0 Alpha"><![CDATA[Uncategorized warnings]]></phrase>
+  <phrase title="sv_warning_improvements_custom_warning_cannot_be_deleted" version_id="2000000" version_string="2.0.0 Alpha"><![CDATA[Custom warning cannot be deleted.]]></phrase>
+  <phrase title="sv_warning_improvements_enable_disable_this_warning_default" version_id="2000000" version_string="2.0.0 Alpha"><![CDATA[Enable / disable this warning default]]></phrase>
+  <phrase title="sv_warning_improvements_please_select_valid_category" version_id="2000000" version_string="2.0.0 Alpha"><![CDATA[Please select a valid warning category.]]></phrase>
+  <phrase title="sv_warning_improvements_previous_warnings" version_id="2000000" version_string="2.0.0 Alpha"><![CDATA[Previous Warnings ({count})]]></phrase>
+  <phrase title="sv_warning_improvements_sort_categories" version_id="2000000" version_string="2.0.0 Alpha"><![CDATA[Sort categories]]></phrase>
+  <phrase title="sv_warning_improvements_sort_warning_definitions" version_id="2000000" version_string="2.0.0 Alpha"><![CDATA[Sort warning definitions]]></phrase>
+  <phrase title="sv_warning_improvements_user_has_received_at_least_x_warnings_count" version_id="2000000" version_string="2.0.0 Alpha"><![CDATA[User has received at least X warnings]]></phrase>
+  <phrase title="sv_warning_improvements_warning_action" version_id="2000000" version_string="2.0.0 Alpha"><![CDATA[Warning Action]]></phrase>
+  <phrase title="sv_warning_improvements_warning_default" version_id="2000000" version_string="2.0.0 Alpha"><![CDATA[Warning Default]]></phrase>
+  <phrase title="sv_warning_improvements_warning_definitions" version_id="2000000" version_string="2.0.0 Alpha"><![CDATA[Warning Definitions]]></phrase>
+  <phrase title="sv_warning_improvements_you_may_use_placeholders_to_dynamically_insert_warning" version_id="2000000" version_string="2.0.0 Alpha"><![CDATA[You may use the following placeholders: {title}, {content}, {url}, {points}, {warning_title} and {warning_link} to dynamically insert the content's information; {name} to insert the name of the user receiving the warning; {points} to insert the warning points; {warning_title} to insert the warning title; {warning_link} to insert the warning link; and {staff} to insert the name of the staff member giving the warning. You may use BB code.]]></phrase>
+  <phrase title="sv_warning_include_expired" version_id="1051000" version_string="1.5.10"><![CDATA[Include Expired]]></phrase>
+  <phrase title="sv_warning_node_id" version_id="1030007" version_string="1.3.0 RC7"><![CDATA[Post to Forum]]></phrase>
+  <phrase title="sv_warning_post_as_user_id" version_id="1020200" version_string="1.2.2"><![CDATA[User Id To Post As]]></phrase>
+  <phrase title="sv_warning_thread_id" version_id="1030007" version_string="1.3.0 RC7"><![CDATA[Reply to thread]]></phrase>
+  <phrase title="sv_x_weeks" version_id="102001" version_string="1.2.0"><![CDATA[{weeks} Weeks]]></phrase>
+  <phrase title="svwi_the_user_x_could_not_be_found" version_id="1030200" version_string="1.3.2"><![CDATA[The user {name} could not be found.]]></phrase>
+  <phrase title="this_member_has_no_warning_actions_available" version_id="2000000" version_string="2.0.0 Alpha"><![CDATA[This member has no warning actions available.]]></phrase>
+  <phrase title="user_has_received_at_least_x_warnings_points" version_id="3" version_string="0.0.3"><![CDATA[User has received at least X warnings points]]></phrase>
+  <phrase title="user_has_received_at_most_x_warnings_count" version_id="1051000" version_string="1.5.10"><![CDATA[User has received at most X warnings]]></phrase>
+  <phrase title="user_has_received_at_most_x_warnings_points" version_id="3" version_string="0.0.3"><![CDATA[User has received at most X warnings points]]></phrase>
+  <phrase title="warning_alert_text" version_id="2000000" version_string="2.0.0 Alpha"><![CDATA[{name} issued you a warning for <a {warning_attributes}>{warning_title}</a> for {points} points.]]></phrase>
+  <phrase title="warning_escalating_defaults" version_id="102001" version_string="1.2.0"><![CDATA[Warning Escalating Defaults]]></phrase>
+</phrases>

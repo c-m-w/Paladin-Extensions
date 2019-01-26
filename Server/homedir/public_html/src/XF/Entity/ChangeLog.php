@@ -15,6 +15,7 @@ use XF\Mvc\Entity\Structure;
  * @property string field
  * @property string old_value
  * @property string new_value
+ * @property bool protected
  *
  * GETTERS
  * @property Entity|null Content
@@ -72,6 +73,7 @@ class ChangeLog extends Entity
 			'field' => ['type' => self::STR, 'maxLength' => 100, 'required' => true],
 			'old_value' => ['type' => self::STR],
 			'new_value' => ['type' => self::STR],
+			'protected' => ['type' => self::BOOL, 'default' => 0]
 		];
 		$structure->getters = [
 			'Content' => true,

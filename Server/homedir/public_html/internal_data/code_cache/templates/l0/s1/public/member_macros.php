@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 2bb7e5e2431b8b6e9bd4fff5f33c0989
+// FROM HASH: 14ad63122dd9301c8a7fab53247df97c
 return array('macros' => array('moderator_menu_actions' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -93,21 +93,7 @@ return array('macros' => array('moderator_menu_actions' => function($__templater
 			</a>
 		</dd>
 	</dl>
-	';
-	if ($__templater->method($__vars['xf']['visitor'], 'canViewResources', array()) AND $__vars['user']['xfrm_resource_count']) {
-		$__finalCompiled .= '
-	<dl class="pairs pairs--rows pairs--rows--centered menu-fauxLinkRow">
-		<dt>' . 'Resources' . '</dt>
-		<dd>
-			<a href="' . $__templater->fn('link', array('resources/authors', $__vars['user'], ), true) . '" class="menu-fauxLinkRow-linkRow u-concealed">
-				' . $__templater->filter($__vars['user']['xfrm_resource_count'], array(array('number', array()),), true) . '
-			</a>
-		</dd>
-	</dl>
-';
-	}
-	$__finalCompiled .= '
-' . '
+	' . '
 	<dl class="pairs pairs--rows pairs--rows--centered">
 		<dt title="' . 'Reactions received' . '">' . 'Reactions' . '</dt>
 <dd>
@@ -165,7 +151,7 @@ return array('macros' => array('moderator_menu_actions' => function($__templater
 		<dl class="pairs pairs--rows pairs--rows--centered fauxBlockLink">
 			<dt>' . 'Warnings' . '</dt>
 			<dd>
-				<a href="' . $__templater->fn('link', array('members', $__vars['user'], ), true) . '#warnings" class="fauxBlockLink-linkRow u-concealed">
+				<a href="' . (($__vars['context'] == 'tooltip') ? ($__templater->fn('link', array('members', $__vars['user'], ), true) . '#warnings') : $__templater->fn('link', array('members/warnings', $__vars['user'], ), true)) . '" data-xf-click="' . (($__vars['context'] == 'tooltip') ? '' : 'overlay') . '" class="fauxBlockLink-linkRow u-concealed">
 					' . $__templater->filter($__vars['user']['warning_points'], array(array('number', array()),), true) . ' / ' . $__templater->filter($__vars['user']['warning_count'], array(array('number', array()),), true) . '
 				</a>
 			</dd>
@@ -218,18 +204,7 @@ return array('macros' => array('moderator_menu_actions' => function($__templater
 			';
 	}
 	$__compilerTemp1 .= '
-			
-';
-	if (!$__vars['xf']['options']['xc_login_as_user_no_display_tabs']) {
-		$__compilerTemp1 .= '
-
-	' . $__templater->includeTemplate('xc_login_as_user_member_macros', $__vars) . '
-
-';
-	}
-	$__compilerTemp1 .= '
-
-' . '
+			' . '
 		';
 	if (strlen(trim($__compilerTemp1)) > 0) {
 		$__finalCompiled .= '
@@ -285,6 +260,19 @@ return array('macros' => array('moderator_menu_actions' => function($__templater
 	}
 	$__compilerTemp2 .= '
 			' . '
+';
+	if ($__templater->method($__vars['xf']['visitor'], 'canUseLAU', array()) AND ($__vars['xf']['options']['lau_DisplayLoginCard'] AND (($__vars['user']['user_id'] != $__vars['xf']['visitor']['user_id']) AND (($__vars['xf']['session']['lau_id'] != $__vars['user']['user_id']) AND ((!$__vars['xf']['session']['lau_id']) AND (!$__templater->fn('in_array', array($__vars['user']['user_id'], $__vars['xf']['options']['lau_DisallowedUsers'], ), false))))))) {
+		$__compilerTemp2 .= '
+	' . $__templater->button('
+		' . 'Login' . '
+	', array(
+			'href' => $__templater->fn('link', array('login/lauin', null, array('username' => $__vars['user']['username'], ), ), false),
+			'class' => 'button--link',
+		), '', array(
+		)) . '
+';
+	}
+	$__compilerTemp2 .= '
 		';
 	if (strlen(trim($__compilerTemp2)) > 0) {
 		$__finalCompiled .= '

@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 0eaf6f6905eeff58692895bf3fbac4bb
+// FROM HASH: e20ae038d5d8598f04b2a5072db55739
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -1069,15 +1069,22 @@ html
 {
 	.m-listPlain();
 	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
 
 	> li
 	{
-		flex: 1;
+		width: 50%;
 	}
 
 	@media (max-width: @xf-responsiveMedium)
 	{
 		display: block;
+
+		> li
+		{
+			width: 100%;
+		}
 	}
 }
 

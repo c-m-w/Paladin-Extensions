@@ -1,0 +1,14 @@
+{
+    "legacy_addon_id": "",
+    "title": "[XenConcept] Maintenance Page",
+    "description": "This addon allows you to create a maintenance page when it is enabled.",
+    "version_id": 2000300,
+    "version_string": "2.0.3",
+    "dev": "Remi C",
+    "dev_url": "https://www.xen-concept.com/",
+    "faq_url": "https://www.xen-concept.com/forums/faqs.13/",
+    "support_url": "https://www.xen-concept.com/forums/bug-reports.7/",
+    "extra_urls": [],
+    "require": [],
+    "icon": "logo.png"
+}

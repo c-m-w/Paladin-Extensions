@@ -58,6 +58,11 @@ class LimitTags implements FiltererInterface
 		return $this->disabledTags;
 	}
 
+	public function isTagDisabled($tag)
+	{
+		return !empty($this->disabledTags[$tag]);
+	}
+
 	public function setMaxTextSize($size)
 	{
 		$this->maxTextSize = $size;

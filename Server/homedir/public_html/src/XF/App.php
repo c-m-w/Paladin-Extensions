@@ -97,7 +97,7 @@ class App implements \ArrayAccess
 				'sslVerify' => null,
 				'proxy' => null
 			],
-			'globalSalt' => 'Nulled by NulledTeam.com',
+			'globalSalt' => '2983b7e1e5f8f0662d35a8cc47b5299f',
 			'superAdmins' => '', // keep this for upgrade purposes
 			'internalDataPath' => 'internal_data',
 			'codeCachePath' => '%s/code_cache',
@@ -174,7 +174,7 @@ class App implements \ArrayAccess
 
 		$container['jsVersion'] = function (Container $c)
 		{
-			return substr(md5(\XF::$versionId . $c['options']['jsLastUpdate']), 0, 8);
+			return substr(md5(\XF::$versionId . $c['options']->jsLastUpdate), 0, 8);
 		};
 
 		$container['avatarSizeMap'] = [
@@ -195,11 +195,14 @@ class App implements \ArrayAccess
 		{
 			/** @var Http\Request $request */
 			$request = $c['request'];
+			$options = $c['options'];
+			$fullPath = $request->getFullBasePath();
+			$canonical = isset($options->boardUrl) ? $options->boardUrl : $fullPath;
 
 			return [
 				'full' => rtrim($request->getFullBasePath(), '/') . '/',
-				'base' => rtrim($request->getBasePath(), '/') . '/',
-				'canonical' => rtrim($c['options']->boardUrl, '/') . '/',
+				'base' => rtrim($fullPath, '/') . '/',
+				'canonical' => rtrim($canonical, '/') . '/',
 				'nopath' => '',
 			];
 		};
@@ -393,6 +396,41 @@ class App implements \ArrayAccess
 			return new $class($this);
 		};
 
+		$container['contactUrl'] = function ($c)
+		{
+			$options = $c['options'];
+			$router = $c['router.public'];
+
+			switch ($options->contactUrl['type'])
+			{
+				case 'default': $url = $router->buildLink('misc/contact/'); break;
+				case 'custom': $url = $options->contactUrl['custom']; break;
+				default: $url = '';
+			}
+			return $url;
+		};
+
+		$container['privacyPolicyUrl'] = function ($c)
+		{
+			$options = $c['options'];
+			$router = $c['router.public'];
+
+			if (!isset($options->privacyPolicyUrl['type']))
+			{
+				return '';
+			}
+
+			switch ($options->privacyPolicyUrl['type'])
+			{
+				case 'default':
+					return $router->buildLink('help/privacy-policy/'); break;
+				case 'custom':
+					return $options->privacyPolicyUrl['custom']; break;
+				default:
+					return '';
+			}
+		};
+
 		$container['tosUrl'] = function ($c)
 		{
 			$options = $c['options'];
@@ -503,7 +541,10 @@ class App implements \ArrayAccess
 
 		$container['options'] = $this->fromRegistry('options',
 			function(Container $c) { return $c['em']->getRepository('XF:Option')->rebuildOptionCache(); },
-			function(array $options) { return new \ArrayObject($options, \ArrayObject::ARRAY_AS_PROPS); }
+			function(array $options)
+			{
+				return new \ArrayObject($options, \ArrayObject::ARRAY_AS_PROPS);
+			}
 		);
 
 		$container['codeEventListeners'] = $this->fromRegistry('codeEventListeners',
@@ -562,7 +603,9 @@ class App implements \ArrayAccess
 		$container['notices'] = $this->fromRegistry('notices',
 			function(Container $c) { return $c['em']->getRepository('XF:Notice')->rebuildNoticeCache(); }
 		);
-		$container['notices.lastReset'] = $this->fromRegistry('noticesLastReset', function() { return 0; });
+		$container['notices.lastReset'] = $this->fromRegistry('noticesLastReset',
+			function(Container $c) { return $c['em']->getRepository('XF:Notice')->rebuildNoticeLastResetCache(); }
+		);
 
 		$container->factory('criteria', function($class, array $params, Container $c)
 		{
@@ -959,7 +1002,7 @@ class App implements \ArrayAccess
 			$cache = $c['language.cache'];
 			if (!$id || !isset($cache[$id]))
 			{
-				$id = $c['options']['defaultLanguageId'];
+				$id = $c['options']->defaultLanguageId;
 			}
 
 			if (isset($cache[$id]))
@@ -1003,7 +1046,7 @@ class App implements \ArrayAccess
 			$cache = $c['style.cache'];
 			if (!$id || !isset($cache[$id]))
 			{
-				$id = $c['options']['defaultStyleId'];
+				$id = $c['options']->defaultStyleId;
 			}
 
 			if (isset($cache[$id]))
@@ -1384,31 +1427,35 @@ class App implements \ArrayAccess
 		$this->initializeExtra();
 	}
 
+	/**
+	 * @param               $key
+	 * @param \Closure      $rebuildFunction
+	 * @param \Closure|null $decoratorFunction
+	 *
+	 * @return \Closure
+	 * @throws \XF\Db\Exception
+	 */
 	public function fromRegistry($key, \Closure $rebuildFunction, \Closure $decoratorFunction = null)
 	{
 		return function(Container $c) use ($key, $rebuildFunction, $decoratorFunction)
 		{
-			try
+			$data = $this->container['registry'][$key];
+
+			if ($data === null)
 			{
-				$data = $this->container['registry'][$key];
-				if ($data === null)
-				{
-					$data = $rebuildFunction($c, $key);
-				}
-				return $decoratorFunction ? $decoratorFunction($data, $c, $key) : $data;
+				$data = $rebuildFunction($c, $key);
 			}
-			catch (\XF\Db\Exception $e)
-			{
-				return [];
-			}
+
+			return $decoratorFunction ? $decoratorFunction($data, $c, $key) : $data;
 		};
 	}
 
 	/**
 	 * @param Container $c
-	 * @param string $class
+	 * @param string    $class
 	 *
 	 * @return Templater
+	 * @throws \Exception
 	 */
 	public function setupTemplaterObject(Container $c, $class)
 	{
@@ -1441,6 +1488,7 @@ class App implements \ArrayAccess
 
 		$templater->setJquerySource($c['jQueryVersion'], $options->jQuerySource);
 		$templater->setJsVersion($c['jsVersion']);
+		$templater->setJsBaseUrl($config['javaScriptUrl']);
 
 		$templater->setDynamicDefaultAvatars($options->dynamicAvatarEnable);
 
@@ -1592,19 +1640,23 @@ class App implements \ArrayAccess
 		$language = \XF::language();
 		$config = $this->config();
 
+		$cookieConfig = $config['cookie'];
+		$cookieConfig['secure'] = $request->isSecure() ? true : false;
+
 		$data = [
 			'versionId' => \XF::$versionId,
 			'version' => \XF::$version,
 			'app' => $this,
 			'request' => $request,
 			'uri' => $request->getRequestUri(),
+			'fullUri' => $request->getFullRequestUri(),
 			'time' => \XF::$time,
 			'timeDetails' => $language->getDayStartTimestamps(),
 			'debug' => \XF::$debugMode,
 			'designer' => $config['designer']['enabled'],
 			'visitor' => \XF::visitor(),
 			'session' => $this->session(),
-			'cookie' => $config['cookie'],
+			'cookie' => $cookieConfig,
 			'enableRtnProtect' => $config['enableReverseTabnabbingProtection'],
 			'language' => $language,
 			'style' => $this->templater()->getStyle(),
@@ -1615,6 +1667,8 @@ class App implements \ArrayAccess
 			'simpleCache' => $this->simpleCache(),
 			'livePayments' => $config['enableLivePayments'],
 			'fullJs' => $config['development']['fullJs'],
+			'contactUrl' => $this->container['contactUrl'],
+			'privacyPolicyUrl' => $this->container['privacyPolicyUrl'],
 			'tosUrl' => $this->container['tosUrl'],
 			'homePageUrl' => $this->container['homePageUrl'],
 			'helpPageCount' => $this->container['helpPageCount'],

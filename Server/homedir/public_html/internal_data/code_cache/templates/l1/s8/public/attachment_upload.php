@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: dfab4b64e15dda45954ea548fee5f915
+// FROM HASH: f9a9a6cbbf78cfa8a5cca92c79d88bbd
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -56,7 +56,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			'explain' => 'You may close this window/tab once you have uploaded your files to return to your content.',
 		)) . '
 			';
-	} else {
+	} else if ((!$__vars['canUpload']) AND $__vars['uploadError']) {
 		$__compilerTemp4 .= '
 				' . $__templater->formRow($__templater->escape($__vars['uploadError']), array(
 			'label' => 'Attach file',

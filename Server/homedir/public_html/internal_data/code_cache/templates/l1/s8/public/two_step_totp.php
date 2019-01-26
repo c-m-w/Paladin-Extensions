@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: a1e14a2fa43a8f7536da52dada29d0ed
+// FROM HASH: d52ec7d001f642bdcb337054a638d4fa
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -41,8 +41,9 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 ' . $__templater->formTextBoxRow(array(
 		'name' => 'code',
-		'type' => 'number',
 		'autofocus' => 'autofocus',
+		'inputmode' => 'numeric',
+		'pattern' => '[0-9]*',
 	), array(
 		'label' => 'Verification code',
 	));

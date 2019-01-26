@@ -12,9 +12,19 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 <h2><a href="' . $__templater->fn('link', array('canonical:conversations/unread', $__vars['conversation'], ), true) . '">' . $__templater->escape($__vars['conversation']['title']) . '</a></h2>
 
 ';
-	if ($__vars['xf']['options']['emailConversationIncludeMessage']) {
+	if ($__vars['conversation']['is_conversation_for_warning']) {
 		$__finalCompiled .= '
 	<div class="message">' . $__templater->fn('bb_code_type', array('emailHtml', $__vars['message']['message'], 'conversation_message', $__vars['message'], ), true) . '</div>
+';
+	} else {
+		$__finalCompiled .= '
+	';
+		if ($__vars['xf']['options']['emailConversationIncludeMessage']) {
+			$__finalCompiled .= '
+	<div class="message">' . $__templater->fn('bb_code_type', array('emailHtml', $__vars['message']['message'], 'conversation_message', $__vars['message'], ), true) . '</div>
+';
+		}
+		$__finalCompiled .= '
 ';
 	}
 	$__finalCompiled .= '

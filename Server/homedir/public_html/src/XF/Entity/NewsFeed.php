@@ -7,6 +7,7 @@ use XF\Mvc\Entity\Structure;
 
 /**
  * COLUMNS
+ *
  * @property int|null news_feed_id
  * @property int user_id
  * @property string username
@@ -36,6 +37,21 @@ class NewsFeed extends Entity
 		else
 		{
 			return false;
+		}
+	}
+
+	public function isVisible(&$error = null)
+	{
+		$handler = $this->getHandler();
+		$content = $this->Content;
+
+		if ($handler && $content)
+		{
+			return $handler->contentIsVisible($content, $error);
+		}
+		else
+		{
+			return true;
 		}
 	}
 

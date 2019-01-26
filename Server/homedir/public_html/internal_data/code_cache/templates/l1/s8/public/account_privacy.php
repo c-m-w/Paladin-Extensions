@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: fad33792e0905efbafc70f895eaa5e7d
+// FROM HASH: 0524fea0ca8fe9d2e7dae949bf09a9b7
 return array('macros' => array('privacy_option' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -86,6 +86,9 @@ return array('macros' => array('privacy_option' => function($__templater, array 
 		<div class="block-body">
 			' . $__templater->callMacro('helper_account', 'activity_privacy_row', array(), $__vars) . '
 			' . $__templater->callMacro('helper_account', 'dob_privacy_row', array(), $__vars) . '
+			' . $__templater->callMacro('helper_account', 'email_options_row', array(
+		'showExplain' => true,
+	), $__vars) . '
 
 			' . $__templater->formRow('
 
@@ -111,7 +114,6 @@ return array('macros' => array('privacy_option' => function($__templater, array 
 		'name' => 'allow_view_identities',
 		'label' => 'View your identities' . $__vars['xf']['language']['label_separator'],
 	), $__vars) . '
-' . $__templater->includeTemplate('blacktea_steamauth_flags_privacy_view', $__vars) . '
 			', array(
 		'rowtype' => 'inputLabelPair noColon',
 		'label' => 'Allow users to' . $__vars['xf']['language']['ellipsis'],

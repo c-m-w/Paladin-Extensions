@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 34bb08d13cb9cfe27d0b66c6d210d6bf
+// FROM HASH: f70b6a1973d915ad0eb2030967ed5c6b
 return array('macros' => array('node_list' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -271,7 +271,7 @@ return array('macros' => array('node_list' => function($__templater, array $__ar
 	if ($__vars['node']['node_type_id'] == 'Forum') {
 		$__finalCompiled .= '
 					<div class="contentRow-minor contentRow-minor--singleLine">
-						' . 'You have insufficient privileges to post here.' . '
+						' . 'You have insufficient privileges to post threads here.' . '
 					</div>
 				';
 	}
@@ -296,6 +296,10 @@ return array('macros' => array('node_list' => function($__templater, array $__ar
 {
 	$__finalCompiled = '';
 	$__templater->pageParams['pageTitle'] = $__templater->preEscaped('Post in...');
+	$__finalCompiled .= '
+
+';
+	$__templater->setPageParam('head.' . 'metaNoindex', $__templater->preEscaped('<meta name="robots" content="noindex" />'));
 	$__finalCompiled .= '
 
 ' . $__templater->callMacro(null, 'node_list', array(

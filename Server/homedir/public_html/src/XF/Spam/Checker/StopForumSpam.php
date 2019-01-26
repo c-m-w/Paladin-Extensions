@@ -175,7 +175,7 @@ class StopForumSpam extends AbstractProvider implements UserCheckerInterface
 			. '?api_key=' . $this->app()->options()->stopForumSpam['apiKey']
 			. ($user->username ? '&username=' . urlencode($user->username) : '')
 			. ($user->email ? '&email=' . urlencode($user->email) : '')
-			. '&ip=' . urlencode($ip);
+			. '&ip=' . urlencode(\XF\Util\Ip::convertIpBinaryToString($ip));
 	}
 
 	protected function getSfsCacheKey($apiUrl)

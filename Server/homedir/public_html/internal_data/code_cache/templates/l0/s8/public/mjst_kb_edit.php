@@ -106,7 +106,7 @@ return array('macros' => array('kb_categories' => function($__templater, array $
 				' . $__templater->formEditorRow(array(
 		'name' => 'message',
 		'value' => $__vars['kb']['message'],
-		'attachments' => ((!$__templater->test($__vars['attachmentData']['attachments'], 'empty', array())) ? $__vars['attachmentData']['attachments'] : array()),
+		'attachments' => ((!$__templater->fn('empty', array($__vars['attachmentData']['attachments']))) ? $__vars['attachmentData']['attachments'] : array()),
 		'data-min-height' => '200',
 	), array(
 		'label' => 'Message',

@@ -7,7 +7,6 @@
   <phrase title="option.similarThreadsMinimumCommonWordLength" version_id="10" version_string="1.0"><![CDATA[Minimum common word length]]></phrase>
   <phrase title="option.similarThreadsMultibyte" version_id="10" version_string="1.0"><![CDATA[Multibyte]]></phrase>
   <phrase title="option.similarThreadsSameForum" version_id="10" version_string="1.0"><![CDATA[Same forum]]></phrase>
-  <phrase title="option.similarThreadsShowBelowFirstPost" version_id="10" version_string="1.0"><![CDATA[Show below first post]]></phrase>
   <phrase title="option.similarThreadsShowBelowQuickReply" version_id="10" version_string="1.0"><![CDATA[Show below quick reply]]></phrase>
   <phrase title="option.similarThreadsShowPostThread" version_id="10" version_string="1.0"><![CDATA[Show post thread]]></phrase>
   <phrase title="option.similarThreadsShowPostThreadQuickThread" version_id="33" version_string="3.3"><![CDATA[Show post thread quick thread]]></phrase>
@@ -20,7 +19,6 @@
   <phrase title="option_explain.similarThreadsMinimumCommonWordLength" version_id="10" version_string="1.0"><![CDATA[Exclude words which are less than this many characters.]]></phrase>
   <phrase title="option_explain.similarThreadsMultibyte" version_id="10" version_string="1.0"><![CDATA[Include support for multibyte characters. Typically only used for Chinese, Japanese and Russian languages.]]></phrase>
   <phrase title="option_explain.similarThreadsSameForum" version_id="10" version_string="1.0"><![CDATA[Show similar threads results from same forum as being viewed.]]></phrase>
-  <phrase title="option_explain.similarThreadsShowBelowFirstPost" version_id="10" version_string="1.0"><![CDATA[Show similar threads below first post.]]></phrase>
   <phrase title="option_explain.similarThreadsShowBelowQuickReply" version_id="10" version_string="1.0"><![CDATA[Show similar threads below quick reply.]]></phrase>
   <phrase title="option_explain.similarThreadsShowPostThread" version_id="33" version_string="3.3"><![CDATA[Show similar threads when creating a new thread (full page).]]></phrase>
   <phrase title="option_explain.similarThreadsShowPostThreadQuickThread" version_id="33" version_string="3.3"><![CDATA[Show similar threads when creating a new thread (quick thread).]]></phrase>
@@ -31,6 +29,7 @@
   <phrase title="permission.similarThreads_view" version_id="10" version_string="1.0"><![CDATA[View]]></phrase>
   <phrase title="permission_interface.similarThreads" version_id="10" version_string="1.0"><![CDATA[Similar threads]]></phrase>
   <phrase title="similarthreads_date" version_id="10" version_string="1.0"><![CDATA[Date]]></phrase>
+  <phrase title="similarthreads_enhanced_search_is_not_enabled" version_id="43" version_string="4.3"><![CDATA[Enhanced search is not enabled. Please go to the Options page of Similar threads and deselect the Enhanced search option.]]></phrase>
   <phrase title="similarthreads_forum" version_id="10" version_string="1.0"><![CDATA[Forum]]></phrase>
   <phrase title="similarthreads_replies" version_id="10" version_string="1.0"><![CDATA[Replies]]></phrase>
   <phrase title="similarthreads_similar_threads" version_id="10" version_string="1.0"><![CDATA[Similar threads]]></phrase>

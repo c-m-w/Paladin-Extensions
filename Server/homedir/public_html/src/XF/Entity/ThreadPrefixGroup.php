@@ -5,9 +5,16 @@ namespace XF\Entity;
 use XF\Mvc\Entity\Structure;
 
 /**
- * Class ThreadPrefixGroup
+ * COLUMNS
+ * @property int|null prefix_group_id
+ * @property int display_order
  *
- * @package XF\Entity
+ * GETTERS
+ * @property \XF\Phrase|string title
+ *
+ * RELATIONS
+ * @property \XF\Entity\Phrase MasterTitle
+ * @property \XF\Entity\ThreadPrefix[] Prefixes
  */
 class ThreadPrefixGroup extends AbstractPrefixGroup
 {

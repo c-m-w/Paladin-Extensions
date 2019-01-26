@@ -23,7 +23,7 @@ class User extends AbstractHandler
 
 		// this will only ever fetch the past 24 hours
 		$usersActive = $db->fetchPairs('
-			SELECT ' . (\XF::$time - \XF::$time % 86400) . ',
+			SELECT ' . ($start - $start % 86400) . ',
 				COUNT(*)
 			FROM xf_user
 			WHERE last_activity > ?

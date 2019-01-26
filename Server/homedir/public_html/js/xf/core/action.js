@@ -139,14 +139,14 @@
 		},
 
 		$form: null,
-		$container: null,
 		href: null,
 		loading: false,
 
 		init: function()
 		{
-			var $form = this.$target.closest('form'),
-				href = $form.data('preview-url') || this.options.previewUrl || this.$target.attr('href');
+			this.$form = this.$target.closest('form');
+
+			var href = this.$form.data('preview-url') || this.options.previewUrl || this.$target.attr('href');
 
 			if (!href)
 			{
@@ -154,15 +154,15 @@
 				return;
 			}
 
-			this.$container = $form.find('.js-previewContainer').first();
-			if (!this.$container.length)
+			this.href = href;
+
+			if (!this.getCurrentContainer())
 			{
 				console.error('Preview form must have a .js-previewContainer element');
 				return;
 			}
 
-			this.href = href;
-			this.$form = $form.on('preview:hide', XF.proxy(this, 'onPreviewHide'));
+			this.$form.on('preview:hide', XF.proxy(this, 'onPreviewHide'));
 		},
 
 		click: function(e)
@@ -179,6 +179,14 @@
 				return;
 			}
 
+			this.loading = true;
+
+			var draftHandler = XF.Element.getHandler(this.$form, 'draft');
+			if (draftHandler)
+			{
+				draftHandler.triggerSave();
+			}
+
 			var self = this,
 				formData = XF.getDefaultFormData(this.$form);
 
@@ -193,21 +201,18 @@
 				return;
 			}
 
-			var self = this;
+			var $container = this.getCurrentContainer();
 
 			if (data.html.content)
 			{
 				XF.setupHtmlInsert(data.html, function($html, container, onComplete)
 				{
-					self.$container.removeClassTransitioned('is-active', function()
+					$container.removeClassTransitioned('is-active', function()
 					{
-						self.$container.replaceWith($html);
+						$container.replaceWith($html);
 						onComplete();
 						$html.addClassTransitioned('is-active');
-						self.$container = $html;
 					});
-
-					return false;
 				});
 			}
 			else
@@ -218,7 +223,12 @@
 
 		onPreviewHide: function(e)
 		{
-			this.$container.removeClassTransitioned('is-active');
+			this.getCurrentContainer().removeClassTransitioned('is-active');
+		},
+
+		getCurrentContainer: function()
+		{
+			return this.$form.find('.js-previewContainer').first();
 		}
 	});
 
@@ -233,7 +243,7 @@
 			if (switchActions)
 			{
 				var match, value;
-				while (match = switchActions.match(/^(\s*,)?\s*(addClass|removeClass):([^,]+),/))
+				while (match = switchActions.match(/(\s*,)?\s*(addClass|removeClass):([^,]+)(,|$)/))
 				{
 					switchActions = switchActions.substring(match[0].length);
 
@@ -738,6 +748,12 @@
 				return false;
 			}
 			this.previewing = true;
+
+			var draftHandler = XF.Element.getHandler(this.$target, 'draft');
+			if (draftHandler)
+			{
+				draftHandler.triggerSave();
+			}
 
 			var t = this;
 			XF.ajax('post', this.options.previewUrl, this.$target.serializeArray(), function(data)

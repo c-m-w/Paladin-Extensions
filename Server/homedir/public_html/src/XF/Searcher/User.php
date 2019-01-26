@@ -110,7 +110,8 @@ class User extends AbstractSearcher
 			}
 			if ($parts)
 			{
-				$finder->whereSql(implode(' OR ', $parts));
+				$joiner = $positiveMatch ? ' OR ' : ' AND ';
+				$finder->whereSql(implode($joiner, $parts));
 			}
 			return true;
 		}
@@ -139,7 +140,6 @@ class User extends AbstractSearcher
 			$customFields = array_merge($value, $exactMatchFields);
 			unset($customFields['exact']);
 
-			$conditions = [];
 			foreach ($customFields AS $fieldId => $value)
 			{
 				if ($value === '' || (is_array($value) && !$value))
@@ -149,6 +149,7 @@ class User extends AbstractSearcher
 
 				$finder->with('Profile.CustomFields|' . $fieldId);
 				$isExact = !empty($exactMatchFields[$fieldId]);
+				$conditions = [];
 
 				foreach ((array)$value AS $possible)
 				{
@@ -162,10 +163,11 @@ class User extends AbstractSearcher
 						$conditions[] = [$columnName, 'LIKE', $finder->escapeLike($possible, '%?%')];
 					}
 				}
-			}
-			if ($conditions)
-			{
-				$finder->whereOr($conditions);
+
+				if ($conditions)
+				{
+					$finder->whereOr($conditions);
+				}
 			}
 		}
 

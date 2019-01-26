@@ -1,5 +1,7 @@
 <?php
 return array (
+  'style_prop_group_desc.Original_Poster_Style' => '',
+  'style_prop_group_desc.XenMake_ProductManagerLayout' => '',
   'style_prop_group_desc.ahDiscordWidget' => '',
   'style_prop_group_desc.avatar' => 'Avatars are graphical representations of users. Some users may upload their own images, while others will use the default letter-based imagery. Styling for both of these types is controlled here.',
   'style_prop_group_desc.basic' => 'Defines the location of various commonly-used assets etc.',
@@ -17,6 +19,7 @@ return array (
   'style_prop_group_desc.headerNav' => 'The upper elements of public-facing pages are controlled with these settings, including navigation tabs and the header logo.',
   'style_prop_group_desc.inlineMod' => 'Inline moderation allows moderators to take actions against multiple pieces of content simultaneously. It may also be exposed to members via systems like conversations.',
   'style_prop_group_desc.input' => 'Individual form controls - primarily text boxes, are styled here, including focused and disabled variants.',
+  'style_prop_group_desc.kl_amdp' => 'Style properties for the double post merger.',
   'style_prop_group_desc.member' => 'Elements for the special page on which the full information for a user is displayed are styled here.',
   'style_prop_group_desc.menu' => 'Most popup menus within the system share common styling attributes, which are located here.',
   'style_prop_group_desc.message' => 'The various elements that combine to form the main message block, including the message itself, the user info block and the signature, are controlled here.',
@@ -28,7 +31,5 @@ return array (
   'style_prop_group_desc.rte' => 'The rich text (or WYSIWYG) editor is the preferred method of entering text for messages posted to the forum. Various parts of the editor can be styled with the settings in this group.',
   'style_prop_group_desc.tab' => 'Standalone tabs - those that are not part of the main page navigation, are controlled here.',
   'style_prop_group_desc.thReactions' => 'Style properties relating to the [TH] Reactions add-on.',
-  'style_prop_group_desc.th_bookmarks' => '',
   'style_prop_group_desc.tooltip' => 'Tooltips are (usually) small hints that appear when the mouse pointer hovers over page elements that may require additional information to convey their purpose or content.',
-  'style_prop_group_desc.xfv_threadstarter_properties' => '',
 );

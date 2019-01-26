@@ -297,7 +297,7 @@ class Conversation extends AbstractController
 			{
 				return $this->error($errors);
 			}
-			$this->assertNotFlooding('conversation');
+			$this->assertNotFlooding('conversation', $this->app->options()->floodCheckLengthDiscussion ?: null);
 			$conversation = $creator->save();
 
 			$this->finalizeConversationCreate($creator);
@@ -482,7 +482,7 @@ class Conversation extends AbstractController
 		{
 			return $this->error($errors);
 		}
-		$this->assertNotFlooding('conversation');
+		$this->assertNotFlooding('conversation_message');
 		$message = $replier->save();
 
 		$this->afterConversationReply($replier);
@@ -635,6 +635,24 @@ class Conversation extends AbstractController
 		}
 	}
 
+	/**
+	 * @param \XF\Entity\ConversationMaster $conversation
+	 *
+	 * @return \XF\Service\Conversation\Editor
+	 */
+	protected function setupConversationEdit(\XF\Entity\ConversationMaster $conversation)
+	{
+		/** @var \XF\Service\Conversation\Editor $editor */
+		$editor = $this->service('XF:Conversation\Editor', $conversation);
+
+		$editor->setTitle($this->filter('title', 'str'));
+		$editor->setOpenInvite($this->filter('open_invite', 'bool'));
+		$editor->setConversationOpen(!$this->filter('conversation_locked', 'bool'));
+
+		return $editor;
+	}
+
+
 	public function actionEdit(ParameterBag $params)
 	{
 		$userConv = $this->assertViewableUserConversation($params->conversation_id);
@@ -647,10 +665,14 @@ class Conversation extends AbstractController
 
 		if ($this->isPost())
 		{
-			$conversation->title = $this->filter('title', 'str');
-			$conversation->open_invite = $this->filter('open_invite', 'bool');
-			$conversation->conversation_open = !$this->filter('conversation_locked', 'bool');
-			$conversation->save();
+			$editor = $this->setupConversationEdit($conversation);
+
+			if (!$editor->validate($errors))
+			{
+				return $this->error($errors);
+			}
+
+			$editor->save();
 
 			return $this->redirect($this->buildLink('conversations', $conversation));
 		}
@@ -878,7 +900,7 @@ class Conversation extends AbstractController
 		$likePlugin = $this->plugin('XF:Like');
 		return $likePlugin->actionLikes(
 			$message,
-			['conversation/messages/likes', $message],
+			['conversations/messages/likes', $message],
 			$title, $breadcrumbs
 		);
 	}
@@ -1156,6 +1178,19 @@ class Conversation extends AbstractController
 	protected function getConversationMessageRepo()
 	{
 		return $this->repository('XF:ConversationMessage');
+	}
+
+	public function assertPolicyAcceptance($action)
+	{
+		switch (strtolower($action))
+		{
+			// mostly just so it doesn't error
+			case 'popup':
+				break;
+
+			default:
+				parent::assertPolicyAcceptance($action);
+		}
 	}
 
 	public static function getActivityDetails(array $activities)

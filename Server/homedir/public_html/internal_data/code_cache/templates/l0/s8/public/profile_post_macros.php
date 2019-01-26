@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: a94c4ec2a442cf9105fa2884a8cf48df
+// FROM HASH: fc4e7b5b8b763c3776e0b1e22d330323
 return array('macros' => array('attribution' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -193,7 +193,7 @@ return array('macros' => array('attribution' => function($__templater, array $__
 			'labelclass' => 'actionBar-action actionBar-action--inlineMod',
 			'class' => 'js-inlineModToggle',
 			'data-xf-init' => 'tooltip',
-			'title' => $__templater->filter('Select for moderation', array(array('for_attr', array()),), false),
+			'title' => 'Select for moderation',
 			'_type' => 'option',
 		))) . '
 									';
@@ -210,7 +210,6 @@ return array('macros' => array('attribution' => function($__templater, array $__
 									';
 	$__vars['hasActionBarMenu'] = false;
 	$__compilerTemp2 .= '
-									' . $__templater->includeTemplate('changeContentOwner_profile_post_macros_action_bar', $__vars) . '
 									';
 	if ($__templater->method($__vars['profilePost'], 'canEdit', array())) {
 		$__compilerTemp2 .= '
@@ -552,8 +551,8 @@ return array('macros' => array('attribution' => function($__templater, array $__
 	), $__arguments, $__vars);
 	$__finalCompiled .= '
 
-	<div class="message-responseRow">
-		<div class="comment' . ($__templater->method($__vars['comment'], 'isIgnored', array()) ? ' is-ignored' : '') . '"
+	<div class="message-responseRow ' . ($__templater->method($__vars['comment'], 'isIgnored', array()) ? 'is-ignored' : '') . '">
+		<div class="comment"
 			data-author="' . $__templater->escape($__vars['comment']['User']['username']) . '"
 			data-content="profile-post-comment-' . $__templater->escape($__vars['comment']['profile_post_comment_id']) . '"
 			id="js-profilePostComment-' . $__templater->escape($__vars['comment']['profile_post_comment_id']) . '">
@@ -935,6 +934,7 @@ return array('macros' => array('attribution' => function($__templater, array $__
 
 		' . $__compilerTemp1 . '
 				<div class="message-editorWrapper">
+					<span class="u-srOnly" id="ctrl_message">' . 'Update your status' . $__vars['xf']['language']['label_separator'] . '</span>
 					' . $__templater->formTextArea(array(
 		'name' => 'message',
 		'autosize' => 'true',
@@ -943,6 +943,7 @@ return array('macros' => array('attribution' => function($__templater, array $__
 		'class' => (($__vars['style'] == 'full') ? 'input--avatarSizeS' : '') . ' js-editor',
 		'data-xf-init' => 'focus-trigger user-mentioner',
 		'data-display' => '< :next',
+		'aria-labelledby' => 'ctrl_message',
 		'placeholder' => (($__vars['xf']['visitor']['user_id'] == $__vars['user']['user_id']) ? 'Update your status' . $__vars['xf']['language']['ellipsis'] : 'Write something' . $__vars['xf']['language']['ellipsis']),
 	)) . '
 

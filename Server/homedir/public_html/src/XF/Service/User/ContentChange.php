@@ -19,6 +19,7 @@ class ContentChange extends \XF\Service\AbstractService
 		'stepMergeThreadUserPost',
 		'stepRebuildLikes',
 		'stepConversationRecipientCache',
+		'stepApplyWarningGroupChanges',
 		'stepReassignSearchIndex',
 		'stepRebuildFinalCaches'
 	];
@@ -327,6 +328,29 @@ class ContentChange extends \XF\Service\AbstractService
 			$this->originalUserId, $newUserId,
 			$this->originalUserName, $newUserName
 		);
+	}
+
+	protected function stepApplyWarningGroupChanges()
+	{
+		$newUserId = $this->getNewUserId();
+		if (!$newUserId)
+		{
+			// user has been deleted or it's just a name change, so no action needed
+			return;
+		}
+
+		$userGroupChanges = $this->db()->fetchPairs("
+			SELECT change_key, group_ids
+			FROM xf_user_group_change
+			WHERE user_id = ?
+				AND change_key REGEXP '^warning_[0-9]+$'
+		", $this->getOriginalUserId());
+
+		foreach ($userGroupChanges AS $changeKey => $groupIds)
+		{
+			$userGroupChangeService = \XF::service('XF:User\UserGroupChange');
+			$userGroupChangeService->addUserGroupChange($newUserId, $changeKey, $groupIds);
+		}
 	}
 
 	protected function stepReassignSearchIndex()

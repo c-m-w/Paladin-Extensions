@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 2c24107c2dab78a6d83dcec3a2c45fe5
+// FROM HASH: 41e604ea33dc9199c62f91c7d77536b8
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -122,7 +122,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'name' => 'sprite_params[w]',
 		'value' => $__vars['smilie']['sprite_params']['w'],
 		'min' => '1',
-		'title' => $__templater->filter('Width', array(array('for_attr', array()),), false),
+		'title' => 'Width',
 		'data-xf-init' => 'tooltip',
 	)) . '
 					<span class="inputGroup-text">x</span>
@@ -130,7 +130,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'name' => 'sprite_params[h]',
 		'value' => $__vars['smilie']['sprite_params']['h'],
 		'min' => '1',
-		'title' => $__templater->filter('Height', array(array('for_attr', array()),), false),
+		'title' => 'Height',
 		'data-xf-init' => 'tooltip',
 	)) . '
 					<span class="inputGroup-text">' . 'Pixels' . '</span>
@@ -146,14 +146,14 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 					' . $__templater->formNumberBox(array(
 		'name' => 'sprite_params[x]',
 		'value' => $__vars['smilie']['sprite_params']['x'],
-		'title' => $__templater->filter('Background position x', array(array('for_attr', array()),), false),
+		'title' => 'Background position x',
 		'data-xf-init' => 'tooltip',
 	)) . '
 					<span class="inputGroup-text">x</span>
 					' . $__templater->formNumberBox(array(
 		'name' => 'sprite_params[y]',
 		'value' => $__vars['smilie']['sprite_params']['y'],
-		'title' => $__templater->filter('Background position y', array(array('for_attr', array()),), false),
+		'title' => 'Background position y',
 		'data-xf-init' => 'tooltip',
 	)) . '
 					<span class="inputGroup-text">' . 'Pixels' . '</span>

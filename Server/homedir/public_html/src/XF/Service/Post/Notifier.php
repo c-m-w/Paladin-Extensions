@@ -53,12 +53,19 @@ class Notifier extends AbstractNotifier
 
 	protected function loadNotifiers()
 	{
-		return [
+		$notifiers = [
 			'quote' => $this->app->notifier('XF:Post\Quote', $this->post),
 			'mention' => $this->app->notifier('XF:Post\Mention', $this->post),
-			'threadWatch' => $this->app->notifier('XF:Post\ThreadWatch', $this->post, $this->actionType),
 			'forumWatch' => $this->app->notifier('XF:Post\ForumWatch', $this->post, $this->actionType),
 		];
+
+		// if this is not the last post, then another notification would have been triggered already
+		if ($this->post->isLastPost())
+		{
+			$notifiers['threadWatch'] = $this->app->notifier('XF:Post\ThreadWatch', $this->post, $this->actionType);
+		}
+
+		return $notifiers;
 	}
 
 	protected function loadExtraUserData(array $users)

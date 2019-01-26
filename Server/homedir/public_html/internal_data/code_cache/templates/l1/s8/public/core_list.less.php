@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: a43055405dd6e99e0aef8516adf7d68d
+// FROM HASH: bb8fd80a82238408a74434cc563e4928
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -124,6 +124,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			float: left;
 			max-width: 100%;
 			margin-right: @xf-paddingMedium;
+			flex-shrink: 0;
 		}
 
 		> dd

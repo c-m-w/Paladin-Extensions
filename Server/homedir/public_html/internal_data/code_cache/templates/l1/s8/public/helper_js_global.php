@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 288c679a658b2069f19a9e5c24602d0f
+// FROM HASH: fe3f13c69aafaad1d546b8e28755cbb5
 return array('macros' => array('head' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -53,7 +53,7 @@ return array('macros' => array('head' => function($__templater, array $__argumen
 	';
 	} else {
 		$__finalCompiled .= '
-		<link rel="stylesheet" href="//cdn.materialdesignicons.com/2.3.54/css/materialdesignicons.min.css">
+		<link rel="stylesheet" href="//cdn.materialdesignicons.com/3.0.39/css/materialdesignicons.min.css">
 	';
 	}
 	$__finalCompiled .= '
@@ -215,6 +215,10 @@ return array('macros' => array('head' => function($__templater, array $__argumen
 			month9: "' . $__templater->filter('October', array(array('escape', array('js', )),), true) . '",
 			month10: "' . $__templater->filter('November', array(array('escape', array('js', )),), true) . '",
 			month11: "' . $__templater->filter('December', array(array('escape', array('js', )),), true) . '",
+
+			xr_pm_buy_for_x: "' . $__templater->filter('Buy for {price}', array(array('escape', array('js', )),), true) . '",
+			xr_pm_renew_for_x: "' . $__templater->filter('Renew for {price}', array(array('escape', array('js', )),), true) . '",
+			xr_pm_get_free_now: "' . $__templater->filter('Get FREE now!', array(array('escape', array('js', )),), true) . '",
 
 			active_user_changed_reload_page: "' . $__templater->filter('The active user has changed. Reload the page for the latest version.', array(array('escape', array('js', )),), true) . '",
 			server_did_not_respond_in_time_try_again: "' . $__templater->filter('The server did not respond in time. Please try again.', array(array('escape', array('js', )),), true) . '",

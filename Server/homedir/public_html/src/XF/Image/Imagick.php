@@ -244,6 +244,12 @@ class Imagick extends AbstractDriver
 					{
 						$this->imagick = $optimized;
 					}
+
+					$deconstructed = @$this->imagick->deconstructImages();
+					if ($deconstructed instanceof \Imagick)
+					{
+						$this->imagick = $deconstructed;
+					}
 				}
 				$success = $this->imagick->setImageFormat('gif');
 				break;

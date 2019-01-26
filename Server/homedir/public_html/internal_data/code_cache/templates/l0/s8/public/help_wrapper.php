@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 295e29f93464a1850118afb409eb3c9e
+// FROM HASH: 064fbec64adb9f2fb25586da93064828
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -11,19 +11,9 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			foreach ($__vars['pages'] AS $__vars['page']) {
 				$__compilerTemp1 .= '
 						';
-				if (($__vars['page']['page_id'] == 'terms')) {
+				if ((($__vars['page']['page_id'] == 'trophies') AND $__vars['xf']['options']['enableTrophies']) OR ($__vars['page']['page_id'] != 'trophies')) {
 					$__compilerTemp1 .= '
-							';
-					if ($__vars['tosUrl']) {
-						$__compilerTemp1 .= '
-								<a href="' . $__templater->escape($__vars['tosUrl']) . '" class="blockLink ' . (($__vars['pageSelected'] == $__vars['page']['page_name']) ? 'is-selected' : '') . '">' . $__templater->escape($__vars['page']['title']) . '</a>
-							';
-					}
-					$__compilerTemp1 .= '
-							';
-				} else {
-					$__compilerTemp1 .= '
-							<a href="' . $__templater->fn('link', array('help', $__vars['page'], ), true) . '" class="blockLink ' . (($__vars['pageSelected'] == $__vars['page']['page_name']) ? 'is-selected' : '') . '">' . $__templater->escape($__vars['page']['title']) . '</a>
+							<a href="' . $__templater->escape($__vars['page']['public_url']) . '" class="blockLink ' . (($__vars['pageSelected'] == $__vars['page']['page_name']) ? 'is-selected' : '') . '">' . $__templater->escape($__vars['page']['title']) . '</a>
 						';
 				}
 				$__compilerTemp1 .= '

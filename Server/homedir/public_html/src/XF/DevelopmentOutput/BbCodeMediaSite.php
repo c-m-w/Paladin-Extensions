@@ -58,7 +58,7 @@ class BbCodeMediaSite extends AbstractHandler
 			unset($json['embed_html']);
 		}
 
-		$mediaSite->bulkSet($json);
+		$mediaSite->bulkSetIgnore($json);
 		$mediaSite->media_site_id = $name;
 		$mediaSite->addon_id = $addOnId;
 		$mediaSite->save();

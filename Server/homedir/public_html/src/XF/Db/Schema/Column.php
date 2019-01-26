@@ -91,6 +91,7 @@ class Column extends AbstractDefinition
 		switch ($type)
 		{
 			case 'ENUM':
+			case 'SET':
 				if ($length !== null)
 				{
 					$this->values($length);
@@ -148,9 +149,9 @@ class Column extends AbstractDefinition
 			$this->length = $length;
 		}
 
-		if ($this->isAlter() && $type != 'ENUM' && $this->values)
+		if ($this->isAlter() && !in_array($type, ['ENUM', 'SET']) && $this->values)
 		{
-			// if values already set and not an enum then remove them
+			// if values already set and not an enum/set then remove them
 			$this->values = null;
 		}
 
@@ -159,7 +160,7 @@ class Column extends AbstractDefinition
 
 	public function length($length)
 	{
-		if ($this->type == 'ENUM')
+		if (in_array($this->type, ['ENUM', 'SET']))
 		{
 			$this->values($length);
 		}
@@ -359,9 +360,9 @@ class Column extends AbstractDefinition
 			{
 				throw new \LogicException("$columnName already exists in table, but cannot change length");
 			}
-			if ($type == 'ENUM' && $existing->values != $values)
+			if (in_array($type, ['ENUM', 'SET']) && $existing->values != $values)
 			{
-				throw new \LogicException("$columnName already exists in table, but cannot change enum values");
+				throw new \LogicException("$columnName already exists in table, but cannot change enum/set values");
 			}
 
 			if ($this->forceChanges)
@@ -443,6 +444,10 @@ class Column extends AbstractDefinition
 		if (in_array($type, ['VARCHAR', 'BINARY', 'VARBINARY']) && !$length)
 		{
 			throw new \InvalidArgumentException("Column type '$type' for column '$columnName' must include a length.");
+		}
+		if (in_array($type, ['TINYBLOB', 'MEDIUMBLOB', 'LONGBLOB', 'BLOB', 'TINYTEXT', 'MEDIUMTEXT', 'LONGTEXT', 'TEXT']) && $length)
+		{
+			$length = 0;
 		}
 		if ($length && !$this->isIntType($type))
 		{
@@ -579,7 +584,7 @@ class Column extends AbstractDefinition
 			$type = isset($matches[1]) ? $matches[1] : null;
 			if ($type)
 			{
-				if ($type == 'enum' && isset($matches[2]))
+				if (in_array($type, ['enum', 'set']) && isset($matches[2]))
 				{
 					$length = str_replace('\'', '', explode(',', $matches[2]));
 					unset($matches[2]);

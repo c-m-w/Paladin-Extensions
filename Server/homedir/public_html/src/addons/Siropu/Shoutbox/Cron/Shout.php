@@ -28,7 +28,7 @@ class Shout
 				if ($message = \XF::options()->siropuShoutboxAutoPruneMessage)
 				{
 					$shout = $app->em()->create('Siropu\Shoutbox:Shout');
-					$shout->shout_user_id = 1;
+					$shout->shout_user_id = \XF::options()->siropuShoutboxBotUserId ?: 1;
 			          $shout->shout_message = $message;
 			          $shout->save();
 				}

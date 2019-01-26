@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 65fcf70908793dd8b7c61353eedd6d36
+// FROM HASH: 117d7233265d561d7efaf0ca82a68746
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -11,7 +11,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	$__finalCompiled .= '
 
 ';
-	if ($__vars['total'] > 0) {
+	if (!$__templater->test($__vars['likes'], 'empty', array())) {
 		$__finalCompiled .= '
 	<div class="block">
 		<div class="block-container">

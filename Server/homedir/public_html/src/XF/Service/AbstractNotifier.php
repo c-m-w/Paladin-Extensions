@@ -142,10 +142,15 @@ abstract class AbstractNotifier extends AbstractService
 	public function hasMore()
 	{
 		$this->ensureDataLoaded();
-
-		foreach ($this->notifyData AS $type => $toProcess)
+		$notifiers = $this->getNotifiers();
+		if (!$notifiers)
 		{
-			if ($toProcess)
+			return false;
+		}
+
+		foreach ($notifiers AS $type => $notifier)
+		{
+			if (!empty($this->notifyData[$type]))
 			{
 				return true;
 			}

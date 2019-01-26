@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: fb7d8805411fd02763051e4af67e3a0d
+// FROM HASH: 71960d11ac184aceedd80ade7d824e94
 return array('macros' => array('resource_update' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -74,6 +74,12 @@ return array('macros' => array('resource_update' => function($__templater, array
 							';
 	}
 	$__finalCompiled .= '
+						</div>
+						
+						<div class="likesBar js-likeList ' . ($__vars['update']['likes'] ? 'is-active' : '') . '">
+							' . $__templater->fn('likes_content', array($__vars['update'], $__templater->fn('link', array('resources/update/likes', $__vars['update'], ), false), array(
+		'url' => $__templater->fn('link', array('resources/update/likes', $__vars['update'], ), false),
+	))) . '
 						</div>
 
 						';
@@ -263,12 +269,6 @@ return array('macros' => array('resource_update' => function($__templater, array
 						';
 	}
 	$__finalCompiled .= '
-
-						<div class="likesBar js-likeList ' . ($__vars['update']['likes'] ? 'is-active' : '') . '">
-							' . $__templater->fn('likes_content', array($__vars['update'], $__templater->fn('link', array('resources/update/likes', $__vars['update'], ), false), array(
-		'url' => $__templater->fn('link', array('resources/update/likes', $__vars['update'], ), false),
-	))) . '
-						</div>
 
 						<div class="js-historyTarget toggleTarget" data-href="trigger-href"></div>
 					</div>

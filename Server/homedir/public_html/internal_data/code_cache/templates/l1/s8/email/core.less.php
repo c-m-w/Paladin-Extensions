@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 13762e72255bf5d3e81a23873863f115
+// FROM HASH: f3aef25abd7e674a53173e6470d9c423
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -18,7 +18,7 @@ body
 	font-size: @xf-fontSizeNormal;
 	font-family: @xf-emailFont;
 	line-height: @xf-lineHeightDefault;
-	color: @xf-textColor;
+	color: @xf-emailTextColor;
 }
 
 table
@@ -36,7 +36,7 @@ td
 
 a
 {
-	color: @xf-linkColor;
+	color: @xf-emailLinkColor;
 	text-decoration: none;
 }
 
@@ -78,9 +78,9 @@ a
 
 .content
 {
-	background-color: @xf-contentBg;
+	background-color: @xf-emailContentBg;
 	border-radius: @xf-borderRadiusSmall;
-	color: @xf-textColor;
+	color: @xf-emailTextColor;
 	padding: @xf-paddingLarge;
 	font-size: @xf-fontSizeNormal;
 	font-family: @xf-emailFont;
@@ -106,7 +106,7 @@ a
 {
 	padding: @xf-paddingMedium @xf-paddingLarge;
 	text-align: center;
-	color: @xf-textColorMuted;
+	color: @xf-emailTextColorMuted;
 	font-size: @xf-fontSizeSmall;
 	font-family: @xf-emailFont;
 	line-height: @xf-lineHeightDefault;
@@ -114,7 +114,7 @@ a
 
 .footer a
 {
-	color: @xf-textColorMuted;
+	color: @xf-emailTextColorMuted;
 	text-decoration: underline;
 }
 
@@ -134,7 +134,7 @@ h2
 hr
 {
 	border: 0;
-	border-bottom: @xf-borderSize solid @xf-borderColor;
+	border-bottom: @xf-borderSize solid @xf-emailBorderColor;
 }
 
 div.message
@@ -147,10 +147,10 @@ div.message
 div.quote
 {
 	border-left: @xf-borderSizeFeature solid @xf-borderColorAttention;
-	border-top: @xf-borderSize solid @xf-borderColor;
-	border-bottom: @xf-borderSize solid @xf-borderColor;
-	border-right: @xf-borderSize solid @xf-borderColor;
-	background: @xf-contentAltBg;
+	border-top: @xf-borderSize solid @xf-emailBorderColor;
+	border-bottom: @xf-borderSize solid @xf-emailBorderColor;
+	border-right: @xf-borderSize solid @xf-emailBorderColor;
+	background: @xf-emailContentAltBg;
 	margin: @xf-paddingLarge 0;
 	padding: @xf-paddingLarge;
 }
@@ -166,24 +166,26 @@ pre.code
 {
 	margin: @xf-paddingLarge 0;
 	padding: @xf-paddingLarge;
-	border-right: @xf-borderSize solid @xf-borderColor;
-	background: @xf-contentAltBg;
-	width: 100%;
+	border-left: @xf-borderSizeFeature solid @xf-borderColorAttention;
+	border-top: @xf-borderSize solid @xf-emailBorderColor;
+	border-bottom: @xf-borderSize solid @xf-emailBorderColor;
+	border-right: @xf-borderSize solid @xf-emailBorderColor;
+	background: @xf-emailContentAltBg;
 	max-width: 600px;
-	overflow: scroll;
+	overflow: auto;
 }
 
 .textLink
 {
-	color: @xf-textColor;
+	color: @xf-emailTextColor;
 	text-decoration: none;
 }
 
 .linkBar
 {
 	padding: @xf-paddingMedium;
-	background-color: @xf-contentAltBg;
-	border-top: @xf-borderSize solid @xf-borderColor;
+	background-color: @xf-emailContentAltBg;
+	border-top: @xf-borderSize solid @xf-emailBorderColor;
 }
 
 .button
@@ -212,13 +214,13 @@ pre.code
 .unsubscribeLink
 {
 	font-size: @xf-fontSizeSmall;
-	color: @xf-textColorMuted;
+	color: @xf-emailTextColorMuted;
 }
 
 .minorText a,
 .unsubscribeLink a
 {
-	color: @xf-textColorMuted;
+	color: @xf-emailTextColorMuted;
 	text-decoration: underline;
 }
 
@@ -237,8 +239,8 @@ pre.code
 	font-size: @xf-fontSizeLargest;
 	line-height: 3;
 	text-align: center;
-	border: @xf-borderSize solid @xf-borderColor;
-	background-color: @xf-contentAltBg;
+	border: @xf-borderSize solid @xf-emailBorderColor;
+	background-color: @xf-emailContentAltBg;
 }';
 	return $__finalCompiled;
 });

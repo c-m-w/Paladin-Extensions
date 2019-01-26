@@ -66,13 +66,13 @@ class PasswordChange extends \XF\Service\AbstractService
 		$this->userAuth->preSave();
 
 		$errors = $this->userAuth->getErrors();
-		if (empty($errors['password']))
+		if (empty($errors))
 		{
 			return true;
 		}
 		else
 		{
-			$error = $errors['password'];
+			$error = reset($errors);
 			return false;
 		}
 	}

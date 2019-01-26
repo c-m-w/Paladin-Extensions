@@ -87,7 +87,7 @@
 			var config = {
 				direction: $.FE.LANGUAGE.xf.direction,
 				editorClass: 'bbWrapper', // since this is a BB code editor, we want our output to normalize like BB code
-				fileAllowedTypes: [],
+				fileUpload: false,
 				fileMaxSize: 4 * 1024 * 1024 * 1024, // 4G
 				fileUploadParam: 'upload',
 				fileUploadURL: false,
@@ -96,9 +96,9 @@
 				heightMin: heightLimits[0],
 				heightMax: heightLimits[1],
 				htmlAllowedTags: ['a', 'b', 'bdi', 'bdo', 'blockquote', 'br', 'cite', 'code', 'dfn', 'div', 'em', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hr', 'i', 'img', 'li', 'mark', 'ol', 'p', 'pre', 's', 'script', 'style', 'small', 'span', 'strike', 'strong', 'sub', 'sup', 'table', 'tbody', 'td', 'tfoot', 'th', 'thead', 'time', 'tr', 'u', 'ul', 'var', 'wbr'],
-				key: 'AODOd2HLEBFZOTGHW==',
+				key: 'PD1A4D4A3oA9A7E6F4C2A3D3J2A7A6bPELe1OMFCIe2LUH1IT==',
 				htmlAllowComments: false,
-				imageAllowedTypes: [],
+				imageUpload: false,
 				imageCORSProxy: null,
 				imageDefaultDisplay: 'inline',
 				imageDefaultWidth: 'auto',
@@ -129,17 +129,19 @@
 					_xfWithData: 1
 				};
 
-				config.fileAllowedTypes = ['*'];
+				config.fileUpload = true;
 				config.fileUploadParams = uploadParams;
 				config.fileUploadURL = this.uploadUrl;
-				config.imageAllowedTypes = ['jpeg', 'jpg', 'png', 'gif'];
+				config.imageUpload = true;
 				config.imageUploadParams = uploadParams;
 				config.imageUploadURL = this.uploadUrl;
 				config.imagePaste = true;
 			}
 			else
 			{
-				config.imageInsertButtons = ['imageByURL'];
+				// TODO: we can return the below value once Froala fix issue #2987
+				// config.imageInsertButtons = ['imageByURL'];
+				config.imageInsertButtons = ['imageUpload', 'imageByURL'];
 			}
 
 			var buttons = this.getButtonConfig();
@@ -164,7 +166,7 @@
 
 			var buttonClass = {
 				_basic: ['bold', 'italic', 'underline', 'strikeThrough'],
-				_extended: ['color', 'fontFamily', 'fontSize'],
+				_extended: ['color', 'fontFamily', 'fontSize', 'xfInlineCode'],
 				_link: ['insertLink'],
 				_align: ['align'],
 				_list: ['formatOL', 'formatUL', 'outdent', 'indent'],
@@ -219,7 +221,7 @@
 				return splitButtons(cleanUp(str));
 			};
 
-			if (!this.$form || !this.$form.is('[data-xf-init~=draft]'))
+			if (!this.$form || !this.$form.is('[data-xf-init~=draft]') || !XF.config.userId)
 			{
 				buttons = removeButton(buttons, 'xfDraft');
 			}
@@ -476,6 +478,36 @@
 			}
 
 			XF.EditorHelpers.setupBlurSelectionWatcher(ed);
+
+			this.$target.on('control:enabled', function()
+			{
+				ed.edit.on();
+			});
+			this.$target.on('control:disabled', function()
+			{
+				ed.edit.off();
+			});
+
+			var self = this;
+			this.$target.on('control:enabled', function()
+			{
+				ed.edit.on();
+				if (ed.bbCode && ed.bbCode.isBbCodeView())
+				{
+					var $button = ed.$tb.find('.fr-command[data-cmd=xfBbCode]');
+					$button.removeClass('fr-disabled');
+				}
+				else
+				{
+					ed.toolbar.enable();
+				}
+			});
+			this.$target.on('control:disabled', function()
+			{
+				ed.edit.off();
+				ed.toolbar.disable();
+				ed.$tb.find(' > .fr-command').addClass('fr-disabled');
+			});
 
 			this.$target.trigger('editor:init', [ed, this]);
 
@@ -1989,6 +2021,7 @@
 							+ parseInt(ed.$wp.css('border-top-width'), 10);
 
 						$bbCodeBox = $('<textarea class="input" style="display: none" />');
+						$bbCodeBox.attr('aria-label', XF.htmlspecialchars(XF.phrase('rich_text_box')));
 						$bbCodeBox.css({
 							minHeight: ed.opts.heightMin ? (ed.opts.heightMin + borderAdjust) + 'px' : null,
 							maxHeight: ed.opts.heightMax ? ed.opts.heightMax + 'px' : null,

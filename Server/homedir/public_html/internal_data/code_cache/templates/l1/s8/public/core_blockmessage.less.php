@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 6279b3fc614717177f0d4217cc877c35
+// FROM HASH: eb216c20eaaf129bd62745534a1faffb
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -123,6 +123,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	{
 		.xf-contentAccentBase();
 		border-left: @xf-borderSizeFeature solid @important-featureColor;
+		padding: @xf-paddingMedium;
 
 		a { .xf-contentAccentLink(); }
 	}

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<phrases>
+  <phrase title="aloph_op_ribbon_bottom" version_id="1000071" version_string="1.0.0"><![CDATA[Avatar Ribbon: Bottom]]></phrase>
+  <phrase title="aloph_op_ribbon_left_corner" version_id="1000071" version_string="1.0.0"><![CDATA[Avatar Ribbon: Top Left Corner]]></phrase>
+  <phrase title="aloph_op_ribbon_right_corner" version_id="1000071" version_string="1.0.0"><![CDATA[Avatar Ribbon: Top Right Corner]]></phrase>
+  <phrase title="aloph_op_ribbon_top" version_id="1000071" version_string="1.0.0"><![CDATA[Avatar Ribbon: Top]]></phrase>
+  <phrase title="aloph_ribbon_desktop" version_id="1000071" version_string="1.0.0"><![CDATA[OP]]></phrase>
+  <phrase title="aloph_ribbon_mobile" version_id="1000071" version_string="1.0.0"><![CDATA[OP]]></phrase>
+  <phrase title="aloph_ribbon_position_over_user_avatar" version_id="1000071" version_string="1.0.0"><![CDATA[Ribbon over user's avatar]]></phrase>
+  <phrase title="aloph_ribbon_position_text_public_controls" version_id="1000071" version_string="1.0.0"><![CDATA[Text: Public Controls]]></phrase>
+  <phrase title="aloph_ribbon_text_public_controls_desktop" version_id="1000071" version_string="1.0.0"><![CDATA[Thread Starter]]></phrase>
+  <phrase title="aloph_ribbon_text_public_controls_mobile" version_id="1000071" version_string="1.0.0"><![CDATA[Thread Starter]]></phrase>
+  <phrase title="aloph_tooltip_text" version_id="1000071" version_string="1.0.0"><![CDATA[Thread Starter]]></phrase>
+  <phrase title="option.aloph_disable_per_style" version_id="1000071" version_string="1.0.0"><![CDATA[Disable for styles]]></phrase>
+  <phrase title="option.aloph_disable_tooltip" version_id="1000071" version_string="1.0.0"><![CDATA[Disable Tooltip]]></phrase>
+  <phrase title="option_explain.aloph_disable_per_style" version_id="1000071" version_string="1.0.0"><![CDATA[The product will be fully disabled for the styles selected]]></phrase>
+  <phrase title="option_explain.aloph_disable_tooltip" version_id="1000071" version_string="1.0.0"><![CDATA[Choose Yes to disable the Tooltip.]]></phrase>
+  <phrase title="option_group.aloph_main" version_id="1000071" version_string="1.0.0"><![CDATA[[AL] Original Poster Highlight]]></phrase>
+  <phrase title="option_group_description.aloph_main" version_id="1000071" version_string="1.0.0"><![CDATA[]]></phrase>
+  <phrase title="style_prop.originalPosterHighlight" version_id="1000071" version_string="1.0.0"><![CDATA[Ribbon Design]]></phrase>
+  <phrase title="style_prop.originalPosterHighlightPositionDesktop" version_id="1000071" version_string="1.0.0"><![CDATA[Switch ribbon position (desktop)]]></phrase>
+  <phrase title="style_prop.originalPosterHighlightPositionMobile" version_id="1000071" version_string="1.0.0"><![CDATA[Switch ribbon position (mobile)]]></phrase>
+  <phrase title="style_prop_desc.originalPosterHighlight" version_id="1000071" version_string="1.0.0"><![CDATA[]]></phrase>
+  <phrase title="style_prop_desc.originalPosterHighlightPositionDesktop" version_id="1000071" version_string="1.0.0"><![CDATA[]]></phrase>
+  <phrase title="style_prop_desc.originalPosterHighlightPositionMobile" version_id="1000071" version_string="1.0.0"><![CDATA[]]></phrase>
+  <phrase title="style_prop_group.Original_Poster_Style" version_id="1000071" version_string="1.0.0"><![CDATA[[AL] Original Poster Highlight]]></phrase>
+  <phrase title="style_prop_group_desc.Original_Poster_Style" version_id="1000071" version_string="1.0.0"><![CDATA[]]></phrase>
+  <phrase title="style_property_group_Original_Poster_Style_master" version_id="1000071" version_string="1.0.0"><![CDATA[[AL] Original Poster Highlight]]></phrase>
+  <phrase title="style_property_group_Original_Poster_Style_master_desc" version_id="1000071" version_string="1.0.0"><![CDATA[]]></phrase>
+  <phrase title="style_property_originalPosterHighlightPositionDesktop_description_master" version_id="1000071" version_string="1.0.0"><![CDATA[Ribbon position over user's avatar (right top corner by default)]]></phrase>
+  <phrase title="style_property_originalPosterHighlightPositionDesktop_master" version_id="1000071" version_string="1.0.0"><![CDATA[Switch ribbon position (desktop)]]></phrase>
+  <phrase title="style_property_originalPosterHighlightPositionMobile_description_master" version_id="1000071" version_string="1.0.0"><![CDATA[Ribbon position over user's avatar (bottom by default)]]></phrase>
+  <phrase title="style_property_originalPosterHighlightPositionMobile_master" version_id="1000071" version_string="1.0.0"><![CDATA[Switch ribbon position (mobile)]]></phrase>
+  <phrase title="style_property_originalPosterHighlight_description_master" version_id="1000071" version_string="1.0.0"><![CDATA[]]></phrase>
+  <phrase title="style_property_originalPosterHighlight_master" version_id="1000071" version_string="1.0.0"><![CDATA[Ribbon Design]]></phrase>
+  <phrase title="style_property_originalPosterHighlight_master_desc" version_id="1000071" version_string="1.0.0"><![CDATA[]]></phrase>
+</phrases>

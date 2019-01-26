@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: b368baa45d91b1be73e5ba106451b807
+// FROM HASH: 4908d4ff5deee8a5a1624d069985fb2f
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -78,6 +78,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			top: ' . $__templater->escape($__vars['uix_stickyTotal']) . 'px !important;
 			min-height: calc(100vh - ' . $__templater->escape($__vars['uix_stickyTotal']) . 'px) !important;
 		}
+		.uix_stickyCategoryStrips {top: ' . $__templater->escape($__vars['uix_stickyTotal']) . 'px !important;}
 		#XF .u-anchorTarget {
 			height: ' . $__templater->escape($__vars['uix_stickyTotal']) . 'px;
 			margin-top: -' . $__templater->escape($__vars['uix_stickyTotal']) . 'px;
@@ -94,6 +95,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 					top: ' . $__templater->escape($__vars['uix_stickyTotal']) . 'px !important;
 					min-height: calc(100vh - ' . $__templater->escape($__vars['uix_stickyTotal']) . 'px) !important;
 				}
+				.uix_stickyCategoryStrips {top: ' . $__templater->escape($__vars['uix_stickyTotal']) . 'px !important;}
 				#XF .u-anchorTarget {
 					height: ' . $__templater->escape($__vars['uix_stickyTotal']) . 'px;
 					margin-top: -' . $__templater->escape($__vars['uix_stickyTotal']) . 'px;
@@ -120,6 +122,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 					top: ' . $__templater->escape($__vars['uix_stickyTotal']) . 'px !important;
 					min-height: calc(100vh - ' . $__templater->escape($__vars['uix_stickyTotal']) . 'px) !important;
 				}
+				.uix_stickyCategoryStrips {top: ' . $__templater->escape($__vars['uix_stickyTotal']) . 'px !important;}
 				#XF .u-anchorTarget {
 					height: ' . $__templater->escape($__vars['uix_stickyTotal']) . 'px;
 					margin-top: -' . $__templater->escape($__vars['uix_stickyTotal']) . 'px;
@@ -137,6 +140,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 							top: ' . $__templater->escape($__vars['uix_stickyTotal']) . 'px !important;
 							min-height: calc(100vh - ' . $__templater->escape($__vars['uix_stickyTotal']) . 'px) !important;
 						}
+						.uix_stickyCategoryStrips {top: ' . $__templater->escape($__vars['uix_stickyTotal']) . 'px !important;}
 						#XF .u-anchorTarget {
 							height: ' . $__templater->escape($__vars['uix_stickyTotal']) . 'px;
 							margin-top: -' . $__templater->escape($__vars['uix_stickyTotal']) . 'px;
@@ -163,6 +167,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			top: ' . $__templater->escape($__vars['uix_stickyTotal']) . 'px !important;
 			min-height: calc(100vh - ' . $__templater->escape($__vars['uix_stickyTotal']) . 'px) !important;
 		}
+		.uix_stickyCategoryStrips {top: ' . $__templater->escape($__vars['uix_stickyTotal']) . 'px !important;}
 		#XF .u-anchorTarget {
 			height: ' . $__templater->escape($__vars['uix_stickyTotal']) . 'px;
 			margin-top: -' . $__templater->escape($__vars['uix_stickyTotal']) . 'px;

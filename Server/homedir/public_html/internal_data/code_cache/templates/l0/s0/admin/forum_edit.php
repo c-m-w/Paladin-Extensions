@@ -55,7 +55,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			'listclass' => 'field listColumns',
 		), $__compilerTemp2, array(
 			'label' => 'Available fields',
-			'explain' => '* Starred fields are required for new threads when selected. Other fields are optional.',
+			'explain' => '* Starred fields are required for new content when selected. Other fields are optional.',
 			'hint' => '
 						' . $__templater->formCheckBox(array(
 			'standalone' => 'true',

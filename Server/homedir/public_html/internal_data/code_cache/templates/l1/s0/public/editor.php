@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: dd26b243aeb0dc362efe26d4766f0ad7
+// FROM HASH: 119ca52b7a70a761d13c9e28a1a35292
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -83,6 +83,9 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			"Upload Image": "' . $__templater->filter('Upload image', array(array('escape', array('json', )),), true) . '",
 			"Uploading": "' . $__templater->filter('Uploading', array(array('escape', array('json', )),), true) . '",
 			"URL": "' . $__templater->filter('URL', array(array('escape', array('json', )),), true) . '",
+			"Ctrl": "' . $__templater->filter('Ctrl', array(array('escape', array('json', )),), true) . '",
+			"Shift": "' . $__templater->filter('Shift', array(array('escape', array('json', )),), true) . '",
+			"Alt": "' . $__templater->filter('Alt', array(array('escape', array('json', )),), true) . '",
 			"__lang end__": ""
 		}
 	</script>
@@ -97,6 +100,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		data-original-name="' . $__templater->escape($__vars['name']) . '"
 		data-buttons-remove="' . $__templater->filter($__vars['removeButtons'], array(array('join', array(',', )),), true) . '"
 		style="visibility: hidden; height: ' . ($__vars['height'] + 37) . 'px; ' . $__templater->escape($__vars['styleAttr']) . '"
+		aria-label="' . $__templater->filter('Rich text box', array(array('for_attr', array()),), true) . '"
 		' . $__templater->filter($__vars['attrsHtml'], array(array('raw', array()),), true) . '>' . $__templater->escape($__vars['htmlValue']) . '</textarea>
 
 	' . '
@@ -104,14 +108,14 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	<input type="hidden" value="' . $__templater->escape($__vars['value']) . '" data-bb-code="' . $__templater->escape($__vars['name']) . '" />
 
 	<noscript>
-		<textarea name="' . $__templater->escape($__vars['name']) . '" class="input">' . $__templater->escape($__vars['value']) . '</textarea>
+		<textarea name="' . $__templater->escape($__vars['name']) . '" class="input" aria-label="' . $__templater->filter('Rich text box', array(array('for_attr', array()),), true) . '">' . $__templater->escape($__vars['value']) . '</textarea>
 	</noscript>
 
 ';
 	} else {
 		$__finalCompiled .= '
 
-	<textarea name="' . $__templater->escape($__vars['name']) . '" class="input js-editor" data-xf-init="user-mentioner" ' . $__templater->filter($__vars['attrsHtml'], array(array('raw', array()),), true) . '>' . $__templater->escape($__vars['value']) . '</textarea>
+	<textarea name="' . $__templater->escape($__vars['name']) . '" class="input js-editor" data-xf-init="user-mentioner" aria-label="' . $__templater->filter('Rich text box', array(array('for_attr', array()),), true) . '" ' . $__templater->filter($__vars['attrsHtml'], array(array('raw', array()),), true) . '>' . $__templater->escape($__vars['value']) . '</textarea>
 
 ';
 	}

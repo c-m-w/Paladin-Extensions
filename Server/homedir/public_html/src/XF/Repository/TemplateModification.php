@@ -144,4 +144,39 @@ class TemplateModification extends Repository
 
 		return $template;
 	}
+
+	/**
+	 * @param \XF\Mvc\Entity\ArrayCollection|\XF\Entity\TemplateModification[] $modifications
+	 *
+	 * @return mixed
+	 */
+	public function addLogsToModifications($modifications)
+	{
+		$ids = [];
+		foreach ($modifications AS $modification)
+		{
+			$ids[] = $modification->modification_id;
+		}
+
+		if ($ids)
+		{
+			$logsGrouped = $this->finder('XF:TemplateModificationLog')
+				->where('modification_id', $ids)
+				->fetch()
+				->groupBy('modification_id');
+
+			foreach ($modifications AS $modification)
+			{
+				$id = $modification->modification_id;
+
+				$logs = isset($logsGrouped[$id])
+					? $this->em->getBasicCollection($logsGrouped[$id])
+					: $this->em->getEmptyCollection();
+
+				$modification->hydrateRelation('Logs', $logs);
+			}
+		}
+
+		return $modifications;
+	}
 }

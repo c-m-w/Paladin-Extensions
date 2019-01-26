@@ -115,9 +115,11 @@ class Route extends AbstractDataType
 
 		foreach ($entries AS $entry)
 		{
-			$type = (string)$entry['route_type'];
-			$prefix = (string)$entry['route_prefix'];
-			$subName = (string)$entry['sub_name'];
+			// this approach is used to workaround what appears to be a potential PHP 7.3 bug
+			$attributes = $this->getSimpleAttributes($entry);
+			$type = $attributes['route_type'];
+			$prefix = $attributes['route_prefix'];
+			$subName = isset($attributes['sub_name']) ? $attributes['sub_name'] : '';
 
 			if (isset($existing[$type][$prefix][$subName]))
 			{

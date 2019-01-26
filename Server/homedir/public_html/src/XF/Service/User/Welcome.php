@@ -29,6 +29,16 @@ class Welcome extends \XF\Service\AbstractService
 		'messageDelete' => 'no_delete'
 	];
 
+	/**
+	 * @var \XF\Mail\Mail
+	 */
+	protected $sentMail;
+
+	/**
+	 * @var \XF\Entity\ConversationMessage
+	 */
+	protected $sentMessage;
+
 	public function __construct(\XF\App $app, User $user)
 	{
 		parent::__construct($app);
@@ -39,6 +49,22 @@ class Welcome extends \XF\Service\AbstractService
 	public function setOptions(array $options)
 	{
 		$this->options = array_merge($this->options, $options);
+	}
+
+	/**
+	 * @return null|\XF\Mail\Mail
+	 */
+	public function getSentMail()
+	{
+		return $this->sentMail;
+	}
+
+	/**
+	 * @return null|\XF\Entity\ConversationMessage
+	 */
+	public function getSentMessage()
+	{
+		return $this->sentMessage;
 	}
 
 	public function send()
@@ -94,6 +120,8 @@ class Welcome extends \XF\Service\AbstractService
 			'textBody' => $text
 		]);
 		$mail->queue();
+
+		$this->sentMail = $mail;
 	}
 
 	protected function getMail(\XF\Entity\User $user)
@@ -175,6 +203,8 @@ class Welcome extends \XF\Service\AbstractService
 		/** @var \XF\Service\Conversation\Notifier $notifier */
 		$notifier = $this->service('XF:Conversation\Notifier', $conversation);
 		$notifier->addNotificationLimit($this->user)->notifyCreate();
+
+		$this->sentMessage = $conversation;
 	}
 
 	protected function prepareTokens($escape = true)

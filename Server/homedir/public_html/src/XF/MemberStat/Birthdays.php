@@ -8,7 +8,8 @@ class Birthdays
 	{
 		$finder
 			->isBirthday()
-			->isRecentlyActive(365);
+			->isRecentlyActive(365)
+			->isValidUser();
 
 		$users = $finder->fetch($memberStat->user_limit * 3);
 

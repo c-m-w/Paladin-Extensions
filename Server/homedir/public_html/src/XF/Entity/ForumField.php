@@ -8,7 +8,7 @@ use XF\Mvc\Entity\Structure;
 /**
  * COLUMNS
  * @property int node_id
- * @property int field_id
+ * @property string field_id
  *
  * RELATIONS
  * @property \XF\Entity\ThreadField Field

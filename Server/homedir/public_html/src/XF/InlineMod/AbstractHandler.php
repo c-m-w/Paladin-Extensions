@@ -37,6 +37,14 @@ abstract class AbstractHandler
 	/**
 	 * @return AbstractAction[]
 	 */
+	public function getActions()
+	{
+		return $this->actions;
+	}
+
+	/**
+	 * @return AbstractAction[]
+	 */
 	abstract public function getPossibleActions();
 
 	public function getEntityWith()

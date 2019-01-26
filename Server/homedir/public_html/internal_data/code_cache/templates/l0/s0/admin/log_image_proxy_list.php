@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 8d10789ca0648def9055d9ff6c95ca00
+// FROM HASH: 6d728fba2e6e67b92cfc6995b5f3ce08
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -78,7 +78,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 				}
 				$__compilerTemp3 = '';
 				if ($__vars['entry']['file_size']) {
-					$__compilerTemp3 .= '<li>' . 'Size' . $__vars['xf']['language']['label_separator'] . $__templater->filter($__vars['entry']['file_size'], array(array('file_size', array()),), true) . '</li>';
+					$__compilerTemp3 .= '<li>' . 'Size' . $__vars['xf']['language']['label_separator'] . ' ' . $__templater->filter($__vars['entry']['file_size'], array(array('file_size', array()),), true) . '</li>';
 				}
 				$__compilerTemp1 .= $__templater->dataRow(array(
 				), array(array(

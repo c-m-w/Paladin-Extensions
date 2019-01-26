@@ -6,7 +6,7 @@ class Facebook extends AbstractValidator
 {
 	public function isValid($value, &$errorKey = null)
 	{
-		if (!preg_match('/^[a-z0-9\.]+$/i', $value))
+		if (!preg_match('/^[a-z0-9\.-]+$/i', $value))
 		{
 			$errorKey = 'please_enter_valid_facebook_username_using_alphanumeric_dot_numbers';
 			return false;
@@ -21,7 +21,7 @@ class Facebook extends AbstractValidator
 		{
 			$value = $match['id'];
 		}
-		else if (preg_match('#facebook\.com/(\#!/)?(?P<id>[a-z0-9\.]+)#i', $value, $match))
+		else if (preg_match('#facebook\.com/(\#!/)?(?P<id>[a-z0-9\.-]+)#i', $value, $match))
 		{
 			if (substr($match['id'], -4) != '.php')
 			{

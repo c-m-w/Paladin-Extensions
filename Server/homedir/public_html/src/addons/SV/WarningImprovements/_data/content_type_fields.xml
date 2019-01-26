@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<content_type_fields>
+  <field content_type="warning_alert" field_name="alert_handler_class">SV\WarningImprovements\Alert\WarningAlert</field>
+  <field content_type="warning_alert" field_name="entity">XF:Warning</field>
+</content_type_fields>

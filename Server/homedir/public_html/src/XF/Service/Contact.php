@@ -180,6 +180,8 @@ class Contact extends AbstractService
 		$toEmail = $options->contactEmailAddress ? $options->contactEmailAddress : $options->defaultEmailAddress;
 		$mail->setTo($toEmail);
 
+		$mail->setFrom($mail->getFromAddress(), $this->fromName);
+
 		if ($options->contactEmailSenderHeader)
 		{
 			$mail->setSender($options->contactEmailAddress)
@@ -187,7 +189,7 @@ class Contact extends AbstractService
 		}
 		else if ($this->fromEmail)
 		{
-			$mail->setReplyTo($this->fromEmail);
+			$mail->setReplyTo($this->fromEmail, $this->fromName);
 		}
 
 		return $mail;

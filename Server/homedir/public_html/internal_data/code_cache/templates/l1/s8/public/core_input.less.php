@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: b897b994c3ae30c864c6305c8a6df3a5
+// FROM HASH: 7ee6c173a9411c6fe2090fe0e7e929b7
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -54,7 +54,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	&.input--number
 	{
 		text-align: right;
-		width: @_input-numberWidth;
+		max-width: @_input-numberWidth;
 
 		&.input--numberNarrow
 		{
@@ -64,7 +64,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 	&.input--date
 	{
-		width: @_input-numberWidth;
+		max-width: @_input-numberWidth;
 	}
 
 	textarea&
@@ -125,6 +125,9 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		-webkit-appearance: none !important;
 		-moz-appearance: none !important;
 		appearance: none !important;
+
+		overflow-x: hidden; // iOS seems to require this to prevent overflow with long options...
+		overflow-y: auto; // ...and Firefox seems to require this to prevent the above from breaking vertical scroll...
 
 		&[disabled]
 		{

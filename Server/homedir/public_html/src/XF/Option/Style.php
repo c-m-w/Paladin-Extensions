@@ -9,14 +9,16 @@ class Style extends AbstractOption
 		/** @var \XF\Repository\Style $styleRepo */
 		$styleRepo = \XF::repository('XF:Style');
 
+		$forEmailStyle = ($option->option_id == 'defaultEmailStyleId');
+
 		$choices = [];
-		if ($option->option_id == 'defaultEmailStyleId')
+		if ($forEmailStyle)
 		{
 			$choices[0] = \XF::phrase('use_default_style');
 		}
 		foreach ($styleRepo->getStyleTree(false)->getFlattened() AS $entry)
 		{
-			if ($entry['record']->user_selectable)
+			if ($entry['record']->user_selectable || $forEmailStyle)
 			{
 				$choices[$entry['record']->style_id] = $entry['record']->title;
 			}

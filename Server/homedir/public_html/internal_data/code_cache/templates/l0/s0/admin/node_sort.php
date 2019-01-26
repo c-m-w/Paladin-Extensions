@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 44e0eb01559a468055348346f251e9f8
+// FROM HASH: ac674e360f36ce742c15f0f7811d8a2a
 return array('macros' => array('node_list' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -35,7 +35,7 @@ return array('macros' => array('node_list' => function($__templater, array $__ar
 	), $__arguments, $__vars);
 	$__finalCompiled .= '
 	<li class="nestable-item" data-id="' . $__templater->escape($__vars['node']['id']) . '">
-		<div class="nestable-handle" aria-label="' . 'Drag handle' . '"><i class="fa fa-bars" aria-hidden="true"></i></div>
+		<div class="nestable-handle" aria-label="' . $__templater->filter('Drag handle', array(array('for_attr', array()),), true) . '"><i class="fa fa-bars" aria-hidden="true"></i></div>
 		<div class="nestable-content">' . $__templater->escape($__vars['node']['record']['title']) . '</div>
 		';
 	if (!$__templater->test($__vars['node']['children'], 'empty', array())) {

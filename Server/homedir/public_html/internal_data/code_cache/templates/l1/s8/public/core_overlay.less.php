@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: e8e80eb3e74f5df210ca77ea0b4d0c87
+// FROM HASH: ecb0ee29a1e64a27f634d47018b0de4c
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -92,6 +92,9 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		margin: 0;
 		height: 100vh;
 		border-radius: 0;
+		overflow-y: scroll;
+		
+		.overlay-title {z-index: 1;}
 	}
 }
 
@@ -228,6 +231,50 @@ body.is-modalOpen
 	> .blockMessage:not(:last-child)
 	{
 		.m-borderBottomRadius(0);
+	}
+}
+
+.overlay {
+	transition: cubic-bezier(0.4, 0, 0.2, 1) 0.26s transform;
+	transform: translateY(20px);
+
+	.is-active & {
+		transform: translateY(0px);
+	}
+}
+
+.overlay-content
+{
+	> .blocks > .block > .block-container,
+	> .block > .block-container,
+	> .blockMessage
+	{
+		.m-borderTopRadius(0);
+	}
+
+	> .blocks > .block > .block-container,
+	> .block > .block-container
+	{
+		> :first-child
+		{
+			.m-borderTopRadius(0);
+		}
+
+		> .block-body:first-child > .formRow:first-child
+		{
+			> dt { border-top-left-radius: 0; }
+			> dd { border-top-right-radius: 0; }
+		}
+
+		> .dataList:first-child
+		{
+			tbody:first-child .dataList-row:first-child,
+			thead:first-child .dataList-row:first-child
+			{
+				> .dataList-cell:first-child { border-top-left-radius: 0; }
+				> .dataList-cell:last-child { border-top-right-radius: 0; }
+			}
+		}
 	}
 }';
 	return $__finalCompiled;

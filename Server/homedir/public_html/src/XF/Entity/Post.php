@@ -676,6 +676,19 @@ class Post extends Entity implements QuotableInterface, \XF\BbCode\RenderableCon
 		$submitter->submitHam('post', $this->post_id);
 	}
 
+	protected function _preDelete()
+	{
+		// if we're deleting multiple posts, the position value we base the position recalc on in postHidden
+		// will be from when the entity was originally loaded, rather than what is in the database.
+		// we therefore need to check what the expected position is before the record is gone and ensure we use that.
+		$expectedPosition = $this->db()->fetchOne('SELECT position FROM xf_post WHERE post_id = ?', $this->post_id);
+
+		if ($expectedPosition != $this->position)
+		{
+			$this->setAsSaved('position', $expectedPosition);
+		}
+	}
+
 	protected function _postDelete()
 	{
 		if ($this->message_state == 'visible')

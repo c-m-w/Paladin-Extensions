@@ -811,6 +811,11 @@
 
 		focusEnter: function(e)
 		{
+			if (Date.now() - XF.pageDisplayTime < 100)
+			{
+				return;
+			}
+
 			if (XF.isEventTouchTriggered(e))
 			{
 				// touch focus is likely a long press so don't trigger a tooltip for that

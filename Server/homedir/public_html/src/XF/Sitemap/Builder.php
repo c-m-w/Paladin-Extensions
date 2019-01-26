@@ -245,12 +245,16 @@ class Builder
 
 		if ($entry->image)
 		{
-			$result = [];
 			if (!is_array($entry->image) || isset($entry->image['loc']))
 			{
-				$result['image'] = [$entry->image];
+				$images = [$entry->image];
 			}
-			foreach ($result['image'] AS $image)
+			else
+			{
+				$images = $entry->image;
+			}
+
+			foreach ($images AS $image)
 			{
 				if (!is_array($image))
 				{
@@ -358,6 +362,7 @@ class Builder
 		\XF\Util\File::copyFileToAbstractedPath($tempFile, $fileName);
 		\XF\Util\File::deleteFromAbstractedPath($persistentTempFile);
 		unlink($tempFile);
+		$this->tempFileName = null;
 
 		$state->incrementFile();
 	}

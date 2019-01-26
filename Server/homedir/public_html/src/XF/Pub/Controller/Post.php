@@ -117,18 +117,10 @@ class Post extends AbstractController
 			$editor = $this->setupPostEdit($post);
 			$editor->checkForSpam();
 
-			if (!$editor->validate($errors))
-			{
-				return $this->error($errors);
-			}
-
 			if ($post->isFirstPost() && $thread->canEdit())
 			{
 				$threadEditor = $this->setupFirstPostThreadEdit($thread, $threadChanges);
-				if (!$threadEditor->validate($errors))
-				{
-					return $this->error($errors);
-				}
+				$editor->setThreadEditor($threadEditor);
 			}
 			else
 			{
@@ -136,12 +128,12 @@ class Post extends AbstractController
 				$threadChanges = [];
 			}
 
-			$editor->save();
-
-			if ($threadEditor)
+			if (!$editor->validate($errors))
 			{
-				$threadEditor->save();
+				return $this->error($errors);
 			}
+
+			$editor->save();
 
 			$this->finalizePostEdit($editor, $threadEditor);
 

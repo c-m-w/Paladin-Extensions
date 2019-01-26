@@ -23,6 +23,17 @@ class AddOn extends Repository
 		return $this->findAddOnsForList()->where('active', 1);
 	}
 
+	public function hasAddOnsBeingProcessed()
+	{
+		$processing = $this->db()->fetchOne("
+			SELECT addon_id
+			FROM xf_addon
+			WHERE is_processing = 1
+			LIMIT 1
+		");
+		return $processing ? true : false;
+	}
+
 	public function getInstalledAddOnData()
 	{
 		return $this->db()->fetchAllKeyed("

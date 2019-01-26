@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: a64736249128b25310fc8a89c47c2853
+// FROM HASH: f0ccced3508a66dd7e33372955674036
 return array('macros' => array('custom_fields_view' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -11,7 +11,7 @@ return array('macros' => array('custom_fields_view' => function($__templater, ar
 		'onlyInclude' => null,
 		'additionalFilters' => array(),
 		'wrapperClass' => '',
-		'valueClass' => 'pairs pairs--columns pairs--spaced pairs--fixedSmall',
+		'valueClass' => 'pairs pairs--columns pairs--fixedSmall',
 	), $__arguments, $__vars);
 	$__finalCompiled .= '
 
@@ -58,7 +58,7 @@ return array('macros' => array('custom_fields_view' => function($__templater, ar
 		foreach ($__compilerTemp1 AS $__vars['fieldId'] => $__vars['fieldDefinition']) {
 			$__finalCompiled .= '
 		';
-			if ($__templater->method($__vars['fieldDefinition'], 'hasValue', array($__vars['set'][$__vars['fieldDefinition']['field_id']], ))) {
+			if (($__vars['fieldDefinition']['cfp_v_input_enable'] !== null) AND $__templater->method($__vars['fieldDefinition'], 'hasValue', array($__vars['set'][$__vars['fieldDefinition']['field_id']], ))) {
 				$__finalCompiled .= '
 			<dl class="' . $__templater->escape($__vars['valueClass']) . '">
 				<dt>' . $__templater->escape($__vars['fieldDefinition']['title']) . '</dt>
@@ -88,35 +88,43 @@ return array('macros' => array('custom_fields_view' => function($__templater, ar
 		'value' => '!',
 	), $__arguments, $__vars);
 	$__finalCompiled .= '
-	';
-	if ($__vars['definition']['field_type'] == 'stars') {
+';
+	if ($__vars['definition']['cfp_v_input_enable'] !== null) {
 		$__finalCompiled .= '
+
+	';
+		if ($__vars['definition']['field_type'] == 'stars') {
+			$__finalCompiled .= '
 		' . $__templater->callMacro('rating_macros', 'stars', array(
-			'rating' => $__vars['value'],
-		), $__vars) . '
+				'rating' => $__vars['value'],
+			), $__vars) . '
 	';
-	} else {
-		$__finalCompiled .= '
-		';
-		if ($__vars['definition']['match_type'] == 'date') {
-			$__finalCompiled .= '
-			' . $__templater->callMacro(null, 'custom_field_value_date', array(
-				'date' => $__vars['value'],
-			), $__vars) . '
-		';
-		} else if ($__vars['definition']['match_type'] == 'color') {
-			$__finalCompiled .= '
-			' . $__templater->callMacro(null, 'custom_field_value_color', array(
-				'color' => $__vars['value'],
-			), $__vars) . '
-		';
 		} else {
 			$__finalCompiled .= '
+		';
+			if ($__vars['definition']['match_type'] == 'date') {
+				$__finalCompiled .= '
+			' . $__templater->callMacro(null, 'custom_field_value_date', array(
+					'date' => $__vars['value'],
+				), $__vars) . '
+		';
+			} else if ($__vars['definition']['match_type'] == 'color') {
+				$__finalCompiled .= '
+			' . $__templater->callMacro(null, 'custom_field_value_color', array(
+					'color' => $__vars['value'],
+				), $__vars) . '
+		';
+			} else {
+				$__finalCompiled .= '
 			' . $__templater->filter($__templater->method($__vars['definition'], 'getFormattedValue', array($__vars['value'], )), array(array('raw', array()),), true) . '
 		';
+			}
+			$__finalCompiled .= '
+	';
 		}
 		$__finalCompiled .= '
-	';
+
+';
 	}
 	$__finalCompiled .= '
 ';
@@ -175,28 +183,36 @@ return array('macros' => array('custom_fields_view' => function($__templater, ar
 	if ($__templater->isTraversable($__compilerTemp1)) {
 		foreach ($__compilerTemp1 AS $__vars['fieldId'] => $__vars['fieldDefinition']) {
 			$__finalCompiled .= '
-		';
-			if ((!$__vars['requiredOnly']) OR ($__vars['requiredOnly'] AND $__vars['fieldDefinition']['required'])) {
+';
+			if ($__vars['fieldDefinition']['cfp_v_input_enable'] !== null) {
 				$__finalCompiled .= '
+
+		';
+				if ((!$__vars['requiredOnly']) OR ($__vars['requiredOnly'] AND $__vars['fieldDefinition']['required'])) {
+					$__finalCompiled .= '
 			' . $__templater->formRow('
 
 				' . $__templater->callMacro(null, 'custom_fields_edit_' . $__vars['fieldDefinition']['field_type'], array(
-					'set' => $__vars['set'],
-					'definition' => $__vars['fieldDefinition'],
-					'editMode' => $__vars['editMode'],
-					'namePrefix' => $__vars['namePrefix'],
-				), $__vars) . '
+						'set' => $__vars['set'],
+						'definition' => $__vars['fieldDefinition'],
+						'editMode' => $__vars['editMode'],
+						'namePrefix' => $__vars['namePrefix'],
+					), $__vars) . '
 			', array(
-					'label' => $__templater->escape($__vars['fieldDefinition']['title']),
-					'explain' => $__templater->escape($__vars['fieldDefinition']['description']),
-					'hint' => ($__templater->method($__vars['fieldDefinition'], 'isRequired', array($__vars['editMode'], )) ? 'Required' : ''),
-					'rowtype' => $__vars['rowType'] . ' customField ' . ($__templater->fn('in_array', array($__vars['fieldDefinition']['field_type'], array('textbox', 'textarea', 'bbcode', 'select', ), ), false) ? 'input' : ''),
-					'rowclass' => $__vars['rowClass'],
-					'data-field' => $__vars['fieldDefinition']['field_id'],
-				)) . '
+						'label' => $__templater->escape($__vars['fieldDefinition']['title']),
+						'explain' => $__templater->escape($__vars['fieldDefinition']['description']),
+						'hint' => ($__templater->method($__vars['fieldDefinition'], 'isRequired', array($__vars['editMode'], )) ? 'Required' : ''),
+						'rowtype' => $__vars['rowType'] . ' customField ' . ($__templater->fn('in_array', array($__vars['fieldDefinition']['field_type'], array('textbox', 'textarea', 'bbcode', 'select', ), ), false) ? 'input' : ''),
+						'rowclass' => $__vars['rowClass'],
+						'data-field' => $__vars['fieldDefinition']['field_id'],
+					)) . '
 		';
+				}
+				$__finalCompiled .= '
+';
 			}
 			$__finalCompiled .= '
+
 	';
 		}
 	}

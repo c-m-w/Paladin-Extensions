@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 124c64de1194211bfb8337ba26392f41
+// FROM HASH: d913d45d0ff41cc3bc52cf4f8cd068bb
 return array('macros' => array('setup' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -52,7 +52,7 @@ return array('macros' => array('setup' => function($__templater, array $__argume
 		';
 	if ($__vars['containerZoom']) {
 		$__finalCompiled .= '
-			<div class="lbContainer-zoomer js-lbImage-' . $__templater->escape($__vars['id']) . '" data-src="' . $__templater->escape($__vars['src']) . '" aria-label="' . 'Zoom' . '"></div>
+			<div class="lbContainer-zoomer js-lbImage-' . $__templater->escape($__vars['id']) . '" data-src="' . $__templater->escape($__vars['src']) . '" aria-label="' . $__templater->filter('Zoom', array(array('for_attr', array()),), true) . '"></div>
 		';
 	}
 	$__finalCompiled .= '

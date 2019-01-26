@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 354bd402562f60ff37c447fc049477ce
+// FROM HASH: 07bbbf0e2a8153bce6fe43138540ae6b
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -74,7 +74,17 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 						<dl class="pairs pairs--columns pairs--fixedSmall">
 							<dt>' . 'Location' . '</dt>
 							<dd>
-								<a href="' . $__templater->fn('link', array('misc/location-info', '', array('location' => $__vars['user']['Profile']['location'], ), ), true) . '" rel="nofollow" target="_blank" class="u-concealed">' . $__templater->escape($__vars['user']['Profile']['location']) . '</a>
+								';
+		if ($__vars['xf']['options']['geoLocationUrl']) {
+			$__compilerTemp2 .= '
+									<a href="' . $__templater->fn('link', array('misc/location-info', '', array('location' => $__vars['user']['Profile']['location'], ), ), true) . '" rel="nofollow noreferrer" target="_blank" class="u-concealed">' . $__templater->escape($__vars['user']['Profile']['location']) . '</a>
+								';
+		} else {
+			$__compilerTemp2 .= '
+									' . $__templater->escape($__vars['user']['Profile']['location']) . '
+								';
+		}
+		$__compilerTemp2 .= '
 							</dd>
 						</dl>
 					';

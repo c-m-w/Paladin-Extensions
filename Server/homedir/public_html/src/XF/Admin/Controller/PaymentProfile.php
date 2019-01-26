@@ -146,8 +146,11 @@ class PaymentProfile extends AbstractController
 		{
 			/** @var \XF\Purchasable\AbstractPurchasable $handler */
 			$handler = $purchasableType->handler;
-			$purchasableItems = $handler->getPurchasablesByProfileId($profile->payment_profile_id);
-			$profileUsed = array_merge($profileUsed, $purchasableItems ?: []);
+			if ($handler)
+			{
+				$purchasableItems = $handler->getPurchasablesByProfileId($profile->payment_profile_id);
+				$profileUsed = array_merge($profileUsed, $purchasableItems ?: []);
+			}
 		}
 
 		if ($this->isPost())

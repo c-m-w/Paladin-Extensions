@@ -12,11 +12,6 @@ return array (
   'option_explain.EWRdiscord_widgetbot' => 'Requires channel configuration and permissions from <a href="https://widgetbot.io/" target="_blank">WidgetBot.io</a>.',
   'option_explain.EWRdiscord_widgetbot_shard' => 'Use one of the optional WidgetBot clusters. Read their <a href="https://docs.widgetbot.io/tutorial/" target="_blank">tutorials</a> for more information.<br />
 Remember that each cluster has it\'s own bot that must be invited to your server.',
-  'option_explain.ExUp_BccEmail' => 'On upgrade/downgrade emails, BCC the email notification <b>if it is sent</b> to an admin email address.',
-  'option_explain.ExUp_BccEmail_Action' => 'New-line separated list!
-BCC notification emails on one of the following actions:<br/>
-purchased_upgrade, payment_reversal, upgrade_payment_reversal, expiring_upgrade, expiring_subscription, expired_upgrade',
-  'option_explain.ExUp_ShowExtendFailReason' => 'For debugging purposes, determining why an upgrade failed to be extendable can be tricky. This will print the reason the upgrade couldn\'t be extended.',
   'option_explain.GoogleSearch_id' => '<div class="blockMessage blockMessage--iconic blockMessage--important" style="margin: 0 2px;">
 <b>Register your <a href="https://cse.google.com/cse/create/new" target="_blank">Google Search Engine</a> and put its ID here.</b><br>
 Google search will not work until you provide the correct ID!
@@ -24,7 +19,6 @@ Google search will not work until you provide the correct ID!
   'option_explain.GoogleSearch_tryAnyways' => 'If enabled, automatically performs Google search if xenForo search engine did not find anything or can\'t perform a search for whatever reason.',
   'option_explain.acpSearchExclude' => 'When using the quick search facility in the control panel, content from the following types will be searched. Disabling content types here may speed-up searching slightly.',
   'option_explain.addBanUserGroup' => 'When a user is banned, they can be added to a specific user group while the ban is active. This allows overrides to their user group styling, for example.',
-  'option_explain.adminNotesNotes' => 'Notes here will be displayed in the Admin Control Panel home page. You may use HTML.',
   'option_explain.adminRequireTfa' => 'If enabled, admins will not be able to access the control panel until they have activated two-step verification. This will not affect users currently logged into the control panel until their next login.',
   'option_explain.adsDisallowedTemplates' => 'You may want to prevent all ads from showing within certain templates, such as errors or other pages that may be against your ad provider\'s ToS. List them above.',
   'option_explain.ahDW_alph' => 'Checking this option will sort the channel list in alphabetical order.',
@@ -35,6 +29,7 @@ Google search will not work until you provide the correct ID!
 <font color="red">\'Channel 1\', \'Channel 2\'</font>',
   'option_explain.ahDW_hideUsers' => 'Checking this option will hide the "All Users" list.',
   'option_explain.ahDW_inviteLink' => 'If you have chosen to show the "Join Server" button, you MUST specify your server\'s invite link. The invite link MUST be set to never expire. If you need help obtaining an invite link, click <a href="https://support.discordapp.com/hc/en-us/articles/204155938-How-do-I-invite-friends-to-my-server-">here</a>.',
+  'option_explain.ahDW_joinDisplay' => '',
   'option_explain.ahDW_joinText' => '',
   'option_explain.ahDW_serverID' => 'If you need help locating your server ID, click <a href="https://support.discordapp.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-">here</a>.',
   'option_explain.ahDW_showJoin' => '',
@@ -43,6 +38,8 @@ Google search will not work until you provide the correct ID!
   'option_explain.alertsPerPage' => 'Controls how many alerts are shown on each page of users\' full alert list.',
   'option_explain.alertsPopupExpiryHours' => 'The alert popup will show all unviewed alerts, plus any viewed alerts that were viewed within the time frame (in hours) before now. Note that the total amount shown in this popup is limited to no more than 25.',
   'option_explain.allowedCodeLanguages' => 'The languages defined here will be available to use inside code BB code with the format of [CODE=xxxx].',
+  'option_explain.aloph_disable_per_style' => 'The product will be fully disabled for the styles selected',
+  'option_explain.aloph_disable_tooltip' => 'Choose Yes to disable the Tooltip.',
   'option_explain.approveSharedBannedRejectedIp' => 'This option allows the IP address of a new registration to be checked against IPs recently used by banned or rejected users. If one or more matches is found, the registration will need to be manually approved by an administrator.',
   'option_explain.attachmentExtensions' => 'List the file extensions that are allowed to be uploaded. Use spaces or line break between extensions.',
   'option_explain.attachmentMaxDimensions' => 'The maximum allowed dimensions for attached images (width x height). Use 0 or blank to not restrict dimensions.',
@@ -50,22 +47,6 @@ Google search will not work until you provide the correct ID!
   'option_explain.attachmentMaxPerMessage' => 'Use 0 to allow an unlimited number of attachments per message. To disable message attachments, use the permissions system.',
   'option_explain.attachmentThumbnailDimensions' => 'The maximum width and height of generated attachment thumbnails. Note that if this value is changed, you must rebuild attachment thumbnails via the "Rebuild caches" system.',
   'option_explain.autoEmbedMedia' => 'Enable this option to have the system attempt to automatically embed media from URLs posted by visitors that point to registered media sites. If you choose to include a link to the content as well, the media embedding may be duplicated when the message is quoted.',
-  'option_explain.blacktea_steamauth_actions' => '',
-  'option_explain.blacktea_steamauth_api_sleep' => 'The amount of time, in seconds, to pause between each Steam API call when performing the game statistics update. If you run a large forum and are experiencing issues with the Steam API, you can try increasing the delay between each API call.',
-  'option_explain.blacktea_steamauth_enabled_pages' => 'Unchecking these will disable visiting the page itself. However, this does not remove the navigation tab for these pages. In order to disable the navigation, please see the built-in XenForo navigation settings under Setup > Navigation > Public navigation.',
-  'option_explain.blacktea_steamauth_force_registration' => 'Force new users to register using their Steam account. This does not prevent existing users from signing in via standard username and password authentication.',
-  'option_explain.blacktea_steamauth_game_update_frequency' => 'The amount of time, in seconds, before the Steam game statistics are updated. You can disable this entirely by visiting the built-in XenForo cron settings.',
-  'option_explain.blacktea_steamauth_message_macro' => 'Displays a link to the user’s Steam profile in the message postbit This is typically located on the left-hand side of posts and private messages.
-
-Please note that once enabled, you will need to configure the Steam permissions for your usergroups. Otherwise, members will not be able to see these links even when this setting is enabled.',
-  'option_explain.blacktea_steamauth_message_macro_steamid' => 'Once enabled, this will replace the standard profile link text shown in messages with the user’s Steam 64-bit ID. This only replaces the text within the link; it does not remove the profile hyperlink itself.
-
-Note that this requires the above setting to be enabled before this takes effect.',
-  'option_explain.blacktea_steamauth_user_banner' => 'This setting controls the display options for the Steam profile banners. These are the little cards that show basic information about the user’s Steam profile (e.g., their avatar, whether or not they are signed-in, and what they are currently playing).
-
-Ticking an option other than “Disable” will result in the profile banner displaying either above or below the user extras respectively. User extras refers to the list of basic profile information typically show on the left-hand side of user posts and private messages (e.g., post count, join date, and location).',
-  'option_explain.blacktea_steamauth_user_update_limit' => 'The amount of users whose Steam statistics will be updated during each run of the analytics cronjob.',
-  'option_explain.blacktea_steamauth_verbose_log' => 'Ticking this box will make error logging significantly more fine-grained. If you are experiencing unexpected issues with add-on, for better debugging, you may try enabling this setting.',
   'option_explain.boardActive' => '',
   'option_explain.boardDescription' => 'Enter a description for your board. This will be placed inside the meta description tag for the forum home page, so avoid using HTML.',
   'option_explain.boardInactiveAllowModerator' => '',
@@ -88,10 +69,6 @@ XenForo will not collect any data without your consent, the data will be stored 
   'option_explain.contactEmailSenderHeader' => 'If enabled, emails sent via the "Contact us" form will be sent with the sender\'s info in the "From" header rather than the "Reply-To" header. Enabling this may help with situations where replying to a contact message does not go to the correct address, but it may not be compatible with all SMTP servers.',
   'option_explain.contactUrl' => 'This is the URL to the page where users will be able to contact you. Please note that the overlay option will only work with XenForo URLs, so if you specify an external URL, it most likely will not work with an overlay.',
   'option_explain.conversationPopupExpiryHours' => 'The conversations popup will show all conversations with unread replies, plus any read conversations whose most recent replies fall within the time frame (in hours) before now.',
-  'option_explain.conversationViewBoardPath' => 'The primary PATH to your board. Do not include a trailing "/" or "index.php". The PATH should look similar to this: /home/path/public_html/forum',
-  'option_explain.conversationViewLimit' => 'Limit number of conversations to view.',
-  'option_explain.countdownLink' => 'Link to countdown.js file.<br /><br />
-Example: https://www.domain.com/js/xf/countdown.js',
   'option_explain.currentVersionId' => '',
   'option_explain.defaultEmailAddress' => 'This is the default email address that emails will be sent from.',
   'option_explain.defaultEmailStyleId' => '',
@@ -109,7 +86,7 @@ Example: https://www.domain.com/js/xf/countdown.js',
   'option_explain.discussionRssContentLength' => 'The maximum number of characters of content to include in RSS feeds. Note that this includes any BB code mark up used in the message. 0 will disable content from being included in RSS feeds.',
   'option_explain.discussionsPerPage' => 'This controls the maximum number of discussions (such as threads) that will be shown on one page.',
   'option_explain.displayVisitorCount' => 'When a logged in user has unread conversations or unviewed alerts, the total count can be displayed in the user\'s browser tab before the title, or an indicator displayed on the favicon, or both.',
-  'option_explain.dynamicAvatarEnable' => 'If enabled, an avatar will by dynamically created for users without a custom avatar. This will include a letter and a color based on their username. If disabled, all users without an avatar will receive a default placeholder.',
+  'option_explain.dynamicAvatarEnable' => 'If enabled, an avatar will be dynamically created for users without a custom avatar. This will include a letter and a color based on their username. If disabled, all users without an avatar will receive a default placeholder.',
   'option_explain.editHistory' => 'If enabled, moderators will be able to see historical versions of messages and compare changes between them. Historical data will be pruned after the specified number of days. Use 0 to keep the history forever.',
   'option_explain.editLogDisplay' => 'If enabled, any edit after the delay will cause a "last edited" message to be displayed at the end of the message.',
   'option_explain.emailBounceHandler' => 'This option allows the "Bounced email address" account to be automatically read and processed for bounced email reports. This will detect if emails sent to a user bounce, forcing the user to update their email address and preventing the system from emailing them until this happens. This can help reduce the chance of email sent from your board from being considered spam.<br />
@@ -130,49 +107,18 @@ All threshold values are limited to bounces generated in the last 30 days.',
   'option_explain.enableNotices' => 'If you don\'t use the notices system, you can completely disable it and save a query on session creation.',
   'option_explain.enableSearch' => 'With this option disabled, the search engine will not function.',
   'option_explain.enableTagging' => 'Tagging is a system that allows keywords to be applied to content to aid searching and content browsing.',
-  'option_explain.enableTrophies' => 'If enabled your users can be awarded <a href="admin.php?trophies/">trophies</a> for completing certain actions or reaching certain milestones. If disabled, the <a href="admin.php?user-title-ladder/">user title ladder</a> will no longer be able to use Trophy Points.',
+  'option_explain.enableTrophies' => 'If enabled your users can be awarded <a href="admin.php?trophies/">trophies</a> for completing certain actions or reaching certain milestones. If disabled, the <a href="admin.php?user-title-ladder/">user title ladder</a> will no longer be able to use trophy points.',
   'option_explain.enableVerp' => 'If enabled, sent emails will include the recipient email address in the bounce address field. This enables more accurate and more secure automated bounce email handling. If using automated bounce processing, enabling this option is strongly recommended.<br />
 <br />
 This option requires that the specified bounce account is a catch-all account or supports a "+" as a wildcard separator (such as in Gmail). For example, if this option is enabled with a bounce address of bounce@example.com, the email might be returned to bounce+123abc+user=domain.com@example.com.',
   'option_explain.extraCaptchaKeys' => 'This option can\'t be edited manually. It is edited only via the "captcha" option.',
-  'option_explain.exup_autoLeaveConversation' => '',
-  'option_explain.exup_extend_upgrade_button' => 'Do you wish to provide a "Extend Upgrade" button in the user\'s purchased upgrades list?<br />This will allow your members to renew a non-recurring upgrade prior to it expiring. Upgrade length will be added to their remaining time.<br /><br /><b>This button will only be available if the upgrade details have not changed since it was first purchased</b> (such as cost, length, user groups, and whether recurring) as they must remain the same in case the payment is reversed and the end date has to be adjusted accordingly.',
-  'option_explain.exup_notify_by' => 'Alert text may be changed by modifying the following phrases:<br />
-<i>exup_alert_purchased_user_upgrade<br />
-exup_alert_purchased_user_subscription<br />
-exup_alert_expired_user_upgrade<br />
-exup_alert_expired_user_subscription<br />
-exup_alert_expiring_user_upgrade<br />
-exup_alert_expiring_user_subscription<br />
-exup_alert_payment_reversal_upgrade<br/>
-exup_alert_payment_reversal_subscription
-</i><br /><br />Email text may be changed by modifying the following phrases:<br />
-<i>exup_email_purchased_user_upgrade_body<br />
-exup_email_purchased_subscription_body<br />
-exup_email_expiring_user_upgrade_body<br />
-exup_email_expiring_user_subscription_body<br />
-exup_email_expired_user_upgrade_body<br />
-exup_email_expired_user_subscription_body<br />
-exup_email_payment_reversal_upgrade_body<br />
-exup_email_payment_reversal_subscription_body
-</i><br /><br />Conversation title and message can be changed by modifying the following phrases:<br />
-<i>exup_conversation_purchased_upgrade_title, exup_conversation_purchased_upgrade_message<br/>
-exup_conversation_expiring_upgrade_title, exup_conversation_expiring_upgrade_message<br/>
-exup_conversation_expiring_subscription_title, exup_conversation_expiring_subscription_message<br/>
-exup_conversation_expired_upgrade_title, exup_conversation_expired_upgrade_message<br/>
-exup_conversation_expired_subscription_title, exup_conversation_expired_subscription_message<br/>
-exup_conversation_payment_reversal_upgrade_title, exup_conversation_payment_reversal_upgrade_message<br/>
-exup_conversation_payment_reversal_subscription_title, exup_conversation_payment_reversal_subscription_message
-</i>',
-  'option_explain.exup_notify_expired' => 'Let the user know the upgrade has expired. <font color="#7E2217">Selecting \'Yes\' here will override the default expiry alert</font><br />Alert and Email text may be changed by modifying the following phrases:<br /><i>exup_alert_expired_user_upgrade</i><br /><i>exup_email_expired_user_upgrade_text, exup_email_expired_user_upgrade_html</i>',
-  'option_explain.exup_notify_purchase' => 'Thank the user for the purchase and provide further information about upgrades and their benefits.<br />Alert and Email text may be changed by modifying the following phrases:<br /><i>exup_alert_purchased_user_upgrade<br />exup_email_purchased_user_upgrade_html, exup_email_purchased_user_upgrade_text</i>',
-  'option_explain.exup_respect_email_privacy' => 'Do you wish to respect the privacy setting <i>Receive site mailings</i> ?<br />Sellecting \'No\' will ensure emails will be sent regardless of whether the user has opted not to receive site mailings.',
-  'option_explain.exup_upgradeUrl' => 'This link will be shown in alerts, conversations and emails to direct users to the user upgrade page.',
   'option_explain.facebookLike' => 'If this feature is enabled, a Facebook button will be displayed on various pages including the thread view page, allowing Facebook users to share it with their Facebook friends.',
   'option_explain.floodCheckLength' => 'Users will have to wait this many seconds between posting messages. Users with the permission "Can bypass flood check" will be exempt from this option.',
+  'option_explain.floodCheckLengthDiscussion' => 'Users will have to wait this many seconds between posting new discussions (threads, conversations etc.). If this option is set to 0, the value for \'minimum time between messages\' will be used.',
   'option_explain.fontAwesomeSource' => 'Controls the source of the Font Awesome library. You may host this yourself (Local) or use the recommended CDN source.',
   'option_explain.forumsDefaultPage' => 'When entering the forums section, this will be the default page users will be taken to. They will be able to access the alternative page via sub-navigation options.',
   'option_explain.geoLocationUrl' => 'The URL specified here will be used to give information (such as a map) about a physical location. The URL must include a <strong>{location}</strong> token.',
+  'option_explain.googleAnalyticsAnonymize' => 'If Google Analytics is enabled above and you wish to anonymize IP addresses, you can enable this option.',
   'option_explain.googleAnalyticsWebPropertyId' => 'You may enter your <a href="https://www.google.com/analytics/" target="_blank">Google Analytics</a> web property ID here to have the Analytics HTML automatically added to your public-facing pages.',
   'option_explain.gravatarEnable' => 'If enabled, your users may source their avatars from <a href="https://www.gravatar.com" target="_blank">Gravatar</a>. When a new user registers, XenForo will automatically search for a Gravatar associated with their email address. If disabled, this will not remove Gravatars from users that already have them.',
   'option_explain.guestShowSignatures' => 'In order to maximise your \'signal to noise\' ratio when displaying threads to guests, you may hide your members\' signatures.',
@@ -186,19 +132,13 @@ exup_conversation_payment_reversal_subscription_title, exup_conversation_payment
   'option_explain.imageLinkProxyLogLength' => 'This option controls the length of time for which the proxy logs will be maintained after the last request made to an image or a link. If an entry is not requested for this amount of time, its data (including first request time and total accesses) will be removed. Image proxy logs will never be removed unless the image data has been removed (Image cache lifetime). Use 0 to disable pruning of the logs.',
   'option_explain.imageLinkProxyReferrer' => 'If enabled, whenever a proxied image or link is accessed, referrer information will be maintained. This can be viewed in the logs to determine where the image or link has been mentioned. Use 0 to keep the referrer data forever.',
   'option_explain.imageProxyMaxSize' => 'This is the maximum file size for images that are displayed through the image proxy system. An image larger than this will return a placeholder image instead. You may use 0 to disable the limit.',
-  'option_explain.inactiveMembersExcludeForums' => 'Exclude forums from email.',
-  'option_explain.inactiveMembersImageUrl' => 'Add optional image URL here. Allows adding a logo or other image to the top of the email.',
-  'option_explain.inactiveMembersLimit' => 'Email topics are limited to this number.',
-  'option_explain.inactiveMembersMaximumDays' => 'Email will be sent if inactive less than or equal to this many days.',
-  'option_explain.inactiveMembersMinimumDays' => 'Email will be sent if inactive greater than or equal to this many days.',
-  'option_explain.inactiveMembersSortForumTitles' => 'By default threads are sorted by most viewed only. To additionally sort by forum title, select this option.',
-  'option_explain.inactiveMembersTestUsername' => 'To send a test email, enter username and click Save. Go to Cron entries and run the Inactive members cron manually. Leave blank to disable this function.',
   'option_explain.includeTitleInUrls' => 'With this disabled, a URL such as /threads/my-thread.128/ would exclude the title and be output as /threads/128/',
   'option_explain.indexRoute' => 'If you wish to change the default index page of the forums, you may enter the route path here. The route path is the section of the URL to a page after your main forum directory URL, such as forums/ or pages/page-name/. Do not reference a route filter here.',
   'option_explain.ipInfoUrl' => 'Specify a URL to be used for requesting more information about an IP address. The URL must include <strong>{ip}</strong>, which will be replaced with the actual IP address.',
   'option_explain.ipLogCleanUp' => 'Old IP logs are rarely useful and simply take up space. They can be pruned after a specified amount of time if desired.',
   'option_explain.jQuerySource' => 'Controls the source of the jQuery core JavaScript library. You may host this yourself (Local) or use one of the recommended CDN sources. All CDN options support HTTPS/SSL.',
   'option_explain.j_enableipquality' => '',
+  'option_explain.j_enableregistrationproxycheck' => 'Enable ipqualityscore proxy check during registration for blocking registration from vpn/proxy IP',
   'option_explain.j_validtorpizza' => '',
   'option_explain.jsLastUpdate' => 'The Unix time stamp of the last JS update. This can be changed to force a JS recache even if the XF version doesn\'t change.<!-- <span class="js-updateJsLastUpdate">update</span>-->
 
@@ -212,7 +152,13 @@ exup_conversation_payment_reversal_subscription_title, exup_conversation_payment
 	});
 });*/
 </script>',
+  'option_explain.kl_amdp_minimal_time' => 'When this option is enabled, the minimum merge time from all user groups a user is in will be chosen. If disabled, the maximum merge time will be in effect.',
   'option_explain.lastPageLinks' => 'If a discussion spans multiple pages, the last few pages are displayed on the discussion list. Set the maximum number of pages to show here. Set the number to 0 to disable this feature.',
+  'option_explain.lau_DisallowedUsers' => 'It is not possible to log in to this user account.',
+  'option_explain.lau_DisplayLoginCard' => '',
+  'option_explain.lau_DisplayLoginStaffBar' => '',
+  'option_explain.lau_ReasonRequired' => '',
+  'option_explain.lau_Stealth' => '',
   'option_explain.lightBoxUniversal' => 'If this option is enabled, the Lightbox overlay in which images are loaded will show all attached images from all messages on the current page. If disabled, the Lightbox will show only attached images from the current message.',
   'option_explain.linkShare' => 'When clicked, the current page link will be copied to the clipboard.',
   'option_explain.loginLimit' => 'If a user fails to log in 4 or more times in a 15 minute period, this method will be used to prevent brute force attacks.',
@@ -263,7 +209,9 @@ Option <a href="admin.php?options/captcha/view" target="_blank">CAPTCHA for Gues
   'option_explain.plusone' => 'Google\'s share button allows your visitors to recommend pages from your XenForo installation to others.',
   'option_explain.pollMaximumResponses' => 'This will limit the number of choices that can be given as responses to a poll.',
   'option_explain.preventDiscouragedRegistration' => 'You may prevent any visitors browsing from <a href="{link}">discouraged IP addresses</a> from registering new accounts. They will be informed that registration is currently disabled.',
-  'option_explain.privacyPolicyUrl' => 'If entered, a privacy policy link will be included in the footer.',
+  'option_explain.privacyPolicyForceWhitelist' => 'If you decide to <a href="admin.php?force-agreement/privacy-policy" target="_blank">Force privacy policy agreement</a> then the routes listed here will bypass being redirected to the force agreement page. The route path is the section of the URL to a page after your main forum directory URL, such as forums/ or pages/page-name/. Do not reference a route filter here.',
+  'option_explain.privacyPolicyLastUpdate' => 'The Unix time stamp of the last privacy policy update.',
+  'option_explain.privacyPolicyUrl' => 'This link will be shown in the footer and users will have to agree to the policy during registration.',
   'option_explain.profilePostMaxLength' => 'The maximum number of characters that can be in a profile post or comment. Use 0 to disable the limit.',
   'option_explain.readMarkingDataLifetime' => 'This is the number of days to maintain read marking data (such as for threads and forums). Data older than this will always be seen as read.',
   'option_explain.redditShare' => 'The Reddit <a href="https://www.reddit.com/buttons/" target="_blank">share button</a> allows your users to share your content quickly and easily directly to Reddit.',
@@ -280,7 +228,7 @@ Option <a href="admin.php?options/captcha/view" target="_blank">CAPTCHA for Gues
   'option_explain.searchResultsPerPage' => '',
   'option_explain.selectQuotable' => 'This feature enables users to quote snippets of messages by using their browser\'s text-selection tools.',
   'option_explain.sharedIpsCheckLimit' => 'When checking for other users having used the same IP addresses, this control limits the search to the last X days.',
-  'option_explain.showFirstCookieNotice' => 'When a user first views a page (with no XenForo cookies), if enabled, the user will see a notice stating that cookies are used by this site and continued use consents to the cookies. This option is designed to make compliance with EU cookie regulations easier.',
+  'option_explain.showFirstCookieNotice' => 'When a guest views a page, if enabled, the guest will see a notice stating that cookies are used by this site and continued use consents to the cookies. This notice must be accepted or it will continue to display. This option is designed to make compliance with EU cookie regulations and GDPR easier.',
   'option_explain.showMessageOnlineStatus' => 'If enabled, messages will display an icon if the author is currently online.',
   'option_explain.similarThreadsEnhancedSearch' => 'Select to use Enhanced search.',
   'option_explain.similarThreadsExcludeDays' => 'Exclude similar threads older than this many days. Enter 0 to disable.',
@@ -289,7 +237,6 @@ Option <a href="admin.php?options/captcha/view" target="_blank">CAPTCHA for Gues
   'option_explain.similarThreadsMinimumCommonWordLength' => 'Exclude words which are less than this many characters.',
   'option_explain.similarThreadsMultibyte' => 'Include support for multibyte characters. Typically only used for Chinese, Japanese and Russian languages.',
   'option_explain.similarThreadsSameForum' => 'Show similar threads results from same forum as being viewed.',
-  'option_explain.similarThreadsShowBelowFirstPost' => 'Show similar threads below first post.',
   'option_explain.similarThreadsShowBelowQuickReply' => 'Show similar threads below quick reply.',
   'option_explain.similarThreadsShowPostThread' => 'Show similar threads when creating a new thread (full page).',
   'option_explain.similarThreadsShowPostThreadQuickThread' => 'Show similar threads when creating a new thread (quick thread).',
@@ -327,12 +274,21 @@ Note: This option will include a JavaScript library.',
   'option_explain.siropuShoutboxAutoPrune' => 'Auto prune shoutbox every x hours. Set to 0 to disable.',
   'option_explain.siropuShoutboxAutoPruneMessage' => 'If a message is set, it will be posted in the shoutbox after auto prune has been completed.',
   'option_explain.siropuShoutboxAutolink' => 'If enabled, URLs and media sites will be automatically linked/embedded. Option "Allow BB codes" must be enabled in order for this to work.',
+  'option_explain.siropuShoutboxBotUserId' => 'This user ID will be used for automated prune bot messages. If none provided, ID 1 will be used.',
   'option_explain.siropuShoutboxDisplayLimit' => 'Set the maximum number of shouts to display in the shoutbox.',
+  'option_explain.siropuShoutboxFloodCheckLength' => 'Users will have to wait this many seconds between posting shouts. Users with the permission "Can bypass flood check" will be exempt from this option.',
   'option_explain.siropuShoutboxFooter' => 'If you want to display something in the shoutbox footer (like ads or notices), you can add it here. HTML is allowed.',
+  'option_explain.siropuShoutboxHeader' => 'If you want to display something in the shoutbox header (like ads or notices), you can add it here. HTML is allowed.',
+  'option_explain.siropuShoutboxMinAge' => 'This option allows you to restrict access based on the user\'s age.',
+  'option_explain.siropuShoutboxNavigation' => 'This option allows users to use Shoutbox in a dedicated page.',
+  'option_explain.siropuShoutboxPopup' => 'If enabled, users can open the shoutbox in a popup.',
   'option_explain.siropuShoutboxRefreshInterval' => 'Interval between shoutbox refreshes. Set to 0 to disable refresh.',
   'option_explain.siropuShoutboxReverse' => 'If enabled, the input box will be placed at the bottom and new message will be displayed from the bottom to the top.',
   'option_explain.siropuShoutboxShoutMaxLength' => 'Set the maximum allowed shout length.',
+  'option_explain.siropuShoutboxSmilieButton' => 'If enabled, a new button will be displayed for easy smilie access.',
   'option_explain.siropuShoutboxSound' => 'If enabled, a sound notification will be used for new shouts.',
+  'option_explain.siropuShoutboxThreadId' => 'If a valid thread ID is specified, shouts will be posted in that thread as well.',
+  'option_explain.siropuShoutboxThreadMessageMinLength' => 'This option allows you to post only shouts with a length equal or higher than x characters.',
   'option_explain.siropuShoutboxUserAvatar' => 'Display user avatar in shout.',
   'option_explain.sitemapAutoRebuild' => 'If this option is enabled, the sitemap will be rebuilt automatically periodically. If this option is disabled, the sitemap will only be updated when it is rebuilt manually through <i>Tools &gt; Rebuild caches</i>. The current sitemap can be accessed via <a href="sitemap.php">sitemap.php</a>.',
   'option_explain.sitemapAutoSubmit' => 'Once a sitemap is built, if this option is enabled, the updated version will be automatically submitted to the search engines specified. {$url} is replaced with your sitemap URL automatically. If this option is not enabled, search engines will only know about the sitemap if it is listed in robots.txt or if you manually submit it to them.',
@@ -344,24 +300,42 @@ Note: This option will include a JavaScript library.',
   'option_explain.spamThreadAction' => 'This controls what happens to threads started by spammers when the spam cleaner is applied against them.',
   'option_explain.spamUserCriteria' => 'The spam cleaner will only be available to act against users who meet these criteria. If any of these criteria are set to 0 (zero) they will be ignored.',
   'option_explain.stopForumSpam' => '',
-  'option_explain.svCustomUpgradeMaximum' => 'The maximum value to accept for a custom upgrade amount.<br/>
+  'option_explain.svPreviousWarningLimit' => 'When displaying previous warnings, only show upto X warnings.<br/>
+0 to show all.',
+  'option_explain.svWarningRedirect' => 'XF warnings attempt to redirect to the previous page, this sometimes doesn\'t work as expected. <br/>
+Warnings understand how to link to their own content, so instead of a dynamic redirect this can be used again.',
+  'option_explain.sv_force_conversation_email_on_warning' => 'Forces an email to be send when a user receives a warning conversation. Sends email if the user is banned.',
+  'option_explain.sv_only_force_warning_email_on_banned' => 'Only send warning emails when the user is in a banned state.',
+  'option_explain.sv_post_warning_summary' => 'Thread Id, Zero to disable.',
+  'option_explain.sv_post_warning_summaryForum' => 'The forum to post threads about new warnings to',
+  'option_explain.sv_respect_receive_admin_email_on_warning' => 'Only sends email if the user has allowed "Receive site mailings"',
+  'option_explain.sv_show_discouraged_warning_actions' => 'Limits who can see that warning actions with discouragment exist.',
+  'option_explain.sv_view_own_warnings' => 'Allow users to see their own warnings',
+  'option_explain.sv_warning_date_format' => 'The Date format string, see <a href="http://php.net/manual/en/function.date.php">php.net</a> for details.',
+  'option_explain.sv_warningimprovements_alert_send_default' => 'By Default, sending warning alerts.',
+  'option_explain.sv_warningimprovements_conversation_invite' => 'By Default, check inviting others into a warning conversation.',
+  'option_explain.sv_warningimprovements_conversation_locked' => 'By Default, lock warning conversations.',
+  'option_explain.sv_warningimprovements_conversation_send_default' => 'By Default, sending warning conversations.',
+  'option_explain.sv_warningimprovements_copy_title' => 'Pre-fill the content action "Post a public warning" with the title of the warning.',
+  'option_explain.sv_warningimprovements_default_content_action' => '',
+  'option_explain.sv_warningimprovements_sticky_button' => 'If checked then the "Warn" button shown during process of warning a user is sticky.',
+  'option_explain.sv_warningimprovements_warning_user' => 'Anonymise warnings and warning alerts as a given user if the warned user does not have the \'View warning issuer\' permission.<br/>
+If Empty, uses the phrase \'WarningStaff\'.<br/>
+Conversations can <b>not</b> be anonymised.<br/>
+Changing this is only retroactive for Warnings, not Warning Alerts.',
+  'option_explain.sv_wi_require_warning_notes' => 'Makes the Notes field required when creating a warning',
+  'option_explain.sv_wi_warning_note_chars' => 'The minimum amount of characters required for warning notes. Setting this to 0 will disable.<br/>
 <br/>
-This maximum is not arbitrary, some payment providers error on values over 999.99',
-  'option_explain.svCustomUpgradeMinimum' => 'The minimum value to accept for a custom upgrade amount',
-  'option_explain.svDisplayMiniAvatars' => 'Display mini-avatars next to a user mention or user group mention. Adds 1 extra query per page load for content which supports mini-avatars.',
-  'option_explain.svSendEditedInMentions' => 'If enabled, send edited in mentions for supported content. Requires mention tracking to be re-build for new installs.<br>
-Run: <pre style="margin: 1em 2em">php cmd.php xf-rebuild:sv-mentions</pre>, and once it completes this setting will be enabled.<br/>
-If this setting is enabled for new installs without running the above, unexpected duplicate alerts will be sent when editing content with a quote or mention.',
+Requires "Require Notes for Warning" to be enabled',
   'option_explain.tagCloud' => 'If enabled, a tag cloud showing the most popular tags will be shown on the tag search page.',
   'option_explain.tagCloudMinUses' => 'Tags will not be shown in the tag cloud unless they have been used at least this many times.',
   'option_explain.tagLength' => 'This controls the minimum and maximum length of tags. Use 0 to disable a limit. Tags may never be longer than 100 characters. These limits only apply when a tag is created. Existing tags may always be used.',
   'option_explain.tagValidation' => '',
   'option_explain.templateHistoryLength' => 'The number of days to maintain template edit history records. Use 0 to never remove history.',
+  'option_explain.termsLastUpdate' => 'The Unix time stamp of the last terms and rules update.',
   'option_explain.th_apiKey_uix' => 'Your ThemeHouse API key. You can find your API key <a href="https://www.themehouse.com/customer/account/api">here</a>.',
-  'option_explain.th_bookmarksPerPage_bookmarks' => 'The number of bookmarks that should be displayed per page.',
   'option_explain.th_deviantArtUrl_uix' => '',
   'option_explain.th_discordUrl_uix' => '',
-  'option_explain.th_enableContentTypes_bookmarks' => '',
   'option_explain.th_enableFtp_uix' => 'If this option is enabled, all styles will be installed through FTP instead of attempting to copy the files on the server using PHP. Use this if you get permission errors while installing a style.',
   'option_explain.th_facebookUrl_uix' => '',
   'option_explain.th_gitHubUrl_uix' => '',
@@ -369,10 +343,8 @@ If this setting is enabled for new installs without running the above, unexpecte
   'option_explain.th_instagramUrl_uix' => '',
   'option_explain.th_linkedInUrl_uix' => '',
   'option_explain.th_materialAvatars_uix' => 'If you\'re using any additional styles and want your default avatars consistent across styles you\'ll want to enable this option to enable Material avatars regardless of style',
-  'option_explain.th_navigationDropdown_bookmarks' => '',
   'option_explain.th_newDirectoryPermissions_uix' => 'This will define the octal file permissions to use for new directories. The default value of "0755" should work in most situations. This option is only used if you install with FTP',
   'option_explain.th_pinterestUrl_uix' => '',
-  'option_explain.th_popupLimit_bookmarks' => '',
   'option_explain.th_reactHandlers_reactions' => 'Globally toggle what react handlers can be used. If they are disabled, the default like system will be used.',
   'option_explain.th_reactionsEnableHover' => 'If enabled, the first click on a trigger will react with the default reaction and a hover or long press will open the pop-out menu.  If disabled, the first click will open the pop-out menu and the second click will react with the default reaction.<br>
 Note: enabling/disabling this option will have no effect if the "Always Show Secondary Trigger" style property is enabled.',
@@ -388,19 +360,12 @@ Note: enabling/disabling this option will have no effect if the "Always Show Sec
   'option_explain.th_updateCheck_uix' => '',
   'option_explain.th_youtubeUrl_uix' => '',
   'option_explain.threactions_displayProfileTab' => 'If enabled, this will display a profile tab listing all reactions a user has given and received. To remove the sidebar display, you need to <a href="admin.php?widgets">remove the widget</a>.',
+  'option_explain.tosForceWhitelist' => 'If you decide to <a href="admin.php?force-agreement/terms" target="_blank">Force terms and rules agreement</a> then the routes listed here will bypass being redirected to the force agreement page. The route path is the section of the URL to a page after your main forum directory URL, such as forums/ or pages/page-name/. Do not reference a route filter here.',
   'option_explain.tosUrl' => 'This link will be shown in the footer and users will have to agree to the terms and rules during registration.',
   'option_explain.tumblrShare' => 'The <a href="https://www.tumblr.com/docs/en/share_button" target="_blank">Tumblr share button</a> lets your users share pages to Tumblr.',
   'option_explain.tweet' => 'Enabling this button will allow your visitors to share pages easily using their Twitter account.<br />
 <br />
 You may also specify up to two Twitter accounts to recommend to visitors after they use the Tweet button. <a href="https://dev.twitter.com/web/tweet-button/web-intent" target="_blank">More info...</a>',
-  'option_explain.uncAllowPreviousNames' => 'If enabled, users will be able to register and change their user name to a user name previously used by another member. Allowing user name re-use can cause confusion, particularly for older quoted messages. This restriction does not apply to administrator user creation and edits.',
-  'option_explain.uncCustomTitleDays' => 'After a user name change, users will receive a custom title displaying their previous user name for this many days. You may edit the phrase \'<i>sv_ue_username_change_user_title</i>\' to customize the title. Use 0 to disable.',
-  'option_explain.uncDisplayChangesViaACP' => 'If enabled, user name changes applied by administrators will be shown in the list of previous user names for a user.',
-  'option_explain.uncMaxChanges' => 'The maximum number of times a user can change their user name. Use 0 to disable.',
-  'option_explain.uncMaxPostCount' => 'The maximum number of messages a user may have before being unable to change their user name. If set, this option overrides the maximum user name changes option. Use 0 to disable.',
-  'option_explain.uncModerate' => 'If enabled, all user name changes must be approved by moderators before being applied.',
-  'option_explain.uncModerateAlert' => 'If enabled, moderators will be notified when a user name change takes place.',
-  'option_explain.uncResetDays' => 'Users will not be able to submit more than the maximum number of user name changes within this many days. For example, a maximum of 1 change every 7 days. To cause the maximum to be permanent, use 0 to disable.',
   'option_explain.urlToPageTitle' => 'With this enabled, if a URL is used inside a message and is not given a title by the author, where possible the linked page\'s title will be fetched and used instead.<br />
 <br />
 Use the textbox above to specify a format. <b>{title}</b> will be replaced with the fetched page title and <b>{url}</b> will be replaced with the original URL. If no format is entered, the title itself will be displayed.',
@@ -408,48 +373,10 @@ Use the textbox above to specify a format. <b>{title}</b> will be replaced with 
   'option_explain.userBanners' => '',
   'option_explain.userMentionKeepAt' => 'The @ character is used to initiate user mentions. If this option is disabled, successful user mentions will remove this character.',
   'option_explain.userTitleLadderField' => 'The <a href="admin.php?user-title-ladder/">user title ladder</a> will use this field to determine how people move up the ladder.',
-  'option_explain.useressDisplayProfileTab' => 'This option controls who will be able to view a user\'s previous user names.',
-  'option_explain.useressLastEditedByPosition' => 'Controls which side of a post the last edit message is aligned to.',
-  'option_explain.useressLogLength' => 'The number of days that user log records will be kept for. Use 0 to keep the records permanently.',
-  'option_explain.useressPostEditHistory' => 'Do you want to keep track of message content with each post edit?<br />Selecting "Yes" will save a copy of each post prior to it being edited, thus allowing you to view the pre-edited version via the <i>Last edited by</i> link.<br />This will slightly increase the amount of disk space used.',
-  'option_explain.useressPostEditMinChars' => 'Minimum number of characters (including BB Code) that need to be added to or removed from the message, or changed within words (line swaps), in order to trigger the logging of the edit post action. This allows for the correction of spelling mistakes or grammatical errors without considering the post as edited. Zero (0) means the action will always be logged (after taking the Grace Period permission into consideration).',
-  'option_explain.useressPreventPrimaryGroupChange' => 'Depending on the permissions scheme, changing the primary user group breaks accounts and should not be done.',
-  'option_explain.useressSeparateTitleEdit' => 'If enabled, users will be allowed to edit thread titles even after the post edit time limit has expired, provided the thread title time limit has not expired.<br/>
-This can result in being able to edit some aspects of a thread but not the title!',
-  'option_explain.useress_acp_unc_notices_default' => 'If enabled, notifications will be sent when an administrator manually edits a member\'s user name by default. Administrators can override this setting when editing a user.',
-  'option_explain.useress_acp_unc_private_default' => 'If enabled, user name changes triggered by an admin will be private by default. Administrators can override this setting when editing a user.',
-  'option_explain.useress_conversationWrapper' => 'If enabled, the conversation area will be wrapped in the account wrapper.',
-  'option_explain.useress_notmatchregex' => 'This requires user names to <strong>not</strong> match the given <a href="http://www.regular-expressions.info/tutorial.html">regular expression</a>. <strong>Note:</strong> use a full expression, including delimiters and switches.',
-  'option_explain.useress_watchedWrapper' => 'If enabled, watched content pages will be wrapped in the account wrapper.',
   'option_explain.usernameLength' => 'This controls the minimum and maximum length of user names. Use 0 to disable a limit. User names may never be longer than 50 characters.',
   'option_explain.usernameValidation' => '',
   'option_explain.watchAlertActiveOnly' => 'If enabled, watched content alerts and emails will only be sent to users that have visited within the specified number of days. This can improve performance on large or very active installations.',
   'option_explain.whatsAppShare' => 'If a user clicks this button WhatsApp will open a list of users with whom to share the current page URL and title.',
-  'option_explain.xc_login_as_user_conversation_content' => '',
-  'option_explain.xc_login_as_user_conversation_options' => '',
-  'option_explain.xc_login_as_user_conversation_title' => 'Title of conversation',
-  'option_explain.xc_login_as_user_enable_stealth_login' => 'If selected, the user will not appear online, there will be no record kept of pages visited and the last logged in date will not change.',
-  'option_explain.xc_login_as_user_no_display_tabs' => 'Do not display the button in the member\'s tooltip and profile page.',
-  'option_explain.xc_login_as_user_send_conversation' => '',
-  'option_explain.xfrmAllowAnonReview' => 'If enabled, users can choose to make their reviews anonymous. Staff will still be able to see who made the review, but end users will not.',
-  'option_explain.xfrmAllowIcons' => 'If enabled, resource authors will have the option of specifying a small (96x96) icon. This icon will be displayed in resource lists and when viewing a resource.',
-  'option_explain.xfrmAllowSupportUrl' => 'If enabled, users can specify a support URL for their resource. Note that even if this is specified, a discussion thread will be created if the category is configured to do so.',
-  'option_explain.xfrmAuthorOtherResourcesCount' => 'The maximum number of other resources to display from a resource\'s author. Use 0 to disable this block.',
-  'option_explain.xfrmFilelessViewFull' => 'If selected, users that cannot download resources will only see this number of characters from the descriptions of resources without a file.',
-  'option_explain.xfrmListDefaultOrder' => 'When viewing the resource index or category overview pages, this will be the default order for resources.',
-  'option_explain.xfrmMinimumReviewLength' => 'If a review is entered, it will not be accepted unless it is at least this long. If a review is not required, this setting will be ignored if no review is entered.',
-  'option_explain.xfrmPaidResourceThreadTitleTemplate' => 'Normally, when threads are automatically created for resources, the thread title is just the resource\'s name. This option lets you specify a format for paid Resources. Use {title} where the resource title should appear.',
-  'option_explain.xfrmRecentReviewsCount' => 'The maximum number of recent reviews to display on the main resource view page. Use 0 to disable this block.',
-  'option_explain.xfrmRecentUpdatesCount' => 'The maximum number of recent updates to display on the main resource view page. Use 0 to disable this block.',
-  'option_explain.xfrmRequireDownloadToRate' => 'If selected, users may only rate a resource once they have downloaded it.',
-  'option_explain.xfrmResourceCurrencies' => 'Controls the currencies that users can select to apply to their resources. Add one currency per line. Each currency can only be 3 characters (USD, GBP, etc). A symbol will be used to display the currency if possible.',
-  'option_explain.xfrmResourceDeleteThreadAction' => 'When a resource is deleted, take this action with any automatically created thread.',
-  'option_explain.xfrmResourceExtensions' => 'List the file extensions that are allowed to be uploaded. Use spaces or line break between extensions.',
-  'option_explain.xfrmResourceMaxFileSize' => 'Provide the maximum resource file size in kilobytes (KB). Resources over this size will be rejected.',
-  'option_explain.xfrmResourceMaxFiles' => 'This is the maximum number of files that can be attached per resource version.',
-  'option_explain.xfrmResourcesPerPage' => 'The number of resources that will be listed per page, including on the resource and category overview pages.',
-  'option_explain.xfrmReviewRequired' => 'If enabled, users must submit a review when rating a resource.',
-  'option_explain.xfrmReviewsPerPage' => '',
-  'option_explain.xfrmUpdateMaxLength' => 'The maximum number of characters that can be in a resource update or description. This includes BB code. Use 0 to disable the limit.',
-  'option_explain.xfrmUpdatesPerPage' => '',
+  'option_explain.xr_pm_default_terms' => 'These are the default terms and conditions which, by default, a user will have to agree to when downloading a purchased product. You can show different terms per product when adding/editing a product. You may use BB code. You may use the <b>{board_title}</b> placeholder which will be replaced with your board title.',
+  'option_explain.xr_pm_thumbnail_size' => 'Specify the size (in pixels) of product thumbnails. Thumbnails will be cropped to a square.',
 );

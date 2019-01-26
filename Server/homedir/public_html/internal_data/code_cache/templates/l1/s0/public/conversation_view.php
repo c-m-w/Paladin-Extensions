@@ -1,31 +1,20 @@
 <?php
-// FROM HASH: 5fa571d78b162695ae70bcb1587cd462
+// FROM HASH: 71a8eea70006a4470765cc84ab79f423
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
-	if ($__vars['xf']['options']['useress_conversationWrapper']) {
-		$__finalCompiled .= '
-	';
-		$__compilerTemp1 = $__vars;
-		$__compilerTemp1['pageSelected'] = 'conversations_view';
-		$__templater->wrapTemplate('account_wrapper', $__compilerTemp1);
-		$__finalCompiled .= '
-';
-	}
-	$__finalCompiled .= '
-';
 	$__templater->pageParams['pageTitle'] = $__templater->preEscaped($__templater->escape($__vars['conversation']['title']));
 	$__templater->pageParams['pageNumber'] = $__vars['page'];
 	$__finalCompiled .= '
 
 ';
-	$__compilerTemp2 = '';
+	$__compilerTemp1 = '';
 	$__vars['i'] = 0;
 	if ($__templater->isTraversable($__vars['conversation']['recipients'])) {
 		foreach ($__vars['conversation']['recipients'] AS $__vars['recipient']) {
 			if (($__vars['recipient']['user_id'] != $__vars['conversation']['user_id']) AND ($__vars['i'] < 4)) {
 				$__vars['i']++;
-				$__compilerTemp2 .= trim('
+				$__compilerTemp1 .= trim('
 					<li>' . $__templater->fn('username_link', array($__vars['recipient'], false, array(
 					'defaultname' => 'Unknown member',
 					'href' => '',
@@ -34,9 +23,9 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			}
 		}
 	}
-	$__compilerTemp3 = '';
+	$__compilerTemp2 = '';
 	if ($__vars['conversation']['recipient_count'] > 5) {
-		$__compilerTemp3 .= '
+		$__compilerTemp2 .= '
 				' . '... and ' . $__templater->filter($__vars['conversation']['recipient_count'] - 5, array(array('number', array()),), true) . ' more.' . '
 			';
 	}
@@ -49,12 +38,12 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			<ul class="listInline listInline--selfInline listInline--comma">
 				<li>' . $__templater->fn('username_link', array($__vars['conversation']['Starter'], false, array(
 		'defaultname' => $__vars['conversation']['username'],
-		'title' => $__templater->filter('Conversation starter', array(array('for_attr', array()),), false),
+		'title' => 'Conversation starter',
 		'href' => '',
 	))) . '</li>' . trim('
-				') . $__compilerTemp2 . '
+				') . $__compilerTemp1 . '
 			</ul>
-			' . $__compilerTemp3 . '
+			' . $__compilerTemp2 . '
 		</li>
 		<li>
 			<i class="fa fa-clock-o" aria-hidden="true" title="' . $__templater->filter('Start date', array(array('for_attr', array()),), true) . '"></i>
@@ -92,15 +81,15 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	$__finalCompiled .= '
 
 ';
-	$__compilerTemp4 = '';
+	$__compilerTemp3 = '';
 	if ($__templater->isTraversable($__vars['recipients'])) {
 		foreach ($__vars['recipients'] AS $__vars['recipient']) {
-			$__compilerTemp4 .= '
+			$__compilerTemp3 .= '
 					<li class="block-row">
 						<div class="contentRow">
 							';
 			if ($__vars['recipient']['User']) {
-				$__compilerTemp4 .= '
+				$__compilerTemp3 .= '
 								<div class="contentRow-figure">
 									' . $__templater->fn('avatar', array($__vars['recipient']['User'], 'xs', false, array(
 				))) . '
@@ -113,7 +102,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 								</div>
 							';
 			} else {
-				$__compilerTemp4 .= '
+				$__compilerTemp3 .= '
 								<div class="contentRow-figure">
 									' . $__templater->fn('avatar', array(null, 'xs', false, array(
 				))) . '
@@ -123,15 +112,15 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 								</div>
 							';
 			}
-			$__compilerTemp4 .= '
+			$__compilerTemp3 .= '
 						</div>
 					</li>
 				';
 		}
 	}
-	$__compilerTemp5 = '';
+	$__compilerTemp4 = '';
 	if ($__templater->method($__vars['conversation'], 'canInvite', array())) {
-		$__compilerTemp5 .= '
+		$__compilerTemp4 .= '
 				<div class="block-footer">
 					<span class="block-footer-controls">
 						<a href="' . $__templater->fn('link', array('conversations/invite', $__vars['conversation'], ), true) . '" data-xf-click="overlay">' . 'Invite more' . '</a>
@@ -144,9 +133,9 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		<div class="block-container">
 			<h3 class="block-minorHeader">' . 'Conversation participants' . '</h3>
 			<ol class="block-body">
-				' . $__compilerTemp4 . '
+				' . $__compilerTemp3 . '
 			</ol>
-			' . $__compilerTemp5 . '
+			' . $__compilerTemp4 . '
 		</div>
 	</div>
 ', 'replace');

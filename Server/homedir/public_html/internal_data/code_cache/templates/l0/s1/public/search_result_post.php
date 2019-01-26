@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: ba96fdcd49bde9a16a9420cac5097544
+// FROM HASH: c2a8cb78ba593d0bb40cf36f08fe1e7a
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -28,7 +28,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			'value' => $__vars['post']['post_id'],
 			'class' => 'js-inlineModToggle',
 			'data-xf-init' => 'tooltip',
-			'title' => $__templater->filter('Select for moderation', array(array('for_attr', array()),), false),
+			'title' => 'Select for moderation',
 			'_type' => 'option',
 		))) . '</li>
 					';

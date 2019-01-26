@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+## 2.4.14 - 2018-08-24
+
+### Added
+
+- Nothing.
+
+### Deprecated
+
+- Nothing.
+
+### Removed
+
+- Nothing.
+
+### Fixed
+
+- Fixes issues caused by an over-zealous interpretation of RFC2822 relating to empty lines.
+
 ## 2.4.13 - 2017-07-13
 
 ### Added

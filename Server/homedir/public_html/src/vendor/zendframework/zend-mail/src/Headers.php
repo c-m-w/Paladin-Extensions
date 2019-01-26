@@ -76,7 +76,7 @@ class Headers implements Countable, Iterator
 
             // Empty line indicates end of headers
             // EXCEPT if there are more lines, in which case, there's a possible error condition
-            if (preg_match('/^\s*$/', $line)) {
+            if ($line === '') {
                 $emptyLine += 1;
                 if ($emptyLine > 2) {
                     throw new Exception\RuntimeException('Malformed header detected');

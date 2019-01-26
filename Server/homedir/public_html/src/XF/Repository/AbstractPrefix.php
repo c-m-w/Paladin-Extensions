@@ -2,6 +2,7 @@
 
 namespace XF\Repository;
 
+use XF\Mvc\Entity\ArrayCollection;
 use XF\Mvc\Entity\Finder;
 use XF\Mvc\Entity\Repository;
 
@@ -53,6 +54,44 @@ abstract class AbstractPrefix extends Repository
 			'prefixGroups' => $prefixGroups,
 			'prefixesGrouped' => $prefixes->groupBy('prefix_group_id'),
 			'prefixTotal' => count($prefixes)
+		];
+	}
+
+	public function getVisiblePrefixListData()
+	{
+		return $this->_getVisiblePrefixListData();
+	}
+
+	protected function _getVisiblePrefixListData(\Closure $isVisibleClosure = null)
+	{
+		$prefixes = $this->findPrefixesForList()->fetch();
+
+		$visiblePrefixes = [];
+
+		foreach ($prefixes AS $prefixId => $prefix)
+		{
+			/** @var \XF\Entity\ThreadPrefix $prefix */
+			if ($isVisibleClosure)
+			{
+				$isVisible = $isVisibleClosure($prefix);
+				if ($isVisible)
+				{
+					$visiblePrefixes[$prefixId] = $prefix;
+				}
+			}
+			else
+			{
+				$visiblePrefixes[$prefixId] = $prefix;
+			}
+		}
+
+		$visiblePrefixes = new ArrayCollection($visiblePrefixes);
+		$prefixGroups = $this->findPrefixGroups(true);
+
+		return [
+			'prefixGroups' => $prefixGroups,
+			'prefixesGrouped' => $visiblePrefixes->groupBy('prefix_group_id'),
+			'prefixTotal' => count($visiblePrefixes)
 		];
 	}
 

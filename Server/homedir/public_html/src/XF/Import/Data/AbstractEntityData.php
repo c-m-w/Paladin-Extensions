@@ -52,9 +52,9 @@ abstract class AbstractEntityData extends AbstractData
 
 		if (!$this->entity->isChanged($primaryKey))
 		{
-			if ($this->handler->retainIds() && $oldId !== false)
+			if ($this->retainIds() && $oldId !== false)
 			{
-				$this->entity->set($primaryKey, $oldId);
+				$this->entity->set($primaryKey, $oldId, ['forceSet' => true]);
 			}
 		}
 
@@ -64,6 +64,8 @@ abstract class AbstractEntityData extends AbstractData
 	protected function write($oldId)
 	{
 		$this->entity->save();
+
+		return $this->entity->get($this->primaryKey);
 	}
 
 	protected function importedIdFound($oldId, $newId)

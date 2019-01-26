@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: de5e1299535e474116d443f80e3e2d89
+// FROM HASH: 02cdfadd7bb7a3048c1d82ff12d40a55
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -158,16 +158,18 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'formnovalidate' => 'formnovalidate',
 		'name' => 'more-options',
 		'value' => '1',
-		'title' => $__templater->filter('Show the full post new thread editor, with options for attaching files, creating polls and more', array(array('for_attr', array()),), false),
+		'title' => 'Show the full post new thread editor, with options for attaching files, creating polls and more',
 		'data-prevent-ajax' => 'true',
 		'data-xf-init' => 'tooltip',
 	), '', array(
 	)) . '
 
-				' . $__templater->button('', array(
+				' . $__templater->button('
+					<span class="u-srOnly">' . 'Cancel' . '</span>
+				', array(
 		'type' => 'reset',
 		'class' => 'button--icon button--icon--cancel button--iconOnly',
-		'title' => $__templater->filter('Cancel', array(array('for_attr', array()),), false),
+		'title' => 'Cancel',
 		'data-xf-init' => 'tooltip',
 	), '', array(
 	)) . '

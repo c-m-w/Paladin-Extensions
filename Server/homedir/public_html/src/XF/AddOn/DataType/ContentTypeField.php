@@ -95,8 +95,10 @@ class ContentTypeField extends AbstractDataType
 
 		foreach ($entries AS $entry)
 		{
-			$type = (string)$entry['content_type'];
-			$name = (string)$entry['field_name'];
+			// this approach is used to workaround what appears to be a potential PHP 7.3 bug
+			$attributes = $this->getSimpleAttributes($entry);
+			$type = $attributes['content_type'];
+			$name = $attributes['field_name'];
 
 			if (isset($existing[$type][$name]))
 			{

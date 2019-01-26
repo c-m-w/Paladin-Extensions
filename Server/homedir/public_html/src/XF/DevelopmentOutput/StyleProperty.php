@@ -61,7 +61,7 @@ class StyleProperty extends AbstractHandler
 		$property = $this->getEntityForImport($name, $addOnId, $json, $options);
 		$property->setOption('update_phrase', false);
 
-		$property->bulkSet($json);
+		$property->bulkSetIgnore($json);
 		$property->property_name = $name;
 		$property->style_id = 0;
 		$property->addon_id = $addOnId;

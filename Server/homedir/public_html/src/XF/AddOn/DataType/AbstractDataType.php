@@ -143,6 +143,7 @@ abstract class AbstractDataType
 		{
 			return false;
 		}
+
 		return $entries;
 	}
 
@@ -271,6 +272,16 @@ abstract class AbstractDataType
 		}
 
 		return $values;
+	}
+
+	protected function getSimpleAttributes(\SimpleXMLElement $el)
+	{
+		$output = [];
+		foreach ($el->attributes() AS $key => $val)
+		{
+			$output[$key] = (string)$val;
+		}
+		return $output;
 	}
 
 	protected function exportCdata(\DOMElement $parent, $value)

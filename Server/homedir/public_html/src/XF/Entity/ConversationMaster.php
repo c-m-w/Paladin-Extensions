@@ -222,6 +222,54 @@ class ConversationMaster extends Entity
 		}
 	}
 
+	public function rebuildCounters()
+	{
+		$cache = $this->repository('XF:Conversation')->getConversationRecipientCache($this, $recipientTotal);
+		$this->recipient_count = $recipientTotal;
+		$this->recipients = $cache;
+
+		$messageCount = $this->db()->fetchOne("
+			SELECT COUNT(*)
+			FROM xf_conversation_message
+			WHERE conversation_id = ?
+		", $this->conversation_id);
+		$this->reply_count = max(0, $messageCount - 1);
+
+		$lastMessage = $this->db()->fetchRow("
+			SELECT message_id, message_date, user_id, username
+			FROM xf_conversation_message
+			WHERE conversation_id = ?
+			ORDER BY message_date DESC
+			LIMIT 1
+		", $this->conversation_id);
+
+		$this->last_message_date = $lastMessage['message_date'];
+		$this->last_message_id = $lastMessage['message_id'];
+		$this->last_message_user_id = $lastMessage['user_id'];
+		$this->last_message_username = $lastMessage['username'];
+
+		$userMappedColumns = [
+			'reply_count' => $this->reply_count,
+			'last_message_date' => $this->last_message_date,
+			'last_message_id' => $this->last_message_id,
+			'last_message_user_id' => $this->last_message_user_id,
+			'last_message_username' => $this->last_message_username
+		];
+
+		if ($this->isChanged(array_keys($userMappedColumns)))
+		{
+			$this->db()->update(
+				'xf_conversation_user',
+				$userMappedColumns,
+				'conversation_id = ?',
+				$this->conversation_id
+			);
+		}
+
+		$this->clearCache('Recipients');
+		$this->clearCache('Users');
+	}
+
 	protected function _postDelete()
 	{
 		$db = $this->db();

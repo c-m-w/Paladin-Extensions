@@ -1,0 +1,13 @@
+{
+    "src/addons/AL/OriginalPosterHighlight/addon.json": "91aeae7a0f69ac5353a44b0b7794166b20e9283fa839dc9f4a0292f63d2fb358",
+    "src/addons/AL/OriginalPosterHighlight/Listener/TemplaterTemplatePreRender.php": "ea95ee1f990ee97aa2502ebd4fe8127c32bf37d6c75b030732a4a9aaf8d0ee89",
+    "src/addons/AL/OriginalPosterHighlight/XF/Option/Style.php": "182f40fc05cea45ad7938ee1074e558601cf304e5ecf64b9abd205b5ec9cc206",
+    "src/addons/AL/OriginalPosterHighlight/_data/code_event_listeners.xml": "eef507c7cf00f91613e5ef4ca0a9b8ef8d265ecd2eda5a03330af5a418bdbb54",
+    "src/addons/AL/OriginalPosterHighlight/_data/options.xml": "2f6afb848e61d06d68d0c7ec1decb060c0ab319b03fb0194478f13d3df0b51ce",
+    "src/addons/AL/OriginalPosterHighlight/_data/option_groups.xml": "d5f161d07206a1b20b10ff676dc2930523f3fd3412b43241682fe1337f9f71ed",
+    "src/addons/AL/OriginalPosterHighlight/_data/phrases.xml": "f9d29d8611afc5751202e65003f4a3d1e73ff5a915a3a2e3d56f6d27a11da1a2",
+    "src/addons/AL/OriginalPosterHighlight/_data/style_properties.xml": "14a3d9e5351791ab93d046f7cef30a8d5ecaa0bd31fc2049bd1878bf426767a9",
+    "src/addons/AL/OriginalPosterHighlight/_data/style_property_groups.xml": "53c4c587c214a494df97eb06127214f7e0c85a1c76e678c4e97edb7715cfd803",
+    "src/addons/AL/OriginalPosterHighlight/_data/templates.xml": "6279a90f07ba5b5be25aa4e1afe15ebff40edb3c495c928776401eb914c3b171",
+    "src/addons/AL/OriginalPosterHighlight/_data/template_modifications.xml": "0a9f4cc086acbde895e50539120cfb39f7f3ccb6b46ff417ca3600027319587f"
+}

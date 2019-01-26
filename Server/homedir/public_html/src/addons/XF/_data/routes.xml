@@ -24,11 +24,13 @@
   <route route_type="admin" route_prefix="cron" format=":str&lt;entry_id&gt;/" controller="XF:CronEntry" context="cronEntries"/>
   <route route_type="admin" route_prefix="custom-thread-fields" format=":str&lt;field_id&gt;/" controller="XF:ThreadField" context="threadFields"/>
   <route route_type="admin" route_prefix="custom-user-fields" format=":str&lt;field_id&gt;/" controller="XF:UserField" context="userFields"/>
+  <route route_type="admin" route_prefix="data-portability" controller="XF:DataPortability" context="dataPortability"/>
   <route route_type="admin" route_prefix="development" controller="XF:Development" context="development"/>
   <route route_type="admin" route_prefix="feeds" format=":int&lt;feed_id,title&gt;/" controller="XF:Feed" context="rssFeedImporter"/>
+  <route route_type="admin" route_prefix="force-agreement" controller="XF:ForceAgreement" context="help"/>
   <route route_type="admin" route_prefix="forums" format=":int&lt;node_id,title&gt;/" controller="XF:Forum" context="nodes"/>
   <route route_type="admin" route_prefix="groups-permissions" controller="XF:GroupAndPermission" context="groupsAndPermissions"/>
-  <route route_type="admin" route_prefix="help-pages" format=":str&lt;page_id&gt;/" controller="XF:HelpPage" context="helpPages"/>
+  <route route_type="admin" route_prefix="help-pages" format=":str&lt;page_id&gt;/" controller="XF:HelpPage" context="help"/>
   <route route_type="admin" route_prefix="import" controller="XF:Import" context="importData"/>
   <route route_type="admin" route_prefix="index" controller="XF:Index"/>
   <route route_type="admin" route_prefix="languages" format=":int&lt;language_id,title&gt;/" controller="XF:Language" context="languages"/>

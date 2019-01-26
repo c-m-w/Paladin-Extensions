@@ -35,7 +35,7 @@ class CodeEvent extends AbstractHandler
 
 		$event = $this->getEntityForImport($name, $addOnId, $json, $options);
 
-		$event->bulkSet($json);
+		$event->bulkSetIgnore($json);
 		$event->event_id = $name;
 		$event->addon_id = $addOnId;
 		$event->save();

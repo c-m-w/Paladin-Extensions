@@ -136,6 +136,16 @@ class Registration extends \XF\Service\AbstractService
 		{
 			$this->setCustomFields($input['custom_fields']);
 		}
+
+		if (isset($input['email_choice']))
+		{
+			$this->setReceiveAdminEmail($input['email_choice']);
+		}
+	}
+
+	public function setReceiveAdminEmail($choice)
+	{
+		$this->user->Option->receive_admin_email = $choice;
 	}
 
 	public function setAvatarUrl($url)
@@ -193,6 +203,7 @@ class Registration extends \XF\Service\AbstractService
 		}
 
 		$this->setInitialUserState();
+		$this->setPolicyAcceptance();
 	}
 
 	protected function setInitialUserState()
@@ -216,6 +227,20 @@ class Registration extends \XF\Service\AbstractService
 		else
 		{
 			$user->user_state = 'valid';
+		}
+	}
+
+	protected function setPolicyAcceptance()
+	{
+		$user = $this->user;
+
+		if ($this->app->container('privacyPolicyUrl'))
+		{
+			$user->privacy_policy_accepted = \XF::$time;
+		}
+		if ($this->app->container('tosUrl'))
+		{
+			$user->terms_accepted = \XF::$time;
 		}
 	}
 
@@ -261,6 +286,7 @@ class Registration extends \XF\Service\AbstractService
 			$this->writeIpLog($ip);
 		}
 
+		$this->writeInitialChangeLogs();
 		$this->updateUserAchievements();
 		$this->sendRegistrationContact();
 
@@ -279,6 +305,34 @@ class Registration extends \XF\Service\AbstractService
 		/** @var \XF\Repository\IP $ipRepo */
 		$ipRepo = $this->repository('XF:Ip');
 		$ipRepo->logIp($user->user_id, $ip, 'user', $user->user_id, 'register');
+	}
+
+	protected function writeInitialChangeLogs()
+	{
+		/** @var \XF\Repository\ChangeLog $changeLogRepo */
+		$changeLogRepo = $this->repository('XF:ChangeLog');
+
+		$user = $this->user;
+
+		$changes = [];
+
+		if ($this->app->options()->registrationSetup['requireEmailChoice'])
+		{
+			$changes['receive_admin_email'] = [0, $user->Option->receive_admin_email ? 1 : 0];
+		}
+		if ($this->app->container('privacyPolicyUrl'))
+		{
+			$changes['privacy_policy_accepted'] = [0, \XF::$time];
+		}
+		if ($this->app->container('tosUrl'))
+		{
+			$changes['terms_accepted'] = [0, \XF::$time];
+		}
+
+		if ($changes)
+		{
+			$changeLogRepo->logChanges('user', $user->user_id, $changes, $user->user_id);
+		}
 	}
 
 	protected function updateUserAchievements()

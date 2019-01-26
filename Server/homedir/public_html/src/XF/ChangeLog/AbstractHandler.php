@@ -17,6 +17,17 @@ abstract class AbstractHandler
 	abstract protected function getLabelMap();
 	abstract protected function getFormatterMap();
 
+	protected function getProtectedFields()
+	{
+		return [];
+	}
+
+	public function isFieldProtected($field)
+	{
+		$protectedFields = $this->getProtectedFields();
+		return (isset($protectedFields[$field]) && $protectedFields[$field] === true);
+	}
+
 	public function __construct($contentType)
 	{
 		$this->contentType = $contentType;
@@ -38,7 +49,14 @@ abstract class AbstractHandler
 		$old = $this->getFormattedValue($log->field, $log->old_value);
 		$new = $this->getFormattedValue($log->field, $log->new_value);
 
-		return new DisplayEntry($label, $old, $new);
+		$displayEntry = new DisplayEntry($label, $old, $new);
+
+		if ($this->isFieldProtected($log->field))
+		{
+			$displayEntry->setIsProtected(true);
+		}
+
+		return $displayEntry;
 	}
 
 	public function getFieldLabel($field)

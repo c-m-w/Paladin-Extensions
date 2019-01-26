@@ -381,12 +381,17 @@ class DevelopmentOutput
 					{
 						foreach (new \DirectoryIterator($file->getPathname()) AS $childFile)
 						{
-							if (!$childFile->isDot() && $childFile->isFile())
+							if ($this->isValidTypeFile($childFile))
 							{
 								$files[$addOnId][$fileName . '/' . $childFile->getBasename()] = $childFile->getPathname();
 							}
 						}
 					}
+				}
+
+				if (empty($files[$addOnId]) && file_exists($addOnTypeDir . $ds . $this->metadataFilename))
+				{
+					$files[$addOnId] = [];
 				}
 			}
 		}

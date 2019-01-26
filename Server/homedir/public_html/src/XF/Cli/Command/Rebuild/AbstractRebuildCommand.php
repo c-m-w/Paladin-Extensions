@@ -39,6 +39,13 @@ abstract class AbstractRebuildCommand extends Command
 			->setName('xf-rebuild:' . $this->getRebuildName())
 			->setDescription($this->getRebuildDescription())
 			->addOption(
+				'log-queries',
+				null,
+				InputOption::VALUE_REQUIRED,
+				'Enable query logger for this job. true / false Default: false',
+				'false'
+			)
+			->addOption(
 				'batch',
 				'b',
 				InputOption::VALUE_REQUIRED,
@@ -63,6 +70,13 @@ abstract class AbstractRebuildCommand extends Command
 		{
 			unset($params[$globalOption]);
 		}
+
+		if ($params['log-queries'] === 'false')
+		{
+			$params['log-queries'] = false;
+		}
+		\XF::db()->logQueries((bool)$params['log-queries']);
+		unset($params['log-queries']);
 
 		$this->setupAndRunJob(
 			'xfRebuildJob-' . $this->getRebuildName(),

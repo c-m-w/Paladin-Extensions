@@ -20,7 +20,7 @@ return array (
   'currency.bob' => 'Bolivian bolivianos',
   'currency.brl' => 'Brazilian reals',
   'currency.bwp' => 'Botswanan pulas',
-  'currency.byr' => 'Belarusian rubles',
+  'currency.byn' => 'Belarusian rubles',
   'currency.bzd' => 'Belize dollars',
   'currency.cad' => 'Canadian dollars',
   'currency.cdf' => 'Congolese francs',

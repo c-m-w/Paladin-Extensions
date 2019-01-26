@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 20038d82142768e23bca686086b8c195
+// FROM HASH: a75e67086a050e4fa76b10b6b63dfa95
 return array('macros' => array('item' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -40,7 +40,114 @@ return array('macros' => array('item' => function($__templater, array $__argumen
 			</div>
 		</div>
 		<div class="structItem-cell structItem-cell--main" data-xf-init="touch-proxy">
-			<div class="structItem-title">
+			';
+	$__compilerTemp1 = '';
+	$__compilerTemp1 .= '
+					';
+	if ($__vars['thread']['discussion_state'] == 'moderated') {
+		$__compilerTemp1 .= '
+						<li>
+							<i class="structItem-status structItem-status--moderated" aria-hidden="true" title="' . $__templater->filter('Awaiting approval', array(array('for_attr', array()),), true) . '"></i>
+							<span class="u-srOnly">' . 'Awaiting approval' . '</span>
+						</li>
+					';
+	}
+	$__compilerTemp1 .= '
+					';
+	if ($__vars['thread']['discussion_state'] == 'deleted') {
+		$__compilerTemp1 .= '
+						<li>
+							<i class="structItem-status structItem-status--deleted" aria-hidden="true" title="' . $__templater->filter('Deleted', array(array('for_attr', array()),), true) . '"></i>
+							<span class="u-srOnly">' . 'Deleted' . '</span>
+						</li>
+					';
+	}
+	$__compilerTemp1 .= '
+					';
+	if (!$__vars['thread']['discussion_open']) {
+		$__compilerTemp1 .= '
+						<li>
+							<i class="structItem-status structItem-status--locked" aria-hidden="true" title="' . $__templater->filter('Locked', array(array('for_attr', array()),), true) . '"></i>
+							<span class="u-srOnly">' . 'Locked' . '</span>
+						</li>
+					';
+	}
+	$__compilerTemp1 .= '
+					';
+	if ($__vars['thread']['discussion_type'] == 'redirect') {
+		$__compilerTemp1 .= '
+						<li>
+							<i class="structItem-status structItem-status--redirect" aria-hidden="true" title="' . $__templater->filter('Redirect', array(array('for_attr', array()),), true) . '"></i>
+							<span class="u-srOnly">' . 'Redirect' . '</span>
+						</li>
+					';
+	} else if ($__vars['thread']['discussion_type'] == 'poll') {
+		$__compilerTemp1 .= '
+						<li>
+							<i class="structItem-status structItem-status--poll" aria-hidden="true" title="' . $__templater->filter('Poll', array(array('for_attr', array()),), true) . '"></i>
+							<span class="u-srOnly">' . 'Poll' . '</span>
+						</li>
+					';
+	}
+	$__compilerTemp1 .= '
+					';
+	if ($__vars['showWatched'] AND $__vars['xf']['visitor']['user_id']) {
+		$__compilerTemp1 .= '
+						';
+		if ($__vars['thread']['Watch'][$__vars['xf']['visitor']['user_id']]) {
+			$__compilerTemp1 .= '
+							<li>
+								<i class="structItem-status structItem-status--watched" aria-hidden="true" title="' . $__templater->filter('Thread watched', array(array('for_attr', array()),), true) . '"></i>
+								<span class="u-srOnly">' . 'Thread watched' . '</span>
+							</li>
+						';
+		} else if ((!$__vars['forum']) AND $__vars['thread']['Forum']['Watch'][$__vars['xf']['visitor']['user_id']]) {
+			$__compilerTemp1 .= '
+							<li>
+								<i class="structItem-status structItem-status--watched" aria-hidden="true" title="' . $__templater->filter('Forum watched', array(array('for_attr', array()),), true) . '"></i>
+								<span class="u-srOnly">' . 'Forum watched' . '</span>
+							</li>
+						';
+		}
+		$__compilerTemp1 .= '
+					';
+	}
+	$__compilerTemp1 .= '
+					';
+	if ($__vars['thread']['sticky']) {
+		$__compilerTemp1 .= '
+						<li>
+							<i class="structItem-status structItem-status--sticky" aria-hidden="true" title="' . $__templater->filter('Sticky', array(array('for_attr', array()),), true) . '"></i>
+							<span class="u-srOnly">' . 'Sticky' . '</span>
+						</li>
+					';
+	}
+	$__compilerTemp1 .= '
+				';
+	if (strlen(trim($__compilerTemp1)) > 0) {
+		$__finalCompiled .= '
+				<ul class="structItem-statuses">
+				' . $__compilerTemp1 . '
+				</ul>
+			';
+	}
+	$__finalCompiled .= '
+
+';
+	if ($__templater->fn('react_handler_status', array('post', ), false)) {
+		$__finalCompiled .= '
+		' . $__templater->callMacro('th_display_reactions', 'reactions_bit_list', array(
+			'type' => 'post',
+			'id' => 'first_post_id',
+			'content' => $__vars['thread'],
+			'reactUsers' => $__templater->method($__vars['thread'], 'getReactUsers', array()),
+			'limit' => true,
+		), $__vars) . '
+';
+	}
+	$__finalCompiled .= '
+
+			<div class="structItem-title" uix-data-href="' . $__templater->fn('link', array('threads' . (($__templater->method($__vars['thread'], 'isUnread', array()) AND (!$__vars['forceRead'])) ? '/unread' : ''), $__vars['thread'], ), true) . '">
 				';
 	$__vars['canPreview'] = $__templater->method($__vars['thread'], 'canPreview', array());
 	$__finalCompiled .= '
@@ -66,33 +173,33 @@ return array('macros' => array('item' => function($__templater, array $__argumen
 
 			<div class="structItem-minor">
 				';
-	$__compilerTemp1 = '';
-	$__compilerTemp1 .= '
+	$__compilerTemp2 = '';
+	$__compilerTemp2 .= '
 						';
 	if ($__vars['extraInfo']) {
-		$__compilerTemp1 .= '
+		$__compilerTemp2 .= '
 							<li>' . $__templater->escape($__vars['extraInfo']) . '</li>
 						';
 	} else if ($__templater->method($__vars['thread'], 'canEdit', array()) AND ($__templater->method($__vars['thread'], 'canUseInlineModeration', array()) AND $__vars['allowEdit'])) {
-		$__compilerTemp1 .= '
+		$__compilerTemp2 .= '
 							';
 		if ((!$__vars['allowInlineMod']) OR (!$__vars['forum'])) {
-			$__compilerTemp1 .= '
+			$__compilerTemp2 .= '
 								';
 			$__vars['editParams'] = array('_xfNoInlineMod' => ((!$__vars['allowInlineMod']) ? 1 : null), '_xfForumName' => ((!$__vars['forum']) ? 1 : 0), );
-			$__compilerTemp1 .= '
+			$__compilerTemp2 .= '
 							';
 		} else {
-			$__compilerTemp1 .= '
+			$__compilerTemp2 .= '
 								';
 			$__vars['editParams'] = array();
-			$__compilerTemp1 .= '
+			$__compilerTemp2 .= '
 							';
 		}
-		$__compilerTemp1 .= '
+		$__compilerTemp2 .= '
 							';
 		if ($__vars['thread']['discussion_type'] != 'redirect') {
-			$__compilerTemp1 .= '
+			$__compilerTemp2 .= '
 								<li class="structItem-extraInfoMinor">
 									<a href="' . $__templater->fn('link', array('threads/edit', $__vars['thread'], ), true) . '" data-xf-click="overlay" data-href="' . $__templater->fn('link', array('threads/edit', $__vars['thread'], $__vars['editParams'], ), true) . '">
 										' . 'Edit' . '
@@ -100,13 +207,13 @@ return array('macros' => array('item' => function($__templater, array $__argumen
 								</li>
 							';
 		}
-		$__compilerTemp1 .= '
+		$__compilerTemp2 .= '
 						';
 	}
-	$__compilerTemp1 .= '
+	$__compilerTemp2 .= '
 						';
 	if ($__vars['chooseName']) {
-		$__compilerTemp1 .= '
+		$__compilerTemp2 .= '
 							<li>' . $__templater->formCheckBox(array(
 			'standalone' => 'true',
 		), array(array(
@@ -117,7 +224,7 @@ return array('macros' => array('item' => function($__templater, array $__argumen
 		))) . '</li>
 						';
 	} else if ($__vars['allowInlineMod'] AND $__templater->method($__vars['thread'], 'canUseInlineModeration', array())) {
-		$__compilerTemp1 .= '
+		$__compilerTemp2 .= '
 							<li>' . $__templater->formCheckBox(array(
 			'standalone' => 'true',
 		), array(array(
@@ -131,12 +238,12 @@ return array('macros' => array('item' => function($__templater, array $__argumen
 		))) . '</li>
 						';
 	}
-	$__compilerTemp1 .= '
+	$__compilerTemp2 .= '
 					';
-	if (strlen(trim($__compilerTemp1)) > 0) {
+	if (strlen(trim($__compilerTemp2)) > 0) {
 		$__finalCompiled .= '
 					<ul class="structItem-extraInfo">
-					' . $__compilerTemp1 . '
+					' . $__compilerTemp2 . '
 					</ul>
 				';
 	}
@@ -176,9 +283,9 @@ return array('macros' => array('item' => function($__templater, array $__argumen
 			$__finalCompiled .= '
 							<span class="structItem-pageJump">
 							';
-			$__compilerTemp2 = $__templater->fn('last_pages', array($__vars['thread']['reply_count'] + 1, $__vars['xf']['options']['messagesPerPage'], $__vars['xf']['options']['lastPageLinks'], ), false);
-			if ($__templater->isTraversable($__compilerTemp2)) {
-				foreach ($__compilerTemp2 AS $__vars['p']) {
+			$__compilerTemp3 = $__templater->fn('last_pages', array($__vars['thread']['reply_count'] + 1, $__vars['xf']['options']['messagesPerPage'], $__vars['xf']['options']['lastPageLinks'], ), false);
+			if ($__templater->isTraversable($__compilerTemp3)) {
+				foreach ($__compilerTemp3 AS $__vars['p']) {
 					$__finalCompiled .= '
 								<a href="' . $__templater->fn('link', array('threads', $__vars['thread'], array('page' => $__vars['p'], ), ), true) . '">' . $__templater->escape($__vars['p']) . '</a>
 							';
@@ -193,121 +300,14 @@ return array('macros' => array('item' => function($__templater, array $__argumen
 				';
 	}
 	$__finalCompiled .= '
-			';
-	$__compilerTemp3 = '';
-	$__compilerTemp3 .= '
-					';
-	if ($__vars['thread']['discussion_state'] == 'moderated') {
-		$__compilerTemp3 .= '
-						<li>
-							<i class="structItem-status structItem-status--moderated" aria-hidden="true" title="' . $__templater->filter('Awaiting approval', array(array('for_attr', array()),), true) . '"></i>
-							<span class="u-srOnly">' . 'Awaiting approval' . '</span>
-						</li>
-					';
-	}
-	$__compilerTemp3 .= '
-					';
-	if ($__vars['thread']['discussion_state'] == 'deleted') {
-		$__compilerTemp3 .= '
-						<li>
-							<i class="structItem-status structItem-status--deleted" aria-hidden="true" title="' . $__templater->filter('Deleted', array(array('for_attr', array()),), true) . '"></i>
-							<span class="u-srOnly">' . 'Deleted' . '</span>
-						</li>
-					';
-	}
-	$__compilerTemp3 .= '
-					';
-	if (!$__vars['thread']['discussion_open']) {
-		$__compilerTemp3 .= '
-						<li>
-							<i class="structItem-status structItem-status--locked" aria-hidden="true" title="' . $__templater->filter('Locked', array(array('for_attr', array()),), true) . '"></i>
-							<span class="u-srOnly">' . 'Locked' . '</span>
-						</li>
-					';
-	}
-	$__compilerTemp3 .= '
-					';
-	if ($__vars['thread']['discussion_type'] == 'redirect') {
-		$__compilerTemp3 .= '
-						<li>
-							<i class="structItem-status structItem-status--redirect" aria-hidden="true" title="' . $__templater->filter('Redirect', array(array('for_attr', array()),), true) . '"></i>
-							<span class="u-srOnly">' . 'Redirect' . '</span>
-						</li>
-					';
-	} else if ($__vars['thread']['discussion_type'] == 'poll') {
-		$__compilerTemp3 .= '
-						<li>
-							<i class="structItem-status structItem-status--poll" aria-hidden="true" title="' . $__templater->filter('Poll', array(array('for_attr', array()),), true) . '"></i>
-							<span class="u-srOnly">' . 'Poll' . '</span>
-						</li>
-					';
-	}
-	$__compilerTemp3 .= '
-					';
-	if ($__vars['showWatched'] AND $__vars['xf']['visitor']['user_id']) {
-		$__compilerTemp3 .= '
-						';
-		if ($__vars['thread']['Watch'][$__vars['xf']['visitor']['user_id']]) {
-			$__compilerTemp3 .= '
-							<li>
-								<i class="structItem-status structItem-status--watched" aria-hidden="true" title="' . $__templater->filter('Thread watched', array(array('for_attr', array()),), true) . '"></i>
-								<span class="u-srOnly">' . 'Thread watched' . '</span>
-							</li>
-						';
-		} else if ((!$__vars['forum']) AND $__vars['thread']['Forum']['Watch'][$__vars['xf']['visitor']['user_id']]) {
-			$__compilerTemp3 .= '
-							<li>
-								<i class="structItem-status structItem-status--watched" aria-hidden="true" title="' . $__templater->filter('Forum watched', array(array('for_attr', array()),), true) . '"></i>
-								<span class="u-srOnly">' . 'Forum watched' . '</span>
-							</li>
-						';
-		}
-		$__compilerTemp3 .= '
-					';
-	}
-	$__compilerTemp3 .= '
-					';
-	if ($__vars['thread']['sticky']) {
-		$__compilerTemp3 .= '
-						<li>
-							<i class="structItem-status structItem-status--sticky" aria-hidden="true" title="' . $__templater->filter('Sticky', array(array('for_attr', array()),), true) . '"></i>
-							<span class="u-srOnly">' . 'Sticky' . '</span>
-						</li>
-					';
-	}
-	$__compilerTemp3 .= '
-					<li class="uix_threadRepliesMobile">
-						<dl class="pairs pairs--justified">
-							<dt>' . $__templater->callMacro('uix_icons.less', 'icon', array(
+				<li class="uix_threadRepliesMobile">
+					<dl class="pairs pairs--justified">
+						<dt>' . $__templater->callMacro('uix_icons.less', 'icon', array(
 		'icon' => 'post',
 	), $__vars) . '</dt>
-							<dd>' . (($__vars['thread']['discussion_type'] == 'redirect') ? '&ndash;' : $__templater->filter($__vars['thread']['reply_count'], array(array('number', array()),), true)) . '</dd>
-						</dl>
-					</li>
-				';
-	if (strlen(trim($__compilerTemp3)) > 0) {
-		$__finalCompiled .= '
-				<ul class="structItem-statuses">
-				' . $__compilerTemp3 . '
-				</ul>
-			';
-	}
-	$__finalCompiled .= '
-
-';
-	if ($__templater->fn('react_handler_status', array('post', ), false)) {
-		$__finalCompiled .= '
-		' . $__templater->callMacro('th_display_reactions', 'reactions_bit_list', array(
-			'type' => 'post',
-			'id' => 'first_post_id',
-			'content' => $__vars['thread'],
-			'reactUsers' => $__templater->method($__vars['thread'], 'getReactUsers', array()),
-			'limit' => true,
-		), $__vars) . '
-';
-	}
-	$__finalCompiled .= '
-
+						<dd>' . (($__vars['thread']['discussion_type'] == 'redirect') ? '&ndash;' : $__templater->filter($__vars['thread']['reply_count'], array(array('number', array()),), true)) . '</dd>
+					</dl>
+				</li>
 			</div>
 		</div>
 		<div class="structItem-cell structItem-cell--meta" title="' . $__templater->filter('First message likes' . $__vars['xf']['language']['label_separator'], array(array('for_attr', array()),), true) . ' ' . $__templater->filter($__vars['thread']['first_post_likes'], array(array('number', array()),), true) . '">
@@ -327,6 +327,13 @@ return array('macros' => array('item' => function($__templater, array $__argumen
 				' . 'N/A' . '
 			';
 	} else {
+		$__finalCompiled .= '
+				';
+		if (!$__vars['forum']) {
+			$__finalCompiled .= '
+					<a class="uix_mobileNodeTitle" href="' . $__templater->fn('link', array('forums', $__vars['thread']['Forum'], ), true) . '">' . $__templater->escape($__vars['thread']['Forum']['title']) . '</a>
+				';
+		}
 		$__finalCompiled .= '
 				<a href="' . $__templater->fn('link', array('threads/latest', $__vars['thread'], ), true) . '" rel="nofollow">' . $__templater->fn('date_dynamic', array($__vars['thread']['last_post_date'], array(
 			'class' => 'structItem-latestDate',

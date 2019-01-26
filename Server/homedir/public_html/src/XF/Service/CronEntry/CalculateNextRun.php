@@ -143,7 +143,7 @@ class CalculateNextRun extends \XF\Service\AbstractService
 				$rollover = null;
 				break;
 			}
-			else if ($rollover == null)
+			else if ($rollover === null)
 			{
 				// found unit earlier in the date; use smallest value
 				$rollover = $unitValue;

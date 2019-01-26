@@ -18,7 +18,7 @@ class UserGroupPromotion extends AbstractJob
 		$promotions = $promotionRepo->getActiveUserGroupPromotions();
 		if (!$promotions)
 		{
-			$this->complete();
+			return $this->complete();
 		}
 
 		$startTime = microtime(true);

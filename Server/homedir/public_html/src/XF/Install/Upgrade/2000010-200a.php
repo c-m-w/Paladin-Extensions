@@ -1272,7 +1272,7 @@ class Version2000010 extends AbstractUpgrade
 
 				foreach ($admins AS $userId => $admin)
 				{
-					$permissionCache = @unserialize($admin['permission_cache']);
+					$permissionCache = @unserialize($admin['permission_cache']) ?: [];
 					$permissionCount = count($permissionCache);
 
 					$mostPermissiveAdmins[$userId] = $permissionCount;
@@ -1296,10 +1296,10 @@ class Version2000010 extends AbstractUpgrade
 		$db = $this->db();
 
 		$admins = $db->fetchAllKeyed("
-			SELECT admin.user_id, admin.permission_cache, admin.is_super_admin
-			FROM xf_admin AS admin
+			SELECT ad.user_id, ad.permission_cache, ad.is_super_admin
+			FROM xf_admin AS ad
 			INNER JOIN xf_user AS user ON
-				(admin.user_id = user.user_id)
+				(ad.user_id = user.user_id)
 			WHERE user.is_moderator = 1
 		", 'user_id');
 

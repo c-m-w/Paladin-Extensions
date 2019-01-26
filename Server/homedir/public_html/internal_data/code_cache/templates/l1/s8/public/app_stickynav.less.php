@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 888694813d5b2c9daab4ebae3219a281
+// FROM HASH: 38c9a4f76c706b9c2b5f59961ffd8d54
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -86,13 +86,22 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		right: 0;
 		z-index: 500;
 		margin: 0 auto;
-		box-shadow: @xf-uix_elevation1;
 		border-radius: 0 !important;
 		.xf-uix_stickyStaffbarStyle();
 		height: @xf-uix_stickyStaffBarHeight;
+		
+		';
+		if ($__templater->fn('property', array('publicNavSticky', ), false) == 'none') {
+			$__finalCompiled .= '
+			box-shadow: @xf-uix_elevation1;
+		';
+		}
+		$__finalCompiled .= '
 
 		// *:not(.hScroller-scroll) {max-height: @xf-uix_stickyStaffBarHeight;}
 	}
+
+
 ';
 	}
 	$__finalCompiled .= '

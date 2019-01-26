@@ -49,7 +49,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			'rowtype' => 'header',
 		), array(array(
 			'_type' => 'cell',
-			'html' => 'Moderator',
+			'html' => '<font size="3"><i class="fa fa-gavel"></i></font>',
 		),
 		array(
 			'_type' => 'cell',

@@ -185,7 +185,7 @@ class Set implements \ArrayAccess, \IteratorAggregate, \Countable
 		{
 			if (!$ignoreInvalid)
 			{
-				$this->entity->error($error, "custom_field_$fieldId");
+				$this->entity->error("{$field->title}: $error", "custom_field_$fieldId");
 			}
 			return false;
 		}

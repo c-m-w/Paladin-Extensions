@@ -70,7 +70,9 @@ class EntityClassProperties extends Command
 			foreach ($iterator AS $name => $file)
 			{
 				$name = str_replace('.php', '', $file->getFilename());
-				$entities[] = str_replace('/', '\\', $addOnId) . ':' . $name;
+				$subDir = substr($file->getPath(), strlen($path));
+				$subDir = ltrim(str_replace('/', '\\', $subDir) . '\\', '\\');
+				$entities[] = str_replace('/', '\\', $addOnId) . ':' . $subDir . $name;
 			}
 		}
 
@@ -241,7 +243,7 @@ class EntityClassProperties extends Command
 		return [
 			Entity::INT => 'int',
 			Entity::UINT => 'int',
-			Entity::FLOAT => 'string', // not decoded
+			Entity::FLOAT => 'float',
 			Entity::BOOL => 'bool',
 			Entity::STR => 'string',
 			Entity::BINARY => 'string',

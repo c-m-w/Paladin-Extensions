@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 00937a1ee25b724643b6c422dc0a9508
+// FROM HASH: 1b48c5378d4975493c4b0bd8ceff954c
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -154,6 +154,14 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		.dataList-cell--link a
 		{
 			color: orange;
+		}
+	}
+
+	&.dataList-row--protected
+	{
+		> .dataList-cell:first-child
+		{
+			border-left: @xf-borderSizeFeature solid @xf-borderColorFeature;
 		}
 	}
 
@@ -355,6 +363,11 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		display: none;
 	}
 
+	&.dataList-cell--breakWord
+	{
+		word-break: break-word;
+	}
+
 	&.dataList-cell--hint,
 	.dataList-row--subSection &.dataList-cell--hint
 	{
@@ -504,6 +517,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 				content: attr(data-cell-label) ":";
 				padding-right: @xf-dataListPaddingH;
 				margin-right: auto;
+				word-break: normal;
 			}
 
 			> .input:first-child:last-child

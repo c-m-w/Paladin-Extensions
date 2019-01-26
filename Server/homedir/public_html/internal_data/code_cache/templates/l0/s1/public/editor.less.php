@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 349f92415b927134858b5bfc9b54c1a1
+// FROM HASH: 51672d8d2b9960b19d83dc92ba63307e
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -38,6 +38,11 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	{
 		margin-bottom: 0;
 		margin-top: 0;
+	}
+
+	&.fr-element.fr-disabled
+	{
+		.xf-inputDisabled() !important;
 	}
 }
 

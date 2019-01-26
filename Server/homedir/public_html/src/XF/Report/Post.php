@@ -21,7 +21,7 @@ class Post extends AbstractHandler
 
 	public function setupReportEntityContent(Report $report, Entity $content)
 	{
-		if (!empty($content->Thread->prefix_id))
+		if (!empty($content->Thread->prefix_id) && $content->Thread->Prefix)
 		{
 			$threadTitle = $content->Thread->Prefix->title . ' - ' . $content->Thread->title;
 		}

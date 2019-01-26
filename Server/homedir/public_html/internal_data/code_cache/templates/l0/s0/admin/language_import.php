@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 0ae5456ccbf69367c26c6e218c3249e6
+// FROM HASH: c185f6ac1293786c4ead1bc6fb217330
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -63,6 +63,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'_dependent' => array($__templater->formSelect(array(
 		'name' => 'overwrite_language_id',
 	), $__compilerTemp3)),
+		'html' => '<div class="formRow-explain">' . 'Overwriting the language will only replace the phrases in the language. All other language properties will remain the same.' . '</div>',
 		'_type' => 'option',
 	)), array(
 		'label' => 'Import as',

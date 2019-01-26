@@ -75,6 +75,16 @@ class Phrase extends Entity
 				$this->error(\XF::phrase('phrase_titles_may_only_contain_single_dot_character'));
 				return false;
 			}
+			else if (substr($title, -1) === '.')
+			{
+				$this->error(\XF::phrase('phrase_titles_cannot_contain_dot_as_last_character'));
+				return false;
+			}
+			else if (!preg_match('/^[a-z0-9_.]*$/i', $title))
+			{
+				$this->error(\XF::phrase('please_enter_title_using_only_alphanumeric_dot_underscore'));
+				return false;
+			}
 			else if (!preg_match('/^[a-z0-9_]{1,50}\.[a-z0-9_]+$/i', $title))
 			{
 				$this->error(\XF::phrase('phrase_group_titles_must_be_no_more_than_50_characters'), 'title');

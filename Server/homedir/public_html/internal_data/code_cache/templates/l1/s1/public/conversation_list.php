@@ -3,17 +3,6 @@
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
-	if ($__vars['xf']['options']['useress_conversationWrapper']) {
-		$__finalCompiled .= '
-	';
-		$__compilerTemp1 = $__vars;
-		$__compilerTemp1['pageSelected'] = 'conversations_view';
-		$__templater->wrapTemplate('account_wrapper', $__compilerTemp1);
-		$__finalCompiled .= '
-';
-	}
-	$__finalCompiled .= '
-';
 	$__templater->pageParams['pageTitle'] = $__templater->preEscaped('Conversations');
 	$__templater->pageParams['pageNumber'] = $__vars['page'];
 	$__finalCompiled .= '
@@ -63,41 +52,41 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		<div class="block-filterBar">
 			<div class="filterBar">
 				';
-	$__compilerTemp2 = '';
-	$__compilerTemp2 .= '
+	$__compilerTemp1 = '';
+	$__compilerTemp1 .= '
 						';
 	if ($__vars['filters']['starter_id'] AND $__vars['starterFilter']) {
-		$__compilerTemp2 .= '
+		$__compilerTemp1 .= '
 							<li><a href="' . $__templater->fn('link', array('conversations', null, $__templater->filter($__vars['filters'], array(array('replace', array('starter_id', null, )),), false), ), true) . '"
 								class="filterBar-filterToggle" data-xf-init="tooltip" title="' . $__templater->filter('Remove this filter', array(array('for_attr', array()),), true) . '">
 								' . 'Started by ' . $__templater->escape($__vars['starterFilter']['username']) . '' . '</a></li>
 						';
 	}
-	$__compilerTemp2 .= '
+	$__compilerTemp1 .= '
 						';
 	if ($__vars['filters']['receiver_id'] AND $__vars['receiverFilter']) {
-		$__compilerTemp2 .= '
+		$__compilerTemp1 .= '
 							<li><a href="' . $__templater->fn('link', array('conversations', null, $__templater->filter($__vars['filters'], array(array('replace', array('receiver_id', null, )),), false), ), true) . '"
 								class="filterBar-filterToggle" data-xf-init="tooltip" title="' . $__templater->filter('Remove this filter', array(array('for_attr', array()),), true) . '">
 								' . 'Received by ' . $__templater->escape($__vars['receiverFilter']['username']) . '' . '</a></li>
 						';
 	}
-	$__compilerTemp2 .= '
+	$__compilerTemp1 .= '
 						';
 	if ($__vars['filters']['starred']) {
-		$__compilerTemp2 .= '
+		$__compilerTemp1 .= '
 							<li><a href="' . $__templater->fn('link', array('conversations', null, $__templater->filter($__vars['filters'], array(array('replace', array('starred', null, )),), false), ), true) . '"
 								class="filterBar-filterToggle" data-xf-init="tooltip" title="' . $__templater->filter('Remove this filter', array(array('for_attr', array()),), true) . '">
 								<span class="filterBar-filterToggle-label">' . 'Show only' . $__vars['xf']['language']['label_separator'] . '</span>
 								' . 'Starred' . '</a></li>
 						';
 	}
-	$__compilerTemp2 .= '
+	$__compilerTemp1 .= '
 					';
-	if (strlen(trim($__compilerTemp2)) > 0) {
+	if (strlen(trim($__compilerTemp1)) > 0) {
 		$__finalCompiled .= '
 					<ul class="filterBar-filters">
-					' . $__compilerTemp2 . '
+					' . $__compilerTemp1 . '
 					</ul>
 				';
 	}

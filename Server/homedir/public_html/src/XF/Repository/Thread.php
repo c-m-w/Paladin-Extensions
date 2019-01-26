@@ -83,8 +83,8 @@ class Thread extends Repository
 			->with(['Forum', 'User'])
 			->exists('UserPosts|' . $userId)
 			->where('discussion_type', '<>', 'redirect')
-			->setDefaultOrder('last_post_date', 'DESC')
-			->indexHint('FORCE', 'last_post_date');
+			//->indexHint('FORCE', 'last_post_date')
+			->setDefaultOrder('last_post_date', 'DESC');
 	}
 
 	public function findThreadsWithNoReplies()
@@ -106,7 +106,6 @@ class Thread extends Repository
 	{
 		return $this->finder('XF:Thread')
 			->with(['Forum', 'User'])
-			->where('Forum.find_new', true)
 			->where('discussion_state', 'visible')
 			->where('discussion_type', '<>', 'redirect')
 			->order('post_date', 'DESC')

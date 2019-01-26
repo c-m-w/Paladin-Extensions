@@ -24,6 +24,12 @@
     <default_value></default_value>
     <relation group_id="ahDiscordWidget" display_order="120"/>
   </option>
+  <option option_id="ahDW_joinDisplay" edit_format="radio" data_type="string">
+    <default_value>bottom</default_value>
+    <edit_format_params>title=Position the join button in the widget title.
+bottom=Position the join button at the bottom of the widget.</edit_format_params>
+    <relation group_id="ahDiscordWidget" display_order="130"/>
+  </option>
   <option option_id="ahDW_joinText" edit_format="textbox" data_type="string">
     <default_value>Join Server</default_value>
     <relation group_id="ahDiscordWidget" display_order="110"/>

@@ -37,6 +37,7 @@ class User extends Repository
 
 	public function getVisitorWith(array $with = [])
 	{
+		$with[] = 'Admin';
 		$with[] = 'Option';
 		$with[] = 'Profile';
 		$with[] = 'Privacy';
@@ -298,6 +299,11 @@ class User extends Repository
 	public function findValidUsers()
 	{
 		return $this->finder('XF:User')->isValidUser();
+	}
+
+	public function findRecentlyActiveValidUsers()
+	{
+		return $this->finder('XF:User')->isValidUser(true);
 	}
 
 	/**

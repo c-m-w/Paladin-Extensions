@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 3ceae24d235dff15fb24b3598f34016e
+// FROM HASH: 054248cd3187f6e9464456dd3607232a
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -60,6 +60,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 .uix_contentWrapper {
 	margin-bottom: @xf-elementSpacer;
+	flex-grow: 1;
 	';
 	if ($__templater->fn('property', array('uix_contentWrapper', ), false) == 1) {
 		$__finalCompiled .= '
@@ -255,10 +256,16 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 .block[data-widget-definition],
 .block[data-widget-key], .p-body-sideNav, .p-body-sidebar {
+	';
+	if ($__templater->fn('property', array('uix_defaultSidebarIcon', ), false)) {
+		$__finalCompiled .= '
 	.block-minorHeader:before,
 	.block-header:before, {' . $__templater->callMacro('uix_icons.less', 'content', array(
-		'icon' => 'article',
-	), $__vars) . '}
+			'icon' => 'article',
+		), $__vars) . '}
+	';
+	}
+	$__finalCompiled .= '
 }
 .block[data-widget-definition="th_userNavigation"] .block-minorHeader:before {' . $__templater->callMacro('uix_icons.less', 'content', array(
 		'icon' => 'user',

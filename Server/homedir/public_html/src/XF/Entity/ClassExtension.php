@@ -24,6 +24,12 @@ class ClassExtension extends Entity
 		$class = trim($class);
 		$class = trim($class, '\\');
 
+		if (!$class)
+		{
+			$this->error(\XF::phrase('invalid_class_x', ['class' => "''"]));
+			return false;
+		}
+
 		return true;
 	}
 
@@ -32,9 +38,9 @@ class ClassExtension extends Entity
 		$class = trim($class);
 		$class = trim($class, '\\');
 
-		if (!\XF::$autoLoader->findFile($class))
+		if (!$class || !\XF::$autoLoader->findFile($class))
 		{
-			$this->error(\XF::phrase('invalid_class_x', ['class' => $class]));
+			$this->error(\XF::phrase('invalid_class_x', ['class' => $class ?: "''"]));
 			return false;
 		}
 
@@ -91,10 +97,10 @@ class ClassExtension extends Entity
 		$structure->columns = [
 			'extension_id' => ['type' => self::UINT, 'autoIncrement' => true, 'nullable' => true],
 			'from_class' => ['type' => self::STR, 'maxLength' => 100,
-				'required' => 'please_enter_valid_callback_class'
+				'required' => 'please_enter_valid_base_class'
 			],
 			'to_class' => ['type' => self::STR, 'maxLength' => 100,
-				'required' => 'please_enter_valid_callback_class'
+				'required' => 'please_enter_valid_extension_class'
 			],
 			'execute_order' => ['type' => self::UINT, 'default' => 10],
 			'active' => ['type' => self::BOOL, 'default' => 1],

@@ -12,7 +12,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 ';
 	$__compilerTemp1 = '';
-	if ($__templater->method($__vars['post'], 'isFirstPost', array()) AND $__templater->method($__vars['thread'], 'canEditTitle', array())) {
+	if ($__templater->method($__vars['post'], 'isFirstPost', array()) AND $__templater->method($__vars['thread'], 'canEdit', array())) {
 		$__compilerTemp1 .= '
 				' . $__templater->formPrefixInputRow($__vars['prefixes'], array(
 			'type' => 'thread',

@@ -18,8 +18,15 @@ use XF\Mvc\Entity\Structure;
  * @property string callback_method
  * @property bool advanced_mode
  *
+ * GETTERS
+ * @property string|null node_name
+ * @property string|null title
+ * @property string|null description
+ * @property int depth
+ *
  * RELATIONS
  * @property \XF\Entity\Template MasterTemplate
+ * @property \XF\Entity\Node Node
  */
 class Page extends AbstractNode
 {

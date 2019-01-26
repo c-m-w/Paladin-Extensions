@@ -13,7 +13,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'id' => 'editor_spoiler_title',
 	), array(
 		'label' => 'Enter spoiler title',
-		'explain' => 'If you would like the \'Spoiler\' button show a title that hints at its content, enter your text here. To avoid having a title, leave the text box empty.',
+		'explain' => 'If you would like the \'Spoiler\' button to show a title that hints at its content, enter your text here. To avoid having a title, leave the text box empty.',
 	)) . '
 		</div>
 		' . $__templater->formSubmitRow(array(

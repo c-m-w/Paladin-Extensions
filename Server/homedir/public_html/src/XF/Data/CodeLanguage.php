@@ -109,14 +109,10 @@ class CodeLanguage
 			],
 			'php' => [
 				'modes' => [
-					'htmlmixed',
-					'xml',
-					'javascript',
-					'css',
 					'clike',
 					'php'
 				],
-				'mime' => 'application/x-httpd-php',
+				'mime' => 'text/x-php',
 				'common' => true
 			],
 			'python' => [

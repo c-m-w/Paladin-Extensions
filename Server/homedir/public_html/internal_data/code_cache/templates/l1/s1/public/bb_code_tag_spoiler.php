@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 86ee07b7fa19776dc96022af10069580
+// FROM HASH: 5ec9c8418429e0cf949d73d5a76f524e
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -19,7 +19,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'class' => 'bbCodeSpoiler-button' . ($__vars['title'] ? ' button--longText' : ''),
 		'data-xf-click' => 'toggle',
 		'data-xf-init' => 'tooltip',
-		'title' => $__templater->filter('Click to reveal or hide spoiler', array(array('for_attr', array()),), false),
+		'title' => 'Click to reveal or hide spoiler',
 	), '', array(
 	)) . '
 	<div class="bbCodeSpoiler-content">

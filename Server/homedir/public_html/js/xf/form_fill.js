@@ -79,6 +79,15 @@
 					else if ($ctrl.is('select, input, textarea'))
 					{
 						$ctrl.val(value);
+
+						if ($ctrl.is('textarea'))
+						{
+							var handler = XF.Element.getHandler($ctrl, 'textarea-handler');
+							if (handler)
+							{
+								handler.update();
+							}
+						}
 					}
 				}
 			});

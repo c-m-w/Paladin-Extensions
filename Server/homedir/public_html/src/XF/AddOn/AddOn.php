@@ -2,6 +2,8 @@
 
 namespace XF\AddOn;
 
+use XF\Util\File;
+
 class AddOn implements \ArrayAccess
 {
 	/**
@@ -51,13 +53,13 @@ class AddOn implements \ArrayAccess
 		$this->dataDir = $this->addOnDir . $ds . '_data';
 		$this->filesDir = $this->addOnDir . $ds . '_files';
 		$this->outputDir = $this->addOnDir . $ds . '_output';
-		$this->releasesDir = $this->addOnDir . $ds. '_releases';
+		$this->releasesDir = $this->addOnDir . $ds . '_releases';
 
 		$this->jsonPath = $this->addOnDir . $ds . 'addon.json';
 		if (file_exists($this->jsonPath))
 		{
 			$this->json = $this->prepareJsonFile(
-				json_decode(file_get_contents($this->jsonPath), true)?: []
+				json_decode(file_get_contents($this->jsonPath), true) ?: []
 			);
 		}
 		else
@@ -344,6 +346,22 @@ class AddOn implements \ArrayAccess
 		}
 	}
 
+	public function getIconUri()
+	{
+		if (!$this->icon)
+		{
+			return null;
+		}
+
+		$tempFile = File::getTempFile();
+		File::copyFile($this->getIconPath(), $tempFile, false);
+
+		$imageManager = \XF::app()->imageManager();
+		$image = $imageManager->imageFromFile($tempFile);
+
+		return $image->getDataUri($tempFile);
+	}
+
 	public function hasHashes()
 	{
 		return file_exists($this->getHashesPath());
@@ -397,6 +415,9 @@ class AddOn implements \ArrayAccess
 
 	public function checkRequirements(&$errors = [], &$warnings = [])
 	{
+		$errors = [];
+		$warnings = [];
+
 		$addOns = \XF::app()->container('addon.cache');
 		foreach ((array)$this->require AS $productKey => $requirement)
 		{
@@ -444,7 +465,7 @@ class AddOn implements \ArrayAccess
 			}
 		}
 
-		if ($this->hasSetup())
+		if ($this->hasSetup() && !$errors)
 		{
 			$setupClass = '\\' . $this->prepareAddOnIdForClass() . '\\Setup';
 
@@ -526,6 +547,8 @@ class AddOn implements \ArrayAccess
 			$installed->save();
 
 			$this->installedAddOn = $installed;
+
+			\XF::fire('addon_pre_install', [$this, $installed, $json], $installed->addon_id);
 		}
 	}
 
@@ -538,6 +561,11 @@ class AddOn implements \ArrayAccess
 		}
 
 		$this->resetPendingAction();
+
+		$installed = $this->installedAddOn;
+
+		$json = $this->getJson();
+		\XF::fire('addon_post_install', [$this, $installed, $json, &$stateChanges], $installed->addon_id);
 	}
 
 	public function preUpgrade()
@@ -567,20 +595,27 @@ class AddOn implements \ArrayAccess
 
 		$installed->saveIfChanged();
 		$installed->resetOption('rebuild_active_change');
+
+		$json = $this->getJson();
+		\XF::fire('addon_pre_upgrade', [$this, $installed, $json], $installed->addon_id);
 	}
 
 	public function postUpgrade(array &$stateChanges)
 	{
+		$installed = $this->installedAddOn;
+
 		$setup = $this->getSetup();
 		if ($setup)
 		{
-			$installed = $this->installedAddOn;
 			$previousVersion = $installed ? $installed->version_id : null;
 			$setup->postUpgrade($previousVersion, $stateChanges);
 		}
 
 		$this->resetPendingAction();
 		$this->syncFromJson();
+
+		$json = $this->getJson();
+		\XF::fire('addon_post_upgrade', [$this, $installed, $json, &$stateChanges], $installed->addon_id);
 	}
 
 	public function preUninstall()
@@ -592,7 +627,18 @@ class AddOn implements \ArrayAccess
 		}
 
 		$installed->is_processing = true;
+		$installed->last_pending_action = 'uninstall:0';
 		$installed->saveIfChanged();
+
+		$json = $this->getJson();
+		\XF::fire('addon_pre_uninstall', [$this, $installed, $json], $installed->addon_id);
+	}
+
+	public function postUninstall()
+	{
+		$json = $this->getJson();
+
+		\XF::fire('addon_post_uninstall', [$this, $this->addOnId, $json], $this->addOnId);
 	}
 
 	public function preRebuild()
@@ -605,11 +651,19 @@ class AddOn implements \ArrayAccess
 
 		$installed->is_processing = true;
 		$installed->saveIfChanged();
+
+		$json = $this->getJson();
+		\XF::fire('addon_pre_rebuild', [$this, $installed, $json], $installed->addon_id);
 	}
 
 	public function postRebuild()
 	{
+		$installed = $this->installedAddOn;
+
 		$this->syncFromJson();
+
+		$json = $this->getJson();
+		\XF::fire('addon_post_rebuild', [$this, $installed, $json], $installed->addon_id);
 	}
 
 	public function onActiveChange($newActive, array &$jobList)

@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 3c0cb98b108158266c39467332964859
+// FROM HASH: 981aa597e964ffec201bc58ed57fede0
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -115,7 +115,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 .bbOembed
 {
 	margin: auto;
-	max-width: 500px;
+	width: 500px;
+	max-width: 100%;
 
 	&.bbOembed--loaded
 	{

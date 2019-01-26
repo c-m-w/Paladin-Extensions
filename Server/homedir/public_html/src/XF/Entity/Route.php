@@ -37,12 +37,14 @@ class Route extends Entity
 
 	protected function verifyRouteType($type)
 	{
-		$types = $this->getRouteRepo()->getRouteTypes();
+		// NOTE: disabling this because it prevents any add-ons from creating a new route type
+
+		/*$types = $this->getRouteRepo()->getRouteTypes();
 		if (!isset($types[$type]))
 		{
 			$this->error(\XF::phrase('please_enter_valid_route_type'), 'route_type');
 			return false;
-		}
+		}*/
 
 		return true;
 	}

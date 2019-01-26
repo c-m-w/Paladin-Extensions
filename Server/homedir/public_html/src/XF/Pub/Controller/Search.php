@@ -207,6 +207,8 @@ class Search extends AbstractController
 		$userId = $this->filter('user_id', 'uint');
 		$user = $this->assertRecordExists('XF:User', $userId, null, 'requested_member_not_found');
 
+		$constraints = ['users' => $user->username];
+
 		$searcher = $this->app->search();
 		$query = $searcher->getQuery();
 		$query->byUserId($user->user_id)
@@ -216,6 +218,7 @@ class Search extends AbstractController
 		if ($content && $searcher->isValidContentType($content))
 		{
 			$query->inType($content);
+			$constraints['content'] = $content;
 		}
 
 		$before = $this->filter('before', 'uint');
@@ -234,9 +237,7 @@ class Search extends AbstractController
 			$query->withGroupedResults();
 		}
 
-		return $this->runSearch($query, [
-			'users' => $user->username
-		], false);
+		return $this->runSearch($query, $constraints, false);
 	}
 
 	public function actionOlder(ParameterBag $params)
@@ -301,6 +302,7 @@ class Search extends AbstractController
 			'c.newer_than' => 'datetime',
 			'c.older_than' => 'datetime',
 			'c.users' => 'str',
+			'c.content' => 'str',
 			'grouped' => 'bool',
 			'order' => 'str'
 		]);
@@ -364,6 +366,11 @@ class Search extends AbstractController
 					$urlConstraints['users'] = implode(', ', $users);
 				}
 			}
+		}
+
+		if ($input['c.content'])
+		{
+			$query->inType($input['c.content']);
 		}
 
 		if ($input['order'])

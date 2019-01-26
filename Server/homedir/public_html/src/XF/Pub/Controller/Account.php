@@ -50,6 +50,7 @@ class Account extends AbstractController
 
 		$input = $this->filter([
 			'option' => [
+				'receive_admin_email' => 'bool',
 				'show_dob_year' => 'bool',
 				'show_dob_date' => 'bool',
 			],
@@ -267,6 +268,7 @@ class Account extends AbstractController
 				'activity_visible' => 'bool'
 			],
 			'option' => [
+				'receive_admin_email' => 'bool',
 				'show_dob_date' => 'bool',
 				'show_dob_year' => 'bool'
 			],
@@ -582,7 +584,10 @@ class Account extends AbstractController
 
 		$likes = $likeFinder->limitByPage($page, $perPage)->fetch();
 		$likeRepo->addContentToLikes($likes);
-		$likes = $likes->filterViewable();
+		$likes = $likes->filter(function(\XF\Entity\LikedContent $like)
+		{
+			return $like->canView() && $like->isLikeRenderable();
+		});
 
 		$viewParams = [
 			'likes' => $likes,
@@ -1039,12 +1044,7 @@ class Account extends AbstractController
 
 		/** @var \XF\Repository\Payment $paymentRepo */
 		$paymentRepo = $this->repository('XF:Payment');
-		$profiles = $paymentRepo->findPaymentProfilesForList()
-			->pluckFrom(function ($e)
-			{
-				return ($e->display_title ?: $e->title);
-			})
-			->fetch();
+		$profiles = $paymentRepo->getPaymentProfileOptionsData();
 
 		$viewParams = [
 			'available' => $available,
@@ -1082,7 +1082,10 @@ class Account extends AbstractController
 		$alerts = $alertsFinder->limitByPage($page, $perPage)->fetch();
 
 		$alertRepo->addContentToAlerts($alerts);
-		$alerts = $alerts->filterViewable();
+		$alerts = $alerts->filter(function(\XF\Entity\UserAlert $alert)
+		{
+			return $alert->canView() && $alert->isAlertRenderable();
+		});
 
 		$skipMarkRead = $this->filter('skip_mark_read', 'bool');
 		if ($page == 1 && $visitor->alerts_unread && !$skipMarkRead)
@@ -1113,7 +1116,10 @@ class Account extends AbstractController
 		$alerts = $alertsFinder->fetch(25);
 
 		$alertRepo->addContentToAlerts($alerts);
-		$alerts = $alerts->filterViewable();
+		$alerts = $alerts->filter(function(\XF\Entity\UserAlert $alert)
+		{
+			return $alert->canView() && $alert->isAlertRenderable();
+		});
 
 		if ($visitor->alerts_unread)
 		{
@@ -1174,6 +1180,26 @@ class Account extends AbstractController
 
 	public function assertViewingPermissions($action) {}
 	public function assertTfaRequirement($action) {}
+
+	public function assertPolicyAcceptance($action)
+	{
+		$action = strtolower($action);
+
+		if (strpos($action, 'twostep') === 0)
+		{
+			return;
+		}
+
+		switch ($action)
+		{
+			case 'dismissnotice':
+			case 'visitormenu':
+				break;
+
+			default:
+				parent::assertPolicyAcceptance($action);
+		}
+	}
 
 	public function assertBoardActive($action)
 	{

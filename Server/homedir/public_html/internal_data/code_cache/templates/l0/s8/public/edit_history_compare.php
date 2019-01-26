@@ -1,9 +1,13 @@
 <?php
-// FROM HASH: c3894927ef9a86a712678cc89f0141f8
+// FROM HASH: 9b3512540be96cf36bb117ac6e276040
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
 	$__templater->pageParams['pageTitle'] = $__templater->preEscaped($__templater->escape($__vars['title']) . ' - ' . 'Version comparison');
+	$__finalCompiled .= '
+
+';
+	$__templater->breadcrumbs($__vars['breadcrumbs']);
 	$__finalCompiled .= '
 
 ';

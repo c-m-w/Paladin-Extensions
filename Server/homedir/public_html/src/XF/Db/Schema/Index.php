@@ -188,6 +188,11 @@ class Index extends AbstractDefinition
 			$conflictRenames = $ddl->getConflictRenames();
 			foreach ($this->columns AS $column)
 			{
+				if (is_array($column))
+				{
+					$column = $column[0];
+				}
+
 				if (isset($conflictRenames[$column]))
 				{
 					$this->syncExistingDefinition(true);
@@ -327,7 +332,16 @@ class Index extends AbstractDefinition
 				}
 			}
 
-			$columns[] = $index['Column_name'];
+			if ($index['Sub_part'] === null)
+			{
+				$column = $index['Column_name'];
+			}
+			else
+			{
+				$column = [$index['Column_name'], $index['Sub_part']];
+			}
+
+			$columns[] = $column;
 		}
 
 		$this->type($type);
@@ -335,7 +349,7 @@ class Index extends AbstractDefinition
 		// name should already be set
 	}
 
-	public function resetDefinition() {}
+	public function resetDefinition() { }
 
 	protected function getColumnsString(array $columns)
 	{

@@ -1,31 +1,8 @@
 <?php
-// FROM HASH: 52720edcea8fce1d074ed2f4f7935e63
+// FROM HASH: 70dec5a815cd0a2b4747ac4553d83872
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
-	$__templater->pageParams['pageTitle'] = $__templater->preEscaped('Import from XML');
-	$__finalCompiled .= '
-
-' . $__templater->form('
-	<div class="block-container">
-		<div class="block-body">
-			' . $__templater->formUploadRow(array(
-		'name' => 'upload',
-		'accept' => '.xml',
-	), array(
-		'label' => 'Import from uploaded XML file',
-	)) . '
-		</div>
-		' . $__templater->formSubmitRow(array(
-		'icon' => 'import',
-	), array(
-	)) . '
-	</div>
-', array(
-		'action' => $__templater->fn('link', array($__vars['urlPrefix'] . '/import', ), false),
-		'upload' => 'true',
-		'ajax' => 'true',
-		'class' => 'block',
-	));
+	$__finalCompiled .= $__templater->includeTemplate('xml_import', $__vars);
 	return $__finalCompiled;
 });

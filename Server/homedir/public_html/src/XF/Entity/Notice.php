@@ -99,7 +99,7 @@ class Notice extends Entity
 				'allowedValues' => ['','wide','medium','narrow']
 			],
 			'notice_type' => ['type' => self::STR, 'default' => 'block',
-				'allowedValues' => ['block', 'scrolling', 'floating']
+				'allowedValues' => ['block', 'scrolling', 'floating', 'bottom_fixer']
 			],
 			'display_style' => ['type' => self::STR, 'default' => 'primary',
 				'allowedValues' => ['', 'primary', 'accent', 'dark', 'light', 'custom']],

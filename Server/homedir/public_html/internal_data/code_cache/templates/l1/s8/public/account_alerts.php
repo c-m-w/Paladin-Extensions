@@ -1,9 +1,12 @@
 <?php
-// FROM HASH: 8b842ce32e83b5854b1e2cdccb14a451
+// FROM HASH: 196902b73fc40206bed11c3c0d1c8410
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
 	$__templater->pageParams['pageTitle'] = $__templater->preEscaped('Alerts');
+	$__finalCompiled .= '
+';
+	$__templater->setPageParam('uix_myAccountLinks', 'alerts');
 	$__finalCompiled .= '
 
 ';
@@ -21,18 +24,12 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		if ($__templater->isTraversable($__vars['alerts'])) {
 			foreach ($__vars['alerts'] AS $__vars['alert']) {
 				$__finalCompiled .= '
-					';
-				if ($__templater->method($__vars['alert'], 'getHandler', array())) {
-					$__finalCompiled .= '
-						<li data-alert-id="' . $__templater->escape($__vars['alert']['alert_id']) . '"
-							class="block-row block-row--separated' . ($__templater->method($__vars['alert'], 'isUnviewed', array()) ? ' block-row--highlighted' : ($__templater->method($__vars['alert'], 'isRecentlyViewed', array()) ? '' : ' block-row--alt')) . '">
-							' . $__templater->callMacro('alert_macros', 'row', array(
-						'alert' => $__vars['alert'],
-					), $__vars) . '
-						</li>
-					';
-				}
-				$__finalCompiled .= '
+					<li data-alert-id="' . $__templater->escape($__vars['alert']['alert_id']) . '"
+						class="block-row block-row--separated' . ($__templater->method($__vars['alert'], 'isUnviewed', array()) ? ' block-row--highlighted' : ($__templater->method($__vars['alert'], 'isRecentlyViewed', array()) ? '' : ' block-row--alt')) . '">
+						' . $__templater->callMacro('alert_macros', 'row', array(
+					'alert' => $__vars['alert'],
+				), $__vars) . '
+					</li>
 				';
 			}
 		}

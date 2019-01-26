@@ -1,13 +1,11 @@
 <?php
-// FROM HASH: 917bbc4933708ac93a04f86d51164537
+// FROM HASH: 7d950653df6189b96aaed888ba4a429d
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
 	$__finalCompiled .= '.siropuShoutbox
 {
-	margin-bottom: 20px;
-
-	.block-header span
+	.block-header span, .block-minorHeader span
 	{
 		float: right;
 	}
@@ -18,18 +16,51 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	}
 	form
 	{
-		.input
-		{
-			width: 92.5%;
-			display: inline-block;
-		}
-		
 		margin-bottom: 10px;
 
+		> span
+		{
+			display: inline-flex;
+			width: 100%;
+
+			> *
+			{
+				margin-right: 2px;
+
+				&:last-child
+				{
+					margin-right: 0;
+				}
+			}
+		}
+		.input
+		{
+			width: 100%;
+
+			.p-body-sidebar &
+			{
+				width: 65%;
+				font-size: 12px;
+			}
+		}
+		.button
+		{
+			font-size: 18px;
+
+			.p-body-sidebar &
+			{
+				font-size: 14px;
+			}
+		}
 		&.siropuShoutboxReverse
 		{
 			margin-top: 10px;
 			margin-bottom: 0;
+		}
+		.editorSmilies
+		{
+			border-top: 1px solid @xf-borderColor;
+			margin-top: 5px;
 		}
 	}
 }
@@ -39,7 +70,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	overflow: auto;
 	padding: 0;
 	margin: 0;
-	
+
 	> li
 	{
 		list-style-type: none;
@@ -94,14 +125,44 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		top: 5px;
 	}
 }
+.siropuShoutboxHeader
+{
+	margin-bottom: 10px;
+	padding-bottom: 10px;
+	border-bottom: 1px solid @xf-borderColor;
+	color: @xf-textColorDimmed;
+}
 .siropuShoutboxFooter
 {
 	margin-top: 10px;
-	text-align: center;
+	padding-top: 10px;
+	border-top: 1px solid @xf-borderColor;
+	color: @xf-textColorDimmed;
 }
-.p-body-sidebar .siropuShoutbox form .input
+#siropuShoutboxFullPage
 {
-	width: 71.5%;
+	&::-webkit-scrollbar
+	{
+    	display: none;
+	}
+	> .block
+	{
+		margin: 0;
+		padding: 0;
+	}
+}
+@media (max-width: 360px)
+{
+	.siropuShoutbox
+	{
+		form
+		{
+			.input
+			{
+				width: 75%;
+			}
+		}
+	}
 }';
 	return $__finalCompiled;
 });

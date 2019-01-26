@@ -3,6 +3,7 @@
 namespace XF\Service\Thread;
 
 use XF\Entity\Thread;
+use XF\Entity\User;
 
 class Editor extends \XF\Service\AbstractService
 {
@@ -13,17 +14,28 @@ class Editor extends \XF\Service\AbstractService
 	 */
 	protected $thread;
 
+	/**
+	 * @var User
+	 */
+	protected $user;
+
 	protected $performValidations = true;
 
 	public function __construct(\XF\App $app, Thread $thread)
 	{
 		parent::__construct($app);
 		$this->thread = $thread;
+		$this->user = \XF::visitor();
 	}
 
 	public function getThread()
 	{
 		return $this->thread;
+	}
+
+	public function getUser()
+	{
+		return $this->user;
 	}
 
 	public function setPerformValidations($perform)
@@ -38,7 +50,9 @@ class Editor extends \XF\Service\AbstractService
 
 	public function setTitle($title)
 	{
-		$this->thread->title = $title;
+		$this->thread->set('title', $title,
+			['forceConstraint' => $this->performValidations ? false : true]
+		);
 	}
 
 	public function setPrefix($prefixId)
@@ -80,6 +94,39 @@ class Editor extends \XF\Service\AbstractService
 			$fieldSet->bulkSet($customFields, $customFieldsShown, $editMode);
 		}
 	}
+
+	public function checkForSpam()
+	{
+		$thread = $this->thread;
+		$post = $thread->FirstPost;
+
+		if ($thread->discussion_state == 'visible' && $this->user->isSpamCheckRequired())
+		{
+			$user = $this->user;
+
+			$message = $thread->title . "\n" . $post->message;
+
+			$checker = $this->app->spam()->contentChecker();
+			$checker->check($user, $message, [
+				'permalink' => $this->app->router('public')->buildLink('canonical:threads', $thread),
+				'content_type' => 'thread'
+			]);
+
+			$decision = $checker->getFinalDecision();
+			switch ($decision)
+			{
+				case 'moderated':
+
+					$thread->discussion_state = 'moderated';
+					break;
+
+				case 'denied':
+					$checker->logSpamTrigger('thread', $thread->thread_id);
+					$thread->error(\XF::phrase('your_content_cannot_be_submitted_try_later'));
+					break;
+			}
+		}
+	}
 	
 	protected function finalSetup()
 	{
@@ -90,6 +137,11 @@ class Editor extends \XF\Service\AbstractService
 		$this->finalSetup();
 
 		$thread = $this->thread;
+
+		if ($this->performValidations)
+		{
+			$this->checkForSpam();
+		}
 
 		$thread->preSave();
 		$errors = $thread->getErrors();
@@ -116,7 +168,7 @@ class Editor extends \XF\Service\AbstractService
 	{
 		$thread = $this->thread;
 
-		$thread->save(true, false);
+		$thread->save();
 
 		return $thread;
 	}

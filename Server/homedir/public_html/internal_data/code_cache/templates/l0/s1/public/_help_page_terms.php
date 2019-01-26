@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: b46319a7c4a032878af2ac2018145fd9
+// FROM HASH: dd9bc1ac92405f0ea0ff0ddf59b23d34
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -17,6 +17,6 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 <p>These terms may be changed at any time without notice.</p>
 
-<p>If you do not agree with these terms, please do not register or use the Service. Use of the Service constitutes acceptance of these terms. If you wish to close your account, please contact us.</p>';
+<p>If you do not agree with these terms, please do not register or use the Service. Use of the Service constitutes acceptance of these terms. If you wish to close your account, please <a href="' . $__templater->escape($__vars['xf']['contactUrl']) . '">contact us</a>.</p>';
 	return $__finalCompiled;
 });

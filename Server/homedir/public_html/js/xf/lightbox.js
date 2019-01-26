@@ -341,7 +341,7 @@
 							$newWindow.attr('href', href);
 							$newWindow.show();
 						}
-						if (!href && !$newWindow.attr('href'))
+						else if (!$newWindow.attr('href'))
 						{
 							$newWindow.hide();
 						}

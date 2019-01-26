@@ -37,11 +37,11 @@ class User extends AbstractHandler
 		}
 		else
 		{
-			$name = '';
+			$name = \XF::phrase('guest');
 		}
 
 		return \XF::phrase('member_x', [
-			'username' => $report->content_info['username']
+			'username' => $name
 		]);
 	}
 

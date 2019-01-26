@@ -29,7 +29,7 @@ return array('macros' => array('callback_fields' => function($__templater, array
 	}
 	$__finalCompiled .= '
 	';
-	if ($__templater->test($__vars['classValue'], 'empty', array()) AND (!$__templater->test($__vars['data'], 'empty', array()))) {
+	if ($__templater->fn('empty', array($__vars['classValue'])) AND (!$__templater->fn('empty', array($__vars['data'])))) {
 		$__finalCompiled .= '
 		';
 		$__vars['classValue'] = $__vars['data'][$__vars['className']];
@@ -38,7 +38,7 @@ return array('macros' => array('callback_fields' => function($__templater, array
 	}
 	$__finalCompiled .= '
 	';
-	if ($__templater->test($__vars['methodValue'], 'empty', array()) AND (!$__templater->test($__vars['data'], 'empty', array()))) {
+	if ($__templater->fn('empty', array($__vars['methodValue'])) AND (!$__templater->fn('empty', array($__vars['data'])))) {
 		$__finalCompiled .= '
 		';
 		$__vars['methodValue'] = $__vars['data'][$__vars['methodName']];

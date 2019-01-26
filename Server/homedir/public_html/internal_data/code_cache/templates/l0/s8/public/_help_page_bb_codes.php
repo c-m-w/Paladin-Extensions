@@ -174,7 +174,7 @@ PHP code:
 [CODE=php]echo $hello . \' world\';[/CODE]
 
 JS code:
-[CODE=js]var hello = \'world\';[/CODE]', array(array('preEscaped', array()),), false),
+[CODE=javascript]var hello = \'world\';[/CODE]', array(array('preEscaped', array()),), false),
 		'anchor' => 'code',
 	), $__vars) . '
 

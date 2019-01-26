@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 25c91b5019a218c76caf84ed5d824c0e
+// FROM HASH: 80aefb13c87f7738b9467716b89b586f
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -27,7 +27,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'data-xf-click' => 'menu',
 		'aria-expanded' => 'false',
 		'aria-haspopup' => 'true',
-		'title' => $__templater->filter('More options', array(array('for_attr', array()),), false),
+		'title' => 'More options',
 	), '', array(
 	)) . '
 			<div class="menu" data-menu="menu" aria-hidden="true">

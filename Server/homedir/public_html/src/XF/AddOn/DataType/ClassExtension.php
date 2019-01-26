@@ -104,8 +104,10 @@ class ClassExtension extends AbstractDataType
 
 		foreach ($entries AS $entry)
 		{
-			$from = (string)$entry['from_class'];
-			$to = (string)$entry['to_class'];
+			// this approach is used to workaround what appears to be a potential PHP 7.3 bug
+			$attributes = $this->getSimpleAttributes($entry);
+			$from = $attributes['from_class'];
+			$to = $attributes['to_class'];
 
 			if (isset($existing[$from][$to]))
 			{

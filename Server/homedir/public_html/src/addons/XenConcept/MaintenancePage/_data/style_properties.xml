@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<style_properties>
+  <style_property property_name="xc_maintenace_page_settings_description_title" group_name="xc_maintenance_page" title="Description title" description="customize the title of the description (message)." property_type="css" display_order="301" css_components="text,extra">
+    <value>{
+    "font-size": "25px",
+    "color": "#fff",
+    "extra": "font-weight: 600;\nopacity: 0.85;\ntext-align: center;"
+}</value>
+  </style_property>
+  <style_property property_name="xc_maintenance_page_logo_text" group_name="xc_maintenance_page" title="Logo text" property_type="value" value_type="string" depends_on="xc_maintenance_page_use_logo_text" value_group="xc_maintenance_page_header_logo_text" display_order="101">
+    <value>"Dev - XenConcept"</value>
+  </style_property>
+  <style_property property_name="xc_maintenance_page_settings_description" group_name="xc_maintenance_page" title="Description" description="customize the description (message)." property_type="css" display_order="302" css_components="text,extra">
+    <value>{
+    "font-size": "18px",
+    "color": "#fff",
+    "extra": "opacity: 0.90;\ntext-align: center;"
+}</value>
+  </style_property>
+  <style_property property_name="xc_maintenance_page_settings_logo_text" group_name="xc_maintenance_page" title="Settings Logo text" property_type="css" display_order="300" css_components="text,extra">
+    <value>{
+    "font-size": "50px",
+    "color": "#fff",
+    "extra": "font-weight: 600;\nletter-spacing: -2px;\nopacity: 0.80;"
+}</value>
+  </style_property>
+  <style_property property_name="xc_maintenance_page_url_bg" group_name="xc_maintenance_page" title="Url background" property_type="value" value_type="string" display_order="1">
+    <value>"styles/xenconcept/maintenancepage/bg.jpg"</value>
+  </style_property>
+  <style_property property_name="xc_maintenance_page_use_logo_text" group_name="xc_maintenance_page" title="Use logo text ?" property_type="value" value_type="boolean" value_group="xc_maintenance_page_header_logo_text" display_order="100">
+    <value>1</value>
+  </style_property>
+  <style_property property_name="xc_maitenance_block_shape" group_name="xc_maintenance_page" title="Block shape" description="Choose the shape of the blocks (timer)" property_type="value" value_type="select" value_group="shape" display_order="201">
+    <value_parameters>square={{ phrase('xc_maintenance_page_shape_square') }}
+round={{ phrase('xc_maintenance_page_shape_round') }}</value_parameters>
+    <value>"round"</value>
+  </style_property>
+</style_properties>

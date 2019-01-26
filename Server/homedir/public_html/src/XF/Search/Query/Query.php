@@ -65,7 +65,7 @@ class Query
 		$this->orderedBy($search->isRelevanceSupported() ? 'relevance' : 'date');
 	}
 
-	public function forTypeHandler(AbstractData $handler, Request $request, array &$urlConstraints)
+	public function forTypeHandler(AbstractData $handler, Request $request, array &$urlConstraints = [])
 	{
 		$this->handler = $handler;
 		$this->handlerType = $handler->getContentType();
@@ -88,7 +88,7 @@ class Query
 
 	public function inType($type)
 	{
-		return $this->inTypes([$type]);
+		return $this->inTypes(is_array($type) ? $type : [$type]);
 	}
 
 	public function inTypes(array $types)

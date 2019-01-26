@@ -16,19 +16,21 @@ class User extends AbstractHandler
 	protected function getLabelMap()
 	{
 		return [
-			'username'            => 'user_name',
-			'email'               => 'email_address',
-			'timezone'            => 'time_zone',
-			'visible'             => 'show_online_status',
-			'activity_visible'    => 'show_current_activity',
-			'user_group_id'       => 'user_group',
-			'secondary_group_ids' => 'secondary_user_groups',
-			'register_date'       => 'joined',
-			'is_moderator'        => 'moderator',
-			'is_admin'            => 'administrator',
-			'is_staff'            => 'staff_member',
-			'is_banned'           => 'banned',
-			'use_tfa'             => 'two_step_verification_enabled',
+			'username'                => 'user_name',
+			'email'                   => 'email_address',
+			'timezone'                => 'time_zone',
+			'visible'                 => 'show_online_status',
+			'activity_visible'        => 'show_current_activity',
+			'user_group_id'           => 'user_group',
+			'secondary_group_ids'     => 'secondary_user_groups',
+			'register_date'           => 'joined',
+			'is_moderator'            => 'moderator',
+			'is_admin'                => 'administrator',
+			'is_staff'                => 'staff_member',
+			'is_banned'               => 'banned',
+			'use_tfa'                 => 'two_step_verification_enabled',
+			'privacy_policy_accepted' => 'accepted_privacy_policy',
+			'terms_accepted'          => 'accepted_terms_rules',
 
 			'show_dob_year'				=> 'show_year_of_birth',
 			'show_dob_date'				=> 'show_day_and_month_of_birth',
@@ -52,19 +54,21 @@ class User extends AbstractHandler
 	protected function getFormatterMap()
 	{
 		return [
-			'user_group_id'       => 'formatUserGroup',
-			'secondary_group_ids' => 'formatUserGroupList',
-			'timezone'            => 'formatTimeZone',
-			'visible'             => 'formatYesNo',
-			'activity_visible'    => 'formatYesNo',
-			'avatar_date'         => 'formatDateTime',
-			'register_date'       => 'formatDateTime',
-			'user_state'          => 'formatUserState',
-			'is_moderator'        => 'formatYesNo',
-			'is_admin'            => 'formatYesNo',
-			'is_staff'            => 'formatYesNo',
-			'is_banned'           => 'formatYesNo',
-			'use_tfa'             => 'formatYesNo',
+			'user_group_id'           => 'formatUserGroup',
+			'secondary_group_ids'     => 'formatUserGroupList',
+			'timezone'                => 'formatTimeZone',
+			'visible'                 => 'formatYesNo',
+			'activity_visible'        => 'formatYesNo',
+			'avatar_date'             => 'formatDateTime',
+			'register_date'           => 'formatDateTime',
+			'user_state'              => 'formatUserState',
+			'is_moderator'            => 'formatYesNo',
+			'is_admin'                => 'formatYesNo',
+			'is_staff'                => 'formatYesNo',
+			'is_banned'               => 'formatYesNo',
+			'use_tfa'                 => 'formatYesNo',
+			'privacy_policy_accepted' => 'formatDateTime',
+			'terms_accepted'          => 'formatDateTime',
 
 			'show_dob_year'				=> 'formatYesNo',
 			'show_dob_date'				=> 'formatYesNo',
@@ -80,6 +84,16 @@ class User extends AbstractHandler
 			'allow_send_personal_conversation' => 'formatPrivacyValue',
 			'allow_view_identities'            => 'formatPrivacyValue',
 			'allow_receive_news_feed'          => 'formatPrivacyValue',
+		];
+	}
+
+	protected function getProtectedFields()
+	{
+		return [
+			'privacy_policy_accepted' => true,
+			'terms_accepted' => true,
+
+			'receive_admin_email' => true,
 		];
 	}
 

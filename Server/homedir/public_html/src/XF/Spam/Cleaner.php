@@ -49,7 +49,7 @@ class Cleaner
 			return;
 		}
 
-		if ($user->avatar_date > 0)
+		if ($user->avatar_date > 0 || $user->gravatar)
 		{
 			/** @var \XF\Service\User\Avatar $avatarService */
 			$avatarService = $this->app->service('XF:User\Avatar', $user);

@@ -15,7 +15,7 @@ class Like extends AbstractPlugin
 
 		if (!$contentType)
 		{
-			throw new \InvalidArgumentException("Provided entity must defined a content type in its structure");
+			throw new \InvalidArgumentException("Provided entity {$entity->structure()->shortName} must define a content type in its structure");
 		}
 
 		/** @var \XF\Repository\LikedContent $likeRepo */

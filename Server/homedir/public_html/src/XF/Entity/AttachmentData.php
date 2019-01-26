@@ -168,7 +168,7 @@ class AttachmentData extends Entity
 	{
 		$maxLength = 100; // must match value in structure
 
-		if (strlen($fileName) > $maxLength && $info = @pathinfo($fileName))
+		if (utf8_strlen($fileName) > $maxLength && $info = @pathinfo($fileName))
 		{
 			if (!empty($info['extension']))
 			{
@@ -179,7 +179,7 @@ class AttachmentData extends Entity
 				$extension = '';
 			}
 
-			$fileName = substr($info['filename'], 0, $maxLength - strlen($extension)) . $extension;
+			$fileName = utf8_substr($info['filename'], 0, $maxLength - utf8_strlen($extension)) . $extension;
 		}
 
 		return true;

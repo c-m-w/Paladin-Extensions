@@ -109,7 +109,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	<div class="menu-row menu-row--separated">
 		' . 'Sort by' . $__vars['xf']['language']['label_separator'] . '
 		<div class="inputGroup u-inputSpacer">
-			<span class="u-srOnly" id="ctrl_sort_by">' . 'sort_order' . '</span>
+			<span class="u-srOnly" id="ctrl_sort_by">' . 'Sort order' . '</span>
 			' . $__templater->formSelect(array(
 		'name' => 'order',
 		'value' => ($__vars['filters']['order'] ?: $__vars['xf']['options']['mjstDefaultSortOrder']['order']),
@@ -140,7 +140,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'_type' => 'option',
 	))) . '
 			<span class="inputGroup-splitter"></span>
-			<span class="u-srOnly" id="ctrl_sort_direction">' . 'sort_direction' . '</span>
+			<span class="u-srOnly" id="ctrl_sort_direction">' . 'Sort direction' . '</span>
 			' . $__templater->formSelect(array(
 		'name' => 'direction',
 		'value' => ($__vars['filters']['direction'] ?: $__vars['xf']['options']['mjstDefaultSortOrder']['direction']),

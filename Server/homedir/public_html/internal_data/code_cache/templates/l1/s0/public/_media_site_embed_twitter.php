@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 3a8b17d32f1f26f14cdb46a86f2b898b
+// FROM HASH: eb6b6dd352b89a4ab1669a841b356cde
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -17,7 +17,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	  data-tweet-id="' . $__templater->escape($__vars['id']) . '"
 	  data-lang="' . $__templater->escape($__vars['xf']['language']['language_code']) . '"
 	  data-theme="' . $__templater->fn('property', array('styleType', ), true) . '"
-	  ><a href="https://twitter.com/statuses/' . $__templater->escape($__vars['id']) . '" rel="external" target="_blank">
-	<i class="fa fa-twitter" aria-hidden="true"></i> https://twitter.com/statuses/' . $__templater->escape($__vars['id']) . '</a></div>';
+	  ><a href="https://twitter.com/i/web/status/' . $__templater->escape($__vars['id']) . '" rel="external" target="_blank">
+	<i class="fa fa-twitter" aria-hidden="true"></i> https://twitter.com/i/web/status/' . $__templater->escape($__vars['id']) . '</a></div>';
 	return $__finalCompiled;
 });

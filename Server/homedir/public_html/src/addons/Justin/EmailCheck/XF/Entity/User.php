@@ -21,12 +21,21 @@ class User extends XFCP_User
 		if ($emailcheck)
 		{
 			$client = \XF::app()->http()->client();
-			$response = $client->get("https://www.validator.pizza/email/$email")->json();
-			if($response !== null){
-				if($response['disposable'] == 'true'){
-					$this->error(\XF::phrase('please_enter_valid_email'), 'email');
-					return false;
+			try
+			{
+				// Attempt to connect to Valdator.pizza api
+				$response = $client->get("https://www.validator.pizza/email/$email")->json();
+				if($response !== null){
+					if($response['disposable'] == 'true'){
+						$this->error(\XF::phrase('please_enter_valid_email'), 'email');
+						return false;
+					}
 				}
+			}
+			catch(\GuzzleHttp\Exception\RequestException $e)
+			{
+				// this is an exception with the underlying request, so let it go through
+				\XF::logException($e, false, 'Valdator.pizza connection error: ');
 			}
 		}
 		
@@ -35,17 +44,26 @@ class User extends XFCP_User
 			$key = $this->app()->options()->j_enableipquality['apikey'];
 			$strictness = 1;
 			$client = \XF::app()->http()->client();
-			$result = $client->get("http://ipqualityscore.com/api/json/email/$key/$email/?strictness=$strictness")->json();
-			if($result !== null){
-			if (!$result['valid']) {
-					$this->error(\XF::phrase('please_enter_valid_email'), 'email');
-					return false;
-					} elseif($result['disposable'] == "true") {
+			try
+			{
+				// Attempt to connect to ipqualityscore api
+				$result = $client->get("http://ipqualityscore.com/api/json/email/$key/$email/?strictness=$strictness")->json();
+				if($result !== null){
+					if (!$result['valid']) {
 						$this->error(\XF::phrase('please_enter_valid_email'), 'email');
-						return false;
+							return false;
+						} elseif($result['disposable'] == "true") {
+							$this->error(\XF::phrase('please_enter_valid_email'), 'email');
+							return false;
 						}
+					}
 				}
+			catch(\GuzzleHttp\Exception\RequestException $e)
+			{
+				// this is an exception with the underlying request, so let it go through
+				\XF::logException($e, false, 'ipqualityscore connection error: ');
 			}
+		}
 		return $emailValid;
 	}
 

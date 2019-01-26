@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 6e7c675888f318681e7b42fbb6028389
+// FROM HASH: 386e1f38bc23e0c483466f541124384e
 return array('macros' => array('depth1' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -21,7 +21,7 @@ return array('macros' => array('depth1' => function($__templater, array $__argum
 		';
 	if ($__templater->fn('property', array('uix_categoryStripOutsideWrapper', ), false)) {
 		$__finalCompiled .= '
-			<h2 class="block-header js-nodeMain' . ($__templater->fn('property', array('uix_stickyCategoryStrips', ), false) ? ' uix_stickyBodyElement' : '') . '">
+			<h2 class="block-header js-nodeMain' . ($__templater->fn('property', array('uix_stickyCategoryStrips', ), false) ? ' uix_stickyCategoryStrips' : '') . '">
 				';
 		if ($__templater->fn('property', array('uix_categoryStripIcons', ), false)) {
 			$__finalCompiled .= '
@@ -65,7 +65,7 @@ return array('macros' => array('depth1' => function($__templater, array $__argum
 			';
 	if (!$__templater->fn('property', array('uix_categoryStripOutsideWrapper', ), false)) {
 		$__finalCompiled .= '
-			<h2 class="block-header js-nodeMain ' . ($__templater->fn('property', array('uix_stickyCategoryStrips', ), false) ? ' uix_stickyBodyElement' : '') . '">
+			<h2 class="block-header js-nodeMain ' . ($__templater->fn('property', array('uix_stickyCategoryStrips', ), false) ? ' uix_stickyCategoryStrips' : '') . '">
 				';
 		if ($__templater->fn('property', array('uix_categoryStripIcons', ), false)) {
 			$__finalCompiled .= '

@@ -423,7 +423,7 @@ class PayPal extends AbstractProvider
 			case 'web_accept':
 			case 'subscr_payment':
 				$costValidated = (
-					round($state->costAmount, 2) - round($state->taxAmount, 2) == round($cost, 2)
+					round(($state->costAmount - $state->taxAmount), 2) == round($cost, 2)
 					&& $state->costCurrency == $currency
 				);
 
@@ -433,7 +433,7 @@ class PayPal extends AbstractProvider
 					$currency = $upgradeRecord->extra['cost_currency'];
 
 					$costValidated = (
-						round($state->costAmount, 2) - round($state->taxAmount, 2) == round($cost, 2)
+						round(($state->costAmount - $state->taxAmount), 2) == round($cost, 2)
 						&& $state->costCurrency == strtoupper($currency)
 					);
 					if ($costValidated)

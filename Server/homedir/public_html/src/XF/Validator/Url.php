@@ -33,8 +33,7 @@ class Url extends AbstractValidator
 				)?
 			)?
 			(?P<path>
-				/(?!/)
-				[^?\#]*
+				/[^?\#]*
 			)?
 			(?:
 				\?

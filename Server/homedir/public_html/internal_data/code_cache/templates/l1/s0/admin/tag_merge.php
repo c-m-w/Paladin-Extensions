@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 0653ef2a340874d71b3e588673bb9384
+// FROM HASH: ca05ae84e4bfefced9aecf67488d2552
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -18,6 +18,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 			' . $__templater->formTextBoxRow(array(
 		'name' => 'target',
+		'ac' => 'single',
+		'data-acurl' => $__templater->fn('link_type', array('public', 'misc/tag-auto-complete', ), false),
 	), array(
 		'label' => 'Target tag',
 		'explain' => 'All content tagged with ' . $__templater->escape($__vars['tag']['tag']) . ' will now be tagged with this tag.',

@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 86f69227bff9734708d8e717235400d9
+// FROM HASH: e647b7ea7635d519dca077f0d1976e83
 return array('macros' => array('post' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -22,41 +22,8 @@ return array('macros' => array('post' => function($__templater, array $__argumen
 		id="js-post-' . $__templater->escape($__vars['post']['post_id']) . '">
 
 		<span class="u-anchorTarget" id="post-' . $__templater->escape($__vars['post']['post_id']) . '"></span>
-		';
-	if ($__templater->fn('property', array('xfv_threadstarter_switch', ), false) == 'enable') {
-		$__finalCompiled .= '
-    ';
-		if ((($__templater->fn('property', array('xfv_threadstarter_locale', ), false) == 'top_message_box_l') OR ($__templater->fn('property', array('xfv_threadstarter_locale', ), false) == 'top_message_box_c')) OR ($__templater->fn('property', array('xfv_threadstarter_locale', ), false) == 'top_message_box_r')) {
-			$__finalCompiled .= '
-	    ' . $__templater->includeTemplate('xfv_threadstarter', $__vars) . '
-	    <div class="message-inner"> 
-    ';
-		} else {
-			$__finalCompiled .= '                   
-        <div class="message-inner">
-    ';
-		}
-		$__finalCompiled .= '   
-';
-	} else {
-		$__finalCompiled .= '                   
-<div class="message-inner">
-';
-	}
-	$__finalCompiled .= '
-			';
-	if (($__templater->fn('property', array('xfv_threadstarter_switch', ), false) == 'enable') AND ($__templater->fn('property', array('xfv_threadstarter_locale', ), false) == 'above_avatar')) {
-		$__finalCompiled .= '
-<div class="message-cell message-cell--user">
-' . $__templater->includeTemplate('xfv_threadstarter', $__vars) . '
-';
-	} else {
-		$__finalCompiled .= '                   
-<div class="message-cell message-cell--user">
-';
-	}
-	$__finalCompiled .= '
-
+		<div class="message-inner">
+			<div class="message-cell message-cell--user">
 				';
 	$__vars['dateHtml'] = $__templater->preEscaped('<a href="' . $__templater->fn('link', array('threads/post', $__vars['thread'], array('post_id' => $__vars['post']['post_id'], ), ), true) . '" class="u-concealed" rel="nofollow">' . $__templater->fn('date_dynamic', array($__vars['post']['post_date'], array(
 	))) . '</a>');
@@ -64,43 +31,14 @@ return array('macros' => array('post' => function($__templater, array $__argumen
 				';
 	$__vars['linkHtml'] = $__templater->preEscaped('<a href="' . $__templater->fn('link', array('threads/post', $__vars['thread'], array('post_id' => $__vars['post']['post_id'], ), ), true) . '" class="u-concealed" rel="nofollow">#' . $__templater->fn('number', array($__vars['post']['position'] + 1, ), true) . '</a>');
 	$__finalCompiled .= '
-				';
-	if ($__vars['user']['user_id'] == $__vars['TS']) {
-		$__finalCompiled .= '
-' . $__templater->callMacro('message_macros', 'user_info', array(
-			'user' => $__vars['post']['User'],
-			'fallbackName' => $__vars['post']['username'],
-			'dateHtml' => $__vars['dateHtml'],
-			'linkHtml' => $__vars['linkHtml'],
-			'TS' => $__vars['post']['Thread']['user_id'],
-		), $__vars) . '
-';
-	} else {
-		$__finalCompiled .= '                   
-' . $__templater->callMacro('message_macros', 'user_info', array(
-			'user' => $__vars['post']['User'],
-			'fallbackName' => $__vars['post']['username'],
-			'dateHtml' => $__vars['dateHtml'],
-			'linkHtml' => $__vars['linkHtml'],
-		), $__vars) . '
-
-';
-	}
-	$__finalCompiled .= '			';
-	if (($__templater->fn('property', array('xfv_threadstarter_switch', ), false) == 'enable') AND ($__templater->fn('property', array('xfv_threadstarter_locale', ), false) == 'below_user_info')) {
-		$__finalCompiled .= '
-
-	' . $__templater->includeTemplate('xfv_threadstarter', $__vars) . '
-</div>
-			<div class="message-cell message-cell--main">	
-';
-	} else {
-		$__finalCompiled .= '                   
-</div>
+				' . $__templater->callMacro('message_macros', 'user_info', array(
+		'user' => $__vars['post']['User'],
+		'fallbackName' => $__vars['post']['username'],
+		'dateHtml' => $__vars['dateHtml'],
+		'linkHtml' => $__vars['linkHtml'],
+	), $__vars) . '
+			</div>
 			<div class="message-cell message-cell--main">
-';
-	}
-	$__finalCompiled .= '
 				<div class="js-quickEditTarget message-main uix_messageContent">
 					<header class="message-attribution">
 						<a href="' . $__templater->fn('link', array('threads/post', $__vars['thread'], array('post_id' => $__vars['post']['post_id'], ), ), true) . '" class="message-attribution-main u-concealed" rel="nofollow">' . $__templater->fn('date_dynamic', array($__vars['post']['post_date'], array(
@@ -216,16 +154,7 @@ return array('macros' => array('post' => function($__templater, array $__argumen
 						';
 	if ($__vars['post']['last_edit_date']) {
 		$__finalCompiled .= '
-							';
-		if ($__vars['xf']['options']['useressLastEditedByPosition'] == 'left') {
-			$__finalCompiled .= '
-	';
-			$__templater->includeCss('sv_ue.less');
-			$__finalCompiled .= '
-';
-		}
-		$__finalCompiled .= '
-<div class="message-lastEdit ' . (($__vars['xf']['options']['useressLastEditedByPosition'] == 'left') ? 'message-lastEdit--align-left' : '') . ' ">
+							<div class="message-lastEdit">
 								';
 		if ($__vars['post']['user_id'] == $__vars['post']['last_edit_user_id']) {
 			$__finalCompiled .= '
@@ -343,6 +272,7 @@ return array('macros' => array('post' => function($__templater, array $__argumen
 	if (strlen(trim($__compilerTemp2)) > 0) {
 		$__compilerTemp1 .= '
 										<div class="actionBar-set actionBar-set--external">
+' . $__templater->includeTemplate('aloph_op_ribbon_text_public_controls', $__vars) . '
 										' . $__compilerTemp2 . '
 										</div>
 									';
@@ -356,6 +286,7 @@ return array('macros' => array('post' => function($__templater, array $__argumen
 	if ($__templater->method($__vars['post'], 'canUseInlineModeration', array())) {
 		$__compilerTemp3 .= '
 												<span class="actionBar-action actionBar-action--inlineMod">
+													' . trim('
 													' . $__templater->formCheckBox(array(
 			'standalone' => 'true',
 		), array(array(
@@ -366,8 +297,7 @@ return array('macros' => array('post' => function($__templater, array $__argumen
 			'label' => 'Select for moderation',
 			'hiddenlabel' => 'true',
 			'_type' => 'option',
-		))) . '
-												</span>
+		)))) . '</span>
 											';
 	}
 	$__compilerTemp3 .= '
@@ -384,7 +314,6 @@ return array('macros' => array('post' => function($__templater, array $__argumen
 											';
 	$__vars['hasActionBarMenu'] = false;
 	$__compilerTemp3 .= '
-											' . $__templater->includeTemplate('changeContentOwner_post_macros_action_bar', $__vars) . '
 											';
 	if ($__templater->method($__vars['post'], 'canEdit', array())) {
 		$__compilerTemp3 .= '
@@ -506,40 +435,7 @@ return array('macros' => array('post' => function($__templater, array $__argumen
 										';
 	if (strlen(trim($__compilerTemp3)) > 0) {
 		$__compilerTemp1 .= '
-										';
-		if (($__templater->fn('property', array('xfv_threadstarter_switch', ), false) == 'enable') AND ($__templater->fn('property', array('xfv_threadstarter_locale', ), false) == 'bottom_message_l')) {
-			$__compilerTemp1 .= '
-' . $__templater->includeTemplate('xfv_threadstarter', $__vars) . '
-';
-			if (($__templater->fn('property', array('xfv_threadstarter_switch', ), false) == 'enable') AND ($__templater->fn('property', array('xfv_threadstarter_locale', ), false) == 'bottom_message_r')) {
-				$__compilerTemp1 .= '
-' . $__templater->includeTemplate('xfv_threadstarter', $__vars) . '
-<div class="actionBar-set actionBar-set--internal">
-';
-			} else {
-				$__compilerTemp1 .= '                   
-<div class="actionBar-set actionBar-set--internal">
-';
-			}
-			$__compilerTemp1 .= '
-';
-		} else {
-			$__compilerTemp1 .= '                   
-';
-			if (($__templater->fn('property', array('xfv_threadstarter_switch', ), false) == 'enable') AND ($__templater->fn('property', array('xfv_threadstarter_locale', ), false) == 'bottom_message_r')) {
-				$__compilerTemp1 .= '
-' . $__templater->includeTemplate('xfv_threadstarter', $__vars) . '
-<div class="actionBar-set actionBar-set--internal">
-';
-			} else {
-				$__compilerTemp1 .= '                   
-<div class="actionBar-set actionBar-set--internal">
-';
-			}
-			$__compilerTemp1 .= '
-';
-		}
-		$__compilerTemp1 .= '
+										<div class="actionBar-set actionBar-set--internal">
 										' . $__compilerTemp3 . '
 										</div>
 									';
@@ -585,60 +481,14 @@ return array('macros' => array('post' => function($__templater, array $__argumen
 		data-content="post-' . $__templater->escape($__vars['post']['post_id']) . '">
 
 		<span class="u-anchorTarget" id="post-' . $__templater->escape($__vars['post']['post_id']) . '"></span>
-		';
-	if ($__templater->fn('property', array('xfv_threadstarter_switch', ), false) == 'enable') {
-		$__finalCompiled .= '
-    ';
-		if ((($__templater->fn('property', array('xfv_threadstarter_locale', ), false) == 'top_message_box_l') OR ($__templater->fn('property', array('xfv_threadstarter_locale', ), false) == 'top_message_box_c')) OR ($__templater->fn('property', array('xfv_threadstarter_locale', ), false) == 'top_message_box_r')) {
-			$__finalCompiled .= '
-	    ' . $__templater->includeTemplate('xfv_threadstarter', $__vars) . '
-	    <div class="message-inner"> 
-    ';
-		} else {
-			$__finalCompiled .= '                   
-        <div class="message-inner">
-    ';
-		}
-		$__finalCompiled .= '   
-';
-	} else {
-		$__finalCompiled .= '                   
-<div class="message-inner">
-';
-	}
-	$__finalCompiled .= '
-			';
-	if (($__templater->fn('property', array('xfv_threadstarter_switch', ), false) == 'enable') AND ($__templater->fn('property', array('xfv_threadstarter_locale', ), false) == 'above_avatar')) {
-		$__finalCompiled .= '
-<div class="message-cell message-cell--user">
-' . $__templater->includeTemplate('xfv_threadstarter', $__vars) . '
-';
-	} else {
-		$__finalCompiled .= '                   
-<div class="message-cell message-cell--user">
-';
-	}
-	$__finalCompiled .= '
-
+		<div class="message-inner">
+			<div class="message-cell message-cell--user">
 				' . $__templater->callMacro('message_macros', 'user_info', array(
 		'user' => $__vars['post']['User'],
 		'fallbackName' => $__vars['post']['username'],
 	), $__vars) . '
-			';
-	if (($__templater->fn('property', array('xfv_threadstarter_switch', ), false) == 'enable') AND ($__templater->fn('property', array('xfv_threadstarter_locale', ), false) == 'below_user_info')) {
-		$__finalCompiled .= '
-
-	' . $__templater->includeTemplate('xfv_threadstarter', $__vars) . '
-</div>
-			<div class="message-cell message-cell--main">	
-';
-	} else {
-		$__finalCompiled .= '                   
-</div>
+			</div>
 			<div class="message-cell message-cell--main">
-';
-	}
-	$__finalCompiled .= '
 				<div class="uix_messageContent">
 					<div class="message-attribution">
 						<ul class="listInline listInline--bullet message-attribution-main">

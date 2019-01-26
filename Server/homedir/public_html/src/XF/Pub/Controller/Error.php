@@ -27,4 +27,5 @@ class Error extends AbstractController
 	public function assertCorrectVersion($action) {}
 	public function assertBoardActive($action) {}
 	public function assertTfaRequirement($action) {}
+	public function assertPolicyAcceptance($action) {}
 }

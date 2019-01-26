@@ -75,6 +75,12 @@ class Runner
 			$console->renderException($e, $output);
 			$exitCode = 1;
 		}
+		catch (\Throwable $e)
+		{
+			\XF::logException($e, true); // exiting so rollback
+			$console->renderException($e, $output);
+			$exitCode = 1;
+		}
 
 		if ($exitCode > 255)
 		{

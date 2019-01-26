@@ -39,7 +39,7 @@ class StylePropertyGroup extends AbstractHandler
 		$group = $this->getEntityForImport($name, $addOnId, $json, $options);
 		$group->setOption('update_phrase', false);
 
-		$group->bulkSet($json);
+		$group->bulkSetIgnore($json);
 		$group->group_name = $name;
 		$group->style_id = 0;
 		$group->addon_id = $addOnId;

@@ -86,14 +86,20 @@ class Report extends AbstractController
 
 	public function actionView(ParameterBag $params)
 	{
-		$report = $this->assertViewableReport($params->report_id);
+		$visitor = \XF::visitor();
+		$with = ['User', 'User.Profile', 'DraftComments|' . $visitor->user_id];
+
+		$report = $this->assertViewableReport($params->report_id, $with);
 		$handler = $report->getHandler();
 
 		$moderators = $this->getReportRepo()->getModeratorsWhoCanHandleReport($report);
 
+		$comments = $report->getRelationFinder('Comments')->with('User')->fetch();
+
 		$viewParams = [
 			'report' => $report,
 			'handler' => $handler,
+			'comments' => $comments,
 			'moderators' => $moderators
 		];
 		return $this->view('XF:Report\View', 'report_view', $viewParams);

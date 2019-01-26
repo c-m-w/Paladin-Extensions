@@ -38,7 +38,7 @@ class CronEntry extends AbstractHandler
 
 		$entry = $this->getEntityForImport($name, $addOnId, $json, $options);
 
-		$entry->bulkSet($json);
+		$entry->bulkSetIgnore($json);
 		$entry->entry_id = $name;
 		$entry->addon_id = $addOnId;
 		$entry->save();

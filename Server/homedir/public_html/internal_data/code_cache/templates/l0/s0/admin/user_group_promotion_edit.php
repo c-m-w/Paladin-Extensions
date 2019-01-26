@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 11efc531154c45cfb3b2577e0a36a269
+// FROM HASH: 553d902a699a524cab24c02d0dd0e0d8
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -39,7 +39,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			<span class="hScroller-scroll">
 				<a class="tabs-tab is-active" role="tab" tabindex="0" aria-controls="promotion-options">' . 'Promotion options' . '</a>
 				' . $__templater->callMacro('helper_criteria', 'user_tabs', array(
-		'userTabTitle' => $__templater->filter('Apply this promotion while...', array(array('for_attr', array()),), false),
+		'userTabTitle' => 'Apply this promotion while...',
 	), $__vars) . '
 			</span>
 		</h2>

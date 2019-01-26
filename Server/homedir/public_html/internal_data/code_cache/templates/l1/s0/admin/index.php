@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 107ac6d9c54f8d9bd72df8785de522a5
+// FROM HASH: 664fa41be4cddb06d57b2e1c0644edbe
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -27,6 +27,18 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		$__finalCompiled .= '
 	<div class="blockMessage blockMessage--error blockMessage--iconic">
 		<a href="' . $__templater->fn('link', array('logs/server-errors', ), true) . '"> ' . 'Server errors have been logged. You should review these.' . '</a>
+	</div>
+';
+	}
+	$__finalCompiled .= '
+
+';
+	if ($__templater->method($__vars['xf']['visitor'], 'hasAdminPermission', array('addOn', )) AND $__vars['hasProcessingAddOn']) {
+		$__finalCompiled .= '
+	<div class="blockMessage blockMessage--error blockMessage--iconic">
+		' . 'One or more add-ons currently have actions pending and may be in an inconsistent state. Because of this, some errors may be suppressed and unexpected behavior may occur. If this does not change shortly, please contact the add-on author for guidance.' . '<br />
+		<br />
+		<a href="' . $__templater->fn('link', array('add-ons', ), true) . '">' . 'View add-ons' . $__vars['xf']['language']['ellipsis'] . '</a>
 	</div>
 ';
 	}
@@ -67,6 +79,27 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	}
 	$__finalCompiled .= '
 
+';
+	if ($__vars['requirementErrors']) {
+		$__finalCompiled .= '
+	<div class="blockMessage blockMessage--error blockMessage--iconic">
+		' . 'The following errors occurred while verifying that your server still meets the minimum requirements' . ':
+		<ul>
+			';
+		if ($__templater->isTraversable($__vars['requirementErrors'])) {
+			foreach ($__vars['requirementErrors'] AS $__vars['error']) {
+				$__finalCompiled .= '
+				<li>' . $__templater->escape($__vars['error']) . '</li>
+			';
+			}
+		}
+		$__finalCompiled .= '
+		</ul>
+	</div>
+';
+	}
+	$__finalCompiled .= '
+
 ' . $__templater->includeTemplate('th_index_admin_notice_uix', $__vars) . '
 ';
 	if ($__templater->method($__vars['xf']['visitor'], 'hasAdminPermission', array('user', ))) {
@@ -96,7 +129,6 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	}
 	$__finalCompiled .= '
 
-' . $__templater->includeTemplate('andy_admin_notes', $__vars) . '
 ';
 	if (!$__templater->test($__vars['stats'], 'empty', array()) AND $__templater->method($__vars['xf']['visitor'], 'hasAdminPermission', array('viewStatistics', ))) {
 		$__finalCompiled .= '
@@ -177,12 +209,119 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 </div>
 
 ';
+	if ($__vars['envReport']) {
+		$__finalCompiled .= '
+	<div class="block">
+		<div class="block-container">
+			<h2 class="block-header">
+				<span class="collapseTrigger collapseTrigger--block ' . ((!$__templater->fn('is_toggled', array('collapse_env_report', ), false)) ? 'is-active' : '') . '" data-xf-click="toggle" data-xf-init="toggle-storage" data-storage-type="cookie" data-storage-key="collapse_env_report" data-target="#js-collapse-env-report">
+					' . 'Server environment report' . '
+				</span>
+			</h2>
+			<div class="block-body block-body--collapsible block-row ' . ((!$__templater->fn('is_toggled', array('collapse_env_report', ), false)) ? 'is-active' : '') . '" id="js-collapse-env-report">
+				';
+		if ($__vars['versionState']) {
+			$__finalCompiled .= '
+					';
+			if ($__vars['versionState'] == 'minimum') {
+				$__finalCompiled .= '
+						<div class="block-rowMessage block-rowMessage--error">
+							' . 'You have only the minimum required PHP version. Future versions of XenForo will require a higher minimum PHP version of 5.6.0. Some features in future versions of XenForo will require a minimum PHP version of 7.1.0.' . '
+						</div>
+					';
+			} else if ($__vars['versionState'] == 'not_newest') {
+				$__finalCompiled .= '
+						<div class="block-rowMessage block-rowMessage--warning">
+							' . 'You have a more up-to-date PHP version than the minimum required, but some features planned for the future may require a newer PHP version.' . '
+						</div>
+					';
+			} else if ($__vars['versionState'] == 'recommended') {
+				$__finalCompiled .= '
+						<div class="block-rowMessage block-rowMessage--success">
+							' . 'You have the recommended PHP version, all features current and planned for the future will work on this server.' . '
+						</div>
+					';
+			}
+			$__finalCompiled .= '
+				';
+		}
+		$__finalCompiled .= '
+				<dl class="pairs pairs--columns">
+					<dt>' . 'PHP version' . '</dt>
+					<dd><a href="' . $__templater->fn('link', array('tools/phpinfo', ), true) . '" target="_blank">' . $__templater->escape($__vars['envReport']['phpVersion']) . '</a></dd>
+				</dl>
+				<dl class="pairs pairs--columns">
+					<dt>' . 'MySQL version' . '</dt>
+					<dd>' . $__templater->escape($__vars['envReport']['mysqlVersion']) . '</dd>
+				</dl>
+				';
+		if ($__vars['envReport']['server_software']) {
+			$__finalCompiled .= '
+					<dl class="pairs pairs--columns">
+						<dt>' . 'Server software' . '</dt>
+						<dd>' . $__templater->escape($__vars['envReport']['server_software']) . '</dd>
+					</dl>
+				';
+		}
+		$__finalCompiled .= '
+				';
+		if ($__templater->isTraversable($__vars['envReport']['ini'])) {
+			foreach ($__vars['envReport']['ini'] AS $__vars['ini'] => $__vars['iniVal']) {
+				$__finalCompiled .= '
+					<dl class="pairs pairs--columns">
+						<dt>PHP <code>' . $__templater->escape($__vars['ini']) . '</code></dt>
+						<dd>' . $__templater->escape($__vars['iniVal']) . '</dd>
+					</dl>
+				';
+			}
+		}
+		$__finalCompiled .= '
+				<dl class="pairs pairs--columns">
+					<dt>' . 'cURL version' . '</dt>
+					<dd>' . ($__templater->escape($__vars['envReport']['curl_version']) ?: 'N/A') . '</dd>
+				</dl>
+				<dl class="pairs pairs--columns">
+					<dt>' . 'SSL version' . '</dt>
+					<dd>' . ($__templater->escape($__vars['envReport']['ssl_version']) ?: 'N/A') . '</dd>
+				</dl>
+				<dl class="pairs pairs--columns">
+					<dt>' . 'Suhosin enabled' . '</dt>
+					<dd>' . ($__vars['envReport']['suhosin'] ? 'Yes' : 'No') . '</dd>
+				</dl>
+				<dl class="pairs pairs--columns">
+					<dt>' . 'Imagick support' . '</dt>
+					<dd>' . ($__vars['envReport']['imagick'] ? 'Yes' : 'No') . '</dd>
+				</dl>
+				<dl class="pairs pairs--columns">
+					<dt>' . 'EXIF support' . '</dt>
+					<dd>' . ($__vars['envReport']['exif'] ? 'Yes' : 'No') . '</dd>
+				</dl>
+				<dl class="pairs pairs--columns">
+					<dt>' . '<code>GZip</code> support' . '</dt>
+					<dd>' . ($__vars['envReport']['gzip'] ? 'Yes' : 'No') . '</dd>
+				</dl>
+				<dl class="pairs pairs--columns">
+					<dt>' . '<code>mbstring</code> support' . '</dt>
+					<dd>' . ($__vars['envReport']['mbstring'] ? 'Yes' : 'No') . '</dd>
+				</dl>
+			</div>
+		</div>
+	</div>
+';
+	}
+	$__finalCompiled .= '
+
+';
 	if (!$__templater->test($__vars['logCounts'], 'empty', array()) AND $__templater->method($__vars['xf']['visitor'], 'hasAdminPermission', array('viewLogs', ))) {
 		$__finalCompiled .= '
 	<div class="block">
 		<div class="block-container">
-			<h2 class="block-header">' . 'Logged activity' . '</h2>
-			<div class="block-body">
+			<h2 class="block-header">
+				<span class="collapseTrigger collapseTrigger--block ' . ((!$__templater->fn('is_toggled', array('collapse_logged_activity', ), false)) ? 'is-active' : '') . '" data-xf-click="toggle" data-xf-init="toggle-storage" data-storage-type="cookie" data-storage-key="collapse_logged_activity" data-target="#js-collapse-logged-activity">
+					' . 'Logged activity' . '
+				</span>
+			</h2>
+			<div class="block-body block-body--collapsible ' . ((!$__templater->fn('is_toggled', array('collapse_logged_activity', ), false)) ? 'is-active' : '') . '" id="js-collapse-logged-activity">
 				' . $__templater->dataList('
 					' . $__templater->dataRow(array(
 			'rowtype' => 'header',
@@ -338,8 +477,12 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		$__finalCompiled .= '
 	<div class="block">
 		<div class="block-container">
-			<h2 class="block-header">' . 'Staff online' . '</h2>
-			<ul class="block-body">
+			<h2 class="block-header">
+				<span class="collapseTrigger collapseTrigger--block ' . ((!$__templater->fn('is_toggled', array('collapse_staff_online', ), false)) ? 'is-active' : '') . '" data-xf-click="toggle" data-xf-init="toggle-storage" data-storage-type="cookie" data-storage-key="collapse_staff_online" data-target="#js-collapse-staff-online">
+					' . 'Staff online' . '
+				</span>
+			</h2>
+			<ul class="block-body block-body--collapsible ' . ((!$__templater->fn('is_toggled', array('collapse_staff_online', ), false)) ? 'is-active' : '') . '" id="js-collapse-staff-online">
 				';
 		if ($__templater->isTraversable($__vars['staffOnline'])) {
 			foreach ($__vars['staffOnline'] AS $__vars['user']) {
@@ -376,8 +519,12 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		$__finalCompiled .= '
 	<div class="block">
 		<div class="block-container">
-			<h3 class="block-header">' . 'File health check results' . '</h3>
-			<div class="block-body">
+			<h2 class="block-header">
+				<span class="collapseTrigger collapseTrigger--block ' . ((!$__templater->fn('is_toggled', array('collapse_health_check', ), false)) ? 'is-active' : '') . '" data-xf-click="toggle" data-xf-init="toggle-storage" data-storage-type="cookie" data-storage-key="collapse_health_check" data-target="#js-collapse-health-check">
+					' . 'File health check results' . '
+				</span>
+			</h2>
+			<div class="block-body block-body--collapsible ' . ((!$__templater->fn('is_toggled', array('collapse_health_check', ), false)) ? 'is-active' : '') . '" id="js-collapse-health-check">
 				' . $__templater->callMacro('tools_file_check', 'file_check_list', array(
 			'fileChecks' => $__vars['fileChecks'],
 		), $__vars) . '
@@ -389,16 +536,34 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	$__finalCompiled .= '
 
 ';
-	if ($__templater->method($__vars['xf']['visitor'], 'hasAdminPermission', array('addOn', ))) {
+	if (($__templater->method($__vars['xf']['visitor'], 'hasAdminPermission', array('addOn', )) AND !$__templater->test($__vars['installedAddOns'], 'empty', array()))) {
 		$__finalCompiled .= '
 	';
 		$__templater->includeCss('addon_list.less');
 		$__finalCompiled .= '
 	<div class="addOnList">
-		' . $__templater->callMacro('addon_list_macros', 'addon_list_block', array(
-			'addOns' => $__vars['installedAddOns'],
-			'heading' => 'Installed add-ons',
-		), $__vars) . '
+		<div class="block">
+			<div class="block-container">
+				<h2 class="block-header">
+					<span class="collapseTrigger collapseTrigger--block ' . ((!$__templater->fn('is_toggled', array('collapse_add_ons', ), false)) ? 'is-active' : '') . '" data-xf-click="toggle" data-xf-init="toggle-storage" data-storage-type="cookie" data-storage-key="collapse_add_ons" data-target="#js-collapse-add-ons">
+						' . 'Installed add-ons' . '
+					</span>
+				</h2>
+				<ul class="block-body block-body--collapsible ' . ((!$__templater->fn('is_toggled', array('collapse_add_ons', ), false)) ? 'is-active' : '') . '" id="js-collapse-add-ons">
+					';
+		if ($__templater->isTraversable($__vars['installedAddOns'])) {
+			foreach ($__vars['installedAddOns'] AS $__vars['addOn']) {
+				$__finalCompiled .= '
+						' . $__templater->callMacro('addon_list_macros', 'addon_list_item', array(
+					'addOn' => $__vars['addOn'],
+				), $__vars) . '
+					';
+			}
+		}
+		$__finalCompiled .= '
+				</ul>
+			</div>
+		</div>
 	</div>
 ';
 	}

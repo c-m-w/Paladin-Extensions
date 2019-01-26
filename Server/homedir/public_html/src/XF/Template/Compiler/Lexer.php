@@ -137,7 +137,7 @@ class Lexer
 			'var' => '\\{\\$',
 			'expr' => '\\{\\{',
 			'comment' => ['<xf:comment>(.*?)</xf:comment>', 1],
-			'extensionPoint' => '<!--\[XF:[a-zA-Z0-9_:-]+\]-->',
+			'extensionPoint' => '<!--\[XF:[a-zA-Z0-9_:/-]+\]-->',
 			'plain' => ['<xf:plain>(.*?)</xf:plain>', 1],
 			'tagOpen' => '<xf:',
 			'tagClose' => '</xf:'

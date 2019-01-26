@@ -477,20 +477,6 @@ return array('macros' => array('user_tabs' => function($__templater, array $__ar
 		'_type' => 'option',
 	),
 	array(
-		'name' => 'user_criteria[resource_count][rule]',
-		'value' => 'resource_count',
-		'selected' => $__vars['criteria']['resource_count'],
-		'label' => 'User has submitted at least X resources' . $__vars['xf']['language']['label_separator'],
-		'_dependent' => array($__templater->formNumberBox(array(
-		'name' => 'user_criteria[resource_count][data][resources]',
-		'value' => $__vars['criteria']['resource_count']['resources'],
-		'size' => '5',
-		'min' => '0',
-		'step' => '1',
-	))),
-		'_type' => 'option',
-	),
-	array(
 		'name' => 'user_criteria[like_count][rule]',
 		'value' => 'like_count',
 		'selected' => $__vars['criteria']['like_count'],
@@ -580,7 +566,8 @@ return array('macros' => array('user_tabs' => function($__templater, array $__ar
 
 			<hr class="formRowSep" />
 
-			' . '
+			' . $__templater->includeTemplate('sv_warningimprovements_criteria', $__vars) . '
+' . '
 
 			' . $__templater->formCheckBoxRow(array(
 	), $__compilerTemp6, array(

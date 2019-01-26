@@ -18,6 +18,8 @@ class Install extends AbstractController
 
 	public function actionIndex()
 	{
+		\XF\Util\Php::resetOpcache();
+
 		$installHelper = $this->getInstallHelper();
 		$errors = $installHelper->getRequirementErrors();
 		$warnings = $installHelper->getRequirementWarnings();

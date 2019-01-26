@@ -13,6 +13,17 @@ class Thread extends AbstractHandler
 	{
 		$app = \XF::app();
 
+		$action = $app->options()->spamThreadAction;
+		if ($action['action'] == 'move')
+		{
+			$node = $app->em()->find('XF:Node', $action['node_id']);
+			if (!$node)
+			{
+				$error = \XF::phrase('spam_cleaner_cannot_be_run_at_moment');
+				return false;
+			}
+		}
+
 		$threadsFinder = $app->finder('XF:Thread');
 		$threads = $threadsFinder->where('user_id', $this->user->user_id)->fetch();
 
@@ -81,12 +92,11 @@ class Thread extends AbstractHandler
 
 	public function restore(array $log, &$error = null)
 	{
-		$threadsFinder = \XF::app()->finder('XF:Thread');
-
 		if ($log['action'] == 'moved')
 		{
 			foreach ($log['threadIds'] AS $nodeId => $threadIds)
 			{
+				$threadsFinder = \XF::app()->finder('XF:Thread');
 				$threads = $threadsFinder->where('thread_id', $threadIds)->fetch();
 				foreach ($threads AS $thread)
 				{
@@ -101,6 +111,7 @@ class Thread extends AbstractHandler
 		{
 			if ($log['deleteType'] == 'soft')
 			{
+				$threadsFinder = \XF::app()->finder('XF:Thread');
 				$threads = $threadsFinder->where('thread_id', $log['threadIds'])->fetch();
 				foreach ($threads AS $thread)
 				{

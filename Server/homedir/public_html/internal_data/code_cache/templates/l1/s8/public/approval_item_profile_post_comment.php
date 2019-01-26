@@ -1,10 +1,10 @@
 <?php
-// FROM HASH: ecba47c5487c5780f24d415556e24b8c
+// FROM HASH: 4cbc1939e5e0b1bc8a59c10a2bdead75
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
 	$__finalCompiled .= $__templater->formRow('
-	' . 'Posted on profile post by <a href="{commentLink}">' . $__templater->escape($__vars['content']['ProfilePost']['username']) . '</a>' . '
+	' . 'Posted on profile post by <a href="' . $__templater->fn('link', array('profile-posts/comments', $__vars['content'], ), true) . '">' . $__templater->escape($__vars['content']['ProfilePost']['username']) . '</a>' . '
 ', array(
 		'label' => 'Profile post comment',
 	)) . '

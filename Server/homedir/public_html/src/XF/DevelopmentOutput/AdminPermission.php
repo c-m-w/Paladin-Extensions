@@ -35,7 +35,7 @@ class AdminPermission extends AbstractHandler
 
 		$permission = $this->getEntityForImport($name, $addOnId, $json, $options);
 
-		$permission->bulkSet($json);
+		$permission->bulkSetIgnore($json);
 		$permission->admin_permission_id = $name;
 		$permission->addon_id = $addOnId;
 		$permission->save();

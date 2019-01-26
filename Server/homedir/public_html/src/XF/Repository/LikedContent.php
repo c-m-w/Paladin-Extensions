@@ -159,7 +159,7 @@ class LikedContent extends Repository
 	}
 
 	/**
-	 * @param \XF\Entity\LikedContent[] $likes
+	 * @param \XF\Mvc\Entity\ArrayCollection|\XF\Entity\LikedContent[] $likes
 	 */
 	public function addContentToLikes($likes)
 	{
@@ -323,7 +323,7 @@ class LikedContent extends Repository
 				{
 					$db->query("
 						UPDATE xf_user
-						SET like_count = GREATEST(0, like_count {$operator} ?)
+						SET like_count = GREATEST(0, CAST(like_count AS SIGNED) {$operator} ?)
 						WHERE user_id = ?
 					", [$totalChange, $userId]);
 				}
@@ -380,7 +380,7 @@ class LikedContent extends Repository
 			{
 				$db->query("
 					UPDATE xf_user
-					SET like_count = GREATEST(0, like_count - ?)
+					SET like_count = GREATEST(0, CAST(like_count AS SIGNED) - ?)
 					WHERE user_id = ?
 				", [$totalChange, $userId]);
 			}

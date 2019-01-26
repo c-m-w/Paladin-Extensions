@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: c15879c1a3a33752e678852b0c1a89ef
+// FROM HASH: 4c01d4484c7febbd3c0744af422de9b7
 return array('macros' => array('head' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -71,6 +71,7 @@ return array('macros' => array('head' => function($__templater, array $__argumen
 	$__finalCompiled .= '
 	<script>
 		jQuery.extend(true, XF.config, {
+			// ' . '
 			userId: ' . $__templater->escape($__vars['xf']['visitor']['user_id']) . ',
 			url: {
 				fullBase: \'' . $__templater->filter($__templater->fn('base_url', array(null, true, ), false), array(array('escape', array('js', )),), true) . '\',
@@ -81,7 +82,8 @@ return array('macros' => array('head' => function($__templater, array $__argumen
 			cookie: {
 				path: \'' . $__templater->filter($__vars['xf']['cookie']['path'], array(array('escape', array('js', )),), true) . '\',
 				domain: \'' . $__templater->filter($__vars['xf']['cookie']['domain'], array(array('escape', array('js', )),), true) . '\',
-				prefix: \'' . $__templater->filter($__vars['xf']['cookie']['prefix'], array(array('escape', array('js', )),), true) . '\'
+				prefix: \'' . $__templater->filter($__vars['xf']['cookie']['prefix'], array(array('escape', array('js', )),), true) . '\',
+				secure: ' . ($__vars['xf']['cookie']['secure'] ? 'true' : 'false') . '
 			},
 			csrf: \'' . $__templater->filter($__templater->fn('csrf_token', array(), false), array(array('escape', array('js', )),), true) . '\',
 			js: {\'<!--XF:JS:JSON-->\'},
@@ -106,6 +108,7 @@ return array('macros' => array('head' => function($__templater, array $__argumen
 		});
 
 		jQuery.extend(XF.phrases, {
+			// ' . '
 			date_x_at_time_y: "' . $__templater->filter('{date} at {time}', array(array('escape', array('js', )),), true) . '",
 			day_x_at_time_y:  "' . $__templater->filter('{day} at {time}', array(array('escape', array('js', )),), true) . '",
 			yesterday_at_x:   "' . $__templater->filter('Yesterday at {time}', array(array('escape', array('js', )),), true) . '",
@@ -148,12 +151,19 @@ return array('macros' => array('head' => function($__templater, array $__argumen
 			month10: "' . $__templater->filter('November', array(array('escape', array('js', )),), true) . '",
 			month11: "' . $__templater->filter('December', array(array('escape', array('js', )),), true) . '",
 
+			xr_pm_buy_for_x: "' . $__templater->filter('Buy for {price}', array(array('escape', array('js', )),), true) . '",
+			xr_pm_renew_for_x: "' . $__templater->filter('Renew for {price}', array(array('escape', array('js', )),), true) . '",
+			xr_pm_get_free_now: "' . $__templater->filter('Get FREE now!', array(array('escape', array('js', )),), true) . '",
+
 			active_user_changed_reload_page: "' . $__templater->filter('The active user has changed. Reload the page for the latest version.', array(array('escape', array('js', )),), true) . '",
 			server_did_not_respond_in_time_try_again: "' . $__templater->filter('The server did not respond in time. Please try again.', array(array('escape', array('js', )),), true) . '",
 			oops_we_ran_into_some_problems: "' . $__templater->filter('Oops! We ran into some problems.', array(array('escape', array('js', )),), true) . '",
 			oops_we_ran_into_some_problems_more_details_console: "' . $__templater->filter('Oops! We ran into some problems. Please try again later. More error details may be in the browser console.', array(array('escape', array('js', )),), true) . '",
 			file_too_large_to_upload: "' . $__templater->filter('The file is too large to be uploaded.', array(array('escape', array('js', )),), true) . '",
+			uploaded_file_is_too_large_for_server_to_process: "' . $__templater->filter('The uploaded file is too large for the server to process.', array(array('escape', array('js', )),), true) . '",
 			files_being_uploaded_are_you_sure: "' . $__templater->filter('Files are still being uploaded. Are you sure you want to submit this form?', array(array('escape', array('js', )),), true) . '",
+			attach: "' . $__templater->filter('Attach files', array(array('escape', array('js', )),), true) . '",
+			rich_text_box: "' . $__templater->filter('Rich text box', array(array('escape', array('js', )),), true) . '",
 			close: "' . $__templater->filter('Close', array(array('escape', array('js', )),), true) . '",
 
 			showing_x_of_y_items: "' . $__templater->filter('Showing {count} of {total} items', array(array('escape', array('js', )),), true) . '",
@@ -163,7 +173,7 @@ return array('macros' => array('head' => function($__templater, array $__argumen
 	</script>
 
 	<form style="display:none" hidden="hidden">
-		<input type="text" name="_xfClientLoadTime" value="" id="_xfClientLoadTime" tabindex="-1" />
+		<input type="text" name="_xfClientLoadTime" value="" id="_xfClientLoadTime" title="_xfClientLoadTime" tabindex="-1" />
 	</form>
 
 	';

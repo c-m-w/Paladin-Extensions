@@ -8,9 +8,6 @@ return array('macros' => array('associate' => function($__templater, array $__ar
 		'provider' => '!',
 	), $__arguments, $__vars);
 	$__finalCompiled .= '
-';
-	$__templater->includeCss('public:login_steam.less');
-	$__finalCompiled .= '
 	' . $__templater->formRow('
 
 		' . $__templater->button('
@@ -39,37 +36,27 @@ return array('macros' => array('associate' => function($__templater, array $__ar
 	';
 	$__vars['explain'] = (((!$__vars['hasPassword']) AND ($__templater->fn('count', array($__vars['xf']['visitor']['Profile']['connected_accounts'], ), false) == 1)) ? 'Disassociating with all external accounts will cause a password to be generated for your account and emailed to ' . $__vars['xf']['visitor']['email'] . '.' : '');
 	$__finalCompiled .= '
-	';
-	$__compilerTemp1 = '';
-	if (($__templater->method($__vars['provider'], 'getValue', array('provider_id', )) !== 'steam') OR $__templater->fn('can_disassociate_steam', array(), false)) {
-		$__compilerTemp1 .= '
-';
-		$__templater->includeCss('public:login_steam.less');
-		$__compilerTemp1 .= '
-' . $__templater->form('
-			' . $__templater->formCheckBox(array(
-		), array(array(
-			'name' => 'disassociate',
-			'label' => 'Disassociate ' . $__templater->escape($__vars['provider']['title']) . ' account',
-			'_dependent' => array('
-						' . $__templater->button('Confirm disassociation', array(
-			'type' => 'submit',
-		), '', array(
-		)) . '
-					'),
-			'_type' => 'option',
-		))) . '
-		', array(
-			'action' => $__templater->fn('link', array('account/connected-accounts/disassociate', $__vars['provider'], ), false),
-			'class' => 'u-inputSpacer',
-		)) . '
-';
-	}
-	$__finalCompiled .= $__templater->formRow('
+	' . $__templater->formRow('
 
 		<div>' . $__templater->filter($__templater->method($__vars['provider'], 'renderAssociated', array()), array(array('raw', array()),), true) . '</div>
 
-		' . $__compilerTemp1 . '
+		' . $__templater->form('
+			' . $__templater->formCheckBox(array(
+	), array(array(
+		'name' => 'disassociate',
+		'label' => 'Disassociate ' . $__templater->escape($__vars['provider']['title']) . ' account',
+		'_dependent' => array('
+						' . $__templater->button('Confirm disassociation', array(
+		'type' => 'submit',
+	), '', array(
+	)) . '
+					'),
+		'_type' => 'option',
+	))) . '
+		', array(
+		'action' => $__templater->fn('link', array('account/connected-accounts/disassociate', $__vars['provider'], ), false),
+		'class' => 'u-inputSpacer',
+	)) . '
 	', array(
 		'label' => $__templater->escape($__vars['provider']['title']),
 		'explain' => $__templater->escape($__vars['explain']),

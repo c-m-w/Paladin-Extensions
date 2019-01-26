@@ -78,7 +78,7 @@ class Index extends AbstractController
 
 		foreach ($this->app->addOnManager()->getInstalledAddOns() AS $id => $addOn)
 		{
-			if ($addOn->canUpgrade() || $addOn->isLegacy())
+			if ($id == 'XF' || $addOn->canUpgrade() || $addOn->isLegacy())
 			{
 				continue;
 			}
@@ -89,6 +89,24 @@ class Index extends AbstractController
 			}
 		}
 
+		$versionState = null;
+		$envReport = \XF\Util\Php::getEnvironmentReport();
+		if (version_compare($envReport['phpVersion'], '5.6.0', '<'))
+		{
+			$versionState = 'minimum';
+		}
+		else if (version_compare($envReport['phpVersion'], '7.1.0', '>='))
+		{
+			$versionState = 'recommended';
+		}
+		else if (version_compare($envReport['phpVersion'], '7.1.0', '<'))
+		{
+			$versionState = 'not_newest';
+		}
+
+		$installHelper = new \XF\Install\Helper($this->app);
+		$requirementErrors = $installHelper->getRequirementErrors();
+
 		$viewParams = [
 			'outdatedTemplates' => $templateRepo->countOutdatedTemplates(),
 			'showUnicodeWarning' => $showUnicodeWarning,
@@ -98,9 +116,13 @@ class Index extends AbstractController
 			'fileChecks' => $fileCheckRepo->findFileChecksForList()->fetch(5),
 			'navigation' => $nav->getTree(),
 			'installedAddOns' => $installed,
+			'hasProcessingAddOn' => $this->repository('XF:AddOn')->hasAddOnsBeingProcessed(),
 			'staffOnline' => $activityRepo->getOnlineStaffList(),
 			'stats' => $stats,
-			'logCounts' => $logCounts
+			'logCounts' => $logCounts,
+			'envReport' => $envReport,
+			'versionState' => $versionState,
+			'requirementErrors' => $requirementErrors
 		];
 		return $this->view('XF:Index', 'index', $viewParams);
 	}

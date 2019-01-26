@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 4c0fa32058961204cca377739e4ac6de
+// FROM HASH: f15b0ddaa80a2c084dc68b15b2e50aec
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -8,26 +8,17 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 (' . 'Confirm' . ')
 <br /><br />
+
 ' . 'Username' . ': ' . $__templater->escape($__vars['postedBy']) . '
 <br />
-' . 'Posts' . ': ' . $__templater->escape($__vars['postsCount']) . '
-<br />
+
 ' . 'Limit' . ': ' . $__templater->escape($__vars['xf']['options']['deletePostsLimit']) . '
 <br /><br />
-' . 'Position 0 indicates entire thread will be deleted.' . '
+
+' . 'Post number 1 indicates entire thread will be deleted.' . '
 <br /><br />
 
-';
-	if ($__vars['xf']['options']['deletePostsLimit'] < $__vars['postsCount']) {
-		$__finalCompiled .= '
-<a href="' . $__templater->fn('link', array('deleteposts/delete', '', array('user_id' => $__vars['userId'], ), ), true) . '">' . 'Delete' . ' ' . $__templater->escape($__vars['limit']) . ' ' . 'deleteposts_posts' . '</a>
-';
-	} else {
-		$__finalCompiled .= '
 <a href="' . $__templater->fn('link', array('deleteposts/delete', '', array('user_id' => $__vars['userId'], ), ), true) . '">' . 'Delete' . ' ' . $__templater->escape($__vars['postsCount']) . ' ' . 'posts' . '</a>
-';
-	}
-	$__finalCompiled .= '
 <br /><br />
 
 <div class="block-container">
@@ -54,7 +45,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			),
 			array(
 				'_type' => 'cell',
-				'html' => $__templater->escape($__vars['post']['position']),
+				'html' => ($__vars['post']['position'] + 1),
 			))) . '
 			';
 		}
@@ -64,7 +55,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'rowtype' => 'header',
 	), array(array(
 		'_type' => 'cell',
-		'html' => 'Post number',
+		'html' => 'Post ID',
 	),
 	array(
 		'_type' => 'cell',
@@ -76,7 +67,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	),
 	array(
 		'_type' => 'cell',
-		'html' => 'Position',
+		'html' => 'Post number',
 	))) . '
 			' . $__compilerTemp1 . '
 		', array(

@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 466e47494b01b7832a53e7f8f39ce41b
+// FROM HASH: 7a4c46dd2574e77c55ad188ac109a2e2
 return array('macros' => array('username_row' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -15,11 +15,13 @@ return array('macros' => array('username_row' => function($__templater, array $_
 		'name' => $__vars['fieldName'],
 		'value' => $__vars['value'],
 		'autocomplete' => 'off',
+		'required' => 'required',
 		'autofocus' => ($__vars['autoFocus'] ? 'autofocus' : false),
 		'maxlength' => $__templater->fn('max_length', array($__vars['xf']['visitor'], 'username', ), false),
 	), array(
 		'label' => 'User name',
-		'explain' => 'This is the name that will be shown with your messages. You may use any name you wish.',
+		'hint' => 'Required',
+		'explain' => 'This is the name that will be shown with your messages. You may use any name you wish. Once set, this cannot be changed.',
 	)) . '
 ';
 	return $__finalCompiled;
@@ -39,9 +41,11 @@ return array('macros' => array('username_row' => function($__templater, array $_
 		'value' => $__vars['value'],
 		'type' => 'email',
 		'autocomplete' => 'off',
+		'required' => 'required',
 		'maxlength' => $__templater->fn('max_length', array($__vars['xf']['visitor'], 'email', ), false),
 	), array(
 		'label' => 'Email',
+		'hint' => 'Required',
 	)) . '
 ';
 	return $__finalCompiled;
@@ -94,6 +98,33 @@ return array('macros' => array('username_row' => function($__templater, array $_
 ';
 	return $__finalCompiled;
 },
+'email_choice_row' => function($__templater, array $__arguments, array $__vars)
+{
+	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
+	$__finalCompiled = '';
+	$__vars = $__templater->mergeMacroArguments(array(
+		'fieldName' => 'email_choice',
+	), $__arguments, $__vars);
+	$__finalCompiled .= '
+
+	';
+	if ($__vars['xf']['options']['registrationSetup']['requireEmailChoice']) {
+		$__finalCompiled .= '
+		' . $__templater->formCheckBoxRow(array(
+		), array(array(
+			'name' => $__vars['fieldName'],
+			'selected' => $__vars['xf']['options']['registrationDefaults']['receive_admin_email'],
+			'label' => 'Receive news and updates from us by email',
+			'hint' => '',
+			'_type' => 'option',
+		)), array(
+		)) . '
+	';
+	}
+	$__finalCompiled .= '
+';
+	return $__finalCompiled;
+},
 'custom_fields' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -116,26 +147,35 @@ return array('macros' => array('username_row' => function($__templater, array $_
 	$__vars = $__templater->mergeMacroArguments(array(), $__arguments, $__vars);
 	$__finalCompiled .= '
 	';
-	if ($__vars['xf']['tosUrl'] OR $__vars['xf']['options']['privacyPolicyUrl']) {
+	if ($__vars['xf']['tosUrl'] OR $__vars['xf']['privacyPolicyUrl']) {
 		$__finalCompiled .= '
 		';
-		$__compilerTemp1 = '';
-		if ($__vars['xf']['tosUrl'] AND $__vars['xf']['options']['privacyPolicyUrl']) {
-			$__compilerTemp1 .= '
-				' . 'By registering, you agree to our <a href="' . $__templater->escape($__vars['xf']['tosUrl']) . '" target="_blank">terms</a> and <a href="' . $__templater->escape($__vars['xf']['options']['privacyPolicyUrl']) . '" target="_blank">privacy policy</a>.' . '
-			';
+		$__compilerTemp1 = array();
+		if ($__vars['xf']['tosUrl'] AND $__vars['xf']['privacyPolicyUrl']) {
+			$__compilerTemp1[] = array(
+				'name' => 'accept',
+				'required' => 'required',
+				'label' => 'I agree to the <a href="' . $__templater->escape($__vars['xf']['tosUrl']) . '" target="_blank">terms</a> and <a href="' . $__templater->escape($__vars['xf']['privacyPolicyUrl']) . '" target="_blank">privacy policy</a>.',
+				'_type' => 'option',
+			);
 		} else if ($__vars['xf']['tosUrl']) {
-			$__compilerTemp1 .= '
-				' . 'By registering, you agree to our <a href="' . $__templater->escape($__vars['xf']['tosUrl']) . '" target="_blank">terms and rules</a>.' . '
-			';
+			$__compilerTemp1[] = array(
+				'name' => 'accept',
+				'required' => 'required',
+				'label' => 'I agree to the <a href="' . $__templater->escape($__vars['xf']['tosUrl']) . '" target="_blank">terms and rules</a>.',
+				'_type' => 'option',
+			);
 		} else {
-			$__compilerTemp1 .= '
-				' . 'By registering, you agree to our <a href="' . $__templater->escape($__vars['xf']['options']['privacyPolicyUrl']) . '" target="_blank">privacy policy</a>.' . '
-			';
+			$__compilerTemp1[] = array(
+				'name' => 'accept',
+				'required' => 'required',
+				'label' => 'I agree to the <a href="' . $__templater->escape($__vars['xf']['privacyPolicyUrl']) . '" target="_blank">privacy policy</a>.',
+				'_type' => 'option',
+			);
 		}
-		$__finalCompiled .= $__templater->formRow('
-			' . $__compilerTemp1 . '
-		', array(
+		$__finalCompiled .= $__templater->formCheckBoxRow(array(
+			'standalone' => 'true',
+		), $__compilerTemp1, array(
 		)) . '
 	';
 	}
@@ -153,7 +193,7 @@ return array('macros' => array('username_row' => function($__templater, array $_
 	$__compilerTemp1 = '';
 	if ($__vars['xf']['options']['registrationTimer']) {
 		$__compilerTemp1 .= '
-				<span id="js-regTimer" data-timer-complete="' . 'Register' . '">
+				<span id="js-regTimer" data-timer-complete="' . $__templater->filter('Register', array(array('for_attr', array()),), true) . '">
 					' . $__vars['xf']['language']['parenthesis_open'] . 'Please wait ' . ('<span>' . $__templater->escape($__vars['xf']['options']['registrationTimer']) . '</span>') . ' seconds.' . $__vars['xf']['language']['parenthesis_close'] . '
 				</span>
 			';
@@ -181,6 +221,8 @@ return array('macros' => array('username_row' => function($__templater, array $_
 {
 	$__finalCompiled = '';
 	$__finalCompiled .= '
+
+' . '
 
 ' . '
 

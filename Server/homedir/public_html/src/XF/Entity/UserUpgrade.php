@@ -14,7 +14,7 @@ use XF\Payment\AbstractProvider;
  * @property int display_order
  * @property array extra_group_ids
  * @property bool recurring
- * @property string cost_amount
+ * @property float cost_amount
  * @property string cost_currency
  * @property int length_amount
  * @property string length_unit

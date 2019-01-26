@@ -145,13 +145,14 @@ class Misc extends AbstractController
 
 		if ($this->request->exists('style_id') && $csrfValid)
 		{
-			$style = $this->app->style($this->filter('style_id', 'uint'));
+			$styleId = $this->filter('style_id', 'uint');
+			$style = $this->app->style($styleId);
 
 			if ($style['user_selectable'] || $visitor->is_admin)
 			{
 				if ($visitor->user_id)
 				{
-					$visitor->style_id = $style->getId();
+					$visitor->style_id = $styleId;
 					$visitor->save();
 
 					$this->app->response()->setCookie('style_id', false);
@@ -249,7 +250,6 @@ class Misc extends AbstractController
 			{
 				$results[] = [
 					'id' => $tag->tag,
-					'icon' => null,
 					'text' => $tag->tag,
 					'q' => $q
 				];
@@ -272,6 +272,122 @@ class Misc extends AbstractController
 		$plugin = $this->plugin('XF:CodeEditor');
 
 		return $plugin->actionModeLoader($language);
+	}
+
+	public function actionAcceptPrivacyPolicy()
+	{
+		$visitor = \XF::visitor();
+		$lastUpdate = $this->options()->privacyPolicyLastUpdate;
+
+		if (!$visitor->user_id || !$lastUpdate)
+		{
+			return $this->noPermission();
+		}
+
+		if ($visitor->privacy_policy_accepted > $lastUpdate)
+		{
+			return $this->redirect(
+				$this->getDynamicRedirectIfNot(
+					$this->buildLink('misc/accept-privacy-policy')
+				)
+			);
+		}
+
+		if ($this->isPost())
+		{
+			if (!$this->filter('accept', 'bool'))
+			{
+				return $this->error(\XF::phrase('please_read_and_accept_our_privacy_policy_before_continuing'));
+			}
+
+			$visitor->privacy_policy_accepted = time();
+			$visitor->save();
+
+			return $this->redirect($this->getDynamicRedirect());
+		}
+		else
+		{
+			$privacyPolicyOption = $this->options()->privacyPolicyUrl;
+
+			$viewParams = [
+				'privacyPolicyOption' => $privacyPolicyOption
+			];
+
+			if ($privacyPolicyOption['type'] == 'default')
+			{
+				/** @var \XF\Entity\HelpPage $page */
+				$page = $this->finder('XF:HelpPage')
+					->where('page_name', 'privacy-policy')
+					->fetchOne();
+				if (!$page)
+				{
+					return $this->notFound();
+				}
+
+				$viewParams['page'] = $page;
+				$viewParams['templateName'] = 'public:_help_page_' . $page->page_id;
+			}
+
+			return $this->view('XF:Misc\AcceptPrivacyPolicy', 'accept_privacy_policy', $viewParams);
+		}
+	}
+
+	public function actionAcceptTerms()
+	{
+		$visitor = \XF::visitor();
+		$lastUpdate = $this->options()->termsLastUpdate;
+
+		if (!$visitor->user_id || !$lastUpdate)
+		{
+			return $this->noPermission();
+		}
+
+		if ($visitor->terms_accepted > $lastUpdate)
+		{
+			return $this->redirect(
+				$this->getDynamicRedirectIfNot(
+					$this->buildLink('misc/accept-terms')
+				)
+			);
+		}
+
+		if ($this->isPost())
+		{
+			if (!$this->filter('accept', 'bool'))
+			{
+				return $this->error(\XF::phrase('please_read_and_accept_our_terms_and_rules_before_continuing'));
+			}
+
+			$visitor->terms_accepted = time();
+			$visitor->save();
+
+			return $this->redirect($this->getDynamicRedirect());
+		}
+		else
+		{
+			$termsOption = $this->options()->tosUrl;
+
+			$viewParams = [
+				'termsOption' => $termsOption
+			];
+
+			if ($termsOption['type'] == 'default')
+			{
+				/** @var \XF\Entity\HelpPage $page */
+				$page = $this->finder('XF:HelpPage')
+					->where('page_name', 'terms')
+					->fetchOne();
+				if (!$page)
+				{
+					return $this->notFound();
+				}
+
+				$viewParams['page'] = $page;
+				$viewParams['templateName'] = 'public:_help_page_' . $page->page_id;
+			}
+
+			return $this->view('XF:Misc\AcceptTerms', 'accept_terms', $viewParams);
+		}
 	}
 
 	public static function getActivityDetails(array $activities)
@@ -328,6 +444,8 @@ class Misc extends AbstractController
 			parent::assertViewingPermissions($action);
 		}
 	}
+
+	public function assertPolicyAcceptance($action) {}
 
 	public function actionException()
 	{

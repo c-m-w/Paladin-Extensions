@@ -37,7 +37,8 @@ class UserFollow extends Repository
 			SELECT follow_user_id
 			FROM xf_user_follow
 			WHERE user_id = ?
-		", $userId);
+			AND follow_user_id <> ?
+		", [$userId, $userId]);
 
 		$profile = $this->em->find('XF:UserProfile', $userId);
 		if ($profile)

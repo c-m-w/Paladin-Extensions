@@ -72,14 +72,34 @@ abstract class AbstractPurchasable
 	 */
 	abstract public function reversePurchase(CallbackState $state);
 
+	public function validatePurchaser(CallbackState $state, &$error = null)
+	{
+		if (!$state->getPurchaser())
+		{
+			if ($state->getPurchaseRequest()->user_id)
+			{
+				$error = 'Could not find user with user_id ' . $state->getPurchaseRequest()->user_id . '.';
+			}
+			else
+			{
+				$error = 'Purchasable type ' . $this->purchasableTypeId . ' does not support payments from guests.';
+			}
+
+			return false;
+		}
+		return true;
+	}
+
 	/**
 	 * Given a payment profile ID, we can enumerate the purchasable items
 	 * which are used by these profiles. Useful to block accidental deletion
 	 * of payment profiles which may be legitimately in use.
 	 *
+	 * This method should return an array of purchasables which are in use by the given profile ID.
+	 *
 	 * @param $profileId
 	 *
-	 * @return array|\XF\Mvc\Entity\ArrayCollection
+	 * @return array
 	 */
 	abstract public function getPurchasablesByProfileId($profileId);
 
@@ -90,6 +110,11 @@ abstract class AbstractPurchasable
 
 	public function sendPaymentReceipt(CallbackState $state)
 	{
+		if (!$state->getPurchaser())
+		{
+			return;
+		}
+
 		switch ($state->paymentResult)
 		{
 			case CallbackState::PAYMENT_RECEIVED:

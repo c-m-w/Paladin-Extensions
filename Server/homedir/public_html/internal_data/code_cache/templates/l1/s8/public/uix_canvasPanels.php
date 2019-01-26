@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 56d9657f307c8dc3327a50a46b0bf1ae
+// FROM HASH: 15f9ece1651b402dc17ec94175f4ff41
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -7,7 +7,9 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	<div class="sidePanel__tabPanels">
 		
 		<div data-content="navigation" class="is-active sidePanel__tabPanel js-navigationTabPanel">
-			' . $__templater->callMacro('PAGE_CONTAINER', 'canvasNavPanel', array(), $__vars) . '
+			' . $__templater->callMacro('PAGE_CONTAINER', 'canvasNavPanel', array(
+		'widgets' => $__vars['uix_sidebarNavWidgets'],
+	), $__vars) . '
 		</div>
 		
 		';

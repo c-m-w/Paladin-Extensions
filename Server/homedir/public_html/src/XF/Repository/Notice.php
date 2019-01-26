@@ -103,7 +103,8 @@ class Notice extends Repository
 		return [
 			'block' => \XF::phrase('block'),
 			'scrolling' => \XF::phrase('scrolling'),
-			'floating' => \XF::phrase('floating')
+			'floating' => \XF::phrase('floating'),
+			'bottom_fixer' => \XF::phrase('fixed')
 		];
 	}
 

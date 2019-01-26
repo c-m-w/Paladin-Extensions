@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 72f9f27e2c9eaf1ab79a70e6d7fe233b
+// FROM HASH: 119650335575bc4e31ece59368d905c8
 return array('macros' => array('item' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -32,7 +32,7 @@ return array('macros' => array('item' => function($__templater, array $__argumen
 					' . $__templater->fn('avatar', array($__vars['xf']['visitor'], 's', false, array(
 			'href' => '',
 			'class' => 'avatar--separated structItem-secondaryIcon',
-			'title' => $__templater->filter('You have posted ' . $__templater->method($__vars['thread'], 'getUserPostCount', array()) . ' message(s) in this thread', array(array('for_attr', array()),), false),
+			'title' => 'You have posted ' . $__templater->method($__vars['thread'], 'getUserPostCount', array()) . ' message(s) in this thread',
 		))) . '
 				';
 	}
@@ -59,16 +59,6 @@ return array('macros' => array('item' => function($__templater, array $__argumen
 						<li>
 							<i class="structItem-status structItem-status--deleted" aria-hidden="true" title="' . $__templater->filter('Deleted', array(array('for_attr', array()),), true) . '"></i>
 							<span class="u-srOnly">' . 'Deleted' . '</span>
-						</li>
-					';
-	}
-	$__compilerTemp1 .= '
-					';
-	if ($__vars['thread']['sticky']) {
-		$__compilerTemp1 .= '
-						<li>
-							<i class="structItem-status structItem-status--sticky" aria-hidden="true" title="' . $__templater->filter('Sticky', array(array('for_attr', array()),), true) . '"></i>
-							<span class="u-srOnly">' . 'Sticky' . '</span>
 						</li>
 					';
 	}
@@ -120,6 +110,16 @@ return array('macros' => array('item' => function($__templater, array $__argumen
 						';
 		}
 		$__compilerTemp1 .= '
+					';
+	}
+	$__compilerTemp1 .= '
+					';
+	if ($__vars['thread']['sticky']) {
+		$__compilerTemp1 .= '
+						<li>
+							<i class="structItem-status structItem-status--sticky" aria-hidden="true" title="' . $__templater->filter('Sticky', array(array('for_attr', array()),), true) . '"></i>
+							<span class="u-srOnly">' . 'Sticky' . '</span>
+						</li>
 					';
 	}
 	$__compilerTemp1 .= '
@@ -232,7 +232,9 @@ return array('macros' => array('item' => function($__templater, array $__argumen
 			'value' => $__vars['thread']['thread_id'],
 			'class' => 'js-inlineModToggle',
 			'data-xf-init' => 'tooltip',
-			'title' => $__templater->filter('Select for moderation', array(array('for_attr', array()),), false),
+			'title' => 'Select for moderation',
+			'label' => 'Select for moderation',
+			'hiddenlabel' => 'true',
 			'_type' => 'option',
 		))) . '</li>
 						';

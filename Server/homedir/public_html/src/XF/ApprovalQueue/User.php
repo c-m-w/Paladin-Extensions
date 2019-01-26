@@ -37,8 +37,8 @@ class User extends AbstractHandler
 			$changeRepo = \XF::repository('XF:ChangeLog');
 			$changeFinder = $changeRepo->findChangeLogsByContent('user', $user->user_id);
 
-			// just get 5 most recent
-			$changes = $changeFinder->fetch(5);
+			// just get 5 most recent - ignore "protected" entries as these are set by the system
+			$changes = $changeFinder->where('protected', 0)->fetch(5);
 			$changeRepo->addDataToLogs($changes);
 
 			$templateData['changesGrouped'] = $changeRepo->groupChangeLogs($changes);

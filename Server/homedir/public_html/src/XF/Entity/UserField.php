@@ -5,14 +5,30 @@ namespace XF\Entity;
 use XF\Mvc\Entity\Structure;
 
 /**
- * Class UserField
- *
- * @package XF\Entity
- *
  * COLUMNS
+ * @property string field_id
+ * @property int display_order
+ * @property string field_type
+ * @property array field_choices
+ * @property string match_type
+ * @property array match_params
+ * @property int max_length
+ * @property bool required
+ * @property string display_template
+ * @property string display_group
+ * @property string user_editable
+ * @property bool moderator_editable
  * @property bool show_registration
  * @property bool viewable_profile
  * @property bool viewable_message
+ *
+ * GETTERS
+ * @property \XF\Phrase title
+ * @property \XF\Phrase description
+ *
+ * RELATIONS
+ * @property \XF\Entity\Phrase MasterTitle
+ * @property \XF\Entity\Phrase MasterDescription
  */
 class UserField extends AbstractField
 {

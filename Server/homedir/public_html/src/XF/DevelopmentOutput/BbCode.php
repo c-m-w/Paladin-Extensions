@@ -53,7 +53,7 @@ class BbCode extends AbstractHandler
 		/** @var \XF\Entity\BbCodeMediaSite $mediaSite */
 		$bbCode = $this->getEntityForImport($name, $addOnId, $json, $options);
 
-		$bbCode->bulkSet($json);
+		$bbCode->bulkSetIgnore($json);
 		$bbCode->bb_code_id = $name;
 		$bbCode->addon_id = $addOnId;
 		$bbCode->save();

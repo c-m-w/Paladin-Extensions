@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 82d440a4cecdf516a9fb008de7f0679c
+// FROM HASH: 295349da33185498fb7f3a11c1d1990b
 return array('macros' => array('delete' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -129,10 +129,22 @@ return array('macros' => array('delete' => function($__templater, array $__argum
 	}
 	$__finalCompiled .= '
 
-			' . $__templater->formRow('
+			';
+	$__compilerTemp2 = '';
+	if ($__templater->method($__vars['warning'], 'canViewIssuer', array())) {
+		$__compilerTemp2 .= '
+	' . $__templater->fn('username_link', array($__vars['warning']['WarnedBy'], false, array(
+		))) . '
+';
+	} else {
+		$__compilerTemp2 .= '
+	' . $__templater->fn('username_link', array($__templater->method($__vars['warning'], 'getAnonymizedIssuer', array()), false, array(
+		))) . '
+';
+	}
+	$__finalCompiled .= $__templater->formRow('
 				<ul class="listInline listInline--bullet">
-					<li>' . $__templater->fn('username_link', array($__vars['warning']['WarnedBy'], false, array(
-	))) . '</li>
+					<li>' . $__compilerTemp2 . '</li>
 					<li>' . $__templater->fn('date_dynamic', array($__vars['warning']['warning_date'], array(
 	))) . '</li>
 				</ul>
@@ -141,31 +153,31 @@ return array('macros' => array('delete' => function($__templater, array $__argum
 	)) . '
 
 			';
-	$__compilerTemp2 = '';
+	$__compilerTemp3 = '';
 	if ($__vars['warning']['notes']) {
-		$__compilerTemp2 .= '<div class="u-muted">' . $__templater->escape($__vars['warning']['notes']) . '</div>';
+		$__compilerTemp3 .= '<div class="u-muted">' . $__templater->fn('structured_text', array($__vars['warning']['notes'], ), true) . '</div>';
 	}
 	$__finalCompiled .= $__templater->formRow('
 				' . $__templater->escape($__vars['warning']['title']) . '
-				' . $__compilerTemp2 . '
+				' . $__compilerTemp3 . '
 			', array(
 		'label' => 'Details of warning',
 	)) . '
 
 			';
-	$__compilerTemp3 = '';
+	$__compilerTemp4 = '';
 	if ($__vars['warning']['is_expired']) {
-		$__compilerTemp3 .= '
+		$__compilerTemp4 .= '
 					<span class="u-muted">' . $__vars['xf']['language']['parenthesis_open'] . 'Expired' . $__vars['xf']['language']['parenthesis_close'] . '</span>
 				';
-	} else if ($__vars['warning']['expiry_date']) {
-		$__compilerTemp3 .= '
-					<span class="u-muted">' . $__vars['xf']['language']['parenthesis_open'] . 'Expires ' . $__templater->fn('date', array($__vars['warning']['expiry_date'], ), true) . '' . $__vars['xf']['language']['parenthesis_close'] . '</span>
+	} else if ($__vars['warning']['expiry_date_rounded']) {
+		$__compilerTemp4 .= '
+					<span class="u-muted">' . $__vars['xf']['language']['parenthesis_open'] . 'Expires ' . $__templater->fn('date', array($__vars['warning']['expiry_date_rounded'], ), true) . '' . $__vars['xf']['language']['parenthesis_close'] . '</span>
 				';
 	}
 	$__finalCompiled .= $__templater->formRow('
 				' . $__templater->filter($__vars['warning']['points'], array(array('number', array()),), true) . '
-				' . $__compilerTemp3 . '
+				' . $__compilerTemp4 . '
 			', array(
 		'label' => 'Warning points',
 	)) . '

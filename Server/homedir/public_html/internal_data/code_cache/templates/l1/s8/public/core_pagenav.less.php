@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 7aeba050176d697fe1fdaa794d180c3a
+// FROM HASH: 095beb7c3b00ebaf357fa2c2f1f0a0c1
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -17,7 +17,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 .m-pageNavElCore()
 {
-	background: @xf-contentHighlightBg;
+	background: @xf-contentBg;
 	color: @xf-textColorMuted;
 	.xf-blockBorder();
 	// font-size: @xf-fontSizeSmall;
@@ -190,7 +190,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		&:hover,
 		&:active
 		{
-			background: xf-intensify(@xf-contentHighlightBg, 3%);
+			background: xf-intensify(@xf-uix_primaryColor, 5%);
 			text-decoration: none;
 		}
 		i:before
@@ -243,6 +243,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		.m-faContent(@fa-var-forward, .93em, rtl);
 		width: auto;
 		font-size: 18px;
+		line-height: inherit;
 	}
 	&.pageNavSimple-el--last i:before
 	{
@@ -253,6 +254,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		.m-faContent(@fa-var-backward, .93em, rtl);
 		width: auto;
 		font-size: 18px;
+		line-height: inherit;
 	}
 	&.is-disabled
 	{

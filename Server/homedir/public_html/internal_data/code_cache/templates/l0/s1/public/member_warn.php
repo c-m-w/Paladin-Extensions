@@ -34,40 +34,19 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 					' . $__templater->escape($__vars['title']) . '
 				';
 	}
-	$__compilerTemp2 = array();
-	if ($__templater->isTraversable($__vars['warnings'])) {
-		foreach ($__vars['warnings'] AS $__vars['warning']) {
-			$__compilerTemp2[] = array(
-				'value' => $__vars['warning']['warning_definition_id'],
-				'class' => 'js-FormFiller',
-				'label' => $__templater->escape($__vars['warning']['title']),
-				'_type' => 'option',
-			);
-		}
-	}
-	$__compilerTemp2[] = array(
-		'value' => '0',
-		'class' => 'js-FormFiller',
-		'label' => 'Custom warning' . $__vars['xf']['language']['label_separator'],
-		'_dependent' => array($__templater->formTextBox(array(
-		'name' => 'custom_title',
-		'maxlength' => $__templater->fn('max_length', array($__vars['warning'], 'title', ), false),
-	))),
-		'_type' => 'option',
-	);
-	$__compilerTemp3 = '';
+	$__compilerTemp2 = '';
 	if ($__vars['contentActions']['delete'] OR $__vars['contentActions']['public']) {
-		$__compilerTemp3 .= '
+		$__compilerTemp2 .= '
 			<h2 class="block-formSectionHeader"><span class="block-formSectionHeader-aligner">' . 'Content action' . '</span></h2>
 			<div class="block-body">
 				';
-		$__compilerTemp4 = array(array(
+		$__compilerTemp3 = array(array(
 			'value' => '',
 			'label' => 'Do nothing',
 			'_type' => 'option',
 		));
 		if ($__vars['contentActions']['delete']) {
-			$__compilerTemp4[] = array(
+			$__compilerTemp3[] = array(
 				'value' => 'delete',
 				'label' => 'Delete the content',
 				'hint' => 'The item will remain viewable by moderators and may be restored at a later date.',
@@ -80,7 +59,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			);
 		}
 		if ($__vars['contentActions']['public']) {
-			$__compilerTemp4[] = array(
+			$__compilerTemp3[] = array(
 				'value' => 'public',
 				'label' => 'Post a public warning',
 				'hint' => 'This will be visible to anyone who can see the content for which this member is being warned.',
@@ -92,14 +71,41 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 				'_type' => 'option',
 			);
 		}
-		$__compilerTemp3 .= $__templater->formRadioRow(array(
+		$__compilerTemp2 .= $__templater->formRadioRow(array(
 			'name' => 'content_action',
-			'value' => '',
-		), $__compilerTemp4, array(
+			'value' => $__templater->method($__vars['user'], 'getWarningDefaultContentAction', array()),
+		), $__compilerTemp3, array(
 			'label' => 'Content action',
 		)) . '
 			</div>
 		';
+	}
+	$__compilerTemp4 = '';
+	if ($__vars['xf']['options']['sv_warningimprovements_sticky_button']) {
+		$__compilerTemp4 .= '
+	' . $__templater->formCheckBoxRow(array(
+		), array(array(
+			'name' => 'send_warning_alert',
+			'value' => '1',
+			'checked' => ($__vars['xf']['options']['sv_warningimprovements_alert_send_default'] ? true : false),
+			'label' => 'Send alert on warning',
+			'_type' => 'option',
+		)), array(
+		)) . '
+
+' . $__templater->formSubmitRow(array(
+			'submit' => 'Warn',
+			'sticky' => 'true',
+		), array(
+		)) . '
+';
+	} else {
+		$__compilerTemp4 .= '
+	' . $__templater->formSubmitRow(array(
+			'submit' => 'Warn',
+		), array(
+		)) . '
+';
 	}
 	$__finalCompiled .= $__templater->form('
 	<div class="block-container">
@@ -115,12 +121,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'label' => 'Content',
 	)) . '
 
-			' . $__templater->formRadioRow(array(
-		'name' => 'warning_definition_id',
-		'value' => '0',
-	), $__compilerTemp2, array(
-		'label' => 'Warning type',
-	)) . '
+			' . $__templater->includeTemplate('sv_member_warn_chooser', $__vars) . '
 
 			<div id="WarningEditableContainer">
 				' . $__templater->formCheckBoxRow(array(
@@ -158,6 +159,11 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'value' => 'months',
 		'class' => 'input--inline',
 	), array(array(
+		'value' => 'hours',
+		'label' => 'Hours',
+		'_type' => 'option',
+	),
+	array(
 		'value' => 'days',
 		'label' => 'Days',
 		'_type' => 'option',
@@ -194,7 +200,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	)) . '
 		</div>
 
-		<h2 class="block-formSectionHeader"><span class="block-formSectionHeader-aligner">' . 'Member notification' . '</span></h2>
+		' . $__templater->includeTemplate('sv_warningimprovements_member_warn7', $__vars) . '
+<h2 class="block-formSectionHeader"><span class="block-formSectionHeader-aligner">' . 'Member notification' . '</span></h2>
 		<div class="block-body">
 			' . $__templater->formCheckBoxRow(array(
 	), array(array(
@@ -229,6 +236,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	), array(array(
 		'name' => 'open_invite',
 		'value' => '1',
+		'checked' => ($__vars['xf']['options']['sv_warningimprovements_conversation_invite'] ? true : false),
 		'label' => '
 						' . 'Allow ' . $__templater->escape($__vars['user']['username']) . ' to invite others to this conversation' . '
 					',
@@ -237,6 +245,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	array(
 		'name' => 'conversation_locked',
 		'value' => '1',
+		'checked' => ($__vars['xf']['options']['sv_warningimprovements_conversation_locked'] ? true : false),
 		'label' => '
 						' . 'Lock conversation (no responses will be allowed)' . '
 					',
@@ -246,13 +255,9 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			</div>
 		</div>
 
-		' . $__compilerTemp3 . '
+		' . $__compilerTemp2 . '
 
-		' . $__templater->formSubmitRow(array(
-		'submit' => 'Warn',
-		'sticky' => 'true',
-	), array(
-	)) . '
+		' . $__compilerTemp4 . '
 	</div>
 
 	' . $__templater->fn('redirect_input', array(null, null, true)) . '

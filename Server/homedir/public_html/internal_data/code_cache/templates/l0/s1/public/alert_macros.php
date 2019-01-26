@@ -10,9 +10,33 @@ return array('macros' => array('row' => function($__templater, array $__argument
 	$__finalCompiled .= '
 	<div class="contentRow">
 		<div class="contentRow-figure">
-			' . $__templater->fn('avatar', array($__vars['alert']['User'], 'xxs', false, array(
-		'defaultname' => $__vars['alert']['username'],
-	))) . '
+			';
+	if ($__vars['alert']['content_type'] === 'warning_alert') {
+		$__finalCompiled .= '
+	';
+		if (!$__templater->method($__vars['alert']['Content'], 'canViewIssuer', array())) {
+			$__finalCompiled .= '
+		' . $__templater->fn('avatar', array($__templater->method($__vars['alert']['Content'], 'getAnonymizedIssuer', array()), 'xxs', false, array(
+				'defaultname' => $__templater->arrayKey($__templater->method($__vars['alert']['Content'], 'getAnonymizedIssuer', array()), 'username'),
+			))) . '
+	';
+		} else {
+			$__finalCompiled .= '
+		' . $__templater->fn('avatar', array($__vars['alert']['User'], 'xxs', false, array(
+				'defaultname' => $__vars['alert']['username'],
+			))) . '
+	';
+		}
+		$__finalCompiled .= '
+';
+	} else {
+		$__finalCompiled .= '
+	' . $__templater->fn('avatar', array($__vars['alert']['User'], 'xxs', false, array(
+			'defaultname' => $__vars['alert']['username'],
+		))) . '
+';
+	}
+	$__finalCompiled .= '
 		</div>
 		<div class="contentRow-main contentRow-main--close">
 			' . $__templater->filter($__templater->method($__vars['alert'], 'render', array()), array(array('raw', array()),), true) . '

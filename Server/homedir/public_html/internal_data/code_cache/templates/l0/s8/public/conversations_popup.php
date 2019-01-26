@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 8158fd078df7e6d9b72718f4a2249b0a
+// FROM HASH: 18ca4c14982aa3ef83aa872490b59269
 return array('macros' => array('popup_item' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -23,7 +23,7 @@ return array('macros' => array('popup_item' => function($__templater, array $__a
 						<ul class="listInline listInline--selfInline listInline--comma">
 							<li>' . $__templater->fn('username_link', array($__vars['userConv']['Master']['Starter'], false, array(
 		'defaultname' => $__vars['userConv']['Master']['username'],
-		'title' => $__templater->filter('Conversation starter', array(array('for_attr', array()),), false),
+		'title' => 'Conversation starter',
 		'href' => '',
 	))) . '</li>' . trim('
 							');

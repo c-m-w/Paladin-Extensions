@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: f3752149508466873e49fffe2783bd23
+// FROM HASH: a10aaee9918d5884a8a418e551a5f082
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -105,7 +105,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 	&:not(a)
 	{
-		cursor: default;
+		cursor: inherit;
 	}
 }
 

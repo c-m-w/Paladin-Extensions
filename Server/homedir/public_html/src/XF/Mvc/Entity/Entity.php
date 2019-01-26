@@ -210,7 +210,7 @@ abstract class Entity implements \ArrayAccess
 			{
 				if (!array_key_exists($key, $this->_valueCache))
 				{
-					$this->_valueCache[$key] = $this->_em->decodeValueFromSource($column['type'], $this->_values[$key]);
+					$this->_valueCache[$key] = $this->_em->decodeValueFromSourceExtended($column['type'], $this->_values[$key], $column);
 				}
 				$value = $this->_valueCache[$key];
 			}
@@ -284,7 +284,7 @@ abstract class Entity implements \ArrayAccess
 			{
 				if (!array_key_exists($key, $this->_valueCache))
 				{
-					$this->_valueCache[$key] = $this->_em->decodeValueFromSource($column['type'], $this->_values[$key]);
+					$this->_valueCache[$key] = $this->_em->decodeValueFromSourceExtended($column['type'], $this->_values[$key], $column);
 				}
 				$value = $this->_valueCache[$key];
 			}
@@ -335,7 +335,7 @@ abstract class Entity implements \ArrayAccess
 
 		if ($column['type'] & self::REQUIRES_DECODING)
 		{
-			return $this->_em->decodeValueFromSource($column['type'], $v);
+			return $this->_em->decodeValueFromSourceExtended($column['type'], $v, $column);
 		}
 		else
 		{
@@ -629,7 +629,9 @@ abstract class Entity implements \ArrayAccess
 			throw new \InvalidArgumentException("Column '$key' is unknown");
 		}
 
-		$value = $this->_em->decodeValueFromSource($this->_structure->columns[$key]['type'], $value);
+		$column = $this->_structure->columns[$key];
+
+		$value = $this->_em->decodeValueFromSourceExtended($column['type'], $value, $column);
 		return $this->set($key, $value, $options);
 	}
 
@@ -659,6 +661,7 @@ abstract class Entity implements \ArrayAccess
 		else
 		{
 			$this->_values[$key] = $sourceValue;
+			$this->_invalidateCachesOnChange($key);
 		}
 
 		unset($this->_valueCache[$key]);
@@ -675,6 +678,12 @@ abstract class Entity implements \ArrayAccess
 		}
 
 		return $results;
+	}
+
+	public function bulkSetIgnore(array $values, array $options = [])
+	{
+		$options['skipInvalid'] = true;
+		return $this->bulkSet($values, $options);
 	}
 
 	protected function _castValueToType($value, $key, $type, array $columnOptions = [])
@@ -769,7 +778,7 @@ abstract class Entity implements \ArrayAccess
 	{
 		return (
 			!array_key_exists($key, $this->_values)
-			|| $value !== $this->_em->decodeValueFromSource($column['type'], $this->_values[$key])
+			|| $value !== $this->_em->decodeValueFromSourceExtended($column['type'], $this->_values[$key], $column)
 		);
 	}
 
@@ -1071,6 +1080,17 @@ abstract class Entity implements \ArrayAccess
 
 		$id = $entity->getUniqueEntityId();
 		$this->_cascadeSave[$id] = $entity;
+	}
+
+	public function removeCascadedSave(Entity $entity)
+	{
+		if ($entity === $this)
+		{
+			return;
+		}
+
+		$id = $entity->getUniqueEntityId();
+		unset($this->_cascadeSave[$id]);
 	}
 
 	public final function save($throw = true, $newTransaction = true)

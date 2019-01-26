@@ -19,11 +19,28 @@ class Help extends AbstractController
 			return $this->handleHelpPage($pageName);
 		}
 
-		$pages = $this->getHelpPageRepo()->findActiveHelpPages();
+		$privacyPolicyUrl = $this->app->container('privacyPolicyUrl');
+		$tosUrl = $this->app->container('tosUrl');
+
+		$pages = $this->getHelpPageRepo()->findActiveHelpPages()->fetch();
+		$pages = $pages->filter(function(\XF\Entity\HelpPage $page) use($privacyPolicyUrl, $tosUrl)
+		{
+			if ($page->page_id == 'privacy_policy')
+			{
+				return ($privacyPolicyUrl ? true : false);
+			}
+			else if ($page->page_id == 'terms')
+			{
+				return ($tosUrl ? true : false);
+			}
+			else
+			{
+				return true;
+			}
+		});
 
 		$viewParams = [
-			'tosUrl' => $this->app->container('tosUrl'),
-			'pages' => $pages->fetch()
+			'pages' => $pages
 		];
 
 		return $this->addWrapperParams(
@@ -84,8 +101,16 @@ class Help extends AbstractController
 		return $this->repository('XF:HelpPage');
 	}
 
+	public function assertNotBanned() {}
+	public function assertNotRejected($action) {}
+	public function assertNotDisabled($action) {}
+
+	public function assertBoardActive($action) {}
 	public function assertViewingPermissions($action) {}
 	public function assertTfaRequirement($action) {}
+
+	// in case these have custom URL which is a help page
+	public function assertPolicyAcceptance($action) {}
 
 	public static function getActivityDetails(array $activities)
 	{

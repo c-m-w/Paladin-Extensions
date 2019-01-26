@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 46cb3590fd6e77afeccb56be685b750c
+// FROM HASH: 62a54a7afb7b4c3e357b73f586e6b0de
 return array('macros' => array('uix_tabBar' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -23,13 +23,13 @@ return array('macros' => array('uix_tabBar' => function($__templater, array $__a
 		), $__vars) . '
 					<div class="uix_tabLabel">What\'s new</div>
 				</a>
-				<a href="' . $__templater->fn('link', array('conversations', ), true) . '" data-badge="' . $__templater->filter($__vars['xf']['visitor']['conversations_unread'], array(array('number', array()),), true) . '" class="uix_tabItem js-badge--conversations badgeContainer' . ($__vars['xf']['visitor']['conversations_unread'] ? ' badgeContainer--highlighted' : '') . '">
+				<a href="' . $__templater->fn('link', array('conversations', ), true) . '" data-xf-click="overlay" data-badge="' . $__templater->filter($__vars['xf']['visitor']['conversations_unread'], array(array('number', array()),), true) . '" class="uix_tabItem js-badge--conversations badgeContainer' . ($__vars['xf']['visitor']['conversations_unread'] ? ' badgeContainer--highlighted' : '') . '">
 					' . $__templater->callMacro('uix_icons.less', 'icon', array(
 			'icon' => 'inbox',
 		), $__vars) . '
 					<div class="uix_tabLabel">Inbox</div>
 				</a>
-				<a href="' . $__templater->fn('link', array('account/alerts', ), true) . '" data-badge="' . $__templater->filter($__vars['xf']['visitor']['alerts_unread'], array(array('number', array()),), true) . '" class="uix_tabItem js-badge--alerts badgeContainer' . ($__vars['xf']['visitor']['alerts_unread'] ? ' badgeContainer--highlighted' : '') . '">
+				<a href="' . $__templater->fn('link', array('account/alerts', ), true) . '" data-xf-click="overlay" data-badge="' . $__templater->filter($__vars['xf']['visitor']['alerts_unread'], array(array('number', array()),), true) . '" class="uix_tabItem js-badge--alerts badgeContainer' . ($__vars['xf']['visitor']['alerts_unread'] ? ' badgeContainer--highlighted' : '') . '">
 					' . $__templater->callMacro('uix_icons.less', 'icon', array(
 			'icon' => 'alert',
 		), $__vars) . '

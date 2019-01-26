@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: f04198e1a59fc6475e21b6e724efcb21
+// FROM HASH: 69e60126f25d32023391e8f50e7e14f0
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -12,7 +12,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 ';
 	} else {
 		$__finalCompiled .= '
-	' . 'Unknown account' . '
+	' . 'Account associated' . '
 ';
 	}
 	return $__finalCompiled;

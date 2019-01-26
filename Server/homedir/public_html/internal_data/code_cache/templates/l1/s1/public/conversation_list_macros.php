@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: eb4126122cf33833fa1b8581c28b8087
+// FROM HASH: e31dc5eecf4d6130b07ada5854953af9
 return array('macros' => array('item' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -96,7 +96,7 @@ return array('macros' => array('item' => function($__templater, array $__argumen
 						<ul class="listInline listInline--comma listInline--selfInline">
 							<li>' . $__templater->fn('username_link', array($__vars['userConv']['Master']['Starter'], false, array(
 		'defaultname' => $__vars['userConv']['Master']['username'],
-		'title' => $__templater->filter('Conversation starter', array(array('for_attr', array()),), false),
+		'title' => 'Conversation starter',
 	))) . '</li>' . trim('
 							');
 	if ($__templater->isTraversable($__vars['userConv']['Master']['recipients'])) {

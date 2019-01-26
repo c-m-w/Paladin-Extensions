@@ -17,8 +17,12 @@ class UserUpgrade extends AbstractController
 		$upgradeRepo = $this->getUserUpgradeRepo();
 		$upgrades = $upgradeRepo->findUserUpgradesForList();
 
-		$activeUpgrades = $upgradeRepo->findActiveUserUpgradesForList()->fetch(5);
-		$expiredUpgrades = $upgradeRepo->findExpiredUserUpgradesForList()->fetch(5);
+		$activeUpgrades = $upgradeRepo->findActiveUserUpgradesForList()
+			->with('Upgrade', true)
+			->fetch(5);
+		$expiredUpgrades = $upgradeRepo->findExpiredUserUpgradesForList()
+			->with('Upgrade', true)
+			->fetch(5);
 
 		$viewParams = [
 			'upgrades' => $upgrades->fetch(),
@@ -220,7 +224,7 @@ class UserUpgrade extends AbstractController
 			$user = $this->em()->findOne('XF:User', ['username' => $username]);
 			if (!$user)
 			{
-				return $this->error(\XF::phrase('requested_user_not_found'));
+				throw $this->exception($this->error(\XF::phrase('requested_user_not_found')));
 			}
 			$finder->where('user_id', $user->user_id);
 			$linkParams['username'] = $username;
@@ -232,7 +236,8 @@ class UserUpgrade extends AbstractController
 	public function actionActive(ParameterBag $params)
 	{
 		$userUpgradeRepo = $this->getUserUpgradeRepo();
-		$activeFinder = $userUpgradeRepo->findActiveUserUpgradesForList();
+		$activeFinder = $userUpgradeRepo->findActiveUserUpgradesForList()
+			->with('Upgrade', true);
 
 		$linkParams = [];
 		$userUpgrade = $this->prepareActiveExpiredList($activeFinder, $params, $linkParams);
@@ -265,7 +270,8 @@ class UserUpgrade extends AbstractController
 	public function actionExpired(ParameterBag $params)
 	{
 		$userUpgradeRepo = $this->getUserUpgradeRepo();
-		$expiredFinder = $userUpgradeRepo->findExpiredUserUpgradesForList();
+		$expiredFinder = $userUpgradeRepo->findExpiredUserUpgradesForList()
+			->with('Upgrade', true);
 
 		$linkParams = [];
 		$userUpgrade = $this->prepareActiveExpiredList($expiredFinder, $params, $linkParams);

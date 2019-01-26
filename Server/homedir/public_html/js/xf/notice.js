@@ -29,6 +29,9 @@
 
 		updateNoticeList: function()
 		{
+			// TODO: may need to trigger this in more places
+			$(document).trigger('xf:notice-change');
+
 			// clone elements are from lightslider
 			this.$notices = this.$target.find(this.options.target).not('.clone');
 			return this.$notices;
@@ -233,7 +236,10 @@
 					dismissed.push(noticeId);
 					dismissed.sort(function(a, b) { return (a - b); });
 
-					XF.Cookie.set(cookieName, dismissed.join(','));
+					// expire notice cookies in one month
+					var expiry = new Date();
+					expiry.setUTCMonth(expiry.getUTCMonth() + 1);
+					XF.Cookie.set(cookieName, dismissed.join(','), expiry);
 				}
 			}
 			else

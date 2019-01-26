@@ -9,6 +9,9 @@ class ComposerStaticInitec13230cd79e563a6cc995d16a3f88cd
     public static $files = array (
         'ad155f8f1cf0d418fe49e248db8c661b' => __DIR__ . '/..' . '/react/promise/src/functions_include.php',
         '0e6d7bf4a5811bfa5cf40c5ccd6fae6a' => __DIR__ . '/..' . '/symfony/polyfill-mbstring/bootstrap.php',
+        '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
+        '5255c38a0faeba867671b61dfda6d864' => __DIR__ . '/..' . '/paragonie/random_compat/lib/random.php',
+        'bd9634f2d41831496de0d3dfe4c94881' => __DIR__ . '/..' . '/symfony/polyfill-php56/bootstrap.php',
         '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
         '667aeda72477189d0494fecd327c3641' => __DIR__ . '/..' . '/symfony/var-dumper/Resources/functions/dump.php',
     );
@@ -33,7 +36,10 @@ class ComposerStaticInitec13230cd79e563a6cc995d16a3f88cd
         ),
         'S' => 
         array (
+            'Symfony\\Polyfill\\Util\\' => 22,
+            'Symfony\\Polyfill\\Php56\\' => 23,
             'Symfony\\Polyfill\\Mbstring\\' => 26,
+            'Symfony\\Polyfill\\Ctype\\' => 23,
             'Symfony\\Component\\VarDumper\\' => 28,
             'Symfony\\Component\\Process\\' => 26,
             'Symfony\\Component\\Filesystem\\' => 29,
@@ -41,6 +47,7 @@ class ComposerStaticInitec13230cd79e563a6cc995d16a3f88cd
             'Symfony\\Component\\Debug\\' => 24,
             'Symfony\\Component\\CssSelector\\' => 30,
             'Symfony\\Component\\Console\\' => 26,
+            'Stripe\\' => 7,
         ),
         'R' => 
         array (
@@ -50,6 +57,11 @@ class ComposerStaticInitec13230cd79e563a6cc995d16a3f88cd
         array (
             'Psr\\Log\\' => 8,
             'Pelago\\' => 7,
+            'ParagonIE\\ConstantTime\\' => 23,
+        ),
+        'O' => 
+        array (
+            'Otp\\' => 4,
         ),
         'L' => 
         array (
@@ -120,9 +132,21 @@ class ComposerStaticInitec13230cd79e563a6cc995d16a3f88cd
         array (
             0 => __DIR__ . '/../../..' . '/src/XF',
         ),
+        'Symfony\\Polyfill\\Util\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-util',
+        ),
+        'Symfony\\Polyfill\\Php56\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-php56',
+        ),
         'Symfony\\Polyfill\\Mbstring\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
+        ),
+        'Symfony\\Polyfill\\Ctype\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-ctype',
         ),
         'Symfony\\Component\\VarDumper\\' => 
         array (
@@ -152,6 +176,10 @@ class ComposerStaticInitec13230cd79e563a6cc995d16a3f88cd
         array (
             0 => __DIR__ . '/..' . '/symfony/console',
         ),
+        'Stripe\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/stripe/stripe-php/lib',
+        ),
         'React\\Promise\\' => 
         array (
             0 => __DIR__ . '/..' . '/react/promise/src',
@@ -163,6 +191,14 @@ class ComposerStaticInitec13230cd79e563a6cc995d16a3f88cd
         'Pelago\\' => 
         array (
             0 => __DIR__ . '/..' . '/pelago/emogrifier/Classes',
+        ),
+        'ParagonIE\\ConstantTime\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/paragonie/constant_time_encoding/src',
+        ),
+        'Otp\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/christian-riesen/otp/src',
         ),
         'League\\Flysystem\\ZipArchive\\' => 
         array (
@@ -213,10 +249,6 @@ class ComposerStaticInitec13230cd79e563a6cc995d16a3f88cd
     public static $prefixesPsr0 = array (
         'O' => 
         array (
-            'Otp' => 
-            array (
-                0 => __DIR__ . '/..' . '/christian-riesen/otp/src',
-            ),
             'OAuth\\Unit' => 
             array (
                 0 => __DIR__ . '/..' . '/lusitanian/oauth/tests',

@@ -47,12 +47,8 @@ class Approver extends \XF\Service\AbstractService
 
 	protected function onApprove()
 	{
-		// if this is not the last post, then another notification would have been triggered already
-		if ($this->post->isLastPost())
-		{
-			/** @var \XF\Service\Post\Notifier $notifier */
-			$notifier = $this->service('XF:Post\Notifier', $this->post, 'reply');
-			$notifier->notifyAndEnqueue($this->notifyRunTime);
-		}
+		/** @var \XF\Service\Post\Notifier $notifier */
+		$notifier = $this->service('XF:Post\Notifier', $this->post, 'reply');
+		$notifier->notifyAndEnqueue($this->notifyRunTime);
 	}
 }

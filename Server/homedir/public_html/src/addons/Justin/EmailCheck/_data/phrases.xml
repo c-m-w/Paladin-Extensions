@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <phrases>
+  <phrase title="j_ipquality_registration_check_error" version_id="1000000" version_string="1.0.0"><![CDATA[Your ip: '{ipaddress}' seems to be proxy or vpn. if you believe it to be wrong you can contact us via contact form.]]></phrase>
   <phrase title="option.j_enableipquality" version_id="10000" version_string="1.0.0"><![CDATA[Enable ipqualityscore check]]></phrase>
+  <phrase title="option.j_enableregistrationproxycheck" version_id="10030" version_string="1.0.3"><![CDATA[Enable IP Check]]></phrase>
   <phrase title="option.j_validtorpizza" version_id="10000" version_string="1.0.0"><![CDATA[Enable validator.pizza check]]></phrase>
   <phrase title="option_explain.j_enableipquality" version_id="10000" version_string="1.0.0"><![CDATA[]]></phrase>
+  <phrase title="option_explain.j_enableregistrationproxycheck" version_id="1000000" version_string="1.0.0"><![CDATA[Enable ipqualityscore proxy check during registration for blocking registration from vpn/proxy IP]]></phrase>
   <phrase title="option_explain.j_validtorpizza" version_id="10000" version_string="1.0.0"><![CDATA[]]></phrase>
   <phrase title="option_group.j_email_check" version_id="10000" version_string="1.0.0"><![CDATA[[J] Email Check]]></phrase>
   <phrase title="option_group_description.j_email_check" version_id="10000" version_string="1.0.0"><![CDATA[]]></phrase>

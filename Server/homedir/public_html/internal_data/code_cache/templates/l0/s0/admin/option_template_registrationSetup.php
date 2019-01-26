@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: fa4274de335b3f01dfa044df8a56581a
+// FROM HASH: a37cf6b67eeb542a18837cee1cdb61df
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -39,6 +39,13 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'min' => '1',
 		'units' => 'Years',
 	))),
+		'_type' => 'option',
+	),
+	array(
+		'name' => $__vars['inputName'] . '[requireEmailChoice]',
+		'selected' => $__vars['option']['option_value']['requireEmailChoice'],
+		'label' => 'Require site email preference',
+		'hint' => 'If selected, users must choose at registration whether or not to receive site emails. The default value depends on <code>registrationDefaults</code> and users may change their preference later.',
 		'_type' => 'option',
 	),
 	array(

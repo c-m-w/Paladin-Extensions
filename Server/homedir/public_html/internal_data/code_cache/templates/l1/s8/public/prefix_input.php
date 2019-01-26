@@ -214,7 +214,7 @@ return array('macros' => array('template' => function($__templater, array $__arg
 					_xfToken: XF.config.csrf
 				},
 				dataType: "html",
-				timeout: 500,
+				timeout: 5000,
 				success: function(data) 
 				{
 					$(data).find(\'.similarthreads-wrapper\').each(function()

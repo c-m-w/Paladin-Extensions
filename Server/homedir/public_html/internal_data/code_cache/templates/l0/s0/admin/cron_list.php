@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 1f6fd7672e97e87d81bc679c09023d6b
+// FROM HASH: cfd3e028bb78a012c408d1f445df9ad3
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -66,7 +66,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 						'href' => $__templater->fn('link', array('cron/run', $__vars['cron'], ), false),
 						'overlay' => 'true',
 						'data-xf-init' => 'tooltip',
-						'title' => $__templater->filter('Run now', array(array('for_attr', array()),), false),
+						'title' => 'Run now',
 						'class' => 'dataList-cell--iconic',
 						'_type' => 'action',
 						'html' => '

@@ -7,6 +7,7 @@ class Email extends AbstractValidator
 	protected $options = [
 		'banned' => [],
 		'allow_empty' => false,
+		'allow_local' => false,
 		'check_typos' => false
 	];
 
@@ -27,6 +28,17 @@ class Email extends AbstractValidator
 		{
 			$errorKey = 'invalid';
 			return false;
+		}
+
+		if (!$this->options['allow_local'])
+		{
+			list ($local, $domain) = explode('@', $value);
+
+			if (strpos($domain, '.') === false)
+			{
+				$errorKey = 'local';
+				return false;
+			}
 		}
 
 		if (preg_match('/["\'\s\\\\]/', $value))

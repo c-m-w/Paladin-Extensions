@@ -2,7 +2,7 @@
 <style_properties>
   <style_property property_name="ahDW_allUsersList" group_name="ahDiscordWidget" title="All Users List" property_type="css" display_order="35" css_components="text,background,border,border_radius,border_width_simple,border_color_simple,border_radius_simple,padding,extra">
     <value>{
-    "extra": "height: 250px;\noverflow-y: auto;"
+    "extra": "max-height: 250px;\noverflow-y: auto;"
 }</value>
   </style_property>
   <style_property property_name="ahDW_channel" group_name="ahDiscordWidget" title="Channel" property_type="css" display_order="20" css_components="text,border,border_radius,border_width_simple,border_color_simple,border_radius_simple,padding,extra">
@@ -17,6 +17,9 @@
     "font-weight": "@xf-fontWeightNormal",
     "extra": "text-align:left;\nmargin: 4px;\nposition: relative;"
 }</value>
+  </style_property>
+  <style_property property_name="ahDW_joinServerButton" group_name="ahDiscordWidget" title="Join Server Button" property_type="css" display_order="100" css_components="text,background,border,border_radius,border_width_simple,border_color_simple,border_radius_simple,padding,extra">
+    <value>[]</value>
   </style_property>
   <style_property property_name="ahDW_user" group_name="ahDiscordWidget" title="User" property_type="css" display_order="50" css_components="text,border,border_radius,border_width_simple,border_color_simple,border_radius_simple,padding,extra">
     <value>{

@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 717a9209a18d63f13ccd4622c05a06ff
+// FROM HASH: 184bb4d7c8e93a2cb6c8ebfd879eea8d
 return array('macros' => array('privacy_select' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -97,6 +97,12 @@ return array('macros' => array('privacy_select' => function($__templater, array 
 					<a href="' . $__templater->fn('link', array('users/resend-confirmation', $__vars['user'], ), true) . '" class="menu-linkRow" data-xf-click="overlay">' . 'Resend account confirmation' . '</a>
 				';
 		}
+		$__compilerTemp6 = '';
+		if ($__templater->method($__vars['xf']['visitor'], 'canUseLAU', array()) AND ($__vars['xf']['options']['lau_DisplayLoginCard'] AND (($__vars['user']['user_id'] != $__vars['xf']['visitor']['user_id']) AND (!$__templater->fn('in_array', array($__vars['user']['user_id'], $__vars['xf']['options']['lau_DisallowedUsers'], ), false))))) {
+			$__compilerTemp6 .= '
+	<a href="' . $__templater->fn('link_type', array('public', 'login/lauin', null, array('username' => $__vars['user']['username'], ), ), true) . '" class="menu-linkRow">' . 'Login as User' . '</a>
+';
+		}
 		$__templater->pageParams['pageAction'] = $__templater->preEscaped('
 	<div>
 		' . $__templater->button('', array(
@@ -130,7 +136,9 @@ return array('macros' => array('privacy_select' => function($__templater, array 
 				<a href="' . $__templater->fn('link', array('users/manage-watched-threads', $__vars['user'], ), true) . '" class="menu-linkRow" data-xf-click="overlay">' . 'Manage watched threads' . '</a>
 
 				' . $__compilerTemp5 . '
-				' . '
+				' . $__compilerTemp6 . '
+
+' . '
 			</div>
 		</div>
 	</div>
@@ -151,44 +159,44 @@ return array('macros' => array('privacy_select' => function($__templater, array 
 	if ($__vars['user']['user_id']) {
 		$__finalCompiled .= '
 	';
-		$__compilerTemp6 = '';
-		$__compilerTemp6 .= '
+		$__compilerTemp7 = '';
+		$__compilerTemp7 .= '
 				' . '
 				';
 		if ($__vars['user']['is_admin']) {
-			$__compilerTemp6 .= '
+			$__compilerTemp7 .= '
 					<li><a href="' . $__templater->fn('link', array('admins/edit', $__vars['user'], ), true) . '">' . ($__vars['user']['is_super_admin'] ? 'Super administrator' : 'Administrator') . '</a></li>
 				';
 		}
-		$__compilerTemp6 .= '
+		$__compilerTemp7 .= '
 				';
 		if ($__vars['user']['is_moderator']) {
-			$__compilerTemp6 .= '
+			$__compilerTemp7 .= '
 					<li><a href="' . $__templater->fn('link', array('moderators', ), true) . '">' . 'Moderator' . '</a></li>
 				';
 		}
-		$__compilerTemp6 .= '
+		$__compilerTemp7 .= '
 				';
 		if ($__vars['user']['Option']['is_discouraged']) {
-			$__compilerTemp6 .= '
+			$__compilerTemp7 .= '
 					<li>' . 'Discouraged' . '</li>
 				';
 		}
-		$__compilerTemp6 .= '
+		$__compilerTemp7 .= '
 				';
 		if ($__vars['user']['is_banned']) {
-			$__compilerTemp6 .= '
+			$__compilerTemp7 .= '
 					<li><a href="' . $__templater->fn('link', array('banning/users/lift', $__vars['user'], ), true) . '" data-xf-click="overlay">' . 'Banned' . '</a></li>
 				';
 		}
-		$__compilerTemp6 .= '
+		$__compilerTemp7 .= '
 				' . '
 			';
-		if (strlen(trim($__compilerTemp6)) > 0) {
+		if (strlen(trim($__compilerTemp7)) > 0) {
 			$__finalCompiled .= '
 		<div class="block-outer">
 			<ul class="listInline listInline--bullet">
-			' . $__compilerTemp6 . '
+			' . $__compilerTemp7 . '
 			</ul>
 		</div>
 	';
@@ -199,9 +207,9 @@ return array('macros' => array('privacy_select' => function($__templater, array 
 	$__finalCompiled .= '
 
 	';
-	$__compilerTemp7 = '';
+	$__compilerTemp8 = '';
 	if ($__vars['user']['is_super_admin']) {
-		$__compilerTemp7 .= '
+		$__compilerTemp8 .= '
 			<div class="block-body">
 				' . $__templater->formTextBoxRow(array(
 			'name' => 'visitor_password',
@@ -213,18 +221,17 @@ return array('macros' => array('privacy_select' => function($__templater, array 
 			</div>
 		';
 	}
-	$__compilerTemp8 = '';
+	$__compilerTemp9 = '';
 	if ($__vars['user']['user_id']) {
-		$__compilerTemp8 .= '
+		$__compilerTemp9 .= '
 					<a class="tabs-tab" role="tab" tabindex="0" aria-controls="user-extras">' . 'Extra' . '</a>
 					<a class="tabs-tab" role="tab" tabindex="0" aria-controls="user-ips">' . 'IP addresses' . '</a>
-' . $__templater->includeTemplate('sv_ue_user_edit_login_attempts_tab', $__vars) . '
 					<a class="tabs-tab" role="tab" tabindex="0" aria-controls="user-changes">' . 'Change log' . '</a>
 				';
 	}
-	$__compilerTemp9 = '';
+	$__compilerTemp10 = '';
 	if ($__templater->method($__vars['user'], 'exists', array())) {
-		$__compilerTemp9 .= '
+		$__compilerTemp10 .= '
 						' . $__templater->formRadioRow(array(
 			'name' => 'change_password',
 		), array(array(
@@ -252,7 +259,7 @@ return array('macros' => array('privacy_select' => function($__templater, array 
 		)) . '
 					';
 	} else {
-		$__compilerTemp9 .= '
+		$__compilerTemp10 .= '
 						' . $__templater->formTextBoxRow(array(
 			'name' => 'password',
 			'autocomplete' => 'off',
@@ -261,13 +268,13 @@ return array('macros' => array('privacy_select' => function($__templater, array 
 		)) . '
 					';
 	}
-	$__compilerTemp10 = '';
+	$__compilerTemp11 = '';
 	if ($__vars['user']['user_id']) {
-		$__compilerTemp10 .= '
+		$__compilerTemp11 .= '
 						';
-		$__compilerTemp11 = '';
+		$__compilerTemp12 = '';
 		if ($__vars['user']['Option']['use_tfa']) {
-			$__compilerTemp11 .= '
+			$__compilerTemp12 .= '
 								<ul class="inputChoices">
 									<li class="inputChoices-choice inputChoices-plainChoice">' . 'Enabled' . '</li>
 									<li class="inputChoices-choice">' . $__templater->formCheckBox(array(
@@ -280,12 +287,12 @@ return array('macros' => array('privacy_select' => function($__templater, array 
 								</ul>
 							';
 		} else {
-			$__compilerTemp11 .= '
+			$__compilerTemp12 .= '
 								' . 'Disabled' . '
 							';
 		}
-		$__compilerTemp10 .= $__templater->formRow('
-							' . $__compilerTemp11 . '
+		$__compilerTemp11 .= $__templater->formRow('
+							' . $__compilerTemp12 . '
 						', array(
 			'label' => 'Two-step verification',
 		)) . '
@@ -307,7 +314,7 @@ return array('macros' => array('privacy_select' => function($__templater, array 
 		)) . '
 						';
 		if ($__vars['user']['last_activity']) {
-			$__compilerTemp10 .= '
+			$__compilerTemp11 .= '
 							' . $__templater->formRow('
 								' . $__templater->fn('date_dynamic', array($__vars['user']['last_activity'], array(
 			))) . '
@@ -316,54 +323,54 @@ return array('macros' => array('privacy_select' => function($__templater, array 
 			)) . '
 						';
 		}
-		$__compilerTemp10 .= '
+		$__compilerTemp11 .= '
 					';
 	}
-	$__compilerTemp12 = '';
+	$__compilerTemp13 = '';
 	if ($__vars['user']['user_id']) {
-		$__compilerTemp12 .= '
+		$__compilerTemp13 .= '
 							';
 		if (!$__vars['user']['is_moderator']) {
-			$__compilerTemp12 .= '<a href="' . $__templater->fn('link', array('moderators', ), true) . '">' . 'Make this user a moderator' . '</a>';
+			$__compilerTemp13 .= '<a href="' . $__templater->fn('link', array('moderators', ), true) . '">' . 'Make this user a moderator' . '</a>';
 		}
-		$__compilerTemp12 .= '
+		$__compilerTemp13 .= '
 							';
 		if ((!$__vars['user']['is_admin']) AND (!$__vars['user']['is_moderator'])) {
-			$__compilerTemp12 .= '/';
+			$__compilerTemp13 .= '/';
 		}
-		$__compilerTemp12 .= '
+		$__compilerTemp13 .= '
 							';
 		if (!$__vars['user']['is_admin']) {
-			$__compilerTemp12 .= '<a href="' . $__templater->fn('link', array('admins', ), true) . '">' . 'Make this user an administrator' . '</a>';
+			$__compilerTemp13 .= '<a href="' . $__templater->fn('link', array('admins', ), true) . '">' . 'Make this user an administrator' . '</a>';
 		}
-		$__compilerTemp12 .= '
+		$__compilerTemp13 .= '
 						';
 	}
 	$__vars['_userChangesHtml'] = $__templater->preEscaped('
-						' . $__compilerTemp12 . '
+						' . $__compilerTemp13 . '
 					');
-	$__compilerTemp13 = $__templater->mergeChoiceOptions(array(), $__vars['userGroups']);
 	$__compilerTemp14 = $__templater->mergeChoiceOptions(array(), $__vars['userGroups']);
-	$__compilerTemp15 = array(array(
+	$__compilerTemp15 = $__templater->mergeChoiceOptions(array(), $__vars['userGroups']);
+	$__compilerTemp16 = array(array(
 		'value' => '0',
 		'label' => $__vars['xf']['language']['parenthesis_open'] . 'Use default style' . $__vars['xf']['language']['parenthesis_close'],
 		'_type' => 'option',
 	));
-	$__compilerTemp16 = $__templater->method($__vars['styleTree'], 'getFlattened', array(0, ));
-	if ($__templater->isTraversable($__compilerTemp16)) {
-		foreach ($__compilerTemp16 AS $__vars['treeEntry']) {
-			$__compilerTemp15[] = array(
+	$__compilerTemp17 = $__templater->method($__vars['styleTree'], 'getFlattened', array(0, ));
+	if ($__templater->isTraversable($__compilerTemp17)) {
+		foreach ($__compilerTemp17 AS $__vars['treeEntry']) {
+			$__compilerTemp16[] = array(
 				'value' => $__vars['treeEntry']['record']['style_id'],
 				'label' => $__templater->fn('repeat', array('--', $__vars['treeEntry']['depth'], ), true) . ' ' . $__templater->escape($__vars['treeEntry']['record']['title']),
 				'_type' => 'option',
 			);
 		}
 	}
-	$__compilerTemp17 = array();
-	$__compilerTemp18 = $__templater->method($__vars['languageTree'], 'getFlattened', array(0, ));
-	if ($__templater->isTraversable($__compilerTemp18)) {
-		foreach ($__compilerTemp18 AS $__vars['treeEntry']) {
-			$__compilerTemp17[] = array(
+	$__compilerTemp18 = array();
+	$__compilerTemp19 = $__templater->method($__vars['languageTree'], 'getFlattened', array(0, ));
+	if ($__templater->isTraversable($__compilerTemp19)) {
+		foreach ($__compilerTemp19 AS $__vars['treeEntry']) {
+			$__compilerTemp18[] = array(
 				'value' => $__vars['treeEntry']['record']['language_id'],
 				'label' => $__templater->fn('repeat', array('--', $__vars['treeEntry']['depth'], ), true) . '
 								' . $__templater->escape($__vars['treeEntry']['record']['title']),
@@ -371,19 +378,11 @@ return array('macros' => array('privacy_select' => function($__templater, array 
 			);
 		}
 	}
-	$__compilerTemp19 = $__templater->mergeChoiceOptions(array(), $__vars['timeZones']);
-	$__compilerTemp20 = '';
-	if ($__vars['user']['user_id']) {
-		$__compilerTemp20 .= '
-				<li data-href="' . $__templater->fn('link', array('users/extra', $__vars['user'], ), true) . '" role="tabpanel" id="user-extras">
-					<div class="block-body block-row">' . 'Loading' . $__vars['xf']['language']['ellipsis'] . '</div>
-				</li>
-			';
-	}
+	$__compilerTemp20 = $__templater->mergeChoiceOptions(array(), $__vars['timeZones']);
 	$__compilerTemp21 = '';
 	if ($__vars['user']['user_id']) {
 		$__compilerTemp21 .= '
-				<li data-href="' . $__templater->fn('link', array('users/user-ips', $__vars['user'], ), true) . '" role="tabpanel" id="user-ips">
+				<li data-href="' . $__templater->fn('link', array('users/extra', $__vars['user'], ), true) . '" role="tabpanel" id="user-extras">
 					<div class="block-body block-row">' . 'Loading' . $__vars['xf']['language']['ellipsis'] . '</div>
 				</li>
 			';
@@ -391,19 +390,27 @@ return array('macros' => array('privacy_select' => function($__templater, array 
 	$__compilerTemp22 = '';
 	if ($__vars['user']['user_id']) {
 		$__compilerTemp22 .= '
+				<li data-href="' . $__templater->fn('link', array('users/user-ips', $__vars['user'], ), true) . '" role="tabpanel" id="user-ips">
+					<div class="block-body block-row">' . 'Loading' . $__vars['xf']['language']['ellipsis'] . '</div>
+				</li>
+			';
+	}
+	$__compilerTemp23 = '';
+	if ($__vars['user']['user_id']) {
+		$__compilerTemp23 .= '
 				<li data-href="' . $__templater->fn('link', array('users/change-log', $__vars['user'], ), true) . '" role="tabpanel" id="user-changes">
 					<div class="block-body block-row">' . 'Loading' . $__vars['xf']['language']['ellipsis'] . '</div>
 				</li>
 			';
 	}
 	$__finalCompiled .= $__templater->form('
-		' . $__compilerTemp7 . '
+		' . $__compilerTemp8 . '
 
 		<h2 class="block-tabHeader tabs hScroller" data-xf-init="tabs h-scroller" role="tablist">
 			<span class="hScroller-scroll">
 				' . '
 				<a class="tabs-tab is-active" role="tab" tabindex="0" aria-controls="user-details">' . 'User details' . '</a>
-				' . $__compilerTemp8 . '
+				' . $__compilerTemp9 . '
 				' . '
 			</span>
 		</h2>
@@ -420,8 +427,7 @@ return array('macros' => array('privacy_select' => function($__templater, array 
 		'label' => 'User name',
 	)) . '
 
-					' . $__templater->includeTemplate('sv_ue_user_edit_username', $__vars) . '
-' . $__templater->formTextBoxRow(array(
+					' . $__templater->formTextBoxRow(array(
 		'name' => 'user[email]',
 		'value' => $__vars['user']['email'],
 		'type' => 'email',
@@ -431,9 +437,9 @@ return array('macros' => array('privacy_select' => function($__templater, array 
 		'label' => 'Email',
 	)) . '
 
-					' . $__compilerTemp9 . '
-
 					' . $__compilerTemp10 . '
+
+					' . $__compilerTemp11 . '
 
 					<hr class="formRowSep" />
 
@@ -441,9 +447,8 @@ return array('macros' => array('privacy_select' => function($__templater, array 
 
 					' . $__templater->formSelectRow(array(
 		'name' => 'user[user_group_id]',
-		'readonly' => ($__vars['xf']['options']['useressPreventPrimaryGroupChange'] ? '1' : ''),
 		'value' => $__vars['user']['user_group_id'],
-	), $__compilerTemp13, array(
+	), $__compilerTemp14, array(
 		'label' => 'User group',
 		'explain' => $__templater->filter($__vars['_userChangesHtml'], array(array('raw', array()),), true),
 	)) . '
@@ -452,7 +457,7 @@ return array('macros' => array('privacy_select' => function($__templater, array 
 		'name' => 'user[secondary_group_ids]',
 		'value' => $__vars['user']['secondary_group_ids'],
 		'listclass' => 'listColumns',
-	), $__compilerTemp14, array(
+	), $__compilerTemp15, array(
 		'label' => 'Secondary user groups',
 	)) . '
 
@@ -505,6 +510,9 @@ return array('macros' => array('privacy_select' => function($__templater, array 
 		'_type' => 'option',
 	)), array(
 		'label' => 'User state',
+		'explain' => '
+							' . 'When in a user state other than \'' . 'Valid' . '\', users will receive permissions from the ' . (((('<a href="' . $__templater->fn('link', array('user-groups/edit', array('user_group_id' => 1, 'title' => $__vars['userGroups']['1'], ), ), true)) . '" target="_blank">') . $__templater->escape($__vars['userGroups']['1'])) . '</a>') . ' group.' . '
+						',
 	)) . '
 
 					<hr class="formRowSep" />
@@ -513,7 +521,7 @@ return array('macros' => array('privacy_select' => function($__templater, array 
 	), array(array(
 		'name' => 'option[is_discouraged]',
 		'selected' => $__vars['user']['Option']['is_discouraged'],
-		'explain' => 'Discouraged users are subjected to annoying random delays and failures in system behavior, designed to \'encourage\' them to go away and troll some other site.',
+		'hint' => 'Discouraged users are subjected to annoying random delays and failures in system behavior, designed to \'encourage\' them to go away and troll some other site.',
 		'label' => 'Discouraged',
 		'_type' => 'option',
 	)), array(
@@ -576,7 +584,6 @@ return array('macros' => array('privacy_select' => function($__templater, array 
 	), array(
 		'label' => 'Custom title',
 	)) . '
-' . $__templater->includeTemplate('sv_ue_user_edit_title', $__vars) . '
 					' . $__templater->formTextAreaRow(array(
 		'name' => 'profile[signature]',
 		'value' => $__vars['user']['Profile']['signature_'],
@@ -634,7 +641,7 @@ return array('macros' => array('privacy_select' => function($__templater, array 
 					' . $__templater->formSelectRow(array(
 		'name' => 'user[style_id]',
 		'value' => $__vars['user']['style_id'],
-	), $__compilerTemp15, array(
+	), $__compilerTemp16, array(
 		'label' => 'Style',
 	)) . '
 
@@ -643,14 +650,14 @@ return array('macros' => array('privacy_select' => function($__templater, array 
 					' . $__templater->formSelectRow(array(
 		'name' => 'user[language_id]',
 		'value' => $__vars['user']['language_id'],
-	), $__compilerTemp17, array(
+	), $__compilerTemp18, array(
 		'label' => 'Language',
 	)) . '
 
 					' . $__templater->formSelectRow(array(
 		'name' => 'user[timezone]',
 		'value' => $__vars['user']['timezone'],
-	), $__compilerTemp19, array(
+	), $__compilerTemp20, array(
 		'label' => 'Time zone',
 	)) . '
 
@@ -669,24 +676,6 @@ return array('macros' => array('privacy_select' => function($__templater, array 
 		'selected' => $__vars['user']['Option']['email_on_conversation'],
 		'label' => '
 							' . 'Receive email when a new conversation message is received',
-		'_type' => 'option',
-	),
-	array(
-		'name' => 'option[sv_exup_email_on_expiring_expired_upgrade]',
-		'checked' => $__vars['user']['Option']['sv_exup_email_on_expiring_expired_upgrade'],
-		'label' => 'Receive expiring and expired user upgrade emails',
-		'_type' => 'option',
-	),
-	array(
-		'name' => 'option[sv_exup_email_on_upgrade_purchase]',
-		'checked' => $__vars['user']['Option']['sv_exup_email_on_upgrade_purchase'],
-		'label' => 'Receive user upgrade purchase emails',
-		'_type' => 'option',
-	),
-	array(
-		'name' => 'option[sv_exup_email_on_upgrade_reversal]',
-		'checked' => $__vars['user']['Option']['sv_exup_email_on_upgrade_reversal'],
-		'label' => 'Receive user upgrade payment reverseal emails',
 		'_type' => 'option',
 	)), array(
 	)) . '
@@ -768,7 +757,7 @@ return array('macros' => array('privacy_select' => function($__templater, array 
 		'name' => 'option[receive_admin_email]',
 		'selected' => $__vars['user']['Option']['receive_admin_email'],
 		'label' => '
-							' . 'Receive site mailings' . '
+							' . 'Receive news and update emails' . '
 						',
 		'_type' => 'option',
 	),
@@ -840,13 +829,11 @@ return array('macros' => array('privacy_select' => function($__templater, array 
 	)) . '
 			</li>
 
-			' . $__compilerTemp20 . '
-
 			' . $__compilerTemp21 . '
-' . $__templater->includeTemplate('sv_ue_user_edit_login_attempts_pane', $__vars) . '
-
 
 			' . $__compilerTemp22 . '
+
+			' . $__compilerTemp23 . '
 			' . '
 		</ul>
 	', array(

@@ -7,9 +7,8 @@ require($dir . '/src/XF.php');
 
 XF::start($dir);
 $app = XF::setupApp('XF\Pub\App');
-$app->setup();
 
-if (\XF::$versionId == $app->options()->currentVersionId)
+if (\XF::$versionId == $app->options()->currentVersionId || !$app->config('checkVersion'))
 {
 	$jobManager = $app->jobManager();
 	$jobResult = $jobManager->runQueue(false, $app->config('jobMaxRunTime'));

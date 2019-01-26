@@ -5,11 +5,26 @@ namespace XF\Entity;
 use XF\Mvc\Entity\Structure;
 
 /**
- * Class ThreadField
+ * COLUMNS
+ * @property string field_id
+ * @property int display_order
+ * @property string field_type
+ * @property array field_choices
+ * @property string match_type
+ * @property array match_params
+ * @property int max_length
+ * @property bool required
+ * @property string display_template
+ * @property string display_group
+ * @property array editable_user_group_ids
  *
- * @package XF\Entity
+ * GETTERS
+ * @property \XF\Phrase title
+ * @property \XF\Phrase description
  *
  * RELATIONS
+ * @property \XF\Entity\Phrase MasterTitle
+ * @property \XF\Entity\Phrase MasterDescription
  * @property \XF\Entity\ForumField[] ForumFields
  */
 class ThreadField extends AbstractField

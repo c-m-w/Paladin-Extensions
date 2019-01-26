@@ -38,6 +38,10 @@ class UserAuth extends Entity
 			return null;
 		}
 
+		// note: the following fallbacks will mostly be no longer touched
+		// but need to stay to ensure upgrades from versions older than
+		// 2.0.10 still work - without them, it may not be possible for
+		// some admins to log into the upgrade system.
 		if (substr($class, 0, 7) == 'XenForo')
 		{
 			$class = 'XF' . substr($class, 7);
@@ -136,7 +140,7 @@ class UserAuth extends Entity
 	public static function getStructure(Structure $structure)
 	{
 		$structure->table = 'xf_user_authenticate';
-		$structure->shortName = 'XF:UserAuthenticate';
+		$structure->shortName = 'XF:UserAuth';
 		$structure->primaryKey = 'user_id';
 		$structure->columns = [
 			'user_id' => ['type' => self::UINT, 'required' => true],

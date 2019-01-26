@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: b85ef9ad1f38b412d6c4e2dec47ced1e
+// FROM HASH: 6af92991fc1fb81cdf9c75dcadbee4b6
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -8,7 +8,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	.m-clearFix();
 }
 
-.actionBar-set.actionBar
+.actionBar-set
 {
 	&.actionBar-set--internal
 	{
@@ -98,28 +98,28 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	&.actionBar-action--like:before { .m-faContent("@{fa-var-thumbs-o-up}\\20"); ' . $__templater->callMacro('uix_icons.less', 'content', array(
 		'icon' => 'like',
 	), $__vars) . '}
-	&.actionBar-action--like.unlike:before { ' . $__templater->callMacro('uix_icons.less', 'content', array(
+	&.actionBar-action--like.unlike:before { .m-faContent("@{fa-var-thumbs-o-down}\\20"); ' . $__templater->callMacro('uix_icons.less', 'content', array(
 		'icon' => 'unlike',
 	), $__vars) . '}// thumbs up
-	&.actionBar-action--report:before { ' . $__templater->callMacro('uix_icons.less', 'content', array(
+	&.actionBar-action--report:before { .m-faContent("@{fa-var-exclamation-circle}\\20"); ' . $__templater->callMacro('uix_icons.less', 'content', array(
 		'icon' => 'report',
 	), $__vars) . '}
-	&.actionBar-action--delete:before { ' . $__templater->callMacro('uix_icons.less', 'content', array(
+	&.actionBar-action--delete:before { .m-faContent("@{fa-var-trash-o}\\20"); ' . $__templater->callMacro('uix_icons.less', 'content', array(
 		'icon' => 'delete',
 	), $__vars) . '}
-	&.actionBar-action--edit:before { ' . $__templater->callMacro('uix_icons.less', 'content', array(
+	&.actionBar-action--edit:before { .m-faContent("@{fa-var-edit}\\20"); ' . $__templater->callMacro('uix_icons.less', 'content', array(
 		'icon' => 'edit',
 	), $__vars) . '}
-	&.actionBar-action--ip:before { ' . $__templater->callMacro('uix_icons.less', 'content', array(
+	&.actionBar-action--ip:before { .m-faContent("@{fa-var-globe}\\20"); ' . $__templater->callMacro('uix_icons.less', 'content', array(
 		'icon' => 'ipaddress',
 	), $__vars) . '}
-	&.actionBar-action--history:before { ' . $__templater->callMacro('uix_icons.less', 'content', array(
+	&.actionBar-action--history:before { .m-faContent("@{fa-var-history}\\20"); ' . $__templater->callMacro('uix_icons.less', 'content', array(
 		'icon' => 'history',
 	), $__vars) . '}
-	&.actionBar-action--warn:before { ' . $__templater->callMacro('uix_icons.less', 'content', array(
+	&.actionBar-action--warn:before { .m-faContent("@{fa-var-warning}\\20"); ' . $__templater->callMacro('uix_icons.less', 'content', array(
 		'icon' => 'warn',
 	), $__vars) . '}
-	&.actionBar-action--spam:before { ' . $__templater->callMacro('uix_icons.less', 'content', array(
+	&.actionBar-action--spam:before { .m-faContent("@{fa-var-warning}\\20"); ' . $__templater->callMacro('uix_icons.less', 'content', array(
 		'icon' => 'spam',
 	), $__vars) . '}
 }

@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 37fa2ffb5f4c5776c57342132358dc50
+// FROM HASH: a4d1d08528bc9bc7f6188427165791b6
 return array('macros' => array('smilie' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, true);
@@ -121,7 +121,7 @@ return array('macros' => array('smilie' => function($__templater, array $__argum
 			'name' => 'smilies[' . $__vars['i'] . '][sprite_params][w]',
 			'value' => $__vars['smilie']['sprite_params']['w'],
 			'min' => '1',
-			'title' => $__templater->filter('Width', array(array('for_attr', array()),), false),
+			'title' => 'Width',
 			'data-xf-init' => 'tooltip',
 		)) . '
 						<span class="inputGroup-splitter"></span>
@@ -129,7 +129,7 @@ return array('macros' => array('smilie' => function($__templater, array $__argum
 			'name' => 'smilies[' . $__vars['i'] . '][sprite_params][h]',
 			'value' => $__vars['smilie']['sprite_params']['h'],
 			'min' => '1',
-			'title' => $__templater->filter('Height', array(array('for_attr', array()),), false),
+			'title' => 'Height',
 			'data-xf-init' => 'tooltip',
 		)) . '
 						<span class="inputGroup-text">px</span>
@@ -145,14 +145,14 @@ return array('macros' => array('smilie' => function($__templater, array $__argum
 						' . $__templater->formNumberBox(array(
 			'name' => 'smilies[' . $__vars['i'] . '][sprite_params][x]',
 			'value' => $__vars['smilie']['sprite_params']['x'],
-			'title' => $__templater->filter('Background position x', array(array('for_attr', array()),), false),
+			'title' => 'Background position x',
 			'data-xf-init' => 'tooltip',
 		)) . '
 						<span class="inputGroup-splitter"></span>
 						' . $__templater->formNumberBox(array(
 			'name' => 'smilies[' . $__vars['i'] . '][sprite_params][y]',
 			'value' => $__vars['smilie']['sprite_params']['y'],
-			'title' => $__templater->filter('Background position y', array(array('for_attr', array()),), false),
+			'title' => 'Background position y',
 			'data-xf-init' => 'tooltip',
 		)) . '
 						<span class="inputGroup-text">px</span>

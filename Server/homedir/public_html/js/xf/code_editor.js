@@ -34,6 +34,7 @@
 		initEditor: function()
 		{
 			var $textarea = this.$target,
+				lang = {},
 				config = {};
 
 			if ($textarea.data('cmInitialized'))
@@ -50,6 +51,16 @@
 				config = this.options.config;
 			}
 
+			try
+			{
+				lang = $.parseJSON($('.js-codeEditorLanguage').first().html()) || {};
+			}
+			catch (e)
+			{
+				console.error(e);
+				lang = {};
+			}
+
 			this.editor = CodeMirror.fromTextArea($textarea.get(0), $.extend({
 				mode: this.options.mode,
 				indentUnit: this.options.indentUnit,
@@ -59,7 +70,8 @@
 				autoCloseBrackets: this.options.autoCloseBrackets,
 				readOnly: $textarea.prop('readonly'),
 				autofocus: $textarea.prop('autofocus'),
-				scrollbarStyle: this.options.scrollbarStyle
+				scrollbarStyle: this.options.scrollbarStyle,
+				phrases: lang
 			}, config));
 
 			this.$wrapper = $(this.editor.getWrapperElement());
@@ -73,9 +85,17 @@
 
 			this.editor.on('keydown', XF.proxy(this, 'keydown'));
 
+			var $form = $textarea.closest('form');
+			$form.on('ajax-submit:before', XF.proxy(this, 'onSubmit'));
+
 			$textarea.trigger('code-editor:init', this.editor);
 
 			$textarea.data('cmInitialized', true);
+		},
+
+		onSubmit: function(e)
+		{
+			this.editor.save();
 		},
 
 		keydown: function(editor, e)
@@ -108,23 +128,17 @@
 
 				var $textarea = $(editor.getTextArea()),
 					$form = $textarea.closest('form'),
-					self = this;
-				this.editor.save();
+					selector = this.options.submitSelector,
+					$submit = $form.find(selector);
 
-				setTimeout(function()
+				if (selector && $submit.length)
 				{
-					var selector = self.options.submitSelector,
-						$submit = $form.find(selector);
-
-					if (selector && $submit.length)
-					{
-						$form.find(selector).click();
-					}
-					else
-					{
-						$form.submit();
-					}
-				}, 200);
+					$form.find(selector).click();
+				}
+				else
+				{
+					$form.submit();
+				}
 			}
 		}
 	});

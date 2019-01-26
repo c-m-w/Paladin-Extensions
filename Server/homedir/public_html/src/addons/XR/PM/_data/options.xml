@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<options>
+  <option option_id="xr_pm_default_terms" edit_format="template" data_type="string" validation_class="XR\PM\Option\Editor" validation_method="verifyOption">
+    <default_value>This software license agreement ("Agreement") is a legal agreement between you (either an individual or an entity, "You" or "Your") and {title} ( "We", "Our" or "Us") for the use of any software purchased from Us (“Software”) and any services that may be provided. {board_title} reserves the right to modify the terms of this Agreement at any time.
+
+By purchasing our Software (or authorizing any other person to do so) You warrant that you are capable of entering into a binding legal agreement, that You have read and understand this Agreement and that You accept its terms and conditions. You acknowledge that this Agreement constitutes the complete statement of the agreement between You and {board_title}.
+
+[B]1. Grant and Scope of License[/B]
+Subject to the terms and conditions of this Agreement and the payment by You of the applicable fee for the Software, {board_title} grants You a limited, non-exclusive, worldwide license to install, download and use a single instance of the Software ("License") through a single installation. Each License may run one instance of the Software, accessible via one URL. Any attempt to circumvent this limitation is prohibited and will result in the License being revoked.
+
+Before deploying the Software, you may be required at the {board_title} Products section the address (URL) at which You will use the License. This URL must be kept up-to-date. You may create a single additional test installation for the purpose of testing the Software. Any test installation of this kind must be password protected, and access to it must be limited to You and Your website staff.
+
+[B]2. Rights[/B]
+The Software is licensed to You for use only under the terms and conditions of the License. You acknowledge that all intellectual property rights, copyrights and trademarks in the Software belong to {board_title}, that rights in the Software are licensed (not sold) to You, and that You have no rights in, or to, the Software other than the right to use them in accordance with the terms of this Agreement.
+
+All copies of the Software must contain the same proprietary notices that appear on and in the Software, including all copyright notices embedded in the Software, which must remain unaltered from the original and visible at all times, unless by specific prior arrangement with {board_title}.
+
+The Software may be permanently transferred by the original purchaser to a third party ("Subsequent Licensee"). The original licensee may not retain a copy or installation of the Software. The Subsequent Licensee must agree to the terms of this Agreement and waive the right to transfer.
+
+[B]3. Restrictions[/B]
+This license is granted to You alone. You may not redistribute the Software in whole or in part. You may not rent, lease, sub-license, sell, assign, pledge, transfer or otherwise dispose of the Software in any form, on a temporary or permanent basis, without the prior written consent of {board_title}.
+
+For the avoidance of doubt, You are solely responsible for managing content posted using your installation of the Software (“Your Content”). {board_title} shall have no liability in respect of Your Content including but not limited to its accuracy or lawfulness.
+
+You are solely responsible for ensuring that Your Content and Your use of the Software complies with all applicable legislation and regulations, including but not limited to all applicable Data Protection and Privacy legislation. You undertake to ensure that the Software is not used by You or others to engage in illegal activity. You may not use the software to engage in any activity that would violate the rights of third parties. You hereby agree to indemnify Us from any loss or damage arising from Your breach of this provision.
+
+[B]4. Termination[/B]
+The License for the Software is effective until terminated. You may terminate the License at any time by uninstalling the Software and destroying all copies of the Software.
+
+{board_title} reserves the right to revoke Your License to use the Software should any of the terms of this Agreement be violated.
+
+[B]5. Customer Data[/B]
+It is Your responsibility to ensure that you provide {board_title} with accurate, complete and current contact information. A failure to do so may result in Your inability to access updates and services.
+
+You must maintain the confidentiality and security of your customer credentials that allow You to access the {board_title} Products system.
+
+[B]6. Support[/B]
+For the initial twelve months of the License (“Initial Period”), which shall commence upon payment by You of the applicable license Fee, We shall provide You with support to respond to any problems (“Support”) You are experiencing with the Software which result in it not complying with its description or the demonstration, as made available on Our website (“Problem”). Such Support and all software updates ("Updates") are included in the License Fee for the Initial Period. Additional payments ("Extension Payments") will be required to extend access to Support and Updates beyond the Initial Period.
+
+You may notify Us of Problems via the website and We will use Our reasonable endeavours to respond to such Problems and provide a resolution to such Problems. For the avoidance of doubt, We do not warrant that We can provide resolution to Problems on an individual basis and resolution to Problems may be provided with the next Update.
+
+[B]7. Optional Extras and Services[/B]
+Optional Extras and services associated with a License (“Extras”) may have additional requirements which You must ensure are met before purchasing.
+
+You may only use Extras with their associated License. If the Extras purchase becomes invalid (such as through refund or cancellation, etc), you must immediately uninstall the Extra and delete all associated files (if applicable).
+
+Add-ons may not be separately transferred between Your Licenses or to a third party. When a License is transferred to a Subsequent Purchaser, all Extras associated with that License will be transferred as well.
+
+Access to Support and Updates for the Extra is dependent on the associated License having current access to Support and Updates. The License's Extension Payment may be changed by the purchase of Extras. Once an Extra is purchased, the Extension Payment will always take the Extra into account. To not extend an Extra with an Extension Payment, You must contact us to cancel the Extra before making the Extension Payment. No refund will be given in this case and should You wish to re-gain access to the Extra, You will need to re-purchase it.
+
+[B]8. Disclaimer of Warranties[/B]
+The Software is provided on an "AS IS" basis, without warranty of any kind, including without limitation the warranties of merchantability, fitness for a particular purpose, and non-infringement.
+
+You acknowledge that the Software has not been developed to meet Your individual requirements, and that it is therefore Your responsibility to ensure that the facilities and functions of the Software meet your requirements prior to purchase. You acknowledge that the Software may not be free of bugs or errors, and agree that the existence of errors shall not constitute a breach of this Agreement.
+
+The entirety of the risk as to the results, quality and performance of the Software is with You.
+
+In the event that You are purchasing the Software as a consumer, nothing in this clause shall affect your statutory rights.
+
+[B]9. Limitation of Liability[/B]
+Our liability for losses suffered by you, arising out of or in connection with this agreement (including any liability for the acts or omissions of its employees, agents and subcontractors), whether arising in contract, tort (including negligence), misrepresentation or otherwise, shall be limited to 100% of the purchase price. We shall not be liable for indirect, incidental, or consequential damages of any kind, including loss of income or profits, loss of goodwill, loss of data, or the like. Nothing in this Agreement shall limit or exclude the liability of either party for death or personal injury resulting from negligence, fraud or fraudulent misrepresentation.
+
+This Agreement sets out the full extent of Your obligations and liabilities in respect of the supply of the Software. In particular, there are no conditions, warranties, representations or other terms, express or implied, that are binding on You except as specifically stated in this Agreement. Any condition, warranty, representation or other term concerning the supply of the Software which might otherwise be implied into, or incorporated in, this Agreement, or any collateral contract, whether by statute, common law or otherwise, is hereby excluded to the fullest extent permitted by law.
+
+[B]10. Indemnification[/B]
+You agree to indemnify, defend, and hold harmless {board_title} and its officers, directors, agents, and employees from and against any and all demands, claims, losses and liabilities, including reasonable attorney's fees, arising out of or caused by Your or Your visitors’ use of the Software. This obligation shall survive the termination of this Agreement.
+
+[B]11. Refund Policy[/B]
+We will maintain a reasonable policy regarding requests for refunds. We reserve the right to refuse a refund or to apply a partial refund. An administration charge may be applied where a refund is offered.
+
+[B]12. Jurisdiction[/B]
+This License, its subject matter or its formation (including non-contractual disputes or claims) shall be governed by and construed in accordance with English law and submitted to the non-exclusive jurisdiction of the English courts. If an English Court judges any provision of this Agreement to be invalid, void, or unenforceable, the parties agree that the remaining provisions of this Agreement shall remain valid and enforceable.</default_value>
+    <edit_format_params>xr_pm_option_template_xr_pm_default_terms</edit_format_params>
+    <relation group_id="xr_pm" display_order="20"/>
+  </option>
+  <option option_id="xr_pm_thumbnail_size" edit_format="spinbox" data_type="positive_integer" validation_class="XF\Option\Style" validation_method="triggerStyleUpdate">
+    <default_value>300</default_value>
+    <edit_format_params>min=1
+step=1
+units=px</edit_format_params>
+    <relation group_id="xr_pm" display_order="10"/>
+  </option>
+</options>

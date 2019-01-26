@@ -21,7 +21,11 @@
   <phrase title="about" version_id="1000015" version_string="1.0.0 Alpha 5"><![CDATA[About]]></phrase>
   <phrase title="about_you" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[About you]]></phrase>
   <phrase title="accent" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Accent]]></phrase>
+  <phrase title="accept" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[Accept]]></phrase>
   <phrase title="accept_future_messages" version_id="1000011" version_string="1.0.0 Alpha 1"><![CDATA[Accept future messages]]></phrase>
+  <phrase title="accepted_privacy_policy" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[Accepted privacy policy]]></phrase>
+  <phrase title="accepted_terms_rules" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[Accepted terms and rules]]></phrase>
+  <phrase title="account_associated" version_id="2001270" version_string="2.0.12"><![CDATA[Account associated]]></phrase>
   <phrase title="account_details" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Account details]]></phrase>
   <phrase title="account_upgrade" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Account upgrade]]></phrase>
   <phrase title="account_upgrades" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Account upgrades]]></phrase>
@@ -29,6 +33,7 @@
   <phrase title="action" version_id="1000015" version_string="1.0.0 Alpha 5"><![CDATA[Action]]></phrase>
   <phrase title="action_available_via_post_only" version_id="1000011" version_string="1.0.0 Alpha 1"><![CDATA[This action is available via POST only. Please press the back button and try again.]]></phrase>
   <phrase title="action_not_completed_because_no_longer_logged_in" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[This action could not be completed because you are no longer logged in. Please reload the page.]]></phrase>
+  <phrase title="action_pending" version_id="2001070" version_string="2.0.10"><![CDATA[Action pending]]></phrase>
   <phrase title="action_prefix" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Action prefix]]></phrase>
   <phrase title="action_to_take" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Action to take]]></phrase>
   <phrase title="actions" version_id="1020010" version_string="1.2.0 Alpha" global_cache="1"><![CDATA[Actions]]></phrase>
@@ -156,6 +161,7 @@
   <phrase title="additional_contact" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Additional contact]]></phrase>
   <phrase title="additional_user_groups" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Additional user groups]]></phrase>
   <phrase title="additional_user_groups_explain" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Puts the user in the selected groups while the upgrade is active.]]></phrase>
+  <phrase title="addon_action_pending_warning" version_id="2001070" version_string="2.0.10"><![CDATA[One or more add-ons currently have actions pending and may be in an inconsistent state. Because of this, some errors may be suppressed and unexpected behavior may occur. If this does not change shortly, please contact the add-on author for guidance.]]></phrase>
   <phrase title="admin" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Admin]]></phrase>
   <phrase title="admin_control_panel" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Admin control panel]]></phrase>
   <phrase title="admin_log" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Admin log]]></phrase>
@@ -193,6 +199,9 @@
   <phrase title="admin_navigation.cronEntries" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Cron entries]]></phrase>
   <phrase title="admin_navigation.customBbCodes" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Custom BB codes]]></phrase>
   <phrase title="admin_navigation.dataMaintenance" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Data maintenance]]></phrase>
+  <phrase title="admin_navigation.dataPortability" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[Data portability]]></phrase>
+  <phrase title="admin_navigation.dataPortabilityExport" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[Export a user]]></phrase>
+  <phrase title="admin_navigation.dataPortabilityImport" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[Import a user]]></phrase>
   <phrase title="admin_navigation.devNavigation" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Navigation]]></phrase>
   <phrase title="admin_navigation.devPermissions" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Permissions]]></phrase>
   <phrase title="admin_navigation.development" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Development]]></phrase>
@@ -201,6 +210,8 @@
   <phrase title="admin_navigation.emailUsers" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Email users]]></phrase>
   <phrase title="admin_navigation.executionManipulation" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Execution manipulation]]></phrase>
   <phrase title="admin_navigation.fileCheck" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[File health check]]></phrase>
+  <phrase title="admin_navigation.forceAgreementPrivacy" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[Force privacy policy agreement]]></phrase>
+  <phrase title="admin_navigation.forceAgreementTerms" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[Force terms and rules agreement]]></phrase>
   <phrase title="admin_navigation.forumNodePermissions" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Node permissions]]></phrase>
   <phrase title="admin_navigation.forums" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Forums]]></phrase>
   <phrase title="admin_navigation.groupsAndPermissions" version_id="2000170" version_string="2.0.1"><![CDATA[Groups &amp; permissions]]></phrase>
@@ -333,7 +344,7 @@
   <phrase title="advertising_position_is_active" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Advertising position is active]]></phrase>
   <phrase title="advertising_position_keys_must_be_unique" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Advertising position keys must be unique.]]></phrase>
   <phrase title="advertising_positions" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Advertising positions]]></phrase>
-  <phrase title="after_checking_x_files_we_found_y_inconsistent" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[After checking {checked} files we found {inconsistent} files which contained unexpected contents.]]></phrase>
+  <phrase title="after_checking_x_files_we_found_y_inconsistent" version_id="2000570" version_string="2.0.5"><![CDATA[After checking {checked} files we found {inconsistent} files which contained unexpected contents. If you edited these files yourself you may ignore this warning but otherwise you should investigate further as this could be evidence of file corruption or potentially malicious alteration.]]></phrase>
   <phrase title="after_checking_x_files_we_found_y_missing" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[After checking {checked} files we found {missing} files missing.]]></phrase>
   <phrase title="after_checking_x_files_we_found_y_missing_z_inconsistent" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[After checking {checked} files we found {missing} files missing and {inconsistent} files which contained unexpected contents.]]></phrase>
   <phrase title="after_message" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[After message]]></phrase>
@@ -372,6 +383,7 @@
   <phrase title="all_content_tagged_with_x_will_now_be_tagged_with_this_tag" version_id="1050010" version_string="1.5.0 Alpha"><![CDATA[All content tagged with {tag} will now be tagged with this tag.]]></phrase>
   <phrase title="all_content_types" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[All content types]]></phrase>
   <phrase title="all_data_has_now_been_imported_last_step_is_to_finalize_import" version_id="2000036" version_string="2.0.0 Beta 6"><![CDATA[All data has now been imported. The last step is to finalize the import. This will trigger all actions necessary to ensure that the imported data is structured as expected. Until this is done, the imported data may not be properly viewable in all cases.]]></phrase>
+  <phrase title="all_directories_under_x_must_be_writable" version_id="2001070" version_string="2.0.10"><![CDATA[All directories under {directory} must be writable. Please change the permissions on these directories to be world writable (chmod 0777).]]></phrase>
   <phrase title="all_forums" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[All forums]]></phrase>
   <phrase title="all_forums_marked_as_read" version_id="1010031" version_string="1.1.0 Beta 1"><![CDATA[All forums marked as read.]]></phrase>
   <phrase title="all_posts_from_other_threads_will_be_merged_into_this_thread" version_id="1000015" version_string="1.0.0 Alpha 5"><![CDATA[All posts from the other threads will be merged into this thread.]]></phrase>
@@ -392,6 +404,7 @@
   <phrase title="allow_users_to" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Allow users to]]></phrase>
   <phrase title="allow_voters_to_change_their_votes" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Allow voters to change their votes]]></phrase>
   <phrase title="allow_x_to_invite_others_to_this_conversation" version_id="1010033" version_string="1.1.0 Beta 3"><![CDATA[Allow {user} to invite others to this conversation]]></phrase>
+  <phrase title="alt" version_id="2001070" version_string="2.0.10"><![CDATA[Alt]]></phrase>
   <phrase title="alternatively_use_ip_discouragement" version_id="1000051" version_string="1.0.0 Release Candidate 1"><![CDATA[Alternatively, you may use IP-based discouragement.]]></phrase>
   <phrase title="alternatively_you_may_cancel_this_import_to_start_new_one" version_id="2000036" version_string="2.0.0 Beta 6"><![CDATA[Alternatively, you may cancel this import to start a new one.]]></phrase>
   <phrase title="analyze" version_id="1020010" version_string="1.2.0 Alpha"><![CDATA[Analyze]]></phrase>
@@ -442,7 +455,7 @@
   <phrase title="associate_existing_account" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Associate existing account]]></phrase>
   <phrase title="associate_with" version_id="1000015" version_string="1.0.0 Alpha 5"><![CDATA[Associate with]]></phrase>
   <phrase title="associate_with_x" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Associate with {provider}]]></phrase>
-  <phrase title="asterisk_fields_required_explain" version_id="2000033" version_string="2.0.0 Beta 3"><![CDATA[* Starred fields are required for new threads when selected. Other fields are optional.]]></phrase>
+  <phrase title="asterisk_fields_required_explain" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[* Starred fields are required for new content when selected. Other fields are optional.]]></phrase>
   <phrase title="at_least_one_attribute_of_src_dev_or_prod_must_be_provided" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[At least one attribute of 'src', 'dev' or 'prod' must be provided.]]></phrase>
   <phrase title="attach_file" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Attach file]]></phrase>
   <phrase title="attach_this_nodes_children_to_its_parent" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Attach this node's children to its parent]]></phrase>
@@ -531,7 +544,7 @@ This is [U]underlined[/U] text.
 This is [S]struck-through[/S] text.]]></phrase>
   <phrase title="bb_code_help_b_i_u_s_title" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[[B], [I], [U], [S] - Bold, italics, underline, and strike-through]]></phrase>
   <phrase title="bb_code_help_code_desc" version_id="1000015" version_string="1.0.0 Alpha 5"><![CDATA[Displays text in one of several programming languages, highlighting the syntax where possible.]]></phrase>
-  <phrase title="bb_code_help_code_example" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[General code:
+  <phrase title="bb_code_help_code_example" version_id="2000570" version_string="2.0.5"><![CDATA[General code:
 [CODE]General
 code[/CODE]
 
@@ -543,7 +556,7 @@ PHP code:
 [CODE=php]echo $hello . ' world';[/CODE]
 
 JS code:
-[CODE=js]var hello = 'world';[/CODE]]]></phrase>
+[CODE=javascript]var hello = 'world';[/CODE]]]></phrase>
   <phrase title="bb_code_help_code_title" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[[CODE] - Programming code display]]></phrase>
   <phrase title="bb_code_help_color_font_size_desc" version_id="1000015" version_string="1.0.0 Alpha 5"><![CDATA[Changes the color, font, or size of the wrapped text.]]></phrase>
   <phrase title="bb_code_help_color_font_size_example" version_id="1000015" version_string="1.0.0 Alpha 5"><![CDATA[This is [COLOR=red]red[/COLOR] and [COLOR=#0000cc]blue[/COLOR] text.
@@ -649,9 +662,9 @@ To support recurring billing and automatically reversing purchases when a paymen
   <phrase title="button.submit" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Submit]]></phrase>
   <phrase title="button.translate" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Translate]]></phrase>
   <phrase title="by" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[By]]></phrase>
-  <phrase title="by_registering_you_agree_to_our_privacy_policy" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[By registering, you agree to our <a href="{privacy}" target="_blank">privacy policy</a>.]]></phrase>
-  <phrase title="by_registering_you_agree_to_our_terms_and_privacy_policy" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[By registering, you agree to our <a href="{tos}" target="_blank">terms</a> and <a href="{privacy}" target="_blank">privacy policy</a>.]]></phrase>
-  <phrase title="by_registering_you_agree_to_our_terms_and_rules" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[By registering, you agree to our <a href="{tos}" target="_blank">terms and rules</a>.]]></phrase>
+  <phrase title="by_registering_you_agree_to_our_privacy_policy" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[I agree to the <a href="{privacy}" target="_blank">privacy policy</a>.]]></phrase>
+  <phrase title="by_registering_you_agree_to_our_terms_and_privacy_policy" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[I agree to the <a href="{tos}" target="_blank">terms</a> and <a href="{privacy}" target="_blank">privacy policy</a>.]]></phrase>
+  <phrase title="by_registering_you_agree_to_our_terms_and_rules" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[I agree to the <a href="{tos}" target="_blank">terms and rules</a>.]]></phrase>
   <phrase title="by_url" version_id="2000034" version_string="2.0.0 Beta 4"><![CDATA[By URL]]></phrase>
   <phrase title="by_user_x" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[By {name}]]></phrase>
   <phrase title="cache_rebuilt_successfully" version_id="1020034" version_string="1.2.0 Beta 4"><![CDATA[Cache rebuilt successfully.]]></phrase>
@@ -693,7 +706,9 @@ If an event is triggered with a hint, the potential hint values will be listed i
   <phrase title="changes_saved" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Changes saved]]></phrase>
   <phrase title="characters" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Characters]]></phrase>
   <phrase title="check_boxes" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Check boxes]]></phrase>
-  <phrase title="check_completed_on_x_files" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Check completed on {total_checked} files. We found some problems with the following files. Please resolve these issues as soon as possible.]]></phrase>
+  <phrase title="check_completed_on_x_files" version_id="2000570" version_string="2.0.5"><![CDATA[Check completed on {total_checked} files. The files listed below have contents different from those originally downloaded.
+
+If you have edited these files yourself, you may ignore this message, otherwise you should investigate further as this may be evidence of corrupted or altered files.]]></phrase>
   <phrase title="check_date" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Check date]]></phrase>
   <phrase title="check_dnsbl_on_registration" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Check DNSBL on registration]]></phrase>
   <phrase title="check_spammers_ips" version_id="1000015" version_string="1.0.0 Alpha 5"><![CDATA[Check spammer's IPs]]></phrase>
@@ -812,7 +827,7 @@ If an event is triggered with a hint, the potential hint values will be listed i
   <phrase title="con_acc_linkedin_client_secret_explain" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[The client secret for the LinkedIn application you created for this domain.]]></phrase>
   <phrase title="con_acc_microsoft_client_id_explain" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[The Client ID that is associated with your <a href="https://account.live.com/developers/applications/index" target="_blank">Microsoft Live application</a> for this domain.]]></phrase>
   <phrase title="con_acc_microsoft_client_secret_explain" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[The client secret for the Microsoft application you created for this domain.]]></phrase>
-  <phrase title="con_acc_twitter_consumer_key_explain" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[To allow users to sign in with their Twitter accounts, you must create a <a href="https://apps.twitter.com/" target="_blank">Twitter application</a> and enter the consumer key and secret.]]></phrase>
+  <phrase title="con_acc_twitter_consumer_key_explain" version_id="2001070" version_string="2.0.10"><![CDATA[To allow users to sign in with their Twitter accounts, you must create a <a href="https://developer.twitter.com/" target="_blank">Twitter application</a> and enter the consumer key and secret.]]></phrase>
   <phrase title="con_acc_twitter_consumer_secret_explain" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[If you have created a Twitter application to allow Twitter sign in, set the application's consumer secret here.]]></phrase>
   <phrase title="con_acc_yahoo_client_id_explain" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[The Client ID that is associated with your <a href="https://developer.yahoo.com/apps" target="_blank">Yahoo application</a> for this domain.]]></phrase>
   <phrase title="con_acc_yahoo_client_secret_explain" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[The client secret for the Yahoo application you created for this domain.]]></phrase>
@@ -857,6 +872,7 @@ If an event is triggered with a hint, the potential hint values will be listed i
   <phrase title="content_ids_cannot_be_retained_message" version_id="2000037" version_string="2.0.0 Beta 7"><![CDATA[<b>Note</b>: content IDs cannot be retained when importing into a forum with existing data, as it would conflict with existing content. Imported content will receive new IDs and mapping will need to be done through the import log.]]></phrase>
   <phrase title="content_ip" version_id="1000015" version_string="1.0.0 Alpha 5"><![CDATA[Content IP]]></phrase>
   <phrase title="content_moderators" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Content moderators]]></phrase>
+  <phrase title="content_options" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[Content options]]></phrase>
   <phrase title="content_submitted_displayed_pending_approval" version_id="2000036" version_string="2.0.0 Beta 6"><![CDATA[Your content has been submitted and will be displayed pending approval by a moderator.]]></phrase>
   <phrase title="content_template_criteria_explain" version_id="1010010" version_string="1.1.0 Alpha"><![CDATA[The name of the template specified in the controller response.]]></phrase>
   <phrase title="content_template_is" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Content template is]]></phrase>
@@ -877,7 +893,9 @@ If an event is triggered with a hint, the potential hint values will be listed i
   <phrase title="controller_and_action_criteria_explain" version_id="1010010" version_string="1.1.0 Alpha"><![CDATA[Specify action name as <b>personal-details</b>, not <b>actionPersonalDetails</b> or <b>personalDetails</b>. You may leave the action blank to apply to all actions within the specified controller.]]></phrase>
   <phrase title="controller_and_action_is" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Controller and action is]]></phrase>
   <phrase title="conversation" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Conversation]]></phrase>
-  <phrase title="conversation_email_html_footer" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[<p class="minorText">This message was sent to you because your preferences are set to receive email when a new conversation message is received. <a href="{disable_link}">Stop receiving these emails</a>.</p>]]></phrase>
+  <phrase title="conversation_email_html_footer" version_id="2001270" version_string="2.0.12"><![CDATA[<p class="minorText">Please do not reply to this message. You must visit the forum to reply.</p>
+
+<p class="minorText">This message was sent to you because your preferences are set to receive email when a new conversation message is received. <a href="{disable_link}">Stop receiving these emails</a>.</p>]]></phrase>
   <phrase title="conversation_info" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Conversation info]]></phrase>
   <phrase title="conversation_insert_email_html" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[<p>{sender} started a new conversation with you at {board}.</p>]]></phrase>
   <phrase title="conversation_insert_email_subject" version_id="1000015" version_string="1.0.0 Alpha 5"><![CDATA[{username} started a conversation with you: "{title}"]]></phrase>
@@ -899,6 +917,7 @@ If an event is triggered with a hint, the potential hint values will be listed i
   <phrase title="conversation_title" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Conversation title]]></phrase>
   <phrase title="conversation_unstarred" version_id="1020010" version_string="1.2.0 Alpha"><![CDATA[Conversation unstarred.]]></phrase>
   <phrase title="conversations" version_id="1000011" version_string="1.0.0 Alpha 1" global_cache="1"><![CDATA[Conversations]]></phrase>
+  <phrase title="cookies_required_to_use_this_site" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[Cookies are required to use this site. You must accept them to continue using the site.]]></phrase>
   <phrase title="copy_posts" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Copy posts]]></phrase>
   <phrase title="copy_settings_from" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Copy settings from]]></phrase>
   <phrase title="copy_to_clipboard" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Copy to clipboard]]></phrase>
@@ -907,6 +926,7 @@ If an event is triggered with a hint, the potential hint values will be listed i
   <phrase title="cost" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Cost]]></phrase>
   <phrase title="cost_currency_explain" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[<strong>Note:</strong> Ensure your merchant account with the selected payment profiles supports the above currencies. Currency support may vary by region.]]></phrase>
   <phrase title="could_not_create_new_stripe_plan" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Could not create a new Stripe plan.]]></phrase>
+  <phrase title="could_not_find_subscriber_id_for_this_purchase_request" version_id="2000570" version_string="2.0.5"><![CDATA[Could not find a subscriber ID for this purchase request.]]></phrase>
   <phrase title="count_messages_in_forum_toward_user_total" version_id="1010010" version_string="1.1.0 Alpha"><![CDATA[Count messages posted in this forum toward user total]]></phrase>
   <phrase title="create_new_account" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Create new account]]></phrase>
   <phrase title="create_poll" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Create poll]]></phrase>
@@ -947,6 +967,8 @@ If an event is triggered with a hint, the potential hint values will be listed i
   <phrase title="css_components" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[CSS components]]></phrase>
   <phrase title="css_components_explain" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Simple border options apply only if border and border radius are not selected.]]></phrase>
   <phrase title="css_style_property_must_have_at_least_one_css_component" version_id="0"><![CDATA[A CSS style property must have at least one CSS component.]]></phrase>
+  <phrase title="ctrl" version_id="2001070" version_string="2.0.10"><![CDATA[Ctrl]]></phrase>
+  <phrase title="curl_version" version_id="2001070" version_string="2.0.10"><![CDATA[cURL version]]></phrase>
   <phrase title="currency.aed" version_id="2000035" version_string="2.0.0 Beta 5"><![CDATA[UAE dirhams]]></phrase>
   <phrase title="currency.afn" version_id="2000035" version_string="2.0.0 Beta 5"><![CDATA[Afghan Afghanis]]></phrase>
   <phrase title="currency.all" version_id="2000035" version_string="2.0.0 Beta 5"><![CDATA[Albanian lekë]]></phrase>
@@ -967,7 +989,7 @@ If an event is triggered with a hint, the potential hint values will be listed i
   <phrase title="currency.bob" version_id="2000035" version_string="2.0.0 Beta 5"><![CDATA[Bolivian bolivianos]]></phrase>
   <phrase title="currency.brl" version_id="2000035" version_string="2.0.0 Beta 5"><![CDATA[Brazilian reals]]></phrase>
   <phrase title="currency.bwp" version_id="2000035" version_string="2.0.0 Beta 5"><![CDATA[Botswanan pulas]]></phrase>
-  <phrase title="currency.byr" version_id="2000035" version_string="2.0.0 Beta 5"><![CDATA[Belarusian rubles]]></phrase>
+  <phrase title="currency.byn" version_id="2001270" version_string="2.0.12"><![CDATA[Belarusian rubles]]></phrase>
   <phrase title="currency.bzd" version_id="2000035" version_string="2.0.0 Beta 5"><![CDATA[Belize dollars]]></phrase>
   <phrase title="currency.cad" version_id="2000035" version_string="2.0.0 Beta 5"><![CDATA[Canadian dollars]]></phrase>
   <phrase title="currency.cdf" version_id="2000035" version_string="2.0.0 Beta 5"><![CDATA[Congolese francs]]></phrase>
@@ -1101,6 +1123,8 @@ If an event is triggered with a hint, the potential hint values will be listed i
   <phrase title="dark" version_id="1050010" version_string="1.5.0 Alpha"><![CDATA[Dark]]></phrase>
   <phrase title="data_directory" version_id="2000036" version_string="2.0.0 Beta 6"><![CDATA[Data directory]]></phrase>
   <phrase title="data_passed_into_create_widget_config_should_either_be_array_or_entity" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Data passed into create WidgetConfig should either be an array or Entity]]></phrase>
+  <phrase title="data_portability_export_explain" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[This page will allow you to download a user's standard personal information in XML format for the purposes of transferring that data to another system.]]></phrase>
+  <phrase title="data_portability_import_explain" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[The new user will be sent a password reset request to their email address before being able to use their account.]]></phrase>
   <phrase title="data_to_import" version_id="2000036" version_string="2.0.0 Beta 6"><![CDATA[Data to import]]></phrase>
   <phrase title="data_type" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Data type]]></phrase>
   <phrase title="date" version_id="1000016" version_string="1.0.0 Alpha 6"><![CDATA[Date]]></phrase>
@@ -1197,6 +1221,7 @@ If an event is triggered with a hint, the potential hint values will be listed i
   <phrase title="did_not_complete_the_captcha_verification_properly" version_id="0"><![CDATA[You did not complete the CAPTCHA verification properly. Please try again.]]></phrase>
   <phrase title="directory_specified_as_x_y_not_found_is_not_readable" version_id="2000053" version_string="2.0.0 Release Candidate 3"><![CDATA[The directory specified as <i>{type}</i>: <code><b>{dir}</b></code> could not be found or is not readable.]]></phrase>
   <phrase title="directory_x_does_not_contain_expected_contents" version_id="2000035" version_string="2.0.0 Beta 5"><![CDATA[The directory {dir} does not contain the expected contents.]]></phrase>
+  <phrase title="directory_x_must_be_writable" version_id="2001070" version_string="2.0.10"><![CDATA[The directory {directory} must be writable. Please change the permissions on this directory to be world writable (chmod 0777). If the directory does not exist, please create it.]]></phrase>
   <phrase title="directory_x_not_found_is_not_readable" version_id="2000053" version_string="2.0.0 Release Candidate 3"><![CDATA[The directory '{dir}' could not be found or is not readable.]]></phrase>
   <phrase title="disable" version_id="1000016" version_string="1.0.0 Alpha 6"><![CDATA[Disable]]></phrase>
   <phrase title="disable_alerts" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Disable alerts]]></phrase>
@@ -1253,6 +1278,7 @@ If an event is triggered with a hint, the potential hint values will be listed i
   <phrase title="do_not_have_permission" version_id="0"><![CDATA[You do not have permission to view this page or perform this action.]]></phrase>
   <phrase title="do_not_leave_conversation" version_id="1050010" version_string="1.5.0 Alpha"><![CDATA[Do not leave conversation]]></phrase>
   <phrase title="do_not_leave_redirect" version_id="1000015" version_string="1.0.0 Alpha 5"><![CDATA[Do not leave a redirect]]></phrase>
+  <phrase title="do_not_rename_this_user" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[Do not rename this user]]></phrase>
   <phrase title="do_nothing" version_id="1000015" version_string="1.0.0 Alpha 5"><![CDATA[Do nothing]]></phrase>
   <phrase title="dob_day" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Day of birth]]></phrase>
   <phrase title="dob_month" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Month of birth]]></phrase>
@@ -1385,6 +1411,8 @@ If an event is triggered with a hint, the potential hint values will be listed i
   <phrase title="email_has_been_sent_to_x_with_code" version_id="1050010" version_string="1.5.0 Alpha"><![CDATA[An email has been sent to <b>{email}</b> with a single-use code. Please enter that code to continue.]]></phrase>
   <phrase title="email_invalid_bounced" version_id="1030010" version_string="1.3.0 Alpha"><![CDATA[Email invalid (bounced)]]></phrase>
   <phrase title="email_list" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Email list]]></phrase>
+  <phrase title="email_options" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[Email options]]></phrase>
+  <phrase title="email_options_row_explain" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[You may find additional email options under <a href="{preferencesLink}">Preferences</a>.]]></phrase>
   <phrase title="email_search_criteria_explain" version_id="1010010" version_string="1.1.0 Alpha"><![CDATA[You may enter one or more text snippets separated by commas, and users whose email addresses contain any of the snippets will match the criteria.]]></phrase>
   <phrase title="email_templates" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Email templates]]></phrase>
   <phrase title="email_title" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Email title]]></phrase>
@@ -1409,8 +1437,8 @@ Your callback should return an HTML string, and have a signature as follows:<br 
   <phrase title="enable" version_id="1000016" version_string="1.0.0 Alpha 6"><![CDATA[Enable]]></phrase>
   <phrase title="enable_alerts" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Enable alerts]]></phrase>
   <phrase title="enable_apple_pay_support" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Enable Apple Pay support]]></phrase>
-  <phrase title="enable_apple_pay_support_braintree_explain" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Requires an Apple Developer account and additional setup in your Braintree Dashboard.]]></phrase>
-  <phrase title="enable_apple_pay_support_stripe_explain" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Requires an Apple Developer account and additional setup in your Stripe Dashboard.]]></phrase>
+  <phrase title="enable_apple_pay_support_braintree_explain" version_id="2000570" version_string="2.0.5"><![CDATA[Requires domain verification using the Settings > Processing page in your Braintree Dashboard.]]></phrase>
+  <phrase title="enable_apple_pay_support_stripe_explain" version_id="2000570" version_string="2.0.5"><![CDATA[Requires domain verification using the <a href="https://dashboard.stripe.com/account/apple_pay" target="_blank">Apple Pay page</a> in your Stripe Dashboard.]]></phrase>
   <phrase title="enable_automated_bounced_email_handler" version_id="1040010" version_string="1.4.0 Alpha"><![CDATA[Enable automated bounced email handler]]></phrase>
   <phrase title="enable_cache_and_cache_for_x_minutes" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Enable cache and cache for X minutes]]></phrase>
   <phrase title="enable_callback_execution" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Enable callback execution]]></phrase>
@@ -1443,11 +1471,16 @@ Your callback should return an HTML string, and have a signature as follows:<br 
   <phrase title="enter_page_title_format" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Enter page title format]]></phrase>
   <phrase title="enter_payment_details" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Enter payment details]]></phrase>
   <phrase title="enter_spoiler_title" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Enter spoiler title]]></phrase>
-  <phrase title="enter_spoiler_title_explain" version_id="1030010" version_string="1.3.0 Alpha"><![CDATA[If you would like the 'Spoiler' button show a title that hints at its content, enter your text here. To avoid having a title, leave the text box empty.]]></phrase>
+  <phrase title="enter_spoiler_title_explain" version_id="2001070" version_string="2.0.10"><![CDATA[If you would like the 'Spoiler' button to show a title that hints at its content, enter your text here. To avoid having a title, leave the text box empty.]]></phrase>
   <phrase title="error" version_id="1000015" version_string="1.0.0 Alpha 5"><![CDATA[Error]]></phrase>
+  <phrase title="error_occurred_while_compiling_advertisement_html" version_id="2001270" version_string="2.0.12"><![CDATA[An error occurred while compiling advertisement HTML]]></phrase>
   <phrase title="error_occurred_while_connecting_with_x" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[An error occurred while connecting with {provider}. Please try again later.]]></phrase>
   <phrase title="error_occurred_while_connecting_with_x_error_y" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[An error occurred while connecting with {provider}. Error: {error}]]></phrase>
   <phrase title="error_occurred_while_creating_stripe_card_token" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[An error occurred while creating a Stripe card token.]]></phrase>
+  <phrase title="error_occurred_while_creating_stripe_customer" version_id="2000570" version_string="2.0.5"><![CDATA[Error occurred while creating Stripe customer. Please try again later.]]></phrase>
+  <phrase title="error_occurred_while_creating_stripe_plan" version_id="2000570" version_string="2.0.5"><![CDATA[Error occurred while creating Stripe plan. Please try again later.]]></phrase>
+  <phrase title="error_occurred_while_creating_stripe_product" version_id="2000570" version_string="2.0.5"><![CDATA[Error occurred while creating Stripe product. Please try again later.]]></phrase>
+  <phrase title="error_occurred_while_creating_stripe_subscription" version_id="2000570" version_string="2.0.5"><![CDATA[Error occurred while creating Stripe subscription. Please try again later.]]></phrase>
   <phrase title="errors_were_encountered_while_trying_to_send_email" version_id="2000053" version_string="2.0.0 Release Candidate 3"><![CDATA[Errors were encountered while trying to send the email.]]></phrase>
   <phrase title="event_hint" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Event hint]]></phrase>
   <phrase title="event_id" version_id="1000016" version_string="1.0.0 Alpha 6"><![CDATA[Event ID]]></phrase>
@@ -1460,6 +1493,7 @@ Your callback should return an HTML string, and have a signature as follows:<br 
   <phrase title="execute_callback" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Execute callback]]></phrase>
   <phrase title="execution_has_been_allowed_to_continue" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Execution has been allowed to continue.]]></phrase>
   <phrase title="execution_order" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Execution order]]></phrase>
+  <phrase title="exif_support" version_id="2001270" version_string="2.0.12"><![CDATA[EXIF support]]></phrase>
   <phrase title="existing" version_id="1030010" version_string="1.3.0 Alpha"><![CDATA[Existing]]></phrase>
   <phrase title="existing_attachments" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Existing attachments]]></phrase>
   <phrase title="existing_thread" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Existing thread]]></phrase>
@@ -1481,6 +1515,7 @@ Your callback should return an HTML string, and have a signature as follows:<br 
   <phrase title="export_from_add_on" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Export from add-on]]></phrase>
   <phrase title="export_language" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Export language]]></phrase>
   <phrase title="export_style" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Export style]]></phrase>
+  <phrase title="export_user" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[Export a user]]></phrase>
   <phrase title="extension_class_name" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Extension class name]]></phrase>
   <phrase title="extra" version_id="1000016" version_string="1.0.0 Alpha 6"><![CDATA[Extra]]></phrase>
   <phrase title="extra_attributes" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Extra attributes]]></phrase>
@@ -1519,7 +1554,7 @@ Your callback should return an HTML string, and have a signature as follows:<br 
 <p>It can be useful for quickly checking that all files have been correctly uploaded.</p>
 			
 <p>Click the <b>{button}</b> button below to run the test.</p>]]></phrase>
-  <phrase title="file_health_check_okay" version_id="1000370" version_string="1.0.3"><![CDATA[All {numFiles} checked files are present and correct.]]></phrase>
+  <phrase title="file_health_check_okay" version_id="2000570" version_string="2.0.5"><![CDATA[All {numFiles} checked files are present and correct.]]></phrase>
   <phrase title="file_health_check_results" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[File health check results]]></phrase>
   <phrase title="file_healthcheck_warnings_on_x" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[File healthcheck warnings on {board_title}]]></phrase>
   <phrase title="file_is_too_large" version_id="1030033" version_string="1.3.0 Beta 3"><![CDATA[File is too large.]]></phrase>
@@ -1554,6 +1589,7 @@ Your callback should return an HTML string, and have a signature as follows:<br 
   <phrase title="first_post_likes_between" version_id="1020034" version_string="1.2.0 Beta 4"><![CDATA[First post likes between]]></phrase>
   <phrase title="first_requested" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[First requested]]></phrase>
   <phrase title="first_seen" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[First seen]]></phrase>
+  <phrase title="fixed" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[Fixed]]></phrase>
   <phrase title="flag" version_id="1010033" version_string="1.1.0 Beta 3"><![CDATA[Flag]]></phrase>
   <phrase title="floating" version_id="1050010" version_string="1.5.0 Alpha"><![CDATA[Floating]]></phrase>
   <phrase title="follow" version_id="1000011" version_string="1.0.0 Alpha 1" global_cache="1"><![CDATA[Follow]]></phrase>
@@ -1565,8 +1601,9 @@ Your callback should return an HTML string, and have a signature as follows:<br 
   <phrase title="following_add_ons_missing_necessary_files_for_health_checking" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[The following add-ons are missing the necessary files for health checking.]]></phrase>
   <phrase title="following_and_ignored_users" version_id="2000036" version_string="2.0.0 Beta 6"><![CDATA[Following and ignored users]]></phrase>
   <phrase title="following_errors_must_be_resolved_before_continuing" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[The following errors must be resolved before continuing]]></phrase>
+  <phrase title="following_errors_occurred_while_verifying_that_your_server_still_meets_requirements" version_id="2001270" version_string="2.0.12"><![CDATA[The following errors occurred while verifying that your server still meets the minimum requirements]]></phrase>
   <phrase title="following_members_not_found_x" version_id="0"><![CDATA[The following members could not be found: {members}.]]></phrase>
-  <phrase title="following_notices_may_contain_page_criteria_which_is_no_longer_matched" version_id="2000370" version_string="2.0.3"><![CDATA[The following notice/s may contain page criteria which is no longer matched]]></phrase>
+  <phrase title="following_notices_may_contain_page_criteria_which_is_no_longer_matched" version_id="2000570" version_string="2.0.5"><![CDATA[The following notice(s) may contain page criteria which is no longer matched]]></phrase>
   <phrase title="following_payment_providers_do_not_support_recurring_payments" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[The following payment providers do not support recurring payments: {invalidRecurring}. Please ensure all payment profiles are valid.]]></phrase>
   <phrase title="following_payment_providers_do_not_support_x_as_valid_currency" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[The following payment providers do not support {currency} as a valid currency option: {invalidCurrency}. Please ensure all payment profiles are valid.]]></phrase>
   <phrase title="following_payment_providers_support_recurring_payments_but_invalid_length" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[The following payment providers support recurring payments, but the chosen length is too long or too short: {invalidLength}. Please ensure all payment profiles are valid.]]></phrase>
@@ -1582,6 +1619,8 @@ Your callback should return an HTML string, and have a signature as follows:<br 
   <phrase title="font_size" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Font size]]></phrase>
   <phrase title="for_length" version_id="1000016" version_string="1.0.0 Alpha 6"><![CDATA[For length]]></phrase>
   <phrase title="for_time_period" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[For time period]]></phrase>
+  <phrase title="force_privacy_policy_agreement" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[Force privacy policy agreement]]></phrase>
+  <phrase title="force_terms_and_rules_agreement" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[Force terms and rules agreement]]></phrase>
   <phrase title="forgot_your_password" version_id="1000015" version_string="1.0.0 Alpha 5"><![CDATA[Forgot your password?]]></phrase>
   <phrase title="format_parameters" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Format parameters]]></phrase>
   <phrase title="formatted" version_id="1020010" version_string="1.2.0 Alpha"><![CDATA[Formatted]]></phrase>
@@ -1611,6 +1650,7 @@ Your callback should return an HTML string, and have a signature as follows:<br 
   <phrase title="function_x_expects_between_y_and_z_arguments" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Function {name} expects between {min} and {max} arguments.]]></phrase>
   <phrase title="function_x_may_not_be_called_in_template" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[The function {name} may not be called in a template. Only functions with whitelisted prefixes are allowed.]]></phrase>
   <phrase title="future_message_handling" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Future message handling]]></phrase>
+  <phrase title="gd_jpeg_support_missing" version_id="2001070" version_string="2.0.10"><![CDATA[The required PHP extension GD was found, but JPEG support is missing. Please ask your host to add support for JPEG images.]]></phrase>
   <phrase title="general_options" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[General options]]></phrase>
   <phrase title="general_privacy" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[General privacy]]></phrase>
   <phrase title="generate_new_backup_codes" version_id="1050010" version_string="1.5.0 Alpha"><![CDATA[Generate new backup codes]]></phrase>
@@ -1635,19 +1675,20 @@ Your callback should return an HTML string, and have a signature as follows:<br 
   <phrase title="guest" version_id="1000015" version_string="1.0.0 Alpha 5" global_cache="1"><![CDATA[Guest]]></phrase>
   <phrase title="guests" version_id="1020010" version_string="1.2.0 Alpha"><![CDATA[Guests]]></phrase>
   <phrase title="guests_online" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Guests online]]></phrase>
+  <phrase title="gzip_support" version_id="2001270" version_string="2.0.12"><![CDATA[<code>GZip</code> support]]></phrase>
   <phrase title="handle_report" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Handle report]]></phrase>
   <phrase title="hard_bounce" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Hard bounce]]></phrase>
   <phrase title="hashes_file_for_this_add_on_missing" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[The hashes.json file for this add-on is missing so no file health check can be performed.]]></phrase>
   <phrase title="height" version_id="1000016" version_string="1.0.0 Alpha 6"><![CDATA[Height]]></phrase>
   <phrase title="help" version_id="0" global_cache="1"><![CDATA[Help]]></phrase>
-  <phrase title="help_cookies_description" version_id="2000270" version_string="2.0.2"><![CDATA[<p>This page discusses how cookies are used by this site. If you continue to use this site, you are consenting to our use of cookies.</p>
+  <phrase title="help_cookies_description" version_id="2001270" version_string="2.0.12"><![CDATA[<p>This page discusses how cookies are used by this site. If you continue to use this site, you are consenting to our use of cookies.</p>
 
-<h3 class="textHeading">What Cookies Are</h3>
-<p>Cookies are small files stored on your computer by your web browser (such as Internet Explorer or Firefox) at the request of a site you're viewing. This allows the site you're viewing to remember things about you, such as your preferences and history or to keep you logged in.</p>
+<h3 class="textHeading">What are cookies?</h3>
+<p>Cookies are small text files stored on your computer by your web browser at the request of a site you're viewing. This allows the site you're viewing to remember things about you, such as your preferences and history or to keep you logged in.</p>
 
 <p>Cookies may be stored on your computer for a short time (such as only while your browser is open) or for an extended period of time, even years. Cookies not set by this site will not be accessible to us.</p>
 
-<h3 class="textHeading">Our Cookie Usage</h3>
+<h3 class="textHeading">Our cookie usage</h3>
 <p>This site uses cookies for numerous things, including:</p>
 <ul>
 	<li>Registration and maintaining your preferences. This includes ensuring that you can stay logged in and keeping the site in the language or appearance that you requested.</li>
@@ -1656,23 +1697,64 @@ Your callback should return an HTML string, and have a signature as follows:<br 
 	<li>Other third-party cookies for things like Facebook or Twitter sharing. These cookies will generally be set by the third-party independently, so this site will have no ability to access them.</li>
 </ul>
 
-<h3 class="textHeading">Removing/Disabling Cookies</h3>
+<h3 class="textHeading">Standard cookies we set</h3>
+<p>
+	These are the main cookies we set during normal operation of the software.
+</p>
+<ul>
+	<li>
+		<strong>{cookiePrefix}csrf</strong>
+		<ul>
+			<li>Stores a token, unique to you, which is used to verify that the actions you perform on this site were intended to be performed by you.</li>
+		</ul>
+	</li>
+	<li>
+		<strong>{cookiePrefix}session</strong>
+		<ul>
+			<li>Stores the current ID of your session.</li>
+		</ul>
+	</li>
+	<li>
+		<strong>{cookiePrefix}user</strong>
+		<ul>
+			<li>Stores a key, unique to you, which allows us to keep you logged in to the software as you navigate from page to page.</li>
+		</ul>
+	</li>
+</ul>
+
+<h3 class="textHeading">Additional cookies and those set by third parties</h3>
+<p>
+	Additional cookies may be set during the use of the site to remember information as certain actions are being performed, or remembering certain preferences.
+</p>
+<p>
+	Other cookies may be set by third party service providers which may provide information such as tracking anonymously which users are visiting the site, or set by content embedded into some pages, such as YouTube or other media service providers.
+</p>
+
+<h3 class="textHeading">Removing/disabling cookies</h3>
 <p>Managing your cookies and cookie preferences must be done from within your browser's options/preferences. Here is a list of guides on how to do this for popular browser software:</p>
 <ul>
-	<li><a href="https://windows.microsoft.com/en-US/internet-explorer/delete-manage-cookies">Internet Explorer</a></li>
-	<li><a href="https://support.mozilla.org/kb/cookies-information-websites-store-on-your-computer">Firefox</a></li>
-	<li><a href="https://support.google.com/chrome/answer/95647?hl=en">Chrome</a></li>
-	<li><a href="https://support.apple.com/kb/PH21411">Safari</a></li>
-	<li><a href="https://www.opera.com/help/tutorials/security/privacy/">Opera</a></li>
-</ul>]]></phrase>
+	<li><a href="https://support.microsoft.com/en-gb/help/17442/windows-internet-explorer-delete-manage-cookies" target="_blank">Microsoft Internet Explorer</a></li>
+	<li><a href="https://privacy.microsoft.com/en-us/windows-10-microsoft-edge-and-privacy" target="_blank">Microsoft Edge</a></li>
+	<li><a href="https://support.mozilla.org/en-US/kb/cookies-information-websites-store-on-your-computer" target="_blank">Mozilla Firefox</a></li>
+	<li><a href="https://support.google.com/chrome/answer/95647?hl=en" target="_blank">Google Chrome</a></li>
+	<li><a href="https://support.apple.com/en-gb/guide/safari/manage-cookies-and-website-data-sfri11471/mac" target="_blank">Safari for macOS</a></li>
+	<li><a href="https://support.apple.com/en-gb/HT201265" target="_blank">Safari for iOS</a></li>
+</ul>
+
+<h3 class="textHeading">More information about cookies</h3>
+<p>
+	To learn more about cookies, and find more information about blocking certain types of cookies, please visit the <a href="https://ico.org.uk/for-the-public/online/cookies/" target="_blank">ICO website Cookies page</a>.
+</p>]]></phrase>
   <phrase title="help_page_desc.bb_codes" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[The list of BB codes you can use to spice up the look of your messages. This page shows a list of all BB codes that are available.]]></phrase>
   <phrase title="help_page_desc.cookies" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[This page explains how this site uses cookies.]]></phrase>
+  <phrase title="help_page_desc.privacy_policy" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[You must accept this policy before using the site.]]></phrase>
   <phrase title="help_page_desc.smilies" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[This shows a full list of the smilies you can insert when posting a message.]]></phrase>
   <phrase title="help_page_desc.terms" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[You must agree to these terms and rules before using the site.]]></phrase>
   <phrase title="help_page_desc.trophies" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[You can earn trophies by carrying out different actions. This page shows a list of the trophies that are available.]]></phrase>
   <phrase title="help_page_names_must_be_unique" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Help page names must be unique. The specified name is already in use.]]></phrase>
   <phrase title="help_page_title.bb_codes" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[BB codes]]></phrase>
   <phrase title="help_page_title.cookies" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Cookie usage]]></phrase>
+  <phrase title="help_page_title.privacy_policy" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[Privacy policy]]></phrase>
   <phrase title="help_page_title.smilies" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Smilies]]></phrase>
   <phrase title="help_page_title.terms" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Terms and rules]]></phrase>
   <phrase title="help_page_title.trophies" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Trophies]]></phrase>
@@ -1694,9 +1776,12 @@ Your callback should return an HTML string, and have a signature as follows:<br 
   <phrase title="html" version_id="1000011" version_string="1.0.0 Alpha 1"><![CDATA[HTML]]></phrase>
   <phrase title="html_email_replacement" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[HTML email replacement]]></phrase>
   <phrase title="html_replacement" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[HTML replacement]]></phrase>
+  <phrase title="i_have_read_and_accept_your_privacy_policy" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[I have read and accept your <a href="{privacyPolicyUrl}" target="_blank">privacy policy</a>.]]></phrase>
+  <phrase title="i_have_read_and_accept_your_terms_and_rules" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[I have read and accept your <a href="{tosUrl}" target="_blank">terms and rules</a>.]]></phrase>
   <phrase title="i_have_reviewed_warnings_and_i_still_wish_to_proceed" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[I have reviewed the warnings and I still wish to proceed]]></phrase>
   <phrase title="i_have_saved_backup_codes" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[I have saved the backup codes]]></phrase>
   <phrase title="icon_indicator" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Indicator on icon]]></phrase>
+  <phrase title="identical_text_collapsed" version_id="2001070" version_string="2.0.10"><![CDATA[Identical text collapsed. Click to expand.]]></phrase>
   <phrase title="identities" version_id="1000015" version_string="1.0.0 Alpha 5"><![CDATA[Identities]]></phrase>
   <phrase title="if_banner_stacking_disabled_staff_only_have_staff_banner" version_id="1020010" version_string="1.2.0 Alpha"><![CDATA[If banner stacking is disabled, staff members will only have the staff banner. If this option is enabled, they will have a staff banner and the highest priority group banner.]]></phrase>
   <phrase title="if_conflict_discovered_while_merging_no_automatic_merging" version_id="1020010" version_string="1.2.0 Alpha"><![CDATA[If a conflict is discovered while attempting to merge, no automatic merging will happen. You will need to manually resolve the conflict.]]></phrase>
@@ -1749,6 +1834,7 @@ Your callback should return an HTML string, and have a signature as follows:<br 
   <phrase title="image_proxy_log" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Image proxy log]]></phrase>
   <phrase title="image_replacement_url" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Image replacement URL]]></phrase>
   <phrase title="imagemagick_pecl_extension" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Imagemagick PECL extension]]></phrase>
+  <phrase title="imagick_support" version_id="2001270" version_string="2.0.12"><![CDATA[Imagick support]]></phrase>
   <phrase title="import_as" version_id="1000016" version_string="1.0.0 Alpha 6"><![CDATA[Import as]]></phrase>
   <phrase title="import_complete" version_id="2000036" version_string="2.0.0 Beta 6"><![CDATA[Import complete!]]></phrase>
   <phrase title="import_data" version_id="2000036" version_string="2.0.0 Beta 6"><![CDATA[Import data]]></phrase>
@@ -1772,6 +1858,7 @@ The XML file will be placed into your 'internal-data' folder, using the file nam
   <phrase title="import_target" version_id="2000170" version_string="2.0.1"><![CDATA[Import target]]></phrase>
   <phrase title="import_this_smilie" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Import this smilie]]></phrase>
   <phrase title="import_totals" version_id="2000036" version_string="2.0.0 Beta 6"><![CDATA[Import totals]]></phrase>
+  <phrase title="import_user" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[Import a user]]></phrase>
   <phrase title="imported_content" version_id="2000270" version_string="2.0.2"><![CDATA[Imported content]]></phrase>
   <phrase title="importing" version_id="2000036" version_string="2.0.0 Beta 6"><![CDATA[Importing]]></phrase>
   <phrase title="in_a_minute" version_id="2000010" version_string="2.0.0 Alpha" global_cache="1"><![CDATA[In a minute]]></phrase>
@@ -1844,6 +1931,7 @@ The XML file will be placed into your 'internal-data' folder, using the file nam
   <phrase title="it_is_not_possible_to_delete_last_language" version_id="0"><![CDATA[It is not possible to delete the last language.]]></phrase>
   <phrase title="it_is_not_possible_to_disable_this_add_on" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[It is not possible to disable this add-on.]]></phrase>
   <phrase title="it_is_not_possible_to_enable_this_add_on" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[It is not possible to enable this add-on.]]></phrase>
+  <phrase title="it_is_not_possible_to_move_any_of_selected_posts_to_specified_target" version_id="2000570" version_string="2.0.5"><![CDATA[It is not possible to move any of the selected posts to the specified target.]]></phrase>
   <phrase title="it_is_not_possible_to_prevent_users_selecting_the_default_style" version_id="1000034" version_string="1.0.0 Beta 4"><![CDATA[It is not possible to prevent users from selecting the default style.]]></phrase>
   <phrase title="it_is_not_possible_to_remove_default_language" version_id="1000032" version_string="1.0.0 Beta 2"><![CDATA[It is not possible to remove the default language.]]></phrase>
   <phrase title="it_is_not_possible_to_remove_default_style" version_id="1000032" version_string="1.0.0 Beta 2"><![CDATA[It is not possible to remove the default style.]]></phrase>
@@ -1858,6 +1946,7 @@ The XML file will be placed into your 'internal-data' folder, using the file nam
   <phrase title="javascript_is_disabled_please_enable_before_proceeding" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[JavaScript is disabled. For a better experience, please enable JavaScript in your browser before proceeding.]]></phrase>
   <phrase title="join_date" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Join date]]></phrase>
   <phrase title="joined" version_id="1000015" version_string="1.0.0 Alpha 5"><![CDATA[Joined]]></phrase>
+  <phrase title="jump_to_line" version_id="2001070" version_string="2.0.10"><![CDATA[Jump to line]]></phrase>
   <phrase title="jump_to_new" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Jump to new]]></phrase>
   <phrase title="keywords" version_id="1000015" version_string="1.0.0 Alpha 5"><![CDATA[Keywords]]></phrase>
   <phrase title="label_separator" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Label separator]]></phrase>
@@ -1978,6 +2067,7 @@ The XML file will be placed into your 'internal-data' folder, using the file nam
   <phrase title="languages" version_id="1000011" version_string="1.0.0 Alpha 1"><![CDATA[Languages]]></phrase>
   <phrase title="largest" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Largest]]></phrase>
   <phrase title="last" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Last]]></phrase>
+  <phrase title="last_action" version_id="2001070" version_string="2.0.10"><![CDATA[Last action]]></phrase>
   <phrase title="last_activity" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Last activity]]></phrase>
   <phrase title="last_administrator_cannot_be_deleted" version_id="0"><![CDATA[The last administrator cannot be deleted.]]></phrase>
   <phrase title="last_day" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Last day]]></phrase>
@@ -2004,7 +2094,7 @@ The XML file will be placed into your 'internal-data' folder, using the file nam
   <phrase title="latest_member" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Latest member]]></phrase>
   <phrase title="latest_threads" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Latest threads]]></phrase>
   <phrase title="latest_x" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Latest: {name}]]></phrase>
-  <phrase title="learn_more" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Learn more.]]></phrase>
+  <phrase title="learn_more" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[Learn more]]></phrase>
   <phrase title="leave" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Leave]]></phrase>
   <phrase title="leave_conversation" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Leave conversation]]></phrase>
   <phrase title="leave_conversation_and_accept_future_messages" version_id="1050010" version_string="1.5.0 Alpha"><![CDATA[Leave conversation and accept future messages]]></phrase>
@@ -2141,6 +2231,7 @@ Example regular expression with 'id' named sub-pattern:<br />
   <phrase title="maximum_selectable_responses_value_may_not_be_reduced" version_id="1040010" version_string="1.4.0 Alpha"><![CDATA[The maximum selectable responses value may not be reduced.]]></phrase>
   <phrase title="maximum_usernames" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Maximum usernames]]></phrase>
   <phrase title="maximum_usernames_explain" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[In order to prevent the 'Members online' widget becoming too large on a busy board, you may limit the number of names before a '... and X more' link is added to terminate the list. A value of 0 disables the limit.]]></phrase>
+  <phrase title="mbstring_support" version_id="2001270" version_string="2.0.12"><![CDATA[<code>mbstring</code> support]]></phrase>
   <phrase title="media" version_id="1000016" version_string="1.0.0 Alpha 6"><![CDATA[Media]]></phrase>
   <phrase title="media_provider_is" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Media provider is]]></phrase>
   <phrase title="media_site_id" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Media site ID]]></phrase>
@@ -2264,10 +2355,11 @@ The callback should either return an array or nothing at all. If nothing is retu
   <phrase title="mod_log.thread_poll_create" version_id="2000051" version_string="2.0.0 Release Candidate 1"><![CDATA[Thread poll created]]></phrase>
   <phrase title="mod_log.thread_poll_delete" version_id="2000051" version_string="2.0.0 Release Candidate 1"><![CDATA[Thread poll deleted]]></phrase>
   <phrase title="mod_log.thread_poll_edit" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Thread poll edited]]></phrase>
-  <phrase title="mod_log.thread_post_copy_source" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Posts from thread copied to <a href="{url}">{title}</a>]]></phrase>
+  <phrase title="mod_log.thread_poll_reset" version_id="2001270" version_string="2.0.12"><![CDATA[Thread poll reset]]></phrase>
+  <phrase title="mod_log.thread_post_copy_source" version_id="2000570" version_string="2.0.5"><![CDATA[Posts from thread copied to {title}]]></phrase>
   <phrase title="mod_log.thread_post_copy_target" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Thread created by copying posts ({ids})]]></phrase>
   <phrase title="mod_log.thread_post_copy_target_existing" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Posts ({ids}) copied to thread]]></phrase>
-  <phrase title="mod_log.thread_post_move_source" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Posts from thread moved to <a href="{url}">{title}</a>]]></phrase>
+  <phrase title="mod_log.thread_post_move_source" version_id="2000570" version_string="2.0.5"><![CDATA[Posts from thread moved to {title}]]></phrase>
   <phrase title="mod_log.thread_post_move_target" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Thread created by moving posts ({ids})]]></phrase>
   <phrase title="mod_log.thread_post_move_target_existing" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Posts ({ids}) moved to thread]]></phrase>
   <phrase title="mod_log.thread_prefix" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Thread prefix edited from '{old}']]></phrase>
@@ -2365,6 +2457,8 @@ The callback should either return an array or nothing at all. If nothing is retu
   <phrase title="mysql_server" version_id="2000036" version_string="2.0.0 Beta 6"><![CDATA[MySQL server]]></phrase>
   <phrase title="mysql_table_prefix" version_id="2000037" version_string="2.0.0 Beta 7"><![CDATA[MySQL table prefix]]></phrase>
   <phrase title="mysql_user_name" version_id="2000036" version_string="2.0.0 Beta 6"><![CDATA[MySQL user name]]></phrase>
+  <phrase title="mysql_version" version_id="2001070" version_string="2.0.10"><![CDATA[MySQL version]]></phrase>
+  <phrase title="mysql_version_x_does_not_meet_requirements" version_id="2001070" version_string="2.0.10"><![CDATA[MySQL 5.5 or newer is required. {version} does not meet this requirement. Please ask your host to upgrade MySQL.]]></phrase>
   <phrase title="n_a" version_id="1000015" version_string="1.0.0 Alpha 5"><![CDATA[N/A]]></phrase>
   <phrase title="name" version_id="1000011" version_string="1.0.0 Alpha 1"><![CDATA[Name]]></phrase>
   <phrase title="name_db_table_which_hold_information_about_import" version_id="2000170" version_string="2.0.1"><![CDATA[This is the name of the database table which will hold information about this import. It may be used to aid with URL redirections. This table must be empty, or must not exist. Only use a-z, 0-9 and underscore characters.]]></phrase>
@@ -2480,7 +2574,7 @@ The callback should either return an array or nothing at all. If nothing is retu
   <phrase title="no_notifications_forum_watch_description" version_id="1020010" version_string="1.2.0 Alpha"><![CDATA[The forum will still be listed on the watched forums page, which can be used to list only the forums you're interested in.]]></phrase>
   <phrase title="no_one_has_liked_this_content_yet" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[No one has liked this content yet.]]></phrase>
   <phrase title="no_parent" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[No parent]]></phrase>
-  <phrase title="no_permission_to_post" version_id="1000034" version_string="1.0.0 Beta 4"><![CDATA[You have insufficient privileges to post here.]]></phrase>
+  <phrase title="no_permission_to_post" version_id="2001070" version_string="2.0.10"><![CDATA[You have insufficient privileges to post threads here.]]></phrase>
   <phrase title="no_permission_to_reply" version_id="1000034" version_string="1.0.0 Beta 4"><![CDATA[You have insufficient privileges to reply here.]]></phrase>
   <phrase title="no_permissions_have_been_created_for_interface_group_yet" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[No permissions have been created for this interface group yet. <a href="{link}">Add one</a>.]]></phrase>
   <phrase title="no_position" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[No position]]></phrase>
@@ -2488,6 +2582,7 @@ The callback should either return an array or nothing at all. If nothing is retu
   <phrase title="no_prefixes_have_been_added_to_this_group_yet" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[No prefixes have been added to this group yet.]]></phrase>
   <phrase title="no_prefixes_have_been_added_yet" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[No prefixes have been added yet.]]></phrase>
   <phrase title="no_previous_version_of_parent_could_be_found" version_id="1020010" version_string="1.2.0 Alpha"><![CDATA[No previous version of the parent could be found. Merging is not possible.]]></phrase>
+  <phrase title="no_privacy_policy" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[No privacy policy]]></phrase>
   <phrase title="no_promotion_history_meeting_criteria_found" version_id="1010010" version_string="1.1.0 Alpha"><![CDATA[No promotion history meeting that criteria can be found.]]></phrase>
   <phrase title="no_promotions_have_been_defined" version_id="1010010" version_string="1.1.0 Alpha"><![CDATA[No promotions have been defined.]]></phrase>
   <phrase title="no_prompts_have_been_added_to_this_group_yet" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[No prompts have been added to this group yet]]></phrase>
@@ -2550,7 +2645,7 @@ The callback should either return an array or nothing at all. If nothing is retu
   <phrase title="note_to_test_provider_must_support_redirecting_to_following_url" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Note: To perform this test, the provider must support redirecting to the following URL]]></phrase>
   <phrase title="notes" version_id="1010010" version_string="1.1.0 Alpha"><![CDATA[Notes]]></phrase>
   <phrase title="notice_display_length_desc" version_id="1050010" version_string="1.5.0 Alpha"><![CDATA[Length of time to display notice on screen, in milliseconds, before fading out. Use 0 to display until dismissed.]]></phrase>
-  <phrase title="notice_display_type_desc" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Block notices are displayed at the top of the page above the top breadcrumb. Floating notices are displayed in the bottom right corner.]]></phrase>
+  <phrase title="notice_display_type_desc" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[Block notices are displayed at the top of the page above the top breadcrumb. Floating notices are displayed in the bottom right corner. Fixed notes are full width and fixed to the bottom of the page.]]></phrase>
   <phrase title="notice_fade_delay_desc" version_id="1050010" version_string="1.5.0 Alpha"><![CDATA[Length of time to delay displaying the notice, in milliseconds, before fading in.]]></phrase>
   <phrase title="notice_is_active" version_id="1010010" version_string="1.1.0 Alpha"><![CDATA[Notice is active]]></phrase>
   <phrase title="notice_may_be_dismissed" version_id="1010010" version_string="1.1.0 Alpha"><![CDATA[Notice may be dismissed]]></phrase>
@@ -2604,7 +2699,7 @@ Note: when enabling oEmbed, any HTML entered in the 'Embed template' field is ig
   <phrase title="only_limited_fields_in_item_may_be_edited" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Only a limited number of fields in this item may be edited.]]></phrase>
   <phrase title="only_one_else_tag_is_allowed_per_foreach_tag" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Only one else tag is allowed per foreach tag.]]></phrase>
   <phrase title="only_one_else_tag_is_allowed_per_if_tag" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Only one else tag is allowed per if tag.]]></phrase>
-  <phrase title="only_send_to_users_opting_to_receive_emails_from_admin" version_id="1000016" version_string="1.0.0 Alpha 6"><![CDATA[Only send to users opting to receive emails from the admin]]></phrase>
+  <phrase title="only_send_to_users_opting_to_receive_emails_from_admin" version_id="2000770" version_string="2.0.7"><![CDATA[Only send to users opting to receive news and update emails]]></phrase>
   <phrase title="oops_we_ran_into_some_problems" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Oops! We ran into some problems.]]></phrase>
   <phrase title="oops_we_ran_into_some_problems_more_details_console" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Oops! We ran into some problems. Please try again later. More error details may be in the browser console.]]></phrase>
   <phrase title="open" version_id="2000038" version_string="2.0.0 Beta 8"><![CDATA[Open]]></phrase>
@@ -2682,9 +2777,11 @@ Note: when enabling oEmbed, any HTML entered in the 'Embed template' field is ig
   <phrase title="option.extraCaptchaKeys" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Extra CAPTCHA keys]]></phrase>
   <phrase title="option.facebookLike" version_id="2000270" version_string="2.0.2"><![CDATA[Enable Facebook share button]]></phrase>
   <phrase title="option.floodCheckLength" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Minimum time between messages]]></phrase>
+  <phrase title="option.floodCheckLengthDiscussion" version_id="2001070" version_string="2.0.10"><![CDATA[Minimum time between discussions]]></phrase>
   <phrase title="option.fontAwesomeSource" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Font Awesome source]]></phrase>
   <phrase title="option.forumsDefaultPage" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Forums default page]]></phrase>
   <phrase title="option.geoLocationUrl" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Location information URL]]></phrase>
+  <phrase title="option.googleAnalyticsAnonymize" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[Anonymize IP addresses for Google Analytics]]></phrase>
   <phrase title="option.googleAnalyticsWebPropertyId" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Google Analytics web property ID]]></phrase>
   <phrase title="option.gravatarEnable" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Enable Gravatar support]]></phrase>
   <phrase title="option.guestShowSignatures" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Show signatures to guests]]></phrase>
@@ -2733,6 +2830,8 @@ Note: when enabling oEmbed, any HTML entered in the 'Embed template' field is ig
   <phrase title="option.plusone" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Enable Google+ share button]]></phrase>
   <phrase title="option.pollMaximumResponses" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Maximum number of poll choices]]></phrase>
   <phrase title="option.preventDiscouragedRegistration" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Prevent discouraged IP addresses from registering]]></phrase>
+  <phrase title="option.privacyPolicyForceWhitelist" version_id="2001070" version_string="2.0.10"><![CDATA[Force privacy policy agreement route whitelist]]></phrase>
+  <phrase title="option.privacyPolicyLastUpdate" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[Privacy policy last update]]></phrase>
   <phrase title="option.privacyPolicyUrl" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Privacy policy URL]]></phrase>
   <phrase title="option.profilePostMaxLength" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Maximum profile message length]]></phrase>
   <phrase title="option.readMarkingDataLifetime" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Read marking data lifetime]]></phrase>
@@ -2750,7 +2849,7 @@ Note: when enabling oEmbed, any HTML entered in the 'Embed template' field is ig
   <phrase title="option.searchResultsPerPage" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Search results per page]]></phrase>
   <phrase title="option.selectQuotable" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Enable select-to-quote]]></phrase>
   <phrase title="option.sharedIpsCheckLimit" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Shared IPs check limit]]></phrase>
-  <phrase title="option.showFirstCookieNotice" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Show cookie notice on first visit]]></phrase>
+  <phrase title="option.showFirstCookieNotice" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[Show cookie notice to guests]]></phrase>
   <phrase title="option.showMessageOnlineStatus" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Show online status indicator]]></phrase>
   <phrase title="option.sitemapAutoRebuild" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Automatically build sitemap]]></phrase>
   <phrase title="option.sitemapAutoSubmit" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Automatically submit sitemap to search engines]]></phrase>
@@ -2767,6 +2866,8 @@ Note: when enabling oEmbed, any HTML entered in the 'Embed template' field is ig
   <phrase title="option.tagLength" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Tag length limit]]></phrase>
   <phrase title="option.tagValidation" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Tag validation]]></phrase>
   <phrase title="option.templateHistoryLength" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Template history length]]></phrase>
+  <phrase title="option.termsLastUpdate" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[Terms and rules last update]]></phrase>
+  <phrase title="option.tosForceWhitelist" version_id="2001070" version_string="2.0.10"><![CDATA[Force terms and rules agreement route whitelist]]></phrase>
   <phrase title="option.tosUrl" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Terms and rules URL]]></phrase>
   <phrase title="option.tumblrShare" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Enable Tumblr share button]]></phrase>
   <phrase title="option.tweet" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Enable Twitter share button]]></phrase>
@@ -2832,7 +2933,7 @@ XenForo will not collect any data without your consent, the data will be stored 
   <phrase title="option_explain.discussionRssContentLength" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[The maximum number of characters of content to include in RSS feeds. Note that this includes any BB code mark up used in the message. 0 will disable content from being included in RSS feeds.]]></phrase>
   <phrase title="option_explain.discussionsPerPage" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[This controls the maximum number of discussions (such as threads) that will be shown on one page.]]></phrase>
   <phrase title="option_explain.displayVisitorCount" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[When a logged in user has unread conversations or unviewed alerts, the total count can be displayed in the user's browser tab before the title, or an indicator displayed on the favicon, or both.]]></phrase>
-  <phrase title="option_explain.dynamicAvatarEnable" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[If enabled, an avatar will by dynamically created for users without a custom avatar. This will include a letter and a color based on their username. If disabled, all users without an avatar will receive a default placeholder.]]></phrase>
+  <phrase title="option_explain.dynamicAvatarEnable" version_id="2001070" version_string="2.0.10"><![CDATA[If enabled, an avatar will be dynamically created for users without a custom avatar. This will include a letter and a color based on their username. If disabled, all users without an avatar will receive a default placeholder.]]></phrase>
   <phrase title="option_explain.editHistory" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[If enabled, moderators will be able to see historical versions of messages and compare changes between them. Historical data will be pruned after the specified number of days. Use 0 to keep the history forever.]]></phrase>
   <phrase title="option_explain.editLogDisplay" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[If enabled, any edit after the delay will cause a "last edited" message to be displayed at the end of the message.]]></phrase>
   <phrase title="option_explain.emailBounceHandler" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[This option allows the "Bounced email address" account to be automatically read and processed for bounced email reports. This will detect if emails sent to a user bounce, forcing the user to update their email address and preventing the system from emailing them until this happens. This can help reduce the chance of email sent from your board from being considered spam.<br />
@@ -2852,16 +2953,18 @@ All threshold values are limited to bounces generated in the last 30 days.]]></p
   <phrase title="option_explain.enableNotices" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[If you don't use the notices system, you can completely disable it and save a query on session creation.]]></phrase>
   <phrase title="option_explain.enableSearch" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[With this option disabled, the search engine will not function.]]></phrase>
   <phrase title="option_explain.enableTagging" version_id="1050010" version_string="1.5.0 Alpha"><![CDATA[Tagging is a system that allows keywords to be applied to content to aid searching and content browsing.]]></phrase>
-  <phrase title="option_explain.enableTrophies" version_id="1050010" version_string="1.5.0 Alpha"><![CDATA[If enabled your users can be awarded <a href="admin.php?trophies/">trophies</a> for completing certain actions or reaching certain milestones. If disabled, the <a href="admin.php?user-title-ladder/">user title ladder</a> will no longer be able to use Trophy Points.]]></phrase>
+  <phrase title="option_explain.enableTrophies" version_id="2001270" version_string="2.0.12"><![CDATA[If enabled your users can be awarded <a href="admin.php?trophies/">trophies</a> for completing certain actions or reaching certain milestones. If disabled, the <a href="admin.php?user-title-ladder/">user title ladder</a> will no longer be able to use trophy points.]]></phrase>
   <phrase title="option_explain.enableVerp" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[If enabled, sent emails will include the recipient email address in the bounce address field. This enables more accurate and more secure automated bounce email handling. If using automated bounce processing, enabling this option is strongly recommended.<br />
 <br />
 This option requires that the specified bounce account is a catch-all account or supports a "+" as a wildcard separator (such as in Gmail). For example, if this option is enabled with a bounce address of bounce@example.com, the email might be returned to bounce+123abc+user=domain.com@example.com.]]></phrase>
   <phrase title="option_explain.extraCaptchaKeys" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[This option can't be edited manually. It is edited only via the "captcha" option.]]></phrase>
   <phrase title="option_explain.facebookLike" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[If this feature is enabled, a Facebook button will be displayed on various pages including the thread view page, allowing Facebook users to share it with their Facebook friends.]]></phrase>
   <phrase title="option_explain.floodCheckLength" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Users will have to wait this many seconds between posting messages. Users with the permission "Can bypass flood check" will be exempt from this option.]]></phrase>
+  <phrase title="option_explain.floodCheckLengthDiscussion" version_id="2001070" version_string="2.0.10"><![CDATA[Users will have to wait this many seconds between posting new discussions (threads, conversations etc.). If this option is set to 0, the value for 'minimum time between messages' will be used.]]></phrase>
   <phrase title="option_explain.fontAwesomeSource" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Controls the source of the Font Awesome library. You may host this yourself (Local) or use the recommended CDN source.]]></phrase>
   <phrase title="option_explain.forumsDefaultPage" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[When entering the forums section, this will be the default page users will be taken to. They will be able to access the alternative page via sub-navigation options.]]></phrase>
   <phrase title="option_explain.geoLocationUrl" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[The URL specified here will be used to give information (such as a map) about a physical location. The URL must include a <strong>{location}</strong> token.]]></phrase>
+  <phrase title="option_explain.googleAnalyticsAnonymize" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[If Google Analytics is enabled above and you wish to anonymize IP addresses, you can enable this option.]]></phrase>
   <phrase title="option_explain.googleAnalyticsWebPropertyId" version_id="2000270" version_string="2.0.2"><![CDATA[You may enter your <a href="https://www.google.com/analytics/" target="_blank">Google Analytics</a> web property ID here to have the Analytics HTML automatically added to your public-facing pages.]]></phrase>
   <phrase title="option_explain.gravatarEnable" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[If enabled, your users may source their avatars from <a href="https://www.gravatar.com" target="_blank">Gravatar</a>. When a new user registers, XenForo will automatically search for a Gravatar associated with their email address. If disabled, this will not remove Gravatars from users that already have them.]]></phrase>
   <phrase title="option_explain.guestShowSignatures" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[In order to maximise your 'signal to noise' ratio when displaying threads to guests, you may hide your members' signatures.]]></phrase>
@@ -2921,7 +3024,9 @@ This option requires that the specified bounce account is a catch-all account or
   <phrase title="option_explain.plusone" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Google's share button allows your visitors to recommend pages from your XenForo installation to others.]]></phrase>
   <phrase title="option_explain.pollMaximumResponses" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[This will limit the number of choices that can be given as responses to a poll.]]></phrase>
   <phrase title="option_explain.preventDiscouragedRegistration" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[You may prevent any visitors browsing from <a href="{link}">discouraged IP addresses</a> from registering new accounts. They will be informed that registration is currently disabled.]]></phrase>
-  <phrase title="option_explain.privacyPolicyUrl" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[If entered, a privacy policy link will be included in the footer.]]></phrase>
+  <phrase title="option_explain.privacyPolicyForceWhitelist" version_id="2001070" version_string="2.0.10"><![CDATA[If you decide to <a href="admin.php?force-agreement/privacy-policy" target="_blank">Force privacy policy agreement</a> then the routes listed here will bypass being redirected to the force agreement page. The route path is the section of the URL to a page after your main forum directory URL, such as forums/ or pages/page-name/. Do not reference a route filter here.]]></phrase>
+  <phrase title="option_explain.privacyPolicyLastUpdate" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[The Unix time stamp of the last privacy policy update.]]></phrase>
+  <phrase title="option_explain.privacyPolicyUrl" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[This link will be shown in the footer and users will have to agree to the policy during registration.]]></phrase>
   <phrase title="option_explain.profilePostMaxLength" version_id="2000052" version_string="2.0.0 Release Candidate 2"><![CDATA[The maximum number of characters that can be in a profile post or comment. Use 0 to disable the limit.]]></phrase>
   <phrase title="option_explain.readMarkingDataLifetime" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[This is the number of days to maintain read marking data (such as for threads and forums). Data older than this will always be seen as read.]]></phrase>
   <phrase title="option_explain.redditShare" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[The Reddit <a href="https://www.reddit.com/buttons/" target="_blank">share button</a> allows your users to share your content quickly and easily directly to Reddit.]]></phrase>
@@ -2938,7 +3043,7 @@ This option requires that the specified bounce account is a catch-all account or
   <phrase title="option_explain.searchResultsPerPage" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[]]></phrase>
   <phrase title="option_explain.selectQuotable" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[This feature enables users to quote snippets of messages by using their browser's text-selection tools.]]></phrase>
   <phrase title="option_explain.sharedIpsCheckLimit" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[When checking for other users having used the same IP addresses, this control limits the search to the last X days.]]></phrase>
-  <phrase title="option_explain.showFirstCookieNotice" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[When a user first views a page (with no XenForo cookies), if enabled, the user will see a notice stating that cookies are used by this site and continued use consents to the cookies. This option is designed to make compliance with EU cookie regulations easier.]]></phrase>
+  <phrase title="option_explain.showFirstCookieNotice" version_id="2000670" version_string="2.0.6"><![CDATA[When a guest views a page, if enabled, the guest will see a notice stating that cookies are used by this site and continued use consents to the cookies. This notice must be accepted or it will continue to display. This option is designed to make compliance with EU cookie regulations and GDPR easier.]]></phrase>
   <phrase title="option_explain.showMessageOnlineStatus" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[If enabled, messages will display an icon if the author is currently online.]]></phrase>
   <phrase title="option_explain.sitemapAutoRebuild" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[If this option is enabled, the sitemap will be rebuilt automatically periodically. If this option is disabled, the sitemap will only be updated when it is rebuilt manually through <i>Tools &gt; Rebuild caches</i>. The current sitemap can be accessed via <a href="sitemap.php">sitemap.php</a>.]]></phrase>
   <phrase title="option_explain.sitemapAutoSubmit" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Once a sitemap is built, if this option is enabled, the updated version will be automatically submitted to the search engines specified. {$url} is replaced with your sitemap URL automatically. If this option is not enabled, search engines will only know about the sitemap if it is listed in robots.txt or if you manually submit it to them.]]></phrase>
@@ -2955,6 +3060,8 @@ This option requires that the specified bounce account is a catch-all account or
   <phrase title="option_explain.tagLength" version_id="1050010" version_string="1.5.0 Alpha"><![CDATA[This controls the minimum and maximum length of tags. Use 0 to disable a limit. Tags may never be longer than 100 characters. These limits only apply when a tag is created. Existing tags may always be used.]]></phrase>
   <phrase title="option_explain.tagValidation" version_id="1050010" version_string="1.5.0 Alpha"><![CDATA[]]></phrase>
   <phrase title="option_explain.templateHistoryLength" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[The number of days to maintain template edit history records. Use 0 to never remove history.]]></phrase>
+  <phrase title="option_explain.termsLastUpdate" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[The Unix time stamp of the last terms and rules update.]]></phrase>
+  <phrase title="option_explain.tosForceWhitelist" version_id="2001070" version_string="2.0.10"><![CDATA[If you decide to <a href="admin.php?force-agreement/terms" target="_blank">Force terms and rules agreement</a> then the routes listed here will bypass being redirected to the force agreement page. The route path is the section of the URL to a page after your main forum directory URL, such as forums/ or pages/page-name/. Do not reference a route filter here.]]></phrase>
   <phrase title="option_explain.tosUrl" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[This link will be shown in the footer and users will have to agree to the terms and rules during registration.]]></phrase>
   <phrase title="option_explain.tumblrShare" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[The <a href="https://www.tumblr.com/docs/en/share_button" target="_blank">Tumblr share button</a> lets your users share pages to Tumblr.]]></phrase>
   <phrase title="option_explain.tweet" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Enabling this button will allow your visitors to share pages easily using their Twitter account.<br />
@@ -3067,6 +3174,7 @@ It is possible to filter the news feed down to just users you follow, or a singl
   <phrase title="override_user_style_choice" version_id="1000016" version_string="1.0.0 Alpha 6"><![CDATA[Override user style choice]]></phrase>
   <phrase title="overview" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Overview]]></phrase>
   <phrase title="overwrite_language" version_id="1000016" version_string="1.0.0 Alpha 6"><![CDATA[Overwrite language]]></phrase>
+  <phrase title="overwrite_language_id_explain" version_id="2001070" version_string="2.0.10"><![CDATA[Overwriting the language will only replace the phrases in the language. All other language properties will remain the same.]]></phrase>
   <phrase title="overwrite_style" version_id="1000016" version_string="1.0.0 Alpha 6"><![CDATA[Overwrite style]]></phrase>
   <phrase title="padding" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Padding]]></phrase>
   <phrase title="page" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Page]]></phrase>
@@ -3114,6 +3222,7 @@ Callback arguments:
   <phrase title="pay_with_paypal" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Pay with PayPal]]></phrase>
   <phrase title="pay_x" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Pay {cost}]]></phrase>
   <phrase title="payment" version_id="1030010" version_string="1.3.0 Alpha"><![CDATA[Payment]]></phrase>
+  <phrase title="payment_could_not_be_processed_and_you_have_not_been_charged" version_id="2000570" version_string="2.0.5"><![CDATA[The payment could not be processed and you have not been charged. Please try again or use a different payment method.]]></phrase>
   <phrase title="payment_profile" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Payment profile]]></phrase>
   <phrase title="payment_profile_display_title_explain" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Enter a name for this payment profile to be shown to users when purchasing products with this profile. If no display title is entered, the profile title above will be used instead.]]></phrase>
   <phrase title="payment_profiles" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Payment profiles]]></phrase>
@@ -3125,6 +3234,8 @@ Callback arguments:
   <phrase title="paypal_alternate_accounts_explain" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Enter the email address of any PayPal accounts other than the primary one that may receive payments for user upgrades. This can be useful if the primary account is changed and recurring payments are still coming from the old account, for example. If the old account is not listed as a valid alternative, payments will not be accepted for this account. Enter one account per line.]]></phrase>
   <phrase title="paypal_primary_account" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[PayPal Primary Account Email]]></phrase>
   <phrase title="paypal_primary_account_explain" version_id="2000034" version_string="2.0.0 Beta 4"><![CDATA[This is the primary email address on your PayPal account. If this is incorrect, payments may not be processed successfully. Note this must be a PayPal Premier or Business account and IPNs must be enabled.]]></phrase>
+  <phrase title="pcre_unicode_property_support_missing" version_id="2001070" version_string="2.0.10"><![CDATA[The required PHP extension PCRE was found with Unicode support, but Unicode character property support is missing.]]></phrase>
+  <phrase title="pcre_unicode_support_missing" version_id="2001070" version_string="2.0.10"><![CDATA[The required PHP extension PCRE was found, but Unicode support is missing. Please ask your host to add support for Unicode to PCRE.]]></phrase>
   <phrase title="pending" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Pending]]></phrase>
   <phrase title="pending_changes" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Pending changes]]></phrase>
   <phrase title="pending_import_from_x_has_been_found" version_id="2000036" version_string="2.0.0 Beta 6"><![CDATA[A pending import from {title} has been found. You may restart this import using the button below.]]></phrase>
@@ -3255,6 +3366,12 @@ Callback arguments:
   <phrase title="personal_details" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Personal details]]></phrase>
   <phrase title="php_built_in_gd" version_id="1000270" version_string="1.0.2"><![CDATA[PHP built-in GD image library]]></phrase>
   <phrase title="php_callback" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[PHP callback]]></phrase>
+  <phrase title="php_function_x_disabled_fundamental" version_id="2001070" version_string="2.0.10"><![CDATA[Your server has disabled a fundamental core PHP function <code><b>{function}</b></code> via the <code>disable_functions</code> directive in php.ini. This will cause unexpected problems in XenForo.]]></phrase>
+  <phrase title="php_functions_disabled_impossible_check" version_id="2001070" version_string="2.0.10"><![CDATA[Your server has disabled functions that make it impossible to detect server information. Other errors may occur.]]></phrase>
+  <phrase title="php_version" version_id="2001070" version_string="2.0.10"><![CDATA[PHP version]]></phrase>
+  <phrase title="php_version_minimum" version_id="2001070" version_string="2.0.10"><![CDATA[You have only the minimum required PHP version. Future versions of XenForo will require a higher minimum PHP version of 5.6.0. Some features in future versions of XenForo will require a minimum PHP version of 7.1.0.]]></phrase>
+  <phrase title="php_version_not_newest" version_id="2001070" version_string="2.0.10"><![CDATA[You have a more up-to-date PHP version than the minimum required, but some features planned for the future may require a newer PHP version.]]></phrase>
+  <phrase title="php_version_recommended" version_id="2001070" version_string="2.0.10"><![CDATA[You have the recommended PHP version, all features current and planned for the future will work on this server.]]></phrase>
   <phrase title="phrase_group_titles_must_be_no_more_than_50_characters" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Phrase group titles must be no more than 50 characters.]]></phrase>
   <phrase title="phrase_name_must_be_literal" version_id="0"><![CDATA[Phrase name must be literal]]></phrase>
   <phrase title="phrase_parameters_must_be_provided_with_literal_names_inside_hash" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Phrase parameters must be provided with literal names inside a hash.]]></phrase>
@@ -3262,6 +3379,7 @@ Callback arguments:
   <phrase title="phrase_status" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Phrase status]]></phrase>
   <phrase title="phrase_text" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Phrase text]]></phrase>
   <phrase title="phrase_text_explain" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[You may use HTML here, but ideally markup should be made in templates, rather than phrases.]]></phrase>
+  <phrase title="phrase_titles_cannot_contain_dot_as_last_character" version_id="2000570" version_string="2.0.5"><![CDATA[Phrase titles cannot contain dot as the last character.]]></phrase>
   <phrase title="phrase_titles_may_only_contain_single_dot_character" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Phrase titles may only contain a single dot character.]]></phrase>
   <phrase title="phrase_titles_must_be_unique_in_language" version_id="0"><![CDATA[Phrase titles must be unique in a language. The specified phrase is already in use.]]></phrase>
   <phrase title="phrases" version_id="0"><![CDATA[Phrases]]></phrase>
@@ -3286,6 +3404,7 @@ Callback arguments:
   <phrase title="please_confirm_that_you_want_to_discourage_following_ip" version_id="1010010" version_string="1.1.0 Alpha"><![CDATA[Please confirm that you want to discourage the following IP address]]></phrase>
   <phrase title="please_confirm_that_you_want_to_downgrade_following_user" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Please confirm that you want to downgrade the following user]]></phrase>
   <phrase title="please_confirm_that_you_want_to_enable_following_add_on" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Please confirm that you want to enable the following add-on]]></phrase>
+  <phrase title="please_confirm_that_you_want_to_force_all_current_users_to_accept_following" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[Please confirm that you want to force all current users to accept the following:]]></phrase>
   <phrase title="please_confirm_that_you_want_to_install_following_add_on" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Please confirm that you want to install the following add-on]]></phrase>
   <phrase title="please_confirm_that_you_want_to_lift_ban_on_following_user" version_id="1000016" version_string="1.0.0 Alpha 6"><![CDATA[Please confirm that you want to lift the ban on the following user]]></phrase>
   <phrase title="please_confirm_that_you_want_to_rebuild_following_add_on" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Please confirm that you want to rebuild the following add-on's master data]]></phrase>
@@ -3341,6 +3460,7 @@ Callback arguments:
   <phrase title="please_enter_name_that_does_not_resemble_an_email_address" version_id="0"><![CDATA[Please enter a name that does not resemble an email address.]]></phrase>
   <phrase title="please_enter_name_that_is_at_least_x_characters_long" version_id="0"><![CDATA[Please enter a name that is at least {count} characters long.]]></phrase>
   <phrase title="please_enter_name_that_is_at_most_x_characters_long" version_id="0"><![CDATA[Please enter a name that is at most {count} characters long.]]></phrase>
+  <phrase title="please_enter_name_to_rename_this_user_to" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[Please enter a name to rename this user to.]]></phrase>
   <phrase title="please_enter_number_that_is_at_least_x" version_id="0"><![CDATA[Please enter a number that is at least {min}.]]></phrase>
   <phrase title="please_enter_number_that_is_no_more_than_x" version_id="0"><![CDATA[Please enter a number that is no more than {max}.]]></phrase>
   <phrase title="please_enter_page_content" version_id="1040010" version_string="1.4.0 Alpha"><![CDATA[Please enter the page content.]]></phrase>
@@ -3354,10 +3474,12 @@ Callback arguments:
   <phrase title="please_enter_title_using_only_alphanumeric_dot" version_id="0"><![CDATA[Please enter a title using only a-z, A-Z, 0-9, _ and . characters.]]></phrase>
   <phrase title="please_enter_title_using_only_alphanumeric_dot_underscore" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Please enter a value using only a-z, A-Z, 0-9, _ and . characters.]]></phrase>
   <phrase title="please_enter_title_using_only_alphanumeric_underscore" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Please enter a value using only a-z, A-Z, 0-9, and _ characters.]]></phrase>
+  <phrase title="please_enter_unique_content_type_field_name_combination" version_id="2000570" version_string="2.0.5"><![CDATA[Please enter a unique content_type and field_name combination.]]></phrase>
   <phrase title="please_enter_unique_route_prefix_and_sub_name" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Please enter a unique route prefix and sub-name. The specified combination is already in use.]]></phrase>
   <phrase title="please_enter_valid_add_on_id_using_rules" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Please enter a valid add-on ID using only a-z, A-Z, 0-9 and / characters. The value must not start or end with a / and must not start with 0-9. Neither namespace part should start with 0-9.]]></phrase>
   <phrase title="please_enter_valid_addon_id" version_id="0"><![CDATA[Please enter a valid add-on ID.]]></phrase>
   <phrase title="please_enter_valid_admin_navigation_id" version_id="0"><![CDATA[Please enter a valid admin navigation ID.]]></phrase>
+  <phrase title="please_enter_valid_base_class" version_id="2001070" version_string="2.0.10"><![CDATA[Please enter a valid base class.]]></phrase>
   <phrase title="please_enter_valid_bb_code_tag" version_id="1030010" version_string="1.3.0 Alpha"><![CDATA[Please enter a valid BB code tag.]]></phrase>
   <phrase title="please_enter_valid_callback_class" version_id="0"><![CDATA[Please enter a valid callback class.]]></phrase>
   <phrase title="please_enter_valid_callback_method" version_id="0"><![CDATA[Please enter a valid callback method.]]></phrase>
@@ -3370,7 +3492,8 @@ Callback arguments:
   <phrase title="please_enter_valid_dependent_permission_id" version_id="0"><![CDATA[Please enter a valid dependent permission ID. The specified permission could not be found.]]></phrase>
   <phrase title="please_enter_valid_designer_mode_id_using_rules" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Please enter a valid designer mode ID using only a-z, A-Z, 0-9, _ and - characters. The value must not start with 0-9.]]></phrase>
   <phrase title="please_enter_valid_email" version_id="0"><![CDATA[Please enter a valid email.]]></phrase>
-  <phrase title="please_enter_valid_facebook_username_using_alphanumeric_dot_numbers" version_id="2000052" version_string="2.0.0 Release Candidate 2"><![CDATA[Please enter a valid Facebook user name using only a-z, 0-9, and . characters, or a user ID using only numbers.]]></phrase>
+  <phrase title="please_enter_valid_extension_class" version_id="2001070" version_string="2.0.10"><![CDATA[Please enter a valid extension class.]]></phrase>
+  <phrase title="please_enter_valid_facebook_username_using_alphanumeric_dot_numbers" version_id="2000570" version_string="2.0.5"><![CDATA[Please enter a valid Facebook user/group/page name using only a-z, 0-9, -, and . characters, or a user ID using only numbers.]]></phrase>
   <phrase title="please_enter_valid_field_id" version_id="1010010" version_string="1.1.0 Alpha"><![CDATA[Please enter a valid field ID.]]></phrase>
   <phrase title="please_enter_valid_field_name" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Please enter a valid field name.]]></phrase>
   <phrase title="please_enter_valid_group_name" version_id="0"><![CDATA[Please enter a valid group name.]]></phrase>
@@ -3421,6 +3544,9 @@ Callback arguments:
   <phrase title="please_provide_url_of_non_redirect_thread" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Please provide the URL of a non-redirect thread.]]></phrase>
   <phrase title="please_provide_valid_x_xml_file" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Please provide a valid {rootName} XML file.]]></phrase>
   <phrase title="please_provide_valid_xml_file" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Please provide a valid XML file.]]></phrase>
+  <phrase title="please_read_and_accept_our_privacy_policy_before_continuing" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[Please read and accept our privacy policy before continuing.]]></phrase>
+  <phrase title="please_read_and_accept_our_terms_and_privacy_policy_before_continuing" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[Please read and accept our terms and privacy policy before continuing.]]></phrase>
+  <phrase title="please_read_and_accept_our_terms_and_rules_before_continuing" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[Please read and accept our terms and rules before continuing.]]></phrase>
   <phrase title="please_review_files" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Please review the files]]></phrase>
   <phrase title="please_review_warnings_and_confirm_you_wish_to_proceed_installing" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Please review the warnings and confirm you wish to proceed installing the following add-on]]></phrase>
   <phrase title="please_review_warnings_and_confirm_you_wish_to_proceed_rebuilding" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Please review the warnings and confirm you wish to proceed rebuilding the following add-on's master data]]></phrase>
@@ -3523,6 +3649,54 @@ Callback arguments:
   <phrase title="primary_navigation_row_only" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Primary navigation row only]]></phrase>
   <phrase title="primary_user_group" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Primary user group]]></phrase>
   <phrase title="privacy" version_id="1000011" version_string="1.0.0 Alpha 1"><![CDATA[Privacy]]></phrase>
+  <phrase title="privacy_options" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[Privacy options]]></phrase>
+  <phrase title="privacy_policy" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[Privacy policy]]></phrase>
+  <phrase title="privacy_policy_text" version_id="2000632" version_string="2.0.6 Beta 2"><![CDATA[<p>We are {board_title} ("we", "our", "us"). We’re committed to protecting and respecting your privacy. If you have questions about your personal information please <a href="{contactUrl}">contact us</a>.</p>
+
+<h2>What information we hold about you</h2>
+<p>The type of data that we collect and process includes:</p>
+<ul>
+	<li>Your name or username.</li>
+	<li>Your email address.</li>
+	<li>Your IP address.</li>
+</ul>
+<p>Further data may be collected if you choose to share it, such as if you fill out fields on your profile.</p>
+<p>We collect some or all of this information in the following cases:</p>
+<ul>
+	<li>You register as a member on this site.</li>
+	<li>You fill out our contact form.</li>
+	<li>You browse this site. See "Cookie policy" below.</li>
+	<li>You fill out fields on your profile.</li>
+</ul>
+
+<h2>How your personal information is used</h2>
+<p>We may use your personal information in the following ways:</p>
+<ul>
+	<li>For the purposes of making you a registered member of our site, in order for you to contribute content to this site.</li>
+	<li>We may use your email address to inform you of activity on our site.</li>
+	<li>Your IP address is recorded when you perform certain actions on our site. Your IP address is never publicly visible.</li>
+</ul>
+
+<h2>Other ways we may use your personal information.</h2>
+<p>In addition to notifying you of activity on our site which may be relevant to you, from time to time we may wish to communicate with all members any important information such as newsletters or announcements by email. You can opt-in to or opt-out of such emails in your profile.</p>
+<p>We may collect non-personally identifiable information about you in the course of your interaction with our site. This information may include technical information about the browser or type of device you're using. This information will be used purely for the purposes of analytics and tracking the number of visitors to our site.</p>
+
+<h2>Keeping your data secure</h2>
+<p>We are committed to ensuring that any information you provide to us is secure. In order to prevent unauthorized access or disclosure, we have put in place suitable measures and procedures to safeguard and secure the information that we collect.</p>
+
+<h2>Cookie policy</h2>
+<p>Cookies are small text files which are set by us on your computer which allow us to provide certain functionality on our site, such as being able to log in, or remembering certain preferences.</p>
+<p>We have a detailed cookie policy and more information about the cookies that we set on <a href="{cookieHelp}">this page</a>.</p>
+
+<h2>Rights</h2>
+<p>You have a right to access the personal data we hold about you or obtain a copy of it. To do so please <a href="{contactUrl}">contact us</a>. If you believe that the information we hold for you is incomplete or inaccurate, you may <a href="{contactUrl}">contact us</a> to ask us to complete or correct that information.</p>
+<p>You also have the right to request the erasure of your personal data. Please <a href="{contactUrl}">contact us</a> if you would like us to remove your personal data.</p>
+
+<h2>Acceptance of this policy</h2>
+<p>Continued use of our site signifies your acceptance of this policy. If you do not accept the policy then please do not use this site. When registering we will further request your explicit acceptance of the privacy policy.</p>
+
+<h2>Changes to this policy</h2>
+<p>We may make changes to this policy at any time. You may be asked to review and re-accept the information in this policy if it changes in the future.</p>]]></phrase>
   <phrase title="private" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Private]]></phrase>
   <phrase title="private_category" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Private category]]></phrase>
   <phrase title="private_category_hint" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[If selected, users will only be able to view this category if they are explicitly granted permissions.]]></phrase>
@@ -3573,6 +3747,7 @@ Callback arguments:
   <phrase title="purchase_request_key" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Purchase request key]]></phrase>
   <phrase title="purchased_item" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Purchased item]]></phrase>
   <phrase title="purchased_upgrades" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Purchased upgrades]]></phrase>
+  <phrase title="push_to_left" version_id="2001070" version_string="2.0.10"><![CDATA[Push to left]]></phrase>
   <phrase title="question" version_id="1000015" version_string="1.0.0 Alpha 5"><![CDATA[Question]]></phrase>
   <phrase title="question_and_answer_captchas" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Question and answer CAPTCHAs]]></phrase>
   <phrase title="question_is_active" version_id="1000036" version_string="1.0.0 Beta 6"><![CDATA[Question is active]]></phrase>
@@ -3619,7 +3794,9 @@ Callback arguments:
   <phrase title="receipt_for_your_account_upgrade_at_x" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Receipt for your account upgrade at {board_title}]]></phrase>
   <phrase title="receive_alert_when_someone" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Receive an alert when someone]]></phrase>
   <phrase title="receive_email_when_new_conversation_message_is_received" version_id="1000015" version_string="1.0.0 Alpha 5"><![CDATA[Receive email when a new conversation message is received]]></phrase>
-  <phrase title="receive_site_mailings" version_id="1000015" version_string="1.0.0 Alpha 5"><![CDATA[Receive site mailings]]></phrase>
+  <phrase title="receive_site_mailings" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[Receive news and updates from us by email]]></phrase>
+  <phrase title="receive_site_mailings_hint" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[]]></phrase>
+  <phrase title="receive_site_mailings_option" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[Receive news and update emails]]></phrase>
   <phrase title="receive_this_users_news_feed" version_id="1000016" version_string="1.0.0 Alpha 6"><![CDATA[Receive this user's news feed]]></phrase>
   <phrase title="receive_your_news_feed" version_id="1000015" version_string="1.0.0 Alpha 5"><![CDATA[Receive your news feed]]></phrase>
   <phrase title="received_by" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Received by]]></phrase>
@@ -3680,8 +3857,11 @@ Callback arguments:
   <phrase title="remove_websites" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Remove websites]]></phrase>
   <phrase title="removed_from_public_view" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Removed from public view]]></phrase>
   <phrase title="removing_likes" version_id="2000035" version_string="2.0.0 Beta 5"><![CDATA[Removing likes]]></phrase>
+  <phrase title="rename_this_user_to" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[Rename this user to]]></phrase>
   <phrase title="reopen_via_admin_control_panel" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Reopen via admin control panel]]></phrase>
   <phrase title="replace" version_id="1020010" version_string="1.2.0 Alpha"><![CDATA[Replace]]></phrase>
+  <phrase title="replace_all" version_id="2001070" version_string="2.0.10"><![CDATA[Replace all]]></phrase>
+  <phrase title="replace_question" version_id="2001070" version_string="2.0.10"><![CDATA[Replace?]]></phrase>
   <phrase title="replace_route_must_start_with_route_prefix" version_id="1020010" version_string="1.2.0 Alpha"><![CDATA[The replace route must start with a route prefix.]]></phrase>
   <phrase title="replace_with" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Replace with]]></phrase>
   <phrase title="replacement_mode" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Replacement mode]]></phrase>
@@ -3743,6 +3923,8 @@ Content being reported:
   <phrase title="require_address" version_id="2000051" version_string="2.0.0 Release Candidate 1"><![CDATA[Require address]]></phrase>
   <phrase title="require_address_hint" version_id="2000051" version_string="2.0.0 Release Candidate 1"><![CDATA[If enabled, the payment provider will collect the payee's address while taking the payment.]]></phrase>
   <phrase title="require_date_of_birth" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Require date of birth]]></phrase>
+  <phrase title="require_email_choice" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[Require site email preference]]></phrase>
+  <phrase title="require_email_choice_hint" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[If selected, users must choose at registration whether or not to receive site emails. The default value depends on <code>registrationDefaults</code> and users may change their preference later.]]></phrase>
   <phrase title="require_location" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Require location]]></phrase>
   <phrase title="require_registration_manually_approved_admin" version_id="1010470" version_string="1.1.4"><![CDATA[Require the registration to be manually approved by an admin]]></phrase>
   <phrase title="require_users_to_select_prefix" version_id="1020010" version_string="1.2.0 Alpha"><![CDATA[Require users to select a prefix]]></phrase>
@@ -3750,6 +3932,7 @@ Content being reported:
   <phrase title="required_admin_permission" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Required admin permission]]></phrase>
   <phrase title="required_fields_will_always_be_shown_during_registration" version_id="1010010" version_string="1.1.0 Alpha"><![CDATA[Required fields will always be shown during registration.]]></phrase>
   <phrase title="required_php_extension_x_not_found" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[The required PHP extension {extension} could not be found. Please ask your host to install this extension.]]></phrase>
+  <phrase title="required_php_xml_extensions_not_found" version_id="2001070" version_string="2.0.10"><![CDATA[The required PHP extensions for XML handling (DOM and SimpleXML) could not be found. Please ask your host to install these extensions.]]></phrase>
   <phrase title="requires_user_names_new_registrations_match_regex" version_id="2000036" version_string="2.0.0 Beta 6"><![CDATA[This requires the user names of new registrations to match the given regular expression. <b>Note</b>: use a full expression, including delimiters and switches.]]></phrase>
   <phrase title="resend_account_confirmation" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Resend account confirmation]]></phrase>
   <phrase title="resend_confirmation_email" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Resend confirmation email]]></phrase>
@@ -3776,6 +3959,7 @@ Content being reported:
   <phrase title="return_to_page_you_were_viewing" version_id="1000015" version_string="1.0.0 Alpha 5"><![CDATA[Return to the page you were viewing]]></phrase>
   <phrase title="returned_data_is_not_json" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[The returned data is not valid JSON.]]></phrase>
   <phrase title="revert" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Revert]]></phrase>
+  <phrase title="revert_chunk" version_id="2001070" version_string="2.0.10"><![CDATA[Revert chunk]]></phrase>
   <phrase title="revert_customizations" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Revert customizations made in this style]]></phrase>
   <phrase title="revert_customized_value" version_id="2000032" version_string="2.0.0 Beta 2"><![CDATA[Revert customized value]]></phrase>
   <phrase title="revert_edits" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Revert edits]]></phrase>
@@ -3877,10 +4061,12 @@ Content being reported:
   <phrase title="send_welcome_email_on_registration" version_id="1050010" version_string="1.5.0 Alpha"><![CDATA[Send welcome email on registration]]></phrase>
   <phrase title="separate_names_with_comma" version_id="1000011" version_string="1.0.0 Alpha 1"><![CDATA[Separate names with a comma.]]></phrase>
   <phrase title="server_did_not_respond_in_time_try_again" version_id="1000034" version_string="1.0.0 Beta 4"><![CDATA[The server did not respond in time. Please try again.]]></phrase>
+  <phrase title="server_environment_report" version_id="2001070" version_string="2.0.10"><![CDATA[Server environment report]]></phrase>
   <phrase title="server_error_log" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Server error log]]></phrase>
   <phrase title="server_error_logs" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Server error logs]]></phrase>
   <phrase title="server_error_occurred" version_id="1000013" version_string="1.0.0 Alpha 3"><![CDATA[A server error occurred. Please try again later.]]></phrase>
   <phrase title="server_errors_have_been_logged" version_id="1020010" version_string="1.2.0 Alpha"><![CDATA[Server errors have been logged. You should review these.]]></phrase>
+  <phrase title="server_software" version_id="2001070" version_string="2.0.10"><![CDATA[Server software]]></phrase>
   <phrase title="server_was_too_slow" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Server was too slow.]]></phrase>
   <phrase title="set_all_to_x" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Set all to: {value}]]></phrase>
   <phrase title="set_custom_title" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Set custom title]]></phrase>
@@ -3898,6 +4084,7 @@ Content being reported:
   <phrase title="shared_ip_rejected_user_x" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Shared IP with rejected users ({users})]]></phrase>
   <phrase title="shared_ips" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Shared IPs]]></phrase>
   <phrase title="shared_ips_for_x" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Shared IPs for {name}]]></phrase>
+  <phrase title="shift" version_id="2001070" version_string="2.0.10"><![CDATA[Shift]]></phrase>
   <phrase title="shortcut.alerts_menu" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[.]]></phrase>
   <phrase title="shortcut.conversations_menu" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[,]]></phrase>
   <phrase title="shortcut.filter" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[f]]></phrase>
@@ -3978,8 +4165,10 @@ Content being reported:
   <phrase title="sort_admin_navigation" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Sort admin navigation]]></phrase>
   <phrase title="sort_by" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Sort by]]></phrase>
   <phrase title="sort_categories" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Sort categories]]></phrase>
+  <phrase title="sort_direction" version_id="2000570" version_string="2.0.5"><![CDATA[Sort direction]]></phrase>
   <phrase title="sort_navigation" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Sort navigation]]></phrase>
   <phrase title="sort_nodes" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Sort nodes]]></phrase>
+  <phrase title="sort_order" version_id="2000570" version_string="2.0.5"><![CDATA[Sort order]]></phrase>
   <phrase title="sort_smilies" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Sort smilies]]></phrase>
   <phrase title="source_database_configuration" version_id="2000053" version_string="2.0.0 Release Candidate 3"><![CDATA[Source database configuration]]></phrase>
   <phrase title="source_database_connection_details_not_correct_x" version_id="2000035" version_string="2.0.0 Beta 5"><![CDATA[The source database connection details are not correct: {message}]]></phrase>
@@ -3989,6 +4178,7 @@ Content being reported:
   <phrase title="spam_cleaner" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Spam cleaner]]></phrase>
   <phrase title="spam_cleaner_actions" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Spam cleaner actions]]></phrase>
   <phrase title="spam_cleaner_ban_reason" version_id="1040570" version_string="1.4.5"><![CDATA[Spam. Please contact the administrator if this was done in error.]]></phrase>
+  <phrase title="spam_cleaner_cannot_be_run_at_moment" version_id="2000570" version_string="2.0.5"><![CDATA[The spam cleaner cannot be run at the moment. The selected forum to move spam threads to does not exist.]]></phrase>
   <phrase title="spam_cleaner_ip_address_check" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Spam cleaner IP address check]]></phrase>
   <phrase title="spam_cleaner_log" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Spam cleaner log]]></phrase>
   <phrase title="spam_cleaner_no_admins_or_mods" version_id="0"><![CDATA[It is not possible to use the spam cleaner against administrators or moderators.]]></phrase>
@@ -4017,6 +4207,7 @@ Content being reported:
   <phrase title="sprite_mode" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Sprite mode]]></phrase>
   <phrase title="sprite_position" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Sprite position]]></phrase>
   <phrase title="src_attribute_must_not_be_specified_when_using_dev_or_prod_attributes" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[A 'src' attribute must not be specified when using 'dev' or 'prod' attributes.]]></phrase>
+  <phrase title="ssl_version" version_id="2001070" version_string="2.0.10"><![CDATA[SSL version]]></phrase>
   <phrase title="stack_trace" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Stack trace]]></phrase>
   <phrase title="staff_member" version_id="2000010" version_string="2.0.0 Alpha" global_cache="1"><![CDATA[Staff member]]></phrase>
   <phrase title="staff_members_cannot_be_reply_banned" version_id="1040010" version_string="1.4.0 Alpha"><![CDATA[Staff members cannot be banned from replying.]]></phrase>
@@ -4049,6 +4240,7 @@ Content being reported:
   <phrase title="stick_threads" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Stick threads]]></phrase>
   <phrase title="sticky" version_id="1000015" version_string="1.0.0 Alpha 5"><![CDATA[Sticky]]></phrase>
   <phrase title="sticky_threads_appear_at_top_of_first_page_of_list_of_threads" version_id="1000015" version_string="1.0.0 Alpha 5"><![CDATA[Sticky threads appear at the top of the first page of the list of threads in their parent forum]]></phrase>
+  <phrase title="stop" version_id="2001070" version_string="2.0.10"><![CDATA[Stop]]></phrase>
   <phrase title="stop_all_emails" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Stop all emails]]></phrase>
   <phrase title="stop_all_emails_from_x" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Stop all emails from {title}]]></phrase>
   <phrase title="stop_conversation_emails" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Stop conversation emails]]></phrase>
@@ -4175,8 +4367,14 @@ You will also need to set up a webhook endpoint in your Stripe account with the 
   <phrase title="style_prop.editorToolbarBorderColor" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Editor toolbar border color]]></phrase>
   <phrase title="style_prop.elementSpacer" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Element spacer]]></phrase>
   <phrase title="style_prop.emailBg" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Email background color]]></phrase>
+  <phrase title="style_prop.emailBorderColor" version_id="2001270" version_string="2.0.12"><![CDATA[Email border color]]></phrase>
+  <phrase title="style_prop.emailContentAltBg" version_id="2001270" version_string="2.0.12"><![CDATA[Email alternate content background color]]></phrase>
+  <phrase title="style_prop.emailContentBg" version_id="2001270" version_string="2.0.12"><![CDATA[Email content background color]]></phrase>
   <phrase title="style_prop.emailFont" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Email font]]></phrase>
   <phrase title="style_prop.emailHeaderColor" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Email header text color]]></phrase>
+  <phrase title="style_prop.emailLinkColor" version_id="2001270" version_string="2.0.12"><![CDATA[Email link color]]></phrase>
+  <phrase title="style_prop.emailTextColor" version_id="2001270" version_string="2.0.12"><![CDATA[Email text color]]></phrase>
+  <phrase title="style_prop.emailTextColorMuted" version_id="2001270" version_string="2.0.12"><![CDATA[Email muted text color]]></phrase>
   <phrase title="style_prop.findThreadsNavStyle" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Find threads navigation style]]></phrase>
   <phrase title="style_prop.fixedMessage" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Fixed message bar]]></phrase>
   <phrase title="style_prop.fontFamilyBody" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Body Text Font]]></phrase>
@@ -4383,8 +4581,14 @@ You will also need to set up a webhook endpoint in your Stripe account with the 
   <phrase title="style_prop_desc.editorToolbarBorderColor" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Like popup menus, the editor has an upper border accent, controlled here]]></phrase>
   <phrase title="style_prop_desc.elementSpacer" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[This represents the base value for spacing between elements, such as individual blocks.]]></phrase>
   <phrase title="style_prop_desc.emailBg" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Emails sent in HTML format will have this as its background color]]></phrase>
+  <phrase title="style_prop_desc.emailBorderColor" version_id="2001270" version_string="2.0.12"><![CDATA[Defines the color used as a border within the email content area]]></phrase>
+  <phrase title="style_prop_desc.emailContentAltBg" version_id="2001270" version_string="2.0.12"><![CDATA[Defines the alternate color that email content may be displayed on]]></phrase>
+  <phrase title="style_prop_desc.emailContentBg" version_id="2001270" version_string="2.0.12"><![CDATA[Defines the color that the main content of the email will be displayed on]]></phrase>
   <phrase title="style_prop_desc.emailFont" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Defines the font (or font list) used for text in HTML emails]]></phrase>
   <phrase title="style_prop_desc.emailHeaderColor" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Defines the color of text in the header bar in HTML email]]></phrase>
+  <phrase title="style_prop_desc.emailLinkColor" version_id="2001270" version_string="2.0.12"><![CDATA[Defines the default link color in HTML emails]]></phrase>
+  <phrase title="style_prop_desc.emailTextColor" version_id="2001270" version_string="2.0.12"><![CDATA[Defines the color of the body text of HTML emails]]></phrase>
+  <phrase title="style_prop_desc.emailTextColorMuted" version_id="2001270" version_string="2.0.12"><![CDATA[Defines how muted text will be displayed in emails. This may be used for minor text in the email body and for email footer text]]></phrase>
   <phrase title="style_prop_desc.findThreadsNavStyle" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[This controls how the navigation is displayed in the <i>Find threads</i> section.]]></phrase>
   <phrase title="style_prop_desc.fixedMessage" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Occasionally, system messages will be displayed to the visitor in a fixed element that slides down from the top of the window. Its styling is controlled here]]></phrase>
   <phrase title="style_prop_desc.fontFamilyBody" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[This font is used for the text of messages etc.]]></phrase>
@@ -4588,6 +4792,7 @@ You will also need to set up a webhook endpoint in your Stripe account with the 
   <phrase title="submitted_message_is_too_long_to_be_processed" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[The submitted message is too long to be processed. Please shorten it.]]></phrase>
   <phrase title="subscriber_id" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Subscriber ID]]></phrase>
   <phrase title="success" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Success]]></phrase>
+  <phrase title="suhosin_enabled" version_id="2001070" version_string="2.0.10"><![CDATA[Suhosin enabled]]></phrase>
   <phrase title="super_administrator" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Super administrator]]></phrase>
   <phrase title="super_admins_have_all_admin_permissions_and_can_manage_other_admins" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Super administrators have all administrator permissions and can manage other admins.]]></phrase>
   <phrase title="super_admins_will_not_be_updated" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Super admins will not be updated.]]></phrase>
@@ -4644,7 +4849,7 @@ You will also need to set up a webhook endpoint in your Stripe account with the 
   <phrase title="templates_in_this_style_can_not_be_modified" version_id="0"><![CDATA[Templates in this style can not be modified. Please try another.]]></phrase>
   <phrase title="temporary" version_id="1010010" version_string="1.1.0 Alpha"><![CDATA[Temporary]]></phrase>
   <phrase title="terms_and_rules" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Terms and rules]]></phrase>
-  <phrase title="terms_rules_text" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[<p>The providers ("we", "us", "our") of the service provided by this web site ("Service") are not responsible for any user-generated content and accounts. Content submitted express the views of their author only.</p>
+  <phrase title="terms_rules_text" version_id="2000632" version_string="2.0.6 Beta 2"><![CDATA[<p>The providers ("we", "us", "our") of the service provided by this web site ("Service") are not responsible for any user-generated content and accounts. Content submitted express the views of their author only.</p>
 
 <p>This Service is only available to users who are at least {age} years old. If you are younger than this, please do not register for this Service. If you register for this Service, you represent that you are this age or older.</p>
 
@@ -4658,7 +4863,7 @@ You will also need to set up a webhook endpoint in your Stripe account with the 
 
 <p>These terms may be changed at any time without notice.</p>
 
-<p>If you do not agree with these terms, please do not register or use the Service. Use of the Service constitutes acceptance of these terms. If you wish to close your account, please contact us.</p>]]></phrase>
+<p>If you do not agree with these terms, please do not register or use the Service. Use of the Service constitutes acceptance of these terms. If you wish to close your account, please <a href="{contactUrl}">contact us</a>.</p>]]></phrase>
   <phrase title="terrible" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Terrible]]></phrase>
   <phrase title="test" version_id="1000015" version_string="1.0.0 Alpha 5"><![CDATA[Test]]></phrase>
   <phrase title="test_email_sent_to_x" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Test email sent to {email}.]]></phrase>
@@ -4722,6 +4927,7 @@ When the payment has been approved, your account will be upgraded.]]></phrase>
   <phrase title="there_no_threads_matching_your_filters" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[There are no threads matching your filters.]]></phrase>
   <phrase title="there_no_threads_to_display" version_id="1000015" version_string="1.0.0 Alpha 5"><![CDATA[There are no threads to display.]]></phrase>
   <phrase title="there_templates_that_may_be_outdated_click_to_review" version_id="1000052" version_string="1.0.0 Release Candidate 2"><![CDATA[There are templates that may be outdated. Click here to review them.]]></phrase>
+  <phrase title="there_was_error_processing_your_card" version_id="2000570" version_string="2.0.5"><![CDATA[There was an error processing your card. Please try again or use a different payment method.]]></phrase>
   <phrase title="there_was_problem_communicating_with_gravatar" version_id="1000011" version_string="1.0.0 Alpha 1"><![CDATA[There was a problem communicating with Gravatar. Please try again later.]]></phrase>
   <phrase title="there_was_problem_requesting_feed" version_id="1000052" version_string="1.0.0 Release Candidate 2"><![CDATA[There was a problem requesting the feed. <br />
 <br />
@@ -4746,6 +4952,7 @@ Error message: <span class="exceptionMessage">{message}</span>]]></phrase>
   <phrase title="this_add_on_has_pending_metadata_changes" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[This add-on has pending metadata changes. Please sync or rebuild to import these changes.]]></phrase>
   <phrase title="this_add_on_is_already_enabled" version_id="1050010" version_string="1.5.0 Alpha"><![CDATA[This add-on is already enabled.]]></phrase>
   <phrase title="this_cache_could_not_be_rebuilt" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[This cache could not be rebuilt.]]></phrase>
+  <phrase title="this_connected_account_provider_is_not_currently_available" version_id="2001070" version_string="2.0.10"><![CDATA[This connected account provider is not currently available. If you are already registered, you may need to reset your password before you can log in.]]></phrase>
   <phrase title="this_content_edit_history_has_been_removed" version_id="1020010" version_string="1.2.0 Alpha"><![CDATA[This content edit history has been removed.]]></phrase>
   <phrase title="this_content_edited_total_of_x_times_old_records_removed" version_id="1020010" version_string="1.2.0 Alpha"><![CDATA[This content has been edited a total of {count} times. Some older edit history records have been removed.]]></phrase>
   <phrase title="this_content_has_not_been_edited" version_id="1020010" version_string="1.2.0 Alpha"><![CDATA[This content has not been edited.]]></phrase>
@@ -4787,7 +4994,8 @@ Error message: <span class="exceptionMessage">{message}</span>]]></phrase>
   <phrase title="this_requires_new_tags_to_match_given_regular_expression" version_id="1050010" version_string="1.5.0 Alpha"><![CDATA[This requires the new tags to match the given regular expression. You must include delimiters and modifiers (e.g., /example/siU).]]></phrase>
   <phrase title="this_section_is_currently_empty" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[This section is currently empty.]]></phrase>
   <phrase title="this_should_be_entered_as_template_style_expression" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[This should be entered as a template-style expression.]]></phrase>
-  <phrase title="this_site_uses_cookies_notice" version_id="1010370" version_string="1.1.3"><![CDATA[This site uses cookies. By continuing to use this site, you are agreeing to our use of cookies.]]></phrase>
+  <phrase title="this_site_uses_cookies_notice" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[This site uses cookies to help personalise content, tailor your experience and to keep you logged in if you register.<br />
+By continuing to use this site, you are consenting to our use of cookies.]]></phrase>
   <phrase title="this_style_xml_file_was_not_built_for_this_version_of_xenforo" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[This style XML file was not built for this version of XenForo.]]></phrase>
   <phrase title="this_subscription_cannot_be_cancelled_maybe_already_cancelled" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[This subscription cannot be cancelled. It may already be cancelled.]]></phrase>
   <phrase title="this_table_contains_mappings_from_old_ids_to_new_ids" version_id="2000036" version_string="2.0.0 Beta 6"><![CDATA[This table contains mappings from old IDs to new IDs. You may need this for redirection scripts.]]></phrase>
@@ -4873,6 +5081,7 @@ Error message: <span class="exceptionMessage">{message}</span>]]></phrase>
   <phrase title="today_at_x" version_id="0" global_cache="1"><![CDATA[Today at {time}]]></phrase>
   <phrase title="toggle_bb_code" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Toggle BB code]]></phrase>
   <phrase title="toggle_expanded" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Toggle expanded]]></phrase>
+  <phrase title="toggle_locked_scrolling" version_id="2001070" version_string="2.0.10"><![CDATA[Toggle locked scrolling]]></phrase>
   <phrase title="toggle_multi_quote_tooltip" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Toggle multi-quote]]></phrase>
   <phrase title="tomorrow_at_x" version_id="2000010" version_string="2.0.0 Alpha" global_cache="1"><![CDATA[Tomorrow at {time}]]></phrase>
   <phrase title="too_many_poll_responses_have_been_entered" version_id="0"><![CDATA[Too many poll responses have been entered. Please remove some.]]></phrase>
@@ -5069,6 +5278,7 @@ Without this, recurring subscriptions can only be cancelled from your <a href="h
   <phrase title="use_gravatar" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Use Gravatar]]></phrase>
   <phrase title="use_invisible_recaptcha" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Use invisible reCAPTCHA]]></phrase>
   <phrase title="use_keycaptcha" version_id="1040010" version_string="1.4.0 Alpha"><![CDATA[Use KeyCAPTCHA]]></phrase>
+  <phrase title="use_line_column_or_scroll_syntax" version_id="2001070" version_string="2.0.10"><![CDATA[(Use line:column or scroll% syntax)]]></phrase>
   <phrase title="use_negative_one_specify_no_max" version_id="1020010" version_string="1.2.0 Alpha"><![CDATA[Use -1 to specify no maximum.]]></phrase>
   <phrase title="use_oembed" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Use oEmbed]]></phrase>
   <phrase title="use_option_and_text_in_custom_bb_code" version_id="1030010" version_string="1.3.0 Alpha"><![CDATA[Use {option} to refer to content inside the tag's option (if provided) and {text} to refer to content within the tag.]]></phrase>
@@ -5076,6 +5286,7 @@ Without this, recurring subscriptions can only be cancelled from your <a href="h
   <phrase title="use_php_money_format" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Use PHP <a href="https://php.net/manual/en/function.money-format.php" target="_blank">money format</a>]]></phrase>
   <phrase title="use_php_time_format" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Use PHP <a href="https://php.net/manual/en/function.date.php" target="_blank">time format</a>]]></phrase>
   <phrase title="use_question_captcha" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Use question &amp; answer CAPTCHA]]></phrase>
+  <phrase title="use_re_syntax" version_id="2001070" version_string="2.0.10"><![CDATA[(Use /re/ syntax for regexp search)]]></phrase>
   <phrase title="use_recaptcha" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Use reCAPTCHA]]></phrase>
   <phrase title="use_solve_media" version_id="1040010" version_string="1.4.0 Alpha"><![CDATA[Use Solve Media]]></phrase>
   <phrase title="use_textcaptcha" version_id="1040010" version_string="1.4.0 Alpha"><![CDATA[Use textCAPTCHA]]></phrase>
@@ -5093,6 +5304,7 @@ Without this, recurring subscriptions can only be cancelled from your <a href="h
   <phrase title="user_change_logs" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[User change logs]]></phrase>
   <phrase title="user_criteria" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[User criteria]]></phrase>
   <phrase title="user_customizations_to_navigation_maintained_addon_upgrade" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[User customizations to this navigation entry will be maintained across add-on upgrades.]]></phrase>
+  <phrase title="user_delete_rename_explain" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[If you choose to rename this user, the username on all of their content will be changed which can be used to anonymize their content to comply with the user's erasure rights under GDPR rules. The user's original name may still appear in quoted content.]]></phrase>
   <phrase title="user_details" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[User details]]></phrase>
   <phrase title="user_editable" version_id="1010010" version_string="1.1.0 Alpha"><![CDATA[User editable]]></phrase>
   <phrase title="user_email_confirmation_body_html" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[<p>{username}, in order to complete your registration or reactivate your account at {board}, you need to confirm your email address by clicking the button below.</p>]]></phrase>
@@ -5153,6 +5365,7 @@ Without this, recurring subscriptions can only be cancelled from your <a href="h
   <phrase title="user_upgrades" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[User upgrades]]></phrase>
   <phrase title="user_value" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[User value]]></phrase>
   <phrase title="user_who_received_this_warning_no_longer_exists" version_id="1010010" version_string="1.1.0 Alpha"><![CDATA[The user who received this warning no longer exists.]]></phrase>
+  <phrase title="user_with_this_username_and_or_email_already_exists" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[A user with this username and/or email already exists.]]></phrase>
   <phrase title="username_contains" version_id="1010010" version_string="1.1.0 Alpha"><![CDATA[User name contains]]></phrase>
   <phrase title="username_criteria_explain" version_id="1010010" version_string="1.1.0 Alpha"><![CDATA[If you would like to match specific users, you may enter their user names here, separated by commas.]]></phrase>
   <phrase title="username_email_ip" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Username, email, IP]]></phrase>
@@ -5258,6 +5471,7 @@ Without this, recurring subscriptions can only be cancelled from your <a href="h
   <phrase title="utc_plus_1300_apia_samoa" version_id="1040370" version_string="1.4.3"><![CDATA[(UTC+13:00) Apia, Samoa]]></phrase>
   <phrase title="utc_plus_1300_nukualofa" version_id="1000033" version_string="1.0.0 Beta 3"><![CDATA[(UTC+13:00) Nuku'alofa]]></phrase>
   <phrase title="utc_plus_1400_kiritimati" version_id="1000033" version_string="1.0.0 Beta 3"><![CDATA[(UTC+14:00) Kiritimati]]></phrase>
+  <phrase title="utc_timezone" version_id="2001070" version_string="2.0.10"><![CDATA[UTC timezone]]></phrase>
   <phrase title="valid" version_id="1000016" version_string="1.0.0 Alpha 6"><![CDATA[Valid]]></phrase>
   <phrase title="validation_callback" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Validation callback]]></phrase>
   <phrase title="validator" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Validator]]></phrase>
@@ -5280,10 +5494,15 @@ Without this, recurring subscriptions can only be cancelled from your <a href="h
   <phrase title="verification_backup_codes_automatically_generated" version_id="1050010" version_string="1.5.0 Alpha"><![CDATA[Verification backup codes have automatically been generated. Each of these codes can be used once in case you don't have access to other means of verification. These codes should be saved in a secure location.]]></phrase>
   <phrase title="verification_code" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Verification code]]></phrase>
   <phrase title="verification_key" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Verification key]]></phrase>
+  <phrase title="version_check_minimum" version_id="2001070" version_string="2.0.10"><![CDATA[You have only the minimum required version. Some features in future versions of XenForo will require a newer version.]]></phrase>
+  <phrase title="version_check_not_newest" version_id="2001070" version_string="2.0.10"><![CDATA[You have a more up-to-date version than the minimum required, but some features planned for the future may require a newer version.]]></phrase>
+  <phrase title="version_check_recommended" version_id="2001070" version_string="2.0.10"><![CDATA[You have the recommended version, all features current and planned for the future will work on this server.]]></phrase>
   <phrase title="version_comparison" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Version comparison]]></phrase>
   <phrase title="version_mismatch" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Version mismatch]]></phrase>
   <phrase title="via_twitter_account" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Via account: @...]]></phrase>
   <phrase title="view" version_id="1000015" version_string="1.0.0 Alpha 5"><![CDATA[View]]></phrase>
+  <phrase title="view_account" version_id="2001270" version_string="2.0.12"><![CDATA[View account]]></phrase>
+  <phrase title="view_addons" version_id="2001070" version_string="2.0.10"><![CDATA[View add-ons]]></phrase>
   <phrase title="view_all_available_trophies" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[View all available trophies]]></phrase>
   <phrase title="view_all_your_conversations" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[View all your conversations]]></phrase>
   <phrase title="view_attachment_x" version_id="1000015" version_string="1.0.0 Alpha 5"><![CDATA[View attachment {name}]]></phrase>
@@ -5386,6 +5605,7 @@ Without this, recurring subscriptions can only be cancelled from your <a href="h
   <phrase title="whats_gravatar" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[What's a Gravatar?]]></phrase>
   <phrase title="whats_new" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[What's new]]></phrase>
   <phrase title="whatsapp" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[WhatsApp]]></phrase>
+  <phrase title="when_user_state_non_x_users_receive_permissions_guest_group" version_id="2001270" version_string="2.0.12"><![CDATA[When in a user state other than '{valid_state}', users will receive permissions from the {guest} group.]]></phrase>
   <phrase title="while_at_or_above_points_threshold" version_id="1030010" version_string="1.3.0 Alpha"><![CDATA[While at or above points threshold]]></phrase>
   <phrase title="widget.latest_followed_profile_posts" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Latest profile posts by followers]]></phrase>
   <phrase title="widget.latest_posts" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Latest posts]]></phrase>
@@ -5478,7 +5698,7 @@ Callback arguments:
   <phrase title="widget_pos_desc.pub_sidebar_top" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Widget position that appears at the top of all public pages. Page specific widgets will always appear below this position.]]></phrase>
   <phrase title="widget_pos_desc.thread_view_sidebar" version_id="2000038" version_string="2.0.0 Beta 8"><![CDATA[Position in the sidebar while viewing a thread. Widget templates rendered in this position can use the current thread entity in the <code>{$context.thread}</code> param.]]></phrase>
   <phrase title="widget_pos_desc.whats_new_overview" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Position inside the whats_new template to display new and recent happenings. This occupies the main column so can support larger widgets.]]></phrase>
-  <phrase title="widget_pos_desc.whats_new_sidenav" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Position inside the What's new sidenav, below the navigation block. Widgets here will appear off canvas on narrow displays.]]></phrase>
+  <phrase title="widget_pos_desc.whats_new_sidenav" version_id="2001270" version_string="2.0.12"><![CDATA[Position inside the What's new sidenav, below the navigation block. Widgets here will appear off canvas on narrow displays. Only applicable if the side navigation option is selected for the "What's new navigation style" style property.]]></phrase>
   <phrase title="widget_position_is_active" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Widget position is active]]></phrase>
   <phrase title="widget_position_keys_must_be_unique" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Widget position keys must be unique. The specified key is already in use.]]></phrase>
   <phrase title="widget_positions" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Widget positions]]></phrase>
@@ -5488,6 +5708,7 @@ Callback arguments:
   <phrase title="widgets" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Widgets]]></phrase>
   <phrase title="width" version_id="1000016" version_string="1.0.0 Alpha 6"><![CDATA[Width]]></phrase>
   <phrase title="will_slow_process_down_only_needed_if_posts_in_incorrect_order" version_id="1000052" version_string="1.0.0 Release Candidate 2"><![CDATA[This will slow the process down and is only needed if posts are shown in an incorrect order or to show users when they have posted in a thread.]]></phrase>
+  <phrase title="with" version_id="2001070" version_string="2.0.10"><![CDATA[With]]></phrase>
   <phrase title="with_people" version_id="1020010" version_string="1.2.0 Alpha"><![CDATA[With]]></phrase>
   <phrase title="with_selected" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[With selected]]></phrase>
   <phrase title="within_this_bb_code" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Within this BB code]]></phrase>
@@ -5562,6 +5783,7 @@ Callback arguments:
   <phrase title="x_user_name_changed_to_x" version_id="2000038" version_string="2.0.0 Beta 8"><![CDATA[{oldName} <span class="u-muted">user name changed to</span> {newName}]]></phrase>
   <phrase title="x_will_be_merged_into_this_user_and_all_of_xs_content_moved" version_id="1020010" version_string="1.2.0 Alpha"><![CDATA[{name} will be merged into this user and all of {name}'s content will now belong to this user.]]></phrase>
   <phrase title="x_wrote_on_ys_profile" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[{name} wrote on {profile}'s profile.]]></phrase>
+  <phrase title="x_years" version_id="2000570" version_string="2.0.5"><![CDATA[{years} years]]></phrase>
   <phrase title="xenforo_importers_now_installed_as_separate_add_on_downloadable_from" version_id="2000370" version_string="2.0.3"><![CDATA[XenForo importers are now installed as a separate add-on, downloadable from your <a href="https://xenforo.com/customers" target="_blank">Customer area</a>.]]></phrase>
   <phrase title="xs_latest_activity" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[{name}'s latest activity]]></phrase>
   <phrase title="xs_reported_content" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[{name}'s reported content]]></phrase>
@@ -5584,6 +5806,8 @@ Callback arguments:
   <phrase title="you_cannot_reassign_this_report_to_this_user" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[You cannot reassign this report to this user.]]></phrase>
   <phrase title="you_cannot_start_conversation_with_yourself" version_id="1050010" version_string="1.5.0 Alpha"><![CDATA[You cannot start a conversation with yourself.]]></phrase>
   <phrase title="you_did_not_grant_permission_to_access_connected_account" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[Unfortunately, you did not grant permission to access your connected account. This is required to continue.]]></phrase>
+  <phrase title="you_do_not_currently_have_privacy_policy_url" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[You do not currently have a privacy policy URL.]]></phrase>
+  <phrase title="you_do_not_currently_have_terms_and_rules_url" version_id="2000631" version_string="2.0.6 Beta 1"><![CDATA[You do not currently have a terms and rules URL.]]></phrase>
   <phrase title="you_do_not_have_any_recent_alerts" version_id="1000015" version_string="1.0.0 Alpha 5"><![CDATA[You do not have any recent alerts.]]></phrase>
   <phrase title="you_have_been_awarded_a_trophy_x" version_id="1000015" version_string="1.0.0 Alpha 5"><![CDATA[<strong class="subject">You</strong> have been awarded a trophy: {trophy}]]></phrase>
   <phrase title="you_have_been_banned" version_id="0"><![CDATA[You have been banned.]]></phrase>
@@ -5684,7 +5908,6 @@ Two-step verification increases the security of your account by requiring you to
   <phrase title="you_sure_you_want_to_update_notification_settings_for_all_forums" version_id="2000036" version_string="2.0.0 Beta 6"><![CDATA[Are you sure you want to update your email notification settings for <b>all</b> forums?]]></phrase>
   <phrase title="you_sure_you_want_to_update_notification_settings_for_all_threads" version_id="2000036" version_string="2.0.0 Beta 6"><![CDATA[Are you sure you want to update your email notification settings for <b>all</b> threads?]]></phrase>
   <phrase title="you_unable_reply_to_thread_x_until_expiry_y" version_id="1040010" version_string="1.4.0 Alpha"><![CDATA[You will be unable to reply to the thread {title} until {expiry}.]]></phrase>
-  <phrase title="you_will_receive_emails_sent_by_administrator_to_all_members" version_id="1000015" version_string="1.0.0 Alpha 5"><![CDATA[You will receive a copy of emails sent by the administrator to all members of the site.]]></phrase>
   <phrase title="your_account" version_id="2000010" version_string="2.0.0 Alpha" global_cache="1"><![CDATA[Your account]]></phrase>
   <phrase title="your_account_already_has_password" version_id="1000011" version_string="1.0.0 Alpha 1"><![CDATA[Your account already has a password.]]></phrase>
   <phrase title="your_account_does_not_currently_have_password" version_id="1000015" version_string="1.0.0 Alpha 5"><![CDATA[Your account does not currently have a password.]]></phrase>

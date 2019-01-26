@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 3f42b3918f28ed3c500b0fcdeed80d0a
+// FROM HASH: 8cf56c804743f8a185684314e49daa3f
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -35,6 +35,16 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	), '', array(
 	)) . '
 ');
+	$__finalCompiled .= '
+
+';
+	if ($__vars['hasProcessing']) {
+		$__finalCompiled .= '
+	<div class="blockMessage blockMessage--error blockMessage--iconic">
+		' . 'One or more add-ons currently have actions pending and may be in an inconsistent state. Because of this, some errors may be suppressed and unexpected behavior may occur. If this does not change shortly, please contact the add-on author for guidance.' . '
+	</div>
+';
+	}
 	$__finalCompiled .= '
 
 ' . $__templater->callMacro('addon_list_macros', 'addon_list_filter', array(), $__vars) . '

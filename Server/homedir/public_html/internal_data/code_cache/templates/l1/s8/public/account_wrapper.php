@@ -58,13 +58,11 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 					' . 'Alerts' . '
 				</a>
 				' . '
-				' . $__templater->includeTemplate('sv_ue_account_wrapper_watched', $__vars) . '
-' . '
+				' . '
 ' . $__compilerTemp1 . '
 			</div>
 
-			' . $__templater->includeTemplate('sv_ue_account_wrapper_conversations', $__vars) . '
-<h3 class="block-minorHeader">' . 'Settings' . '</h3>
+			<h3 class="block-minorHeader">' . 'Settings' . '</h3>
 			<div class="block-body">
 				' . '
 				<a class="blockLink ' . (($__vars['pageSelected'] == 'account_details') ? 'is-selected' : '') . '" href="' . $__templater->fn('link', array('account/account-details', ), true) . '">

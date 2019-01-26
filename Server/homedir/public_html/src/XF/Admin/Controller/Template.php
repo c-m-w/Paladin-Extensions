@@ -106,6 +106,16 @@ class Template extends AbstractController
 			'addon_id' => 'str'
 		]);
 
+		$form->setup(function() use ($template)
+		{
+			if ($template->style_id > 0)
+			{
+				// force an update to resolve any out of date issues
+				$template->updateVersionId();
+				$template->last_edit_date = \XF::$time;
+			}
+		});
+
 		$form->basicEntitySave($template, $input);
 
 		return $form;

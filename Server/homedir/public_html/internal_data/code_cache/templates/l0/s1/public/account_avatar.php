@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: c6ab63717e0569141359e05ca4401a02
+// FROM HASH: 709a85c26b1b393a3d8a440a61b2ca9a
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -12,7 +12,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 ';
 	$__templater->includeJs(array(
 		'prod' => 'xf/avatar-compiled.js',
-		'dev' => 'vendor/cropbox/jquery.cropbox.js, xf/avatar.js',
+		'dev' => 'vendor/hammer/hammer.js, vendor/cropbox/jquery.cropbox.js, xf/avatar.js',
 	));
 	$__finalCompiled .= '
 

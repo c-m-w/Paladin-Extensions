@@ -222,7 +222,15 @@ class Ip
 			$output = implode(':', $parts);
 			if ($shorten)
 			{
-				$output = preg_replace('/((^0|:0){2,})(.*)$/', ':$3', $output);
+				$output = preg_replace_callback(
+					'/((^0|:0){2,})(.*)$/',
+					function($matches)
+					{
+						return ':' . (strlen($matches[3]) ? $matches[3] : ':');
+					},
+					$output
+				);
+
 				if ($output == ':')
 				{
 					// correct way of writing an IPv6 address of all zeroes

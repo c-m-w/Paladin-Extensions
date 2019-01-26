@@ -190,7 +190,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'value' => $__vars['notice']['notice_type'],
 	), $__compilerTemp1, array(
 		'label' => 'Notice type',
-		'explain' => 'Block notices are displayed at the top of the page above the top breadcrumb. Floating notices are displayed in the bottom right corner.',
+		'explain' => 'Block notices are displayed at the top of the page above the top breadcrumb. Floating notices are displayed in the bottom right corner. Fixed notes are full width and fixed to the bottom of the page.',
 	)) . '
 
 				<div class="js-hiderContainer">

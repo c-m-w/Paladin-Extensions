@@ -21,7 +21,9 @@ class NoticeList
 
 	protected $notices = [
 		'block' => [],
-		'floating' => []
+		'floating' => [],
+		'scrolling' => [],
+		'bottom_fixer' => []
 	];
 
 	protected $tokens = [];

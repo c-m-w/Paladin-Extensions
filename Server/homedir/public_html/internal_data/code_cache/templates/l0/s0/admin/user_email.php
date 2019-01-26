@@ -106,7 +106,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'name' => 'criteria[Option][receive_admin_email]',
 		'selected' => true,
 		'label' => '
-					' . 'Only send to users opting to receive emails from the admin' . '
+					' . 'Only send to users opting to receive news and update emails' . '
 				',
 		'_type' => 'option',
 	)), array(

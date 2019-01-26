@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 20d3c24a15d962f6ea63f6a8e2c94a63
+// FROM HASH: 9fc5a65cf2037ed1c1cca1f019aef85a
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -13,7 +13,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	$__templater->setPageParam('jsState.' . $__vars['jsState'], true);
 	$__finalCompiled .= '
 
-<span class="bbOembed"
+<span class="bbOembed bbMediaJustifier"
 	  data-xf-init="oembed"
 	  data-provider="' . $__templater->escape($__vars['provider']) . '"
 	  data-id="' . $__templater->escape($__vars['id']) . '">

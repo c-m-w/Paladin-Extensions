@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: ffef22d9e3bff03241a00bd3c2efe8b0
+// FROM HASH: 74641a844f59005cb0e508c8ea6152f0
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -14,31 +14,13 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 					<a href="' . $__templater->fn('link', array('threads/list', null, array('criteria' => $__vars['criteria'], 'all' => true, ), ), true) . '">' . 'View or filter matches' . '</a>
 				';
 	}
-	$__compilerTemp2 = '';
-	if ($__vars['prefixes']['prefixesGrouped']) {
-		$__compilerTemp2 .= '
-				' . $__templater->formRow('
-
-					' . $__templater->callMacro('public:prefix_macros', 'select', array(
-			'noneLabel' => '',
-			'prefixes' => $__vars['prefixes']['prefixesGrouped'],
-			'name' => 'actions[prefix_id]',
-			'type' => 'thread',
-		), $__vars) . '
-				', array(
-			'rowtype' => 'input',
-			'label' => 'Set a prefix',
-			'explain' => 'The prefix will only be applied if it is valid for the forum the thread is in or is being moved to.',
-		)) . '
-			';
-	}
-	$__compilerTemp3 = array(array(
+	$__compilerTemp2 = array(array(
 		'value' => '0',
 		'_type' => 'option',
 	));
 	if ($__templater->isTraversable($__vars['forums'])) {
 		foreach ($__vars['forums'] AS $__vars['forum']) {
-			$__compilerTemp3[] = array(
+			$__compilerTemp2[] = array(
 				'value' => $__vars['forum']['value'],
 				'label' => $__templater->escape($__vars['forum']['label']),
 				'disabled' => $__vars['forum']['disabled'],
@@ -46,11 +28,31 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			);
 		}
 	}
-	$__compilerTemp4 = '';
+	$__compilerTemp3 = '';
 	if ($__vars['hasPrefixes']) {
-		$__compilerTemp4 .= '
+		$__compilerTemp3 .= '
 					' . 'If the selected thread(s) have any prefixes applied which are not valid in the selected forum, those prefixes will be removed.' . '
 				';
+	}
+	$__compilerTemp4 = '';
+	if ($__vars['prefixes']['prefixesGrouped']) {
+		$__compilerTemp4 .= '
+				' . $__templater->formCheckBoxRow(array(
+		), array(array(
+			'name' => 'actions[apply_thread_prefix]',
+			'label' => 'Set a prefix',
+			'_dependent' => array('
+							' . $__templater->callMacro('public:prefix_macros', 'select', array(
+			'prefixes' => $__vars['prefixes']['prefixesGrouped'],
+			'name' => 'actions[prefix_id]',
+			'type' => 'thread',
+		), $__vars) . '
+						'),
+			'_type' => 'option',
+		)), array(
+			'explain' => 'The prefix will only be applied if it is valid for the forum the thread is in or is being moved to.',
+		)) . '
+			';
 	}
 	$__compilerTemp5 = '';
 	if ($__vars['threadIds']) {
@@ -77,15 +79,14 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 			<hr class="formRowSep" />
 
-			' . $__compilerTemp2 . '
-
-
 			' . $__templater->formSelectRow(array(
 		'name' => 'actions[node_id]',
-	), $__compilerTemp3, array(
+	), $__compilerTemp2, array(
 		'label' => 'Move to forum',
-		'explain' => $__compilerTemp4,
+		'explain' => $__compilerTemp3,
 	)) . '
+
+			' . $__compilerTemp4 . '
 
 			<hr class="formRowSep" />
 

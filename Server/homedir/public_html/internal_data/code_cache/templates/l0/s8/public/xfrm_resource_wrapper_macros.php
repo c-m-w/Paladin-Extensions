@@ -57,7 +57,7 @@ return array('macros' => array('header' => function($__templater, array $__argum
 							';
 		} else {
 			$__compilerTemp4 .= '
-								<span class="button is-disabled">' . 'No permission to download' . '</span>
+								<span class="button is-disabled">' . 'xfrm_no_permission_to_download' . '</span>
 							';
 		}
 		$__compilerTemp4 .= '
@@ -69,7 +69,7 @@ return array('macros' => array('header' => function($__templater, array $__argum
 							';
 		if ($__templater->method($__vars['resource'], 'canDownload', array())) {
 			$__compilerTemp4 .= '
-								' . $__templater->button('Buy for ' . $__templater->filter($__vars['resource']['price'], array(array('currency', array($__vars['resource']['currency'], )),), true) . '', array(
+								' . $__templater->button('xfrm_buy_for_x', array(
 				'href' => $__vars['resource']['external_purchase_url'],
 				'class' => 'button--cta',
 				'icon' => 'purchase',
@@ -78,7 +78,7 @@ return array('macros' => array('header' => function($__templater, array $__argum
 							';
 		} else {
 			$__compilerTemp4 .= '
-								<span class="button is-disabled">' . 'No permission to buy (' . $__templater->filter($__vars['resource']['price'], array(array('currency', array($__vars['resource']['currency'], )),), true) . ')' . '</span>
+								<span class="button is-disabled">' . 'xfrm_no_permission_to_buy_price_x' . '</span>
 							';
 		}
 		$__compilerTemp4 .= '
@@ -107,8 +107,8 @@ return array('macros' => array('header' => function($__templater, array $__argum
 			))) . '
 								</li>
 								<li>
-									<i class="fa fa-clock-o" aria-hidden="true" title="' . $__templater->filter('Creation date', array(array('for_attr', array()),), true) . '"></i>
-									<span class="u-srOnly">' . 'Creation date' . '</span>
+									<i class="fa fa-clock-o" aria-hidden="true" title="' . $__templater->filter('xfrm_creation_date', array(array('for_attr', array()),), true) . '"></i>
+									<span class="u-srOnly">' . 'xfrm_creation_date' . '</span>
 
 									<a href="' . $__templater->fn('link', array('resources', $__vars['resource'], ), true) . '" class="u-concealed">' . $__templater->fn('date_dynamic', array($__vars['resource']['resource_date'], array(
 			))) . '</a>
@@ -157,7 +157,7 @@ return array('macros' => array('header' => function($__templater, array $__argum
 								';
 			if ($__vars['resource']['Featured']) {
 				$__compilerTemp5 .= '
-									<li><span class="label label--accent">' . 'Featured' . '</span></li>
+									<li><span class="label label--accent">' . 'xfrm_featured' . '</span></li>
 								';
 			}
 			$__compilerTemp5 .= '
@@ -245,7 +245,7 @@ return array('macros' => array('header' => function($__templater, array $__argum
 						';
 	if ($__templater->method($__vars['resource'], 'hasExtraInfoTab', array())) {
 		$__compilerTemp1 .= '
-							<a class="tabs-tab ' . (($__vars['selected'] == 'extra') ? 'is-active' : '') . '" href="' . $__templater->fn('link', array('resources/extra', $__vars['resource'], ), true) . '">' . 'Extra info' . '</a>
+							<a class="tabs-tab ' . (($__vars['selected'] == 'extra') ? 'is-active' : '') . '" href="' . $__templater->fn('link', array('resources/extra', $__vars['resource'], ), true) . '">' . 'xfrm_extra_info' . '</a>
 						';
 	}
 	$__compilerTemp1 .= '
@@ -262,14 +262,14 @@ return array('macros' => array('header' => function($__templater, array $__argum
 						';
 	if ($__vars['resource']['real_update_count']) {
 		$__compilerTemp1 .= '
-							<a class="tabs-tab ' . (($__vars['selected'] == 'updates') ? 'is-active' : '') . '" href="' . $__templater->fn('link', array('resources/updates', $__vars['resource'], ), true) . '">' . 'Updates' . ' ' . $__templater->filter($__vars['resource']['real_update_count'], array(array('parens', array()),), true) . '</a>
+							<a class="tabs-tab ' . (($__vars['selected'] == 'updates') ? 'is-active' : '') . '" href="' . $__templater->fn('link', array('resources/updates', $__vars['resource'], ), true) . '">' . 'xfrm_updates' . ' ' . $__templater->filter($__vars['resource']['real_update_count'], array(array('parens', array()),), true) . '</a>
 						';
 	}
 	$__compilerTemp1 .= '
 						';
 	if ($__vars['resource']['real_review_count']) {
 		$__compilerTemp1 .= '
-							<a class="tabs-tab ' . (($__vars['selected'] == 'reviews') ? 'is-active' : '') . '" href="' . $__templater->fn('link', array('resources/reviews', $__vars['resource'], ), true) . '">' . 'Reviews' . ' ' . $__templater->filter($__vars['resource']['real_review_count'], array(array('parens', array()),), true) . '</a>
+							<a class="tabs-tab ' . (($__vars['selected'] == 'reviews') ? 'is-active' : '') . '" href="' . $__templater->fn('link', array('resources/reviews', $__vars['resource'], ), true) . '">' . 'xfrm_reviews' . ' ' . $__templater->filter($__vars['resource']['real_review_count'], array(array('parens', array()),), true) . '</a>
 						';
 	}
 	$__compilerTemp1 .= '
@@ -283,7 +283,7 @@ return array('macros' => array('header' => function($__templater, array $__argum
 						';
 	if ($__templater->method($__vars['resource'], 'hasViewableDiscussion', array())) {
 		$__compilerTemp1 .= '
-							<a class="tabs-tab ' . (($__vars['selected'] == 'discussion') ? 'is-active' : '') . '" href="' . $__templater->fn('link', array('threads', $__vars['resource']['Discussion'], ), true) . '">' . 'Discussion' . '</a>
+							<a class="tabs-tab ' . (($__vars['selected'] == 'discussion') ? 'is-active' : '') . '" href="' . $__templater->fn('link', array('threads', $__vars['resource']['Discussion'], ), true) . '">' . 'xfrm_discussion' . '</a>
 						';
 	}
 	$__compilerTemp1 .= '
@@ -316,7 +316,7 @@ return array('macros' => array('header' => function($__templater, array $__argum
 	';
 	if ($__templater->method($__vars['resource'], 'canReleaseUpdate', array())) {
 		$__finalCompiled .= '
-		' . $__templater->button('Post an update', array(
+		' . $__templater->button('xfrm_post_update', array(
 			'href' => $__templater->fn('link', array('resources/post-update', $__vars['resource'], ), false),
 		), '', array(
 		)) . '
@@ -391,21 +391,21 @@ return array('macros' => array('header' => function($__templater, array $__argum
 								';
 	if ($__templater->method($__vars['resource'], 'canEdit', array())) {
 		$__compilerTemp3 .= '
-									<a href="' . $__templater->fn('link', array('resources/edit', $__vars['resource'], ), true) . '" class="menu-linkRow">' . 'Edit resource' . '</a>
+									<a href="' . $__templater->fn('link', array('resources/edit', $__vars['resource'], ), true) . '" class="menu-linkRow">' . 'xfrm_edit_resource' . '</a>
 								';
 	}
 	$__compilerTemp3 .= '
 								';
 	if ($__templater->method($__vars['resource'], 'canEditIcon', array())) {
 		$__compilerTemp3 .= '
-									<a href="' . $__templater->fn('link', array('resources/edit-icon', $__vars['resource'], ), true) . '" class="menu-linkRow" data-xf-click="overlay">' . 'Edit resource icon' . '</a>
+									<a href="' . $__templater->fn('link', array('resources/edit-icon', $__vars['resource'], ), true) . '" class="menu-linkRow" data-xf-click="overlay">' . 'xfrm_edit_resource_icon' . '</a>
 								';
 	}
 	$__compilerTemp3 .= '
 								';
 	if ($__templater->method($__vars['resource'], 'canReleaseUpdate', array())) {
 		$__compilerTemp3 .= '
-									<a href="' . $__templater->fn('link', array('resources/change-type', $__vars['resource'], ), true) . '" class="menu-linkRow">' . 'Change resource type' . '</a>
+									<a href="' . $__templater->fn('link', array('resources/change-type', $__vars['resource'], ), true) . '" class="menu-linkRow">' . 'xfrm_change_resource_type' . '</a>
 								';
 	}
 	$__compilerTemp3 .= '
@@ -420,11 +420,11 @@ return array('macros' => array('header' => function($__templater, array $__argum
 										';
 		if ($__vars['resource']['Featured']) {
 			$__compilerTemp3 .= '
-											' . 'Unfeature resource' . '
+											' . 'xfrm_resource_quick_unfeature' . '
 										';
 		} else {
 			$__compilerTemp3 .= '
-											' . 'Feature resource' . '
+											' . 'xfrm_resource_quick_feature' . '
 										';
 		}
 		$__compilerTemp3 .= '
@@ -435,21 +435,21 @@ return array('macros' => array('header' => function($__templater, array $__argum
 								';
 	if ($__templater->method($__vars['resource'], 'canMove', array())) {
 		$__compilerTemp3 .= '
-									<a href="' . $__templater->fn('link', array('resources/move', $__vars['resource'], ), true) . '" data-xf-click="overlay" class="menu-linkRow">' . 'Move resource' . '</a>
+									<a href="' . $__templater->fn('link', array('resources/move', $__vars['resource'], ), true) . '" data-xf-click="overlay" class="menu-linkRow">' . 'xfrm_move_resource' . '</a>
 								';
 	}
 	$__compilerTemp3 .= '
 								';
 	if ($__templater->method($__vars['resource'], 'canReassign', array())) {
 		$__compilerTemp3 .= '
-									<a href="' . $__templater->fn('link', array('resources/reassign', $__vars['resource'], ), true) . '" data-xf-click="overlay" class="menu-linkRow">' . 'Reassign resource' . '</a>
+									<a href="' . $__templater->fn('link', array('resources/reassign', $__vars['resource'], ), true) . '" data-xf-click="overlay" class="menu-linkRow">' . 'xfrm_reassign_resource' . '</a>
 								';
 	}
 	$__compilerTemp3 .= '
 							';
 	if ($__templater->method($__vars['resource'], 'canDelete', array('soft', ))) {
 		$__compilerTemp3 .= '
-									<a href="' . $__templater->fn('link', array('resources/delete', $__vars['resource'], ), true) . '" data-xf-click="overlay" class="menu-linkRow">' . 'Delete resource' . '</a>
+									<a href="' . $__templater->fn('link', array('resources/delete', $__vars['resource'], ), true) . '" data-xf-click="overlay" class="menu-linkRow">' . 'xfrm_delete_resource' . '</a>
 								';
 	}
 	$__compilerTemp3 .= '

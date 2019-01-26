@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: d1dbba07f4ffcb98716b0ec6cfba53d9
+// FROM HASH: 6a0f3403b90081a9a2cb339e63f0344c
 return array('macros' => array('number_dependent' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -109,7 +109,7 @@ return array('macros' => array('number_dependent' => function($__templater, arra
 	} else {
 		$__finalCompiled .= '
 	';
-		$__templater->pageParams['pageTitle'] = $__templater->preEscaped('Edit field' . $__vars['xf']['language']['label_separator'] . ' ' . $__templater->escape($__vars['field']['title']));
+		$__templater->pageParams['pageTitle'] = $__templater->preEscaped('Edit field' . $__vars['xf']['language']['label_separator'] . ' ' . $__templater->filter($__vars['field']['title'], array(array('htmlspecialchars', array()),), true));
 		$__finalCompiled .= '
 ';
 	}
@@ -420,7 +420,7 @@ return array('macros' => array('number_dependent' => function($__templater, arra
 	)) . '
 		</div>
 
-		' . $__templater->includeTemplate('sedo_user_field_edit_perms_pane', $__vars) . '
+		' . $__templater->includeTemplate('custom_field_permissions_pane', $__vars) . '
 
 ' . $__templater->formSubmitRow(array(
 		'sticky' => 'true',

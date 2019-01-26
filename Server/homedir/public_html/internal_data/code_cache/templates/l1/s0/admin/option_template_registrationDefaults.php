@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 2f8c45c814da0095f597367b6c8a22d9
+// FROM HASH: 5f291ba1c70b00403c031136023cef24
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -39,7 +39,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	array(
 		'name' => $__vars['inputName'] . '[receive_admin_email]',
 		'selected' => $__vars['option']['option_value']['receive_admin_email'],
-		'label' => 'Receive site mailings',
+		'label' => 'Receive news and update emails',
 		'_type' => 'option',
 	),
 	array(
@@ -49,7 +49,6 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'_type' => 'option',
 	))) . '
 	<div class="u-inputSpacer">
-		' . $__templater->includeTemplate('expiringUserUpgrades_option_template_registrationDefaults', $__vars) . '
 		<dl class="inputLabelPair">
 			<dt><label for="' . $__templater->escape($__vars['inputName']) . '_dws">' . 'Watch content on creation' . '</label></dt>
 			<dd>' . $__templater->formSelect(array(

@@ -427,7 +427,7 @@ abstract class AbstractSearcher
 				}
 				if (isset($value['end']))
 				{
-					$value['end'] = $this->convertDateToInteger($value['end']);
+					$value['end'] = $this->convertDateToInteger($value['end'], true);
 				}
 			}
 			else

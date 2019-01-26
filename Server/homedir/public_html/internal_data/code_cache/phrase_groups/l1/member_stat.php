@@ -6,5 +6,4 @@ return array (
   'member_stat.siropu_referral_count' => 'Most referrals',
   'member_stat.staff_members' => 'Staff members',
   'member_stat.todays_birthdays' => 'Today\'s birthdays',
-  'member_stat.xfrm_most_resources' => 'Most extensions',
 );

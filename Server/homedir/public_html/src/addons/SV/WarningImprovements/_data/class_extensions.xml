@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<class_extensions>
+  <extension from_class="XF\Admin\Controller\Warning" to_class="SV\WarningImprovements\XF\Admin\Controller\Warning" execute_order="624000" active="1"/>
+  <extension from_class="XF\ControllerPlugin\Warn" to_class="SV\WarningImprovements\XF\ControllerPlugin\Warn" execute_order="6240" active="1"/>
+  <extension from_class="XF\Entity\ConversationMaster" to_class="SV\WarningImprovements\XF\Entity\ConversationMaster" execute_order="6240" active="1"/>
+  <extension from_class="XF\Entity\User" to_class="SV\WarningImprovements\XF\Entity\User" execute_order="6240" active="1"/>
+  <extension from_class="XF\Entity\UserBan" to_class="SV\WarningImprovements\XF\Entity\UserBan" execute_order="6240" active="1"/>
+  <extension from_class="XF\Entity\UserChangeTemp" to_class="SV\WarningImprovements\XF\Entity\UserChangeTemp" execute_order="6240" active="1"/>
+  <extension from_class="XF\Entity\UserOption" to_class="SV\WarningImprovements\XF\Entity\UserOption" execute_order="6240" active="1"/>
+  <extension from_class="XF\Entity\Warning" to_class="SV\WarningImprovements\XF\Entity\Warning" execute_order="6240" active="1"/>
+  <extension from_class="XF\Entity\WarningAction" to_class="SV\WarningImprovements\XF\Entity\WarningAction" execute_order="6240" active="1"/>
+  <extension from_class="XF\Entity\WarningDefinition" to_class="SV\WarningImprovements\XF\Entity\WarningDefinition" execute_order="6240" active="1"/>
+  <extension from_class="XF\Pub\Controller\Member" to_class="SV\WarningImprovements\XF\Pub\Controller\Member" execute_order="6240" active="1"/>
+  <extension from_class="XF\Pub\View\Member\WarnFill" to_class="SV\WarningImprovements\XF\Pub\View\Member\WarnFill" execute_order="6240" active="1"/>
+  <extension from_class="XF\Repository\UserChangeTemp" to_class="SV\WarningImprovements\XF\Repository\UserChangeTemp" execute_order="6240" active="1"/>
+  <extension from_class="XF\Repository\Warning" to_class="SV\WarningImprovements\XF\Repository\Warning" execute_order="6240" active="1"/>
+  <extension from_class="XF\Service\Conversation\Notifier" to_class="SV\WarningImprovements\XF\Service\Conversation\Notifier" execute_order="6240" active="1"/>
+  <extension from_class="XF\Service\User\ContentChange" to_class="SV\WarningImprovements\XF\Service\User\ContentChange" execute_order="10" active="1"/>
+  <extension from_class="XF\Service\User\Warn" to_class="SV\WarningImprovements\XF\Service\User\Warn" execute_order="6240" active="1"/>
+  <extension from_class="XF\Service\User\WarningPointsChange" to_class="SV\WarningImprovements\XF\Service\User\WarningPointsChange" execute_order="6240" active="1"/>
+</class_extensions>

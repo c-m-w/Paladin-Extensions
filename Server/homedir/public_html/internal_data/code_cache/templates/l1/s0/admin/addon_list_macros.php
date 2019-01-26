@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 041d2412e51c5ff3154d92bffbb10b58
+// FROM HASH: 0015478b18fa4ef077538b7dbf2c2d15
 return array('macros' => array('addon_list_filter' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -24,7 +24,7 @@ return array('macros' => array('addon_list_filter' => function($__templater, arr
 				data-no-results-format="<div class=&quot;blockMessage js-filterNoResults&quot;>%s</div>">
 
 				<div class="inputGroup inputGroup--inline inputGroup--joined">
-					<input type="text" class="input js-filterInput" placeholder="' . 'Filter' . $__vars['xf']['language']['ellipsis'] . '" />
+					<input type="text" class="input js-filterInput" placeholder="' . $__templater->filter('Filter' . $__vars['xf']['language']['ellipsis'], array(array('for_attr', array()),), true) . '" />
 					' . $__templater->formCheckBox(array(
 		'standalone' => 'true',
 	), array(array(
@@ -112,6 +112,13 @@ return array('macros' => array('addon_list_filter' => function($__templater, arr
 	), $__vars) . '
 				<h3 class="contentRow-header js-filterSearchable">
 					' . $__templater->escape($__vars['addOn']['title']) . ' <span class="contentRow-muted">' . $__templater->escape($__vars['addOn']['version_string']) . '</span>
+					';
+	if ($__vars['addOn']['is_processing']) {
+		$__finalCompiled .= '
+						<span class="label label--error" data-xf-init="tooltip" title="' . $__templater->filter('Last action' . $__vars['xf']['language']['label_separator'], array(array('for_attr', array()),), true) . ' ' . ($__templater->escape($__vars['addOn']['last_pending_action']) ?: $__templater->filter('N/A', array(array('for_attr', array()),), true)) . '">' . 'Action pending' . '</span>
+					';
+	}
+	$__finalCompiled .= '
 				</h3>
 				<div class="contentRow-lesser js-filterSearchable' . ((!$__vars['addOn']['description']) ? ' no-description' : '') . '">
 					' . ($__vars['addOn']['description'] ? $__templater->filter($__templater->fn('snippet', array($__vars['addOn']['description'], 200, ), false), array(array('nl2br', array()),), true) : '&nbsp;') . '
@@ -142,7 +149,7 @@ return array('macros' => array('addon_list_filter' => function($__templater, arr
 			';
 	} else if ($__templater->method($__vars['addOn'], 'hasIcon', array())) {
 		$__finalCompiled .= '
-				<img src="' . $__templater->fn('link', array('add-ons/icon', $__vars['addOn'], ), true) . '" alt="' . $__templater->escape($__vars['addOn']['title']) . '" />
+				<img src="' . $__templater->escape($__templater->method($__vars['addOn'], 'getIconUri', array())) . '" alt="' . $__templater->escape($__vars['addOn']['title']) . '" />
 			';
 	} else if ($__templater->method($__vars['addOn'], 'isLegacy', array())) {
 		$__finalCompiled .= '

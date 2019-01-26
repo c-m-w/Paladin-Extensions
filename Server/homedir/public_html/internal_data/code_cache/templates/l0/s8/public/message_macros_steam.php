@@ -19,7 +19,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 				';
 		} else {
 			$__finalCompiled .= '
-					' . 'View' . '
+					' . 'message_macros_steam_view' . '
 				';
 		}
 		$__finalCompiled .= '

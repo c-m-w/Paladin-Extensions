@@ -156,13 +156,16 @@ class UserUpgrade extends AbstractPurchasable
 				if ($userUpgradeRecordId)
 				{
 					$existingRecord = \XF::em()->find('XF:UserUpgradeActive', $userUpgradeRecordId);
+					$endColumn = 'end_date';
+
 					if (!$existingRecord)
 					{
 						$existingRecord = \XF::em()->find('XF:UserUpgradeExpired', $userUpgradeRecordId);
+						$endColumn = 'original_end_date';
 					}
 					if ($existingRecord)
 					{
-						$upgradeService->setEndDate($existingRecord->original_end_date ?: $existingRecord->end_date);
+						$upgradeService->setEndDate($existingRecord->$endColumn);
 					}
 					$upgradeService->ignoreUnpurchasable(true);
 					$activeUpgrade = $upgradeService->upgrade();
@@ -190,11 +193,21 @@ class UserUpgrade extends AbstractPurchasable
 
 	public function reversePurchase(CallbackState $state)
 	{
-		$purchaseRequest = $state->getPurchaseRequest();
+		if ($state->legacy)
+		{
+			$purchaseRequest = null;
+			$userUpgradeId = $state->userUpgrade->user_upgrade_id;
+		}
+		else
+		{
+			$purchaseRequest = $state->getPurchaseRequest();
+			$userUpgradeId = $purchaseRequest->extra_data['user_upgrade_id'];
+		}
+
 		$purchaser = $state->getPurchaser();
 
 		$userUpgrade = \XF::em()->find(
-			'XF:UserUpgrade', $purchaseRequest->extra_data['user_upgrade_id'], 'Active|' . $purchaser->user_id
+			'XF:UserUpgrade', $userUpgradeId, 'Active|' . $purchaser->user_id
 		);
 
 		/** @var \XF\Service\User\Downgrade $downgradeService */

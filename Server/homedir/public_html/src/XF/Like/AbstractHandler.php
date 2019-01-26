@@ -66,6 +66,12 @@ abstract class AbstractHandler
 		return \XF::app()->templater()->renderTemplate($template, $data);
 	}
 
+	public function isLikeRenderable(LikedContent $like)
+	{
+		$template = $this->getTemplateName();
+		return \XF::app()->templater()->isKnownTemplate($template);
+	}
+
 	public function updateContentLikes(Entity $entity, $count, array $latestLikes)
 	{
 		$countField = isset($this->contentCacheFields['count']) ? $this->contentCacheFields['count'] : false;

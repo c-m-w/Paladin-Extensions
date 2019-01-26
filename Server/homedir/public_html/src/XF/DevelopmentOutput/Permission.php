@@ -57,7 +57,7 @@ class Permission extends AbstractHandler
 
 		list($groupId, $permissionId) = explode('-', $name);
 
-		$permission->bulkSet($json);
+		$permission->bulkSetIgnore($json);
 		$permission->permission_group_id = $groupId;
 		$permission->permission_id = $permissionId;
 		$permission->addon_id = $addOnId;

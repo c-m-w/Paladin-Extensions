@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 06d5b0ed6441826da692c2c2066b6198
+// FROM HASH: 98aeef8884491e80282cd6b34d677474
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -44,6 +44,14 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 .uix_welcomeSection {
 	position: relative;
 	.xf-uix_welcomeSection__style();
+	
+	';
+	if ($__templater->fn('property', array('uix_welcomeSectionLocation', ), false) == 'header') {
+		$__finalCompiled .= '
+		margin-bottom: 0;
+	';
+	}
+	$__finalCompiled .= '
 
 	.uix_welcomeSection__inner {
 		position: relative;

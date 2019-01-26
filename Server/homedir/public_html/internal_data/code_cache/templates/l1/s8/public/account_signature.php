@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: ab41b61cac17207f4579cc657536eb8b
+// FROM HASH: 6469bdf8386a54275f24464cf6a39f74
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -32,7 +32,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'action' => $__templater->fn('link', array('account/signature', ), false),
 		'ajax' => 'true',
 		'class' => 'block',
-		'data-force-flash-message' => 'true',
+		'data-redirect' => 'off',
 	));
 	return $__finalCompiled;
 });

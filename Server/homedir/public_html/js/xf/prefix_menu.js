@@ -225,6 +225,8 @@
 				.addClass(addClass);
 
 			$active.data('prefix-class', addClass);
+
+			$select.trigger('change');
 		},
 
 		prefixClick: function(e)

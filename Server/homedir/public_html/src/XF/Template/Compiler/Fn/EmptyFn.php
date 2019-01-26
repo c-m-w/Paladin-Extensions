@@ -14,6 +14,6 @@ class EmptyFn extends AbstractFn
 		$context['escape'] = false;
 
 		$value = $fn->arguments[0]->compile($compiler, $context, true);
-		return "{$compiler->templaterVariable}->test($value, 'empty', array())";
+		return "{$compiler->templaterVariable}->fn('empty', array($value))";
 	}
 }

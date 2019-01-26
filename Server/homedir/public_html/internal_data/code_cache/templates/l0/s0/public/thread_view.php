@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: dcfd8adac83990ca4a08542a7a344f1e
+// FROM HASH: 52952d4cceb9a54bd492b2346283fe56
 return array('macros' => array('thread_status' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -192,7 +192,6 @@ return array('macros' => array('thread_status' => function($__templater, array $
 	$__finalCompiled .= '
 
 ' . '
-' . $__templater->includeTemplate('xfrm_thread_insert', $__vars) . '
 
 ';
 	if ($__vars['pendingApproval']) {
@@ -423,8 +422,7 @@ return array('macros' => array('thread_status' => function($__templater, array $
 										';
 	}
 	$__compilerTemp7 .= '
-										' . $__templater->includeTemplate('changeContentOwner_thread_tools_menu_before_footer', $__vars) . '
-' . '
+										' . '
 										';
 	if ($__templater->method($__vars['thread'], 'canUseInlineModeration', array())) {
 		$__compilerTemp7 .= '
@@ -454,7 +452,7 @@ return array('macros' => array('thread_status' => function($__templater, array $
 			'data-xf-click' => 'menu',
 			'aria-expanded' => 'false',
 			'aria-haspopup' => 'true',
-			'title' => $__templater->filter('More options', array(array('for_attr', array()),), false),
+			'title' => 'More options',
 		), '', array(
 		)) . '
 							<div class="menu" data-menu="menu" aria-hidden="true">
@@ -538,19 +536,6 @@ return array('macros' => array('thread_status' => function($__templater, array $
 					'thread' => $__vars['thread'],
 				), $__vars) . '
 				';
-			}
-			$__finalCompiled .= '
-';
-			if ($__vars['xf']['options']['similarThreadsShowBelowFirstPost']) {
-				$__finalCompiled .= '
-	';
-				if ($__templater->fn('number', array($__vars['post']['position'] + 1, ), false) == 1) {
-					$__finalCompiled .= '
-		' . $__templater->includeTemplate('andy_similarthreads', $__vars) . '
-	';
-				}
-				$__finalCompiled .= '
-';
 			}
 			$__finalCompiled .= '
 			';

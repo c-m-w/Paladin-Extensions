@@ -2608,7 +2608,7 @@
 
 				var checkIsSticky = function(isScrolling)
 				{
-					var targetTop = $target[0].getBoundingClientRect().top,
+					var targetTop = Math.floor($target[0].getBoundingClientRect().top),
 						shouldBeSticky = false;
 
 					if (targetTop < stickyTop || (targetTop == stickyTop && window.scrollY > 0))

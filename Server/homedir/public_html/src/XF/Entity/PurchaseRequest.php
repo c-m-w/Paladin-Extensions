@@ -13,7 +13,7 @@ use XF\Mvc\Entity\Structure;
  * @property string provider_id
  * @property int payment_profile_id
  * @property string purchasable_type_id
- * @property string cost_amount
+ * @property float cost_amount
  * @property string cost_currency
  * @property array extra_data
  * @property string|null provider_metadata

@@ -40,16 +40,6 @@ return array('macros' => array('item' => function($__templater, array $__argumen
 						<dd>' . $__templater->filter($__vars['user']['message_count'], array(array('number', array()),), true) . '</dd>
 					</dl></li>
 					' . '
-';
-	if ($__templater->method($__vars['xf']['visitor'], 'canViewResources', array()) AND $__vars['user']['xfrm_resource_count']) {
-		$__finalCompiled .= '
-	<li><dl class="pairs pairs--inline">
-		<dt>' . 'Extensions' . '</dt>
-		<dd>' . $__templater->filter($__vars['user']['xfrm_resource_count'], array(array('number', array()),), true) . '</dd>
-	</dl></li>
-';
-	}
-	$__finalCompiled .= '
 					<li><dl class="pairs pairs--inline">
 						<dt>' . 'Likes' . '</dt>
 						<dd>' . $__templater->filter($__vars['user']['like_count'], array(array('number', array()),), true) . '</dd>

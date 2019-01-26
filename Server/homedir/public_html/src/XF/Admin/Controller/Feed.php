@@ -93,6 +93,10 @@ class Feed extends AbstractController
 			{
 				$input['user_id'] = $user['user_id'];
 			}
+			else
+			{
+				throw $this->exception($this->error(\XF::phrase('please_enter_valid_name')));
+			}
 		}
 		$input['user_id'] = intval(max($input['user_id'], 0));
 

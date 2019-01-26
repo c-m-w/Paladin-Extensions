@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: de985c1c66949d3c78b6de3a1af3261f
+// FROM HASH: 120dcd13a2835a8c076c55ab3bf27f1a
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -92,7 +92,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		), array(array(
 			'check-all' => '< .block-container',
 			'data-xf-init' => 'tooltip',
-			'title' => $__templater->filter('Select all', array(array('for_attr', array()),), false),
+			'title' => 'Select all',
 			'_type' => 'option',
 		))),
 		),

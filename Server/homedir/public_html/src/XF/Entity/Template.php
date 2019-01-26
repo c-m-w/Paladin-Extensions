@@ -202,7 +202,7 @@ class Template extends Entity
 			}
 			catch (\XF\Template\Compiler\Exception $e)
 			{
-				$error = $e->getMessage();
+				$error = $e->getMessage() . ' - ' . \XF::phrase('template_modifications:') . ' ' . "{$this->type}:{$this->title}";
 				foreach ($modificationStatuses AS &$status)
 				{
 					if (is_int($status))
@@ -223,10 +223,15 @@ class Template extends Entity
 				{
 					$compiler->compileAst($ast);
 				}
+
+				if ($forceValid)
+				{
+					$error = null;
+				}
 			}
 			catch (\XF\Template\Compiler\Exception $e)
 			{
-				$error = $e->getMessage();
+				$error = $e->getMessage() . ' - ' . \XF::phrase('template_name:') . ' ' . "{$this->type}:{$this->title}";
 			}
 		}
 
@@ -368,16 +373,16 @@ class Template extends Entity
 			}
 		}
 
-		if ($this->isChanged('template') && !$this->isChanged('last_edit_date'))
-		{
-			$this->set('last_edit_date', \XF::$time);
-		}
-
 		if (!$this->isChanged('version_id')
 			&& $this->isChanged(['type', 'title', 'template', 'addon_id'])
 		)
 		{
 			$this->updateVersionId();
+		}
+
+		if (($this->isChanged('template') || $this->isChanged('version_id')) && !$this->isChanged('last_edit_date'))
+		{
+			$this->set('last_edit_date', \XF::$time);
 		}
 	}
 

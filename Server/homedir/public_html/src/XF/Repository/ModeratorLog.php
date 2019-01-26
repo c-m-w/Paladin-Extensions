@@ -69,7 +69,7 @@ class ModeratorLog extends Repository
 			if (class_exists($handlerClass))
 			{
 				$handlerClass = \XF::extendClass($handlerClass);
-				$handlers[$contentType] = new $handlerClass();
+				$handlers[$contentType] = new $handlerClass($contentType);
 			}
 		}
 
@@ -95,6 +95,6 @@ class ModeratorLog extends Repository
 		}
 
 		$handlerClass = \XF::extendClass($handlerClass);
-		return new $handlerClass();
+		return new $handlerClass($type);
 	}
 }

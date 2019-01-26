@@ -71,7 +71,7 @@ class ClassExtension extends AbstractHandler
 
 		$extension = $this->getEntityForImport($name, $addOnId, $json, $options);
 		
-		$extension->bulkSet($json);
+		$extension->bulkSetIgnore($json);
 		$extension->addon_id = $addOnId;
 		$extension->save();
 		// this will update the metadata itself

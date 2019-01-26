@@ -455,45 +455,45 @@ class Language implements \ArrayAccess
 			switch ($identifier)
 			{
 				// day of month
-				case 'd': $output .= sprintf('%02d', $dayOfMonth); continue;
-				case 'j': $output .= $dayOfMonth; continue;
+				case 'd': $output .= sprintf('%02d', $dayOfMonth); break;
+				case 'j': $output .= $dayOfMonth; break;
 
 				// day of week
-				case 'D': $output .= $this->getPhraseCacheRaw('day_' . $this->dowTranslation[$dayOfWeek] . '_short'); continue;
-				case 'l': $output .= $this->getPhraseCacheRaw('day_' . $this->dowTranslation[$dayOfWeek]); continue;
+				case 'D': $output .= $this->getPhraseCacheRaw('day_' . $this->dowTranslation[$dayOfWeek] . '_short'); break;
+				case 'l': $output .= $this->getPhraseCacheRaw('day_' . $this->dowTranslation[$dayOfWeek]); break;
 
 				// week
-				case 'w': $output .= $dayOfWeek; continue;
-				case 'W': $output .= $weekOfYear; continue;
+				case 'w': $output .= $dayOfWeek; break;
+				case 'W': $output .= $weekOfYear; break;
 
 				// month
-				case 'm': $output .= sprintf('%02d', $month); continue;
-				case 'n': $output .= $month; continue;
-				case 'F': $output .= $this->getPhraseCacheRaw('month_' . $month); continue;
-				case 'M': $output .= $this->getPhraseCacheRaw('month_' . $month . '_short'); continue;
+				case 'm': $output .= sprintf('%02d', $month); break;
+				case 'n': $output .= $month; break;
+				case 'F': $output .= $this->getPhraseCacheRaw('month_' . $month); break;
+				case 'M': $output .= $this->getPhraseCacheRaw('month_' . $month . '_short'); break;
 
 				// year
-				case 'Y': $output .= $year; continue;
-				case 'y': $output .= substr($year, 2); continue;
+				case 'Y': $output .= $year; break;
+				case 'y': $output .= substr($year, 2); break;
 
 				// am/pm
-				case 'a': $output .= $this->getPhraseCacheRaw(($hour >= 12 ? 'time_pm_lower' : 'time_am_lower')); continue;
-				case 'A': $output .= $this->getPhraseCacheRaw(($hour >= 12 ? 'time_pm_upper' : 'time_am_upper')); continue;
+				case 'a': $output .= $this->getPhraseCacheRaw(($hour >= 12 ? 'time_pm_lower' : 'time_am_lower')); break;
+				case 'A': $output .= $this->getPhraseCacheRaw(($hour >= 12 ? 'time_pm_upper' : 'time_am_upper')); break;
 
 				// hour
-				case 'H': $output .= sprintf('%02d', $hour); continue;
-				case 'h': $output .= sprintf('%02d', $hour % 12 ? $hour % 12 : 12); continue;
-				case 'G': $output .= $hour; continue;
-				case 'g': $output .= ($hour % 12 ? $hour % 12 : 12); continue;
+				case 'H': $output .= sprintf('%02d', $hour); break;
+				case 'h': $output .= sprintf('%02d', $hour % 12 ? $hour % 12 : 12); break;
+				case 'G': $output .= $hour; break;
+				case 'g': $output .= ($hour % 12 ? $hour % 12 : 12); break;
 
 				// minute
-				case 'i': $output .= $minute; continue;
+				case 'i': $output .= $minute; break;
 
 				// second
-				case 's': $output .= $second; continue;
+				case 's': $output .= $second; break;
 
 				// ordinal
-				case 'S': $output .= $ordinalSuffix; continue;
+				case 'S': $output .= $ordinalSuffix; break;
 
 				case '\\':
 					$i++;
@@ -501,7 +501,7 @@ class Language implements \ArrayAccess
 					{
 						$output .= $formatters[$i];
 					}
-					continue;
+					break;
 
 				// fallback to PHP formatter directly - shouldn't be used regularly
 				case 'N':
@@ -522,7 +522,7 @@ class Language implements \ArrayAccess
 				case 'r':
 				case 'U':
 					$output .= $date->format($identifier);
-					continue;
+				break;
 
 				// anything else is printed
 				default: $output .= $identifier;

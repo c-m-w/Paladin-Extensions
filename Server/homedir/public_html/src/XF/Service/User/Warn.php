@@ -124,7 +124,10 @@ class Warn extends \XF\Service\AbstractService
 
 	public function setNotes($notes)
 	{
-		$this->warning->notes = $notes;
+		$preparer = $this->getStructuredTextPreparer();
+		$this->warning->notes = $preparer->prepare($notes);
+
+		$preparer->pushEntityErrorIfInvalid($this->warning, 'notes');
 
 		return $this;
 	}
@@ -208,5 +211,19 @@ class Warn extends \XF\Service\AbstractService
 		{
 			return null;
 		}
+	}
+
+	protected function getStructuredTextPreparer($format = true)
+	{
+		/** @var \XF\Service\StructuredText\Preparer $preparer */
+		$preparer = $this->service('XF:StructuredText\Preparer', 'warning');
+		$preparer->setConstraint('maxLength', 0);
+		//$preparer->disableFilter('mentions');
+		if (!$format)
+		{
+			$preparer->disableAllFilters();
+		}
+
+		return $preparer;
 	}
 }

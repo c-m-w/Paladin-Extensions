@@ -9,7 +9,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	), array(
 		'label' => 'Consumer key',
 		'hint' => 'Required',
-		'explain' => 'To allow users to sign in with their Twitter accounts, you must create a <a href="https://apps.twitter.com/" target="_blank">Twitter application</a> and enter the consumer key and secret.',
+		'explain' => 'To allow users to sign in with their Twitter accounts, you must create a <a href="https://developer.twitter.com/" target="_blank">Twitter application</a> and enter the consumer key and secret.',
 	)) . '
 
 ' . $__templater->formTextBoxRow(array(

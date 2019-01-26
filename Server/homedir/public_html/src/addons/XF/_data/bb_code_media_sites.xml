@@ -83,6 +83,7 @@ media.giphy.com/media/{$id}/giphy.gif]]></match_urls>
   <site media_site_id="imgur" site_title="Imgur" site_url="https://imgur.com" match_is_regex="0" match_callback_class="XF\BbCode\Helper\Imgur" match_callback_method="matchCallback" supported="1" active="1" oembed_enabled="0" oembed_retain_scripts="0">
     <match_urls><![CDATA[imgur.com/gallery/{$id:alphanum}
 imgur.com/a/{$id:alphanum}
+imgur.com/r/*/{$id:alphanum}
 imgur.com/{$id:alphanum}]]></match_urls>
     <embed_html><![CDATA[<xf:page option="jsState.imgur" value="{{ true }}" />
 
@@ -98,7 +99,8 @@ instagr.am/p/{$id}]]></match_urls>
     <embed_html><![CDATA[<!-- oEmbed - template unused -->]]></embed_html>
   </site>
   <site media_site_id="liveleak" site_title="Liveleak" site_url="https://www.liveleak.com" match_is_regex="0" supported="1" active="1" oembed_enabled="0" oembed_retain_scripts="0">
-    <match_urls><![CDATA[liveleak.com/view?i={$id}]]></match_urls>
+    <match_urls><![CDATA[liveleak.com/view?i={$id}
+liveleak.com/view?t={$id}]]></match_urls>
     <embed_html><![CDATA[<div class="bbMediaWrapper">
 	<div class="bbMediaWrapper-inner">
 		<iframe src="http://www.liveleak.com/ll_embed?i={$id}"
@@ -167,7 +169,7 @@ clips.twitch.tv/{$id:alphanum}]]></match_urls>
 	</div>
 </div>]]></embed_html>
   </site>
-  <site media_site_id="twitter" site_title="Twitter" site_url="https://twitter.com" match_is_regex="0" supported="1" active="1" oembed_enabled="0" oembed_api_endpoint="https://publish.twitter.com/oembed?omit_script=1" oembed_url_scheme="https://twitter.com/{$id}" oembed_retain_scripts="0">
+  <site media_site_id="twitter" site_title="Twitter" site_url="https://twitter.com" match_is_regex="0" supported="1" active="1" oembed_enabled="0" oembed_retain_scripts="0">
     <match_urls><![CDATA[twitter.com/*/status/{$id}
 twitter.com/statuses/{$id}]]></match_urls>
     <embed_html><![CDATA[<xf:page option="jsState.twitter" value="{{ true }}" />
@@ -178,8 +180,8 @@ twitter.com/statuses/{$id}]]></match_urls>
 	  data-tweet-id="{$id}"
 	  data-lang="{$xf.language.language_code}"
 	  data-theme="{{ property('styleType') }}"
-	  ><a href="https://twitter.com/statuses/{$id}" rel="external" target="_blank">
-	<i class="fa fa-twitter" aria-hidden="true"></i> https://twitter.com/statuses/{$id}</a></div>]]></embed_html>
+	  ><a href="https://twitter.com/i/web/status/{$id}" rel="external" target="_blank">
+	<i class="fa fa-twitter" aria-hidden="true"></i> https://twitter.com/i/web/status/{$id}</a></div>]]></embed_html>
   </site>
   <site media_site_id="vimeo" site_title="Vimeo" site_url="https://vimeo.com" match_is_regex="0" match_callback_class="XF\BbCode\Helper\Vimeo" match_callback_method="matchCallback" embed_html_callback_class="XF\BbCode\Helper\Vimeo" embed_html_callback_method="htmlCallback" supported="1" active="1" oembed_enabled="0" oembed_retain_scripts="0">
     <match_urls><![CDATA[vimeo.com/{$id:digits}

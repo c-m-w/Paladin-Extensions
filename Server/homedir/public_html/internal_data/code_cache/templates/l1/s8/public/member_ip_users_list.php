@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 3b4bfe06bbf7241b5d4ce5545cedd979
+// FROM HASH: a3394bb6f73c60bdff1e0b84f925e211
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -56,7 +56,10 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			),
 			array(
 				'href' => $__templater->fn('link', array('members', $__vars['user'], ), false),
-				'label' => $__templater->escape($__vars['user']['username']),
+				'label' => $__templater->fn('username_link', array($__vars['user'], true, array(
+				'notooltip' => 'true',
+				'href' => '',
+			))),
 				'hint' => $__templater->fn('user_title', array($__vars['user'], false, array(
 			))),
 				'explain' => '

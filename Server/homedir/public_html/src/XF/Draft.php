@@ -39,7 +39,14 @@ class Draft implements \ArrayAccess
 	{
 		if ($this->draft)
 		{
-			return $this->draft->save();
+			try
+			{
+				return $this->draft->save();
+			}
+			catch (\XF\Db\DuplicateKeyException $e)
+			{
+				return false;
+			}
 		}
 		else
 		{

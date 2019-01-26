@@ -8,11 +8,8 @@ class DeletePosts extends AbstractController
 {
 	public function actionIndex()
 	{
-		// get visitor
-		$visitor = \XF::visitor();
-		
-		// get permission
-		if (!$visitor->hasPermission('deletePosts', 'view'))
+		// check permission
+		if (!\XF::visitor()->is_admin)
 		{
 			return $this->noPermission();
 		}
@@ -23,11 +20,8 @@ class DeletePosts extends AbstractController
 	
 	public function actionConfirm()
 	{
-		// get visitor
-		$visitor = \XF::visitor();
-		
-		// get permission
-		if (!$visitor->hasPermission('deletePosts', 'view'))
+		// check permission
+		if (!\XF::visitor()->is_admin)
 		{
 			return $this->noPermission();
 		}
@@ -56,24 +50,18 @@ class DeletePosts extends AbstractController
 			return $this->error(\XF::phrase('deleteposts_username_not_found'));
 		}
 		
-		// run query
-		$posts = $db->fetchAll("
-		SELECT post_id
-		FROM xf_post
-		WHERE user_id = ?
-		", $userId);
-		
-		$postsCount = count($posts);
-		
 		// get posts
 		$finder = \XF::finder('XF:Post');
 		$posts = $finder
 			->with('Thread')
 			->with('Thread.Forum')
 			->where('user_id', '=', $userId)
-			->order('post_id', 'DESC')
+			->order('post_id', 'ASC')
 			->limit($limit)
-			->fetch();		
+			->fetch();
+		
+		// get postsCount
+		$postsCount = count($posts);
 
 		// prepare viewParams
 		$viewParams = [
@@ -90,11 +78,8 @@ class DeletePosts extends AbstractController
 	
 	public function actionDelete()
 	{
-		// get visitor
-		$visitor = \XF::visitor();
-		
-		// get permission
-		if (!$visitor->hasPermission('deletePosts', 'view'))
+		// check permission
+		if (!\XF::visitor()->is_admin)
 		{
 			return $this->noPermission();
 		}
@@ -128,23 +113,36 @@ class DeletePosts extends AbstractController
 		SELECT post_id
 		FROM xf_post
 		WHERE user_id = ?
-		", $userId);
+		ORDER BY post_id ASC
+		LIMIT ?
+		", array($userId,$limit));
 		
 		// delete posts
 		foreach ($posts AS $k => $v)
 		{
 			$postId = $v['post_id'];
-			$type = 'hard';
-			$reason = '';
+			
+			// run query
+			$var = $db->fetchOne("
+			SELECT post_id
+			FROM xf_post
+			WHERE post_id = ?
+			", $postId);
+			
+			if (!empty($var))
+			{
+				$type = 'hard';
+				$reason = '';
 
-			$finder = \XF::finder('XF:Post');
-			$post = $finder
-				->where('post_id', '=', $postId)
-				->fetchOne();
+				$finder = \XF::finder('XF:Post');
+				$post = $finder
+					->where('post_id', '=', $postId)
+					->fetchOne();
 
-			$deleter = \XF::app()->service('XF:Post\Deleter', $post);
+				$deleter = \XF::app()->service('XF:Post\Deleter', $post);
 
-			$deleter->delete($type, $reason);
+				$deleter->delete($type, $reason);
+			}
 		}
 
 		// run query
@@ -152,7 +150,9 @@ class DeletePosts extends AbstractController
 		SELECT post_id
 		FROM xf_post
 		WHERE user_id = ?
-		", $userId);
+		ORDER BY post_id ASC
+		LIMIT ?
+		", array($userId,$limit));
 		
 		// get postsCount
 		$postsCount = count($posts);
@@ -162,7 +162,8 @@ class DeletePosts extends AbstractController
 			'postedBy' => $postedBy,
 			'postsCount' => $postsCount,
 			'limit' => $limit,
-			'userId' => $userId
+			'userId' => $userId,
+			'posts' => $posts
 		];
 			
 		// send to template

@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 66a2ecd468b19a210676fbef6e654fad
+// FROM HASH: a9ab0171263b53e948120fbe8c1d0753
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -176,6 +176,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 .contentRow-suffix
 {
+	padding-left: @xf-paddingMedium;
 	white-space: nowrap;
 	word-wrap: normal;
 

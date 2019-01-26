@@ -180,7 +180,7 @@ abstract class AbstractAdapter
 			{
 				if (!array_key_exists($col, $row))
 				{
-					throw new \InvalidArgumentException("Row $row missing column $col in bulk insert");
+					throw new \InvalidArgumentException("Row missing column $col in bulk insert");
 				}
 
 				$values[] = $this->quote($row[$col]);

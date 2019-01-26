@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 3d11783e46f96bb805cbbcfe886f276c
+// FROM HASH: c7368e9dbcc5309fe9ddca6c8bd8919f
 return array('macros' => array('change_log_list' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -44,15 +44,18 @@ return array('macros' => array('change_log_list' => function($__templater, array
 				foreach ($__vars['group']['changes'] AS $__vars['change']) {
 					$__compilerTemp1 .= '
 				' . $__templater->dataRow(array(
+						'rowclass' => ($__vars['change']['protected'] ? 'dataList-row--protected' : ''),
 					), array(array(
 						'_type' => 'cell',
 						'html' => $__templater->escape($__vars['change']['label']),
 					),
 					array(
+						'class' => 'dataList-cell--breakWord',
 						'_type' => 'cell',
 						'html' => $__templater->escape($__vars['change']['old']),
 					),
 					array(
+						'class' => 'dataList-cell--breakWord',
 						'_type' => 'cell',
 						'html' => $__templater->escape($__vars['change']['new']),
 					))) . '

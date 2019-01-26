@@ -131,9 +131,9 @@ class Error
 					'exception_date' => \XF::$time,
 					'user_id' => \XF::visitor()->user_id,
 					'ip_address' => Ip::convertIpStringToBinary($this->app->request()->getIp()),
-					'exception_type' => get_class($e),
-					'message' => $messagePrefix . $e->getMessage(),
-					'filename' => $file,
+					'exception_type' => utf8_substr(get_class($e), 0, 75),
+					'message' => utf8_substr($messagePrefix . $e->getMessage(), 0, 20000),
+					'filename' => utf8_substr($file, 0, 255),
 					'line' => $e->getLine(),
 					'trace_string' => $trace,
 					'request_state' => serialize($requestInfo)
@@ -151,7 +151,7 @@ class Error
 	{
 		/** @var \Throwable $e */
 
-		$trace = $e->getTraceAsString();
+		$trace = $this->buildTraceString($e);
 
 		while ($e->getPrevious())
 		{
@@ -160,7 +160,7 @@ class Error
 			$trace .= "\n\n-------------\n\n"
 				. "Previous " . get_class($e) . ": " . $e->getMessage()
 				. " - " . $e->getFile() . ':' . $e->getLine() . "\n"
-				. $e->getTraceAsString();
+				. $this->buildTraceString($e);
 		}
 
 		$rootDir = \XF::getRootDirectory() . DIRECTORY_SEPARATOR;
@@ -169,8 +169,138 @@ class Error
 		return $trace;
 	}
 
+	protected function buildTraceString($e)
+	{
+		/** @var \Throwable $e */
+
+		$traceElements = $e->getTrace();
+
+		$traceString = "";
+
+		$num = 0;
+
+		foreach ($traceElements AS $num => $element)
+		{
+			if (isset($element['file']))
+			{
+				$file = $element['file'];
+				$location = "$file({$element['line']})";
+			}
+			else
+			{
+				$location = "[internal function]";
+			}
+
+			$traceString .= "#$num $location: ";
+
+			if (isset($element['class']) && isset($element['type']))
+			{
+				$traceString .= $element['class'] . $element['type'];
+			}
+
+			$traceString .= $element['function'] . '(';
+			$traceString .= implode(', ', $this->buildTraceArgs($element));
+			$traceString .= ")\n";
+		}
+
+		$traceString .= "#" . strval($num + 1) . " {main}";
+
+		return $traceString;
+	}
+
+	protected function buildTraceArgs(array $traceElement)
+	{
+		$methodParameters = [];
+
+		try
+		{
+			if (isset($traceElement['class']))
+			{
+				$class = new \ReflectionClass($traceElement['class']);
+				$method = $class->getMethod($traceElement['function']);
+				$methodParameters = $method->getParameters();
+			}
+			else if (isset($traceElement['function']))
+			{
+				$method = new \ReflectionFunction($traceElement['function']);
+				$methodParameters = $method->getParameters();
+			}
+		} catch (\ReflectionException $e)
+		{
+			// Can happen with closures
+		}
+		$args = [];
+
+		foreach ($traceElement['args'] AS $key => $arg)
+		{
+			// This might not be set
+			$methodParameter = isset($methodParameters[$key]) ? $methodParameters[$key] : null;
+
+			switch (gettype($arg))
+			{
+				case 'NULL':
+					$args[] = "NULL";
+					break;
+				case 'string':
+					if ($methodParameter && stripos($methodParameter->getName(), 'password') !== false)
+					{
+						$arg = '*****';
+					}
+
+					$tmp = substr($arg, 0, min(strlen($arg), 15));
+					if (strlen($arg) > 15)
+					{
+						$tmp .= '...';
+					}
+					$tmp = str_replace('\\', '\\\\', $tmp);
+					$args[] = "'$tmp'";
+					break;
+				case 'boolean':
+					if ($arg)
+					{
+						$args[] = 'true';
+					}
+					else
+					{
+						$args[] = 'false';
+					}
+					break;
+				case 'resource (closed)':
+				case 'resource':
+					$args[] = "Resource id #" . intval($arg);
+					break;
+				case 'integer':
+					$args[] = $arg;
+					break;
+				case 'double':
+					$args[] = sprintf('%.*G', $arg);
+					break;
+				case 'array':
+					$args[] = 'Array';
+					break;
+				case 'object':
+					$args[] = 'Object(' . get_class($arg) . ')';
+					break;
+				default:
+					$args[] = '(Unknown parameter type)';
+					break;
+			}
+		}
+
+		return $args;
+	}
+
 	protected function getRequestDataForExceptionLog()
 	{
+		if (PHP_SAPI == 'cli')
+		{
+			$command = isset($GLOBALS['argv']) ? implode(' ', $GLOBALS['argv']) : '';
+
+			return [
+				'cli' => $command
+			];
+		}
+
 		$request = $this->app->request();
 
 		return [
@@ -264,7 +394,7 @@ class Error
 		if (PHP_SAPI == 'cli' || \XF::app()->request()->isXhr())
 		{
 			$file = str_replace($rootDir, '', $e->getFile());
-			$trace = str_replace($rootDir, '', $e->getTraceAsString());
+			$trace = str_replace($rootDir, '', $this->buildTraceString($e));
 
 			$class = get_class($e);
 

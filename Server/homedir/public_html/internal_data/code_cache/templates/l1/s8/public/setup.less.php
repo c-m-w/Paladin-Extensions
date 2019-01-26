@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 3899245648a3d435291943277875b789
+// FROM HASH: f82dfe76a2e45526520a0380b923537e
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -700,7 +700,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	$__finalCompiled .= '
 	transition: max-width 0.2s;
 	
-	@media (max-width: @xf-responsiveMedium) {
+	@media (max-width: @xf-responsiveWide) {
 		';
 	if ($__templater->fn('property', array('uix_pageStyle', ), false) == 'covered') {
 		$__finalCompiled .= '

@@ -35,6 +35,6 @@ class ThreadReplyBan extends Repository
 		{
 			$cutOff = time();
 		}
-		$this->db()->delete('xf_thread_reply_ban', 'expiry_date < ?', $cutOff);
+		$this->db()->delete('xf_thread_reply_ban', 'expiry_date > 0 AND expiry_date < ?', $cutOff);
 	}
 }

@@ -20,6 +20,7 @@ abstract class AbstractController extends \XF\Mvc\Controller
 		$this->assertViewingPermissions($action);
 		$this->assertBoardActive($action);
 		$this->assertTfaRequirement($action);
+		$this->assertPolicyAcceptance($action);
 
 		if ($this->isDiscouraged())
 		{
@@ -249,6 +250,91 @@ abstract class AbstractController extends \XF\Mvc\Controller
 				'link' => $this->buildLink('account/two-step')
 			])));
 		}
+	}
+
+	public function assertPolicyAcceptance($action)
+	{
+		$options = $this->options();
+
+		if (!isset($options->privacyPolicyLastUpdate, $options->termsLastUpdate))
+		{
+			return;
+		}
+
+		$request = $this->request;
+		$requestUri = $request->getFullRequestUri();
+		$visitor = \XF::visitor();
+
+		$privacyLastUpdate = $options->privacyPolicyLastUpdate;
+		$privacyPolicyUrl = $this->app->container('privacyPolicyUrl');
+
+		$termsLastUpdate = $options->termsLastUpdate;
+		$tosUrl = $this->app->container('tosUrl');
+
+		if ($privacyLastUpdate
+			&& $privacyPolicyUrl
+			&& $visitor->user_id
+			&& $visitor->privacy_policy_accepted < $privacyLastUpdate
+		)
+		{
+			// check if requested route matches privacy policy URL or whitelist to bypass acceptance
+			if (!empty($options->privacyPolicyUrl['custom'])
+				&& $this->canBypassPolicyAcceptance(
+					$options->privacyPolicyForceWhitelist, $privacyPolicyUrl, $requestUri
+				)
+			)
+			{
+				return;
+			}
+
+			throw $this->exception($this->redirect($this->buildLink('misc/accept-privacy-policy', null, [
+				'_xfRedirect' => $this->request->getFullRequestUri()
+			]), ''));
+		}
+		else if ($termsLastUpdate
+			&& $tosUrl
+			&& $visitor->user_id
+			&& $visitor->terms_accepted < $termsLastUpdate
+		)
+		{
+			// check if requested route matches terms URL or whitelist to bypass acceptance
+			if (!empty($options->tosUrl['custom'])
+				&& $this->canBypassPolicyAcceptance(
+					$options->tosForceWhitelist, $tosUrl, $requestUri
+				)
+			)
+			{
+				return;
+			}
+
+			throw $this->exception($this->redirect($this->buildLink('misc/accept-terms', null, [
+				'_xfRedirect' => $this->request->getFullRequestUri()
+			]), ''));
+		}
+	}
+
+	protected function canBypassPolicyAcceptance($whitelist, $policyUrl, $requestUri)
+	{
+		$request = $this->request;
+
+		if ($whitelist)
+		{
+			$whitelistRoutePaths = preg_split('/\s+/', trim($whitelist), -1, PREG_SPLIT_NO_EMPTY);
+		}
+		else
+		{
+			$whitelistRoutePaths = [];
+		}
+
+		$whitelistRoutePaths[] = $request->getRoutePathFromUrl($policyUrl);
+		$whitelistRoutePaths = array_map(function($routePath)
+		{
+			return rtrim($routePath, '/') . '/';
+		}, $whitelistRoutePaths);
+
+		$requestRoutePath = $request->getRoutePathFromUrl($requestUri);
+
+		return in_array($requestRoutePath, $whitelistRoutePaths);
 	}
 
 	public function hasContentPendingApproval()

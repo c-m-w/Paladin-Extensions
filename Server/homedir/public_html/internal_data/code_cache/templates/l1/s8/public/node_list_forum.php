@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 0c1ed63bb4f59abfef92f7cc13fff0cb
+// FROM HASH: c7489ca7ca748e491b624d80d045c152
 return array('macros' => array('depth1' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -135,6 +135,7 @@ return array('macros' => array('depth1' => function($__templater, array $__argum
 			$__finalCompiled .= '
 						<div class="node-statsMeta">
 							<dl class="pairs pairs--inline">
+								<dd>' . $__templater->filter($__vars['extras']['discussion_count'], array(array('number', array()),), true) . '</dd>
 								';
 			if ($__templater->fn('property', array('uix_nodeStatsIcons', ), false)) {
 				$__finalCompiled .= '
@@ -148,9 +149,9 @@ return array('macros' => array('depth1' => function($__templater, array $__argum
 								';
 			}
 			$__finalCompiled .= '
-								<dd>' . $__templater->filter($__vars['extras']['discussion_count'], array(array('number', array()),), true) . '</dd>
 							</dl>
 							<dl class="pairs pairs--inline">
+								<dd>' . $__templater->filter($__vars['extras']['message_count'], array(array('number', array()),), true) . '</dd>
 								';
 			if ($__templater->fn('property', array('uix_nodeStatsIcons', ), false)) {
 				$__finalCompiled .= '
@@ -164,7 +165,6 @@ return array('macros' => array('depth1' => function($__templater, array $__argum
 								';
 			}
 			$__finalCompiled .= '
-								<dd>' . $__templater->filter($__vars['extras']['message_count'], array(array('number', array()),), true) . '</dd>
 							</dl>
 						</div>
 					';
@@ -214,12 +214,12 @@ return array('macros' => array('depth1' => function($__templater, array $__argum
 		$__finalCompiled .= '
 				<div class="node-stats">
 					<dl class="pairs pairs--rows">
-						<dt>' . 'Threads' . '</dt>
 						<dd>' . $__templater->filter($__vars['extras']['discussion_count'], array(array('number', array()),), true) . '</dd>
+						<dt>' . 'Threads' . '</dt>
 					</dl>
 					<dl class="pairs pairs--rows">
-						<dt>' . 'Messages' . '</dt>
 						<dd>' . $__templater->filter($__vars['extras']['message_count'], array(array('number', array()),), true) . '</dd>
+						<dt>' . 'Messages' . '</dt>
 					</dl>
 				</div>
 			';

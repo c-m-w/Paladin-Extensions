@@ -37,6 +37,8 @@ class ApprovalQueue extends AbstractController
 
 	public function actionProcess()
 	{
+		$this->assertPostOnly();
+
 		$approvalQueueRepo = $this->getApprovalQueueRepo();
 
 		$queue = $this->filter('queue', 'array');

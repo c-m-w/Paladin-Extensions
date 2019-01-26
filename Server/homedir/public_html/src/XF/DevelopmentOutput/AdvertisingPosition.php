@@ -36,7 +36,7 @@ class AdvertisingPosition extends AbstractHandler
 
 		$advertisingPosition = $this->getEntityForImport($name, $addOnId, $json, $options);
 
-		$advertisingPosition->bulkSet($json);
+		$advertisingPosition->bulkSetIgnore($json);
 		$advertisingPosition->position_id = $name;
 		$advertisingPosition->addon_id = $addOnId;
 		$advertisingPosition->save();

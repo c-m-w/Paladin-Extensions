@@ -201,6 +201,11 @@ class Router
 		$match = new RouteMatch();
 		$path = urldecode($path);
 
+		if (strlen($path) && strpos($path, '/') === false)
+		{
+			$path .= '/';
+		}
+
 		foreach ($this->routePreProcessors AS $preProcessor)
 		{
 			if (!is_callable($preProcessor))
@@ -479,6 +484,16 @@ class Router
 		if ($romanize)
 		{
 			$string = utf8_romanize(utf8_deaccent($string));
+
+			$originalString = $string;
+
+			// Attempt to transliterate remaining UTF-8 characters to their ASCII equivalents
+			$string = @iconv('UTF-8', 'ASCII//TRANSLIT', $string);
+			if (!$string)
+			{
+				// iconv failed so forget about it
+				$string = $originalString;
+			}
 		}
 
 		$string = strtr(

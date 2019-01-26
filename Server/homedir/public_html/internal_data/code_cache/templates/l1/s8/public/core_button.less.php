@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 58de174b3357fb93abcb6cc5c465b86c
+// FROM HASH: 2262b9b52f2cd6cc57d23f563a272098
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -154,7 +154,6 @@ a.button // needed for specificity over a:link
 		&--reply	    { .m-buttonIcon(@fa-var-mail-reply, 1em); }
 		&--quote	    { .m-buttonIcon(@fa-var-quote-left, .93em); }
 		&--purchase	    { .m-buttonIcon(@fa-var-credit-card, 1.11em); }
-&--nfgift	    { .m-buttonIcon(@fa-var-gift, .8em); }
 		&--payment	    { .m-buttonIcon(@fa-var-credit-card, 1.08em); }
 		&--convert	    { .m-buttonIcon(@fa-var-flash, .5em); }
 		&--search	    { .m-buttonIcon(@fa-var-search, .93em); }
@@ -175,6 +174,8 @@ a.button // needed for specificity over a:link
 		&--bolt         { .m-buttonIcon(@fa-var-bolt, .5em); }
 		&--list         { .m-buttonIcon(@fa-var-list, .86em); }
 		&--markRead     { .m-buttonIcon(@fa-var-check-square-o, .93em); }
+		&--user         { .m-buttonIcon(@fa-var-user, .72em); }
+		&--userCircle   { .m-buttonIcon(@fa-var-user-circle, 1em); }
 
 		&--notificationsOn  { .m-buttonIcon(@fa-var-bell-o, 1em); }
 		&--notificationsOff { .m-buttonIcon(@fa-var-bell-slash-o, 1.15em); }
@@ -402,14 +403,8 @@ a.button // needed for specificity over a:link
 		&--yahoo
 		{
 			.m-buttonColorVariation(#410093, white);
-			> .button-text:before { .m-faContent(@fa-var-yahoo, 0.86em); }
-		}
-		
-		&--yahoo
-		{
-			.m-buttonColorVariation(#410093, white);
 			> .button-text:before { .m-faContent(@fa-var-yahoo, 0.86em); ' . $__templater->callMacro('uix_icons.less', 'content', array(
-		'icon' => '/f4d3',
+		'icon' => '\\fb2a',
 	), $__vars) . '}
 		}
 	}
