@@ -48,6 +48,15 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 ';
 	$__templater->modifySidebarHtml('_xfWidgetPositionSidebarForumNewPostsSidebar', $__templater->widgetPosition('forum_new_posts_sidebar', array()), 'replace');
 	$__finalCompiled .= '
+';
+	if ($__vars['xf']['options']['forumsDefaultPage'] === 'new_posts') {
+		$__finalCompiled .= '
+	';
+		$__templater->modifySidebarHtml('_xfWidgetPositionSidebarThuixIndexPage', $__templater->widgetPosition('thuix_index_page', array()), 'replace');
+		$__finalCompiled .= '
+';
+	}
+	$__finalCompiled .= '
 
 ';
 	if ($__vars['canInlineMod']) {

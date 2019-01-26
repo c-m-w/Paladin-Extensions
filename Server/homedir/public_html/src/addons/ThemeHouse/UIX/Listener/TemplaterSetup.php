@@ -2,22 +2,61 @@
 
 namespace ThemeHouse\UIX\Listener;
 
+use ThemeHouse\UIX\Util\UIX;
+use XF\Entity\StyleProperty;
+use XF\Entity\StylePropertyGroup;
+use XF\Template\Templater;
+
+/**
+ * Class TemplaterSetup
+ * @package ThemeHouse\UIX\Listener
+ */
 class TemplaterSetup
 {
-    public static function run(\XF\Container $container, \XF\Template\Templater &$templater)
+    public static function run(\XF\Container $container, Templater &$templater)
     {
-        $templater->addFunction('uix_style_property_prefix', ['\ThemeHouse\UIX\Listener\TemplaterSetup', 'fnStylePropertyPrefix']);
-        $templater->addFunction('uix_style_property_documentation', ['\ThemeHouse\UIX\Listener\TemplaterSetup', 'fnStylePropertyDocumentation']);
+        $templater->addFunction('uix_style_property_prefix',
+            ['\ThemeHouse\UIX\Listener\TemplaterSetup', 'fnStylePropertyPrefix']);
+        $templater->addFunction('uix_style_property_documentation',
+            ['\ThemeHouse\UIX\Listener\TemplaterSetup', 'fnStylePropertyDocumentation']);
         $templater->addFunction('uix_extra_css_urls', ['\ThemeHouse\UIX\Listener\TemplaterSetup', 'fnExtraCssUrls']);
     }
 
-    public static function fnStylePropertyPrefix(\XF\Template\Templater $templater, &$escape, $entity)
+    public static function macroPreRender(
+        Templater $templater,
+        &$type,
+        &$template,
+        &$name,
+        array &$arguments,
+        array &$globalVars
+    ) {
+        if ($template == 'helper_js_global' && $name == 'body') {
+            $uix = new UIX();
+
+            $globalVars['uix_backstretchImages'] = $uix->getBackstretchImages($templater);
+        }
+    }
+
+    public static function optionMacroPreRender(
+        Templater $templater,
+        &$type,
+        &$template,
+        &$name,
+        array &$arguments,
+        array &$globalVars
+    ) {
+        if ($arguments['group']->group_id == 'th_uix') {
+            $template = 'thuix_options';
+        }
+    }
+
+    public static function fnStylePropertyPrefix(Templater $templater, &$escape, $entity)
     {
         $key = '';
-        if ($entity instanceof \XF\Entity\StylePropertyGroup) {
+        if ($entity instanceof StylePropertyGroup) {
             $key = $entity->group_name;
         }
-        if ($entity instanceof \XF\Entity\StyleProperty) {
+        if ($entity instanceof StyleProperty) {
             $key = $entity->property_name;
         }
 
@@ -27,12 +66,12 @@ class TemplaterSetup
         }
     }
 
-    public static function fnStylePropertyDocumentation(\XF\Template\Templater $templater, &$escape, $entity)
+    public static function fnStylePropertyDocumentation(Templater $templater, &$escape, $entity)
     {
         $propKey = '';
         $groupKey = '';
         $version = '';
-        if ($entity instanceof \XF\Entity\StyleProperty) {
+        if ($entity instanceof StyleProperty) {
             $style = \XF::app()->style($entity->style_id);
 
             $propKey = $entity->property_name;
@@ -51,7 +90,7 @@ class TemplaterSetup
         }
     }
 
-    public static function fnExtraCssUrls(\XF\Template\Templater $templater, &$escape, array $cssUrls = [])
+    public static function fnExtraCssUrls(Templater $templater, &$escape, array $cssUrls = [])
     {
         $additionalCss = $templater->getStyle()->getProperty('uix_additionalCss');
         if (!empty($additionalCss)) {

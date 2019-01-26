@@ -27,6 +27,7 @@ return array (
   'widget_def_desc.th_post_thread_uix' => 'Allows you to display a post new thread block in your sidebar',
   'widget_def_desc.th_widget_login_uix' => 'Allows you to display a login bar in your sidebar, or any other widget location.',
   'widget_def_desc.thread_poll' => 'Displays the specified poll in a widget.',
+  'widget_def_desc.thuix_socialMedia' => '',
   'widget_def_desc.visitor_panel' => 'Displays the visitor\'s avatar and basic information to the visitor about themselves.',
   'widget_def_desc.xfrm_latest_reviews' => 'Displays the latest extension reviews.',
   'widget_def_desc.xfrm_new_resources' => 'Displays the most recently updated extensions.',

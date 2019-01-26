@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: c88918dd07a77a954de3fa37b9ebac21
+// FROM HASH: 7633dedb0ddcf421385cb22545ed4cb2
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -31,7 +31,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		justify-content: space-between;
 		position: relative;
 		';
-	if ($__templater->fn('property', array('uix_pageStyle', ), false) != 'fixed') {
+	if ($__templater->fn('property', array('uix_pageStyle', ), false) == 'covered') {
 		$__finalCompiled .= '
 			.m-pageWidth();
 		';
@@ -45,12 +45,20 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		';
 	}
 	$__finalCompiled .= '
+
+		.p-nav-opposite a:not(.button)
+		{
+			color: inherit;
+
+			&:hover {.xf-uix_staffBarTabHover();}
+		}
 		
 		a {
-			color: @xf-uix_staffBarTab--color;
+			.xf-uix_staffBarTab();
 			
-			&:hover {color: @xf-uix_staffBarTabHover--color;}
+			&:hover {.xf-uix_staffBarTabHover();}
 		}
+
 	}
 
 
@@ -80,7 +88,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	&:hover
 	{
 		text-decoration: none;
-		background: xf-diminish(@xf-publicStaffBar--background-color, 6%);
+		// background: xf-diminish(@xf-publicStaffBar--background-color, 6%);
 		border-radius: @xf-borderRadiusSmall;
 		.xf-uix_staffBarTabHover();
 	}

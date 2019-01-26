@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: b292722207d7fab4d61621b0af25e5c4
+// FROM HASH: f4ceff01f2fe35ee903375d5cfccd1d6
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -63,10 +63,14 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		padding: 0 @xf-paddingLarge;
 		width: 1%;
 		white-space: nowrap;
-		font-size: @xf-fontSizeLargest;
+		// font-size: @xf-fontSizeLargest;
 		line-height: 1;
 		font-style: normal;
 		text-align: center;
+		
+		font-weight: 400;
+		color: @xf-textColorMuted;
+		text-transform: lowercase;
 	}
 }
 
@@ -75,7 +79,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 {
 	margin-bottom: @xf-elementSpacer;
 	
-	// &:last-child {margin-bottom: 0;}
+	&:last-child {margin-bottom: 0;}
 
 	&.block--close
 	{
@@ -155,10 +159,11 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 .block-container
 {
 	.xf-contentBase();
-	.xf-blockBorder();
+	.xf-blockBorder()
 	border-radius: @xf-blockBorderRadius;
 	.m-transition(); .m-transitionProperty(border margin); // edgeSpacerRemoval
 	.xf-uix_blockContainer();
+
 }
 
 @media (min-width: @xf-responsiveEdgeSpacerRemoval)
@@ -364,7 +369,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 .block-filterBar
 {
-	padding: (@xf-blockPaddingH / 2) @xf-blockPaddingH;
+	padding: (@xf-blockPaddingH / 2) (@xf-blockPaddingH / 2);
 	.xf-blockFilterBar();
 
 	.filterBar-filterToggle
@@ -388,11 +393,6 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 				16%
 			);
 		}
-	}
-
-	.filterBar-menuTrigger
-	{
-		margin-right: -5px;
 	}
 }
 
@@ -617,7 +617,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		}
 	}
 	
-	.block-footer-controls .button {
+	.block-footer-controls .button,
+	.block-footer-counter .button {
 		.xf-uix_buttonSmall();
 	}
 

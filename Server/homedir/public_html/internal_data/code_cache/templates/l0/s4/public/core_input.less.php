@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 8e4f69ed7018dee30cad9a08ce5d3559
+// FROM HASH: b897b994c3ae30c864c6305c8a6df3a5
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -73,6 +73,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		max-height: 400px;
 		max-height: 75vh;
 		resize: vertical;
+		padding-top: 8px;
+		padding-bottom: 8px;
 
 		&.input--fitHeight
 		{
@@ -134,6 +136,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		{
 			background-image: none !important;
 			padding-right: xf-default(@xf-input--padding, 5px) !important;
+			height: auto;
 		}
 	}
 
@@ -182,12 +185,14 @@ label.iconic
 	> input
 	{
 		.m-visuallyHidden();
+		width: auto;
+		height: auto;
 		opacity: 0;
 
 		+ i:before
 		{
 			.m-faBase();
-			font-size: 120%;
+			font-size: 18px !important;
 			height: .9em; // this prevents some zoom related issues
 			color: @controlColor;
 			vertical-align: -.1em;
@@ -214,14 +219,30 @@ label.iconic
 
 		&[type="checkbox"]
 		{
-			+ i:before { .m-faContent(@fa-var-square-o, .93em); }
-			&:checked + i:before { .m-faContent(@fa-var-check-square-o, .93em); }
+			+ i:before { .m-faContent(@fa-var-square-o, .93em); 
+				' . $__templater->callMacro('uix_icons.less', 'content', array(
+		'icon' => 'checkbox',
+	), $__vars) . '
+			}
+			&:checked + i:before { .m-faContent(@fa-var-check-square-o, .93em); 
+				' . $__templater->callMacro('uix_icons.less', 'content', array(
+		'icon' => 'checkbox-checked',
+	), $__vars) . '
+			}
 		}
 
 		&[type="radio"]
 		{
-			+ i:before { .m-faContent(@fa-var-circle-o, .86em); }
-			&:checked + i:before { .m-faContent(@fa-var-check-circle, .86em); }
+			+ i:before { .m-faContent(@fa-var-circle-o, .86em); 
+				' . $__templater->callMacro('uix_icons.less', 'content', array(
+		'icon' => 'radio',
+	), $__vars) . '
+			}
+			&:checked + i:before { .m-faContent(@fa-var-check-circle, .86em); 
+				' . $__templater->callMacro('uix_icons.less', 'content', array(
+		'icon' => 'radio-selected',
+	), $__vars) . '
+			}
 		}
 	}
 
@@ -252,10 +273,16 @@ label.iconic
 			+ i:before
 			{
 				.m-faContent(@fa-var-toggle-off, 1.15em);
+				' . $__templater->callMacro('uix_icons.less', 'content', array(
+		'icon' => 'toggle-off',
+	), $__vars) . '
 			}
 			&:checked + i:before
 			{
 				.m-faContent(@fa-var-toggle-on, 1.15em);
+				' . $__templater->callMacro('uix_icons.less', 'content', array(
+		'icon' => 'toggle-on',
+	), $__vars) . '
 			}
 		}
 	}
@@ -426,6 +453,7 @@ label.iconic
 		.input:not(.input--autoSize):not(.input--numberNarrow)
 		{
 			width: 100%;
+			min-width: 100px;
 		}
 	}
 
@@ -563,7 +591,7 @@ label.iconic
 	line-height: .75em;
 	vertical-align: -15%;
 
-	width: 35px;
+	width: 45px;
 	justify-content: center;
 	text-align: center;
 
@@ -578,13 +606,7 @@ label.iconic
 	&.inputNumber-button--smaller
 	{
 		vertical-align: 0;
-		width: 25px;
-	}
-
-	@media (max-width: @xf-formResponsive)
-	{
-		vertical-align: 0;
-		width: 25px;
+		width: 35px;
 	}
 
 	.menu & {
@@ -888,7 +910,6 @@ label.iconic
 	{
 		font-size: @xf-fontSizeLarge;
 	}
-}
-';
+}';
 	return $__finalCompiled;
 });

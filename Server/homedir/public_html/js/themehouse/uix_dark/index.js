@@ -86,7 +86,7 @@ if (_typeof(window.themehouse.settings.data) !== 'object') {
     window.themehouse.settings.data = {};
 }
 
-window.themehouse.settings.data.jsVersion = '2.0.1.0_Release';
+window.themehouse.settings.data.jsVersion = '2.0.10.0_Release';
 
 new __WEBPACK_IMPORTED_MODULE_0__sticky__["a" /* default */]({
     settings: window.themehouse.settings.sticky
@@ -114,7 +114,7 @@ var sticky = function () {
             _ref$init = _ref.init,
             init = _ref$init === undefined ? false : _ref$init,
             _ref$commonVersion = _ref.commonVersion,
-            commonVersion = _ref$commonVersion === undefined ? '20171204' : _ref$commonVersion;
+            commonVersion = _ref$commonVersion === undefined ? '20180112' : _ref$commonVersion;
 
         _classCallCheck(this, Sticky);
 
@@ -134,7 +134,7 @@ var sticky = function () {
             }
 
             if (offset !== ele.currentOffset) {
-                var $ele = window.jQuery(ele.ele);
+                var $ele = jQuery(ele.ele);
                 if (ele.currentOffset !== -1) {
                     $ele.trigger('sticky_kit:detach').removeData('sticky_kit');
                 }
@@ -408,7 +408,7 @@ var checkRadius = function () {
             _ref$init = _ref.init,
             init = _ref$init === undefined ? false : _ref$init,
             _ref$commonVersion = _ref.commonVersion,
-            commonVersion = _ref$commonVersion === undefined ? '20171204' : _ref$commonVersion;
+            commonVersion = _ref$commonVersion === undefined ? '20180112' : _ref$commonVersion;
 
         _classCallCheck(this, CheckRadius);
 
@@ -475,11 +475,13 @@ var checkRadius = function () {
 
         this.checkGet = function () {
             if (_this.settings.enabled) {
+                var scrollTop = window.document.body.scrollTop || 0;
                 for (var i = 0, len = _this.eles.length; i < len; i++) {
                     var ele = _this.eles[i].ele;
+                    var rect = ele.getBoundingClientRect();
                     _this.eles[i].height = ele.offsetHeight;
                     _this.eles[i].width = ele.offsetWidth;
-                    _this.eles[i].topOffset = ele.offsetTop;
+                    _this.eles[i].topOffset = rect.top + scrollTop;
                 }
             }
         };

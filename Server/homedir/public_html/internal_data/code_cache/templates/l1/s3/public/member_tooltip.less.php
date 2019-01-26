@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 2edf1be7412b4630fd644440ccdb05b3
+// FROM HASH: b87b34d63ec9afa7da0b6d9c9fdaf253
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -45,6 +45,12 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 .memberTooltip-headerAction
 {
 	float: right;
+}
+
+.memberTooltip-banners {
+	margin: -2px;
+	
+	.userBanner {margin: 2px;}
 }
 
 .memberTooltip-banners,

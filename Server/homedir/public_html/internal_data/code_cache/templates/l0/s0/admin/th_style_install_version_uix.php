@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: b406e1e1150ead5e344fe8061245ca70
+// FROM HASH: c80177186ba262a2d9ee8cf5a0c79d86
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -12,24 +12,34 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	$__finalCompiled .= '
 
 ';
-	$__compilerTemp1 = array();
+	$__compilerTemp1 = '';
+	if (!$__vars['freshInstall']) {
+		$__compilerTemp1 .= '
+		<div class="blockMessage blockMessage--important">
+			<b>Note:</b> If you\'re upgrading from 2.0.2.1.0 or below there are some significant changes in this update, please do <a href="https://www.themehouse.com/help/documentation/uix2/faqs#uix-204-update-potential-issues" target="_BLANK">review these changes before proceeding </a>
+		</div>
+	';
+	}
+	$__compilerTemp2 = array();
 	if ($__templater->isTraversable($__vars['versions'])) {
 		foreach ($__vars['versions'] AS $__vars['version']) {
-			$__compilerTemp1[] = array(
+			$__compilerTemp2[] = array(
 				'value' => $__vars['version']['id'],
 				'label' => $__templater->escape($__vars['version']['version']),
 				'_type' => 'option',
 			);
 		}
 	}
-	$__compilerTemp2 = '';
+	$__compilerTemp3 = '';
 	if (!$__vars['freshInstall']) {
-		$__compilerTemp2 .= '
+		$__compilerTemp3 .= '
 			' . $__templater->formHiddenVal('style_id', $__vars['style']['style_id'], array(
 		)) . '
 		';
 	}
 	$__finalCompiled .= $__templater->form('
+	' . $__compilerTemp1 . '
+
 	<div class="block-container">
 		<div class="block-body">
 			' . $__templater->formInfoRow('
@@ -41,11 +51,11 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 		' . $__templater->formSelectRow(array(
 		'name' => 'version_id',
-	), $__compilerTemp1, array(
+	), $__compilerTemp2, array(
 		'label' => 'Version',
 	)) . '
 
-		' . $__compilerTemp2 . '
+		' . $__compilerTemp3 . '
 
 		' . $__templater->formHiddenVal('step', 'ftp_details', array(
 	)) . '

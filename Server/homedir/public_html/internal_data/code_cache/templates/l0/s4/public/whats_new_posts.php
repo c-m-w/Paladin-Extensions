@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 472a6d1db5f2b030a72f5a3fd73f742a
+// FROM HASH: bfa7f90506306273c3e09eaeffea7001
 return array('macros' => array('buttons' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -300,10 +300,8 @@ return array('macros' => array('buttons' => function($__templater, array $__argu
 	';
 	if ($__vars['findNew']['result_count']) {
 		$__finalCompiled .= '
-		';
-		$__compilerTemp3 = '';
-		$__compilerTemp3 .= '
-					' . $__templater->fn('page_nav', array(array(
+		<div class="block-outer">
+			' . $__templater->fn('page_nav', array(array(
 			'page' => $__vars['page'],
 			'total' => $__vars['findNew']['result_count'],
 			'link' => 'whats-new/posts',
@@ -312,33 +310,25 @@ return array('macros' => array('buttons' => function($__templater, array $__argu
 			'perPage' => $__vars['perPage'],
 		))) . '
 
-					';
-		$__compilerTemp4 = '';
-		$__compilerTemp4 .= '
-								' . $__templater->callMacro(null, 'buttons', array(
+			';
+		$__compilerTemp3 = '';
+		$__compilerTemp3 .= '
+						' . $__templater->callMacro(null, 'buttons', array(
 			'findNew' => $__vars['findNew'],
 			'canInlineMod' => $__vars['canInlineMod'],
 		), $__vars) . '
-							';
-		if (strlen(trim($__compilerTemp4)) > 0) {
-			$__compilerTemp3 .= '
-						<div class="block-outer-opposite">
-							<div class="buttonGroup">
-							' . $__compilerTemp4 . '
-							</div>
-						</div>
 					';
-		}
-		$__compilerTemp3 .= '
-				';
 		if (strlen(trim($__compilerTemp3)) > 0) {
 			$__finalCompiled .= '
-			<div class="block-outer">
-				' . $__compilerTemp3 . '
-			</div>
-		';
+				<div class="block-outer-opposite">
+					<div class="buttonGroup">
+					' . $__compilerTemp3 . '
+					</div>
+				</div>
+			';
 		}
 		$__finalCompiled .= '
+		</div>
 	';
 	}
 	$__finalCompiled .= '

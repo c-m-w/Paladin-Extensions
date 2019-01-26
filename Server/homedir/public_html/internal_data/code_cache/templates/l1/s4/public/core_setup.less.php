@@ -1,9 +1,11 @@
 <?php
-// FROM HASH: 7aa03dce08d181bf369a55f4cff725e6
+// FROM HASH: c6fbbb03b29c403f8c2e5d139fa65acd
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
 	$__finalCompiled .= '// Vital base setup, don\'t change these!
+
+html {.xf-pageBackground();}
 
 html:after
 {
@@ -25,7 +27,6 @@ body
 {
 	// don\'t hide the vertical scrollbar
 	overflow-y: scroll !important;
-	.xf-pageBackground();
 }
 
 

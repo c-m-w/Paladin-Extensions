@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 8ffc297545e7e64caa9de6ecb88ce691
+// FROM HASH: d672b1d70e7e2d7e008156c36a7002ef
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -35,8 +35,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 	.blockStatus
 	{
-		margin-left: -@xf-pageEdgeSpacer;
-		margin-right: -@xf-pageEdgeSpacer;
+		margin-left: -@xf-pageEdgeSpacer * .5;
+		margin-right: -@xf-pageEdgeSpacer * .5;
 		border-radius: 0;
 		border-right: none;
 	}

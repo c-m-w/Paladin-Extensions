@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: ee2fcf0d2432d6db6d56f330e56dfa27
+// FROM HASH: 86f69227bff9734708d8e717235400d9
 return array('macros' => array('post' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -7,6 +7,7 @@ return array('macros' => array('post' => function($__templater, array $__argumen
 	$__vars = $__templater->mergeMacroArguments(array(
 		'post' => '!',
 		'thread' => '!',
+		'uix_condensed' => '',
 	), $__arguments, $__vars);
 	$__finalCompiled .= '
 	';
@@ -15,7 +16,7 @@ return array('macros' => array('post' => function($__templater, array $__argumen
 	';
 	$__vars['isIgnored'] = $__templater->method($__vars['post'], 'isIgnored', array());
 	$__finalCompiled .= '
-	<article class="message message--post js-post js-inlineModContainer ' . ($__vars['isIgnored'] ? 'is-ignored' : '') . ' ' . ($__templater->method($__vars['post'], 'isUnread', array()) ? ' is-unread' : '') . '"
+	<article class="message message--post ' . ($__vars['uix_condensed'] ? 'uix_message--condensed' : '') . ' js-post js-inlineModContainer ' . ($__vars['isIgnored'] ? 'is-ignored' : '') . ' ' . ($__templater->method($__vars['post'], 'isUnread', array()) ? ' is-unread' : '') . '"
 		data-author="' . ($__templater->escape($__vars['post']['User']['username']) ?: $__templater->escape($__vars['post']['username'])) . '"
 		data-content="post-' . $__templater->escape($__vars['post']['post_id']) . '"
 		id="js-post-' . $__templater->escape($__vars['post']['post_id']) . '">
@@ -116,6 +117,7 @@ return array('macros' => array('post' => function($__templater, array $__argumen
 							<a href="' . $__templater->fn('link', array('threads/post', $__vars['thread'], array('post_id' => $__vars['post']['post_id'], ), ), true) . '" class="u-concealed" rel="nofollow">#' . $__templater->fn('number', array($__vars['post']['position'] + 1, ), true) . '</a>
 						</div>
 					</header>
+					
 					<div class="message-content js-messageContent">
 
 						';
@@ -234,7 +236,9 @@ return array('macros' => array('post' => function($__templater, array $__argumen
 	}
 	$__finalCompiled .= '
 
-						';
+					</div>
+					
+					';
 	if ($__templater->fn('reaction_bar_position', array('post', ), false) == 'abovesig') {
 		$__finalCompiled .= '
 	' . $__templater->callMacro('th_display_reactions', 'reactions_bar', array(
@@ -249,7 +253,6 @@ return array('macros' => array('post' => function($__templater, array $__argumen
 ' . $__templater->callMacro('message_macros', 'signature', array(
 		'user' => $__vars['post']['User'],
 	), $__vars) . '
-					</div>
 					
 					';
 	if (!$__templater->fn('react_handler_status', array('post', ), false)) {
@@ -351,7 +354,9 @@ return array('macros' => array('post' => function($__templater, array $__argumen
 			'value' => $__vars['post']['post_id'],
 			'class' => 'js-inlineModToggle',
 			'data-xf-init' => 'tooltip',
-			'title' => $__templater->filter('Select for moderation', array(array('for_attr', array()),), false),
+			'title' => 'Select for moderation',
+			'label' => 'Select for moderation',
+			'hiddenlabel' => 'true',
 			'_type' => 'option',
 		))) . '
 												</span>

@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: c006e22798ff679e3f2e2f3215bd6ae9
+// FROM HASH: 673f77c31d98e6f1c80e7ba0df124c52
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -16,7 +16,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		.m-faBase();
 		.m-faContent(@fa-var-check-square-o, .97em);
 		vertical-align: middle;
-		font-size: 1.2em;
+		font-size: 18px !important;
 		margin: -.10em 0;
 	}
 
@@ -50,7 +50,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	position: absolute;
 	top: -3px;
 	left: -6px;
-	.xf-contentAccentBase();
+	.xf-contentHighlightBase();
 	border: @xf-borderSize solid @xf-borderColorAccentContent;
 	border-radius: @xf-borderRadiusSmall;
 	padding: 1px 2px;
@@ -79,6 +79,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	{
 		padding-top: @xf-paddingSmall;
 		padding-bottom: @xf-paddingSmall;
+		height: auto;
+		line-height: inherit;
 	}
 
 	&.is-active:first-of-type

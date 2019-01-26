@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 4f9bf0f63a347d6df83aaaf6ce4a2289
+// FROM HASH: 66a2ecd468b19a210676fbef6e654fad
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -196,6 +196,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 {
 	max-height: 150px;
 	overflow: hidden;
+	-webkit-mask-image: linear-gradient(to bottom, #000 100px, transparent 150px);
+	mask-image: linear-gradient(to bottom, #000 100px, transparent 150px);
 }
 
 .contentRow-fader
@@ -205,8 +207,9 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	left: 0;
 	right: 0;
 	height: @_contentRow-faderCoverHeight;
-
-	.m-gradient(fade(@xf-contentBg, 0%), @xf-contentBg, transparent, 0%, 80%);
+	@supports not (-webkit-mask-image) or not (mask-image) {
+		.m-gradient(fade(@xf-contentBg, 0%), @xf-contentBg, transparent, 0%, 80%);
+	}
 }
 
 .contentRow-minor

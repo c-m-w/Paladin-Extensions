@@ -24,6 +24,7 @@ return array (
   'widget_pos_desc.th_footer_uix' => '',
   'widget_pos_desc.th_sidebarNavigation_uix' => '',
   'widget_pos_desc.thread_view_sidebar' => 'Position in the sidebar while viewing a thread. Widget templates rendered in this position can use the current thread entity in the <code>{$context.thread}</code> param.',
+  'widget_pos_desc.thuix_index_page' => 'Position in the sidebar while viewing the forums default page.',
   'widget_pos_desc.whats_new_overview' => 'Position inside the whats_new template to display new and recent happenings. This occupies the main column so can support larger widgets.',
   'widget_pos_desc.whats_new_sidenav' => 'Position inside the What\'s new sidenav, below the navigation block. Widgets here will appear off canvas on narrow displays.',
   'widget_pos_desc.xfrm_category_sidenav' => 'Displays inside the side navigation on the extension category pages. Widget templates rendered in this position can use the current category entity in the <code>{$context.category}</code> param.',

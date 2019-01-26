@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 980351c387ddcc2ddd532aadf2264769
+// FROM HASH: bb472f6cbe58517ae9f180048497cdcc
 return array('macros' => array('node_list_entry' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -29,7 +29,7 @@ return array('macros' => array('node_list_entry' => function($__templater, array
 			'depth' => $__vars['depth'],
 		), $__vars) . '
 	';
-	} else {
+	} else if ($__vars['nodeTemplate']['template']) {
 		$__finalCompiled .= '
 		' . $__templater->includeTemplate($__vars['nodeTemplate']['template'], $__vars) . '
 	';
@@ -183,7 +183,7 @@ return array('macros' => array('node_list_entry' => function($__templater, array
 },), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
-	$__templater->pageParams['pageH1'] = $__templater->preEscaped($__templater->escape($__vars['xf']['options']['boardTitle']));
+	$__templater->pageParams['pageH1'] = $__templater->preEscaped('Forum list');
 	$__finalCompiled .= '
 ';
 	if ($__vars['xf']['options']['forumsDefaultPage'] != 'forums') {
@@ -193,6 +193,13 @@ return array('macros' => array('node_list_entry' => function($__templater, array
 		$__finalCompiled .= '
 ';
 	}
+	$__finalCompiled .= '
+
+';
+	$__templater->setPageParam('uix_mainTabSets', 'forum');
+	$__finalCompiled .= '
+';
+	$__templater->setPageParam('uix_mainTabActive', 'forum_list');
 	$__finalCompiled .= '
 
 ' . $__templater->callMacro('metadata_macros', 'metadata', array(
@@ -209,10 +216,19 @@ return array('macros' => array('node_list_entry' => function($__templater, array
 ';
 	$__templater->modifySidebarHtml('_xfWidgetPositionSidebarForumListSidebar', $__templater->widgetPosition('forum_list_sidebar', array()), 'replace');
 	$__finalCompiled .= '
+';
+	if ($__vars['xf']['options']['forumsDefaultPage'] === 'forums') {
+		$__finalCompiled .= '
+	';
+		$__templater->modifySidebarHtml('_xfWidgetPositionSidebarThuixIndexPage', $__templater->widgetPosition('thuix_index_page', array()), 'replace');
+		$__finalCompiled .= '
+';
+	}
+	$__finalCompiled .= '
 
 ' . $__templater->widgetPosition('forum_list_above_nodes', array()) . '
 
-<div class="uix_nodeList">
+<div class="uix_nodeList block">
 	' . $__templater->callMacro(null, 'node_list', array(
 		'children' => $__vars['nodeTree'],
 		'extras' => $__vars['nodeExtras'],

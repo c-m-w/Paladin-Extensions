@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: e8ac2045aa85bdda6966e3430bcec7d9
+// FROM HASH: 67104836648fa42324bb1c50e82dfe8d
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -21,10 +21,6 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		$__finalCompiled .= '
 ';
 	}
-	$__finalCompiled .= '
-
-';
-	$__templater->setPageParam('uix_mobileActiveNav', 'Search');
 	$__finalCompiled .= '
 
 ';

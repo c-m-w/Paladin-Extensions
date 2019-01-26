@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: c028e1292cb73bac7f40fbba186f2cca
+// FROM HASH: f0cac31c9564c6b8274100cbd3ee52d0
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -132,6 +132,12 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	<div class="block-container">
 		<div class="block-body">
 			' . '
+
+			' . $__templater->callMacro('register_macros', 'username_row', array(
+		'fieldName' => $__templater->method($__vars['regForm'], 'getFieldName', array('username', )),
+		'value' => $__vars['fields']['username'],
+	), $__vars) . '
+			
 			' . $__templater->formTextBoxRow(array(
 		'name' => 'username',
 		'value' => '',
@@ -142,11 +148,6 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'label' => 'User name',
 		'explain' => 'Please leave this field blank.',
 	)) . '
-
-			' . $__templater->callMacro('register_macros', 'username_row', array(
-		'fieldName' => $__templater->method($__vars['regForm'], 'getFieldName', array('username', )),
-		'value' => $__vars['fields']['username'],
-	), $__vars) . '
 
 			' . '
 			' . $__compilerTemp2 . '
@@ -166,8 +167,10 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'name' => $__templater->method($__vars['regForm'], 'getFieldName', array('password', )),
 		'type' => 'password',
 		'autocomplete' => 'off',
+		'required' => 'required',
 	), array(
 		'label' => 'Password',
+		'hint' => 'Required',
 	)) . '
 
 			' . $__templater->callMacro('register_macros', 'dob_row', array(), $__vars) . '
@@ -180,7 +183,10 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 			' . $__templater->formRowIfContent($__templater->fn('captcha', array(false)), array(
 		'label' => 'Verification',
+		'hint' => 'Required',
 	)) . '
+
+			' . $__templater->callMacro('register_macros', 'email_choice_row', array(), $__vars) . '
 
 			' . $__templater->callMacro('register_macros', 'tos_row', array(), $__vars) . '
 		</div>

@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 480a786cc68f17d869e350cbad0ce551
+// FROM HASH: 117fec4ba7a9b514fbd40cf62418f31a
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -24,7 +24,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 		.message-userArrow:after
 		{
-			border-right-color: @xf-inlineModHighlightColor;
+			border-right-color: @xf-messageUserBlock--backgorund-color;
 		}
 	}
 }
@@ -109,8 +109,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			.m-fixedWidthFlex(@_messageSimple-userColumnWidth + 2 * @xf-messagePaddingSmall);
 			// width: auto;
 			// min-width: auto;
-			background: none;
-			border: none;
+			// background: none;
+			// border: none;
 			padding-right: 0;
 		}
 	}
@@ -126,7 +126,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 		flex: 1 1 auto;
 		width: 100%;
-		display: flex;
+		// display: flex;
 		min-width: 0;
 		.xf-uix_messageMain();
 
@@ -168,6 +168,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	display: flex;
 	flex-direction: column;
 	width: 100%;
+	min-width: 0;
 }
 
 .message-content
@@ -270,6 +271,8 @@ form.message--simple .message-cell--main {
 	.avatar
 	{
 		vertical-align: bottom;
+		max-width: @xf-messageUserBlockWidth;
+		max-height: @xf-messageUserBlockWidth;
 	}
 }
 
@@ -314,7 +317,9 @@ form.message--simple .message-cell--main {
 
 .message-userBanner.userBanner
 {
-	display: block;
+	@media (min-width: @xf-messageSingleColumnWidth) {
+		display: block;
+	}
 	margin-top: 3px;
 }
 
@@ -371,6 +376,10 @@ form.message--simple .message-cell--main {
 	{
 		display: none;
 	}
+}
+
+@media (min-width: @xf-messageSingleColumnWidth) {
+	.message-userDetails {text-align: center;}
 }
 
 @media (max-width: @xf-messageSingleColumnWidth)
@@ -570,11 +579,14 @@ form.message--simple .message-cell--main {
 {
 	font-size: @xf-fontSizeSmall;
 	color: @xf-textColorFeature;
+	padding-left: @xf-messagePadding;
+	padding-right: @xf-messagePadding;
 }
 
 .message-fields
 {
 	margin: @xf-messagePadding 0;
+	.xf-uix_threadField();
 }
 
 .message-body
@@ -625,10 +637,10 @@ form.message--simple .message-cell--main {
 {
 	// margin-top: @xf-messagePadding;
 	font-size: @xf-fontSizeSmall;
-	padding: calc( @xf-messagePadding / 2 );
+	// padding: calc( @xf-messagePadding / 2 );
 	.message--simple &
 	{
-		margin-top: @xf-messagePaddingSmall;
+		// margin-top: @xf-messagePaddingSmall;
 	}
 }
 
@@ -638,12 +650,12 @@ form.message--simple .message-cell--main {
 	// font-size: @xf-fontSizeSmaller;
 	margin-top: @xf-messagePadding;
 	padding: @xf-messagePaddingSmall;
+	.xf-uix_messageLikes();
 }
 
 .message-historyTarget
 {
 	margin-top: @xf-messagePadding;
-	.xf-uix_messageLikes();
 }
 
 .message-gradient
@@ -659,9 +671,7 @@ form.message--simple .message-cell--main {
 
 .message-responses
 {
-	// margin-top: @xf-messagePaddingSmall;
-	margin-right: @xf-messagePadding;
-	margin-left: @xf-messagePadding;
+	margin-top: @xf-messagePaddingSmall;
 	font-size: @xf-fontSizeSmall;
 }
 
@@ -670,7 +680,6 @@ form.message--simple .message-cell--main {
 	margin-top: -@xf-minorBlockContent--border-width;
 	.xf-minorBlockContent();
 	padding: @xf-messagePadding;
-	margin-bottom: @xf-messagePadding;
 
 	// note that border radiuses are very difficult to do here due to a lot of dynamic showing/hiding
 
@@ -895,110 +904,6 @@ form.message--simple .message-cell--main {
 	}
 }
 
-.actionBar-action
-{
-	padding: 3px;
-	border: 1px solid transparent;
-	border-radius: @xf-borderRadiusMedium;
-	margin-left: 5px;
-	.xf-uix_messageControl();
-
-	&:hover {
-		.xf-uix_messageControlHover();
-	}
-
-	&:before
-	{
-		.m-faBase();
-		font-size: 12px;
-		padding-right: 2px;
-	}
-
-	&.actionBar-action--menuTrigger
-	{
-		display: none;
-
-		&:after
-		{
-			.m-faBase();
-			.m-faContent(" @{fa-var-caret-down}");
-			' . $__templater->callMacro('uix_icons.less', 'content', array(
-		'icon' => 'menu-down',
-	), $__vars) . '
-		}
-	}
-
-	&.actionBar-action--inlineMod input
-	{
-		.m-checkboxAligner();
-		margin: 0;
-	}
-
-	&.actionBar-action--mq
-	{
-		&:before { .m-faContent("@{fa-var-plus}\\20"); ' . $__templater->callMacro('uix_icons.less', 'content', array(
-		'icon' => 'quote',
-	), $__vars) . ' } // plus
-
-		&.is-selected
-		{
-			background-color: @xf-contentHighlightBg;
-			border-color: @xf-borderColorHighlight;
-
-			&:before { .m-faContent("@{fa-var-minus}\\20"); ' . $__templater->callMacro('uix_icons.less', 'content', array(
-		'icon' => 'quote',
-	), $__vars) . '} // minus
-		}
-	}
-
-	&.actionBar-action--reply:before { .m-faContent("@{fa-var-reply}\\20"); ' . $__templater->callMacro('uix_icons.less', 'content', array(
-		'icon' => 'reply',
-	), $__vars) . '} // reply
-	&.actionBar-action--like:before { .m-faContent("@{fa-var-thumbs-o-up}\\20"); ' . $__templater->callMacro('uix_icons.less', 'content', array(
-		'icon' => 'like',
-	), $__vars) . '}
-	&.actionBar-action--like.unlike:before { ' . $__templater->callMacro('uix_icons.less', 'content', array(
-		'icon' => 'unlike',
-	), $__vars) . '}// thumbs up
-	&.actionBar-action--report:before { ' . $__templater->callMacro('uix_icons.less', 'content', array(
-		'icon' => 'report',
-	), $__vars) . '}
-	&.actionBar-action--delete:before { ' . $__templater->callMacro('uix_icons.less', 'content', array(
-		'icon' => 'delete',
-	), $__vars) . '}
-	&.actionBar-action--edit:before { ' . $__templater->callMacro('uix_icons.less', 'content', array(
-		'icon' => 'edit',
-	), $__vars) . '}
-	&.actionBar-action--ip:before { ' . $__templater->callMacro('uix_icons.less', 'content', array(
-		'icon' => 'ipaddress',
-	), $__vars) . '}
-	&.actionBar-action--history:before { ' . $__templater->callMacro('uix_icons.less', 'content', array(
-		'icon' => 'history',
-	), $__vars) . '}
-	&.actionBar-action--warn:before { ' . $__templater->callMacro('uix_icons.less', 'content', array(
-		'icon' => 'warn',
-	), $__vars) . '}
-	&.actionBar-action--spam:before { ' . $__templater->callMacro('uix_icons.less', 'content', array(
-		'icon' => 'spam',
-	), $__vars) . '}
-}
-
-@media (max-width: @xf-responsiveNarrow)
-{
-	.actionBar-action
-	{
-		&.actionBar-action--menuItem
-		{
-			display: none !important;
-		}
-
-		&.actionBar-action--menuTrigger
-		{
-			display: inline;
-		}
-	}
-}
-
 // ################################## MESSAGE QUICK REPLY ADDITIONS #############
 
 .formSubmitRow.formSubmitRow--messageQr
@@ -1090,7 +995,7 @@ form.message--simple .message-cell--main {
 	}
 }
 
-.block--messages
+.block--messages, .js-quickReply
 {
 	.block-container
 	{

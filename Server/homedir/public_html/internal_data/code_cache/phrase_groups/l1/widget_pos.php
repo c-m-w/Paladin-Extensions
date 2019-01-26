@@ -24,6 +24,7 @@ return array (
   'widget_pos.th_footer_uix' => 'UI.X: Extended footer',
   'widget_pos.th_sidebarNavigation_uix' => 'UI.X: Sidebar navigation',
   'widget_pos.thread_view_sidebar' => 'Thread view: Sidebar',
+  'widget_pos.thuix_index_page' => 'Forums default page: Sidebar',
   'widget_pos.whats_new_overview' => 'What\'s new: Overview',
   'widget_pos.whats_new_sidenav' => 'What\'s new: Sidenav',
   'widget_pos.xfrm_category_sidenav' => 'Extension category: Sidenav',

@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 0b9106a1ce0c1e940054dfdecb1f99ba
+// FROM HASH: 824b75945eb966dffc63b09ded408828
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -36,6 +36,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		display: flex;
 		flex-wrap: wrap;
 		margin: calc(-@xf-uix_footerWidgetPadding / 2);
+			
+			.blockLink {text-transform: capitalize;}
 
 		.block {
 			flex-basis: @xf-uix_footerWidgetWidth;
@@ -46,20 +48,81 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			.block-container {
 				margin-left: 0;
 				margin-right: 0;
+				';
+	if ($__templater->fn('property', array('uix_extendedFooter__whiteText', ), false)) {
+		$__finalCompiled .= '
+					color: rgba(255,255,255,.7);
+				';
+	}
+	$__finalCompiled .= '
 				.xf-uix_footerWidget();
 				
 				.block-minorHeader {
-					.xf-uix_footerWidgetHeader();	
+					';
+	if ($__templater->fn('property', array('uix_extendedFooter__whiteText', ), false)) {
+		$__finalCompiled .= '
+						color: rgba(255,255,255,1);
+					';
+	}
+	$__finalCompiled .= '
+					.xf-uix_footerWidgetHeader();
+			
+					&:before {
+						';
+	if ($__templater->fn('property', array('uix_extendedFooter__whiteText', ), false)) {
+		$__finalCompiled .= '
+							color: rgba(255,255,255,.3);
+						';
+	}
+	$__finalCompiled .= '
+					}
 			
 					a {color: inherit;}
 				}
+	
+				';
+	if ($__templater->fn('property', array('uix_extendedFooter__whiteText', ), false)) {
+		$__finalCompiled .= '
+					.contentRow-minor {
+						color: rgba(255,255,255,.5);
+
+						time {color: rgba(255,255,255,.7);}
+					}
+	
+					a {
+						color: inherit;
+					}
+
+					.pairs > dt {color: rgba(255,255,255,.5);}
+				';
+	}
+	$__finalCompiled .= '
 				
 				.block-body {
 					.xf-uix_footerWidgetBody();	
 				}
+	
+				.block-row {
+					.xf-uix_footerWidgetRow();
+				}
 				
 				.block-footer {
+						';
+	if ($__templater->fn('property', array('uix_extendedFooter__whiteText', ), false)) {
+		$__finalCompiled .= '
+							color: inherit;
+						';
+	}
+	$__finalCompiled .= '
 					.xf-uix_footerWidgetFooter();	
+				}
+	
+				.blockLink {
+					background: none;
+					color: inherit;
+					border-bottom: 1px solid rgba(255,255,255,.12);
+					
+					a {display: block;}
 				}
 				
 			}

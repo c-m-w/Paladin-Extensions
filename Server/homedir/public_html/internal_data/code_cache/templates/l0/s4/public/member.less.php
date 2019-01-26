@@ -1,11 +1,18 @@
 <?php
-// FROM HASH: e0231bbb5db91a39250e4eb318410beb
+// FROM HASH: 4d222e771f784f1d87993d2582c79b47
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
 	$__finalCompiled .= '@_memberHeader-padding: @xf-paddingLarge;
 @_memberHeader-avatarSize: @avatar-l;
 @_memberHeader-avatarSizeShrunk: @avatar-m;
+
+.uix_memberHeader__extra {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+}
 
 .memberHeader
 {
@@ -15,12 +22,11 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 .memberHeader-main
 {
 	.xf-memberHeader();
-	display: flex;
 }
 
 .memberHeader-avatar
 {
-	// float: left;
+	float: left;
 	padding: @_memberHeader-padding;
 
 	img,
@@ -33,8 +39,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 .memberHeader-content
 {
 	padding: @_memberHeader-padding;
-	// padding-left: ((@_memberHeader-padding) * 2 + (@_memberHeader-avatarSize));
-	flex-grow: 1;
+	padding-left: ((@_memberHeader-padding) * 2 + (@_memberHeader-avatarSize));
 }
 
 .memberHeader-actionTop
@@ -57,13 +62,6 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	margin-top: @xf-paddingSmall;
 }
 
-.uix_profileTabBar {
-	display: flex;
-	align-items: center;
-	
-	.block-tabHeader--memberTabs {flex-grow: 1;}
-}
-
 .memberHeader-separator
 {
 	margin: @_memberHeader-padding 0;
@@ -74,32 +72,13 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 .memberHeader-stats
 {
 	font-size: @xf-fontSizeLarge;
-	
-	.pairJustifier {
-		justify-content: flex-start;
-		margin: 0 -10px;
-	}
 
-	.pairs.pairs--rows
+	.pairs.pairs--row
 	{
-		// min-width: 100px;
-		display: flex;
-		align-items: center;
-		margin: 0 10px;
-		font-size: 14px;
-		
-		dt {
-			padding-right: 5px;
-			font-size: inherit;
-			
-			&:after {
-				content: \':\';
-			}
-		}
+		min-width: 100px;
 	}
 }
 
-/*
 @media (max-width: @xf-responsiveMedium)
 {
 	.memberHeader-avatar .avatar
@@ -112,19 +91,9 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		padding-left: ((@_memberHeader-padding) * 2 + (@_memberHeader-avatarSizeShrunk));
 	}
 }
-*/
-
-.memberHeader-buttons {margin-top: @xf-paddingMedium;}
 
 @media (max-width: @xf-responsiveNarrow)
 {
-	.memberHeader-main {
-		flex-direction: column;
-		align-items: center;
-	}
-	.memberHeader-stats .pairJustifier {
-		justify-content: center;
-	}
 	.memberHeader-avatar
 	{
 		display: block;
@@ -150,8 +119,6 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		padding-top: 0;
 		min-height: 0;
 		text-align: center;
-		
-		[dir=auto] {text-align: inherit;}
 	}
 
 	.memberHeader-name
@@ -178,7 +145,6 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		text-align: inherit;
 	}
 }
-
 
 .block-tabHeader.block-tabHeader--memberTabs
 {

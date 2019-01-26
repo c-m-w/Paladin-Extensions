@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: a98067e25bb26cc2a74e761972d57d56
+// FROM HASH: c1e73120973e12525ec8b13ea447a7f7
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -30,9 +30,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	';
 	if ($__vars['findNew']['result_count']) {
 		$__finalCompiled .= '
-		';
-		$__compilerTemp2 = '';
-		$__compilerTemp2 .= '
+		<div class="block-outer">
 			' . $__templater->fn('page_nav', array(array(
 			'page' => $__vars['page'],
 			'total' => $__vars['findNew']['result_count'],
@@ -43,35 +41,27 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		))) . '
 
 			';
-		$__compilerTemp3 = '';
-		$__compilerTemp3 .= '
+		$__compilerTemp2 = '';
+		$__compilerTemp2 .= '
 						';
 		if ($__vars['canInlineMod']) {
-			$__compilerTemp3 .= '
+			$__compilerTemp2 .= '
 							' . $__templater->callMacro('inline_mod_macros', 'button', array(), $__vars) . '
 						';
 		}
-		$__compilerTemp3 .= '
+		$__compilerTemp2 .= '
 					';
-		if (strlen(trim($__compilerTemp3)) > 0) {
-			$__compilerTemp2 .= '
+		if (strlen(trim($__compilerTemp2)) > 0) {
+			$__finalCompiled .= '
 				<div class="block-outer-opposite">
 					<div class="buttonGroup">
-					' . $__compilerTemp3 . '
+					' . $__compilerTemp2 . '
 					</div>
 				</div>
 			';
 		}
-		$__compilerTemp2 .= '
-			';
-		if (strlen(trim($__compilerTemp2)) > 0) {
-			$__finalCompiled .= '
-		<div class="block-outer">
-			' . $__compilerTemp2 . '
-		</div>
-		';
-		}
 		$__finalCompiled .= '
+		</div>
 	';
 	}
 	$__finalCompiled .= '
@@ -83,25 +73,25 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			<div class="block-filterBar">
 				<div class="filterBar">
 					';
-		$__compilerTemp4 = '';
-		$__compilerTemp4 .= '
+		$__compilerTemp3 = '';
+		$__compilerTemp3 .= '
 								' . '
 								';
 		if ($__vars['findNew']['filters']['followed']) {
-			$__compilerTemp4 .= '
+			$__compilerTemp3 .= '
 									<li><a href="' . $__templater->fn('link', array('whats-new/profile-posts', $__vars['findNew'], array('remove' => 'followed', ), ), true) . '"
 										class="filterBar-filterToggle" data-xf-init="tooltip" title="' . $__templater->filter('Remove this filter', array(array('for_attr', array()),), true) . '">
 										<span class="filterBar-filterToggle-label">' . 'Show only' . '</span>
 										' . 'Followed members' . '</a></li>
 								';
 		}
-		$__compilerTemp4 .= '
+		$__compilerTemp3 .= '
 								' . '
 							';
-		if (strlen(trim($__compilerTemp4)) > 0) {
+		if (strlen(trim($__compilerTemp3)) > 0) {
 			$__finalCompiled .= '
 						<ul class="filterBar-filters">
-							' . $__compilerTemp4 . '
+							' . $__compilerTemp3 . '
 						</ul>
 					';
 		}

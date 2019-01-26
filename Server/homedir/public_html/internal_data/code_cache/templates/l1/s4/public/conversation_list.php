@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 12f60a42fe073735f9f229e81207d4cd
+// FROM HASH: 62b39980ae1b56beaab0ee5186ecf33a
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -198,7 +198,6 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'wrapperclass' => 'block-outer block-outer--after',
 		'perPage' => $__vars['perPage'],
 	))) . '
-	</div>
 </div>
 
 ';

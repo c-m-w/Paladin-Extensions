@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 96aa1d7a0ad88caad45d3afbaf88f992
+// FROM HASH: 0cd126b9b9795fb52755711b0761838a
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -40,7 +40,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 				<div class="memberHeader-main">
 					<span class="memberHeader-avatar">
-						' . $__templater->fn('avatar', array($__vars['user'], 'm', false, array(
+						' . $__templater->fn('avatar', array($__vars['user'], 'l', false, array(
 		'href' => '',
 		'update' => $__templater->fn('link', array('account/avatar', $__vars['user'], ), false),
 	))) . '
@@ -124,48 +124,56 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'tag' => 'div',
 		'class' => 'memberHeader-blurb',
 	))) . '
+					</div>
+				</div>
 
-						';
-	$__compilerTemp4 = '';
-	$__compilerTemp4 .= $__templater->fn('user_activity', array($__vars['user']));
-	if (strlen(trim($__compilerTemp4)) > 0) {
-		$__finalCompiled .= '
-							<dl class="pairs pairs--inline memberHeader-blurb">
-								<dt>' . 'Last seen' . '</dt>
-								<dd dir="auto">
-									' . $__compilerTemp4 . '
-								</dd>
-							</dl>
-						';
-	}
-	$__finalCompiled .= '
-						
-						<div class="memberHeader-stats">
-							<div class="pairJustifier">
-								' . $__templater->callMacro('member_macros', 'member_stat_pairs', array(
+				<div class="memberHeader-content">
+					<div class="memberHeader-stats">
+						<div class="pairJustifier">
+							' . $__templater->callMacro('member_macros', 'member_stat_pairs', array(
 		'user' => $__vars['user'],
 		'context' => 'profile',
 	), $__vars) . '
-							</div>
 						</div>
-						';
-	$__compilerTemp5 = '';
-	$__compilerTemp5 .= '
+					</div>
+
+					';
+	$__compilerTemp4 = '';
+	$__compilerTemp4 .= '
 									' . $__templater->callMacro('member_macros', 'member_action_buttons', array(
 		'user' => $__vars['user'],
 		'context' => 'profile',
 	), $__vars) . '
 								';
-	if (strlen(trim($__compilerTemp5)) > 0) {
+	if (strlen(trim($__compilerTemp4)) > 0) {
 		$__finalCompiled .= '
+						<hr class="memberHeader-separator" />
+						
+						<div class="uix_memberHeader__extra">
+							';
+		$__compilerTemp5 = '';
+		$__compilerTemp5 .= $__templater->fn('user_activity', array($__vars['user']));
+		if (strlen(trim($__compilerTemp5)) > 0) {
+			$__finalCompiled .= '
+								<dl class="pairs pairs--inline memberHeader-blurb">
+									<dt>' . 'Last seen' . '</dt>
+									<dd dir="auto">
+										' . $__compilerTemp5 . '
+									</dd>
+								</dl>
+							';
+		}
+		$__finalCompiled .= '
+
 							<div class="memberHeader-buttons">
-								' . $__compilerTemp5 . '
+								' . $__compilerTemp4 . '
 							</div>
-						';
+						</div>
+					';
 	}
 	$__finalCompiled .= '
-					</div>
 				</div>
+
 			</div>
 		</div>
 	</div>
@@ -175,43 +183,43 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'user' => $__vars['user'],
 	), $__vars) . '
 
-<div class="uix_profileTabBar">
-	<h2 class="block-tabHeader block-tabHeader--memberTabs tabs hScroller"
-		data-xf-init="tabs h-scroller"
-		data-panes=".js-memberTabPanes"
-		data-state="replace"
-		role="tablist">
-		<span class="hScroller-scroll">
-			' . '
-			';
+<h2 class="block-tabHeader block-tabHeader--memberTabs tabs hScroller"
+	data-xf-init="tabs h-scroller"
+	data-panes=".js-memberTabPanes"
+	data-state="replace"
+	role="tablist">
+	<span class="hScroller-scroll">
+		' . '
+		';
 	if ($__templater->method($__vars['user'], 'canViewPostsOnProfile', array())) {
 		$__finalCompiled .= '
-				<a href="' . $__templater->fn('link', array('members', $__vars['user'], ), true) . '"
-				   class="tabs-tab is-active"
-				   role="tab"
-				   aria-controls="profile-posts">' . 'Profile posts' . '</a>
-			';
+			<a href="' . $__templater->fn('link', array('members', $__vars['user'], ), true) . '"
+			   class="tabs-tab is-active"
+			   role="tab"
+			   aria-controls="profile-posts">' . 'Profile posts' . '</a>
+		';
 	}
 	$__finalCompiled .= '
 
-			';
+		';
 	if ($__templater->method($__vars['user'], 'canViewLatestActivity', array())) {
 		$__finalCompiled .= '
-				<a href="' . $__templater->fn('link', array('members/latest-activity', $__vars['user'], ), true) . '"
-				   class="tabs-tab"
-				   id="latest-activity"
-				   role="tab">' . 'Latest activity' . '</a>
-			';
+			<a href="' . $__templater->fn('link', array('members/latest-activity', $__vars['user'], ), true) . '"
+			   rel="nofollow"
+			   class="tabs-tab"
+			   id="latest-activity"
+			   role="tab">' . 'Latest activity' . '</a>
+		';
 	}
 	$__finalCompiled .= '
 
-			<a href="' . $__templater->fn('link', array('members/recent-content', $__vars['user'], ), true) . '"
-			   rel="nofollow"
-			   class="tabs-tab"
-			   id="recent-content"
-			   role="tab">' . 'Postings' . '</a>
+		<a href="' . $__templater->fn('link', array('members/recent-content', $__vars['user'], ), true) . '"
+		   rel="nofollow"
+		   class="tabs-tab"
+		   id="recent-content"
+		   role="tab">' . 'Postings' . '</a>
 
-			' . '
+		' . '
 
 ';
 	if ($__templater->method($__vars['xf']['visitor'], 'canViewResources', array()) AND $__vars['user']['xfrm_resource_count']) {
@@ -239,26 +247,24 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'user' => $__vars['user'],
 	), $__vars) . '
 
-			<a href="' . $__templater->fn('link', array('members/about', $__vars['user'], ), true) . '"
-			   rel="nofollow"
-			   class="tabs-tab"
-			   id="about"
-			   role="tab">' . 'About' . '</a>
+		<a href="' . $__templater->fn('link', array('members/about', $__vars['user'], ), true) . '"
+		   class="tabs-tab"
+		   id="about"
+		   role="tab">' . 'About' . '</a>
 
-			';
+		';
 	if ($__templater->method($__vars['xf']['visitor'], 'canViewWarnings', array()) AND $__vars['user']['warning_count']) {
 		$__finalCompiled .= '
-				<a href="' . $__templater->fn('link', array('members/warnings', $__vars['user'], ), true) . '"
-				   class="tabs-tab"
-				   id="warnings"
-				   role="tab">' . 'Warnings' . '</a>
-			';
+			<a href="' . $__templater->fn('link', array('members/warnings', $__vars['user'], ), true) . '"
+			   class="tabs-tab"
+			   id="warnings"
+			   role="tab">' . 'Warnings' . '</a>
+		';
 	}
 	$__finalCompiled .= '
-			' . '
-		</span>
-	</h2>
-</div>
+		' . '
+	</span>
+</h2>
 
 <ul class="tabPanes js-memberTabPanes">
 	' . '
@@ -345,7 +351,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	if ($__templater->method($__vars['user'], 'canViewLatestActivity', array())) {
 		$__finalCompiled .= '
 		<li data-href="' . $__templater->fn('link', array('members/latest-activity', $__vars['user'], ), true) . '" role="tabpanel" aria-labelledby="latest-activity">
-			<div class="block-row">' . 'Loading' . $__vars['xf']['language']['ellipsis'] . '</div>
+			<div class="blockMessage">' . 'Loading' . $__vars['xf']['language']['ellipsis'] . '</div>
 		</li>
 	';
 	}
@@ -380,14 +386,14 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 ' . $__templater->includeTemplate('th_member_view_bookmarkTab_bookmarks', $__vars) . '
 
 	<li data-href="' . $__templater->fn('link', array('members/about', $__vars['user'], ), true) . '" role="tabpanel" aria-labelledby="about">
-		<div class="block-row">' . 'Loading' . $__vars['xf']['language']['ellipsis'] . '</div>
+		<div class="blockMessage">' . 'Loading' . $__vars['xf']['language']['ellipsis'] . '</div>
 	</li>
 
 	';
 	if ($__templater->method($__vars['xf']['visitor'], 'canViewWarnings', array()) AND $__vars['user']['warning_count']) {
 		$__finalCompiled .= '
 		<li data-href="' . $__templater->fn('link', array('members/warnings', $__vars['user'], ), true) . '" role="tabpanel" aria-labelledby="warnings">
-			<div class="block-row">' . 'Loading' . $__vars['xf']['language']['ellipsis'] . '</div>
+			<div class="blockMessage">' . 'Loading' . $__vars['xf']['language']['ellipsis'] . '</div>
 		</li>
 	';
 	}

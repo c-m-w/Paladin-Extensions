@@ -22,6 +22,27 @@ class UIX
         return '';
     }
 
+    public function getBackstretchImages(\XF\Template\Templater $templater)
+    {
+        $backstretchImages = '';
+
+        if ($imageStr = $templater->getStyle()->getProperty('uix_backstretchImages')) {
+            $images = explode(',', $imageStr);
+            if (!empty($images)) {
+                foreach ($images as &$image) {
+                    $image = trim($image);
+                    $image = str_replace('"', '', $image);
+                    $image = $templater->fnBaseUrl($templater, $escape, $image);
+                    $image = '"' . $image . '"';
+                }
+
+                $backstretchImages = implode(',', $images);
+            }
+        }
+
+        return $backstretchImages;
+    }
+
     public function getFooterWidgets(\XF\Template\Templater $templater)
     {
         $footerWidgets = false;
@@ -42,7 +63,7 @@ class UIX
         return $sidebarNavWidgets;
     }
 
-    public function showWelcomeSection(\XF\Template\Templater $templater, $contentTemplate)
+    public function showWelcomeSection(\XF\Template\Templater $templater, $contentTemplate, $templateCheck = true)
     {
         $visitor = \XF::visitor();
 
@@ -62,8 +83,10 @@ class UIX
             }
         }
 
-        if ($showWelcomeSection) {
-            if ($templater->getStyle()->getProperty('uix_welcomeSectionForumListOnly') && $contentTemplate !== 'forum_list') {
+        if ($showWelcomeSection && $templateCheck) {
+            /* @var \ThemeHouse\UIX\XF\Template\Templater $templater */
+            $templateCache = $templater->getTemplateCacheForUIX();
+            if ($templater->getStyle()->getProperty('uix_welcomeSectionForumListOnly') && !isset($templateCache['forum_overview_wrapper'])) {
                 return false;
             }
         }

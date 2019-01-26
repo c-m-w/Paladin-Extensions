@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: a3ca311ef58969b9866ceacaafc9c7e4
+// FROM HASH: 4568f7caca4748c86cca1b123626f4ef
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -9,8 +9,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 .badgeContainer:after
 {
 	display: inline-block;
-	padding: 2px 4px;
-	margin: -2px 0;
+	padding: 2px 4px 1px;
+	margin: -2px 0 -2px 4px;
 	font-size: 80%;
 	line-height: 1;
 	font-weight: @xf-fontWeightNormal;

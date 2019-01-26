@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 35ca10913ed3465b38c60bfb64f6b705
+// FROM HASH: 3773fdabc2cf57ab1054a7b9af9da956
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -107,7 +107,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	white-space: nowrap;
 	overflow: hidden;
 	opacity: .5;
-	font-size: 0;
+	font-size: 24px;
 
 	&::before
 	{

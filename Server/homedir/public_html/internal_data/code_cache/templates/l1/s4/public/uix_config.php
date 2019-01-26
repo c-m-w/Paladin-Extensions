@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: d95ac36f787db7e28d878ce4065be7cf
+// FROM HASH: d55543703546cdb8bbdb14b4ff9f07c1
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -12,14 +12,14 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	}
 	window.themehouse.settings = {
 		common: {
-			\'20171204\': {
+			\'20180112\': {
 				init: false,
 			},
 		},
 		data: {
 			version: \'' . $__templater->fn('property', array('uix_version', ), true) . '\',
 			jsVersion: \'No JS Files\',
-			templateVersion: \'2.0.1.0_Release\',
+			templateVersion: \'2.0.10.0_Release\',
 			betaMode: ' . $__templater->fn('property', array('uix_betaMode', ), true) . ',
 			theme: \'\',
 			url: \'' . $__templater->filter($__templater->fn('base_url', array(null, true, ), false), array(array('escape', array('js', )),), true) . '\',
@@ -66,12 +66,12 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		';
 	if ($__templater->fn('property', array('uix_betaMode', ), false)) {
 		$__finalCompiled .= '
-			window.themehouse.common[\'20171204\'].init();
+			window.themehouse.common[\'20180112\'].init();
 		';
 	} else {
 		$__finalCompiled .= '
 			try {
-			   window.themehouse.common[\'20171204\'].init();
+			   window.themehouse.common[\'20180112\'].init();
 			} catch(e) {
 			   console.log(\'Error caught\', e);
 			}
@@ -101,7 +101,6 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		}
 
 	});
-</script>
-';
+</script>';
 	return $__finalCompiled;
 });

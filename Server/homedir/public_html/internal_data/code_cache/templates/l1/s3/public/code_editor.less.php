@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 06f21f5582bb54510382e2f0cb32d521
+// FROM HASH: 99ca3d5db0255bbdac78fead0d4fed39
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -246,6 +246,7 @@ div.CodeMirror span.CodeMirror-nonmatchingbracket {color: #f22;}
 	height: 100%;
 	outline: none; /* Prevent dragging from highlighting the element */
 	position: relative;
+	background-color: #fff;
 }
 .CodeMirror-sizer {
 	position: relative;

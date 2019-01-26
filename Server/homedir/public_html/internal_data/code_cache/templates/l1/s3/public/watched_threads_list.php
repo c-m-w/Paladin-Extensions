@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 869cc7b4a6206c398cb21c28389744c3
+// FROM HASH: e82c661f19ee6662f39e5b34cec13ce2
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -111,7 +111,6 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			'wrapperclass' => 'block-outer block-outer--after',
 			'perPage' => $__vars['perPage'],
 		))) . '
-		</div>
 	', array(
 			'action' => $__templater->fn('link', array('watched/threads/update', ), false),
 			'ajax' => 'true',

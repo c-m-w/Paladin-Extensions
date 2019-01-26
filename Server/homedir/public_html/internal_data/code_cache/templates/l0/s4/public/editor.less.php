@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 349f92415b927134858b5bfc9b54c1a1
+// FROM HASH: 3057ba8213ca89049f0ca1538b87abaa
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -38,6 +38,11 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	{
 		margin-bottom: 0;
 		margin-top: 0;
+	}
+
+	&.fr-element.fr-disabled
+	{
+		.xf-inputDisabled() !important;
 	}
 }
 
@@ -132,6 +137,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		{
 			// overriding Froala\'s hover
 			color: @xf-buttonPrimary--color;
+			background-color: @xf-uix_buttonPrimaryHover--background-color;
 		}
 	}
 }
@@ -198,7 +204,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 .tabs--editor // takes some hints from .tabs--standalone
 {
-	color: @xf-paletteColor4;
+	color: @xf-textColorMuted;
 	background: @editorSmiliesBg;
 	font-weight: @xf-fontWeightNormal;
 	border-bottom:  @xf-borderSize solid @xf-borderColor;

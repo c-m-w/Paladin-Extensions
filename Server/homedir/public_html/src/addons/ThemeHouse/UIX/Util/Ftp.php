@@ -9,6 +9,9 @@ class Ftp
 
     function __construct($host, $port, $username, $password, $directory)
     {
+        if (substr($directory, -1) !== DIRECTORY_SEPARATOR) {
+            $directory = $directory . DIRECTORY_SEPARATOR;
+        }
         $this->ftpHost = $host;
         $this->ftpPort = $port;
         $this->ftpUser = $username;
@@ -27,7 +30,6 @@ class Ftp
         }
 
         ftp_chdir($this->ftp, $directory);
-
         $list = ftp_nlist($this->ftp, $directory);
         if (!in_array('index.php', $list) ||
             !in_array('proxy.php', $list) ||

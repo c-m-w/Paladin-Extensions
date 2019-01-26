@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 9b0531d02f29eeefeb4cbd5397d3900f
+// FROM HASH: 27c99fc63d21edf5868166af27017346
 return array('macros' => array('simple_category_list' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -108,7 +108,7 @@ return array('macros' => array('simple_category_list' => function($__templater, 
 	$__finalCompiled .= '
 	<div class="block">
 		<div class="block-container">
-			<h3 class="block-header">' . 'Categories' . '</h3>
+			<h3 class="block-minorHeader">' . 'Categories' . '</h3>
 			<div class="block-body">
 				';
 	if ($__templater->method($__vars['categoryTree'], 'count', array())) {

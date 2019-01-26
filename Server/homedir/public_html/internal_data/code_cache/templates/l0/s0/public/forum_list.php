@@ -205,6 +205,15 @@ return array('macros' => array('node_list_entry' => function($__templater, array
 ';
 	$__templater->modifySidebarHtml('_xfWidgetPositionSidebarForumListSidebar', $__templater->widgetPosition('forum_list_sidebar', array()), 'replace');
 	$__finalCompiled .= '
+';
+	if ($__vars['xf']['options']['forumsDefaultPage'] === 'forums') {
+		$__finalCompiled .= '
+	';
+		$__templater->modifySidebarHtml('_xfWidgetPositionSidebarThuixIndexPage', $__templater->widgetPosition('thuix_index_page', array()), 'replace');
+		$__finalCompiled .= '
+';
+	}
+	$__finalCompiled .= '
 
 ' . $__templater->widgetPosition('forum_list_above_nodes', array()) . '
 ' . $__templater->callMacro(null, 'node_list', array(

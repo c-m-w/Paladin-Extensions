@@ -1,15 +1,23 @@
 <?php
-// FROM HASH: 290e30724b21a2a1f12bb19320817665
+// FROM HASH: 271544d424c8f929c5935f839e4f9baa
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
 	$__finalCompiled .= '@_nodeList-statsCellBreakpoint: @xf-uix_viewportCollapseStats;
+@_iconWidth: ' . ($__templater->fn('property', array('uix_nodeIconWidth', ), false) + $__templater->fn('property', array('paddingLarge', ), false)) . 'px;
 
 .block--category {
 	.block-header {
 		display: flex;
 		align-items: center;
 		.xf-uix_categoryStrip();
+		';
+	if ($__templater->fn('property', array('uix_categoryStripOutsideWrapper', ), false)) {
+		$__finalCompiled .= '
+			.m-uix_removePageSpacer();
+		';
+	}
+	$__finalCompiled .= '
 
 		.uix_categoryStrip__icon {
 			align-self: flex-start;
@@ -22,7 +30,6 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 
 		.node-description {
-			padding-top: 4px;
 			.xf-uix_categoryDescription();
 		}
 
@@ -37,8 +44,6 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 .uix_nodeList {
 	.block-container {.xf-uix_nodeContainer();}
 	.block-body {.xf-uix_nodeBlockBody();}
-
-	.block:last-child {margin-bottom: 0;}
 }
 
 .block-body {
@@ -70,6 +75,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	display: table;
 	table-layout: fixed;
 	width: 100%;
+	transition: all ease-in .15s;
 	.xf-uix_nodeBody();
 
 	&:hover {
@@ -120,7 +126,10 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	.node-icon,
 	.node-main {display: inline-block;}
 
-	.node-main {flex-grow: 1;}
+	.node-main {
+		flex-grow: 1;
+		width: calc(~"100% - ' . ($__templater->fn('property', array('uix_nodeIconWidth', ), false) + $__templater->fn('property', array('paddingLarge', ), false)) . 'px");
+	}
 
 	@media (max-width: @xf-responsiveMedium) {
 		flex-wrap: wrap;
@@ -138,7 +147,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	text-align: center;
 	width: 46px;
 	width: @xf-uix_nodeIconWidth;
-	padding: @xf-paddingLarge 0 @xf-paddingLarge @xf-paddingLarge;
+	padding: @xf-uix_nodePadding 0 @xf-uix_nodePadding @xf-uix_nodePadding;
 	flex-shrink: 0;
 
 	i
@@ -232,7 +241,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 {
 	display: table-cell;
 	vertical-align: middle;
-	padding: @xf-paddingLarge;
+	padding: @xf-uix_nodePadding;
 }
 
 .node-stats
@@ -244,7 +253,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	min-width: 170px;
 	vertical-align: middle;
 	text-align: center;
-	padding: @xf-paddingLarge 0;
+	padding: @xf-uix_nodePadding 0;
 
 	.pairs {line-height: 1.5;}
 
@@ -299,12 +308,14 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	vertical-align: middle;
 	width: 230px;
 	min-width: 230px;
-	padding: @xf-paddingLarge;
+	padding: @xf-uix_nodePadding;
 	display: inline-flex;
 	//flex-direction: column;
 	//justify-content: center;
 	align-items: center;
 	font-size: @xf-fontSizeSmall;
+	
+	a:not(:hover) {color: @xf-textColorDimmed;}
 
 	.uix_nodeExtra__rows {
 		display: flex;
@@ -312,6 +323,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		min-width: 0;
 		max-width: 100%;
 		flex-direction: column;
+		width: 100%;
 	}
 }
 
@@ -319,6 +331,9 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 {
 	.m-overflowEllipsis();
 	color: @xf-textColorMuted;
+	max-width: 100%;
+	
+	.listInline {.m-overflowEllipsis();}
 }
 
 .node-extra-title {padding-right: .5em;}
@@ -344,10 +359,6 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	{
 		font-weight: @xf-fontWeightHeavy;
 		.xf-uix_nodeTitle__unread();
-	}
-
-	.uix_newIndicator {
-		.xf-uix_newNodeMarkerStyle();
 	}
 }
 
@@ -456,7 +467,6 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	}
 
 	.node-description,
-	.node-stats,
 	.node-subNodesFlat
 	{
 		display: none;
@@ -497,14 +507,14 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		&:before
 		{
 			color: @xf-nodeIconUnreadColor;
-			text-shadow: 1px 1px 0 fade(xf-intensify(@xf-nodeIconUnreadColor, 50%), 50%);
+			// text-shadow: 1px 1px 0 fade(xf-intensify(@xf-nodeIconUnreadColor, 50%), 50%);
 		}
 	}
 
 	&.subNodeLink--forum:before,
 	&.subNodeLink--category:before
 	{
-		.m-faContent(@fa-var-comments, 1em);
+		.m-faContent(@fa-var-comments);
 		' . $__templater->callMacro('uix_icons.less', 'content', array(
 		'icon' => 'forum',
 	), $__vars) . '
@@ -512,7 +522,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 	&.subNodeLink--page:before
 	{
-		.m-faContent(@fa-var-file-text, .86em);
+		.m-faContent(@fa-var-file-text);
 		' . $__templater->callMacro('uix_icons.less', 'content', array(
 		'icon' => 'page',
 	), $__vars) . '
@@ -520,7 +530,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 	&.subNodeLink--link:before
 	{
-		.m-faContent(@fa-var-link, .93em);
+		.m-faContent(@fa-var-link);
 		' . $__templater->callMacro('uix_icons.less', 'content', array(
 		'icon' => 'link',
 	), $__vars) . '
@@ -569,7 +579,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	.subNodeLink
 	{
 		display: block;
-		padding: @xf-blockPaddingV @xf-blockPaddingH;
+		padding: (@xf-blockPaddingV / 2) @xf-blockPaddingH;
 		text-decoration: none;
 		cursor: pointer;
 
@@ -585,7 +595,6 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	li li li li .subNodeLink { padding-left: 4.5em; }
 	li li li li li .subNodeLink { padding-left: 6em; }
 	li li li li li li .subNodeLink { padding-left: 7.5em; }
-}
-';
+}';
 	return $__finalCompiled;
 });

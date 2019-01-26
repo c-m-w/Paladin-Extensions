@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: a13b61d6332d6e9b2acf33252b2aa463
+// FROM HASH: 7c6c7e1010ebef4cea3469fac6c93bcc
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -48,6 +48,8 @@ a
 	}
 }
 
+
+' . $__templater->includeTemplate('core_action_bar.less', $__vars) . '
 ' . $__templater->includeTemplate('core_setup.less', $__vars) . '
 ' . $__templater->includeTemplate('core_utilities.less', $__vars) . '
 ' . $__templater->includeTemplate('core_list.less', $__vars) . '

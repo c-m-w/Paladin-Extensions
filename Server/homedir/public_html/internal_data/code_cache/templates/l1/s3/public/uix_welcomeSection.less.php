@@ -1,9 +1,25 @@
 <?php
-// FROM HASH: 22ce938e953a35c3b4f1f5439057d350
+// FROM HASH: 06d5b0ed6441826da692c2c2066b6198
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
-	$__finalCompiled .= '.uix_headerContainer {
+	if (($__templater->fn('property', array('uix_welcomeSectionLocation', ), false) == 'header') AND $__templater->fn('property', array('uix_enableWelcomeHeaderImage', ), false)) {
+		$__finalCompiled .= '
+.uix_hasWelcomeSection .uix_headerContainer {
+	background-image: @xf-uix_welcomeSection__style--background-image;
+	
+	.uix_welcomeSection:before {display: none;}
+	
+	> *:not(.p-navSticky), .p-nav, .p-sectionLinks {
+		background: none;
+		background: @xf-uix_welcomeSectionOverlay;
+	}
+}
+';
+	}
+	$__finalCompiled .= '
+
+.uix_headerContainer {
 	.uix_welcomeSection {
 		';
 	if ($__templater->fn('property', array('uix_pageStyle', ), false) == 'fixed') {
@@ -50,7 +66,6 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		top: 0;
 		background: @xf-uix_welcomeSectionOverlay;
 	}
-}
-';
+}';
 	return $__finalCompiled;
 });

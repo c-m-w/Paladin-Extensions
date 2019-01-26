@@ -82,7 +82,7 @@ This is [SIZE=1]small[/SIZE] and [SIZE=7]big[/SIZE] text.', array(array('preEsca
 			' . $__templater->callMacro(null, 'row_output', array(
 		'title' => $__templater->filter('[URL=<span class="block-textHeader-highlight">link</span>], [EMAIL=<span class="block-textHeader-highlight">address</span>] - Linking (Advanced)', array(array('preEscaped', array()),), false),
 		'desc' => $__templater->filter('Links the wrapped text to the specified web page or email address.', array(array('preEscaped', array()),), false),
-		'example' => $__templater->filter('[URL=http://www.example.com]Go to example.com[/URL]
+		'example' => $__templater->filter('[URL=https://www.example.com]Go to example.com[/URL]
 [EMAIL=example@example.com]Email me[/EMAIL]', array(array('preEscaped', array()),), false),
 		'anchor' => 'email-url-advanced',
 	), $__vars) . '

@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 48d65fdfb5b4824ca6a8bc7c10035ea5
+// FROM HASH: 11513c63d24247b5503f7c9c13cd8361
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -19,11 +19,11 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 .userBanner
 {
 	font-size: 75%;
-	font-size: @xf-fontSizeSmall;
+	font-size: 11px;
 	font-weight: @xf-fontWeightNormal;
 	font-style: normal;
 	padding: 1px @xf-paddingMedium;
-	padding: 3px 8px;
+	padding: 1px 3px;
 	border: 1px solid transparent;
 	border-radius: @xf-borderRadiusSmall;
 	text-align: center;
@@ -51,7 +51,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 	&.userBanner--accent
 	{
-		.m-userBannerVariation(@xf-textColorAccentContent, @xf-contentAccentBg, @xf-borderColorAccentContent);
+		.m-userBannerVariation(#fff, @xf-uix_secondaryColor, @xf-uix_secondaryColor);
 	}
 
 	&.userBanner--red { .m-userBannerVariation(white, #d80000); }

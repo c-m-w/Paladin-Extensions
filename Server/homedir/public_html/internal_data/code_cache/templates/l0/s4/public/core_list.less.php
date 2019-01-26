@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 289cce9c4e128c053856de1d7d441364
+// FROM HASH: a43055405dd6e99e0aef8516adf7d68d
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -115,7 +115,9 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 	&.pairs--justified
 	{
-		.m-clearFix();
+		// .m-clearFix();
+		display: flex;
+		justify-content: space-between;
 
 		> dt
 		{
@@ -129,6 +131,9 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			float: right;
 			text-align: right;
 			max-width: 100%;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
 		}
 	}
 
@@ -159,7 +164,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			&:after
 			{
 				content: \'\';
-				display: none;
+				// display: none;
 			}
 		}
 
@@ -246,15 +251,14 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 .listHeap
 {
 	.m-listPlain();
-	margin-top: -4px;
+	margin: -4px;
 
 	> li
 	{
 		margin: 0;
 		padding: 0;
 		display: inline-block;
-		margin-right: -1px;
-		margin-top: 4px;
+		margin: 4px;
 
 		&:last-child
 		{

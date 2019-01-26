@@ -6,18 +6,19 @@ use XF\AddOn\AbstractSetup;
 use XF\AddOn\StepRunnerInstallTrait;
 use XF\AddOn\StepRunnerUninstallTrait;
 use XF\AddOn\StepRunnerUpgradeTrait;
+use XF\Db\Schema\Alter;
 
 class Setup extends AbstractSetup
 {
-	use StepRunnerInstallTrait;
-	use StepRunnerUpgradeTrait;
-	use StepRunnerUninstallTrait;
+    use StepRunnerInstallTrait;
+    use StepRunnerUpgradeTrait;
+    use StepRunnerUninstallTrait;
 
-	// Upgrading from XF1 version of add-on
+    // Upgrading from XF1 version of add-on
     public function upgrade2000031Step1()
     {
         $schemaManager = \XF::db()->getSchemaManager();
-        $schemaManager->alterTable('xf_style', function(\XF\Db\Schema\Alter $table) {
+        $schemaManager->alterTable('xf_style', function (Alter $table) {
             $table->dropColumns([
                 'audentio',
                 'uix_pid',
@@ -27,7 +28,7 @@ class Setup extends AbstractSetup
             ]);
         });
 
-        $schemaManager->alterTable('xf_forum', function(\XF\Db\Schema\Alter $table) {
+        $schemaManager->alterTable('xf_forum', function (Alter $table) {
             $table->dropColumns([
                 'uix_last_sticky_action',
             ]);
@@ -41,7 +42,7 @@ class Setup extends AbstractSetup
     public function upgrade2000031Step2()
     {
         $schemaManager = \XF::db()->getSchemaManager();
-        $schemaManager->alterTable('xf_user_option', function(\XF\Db\Schema\Alter $table) {
+        $schemaManager->alterTable('xf_user_option', function (Alter $table) {
             $table->dropColumns([
                 'uix_sidebar',
                 'uix_collapse_stuck_threads',
@@ -59,7 +60,7 @@ class Setup extends AbstractSetup
     public function upgrade2000031Step3()
     {
         $schema = \XF::db()->getSchemaManager();
-        $schema->alterTable('xf_style', function(\XF\Db\Schema\Alter $table) {
+        $schema->alterTable('xf_style', function (Alter $table) {
             $table->addColumn('th_product_id_uix', 'int')->setDefault(0);
             $table->addColumn('th_product_version_uix', 'varchar', 250)->nullable()->setDefault(null);
         });
@@ -81,7 +82,7 @@ class Setup extends AbstractSetup
     public function upgrade2000032Step1()
     {
         $schemaManager = $this->schemaManager();
-        $schemaManager->alterTable('xf_user_option', function(\XF\Db\Schema\Alter $table) {
+        $schemaManager->alterTable('xf_user_option', function (Alter $table) {
             if ($table->getColumnDefinition('th_width_uix')) {
                 $table->dropColumns([
                     'th_width_uix',
@@ -94,7 +95,7 @@ class Setup extends AbstractSetup
     public function upgrade2000411Step1()
     {
         $schemaManager = $this->schemaManager();
-        $schemaManager->alterTable('xf_style', function(\XF\Db\Schema\Alter $table) {
+        $schemaManager->alterTable('xf_style', function (Alter $table) {
             $table->addColumn('th_primary_child_uix', 'boolean')->setDefault(0);
         });
     }
@@ -102,7 +103,7 @@ class Setup extends AbstractSetup
     public function upgrade2000531Step1()
     {
         $schemaManager = $this->schemaManager();
-        $schemaManager->alterTable('xf_style', function(\XF\Db\Schema\Alter $table) {
+        $schemaManager->alterTable('xf_style', function (Alter $table) {
             $table->addColumn('th_child_style_xml_uix', 'varchar', 100)->setDefault('');
             $table->addColumn('th_child_style_cache_uix', 'blob')->nullable();
         });
@@ -123,7 +124,7 @@ class Setup extends AbstractSetup
     public function installStep1()
     {
         $schema = \XF::db()->getSchemaManager();
-        $schema->alterTable('xf_style', function(\XF\Db\Schema\Alter $table) {
+        $schema->alterTable('xf_style', function (Alter $table) {
             $table->addColumn('th_product_id_uix', 'int')->setDefault(0);
             $table->addColumn('th_product_version_uix', 'varchar', 250)->nullable()->setDefault(null);
             $table->addColumn('th_primary_child_uix', 'boolean')->setDefault(0);
@@ -132,81 +133,144 @@ class Setup extends AbstractSetup
         });
     }
 
+    /**
+     * @throws \XF\PrintableException
+     */
     public function installStep2()
     {
         $this->applyDefaultWidgets();
     }
 
-    public function installStep3()
+    /**
+     * @param array $stateChanges
+     * @throws \XF\PrintableException
+     */
+    public function postInstall(array &$stateChanges)
     {
+        $this->applyDefaultWidgets();
         $this->applyDefaultPermissions();
     }
 
     public function uninstallStep1()
     {
         $schema = \XF::db()->getSchemaManager();
-        $schema->alterTable('xf_style', function(\XF\Db\Schema\Alter $table) {
-            $table->dropColumns(['th_product_id_uix', 'th_product_version_uix', 'th_primary_child_uix', 'th_child_style_xml_uix']);
+        $schema->alterTable('xf_style', function (Alter $table) {
+            $table->dropColumns([
+                'th_product_id_uix',
+                'th_product_version_uix',
+                'th_primary_child_uix',
+                'th_child_style_xml_uix'
+            ]);
         });
     }
 
+    /**
+     * @param int $previousVersion
+     * @return bool
+     * @throws \XF\PrintableException
+     */
     protected function applyDefaultWidgets($previousVersion = 0)
     {
         $widgets = [];
 
         if ($previousVersion < 2000000) {
             $widgets[] = [
-                'key' => 'uix_footer_forumStatistics',
-                'definition_id' => 'forum_statistics',
+                'key' => 'thuix_footer_aboutUsWidget',
+                'definition_id' => 'html',
+                'title' => 'About us',
                 'config' => [
                     'positions' => [
                         'th_footer_uix' => 10,
                     ],
+                    'options' => [
+                        'advanced_mode' => true,
+                        'template_title' => '_widget_thuix_aboutUsWidget',
+                    ],
                 ],
+                'template_contents' => '<div class="block" data-widget-definition="th_aboutUs">
+    <div class="block-container">
+        <h3 class="block-minorHeader">About us</h3>
+        <ul class="block-body">
+            <li class="block-row">Our community has been around for many years and pride ourselves on offering unbiased, critical discussion among people of all different backgrounds. We are working every day to make sure our community is one of the best.</li>
+        </ul>
+    </div>
+</div>',
             ];
 
             $widgets[] = [
-                'key' => 'uix_footer_newPosts',
-                'definition_id' => 'new_posts',
+                'key' => 'thuix_footer_quickNavWidget',
+                'definition_id' => 'html',
+                'title' => 'Quick navigation',
                 'config' => [
                     'positions' => [
                         'th_footer_uix' => 20,
                     ],
+                    'options' => [
+                        'advanced_mode' => true,
+                        'template_title' => '_widget_thuix_quickNavWidget',
+                    ],
                 ],
+                'template_contents' => '<div class="block" data-widget-definition="th_navigation">
+    <div class="block-container">
+        <h3 class="block-minorHeader">Quick Navigation</h3>
+        <div class="block-body">
+            <xf:if is="$xf.options.homePageUrl">
+            <a class="blockLink rippleButton" href="{$xf.options.homePageUrl}">{{ phrase(\'home\') }}</a>
+            </xf:if>
+            <a class="blockLink rippleButton" href="{{ link(\'forums\') }}">{{ phrase(\'forums\') }}</a>
+            <xf:if is="$xf.visitor.canUseContactForm()">
+                <xf:if is="$xf.options.contactUrl.type == \'default\'">
+                    <a class="blockLink rippleButton" href="{{ link(\'misc/contact\') }}" data-xf-click="overlay">{{ phrase(\'contact_us\') }}</a>
+                <xf:elseif is="$xf.options.contactUrl.type == \'custom\'" />
+                    <a class="blockLink rippleButton" href="{$xf.options.contactUrl.custom}" data-xf-click="{{ $xf.options.contactUrl.overlay ? \'overlay\' : \'\' }}">{{ phrase(\'contact_us\') }}</a>
+                </xf:if>
+            </xf:if>
+        </div>
+    </div>
+</div>',
             ];
 
             $widgets[] = [
-                'key' => 'uix_footer_onlineStatistics',
-                'definition_id' => 'online_statistics',
+                'key' => 'thuix_footer_userNavWidget',
+                'definition_id' => 'html',
+                'title' => 'User menu',
                 'config' => [
                     'positions' => [
                         'th_footer_uix' => 30,
                     ],
+                    'options' => [
+                        'advanced_mode' => true,
+                        'template_title' => '_widget_thuix_userNavWidget',
+                    ],
                 ],
+                'template_contents' => '<div class="block" data-widget-definition="th_userNavigation">
+    <div class="block-container">
+        <h3 class="block-minorHeader">User Menu</h3>
+        <div class="block-body">
+            <xf:if is="$xf.visitor.user_id">
+                <a class="blockLink rippleButton" href="{{ link(\'members\', $xf.visitor) }}">{{ phrase(\'th_profile_uix\') }}</a>
+                <a class="blockLink rippleButton" href="{{ link(\'account/account-details\') }}">{{ phrase(\'account_details\') }}</a>
+                <a class="blockLink rippleButton" href="{{ link(\'whats-new/news-feed\') }}">{{ phrase(\'news_feed\') }}</a>
+                <a class="blockLink rippleButton" href="{{ link(\'logout\', null, {\'t\': csrf_token()}) }}">{{ phrase(\'log_out\') }}</a>
+            <xf:else />
+                <a class="blockLink rippleButton" href="{{ link(\'login\') }}">{{ phrase(\'login\') }}</a>
+            </xf:if>
+        </div>
+    </div>
+</div>',
             ];
 
             $widgets[] = [
-                'key' => 'uix_footer_sharePage',
-                'definition_id' => 'share_page',
+                'key' => 'thuix_footer_facebookWidget',
+                'definition_id' => 'thuix_socialMedia',
+                'title' => 'Follow us on Facebook',
                 'config' => [
                     'positions' => [
                         'th_footer_uix' => 40,
                     ],
-                ],
-            ];
-        }
-
-        if ($previousVersion < 2000070) {
-            $widgets[] = [
-                'key' => 'uix_sidebar_postNewThread',
-                'definition_id' => 'th_post_thread_uix',
-                'title' => 'Can\'t find a topic?',
-                'config' => [
-                    'positions' => [
-                        'forum_list_sidebar' => 0,
-                    ],
                     'options' => [
-                        'description' => 'Share your experiences with like-minded people.',
+                        'platform' => 'facebook',
+                        'name' => 'themehouse',
                     ],
                 ],
             ];
@@ -217,6 +281,24 @@ class Setup extends AbstractSetup
             if (!empty($widget['title'])) {
                 $title = $widget['title'];
             }
+
+            if ($widget['definition_id'] === 'html' && !empty($widget['config']['options']['template_title']) && isset($widget['template_contents'])) {
+                $templateTitle = $widget['config']['options']['template_title'];
+
+                /** @var \XF\Entity\Template $template */
+                $template = $this->app->em()->getFinder('XF:Template')->where('style_id', '=', 0)->where('title', '=',
+                    $templateTitle)->where('type', '=', 'public')->fetchOne();
+                if (!$template) {
+                    $template = $this->app->em()->create('XF:Template');
+                    $template->style_id = 0;
+                    $template->title = $templateTitle;
+                    $template->type = 'public';
+                }
+
+                $template->template = $widget['template_contents'];
+                $template->save();
+            }
+
             $this->createWidget($widget['key'], $widget['definition_id'], $widget['config'], $title);
         }
 
@@ -282,7 +364,8 @@ class Setup extends AbstractSetup
 
             try {
                 $db->insert('xf_permission_entry', $permission);
-            } catch (\Exception $e) {}
+            } catch (\Exception $e) {
+            }
         }
 
         if (empty($permissions)) {

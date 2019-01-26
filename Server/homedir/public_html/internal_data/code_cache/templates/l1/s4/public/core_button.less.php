@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 20cdd8b07a24e321462b21e2eabe2f32
+// FROM HASH: 58de174b3357fb93abcb6cc5c465b86c
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -9,6 +9,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 a.button // needed for specificity over a:link
 {
 	.m-buttonBase();
+	
+	.button-text {display: inline-flex; align-items: center;}
 
 	a
 	{
@@ -56,6 +58,8 @@ a.button // needed for specificity over a:link
 		// background: @xf-contentBg;
 		// color: @xf-linkColor;
 		// .m-buttonBorderColorVariation(@xf-borderColor);
+		.xf-uix_buttonSmall();
+		.xf-uix_buttonLink();
 
 		&:hover,
 		&:focus
@@ -92,9 +96,15 @@ a.button // needed for specificity over a:link
 	
 	&.button--scroll
 	{
-		background: fade(xf-default(@xf-buttonDefault--background-color, transparent), 75%);
+		// background: fade(xf-default(@xf-buttonDefault--background-color, transparent), 75%);
+		.xf-buttonPrimary();
 		padding: 5px 8px;
 		.m-dropShadow();
+		
+		&:hover,
+		&:focus {.xf-uix_buttonPrimaryHover();}
+
+		&:active {.xf-uix_buttonPrimaryActive();}
 	}
 
 	&.button--small
@@ -120,7 +130,7 @@ a.button // needed for specificity over a:link
 			vertical-align: middle;
 			display: inline-block;
 			// margin: -.255em 6px -.255em 0;
-			margin-right: .5em;
+			margin-right: .2em;
 		}
 		
 		&.button--iconOnly > .button-text
@@ -256,7 +266,7 @@ a.button // needed for specificity over a:link
 		'icon' => 'watched',
 	), $__vars) . '}
 		&--conversation .button-text:before	{ .m-buttonIcon(@fa-var-comments-o, 1em); ' . $__templater->callMacro('uix_icons.less', 'content', array(
-		'icon' => 'message',
+		'icon' => 'messages',
 	), $__vars) . '}
 		&--write .button-text:before	    { .m-buttonIcon(@fa-var-pencil-square-o, 1em); ' . $__templater->callMacro('uix_icons.less', 'content', array(
 		'icon' => 'edit',
@@ -273,11 +283,15 @@ a.button // needed for specificity over a:link
 		&--confirm .button-text:before     { .m-buttonIcon(@fa-var-check, 1em); ' . $__templater->callMacro('uix_icons.less', 'content', array(
 		'icon' => 'check',
 	), $__vars) . '}
-		&--disable .button-text:before     { .m-buttonIcon(@fa-var-power-off); }
+		&--disable .button-text:before     { .m-buttonIcon(@fa-var-power-off); ' . $__templater->callMacro('uix_icons.less', 'content', array(
+		'icon' => 'disable',
+	), $__vars) . '}
 		&--markRead .button-text:before    { .m-buttonIcon(@fa-var-check-square-o, .93em); ' . $__templater->callMacro('uix_icons.less', 'content', array(
 		'icon' => 'check',
 	), $__vars) . '}
-		&--notificationsOn .button-text:before { .m-buttonIcon(@fa-var-bell-o, 1em); }
+		&--notificationsOn .button-text:before { .m-buttonIcon(@fa-var-bell-o, 1em); ' . $__templater->callMacro('uix_icons.less', 'content', array(
+		'icon' => 'alert',
+	), $__vars) . '}
 		&--notificationsOff .button-text:before { .m-buttonIcon(@fa-var-bell-slash-o, 1.15em); ' . $__templater->callMacro('uix_icons.less', 'content', array(
 		'icon' => 'alert-off',
 	), $__vars) . '}
@@ -324,10 +338,11 @@ a.button // needed for specificity over a:link
 		> .button-text:before
 		{
 			.m-faBase();
-			font-size: 120%;
+			font-size: 18px !important;
 			vertical-align: middle;
 			display: inline-block;
-			margin: -4px 6px -4px 0;
+			margin: -4px 5px -4px 0;
+			width: auto;
 		}
 
 		&--facebook
@@ -382,6 +397,14 @@ a.button // needed for specificity over a:link
 		{
 			.m-buttonColorVariation(#410093, white);
 			> .button-text:before { .m-faContent(@fa-var-yahoo, 0.86em); }
+		}
+		
+		&--yahoo
+		{
+			.m-buttonColorVariation(#410093, white);
+			> .button-text:before { .m-faContent(@fa-var-yahoo, 0.86em); ' . $__templater->callMacro('uix_icons.less', 'content', array(
+		'icon' => '/f4d3',
+	), $__vars) . '}
 		}
 	}
 
@@ -457,7 +480,7 @@ a.button // needed for specificity over a:link
 		vertical-align: middle;
 	}
 
-	.button
+	> .button
 	{
 		float: left;
 
@@ -551,6 +574,15 @@ a.button // needed for specificity over a:link
 	';
 	}
 	$__finalCompiled .= '
+	';
+	if (($__templater->fn('property', array('uix_visitorTabsMobile', ), false) == 'tabbar') AND ($__templater->fn('property', array('uix_fab', ), false) != 'never')) {
+		$__finalCompiled .= '
+		@media (max-width: @xf-responsiveNarrow) {
+			bottom: ' . (($__templater->fn('property', array('paddingLarge', ), false) + 23) + 100) . 'px;
+		}
+	';
+	}
+	$__finalCompiled .= '
 	right: (@xf-pageEdgeSpacer) / 2;
 	.has-hiddenscroll &
 	{
@@ -562,20 +594,22 @@ a.button // needed for specificity over a:link
 	display: none;
 	&.is-transitioning
 	{
-		display: block;
+		display: flex;
 	}
 	&.is-active
 	{
-		display: block;
+		display: flex;
 		opacity: 1;
 	}
 	.button
 	{
-		font-size: @xf-uix_iconSize;
-		display: block;
+		font-size: 14px;
+		display: flex;
+		height: 24px;
+		line-height: 24px;
 		+ .button
 		{
-			margin-top: (@xf-pageEdgeSpacer) / 2;
+			margin-left: @xf-paddingMedium;
 		}
 	}
 }

@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 36edcb8cdbbaaa2588dfdb8e1fd22439
+// FROM HASH: 6e7c675888f318681e7b42fbb6028389
 return array('macros' => array('depth1' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -49,7 +49,7 @@ return array('macros' => array('depth1' => function($__templater, array $__argum
 		$__finalCompiled .= '
 				</div>
 				';
-		if ($__templater->fn('property', array('uix_categoryCollapse', ), false)) {
+		if (($__templater->fn('property', array('uix_categoryCollapse', ), false) AND $__templater->method($__vars['xf']['visitor'], 'hasPermission', array('th_uix', 'collapseCategories', )))) {
 			$__finalCompiled .= '
 					<a class="u-ripple categoryCollapse--trigger">' . $__templater->callMacro('uix_icons.less', 'icon', array(
 				'icon' => 'chevron-up',
@@ -65,7 +65,7 @@ return array('macros' => array('depth1' => function($__templater, array $__argum
 			';
 	if (!$__templater->fn('property', array('uix_categoryStripOutsideWrapper', ), false)) {
 		$__finalCompiled .= '
-			<h2 class="block-header js-nodeMain">
+			<h2 class="block-header js-nodeMain ' . ($__templater->fn('property', array('uix_stickyCategoryStrips', ), false) ? ' uix_stickyBodyElement' : '') . '">
 				';
 		if ($__templater->fn('property', array('uix_categoryStripIcons', ), false)) {
 			$__finalCompiled .= '
@@ -93,7 +93,7 @@ return array('macros' => array('depth1' => function($__templater, array $__argum
 		$__finalCompiled .= '
 				</div>
 				';
-		if ($__templater->fn('property', array('uix_categoryCollapse', ), false)) {
+		if (($__templater->fn('property', array('uix_categoryCollapse', ), false) AND $__templater->method($__vars['xf']['visitor'], 'hasPermission', array('th_uix', 'collapseCategories', )))) {
 			$__finalCompiled .= '
 					<a class="u-ripple categoryCollapse--trigger">' . $__templater->callMacro('uix_icons.less', 'icon', array(
 				'icon' => 'chevron-up',
@@ -142,7 +142,7 @@ return array('macros' => array('depth1' => function($__templater, array $__argum
 					<a href="' . $__templater->fn('link', array('categories', $__vars['node'], ), true) . '" data-xf-init="' . (($__vars['descriptionDisplay'] == 'tooltip') ? 'element-tooltip' : '') . '" data-shortcut="node-description">' . $__templater->escape($__vars['node']['title']) . '</a>
 					';
 	if ($__vars['extras']['hasNew'] AND $__templater->fn('property', array('uix_newNodeMarker', ), false)) {
-		$__finalCompiled .= '<span class="uix_newIndicator">New</span>';
+		$__finalCompiled .= '<span class="uix_newIndicator">' . 'New' . '</span>';
 	}
 	$__finalCompiled .= '
 				</h3>
@@ -256,7 +256,7 @@ return array('macros' => array('depth1' => function($__templater, array $__argum
 					';
 		} else if ($__vars['extras']['last_post_date']) {
 			$__finalCompiled .= '
-						<div>
+						<div class="uix_nodeExtra__rows">
 							<div class="node-extra-row"><a href="' . $__templater->fn('link', array('posts', array('post_id' => $__vars['extras']['last_post_id'], ), ), true) . '" class="node-extra-title" title="' . $__templater->escape($__vars['extras']['last_thread_title']) . '">' . $__templater->escape($__vars['extras']['last_thread_title']) . '</a></div>
 							<div class="node-extra-row">
 								<ul class="listInline listInline--bullet">
@@ -322,7 +322,6 @@ return array('macros' => array('depth1' => function($__templater, array $__argum
 
 ' . '
 
-' . '
 ';
 	return $__finalCompiled;
 });

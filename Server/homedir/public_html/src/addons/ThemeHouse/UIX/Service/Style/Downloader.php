@@ -21,8 +21,8 @@ class Downloader extends \XF\Service\AbstractService
 
     protected function downloadStyle($version)
     {
-        /** @var \ThemeHouse\UIX\Service\ApiRequest $apiService */
-        $apiService = $this->service('ThemeHouse\UIX:ApiRequest');
+        /** @var \ThemeHouse\Core\Service\ApiRequest $apiService */
+        $apiService = $this->service('ThemeHouse\Core:ApiRequest');
 
         $tempPath = \XF\Util\File::getTempDir() . DIRECTORY_SEPARATOR . 'style-' . \XF::$time . '.zip';
 
@@ -40,8 +40,8 @@ class Downloader extends \XF\Service\AbstractService
 
     protected function getVersion($productId, $versionId)
     {
-        /** @var \ThemeHouse\UIX\Service\ApiRequest $apiService */
-        $apiService = $this->service('ThemeHouse\UIX:ApiRequest');
+        /** @var \ThemeHouse\Core\Service\ApiRequest $apiService */
+        $apiService = $this->service('ThemeHouse\Core:ApiRequest');
 
         $url = str_replace('{product_id}', $productId, str_replace('{version_id}', $versionId, $this->apiUrl));
         return $apiService->get($url);

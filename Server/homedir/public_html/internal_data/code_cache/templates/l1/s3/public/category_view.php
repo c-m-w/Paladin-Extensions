@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 49c0cabe4dcc92a8d711da11384118a7
+// FROM HASH: 016dd5db0e7aa0c0923d68fda01e0b8e
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -21,7 +21,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 ';
 	if ($__vars['nodeTree']) {
 		$__finalCompiled .= '
-	<div class="block uix_nodeList">
+	<div class="block uix_nodeList block">
 		<div class="block-outer">';
 		$__compilerTemp1 = '';
 		$__compilerTemp2 = '';
@@ -75,5 +75,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	$__templater->modifySidebarHtml('_xfWidgetPositionSidebarCategoryViewSidebar', $__templater->widgetPosition('category_view_sidebar', array(
 		'category' => $__vars['category'],
 	)), 'replace');
+	$__finalCompiled .= '
+';
 	return $__finalCompiled;
 });

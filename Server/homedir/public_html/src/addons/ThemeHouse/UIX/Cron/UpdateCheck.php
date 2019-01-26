@@ -19,7 +19,8 @@ class UpdateCheck
         $unresolvedKeys = array_keys($updateStatus);
 
         // First we'll check to see if an add-on update is avaialable
-        $update = \XF::service('ThemeHouse\UIX:UpdateCheck', 217, \XF::repository('XF:AddOn')->inferVersionStringFromId(\XF::app()->registry()['addOns']['ThemeHouse/UIX']));
+        /** @var \ThemeHouse\Core\Service\UpdateCheck $update */
+        $update = \XF::service('ThemeHouse\Core:UpdateCheck', 217, \XF::repository('XF:AddOn')->inferVersionStringFromId(\XF::app()->registry()['addOns']['ThemeHouse/UIX']));
         $check = $update->check();
         $key = array_search('addon', $unresolvedKeys);
         if ($key !== false) {
@@ -33,7 +34,7 @@ class UpdateCheck
         // Now let's check the styles
         $styles = \XF::finder('XF:Style')->where('th_product_id_uix', '!=', 0)->fetch();
         foreach ($styles as $style) {
-            $update = \XF::service('ThemeHouse\UIX:UpdateCheck', $style->th_product_id_uix, $style->th_product_version_uix);
+            $update = \XF::service('ThemeHouse\Core:UpdateCheck', $style->th_product_id_uix, $style->th_product_version_uix);
             $check = $update->checK();
             if ($check) {
                 $updateStatus[$style->th_product_id_uix] = $check;

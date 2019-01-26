@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 736c920b864dee02016684d1b1d5b911
+// FROM HASH: 1beb1fb14ef93b441ac302e4d47bd99e
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -71,14 +71,14 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 @btn-hover-text: #222222;
 @btn-hover-bg: @ui-hover-color;
 
-@btn-active-text: @ui-color;
+@btn-active-text: @xf-uix_primaryColor;
 @btn-active-bg: transparent;
-@btn-active-hover-text: @ui-color;
+@btn-active-hover-text: @xf-uix_primaryColor;
 @btn-active-hover-bg: @btn-hover-bg;
 
 @btn-selected-text: @btn-text;
 @btn-selected-bg: @ui-focused-color;
-@btn-active-selected-text: @ui-color;
+@btn-active-selected-text: @xf-uix_primaryColor;
 @btn-active-selected-bg: @btn-selected-bg;
 
 @btn-disabled-color: @ui-disabled-color;
@@ -587,7 +587,7 @@ iframe.fr-iframe {
 
     // Button is active.
     &.fr-active {
-      // color: @btn-active-text;
+      color: @btn-active-text;
       background: @btn-active-bg;
     }
 

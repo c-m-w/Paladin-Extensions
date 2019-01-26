@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 454845020a571a7326317dc303196fb1
+// FROM HASH: b5c31269a60fea13083cd23d0879ec06
 return array('macros' => array('links' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -13,7 +13,6 @@ return array('macros' => array('links' => function($__templater, array $__argume
 	<a class="' . $__templater->escape($__vars['baseClass']) . ' ' . (($__vars['pageSelected'] == 'overview') ? $__templater->escape($__vars['selectedClass']) : '') . '" href="' . $__templater->fn('link', array('whats-new', ), true) . '">' . 'What\'s new' . '</a>
 	' . '
 	<a class="' . $__templater->escape($__vars['baseClass']) . ' ' . (($__vars['pageSelected'] == 'new_thread') ? $__templater->escape($__vars['selectedClass']) : '') . '" href="' . $__templater->fn('link', array('whats-new/posts', ), true) . '" rel="nofollow">' . 'New posts' . '</a>
-	<a class="' . $__templater->escape($__vars['baseClass']) . ' ' . (($__vars['pageSelected'] == 'new_profile_post') ? $__templater->escape($__vars['selectedClass']) : '') . '" href="' . $__templater->fn('link', array('whats-new/profile-posts', ), true) . '" rel="nofollow">' . 'New profile posts' . '</a>
 	' . '
 ';
 	if ($__templater->method($__vars['xf']['visitor'], 'canViewResources', array())) {
@@ -22,7 +21,14 @@ return array('macros' => array('links' => function($__templater, array $__argume
 ';
 	}
 	$__finalCompiled .= '
-
+	';
+	if ($__templater->method($__vars['xf']['visitor'], 'canViewProfilePosts', array())) {
+		$__finalCompiled .= '
+		<a class="' . $__templater->escape($__vars['baseClass']) . ' ' . (($__vars['pageSelected'] == 'new_profile_post') ? $__templater->escape($__vars['selectedClass']) : '') . '" href="' . $__templater->fn('link', array('whats-new/profile-posts', ), true) . '" rel="nofollow">' . 'New profile posts' . '</a>
+	';
+	}
+	$__finalCompiled .= '
+	' . '
 	';
 	if ($__vars['xf']['options']['enableNewsFeed']) {
 		$__finalCompiled .= '

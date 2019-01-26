@@ -2,6 +2,7 @@
 
 namespace ThemeHouse\UIX\XF\Admin\Controller;
 
+use ThemeHouse\UIX\Util\UIX;
 use XF\Mvc\ParameterBag;
 use XF\Util\File;
 
@@ -10,6 +11,11 @@ class Style extends XFCP_Style
     protected $ftpConnection;
     protected $sessionKey = 'th_styleInstallUpgrade_uix';
 
+    /**
+     * @param $action
+     * @param ParameterBag $params
+     * @throws \XF\Mvc\Reply\Exception
+     */
     public function preDispatch($action, ParameterBag $params)
     {
         parent::preDispatch($action, $params);
@@ -21,33 +27,33 @@ class Style extends XFCP_Style
         ];
 
         if (in_array($action, $blockedActions)) {
-            $update = \XF::service('ThemeHouse\UIX:UpdateCheck', 217, \XF::repository('XF:AddOn')->inferVersionStringFromId(\XF::app()->registry()['addOns']['ThemeHouse/UIX']));
+            $update = \XF::service('ThemeHouse\Core:UpdateCheck', 217, \XF::repository('XF:AddOn')->inferVersionStringFromId(\XF::app()->registry()['addOns']['ThemeHouse/UIX']));
             $bypassCheck = \XF::config('uix_bypassCheck');
             if (empty($bypassCheck)) {
                 $check = $update->check();
 
                 if (!$check || $check['requires_update']) {
-                    throw $this->exception($this->error('The UI.X add-on requires an update before you can upgrade this style.'));
+                    throw $this->exception($this->error(\XF::phrase('thuix_addon_requires_upgrade')));
                 }
             }
 
-            $uix = new \ThemeHouse\UIX\Util\UIX;
+            $uix = new UIX;
             $canWriteDirs = $uix->canWriteToJsAndStyleDirectories();
             if (!$canWriteDirs && !\XF::options()->th_enableFtp_uix) {
-                throw $this->exception($this->error('Your XenForo directory is not writable by the PHP user. You can contact your host and recommend they use a method that allows PHP to run as the same user that owns the XenForo files or alternatively you can <a href="https://www.themehouse.com/help/documentation/uix2/installing-uix-2-manually">install your style manually</a>, a future update will add back the ability to install via FTP.'));
+                throw $this->exception($this->error(\XF::phrase('thuix_writeable_error', ['url' => $this->buildLink('options/groups', ['group_id' => 'th_uix'])])));
             }
 
             if (!class_exists('ZipArchive')) {
-                throw $this->exception($this->error('The PHP zip extension has not been installed and is required for this functionality to work. Please contact your host to get this issue resolved as this is not something we\'re able to fix from the add-on'));
+                throw $this->exception($this->error(\XF::phrase('thuix_zip_extension_error')));
             }
         }
     }
 
     public function actionThemehouse() {
-        $uix = new \ThemeHouse\UIX\Util\UIX;
+        $uix = new UIX;
         /** @var \ThemeHouse\UIX\Service\Style\Fetcher $styleFetcher */
         $styleFetcher = $this->service('ThemeHouse\UIX:Style\Fetcher');
-        /** @var \XF\Repository\Style $styleRepo */
+        /** @var \ThemeHouse\UIX\XF\Repository\Style $styleRepo */
         $styleRepo = $this->repository('XF:Style');
 
         $styleResponse = $styleFetcher->fetch();
@@ -68,7 +74,7 @@ class Style extends XFCP_Style
     {
         $options = \XF::options();
 
-        $uix = new \ThemeHouse\UIX\Util\UIX;
+        $uix = new UIX;
 
         /** @var \ThemeHouse\UIX\Service\Style\Fetcher $styleFetcher */
         $styleFetcher = $this->service('ThemeHouse\UIX:Style\Fetcher');
@@ -102,7 +108,7 @@ class Style extends XFCP_Style
     {
         $options = \XF::options();
 
-        $uix = new \ThemeHouse\UIX\Util\UIX;
+        $uix = new UIX;
 
         /** @var \ThemeHouse\UIX\Service\Style\Fetcher $styleFetcher */
         $styleFetcher = $this->service('ThemeHouse\UIX:Style\Fetcher');
@@ -172,7 +178,7 @@ class Style extends XFCP_Style
     {
         $options = \XF::options();
 
-        $uix = new \ThemeHouse\UIX\Util\UIX;
+        $uix = new UIX;
 
         /** @var \ThemeHouse\UIX\Service\Style\Fetcher $styleFetcher */
         $styleFetcher = $this->service('ThemeHouse\UIX:Style\Fetcher');
@@ -324,7 +330,7 @@ class Style extends XFCP_Style
         }
 
         $options = \XF::options();
-        $uix = new \ThemeHouse\UIX\Util\UIX;
+        $uix = new UIX;
         $path = $this->filter('path', 'str');
 
         $ftpDetails = $this->filter([
@@ -441,7 +447,7 @@ class Style extends XFCP_Style
             /** @var \ThemeHouse\UIX\Service\Style\Upgrader $styleUpgrader */
             $styleUpgrader = $this->service('ThemeHouse\UIX:Style\Upgrader', $product, $version, $style);
 
-            $upgradeResponse = $styleUpgrader->upgrade($tempStyleDir, $childStyleNames8);
+            $upgradeResponse = $styleUpgrader->upgrade($tempStyleDir, $childStyleNames);
 
             if ($upgradeResponse['status'] === 'error') {
                 File::cleanUpTempFiles();
@@ -460,7 +466,7 @@ class Style extends XFCP_Style
     {
         switch ($response['error_code']) {
             case 'ERR_API_KEY':
-                $error = \XF::phrase('th_invalid_api_key_uix');
+                $error = \XF::phrase('th_invalid_api_key_uix', ['url' => $this->buildLink('options/groups', ['group_id' => 'th_uix'])]);
                 break;
 
             default:

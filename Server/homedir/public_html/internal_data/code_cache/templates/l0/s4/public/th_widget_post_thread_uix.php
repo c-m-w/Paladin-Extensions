@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: ef89ce7bf8c2cb455941f4ab35fd32ce
+// FROM HASH: 829486d3a7c54373ab5f955ec597e1fd
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -17,9 +17,9 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 					<h3 class="uix_postThreadWidget__title">' . $__templater->escape($__vars['title']) . '</h3>
 					<div class="uix_postThreadWidget__description">' . $__templater->filter($__vars['options']['description'], array(array('raw', array()),), true) . '</div>
 					' . $__templater->button('
-						' . 'Post thread' . $__vars['xf']['language']['ellipsis'] . '
+						' . 'Post thread' . '
 					', array(
-				'href' => $__templater->fn('link', array('https://www.paladin.rip/forums/9/', ), false),
+				'href' => $__templater->fn('link', array('https://www.paladin-extensions.com/forums/pre-sale-discussion.9/post-thread', ), false),
 				'class' => 'button--cta',
 				'icon' => 'write',
 				'overlay' => 'true',
@@ -33,5 +33,9 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		$__finalCompiled .= '
 ';
 	}
+	$__finalCompiled .= '
+
+';
+	$__templater->includeCss('th_widget_post_thread_uix.less');
 	return $__finalCompiled;
 });

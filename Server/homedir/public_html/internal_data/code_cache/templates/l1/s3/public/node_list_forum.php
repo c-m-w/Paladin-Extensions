@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 67e49c0fa3fa0b76dc8abc6c9b66fdeb
+// FROM HASH: 0c1ed63bb4f59abfef92f7cc13fff0cb
 return array('macros' => array('depth1' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -114,7 +114,7 @@ return array('macros' => array('depth1' => function($__templater, array $__argum
 					<a href="' . $__templater->fn('link', array('forums', $__vars['node'], ), true) . '" data-xf-init="' . (($__vars['descriptionDisplay'] == 'tooltip') ? 'element-tooltip' : '') . '" data-shortcut="node-description">' . $__templater->escape($__vars['node']['title']) . '</a>
 					';
 	if ($__vars['extras']['hasNew'] AND $__templater->fn('property', array('uix_newNodeMarker', ), false)) {
-		$__finalCompiled .= '<span class="uix_newIndicator">New</span>';
+		$__finalCompiled .= '<span class="uix_newIndicator">' . 'New' . '</span>';
 	}
 	$__finalCompiled .= '
 				</h3>

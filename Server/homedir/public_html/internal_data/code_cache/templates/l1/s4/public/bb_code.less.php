@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 34f9de1e584e3a8ff559fb5d9528f5d0
+// FROM HASH: c06bfd619e279bc66d6ba9d259157d25
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -54,6 +54,8 @@ a.bbCodeBlock-sourceJump
 	padding: @_bbCodeBlock-paddingV @_bbCodeBlock-paddingH;
 }
 
+.bbCodeBlock--code .bbCodeBlock-content {background-color: @xf-contentBg; color: @xf-textColor;}
+
 .bbCodeBlock-expandLink
 {
 	display: none;
@@ -92,6 +94,7 @@ a.bbCodeBlock-sourceJump
 		max-height: 300px;
 		max-height: 70vh;
 		overflow: auto;
+		-webkit-overflow-scrolling: touch;
 	}
 }
 
@@ -172,21 +175,49 @@ a.bbCodeBlock-sourceJump
 		&.prism-cdata
 		{
 			color: #a50;
+			';
+	if (($__templater->fn('property', array('styleType', ), false) == 'dark')) {
+		$__finalCompiled .= '
+				color: lighten(#a50, 40%);
+			';
+	}
+	$__finalCompiled .= '
 		}
 
 		&.prism-constant
 		{
 			color: #05a;
+			';
+	if (($__templater->fn('property', array('styleType', ), false) == 'dark')) {
+		$__finalCompiled .= '
+				color: lighten(#05a, 40%);
+			';
+	}
+	$__finalCompiled .= '
 		}
 
 		&.prism-tag
 		{
 			color: #170;
+			';
+	if (($__templater->fn('property', array('styleType', ), false) == 'dark')) {
+		$__finalCompiled .= '
+				color: lighten(#170, 40%);
+			';
+	}
+	$__finalCompiled .= '
 		}
 
 		&.prism-boolean
 		{
 			color: #219;
+			';
+	if (($__templater->fn('property', array('styleType', ), false) == 'dark')) {
+		$__finalCompiled .= '
+				color: lighten(#219, 40%);
+			';
+	}
+	$__finalCompiled .= '
 		}
 
 		&.prism-symbol,
@@ -194,33 +225,75 @@ a.bbCodeBlock-sourceJump
 		&.prism-keyword
 		{
 			color: #708;
+			';
+	if (($__templater->fn('property', array('styleType', ), false) == 'dark')) {
+		$__finalCompiled .= '
+				color: lighten(#708, 40%);
+			';
+	}
+	$__finalCompiled .= '
 		}
 
 		&.prism-selector,
 		&.prism-function
 		{
 			color: #05a;
+			';
+	if (($__templater->fn('property', array('styleType', ), false) == 'dark')) {
+		$__finalCompiled .= '
+				color: lighten(#05a, 40%);
+			';
+	}
+	$__finalCompiled .= '
 		}
 
 		&.prism-deleted
 		{
 			color: #d44;
+			';
+	if (($__templater->fn('property', array('styleType', ), false) == 'dark')) {
+		$__finalCompiled .= '
+				color: lighten(#d44, 40%);
+			';
+	}
+	$__finalCompiled .= '
 		}
 
 		&.prism-inserted
 		{
 			color: #292;
+			';
+	if (($__templater->fn('property', array('styleType', ), false) == 'dark')) {
+		$__finalCompiled .= '
+				color: lighten(#292, 40%);
+			';
+	}
+	$__finalCompiled .= '
 		}
 
 		&.prism-string,
 		&.prism-attr-value
 		{
 			color: #a11;
+			';
+	if (($__templater->fn('property', array('styleType', ), false) == 'dark')) {
+		$__finalCompiled .= '
+				color: lighten(#a11, 40%);
+			';
+	}
+	$__finalCompiled .= '
 		}
 
 		&.prism-number
 		{
 			color: #164;
+			';
+	if (($__templater->fn('property', array('styleType', ), false) == 'dark')) {
+		$__finalCompiled .= '
+				color: lighten(#164, 40%);
+			';
+	}
+	$__finalCompiled .= '
 		}
 
 		&.prism-attr-name,
@@ -228,6 +301,13 @@ a.bbCodeBlock-sourceJump
 		&.prism-builtin
 		{
 			color: #00c;
+			';
+	if (($__templater->fn('property', array('styleType', ), false) == 'dark')) {
+		$__finalCompiled .= '
+				color: lighten(#00c, 40%);
+			';
+	}
+	$__finalCompiled .= '
 		}
 
 		&.prism-regex,
@@ -236,6 +316,13 @@ a.bbCodeBlock-sourceJump
 		&.prism-package
 		{
 			color: #05a;
+			';
+	if (($__templater->fn('property', array('styleType', ), false) == 'dark')) {
+		$__finalCompiled .= '
+				color: lighten(#05a, 40%);
+			';
+	}
+	$__finalCompiled .= '
 		}
 
 		&.prism-class-name,
@@ -243,6 +330,13 @@ a.bbCodeBlock-sourceJump
 		&.prism-bold
 		{
 			color: #00f;
+			';
+	if (($__templater->fn('property', array('styleType', ), false) == 'dark')) {
+		$__finalCompiled .= '
+				color: lighten(#00f, 40%);
+			';
+	}
+	$__finalCompiled .= '
 		}
 
 		&.prism-bold
@@ -254,6 +348,13 @@ a.bbCodeBlock-sourceJump
 		&.prism-constant
 		{
 			color: #05a;
+			';
+	if (($__templater->fn('property', array('styleType', ), false) == 'dark')) {
+		$__finalCompiled .= '
+				color: lighten(#05a, 40%);
+			';
+	}
+	$__finalCompiled .= '
 			font-style: italic;
 		}
 

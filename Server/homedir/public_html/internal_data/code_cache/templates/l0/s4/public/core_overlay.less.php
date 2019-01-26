@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: c90708991f97fdc020b4a6ac2b1c51a0
+// FROM HASH: e8e80eb3e74f5df210ca77ea0b4d0c87
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -18,6 +18,18 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	-webkit-overflow-scrolling: touch;
 	opacity: 0;
 	.m-transition(opacity);
+	
+	@media (max-width: @xf-responsiveNarrow) {
+		transition: transform ease-in .25s;
+		transform: translatey(100%);
+		display: block;
+		opacity: 1;
+		
+		.overlay-title {
+			position: sticky;
+			top: 0;
+		}
+	}
 
 	&.is-transitioning
 	{
@@ -28,6 +40,9 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	{
 		display: block;
 		opacity: 1;
+		@media (max-width: @xf-responsiveNarrow) {
+			transform: translatey(0);
+		}
 	}
 }
 
@@ -38,7 +53,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	margin-top: @xf-overlayTopMargin;
 	width: 100%;
 	max-width: 800px;
-	.xf-pageBackground();
+	background: @xf-contentBg;
 	color: @xf-textColor;
 	.xf-blockBorder();
 	border-radius: @xf-blockBorderRadius;
@@ -62,11 +77,21 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	.block-container {box-shadow: none;}
 }
 
-@media (max-width: 820px)
+@media (max-width: @xf-responsiveWide)
 {
 	.overlay
 	{
 		max-width: ~"calc(100% - 20px)";
+		max-width: ~"calc(100% - env(safe-area-inset-left) - env(safe-area-inset-right))";
+	}
+}
+
+@media (max-width: @xf-responsiveNarrow) {
+	.overlay {
+		max-width: 100%;
+		margin: 0;
+		height: 100vh;
+		border-radius: 0;
 	}
 }
 

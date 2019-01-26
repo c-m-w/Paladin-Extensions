@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: d4db4fe032ba2b18d46f9f0b916ec6cc
+// FROM HASH: 7aeba050176d697fe1fdaa794d180c3a
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -17,7 +17,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 .m-pageNavElCore()
 {
-	background: linear-gradient(0deg, @xf-contentHighlightBg, mix(@xf-contentHighlightBg, @xf-contentBg, 25%));
+	background: @xf-contentHighlightBg;
 	color: @xf-textColorMuted;
 	.xf-blockBorder();
 	// font-size: @xf-fontSizeSmall;

@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: e3604497d6e5a810441425a4585a164d
+// FROM HASH: ac5a023a98d43bf8a4e9d511e6436c56
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -48,11 +48,13 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	float: left;
 }
 
-.p-navEl-link
+a.p-navEl-link
 {
 	float: left;
 	// .m-transition(all, @_nav-elTransitionSpeed);
-	//.m-transitionProperty(opacity, background, color;);
+	//.m-transitionProperty(opacity, background;);
+	text-decoration: none;
+	max-height: 100%;
 
 	&.p-navEl-link--menuTrigger
 	{
@@ -114,14 +116,11 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	}
 	$__finalCompiled .= '
 
+	transition: ease-in .15s all;
 
 	a:not(.button)
 	{
 		color: inherit;
-
-		&:hover {
-			color: @xf-publicNavTabHover--color;
-		}
 	}
 
 	.p-navSticky.is-sticky &
@@ -137,7 +136,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 .p-nav-inner
 {
 	';
-	if ($__templater->fn('property', array('uix_pageStyle', ), false) != 'fixed') {
+	if ($__templater->fn('property', array('uix_pageStyle', ), false) == 'covered') {
 		$__finalCompiled .= '
 		.m-pageWidth();
 	';
@@ -156,8 +155,14 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		display: inline-flex;
 		align-items: center;
 		margin-right: @xf-paddingLarge;
-		
-		&.p-header-logo--image img {height: @xf-uix_navLogoHeight;}
+
+		&.p-header-logo--image img {
+			max-height: calc(@xf-uix_navigationBarHeight - (@xf-uix_navLogoVertSpacing * 2));
+
+			.is-sticky & {
+				max-height: calc(@xf-uix_stickyNavHeight - (@xf-uix_navLogoVertSpacing * 2));
+			}
+		}
 	}
 
 	.m-clearFix();
@@ -239,8 +244,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		}
 		$__finalCompiled .= '
 
-@media (max-width: @xf-uix_brandmarkImage__breakpoint) {
-	.uix_logoSmall {display: inline-flex;}
+@media (max-width: ' . ($__templater->fn('property', array('uix_brandmarkImage__breakpoint', ), false) - 1) . 'px) {
+	.uix_logoSmall {display: inline-block;}
 	.p-header-logo.p-header-logo--image .uix_logo {display: none;}
 }
 ';
@@ -253,29 +258,11 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	.xf-uix_logoText__style();
 }
 
-.uix_navLogo--text {
-	display: flex;
-	align-items: center;
-	.xf-uix_navLogoText__style();
-
-	.uix_logoIcon {padding-right: @xf-paddingMedium;}
-}
-
 ';
 	if ($__templater->fn('property', array('uix_logoTextBreakpoint', ), false)) {
 		$__finalCompiled .= '
 @media (max-width: @xf-uix_logoTextBreakpoint) {
 	.uix_logo--text {font-size: @xf-uix_responsiveLogoFontSize;}
-}
-';
-	}
-	$__finalCompiled .= '
-
-';
-	if ($__templater->fn('property', array('uix_navLogoTextBreakpoint', ), false)) {
-		$__finalCompiled .= '
-@media (max-width: @xf-uix_navLogoTextBreakpoint) {
-	.uix_navLogo--text {font-size: @xf-uix_responsiveNavLogoFontSize}
 }
 ';
 	}
@@ -311,6 +298,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 {
 	.m-listPlain();
 	.m-clearFix();
+	display: flex;
+	align-items: center;
 
 	font-size: 0;
 
@@ -338,6 +327,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		}
 	}
 
+	.badgeContainer:after {margin-left: 4px;}
+
 	.m-navElHPadding(@xf-publicNavPaddingH);
 
 	.p-navEl
@@ -351,35 +342,40 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 			.p-navEl-link
 			{
-				padding-right: @xf-publicNavPaddingH; // since the split trigger is hidden
+
+				@media (min-width: ' . ($__templater->fn('property', array('uix_viewportWidthRemoveSubNav', ), false) + 1) . 'px ) {
+					padding-right: @xf-publicNavPaddingH; // since the split trigger is hidden
+				}
 
 				&:hover
 				{
-					.xf-publicNavSelected();
 					background: none;
 					text-decoration: none;
+					color: inherit;
 				}
 			}
 
 			.p-navEl-splitTrigger
 			{
-				';
-	if (!$__templater->fn('property', array('uix_removeTablinks', ), false)) {
-		$__finalCompiled .= '
-				display: none;
-				';
-	}
-	$__finalCompiled .= '
+				@media (min-width: ' . ($__templater->fn('property', array('uix_viewportWidthRemoveSubNav', ), false) + 1) . 'px ) {
+					display: none;
+				}
 			}
 		}
 
 		&:not(.is-selected):not(.is-menuOpen)
 		{
 			&:hover,
-			.p-navEl-link:hover,
-			.p-navEl-splitTrigger:hover
+			// .p-navEl-link:hover,
+			// .p-navEl-splitTrigger:hover
 			{
 				.xf-publicNavTabHover();
+			}
+
+			.p-navEl-link:hover,
+			.p-navEl-splitTrigger:hover {
+				text-decoration: none;
+				color: inherit;
 			}
 		}
 
@@ -405,6 +401,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		padding-bottom: @xf-publicNavPaddingV;
 		display: inline-flex;
 		align-items: center;
+
+		&:hover {background: none !important;}
 	}
 }
 
@@ -484,7 +482,17 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	border-top-right-radius: @xf-borderRadiusMedium;
 	display: inline-flex;
 
-	i {line-height: 1;}
+	&.p-discovery
+	{
+		// margin-left: .5em;
+
+		&.p-discovery--noSearch
+		{
+			margin-left: 0;
+		}
+		i {line-height: 1;}
+
+	}
 
 	.p-navgroup-linkText {padding-left: @xf-paddingSmall;}
 }
@@ -708,6 +716,29 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	}
 }
 
+';
+	if ($__templater->fn('property', array('uix_visitorTabsMobile', ), false) != 'initial') {
+		$__finalCompiled .= '
+	@media (max-width: @xf-responsiveNarrow) {
+		.p-navgroup.p-account {
+			.p-navgroup-link--user {display: none;}
+			.p-navgroup-link--conversations {display: none;}
+			.p-navgroup-link--alerts {display: none;}
+		}
+		';
+		if ($__templater->fn('property', array('uix_visitorTabsMobile', ), false) == 'tabbar') {
+			$__finalCompiled .= '
+			.p-navgroup.p-discovery {
+				.p-navgroup-link--whatsnew {display: none;}
+			}
+		';
+		}
+		$__finalCompiled .= '
+	}
+';
+	}
+	$__finalCompiled .= '
+
 @media (max-width: @xf-responsiveWide)
 {
 	/*
@@ -790,11 +821,14 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 }
 */
 
-.p-navgroup .p-navgroup-link i:after {
-	font-size: @xf-uix_iconSizeLarge;
-	@media (min-width: @xf-uix_viewportRemoveVisitorTabsText) {
-		font-size: @xf-uix_iconSize;
-		// padding-right: @xf-paddingMedium;
+.p-navgroup .p-navgroup-link i {
+	&:after, &:before {
+		font-size: @xf-uix_iconSizeLarge;
+
+		@media (min-width: @xf-uix_viewportRemoveRegisterText) {
+			font-size: @xf-uix_iconSize;
+			// padding-right: @xf-paddingMedium;
+		}
 	}
 }';
 	return $__finalCompiled;

@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: a7341b72255f89cac72de4405cebcc29
+// FROM HASH: eb916143c02f029d2a7d29cf5067bea9
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -79,9 +79,10 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 							opacity: .5;
 							.m-transition(opacity);
 							' . $__templater->callMacro('uix_icons.less', 'content', array(
-		'icon' => 'close ',
+		'icon' => 'close',
 	), $__vars) . '
 							margin-right: 3px;
+							font-size: 14px;
 						}
 
 						&:hover:before
@@ -96,6 +97,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			{
 				flex-grow: 1;
 				min-width: 0;
+				
+				input {.xf-input();}
 
 				&.select2-search--inline
 				{

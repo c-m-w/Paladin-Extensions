@@ -1,12 +1,12 @@
 <?php
-// FROM HASH: a0d9616e43090ca8bf6b58052bcdb059
+// FROM HASH: 346cc5e5585699ecad95b5af43d83fa0
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
 	$__finalCompiled .= '@_structItem-avatarSize: 36px;
 @_structItem-avatarSizeExpanded: 48px;
-@_structItem-cellPaddingH: @xf-paddingMedium; 
-@_structItem-cellPaddingV: @xf-paddingMedium;
+@_structItem-cellPaddingH: @xf-uix_structPaddingH; 
+@_structItem-cellPaddingV: @xf-uix_structPaddingV;
 
 .structItemContainer
 {
@@ -47,6 +47,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	padding: 0;
 	width: 100%;
 	.xf-uix_discussionListItem();
+	
+	.pairs {line-height: inherit;}
 
 	&:nth-child(even) {
 		background-color: @xf-uix_discussionListItemEven;
@@ -89,6 +91,11 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		background: @xf-inlineModHighlightColor;
 		opacity: 1;
 	}
+	
+	&:last-child {
+		border-bottom-left-radius: @xf-blockBorderRadius;
+		border-bottom-right-radius: @xf-blockBorderRadius;
+	}
 }
 
 .threadListSeparator {
@@ -100,8 +107,6 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	display: table-cell;
 	vertical-align: top;
 	padding: @_structItem-cellPaddingV @_structItem-cellPaddingH;
-	
-	&.structItem-cell--main {padding-left: 0;}
 
 	.structItem--middle &
 	{
@@ -142,6 +147,9 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	{
 		width: 220px;
 		text-align: right;
+		font-size: @xf-fontSizeSmaller;
+		
+		a:not(:hover) {color: @xf-textColorMuted;}
 	}
 }
 
@@ -188,15 +196,22 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	font-weight: @xf-fontWeightNormal;
 	margin: 0;
 	padding: 0;
+	.xf-uix_discussionListTitle();
 
 	.label
 	{
 		font-weight: @xf-fontWeightNormal;
 	}
+	
+	a {
+		color: inherit;
+		&:hover {color: @xf-linkHoverColor;}
+	}
 
 	.is-unread &
 	{
 		font-weight: @xf-fontWeightHeavy;
+		.xf-uix_discussionListTitleUnread();
 	}
 }
 
@@ -266,10 +281,12 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 }
 
 .structItem-statuses,
-.structItem-extraInfo
+.structItem .structItem-extraInfo
 {
 	.m-listPlain();
 	float: right;
+	
+	label.iconic--checkbox i {text-align: right;}
 
 	> li
 	{
@@ -287,7 +304,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 {
 	.m-faBase();
 	display: inline-block;
-	// font-size: 90%;
+	font-size: @xf-fontSizeNormal;
 	color: @xf-textColorMuted;
 
 	&--deleted::before { .m-faContent(@fa-var-trash-o, .79em); ' . $__templater->callMacro('uix_icons.less', 'content', array(
@@ -353,7 +370,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	}
 }
 
-@media (max-width: @xf-responsiveMedium)
+@media (max-width: @xf-uix_discussionListCollapseWidth)
 {
 	.structItem-cell
 	{
@@ -365,6 +382,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			display: block;
 			padding-bottom: .2em;
 			padding-left: 0;
+			
+			.structItem-minor {float: right;}
 		}
 
 		&.structItem-cell--meta
@@ -376,6 +395,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			padding-left: 0;
 			padding-right: 0;
 			color: @xf-textColorMuted;
+			font-size: @xf-fontSizeSmaller;
+			display: none;
 
 			.structItem-minor
 			{
@@ -391,6 +412,15 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 					float: none;
 					margin: 0;
 				}
+				
+				dt {display: none;}
+				dd:before {' . $__templater->callMacro('uix_icons.less', 'content', array(
+		'icon' => 'post',
+	), $__vars) . '}
+				dd:after {
+					content: "\\00A0\\00B7\\20";
+					color: @xf-textColorMuted;
+				}
 			}
 		}
 
@@ -401,10 +431,14 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			float: left;
 			padding-top: 0;
 			padding-left: 0;
+			display: flex;
+			flex-direction: row-reverse;
+			align-items: center;
+			line-height: 1;
 
 			&:before
 			{
-				content: "\\00A0\\00B7\\20";
+				// content: "\\00A0\\00B7\\20";
 				color: @xf-textColorMuted;
 			}
 
@@ -415,7 +449,17 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 			.structItem-minor
 			{
-				display: none;
+				display: inline-block;
+				
+				&:before {' . $__templater->callMacro('uix_icons.less', 'content', array(
+		'icon' => 'reply',
+	), $__vars) . '}
+				
+				&:after {
+					content: " ' . 'replied' . ' ";
+
+					white-space: pre;
+				}
 			}
 		}
 	}
@@ -432,15 +476,148 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	}
 }
 
-@media (max-width: @xf-responsiveNarrow)
+@media (max-width: @xf-uix_discussionListCollapseWidth)
 {
-	.structItem-parts
+	.structItem-parts {display: none;}
+}
+
+@media (min-width: @xf-uix_discussionListCollapseWidth) {
+	.uix_threadRepliesMobile {
+		display: none;
+	}
+}
+
+@media (max-width: @xf-uix_discussionListCollapseWidth) {
+	.structItem .lastPostAv {display: none;}
+}
+
+/* if sidebar, then break discussion list earlier */
+
+.p-body-main--withSidebar {
+
+	@media (min-width: @xf-uix_sidebarBreakpoint) and (max-width: 1200px)
 	{
-		.structItem-startDate
+		.structItem-cell
+		{
+
+			//padding: (@_structItem-cellPaddingV) / 2 @_structItem-cellPaddingH;
+
+			&.structItem-cell--main
+			{
+				display: block;
+				padding-bottom: .2em;
+				padding-left: 0;
+
+				.structItem-minor {float: right;}
+			}
+
+			&.structItem-cell--meta
+			{
+				display: block;
+				width: auto;
+				float: left;
+				padding-top: 0;
+				padding-left: 0;
+				padding-right: 0;
+				color: @xf-textColorMuted;
+				font-size: @xf-fontSizeSmaller;
+				display: none;
+
+				.structItem-minor
+				{
+					display: none;
+				}
+
+				.pairs
+				{
+					> dt,
+					> dd
+					{
+						display: inline;
+						float: none;
+						margin: 0;
+					}
+
+					dt {display: none;}
+					dd:before {' . $__templater->callMacro('uix_icons.less', 'content', array(
+		'icon' => 'post',
+	), $__vars) . '}
+					dd:after {
+						content: "\\00A0\\00B7\\20";
+						color: @xf-textColorMuted;
+					}
+				}
+			}
+
+			&.structItem-cell--latest
+			{
+				display: block;
+				width: auto;
+				float: left;
+				padding-top: 0;
+				padding-left: 0;
+				display: flex;
+				flex-direction: row-reverse;
+				align-items: center;
+				line-height: 1;
+
+				&:before
+				{
+					// content: "\\00A0\\00B7\\20";
+					color: @xf-textColorMuted;
+				}
+
+				a
+				{
+					color: @xf-textColorMuted;
+				}
+
+				.structItem-minor
+				{
+					display: inline-block;
+
+					&:before {' . $__templater->callMacro('uix_icons.less', 'content', array(
+		'icon' => 'reply',
+	), $__vars) . '}
+
+					&:after {
+						content: \' replied \';
+						white-space: pre;
+					}
+				}
+			}
+		}
+
+		.structItem-pageJump,
+		.structItem-extraInfoMinor
 		{
 			display: none;
 		}
+
+		.is-unread .structItem-latestDate
+		{
+			font-weight: @xf-fontWeightNormal;
+		}
 	}
+
+	@media (min-width: @xf-uix_sidebarBreakpoint) and (max-width: 1200px)
+	{
+		.structItem-parts {display: none;}
+	}
+
+	@media (min-width: @xf-uix_sidebarBreakpoint) and (max-width: 1200px) {
+		.uix_threadRepliesMobile {
+			display: block;
+		}
+	}
+
+	@media (min-width: @xf-uix_sidebarBreakpoint) and (max-width: 1200px) {
+		.structItem .lastPostAv {display: none;}
+	}
+}
+
+@media (max-width: @xf-responsiveNarrow) {
+	.structItem-cell.structItem-cell--main .structItem-minor {float: none;}
 }';
 	return $__finalCompiled;
 });

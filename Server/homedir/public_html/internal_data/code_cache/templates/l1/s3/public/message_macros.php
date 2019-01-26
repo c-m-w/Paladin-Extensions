@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 5e64f1f63f49d6450698394a35c137bb
+// FROM HASH: 4ae1d7ad4ce9893d103fddc652edd367
 return array('macros' => array('user_info' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -119,9 +119,11 @@ return array('macros' => array('user_info' => function($__templater, array $__ar
 												';
 			if ($__templater->fn('property', array('uix_postBitIcons', ), false)) {
 				$__compilerTemp1 .= '
-													' . $__templater->callMacro('uix_icons.less', 'icon', array(
+													<span data-xf-init="tooltip" title="' . 'Joined' . '">
+														' . $__templater->callMacro('uix_icons.less', 'icon', array(
 					'icon' => 'user',
 				), $__vars) . '
+													</span>
 												';
 			} else {
 				$__compilerTemp1 .= '
@@ -144,9 +146,11 @@ return array('macros' => array('user_info' => function($__templater, array $__ar
 												';
 			if ($__templater->fn('property', array('uix_postBitIcons', ), false)) {
 				$__compilerTemp1 .= '
-													' . $__templater->callMacro('uix_icons.less', 'icon', array(
+													<span data-xf-init="tooltip" title="' . 'Messages' . '">
+														' . $__templater->callMacro('uix_icons.less', 'icon', array(
 					'icon' => 'messages',
 				), $__vars) . '
+													</span>
 												';
 			} else {
 				$__compilerTemp1 .= '
@@ -168,9 +172,11 @@ return array('macros' => array('user_info' => function($__templater, array $__ar
 												';
 			if ($__templater->fn('property', array('uix_postBitIcons', ), false)) {
 				$__compilerTemp1 .= '
-													' . $__templater->callMacro('uix_icons.less', 'icon', array(
+													<span data-xf-init="tooltip" title="' . 'Likes' . '">
+														' . $__templater->callMacro('uix_icons.less', 'icon', array(
 					'icon' => 'like',
 				), $__vars) . '
+													</span>
 												';
 			} else {
 				$__compilerTemp1 .= '
@@ -192,9 +198,11 @@ return array('macros' => array('user_info' => function($__templater, array $__ar
 												';
 			if ($__templater->fn('property', array('uix_postBitIcons', ), false)) {
 				$__compilerTemp1 .= '
-													' . $__templater->callMacro('uix_icons.less', 'icon', array(
+													<span data-xf-init="tooltip" title="' . 'Points' . '">
+														' . $__templater->callMacro('uix_icons.less', 'icon', array(
 					'icon' => 'trophy',
 				), $__vars) . '
+													</span>
 												';
 			} else {
 				$__compilerTemp1 .= '
@@ -216,9 +224,11 @@ return array('macros' => array('user_info' => function($__templater, array $__ar
 												';
 			if ($__templater->fn('property', array('uix_postBitIcons', ), false)) {
 				$__compilerTemp1 .= '
-													' . $__templater->callMacro('uix_icons.less', 'icon', array(
+													<span data-xf-init="tooltip" title="' . 'Age' . '">
+														' . $__templater->callMacro('uix_icons.less', 'icon', array(
 					'icon' => 'birthday',
 				), $__vars) . '
+													</span>
 												';
 			} else {
 				$__compilerTemp1 .= '
@@ -240,9 +250,11 @@ return array('macros' => array('user_info' => function($__templater, array $__ar
 												';
 			if ($__templater->fn('property', array('uix_postBitIcons', ), false)) {
 				$__compilerTemp1 .= '
-													' . $__templater->callMacro('uix_icons.less', 'icon', array(
+													<span data-xf-init="tooltip" title="' . 'Location' . '">
+														' . $__templater->callMacro('uix_icons.less', 'icon', array(
 					'icon' => 'location',
 				), $__vars) . '
+													</span>
 												';
 			} else {
 				$__compilerTemp1 .= '
@@ -251,7 +263,19 @@ return array('macros' => array('user_info' => function($__templater, array $__ar
 			}
 			$__compilerTemp1 .= '
 											</dt>
-											<dd><a href="' . $__templater->fn('link', array('misc/location-info', '', array('location' => $__vars['user']['Profile']['location'], ), ), true) . '" rel="nofollow" target="_blank" class="u-concealed">' . $__templater->escape($__vars['user']['Profile']['location']) . '</a></dd>
+											<dd>
+												';
+			if ($__vars['xf']['options']['geoLocationUrl']) {
+				$__compilerTemp1 .= '
+													<a href="' . $__templater->fn('link', array('misc/location-info', '', array('location' => $__vars['user']['Profile']['location'], ), ), true) . '" rel="nofollow noreferrer" target="_blank" class="u-concealed">' . $__templater->escape($__vars['user']['Profile']['location']) . '</a>
+												';
+			} else {
+				$__compilerTemp1 .= '
+													' . $__templater->escape($__vars['user']['Profile']['location']) . '
+												';
+			}
+			$__compilerTemp1 .= '
+											</dd>
 										</dl>
 									';
 		}
@@ -264,9 +288,11 @@ return array('macros' => array('user_info' => function($__templater, array $__ar
 												';
 			if ($__templater->fn('property', array('uix_postBitIcons', ), false)) {
 				$__compilerTemp1 .= '
-													' . $__templater->callMacro('uix_icons.less', 'icon', array(
+													<span data-xf-init="tooltip" title="' . 'Website' . '">
+														' . $__templater->callMacro('uix_icons.less', 'icon', array(
 					'icon' => 'web',
 				), $__vars) . '
+													</span>
 												';
 			} else {
 				$__compilerTemp1 .= '

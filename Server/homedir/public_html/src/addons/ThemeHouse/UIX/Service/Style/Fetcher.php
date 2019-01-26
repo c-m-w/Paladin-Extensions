@@ -9,8 +9,8 @@ class Fetcher extends \XF\Service\AbstractService
 
     public function fetch($productId = 0)
     {
-        /** @var \ThemeHouse\UIX\Service\ApiRequest $apiService */
-        $apiService = $this->service('ThemeHouse\UIX:ApiRequest');
+        /** @var \ThemeHouse\Core\Service\ApiRequest $apiService */
+        $apiService = $this->service('ThemeHouse\Core:ApiRequest');
 
         $url = $this->productListingUrl;
 

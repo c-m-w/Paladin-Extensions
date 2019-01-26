@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 9f102927552c8ca8a578088923c026e9
+// FROM HASH: 689441015a28316b7a09071c5cd841b8
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -20,7 +20,7 @@ html {
 		'icon' => 'arrow-down',
 	), $__vars) . ';}
 	.fa-bar-chart:before { .m-faContent(@fa-var-bar-chart, 1.15em); ' . $__templater->callMacro('uix_icons.less', 'content', array(
-		'icon' => 'chart-bar',
+		'icon' => 'poll',
 	), $__vars) . ';}
 	.fa-bars:before { .m-faContent(@fa-var-bars, 0.86em); ' . $__templater->callMacro('uix_icons.less', 'content', array(
 		'icon' => 'menu',

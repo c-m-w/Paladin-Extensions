@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: fe0d5aa53913eadc875d6ac92e42e419
+// FROM HASH: f5d741395745cf6b327a4c63aec40964
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -16,6 +16,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	z-index: @_tooltip-zIndex;
 	line-height: @xf-lineHeightDefault;
 	padding: 0 5px;
+	padding-left: env(safe-area-inset-left) !important;
+	padding-right: env(safe-area-inset-right) !important;
 	display: none;
 
 	&.tooltip--basic
@@ -77,7 +79,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	&.tooltip--member
 	{
 		max-width: 100%;
-		width: 380px;
+		width: 430px;
 		padding: 0 15px;
 
 		// Tooltip positioning is literal.

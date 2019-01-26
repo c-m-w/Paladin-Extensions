@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: bf061debfd8031ca42000f6c2deff211
+// FROM HASH: 533d4e595f583d5efb7e9e189e35f8c9
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -158,7 +158,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			.xf-uix_footerChooser();
 
 
-			&:hover {.xf-uix_footerChooser();}
+			&:hover {.xf-uix_footerChooserHover();}
 
 			// i {display: none;}
 		}
@@ -167,7 +167,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 .p-footer-rssLink
 {
-	span
+	> span
 	{
 		position: relative;
 		top: -1px;
@@ -217,7 +217,6 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		text-align: left;
 		padding: 0 4px; // aligns with other links
 	}
-}
-';
+}';
 	return $__finalCompiled;
 });

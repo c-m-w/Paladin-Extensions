@@ -40,7 +40,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'name' => 'ftp_port',
 		'value' => '21',
 	), array(
-		'label' => 'th_ftp_port_uix',
+		'label' => 'FTP port',
 	)) . '
 
 		' . $__templater->formTextBoxRow(array(

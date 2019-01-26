@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 9d0045f2613408667e439c5c3e62289d
+// FROM HASH: 35a8222a6b57689e68e26b3a8ffc5f79
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -9,6 +9,13 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 ';
 	$__templater->pageParams['pageDescription'] = $__templater->preEscaped($__templater->filter($__vars['forum']['Node']['description'], array(array('raw', array()),), true));
 	$__templater->pageParams['pageDescriptionMeta'] = true;
+	$__finalCompiled .= '
+
+';
+	$__templater->setPageParam('uix_mainTabSets', 'forum');
+	$__finalCompiled .= '
+';
+	$__templater->setPageParam('uix_mainTabActive', 'forum_list');
 	$__finalCompiled .= '
 
 ' . $__templater->callMacro('metadata_macros', 'canonical_url', array(
@@ -55,7 +62,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	' . $__templater->callAdsMacro('forum_view_above_node_list', array(
 			'forum' => $__vars['forum'],
 		), $__vars) . '
-	<div class="block uix_nodeList">
+	<div class="block uix_nodeList block">
 		<div class="block-container">
 			<div class="block-body">
 				' . $__templater->callMacro('forum_list', 'node_list', array(
@@ -289,10 +296,10 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		}
 		$__finalCompiled .= '
 
-					';
+					<div class="structItemContainer-group js-threadList">
+						';
 		if (!$__templater->test($__vars['threads'], 'empty', array())) {
 			$__finalCompiled .= '
-						<div class="structItemContainer-group js-threadList">
 							';
 			if ($__templater->isTraversable($__vars['threads'])) {
 				foreach ($__vars['threads'] AS $__vars['thread']) {
@@ -318,21 +325,25 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 							';
 			}
 			$__finalCompiled .= '
-						</div>
-					';
+						';
 		}
 		$__finalCompiled .= '
+					</div>
 				';
 	} else if ($__vars['filters']) {
 		$__finalCompiled .= '
-					<div class="structItem js-emptyThreadList">
-						<div class="structItem-cell">' . 'There are no threads matching your filters.' . '</div>
+					<div class="structItemContainer-group js-threadList">
+						<div class="structItem js-emptyThreadList">
+							<div class="structItem-cell">' . 'There are no threads matching your filters.' . '</div>
+						</div>
 					</div>
 				';
 	} else {
 		$__finalCompiled .= '
-					<div class="structItem js-emptyThreadList">
-						<div class="structItem-cell">' . 'There are no threads in this forum.' . '</div>
+					<div class="structItemContainer-group js-threadList">
+						<div class="structItem js-emptyThreadList">
+							<div class="structItem-cell">' . 'There are no threads in this forum.' . '</div>
+						</div>
 					</div>
 				';
 	}

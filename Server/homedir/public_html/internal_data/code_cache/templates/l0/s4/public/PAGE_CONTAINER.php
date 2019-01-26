@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 15332d02e8fee7ac6a10f931f91b2cf3
+// FROM HASH: bf737cf5d0b6af5bf45e5ade4bf531f5
 return array('macros' => array('uix_search__component' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -2182,6 +2182,16 @@ return array('macros' => array('uix_search__component' => function($__templater,
 	}
 	$__finalCompiled .= '
 	';
+	if (!$__vars['head']['meta_type']) {
+		$__finalCompiled .= '
+		' . $__templater->callMacro('metadata_macros', 'type', array(
+			'type' => 'website',
+			'output' => true,
+		), $__vars) . '
+	';
+	}
+	$__finalCompiled .= '
+	';
 	if (!$__vars['head']['meta_title']) {
 		$__finalCompiled .= '
 		' . $__templater->callMacro('metadata_macros', 'title', array(
@@ -2202,6 +2212,16 @@ return array('macros' => array('uix_search__component' => function($__templater,
 	}
 	$__finalCompiled .= '
 	';
+	if (!$__vars['head']['meta_share_url']) {
+		$__finalCompiled .= '
+		' . $__templater->callMacro('metadata_macros', 'share_url', array(
+			'shareUrl' => $__vars['xf']['fullUri'],
+			'output' => true,
+		), $__vars) . '
+	';
+	}
+	$__finalCompiled .= '
+	';
 	if ((!$__vars['head']['meta_image_url']) AND $__templater->fn('property', array('publicMetadataLogoUrl', ), false)) {
 		$__finalCompiled .= '
 		' . $__templater->callMacro('metadata_macros', 'image_url', array(
@@ -2215,8 +2235,7 @@ return array('macros' => array('uix_search__component' => function($__templater,
 	';
 	if ($__templater->fn('property', array('metaThemeColor', ), false)) {
 		$__finalCompiled .= '
-		<meta name="theme-color" content="' . $__templater->fn('property', array('metaThemeColor', ), true) . '" />
-		<meta name="msapplication-TileColor" content="' . $__templater->fn('property', array('metaThemeColor', ), true) . '">
+		<meta name="theme-color" content="' . $__templater->fn('parse_less_color', array($__templater->fn('property', array('metaThemeColor', ), false), ), true) . '" />
 	';
 	}
 	$__finalCompiled .= '
@@ -2547,6 +2566,7 @@ return array('macros' => array('uix_search__component' => function($__templater,
 				<nav class="p-nav">
 					<div class="p-nav-inner">
 						' . $__compilerTemp35 . '
+
 
 						' . $__templater->callMacro(null, 'uix_logo__component', array(
 		'content' => $__vars['uix_logo__component'],

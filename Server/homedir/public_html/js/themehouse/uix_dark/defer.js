@@ -95,6 +95,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
+// import Anchors from './anchors';
 
 
 new __WEBPACK_IMPORTED_MODULE_0__inputSync__["a" /* default */]({
@@ -137,6 +138,12 @@ new __WEBPACK_IMPORTED_MODULE_9__tooltipFix__["a" /* default */]({
     settings: window.themehouse.settings.tooltipFix
 }).register();
 
+// new Anchors({
+//     settings: window.themehouse.settings.anchors,
+// }).register();
+
+__webpack_require__(15);
+
 /***/ }),
 /* 4 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
@@ -155,7 +162,7 @@ var inputSync = function () {
             _ref$init = _ref.init,
             init = _ref$init === undefined ? false : _ref$init,
             _ref$commonVersion = _ref.commonVersion,
-            commonVersion = _ref$commonVersion === undefined ? '20171204' : _ref$commonVersion;
+            commonVersion = _ref$commonVersion === undefined ? '20180112' : _ref$commonVersion;
 
         _classCallCheck(this, InputSync);
 
@@ -253,7 +260,7 @@ var minimalSearch = function () {
             _ref$init = _ref.init,
             init = _ref$init === undefined ? false : _ref$init,
             _ref$commonVersion = _ref.commonVersion,
-            commonVersion = _ref$commonVersion === undefined ? '20171204' : _ref$commonVersion;
+            commonVersion = _ref$commonVersion === undefined ? '20180112' : _ref$commonVersion;
 
         _classCallCheck(this, MinimalSearch);
 
@@ -273,16 +280,26 @@ var minimalSearch = function () {
                     }
                 }
             } else {
+                _this.focusBlocked = true;
                 var activeEles = window.document.querySelectorAll('.' + _this.settings.active);
                 if (activeEles) {
                     for (var i = 0, len = activeEles.length; i < len; i++) {
                         activeEles[i].classList.remove(_this.settings.active);
                     }
                 }
-                var activeEle = window.document.activeElement;
-                if (activeEle) {
-                    activeEle.blur();
-                }
+                _this.blurActiveEle();
+
+                window.setTimeout(function () {
+                    _this.blurActiveEle();
+                    _this.focusBlocked = false;
+                }, 900);
+            }
+        };
+
+        this.blurActiveEle = function () {
+            var activeEle = window.document.activeElement;
+            if (activeEle) {
+                activeEle.blur();
             }
         };
 
@@ -346,6 +363,16 @@ var minimalSearch = function () {
             }
         };
 
+        this.forceFocus = function (ele) {
+            // workaround for android keyboard issue
+            ele.focus();
+            for (var i = 0; i < 10; i++) {
+                window.setTimeout(function () {
+                    ele.focus();
+                }, 50 * i);
+            }
+        };
+
         this.initGet = function () {
             var dropdownTriggerEles = window.document.querySelectorAll(_this.settings.searchDropdownTriggerSelector);
 
@@ -356,10 +383,12 @@ var minimalSearch = function () {
                     var menuEle = searchBar.querySelector(_this.settings.searchDropdownSelector);
                     if (menuEle) {
                         triggerEle.addEventListener('focus', function () {
-                            var closestActive = searchBar.querySelector('.' + _this.settings.searchDropdownActive);
-                            if (closestActive === null) {
+                            if (!_this.focusBlocked) {
                                 if (_this.common.values.innerWidth >= _this.settings.dropdownBreakpoint) {
-                                    _this.setDropdown(menuEle, true);
+                                    var closestActive = searchBar.querySelector('.' + _this.settings.searchDropdownActive);
+                                    if (closestActive === null) {
+                                        _this.setDropdown(menuEle, true);
+                                    }
                                 }
                             }
                         });
@@ -377,16 +406,20 @@ var minimalSearch = function () {
                     var inputEle = inputEles[i];
 
                     inputEle.addEventListener('focus', function () {
-                        var searchForm = inputEle.closest(_this.settings.searchFormSelector);
-                        if (searchForm) {
-                            searchForm.classList.add(_this.settings.focusedSearchForm);
+                        if (!_this.focusBlocked) {
+                            var searchForm = inputEle.closest(_this.settings.searchFormSelector);
+                            if (searchForm) {
+                                searchForm.classList.add(_this.settings.focusedSearchForm);
+                            }
                         }
                     });
 
                     inputEle.addEventListener('blur', function () {
-                        var searchForm = inputEle.closest(_this.settings.searchFormSelector);
-                        if (searchForm) {
-                            searchForm.classList.remove(_this.settings.focusedSearchForm);
+                        if (!_this.focusBlocked) {
+                            var searchForm = inputEle.closest(_this.settings.searchFormSelector);
+                            if (searchForm) {
+                                searchForm.classList.remove(_this.settings.focusedSearchForm);
+                            }
                         }
                     });
 
@@ -395,15 +428,21 @@ var minimalSearch = function () {
                         var trigger = searchBar.querySelector(_this.settings.triggerSelector);
                         if (trigger) {
                             trigger.addEventListener('click', function () {
-                                _this.setState(true, searchBar);
-                                inputEle.focus();
+                                if (!_this.focusBlocked) {
+                                    _this.setState(true, searchBar);
+                                    window.setTimeout(function () {
+                                        _this.forceFocus(inputEle);
+                                    }, 350);
+                                }
                             });
                         }
 
                         var searchForm = searchBar.querySelector(_this.settings.searchFormSelector);
                         if (searchForm) {
                             searchForm.addEventListener('click', function () {
-                                inputEle.focus();
+                                if (!_this.focusBlocked) {
+                                    _this.forceFocus(inputEle);
+                                }
                             });
 
                             var submitIcon = searchForm.querySelector(_this.settings.submitIconSelector);
@@ -441,6 +480,7 @@ var minimalSearch = function () {
                     closeEle.addEventListener('click', function (e) {
                         e.preventDefault();
                         _this.setState(false);
+                        e.preventDefault();
                         return false;
                     });
                 }
@@ -494,6 +534,7 @@ var minimalSearch = function () {
         this.numOpenedDropdown = 0;
         this.closerListener = null;
         this.xfMenuOpen = false;
+        this.focusBlocked = false;
 
         if (init) {
             this.init();
@@ -562,7 +603,7 @@ var loginPanel = function () {
             _ref$init = _ref.init,
             init = _ref$init === undefined ? false : _ref$init,
             _ref$commonVersion = _ref.commonVersion,
-            commonVersion = _ref$commonVersion === undefined ? '20171204' : _ref$commonVersion;
+            commonVersion = _ref$commonVersion === undefined ? '20180112' : _ref$commonVersion;
 
         _classCallCheck(this, LoginPanel);
 
@@ -709,7 +750,7 @@ var sidebarNav = function () {
             _ref$init = _ref.init,
             init = _ref$init === undefined ? false : _ref$init,
             _ref$commonVersion = _ref.commonVersion,
-            commonVersion = _ref$commonVersion === undefined ? '20171204' : _ref$commonVersion;
+            commonVersion = _ref$commonVersion === undefined ? '20180112' : _ref$commonVersion;
 
         _classCallCheck(this, SidebarNav);
 
@@ -870,7 +911,7 @@ var sidebar = function () {
             _ref$init = _ref.init,
             init = _ref$init === undefined ? false : _ref$init,
             _ref$commonVersion = _ref.commonVersion,
-            commonVersion = _ref$commonVersion === undefined ? '20171204' : _ref$commonVersion;
+            commonVersion = _ref$commonVersion === undefined ? '20180112' : _ref$commonVersion;
 
         _classCallCheck(this, Sidebar);
 
@@ -904,11 +945,14 @@ var sidebar = function () {
         };
 
         this.initGet = function () {
-            var trigger = window.document.querySelector(_this.settings.triggerSelector);
-            if (trigger) {
-                trigger.addEventListener('click', function () {
-                    _this.toggleSidebar();
-                });
+            var triggers = window.document.querySelectorAll(_this.settings.triggerSelector);
+            if (triggers && triggers.length) {
+                for (var i = 0, len = triggers.length; i < len; i++) {
+                    var trigger = triggers[i];
+                    trigger.addEventListener('click', function () {
+                        _this.toggleSidebar();
+                    });
+                }
             }
         };
 
@@ -919,7 +963,7 @@ var sidebar = function () {
         this.running = false;
         this.settings = Object.assign({
             selector: 'html',
-            triggerSelector: '#uix_sidebarTrigger',
+            triggerSelector: '.uix_sidebarTrigger',
             collapseClass: 'uix_sidebarCollapsed',
             link: null,
             delay: 400
@@ -982,7 +1026,7 @@ var fab = function () {
             _ref$init = _ref.init,
             init = _ref$init === undefined ? false : _ref$init,
             _ref$commonVersion = _ref.commonVersion,
-            commonVersion = _ref$commonVersion === undefined ? '20171204' : _ref$commonVersion;
+            commonVersion = _ref$commonVersion === undefined ? '20180112' : _ref$commonVersion;
 
         _classCallCheck(this, Fab);
 
@@ -1152,7 +1196,7 @@ var nodes = function () {
             _ref$init = _ref.init,
             init = _ref$init === undefined ? false : _ref$init,
             _ref$commonVersion = _ref.commonVersion,
-            commonVersion = _ref$commonVersion === undefined ? '20171204' : _ref$commonVersion;
+            commonVersion = _ref$commonVersion === undefined ? '20180112' : _ref$commonVersion;
 
         _classCallCheck(this, Nodes);
 
@@ -1171,6 +1215,12 @@ var nodes = function () {
                             var target = e.target;
                             if (target) {
                                 if (target.closest(_this.settings.subNodeSelector)) {
+                                    return true;
+                                }
+                                if (target.closest('a')) {
+                                    return true;
+                                }
+                                if (target.tagName.toLowerCase() === 'a') {
                                     return true;
                                 }
                             }
@@ -1262,7 +1312,7 @@ var nodesCollapse = function () {
             _ref$init = _ref.init,
             init = _ref$init === undefined ? false : _ref$init,
             _ref$commonVersion = _ref.commonVersion,
-            commonVersion = _ref$commonVersion === undefined ? '20171204' : _ref$commonVersion;
+            commonVersion = _ref$commonVersion === undefined ? '20180112' : _ref$commonVersion;
 
         _classCallCheck(this, NodesCollapse);
 
@@ -1291,7 +1341,7 @@ var nodesCollapse = function () {
                         var innerChild = child.querySelector(_this.settings.childInnerSelector);
                         var height = innerChild.offsetHeight;
                         child.style.height = height + 'px';
-                        child.style.overflow = 'hidden';
+                        child.classList.add('uix_node--transitioning');
                         window.requestAnimationFrame(function () {
                             var stateName = '1';
                             if (parent.classList.contains(_this.settings.active)) {
@@ -1311,7 +1361,7 @@ var nodesCollapse = function () {
 
                             window.setTimeout(function () {
                                 child.style.height = '';
-                                child.style.overflow = '';
+                                child.classList.remove('uix_node--transitioning');
                             }, _this.settings.duration);
                         });
                     });
@@ -1393,7 +1443,7 @@ var widthToggle = function () {
             _ref$init = _ref.init,
             init = _ref$init === undefined ? false : _ref$init,
             _ref$commonVersion = _ref.commonVersion,
-            commonVersion = _ref$commonVersion === undefined ? '20171204' : _ref$commonVersion;
+            commonVersion = _ref$commonVersion === undefined ? '20180112' : _ref$commonVersion;
 
         _classCallCheck(this, WidthToggle);
 
@@ -1501,7 +1551,7 @@ var tooltipFix = function () {
         var _ref$settings = _ref.settings,
             settings = _ref$settings === undefined ? {} : _ref$settings,
             _ref$commonVersion = _ref.commonVersion,
-            commonVersion = _ref$commonVersion === undefined ? '20171204' : _ref$commonVersion;
+            commonVersion = _ref$commonVersion === undefined ? '20180112' : _ref$commonVersion;
 
         _classCallCheck(this, TooltipFix);
 
@@ -1619,6 +1669,34 @@ if (typeof window.themehouse === 'undefined') {
 window.themehouse.debug = debug;
 
 /* unused harmony default export */ var _unused_webpack_default_export = (debug);
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports) {
+
+window.XF.HScroller.prototype.updateScroll = function () {
+    var el = this.$scrollTarget[0];
+    var left = this.$scrollTarget.normalizedScrollLeft();
+    var width = el.offsetWidth;
+    var scrollWidth = el.scrollWidth;
+    var startActive = left > 0;
+    var endActive = width + left + 1 < scrollWidth;
+
+    if (startActive) {
+        this.$scrollTarget.addClass('th_scroller--start-active');
+    } else {
+        this.$scrollTarget.removeClass('th_scroller--start-active');
+    }
+
+    if (endActive) {
+        this.$scrollTarget.addClass('th_scroller--end-active');
+    } else {
+        this.$scrollTarget.removeClass('th_scroller--end-active');
+    }
+
+    this.$goStart[startActive ? 'addClass' : 'removeClass']('is-active');
+    this.$goEnd[endActive ? 'addClass' : 'removeClass']('is-active');
+};
 
 /***/ })
 /******/ ]);

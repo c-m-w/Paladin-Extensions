@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: e908f46d6ba6d80fdc320a3e47a48c17
+// FROM HASH: 434019eebf931a0d73d8739a5d64dc6b
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -38,23 +38,43 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 <div class="blocks">
 	';
 	$__compilerTemp2 = '';
-	if ($__vars['captcha']) {
+	if ($__vars['uix_loginPreventAutoFocus']) {
 		$__compilerTemp2 .= '
+					' . $__templater->formTextBoxRow(array(
+			'name' => 'login',
+			'value' => $__vars['login'],
+			'autocomplete' => 'username',
+		), array(
+			'label' => 'Your name or email address',
+		)) . '
+				';
+	} else {
+		$__compilerTemp2 .= '
+					' . $__templater->formTextBoxRow(array(
+			'name' => 'login',
+			'value' => $__vars['login'],
+			'autofocus' => 'autofocus',
+			'autocomplete' => 'username',
+		), array(
+			'label' => 'Your name or email address',
+		)) . '
+				';
+	}
+	$__compilerTemp3 = '';
+	if ($__vars['captcha']) {
+		$__compilerTemp3 .= '
 					' . $__templater->formRowIfContent($__templater->fn('captcha', array(true)), array(
 			'label' => 'Verification',
 			'force' => 'true',
 		)) . '
 				';
 	}
-	$__compilerTemp3 = '';
+	$__compilerTemp4 = '';
 	if ($__vars['xf']['options']['registrationSetup']['enabled']) {
-		$__compilerTemp3 .= '
-			<div class="block-outer block-outer--after">
+		$__compilerTemp4 .= '
+			<div class="block-outer block-outer--after uix_login__registerLink">
 				<div class="block-outer-middle">
-					' . 'Don\'t have an account?' . ' ' . $__templater->button('Register now', array(
-			'href' => $__templater->fn('link', array('register', ), false),
-		), '', array(
-		)) . '
+					' . 'Don\'t have an account?' . ' <a href="' . $__templater->fn('link', array('register', ), true) . '">' . 'Register now' . '</a>
 				</div>
 			</div>
 		';
@@ -62,14 +82,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	$__finalCompiled .= $__templater->form('
 		<div class="block-container">
 			<div class="block-body">
-				' . $__templater->formTextBoxRow(array(
-		'name' => 'login',
-		'value' => $__vars['login'],
-		'autofocus' => 'autofocus',
-		'autocomplete' => 'username',
-	), array(
-		'label' => 'Your name or email address',
-	)) . '
+				' . $__compilerTemp2 . '
 
 				' . $__templater->formTextBoxRow(array(
 		'name' => 'password',
@@ -78,11 +91,11 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	), array(
 		'label' => 'Password',
 		'html' => '
-						<a href="' . $__templater->fn('link', array('lost-password', ), true) . '" data-xf-click="overlay">' . 'Forgot your password?' . '</a>
+						<a class="uix_forgotPassWord__link" href="' . $__templater->fn('link', array('lost-password', ), true) . '" data-xf-click="overlay">' . 'Forgot your password?' . '</a>
 					',
 	)) . '
 
-				' . $__compilerTemp2 . '
+				' . $__compilerTemp3 . '
 
 				' . $__templater->formCheckBoxRow(array(
 	), array(array(
@@ -92,13 +105,16 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'_type' => 'option',
 	)), array(
 	)) . '
+
+				' . $__templater->formHiddenVal('_xfRedirect', $__vars['redirect'], array(
+	)) . '
 			</div>
 			' . $__templater->formSubmitRow(array(
 		'icon' => 'login',
 	), array(
 	)) . '
 		</div>
-		' . $__compilerTemp3 . '
+		' . $__compilerTemp4 . '
 	', array(
 		'action' => $__templater->fn('link', array('login/login', ), false),
 		'class' => 'block',
@@ -107,16 +123,16 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	';
 	if (!$__templater->test($__vars['providers'], 'empty', array())) {
 		$__finalCompiled .= '
-		<div class="blocks-textJoiner"><span></span><em>' . 'or' . '</em><span></span></div>
+		<div class="blocks-textJoiner"><span></span><em>' . 'or' . ' ' . 'Log in using' . '</em><span></span></div>
 
-		<div class="block">
+		<div class="block uix_loginProvider__row">
 			<div class="block-container">
 				<div class="block-body">
 					';
-		$__compilerTemp4 = '';
+		$__compilerTemp5 = '';
 		if ($__templater->isTraversable($__vars['providers'])) {
 			foreach ($__vars['providers'] AS $__vars['provider']) {
-				$__compilerTemp4 .= '
+				$__compilerTemp5 .= '
 								<li>
 									' . $__templater->button('
 										' . $__templater->escape($__vars['provider']['title']) . '
@@ -130,13 +146,11 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			}
 		}
 		$__finalCompiled .= $__templater->formRow('
-
 						<ul class="listHeap">
-							' . $__compilerTemp4 . '
+							' . $__compilerTemp5 . '
 						</ul>
 					', array(
 			'rowtype' => 'button',
-			'label' => 'Log in using',
 		)) . '
 				</div>
 			</div>

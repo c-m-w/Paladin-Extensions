@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 4743eb91fe6a96245609d56ac54feaab
+// FROM HASH: 3ceae24d235dff15fb24b3598f34016e
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -9,11 +9,14 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 {
 	display: flex;
 	align-items: stretch;
+	flex-grow: 1;
+	min-height: 1px; // IE11 workaround - related to #139187
 	position: relative;
 }
 
 .p-body-inner
 {
+	width: 100%;
 	';
 	if ($__templater->fn('property', array('uix_pageStyle', ), false) != 'wrapped') {
 		$__finalCompiled .= '
@@ -38,32 +41,30 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	left: 0;
 	padding-left: 0;
 	padding-right: 0;
-
 	padding-bottom: @xf-elementSpacer;
 
-
+	/*
 	> * {
 		margin-bottom: 20px;
 
 		&:last-child {margin-bottom: 0;}
 	}
+	*/
 
 .p-body-header
 {
-	// margin-bottom: ((@xf-elementSpacer) / 2);
+	margin-bottom: @xf-elementSpacer;
 }
 
-.p-body
-{
-	flex-grow: 1;
 }
 
 .uix_contentWrapper {
+	margin-bottom: @xf-elementSpacer;
 	';
 	if ($__templater->fn('property', array('uix_contentWrapper', ), false) == 1) {
 		$__finalCompiled .= '
-		.xf-uix_contentWrapperStyle();
 		padding: @xf-pageEdgeSpacer;
+		.xf-uix_contentWrapperStyle();
 	@media (max-width: @xf-responsiveEdgeSpacerRemoval) {
 		padding: ' . ($__templater->fn('property', array('pageEdgeSpacer', ), false) / 2) . 'px;
 		margin-left: -' . ($__templater->fn('property', array('pageEdgeSpacer', ), false) / 2) . 'px;
@@ -94,7 +95,24 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	// display: table-cell;
 	vertical-align: top;
 	@media ( min-width: ' . ($__templater->fn('property', array('uix_sidebarBreakpoint', ), false) + 1) . 'px ) {
-		transition: ease-in width 0.2s 0.2s, ease-in max-width 0.2s 0.2s;
+		';
+	if (($__templater->fn('property', array('uix_sidebarLocation', ), false) == 'right')) {
+		$__finalCompiled .= '
+			transition: ease-in width 0.2s, ease-in max-width 0.2s;
+
+			.uix_sidebarCollapsed & {
+				transition: ease-in width 0.2s 0.2s, ease-in max-width 0.2s 0.2s;
+			}
+		';
+	} else {
+		$__finalCompiled .= '
+			transition: ease-in width 0.2s, ease-in max-width 0.2s;
+			.uix_sidebarCollapsed & {
+				transition: ease-in width 0.2s 0.2s, ease-in max-width 0.2s 0.2s;
+			}
+		';
+	}
+	$__finalCompiled .= '
 	}
 	flex-grow: 1;
 	max-width: 100%;
@@ -109,13 +127,13 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			// -10px gives a little buffer or helps account for no scrollbar being considered
 			max-width: ~"calc(100vw - 10px - @{xf-pageEdgeSpacer} - @{xf-pageEdgeSpacer} - @{xf-sidebarWidth} - @{xf-sidebarSpacer})";
 
-			@media (min-width: @xf-pageWidthMax)
+			@media (min-width: ' . ($__templater->fn('property', array('uix_sidebarBreakpoint', ), false) + 1) . 'px )
 			{
 				// window wider than the max width, so limit to the display area without the sidebar
 				max-width: ~"calc(@{xf-pageWidthMax} - @{xf-pageEdgeSpacer} - @{xf-pageEdgeSpacer} - @{xf-sidebarWidth} - @{xf-sidebarSpacer})";
 			}
 
-			@media (max-width: @xf-responsiveWide)
+			@media (max-width: @xf-uix_sidebarBreakpoint)
 			{
 				// sidebar/sidenav have been moved/hidden
 				max-width: 100vw;
@@ -141,10 +159,12 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		}
 	}
 
-	.p-body-main--withSidebar.p-body-main--withSideNav & {
-		width: calc(~"100% - ' . (($__templater->fn('property', array('sidebarWidth', ), false) + $__templater->fn('property', array('elementSpacer', ), false)) * 2) . 'px");
-		max-width: calc(~"100% - ' . (($__templater->fn('property', array('sidebarWidth', ), false) + $__templater->fn('property', array('elementSpacer', ), false)) * 2) . 'px");
-		display: inline-block;
+	@media (min-width: ' . ($__templater->fn('property', array('uix_sidebarBreakpoint', ), false) + 1) . 'px ) {
+		.p-body-main--withSidebar.p-body-main--withSideNav & {
+			width: calc(~"100% - ' . (($__templater->fn('property', array('sidebarWidth', ), false) + $__templater->fn('property', array('elementSpacer', ), false)) * 2) . 'px");
+			max-width: calc(~"100% - ' . (($__templater->fn('property', array('sidebarWidth', ), false) + $__templater->fn('property', array('elementSpacer', ), false)) * 2) . 'px");
+			display: inline-block;
+		}
 	}
 }
 
@@ -194,10 +214,14 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
     display: inline-block;
 	vertical-align: top;
 	width: @xf-sidebarWidth;
+
 }
 
 .block[data-widget-id],
-.p-body-sideNav {
+.p-body-sideNav,
+.p-body-sidebar,
+.uix_extendedFooterRow,
+.columnContainer-sidebar {
 	.block-container {
 		.xf-uix_sidebarWidgetWrapper();
 	}
@@ -210,106 +234,120 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		padding: @xf-uix_widgetPadding;
 		.xf-uix_sidebarWidgetHeading();
 	}
+	
+	.block-minorHeader:before,
+	.block-header:before {
+		.m-faBase();
+		font-size: @xf-uix_iconSize !important;
+		padding-right: @xf-paddingMedium;
+		color: @xf-textColorMuted;
+	}
 
 	.block-footer {
 		padding: @xf-uix_widgetPadding;
-		.xf-uix_uix_sidebarFooter();
+		.xf-uix_sidebarWidgetFooter();
 	}
 
 	.block-row {padding: @xf-uix_widgetPadding;}
 }
 
 // ----  Widget icons -----
-';
-	if ($__templater->fn('property', array('uix_sidebarIcons', ), false)) {
-		$__finalCompiled .= '
 
-.block[data-widget-id] .block-minorHeader:before {
-	.m-faBase();
-	font-size: @xf-uix_iconSize !important;
-	padding-right: @xf-paddingMedium;
-	color: @xf-textColorMuted;
+.block[data-widget-definition],
+.block[data-widget-key], .p-body-sideNav, .p-body-sidebar {
+	.block-minorHeader:before,
+	.block-header:before, {' . $__templater->callMacro('uix_icons.less', 'content', array(
+		'icon' => 'article',
+	), $__vars) . '}
 }
-
-
+.block[data-widget-definition="th_userNavigation"] .block-minorHeader:before {' . $__templater->callMacro('uix_icons.less', 'content', array(
+		'icon' => 'user',
+	), $__vars) . '}
 .block[data-widget-definition="members_online"] .block-minorHeader:before {' . $__templater->callMacro('uix_icons.less', 'content', array(
-			'icon' => 'user-multiple',
-		), $__vars) . '}
+		'icon' => 'user-multiple',
+	), $__vars) . '}
 .block[data-widget-definition="board_totals"] .block-minorHeader:before,
 .block[data-widget-definition="online_statistics"] .block-minorHeader:before,
 .block[data-widget-definition="forum_statistics"] .block-minorHeader:before {' . $__templater->callMacro('uix_icons.less', 'content', array(
-			'icon' => 'statistics',
-		), $__vars) . '}
+		'icon' => 'statistics',
+	), $__vars) . '}
 .block[data-widget-definition="share_page"] .block-minorHeader:before {' . $__templater->callMacro('uix_icons.less', 'content', array(
-			'icon' => 'share',
-		), $__vars) . '}
+		'icon' => 'share',
+	), $__vars) . '}
 .block[data-widget-definition="most_messages"] .block-minorHeader:before {' . $__templater->callMacro('uix_icons.less', 'content', array(
-			'icon' => 'messages',
-		), $__vars) . '}
+		'icon' => 'messages',
+	), $__vars) . '}
 .block[data-widget-definition="find_member"] .block-minorHeader:before {' . $__templater->callMacro('uix_icons.less', 'content', array(
-			'icon' => 'search-member',
-		), $__vars) . '}
+		'icon' => 'search-member',
+	), $__vars) . '}
 .block[data-widget-definition="new_threads"] .block-minorHeader:before,
 .block[data-widget-definition="new_profile_posts"] .block-minorHeader:before,
 .block[data-widget-definition="new_posts"] .block-minorHeader:before{' . $__templater->callMacro('uix_icons.less', 'content', array(
-			'icon' => 'post',
-		), $__vars) . '}
+		'icon' => 'post',
+	), $__vars) . '}
 .block[data-widget-definition="birthdays"] .block-minorHeader:before{' . $__templater->callMacro('uix_icons.less', 'content', array(
-			'icon' => 'birthday',
-		), $__vars) . '}
+		'icon' => 'birthday',
+	), $__vars) . '}
+.block[data-widget-definition="th_navigation"] .block-minorHeader:before{' . $__templater->callMacro('uix_icons.less', 'content', array(
+		'icon' => 'list',
+	), $__vars) . '}
+.block[data-widget-key="thuix_footer_facebookWidget"] .block-minorHeader:before{' . $__templater->callMacro('uix_icons.less', 'content', array(
+		'icon' => 'facebook',
+	), $__vars) . '}
+.block[data-widget-definition="thuix_footer_twitterWidget"] .block-minorHeader:before{' . $__templater->callMacro('uix_icons.less', 'content', array(
+		'icon' => 'twitter',
+	), $__vars) . '}
 form[data-xf-init*="poll-block"] .block-minorHeader:before {' . $__templater->callMacro('uix_icons.less', 'content', array(
-			'icon' => 'poll',
-		), $__vars) . '}
+		'icon' => 'poll',
+	), $__vars) . '}
 
+// xpress WP widget support
 
+.p-body-sidebar .block-xpress {
+	.block-minorHeader:before {' . $__templater->callMacro('uix_icons.less', 'content', array(
+		'icon' => 'article',
+	), $__vars) . '}
+	&.widget_media_gallery .block-minorHeader:before,
+	&.widget_media_audio .block-minorHeader:before {' . $__templater->callMacro('uix_icons.less', 'content', array(
+		'icon' => 'media',
+	), $__vars) . '}
+	&.widget_calendar .block-minorHeader:before {' . $__templater->callMacro('uix_icons.less', 'content', array(
+		'icon' => '\\f0ed',
+	), $__vars) . '}
+	&.widget_recent_comments .block-minorHeader:before {' . $__templater->callMacro('uix_icons.less', 'content', array(
+		'icon' => 'comment-multiple',
+	), $__vars) . '}	
+	&.widget_search .block-minorHeader:before {' . $__templater->callMacro('uix_icons.less', 'content', array(
+		'icon' => 'search',
+	), $__vars) . '}	
+}
+
+';
+	if (!$__templater->fn('property', array('uix_sidebarIcons', ), false)) {
+		$__finalCompiled .= '
+.p-body-sidebar .block .block-minorHeader:before,
+.p-body-sideNavContent .block .block-minorHeader:before, 
+.p-body-pageContent .block .block-minorHeader:before,
+.p-body-sidebar .block .block-header:before,
+.p-body-sideNavContent .block .block-header:before, 
+.p-body-pageContent .block .block-header:before {display: none !important;}
 ';
 	}
 	$__finalCompiled .= '
 
 ';
-	if ($__templater->fn('property', array('uix_footerIcons', ), false)) {
+	if (!$__templater->fn('property', array('uix_footerIcons', ), false)) {
 		$__finalCompiled .= '
+.uix_extendedFooterRow .block .block-minorHeader:before {display: none !important;}
+';
+	}
+	$__finalCompiled .= '
 
 .uix_extendedFooterRow .block-minorHeader:before {
 	.m-faBase();
-	font-size: @xf-uix_iconSize;
+	font-size: @xf-uix_iconSize !important;
 	padding-right: @xf-paddingMedium;
 }
-
-.uix_extendedFooterRow {
-	.block[data-widget-definition="members_online"] .block-minorHeader:before {' . $__templater->callMacro('uix_icons.less', 'content', array(
-			'icon' => 'user-multiple',
-		), $__vars) . '}
-	.block[data-widget-definition="board_totals"] .block-minorHeader:before,
-	.block[data-widget-definition="online_statistics"] .block-minorHeader:before,
-	.block[data-widget-definition="forum_statistics"] .block-minorHeader:before {' . $__templater->callMacro('uix_icons.less', 'content', array(
-			'icon' => 'statistics',
-		), $__vars) . '}
-	.block[data-widget-definition="share_page"] .block-minorHeader:before {' . $__templater->callMacro('uix_icons.less', 'content', array(
-			'icon' => 'share',
-		), $__vars) . '}
-	.block[data-widget-definition="most_messages"] .block-minorHeader:before {' . $__templater->callMacro('uix_icons.less', 'content', array(
-			'icon' => 'messages',
-		), $__vars) . '}
-	.block[data-widget-definition="find_member"] .block-minorHeader:before {' . $__templater->callMacro('uix_icons.less', 'content', array(
-			'icon' => 'search-member',
-		), $__vars) . '}
-	.block[data-widget-definition="new_threads"] .block-minorHeader:before,
-	.block[data-widget-definition="new_profile_posts"] .block-minorHeader:before,
-	.block[data-widget-definition="new_posts"] .block-minorHeader:before{' . $__templater->callMacro('uix_icons.less', 'content', array(
-			'icon' => 'post',
-		), $__vars) . '}
-	.block[data-widget-definition="birthdays"] .block-minorHeader:before{' . $__templater->callMacro('uix_icons.less', 'content', array(
-			'icon' => 'birthday',
-		), $__vars) . '}
-	form[data-xf-init*="poll-block"] .block-minorHeader:before {' . $__templater->callMacro('uix_icons.less', 'content', array(
-			'icon' => 'poll',
-		), $__vars) . '}
-}
-
-';
-	}
-	$__finalCompiled .= '
 
 ';
 	if ($__templater->fn('property', array('uix_visitorPanelIcons', ), false)) {
@@ -317,7 +355,6 @@ form[data-xf-init*="poll-block"] .block-minorHeader:before {' . $__templater->ca
 	.block[data-widget-definition="visitor_panel"]
 
 		.pairs {
-			display: flex;
 			dt:after {display: none;}
 		}
 ';
@@ -340,8 +377,9 @@ form[data-xf-init*="poll-block"] .block-minorHeader:before {' . $__templater->ca
 	}
 }
 
-@media (max-width: @xf-uix_sidebarBreakpoint ) 
+@media (max-width: @xf-uix_sidebarBreakpoint )
 {
+
 	/*
 	.p-body-main,
 	.p-body-content
@@ -461,8 +499,6 @@ form[data-xf-init*="poll-block"] .block-minorHeader:before {' . $__templater->ca
 
 .uix_sidebarCollapsed .uix_sidebarInner {
 	overflow: hidden;
-    padding: 0 3px;
-    margin: 0 -3px;
 }
 
 @media (max-width: @xf-responsiveEdgeSpacerRemoval)

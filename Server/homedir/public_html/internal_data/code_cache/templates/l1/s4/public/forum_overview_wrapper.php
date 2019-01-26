@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 55a23a2f09178307cb71b4bf248d1c61
+// FROM HASH: 8c17adb54100280a911fe9497f6dfb36
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -7,31 +7,19 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 ' . $__templater->widgetPosition('forum_overview_top', array()) . '
 
 ';
-	$__compilerTemp1 = '';
-	if ($__vars['pageSelected'] == 'new_posts') {
-		$__compilerTemp1 .= '
-		' . $__templater->button('
-			' . 'Forum list' . '
-		', array(
-			'href' => $__templater->fn('link', array('forums/list', ), false),
-			'icon' => 'list',
-		), '', array(
-		)) . '
+	if ($__templater->fn('property', array('uix_removeIndexPageTitle', ), false)) {
+		$__finalCompiled .= '
 	';
-	} else {
-		$__compilerTemp1 .= '
-		' . $__templater->button('
-			' . 'New posts' . '
-		', array(
-			'href' => (($__vars['xf']['options']['forumsDefaultPage'] == 'new_posts') ? $__templater->fn('link', array('forums/new-posts', ), false) : $__templater->fn('link', array('whats-new/posts', ), false)),
-			'icon' => 'bolt',
-		), '', array(
-		)) . '
-	';
+		$__templater->setPageParam('uix_hidePageTitle', '1');
+		$__finalCompiled .= '
+';
 	}
-	$__compilerTemp2 = '';
+	$__finalCompiled .= '
+
+';
+	$__compilerTemp1 = '';
 	if ($__templater->method($__vars['xf']['visitor'], 'canCreateThread', array())) {
-		$__compilerTemp2 .= '
+		$__compilerTemp1 .= '
 		' . $__templater->button('
 			' . 'Post' . $__vars['xf']['language']['ellipsis'] . '
 		', array(
@@ -44,8 +32,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	';
 	}
 	$__templater->pageParams['pageAction'] = $__templater->preEscaped('
+	' . '
 	' . $__compilerTemp1 . '
-	' . $__compilerTemp2 . '
 ');
 	$__finalCompiled .= '
 

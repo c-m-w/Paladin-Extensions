@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: e4cec55c3729faf8e611da8808636504
+// FROM HASH: 1c649e9c347d5d26fbdeaf85272a3f13
 return array('macros' => array('content' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -11,7 +11,77 @@ return array('macros' => array('content' => function($__templater, array $__argu
 	$__finalCompiled .= '
 
 	.xf-uix_iconFont();
-
+	content: \'' . $__templater->escape($__vars['icon']) . '\';
+	';
+	if ($__vars['icon'] == 'article') {
+		$__finalCompiled .= 'content: \'@xf-uix_icon_article\';';
+	}
+	$__finalCompiled .= '
+	';
+	if ($__vars['icon'] == 'toggle-off') {
+		$__finalCompiled .= 'content: \'@xf-uix_icon_toggleOff\';';
+	}
+	$__finalCompiled .= '
+	';
+	if ($__vars['icon'] == 'toggle-on') {
+		$__finalCompiled .= 'content: \'@xf-uix_icon_toggleOn\';';
+	}
+	$__finalCompiled .= '
+	';
+	if ($__vars['icon'] == 'vimeo') {
+		$__finalCompiled .= 'content: \'@xf-uix_icon_vimeo\';';
+	}
+	$__finalCompiled .= '
+	';
+	if ($__vars['icon'] == 'twitch') {
+		$__finalCompiled .= 'content: \'@xf-uix_icon_twitch\';';
+	}
+	$__finalCompiled .= '
+	';
+	if ($__vars['icon'] == 'spotify') {
+		$__finalCompiled .= 'content: \'@xf-uix_icon_spotify\';';
+	}
+	$__finalCompiled .= '
+	';
+	if ($__vars['icon'] == 'apple') {
+		$__finalCompiled .= 'content: \'@xf-uix_icon_apple\';';
+	}
+	$__finalCompiled .= '
+	';
+	if ($__vars['icon'] == 'youtube') {
+		$__finalCompiled .= 'content: \'@xf-uix_icon_youtube\';';
+	}
+	$__finalCompiled .= '
+	';
+	if ($__vars['icon'] == 'camera') {
+		$__finalCompiled .= 'content: \'@xf-uix_icon_camera\';';
+	}
+	$__finalCompiled .= '
+	';
+	if ($__vars['icon'] == 'checkbox') {
+		$__finalCompiled .= 'content: \'@xf-uix_icon_checkbox\';';
+	}
+	$__finalCompiled .= '
+	';
+	if ($__vars['icon'] == 'checkbox-checked') {
+		$__finalCompiled .= 'content: \'@xf-uix_icon_checkboxChecked\';';
+	}
+	$__finalCompiled .= '
+	';
+	if ($__vars['icon'] == 'radio') {
+		$__finalCompiled .= 'content: \'@xf-uix_icon_radio\';';
+	}
+	$__finalCompiled .= '
+	';
+	if ($__vars['icon'] == 'radio-selected') {
+		$__finalCompiled .= 'content: \'@xf-uix_icon_radioSelected\';';
+	}
+	$__finalCompiled .= '
+	';
+	if ($__vars['icon'] == 'disable') {
+		$__finalCompiled .= 'content: \'@xf-uix_icon_disable\';';
+	}
+	$__finalCompiled .= '
 	';
 	if ($__vars['icon'] == 'alert') {
 		$__finalCompiled .= 'content: \'@xf-uix_icon_alert\';';
@@ -121,7 +191,7 @@ return array('macros' => array('content' => function($__templater, array $__argu
 	$__finalCompiled .= '
 	';
 	if ($__vars['icon'] == 'chevron-right') {
-		$__finalCompiled .= '	
+		$__finalCompiled .= '
 		';
 		if ((($__vars['xf']['language']['text_direction'] == 'LTR') AND ($__templater->fn('property', array('uix_textDirection', ), false) == 'LTR')) OR (($__vars['xf']['language']['text_direction'] == 'RTL') AND ($__templater->fn('property', array('uix_textDirection', ), false) == 'RTL'))) {
 			$__finalCompiled .= '
@@ -423,6 +493,11 @@ return array('macros' => array('content' => function($__templater, array $__argu
 	}
 	$__finalCompiled .= '
 	';
+	if ($__vars['icon'] == 'instagram') {
+		$__finalCompiled .= 'content: \'@xf-uix_icon_instagram\';';
+	}
+	$__finalCompiled .= '
+	';
 	if ($__vars['icon'] == 'reddit') {
 		$__finalCompiled .= 'content: \'@xf-uix_icon_reddit\';';
 	}
@@ -682,6 +757,8 @@ return array('macros' => array('content' => function($__templater, array $__argu
 
 ' . '
 
+.uix_icon--toggle-on:before {content: \'@xf-uix_icon_toggleOn\';}
+.uix_icon--toggle-off:before {content: \'@xf-uix_icon_toggleOff\';}
 .uix_icon--alert:before {content: \'@xf-uix_icon_alert\';}
 .uix_icon--alert-off:before {content: \'@xf-uix_icon_alertOff\';}
 .uix_icon--user:before {content: \'@xf-uix_icon_user\';}
@@ -744,7 +821,7 @@ return array('macros' => array('content' => function($__templater, array $__argu
 		content: \'@xf-uix_icon_chevronRight\';
 	';
 	}
-	$__finalCompiled .= '	
+	$__finalCompiled .= '
 }
 .uix_icon--chevron-down:before {content: \'@xf-uix_icon_chevronDown\';}
 .uix_icon--chevron-up:before {content: \'@xf-uix_icon_chevronUp\';}
@@ -752,7 +829,7 @@ return array('macros' => array('content' => function($__templater, array $__argu
 .uix_icon--arrow-up-circle:before {content: \'@xf-uix_icon_arrowUpCircle\';}
 .uix_icon--arrow-up:before {content: \'@xf-uix_icon_arrowUp\';}
 .uix_icon--arrow-down:before {content: \'@xf-uix_icon_arrowDown\';}
-.uix_icon--arrow-left:before {	
+.uix_icon--arrow-left:before {
 	';
 	if ((($__vars['xf']['language']['text_direction'] == 'LTR') AND ($__templater->fn('property', array('uix_textDirection', ), false) == 'LTR')) OR (($__vars['xf']['language']['text_direction'] == 'RTL') AND ($__templater->fn('property', array('uix_textDirection', ), false) == 'RTL'))) {
 		$__finalCompiled .= '
@@ -763,7 +840,7 @@ return array('macros' => array('content' => function($__templater, array $__argu
 		content: \'@xf-uix_icon_arrowRight\';
 	';
 	}
-	$__finalCompiled .= '	
+	$__finalCompiled .= '
 }
 .uix_icon--arrow-right:before {
 	';
@@ -776,9 +853,16 @@ return array('macros' => array('content' => function($__templater, array $__argu
 		content: \'@xf-uix_icon_arrowRight\';
 	';
 	}
-	$__finalCompiled .= '	
+	$__finalCompiled .= '
 }
+
+.uix_icon--spotify:before {content: \'@xf-uix_icon_spotify\';}
+.uix_icon--soundcloud:before {content: \'@xf-uix_icon_soundcloud\';}
+.uix_icon--flickr:before {content: \'@xf-uix_icon_flickr\';}
 .uix_icon--close:before {content: \'@xf-uix_icon_close\';}
+.uix_icon--apple:before {content: \'@xf-uix_icon_apple\';}
+.uix_icon--youtube:before {content: \'@xf-uix_icon_youtube\';}
+.uix_icon--camera:before {content: \'@xf-uix_icon_camera\';}
 .uix_icon--tag-multiple:before {content: \'@xf-uix_icon_tagMultiple\';}
 .uix_icon--search-plus:before {content: \'@xf-uix_icon_searchPlus\';}
 .uix_icon--search:before {content: \'@xf-uix_icon_search\';}
@@ -801,7 +885,11 @@ return array('macros' => array('content' => function($__templater, array $__argu
 .uix_icon--earth:before {content: \'@xf-uix_icon_earth\';}
 .uix_icon--link:before {content: \'@xf-uix_icon_link\';}
 .uix_icon--search-member:before {content: \'@xf-uix_icon_searchMember\';}
+.uix_icon--radio:before {content: \'@xf-uix_icon_radio\';}
+.uix_icon--radio-selected:before {content: \'@xf-uix_icon_radioSelected\';}
 .uix_icon--check:before {content: \'@xf-uix_icon_check\';}
+.uix_icon--checkbox-checked:before {content: \'@xf-uix_icon_checkboxChecked\';}
+.uix_icon--checkbox:before {content: \'@xf-uix_icon_checkbpx\';}
 .uix_icon--lock:before {content: \'@xf-uix_icon_lock\';}
 .uix_icon--share:before {content: \'@xf-uix_icon_share\';}
 .uix_icon--redirect:before {content: \'@xf-uix_icon_redirect\';}
@@ -870,7 +958,25 @@ return array('macros' => array('content' => function($__templater, array $__argu
 .uix_icon--video:before {content: \'@xf-uix_icon_video\';}
 .uix_icon--audio:before {content: \'@xf-uix_icon_audio\';}
 .uix_icon--graph:before {content: \'@xf-uix_icon_graph\';}
+.uix_icon--disable:before {content: \'@xf-uix_icon_disable\';}
+.uix_icon--twitch:before {content: \'@xf-uix_icon_twitch\';}
+.uix_icon--vimeo:before {content: \'@xf-uix_icon_vimeo\';}
+.uix_icon--article:before {content: \'@xf-uix_icon_article\';}
 
+// external anchors icons
+/*
+';
+	if ($__templater->fn('property', array('uix_externalLinkIcon', ), false)) {
+		$__finalCompiled .= '
+	a[href]:not([href*=\'\']):not([href*=\'' . $__templater->escape($__vars['xf']['options']['boardUrl']) . '\']):not([href*=\'' . $__templater->escape($__vars['xf']['options']['homePageUrl']) . '\']):not( [href^=\'#\'] ):not( [href^=\'/\'] ):after {
+	    ' . $__templater->callMacro('uix_icons.less', 'content', array(
+			'icon' => 'open-in-new',
+		), $__vars) . '
+	}
+';
+	}
+	$__finalCompiled .= '
+*/
 
 /* -- MATERIAL ICONS -- */
 

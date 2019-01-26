@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 24c8d3a2ea0ec91fe0f303d71f9572f4
+// FROM HASH: dd855dd1040810fc5106866715162a10
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -7,8 +7,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 @_menu-arrowSize: 8px;
 @_menu-edgePadding: @xf-pageEdgeSpacer;
-@_menu-paddingH: @xf-paddingLarge;
-@_menu-paddingV: calc(@_menu-paddingH / 2);
+@_menu-paddingH: 8px;
+@_menu-paddingV: 8px;
 
 .menuTrigger
 {
@@ -45,6 +45,15 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 .menu
 {
 	.m-transitionFade();
+	
+	@media (max-width: @xf-responsiveNarrow) {
+		width: 90% !important;
+		max-width: 90% !important;
+		left: 0;
+		right: 0;
+		margin-left: auto;
+		margin-right: auto;
+	}
 
 	position: absolute;
 	z-index: @zIndex-2;
@@ -58,8 +67,10 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	
 	.block-container {
 		box-shadow: none;
-		border-radius: 0;
+		// border-radius: 0;
 		margin: 0;
+		border: none;
+		padding: 0;
 	}
 
 	&.menu--structural
@@ -69,11 +80,11 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		// when menus nudge up against structure, the joined corner should not be radiused
 		&.menu--left
 		{
-			border-top-left-radius: 0;
+			// border-top-left-radius: 0;
 		}
 		&.menu--right
 		{
-			border-top-right-radius: 0;
+			// border-top-right-radius: 0;
 		}
 	}
 
@@ -113,6 +124,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	width: 0;
 	height: 0;
 	border: 0 solid transparent;
+	display: none;
 
 	top: -@_menu-arrowSize;
 	-ltr-rtl-left: 50%;
@@ -138,16 +150,16 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	text-align: left;
 	.xf-menu();
 	border-radius: @xf-menuBorderRadius;
-	border-top: @xf-borderSizeFeature solid @xf-menuFeatureBorderColor;
+	// border-top: @xf-borderSizeFeature solid @xf-menuFeatureBorderColor;
 
 	// when menus nudge up against structure, the joined corner should not be radiused
 	.menu--structural.menu--left &
 	{
-		border-top-left-radius: 0;
+		// border-top-left-radius: 0;
 	}
 	.menu--structural.menu--right &
 	{
-		border-top-right-radius: 0;
+		// border-top-right-radius: 0;
 	}
 
 	// potentially fixed menus
@@ -227,8 +239,11 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 .menu-row
 {
 	margin: 0;
-	padding: @xf-paddingMedium;
+	padding: @_menu-paddingH;
 	.m-clearFix();
+	
+	// causing issues when menu-row is not the first item
+	// &:not(:first-of-type):not(.menu-row--separated) {padding-top: 0;}
 
 	&.menu-row--alt
 	{
@@ -345,11 +360,24 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 .menu-footer
 {
-	padding: @xf-blockPaddingV @_menu-paddingH;
+	padding: @_menu-paddingV @_menu-paddingH;
 	.xf-menuFooter();
 	.m-clearFix();
 
-	' . '
+	&:not(.menu-footer--split)
+	{
+		.menu-footer-counter
+		{
+			float: left;
+		}
+
+		.menu-footer-controls
+		{
+			float: right;
+			
+			.button {.xf-uix_buttonSmall();}
+		}
+	}
 
 	&.menu-footer--split
 	{

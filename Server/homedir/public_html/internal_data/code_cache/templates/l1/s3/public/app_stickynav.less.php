@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: c817df94d396b22b4fb8a5724eeef54c
+// FROM HASH: 888694813d5b2c9daab4ebae3219a281
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -13,22 +13,26 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	{
 		z-index: @zIndex-4;
 		// .m-dropShadow(0, 2px, 5px, 0px, .26);
-		box-shadow: @xf-uix_elevation1;
 		position: fixed !important;
 		top: 0;
 		bottom: auto !important;
 		left: 0;
 		right: 0;
+		margin-left: auto;
+		margin-right: auto;
+		
+		> * {box-shadow: @xf-uix_elevation1; border-radius: 0 !important;}
+		
+		.p-nav {.xf-uix_stickyNavigationStyle();}
+		
+		.p-sectionLinks {.xf-uix_sectionLinksStickyStyle();}
 
 		';
 	if ($__templater->fn('property', array('uix_pageStyle', ), false) != 'covered') {
 		$__finalCompiled .= '
-			.m-pageWidth();
+			// .m-pageWidth();
 			padding: 0 !important;
 
-			> * {
-				width: 100%;
-			}
 		';
 	}
 	$__finalCompiled .= '
@@ -80,11 +84,12 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		top: 0 !important;
 		left: 0;
 		right: 0;
-		z-index: 400;
-
-		.pageContent {
-			height: @xf-uix_stickyStaffBarHeight;
-		}
+		z-index: 500;
+		margin: 0 auto;
+		box-shadow: @xf-uix_elevation1;
+		border-radius: 0 !important;
+		.xf-uix_stickyStaffbarStyle();
+		height: @xf-uix_stickyStaffBarHeight;
 
 		// *:not(.hScroller-scroll) {max-height: @xf-uix_stickyStaffBarHeight;}
 	}

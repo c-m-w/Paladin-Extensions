@@ -1,11 +1,11 @@
 <?php
-// FROM HASH: 6b87e79281c18c632380c13821323f84
+// FROM HASH: a219f9b293c242617e018bb862165a45
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
 	$__finalCompiled .= '// ########################################### FORM ROWS #################################
 
-@_form-labelShiftInput: @xf-paddingMedium + @xf-borderSize; // technically input border-top-width + padding-top
+@_form-labelShiftInput: @xf-input--padding + @xf-borderSize; // technically input border-top-width + padding-top
 @_form-labelButtonInput: 5px; // technically button border-top-width + padding-top, adjusted for text size differences
 @_form-elementSpacer: @xf-paddingMedium;
 
@@ -53,6 +53,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		padding-top: 0;
 	}
 }
+
+.formRow--button li:not(:last-child) {margin-right: 8px;}
 
 .formRow
 {
@@ -142,8 +144,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		{
 			border-top: 0;
 
-			> dt,
-			> dd
+			> dt
 			{
 				padding-top: 0;
 			}
@@ -171,8 +172,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		&.formRow--noPadding + &,
 		&.formRow--noPadding + * > &:first-of-type
 		{
-			> dt,
-			> dd
+			> dt
 			{
 				padding-top: @xf-formRowPaddingV;
 			}
@@ -426,7 +426,9 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 /* -- adds styling to fix forms in modals/dropdowns, such as login -- Added by Ian */
 
-.menu {
+.menu .blocks .block:last-child {margin-bottom: (@xf-elementSpacer / 2);}
+
+.menu.menu--structural {
 	.formSubmitRow {
 		dt, dd {padding: 0;}
 		.formSubmitRow-bar {display: none;}
@@ -435,6 +437,24 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			display: flex;
 			.button {flex-grow: 1;}
 		}
+	}
+	
+	dl.formRow {
+		padding: @xf-formRowPaddingV @xf-formRowPaddingH;
+		padding-top: 0;
+		&:first-child {padding-top: @xf-formRowPaddingV;}
+		dd, dt {padding: 0;}
+	}
+	
+	.uix_login__registerLink {padding: 0;}
+	
+	.formRow-label {padding-bottom: 5px; display: inline-block;}
+	
+	.blocks-textJoiner {margin: 0;}
+	
+	.menu-footer {
+		border-bottom-left-radius: @xf-menuBorderRadius;
+		border-bottom-right-radius: @xf-menuBorderRadius;
 	}
 }';
 	return $__finalCompiled;

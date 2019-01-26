@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: e769c04018e66aac845b4adec6921406
+// FROM HASH: b3d3e21b1e79432f0cc172668a330ed9
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -145,9 +145,11 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 	&:not(a)
 	{
-		cursor: default;
+		cursor: inherit;
 	}
 }
+
+.memberHeader-avatar .avatar {border-radius: @xf-avatarBorderRadius;}
 
 .avatar-update
 {

@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: d1a1cd84987f0e3197437da4f6dbb5a3
+// FROM HASH: ab1c89b4bdf246bd3b59989bbe665c78
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -16,10 +16,14 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	}
 	$__finalCompiled .= '
 
+	.p-header-logo img {max-width: @xf-uix_logoWidth;}
+
 	a
 	{
 		color: inherit;
 	}
+	
+	.p-header-logo img {width: 100%;}
 }
 
 .p-header-inner
@@ -73,14 +77,13 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 .p-header-logo
 {
-	flex-shrink: 0;
 	.has-no-flexbox &
 	{
 		display: table-cell;
 	}
 
 	vertical-align: middle;
-	margin-right: auto;
+	// margin-right: auto;
 
 	a
 	{
@@ -97,10 +100,9 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	{
 		img
 		{
-			vertical-align: bottom;
+			// vertical-align: bottom;
 			// max-width: 100%;
 			// max-height: 200px;
-			height: @xf-uix_logoHeight;
 		}
 	}
 
@@ -140,11 +142,13 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 ';
 	if ($__templater->fn('property', array('uix_rightAlignNavigation', ), false)) {
 		$__finalCompiled .= '
-	.p-nav-inner .p-nav-opposite,
-	.p-sectionLinks .p-nav-opposite {margin-left: 0;}
+	@media (min-width: @xf-publicNavCollapseWidth) {
+		.p-nav-inner .p-nav-opposite,
+		.p-sectionLinks .p-nav-opposite {margin-left: 0;}
 
-	.p-nav-inner .p-nav-scroller,
-	.p-sectionLinks .p-sectionLinks-inner {margin-right: 0; margin-left: auto;}
+		.p-nav-inner .p-nav-scroller,
+		.p-sectionLinks .p-sectionLinks-inner {margin-right: 0; margin-left: auto;}
+	}
 ';
 	}
 	return $__finalCompiled;

@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 8ae6314a4b37e7860c7f0f5d59ea9aaf
+// FROM HASH: 3899245648a3d435291943277875b789
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -41,6 +41,10 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 ' . $__templater->includeTemplate('setup_fa_variables.less', $__vars) . '
 
 // ######################## UI.X Variables ######################
+
+// UI.X browser query variables
+
+@isIe: ~"(-ms-high-contrast: none), (-ms-high-contrast: active)";
 
 @uix_sidebarNavBreakpoint: ' . ($__templater->fn('property', array('pageWidthMax', ), false) + (2 * ($__templater->fn('property', array('uix_sidebarNavWidth', ), false) + $__templater->fn('property', array('elementSpacer', ), false)))) . 'px;
 
@@ -560,14 +564,15 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		&:focus,
 		&:active
 		{
-			background-color: saturate(xf-intensify(@color, 4%), 12%);
+			// background-color: saturate(xf-intensify(@color, 4%), 12%);
 		}
 	}
 }
 
 .m-buttonBorderColorVariation(@borderColor)
 {
-	border-color: xf-diminish(@borderColor, 5%) xf-intensify(@borderColor, 5%) xf-intensify(@borderColor, 5%) xf-diminish(@borderColor, 5%);
+	// border-color: xf-diminish(@borderColor, 5%) xf-intensify(@borderColor, 5%) xf-intensify(@borderColor, 5%) xf-diminish(@borderColor, 5%);
+	border-color: xf-intensify(@borderColor, 5%);
 	&.button--splitTrigger
 	{
 		> .button-text { border-right-color: xf-intensify(@borderColor, 5%); }
@@ -625,13 +630,33 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 // UI.X MIXINS
 
+.m-uix_collapseOverflow() {
+	clip-path: inset(-2px -2px -2px -2px);
+	
+	@media @isIe {
+		overflow: hidden;
+	}
+}
+
+.m-uix_removePageSpacer() {
+	@media (max-width: @xf-responsiveEdgeSpacerRemoval) {
+		margin-left: -@xf-pageEdgeSpacer * .5;
+		margin-right: -@xf-pageEdgeSpacer * .5;
+		border-radius: 0;
+		border-left: none;
+		border-right: none;
+	}
+}
+
 .m-pageSpacerPadding() {
 	padding-left: @xf-pageEdgeSpacer;
 	padding-right: @xf-pageEdgeSpacer;
 
 	@media (max-width: @xf-responsiveEdgeSpacerRemoval) {
 		padding-left: ' . ($__templater->fn('property', array('pageEdgeSpacer', ), false) / 2) . 'px;
-		padding-right: ' . ($__templater->fn('property', array('pageEdgeSpacer', ), false) / 2) . 'px;
+		padding-right: ' . ($__templater->fn('property', array('pageEdgeSpacer', ), false) / 2) . 'px;	
+		padding-left: ~"max(10px, env(safe-area-inset-left)) !important";
+		padding-right: ~"max(10px, env(safe-area-inset-right)) !important";
 	}
 }
 
@@ -662,7 +687,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 .m-pageWidth()
 {
 	max-width: @xf-pageWidthMax;
-	margin: 0 auto;
+	margin-left: auto;
+	margin-right: auto;
 	width: 100%;
 	.m-pageSpacer();
 	';
@@ -673,6 +699,17 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	}
 	$__finalCompiled .= '
 	transition: max-width 0.2s;
+	
+	@media (max-width: @xf-responsiveMedium) {
+		';
+	if ($__templater->fn('property', array('uix_pageStyle', ), false) == 'covered') {
+		$__finalCompiled .= '
+			padding-left: env(safe-area-inset-left) !important;
+			padding-right: env(safe-area-inset-right) !important;
+		';
+	}
+	$__finalCompiled .= '
+	}
 
 	.uix_page--fluid & {
 		';
@@ -695,6 +732,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		$__finalCompiled .= '
 	@media (max-width: @uix_sidebarNavBreakpoint)  {
 		.uix_page--fixed & {max-width: 100%;}
+		#uix_widthToggle--trigger {display: none;}
 	}
 	';
 	}
@@ -710,7 +748,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		$__vars['uix_sectionLinkHeight'] = $__templater->preEscaped($__templater->fn('property', array('uix_sectionLinkHeight', ), true));
 		$__finalCompiled .= '
 ';
-	} else if ($__templater->fn('property', array('uix_removeTablinks', ), false)) {
+	} else if ($__templater->fn('property', array('uix_viewportWidthRemoveSubNav', ), false) == '100%') {
 		$__finalCompiled .= '
 	';
 		$__vars['uix_sectionLinkHeight'] = $__templater->preEscaped('0px');

@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: d8b895492f204b3b9fbde03cbfe59adf
+// FROM HASH: dbb73e9b7563a3e3b5f979057e1af389
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -12,8 +12,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	<div class="blockMessage blockMessage--error">
 		<h2 style="margin: 0 0 .5em 0">UI.X Error</h2>
 		<p>
-			Your XenForo directory is not writable by the PHP user. You can contact your host and recommend they use a method that allows PHP to run as the same user that owns the XenForo files or alternatively you can <a href="https://www.themehouse.com/help/documentation/uix2/installing-uix-2-manually">install your style manually</a>.<br>
-			Alternatively, you can enable the option to install via FTP <a href="http://xf2.dev/admin.php?options/groups/th_uix/" target="_BLANK">here</a> which should allow you to proceed.
+			' . 'Your XenForo directory is not writable by the PHP user. You can contact your host and recommend they use a method that allows PHP to run as the same user that owns the XenForo files or alternatively you can <a href="https://www.themehouse.com/help/documentation/uix2/installing-uix-2-manually">install your style manually</a>.<br> Alternatively, you can enable the option to install via FTP <a href="' . $__templater->fn('link', array('options/groups', array('group_id' => 'th_uix', ), ), true) . '" target="_BLANK">here</a> which should allow you to proceed.' . '
 		</p>
 	</div>
 ';

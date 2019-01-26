@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: b42510466267fd826e382c05b911c290
+// FROM HASH: 59b7faffc8a8e15cbe6d932f4c6b9acb
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -19,6 +19,16 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		$__finalCompiled .= '
 		<li><a href="' . $__templater->escape($__vars['xf']['options']['th_deviantArtUrl_uix']) . '">
 			<i class="mdi mdi-deviantart"></i>
+			</a></li>
+	';
+	}
+	$__finalCompiled .= '
+	
+	';
+	if ($__vars['xf']['options']['th_discordUrl_uix']) {
+		$__finalCompiled .= '
+		<li><a href="' . $__templater->escape($__vars['xf']['options']['th_discordUrl_uix']) . '">
+			<i class="mdi mdi-discord"></i>
 			</a></li>
 	';
 	}

@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 666deff1ec491aae74b331a92c68c082
+// FROM HASH: 13762e72255bf5d3e81a23873863f115
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -196,6 +196,9 @@ pre.code
 	font-size: @xf-fontSizeSmall;
 	color: @xf-paletteColor1;
 	text-decoration: none;
+	.xf-buttonBase();
+	.xf-buttonDefault();
+	.xf-buttonPrimary();
 }
 
 .buttonFake

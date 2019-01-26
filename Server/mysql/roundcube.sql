@@ -158,7 +158,7 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-12-02 19:05:38
+-- Dump completed on 2018-12-03  0:00:46
 -- MySQL dump 10.16  Distrib 10.1.36-MariaDB, for Linux (x86_64)
 --
 -- Host: localhost    Database: roundcube
@@ -216,4 +216,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-12-02 19:05:38
+-- Dump completed on 2018-12-03  0:00:46

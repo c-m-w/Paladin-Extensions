@@ -1,11 +1,11 @@
 <?php
-// FROM HASH: a8aeee95aee21a6c74949cfd67196c05
+// FROM HASH: 30b8402a7adb771516d196f446e6ee26
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
 	$__finalCompiled .= '// ################################## OFF CANVAS MENU #########################
 
-@_offCanvas-animationLength: (2 * (@xf-animationSpeed));
+@_offCanvas-animationLength: @xf-animationSpeed;
 
 .offCanvasMenu
 {
@@ -115,6 +115,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	overflow: auto;
 	.m-transition(all, @_offCanvas-animationLength, ease-in-out);
 	-webkit-overflow-scrolling: touch;
+	.xf-uix_canvas();
 
 	& when(@ltr)
 	{
@@ -278,8 +279,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 {
 	.offCanvasMenu-content
 	{
-		.xf-pageBackground();
-		color: @xf-textColor;
+		// .xf-pageBackground();
+		// color: @xf-textColor;
 	}
 
 	.offCanvasMenu-header
@@ -304,7 +305,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 {
 	.offCanvasMenu-content
 	{
-		.xf-publicNav();
+		// .xf-publicNav();
 
 		a
 		{
@@ -321,6 +322,12 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	.offCanvasMenu-list
 	{
 		border-bottom: @xf-borderSize solid fadein(@xf-publicHeaderAdjustColor, 10%);
+		
+		a {
+			.xf-uix_canvasNavItem();
+			
+			&:hover {.xf-uix_canvasNavItemHoverColor();}
+		}
 	}
 
 	.offCanvasMenu-separator
@@ -339,16 +346,18 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 		&:hover
 		{
-			background: fadeout(@xf-publicHeaderAdjustColor, 6%);
+			// background: fadeout(@xf-publicHeaderAdjustColor, 6%);
 		}
 
 		&.is-selected
 		{
-			.xf-publicNavSelected(no-border, no-border-radius);
+			// .xf-publicNavSelected(no-border, no-border-radius);
+			
+			a {.xf-uix_canvasNavItemActive();}
 
 			.offCanvasMenu-link.offCanvasMenu-link--splitToggle:before
 			{
-				border-left-color: fade(xf-default(@xf-publicNavSelected--color, transparent), 20%);
+				// border-left-color: fade(xf-default(@xf-publicNavSelected--color, transparent), 20%);
 			}
 		}
 	}
@@ -356,11 +365,17 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	.offCanvasMenu-subList
 	{
 		background: @xf-publicHeaderAdjustColor;
+		
+		a {
+			.xf-uix_canvasNavSubItem();
+			
+			&:hover {.xf-uix_canvasNavItemHoverColor();}
+		}
 
 		.offCanvasMenu-link:hover
 		{
 			text-decoration: none;
-			background: @xf-publicHeaderAdjustColor;
+			// background: @xf-publicHeaderAdjustColor;
 		}
 	}
 

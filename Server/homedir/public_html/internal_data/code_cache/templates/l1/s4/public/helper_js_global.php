@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: b012b46c5c2d01ebc0bb43a2b7a3b72d
+// FROM HASH: 288c679a658b2069f19a9e5c24602d0f
 return array('macros' => array('head' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -26,6 +26,16 @@ return array('macros' => array('head' => function($__templater, array $__argumen
 	}
 	$__finalCompiled .= '
 
+	';
+	if ($__templater->fn('is_addon_active', array('ThemeHouse/UIX', ), false) AND ($__templater->fn('is_addon_active', array('ThemeHouse/UIX', ), false) >= 2000490)) {
+		$__finalCompiled .= '
+		';
+		$__vars['cssUrls'] = $__templater->fn('uix_extra_css_urls', array($__vars['cssUrls'], ), false);
+		$__finalCompiled .= '
+	';
+	}
+	$__finalCompiled .= '
+
 	<link rel="stylesheet" href="' . $__templater->fn('css_url', array($__vars['cssUrls'], ), true) . '" />
 
 	';
@@ -35,7 +45,19 @@ return array('macros' => array('head' => function($__templater, array $__argumen
 	';
 	}
 	$__finalCompiled .= '
-	<link rel="stylesheet" href="//cdn.materialdesignicons.com/2.0.46/css/materialdesignicons.min.css">
+	
+	';
+	if ($__templater->fn('property', array('uix_localMaterialIcons', ), false)) {
+		$__finalCompiled .= '
+		<link rel="stylesheet" href="' . $__templater->fn('base_url', array($__templater->fn('property', array('uix_imagePath', ), false), ), true) . '/fonts/icons/material-icons/css/materialdesignicons.min.css" />	
+	';
+	} else {
+		$__finalCompiled .= '
+		<link rel="stylesheet" href="//cdn.materialdesignicons.com/2.3.54/css/materialdesignicons.min.css">
+	';
+	}
+	$__finalCompiled .= '
+	
 	<!--XF:CSS-->
 	';
 	if ($__templater->fn('property', array('uix_googleFonts', ), false)) {
@@ -56,6 +78,8 @@ return array('macros' => array('head' => function($__templater, array $__argumen
 	';
 	}
 	$__finalCompiled .= '
+	
+	<meta name="apple-mobile-web-app-capable" content="yes">
 ';
 	return $__finalCompiled;
 },
@@ -81,10 +105,23 @@ return array('macros' => array('head' => function($__templater, array $__argumen
 	if ($__templater->fn('property', array('uix_buttonRipple', ), false)) {
 		$__templater->includeJs(array(
 			'src' => 'themehouse/' . $__templater->fn('property', array('uix_jsPath', ), false) . '/ripple.js',
+			'min' => 'themehouse/' . $__templater->fn('property', array('uix_jsPath', ), false) . '/ripple.min.js',
 		));
 	}
 	$__finalCompiled .= '
 	' . $__templater->includeTemplate('uix_js', $__vars) . '
+	';
+	if ($__templater->fn('property', array('uix_parallax', ), false)) {
+		$__finalCompiled .= '
+		';
+		$__templater->includeJs(array(
+			'src' => 'themehouse/' . $__templater->fn('property', array('uix_jsPath', ), false) . '/vendor/parallax/parallax.js',
+			'min' => 'themehouse/uix/vendor/parallax/parallax.min.js',
+		));
+		$__finalCompiled .= '
+	';
+	}
+	$__finalCompiled .= '
 	';
 	if ($__templater->fn('property', array('uix_backstretch', ), false)) {
 		$__finalCompiled .= '
@@ -99,6 +136,7 @@ return array('macros' => array('head' => function($__templater, array $__argumen
 	$__finalCompiled .= '
 	<script>
 		jQuery.extend(true, XF.config, {
+			// ' . '
 			userId: ' . $__templater->escape($__vars['xf']['visitor']['user_id']) . ',
 			url: {
 				fullBase: \'' . $__templater->filter($__templater->fn('base_url', array(null, true, ), false), array(array('escape', array('js', )),), true) . '\',
@@ -109,7 +147,8 @@ return array('macros' => array('head' => function($__templater, array $__argumen
 			cookie: {
 				path: \'' . $__templater->filter($__vars['xf']['cookie']['path'], array(array('escape', array('js', )),), true) . '\',
 				domain: \'' . $__templater->filter($__vars['xf']['cookie']['domain'], array(array('escape', array('js', )),), true) . '\',
-				prefix: \'' . $__templater->filter($__vars['xf']['cookie']['prefix'], array(array('escape', array('js', )),), true) . '\'
+				prefix: \'' . $__templater->filter($__vars['xf']['cookie']['prefix'], array(array('escape', array('js', )),), true) . '\',
+				secure: ' . ($__vars['xf']['cookie']['secure'] ? 'true' : 'false') . '
 			},
 			csrf: \'' . $__templater->filter($__templater->fn('csrf_token', array(), false), array(array('escape', array('js', )),), true) . '\',
 			js: {\'<!--XF:JS:JSON-->\'},
@@ -134,6 +173,7 @@ return array('macros' => array('head' => function($__templater, array $__argumen
 		});
 
 		jQuery.extend(XF.phrases, {
+			// ' . '
 			date_x_at_time_y: "' . $__templater->filter('{date} at {time}', array(array('escape', array('js', )),), true) . '",
 			day_x_at_time_y:  "' . $__templater->filter('{day} at {time}', array(array('escape', array('js', )),), true) . '",
 			yesterday_at_x:   "' . $__templater->filter('Yesterday at {time}', array(array('escape', array('js', )),), true) . '",
@@ -181,7 +221,10 @@ return array('macros' => array('head' => function($__templater, array $__argumen
 			oops_we_ran_into_some_problems: "' . $__templater->filter('Oops! We ran into some problems.', array(array('escape', array('js', )),), true) . '",
 			oops_we_ran_into_some_problems_more_details_console: "' . $__templater->filter('Oops! We ran into some problems. Please try again later. More error details may be in the browser console.', array(array('escape', array('js', )),), true) . '",
 			file_too_large_to_upload: "' . $__templater->filter('The file is too large to be uploaded.', array(array('escape', array('js', )),), true) . '",
+			uploaded_file_is_too_large_for_server_to_process: "' . $__templater->filter('The uploaded file is too large for the server to process.', array(array('escape', array('js', )),), true) . '",
 			files_being_uploaded_are_you_sure: "' . $__templater->filter('Files are still being uploaded. Are you sure you want to submit this form?', array(array('escape', array('js', )),), true) . '",
+			attach: "' . $__templater->filter('Attach files', array(array('escape', array('js', )),), true) . '",
+			rich_text_box: "' . $__templater->filter('Rich text box', array(array('escape', array('js', )),), true) . '",
 			close: "' . $__templater->filter('Close', array(array('escape', array('js', )),), true) . '",
 
 			showing_x_of_y_items: "' . $__templater->filter('Showing {count} of {total} items', array(array('escape', array('js', )),), true) . '",
@@ -191,7 +234,7 @@ return array('macros' => array('head' => function($__templater, array $__argumen
 	</script>
 
 	<form style="display:none" hidden="hidden">
-		<input type="text" name="_xfClientLoadTime" value="" id="_xfClientLoadTime" tabindex="-1" />
+		<input type="text" name="_xfClientLoadTime" value="" id="_xfClientLoadTime" title="_xfClientLoadTime" tabindex="-1" />
 	</form>
 
 	';
@@ -219,7 +262,6 @@ return array('macros' => array('head' => function($__templater, array $__argumen
 	$__finalCompiled = '';
 	$__finalCompiled .= '
 
-' . '
 ';
 	return $__finalCompiled;
 });

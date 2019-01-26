@@ -1,11 +1,11 @@
 <?php
-// FROM HASH: ba5ab49ab7ca03d400b442ff70f74467
+// FROM HASH: 56793f0d27ebab6b1aff87e873c4fccd
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
 	$__finalCompiled .= '@_notice-darkBg: @xf-paletteColor4;
 @_notice-lightBg: #fff;
-@_notice-floatingFade: 80%;
+@_notice-floatingFade: 100%;
 @_notice-imageSize: 48px;
 @_notice-padding: @xf-paddingLarge;
 
@@ -24,7 +24,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	&.notices--floating
 	{
 		// assumed to be within u-bottomFixer
-		margin: 0 20px 0 auto;
+		margin: 0 auto 0 @xf-elementSpacer;
 		width: 300px;
 		max-width: 100%;
 		z-index: @zIndex-8;
@@ -154,7 +154,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		
 		.uix_noticeIcon {background: @xf-uix_secondaryColor;}
 
-		a
+		a:not(.button--notice)
 		{
 			.xf-contentAccentLink();
 		}
@@ -162,13 +162,12 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 	&.notice--dark
 	{
-		color: @xf-textColor;
 		//background: @_notice-darkBg;
 		background: @xf-uix_primaryColor;
 		color: #fff;
 		border-color: lighten(@xf-uix_primaryColor, 30%);
 
-		a
+		a:not(.button--notice)
 		{
 			color: @xf-linkColor;
 		}
@@ -181,9 +180,32 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		
 		.uix_noticeIcon {background: @xf-borderColor; color: @xf-textColorMuted;}
 
-		a
+		a:not(.button--notice)
 		{
 			color: rgb(130, 130, 130);
+		}
+	}
+
+	&.notice--cookie
+	{
+		@media (max-width: @xf-responsiveWide)
+		{
+			.notice-content
+			{
+				padding: @xf-paddingSmall @xf-paddingSmall;
+				font-size: @xf-fontSizeSmaller;
+
+				.button--notice
+				{
+					font-size: @xf-fontSizeSmaller;
+					padding: @xf-paddingSmall @xf-paddingMedium;
+
+					.button-text
+					{
+						font-size: @xf-fontSizeSmaller;
+					}
+				}
+			}
 		}
 	}
 
@@ -272,7 +294,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 {
 	padding: @_notice-padding;
 	flex-grow: 1;
-	color: @xf-textColorDimmed;
+	// color: @xf-textColorDimmed;
 
 	a.notice-dismiss
 	{

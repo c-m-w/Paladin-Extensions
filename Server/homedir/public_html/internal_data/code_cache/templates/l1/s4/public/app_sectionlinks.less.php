@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: c0636f6e7a08d20f804ebbabb2326133
+// FROM HASH: d61cfcc2aec3217fcd6588987a1fba0d
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -16,7 +16,22 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	}
 	$__finalCompiled .= '
 	
-	.p-sectionLinks--group {display: flex;}
+	transition: ease-in .15s all;
+	
+	.p-sectionLinks--group {
+		display: flex; 
+		align-items: center;
+		
+		';
+	if ($__templater->fn('property', array('uix_rightAlignNavigation', ), false)) {
+		$__finalCompiled .= '
+			&:first-child {
+				margin-left: auto;
+			}
+		';
+	}
+	$__finalCompiled .= '
+	}
 
 	.hScroller-action
 	{
@@ -26,11 +41,26 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			@xf-publicSubNavElHover--color
 		);
 	}
+	
+	.p-nav-opposite a:not(.button)
+	{
+		color: inherit;
+
+		&:hover {
+			.xf-publicSubNavElHover();
+		}
+	}
 
 	&.p-sectionLinks--empty
 	{
 		height: 10px;
-		display: none;
+		';
+	if (!$__templater->fn('property', array('publicNavSelected--background-color', ), false)) {
+		$__finalCompiled .= '
+			display: none;
+		';
+	}
+	$__finalCompiled .= '
 	}
 
 	.pageContent {
@@ -42,11 +72,12 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	if ($__templater->fn('property', array('publicNavSticky', ), false)) {
 		$__finalCompiled .= '
 			min-height: @xf-uix_stickySectionLinkHeight;
+			height: @xf-uix_stickySectionLinkHeight;
 		';
 	}
 	$__finalCompiled .= '
 		';
-	if ($__templater->fn('property', array('uix_pageStyle', ), false) != 'fixed') {
+	if ($__templater->fn('property', array('uix_pageStyle', ), false) == 'covered') {
 		$__finalCompiled .= '
 			.m-pageWidth();
 		';
@@ -96,8 +127,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	.p-navEl
 	{
 		font-size: @xf-publicSubNav--font-size;
-		padding-top: @xf-paddingMedium;
-		padding-bottom: @xf-paddingMedium;
+		// padding-top: @xf-paddingMedium;
+		// padding-bottom: @xf-paddingMedium;
 
 		&:hover
 		{
@@ -114,8 +145,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	.p-navEl-link,
 	.p-navEl-splitTrigger
 	{
-		padding-top: 2px;
-		padding-bottom: 2px;
+		padding-top: @xf-publicSubNavPaddingV;
+		padding-bottom: @xf-publicSubNavPaddingV;
 	}
 }
 
