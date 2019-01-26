@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 532e964efd4467ac0647c86cbb1878a8
+// FROM HASH: 1327fa426b8dcb4c29a701b37254e858
 return array('macros' => array('submit' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -30,7 +30,7 @@ return array('macros' => array('submit' => function($__templater, array $__argum
 				';
 		}
 		$__finalCompiled .= '
-				<button type="submit" class="button button--link" title="' . $__templater->filter('Post', array(array('for_attr', array()),), true) . '" data-xf-init="tooltip" style="height:31px;"><i class="fa fa-bullhorn" aria-hidden="true"></i></button>
+				<button type="submit" class="button button--link" title="' . $__templater->filter('Post', array(array('for_attr', array()),), true) . '" data-xf-init="tooltip" style="height:31px;"><i class="fa fa-comment" aria-hidden="true"></i></button>
 			</span>
 		</form>
 	';

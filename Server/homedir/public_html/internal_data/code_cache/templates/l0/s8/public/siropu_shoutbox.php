@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 69d2b8142a8a3a978406d3f2973b5340
+// FROM HASH: 68c4423da90f8cb74db35d3a27668327
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -48,7 +48,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 <div class="siropuShoutbox block" data-refresh-interval="' . ($__vars['xf']['options']['siropuShoutboxRefreshInterval'] * 1000) . '" data-last-id="' . $__templater->escape($__vars['shoutbox']['lastId']) . '" data-load-more="' . (($__templater->method($__vars['xf']['visitor'], 'canUseSiropuShoutbox', array()) AND ($__templater->fn('count', array($__vars['shoutbox']['shouts'], ), false) == $__vars['xf']['options']['siropuShoutboxDisplayLimit'])) ? 1 : 0) . '" data-last-active="' . $__templater->escape($__vars['xf']['time']) . '" data-sound="' . ($__vars['shoutbox']['sound'] ? 'on' : 'off') . '" data-reverse="' . ($__vars['shoutbox']['reverse'] ? 'true' : 'false') . '" data-collapsed="' . ($__vars['shoutbox']['collapsed'] ? 'true' : 'false') . '" data-timeout="' . ($__templater->method($__vars['xf']['visitor'], 'canBypassFloodCheckSiropuShoutbox', array()) ? 0 : ($__vars['xf']['options']['siropuShoutboxFloodCheckLength'] * 1000)) . '" data-xf-init="siropu-shoutbox">
 	<div class="block-container">
 		<div class="' . ($__vars['options']['sidebarStyle'] ? 'block-minorHeader' : 'block-header') . '">
-			<i class="fa fa-bullhorn" aria-hidden="true"></i> ' . $__templater->escape($__vars['title']) . '
+			<i class="fa fa-comments" aria-hidden="true"></i> ' . $__templater->escape($__vars['title']) . '
 			<span>
 				';
 	if ($__vars['xf']['options']['siropuShoutboxPopup'] AND (!$__vars['shoutbox']['isFullPage'])) {
