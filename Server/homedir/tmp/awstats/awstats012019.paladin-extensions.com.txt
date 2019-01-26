@@ -46,10 +46,10 @@ END_MAP
 # MonthHostsKnown   = Number of hosts known
 # MonthHostsUnKnown = Number of hosts unknown
 BEGIN_GENERAL 8
-LastLine 20190121065639 88 17136 10611638569170
+LastLine 20190122070150 80 15330 10818265948081
 FirstTime 0
 LastTime 20190120145709
-LastUpdate 20190121072735 88 0 88 0 0
+LastUpdate 20190122072440 80 0 80 0 0
 TotalVisits 2                   
 TotalUnique 2                   
 MonthHostsKnown 0                   
@@ -58,51 +58,51 @@ END_GENERAL
 
 # Misc ID - Pages - Hits - Bandwidth
 BEGIN_MISC 10
+FlashSupport 0 0 0
+JavaEnabled 0 0 0
 PDFSupport 0 0 0
 WindowsMediaPlayerSupport 0 0 0
-FlashSupport 0 0 0
-RealPlayerSupport 0 0 0
-JavaEnabled 0 0 0
-AddToFavourites 0 0 0
-TotalMisc 0 0 0
 QuickTimeSupport 0 0 0
-JavascriptDisabled 0 0 0
 DirectorSupport 0 0 0
+TotalMisc 0 0 0
+RealPlayerSupport 0 0 0
+JavascriptDisabled 0 0 0
+AddToFavourites 0 0 0
 END_MISC
 
 # Hour - Pages - Hits - Bandwidth - Not viewed Pages - Not viewed Hits - Not viewed Bandwidth
 BEGIN_TIME 24
-0 0 0 0 84 85 208
-1 0 0 0 84 85 33273
-2 0 0 0 85 85 3589
-3 0 0 0 82 86 27668
-4 0 0 0 82 83 208
-5 0 0 0 77 79 16240
-6 0 0 0 108 111 25343
-7 0 0 0 72 72 27319
-8 0 0 0 74 77 15342
-9 0 0 0 79 81 36963
-10 0 0 0 70 70 0
-11 0 0 0 69 72 21003
-12 0 0 0 72 82 16798
-13 0 0 0 73 74 484
-14 1 1 119 66 67 14926
-15 0 0 0 103 107 832
-16 1 1 119 69 70 3837
-17 0 0 0 65 66 208
-18 0 0 0 74 74 19871
-19 0 0 0 70 71 32822
-20 0 0 0 71 74 47953
-21 0 0 0 67 69 416
-22 0 0 0 70 73 18971
-23 0 0 0 68 68 0
+0 0 0 0 86 87 208
+1 0 0 0 87 88 33273
+2 0 0 0 88 88 3589
+3 0 0 0 86 90 27668
+4 0 0 0 86 87 208
+5 0 0 0 81 83 16240
+6 0 0 0 111 114 25343
+7 0 0 0 76 76 27319
+8 0 0 0 77 80 15342
+9 0 0 0 82 84 36963
+10 0 0 0 73 73 0
+11 0 0 0 72 75 21003
+12 0 0 0 75 85 16798
+13 0 0 0 76 77 484
+14 1 1 119 69 70 14926
+15 0 0 0 106 110 832
+16 1 1 119 73 74 3837
+17 0 0 0 68 69 208
+18 0 0 0 78 78 19871
+19 0 0 0 74 75 32822
+20 0 0 0 74 77 47953
+21 0 0 0 71 73 416
+22 0 0 0 74 77 18971
+23 0 0 0 71 71 0
 END_TIME
 
 # Domain - Pages - Hits - Bandwidth
 # The 25 first Pages must be first (order not required for others)
 BEGIN_DOMAIN 2
-lr 1 1 119
 us 1 1 119
+lr 1 1 119
 END_DOMAIN
 
 # Cluster ID - Pages - Hits - Bandwidth
@@ -153,8 +153,8 @@ END_OS
 
 # Browser ID - Hits - Pages
 BEGIN_BROWSER 2
-chrome71.0.3578.98 1 1
 opera58.0.3135.37 1 1
+chrome71.0.3578.98 1 1
 END_BROWSER
 
 # Screen size - Hits
@@ -200,9 +200,9 @@ END_KEYWORDS
 
 # Errors - Hits - Bandwidth
 BEGIN_ERRORS 3
-404 44 9152
+301 1876 0
 503 5 40467
-301 1796 0
+404 44 9152
 END_ERRORS
 
 # URL with 404 errors - Hits - Last URL referrer
@@ -214,8 +214,8 @@ END_SIDER_404
 # [Start date of last visit] and [Last page of last visit] are saved only if session is not finished
 # The 25 first Hits must be first (order not required for others)
 BEGIN_VISITOR 2
-24.251.180.38 1 1 119 20190112164651
 196.235.5.140 1 1 119 20190120145709
+24.251.180.38 1 1 119 20190112164651
 END_VISITOR
 
 # Date - Pages - Hits - Bandwidth - Visits
