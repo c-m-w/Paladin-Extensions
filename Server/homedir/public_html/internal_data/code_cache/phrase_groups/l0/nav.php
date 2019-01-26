@@ -1,5 +1,7 @@
 <?php
 return array (
+  'nav.EWRdiscord' => 'Discord',
+  'nav.EWRdiscord_botpost' => 'Post as bot',
   'nav._default' => 'Default (no selected tab)',
   'nav.contributedThreads' => 'Threads with your posts',
   'nav.currentVisitors' => 'Current visitors',

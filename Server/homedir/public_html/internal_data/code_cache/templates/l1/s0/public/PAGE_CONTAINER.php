@@ -610,8 +610,6 @@ return array('macros' => array('nav_entry' => function($__templater, array $__ar
 									</div>
 								</div>
 							</div>
-
-' . $__templater->includeTemplate('th_page_container_visitorLink_bookmarks', $__vars) . '
 						';
 		}
 		$__compilerTemp4 .= '
@@ -1171,6 +1169,11 @@ return array('macros' => array('nav_entry' => function($__templater, array $__ar
 	$__compilerTemp12 .= '
 				' . $__templater->fn('copyright') . '
 				' . '' . '
+<div class="discord-copyright">
+	<a href="https://xenforo.com/community/resources/6058/"
+		target="_blank">Discord Integration</a> &copy; Jason Axelrod of
+	<a href="https://8wayrun.com/" target="_blank">8WAYRUN</a>
+</div>
 			';
 	if (strlen(trim($__compilerTemp12)) > 0) {
 		$__finalCompiled .= '
@@ -1202,6 +1205,28 @@ return array('macros' => array('nav_entry' => function($__templater, array $__ar
 </footer>
 
 </div> <!-- closing p-pageWrapper -->
+
+';
+	if ($__vars['xf']['options']['EWRdiscord_widgetbot']['crate']) {
+		$__finalCompiled .= '
+	<script src="https://crate.widgetbot.io/v2" async defer>
+		new Crate({
+			server: \'' . $__templater->escape($__vars['xf']['options']['EWRdiscord_server']) . '\',
+			channel: \'' . $__templater->escape($__vars['xf']['options']['EWRdiscord_widgetbot']['channel']) . '\',
+			options: \'00' . (($__templater->fn('property', array('styleType', ), false) == 'light') ? '1' : '0') . '0\',
+			scheme: \'' . $__templater->fn('property', array('styleType', ), true) . '\',
+
+			notifications: {
+				toasts: {
+					enable: ' . ($__vars['xf']['options']['EWRdiscord_widgetbot']['toast'] ? 1 : 0) . '
+				}
+			}
+		})
+		crate.pulse()
+	</script>
+';
+	}
+	$__finalCompiled .= '
 
 <div class="u-bottomFixer js-bottomFixTarget">
 	';

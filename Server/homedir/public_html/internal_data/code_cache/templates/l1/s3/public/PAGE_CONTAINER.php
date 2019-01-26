@@ -1384,8 +1384,6 @@ return array('macros' => array('uix_mainTabComponent' => function($__templater, 
 				</div>
 			</div>
 		</div>
-
-' . $__templater->includeTemplate('th_page_container_visitorLink_bookmarks', $__vars) . '
 	';
 		}
 		$__vars['uix_userTabs__component'] = $__templater->preEscaped('
@@ -3017,6 +3015,11 @@ return array('macros' => array('uix_mainTabComponent' => function($__templater, 
 	$__vars['thBrandingDisplayed'] = '1';
 	$__compilerTemp54 .= '
 									' . '' . '
+<div class="discord-copyright">
+	<a href="https://xenforo.com/community/resources/6058/"
+		target="_blank">Discord Integration</a> &copy; Jason Axelrod of
+	<a href="https://8wayrun.com/" target="_blank">8WAYRUN</a>
+</div>
 								';
 	if (strlen(trim($__compilerTemp54)) > 0) {
 		$__finalCompiled .= '

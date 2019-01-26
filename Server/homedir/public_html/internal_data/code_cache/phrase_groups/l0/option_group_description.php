@@ -1,5 +1,6 @@
 <?php
 return array (
+  'option_group_description.EWRdiscord' => 'Add-on from 8WAYRUN.',
   'option_group_description.GoogleSearch_options' => '',
   'option_group_description.acp' => 'Contains various options relating to the admin control panel itself.',
   'option_group_description.adminNotes' => 'Options here control the Admin notes add-on.',

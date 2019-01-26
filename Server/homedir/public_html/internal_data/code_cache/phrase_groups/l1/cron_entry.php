@@ -10,6 +10,7 @@ return array (
   'cron_entry.deleteExpiredBans' => 'Delete expired bans',
   'cron_entry.downgradeExpired' => 'Downgrade expired user upgrades',
   'cron_entry.emailBounce' => 'Process email bounces',
+  'cron_entry.ewrDiscord' => '[8WR] Discord Account Sync',
   'cron_entry.expireTempUserChanges' => 'Expire temporary user changes',
   'cron_entry.feeder' => 'Feeder',
   'cron_entry.fileCheck' => 'Perform file health check',

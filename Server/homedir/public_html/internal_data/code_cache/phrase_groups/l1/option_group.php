@@ -1,5 +1,6 @@
 <?php
 return array (
+  'option_group.EWRdiscord' => '[8WR] Discord Integration',
   'option_group.GoogleSearch_options' => 'Google Search options',
   'option_group.acp' => 'Admin control panel',
   'option_group.adminNotes' => 'Admin notes',

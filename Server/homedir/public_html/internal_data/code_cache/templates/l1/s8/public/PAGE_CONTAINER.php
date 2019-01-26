@@ -1384,8 +1384,6 @@ return array('macros' => array('uix_mainTabComponent' => function($__templater, 
 				</div>
 			</div>
 		</div>
-
-' . $__templater->includeTemplate('th_page_container_visitorLink_bookmarks', $__vars) . '
 	';
 		}
 		$__vars['uix_userTabs__component'] = $__templater->preEscaped('

@@ -5,36 +5,61 @@
 #	SecFilterScanPOST Off
 #</IfModule>
 
-ErrorDocument 400 /error.shtml
-ErrorDocument 401 /error.shtml
-ErrorDocument 402 /error.shtml
-ErrorDocument 403 /error.shtml
-ErrorDocument 404 /error.shtml
-ErrorDocument 405 /error.shtml
-ErrorDocument 406 /error.shtml
-ErrorDocument 407 /error.shtml
-ErrorDocument 408 /error.shtml
-ErrorDocument 409 /error.shtml
-ErrorDocument 410 /error.shtml
-ErrorDocument 411 /error.shtml
-ErrorDocument 412 /error.shtml
-ErrorDocument 413 /error.shtml
-ErrorDocument 414 /error.shtml
-ErrorDocument 415 /error.shtml
-ErrorDocument 416 /error.shtml
-ErrorDocument 417 /error.shtml
-ErrorDocument 422 /error.shtml
-ErrorDocument 423 /error.shtml
-ErrorDocument 424 /error.shtml
-ErrorDocument 500 /error.shtml
-ErrorDocument 501 /error.shtml
-ErrorDocument 502 /error.shtml
-ErrorDocument 503 /error.shtml
-ErrorDocument 504 /error.shtml
-ErrorDocument 505 /error.shtml
-ErrorDocument 506 /error.shtml
-ErrorDocument 507 /error.shtml
-ErrorDocument 510 /error.shtml
+ErrorDocument 400 error.shtml
+ErrorDocument 401 error.shtml
+ErrorDocument 402 error.shtml
+ErrorDocument 403 error.shtml
+ErrorDocument 404 error.shtml
+ErrorDocument 405 error.shtml
+ErrorDocument 406 error.shtml
+ErrorDocument 407 error.shtml
+ErrorDocument 408 error.shtml
+ErrorDocument 409 error.shtml
+ErrorDocument 410 error.shtml
+ErrorDocument 411 error.shtml
+ErrorDocument 412 error.shtml
+ErrorDocument 413 error.shtml
+ErrorDocument 414 error.shtml
+ErrorDocument 415 error.shtml
+ErrorDocument 416 error.shtml
+ErrorDocument 417 error.shtml
+ErrorDocument 422 error.shtml
+ErrorDocument 423 error.shtml
+ErrorDocument 424 error.shtml
+ErrorDocument 500 error.shtml
+ErrorDocument 501 error.shtml
+ErrorDocument 502 error.shtml
+ErrorDocument 503 error.shtml
+ErrorDocument 504 error.shtml
+ErrorDocument 505 error.shtml
+ErrorDocument 506 error.shtml
+ErrorDocument 507 error.shtml
+ErrorDocument 510 error.shtml
+
+<IfModule mod_expires.c>
+  ExpiresActive On
+
+  # Images
+  ExpiresByType image/jpeg "access plus 1 month"
+  ExpiresByType image/gif "access plus 1 month"
+  ExpiresByType image/png "access plus 1 month"
+  ExpiresByType image/webp "access plus 1 month"
+  ExpiresByType image/svg+xml "access plus 1 month"
+  ExpiresByType image/x-icon "access plus 1 month"
+
+  # Video
+  ExpiresByType video/mp4 "access plus 1 month"
+  ExpiresByType video/mpeg "access plus 1 month"
+
+  # CSS, JavaScript
+  ExpiresByType text/css "access plus 1 month"
+  ExpiresByType text/javascript "access plus 1 month"
+  ExpiresByType application/javascript "access plus 1 month"
+
+  # Others
+  ExpiresByType application/pdf "access plus 1 month"
+  ExpiresByType application/x-shockwave-flash "access plus 1 month"
+</IfModule>
 
 <IfModule mod_rewrite.c>
 	RewriteEngine On

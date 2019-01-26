@@ -152,7 +152,6 @@ return array('macros' => array('visitor_panel_row' => function($__templater, arr
 ';
 	}
 	$__finalCompiled .= '
-' . $__templater->includeTemplate('th_account_visitor_menu_bookmarkLink_bookmarks', $__vars) . '
 ';
 	if ($__templater->method($__vars['xf']['visitor'], 'hasPermission', array('conversationView', 'view', ))) {
 		$__finalCompiled .= '

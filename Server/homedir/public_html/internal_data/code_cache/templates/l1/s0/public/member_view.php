@@ -245,10 +245,6 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	}
 	$__finalCompiled .= '
 
-' . $__templater->callMacro('th_member_view_bookmarkTab_bookmarks', 'tab', array(
-		'user' => $__vars['user'],
-	), $__vars) . '
-
 				<a href="' . $__templater->fn('link', array('members/about', $__vars['user'], ), true) . '"
 					class="tabs-tab"
 					id="about"
@@ -402,8 +398,6 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 ';
 	}
 	$__finalCompiled .= '
-
-' . $__templater->includeTemplate('th_member_view_bookmarkTab_bookmarks', $__vars) . '
 
 	<li data-href="' . $__templater->fn('link', array('members/about', $__vars['user'], ), true) . '" role="tabpanel" aria-labelledby="about">
 		<div class="blockMessage">' . 'Loading' . $__vars['xf']['language']['ellipsis'] . '</div>

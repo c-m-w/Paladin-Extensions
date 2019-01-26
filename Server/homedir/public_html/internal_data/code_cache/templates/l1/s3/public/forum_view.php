@@ -123,8 +123,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 					';
 	}
 	$__compilerTemp2 .= '
-					' . $__templater->includeTemplate('th_forum_view_bookmarkLink_bookmarks', $__vars) . '
-';
+					';
 	if ($__templater->method($__vars['forum'], 'canWatch', array())) {
 		$__compilerTemp2 .= '
 						';

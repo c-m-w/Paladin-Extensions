@@ -63,15 +63,30 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 									</div>
 								</a>
 							',
-				)
-,array(
+				));
+				if ($__vars['node']['node_type_id'] == 'Forum') {
+					$__compilerTemp3[] = array(
+						'class' => ($__vars['node']['discord_options'] ? 'dataList-cell--highlighted' : ''),
+						'href' => $__templater->fn('link', array('nodes/discord', $__vars['node'], ), false),
+						'_type' => 'action',
+						'html' => '
+		' . 'Discord' . '
+	',
+					);
+				} else {
+					$__compilerTemp3[] = array(
+						'_type' => 'cell',
+						'html' => '',
+					);
+				}
+				$__compilerTemp3[] = array(
 					'class' => ($__vars['customPermissions'][$__vars['node']['node_id']] ? 'dataList-cell--highlighted' : ''),
 					'href' => $__templater->fn('link', array('nodes/permissions', $__vars['node'], ), false),
 					'_type' => 'action',
 					'html' => '
 								' . 'Permissions' . '
 							',
-				));
+				);
 				if ($__vars['moderators'][$__vars['node']['node_id']]) {
 					$__compilerTemp4 = '';
 					if ($__templater->isTraversable($__vars['moderators'][$__vars['node']['node_id']])) {

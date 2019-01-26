@@ -1,5 +1,6 @@
 <?php
 return array (
+  'permission_interface.EWRdiscord' => '[8WR] Discord Integration',
   'permission_interface.conversationModeratorPermissions' => 'Conversation moderator permissions',
   'permission_interface.conversationPermissions' => 'Conversation permissions',
   'permission_interface.conversationView' => 'Conversation view',

@@ -1,5 +1,6 @@
 <?php
 return array (
+  'con_acc_desc.discord' => '',
   'con_acc_desc.facebook' => '',
   'con_acc_desc.github' => '',
   'con_acc_desc.google' => '',

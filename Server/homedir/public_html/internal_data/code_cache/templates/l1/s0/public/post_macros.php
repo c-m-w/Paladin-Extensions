@@ -114,7 +114,6 @@ return array('macros' => array('post' => function($__templater, array $__argumen
 							';
 	}
 	$__finalCompiled .= '
-' . $__templater->includeTemplate('th_post_macros_bookmarkLink_bookmarks', $__vars) . '
 							<a href="' . $__templater->fn('link', array('threads/post', $__vars['thread'], array('post_id' => $__vars['post']['post_id'], ), ), true) . '" class="u-concealed" rel="nofollow">#' . $__templater->fn('number', array($__vars['post']['position'] + 1, ), true) . '</a>
 						</div>
 					</header>

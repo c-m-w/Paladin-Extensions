@@ -345,7 +345,13 @@ a.button // needed for specificity over a:link
 			width: auto;
 		}
 
-		&--facebook
+		&--discord
+{
+	.m-buttonColorVariation(#7289DA, white);
+	.m-buttonIcon(@fa-var-comments-o, .93em);
+}
+
+&--facebook
 		{
 			.m-buttonColorVariation(#3B5998, white);
 			> .button-text:before { .m-faContent(@fa-var-facebook, 0.58em);  ' . $__templater->callMacro('uix_icons.less', 'content', array(

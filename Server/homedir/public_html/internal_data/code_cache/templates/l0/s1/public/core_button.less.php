@@ -170,7 +170,13 @@ a.button // needed for specificity over a:link
 			margin: -4px 6px -4px 0;
 		}
 
-		&--facebook
+		&--discord
+{
+	.m-buttonColorVariation(#7289DA, white);
+	.m-buttonIcon(@fa-var-comments-o, .93em);
+}
+
+&--facebook
 		{
 			.m-buttonColorVariation(#3B5998, white);
 			.m-buttonIcon(@fa-var-facebook, .58em);

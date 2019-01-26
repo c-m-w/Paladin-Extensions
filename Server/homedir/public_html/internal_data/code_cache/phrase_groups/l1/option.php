@@ -1,5 +1,14 @@
 <?php
 return array (
+  'option.EWRdiscord_channels' => 'Bot channels',
+  'option.EWRdiscord_navtab' => 'Navigation',
+  'option.EWRdiscord_payload' => 'Payload size',
+  'option.EWRdiscord_roles' => 'Server roles',
+  'option.EWRdiscord_server' => 'Server ID (guild)',
+  'option.EWRdiscord_sync_bans' => 'Enable ban syncing',
+  'option.EWRdiscord_sync_nicks' => 'Enable nick syncing',
+  'option.EWRdiscord_sync_roles' => 'Enable role syncing',
+  'option.EWRdiscord_widgetbot' => 'WidgetBot.io',
   'option.ExUp_BccEmail' => 'BCC Email Address',
   'option.ExUp_BccEmail_Action' => 'BCC On Actions',
   'option.ExUp_ShowExtendFailReason' => 'Shows the reason an upgrade can not be extended',

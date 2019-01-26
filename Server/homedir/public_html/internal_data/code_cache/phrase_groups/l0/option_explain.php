@@ -1,5 +1,15 @@
 <?php
 return array (
+  'option_explain.EWRdiscord_channels' => 'Your bot can automatically post events directly to a specified text chat rooms.',
+  'option_explain.EWRdiscord_navtab' => 'Hiding the navigation will result in a loss of sub-navigation as well.',
+  'option_explain.EWRdiscord_payload' => 'The maximum length of the quoted text in a bot auto-posted message.',
+  'option_explain.EWRdiscord_roles' => '@everyone and managed roles can not be manually assigned to users.<br/>
+(unspecified roles will remain unaffected during the role sync process)',
+  'option_explain.EWRdiscord_server' => 'Your server\'s ID will be determined automatically by which guild you have it join.',
+  'option_explain.EWRdiscord_sync_bans' => 'When a user is banned, their linked account will also be banned from your Discord server.',
+  'option_explain.EWRdiscord_sync_nicks' => 'A user\'s Discord nickname will be force-changed to match their XenForo username.',
+  'option_explain.EWRdiscord_sync_roles' => 'Users will be assigned roles on your Discord server based on their usergroups in XenForo.',
+  'option_explain.EWRdiscord_widgetbot' => 'Requires channel configuration and permissions from <a href="https://widgetbot.io/" target="_blank">WidgetBot.io</a>.',
   'option_explain.ExUp_BccEmail' => 'On upgrade/downgrade emails, BCC the email notification <b>if it is sent</b> to an admin email address.',
   'option_explain.ExUp_BccEmail_Action' => 'New-line separated list!
 BCC notification emails on one of the following actions:<br/>
