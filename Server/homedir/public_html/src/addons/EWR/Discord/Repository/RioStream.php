@@ -26,7 +26,7 @@ class RioStream extends XFCP_RioStream
 					'title' => str_replace('@', '@𝅳', $stream->stream_title),
 					'status' => str_replace('@', '@𝅳', $stream->stream_status),
 					'url' => $url
-				])->render();
+				])->render('raw');
 				
 				$data = [
 					'content' => $content,

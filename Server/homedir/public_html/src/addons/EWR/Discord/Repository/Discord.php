@@ -47,7 +47,7 @@ class Discord extends Repository
 		}
 		catch (\Exception $e)
 		{
-			if ($e->getResponse()->getStatusCode() == 404)
+			if (!empty($e->getResponse()) && $e->getResponse()->getStatusCode() == 404)
 			{
 				return false;
 			}
@@ -150,7 +150,7 @@ class Discord extends Repository
 		catch (\Exception $e) {}
 	}
 	
-	public function postToChannel($channel, $data)
+	public function createDMChannel($recipient)
 	{
 		$provider = $this->assertSetup();
 		$server = $this->getServer();
@@ -163,7 +163,36 @@ class Discord extends Repository
 		try
 		{
 			$client = \XF::app()->http()->client();
-			$response = $client->post('https://discordapp.com/api/channels/'.$channel.'/messages', [
+			$response = $client->post('https://discordapp.com/api/users/@me/channels', [
+				'headers' => [
+					'Authorization' => 'Bot '.$provider->options['bot_token'],
+					'User-Agent' => 'DiscordBot (8wayrunBot, v2)',
+					'Content-Type' => 'application/json'
+				],
+				'body' => json_encode([
+					'recipient_id' => $recipient
+				]),
+			]);
+			
+			return $response->json()['id'];
+		}
+		catch (\Exception $e) {}
+	}
+	
+	public function postToChannel($channel, $data, $endpoint = 'channels/')
+	{
+		$provider = $this->assertSetup();
+		$server = $this->getServer();
+		
+		if (!$provider || !$server)
+		{
+			return false;
+		}
+		
+		try
+		{
+			$client = \XF::app()->http()->client();
+			$response = $client->post('https://discordapp.com/api/'.$endpoint.$channel.'/messages', [
 				'headers' => [
 					'Authorization' => 'Bot '.$provider->options['bot_token'],
 					'User-Agent' => 'DiscordBot (8wayrunBot, v2)',
@@ -172,7 +201,7 @@ class Discord extends Repository
 				'body' => json_encode($data),
 			]);
 		}
-		catch (\Exception $e) { }
+		catch (\Exception $e) {}
 	}
 	
 	public function syncDiscord()

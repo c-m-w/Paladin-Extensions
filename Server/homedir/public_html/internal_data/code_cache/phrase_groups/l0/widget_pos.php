@@ -3,6 +3,7 @@ return array (
   'widget_pos.category_view_sidebar' => 'Category view: Sidebar',
   'widget_pos.conversation_list_sidebar' => 'Conversation list: Sidebar',
   'widget_pos.conversation_view_sidebar' => 'Conversation view: Sidebar',
+  'widget_pos.ewr_discord_index_sidebar' => 'Discord > Chat page: Sidebar',
   'widget_pos.find_threads_sidebar' => 'Find threads: Sidebar',
   'widget_pos.forum_list_above_nodes' => 'Forum list: Above nodes',
   'widget_pos.forum_list_below_nodes' => 'Forum list: Below nodes',

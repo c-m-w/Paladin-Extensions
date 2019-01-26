@@ -8,6 +8,8 @@ class Post extends XFCP_Post
 {
 	protected function _postSave()
 	{
+		$parent = parent::_postSave();
+		
 		if (!$this->position && $this->Thread->discussion_state == 'visible' && $this->isInsert())
 		{
 			$this->postThreadToDiscord($this->Thread, $this);
@@ -20,7 +22,7 @@ class Post extends XFCP_Post
 			
 			if (!empty(\XF::options()->EWRdiscord_channels['posts']) || !empty($discord['posts']['channel']))
 			{
-				$url = \XF::app()->router()->buildLink('canonical:posts', $this);
+				$url = \XF::app()->router('public')->buildLink('canonical:posts', $this);
 				$length = !empty($discord['posts']['payload']) ? $discord['posts']['payload'] : \XF::options()->EWRdiscord_payload;
 				
 				if (!empty($discord['posts']['channel']))
@@ -53,7 +55,7 @@ class Post extends XFCP_Post
 						'user' => $this->username,
 						'title' => str_replace('@', '@𝅳', $this->Thread->title),
 						'url' => $url
-					])->render();
+					])->render('raw');
 				}
 				
 				$data = [
@@ -69,7 +71,7 @@ class Post extends XFCP_Post
 			}
 		}
 		
-		return parent::_postSave();
+		return $parent;
 	}
 	
 	public function postThreadToDiscord($thread)
@@ -78,7 +80,7 @@ class Post extends XFCP_Post
 			
 		if (!empty(\XF::options()->EWRdiscord_channels['threads']) || !empty($discord['threads']['channel']))
 		{
-			$url = \XF::app()->router()->buildLink('canonical:threads', $thread);
+			$url = \XF::app()->router('public')->buildLink('canonical:threads', $thread);
 			$icon = $thread->User ? $thread->User->getAvatarUrl('s', null, true) : '';
 			$length = !empty($discord['threads']['payload']) ? $discord['threads']['payload'] : \XF::options()->EWRdiscord_payload;
 			
@@ -112,7 +114,7 @@ class Post extends XFCP_Post
 					'user' => $thread->username,
 					'title' => str_replace('@', '@𝅳', $thread->title),
 					'url' => $url
-				])->render();
+				])->render('raw');
 			}
 			
 			$data = [
@@ -128,7 +130,7 @@ class Post extends XFCP_Post
 					],
 					'author' => [
 						'name' => $thread->username,
-						'url' => $thread->User ? \XF::app()->router()->buildLink('canonical:members', $thread->User) : '',
+						'url' => $thread->User ? \XF::app()->router('public')->buildLink('canonical:members', $thread->User) : '',
 						'icon_url' => $icon,
 					],
 				],

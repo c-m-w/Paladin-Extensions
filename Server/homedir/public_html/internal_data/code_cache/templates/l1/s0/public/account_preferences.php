@@ -189,6 +189,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	)) . '
 			' . $__templater->callMacro('helper_account', 'activity_privacy_row', array(), $__vars) . '
 
+' . $__templater->includeTemplate('EWRdiscord_account_preferences', $__vars) . '
+
 			' . $__templater->callMacro('custom_fields_macros', 'custom_fields_edit', array(
 		'type' => 'users',
 		'group' => 'preferences',

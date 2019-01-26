@@ -9,6 +9,7 @@ return array (
   'option.EWRdiscord_sync_nicks' => 'Enable nick syncing',
   'option.EWRdiscord_sync_roles' => 'Enable role syncing',
   'option.EWRdiscord_widgetbot' => 'WidgetBot.io',
+  'option.EWRdiscord_widgetbot_shard' => 'Bot cluster',
   'option.ExUp_BccEmail' => 'BCC Email Address',
   'option.ExUp_BccEmail_Action' => 'BCC On Actions',
   'option.ExUp_ShowExtendFailReason' => 'Shows the reason an upgrade can not be extended',

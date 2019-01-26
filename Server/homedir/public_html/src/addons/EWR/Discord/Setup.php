@@ -17,7 +17,7 @@ class Setup extends AbstractSetup
 	use StepRunnerUninstallTrait;
 	
 	public function installStep1()
-	{	
+	{
 		$this->schemaManager()->alterTable('xf_node', function(Alter $table)
 		{
             $table->addColumn('discord_options', 'blob')->nullable();
@@ -39,6 +39,14 @@ class Setup extends AbstractSetup
 		], true);
 	}
 	
+	public function installStep3()
+	{
+		$this->schemaManager()->alterTable('xf_user_option', function(Alter $table)
+		{
+            $table->addColumn('discord_options', 'blob')->nullable();
+		});
+	}
+	
 	public function uninstallStep1()
 	{
 		$this->schemaManager()->alterTable('xf_node', function(Alter $table)
@@ -49,6 +57,11 @@ class Setup extends AbstractSetup
 		$this->schemaManager()->alterTable('xf_user_connected_account', function(Alter $table)
 		{
 			$table->dropColumns('sync_date');
+		});
+		
+		$this->schemaManager()->alterTable('xf_user_option', function(Alter $table)
+		{
+			$table->dropColumns('discord_options');
 		});
 	}
 	
@@ -61,5 +74,10 @@ class Setup extends AbstractSetup
 	{
 		$this->installStep1();
 		$this->installStep2();
+	}
+	
+	public function upgrade2012Step1()
+	{
+		$this->installStep3();
 	}
 }

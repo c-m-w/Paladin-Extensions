@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: f0cac31c9564c6b8274100cbd3ee52d0
+// FROM HASH: 9c14a3112417f75cebcc2e3037f250e1
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -42,16 +42,14 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	$__finalCompiled .= '
 
 ';
+	$__compilerTemp1 = '';
 	if (!$__templater->test($__vars['providers'], 'empty', array())) {
-		$__finalCompiled .= '
-	<div class="block">
-		<div class="block-container">
-			<div class="block-body">
-				';
-		$__compilerTemp1 = '';
+		$__compilerTemp1 .= '
+					';
+		$__compilerTemp2 = '';
 		if ($__templater->isTraversable($__vars['providers'])) {
 			foreach ($__vars['providers'] AS $__vars['provider']) {
-				$__compilerTemp1 .= '
+				$__compilerTemp2 .= '
 							<li>
 								' . $__templater->button('
 									' . $__templater->escape($__vars['provider']['title']) . '
@@ -64,36 +62,14 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 						';
 			}
 		}
-		$__finalCompiled .= $__templater->formRow('
+		$__compilerTemp1 .= $__templater->formRow('
 
 					<ul class="listHeap">
-						' . $__compilerTemp1 . '
+						' . $__compilerTemp2 . '
 					</ul>
 				', array(
 			'rowtype' => 'button',
 			'label' => 'Register faster using',
-		)) . '
-			</div>
-		</div>
-	</div>
-';
-	}
-	$__finalCompiled .= '
-
-';
-	$__compilerTemp2 = '';
-	if (($__templater->fn('rand', array(0, 2, ), false) == 1)) {
-		$__compilerTemp2 .= '
-				' . $__templater->formTextBoxRow(array(
-			'name' => $__templater->method($__vars['regForm'], 'getFieldName', array('email_hp', )),
-			'value' => '',
-			'type' => 'email',
-			'autocomplete' => 'off',
-			'maxlength' => $__templater->fn('max_length', array($__vars['xf']['visitor'], 'email', ), false),
-		), array(
-			'rowclass' => 'formRow--limited',
-			'label' => 'Email',
-			'explain' => 'Please leave this field blank.',
 		)) . '
 			';
 	}
@@ -101,7 +77,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	if (($__templater->fn('rand', array(0, 2, ), false) == 1)) {
 		$__compilerTemp3 .= '
 				' . $__templater->formTextBoxRow(array(
-			'name' => 'email',
+			'name' => $__templater->method($__vars['regForm'], 'getFieldName', array('email_hp', )),
 			'value' => '',
 			'type' => 'email',
 			'autocomplete' => 'off',
@@ -117,6 +93,22 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	if (($__templater->fn('rand', array(0, 2, ), false) == 1)) {
 		$__compilerTemp4 .= '
 				' . $__templater->formTextBoxRow(array(
+			'name' => 'email',
+			'value' => '',
+			'type' => 'email',
+			'autocomplete' => 'off',
+			'maxlength' => $__templater->fn('max_length', array($__vars['xf']['visitor'], 'email', ), false),
+		), array(
+			'rowclass' => 'formRow--limited',
+			'label' => 'Email',
+			'explain' => 'Please leave this field blank.',
+		)) . '
+			';
+	}
+	$__compilerTemp5 = '';
+	if (($__templater->fn('rand', array(0, 2, ), false) == 1)) {
+		$__compilerTemp5 .= '
+				' . $__templater->formTextBoxRow(array(
 			'name' => 'password',
 			'type' => 'password',
 			'autocomplete' => 'off',
@@ -128,9 +120,11 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			';
 	}
 	$__finalCompiled .= $__templater->form('
-
+	
 	<div class="block-container">
 		<div class="block-body">
+			' . $__compilerTemp1 . '
+			
 			' . '
 
 			' . $__templater->callMacro('register_macros', 'username_row', array(
@@ -150,7 +144,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	)) . '
 
 			' . '
-			' . $__compilerTemp2 . '
+			' . $__compilerTemp3 . '
 
 			' . $__templater->callMacro('register_macros', 'email_row', array(
 		'fieldName' => $__templater->method($__vars['regForm'], 'getFieldName', array('email', )),
@@ -158,10 +152,10 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	), $__vars) . '
 
 			' . '
-			' . $__compilerTemp3 . '
+			' . $__compilerTemp4 . '
 
 			' . '
-			' . $__compilerTemp4 . '
+			' . $__compilerTemp5 . '
 
 			' . $__templater->formTextBoxRow(array(
 		'name' => $__templater->method($__vars['regForm'], 'getFieldName', array('password', )),

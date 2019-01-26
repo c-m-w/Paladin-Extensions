@@ -10,7 +10,9 @@ class WidgetBot extends \XF\Option\AbstractOption
 		$provider = $discordRepo->assertSetup();
 		
 		$channels = $discordRepo->getGuild('/channels');
-		$choices = [];
+		$choices = [
+			0 => \XF::phrase('(disabled)')
+		];
 		
 		if (!empty($channels) && isset($channels[0]['position']))
 		{
@@ -20,14 +22,11 @@ class WidgetBot extends \XF\Option\AbstractOption
 			{
 				if (!$channel['type'])
 				{
-					$choices[$channel['id']] = $channel;
+					$choices[$channel['id']] = '# '.$channel['name'];
 				}
 			}
 		}
 
-		return self::getTemplate('admin:option_template_EWRdiscord_widgetbot', $option, $htmlParams, [
-			'provider' => $provider,
-			'channels' => $choices,
-		]);
+		return self::getSelectRow($option, $htmlParams, $choices);
 	}
 }

@@ -42,13 +42,20 @@ step=50</edit_format_params>
     <default_value>1</default_value>
     <relation group_id="EWRdiscord" display_order="301"/>
   </option>
-  <option option_id="EWRdiscord_widgetbot" edit_format="callback" data_type="array">
-    <default_value>{"channel":false,"crate":false,"toast":false}</default_value>
+  <option option_id="EWRdiscord_widgetbot" edit_format="callback" data_type="string">
+    <default_value></default_value>
     <edit_format_params>EWR\Discord\Option\WidgetBot::renderOption</edit_format_params>
-    <sub_options>channel
-crate
-toast
-*</sub_options>
     <relation group_id="EWRdiscord" display_order="102"/>
+  </option>
+  <option option_id="EWRdiscord_widgetbot_shard" edit_format="select" data_type="string">
+    <default_value></default_value>
+    <edit_format_params>=({{ phrase('none') }})
+cl1.=Cluster 1 (cl1)
+cl2.=Cluster 2 (cl2)
+cl3.=Cluster 3 (cl3)
+cl4.=Cluster 4 (cl4)
+cl5.=Cluster 5 (cl5)
+beta.=Beta (beta)</edit_format_params>
+    <relation group_id="EWRdiscord" display_order="103"/>
   </option>
 </options>

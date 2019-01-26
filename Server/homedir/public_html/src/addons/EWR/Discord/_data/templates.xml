@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <templates>
-  <template type="public" title="EWRdiscord.less" version_id="2010" version_string="2.0.1.0"><![CDATA[.discord-body
+  <template type="public" title="EWRdiscord.less" version_id="2011" version_string="2.0.1.1"><![CDATA[.discord-container embed { display: grid; }
+.discord-body
 {
 	padding: 150px;
 	text-align: center;
@@ -31,6 +32,31 @@
 		.discord-join { padding: 0; font-size: 32px; }
 	}
 }]]></template>
+  <template type="public" title="EWRdiscord_account_preferences" version_id="2018" version_string="2.0.1.8"><![CDATA[<xf:if is="$xf.options.EWRdiscord_widgetbot && $xf.visitor.hasPermission('EWRdiscord', 'viewCrate')">
+	<xf:checkboxrow>
+		<xf:option name="discord_options[crate]"
+				checked="{{ !$xf.visitor.Option.discord_options.crate }}"
+				label="{{ phrase('EWRdiscord_enable_discord_chat_popup_button...') }}">
+			<xf:checkbox>
+				<xf:option name="discord_options[count]"
+					checked="{{ !$xf.visitor.Option.discord_options.count }}"
+					label="{{ phrase('EWRdiscord_and_enable_new_message_counter') }}" />
+				<xf:option name="discord_options[toast]"
+					checked="{{ !$xf.visitor.Option.discord_options.toast }}"
+					label="{{ phrase('EWRdiscord_and_enable_toast_notifications') }}" />
+			</xf:checkbox>
+		</xf:option>
+	</xf:checkboxrow>
+</xf:if>
+
+<xf:if is="$xf.visitor.ConnectedAccounts.discord.provider_key">
+	<xf:checkboxrow>
+		<xf:option name="discord_options[alert]"
+				checked="{{ !$xf.visitor.Option.discord_options.alert }}"
+				label="{{ phrase('EWRdiscord_receive_direct_messages_and_updates_on_discord...') }}">
+		</xf:option>
+	</xf:checkboxrow>
+</xf:if>]]></template>
   <template type="public" title="EWRdiscord_botpost" version_id="1300" version_string="1.3.0.0"><![CDATA[<xf:title>{{ phrase('EWRdiscord_post_as_bot') }}</xf:title>
 
 <xf:form action="{{ link('ewr-discord/botpost') }}" ajax="true" class="block" data-redirect="off">
@@ -53,6 +79,27 @@
 		<xf:submitrow submit="{{ phrase('proceed...') }}" />
 	</div>
 </xf:form>]]></template>
+  <template type="public" title="EWRdiscord_crate" version_id="2019" version_string="2.0.1.9"><![CDATA[<xf:if is="$xf.options.EWRdiscord_widgetbot && !$xf.visitor.Option.discord_options.crate
+		&& $xf.visitor.hasPermission('EWRdiscord', 'viewCrate') && $xf.uri != link('ewr-discord')">
+	
+	<script src="https://cdn.jsdelivr.net/npm/@widgetbot/crate@3" async>
+		const crate = new Crate({
+			server: '{$xf.options.EWRdiscord_server}',
+			channel: '{$xf.options.EWRdiscord_widgetbot}',
+			shard: 'https://{$xf.options.EWRdiscord_widgetbot_shard}widgetbot.io',
+			
+			notifications: {{ !$xf.visitor.Option.discord_options.toast ? 'true' : 'false' }},
+			indicator: {{ !$xf.visitor.Option.discord_options.count ? 'true' : 'false' }},
+		});
+
+		<xf:if is="$xf.visitor.user_id && !$xf.visitor.Option.discord_options.toast">
+			crate.notify({
+				content: '{{ phrase('EWRdiscord_crate_disable', {'link':link('canonical:account/preferences')}) }}',
+				timeout: 10000
+			});
+		</xf:if>
+	</script>
+</xf:if>]]></template>
   <template type="admin" title="EWRdiscord_forum" version_id="1300" version_string="1.3.0.0"><![CDATA[<xf:title>{{ phrase('EWRdiscord_edit_discord_options:') }} {$node.title}</xf:title>
 
 <xf:form action="{{ link('nodes/discord-save', $node) }}" ajax="true" class="block">
@@ -96,16 +143,24 @@
 		<xf:submitrow icon="save" sticky="true" />
 	</div>
 </xf:form>]]></template>
-  <template type="public" title="EWRdiscord_index" version_id="2010" version_string="2.0.1.0"><![CDATA[<xf:title>{{ phrase('EWRdiscord_discord') }}</xf:title>
+  <template type="public" title="EWRdiscord_index" version_id="2019" version_string="2.0.1.9"><![CDATA[<xf:title>{{ phrase('EWRdiscord_discord') }}</xf:title>
 
 <xf:css src="EWRdiscord.less" />
 
-<div class="block">
-	<div class="block-container">
-		<xf:if is="$xf.options.EWRdiscord_widgetbot.channel">
-			<embed width="100%" height="600px"
-				src="https://widgetbot.io/embed/{$cache.server}/{$xf.options.EWRdiscord_widgetbot.channel}/00{{ property('styleType')=='light' ? '1' : '0' }}2/" />
-		<xf:else/>
+<xf:if is="$xf.options.EWRdiscord_widgetbot">
+	<div class="block">
+		<div class="block-container discord-container">
+			<widgetbot
+				server="{$cache.server}"
+				channel="{$xf.options.EWRdiscord_widgetbot}"
+				shard="https://{$xf.options.EWRdiscord_widgetbot_shard}widgetbot.io"
+				height="600" width="100%"></widgetbot>
+			<script src="https://cdn.jsdelivr.net/npm/@widgetbot/html-embed"></script>
+		</div>
+	</div>
+<xf:else/>
+	<div class="block">
+		<div class="block-container discord-container">
 			<div class="block-body discord-body">
 				{{ phrase('EWRdiscord_index_1') }}
 				<div class="discord-join">
@@ -113,14 +168,16 @@
 				</div>
 				{{ phrase('EWRdiscord_index_3') }}
 			</div>
-		</xf:if>
+		</div>
 	</div>
-</div>
 
-<xf:sidebar>
-	<iframe width="100%" height="600px" scrolling="no" frameborder="0"
-		src="//discordapp.com/widget?id={$cache.server}&theme={{ property('styleType') }}"></iframe>
-</xf:sidebar>]]></template>
+	<xf:sidebar>
+		<iframe width="100%" height="600px" scrolling="no" frameborder="0"
+			src="//discordapp.com/widget?id={$cache.server}&theme={{ property('styleType') }}"></iframe>
+	</xf:sidebar>
+</xf:if>
+
+<xf:widgetpos id="ewr_discord_index_sidebar" position="sidebar" />]]></template>
   <template type="public" title="connected_account_associated_discord" version_id="1300" version_string="1.3.0.0"><![CDATA[<xf:if is="$providerData">
 	<a href="https://discordapp.com/channels/@me" target="_blank">
 		<img src="{$providerData.avatar_url}" width="48" alt="" />
@@ -160,7 +217,7 @@
 	<xf:macro template="connected_account_provider_test_macros" name="picture"
 		arg-url="{$providerData.avatar_url}" />
 </xf:if>]]></template>
-  <template type="admin" title="option_template_EWRdiscord_channels" version_id="2010" version_string="2.0.1.0"><![CDATA[<xf:if is="$channels is not empty">
+  <template type="admin" title="option_template_EWRdiscord_channels" version_id="2014" version_string="2.0.1.4"><![CDATA[<xf:if is="$channels is not empty">
 	
 	<xf:formrow label="{$option.title}" hint="{$hintHtml}" explain="{$explainHtml}" html="{$listedHtml}">
 		<dl class="inputLabelPair">
@@ -246,6 +303,54 @@
 				</dd>
 			</dl>
 		</xf:if>
+		<xf:if is="$addons.XFMG">
+			<dl class="inputLabelPair">
+				<dt>[XF] Media Gallery > {{ phrase('xfmg_new_media') }}</dt>
+				<dd>
+					<xf:select name="{$inputName}[xfmg]" value="{$option.option_value.xfmg}">
+						<xf:option value="0">{{ phrase('(none)') }}</xf:option>
+						<xf:foreach loop="$channels" value="$channel">
+							<xf:option value="{$channel.id}"># {$channel.name}</xf:option>
+						</xf:foreach>
+					</xf:select>
+				</dd>
+			</dl>
+			<dl class="inputLabelPair">
+				<dt>[XF] Media Gallery > {{ phrase('xfmg_new_comments') }}</dt>
+				<dd>
+					<xf:select name="{$inputName}[xfmgcomments]" value="{$option.option_value.xfmgcomments}">
+						<xf:option value="0">{{ phrase('(none)') }}</xf:option>
+						<xf:foreach loop="$channels" value="$channel">
+							<xf:option value="{$channel.id}"># {$channel.name}</xf:option>
+						</xf:foreach>
+					</xf:select>
+				</dd>
+			</dl>
+		</xf:if>
+		<xf:if is="$addons.XFRM">
+			<dl class="inputLabelPair">
+				<dt>[XF] Resource Manager > {{ phrase('xfrm_new_resources') }}</dt>
+				<dd>
+					<xf:select name="{$inputName}[xfrm]" value="{$option.option_value.xfrm}">
+						<xf:option value="0">{{ phrase('(none)') }}</xf:option>
+						<xf:foreach loop="$channels" value="$channel">
+							<xf:option value="{$channel.id}"># {$channel.name}</xf:option>
+						</xf:foreach>
+					</xf:select>
+				</dd>
+			</dl>
+			<dl class="inputLabelPair">
+				<dt>[XF] Resource Manager > {{ phrase('xfrm_resource_updates') }}</dt>
+				<dd>
+					<xf:select name="{$inputName}[xfrmupdate]" value="{$option.option_value.xfrmupdate}">
+						<xf:option value="0">{{ phrase('(none)') }}</xf:option>
+						<xf:foreach loop="$channels" value="$channel">
+							<xf:option value="{$channel.id}"># {$channel.name}</xf:option>
+						</xf:foreach>
+					</xf:select>
+				</dd>
+			</dl>
+		</xf:if>
 	</xf:formrow>
 	
 <xf:else/>
@@ -315,19 +420,4 @@
 	</xf:inforow>
 	
 </xf:if>]]></template>
-  <template type="admin" title="option_template_EWRdiscord_widgetbot" version_id="2010" version_string="2.0.1.0"><![CDATA[<xf:checkboxrow label="{$option.title}" hint="{$hintHtml}" explain="{$explainHtml}" html="{$listedHtml}">
-	<xf:option selected="{$option.option_value.channel}">
-		<xf:select name="{$inputName}[channel]" value="{$option.option_value.channel}">
-			<xf:foreach loop="$channels" value="$channel">
-				<xf:option value="{$channel.id}"># {$channel.name}</xf:option>
-			</xf:foreach>
-		</xf:select>
-		<xf:checkbox>
-			<xf:option name="{$inputName}[crate]" value="1" selected="{$option.option_value.crate}"
-				label="{{ phrase('EWRdiscord_enable_crate_popup_wrapper') }}" />
-			<xf:option name="{$inputName}[toast]" value="1" selected="{$option.option_value.toast}"
-				label="{{ phrase('EWRdiscord_enable_crate_toast_notifications') }}" />
-		</xf:checkbox>
-	</xf:option>
-</xf:checkboxrow>]]></template>
 </templates>

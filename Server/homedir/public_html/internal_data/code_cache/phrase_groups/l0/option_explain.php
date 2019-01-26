@@ -10,6 +10,8 @@ return array (
   'option_explain.EWRdiscord_sync_nicks' => 'A user\'s Discord nickname will be force-changed to match their XenForo username.',
   'option_explain.EWRdiscord_sync_roles' => 'Users will be assigned roles on your Discord server based on their usergroups in XenForo.',
   'option_explain.EWRdiscord_widgetbot' => 'Requires channel configuration and permissions from <a href="https://widgetbot.io/" target="_blank">WidgetBot.io</a>.',
+  'option_explain.EWRdiscord_widgetbot_shard' => 'Use one of the optional WidgetBot clusters. Read their <a href="https://docs.widgetbot.io/tutorial/" target="_blank">tutorials</a> for more information.<br />
+Remember that each cluster has it\'s own bot that must be invited to your server.',
   'option_explain.ExUp_BccEmail' => 'On upgrade/downgrade emails, BCC the email notification <b>if it is sent</b> to an admin email address.',
   'option_explain.ExUp_BccEmail_Action' => 'New-line separated list!
 BCC notification emails on one of the following actions:<br/>

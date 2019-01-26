@@ -8,6 +8,8 @@ class ProfilePost extends XFCP_ProfilePost
 {
 	protected function _postSave()
 	{
+		$parent = parent::_postSave();
+		
 		if ($this->message_state == 'visible' &&
 			($this->isInsert() || $this->isChanged('message_state')))
 		{
@@ -19,14 +21,14 @@ class ProfilePost extends XFCP_ProfilePost
 					'content' => \XF::phrase('EWRdiscord_x_updated_status_y', [
 							'user' => $this->username,
 							'title' => str_replace('@', '@𝅳', $this->message),
-							'url' => \XF::app()->router()->buildLink('canonical:profile-posts', $this)
-						])->render(),
+							'url' => \XF::app()->router('public')->buildLink('canonical:profile-posts', $this)
+						])->render('raw'),
 				];
 				
 				$this->repository('EWR\Discord:Discord')->postToChannel($channel, $data);
 			}
 		}
 		
-		return parent::_postSave();
+		return $parent;
 	}
 }

@@ -1,6 +1,7 @@
 <?php
 return array (
   'permission.EWRdiscord_botPost' => 'Post as the bot',
+  'permission.EWRdiscord_viewCrate' => 'View Discord pop-up',
   'permission.EWRdiscord_viewDiscord' => 'View Discord',
   'permission.avatar_allowed' => 'Upload an avatar',
   'permission.conversationView_view' => 'View',

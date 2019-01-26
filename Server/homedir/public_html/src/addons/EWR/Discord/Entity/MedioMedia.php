@@ -8,6 +8,8 @@ class MedioMedia extends XFCP_MedioMedia
 {
 	protected function _postSave()
 	{
+		$parent = parent::_postSave();
+		
 		if ($this->media_state == 'visible' &&
 			($this->isInsert() || $this->isChanged('media_state')))
 		{
@@ -23,10 +25,9 @@ class MedioMedia extends XFCP_MedioMedia
 					'user' => $this->username,
 					'title' => str_replace('@', '@𝅳', $this->media_title),
 					'url' => $url
-				])->render();
+				])->render('raw');
 				
-				$pather = $this->app()->container('request.pather');
-				$image = $pather('data/media/high/'.$this->media_id.'.jpg', 'canonical');
+				$image = $this->app()->applyExternalDataUrl("media/high/".$this->media_id.".jpg", true);
 				
 				$data = [
 					'content' => $content,
@@ -42,7 +43,7 @@ class MedioMedia extends XFCP_MedioMedia
 							'url' => $icon,
 						],
 						'author' => [
-							'name' => $this->username,
+							'name' => $this->media_title,
 							'url' => $url,
 							'icon_url' => $icon,
 						],
@@ -53,6 +54,6 @@ class MedioMedia extends XFCP_MedioMedia
 			}
 		}
 		
-		return parent::_postSave();
+		return $parent;
 	}
 }

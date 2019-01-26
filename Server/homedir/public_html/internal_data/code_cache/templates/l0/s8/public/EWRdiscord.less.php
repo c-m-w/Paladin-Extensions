@@ -1,9 +1,10 @@
 <?php
-// FROM HASH: 884aff985b9600b679a4bc02c8c50674
+// FROM HASH: 6eb7358036a7048b508e5de0937149a1
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
-	$__finalCompiled .= '.discord-body
+	$__finalCompiled .= '.discord-container embed { display: grid; }
+.discord-body
 {
 	padding: 150px;
 	text-align: center;

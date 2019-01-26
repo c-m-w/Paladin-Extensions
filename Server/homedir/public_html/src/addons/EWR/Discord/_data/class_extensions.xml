@@ -4,6 +4,10 @@
   <extension from_class="EWR\Medio\Entity\Comment" to_class="EWR\Discord\Entity\MedioComment" execute_order="10" active="1"/>
   <extension from_class="EWR\Medio\Entity\Media" to_class="EWR\Discord\Entity\MedioMedia" execute_order="10" active="1"/>
   <extension from_class="EWR\Rio\Repository\Stream" to_class="EWR\Discord\Repository\RioStream" execute_order="10" active="1"/>
+  <extension from_class="XFMG\Entity\Comment" to_class="EWR\Discord\Entity\XFMGComment" execute_order="10" active="1"/>
+  <extension from_class="XFMG\Entity\MediaItem" to_class="EWR\Discord\Entity\XFMGItem" execute_order="10" active="1"/>
+  <extension from_class="XFRM\Entity\ResourceItem" to_class="EWR\Discord\Entity\XFRMItem" execute_order="10" active="1"/>
+  <extension from_class="XFRM\Entity\ResourceUpdate" to_class="EWR\Discord\Entity\XFRMUpdate" execute_order="10" active="1"/>
   <extension from_class="XF\Admin\Controller\Node" to_class="EWR\Discord\Admin\Controller\Node" execute_order="10" active="1"/>
   <extension from_class="XF\Entity\Node" to_class="EWR\Discord\Entity\Node" execute_order="10" active="1"/>
   <extension from_class="XF\Entity\Post" to_class="EWR\Discord\Entity\Post" execute_order="10" active="1"/>
@@ -11,4 +15,7 @@
   <extension from_class="XF\Entity\Thread" to_class="EWR\Discord\Entity\Thread" execute_order="10" active="1"/>
   <extension from_class="XF\Entity\User" to_class="EWR\Discord\Entity\User" execute_order="10" active="1"/>
   <extension from_class="XF\Entity\UserConnectedAccount" to_class="EWR\Discord\Entity\UserConnectedAccount" execute_order="10" active="1"/>
+  <extension from_class="XF\Entity\UserOption" to_class="EWR\Discord\Entity\UserOption" execute_order="10" active="1"/>
+  <extension from_class="XF\Pub\Controller\Account" to_class="EWR\Discord\Pub\Controller\Account" execute_order="10" active="1"/>
+  <extension from_class="XF\Service\Conversation\Notifier" to_class="EWR\Discord\Service\Conversation\Notifier" execute_order="10" active="1"/>
 </class_extensions>

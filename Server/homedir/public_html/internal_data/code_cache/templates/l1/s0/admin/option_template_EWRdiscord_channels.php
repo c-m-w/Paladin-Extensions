@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: ae4045b10855ebeed7f5f42579f4326d
+// FROM HASH: 485866de5a80f9c750a97a35e2f7cf60
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -160,6 +160,112 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			</dl>
 		';
 		}
+		$__compilerTemp11 = '';
+		if ($__vars['addons']['XFMG']) {
+			$__compilerTemp11 .= '
+			<dl class="inputLabelPair">
+				<dt>[XF] Media Gallery > ' . 'xfmg_new_media' . '</dt>
+				<dd>
+					';
+			$__compilerTemp12 = array(array(
+				'value' => '0',
+				'label' => $__vars['xf']['language']['parenthesis_open'] . 'None' . $__vars['xf']['language']['parenthesis_close'],
+				'_type' => 'option',
+			));
+			if ($__templater->isTraversable($__vars['channels'])) {
+				foreach ($__vars['channels'] AS $__vars['channel']) {
+					$__compilerTemp12[] = array(
+						'value' => $__vars['channel']['id'],
+						'label' => '# ' . $__templater->escape($__vars['channel']['name']),
+						'_type' => 'option',
+					);
+				}
+			}
+			$__compilerTemp11 .= $__templater->formSelect(array(
+				'name' => $__vars['inputName'] . '[xfmg]',
+				'value' => $__vars['option']['option_value']['xfmg'],
+			), $__compilerTemp12) . '
+				</dd>
+			</dl>
+			<dl class="inputLabelPair">
+				<dt>[XF] Media Gallery > ' . 'xfmg_new_comments' . '</dt>
+				<dd>
+					';
+			$__compilerTemp13 = array(array(
+				'value' => '0',
+				'label' => $__vars['xf']['language']['parenthesis_open'] . 'None' . $__vars['xf']['language']['parenthesis_close'],
+				'_type' => 'option',
+			));
+			if ($__templater->isTraversable($__vars['channels'])) {
+				foreach ($__vars['channels'] AS $__vars['channel']) {
+					$__compilerTemp13[] = array(
+						'value' => $__vars['channel']['id'],
+						'label' => '# ' . $__templater->escape($__vars['channel']['name']),
+						'_type' => 'option',
+					);
+				}
+			}
+			$__compilerTemp11 .= $__templater->formSelect(array(
+				'name' => $__vars['inputName'] . '[xfmgcomments]',
+				'value' => $__vars['option']['option_value']['xfmgcomments'],
+			), $__compilerTemp13) . '
+				</dd>
+			</dl>
+		';
+		}
+		$__compilerTemp14 = '';
+		if ($__vars['addons']['XFRM']) {
+			$__compilerTemp14 .= '
+			<dl class="inputLabelPair">
+				<dt>[XF] Resource Manager > ' . 'New extensions' . '</dt>
+				<dd>
+					';
+			$__compilerTemp15 = array(array(
+				'value' => '0',
+				'label' => $__vars['xf']['language']['parenthesis_open'] . 'None' . $__vars['xf']['language']['parenthesis_close'],
+				'_type' => 'option',
+			));
+			if ($__templater->isTraversable($__vars['channels'])) {
+				foreach ($__vars['channels'] AS $__vars['channel']) {
+					$__compilerTemp15[] = array(
+						'value' => $__vars['channel']['id'],
+						'label' => '# ' . $__templater->escape($__vars['channel']['name']),
+						'_type' => 'option',
+					);
+				}
+			}
+			$__compilerTemp14 .= $__templater->formSelect(array(
+				'name' => $__vars['inputName'] . '[xfrm]',
+				'value' => $__vars['option']['option_value']['xfrm'],
+			), $__compilerTemp15) . '
+				</dd>
+			</dl>
+			<dl class="inputLabelPair">
+				<dt>[XF] Resource Manager > ' . 'Extension updates' . '</dt>
+				<dd>
+					';
+			$__compilerTemp16 = array(array(
+				'value' => '0',
+				'label' => $__vars['xf']['language']['parenthesis_open'] . 'None' . $__vars['xf']['language']['parenthesis_close'],
+				'_type' => 'option',
+			));
+			if ($__templater->isTraversable($__vars['channels'])) {
+				foreach ($__vars['channels'] AS $__vars['channel']) {
+					$__compilerTemp16[] = array(
+						'value' => $__vars['channel']['id'],
+						'label' => '# ' . $__templater->escape($__vars['channel']['name']),
+						'_type' => 'option',
+					);
+				}
+			}
+			$__compilerTemp14 .= $__templater->formSelect(array(
+				'name' => $__vars['inputName'] . '[xfrmupdate]',
+				'value' => $__vars['option']['option_value']['xfrmupdate'],
+			), $__compilerTemp16) . '
+				</dd>
+			</dl>
+		';
+		}
 		$__finalCompiled .= $__templater->formRow('
 		<dl class="inputLabelPair">
 			<dt>' . 'New threads' . '</dt>
@@ -191,6 +297,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		' . $__compilerTemp4 . '
 		' . $__compilerTemp6 . '
 		' . $__compilerTemp9 . '
+		' . $__compilerTemp11 . '
+		' . $__compilerTemp14 . '
 	', array(
 			'label' => $__templater->escape($__vars['option']['title']),
 			'hint' => $__templater->escape($__vars['hintHtml']),

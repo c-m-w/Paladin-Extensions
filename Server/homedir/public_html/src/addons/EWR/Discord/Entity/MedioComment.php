@@ -8,6 +8,8 @@ class MedioComment extends XFCP_MedioComment
 {
 	protected function _postSave()
 	{
+		$parent = parent::_postSave();
+		
 		if ($this->comment_state == 'visible' &&
 			($this->isInsert() || $this->isChanged('comment_state')))
 		{
@@ -20,8 +22,8 @@ class MedioComment extends XFCP_MedioComment
 					'content' => \XF::phrase('EWRdiscord_x_commented_on_media_y', [
 							'user' => $this->username,
 							'title' => str_replace('@', '@𝅳', $this->Media->media_title),
-							'url' => \XF::app()->router()->buildLink('canonical:ewr-medio/posts', $this)
-						])->render(),
+							'url' => \XF::app()->router('public')->buildLink('canonical:ewr-medio/posts', $this)
+						])->render('raw'),
 					'embed' => [
 						'description' => str_replace('@', '@𝅳',
 							htmlspecialchars_decode(\XF::app()->stringFormatter()->snippetString($this->comment_message,
@@ -33,6 +35,6 @@ class MedioComment extends XFCP_MedioComment
 			}
 		}
 		
-		return parent::_postSave();
+		return $parent;
 	}
 }

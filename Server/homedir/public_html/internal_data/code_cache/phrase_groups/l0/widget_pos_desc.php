@@ -3,6 +3,7 @@ return array (
   'widget_pos_desc.category_view_sidebar' => 'Position in the sidebar of the category_view template. Widget templates rendered in this position can use the current category entity in the <code>{$context.category}</code> param. Widgets here will only be visible if the \'Create pages for categories\' option is enabled.',
   'widget_pos_desc.conversation_list_sidebar' => 'Position in the sidebar while viewing a list of conversations.',
   'widget_pos_desc.conversation_view_sidebar' => 'Position in the conversation_view template sidebar. Widget templates rendered in this position can use the current conversation entity in the <code>{$context.conversation}</code> param.',
+  'widget_pos_desc.ewr_discord_index_sidebar' => 'Position in the sidebar while viewing discreet chat page.',
   'widget_pos_desc.find_threads_sidebar' => 'Position inside the \'find threads\' sidebar, which is shown only when <i>Appearance &gt; Style properties &gt; Miscellaneous &gt; Find threads navigation style</i> is set to \'Side navigation\'.',
   'widget_pos_desc.forum_list_above_nodes' => 'A position inside the main content area of the forum list above the node tree.',
   'widget_pos_desc.forum_list_below_nodes' => 'A position inside the main content area of the forum list below the node tree.',
