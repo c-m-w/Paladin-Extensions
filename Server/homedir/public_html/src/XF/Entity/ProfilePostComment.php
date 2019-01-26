@@ -173,9 +173,21 @@ class ProfilePostComment extends Entity
 
 	public function canSendModeratorActionAlert()
 	{
+		$visitor = \XF::visitor();
+
+		if (!$visitor->user_id || $visitor->user_id == $this->user_id)
+		{
+			return false;
+		}
+
+		if ($this->message_state != 'visible')
+		{
+			return false;
+		}
+
 		return (
 			$this->ProfilePost->canSendModeratorActionAlert()
-				&& $this->message_state == 'visible'
+			&& $this->message_state == 'visible'
 		);
 	}
 

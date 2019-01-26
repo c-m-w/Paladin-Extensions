@@ -66,13 +66,12 @@ class Rss extends \XF\Mvc\View
 				->setDateModified($thread->last_post_date);
 
 			$firstPost = $thread->FirstPost;
-			$message = $firstPost->message;
 
-			if ($maxLength && !empty($message))
+			if ($maxLength && $firstPost && $firstPost->message)
 			{
-				$snippet = $bbCodeCleaner->render($formatter->wholeWordTrim($message, $maxLength), $parser, $rules);
+				$snippet = $bbCodeCleaner->render($formatter->wholeWordTrim($firstPost->message, $maxLength), $parser, $rules);
 
-				if ($snippet != $message)
+				if ($snippet != $firstPost->message)
 				{
 					$snippet .= "\n\n[URL='" . $router->buildLink('canonical:threads', $thread) . "']$thread->title[/URL]";
 				}

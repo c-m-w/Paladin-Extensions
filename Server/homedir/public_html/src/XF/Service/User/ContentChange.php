@@ -191,9 +191,7 @@ class ContentChange extends \XF\Service\AbstractService
 			return \XF\ContinuationResult::completed();
 		}
 
-		$this->db()->beginTransaction();
 		$result = $this->runLoop($maxRunTime);
-		$this->db()->commit();
 
 		return $result;
 	}
@@ -232,7 +230,7 @@ class ContentChange extends \XF\Service\AbstractService
 				$sqlUpdates = [];
 				if ($newUserId !== null)
 				{
-					if (!$newUserId && !empty($change['emptyable']))
+					if (!$newUserId && isset($change['emptyable']) && !$change['emptyable'])
 					{
 						// trying to update user ID to 0 and this is set to be ignored
 						continue;
@@ -272,6 +270,7 @@ class ContentChange extends \XF\Service\AbstractService
 		}
 
 		// merge the post counts here for accurate values
+		$this->db()->beginTransaction();
 		$this->db()->query("
 			UPDATE xf_thread_user_post AS source, xf_thread_user_post AS target
 			SET target.post_count = target.post_count + source.post_count
@@ -280,6 +279,7 @@ class ContentChange extends \XF\Service\AbstractService
 				AND target.user_id = ?
 		", [$this->originalUserId, $this->newUserId]);
 		$this->db()->delete('xf_thread_user_post', 'user_id = ?', $this->originalUserId);
+		$this->db()->commit();
 	}
 
 	protected function stepRebuildLikes($lastOffset, $maxRunTime)

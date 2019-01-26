@@ -1,18 +1,33 @@
 <?php
-// FROM HASH: 5185134a3a41172cd19b568aa96163f5
+// FROM HASH: c451664b3291abe064f489886e38bf76
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
 	if ($__vars['xf']['options']['googleAnalyticsWebPropertyId']) {
-		$__finalCompiled .= '<script>
-	(function(i,s,o,g,r,a,m){i[\'GoogleAnalyticsObject\']=r;i[r]=i[r]||function(){
-	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	})(window,document,\'script\',\'https://www.google-analytics.com/analytics.js\',\'ga\');
-
-	ga(\'create\', \'' . $__templater->filter($__vars['xf']['options']['googleAnalyticsWebPropertyId'], array(array('escape', array('js', )),), true) . '\', \'auto\');
-	ga(\'send\', \'pageview\');
-</script>';
+		$__finalCompiled .= '
+	';
+		if ($__vars['xf']['cookie']['domain']) {
+			$__finalCompiled .= '
+		';
+			$__vars['gaConfig'] = $__templater->preEscaped('{\'cookie_domain\': \'' . $__templater->escape($__vars['xf']['cookie']['domain']) . '\'}');
+			$__finalCompiled .= '
+	';
+		} else {
+			$__finalCompiled .= '
+		';
+			$__vars['gaConfig'] = $__templater->preEscaped('{}');
+			$__finalCompiled .= '
+	';
+		}
+		$__finalCompiled .= '
+	<script async src="https://www.googletagmanager.com/gtag/js?id=' . $__templater->escape($__vars['xf']['options']['googleAnalyticsWebPropertyId']) . '"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag(\'js\', new Date());
+		gtag(\'config\', \'' . $__templater->filter($__vars['xf']['options']['googleAnalyticsWebPropertyId'], array(array('escape', array('js', )),), true) . '\', ' . $__templater->escape($__vars['gaConfig']) . ');
+	</script>
+';
 	}
 	return $__finalCompiled;
 });

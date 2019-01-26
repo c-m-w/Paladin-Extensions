@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 91af57052a8cee9e1ec1948ff4dc130e
+// FROM HASH: 214e7940ffdc5fd3c5ca91da40fa6038
 return array('macros' => array('post' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -552,11 +552,11 @@ return array('macros' => array('post' => function($__templater, array $__argumen
 				</div>
 			</div>
 		</div>
+	</article>
 
-		' . $__templater->callAdsMacro('post_above', array(
+	' . $__templater->callAdsMacro('post_below_container', array(
 		'post' => $__vars['post'],
 	), $__vars) . '
-	</article>
 ';
 	return $__finalCompiled;
 },
@@ -652,6 +652,10 @@ return array('macros' => array('post' => function($__templater, array $__argumen
 			</div>
 		</div>
 	</div>
+
+	' . $__templater->callAdsMacro('post_below_container', array(
+		'post' => $__vars['post'],
+	), $__vars) . '
 ';
 	return $__finalCompiled;
 },), 'code' => function($__templater, array $__vars)

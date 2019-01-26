@@ -39,6 +39,8 @@ class UserTitleLadder extends Repository
 			$ladder->save();
 		}
 
+		$this->rebuildLadderCache();
+
 		$db->commit();
 	}
 

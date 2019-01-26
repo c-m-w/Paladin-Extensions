@@ -141,7 +141,13 @@ class Upgrade extends \XF\Service\AbstractService
 
 		if ($this->purchaseRequestKey)
 		{
-			$active->purchase_request_key = $this->purchaseRequestKey;
+			$requestKey = $this->purchaseRequestKey;
+			if (strlen($requestKey) > 32)
+			{
+				$requestKey = substr($requestKey, 0, 29) . '...';
+			}
+
+			$active->purchase_request_key = $requestKey;
 		}
 	}
 

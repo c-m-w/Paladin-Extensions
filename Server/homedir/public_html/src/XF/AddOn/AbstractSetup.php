@@ -73,11 +73,14 @@ abstract class AbstractSetup
 		$widget->widget_key = $widgetKey;
 		$widget->definition_id = $definitionId;
 		$widget->bulkSet($config);
-		$widget->save(false);
+		$success = $widget->save(false);
 
-		$masterTitle = $widget->getMasterPhrase();
-		$masterTitle->phrase_text = $title;
-		$masterTitle->save(false);
+		if ($success)
+		{
+			$masterTitle = $widget->getMasterPhrase();
+			$masterTitle->phrase_text = $title;
+			$masterTitle->save(false);
+		}
 	}
 
 	public function deleteWidget($widgetKey)

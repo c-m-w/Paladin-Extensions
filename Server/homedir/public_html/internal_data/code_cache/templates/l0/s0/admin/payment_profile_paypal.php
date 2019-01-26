@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: b3ae301e0698cf0807aebb2164406b4a
+// FROM HASH: 80205a50dec1a0ed4e011788e99726d6
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -32,6 +32,9 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'hint' => 'If enabled, the payment provider will collect the payee\'s address while taking the payment.',
 		'_type' => 'option',
 	)), array(
+	)) . '
+
+' . $__templater->formHiddenVal('options[legacy]', ($__vars['profile']['options']['legacy'] ? 1 : 0), array(
 	));
 	return $__finalCompiled;
 });

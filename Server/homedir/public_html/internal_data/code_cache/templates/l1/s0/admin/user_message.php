@@ -53,7 +53,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	), array(
 		'label' => 'Conversation message',
 		'hint' => 'You may use BB code',
-		'explain' => 'The following placeholders will be replaced in the message: {name}, {id}.' . ' ' . 'You may also use {phrase:phrase_title} which will be replaced with the phrase text in the recipient\'s language.',
+		'explain' => 'The following placeholders will be replaced in the message: {name}, {email}, {id}.' . ' ' . 'You may also use {phrase:phrase_title} which will be replaced with the phrase text in the recipient\'s language.',
 	)) . '
 
 			<hr class="formRowSep" />

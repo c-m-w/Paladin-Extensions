@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: be727f69059722b8802dc83a9e29a514
+// FROM HASH: 8078fe5b7f1e016e74f5147af1fabe15
 return array('macros' => array('message' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -182,6 +182,17 @@ return array('macros' => array('message' => function($__templater, array $__argu
 												';
 	}
 	$__compilerTemp3 .= '
+
+												';
+	if ($__templater->method($__vars['message'], 'canCleanSpam', array())) {
+		$__compilerTemp3 .= '
+													<a href="' . $__templater->fn('link', array('spam-cleaner', $__vars['message'], ), true) . '"
+														class="actionBar-action actionBar-action--spam actionBar-action--menuItem"
+														data-xf-click="overlay">' . 'Spam' . '</a>
+												';
+	}
+	$__compilerTemp3 .= '
+
 												';
 	if ($__templater->method($__vars['xf']['visitor'], 'canViewIps', array()) AND $__vars['message']['ip_id']) {
 		$__compilerTemp3 .= '

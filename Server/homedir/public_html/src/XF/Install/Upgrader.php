@@ -55,6 +55,8 @@ class Upgrader
 
 		$this->enqueuePostUpgradeJobs();
 		$this->clearUpgradeJobs();
+
+		$this->enqueueStatsCollection();
 	}
 
 	public function getLatestUpgradeVersion()
@@ -208,42 +210,6 @@ class Upgrader
 		}
 
 		return $conflicts;
-	}
-
-	public function isCliUpgradeRecommended()
-	{
-		if (!$this->isSignificantUpgrade())
-		{
-			return false;
-		}
-
-		$totals = $this->db()->fetchOne("
-			SELECT data_value
-			FROM xf_data_registry
-			WHERE data_key = 'forumStatistics'
-		");
-		if (!$totals)
-		{
-			return false;
-		}
-
-		$totals = @unserialize($totals);
-		if (!$totals)
-		{
-			return false;
-		}
-
-		if (!empty($totals['messages']) && $totals['messages'] >= 500000)
-		{
-			return true;
-		}
-
-		if (!empty($totals['users']) && $totals['users'] >= 50000)
-		{
-			return true;
-		}
-
-		return false;
 	}
 
 	public function getCliCommand()
@@ -532,6 +498,17 @@ class Upgrader
 		if ($jobs && $clear)
 		{
 			$this->clearUpgradeJobs(false);
+		}
+	}
+
+	public function enqueueStatsCollection()
+	{
+		/** @var \XF\Repository\CollectStats $collectStatsRepo */
+		$collectStatsRepo = $this->app->repository('XF:CollectStats');
+
+		if ($collectStatsRepo->isEnabled())
+		{
+			$this->app->jobManager()->enqueueUnique('xfCollectStats', 'XF:CollectStats');
 		}
 	}
 }

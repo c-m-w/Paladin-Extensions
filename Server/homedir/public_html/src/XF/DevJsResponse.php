@@ -32,7 +32,7 @@ class DevJsResponse
 
 		if (!$addOn || !$addOn->isInstalled())
 		{
-			return $this->getConsoleResponse('error', 'Add-on is not installed.');
+			return $this->getConsoleResponse('error', 'Add-on (' . \XF::escapeString($addOnId, 'js') . ') is not installed.');
 		}
 
 		// Sanity checks for the form. There are some duplicative checks here, but just to make things clear.

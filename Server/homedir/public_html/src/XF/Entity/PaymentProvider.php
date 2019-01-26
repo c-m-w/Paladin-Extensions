@@ -39,11 +39,11 @@ class PaymentProvider extends Entity
 	public function renderCancellation(UserUpgradeActive $active)
 	{
 		$handler = $this->handler;
-		if (!$handler)
+		if (!$handler || !$active->PurchaseRequest)
 		{
 			return '';
 		}
-		return $handler->renderCancellation($active);
+		return $handler->renderCancellationTemplate($active->PurchaseRequest);
 	}
 
 	/**

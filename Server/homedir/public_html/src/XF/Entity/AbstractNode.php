@@ -6,7 +6,21 @@ use XF\Mvc\Entity\Entity;
 use XF\Mvc\Entity\Structure;
 
 /**
- * @property Node $Node
+ * Class AbstractNode
+ *
+ * @package XF\Entity
+ *
+ * COLUMNS
+ * @property int node_id
+ *
+ * GETTERS
+ * @property string|null node_name
+ * @property string title
+ * @property string description
+ * @property int depth
+ *
+ * RELATIONS
+ * @property \XF\Entity\Node Node
  */
 abstract class AbstractNode extends Entity
 {

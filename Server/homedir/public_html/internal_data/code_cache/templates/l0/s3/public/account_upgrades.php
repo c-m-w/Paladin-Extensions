@@ -187,7 +187,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 				}
 				$__compilerTemp1 .= $__templater->formRow('
 
-										' . $__compilerTemp4 . '
+										' . $__templater->includeTemplate('expiringUserUpgrades_account_upgrades_extend_button', $__vars) . '
+' . $__compilerTemp4 . '
 
 										' . $__compilerTemp5 . '
 									', array(

@@ -54,6 +54,12 @@ class EntityClassProperties extends Command
 				$path = $manager->getAddOnPath($addOnId) . DIRECTORY_SEPARATOR . 'Entity';
 			}
 
+			if (!file_exists($path) || !is_dir($path))
+			{
+				$output->writeln('<error>The selected add-on does not appear to have an Entity directory.</error>');
+				return 1;
+			}
+
 			$iterator = new \RegexIterator(
 				new \RecursiveIteratorIterator(
 					new \RecursiveDirectoryIterator($path)
@@ -70,7 +76,7 @@ class EntityClassProperties extends Command
 
 		if (!$entities)
 		{
-			$output->writeln('No entity classes could be found.');
+			$output->writeln('<error>No entity classes could be found.</error>');
 			return 1;
 		}
 

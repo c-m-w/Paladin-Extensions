@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 98178b8770515533cb1c903d4ed36fb7
+// FROM HASH: c244acd9d880ad722a03bca6fd3bde58
 return array('macros' => array('option_row' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -282,7 +282,7 @@ return array('macros' => array('option_row' => function($__templater, array $__a
 		} else if ($__vars['option']['data_type'] == 'array') {
 			$__finalCompiled .= '
 			';
-			$__vars['users'] = $__templater->method($__vars['xf']['app']['em'], 'findByIds', array('XF:User', $__vars['option']['option_value'], ));
+			$__vars['users'] = $__templater->method($__templater->method($__vars['xf']['app']['em'], 'getRepository', array('XF:User', )), 'getUsersByIdsOrdered', array($__vars['option']['option_value'], ));
 			$__finalCompiled .= '
 			';
 			$__vars['value'] = $__templater->filter($__templater->method($__vars['users'], 'pluckNamed', array('username', )), array(array('join', array(', ', )),), false);

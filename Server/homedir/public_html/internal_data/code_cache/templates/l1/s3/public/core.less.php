@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 4743bd4355730b292f409179c7b48c8d
+// FROM HASH: a13b61d6332d6e9b2acf33252b2aa463
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -31,6 +31,11 @@ img
 {
 	max-width: 100%;
 	height: auto;
+}
+
+b, strong
+{
+	font-weight: @xf-fontWeightHeavy;
 }
 
 a

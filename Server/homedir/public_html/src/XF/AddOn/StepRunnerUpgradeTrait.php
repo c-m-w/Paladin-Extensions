@@ -14,10 +14,7 @@ trait StepRunnerUpgradeTrait
 	 */
 	public function upgrade(array $stepParams = [])
 	{
-		$stepParams = array_replace([
-			'version_id' => 0,
-			'step' => 0
-		], $stepParams);
+		$stepParams = $this->getStepParams($stepParams);
 
 		$versions = [];
 		$stepsGrouped = [];
@@ -76,12 +73,20 @@ trait StepRunnerUpgradeTrait
 
 				// if we hit here, then the step couldn't be found, so move onto the next upgrade
 				$runStep = 1;
-				$stepParams = [];
+				$stepParams = $this->getStepParams();
 			}
 		}
 
 		// if we got here, we don't have any other upgrades to run
 		return null;
+	}
+
+	protected function getStepParams(array $stepParams = [])
+	{
+		return array_replace([
+			'version_id' => 0,
+			'step' => 0
+		], $stepParams);
 	}
 
 	private function getUpgradeResumeStep()

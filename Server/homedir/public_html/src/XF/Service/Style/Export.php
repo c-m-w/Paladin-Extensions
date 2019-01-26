@@ -3,6 +3,7 @@
 namespace XF\Service\Style;
 
 use XF\Entity\Style;
+use XF\Util\Xml;
 
 class Export extends \XF\Service\AbstractService
 {
@@ -185,11 +186,11 @@ class Export extends \XF\Service\AbstractService
 
 		if ($property->value_parameters !== '')
 		{
-			$propertyNode->appendChild($document->createElement('value_parameters', $property->value_parameters));
+			$propertyNode->appendChild(Xml::createDomElement($document, 'value_parameters', $property->value_parameters));
 		}
 
 		$propertyNode->appendChild(
-			$document->createElement('value', \XF\Util\Json::jsonEncodePretty($property->property_value))
+			Xml::createDomElement($document, 'value', \XF\Util\Json::jsonEncodePretty($property->property_value))
 		);
 
 		return $propertyNode;

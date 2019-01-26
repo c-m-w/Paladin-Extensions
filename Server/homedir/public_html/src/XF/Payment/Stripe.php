@@ -19,7 +19,7 @@ class Stripe extends AbstractProvider
 		return 'https://api.stripe.com';
 	}
 
-	public function initiatePayment(Controller $controller, PurchaseRequest $purchaseRequest, Purchase $purchase)
+	protected function getPaymentParams(PurchaseRequest $purchaseRequest, Purchase $purchase)
 	{
 		$paymentProfile = $purchase->paymentProfile;
 
@@ -32,7 +32,7 @@ class Stripe extends AbstractProvider
 			$publishableKey = $paymentProfile->options['test_publishable_key'];
 		}
 
-		$viewParams = [
+		return [
 			'purchaseRequest' => $purchaseRequest,
 			'paymentProfile' => $paymentProfile,
 			'purchaser' => $purchase->purchaser,
@@ -42,6 +42,11 @@ class Stripe extends AbstractProvider
 			'publishableKey' => $publishableKey,
 			'cost' => $this->prepareCost($purchase->cost, $purchase->currency)
 		];
+	}
+
+	public function initiatePayment(Controller $controller, PurchaseRequest $purchaseRequest, Purchase $purchase)
+	{
+		$viewParams = $this->getPaymentParams($purchaseRequest, $purchase);
 		return $controller->view('XF:Purchase\StripeInitiate', 'payment_initiate_stripe', $viewParams);
 	}
 
@@ -195,11 +200,10 @@ class Stripe extends AbstractProvider
 		return $controller->redirect($purchase->returnUrl);
 	}
 
-	public function renderCancellation(\XF\Entity\UserUpgradeActive $active)
+	public function renderCancellationTemplate(PurchaseRequest $purchaseRequest)
 	{
 		$data = [
-			'active' => $active,
-			'purchaseRequest' => $active->PurchaseRequest
+			'purchaseRequest' => $purchaseRequest
 		];
 		return \XF::app()->templater()->renderTemplate('public:payment_cancel_recurring_braintree', $data);
 	}
@@ -299,6 +303,11 @@ class Stripe extends AbstractProvider
 		{
 			$state->subscriberId = isset($state->event['customer']) ? $state->event['customer'] : null;
 		}
+
+		if (isset($state->event['metadata']['request_key']))
+		{
+			$state->requestKey = $state->event['metadata']['request_key'];
+		}
 		
 		return $state;
 	}
@@ -364,6 +373,16 @@ class Stripe extends AbstractProvider
 
 				return false;
 			}
+		}
+
+		$skippableEvents = ['payout.created'];
+
+		if ($state->eventType && in_array($state->eventType, $skippableEvents))
+		{
+			$state->logType = 'info';
+			$state->logMessage = 'Event "' . htmlspecialchars($state->eventType) . '" processed. No action required.';
+			$state->httpCode = 200;
+			return false;
 		}
 
 		$purchaseRequest = null;

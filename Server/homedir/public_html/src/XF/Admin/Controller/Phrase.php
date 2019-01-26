@@ -382,7 +382,7 @@ class Phrase extends AbstractController
 		$lastTitle = $this->filter('last_title', 'str');
 		if ($lastTitle)
 		{
-			$expression = $finder->expression('CONVERT (%s USING utf8)', 'title');
+			$expression = $finder->columnUtf8('title');
 			$finder->where($expression, '>', $lastTitle);
 		}
 

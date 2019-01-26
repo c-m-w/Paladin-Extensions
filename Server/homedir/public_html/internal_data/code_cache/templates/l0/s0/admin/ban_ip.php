@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 6dbdd40892457c2f92ebf072a759296b
+// FROM HASH: 52231264c99439bb63a7459ad4131ebb
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -33,6 +33,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 ', array(
 		'action' => $__templater->fn('link', array('banning/ips/add', null, array('ip' => $__vars['ip']['ip'], ), ), false),
 		'ajax' => 'true',
+		'data-redirect' => 'off',
 		'class' => 'block',
 	));
 	return $__finalCompiled;

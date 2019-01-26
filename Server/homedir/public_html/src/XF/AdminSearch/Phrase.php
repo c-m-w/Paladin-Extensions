@@ -34,7 +34,7 @@ class Phrase extends AbstractHandler
 		$finder = $this->app->finder('XF:PhraseMap');
 
 		$conditions = [
-			[$finder->expression('CONVERT (%s USING utf8)', 'title'), 'like', $finder->escapeLike($text, '%?%')]
+			[$finder->columnUtf8('title'), 'like', $finder->escapeLike($text, '%?%')]
 		];
 		if ($previousMatchIds)
 		{
@@ -45,7 +45,7 @@ class Phrase extends AbstractHandler
 			->where('language_id', $languageId)
 			->whereOr($conditions)
 			->with('Phrase')
-			->order($finder->expression('CONVERT (%s USING utf8)', 'title'))
+			->order($finder->columnUtf8('title'))
 			->limit($limit);
 
 		return $finder->fetch()->pluckNamed('Phrase', 'phrase_id');

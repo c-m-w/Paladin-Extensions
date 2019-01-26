@@ -30,6 +30,9 @@ abstract class Entity implements \ArrayAccess
 
 	protected $rootClass;
 
+	// if true, pass arguments to db->insert to use REPLACE INTO instead of INSERT INTO
+	protected $_useReplaceInto = false;
+
 	protected $_newValues = [];
 	protected $_values = [];
 	protected $_relations = [];
@@ -1054,6 +1057,11 @@ abstract class Entity implements \ArrayAccess
 		return isset($behaviors[$behavior]);
 	}
 
+	public function useReplaceInto($useReplaceInto)
+	{
+		$this->_useReplaceInto = $useReplaceInto ? true : false;
+	}
+
 	public function addCascadedSave(Entity $entity)
 	{
 		if ($entity === $this)
@@ -1378,7 +1386,7 @@ abstract class Entity implements \ArrayAccess
 		{
 			if ($this->isInsert())
 			{
-				$db->insert($structure->table, $save);
+				$db->insert($structure->table, $save, $this->_useReplaceInto);
 				$this->_fillAutoIncrement($db->lastInsertId(), $save);
 			}
 			else

@@ -4,6 +4,8 @@ namespace XF\Mvc\Entity;
 
 class Finder implements \IteratorAggregate
 {
+	const ORDER_RANDOM = 'RAND()';
+
 	/**
 	 * @var Manager
 	 */
@@ -382,13 +384,20 @@ class Finder implements \IteratorAggregate
 
 	public function whereId($id)
 	{
-		if (is_array($this->structure->primaryKey))
+		$primaryKey = $this->structure->primaryKey;
+
+		if (is_array($primaryKey) && count($primaryKey) === 1)
+		{
+			$primaryKey = reset($primaryKey);
+		}
+
+		if (is_array($primaryKey))
 		{
 			if (!is_array($id))
 			{
 				throw new \InvalidArgumentException("Primary key is compound but non array ID given");
 			}
-			foreach ($this->structure->primaryKey AS $i => $key)
+			foreach ($primaryKey AS $i => $key)
 			{
 				if (array_key_exists($key, $id))
 				{
@@ -406,7 +415,7 @@ class Finder implements \IteratorAggregate
 		}
 		else
 		{
-			$this->where($this->structure->primaryKey, $id);
+			$this->where($primaryKey, $id);
 		}
 
 		return $this;
@@ -414,10 +423,17 @@ class Finder implements \IteratorAggregate
 
 	public function whereIds(array $ids)
 	{
-		if (is_array($this->structure->primaryKey))
+		$primaryKey = $this->structure->primaryKey;
+
+		if (is_array($primaryKey) && count($primaryKey) === 1)
+		{
+			$primaryKey = reset($primaryKey);
+		}
+
+		if (is_array($primaryKey))
 		{
 			$columns = [];
-			foreach ($this->structure->primaryKey AS $i => $key)
+			foreach ($primaryKey AS $i => $key)
 			{
 				$columns[] = $this->columnSqlName($key, true);
 			}
@@ -426,7 +442,7 @@ class Finder implements \IteratorAggregate
 			foreach ($ids AS $id)
 			{
 				$row = [];
-				foreach ($this->structure->primaryKey AS $i => $key)
+				foreach ($primaryKey AS $i => $key)
 				{
 					if (array_key_exists($key, $id))
 					{
@@ -449,7 +465,7 @@ class Finder implements \IteratorAggregate
 		}
 		else
 		{
-			$this->where($this->structure->primaryKey, $ids);
+			$this->where($primaryKey, $ids);
 		}
 
 		return $this;
@@ -543,9 +559,14 @@ class Finder implements \IteratorAggregate
 		return str_replace('%', '%%', $expression);
 	}
 
+	public function columnUtf8($column)
+	{
+		return $this->expression("CONVERT (%s USING {$this->db->getUtf8Type()})", $column);
+	}
+
 	public function caseInsensitive($column)
 	{
-		return $this->expression('CONVERT (%s USING utf8)', $column);
+		return $this->columnUtf8($column);
 	}
 
 	public function quote($value, $type = null)
@@ -804,6 +825,7 @@ class Finder implements \IteratorAggregate
 
 		switch ($direction)
 		{
+			case self::ORDER_RANDOM:
 			case 'ASC':
 			case 'DESC':
 				break;
@@ -839,16 +861,23 @@ class Finder implements \IteratorAggregate
 		}
 		else
 		{
-			if ($field instanceof FinderExpression)
+			if ($field == self::ORDER_RANDOM)
 			{
-				$order = $field->renderSql($this, true);
+				$this->writeSqlOrder(self::ORDER_RANDOM);
 			}
 			else
 			{
-				$order = $this->columnSqlName($field, true);
-			}
+				if ($field instanceof FinderExpression)
+				{
+					$order = $field->renderSql($this, true);
+				}
+				else
+				{
+					$order = $this->columnSqlName($field, true);
+				}
 
-			$this->writeSqlOrder("$order $direction");
+				$this->writeSqlOrder("$order $direction");
+			}
 		}
 
 		return $this;

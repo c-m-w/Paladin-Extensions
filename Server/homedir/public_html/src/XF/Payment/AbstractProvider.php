@@ -17,6 +17,11 @@ abstract class AbstractProvider
 
 	abstract public function getTitle();
 
+	protected function getPaymentParams(PurchaseRequest $purchaseRequest, Purchase $purchase)
+	{
+		return [];
+	}
+
 	abstract public function initiatePayment(Controller $controller, PurchaseRequest $purchaseRequest, Purchase $purchase);
 
 	/**
@@ -53,7 +58,7 @@ abstract class AbstractProvider
 		return null;
 	}
 
-	public function renderCancellation(\XF\Entity\UserUpgradeActive $active)
+	public function renderCancellationTemplate(PurchaseRequest $purchaseRequest)
 	{
 		return '';
 	}
@@ -154,7 +159,14 @@ abstract class AbstractProvider
 		{
 			case CallbackState::PAYMENT_RECEIVED:
 				$purchasableHandler->completePurchase($state);
-				$purchasableHandler->sendPaymentReceipt($state);
+				try
+				{
+					$purchasableHandler->sendPaymentReceipt($state);
+				}
+				catch (\Exception $e)
+				{
+					\XF::logException($e, false, "Error when sending payment receipt: ");
+				}
 				break;
 
 			case CallbackState::PAYMENT_REINSTATED:

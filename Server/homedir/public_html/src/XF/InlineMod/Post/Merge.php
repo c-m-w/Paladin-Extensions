@@ -54,24 +54,6 @@ class Merge extends AbstractAction
 		$target = $source[$options['target_post_id']];
 		unset($source[$options['target_post_id']]);
 
-		if ($this->app()->options()->editHistory['enabled'])
-		{
-			$originalMessage = $target->message;
-			$preEditMergeMessage = trim(implode("\n\n", $entities->pluckNamed('message')));
-
-			$visitor = \XF::visitor();
-			$ip = $this->app()->request()->getIp();
-
-			/** @var \XF\Repository\EditHistory $editHistoryRepo */
-			$editHistoryRepo = $this->app()->repository('XF:EditHistory');
-
-			// Log an edit history record for the target post's original message then log a further record
-			// for the pre-merge result of all the source and target messages. These two entries should ensure
-			// there is no context loss as a result of merging a series of posts.
-			$editHistoryRepo->insertEditHistory('post', $target, $visitor, $originalMessage, $ip);
-			$editHistoryRepo->insertEditHistory('post', $target, $visitor, $preEditMergeMessage, $ip);
-		}
-
 		/** @var \XF\Service\Post\Merger $merger */
 		$merger = $this->app()->service('XF:Post\Merger', $target);
 

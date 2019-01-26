@@ -12,6 +12,8 @@ class Merger extends \XF\Service\AbstractService
 	 */
 	protected $target;
 
+	protected $originalTargetMessage;
+
 	/**
 	 * @var \XF\Service\Post\Preparer
 	 */
@@ -37,6 +39,7 @@ class Merger extends \XF\Service\AbstractService
 		parent::__construct($app);
 
 		$this->target = $target;
+		$this->originalTargetMessage = $target->message;
 		$this->postPreparer = $this->service('XF:Post\Preparer', $this->target);
 	}
 
@@ -329,6 +332,41 @@ class Merger extends \XF\Service\AbstractService
 			$this->app->logger()->logModeratorAction('post', $target, 'merge_target',
 				['ids' => implode(', ', $postIds)]
 			);
+		}
+
+		$preEditMergeMessage = $this->originalTargetMessage;
+		foreach ($this->sourcePosts AS $s)
+		{
+			$preEditMergeMessage .= "\n\n" . $s->message;
+		}
+		$preEditMergeMessage = trim($preEditMergeMessage);
+
+		$options = $this->app->options();
+		if ($options->editLogDisplay['enabled'] && $this->log && $target->message != $preEditMergeMessage)
+		{
+			$target->last_edit_date = \XF::$time;
+			$target->last_edit_user_id = \XF::visitor()->user_id;
+		}
+
+		if ($options->editHistory['enabled'])
+		{
+			$visitor = \XF::visitor();
+			$ip = $this->app->request()->getIp();
+
+			/** @var \XF\Repository\EditHistory $editHistoryRepo */
+			$editHistoryRepo = $this->app->repository('XF:EditHistory');
+
+			// Log an edit history record for the target post's original message then log a further record
+			// for the pre-merge result of all the source and target messages. These two entries should ensure
+			// there is no context loss as a result of merging a series of posts.
+			$editHistoryRepo->insertEditHistory('post', $target, $visitor, $this->originalTargetMessage, $ip);
+			$target->edit_count++;
+
+			if ($target->message != $preEditMergeMessage)
+			{
+				$editHistoryRepo->insertEditHistory('post', $target, $visitor, $preEditMergeMessage, $ip);
+				$target->edit_count++;
+			}
 		}
 	}
 }

@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: d7bcace855f5e94665170c98dc44059e
+// FROM HASH: 5319d1e1b63022e62862fafceb5cdaa0
 return array('macros' => array('nav_entry' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -306,6 +306,16 @@ return array('macros' => array('nav_entry' => function($__templater, array $__ar
 	}
 	$__finalCompiled .= '
 	';
+	if (!$__vars['head']['meta_type']) {
+		$__finalCompiled .= '
+		' . $__templater->callMacro('metadata_macros', 'type', array(
+			'type' => 'website',
+			'output' => true,
+		), $__vars) . '
+	';
+	}
+	$__finalCompiled .= '
+	';
 	if (!$__vars['head']['meta_title']) {
 		$__finalCompiled .= '
 		' . $__templater->callMacro('metadata_macros', 'title', array(
@@ -326,6 +336,16 @@ return array('macros' => array('nav_entry' => function($__templater, array $__ar
 	}
 	$__finalCompiled .= '
 	';
+	if (!$__vars['head']['meta_share_url']) {
+		$__finalCompiled .= '
+		' . $__templater->callMacro('metadata_macros', 'share_url', array(
+			'shareUrl' => $__vars['xf']['fullUri'],
+			'output' => true,
+		), $__vars) . '
+	';
+	}
+	$__finalCompiled .= '
+	';
 	if ((!$__vars['head']['meta_image_url']) AND $__templater->fn('property', array('publicMetadataLogoUrl', ), false)) {
 		$__finalCompiled .= '
 		' . $__templater->callMacro('metadata_macros', 'image_url', array(
@@ -339,7 +359,7 @@ return array('macros' => array('nav_entry' => function($__templater, array $__ar
 	';
 	if ($__templater->fn('property', array('metaThemeColor', ), false)) {
 		$__finalCompiled .= '
-		<meta name="theme-color" content="' . $__templater->fn('property', array('metaThemeColor', ), true) . '" />
+		<meta name="theme-color" content="' . $__templater->fn('parse_less_color', array($__templater->fn('property', array('metaThemeColor', ), false), ), true) . '" />
 	';
 	}
 	$__finalCompiled .= '
@@ -598,13 +618,15 @@ return array('macros' => array('nav_entry' => function($__templater, array $__ar
 					';
 	} else {
 		$__compilerTemp4 .= '
-						<a href="' . $__templater->fn('link', array('login', ), true) . '" class="p-navgroup-link p-navgroup-link--textual p-navgroup-link--logIn" rel="nofollow" data-xf-click="overlay">
+						<a href="' . $__templater->fn('link', array('login', ), true) . '" class="p-navgroup-link p-navgroup-link--textual p-navgroup-link--logIn" rel="nofollow"
+							data-xf-click="overlay" data-follow-redirects="on">
 							<span class="p-navgroup-linkText">' . 'Log in' . '</span>
 						</a>
 						';
 		if ($__vars['xf']['options']['registrationSetup']['enabled']) {
 			$__compilerTemp4 .= '
-							<a href="' . $__templater->fn('link', array('register', ), true) . '" class="p-navgroup-link p-navgroup-link--textual p-navgroup-link--register" rel="nofollow" data-xf-click="overlay">
+							<a href="' . $__templater->fn('link', array('register', ), true) . '" class="p-navgroup-link p-navgroup-link--textual p-navgroup-link--register" rel="nofollow"
+								data-xf-click="overlay" data-follow-redirects="on">
 								<span class="p-navgroup-linkText">' . 'Register' . '</span>
 							</a>
 						';
@@ -733,7 +755,7 @@ return array('macros' => array('nav_entry' => function($__templater, array $__ar
 				</a>
 			</div>
 
-			<div class="p-nav-scroller hScroller" data-xf-init="h-scroller">
+			<div class="p-nav-scroller hScroller" data-xf-init="h-scroller" data-auto-scroll=".p-navEl.is-selected">
 				<div class="hScroller-scroll">
 					<ul class="p-nav-list js-offCanvasNavSource">
 					' . $__compilerTemp3 . '
@@ -746,7 +768,7 @@ return array('macros' => array('nav_entry' => function($__templater, array $__ar
 					' . $__compilerTemp4 . '
 				</div>
 
-				<div class="p-navgroup p-discovery">
+				<div class="p-navgroup p-discovery' . ((!$__templater->method($__vars['xf']['visitor'], 'canSearch', array())) ? ' p-discovery--noSearch' : '') . '">
 					<a href="' . $__templater->fn('link', array('whats-new', ), true) . '"
 						class="p-navgroup-link p-navgroup-link--iconic p-navgroup-link--whatsnew"
 						title="' . $__templater->filter('What\'s new', array(array('for_attr', array()),), true) . '">

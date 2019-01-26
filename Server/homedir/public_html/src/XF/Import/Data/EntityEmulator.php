@@ -2,6 +2,8 @@
 
 namespace XF\Import\Data;
 
+use XF\Mvc\Entity\Entity;
+
 class EntityEmulator
 {
 	/**
@@ -25,6 +27,21 @@ class EntityEmulator
 
 	protected $oldId = null;
 
+	/**
+	 * Convert text to UTF8 on set()
+	 */
+	const CONVERT_UTF8 = 'convertUtf8';
+
+	/**
+	 * Force type constraints on set()
+	 */
+	const FORCE_CONSTRAINT = 'forceConstraint';
+
+	/**
+	 * Convert HTML entities to raw values on set()
+	 */
+	const UNHTML_ENTITIES = 'unHtmlEntities';
+
 	public function __construct(
 		AbstractData $handler, \XF\Mvc\Entity\Structure $structure, \XF\Mvc\Entity\ValueFormatter $valueFormatter
 	)
@@ -45,30 +62,83 @@ class EntityEmulator
 		$this->primaryKey = $primaryKey;
 	}
 
+	protected function isStringy($value)
+	{
+		return is_string($value) || (is_object($value) && is_callable([$value, '__toString']));
+	}
+
+	protected function isValidUtf8($string)
+	{
+		return preg_match('/./u', $string);
+	}
+
 	public function set($field, $value, array $options = [])
 	{
 		$options = array_replace([
-			'convertUtf8' => true,
-			'forceConstraint' => true
+			self::CONVERT_UTF8     => true,
+			self::FORCE_CONSTRAINT => true,
+			self::UNHTML_ENTITIES  => false
 		], $options);
 
 		$columns = $this->structure->columns;
-		if (!isset($columns[$field]))
+		$column = $columns[$field];
+
+		if (isset($columns[$field]))
+		{
+			if (is_null($value) && empty($column['nullable']))
+			{
+				$value = $this->getValidEmptyValue($column['type']);
+			}
+			else if ($column['type'] == Entity::STR && empty($column['nullable']))
+			{
+				// TODO: this does mean we can't have leading whitespace at all, but perhaps that's not a bad thing
+				$value = ltrim(strval($value));
+			}
+		}
+		else
 		{
 			throw new \InvalidArgumentException("Unknown column '$field'");
 		}
 
-		$column = $columns[$field];
-
-		if ($options['convertUtf8'])
+		// Convert CRLF to LF
+		if (is_string($value))
 		{
-			if (is_string($value) || (is_object($value) && is_callable([$value, '__toString'])))
-			{
-				$value = $this->handler->convertToUtf8(strval($value));
-			}
+			$value = str_replace("\r\n", "\n", $value);
 		}
 
 		$vf = $this->valueFormatter;
+		$originalValue = $value;
+
+		if ($options[self::CONVERT_UTF8])
+		{
+			if ($this->isStringy($value))
+			{
+				if (!$this->isValidUtf8($value))
+				{
+					$value = $this->handler->convertToUtf8(strval($value), null, $options[self::UNHTML_ENTITIES]);
+				}
+				else if ($options[self::UNHTML_ENTITIES])
+				{
+					$value = htmlspecialchars_decode(strval($value));
+				}
+			}
+
+			try
+			{
+				$value = $vf->castValueToType($value, $column['type'], $column);
+			}
+			catch (\Exception $e)
+			{
+				if (is_string($originalValue) && !$this->isValidUtf8($originalValue))
+				{
+					$value = utf8_bad_replace($originalValue);
+				}
+			}
+		}
+		else if ($options[self::UNHTML_ENTITIES] && $this->isStringy($value))
+		{
+			$value = htmlspecialchars_decode(strval($value));
+		}
 
 		try
 		{
@@ -79,7 +149,7 @@ class EntityEmulator
 			throw new \InvalidArgumentException($e->getMessage() . " [$field]", $e->getCode(), $e);
 		}
 
-		if (!$vf->applyValueConstraints($value, $column['type'], $column, $error, $options['forceConstraint']))
+		if (!$vf->applyValueConstraints($value, $column['type'], $column, $error, $options[self::FORCE_CONSTRAINT]))
 		{
 			throw new \InvalidArgumentException("Constraint error for $field: " . $error);
 		}
@@ -87,6 +157,49 @@ class EntityEmulator
 		$this->entityData[$field] = $value;
 
 		return true;
+	}
+
+	protected function getValidEmptyValue($columnType)
+	{
+		switch ($columnType)
+		{
+			case Entity::INT:
+			case Entity::UINT:
+			case Entity::FLOAT:
+				return 0;
+
+			case Entity::STR:
+			case Entity::BINARY:
+				return '';
+
+			case Entity::SERIALIZED_ARRAY:
+			case Entity::JSON:
+			case Entity::JSON_ARRAY:
+			case Entity::LIST_LINES:
+			case Entity::LIST_COMMA:
+				return [];
+
+			case Entity::BOOL:
+				return false;
+
+			case Entity::SERIALIZED:
+			default:
+				return null;
+		}
+	}
+
+	/**
+	 * This method is primarily for avoiding double-UTF8 conversion.
+	 *
+	 * Only use this if you are certain that the field is valid, the value is valid UTF8 etc.
+	 * If in doubt, use set().
+	 *
+	 * @param $field
+	 * @param $value
+	 */
+	public function setDirect($field, $value)
+	{
+		$this->entityData[$field] = $value;
 	}
 
 	public function setPrimaryKey($value, array $options = [])

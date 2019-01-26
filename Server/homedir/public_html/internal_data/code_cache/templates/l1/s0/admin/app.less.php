@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: e77023df8da45193690e7c73ab65757b
+// FROM HASH: 0eaf6f6905eeff58692895bf3fbac4bb
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -821,7 +821,8 @@ html
 		padding: @xf-paddingMedium;
 		font-size: @xf-fontSizeSmall;
 
-		&:hover
+		&:hover,
+		&.is-active
 		{
 			text-decoration: none;
 			background: @xf-contentHighlightBg;
@@ -830,7 +831,7 @@ html
 		span
 		{
 			font-size: @xf-fontSizeSmaller;
-			color: @xf-textColorMuted;
+			color: fade(@xf-textColorMuted, 75%);
 		}
 	}
 }

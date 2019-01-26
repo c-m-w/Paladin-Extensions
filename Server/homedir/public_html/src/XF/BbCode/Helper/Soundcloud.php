@@ -4,7 +4,7 @@ namespace XF\BbCode\Helper;
 
 class Soundcloud
 {
-	const URL_REGEX = '#soundcloud\.com/(?P<user>[A-Z0-9\-]+)(/(?P<type>sets|albums))?(/(?P<item>[A-Z0-9\-]+)(?P<time>\#t=[0-9:]+)?)?#si';
+	const URL_REGEX = '#soundcloud\.com/(?P<user>[A-Z0-9\-]+)(/(?P<type>sets|albums))?(/(?P<item>[A-Z0-9\-]+)?(/(?P<secret>[A-Z0-9\-]+))?(?P<time>\#t=[0-9:]+)?)#si';
 
 	public static function matchCallback($url, $matchedId, \XF\Entity\BbCodeMediaSite $site, $siteId)
 	{
@@ -14,7 +14,7 @@ class Soundcloud
 			{
 				if (empty($i['type'])) // track
 				{
-					return $i['user'] . '/' . $i['item'] . (empty($i['time']) ? '' : $i['time']);
+					return $i['user'] . '/' . $i['item'] . (empty($i['secret']) ? '' : '/' . $i['secret']) . (empty($i['time']) ? '' : $i['time']);
 				}
 				else // playlist
 				{

@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <options>
+  <option option_id="acpSearchExclude" edit_format="callback" data_type="array" validation_class="XF\Option\AcpSearchExclude" validation_method="verifyOption">
+    <default_value>[]</default_value>
+    <edit_format_params>XF\Option\AcpSearchExclude::renderCheckbox</edit_format_params>
+    <sub_options>*</sub_options>
+    <relation group_id="acp" display_order="10100"/>
+  </option>
   <option option_id="addBanUserGroup" edit_format="callback" data_type="integer">
     <default_value>0</default_value>
     <edit_format_params>XF\Option\UserGroup::renderSelect</edit_format_params>
@@ -23,7 +29,7 @@ register_form</default_value>
     <relation group_id="appearance" display_order="300"/>
   </option>
   <option option_id="akismetKey" edit_format="textbox" data_type="string">
-    <default_value/>
+    <default_value></default_value>
     <relation group_id="spam" display_order="150"/>
   </option>
   <option option_id="alertExpiryDays" edit_format="spinbox" data_type="positive_integer">
@@ -157,7 +163,7 @@ linkBbCode</sub_options>
     <relation group_id="basicBoard" display_order="10"/>
   </option>
   <option option_id="boardUrl" edit_format="textbox" data_type="string">
-    <default_value/>
+    <default_value></default_value>
     <edit_format_params>type=url</edit_format_params>
     <relation group_id="basicBoard" display_order="30"/>
   </option>
@@ -166,7 +172,7 @@ linkBbCode</sub_options>
     <relation group_id="basicBoard" display_order="31"/>
   </option>
   <option option_id="bounceEmailAddress" edit_format="textbox" data_type="string">
-    <default_value/>
+    <default_value></default_value>
     <relation group_id="emailOptions" display_order="310"/>
   </option>
   <option option_id="captcha" edit_format="template" data_type="string">
@@ -196,8 +202,17 @@ linkBbCode</sub_options>
 units={{ phrase('units_days') }}</edit_format_params>
     <relation group_id="logging" display_order="10"/>
   </option>
+  <option option_id="collectServerStats" edit_format="template" data_type="array" validation_class="XF\Option\CollectServerStats" validation_method="verifyOption">
+    <default_value>{"configured":"0","enabled":"0","installation_id":"","last_sent":"0"}</default_value>
+    <edit_format_params>option_template_collectServerStats</edit_format_params>
+    <sub_options>configured
+enabled
+installation_id
+last_sent</sub_options>
+    <relation group_id="stats" display_order="100"/>
+  </option>
   <option option_id="contactEmailAddress" edit_format="textbox" data_type="string">
-    <default_value/>
+    <default_value></default_value>
     <relation group_id="basicBoard" display_order="40"/>
     <relation group_id="emailOptions" display_order="20"/>
   </option>
@@ -224,7 +239,7 @@ units={{ phrase('units_hours') }}</edit_format_params>
     <relation group_id="debug" display_order="0"/>
   </option>
   <option option_id="defaultEmailAddress" edit_format="textbox" data_type="string">
-    <default_value/>
+    <default_value></default_value>
     <relation group_id="basicBoard" display_order="35"/>
     <relation group_id="emailOptions" display_order="10"/>
   </option>
@@ -278,7 +293,7 @@ units=%</edit_format_params>
     <relation group_id="discourager" display_order="210"/>
   </option>
   <option option_id="discourageRedirectUrl" edit_format="textbox" data_type="string">
-    <default_value/>
+    <default_value></default_value>
     <relation group_id="discourager" display_order="220"/>
   </option>
   <option option_id="discourageSearchChance" edit_format="spinbox" data_type="unsigned_integer">
@@ -366,7 +381,7 @@ email</sub_options>
     <relation group_id="acp" display_order="40"/>
   </option>
   <option option_id="emailSenderName" edit_format="textbox" data_type="string">
-    <default_value/>
+    <default_value></default_value>
     <relation group_id="emailOptions" display_order="110"/>
   </option>
   <option option_id="emailShare" edit_format="onoff" data_type="boolean">
@@ -459,7 +474,7 @@ bootstrap=Bootstrap CDN</edit_format_params>
     <relation group_id="serviceProviders" display_order="210"/>
   </option>
   <option option_id="googleAnalyticsWebPropertyId" edit_format="textbox" data_type="string" validation_class="XF\Option\GoogleAnalytics" validation_method="verifyWebPropertyOption">
-    <default_value/>
+    <default_value></default_value>
     <relation group_id="seo" display_order="210"/>
     <relation group_id="stats" display_order="10"/>
   </option>
@@ -480,8 +495,7 @@ bootstrap=Bootstrap CDN</edit_format_params>
     <relation group_id="usersAndRegistration" display_order="240"/>
   </option>
   <option option_id="homePageUrl" edit_format="textbox" data_type="string">
-    <default_value/>
-    <edit_format_params>type=url</edit_format_params>
+    <default_value></default_value>
     <relation group_id="basicBoard" display_order="150"/>
   </option>
   <option option_id="imageCacheRefresh" edit_format="spinbox" data_type="unsigned_integer">
@@ -511,7 +525,7 @@ links</sub_options>
     <relation group_id="messageOptions" display_order="620"/>
   </option>
   <option option_id="imageLinkProxyKey" edit_format="textbox" data_type="string">
-    <default_value/>
+    <default_value></default_value>
     <relation group_id="imageLinkProxy" display_order="110"/>
   </option>
   <option option_id="imageLinkProxyLogLength" edit_format="spinbox" data_type="unsigned_integer">
@@ -547,7 +561,7 @@ units={{ phrase('units_kb') }}</edit_format_params>
     <relation group_id="basicBoard" display_order="100"/>
   </option>
   <option option_id="ipInfoUrl" edit_format="textbox" data_type="string">
-    <default_value>http://whatismyipaddress.com/ip/{ip}</default_value>
+    <default_value>https://whatismyipaddress.com/ip/{ip}</default_value>
     <relation group_id="serviceProviders" display_order="110"/>
     <relation group_id="spam" display_order="520"/>
   </option>
@@ -738,7 +752,7 @@ units={{ phrase('units_minutes') }}</edit_format_params>
     <relation group_id="usersAndRegistration" display_order="930"/>
   </option>
   <option option_id="privacyPolicyUrl" edit_format="textbox" data_type="string">
-    <default_value/>
+    <default_value></default_value>
     <relation group_id="basicBoard" display_order="210"/>
   </option>
   <option option_id="profilePostMaxLength" edit_format="spinbox" data_type="unsigned_integer">
@@ -888,7 +902,7 @@ urls</sub_options>
     <relation group_id="sitemap" display_order="30"/>
   </option>
   <option option_id="sitemapExtraUrls" edit_format="textbox" data_type="string">
-    <default_value/>
+    <default_value></default_value>
     <edit_format_params>rows=5</edit_format_params>
     <relation group_id="sitemap" display_order="40"/>
   </option>

@@ -5,15 +5,11 @@ namespace XF\Entity;
 use XF\Mvc\Entity\Structure;
 
 /**
- * COLUMNS
- * @property int|null prompt_group_id
- * @property int display_order
+ * Class ThreadPromptGroup
  *
- * GETTERS
- * @property \XF\Phrase|string title
+ * @package XF\Entity
  *
  * RELATIONS
- * @property \XF\Entity\Phrase MasterTitle
  * @property \XF\Entity\ThreadPrompt[] Prompts
  */
 class ThreadPromptGroup extends AbstractPromptGroup

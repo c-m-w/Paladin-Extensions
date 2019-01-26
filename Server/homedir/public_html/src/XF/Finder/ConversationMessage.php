@@ -15,7 +15,7 @@ class ConversationMessage extends Finder
 
 	public function earlierThan(\XF\Entity\ConversationMessage $message)
 	{
-		$this->where('message_date', '<=', $message->message_date);
+		$this->where('message_date', '<', $message->message_date);
 
 		return $this;
 	}

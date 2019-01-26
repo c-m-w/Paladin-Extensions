@@ -25,7 +25,7 @@ class ProfilePostComment extends AbstractEmulatedData
 
 	protected function preSave($oldId)
 	{
-		$this->username = $this->validTextOrDefault($this->username, 'username', $oldId);
+		$this->forceNotEmpty('username', $oldId);
 	}
 
 	protected function postSave($oldId, $newId)

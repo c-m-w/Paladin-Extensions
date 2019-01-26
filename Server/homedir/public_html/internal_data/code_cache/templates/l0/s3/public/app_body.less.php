@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 95be47754b895333d55ffb24a88c95b4
+// FROM HASH: 4743eb91fe6a96245609d56ac54feaab
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -47,7 +47,6 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 		&:last-child {margin-bottom: 0;}
 	}
-}
 
 .p-body-header
 {
@@ -87,6 +86,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	width: 100%;
 	max-width: 100%;
 	margin-bottom: auto;
+	min-height: 1px; // IE11 workaround - related to #139187
 }
 
 .p-body-content

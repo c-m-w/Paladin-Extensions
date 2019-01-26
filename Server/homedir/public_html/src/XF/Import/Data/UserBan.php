@@ -21,6 +21,7 @@ class UserBan extends AbstractEmulatedData
 		if ($user)
 		{
 			$user->is_banned = true;
+			$user->getBehavior('XF:ChangeLoggable')->setOption('enabled', false);
 			$user->saveIfChanged($saved, false, false);
 		}
 	}

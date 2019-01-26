@@ -20,6 +20,7 @@ return array (
   'ad_pos_desc.forum_view_below_thread_list' => 'Available below the list of threads while viewing a forum.',
   'ad_pos_desc.member_view_below_tabs' => 'Directly below the tabs (and above the tab panes) on every member\'s profile.',
   'ad_pos_desc.post_above_content' => 'This position is above the message content in every post.',
+  'ad_pos_desc.post_below_container' => 'This position is below the message container for every post.',
   'ad_pos_desc.post_below_content' => 'This position is below the message content in every post.',
   'ad_pos_desc.thread_view_above_messages' => 'Advertising position above the list of messages when viewing a thread.',
   'ad_pos_desc.thread_view_below_messages' => 'Advertising position below the list of messages when viewing a thread.',

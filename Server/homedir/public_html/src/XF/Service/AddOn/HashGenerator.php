@@ -42,6 +42,8 @@ class HashGenerator extends \XF\Service\AbstractService
 			new \RecursiveDirectoryIterator($rootPath, \RecursiveDirectoryIterator::SKIP_DOTS),
 			\RecursiveIteratorIterator::CHILD_FIRST
 		);
+
+		/** @var \SplFileInfo $file */
 		foreach ($filesIterator AS $file)
 		{
 			if ($file->isDir())
@@ -49,14 +51,16 @@ class HashGenerator extends \XF\Service\AbstractService
 				continue;
 			}
 
+			$fileName = $file->getFilename();
+
 			// skip hidden dot files, e.g. .DS_Store, .gitignore etc.
-			if (strpos($file->getFilename(), '.') === 0)
+			if ($fileName[0] == '.' && $fileName != '.htaccess')
 			{
 				continue;
 			}
 
 			// don't hash the hashes file if it already exists
-			if ($file->getFilename() == 'hashes.json')
+			if ($fileName == 'hashes.json')
 			{
 				continue;
 			}

@@ -23,7 +23,7 @@
 			this.$code.xfUniqueId();
 
 			this.load();
-			this.$target.closest('form').on('ajax-submit:error ajax-submit:always', $.proxy(this, 'reload'));
+			this.$target.closest('form').on('ajax-submit:error ajax-submit:always', XF.proxy(this, 'reload'));
 		},
 
 		load: function()
@@ -109,14 +109,14 @@
 				$formRow.after($reCaptchaTarget);
 				this.$reCaptchaTarget = $reCaptchaTarget;
 
-				$form.on('ajax-submit:before', $.proxy(this, 'beforeSubmit'));
+				$form.on('ajax-submit:before', XF.proxy(this, 'beforeSubmit'));
 			}
 			else
 			{
 				this.$reCaptchaTarget = this.$target;
 			}
 
-			$form.on('ajax-submit:error ajax-submit:always', $.proxy(this, 'reload'));
+			$form.on('ajax-submit:error ajax-submit:always', XF.proxy(this, 'reload'));
 
 			if (window.grecaptcha)
 			{
@@ -124,7 +124,7 @@
 			}
 			else
 			{
-				XF.ReCaptcha.Callbacks.push($.proxy(this, 'create'));
+				XF.ReCaptcha.Callbacks.push(XF.proxy(this, 'create'));
 
 				$.ajax({
 					url: 'https://www.google.com/recaptcha/api.js?onload=XFReCaptchaCallback&render=explicit',
@@ -148,7 +148,7 @@
 			if (this.options.invisible)
 			{
 				options.size = 'invisible';
-				options.callback = $.proxy(this, 'complete');
+				options.callback = XF.proxy(this, 'complete');
 
 			}
 			this.reCaptchaId = grecaptcha.render(this.$reCaptchaTarget[0], options);
@@ -215,7 +215,7 @@
 				return;
 			}
 
-			this.$target.closest('form').on('ajax-submit:error ajax-submit:always', $.proxy(this, 'reload'));
+			this.$target.closest('form').on('ajax-submit:error ajax-submit:always', XF.proxy(this, 'reload'));
 		},
 
 		reload: function()
@@ -228,7 +228,7 @@
 			this.reloading = true;
 
 			this.$target.fadeTo(XF.config.speed.fast, 0.5);
-			XF.ajax('get', this.options.url, $.proxy(this, 'show'));
+			XF.ajax('get', this.options.url, XF.proxy(this, 'show'));
 		},
 
 		show: function(data)
@@ -276,11 +276,11 @@
 				return;
 			}
 
-			this.$target.closest('form').on('ajax-submit:error ajax-submit:always', $.proxy(this, 'reload'));
+			this.$target.closest('form').on('ajax-submit:error ajax-submit:always', XF.proxy(this, 'reload'));
 			this.$target.siblings('noscript').remove();
 
 			this.load();
-			$(window).on('unload', $.proxy(this, 'remove'));
+			$(window).on('unload', XF.proxy(this, 'remove'));
 		},
 
 		load: function()
@@ -294,7 +294,7 @@
 				var prefix = window.location.protocol == 'https:' ? 'https://api-secure' : 'http://api';
 
 				window.ACPuzzleOptions = {
-					onload: $.proxy(this, 'create')
+					onload: XF.proxy(this, 'create')
 				};
 				$.ajax({
 					url: prefix + '.solvemedia.com/papi/challenge.ajax',

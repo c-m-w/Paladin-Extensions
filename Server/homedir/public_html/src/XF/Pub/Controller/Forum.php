@@ -220,6 +220,8 @@ class Forum extends AbstractController
 			$stickyThreads = null;
 		}
 
+		$this->applyDateLimitFilters($forum, $threadList, $filters);
+
 		$threadList->where('sticky', 0)
 			->limitByPage($page, $perPage);
 
@@ -287,6 +289,10 @@ class Forum extends AbstractController
 			$starterFilter = null;
 		}
 
+		$isDateLimited = (empty($filters['no_date_limit']) && (!empty($filters['last_days']) || $forum->list_date_limit_days));
+		$threadEndOffset = ($page - 1) * $perPage + count($threads);
+		$showDateLimitDisabler = ($isDateLimited && $threadEndOffset >= $totalThreads);
+
 		$viewParams = [
 			'forum' => $forum,
 
@@ -304,6 +310,7 @@ class Forum extends AbstractController
 
 			'filters' => $filters,
 			'starterFilter' => $starterFilter,
+			'showDateLimitDisabler' => $showDateLimitDisabler,
 
 			'sortInfo' => $this->getEffectiveSortInfo($forum, $filters),
 
@@ -354,18 +361,6 @@ class Forum extends AbstractController
 			$threadFinder->where('user_id', intval($filters['starter_id']));
 		}
 
-		if (!empty($filters['last_days']))
-		{
-			if ($filters['last_days'] > 0)
-			{
-				$threadFinder->where('last_post_date', '>=', \XF::$time - ($filters['last_days'] * 86400));
-			}
-		}
-		else if ($forum->list_date_limit_days)
-		{
-			$threadFinder->where('last_post_date', '>=', \XF::$time - ($forum->list_date_limit_days * 86400));
-		}
-
 		$sorts = $this->getAvailableForumSorts($forum);
 
 		if (!empty($filters['order']) && isset($sorts[$filters['order']]))
@@ -373,6 +368,21 @@ class Forum extends AbstractController
 			$threadFinder->order($sorts[$filters['order']], $filters['direction']);
 		}
 		// else the default order has already been applied
+	}
+
+	protected function applyDateLimitFilters(\XF\Entity\Forum $forum, \XF\Finder\Thread $threadFinder, array $filters)
+	{
+		if (!empty($filters['last_days']) && empty($filters['no_date_limit']))
+		{
+			if ($filters['last_days'] > 0)
+			{
+				$threadFinder->where('last_post_date', '>=', \XF::$time - ($filters['last_days'] * 86400));
+			}
+		}
+		else if ($forum->list_date_limit_days && empty($filters['no_date_limit']))
+		{
+			$threadFinder->where('last_post_date', '>=', \XF::$time - ($forum->list_date_limit_days * 86400));
+		}
 	}
 
 	protected function getForumFilterInput(\XF\Entity\Forum $forum)
@@ -385,8 +395,14 @@ class Forum extends AbstractController
 			'starter_id' => 'uint',
 			'last_days' => 'int',
 			'order' => 'str',
-			'direction' => 'str'
+			'direction' => 'str',
+			'no_date_limit' => 'bool'
 		]);
+
+		if ($input['no_date_limit'])
+		{
+			$filters['no_date_limit'] = $input['no_date_limit'];
+		}
 
 		if ($input['prefix_id'] && $forum->isPrefixValid($input['prefix_id']))
 		{
@@ -444,6 +460,10 @@ class Forum extends AbstractController
 
 		if ($this->filter('apply', 'bool'))
 		{
+			if (!empty($filters['last_days']))
+			{
+				unset($filters['no_date_limit']);
+			}
 			return $this->redirect($this->buildLink('forums', $forum, $filters));
 		}
 
@@ -922,13 +942,17 @@ class Forum extends AbstractController
 	{
 		$this->assertPostOnly();
 
-		$nodeId = $this->filter('val', 'uint');
-		$forum = $this->assertViewableForum($nodeId);
+		$viewParams = [];
 
-		$viewParams = [
-			'forum' => $forum,
-			'prefixes' => $forum->getUsablePrefixes()
-		];
+		$nodeId = $this->filter('val', 'uint');
+		if ($nodeId)
+		{
+			$forum = $this->assertViewableForum($nodeId);
+
+			$viewParams['forum'] = $forum;
+			$viewParams['prefixes'] = $forum->getUsablePrefixes();
+		}
+
 		return $this->view('XF:Forum\Prefixes', 'forum_prefixes', $viewParams);
 	}
 

@@ -862,6 +862,7 @@ if (window.jQuery === undefined) jQuery = $ = {};
 			XF.BbBlockExpand.watch();
 			XF.ScrollButtons.initialize();
 			XF.KeyboardShortcuts.initialize();
+			XF.FormInputValidation.initialize();
 			XF.IgnoreWatcher.initializeHash();
 			XF.Click.watch();
 
@@ -904,6 +905,7 @@ if (window.jQuery === undefined) jQuery = $ = {};
 					}
 				}
 			});
+
 			$(document).on('keyup', 'a:not([href])', function(e)
 			{
 				if (e.which == 13)
@@ -1003,6 +1005,12 @@ if (window.jQuery === undefined) jQuery = $ = {};
 			return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
 		},
 
+		isIE: function()
+		{
+			var ua = navigator.userAgent;
+			return (ua.indexOf('MSIE ') > 0 || ua.indexOf('Trident/') > 0);
+		},
+
 		log: function()
 		{
 			if (!console.log || !console.log.apply)
@@ -1039,6 +1047,19 @@ if (window.jQuery === undefined) jQuery = $ = {};
 			{
 				return $(selector);
 			}
+		},
+
+		isElementVisible: function($el)
+		{
+			var el = $el[0],
+				rect = el.getBoundingClientRect();
+
+			return (
+				rect.top >= 0
+				&& rect.left >= 0
+				&& rect.bottom <= $(window).height()
+				&& rect.right <= $(window).width()
+			);
 		},
 
 		/**
@@ -1338,8 +1359,14 @@ if (window.jQuery === undefined) jQuery = $ = {};
 					return true;
 				}
 
-				var	$code = $this.find('.bbCodeCode code'),
-					language = $code.attr('class').match(/language-(\S+)/)[1];
+				var	$code = $this.find('.bbCodeCode code');
+
+				if (!$code.length)
+				{
+					return true;
+				}
+
+				var language = $code.attr('class').match(/language-(\S+)/)[1];
 
 				$code.removeAttr('class');
 
@@ -1773,6 +1800,7 @@ if (window.jQuery === undefined) jQuery = $ = {};
 			XF.DynamicDate.refresh(el);
 			XF.BbBlockExpand.checkSizing(el);
 			XF.KeyboardShortcuts.initializeElements(el);
+			XF.FormInputValidation.initializeElements(el);
 
 			var domEl = (el instanceof $ ? el.get(0) : el);
 
@@ -2275,7 +2303,7 @@ if (window.jQuery === undefined) jQuery = $ = {};
 
 			if (url == location.href)
 			{
-				location.reload();
+				location.reload(true);
 			}
 			else
 			{
@@ -2288,7 +2316,7 @@ if (window.jQuery === undefined) jQuery = $ = {};
 				// we should explicitly reload
 				if (destParts[1] && destParts[0] == srcParts[0])
 				{
-					location.reload();
+					location.reload(true);
 				}
 			}
 
@@ -3115,6 +3143,39 @@ if (window.jQuery === undefined) jQuery = $ = {};
 			};
 
 			return data;
+		},
+
+
+		/**
+		 * Returns a function replacing the default this object with the supplied context.
+		 *
+		 * jQuery equivalent function has been deprecated in 3.3, so lets prefer to use our own now.
+		 *
+		 * @param fn
+		 * @param context
+		 * @returns {undefined|Function}
+		 */
+		proxy: function(fn, context)
+		{
+			var tmp, args, proxy;
+
+			if (typeof context === "string")
+			{
+				tmp = fn[context];
+				context = fn;
+				fn = tmp;
+			}
+
+			if (typeof fn !== 'function')
+			{
+				return undefined;
+			}
+
+			args = [].slice.call(arguments, 2);
+			return function()
+			{
+				return fn.apply(context, args.concat([].slice.call(arguments)));
+			};
 		}
 	});
 
@@ -4131,7 +4192,18 @@ if (window.jQuery === undefined) jQuery = $ = {};
 					else
 					{
 						// after the next week
-						$el.text($el.attr('data-date-string'));
+						if ($el.attr('data-full-date'))
+						{
+							$el.text(XF.phrase('date_x_at_time_y', {
+								'{date}': $el.attr('data-date-string'), // must use attr for string value
+								'{time}': $el.attr('data-time-string') // must use attr for string value
+							}));
+						}
+						else
+						{
+							$el.text($el.attr('data-date-string')); // must use attr for string value
+						}
+
 						el.xfDynType = 'future';
 					}
 				}
@@ -4203,7 +4275,7 @@ if (window.jQuery === undefined) jQuery = $ = {};
 				{
 					if (dynType !== 'old')
 					{
-						if ($el.attr('data-full-old-date'))
+						if ($el.attr('data-full-date'))
 						{
 							$el.text(XF.phrase('date_x_at_time_y', {
 								'{date}': $el.attr('data-date-string'), // must use attr for string value
@@ -4613,7 +4685,7 @@ if (window.jQuery === undefined) jQuery = $ = {};
 
 			this.updateState();
 
-			$container.on('click', this.options.link, $.proxy(this, 'show'));
+			$container.on('click', this.options.link, XF.proxy(this, 'show'));
 		},
 
 		refresh: function($el)
@@ -4706,7 +4778,13 @@ if (window.jQuery === undefined) jQuery = $ = {};
 		{
 			if (window.location.hash)
 			{
-				var $jump = $(window.location.hash.replace(/[^\w_#-]/g, '')),
+				var cleanedHash = window.location.hash.replace(/[^\w_#-]/g, '');
+				if (cleanedHash === '#')
+				{
+					return;
+				}
+
+				var $jump = $(cleanedHash),
 					ignoredSel = this.options.ignored,
 					$ignored;
 
@@ -4735,7 +4813,8 @@ if (window.jQuery === undefined) jQuery = $ = {};
 		options: {
 			backdropClose: true,
 			escapeClose: true,
-			focusShow: true
+			focusShow: true,
+			className: ''
 		},
 
 		$container: null,
@@ -4756,6 +4835,17 @@ if (window.jQuery === undefined) jQuery = $ = {};
 				.xfUniqueId();
 
 			var self = this;
+
+			if (this.options.escapeClose)
+			{
+				this.$container.on('keydown.overlay', function(e)
+				{
+					if (e.which === 27)
+					{
+						self.hide();
+					}
+				});
+			}
 
 			if (this.options.backdropClose)
 			{
@@ -4784,15 +4874,20 @@ if (window.jQuery === undefined) jQuery = $ = {};
 				});
 			}
 
-			this.$container.on('click', '.js-overlayClose', $.proxy(this, 'hide'));
+			if (this.options.className)
+			{
+				this.$container.addClass(this.options.className);
+			}
+
+			this.$container.on('click', '.js-overlayClose', XF.proxy(this, 'hide'));
 
 			this.$container.appendTo('body');
 			XF.activate(this.$container);
 
 			XF.Overlay.cache[this.$container.attr('id')] = this;
 
-			this.$overlay.on('overlay:hide', $.proxy(this, 'hide'));
-			this.$overlay.on('overlay:show', $.proxy(this, 'show'));
+			this.$overlay.on('overlay:hide', XF.proxy(this, 'hide'));
+			this.$overlay.on('overlay:show', XF.proxy(this, 'show'));
 		},
 
 		show: function()
@@ -5315,7 +5410,10 @@ if (window.jQuery === undefined) jQuery = $ = {};
 
 			if ($root.length > 1)
 			{
-				$root.each(function() { initializeElements(this); });
+				$root.each(function()
+				{
+					initializeElements(this);
+				});
 				return;
 			}
 
@@ -5346,7 +5444,7 @@ if (window.jQuery === undefined) jQuery = $ = {};
 
 			if (modifierCode)
 			{
-				if (isStandardKey(charCode))
+				if (XF.Keyboard.isStandardKey(charCode))
 				{
 					shortcuts[charCode] = shortcuts[charCode] || {};
 					shortcuts[charCode][modifierCode] = el;
@@ -5372,7 +5470,6 @@ if (window.jQuery === undefined) jQuery = $ = {};
 			{
 				case 27: // escape
 					XF.MenuWatcher.closeAll(); // close all menus
-					XF.hideOverlays(); // close all overlays
 					XF.hideTooltips();
 					return;
 
@@ -5383,7 +5480,7 @@ if (window.jQuery === undefined) jQuery = $ = {};
 					return;
 			}
 
-			if (!isShortcutAllowed(document.activeElement))
+			if (!XF.Keyboard.isShortcutAllowed(document.activeElement))
 			{
 				return;
 			}
@@ -5396,7 +5493,7 @@ if (window.jQuery === undefined) jQuery = $ = {};
 				String.fromCharCode(e.which)
 			);
 
-			if (shortcuts.hasOwnProperty(e.key)) // try simple mapping first
+			if (shortcuts.hasOwnProperty(e.key) && getModifierCodeFromEvent(e) == 0) // try simple mapping first
 			{
 				if (fireShortcut(shortcuts[e.key]))
 				{
@@ -5446,7 +5543,38 @@ if (window.jQuery === undefined) jQuery = $ = {};
 			return false;
 		}
 
-		function isShortcutAllowed(activeElement)
+		function getModifierCode(CtrlKey, AltKey, MetaKey)
+		{
+			return 0
+			+ CtrlKey  ? Ctrl  : 0
+			+ AltKey   ? Alt   : 0
+			+ MetaKey  ? Meta  : 0;
+		}
+
+		function getModifierCodeFromEvent(event)
+		{
+			return getModifierCode(event.ctrlKey, event.altKey, event.metaKey);
+		}
+
+		return {
+			initialize: initialize,
+			initializeElements: initializeElements
+		}
+	})();
+
+	/**
+	 * Collection of methods for working with the keyboard
+	 */
+	XF.Keyboard =
+	{
+		/**
+		 * Determines whether a keyboard shortcut can be fired with the current activeElement
+		 *
+		 * @param object activeElement (usually document.activeElement)
+		 *
+		 * @returns {boolean}
+		 */
+		isShortcutAllowed: function(activeElement)
 		{
 			switch (activeElement.tagName)
 			{
@@ -5472,24 +5600,97 @@ if (window.jQuery === undefined) jQuery = $ = {};
 				default:
 					return activeElement.contentEditable === 'true' ? false : true;
 			}
+		},
+
+		isStandardKey: function(charcode)
+		{
+			return (charcode >= 48 && charcode <= 90);
+		}
+	};
+
+	// ################################## FORM VALIDATION HANDLER ###########################################
+
+	/**
+	 * Sets up some custom behaviour on forms so that when invalid inputs are scrolled
+	 * to they are not covered by fixed headers.
+	 *
+	 * @type {{initialize, initializeElements}}
+	 */
+	XF.FormInputValidation = (function()
+	{
+		var $forms = {};
+
+		function initialize()
+		{
+			$forms = $('form').not('[novalidate]');
+
+			prepareForms();
 		}
 
-		function isStandardKey(which)
+		function initializeElements(root)
 		{
-			return (which >= 48 && which <= 90);
+			var $root = $(root);
+
+			if ($root.length > 1)
+			{
+				$root.each(function() { initializeElements(this); });
+				return;
+			}
+
+			if ($root.is('form'))
+			{
+				prepareForm($root);
+			}
 		}
 
-		function getModifierCode(CtrlKey, AltKey, MetaKey)
+		function prepareForms()
 		{
-			return 0
-			+ CtrlKey  ? Ctrl  : 0
-			+ AltKey   ? Alt   : 0
-			+ MetaKey  ? Meta  : 0;
+			if (!$forms.length)
+			{
+				return;
+			}
+
+			$forms.each(function()
+			{
+				prepareForm($(this));
+			});
 		}
 
-		function getModifierCodeFromEvent(event)
+		function prepareForm($form)
 		{
-			return getModifierCode(event.ctrlKey, event.altKey, event.metaKey);
+			$form.find(':input').on('invalid', { form: $form }, onInvalidInput);
+		}
+
+		function onInvalidInput(event)
+		{
+			var $input = $(this),
+				$form = event.data.form,
+				$first = $form.find(':invalid').first();
+
+			if ($input[0] === $first[0])
+			{
+				if (XF.isElementVisible($input))
+				{
+					// element is already visible so skip
+					return;
+				}
+
+				var offset = 100;
+				var $overlayContainer = $form.closest('.overlay-container.is-active');
+
+				if ($overlayContainer.length)
+				{
+					$overlayContainer.scrollTop(
+						$input.offset().top - $overlayContainer.offset().top + $overlayContainer.scrollTop() - offset
+					);
+				}
+				else
+				{
+					// put the input 100px from the top of the screen
+					$input[0].scrollIntoView();
+					window.scrollBy(0, -offset);
+				}
+			}
 		}
 
 		return {
@@ -5644,7 +5845,24 @@ if (window.jQuery === undefined) jQuery = $ = {};
 					return;
 				}
 
-				if ($(target).closest('[contenteditable=true]').length)
+				var $target = $(target);
+
+				if ($target.is('a') && !$target.data('click-allow-modifier'))
+				{
+					// abort if the event has a modifier key
+					if (e.ctrlKey || e.shiftKey || e.altKey || e.metaKey)
+					{
+						return;
+					}
+
+					// abort if the event is a middle or right-button click
+					if (e.which > 1)
+					{
+						return;
+					}
+				}
+
+				if ($target.closest('[contenteditable=true]').length)
 				{
 					return;
 				}
@@ -6083,15 +6301,15 @@ if (window.jQuery === undefined) jQuery = $ = {};
 					.css('cursor', 'pointer')
 					.attr('unselectable', 'on')
 					.attr('role', 'option')
-					.mouseenter($.proxy(this, 'resultMouseEnter'));
+					.mouseenter(XF.proxy(this, 'resultMouseEnter'));
 
 				if (this.options.clickAttacher)
 				{
-					this.options.clickAttacher($li, $.proxy(this, 'resultClick'));
+					this.options.clickAttacher($li, XF.proxy(this, 'resultClick'));
 				}
 				else
 				{
-					$li.click($.proxy(this, 'resultClick'));
+					$li.click(XF.proxy(this, 'resultClick'));
 				}
 
 				if (typeof result == 'string')
@@ -6126,7 +6344,7 @@ if (window.jQuery === undefined) jQuery = $ = {};
 
 			if (!this.resizeBound)
 			{
-				$(window).onPassive('resize', $.proxy(this, 'hideResults'));
+				$(window).onPassive('resize', XF.proxy(this, 'hideResults'));
 			}
 
 			this.$results.css({

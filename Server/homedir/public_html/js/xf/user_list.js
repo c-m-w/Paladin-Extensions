@@ -82,7 +82,7 @@
 		init: function()
 		{
 			this.form = $(this.$target);
-			this.form.on('ajax-submit:complete', $.proxy(this, 'formSubmit'));
+			this.form.on('ajax-submit:complete', XF.proxy(this, 'formSubmit'));
 
 			this.userInput = this.form.find('.users');
 			this.noResults = this.form.find('.js-userListEmpty');

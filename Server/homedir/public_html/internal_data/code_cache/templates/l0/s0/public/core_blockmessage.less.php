@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 56aba0a5c2b57527f604e9e3076d84c5
+// FROM HASH: 707ba12c25a0f60a7ed4c086985add19
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -28,6 +28,11 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	{
 		font-size: @xf-fontSizeSmall;
 		padding: @xf-blockPaddingV/2 @xf-blockPaddingH/2;
+	}
+
+	&.block-rowMessage--center
+	{
+		text-align: center;
 	}
 
 	.m-blockMessageVariants();

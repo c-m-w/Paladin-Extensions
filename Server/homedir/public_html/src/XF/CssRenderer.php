@@ -318,6 +318,39 @@ class CssRenderer
 		}
 	}
 
+	/**
+	 * When given a color value which may contain a mix of XF and Less functions test and return the parsed color.
+	 * If the provided Less is invalid, or no valid color found, returns null.
+	 *
+	 * @param $contents
+	 * @return null|string
+	 */
+	public function parseLessColorValue($value)
+	{
+		$parser = $this->getFreshLessParser();
+
+		$value = '@someVar: ' . $value . '; #test { color: @someVar; }';
+		$value = $this->prepareLessForRendering($value);
+
+		try
+		{
+			$css = $parser->parse($value)->getCss();
+		}
+		catch (\Exception $e)
+		{
+			return null;
+		}
+
+		preg_match('/^\s+color:\s+(#(?:[0-9a-f]{2}){2,4}|(#[0-9a-f]{3})|(rgb|hsl)a?\((-?\d+%?[,\s]+){2,3}\s*[\d\.]+%?\));$/im', $css, $matches);
+
+		if (!$matches || !isset($matches[1]))
+		{
+			return null;
+		}
+
+		return $matches[1];
+	}
+
 	protected function renderToCss($template, $output)
 	{
 		switch (strrchr($template, '.'))

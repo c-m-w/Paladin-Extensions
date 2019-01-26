@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: a12b546824a213687626d135b46f27bf
+// FROM HASH: 290e30724b21a2a1f12bb19320817665
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -477,10 +477,17 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	{
 		display: inline-block;
 		.m-faBase();
+		width: 1em;
 		padding-right: .3em;
+		text-decoration: none;
 
 		color: @xf-textColorMuted;
 		// text-shadow: 1px 1px 0 fade(xf-intensify(@xf-nodeIconReadColor, 50%), 50%);
+	}
+
+	&:hover:before
+	{
+		text-decoration: none;
 	}
 
 	&.subNodeLink--unread
@@ -523,10 +530,11 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 .node-subNodeFlatList
 {
 	.m-listPlain();
+	.m-clearFix();
 
 	> li
 	{
-		display: inline;
+		display: inline-block;
 		margin-right: 1em;
 
 

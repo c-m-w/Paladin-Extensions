@@ -131,6 +131,38 @@ class MemberStat extends Entity
 		return $phrase;
 	}
 
+	protected function verifyCriteria(&$criteria)
+	{
+		if (!$criteria)
+		{
+			return true;
+		}
+
+		if (!empty($criteria['user_field']))
+		{
+			if (!is_array($criteria['user_field']))
+			{
+				unset($criteria['user_field']);
+			}
+			else
+			{
+				foreach ($criteria['user_field'] AS $k => $v)
+				{
+					if ($v === '' || (is_array($v) && !$v))
+					{
+						unset($criteria['user_field'][$k]);
+					}
+				}
+				if (!$criteria['user_field'])
+				{
+					unset($criteria['user_field']);
+				}
+			}
+		}
+
+		return true;
+	}
+
 	protected function _preSave()
 	{
 		if ($this->callback_class || $this->callback_method)

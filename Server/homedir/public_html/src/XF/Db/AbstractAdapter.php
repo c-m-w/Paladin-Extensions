@@ -25,7 +25,12 @@ abstract class AbstractAdapter
 	abstract protected function getStatementClass();
 	abstract protected function _rawQuery($query);
 	abstract protected function standardizeConfig(array $config);
+
+	/**
+	 * @return mixed
+	 */
 	abstract public function getConnection();
+
 	abstract public function isConnected();
 	abstract public function ping();
 	abstract public function lastInsertId();
@@ -58,7 +63,7 @@ abstract class AbstractAdapter
 	}
 
 	/**
-	 * @param $query
+	 * @param       $query
 	 * @param array $params
 	 *
 	 * @return AbstractStatement
@@ -111,6 +116,11 @@ abstract class AbstractAdapter
 		return $this->query($query, $params)->fetchPairs();
 	}
 
+	/**
+	 * @param $query
+	 *
+	 * @return mixed
+	 */
 	public function rawQuery($query)
 	{
 		$this->logQueryExecution($query);
@@ -450,6 +460,11 @@ abstract class AbstractAdapter
 	{
 		$this->logQueries = (bool)$value;
 		$this->logSimpleOnly = $simpleOnly;
+	}
+
+	public function getUtf8Type()
+	{
+		return $this->fullUnicode ? 'utf8mb4' : 'utf8';
 	}
 
 	public function logSimpleOnly($value = true)

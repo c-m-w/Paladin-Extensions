@@ -241,7 +241,7 @@ class TemplateModification extends AbstractController
 		$finder->where('type', $type)
 			->where('style_id', 0)
 			->where(
-				$finder->expression('CONVERT (%s USING utf8)', 'title'),
+				$finder->columnUtf8('title'),
 				'LIKE', $finder->escapeLike($q, '?%'))
 			->limit(10);
 

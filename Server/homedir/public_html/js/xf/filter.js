@@ -68,12 +68,12 @@
 			this.$displayTotals = XF.findRelativeIf(this.options.totalsEl, $target.closest('form', '.block'));
 
 			this.$input.on({
-				keyup: $.proxy(this, 'onKeyUp'),
-				keypress: $.proxy(this, 'onKeyPress'),
-				paste: $.proxy(this, 'onPaste')
+				keyup: XF.proxy(this, 'onKeyUp'),
+				keypress: XF.proxy(this, 'onKeyPress'),
+				paste: XF.proxy(this, 'onPaste')
 			});
-			this.$prefix.on('change', $.proxy(this, 'onPrefixChange'));
-			this.$clear.on('click', $.proxy(this, 'onClearFilter'));
+			this.$prefix.on('change', XF.proxy(this, 'onPrefixChange'));
+			this.$clear.on('click', XF.proxy(this, 'onClearFilter'));
 
 			this.storageKey = this.options.key;
 			if (!this.storageKey.length)
@@ -162,7 +162,7 @@
 			{
 				clearTimeout(this.updateTimer);
 			}
-			this.updateTimer = setTimeout($.proxy(this, 'update'), 250);
+			this.updateTimer = setTimeout(XF.proxy(this, 'update'), 250);
 		},
 
 		update: function()
@@ -232,7 +232,7 @@
 				};
 
 				this.xhrFilter = { text: text, prefix: prefix };
-				this.xhr = XF.ajax('GET', this.options.ajax, data, $.proxy(this, '_filterAjaxResponse'));
+				this.xhr = XF.ajax('GET', this.options.ajax, data, XF.proxy(this, '_filterAjaxResponse'));
 			}
 		},
 
@@ -257,6 +257,10 @@
 				this.$ajaxRows = $rows;
 
 				this._applyFilter($rows, filter.text, filter.prefix);
+			}
+			else
+			{
+				XF.layoutChange();
 			}
 
 			this.xhrFilter = null;

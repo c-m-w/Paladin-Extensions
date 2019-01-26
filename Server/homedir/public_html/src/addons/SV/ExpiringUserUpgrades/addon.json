@@ -1,0 +1,20 @@
+{
+    "legacy_addon_id": "ExUp",
+    "title": "Expiring User Upgrades",
+    "description": "Notify your members when their account upgrades are about to expire",
+    "version_id": 2000800,
+    "version_string": "2.0.8",
+    "dev": "Atelier Aphelion",
+    "dev_url": "https://atelieraphelion.com",
+    "faq_url": "",
+    "support_url": "https://xenforo.com/community/resources/expiring-user-upgrades.6507/",
+    "extra_urls": [],
+    "require": {
+        "XF": [2000470, "XenForo 2.0.4+"],
+        "php": ["5.6.0","PHP 5.6.0+"]
+    },
+    "require-soft": {
+        "SV/ConversationEssentials": [2000300, "Conversation Essentials v2.0.3+", true]
+    },
+    "icon": "fa-history"
+}

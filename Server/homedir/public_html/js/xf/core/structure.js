@@ -42,7 +42,7 @@
 		init: function()
 		{
 			this.inserter = new XF.Inserter(this.$target, this.options);
-			this.$target.one('focus', $.proxy(this.inserter, 'onEvent'));
+			this.$target.one('focus', XF.proxy(this.inserter, 'onEvent'));
 		}
 	});
 
@@ -87,7 +87,7 @@
 
 			var self = this;
 
-			XF.ajax('get', this.href, {}, $.proxy(this, 'onLoad'))
+			XF.ajax('get', this.href, {}, XF.proxy(this, 'onLoad'))
 				.always(function() { self.loading = false; });
 		},
 
@@ -110,11 +110,11 @@
 
 			XF.setupHtmlInsert(data.html, function($html, container, onComplete)
 			{
-				self._applyChange($html, options.after, $.proxy(self, '_applyAfter'));
-				self._applyChange($html, options.append, $.proxy(self, '_applyAppend'));
-				self._applyChange($html, options.before, $.proxy(self, '_applyBefore'));
-				self._applyChange($html, options.prepend, $.proxy(self, '_applyPrepend'));
-				self._applyChange($html, options.replace, $.proxy(self, '_applyReplace'));
+				self._applyChange($html, options.after, XF.proxy(self, '_applyAfter'));
+				self._applyChange($html, options.append, XF.proxy(self, '_applyAppend'));
+				self._applyChange($html, options.before, XF.proxy(self, '_applyBefore'));
+				self._applyChange($html, options.prepend, XF.proxy(self, '_applyPrepend'));
+				self._applyChange($html, options.replace, XF.proxy(self, '_applyReplace'));
 
 				onComplete(true);
 
@@ -355,7 +355,7 @@
 					'menu:open': function() { self.open(Modernizr.touchevents); },
 					'menu:close': function() { self.close(); },
 					'menu:reposition': function() { if (self.isOpen()) { self.reposition(); } },
-					'keydown': $.proxy(this, 'keyboardEvent')
+					'keydown': XF.proxy(this, 'keyboardEvent')
 				});
 
 
@@ -402,7 +402,7 @@
 			var $tooltip = this.$menu.closest('.tooltip');
 			if ($tooltip.length)
 			{
-				$tooltip.on('tooltip:hidden', $.proxy(this, 'close'));
+				$tooltip.on('tooltip:hidden', XF.proxy(this, 'close'));
 			}
 
 			var builder = this.$menu.data('menu-builder');
@@ -519,7 +519,7 @@
 			this.reposition();
 
 			$target.attr('aria-expanded', 'true').addClassTransitioned(this.options.targetOpenClass);
-			$menu.attr('aria-hidden', 'false').addClassTransitioned(this.options.openClass, $.proxy(function() { $menu.addClassTransitioned(this.options.completeClass); }, this));
+			$menu.attr('aria-hidden', 'false').addClassTransitioned(this.options.openClass, XF.proxy(function() { $menu.addClassTransitioned(this.options.completeClass); }, this));
 			$menuPosRef.addClassTransitioned(this.options.targetOpenClass);
 
 			this.$target.trigger('menu:opened', [$menu]);
@@ -572,7 +572,7 @@
 							self.updateMenuDimensions();
 
 							onComplete();
-							setTimeout($.proxy(self, 'reposition'), 0);
+							setTimeout(XF.proxy(self, 'reposition'), 0);
 
 							self.$target.trigger('menu:complete', [$menu]);
 							$menu.trigger('menu:complete');
@@ -940,32 +940,42 @@
 			}
 		},
 
+		/**
+		 * Allow up and down arrow keys to navigate between links in the menu
+		 * @param e
+		 * @returns {boolean}
+		 */
 		keyboardEvent: function(e)
 		{
-			// allow up and down arrow keys to navigate between links in the menu
-
-			if ((e.which == 38 || e.which == 40) && document.activeElement.tagName == 'A')
+			if (e.key == 'ArrowUp' || e.key == 'ArrowDown')
 			{
-				var $activeElement = $(document.activeElement),
-					$links = $activeElement.closest('.menu').find('a'),
-					newIndex = $links.index($activeElement) + (e.which == 38 ? -1 : 1);
-
-				if (newIndex < 0)
+				if (XF.Keyboard.isShortcutAllowed(document.activeElement))
 				{
-					newIndex = $links.length - 1;
-				}
-				else if (newIndex >= $links.length)
-				{
-					newIndex = 0;
-				}
+					if ($(document.activeElement).closest('.menu').get(0) == this.$menu.get(0))
+					{
+						var $activeElement = $(document.activeElement),
+							$links = $activeElement.closest('.menu').find('a'),
+							newIndex = $links.index($activeElement) + (e.key == 'ArrowUp' ? -1 : 1);
 
-				$($links.get(newIndex)).focus();
-				e.preventDefault();
-				return false;
+						if (newIndex < 0)
+						{
+							newIndex = $links.length - 1;
+						}
+						else if (newIndex >= $links.length)
+						{
+							newIndex = 0;
+						}
+
+						$($links.get(newIndex)).focus();
+						e.preventDefault();
+						return false;
+					}
+				}
 			}
 		}
 
 	});
+
 	XF.MenuWatcher = (function()
 	{
 		var $opened = $([]),
@@ -1125,7 +1135,7 @@
 
 		click: function(e)
 		{
-			setTimeout($.proxy(function()
+			setTimeout(XF.proxy(function()
 			{
 				this.$trigger.trigger('click', [e]);
 			}, this), 0);
@@ -1160,9 +1170,9 @@
 				return;
 			}
 
-			this.$menu.on('click', '[data-menu-close]', $.proxy(this, 'closeTrigger'))
-				.on('off-canvas:close', $.proxy(this, 'closeTrigger'))
-				.on('off-canvas:open', $.proxy(this, 'openTrigger'));
+			this.$menu.on('click', '[data-menu-close]', XF.proxy(this, 'closeTrigger'))
+				.on('off-canvas:close', XF.proxy(this, 'closeTrigger'))
+				.on('off-canvas:open', XF.proxy(this, 'openTrigger'));
 
 			var builder = this.$menu.data('ocm-builder');
 			if (builder)
@@ -1404,6 +1414,8 @@
 
 	XF.OverlayClick = XF.Click.newHandler({
 		eventNameSpace: 'XFOverlayClick',
+
+		// NOTE: these attributes must be reflected in XF\Template\Templater::overlayClickOptions
 		options: {
 			cache: true,
 			overlayConfig: {},
@@ -1437,18 +1449,6 @@
 
 		click: function(e)
 		{
-			// abort if the event has a modifier key
-			if (e.ctrlKey || e.shiftKey || e.altKey || e.metaKey)
-			{
-				return true;
-			}
-
-			// abort if the event is a middle or right-button click
-			if (e.which > 1)
-			{
-				return true;
-			}
-
 			e.preventDefault();
 
 			this.toggle();
@@ -1488,7 +1488,7 @@
 						{
 							t.overlay = overlay;
 						},
-						init: $.proxy(this, 'setupOverlay')
+						init: XF.proxy(this, 'setupOverlay')
 					},
 					ajax;
 
@@ -1734,13 +1734,13 @@
 
 			if (this.$toggleParent)
 			{
-				this.$toggleParent.removeClassTransitioned(activeClass, $.proxy(this, 'inactiveTransitionComplete'), instant);
+				this.$toggleParent.removeClassTransitioned(activeClass, XF.proxy(this, 'inactiveTransitionComplete'), instant);
 			}
 			if (this.$toggleTarget)
 			{
-				this.$toggleTarget.removeClassTransitioned(activeClass, $.proxy(this, 'inactiveTransitionComplete'), instant);
+				this.$toggleTarget.removeClassTransitioned(activeClass, XF.proxy(this, 'inactiveTransitionComplete'), instant);
 			}
-			this.$target.removeClassTransitioned(activeClass, $.proxy(this, 'inactiveTransitionComplete'), instant);
+			this.$target.removeClassTransitioned(activeClass, XF.proxy(this, 'inactiveTransitionComplete'), instant);
 		},
 
 		show: function(instant)
@@ -1904,6 +1904,7 @@
 
 	XF.ToggleStorage = XF.Element.newHandler({
 		options: {
+			storageType: 'local',
 			storageContainer: 'toggle',
 			storageKey: null,
 
@@ -1930,6 +1931,8 @@
 				throw new Error("Storage key not specified for ToggleStorage handler");
 			}
 
+			XF.ToggleStorageData.setStorageType(this.options.storageType);
+
 			var toggleValue = XF.ToggleStorageData.get(container, key);
 			if (toggleValue !== null)
 			{
@@ -1945,7 +1948,7 @@
 
 			XF.ToggleStorageData.prune(container);
 
-			this.$target.on('xf-click:after-click.XFToggleClick', $.proxy(this, 'updateStorage'));
+			this.$target.on('xf-click:after-click.XFToggleClick', XF.proxy(this, 'updateStorage'));
 		},
 
 		updateStorage: function()
@@ -1964,7 +1967,37 @@
 	{
 		var dataCache = {},
 			syncTimers = {},
-			pruneTimers = {};
+			pruneTimers = {},
+			storageType = 'local';
+
+		function setStorageType(type)
+		{
+			switch (type)
+			{
+				case 'local':
+				case 'cookie':
+					storageType = type;
+					break;
+				default:
+					throw Error('Storage type not supported');
+			}
+		}
+
+		function getStorageType()
+		{
+			return storageType;
+		}
+
+		function getStorageObject()
+		{
+			switch (storageType)
+			{
+				case 'local':
+					return XF.LocalStorage;
+				case 'cookie':
+					return XF.Cookie;
+			}
+		}
 
 		function get(container, key, options)
 		{
@@ -1974,11 +2007,12 @@
 			}
 
 			var allowExpired = options.allowExpired || true,
-				touch = options.touch || true;
+				touch = options.touch || true,
+				storageObject = getStorageObject();
 
 			if (!dataCache[container])
 			{
-				dataCache[container] = XF.LocalStorage.getJson(container);
+				dataCache[container] = storageObject.getJson(container);
 			}
 
 			var data = dataCache[container];
@@ -2058,9 +2092,11 @@
 
 		function pruneInternal(container)
 		{
+			var storageObject = getStorageObject();
+
 			if (!dataCache[container])
 			{
-				dataCache[container] = XF.LocalStorage.getJson(container);
+				dataCache[container] = storageObject.getJson(container);
 			}
 
 			var cache = dataCache[container],
@@ -2117,18 +2153,20 @@
 				return;
 			}
 
-			var writeValue = dataCache[container];
+			var storageObject = getStorageObject(),
+				writeValue = dataCache[container];
 			if ($.isEmptyObject(writeValue))
 			{
-				XF.LocalStorage.remove(container);
+				storageObject.remove(container);
 			}
 			else
 			{
-				XF.LocalStorage.setJson(container, writeValue);
+				storageObject.setJson(container, writeValue);
 			}
 		}
 
 		return {
+			setStorageType: setStorageType,
 			get: get,
 			set: set,
 			remove: remove,
@@ -2225,7 +2263,7 @@
 						dragged = false;
 					}
 				})
-				.on('scroll.' + ns, $.proxy(this, 'updateScroll'))
+				.on('scroll.' + ns, XF.proxy(this, 'updateScroll'))
 				.on('tab:click.' + ns, function(e)
 				{
 					if (dragged)
@@ -2234,7 +2272,7 @@
 					}
 				});
 
-			var measure = XF.measureScrollBar($scrollTarget, 'height');
+			var measure = XF.measureScrollBar(null, 'height');
 			$scrollTarget.addClass('is-calculated');
 			if (measure != 0)
 			{
@@ -2251,7 +2289,7 @@
 
 			this.updateScroll();
 
-			$(document.body).on('xf:layout', $.proxy(this, 'updateScroll'));
+			$(document.body).on('xf:layout', XF.proxy(this, 'updateScroll'));
 
 			var resizeTimer;
 			$(window).on('resize', function()
@@ -2260,7 +2298,7 @@
 				{
 					clearTimeout(resizeTimer);
 				}
-				resizeTimer = setTimeout($.proxy(self, 'updateScroll'), 100);
+				resizeTimer = setTimeout(XF.proxy(self, 'updateScroll'), 100);
 			});
 
 			var $autoScroll = $scrollTarget.find(this.options.autoScroll).first();
@@ -2389,7 +2427,7 @@
 			this.$rows = this.$target.find(this.options.rows);
 			this.process();
 
-			$(document).on('breakpoint:change', $.proxy(this, 'process'));
+			$(document).on('breakpoint:change', XF.proxy(this, 'process'));
 		},
 
 		process: function()
@@ -2441,7 +2479,7 @@
 				if (apply)
 				{
 					var	thisHeaderText = headerText[i];
-					if (thisHeaderText && thisHeaderText.length)
+					if (thisHeaderText && thisHeaderText.length && !$cell.data('hide-label'))
 					{
 						$cell.attr('data-cell-label', thisHeaderText);
 					}
@@ -2523,7 +2561,7 @@
 
 			this.update();
 
-			$(window).on('resize.sticky-header', $.proxy(this, 'update'));
+			$(window).on('resize.sticky-header', XF.proxy(this, 'update'));
 		},
 
 		update: function()
@@ -2704,9 +2742,15 @@
 				}
 			}
 
-			$tabs.on('click', $.proxy(this, 'tabClick'));
-			$(window).on('popstate', $.proxy(this, 'onPopState'));
+			$tabs.on('click', XF.proxy(this, 'tabClick'));
+			$(window).on('hashchange', XF.proxy(this, 'onHashChange'));
+			$(window).on('popstate', XF.proxy(this, 'onPopState'));
 
+			this.reactToHash();
+		},
+
+		getSelectorFromHash: function()
+		{
 			var selector = '';
 			if (window.location.hash.length > 1)
 			{
@@ -2716,6 +2760,12 @@
 					selector = '#' + hash;
 				}
 			}
+			return selector;
+		},
+
+		reactToHash: function()
+		{
+			var selector = this.getSelectorFromHash();
 
 			if (selector)
 			{
@@ -2725,6 +2775,11 @@
 			{
 				this.activateTab(this.initial);
 			}
+		},
+
+		onHashChange: function(e)
+		{
+			this.reactToHash();
 		},
 
 		onPopState: function(e)
@@ -2990,7 +3045,7 @@
 		init: function()
 		{
 			this.$select = XF.findRelativeIf(this.options.select, this.$target);
-			this.$select.on('change', $.proxy(this, 'updateSelectWidth'));
+			this.$select.on('change', XF.proxy(this, 'updateSelectWidth'));
 
 			this.updateSelectWidth();
 		},

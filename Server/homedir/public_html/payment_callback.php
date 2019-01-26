@@ -64,7 +64,14 @@ else
 
 if ($state->logType)
 {
-	$handler->log($state);
+	try
+	{
+		$handler->log($state);
+	}
+	catch (\Exception $e)
+	{
+		\XF::logException($e, false, "Error logging payment to payment provider: ");
+	}
 }
 
 $response

@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 8f50da56aecc8f6ef0fcc8cdb80d1afa
+// FROM HASH: edacdb8165ee159bba8b721b467405a3
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -24,11 +24,6 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		{
 			opacity: 1;
 		}
-	}
-
-	::-webkit-scrollbar
-	{
-		display: none;
 	}
 }
 

@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: dff19363b70d7084ff24efa238dcc067
+// FROM HASH: fe0d5aa53913eadc875d6ac92e42e419
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -37,6 +37,11 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		{
 			margin-top: 3px;
 			padding-top: @_tooltip-arrowSize;
+
+			.has-touchevents &.tooltip--selectToQuote
+			{
+				margin-top: .75em;
+			}
 		}
 		&.tooltip--left
 		{

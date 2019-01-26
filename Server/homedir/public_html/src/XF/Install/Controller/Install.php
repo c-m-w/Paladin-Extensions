@@ -231,7 +231,9 @@ class Install extends AbstractController
 
 	public function actionStep4()
 	{
-		$options = $this->em()->findByIds('XF:Option', ['boardTitle', 'boardUrl', 'contactEmailAddress', 'homePageUrl']);
+		$options = $this->em()->findByIds('XF:Option', [
+			'boardTitle', 'boardUrl', 'contactEmailAddress', 'homePageUrl'
+		]);
 
 		$request = $this->request;
 		$options['boardUrl']->option_value = preg_replace('#(/install)?/?$#i', '', $request->getFullBasePath());
@@ -255,7 +257,7 @@ class Install extends AbstractController
 
 		$options = \XF\Util\Arr::arrayFilterKeys(
 			$this->filter('options', 'array'),
-			['boardTitle', 'boardUrl', 'contactEmailAddress', 'homePageUrl'],
+			['boardTitle', 'boardUrl', 'contactEmailAddress', 'homePageUrl', 'collectServerStats'],
 			true
 		);
 		if (!empty($options['contactEmailAddress']))
@@ -269,6 +271,8 @@ class Install extends AbstractController
 
 		/** @var \XF\Repository\Option $optionRepo */
 		$optionRepo = $this->repository('XF:Option');
+
+		// if applicable, updating collectServerStats will enqueue stats collection automatically
 		$optionRepo->updateOptions($options);
 
 		return $this->redirect('index.php?install/complete');

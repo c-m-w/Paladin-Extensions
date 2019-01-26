@@ -507,7 +507,7 @@ class Tag extends Repository implements \XF\ResultSetInterface
 
 	public function rebuildContentTagCache($contentType, $contentId)
 	{
-		$handler = $this->getTagHandler($contentType, true);
+		$handler = $this->getTagHandler($contentType, false);
 		if (!$handler)
 		{
 			return false;

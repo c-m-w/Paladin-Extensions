@@ -598,7 +598,7 @@ class Request
 			return $baseUrl;
 		}
 
-		$requestUri = $this->getServer('REQUEST_URI', '');
+		$requestUri = $this->getRequestUri();
 		if (!strlen($requestUri))
 		{
 			// no request URI, probably not a normal HTTP request - just return the root
@@ -683,6 +683,15 @@ class Request
 
 	public function getRequestUri()
 	{
+		if ($this->getServer('IIS_WasUrlRewritten') === '1')
+		{
+			$unencodedUrl = $this->getServer('UNENCODED_URL', '');
+			if ($unencodedUrl !== '')
+			{
+				return $unencodedUrl;
+			}
+		}
+
 		return $this->getServer('REQUEST_URI', '');
 	}
 

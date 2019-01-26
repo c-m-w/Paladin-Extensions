@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 9061bed384c2ab71b78f2eb6c531ddd7
+// FROM HASH: 4da89406c0e434c149d88d82702f8991
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -128,6 +128,13 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		}
 		$__finalCompiled .= '
 					</ul>
+					';
+		if ($__vars['online']['counts']['unseen']) {
+			$__finalCompiled .= '
+						<a href="' . $__templater->fn('link', array('online', ), true) . '">' . '... and ' . $__templater->escape($__vars['online']['counts']['unseen']) . ' more.' . '</a>
+					';
+		}
+		$__finalCompiled .= '
 				';
 	} else {
 		$__finalCompiled .= '

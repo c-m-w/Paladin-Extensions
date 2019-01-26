@@ -22,7 +22,7 @@
 				return;
 			}
 
-			this.$target.on('click', '.js-noticeDismiss', $.proxy(this, 'dismiss'));
+			this.$target.on('click', '.js-noticeDismiss', XF.proxy(this, 'dismiss'));
 
 			this.start();
 		},
@@ -154,7 +154,7 @@
 						enableDrag: false
 					});
 
-					$(window).on('resize', $.proxy(this, 'refreshSlider'));
+					$(window).on('resize', XF.proxy(this, 'refreshSlider'));
 				}
 				else
 				{

@@ -6,17 +6,9 @@ use XF\Mvc\Entity\Entity;
 use XF\Mvc\Entity\Structure;
 
 /**
- * COLUMNS
- * @property int node_id
+ * Class Category
  *
- * GETTERS
- * @property string|null node_name
- * @property string|null title
- * @property string|null description
- * @property int depth
- *
- * RELATIONS
- * @property \XF\Entity\Node Node
+ * @package XF\Entity
  */
 class Category extends AbstractNode
 {

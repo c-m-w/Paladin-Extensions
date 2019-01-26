@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 3cc76ba2d7ca853cc1eae87552d8aa19
+// FROM HASH: 8470fea0b709e9a53e0eccdcb0363fda
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -9,6 +9,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 {
 	display: flex;
 	align-items: stretch;
+	flex-grow: 1;
+	min-height: 1px; // IE11 workaround - related to #139187
 }
 
 .p-body-inner
@@ -16,15 +18,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	display: flex;
 	flex-direction: column;
 	width: 100%;
-}
 
-.p-body
-{
-	flex-grow: 1;
-}
-
-.p-body-inner
-{
 	.m-pageWidth();
 	.m-clearFix();
 
@@ -43,6 +37,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	table-layout: fixed;
 	width: 100%;
 	margin-bottom: auto;
+	min-height: 1px; // IE11 workaround - related to #139187
 }
 
 .p-body-content

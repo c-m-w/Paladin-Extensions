@@ -211,7 +211,7 @@ class PermissionEntry extends Repository
 
 		if ($groups)
 		{
-			$db->delete('xf_permission_entry', 'permission_group_id IN(' . $db->quote($groups) . ')');
+			$db->delete($table, 'permission_group_id IN(' . $db->quote($groups) . ')');
 		}
 
 		$permPairs = $db->fetchAll('

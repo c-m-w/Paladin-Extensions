@@ -58,6 +58,12 @@ class Install extends Command implements CustomAppCommandInterface
 				'Board URL (default: http://localhost)'
 			)
 			->addOption(
+				'skip-statistics',
+				null,
+				InputOption::VALUE_NONE,
+				'If set, the question to opt into anonymous server statistics collection will be skipped.'
+			)
+			->addOption(
 				'clear',
 				null,
 				InputOption::VALUE_NONE,
@@ -175,22 +181,23 @@ class Install extends Command implements CustomAppCommandInterface
 			$question->setHidden(true);
 			$password = $helper->ask($input, $output, $question);
 			$output->writeln("");
-		}
 
-		$question = new Question('<question>Re-enter the administrator user password to confirm:</question> ');
-		$question->setValidator(function ($value) use ($password)
-		{
-			if ($value !== $password)
+			// we can just trust the password input if it was entered when executing the command, otherwise ask:
+			$question = new Question('<question>Re-enter the administrator user password to confirm:</question> ');
+			$question->setValidator(function ($value) use ($password)
 			{
-				throw new \InvalidArgumentException('Passwords did not match. Please enter the same password.');
-			}
+				if ($value !== $password)
+				{
+					throw new \InvalidArgumentException('Passwords did not match. Please enter the same password.');
+				}
 
-			return $value;
-		});
-		$question->setHidden(true);
-		$question->setMaxAttempts(5);
-		$helper->ask($input, $output, $question);
-		$output->writeln("");
+				return $value;
+			});
+			$question->setHidden(true);
+			$question->setMaxAttempts(5);
+			$helper->ask($input, $output, $question);
+			$output->writeln("");
+		}
 
 		$email = $input->getOption('email');
 		if (!$email)
@@ -303,19 +310,36 @@ class Install extends Command implements CustomAppCommandInterface
 		}
 
 		$output->writeln("Done. Apply installation configuration...");
+		$output->writeln("");
 
 		$installHelper->createInitialUser([
 			'username' => $username,
 			'email' => $email
 		], $password);
 
+		$serverStats = [
+			'configured' => 1,
+			'enabled' => 0
+		];
+		if (!$input->getOption('skip-statistics'))
+		{
+			$question = new ConfirmationQuestion("<question>Send anonymous server statistics (PHP, MySQL, XF versions)? (y/n)</question> ");
+			if ($helper->ask($input, $output, $question))
+			{
+				$serverStats['enabled'] = 1;
+			}
+		}
+
 		/** @var \XF\Repository\Option $optionRepo */
 		$optionRepo = \XF::repository('XF:Option');
+
+		// if applicable, updating collectServerStats will enqueue stats collection automatically
 		$optionRepo->updateOptions([
 			'boardTitle' => $title,
 			'boardUrl' => $url,
 			'contactEmailAddress' => $email,
-			'defaultEmailAddress' => $email
+			'defaultEmailAddress' => $email,
+			'collectServerStats' => $serverStats
 		]);
 
 		$installHelper->completeInstallation();

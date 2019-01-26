@@ -25,7 +25,7 @@
   <admin_navigation_entry navigation_id="communication" display_order="9999" link="communication" icon="fa-bullhorn" debug_only="0" hide_no_children="1"/>
   <admin_navigation_entry navigation_id="connectedAccountProviders" parent_navigation_id="serviceProviders" display_order="300" link="connected-accounts" admin_permission_id="user" debug_only="0" hide_no_children="0"/>
   <admin_navigation_entry navigation_id="contactUsers" parent_navigation_id="communication" display_order="1000" icon="fa-send-o" debug_only="0" hide_no_children="1"/>
-  <admin_navigation_entry navigation_id="content" display_order="300" link="content" icon="fa-newspaper-o" debug_only="0" hide_no_children="0"/>
+  <admin_navigation_entry navigation_id="content" display_order="300" link="content" icon="fa-newspaper-o" debug_only="0" hide_no_children="1"/>
   <admin_navigation_entry navigation_id="contentTypes" parent_navigation_id="executionManipulation" display_order="100" link="content-types" debug_only="1" hide_no_children="0"/>
   <admin_navigation_entry navigation_id="createNewUser" parent_navigation_id="users" display_order="300" link="users/add" admin_permission_id="user" debug_only="0" hide_no_children="0"/>
   <admin_navigation_entry navigation_id="cronEntries" parent_navigation_id="tools" display_order="100" link="cron" admin_permission_id="cron" debug_only="0" hide_no_children="0"/>
@@ -52,11 +52,11 @@
   <admin_navigation_entry navigation_id="listAddOns" parent_navigation_id="addOns" display_order="100" link="add-ons" admin_permission_id="addOn" debug_only="0" hide_no_children="0"/>
   <admin_navigation_entry navigation_id="listAllUsers" parent_navigation_id="users" display_order="100" link="users/list" admin_permission_id="user" debug_only="0" hide_no_children="0"/>
   <admin_navigation_entry navigation_id="logs" display_order="15100" link="logs" icon="fa-history" debug_only="0" hide_no_children="1"/>
-  <admin_navigation_entry navigation_id="logsContent" parent_navigation_id="logs" display_order="50" icon="fa-newspaper-o" debug_only="0" hide_no_children="0"/>
-  <admin_navigation_entry navigation_id="logsError" parent_navigation_id="logs" display_order="20" icon="fa-exclamation-triangle" debug_only="0" hide_no_children="0"/>
-  <admin_navigation_entry navigation_id="logsMisc" parent_navigation_id="logs" display_order="60" icon="fa-file-o" debug_only="0" hide_no_children="0"/>
-  <admin_navigation_entry navigation_id="logsSpam" parent_navigation_id="logs" display_order="40" icon="fa-fire-extinguisher" debug_only="0" hide_no_children="0"/>
-  <admin_navigation_entry navigation_id="logsUser" parent_navigation_id="logs" display_order="30" icon="fa-users" debug_only="0" hide_no_children="0"/>
+  <admin_navigation_entry navigation_id="logsContent" parent_navigation_id="logs" display_order="50" icon="fa-newspaper-o" debug_only="0" hide_no_children="1"/>
+  <admin_navigation_entry navigation_id="logsError" parent_navigation_id="logs" display_order="20" icon="fa-exclamation-triangle" debug_only="0" hide_no_children="1"/>
+  <admin_navigation_entry navigation_id="logsMisc" parent_navigation_id="logs" display_order="60" icon="fa-file-o" debug_only="0" hide_no_children="1"/>
+  <admin_navigation_entry navigation_id="logsSpam" parent_navigation_id="logs" display_order="40" icon="fa-fire-extinguisher" debug_only="0" hide_no_children="1"/>
+  <admin_navigation_entry navigation_id="logsUser" parent_navigation_id="logs" display_order="30" icon="fa-users" debug_only="0" hide_no_children="1"/>
   <admin_navigation_entry navigation_id="memberStats" parent_navigation_id="users" display_order="500" link="member-stats" admin_permission_id="user" debug_only="0" hide_no_children="0"/>
   <admin_navigation_entry navigation_id="messageUsers" parent_navigation_id="contactUsers" display_order="300" link="users/message" admin_permission_id="user" debug_only="0" hide_no_children="0"/>
   <admin_navigation_entry navigation_id="moderatorLog" parent_navigation_id="logsUser" display_order="300" link="logs/moderator" admin_permission_id="viewLogs" debug_only="0" hide_no_children="0"/>
@@ -119,7 +119,7 @@
   <admin_navigation_entry navigation_id="userTitleLadder" parent_navigation_id="userCustomization" display_order="300" link="user-title-ladder" admin_permission_id="user" debug_only="0" hide_no_children="0"/>
   <admin_navigation_entry navigation_id="userUpgrades" parent_navigation_id="userCustomization" display_order="500" link="user-upgrades" admin_permission_id="userUpgrade" debug_only="0" hide_no_children="0"/>
   <admin_navigation_entry navigation_id="userWarnings" parent_navigation_id="userDiscipline" display_order="100" link="warnings" admin_permission_id="warning" debug_only="0" hide_no_children="0"/>
-  <admin_navigation_entry navigation_id="users" display_order="10000" link="users/list" icon="fa-user" debug_only="0" hide_no_children="1"/>
+  <admin_navigation_entry navigation_id="users" display_order="10000" link="users" icon="fa-user" debug_only="0" hide_no_children="1"/>
   <admin_navigation_entry navigation_id="usersStaff" parent_navigation_id="groupsAndPermissions" display_order="2000" icon="fa-shield" debug_only="0" hide_no_children="1"/>
   <admin_navigation_entry navigation_id="widgetDefinitions" parent_navigation_id="development" display_order="300" link="widgets/definitions/" admin_permission_id="widget" debug_only="1" hide_no_children="0"/>
   <admin_navigation_entry navigation_id="widgetPositions" parent_navigation_id="development" display_order="200" link="widgets/positions/" admin_permission_id="widget" debug_only="1" hide_no_children="0"/>

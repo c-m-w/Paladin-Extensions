@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: bab7473872176323dfd7c704065893fc
+// FROM HASH: 2248f008544dab4bfff9e29499547bca
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -363,6 +363,11 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	&.p-discovery
 	{
 		margin-left: .5em;
+
+		&.p-discovery--noSearch
+		{
+			margin-left: 0;
+		}
 	}
 }
 

@@ -96,6 +96,11 @@ class NewThreads extends AbstractWidget
 			'show_expanded_title' => 'bool'
 		]);
 
+		if (in_array(0, $options['node_ids']))
+		{
+			$options['node_ids'] = [0];
+		}
+
 		if ($options['limit'] < 1)
 		{
 			$options['limit'] = 1;

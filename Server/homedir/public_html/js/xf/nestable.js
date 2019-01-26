@@ -64,7 +64,7 @@
 			};
 			this.$target.nestable(config);
 
-			this.$target.on('change', $.proxy(this, 'change'));
+			this.$target.on('change', XF.proxy(this, 'change'));
 			this.change();
 		},
 

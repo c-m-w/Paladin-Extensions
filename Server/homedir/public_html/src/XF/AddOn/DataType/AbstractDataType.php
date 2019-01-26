@@ -16,13 +16,15 @@ abstract class AbstractDataType
 	abstract public function getContainerTag();
 
 	abstract public function getChildTag();
-	
+
 	abstract public function exportAddOnData($addOnId, \DOMElement $container);
-	
+
 	abstract public function importAddOnData($addOnId, \SimpleXMLElement $container, $start = 0, $maxRunTime = 0);
 
 	abstract public function deleteOrphanedAddOnData($addOnId, \SimpleXMLElement $container);
-	
+
+	const USE_AUTO_CDATA = false;
+
 	public function __construct(\XF\Mvc\Entity\Manager $em)
 	{
 		$this->em = $em;
@@ -191,15 +193,35 @@ abstract class AbstractDataType
 		foreach ($this->getMappedAttributes() AS $attr)
 		{
 			$value = $entity->getValue($attr);
-			if ($value === '')
+
+			if ($value !== '')
 			{
-				continue;
+				if (is_bool($value))
+				{
+					$value = $value ? 1 : 0;
+				}
+
+				// CURRENTLY NOT USED DUE TO BC ISSUES WITH 2.0.x < 2.0.4
+				if (self::USE_AUTO_CDATA && is_string($value) && !preg_match('/^[^<>&"]*$/si', $value))
+				{
+					// This exports CDATA, but does not escape `]]>` like \XF\Util\XML::createDomCdataSection(),
+					// because it needs to be transparently importable.
+					// If you need to export values containing `]]>`, use exportCdataToNewNode()
+					// and remove this attribute from exportMappedAttributes()
+
+					$newNode = $tag->ownerDocument->createElement($attr);
+
+					$newNode->appendChild(
+						$newNode->ownerDocument->createCDATASection($entity->{$attr})
+					);
+
+					$tag->appendChild($newNode);
+				}
+				else
+				{
+					$tag->setAttribute($attr, $value);
+				}
 			}
-			if (is_bool($value))
-			{
-				$value = $value ? 1 : 0;
-			}
-			$tag->setAttribute($attr, $value);
 		}
 	}
 
@@ -221,7 +243,21 @@ abstract class AbstractDataType
 				continue;
 			}
 
-			$entity->$attr = (string)$el[$attr];
+			if (self::USE_AUTO_CDATA)
+			{
+				if (isset($el[$attr]))
+				{
+					$entity->$attr = (string)$el[$attr];
+				}
+				else if (isset($el->{$attr}))
+				{
+					$entity->$attr = (string)$el->{$attr};
+				}
+			}
+			else
+			{
+				$entity->$attr = (string)$el[$attr];
+			}
 		}
 	}
 

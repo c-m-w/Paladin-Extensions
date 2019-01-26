@@ -17,6 +17,7 @@ return array (
   'option_group.discussionOptions' => 'Threads,  discussions and conversations',
   'option_group.emailLog' => 'Email log',
   'option_group.emailOptions' => 'Email options',
+  'option_group.exup' => 'Expiring User Upgrades',
   'option_group.imageLinkProxy' => 'Image and link proxy',
   'option_group.inactiveMembers' => 'Inactive members',
   'option_group.j_email_check' => '[J] Email Check',

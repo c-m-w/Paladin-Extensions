@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 982ab02f49724fa548a654d1c377041b
+// FROM HASH: e769c04018e66aac845b4adec6921406
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -163,10 +163,12 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	padding: @xf-paddingSmall;
 	overflow: hidden;
 
+	font-family: @xf-fontFamilyUi;
 	font-size: @xf-fontSizeSmaller;
+	line-height: @xf-lineHeightDefault;
 
 	display: none;
-	align-items: flex-end;
+	align-items: center;
 	justify-content: center;
 
 	.avatar--updateLink &

@@ -34,7 +34,7 @@ class PaymentProviderLog extends Entity
 		$value = $this->log_details_;
 		if (substr($value, 0, 2) == 'a:')
 		{
-			// pre-2.0 version stored serialized
+			// pre-2.0 version stored serialized (as well as logs with invalid UTF-8)
 			$details = \XF\Util\Php::safeUnserialize($value);
 			if (!is_array($details))
 			{
@@ -50,7 +50,17 @@ class PaymentProviderLog extends Entity
 
 	public function verifyLogDetails(&$value)
 	{
-		$value = json_encode($value);
+		$newValue = json_encode($value);
+		if (json_last_error() == JSON_ERROR_NONE)
+		{
+			$value = $newValue;
+		}
+		else
+		{
+			// likely a UTF-8 error
+			$value = serialize($value);
+		}
+
 		return true;
 	}
 

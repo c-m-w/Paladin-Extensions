@@ -20,6 +20,7 @@ return array (
   'ad_pos.forum_view_below_thread_list' => 'Forum view: Below thread list',
   'ad_pos.member_view_below_tabs' => 'Member view: Below tabs',
   'ad_pos.post_above_content' => 'Post: Above message content',
+  'ad_pos.post_below_container' => 'Post: Below message container',
   'ad_pos.post_below_content' => 'Post: Below message content',
   'ad_pos.thread_view_above_messages' => 'Thread view: Above message list',
   'ad_pos.thread_view_below_messages' => 'Thread view: Below message list',

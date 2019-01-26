@@ -161,6 +161,7 @@ class UserUpgrade extends AbstractController
 				? $this->filter('end_date', 'datetime')
 				: 0;
 
+			/** @var \XF\Service\User\Upgrade $upgradeService */
 			$upgradeService = $this->service('XF:User\Upgrade', $upgrade, $user);
 			$upgradeService->setEndDate($endDate);
 			$upgradeService->ignoreUnpurchasable(true);

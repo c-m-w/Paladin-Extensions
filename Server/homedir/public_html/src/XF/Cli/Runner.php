@@ -105,11 +105,17 @@ class Runner
 					{
 						if ($output)
 						{
-							$output->writeln($runner->statusMessage);
+							$output->writeln(strval($runner->statusMessage));
 						}
 
 						// keep the memory limit down on long running jobs
 						$app->em()->clearEntityCache();
+
+						if ($runner->continueDate)
+						{
+							// job is finished but set to resume in the future
+							break;
+						}
 					}
 				}
 			}

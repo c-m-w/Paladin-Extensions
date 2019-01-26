@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 5e2375cd6b08cf4fbb306b64ee6466c7
+// FROM HASH: 37472aee76c00cc9ff2e2c7235e82555
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -61,10 +61,9 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 				<script type="application/json" class="js-formStyles">
 					{
 						"base": {
-							"color": "' . $__templater->fn('property', array('textColor', '#141414', ), true) . '",
-							"fontFamily": "' . $__templater->fn('property', array('fontFamilyUi', ), true) . '",
-							"fontSize": "16px",
-							"lineHeight": "' . $__templater->fn('property', array('lineHeightDefault', '1.4', ), true) . '"
+							"color": "' . $__templater->filter($__templater->fn('parse_less_color', array($__templater->fn('property', array('textColor', '#141414', ), false), ), false), array(array('escape', array('json', )),), true) . '",
+							"fontFamily": "' . $__templater->filter($__templater->fn('property', array('fontFamilyUi', ), false), array(array('escape', array('json', )),), true) . '",
+							"fontSize": "16px"
 						},
 						"invalid": {
 							"color": "#c84448"
@@ -89,7 +88,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			<div class="block-container">
 				<div class="block-body">
 					' . $__templater->formRow('
-						' . $__templater->button('', array(
+						' . $__templater->button('&nbsp;', array(
 			'class' => 'button--apple js-applePayButton',
 		), '', array(
 		)) . '

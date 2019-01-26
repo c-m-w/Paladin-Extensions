@@ -19,9 +19,21 @@ class Searcher
 
 	protected $typeLimit = 10;
 
-	public function __construct(App $app, array $handlerClasses = [])
+	public function __construct(App $app, array $handlerClasses = [], $allowExclusions = true)
 	{
 		$this->app = $app;
+
+		if ($allowExclusions)
+		{
+			foreach ($app->options()->acpSearchExclude AS $type => $value)
+			{
+				if (isset($handlerClasses[$type]))
+				{
+					unset($handlerClasses[$type]);
+				}
+			}
+		}
+
 		$this->addHandlerClasses($handlerClasses);
 	}
 

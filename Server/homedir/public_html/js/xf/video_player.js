@@ -12,7 +12,7 @@
 		init: function()
 		{
 			this.player = videojs(this.$target[0], this.options.playerSetup);
-			this.player.ready($.proxy(this, 'ready'));
+			this.player.ready(XF.proxy(this, 'ready'));
 		},
 
 		ready: function()

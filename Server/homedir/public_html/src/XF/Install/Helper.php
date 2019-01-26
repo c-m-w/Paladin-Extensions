@@ -234,6 +234,12 @@ class Helper
 			$warnings['random'] = \XF::phrase('php_weak_random_values');
 		}
 
+		$phpVersion = phpversion();
+		if (version_compare($phpVersion, '5.6.0', '<'))
+		{
+			$warnings['phpVersion'] = \XF::phrase('php_version_x_outdated_upgrade', ['version' => $phpVersion]);
+		}
+
 		return $warnings;
 	}
 
@@ -444,6 +450,8 @@ class Helper
 			['version_id' => \XF::$versionId, 'version_string' => \XF::$version],
 			"addon_id = 'XF'"
 		);
+
+		$this->app->addOnDataManager()->rebuildActiveAddOnCache();
 	}
 
 	public function isInstalled()

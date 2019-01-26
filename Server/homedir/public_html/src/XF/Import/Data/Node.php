@@ -2,6 +2,29 @@
 
 namespace XF\Import\Data;
 
+/**
+ * Class Node
+ *
+ * @package XF\Import\Data
+ *
+ * COLUMNS
+ * @property int|null node_id
+ * @property string title
+ * @property string|null node_name
+ * @property string description
+ * @property string node_type_id
+ * @property int parent_node_id
+ * @property int display_order
+ * @property int lft
+ * @property int rgt
+ * @property int depth
+ * @property int style_id
+ * @property int effective_style_id
+ * @property bool display_in_list
+ * @property array breadcrumb_data
+ * @property string navigation_id
+ * @property string effective_navigation_id
+ */
 class Node extends AbstractEmulatedData
 {
 	/**
@@ -29,7 +52,7 @@ class Node extends AbstractEmulatedData
 
 	protected function preSave($oldId)
 	{
-		$this->title = $this->validTextOrDefault($this->title, 'title', $oldId);
+		$this->forceNotEmpty('title', $oldId);
 
 		if (!$this->typeData)
 		{

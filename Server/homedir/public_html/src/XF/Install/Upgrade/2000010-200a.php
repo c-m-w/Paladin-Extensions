@@ -2104,22 +2104,28 @@ class Version2000010 extends AbstractUpgrade
 		$prefixes = $db->fetchPairs("
 			SELECT prefix_id, css_class
 			FROM xf_thread_prefix
-			WHERE css_class <> ''
 		");
 
 		$db->beginTransaction();
 
 		foreach ($prefixes AS $id => $class)
 		{
-			$newClass = preg_replace_callback('#prefix\s+prefix([A-Z][a-zA-Z0-9_-]*)#', function ($match)
+			if ($class === '')
 			{
-				$variant = strtolower($match[1][0]) . substr($match[1], 1);
-				if ($variant == 'secondary')
+				$newClass = 'label label--hidden';
+			}
+			else
+			{
+				$newClass = preg_replace_callback('#prefix\s+prefix([A-Z][a-zA-Z0-9_-]*)#', function ($match)
 				{
-					$variant = 'accent';
-				}
-				return 'label label--' . $variant;
-			}, $class);
+					$variant = strtolower($match[1][0]) . substr($match[1], 1);
+					if ($variant == 'secondary')
+					{
+						$variant = 'accent';
+					}
+					return 'label label--' . $variant;
+				}, $class);
+			}
 			if ($newClass != $class)
 			{
 				$db->update('xf_thread_prefix',

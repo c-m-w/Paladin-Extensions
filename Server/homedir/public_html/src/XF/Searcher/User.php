@@ -50,6 +50,38 @@ class User extends AbstractSearcher
 			return false;
 		}
 
+		if ($key == 'user_field')
+		{
+			$exactMatchFields = !empty($value['exact']) ? $value['exact'] : [];
+			$customFields = $value;
+			unset($customFields['exact']);
+
+			foreach ($customFields AS $fieldId => $fieldValue)
+			{
+				if ($fieldValue === '' || (is_array($fieldValue) && !$fieldValue))
+				{
+					unset($customFields[$fieldId]);
+				}
+			}
+			foreach ($exactMatchFields AS $fieldId => $fieldValue)
+			{
+				if ($fieldValue === '' || (is_array($fieldValue) && !$fieldValue))
+				{
+					unset($exactMatchFields[$fieldId]);
+				}
+			}
+			if ($exactMatchFields)
+			{
+				$customFields['exact'] = $exactMatchFields;
+			}
+
+			$value = $customFields;
+			if (!$customFields)
+			{
+				return false;
+			}
+		}
+
 		return null;
 	}
 

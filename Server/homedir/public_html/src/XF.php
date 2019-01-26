@@ -12,8 +12,8 @@ class XF
 	 * @var string
 	 * @var integer
 	 */
-	public static $version = '2.0.1';
-	public static $versionId = 2000170; // abbccde = a.b.c d (alpha: 1, beta: 3, RC: 5, stable: 7, PL: 9) e
+	public static $version = '2.0.4';
+	public static $versionId = 2000470; // abbccde = a.b.c d (alpha: 1, beta: 3, RC: 5, stable: 7, PL: 9) e
 
 	protected static $requestCleaned = false;
 
@@ -732,7 +732,7 @@ class XF
 
 	public static function getCopyrightHtml()
 	{
-		return '<span class="u-concealed" dir="ltr">Forum software by XenForo&trade; <span class="copyright">&copy;2010-2017 XenForo Ltd.</span></span>';
+		return '<a href="https://xenforo.com" class="u-concealed" dir="ltr" target="_blank">Forum software by XenForo&trade; <span class="copyright">&copy; 2010-2018 XenForo Ltd.</span></a>';
 	}
 
 	public static function isPreEscaped($value, $type = 'html')

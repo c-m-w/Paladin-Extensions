@@ -421,6 +421,11 @@ class Response
 			return false;
 		}
 
+		if (!function_exists('gzencode'))
+		{
+			return false;
+		}
+
 		return (strlen($this->body) >= 20);
 	}
 }

@@ -96,6 +96,11 @@ class ConversationMessage extends Entity implements QuotableInterface, \XF\BbCod
 		return $visitor->hasPermission('conversation', 'like');
 	}
 
+	public function canCleanSpam()
+	{
+		return (\XF::visitor()->canCleanSpam() && $this->User && $this->User->isPossibleSpammer());
+	}
+
 	public function isLiked()
 	{
 		$visitor = \XF::visitor();

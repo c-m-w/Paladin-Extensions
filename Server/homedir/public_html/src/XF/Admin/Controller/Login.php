@@ -115,8 +115,18 @@ class Login extends AbstractController
 			'user', $user->user_id, 'login_admin'
 		);
 
-		$user->Admin->last_login = time();
-		$user->Admin->save();
+		if (!$user->Admin && $user->is_admin)
+		{
+			$admin = $this->em()->create('XF:Admin');
+			$admin->user_id = $user->user_id;
+			$admin->last_login = \XF::$time;
+			$admin->save();
+		}
+		else
+		{
+			$user->Admin->last_login = \XF::$time;
+			$user->Admin->save();
+		}
 
 		/** @var \XF\Session\Session $publicSession */
 		$publicSession = $this->app['session.public'];

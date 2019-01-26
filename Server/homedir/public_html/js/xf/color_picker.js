@@ -693,13 +693,33 @@
 		}
 		else
 		{
-			var mapColors = XF.Color.mapColors;
+			var mapColors = XF.Color.mapColors,
+				firstMapped = false;
+
+			if (XF.Color.mapVisited === null)
+			{
+				firstMapped = true;
+				XF.Color.mapVisited = {};
+			}
 
 			for (var mapKey in mapColors)
 			{
 				if (mapColors.hasOwnProperty(mapKey) && mapColors[mapKey].colors[str])
 				{
-					return XF.Color.fromString(mapColors[mapKey].colors[str].value, name || str);
+					if (XF.Color.mapVisited[str])
+					{
+						return '';
+					}
+					XF.Color.mapVisited[str] = true;
+
+					var final = XF.Color.fromString(mapColors[mapKey].colors[str].value, name || str);
+
+					if (firstMapped)
+					{
+						XF.Color.mapVisited = null;
+					}
+
+					return final;
 				}
 			}
 
@@ -718,6 +738,7 @@
 	}
 
 	XF.Color.mapColors = {};
+	XF.Color.mapVisited = null;
 
 	XF.ColorPicker = XF.Element.newHandler({
 		options: {
@@ -743,11 +764,11 @@
 			var $target = this.$target;
 
 			this.$input = XF.findRelativeIf(this.options.input, $target);
-			this.$input.on('keyup paste', $.proxy(this, 'onInputUpdate'));
+			this.$input.on('keyup paste', XF.proxy(this, 'onInputUpdate'));
 
 			this.$box = XF.findRelativeIf(this.options.box, $target);
 			this.$box.append('<span class="colorPickerBox-sample" />');
-			this.$box.click($.proxy(this, 'click'));
+			this.$box.click(XF.proxy(this, 'click'));
 
 			this.updateFromInput();
 
@@ -874,11 +895,11 @@
 			this.menuEls.$input = $menu.find('.colorPicker-input');
 			this.menuEls.$save = $menu.find('.colorPicker-save');
 
-			this.menuEls.$propertyContainer.on('click', '[data-property]', $.proxy(this, 'propertyClick'));
-			this.menuEls.$colorGrad.on('mousedown', $.proxy(this, 'colorGradMouseDown'));
-			this.menuEls.$hueBar.on('mousedown', $.proxy(this, 'hueBarMouseDown'));
-			this.menuEls.$alphaBar.on('mousedown', $.proxy(this, 'alphaBarMouseDown'));
-			this.menuEls.$save.on('click', $.proxy(this, 'save'));
+			this.menuEls.$propertyContainer.on('click', '[data-property]', XF.proxy(this, 'propertyClick'));
+			this.menuEls.$colorGrad.on('mousedown', XF.proxy(this, 'colorGradMouseDown'));
+			this.menuEls.$hueBar.on('mousedown', XF.proxy(this, 'hueBarMouseDown'));
+			this.menuEls.$alphaBar.on('mousedown', XF.proxy(this, 'alphaBarMouseDown'));
+			this.menuEls.$save.on('click', XF.proxy(this, 'save'));
 
 			this.menu = new XF.MenuClick(this.$box, {});
 		},
@@ -925,6 +946,7 @@
 			if (this.options.allowPalette)
 			{
 				var mapColors = XF.Color.mapColors,
+					thisMapName = this.options.mapName,
 					colorGroupId,
 					colorGroup,
 					propName,
@@ -945,6 +967,10 @@
 					for (propName in colorGroup.colors)
 					{
 						if (!colorGroup.colors.hasOwnProperty(propName))
+						{
+							continue;
+						}
+						if (thisMapName && thisMapName === propName)
 						{
 							continue;
 						}

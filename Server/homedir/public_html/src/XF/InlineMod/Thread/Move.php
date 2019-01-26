@@ -122,7 +122,7 @@ class Move extends AbstractAction
 	{
 		/** @var \XF\Repository\Node $nodeRepo */
 		$nodeRepo = $this->app()->repository('XF:Node');
-		$nodes = $nodeRepo->getNodeList();
+		$nodes = $nodeRepo->getFullNodeList()->filterViewable();
 
 		$prefixes = $this->app()->finder('XF:ThreadPrefix')
 			->order('materialized_order')

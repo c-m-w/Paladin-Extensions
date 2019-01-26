@@ -127,6 +127,21 @@ class Option extends Repository
 		return true;
 	}
 
+	public function updateOptionSkipVerify($name, $value)
+	{
+		$option = $this->em->find('XF:Option', $name);
+		if (!$option)
+		{
+			throw new \InvalidArgumentException("Unknown option $name");
+		}
+
+		$option->setOption('verify_value', false);
+		$option->option_value = $value;
+		$option->save();
+
+		return true;
+	}
+
 	public function getOptionCacheData()
 	{
 		$options = $this->finder('XF:Option')->fetch();

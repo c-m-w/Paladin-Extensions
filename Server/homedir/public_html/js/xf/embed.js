@@ -17,7 +17,7 @@
 						'provider': this.options.provider,
 						'id': this.options.id.replace(/#/, '{{_hash_}}')
 					},
-					success: $.proxy(this, 'handleResponse')
+					success: XF.proxy(this, 'handleResponse')
 				});
 			}
 		},
@@ -49,7 +49,7 @@
 				content: data.html
 			};
 
-			XF.setupHtmlInsert(container, $.proxy(function($html, container, onComplete)
+			XF.setupHtmlInsert(container, XF.proxy(function($html, container, onComplete)
 			{
 				this.$target
 					.addClass('bbOembed--loaded')
@@ -65,7 +65,7 @@
 			var $a = $('<a />', this.getImageLinkData(data)),
 				$i = $('<img class="bbImage" data-zoom-target="1" />').appendTo($a);
 
-			$i.on('load', $.proxy(this, 'onComplete'))
+			$i.on('load', XF.proxy(this, 'onComplete'))
 				.attr('src', data.url);
 
 			this.$target.empty().append($a);
@@ -133,11 +133,13 @@
 
 		init: function()
 		{
-			if (window.twttr && !isNaN(this.options.tweetId))
+			var tweetId = this.options.tweetId + '';
+
+			if (window.twttr && tweetId.length)
 			{
-				twttr.ready($.proxy(function(twttr)
+				twttr.ready(XF.proxy(function(twttr)
 				{
-					twttr.widgets.createTweet(this.options.tweetId, this.$target.get(0), this.options)
+					twttr.widgets.createTweet(tweetId, this.$target.get(0), this.options)
 						.then(function()
 						{
 							$(document).trigger('embed:loaded');

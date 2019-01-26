@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 119dc1ddfa70cd228203782e32a5a71e
+// FROM HASH: c1546e1625f960dc2f9854be139460a3
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -45,7 +45,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 				</div>
 				' . $__templater->callMacro('filter_macros', 'quick_filter', array(
 				'key' => 'users',
-				'ajax' => $__templater->fn('link', array('users/list', null, array('criteria' => $__vars['criteria'], ), ), false),
+				'ajax' => $__templater->fn('link', array('users/list', null, array('criteria' => $__vars['criteria'], 'order' => $__vars['order'], 'direction' => $__vars['direction'], ), ), false),
 				'class' => 'block-outer-opposite',
 			), $__vars) . '
 			</div>

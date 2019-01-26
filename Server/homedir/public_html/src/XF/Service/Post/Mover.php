@@ -101,7 +101,7 @@ class Mover extends \XF\Service\AbstractService
 
 			/** @var Thread $sourceThread */
 			$sourceThread = $sourcePost->Thread;
-			if (!isset($sourceThreads[$sourceThread->thread_id]))
+			if ($sourceThread && !isset($sourceThreads[$sourceThread->thread_id]))
 			{
 				$sourceThread->setOption('log_moderator', false);
 				$sourceThreads[$sourceThread->thread_id] = $sourceThread;
@@ -159,11 +159,16 @@ class Mover extends \XF\Service\AbstractService
 		);
 
 		$firstPost = reset($this->sourcePosts);
-		if ($firstPost->message_state != 'visible')
+		if (
+			$firstPost->message_state != 'visible'
+			&& (!$this->existingTarget || $firstPost->post_date <= $this->target->post_date)
+		)
 		{
-			$firstPost->setAsSaved('thread_id', $target->thread_id);
-			$firstPost->message_state = 'visible';
-			$firstPost->save();
+			// need to do this change on a clone, as we need the source post version to be unchanged
+			$clone = clone $firstPost;
+			$clone->setAsSaved('thread_id', $target->thread_id);
+			$clone->message_state = 'visible';
+			$clone->save();
 		}
 	}
 
@@ -171,7 +176,10 @@ class Mover extends \XF\Service\AbstractService
 	{
 		$target = $this->target;
 
-		$target->prefix_id = $this->prefixId;
+		if ($this->prefixId !== null)
+		{
+			$target->prefix_id = $this->prefixId;
+		}
 		$target->rebuildCounters();
 		$target->save();
 
@@ -237,13 +245,13 @@ class Mover extends \XF\Service\AbstractService
 
 		foreach ($this->sourcePosts AS $id => $post)
 		{
-			if ($post['message_state'] != 'visible')
+			if ($post->message_state != 'visible')
 			{
 				continue; // everything will stay the same in the new thread
 			}
 
-			$sourceMessagesCount = $sourcesMessagesCount[$post->thread_id];
-			$sourceLikesCount = $sourcesLikesCount[$post->thread_id];
+			$sourceMessagesCount = !empty($sourcesMessagesCount[$post->thread_id]);
+			$sourceLikesCount = !empty($sourcesLikesCount[$post->thread_id]);
 
 			if ($post->likes)
 			{

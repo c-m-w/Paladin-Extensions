@@ -73,13 +73,20 @@ class BbCode extends AbstractSubContainer
 			return $renderer;
 		});
 
-		$container['rendererMap'] = [
-			'bbCodeClean' => 'XF:BbCodeClean',
-			'editorHtml' => 'XF:EditorHtml',
-			'emailHtml' => 'XF:EmailHtml',
-			'html' => 'XF:Html',
-			'simpleHtml' => 'XF:SimpleHtml'
-		];
+		$container['rendererMap'] = function(Container $c)
+		{
+			$rendererMap = [
+				'bbCodeClean' => 'XF:BbCodeClean',
+				'editorHtml' => 'XF:EditorHtml',
+				'emailHtml' => 'XF:EmailHtml',
+				'html' => 'XF:Html',
+				'simpleHtml' => 'XF:SimpleHtml'
+			];
+
+			$this->app->fire('bb_code_renderer_map', [&$rendererMap]);
+
+			return $rendererMap;
+		};
 
 		$container->set('processor', function(Container $c)
 		{
@@ -108,14 +115,21 @@ class BbCode extends AbstractSubContainer
 			}
 		}, false);
 
-		$container['processorActionMap'] = [
-			'usage' => 'XF:AnalyzeUsage',
-			'autolink' => 'XF:AutoLink',
-			'censor' => 'XF:Censor',
-			'mentions' => 'XF:MentionUsers',
-			'quotes' => 'XF:StripQuotes',
-			'limit' => 'XF:LimitTags'
-		];
+		$container['processorActionMap'] = function()
+		{
+			$processorActionMap = [
+				'usage' => 'XF:AnalyzeUsage',
+				'autolink' => 'XF:AutoLink',
+				'censor' => 'XF:Censor',
+				'mentions' => 'XF:MentionUsers',
+				'quotes' => 'XF:StripQuotes',
+				'limit' => 'XF:LimitTags'
+			];
+
+			$this->app->fire('bb_code_processor_action_map', [&$processorActionMap]);
+
+			return $processorActionMap;
+		};
 
 		$container['custom'] = $this->fromRegistry('bbCodeCustom',
 			function(Container $c) { return $this->app['em']->getRepository('XF:BbCode')->rebuildBbCodeCache(); }

@@ -27,7 +27,7 @@
 			}
 			else
 			{
-				this.$target.oneWithin('toggle:shown overlay:showing tab:shown', $.proxy(this, 'initEditor'));
+				this.$target.oneWithin('toggle:shown overlay:showing tab:shown', XF.proxy(this, 'initEditor'));
 			}
 		},
 
@@ -51,6 +51,7 @@
 			}
 
 			this.editor = CodeMirror.fromTextArea($textarea.get(0), $.extend({
+				mode: this.options.mode,
 				indentUnit: this.options.indentUnit,
 				indentWithTabs: this.options.indentWithTabs,
 				lineNumbers: this.options.lineNumbers,
@@ -70,7 +71,7 @@
 
 			XF.layoutChange();
 
-			this.editor.on('keydown', $.proxy(this, 'keydown'));
+			this.editor.on('keydown', XF.proxy(this, 'keydown'));
 
 			$textarea.trigger('code-editor:init', this.editor);
 
@@ -141,7 +142,7 @@
 
 		init: function()
 		{
-			this.$target.on('code-editor:init', $.proxy(this, 'initEditor'));
+			this.$target.on('code-editor:init', XF.proxy(this, 'initEditor'));
 		},
 
 		initEditor: function(e, editor)
@@ -156,11 +157,11 @@
 
 			if ($switcher.is('select, :radio'))
 			{
-				$switcher.on('change', $.proxy(this, 'change'));
+				$switcher.on('change', XF.proxy(this, 'change'));
 			}
 			else if ($switcher.is('input:not(:checkbox :radio)'))
 			{
-				$switcher.on('blur', $.proxy(this, 'blurInput'));
+				$switcher.on('blur', XF.proxy(this, 'blurInput'));
 
 				// Trigger after a short delay to get the existing template's mode and apply
 				setTimeout(function()
@@ -241,7 +242,7 @@
 
 				XF.ajax('post', XF.canonicalizeUrl(url), {
 					language: language
-				}, $.proxy(self, 'handleAjax')).always(function() { self.loading = false; });
+				}, XF.proxy(self, 'handleAjax')).always(function() { self.loading = false; });
 			}, 200);
 		},
 

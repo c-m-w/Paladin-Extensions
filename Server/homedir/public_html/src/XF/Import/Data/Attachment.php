@@ -45,6 +45,8 @@ class Attachment extends AbstractEmulatedData
 
 	public function setSourceFile($sourceFile, $fileName = '')
 	{
+		$fileName = $this->convertToUtf8($fileName);
+
 		$this->sourceFile = new \XF\FileWrapper($sourceFile, $fileName);
 	}
 
@@ -96,7 +98,7 @@ class Attachment extends AbstractEmulatedData
 			if ($this->containerCallback)
 			{
 				$callback = $this->containerCallback;
-				$callback($container, $attachment, $oldId);
+				$callback($container, $attachment, $oldId, $this->dataExtras);
 			}
 
 			$container->saveIfChanged($saved, false, false);

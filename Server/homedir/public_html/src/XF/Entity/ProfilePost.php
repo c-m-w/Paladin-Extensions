@@ -217,7 +217,7 @@ class ProfilePost extends Entity
 	{
 		$visitor = \XF::visitor();
 
-		if (!$visitor->user_id)
+		if (!$visitor->user_id || $visitor->user_id == $this->user_id)
 		{
 			return false;
 		}

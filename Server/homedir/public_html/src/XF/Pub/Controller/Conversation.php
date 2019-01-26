@@ -137,7 +137,7 @@ class Conversation extends AbstractController
 
 		$conversations = $conversationRepo->getUserConversationsForPopup($visitor, 10, $cutOff, ['Master.LastMessageUser']);
 
-		$totalUnread = count($conversations['unread']);
+		$totalUnread = $conversationRepo->findUserConversationsForPopupList($visitor, true)->total();
 		if ($totalUnread != $visitor->conversations_unread)
 		{
 			$visitor->conversations_unread = $totalUnread;
@@ -935,7 +935,7 @@ class Conversation extends AbstractController
 			}
 			$editor->save();
 
-			if ($this->filter('_xfWithData', 'bool'))
+			if ($this->filter('_xfWithData', 'bool') && $this->filter('_xfInlineEdit', 'bool'))
 			{
 				/** @var \XF\Repository\Attachment $attachmentRepo */
 				$attachmentRepo = $this->repository('XF:Attachment');

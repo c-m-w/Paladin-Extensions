@@ -65,10 +65,8 @@ class Imagick extends AbstractDriver
 		$this->height = $this->imagick->getImageHeight();
 	}
 
-	public function resizeTo($width, $height)
+	protected function isOldImagick()
 	{
-		$scaleUp = ($width > $this->width || $height > $this->height);
-
 		// imagick module < 3 or ImageMagick < 6.3.2 don't support the 4th thumbnailImage param
 		$oldImagick = version_compare(phpversion('imagick'), '3', '<');
 
@@ -81,6 +79,13 @@ class Imagick extends AbstractDriver
 			}
 		}
 
+		return $oldImagick;
+	}
+
+	public function resizeTo($width, $height)
+	{
+		$scaleUp = ($width > $this->width || $height > $this->height);
+
 		try
 		{
 			foreach ($this->imagick AS $frame)
@@ -89,13 +94,13 @@ class Imagick extends AbstractDriver
 				{
 					$frame->resizeImage($width, $height, \Imagick::FILTER_QUADRATIC, .5, true);
 				}
-				else if ($oldImagick)
+				else if ($this->isOldImagick())
 				{
-					$frame->thumbnailImage($width, $height, true);
+					$frame->thumbnailImage($width, $height, false);
 				}
 				else
 				{
-					$frame->thumbnailImage($width, $height, true, true);
+					$frame->thumbnailImage($width, $height, false, true);
 				}
 				$frame->setImagePage($width, $height, 0, 0);
 			}
@@ -112,7 +117,14 @@ class Imagick extends AbstractDriver
 		foreach ($this->imagick AS $frame)
 		{
 			$frame->cropImage($srcWidth ?: $width, $srcHeight ?: $height, $x, $y);
-			$frame->thumbnailImage($width, $height, $x, $y);
+			if ($this->isOldImagick())
+			{
+				$frame->thumbnailImage($width, $height, false);
+			}
+			else
+			{
+				$frame->thumbnailImage($width, $height, false, true);
+			}
 			$frame->setImagePage($frame->getImageWidth(), $frame->getImageHeight(), 0, 0);
 		}
 		$this->updateDimensions();
@@ -225,7 +237,15 @@ class Imagick extends AbstractDriver
 		switch ($format)
 		{
 			case IMAGETYPE_GIF:
-				$success = $this->imagick->optimizeImageLayers();
+				if (is_callable(array($this->imagick, 'optimizeimagelayers')))
+				{
+					$optimized = @$this->imagick->optimizeimagelayers();
+					if ($optimized instanceof \Imagick)
+					{
+						$this->imagick = $optimized;
+					}
+				}
+				$success = $this->imagick->setImageFormat('gif');
 				break;
 
 			case IMAGETYPE_JPEG:

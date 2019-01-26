@@ -183,14 +183,14 @@ abstract class AbstractData
 	 */
 	public function validTextOrDefault($string, $fieldType, $contentId = null, $fieldName = null)
 	{
-		if (strval($string) === '')
+		if (trim(strval($string)) === '')
 		{
 			if (!isset($this->defaultText[$fieldType]))
 			{
 				$fieldType = 'message';
 			}
 
-			// TODO: note that this text was defaulted in the session notes using $oldId and $fieldName?
+			// TODO: perhaps make a session note saying that this text was defaulted using $oldId and $fieldName?
 			/*if ($contentId !== null)
 			{
 				if ($fieldName === null)
@@ -225,15 +225,16 @@ abstract class AbstractData
 		/** @var \XF\Entity\Phrase $phrase */
 		$phrase = $this->dataManager->em()->create('XF:Phrase');
 
-		$phrase->title = $title;
-		$phrase->phrase_text = $value;
+		$phrase->title = $this->convertToUtf8($title);
+		$phrase->phrase_text = $this->convertToUtf8($value);
 		$phrase->language_id = 0;
 		$phrase->addon_id = '';
 		$phrase->bulkSet($extra);
 
-		$phrase->save($silent ? false : true, false);
-
-		$this->dataManager->em()->detachEntity($phrase);
+		if ($phrase->save($silent ? false : true, false))
+		{
+			$this->dataManager->em()->detachEntity($phrase);
+		}
 	}
 
 	protected function insertTemplate($title, $value, $type = 'public', $extra = [], $silent = true)
@@ -241,11 +242,11 @@ abstract class AbstractData
 		/** @var \XF\Entity\Template $template */
 		$template = $this->dataManager->em()->create('XF:Template');
 
-		$template->title = $title;
+		$template->title = $this->convertToUtf8($title);
 		$template->type = $type;
 		$template->style_id = 0;
 		$template->addon_id = '';
-		$template->setTemplateUnchecked($value);
+		$template->setTemplateUnchecked($this->convertToUtf8($value));
 		$template->bulkSet($extra);
 
 		$template->save($silent ? false : true, false);

@@ -1,5 +1,11 @@
 <?php
 return array (
+  'option_explain.ExUp_BccEmail' => 'On upgrade/downgrade emails, BCC the email notification <b>if it is sent</b> to an admin email address.',
+  'option_explain.ExUp_BccEmail_Action' => 'New-line separated list!
+BCC notification emails on one of the following actions:<br/>
+purchased_upgrade, payment_reversal, upgrade_payment_reversal, expiring_upgrade, expiring_subscription, expired_upgrade',
+  'option_explain.ExUp_ShowExtendFailReason' => 'For debugging purposes, determining why an upgrade failed to be extendable can be tricky. This will print the reason the upgrade couldn\'t be extended.',
+  'option_explain.acpSearchExclude' => 'When using the quick search facility in the control panel, content from the following types will be searched. Disabling content types here may speed-up searching slightly.',
   'option_explain.addBanUserGroup' => 'When a user is banned, they can be added to a specific user group while the ban is active. This allows overrides to their user group styling, for example.',
   'option_explain.adminNotesNotes' => 'Notes here will be displayed in the Admin Control Panel home page. You may use HTML.',
   'option_explain.adminRequireTfa' => 'If enabled, admins will not be able to access the control panel until they have activated two-step verification. This will not affect users currently logged into the control panel until their next login.',
@@ -41,6 +47,9 @@ return array (
 <br />
 If you wish to match a wildcard at the beginning or end of the matched word, add a "*" in the correct position. For example, "dog" will not censor "dogs" but "dog*" will.',
   'option_explain.changeLogLength' => 'Content change log data will be kept for this many days. Use 0 to keep change log data indefinitely.',
+  'option_explain.collectServerStats' => 'XenForo would like to collect some anonymous statistics including your PHP, MySQL and XenForo versions.<br />
+<br />
+XenForo will not collect any data without your consent, the data will be stored anonymously and we will not collect any user data.',
   'option_explain.contactEmailAddress' => 'Email address where board-related messages will be sent.',
   'option_explain.contactEmailSenderHeader' => 'If enabled, emails sent via the "Contact us" form will be sent with the sender\'s info in the "From" header rather than the "Reply-To" header. Enabling this may help with situations where replying to a contact message does not go to the correct address, but it may not be compatible with all SMTP servers.',
   'option_explain.contactUrl' => 'This is the URL to the page where users will be able to contact you. Please note that the overlay option will only work with XenForo URLs, so if you specify an external URL, it most likely will not work with an overlay.',
@@ -92,12 +101,45 @@ All threshold values are limited to bounces generated in the last 30 days.',
 <br />
 This option requires that the specified bounce account is a catch-all account or supports a "+" as a wildcard separator (such as in Gmail). For example, if this option is enabled with a bounce address of bounce@example.com, the email might be returned to bounce+123abc+user=domain.com@example.com.',
   'option_explain.extraCaptchaKeys' => 'This option can\'t be edited manually. It is edited only via the "captcha" option.',
+  'option_explain.exup_autoLeaveConversation' => '',
+  'option_explain.exup_extend_upgrade_button' => 'Do you wish to provide a "Extend Upgrade" button in the user\'s purchased upgrades list?<br />This will allow your members to renew a non-recurring upgrade prior to it expiring. Upgrade length will be added to their remaining time.<br /><br /><b>This button will only be available if the upgrade details have not changed since it was first purchased</b> (such as cost, length, user groups, and whether recurring) as they must remain the same in case the payment is reversed and the end date has to be adjusted accordingly.',
+  'option_explain.exup_notify_by' => 'Alert text may be changed by modifying the following phrases:<br />
+<i>exup_alert_purchased_user_upgrade<br />
+exup_alert_purchased_user_subscription<br />
+exup_alert_expired_user_upgrade<br />
+exup_alert_expired_user_subscription<br />
+exup_alert_expiring_user_upgrade<br />
+exup_alert_expiring_user_subscription<br />
+exup_alert_payment_reversal_upgrade<br/>
+exup_alert_payment_reversal_subscription
+</i><br /><br />Email text may be changed by modifying the following phrases:<br />
+<i>exup_email_purchased_user_upgrade_body<br />
+exup_email_purchased_subscription_body<br />
+exup_email_expiring_user_upgrade_body<br />
+exup_email_expiring_user_subscription_body<br />
+exup_email_expired_user_upgrade_body<br />
+exup_email_expired_user_subscription_body<br />
+exup_email_payment_reversal_upgrade_body<br />
+exup_email_payment_reversal_subscription_body
+</i><br /><br />Conversation title and message can be changed by modifying the following phrases:<br />
+<i>exup_conversation_purchased_upgrade_title, exup_conversation_purchased_upgrade_message<br/>
+exup_conversation_expiring_upgrade_title, exup_conversation_expiring_upgrade_message<br/>
+exup_conversation_expiring_subscription_title, exup_conversation_expiring_subscription_message<br/>
+exup_conversation_expired_upgrade_title, exup_conversation_expired_upgrade_message<br/>
+exup_conversation_expired_subscription_title, exup_conversation_expired_subscription_message<br/>
+exup_conversation_payment_reversal_upgrade_title, exup_conversation_payment_reversal_upgrade_message<br/>
+exup_conversation_payment_reversal_subscription_title, exup_conversation_payment_reversal_subscription_message
+</i>',
+  'option_explain.exup_notify_expired' => 'Let the user know the upgrade has expired. <font color="#7E2217">Selecting \'Yes\' here will override the default expiry alert</font><br />Alert and Email text may be changed by modifying the following phrases:<br /><i>exup_alert_expired_user_upgrade</i><br /><i>exup_email_expired_user_upgrade_text, exup_email_expired_user_upgrade_html</i>',
+  'option_explain.exup_notify_purchase' => 'Thank the user for the purchase and provide further information about upgrades and their benefits.<br />Alert and Email text may be changed by modifying the following phrases:<br /><i>exup_alert_purchased_user_upgrade<br />exup_email_purchased_user_upgrade_html, exup_email_purchased_user_upgrade_text</i>',
+  'option_explain.exup_respect_email_privacy' => 'Do you wish to respect the privacy setting <i>Receive site mailings</i> ?<br />Sellecting \'No\' will ensure emails will be sent regardless of whether the user has opted not to receive site mailings.',
+  'option_explain.exup_upgradeUrl' => 'This link will be shown in alerts, conversations and emails to direct users to the user upgrade page.',
   'option_explain.facebookLike' => 'If this feature is enabled, a Facebook button will be displayed on various pages including the thread view page, allowing Facebook users to share it with their Facebook friends.',
   'option_explain.floodCheckLength' => 'Users will have to wait this many seconds between posting messages. Users with the permission "Can bypass flood check" will be exempt from this option.',
   'option_explain.fontAwesomeSource' => 'Controls the source of the Font Awesome library. You may host this yourself (Local) or use the recommended CDN source.',
   'option_explain.forumsDefaultPage' => 'When entering the forums section, this will be the default page users will be taken to. They will be able to access the alternative page via sub-navigation options.',
   'option_explain.geoLocationUrl' => 'The URL specified here will be used to give information (such as a map) about a physical location. The URL must include a <strong>{location}</strong> token.',
-  'option_explain.googleAnalyticsWebPropertyId' => 'You may enter your <a href="https://www.google.com/analytics/">Google Analytics</a> web property ID here to have the Analytics HTML automatically added to your public-facing pages.',
+  'option_explain.googleAnalyticsWebPropertyId' => 'You may enter your <a href="https://www.google.com/analytics/" target="_blank">Google Analytics</a> web property ID here to have the Analytics HTML automatically added to your public-facing pages.',
   'option_explain.gravatarEnable' => 'If enabled, your users may source their avatars from <a href="https://www.gravatar.com" target="_blank">Gravatar</a>. When a new user registers, XenForo will automatically search for a Gravatar associated with their email address. If disabled, this will not remove Gravatars from users that already have them.',
   'option_explain.guestShowSignatures' => 'In order to maximise your \'signal to noise\' ratio when displaying threads to guests, you may hide your members\' signatures.',
   'option_explain.guestTimeZone' => 'All dates and times will be displayed to guests in this time zone.',
@@ -146,7 +188,7 @@ This option requires that the specified bounce account is a catch-all account or
   'option_explain.maxContentSpamMessages' => 'Users will only have their messages checked as spam until they have successfully posted this many messages. Use 0 to disable all spam checks.',
   'option_explain.maxContentTags' => 'This controls the maximum number of tags that can be applied to a piece of content. Use 0 to disable this limit.',
   'option_explain.maxContentTagsPerUser' => 'Beyond controlling the maximum number of tags on a piece of content, you can limit the number of tags each user may apply to prevent a single user from abusing the system. Use 0 to disable this limit.',
-  'option_explain.maximumSearchResults' => 'This number reflects the maximum number of search results that will be found, before permissions are taken into account. Setting this too high may cause performance problems.',
+  'option_explain.maximumSearchResults' => 'This number reflects the maximum number of search or find new results that will be found, before permissions are taken into account. Setting this too high may cause performance problems.',
   'option_explain.membersPerPage' => 'Limit the number of members to show on each page of the registered member list, and online members list.',
   'option_explain.messageMaxImages' => 'Use 0 to allow an unlimited amount of images per message.',
   'option_explain.messageMaxLength' => 'The maximum number of characters that can be in a message. This includes BB code. Use 0 to disable the limit.',

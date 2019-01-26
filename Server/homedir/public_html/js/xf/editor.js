@@ -84,9 +84,6 @@
 
 			var heightLimits = this.getHeightLimits();
 
-			// make the sticky toolbar underlap the sticky header a teeny bit
-			var toolbarStickyOffset = Math.max(parseInt(window.getComputedStyle($('.p-header')[0], ':after').getPropertyValue('content').replace(/\"/g, ''), 10) -2, 0);
-
 			var config = {
 				direction: $.FE.LANGUAGE.xf.direction,
 				editorClass: 'bbWrapper', // since this is a BB code editor, we want our output to normalize like BB code
@@ -119,7 +116,6 @@
 				linkInsertButtons: ['linkBack'],
 				placeholderText: '',
 				toolbarSticky: false,
-				toolbarStickyOffset: toolbarStickyOffset,
 				videoUploadURL: false,
 				xfBbCodeAttachmentContextInput: this.options.attachmentContextInput
 			};
@@ -1165,8 +1161,8 @@
 				}
 			});
 
-			ed.events.on('keydown', $.proxy(this, 'keydown'), true);
-			ed.events.on('keyup', $.proxy(this, 'keyup'), true);
+			ed.events.on('keydown', XF.proxy(this, 'keydown'), true);
+			ed.events.on('keyup', XF.proxy(this, 'keyup'), true);
 
 			ed.events.on('click blur', function() { t.hide(); });
 			ed.$wp.onPassive('scroll', function() { t.hide(); });
@@ -1221,7 +1217,7 @@
 			{
 				clearTimeout(this.idleTimer);
 			}
-			this.idleTimer = setTimeout($.proxy(this, 'lookForMention'), this.idleWait);
+			this.idleTimer = setTimeout(XF.proxy(this, 'lookForMention'), this.idleWait);
 		},
 
 		lookForMention: function()
@@ -1296,7 +1292,7 @@
 		{
 			XF.ajax(
 				'GET', XF.getAutoCompleteUrl(), { q: this.pendingMention },
-				$.proxy(this, 'handlePendingMentionOptions'),
+				XF.proxy(this, 'handlePendingMentionOptions'),
 				{ global: false, error: false }
 			);
 		},
@@ -1613,9 +1609,9 @@
 			ed.selection.save();
 
 			XF.loadOverlay(XF.canonicalizeUrl('index.php?editor/dialog&dialog=' + this.dialog), {
-				beforeShow: $.proxy(this, 'beforeShow'),
-				afterShow: $.proxy(this, 'afterShow'),
-				init: $.proxy(this, 'init'),
+				beforeShow: XF.proxy(this, 'beforeShow'),
+				afterShow: XF.proxy(this, 'afterShow'),
+				init: XF.proxy(this, 'init'),
 				cache: this.cache
 			});
 		},
@@ -1664,7 +1660,7 @@
 
 		_init: function(overlay)
 		{
-			$('#editor_media_form').submit($.proxy(this, 'submit'));
+			$('#editor_media_form').submit(XF.proxy(this, 'submit'));
 		},
 
 		submit: function(e)
@@ -1707,7 +1703,7 @@
 
 		_init: function(overlay)
 		{
-			$('#editor_spoiler_form').submit($.proxy(this, 'submit'));
+			$('#editor_spoiler_form').submit(XF.proxy(this, 'submit'));
 		},
 
 		submit: function(e)
@@ -1732,7 +1728,7 @@
 
 		_init: function(overlay)
 		{
-			$('#editor_code_form').submit($.proxy(this, 'submit'));
+			$('#editor_code_form').submit(XF.proxy(this, 'submit'));
 		},
 
 		submit: function(e)

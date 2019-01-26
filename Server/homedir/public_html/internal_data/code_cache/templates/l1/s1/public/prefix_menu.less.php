@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 266804689f54f748cf2c91db454d186a
+// FROM HASH: 6b4f2d51397fb6a9a27fc67e5c972124
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -8,13 +8,19 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	text-decoration: none;
 }
 
-.menuPrefix
+.menuPrefix,
+.menuPrefix.label--hidden
 {
 	display: block;
 	font-size: @xf-fontSizeSmall;
 	cursor: default;
 	padding: @xf-paddingMedium;
 	//margin-bottom: -(@xf-paddingMedium);
+
+	&.label--hidden
+	{
+		border: 1px solid @xf-borderColorFaint;
+	}
 
 	&.menuPrefix--none
 	{

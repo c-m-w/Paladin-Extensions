@@ -1,10 +1,11 @@
 <?php
-// FROM HASH: 92f21d5bf7453e498526c28370620a64
+// FROM HASH: e71dddda560e7c63a93bbb0d332258a5
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
 	$__finalCompiled .= '.label
 {
+
 	display: inline-block;
 	padding: 1px .35em;
 	border: 1px solid transparent;
@@ -34,12 +35,21 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		font-size: @xf-fontSizeSmallest;
 	}
 
-	// variations
+	// Label variations
+
 	&.label--hidden
 	{
-		background: none;
+		// this has to essentially undo all the adjustments made by .label
+		padding: inherit;
 		border: none;
-		box-shadow: none;
+		font-size: inherit;
+		line-height: inherit;
+		text-decoration: inherit;
+
+		&:hover
+		{
+			text-decoration: underline;
+		}
 	}
 
 	&.label--subtle

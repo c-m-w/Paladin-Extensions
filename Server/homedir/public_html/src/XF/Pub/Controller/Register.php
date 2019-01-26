@@ -12,7 +12,7 @@ class Register extends AbstractController
 	{
 		if (\XF::visitor()->user_id)
 		{
-			return $this->redirect($this->getDynamicRedirectIfNot($this->buildLink('register')));
+			return $this->redirect($this->getDynamicRedirectIfNot($this->buildLink('register')), '');
 		}
 
 		$this->assertRegistrationActive();
@@ -155,6 +155,8 @@ class Register extends AbstractController
 
 	protected function getConnectedAssociateResponse(array $viewParams)
 	{
+		$this->assertBoardActive(null);
+
 		$visitor = \XF::visitor();
 
 		/** @var \XF\Entity\UserAuth $auth */
@@ -179,6 +181,8 @@ class Register extends AbstractController
 
 	protected function getConnectedRegisterResponse(array $viewParams)
 	{
+		$this->assertBoardActive(null);
+
 		return $this->view('XF:Register\ConnectedAccount', 'register_connected_account', $viewParams);
 	}
 
@@ -467,6 +471,18 @@ class Register extends AbstractController
 
 	public function assertViewingPermissions($action) {}
 	public function assertTfaRequirement($action) {}
+
+	public function assertBoardActive($action)
+	{
+		switch (strtolower($action))
+		{
+			case 'connectedaccount':
+				break;
+
+			default:
+				parent::assertBoardActive($action);
+		}
+	}
 
 	public static function getActivityDetails(array $activities)
 	{

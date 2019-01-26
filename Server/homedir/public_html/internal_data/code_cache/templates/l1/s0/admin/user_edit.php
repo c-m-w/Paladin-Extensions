@@ -666,6 +666,24 @@ return array('macros' => array('privacy_select' => function($__templater, array 
 		'label' => '
 							' . 'Receive email when a new conversation message is received',
 		'_type' => 'option',
+	),
+	array(
+		'name' => 'option[sv_exup_email_on_expiring_expired_upgrade]',
+		'checked' => $__vars['user']['Option']['sv_exup_email_on_expiring_expired_upgrade'],
+		'label' => 'Receive expiring and expired user upgrade emails',
+		'_type' => 'option',
+	),
+	array(
+		'name' => 'option[sv_exup_email_on_upgrade_purchase]',
+		'checked' => $__vars['user']['Option']['sv_exup_email_on_upgrade_purchase'],
+		'label' => 'Receive user upgrade purchase emails',
+		'_type' => 'option',
+	),
+	array(
+		'name' => 'option[sv_exup_email_on_upgrade_reversal]',
+		'checked' => $__vars['user']['Option']['sv_exup_email_on_upgrade_reversal'],
+		'label' => 'Receive user upgrade payment reverseal emails',
+		'_type' => 'option',
 	)), array(
 	)) . '
 

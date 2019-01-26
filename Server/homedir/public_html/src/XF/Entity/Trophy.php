@@ -114,7 +114,9 @@ class Trophy extends Entity
 		$structure->columns = [
 			'trophy_id' => ['type' => self::UINT, 'autoIncrement' => true, 'nullable' => true],
 			'trophy_points' => ['type' => self::UINT, 'required' => true],
-			'user_criteria' => ['type' => self::SERIALIZED_ARRAY, 'required' => true, 'default' => []]
+			'user_criteria' => ['type' => self::SERIALIZED_ARRAY, 'default' => [],
+				'required' => 'please_select_criteria_that_must_be_met'
+			]
 		];
 		$structure->getters = [
 			'title' => true,

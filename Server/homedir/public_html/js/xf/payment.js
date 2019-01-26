@@ -14,7 +14,7 @@
 				return;
 			}
 
-			this.$target.on('ajax-submit:response', $.proxy(this, 'submitResponse'));
+			this.$target.on('ajax-submit:response', XF.proxy(this, 'submitResponse'));
 		},
 
 		submitResponse: function(event, response)
@@ -47,13 +47,13 @@
 
 		init: function ()
 		{
-			this.$target.on('submit', $.proxy(this, 'submit'));
+			this.$target.on('submit', XF.proxy(this, 'submit'));
 
 			var urls = [
 				'https://js.braintreegateway.com/web/3.19.0/js/client.min.js',
 				'https://js.braintreegateway.com/web/3.19.0/js/hosted-fields.min.js'
 			];
-			XF.loadScripts(urls, $.proxy(this, 'postInit'));
+			XF.loadScripts(urls, XF.proxy(this, 'postInit'));
 
 			var overlay = this.$target.closest('.overlay-container').data('overlay');
 			overlay.on('overlay:hidden', function()
@@ -193,7 +193,7 @@
 				this.xhr.abort();
 			}
 
-			this.xhr = XF.ajax('post', this.$target.attr('action'), object, $.proxy(this, 'complete'), { skipDefaultSuccess: true });
+			this.xhr = XF.ajax('post', this.$target.attr('action'), object, XF.proxy(this, 'complete'), { skipDefaultSuccess: true });
 		},
 
 		complete: function(data)
@@ -225,7 +225,7 @@
 				'https://js.braintreegateway.com/web/3.19.0/js/client.min.js',
 				'https://js.braintreegateway.com/web/3.19.0/js/apple-pay.min.js'
 			];
-			XF.loadScripts(urls, $.proxy(this, 'postInit'));
+			XF.loadScripts(urls, XF.proxy(this, 'postInit'));
 		},
 
 		postInit: function()
@@ -333,7 +333,7 @@
 				this.xhr.abort();
 			}
 
-			this.xhr = XF.ajax('post', this.$target.attr('action'), object, $.proxy(this, 'complete'), { skipDefaultSuccess: true });
+			this.xhr = XF.ajax('post', this.$target.attr('action'), object, XF.proxy(this, 'complete'), { skipDefaultSuccess: true });
 		},
 
 		complete: function(data)
@@ -365,7 +365,7 @@
 				'https://js.braintreegateway.com/web/3.19.0/js/paypal-checkout.min.js',
 				'https://js.braintreegateway.com/web/3.19.0/js/data-collector.min.js'
 			];
-			XF.loadScripts(urls, $.proxy(this, 'postInit'));
+			XF.loadScripts(urls, XF.proxy(this, 'postInit'));
 		},
 
 		postInit: function()
@@ -437,7 +437,7 @@
 				this.xhr.abort();
 			}
 
-			this.xhr = XF.ajax('post', this.$target.attr('action'), object, $.proxy(this, 'complete'), { skipDefaultSuccess: true });
+			this.xhr = XF.ajax('post', this.$target.attr('action'), object, XF.proxy(this, 'complete'), { skipDefaultSuccess: true });
 		},
 
 		complete: function(data)
@@ -466,8 +466,8 @@
 
 		init: function ()
 		{
-			this.$target.on('submit', $.proxy(this, 'submit'));
-			XF.loadScript('https://js.stripe.com/v3/', $.proxy(this, 'postInit'));
+			this.$target.on('submit', XF.proxy(this, 'submit'));
+			XF.loadScript('https://js.stripe.com/v3/', XF.proxy(this, 'postInit'));
 		},
 
 		postInit: function()
@@ -620,7 +620,7 @@
 			var $form = this.$target,
 				formData = XF.getDefaultFormData($form);
 
-			XF.ajax('post', $form.attr('action'), formData, $.proxy(this, 'complete'), { skipDefaultSuccess: true });
+			XF.ajax('post', $form.attr('action'), formData, XF.proxy(this, 'complete'), { skipDefaultSuccess: true });
 		},
 
 		complete: function(data)
@@ -650,10 +650,10 @@
 			var $form = this.$target,
 				$submit = $form.find('.js-applePayButton');
 
-			$submit.on('click', $.proxy(this, 'click'));
+			$submit.on('click', XF.proxy(this, 'click'));
 
-			$form.on('submit', $.proxy(this, 'submit'));
-			XF.loadScript('https://js.stripe.com/v2/', $.proxy(this, 'postInit'));
+			$form.on('submit', XF.proxy(this, 'submit'));
+			XF.loadScript('https://js.stripe.com/v2/', XF.proxy(this, 'postInit'));
 		},
 
 		postInit: function()

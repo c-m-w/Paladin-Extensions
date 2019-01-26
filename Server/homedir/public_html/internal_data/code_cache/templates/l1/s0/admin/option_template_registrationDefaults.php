@@ -49,6 +49,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'_type' => 'option',
 	))) . '
 	<div class="u-inputSpacer">
+		' . $__templater->includeTemplate('expiringUserUpgrades_option_template_registrationDefaults', $__vars) . '
 		<dl class="inputLabelPair">
 			<dt><label for="' . $__templater->escape($__vars['inputName']) . '_dws">' . 'Watch content on creation' . '</label></dt>
 			<dd>' . $__templater->formSelect(array(

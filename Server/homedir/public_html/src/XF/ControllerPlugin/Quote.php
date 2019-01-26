@@ -68,9 +68,13 @@ class Quote extends AbstractPlugin
 	{
 		return array_map(function($quotes)
 		{
-			foreach ($quotes AS &$quote)
+			foreach ($quotes AS $i => &$quote)
 			{
-				if ($quote !== true)
+				if ($quote === null)
+				{
+					unset($quotes[$i]);
+				}
+				else if ($quote !== true)
 				{
 					$quote = $this->prepareMessage(null, $quote);
 				}
@@ -78,7 +82,7 @@ class Quote extends AbstractPlugin
 			return $quotes;
 		}, $quotes);
 	}
-	
+
 	public function prepareMessage($content = null, $html = null, $messageKey = 'message')
 	{
 		if ($html)

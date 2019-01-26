@@ -171,6 +171,10 @@ class CacheFactory
 				$m->addServer($server, 11211);
 			}
 		}
+		else
+		{
+			$m->addServer('localhost', 11211);
+		}
 
 		if (!empty($config['custom']) && $config['custom'] instanceof \Closure)
 		{
@@ -178,7 +182,7 @@ class CacheFactory
 			$custom($m);
 		}
 
-		$cache = new Cache\MemcachedCache();
+		$cache = new \XF\Cache\MemcachedCache();
 		$cache->setMemcached($m);
 		return $cache;
 	}

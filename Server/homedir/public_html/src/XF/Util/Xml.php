@@ -33,6 +33,7 @@ class Xml
 		$entityLoader = libxml_disable_entity_loader(true);
 		$internalErrors = libxml_use_internal_errors(true);
 
+		//if (!$dom->loadXML($xml, LIBXML_NOCDATA))
 		if (!$dom->loadXML($xml))
 		{
 			libxml_disable_entity_loader($entityLoader);

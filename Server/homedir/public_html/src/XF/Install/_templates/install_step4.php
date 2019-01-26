@@ -15,6 +15,29 @@
 					</dd>
 				</dl>
 			<?php } ?>
+
+			<hr class="formRowSep" />
+
+			<dl class="formRow">
+				<dt></dt>
+				<dd>
+					<ul class="inputChoices">
+						<li class="inputChoices-choice">
+							<label class="iconic iconic--checkbox iconic--labelled">
+								<input type="checkbox" name="options[collectServerStats][enabled]" value="1" checked><i aria-hidden="true"></i> Send anonymous server statistics
+							</label>
+						</li>
+					</ul>
+
+					<div class="formRow-explain">
+						XenForo would like to collect some anonymous statistics including your PHP, MySQL and XenForo versions.<br />
+						<br />
+						XenForo will not collect any data without your consent, the data will be stored anonymously and we will not collect any user data.
+					</div>
+
+					<input type="hidden" name="options[collectServerStats][configured]" value="1" />
+				</dd>
+			</dl>
 		</div>
 		<dl class="formRow formSubmitRow">
 			<dt></dt>

@@ -25,7 +25,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	<li><a href="https://windows.microsoft.com/en-US/internet-explorer/delete-manage-cookies">Internet Explorer</a></li>
 	<li><a href="https://support.mozilla.org/kb/cookies-information-websites-store-on-your-computer">Firefox</a></li>
 	<li><a href="https://support.google.com/chrome/answer/95647?hl=en">Chrome</a></li>
-	<li><a href="https://support.apple.com/kb/PH17191">Safari</a></li>
+	<li><a href="https://support.apple.com/kb/PH21411">Safari</a></li>
 	<li><a href="https://www.opera.com/help/tutorials/security/privacy/">Opera</a></li>
 </ul>';
 	return $__finalCompiled;

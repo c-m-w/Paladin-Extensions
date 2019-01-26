@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: a376a557bec8bd517bcace1780ecf2df
+// FROM HASH: 2bb7e5e2431b8b6e9bd4fff5f33c0989
 return array('macros' => array('moderator_menu_actions' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -231,12 +231,15 @@ return array('macros' => array('moderator_menu_actions' => function($__templater
 		';
 	if (strlen(trim($__compilerTemp1)) > 0) {
 		$__finalCompiled .= '
+		' . '
 		<div class="buttonGroup">
 		' . $__compilerTemp1 . '
 		</div>
 	';
 	}
 	$__finalCompiled .= '
+
+	' . '
 
 	';
 	$__compilerTemp2 = '';
@@ -286,6 +289,7 @@ return array('macros' => array('moderator_menu_actions' => function($__templater
 		<div class="buttonGroup">
 		' . $__compilerTemp2 . '
 		</div>
+		' . '
 	';
 	}
 	$__finalCompiled .= '

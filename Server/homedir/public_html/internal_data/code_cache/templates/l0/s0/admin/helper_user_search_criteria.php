@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 0307c277e225198d845b08dfae7d97fb
+// FROM HASH: 942d5489c3d5282569d1545959d97c06
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -355,7 +355,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 						$__compilerTemp8 .= '
 								' . $__templater->formTextBox(array(
 							'name' => $__vars['fieldName'],
-							'value' => $__vars['criteria'][$__vars['fieldName']]['text'],
+							'value' => $__vars['criteria']['user_field'][$__vars['fieldId']],
 							'readonly' => $__vars['readOnly'],
 						)) . '
 							';
@@ -374,7 +374,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 						}
 						$__compilerTemp8 .= $__templater->formCheckBox(array(
 							'name' => $__vars['fieldName'],
-							'value' => $__vars['criteria']['custom'][$__vars['fieldId']],
+							'value' => $__vars['criteria']['user_field']['exact'][$__vars['fieldId']],
 							'listclass' => 'listColumns',
 							'readonly' => $__vars['readOnly'],
 						), $__compilerTemp9) . '

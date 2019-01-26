@@ -82,8 +82,14 @@ class Smilie extends AbstractHelper
 
 		if ($this->importUrl)
 		{
-			$thisUrl = parse_url(\XF::app()->options()->boardUrl);
-			$importUrl = parse_url($this->importUrl);
+			$expectedParts = [
+				'path' => null,
+				'scheme' => null,
+				'host' => null
+			];
+
+			$thisUrl = array_replace($expectedParts, parse_url(\XF::app()->options()->boardUrl));
+			$importUrl = array_replace($expectedParts, parse_url($this->importUrl));
 
 			if (substr($importUrl['path'], -1, 1) == '/')
 			{

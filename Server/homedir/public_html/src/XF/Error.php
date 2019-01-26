@@ -104,6 +104,12 @@ class Error
 					}
 				}
 
+				$isValidArg = ($e instanceof \Exception || $e instanceof \Throwable);
+				if (!$isValidArg)
+				{
+					$e = new \ErrorException('Non-exception passed to logException. See trace for details.');
+				}
+
 				$rootDir = \XF::getRootDirectory() . DIRECTORY_SEPARATOR;
 				$file = str_replace($rootDir, '', $e->getFile());
 

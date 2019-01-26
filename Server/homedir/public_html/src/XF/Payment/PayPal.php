@@ -58,7 +58,7 @@ class PayPal extends AbstractProvider
 		return true;
 	}
 
-	public function initiatePayment(Controller $controller, PurchaseRequest $purchaseRequest, Purchase $purchase)
+	protected function getPaymentParams(PurchaseRequest $purchaseRequest, Purchase $purchase)
 	{
 		$paymentProfile = $purchase->paymentProfile;
 		$purchaser = $purchase->purchaser;
@@ -105,15 +105,22 @@ class PayPal extends AbstractProvider
 			$params['amount'] = $purchase->cost;
 		}
 
+		return $params;
+	}
+
+	public function initiatePayment(Controller $controller, PurchaseRequest $purchaseRequest, Purchase $purchase)
+	{
+		$params = $this->getPaymentParams($purchaseRequest, $purchase);
+
 		$endpointUrl = $this->getApiEndpoint();
 		$endpointUrl .= '?' . http_build_query($params);
 		return $controller->redirect($endpointUrl, '');
 	}
 
-	public function renderCancellation(\XF\Entity\UserUpgradeActive $active)
+	public function renderCancellationTemplate(PurchaseRequest $purchaseRequest)
 	{
 		$data = [
-			'active' => $active,
+			'purchaseRequest' => $purchaseRequest,
 			'endpoint' => $this->getApiEndpoint()
 		];
 		return \XF::app()->templater()->renderTemplate('public:payment_cancel_recurring_paypal', $data);
@@ -191,6 +198,56 @@ class PayPal extends AbstractProvider
 
 	public function validateTransaction(CallbackState $state)
 	{
+		if (!$state->requestKey)
+		{
+			$state->logType = 'info';
+			$state->logMessage = 'No purchase request key. Unrelated payment, no action to take.';
+			return false;
+		}
+
+		if ($state->legacy)
+		{
+			// The custom data in legacy calls is <user_id>,<user_upgrade_id>,<validation_type>,<validation>.
+			// We only need the user_id and user_upgrade_id but we can at least verify it's a familiar format.
+			if (!preg_match(
+				'/^(?P<user_id>\d+),(?P<user_upgrade_id>\d+),token,.*$/',
+				$state->requestKey,
+				$itemParts)
+				&& count($itemParts) !== 3 // full match + 2 groups
+			)
+			{
+				$state->logType = 'info';
+				$state->logMessage = 'Invalid custom field. Unrelated payment, no action to take.';
+				return false;
+			}
+
+			$user = \XF::em()->find('XF:User', $itemParts['user_id']);
+			if (!$user)
+			{
+				$state->logType = 'error';
+				$state->logMessage = 'Could not find user with user_id ' . $itemParts['user_id'] . '.';
+				return false;
+			}
+			$state->purchaser = $user;
+
+			$state->userUpgrade = \XF::em()->find('XF:UserUpgrade', $itemParts['user_upgrade_id']);
+			if (!$state->userUpgrade)
+			{
+				$state->logType = 'error';
+				$state->logMessage = 'Could not find user upgrade with user_upgrade_id ' . $itemParts['user_upgrade_id'] . '.';
+				return false;
+			}
+		}
+		else
+		{
+			if (!$state->getPurchaseRequest())
+			{
+				$state->logType = 'info';
+				$state->logMessage = 'Invalid request key. Unrelated payment, no action to take.';
+				return false;
+			}
+		}
+
 		if (!$state->transactionId && !$state->subscriberId)
 		{
 			$state->logType = 'info';
@@ -223,15 +280,8 @@ class PayPal extends AbstractProvider
 
 	public function validatePurchaseRequest(CallbackState $state)
 	{
-		if ($state->legacy)
-		{
-			// For legacy calls there is no concept of purchase requests.
-			return true;
-		}
-		else
-		{
-			return parent::validatePurchaseRequest($state);
-		}
+		// validated in validateTransaction
+		return true;
 	}
 
 	public function validatePurchasableHandler(CallbackState $state)
@@ -266,33 +316,7 @@ class PayPal extends AbstractProvider
 	{
 		if ($state->legacy)
 		{
-			// The custom data in legacy calls is <user_id>,<user_upgrade_id>,<validation_type>,<validation>.
-			// We only need the user_id and user_upgrade_id but we can at least verify it's a familiar format.
-			$itemParts = explode(',', $state->requestKey, 4);
-			if (count($itemParts) != 4)
-			{
-				$state->logType = 'error';
-				$state->logMessage = 'Invalid item (custom)';
-				return false;
-			}
-
-			$user = \XF::em()->find('XF:User', $itemParts[0]);
-			if (!$user)
-			{
-				$state->logType = 'error';
-				$state->logMessage = 'Could not find user with user_id ' . $itemParts[0] . '.';
-				return false;
-			}
-			$state->purchaser = $user;
-
-			$state->userUpgrade = \XF::em()->find('XF:UserUpgrade', $itemParts[1]);
-			if (!$state->userUpgrade)
-			{
-				$state->logType = 'error';
-				$state->logMessage = 'Could not find user upgrade with user_upgrade_id ' . $itemParts[1] . '.';
-				return false;
-			}
-
+			// validated in validateTransaction
 			return true;
 		}
 		else

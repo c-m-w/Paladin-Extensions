@@ -340,7 +340,7 @@
 			arg-depth="{{ $depth + 1 }}" />
 	</li>
 </xf:macro>]]></template>
-  <template type="public" title="PAGE_CONTAINER" version_id="2000052" version_string="2.0.0 Release Candidate 2"><![CDATA[<!DOCTYPE html>
+  <template type="public" title="PAGE_CONTAINER" version_id="2000370" version_string="2.0.3"><![CDATA[<!DOCTYPE html>
 <html id="XF" lang="{$xf.language.language_code}" dir="{$xf.language.text_direction}"
 	data-app="public"
 	data-template="{$template}"
@@ -368,11 +368,17 @@
 	<xf:if is="!$head.meta_site_name && $siteName is not empty">
 		<xf:macro template="metadata_macros" name="site_name" arg-siteName="{$siteName}" arg-output="{{ true }}" />
 	</xf:if>
+	<xf:if is="!$head.meta_type">
+		<xf:macro template="metadata_macros" name="type" arg-type="website" arg-output="{{ true }}" />
+	</xf:if>
 	<xf:if is="!$head.meta_title">
 		<xf:macro template="metadata_macros" name="title" arg-title="{{ page_title() ?: $siteName }}" arg-output="{{ true }}" />
 	</xf:if>
 	<xf:if is="!$head.meta_description && $description is not empty && $pageDescriptionMeta">
 		<xf:macro template="metadata_macros" name="description" arg-description="{$description}" arg-output="{{ true }}" />
+	</xf:if>
+	<xf:if is="!$head.meta_share_url">
+		<xf:macro template="metadata_macros" name="share_url" arg-shareUrl="{$xf.fullUri}" arg-output="{{ true }}" />
 	</xf:if>
 	<xf:if is="!$head.meta_image_url && property('publicMetadataLogoUrl')">
 		<xf:macro template="metadata_macros" name="image_url"
@@ -381,7 +387,7 @@
 	</xf:if>
 
 	<xf:if is="property('metaThemeColor')">
-		<meta name="theme-color" content="{{ property('metaThemeColor') }}" />
+		<meta name="theme-color" content="{{ parse_less_color(property('metaThemeColor')) }}" />
 	</xf:if>
 
 	<xf:macro template="helper_js_global" name="head" arg-app="public" />
@@ -479,7 +485,7 @@
 				</a>
 			</div>
 
-			<div class="p-nav-scroller hScroller" data-xf-init="h-scroller">
+			<div class="p-nav-scroller hScroller" data-xf-init="h-scroller" data-auto-scroll=".p-navEl.is-selected">
 				<div class="hScroller-scroll">
 					<ul class="p-nav-list js-offCanvasNavSource">
 					<xf:foreach loop="$navTree" key="$navSection" value="$navEntry" i="$i" if="{{ $navSection != $xf.app.defaultNavigationId }}">
@@ -592,18 +598,20 @@
 							</div>
 						</xf:if>
 					<xf:else />
-						<a href="{{ link('login') }}" class="p-navgroup-link p-navgroup-link--textual p-navgroup-link--logIn" rel="nofollow" data-xf-click="overlay">
+						<a href="{{ link('login') }}" class="p-navgroup-link p-navgroup-link--textual p-navgroup-link--logIn" rel="nofollow"
+							data-xf-click="overlay" data-follow-redirects="on">
 							<span class="p-navgroup-linkText">{{ phrase('log_in') }}</span>
 						</a>
 						<xf:if is="$xf.options.registrationSetup.enabled">
-							<a href="{{ link('register') }}" class="p-navgroup-link p-navgroup-link--textual p-navgroup-link--register" rel="nofollow" data-xf-click="overlay">
+							<a href="{{ link('register') }}" class="p-navgroup-link p-navgroup-link--textual p-navgroup-link--register" rel="nofollow"
+								data-xf-click="overlay" data-follow-redirects="on">
 								<span class="p-navgroup-linkText">{{ phrase('register') }}</span>
 							</a>
 						</xf:if>
 					</xf:if>
 				</div>
 
-				<div class="p-navgroup p-discovery">
+				<div class="p-navgroup p-discovery{{ !$xf.visitor.canSearch() ? ' p-discovery--noSearch' : '' }}">
 					<a href="{{ link('whats-new') }}"
 						class="p-navgroup-link p-navgroup-link--iconic p-navgroup-link--whatsnew"
 						title="{{ phrase('whats_new')|for_attr }}">
@@ -1386,7 +1394,7 @@
 	<a href="{$url}" rel="external" target="_blank"><i class="fa fa-{$provider} fa-{$provider}-square" aria-hidden="true"></i>
 		{$url}</a>
 </span>]]></template>
-  <template type="public" title="account_alerts" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[<xf:title>{{ phrase('alerts') }}</xf:title>
+  <template type="public" title="account_alerts" version_id="2000370" version_string="2.0.3"><![CDATA[<xf:title>{{ phrase('alerts') }}</xf:title>
 
 <xf:wrap template="account_wrapper" />
 
@@ -1396,10 +1404,12 @@
 			<xf:if is="$alerts is not empty">
 				<ol class="listPlain">
 				<xf:foreach loop="$alerts" value="$alert">
-					<li data-alert-id="{$alert.alert_id}"
-						class="block-row block-row--separated{{ $alert.isUnviewed() ? ' block-row--highlighted' : ($alert.isRecentlyViewed() ? '' : ' block-row--alt') }}">
-						<xf:macro template="alert_macros" name="row" arg-alert="{$alert}" />
-					</li>
+					<xf:if is="$alert.getHandler()">
+						<li data-alert-id="{$alert.alert_id}"
+							class="block-row block-row--separated{{ $alert.isUnviewed() ? ' block-row--highlighted' : ($alert.isRecentlyViewed() ? '' : ' block-row--alt') }}">
+							<xf:macro template="alert_macros" name="row" arg-alert="{$alert}" />
+						</li>
+					</xf:if>
 				</xf:foreach>
 				</ol>
 			<xf:elseif is="$page <= 1" />
@@ -1413,15 +1423,17 @@
 	<xf:pagenav link="account/alerts" page="{$page}" perpage="{$perPage}" total="{$totalAlerts}"
 		wrapperclass="block-outer block-outer--after" />
 </div>]]></template>
-  <template type="public" title="account_alerts_popup" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[<xf:if is="$alerts is not empty">
+  <template type="public" title="account_alerts_popup" version_id="2000370" version_string="2.0.3"><![CDATA[<xf:if is="$alerts is not empty">
 	<div class="menu-scroller">
 		<ol class="listPlain">
 			<xf:foreach loop="$alerts" value="$alert">
-				<li class="menu-row menu-row--separated menu-row--clickable {{ $alert.isUnviewed() ? 'menu-row--highlighted' : ($alert.isRecentlyViewed() ? '' : 'menu-row--alt') }}">
-					<div class="fauxBlockLink">
-						<xf:macro template="alert_macros" name="row" arg-alert="{$alert}" />
-					</div>
-				</li>
+				<xf:if is="$alert.getHandler()">
+					<li class="menu-row menu-row--separated menu-row--clickable {{ $alert.isUnviewed() ? 'menu-row--highlighted' : ($alert.isRecentlyViewed() ? '' : 'menu-row--alt') }}">
+						<div class="fauxBlockLink">
+							<xf:macro template="alert_macros" name="row" arg-alert="{$alert}" />
+						</div>
+					</li>
+				</xf:if>
 			</xf:foreach>
 		</ol>
 	</div>
@@ -2410,7 +2422,7 @@
 		</xf:if>
 	</div>
 </div>]]></template>
-  <template type="public" title="account_visitor_menu" version_id="2000170" version_string="2.0.1"><![CDATA[<div class="menu-row menu-row--highlighted">
+  <template type="public" title="account_visitor_menu" version_id="2000370" version_string="2.0.3"><![CDATA[<div class="menu-row menu-row--highlighted">
 	<xf:macro name="visitor_panel_row" />
 </div>
 
@@ -2465,7 +2477,9 @@
 
 <ul class="listPlain listColumns listColumns--narrow listColumns--together">
 	<!--[XF:content_links:top]-->
-	<li><a href="{{ link('whats-new/news-feed') }}" class="menu-linkRow">{{ phrase('news_feed') }}</a></li>
+	<xf:if is="$xf.options.enableNewsFeed">
+		<li><a href="{{ link('whats-new/news-feed') }}" class="menu-linkRow">{{ phrase('news_feed') }}</a></li>
+	</xf:if>
 	<li><a href="{{ link('search/member', null, {'user_id': $xf.visitor.user_id}) }}" class="menu-linkRow">{{ phrase('your_content') }}</a></li>
 	<li><a href="{{ link('account/likes') }}" class="menu-linkRow">{{ phrase('likes_received') }}</a></li>
 	<!--[XF:content_links:bottom]-->
@@ -4063,69 +4077,7 @@
 	'trophy': '<a href="' . link('members/trophies', $xf.visitor) . '" class="fauxBlockLink-blockLink">' . $trophy . '</a>'
 }) }}]]></template>
   <template type="public" title="alert_user_upgrade_end" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[{{ phrase('one_account_upgrades_expired_renew_now', {'link': link('account/upgrades')}) }}]]></template>
-  <template type="public" title="app.less" version_id="2000170" version_string="2.0.1"><![CDATA[@_nav-elTransitionSpeed: @xf-animationSpeed;
-@_navAccount-hPadding: @xf-paddingLarge;
-
-.m-pageWidth()
-{
-	max-width: @xf-pageWidthMax;
-	padding: 0 @xf-pageEdgeSpacer;
-	margin: 0 auto;
-}
-
-.u-anchorTarget
-{
-	.m-stickyHeaderConfig(@xf-publicNavSticky);
-	height: (@_stickyHeader-height + @_stickyHeader-offset);
-	margin-top: -(@_stickyHeader-height + @_stickyHeader-offset);
-}
-
-.p-pageWrapper
-{
-	position: relative;
-	display: flex;
-	flex-direction: column;
-	min-height: 100vh;
-	.xf-pageBackground();
-}
-
-// RESPONSIVE HEADER
-
-.p-offCanvasAccountLink
-{
-	display: none;
-}
-
-@media (max-width: 359px)
-{
-	.p-offCanvasAccountLink
-	{
-		display: block;
-	}
-}
-
-@media (max-width: 359px)
-{
-	.p-offCanvasRegisterLink
-	{
-		display: block;
-	}
-}
-
-{{ include('app_staffbar.less') }}
-{{ include('app_header.less') }}
-{{ include('app_stickynav.less') }}
-{{ include('app_nav.less') }}
-{{ include('app_sectionlinks.less') }}
-{{ include('app_body.less') }}
-{{ include('app_breadcrumbs.less') }}
-{{ include('app_title.less') }}
-{{ include('app_footer.less') }}
-{{ include('app_inlinemod.less') }}
-{{ include('app_ignored.less') }}
-{{ include('app_username_styles.less') }}
-{{ include('app_user_banners.less') }}]]></template>
-  <template type="admin" title="app.less" version_id="2000170" version_string="2.0.1"><![CDATA[@_adminPage-maxWidth: 1100px; // this does not include the navigation sidebar
+  <template type="admin" title="app.less" version_id="2000270" version_string="2.0.2"><![CDATA[@_adminPage-maxWidth: 1100px; // this does not include the navigation sidebar
 
 .m-pageWidth()
 {
@@ -4943,7 +4895,8 @@ html
 		padding: @xf-paddingMedium;
 		font-size: @xf-fontSizeSmall;
 
-		&:hover
+		&:hover,
+		&.is-active
 		{
 			text-decoration: none;
 			background: @xf-contentHighlightBg;
@@ -4952,7 +4905,7 @@ html
 		span
 		{
 			font-size: @xf-fontSizeSmaller;
-			color: @xf-textColorMuted;
+			color: fade(@xf-textColorMuted, 75%);
 		}
 	}
 }
@@ -5227,12 +5180,76 @@ html
 		.m-faContent(@fa-var-file-text, .86em);
 	}
 }]]></template>
-  <template type="public" title="app_body.less" version_id="2000053" version_string="2.0.0 Release Candidate 3"><![CDATA[// ######################################### MAIN BODY #################################
+  <template type="public" title="app.less" version_id="2000170" version_string="2.0.1"><![CDATA[@_nav-elTransitionSpeed: @xf-animationSpeed;
+@_navAccount-hPadding: @xf-paddingLarge;
+
+.m-pageWidth()
+{
+	max-width: @xf-pageWidthMax;
+	padding: 0 @xf-pageEdgeSpacer;
+	margin: 0 auto;
+}
+
+.u-anchorTarget
+{
+	.m-stickyHeaderConfig(@xf-publicNavSticky);
+	height: (@_stickyHeader-height + @_stickyHeader-offset);
+	margin-top: -(@_stickyHeader-height + @_stickyHeader-offset);
+}
+
+.p-pageWrapper
+{
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+	.xf-pageBackground();
+}
+
+// RESPONSIVE HEADER
+
+.p-offCanvasAccountLink
+{
+	display: none;
+}
+
+@media (max-width: 359px)
+{
+	.p-offCanvasAccountLink
+	{
+		display: block;
+	}
+}
+
+@media (max-width: 359px)
+{
+	.p-offCanvasRegisterLink
+	{
+		display: block;
+	}
+}
+
+{{ include('app_staffbar.less') }}
+{{ include('app_header.less') }}
+{{ include('app_stickynav.less') }}
+{{ include('app_nav.less') }}
+{{ include('app_sectionlinks.less') }}
+{{ include('app_body.less') }}
+{{ include('app_breadcrumbs.less') }}
+{{ include('app_title.less') }}
+{{ include('app_footer.less') }}
+{{ include('app_inlinemod.less') }}
+{{ include('app_ignored.less') }}
+{{ include('app_username_styles.less') }}
+{{ include('app_user_banners.less') }}]]></template>
+  <template type="public" title="app_body.less" version_id="2000270" version_string="2.0.2"><![CDATA[// ######################################### MAIN BODY #################################
 
 .p-body
 {
 	display: flex;
 	align-items: stretch;
+	flex-grow: 1;
+	min-height: 1px; // IE11 workaround - related to #139187
 }
 
 .p-body-inner
@@ -5240,15 +5257,7 @@ html
 	display: flex;
 	flex-direction: column;
 	width: 100%;
-}
 
-.p-body
-{
-	flex-grow: 1;
-}
-
-.p-body-inner
-{
 	.m-pageWidth();
 	.m-clearFix();
 
@@ -5267,6 +5276,7 @@ html
 	table-layout: fixed;
 	width: 100%;
 	margin-bottom: auto;
+	min-height: 1px; // IE11 workaround - related to #139187
 }
 
 .p-body-content
@@ -5953,7 +5963,7 @@ html
 	z-index: -1;
 	cursor: pointer;
 }]]></template>
-  <template type="public" title="app_nav.less" version_id="2000038" version_string="2.0.0 Beta 8"><![CDATA[// navEl / Navigation Elements for header navigation
+  <template type="public" title="app_nav.less" version_id="2000370" version_string="2.0.3"><![CDATA[// navEl / Navigation Elements for header navigation
 
 .m-navElHPadding(@padding)
 {
@@ -6313,6 +6323,11 @@ html
 	&.p-discovery
 	{
 		margin-left: .5em;
+
+		&.p-discovery--noSearch
+		{
+			margin-left: 0;
+		}
 	}
 }
 
@@ -7716,9 +7731,9 @@ html
 		<xf:submitrow icon="save" />
 	</div>
 </xf:form>]]></template>
-  <template type="admin" title="ban_ip" version_id="2000033" version_string="2.0.0 Beta 3"><![CDATA[<xf:title>{{ phrase('confirm_action') }}</xf:title>
+  <template type="admin" title="ban_ip" version_id="2000370" version_string="2.0.3"><![CDATA[<xf:title>{{ phrase('confirm_action') }}</xf:title>
 
-<xf:form action="{{ link('banning/ips/add', null, {'ip': $ip.ip}) }}" ajax="true" class="block">
+<xf:form action="{{ link('banning/ips/add', null, {'ip': $ip.ip}) }}" ajax="true" data-redirect="off" class="block">
 	<div class="block-container">
 		<div class="block-body">
 			<xf:inforow rowtype="confirm">
@@ -8172,7 +8187,7 @@ html
 		<xf:option value="">{{ phrase('any') }}</xf:option>
 	</xf:radio>
 </xf:macro>]]></template>
-  <template type="admin" title="base_custom_field_list" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[<xf:pageaction>
+  <template type="admin" title="base_custom_field_list" version_id="2000270" version_string="2.0.2"><![CDATA[<xf:pageaction>
 	<xf:button href="{{ link($prefix . '/add') }}" icon="add">{{ phrase('add_field') }}</xf:button>
 </xf:pageaction>
 
@@ -8192,7 +8207,7 @@ html
 								</xf:datarow>
 								<xf:foreach loop="{$fieldsGrouped.{$displayGroupId}}" value="$field">
 									<xf:datarow
-										label="{$field.title}"
+										label="{$field.title|strip_tags}"
 										href="{{ link($prefix . '/edit', $field) }}"
 										delete="{{ link($prefix . '/delete', $field) }}"
 										hash="{$field.field_id}">
@@ -9539,9 +9554,9 @@ a.bbCodeBlock-sourceJump
 <xf:else />
 	<div class="blockMessage">{{ phrase('no_items_have_been_created_yet') }}</div>
 </xf:if>]]></template>
-  <template type="public" title="bb_code_preview" version_id="2000038" version_string="2.0.0 Beta 8"><![CDATA[<xf:if is="$message">
+  <template type="public" title="bb_code_preview" version_id="2000270" version_string="2.0.2"><![CDATA[<xf:if is="$message">
 	<xf:css src="bb_code_preview.less" />
-	<div class="bbCodePreview">
+	<div class="bbCodePreview js-previewContainer">
 	<xf:formrow rowtype="fullWidth noLabel noGutter">
 		<h4 class="block-textHeader">{{ phrase('preview') }}</h4>
 		<div class="bbCodePreview-content">
@@ -9586,6 +9601,7 @@ a.bbCodeBlock-sourceJump
 <xf:else />
 	<a href="{{ link('full:attachments', $attachment, {'hash': $attachment.temp_hash}) }}" target="_blank"><img src="{$attachment.thumbnail_url}" class="bbImage" alt="{$attachment.filename}" /></a>
 </xf:if>]]></template>
+  <template type="email" title="bb_code_tag_code" version_id="2000170" version_string="2.0.1"><![CDATA[<pre class="code" dir="ltr">{$content}</pre>]]></template>
   <template type="public" title="bb_code_tag_code" version_id="2000170" version_string="2.0.1"><![CDATA[<xf:macro template="prism_macros" name="setup" />
 
 <div class="bbCodeBlock bbCodeBlock--screenLimited bbCodeBlock--code">
@@ -9596,7 +9612,6 @@ a.bbCodeBlock-sourceJump
 		<pre class="bbCodeCode" dir="ltr" data-xf-init="code-block" data-lang="{{ $language ?: '' }}"><code>{$content}</code></pre>
 	</div>
 </div>]]></template>
-  <template type="email" title="bb_code_tag_code" version_id="2000170" version_string="2.0.1"><![CDATA[<pre class="code" dir="ltr">{$content}</pre>]]></template>
   <template type="public" title="bb_code_tag_img" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[<xf:macro template="lightbox_macros" name="single_image"
 	arg-canViewAttachments="{{ true }}"
 	arg-id="{{ unique_id() }}"
@@ -9604,6 +9619,10 @@ a.bbCodeBlock-sourceJump
 	arg-dataUrl="{$validUrl}" />
 ]]></template>
   <template type="email" title="bb_code_tag_media" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[<div class="mediaPlaceholder">{{ phrase('embedded_media') }}</div>]]></template>
+  <template type="email" title="bb_code_tag_quote" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[<div class="quote">
+	<xf:if is="$name"><div class="quote-name">{{ phrase('x_said:', {'name': $name}) }}</div></xf:if>
+	{$content}
+</div>]]></template>
   <template type="public" title="bb_code_tag_quote" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[<xf:css src="bb_code.less" />
 
 <div class="bbCodeBlock bbCodeBlock--expandable bbCodeBlock--quote{{ ($attributes.member && $xf.visitor.isIgnoring($attributes.member)) ? ' is-ignored' : '' }}">
@@ -9626,10 +9645,7 @@ a.bbCodeBlock-sourceJump
 		<div class="bbCodeBlock-expandLink"><a>{{ phrase('click_to_expand') }}</a></div>
 	</div>
 </div>]]></template>
-  <template type="email" title="bb_code_tag_quote" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[<div class="quote">
-	<xf:if is="$name"><div class="quote-name">{{ phrase('x_said:', {'name': $name}) }}</div></xf:if>
-	{$content}
-</div>]]></template>
+  <template type="email" title="bb_code_tag_spoiler" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[<div class="spoilerPlaceholder"><xf:if is="$title">{$title} - </xf:if>{{ phrase('spoiler_content_hidden') }}</div>]]></template>
   <template type="public" title="bb_code_tag_spoiler" version_id="2000037" version_string="2.0.0 Beta 7"><![CDATA[<xf:css src="bb_code.less" />
 
 <div class="bbCodeSpoiler">
@@ -9644,7 +9660,6 @@ a.bbCodeBlock-sourceJump
 		</div>
 	</div>
 </div>]]></template>
-  <template type="email" title="bb_code_tag_spoiler" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[<div class="spoilerPlaceholder"><xf:if is="$title">{$title} - </xf:if>{{ phrase('spoiler_content_hidden') }}</div>]]></template>
   <template type="public" title="browser_warning_macros" version_id="2000037" version_string="2.0.0 Beta 7"><![CDATA[<xf:macro name="javascript">
 	<noscript><div class="blockMessage blockMessage--important blockMessage--iconic u-noJsOnly">{{ phrase('javascript_is_disabled_please_enable_before_proceeding') }}</div></noscript>
 </xf:macro>
@@ -10272,7 +10287,7 @@ a.bbCodeBlock-sourceJump
 
 	<xf:js src="xf/code_editor.js" min="1" />
 </xf:macro>]]></template>
-  <template type="public" title="code_editor.less" version_id="2000037" version_string="2.0.0 Beta 7"><![CDATA[.codeEditor
+  <template type="public" title="code_editor.less" version_id="2000370" version_string="2.0.3"><![CDATA[.codeEditor
 {
 	// standard editor with fixed-width font and 55% screen height, used when the code editor is the primary
 	// editable element on screen
@@ -10293,6 +10308,15 @@ a.bbCodeBlock-sourceJump
 		&.CodeMirror-focused
 		{
 			.xf-inputFocus();
+		}
+
+		&.CodeMirror-simplescroll
+		{
+			.CodeMirror-sizer
+			{
+				// Bit hacky but solves issue with the simplescroll bars overlapping the content
+				padding-right: 30px !important;
+			}
 		}
 	}
 
@@ -12403,7 +12427,7 @@ span.CodeMirror-selectedtext { background: none; }
 	</div>
 </xf:form>]]></template>
   <template type="public" title="conversation_message_edit_new_message" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[<xf:macro template="conversation_message_macros" name="message" arg-message="{$message}" arg-conversation="{$conversation}" />]]></template>
-  <template type="public" title="conversation_message_macros" version_id="2000038" version_string="2.0.0 Beta 8"><![CDATA[<xf:macro name="message" arg-message="!" arg-conversation="!" arg-position="" arg-lastRead="{{ null }}">
+  <template type="public" title="conversation_message_macros" version_id="2000270" version_string="2.0.2"><![CDATA[<xf:macro name="message" arg-message="!" arg-conversation="!" arg-position="" arg-lastRead="{{ null }}">
 	<xf:css src="message.less" />
 	<article class="message message--conversationMessage {{ $message.isIgnored() ? ' is-ignored' : '' }} {{ $message.isUnread($lastRead) ? 'is-unread' : '' }} js-message" data-author="{{ $message.User.username ?: $message.username }}">
 		<span class="u-anchorTarget" id="convMessage-{$message.message_id}"></span>
@@ -12499,6 +12523,13 @@ span.CodeMirror-selectedtext { background: none; }
 														data-xf-click="quick-edit"
 														data-editor-target="< .js-quickEditTarget">{{ phrase('edit') }}</a>
 												</xf:if>
+
+												<xf:if is="$message.canCleanSpam()">
+													<a href="{{ link('spam-cleaner', $message) }}"
+														class="actionBar-action actionBar-action--spam actionBar-action--menuItem"
+														data-xf-click="overlay">{{ phrase('spam') }}</a>
+												</xf:if>
+
 												<xf:if is="$xf.visitor.canViewIps() && $message.ip_id">
 													<a href="{{ link('conversations/messages/ip', $message) }}"
 														class="actionBar-action actionBar-action--ip"
@@ -12854,6 +12885,229 @@ span.CodeMirror-selectedtext { background: none; }
 		</div>
 	</li>
 </xf:macro>]]></template>
+  <template type="public" title="core.less" version_id="2000270" version_string="2.0.2"><![CDATA[// ########################## GLOBAL BASE SETUP #######################
+
+html
+{
+	font: @xf-fontSizeNormal / @xf-lineHeightDefault sans-serif;
+	font-family: @xf-fontFamilyUi;
+	font-weight: @xf-fontWeightNormal;
+	color: @xf-textColor;
+	margin: 0;
+	padding: 0;
+	word-wrap: break-word;
+	background-color: @xf-pageBg;
+
+	/* // just a reminder that we *might* want this at some point
+	-ms-text-size-adjust: none;
+	-webkit-text-size-adjust: none;*/
+}
+
+button, input, optgroup, select, textarea
+{
+	font-family: @xf-fontFamilyUi;
+	line-height: @xf-lineHeightDefault;
+}
+
+img
+{
+	max-width: 100%;
+	height: auto;
+}
+
+b, strong
+{
+	font-weight: @xf-fontWeightHeavy;
+}
+
+a
+{
+	.xf-link();
+
+	&:hover
+	{
+		.xf-linkHover();
+	}
+}
+
+{{ include('core_setup.less') }}
+{{ include('core_utilities.less') }}
+{{ include('core_list.less') }}
+{{ include('core_categorylist.less') }}
+{{ include('core_block.less') }}
+{{ include('core_blockmessage.less') }}
+{{ include('core_blockstatus.less') }}
+{{ include('core_blocklink.less') }}
+{{ include('core_blockend.less') }}
+{{ include('core_fixedmessage.less') }}
+{{ include('core_button.less') }}
+
+// ################################# INPUTS & FORMS #####################
+
+.m-formElementExplain()
+{
+	display: block;
+	font-style: normal;
+	.xf-formExplain();
+
+	.m-textColoredLinks();
+}
+
+{{ include('core_input.less') }}
+{{ include('core_formrow.less') }}
+
+{{ include('core_collapse.less') }}
+{{ include('core_badge.less') }}
+{{ include('core_tooltip.less') }}
+{{ include('core_menu.less') }}
+{{ include('core_offcanvas.less') }}
+{{ include('core_tab.less') }}
+{{ include('core_overlay.less') }}
+{{ include('core_globalaction.less') }}
+{{ include('core_avatar.less') }}
+{{ include('core_datalist.less') }}
+{{ include('core_filter.less') }}
+{{ include('core_contentrow.less') }}
+{{ include('core_pagenav.less') }}
+{{ include('core_hscroller.less') }}
+
+// FLASH MESSAGES
+.flashMessage
+{
+	display: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	padding: @xf-paddingLargest;
+	font-size: @xf-fontSizeLargest;
+	text-align: center;
+	z-index: @zIndex-9;
+	background: #e2e2e2;
+	color: #202020;
+	.m-dropShadow(0, 5px, 5px);
+
+	.m-transitionFadeDown();
+}
+
+// AUTOCOMPLETE
+.autoCompleteList
+{
+	.m-autoCompleteList();
+	margin-top: 2px;
+}
+
+// #################################### TAGS ##############################
+// note that while this is related to tags, it's commonly used so just include it
+
+.tagItem
+{
+	display: inline-block;
+	max-width: 100%;
+	padding: 0 6px 1px;
+	margin: 0 0 2px;
+	border-radius: @xf-borderRadiusMedium;
+	font-size: @xf-fontSizeSmaller;
+	.xf-chip();
+
+	&:hover
+	{
+		text-decoration: none;
+		color: @xf-chip--color;
+		.xf-chipHover();
+	}
+}
+
+// ############################# MISC #########################
+
+.recaptcha
+{
+	&.input
+	{
+		box-sizing: content-box;
+		max-width: 100%;
+	}
+
+	img
+	{
+		max-width: 100%;
+	}
+}
+
+.likesBar
+{
+	.m-transitionFadeDown();
+	.xf-minorBlockContent();
+	border-left: @xf-borderSizeMinorFeature solid @xf-borderColorFeature;
+	padding: @xf-paddingMedium;
+	font-size: @xf-fontSizeSmaller;
+	margin-top: @xf-paddingMedium;
+}
+
+.likeIcon
+{
+	&:before
+	{
+		.m-faBase();
+		.m-faContent(@fa-var-thumbs-o-up, .86em);
+		color: @xf-textColorFeature;
+		margin-right: .2em;
+	}
+}
+
+.colorChip
+{
+	display: inline-block;
+	border: @xf-borderSize solid @xf-borderColor;
+	border-radius: @xf-borderRadiusMedium;
+	padding: 1px;
+	width: 100px;
+}
+
+.colorChip-inner
+{
+	display: block;
+	background-color: transparent;
+	border-radius: @xf-borderRadiusSmall;
+	height: 1em;
+}
+
+.colorChip-value
+{
+	display: none;
+}
+
+pre.sf-dump
+{
+	// not ideal, but then again neither is the default of 99999...
+	z-index: @zIndex-1 !important;
+}
+
+.grecaptcha-badge
+{
+	z-index: @zIndex-5;
+}
+
+{{ include('core_action_bar.less') }}
+{{ include('core_labels.less') }}
+{{ include('core_pikaday.less') }}
+{{ include('core_smilie.less') }}
+{{ include('core_bbcode.less') }}
+{{ include('core_fawidths.less') }}
+
+// RESOLUTION OUTPUT
+
+.debugResolution
+{
+	.debugResolution-output:before
+	{
+		content: "Full @{xf-responsiveWide} - @{xf-pageWidthMax}";
+		@media (min-width: @xf-pageWidthMax) { content: "Max > @{xf-pageWidthMax}"; }
+		@media (max-width: @xf-responsiveWide) { content: "Wide < @{xf-responsiveWide}"; }
+		@media (max-width: @xf-responsiveMedium) { content: "Medium < @{xf-responsiveMedium}"; }
+		@media (max-width: @xf-responsiveNarrow) { content: "Narrow < @{xf-responsiveNarrow}"; }
+	}
+}]]></template>
   <template type="email" title="core.less" version_id="2000038" version_string="2.0.0 Beta 8"><![CDATA[// NOTE: THIS DOES NOT HAVE ACCESS TO public:setup.less automatically!
 // THE LESS HERE SHOULD BE KEPT AS SIMPLE AS POSSIBLE
 
@@ -13088,224 +13342,6 @@ pre.code
 	border: @xf-borderSize solid @xf-borderColor;
 	background-color: @xf-contentAltBg;
 }]]></template>
-  <template type="public" title="core.less" version_id="2000170" version_string="2.0.1"><![CDATA[// ########################## GLOBAL BASE SETUP #######################
-
-html
-{
-	font: @xf-fontSizeNormal / @xf-lineHeightDefault sans-serif;
-	font-family: @xf-fontFamilyUi;
-	font-weight: @xf-fontWeightNormal;
-	color: @xf-textColor;
-	margin: 0;
-	padding: 0;
-	word-wrap: break-word;
-	background-color: @xf-pageBg;
-
-	/* // just a reminder that we *might* want this at some point
-	-ms-text-size-adjust: none;
-	-webkit-text-size-adjust: none;*/
-}
-
-button, input, optgroup, select, textarea
-{
-	font-family: @xf-fontFamilyUi;
-	line-height: @xf-lineHeightDefault;
-}
-
-img
-{
-	max-width: 100%;
-	height: auto;
-}
-
-a
-{
-	.xf-link();
-
-	&:hover
-	{
-		.xf-linkHover();
-	}
-}
-
-{{ include('core_setup.less') }}
-{{ include('core_utilities.less') }}
-{{ include('core_list.less') }}
-{{ include('core_categorylist.less') }}
-{{ include('core_block.less') }}
-{{ include('core_blockmessage.less') }}
-{{ include('core_blockstatus.less') }}
-{{ include('core_blocklink.less') }}
-{{ include('core_blockend.less') }}
-{{ include('core_fixedmessage.less') }}
-{{ include('core_button.less') }}
-
-// ################################# INPUTS & FORMS #####################
-
-.m-formElementExplain()
-{
-	display: block;
-	font-style: normal;
-	.xf-formExplain();
-
-	.m-textColoredLinks();
-}
-
-{{ include('core_input.less') }}
-{{ include('core_formrow.less') }}
-
-{{ include('core_collapse.less') }}
-{{ include('core_badge.less') }}
-{{ include('core_tooltip.less') }}
-{{ include('core_menu.less') }}
-{{ include('core_offcanvas.less') }}
-{{ include('core_tab.less') }}
-{{ include('core_overlay.less') }}
-{{ include('core_globalaction.less') }}
-{{ include('core_avatar.less') }}
-{{ include('core_datalist.less') }}
-{{ include('core_filter.less') }}
-{{ include('core_contentrow.less') }}
-{{ include('core_pagenav.less') }}
-{{ include('core_hscroller.less') }}
-
-// FLASH MESSAGES
-.flashMessage
-{
-	display: none;
-	position: fixed;
-	top: 0;
-	left: 0;
-	right: 0;
-	padding: @xf-paddingLargest;
-	font-size: @xf-fontSizeLargest;
-	text-align: center;
-	z-index: @zIndex-9;
-	background: #e2e2e2;
-	color: #202020;
-	.m-dropShadow(0, 5px, 5px);
-
-	.m-transitionFadeDown();
-}
-
-// AUTOCOMPLETE
-.autoCompleteList
-{
-	.m-autoCompleteList();
-	margin-top: 2px;
-}
-
-// #################################### TAGS ##############################
-// note that while this is related to tags, it's commonly used so just include it
-
-.tagItem
-{
-	display: inline-block;
-	max-width: 100%;
-	padding: 0 6px 1px;
-	margin: 0 0 2px;
-	border-radius: @xf-borderRadiusMedium;
-	font-size: @xf-fontSizeSmaller;
-	.xf-chip();
-
-	&:hover
-	{
-		text-decoration: none;
-		color: @xf-chip--color;
-		.xf-chipHover();
-	}
-}
-
-// ############################# MISC #########################
-
-.recaptcha
-{
-	&.input
-	{
-		box-sizing: content-box;
-		max-width: 100%;
-	}
-
-	img
-	{
-		max-width: 100%;
-	}
-}
-
-.likesBar
-{
-	.m-transitionFadeDown();
-	.xf-minorBlockContent();
-	border-left: @xf-borderSizeMinorFeature solid @xf-borderColorFeature;
-	padding: @xf-paddingMedium;
-	font-size: @xf-fontSizeSmaller;
-	margin-top: @xf-paddingMedium;
-}
-
-.likeIcon
-{
-	&:before
-	{
-		.m-faBase();
-		.m-faContent(@fa-var-thumbs-o-up, .86em);
-		color: @xf-textColorFeature;
-		margin-right: .2em;
-	}
-}
-
-.colorChip
-{
-	display: inline-block;
-	border: @xf-borderSize solid @xf-borderColor;
-	border-radius: @xf-borderRadiusMedium;
-	padding: 1px;
-	width: 100px;
-}
-
-.colorChip-inner
-{
-	display: block;
-	background-color: transparent;
-	border-radius: @xf-borderRadiusSmall;
-	height: 1em;
-}
-
-.colorChip-value
-{
-	display: none;
-}
-
-pre.sf-dump
-{
-	// not ideal, but then again neither is the default of 99999...
-	z-index: @zIndex-1 !important;
-}
-
-.grecaptcha-badge
-{
-	z-index: @zIndex-5;
-}
-
-{{ include('core_action_bar.less') }}
-{{ include('core_labels.less') }}
-{{ include('core_pikaday.less') }}
-{{ include('core_smilie.less') }}
-{{ include('core_bbcode.less') }}
-{{ include('core_fawidths.less') }}
-
-// RESOLUTION OUTPUT
-
-.debugResolution
-{
-	.debugResolution-output:before
-	{
-		content: "Full @{xf-responsiveWide} - @{xf-pageWidthMax}";
-		@media (min-width: @xf-pageWidthMax) { content: "Max > @{xf-pageWidthMax}"; }
-		@media (max-width: @xf-responsiveWide) { content: "Wide < @{xf-responsiveWide}"; }
-		@media (max-width: @xf-responsiveMedium) { content: "Medium < @{xf-responsiveMedium}"; }
-		@media (max-width: @xf-responsiveNarrow) { content: "Narrow < @{xf-responsiveNarrow}"; }
-	}
-}]]></template>
   <template type="public" title="core_action_bar.less" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[.actionBar
 {
 	.m-clearFix();
@@ -13403,7 +13439,7 @@ pre.sf-dump
 		}
 	}
 }]]></template>
-  <template type="public" title="core_avatar.less" version_id="2000052" version_string="2.0.0 Release Candidate 2"><![CDATA[// ################################### AVATARS #############################
+  <template type="public" title="core_avatar.less" version_id="2000370" version_string="2.0.3"><![CDATA[// ################################### AVATARS #############################
 
 .avatar
 {
@@ -13523,10 +13559,12 @@ pre.sf-dump
 	padding: @xf-paddingSmall;
 	overflow: hidden;
 
+	font-family: @xf-fontFamilyUi;
 	font-size: @xf-fontSizeSmaller;
+	line-height: @xf-lineHeightDefault;
 
 	display: none;
-	align-items: flex-end;
+	align-items: center;
 	justify-content: center;
 
 	.avatar--updateLink &
@@ -13591,7 +13629,7 @@ pre.sf-dump
 	display: inline-block;
 	.xf-badgeHighlighted();
 }]]></template>
-  <template type="public" title="core_bbcode.less" version_id="2000070" version_string="2.0.0"><![CDATA[.bbWrapper
+  <template type="public" title="core_bbcode.less" version_id="2000370" version_string="2.0.3"><![CDATA[.bbWrapper
 {
 	// This approach is needed to normalize browser differences that normalize.css won't handle within BB code/rich text
 	// sections. You may need higher specificity to override some situations because of this.
@@ -13624,6 +13662,11 @@ pre.sf-dump
 	width: 560px;
 	max-width: 100%;
 	margin: 0;
+
+	&.fb_iframe_widget
+	{
+		display: block;
+	}
 
 	// we want this to still be a block element but to inherit the alignment a user has set - this approximates that
 	[style="text-align: center"] &
@@ -14586,7 +14629,7 @@ pre.sf-dump
 		}
 	}
 }]]></template>
-  <template type="public" title="core_blockmessage.less" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[// ############################ BLOCK MESSAGE ###################
+  <template type="public" title="core_blockmessage.less" version_id="2000370" version_string="2.0.3"><![CDATA[// ############################ BLOCK MESSAGE ###################
 
 .block-rowMessage
 {
@@ -14611,6 +14654,11 @@ pre.sf-dump
 	{
 		font-size: @xf-fontSizeSmall;
 		padding: @xf-blockPaddingV/2 @xf-blockPaddingH/2;
+	}
+
+	&.block-rowMessage--center
+	{
+		text-align: center;
 	}
 
 	.m-blockMessageVariants();
@@ -16970,7 +17018,7 @@ a.button // needed for specificity over a:link
 		opacity: .35;
 	}
 });]]></template>
-  <template type="public" title="core_hscroller.less" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[// ##################################### HORIZONTAL SCROLLER ###################
+  <template type="public" title="core_hscroller.less" version_id="2000270" version_string="2.0.2"><![CDATA[// ##################################### HORIZONTAL SCROLLER ###################
 
 .hScroller
 {
@@ -16991,11 +17039,6 @@ a.button // needed for specificity over a:link
 		{
 			opacity: 1;
 		}
-	}
-
-	::-webkit-scrollbar
-	{
-		display: none;
 	}
 }
 
@@ -17935,8 +17978,9 @@ label.iconic
 		font-size: @xf-fontSizeLarge;
 	}
 }]]></template>
-  <template type="public" title="core_labels.less" version_id="2000032" version_string="2.0.0 Beta 2"><![CDATA[.label
+  <template type="public" title="core_labels.less" version_id="2000370" version_string="2.0.3"><![CDATA[.label
 {
+
 	display: inline-block;
 	padding: 1px .35em;
 	border: 1px solid transparent;
@@ -17966,12 +18010,21 @@ label.iconic
 		font-size: @xf-fontSizeSmallest;
 	}
 
-	// variations
+	// Label variations
+
 	&.label--hidden
 	{
-		background: none;
+		// this has to essentially undo all the adjustments made by .label
+		padding: inherit;
 		border: none;
-		box-shadow: none;
+		font-size: inherit;
+		line-height: inherit;
+		text-decoration: inherit;
+
+		&:hover
+		{
+			text-decoration: underline;
+		}
 	}
 
 	&.label--subtle
@@ -20024,7 +20077,7 @@ img
 		border-right: none;
 	}
 }]]></template>
-  <template type="public" title="core_tooltip.less" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[// ######################################### TOOLTIPS #######################################
+  <template type="public" title="core_tooltip.less" version_id="2000270" version_string="2.0.2"><![CDATA[// ######################################### TOOLTIPS #######################################
 
 @_tooltip-arrowSize: 5px;
 @_tooltip-zIndex: @zIndex-3;
@@ -20058,6 +20111,11 @@ img
 		{
 			margin-top: 3px;
 			padding-top: @_tooltip-arrowSize;
+
+			.has-touchevents &.tooltip--selectToQuote
+			{
+				margin-top: .75em;
+			}
 		}
 		&.tooltip--left
 		{
@@ -21214,9 +21272,9 @@ img.u-imgContained
 	}
 }
 ]]></template>
-  <template type="admin" title="discourage_ip" version_id="2000033" version_string="2.0.0 Beta 3"><![CDATA[<xf:title>{{ phrase('confirm_action') }}</xf:title>
+  <template type="admin" title="discourage_ip" version_id="2000370" version_string="2.0.3"><![CDATA[<xf:title>{{ phrase('confirm_action') }}</xf:title>
 
-<xf:form action="{{ link('banning/discouraged-ips/add', null, {'ip': $ip}) }}" ajax="true" class="block">
+<xf:form action="{{ link('banning/discouraged-ips/add', null, {'ip': $ip}) }}" ajax="true" data-redirect="off" class="block">
 	<div class="block-container">
 		<div class="block-body">
 			<xf:inforow rowtype="confirm">
@@ -21765,7 +21823,7 @@ img.u-imgContained
 		);
 	}
 }]]></template>
-  <template type="public" title="editor_base.less" version_id="2000170" version_string="2.0.1"><![CDATA[/***** froala.less *****/
+  <template type="public" title="editor_base.less" version_id="2000370" version_string="2.0.3"><![CDATA[/***** froala.less *****/
 
 /***** variables.less *****/
 
@@ -22121,13 +22179,8 @@ img.u-imgContained
     .user-select(none);
   }
 
-  [contenteditable="false"] {
-    .user-select(none);
-  }
-
   [contenteditable="true"] {
     outline: 0px solid transparent;
-    .user-select(text);
   }
 }
 
@@ -22156,7 +22209,7 @@ img.u-imgContained
       fill: @floating-btn-text;
     }
 
-    i {
+    i, svg {
       font-size: @floating-btn-font-size;
       line-height: @floating-btn-size;
     }
@@ -22317,7 +22370,7 @@ iframe.fr-iframe {
       width: auto;
     }
 
-    i {
+    i, svg {
       display: block;
       font-size: @btn-font-size;
       width: @btn-font-size;
@@ -22365,7 +22418,7 @@ iframe.fr-iframe {
         }
       }
 
-      i, span, img {
+      i, span, img, svg {
         margin-left: (((@btn-width - @btn-font-size) / 2) - @dropdown-arrow-width);
         margin-right: (((@btn-width - @btn-font-size) / 2) + @dropdown-arrow-width);
       }
@@ -22675,7 +22728,7 @@ body.prevent-scroll {
       z-index: 3;
       .transition(height @transition-timing);
 
-      i {
+      .fr-modal-close {
         padding: 12px;
         width: 20px;
         font-size: 16px;
@@ -22683,13 +22736,10 @@ body.prevent-scroll {
         line-height: 18px;
         color: @ui-text;
         .box-sizing(content-box);
-
-        &.fr-modal-close {
-          position: absolute;
-          top: 0;
-          right: 0;
-          .transition(color @transition-timing);
-        }
+        position: absolute;
+        top: 0;
+        right: 0;
+        .transition(color @transition-timing);
       }
 
       h4 {
@@ -22809,6 +22859,10 @@ body.prevent-scroll {
 
   &.fr-hidden {
     .opacity(0);
+  }
+
+  &.fr-empty {
+    display: none !important;
   }
 
   .fr-hs {
@@ -23353,7 +23407,7 @@ span.fr-sr-only {
       position: relative;
       z-index: 1;
 
-      > i {
+      > i, > svg {
         text-align: center;
         line-height: 32px;
         height: 32px;
@@ -23928,7 +23982,7 @@ span.fr-sr-only {
 
 	<xf:hiddenval name="c">{$confirmKey}</xf:hiddenval>
 </xf:form>]]></template>
-  <template type="public" title="error" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[<xf:title>{{ phrase('oops_we_ran_into_some_problems') }}</xf:title>
+  <template type="admin" title="error" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[<xf:title>{{ phrase('oops_we_ran_into_some_problems') }}</xf:title>
 
 <div class="blockMessage">
 	<xf:if is="$error">
@@ -23941,7 +23995,7 @@ span.fr-sr-only {
 		</ul>
 	</xf:if>
 </div>]]></template>
-  <template type="admin" title="error" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[<xf:title>{{ phrase('oops_we_ran_into_some_problems') }}</xf:title>
+  <template type="public" title="error" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[<xf:title>{{ phrase('oops_we_ran_into_some_problems') }}</xf:title>
 
 <div class="blockMessage">
 	<xf:if is="$error">
@@ -24159,6 +24213,19 @@ span.fr-sr-only {
 		</td>
 	</tr>
 </table>]]></template>
+  <template type="admin" title="filter_macros" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[<xf:macro name="quick_filter" arg-key="" arg-ajax="" arg-class="">
+	<xf:js src="xf/filter.js" min="1" />
+	<div class="{$class} quickFilter u-jsOnly" data-xf-init="filter" data-key="{$key}" data-ajax="{$ajax}">
+		<div class="inputGroup inputGroup--inline inputGroup--joined">
+			<input type="text" class="input js-filterInput" placeholder="{{ phrase('filter...') }}" data-xf-key="{{ phrase('shortcut.filter') }}" />
+			<xf:checkbox standalone="true">
+				<xf:option labelclass="inputGroup-text" class="js-filterPrefix" label="{{ phrase('prefix') }}" />
+			</xf:checkbox>
+			<i class="inputGroup-text js-filterClear is-disabled" aria-hidden="true"></i>
+		</div>
+	</div>
+</xf:macro>
+]]></template>
   <template type="public" title="filter_macros" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[<xf:macro name="find_new_filter_footer">
 	<hr class="menu-separator" />
 	<div class="menu-row">
@@ -24175,19 +24242,6 @@ span.fr-sr-only {
 		<xf:hiddenval name="skip">1</xf:hiddenval>
 	</div>
 </xf:macro>]]></template>
-  <template type="admin" title="filter_macros" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[<xf:macro name="quick_filter" arg-key="" arg-ajax="" arg-class="">
-	<xf:js src="xf/filter.js" min="1" />
-	<div class="{$class} quickFilter u-jsOnly" data-xf-init="filter" data-key="{$key}" data-ajax="{$ajax}">
-		<div class="inputGroup inputGroup--inline inputGroup--joined">
-			<input type="text" class="input js-filterInput" placeholder="{{ phrase('filter...') }}" data-xf-key="{{ phrase('shortcut.filter') }}" />
-			<xf:checkbox standalone="true">
-				<xf:option labelclass="inputGroup-text" class="js-filterPrefix" label="{{ phrase('prefix') }}" />
-			</xf:checkbox>
-			<i class="inputGroup-text js-filterClear is-disabled" aria-hidden="true"></i>
-		</div>
-	</div>
-</xf:macro>
-]]></template>
   <template type="public" title="find_threads_list" version_id="2000034" version_string="2.0.0 Beta 4"><![CDATA[<xf:if is="$pageSelected == 'started'">
 	<xf:title page="{$page}">{{ phrase('threads_started_by_x', {'username': $user.username}) }}</xf:title>
 <xf:elseif is="$pageSelected == 'contributed'" />
@@ -24538,7 +24592,7 @@ span.fr-sr-only {
 		<xf:submitrow icon="save" sticky="true" />
 	</div>
 </xf:form>]]></template>
-  <template type="public" title="forum_filters" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[<xf:form action="{{ link('forums/filters', $forum) }}">
+  <template type="public" title="forum_filters" version_id="2000370" version_string="2.0.3"><![CDATA[<xf:form action="{{ link('forums/filters', $forum) }}">
 	<!--[XF:above_prefixes]-->
 	<xf:if is="$prefixes is not empty">
 		<div class="menu-row menu-row--separated">
@@ -24567,7 +24621,12 @@ span.fr-sr-only {
 	<div class="menu-row menu-row--separated">
 		{{ phrase('last_updated:') }}
 		<div class="u-inputSpacer">
-			<xf:select name="last_days" value="{{ $filters.last_days ?: $forum.list_date_limit_days }}">
+			<xf:if is="$filters.no_date_limit">
+				<xf:set var="$lastDays" value="" />
+			<xf:else />
+				<xf:set var="$lastDays" value="{{ $filters.last_days ?: $forum.list_date_limit_days }}" />
+			</xf:if>
+			<xf:select name="last_days" value="{$lastDays}">
 				<xf:option value="-1">{{ phrase('any_time') }}</xf:option>
 				<xf:option value="7">{{ phrase('x_days', {'days': '7'}) }}</xf:option>
 				<xf:option value="14">{{ phrase('x_days', {'days': '14'}) }}</xf:option>
@@ -24842,7 +24901,7 @@ span.fr-sr-only {
 
 <xf:ad position="forum_overview_bottom" />
 <xf:widgetpos id="forum_overview_bottom" />]]></template>
-  <template type="public" title="forum_post_quick_thread" version_id="2000051" version_string="2.0.0 Release Candidate 1"><![CDATA[<xf:form action="{{ link('forums/post-thread', $forum) }}" draft="{{ link('forums/draft', $forum) }}">
+  <template type="public" title="forum_post_quick_thread" version_id="2000270" version_string="2.0.2"><![CDATA[<xf:form action="{{ link('forums/post-thread', $forum) }}" draft="{{ link('forums/draft', $forum) }}">
 
 	<div class="js-quickThreadFields" data-xf-init="attachment-manager">
 
@@ -24900,6 +24959,12 @@ span.fr-sr-only {
 				arg-visible="{{ false }}" />
 		</xf:if>
 
+		<xf:if is="$attachmentData">
+			<xf:macro template="helper_attach_upload" name="uploaded_files_list"
+				arg-attachments="{$attachmentData.attachments}"
+				arg-listClass="attachUploadList--spaced" />
+		</xf:if>
+
 		<div class="formButtonGroup">
 			<div class="formButtonGroup-primary">
 				<xf:button type="submit" class="button--primary" icon="write">
@@ -24918,19 +24983,16 @@ span.fr-sr-only {
 			<xf:if contentcheck="true">
 				<div class="formButtonGroup-extra">
 					<xf:contentcheck>
-						<xf:if is="$attachmentData || $xf.options.multiQuote">
-							<xf:if is="$attachmentData">
-								<xf:macro template="helper_attach_upload" name="upload_block"
-									arg-attachmentData="{$attachmentData}"
-									arg-rowType="fullWidth"/>
-							</xf:if>
+						<xf:if is="$attachmentData">
+							<xf:macro template="helper_attach_upload" name="upload_link_from_data"
+								arg-attachmentData="{$attachmentData}" />
+						</xf:if>
 
-							<xf:if is="$xf.options.multiQuote">
-								<xf:macro template="multi_quote_macros" name="button"
-									arg-href="{{ link('threads/multi-quote', $thread) }}"
-									arg-messageSelector=".js-post"
-									arg-storageKey="multiQuoteThread" />
-							</xf:if>
+						<xf:if is="$xf.options.multiQuote">
+							<xf:macro template="multi_quote_macros" name="button"
+								arg-href="{{ link('threads/multi-quote', $thread) }}"
+								arg-messageSelector=".js-post"
+								arg-storageKey="multiQuoteThread" />
 						</xf:if>
 					</xf:contentcheck>
 				</div>
@@ -25281,7 +25343,7 @@ span.fr-sr-only {
 		});
 	</xf:js>
 </xf:macro>]]></template>
-  <template type="public" title="forum_view" version_id="2000037" version_string="2.0.0 Beta 7"><![CDATA[<xf:title page="{$page}">{$forum.Node.title}</xf:title>
+  <template type="public" title="forum_view" version_id="2000370" version_string="2.0.3"><![CDATA[<xf:title page="{$page}">{$forum.Node.title}</xf:title>
 <xf:description>{$forum.Node.description|raw}</xf:description>
 
 <xf:macro template="metadata_macros" name="canonical_url"
@@ -25450,6 +25512,15 @@ span.fr-sr-only {
 							<xf:foreach loop="$threads" value="$thread">
 								<xf:macro template="thread_list_macros" name="item" arg-thread="{$thread}" arg-forum="{$forum}" />
 							</xf:foreach>
+							<xf:if is="$showDateLimitDisabler">
+								<div class="structItem structItem--note">
+									<div class="structItem-cell">
+										<a href="{{ link('forums', $forum, $filters + {'page': $page, 'no_date_limit': 1}) }}">
+											{{ phrase('show_older_items') }}
+										</a>
+									</div>
+								</div>
+							</xf:if>
 						</div>
 					</xf:if>
 				<xf:elseif is="$filters" />
@@ -25535,15 +25606,20 @@ span.fr-sr-only {
   <template type="admin" title="forums" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[<xf:title>{{ phrase('admin_navigation.forums') }}</xf:title>
 
 <xf:macro template="section_nav_macros" name="section_nav" arg-section="forums" />]]></template>
-  <template type="public" title="google_analytics" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[<xf:if is="$xf.options.googleAnalyticsWebPropertyId"><script>
-	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-	ga('create', '{$xf.options.googleAnalyticsWebPropertyId|escape("js")}', 'auto');
-	ga('send', 'pageview');
-</script></xf:if>]]></template>
+  <template type="public" title="google_analytics" version_id="2000270" version_string="2.0.2"><![CDATA[<xf:if is="$xf.options.googleAnalyticsWebPropertyId">
+	<xf:if is="$xf.cookie.domain">
+		<xf:set var="$gaConfig">{'cookie_domain': '{$xf.cookie.domain}'}</xf:set>
+	<xf:else />
+		<xf:set var="$gaConfig">{}</xf:set>
+	</xf:if>
+	<script async src="https://www.googletagmanager.com/gtag/js?id={$xf.options.googleAnalyticsWebPropertyId}"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+		gtag('config', '{$xf.options.googleAnalyticsWebPropertyId|escape("js")}', {$gaConfig});
+	</script>
+</xf:if>]]></template>
   <template type="admin" title="groups_permissions" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[<xf:title>{{ phrase('admin_navigation.groupsAndPermissions') }}</xf:title>
 
 <xf:macro template="section_nav_macros" name="section_nav" arg-section="groupsAndPermissions" />]]></template>
@@ -25824,7 +25900,7 @@ span.fr-sr-only {
 		</xf:option>
 	</xf:checkboxrow>
 </xf:macro>]]></template>
-  <template type="public" title="helper_action" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[<xf:macro name="edit_type" arg-canEditSilently="{{ false }}" arg-silentName="silent" arg-clearEditName="clear_edit" arg-silentEdit="{{ false }}" arg-clearEdit="{{ false }}">
+  <template type="public" title="helper_action" version_id="2000270" version_string="2.0.2"><![CDATA[<xf:macro name="edit_type" arg-canEditSilently="{{ false }}" arg-silentName="silent" arg-clearEditName="clear_edit" arg-silentEdit="{{ false }}" arg-clearEdit="{{ false }}">
 	<xf:if is="$canEditSilently">
 		<xf:checkbox>
 			<xf:option name="{$silentName}" checked="{$silentEdit}"
@@ -25869,15 +25945,15 @@ span.fr-sr-only {
 	<xf:set var="$checkbox">
 		<xf:checkbox>
 			<xf:option name="{$alertName}" selected="{$selected}"
-				label="{{ phrase('notify_author_of_this_action') }} {{ phrase('reason:') }}"
-				hint="{{ phrase('note_that_author_will_see_alert_even_no_longer_view_content') }}">
+				label="{{ phrase('notify_author_of_this_action') }} {{ phrase('reason:') }}">
 
 				<xf:textbox name="{$reasonName}" placeholder="{{ phrase('optional') }}" />
+				<xf:afterhint>{{ phrase('note_that_author_will_see_alert_even_no_longer_view_content') }}</xf:afterhint>
 			</xf:option>
 		</xf:checkbox>
 	</xf:set>
 	<xf:if is="$row">
-		<xf:formrow label="">
+		<xf:formrow>
 			{$checkbox|raw}
 		</xf:formrow>
 	<xf:else />
@@ -25888,10 +25964,10 @@ span.fr-sr-only {
 <xf:macro name="thread_alert" arg-selected="{{ false }}" arg-alertName="starter_alert" arg-reasonName="starter_alert_reason">
 	<xf:checkboxrow>
 		<xf:option name="{$alertName}" selected="{$selected}"
-			label="{{ phrase('notify_thread_starter_of_this_action') }} {{ phrase('reason:') }}"
-			hint="{{ phrase('note_thread_starter_see_alert_even_no_longer_view_thread') }}">
+			label="{{ phrase('notify_thread_starter_of_this_action') }} {{ phrase('reason:') }}">
 
 			<xf:textbox name="{$reasonName}" placeholder="{{ phrase('optional') }}" />
+			<xf:afterhint>{{ phrase('note_thread_starter_see_alert_even_no_longer_view_thread') }}</xf:afterhint>
 		</xf:option>
 	</xf:checkboxrow>
 </xf:macro>
@@ -26135,7 +26211,7 @@ span.fr-sr-only {
 			arg-readOnly="{$readOnly}" />
 	</xf:formrow>
 </xf:macro>]]></template>
-  <template type="admin" title="helper_criteria" version_id="2000070" version_string="2.0.0"><![CDATA[<xf:macro name="user_tabs" arg-container="" arg-userTabTitle="" arg-active="">
+  <template type="admin" title="helper_criteria" version_id="2000370" version_string="2.0.3"><![CDATA[<xf:macro name="user_tabs" arg-container="" arg-userTabTitle="" arg-active="">
 	<xf:set var="$tabs">
 		<a class="tabs-tab{{ $active == 'user' ? ' is-active' : '' }}"
 			role="tab" tabindex="0" aria-controls="{{ unique_id('criteriaUser') }}">
@@ -26507,15 +26583,17 @@ span.fr-sr-only {
 					<xf:dependent>
 						<div class="inputGroup">
 							<xf:dateinput name="page_criteria[before][data][ymd]" value="{$criteria.before.ymd}" />
-							<span class="inputGroup-text">{{ phrase('criteria_time:') }}</span>
+							<span class="inputGroup-text">
+								{{ phrase('criteria_time:') }}
+							</span>
 							<span class="inputGroup" dir="ltr">
-								<xf:select name="page_criteria[before][data][hh]" value="{$criteria.before.hh}">
+								<xf:select name="page_criteria[before][data][hh]" value="{$criteria.before.hh}" class="input--inline input--autoSize">
 									<xf:foreach loop="$data.hours" value="$hour">
 										<xf:option value="{$hour}" label="{$hour}" />
 									</xf:foreach>
 								</xf:select>
 								<span class="inputGroup-text">:</span>
-								<xf:select name="page_criteria[before][data][mm]" value="{$criteria.before.mm}">
+								<xf:select name="page_criteria[before][data][mm]" value="{$criteria.before.mm}" class="input--inline input--autoSize">
 									<xf:foreach loop="$data.minutes" value="$minute">
 										<xf:option value="{$minute}" label="{$minute}" />
 									</xf:foreach>
@@ -26563,7 +26641,7 @@ span.fr-sr-only {
 			<!--[XF:page:after_nodes]-->
 
 			<xf:checkboxrow label="{{ phrase('page_information') }}">
-				<xf:option name="user_criteria[style][rule]" value="style" selected="{$criteria.style}"
+				<xf:option name="page_criteria[style][rule]" value="style" selected="{$criteria.style}"
 					label="{{ phrase('user_is_browsing_with_following_style:') }}">
 
 					<xf:select name="page_criteria[style][data][style_id]" value="{$criteria.style.style_id}">
@@ -26643,6 +26721,25 @@ span.fr-sr-only {
 		</div>
 	</div>
 </div>
+</xf:macro>]]></template>
+  <template type="admin" title="helper_js_global" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[<xf:macro name="body" arg-jsState="{{ null }}">
+	<xf:macro template="public:helper_js_global" name="body" arg-app="admin" arg-jsState="{$jsState}" />
+	<xf:js src="xf/admin.js" min="1" />
+	<script>
+		jQuery.extend(true, XF.config, {
+			job: {
+				manualUrl: "{{ link('tools/run-job')|escape('js') }}"
+			},
+			visitorCounts: null
+		});
+		jQuery.extend(XF.phrases, {
+			cancel: "{{ phrase('cancel')|escape('js') }}",
+			cancelling: "{{ phrase('cancelling')|escape('js') }}",
+			processing: "{{ phrase('processing')|escape('js') }}",
+			'processing...': "{{ phrase('processing...')|escape('js') }}",
+			no_items_matched_your_filter: "{{ phrase('no_items_matched_your_filter')|escape('js') }}"
+		});
+	</script>
 </xf:macro>]]></template>
   <template type="public" title="helper_js_global" version_id="2000052" version_string="2.0.0 Release Candidate 2"><![CDATA[<xf:macro name="head" arg-app="!">
 	<xf:set var="$faVer">4.7.0</xf:set>
@@ -26781,25 +26878,6 @@ span.fr-sr-only {
 		}
 		</script>
 	</xf:if>
-</xf:macro>]]></template>
-  <template type="admin" title="helper_js_global" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[<xf:macro name="body" arg-jsState="{{ null }}">
-	<xf:macro template="public:helper_js_global" name="body" arg-app="admin" arg-jsState="{$jsState}" />
-	<xf:js src="xf/admin.js" min="1" />
-	<script>
-		jQuery.extend(true, XF.config, {
-			job: {
-				manualUrl: "{{ link('tools/run-job')|escape('js') }}"
-			},
-			visitorCounts: null
-		});
-		jQuery.extend(XF.phrases, {
-			cancel: "{{ phrase('cancel')|escape('js') }}",
-			cancelling: "{{ phrase('cancelling')|escape('js') }}",
-			processing: "{{ phrase('processing')|escape('js') }}",
-			'processing...': "{{ phrase('processing...')|escape('js') }}",
-			no_items_matched_your_filter: "{{ phrase('no_items_matched_your_filter')|escape('js') }}"
-		});
-	</script>
 </xf:macro>]]></template>
   <template type="admin" title="helper_node_delete_children" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[<xf:macro name="delete_row" arg-node="!" arg-nodeTree="!">
 	<xf:if is="$node.hasChildren()">
@@ -27072,7 +27150,7 @@ span.fr-sr-only {
 		{$inner|raw}
 	</xf:if>
 </xf:macro>]]></template>
-  <template type="admin" title="helper_user_search_criteria" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[<xf:if is="!$noSpecificUser">
+  <template type="admin" title="helper_user_search_criteria" version_id="2000270" version_string="2.0.2"><![CDATA[<xf:if is="!$noSpecificUser">
 	<xf:textboxrow name="criteria[username]" value="{$criteria.username}" readonly="{$readOnly}"
 		label="{{ phrase('user_name') }}" />
 
@@ -27218,9 +27296,9 @@ span.fr-sr-only {
 							label="{$fieldDefinition.title}">
 
 							<xf:if is="!{$choices}">
-								<xf:textbox name="{$fieldName}" value="{$criteria.{$fieldName}.text}" readonly="{$readOnly}" />
+								<xf:textbox name="{$fieldName}" value="{$criteria.user_field.{$fieldId}}" readonly="{$readOnly}" />
 							<xf:else />
-								<xf:checkbox name="{$fieldName}" value="{$criteria.custom.{$fieldId}}" listclass="listColumns" readonly="{$readOnly}">
+								<xf:checkbox name="{$fieldName}" value="{$criteria.user_field.exact.{$fieldId}}" listclass="listColumns" readonly="{$readOnly}">
 									<xf:foreach loop="$choices" key="$val" value="$choice">
 										<xf:option value="{{ $fieldDefinition.type_group == 'multiple' ? 's:' . strlen($val) . ':"' . $val . '"' : $val }}" label="{$choice}" />
 									</xf:foreach>
@@ -27274,73 +27352,6 @@ span.fr-sr-only {
 	<xf:hiddenval name="previous_config">{$baseConfig|json}</xf:hiddenval>
 	<xf:hiddenval name="importer">{$importerId}</xf:hiddenval>
 </xf:form>]]></template>
-  <template type="admin" title="import_config_vbulletin" version_id="2000170" version_string="2.0.1"><![CDATA[<h3 class="block-formSectionHeader">{{ phrase('source_database_configuration') }}</h3>
-<xf:if is="!$baseConfig.db.host">
-	<xf:textboxrow name="config[db][host]" value="{$db.host}"
-		label="{{ phrase('mysql_server') }}"
-		placeholder="$config['MasterServer']['servername']" />
-	<xf:textboxrow name="config[db][port]" value="{$db.port}"
-		label="{{ phrase('mysql_port') }}"
-		placeholder="$config['MasterServer']['port']" />
-	<xf:textboxrow name="config[db][username]" value="{$db.username}"
-		label="{{ phrase('mysql_user_name') }}"
-		placeholder="$config['MasterServer']['username']" />
-	<xf:textboxrow name="config[db][password]" value="{$db.password}" autocomplete="off"
-		label="{{ phrase('mysql_password') }}"
-		placeholder="$config['MasterServer']['password']" />
-	<xf:textboxrow name="config[db][dbname]" value="{$db.dbname}"
-		label="{{ phrase('mysql_database_name') }}"
-		placeholder="$config['Database']['dbname']" />
-	<xf:textboxrow name="config[db][prefix]" value="{$db.prefix}"
-		label="{{ phrase('mysql_table_prefix') }}"
-		placeholder="$config['Database']['tableprefix']" />
-	<hr class="formRowSep" />
-	<xf:textboxrow name="config[db][charset]" value="{$db.charset}"
-		label="{{ phrase('mysql_force_charset') }}"
-		explain="{{ phrase('mysql_force_charset_explain') }}"
-		placeholder="$config['Mysqli']['charset']" />
-
-	<xf:hiddenval name="config[super_admins]" value="{$super_admins}" />
-<xf:else />
-	<xf:formrow label="{{ phrase('mysql_server') }}">{$fullConfig.db.host}:{$fullConfig.db.dbname}</xf:formrow>
-</xf:if>]]></template>
-  <template type="admin" title="import_config_xenforo2" version_id="2000053" version_string="2.0.0 Release Candidate 3"><![CDATA[<h3 class="block-formSectionHeader">{{ phrase('source_database_configuration') }}</h3>
-<xf:if is="!$baseConfig.db.host">
-	<xf:textboxrow name="config[db][host]" value="localhost"
-		label="{{ phrase('mysql_server') }}"
-		placeholder="$config['db']['host']" />
-	<xf:textboxrow name="config[db][port]" value="3306"
-		label="{{ phrase('mysql_port') }}"
-		placeholder="$config['db']['port']" />
-	<xf:textboxrow name="config[db][username]"
-		label="{{ phrase('mysql_user_name') }}"
-		placeholder="$config['db']['username']" />
-	<xf:textboxrow name="config[db][password]" autocomplete="off"
-		label="{{ phrase('mysql_password') }}"
-		placeholder="$config['db']['password']" />
-	<xf:textboxrow name="config[db][dbname]"
-		label="{{ phrase('mysql_database_name') }}"
-		placeholder="$config['db']['dbname']" />
-<xf:else />
-	<xf:formrow label="{{ phrase('mysql_server') }}">{$fullConfig.db.host}:{$fullConfig.db.dbname}</xf:formrow>
-</xf:if>
-
-<xf:if is="!$baseConfig.data_dir">
-	<hr class="formRowSep" />
-
-	<xf:textboxrow name="config[data_dir]"
-		label="{{ phrase('data_directory') }}"
-		placeholder="$config['externalDataPath']" />
-<xf:else />
-	<xf:formrow label="{{ phrase('data_directory') }}">{$fullConfig.data_dir}</xf:formrow>
-</xf:if>
-<xf:if is="!$baseConfig.internal_data_dir">
-	<xf:textboxrow name="config[internal_data_dir]"
-		label="{{ phrase('internal_data_directory') }}"
-		placeholder="$config['internalDataPath']" />
-<xf:else />
-	<xf:formrow label="{{ phrase('internal_data_directory') }}">{$fullConfig.internal_data_dir}</xf:formrow>
-</xf:if>]]></template>
   <template type="admin" title="import_finalize" version_id="2000170" version_string="2.0.1"><![CDATA[<xf:title>{{ phrase('finalize_import') }}</xf:title>
 
 <xf:form action="{{ link('import/finalize') }}" class="block">
@@ -27405,7 +27416,11 @@ span.fr-sr-only {
 		</xf:foreach>
 	</xf:if>
 </xf:macro>]]></template>
-  <template type="admin" title="import_index" version_id="2000170" version_string="2.0.1"><![CDATA[<xf:title>{{ phrase('import_data') }}</xf:title>
+  <template type="admin" title="import_index" version_id="2000370" version_string="2.0.3"><![CDATA[<xf:title>{{ phrase('import_data') }}</xf:title>
+
+<div class="blockMessage blockMessage--important">
+	{{ phrase('xenforo_importers_now_installed_as_separate_add_on_downloadable_from') }}
+</div>
 
 <xf:if is="$complete">
 	<div class="blockMessage blockMessage--success blockMessage--iconic">
@@ -27413,22 +27428,26 @@ span.fr-sr-only {
 	</div>
 </xf:if>
 
-<xf:form action="{{ link('import/config') }}" class="block">
-	<div class="block-container">
-		<div class="block-body">
-			<xf:selectrow label="{{ phrase('import_from') }}" name="importer" size="10">
-				<xf:foreach loop="$importersGrouped" key="$target" value="$importers">
-					<xf:optgroup label="{{ phrase('import_target:') }} {$target}">
-						<xf:foreach loop="$importers" key="$importer" value="$info">
-							<xf:option value="{$importer}">{$info.source}</xf:option>
-						</xf:foreach>
-					</xf:optgroup>
-				</xf:foreach>
-			</xf:selectrow>
+<xf:if is="$importersGrouped">
+	<xf:form action="{{ link('import/config') }}" class="block">
+		<div class="block-container">
+			<div class="block-body">
+				<xf:selectrow label="{{ phrase('import_from') }}" name="importer" size="10">
+					<xf:foreach loop="$importersGrouped" key="$target" value="$importers">
+						<xf:optgroup label="{{ phrase('import_target:') }} {$target}">
+							<xf:foreach loop="$importers" key="$importer" value="$info">
+								<xf:option value="{$importer}">{$info.source}</xf:option>
+							</xf:foreach>
+						</xf:optgroup>
+					</xf:foreach>
+				</xf:selectrow>
+			</div>
+			<xf:submitrow submit="{{ phrase('continue...') }}" />
 		</div>
-		<xf:submitrow submit="{{ phrase('continue...') }}" />
-	</div>
-</xf:form>]]></template>
+	</xf:form>
+<xf:else />
+	<div class="blockMessage">{{ phrase('no_importers_currently_available') }}</div>
+</xf:if>]]></template>
   <template type="admin" title="import_macros" version_id="2000170" version_string="2.0.1"><![CDATA[<xf:macro name="step_users_config" arg-config="!">
 	<xf:checkboxrow label="{{ phrase('users') }}">
 		<xf:option name="step_config[users][merge_email]" selected="{$config.merge_email}">{{ phrase('automatically_merge_users_with_same_email') }}</xf:option>
@@ -27608,104 +27627,6 @@ span.fr-sr-only {
 	</xf:foreach>
 	<xf:hiddenval name="steps_configured">1</xf:hiddenval>
 </xf:form>]]></template>
-  <template type="admin" title="import_step_config_vbulletin" version_id="2000170" version_string="2.0.1"><![CDATA[<xf:if is="in_array('users', $steps)">
-	<h3 class="block-formSectionHeader">{{ phrase('users') }}</h3>
-	<xf:macro template="import_macros" name="step_users_config" arg-config="{$stepConfig.users}" />
-
-	<xf:textboxrow name="step_config[users][super_admins]" value="{$baseConfig.super_admins}"
-		label="{{ phrase('super_admin_user_ids') }}"
-		explain="{{ phrase('super_admin_user_ids_vbulletin_explain') }}"
-		placeholder="$config['SpecialUsers']['superadministrators']" />
-</xf:if>
-
-<xf:if is="in_array('avatars', $steps) && $baseConfig.avatarpath">
-	<h3 class="block-formSectionHeader">{{ phrase('avatars') }}</h3>
-	<xf:textboxrow name="step_config[avatars][path]" value="{$stepConfig.avatars.path}"
-		label="{{ phrase('import_avatars_path') }}"
-		explain="{{ phrase('import_avatars_path_vbulletin_explain') }}" />
-</xf:if>
-
-<xf:if is="in_array('forums', $steps)">
-	<h3 class="block-formSectionHeader">{{ phrase('forums') }}</h3>
-	<xf:selectrow name="step_config[forums][parent_node_id]" value="{$stepConfig.forums.parent_node_id}"
-		label="{{ phrase('parent_node') }}"
-		explain="{{ phrase('import_forums_explain')|nl2br }}">
-		<xf:option value="0">{{ phrase('(none)') }}</xf:option>
-		<xf:foreach loop="$nodeTree.getFlattened(0)" value="$treeEntry">
-			<xf:option value="{$treeEntry.record.node_id}">{{ repeat('--', $treeEntry.depth) }} {$treeEntry.record.title}</xf:option>
-		</xf:foreach>
-	</xf:selectrow>
-	<xf:if is="$vBulletin5">
-		<xf:radiorow name="step_config[forums][import_everything]" value="{$stepConfig.forums.import_everything}">
-			<xf:option value="1" label="{{ phrase('import_blogs_and_groups') }}" />
-			<xf:option value="0" label="{{ phrase('import_forums_only') }}" />
-			<xf:explain>{{ phrase('import_blogs_and_groups_vbulletin_explain') }}</xf:explain>
-		</xf:radiorow>
-	</xf:if>
-</xf:if>
-
-<xf:if is="in_array('attachments', $steps) && $baseConfig.attachpath">
-	<h3 class="block-formSectionHeader">{{ phrase('attachments') }}</h3>
-	<xf:textboxrow name="step_config[attachments][path]" value="{$stepConfig.attachments.path}"
-		label="{{ phrase('import_attachments_path') }}"
-		explain="{{ phrase('import_attachments_path_vbulletin_explain') }}" />
-</xf:if>
-
-<xf:if is="in_array('faq', $steps)">
-	<h3 class="block-formSectionHeader">{{ phrase('import_faq_pages') }}</h3>
-	<xf:radiorow name="step_config[faq][import_as]" value="{$stepConfig.faq.import_as}"
-		label="{{ phrase('import_as') }}">
-		<xf:option value="help" label="{{ phrase('import_as_help_pages') }}"></xf:option>
-		<xf:option value="page" label="{{ phrase('import_as_page_nodes_with_parent_node...') }}">
-			<xf:select name="step_config[faq][parent_node_id]" value="{$stepConfig.faq.parent_node_id}" label="{{ phrase('parent_node') }}">
-				<xf:option value="0">{{ phrase('(none)') }}</xf:option>
-				<xf:foreach loop="$nodeTree.getFlattened(0)" value="$treeEntry">
-					<xf:option value="{$treeEntry.record.node_id}">{{ repeat('--', $treeEntry.depth) }} {$treeEntry.record.title}</xf:option>
-				</xf:foreach>
-			</xf:select>
-		</xf:option>
-		<xf:explain>{{ phrase('import_faq_pages_explain')|nl2br }}</xf:explain>
-	</xf:radiorow>
-</xf:if>
-
-<xf:if is="in_array('notices', $steps)">
-	<h3 class="block-formSectionHeader">{{ phrase('import_notices') }}</h3>
-	<xf:radiorow name="step_config[notices][notice_type]" value="{$stepConfig.notices.notice_type}"
-		label="{{ phrase('import_notices_as') }}">
-		<xf:options source="$noticeTypes" />
-	</xf:radiorow>
-	<xf:radiorow name="step_config[notices][persistent_notice_type]" value="{$stepConfig.notices.persistent_notice_type}"
-		label="{{ phrase('import_persistent_notices_as') }}"
-		explain="{{ phrase('import_notices_explain') }}">
-		<xf:options source="$noticeTypes" />
-	</xf:radiorow>
-</xf:if>
-
-<xf:if is="in_array('smilies', $steps)">
-	<h3 class="block-formSectionHeader">{{ phrase('smilies') }}</h3>
-	<xf:macro template="import_macros" name="step_smilies_config" arg-config="{$stepConfig.smilies}" />
-</xf:if>
-
-<xf:if is="in_array('blogUsers', $steps)">
-	<h3 class="block-formSectionHeader">{{ phrase('import_blogs') }}</h3>
-	<xf:selectrow name="step_config[blogUsers][parent_node_id]" value="{$stepConfig.blogUsers.parent_node_id}"
-		label="{{ phrase('parent_node') }}"
-		explain="{{ phrase('import_blogs_explain')|nl2br }}">
-		<xf:foreach loop="$nodeTree.getFlattened(0)" value="$treeEntry">
-			<xf:option value="{$treeEntry.record.node_id}">{{ repeat('--', $treeEntry.depth) }} {$treeEntry.record.title}</xf:option>
-		</xf:foreach>
-	</xf:selectrow>
-</xf:if>
-
-<xf:if is="in_array('blogAttachments', $steps) && $baseConfig.blogattachpath">
-	<h3 class="block-formSectionHeader">{{ phrase('import_blog_attachments') }}</h3>
-	<xf:textboxrow name="step_config[blogAttachments][path]" value="{$stepConfig.blogAttachments.path}"
-		label="{{ phrase('import_blog_attachments_path') }}"
-		explain="{{ phrase('import_blog_attachments_path_vbulletin_explain') }}" />
-</xf:if>]]></template>
-  <template type="admin" title="import_step_config_xenforo2" version_id="2000170" version_string="2.0.1"><![CDATA[<xf:if is="in_array('users', $steps)">
-	<xf:macro template="import_macros" name="step_users_config" arg-config="{$config}" />
-</xf:if>]]></template>
   <template type="admin" title="index" version_id="2000170" version_string="2.0.1"><![CDATA[<xf:if is="$showUnicodeWarning">
 	<div class="blockMessage blockMessage--error blockMessage--iconic">
 		{{ phrase('full_unicode_support_has_been_enabled_in_config_but_db_does_not_support') }}
@@ -29060,7 +28981,7 @@ span.fr-sr-only {
 		{$select|raw}
 	</xf:if>
 </xf:macro>]]></template>
-  <template type="public" title="latest_activity" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[<xf:title>{{ phrase('latest_activity') }}</xf:title>
+  <template type="public" title="latest_activity" version_id="2000370" version_string="2.0.3"><![CDATA[<xf:title>{{ phrase('latest_activity') }}</xf:title>
 
 <xf:wrap template="whats_new_wrapper">
 	<xf:set var="$pageSelected" value="latest_activity" />
@@ -31901,7 +31822,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 		</div>
 	</div>
 </div>]]></template>
-  <template type="admin" title="log_sitemap_list" version_id="2000032" version_string="2.0.0 Beta 2"><![CDATA[<xf:title>{{ phrase('sitemap_log') }}</xf:title>
+  <template type="admin" title="log_sitemap_list" version_id="2000270" version_string="2.0.2"><![CDATA[<xf:title>{{ phrase('sitemap_log') }}</xf:title>
 
 <xf:pageaction>
 	<xf:button href="{{ base_url('sitemap.php') }}" icon="export">{{ phrase('download_sitemap') }}</xf:button>
@@ -31923,11 +31844,11 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 					<xf:foreach loop="$entries" value="$entry">
 						<xf:datarow rowclass="{{ $entry.is_active ? 'dataList-row--highlighted' : '' }}">
 							<xf:cell>
-								<xf:date time="{$entry.sitemap_id}" data-full-old-date="true" />
+								<xf:date time="{$entry.sitemap_id}" data-full-date="true" />
 							</xf:cell>
 							<xf:cell>
 								<xf:if is="$entry.complete_date">
-									<xf:date time="{$entry.complete_date}" data-full-old-date="true" />
+									<xf:date time="{$entry.complete_date}" data-full-date="true" />
 								<xf:else />
 									{{ phrase('n_a') }}
 								</xf:if>
@@ -31947,7 +31868,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 <xf:else />
 	<div class="blockMessage">{{ phrase('there_no_sitemap_logs_to_display') }}</div>
 </xf:if>]]></template>
-  <template type="admin" title="log_spam_cleaner_list" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[<xf:title>{{ phrase('spam_cleaner_log') }}</xf:title>
+  <template type="admin" title="log_spam_cleaner_list" version_id="2000270" version_string="2.0.2"><![CDATA[<xf:title>{{ phrase('spam_cleaner_log') }}</xf:title>
 
 <xf:if is="$entries is not empty">
 	<div class="block">
@@ -31965,12 +31886,15 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 					<xf:foreach loop="$entries" value="$entry">
 						<xf:datarow>
 							<xf:cell>
-								<xf:username user="$entry.User" href="{{ link('users/edit', $entry.User) }}" />
+								<xf:username user="$entry.User"
+									defaultname="{$entry.username}"
+									href="{{ $entry.User ? link('users/edit', $entry.User) : null }}" />
 							</xf:cell>
 
 							<xf:cell>
 								<xf:username user="$entry.ApplyingUser"
-									href="{{ link_type('public', 'members', $entry.ApplyingUser) }}" />
+									defaultname="{$entry.applying_username}"
+									href="{{ $entry.ApplyingUser ? link_type('public', 'members', $entry.ApplyingUser) : null }}" />
 							</xf:cell>
 
 							<xf:cell>
@@ -32004,14 +31928,19 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 <xf:else />
 	<div class="blockMessage">{{ phrase('no_entries_have_been_logged') }}</div>
 </xf:if>]]></template>
-  <template type="admin" title="log_spam_cleaner_restore" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[<xf:title>{{ phrase('confirm_action') }}</xf:title>
+  <template type="admin" title="log_spam_cleaner_restore" version_id="2000270" version_string="2.0.2"><![CDATA[<xf:title>{{ phrase('confirm_action') }}</xf:title>
 
 <xf:form action="{{ link('logs/spam-cleaner/restore', $entry) }}" ajax="true" class="block">
 	<div class="block-container">
 		<div class="block-body">
 			<xf:inforow rowtype="confirm">
-				{{ phrase('please_confirm_that_you_want_to_restore_data_and_status_of_user:') }}
-				<strong><a href="{{ link('users/edit', $entry.User) }}">{$entry.User.username}</a></strong>
+				<xf:if is="$entry.User">
+					{{ phrase('please_confirm_that_you_want_to_restore_data_and_status_of_user:') }}
+					<strong><a href="{{ link('users/edit', $entry.User) }}">{$entry.User.username}</a></strong>
+				<xf:else />
+					{{ phrase('please_confirm_that_you_want_to_restore_data_of_following_user:') }}
+					<strong>{$entry.username}</strong>
+				</xf:if>
 			</xf:inforow>
 		</div>
 		<xf:submitrow submit="{{ phrase('restore') }}" rowtype="simple" />
@@ -33050,7 +32979,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 		</div>
 	</div>
 </xf:macro>]]></template>
-  <template type="public" title="member_macros" version_id="2000038" version_string="2.0.0 Beta 8"><![CDATA[<xf:macro name="moderator_menu_actions" arg-user="!" arg-context="!">
+  <template type="public" title="member_macros" version_id="2000370" version_string="2.0.3"><![CDATA[<xf:macro name="moderator_menu_actions" arg-user="!" arg-context="!">
 	<!--[XF:moderator_menu:top]-->
 	<xf:if is="$xf.visitor.canCleanSpam() && $user.isPossibleSpammer()">
 		<a href="{{ link('spam-cleaner', $user, {'no_redirect': 1}) }}" class="menu-linkRow" data-xf-click="overlay">{{ phrase('spam') }}</a>
@@ -33128,6 +33057,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 
 <xf:macro name="member_action_buttons" arg-user="!" arg-context="!">
 	<xf:if contentcheck="true">
+		<!--[XF:action_groups:start]-->
 		<div class="buttonGroup">
 		<xf:contentcheck>
 			<!--[XF:action_group_1:start]-->
@@ -33153,6 +33083,8 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 		</xf:contentcheck>
 		</div>
 	</xf:if>
+
+	<!--[XF:action_groups:middle]-->
 
 	<xf:if contentcheck="true">
 		<div class="buttonGroup">
@@ -33180,6 +33112,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 			<!--[XF:action_group_2:end]-->
 		</xf:contentcheck>
 		</div>
+		<!--[XF:action_groups:end]-->
 	</xf:if>
 </xf:macro>]]></template>
   <template type="public" title="member_notable" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[<xf:title>{{ $active ? $active.title : phrase('notable_members') }}</xf:title>
@@ -33415,7 +33348,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 		<xf:submitrow rowtype="simple" icon="delete" />
 	</div>
 </xf:form>]]></template>
-  <template type="admin" title="member_stat_edit" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[<xf:if is="$memberStat.isInsert()">
+  <template type="admin" title="member_stat_edit" version_id="2000270" version_string="2.0.2"><![CDATA[<xf:if is="$memberStat.isInsert()">
 	<xf:title>{{ phrase('add_member_stat') }}</xf:title>
 <xf:else />
 	<xf:title>{{ phrase('edit_member_stat:') }} {$memberStat.title}</xf:title>
@@ -33524,9 +33457,9 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 				<xf:explain>{{ phrase('permission_limit_explain') }}</xf:explain>
 			</xf:selectrow>
 
-			<xf:checkboxrow readonly="{{ !$memberStat.canEdit() }}"
-				label="{{ phrase('options') }}">
+			<xf:checkboxrow label="{{ phrase('options') }}">
 				<xf:option name="show_value" selected="$memberStat.show_value"
+					readonly="{{ !$memberStat.canEdit() }}"
 					label="{{ phrase('show_value') }}"
 					hint="{{ phrase('if_enabled_and_provided_value_will_be_displayed_for_each_user') }}" />
 				<xf:option name="overview_display" selected="$memberStat.overview_display"
@@ -33538,8 +33471,8 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 			</xf:checkboxrow>
 
 			<xf:numberboxrow name="user_limit" value="{$memberStat.user_limit}" min="0" step="1"
-				readonly="{{ !$memberStat.canEdit() }}"
-				label="{{ phrase('user_limit') }}" />
+				label="{{ phrase('user_limit') }}"
+				explain="{{ ($xf.debug AND $memberStat.addon_id) ? phrase('field_value_maintained_addon_upgrade_explain') : '' }}" />
 
 			<xf:macro template="display_order_macros" name="row"
 				arg-value="{$memberStat.display_order}"
@@ -34215,7 +34148,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 <xf:widgetpos id="member_wrapper_sidenav" position="sidenav" />
 {$innerContent|raw}]]></template>
   <template type="admin" title="message" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[<div class="blockMessage">{$message|raw}</div>]]></template>
-  <template type="public" title="message.less" version_id="2000038" version_string="2.0.0 Beta 8"><![CDATA[@_message-actionColumnWidth: 40px;
+  <template type="public" title="message.less" version_id="2000370" version_string="2.0.3"><![CDATA[@_message-actionColumnWidth: 40px;
 @_messageSimple-userColumnWidth: 70px;
 
 .message
@@ -34377,6 +34310,9 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 .message-content
 {
 	flex: 1 1 auto;
+
+	// IE11 flex bug
+	min-height: 1px;
 }
 
 .message-footer
@@ -34816,7 +34752,8 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 
 		.message-content
 		{
-			min-height: 0;
+			// this is 1px to workaround an IE11 issue - see #139187
+			min-height: 1px;
 		}
 	}
 }
@@ -35298,8 +35235,8 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 		</xf:if>
 	</xf:if>
 </xf:macro>]]></template>
-  <template type="public" title="message_page" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[<div class="blockMessage">{$message}</div>]]></template>
   <template type="admin" title="message_page" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[<div class="blockMessage">{$message}</div>]]></template>
+  <template type="public" title="message_page" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[<div class="blockMessage">{$message}</div>]]></template>
   <template type="public" title="metadata_macros" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[<xf:macro name="metadata"
 	arg-siteName=""
 	arg-title=""
@@ -36243,7 +36180,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 	</xf:if>
 	<xf:js prod="xf/nestable-compiled.js" dev="vendor/nestable/jquery.nestable.js, xf/nestable.js" />
 </xf:macro>]]></template>
-  <template type="public" title="news_feed" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[<xf:title>{{ phrase('your_news_feed') }}</xf:title>
+  <template type="public" title="news_feed" version_id="2000370" version_string="2.0.3"><![CDATA[<xf:title>{{ phrase('your_news_feed') }}</xf:title>
 
 <xf:wrap template="whats_new_wrapper">
 	<xf:set var="$pageSelected" value="news_feed" />
@@ -36537,7 +36474,7 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 <xf:else />
 	<div class="blockMessage">{{ phrase('no_items_have_been_created_yet') }}</div>
 </xf:if>]]></template>
-  <template type="public" title="node_list.less" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[@_nodeList-statsCellBreakpoint: 1000px;
+  <template type="public" title="node_list.less" version_id="2000370" version_string="2.0.3"><![CDATA[@_nodeList-statsCellBreakpoint: 1000px;
 
 .node
 {
@@ -36798,10 +36735,17 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 	{
 		display: inline-block;
 		.m-faBase();
+		width: 1em;
 		padding-right: .3em;
+		text-decoration: none;
 
 		color: @xf-nodeIconReadColor;
 		text-shadow: 1px 1px 0 fade(xf-intensify(@xf-nodeIconReadColor, 50%), 50%);
+	}
+
+	&:hover:before
+	{
+		text-decoration: none;
 	}
 
 	&.subNodeLink--unread
@@ -36818,27 +36762,28 @@ body:not(.lg-from-hash) .lg-outer.lg-start-zoom .lg-item.lg-complete .lg-object 
 	&.subNodeLink--forum:before,
 	&.subNodeLink--category:before
 	{
-		.m-faContent(@fa-var-comments, 1em);
+		.m-faContent(@fa-var-comments);
 	}
 
 	&.subNodeLink--page:before
 	{
-		.m-faContent(@fa-var-file-text, .86em);
+		.m-faContent(@fa-var-file-text);
 	}
 
 	&.subNodeLink--link:before
 	{
-		.m-faContent(@fa-var-link, .93em);
+		.m-faContent(@fa-var-link);
 	}
 }
 
 .node-subNodeFlatList
 {
 	.m-listPlain();
+	.m-clearFix();
 
 	> li
 	{
-		display: inline;
+		display: inline-block;
 		margin-right: 1em;
 
 		&:last-child
@@ -37548,13 +37493,24 @@ button,hr,input{overflow:visible}audio,canvas,progress,video{display:inline-bloc
 </xf:form>]]></template>
   <template type="public" title="notice_email_bounce" version_id="2000170" version_string="2.0.1"><![CDATA[{{ phrase('attempts_to_email_x_have_failed_please_update', {'email': $xf.visitor.email}) }}<br />
 <a href="{{ link('account/email') }}">{{ phrase('update_your_contact_details') }}</a>]]></template>
-  <template type="admin" title="notice_list" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[<xf:title>{{ phrase('notices') }}</xf:title>
+  <template type="admin" title="notice_list" version_id="2000370" version_string="2.0.3"><![CDATA[<xf:title>{{ phrase('notices') }}</xf:title>
 
 <xf:pageaction>
 	<xf:button href="{{ link('notices/add') }}" icon="add">{{ phrase('add_notice') }}</xf:button>
 </xf:pageaction>
 
 <xf:if is="$notices is not empty">
+	<xf:if is="$invalidNotices">
+		<div class="blockMessage blockMessage--important">
+			{{ phrase('following_notices_may_contain_page_criteria_which_is_no_longer_matched:') }}
+			<ul class="listInline listInline--comma">
+				<xf:foreach loop="$invalidNotices" value="$invalidNotice">
+					<li><a href="{{ link('notice/edit', $invalidNotice) }}">{$invalidNotice.title}</a></li>
+				</xf:foreach>
+			</ul>
+		</div>
+	</xf:if>
+
 	<xf:form action="{{ link('notices/toggle') }}" class="block" ajax="true">
 		<div class="block-outer">
 			<xf:macro template="filter_macros" name="quick_filter" arg-key="notices" arg-class="block-outer-opposite" />
@@ -38237,7 +38193,7 @@ button,hr,input{overflow:visible}audio,canvas,progress,video{display:inline-bloc
 </xf:trim></xf:pageaction>
 
 <xf:macro template="option_macros" name="option_form_block" arg-group="{$group}" arg-options="{$group.Options}" />]]></template>
-  <template type="admin" title="option_macros" version_id="2000037" version_string="2.0.0 Beta 7"><![CDATA[<xf:macro name="option_row" arg-group="" arg-option="!" arg-includeAddOnHint="{{ true }}">
+  <template type="admin" title="option_macros" version_id="2000270" version_string="2.0.2"><![CDATA[<xf:macro name="option_row" arg-group="" arg-option="!" arg-includeAddOnHint="{{ true }}">
 	<xf:set var="$formatParams" value="{$option.formatParams}" />
 
 	<xf:set var="$inputName"><xf:macro name="input_name" arg-id="{$option.option_id}" /></xf:set>
@@ -38366,7 +38322,7 @@ button,hr,input{overflow:visible}audio,canvas,progress,video{display:inline-bloc
 			<xf:set var="$user" value="{$xf.app.em.find('XF:User', $option.option_value)}" />
 			<xf:set var="$value" value="{$user.username}" />
 		<xf:elseif is="$option.data_type == 'array'" />
-			<xf:set var="$users" value="{$xf.app.em.findByIds('XF:User', $option.option_value)}" />
+			<xf:set var="$users" value="{{ $xf.app.em.getRepository('XF:User').getUsersByIdsOrdered($option.option_value) }}" />
 			<xf:set var="$value" value="{$users.pluckNamed('username')|join(', ')}" />
 			<xf:set var="$singleUserName" value="{{ false }}" />
 		<xf:else />
@@ -38581,6 +38537,17 @@ button,hr,input{overflow:visible}audio,canvas,progress,video{display:inline-bloc
 		</li>
 	</ul>
 </xf:formrow>]]></template>
+  <template type="admin" title="option_template_collectServerStats" version_id="2000170" version_string="2.0.1"><![CDATA[<xf:checkboxrow
+	hint="{$hintHtml}"
+	explain="{$explainHtml}"
+	html="{$listedHtml}">
+
+	<xf:option name="{$inputName}[enabled]" selected="$option.option_value.enabled" label="{$option.title}" />
+</xf:checkboxrow>
+
+<xf:hiddenval name="{$inputName}[configured]">1</xf:hiddenval>
+<xf:hiddenval name="{$inputName}[installation_id]">{$option.option_value.installation_id}</xf:hiddenval>
+<xf:hiddenval name="{$inputName}[last_sent]">{$option.option_value.last_sent}</xf:hiddenval>]]></template>
   <template type="admin" title="option_template_contactUrl" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[<xf:radiorow name="{$inputName}[type]" value="{$option.option_value.type}"
 	label="{$option.title}"
 	hint="{$hintHtml}"
@@ -38922,7 +38889,7 @@ button,hr,input{overflow:visible}audio,canvas,progress,video{display:inline-bloc
 	<xf:option name="{$inputName}[requireLocation]" selected="$option.option_value.requireLocation"
 		label="{{ phrase('require_location') }}" />
 </xf:checkboxrow>]]></template>
-  <template type="admin" title="option_template_registrationWelcome" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[<xf:checkboxrow
+  <template type="admin" title="option_template_registrationWelcome" version_id="2000270" version_string="2.0.2"><![CDATA[<xf:checkboxrow
 	label="{$option.title}"
 	hint="{$hintHtml}"
 	explain="{$explainHtml}"
@@ -38934,7 +38901,7 @@ button,hr,input{overflow:visible}audio,canvas,progress,video{display:inline-bloc
 		<xf:dependent>
 			<div>{{ phrase('other_participants:') }}</div>
 			<xf:if is="$option.option_value.messageParticipants">
-				<xf:set var="$users" value="{$xf.app.em.findByIds('XF:User', $option.option_value.messageParticipants)}" />
+				<xf:set var="$users" value="{{ $xf.app.em.getRepository('XF:User').getUsersByIdsOrdered($option.option_value.messageParticipants) }}" />
 				<xf:set var="$value" value="{$users.pluckNamed('username')|join(', ')}" />
 			<xf:else />
 				<xf:set var="$value">{$xf.visitor.username}</xf:set>
@@ -39016,7 +38983,7 @@ button,hr,input{overflow:visible}audio,canvas,progress,video{display:inline-bloc
 		<xf:dependent>
 			<div>{{ phrase('email_body:') }}</div>
 			<xf:textarea name="{$inputName}[emailBody]" value="{$option.option_value.emailBody}" rows="5" autosize="true" />
-			<p class="formRow-explain">{{ phrase('following_placeholders_will_be_replaced_in_message_for_email') }} {{ phrase('you_may_also_use_phrase_title_which_will_be_replaced') }}</p>
+			<p class="formRow-explain">{{ phrase('following_placeholders_will_be_replaced_in_message_for_welcome_email') }} {{ phrase('you_may_also_use_phrase_title_which_will_be_replaced') }}</p>
 		</xf:dependent>
 	</xf:option>
 </xf:checkboxrow>]]></template>
@@ -39856,7 +39823,7 @@ button,hr,input{overflow:visible}audio,canvas,progress,video{display:inline-bloc
 	background: #fde9e9;
 	color: #c84448 !important;
 }]]></template>
-  <template type="public" title="payment_initiate_braintree" version_id="2000037" version_string="2.0.0 Beta 7"><![CDATA[<xf:css src="payment_initiate.less" />
+  <template type="public" title="payment_initiate_braintree" version_id="2000370" version_string="2.0.3"><![CDATA[<xf:css src="payment_initiate.less" />
 <xf:js src="xf/payment.js" min="1" />
 
 <xf:title>{{ phrase('enter_payment_details') }}</xf:title>
@@ -39921,7 +39888,7 @@ button,hr,input{overflow:visible}audio,canvas,progress,video{display:inline-bloc
 					<div class="block-body">
 						<xf:formrow rowtype="button"
 							label="{{ phrase('pay_with_apple_pay') }}">
-							<xf:button class="button--apple js-applePayButton" />
+							<xf:button class="button--apple js-applePayButton">&nbsp;</xf:button>
 						</xf:formrow>
 					</div>
 				</div>
@@ -39945,7 +39912,7 @@ button,hr,input{overflow:visible}audio,canvas,progress,video{display:inline-bloc
 		</xf:if>
 	</xf:if>
 </div>]]></template>
-  <template type="public" title="payment_initiate_stripe" version_id="2000037" version_string="2.0.0 Beta 7"><![CDATA[<xf:css src="payment_initiate.less" />
+  <template type="public" title="payment_initiate_stripe" version_id="2000370" version_string="2.0.3"><![CDATA[<xf:css src="payment_initiate.less" />
 <xf:js src="xf/payment.js" min="1" />
 
 <xf:title>{{ phrase('enter_payment_details') }}</xf:title>
@@ -39982,10 +39949,9 @@ button,hr,input{overflow:visible}audio,canvas,progress,video{display:inline-bloc
 				<script type="application/json" class="js-formStyles">
 					{
 						"base": {
-							"color": "{{ property('textColor', '#141414') }}",
-							"fontFamily": "{{ property('fontFamilyUi') }}",
-							"fontSize": "16px",
-							"lineHeight": "{{ property('lineHeightDefault', '1.4') }}"
+							"color": "{{ parse_less_color(property('textColor', '#141414'))|escape('json') }}",
+							"fontFamily": "{{ property('fontFamilyUi')|escape('json') }}",
+							"fontSize": "16px"
 						},
 						"invalid": {
 							"color": "#c84448"
@@ -40009,7 +39975,7 @@ button,hr,input{overflow:visible}audio,canvas,progress,video{display:inline-bloc
 				<div class="block-body">
 					<xf:formrow rowtype="button"
 						label="{{ phrase('pay_with_apple_pay') }}">
-						<xf:button class="button--apple js-applePayButton" />
+						<xf:button class="button--apple js-applePayButton">&nbsp;</xf:button>
 					</xf:formrow>
 				</div>
 			</div>
@@ -40208,7 +40174,7 @@ button,hr,input{overflow:visible}audio,canvas,progress,video{display:inline-bloc
 <xf:else />
 	<div class="blockMessage">{{ phrase('no_items_have_been_created_yet') }}</div>
 </xf:if>]]></template>
-  <template type="admin" title="payment_profile_paypal" version_id="2000051" version_string="2.0.0 Release Candidate 1"><![CDATA[<xf:textboxrow name="options[primary_account]" value="{$profile.options.primary_account}" type="email"
+  <template type="admin" title="payment_profile_paypal" version_id="2000270" version_string="2.0.2"><![CDATA[<xf:textboxrow name="options[primary_account]" value="{$profile.options.primary_account}" type="email"
 	label="{{ phrase('paypal_primary_account') }}"
 	hint="{{ phrase('required') }}">
 
@@ -40225,7 +40191,9 @@ button,hr,input{overflow:visible}audio,canvas,progress,video{display:inline-bloc
 	<xf:option name="options[require_address]" selected="$profile.options.require_address"
 		label="{{ phrase('require_address') }}"
 		hint="{{ phrase('require_address_hint') }}" />
-</xf:checkboxrow>]]></template>
+</xf:checkboxrow>
+
+<xf:hiddenval name="options[legacy]" value="{{ $profile.options.legacy ? 1 : 0 }}" />]]></template>
   <template type="admin" title="payment_profile_stripe" version_id="2000051" version_string="2.0.0 Release Candidate 1"><![CDATA[<xf:textboxrow name="options[live_publishable_key]" value="{$profile.options.live_publishable_key}"
 	label="{{ phrase('stripe_live_publishable_key') }}" />
 
@@ -41717,7 +41685,7 @@ button,hr,input{overflow:visible}audio,canvas,progress,video{display:inline-bloc
 		border-top-width: @xf-borderSizeFeature;
 	}
 }]]></template>
-  <template type="admin" title="phrase_translate_macros" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[<xf:macro name="expanded" arg-phrase="!" arg-language="!">
+  <template type="admin" title="phrase_translate_macros" version_id="2000370" version_string="2.0.3"><![CDATA[<xf:macro name="expanded" arg-phrase="!" arg-language="!">
 	<xf:js src="xf/translation.js" min="1" />
 	<xf:css src="phrase_translate.less" />
 
@@ -41760,37 +41728,39 @@ button,hr,input{overflow:visible}audio,canvas,progress,video{display:inline-bloc
 </xf:macro>
 
 <xf:macro name="collapsed" arg-phrase="!" arg-language="!">
-	<xf:form action="{{ link('phrases/translate', $phrase) }}" ajax="true" data-xf-init="translate-submit" class="block block--phrase block block--phrase {{ ($phrase.language_id == 0 ? '' : ($phrase.language_id == $language.language_id ? 'block--phrase--custom' : 'block--phrase--parentCustom')) }}">
-		<div class="block-outer">
-			<div class="block-outer-opposite">
-				<div class="buttonGroup">
-					<xf:button type="submit" name="edit" icon="edit" class="button--link" />
-					<xf:if is="$language.language_id AND $phrase.isUpdate() AND $phrase.language_id == $language.language_id">
-						<xf:button type="submit" name="revert" class="button--link">{{ phrase('revert') }}</xf:button>
-					</xf:if>
+	<xf:if is="$phrase">
+		<xf:form action="{{ link('phrases/translate', $phrase) }}" ajax="true" data-xf-init="translate-submit" class="block block--phrase block block--phrase {{ ($phrase.language_id == 0 ? '' : ($phrase.language_id == $language.language_id ? 'block--phrase--custom' : 'block--phrase--parentCustom')) }}">
+			<div class="block-outer">
+				<div class="block-outer-opposite">
+					<div class="buttonGroup">
+						<xf:button type="submit" name="edit" icon="edit" class="button--link" />
+						<xf:if is="$language.language_id AND $phrase.isUpdate() AND $phrase.language_id == $language.language_id">
+							<xf:button type="submit" name="revert" class="button--link">{{ phrase('revert') }}</xf:button>
+						</xf:if>
+					</div>
 				</div>
 			</div>
-		</div>
-		<div class="block-container">
-			<div class="block-body">
-				<xf:formrow rowtype="fullWidth">
-					<dl class="pairs pairs--inline">
-						<dt>{{ phrase('title') }}</dt>
-						<dd>{$phrase.title}</dd>
-					</dl>
-				</xf:formrow>
-				<xf:formrow rowtype="fullWidth">
-					<dl class="pairs pairs--inline">
-						<dt>{{ phrase('phrase_text') }}</dt>
-						<dd>
-							{$phrase.phrase_text|nl2br}
-						</dd>
-					</dl>
-				</xf:formrow>
+			<div class="block-container">
+				<div class="block-body">
+					<xf:formrow rowtype="fullWidth">
+						<dl class="pairs pairs--inline">
+							<dt>{{ phrase('title') }}</dt>
+							<dd>{$phrase.title}</dd>
+						</dl>
+					</xf:formrow>
+					<xf:formrow rowtype="fullWidth">
+						<dl class="pairs pairs--inline">
+							<dt>{{ phrase('phrase_text') }}</dt>
+							<dd>
+								{$phrase.phrase_text|nl2br}
+							</dd>
+						</dl>
+					</xf:formrow>
+				</div>
 			</div>
-		</div>
-		<xf:hiddenval name="language_id">{$language.language_id}</xf:hiddenval>
-	</xf:form>
+			<xf:hiddenval name="language_id">{$language.language_id}</xf:hiddenval>
+		</xf:form>
+	</xf:if>
 </xf:macro>]]></template>
   <template type="admin" title="phrase_translate_results" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[<xf:title>{{ phrase('translate_phrases:') }} {$language.title}</xf:title>
 
@@ -42470,7 +42440,7 @@ button,hr,input{overflow:visible}audio,canvas,progress,video{display:inline-bloc
 </xf:trim></div>
 
 <xf:macro template="post_macros" name="post" arg-post="{$post}" arg-thread="{$thread}" />]]></template>
-  <template type="public" title="post_macros" version_id="2000038" version_string="2.0.0 Beta 8"><![CDATA[<xf:macro name="post" arg-post="!" arg-thread="!">
+  <template type="public" title="post_macros" version_id="2000370" version_string="2.0.3"><![CDATA[<xf:macro name="post" arg-post="!" arg-thread="!">
 	<xf:css src="message.less" />
 	<xf:set var="$isIgnored" value="{{ $post.isIgnored() }}" />
 	<article class="message message--post js-post js-inlineModContainer {{ $isIgnored ? 'is-ignored' : '' }} {{ $post.isUnread() ? ' is-unread' : '' }}"
@@ -42709,9 +42679,9 @@ button,hr,input{overflow:visible}audio,canvas,progress,video{display:inline-bloc
 				</div>
 			</div>
 		</div>
-
-		<xf:ad position="post_above" arg-post="{$post}" />
 	</article>
+
+	<xf:ad position="post_below_container" arg-post="{$post}" />
 </xf:macro>
 
 <xf:macro name="post_deleted" arg-post="!" arg-thread="!">
@@ -42741,6 +42711,8 @@ button,hr,input{overflow:visible}audio,canvas,progress,video{display:inline-bloc
 			</div>
 		</div>
 	</div>
+
+	<xf:ad position="post_below_container" arg-post="{$post}" />
 </xf:macro>]]></template>
   <template type="public" title="prefix_input" version_id="2000035" version_string="2.0.0 Beta 5"><![CDATA[<xf:js src="xf/prefix_menu.js" min="1" />
 <xf:css src="prefix_menu.less" />
@@ -42922,18 +42894,24 @@ button,hr,input{overflow:visible}audio,canvas,progress,video{display:inline-bloc
 		</xf:if>
 	</xf:formrow>
 </xf:macro>]]></template>
-  <template type="public" title="prefix_menu.less" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[.menuTrigger.menuTrigger--prefix
+  <template type="public" title="prefix_menu.less" version_id="2000370" version_string="2.0.3"><![CDATA[.menuTrigger.menuTrigger--prefix
 {
 	text-decoration: none;
 }
 
-.menuPrefix
+.menuPrefix,
+.menuPrefix.label--hidden
 {
 	display: block;
 	font-size: @xf-fontSizeSmall;
 	cursor: default;
 	padding: @xf-paddingMedium;
 	//margin-bottom: -(@xf-paddingMedium);
+
+	&.label--hidden
+	{
+		border: 1px solid @xf-borderColorFaint;
+	}
 
 	&.menuPrefix--none
 	{
@@ -51769,7 +51747,7 @@ table.cssPropertySet
 	arg-thread="{$thread}"
 	arg-forum="{$forum}"
 	arg-forceRead="{$inlineMode}" />]]></template>
-  <template type="public" title="thread_list_macros" version_id="2000053" version_string="2.0.0 Release Candidate 3"><![CDATA[<xf:macro name="item"
+  <template type="public" title="thread_list_macros" version_id="2000370" version_string="2.0.3"><![CDATA[<xf:macro name="item"
 	arg-thread="!"
 	arg-forum=""
 	arg-forceRead="{{ false }}"
@@ -51853,7 +51831,7 @@ table.cssPropertySet
 				<xf:set var="$canPreview" value="{{ $thread.canPreview() }}" />
 				<xf:if is="$thread.prefix_id">
 					<xf:if is="$forum">
-						<a href="{{ link('forums', $forum, {'prefix_id': $thread.prefix_id}) }}" class="labelLink">{{ prefix('thread', $thread, 'html', '') }}</a>
+						<a href="{{ link('forums', $forum, {'prefix_id': $thread.prefix_id}) }}" class="labelLink" rel="nofollow">{{ prefix('thread', $thread, 'html', '') }}</a>
 					<xf:else />
 						{{ prefix('thread', $thread, 'html', '') }}
 					</xf:if>
@@ -52427,7 +52405,7 @@ table.cssPropertySet
 		<xf:submitrow submit="{{ phrase('undelete') }}" rowtype="simple" />
 	</div>
 </xf:form>]]></template>
-  <template type="public" title="thread_view" version_id="2000170" version_string="2.0.1"><![CDATA[<xf:title page="{$page}">{{ prefix('thread', $thread, 'escaped') }}{$thread.title}</xf:title>
+  <template type="public" title="thread_view" version_id="2000270" version_string="2.0.2"><![CDATA[<xf:title page="{$page}">{{ prefix('thread', $thread, 'escaped') }}{$thread.title}</xf:title>
 <xf:h1>{{ prefix('thread', $thread) }}{$thread.title}</xf:h1>
 
 <xf:description meta="false">
@@ -52476,33 +52454,37 @@ table.cssPropertySet
 	arg-canonicalUrl="{{ link('canonical:threads', $thread, {'page': $page}) }}" />
 
 <xf:page option="ldJsonHtml">
-	<script type="application/ld+json">
-	{
-		"@context": "https://schema.org",
-		"@type": "DiscussionForumPosting",
-		"@id": "{{ link('canonical:threads', $thread)|escape('json') }}",
-		"headline": "{$thread.title|escape('json')}",
-		"articleBody": "{$fpSnippet|escape('json')}",
-		"articleSection": "{$thread.Forum.Node.title|escape('json')}",
-		"author": {
-			"@type": "Person",
-			"name": "{{ ($thread.User ? $thread.User.username : $thread.username)|escape('json') }}"
-		},
-		"datePublished": "{{ date($thread.post_date, 'Y-m-d')|escape('json') }}",
-		"dateModified": "{{ date($thread.last_post_date, 'Y-m-d')|escape('json') }}",
-		<xf:if is="$thread.User">
-		"image": "{{ (($thread.User.avatar_highdpi
-			? $thread.User.getAvatarUrl('h', null, true)
-			: $thread.User.getAvatarUrl('l', null, true))
-			?: base_url(property('publicMetadataLogoUrl'), true))|escape('json') }}",
-		</xf:if>
-		"interactionStatistic": {
-			"@type": "InteractionCounter",
-			"interactionType": "https://schema.org/ReplyAction",
-			"userInteractionCount": {$thread.reply_count}
+	<xf:if is="$thread.User.avatar_highdpi">
+		<xf:set var="$image">{$thread.User.getAvatarUrl('h', null, true)}</xf:set>
+	<xf:elseif is="$thread.User.avatar_date" />
+		<xf:set var="$image">{$thread.User.getAvatarUrl('l', null, true)}</xf:set>
+	<xf:elseif is="property('publicMetadataLogoUrl')" />
+		<xf:set var="$image">{{ base_url(property('publicMetadataLogoUrl'), true) }}</xf:set>
+	</xf:if>
+	<xf:if is="$image">
+		<script type="application/ld+json">
+		{
+			"@context": "https://schema.org",
+			"@type": "DiscussionForumPosting",
+			"@id": "{{ link('canonical:threads', $thread)|escape('json') }}",
+			"headline": "{$thread.title|escape('json')}",
+			"articleBody": "{$fpSnippet|escape('json')}",
+			"articleSection": "{$thread.Forum.Node.title|escape('json')}",
+			"author": {
+				"@type": "Person",
+				"name": "{{ ($thread.User ? $thread.User.username : $thread.username)|escape('json') }}"
+			},
+			"datePublished": "{{ date($thread.post_date, 'Y-m-d')|escape('json') }}",
+			"dateModified": "{{ date($thread.last_post_date, 'Y-m-d')|escape('json') }}",
+			"image": "{$image|escape('json')}",
+			"interactionStatistic": {
+				"@type": "InteractionCounter",
+				"interactionType": "https://schema.org/ReplyAction",
+				"userInteractionCount": {$thread.reply_count}
+			}
 		}
-	}
-	</script>
+		</script>
+	</xf:if>
 </xf:page>
 
 <!--[XF:content_top]-->
@@ -52960,7 +52942,7 @@ jQuery.extend(XF.phrases, {
 		<div class="blockMessage">{{ phrase('file_check_results_file_not_found_please_rerun') }}</div>
 	</xf:if>
 </xf:if>]]></template>
-  <template type="admin" title="tools_rebuild" version_id="2000036" version_string="2.0.0 Beta 6"><![CDATA[<xf:title>{{ phrase('rebuild_caches') }}</xf:title>
+  <template type="admin" title="tools_rebuild" version_id="2000270" version_string="2.0.2"><![CDATA[<xf:title>{{ phrase('rebuild_caches') }}</xf:title>
 
 <xf:if is="$success">
 	<div class="blockMessage blockMessage--success blockMessage--iconic">{{ phrase('cache_rebuilt_successfully') }}</div>
@@ -53126,6 +53108,20 @@ jQuery.extend(XF.phrases, {
 	arg-body="{$sitemapBody}"
 	arg-job="XF:Sitemap" />
 <!--[XF:after_sitemap]-->
+
+<xf:set var="$gravatarBody">
+	<xf:checkboxrow>
+		<xf:option name="options[posters]" selected="1" label="{{ phrase('limit_to_users_who_have_posted') }}" />
+		<xf:option name="options[import_table]" label="{{ phrase('limit_to_imported_users_logged_in_this_table:') }}">
+			<xf:textbox name="options[import_table_name]" />
+		</xf:option>
+		<xf:explain>{{ phrase('fetch_gravatars_job_explain') }}</xf:explain>
+	</xf:checkboxrow>
+</xf:set>
+<xf:macro name="rebuild_job"
+	arg-header="{{ phrase('fetch_gravatars_for_users_with_no_avatar') }}"
+	arg-body="{$gravatarBody}"
+	arg-job="XF:Gravatar" />
 
 <!--[XF:rebuild_bottom]-->
 
@@ -53423,7 +53419,7 @@ jQuery.extend(XF.phrases, {
 <h2>{$code}</h2>
 
 {{ phrase('two_step_email_body_html2', {'ip': $ip}) }}]]></template>
-  <template type="public" title="two_step_totp" version_id="2000051" version_string="2.0.0 Release Candidate 1"><![CDATA[<xf:if is="$context == 'setup'">
+  <template type="public" title="two_step_totp" version_id="2000370" version_string="2.0.3"><![CDATA[<xf:if is="$context == 'setup'">
 	<xf:js src="vendor/qrcode/jquery-qrcode.min.js" />
 	<xf:formrow label="{{ phrase('setup') }}">
 		{{ phrase('totp_recieve_codes_via_app_desc') }}
@@ -53431,7 +53427,7 @@ jQuery.extend(XF.phrases, {
 		{{ phrase('totp_enter_secret_into_app_x', {'secret': $secret}) }}
 	</xf:formrow>
 	<xf:js>
-	$(function()
+	jQuery(function($)
 	{
 		var $el = $('#js-totpQrCode');
 		$el.qrcode({
@@ -54685,7 +54681,7 @@ jQuery.extend(XF.phrases, {
 		<xf:submitrow icon="save" />
 	</div>
 </xf:form>]]></template>
-  <template type="admin" title="user_ip_list" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[<xf:title>{{ phrase('ip_addresses_logged_for_x', {'name': $user.username}) }}</xf:title>
+  <template type="admin" title="user_ip_list" version_id="2000370" version_string="2.0.3"><![CDATA[<xf:title>{{ phrase('ip_addresses_logged_for_x', {'name': $user.username}) }}</xf:title>
 
 <xf:if is="$ips is not empty">
 	<div class="block">
@@ -54698,6 +54694,7 @@ jQuery.extend(XF.phrases, {
 						<xf:cell>{{ phrase('earliest') }}</xf:cell>
 						<xf:cell>{{ phrase('latest') }}</xf:cell>
 						<xf:cell>&nbsp;</xf:cell>
+						<xf:cell>&nbsp;</xf:cell>
 					</xf:datarow>
 					<xf:foreach loop="$ips" value="$ip">
 						<xf:datarow rowclass="dataList-row--noHover">
@@ -54706,6 +54703,16 @@ jQuery.extend(XF.phrases, {
 							<xf:cell><xf:date time="{$ip.first_date}" /></xf:cell>
 							<xf:cell><xf:date time="{$ip.last_date}" /></xf:cell>
 							<xf:action href="{{ link('users/ip-users', null, {'ip': $ip.ip|ip}) }}" overlay="true">{{ phrase('more_users') }}</xf:action>
+							<xf:popup label="&#8226;&#8226;&#8226;" class="dataList-cell--separated">
+								<div class="menu" data-menu="menu" aria-hidden="true" data-menu-builder="dataList">
+									<div class="menu-content">
+										<h3 class="menu-header">{{ phrase('more_options') }}</h3>
+										<a href="{{ link('banning/ips/add', null, {'ip': $ip.ip|ip}) }}" class="menu-linkRow" data-xf-click="overlay">{{ phrase('ban') }}</a>
+										<a href="{{ link('banning/discouraged-ips/add', null, {'ip': $ip.ip|ip}) }}" class="menu-linkRow" data-xf-click="overlay">{{ phrase('discourage') }}</a>
+										<div class="js-menuBuilderTarget u-showMediumBlock"></div>
+									</div>
+								</div>
+							</xf:popup>
 						</xf:datarow>
 					</xf:foreach>
 				</xf:datalist>
@@ -54715,7 +54722,7 @@ jQuery.extend(XF.phrases, {
 <xf:else />
 	<div class="blockMessage">{{ phrase('no_ip_logs_for_requested_user') }}</div>
 </xf:if>]]></template>
-  <template type="admin" title="user_list" version_id="2000170" version_string="2.0.1"><![CDATA[<xf:title>{{ phrase('users') }}</xf:title>
+  <template type="admin" title="user_list" version_id="2000370" version_string="2.0.3"><![CDATA[<xf:title>{{ phrase('users') }}</xf:title>
 
 <xf:if is="$users is not empty">
 	<xf:form action="{{ link('users/batch-update/confirm') }}" class="block">
@@ -54739,7 +54746,7 @@ jQuery.extend(XF.phrases, {
 					</div>
 				</div>
 				<xf:macro template="filter_macros" name="quick_filter" arg-key="users"
-					arg-ajax="{{ link('users/list', null, {'criteria': $criteria}) }}"
+					arg-ajax="{{ link('users/list', null, {'criteria': $criteria, 'order': $order, 'direction': $direction}) }}"
 					arg-class="block-outer-opposite" />
 			</div>
 		</xf:if>
@@ -55067,7 +55074,7 @@ jQuery.extend(XF.phrases, {
 		</ul>
 	</div>
 </div>]]></template>
-  <template type="admin" title="user_title_ladder_list" version_id="2000170" version_string="2.0.1"><![CDATA[<xf:title>{{ phrase('user_title_ladder') }}</xf:title>
+  <template type="admin" title="user_title_ladder_list" version_id="2000270" version_string="2.0.2"><![CDATA[<xf:title>{{ phrase('user_title_ladder') }}</xf:title>
 
 <xf:form action="{{ link('user-title-ladder/update') }}" class="block">
 	<div class="block-container">
@@ -55097,7 +55104,7 @@ jQuery.extend(XF.phrases, {
 					</xf:datarow>
 				</xf:foreach>
 				<xf:datarow>
-					<xf:cell>{{ phrase('new:') }}</xf:cell>
+					<xf:cell data-hide-label="true">{{ phrase('new:') }}</xf:cell>
 					<xf:cell>
 						<xf:textbox name="title" maxlength="{$maxLength}" />
 					</xf:cell>
@@ -55116,10 +55123,10 @@ jQuery.extend(XF.phrases, {
 </xf:form>
 
 <xf:macro template="option_macros" name="option_form_block" arg-options="{$options}" />]]></template>
-  <template type="admin" title="user_upgrade_active_downgrade" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[<xf:title>{{ phrase('confirm_action') }}</xf:title>
+  <template type="admin" title="user_upgrade_active_downgrade" version_id="2000270" version_string="2.0.2"><![CDATA[<xf:title>{{ phrase('confirm_action') }}</xf:title>
 
 <xf:form action="{{ link('user-upgrades/downgrade', null, {'user_upgrade_record_id': $activeUpgrade.user_upgrade_record_id}) }}"
-	ajax="true" class="block">
+	ajax="true" data-force-flash-message="on" class="block">
 
 	<div class="block-container">
 		<div class="block-body">
@@ -55233,7 +55240,7 @@ jQuery.extend(XF.phrases, {
 		<xf:submitrow rowtype="simple" icon="delete" />
 	</div>
 </xf:form>]]></template>
-  <template type="admin" title="user_upgrade_edit" version_id="2000037" version_string="2.0.0 Beta 7"><![CDATA[<xf:if is="$upgrade.isInsert()">
+  <template type="admin" title="user_upgrade_edit" version_id="2000370" version_string="2.0.3"><![CDATA[<xf:if is="$upgrade.isInsert()">
 	<xf:title>{{ phrase('add_user_upgrade') }}</xf:title>
 <xf:else />
 	<xf:title>{{ phrase('edit_user_upgrade:') }} {$upgrade.title}</xf:title>
@@ -55259,7 +55266,7 @@ jQuery.extend(XF.phrases, {
 			<xf:formrow rowtype="input"
 				label="{{ phrase('cost') }}">
 
-				<xf:textbox name="cost_amount" value="{{ $upgrade.cost_amount ?: 5 }}" class="input--inline" size="3" />
+				<xf:textbox name="cost_amount" value="{{ $upgrade.cost_amount ?: 5 }}" class="input--inline" size="5" />
 				<xf:macro template="public:currency_macros" name="currency_list"
 					arg-value="{{ $upgrade.cost_currency ?: 'USD' }}"
 					arg-class="input--inline" />
@@ -55509,7 +55516,7 @@ jQuery.extend(XF.phrases, {
 		</xf:foreach>
 	</xf:datalist>
 </xf:macro>]]></template>
-  <template type="admin" title="user_upgrade_manual" version_id="2000035" version_string="2.0.0 Beta 5"><![CDATA[<xf:title>{{ phrase('manually_upgrade_user') }}</xf:title>
+  <template type="admin" title="user_upgrade_manual" version_id="2000270" version_string="2.0.2"><![CDATA[<xf:title>{{ phrase('manually_upgrade_user') }}</xf:title>
 
 <xf:form action="{{ link('user-upgrades/manual', $upgrade) }}" ajax="true" class="block">
 	<div class="block-container">
@@ -55525,9 +55532,9 @@ jQuery.extend(XF.phrases, {
 			<xf:radiorow name="end_type"
 				label="{{ phrase('upgrade_ends') }}">
 
-				<xf:option value="permanent" selected="!{$activeUpgrade.end_date}">{{ phrase('permanent') }}</xf:option>
-				<xf:option value="date" selected="{$activeUpgrade.end_date}" label="{{ phrase('date:') }}">
-					<xf:dateinput name="end_date" value="{{ $activeUpgrade.end_date ? date($activeUpgrade.end_date, 'picker') : date($xf.time, 'picker') }}" />
+				<xf:option value="permanent" selected="!{$endDate}">{{ phrase('permanent') }}</xf:option>
+				<xf:option value="date" selected="{$endDate}" label="{{ phrase('date:') }}">
+					<xf:dateinput name="end_date" value="{{ $endDate ? date($endDate, 'picker') : date($xf.time, 'picker') }}" />
 				</xf:option>
 			</xf:radiorow>
 		</div>
@@ -58394,7 +58401,7 @@ video::-webkit-media-text-track-display {
 		</div>
 	</div>
 </xf:if>]]></template>
-  <template type="public" title="widget_members_online" version_id="2000010" version_string="2.0.0 Alpha"><![CDATA[<xf:if is="$options.staffOnline">
+  <template type="public" title="widget_members_online" version_id="2000270" version_string="2.0.2"><![CDATA[<xf:if is="$options.staffOnline">
 	<xf:if contentcheck="true">
 		<div class="block" data-widget-section="staffMembers"{{ widget_data($widget) }}>
 			<div class="block-container">
@@ -58463,6 +58470,9 @@ video::-webkit-media-text-track-display {
 							<li><xf:username user="$user" rich="true" class="{{ !$user.visible ? 'username--invisible' : '' }}" /></li>
 						</xf:trim></xf:foreach>
 					</ul>
+					<xf:if is="$online.counts.unseen">
+						<a href="{{ link('online') }}">{{ phrase('ellipsis_and_x_more', {'count': $online.counts.unseen}) }}</a>
+					</xf:if>
 				<xf:else />
 					{{ phrase('no_members_online_now') }}
 				</xf:if>

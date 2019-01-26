@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 8449eceb2912e9e691da8537e0162c77
+// FROM HASH: e78bc4c52721d1e8a26e5b1e0d1d4f12
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -19,6 +19,20 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			</div>
 		</div>
 	';
+	}
+	$__compilerTemp2 = '';
+	if ($__vars['filters']['no_date_limit']) {
+		$__compilerTemp2 .= '
+				';
+		$__vars['lastDays'] = '';
+		$__compilerTemp2 .= '
+			';
+	} else {
+		$__compilerTemp2 .= '
+				';
+		$__vars['lastDays'] = ($__vars['filters']['last_days'] ?: $__vars['forum']['list_date_limit_days']);
+		$__compilerTemp2 .= '
+			';
 	}
 	$__finalCompiled .= $__templater->form('
 	' . '
@@ -41,9 +55,10 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	<div class="menu-row menu-row--separated">
 		' . 'Last updated' . $__vars['xf']['language']['label_separator'] . '
 		<div class="u-inputSpacer">
+			' . $__compilerTemp2 . '
 			' . $__templater->formSelect(array(
 		'name' => 'last_days',
-		'value' => ($__vars['filters']['last_days'] ?: $__vars['forum']['list_date_limit_days']),
+		'value' => $__vars['lastDays'],
 	), array(array(
 		'value' => '-1',
 		'label' => 'Any time',

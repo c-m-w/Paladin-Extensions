@@ -1042,7 +1042,7 @@ class Account extends AbstractController
 		$profiles = $paymentRepo->findPaymentProfilesForList()
 			->pluckFrom(function ($e)
 			{
-				return ($e->display_title ?: $e->Provider->title);
+				return ($e->display_title ?: $e->title);
 			})
 			->fetch();
 

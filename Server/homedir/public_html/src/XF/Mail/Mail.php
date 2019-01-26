@@ -30,6 +30,11 @@ class Mail
 	protected $templateName;
 	protected $templateParams = [];
 
+	/**
+	 * @var null|\Exception
+	 */
+	protected $setupError;
+
 	public function __construct(Mailer $mailer, $templateName = null, array $templateParams = null)
 	{
 		$this->mailer = $mailer;
@@ -44,7 +49,17 @@ class Mail
 
 	public function setTo($email, $name = null)
 	{
-		$this->message->setTo($email, $name);
+		try
+		{
+			$this->message->setTo($email, $name);
+		}
+		catch (\Swift_SwiftException $e)
+		{
+			$this->applySetupError($e);
+
+			return $this;
+		}
+
 		$this->bounceHmac = $this->mailer->calculateBounceHmac($email);
 
 		$headers = $this->message->getHeaders();
@@ -68,6 +83,8 @@ class Mail
 	{
 		if (!$user->email)
 		{
+			$this->setupError = new \Exception("Trying to send email to user without email (ID: $user->user_id)");
+
 			return $this;
 		}
 
@@ -86,14 +103,28 @@ class Mail
 
 	public function setFrom($email, $name = null)
 	{
-		$this->message->setFrom($email, $name);
+		try
+		{
+			$this->message->setFrom($email, $name);
+		}
+		catch (\Swift_SwiftException $e)
+		{
+			$this->applySetupError($e);
+		}
 
 		return $this;
 	}
 
 	public function setReplyTo($email)
 	{
-		$this->message->setReplyTo($email);
+		try
+		{
+			$this->message->setReplyTo($email);
+		}
+		catch (\Swift_SwiftException $e)
+		{
+			$this->applySetupError($e);
+		}
 
 		return $this;
 	}
@@ -102,6 +133,15 @@ class Mail
 	{
 		$email = preg_replace('/["\'\s\\\\]/', '', $email);
 		$this->message->setReturnPath($email);
+
+		try
+		{
+			$this->message->setReturnPath($email);
+		}
+		catch (\Swift_SwiftException $e)
+		{
+			$this->applySetupError($e);
+		}
 
 		if ($useVerp)
 		{
@@ -118,27 +158,54 @@ class Mail
 	protected function applyVerp()
 	{
 		$toAll = $this->message->getTo();
+		if (!$toAll || count($toAll) > 1)
+		{
+			// 0 or 2+ to addresses, so we can't really do verp
+			return $this;
+		}
+
 		$to = key($toAll);
 
 		$verpValue = str_replace('@', '=', $to);
 		$bounceEmailAddress = str_replace('@', "+{$this->bounceHmac}+$verpValue@", $this->verpBase);
 		$bounceEmailAddress = preg_replace('/["\'\s\\\\]/', '', $bounceEmailAddress);
 
-		$this->message->setReturnPath($bounceEmailAddress);
+		try
+		{
+			$this->message->setReturnPath($bounceEmailAddress);
+		}
+		catch (\Swift_SwiftException $e)
+		{
+			$this->applySetupError($e);
+		}
 
 		return $bounceEmailAddress;
 	}
 
 	public function setSender($sender, $name = null)
 	{
-		$this->message->setSender($sender, $name);
+		try
+		{
+			$this->message->setSender($sender, $name);
+		}
+		catch (\Swift_SwiftException $e)
+		{
+			$this->applySetupError($e);
+		}
 
 		return $this;
 	}
 
 	public function setId($id)
 	{
-		$this->message->setId($id);
+		try
+		{
+			$this->message->setId($id);
+		}
+		catch (\Swift_SwiftException $e)
+		{
+			$this->applySetupError($e);
+		}
 
 		return $this;
 	}
@@ -253,21 +320,60 @@ class Mail
 
 	public function send(\Swift_Transport $transport = null)
 	{
+		if ($this->setupError)
+		{
+			$this->logSetupError($this->setupError);
+			return 0;
+		}
+
 		$message = $this->getSendableMessage();
 		if (!$message->getTo())
 		{
-			return false;
+			return 0;
 		}
+
 		return $this->mailer->send($message, $transport);
 	}
 
 	public function queue()
 	{
+		if ($this->setupError)
+		{
+			$this->logSetupError($this->setupError);
+			return false;
+		}
+		
 		$message = $this->getSendableMessage();
 		if (!$message->getTo())
 		{
 			return false;
 		}
+
 		return $this->mailer->queue($message);
+	}
+
+	/**
+	 * Handles the application of the setup error. Throws the exception immediately in debug mode.
+	 * (In normal execution, queues it for logging when the email is sent.)
+	 *
+	 * @param \Exception $e
+	 * @throws \Exception
+	 */
+	protected function applySetupError(\Exception $e)
+	{
+		if (\XF::$debugMode)
+		{
+			throw $e;
+		}
+		
+		$this->setupError = $e;
+	}
+	
+	protected function logSetupError(\Exception $e)
+	{
+		$to = $this->message->getTo();
+		$toEmails = $to ? implode(', ', array_keys($to)) : '[unknown]';
+
+		\XF::logException($this->setupError, false, "Email to {$toEmails} failed setup:");
 	}
 }

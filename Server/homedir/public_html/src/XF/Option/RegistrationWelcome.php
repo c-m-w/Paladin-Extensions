@@ -21,17 +21,24 @@ class RegistrationWelcome extends AbstractOption
 		if (!empty($values['messageEnabled']))
 		{
 			$participants = preg_split('#\s*,\s*#', $values['messageParticipants'], -1, PREG_SPLIT_NO_EMPTY);
-
-			$userRepo = \XF::repository('XF:User');
-			$users = $userRepo->getUsersByNames($participants, $notFound, [], false);
-
-			$starter = $users->shift();
-			if (!$starter)
+			if (!$participants)
 			{
 				$option->error(\XF::phrase('please_enter_at_least_one_valid_recipient'), $option->option_id);
 				return false;
 			}
 
+			// separate this out as it's very important it comes first
+			$starterName = array_shift($participants);
+			$starter = \XF::em()->findOne('XF:User', ['username' => $starterName]);
+			if (!$starter)
+			{
+				$option->error(\XF::phrase('the_following_recipients_could_not_be_found_x', ['names' => $starterName]), $option->option_id);
+				return false;
+			}
+
+			/** @var \XF\Repository\User $userRepo */
+			$userRepo = \XF::repository('XF:User');
+			$users = $userRepo->getUsersByNames($participants, $notFound, [], false);
 			if ($notFound)
 			{
 				$option->error(\XF::phrase('the_following_recipients_could_not_be_found_x', ['names' => implode(', ', $notFound)]), $option->option_id);
@@ -39,6 +46,7 @@ class RegistrationWelcome extends AbstractOption
 			}
 
 			$values['messageParticipants'] = $users->keys();
+			array_unshift($values['messageParticipants'], $starter->user_id);
 
 			if (!$values['messageTitle'] && !$values['messageBody'])
 			{

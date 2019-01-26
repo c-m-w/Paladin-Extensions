@@ -12,7 +12,12 @@ class Login extends AbstractController
 	{
 		if (\XF::visitor()->user_id)
 		{
-			return $this->error(\XF::phrase('you_already_logged_in', ['link' => $this->buildLink('forums')]));
+			if ($this->filter('check', 'bool'))
+			{
+				return $this->redirect($this->getDynamicRedirectIfNot($this->buildLink('login')), '');
+			}
+
+			return $this->message(\XF::phrase('you_already_logged_in', ['link' => $this->buildLink('forums')]));
 		}
 
 		$providers = $this->repository('XF:ConnectedAccount')->getUsableProviders(false);
@@ -26,12 +31,21 @@ class Login extends AbstractController
 	{
 		if (\XF::visitor()->user_id)
 		{
-			return $this->error(\XF::phrase('you_already_logged_in', ['link' => $this->buildLink('forums')]));
+			if ($this->filter('check', 'bool'))
+			{
+				return $this->redirect($this->getDynamicRedirectIfNot($this->buildLink('login')));
+			}
+
+			return $this->message(\XF::phrase('you_already_logged_in', ['link' => $this->buildLink('forums')]));
 		}
 
 		if (!$this->isPost())
 		{
-			return $this->view('XF:Login\Form', 'login');
+			$providers = $this->repository('XF:ConnectedAccount')->getUsableProviders(false);
+			$viewParams = [
+				'providers' => $providers
+			];
+			return $this->view('XF:Login\Form', 'login', $viewParams);
 		}
 
 		$this->assertPostOnly();

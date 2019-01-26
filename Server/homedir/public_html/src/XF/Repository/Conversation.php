@@ -153,6 +153,23 @@ class Conversation extends Repository
 			$users = $recipients;
 		}
 
+		if (is_array($users))
+		{
+			if (count($users) === 1 && reset($users) === $from)
+			{
+				$error = \XF::phraseDeferred('you_cannot_start_conversation_with_yourself');
+				return [];
+			}
+		}
+		else if ($users instanceof \XF\Mvc\Entity\ArrayCollection)
+		{
+			if ($users->count() === 1 && $users->first() === $from)
+			{
+				$error = \XF::phraseDeferred('you_cannot_start_conversation_with_yourself');
+				return [];
+			}
+		}
+
 		$newRecipients = [];
 		$cantStart = [];
 

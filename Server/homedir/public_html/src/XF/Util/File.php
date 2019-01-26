@@ -136,6 +136,11 @@ class File
 		catch (\League\Flysystem\FileNotFoundException $e) {}
 	}
 
+	public static function abstractedPathExists($abstractedPath)
+	{
+		return \XF::app()->fs()->has($abstractedPath);
+	}
+
 	public static function createDirectory($path, $createIndexHtml = true)
 	{
 		if (file_exists($path))

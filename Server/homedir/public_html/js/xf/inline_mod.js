@@ -34,8 +34,8 @@
 
 			this.cookie = this.options.cookieBase + '_' + this.options.type;
 
-			this.$target.on('click', this.options.toggle, $.proxy(this, 'onToggle'));
-			this.$target.on('click', this.options.actionTrigger, $.proxy(this, 'onActionTrigger'));
+			this.$target.on('click', this.options.toggle, XF.proxy(this, 'onToggle'));
+			this.$target.on('click', this.options.actionTrigger, XF.proxy(this, 'onActionTrigger'));
 
 			var cookie = this.getCookieValue();
 			this._initialLoad(cookie);
@@ -278,9 +278,9 @@
 
 		_setupBar: function($bar)
 		{
-			$bar.on('click', ':submit', $.proxy(this, 'submit'))
-				.on('click', '.js-inlineModClose', $.proxy(this, 'hideBar'))
-				.on('click', '.js-inlineModSelectAll', $.proxy(this, 'onSelectAllClick'));
+			$bar.on('click', ':submit', XF.proxy(this, 'submit'))
+				.on('click', '.js-inlineModClose', XF.proxy(this, 'hideBar'))
+				.on('click', '.js-inlineModSelectAll', XF.proxy(this, 'onSelectAllClick'));
 
 			// check the 'select all' checkbox if all toggles are checked
 			var $toggles = this.$target.find(this.options.toggle);

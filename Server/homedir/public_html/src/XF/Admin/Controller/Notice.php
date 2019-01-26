@@ -22,10 +22,14 @@ class Notice extends AbstractController
 		$options = $this->em()->find('XF:Option', 'enableNotices');
 
 		$noticeRepo = $this->getNoticeRepo();
-		$notices = $noticeRepo->findNoticesForList()->fetch()->groupBy('notice_type');
+		$noticeList = $noticeRepo->findNoticesForList()->fetch();
+		$notices = $noticeList->groupBy('notice_type');
+
+		$invalidNotices = $noticeRepo->getInvalidNotices($noticeList);
 
 		$viewParams = [
 			'notices' => $notices,
+			'invalidNotices' => $invalidNotices,
 			'noticeTypes' => $noticeRepo->getNoticeTypes(),
 			'options' => [$options],
 			'totalNotices' => $noticeRepo->getTotalGroupedNotices($notices)

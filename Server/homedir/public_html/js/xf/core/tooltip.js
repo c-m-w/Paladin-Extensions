@@ -79,7 +79,7 @@
 
 			this.reposition();
 
-			$(window).on('resize.tooltip-' + $tooltip.xfUniqueId(), $.proxy(this, 'reposition'));
+			$(window).on('resize.tooltip-' + $tooltip.xfUniqueId(), XF.proxy(this, 'reposition'));
 
 			$tooltip
 				.trigger('tooltip:shown')
@@ -470,7 +470,7 @@
 			if (this.options.html)
 			{
 				$contentHolder.html(content);
-				$contentHolder.find('img').on('load', $.proxy(this, 'reposition'));
+				$contentHolder.find('img').on('load', XF.proxy(this, 'reposition'));
 			}
 			else
 			{
@@ -565,7 +565,7 @@
 			this.tooltip = tooltip;
 
 			tooltip.setPositioner($target);
-			tooltip.addSetupCallback($.proxy(this, 'onTooltipSetup'));
+			tooltip.addSetupCallback(XF.proxy(this, 'onTooltipSetup'));
 
 			$target.xfUniqueId();
 			XF.TooltipTrigger.cache[$target.attr('id')] = this;
@@ -590,21 +590,21 @@
 				{
 					case 'hover':
 						$target.on({
-							'mouseenter.tooltip': $.proxy(this, 'mouseEnter'),
-							'mouseleave.tooltip': $.proxy(this, 'leave')
+							'mouseenter.tooltip': XF.proxy(this, 'mouseEnter'),
+							'mouseleave.tooltip': XF.proxy(this, 'leave')
 						});
 						break;
 
 					case 'focus':
 						$target.on({
-							'focusin.tooltip': $.proxy(this, 'focusEnter'),
-							'focusout.tooltip': $.proxy(this, 'leave')
+							'focusin.tooltip': XF.proxy(this, 'focusEnter'),
+							'focusout.tooltip': XF.proxy(this, 'leave')
 						});
 						break;
 
 					case 'click':
 						actOnClick = true;
-						$target.on('click.tooltip', $.proxy(this, 'click'));
+						$target.on('click.tooltip', XF.proxy(this, 'click'));
 						$target.on('auxclick.tooltip contextmenu.tooltip', function()
 						{
 							self.cancelShow();
@@ -646,9 +646,9 @@
 			}
 
 			$target.on({
-				'tooltip:show': $.proxy(this, 'show'),
-				'tooltip:hide': $.proxy(this, 'hide'),
-				'tooltip:reposition': $.proxy(this, 'reposition')
+				'tooltip:show': XF.proxy(this, 'show'),
+				'tooltip:hide': XF.proxy(this, 'hide'),
+				'tooltip:reposition': XF.proxy(this, 'reposition')
 			});
 		},
 
@@ -701,7 +701,7 @@
 				}
 				else
 				{
-					$(document).on('click.tooltip-' + self.$target.xfUniqueId(), $.proxy(self, 'docClick'));
+					$(document).on('click.tooltip-' + self.$target.xfUniqueId(), XF.proxy(self, 'docClick'));
 				}
 			}, 0);
 
@@ -758,7 +758,7 @@
 				$covers = $covers.add($box);
 			}
 
-			$covers.on('click', $.proxy(this, 'hide'));
+			$covers.on('click', XF.proxy(this, 'hide'));
 
 			this.tooltip.getTooltip().before($covers);
 			this.$covers = $covers;
@@ -984,13 +984,13 @@
 				switch (triggers[i])
 				{
 					case 'hover':
-						$el.on('mouseenter.tooltip', $.proxy(this, 'enter'));
-						$el.on('mouseleave.tooltip', $.proxy(this, 'leave'));
+						$el.on('mouseenter.tooltip', XF.proxy(this, 'enter'));
+						$el.on('mouseleave.tooltip', XF.proxy(this, 'leave'));
 						break;
 
 					case 'focus':
-						$el.on('focusin.tooltip', $.proxy(this, 'enter'));
-						$el.on('focusout.tooltip', $.proxy(this, 'leave'));
+						$el.on('focusin.tooltip', XF.proxy(this, 'enter'));
+						$el.on('focusout.tooltip', XF.proxy(this, 'leave'));
 						break;
 				}
 			}
@@ -1207,7 +1207,7 @@
 				return;
 			}
 
-			this.tooltip = new XF.TooltipElement($.proxy(this, 'getContent'), {
+			this.tooltip = new XF.TooltipElement(XF.proxy(this, 'getContent'), {
 				extraClass: 'tooltip--preview',
 				html: true,
 				loadRequired: true
@@ -1268,7 +1268,7 @@
 		{
 			this.userId = this.$target.data('user-id');
 
-			this.tooltip = new XF.TooltipElement($.proxy(this, 'getContent'), {
+			this.tooltip = new XF.TooltipElement(XF.proxy(this, 'getContent'), {
 				extraClass: 'tooltip--member',
 				html: true,
 				loadRequired: true
@@ -1279,8 +1279,8 @@
 				delayInLoading: this.options.delay,
 				delayIn: this.options.delay,
 				trigger: 'hover focus click',
-				onShow: $.proxy(this, 'onShow'),
-				onHide: $.proxy(this, 'onHide')
+				onShow: XF.proxy(this, 'onShow'),
+				onHide: XF.proxy(this, 'onHide')
 			});
 
 			this.trigger.init();

@@ -117,7 +117,7 @@ class ReleaseBuilder extends \XF\Service\AbstractService
 				$copyRoot = $uploadRoot . $ds . '..'; // These need copying, but to a different path (outside upload)
 			}
 
-			if (strpos($file->getFilename(), '.') === 0)
+			if ($this->isExcludedFileName($file->getFilename()))
 			{
 				$exclude[$file->getPathname()] = true;
 				continue;
@@ -166,7 +166,7 @@ class ReleaseBuilder extends \XF\Service\AbstractService
 				$filesIterator = $this->getFileIterator($filePath);
 				foreach ($filesIterator AS $file)
 				{
-					if (strpos($file->getFilename(), '.') === 0)
+					if ($this->isExcludedFileName($file->getFilename()))
 					{
 						$exclude[$file->getPathname()] = true;
 						continue;
@@ -255,6 +255,8 @@ class ReleaseBuilder extends \XF\Service\AbstractService
 		$this->rollupJs($buildJson['rollup']);
 		$this->execCmds($buildJson['exec']);
 
+		$this->buildTasksComplete = true;
+
 		return;
 	}
 
@@ -299,7 +301,7 @@ class ReleaseBuilder extends \XF\Service\AbstractService
 					continue;
 				}
 
-				$fileName = $file->getFilename();
+				$fileName = $file->getBasename();
 
 				if (strpos($fileName, '.js') === false || strpos($fileName, '.min.js') !== false)
 				{
@@ -390,10 +392,12 @@ class ReleaseBuilder extends \XF\Service\AbstractService
 		$localFs = $this->localFs;
 		$zipArchive = $this->zipArchive;
 
+		// NOTE: any files skipped by generateHashes() won't appear in this loop...
+
 		foreach ($localFs->listContents('', true) AS $info)
 		{
 			// skip hidden dot files, e.g. .DS_Store, .gitignore etc.
-			if (strpos($info['filename'], '.') === 0 || $info['filename'] === '' || $info['filename'] === false || $info['filename'] === null)
+			if ($this->isExcludedFileName($info['basename']))
 			{
 				continue;
 			}
@@ -475,7 +479,24 @@ class ReleaseBuilder extends \XF\Service\AbstractService
 			'_files',
 			'_no_upload',
 			'_output',
-			'_releases'
+			'_releases',
+			'.git',
+			'.svn',
 		];
+	}
+
+	protected function isExcludedFileName($fileName)
+	{
+		if ($fileName === '' || $fileName === false || $fileName === null)
+		{
+			return true;
+		}
+
+		if ($fileName[0] == '.' && $fileName != '.htaccess')
+		{
+			return true;
+		}
+
+		return false;
 	}
 }

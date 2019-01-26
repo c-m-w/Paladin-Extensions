@@ -636,20 +636,6 @@ class User extends Entity
 
 	public function canViewBasicProfile(&$error = null)
 	{
-		$visitor = \XF::visitor();
-		if ($visitor->user_id == $this->user_id)
-		{
-			return true;
-		}
-
-		if (
-			($this->user_state == 'moderated' || $this->user_state == 'email_confirm' || $this->user_state == 'rejected')
-			&& !$visitor->canBypassUserPrivacy()
-		)
-		{
-			return false;
-		}
-
 		return true;
 	}
 

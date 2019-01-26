@@ -113,7 +113,7 @@
 			}
 			else
 			{
-				var f = $.proxy(this, 'updateSubmitState');
+				var f = XF.proxy(this, 'updateSubmitState');
 				this.$disabler.click(function()
 				{
 					setTimeout(f, 0);

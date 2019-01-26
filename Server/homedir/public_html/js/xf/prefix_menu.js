@@ -33,7 +33,7 @@
 				return;
 			}
 
-			this.$select.on('control:enabled control:disabled', $.proxy(this, 'toggleActive'));
+			this.$select.on('control:enabled control:disabled', XF.proxy(this, 'toggleActive'));
 
 			this.$title = XF.findRelativeIf(this.options.title, this.$target);
 
@@ -42,7 +42,7 @@
 			this.$menu = XF.findRelativeIf(this.options.menu, this.$target);
 
 			this.$menuContent = this.$menu.find(this.options.menuContent);
-			this.$menuContent.on('click', '[data-prefix-id]', $.proxy(this, 'prefixClick'));
+			this.$menuContent.on('click', '[data-prefix-id]', XF.proxy(this, 'prefixClick'));
 
 			this.template = this.$menuContent.find('script[type="text/template"]').html();
 			if (!this.template)
@@ -60,7 +60,7 @@
 				}
 				else
 				{
-					$listenTo.on('change', $.proxy(this, 'loadPrefixes'));
+					$listenTo.on('change', XF.proxy(this, 'loadPrefixes'));
 				}
 			}
 
@@ -74,7 +74,7 @@
 			}
 
 			// reset prefix menu when form is reset
-			this.$target.closest('form').on('reset', $.proxy(function()
+			this.$target.closest('form').on('reset', XF.proxy(function()
 			{
 				this.reset();
 			}, this));
@@ -151,7 +151,7 @@
 		{
 			XF.ajax('POST', this.options.href, {
 				val: $(e.target).val()
-			}, $.proxy(this, 'loadSuccess'));
+			}, XF.proxy(this, 'loadSuccess'));
 		},
 
 		loadSuccess: function(data)
@@ -251,6 +251,7 @@
 
 		options: {
 			listenTo: '',
+			initUpdate: true,
 			href: ''
 		},
 
@@ -271,7 +272,12 @@
 				}
 				else
 				{
-					$listenTo.on('change', $.proxy(this, 'loadPrefixes'));
+					$listenTo.on('change', XF.proxy(this, 'loadPrefixes'));
+
+					if (this.options.initUpdate)
+					{
+						$listenTo.trigger('change');
+					}
 				}
 			}
 		},
@@ -280,7 +286,7 @@
 		{
 			XF.ajax('POST', this.options.href, {
 				val: $(e.target).val()
-			}, $.proxy(this, 'loadSuccess'));
+			}, XF.proxy(this, 'loadSuccess'));
 		},
 
 		loadSuccess: function(data)

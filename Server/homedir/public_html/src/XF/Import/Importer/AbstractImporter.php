@@ -318,6 +318,11 @@ abstract class AbstractImporter
 		return $array;
 	}
 
+	public function isInvalidUtf8($value)
+	{
+		return $this->dataManager->isInvalidUtf8($value);
+	}
+
 	public function convertToUtf8($value, $fromCharset = null, $convertHtml = null)
 	{
 		return $this->dataManager->convertToUtf8($value, $fromCharset, $convertHtml);
@@ -406,6 +411,16 @@ abstract class AbstractImporter
 			default:
 				throw new \InvalidArgumentException("Unknown decode type '$type'");
 		}
+	}
+
+	protected function prepareImportSql($prefix, $SQL)
+	{
+		if ($prefix == '')
+		{
+			return $SQL;
+		}
+
+		return preg_replace('/((?:\s|^)(?:UPDATE|FROM|JOIN|STRAIGHT_JOIN)\s)([a-z0-9_-]+(?:\s|$))/siU', '$1' . $prefix . '$2$3', $SQL);
 	}
 
 	/**

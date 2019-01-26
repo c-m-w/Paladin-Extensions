@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 11b1acc020277bc1c029ba0dcf65861c
+// FROM HASH: 6b8596a8cdee45ec5cdf39cd34e4f1dd
 return array('macros' => array('visitor_panel_row' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -86,7 +86,13 @@ return array('macros' => array('visitor_panel_row' => function($__templater, arr
 
 <ul class="listPlain listColumns listColumns--narrow listColumns--together">
 	' . '
-	<li><a href="' . $__templater->fn('link', array('whats-new/news-feed', ), true) . '" class="menu-linkRow">' . 'News feed' . '</a></li>
+	';
+	if ($__vars['xf']['options']['enableNewsFeed']) {
+		$__finalCompiled .= '
+		<li><a href="' . $__templater->fn('link', array('whats-new/news-feed', ), true) . '" class="menu-linkRow">' . 'News feed' . '</a></li>
+	';
+	}
+	$__finalCompiled .= '
 	<li><a href="' . $__templater->fn('link', array('search/member', null, array('user_id' => $__vars['xf']['visitor']['user_id'], ), ), true) . '" class="menu-linkRow">' . 'Your content' . '</a></li>
 	<li><a href="' . $__templater->fn('link', array('account/likes', ), true) . '" class="menu-linkRow">' . 'Likes received' . '</a></li>
 	' . '

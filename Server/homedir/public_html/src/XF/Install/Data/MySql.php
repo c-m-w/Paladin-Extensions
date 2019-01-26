@@ -330,6 +330,7 @@ class MySql
 			$table->addColumn('last_message_username', 'varchar', 50);
 			$table->addColumn('recipients', 'mediumblob');
 			$table->addKey('user_id');
+			$table->addKey('start_date');
 		};
 
 		$tables['xf_conversation_message'] = function(Create $table)

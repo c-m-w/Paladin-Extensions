@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 6ab13f07806a6598ca98212494b79946
+// FROM HASH: c0b2e62203c808fb0ee00bd88f181d1f
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -30,6 +30,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 ', array(
 		'action' => $__templater->fn('link', array('user-upgrades/downgrade', null, array('user_upgrade_record_id' => $__vars['activeUpgrade']['user_upgrade_record_id'], ), ), false),
 		'ajax' => 'true',
+		'data-force-flash-message' => 'on',
 		'class' => 'block',
 	));
 	return $__finalCompiled;

@@ -6,17 +6,19 @@ class Twitch
 {
 	public static function matchCallback($url, $matchedId, \XF\Entity\BbCodeMediaSite $site, $siteId)
 	{
-		if (preg_match('#clips.twitch.tv/(?P<id>\w+)#si', $url, $matches))
+		if (preg_match('#^https?://(?P<subdomain>www|clips)\.twitch\.tv/(?P<id>\w+)$#i', $url, $match))
 		{
-			return 'clip:' . $matchedId;
+			// match channel or clip
+			return ($match['subdomain'] == 'clips' ? 'clip:' : '') . $match['id'];
 		}
-		else if (preg_match('#twitch.tv/videos/\d+\?t=(?P<time>[0-9hms]+)#si', $url, $matches))
+		else if (preg_match('#^https?://www\.twitch\.tv/videos/(?P<id>\d+)\?t=(?P<time>[0-9hms]+)$#si', $url, $match))
 		{
-			return intval($matchedId) . ':' . $matches['time'];
+			// match video with optional time
+			return $match['id'] . ':' . $match['time'];
 		}
 		else
 		{
-			return $matchedId;
+			return false;
 		}
 	}
 
@@ -70,4 +72,16 @@ class Twitch
 
 		return $url;
 	}
+
+	//Channel:
+	//https://www.twitch.tv/{alphanum}
+	//
+	//Video:
+	//https://www.twitch.tv/videos/{digits}
+	//
+	//Clip:
+	//https://clips.twitch.tv/{alphanum}
+	//
+	//Video with time:
+	//https://www.twitch.tv/videos/{digits}?t=04h42m29s
 }

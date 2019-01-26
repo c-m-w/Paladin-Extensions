@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 30f7fc265dc4a75458f6c4c66e144d53
+// FROM HASH: 31746175c1102db966e11902e61cbbfb
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -224,10 +224,10 @@ The callback should either return an array or nothing at all. If nothing is retu
 	)) . '
 
 			' . $__templater->formCheckBoxRow(array(
-		'readonly' => (!$__templater->method($__vars['memberStat'], 'canEdit', array())),
 	), array(array(
 		'name' => 'show_value',
 		'selected' => $__vars['memberStat']['show_value'],
+		'readonly' => (!$__templater->method($__vars['memberStat'], 'canEdit', array())),
 		'label' => 'Show value',
 		'hint' => 'If enabled, and provided, a value will be displayed for each user.',
 		'_type' => 'option',
@@ -247,9 +247,9 @@ The callback should either return an array or nothing at all. If nothing is retu
 		'value' => $__vars['memberStat']['user_limit'],
 		'min' => '0',
 		'step' => '1',
-		'readonly' => (!$__templater->method($__vars['memberStat'], 'canEdit', array())),
 	), array(
 		'label' => 'User limit',
+		'explain' => (($__vars['xf']['debug'] AND $__vars['memberStat']['addon_id']) ? 'The value of this field will not be changed when this add-on is upgraded.' : ''),
 	)) . '
 
 			' . $__templater->callMacro('display_order_macros', 'row', array(

@@ -482,6 +482,19 @@ class Option extends Entity
 		{
 			$this->_setInternal('option_value', $this->getValue('default_value'));
 		}
+
+		if ($this->isUpdate()
+			&& $this->_newValues
+			&& count($this->_newValues) === 1
+			&& $this->isChanged('option_value')
+		)
+		{
+			// only the option value has changed so prevent dev output from being written
+
+			/** @var \XF\Behavior\DevOutputWritable $devOutputWritable */
+			$devOutputWritable = $this->getBehavior('XF:DevOutputWritable');
+			$devOutputWritable->setOption('write_dev_output', false);
+		}
 	}
 
 	protected function validateDataTypeEditFormat($dataType, $editFormat)

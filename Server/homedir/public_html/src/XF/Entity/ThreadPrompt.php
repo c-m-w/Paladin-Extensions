@@ -7,17 +7,11 @@ use XF\Mvc\Entity\Structure;
 use XF\Template\Compiler\Syntax\Str;
 
 /**
- * COLUMNS
- * @property int|null prompt_id
- * @property int prompt_group_id
- * @property int display_order
- * @property int materialized_order
+ * Class ThreadPrompt
  *
- * GETTERS
- * @property \XF\Phrase|string title
+ * @package XF\Entity
  *
  * RELATIONS
- * @property \XF\Entity\Phrase MasterTitle
  * @property \XF\Entity\ThreadPromptGroup PromptGroup
  * @property \XF\Entity\ForumPrompt[] ForumPrompts
  */

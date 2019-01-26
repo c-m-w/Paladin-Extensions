@@ -24,8 +24,8 @@
 				$deleteButton.hide();
 			}
 
-			$file.on('change', $.proxy(this, 'changeFile'));
-			$form.on('ajax-submit:response', $.proxy(this, 'ajaxResponse'));
+			$file.on('change', XF.proxy(this, 'changeFile'));
+			$form.on('ajax-submit:response', XF.proxy(this, 'ajaxResponse'));
 		},
 
 		changeFile: function(e)
@@ -121,7 +121,7 @@
 
 		init: function()
 		{
-			this.$target.one('avatar:updated', $.proxy(this, 'avatarsUpdated'));
+			this.$target.one('avatar:updated', XF.proxy(this, 'avatarsUpdated'));
 
 			this.$img = this.$target.find('img');
 
@@ -189,7 +189,7 @@
 					cropW: this.cropSize,
 					cropH: this.cropSize
 				}
-			}).on('cropbox', $.proxy(this, 'onCrop'));
+			}).on('cropbox', XF.proxy(this, 'onCrop'));
 		},
 
 		onCrop: function(e, results)

@@ -21,6 +21,12 @@ class DevOutputWritable extends Behavior
 		}
 
 		$entity = $this->entity;
+
+		if (!$entity->getNewValues())
+		{
+			return;
+		}
+
 		$devOutput = \XF::app()->developmentOutput();
 
 		if ($devOutput->hasNameChange($entity))
@@ -28,7 +34,7 @@ class DevOutputWritable extends Behavior
 			$devOutput->delete($entity, false);
 		}
 
-		$devOutput->export($this->entity);
+		$devOutput->export($entity);
 	}
 
 	public function postDelete()

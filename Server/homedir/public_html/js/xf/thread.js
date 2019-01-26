@@ -17,8 +17,8 @@
 				return;
 			}
 
-			this.$target.on('ajax-submit:before', $.proxy(this, 'beforeSubmit'));
-			this.$target.on('ajax-submit:response', $.proxy(this, 'afterSubmit'));
+			this.$target.on('ajax-submit:before', XF.proxy(this, 'beforeSubmit'));
+			this.$target.on('ajax-submit:response', XF.proxy(this, 'afterSubmit'));
 		},
 
 		beforeSubmit: function()
@@ -79,7 +79,7 @@
 					href: this.options.focusActivateHref,
 					replace: this.options.focusActivateTarget
 				});
-				$focusActivate.on('focus', $.proxy(function(e)
+				$focusActivate.on('focus', XF.proxy(function(e)
 				{
 					if ($(this.options.replace).is(':empty'))
 					{
@@ -90,8 +90,8 @@
 
 			var self = this;
 
-			this.$target.on('ajax-submit:response', $.proxy(this, 'afterSubmit'))
-				.on('reset', $.proxy(this, 'reset'));
+			this.$target.on('ajax-submit:response', XF.proxy(this, 'afterSubmit'))
+				.on('reset', XF.proxy(this, 'reset'));
 		},
 
 		afterSubmit: function(e, data)
@@ -137,7 +137,7 @@
 
 			XF.hideTooltips();
 
-			$fat.xfFadeUp(null, $.proxy(function()
+			$fat.xfFadeUp(null, XF.proxy(function()
 			{
 				$fat.empty();
 

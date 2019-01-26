@@ -21,7 +21,7 @@ class Template extends Finder
 		if ($match)
 		{
 			$this->where(
-				$this->expression('CONVERT (%s USING utf8)', 'title'),
+				$this->columnUtf8('title'),
 				'LIKE',
 				$this->escapeLike($match, '%?%')
 			);
@@ -48,7 +48,7 @@ class Template extends Finder
 
 	public function orderTitle($direction = 'ASC')
 	{
-		$expression = $this->expression('CONVERT (%s USING utf8)', 'title');
+		$expression = $this->columnUtf8('title');
 		$this->order($expression, $direction);
 
 		return $this;

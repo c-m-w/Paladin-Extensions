@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 3d68dd1b05c9fa0536ee92a5810f85ea
+// FROM HASH: 736c920b864dee02016684d1b1d5b911
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -359,13 +359,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
     .user-select(none);
   }
 
-  [contenteditable="false"] {
-    .user-select(none);
-  }
-
   [contenteditable="true"] {
     outline: 0px solid transparent;
-    .user-select(text);
   }
 }
 
@@ -394,7 +389,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
       fill: @floating-btn-text;
     }
 
-    i {
+    i, svg {
       font-size: @floating-btn-font-size;
       line-height: @floating-btn-size;
     }
@@ -557,7 +552,7 @@ iframe.fr-iframe {
       width: auto;
     }
 
-    i {
+    i, svg {
       display: block;
       font-size: @btn-font-size;
       width: @btn-font-size;
@@ -605,7 +600,7 @@ iframe.fr-iframe {
         }
       }
 
-      i, span, img {
+      i, span, img, svg {
         margin-left: (((@btn-width - @btn-font-size) / 2) - @dropdown-arrow-width);
         margin-right: (((@btn-width - @btn-font-size) / 2) + @dropdown-arrow-width);
       }
@@ -915,7 +910,7 @@ body.prevent-scroll {
       z-index: 3;
       .transition(height @transition-timing);
 
-      i {
+      .fr-modal-close {
         padding: 12px;
         width: 20px;
         font-size: 16px;
@@ -923,13 +918,10 @@ body.prevent-scroll {
         line-height: 18px;
         color: @ui-text;
         .box-sizing(content-box);
-
-        &.fr-modal-close {
-          position: absolute;
-          top: 0;
-          right: 0;
-          .transition(color @transition-timing);
-        }
+        position: absolute;
+        top: 0;
+        right: 0;
+        .transition(color @transition-timing);
       }
 
       h4 {
@@ -1049,6 +1041,10 @@ body.prevent-scroll {
 
   &.fr-hidden {
     .opacity(0);
+  }
+
+  &.fr-empty {
+    display: none !important;
   }
 
   .fr-hs {
@@ -1593,7 +1589,7 @@ span.fr-sr-only {
       position: relative;
       z-index: 1;
 
-      > i {
+      > i, > svg {
         text-align: center;
         line-height: 32px;
         height: 32px;

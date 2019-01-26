@@ -1004,7 +1004,7 @@ class Thread extends AbstractController
 		{
 			/** @var \XF\Repository\Node $nodeRepo */
 			$nodeRepo = $this->app()->repository('XF:Node');
-			$nodes = $nodeRepo->getNodeList();
+			$nodes = $nodeRepo->getFullNodeList()->filterViewable();
 
 			$viewParams = [
 				'thread' => $thread,

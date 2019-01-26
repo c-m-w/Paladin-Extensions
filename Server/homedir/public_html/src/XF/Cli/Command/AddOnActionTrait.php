@@ -203,14 +203,21 @@ trait AddOnActionTrait
 	{
 		$execFinder = new PhpExecutableFinder();
 
-		$builder = ProcessBuilder::create([
+		$builderOptions = [
 			$execFinder->find(false),
 			\XF::getRootDirectory() . DIRECTORY_SEPARATOR .'cmd.php',
 			'xf:addon-sub-action',
 			$addOn->addon_id,
 			$action,
 			'--k=' . $this->getSubActionKey($addOn->addon_id, $action)
-		]);
+		];
+
+		if ($verbosityOption = $this->getVerbosityOption($output->getVerbosity()))
+		{
+			$builderOptions[] = $verbosityOption;
+		}
+
+		$builder = ProcessBuilder::create($builderOptions);
 		$builder->setTimeout(null);
 		$process = $builder->getProcess();
 
@@ -225,6 +232,27 @@ trait AddOnActionTrait
 			// Note that progress bar output is in Process::ERR/stderr, but they get streamed to this callback
 			// interleaved, so displaying both is difficult. Thus, we need to only display stuff sent stdout.
 		});
+	}
+
+	protected function getVerbosityOption($verbosity)
+	{
+		switch ($verbosity)
+		{
+			case OutputInterface::VERBOSITY_QUIET:
+				return '-q';
+
+			case OutputInterface::VERBOSITY_VERBOSE:
+				return '-v';
+
+			case OutputInterface::VERBOSITY_VERY_VERBOSE:
+				return '-vv';
+
+			case OutputInterface::VERBOSITY_DEBUG:
+				return '-vvv';
+
+			default:
+				return '';
+		}
 	}
 
 	public function getSubActionKey($addOnId, $action)

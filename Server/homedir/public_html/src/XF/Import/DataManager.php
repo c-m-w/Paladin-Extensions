@@ -122,6 +122,16 @@ class DataManager
 		$this->log->log($handler->getImportType(), $oldId, $newId);
 	}
 
+	public function isInvalidUtf8($string)
+	{
+		if (is_string($string) && !preg_match('/./u', $string))
+		{
+			return true;
+		}
+
+		return false;
+	}
+
 	public function convertToUtf8($string, $fromCharset = null, $convertHtml = null)
 	{
 		if ($fromCharset === null)

@@ -48,9 +48,8 @@ class Thread extends AbstractEmulatedData
 
 	protected function preSave($oldId)
 	{
-		$this->username = $this->validTextOrDefault($this->username, 'username', $oldId);
-
-		$this->title = $this->validTextOrDefault($this->title, 'title', $oldId);
+		$this->forceNotEmpty('username', $oldId);
+		$this->forceNotEmpty('title', $oldId);
 	}
 
 	protected function postSave($oldId, $newId)

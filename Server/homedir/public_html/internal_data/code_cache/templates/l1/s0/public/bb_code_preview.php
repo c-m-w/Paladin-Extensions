@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: b3adff932426ddaab69625d42e75ffa5
+// FROM HASH: 22a0640f8773def6e31cb3b1704ac3d4
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -8,7 +8,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	';
 		$__templater->includeCss('bb_code_preview.less');
 		$__finalCompiled .= '
-	<div class="bbCodePreview">
+	<div class="bbCodePreview js-previewContainer">
 	' . $__templater->formRow('
 		<h4 class="block-textHeader">' . 'Preview' . '</h4>
 		<div class="bbCodePreview-content">

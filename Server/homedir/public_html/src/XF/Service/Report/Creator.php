@@ -123,6 +123,7 @@ class Creator extends \XF\Service\AbstractService
 	{
 		/** @var \XF\Service\Thread\Creator $threadCreator */
 		$threadCreator = $this->service('XF:Thread\Creator', $forum);
+		$threadCreator->setIsAutomated();
 		$this->threadCreator = $threadCreator;
 
 		return $threadCreator;

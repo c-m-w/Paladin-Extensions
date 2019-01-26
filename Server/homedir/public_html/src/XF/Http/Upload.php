@@ -267,7 +267,7 @@ class Upload
 				{
 					if ($resizeRequired)
 					{
-						$image->resize($maxWidth ?: $maxHeight, $maxHeight);
+						$image->resize($maxWidth ?: $maxHeight, $maxHeight ?: null);
 					}
 					if ($transformRequired)
 					{

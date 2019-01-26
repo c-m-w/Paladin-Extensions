@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 91c567a587d68f90617a97a3b85b9179
+// FROM HASH: 480a786cc68f17d869e350cbad0ce551
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -173,6 +173,9 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 .message-content
 {
 	flex: 1 1 auto;
+
+	// IE11 flex bug
+	min-height: 1px;
 	max-width: 100%;
 }
 
@@ -691,7 +694,8 @@ form.message--simple .message-cell--main {
 
 		.message-content
 		{
-			min-height: 0;
+			// this is 1px to workaround an IE11 issue - see #139187
+			min-height: 1px;
 		}
 	}
 }

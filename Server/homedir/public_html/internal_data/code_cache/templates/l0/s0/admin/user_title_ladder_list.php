@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 11fdc8fd6ac9fbfe555394285de60c8a
+// FROM HASH: 8321eb7759c084b824eb7a037b8ab764
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -70,6 +70,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 				' . $__compilerTemp1 . '
 				' . $__templater->dataRow(array(
 	), array(array(
+		'data-hide-label' => 'true',
 		'_type' => 'cell',
 		'html' => 'New' . $__vars['xf']['language']['label_separator'],
 	),

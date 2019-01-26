@@ -22,7 +22,7 @@
 				readonly: this.options.readonly ? true : false,
 				deselectable: this.options.deselectable ? true : false,
 				showSelectedRating: this.options.showSelected ? true : false,
-				onSelect: $.proxy(this, 'ratingSelected')
+				onSelect: XF.proxy(this, 'ratingSelected')
 			});
 
 			if (this.options.showSelected)
@@ -57,7 +57,7 @@
 
 			XF.ajax('get', this.options.ratingHref, {
 				rating: value
-			}, $.proxy(this, 'loadOverlay'));
+			}, XF.proxy(this, 'loadOverlay'));
 		},
 
 		loadOverlay: function(data)

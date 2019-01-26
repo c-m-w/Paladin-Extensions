@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 6c263a8494a46f872e956dc00568f70b
+// FROM HASH: a1e14a2fa43a8f7536da52dada29d0ed
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -21,7 +21,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		)) . '
 	';
 		$__templater->inlineJs('
-	$(function()
+	jQuery(function($)
 	{
 		var $el = $(\'#js-totpQrCode\');
 		$el.qrcode({

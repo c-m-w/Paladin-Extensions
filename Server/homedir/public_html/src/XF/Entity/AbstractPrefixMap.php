@@ -5,6 +5,17 @@ namespace XF\Entity;
 use XF\Mvc\Entity\Entity;
 use XF\Mvc\Entity\Structure;
 
+/**
+ * Class AbstractPrefixMap
+ *
+ * @package XF\Entity
+ *
+ * COLUMNS
+ * @property int prefix_id
+ *
+ * RELATIONS
+ * @property \XF\Entity\AbstractPrefix Prefix
+ */
 abstract class AbstractPrefixMap extends Entity
 {
 	public function getContainerId()

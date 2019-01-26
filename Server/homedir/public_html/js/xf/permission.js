@@ -64,9 +64,9 @@
 
 			this.$filter = XF.findRelativeIf(options.filterInput, $target);
 			this.$filter.on({
-				keyup: $.proxy(this, 'onKeyUp'),
-				keypress: $.proxy(this, 'onKeyPress'),
-				paste: $.proxy(this, 'onPaste')
+				keyup: XF.proxy(this, 'onKeyUp'),
+				keypress: XF.proxy(this, 'onKeyPress'),
+				paste: XF.proxy(this, 'onPaste')
 			});
 
 			// note that this can't use delegation as these are in menus which will get moved out when opened
@@ -75,7 +75,7 @@
 				self.triggerQuickSet($(this));
 			});
 
-			setTimeout($.proxy(this, 'applyInitialState'), 0);
+			setTimeout(XF.proxy(this, 'applyInitialState'), 0);
 		},
 
 		applyInitialState: function()
@@ -212,7 +212,7 @@
 			{
 				clearTimeout(this.filterTimer);
 			}
-			this.filterTimer = setTimeout($.proxy(this, 'filter'), 250);
+			this.filterTimer = setTimeout(XF.proxy(this, 'filter'), 250);
 		},
 
 		filter: function()

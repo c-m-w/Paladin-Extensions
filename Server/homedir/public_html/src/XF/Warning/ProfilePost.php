@@ -9,12 +9,12 @@ class ProfilePost extends AbstractHandler
 {
 	public function getStoredTitle(Entity $entity)
 	{
-		return $entity->ProfileUser ? $entity->ProfileUser->username : '';
+		return $entity->User ? $entity->User->username : '';
 	}
 
 	public function getDisplayTitle($title)
 	{
-		return \XF::phrase('profile_post_for_x', ['username' => $title]);
+		return \XF::phrase('profile_post_by_x', ['name' => $title]);
 	}
 
 	public function getContentForConversation(Entity $entity)

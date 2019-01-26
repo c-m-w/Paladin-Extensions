@@ -241,7 +241,14 @@ class Upgrade extends AbstractController
 
 	public function actionRunJob()
 	{
-		$output = $this->manualJobRunner('index.php?upgrade/run-job', 'index.php?upgrade/complete');
+		$redirect = 'index.php?upgrade/complete';
+
+		if (empty($this->options()->collectServerStats['configured']))
+		{
+			$redirect = 'index.php?upgrade/options';
+		}
+
+		$output = $this->manualJobRunner('index.php?upgrade/run-job', $redirect);
 
 		if ($output instanceof \XF\Mvc\Reply\Redirect)
 		{
@@ -260,6 +267,28 @@ class Upgrade extends AbstractController
 		}
 
 		return $output;
+	}
+
+	public function actionOptions()
+	{
+		if ($this->isPost())
+		{
+			$options = \XF\Util\Arr::arrayFilterKeys(
+				$this->filter('options', 'array'),
+				['collectServerStats'],
+				true
+			);
+
+			/** @var \XF\Repository\Option $optionRepo */
+			$optionRepo = $this->repository('XF:Option');
+			$optionRepo->updateOptions($options);
+
+			return $this->redirect('index.php?upgrade/complete');
+		}
+		else
+		{
+			return $this->view('XF:Upgrade\Options', 'upgrade_options');
+		}
 	}
 
 	public function actionComplete()

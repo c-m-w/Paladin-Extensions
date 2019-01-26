@@ -96,18 +96,21 @@ abstract class AbstractPurchasable
 			{
 				$purchaser = $state->getPurchaser();
 				$purchaseRequest = $state->getPurchaseRequest();
-				$purchasable = $this->getPurchasableFromExtraData($purchaseRequest->extra_data);
+				if ($purchaseRequest)
+				{
+					$purchasable = $this->getPurchasableFromExtraData($purchaseRequest->extra_data);
 
-				$params = [
-					'purchaser' => $purchaser,
-					'purchaseRequest' => $purchaseRequest,
-					'purchasable' => $purchasable
-				];
+					$params = [
+						'purchaser' => $purchaser,
+						'purchaseRequest' => $purchaseRequest,
+						'purchasable' => $purchasable
+					];
 
-				\XF::app()->mailer()->newMail()
-					->setToUser($purchaser)
-					->setTemplate('payment_received_receipt_' . $this->purchasableTypeId, $params)
-					->send();
+					\XF::app()->mailer()->newMail()
+						->setToUser($purchaser)
+						->setTemplate('payment_received_receipt_' . $this->purchasableTypeId, $params)
+						->send();
+				}
 			}
 		}
 	}

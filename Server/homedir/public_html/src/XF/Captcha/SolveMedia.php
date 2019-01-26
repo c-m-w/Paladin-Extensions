@@ -89,6 +89,11 @@ class SolveMedia extends AbstractCaptcha
 					// generally end user mistakes
 					return false;
 
+				case 'invalid challenge':
+					// actually indicates the challenge key has been tampered with
+					// these should definitely not pass
+					return false;
+
 				default:
 					// this is likely a configuration error, log and let it through
 					$this->app->error()->logError("Solve Media CAPTCHA error: $error");

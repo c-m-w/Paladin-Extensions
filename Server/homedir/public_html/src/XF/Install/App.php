@@ -55,6 +55,38 @@ class App extends \XF\App
 		});
 	}
 
+	/**
+	 * This overrides the standard fromRegistry but silences the DB exception when data is not found,
+	 * or any other DB error occurs
+	 *
+	 * @param               $key
+	 * @param \Closure      $rebuildFunction
+	 * @param \Closure|null $decoratorFunction
+	 *
+	 * @return \Closure
+	 */
+	public function fromRegistry($key, \Closure $rebuildFunction, \Closure $decoratorFunction = null)
+	{
+		return function(Container $c) use ($key, $rebuildFunction, $decoratorFunction)
+		{
+			try
+			{
+				$data = $this->container['registry'][$key];
+
+				if ($data === null)
+				{
+					$data = $rebuildFunction($c, $key);
+				}
+
+				return $decoratorFunction ? $decoratorFunction($data, $c, $key) : $data;
+			}
+			catch (\XF\Db\Exception $e)
+			{
+				return [];
+			}
+		};
+	}
+
 	protected function getInstallerPhrases()
 	{
 		return [
@@ -92,6 +124,7 @@ class App extends \XF\App
 			'php_function_x_disabled_warning' => 'Your server has disabled a core PHP function <code><b>{function}</b></code> via the <code>disable_functions</code> directive in php.ini. This may cause unexpected problems in XenForo.',
 			'php_no_ssl_support' => 'Your PHP does not have support for SSL connections. This may interfere with integrations into external services, such as Facebook.',
 			'php_version_x_does_not_meet_requirements' => 'PHP 5.4.0 or newer is required. {version} does not meet this requirement. Please ask your host to upgrade PHP.',
+			'php_version_x_outdated_upgrade' => 'Your server is running an outdated and unsupported version of PHP ({version}). If possible, you should upgrade to PHP 5.6 or newer (we recommend PHP 7.2) to benefit from improved security and performance.',
 			'php_weak_random_values' => 'Your PHP configuration does not allow generation of secure random values. This may impact security. To resolve this, you may need to upgrade PHP or enable certain PHP extensions.',
 			'please_enter_valid_email' => 'Please enter a valid email.',
 			'please_enter_valid_password' => 'Please enter a valid password.',

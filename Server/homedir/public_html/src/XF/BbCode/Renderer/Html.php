@@ -52,8 +52,8 @@ class Html extends AbstractRenderer
 		$this->addTag('u', ['replace' => ['<span style="text-decoration: underline">', '</span>']]);
 		$this->addTag('s', ['replace' => ['<span style="text-decoration: line-through">', '</span>']]);
 		$this->addTag('color', ['replace' => ['<span style="color: %s">', '</span>']]);
-		$this->addTag('font', ['replace' => ['<span style="font-family: \'%s\'">', '</span>']]);
 
+		$this->addTag('font', ['callback' => 'renderTagFont']);
 		$this->addTag('size', ['callback' => 'renderTagSize']);
 		$this->addTag('url', ['callback' => 'renderTagUrl']);
 		$this->addTag('email', ['callback' => 'renderTagEmail']);
@@ -780,6 +780,28 @@ class Html extends AbstractRenderer
 			'source' => $source,
 			'attributes' => $attributes
 		]);
+	}
+
+	public function renderTagFont(array $children, $option, array $tag, array $options)
+	{
+		$text = $this->renderSubTree($children, $options);
+		if (trim($text) === '')
+		{
+			return $text;
+		}
+
+		$font = htmlspecialchars($option);
+
+		if (strtolower(trim($font)) != 'inherit')
+		{
+			$font = "'{$font}'";
+		}
+
+		return $this->wrapHtml(
+			'<span style="font-family: ' . $font . '">',
+			$text,
+			'</span>'
+		);
 	}
 
 	public function renderTagSize(array $children, $option, array $tag, array $options)

@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 7e9b1498621a74eb01f3e1be99d4a434
+// FROM HASH: acf6b656b4afae94044e3b4bbad09e09
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -303,6 +303,19 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 					), $__vars) . '
 							';
 				}
+			}
+			$__finalCompiled .= '
+							';
+			if ($__vars['showDateLimitDisabler']) {
+				$__finalCompiled .= '
+								<div class="structItem structItem--note">
+									<div class="structItem-cell">
+										<a href="' . $__templater->fn('link', array('forums', $__vars['forum'], $__vars['filters'] + array('page' => $__vars['page'], 'no_date_limit' => 1, ), ), true) . '">
+											' . 'Show older items' . '
+										</a>
+									</div>
+								</div>
+							';
 			}
 			$__finalCompiled .= '
 						</div>

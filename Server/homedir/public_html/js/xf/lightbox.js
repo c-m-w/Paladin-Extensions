@@ -30,7 +30,7 @@
 				this.initContainers();
 			}
 
-			$(document).on('xf:reinit', $.proxy(this, 'checkReInit'));
+			$(document).on('xf:reinit', XF.proxy(this, 'checkReInit'));
 		},
 
 		initSingleImageContainer: function()
@@ -41,8 +41,8 @@
 			}
 
 			var $container = this.$target;
-			$(window).onPassive('resize', $.proxy(this, 'handleContainerZoom'));
-			$container.on('lightbox:init', $.proxy(this, 'handleContainerZoom'));
+			$(window).onPassive('resize', XF.proxy(this, 'handleContainerZoom'));
+			$container.on('lightbox:init', XF.proxy(this, 'handleContainerZoom'));
 
 			this._initContainer($container);
 		},
@@ -136,7 +136,7 @@
 			var event = $.Event('lightbox:init');
 			$container.trigger(event);
 
-			$container.on('onAfterSlide.lg', $.proxy(this, 'afterSlide'));
+			$container.on('onAfterSlide.lg', XF.proxy(this, 'afterSlide'));
 		},
 
 		_reInitContainer: function($container)
@@ -397,8 +397,8 @@
 			{
 				if (this.core.s.captionLoader)
 				{
-					this.$el.one('onAfterOpen.lg', $.proxy(this, 'captionAfterOpen'));
-					this.$el.on('onAfterAppendSubHtml.lg', $.proxy(this, 'captionLoaded'));
+					this.$el.one('onAfterOpen.lg', XF.proxy(this, 'captionAfterOpen'));
+					this.$el.on('onAfterAppendSubHtml.lg', XF.proxy(this, 'captionLoaded'));
 				}
 			};
 
@@ -435,7 +435,7 @@
 			CaptionLoader.prototype.captionLoaded = function()
 			{
 				var $outer = this.core.$outer;
-				$outer.find(this.core.s.appendSubHtmlTo + ' a').on('click', $.proxy(this, 'captionLinkClicked'));
+				$outer.find(this.core.s.appendSubHtmlTo + ' a').on('click', XF.proxy(this, 'captionLinkClicked'));
 			};
 
 			CaptionLoader.prototype.captionLinkClicked = function(e)

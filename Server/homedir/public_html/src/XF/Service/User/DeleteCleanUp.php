@@ -89,9 +89,7 @@ class DeleteCleanUp extends \XF\Service\AbstractService
 
 	public function cleanUp($maxRunTime = 0)
 	{
-		$this->db()->beginTransaction();
 		$result = $this->runLoop($maxRunTime);
-		$this->db()->commit();
 
 		return $result;
 	}

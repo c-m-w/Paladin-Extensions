@@ -108,6 +108,7 @@ class Import extends AbstractController
 			if ($this->filter('steps_configured', 'bool'))
 			{
 				$stepConfig = $this->filter('step_config', 'array');
+				$stepConfig['_retainIds'] = $retainIds;
 				$stepConfig = $importer->prepareStepConfigFromInput($stepConfig, $this->request);
 
 				$configErrors = [];

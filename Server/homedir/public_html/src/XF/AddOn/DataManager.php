@@ -65,6 +65,10 @@ class DataManager
 	public function rebuildActiveAddOnCache()
 	{
 		$data = [];
+
+		// cached add-on entities can end up being saved here so clear entity cache
+		$this->em->clearEntityCache('XF:AddOn');
+
 		$addOns = $this->em->getFinder('XF:AddOn')->where('active', 1)->fetch();
 		foreach ($addOns AS $addOn)
 		{

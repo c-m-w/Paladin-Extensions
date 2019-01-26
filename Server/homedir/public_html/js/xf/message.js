@@ -88,7 +88,7 @@
 
 			var self = this;
 
-			XF.ajax('GET', this.options.href, {}, $.proxy(this, 'loaded'))
+			XF.ajax('GET', this.options.href, {}, XF.proxy(this, 'loaded'))
 				.always(function() { self.loading = false; });
 		},
 
@@ -179,7 +179,7 @@
 				data['_xfNoInlineMod'] = true;
 			}
 
-			XF.ajax('GET', this.href, data, $.proxy(this, 'handleAjax'), {skipDefaultSuccessError: true});
+			XF.ajax('GET', this.href, data, XF.proxy(this, 'handleAjax'), {skipDefaultSuccessError: true});
 		},
 
 		handleAjax: function(data)
@@ -199,8 +199,11 @@
 				XF.activate($html);
 				self.$editForm = $html;
 
-				$html.on('ajax-submit:response', $.proxy(self, 'editSubmit'));
-				$html.find('.js-cancelButton').on('click', $.proxy(self, 'cancelClick'));
+				$html.on('ajax-submit:response', XF.proxy(self, 'editSubmit'));
+				$html.find('.js-cancelButton').on('click', XF.proxy(self, 'cancelClick'));
+
+				var $hidden = $html.find('input[type=hidden]').first();
+				$hidden.after('<input type="hidden" name="_xfInlineEdit" value="1" />');
 
 				$editorTarget.xfFadeUp(null, function()
 				{
@@ -327,7 +330,7 @@
 				$selectToQuote = $(e.target).parents('.tooltip--selectToQuote'),
 				quoteHtml = XF.unparseBbCode($selectToQuote.data('quote-html'));
 
-			XF.ajax('POST', href, { quoteHtml: quoteHtml }, $.proxy(this, 'handleAjax'), {skipDefaultSuccess: true});
+			XF.ajax('POST', href, { quoteHtml: quoteHtml }, XF.proxy(this, 'handleAjax'), {skipDefaultSuccess: true});
 
 			$(e.target).trigger('s2q:click');
 
@@ -371,7 +374,7 @@
 				this.$target.show();
 			}
 
-			this.$target.on('click', $.proxy(this, 'buttonClick'));
+			this.$target.on('click', XF.proxy(this, 'buttonClick'));
 		},
 
 		buttonClick: function(e)
@@ -385,7 +388,7 @@
 
 			XF.ajax('post', this.options.href, {
 				quotes: XF.LocalStorage.get(this.options.storageKey)
-			}, $.proxy(this, 'loadOverlay'));
+			}, XF.proxy(this, 'loadOverlay'));
 		},
 
 		loadOverlay: function(data)
@@ -399,8 +402,8 @@
 						html: $html,
 						title: container.h1 || container.title
 					});
-					$overlay.find('.js-removeMessage').on('click', $.proxy(self, 'removeMessage'));
-					$overlay.find('.js-quoteMessages').on('click', $.proxy(self, 'quoteMessages'));
+					$overlay.find('.js-removeMessage').on('click', XF.proxy(self, 'removeMessage'));
+					$overlay.find('.js-quoteMessages').on('click', XF.proxy(self, 'quoteMessages'));
 					self.mqOverlay = XF.showOverlay($overlay);
 				});
 			}
@@ -411,7 +414,7 @@
 			e.preventDefault();
 
 			var $item = $(e.target).closest('.nestable-item'),
-				messageId = parseInt($item.data('id')),
+				messageId = $item.data('id'),
 				overlay = this.mqOverlay;
 
 			this.removeFromMultiQuote(messageId);
@@ -448,7 +451,7 @@
 					messageId = parts[0],
 					key = parts[1];
 
-				if (!multiQuotes.hasOwnProperty(messageId) || !multiQuotes[messageId].hasOwnProperty(key))
+				if (!this.isValidQuote(multiQuotes[messageId], key))
 				{
 					continue;
 				}
@@ -466,7 +469,23 @@
 			XF.ajax('post', this.options.href, {
 				insert: toInsert,
 				quotes: XF.LocalStorage.get(this.options.storageKey)
-			}, $.proxy(this, 'insertMessages'));
+			}, XF.proxy(this, 'insertMessages'));
+		},
+
+		isValidQuote: function(quote, key)
+		{
+			if (quote != undefined)
+			{
+				if (quote.hasOwnProperty(key))
+				{
+					if (quote[key] === true || typeof quote[key] == 'string')
+					{
+						return true;
+					}
+				}
+			}
+
+			return false;
 		},
 
 		insertMessages: function(data)
@@ -492,7 +511,7 @@
 			var messages = '.tooltip--selectToQuote, ' + this.options.messageSelector,
 				$controls = $(messages).find('.js-multiQuote');
 
-			$(document).on('click', messages, $.proxy(this, 'controlClick'));
+			$(document).on('click', messages, XF.proxy(this, 'controlClick'));
 
 			var self = this;
 			$controls.each(function()
@@ -575,16 +594,55 @@
 
 		removeFromMultiQuote: function(messageId)
 		{
-			var $mqControl = $('.js-multiQuote[data-message-id="' + messageId + '"]');
+			var quoteInfo = String(messageId).match(/^(\d+)-(\d+)$/),
+				$mqControl;
 
-			if ($mqControl.length)
+			if (quoteInfo)
 			{
-				$mqControl.removeClass('is-selected');
-				$mqControl.data('mqAction', 'add');
+				messageId = quoteInfo[1];
+
+				delete this.mqStorage[messageId][quoteInfo[2]];
+
+				if (!this.getQuoteStoreCount(this.mqStorage[messageId]))
+				{
+					delete this.mqStorage[messageId];
+				}
+			}
+			else
+			{
+				delete this.mqStorage[messageId];
 			}
 
-			delete this.mqStorage[messageId];
+			if (!this.mqStorage[messageId])
+			{
+				$mqControl = $('.js-multiQuote[data-message-id="' + messageId + '"]');
+
+				if ($mqControl.length)
+				{
+					$mqControl.removeClass('is-selected');
+					$mqControl.data('mqAction', 'add');
+				}
+			}
+
 			this.updateMultiQuote();
+		},
+
+		getQuoteStoreCount: function(quoteStore)
+		{
+			var length = 0;
+
+			for (var i in quoteStore)
+			{
+				if (quoteStore.hasOwnProperty(i))
+				{
+					if (quoteStore[i] == true || typeof quoteStore[i] == 'string')
+					{
+						length ++;
+					}
+				}
+			}
+
+			return length;
 		},
 
 		updateMultiQuote: function()
@@ -640,9 +698,9 @@
 				return;
 			}
 
-			this.$target.on('mousedown', $.proxy(this, 'mouseDown'));
-			this.$target.on('mouseup', $.proxy(this, 'mouseUp'));
-			$(document).on('selectionchange', $.proxy(this, 'selectionChange'));
+			this.$target.on('mousedown', XF.proxy(this, 'mouseDown'));
+			this.$target.on('mouseup', XF.proxy(this, 'mouseUp'));
+			$(document).on('selectionchange', XF.proxy(this, 'selectionChange'));
 		},
 
 		mouseDown: function()
@@ -668,7 +726,7 @@
 		{
 			if (!this.timeout && !this.processing)
 			{
-				this.timeout = setTimeout($.proxy(this, 'handleSelection'), 100);
+				this.timeout = setTimeout(XF.proxy(this, 'handleSelection'), 100);
 			}
 		},
 
@@ -944,7 +1002,7 @@
 						marginLeft: 0,
 						background: 'transparent'
 					})
-					.on('s2q:click', $.proxy(this, 'buttonClicked'));
+					.on('s2q:click', XF.proxy(this, 'buttonClicked'));
 
 				$tooltip.append($mqButton);
 				$tooltip.append(document.createTextNode(' | '));
@@ -956,7 +1014,7 @@
 					.css({
 						marginLeft: 0
 					})
-					.on('s2q:click', $.proxy(this, 'buttonClicked'));
+					.on('s2q:click', XF.proxy(this, 'buttonClicked'));
 
 			$tooltip.append($quoteButton);
 
@@ -1024,9 +1082,9 @@
 
 		init: function()
 		{
-			this.$target.on('ajax-submit:before', $.proxy(this, 'beforeSubmit'));
-			this.$target.on('ajax-submit:response', $.proxy(this, 'afterSubmit'));
-			this.$target.on('draft:complete', $.proxy(this, 'onDraft'));
+			this.$target.on('ajax-submit:before', XF.proxy(this, 'beforeSubmit'));
+			this.$target.on('ajax-submit:response', XF.proxy(this, 'afterSubmit'));
+			this.$target.on('draft:complete', XF.proxy(this, 'onDraft'));
 		},
 
 		beforeSubmit: function(e, config)
@@ -1175,8 +1233,8 @@
 				return;
 			}
 
-			$form.on('focusin', $.proxy(this, 'initializeCaptcha'));
-			$form.on('submit ajax-submit:before', $.proxy(this, 'submit'));
+			$form.on('focusin', XF.proxy(this, 'initializeCaptcha'));
+			$form.on('submit ajax-submit:before', XF.proxy(this, 'submit'));
 		},
 
 		initializeCaptcha: function(e)
@@ -1193,7 +1251,7 @@
 			XF.ajax('get',
 				XF.canonicalizeUrl(this.options.url),
 				{ row_type: rowType },
-				$.proxy(this, 'showCaptcha')
+				XF.proxy(this, 'showCaptcha')
 			);
 
 			this.initialized = true;
@@ -1231,7 +1289,7 @@
 
 		init: function()
 		{
-			this.$target.on('quickedit:editcomplete', $.proxy(this, 'editComplete'));
+			this.$target.on('quickedit:editcomplete', XF.proxy(this, 'editComplete'));
 		},
 
 		editComplete: function(e, data)
@@ -1272,269 +1330,6 @@
 					$html.find('.js-threadStatusField').remove();
 				}
 			});
-		}
-	});
-
-	// ################################### MULTI QUOTE HANDLER ################################
-
-	XF.MultiQuote = XF.Element.newHandler({
-		options: {
-			href: '',
-			messageSelector: '',
-			addMessage: '',
-			removeMessage: '',
-			storageKey: ''
-		},
-
-		mqStorage: null,
-		mqOverlay: null,
-
-		init: function()
-		{
-			this.initButton();
-			this.initControls();
-		},
-
-		initButton: function()
-		{
-			this.mqStorage = XF.LocalStorage.getJson(this.options.storageKey);
-			if (this.hasQuotesStored())
-			{
-				this.$target.show();
-			}
-
-			this.$target.on('click', $.proxy(this, 'buttonClick'));
-		},
-
-		buttonClick: function(e)
-		{
-			e.preventDefault();
-			if (!this.options.href)
-			{
-				console.error('Multi-quote button must have a data-href attribute set to display selected quotes');
-				return false;
-			}
-
-			XF.ajax('post', this.options.href, {
-				quotes: XF.LocalStorage.get(this.options.storageKey)
-			}, $.proxy(this, 'loadOverlay'));
-		},
-
-		loadOverlay: function(data)
-		{
-			if (data.html)
-			{
-				var self = this;
-				XF.setupHtmlInsert(data.html, function ($html, container)
-				{
-					var $overlay = XF.getOverlayHtml({
-						html: $html,
-						title: container.h1 || container.title
-					});
-					$overlay.find('.js-removeMessage').on('click', $.proxy(self, 'removeMessage'));
-					$overlay.find('.js-quoteMessages').on('click', $.proxy(self, 'quoteMessages'));
-					self.mqOverlay = XF.showOverlay($overlay);
-				});
-			}
-		},
-
-		removeMessage: function(e)
-		{
-			e.preventDefault();
-
-			var $item = $(e.target).closest('.nestable-item'),
-				messageId = parseInt($item.data('id')),
-				overlay = this.mqOverlay;
-
-			this.removeFromMultiQuote(messageId);
-
-			$item.xfFadeUp(XF.config.speed.fast, function()
-			{
-				$item.remove();
-			});
-
-			if (!this.hasQuotesStored())
-			{
-				overlay.hide();
-			}
-		},
-
-		quoteMessages: function(e)
-		{
-			e.preventDefault();
-
-			var overlay = this.mqOverlay,
-				$overlay = overlay.getOverlay(),
-				toInsert = $.parseJSON($overlay.find('input[name="message_ids"]').val()),
-				multiQuotes = this.mqStorage;
-
-			for (var i in toInsert)
-			{
-				if (!toInsert.hasOwnProperty(i) || !toInsert[i].hasOwnProperty('id'))
-				{
-					continue;
-				}
-
-				var id = toInsert[i]['id'],
-					parts = id.split('-'),
-					messageId = parts[0],
-					key = parts[1];
-
-				if (!multiQuotes.hasOwnProperty(messageId) || !multiQuotes[messageId].hasOwnProperty(key))
-				{
-					continue;
-				}
-
-				var value = multiQuotes[messageId][key];
-				if (value !== true)
-				{
-					value = XF.unparseBbCode(value);
-				}
-				toInsert[i]['value'] = value;
-			}
-
-			overlay.hide();
-
-			XF.ajax('post', this.options.href, {
-				insert: toInsert,
-				quotes: XF.LocalStorage.get(this.options.storageKey)
-			}, $.proxy(this, 'insertMessages'));
-		},
-
-		insertMessages: function(data)
-		{
-			$.each(data, function(i, quoteObj)
-			{
-				if (!quoteObj.hasOwnProperty('quote') || !quoteObj.hasOwnProperty('quoteHtml'))
-				{
-					return true;
-				}
-
-				XF.insertIntoEditor($('.js-editor').parent(), quoteObj.quoteHtml, quoteObj.quote);
-			});
-
-			for (var messageId in this.mqStorage)
-			{
-				this.removeFromMultiQuote(messageId);
-			}
-		},
-
-		initControls: function()
-		{
-			var messages = '.tooltip--selectToQuote, ' + this.options.messageSelector,
-				$controls = $(messages).find('.js-multiQuote');
-
-			$(document).on('click', messages, $.proxy(this, 'controlClick'));
-
-			var self = this;
-			$controls.each(function()
-			{
-				var $control = $(this),
-					messageId = $control.data('messageId');
-
-				if (self.mqStorage.hasOwnProperty(messageId))
-				{
-					$control.addClass('is-selected');
-					$control.data('mqAction', 'remove');
-				}
-			});
-		},
-
-		controlClick: function(e)
-		{
-			if (!$(e.target).is('.js-multiQuote'))
-			{
-				return;
-			}
-
-			e.preventDefault();
-
-			var $target = $(e.target),
-				action = $target.data('mqAction'),
-				messageId = $target.data('messageId');
-
-			switch (action)
-			{
-				case 'add':
-					this.addToMultiQuote(messageId);
-					XF.flashMessage(this.options.addMessage, 3000);
-					break;
-
-				case 'remove':
-					this.removeFromMultiQuote(messageId);
-					XF.flashMessage(this.options.removeMessage, 3000);
-					break;
-			}
-
-			$(e.target).trigger('s2q:click');
-		},
-
-		addToMultiQuote: function(messageId)
-		{
-			var $mqControl = $('.js-multiQuote[data-message-id="' + messageId + '"]'),
-				$selectToQuote = $mqControl.parents('.tooltip--selectToQuote'),
-				quoteHtml = XF.unparseBbCode($selectToQuote.data('quote-html'));
-
-			if ($mqControl.length)
-			{
-				$mqControl.addClass('is-selected');
-				$mqControl.data('mqAction', 'remove');
-			}
-
-			if (!this.hasQuotesStored())
-			{
-				this.mqStorage = {};
-				this.mqStorage[messageId] = [];
-			}
-			else
-			{
-				if (!this.mqStorage[messageId])
-				{
-					this.mqStorage[messageId] = [];
-				}
-			}
-
-			if ($selectToQuote.length)
-			{
-				this.mqStorage[messageId].push(quoteHtml);
-			}
-			else
-			{
-				this.mqStorage[messageId].push(true); // true == quoting the full message
-			}
-			this.updateMultiQuote();
-		},
-
-		removeFromMultiQuote: function(messageId)
-		{
-			var $mqControl = $('.js-multiQuote[data-message-id="' + messageId + '"]');
-
-			if ($mqControl.length)
-			{
-				$mqControl.removeClass('is-selected');
-				$mqControl.data('mqAction', 'add');
-			}
-
-			delete this.mqStorage[messageId];
-			this.updateMultiQuote();
-		},
-
-		updateMultiQuote: function()
-		{
-			XF.LocalStorage.setJson(this.options.storageKey, this.mqStorage, true);
-			if (!this.hasQuotesStored())
-			{
-				this.$target.hide();
-			}
-			else
-			{
-				this.$target.show();
-			}
-		},
-
-		hasQuotesStored: function()
-		{
-			return this.mqStorage && !$.isEmptyObject(this.mqStorage);
 		}
 	});
 

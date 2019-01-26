@@ -54,7 +54,7 @@ class ConversationMaster extends AbstractEmulatedData
 			return false;
 		}
 
-		$this->title = $this->validTextOrDefault($this->title, 'title', $oldId);
+		$this->forceNotEmpty('title', $oldId);
 
 		uasort($this->messages, function(ConversationMessage $m1, ConversationMessage $m2)
 		{
@@ -63,7 +63,7 @@ class ConversationMaster extends AbstractEmulatedData
 				return 0;
 			}
 
-			return ($m1->message_date < $m1->message_date ? -1 : 1);
+			return ($m1->message_date < $m2->message_date ? -1 : 1);
 		});
 
 		$firstMessage = reset($this->messages);

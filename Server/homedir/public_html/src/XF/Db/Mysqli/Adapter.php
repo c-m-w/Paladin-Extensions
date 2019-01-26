@@ -9,6 +9,9 @@ class Adapter extends \XF\Db\AbstractAdapter
 	 */
 	protected $connection;
 
+	/**
+	 * @return string
+	 */
 	protected function getStatementClass()
 	{
 		return 'XF\Db\Mysqli\Statement';
@@ -16,6 +19,7 @@ class Adapter extends \XF\Db\AbstractAdapter
 
 	/**
 	 * @return \mysqli
+	 * @throws \XF\Db\Exception
 	 */
 	public function getConnection()
 	{
@@ -36,27 +40,45 @@ class Adapter extends \XF\Db\AbstractAdapter
 		$this->connection = null;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function isConnected()
 	{
 		return $this->connection ? true : false;
 	}
 
+	/**
+	 * @param $query
+	 *
+	 * @return mixed
+	 */
 	protected function _rawQuery($query)
 	{
 		return $this->getConnectionForQuery($query)->query($query);
 	}
 
+	/**
+	 * @return bool
+	 * @throws \XF\Db\Exception
+	 */
 	public function ping()
 	{
 		return $this->getConnection()->ping();
 	}
 
+	/**
+	 * @return mixed
+	 */
 	public function lastInsertId()
 	{
 		$this->connect();
 		return $this->connection->insert_id;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getServerVersion()
 	{
 		$this->connect();
@@ -67,6 +89,9 @@ class Adapter extends \XF\Db\AbstractAdapter
 		return $major . '.' . $minor . '.' . $revision;
 	}
 
+	/**
+	 * @return array|bool|null
+	 */
 	public function getConnectionStats()
 	{
 		$this->connect();
@@ -78,12 +103,20 @@ class Adapter extends \XF\Db\AbstractAdapter
 		return $this->connection->get_connection_stats();
 	}
 
+	/**
+	 * @param $string
+	 *
+	 * @return string
+	 */
 	public function escapeString($string)
 	{
 		$this->connect();
 		return $this->connection->real_escape_string($string);
 	}
 
+	/**
+	 * @return array
+	 */
 	public function getDefaultTableConfig()
 	{
 		$engine = isset($this->config['engine']) ? $this->config['engine'] : 'InnoDB';
@@ -106,6 +139,12 @@ class Adapter extends \XF\Db\AbstractAdapter
 		}
 	}
 
+	/**
+	 * @param array $config
+	 *
+	 * @return \mysqli
+	 * @throws \XF\Db\Exception
+	 */
 	protected function makeConnection(array $config)
 	{
 		$config = $this->standardizeConfig($config);
@@ -142,6 +181,11 @@ class Adapter extends \XF\Db\AbstractAdapter
 		return $connection;
 	}
 
+	/**
+	 * @param array $config
+	 *
+	 * @return array
+	 */
 	protected function standardizeConfig(array $config)
 	{
 		return array_merge([

@@ -3,6 +3,7 @@
 namespace XF\Admin\Controller;
 
 use XF\Entity\UserBan;
+use XF\Mvc\FormAction;
 use XF\Mvc\ParameterBag;
 
 class Banning extends AbstractController
@@ -101,20 +102,23 @@ class Banning extends AbstractController
 			$user = $this->finder('XF:User')->where('username', $input['username'])->fetchOne();
 			if (!$user)
 			{
-				$form->logError(\XF::phraseDeferred('requested_user_not_found'));
+				throw $this->exception($this->error(\XF::phrase('requested_user_not_found')));
 			}
 		}
 
-		if ($input['ban_length'] == 'permanent')
+		$form->apply(function(FormAction $form) use ($input, $user)
 		{
-			$input['end_date'] = 0;
-		}
+			if ($input['ban_length'] == 'permanent')
+			{
+				$input['end_date'] = 0;
+			}
 
-		$banningRepo = $this->getBanningRepo();
-		if (!$banningRepo->banUser($user, $input['end_date'], $input['user_reason'], $error))
-		{
-			$form->logError($error);
-		}
+			$banningRepo = $this->getBanningRepo();
+			if (!$banningRepo->banUser($user, $input['end_date'], $input['user_reason'], $error))
+			{
+				$form->logError($error);
+			}
+		});
 
 		return $form;
 	}

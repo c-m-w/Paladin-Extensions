@@ -147,16 +147,19 @@ class Misc extends AbstractController
 		{
 			$style = $this->app->style($this->filter('style_id', 'uint'));
 
-			if ($visitor->user_id)
+			if ($style['user_selectable'] || $visitor->is_admin)
 			{
-				$visitor->style_id = $style->getId();
-				$visitor->save();
+				if ($visitor->user_id)
+				{
+					$visitor->style_id = $style->getId();
+					$visitor->save();
 
-				$this->app->response()->setCookie('style_id', false);
-			}
-			else
-			{
-				$this->app->response()->setCookie('style_id', $style->getId());
+					$this->app->response()->setCookie('style_id', false);
+				}
+				else
+				{
+					$this->app->response()->setCookie('style_id', $style->getId());
+				}
 			}
 			return $this->redirect($redirect);
 		}
@@ -206,7 +209,7 @@ class Misc extends AbstractController
 
 		if (strpos($url, '{ip}') === false)
 		{
-			$url = 'http://whatismyipaddress.com/ip/{ip}/';
+			$url = 'https://whatismyipaddress.com/ip/{ip}/';
 		}
 
 		return $this->redirectPermanently(str_replace('{ip}', urlencode($ip), $url));

@@ -5,6 +5,17 @@ namespace XF\Entity;
 use XF\Mvc\Entity\Entity;
 use XF\Mvc\Entity\Structure;
 
+/**
+ * Class AbstractPromptMap
+ *
+ * @package XF\Entity
+ *
+ * COLUMNS
+ * @property int prompt_id
+ *
+ * RELATIONS
+ * @property \XF\Entity\AbstractPrompt Prompt
+ */
 abstract class AbstractPromptMap extends Entity
 {
 	public function getContainerId()

@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 717f7603b8973ae01250fe94b5f3f932
+// FROM HASH: 1978828d1c0801eb3a25ef756c947baf
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -168,7 +168,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 				$__compilerTemp4 = '';
 				if ($__vars['active']['end_date']) {
 					$__compilerTemp4 .= '
-											' . 'Expires' . $__vars['xf']['language']['label_separator'] . ' ' . $__templater->fn('date_dynamic', array($__vars['active']['end_date'], array(
+											<p />' . 'Expires' . $__vars['xf']['language']['label_separator'] . ' ' . $__templater->fn('date_dynamic', array($__vars['active']['end_date'], array(
 					))) . '
 										';
 				} else {
@@ -187,7 +187,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 				}
 				$__compilerTemp1 .= $__templater->formRow('
 
-										' . $__compilerTemp4 . '
+										' . $__templater->includeTemplate('expiringUserUpgrades_account_upgrades_extend_button', $__vars) . '
+' . $__compilerTemp4 . '
 
 										' . $__compilerTemp5 . '
 									', array(

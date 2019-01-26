@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 32c79e6fd1026bc2abe8abfc7ec55c69
+// FROM HASH: 2686b341987b95c43d08a640be6de326
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -264,10 +264,17 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	{
 		display: inline-block;
 		.m-faBase();
+		width: 1em;
 		padding-right: .3em;
+		text-decoration: none;
 
 		color: @xf-nodeIconReadColor;
 		text-shadow: 1px 1px 0 fade(xf-intensify(@xf-nodeIconReadColor, 50%), 50%);
+	}
+
+	&:hover:before
+	{
+		text-decoration: none;
 	}
 
 	&.subNodeLink--unread
@@ -284,27 +291,28 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	&.subNodeLink--forum:before,
 	&.subNodeLink--category:before
 	{
-		.m-faContent(@fa-var-comments, 1em);
+		.m-faContent(@fa-var-comments);
 	}
 
 	&.subNodeLink--page:before
 	{
-		.m-faContent(@fa-var-file-text, .86em);
+		.m-faContent(@fa-var-file-text);
 	}
 
 	&.subNodeLink--link:before
 	{
-		.m-faContent(@fa-var-link, .93em);
+		.m-faContent(@fa-var-link);
 	}
 }
 
 .node-subNodeFlatList
 {
 	.m-listPlain();
+	.m-clearFix();
 
 	> li
 	{
-		display: inline;
+		display: inline-block;
 		margin-right: 1em;
 
 		&:last-child

@@ -21,6 +21,20 @@ class ThreadPoll extends AbstractPollWidget
 		return $thread->Poll;
 	}
 
+	public function getDefaultTitle()
+	{
+		/** @var \XF\Entity\Thread $content */
+		$content = $this->getContent();
+		if ($content && $content->canView() && $content->Poll)
+		{
+			return $content->Poll->question;
+		}
+		else
+		{
+			return parent::getDefaultTitle();
+		}
+	}
+
 	public function render()
 	{
 		/** @var \XF\Entity\Thread $content */

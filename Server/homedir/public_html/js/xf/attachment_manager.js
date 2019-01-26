@@ -76,8 +76,8 @@
 
 			this.$filesContainer = $target.find(options.filesContainer);
 			this.$filesContainer
-				.on('click', options.actionButton, $.proxy(this, 'actionButtonClick'))
-				.on('click', options.allActionButton, $.proxy(this, 'allActionButtonClick'));
+				.on('click', options.actionButton, XF.proxy(this, 'actionButtonClick'))
+				.on('click', options.allActionButton, XF.proxy(this, 'allActionButtonClick'));
 
 			this.template = $target.find(options.uploadTemplate).html();
 			if (!this.template)
@@ -142,11 +142,11 @@
 				flow = new FustyFlow(options);
 			}
 
-			flow.on('fileAdded', $.proxy(this, 'fileAdded'));
+			flow.on('fileAdded', XF.proxy(this, 'fileAdded'));
 			flow.on('filesSubmitted', function() { self.setUploading(true); flow.upload(); });
-			flow.on('fileProgress', $.proxy(this, 'uploadProgress'));
-			flow.on('fileSuccess', $.proxy(this, 'uploadSuccess'));
-			flow.on('fileError', $.proxy(this, 'uploadError'));
+			flow.on('fileProgress', XF.proxy(this, 'uploadProgress'));
+			flow.on('fileSuccess', XF.proxy(this, 'uploadSuccess'));
+			flow.on('fileError', XF.proxy(this, 'uploadError'));
 
 			return flow;
 		},
@@ -157,7 +157,7 @@
 				target: this.manageUrl,
 				allowDuplicateUploads: true,
 				fileParameterName: 'upload',
-				query: $.proxy(this, 'uploadQueryParams'),
+				query: XF.proxy(this, 'uploadQueryParams'),
 				simultaneousUploads: 1,
 				testChunks: false,
 				progressCallbacksInterval: 100,
@@ -600,7 +600,7 @@
 			{
 				console.error('Cannot find inserted row or action to perform.');
 			}
-			$row.on('attachment:row-inserted', $.proxy(this, 'onAttachmentInsert'));
+			$row.on('attachment:row-inserted', XF.proxy(this, 'onAttachmentInsert'));
 		},
 
 		onAttachmentInsert: function(e, $html, manager)
@@ -614,7 +614,7 @@
 				href = this.options.href,
 				data = this.options.linkData || {};
 
-			XF.ajax('post', href, data, $.proxy(this, 'onLoad')).always(function() { self.loading = false; });
+			XF.ajax('post', href, data, XF.proxy(this, 'onLoad')).always(function() { self.loading = false; });
 		},
 
 		onLoad: function(data)

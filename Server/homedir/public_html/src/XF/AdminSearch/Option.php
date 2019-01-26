@@ -18,7 +18,7 @@ class Option extends AbstractHandler
 		$optFinder = $this->app->finder('XF:Option');
 
 		$conditions = [
-			[$optFinder->expression('CONVERT (%s USING utf8)', 'option_id'), 'like', $optFinder->escapeLike($text, '%?%')]
+			[$optFinder->columnUtf8('option_id'), 'like', $optFinder->escapeLike($text, '%?%')]
 		];
 		if ($previousMatchIds)
 		{
@@ -31,6 +31,8 @@ class Option extends AbstractHandler
 			->limit($limit);
 
 		$results = $optFinder->fetch();
+
+		// TODO: option_group, option_group_description phrases?
 
 		$groupFinder = $this->app->finder('XF:OptionGroup');
 
@@ -60,7 +62,7 @@ class Option extends AbstractHandler
 
 	public function getRelatedPhraseGroups()
 	{
-		return ['option'];
+		return ['option', 'option_explain'];
 	}
 
 	public function getTemplateData(Entity $record)

@@ -92,7 +92,12 @@ class Member extends AbstractController
 
 			if (isset($resultsData[$active->member_stat_key]))
 			{
-				$resultsData[$active->member_stat_key] = array_slice($resultsData[$active->member_stat_key], 0, $active->user_limit, true);
+				if ($active->user_limit > 0)
+				{
+					$resultsData[$active->member_stat_key] = array_slice(
+						$resultsData[$active->member_stat_key], 0, $active->user_limit, true
+					);
+				}
 			}
 			else
 			{
@@ -763,6 +768,10 @@ class Member extends AbstractController
 	{
 		$this->assertPostOnly();
 		$user = $this->assertViewableUser($params->user_id);
+		if (!$user->canPostOnProfile())
+		{
+			return $this->noPermission();
+		}
 
 		$creator = $this->setupProfilePostCreate($user->Profile);
 		$creator->checkForSpam();
@@ -868,17 +877,20 @@ class Member extends AbstractController
 			'user_reason' => 'str'
 		]);
 
-		if ($input['ban_length'] == 'permanent')
+		$form->apply(function(FormAction $form) use ($input, $user)
 		{
-			$input['end_date'] = 0;
-		}
+			if ($input['ban_length'] == 'permanent')
+			{
+				$input['end_date'] = 0;
+			}
 
-		/** @var \XF\Repository\Banning $banningRepo */
-		$banningRepo = $this->repository('XF:Banning');
-		if (!$banningRepo->banUser($user, $input['end_date'], $input['user_reason'], $error))
-		{
-			$form->logError($error);
-		}
+			/** @var \XF\Repository\Banning $banningRepo */
+			$banningRepo = $this->repository('XF:Banning');
+			if (!$banningRepo->banUser($user, $input['end_date'], $input['user_reason'], $error))
+			{
+				$form->logError($error);
+			}
+		});
 
 		return $form;
 	}

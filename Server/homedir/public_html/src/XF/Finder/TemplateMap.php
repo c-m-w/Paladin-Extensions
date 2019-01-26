@@ -31,7 +31,7 @@ class TemplateMap extends Finder
 
 	public function orderTitle($direction = 'ASC')
 	{
-		$expression = $this->expression('CONVERT (%s USING utf8)', 'title');
+		$expression = $this->columnUtf8('title');
 		$this->order($expression, $direction);
 
 		return $this;

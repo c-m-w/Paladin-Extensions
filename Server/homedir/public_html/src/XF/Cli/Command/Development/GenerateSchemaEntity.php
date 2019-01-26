@@ -136,11 +136,11 @@ class GenerateSchemaEntity extends Command
 			$primaryKeyString = "\n\t";
 			if (is_array($primaryKey) && count($primaryKey) > 1)
 			{
-				$primaryKeyString .= '$table->addPrimaryKey([\'' . implode('\', \'', $primaryKey) . '\'])';
+				$primaryKeyString .= '$table->addPrimaryKey([\'' . implode('\', \'', $primaryKey) . '\']);';
 			}
 			else
 			{
-				$primaryKeyString .= '$table->addPrimaryKey(\'' . $primaryKeyString . '\')';
+				$primaryKeyString .= '$table->addPrimaryKey(\'' . $primaryKey . '\');';
 			}
 		}
 

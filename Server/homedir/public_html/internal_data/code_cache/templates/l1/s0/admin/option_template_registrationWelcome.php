@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: aa5556bfe90e5a0dc4f2a414151c8054
+// FROM HASH: 0ad22cb90a9f51312587d9a24485d56f
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -7,7 +7,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	if ($__vars['option']['option_value']['messageParticipants']) {
 		$__compilerTemp1 .= '
 				';
-		$__vars['users'] = $__templater->method($__vars['xf']['app']['em'], 'findByIds', array('XF:User', $__vars['option']['option_value']['messageParticipants'], ));
+		$__vars['users'] = $__templater->method($__templater->method($__vars['xf']['app']['em'], 'getRepository', array('XF:User', )), 'getUsersByIdsOrdered', array($__vars['option']['option_value']['messageParticipants'], ));
 		$__compilerTemp1 .= '
 				';
 		$__vars['value'] = $__templater->filter($__templater->method($__vars['users'], 'pluckNamed', array('username', )), array(array('join', array(', ', )),), false);
@@ -50,7 +50,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'rows' => '5',
 		'autosize' => 'true',
 	)) . '
-			<p class="formRow-explain">' . 'The following placeholders will be replaced in the message: {name}, {id}.' . ' ' . 'You may also use {phrase:phrase_title} which will be replaced with the phrase text in the recipient\'s language.' . '</p>
+			<p class="formRow-explain">' . 'The following placeholders will be replaced in the message: {name}, {email}, {id}.' . ' ' . 'You may also use {phrase:phrase_title} which will be replaced with the phrase text in the recipient\'s language.' . '</p>
 		', '
 			<div>' . 'Conversation options' . $__vars['xf']['language']['label_separator'] . '</div>
 			' . $__templater->formCheckBox(array(
@@ -149,7 +149,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'rows' => '5',
 		'autosize' => 'true',
 	)) . '
-			<p class="formRow-explain">' . 'The following placeholders will be replaced in the message: {name}, {email}, {id}, {unsub}.' . ' ' . 'You may also use {phrase:phrase_title} which will be replaced with the phrase text in the recipient\'s language.' . '</p>
+			<p class="formRow-explain">' . 'The following placeholders will be replaced in the message: {name}, {email}, {id}.' . ' ' . 'You may also use {phrase:phrase_title} which will be replaced with the phrase text in the recipient\'s language.' . '</p>
 		'),
 		'_type' => 'option',
 	)), array(

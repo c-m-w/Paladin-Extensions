@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 6fd6a0d180e65882e533d4f43d73ba28
+// FROM HASH: d284ec3a34fbd76c000962710be34bca
 return array('macros' => array('rebuild_job' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -286,6 +286,33 @@ return array('macros' => array('rebuild_job' => function($__templater, array $__
 		'job' => 'XF:Sitemap',
 	), $__vars) . '
 ' . '
+
+';
+	$__vars['gravatarBody'] = $__templater->preEscaped('
+	' . $__templater->formCheckBoxRow(array(
+	), array(array(
+		'name' => 'options[posters]',
+		'selected' => 1,
+		'label' => 'Limit to users who have posted',
+		'_type' => 'option',
+	),
+	array(
+		'name' => 'options[import_table]',
+		'label' => 'Limit to imported users logged in this table' . $__vars['xf']['language']['label_separator'],
+		'_dependent' => array($__templater->formTextBox(array(
+		'name' => 'options[import_table_name]',
+	))),
+		'_type' => 'option',
+	)), array(
+		'explain' => 'Any users with no avatar matching the above conditions will have a <a href="https://gravatar.com" target="_blank">Gravatar</a> applied if one exists for their email address.',
+	)) . '
+');
+	$__finalCompiled .= '
+' . $__templater->callMacro(null, 'rebuild_job', array(
+		'header' => 'Fetch Gravatars for users with no avatar',
+		'body' => $__vars['gravatarBody'],
+		'job' => 'XF:Gravatar',
+	), $__vars) . '
 
 ' . '
 ' . $__templater->includeTemplate('xfrm_tools_rebuild', $__vars) . '

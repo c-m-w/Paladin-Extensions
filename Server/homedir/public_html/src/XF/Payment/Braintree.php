@@ -88,7 +88,7 @@ class Braintree extends AbstractProvider
 		return true;
 	}
 
-	public function initiatePayment(Controller $controller, PurchaseRequest $purchaseRequest, Purchase $purchase)
+	protected function getPaymentParams(PurchaseRequest $purchaseRequest, Purchase $purchase)
 	{
 		$paymentProfile = $purchase->paymentProfile;
 		$this->setupBraintreeConfig($paymentProfile->options);
@@ -107,13 +107,18 @@ class Braintree extends AbstractProvider
 
 		$clientToken = ClientToken::generate($tokenParams);
 
-		$viewParams = [
+		return [
 			'purchaseRequest' => $purchaseRequest,
 			'paymentProfile' => $paymentProfile,
 			'purchaser' => $purchase->purchaser,
 			'purchase' => $purchase,
 			'clientToken' => $clientToken
 		];
+	}
+
+	public function initiatePayment(Controller $controller, PurchaseRequest $purchaseRequest, Purchase $purchase)
+	{
+		$viewParams = $this->getPaymentParams($purchaseRequest, $purchase);
 		return $controller->view('XF:Payment\BraintreeInitiate', 'payment_initiate_braintree', $viewParams);
 	}
 
@@ -238,11 +243,10 @@ class Braintree extends AbstractProvider
 		}
 	}
 
-	public function renderCancellation(\XF\Entity\UserUpgradeActive $active)
+	public function renderCancellationTemplate(PurchaseRequest $purchaseRequest)
 	{
 		$data = [
-			'active' => $active,
-			'purchaseRequest' => $active->PurchaseRequest
+			'purchaseRequest' => $purchaseRequest
 		];
 		return \XF::app()->templater()->renderTemplate('public:payment_cancel_recurring_braintree', $data);
 	}

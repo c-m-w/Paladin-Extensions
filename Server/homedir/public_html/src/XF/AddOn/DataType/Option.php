@@ -2,6 +2,8 @@
 
 namespace XF\AddOn\DataType;
 
+use XF\Util\Xml;
+
 class Option extends AbstractDataType
 {
 	public function getShortName()
@@ -32,14 +34,14 @@ class Option extends AbstractDataType
 			$node = $doc->createElement($this->getChildTag());
 
 			$this->exportMappedAttributes($node, $entry);
-			$node->appendChild($doc->createElement('default_value', $entry->getValue('default_value')));
+			$node->appendChild(Xml::createDomElement($doc, 'default_value', $entry->getValue('default_value')));
 			if ($entry->edit_format_params !== '')
 			{
-				$node->appendChild($doc->createElement('edit_format_params', $entry->edit_format_params));
+				$node->appendChild(Xml::createDomElement($doc, 'edit_format_params', $entry->edit_format_params));
 			}
 			if ($entry->sub_options)
 			{
-				$node->appendChild($doc->createElement('sub_options', implode("\n", $entry->sub_options)));
+				$node->appendChild(Xml::createDomElement($doc, 'sub_options', implode("\n", $entry->sub_options)));
 			}
 
 			foreach ($entry->Relations AS $relation)

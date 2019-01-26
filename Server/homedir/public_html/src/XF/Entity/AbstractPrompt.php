@@ -6,6 +6,24 @@ use XF\Mvc\Entity\Entity;
 use XF\Mvc\Entity\Structure;
 use XF\Template\Compiler\Syntax\Str;
 
+/**
+ * Class AbstractPrompt
+ *
+ * @package XF\Entity
+ *
+ * COLUMNS
+ * @property int|null prompt_id
+ * @property int prompt_group_id
+ * @property int display_order
+ * @property int materialized_order
+ *
+ * GETTERS
+ * @property \XF\Phrase|string title
+ *
+ * RELATIONS
+ * @property \XF\Phrase MasterTitle
+ * @property \XF\Entity\AbstractPromptGroup PromptGroup
+ */
 abstract class AbstractPrompt extends Entity
 {
 	abstract protected function getClassIdentifier();

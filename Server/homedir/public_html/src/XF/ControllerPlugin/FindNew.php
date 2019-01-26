@@ -59,7 +59,7 @@ class FindNew extends AbstractPlugin
 			return $cached;
 		}
 
-		$maxResults = 200; // TODO: customizable
+		$maxResults = $this->options()->maximumSearchResults;
 		$findNew->results = $handler->getResultIds($filters, $maxResults);
 
 		return $findNew;

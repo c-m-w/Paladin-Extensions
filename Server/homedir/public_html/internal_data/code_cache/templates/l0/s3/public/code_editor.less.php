@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 74063a304004b746e9e38adb676a2ac4
+// FROM HASH: 06f21f5582bb54510382e2f0cb32d521
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -24,6 +24,15 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		&.CodeMirror-focused
 		{
 			.xf-inputFocus();
+		}
+
+		&.CodeMirror-simplescroll
+		{
+			.CodeMirror-sizer
+			{
+				// Bit hacky but solves issue with the simplescroll bars overlapping the content
+				padding-right: 30px !important;
+			}
 		}
 	}
 

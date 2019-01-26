@@ -136,8 +136,11 @@ class Feed extends AbstractController
 
 	public function actionPreview()
 	{
+		$input = $this->getFeedInput();
+
+		/** @var \XF\Entity\Feed $feed */
 		$feed = $this->em()->create('XF:Feed');
-		$feed->bulkSet($this->getFeedInput());
+		$feed->bulkSet($input);
 
 		$reader = $this->getFeedReader($feed['url']);
 		$feedData = $reader->getFeedData();
@@ -150,10 +153,18 @@ class Feed extends AbstractController
 		}
 
 		$entry = $feedData['entries'][mt_rand(0, count($feedData['entries']) - 1)];
-		$entry['title'] = $feed->getEntryTitle($entry);
-		$entry['message'] = $feed->getEntryMessage($entry);
 
-		if ($feed['user_id'] == -1)
+		$title = $feed->getEntryTitle($entry);
+		$message = $feed->getEntryMessage($entry);
+		
+		$entry['title'] = $title;
+		$entry['message'] = $message;
+
+		if ($input['user_id'] == 0)
+		{
+			$entry['author'] = $feed->title;
+		}
+		else if ($input['user_id'] == -1)
 		{
 			$entry['author'] = $this->filter('username', 'str');
 		}

@@ -68,7 +68,7 @@ class ProfilePost extends AbstractController
 
 			$this->finalizeEdit($editor);
 
-			if ($this->filter('_xfWithData', 'bool'))
+			if ($this->filter('_xfWithData', 'bool') && $this->filter('_xfInlineEdit', 'bool'))
 			{
 				$viewParams = [
 					'profilePost' => $profilePost,
@@ -386,7 +386,7 @@ class ProfilePost extends AbstractController
 
 			$this->finalizeCommentEdit($editor);
 
-			if ($this->filter('_xfWithData', 'bool'))
+			if ($this->filter('_xfWithData', 'bool') && $this->filter('_xfInlineEdit', 'bool'))
 			{
 				$viewParams = [
 					'profilePost' => $comment->ProfilePost,

@@ -18,6 +18,10 @@ class Statement extends \XF\Db\AbstractStatement
 
 	protected $values = [];
 
+	/**
+	 * @return bool
+	 * @throws \XF\Db\Exception
+	 */
 	public function prepare()
 	{
 		if ($this->statement)
@@ -39,6 +43,10 @@ class Statement extends \XF\Db\AbstractStatement
 		return true;
 	}
 
+	/**
+	 * @return bool
+	 * @throws \XF\Db\Exception
+	 */
 	public function execute()
 	{
 		if (!$this->statement)
@@ -102,6 +110,10 @@ class Statement extends \XF\Db\AbstractStatement
 		return $success;
 	}
 
+	/**
+	 * @return array|bool
+	 * @throws \XF\Db\Exception
+	 */
 	public function fetchRowValues()
 	{
 		$statement = $this->statement;
@@ -133,6 +145,9 @@ class Statement extends \XF\Db\AbstractStatement
 		return $values;
 	}
 
+	/**
+	 * @return int|null
+	 */
 	public function rowsAffected()
 	{
 		return $this->statement ? $this->statement->affected_rows : null;
@@ -158,6 +173,13 @@ class Statement extends \XF\Db\AbstractStatement
 		}
 	}
 
+	/**
+	 * @param string $message
+	 * @param int    $code
+	 * @param null   $sqlStateCode
+	 *
+	 * @return \XF\Db\Exception
+	 */
 	protected function getException($message, $code = 0, $sqlStateCode = null)
 	{
 		if (!$sqlStateCode || $sqlStateCode === '00000')

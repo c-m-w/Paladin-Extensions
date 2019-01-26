@@ -4,6 +4,11 @@
   <field content_type="admin_navigation" field_name="phrase_plural">admin_navigation</field>
   <field content_type="admin_template" field_name="admin_search_class">XF\AdminSearch\AdminTemplate</field>
   <field content_type="attachment" field_name="stats_handler_class">XF\Stats\Attachment</field>
+  <field content_type="bb_code_media_site" field_name="admin_search_class">XF\AdminSearch\BbCodeMediaSite</field>
+  <field content_type="captcha_question" field_name="admin_search_class">XF\AdminSearch\CaptchaQuestion</field>
+  <field content_type="captcha_question" field_name="phrase">captcha_question</field>
+  <field content_type="con_acc_provider" field_name="admin_search_class">XF\AdminSearch\ConnectedAccountProvider</field>
+  <field content_type="con_acc_provider" field_name="phrase">connected_account_provider</field>
   <field content_type="conversation" field_name="entity">XF:ConversationMaster</field>
   <field content_type="conversation" field_name="inline_mod_handler_class">XF\InlineMod\Conversation</field>
   <field content_type="conversation" field_name="spam_handler_class">XF\Spam\Cleaner\Conversation</field>
@@ -13,15 +18,24 @@
   <field content_type="conversation_message" field_name="entity">XF:ConversationMessage</field>
   <field content_type="conversation_message" field_name="like_handler_class">XF\Like\ConversationMessage</field>
   <field content_type="conversation_message" field_name="report_handler_class">XF\Report\ConversationMessage</field>
+  <field content_type="cron_entry" field_name="admin_search_class">XF\AdminSearch\CronEntry</field>
+  <field content_type="cron_entry" field_name="phrase_plural">cron_entries</field>
   <field content_type="email_template" field_name="admin_search_class">XF\AdminSearch\EmailTemplate</field>
+  <field content_type="feed" field_name="admin_search_class">XF\AdminSearch\Feed</field>
+  <field content_type="feed" field_name="phrase">rss_feed_importer</field>
   <field content_type="forum" field_name="email_stop_class">XF\EmailStop\Forum</field>
+  <field content_type="member_stat" field_name="admin_search_class">XF\AdminSearch\MemberStat</field>
+  <field content_type="navigation" field_name="admin_search_class">XF\AdminSearch\Navigation</field>
+  <field content_type="navigation" field_name="phrase_plural">navigation</field>
   <field content_type="node" field_name="admin_search_class">XF\AdminSearch\Node</field>
   <field content_type="node" field_name="moderator_handler_class">XF\Moderator\NodeModerator</field>
   <field content_type="node" field_name="permission_handler_class">XF\Permission\NodePermissions</field>
   <field content_type="node" field_name="sitemap_handler_class">XF\Sitemap\Node</field>
+  <field content_type="notice" field_name="admin_search_class">XF\AdminSearch\Notice</field>
   <field content_type="option" field_name="admin_search_class">XF\AdminSearch\Option</field>
   <field content_type="page" field_name="entity">XF:Page</field>
   <field content_type="page" field_name="search_handler_class">XF\Search\Data\Page</field>
+  <field content_type="payment_profile" field_name="admin_search_class">XF\AdminSearch\PaymentProfile</field>
   <field content_type="phrase" field_name="admin_search_class">XF\AdminSearch\Phrase</field>
   <field content_type="post" field_name="alert_handler_class">XF\Alert\Post</field>
   <field content_type="post" field_name="approval_queue_handler_class">XF\ApprovalQueue\Post</field>
@@ -83,8 +97,17 @@
   <field content_type="thread" field_name="spam_handler_class">XF\Spam\Cleaner\Thread</field>
   <field content_type="thread" field_name="stats_handler_class">XF\Stats\Thread</field>
   <field content_type="thread" field_name="tag_handler_class">XF\Tag\Thread</field>
+  <field content_type="thread_field" field_name="admin_search_class">XF\AdminSearch\ThreadField</field>
+  <field content_type="thread_field" field_name="phrase">custom_thread_field</field>
+  <field content_type="thread_prefix" field_name="admin_search_class">XF\AdminSearch\ThreadPrefix</field>
+  <field content_type="thread_prefix" field_name="phrase">thread_prefix</field>
+  <field content_type="thread_prefix" field_name="phrase_plural">thread_prefixes</field>
+  <field content_type="thread_prompt" field_name="admin_search_class">XF\AdminSearch\ThreadPrompt</field>
+  <field content_type="thread_prompt" field_name="phrase">thread_prompt</field>
+  <field content_type="trophy" field_name="admin_search_class">XF\AdminSearch\Trophy</field>
   <field content_type="trophy" field_name="alert_handler_class">XF\Alert\Trophy</field>
   <field content_type="trophy" field_name="entity">XF:Trophy</field>
+  <field content_type="trophy" field_name="phrase_plural">trophies</field>
   <field content_type="user" field_name="admin_search_class">XF\AdminSearch\User</field>
   <field content_type="user" field_name="alert_handler_class">XF\Alert\User</field>
   <field content_type="user" field_name="approval_queue_handler_class">XF\ApprovalQueue\User</field>
@@ -95,5 +118,11 @@
   <field content_type="user" field_name="sitemap_handler_class">XF\Sitemap\User</field>
   <field content_type="user" field_name="stats_handler_class">XF\Stats\User</field>
   <field content_type="user" field_name="warning_handler_class">XF\Warning\User</field>
+  <field content_type="user_field" field_name="admin_search_class">XF\AdminSearch\UserField</field>
+  <field content_type="user_field" field_name="phrase">custom_user_field</field>
   <field content_type="user_group" field_name="admin_search_class">XF\AdminSearch\UserGroup</field>
+  <field content_type="user_upgrade" field_name="admin_search_class">XF\AdminSearch\UserUpgrade</field>
+  <field content_type="warning_definition" field_name="admin_search_class">XF\AdminSearch\WarningDefinition</field>
+  <field content_type="warning_definition" field_name="phrase">warning</field>
+  <field content_type="widget" field_name="admin_search_class">XF\AdminSearch\Widget</field>
 </content_type_fields>

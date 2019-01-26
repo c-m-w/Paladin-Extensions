@@ -29,6 +29,7 @@ class Debugger
 		$dump = ob_get_clean();
 
 		$dump = preg_replace("/\]\=\>\n(\s+)/m", "] => ", $dump);
+		$dump = utf8_bad_replace($dump, "\xEF\xBF\xBD");
 
 		if (PHP_SAPI == 'cli')
 		{

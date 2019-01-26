@@ -19,6 +19,7 @@ You may set a user into \'discouraged\' mode by editing their user profile, or d
   'option_group_description.discussionOptions' => 'Messages are contained within a discussion container, and options relating to these can be found here.',
   'option_group_description.emailLog' => 'Options here control the Email log add-on.',
   'option_group_description.emailOptions' => '',
+  'option_group_description.exup' => 'Notify users when their account upgrades are about to expire.',
   'option_group_description.imageLinkProxy' => 'Controls the system for proxying and logging posted links and images',
   'option_group_description.inactiveMembers' => 'Options here control the Inactive members add-on.',
   'option_group_description.j_email_check' => '',

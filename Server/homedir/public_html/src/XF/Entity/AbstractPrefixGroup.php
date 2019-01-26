@@ -5,10 +5,26 @@ namespace XF\Entity;
 use XF\Mvc\Entity\Entity;
 use XF\Mvc\Entity\Structure;
 
+/**
+ * Class AbstractPrefixGroup
+ *
+ * @package XF\Entity
+ *
+ * COLUMNS
+ * @property int|null prefix_group_id
+ * @property int display_order
+ *
+ * GETTERS
+ * @property \XF\Phrase|string title
+ *
+ * RELATIONS
+ * @property \XF\Phrase MasterTitle
+ * @property \XF\Entity\AbstractPrefix[] Prefixes
+ */
 abstract class AbstractPrefixGroup extends Entity
 {
 	abstract protected function getClassIdentifier();
-	
+
 	protected static function getContentType()
 	{
 		throw new \LogicException('The content type must be overridden.');

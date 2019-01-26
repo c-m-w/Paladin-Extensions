@@ -18,9 +18,12 @@ class Definition implements \ArrayAccess
 			return '';
 		}
 
+		$choice = null;
+
 		switch ($this->type_group)
 		{
 			case 'single':
+				$choice = $value;
 				$value = isset($this->field_choices[$value]) ? $this->field_choices[$value] : '';
 				break;
 
@@ -53,7 +56,7 @@ class Definition implements \ArrayAccess
 			}
 			else
 			{
-				$value = $this->translateValue($value);
+				$value = $this->translateValue($value, $choice);
 			}
 		}
 

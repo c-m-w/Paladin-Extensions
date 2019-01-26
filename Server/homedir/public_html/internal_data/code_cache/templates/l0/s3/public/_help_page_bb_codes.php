@@ -189,9 +189,8 @@ JS code:
 		'title' => $__templater->filter('[INDENT] - Text indent', array(array('preEscaped', array()),), false),
 		'desc' => $__templater->filter('Indents the wrapped text. This can be nested for larger indentings.', array(array('preEscaped', array()),), false),
 		'example' => $__templater->filter('Regular text
-[INDENT]Indented text
-[INDENT]More indented[/INDENT]
-[/INDENT]', array(array('preEscaped', array()),), false),
+[INDENT]Indented text[/INDENT]
+[INDENT=2]More indented[/INDENT]', array(array('preEscaped', array()),), false),
 		'anchor' => 'indent',
 	), $__vars) . '
 

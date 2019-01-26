@@ -76,7 +76,7 @@
 			var href = this.$target.attr('href'),
 				self = this;
 
-			XF.ajax('POST', href, {}, $.proxy(this, 'handleAjax'), {skipDefaultSuccess: true})
+			XF.ajax('POST', href, {}, XF.proxy(this, 'handleAjax'), {skipDefaultSuccess: true})
 				.always(function()
 				{
 					setTimeout(function()
@@ -162,7 +162,7 @@
 			}
 
 			this.href = href;
-			this.$form = $form.on('preview:hide', $.proxy(this, 'onPreviewHide'));
+			this.$form = $form.on('preview:hide', XF.proxy(this, 'onPreviewHide'));
 		},
 
 		click: function(e)
@@ -182,7 +182,7 @@
 			var self = this,
 				formData = XF.getDefaultFormData(this.$form);
 
-			XF.ajax('post', this.href, formData, $.proxy(this, 'onLoad'))
+			XF.ajax('post', this.href, formData, XF.proxy(this, 'onLoad'))
 				.always(function() { self.loading = false; });
 		},
 
@@ -397,7 +397,7 @@
 			var href = this.$target.attr('href'),
 				self = this;
 
-			XF.ajax('POST', href, {}, $.proxy(this, 'handleAjax'), {skipDefaultSuccess: true})
+			XF.ajax('POST', href, {}, XF.proxy(this, 'handleAjax'), {skipDefaultSuccess: true})
 				.always(function()
 				{
 					setTimeout(function()
@@ -448,7 +448,7 @@
 
 			XF.loadOverlay(href, {
 				cache: false,
-				init: $.proxy(this, 'setupOverlay')
+				init: XF.proxy(this, 'setupOverlay')
 			});
 		},
 
@@ -458,7 +458,7 @@
 
 			var $form = overlay.getOverlay().find('form');
 
-			$form.on('ajax-submit:response', $.proxy(this, 'handleOverlaySubmit'));
+			$form.on('ajax-submit:response', XF.proxy(this, 'handleOverlaySubmit'));
 
 			var t = this;
 			overlay.on('overlay:hidden', function() { t.overlay = null; });
@@ -519,7 +519,7 @@
 				self.triggerDelete();
 			});
 
-			var proxySync = $.proxy(this, 'syncState');
+			var proxySync = XF.proxy(this, 'syncState');
 
 			// set the default value and check it after other JS loads
 			this.syncState();
@@ -527,7 +527,7 @@
 
 			this.$target.on('draft:sync', proxySync);
 
-			setInterval($.proxy(this, 'triggerSave'), this.options.draftAutosave * 1000);
+			setInterval(XF.proxy(this, 'triggerSave'), this.options.draftAutosave * 1000);
 		},
 
 		triggerSave: function()
@@ -582,7 +582,7 @@
 				'post',
 				this.options.draftUrl,
 				data,
-				$.proxy(this, 'completeAction'),
+				XF.proxy(this, 'completeAction'),
 				{ skipDefault: true, skipError: true, global: false }
 			).always(
 				function() { self.autoSaveRunning = false; }
@@ -639,7 +639,7 @@
 			}
 			else
 			{
-				this.$target.one('focusin', $.proxy(this, 'trigger'));
+				this.$target.one('focusin', XF.proxy(this, 'trigger'));
 			}
 		},
 
@@ -664,7 +664,7 @@
 
 		init: function()
 		{
-			this.$target.on('ajax-submit:response', $.proxy(this, 'afterSubmit'));
+			this.$target.on('ajax-submit:response', XF.proxy(this, 'afterSubmit'));
 		},
 
 		afterSubmit: function(e, data)
@@ -725,7 +725,7 @@
 			}
 
 			$button.on({
-				click: $.proxy(this, 'preview')
+				click: XF.proxy(this, 'preview')
 			});
 		},
 
@@ -774,8 +774,8 @@
 				iconic = this.options.iconic;
 
 			this.$target
-				.on('focus mouseenter', buttonSel, $.proxy(this, 'focus'))
-				.on('click', buttonSel, $.proxy(this, 'click'));
+				.on('focus mouseenter', buttonSel, XF.proxy(this, 'focus'))
+				.on('click', buttonSel, XF.proxy(this, 'click'));
 
 			if (typeof iconic == 'string')
 			{
@@ -928,9 +928,9 @@
 					return $input[0];
 				}
 			});
-			clipboard.on('success', $.proxy(this, 'success'));
+			clipboard.on('success', XF.proxy(this, 'success'));
 
-			$input.on('click', $.proxy(this, 'click'));
+			$input.on('click', XF.proxy(this, 'click'));
 		},
 
 		success: function()

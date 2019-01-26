@@ -18,6 +18,8 @@ class Contact extends AbstractService
 	protected $subject = '';
 	protected $message = '';
 
+	protected $validated;
+
 	public function setFromUser(User $user)
 	{
 		if (!$user->user_id)
@@ -118,17 +120,22 @@ class Contact extends AbstractService
 	{
 		$errors = [];
 
-		if (!$this->fromUser)
+		if (!$this->validated)
 		{
-			if (!$this->validateEmail($this->fromEmail, $error))
+			if (!$this->fromUser)
 			{
-				$errors['email'] = $error;
+				if (!$this->validateEmail($this->fromEmail, $error))
+				{
+					$errors['email'] = $error;
+				}
 			}
-		}
 
-		if (!$this->fromName || !$this->subject || !$this->message)
-		{
-			$errors['required'] = \XF::phrase('please_complete_required_fields');
+			if (!$this->fromName || !$this->subject || !$this->message)
+			{
+				$errors['required'] = \XF::phrase('please_complete_required_fields');
+			}
+
+			$this->validated = true;
 		}
 
 		return !count($errors);
@@ -176,7 +183,7 @@ class Contact extends AbstractService
 		if ($options->contactEmailSenderHeader)
 		{
 			$mail->setSender($options->contactEmailAddress)
-				->setFrom($this->fromEmail, $this->fromUser);
+				->setFrom($this->fromEmail, $this->fromName);
 		}
 		else if ($this->fromEmail)
 		{

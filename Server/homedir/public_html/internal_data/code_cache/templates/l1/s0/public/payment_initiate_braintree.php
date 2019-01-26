@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: ae5df4443e223c6e1dff3ce0377abf46
+// FROM HASH: 8428cc53119e5288f3a6f5f5dc5cd730
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -87,7 +87,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 				<div class="block-container">
 					<div class="block-body">
 						' . $__templater->formRow('
-							' . $__templater->button('', array(
+							' . $__templater->button('&nbsp;', array(
 				'class' => 'button--apple js-applePayButton',
 			), '', array(
 			)) . '

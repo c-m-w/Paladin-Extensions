@@ -58,6 +58,7 @@ class vBulletinBlogEntry extends Thread
 	{
 		/** @var \XF\Import\Data\vBulletinBlogText $postHandler */
 		$postHandler = $this->dataManager->newHandler('XF:vBulletinBlogText');
+		$postHandler->preventRetainIds();
 		$postHandler->bulkSet([
 			'thread_id' => $newId,
 			'post_date' => $this->post_date,

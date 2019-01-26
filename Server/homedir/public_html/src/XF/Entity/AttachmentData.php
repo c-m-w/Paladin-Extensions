@@ -170,7 +170,14 @@ class AttachmentData extends Entity
 
 		if (strlen($fileName) > $maxLength && $info = @pathinfo($fileName))
 		{
-			$extension = '...' . $info['extension'];
+			if (!empty($info['extension']))
+			{
+				$extension = '...' . $info['extension'];
+			}
+			else
+			{
+				$extension = '';
+			}
 
 			$fileName = substr($info['filename'], 0, $maxLength - strlen($extension)) . $extension;
 		}

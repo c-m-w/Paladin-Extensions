@@ -45,6 +45,11 @@ class Payment extends Repository
 		/** @var \XF\Entity\PaymentProviderLog $providerLog */
 		$providerLog = $this->em->create('XF:PaymentProviderLog');
 
+		if (strlen($requestKey) > 32)
+		{
+			$requestKey = substr($requestKey, 0, 29) . '...';
+		}
+
 		$providerLog->purchase_request_key = $requestKey;
 		$providerLog->provider_id = $providerId;
 		$providerLog->transaction_id = $txnId;

@@ -6,6 +6,26 @@ use XF\Mvc\Entity\Entity;
 use XF\Mvc\Entity\Structure;
 use XF\Template\Compiler\Syntax\Str;
 
+/**
+ * Class AbstractPrefix
+ *
+ * @package XF\Entity
+ *
+ * COLUMNS
+ * @property int|null prefix_id
+ * @property int prefix_group_id
+ * @property int display_order
+ * @property int materialized_order
+ * @property string css_class
+ * @property array allowed_user_group_ids
+ *
+ * GETTERS
+ * @property \XF\Phrase|string title
+ *
+ * RELATIONS
+ * @property \XF\Phrase MasterTitle
+ * @property \XF\Entity\AbstractPrefixGroup PrefixGroup
+ */
 abstract class AbstractPrefix extends Entity
 {
 	abstract protected function getClassIdentifier();

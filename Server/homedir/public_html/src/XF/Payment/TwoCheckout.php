@@ -36,9 +36,9 @@ class TwoCheckout extends AbstractProvider
 		return true;
 	}
 
-	public function initiatePayment(Controller $controller, PurchaseRequest $purchaseRequest, Purchase $purchase)
+	protected function getPaymentParams(PurchaseRequest $purchaseRequest, Purchase $purchase)
 	{
-		$viewParams = [
+		return [
 			'purchaseRequest' => $purchaseRequest,
 			'paymentProfile' => $purchase->paymentProfile,
 			'purchaser' => $purchase->purchaser,
@@ -47,6 +47,11 @@ class TwoCheckout extends AbstractProvider
 			'purchasableId' => $purchase->purchasableId,
 			'recurrence' => $purchase->recurring ? ($purchase->lengthAmount . ' ' . ucfirst($purchase->lengthUnit)) : false
 		];
+	}
+
+	public function initiatePayment(Controller $controller, PurchaseRequest $purchaseRequest, Purchase $purchase)
+	{
+		$viewParams = $this->getPaymentParams($purchaseRequest, $purchase);
 		return $controller->view('XF:Purchase\TwoCheckoutInitiate', 'payment_initiate_twocheckout', $viewParams);
 	}
 
@@ -124,11 +129,10 @@ class TwoCheckout extends AbstractProvider
 		return $controller->redirect($purchase->returnUrl, '');
 	}
 
-	public function renderCancellation(\XF\Entity\UserUpgradeActive $active)
+	public function renderCancellationTemplate(PurchaseRequest $purchaseRequest)
 	{
 		$data = [
-			'active' => $active,
-			'purchaseRequest' => $active->PurchaseRequest
+			'purchaseRequest' => $purchaseRequest
 		];
 		return \XF::app()->templater()->renderTemplate('public:payment_cancel_recurring_twocheckout', $data);
 	}

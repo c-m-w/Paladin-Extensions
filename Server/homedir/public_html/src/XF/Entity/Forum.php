@@ -37,16 +37,11 @@ use XF\Mvc\Entity\Structure;
  * @property \XF\Draft draft_thread
  * @property \XF\Mvc\Entity\ArrayCollection prefixes
  * @property \XF\Phrase thread_prompt
- * @property string|null node_name
- * @property string|null title
- * @property string|null description
- * @property int depth
  *
  * RELATIONS
  * @property \XF\Entity\ForumRead[] Read
  * @property \XF\Entity\ForumWatch[] Watch
  * @property \XF\Entity\Draft[] DraftThreads
- * @property \XF\Entity\Node Node
  */
 class Forum extends AbstractNode
 {

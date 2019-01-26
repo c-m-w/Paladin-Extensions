@@ -255,7 +255,41 @@ class User extends Repository
 			}
 		}
 
-		return $users;
+		//return $users;
+
+		$orderedUsers = [];
+		foreach ($usernames AS $searchUsername)
+		{
+			$searchUsername = utf8_deaccent(utf8_strtolower($searchUsername));
+			foreach ($users AS $id => $user)
+			{
+				$testUsername = utf8_deaccent(utf8_strtolower($user->username));
+				if ($searchUsername == $testUsername && !isset($orderedUsers[$id]))
+				{
+					$orderedUsers[$id] = $user;
+				}
+			}
+		}
+		foreach ($users AS $id => $user)
+		{
+			if (!isset($orderedUsers[$id]))
+			{
+				$orderedUsers[$id] = $user;
+			}
+		}
+
+		return $this->em->getBasicCollection($orderedUsers);
+	}
+
+	public function getUsersByIdsOrdered(array $ids, $with = [])
+	{
+		if (!$ids)
+		{
+			return $this->em->getEmptyCollection();
+		}
+
+		$users = $this->em->findByIds('XF:User', $ids, $with);
+		return $users->sortByList($ids);
 	}
 
 	/**

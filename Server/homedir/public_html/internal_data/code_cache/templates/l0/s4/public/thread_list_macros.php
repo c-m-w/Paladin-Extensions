@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: f8dd5226eb9d1ac1accd7b8b354bbb85
+// FROM HASH: 72f9f27e2c9eaf1ab79a70e6d7fe233b
 return array('macros' => array('item' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -157,7 +157,7 @@ return array('macros' => array('item' => function($__templater, array $__argumen
 					';
 		if ($__vars['forum']) {
 			$__finalCompiled .= '
-						<a href="' . $__templater->fn('link', array('forums', $__vars['forum'], array('prefix_id' => $__vars['thread']['prefix_id'], ), ), true) . '" class="labelLink">' . $__templater->fn('prefix', array('thread', $__vars['thread'], 'html', '', ), true) . '</a>
+						<a href="' . $__templater->fn('link', array('forums', $__vars['forum'], array('prefix_id' => $__vars['thread']['prefix_id'], ), ), true) . '" class="labelLink" rel="nofollow">' . $__templater->fn('prefix', array('thread', $__vars['thread'], 'html', '', ), true) . '</a>
 					';
 		} else {
 			$__finalCompiled .= '

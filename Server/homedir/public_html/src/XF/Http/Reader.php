@@ -20,6 +20,13 @@ class Reader
 	 */
 	protected $clientUntrusted;
 
+	/**
+	 * Array of listeners for \GuzzleHttp\Event\Emitter
+	 *
+	 * @var callable[]
+	 */
+	protected $listeners;
+
 	protected $untrustedAllowedSchemes = ['http', 'https'];
 	protected $untrustedAllowedPorts = [80, 443];
 
@@ -29,12 +36,32 @@ class Reader
 		$this->clientUntrusted = $clientUntrusted;
 	}
 
-	public function get($url, array $limits = [], $saveTo = null, array $options = [], &$error = null)
+	/**
+	 * @param       $url
+	 * @param array $limits
+	 * @param null  $saveTo
+	 * @param array $options
+	 * @param null  $error
+	 * @param callable[] $listeners
+	 *
+	 * @return \GuzzleHttp\Message\ResponseInterface|null
+	 */
+	public function get($url, array $limits = [], $saveTo = null, array $options = [], &$error = null, array $listeners = [])
 	{
-		return $this->_get($this->clientTrusted, $url, $limits, $saveTo, $options, $error);
+		return $this->_get($this->clientTrusted, $url, $limits, $saveTo, $options, $error, $listeners);
 	}
 
-	public function getUntrusted($url, array $limits = [], $saveTo = null, array $options = [], &$error = null)
+	/**
+	 * @param       $url
+	 * @param array $limits
+	 * @param null  $saveTo
+	 * @param array $options
+	 * @param null  $error
+	 * @param callable[] $listeners
+	 *
+	 * @return \GuzzleHttp\Message\ResponseInterface|null
+	 */
+	public function getUntrusted($url, array $limits = [], $saveTo = null, array $options = [], &$error = null, array $listeners = [])
 	{
 		$options['allow_redirects'] = false;
 
@@ -52,7 +79,8 @@ class Reader
 				return null;
 			}
 
-			$response = $this->_get($this->clientUntrusted, $url, $limits, $saveTo, $options, $error);
+			$response = $this->_get($this->clientUntrusted, $url, $limits, $saveTo, $options, $error, $listeners);
+
 			if (
 				$response instanceof \GuzzleHttp\Message\Response
 				&& $response->getStatusCode() >= 300
@@ -240,12 +268,12 @@ class Reader
 	 * @param null|string $saveTo
 	 * @param array $options
 	 * @param mixed $error
+	 * @param callable[] $listeners
 	 *
 	 * @return \GuzzleHttp\Message\ResponseInterface|null
 	 */
-	protected function _get(
-		\GuzzleHttp\Client $client,
-		$url, array $limits = [], $saveTo = null, array $options = [], &$error = null
+	protected function _get(\GuzzleHttp\Client $client,
+		$url, array $limits = [], $saveTo = null, array $options = [], &$error = null, array $listeners = []
 	)
 	{
 		$limits = array_merge([
@@ -281,6 +309,8 @@ class Reader
 		$saveTo = new Stream($saveTo, $maxSize, $maxTime);
 
 		$options['save_to'] = $saveTo;
+
+		$this->initListeners($client, $listeners);
 
 		try
 		{
@@ -320,6 +350,53 @@ class Reader
 		return $response;
 	}
 
+	/**
+	 * This is called with every _get(), and causes previously attached listener callbacks to be detached
+	 * and any new listeners to be attached. The primary use for this would be a 'progress' listener,
+	 * operating something like ['progress' => function (\GuzzleHttp\Event\ProgressEvent $e) { ... }]
+	 *
+	 * @param \GuzzleHttp\Client $client
+	 * @param callable[] $listeners
+	 *
+	 * @return bool
+	 */
+	protected function initListeners(\GuzzleHttp\Client $client, array $listeners)
+	{
+		$emitter = $client->getEmitter();
+
+		// remove any existing listeners for a new request
+		if (is_array($this->listeners))
+		{
+			foreach ($this->listeners AS $event => $callback)
+			{
+				$emitter->removeListener($event, $callback);
+			}
+		}
+
+		$this->listeners = null;
+
+		// attach any new listeners
+		if (!empty($listeners))
+		{
+			$this->listeners = [];
+
+			foreach ($listeners AS $event => $callback)
+			{
+				if (is_callable($callback))
+				{
+					$this->listeners[$event] = $callback;
+					$emitter->on($event, $this->listeners[$event]);
+				}
+				else
+				{
+					throw new \InvalidArgumentException("HTTP reader callback requested for '{$event}' is not callable.");
+				}
+			}
+		}
+
+		return true;
+	}
+
 	public function getErrorMessage($code)
 	{
 		switch ($code)
@@ -333,5 +410,28 @@ class Reader
 			default:
 				return \XF::phraseDeferred('unknown');
 		}
+	}
+
+	public function getCharset($contentType)
+	{
+		$charset = null;
+
+		if ($contentType)
+		{
+			$parts = explode(';', $contentType, 2);
+
+			$type = trim($parts[0]);
+			if ($type != 'text/html')
+			{
+				return [];
+			}
+
+			if (isset($parts[1]) && preg_match('/charset=([-a-z0-9_]+)/i', trim($parts[1]), $match))
+			{
+				$charset = $match[1];
+			}
+		}
+
+		return $charset;
 	}
 }

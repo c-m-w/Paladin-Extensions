@@ -24,14 +24,14 @@ class Move extends AbstractMoveCopy
 
 		/** @var \XF\Service\Post\Mover $mover */
 		$mover = $this->app()->service('XF:Post\Mover', $thread);
-		$mover->setExistingTarget($options['thread_type']);
+		$mover->setExistingTarget($options['thread_type'] == 'existing' ? true : false);
 
 		if ($options['alert'])
 		{
 			$mover->setSendAlert(true, $options['alert_reason']);
 		}
 
-		if ($options['prefix_id'] !== null)
+		if ($options['prefix_id'] !== null && $options['thread_type'] !== 'existing')
 		{
 			$mover->setPrefix($options['prefix_id']);
 		}
@@ -45,7 +45,7 @@ class Move extends AbstractMoveCopy
 	{
 		/** @var \XF\Repository\Node $nodeRepo */
 		$nodeRepo = $this->app()->repository('XF:Node');
-		$nodes = $nodeRepo->getNodeList();
+		$nodes = $nodeRepo->getFullNodeList()->filterViewable();
 
 		$viewParams = [
 			'posts' => $entities,

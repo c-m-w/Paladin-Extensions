@@ -24,6 +24,11 @@ abstract class AbstractEmulatedData extends AbstractData
 		return $this->ee->set($field, $value, $options);
 	}
 
+	public function setDirect($field, $value)
+	{
+		return $this->ee->setDirect($field, $value);
+	}
+
 	public function get($field)
 	{
 		return $this->ee->get($field);
@@ -32,6 +37,11 @@ abstract class AbstractEmulatedData extends AbstractData
 	protected function write($oldId)
 	{
 		return $this->ee->insert($oldId, $this->db());
+	}
+
+	public function forceNotEmpty($field, $oldId)
+	{
+		$this->setDirect($field, $this->validTextOrDefault($this->$field, $field, $oldId));
 	}
 
 	public function getEntityEmulator()

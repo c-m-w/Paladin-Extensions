@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: ef3cadbe7260a8cd23bba845b0776f10
+// FROM HASH: 3c0cb98b108158266c39467332964859
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -36,6 +36,11 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	width: 560px;
 	max-width: 100%;
 	margin: 0;
+
+	&.fb_iframe_widget
+	{
+		display: block;
+	}
 
 	// we want this to still be a block element but to inherit the alignment a user has set - this approximates that
 	[style="text-align: center"] &

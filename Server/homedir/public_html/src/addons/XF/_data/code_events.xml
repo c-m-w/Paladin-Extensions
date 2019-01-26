@@ -154,6 +154,15 @@
 <ol>
 	<li><code><em>\XF\App</em> $app</code> - Global App object.</li>
 </ol>]]></event>
+  <event event_id="bb_code_processor_action_map"><![CDATA[<p>Called when the BB code processor action map is accessed.</p>
+
+<p>Callback signature:</p>
+<blockquote><code><em>array</em> &amp;$processorActionMap</code></blockquote>
+
+<p>Arguments:</p>
+<ol>
+	<li><code><em>array</em> &amp;$processorActionMap</code> - The current processor action map.</li>
+</ol>]]></event>
   <event event_id="bb_code_renderer"><![CDATA[<p>Called when a BB code renderer object is created.</p>
 
 <p>Callback signature:</p>
@@ -166,6 +175,15 @@
 </ol>
 
 <p><b>Event hint:</b> The type of renderer being created.</p>]]></event>
+  <event event_id="bb_code_renderer_map"><![CDATA[<p>Called when the BB code renderer map is accessed.</p>
+
+<p>Callback signature:</p>
+<blockquote><code><em>array</em> &amp;$rendererMap</code></blockquote>
+
+<p>Arguments:</p>
+<ol>
+	<li><code><em>array</em> &amp;$rendererMap</code> - The current renderer map.</li>
+</ol>]]></event>
   <event event_id="bb_code_rules"><![CDATA[<p>Called when a BB code rule set object is created.</p>
 
 <p>Callback signature:</p>

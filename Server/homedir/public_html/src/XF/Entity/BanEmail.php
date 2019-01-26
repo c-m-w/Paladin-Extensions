@@ -22,7 +22,7 @@ class BanEmail extends Entity
 	{
 		if ($email == '*' || $email === '')
 		{
-			$this->error('you_must_enter_at_least_one_non_wildcard_character', 'banned_email');
+			$this->error(\XF::phrase('you_must_enter_at_least_one_non_wildcard_character')	, 'banned_email');
 			return false;
 		}
 

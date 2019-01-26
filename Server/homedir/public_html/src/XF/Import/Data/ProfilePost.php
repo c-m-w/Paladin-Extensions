@@ -35,9 +35,8 @@ class ProfilePost extends AbstractEmulatedData
 
 	protected function preSave($oldId)
 	{
-		$this->username = $this->validTextOrDefault($this->username, 'username', $oldId);
-
-		$this->message = $this->validTextOrDefault($this->message, 'message', $oldId);
+		$this->forceNotEmpty('username', $oldId);
+		$this->forceNotEmpty('message', $oldId);
 
 		if ($this->message === '')
 		{

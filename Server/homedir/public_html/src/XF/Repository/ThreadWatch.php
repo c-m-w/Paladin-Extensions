@@ -65,7 +65,11 @@ class ThreadWatch extends Repository
 					$watch->user_id = $user->user_id;
 				}
 				$watch->email_subscribe = ($state == 'watch_email');
-				$watch->save();
+				try
+				{
+					$watch->save();
+				}
+				catch (\XF\Db\DuplicateKeyException $e) {}
 				break;
 
 			case 'delete':

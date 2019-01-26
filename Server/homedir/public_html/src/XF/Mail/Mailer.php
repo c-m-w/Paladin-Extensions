@@ -261,12 +261,8 @@ class Mailer
 
 	public function send(\Swift_Mime_Message $message, \Swift_Transport $transport = null)
 	{
-		$to = [];
-		foreach ($message->getTo() AS $address => $name)
-		{
-			$to[] = $address;
-		}
-		$toEmails = implode(', ', $to);
+		$to = $message->getTo();
+		$toEmails = $to ? implode(', ', array_keys($to)) : '[unknown]';
 
 		if (!$transport)
 		{
@@ -348,6 +344,8 @@ class Mailer
 				{
 					$transport->setEncryption($config['smtpEncrypt']);
 				}
+
+				$transport->registerPlugin(new \Swift_Plugins_AntiFloodPlugin(99));
 
 				return $transport;
 

@@ -136,11 +136,11 @@
 			}
 
 			$form.on({
-				submit: $.proxy(this, 'submit'),
-				keyup: $.proxy(this, 'cmdEnterKey'),
-				'draft:beforesave': $.proxy(this, 'draftCheck')
+				submit: XF.proxy(this, 'submit'),
+				keyup: XF.proxy(this, 'cmdEnterKey'),
+				'draft:beforesave': XF.proxy(this, 'draftCheck')
 			});
-			$form.on('click', 'input[type=submit], button:not([type]), button[type=submit]', $.proxy(this, 'submitButtonClicked'));
+			$form.on('click', 'input[type=submit], button:not([type]), button[type=submit]', XF.proxy(this, 'submitButtonClicked'));
 		},
 
 		submit: function(e)
@@ -188,7 +188,7 @@
 					action: $form.attr('action'),
 					submitButton: $submitButton,
 					preventSubmit: false,
-					successCallback: $.proxy(this, 'submitResponse'),
+					successCallback: XF.proxy(this, 'submitResponse'),
 					ajaxOptions: { skipDefault: true }
 				};
 
@@ -525,21 +525,21 @@
 			}
 
 			this.results = new XF.AutoCompleteResults({
-				onInsert: $.proxy(this, 'addValue')
+				onInsert: XF.proxy(this, 'addValue')
 			});
 
 			$input.attr('autocomplete', 'off')
 				.on({
-					keydown: $.proxy(this, 'keydown'),
-					keyup: $.proxy(this, 'keyup'),
-					'blur click': $.proxy(this, 'blur'),
+					keydown: XF.proxy(this, 'keydown'),
+					keyup: XF.proxy(this, 'keyup'),
+					'blur click': XF.proxy(this, 'blur'),
 					paste: function()
 					{
 						setTimeout(function() { $input.trigger('keydown'); }, 0);
 					}
 				});
 
-			$input.closest('form').submit($.proxy(this, 'hideResults'))
+			$input.closest('form').submit(XF.proxy(this, 'hideResults'))
 		},
 
 		keydown: function(e)
@@ -591,7 +591,7 @@
 			{
 				clearTimeout(this.loadTimer);
 			}
-			this.loadTimer = setTimeout($.proxy(this, 'load'), 200);
+			this.loadTimer = setTimeout(XF.proxy(this, 'load'), 200);
 		},
 
 		blur: function(e)
@@ -599,7 +599,7 @@
 			clearTimeout(this.loadTimer);
 
 			// timeout ensures that clicks still register
-			setTimeout($.proxy(this, 'hideResults'), 250);
+			setTimeout(XF.proxy(this, 'hideResults'), 250);
 
 			if (this.xhr)
 			{
@@ -655,7 +655,7 @@
 				'get',
 				this.options.acurl,
 				params,
-				$.proxy(this, 'showResults'),
+				XF.proxy(this, 'showResults'),
 				{ global: false, error: false }
 			);
 		},
@@ -790,10 +790,10 @@
 				}
 			});
 
-			this.$input.on('keydown', $.proxy(this, 'keydown'));
-			this.$input.on('keyup', $.proxy(this, 'keyup'));
-			this.$input.on('blur click', $.proxy(this, 'blur'));
-			$(document).on('scroll', $.proxy(this, 'blur'))
+			this.$input.on('keydown', XF.proxy(this, 'keydown'));
+			this.$input.on('keyup', XF.proxy(this, 'keyup'));
+			this.$input.on('blur click', XF.proxy(this, 'blur'));
+			$(document).on('scroll', XF.proxy(this, 'blur'))
 		},
 
 		keydown: function(e)
@@ -850,7 +850,7 @@
 			{
 				clearTimeout(this.idleTimer);
 			}
-			this.idleTimer = setTimeout($.proxy(this, 'lookForMention'), this.idleWait);
+			this.idleTimer = setTimeout(XF.proxy(this, 'lookForMention'), this.idleWait);
 		},
 
 		blur: function()
@@ -861,7 +861,7 @@
 			}
 
 			// timeout ensures that clicks still register
-			setTimeout($.proxy(this, 'hide'), 250);
+			setTimeout(XF.proxy(this, 'hide'), 250);
 		},
 
 		lookForMention: function()
@@ -933,7 +933,7 @@
 		{
 			XF.ajax(
 				'GET', XF.getAutoCompleteUrl(), { q: this.pendingMention },
-				$.proxy(this, 'handlePendingMentionOptions'),
+				XF.proxy(this, 'handlePendingMentionOptions'),
 				{ global: false, error: false }
 			);
 		},
@@ -1085,7 +1085,7 @@
 
 			this.updateState();
 
-			this.$target.click($.proxy(this, 'click'));
+			this.$target.click(XF.proxy(this, 'click'));
 		},
 
 		click: function(e)
@@ -1232,7 +1232,7 @@
 			}
 			this.$container = $container;
 
-			this.$target.on('change', $.proxy(this, 'change'));
+			this.$target.on('change', XF.proxy(this, 'change'));
 		},
 
 		change: function()
@@ -1248,7 +1248,7 @@
 				this.xhr = null;
 			}
 
-			this.changeTimer = setTimeout($.proxy(this, 'onTimer'), 200);
+			this.changeTimer = setTimeout(XF.proxy(this, 'onTimer'), 200);
 		},
 
 		onTimer: function()
@@ -1261,7 +1261,7 @@
 				return;
 			}
 
-			this.xhr = XF.ajax('post', this.options.descUrl, { id: value }, $.proxy(this, 'onLoad'));
+			this.xhr = XF.ajax('post', this.options.descUrl, { id: value }, XF.proxy(this, 'onLoad'));
 		},
 
 		onLoad: function(data)
@@ -1314,7 +1314,7 @@
 				$form = $input.closest('form');
 			if ($form.length)
 			{
-				$form.on('reset', $.proxy(this, 'formReset'));
+				$form.on('reset', XF.proxy(this, 'formReset'));
 			}
 
 			if ($input.is(':radio'))
@@ -1328,15 +1328,15 @@
 
 				// radios only fire events for the element we click normally, so we need to know
 				// when we move away from the value by firing every radio's handler for every click
-				$context.on('click', 'input:radio[name="' + name + '"]', $.proxy(this, 'click'));
+				$context.on('click', 'input:radio[name="' + name + '"]', XF.proxy(this, 'click'));
 			}
 			else
 			{
-				$input.click($.proxy(this, 'click'));
+				$input.click(XF.proxy(this, 'click'));
 			}
 
 			// this ensures that nested disablers are disabled properly
-			$input.on('control:enabled control:disabled', $.proxy(this, 'recalculateAfter'));
+			$input.on('control:enabled control:disabled', XF.proxy(this, 'recalculateAfter'));
 
 			this.recalculate(true);
 		},
@@ -1580,21 +1580,21 @@
 			this.topOffset = this.options.topOffset;
 			this.$fixEl = $target.find(this.options.fixedChild);
 
-			$(window).on('scroll', $.proxy(this, 'onScroll'))
-				.on('resize', $.proxy(this, 'recalcAndUpdate'));
+			$(window).on('scroll', XF.proxy(this, 'onScroll'))
+				.on('resize', XF.proxy(this, 'recalcAndUpdate'));
 
 			var $fixedParent = XF.getFixedOffsetParent($target);
 			if (!$fixedParent.is('html'))
 			{
 				this.$fixedParent = $fixedParent;
-				$fixedParent.on('scroll', $.proxy(this, 'onScroll'));
+				$fixedParent.on('scroll', XF.proxy(this, 'onScroll'));
 			}
 
-			$(document.body).on('xf:layout', $.proxy(this, 'recalcAndUpdate'));
+			$(document.body).on('xf:layout', XF.proxy(this, 'recalcAndUpdate'));
 
 			if (!$target.height())
 			{
-				setTimeout($.proxy(this, 'recalcAndUpdate'), 250);
+				setTimeout(XF.proxy(this, 'recalcAndUpdate'), 250);
 			}
 
 			this.recalcAndUpdate();
@@ -1772,7 +1772,7 @@
 		{
 			var $input = this.$target;
 			$input.val(XF.LocalStorage.get('guestUsername'));
-			$input.on('keyup', $.proxy(this, 'change'));
+			$input.on('keyup', XF.proxy(this, 'change'));
 		},
 
 		change: function()
@@ -1820,7 +1820,7 @@
 
 			this.$target.on('change keypress keydown paste', function()
 			{
-				setTimeout($.proxy(self, 'checkLimits'), 0);
+				setTimeout(XF.proxy(self, 'checkLimits'), 0);
 			});
 
 			this.checkLimits();
@@ -1878,16 +1878,16 @@
 				}
 				else
 				{
-					this.$target.one('focus', $.proxy(this, 'setupDelayed'));
-					this.$target.onWithin('toggle:shown overlay:shown tab:shown quick-edit:shown', $.proxy(this, 'setupDelayed'));
+					this.$target.one('focus', XF.proxy(this, 'setupDelayed'));
+					this.$target.onWithin('toggle:shown overlay:shown tab:shown quick-edit:shown', XF.proxy(this, 'setupDelayed'));
 				}
 
-				this.$target.on('autosize', $.proxy(this, 'update'));
+				this.$target.on('autosize', XF.proxy(this, 'update'));
 			}
 
 			if (this.options.keySubmit || this.options.singleLine)
 			{
-				this.$target.on('keydown', $.proxy(this, 'keySubmit'));
+				this.$target.on('keydown', XF.proxy(this, 'keySubmit'));
 			}
 		},
 
@@ -1977,7 +1977,7 @@
 			// identify parent row, to which classes will be attached
 			this.$parentRow = this.$target.closest(this.options.parentSelector);
 
-			this.$target.find(this.options.inputSelector).on('click', $.proxy(this, 'update'));
+			this.$target.find(this.options.inputSelector).on('click', XF.proxy(this, 'update'));
 			this.update();
 		},
 
@@ -2078,10 +2078,10 @@
 				.attr('tabindex', '-1')
 				.addClass('inputGroup-text')
 				.addClass('inputNumber-button')
-				.on('focus', $.proxy(this, 'buttonFocus'))
-				.on('click', $.proxy(this, 'buttonClick'))
-				.on('mousedown touchstart', $.proxy(this, 'buttonMouseDown'))
-				.on('mouseleave mouseup touchend', $.proxy(this, 'buttonMouseUp'))
+				.on('focus', XF.proxy(this, 'buttonFocus'))
+				.on('click', XF.proxy(this, 'buttonClick'))
+				.on('mousedown touchstart', XF.proxy(this, 'buttonMouseDown'))
+				.on('mouseleave mouseup touchend', XF.proxy(this, 'buttonMouseUp'))
 				.on('touchend', function(e)
 				{
 					e.preventDefault();
@@ -2118,7 +2118,7 @@
 
 			if (!this.supportsStepFunctions())
 			{
-				$textInput.on('keydown', $.proxy(this, 'stepFallback'));
+				$textInput.on('keydown', XF.proxy(this, 'stepFallback'));
 			}
 		},
 
@@ -2202,10 +2202,19 @@
 			// force some rounding if appropriate to the same number of places as the step
 			if (Math.round(value) !== value)
 			{
-				var decs = 0;
+				var decs = 0,
+					splitVal = originalVal.split('.');
+
 				if (stepAny)
 				{
-					decs = originalVal.split('.')[1].length || 0;
+					if (splitVal[1])
+					{
+						decs = splitVal[1].length;
+					}
+					else
+					{
+						decs = 0;
+					}
 				}
 				else if (Math.floor(step) !== step)
 				{
@@ -2223,6 +2232,11 @@
 				value = max;
 			}
 
+			if (isNaN(value))
+			{
+				value = 0;
+			}
+
 			$textInput.val(value);
 		},
 
@@ -2231,10 +2245,10 @@
 			this.buttonMouseUp(e);
 
 			this.holdTimeout = setTimeout(
-				$.proxy(function()
+				XF.proxy(function()
 				{
 					this.holdInterval = setInterval(
-						$.proxy(function()
+						XF.proxy(function()
 						{
 							this.step($(e.target).data('dir'));
 						}, this
@@ -2301,7 +2315,7 @@
 				return;
 			}
 
-			this.$checkboxes = this.$target.find(':checkbox').on('click', $.proxy(this, 'update'));
+			this.$checkboxes = this.$target.find(':checkbox').on('click', XF.proxy(this, 'update'));
 
 			this.update();
 		},

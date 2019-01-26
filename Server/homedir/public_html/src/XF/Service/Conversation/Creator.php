@@ -87,9 +87,6 @@ class Creator extends \XF\Service\AbstractService
 			$recipients, $this->starter, $error, $checkPrivacy
 		);
 
-		// don't count this as a valid recipient, we'll add it automatically
-		unset($this->recipients[$this->starter->user_id]);
-
 		if ($triggerErrors)
 		{
 			if ($error)

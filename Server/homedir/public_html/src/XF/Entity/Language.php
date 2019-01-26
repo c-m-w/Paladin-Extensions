@@ -84,6 +84,9 @@ class Language extends Entity
 		}
 
 		$this->rebuildLanguageCache();
+
+		// this invalidates the CSS cache so changes such LTR/RTL and various separators take effect properly
+		\XF::repository('XF:Style')->updateAllStylesLastModifiedDate();
 	}
 
 	protected function _preDelete()

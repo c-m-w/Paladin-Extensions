@@ -4,6 +4,7 @@ namespace XF\Service\Smilie;
 
 use XF\Mvc\Entity\Finder;
 use XF\Service\AbstractXmlExport;
+use XF\Util\Xml;
 
 class Export extends AbstractXmlExport
 {
@@ -60,8 +61,8 @@ class Export extends AbstractXmlExport
 
 				$smilieNode->setAttribute('title', $smilie['title']);
 
-				$smilieNode->appendChild($document->createElement('image_url', $smilie['image_url']));
-				$smilieNode->appendChild($document->createElement('image_url_2x', $smilie['image_url_2x']));
+				$smilieNode->appendChild(Xml::createDomElement($document, 'image_url', $smilie['image_url']));
+				$smilieNode->appendChild(Xml::createDomElement($document, 'image_url_2x', $smilie['image_url_2x']));
 
 				if ($smilie['sprite_mode'])
 				{
@@ -77,7 +78,7 @@ class Export extends AbstractXmlExport
 
 				foreach (preg_split('/\r?\n/', $smilie['smilie_text'], -1, PREG_SPLIT_NO_EMPTY) AS $smilieText)
 				{
-					$smilieNode->appendChild($document->createElement('smilie_text', $smilieText));
+					$smilieNode->appendChild(Xml::createDomElement($document, 'smilie_text', $smilieText));
 				}
 
 				$smilieNode->setAttribute('display_order', $smilie['display_order']);

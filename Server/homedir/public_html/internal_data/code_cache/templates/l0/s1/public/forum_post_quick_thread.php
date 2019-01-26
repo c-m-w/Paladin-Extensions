@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: df74ab9058d859e78c115a14173deea4
+// FROM HASH: de5e1299535e474116d443f80e3e2d89
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -69,41 +69,43 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		';
 	}
 	$__compilerTemp5 = '';
+	if ($__vars['attachmentData']) {
+		$__compilerTemp5 .= '
+			' . $__templater->callMacro('helper_attach_upload', 'uploaded_files_list', array(
+			'attachments' => $__vars['attachmentData']['attachments'],
+			'listClass' => 'attachUploadList--spaced',
+		), $__vars) . '
+		';
+	}
 	$__compilerTemp6 = '';
-	$__compilerTemp6 .= '
+	$__compilerTemp7 = '';
+	$__compilerTemp7 .= '
 						';
-	if ($__vars['attachmentData'] OR $__vars['xf']['options']['multiQuote']) {
-		$__compilerTemp6 .= '
-							';
-		if ($__vars['attachmentData']) {
-			$__compilerTemp6 .= '
-								' . $__templater->callMacro('helper_attach_upload', 'upload_block', array(
-				'attachmentData' => $__vars['attachmentData'],
-				'rowType' => 'fullWidth',
-			), $__vars) . '
-							';
-		}
-		$__compilerTemp6 .= '
-
-							';
-		if ($__vars['xf']['options']['multiQuote']) {
-			$__compilerTemp6 .= '
-								' . $__templater->callMacro('multi_quote_macros', 'button', array(
-				'href' => $__templater->fn('link', array('threads/multi-quote', $__vars['thread'], ), false),
-				'messageSelector' => '.js-post',
-				'storageKey' => 'multiQuoteThread',
-			), $__vars) . '
-							';
-		}
-		$__compilerTemp6 .= '
+	if ($__vars['attachmentData']) {
+		$__compilerTemp7 .= '
+							' . $__templater->callMacro('helper_attach_upload', 'upload_link_from_data', array(
+			'attachmentData' => $__vars['attachmentData'],
+		), $__vars) . '
 						';
 	}
-	$__compilerTemp6 .= '
+	$__compilerTemp7 .= '
+
+						';
+	if ($__vars['xf']['options']['multiQuote']) {
+		$__compilerTemp7 .= '
+							' . $__templater->callMacro('multi_quote_macros', 'button', array(
+			'href' => $__templater->fn('link', array('threads/multi-quote', $__vars['thread'], ), false),
+			'messageSelector' => '.js-post',
+			'storageKey' => 'multiQuoteThread',
+		), $__vars) . '
+						';
+	}
+	$__compilerTemp7 .= '
 					';
-	if (strlen(trim($__compilerTemp6)) > 0) {
-		$__compilerTemp5 .= '
+	if (strlen(trim($__compilerTemp7)) > 0) {
+		$__compilerTemp6 .= '
 				<div class="formButtonGroup-extra">
-					' . $__compilerTemp6 . '
+					' . $__compilerTemp7 . '
 				</div>
 			';
 	}
@@ -138,6 +140,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 		' . $__compilerTemp4 . '
 
+		' . $__compilerTemp5 . '
+
 		<div class="formButtonGroup">
 			<div class="formButtonGroup-primary">
 				' . $__templater->button('
@@ -168,7 +172,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	), '', array(
 	)) . '
 			</div>
-			' . $__compilerTemp5 . '
+			' . $__compilerTemp6 . '
 		</div>
 	</div>
 ', array(

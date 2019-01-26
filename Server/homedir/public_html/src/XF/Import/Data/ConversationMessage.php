@@ -23,7 +23,7 @@ class ConversationMessage extends AbstractEmulatedData
 
 	protected function preSave($oldId)
 	{
-		$this->message = $this->validTextOrDefault($this->message, 'message', $oldId);
+		$this->forceNotEmpty('message', $oldId);
 	}
 
 	protected function postSave($oldId, $newId)

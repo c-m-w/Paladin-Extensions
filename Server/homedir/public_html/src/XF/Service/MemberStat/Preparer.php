@@ -199,7 +199,17 @@ class Preparer extends \XF\Service\AbstractService
 				$valueField = null;
 			}
 
-			$results = $finder->fetch($memberStat->user_limit * 3);
+			if ($memberStat->user_limit > 0)
+			{
+				$limit = $memberStat->user_limit * 3;
+			}
+			else
+			{
+				// technically means unlimited, but doing this accidentally could cause serious problems
+				$limit = 200;
+			}
+
+			$results = $finder->fetch($limit);
 
 			if ($valueField)
 			{

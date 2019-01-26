@@ -165,7 +165,32 @@ class Parser
 	{
 		if (is_string($message))
 		{
+			$rawMessage = $message;
 			$message = new Message(['raw' => $message]);
+
+			try
+			{
+				$message->countParts();
+			}
+			catch (\Zend\Mail\Exception\RuntimeException $e)
+			{
+				// Workaround https://github.com/zendframework/zend-mime/pull/7
+				// This was fixed in ZF 2.5.2, but that has higher requirements than us so we can't currently use that version.
+				if (
+					$e->getMessage() == 'Malformed header detected'
+					&& isset($message->contentType)
+					&& preg_match('/boundary=("[^"]+"|(?:[^\s]+|$))/is', $message->contentType, $boundaryMatch)
+				)
+				{
+					$boundary = trim($boundaryMatch[1], '"');
+					$rawMessage = preg_replace(
+						'/(\r?\n--' . preg_quote($boundary, '/') . '\r?\n)(\r?\n)/',
+						'$1X-XF-Temp-Header: ignore$2$2',
+						$rawMessage
+					);
+					$message = new Message(['raw' => $rawMessage]);
+				}
+			}
 		}
 		else if (!($message instanceof Message))
 		{
@@ -220,6 +245,16 @@ class Parser
 				/** @var \Zend\Mail\Storage\Part $part */
 				if (!isset($part->contentType))
 				{
+					if (!$textContent)
+					{
+						$content = trim($part->getContent());
+						if (strlen($content) && preg_match('/./u', $content))
+						{
+							// if it's valid UTF-8, it's probably textual
+							$textContent = $content;
+						}
+					}
+
 					continue;
 				}
 

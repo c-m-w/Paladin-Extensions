@@ -138,17 +138,27 @@ class DataRegistry implements \ArrayAccess
 		");
 		foreach ($keys AS $key)
 		{
-			if (!isset($pairs[$key]))
+			$exists = false;
+
+			if (isset($pairs[$key]))
 			{
-				$data[$key] = null;
+				$value = @unserialize($pairs[$key]);
+				if ($value !== false || $pairs[$key] === serialize(false))
+				{
+					$data[$key] = $value;
+					$exists = true;
+				}
+			}
+
+			if ($exists)
+			{
+				// populate the cache on demand
+				$this->setInCache($key, $data[$key]);
 			}
 			else
 			{
-				$data[$key] = @unserialize($pairs[$key]);
+				$data[$key] = null;
 			}
-
-			// populate the cache on demand
-			$this->setInCache($key, $data[$key]);
 
 			$this->localData[$key] = $data[$key];
 		}

@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 97cfffd34b0d92084c9d31ab78fe8424
+// FROM HASH: dcfd8adac83990ca4a08542a7a344f1e
 return array('macros' => array('thread_status' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -139,34 +139,55 @@ return array('macros' => array('thread_status' => function($__templater, array $
 
 ';
 	$__compilerTemp2 = '';
-	if ($__vars['thread']['User']) {
+	if ($__vars['thread']['User']['avatar_highdpi']) {
 		$__compilerTemp2 .= '
-		"image": "' . $__templater->filter((($__vars['thread']['User']['avatar_highdpi'] ? $__templater->method($__vars['thread']['User'], 'getAvatarUrl', array('h', null, true, )) : $__templater->method($__vars['thread']['User'], 'getAvatarUrl', array('l', null, true, ))) ?: $__templater->fn('base_url', array($__templater->fn('property', array('publicMetadataLogoUrl', ), false), true, ), false)), array(array('escape', array('json', )),), true) . '",
 		';
+		$__vars['image'] = $__templater->preEscaped($__templater->escape($__templater->method($__vars['thread']['User'], 'getAvatarUrl', array('h', null, true, ))));
+		$__compilerTemp2 .= '
+	';
+	} else if ($__vars['thread']['User']['avatar_date']) {
+		$__compilerTemp2 .= '
+		';
+		$__vars['image'] = $__templater->preEscaped($__templater->escape($__templater->method($__vars['thread']['User'], 'getAvatarUrl', array('l', null, true, ))));
+		$__compilerTemp2 .= '
+	';
+	} else if ($__templater->fn('property', array('publicMetadataLogoUrl', ), false)) {
+		$__compilerTemp2 .= '
+		';
+		$__vars['image'] = $__templater->preEscaped($__templater->fn('base_url', array($__templater->fn('property', array('publicMetadataLogoUrl', ), false), true, ), true));
+		$__compilerTemp2 .= '
+	';
+	}
+	$__compilerTemp3 = '';
+	if ($__vars['image']) {
+		$__compilerTemp3 .= '
+		<script type="application/ld+json">
+		{
+			"@context": "https://schema.org",
+			"@type": "DiscussionForumPosting",
+			"@id": "' . $__templater->filter($__templater->fn('link', array('canonical:threads', $__vars['thread'], ), false), array(array('escape', array('json', )),), true) . '",
+			"headline": "' . $__templater->filter($__vars['thread']['title'], array(array('escape', array('json', )),), true) . '",
+			"articleBody": "' . $__templater->filter($__vars['fpSnippet'], array(array('escape', array('json', )),), true) . '",
+			"articleSection": "' . $__templater->filter($__vars['thread']['Forum']['Node']['title'], array(array('escape', array('json', )),), true) . '",
+			"author": {
+				"@type": "Person",
+				"name": "' . $__templater->filter(($__vars['thread']['User'] ? $__vars['thread']['User']['username'] : $__vars['thread']['username']), array(array('escape', array('json', )),), true) . '"
+			},
+			"datePublished": "' . $__templater->filter($__templater->fn('date', array($__vars['thread']['post_date'], 'Y-m-d', ), false), array(array('escape', array('json', )),), true) . '",
+			"dateModified": "' . $__templater->filter($__templater->fn('date', array($__vars['thread']['last_post_date'], 'Y-m-d', ), false), array(array('escape', array('json', )),), true) . '",
+			"image": "' . $__templater->filter($__vars['image'], array(array('escape', array('json', )),), true) . '",
+			"interactionStatistic": {
+				"@type": "InteractionCounter",
+				"interactionType": "https://schema.org/ReplyAction",
+				"userInteractionCount": ' . $__templater->escape($__vars['thread']['reply_count']) . '
+			}
+		}
+		</script>
+	';
 	}
 	$__templater->setPageParam('ldJsonHtml', '
-	<script type="application/ld+json">
-	{
-		"@context": "https://schema.org",
-		"@type": "DiscussionForumPosting",
-		"@id": "' . $__templater->filter($__templater->fn('link', array('canonical:threads', $__vars['thread'], ), false), array(array('escape', array('json', )),), true) . '",
-		"headline": "' . $__templater->filter($__vars['thread']['title'], array(array('escape', array('json', )),), true) . '",
-		"articleBody": "' . $__templater->filter($__vars['fpSnippet'], array(array('escape', array('json', )),), true) . '",
-		"articleSection": "' . $__templater->filter($__vars['thread']['Forum']['Node']['title'], array(array('escape', array('json', )),), true) . '",
-		"author": {
-			"@type": "Person",
-			"name": "' . $__templater->filter(($__vars['thread']['User'] ? $__vars['thread']['User']['username'] : $__vars['thread']['username']), array(array('escape', array('json', )),), true) . '"
-		},
-		"datePublished": "' . $__templater->filter($__templater->fn('date', array($__vars['thread']['post_date'], 'Y-m-d', ), false), array(array('escape', array('json', )),), true) . '",
-		"dateModified": "' . $__templater->filter($__templater->fn('date', array($__vars['thread']['last_post_date'], 'Y-m-d', ), false), array(array('escape', array('json', )),), true) . '",
-		' . $__compilerTemp2 . '
-		"interactionStatistic": {
-			"@type": "InteractionCounter",
-			"interactionType": "https://schema.org/ReplyAction",
-			"userInteractionCount": ' . $__templater->escape($__vars['thread']['reply_count']) . '
-		}
-	}
-	</script>
+	' . $__compilerTemp2 . '
+	' . $__compilerTemp3 . '
 ');
 	$__finalCompiled .= '
 
@@ -229,19 +250,19 @@ return array('macros' => array('thread_status' => function($__templater, array $
 	), $__vars) . '
 
 	<div class="block-outer">';
-	$__compilerTemp3 = '';
 	$__compilerTemp4 = '';
-	$__compilerTemp4 .= '
+	$__compilerTemp5 = '';
+	$__compilerTemp5 .= '
 					';
 	if ($__vars['canInlineMod']) {
-		$__compilerTemp4 .= '
+		$__compilerTemp5 .= '
 						' . $__templater->callMacro('inline_mod_macros', 'button', array(), $__vars) . '
 					';
 	}
-	$__compilerTemp4 .= '
+	$__compilerTemp5 .= '
 					';
 	if (($__vars['thread']['discussion_state'] == 'deleted') AND $__templater->method($__vars['thread'], 'canUndelete', array())) {
-		$__compilerTemp4 .= '
+		$__compilerTemp5 .= '
 						' . $__templater->button('
 							' . 'Undelete' . '
 						', array(
@@ -252,10 +273,10 @@ return array('macros' => array('thread_status' => function($__templater, array $
 		)) . '
 					';
 	}
-	$__compilerTemp4 .= '
+	$__compilerTemp5 .= '
 					';
 	if ($__templater->method($__vars['thread'], 'canApproveUnapprove', array()) AND ($__vars['thread']['discussion_state'] == 'moderated')) {
-		$__compilerTemp4 .= '
+		$__compilerTemp5 .= '
 						' . $__templater->button('
 							' . 'Approve' . '
 						', array(
@@ -266,10 +287,10 @@ return array('macros' => array('thread_status' => function($__templater, array $
 		)) . '
 					';
 	}
-	$__compilerTemp4 .= '
+	$__compilerTemp5 .= '
 					';
 	if ($__vars['xf']['visitor']['user_id'] AND $__templater->method($__vars['thread'], 'isUnread', array())) {
-		$__compilerTemp4 .= '
+		$__compilerTemp5 .= '
 						' . $__templater->button('
 								' . 'Jump to new' . '
 						', array(
@@ -281,23 +302,23 @@ return array('macros' => array('thread_status' => function($__templater, array $
 		)) . '
 					';
 	}
-	$__compilerTemp4 .= '
+	$__compilerTemp5 .= '
 					';
 	if ($__templater->method($__vars['thread'], 'canWatch', array())) {
-		$__compilerTemp4 .= '
+		$__compilerTemp5 .= '
 						';
-		$__compilerTemp5 = '';
+		$__compilerTemp6 = '';
 		if ($__vars['thread']['Watch'][$__vars['xf']['visitor']['user_id']]) {
-			$__compilerTemp5 .= '
+			$__compilerTemp6 .= '
 								' . 'Unwatch' . '
 							';
 		} else {
-			$__compilerTemp5 .= '
+			$__compilerTemp6 .= '
 								' . 'Watch' . '
 							';
 		}
-		$__compilerTemp4 .= $__templater->button('
-							' . $__compilerTemp5 . '
+		$__compilerTemp5 .= $__templater->button('
+							' . $__compilerTemp6 . '
 						', array(
 			'href' => $__templater->fn('link', array('threads/watch', $__vars['thread'], ), false),
 			'class' => 'button--link',
@@ -308,22 +329,22 @@ return array('macros' => array('thread_status' => function($__templater, array $
 		)) . '
 					';
 	}
-	$__compilerTemp4 .= '
+	$__compilerTemp5 .= '
 
 					';
-	$__compilerTemp6 = '';
-	$__compilerTemp6 .= '
+	$__compilerTemp7 = '';
+	$__compilerTemp7 .= '
 										' . '
 										';
 	if ($__templater->method($__vars['thread'], 'canEdit', array())) {
-		$__compilerTemp6 .= '
+		$__compilerTemp7 .= '
 											<a href="' . $__templater->fn('link', array('threads/edit', $__vars['thread'], ), true) . '" data-xf-click="overlay" class="menu-linkRow">' . 'Edit thread' . '</a>
 										';
 	}
-	$__compilerTemp6 .= '
+	$__compilerTemp7 .= '
 										';
 	if ($__templater->method($__vars['thread'], 'canLockUnlock', array())) {
-		$__compilerTemp6 .= '
+		$__compilerTemp7 .= '
 											<a href="' . $__templater->fn('link', array('threads/quick-close', $__vars['thread'], ), true) . '"
 												class="menu-linkRow"
 												data-xf-click="switch"
@@ -331,22 +352,22 @@ return array('macros' => array('thread_status' => function($__templater, array $
 
 												';
 		if ($__vars['thread']['discussion_open']) {
-			$__compilerTemp6 .= '
+			$__compilerTemp7 .= '
 													' . 'Close thread' . '
 												';
 		} else {
-			$__compilerTemp6 .= '
+			$__compilerTemp7 .= '
 													' . 'Open thread' . '
 												';
 		}
-		$__compilerTemp6 .= '
+		$__compilerTemp7 .= '
 											</a>
 										';
 	}
-	$__compilerTemp6 .= '
+	$__compilerTemp7 .= '
 										';
 	if ($__templater->method($__vars['thread'], 'canStickUnstick', array())) {
-		$__compilerTemp6 .= '
+		$__compilerTemp7 .= '
 											<a href="' . $__templater->fn('link', array('threads/quick-stick', $__vars['thread'], ), true) . '"
 												class="menu-linkRow"
 												data-xf-click="switch"
@@ -354,59 +375,59 @@ return array('macros' => array('thread_status' => function($__templater, array $
 
 												';
 		if ($__vars['thread']['sticky']) {
-			$__compilerTemp6 .= '
+			$__compilerTemp7 .= '
 													' . 'Unstick thread' . '
 												';
 		} else {
-			$__compilerTemp6 .= '
+			$__compilerTemp7 .= '
 													' . 'Stick thread' . '
 												';
 		}
-		$__compilerTemp6 .= '
+		$__compilerTemp7 .= '
 											</a>
 										';
 	}
-	$__compilerTemp6 .= '
+	$__compilerTemp7 .= '
 										';
 	if ($__templater->method($__vars['thread'], 'canCreatePoll', array())) {
-		$__compilerTemp6 .= '
+		$__compilerTemp7 .= '
 											<a href="' . $__templater->fn('link', array('threads/poll/create', $__vars['thread'], ), true) . '" data-xf-click="overlay" class="menu-linkRow">' . 'Create poll' . '</a>
 										';
 	}
-	$__compilerTemp6 .= '
+	$__compilerTemp7 .= '
 										';
 	if ($__templater->method($__vars['thread'], 'canDelete', array('soft', ))) {
-		$__compilerTemp6 .= '
+		$__compilerTemp7 .= '
 											<a href="' . $__templater->fn('link', array('threads/delete', $__vars['thread'], ), true) . '" data-xf-click="overlay" class="menu-linkRow">' . 'Delete thread' . '</a>
 										';
 	}
-	$__compilerTemp6 .= '
+	$__compilerTemp7 .= '
 										';
 	if ($__templater->method($__vars['thread'], 'canMove', array())) {
-		$__compilerTemp6 .= '
+		$__compilerTemp7 .= '
 											<a href="' . $__templater->fn('link', array('threads/move', $__vars['thread'], ), true) . '" data-xf-click="overlay" class="menu-linkRow">' . 'Move thread' . '</a>
 										';
 	}
-	$__compilerTemp6 .= '
+	$__compilerTemp7 .= '
 										';
 	if ($__templater->method($__vars['thread'], 'canReplyBan', array())) {
-		$__compilerTemp6 .= '
+		$__compilerTemp7 .= '
 											<a href="' . $__templater->fn('link', array('threads/reply-bans', $__vars['thread'], ), true) . '" data-xf-click="overlay" class="menu-linkRow">' . 'Manage reply bans' . '</a>
 										';
 	}
-	$__compilerTemp6 .= '
+	$__compilerTemp7 .= '
 										';
 	if ($__templater->method($__vars['thread'], 'canViewModeratorLogs', array())) {
-		$__compilerTemp6 .= '
+		$__compilerTemp7 .= '
 											<a href="' . $__templater->fn('link', array('threads/moderator-actions', $__vars['thread'], ), true) . '" data-xf-click="overlay" class="menu-linkRow">' . 'Moderator actions' . '</a>
 										';
 	}
-	$__compilerTemp6 .= '
+	$__compilerTemp7 .= '
 										' . $__templater->includeTemplate('changeContentOwner_thread_tools_menu_before_footer', $__vars) . '
 ' . '
 										';
 	if ($__templater->method($__vars['thread'], 'canUseInlineModeration', array())) {
-		$__compilerTemp6 .= '
+		$__compilerTemp7 .= '
 											<div class="menu-footer"
 												data-xf-init="inline-mod"
 												data-type="thread"
@@ -422,11 +443,11 @@ return array('macros' => array('thread_status' => function($__templater, array $
 											</div>
 										';
 	}
-	$__compilerTemp6 .= '
+	$__compilerTemp7 .= '
 										' . '
 									';
-	if (strlen(trim($__compilerTemp6)) > 0) {
-		$__compilerTemp4 .= '
+	if (strlen(trim($__compilerTemp7)) > 0) {
+		$__compilerTemp5 .= '
 						<div class="buttonGroup-buttonWrapper">
 							' . $__templater->button('&#8226;&#8226;&#8226;', array(
 			'class' => 'button--link menuTrigger',
@@ -439,19 +460,19 @@ return array('macros' => array('thread_status' => function($__templater, array $
 							<div class="menu" data-menu="menu" aria-hidden="true">
 								<div class="menu-content">
 									<h4 class="menu-header">' . 'More options' . '</h4>
-									' . $__compilerTemp6 . '
+									' . $__compilerTemp7 . '
 								</div>
 							</div>
 						</div>
 					';
 	}
-	$__compilerTemp4 .= '
+	$__compilerTemp5 .= '
 				';
-	if (strlen(trim($__compilerTemp4)) > 0) {
-		$__compilerTemp3 .= '
+	if (strlen(trim($__compilerTemp5)) > 0) {
+		$__compilerTemp4 .= '
 			<div class="block-outer-opposite">
 				<div class="buttonGroup">
-				' . $__compilerTemp4 . '
+				' . $__compilerTemp5 . '
 				</div>
 			</div>
 		';
@@ -465,13 +486,13 @@ return array('macros' => array('thread_status' => function($__templater, array $
 		'wrapperclass' => 'block-outer-main',
 		'perPage' => $__vars['perPage'],
 	))) . '
-		' . $__compilerTemp3 . '
+		' . $__compilerTemp4 . '
 	') . '</div>
 
 	<div class="block-outer js-threadStatusField">';
-	$__compilerTemp7 = '';
 	$__compilerTemp8 = '';
-	$__compilerTemp8 .= '
+	$__compilerTemp9 = '';
+	$__compilerTemp9 .= '
 					' . $__templater->callMacro('custom_fields_macros', 'custom_fields_view', array(
 		'type' => 'threads',
 		'group' => 'thread_status',
@@ -480,15 +501,15 @@ return array('macros' => array('thread_status' => function($__templater, array $
 		'wrapperClass' => 'blockStatus-message',
 	), $__vars) . '
 				';
-	if (strlen(trim($__compilerTemp8)) > 0) {
-		$__compilerTemp7 .= '
+	if (strlen(trim($__compilerTemp9)) > 0) {
+		$__compilerTemp8 .= '
 			<div class="blockStatus blockStatus--info">
-				' . $__compilerTemp8 . '
+				' . $__compilerTemp9 . '
 			</div>
 		';
 	}
 	$__finalCompiled .= trim('
-		' . $__compilerTemp7 . '
+		' . $__compilerTemp8 . '
 	') . '</div>
 
 	<div class="block-container lbContainer"
@@ -540,8 +561,8 @@ return array('macros' => array('thread_status' => function($__templater, array $
 	</div>
 
 	';
-	$__compilerTemp9 = '';
-	$__compilerTemp9 .= '
+	$__compilerTemp10 = '';
+	$__compilerTemp10 .= '
 				' . $__templater->fn('page_nav', array(array(
 		'page' => $__vars['page'],
 		'total' => ($__vars['thread']['reply_count'] + 1),
@@ -555,18 +576,18 @@ return array('macros' => array('thread_status' => function($__templater, array $
 	))) . '
 				';
 	if ((!$__templater->method($__vars['thread'], 'canReply', array())) AND (($__vars['thread']['discussion_state'] == 'visible') AND $__vars['thread']['discussion_open'])) {
-		$__compilerTemp9 .= '
+		$__compilerTemp10 .= '
 					<div class="block-outer-opposite">
 						';
 		if ($__vars['xf']['visitor']['user_id']) {
-			$__compilerTemp9 .= '
+			$__compilerTemp10 .= '
 							<span class="button is-disabled">
 								' . 'You have insufficient privileges to reply here.' . '
 								<!-- this is not interactive so shouldn\'t be a button element -->
 							</span>
 						';
 		} else {
-			$__compilerTemp9 .= '
+			$__compilerTemp10 .= '
 							' . $__templater->button('
 								' . 'You must log in or register to reply here.' . '
 							', array(
@@ -577,16 +598,16 @@ return array('macros' => array('thread_status' => function($__templater, array $
 			)) . '
 						';
 		}
-		$__compilerTemp9 .= '
+		$__compilerTemp10 .= '
 					</div>
 				';
 	}
-	$__compilerTemp9 .= '
+	$__compilerTemp10 .= '
 			';
-	if (strlen(trim($__compilerTemp9)) > 0) {
+	if (strlen(trim($__compilerTemp10)) > 0) {
 		$__finalCompiled .= '
 		<div class="block-outer block-outer--after">
-			' . $__compilerTemp9 . '
+			' . $__compilerTemp10 . '
 		</div>
 	';
 	}

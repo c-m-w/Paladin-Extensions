@@ -45,6 +45,15 @@ abstract class AbstractDriver
 		return true;
 	}
 
+	/**
+	 * Resizes an image. If height is specified, aspect ratio is not maintained.
+	 *
+	 * @param      $width
+	 * @param null $height
+	 * @param bool $upsize
+	 *
+	 * @return $this
+	 */
 	public function resize($width, $height = null, $upsize = false)
 	{
 		$width = max(1, intval($width));
@@ -57,14 +66,14 @@ abstract class AbstractDriver
 			$height = max(1, intval($height));
 		}
 
-		if ($this->width < $width && $this->height < $width && !$upsize)
+		if ($this->width < $width && $this->height < $height && !$upsize)
 		{
 			// already done
 			return $this;
 		}
 
 		$ratio = $this->width / $this->height;
-		$newRatio = ($width / $width);
+		$newRatio = ($width / $height);
 
 		if ($newRatio > $ratio)
 		{
@@ -116,6 +125,14 @@ abstract class AbstractDriver
 		return $this;
 	}
 
+	/**
+	 * Resizes an image to a specific length of the shortest side, maintaining aspect ratio
+	 *
+	 * @param      $length
+	 * @param bool $upsize
+	 *
+	 * @return $this
+	 */
 	public function resizeShortEdge($length, $upsize = false)
 	{
 		$length = max(1, intval($length));
@@ -141,6 +158,30 @@ abstract class AbstractDriver
 			$width = $length;
 			$height = max(1, ceil($length / $ratio));
 		}
+
+		$this->resizeTo($width, $height);
+
+		return $this;
+	}
+
+	/**
+	 * Resizes an image to a specific height, maintaining aspect ratio
+	 *
+	 * @param      $height
+	 * @param bool $upsize
+	 *
+	 * @return $this
+	 */
+	public function resizeHeight($height, $upsize = false)
+	{
+		$height = max(1, intval($height));
+
+		if ($height > $this->height && !$upsize)
+		{
+			return $this;
+		}
+
+		$width = ceil($this->width * ($height / $this->height));
 
 		$this->resizeTo($width, $height);
 

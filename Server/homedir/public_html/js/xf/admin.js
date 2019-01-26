@@ -30,9 +30,9 @@
 			this.$stickyTarget = $stickyTarget;
 			this.refreshSticky();
 
-			this.$target.on('click', this.options.sectionTogglers, $.proxy(this, 'togglerClick'));
+			this.$target.on('click', this.options.sectionTogglers, XF.proxy(this, 'togglerClick'));
 
-			$(window).resize($.proxy(this, 'refreshSticky'));
+			$(window).resize(XF.proxy(this, 'refreshSticky'));
 		},
 
 		isOffCanvas: function()
@@ -120,12 +120,14 @@
 
 			this.$resultsWrapper = XF.findRelativeIf(this.options.resultsWrapper, $form);
 
-			$form.submit($.proxy(this, 'submit'));
+			$form.submit(XF.proxy(this, 'submit'));
 
 			XF.watchInputChangeDelayed($input, function()
 			{
 				$form.submit();
 			});
+
+			$input.on('keydown', XF.proxy(this, 'keyDown'));
 		},
 
 		submit: function(e)
@@ -161,6 +163,10 @@
 							onComplete();
 							$resultsWrapper.addClass(toggleClass);
 							$results.addClassTransitioned(toggleClass);
+							$results.find('a').hover(
+								function() { $(this).addClass('is-active'); },
+								function() { $(this).removeClass('is-active'); }
+							);
 						}
 						else
 						{
@@ -182,6 +188,51 @@
 				$results.empty();
 				$resultsWrapper.removeClass(toggleClass);
 			});
+		},
+
+		keyDown: function(e)
+		{
+			switch (e.key)
+			{
+				case 'ArrowUp': return this.menuNavigate(-1);
+				case 'ArrowDown': return this.menuNavigate(1);
+				case 'Enter': return this.menuSelect();
+			}
+		},
+
+		menuNavigate: function(direction)
+		{
+			var $links = this.$results.find('a'),
+				$highlighted = $links.filter('.is-active'),
+				newIndex = $links.index($highlighted) + direction;
+
+			$links.removeClass('is-active');
+
+			if (newIndex < 0)
+			{
+				newIndex = $links.length - 1;
+			}
+			else if (newIndex >= $links.length)
+			{
+				newIndex = 0;
+			}
+
+			$($links.get(newIndex)).addClass('is-active').focus();
+
+			this.$input.focus();
+
+			return false;
+		},
+
+		menuSelect: function()
+		{
+			var $link = this.$results.find('a.is-active');
+
+			if ($link.length)
+			{
+				window.location = $link.attr('href');
+				return false;
+			}
 		}
 	});
 

@@ -5,6 +5,17 @@ namespace XF\Entity;
 use XF\Mvc\Entity\Entity;
 use XF\Mvc\Entity\Structure;
 
+/**
+ * Class AbstractFieldMap
+ *
+ * @package XF\Entity
+ *
+ * COLUMNS
+ * @property string field_id
+ *
+ * RELATIONS
+ * @property \XF\AbstractField Field
+ */
 abstract class AbstractFieldMap extends Entity
 {
 	public function getContainerId()
@@ -26,7 +37,7 @@ abstract class AbstractFieldMap extends Entity
 		$structure->primaryKey = [$containerKey, 'field_id'];
 		$structure->columns = [
 			$containerKey => ['type' => self::UINT, 'required' => true],
-			'field_id' => ['type' => self::UINT, 'required' => true]
+			'field_id' => ['type' => self::STR, 'maxLength' => 25, 'required' => true]
 		];
 		$structure->getters = [];
 		$structure->relations = [

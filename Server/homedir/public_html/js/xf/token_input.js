@@ -53,14 +53,14 @@
 			{
 				config.ajax = {
 					delay: 250,
-					data: $.proxy(this, 'prepareAjax'),
-					transport: $.proxy(this, 'getAjax'),
-					processResults: $.proxy(this, 'processAjax')
+					data: XF.proxy(this, 'prepareAjax'),
+					transport: XF.proxy(this, 'getAjax'),
+					processResults: XF.proxy(this, 'processAjax')
 				};
 				config.escapeMarkup = function(markup) { return markup; };
-				config.sorter = $.proxy(this, 'sortResults');
-				config.templateResult = $.proxy(this, 'prepareResults');
-				config.templateSelection = $.proxy(this, 'prepareSelection');
+				config.sorter = XF.proxy(this, 'sortResults');
+				config.templateResult = XF.proxy(this, 'prepareResults');
+				config.templateSelection = XF.proxy(this, 'prepareSelection');
 			}
 
 			$input.remove();
@@ -107,8 +107,8 @@
 				});
 			}
 
-			api.$container.on('focusin focusout', $.proxy(this, 'inputFocusBlur'));
-			$element.on('change', $.proxy(this, 'updateInput'));
+			api.$container.on('focusin focusout', XF.proxy(this, 'inputFocusBlur'));
+			$element.on('change', XF.proxy(this, 'updateInput'));
 		},
 
 		prepareAjax: function(params)

@@ -45,6 +45,16 @@ abstract class AbstractAuth
 	abstract public function getAuthenticationName();
 
 	/**
+	 * Method which can return the default options for the authentication provider (if applicable).
+	 *
+	 * @return array
+	 */
+	protected function getDefaultOptions()
+	{
+		return [];
+	}
+
+	/**
 	 * Returns true if the auth method provides a password. A user can switch away
 	 * from this auth by requesting a password be emailed to him/her. An example of
 	 * this situation is FB registrations.

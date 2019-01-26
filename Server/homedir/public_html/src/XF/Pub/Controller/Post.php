@@ -145,7 +145,7 @@ class Post extends AbstractController
 
 			$this->finalizePostEdit($editor, $threadEditor);
 
-			if ($this->filter('_xfWithData', 'bool'))
+			if ($this->filter('_xfWithData', 'bool') && $this->filter('_xfInlineEdit', 'bool'))
 			{
 				/** @var \XF\Repository\Attachment $attachmentRepo */
 				$attachmentRepo = $this->repository('XF:Attachment');

@@ -247,7 +247,7 @@ return array('macros' => array('navigation_list' => function($__templater, array
 	if ($__vars['mailDisabled']) {
 		$__finalCompiled .= '
 					<div class="blockMessage blockMessage--important blockMessage--iconic">
-						' . 'Mail has been disabled via config.php. No outgoing mails will sent to any users until the <code>$config[\'enableMail\'] = false;</code> line is removed from config.php.' . '
+						' . 'Mail has been disabled via config.php. No outgoing mails will be sent to any users until the <code>$config[\'enableMail\'] = false;</code> line is removed from config.php.' . '
 					</div>
 				';
 	}

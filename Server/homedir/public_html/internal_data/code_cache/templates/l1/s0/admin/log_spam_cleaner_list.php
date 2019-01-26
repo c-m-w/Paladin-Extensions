@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 6a5681a7ded16bcdc2127a02d9eafdb0
+// FROM HASH: 1723f5ea5388b963e9d5c0658b60612c
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -34,7 +34,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 					'_type' => 'cell',
 					'html' => '
 								' . $__templater->fn('username_link', array($__vars['entry']['User'], false, array(
-					'href' => $__templater->fn('link', array('users/edit', $__vars['entry']['User'], ), false),
+					'defaultname' => $__vars['entry']['username'],
+					'href' => ($__vars['entry']['User'] ? $__templater->fn('link', array('users/edit', $__vars['entry']['User'], ), false) : null),
 				))) . '
 							',
 				),
@@ -42,7 +43,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 					'_type' => 'cell',
 					'html' => '
 								' . $__templater->fn('username_link', array($__vars['entry']['ApplyingUser'], false, array(
-					'href' => $__templater->fn('link_type', array('public', 'members', $__vars['entry']['ApplyingUser'], ), false),
+					'defaultname' => $__vars['entry']['applying_username'],
+					'href' => ($__vars['entry']['ApplyingUser'] ? $__templater->fn('link_type', array('public', 'members', $__vars['entry']['ApplyingUser'], ), false) : null),
 				))) . '
 							',
 				),

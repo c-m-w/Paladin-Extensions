@@ -19,7 +19,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'value' => 'ReCaptcha',
 		'data-hide' => 'true',
 		'label' => 'Use reCAPTCHA',
-		'hint' => 'No extra configuration is required for this CAPTCHA. But if you would like additional features, such as security preferences and analytics, you should get your own API keys from <a href="https://www.google.com/recaptcha" target="_blank">http://www.google.com/recaptcha</a> and enter them below.<br />
+		'hint' => 'No extra configuration is required for this CAPTCHA. But if you would like additional features, such as security preferences and analytics, you should get your own API keys from <a href="https://www.google.com/recaptcha" target="_blank">https://www.google.com/recaptcha</a> and enter them below.<br />
 <br />
 <strong>Note:</strong> You must also use your own API keys and explicitly enable invisible mode if you wish to use "invisible reCAPTCHA".',
 		'_dependent' => array('

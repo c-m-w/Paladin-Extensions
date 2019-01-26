@@ -5,6 +5,22 @@ namespace XF\Entity;
 use XF\Mvc\Entity\Entity;
 use XF\Mvc\Entity\Structure;
 
+/**
+ * Class AbstractPromptGroup
+ *
+ * @package XF\Entity
+ *
+ * COLUMNS
+ * @property int|null prompt_group_id
+ * @property int display_order
+ *
+ * GETTERS
+ * @property \XF\Phrase|string title
+ *
+ * RELATIONS
+ * @property \XF\Phrase MasterTitle
+ * @property \XF\Entity\AbstractPrompt[] Prompts
+ */
 abstract class AbstractPromptGroup extends Entity
 {
 	abstract protected function getClassIdentifier();

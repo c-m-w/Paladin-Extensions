@@ -63,7 +63,6 @@ class NewPosts extends AbstractWidget
 				break;
 		}
 
-
 		$threadFinder
 			->with('Forum.Node.Permissions|' . $visitor->permission_combination_id)
 			->limit(max($limit * 2, 10));
@@ -117,6 +116,10 @@ class NewPosts extends AbstractWidget
 			'filter' => 'str',
 			'node_ids' => 'array-uint'
 		]);
+		if (in_array(0, $options['node_ids']))
+		{
+			$options['node_ids'] = [0];
+		}
 		if ($options['limit'] < 1)
 		{
 			$options['limit'] = 1;

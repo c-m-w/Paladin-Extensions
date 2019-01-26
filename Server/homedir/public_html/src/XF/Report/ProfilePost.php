@@ -48,8 +48,8 @@ class ProfilePost extends AbstractHandler
 			}
 			else
 			{
-				return \XF::phrase('profile_post_for_x', [
-					'username' => $report->content_info['user']['username']
+				return \XF::phrase('profile_post_by_x', [
+					'name' => $report->content_info['user']['username']
 				]);
 			}
 		}

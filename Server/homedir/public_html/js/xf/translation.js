@@ -7,7 +7,7 @@
 
 		init: function()
 		{
-			this.$target.on('ajax-submit:response', $.proxy(this, 'afterSubmit'));
+			this.$target.on('ajax-submit:response', XF.proxy(this, 'afterSubmit'));
 		},
 
 		afterSubmit: function(e, data)

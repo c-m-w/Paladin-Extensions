@@ -30,7 +30,7 @@
 				return;
 			}
 
-			this.$target.on('click', this.options.fillers, $.proxy(this, 'change'));
+			this.$target.on('click', this.options.fillers, XF.proxy(this, 'change'));
 		},
 
 		change: function()
@@ -43,7 +43,7 @@
 			this.xhr = XF.ajax(
 				'post', this.options.action,
 				this.$target.serialize() + '&' + this.options.key + '=1',
-				$.proxy(this, 'onSuccess')
+				XF.proxy(this, 'onSuccess')
 			);
 		},
 
@@ -66,6 +66,15 @@
 						$ctrl.prop('checked', value ? true : false).triggerHandler('click', {
 							triggered: true
 						});
+						// trigger disabler handlers as appropriate
+						if (value)
+						{
+							$ctrl.trigger('control:enabled');
+						}
+						else
+						{
+							$ctrl.trigger('control:disabled');
+						}
 					}
 					else if ($ctrl.is('select, input, textarea'))
 					{

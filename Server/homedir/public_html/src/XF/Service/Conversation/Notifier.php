@@ -131,6 +131,7 @@ class Notifier extends AbstractService
 			$user->Option->email_on_conversation
 			&& $user->user_state == 'valid'
 			&& !$user->is_banned
+			&& $user->email
 			&& (!$sender || $sender->user_id != $user->user_id)
 		);
 	}

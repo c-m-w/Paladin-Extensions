@@ -1,10 +1,14 @@
 <?php
-// FROM HASH: ef71c0e161814524d5a3972efaf37f5a
+// FROM HASH: 3a1022e5f5404af85318ee07a3cc77ac
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
 	$__templater->pageParams['pageTitle'] = $__templater->preEscaped('Import data');
 	$__finalCompiled .= '
+
+<div class="blockMessage blockMessage--important">
+	' . 'XenForo importers are now installed as a separate add-on, downloadable from your <a href="https://xenforo.com/customers" target="_blank">Customer area</a>.' . '
+</div>
 
 ';
 	if ($__vars['complete']) {
@@ -17,44 +21,53 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	$__finalCompiled .= '
 
 ';
-	$__compilerTemp1 = array();
-	if ($__templater->isTraversable($__vars['importersGrouped'])) {
-		foreach ($__vars['importersGrouped'] AS $__vars['target'] => $__vars['importers']) {
-			$__compilerTemp1[] = array(
-				'label' => 'Import target' . $__vars['xf']['language']['label_separator'] . ' ' . $__vars['target'],
-				'_type' => 'optgroup',
-				'options' => array(),
-			);
-			end($__compilerTemp1); $__compilerTemp2 = key($__compilerTemp1);
-			if ($__templater->isTraversable($__vars['importers'])) {
-				foreach ($__vars['importers'] AS $__vars['importer'] => $__vars['info']) {
-					$__compilerTemp1[$__compilerTemp2]['options'][] = array(
-						'value' => $__vars['importer'],
-						'label' => $__templater->escape($__vars['info']['source']),
-						'_type' => 'option',
-					);
+	if ($__vars['importersGrouped']) {
+		$__finalCompiled .= '
+	';
+		$__compilerTemp1 = array();
+		if ($__templater->isTraversable($__vars['importersGrouped'])) {
+			foreach ($__vars['importersGrouped'] AS $__vars['target'] => $__vars['importers']) {
+				$__compilerTemp1[] = array(
+					'label' => 'Import target' . $__vars['xf']['language']['label_separator'] . ' ' . $__vars['target'],
+					'_type' => 'optgroup',
+					'options' => array(),
+				);
+				end($__compilerTemp1); $__compilerTemp2 = key($__compilerTemp1);
+				if ($__templater->isTraversable($__vars['importers'])) {
+					foreach ($__vars['importers'] AS $__vars['importer'] => $__vars['info']) {
+						$__compilerTemp1[$__compilerTemp2]['options'][] = array(
+							'value' => $__vars['importer'],
+							'label' => $__templater->escape($__vars['info']['source']),
+							'_type' => 'option',
+						);
+					}
 				}
 			}
 		}
-	}
-	$__finalCompiled .= $__templater->form('
-	<div class="block-container">
-		<div class="block-body">
-			' . $__templater->formSelectRow(array(
-		'name' => 'importer',
-		'size' => '10',
-	), $__compilerTemp1, array(
-		'label' => 'Import from',
-	)) . '
+		$__finalCompiled .= $__templater->form('
+		<div class="block-container">
+			<div class="block-body">
+				' . $__templater->formSelectRow(array(
+			'name' => 'importer',
+			'size' => '10',
+		), $__compilerTemp1, array(
+			'label' => 'Import from',
+		)) . '
+			</div>
+			' . $__templater->formSubmitRow(array(
+			'submit' => 'Continue' . $__vars['xf']['language']['ellipsis'],
+		), array(
+		)) . '
 		</div>
-		' . $__templater->formSubmitRow(array(
-		'submit' => 'Continue' . $__vars['xf']['language']['ellipsis'],
-	), array(
-	)) . '
-	</div>
-', array(
-		'action' => $__templater->fn('link', array('import/config', ), false),
-		'class' => 'block',
-	));
+	', array(
+			'action' => $__templater->fn('link', array('import/config', ), false),
+			'class' => 'block',
+		)) . '
+';
+	} else {
+		$__finalCompiled .= '
+	<div class="blockMessage">' . 'No importers are currently available.' . '</div>
+';
+	}
 	return $__finalCompiled;
 });

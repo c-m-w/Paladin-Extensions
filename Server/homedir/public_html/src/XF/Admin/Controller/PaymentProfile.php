@@ -141,13 +141,13 @@ class PaymentProfile extends AbstractController
 
 		$profileUsed = [];
 
-		$purchasables = $this->finder('XF:Purchasable')->fetch();
-		foreach ($purchasables AS $purchasable)
+		$purchasableTypes = $this->finder('XF:Purchasable')->fetch();
+		foreach ($purchasableTypes AS $purchasableType)
 		{
 			/** @var \XF\Purchasable\AbstractPurchasable $handler */
-			$handler = $purchasable->handler;
-
-			$profileUsed = array_merge($profileUsed, $handler->getPurchasablesByProfileId($profile->payment_profile_id));
+			$handler = $purchasableType->handler;
+			$purchasableItems = $handler->getPurchasablesByProfileId($profile->payment_profile_id);
+			$profileUsed = array_merge($profileUsed, $purchasableItems ?: []);
 		}
 
 		if ($this->isPost())

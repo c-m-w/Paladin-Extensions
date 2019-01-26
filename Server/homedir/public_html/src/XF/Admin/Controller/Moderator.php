@@ -15,9 +15,16 @@ class Moderator extends AbstractController
 	public function actionIndex(ParameterBag $params)
 	{
 		$modRepo = $this->getModRepo();
+		$handlers = $modRepo->getModeratorHandlers();
 
 		$superModerators = $modRepo->findModeratorsForList(true)->fetch();
+
 		$contentModerators = $modRepo->findContentModeratorsForList()->fetch();
+		$contentModerators = $contentModerators->filter(function(\XF\Entity\ModeratorContent $moderatorContent) use ($handlers)
+		{
+			return isset($handlers[$moderatorContent->content_type]);
+		});
+
 		$users = $contentModerators->pluckNamed('User', 'user_id');
 
 		$viewParams = [

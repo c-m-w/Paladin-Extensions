@@ -6,6 +6,30 @@ use XF\Db\Exception;
 use XF\Mvc\Entity\Entity;
 use XF\Mvc\Entity\Structure;
 
+/**
+ * Class AbstractField
+ *
+ * @package XF\Entity
+ *
+ * COLUMNS
+ * @property string field_id
+ * @property int display_order
+ * @property string field_type
+ * @property array field_choices
+ * @property string match_type
+ * @property array match_params
+ * @property int max_length
+ * @property bool required
+ * @property string display_template
+ *
+ * GETTERS
+ * @property \XF\Phrase|string title
+ * @property \XF\Phrase|string description
+ *
+ * RELATIONS
+ * @property \XF\Phrase MasterTitle
+ * @property \XF\Phrase MasterDescription
+ */
 abstract class AbstractField extends Entity
 {
 	abstract protected function getClassIdentifier();
@@ -257,7 +281,7 @@ abstract class AbstractField extends Entity
 		{
 			$this->error('The field ID cannot be changed once set.', 'field_id');
 		}
-		
+
 		if ($this->isChanged(['match_type', 'match_params']))
 		{
 			$validateMatchTypeMethod = '_validateMatchType' . \XF\Util\Php::camelCase($this->get('match_type'));

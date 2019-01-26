@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 11b13b81730bbd40aa3d4ed4b425b453
+// FROM HASH: 8b842ce32e83b5854b1e2cdccb14a451
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -21,12 +21,18 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		if ($__templater->isTraversable($__vars['alerts'])) {
 			foreach ($__vars['alerts'] AS $__vars['alert']) {
 				$__finalCompiled .= '
-					<li data-alert-id="' . $__templater->escape($__vars['alert']['alert_id']) . '"
-						class="block-row block-row--separated' . ($__templater->method($__vars['alert'], 'isUnviewed', array()) ? ' block-row--highlighted' : ($__templater->method($__vars['alert'], 'isRecentlyViewed', array()) ? '' : ' block-row--alt')) . '">
-						' . $__templater->callMacro('alert_macros', 'row', array(
-					'alert' => $__vars['alert'],
-				), $__vars) . '
-					</li>
+					';
+				if ($__templater->method($__vars['alert'], 'getHandler', array())) {
+					$__finalCompiled .= '
+						<li data-alert-id="' . $__templater->escape($__vars['alert']['alert_id']) . '"
+							class="block-row block-row--separated' . ($__templater->method($__vars['alert'], 'isUnviewed', array()) ? ' block-row--highlighted' : ($__templater->method($__vars['alert'], 'isRecentlyViewed', array()) ? '' : ' block-row--alt')) . '">
+							' . $__templater->callMacro('alert_macros', 'row', array(
+						'alert' => $__vars['alert'],
+					), $__vars) . '
+						</li>
+					';
+				}
+				$__finalCompiled .= '
 				';
 			}
 		}

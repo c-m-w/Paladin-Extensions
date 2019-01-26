@@ -33,8 +33,12 @@ class SessionActivity extends Repository
 			->applyMemberVisibilityRestriction()
 			->activeOnly()
 			->with('User')
-			->order('view_date', 'DESC')
-			->limit($limit);
+			->order('view_date', 'DESC');
+
+		if ($limit)
+		{
+			$finder->limit($limit);
+		}
 
 		return $finder->fetch()->pluckNamed('User', 'user_id');
 	}
@@ -74,6 +78,8 @@ class SessionActivity extends Repository
 		{
 			$users += $this->getOnlineStaffList()->toArray();
 		}
+
+		$counts['unseen'] = ($userLimit ? max($counts['members'] - $userLimit, 0) : 0);
 
 		return [
 			'counts' => $counts,

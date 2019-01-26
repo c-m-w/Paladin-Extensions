@@ -458,6 +458,15 @@ class Template extends AbstractController
 
 			$template->template = $final;
 			$template->last_edit_date = time();
+
+			// even if the template isn't changed we should
+			// make the custom template the same version so
+			// it is no longer outdated.
+			if (!$template->isChanged('template'))
+			{
+				$template->updateVersionId();
+			}
+
 			$template->save();
 
 			return $this->redirect($this->buildLink('templates/outdated'));

@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 3c8c4bcb72b7b62260a48a2c7cc0f456
+// FROM HASH: a245de1990a2211a58f16415b9c5936d
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -44,6 +44,21 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 					'overlay' => 'true',
 					'_type' => 'action',
 					'html' => 'More users',
+				),
+				array(
+					'label' => '&#8226;&#8226;&#8226;',
+					'class' => 'dataList-cell--separated',
+					'_type' => 'popup',
+					'html' => '
+								<div class="menu" data-menu="menu" aria-hidden="true" data-menu-builder="dataList">
+									<div class="menu-content">
+										<h3 class="menu-header">' . 'More options' . '</h3>
+										<a href="' . $__templater->fn('link', array('banning/ips/add', null, array('ip' => $__templater->filter($__vars['ip']['ip'], array(array('ip', array()),), false), ), ), true) . '" class="menu-linkRow" data-xf-click="overlay">' . 'Ban' . '</a>
+										<a href="' . $__templater->fn('link', array('banning/discouraged-ips/add', null, array('ip' => $__templater->filter($__vars['ip']['ip'], array(array('ip', array()),), false), ), ), true) . '" class="menu-linkRow" data-xf-click="overlay">' . 'Discourage' . '</a>
+										<div class="js-menuBuilderTarget u-showMediumBlock"></div>
+									</div>
+								</div>
+							',
 				))) . '
 					';
 			}
@@ -66,6 +81,10 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		array(
 			'_type' => 'cell',
 			'html' => 'Latest',
+		),
+		array(
+			'_type' => 'cell',
+			'html' => '&nbsp;',
 		),
 		array(
 			'_type' => 'cell',

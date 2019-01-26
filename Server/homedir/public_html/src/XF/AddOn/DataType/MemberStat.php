@@ -114,6 +114,7 @@ class MemberStat extends AbstractDataType
 		return [
 			'overview_display',
 			'display_order',
+			'user_limit',
 			'active'
 		];
 	}

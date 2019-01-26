@@ -25,9 +25,8 @@ class Post extends AbstractEmulatedData
 
 	protected function preSave($oldId)
 	{
-		$this->username = $this->validTextOrDefault($this->username, 'username', $oldId);
-
-		$this->message = $this->validTextOrDefault($this->message, 'message', $oldId);
+		$this->forceNotEmpty('username', $oldId);
+		$this->forceNotEmpty('message', $oldId);
 	}
 
 	protected function postSave($oldId, $newId)

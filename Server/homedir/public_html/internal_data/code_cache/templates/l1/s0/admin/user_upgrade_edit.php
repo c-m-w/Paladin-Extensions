@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 79fecfeed4343508fce4460afe95c8f7
+// FROM HASH: 5baf87bbf357d73573db05e68be8d0e8
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -88,7 +88,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'name' => 'cost_amount',
 		'value' => ($__vars['upgrade']['cost_amount'] ?: 5),
 		'class' => 'input--inline',
-		'size' => '3',
+		'size' => '5',
 	)) . '
 				' . $__templater->callMacro('public:currency_macros', 'currency_list', array(
 		'value' => ($__vars['upgrade']['cost_currency'] ?: 'USD'),
@@ -192,6 +192,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'_type' => 'option',
 	)), array(
 	)) . '
+
+' . $__templater->includeTemplate('exup_user_upgrade_edit_1', $__vars) . '
 		</div>
 		' . $__templater->formSubmitRow(array(
 		'icon' => 'save',

@@ -63,7 +63,8 @@ class AdminNavigation extends AbstractHandler
 
 		return [
 			'link' => $router->buildLink($record->link),
-			'title' => $record->title
+			'title' => $record->title,
+			'extra' => $record->navigation_id
 		];
 	}
 }

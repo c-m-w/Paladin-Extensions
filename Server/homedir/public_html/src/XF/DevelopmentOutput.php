@@ -377,7 +377,7 @@ class DevelopmentOutput
 					{
 						$files[$addOnId][$fileName] = $file->getPathname();
 					}
-					else if (!$file->isDot() && $file->isDir() && substr($fileName, 0, 1) != '.')
+					else if (!$file->isDot() && $file->isDir() && $fileName[0] != '.')
 					{
 						foreach (new \DirectoryIterator($file->getPathname()) AS $childFile)
 						{
@@ -409,7 +409,7 @@ class DevelopmentOutput
 
 		if ($fileName == $this->metadataFilename) return false;
 
-		if ($fileName[0] == '.') return false;
+		if ($fileName[0] == '.' && $fileName != '.htaccess') return false;
 
 		return $this->isValidFileExtension($file->getExtension());
 	}

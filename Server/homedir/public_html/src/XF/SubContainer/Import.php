@@ -17,7 +17,7 @@ class Import extends AbstractSubContainer
 
 		$container['importers'] = function()
 		{
-			$importers = \XF\Import\Manager::getImporterShortNamesForType('XF');
+			$importers = [];
 
 			$this->app->fire('import_importer_classes', [$this, $this->parent, &$importers]);
 

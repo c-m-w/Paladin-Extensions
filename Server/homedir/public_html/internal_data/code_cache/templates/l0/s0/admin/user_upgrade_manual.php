@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 428679f6aa7a8a5066454a7078c030bd
+// FROM HASH: a43b997f074a3e3645cda3a93eeed7fd
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -26,17 +26,17 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'name' => 'end_type',
 	), array(array(
 		'value' => 'permanent',
-		'selected' => !$__vars['activeUpgrade']['end_date'],
+		'selected' => !$__vars['endDate'],
 		'label' => 'Permanent',
 		'_type' => 'option',
 	),
 	array(
 		'value' => 'date',
-		'selected' => $__vars['activeUpgrade']['end_date'],
+		'selected' => $__vars['endDate'],
 		'label' => 'Date' . $__vars['xf']['language']['label_separator'],
 		'_dependent' => array($__templater->formDateInput(array(
 		'name' => 'end_date',
-		'value' => ($__vars['activeUpgrade']['end_date'] ? $__templater->fn('date', array($__vars['activeUpgrade']['end_date'], 'picker', ), false) : $__templater->fn('date', array($__vars['xf']['time'], 'picker', ), false)),
+		'value' => ($__vars['endDate'] ? $__templater->fn('date', array($__vars['endDate'], 'picker', ), false) : $__templater->fn('date', array($__vars['xf']['time'], 'picker', ), false)),
 	))),
 		'_type' => 'option',
 	)), array(

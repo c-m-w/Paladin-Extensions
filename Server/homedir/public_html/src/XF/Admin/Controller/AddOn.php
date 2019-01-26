@@ -89,6 +89,18 @@ class AddOn extends AbstractController
 			return $this->noPermission();
 		}
 
+
+		if (!$addOn->active)
+		{
+			// check for add-on errors when enabling - ignoring warnings
+			list ($null, $errors) = $this->getAddOnWarningsAndErrors($this->getAddOnManager()->getById($addOn->addon_id));
+
+			if ($errors)
+			{
+				return $this->error($errors);
+			}
+		}
+
 		$addOn->active = $addOn->active ? false : true;
 		$addOn->save();
 

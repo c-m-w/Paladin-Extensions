@@ -242,24 +242,8 @@ class AutoLink implements FiltererInterface
 			return false;
 		}
 
-		$charset = null;
-
 		$contentType = $response->getHeader('Content-type');
-		if ($contentType)
-		{
-			$parts = explode(';', $contentType, 2);
-
-			$type = trim($parts[0]);
-			if ($type != 'text/html')
-			{
-				return false;
-			}
-
-			if (isset($parts[1]) && preg_match('/charset=([-a-z0-9_]+)/i', trim($parts[1]), $match))
-			{
-				$charset = $match[1];
-			}
-		}
+		$charset = $this->app->http()->reader()->getCharset($contentType);
 
 		return [
 			'body' => $response->getBody()->read(50 * 1024),

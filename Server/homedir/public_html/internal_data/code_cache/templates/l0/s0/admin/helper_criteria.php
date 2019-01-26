@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 52b295af180c30c7f8d424dc4547a83d
+// FROM HASH: 393a668ed7fd690e95336b5e4de34de1
 return array('macros' => array('user_tabs' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -822,16 +822,20 @@ return array('macros' => array('user_tabs' => function($__templater, array $__ar
 		'name' => 'page_criteria[before][data][ymd]',
 		'value' => $__vars['criteria']['before']['ymd'],
 	)) . '
-							<span class="inputGroup-text">' . 'Time' . $__vars['xf']['language']['label_separator'] . '</span>
+							<span class="inputGroup-text">
+								' . 'Time' . $__vars['xf']['language']['label_separator'] . '
+							</span>
 							<span class="inputGroup" dir="ltr">
 								' . $__templater->formSelect(array(
 		'name' => 'page_criteria[before][data][hh]',
 		'value' => $__vars['criteria']['before']['hh'],
+		'class' => 'input--inline input--autoSize',
 	), $__compilerTemp4) . '
 								<span class="inputGroup-text">:</span>
 								' . $__templater->formSelect(array(
 		'name' => 'page_criteria[before][data][mm]',
 		'value' => $__vars['criteria']['before']['mm'],
+		'class' => 'input--inline input--autoSize',
 	), $__compilerTemp5) . '
 							</span>
 						</div>
@@ -890,7 +894,7 @@ return array('macros' => array('user_tabs' => function($__templater, array $__ar
 
 			' . $__templater->formCheckBoxRow(array(
 	), array(array(
-		'name' => 'user_criteria[style][rule]',
+		'name' => 'page_criteria[style][rule]',
 		'value' => 'style',
 		'selected' => $__vars['criteria']['style'],
 		'label' => 'User is browsing with the following style' . $__vars['xf']['language']['label_separator'],

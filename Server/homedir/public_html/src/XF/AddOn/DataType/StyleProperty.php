@@ -2,6 +2,8 @@
 
 namespace XF\AddOn\DataType;
 
+use XF\Util\Xml;
+
 class StyleProperty extends AbstractDataType
 {
 	public function getShortName()
@@ -41,10 +43,10 @@ class StyleProperty extends AbstractDataType
 
 			if ($entry->value_parameters !== '')
 			{
-				$node->appendChild($doc->createElement('value_parameters', $entry->value_parameters));
+				$node->appendChild(Xml::createDomElement($doc, 'value_parameters', $entry->value_parameters));
 			}
 
-			$node->appendChild($doc->createElement('value', \XF\Util\Json::jsonEncodePretty($entry->property_value)));
+			$node->appendChild(Xml::createDomElement($doc, 'value', \XF\Util\Json::jsonEncodePretty($entry->property_value)));
 
 			$container->appendChild($node);
 		}

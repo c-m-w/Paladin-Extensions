@@ -166,13 +166,6 @@ class Avatar extends \XF\Service\AbstractService
 			return false;
 		}
 
-		// require 2:1 aspect ratio or squarer
-		if ($width > 2 * $height || $height > 2 * $width)
-		{
-			$error = \XF::phrase('please_provide_an_image_whose_longer_side_is_no_more_than_twice_length');
-			return false;
-		}
-
 		$this->width = $width;
 		$this->height = $height;
 		$this->type = $type;

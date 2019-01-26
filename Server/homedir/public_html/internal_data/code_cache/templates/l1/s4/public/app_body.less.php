@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 95be47754b895333d55ffb24a88c95b4
+// FROM HASH: 58782c4bdb6c3ae9901d06344dfbeb5e
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -87,6 +87,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	width: 100%;
 	max-width: 100%;
 	margin-bottom: auto;
+	min-height: 1px; // IE11 workaround - related to #139187
 }
 
 .p-body-content

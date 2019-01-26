@@ -2,6 +2,8 @@
 
 namespace XF\AddOn\DataType;
 
+use XF\Mvc\Entity\Entity;
+
 class Template extends AbstractDataType
 {
 	public function getShortName()
@@ -131,6 +133,18 @@ class Template extends AbstractDataType
 				$entity->delete();
 			}
 		});
+	}
+
+	/**
+	 * @param \XF\Entity\Template $entity
+	 */
+	protected function deleteEntity(Entity $entity)
+	{
+		if ($entity->style_id > 0)
+		{
+			return;
+		}
+		parent::deleteEntity($entity);
 	}
 
 	protected function getMappedAttributes()

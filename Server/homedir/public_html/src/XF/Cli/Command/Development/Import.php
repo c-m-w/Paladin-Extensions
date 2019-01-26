@@ -55,6 +55,9 @@ class Import extends Command
 
 		$addOn = $input->getOption('addon');
 
+		$version = \XF::$version;
+		$output->writeln("XenForo {$version}");
+
 		$start = microtime(true);
 
 		foreach ($importers AS $importer)

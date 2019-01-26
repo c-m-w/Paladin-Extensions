@@ -7,7 +7,7 @@ On.jsonToTextTracks(this.textTracksJson_||[],this.tech_),oo.forEach(function(t){
 
 /*
  * XenForo video_player.min.js
- * Copyright 2010-2017 XenForo Ltd.
+ * Copyright 2010-2018 XenForo Ltd.
  * Released under the XenForo License Agreement: https://xenforo.com/license-agreement
  */
-!function(a,c,d,e){XF.VideoPlayer=XF.Element.newHandler({options:{playerSetup:{}},player:null,init:function(){this.player=videojs(this.$target[0],this.options.playerSetup);this.player.ready(a.proxy(this,"ready"))},ready:function(){var b=a.Event("video-player:ready");this.$target.trigger(b,{player:this.player,video:this.$target,handler:this})}});XF.Element.register("video-player","XF.VideoPlayer")}(jQuery,window,document);
+!function(a,c,d,e){XF.VideoPlayer=XF.Element.newHandler({options:{playerSetup:{}},player:null,init:function(){this.player=videojs(this.$target[0],this.options.playerSetup);this.player.ready(XF.proxy(this,"ready"))},ready:function(){var b=a.Event("video-player:ready");this.$target.trigger(b,{player:this.player,video:this.$target,handler:this})}});XF.Element.register("video-player","XF.VideoPlayer")}(jQuery,window,document);

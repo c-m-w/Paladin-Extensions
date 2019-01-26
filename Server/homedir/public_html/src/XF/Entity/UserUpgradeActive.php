@@ -34,9 +34,20 @@ class UserUpgradeActive extends Entity
 				FROM xf_user_upgrade_expired
 			"));
 
+
 			if ($this->user_upgrade_record_id <= $maxExpiredId)
 			{
-				$this->fastUpdate('user_upgrade_record_id', $maxExpiredId + 1);
+				try
+				{
+					$newAi = $maxExpiredId + 2; // what we're updating to + 1
+					$this->db()->query("
+						ALTER TABLE xf_user_upgrade_active AUTO_INCREMENT = $newAi
+					");
+					$this->fastUpdate('user_upgrade_record_id', $maxExpiredId + 1);
+				}
+				catch (\XF\Db\Exception $e)
+				{
+				}
 			}
 		}
 	}

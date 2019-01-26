@@ -13,7 +13,7 @@ abstract class AbstractForumImporter extends AbstractCoreImporter
 
 		$db = $this->app->db();
 
-		$maxThreadId = $db->fetchOne("SELECT MAX(user_id) FROM xf_thread");
+		$maxThreadId = $db->fetchOne("SELECT MAX(thread_id) FROM xf_thread");
 		if ($maxThreadId)
 		{
 			return false;

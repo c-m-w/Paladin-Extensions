@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 3524a62c415c4e8d5f4895d49e8302fd
+// FROM HASH: 28f4ee6f1307f5a39c62d71fb316770d
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -32,7 +32,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 				if ($__vars['entry']['complete_date']) {
 					$__compilerTemp2 .= '
 									' . $__templater->fn('date_dynamic', array($__vars['entry']['complete_date'], array(
-						'data-full-old-date' => 'true',
+						'data-full-date' => 'true',
 					))) . '
 								';
 				} else {
@@ -46,7 +46,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 					'_type' => 'cell',
 					'html' => '
 								' . $__templater->fn('date_dynamic', array($__vars['entry']['sitemap_id'], array(
-					'data-full-old-date' => 'true',
+					'data-full-date' => 'true',
 				))) . '
 							',
 				),

@@ -253,7 +253,10 @@ class Copier extends \XF\Service\AbstractService
 	{
 		$target = $this->target;
 
-		$target->prefix_id = $this->prefixId;
+		if ($this->prefixId !== null)
+		{
+			$target->prefix_id = $this->prefixId;
+		}
 		$target->rebuildCounters();
 		$target->save();
 

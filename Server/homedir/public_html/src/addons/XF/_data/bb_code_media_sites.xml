@@ -155,8 +155,9 @@ open.spotify.com/user/*/playlist/{$id:alphanum}]]></match_urls>
     <embed_html><![CDATA[<!-- oEmbed - template unused -->]]></embed_html>
   </site>
   <site media_site_id="twitch" site_title="Twitch" site_url="https://www.twitch.tv" match_is_regex="0" match_callback_class="XF\BbCode\Helper\Twitch" match_callback_method="matchCallback" embed_html_callback_class="XF\BbCode\Helper\Twitch" embed_html_callback_method="htmlCallback" supported="1" active="1" oembed_enabled="0" oembed_api_endpoint="https://api.twitch.tv/v4/oembed" oembed_url_scheme="https://twitch.tv/videos/{$id}" oembed_retain_scripts="0">
-    <match_urls><![CDATA[twitch.tv/videos/{$id}
-twitch.tv/{$id}]]></match_urls>
+    <match_urls><![CDATA[www.twitch.tv/videos/{$id:digits}
+www.twitch.tv/{$id:alphanum}
+clips.twitch.tv/{$id:alphanum}]]></match_urls>
     <embed_html><![CDATA[<div class="bbMediaWrapper">
 	<div class="bbMediaWrapper-inner">
 		<iframe src="{$url}"

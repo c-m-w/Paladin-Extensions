@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: af4693e57c0cadee22c018a729d9e2de
+// FROM HASH: 14ed92df14b43da25d62aaa5c6fb51ed
 return array('macros' => array('edit_type' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -107,11 +107,11 @@ return array('macros' => array('edit_type' => function($__templater, array $__ar
 		'name' => $__vars['alertName'],
 		'selected' => $__vars['selected'],
 		'label' => 'Notify author of this action.' . ' ' . 'Reason' . $__vars['xf']['language']['label_separator'],
-		'hint' => 'Note that the author will see this alert even if they can no longer view their content.',
 		'_dependent' => array($__templater->formTextBox(array(
 		'name' => $__vars['reasonName'],
 		'placeholder' => 'Optional',
 	))),
+		'afterhint' => 'Note that the author will see this alert even if they can no longer view their content.',
 		'_type' => 'option',
 	))) . '
 	');
@@ -122,7 +122,6 @@ return array('macros' => array('edit_type' => function($__templater, array $__ar
 		' . $__templater->formRow('
 			' . $__templater->filter($__vars['checkbox'], array(array('raw', array()),), true) . '
 		', array(
-			'label' => '',
 		)) . '
 	';
 	} else {
@@ -149,11 +148,11 @@ return array('macros' => array('edit_type' => function($__templater, array $__ar
 		'name' => $__vars['alertName'],
 		'selected' => $__vars['selected'],
 		'label' => 'Notify thread starter of this action.' . ' ' . 'Reason' . $__vars['xf']['language']['label_separator'],
-		'hint' => 'Note that the thread starter will see this alert even if they can no longer view their thread.',
 		'_dependent' => array($__templater->formTextBox(array(
 		'name' => $__vars['reasonName'],
 		'placeholder' => 'Optional',
 	))),
+		'afterhint' => 'Note that the thread starter will see this alert even if they can no longer view their thread.',
 		'_type' => 'option',
 	)), array(
 	)) . '
