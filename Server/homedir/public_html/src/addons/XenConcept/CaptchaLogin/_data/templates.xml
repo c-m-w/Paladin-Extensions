@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates>
+  <template type="admin" title="xc_captcha_login_form" version_id="2000000" version_string="2.0.0"><![CDATA[<xf:if is="$captcha">
+	<xf:captcha force="true" />
+</xf:if>]]></template>
+</templates>

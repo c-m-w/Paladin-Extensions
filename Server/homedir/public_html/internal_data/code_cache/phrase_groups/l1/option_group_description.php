@@ -4,6 +4,7 @@ return array (
   'option_group_description.GoogleSearch_options' => '',
   'option_group_description.SV_WarningImprovements' => 'A collection of improvements and configurables for XF\'s warning system.',
   'option_group_description.acp' => 'Contains various options relating to the admin control panel itself.',
+  'option_group_description.aed_settings' => 'Multiple Account Detector',
   'option_group_description.ahDiscordWidget' => 'Options for [AH] Discord Widget',
   'option_group_description.alerts' => 'When events happen that affect individual users, they are alerted via this system. As large volumes of alerts are generated, they are periodically pruned from the database.',
   'option_group_description.aloph_main' => '',
@@ -49,5 +50,6 @@ It is possible to filter the news feed down to just users you follow, or a singl
   'option_group_description.th_uix' => 'Options in this group allow you to customize your UI.X experience.',
   'option_group_description.users' => '',
   'option_group_description.usersAndRegistration' => '',
+  'option_group_description.xc_captcha_login' => '',
   'option_group_description.xr_pm' => 'Options for the XR Product Manager add-on',
 );

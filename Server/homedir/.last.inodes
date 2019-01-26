@@ -10,9 +10,9 @@
 10 /home/palavpvb/tmp/awstats
 2 /home/palavpvb/tmp/cpbandwidth
 1 /home/palavpvb/tmp/webalizer
-78 /home/palavpvb/tmp
+79 /home/palavpvb/tmp
 2 /home/palavpvb/.sqmaildata
-8 /home/palavpvb/.trash
+9 /home/palavpvb/.trash
 6 /home/palavpvb/perl5/lib
 1 /home/palavpvb/perl5/bin
 8 /home/palavpvb/perl5
@@ -32,16 +32,16 @@
 4 /home/palavpvb/.spamassassin
 3 /home/palavpvb/public_html/.well-known
 3 /home/palavpvb/public_html/install
-8 /home/palavpvb/public_html/auth
+9 /home/palavpvb/public_html/auth
 3 /home/palavpvb/public_html/library
 184 /home/palavpvb/public_html/styles
-7974 /home/palavpvb/public_html/internal_data
+7990 /home/palavpvb/public_html/internal_data
 425 /home/palavpvb/public_html/js
 1 /home/palavpvb/public_html/cgi-bin
 135 /home/palavpvb/public_html/data
-6259 /home/palavpvb/public_html/src
-15012 /home/palavpvb/public_html
-38 /home/palavpvb/backups
+6347 /home/palavpvb/public_html/src
+15117 /home/palavpvb/public_html
+40 /home/palavpvb/backups
 8 /home/palavpvb/etc/paladin-extensions.com
 11 /home/palavpvb/etc
 1 /home/palavpvb/.softaculous/tmp
@@ -56,10 +56,10 @@
 7 /home/palavpvb/mail/.spam
 1 /home/palavpvb/mail/cur
 1 /home/palavpvb/mail/tmp
-68 /home/palavpvb/mail/paladin-extensions.com
+78 /home/palavpvb/mail/paladin-extensions.com
 6 /home/palavpvb/mail/.Junk
 6 /home/palavpvb/mail/.Drafts
-114 /home/palavpvb/mail
+124 /home/palavpvb/mail
 1 /home/palavpvb/.sqmailattach
 1 /home/palavpvb/.pki/nssdb
 2 /home/palavpvb/.pki
@@ -73,5 +73,5 @@
 5 /home/palavpvb/.cphorde
 1 /home/palavpvb/.ssh
 3 /home/palavpvb/.cl.selector
-15501 /home/palavpvb
-Last modified: Fri Jan  4 05:33:36 EST 2019
+15619 /home/palavpvb
+Last modified: Sun Jan  6 05:32:16 EST 2019

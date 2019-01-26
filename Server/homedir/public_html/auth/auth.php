@@ -2,7 +2,7 @@
 	require '../../include.php';
 
 	if ( mysqli_connect_errno( ) || $sql_connection->connect_error )
-		die( ReturnKeys[ "Establishing Failure" ] );
+		die( Encrypt( ReturnKeys[ "Establishing Failure" ] ) );
 
 // Todo: xf_loader_atmp logging
 // Todo: DLL Streaming
@@ -31,7 +31,7 @@
 	$hardware	= json_decode( Decrypt( $_POST[ $identifiers[ "hw" ] ] ), true );
 
 	if ( !ValidUser( $user_id, $secret_key ) )
-		die( ReturnKeys[ "Establishing Failure" ] );
+		die( Encrypt( ReturnKeys[ "Establishing Failure" ] ) );
 
 	if ( $is_banned )
 		die( PutLoginAttempt( $user_id, 0, $hardware, ReturnKeys[ "Banned" ] ) );

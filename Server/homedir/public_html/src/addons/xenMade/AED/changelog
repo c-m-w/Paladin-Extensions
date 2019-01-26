@@ -1,0 +1,11 @@
+1.1.1 // December 05 2018
+    [fixed] Incorrect detection of AE
+
+    [info] XF2.1 compatibility
+
+1.1.0 // October 2, 2018
+    [add] a Second Method of User Identification - Browser fingerprint
+    [add] ACP: Logs
+
+1.0.0 // August  24, 2018
+	initial release

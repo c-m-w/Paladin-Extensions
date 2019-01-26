@@ -13,7 +13,8 @@
 		"Success"				=> "6",		// regular user logged in
 		"Staff Success"			=> "7" ) );	// staff member logged in
 	
-	$sql_connection = new mysqli( "localhost", "palatfef_admin", "_paladin_ext()++", "palatfef_xenforo" );
+	require 'public_html/src/config.php';
+	$sql_connection = new mysqli( $config['db']['host'], $config['db']['username'], $config['db']['password'], $config['db']['dbname'] );
 
 	function GenerateKeys( )
 	{

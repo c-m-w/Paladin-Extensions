@@ -7,6 +7,7 @@ return array (
   'admin_navigation.admins' => 'Administrators',
   'admin_navigation.advertising' => 'Advertising',
   'admin_navigation.advertisingPositions' => 'Advertising positions',
+  'admin_navigation.aedLog' => 'Alter Ego Detector log',
   'admin_navigation.alertUsers' => 'Alert users',
   'admin_navigation.analyzePermissions' => 'Analyze permissions',
   'admin_navigation.appearance' => 'Appearance',

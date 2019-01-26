@@ -4,6 +4,7 @@ return array (
   'option_group.GoogleSearch_options' => 'Google Search options',
   'option_group.SV_WarningImprovements' => 'Warning improvements',
   'option_group.acp' => 'Admin control panel',
+  'option_group.aed_settings' => 'Alter Ego Detector (AED2)',
   'option_group.ahDiscordWidget' => '[AH] Discord Widget',
   'option_group.alerts' => 'User alerts',
   'option_group.aloph_main' => '[AL] Original Poster Highlight',
@@ -45,5 +46,6 @@ return array (
   'option_group.th_uix' => '[TH] [UI.X] Options',
   'option_group.users' => 'User options',
   'option_group.usersAndRegistration' => 'User registration',
+  'option_group.xc_captcha_login' => '[XenConcept] Captcha login',
   'option_group.xr_pm' => 'XR Product Manager',
 );

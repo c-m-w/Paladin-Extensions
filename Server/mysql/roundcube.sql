@@ -37,17 +37,17 @@ CREATE TABLE `users` (
   `failed_login_counter` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `username` (`username`,`mail_host`)
-) ENGINE=InnoDB AUTO_INCREMENT=755 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=765 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `users`
 --
--- WHERE:  user_id IN (243,277)
+-- WHERE:  user_id IN (243,277,763)
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` (`user_id`, `username`, `mail_host`, `created`, `last_login`, `language`, `preferences`, `failed_login`, `failed_login_counter`) VALUES (243,'no.reply@paladin-extensions.com','localhost','2018-11-27 01:55:02','2018-11-27 01:55:02','en_US','a:3:{s:11:\"client_hash\";s:16:\"HZZRK5MvgStugN52\";s:9:\"junk_mbox\";s:10:\"INBOX.spam\";s:15:\"namespace_fixed\";b:1;}',NULL,NULL),(277,'palavpvb','localhost','2018-11-27 23:45:51','2018-11-27 23:45:51','en_US','a:3:{s:11:\"client_hash\";s:16:\"FTpZXDOflxRr9yCz\";s:9:\"junk_mbox\";s:10:\"INBOX.spam\";s:15:\"namespace_fixed\";b:1;}',NULL,NULL);
+INSERT INTO `users` (`user_id`, `username`, `mail_host`, `created`, `last_login`, `language`, `preferences`, `failed_login`, `failed_login_counter`) VALUES (243,'no.reply@paladin-extensions.com','localhost','2018-11-27 01:55:02','2018-11-27 01:55:02','en_US','a:3:{s:11:\"client_hash\";s:16:\"HZZRK5MvgStugN52\";s:9:\"junk_mbox\";s:10:\"INBOX.spam\";s:15:\"namespace_fixed\";b:1;}',NULL,NULL),(277,'palavpvb','localhost','2018-11-27 23:45:51','2018-11-27 23:45:51','en_US','a:3:{s:11:\"client_hash\";s:16:\"FTpZXDOflxRr9yCz\";s:9:\"junk_mbox\";s:10:\"INBOX.spam\";s:15:\"namespace_fixed\";b:1;}',NULL,NULL),(763,'support@paladin-extensions.com','localhost','2019-01-06 05:06:27','2019-01-06 07:02:22','en_US','a:3:{s:9:\"junk_mbox\";s:10:\"INBOX.Junk\";s:11:\"client_hash\";s:16:\"KR9aRThGIsP7zsvm\";s:15:\"namespace_fixed\";b:1;}',NULL,NULL);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -74,17 +74,17 @@ CREATE TABLE `identities` (
   KEY `user_identities_index` (`user_id`,`del`),
   KEY `email_identities_index` (`email`,`del`),
   CONSTRAINT `user_id_fk_identities` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=757 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=767 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `identities`
 --
--- WHERE:  user_id IN (243,277)
+-- WHERE:  user_id IN (243,277,763)
 
 LOCK TABLES `identities` WRITE;
 /*!40000 ALTER TABLE `identities` DISABLE KEYS */;
-INSERT INTO `identities` (`identity_id`, `user_id`, `changed`, `del`, `standard`, `name`, `organization`, `email`, `reply-to`, `bcc`, `signature`, `html_signature`) VALUES (243,243,'2018-11-27 01:55:02',0,1,'','','no.reply@paladin-extensions.com','','',NULL,0),(277,277,'2018-11-27 23:45:51',0,1,'palavpvb','','palavpvb@paladin-extensions.com','','',NULL,0);
+INSERT INTO `identities` (`identity_id`, `user_id`, `changed`, `del`, `standard`, `name`, `organization`, `email`, `reply-to`, `bcc`, `signature`, `html_signature`) VALUES (243,243,'2018-11-27 01:55:02',0,1,'','','no.reply@paladin-extensions.com','','',NULL,0),(277,277,'2018-11-27 23:45:51',0,1,'palavpvb','','palavpvb@paladin-extensions.com','','',NULL,0),(765,763,'2019-01-06 05:06:27',0,1,'','','support@paladin-extensions.com','','',NULL,0);
 /*!40000 ALTER TABLE `identities` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -108,13 +108,13 @@ CREATE TABLE `contacts` (
   PRIMARY KEY (`contact_id`),
   KEY `user_contacts_index` (`user_id`,`del`),
   CONSTRAINT `user_id_fk_contacts` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1237 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1239 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
 -- Dumping data for table `contacts`
 --
--- WHERE:  user_id IN (243,277)
+-- WHERE:  user_id IN (243,277,763)
 
 LOCK TABLES `contacts` WRITE;
 /*!40000 ALTER TABLE `contacts` DISABLE KEYS */;
@@ -142,7 +142,7 @@ CREATE TABLE `contactgroups` (
 --
 -- Dumping data for table `contactgroups`
 --
--- WHERE:  user_id IN (243,277)
+-- WHERE:  user_id IN (243,277,763)
 
 LOCK TABLES `contactgroups` WRITE;
 /*!40000 ALTER TABLE `contactgroups` DISABLE KEYS */;
@@ -158,7 +158,7 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-01-05  0:00:53
+-- Dump completed on 2019-01-07  0:00:53
 -- MySQL dump 10.16  Distrib 10.1.37-MariaDB, for Linux (x86_64)
 --
 -- Host: localhost    Database: roundcube
@@ -216,4 +216,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-01-05  0:00:53
+-- Dump completed on 2019-01-07  0:00:53

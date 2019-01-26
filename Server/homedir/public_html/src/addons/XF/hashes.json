@@ -3256,7 +3256,7 @@
     "src/XF/Proxy/Controller.php": "b3ee8a0584f29aeb320799d56edb416221452134aad35d246c91f87d0c34571d",
     "src/XF/Proxy/Linker.php": "e1e16e6e4737c2c8dad443fe12d1d2a50df56f92310d88ad9a60a212a0ffe2b6",
     "src/XF/Pub/App.php": "3f76814a89a64e0f0a2696c06df1c1dea2296628a3db5e73facd7a8ee4390113",
-    "src/XF/Pub/Controller/AbstractController.php": "514597a9a71314781e0ffbfe1e0de1616e2ed7502e96a549fb1301d1e49ddc07",
+    "src/XF/Pub/Controller/AbstractController.php": "852444db877fdacaf508422c802802ea5e453a7e951b504e27a057cc66d32bb1",
     "src/XF/Pub/Controller/AbstractWhatsNewFindType.php": "556e841bc86efc37ec9650a1ec10f2d23854f5fe1f81df61fcc7300a784745d3",
     "src/XF/Pub/Controller/Account.php": "2126d0463effe79e8ab6852dc25ae2578b3fc524ad4935406724ba3fc21354de",
     "src/XF/Pub/Controller/AccountConfirmation.php": "fe986e6a0682ab7edf31d10b4466b32f0421ebe88038d2009741d6e74b967a7e",
