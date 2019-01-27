@@ -8,4 +8,5 @@ return array (
   'support_ticket_prefix.6' => 'Subscription',
   'support_ticket_prefix.7' => 'Refund',
   'support_ticket_prefix.8' => 'Gift',
+  'support_ticket_prefix.9' => 'Suspicious Activity',
 );

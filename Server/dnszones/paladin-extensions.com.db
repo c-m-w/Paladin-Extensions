@@ -1,8 +1,8 @@
-; cPanel first:11.70.0.57 (update_time):1543291591 Cpanel::ZoneFile::VERSION:1.3 hostname:premium57.web-hosting.com latest:11.70.0.57
+; cPanel first:11.70.0.57 (update_time):1548493041 Cpanel::ZoneFile::VERSION:1.3 hostname:premium57.web-hosting.com latest:11.70.0.57
 ; Zone file for paladin-extensions.com
 $TTL 1200
 paladin-extensions.com.	1800000	IN	SOA	dns1.namecheaphosting.com.	cpanel.tech.namecheap.com.	(
-						2018112702 ;Serial Number
+						2019012601 ;Serial Number
 						86400 ;refresh
 						7200 ;retry
 						3600000 ;expire
