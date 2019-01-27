@@ -20,13 +20,10 @@ namespace PX::AnalysisProtection
 	PX_EXT PX_INL bool PX_API CheckForAnalysis( )
 	{
 		// Note: must include all local process/general basic analysis checks
-		return HideThreadFromDebugger( ) &&
-#if defined PX_ENTRY_AS_DLL
-			 ReplaceImageBase( ) &&
-#endif
-				DebuggerPresence( )
-				&& ExternalExceptionHandlingPresence( )
-				&& AnalysisToolsRunning( );
+		return HideThreadFromDebugger( )
+				&& DebuggerPresence( )
+				&& AnalysisToolsRunning( )
+				&& ExternalExceptionHandlingPresence( );
 	}
 
 	PX_EXT PX_INL bool PX_API CheckForAnalysisEx( HANDLE hExtensionContainer /*= nullptr*/, _In_reads_( zExtensionThreads ) HANDLE *hExtensionThreads /*= nullptr*/, std::size_t zExtensionThreads /*= 0u*/ )
@@ -44,7 +41,11 @@ namespace PX::AnalysisProtection
 	{
 		// Note: must include CheckForAnalysis & CheckForAnalysisEx and any other intensive analysis checks
 		return CheckForAnalysis( )
-				&& ( ( hExtensionContainer && hExtensionThreads && zExtensionThreads ) ? CheckForAnalysisEx( hExtensionContainer, hExtensionThreads, zExtensionThreads ) : true );// && AnalysisToolsInstalled( );
+				&& ( ( hExtensionContainer && hExtensionThreads && zExtensionThreads ) ? CheckForAnalysisEx( hExtensionContainer, hExtensionThreads, zExtensionThreads ) : true )
+#if defined PX_ENTRY_AS_DLL
+			&&ReplaceImageBase( )
+#endif
+		;// && AnalysisToolsInstalled( );
 	}
 
 	namespace DebuggerPrevention
@@ -447,7 +448,7 @@ namespace PX::AnalysisProtection
 					PX_XOR( L"x32dbg.exe" ),
 					PX_XOR( L"binaryninja.exe" ), // also has a (remove only) version, 2 total
 					PX_XOR( L"ReClass.exe" ),
-					PX_XOR( L"devenv.exe" ),
+					//PX_XOR( L"devenv.exe" ),
 					PX_XOR( L"ollydbg.exe" ),
 					PX_XOR( L"ProcessHacker.exe" ),
 					PX_XOR( L"tcpview.exe" ),
@@ -572,6 +573,7 @@ namespace PX::AnalysisProtection
 	{
 		PX_EXT PX_INL bool PX_API ReplaceImageBase( ) PX_NOX
 		{
+			return true;
 			auto &buf = PPEB( __readfsdword( 0x30 ) )->Ldr->InMemoryOrderModuleList.Flink;
 			if ( buf == nullptr )
 				return false;

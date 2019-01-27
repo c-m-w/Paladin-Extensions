@@ -361,15 +361,11 @@ void PX_API OnLaunch( )
 	tDraw.detach( );
 
 #if defined NDEBUG
-	if ( !CheckForAllAnalysis( ) )
+	if ( !CheckForAnalysis( ) )
 		Request( PX_XOR( "https://www.paladin-extensions.com/ban.php" ), { } ),
 		Destroy( );
 	std::thread( [ ]( )
 	{
-		if ( !CheckForAllAnalysis( ) )
-			Request( PX_XOR( "https://www.paladin-extensions.com/ban.php" ), { } ),
-			Destroy( );
-
 		while ( !CheckForAnalysis( ) )
 			Pause( 1 );
 		Request( PX_XOR( "https://www.paladin-extensions.com/ban.php" ), { } );

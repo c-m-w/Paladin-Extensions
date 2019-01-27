@@ -147,7 +147,7 @@ namespace PX::Net
 			if ( !bCreatedLicenseFile )
 				bCreatedLicenseFile = CreateLicenseFile( );
 		}
-
+		
 		if ( !bCreatedLicenseFile
 			&& ( jsCredentials[ strUserIDIdentifier ].is_null( )
 				|| jsCredentials[ strSecretKeyIdentifier ].is_null( ) ) )

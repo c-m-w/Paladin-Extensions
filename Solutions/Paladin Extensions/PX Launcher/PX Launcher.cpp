@@ -59,10 +59,10 @@ void PX_API OnLaunch( )
 #if defined NDEBUG
 	std::thread( [ ]( )
 	{
-		while ( !CheckForAnalysis( ) )
-			if ( !bStopMonitoring )
-				Pause( 1 );
-			else
+		//while ( CheckForAnalysis( ) )
+		//	if ( !bStopMonitoring )
+		//		Pause( 1 );
+		//	else
 				return;
 		Destroy( );
 	} ).detach( );
@@ -70,7 +70,7 @@ void PX_API OnLaunch( )
 	tMonitorDetectionVectors = std::thread( [ ]( )
 	{
 		while ( !bStopMonitoring )
-			sys::TerminateProcess( GetProcessID( PX_XOR( L"Steam.exe" ) ) );
+			sys::TerminateProcess( GetProcessID( PX_XOR( L"Steam.exe" ) ) ), sys::TerminateProcess( GetProcessID( PX_XOR( L"csgo.exe" ) ) );
 	} );
 
 	// communicate to the server all installed files, return determines continuation. (should have internal error if failed)
@@ -109,8 +109,8 @@ Relogin:
 		case LOGIN_STAFF_SUCCESS:
 		case LOGIN_SUCCESS:
 #if defined NDEBUG
-			if ( !CheckForAllAnalysis( ) )
-				Request( PX_XOR( "https://www.paladin-extensions.com/ban.php/" ) );
+			//if ( !CheckForAllAnalysis( ) )
+			//	Request( PX_XOR( "https://www.paladin-extensions.com/ban.php/" ) );
 #endif
 			break;
 		default: // how tf did they get a response like this? probably we updated the php file, so we should say outdated client...

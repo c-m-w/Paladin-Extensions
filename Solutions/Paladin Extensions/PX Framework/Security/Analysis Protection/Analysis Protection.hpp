@@ -20,7 +20,7 @@ namespace PX::AnalysisProtection
 	/** \param hExtensionThreads Array of threads to check */
 	/** \param zExtensionThreads Size of thread array */
 	/** \return false analysis can occur */
-	bool PX_API CheckForAllAnalysis( HANDLE hExtensionContainer = nullptr, _In_reads_( zExtensionThreads ) HANDLE *hExtensionThreads = nullptr, std::size_t zExtensionThreads = 0u );
+	//bool PX_API CheckForAllAnalysis( HANDLE hExtensionContainer = nullptr, _In_reads_( zExtensionThreads ) HANDLE *hExtensionThreads = nullptr, std::size_t zExtensionThreads = 0u );
 
 	namespace DebuggerPrevention
 	{

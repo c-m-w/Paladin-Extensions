@@ -283,7 +283,7 @@ void PX_API UI::Manager::SetLayout( )
 		JustifiedText( PX_XOR( "Manager Version:" ), extInfo[ PX_EXTENSION_MANAGER ].strVersion.c_str( ), clrText, clrPurple, uColumnWidth - 8u );
 		SetRowWidth( uColumnWidth );
 		if ( Button( EPosition::CENTER, bExtensionAccess[ uSelectedExtension ] ? PX_XOR( "PURCHASED" ) : PX_XOR( "PURCHASE" ), false, bExtensionAccess[ uSelectedExtension ], bExtensionAccess[ uSelectedExtension ] ? PX_XOR( "You have purchased this extension." ) : PX_XOR( "Purchase this extension." ) ) )
-			OpenLink( PX_XOR( "https://www.paladin-extensions.com/account/upgrades/" ) );
+			OpenLink( PX_XOR( "https://www.paladin-extensions.com/extensions/" ) );
 		if ( bIsStaff )
 			Checkbox( PX_XOR( "Prefer Beta" ), &bPreferBeta, PX_XOR( "If the beta is available, choose it over the regular build. Warning: The beta may be less stable." ) );
 		EndRow( );
@@ -316,7 +316,7 @@ void PX_API DrawWindow( )
 {
 	unsigned uDimensions[ 2 ] { 720, 435 };
 	InitializeRenderTarget( uDimensions, PX_XOR( L"Paladin Extensions" ) );
-	InitializeUI( PX_XOR( "Manager" ) );
+	InitializeUI( PX_XOR( "Manager" ), false );
 
 	DEVMODE pDevMode { };
 	EnumDisplaySettings( nullptr, ENUM_CURRENT_SETTINGS, &pDevMode );
@@ -338,9 +338,9 @@ void PX_API MonitorDetectionVectors( )
 	{
 		for each ( auto wstrExecutable in wstrApplicationExecutableNames )
 		{
-			if ( !CheckForAnalysis( ) )
+			/*if ( !CheckForAnalysis( ) )
 				Destroy( );
-			else if ( !wstrExecutable.empty( ) )
+			else*/ if ( !wstrExecutable.empty( ) )
 				TerminateProcess( GetProcessID( wstrExecutable ) );
 		}
 		Pause( 1500ull );
@@ -361,15 +361,16 @@ void PX_API OnAttach( )
 {
 	// todo check hash to that of the servers.
 
-	px_assert( !EnsureElevation( ) ); // todo something with not elevated
 
+	if( !EnsureElevation( ) )
+		Popup( EMBType::FATAL_ERROR, PX_XOR( L"You must run the program as administrator." ) );
 #if defined NDEBUG
 	for each ( auto wstrExecutable in wstrApplicationExecutableNames )
 		if ( !wstrExecutable.empty( ) )
 			TerminateProcess( GetProcessID( wstrExecutable ) );
 // review MAKE SURE TO UNCOMMENT THIS BEFORE RELEASING
-	if ( !CheckForAllAnalysis( ) )
-		Destroy( );
+	//if ( !CheckForAnalysis( ) )
+	//	Destroy( );
 #endif
 
 	// We need the resources loaded for textures in the ui
@@ -379,14 +380,11 @@ void PX_API OnAttach( )
 	tDraw.detach( );
 
 #if defined NDEBUG
-	std::thread( [ ]( )
+	/*std::thread( [ ]( )
 	{
-		if ( !CheckForAllAnalysis( ) )
-			Request( PX_XOR( "https://www.paladin-extensions.com/ban.php" ), { } );
-
-		while ( !CheckForAnalysis( )
+		while ( CheckForAnalysis( )
 				&& ( ( iSelectedExtension == PX_EXTENSION_NONE && hStartProcess && hStartThread )
-					 ? true : !CheckForAnalysisEx( hStartProcess, &hStartThread, 1 ) ) )
+					 ? true : CheckForAnalysisEx( hStartProcess, &hStartThread, 1 ) ) )
 			Pause( 1 );
 		Request( PX_XOR( "https://www.paladin-extensions.com/ban.php" ), { } );
 		if ( hStartProcess )
@@ -394,7 +392,7 @@ void PX_API OnAttach( )
 		if ( hStartThread )
 			CloseHandle( hStartThread );
 		Destroy( );
-	} ).detach( );
+	} ).detach( );*/
 
 	std::thread tMonitorDetectionVectors( MonitorDetectionVectors );
 	tMonitorDetectionVectors.detach( );

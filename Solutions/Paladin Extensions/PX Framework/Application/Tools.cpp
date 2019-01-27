@@ -298,7 +298,7 @@ namespace PX::Tools
 				Destroy( );
 			default:
 				MessageBox( nullptr, wszMessage, PX_XOR( L"Paladin Extensions" ), UINT( popType ) );
-				break;
+				return false;
 		}
 		bDelete ? Destroy( ) : ExitProcess( UINT_MAX );
 	}
