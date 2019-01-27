@@ -48,6 +48,7 @@ It is possible to filter the news feed down to just users you follow, or a singl
   'option_group_description.tagging' => 'Options that control how tags can be applied to content.',
   'option_group_description.thReactions' => 'Options for the [TH] Reactions add-on.',
   'option_group_description.th_uix' => 'Options in this group allow you to customize your UI.X experience.',
+  'option_group_description.trader' => 'Options here control the Trader add-on.',
   'option_group_description.users' => '',
   'option_group_description.usersAndRegistration' => '',
   'option_group_description.xc_captcha_login' => '',

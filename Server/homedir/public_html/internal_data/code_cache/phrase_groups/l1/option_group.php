@@ -44,6 +44,7 @@ return array (
   'option_group.tagging' => 'Content tagging',
   'option_group.thReactions' => '[TH] Reactions',
   'option_group.th_uix' => '[TH] [UI.X] Options',
+  'option_group.trader' => 'Trader',
   'option_group.users' => 'User options',
   'option_group.usersAndRegistration' => 'User registration',
   'option_group.xc_captcha_login' => '[XenConcept] Captcha login',

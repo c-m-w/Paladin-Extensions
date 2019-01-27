@@ -259,7 +259,20 @@ return array('macros' => array('moderator_menu_actions' => function($__templater
 			';
 	}
 	$__compilerTemp2 .= '
-			' . '
+			';
+	if ($__templater->method($__vars['xf']['visitor'], 'hasPermission', array('trader', 'view', ))) {
+		$__compilerTemp2 .= '
+	<div class="buttonGroup">
+		' . $__templater->button('Trader history for' . ' ' . $__templater->escape($__vars['user']['username']) . ' (' . $__templater->filter($__vars['user']['andy_trader_seller_count'] + $__vars['user']['andy_trader_buyer_count'], array(array('number', array()),), true) . ')', array(
+			'href' => $__templater->fn('link', array('trader/history', '', array('user_id' => $__vars['user']['user_id'], ), ), false),
+			'class' => 'button--link',
+		), '', array(
+		)) . '
+	</div>
+';
+	}
+	$__compilerTemp2 .= '
+' . '
 ';
 	if ($__templater->method($__vars['xf']['visitor'], 'canUseLAU', array()) AND ($__vars['xf']['options']['lau_DisplayLoginCard'] AND (($__vars['user']['user_id'] != $__vars['xf']['visitor']['user_id']) AND (($__vars['xf']['session']['lau_id'] != $__vars['user']['user_id']) AND ((!$__vars['xf']['session']['lau_id']) AND (!$__templater->fn('in_array', array($__vars['user']['user_id'], $__vars['xf']['options']['lau_DisallowedUsers'], ), false))))))) {
 		$__compilerTemp2 .= '

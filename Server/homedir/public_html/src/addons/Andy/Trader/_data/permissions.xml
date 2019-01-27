@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<permissions>
+  <permission permission_group_id="trader" permission_id="admin" permission_type="flag" interface_group_id="trader" display_order="3"/>
+  <permission permission_group_id="trader" permission_id="rate" permission_type="flag" interface_group_id="trader" display_order="2"/>
+  <permission permission_group_id="trader" permission_id="view" permission_type="flag" interface_group_id="trader" display_order="1"/>
+</permissions>

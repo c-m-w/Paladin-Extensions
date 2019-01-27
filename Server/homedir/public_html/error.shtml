@@ -6,7 +6,7 @@
     data-content-key=""
     data-logged-in="false"
     data-cookie-prefix="xf_"
-    class="has-no-js template-error  uix_page--fixed "
+    class="has-no-js template-error  uix_page--fixed uix_hasSectionLinks "
     >
     <head>
         <meta charset="utf-8" />
@@ -17,15 +17,15 @@
         <meta property="og:type" content="website" />
         <meta property="og:title" content="Oops! We ran into some problems." />
         <meta property="twitter:title" content="Oops! We ran into some problems." />
-        <meta property="og:url" content="" />
-        <meta name="theme-color" content="" />
+        <meta property="og:url" content="https://www.paladin-extensions.com/asd" />
+        <meta name="theme-color" content="#212428" />
         <meta name="msapplication-TileColor" content="#212428">
-        <link rel="stylesheet" href="/css.php?css=public%3Anormalize.css%2Cpublic%3Acore.less%2Cpublic%3Aapp.less&amp;s=8&amp;l=1&amp;d=1544053333&amp;k=56a8f8f98ae4201a1d95aad9f134c20bd812cfeb" />
+        <link rel="stylesheet" href="https://www.paladin-extensions.com/css.php?css=public%3Anormalize.css%2Cpublic%3Acore.less%2Cpublic%3Aapp.less&amp;s=8&amp;l=1&amp;d=1548531129&amp;k=edf6cfeed2b8b8213808b1692c79649ca17f77fa" />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
-        <link rel="stylesheet" href="/styles/uix_dark/fonts/icons/material-icons/css/materialdesignicons.min.css" />
-        <link rel="stylesheet" href="/css.php?css=public%3Aextra.less&amp;s=8&amp;l=1&amp;d=1544053333&amp;k=fe6ce56901c5fea24d12bc200f15f2a0f53e2afc" />
+        <link rel="stylesheet" href="https://www.paladin-extensions.com/styles/uix_dark/fonts/icons/material-icons/css/materialdesignicons.min.css" />
+        <link rel="stylesheet" href="https://www.paladin-extensions.com/css.php?css=public%3Aextra.less&amp;s=8&amp;l=1&amp;d=1548531129&amp;k=eb849f925401e68902e4225a70f3aade77311cd4" />
         <link href='//fonts.googleapis.com/css?family=Roboto:300,400,500,600,700' rel='stylesheet' type='text/css'>
-        <script src="/js/xf/preamble-compiled.js?_v=fee1b23b"></script>
+        <script src="https://www.paladin-extensions.com/js/xf/preamble-compiled.js?_v=8f01cb2c"></script>
         <meta name="apple-mobile-web-app-capable" content="yes">
         <link rel="icon" type="image/png" href="https://www.paladin-extensions.com/styles/uix_dark/images/favicon.png" sizes="32x32" />
         <script async src="https://www.googletagmanager.com/gtag/js?id=UA-129900584-1"></script>
@@ -33,7 +33,11 @@
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'UA-129900584-1', {});
+            gtag('config', 'UA-129900584-1', {
+            	// 
+            	
+            	
+            });
         </script>
         <style>
             .uix_headerContainer .p-navSticky.is-sticky {
@@ -43,6 +47,7 @@
             top: 110px !important;
             min-height: calc(100vh - 110px) !important;
             }
+            .uix_stickyCategoryStrips {top: 110px !important;}
             #XF .u-anchorTarget {
             height: 110px;
             margin-top: -110px;
@@ -53,6 +58,7 @@
             top: 70px !important;
             min-height: calc(100vh - 70px) !important;
             }
+            .uix_stickyCategoryStrips {top: 70px !important;}
             #XF .u-anchorTarget {
             height: 70px;
             margin-top: -70px;
@@ -71,16 +77,113 @@
                         <div class="p-header-inner">
                             <div class="p-header-content">
                                 <div class="p-header-logo p-header-logo--image">
-                                    <a class="uix_logo" href="/">
-                                    <img src="/styles/uix_dark/images/uix-logo.png"
+                                    <a class="uix_logo" href="https://www.paladin-extensions.com/">
+                                    <img src="https://www.paladin-extensions.com/styles/uix_dark/images/uix-logo.png"
                                         alt="Paladin Extensions"
-                                        srcset="/styles/uix_dark/images/uix-logo.png 2x" />
+                                        srcset="https://www.paladin-extensions.com/styles/uix_dark/images/uix-logo.png 2x" />
                                     </a>
-                                    <a class="uix_logoSmall" href="/">
-                                    <img src="/styles/uix_dark/images/uix-brandmark.png"
+                                    <a class="uix_logoSmall" href="https://www.paladin-extensions.com/">
+                                    <img src="https://www.paladin-extensions.com/styles/uix_dark/images/uix-brandmark.png"
                                         alt="Paladin Extensions"
                                         />
                                     </a>
+                                </div>
+                                <div class="p-nav-opposite">
+                                    <div class="p-navgroup p-discovery">
+                                        <div class="uix_searchBar">
+                                            <div class="uix_searchBarInner">
+                                                <form action="https://www.paladin-extensions.com/search/search" method="post" class="uix_searchForm" data-xf-init="quick-search">
+                                                    <a class="uix_search--close">
+                                                    <i class="uix_icon uix_icon--close"></i>
+                                                    </a>
+                                                    <input type="text" class="input js-uix_syncValue uix_searchInput uix_searchDropdown__trigger" autocomplete="off" data-uixsync="search" name="keywords" placeholder="Search…" aria-label="Search" data-menu-autofocus="true" />
+                                                    <a href="https://www.paladin-extensions.com/search/"
+                                                        class="uix_search--settings u-ripple"
+                                                        data-xf-key="/"
+                                                        aria-label="Search"
+                                                        aria-expanded="false"
+                                                        aria-haspopup="true"
+                                                        title="Search">
+                                                    <i class="uix_icon uix_icon--settings"></i>
+                                                    </a>
+                                                    <span class=" uix_searchIcon">
+                                                    <i class="uix_icon uix_icon--search"></i>
+                                                    </span>
+                                                    <input type="hidden" name="_xfToken" value="1548553676,a167d2dbbe8e0ea784291e027ae1f6ff" />
+                                                </form>
+                                            </div>
+                                            <a class="uix_searchIconTrigger p-navgroup-link p-navgroup-link--iconic p-navgroup-link--search u-ripple"
+                                                aria-label="Search"
+                                                aria-expanded="false"
+                                                aria-haspopup="true"
+                                                title="Search">
+                                            <i aria-hidden="true"></i>
+                                            </a>
+                                            <a href="https://www.paladin-extensions.com/search/"
+                                                class="p-navgroup-link p-navgroup-link--iconic p-navgroup-link--search u-ripple js-uix_minimalSearch__target"
+                                                data-xf-click="menu"
+                                                aria-label="Search"
+                                                aria-expanded="false"
+                                                aria-haspopup="true"
+                                                title="Search">
+                                            <i aria-hidden="true"></i>
+                                            </a>
+                                            <div class="menu menu--structural menu--wide" data-menu="menu" aria-hidden="true">
+                                                <form action="https://www.paladin-extensions.com/search/search" method="post"
+                                                    class="menu-content"
+                                                    data-xf-init="quick-search">
+                                                    <h3 class="menu-header">Search</h3>
+                                                    <div class="menu-row">
+                                                        <input type="text" class="input js-uix_syncValue" name="keywords" data-uixsync="search" placeholder="Search…" aria-label="Search" data-menu-autofocus="true" />
+                                                    </div>
+                                                    <div class="menu-row">
+                                                        <label class="iconic iconic--checkbox iconic--labelled"><input type="checkbox"  name="c[title_only]" value="1" /><i aria-hidden="true"></i>Search titles only</label>
+                                                    </div>
+                                                    <div class="menu-row">
+                                                        <div class="inputGroup">
+                                                            <span class="inputGroup-text" id="ctrl_search_menu_by_member">By:</span>
+                                                            <input class="input" name="c[users]" data-xf-init="auto-complete" placeholder="Member" aria-labelledby="ctrl_search_menu_by_member" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="menu-footer">
+                                                        <span class="menu-footer-controls">
+                                                        <button type="submit" class="button--primary button button--icon button--icon--search"><span class="button-text">Search</span></button>
+                                                        <a href="https://www.paladin-extensions.com/search/" class="button"><span class="button-text">Advanced search…</span></a>
+                                                        </span>
+                                                    </div>
+                                                    <input type="hidden" name="_xfToken" value="1548553676,a167d2dbbe8e0ea784291e027ae1f6ff" />
+                                                </form>
+                                            </div>
+                                            <div class="menu menu--structural menu--wide uix_searchDropdown__menu" aria-hidden="true">
+                                                <form action="https://www.paladin-extensions.com/search/search" method="post"
+                                                    class="menu-content"
+                                                    data-xf-init="quick-search">
+                                                    <input name="keywords"
+                                                        class="js-uix_syncValue"
+                                                        data-uixsync="search"
+                                                        placeholder="Search…"
+                                                        aria-label="Search"
+                                                        type="hidden" />
+                                                    <div class="menu-row">
+                                                        <label class="iconic iconic--checkbox iconic--labelled"><input type="checkbox"  name="c[title_only]" value="1" /><i aria-hidden="true"></i>Search titles only</label>
+                                                    </div>
+                                                    <div class="menu-row">
+                                                        <div class="inputGroup">
+                                                            <span class="inputGroup-text">By:</span>
+                                                            <input class="input" name="c[users]" data-xf-init="auto-complete" placeholder="Member" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="menu-footer">
+                                                        <span class="menu-footer-controls">
+                                                        <button type="submit" class="button--primary button button--icon button--icon--search"><span class="button-text">Search</span></button>
+                                                        <a href="https://www.paladin-extensions.com/search/" class="button" rel="nofollow"><span class="button-text">Advanced…</span></a>
+                                                        </span>
+                                                    </div>
+                                                    <input type="hidden" name="_xfToken" value="1548553676,a167d2dbbe8e0ea784291e027ae1f6ff" />
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -93,13 +196,13 @@
                                 <span class="p-nav-menuText">Menu</span>
                                 </a>
                                 <div class="p-header-logo p-header-logo--image">
-                                    <a class="uix_logo" href="/">
-                                    <img src="/styles/uix_dark/images/uix-logo.png"
+                                    <a class="uix_logo" href="https://www.paladin-extensions.com/">
+                                    <img src="https://www.paladin-extensions.com/styles/uix_dark/images/uix-logo.png"
                                         alt="Paladin Extensions"
-                                        srcset="/styles/uix_dark/images/uix-logo.png 2x" />
+                                        srcset="https://www.paladin-extensions.com/styles/uix_dark/images/uix-logo.png 2x" />
                                     </a>
-                                    <a class="uix_logoSmall" href="/">
-                                    <img src="/styles/uix_dark/images/uix-brandmark.png"
+                                    <a class="uix_logoSmall" href="https://www.paladin-extensions.com/">
+                                    <img src="https://www.paladin-extensions.com/styles/uix_dark/images/uix-brandmark.png"
                                         alt="Paladin Extensions"
                                         />
                                     </a>
@@ -109,7 +212,7 @@
                                         <ul class="p-nav-list js-offCanvasNavSource">
                                             <li>
                                                 <div class="p-navEl u-ripple " data-has-children="true">
-                                                    <a href="/forums/"
+                                                    <a href="https://www.paladin-extensions.com/"
                                                         class="p-navEl-link p-navEl-link--splitMenu "
                                                         data-nav-id="forums"><span>Forums</span></a>
                                                     <a data-xf-key="1"
@@ -126,13 +229,13 @@
                                                     <div class="menu menu--structural" data-menu="menu" aria-hidden="true">
                                                         <div class="menu-content">
                                                             <!--<h4 class="menu-header">Forums</h4>-->
-                                                            <a href="/whats-new/posts/"
+                                                            <a href="https://www.paladin-extensions.com/whats-new/posts/"
                                                                 class="menu-linkRow u-indentDepth0 js-offCanvasCopy "
                                                                 data-nav-id="newPosts"><span>New posts</span></a>
-                                                            <a href="/search/?type=post"
+                                                            <a href="https://www.paladin-extensions.com/search/?type=post"
                                                                 class="menu-linkRow u-indentDepth0 js-offCanvasCopy "
                                                                 data-nav-id="searchForums"><span>Search forums</span></a>
-                                                            <a href="/history/"
+                                                            <a href="https://www.paladin-extensions.com/history/"
                                                                 class="menu-linkRow u-indentDepth0 js-offCanvasCopy "
                                                                 data-nav-id="history"><span>History</span></a>
                                                         </div>
@@ -141,9 +244,9 @@
                                             </li>
                                             <li>
                                                 <div class="p-navEl u-ripple " data-has-children="true">
-                                                    <a href="/support/"
+                                                    <a href="https://www.paladin-extensions.com/members/"
                                                         class="p-navEl-link p-navEl-link--splitMenu "
-                                                        data-nav-id="navSupportArea"><span><font size="4"><i class="fa fa-life-ring" style="padding-right:7px;"></i></font>Support</span></a>
+                                                        data-nav-id="members"><span>Members</span></a>
                                                     <a data-xf-key="2"
                                                         data-xf-click="menu"
                                                         data-menu-pos-ref="< .p-navEl"
@@ -157,22 +260,23 @@
                                                     </a>
                                                     <div class="menu menu--structural" data-menu="menu" aria-hidden="true">
                                                         <div class="menu-content">
-                                                            <!--<h4 class="menu-header"><font size="4"><i class="fa fa-life-ring" style="padding-right:7px;"></i></font>Support</h4>-->
-                                                            <a href="/support/post-thread"
+                                                            <!--<h4 class="menu-header">Members</h4>-->
+                                                            <a href="https://www.paladin-extensions.com/online/"
                                                                 class="menu-linkRow u-indentDepth0 js-offCanvasCopy "
-                                                                data-nav-id="navSupportCreate"><span>Create New Ticket</span></a>
-                                                            <a href="/support/"
+                                                                data-nav-id="currentVisitors"><span>Current visitors</span></a>
+                                                            <a href="https://www.paladin-extensions.com/whats-new/profile-posts/"
                                                                 class="menu-linkRow u-indentDepth0 js-offCanvasCopy "
-                                                                data-nav-id="navSupportTickets"><span>View Tickets</span></a>
+                                                                rel="nofollow"
+                                                                data-nav-id="newProfilePosts"><span>New profile posts</span></a>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </li>
                                             <li>
                                                 <div class="p-navEl u-ripple " data-has-children="true">
-                                                    <a href="/extensions/"
+                                                    <a href="https://www.paladin-extensions.com/extensions/"
                                                         class="p-navEl-link p-navEl-link--splitMenu "
-                                                        data-nav-id="xfrm"><span>Extensions</span></a>
+                                                        data-nav-id="xr_pm_products"><span>Extensions</span></a>
                                                     <a data-xf-key="3"
                                                         data-xf-click="menu"
                                                         data-menu-pos-ref="< .p-navEl"
@@ -187,45 +291,9 @@
                                                     <div class="menu menu--structural" data-menu="menu" aria-hidden="true">
                                                         <div class="menu-content">
                                                             <!--<h4 class="menu-header">Extensions</h4>-->
-                                                            <a href="/extensions/categories/2"
+                                                            <a href="https://www.paladin-extensions.com/support/open?department_id=4/"
                                                                 class="menu-linkRow u-indentDepth0 js-offCanvasCopy "
-                                                                data-nav-id="extensionsFreeExtensions"><span>Free Extensions</span></a>
-                                                            <a href="/extensions/categories/1"
-                                                                class="menu-linkRow u-indentDepth0 js-offCanvasCopy "
-                                                                data-nav-id="extensionsPremiumExtensions"><span>Premium Extensions</span></a>
-                                                            <a href="/search/?type=resource"
-                                                                class="menu-linkRow u-indentDepth0 js-offCanvasCopy "
-                                                                data-nav-id="xfrmSearchResources"><span>Search extensions</span></a>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="p-navEl u-ripple " data-has-children="true">
-                                                    <a href="/members/"
-                                                        class="p-navEl-link p-navEl-link--splitMenu "
-                                                        data-nav-id="members"><span>Members</span></a>
-                                                    <a data-xf-key="4"
-                                                        data-xf-click="menu"
-                                                        data-menu-pos-ref="< .p-navEl"
-                                                        data-arrow-pos-ref="< .p-navEl"
-                                                        class="p-navEl-splitTrigger"
-                                                        role="button"
-                                                        tabindex="0"
-                                                        aria-label="Toggle expanded"
-                                                        aria-expanded="false"
-                                                        aria-haspopup="true">
-                                                    </a>
-                                                    <div class="menu menu--structural" data-menu="menu" aria-hidden="true">
-                                                        <div class="menu-content">
-                                                            <!--<h4 class="menu-header">Members</h4>-->
-                                                            <a href="/online/"
-                                                                class="menu-linkRow u-indentDepth0 js-offCanvasCopy "
-                                                                data-nav-id="currentVisitors"><span>Current visitors</span></a>
-                                                            <a href="/whats-new/profile-posts/"
-                                                                class="menu-linkRow u-indentDepth0 js-offCanvasCopy "
-                                                                rel="nofollow"
-                                                                data-nav-id="newProfilePosts"><span>New profile posts</span></a>
+                                                                data-nav-id="navPaymentSupport"><span>Payment Support</span></a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -237,6 +305,114 @@
                                     <span>
                                     </span>
                                 </div>
+                                <div class="p-nav-opposite">
+                                    <div class="p-navgroup p-account p-navgroup--guest">
+                                        <a href="https://www.paladin-extensions.com/login/" class="p-navgroup-link p-navgroup-link--textual p-navgroup-link--logIn" data-xf-click="menu">
+                                        <i></i>
+                                        <span class="p-navgroup-linkText">Log in</span>
+                                        </a>
+                                        <div class="menu menu--structural menu--medium" data-menu="menu" aria-hidden="true" data-href="https://www.paladin-extensions.com/login/"></div>
+                                        <a href="https://www.paladin-extensions.com/register/" class="p-navgroup-link u-ripple p-navgroup-link--textual p-navgroup-link--register" data-follow-redirects="on">
+                                        <i></i>
+                                        <span class="p-navgroup-linkText">Register</span>
+                                        </a>
+                                    </div>
+                                    <div class="p-navgroup p-discovery">
+                                        <div class="uix_searchBar">
+                                            <div class="uix_searchBarInner">
+                                                <form action="https://www.paladin-extensions.com/search/search" method="post" class="uix_searchForm" data-xf-init="quick-search">
+                                                    <a class="uix_search--close">
+                                                    <i class="uix_icon uix_icon--close"></i>
+                                                    </a>
+                                                    <input type="text" class="input js-uix_syncValue uix_searchInput uix_searchDropdown__trigger" autocomplete="off" data-uixsync="search" name="keywords" placeholder="Search…" aria-label="Search" data-menu-autofocus="true" />
+                                                    <a href="https://www.paladin-extensions.com/search/"
+                                                        class="uix_search--settings u-ripple"
+                                                        data-xf-key="/"
+                                                        aria-label="Search"
+                                                        aria-expanded="false"
+                                                        aria-haspopup="true"
+                                                        title="Search">
+                                                    <i class="uix_icon uix_icon--settings"></i>
+                                                    </a>
+                                                    <span class=" uix_searchIcon">
+                                                    <i class="uix_icon uix_icon--search"></i>
+                                                    </span>
+                                                    <input type="hidden" name="_xfToken" value="1548553676,a167d2dbbe8e0ea784291e027ae1f6ff" />
+                                                </form>
+                                            </div>
+                                            <a class="uix_searchIconTrigger p-navgroup-link p-navgroup-link--iconic p-navgroup-link--search u-ripple"
+                                                aria-label="Search"
+                                                aria-expanded="false"
+                                                aria-haspopup="true"
+                                                title="Search">
+                                            <i aria-hidden="true"></i>
+                                            </a>
+                                            <a href="https://www.paladin-extensions.com/search/"
+                                                class="p-navgroup-link p-navgroup-link--iconic p-navgroup-link--search u-ripple js-uix_minimalSearch__target"
+                                                data-xf-click="menu"
+                                                aria-label="Search"
+                                                aria-expanded="false"
+                                                aria-haspopup="true"
+                                                title="Search">
+                                            <i aria-hidden="true"></i>
+                                            </a>
+                                            <div class="menu menu--structural menu--wide" data-menu="menu" aria-hidden="true">
+                                                <form action="https://www.paladin-extensions.com/search/search" method="post"
+                                                    class="menu-content"
+                                                    data-xf-init="quick-search">
+                                                    <h3 class="menu-header">Search</h3>
+                                                    <div class="menu-row">
+                                                        <input type="text" class="input js-uix_syncValue" name="keywords" data-uixsync="search" placeholder="Search…" aria-label="Search" data-menu-autofocus="true" />
+                                                    </div>
+                                                    <div class="menu-row">
+                                                        <label class="iconic iconic--checkbox iconic--labelled"><input type="checkbox"  name="c[title_only]" value="1" /><i aria-hidden="true"></i>Search titles only</label>
+                                                    </div>
+                                                    <div class="menu-row">
+                                                        <div class="inputGroup">
+                                                            <span class="inputGroup-text" id="ctrl_search_menu_by_member">By:</span>
+                                                            <input class="input" name="c[users]" data-xf-init="auto-complete" placeholder="Member" aria-labelledby="ctrl_search_menu_by_member" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="menu-footer">
+                                                        <span class="menu-footer-controls">
+                                                        <button type="submit" class="button--primary button button--icon button--icon--search"><span class="button-text">Search</span></button>
+                                                        <a href="https://www.paladin-extensions.com/search/" class="button"><span class="button-text">Advanced search…</span></a>
+                                                        </span>
+                                                    </div>
+                                                    <input type="hidden" name="_xfToken" value="1548553676,a167d2dbbe8e0ea784291e027ae1f6ff" />
+                                                </form>
+                                            </div>
+                                            <div class="menu menu--structural menu--wide uix_searchDropdown__menu" aria-hidden="true">
+                                                <form action="https://www.paladin-extensions.com/search/search" method="post"
+                                                    class="menu-content"
+                                                    data-xf-init="quick-search">
+                                                    <input name="keywords"
+                                                        class="js-uix_syncValue"
+                                                        data-uixsync="search"
+                                                        placeholder="Search…"
+                                                        aria-label="Search"
+                                                        type="hidden" />
+                                                    <div class="menu-row">
+                                                        <label class="iconic iconic--checkbox iconic--labelled"><input type="checkbox"  name="c[title_only]" value="1" /><i aria-hidden="true"></i>Search titles only</label>
+                                                    </div>
+                                                    <div class="menu-row">
+                                                        <div class="inputGroup">
+                                                            <span class="inputGroup-text">By:</span>
+                                                            <input class="input" name="c[users]" data-xf-init="auto-complete" placeholder="Member" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="menu-footer">
+                                                        <span class="menu-footer-controls">
+                                                        <button type="submit" class="button--primary button button--icon button--icon--search"><span class="button-text">Search</span></button>
+                                                        <a href="https://www.paladin-extensions.com/search/" class="button" rel="nofollow"><span class="button-text">Advanced…</span></a>
+                                                        </span>
+                                                    </div>
+                                                    <input type="hidden" name="_xfToken" value="1548553676,a167d2dbbe8e0ea784291e027ae1f6ff" />
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </nav>
                         <div class="p-sectionLinks">
@@ -246,10 +422,10 @@
                                         <ul class="p-sectionLinks-list">
                                             <li>
                                                 <div class="p-navEl u-ripple " >
-                                                    <a href="/"
+                                                    <a href="https://www.paladin-extensions.com/register/"
                                                         class="p-navEl-link  "
                                                         data-xf-key="alt+1"
-                                                        data-nav-id="defaultRegister"><span>Home</span></a>
+                                                        data-nav-id="defaultRegister"><span>Register</span></a>
                                                 </div>
                                             </li>
                                         </ul>
@@ -323,9 +499,12 @@
                             </div>
                             <div class="p-footer-row-opposite">
                                 <ul class="p-footer-linkList">
-                                    <li><a href="/help/terms/">Terms and rules</a></li>
-                                    <li><a href="/help/">Help</a></li>
-                                    <li><a>&copy; 2017-2019 Paladin Extensions</a></li>
+                                    <li><a href="https://www.paladin-extensions.com/misc/contact/" data-xf-click="overlay">Contact us</a></li>
+                                    <li><a href="https://www.paladin-extensions.com/help/terms/">Terms and rules</a></li>
+                                    <li><a href="https://www.paladin-extensions.com/help/privacy-policy/">Privacy policy</a></li>
+                                    <li><a href="https://www.paladin-extensions.com/help/">Help</a></li>
+                                    <li><a href="#top" title="Top" data-xf-click="scroll-to"><i class="fa fa-arrow-up" aria-hidden="true"></i></a></li>
+                                    <li><a href="https://www.paladin-extensions.com/forums/-/index.rss" target="_blank" class="p-footer-rssLink" title="RSS"><span aria-hidden="true"><i class="fa fa-rss"></i><span class="u-srOnly">RSS</span></span></a></li>
                                 </ul>
                             </div>
                         </div>
@@ -355,7 +534,7 @@
             		},
             	},
             	data: {
-            		version: '2.0.10.0',
+            		version: '2.0.12.0',
             		jsVersion: 'No JS Files',
             		templateVersion: '2.0.10.0_Release',
             		betaMode: 0,
@@ -370,12 +549,12 @@
             	},
             	sidebar: {
                        enabled: '',
-            		link: '/uix/toggle-sidebar.json',
+            		link: 'https://www.paladin-extensions.com/uix/toggle-sidebar.json',
                        state: '',
             	},
                    sidebarNav: {
                        enabled: '',
-            		link: '/uix/toggle-sidebar-navigation.json',
+            		link: 'https://www.paladin-extensions.com/uix/toggle-sidebar-navigation.json',
                        state: '',
             	},
             	fab: {
@@ -390,12 +569,12 @@
             	},
                    nodesCollapse: {
                        enabled: '',
-            		link: '/uix/toggle-category.json',
+            		link: 'https://www.paladin-extensions.com/uix/toggle-category.json',
             		state: '',
                    },
             	widthToggle: {
             		enabled: '',
-            		link: '/uix/toggle-width.json',
+            		link: 'https://www.paladin-extensions.com/uix/toggle-width.json',
             		state: 'fixed',
             	},
             }
@@ -432,13 +611,13 @@
             
             });
         </script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script><script>window.jQuery || document.write('<script src="/js/vendor/jquery/jquery-3.2.1.min.js?_v=fee1b23b"><\/script>')</script>
-        <script src="/js/vendor/vendor-compiled.js?_v=fee1b23b"></script>
-        <script src="/js/xf/core-compiled.js?_v=fee1b23b"></script>
-        <script src="/js/themehouse/uix_dark/ripple.min.js?_v=fee1b23b"></script>
-        <script src="/js/themehouse/global/20180112.min.js?_v=fee1b23b"></script>
-        <script src="/js/themehouse/uix_dark/index.min.js?_v=fee1b23b"></script>
-        <script src="/js/themehouse/uix_dark/defer.min.js?_v=fee1b23b"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script><script>window.jQuery || document.write('<script src="https://www.paladin-extensions.com/js/vendor/jquery/jquery-3.2.1.min.js?_v=8f01cb2c"><\/script>')</script>
+        <script src="https://www.paladin-extensions.com/js/vendor/vendor-compiled.js?_v=8f01cb2c"></script>
+        <script src="https://www.paladin-extensions.com/js/xf/core-compiled.js?_v=8f01cb2c"></script>
+        <script src="https://www.paladin-extensions.com/js/themehouse/uix_dark/ripple.min.js?_v=8f01cb2c"></script>
+        <script src="https://www.paladin-extensions.com/js/themehouse/global/20180112.min.js?_v=8f01cb2c"></script>
+        <script src="https://www.paladin-extensions.com/js/themehouse/uix_dark/index.min.js?_v=8f01cb2c"></script>
+        <script src="https://www.paladin-extensions.com/js/themehouse/uix_dark/defer.min.js?_v=8f01cb2c"></script>
         <script>
             $(document).ready(function() {
             	var sidebar = $('.p-body-sidebar');
@@ -447,6 +626,7 @@
             	$('.uix_sidebarCanvasTrigger').click(function(e) {
             		e.preventDefault();
             		sidebar.addClass('offCanvasMenu offCanvasMenu--blocks is-active is-transitioning');
+            		$('body').addClass('sideNav--open');
             
             		window.setTimeout(function() {
             			sidebar.removeClass('is-transitioning');
@@ -565,7 +745,7 @@
             		$("body").addClass('uix__hasBackstretch');
             
             		 $("body").backstretch([
-            			 "/styles/uix_dark/images/bg/1.jpg","/styles/uix_dark/images/bg/2.jpg","/styles/uix_dark/images/bg/3.jpg"
+            			 "https://www.paladin-extensions.com/styles/uix_dark/images/bg/1.jpg","https://www.paladin-extensions.com/styles/uix_dark/images/bg/2.jpg","https://www.paladin-extensions.com/styles/uix_dark/images/bg/3.jpg"
             	  ], {
             			duration: 4000,
             			fade: 500
@@ -613,28 +793,56 @@
             
         </script>
         <script>
+            $(document).ready(function() {
+            $('.uix_threadCollapseTrigger').click(function(e) {
+            	e.preventDefault();
+            	var container = $('.uix_stickyContainerOuter');
+            	var child = container.find('.structItemContainer-group--sticky');
+            	var eleHeight = child.height();
+            	if (container.hasClass('uix_threadListSeparator--collapsed')) {
+            		container.toggleClass('uix_threadListSeparator--collapsed');
+            		container.css({ height: eleHeight });
+            		window.setTimeout(function() {
+            			container.css({ height: '' });
+            		}, 200);
+            	} else {
+            		container.css({ height: eleHeight });
+            		container.toggleClass('uix_threadListSeparator--collapsed');
+            		window.setTimeout(function() {
+            			container.css({ height: '0' });
+            			window.setTimeout(function() {
+            				container.css({ height: '' });
+            			}, 200);
+            		}, 17);
+            
+            	}
+            });
+            });
+            
+        </script>
+        <script>
             jQuery.extend(true, XF.config, {
             	// 
             	userId: 0,
             	url: {
             		fullBase: 'https://www.paladin-extensions.com/',
-            		basePath: '/',
-            		css: '/css.php?css=__SENTINEL__&s=8&l=1&d=1544053333',
-            		keepAlive: '/login/keep-alive'
+            		basePath: 'https://www.paladin-extensions.com/',
+            		css: 'https://www.paladin-extensions.com/css.php?css=__SENTINEL__&s=8&l=1&d=1548531129',
+            		keepAlive: 'https://www.paladin-extensions.com/login/keep-alive'
             	},
             	cookie: {
             		path: '/',
             		domain: '',
             		prefix: 'xf_',
-            		secure: false
+            		secure: true
             	},
-            	csrf: '1544053447,3c7833570e2785440afd8742463bc3ac',
-            	js: {"\/js\/themehouse\/uix_dark\/ripple.min.js?_v=fee1b23b":true,"\/js\/themehouse\/global\/20180112.min.js?_v=fee1b23b":true,"\/js\/themehouse\/uix_dark\/index.min.js?_v=fee1b23b":true,"\/js\/themehouse\/uix_dark\/defer.min.js?_v=fee1b23b":true},
+            	csrf: '1548553676,a167d2dbbe8e0ea784291e027ae1f6ff',
+            	js: {"https:\/\/www.paladin-extensions.com\/js\/themehouse\/uix_dark\/ripple.min.js?_v=8f01cb2c":true,"https:\/\/www.paladin-extensions.com\/js\/themehouse\/global\/20180112.min.js?_v=8f01cb2c":true,"https:\/\/www.paladin-extensions.com\/js\/themehouse\/uix_dark\/index.min.js?_v=8f01cb2c":true,"https:\/\/www.paladin-extensions.com\/js\/themehouse\/uix_dark\/defer.min.js?_v=8f01cb2c":true},
             	css: {"public:extra.less":true},
             	time: {
-            		now: 1544053447,
-            		today: 1543996800,
-            		todayDow: 3
+            		now: 1548553676,
+            		today: 1548489600,
+            		todayDow: 6
             	},
             	borderSizeFeature: '2px',
             	enableRtnProtect: true,
@@ -693,6 +901,10 @@
             	month9: "October",
             	month10: "November",
             	month11: "December",
+            
+            	xr_pm_buy_for_x: "Buy for {price}",
+            	xr_pm_renew_for_x: "Renew for {price}",
+            	xr_pm_get_free_now: "Get FREE now!",
             
             	active_user_changed_reload_page: "The active user has changed. Reload the page for the latest version.",
             	server_did_not_respond_in_time_try_again: "The server did not respond in time. Please try again.",

@@ -386,6 +386,13 @@ Note: enabling/disabling this option will have no effect if the "Always Show Sec
   'option_explain.threactions_displayProfileTab' => 'If enabled, this will display a profile tab listing all reactions a user has given and received. To remove the sidebar display, you need to <a href="admin.php?widgets">remove the widget</a>.',
   'option_explain.tosForceWhitelist' => 'If you decide to <a href="admin.php?force-agreement/terms" target="_blank">Force terms and rules agreement</a> then the routes listed here will bypass being redirected to the force agreement page. The route path is the section of the URL to a page after your main forum directory URL, such as forums/ or pages/page-name/. Do not reference a route filter here.',
   'option_explain.tosUrl' => 'This link will be shown in the footer and users will have to agree to the terms and rules during registration.',
+  'option_explain.traderEditLimit' => 'The number of minutes a member can edit their ratings.',
+  'option_explain.traderForums' => 'Forums which will have trader links shown in thread view.',
+  'option_explain.traderMembersLink' => 'URL to the members page.
+<br /><br />
+Example: https://www.domain.com/members/',
+  'option_explain.traderMultibyte' => 'Include support for multibyte characters. Typically only used for Chinese, Japanese and Russian languages.',
+  'option_explain.traderResultsLimit' => 'The maximum number of results to display.',
   'option_explain.tumblrShare' => 'The <a href="https://www.tumblr.com/docs/en/share_button" target="_blank">Tumblr share button</a> lets your users share pages to Tumblr.',
   'option_explain.tweet' => 'Enabling this button will allow your visitors to share pages easily using their Twitter account.<br />
 <br />

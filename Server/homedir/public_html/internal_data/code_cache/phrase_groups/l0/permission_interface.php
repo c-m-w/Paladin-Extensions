@@ -27,5 +27,6 @@ return array (
   'permission_interface.thReactionsModerator' => '[TH] Reactions moderator permissions',
   'permission_interface.thReactionsPermissions' => '[TH] Reactions permissions',
   'permission_interface.th_uix' => 'UI.X Permissions',
+  'permission_interface.trader' => 'Trader',
   'permission_interface.xr_pm_user' => 'XR Product Manager: User permissions',
 );

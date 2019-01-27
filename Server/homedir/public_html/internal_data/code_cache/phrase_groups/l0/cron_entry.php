@@ -1,6 +1,7 @@
 <?php
 return array (
   'cron_entry.EmailLog' => 'Email log',
+  'cron_entry.Trader' => 'Trader',
   'cron_entry.cleanUpDaily' => 'Daily clean up',
   'cron_entry.cleanUpHourly' => 'Hourly clean up',
   'cron_entry.dailyStats' => 'Record daily statistics',
