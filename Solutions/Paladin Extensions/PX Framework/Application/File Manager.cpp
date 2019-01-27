@@ -50,10 +50,102 @@ namespace PX::Files
 		return wstrInstallDirectory;
 	}
 
-	CConfig::CConfig( ): wstrExtension( PX_XOR( L".pxcfg" ) ), wstrExtensionFolderNames { PX_XOR( L"CSGO\\Configurations\\" ), PX_XOR( L"PUBG\\Configurations\\" ), PX_XOR( L"RSIX\\Configurations\\" ) }, wstrGlobalFileName( PX_XOR( L"global" ) )
+	std::vector< Types::str_t > GetFilesInDirectory( const Types::str_t& strFolder, const Types::str_t& strExtension )
+	{
+		const auto strDirectory = string_cast< std::string >( GetPXDirectory( ) ) + strFolder;
+		std::vector< Types::str_t > vecFiles;
+		
+		for ( auto& file : std::filesystem::directory_iterator( strDirectory.c_str( ) ) )
+			if ( file.is_regular_file( )
+				 && ( strExtension.empty( ) || file.path( ).string( ).find( strExtension ) != std::string::npos ) )
+				vecFiles.emplace_back( file.path( ).string( ).substr( file.path().string().find_last_of( '\\' ) ) );
+
+		return vecFiles;
+	}
+
+	void CConfig::LoadGlobalConfig( )
+	{
+		if ( bLoadedGlobalConfig )
+			return;
+
+		std::wstring wstrData { };
+		if ( !Files::FileRead( GetConfigDirectory( ) + wstrGlobalFileName, wstrData, false, false ) )
+		{
+			SaveGlobalConfiguration( );
+			return LoadGlobalConfig( );
+		}
+
+		try
+		{
+			auto jsData = nlohmann::json::parse( string_cast< std::string >( wstrData ) );
+
+			global.kMenuKey = jsData[ "Menu Key" ].get< int >( );
+			global.strDefaultConfiguration = jsData[ "Default Configuration" ].get< std::string >( );
+			global.bSimplifyMenu = jsData[ "Simplify Menu" ].get< bool >( );
+			global.bNotifyUponInjection = jsData[ "Notify Upon Injection" ].get< bool >( );
+			global.bNotifyUponConfigurationChange = jsData[ "Notify Upon Configuration Change" ].get< bool >( );
+			global.bDisplayTooltips = jsData[ "Display Tooltips" ].get< bool >( );
+			global.bDisplayWatermark = jsData[ "Display Watermark" ].get< bool >( );
+			bLoadedGlobalConfig = true;
+		}
+		catch( nlohmann::json::parse_error& )
+		{
+			SaveGlobalConfiguration( );
+			return LoadGlobalConfig( );
+		}
+		catch( nlohmann::json::type_error& )
+		{
+			SaveGlobalConfiguration( );
+			return LoadGlobalConfig( );
+		}
+	}
+
+	void CConfig::CreateDefaultConfig( )
+	{
+		SaveConfiguration( string_cast< std::wstring >( GetDefaultConfiguration( ) ).c_str( ) );
+	}
+
+	CConfig::CConfig( ): wstrExtension( PX_XOR( L".pxcfg" ) ), wstrExtensionFolderNames { PX_XOR( L"Resources\\Extensions Data\\CSGO\\Configurations\\" ), PX_XOR( L"Resources\\Extensions Data\\PUBG\\Configurations\\" ), PX_XOR( L"Resources\\Extensions Data\\RSIX\\Configurations\\" ) }, wstrGlobalFileName( PX_XOR( L"global.json" ) )
 	{ }
 
-	PX_RET wstr_t PX_API CConfig::GetConfigDirectory( int iExtension )
+	void CConfig::SetMenuKey( const Types::key_t kNewKey )
+	{
+		if( global.kMenuKey != kNewKey )
+		{
+			global.kMenuKey = kNewKey;
+			SaveGlobalConfiguration( );
+		}
+	}
+
+	void CConfig::SetDefaultConfiguration( const Types::str_t& strNewDefaultConfiguration )
+	{
+		if ( global.strDefaultConfiguration != strNewDefaultConfiguration )
+		{
+			global.strDefaultConfiguration = strNewDefaultConfiguration;
+			SaveGlobalConfiguration( );
+		}
+	}
+
+	Types::key_t CConfig::GetMenuKey( )
+	{
+		LoadGlobalConfig( );
+		return global.kMenuKey;
+	}
+
+	const Types::str_t& CConfig::GetDefaultConfiguration( )
+	{
+		LoadGlobalConfig( );
+		return global.strDefaultConfiguration;
+	}
+
+	void CConfig::SetContext( void* pStructure, std::size_t zConfigStructure, int iExtensionID )
+	{
+		pConfig = pStructure;
+		zConfig = zConfigStructure;
+		iExtension = iExtensionID;
+	}
+
+	PX_RET wstr_t PX_API CConfig::GetConfigDirectory( )
 	{
 		static wstr_t wstrConfigDirectory;
 		if ( wstrConfigDirectory.empty( ) )
@@ -61,19 +153,46 @@ namespace PX::Files
 		return wstrConfigDirectory + wstrExtensionFolderNames[ iExtension ];
 	}
 
-	void PX_API CConfig::SaveConfiguration( int iExtensionID, wcstr_t wszFileName, void *pConfigStructure, std::size_t zConfigStructureSize )
+	std::vector< Types::str_t > CConfig::GetConfigs( )
 	{
-		nlohmann::json jsConfiguration;
-		jsConfiguration[ PX_XOR( "Size" ) ] = zConfigStructureSize;
-		for ( auto u = 0u; u < zConfigStructureSize; u++ )
-			jsConfiguration[ PX_XOR( "Bytes" ) ][ u ] = *reinterpret_cast< byte_t* >( ptr_t( pConfigStructure ) + u );
-		FileWrite( GetConfigDirectory( iExtensionID ) + wszFileName + wstrExtension, string_cast< wstr_t >( jsConfiguration.dump( 4 ) ), false, true );
+		const auto vecConfigs = GetFilesInDirectory( string_cast< std::string >( wstrExtensionFolderNames[ iExtension ] ), string_cast< decltype( std::string { } ) > ( wstrExtension ) );
+		if ( vecConfigs.empty( ) )
+		{
+			CreateDefaultConfig( );
+			return GetConfigs( );
+		}
+
+		return vecConfigs;
 	}
 
-	bool PX_API CConfig::LoadDefaultConfiguration( int iExtensionID, void *pConfigStructure, std::size_t zConfigStructureSize )
+	void CConfig::SaveGlobalConfiguration( )
+	{
+		Files::FileWrite( GetConfigDirectory( ) + wstrGlobalFileName, string_cast< std::wstring >(
+			nlohmann::json
+			{
+				{ "Menu Key", global.kMenuKey },
+				{ "Default Configuration", global.strDefaultConfiguration },
+				{ "Simplify Menu", global.bSimplifyMenu },
+				{ "Notify Upon Injection", global.bNotifyUponInjection },
+				{ "Notify Upon Configuration Change", global.bNotifyUponConfigurationChange },
+				{ "Display Tooltips", global.bDisplayTooltips },
+				{ "Display Watermark", global.bDisplayWatermark },
+			}.dump( 4 ) ), false, false );
+	}
+
+	void PX_API CConfig::SaveConfiguration( wcstr_t wszFileName )
+	{
+		nlohmann::json jsConfiguration;
+		jsConfiguration[ PX_XOR( "Size" ) ] = zConfig;
+		for ( auto u = 0u; u < zConfig; u++ )
+			jsConfiguration[ PX_XOR( "Bytes" ) ][ u ] = *reinterpret_cast< byte_t* >( ptr_t( pConfig ) + u );
+		FileWrite( GetConfigDirectory( ) + wszFileName + wstrExtension, string_cast< wstr_t >( jsConfiguration.dump( 4 ) ), false, true );
+	}
+
+	bool PX_API CConfig::LoadDefaultConfiguration( )
 	{
 		wstr_t wstrData;
-		if ( !FileRead( GetConfigDirectory( iExtensionID ) + wstrGlobalFileName + wstrExtension, wstrData, false, true ) )
+		if ( !FileRead( GetConfigDirectory( ) + wstrGlobalFileName + wstrExtension, wstrData, false, true ) )
 			return false;
 		nlohmann::json jsData;
 		try
@@ -87,7 +206,7 @@ namespace PX::Files
 #define large_char_t unsigned __int128
 		try
 		{
-			return LoadConfiguration( iExtensionID, string_cast< wstr_t >( jsData[ PX_XOR( "Default Configuration" ) ].get< str_t >( ) ).c_str( ), pConfigStructure, zConfigStructureSize );
+			return LoadConfiguration( string_cast< wstr_t >( jsData[ PX_XOR( "Default Configuration" ) ].get< str_t >( ) ).c_str( ) );
 		}
 		catch ( nlohmann::json::type_error & )
 		{
@@ -95,17 +214,17 @@ namespace PX::Files
 		}
 	}
 
-	void CConfig::SetDefaultConfiguration( int iExtensionID, wcstr_t wszFileName )
-	{
-		nlohmann::json jsGlobal;
-		jsGlobal[ PX_XOR( "Default Configuration" ) ] = string_cast< str_t >( wstr_t( wszFileName ) );
-		FileWrite( GetConfigDirectory( iExtensionID ) + wstrGlobalFileName + wstrExtension, string_cast< wstr_t >( jsGlobal.dump( 4 ) ), false, true );
-	}
+	//oid CConfig::SetDefaultConfiguration( int iExtensionID, wcstr_t wszFileName )
+	//
+	//	nlohmann::json jsGlobal;
+	//	jsGlobal[ PX_XOR( "Default Configuration" ) ] = string_cast< str_t >( wstr_t( wszFileName ) );
+	//	FileWrite( GetConfigDirectory( iExtensionID ) + wstrGlobalFileName + wstrExtension, string_cast< wstr_t >( jsGlobal.dump( 4 ) ), false, true );
+	//
 
-	bool PX_API CConfig::LoadConfiguration( int iExtensionID, Types::wcstr_t wszFileName, void *pConfigStructure, std::size_t zConfigStructureSize )
+	bool PX_API CConfig::LoadConfiguration( Types::wcstr_t wszFileName )
 	{
 		wstr_t wstrData;
-		if ( !FileRead( GetConfigDirectory( iExtensionID ) + wszFileName + wstrExtension, wstrData, false, true ) )
+		if ( !FileRead( GetConfigDirectory( ) + wszFileName + wstrExtension, wstrData, false, true ) )
 			return false;
 		const auto strData = string_cast< str_t >( wstrData );
 		nlohmann::json jsConfig;
@@ -121,16 +240,21 @@ namespace PX::Files
 
 		try
 		{
-			if ( jsConfig[ PX_XOR( "Size" ) ].get< std::size_t >( ) != zConfigStructureSize )
+			if ( jsConfig[ PX_XOR( "Size" ) ].get< std::size_t >( ) != zConfig )
 			{ };// config outdated
 			for ( auto u = 0u; u < jsConfig[ PX_XOR( "Size" ) ].get< std::size_t >( ); u++ )
-				*reinterpret_cast< byte_t* >( ptr_t( pConfigStructure ) + u ) = jsConfig[ PX_XOR( "Bytes" ) ][ u ].get< byte_t >( );
+				*reinterpret_cast< byte_t* >( ptr_t( pConfig ) + u ) = jsConfig[ PX_XOR( "Bytes" ) ][ u ].get< byte_t >( );
 		}
 		catch ( nlohmann::json::type_error & )
 		{
 			return false;
 		}
 		return true;
+	}
+
+	void CConfig::RemoveConfiguration( Types::wcstr_t wszFileName )
+	{
+		DeleteFile( ( GetPXDirectory( ) + wstrExtensionFolderNames[ iExtension ] + wszFileName + wstrExtension ).c_str( ) );
 	}
 
 	namespace Resources

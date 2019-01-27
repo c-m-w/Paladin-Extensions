@@ -131,7 +131,7 @@ namespace PX::UI::Manager
 					} );
 
 			return Render::InitializeRenderTarget( pDevice, uDimensions )
-					&& InitializeUI( PX_XOR( "CSGO" ), uWindowWidth, uWindowHeight );
+					&& InitializeUI( PX_XOR( "CSGO" ), false, uWindowWidth, uWindowHeight );
 		}
 
 		void PX_API OnEndScene( )
@@ -194,7 +194,8 @@ namespace PX::UI::Manager
 				"Other"
 			},
 			{
-				"Tab"
+				"Global Configuration",
+				"Other Configurations"
 			}
 		};
 
@@ -2074,6 +2075,7 @@ namespace PX::UI::Manager
 
 						EndRow( );
 					}
+					EndGroupbox( );
 				}
 			}
 			break;
@@ -2086,12 +2088,89 @@ namespace PX::UI::Manager
 	void PX_API LayoutSettings( int iSubtab )
 	{
 		enum
-		{ };
+		{
+			GLOBAL,
+			OTHER
+		};
 
 		switch ( iSubtab )
 		{
+			case GLOBAL:
+			{
+				if ( BeginGroupbox( 200, 150, 500, 112, PX_XOR( "Global Configuration" ) ) )
+				{
+					VerticalSpacing( );
+
+					{
+						static std::string strConfig { };
+							strConfig.resize( 32u );
+
+						BeginRow( 30, 4, ROW_STATIC );
+						SetRowWidth( 5 );
+						Spacing( );
+
+						SetFont( FNT_ROBOTO_SMALL );
+						SetRowWidth( CalculateTextBounds( PX_XOR( "Default Configuration:" ), 30 ).x );
+						Text( PX_XOR( "Default Configuration:" ), color_t( { 255, 255, 255, 255 } ) );
+						SetRowWidth( 5 );
+						Spacing( );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH );
+						Inputbox( 32u, &strConfig[ 0 ] );
+
+						EndRow( );
+
+						PX_CONFIG.SetDefaultConfiguration( strConfig );
+					}
+					EndGroupbox( );
+				}
+			}
+			break;
+
 			default:
-				break;
+			{
+				if ( BeginGroupbox( 200, 150, 500, 112, PX_XOR( "Other Configurations" ) ) )
+				{
+					static auto iSelectedConfig = 0;
+					const auto vecConfigs = PX_CONFIG.GetConfigs( );
+					std::deque< const char* > vecMen { };
+					for ( auto& config : vecConfigs )
+						vecMen.emplace_back( config.c_str( ) );
+
+					{
+						VerticalSpacing( );
+
+						BeginRow( 30, 2, ROW_STATIC );
+						SetRowWidth( 5 );
+						Spacing( );
+
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH );
+						fnSetValue( iSelectedConfig, Combobox( 30, PX_XOR( "Configs" ), vecMen, iSelectedConfig ) );
+
+						EndRow( );
+					}
+
+					{
+						VerticalSpacing( );
+
+						BeginRow( 30, 4, ROW_STATIC );
+						SetRowWidth( 5 );
+						Spacing( );
+
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH / 2.f );
+
+						if ( Button( EPosition::LEFT, PX_XOR( "Save" ), false, false ) )
+							PX_CONFIG.SaveConfiguration( Tools::string_cast< std::wstring >( vecConfigs[ iSelectedConfig ] ).c_str( ) );
+						if ( Button( EPosition::CENTER, PX_XOR( "Load" ), false, false ) )
+							PX_CONFIG.LoadConfiguration( Tools::string_cast< std::wstring >( vecConfigs[ iSelectedConfig ] ).c_str( ) );
+						if ( Button( EPosition::RIGHT, PX_XOR( "Remove" ), false, false ) )
+							PX_CONFIG.RemoveConfiguration( Tools::string_cast< std::wstring >( vecConfigs[ iSelectedConfig ] ).c_str( ) );
+
+						EndRow( );
+					}
+					EndGroupbox( );
+				}
+			}
+			break;
 		}
 	}
 }

@@ -54,7 +54,8 @@ namespace PX::Features
 									}
 				} );
 
-		PX_CONFIG.LoadDefaultConfiguration( PX_EXTENSION_CSGO, &_Settings, sizeof( settings_t ) );
+		PX_CONFIG.SetContext( &_Settings, sizeof _Settings, PX_EXTENSION_CSGO );
+		PX_CONFIG.LoadDefaultConfiguration( );
 		return Awareness::CreateMaterials( )
 				&& Events::AddEventCallback( Miscellaneous::Hitsound, PX_XOR( "player_hurt" ), false )
 				&& Events::AddEventCallback( Miscellaneous::BulletBeam, PX_XOR( "weapon_fire" ), false )
