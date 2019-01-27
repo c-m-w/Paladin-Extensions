@@ -2103,6 +2103,7 @@ namespace PX::UI::Manager
 
 					{
 						static std::string strConfig { };
+						if ( strConfig.empty( ) )
 							strConfig.resize( 32u );
 
 						BeginRow( 30, 4, ROW_STATIC );
