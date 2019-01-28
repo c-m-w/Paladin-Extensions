@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 14ad63122dd9301c8a7fab53247df97c
+// FROM HASH: 34829bf3bbccabd03428f09006db0561
 return array('macros' => array('moderator_menu_actions' => function($__templater, array $__arguments, array $__vars)
 {
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
@@ -255,35 +255,8 @@ return array('macros' => array('moderator_menu_actions' => function($__templater
 							' . '
 						</div>
 					</div>
-				</div>
+				</div> 
 			';
-	}
-	$__compilerTemp2 .= '
-			';
-	if ($__templater->method($__vars['xf']['visitor'], 'hasPermission', array('trader', 'view', ))) {
-		$__compilerTemp2 .= '
-	<div class="buttonGroup">
-		' . $__templater->button('Trader history for' . ' ' . $__templater->escape($__vars['user']['username']) . ' (' . $__templater->filter($__vars['user']['andy_trader_seller_count'] + $__vars['user']['andy_trader_buyer_count'], array(array('number', array()),), true) . ')', array(
-			'href' => $__templater->fn('link', array('trader/history', '', array('user_id' => $__vars['user']['user_id'], ), ), false),
-			'class' => 'button--link',
-		), '', array(
-		)) . '
-	</div>
-';
-	}
-	$__compilerTemp2 .= '
-' . '
-';
-	if ($__templater->method($__vars['xf']['visitor'], 'canUseLAU', array()) AND ($__vars['xf']['options']['lau_DisplayLoginCard'] AND (($__vars['user']['user_id'] != $__vars['xf']['visitor']['user_id']) AND (($__vars['xf']['session']['lau_id'] != $__vars['user']['user_id']) AND ((!$__vars['xf']['session']['lau_id']) AND (!$__templater->fn('in_array', array($__vars['user']['user_id'], $__vars['xf']['options']['lau_DisallowedUsers'], ), false))))))) {
-		$__compilerTemp2 .= '
-	' . $__templater->button('
-		' . 'Login' . '
-	', array(
-			'href' => $__templater->fn('link', array('login/lauin', null, array('username' => $__vars['user']['username'], ), ), false),
-			'class' => 'button--link',
-		), '', array(
-		)) . '
-';
 	}
 	$__compilerTemp2 .= '
 		';

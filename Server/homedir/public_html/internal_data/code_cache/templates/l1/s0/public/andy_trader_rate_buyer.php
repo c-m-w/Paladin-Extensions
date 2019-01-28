@@ -10,7 +10,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	$__templater->includeCss('andy_trader.less');
 	$__finalCompiled .= '
 
-<a href="' . $__templater->fn('link', array('trader/history', '', array('user_id' => $__vars['userId'], ), ), true) . '" rel="nofollow">' . 'Return to trader history menu' . '</a>
+<a href="' . $__templater->fn('link', array('trader/history', '', array('user_id' => $__vars['userId'], ), ), true) . '" rel="nofollow">' . 'Return to marketplace history menu' . '</a>
 <br />
 <br />
 

@@ -3,7 +3,7 @@
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
-	$__templater->pageParams['pageTitle'] = $__templater->preEscaped('xr_pm_download:' . ' ' . $__templater->escape($__vars['product']['product_title']) . ' - ' . $__templater->escape($__vars['purchase']['purchase_key']));
+	$__templater->pageParams['pageTitle'] = $__templater->preEscaped('Download' . $__vars['xf']['language']['label_separator'] . ' ' . $__templater->escape($__vars['product']['product_title']) . ' - ' . $__templater->escape($__vars['purchase']['purchase_key']));
 	$__finalCompiled .= '
 
 ';

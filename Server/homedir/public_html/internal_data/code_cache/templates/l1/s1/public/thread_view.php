@@ -215,7 +215,7 @@ return array('macros' => array('thread_status' => function($__templater, array $
 	';
 		if ($__templater->fn('in_array', array($__vars['thread']['node_id'], $__vars['xf']['options']['traderForums'], ), false)) {
 			$__finalCompiled .= '
-		' . $__templater->button('Trader history for' . ' ' . $__templater->escape($__vars['thread']['username']) . ' (' . $__templater->filter($__vars['thread']['User']['andy_trader_seller_count'] + $__vars['thread']['User']['andy_trader_buyer_count'], array(array('number', array()),), true) . ')', array(
+		' . $__templater->button('Marketplace history for' . ' ' . $__templater->escape($__vars['thread']['username']) . ' (' . $__templater->filter($__vars['thread']['User']['andy_trader_seller_count'] + $__vars['thread']['User']['andy_trader_buyer_count'], array(array('number', array()),), true) . ')', array(
 				'href' => $__templater->fn('link', array('trader/history', '', array('user_id' => $__vars['thread']['user_id'], ), ), false),
 				'class' => 'button--link',
 			), '', array(

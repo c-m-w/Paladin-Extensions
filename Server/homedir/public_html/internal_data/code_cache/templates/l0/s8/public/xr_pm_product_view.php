@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 29fd5e80af1fa8ba921f2255d291b430
+// FROM HASH: 45ffd976e4d24405d0378ddb6a33133f
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -111,79 +111,92 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	</div>
 </div>
 
-<div class="block">
-	<div class="block-container">
-		<h3 class="block-minorHeader">' . 'Feature summary' . '</h3>
-		<div class="block-body">
-			<ul class="listFeatures">
-				';
-	if ($__templater->isTraversable($__vars['product']['features'])) {
-		foreach ($__vars['product']['features'] AS $__vars['feature']) {
-			$__finalCompiled .= '
-					<li>' . $__templater->escape($__vars['feature']) . '</li>
-				';
-		}
-	}
-	$__finalCompiled .= '
-			</ul>
-		</div>
-	</div>
-</div>
-
 ' . $__templater->callMacro('xr_pm_product_overview_macros', 'field_view', array(
 		'group' => 'above_details',
 		'product' => $__vars['product'],
 	), $__vars) . '
 
-<div class="block">
-	<div class="block-container">
-		<h3 class="block-minorHeader">' . 'Product details' . '</h3>
-		<div class="block-body block-row lbContainer js-productDetails"
-			data-xf-init="lightbox"
-			data-lb-id="product-' . $__templater->escape($__vars['product']['product_id']) . '"
-			data-lb-caption-desc="' . ($__vars['product']['User'] ? $__templater->escape($__vars['product']['User']['username']) : $__templater->escape($__vars['product']['username'])) . ' &middot; ' . $__templater->fn('date_time', array($__vars['product']['product_date'], ), true) . '">
-
-			<article class="js-lbContainer">
-				' . $__templater->fn('bb_code', array($__vars['product']['product_details'], 'xr_pm_product_details', $__vars['product'], ), true) . '
-
-				';
+<div uix_component="MainContent" class="uix_contentWrapper">
+	<div class="p-body-main p-body-main--withSidebar ">
+	<div uix_component="MainContent" class="p-body-content">
+		<div class="p-body-pageContent">
+			<div class="block">
+				<div class="block-container">
+					<h3 class="block-minorHeader"><b><font size="4">' . 'Product details' . '</font></b></h3>' . '
+					<div class="block-body block-row lbContainer js-productDetails"
+						data-xf-init="lightbox"
+						data-lb-id="product-' . $__templater->escape($__vars['product']['product_id']) . '"
+						data-lb-caption-desc="' . ($__vars['product']['User'] ? $__templater->escape($__vars['product']['User']['username']) : $__templater->escape($__vars['product']['username'])) . ' &middot; ' . $__templater->fn('date_time', array($__vars['product']['product_date'], ), true) . '">
+			
+						<article class="js-lbContainer">
+							' . $__templater->fn('bb_code', array($__vars['product']['product_details'], 'xr_pm_product_details', $__vars['product'], ), true) . '
+			
+							';
 	if ($__vars['product']['attach_count']) {
 		$__finalCompiled .= '
-					<div class="u-inputSpacer"></div>
-					';
+								<div class="u-inputSpacer"></div>
+								';
 		$__compilerTemp3 = '';
 		$__compilerTemp3 .= '
-								';
+											';
 		if ($__templater->isTraversable($__vars['product']['Images'])) {
 			foreach ($__vars['product']['Images'] AS $__vars['image']) {
 				if (!$__templater->method($__vars['product'], 'isAttachmentEmbedded', array($__vars['image'], ))) {
 					$__compilerTemp3 .= '
-									' . $__templater->callMacro('attachment_macros', 'attachment_list_item', array(
+												' . $__templater->callMacro('attachment_macros', 'attachment_list_item', array(
 						'attachment' => $__vars['image'],
 						'canView' => $__templater->method($__vars['product'], 'canViewProductImages', array()),
 					), $__vars) . '
-								';
+											';
 				}
 			}
 		}
 		$__compilerTemp3 .= '
-							';
+										';
 		if (strlen(trim($__compilerTemp3)) > 0) {
 			$__finalCompiled .= '
-						';
+									';
 			$__templater->includeCss('attachments.less');
 			$__finalCompiled .= '
-						<ul class="attachmentList">
-							' . $__compilerTemp3 . '
-						</ul>
-					';
+									<ul class="attachmentList">
+										' . $__compilerTemp3 . '
+									</ul>
+								';
 		}
 		$__finalCompiled .= '
-				';
+							';
 	}
 	$__finalCompiled .= '
-			</article>
+						</article>
+					</div>
+				</div>
+			</div>
 		</div>
+	</div>
+
+	<div uix_component="MainSidebar" class="p-body-sidebar">
+		<div class="uix_sidebar--scroller">
+			<div class="block">
+				<div class="block-container">
+					<h3 class="block-minorHeader"><font size="3">' . 'Feature summary' . '</font></h3>
+					<div class="block-body">
+						<ul class="listFeatures" style="padding-right:40px">
+							';
+	if ($__templater->isTraversable($__vars['product']['features'])) {
+		foreach ($__vars['product']['features'] AS $__vars['feature']) {
+			$__finalCompiled .= '
+								<font size="2">' . $__templater->escape($__vars['feature']) . ', </font>
+							';
+		}
+	}
+	$__finalCompiled .= '
+						</ul>
+						<p style="padding-bottom:5px"/>
+					</div>
+				</div>
+			</div>	
+		</div>
+	</div>
 	</div>
 </div>
 

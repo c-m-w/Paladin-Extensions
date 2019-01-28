@@ -113,7 +113,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	if ($__templater->method($__vars['purchase']['Product'], 'isRenewable', array())) {
 		$__finalCompiled .= '
 			<dl class="pairs pairs--rows pairs--rows--centered">
-				<dt>' . 'Renewal price' . '</dt>
+				<dt>' . 'Price' . '</dt>
 				<dd>
 					' . $__templater->filter($__vars['purchase']['renew_price'], array(array('currency', array($__vars['purchase']['purchase_currency'], )),), true) . '
 				</dd>
