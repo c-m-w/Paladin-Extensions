@@ -44,6 +44,7 @@ namespace PX::Files
 	{
 		const Types::wstr_t wstrExtension;
 		const Types::wstr_t wstrExtensionFolderNames[ 3 ];
+		const Types::wstr_t wstrConfigsFolder;
 		const Types::wstr_t wstrGlobalFileName;
 		bool bLoadedGlobalConfig = false;
 		void* pConfig = nullptr;

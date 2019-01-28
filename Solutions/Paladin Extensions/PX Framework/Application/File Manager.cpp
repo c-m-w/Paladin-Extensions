@@ -58,7 +58,11 @@ namespace PX::Files
 		for ( auto& file : std::filesystem::directory_iterator( strDirectory.c_str( ) ) )
 			if ( file.is_regular_file( )
 				 && ( strExtension.empty( ) || file.path( ).string( ).find( strExtension ) != std::string::npos ) )
-				vecFiles.emplace_back( file.path( ).string( ).substr( file.path().string().find_last_of( '\\' ) ) );
+			{
+				vecFiles.emplace_back( file.path( ).string( ).substr( file.path( ).string( ).find_last_of( '\\' ) + 1 ) );
+				if ( !strExtension.empty( ) )
+					vecFiles.back() = vecFiles.back( ).substr( 0, vecFiles.back( ).length( ) - strExtension.length( ) );
+			}
 
 		return vecFiles;
 	}
@@ -105,7 +109,7 @@ namespace PX::Files
 		SaveConfiguration( string_cast< std::wstring >( GetDefaultConfiguration( ) ).c_str( ) );
 	}
 
-	CConfig::CConfig( ): wstrExtension( PX_XOR( L".pxcfg" ) ), wstrExtensionFolderNames { PX_XOR( L"Resources\\Extensions Data\\CSGO\\Configurations\\" ), PX_XOR( L"Resources\\Extensions Data\\PUBG\\Configurations\\" ), PX_XOR( L"Resources\\Extensions Data\\RSIX\\Configurations\\" ) }, wstrGlobalFileName( PX_XOR( L"global.json" ) )
+	CConfig::CConfig( ): wstrExtension( PX_XOR( L".pxcfg" ) ), wstrExtensionFolderNames { PX_XOR( L"CSGO\\Configurations\\" ), PX_XOR( L"PUBG\\Configurations\\" ), PX_XOR( L"RSIX\\Configurations\\" ) }, wstrConfigsFolder( PX_XOR( L"Resources\\Extensions Data\\") ), wstrGlobalFileName( PX_XOR( L"global.json" ) )
 	{ }
 
 	void CConfig::SetMenuKey( const Types::key_t kNewKey )
@@ -143,19 +147,23 @@ namespace PX::Files
 		pConfig = pStructure;
 		zConfig = zConfigStructure;
 		iExtension = iExtensionID;
+
+		LoadGlobalConfig( );
+		LoadDefaultConfiguration( );
 	}
 
 	PX_RET wstr_t PX_API CConfig::GetConfigDirectory( )
 	{
 		static wstr_t wstrConfigDirectory;
 		if ( wstrConfigDirectory.empty( ) )
-			wstrConfigDirectory = GetPXDirectory( ) + PX_XOR( L"Resources\\Extensions Data\\" );
+			wstrConfigDirectory = GetPXDirectory( ) + wstrConfigsFolder;
+
 		return wstrConfigDirectory + wstrExtensionFolderNames[ iExtension ];
 	}
 
 	std::vector< Types::str_t > CConfig::GetConfigs( )
 	{
-		const auto vecConfigs = GetFilesInDirectory( string_cast< std::string >( wstrExtensionFolderNames[ iExtension ] ), string_cast< decltype( std::string { } ) > ( wstrExtension ) );
+		const auto vecConfigs = GetFilesInDirectory( string_cast< std::string >( wstrConfigsFolder + wstrExtensionFolderNames[ iExtension ] ), string_cast< decltype( std::string { } ) > ( wstrExtension ) );
 		if ( vecConfigs.empty( ) )
 		{
 			CreateDefaultConfig( );
@@ -186,32 +194,13 @@ namespace PX::Files
 		jsConfiguration[ PX_XOR( "Size" ) ] = zConfig;
 		for ( auto u = 0u; u < zConfig; u++ )
 			jsConfiguration[ PX_XOR( "Bytes" ) ][ u ] = *reinterpret_cast< byte_t* >( ptr_t( pConfig ) + u );
+
 		FileWrite( GetConfigDirectory( ) + wszFileName + wstrExtension, string_cast< wstr_t >( jsConfiguration.dump( 4 ) ), false, true );
 	}
 
 	bool PX_API CConfig::LoadDefaultConfiguration( )
 	{
-		wstr_t wstrData;
-		if ( !FileRead( GetConfigDirectory( ) + wstrGlobalFileName + wstrExtension, wstrData, false, true ) )
-			return false;
-		nlohmann::json jsData;
-		try
-		{
-			jsData = nlohmann::json::parse( string_cast< str_t >( wstrData ) );
-		}
-		catch ( nlohmann::json::parse_error & )
-		{
-			return false;
-		}
-#define large_char_t unsigned __int128
-		try
-		{
-			return LoadConfiguration( string_cast< wstr_t >( jsData[ PX_XOR( "Default Configuration" ) ].get< str_t >( ) ).c_str( ) );
-		}
-		catch ( nlohmann::json::type_error & )
-		{
-			return false;
-		}
+		return LoadConfiguration( string_cast< std::wstring >( global.strDefaultConfiguration ).c_str( ) );
 	}
 
 	//oid CConfig::SetDefaultConfiguration( int iExtensionID, wcstr_t wszFileName )
@@ -226,6 +215,7 @@ namespace PX::Files
 		wstr_t wstrData;
 		if ( !FileRead( GetConfigDirectory( ) + wszFileName + wstrExtension, wstrData, false, true ) )
 			return false;
+
 		const auto strData = string_cast< str_t >( wstrData );
 		nlohmann::json jsConfig;
 
@@ -235,13 +225,18 @@ namespace PX::Files
 		}
 		catch ( nlohmann::json::parse_error & )
 		{
+			RemoveConfiguration( wszFileName );
 			return false;
 		}
 
 		try
 		{
 			if ( jsConfig[ PX_XOR( "Size" ) ].get< std::size_t >( ) != zConfig )
-			{ };// config outdated
+			{
+				RemoveConfiguration( wszFileName );
+				return false;
+			}
+
 			for ( auto u = 0u; u < jsConfig[ PX_XOR( "Size" ) ].get< std::size_t >( ); u++ )
 				*reinterpret_cast< byte_t* >( ptr_t( pConfig ) + u ) = jsConfig[ PX_XOR( "Bytes" ) ][ u ].get< byte_t >( );
 		}
@@ -255,6 +250,8 @@ namespace PX::Files
 	void CConfig::RemoveConfiguration( Types::wcstr_t wszFileName )
 	{
 		DeleteFile( ( GetPXDirectory( ) + wstrExtensionFolderNames[ iExtension ] + wszFileName + wstrExtension ).c_str( ) );
+		if ( wszFileName == string_cast< std::wstring >( global.strDefaultConfiguration ) )
+			SaveConfiguration( wszFileName );
 	}
 
 	namespace Resources
@@ -365,8 +362,12 @@ namespace PX::Files
 		ssReturn << fFile.rdbuf( );
 		fFile.close( );
 		const auto str = ssReturn.str( );
-		if ( str.empty( ) )
+		if( str.empty( ) )
+		{
+			DeleteFile( wstrPath.c_str( ) );
 			return false;
+		}
+
 		wstrData = string_cast< wstr_t >( bBase64 ? Base64< CryptoPP::Base64Decoder >( str ) : ssReturn.str( ) );
 		return true;
 	}
