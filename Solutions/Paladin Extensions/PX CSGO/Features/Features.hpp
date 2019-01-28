@@ -181,8 +181,8 @@ namespace PX::Features
 
 				struct player_t: a_statistics_base
 				{
-					color_t clrHighestHealth = { 0x00, 0xFF, 0x00, 0xFF };
-					color_t clrLowestHealth = { 0xFF, 0x00, 0x00, 0xFF };
+					color_sequence_t clrHighestHealth { };
+					color_sequence_t clrLowestHealth { };
 
 					color_sequence_t seqSnapline[ STATE_PLAYER_MAX ] { };
 					color_sequence_t seqBox[ STATE_PLAYER_MAX ] { };
