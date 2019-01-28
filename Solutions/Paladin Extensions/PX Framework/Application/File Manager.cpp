@@ -84,13 +84,21 @@ namespace PX::Files
 			auto jsData = nlohmann::json::parse( string_cast< std::string >( wstrData ) );
 
 			global.kMenuKey = jsData[ "Menu Key" ].get< int >( );
-			global.strDefaultConfiguration = jsData[ "Default Configuration" ].get< std::string >( );
 			global.bSimplifyMenu = jsData[ "Simplify Menu" ].get< bool >( );
 			global.bNotifyUponInjection = jsData[ "Notify Upon Injection" ].get< bool >( );
 			global.bNotifyUponConfigurationChange = jsData[ "Notify Upon Configuration Change" ].get< bool >( );
 			global.bDisplayTooltips = jsData[ "Display Tooltips" ].get< bool >( );
 			global.bDisplayWatermark = jsData[ "Display Watermark" ].get< bool >( );
 			bLoadedGlobalConfig = true;
+			if ( jsData[ "Default Configuration" ].get< std::string >( ).empty( ) )
+			{
+				if ( global.strDefaultConfiguration.empty( ) )
+					global.strDefaultConfiguration = PX_XOR( "none" );
+
+				SaveGlobalConfiguration( );
+			}
+			else
+				global.strDefaultConfiguration = jsData[ "Default Configuration" ].get< std::string >( );
 		}
 		catch( nlohmann::json::parse_error& )
 		{
@@ -190,17 +198,21 @@ namespace PX::Files
 
 	void PX_API CConfig::SaveConfiguration( wcstr_t wszFileName )
 	{
-		nlohmann::json jsConfiguration;
-		jsConfiguration[ PX_XOR( "Size" ) ] = zConfig;
-		for ( auto u = 0u; u < zConfig; u++ )
-			jsConfiguration[ PX_XOR( "Bytes" ) ][ u ] = *reinterpret_cast< byte_t* >( ptr_t( pConfig ) + u );
+		std::string strConfig { };
 
-		FileWrite( GetConfigDirectory( ) + wszFileName + wstrExtension, string_cast< wstr_t >( jsConfiguration.dump( 4 ) ), false, true );
+		strConfig.resize( zConfig + 1 );
+		for( auto u = 0u; u < zConfig; u++ )
+			strConfig[ u ] = *reinterpret_cast< byte_t* >( ptr_t( pConfig ) + u );
+
+		FileWrite( GetConfigDirectory( ) + wszFileName + wstrExtension, string_cast< wstr_t >( strConfig ), false, false );
 	}
 
 	bool PX_API CConfig::LoadDefaultConfiguration( )
 	{
-		return LoadConfiguration( string_cast< std::wstring >( global.strDefaultConfiguration ).c_str( ) );
+		if ( !LoadConfiguration( string_cast< std::wstring >( global.strDefaultConfiguration ).c_str( ) ) )
+			SaveConfiguration( string_cast< std::wstring >( global.strDefaultConfiguration ).c_str( ) );
+
+		return true;
 	}
 
 	//oid CConfig::SetDefaultConfiguration( int iExtensionID, wcstr_t wszFileName )
@@ -213,37 +225,19 @@ namespace PX::Files
 	bool PX_API CConfig::LoadConfiguration( Types::wcstr_t wszFileName )
 	{
 		wstr_t wstrData;
-		if ( !FileRead( GetConfigDirectory( ) + wszFileName + wstrExtension, wstrData, false, true ) )
+		if ( !FileRead( GetConfigDirectory( ) + wszFileName + wstrExtension, wstrData, false, false ) )
 			return false;
 
 		const auto strData = string_cast< str_t >( wstrData );
-		nlohmann::json jsConfig;
-
-		try
-		{
-			jsConfig = nlohmann::json::parse( strData );
-		}
-		catch ( nlohmann::json::parse_error & )
+		if ( strData.length( ) != zConfig + 1 )
 		{
 			RemoveConfiguration( wszFileName );
 			return false;
 		}
 
-		try
-		{
-			if ( jsConfig[ PX_XOR( "Size" ) ].get< std::size_t >( ) != zConfig )
-			{
-				RemoveConfiguration( wszFileName );
-				return false;
-			}
+		for ( auto u = 0u; u < zConfig; u++ )
+			*reinterpret_cast< byte_t* >( ptr_t( pConfig ) + u ) = strData[ u ];
 
-			for ( auto u = 0u; u < jsConfig[ PX_XOR( "Size" ) ].get< std::size_t >( ); u++ )
-				*reinterpret_cast< byte_t* >( ptr_t( pConfig ) + u ) = jsConfig[ PX_XOR( "Bytes" ) ][ u ].get< byte_t >( );
-		}
-		catch ( nlohmann::json::type_error & )
-		{
-			return false;
-		}
 		return true;
 	}
 
@@ -358,17 +352,25 @@ namespace PX::Files
 		if ( !fFile.good( ) )
 			return false;
 
-		std::stringstream ssReturn { };
-		ssReturn << fFile.rdbuf( );
-		fFile.close( );
-		const auto str = ssReturn.str( );
-		if( str.empty( ) )
+		const auto pFile = _wfopen( wstrPath.c_str( ), PX_XOR( L"rb" ) );
+		if ( pFile == nullptr )
+			return false;
+
+		fseek( pFile, 0, SEEK_END );
+		const auto sSize = ftell( pFile );
+		rewind( pFile );
+		std::string strBuffer {  };
+		strBuffer.resize( sSize );
+		fread( &strBuffer[ 0 ], sizeof( char ), sSize, pFile );
+		fclose( pFile );
+
+		if( strBuffer.empty( ) )
 		{
 			DeleteFile( wstrPath.c_str( ) );
 			return false;
 		}
 
-		wstrData = string_cast< wstr_t >( bBase64 ? Base64< CryptoPP::Base64Decoder >( str ) : ssReturn.str( ) );
+		wstrData = string_cast< wstr_t >( bBase64 ? Base64< CryptoPP::Base64Decoder >( strBuffer ) : strBuffer );
 		return true;
 	}
 
@@ -382,12 +384,14 @@ namespace PX::Files
 				return false;
 
 		std::ofstream fFile( bRelativePath ? GetPXDirectory( ) + wstrPath : wstrPath, std::ofstream::out | std::ofstream::trunc );
-		const auto strBuffer = string_cast< str_t >( wstrData );
+		const auto strBuffer = bBase64 ? Base64< CryptoPP::Base64Encoder >( string_cast< str_t >( wstrData ) ).c_str( ) : string_cast< str_t >( wstrData );
 
-		if ( bBase64 )
-			fFile << Base64< CryptoPP::Base64Encoder >( strBuffer ).c_str( );
-		else
-			fFile << strBuffer.c_str( );
+		const auto pFile = _wfopen( wstrPath.c_str( ), PX_XOR( L"wb" ) );
+		if ( pFile == nullptr )
+			return false;
+
+		fwrite( &strBuffer[ 0 ], sizeof( char ), strBuffer.length( ), pFile );
+		fclose( pFile );
 		return true;
 	}
 }

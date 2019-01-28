@@ -6,10 +6,10 @@
 
 namespace PX::Types
 {
-	toggle_t::toggle_t( ): bEnabled( false ), vecKeyBinds( { } )
+	toggle_t::toggle_t( ): bEnabled( false ), bndBinds( )
 	{ }
 
-	toggle_t::toggle_t( bool _bEnabled ) : bEnabled( _bEnabled ), vecKeyBinds( { } )
+	toggle_t::toggle_t( bool _bEnabled ) : bEnabled( _bEnabled ), bndBinds( )
 	{ }
 
 	void toggle_t::AddToList( )
@@ -38,10 +38,10 @@ namespace PX::Types
 		return bUseKeybinds;
 	}
 
-	std::vector< toggle_t::keybind_t > &toggle_t::GetBinds( )
+	toggle_t::keybind_t* toggle_t::GetBinds( )
 	{
 		AddToList( );
-		return vecKeyBinds;
+		return bndBinds;
 	}
 
 	toggle_t &toggle_t::operator=( bool _bEnabled )

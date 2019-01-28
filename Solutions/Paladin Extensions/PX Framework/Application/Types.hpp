@@ -88,6 +88,12 @@ namespace PX::Types
 		KEYBIND_DISABLE
 	};
 
+	struct toggle_t;
+
+	inline static std::vector< toggle_t* > vecToggles;
+	inline void *pConfigStructure = nullptr;
+	inline std::size_t zConfigStructureSize = 0;
+
 	struct toggle_t
 	{
 		explicit operator bool( ) const
@@ -101,8 +107,6 @@ namespace PX::Types
 			Types::key_t kKey { };
 		};
 
-		inline static std::vector< toggle_t* > vecToggles;
-
 		static void Initialize( void *_pConfigStructure, std::size_t _zConfigStructureSize )
 		{
 			pConfigStructure = _pConfigStructure;
@@ -110,10 +114,8 @@ namespace PX::Types
 		}
 
 	private:
-		inline static void *pConfigStructure = nullptr;
-		inline static std::size_t zConfigStructureSize = 0;
 		bool bEnabled = false, bAddedToList = false, bAttemptedToAddToList = false, bUseKeybinds = true;
-		std::vector< keybind_t > vecKeyBinds { };
+		keybind_t bndBinds[ 7 ] { };
 
 	public:
 
@@ -124,7 +126,7 @@ namespace PX::Types
 		void AddToList( );
 		bool &Get( );
 		bool &UseKeyBinds( );
-		std::vector< keybind_t > &GetBinds( );
+		keybind_t* GetBinds( );
 
 		toggle_t &operator=( bool _bEnabled );
 		bool operator!( );

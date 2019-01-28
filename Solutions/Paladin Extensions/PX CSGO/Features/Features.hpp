@@ -451,6 +451,8 @@ namespace PX::Features
 		} _Miscellaneous;
 	} PX_SDK _Settings;
 
+	static_assert( sizeof _Settings % sizeof( __int64 ) == 0 );
+
 	bool PX_API InitializeFeatures( );
 	void PX_API ShutdownFeatures( );
 

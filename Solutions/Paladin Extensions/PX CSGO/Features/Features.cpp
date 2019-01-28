@@ -10,11 +10,11 @@ namespace PX::Features
 		toggle_t::Initialize( &_Settings, sizeof( settings_t ) );
 		PX_INPUT.AddGlobalCallback( [ ]( unsigned uKey, bool bPressed )
 				{
-					for ( auto &toggle: toggle_t::vecToggles )
+					for ( auto &toggle: vecToggles )
 						if ( toggle->UseKeyBinds( ) )
-							for ( auto &keybind: toggle->GetBinds( ) )
-								if ( keybind.kKey == uKey )
-									switch ( keybind.iKeyBindMode )
+							for ( auto i = 0; i < 7; i++ )
+								if ( toggle->GetBinds( )[i].kKey == uKey )
+									switch ( toggle->GetBinds( )[i].iKeyBindMode )
 									{
 										case KEYBIND_TOGGLE:
 										{
@@ -54,7 +54,7 @@ namespace PX::Features
 									}
 				} );
 
-		PX_CONFIG.SetContext( &_Settings, sizeof( decltype( _Settings ) ), PX_EXTENSION_CSGO );
+		PX_CONFIG.SetContext( &_Settings, sizeof( settings_t ), PX_EXTENSION_CSGO );
 		return Awareness::CreateMaterials( )
 				&& Events::AddEventCallback( Miscellaneous::Hitsound, PX_XOR( "player_hurt" ), false )
 				&& Events::AddEventCallback( Miscellaneous::BulletBeam, PX_XOR( "weapon_fire" ), false )

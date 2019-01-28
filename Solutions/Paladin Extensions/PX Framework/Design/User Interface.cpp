@@ -1570,30 +1570,16 @@ namespace PX::UI
 			SetFont( FNT_ROBOTO_BOLD );
 			if ( bStoppedClicking && nk_begin( pContext, PX_XOR( "Keybind Editor" ), recPopupBoundaries, NK_WINDOW_NO_SCROLLBAR | NK_WINDOW_TITLE ) )
 			{
-				nk_layout_row_begin( pContext, NK_STATIC, 25, 3 );
-				nk_layout_row_push( pContext, 5.f );
-				nk_spacing( pContext, 1 );
-				nk_layout_row_push( pContext, 140.f );
-				if ( Button( EPosition::LEFT, PX_XOR( "+" ), false, pActiveEditToggle->GetBinds( ).size( ) >= 7 ) && !bWasClicking )
-					pActiveEditToggle->GetBinds( ).emplace_back( toggle_t::keybind_t( ) );
-				if ( Button( EPosition::RIGHT, PX_XOR( "-" ), false, pActiveEditToggle->GetBinds( ).empty( ) ) && !bWasClicking )
-				{
-					pActiveEditToggle->GetBinds( ).erase( pActiveEditToggle->GetBinds( ).begin( ) + iCurrentBindIndex );
-					iCurrentBindIndex = 0;
-				}
-				nk_layout_row_end( pContext );
-
 				nk_layout_row_begin( pContext, NK_STATIC, 30, 3 );
 				nk_layout_row_push( pContext, 5.f );
 				nk_spacing( pContext, 1 );
 				PopupCheckbox( PX_XOR( "Use Keybinds" ), &pActiveEditToggle->UseKeyBinds( ) );
 				nk_layout_row_end( pContext );
 
-				if ( !pActiveEditToggle->GetBinds( ).empty( ) )
 				{
 					std::deque< cstr_t > dqKeys;
-					for ( auto &keybind: pActiveEditToggle->GetBinds( ) )
-						dqKeys.emplace_back( fnGetKeyName( keybind.kKey ) );
+					for ( auto i = 0; i < 7; i++ )
+						dqKeys.emplace_back( fnGetKeyName( pActiveEditToggle->GetBinds( )[ i ].kKey ) );
 
 					nk_layout_row_begin( pContext, NK_STATIC, 30, 3 );
 					nk_layout_row_push( pContext, 5.f );
@@ -1606,7 +1592,7 @@ namespace PX::UI
 						nk_popup_end( pContext );
 					}
 
-					auto &bind = pActiveEditToggle->GetBinds( ).at( iCurrentBindIndex );
+					auto &bind = pActiveEditToggle->GetBinds( )[ iCurrentBindIndex ];
 					nk_layout_row_push( pContext, 97.f );
 					if ( Button( EPosition::NONE, fnGetKeyName( bind.kKey ), false, false ) )
 					{
