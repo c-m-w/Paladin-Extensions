@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 8ab0767d0bb8c5d155a354093701d37c
+// FROM HASH: 9a235982b0bb8b7c8a6557d294e899ce
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -85,44 +85,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	</div>
 </div>
 
-';
-	$__templater->setPageParam('sideNavTitle', 'Product categories');
-	$__finalCompiled .= '
-
-';
-	$__compilerTemp1 = '';
-	if ($__vars['categoryTree']) {
-		$__compilerTemp1 .= '
-		<div class="block">
-			<div class="block-container">
-				<h3 class="block-header">' . 'Product categories' . '</h3>
-				<div class="block-body">
-					';
-		if ($__templater->method($__vars['categoryTree'], 'count', array())) {
-			$__compilerTemp1 .= '
-						' . $__templater->callMacro('xr_pm_category_list_macros', 'category_list', array(
-				'selected' => $__vars['selected'],
-				'pathToSelected' => $__templater->method($__vars['categoryTree'], 'getPathTo', array($__vars['selected'], )),
-				'children' => $__vars['categoryTree'],
-				'extras' => $__vars['categoryExtras'],
-				'isActive' => true,
-			), $__vars) . '
-					';
-		} else {
-			$__compilerTemp1 .= '
-						<div class="block-row">' . 'N/A' . '</div>
-					';
-		}
-		$__compilerTemp1 .= '
-				</div>
-			</div>
-		</div>
-	';
-	}
-	$__templater->modifySideNavHtml('xrpmSideNav', '
-	' . $__compilerTemp1 . '
-', 'replace');
-	$__finalCompiled .= '
+' . '
 
 ';
 	$__templater->setPageParam('searchConstraints', array('Products' => array('search_type' => 'xr_pm_product', ), ));

@@ -263,7 +263,7 @@ return array('macros' => array('moderator_menu_actions' => function($__templater
 	if ($__templater->method($__vars['xf']['visitor'], 'hasPermission', array('trader', 'view', ))) {
 		$__compilerTemp2 .= '
 	<div class="buttonGroup">
-		' . $__templater->button('Trader history for' . ' ' . $__templater->escape($__vars['user']['username']) . ' (' . $__templater->filter($__vars['user']['andy_trader_seller_count'] + $__vars['user']['andy_trader_buyer_count'], array(array('number', array()),), true) . ')', array(
+		' . $__templater->button('Marketplace history for' . ' ' . $__templater->escape($__vars['user']['username']) . ' (' . $__templater->filter($__vars['user']['andy_trader_seller_count'] + $__vars['user']['andy_trader_buyer_count'], array(array('number', array()),), true) . ')', array(
 			'href' => $__templater->fn('link', array('trader/history', '', array('user_id' => $__vars['user']['user_id'], ), ), false),
 			'class' => 'button--link',
 		), '', array(

@@ -159,7 +159,7 @@ return array('macros' => array('purchase_list' => function($__templater, array $
 	if ($__templater->method($__vars['purchase']['Product'], 'isRenewable', array())) {
 		$__finalCompiled .= '
 				<dl class="pairs pairs--justified structItem-minor">
-					<dt>' . 'Renewal price' . '</dt>
+					<dt>' . 'Price' . '</dt>
 					<dd>
 						' . $__templater->filter($__vars['purchase']['renew_price'], array(array('currency', array($__vars['purchase']['purchase_currency'], )),), true) . '
 					</dd>

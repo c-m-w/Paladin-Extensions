@@ -25,7 +25,7 @@ return array('macros' => array('purchase_buttons' => function($__templater, arra
 	';
 	if ($__templater->method($__vars['purchase'], 'isDownloadable', array())) {
 		$__finalCompiled .= '
-		' . $__templater->button('xr_pm_download', array(
+		' . $__templater->button('Download', array(
 			'icon' => 'download',
 			'class' => 'button--product button--cta',
 			'href' => $__templater->fn('link', array('products/purchase/download', $__vars['purchase'], ), false),

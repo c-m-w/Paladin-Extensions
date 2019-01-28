@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 9611ba93b72db4992bc6fa54f8a395d2
+// FROM HASH: d5ef9c9a8aefeb9b6a4cbe1919acdc21
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -34,20 +34,27 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 <br />
 
 ';
-	if ($__templater->method($__vars['xf']['visitor'], 'hasPermission', array('trader', 'view', ))) {
+	if ($__templater->method($__vars['xf']['visitor'], 'hasPermission', array('trader', 'view', )) AND $__templater->method($__vars['xf']['visitor'], 'hasPermission', array('trader', 'rate', ))) {
 		$__finalCompiled .= '
-	<a href="' . $__templater->fn('link', array('trader/ratingseller', '', array('user_id' => $__vars['userId'], ), ), true) . '" rel="nofollow">' . 'Selling history' . ' (' . $__templater->escape($__vars['sellerCount']) . ')</a>
+	' . $__templater->button('Submit feedback', array(
+			'class' => 'button--link button rippleButton',
+			'href' => $__templater->fn('link', array('trader/rateseller', '', array('user_id' => $__vars['userId'], ), ), false),
+			'rel' => 'nofollow',
+		), '', array(
+		)) . '
 ';
 	}
 	$__finalCompiled .= '
 
-<br />
-<br />
-
 ';
-	if ($__templater->method($__vars['xf']['visitor'], 'hasPermission', array('trader', 'view', )) AND $__templater->method($__vars['xf']['visitor'], 'hasPermission', array('trader', 'rate', ))) {
+	if ($__templater->method($__vars['xf']['visitor'], 'hasPermission', array('trader', 'view', ))) {
 		$__finalCompiled .= '
-	<a href="' . $__templater->fn('link', array('trader/rateseller', '', array('user_id' => $__vars['userId'], ), ), true) . '" rel="nofollow">' . 'Submit feedback' . '</a>
+	' . $__templater->button('Selling history' . ' (' . $__templater->escape($__vars['sellerCount']) . ')', array(
+			'class' => 'button--link button rippleButton',
+			'href' => $__templater->fn('link', array('trader/ratingseller', '', array('user_id' => $__vars['userId'], ), ), false),
+			'rel' => 'nofollow',
+		), '', array(
+		)) . '
 ';
 	}
 	$__finalCompiled .= '
@@ -78,20 +85,27 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 <br />
 
 ';
-	if ($__templater->method($__vars['xf']['visitor'], 'hasPermission', array('trader', 'view', ))) {
+	if ($__templater->method($__vars['xf']['visitor'], 'hasPermission', array('trader', 'view', )) AND $__templater->method($__vars['xf']['visitor'], 'hasPermission', array('trader', 'rate', ))) {
 		$__finalCompiled .= '
-	<a href="' . $__templater->fn('link', array('trader/ratingbuyer', '', array('user_id' => $__vars['userId'], ), ), true) . '" rel="nofollow">' . 'Buying history' . ' (' . $__templater->escape($__vars['buyerCount']) . ')</a>
+	' . $__templater->button('Submit feedback', array(
+			'class' => 'button--link button rippleButton',
+			'href' => $__templater->fn('link', array('trader/ratebuyer', '', array('user_id' => $__vars['userId'], ), ), false),
+			'rel' => 'nofollow',
+		), '', array(
+		)) . '
 ';
 	}
 	$__finalCompiled .= '
 
-<br />
-<br />
-
 ';
-	if ($__templater->method($__vars['xf']['visitor'], 'hasPermission', array('trader', 'view', )) AND $__templater->method($__vars['xf']['visitor'], 'hasPermission', array('trader', 'rate', ))) {
+	if ($__templater->method($__vars['xf']['visitor'], 'hasPermission', array('trader', 'view', ))) {
 		$__finalCompiled .= '
-	<a href="' . $__templater->fn('link', array('trader/ratebuyer', '', array('user_id' => $__vars['userId'], ), ), true) . '" rel="nofollow">' . 'Submit feedback' . '</a>
+	' . $__templater->button('Buying history' . ' (' . $__templater->escape($__vars['buyerCount']) . ')', array(
+			'class' => 'button--link button rippleButton',
+			'href' => $__templater->fn('link', array('trader/ratingbuyer', '', array('user_id' => $__vars['userId'], ), ), false),
+			'rel' => 'nofollow',
+		), '', array(
+		)) . '
 ';
 	}
 	$__finalCompiled .= '

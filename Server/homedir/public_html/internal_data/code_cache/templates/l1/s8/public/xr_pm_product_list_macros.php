@@ -268,7 +268,7 @@ return array('macros' => array('product' => function($__templater, array $__argu
 	if ($__templater->method($__vars['product'], 'isRenewable', array())) {
 		$__finalCompiled .= '
 				<dl class="pairs pairs--justified structItem-minor">
-					<dt>' . 'Renewal price' . '</dt>
+					<dt>' . 'Price' . '</dt>
 					<dd>
 						' . $__templater->filter($__vars['product']['renew_price'], array(array('currency', array($__vars['product']['currency'], )),), true) . '
 					</dd>

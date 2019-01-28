@@ -270,7 +270,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'value' => $__vars['product']['renew_price'],
 		'class' => 'input--autoSize',
 	), array(
-		'label' => 'Renewal price',
+		'label' => 'Price',
 		'explain' => 'This is the cost for renewing a purchase after the initial support duration has expired (if one is defined below).',
 	)) . '
 

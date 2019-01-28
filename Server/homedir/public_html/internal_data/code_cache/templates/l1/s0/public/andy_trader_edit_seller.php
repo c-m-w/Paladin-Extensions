@@ -29,7 +29,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'value' => $__vars['results']['trader_id'],
 		'class' => 'trader-muted',
 	), array(
-		'label' => 'Trader ID',
+		'label' => 'Marketplace ID',
 	)) . '
 			
 			' . $__templater->formTextBoxRow(array(

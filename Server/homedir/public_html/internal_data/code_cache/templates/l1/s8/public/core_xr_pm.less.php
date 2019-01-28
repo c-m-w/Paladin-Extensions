@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 6124cc4119b4ff9d34151a32d9f45211
+// FROM HASH: 7b388c83f357e9ff8ed9b0507fc6ec75
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -69,8 +69,9 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		.button--product
 		{
 			display: block;
-			width: 100%;
+			width: 90%;
 			margin-bottom: 5px;
+			margin-right: 5px;
 		}
 
 		@media (max-width: @xf-responsiveWide)

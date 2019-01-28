@@ -18,7 +18,7 @@ return array('macros' => array('header' => function($__templater, array $__argum
 	$__compilerTemp1 = '';
 	if ($__templater->method($__vars['product'], 'canDownload', array())) {
 		$__compilerTemp1 .= '
-							' . $__templater->button('xr_pm_download', array(
+							' . $__templater->button('Download', array(
 			'icon' => 'download',
 			'class' => 'button--product button--cta',
 			'href' => $__templater->fn('link', array('products/download', $__vars['product'], ), false),
@@ -226,7 +226,7 @@ return array('macros' => array('header' => function($__templater, array $__argum
 	if ($__vars['product']['renew_price']) {
 		$__compilerTemp1 .= '
 						<dl class="pairs pairs--justified">
-							<dt>' . 'Renewal price' . '</dt>
+							<dt>' . 'Price' . '</dt>
 							<dd>
 								' . $__templater->filter($__vars['product']['renew_price'], array(array('currency', array($__vars['product']['currency'], )),), true) . '
 							</dd>

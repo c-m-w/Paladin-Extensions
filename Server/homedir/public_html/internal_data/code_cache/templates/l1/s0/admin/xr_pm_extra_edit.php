@@ -105,7 +105,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'value' => $__vars['extra']['extra_renew_price'],
 		'class' => 'input--autoSize',
 	), array(
-		'label' => 'Renewal price',
+		'label' => 'Price',
 		'explain' => 'Owners of this optional extra will have this amount added on to their existing purchases when they renew.',
 	)) . '
 
