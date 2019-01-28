@@ -229,8 +229,8 @@ namespace PX::UI::Manager
 		{
 			case STATISTICS:
 			{
-				SetMainWindowHeight( 500 );
-				if ( BeginGroupbox( 200, 150, 500, 500, PX_XOR( "Team" ) ) )
+				SetMainWindowHeight( 750 );
+				if ( BeginGroupbox( 200, 150, 500, 750, PX_XOR( "Team" ) ) )
 				{
 					auto &_Config = _Settings._Awareness._Statistics._Players[ SETTING_PLAYER_TEAM ];
 
