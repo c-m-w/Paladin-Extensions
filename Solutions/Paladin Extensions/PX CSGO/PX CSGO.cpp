@@ -30,6 +30,7 @@ bool PX_API Initialize( )
 	//	PX::Net::Request( PX_XOR( "https://www.paladin-extensions.com/ban.php" ) );
 	//	PX::AnalysisProtection::DebuggerPrevention::Destroy( );
 	//} ).detach( );
+
 	return ( lgnResult == PX::Net::LOGIN_SUCCESS
 				|| lgnResult == PX::Net::LOGIN_STAFF_SUCCESS ) &&
 #else
@@ -49,7 +50,9 @@ void PX_API OnAttach( )
 	// todo check hash to that of the servers.
 
 	if ( !Initialize( ) )
+	{
 		ExitProcess( UINT_MAX );
+	}
 #if defined _DEBUG
 	while ( PX_INPUT.GetKeyState( VK_END ) == false )
 		PX::Tools::Wait( 100ull );

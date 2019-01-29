@@ -76,7 +76,7 @@
 #define PX_MOV_EDX	0xBA
 #define PX_PUSH		0x68
 
-#define PX_EXTENSION_SECTIONS 7
+#define PX_EXTENSION_SECTIONS 8
 
 // TODO: make this an enumerated type
 #define PX_EXTENSION_NONE ( -1 )

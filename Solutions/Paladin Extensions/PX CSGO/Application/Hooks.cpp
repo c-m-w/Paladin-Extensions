@@ -56,6 +56,7 @@ namespace PX
 
 		bool PX_API InitializeHooks( )
 		{
+			MessageBox( nullptr, L"hooks::init", L"jeremy likes men", 0 );
 			hkDirectXDevice = new Tools::CStandardHook( pDevice );
 			hkClientBase = new Tools::CTrampolineHook( pClientBase );
 			hkClientMode = new Tools::CTrampolineHook( pClientMode );

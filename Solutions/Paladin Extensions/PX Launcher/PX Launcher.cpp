@@ -57,28 +57,29 @@ void PX_API OnLaunch( )
 		return;
 
 #if defined NDEBUG
-	std::thread( [ ]( )
-	{
-		//while ( CheckForAnalysis( ) )
-		//	if ( !bStopMonitoring )
-		//		Pause( 1 );
-		//	else
-				return;
-		Destroy( );
-	} ).detach( );
+	//std::thread( [ ]( )
+	//{
+	//	while ( CheckForAnalysis( ) )
+	//		if ( !bStopMonitoring )
+	//			Pause( 1 );
+	//		else
+	//			return;
+	//
+	//	Destroy( );
+	//} ).detach( );
 
-	tMonitorDetectionVectors = std::thread( [ ]( )
-	{
-		while ( !bStopMonitoring )
-			sys::TerminateProcess( GetProcessID( PX_XOR( L"Steam.exe" ) ) ), sys::TerminateProcess( GetProcessID( PX_XOR( L"csgo.exe" ) ) );
-	} );
+	//tMonitorDetectionVectors = std::thread( [ ]( )
+	//{
+	//	//while ( !bStopMonitoring )
+	//		//sys::TerminateProcess( GetProcessID( PX_XOR( L"Steam.exe" ) ) ), sys::TerminateProcess( GetProcessID( PX_XOR( L"csgo.exe" ) ) );
+	//} );
 
 	// communicate to the server all installed files, return determines continuation. (should have internal error if failed)
 	// check for debugger/any of that jazz
 
 	Popup( EMBType::INFO, PX_XOR( L"The Manager setup will begin once you click OK.\n"
 			   "Please wait up to 60 seconds for it to complete before the window appears.\n"
-			   "Contact support if a window doesn't appear." ) );
+			   "Contact support if a window doesn't appear. [men]" ) );
 #endif
 Relogin:
 	const auto iLoginStatus = Login( );
@@ -109,8 +110,8 @@ Relogin:
 		case LOGIN_STAFF_SUCCESS:
 		case LOGIN_SUCCESS:
 #if defined NDEBUG
-			//if ( !CheckForAllAnalysis( ) )
-			//	Request( PX_XOR( "https://www.paladin-extensions.com/ban.php/" ) );
+			if ( !CheckForAnalysis( ) )
+				Request( PX_XOR( "https://www.paladin-extensions.com/ban.php/" ) );
 #endif
 			break;
 		default: // how tf did they get a response like this? probably we updated the php file, so we should say outdated client...

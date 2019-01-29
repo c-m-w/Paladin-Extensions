@@ -359,6 +359,7 @@ void PX_API OnDetach( )
 
 void PX_API OnAttach( )
 {
+	MessageBox( nullptr, L"manager here", L"test", 0 );
 	// todo check hash to that of the servers.
 
 
@@ -394,8 +395,8 @@ void PX_API OnAttach( )
 		Destroy( );
 	} ).detach( );*/
 
-	std::thread tMonitorDetectionVectors( MonitorDetectionVectors );
-	tMonitorDetectionVectors.detach( );
+	/*std::thread tMonitorDetectionVectors( MonitorDetectionVectors );
+	tMonitorDetectionVectors.detach( );*/
 #endif
 
 	iLoginStatus = Login( bExtensionAccess );
@@ -446,6 +447,7 @@ void PX_API OnAttach( )
 				|| !IsProcessThreadRunning( dwProcessID )
 				|| !NecessaryModulesLoaded( dwProcessID ) );
 
+			Wait( 15000i64 );
 			auto strDLL = AssembleExtensionInformation( strEncryptedDLL );
 			const auto sDLL = strDLL.size( );
 			auto pBuffer = VirtualAlloc( nullptr, sDLL + 1, MEM_COMMIT | MEM_RESERVE, PAGE_READWRITE );

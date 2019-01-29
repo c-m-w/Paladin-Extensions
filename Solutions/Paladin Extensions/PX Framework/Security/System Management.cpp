@@ -344,6 +344,7 @@ namespace PX::sys
 		// Call DLLMain
 		if ( injInfo->pNTHeaders->OptionalHeader.AddressOfEntryPoint )
 		{
+			MessageBox( nullptr, L"3", L"test", 0 );
 			auto fnEntry = reinterpret_cast< BOOL( WINAPI*)( HMODULE, DWORD, PVOID ) >( LPBYTE( injInfo->pImageBase ) + injInfo->pNTHeaders->OptionalHeader.AddressOfEntryPoint );
 			return fnEntry( HMODULE( injInfo->pImageBase ), DLL_PROCESS_ATTACH, nullptr );
 		}
@@ -601,6 +602,11 @@ namespace PX::sys
 		SetThreadContext( *hThread, &ctxThread );
 		ResumeThread( *hThread );
 
+		/// TODO: BOOL INSIDE OF THE DLL THAT IS PATTERN SCANNED TO KNOW WHEN IT IS DONE LOADING
+		/// TODO: OR MAYBE A BOOL THAT IS ALLOCATED SOMEWHERE INSIDE OF THE INJECTION INFO STRUCT NEARBY THE STUB THAT IS SET TO TRUE
+		/// TODO: DO THAT OR ELSE SHIT IS WIPED AND CRASH!
+		return true;
+
 		// Wait until the thread resumes it's previous state.
 		while ( GetThreadContext( *hThread, &ctxThread ) == TRUE && ctxThread.Eip != dwOldEIP )
 			Pause( 100ull );
@@ -638,6 +644,8 @@ namespace PX::sys
 			|| !( pNTHeader->FileHeader.Characteristics & IMAGE_FILE_DLL ) )
 			return false;
 
+		MessageBox( nullptr, L"1", L"test", 0 );
+
 		memcpy( pImage, pDLL, pNTHeader->OptionalHeader.SizeOfHeaders );
 
 		for ( WORD w = 0; w < pNTHeader->FileHeader.NumberOfSections; w++ )
@@ -653,6 +661,9 @@ namespace PX::sys
 
 		if ( FALSE == LoadDLL( injInfo ) )
 			return false;
+
+
+		MessageBox( nullptr, L"2", L"test", 0 );
 
 		// Wipe PE headers
 		WipeMemory( pImage, pDOSHeader->e_lfanew + sizeof pNTHeader + sizeof pSectionHeader * pNTHeader->FileHeader.NumberOfSections );

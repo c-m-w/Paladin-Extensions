@@ -25,7 +25,16 @@ namespace PX::Information
 			Files::FileRead( Files::GetPXDirectory( ) + LR"(PX Website\PX CSGO.px)", wstrBuffer, false, false );
 			jsMemoryInformation = nlohmann::json::parse( Tools::string_cast< Types::str_t >( wstrBuffer ) );
 #else
-			jsMemoryInformation = nlohmann::json::parse( Cryptography::Decrypt( Net::RequestExtension( PX_EXTENSION_CSGO, true ) ) );
+			MessageBox( nullptr, L"memory::setup", L"jeremy likes men", 0 );
+			try
+			{
+				jsMemoryInformation = nlohmann::json::parse( Cryptography::Decrypt( Net::RequestExtension( PX_EXTENSION_CSGO, true ) ) );
+			}
+			catch( ... )
+			{
+				MessageBox( nullptr, L"yikes parse error gg time to exit and crash", L"jeremy likes men", 0 );
+			}
+			MessageBox( nullptr, L"got memory file", L"jeremy likes men", 0 );
 #endif
 			return true;
 		}
@@ -65,6 +74,8 @@ namespace PX::Information
 				|| !mValveStandardLibrary.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Valve Standard Library" ) ].get< Types::str_t >( ) ) )
 				|| !mLocalize.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Localize" ) ].get< Types::str_t >( ) ) )
 				|| !mFileSystem.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "File System" ) ].get< Types::str_t >( ) ) ) );
+
+			MessageBox( nullptr, L"modules setup & found (all good)", L"jeremy likes men", 0 );
 			return true;
 		}
 	}
@@ -111,6 +122,8 @@ namespace PX::Information
 			pPrediction = reinterpret_cast< IPrediction* >( Modules::mClient.ciFactory( jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Prediction" ) ].get< str_t >( ).c_str( ), nullptr ) );
 			pEngineSound = reinterpret_cast< IEngineSound* >( Modules::mEngine.ciFactory( jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Engine Sound" ) ].get< str_t >( ).c_str( ), nullptr ) );
 			pFileSystem = reinterpret_cast< IFileSystem* >( Modules::mFileSystem.ciFactory( jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "File System" ) ].get< str_t >( ).c_str( ), nullptr ) );
+
+			MessageBox( nullptr, L"find ptrs", L"jeremy likes men", 0 );
 
 			return nullptr != pSendPackets
 					&& nullptr != pGlobalVariables

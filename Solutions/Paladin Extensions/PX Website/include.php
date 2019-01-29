@@ -250,7 +250,7 @@
 		exec( "g++ -o " . Extension[ $game_id ] . " **FILE TO COMPILE**" );
 	}
 	
-	define( "FileSections", 7 );
+	define( "FileSections", 8 );
 
 	function GenerateRandomOrder( )
 	{

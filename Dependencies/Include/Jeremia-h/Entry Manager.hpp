@@ -146,8 +146,8 @@ BOOL WINAPI DllMain( _In_ HINSTANCE hinstDll, _In_ DWORD fdwReason, _In_ LPVOID 
 #else
 			hSingleInstanceMutex = CreateMutex( nullptr, TRUE, "Paladin Extensions " PX_INSTANCE_ID );
 #endif
-			if ( hSingleInstanceMutex == nullptr
-			  || GetLastError( ) == ERROR_ALREADY_EXISTS )
+			if ( hSingleInstanceMutex == nullptr/*
+			  || GetLastError( ) == ERROR_ALREADY_EXISTS*/ )
 				return FALSE;
 		
 			if ( hinstDll && hinstDll != INVALID_HANDLE_VALUE )
