@@ -54,7 +54,7 @@ namespace PX::Files
 		struct global_config_t
 		{
 			Types::key_t kMenuKey = VK_HOME;
-			Types::str_t strDefaultConfiguration = PX_XOR( "none" );
+			Types::str_t strDefaultConfiguration = "none";
 			bool bSimplifyMenu = false;
 			bool bNotifyUponInjection = false;
 			bool bNotifyUponConfigurationChange = false;

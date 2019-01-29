@@ -112,6 +112,7 @@ namespace PX::Features::Awareness
 		auto basdi = cfg.seqOrientation[ pEntity.enumExistence ].GetCurrentColor( );
 		if ( basdi.a == 0 )
 			return;
+
 		auto buf = player_ptr_t( pEntity.p )->GetHitboxPosition( HITBOX_HEAD );
 		const QAngle buff = player_ptr_t( pEntity.p )->m_angEyeAngles( );
 		const Vector viewbuff { buff.pitch, buff.yaw, buff.roll };
@@ -339,9 +340,9 @@ namespace PX::Features::Awareness
 
 		color_t clrBox;
 		if ( bVariantID )
-			clrBox = reinterpret_cast< settings_t::awareness_t::statistics_t::player_t* >( _cfg )->seqSnapline[ pEntity.enumExistence ].GetCurrentColor( );
+			clrBox = reinterpret_cast< settings_t::awareness_t::statistics_t::player_t* >( _cfg )->seqBox[ pEntity.enumExistence ].GetCurrentColor( );
 		else
-			clrBox = reinterpret_cast< settings_t::awareness_t::statistics_t::entity_t* >( _cfg )->seqSnapline[ pEntity.enumExistence ].GetCurrentColor( );
+			clrBox = reinterpret_cast< settings_t::awareness_t::statistics_t::entity_t* >( _cfg )->seqBox[ pEntity.enumExistence ].GetCurrentColor( );
 
 		if ( clrBox.a == 0 )
 			return;
@@ -582,27 +583,9 @@ namespace PX::Features::Awareness
 	// todo entities seem to not be working
 	void PX_API DrawStatistics( )
 	{
-		static bool bDeleteOnce = false;
-		{
-			_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].bEnabled = true;
-			_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].bInformation = true;
-			_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].bIdentifier = true;
-			_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].fAlignment = settings_t::awareness_t::statistics_t::a_statistics_base::BOTTOM;
-			_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].bOrientation = true;
-			_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].bBone = true;
-			_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].bSnapline = true;
-			_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].flBoneThickness = 1.f;
-			_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].flSnaplineThickness = 1.f;
-
-			_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].bBox = true;
-			_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].bBoxOutline = true;
-			_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].bDimesMode = false;//GetMoment( ) / 10000000ull % 10 > 6 ? true : false;
-			_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].bDisplayMode = false;//GetMoment( ) / 10000000ull % 10 > 3 ? true : false;
-			//bDeleteOnce ? _Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].seqBox[ STATE_VISIBLE ].DeleteColorSequence( 0 ) : ( void )0;
-			bDeleteOnce ? _Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].seqBox[ STATE_VISIBLE ].PutNewColorSequence( { 255, 255, 255, 255 }, 1000ull ) : ( void )0;
-			_Settings._Awareness._Statistics._Players[ SETTING_PLAYER_ENEMY ].flBoxThickness = 1.f;
-		}
-		bDeleteOnce = true;
+		static auto mmtStartMoment = GetMoment( );
+		if ( !( GetMoment( ) - mmtStartMoment > 10000 ) ) // config load time :p
+			return;
 
 		// check that game is setup properly
 		if ( !pEngineClient->IsInGame( ) )
@@ -610,6 +593,10 @@ namespace PX::Features::Awareness
 		pLocalPlayer = GetLocalPlayer( );
 		if ( !pLocalPlayer )
 			return;
+
+		//static auto iLastTickCount = pGlobalVariables->m_iTickCount;
+		//if ( !( iLastTickCount < pGlobalVariables->m_iTickCount ) )
+		//	return;
 
 		// check that config for anything is enabled
 		{
@@ -628,6 +615,8 @@ namespace PX::Features::Awareness
 		{
 			pEntity = entity_ptr_t( pEntityList->GetClientEntity( i ) );
 			if ( !pEntity )
+				continue;
+			if ( pEntity.p == pLocalPlayer )
 				continue;
 
 			// check that the config for that ent is enabled
