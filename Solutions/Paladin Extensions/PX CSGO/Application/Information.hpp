@@ -50,8 +50,8 @@ namespace PX::Information
 
 			// CBaseCombatWeapon
 			PX_DEF uGetInaccuracy = 471u;
-			PX_DEF uGetSpread = 436u;
-			PX_DEF uUpdateAccuracyPenalty = 468u;
+			PX_DEF uGetSpread = 440u;
+			PX_DEF uUpdateAccuracyPenalty = 472u;
 		}
 
 		namespace Offsets
