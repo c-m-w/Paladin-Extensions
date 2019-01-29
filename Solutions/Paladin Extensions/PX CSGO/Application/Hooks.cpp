@@ -33,7 +33,7 @@ namespace PX
 			}
 
 			return fnSequence != nullptr
-					//&& hkDirectXDevice->HookIndex( uBeginScene, reinterpret_cast< void* >( BeginScene ) )
+					&& hkDirectXDevice->HookIndex( uBeginScene, reinterpret_cast< void* >( BeginScene ) )
 					&& hkDirectXDevice->HookIndex( uEndScene, reinterpret_cast< void* >( EndScene ) )
 					&& hkDirectXDevice->HookIndex( uReset, reinterpret_cast< void* >( Reset ) )
 					&& hkClientBase->HookIndex( uCreateMove, reinterpret_cast< void* >( CreateMove ) )
