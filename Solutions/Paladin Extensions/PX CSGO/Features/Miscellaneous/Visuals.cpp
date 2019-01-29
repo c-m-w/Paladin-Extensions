@@ -52,52 +52,56 @@ namespace PX::Features::Miscellaneous
 
 	void PX_API DarkenWorld( )
 	{
-		static auto bModifiedMaterials = false;
-		char szOldSky[ MAX_PATH ];
+		static auto bFinished = false;
 		static auto pSkyModel = pConVar->FindVar( PX_XOR( "sv_skyname" ) );
-		static auto pDrawSpecificStaticProp = pConVar->FindVar( PX_XOR( "r_DrawSpecificStaticProp" ) );
+		static auto flOldMin = 0.f, flOldMax = 0.f;
+		char szOldSky[ MAX_PATH ];
 		if ( pSkyModel->m_nFlags & FCVAR_CHEAT )
 			pSkyModel->m_nFlags &= ~FCVAR_CHEAT;
-		pDrawSpecificStaticProp->SetValue( 1 );
-		if ( bModifiedMaterials == _Settings._Miscellaneous._Visuals.bDarkenWorld.Get( ) )
+
+		CEnvTonemapController* pController = nullptr;
+
+		for ( auto i = 0; i < pEntityList->GetHighestEntityIndex( )
+			  && pController == nullptr; i++ )
+		{
+			const auto pEntity = pEntityList->GetClientEntity( i );
+			if ( !pEntity )
+				continue;
+
+			if ( pEntity->GetClientClass( )->m_ClassID == ClassID_CEnvTonemapController )
+				pController = decltype( pController )( pEntity );
+		}
+
+		if ( pController == nullptr )
 			return;
 
-		float flColorModifier;
-		char szNewSky[ MAX_PATH ];
+		bFinished &= pController->m_bUseCustomAutoExposureMax( ) == true && pController->m_bUseCustomAutoExposureMin( ) == true
+			&& pController->m_flCustomAutoExposureMax( ) == 0.075f && pController->m_flCustomAutoExposureMin( ) == 0.075f;
 
-		if ( bModifiedMaterials )
+		if ( bFinished != _Settings._Miscellaneous._Visuals.bDarkenWorld.Get( ) )
 		{
-			strcpy( szNewSky, const_cast< const char* >( szOldSky ) );
-			flColorModifier = 1.f;
-		}
-		else
-		{
-			strcpy( szOldSky, pSkyModel->GetString( ) );
-			strcpy( szNewSky, PX_XOR( "sky_csgo_night02" ) );
-			flColorModifier = 0.15f;
-		}
+			char szNewSky[ MAX_PATH ];
 
-		bModifiedMaterials = !bModifiedMaterials;
-		const static auto pInvalidMaterial = reinterpret_cast< MaterialHandle_t( __thiscall*)( IMaterialSystem * ) >( ( *reinterpret_cast< void*** >( pMaterialSystem ) )[ 88 ] )( pMaterialSystem );
-
-		for ( auto m = reinterpret_cast< MaterialHandle_t( __thiscall*)( IMaterialSystem * ) >( ( *reinterpret_cast< void*** >( pMaterialSystem ) )[ 86 ] )( pMaterialSystem );
-			  m != pInvalidMaterial;
-			  m = reinterpret_cast< MaterialHandle_t( __thiscall*)( IMaterialSystem *, MaterialHandle_t ) >( ( *reinterpret_cast< void*** >( pMaterialSystem ) )[ 87 ] )( pMaterialSystem, m ) )
-		{
-			const auto pMaterial = reinterpret_cast< IMaterial*( __thiscall*)( IMaterialSystem *, MaterialHandle_t ) >( ( *reinterpret_cast< void*** >( pMaterialSystem ) )[ 89 ] )( pMaterialSystem, m );
-			if ( pMaterial == nullptr
-				|| pMaterial->IsErrorMaterial( ) )
-				continue;
-			std::cout << pMaterial->GetTextureGroupName( ) << std::endl;
-			if ( strstr( pMaterial->GetTextureGroupName( ), PX_XOR( "World" ) ) != nullptr
-				|| strstr( pMaterial->GetTextureGroupName( ), PX_XOR( "StaticProp" ) ) != nullptr )
+			if ( bFinished )
 			{
-				pSkyModel->SetValue( szNewSky );
-				pMaterial->ColorModulate( flColorModifier, flColorModifier, flColorModifier );
-				if ( bModifiedMaterials )
-					pMaterial->SetMaterialVarFlag( MATERIAL_VAR_TRANSLUCENT, false );
+				strcpy( szNewSky, const_cast< const char* >( szOldSky ) );
+				pController->m_bUseCustomAutoExposureMax( ) = pController->m_bUseCustomAutoExposureMin( ) = false;
+				pController->m_flCustomAutoExposureMin( ) = flOldMin;
+				pController->m_flCustomAutoExposureMax( ) = flOldMax;
+				ForceUpdate( );
 			}
-		}
+			else
+			{
+				strcpy( szOldSky, pSkyModel->GetString( ) );
+				strcpy( szNewSky, PX_XOR( "sky_csgo_night02" ) );
+				pController->m_bUseCustomAutoExposureMin( ) = pController->m_bUseCustomAutoExposureMax( ) = true;
+				flOldMin = pController->m_flCustomAutoExposureMin( );
+				flOldMax = pController->m_flCustomAutoExposureMax( );
+				pController->m_flCustomAutoExposureMax( ) = pController->m_flCustomAutoExposureMin( ) = 0.075f;
+			}
+
+			bFinished = !bFinished;
+		}		
 	}
 
 	void PX_API DrawAimbotFOV( )
@@ -148,9 +152,12 @@ namespace PX::Features::Miscellaneous
 		if ( !hActiveWeapon )
 			return;
 
+		static std::vector< float > vecRadii { };
 		const auto vecViewPos = pLocalPlayer->GetViewPosition( );
 		const auto flRange = hActiveWeapon->GetCSWeaponData( )->flRange;
 		const auto qRecoil = pLocalPlayer->m_aimPunchAngle( );
+		const auto flSpread = ( hActiveWeapon->GetInaccuracy( ) + hActiveWeapon->GetSpread( ) ) / 2.f;
+
 		Vector vecMiddle { }, vecRecoil { }, vecMiddleWorld { }, vecRecoilWorld { }, vecNewWorld { }, vecScreenMiddle { }, vecScreenRecoil { }, vecScreenNew { };
 		vecMiddle = pClientState->viewangles;
 		vecRecoil = vecMiddle + Vector( qRecoil.pitch, qRecoil.yaw, qRecoil.roll );
@@ -158,7 +165,7 @@ namespace PX::Features::Miscellaneous
 		TransformAngle( vecRecoil, vecRecoilWorld );
 
 		vecNewWorld = vecMiddleWorld;
-		vecNewWorld += hActiveWeapon->GetInaccuracy( ) + hActiveWeapon->GetSpread( );
+		vecNewWorld += flSpread;
 		vecRecoilWorld *= flRange;
 		vecMiddleWorld *= flRange;
 		vecNewWorld *= flRange;
@@ -171,12 +178,21 @@ namespace PX::Features::Miscellaneous
 		WorldToScreen( vecRecoilWorld, vecScreenRecoil );
 
 		const auto vecRecoilDifference = vecScreenMiddle - vecScreenRecoil;
-		auto radius = sqrt( powf( vecScreenNew.x - vecScreenMiddle.x, 2.f ) + powf( vecScreenNew.y - vecScreenMiddle.y, 2.f ) );
+		auto radius = ceilf( sqrt( powf( vecScreenNew.x - vecScreenMiddle.x, 2.f ) + powf( vecScreenNew.y - vecScreenMiddle.y, 2.f ) ) );
+		auto sum = 0.f;
+		vecRadii.emplace_back( radius );
+		for ( auto& flRadius : vecRadii )
+			sum += flRadius;
+
+		sum /= float( vecRadii.size( ) );
+		if ( vecRadii.size( ) >= 10 )
+			vecRadii.erase( vecRadii.begin( ) );
+
 		int iWidth, iHeight;
 		pEngineClient->GetScreenSize( iWidth, iHeight );
-		radius = std::clamp( radius, 0.f, sqrt( powf( iWidth / 2.f, 2.f ) + powf( iHeight / 2.f, 2.f ) ) );
+		sum = std::clamp( sum, 0.f, sqrt( powf( iWidth / 2.f, 2.f ) + powf( iHeight / 2.f, 2.f ) ) );
 
-		Drawing::Circle( D3DXVECTOR2( iWidth / 2.f - vecRecoilDifference.x, iHeight / 2.f - vecRecoilDifference.y ), radius, _Settings._Miscellaneous._Visuals.seqSpread[ 0 ].GetCurrentColor( ).GetARGB( ), _Settings._Miscellaneous._Visuals.seqSpread[ 1 ].GetCurrentColor( ).GetARGB( ), int( 2 * D3DX_PI * radius / 4.f ) );
+		Drawing::Circle( D3DXVECTOR2( roundf( iWidth / 2.f - vecRecoilDifference.x ), roundf( iHeight / 2.f - vecRecoilDifference.y ) ), sum, _Settings._Miscellaneous._Visuals.seqSpread[ 0 ].GetCurrentColor( ).GetARGB( ), _Settings._Miscellaneous._Visuals.seqSpread[ 1 ].GetCurrentColor( ).GetARGB( ), int( D3DX_PI * sum ) );
 	}
 
 	void PX_API ModifyRenderFOV( CViewSetup *pViewSetup )

@@ -63,6 +63,7 @@ namespace PX::Features::Awareness
 				{
 					GlowEntity( pLocalPlayer, pEntity, pObject, SETTING_ENTITY_CHICKEN );
 				}
+				break;
 
 				case ClassID_CHEGrenade:
 				{

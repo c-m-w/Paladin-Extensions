@@ -85,15 +85,17 @@ namespace PX::Features::Miscellaneous
 			const auto pHudWeaponSelection = FindHudElement< ptr_t >( PX_XOR( "CCSGO_HudWeaponSelection" ) );
 			if ( pHudWeaponSelection != nullptr )
 			{
-				const auto pWeapons = reinterpret_cast< int* >( ptr_t( pHudWeaponSelection ) - 0x1C );
+				const auto pHudWeapons = reinterpret_cast< void* >( ptr_t( pHudWeaponSelection ) - 0xA0 );
+				const auto pWeapons = reinterpret_cast< int* >( ptr_t( pHudWeapons ) + 0x80 );
 				if ( pWeapons != nullptr
 					&& *pWeapons > 0 )
 				{
 					static auto pClearHudWeaponIcon = reinterpret_cast< int( __thiscall*)( void *, int ) >( Modules::mClient.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Clear Hud Weapon" ) ].get< str_t >( ) )
 						+ jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Clear Hud Weapon" ) ].get< int >( ) );
 					for ( auto i = 0; i < *pWeapons; i++ )
-						i = pClearHudWeaponIcon( reinterpret_cast< void* >( ptr_t( pHudWeaponSelection ) - 0x9C ), i );
+						i = pClearHudWeaponIcon( pHudWeapons, i );
 
+					//*pWeapons = 0;
 					_InventoryContext.bClearHud = false;
 				}
 			}

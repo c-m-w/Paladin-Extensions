@@ -91,6 +91,20 @@ namespace PX::Tools
 		}
 	};
 
+	class CEnvTonemapController: public IClientEntity
+	{
+	public:
+
+		PX_NETVAR_REFERENCE( bool, m_bUseCustomAutoExposureMin, PX_XOR( "DT_EnvTonemapController" ), PX_XOR( "m_bUseCustomAutoExposureMin" ) );
+		PX_NETVAR_REFERENCE( bool, m_bUseCustomAutoExposureMax, PX_XOR( "DT_EnvTonemapController" ), PX_XOR( "m_bUseCustomAutoExposureMax" ) );
+		PX_NETVAR_REFERENCE( float, m_flCustomAutoExposureMin, PX_XOR( "DT_EnvTonemapController" ), PX_XOR( "m_flCustomAutoExposureMin" ) );
+		PX_INL float& m_flCustomAutoExposureMax( ) const
+		{
+			static auto ptrOffset = PX::Information::NetworkedVariableManager::FindOffset( ( "DT_EnvTonemapController" ), ( "m_flCustomAutoExposureMax" ) ); 
+			return *reinterpret_cast< float* >( PX::Types::ptr_t( this ) + ptrOffset );
+		};
+	};
+
 	class CBaseEntity: public IClientEntity
 	{
 	public:

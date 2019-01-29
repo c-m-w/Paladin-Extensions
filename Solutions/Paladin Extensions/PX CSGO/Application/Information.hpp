@@ -46,7 +46,7 @@ namespace PX::Information
 
 			// CBaseEntity
 			PX_DEF uIsPlayer = 153u;
-			PX_DEF uIsWeapon = 160u;
+			PX_DEF uIsWeapon = 161u;
 
 			// CBaseCombatWeapon
 			PX_DEF uGetInaccuracy = 471u;

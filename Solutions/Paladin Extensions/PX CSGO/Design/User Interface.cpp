@@ -618,7 +618,7 @@ namespace PX::UI::Manager
 					EndGroupbox( );
 				}
 
-				if ( BeginGroupbox( 400, 285, 500, 220, PX_XOR( "Entities" ) ) )
+				if ( BeginGroupbox( 400, 315, 500, 220, PX_XOR( "Entities" ) ) )
 				{
 					static auto uEntity = 0u;
 					{
@@ -1621,7 +1621,7 @@ namespace PX::UI::Manager
 
 			case VISUALS:
 			{
-				if ( BeginGroupbox( 200, 150, 500, 220, PX_XOR( "Visuals" ) ) )
+				if ( BeginGroupbox( 200, 150, 500, 250, PX_XOR( "Visuals" ) ) )
 				{
 					{
 						BeginRow( 30, 13, ROW_STATIC );
@@ -1926,7 +1926,7 @@ namespace PX::UI::Manager
 					EndGroupbox( );
 				}
 
-				if ( BeginGroupbox( 401, 205, 500, 220, PX_XOR( "Paint Kits" ) ) )
+				if ( BeginGroupbox( 401, 175, 500, 220, PX_XOR( "Paint Kits" ) ) )
 				{
 					{
 						VerticalSpacing( );
@@ -2049,7 +2049,7 @@ namespace PX::UI::Manager
 					EndGroupbox( );
 				}
 
-				if ( BeginGroupbox( 401, 409, 500, 120, PX_XOR( "Models" ) ) )
+				if ( BeginGroupbox( 401, 379, 500, 120, PX_XOR( "Models" ) ) )
 				{
 					{
 						std::deque< cstr_t > dqPages

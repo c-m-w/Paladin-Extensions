@@ -344,7 +344,6 @@ namespace PX::sys
 		// Call DLLMain
 		if ( injInfo->pNTHeaders->OptionalHeader.AddressOfEntryPoint )
 		{
-			MessageBox( nullptr, L"3", L"test", 0 );
 			auto fnEntry = reinterpret_cast< BOOL( WINAPI*)( HMODULE, DWORD, PVOID ) >( LPBYTE( injInfo->pImageBase ) + injInfo->pNTHeaders->OptionalHeader.AddressOfEntryPoint );
 			return fnEntry( HMODULE( injInfo->pImageBase ), DLL_PROCESS_ATTACH, nullptr );
 		}
