@@ -244,7 +244,8 @@ namespace PX::Files
 
 	void CConfig::RemoveConfiguration( Types::wcstr_t wszFileName )
 	{
-		DeleteFile( ( GetPXDirectory( ) + wstrExtensionFolderNames[ iExtension ] + wszFileName + wstrExtension ).c_str( ) );
+		const auto strPath = string_cast< std::string >( GetConfigDirectory( ) + wszFileName + wstrExtension );
+		std::remove( strPath.c_str( ) );
 		if ( wszFileName == string_cast< std::wstring >( global.strDefaultConfiguration ) )
 			SaveConfiguration( wszFileName );
 	}

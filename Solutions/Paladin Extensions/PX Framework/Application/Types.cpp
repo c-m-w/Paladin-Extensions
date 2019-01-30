@@ -139,10 +139,7 @@ namespace PX::Types
 	{
 		px_assert( initInputs.size( ) == 1 );
 		for each ( auto initInput in initInputs )
-		{
-			delete pColor;
-			pColor = reinterpret_cast< UColor* >( initInput );
-		}
+			_Color = *reinterpret_cast< UColor* >( initInput );
 	}
 
 	SColor::SColor( std::initializer_list< int > initInputs )
@@ -151,11 +148,11 @@ namespace PX::Types
 		auto u = 0u;
 		for each ( auto initInput in initInputs )
 		{
-			pColor->b[ u ] = byte_t( initInput );
+			_Color.b[ u ] = byte_t( initInput );
 			u++;
 		}
 		for ( auto uu = 3u; uu >= u + 1; uu-- )
-			pColor->b[ uu ] = UCHAR_MAX;
+			_Color.b[ uu ] = UCHAR_MAX;
 	}
 
 	SColor::SColor( std::initializer_list< float > initInputs )
@@ -164,11 +161,11 @@ namespace PX::Types
 		auto u = 0u;
 		for each ( auto initInput in initInputs )
 		{
-			pColor->b[ u ] = byte_t( initInput > 1.f ? initInput : initInput * 255.f );
+			_Color.b[ u ] = byte_t( initInput > 1.f ? initInput : initInput * 255.f );
 			u++;
 		}
 		for ( auto uu = 3u; uu >= u + 1; uu-- )
-			pColor->b[ uu ] = UCHAR_MAX;
+			_Color.b[ uu ] = UCHAR_MAX;
 	}
 
 	//SColor::~SColor( )
@@ -178,66 +175,58 @@ namespace PX::Types
 
 	unsigned SColor::GetRGBA( ) const
 	{
-		return pColor->u;
+		return _Color.u;
 	}
 
 	unsigned SColor::GetARGB( ) const
 	{
-		const auto flFactor = pColor->b[ COLOR_ALPHA ] / 255.f;
-		return D3DCOLOR_ARGB( pColor->b[ COLOR_ALPHA ], byte_t( pColor->b[ COLOR_RED ] * flFactor ), byte_t( pColor->b[ COLOR_GREEN ] * flFactor ), byte_t( pColor->b[ COLOR_BLUE ] * flFactor ) );
+		const auto flFactor = _Color.b[ COLOR_ALPHA ] / 255.f;
+		return D3DCOLOR_ARGB( _Color.b[ COLOR_ALPHA ], byte_t( _Color.b[ COLOR_RED ] * flFactor ), byte_t( _Color.b[ COLOR_GREEN ] * flFactor ), byte_t( _Color.b[ COLOR_BLUE ] * flFactor ) );
 	}
 
-	unsigned SColor::PutHex( const unsigned uValue ) const
+	unsigned SColor::PutHex( const unsigned uValue )
 	{
-		return pColor->u = uValue;
+		return _Color.u = uValue;
 	}
 
 	byte_t SColor::GetRed( ) const
 	{
-		if ( pColor == nullptr )
-			return UCHAR_MAX;
-		return pColor->b[ COLOR_RED ];
+		return _Color.b[ COLOR_RED ];
 	}
 
 	byte_t SColor::GetGreen( ) const
 	{
-		if ( pColor == nullptr )
-			return UCHAR_MAX;
-		return pColor->b[ COLOR_GREEN ];
+		return _Color.b[ COLOR_GREEN ];
 	}
 
 	byte_t SColor::GetBlue( ) const
 	{
-		if ( pColor == nullptr )
-			return UCHAR_MAX;
-		return pColor->b[ COLOR_BLUE ];
+		return _Color.b[ COLOR_BLUE ];
 	}
 
 	byte_t SColor::GetAlpha( ) const
 	{
-		if ( pColor == nullptr )
-			return UCHAR_MAX;
-		return pColor->b[ COLOR_ALPHA ];
+		return _Color.b[ COLOR_ALPHA ];
 	}
 
-	byte_t SColor::PutRed( const byte_t bValue ) const
+	byte_t SColor::PutRed( const byte_t bValue )
 	{
-		return pColor->b[ COLOR_RED ] = bValue;
+		return _Color.b[ COLOR_RED ] = bValue;
 	}
 
-	byte_t SColor::PutGreen( const byte_t bValue ) const
+	byte_t SColor::PutGreen( const byte_t bValue )
 	{
-		return pColor->b[ COLOR_GREEN ] = bValue;
+		return _Color.b[ COLOR_GREEN ] = bValue;
 	}
 
-	byte_t SColor::PutBlue( const byte_t bValue ) const
+	byte_t SColor::PutBlue( const byte_t bValue )
 	{
-		return pColor->b[ COLOR_BLUE ] = bValue;
+		return _Color.b[ COLOR_BLUE ] = bValue;
 	}
 
-	byte_t SColor::PutAlpha( const byte_t bValue ) const
+	byte_t SColor::PutAlpha( const byte_t bValue )
 	{
-		return pColor->b[ COLOR_ALPHA ] = bValue;
+		return _Color.b[ COLOR_ALPHA ] = bValue;
 	}
 
 	float SColor::GetRedFloat( ) const
@@ -260,22 +249,22 @@ namespace PX::Types
 		return GetAlpha( ) / 255.f;
 	}
 
-	float SColor::PutRedFloat( const float flValue ) const
+	float SColor::PutRedFloat( const float flValue )
 	{
 		return PutRed( byte_t( flValue <= 1.f ? flValue * 255u : flValue ) );
 	}
 
-	float SColor::PutGreenFloat( const float flValue ) const
+	float SColor::PutGreenFloat( const float flValue )
 	{
 		return PutGreen( byte_t( flValue <= 1.f ? flValue * 255u : flValue ) );
 	}
 
-	float SColor::PutBlueFloat( const float flValue ) const
+	float SColor::PutBlueFloat( const float flValue )
 	{
 		return PutBlue( byte_t( flValue <= 1.f ? flValue * 255u : flValue ) );
 	}
 
-	float SColor::PutAlphaFloat( const float flValue ) const
+	float SColor::PutAlphaFloat( const float flValue )
 	{
 		return PutAlpha( byte_t( flValue <= 1.f ? flValue * 255u : flValue ) );
 	}
@@ -287,12 +276,12 @@ namespace PX::Types
 
 	byte_t SColor::operator[ ]( const int iColor ) const
 	{
-		return pColor->b[ iColor ];
+		return _Color.b[ iColor ];
 	}
 
 	float SColor::operator[ ]( const float flColor ) const
 	{
-		return float( pColor->b[ int( flColor ) ] ) / 255.f;
+		return float( _Color.b[ int( flColor ) ] ) / 255.f;
 	}
 
 	bool SColor::operator==( const SColor &rhs ) const
@@ -318,7 +307,7 @@ namespace PX::Types
 
 	//bool SColor::operator==( const SColor& rhs ) const
 	//{
-	//	return pColor->u == rhs.pColor->u;
+	//	return _Color.u == rhs._Color.u;
 	//}
 	//
 	//bool SColor::operator!=( const SColor& rhs ) const

@@ -347,7 +347,7 @@ namespace PX::Types
 		{
 			unsigned u;
 			byte_t b[ COLOR_MAX ];
-		} _Color, *pColor = &_Color;
+		} _Color;
 
 	public:
 		SColor( ) = default;
@@ -361,17 +361,17 @@ namespace PX::Types
 
 		unsigned GetRGBA( ) const;
 		unsigned GetARGB( ) const;
-		unsigned PutHex( unsigned uValue ) const;
+		unsigned PutHex( unsigned uValue );
 		__declspec( property( get = GetRGBA, put = PutHex ) ) unsigned Hex;
 
 		byte_t GetRed( ) const;
 		byte_t GetGreen( ) const;
 		byte_t GetBlue( ) const;
 		byte_t GetAlpha( ) const;
-		byte_t PutRed( byte_t bValue ) const;
-		byte_t PutGreen( byte_t bValue ) const;
-		byte_t PutBlue( byte_t bValue ) const;
-		byte_t PutAlpha( byte_t bValue ) const;
+		byte_t PutRed( byte_t bValue );
+		byte_t PutGreen( byte_t bValue );
+		byte_t PutBlue( byte_t bValue );
+		byte_t PutAlpha( byte_t bValue );
 		__declspec( property( get = GetRed, put = PutRed ) ) byte_t r;
 		__declspec( property( get = GetGreen, put = PutGreen ) ) byte_t g;
 		__declspec( property( get = GetBlue, put = PutBlue ) ) byte_t b;
@@ -381,10 +381,10 @@ namespace PX::Types
 		float GetGreenFloat( ) const;
 		float GetBlueFloat( ) const;
 		float GetAlphaFloat( ) const;
-		float PutRedFloat( float flValue ) const;
-		float PutGreenFloat( float flValue ) const;
-		float PutBlueFloat( float flValue ) const;
-		float PutAlphaFloat( float flValue ) const;
+		float PutRedFloat( float flValue );
+		float PutGreenFloat( float flValue );
+		float PutBlueFloat( float flValue );
+		float PutAlphaFloat( float flValue );
 		__declspec( property( get = GetRedFloat, put = PutRedFloat ) ) float rfl;
 		__declspec( property( get = GetGreenFloat, put = PutGreenFloat ) ) float gfl;
 		__declspec( property( get = GetBlueFloat, put = PutBlueFloat ) ) float bfl;

@@ -1283,7 +1283,7 @@ namespace PX::UI
 			static auto bStoppedClicking = false;
 			static auto uCurrentSequence = 0u;
 			static char szSliderBuffer[ 32 ];
-			static auto bWasClicking = false;
+			static auto bWasClicking = false, bWasWasClicking = false;
 
 			if ( !nk_input_is_mouse_hovering_rect( &pContext->input, recColorPickerBoundaries ) && PX_INPUT.GetKeyState( VK_LBUTTON ) && bStoppedClicking && !bWasClicking )
 			{
@@ -1372,8 +1372,9 @@ namespace PX::UI
 				nk_spacing( pContext, 1 );
 				nk_layout_row_push( pContext, 75 );
 
-				if ( Button( EPosition::LEFT, PX_XOR( "+" ), false, false ) && !bWasClicking && pActiveEditColor->zSequences < 7 )
+				if ( Button( EPosition::LEFT, PX_XOR( "+" ), false, false ) && !bWasWasClicking && pActiveEditColor->zSequences < 7 )
 				{
+					bWasWasClicking = true;
 					pActiveEditColor->PutNewColorSequence( color_t( ), 1000u );
 					uCurrentSequence = pActiveEditColor->zSequences - 1;
 					clrChosenColor = {
@@ -1383,8 +1384,9 @@ namespace PX::UI
 						pActiveEditColor->GetColor( uCurrentSequence ).afl
 					};
 				}
-				if ( Button( EPosition::RIGHT, PX_XOR( "-" ), false, false ) && !bWasClicking && pActiveEditColor->zSequences > 1 )
+				if ( Button( EPosition::RIGHT, PX_XOR( "-" ), false, false ) && !bWasWasClicking && pActiveEditColor->zSequences > 1 )
 				{
+					bWasWasClicking = true;
 					pActiveEditColor->DeleteColorSequence( uCurrentSequence );
 					uCurrentSequence = 0u;
 					clrChosenColor = {
@@ -1414,9 +1416,15 @@ namespace PX::UI
 				}
 				nk_layout_row_dynamic( pContext, 10, 0 );
 				nk_popup_end( pContext );
+				if ( bWasWasClicking )
+					bWasWasClicking = PX_INPUT.GetKeyState( VK_LBUTTON ) == true;
+
 				bWasClicking = PX_INPUT.GetKeyState( VK_LBUTTON ) == true;
 				return;
 			}
+			if ( bWasWasClicking )
+				bWasWasClicking = PX_INPUT.GetKeyState( VK_LBUTTON ) == true;
+
 			bWasClicking = PX_INPUT.GetKeyState( VK_LBUTTON ) == true;
 			bNewColor = true;
 			bStoppedClicking = false;

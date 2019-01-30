@@ -75,7 +75,6 @@ namespace PX::Information
 				|| !mLocalize.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "Localize" ) ].get< Types::str_t >( ) ) )
 				|| !mFileSystem.Setup( Tools::string_cast< wstr_t >( jsMemoryInformation[ PX_XOR( "Modules" ) ][ PX_XOR( "File System" ) ].get< Types::str_t >( ) ) ) );
 
-			MessageBox( nullptr, L"modules setup & found (all good)", L"jeremy likes men", 0 );
 			return true;
 		}
 	}
@@ -122,8 +121,6 @@ namespace PX::Information
 			pPrediction = reinterpret_cast< IPrediction* >( Modules::mClient.ciFactory( jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Prediction" ) ].get< str_t >( ).c_str( ), nullptr ) );
 			pEngineSound = reinterpret_cast< IEngineSound* >( Modules::mEngine.ciFactory( jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "Engine Sound" ) ].get< str_t >( ).c_str( ), nullptr ) );
 			pFileSystem = reinterpret_cast< IFileSystem* >( Modules::mFileSystem.ciFactory( jsMemoryInformation[ PX_XOR( "Versions" ) ][ PX_XOR( "File System" ) ].get< str_t >( ).c_str( ), nullptr ) );
-
-			MessageBox( nullptr, L"find ptrs", L"jeremy likes men", 0 );
 
 			return nullptr != pSendPackets
 					&& nullptr != pGlobalVariables

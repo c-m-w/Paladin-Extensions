@@ -19,20 +19,10 @@ namespace PX::Prediction
 	bool PX_API InitializePrediction( )
 	{
 
-		MessageBox( nullptr, L"prediction init", L"jeremy likes men", 0 );
-
 		pPlayer = *reinterpret_cast< ptr_t** >( Modules::mClient.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Prediction Player" ) ].get< str_t >( ) )
 			+ jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Prediction Player" ) ].get< int >( ) );
 		pPredictionSeed = *reinterpret_cast< int** >( Modules::mClient.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Prediction Seed" ) ].get< str_t >( ) )
 			+ jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Prediction Seed" ) ].get< int >( ) );
-
-		if( pPlayer != nullptr
-			&& pPredictionSeed != nullptr )
-			MessageBox( nullptr, L"prediction worked (yay)", L"jeremy likes men", 0 );
-		else
-
-			MessageBox( nullptr, L"prediction not worked (yay)", L"jeremy likes men", 0 );
-
 
 		return pPlayer != nullptr
 				&& pPredictionSeed != nullptr;
