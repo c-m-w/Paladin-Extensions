@@ -90,11 +90,10 @@ namespace PX::Files
 			global.bDisplayTooltips = jsData[ "Display Tooltips" ].get< bool >( );
 			global.bDisplayWatermark = jsData[ "Display Watermark" ].get< bool >( );
 			bLoadedGlobalConfig = true;
-			if ( jsData[ "Default Configuration" ].get< std::string >( ).empty( ) )
+			if ( jsData[ "Default Configuration" ].get< std::string >( ).empty( )
+				 || jsData[ "Default Configuration" ].get< std::string >( )[ 0 ] == 0 )
 			{
-				if ( global.strDefaultConfiguration.empty( ) )
-					global.strDefaultConfiguration = PX_XOR( "none" );
-
+				global.strDefaultConfiguration = PX_XOR( "none" );
 				SaveGlobalConfiguration( );
 			}
 			else
@@ -201,8 +200,9 @@ namespace PX::Files
 		std::string strConfig { };
 
 		strConfig.resize( zConfig + 1 );
+		const auto pBytes = &strConfig[ 0 ];
 		for( auto u = 0u; u < zConfig; u++ )
-			strConfig[ u ] = *reinterpret_cast< byte_t* >( ptr_t( pConfig ) + u );
+			pBytes[ u ] = *reinterpret_cast< byte_t* >( ptr_t( pConfig ) + u );
 
 		FileWrite( GetConfigDirectory( ) + wszFileName + wstrExtension, string_cast< wstr_t >( strConfig ), false, false );
 	}
@@ -235,8 +235,9 @@ namespace PX::Files
 			return false;
 		}
 
+		const auto pData = &strData[ 0 ];
 		for ( auto u = 0u; u < zConfig; u++ )
-			*reinterpret_cast< byte_t* >( ptr_t( pConfig ) + u ) = strData[ u ];
+			*reinterpret_cast< byte_t* >( ptr_t( pConfig ) + u ) = pData[ u ];
 
 		return true;
 	}

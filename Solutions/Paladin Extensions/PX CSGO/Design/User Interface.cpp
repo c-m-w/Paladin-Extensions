@@ -1200,7 +1200,7 @@ namespace PX::UI::Manager
 
 						pConfig->flAimTime = Slider( PX_XOR( "Aim Time" ), szSmoothFactor, 0.01f, 1.50f, pConfig->flAimTime, 10, 10, GROUPBOX_COLUMN_WIDTH, 30, 2 );
 
-						pConfig->flAimAcceleration = Slider( PX_XOR( "Acceleration Factor" ), szSmoothFactor, -0.99f, 0.99f, pConfig->flAimAcceleration, GROUPBOX_COLUMN_WIDTH + 30, 10, GROUPBOX_COLUMN_WIDTH, 30, 2 );
+						pConfig->flAimAcceleration = Slider( PX_XOR( "Acceleration Factor" ), szSmoothFactor, -0.75f, 1.50f, pConfig->flAimAcceleration, GROUPBOX_COLUMN_WIDTH + 30, 10, GROUPBOX_COLUMN_WIDTH, 30, 2 );
 
 						pConfig->flMaxCrosshairDistance = Slider( PX_XOR( "Max Distance" ), szCrosshairDistance, 0.f, 254.558441227f, pConfig->flMaxCrosshairDistance, GROUPBOX_COLUMN_WIDTH * 2 + 40, 10, GROUPBOX_COLUMN_WIDTH, 30, 2 );
 
@@ -2175,12 +2175,13 @@ namespace PX::UI::Manager
 						SetRowWidth( 5 );
 						Spacing( );
 
-						SetFont( FNT_ROBOTO_SMALL );
+						SetFont( FNT_TAHOMA );
 						SetRowWidth( CalculateTextBounds( PX_XOR( "Default Configuration:" ), 30 ).x );
 						Text( PX_XOR( "Default Configuration:" ), color_t( { 255, 255, 255, 255 } ) );
 						SetRowWidth( 5 );
 						Spacing( );
 						SetRowWidth( GROUPBOX_COLUMN_WIDTH );
+						SetFont( FNT_ENVY );
 						Inputbox( 32u, &strConfig[ 0 ] );
 
 						EndRow( );
@@ -2194,7 +2195,7 @@ namespace PX::UI::Manager
 
 			default:
 			{
-				if ( BeginGroupbox( 200, 150, 500, 112, PX_XOR( "Other Configurations" ) ) )
+				if ( BeginGroupbox( 200, 150, 500, 160, PX_XOR( "Other Configurations" ) ) )
 				{
 					static auto iSelectedConfig = 0;
 					const auto vecConfigs = PX_CONFIG.GetConfigs( );
@@ -2219,8 +2220,6 @@ namespace PX::UI::Manager
 					}
 
 					{
-						VerticalSpacing( );
-
 						BeginRow( 30, 4, ROW_STATIC );
 						SetRowWidth( 5 );
 						Spacing( );
@@ -2236,6 +2235,23 @@ namespace PX::UI::Manager
 
 						EndRow( );
 					}
+
+					{
+						static char szNewConfig[ 32 ] { };
+						BeginRow( 30, 3, ROW_STATIC );
+						SetRowWidth( 5 );
+						Spacing( );
+
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH );
+						SetFont( FNT_ENVY );
+						Inputbox( 32, szNewConfig );
+
+						if ( Button( EPosition::CENTER, PX_XOR( "Create Config" ), false, strlen( szNewConfig ) == 0u ) )
+							PX_CONFIG.SaveConfiguration( Tools::string_cast< std::wstring >( std::string( szNewConfig ) ).c_str( ) );
+
+						EndRow( );
+					}
+
 					EndGroupbox( );
 				}
 			}

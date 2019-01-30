@@ -17,8 +17,9 @@ namespace PX
 		for each ( auto fnCallback in vecfnKeyCallback[ uKey ] )
 			fnCallback( bKeyDown );
 
-		for each ( auto fnCallback in vecfnGlobalCallbacks )
-			fnCallback( uKey, bKeyDown );
+		const auto uSize = vecfnGlobalCallbacks.size( );
+		for( auto u = 0u; u < uSize; u++ )
+			vecfnGlobalCallbacks[ u ]( uKey, bKeyDown );
 	}
 
 	void PX_API CInputManager::ProcessMouseMessage( UINT uMessage, WPARAM wParam )

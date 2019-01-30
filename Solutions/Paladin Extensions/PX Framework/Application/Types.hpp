@@ -90,7 +90,7 @@ namespace PX::Types
 
 	struct toggle_t;
 
-	inline static std::vector< toggle_t* > vecToggles;
+	inline std::vector< toggle_t* > vecToggles;
 	inline void *pConfigStructure = nullptr;
 	inline std::size_t zConfigStructureSize = 0;
 
@@ -113,8 +113,65 @@ namespace PX::Types
 			zConfigStructureSize = _zConfigStructureSize;
 		}
 
+		static void Event( unsigned uKey, bool bPressed )
+		{
+			for ( auto u = 0u; u < vecToggles.size(); u++ )
+			{
+				auto& toggle = vecToggles[ u ];
+				if ( ptr_t( toggle ) < ptr_t( pConfigStructure )
+					 || ptr_t( toggle ) > ptr_t( pConfigStructure ) + zConfigStructureSize )
+				{
+					vecToggles.erase( vecToggles.begin( ) + u );
+					u--;
+					continue;
+				}
+
+				if ( toggle->UseKeyBinds( ) )
+					for ( auto i = 0; i < 7; i++ )
+						if ( toggle->GetBinds( )[ i ].kKey == uKey )
+							switch ( toggle->GetBinds( )[ i ].iKeyBindMode )
+							{
+								case KEYBIND_TOGGLE:
+								{
+									if ( bPressed )
+										toggle->Get( ) = !toggle->Get( );
+								}
+								break;
+
+								case KEYBIND_WHILE_PRESSED:
+								{
+									toggle->Get( ) = bPressed;
+								}
+								break;
+
+								case KEYBIND_WHILE_NOT_PRESSED:
+								{
+									toggle->Get( ) = !bPressed;
+								}
+								break;
+
+								case KEYBIND_ENABLE:
+								{
+									if ( bPressed )
+										toggle->Get( ) = true;
+								}
+								break;
+
+								case KEYBIND_DISABLE:
+								{
+									if ( bPressed )
+										toggle->Get( ) = false;
+								}
+								break;
+
+								default:
+									break;
+							}
+			}
+		}
+
 	private:
-		bool bEnabled = false, bAddedToList = false, bAttemptedToAddToList = false, bUseKeybinds = true;
+		bool bEnabled = false, bUseKeybinds = true;
 		keybind_t bndBinds[ 7 ] { };
 
 	public:

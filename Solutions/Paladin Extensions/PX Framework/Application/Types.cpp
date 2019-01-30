@@ -15,15 +15,17 @@ namespace PX::Types
 	void toggle_t::AddToList( )
 	{
 		px_assert( pConfigStructure != nullptr && zConfigStructureSize > 0 );
-		if ( bAttemptedToAddToList || this < pConfigStructure || ptr_t( this ) > ptr_t( pConfigStructure ) + zConfigStructureSize )
+		if ( this < pConfigStructure || ptr_t( this ) > ptr_t( pConfigStructure ) + zConfigStructureSize )
 			return;
 
-		if ( !bAddedToList )
-		{
-			bAddedToList = true;
+		auto bFound = false;
+		for ( auto u = 0u; !vecToggles.empty( )
+			  && u < vecToggles.size( )
+			  && !bFound; u++ )
+			bFound |= ptr_t( vecToggles[ u ] ) == ptr_t( this );
+
+		if ( !bFound )
 			vecToggles.emplace_back( this );
-		}
-		bAttemptedToAddToList = true;
 	}
 
 	bool &toggle_t::Get( )

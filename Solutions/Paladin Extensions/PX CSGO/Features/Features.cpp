@@ -9,50 +9,9 @@ namespace PX::Features
 	{
 		toggle_t::Initialize( &_Settings, sizeof( settings_t ) );
 		PX_INPUT.AddGlobalCallback( [ ]( unsigned uKey, bool bPressed )
-				{
-					for ( auto &toggle: vecToggles )
-						if ( toggle->UseKeyBinds( ) )
-							for ( auto i = 0; i < 7; i++ )
-								if ( toggle->GetBinds( )[i].kKey == uKey )
-									switch ( toggle->GetBinds( )[i].iKeyBindMode )
-									{
-										case KEYBIND_TOGGLE:
-										{
-											if ( bPressed )
-												toggle->Get( ) = !toggle->Get( );
-										}
-										break;
-
-										case KEYBIND_WHILE_PRESSED:
-										{
-											toggle->Get( ) = bPressed;
-										}
-										break;
-
-										case KEYBIND_WHILE_NOT_PRESSED:
-										{
-											toggle->Get( ) = !bPressed;
-										}
-										break;
-
-										case KEYBIND_ENABLE:
-										{
-											if ( bPressed )
-												toggle->Get( ) = true;
-										}
-										break;
-
-										case KEYBIND_DISABLE:
-										{
-											if ( bPressed )
-												toggle->Get( ) = false;
-										}
-										break;
-
-										default:
-											break;
-									}
-				} );
+		{
+			toggle_t::Event( uKey, bPressed );
+		} );
 
 		//PX_CONFIG.SetContext( &_Settings, sizeof( settings_t ), PX_EXTENSION_CSGO );
 		return Awareness::CreateMaterials( )
