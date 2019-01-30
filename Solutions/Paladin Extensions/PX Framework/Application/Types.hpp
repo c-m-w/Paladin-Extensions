@@ -290,7 +290,7 @@ namespace PX::Types
 		{
 			unsigned u;
 			byte_t b[ COLOR_MAX ];
-		} *pColor = new UColor { UINT_MAX };
+		} _Color, *pColor = &_Color;
 
 	public:
 		SColor( ) = default;
