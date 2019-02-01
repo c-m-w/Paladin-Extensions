@@ -15,9 +15,9 @@ namespace PX::Features
 
 		PX_CONFIG.SetContext( &_Settings, sizeof( settings_t ), PX_EXTENSION_CSGO );
 		return Awareness::CreateMaterials( )
-				&& Events::AddEventCallback( Miscellaneous::Hitsound, PX_XOR( "player_hurt" ), false )
-				&& Events::AddEventCallback( Miscellaneous::BulletBeam, PX_XOR( "weapon_fire" ), false )
-				&& Events::AddEventCallback( Miscellaneous::CreateHitmarker, PX_XOR( "bullet_impact" ), false )
+				//&& Events::AddEventCallback( Miscellaneous::Hitsound, PX_XOR( "player_hurt" ), false )
+				//&& Events::AddEventCallback( Miscellaneous::BulletBeam, PX_XOR( "weapon_fire" ), false )
+				//&& Events::AddEventCallback( Miscellaneous::CreateHitmarker, PX_XOR( "bullet_impact" ), false )
 				&& Miscellaneous::CopyHitsoundFiles( );
 	}
 

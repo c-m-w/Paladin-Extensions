@@ -359,7 +359,6 @@ void PX_API OnDetach( )
 
 void PX_API OnAttach( )
 {
-	MessageBox( nullptr, L"manager here", L"test", 0 );
 	// todo check hash to that of the servers.
 
 

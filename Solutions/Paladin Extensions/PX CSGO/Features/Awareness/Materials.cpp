@@ -122,7 +122,10 @@ namespace PX::Features::Awareness
 			if ( material.bCreateFile )
 				std::ofstream( PX_XOR( "csgo\\materials\\" ) + material.wstrFileName + PX_XOR( ".vmt" ) ) << material.wstrData;
 			if ( ( material.pMaterial = pMaterialSystem->FindMaterial( material.wstrFileName.empty( ) ? nullptr : material.wstrFileName.c_str( ), material.bCreateFile ? TEXTURE_GROUP_MODEL : TEXTURE_GROUP_OTHER ) ) == nullptr )
+			{
+
 				return false;
+			}
 		}
 		return true;
 	}

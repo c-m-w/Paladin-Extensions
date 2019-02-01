@@ -25,16 +25,18 @@ namespace PX::Information
 			Files::FileRead( Files::GetPXDirectory( ) + LR"(PX Website\PX CSGO.px)", wstrBuffer, false, false );
 			jsMemoryInformation = nlohmann::json::parse( Tools::string_cast< Types::str_t >( wstrBuffer ) );
 #else
-			MessageBox( nullptr, L"memory::setup", L"jeremy likes men", 0 );
 			try
 			{
-				jsMemoryInformation = nlohmann::json::parse( Cryptography::Decrypt( Net::RequestExtension( PX_EXTENSION_CSGO, true ) ) );
+				const auto strBuffer = Net::RequestExtension( PX_EXTENSION_CSGO, true );
+				if ( strBuffer.empty( ) )
+					throw std::exception( );
+
+				jsMemoryInformation = nlohmann::json::parse( Cryptography::Decrypt( strBuffer ) );
 			}
 			catch( ... )
 			{
 				MessageBox( nullptr, L"yikes parse error gg time to exit and crash", L"jeremy likes men", 0 );
 			}
-			MessageBox( nullptr, L"got memory file", L"jeremy likes men", 0 );
 #endif
 			return true;
 		}

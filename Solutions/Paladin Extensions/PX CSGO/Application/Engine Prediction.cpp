@@ -18,7 +18,6 @@ namespace PX::Prediction
 
 	bool PX_API InitializePrediction( )
 	{
-
 		pPlayer = *reinterpret_cast< ptr_t** >( Modules::mClient.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Prediction Player" ) ].get< str_t >( ) )
 			+ jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Offsets" ) ][ PX_XOR( "Prediction Player" ) ].get< int >( ) );
 		pPredictionSeed = *reinterpret_cast< int** >( Modules::mClient.FindPattern( jsMemoryInformation[ PX_XOR( "Patterns" ) ][ PX_XOR( "Signatures" ) ][ PX_XOR( "Prediction Seed" ) ].get< str_t >( ) )

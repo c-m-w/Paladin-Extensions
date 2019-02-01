@@ -79,7 +79,7 @@ void PX_API OnLaunch( )
 
 	Popup( EMBType::INFO, PX_XOR( L"The Manager setup will begin once you click OK.\n"
 			   "Please wait up to 60 seconds for it to complete before the window appears.\n"
-			   "Contact support if a window doesn't appear. [men]" ) );
+			   "Contact support if a window doesn't appear." ) );
 #endif
 Relogin:
 	const auto iLoginStatus = Login( );

@@ -643,8 +643,6 @@ namespace PX::sys
 			|| !( pNTHeader->FileHeader.Characteristics & IMAGE_FILE_DLL ) )
 			return false;
 
-		MessageBox( nullptr, L"1", L"test", 0 );
-
 		memcpy( pImage, pDLL, pNTHeader->OptionalHeader.SizeOfHeaders );
 
 		for ( WORD w = 0; w < pNTHeader->FileHeader.NumberOfSections; w++ )
@@ -660,9 +658,6 @@ namespace PX::sys
 
 		if ( FALSE == LoadDLL( injInfo ) )
 			return false;
-
-
-		MessageBox( nullptr, L"2", L"test", 0 );
 
 		// Wipe PE headers
 		WipeMemory( pImage, pDOSHeader->e_lfanew + sizeof pNTHeader + sizeof pSectionHeader * pNTHeader->FileHeader.NumberOfSections );

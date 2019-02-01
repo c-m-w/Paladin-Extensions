@@ -10,7 +10,7 @@ using namespace Tools;
 
 namespace PX::Features::Miscellaneous
 {
-	const std::string strSoundDirectory = PX_XOR( "csgo\\sound" ),
+	const std::string strSoundDirectory = PX_XOR( "csgo\\sound\\" ),
 					  strHitsound = PX_XOR( "hitsound.wav" ),
 					  strHitsoundHead = PX_XOR( "head_hitsound.wav" ),
 					  strPrefix = PX_XOR( "*" );
@@ -22,8 +22,11 @@ namespace PX::Features::Miscellaneous
 			return false;
 
 		RemoveHitsoundFiles( );
-		std::filesystem::copy( string_cast< std::string >( Files::GetPXDirectory( ) ) + PX_XOR( "Resources\\" ) + strHitsound, strSoundDirectory );
-		std::filesystem::copy( string_cast< std::string >( Files::GetPXDirectory( ) ) + PX_XOR( "Resources\\" ) + strHitsoundHead, strSoundDirectory );
+		const auto strNewDirectory = string_cast< std::string >( Files::GetExecutableDirectory( ) ) + strSoundDirectory;
+		if ( !CopyFileA( ( string_cast< std::string >( Files::GetPXDirectory( ) ) + PX_XOR( "Resources\\" ) + strHitsound ).c_str( ), ( strNewDirectory + strHitsound ).c_str( ), FALSE )
+			 || !CopyFileA( ( string_cast< std::string >( Files::GetPXDirectory( ) ) + PX_XOR( "Resources\\" ) + strHitsoundHead ).c_str( ), ( strNewDirectory + strHitsoundHead ).c_str( ), FALSE ) )
+			return false;
+
 		return std::filesystem::exists( strSoundDirectory + PX_XOR( "\\" ) + strHitsound )
 				&& std::filesystem::exists( strSoundDirectory + PX_XOR( "\\" ) + strHitsoundHead );
 	}
