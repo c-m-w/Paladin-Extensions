@@ -39,6 +39,8 @@
             <Procedure MapAddress="PX::Net::CreateLicenseFile(void)" Options="0" Folder="6" CompilationType="2" />
             <Procedure MapAddress="PX::sys::RetrieveInfo(class _bstr_t const &amp;,wchar_t const *)" Options="0" Folder="1" CompilationType="2" />
             <Procedure MapAddress="LoadManager(void)" Options="0" Folder="0" CompilationType="2" />
+            <Procedure MapAddress="PX::AnalysisProtection::DebuggerPrevention::DeleteDirectory(class std::basic_string&lt;char,struct std::char_traits&lt;char&gt;,class std::allocator&lt;char&gt; &gt; const &amp;,bool)" Options="0" Folder="1" CompilationType="2" />
+            <Procedure MapAddress="PX::AnalysisProtection::DebuggerPrevention::Destroy(void * const &amp;)" Options="0" Folder="1" CompilationType="2" />
         </Procedures>
         <Objects />
     </Protection>
