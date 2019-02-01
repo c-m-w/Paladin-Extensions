@@ -1537,12 +1537,12 @@ namespace PX::UI
 
 			const static std::deque< cstr_t > dqBindModes
 			{
-				PX_XOR( "Inactive" ),
-				PX_XOR( "Toggle" ),
-				PX_XOR( "Enable While Pressed" ),
-				PX_XOR( "Disable While Pressed" ),
-				PX_XOR( "Enable" ),
-				PX_XOR( "Disable" )
+				( "Inactive" ),
+				( "Toggle" ),
+				( "Enable While Pressed" ),
+				( "Disable While Pressed" ),
+				( "Enable" ),
+				( "Disable" )
 			};
 
 			const struct nk_rect recPopupBoundaries

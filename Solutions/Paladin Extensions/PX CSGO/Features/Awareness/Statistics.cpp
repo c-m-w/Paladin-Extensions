@@ -479,9 +479,6 @@ namespace PX::Features::Awareness
 	// todo
 	static void PX_API DrawInformation( )
 	{
-		Text( ED3DFont::FNT_ICON, 100, 100,
-			  L"Hello", false, DT_RIGHT | DT_NOCLIP, 0xFFFFFFFF );
-
 		if ( !pEntity.bBoxVisibility )
 			return;
 
