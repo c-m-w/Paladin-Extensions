@@ -229,302 +229,523 @@ namespace PX::UI::Manager
 		{
 			case STATISTICS:
 			{
-				SetMainWindowHeight( 750 );
-				if ( BeginGroupbox( 200, 150, 500, 750, ( "Team" ) ) )
+				SetMainWindowHeight( 800 );
+
+				static auto uTargetEntity = 0u;
+
+				if ( BeginGroupbox( 200, 150, 500, 100, ( "Entities" ) ) )
 				{
-					auto &_Config = _Settings._Awareness._Statistics._Players[ SETTING_PLAYER_TEAM ];
-
 					{
-						VerticalSpacing( );
-
-						BeginRow( 30, 13, ROW_STATIC );
-						SetRowWidth( 5 );
-						Spacing( );
-
-						Checkbox( ( "Enabled" ), &_Config.bEnabled );
-
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Enabled" ), 30 ).x );
-						Spacing( );
-						Checkbox( ( "Smoke Check" ), &_Config.bSmokeCheck );
-
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Smoke Check" ), 30 ).x );
-						Spacing( );
-
-						Checkbox( ( "Snaplines" ), &_Config.bSnapline );
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Snaplines" ), 30 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 3 );
-						Spacing( );
-						SetRowWidth( COLOR_BUTTON_WIDTH );
-						ColorButton( ( "Snapline Visible" ), &_Config.seqSnapline[ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
-						ColorButton( ( "Snapline Invisible" ), &_Config.seqSnapline[ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
-						ColorButton( ( "Snapline Dormant" ), &_Config.seqSnapline[ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
-
-						EndRow( );
-					}
-
-					{
-						BeginRow( 30, 10, ROW_STATIC );
-						SetRowWidth( 5 );
-						Spacing( );
-
-						Checkbox( ( "Snapline Outline" ), &_Config.bSnaplineOutline );
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Snapline Outline" ), 30 ).x - COLOR_BUTTON_PADDING * 2 - COLOR_BUTTON_WIDTH );
-						Spacing( );
-						SetRowWidth( COLOR_BUTTON_WIDTH );
-						ColorButton( "Snapline Outline", &_Config.seqSnaplineOutline, COLOR_BUTTON_VERTICAL_PADDING );
-
-
-						Checkbox( ( "Begin at Screen Top" ), &_Config.bSnaplineOrigin );
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Begin at Screen Top" ), 30 ).x );
-						Spacing( );
-
-						Checkbox( ( "End at Box Top" ), &_Config.bSnaplineDestination );
-
-						EndRow( );
-					}
-
-					{
-						BeginRow( 30, 13, ROW_STATIC );
-						SetRowWidth( 5 );
-						Spacing( );
-
-						Checkbox( ( "Box" ), &_Config.bBox );
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Box" ), 30 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 3 );
-						Spacing( );
-						SetRowWidth( COLOR_BUTTON_WIDTH );
-						ColorButton( ( "Bounding Box Visible" ), &_Config.seqBox[ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
-						ColorButton( ( "Bounding Box Invisible" ), &_Config.seqBox[ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
-						ColorButton( ( "Bounding Box Dormant" ), &_Config.seqBox[ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
-
-						Checkbox( ( "Box Outline" ), &_Config.bBoxOutline );
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Box Outline" ), 30 ).x - COLOR_BUTTON_PADDING * 2 - COLOR_BUTTON_WIDTH );
-						Spacing( );
-						SetRowWidth( COLOR_BUTTON_WIDTH );
-						ColorButton( ( "Bounding Box Outline" ), &_Config.seqBoxOutline, COLOR_BUTTON_VERTICAL_PADDING );
-
-						Checkbox( ( "Three-Dimensional Box" ), &_Config.bDimesMode );
-
-						EndRow( );
-					}
-
-					{
-						BeginRow( 30, 13, ROW_STATIC );
-						SetRowWidth( 5 );
-						Spacing( );
-
-						Checkbox( ( "Worldly 2D Box" ), &_Config.bDisplayMode );
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Worldly 2D Box" ), 30 ).x );
-						Spacing( );
-
-						Checkbox( ( "Information" ), &_Config.bInformation );
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Information" ), 30 ).x );
-						Spacing( );
-
-						Checkbox( ( "Weapon" ), &_Config.bWeapon );
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Weapon" ), 30 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 3 );
-						Spacing( );
-						SetRowWidth( COLOR_BUTTON_WIDTH );
-						ColorButton( ( "Weapon Information Visible" ), &_Config.seqWeapon[ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
-						ColorButton( ( "Weapon Information Invisible" ), &_Config.seqWeapon[ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
-						ColorButton( ( "Weapon Information Dormant" ), &_Config.seqWeapon[ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
-
-						EndRow( );
-					}
-
-					{
-						BeginRow( 30, 16, ROW_STATIC );
-						SetRowWidth( 5 );
-						Spacing( );
-
-						Checkbox( ( "Weapon Icon" ), &_Config.bWeaponIcon );
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Weapon Icon" ), 30 ).x );
-						Spacing( );
-
-						Checkbox( ( "Ammo" ), &_Config.bAmmo );
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Ammo" ), 30 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 3 );
-						Spacing( );
-						SetRowWidth( COLOR_BUTTON_WIDTH );
-						ColorButton( ( "Ammo Information Visible" ), &_Config.seqAmmo[ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
-						ColorButton( ( "Ammo Information Invisible" ), &_Config.seqAmmo[ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
-						ColorButton( ( "Ammo Information Dormant" ), &_Config.seqAmmo[ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
-
-						Checkbox( ( "Health" ), &_Config.bHealth );
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Health" ), 30 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 3 );
-						Spacing( );
-						SetRowWidth( COLOR_BUTTON_WIDTH );
-						ColorButton( ( "Health Information Visible" ), &_Config.seqHealth[ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
-						ColorButton( ( "Health Information Invisible" ), &_Config.seqHealth[ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
-						ColorButton( ( "Health Information Dormant" ), &_Config.seqHealth[ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
-
-						EndRow( );
-					}
-
-					{
-						BeginRow( 30, 12, ROW_STATIC );
-						SetRowWidth( 5 );
-						Spacing( );
-
-						Checkbox( ( "Health-Based Health Color" ), &_Config.bHealthColoredByHealth );
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Health-Based Health Color" ), 30 ).x );
-						Spacing( );
-
-						Checkbox( ( "Armor" ), &_Config.bArmor );
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Armor" ), 30 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 3 );
-						Spacing( );
-						SetRowWidth( COLOR_BUTTON_WIDTH );
-						ColorButton( ( "Armor Information Visible" ), &_Config.seqArmor[ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
-						ColorButton( ( "Armor Information Invisible" ), &_Config.seqArmor[ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
-						ColorButton( ( "Armor Information Dormant" ), &_Config.seqArmor[ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
-
-						Checkbox( ( "Armor Icon" ), &_Config.bArmorIcon );
-
-						EndRow( );
-					}
-
-					{
-						BeginRow( 30, 12, ROW_STATIC );
-						SetRowWidth( 5 );
-						Spacing( );
-
-						Checkbox( ( "Armor-Based Armor Color" ), &_Config.bArmorColoredByArmor );
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Armor-Based Armor Color" ), 30 ).x );
-						Spacing( );
-
-						Checkbox( ( "Damage Indication" ), &_Config.bDamageIndication );
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Damage Indication"), 30 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 3 );
-						Spacing( );
-						SetRowWidth( COLOR_BUTTON_WIDTH );
-						ColorButton( ( "Damage Indication Visible" ), &_Config.seqDamageIndication[ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
-						ColorButton( ( "Damage Indication Invisible" ), &_Config.seqDamageIndication[ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
-						ColorButton( ( "Damage Indication Dormant" ), &_Config.seqDamageIndication[ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
-
-						Checkbox( ( "Damage-Based Damage Indication Color" ), &_Config.bDamageIndicationColoredByDamage );
-
-						EndRow( );
-					}
-
-					{
-						BeginRow( 30, 13, ROW_STATIC );
-						SetRowWidth( 5 );
-						Spacing( );
-
-						Checkbox( ( "Bone" ), &_Config.bDamageIndication );
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Bone" ), 30 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 3 );
-						Spacing( );
-						SetRowWidth( COLOR_BUTTON_WIDTH );
-						ColorButton( ( "Bone Visible" ), &_Config.seqBone[ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
-						ColorButton( ( "Bone Invisible" ), &_Config.seqBone[ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
-						ColorButton( ( "Bone Dormant" ), &_Config.seqBone[ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
-
-						Checkbox( ( "Bone Outline" ), &_Config.bBoneOutline );
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Bone Outline" ), 30 ).x - COLOR_BUTTON_PADDING * 2 - COLOR_BUTTON_WIDTH );
-						Spacing( );
-						SetRowWidth( COLOR_BUTTON_WIDTH );
-						ColorButton( ( "Bone Outline" ), &_Config.seqBoneOutline, COLOR_BUTTON_VERTICAL_PADDING );
-
-						Checkbox( ( "Health-Based Bone Color" ), &_Config.bBoneColoredByHealth );
-
-						EndRow( );
-					}
-
-					{
-						std::deque< const char* > dqAlignment
+						std::deque< cstr_t > dqTabs
 						{
-							( "Left" ),
-							( "Right" ),
-							( "Top" ),
-							( "Bottom" ),
-							( "Smart" )
+							( "Entities" ),
+							( "Grenades" ),
+							( "Projectiles" )
 						};
 
-						BeginRow( 30, 12, ROW_STATIC );
-						SetRowWidth( 5 );
+						std::deque< cstr_t > dqItems[ ]
+						{
+							{
+								( "Teammates" ),
+								( "Enemies" ),
+								( "Weapons" ),
+								( "C4" ),
+								( "Planted C4" ),
+								( "Defuse Kit" ),
+								( "Chicken" )
+							},
+							{
+								( "HE" ),
+								( "Flash" ),
+								( "Smoke" ),
+								( "Decoy" ),
+								( "Incendiary" )
+							},
+							{
+								( "Thrown HE" ),
+								( "Thrown Flash" ),
+								( "Thrown Smoke" ),
+								( "Thrown Decoy" ),
+								( "Thrown Incendiary" )
+							}
+						};
+
+						VerticalSpacing( );
+
+						BeginRow( 30, 2, ROW_STATIC );
+						SetRowWidth( 10 );
 						Spacing( );
+						SetRowWidth( GROUPBOX_COLUMN_WIDTH * 2 );
 
-						Checkbox( ( "Orientation" ), &_Config.bOrientation );
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Orientation" ), 30 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 3 );
-						Spacing( );
-						SetRowWidth( COLOR_BUTTON_WIDTH );
-						ColorButton( ( "Orientation Visible" ), &_Config.seqOrientation[ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
-						ColorButton( ( "Orientation Invisible" ), &_Config.seqOrientation[ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
-						ColorButton( ( "Orientation Dormant" ), &_Config.seqOrientation[ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
-
-						Checkbox( ( "Orientation Outline" ), &_Config.bOrientationOutline );
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Orientation Outline" ), 30 ).x - COLOR_BUTTON_PADDING * 2 - COLOR_BUTTON_WIDTH );
-						Spacing( );
-						SetRowWidth( COLOR_BUTTON_WIDTH );
-						ColorButton( ( "Orientation Outline" ), &_Config.seqOrientationOutline, COLOR_BUTTON_VERTICAL_PADDING );
-
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH );
-						const auto iReturn = Combobox( 30, ( "Alignment" ), dqAlignment, _Config.fAlignment );
-						if ( iReturn >= 0 )
-							_Config.fAlignment = iReturn;
-
-						EndRow( );
-					}
-
-					{
-						BeginRow( 30, 6, ROW_STATIC );
-						SetRowWidth( 5 );
-						Spacing( );
-
-						Checkbox( ( "Identifier" ), &_Config.bIdentifier );
-						SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Identifier" ), 30 ).x );
-						Spacing( );
-
-						Checkbox( ( "Distance" ), &_Config.bDistance );
-
-						EndRow( );
-					}
-
-					{
-						static char szSnaplineThickness[ 32 ] { },
-							szSnaplineOutlineThickness[ 32 ] { },
-							szBoxThickness[ 32 ] { };
-
-						BeginRow( 30, 9, ROW_CUSTOM );
-
-						_Config.flSnaplineThickness = Slider( ( "Snapline Thickness" ), szSnaplineThickness, 1.f, 5.f, _Config.flSnaplineThickness, 10, 10, GROUPBOX_COLUMN_WIDTH, 30, 1 );
-
-						_Config.flSnaplineOutlineThickness = Slider( ( "Snapline Outline Thickness" ), szSnaplineOutlineThickness, 1.f, 5.f, _Config.flSnaplineOutlineThickness, GROUPBOX_COLUMN_WIDTH + 30, 10, GROUPBOX_COLUMN_WIDTH, 30, 1 );
-
-						_Config.flBoxThickness = Slider( ( "Box Thickness" ), szBoxThickness, 1.f, 5.f, _Config.flBoxThickness, GROUPBOX_COLUMN_WIDTH * 2 + 40, 10, GROUPBOX_COLUMN_WIDTH, 30, 1 );
-
-						EndRow( );
-					}
-
-					{
-						static char szBoxOutlineThickness[ 32 ] { },
-							szBoxCornerLength[ 32 ] { },
-							szBoneThickness[ 32 ] { };
-
-						BeginRow( 30, 9, ROW_CUSTOM );
-
-						_Config.flBoxOutlineThickness = Slider( ( "Box Outline Thickness" ), szBoxOutlineThickness, 1.f, 5.f, _Config.flBoxOutlineThickness, 10, 10, GROUPBOX_COLUMN_WIDTH, 30, 1 );
-
-						_Config.flBoxCornerLength = Slider( ( "Box Corner Length" ), szBoxCornerLength, 1.f, 5.f, _Config.flBoxCornerLength, GROUPBOX_COLUMN_WIDTH + 30, 10, GROUPBOX_COLUMN_WIDTH, 30, 1 );
-
-						_Config.flBoneThickness = Slider( ( "Bone Thickness" ), szBoneThickness, 1.f, 5.f, _Config.flBoneThickness, GROUPBOX_COLUMN_WIDTH * 2 + 40, 10, GROUPBOX_COLUMN_WIDTH, 30, 1 );
-
-						EndRow( );
-					}
-
-					{
-						static char szBoneOutlineThickness[ 32 ] { },
-							szOrientationThickness[ 32 ] { },
-							szOrientationOutlineThickness[ 32 ] { };
-
-						BeginRow( 30, 9, ROW_CUSTOM );
-
-						_Config.flBoneOutlineThickness = Slider( ( "Bone Outline Thickness" ), szBoneOutlineThickness, 1.f, 5.f, _Config.flBoneOutlineThickness, 10, 10, GROUPBOX_COLUMN_WIDTH, 30, 1 );
-
-						_Config.flOrientationThickness = Slider( ( "Orientation Thickness" ), szOrientationThickness, 1.f, 5.f, _Config.flOrientationThickness, GROUPBOX_COLUMN_WIDTH + 30, 10, GROUPBOX_COLUMN_WIDTH, 30, 1 );
-
-						_Config.flOrientationOutlineThickness = Slider( ( "Orientation Outline Thickness" ), szOrientationOutlineThickness, 1.f, 5.f, _Config.flOrientationOutlineThickness, GROUPBOX_COLUMN_WIDTH * 2 + 40, 10, GROUPBOX_COLUMN_WIDTH, 30, 1 );
-
+						TabbedCombobox( 30, ( "Settings" ), dqTabs, dqItems, uTargetEntity );
 						EndRow( );
 					}
 
 					EndGroupbox( );
+				}
+
+				if ( uTargetEntity <= 1 )
+				{
+					auto& _Config = _Settings._Awareness._Statistics._Players[ uTargetEntity ];
+
+					if ( BeginGroupbox( 400, 150 + 50, 500, 750, uTargetEntity ? ( "Enemies" ) : ( "Teammates" ) ) )
+					{
+						{
+							VerticalSpacing( );
+
+							BeginRow( 30, 13, ROW_STATIC );
+							SetRowWidth( 5 );
+							Spacing( );
+
+							Checkbox( ( "Enabled" ), &_Config.bEnabled );
+
+							SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Enabled" ), 30 ).x );
+							Spacing( );
+							Checkbox( ( "Smoke Check" ), &_Config.bSmokeCheck );
+
+							SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Smoke Check" ), 30 ).x );
+							Spacing( );
+
+							Checkbox( ( "Snaplines" ), &_Config.bSnapline );
+							SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Snaplines" ), 30 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 3 );
+							Spacing( );
+							SetRowWidth( COLOR_BUTTON_WIDTH );
+							ColorButton( ( "Snapline Visible" ), &_Config.seqSnapline[ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+							ColorButton( ( "Snapline Invisible" ), &_Config.seqSnapline[ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+							ColorButton( ( "Snapline Dormant" ), &_Config.seqSnapline[ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
+
+							EndRow( );
+						}
+
+						{
+							BeginRow( 30, 10, ROW_STATIC );
+							SetRowWidth( 5 );
+							Spacing( );
+
+							Checkbox( ( "Snapline Outline" ), &_Config.bSnaplineOutline );
+							SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Snapline Outline" ), 30 ).x - COLOR_BUTTON_PADDING * 2 - COLOR_BUTTON_WIDTH );
+							Spacing( );
+							SetRowWidth( COLOR_BUTTON_WIDTH );
+							ColorButton( "Snapline Outline", &_Config.seqSnaplineOutline, COLOR_BUTTON_VERTICAL_PADDING );
+
+
+							Checkbox( ( "Begin at Screen Top" ), &_Config.bSnaplineOrigin );
+							SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Begin at Screen Top" ), 30 ).x );
+							Spacing( );
+
+							Checkbox( ( "End at Box Top" ), &_Config.bSnaplineDestination );
+
+							EndRow( );
+						}
+
+						{
+							BeginRow( 30, 13, ROW_STATIC );
+							SetRowWidth( 5 );
+							Spacing( );
+
+							Checkbox( ( "Box" ), &_Config.bBox );
+							SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Box" ), 30 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 3 );
+							Spacing( );
+							SetRowWidth( COLOR_BUTTON_WIDTH );
+							ColorButton( ( "Bounding Box Visible" ), &_Config.seqBox[ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+							ColorButton( ( "Bounding Box Invisible" ), &_Config.seqBox[ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+							ColorButton( ( "Bounding Box Dormant" ), &_Config.seqBox[ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
+
+							Checkbox( ( "Box Outline" ), &_Config.bBoxOutline );
+							SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Box Outline" ), 30 ).x - COLOR_BUTTON_PADDING * 2 - COLOR_BUTTON_WIDTH );
+							Spacing( );
+							SetRowWidth( COLOR_BUTTON_WIDTH );
+							ColorButton( ( "Bounding Box Outline" ), &_Config.seqBoxOutline, COLOR_BUTTON_VERTICAL_PADDING );
+
+							Checkbox( ( "Three-Dimensional Box" ), &_Config.bDimesMode );
+
+							EndRow( );
+						}
+
+						{
+							BeginRow( 30, 13, ROW_STATIC );
+							SetRowWidth( 5 );
+							Spacing( );
+
+							Checkbox( ( "Worldly 2D Box" ), &_Config.bDisplayMode );
+							SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Worldly 2D Box" ), 30 ).x );
+							Spacing( );
+
+							Checkbox( ( "Information" ), &_Config.bInformation );
+							SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Information" ), 30 ).x );
+							Spacing( );
+
+							Checkbox( ( "Weapon" ), &_Config.bWeapon );
+							SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Weapon" ), 30 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 3 );
+							Spacing( );
+							SetRowWidth( COLOR_BUTTON_WIDTH );
+							ColorButton( ( "Weapon Information Visible" ), &_Config.seqWeapon[ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+							ColorButton( ( "Weapon Information Invisible" ), &_Config.seqWeapon[ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+							ColorButton( ( "Weapon Information Dormant" ), &_Config.seqWeapon[ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
+
+							EndRow( );
+						}
+
+						{
+							BeginRow( 30, 16, ROW_STATIC );
+							SetRowWidth( 5 );
+							Spacing( );
+
+							Checkbox( ( "Weapon Icon" ), &_Config.bWeaponIcon );
+							SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Weapon Icon" ), 30 ).x );
+							Spacing( );
+
+							Checkbox( ( "Ammo" ), &_Config.bAmmo );
+							SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Ammo" ), 30 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 3 );
+							Spacing( );
+							SetRowWidth( COLOR_BUTTON_WIDTH );
+							ColorButton( ( "Ammo Information Visible" ), &_Config.seqAmmo[ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+							ColorButton( ( "Ammo Information Invisible" ), &_Config.seqAmmo[ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+							ColorButton( ( "Ammo Information Dormant" ), &_Config.seqAmmo[ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
+
+							Checkbox( ( "Health" ), &_Config.bHealth );
+							SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Health" ), 30 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 3 );
+							Spacing( );
+							SetRowWidth( COLOR_BUTTON_WIDTH );
+							ColorButton( ( "Health Information Visible" ), &_Config.seqHealth[ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+							ColorButton( ( "Health Information Invisible" ), &_Config.seqHealth[ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+							ColorButton( ( "Health Information Dormant" ), &_Config.seqHealth[ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
+
+							EndRow( );
+						}
+
+						{
+							BeginRow( 30, 12, ROW_STATIC );
+							SetRowWidth( 5 );
+							Spacing( );
+
+							Checkbox( ( "Health-Based Health Color" ), &_Config.bHealthColoredByHealth );
+							SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Health-Based Health Color" ), 30 ).x );
+							Spacing( );
+
+							Checkbox( ( "Armor" ), &_Config.bArmor );
+							SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Armor" ), 30 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 3 );
+							Spacing( );
+							SetRowWidth( COLOR_BUTTON_WIDTH );
+							ColorButton( ( "Armor Information Visible" ), &_Config.seqArmor[ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+							ColorButton( ( "Armor Information Invisible" ), &_Config.seqArmor[ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+							ColorButton( ( "Armor Information Dormant" ), &_Config.seqArmor[ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
+
+							Checkbox( ( "Armor Icon" ), &_Config.bArmorIcon );
+
+							EndRow( );
+						}
+
+						{
+							BeginRow( 30, 12, ROW_STATIC );
+							SetRowWidth( 5 );
+							Spacing( );
+
+							Checkbox( ( "Armor-Based Armor Color" ), &_Config.bArmorColoredByArmor );
+							SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Armor-Based Armor Color" ), 30 ).x );
+							Spacing( );
+
+							Checkbox( ( "Damage Indication" ), &_Config.bDamageIndication );
+							SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Damage Indication" ), 30 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 3 );
+							Spacing( );
+							SetRowWidth( COLOR_BUTTON_WIDTH );
+							ColorButton( ( "Damage Indication Visible" ), &_Config.seqDamageIndication[ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+							ColorButton( ( "Damage Indication Invisible" ), &_Config.seqDamageIndication[ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+							ColorButton( ( "Damage Indication Dormant" ), &_Config.seqDamageIndication[ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
+
+							Checkbox( ( "Damage-Based Damage Indication Color" ), &_Config.bDamageIndicationColoredByDamage );
+
+							EndRow( );
+						}
+
+						{
+							BeginRow( 30, 13, ROW_STATIC );
+							SetRowWidth( 5 );
+							Spacing( );
+
+							Checkbox( ( "Bone" ), &_Config.bDamageIndication );
+							SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Bone" ), 30 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 3 );
+							Spacing( );
+							SetRowWidth( COLOR_BUTTON_WIDTH );
+							ColorButton( ( "Bone Visible" ), &_Config.seqBone[ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+							ColorButton( ( "Bone Invisible" ), &_Config.seqBone[ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+							ColorButton( ( "Bone Dormant" ), &_Config.seqBone[ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
+
+							Checkbox( ( "Bone Outline" ), &_Config.bBoneOutline );
+							SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Bone Outline" ), 30 ).x - COLOR_BUTTON_PADDING * 2 - COLOR_BUTTON_WIDTH );
+							Spacing( );
+							SetRowWidth( COLOR_BUTTON_WIDTH );
+							ColorButton( ( "Bone Outline" ), &_Config.seqBoneOutline, COLOR_BUTTON_VERTICAL_PADDING );
+
+							Checkbox( ( "Health-Based Bone Color" ), &_Config.bBoneColoredByHealth );
+
+							EndRow( );
+						}
+
+						{
+							std::deque< const char* > dqAlignment
+							{
+								( "Left" ),
+								( "Right" ),
+								( "Top" ),
+								( "Bottom" ),
+								( "Smart" )
+							};
+
+							BeginRow( 30, 12, ROW_STATIC );
+							SetRowWidth( 5 );
+							Spacing( );
+
+							Checkbox( ( "Orientation" ), &_Config.bOrientation );
+							SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Orientation" ), 30 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 3 );
+							Spacing( );
+							SetRowWidth( COLOR_BUTTON_WIDTH );
+							ColorButton( ( "Orientation Visible" ), &_Config.seqOrientation[ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+							ColorButton( ( "Orientation Invisible" ), &_Config.seqOrientation[ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+							ColorButton( ( "Orientation Dormant" ), &_Config.seqOrientation[ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
+
+							Checkbox( ( "Orientation Outline" ), &_Config.bOrientationOutline );
+							SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Orientation Outline" ), 30 ).x - COLOR_BUTTON_PADDING * 2 - COLOR_BUTTON_WIDTH );
+							Spacing( );
+							SetRowWidth( COLOR_BUTTON_WIDTH );
+							ColorButton( ( "Orientation Outline" ), &_Config.seqOrientationOutline, COLOR_BUTTON_VERTICAL_PADDING );
+
+							SetRowWidth( GROUPBOX_COLUMN_WIDTH );
+							const auto iReturn = Combobox( 30, ( "Alignment" ), dqAlignment, _Config.fAlignment );
+							if ( iReturn >= 0 )
+								_Config.fAlignment = iReturn;
+
+							EndRow( );
+						}
+
+						{
+							BeginRow( 30, 6, ROW_STATIC );
+							SetRowWidth( 5 );
+							Spacing( );
+
+							Checkbox( ( "Identifier" ), &_Config.bIdentifier );
+							SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Identifier" ), 30 ).x );
+							Spacing( );
+
+							Checkbox( ( "Distance" ), &_Config.bDistance );
+
+							EndRow( );
+						}
+
+						{
+							static char szSnaplineThickness[ 32 ] { },
+								szSnaplineOutlineThickness[ 32 ] { },
+								szBoxThickness[ 32 ] { };
+
+							BeginRow( 30, 9, ROW_CUSTOM );
+
+							_Config.flSnaplineThickness = Slider( ( "Snapline Thickness" ), szSnaplineThickness, 1.f, 5.f, _Config.flSnaplineThickness, 10, 10, GROUPBOX_COLUMN_WIDTH, 30, 1 );
+
+							_Config.flSnaplineOutlineThickness = Slider( ( "Snapline Outline Thickness" ), szSnaplineOutlineThickness, 1.f, 5.f, _Config.flSnaplineOutlineThickness, GROUPBOX_COLUMN_WIDTH + 30, 10, GROUPBOX_COLUMN_WIDTH, 30, 1 );
+
+							_Config.flBoxThickness = Slider( ( "Box Thickness" ), szBoxThickness, 1.f, 5.f, _Config.flBoxThickness, GROUPBOX_COLUMN_WIDTH * 2 + 40, 10, GROUPBOX_COLUMN_WIDTH, 30, 1 );
+
+							EndRow( );
+						}
+
+						{
+							static char szBoxOutlineThickness[ 32 ] { },
+								szBoxCornerLength[ 32 ] { },
+								szBoneThickness[ 32 ] { };
+
+							BeginRow( 30, 9, ROW_CUSTOM );
+
+							_Config.flBoxOutlineThickness = Slider( ( "Box Outline Thickness" ), szBoxOutlineThickness, 1.f, 5.f, _Config.flBoxOutlineThickness, 10, 10, GROUPBOX_COLUMN_WIDTH, 30, 1 );
+
+							_Config.flBoxCornerLength = Slider( ( "Box Corner Length" ), szBoxCornerLength, 1.f, 5.f, _Config.flBoxCornerLength, GROUPBOX_COLUMN_WIDTH + 30, 10, GROUPBOX_COLUMN_WIDTH, 30, 1 );
+
+							_Config.flBoneThickness = Slider( ( "Bone Thickness" ), szBoneThickness, 1.f, 5.f, _Config.flBoneThickness, GROUPBOX_COLUMN_WIDTH * 2 + 40, 10, GROUPBOX_COLUMN_WIDTH, 30, 1 );
+
+							EndRow( );
+						}
+
+						{
+							static char szBoneOutlineThickness[ 32 ] { },
+								szOrientationThickness[ 32 ] { },
+								szOrientationOutlineThickness[ 32 ] { };
+
+							BeginRow( 30, 9, ROW_CUSTOM );
+
+							_Config.flBoneOutlineThickness = Slider( ( "Bone Outline Thickness" ), szBoneOutlineThickness, 1.f, 5.f, _Config.flBoneOutlineThickness, 10, 10, GROUPBOX_COLUMN_WIDTH, 30, 1 );
+
+							_Config.flOrientationThickness = Slider( ( "Orientation Thickness" ), szOrientationThickness, 1.f, 5.f, _Config.flOrientationThickness, GROUPBOX_COLUMN_WIDTH + 30, 10, GROUPBOX_COLUMN_WIDTH, 30, 1 );
+
+							_Config.flOrientationOutlineThickness = Slider( ( "Orientation Outline Thickness" ), szOrientationOutlineThickness, 1.f, 5.f, _Config.flOrientationOutlineThickness, GROUPBOX_COLUMN_WIDTH * 2 + 40, 10, GROUPBOX_COLUMN_WIDTH, 30, 1 );
+
+							EndRow( );
+						}
+
+						EndGroupbox( );
+					}
+				}
+				else
+				{
+					auto& _Config = _Settings._Awareness._Statistics._Entities[ uTargetEntity - 2 ];
+
+					if ( BeginGroupbox( 400, 150 + 50, 500, 400, uTargetEntity ? ( "Enemies" ) : ( "Teammates" ) ) )
+					{
+
+						{
+							VerticalSpacing( );
+
+							BeginRow( 30, 13, ROW_STATIC );
+							SetRowWidth( 5 );
+							Spacing( );
+
+							Checkbox( ( "Enabled" ), &_Config.bEnabled );
+
+							SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Enabled" ), 30 ).x );
+							Spacing( );
+							Checkbox( ( "Smoke Check" ), &_Config.bSmokeCheck );
+
+							SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Smoke Check" ), 30 ).x );
+							Spacing( );
+
+							Checkbox( ( "Snaplines" ), &_Config.bSnapline );
+							SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Snaplines" ), 30 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 3 );
+							Spacing( );
+							SetRowWidth( COLOR_BUTTON_WIDTH );
+							ColorButton( ( "Snapline Visible" ), &_Config.seqSnapline[ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+							ColorButton( ( "Snapline Invisible" ), &_Config.seqSnapline[ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+							ColorButton( ( "Snapline Dormant" ), &_Config.seqSnapline[ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
+
+							EndRow( );
+						}
+
+						{
+							BeginRow( 30, 10, ROW_STATIC );
+							SetRowWidth( 5 );
+							Spacing( );
+
+							Checkbox( ( "Snapline Outline" ), &_Config.bSnaplineOutline );
+							SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Snapline Outline" ), 30 ).x - COLOR_BUTTON_PADDING * 2 - COLOR_BUTTON_WIDTH );
+							Spacing( );
+							SetRowWidth( COLOR_BUTTON_WIDTH );
+							ColorButton( "Snapline Outline", &_Config.seqSnaplineOutline, COLOR_BUTTON_VERTICAL_PADDING );
+
+
+							Checkbox( ( "Begin at Screen Top" ), &_Config.bSnaplineOrigin );
+							SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Begin at Screen Top" ), 30 ).x );
+							Spacing( );
+
+							Checkbox( ( "End at Box Top" ), &_Config.bSnaplineDestination );
+
+							EndRow( );
+						}
+
+						{
+							BeginRow( 30, 13, ROW_STATIC );
+							SetRowWidth( 5 );
+							Spacing( );
+
+							Checkbox( ( "Box" ), &_Config.bBox );
+							SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Box" ), 30 ).x - COLOR_BUTTON_PADDING * 6 - COLOR_BUTTON_WIDTH * 3 );
+							Spacing( );
+							SetRowWidth( COLOR_BUTTON_WIDTH );
+							ColorButton( ( "Bounding Box Visible" ), &_Config.seqBox[ STATE_VISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+							ColorButton( ( "Bounding Box Invisible" ), &_Config.seqBox[ STATE_INVISIBLE ], COLOR_BUTTON_VERTICAL_PADDING );
+							ColorButton( ( "Bounding Box Dormant" ), &_Config.seqBox[ STATE_DORMANT ], COLOR_BUTTON_VERTICAL_PADDING );
+
+							Checkbox( ( "Box Outline" ), &_Config.bBoxOutline );
+							SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Box Outline" ), 30 ).x - COLOR_BUTTON_PADDING * 2 - COLOR_BUTTON_WIDTH );
+							Spacing( );
+							SetRowWidth( COLOR_BUTTON_WIDTH );
+							ColorButton( ( "Bounding Box Outline" ), &_Config.seqBoxOutline, COLOR_BUTTON_VERTICAL_PADDING );
+
+							Checkbox( ( "Three-Dimensional Box" ), &_Config.bDimesMode );
+
+							EndRow( );
+						}
+
+						{
+							BeginRow( 30, 7, ROW_STATIC );
+							SetRowWidth( 5 );
+							Spacing( );
+
+							Checkbox( ( "Worldly 2D Box" ), &_Config.bDisplayMode );
+							SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Worldly 2D Box" ), 30 ).x );
+							Spacing( );
+
+							Checkbox( ( "Information" ), &_Config.bInformation );
+							SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Information" ), 30 ).x );
+							Spacing( );
+
+							EndRow( );
+						}
+
+						{
+							std::deque< const char* > dqAlignment
+							{
+								( "Left" ),
+								( "Right" ),
+								( "Top" ),
+								( "Bottom" ),
+								( "Smart" )
+							};
+
+							BeginRow( 30, 2, ROW_STATIC );
+							SetRowWidth( 5 );
+							Spacing( );
+
+							SetRowWidth( GROUPBOX_COLUMN_WIDTH );
+							const auto iReturn = Combobox( 30, ( "Alignment" ), dqAlignment, _Config.fAlignment );
+							if ( iReturn >= 0 )
+								_Config.fAlignment = iReturn;
+
+							EndRow( );
+						}
+
+						{
+							BeginRow( 30, 6, ROW_STATIC );
+							SetRowWidth( 5 );
+							Spacing( );
+
+							Checkbox( ( "Identifier" ), &_Config.bIdentifier );
+							SetRowWidth( GROUPBOX_COLUMN_WIDTH - CHECKBOX_ICON_WIDTH - CalculateTextBounds( ( "Identifier" ), 30 ).x );
+							Spacing( );
+
+							Checkbox( ( "Distance" ), &_Config.bDistance );
+
+							EndRow( );
+						}
+
+						{
+							static char szSnaplineThickness[ 32 ] { },
+								szSnaplineOutlineThickness[ 32 ] { },
+								szBoxThickness[ 32 ] { };
+
+							BeginRow( 30, 9, ROW_CUSTOM );
+
+							_Config.flSnaplineThickness = Slider( ( "Snapline Thickness" ), szSnaplineThickness, 1.f, 5.f, _Config.flSnaplineThickness, 10, 10, GROUPBOX_COLUMN_WIDTH, 30, 1 );
+
+							_Config.flSnaplineOutlineThickness = Slider( ( "Snapline Outline Thickness" ), szSnaplineOutlineThickness, 1.f, 5.f, _Config.flSnaplineOutlineThickness, GROUPBOX_COLUMN_WIDTH + 30, 10, GROUPBOX_COLUMN_WIDTH, 30, 1 );
+
+							_Config.flBoxThickness = Slider( ( "Box Thickness" ), szBoxThickness, 1.f, 5.f, _Config.flBoxThickness, GROUPBOX_COLUMN_WIDTH * 2 + 40, 10, GROUPBOX_COLUMN_WIDTH, 30, 1 );
+
+							EndRow( );
+						}
+
+						{
+							static char szBoxOutlineThickness[ 32 ] { },
+								szBoxCornerLength[ 32 ] { },
+								szBoneThickness[ 32 ] { };
+
+							BeginRow( 30, 6, ROW_CUSTOM );
+
+							_Config.flBoxOutlineThickness = Slider( ( "Box Outline Thickness" ), szBoxOutlineThickness, 1.f, 5.f, _Config.flBoxOutlineThickness, 10, 10, GROUPBOX_COLUMN_WIDTH, 30, 1 );
+
+							_Config.flBoxCornerLength = Slider( ( "Box Corner Length" ), szBoxCornerLength, 1.f, 5.f, _Config.flBoxCornerLength, GROUPBOX_COLUMN_WIDTH + 30, 10, GROUPBOX_COLUMN_WIDTH, 30, 1 );
+
+							EndRow( );
+						}
+
+						EndGroupbox( );
+					}
 				}
 			}
 			break;

@@ -617,19 +617,15 @@ namespace PX::Features::Awareness
 				continue;
 
 			// check that the config for that ent is enabled
-#define buffer_macro( _Sub, enumExist ) _cfg = &_Settings._Awareness._Statistics.##_Sub[ enumExist ]; if ( !_Settings._Awareness._Statistics.##_Sub[ enumExist ].bEnabled  ) continue;
+#define buffer_macro( _Sub, enumExist ) { _cfg = &_Settings._Awareness._Statistics.##_Sub[ enumExist ]; if ( !_Settings._Awareness._Statistics.##_Sub[ enumExist ].bEnabled ) continue; }
 			switch ( pEntity->GetClientClass( )->m_ClassID )
 			{
 				case ClassID_CCSPlayer:
 					bVariantID = true;
 					if ( pEntity.Friendly( ) )
-					{
-						buffer_macro( _Players, SETTING_PLAYER_TEAM );
-					}
+						buffer_macro( _Players, SETTING_PLAYER_TEAM )
 					else
-					{
 						buffer_macro( _Players, SETTING_PLAYER_ENEMY );
-					}
 					break;
 				case ClassID_CBaseAnimating: // defuse kit
 					bVariantID = false;
@@ -660,13 +656,9 @@ namespace PX::Features::Awareness
 					bVariantID = false;
 					const auto &iModelIndex = reinterpret_cast< CBaseViewModel* >( pEntity.p )->m_nModelIndex( );
 					if ( iModelIndex == pModelInfo->GetModelIndex( PX_XOR( "models/Weapons/w_eq_flashbang_dropped.mdl" ) ) )
-					{
-						buffer_macro( _Entities, SETTING_ENTITY_GRENADE_PROJECTILE_FLASH );
-					}
+						buffer_macro( _Entities, SETTING_ENTITY_GRENADE_PROJECTILE_FLASH )
 					else if ( iModelIndex == pModelInfo->GetModelIndex( PX_XOR( "models/Weapons/w_eq_fraggrenade_dropped.mdl" ) ) )
-					{
-						buffer_macro( _Entities, SETTING_ENTITY_GRENADE_PROJECTILE_HE );
-					}
+						buffer_macro( _Entities, SETTING_ENTITY_GRENADE_PROJECTILE_HE )
 					else
 						continue; // waduhek
 					break;
@@ -696,7 +688,13 @@ namespace PX::Features::Awareness
 					buffer_macro( _Entities, SETTING_ENTITY_PLANTED_C4 );
 					break;
 				default: // unaccounted for ent
-					continue;
+				{
+					if ( pEntity->IsWeapon( ) )
+						buffer_macro( _Entities, SETTING_ENTITY_WEAPONS )
+					else
+						continue;
+					break;
+				}
 			}
 
 			if ( bVariantID )
