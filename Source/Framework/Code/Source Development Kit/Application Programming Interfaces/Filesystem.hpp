@@ -114,9 +114,9 @@ public:
 						when written back to the file. */
 	/** \return Whether or not reading and writing to the specified file was successful. */
 	bool AddToFile( const std::string& strFilename, const std::string& strData, bool bEncode = true );
-	[ [ nodiscard ] ] static bool GetDirectoryContents( const std::string& strDirectory, bool bFiles, bool bFolders, std::vector< std::string >& vecOut );
-	[ [ nodiscard ] ] static bool GetFoldersInDirectory( const std::string& strDirectory, std::vector< std::string >& vecOut );
-	[ [ nodiscard ] ] static bool GetFilesInDirectory( const std::string& strDirectory, std::vector< std::string >& vecOut, const std::string& strExtension = std::string( ) );
+	[ [ nodiscard ] ] bool GetDirectoryContents( const std::string& strDirectory, bool bFiles, bool bFolders, std::vector< std::string >& vecOut );
+	[ [ nodiscard ] ] bool GetFoldersInDirectory( const std::string& strDirectory, std::vector< std::string >& vecOut );
+	[ [ nodiscard ] ] bool GetFilesInDirectory( const std::string& strDirectory, std::vector< std::string >& vecOut, const std::string& strExtension = std::string( ) );
 	bool HidePath( const std::string& strPath );
 
 	/** \brief Path of the Paladin data folder from \appdata\roaming\ */

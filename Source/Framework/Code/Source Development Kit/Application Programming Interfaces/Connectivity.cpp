@@ -41,11 +41,25 @@ void CConnectivity::Shutdown( )
 	return curl_easy_cleanup( hConnection );
 }
 
+void CConnectivity::ValidateString( std::string &strToValidate )
+{
+	for ( auto& _IllegalCharacter : vecIllegalCharacters )
+		_IllegalCharacter.ValidateString( strToValidate );
+}
+
 bool CConnectivity::Request( const std::string &strUniformResourceLocator, std::initializer_list< post_data_t > initData, std::string& strOut, int iRetries /*= 0*/ )
 {
+	std::string strPostData { };
+	for ( auto& _Data : initData )
+	{
+		if ( !strPostData.empty( ) )
+			strPostData += '&';
+
+		strPostData += _Data.FormatString( );
+	}
+
 	_Filesystem.ChangeWorkingDirectory( CFilesystem::GetAppdataDirectory( ) );
 	const auto strCookieFile = _Filesystem.FileToPath( _Filesystem.strCookieFile );
-	const auto strPostData = std::string( );
 	std::string strErrorBuffer { };
 	strErrorBuffer.resize( CURL_ERROR_SIZE );
 	const auto bSetErrorBuffer = SetConnectionParameter( CURLOPT_ERRORBUFFER, &strErrorBuffer[ 0 ] );
@@ -80,7 +94,16 @@ bool CConnectivity::Request( const std::string &strUniformResourceLocator, std::
 		return iRetries < MAX_RETRIES ? Request( strUniformResourceLocator, initData, strOut, iRetries++ ) : false;
 	}
 
-	return !strOut.empty( );
+	if( strOut.empty( ) )
+	{
+		_Log.Log( EPrefix::ERROR, ELocation::CONNECTIVITY, XOR( "Response was empty. Retries: %i." ), _Code, iRetries );
+		if ( bSetErrorBuffer )
+			_Log.Log( EPrefix::INFO, ELocation::CONNECTIVITY, XOR( "Error message: " ) + strErrorBuffer );
+
+		return iRetries < MAX_RETRIES ? Request( strUniformResourceLocator, initData, strOut, iRetries++ ) : false;
+	}
+
+	return true;
 }
 
 CConnectivity::illegal_post_data_character_t::illegal_post_data_character_t( char _chCharacter, const std::string &_strReplacement ): chCharacter( _chCharacter ), strReplacement( _strReplacement )
@@ -97,14 +120,30 @@ void CConnectivity::illegal_post_data_character_t::ValidateString( std::string &
 	}
 }
 
+std::string CConnectivity::post_data_t::GenerateIdentifier( ) const
+{
+	auto strReturn = _Cryptography.GenerateHash( strIdentifier ).substr( 0, IDENTIFIER_LENGTH );
+	ValidateString( strReturn );
+	return strReturn;
+}
+
+std::string CConnectivity::post_data_t::ProcessValue( ) const
+{
+	std::string strReturn { };
+	if ( _Cryptography.Crypt< encrypt_t >( strValue, strReturn ) )
+	{
+		ValidateString( strReturn );
+		return strReturn;
+	}
+
+	return { };
+}
+
 post_data_t::post_data_t( const std::string &_strName, const std::string &_strValue ): strIdentifier( _strName ), strValue( _strValue )
 { }
 
-std::string post_data_t::FormatString( bool bLast )
+std::string post_data_t::FormatString( ) const
 {
-	auto strReturn = strIdentifier + '=' + strValue;
-	if ( !bLast )
-		strReturn += '&';
-
+	auto strReturn = GenerateIdentifier( ) + '=' + ProcessValue( );
 	return strReturn;
 }

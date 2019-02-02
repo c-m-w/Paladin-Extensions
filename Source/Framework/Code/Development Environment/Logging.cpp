@@ -104,6 +104,8 @@ void CLogging::Log( EPrefix _Prefix, ELocation _Location, const std::string &str
 		return ErrorPopup( ERROR_UNITIALIZED_LOG );
 
 	strBuffer += GetTimestamp( ) + '\t' + strStatusPrefixes[ _Prefix ] + '\t' + strLocations[ _Location ] + strLog + '\n';
+	if ( _Prefix == ERROR )
+		Log( INFO, _Location, XOR( "Last error: %i." ), GetLastError( ) );
 }
 
 void CLogging::Log( EPrefix _Prefix, ELocation _Location, const char *szFormat, ... )

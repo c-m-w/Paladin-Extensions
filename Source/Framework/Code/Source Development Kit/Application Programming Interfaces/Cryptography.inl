@@ -28,8 +28,8 @@ template< typename _t > bool CCryptography::Crypt( const std::string &strPlainTe
 
 	_t _Cryption( reinterpret_cast< unsigned char* >( const_cast< char* >( strEncryptionKey.c_str( ) ) ),
 				  strEncryptionKey.length( ), reinterpret_cast< unsigned char* >( const_cast< char* >( strInitializationVector.c_str( ) ) ) );
-	const auto _FormatString = CryptoPP::StringSink( strOut );
-	auto _StreamTransform = CryptoPP::StreamTransformationFilter( _Cryption, &_FormatString );
+	CryptoPP::StringSink _FormatString( strOut );
+	CryptoPP::StreamTransformationFilter _StreamTransform( _Cryption, &_FormatString );
 	CryptoPP::StringSource( strPlainText, true, &_StreamTransform );
 	return !strOut.empty( );
 }
