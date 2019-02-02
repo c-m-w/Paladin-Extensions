@@ -58,13 +58,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)..\Dependencies\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)..\Dependencies\Lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Dependencies\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Dependencies\Lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)..\..\Dependencies\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)..\..\Dependencies\Lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Dependencies\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Dependencies\Lib;$(LibraryPath)</LibraryPath>
     <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>

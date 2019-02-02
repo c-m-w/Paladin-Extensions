@@ -45,13 +45,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)..\Dependencies\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)..\Dependencies\Lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Dependencies\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Dependencies\Lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)..\Dependencies\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)..\Dependencies\Lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Dependencies\Include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Dependencies\Lib;$(LibraryPath)</LibraryPath>
     <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
@@ -93,10 +93,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Code\Development Environment\Entry Manager.hpp" />
+    <ClInclude Include="Code\Development Environment\Standard Library.hpp" />
     <ClInclude Include="Precompile.hpp" />
     <ClInclude Include="Code\Framework.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Code\Development Environment\Entry Manager.cpp" />
     <ClCompile Include="Precompile.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

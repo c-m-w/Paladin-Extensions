@@ -21,9 +21,18 @@
     <ClInclude Include="Precompile.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Code\Development Environment\Standard Library.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Development Environment\Entry Manager.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Precompile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\Development Environment\Entry Manager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
