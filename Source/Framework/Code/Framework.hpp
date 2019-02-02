@@ -23,6 +23,10 @@ using namespace Utilities;
 
 #if defined USE_DEFINITIONS
 #define CRYPTO ( _Cryptography )
+#define ENCODE( _String ) ( CRYPTO.Base64< encode_t >( _String ) )
+#define DECODE( _String ) ( CRYPTO.Base64< decode_t >( _String ) )
+#define ENCRYPT( _String ) ( CRYPTO.Crypt< encrypt_t >( _String ) )
+#define DECRYPT( _String ) ( CRYPTO.Crypt< decrypt_t >( _String ) )
 #define FS ( _Filesystem )
 #define LOG ( _Log )
 #define NET ( _Connection )

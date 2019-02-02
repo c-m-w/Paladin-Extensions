@@ -21,19 +21,19 @@ public:
 	/** \brief Prefixes for events to be logged which convey severity of the event. */
 	enum EPrefix
 	{
-		PREFIX_INFO,
-		PREFIX_DEBUG,
-		PREFIX_SUCCESS,
-		PREFIX_WARNING,
-		PREFIX_ERROR,
+		INFO,
+		DEBUG,
+		SUCCESS,
+		WARNING,
+		ERROR,
 		PREFIX_MAX
 	};
 
 	/** \brief Locations where events may be logged. */
 	enum ELocation
 	{
-		LOCATION_CONNECTIVITY,
-		LOCATION_FILESYSTEM,
+		FILESYSTEM,
+		CONNECTIVITY,
 		LOCATION_MAX
 	};
 

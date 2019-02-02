@@ -31,6 +31,8 @@
 #include <WbemIdl.h>
 #pragma comment( lib, "wbemuuid.lib" )
 
+#undef ERROR
+
 #include <curl/include/curl/curl.h>
 #include <cryptopp/base64.h>
 #include <cryptopp/filters.h>

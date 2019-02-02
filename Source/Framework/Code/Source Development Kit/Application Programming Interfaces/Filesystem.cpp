@@ -15,6 +15,20 @@ bool CFilesystem::Initialize( )
 	return true;
 }
 
+void CFilesystem::working_directory_t::StoreCurrentWorkingDirectory( )
+{
+	_DirectoryStack.push( strWorkingDirectory );
+}
+
+void CFilesystem::working_directory_t::RestoreWorkingDirectory( )
+{
+	if ( _DirectoryStack.empty( ) )
+		return; // todo log
+
+	strWorkingDirectory = _DirectoryStack.top( );
+	_DirectoryStack.pop( );
+}
+
 void CFilesystem::Shutdown( )
 { }
 
@@ -52,16 +66,26 @@ bool CFilesystem::CheckFileValidity( const std::string &strFile )
 
 void CFilesystem::StoreCurrentWorkingDirectory( )
 {
-	_DirectoryStack.push( strWorkingDirectory );
+	GetThreadDirectories( ).StoreCurrentWorkingDirectory( );
 }
 
 void CFilesystem::RestoreWorkingDirectory( )
 {
-	if ( _DirectoryStack.empty( ) )
-		return; // todo log
+	GetThreadDirectories( ).RestoreWorkingDirectory( );
+}
 
-	strWorkingDirectory = _DirectoryStack.top( );
-	_DirectoryStack.pop( );
+CFilesystem::working_directory_t &CFilesystem::GetThreadDirectories( )
+{
+	const auto dwThread = GetCurrentThreadId( );
+
+	const auto pSearch = _ThreadDirectories.find( dwThread );
+	if ( pSearch == _ThreadDirectories.end( ) )
+	{
+		_ThreadDirectories.insert( std::pair< DWORD, working_directory_t >( dwThread, working_directory_t( ) ) );
+		return GetThreadDirectories( );
+	}
+
+	return pSearch->second;
 }
 
 bool CFilesystem::GetInstallDirectory( std::string& strOut )
@@ -95,6 +119,51 @@ bool CFilesystem::CheckAbsoluteFileValidity( const std::string &strFile )
 {
 	return strFile.find_last_of( '\\' ) != strFile.length( )
 		&& PathFileExists( strFile.c_str( ) ) == TRUE;
+}
+
+bool CFilesystem::GetAbsoluteDirectoryContents( const std::string &strDirectory, bool bFiles, bool bFolders, std::vector< std::string >& vecOut )
+{
+	auto strFinalDirectory = strDirectory;
+	FormatDirectory( strFinalDirectory );
+
+	WIN32_FIND_DATA _FileData;
+	const auto hFile = FindFirstFile( ( strFinalDirectory + '*' ).c_str( ), &_FileData );
+
+	if ( ( hFile == nullptr
+		   || hFile == INVALID_HANDLE_VALUE )
+		 && GetLastError( ) != ERROR_FILE_NOT_FOUND )
+		return false;
+
+	vecOut.clear( );
+	do
+	{
+		if ( bFiles && !( _FileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY )
+			 || bFolders && 0 < ( _FileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) )
+			vecOut.emplace_back( _FileData.cFileName );
+	} while ( FindNextFile( hFile, &_FileData ) == TRUE );
+
+	return FindClose( hFile ) == TRUE;
+}
+
+bool CFilesystem::GetFoldersInAbsoluteDirectory( const std::string &strDirectory, std::vector< std::string >& vecOut )
+{
+	return GetAbsoluteDirectoryContents( strDirectory, false, true, vecOut );
+}
+
+bool CFilesystem::GetFilesInAbsoluteDirectory( const std::string &strDirectory, std::vector< std::string >& vecOut, const std::string& strExtension /*= std::string( )*/ )
+{
+	if ( !GetAbsoluteDirectoryContents( strDirectory, true, false, vecOut ) )
+		return false;
+
+	if ( !strExtension.empty( ) )
+		for ( auto u = 0u; u < vecOut.size( ); u++ )
+			if ( vecOut[ u ].find_last_of( strExtension ) != vecOut[ u ].length( ) - strExtension.length( ) )
+			{
+				vecOut.erase( vecOut.begin( ) + u );
+				u--;
+			}
+
+	return true;
 }
 
 bool CFilesystem::ReadAbsoluteFile( const std::string& strFilename, std::string& strOut, bool bDecode /*= true*/ )
@@ -140,6 +209,28 @@ bool CFilesystem::AddToAbsoluteFile( const std::string &strFilename, const std::
 	return WriteAbsoluteFile( strFilename, strBuffer, bEncode );
 }
 
+bool CFilesystem::HideAbsolutePath( const std::string &strPath )
+{
+	auto strFinalPath = strPath;
+	FormatDirectory( strFinalPath );
+
+	if ( SetFileAttributes( strFinalPath.c_str( ), FILE_ATTRIBUTE_HIDDEN ) != TRUE )
+		return false;
+
+	auto bReturn = true;
+
+	if ( CheckAbsoluteDirectoryValidity( strFinalPath.c_str( ) ) )
+	{
+		std::vector< std::string > vecContents { };
+
+		if ( bReturn &= GetAbsoluteDirectoryContents( strFinalPath, true, true, vecContents ) )
+			for ( auto& strContent : vecContents )
+				bReturn &= HideAbsolutePath( strContent );
+	}
+
+	return bReturn;
+}
+
 void CFilesystem::FormatDirectory( std::string &strDirectory )
 {
 	if ( strDirectory.find_last_of( '\\' ) != strDirectory.length( ) )
@@ -153,6 +244,7 @@ void CFilesystem::FormatDirectory( std::string &strDirectory )
 void CFilesystem::ChangeWorkingDirectory( std::string strNew, std::size_t zSubDirectories /*= 0u*/, ... )
 {
 	va_list vaArgs;
+	auto& strWorkingDirectory = GetWorkingDirectory( );
 
 	strWorkingDirectory = strNew;
 	va_start( vaArgs, strNew );
@@ -166,14 +258,14 @@ void CFilesystem::ChangeWorkingDirectory( std::string strNew, std::size_t zSubDi
 	va_end( vaArgs );
 }
 
-std::string CFilesystem::GetWorkingDirectory( )
+std::string& CFilesystem::GetWorkingDirectory( )
 {
-	return strWorkingDirectory;
+	return GetThreadDirectories( ).strWorkingDirectory;
 }
 
 std::string CFilesystem::FileToPath( const std::string &strFile )
 {
-	return strWorkingDirectory + strFile;
+	return GetWorkingDirectory( ) + strFile;
 }
 
 bool CFilesystem::ReadFile( const std::string& strFilename, std::string& strOut, bool bDecode /*= true*/ )
@@ -189,4 +281,24 @@ bool CFilesystem::WriteFile( const std::string& strFilename, const std::string& 
 bool CFilesystem::AddToFile( const std::string &strFilename, const std::string &strData, bool bEncode /*= true*/ )
 {
 	return AddToAbsoluteFile( FileToPath( strFilename ), strData, bEncode );
+}
+
+bool CFilesystem::GetDirectoryContents( const std::string &strDirectory, bool bFiles, bool bFolders, std::vector< std::string > &vecOut )
+{
+	return GetAbsoluteDirectoryContents( FileToPath( strDirectory ), bFiles, bFolders, vecOut );
+}
+
+bool CFilesystem::GetFoldersInDirectory( const std::string &strDirectory, std::vector<std::string> &vecOut )
+{
+	return GetFoldersInAbsoluteDirectory( FileToPath( strDirectory ), vecOut );
+}
+
+bool CFilesystem::GetFilesInDirectory( const std::string &strDirectory, std::vector<std::string> &vecOut, const std::string &strExtension /*= std::string( )*/ )
+{
+	return GetFilesInAbsoluteDirectory( FileToPath( strDirectory ), vecOut, strExtension );
+}
+
+bool CFilesystem::HidePath( const std::string &strPath )
+{
+	return HideAbsolutePath( FileToPath( strPath ) );
 }

@@ -7,7 +7,11 @@
 
 bool CCryptography::Initialize( )
 {
-	const auto strUnhashedKey = std::to_string( GetMoment( ) / 1000000000ull );
+	if ( GetMoment( ) - mmtLastGenerationTime < GENERATION_INTERVAL
+		 && !strEncryptionKey.empty( ) && !strInitializationVector.empty( ) )
+		return true;
+
+	const auto strUnhashedKey = std::to_string( GetMoment( ) / GENERATION_INTERVAL );
 
 	strEncryptionKey = GenerateHash( strUnhashedKey ).substr( 0, ENCRYPTION_KEY_SIZE );
 	strInitializationVector = strEncryptionKey.substr( 0, INITIALIZATION_VECTOR_SIZE );
