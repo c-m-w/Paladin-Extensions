@@ -94,16 +94,31 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Code\Development Environment\Entry Manager.hpp" />
+    <ClInclude Include="Code\Development Environment\Logging.hpp" />
     <ClInclude Include="Code\Development Environment\Standard Library.hpp" />
+    <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Base Interface.hpp" />
+    <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Connectivity.hpp" />
+    <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Cryptography.hpp" />
+    <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Filesystem.hpp" />
+    <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Utilities.hpp" />
     <ClInclude Include="Precompile.hpp" />
     <ClInclude Include="Code\Framework.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Code\Development Environment\Entry Manager.cpp" />
+    <ClCompile Include="Code\Development Environment\Logging.cpp" />
+    <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Connectivity.cpp" />
+    <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Cryptography.cpp" />
+    <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Filesystem.cpp" />
+    <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Utilities.cpp" />
     <ClCompile Include="Precompile.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Code\Source Development Kit\Application Programming Interfaces\Cryptography.inl" />
+    <None Include="Code\Source Development Kit\Application Programming Interfaces\Utilities.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

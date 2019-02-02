@@ -27,6 +27,24 @@
     <ClInclude Include="Code\Development Environment\Entry Manager.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Connectivity.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Base Interface.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Filesystem.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Development Environment\Logging.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Utilities.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Cryptography.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Precompile.cpp">
@@ -35,5 +53,28 @@
     <ClCompile Include="Code\Development Environment\Entry Manager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Connectivity.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Filesystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\Development Environment\Logging.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Utilities.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Cryptography.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Code\Source Development Kit\Application Programming Interfaces\Utilities.inl">
+      <Filter>Header Files</Filter>
+    </None>
+    <None Include="Code\Source Development Kit\Application Programming Interfaces\Cryptography.inl">
+      <Filter>Header Files</Filter>
+    </None>
   </ItemGroup>
 </Project>
