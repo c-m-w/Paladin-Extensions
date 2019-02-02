@@ -1,0 +1,3 @@
+[submodule "Source/Dependencies/Include/cryptopp"]
+	path = Source/Dependencies/Include/cryptopp
+	url = https://github.com/weidai11/cryptopp
