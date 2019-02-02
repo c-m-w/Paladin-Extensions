@@ -4,3 +4,6 @@
 [submodule "Source/Dependencies/Include/IconFontCppHeaders"]
 	path = Source/Dependencies/Include/IconFontCppHeaders
 	url = https://github.com/juliettef/IconFontCppHeaders
+[submodule "Source/Dependencies/Include/json"]
+	path = Source/Dependencies/Include/json
+	url = https://github.com/nlohmann/json
