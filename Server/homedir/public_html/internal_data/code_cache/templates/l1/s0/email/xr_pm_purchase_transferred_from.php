@@ -9,7 +9,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 ' . '' . $__templater->escape($__vars['receiver']['username']) . ',<br />
 <br />
-Your purchase ' . $__templater->escape($__vars['purchase']['purchase_key']) . ' for product ' . $__templater->escape($__vars['product']['product_title']) . ' has now been transferred.<br />
+Your purchase ' . $__templater->escape($__vars['purchase']['purchase_key']) . ' for ' . $__templater->escape($__vars['product']['product_title']) . ' has now been transferred.<br />
 <br />
 You will no longer be able to access the purchase history, receive support, or download updates.';
 	return $__finalCompiled;

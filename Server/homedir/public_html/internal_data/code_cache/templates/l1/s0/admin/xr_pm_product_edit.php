@@ -219,7 +219,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			' . '' . '
 			' . $__templater->callMacro('public:xr_pm_attachment_macros', 'upload_editor', array(
 		'isInsert' => $__templater->method($__vars['product'], 'isInsert', array()),
-		'label' => 'Product',
+		'label' => 'Extension',
 		'buttonLabel' => 'Upload product',
 		'attachmentData' => $__vars['productAttachData'],
 		'hiddenName' => 'product_attach_hash',

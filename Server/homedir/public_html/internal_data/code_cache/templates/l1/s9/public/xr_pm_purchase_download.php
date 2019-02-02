@@ -24,7 +24,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 				' . $__templater->formCheckBoxRow(array(
 		), array(array(
 			'name' => 'confirmed',
-			'label' => 'I agree to and accept the <a href="' . $__templater->fn('link', array('products/terms', $__vars['product'], ), true) . '" target="_blank">terms and conditions</a> for this product.',
+			'label' => 'I agree to and accept the <a href="' . $__templater->fn('link', array('products/terms', $__vars['product'], ), true) . '" target="_blank">terms and conditions</a> for this extension.',
 			'_type' => 'option',
 		)), array(
 		)) . '

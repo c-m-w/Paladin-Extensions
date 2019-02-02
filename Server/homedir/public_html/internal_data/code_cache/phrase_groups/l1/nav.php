@@ -29,6 +29,7 @@ return array (
   'nav.mjstYourAssigned' => 'Your assigned tickets',
   'nav.mjstYourTickets' => 'Your tickets',
   'nav.navExtensionsInvitations' => 'Invitations',
+  'nav.navFAQ' => 'Frequently Asked Questions',
   'nav.navPaymentSupport' => 'Payment Support',
   'nav.navPremium' => '<font size="3"><i class="fa fa-shopping-cart" style="padding-right:7px;"></i></font>Premium',
   'nav.navSupportArea' => '<font size="4"><i class="fa fa-life-ring" style="padding-right:7px;"></i></font>Support',

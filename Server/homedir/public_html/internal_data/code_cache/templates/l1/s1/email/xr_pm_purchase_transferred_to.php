@@ -10,7 +10,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 
 ' . '' . $__templater->escape($__vars['receiver']['username']) . ',<br />
 <br />
-A purchase ' . $__templater->escape($__vars['purchase']['purchase_key']) . ' for product ' . $__templater->escape($__vars['product']['product_title']) . ' has now been transferred to you.<br />
+A purchase ' . $__templater->escape($__vars['purchase']['purchase_key']) . ' for ' . $__templater->escape($__vars['product']['product_title']) . ' has now been transferred to you.<br />
 <br />
 You should now be able to download updates, receive support and view the purchase details.' . '
 

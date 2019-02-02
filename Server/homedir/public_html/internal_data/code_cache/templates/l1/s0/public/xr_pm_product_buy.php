@@ -18,7 +18,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	<div class="block-container">
 		<div class="block-body">
 			' . $__templater->formInfoRow('
-				' . 'Please confirm you wish to buy the following product and customize any extras (if any) below' . ':
+				' . 'Please confirm you wish to buy the following extension and customize any extras (if any) below' . ':
 				<strong><a href="' . $__templater->fn('link', array('products', $__vars['product'], ), true) . '">' . $__templater->escape($__vars['product']['product_title']) . '</a></strong>
 			', array(
 		'rowtype' => 'confirm',

@@ -60,7 +60,7 @@ You may instead choose to post to a different channel; or "<strong>Disable</stro
 		'name' => 'discord[threads][message]',
 		'value' => $__vars['node']['discord_options']['threads']['message'],
 		'autosize' => 'true',
-		'placeholder' => '**{user}** posted a new thread: *{title}* (<{url}>)',
+		'placeholder' => '**{user}** posted a new thread: *{title}* (<{url}>) @everyone',
 	), array(
 		'label' => 'Message',
 		'explain' => 'Leave blank to use the default phrasing. Available substitution parameters: <strong>{user}</strong>, <strong>{title}</strong> and <strong>{url}</strong>.',
@@ -89,7 +89,7 @@ You may instead choose to post to a different channel; or "<strong>Disable</stro
 		'name' => 'discord[posts][message]',
 		'value' => $__vars['node']['discord_options']['posts']['message'],
 		'autosize' => 'true',
-		'placeholder' => '**{user}** posted a new thread: *{title}* (<{url}>)',
+		'placeholder' => '**{user}** posted a new thread: *{title}* (<{url}>) @everyone',
 	), array(
 		'label' => 'Message',
 		'explain' => 'Leave blank to use the default phrasing. Available substitution parameters: <strong>{user}</strong>, <strong>{title}</strong> and <strong>{url}</strong>.',

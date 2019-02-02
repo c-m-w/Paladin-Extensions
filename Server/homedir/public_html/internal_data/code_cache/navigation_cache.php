@@ -389,13 +389,13 @@ return function($__templater, $__selectedNav, array $__vars)
 
 			if ((!$__vars['xf']['visitor']['user_id'])) {
 				$__navTemp = [
-		'title' => \XF::phrase('nav.xr_pm_products_search'),
-		'href' => $__templater->fn('link', array('search', null, array('type' => 'xr_pm_product', ), ), false),
+		'title' => \XF::phrase('nav.navFAQ'),
+		'href' => $__templater->fn('link', array('threads/2/', ), false),
 		'attributes' => [],
 	];
 				if ($__navTemp) {
-					$__tree['xr_pm_products']['children']['xr_pm_products_search'] = $__navTemp;
-					$__flat['xr_pm_products_search'] =& $__tree['xr_pm_products']['children']['xr_pm_products_search'];
+					$__tree['xr_pm_products']['children']['navFAQ'] = $__navTemp;
+					$__flat['navFAQ'] =& $__tree['xr_pm_products']['children']['navFAQ'];
 				}
 			}
 

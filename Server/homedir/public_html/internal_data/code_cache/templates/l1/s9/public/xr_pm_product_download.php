@@ -33,7 +33,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 				' . $__templater->formCheckBoxRow(array(
 		), array(array(
 			'name' => 'confirmed',
-			'label' => 'I agree to and accept the <a href="' . $__templater->fn('link', array('products/terms', $__vars['product'], ), true) . '" target="_blank">terms and conditions</a> for this product.',
+			'label' => 'I agree to and accept the <a href="' . $__templater->fn('link', array('products/terms', $__vars['product'], ), true) . '" target="_blank">terms and conditions</a> for this extension.',
 			'_type' => 'option',
 		)), array(
 		)) . '
@@ -45,7 +45,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			' . $__templater->formSelectRow(array(
 		'name' => 'purchase_version',
 	), $__compilerTemp1, array(
-		'label' => 'Select purchase to download product',
+		'label' => 'Select purchase to download extension',
 		'explain' => 'You can download more versions from the <a href="' . $__templater->fn('link', array('products/purchases', ), true) . '" target="_blank">Your purchases</a> page.',
 	)) . '
 			' . $__compilerTemp3 . '
