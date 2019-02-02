@@ -7,19 +7,23 @@ class CCryptography: public IBase
 {
 private:
 
+	constexpr static auto GENERATION_INTERVAL = 3600000ui64; // 1 hour in milliseconds
+
 	bool Initialize( ) override;
 
 	/** \brief Key to encrypt / decrypt with. */
 	std::string strEncryptionKey;
 	/** \brief Initialization vector for encryption. */
 	std::string strInitializationVector;
+	/** \brief Last time that an encryption key was generated. */
+	Utilities::moment_t mmtLastGenerationTime;
 
 public:
 
-	using encrypt_t = CryptoPP::CBC_Mode< CryptoPP::AES >::Encryption;
-	using decrypt_t = CryptoPP::CBC_Mode< CryptoPP::AES >::Decryption;
 	using encode_t = CryptoPP::Base64Encoder;
 	using decode_t = CryptoPP::Base64Decoder;
+	using encrypt_t = CryptoPP::CBC_Mode< CryptoPP::AES >::Encryption;
+	using decrypt_t = CryptoPP::CBC_Mode< CryptoPP::AES >::Decryption;
 
 	/** \brief Size of encryption key in bytes. */
 	constexpr static auto ENCRYPTION_KEY_SIZE = 32;
@@ -48,9 +52,9 @@ public:
 	template< typename _t > bool Crypt( const  std::string &strPlainText, std::string& strOut );
 } inline _Cryptography;
 
-using encrypt_t = CCryptography::encrypt_t;
-using decrypt_t = CCryptography::decrypt_t;
 using encode_t = CCryptography::encode_t;
 using decode_t = CCryptography::decode_t;
+using encrypt_t = CCryptography::encrypt_t;
+using decrypt_t = CCryptography::decrypt_t;
 
 #include "Cryptography.inl"

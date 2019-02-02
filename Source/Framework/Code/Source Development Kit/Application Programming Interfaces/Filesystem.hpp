@@ -9,11 +9,17 @@ private:
 
 	bool Initialize( ) override;
 
-	/** \brief Current working directory, used for context to perform operations\n
-				on relative files and directories. */
-	std::string strWorkingDirectory { };
-	/** \brief Stack of stored directories. */
-	std::stack< std::string > _DirectoryStack { };
+	struct working_directory_t
+	{
+		std::string strWorkingDirectory;
+		std::stack< std::string > _DirectoryStack;
+
+		working_directory_t( ) = default;
+		void StoreCurrentWorkingDirectory( );
+		void RestoreWorkingDirectory( );
+	};
+
+	std::map< DWORD, working_directory_t > _ThreadDirectories { };
 
 public:
 
@@ -27,6 +33,9 @@ public:
 	/** \param strFile Complete path of a file. */
 	/** \return Whether or not the file exists. */
 	[ [ nodiscard ] ] static bool CheckAbsoluteFileValidity( const std::string& strFile );
+	[ [ nodiscard ] ] static bool GetAbsoluteDirectoryContents( const std::string& strDirectory, bool bFiles, bool bFolders, std::vector< std::string >& vecOut );
+	[ [ nodiscard ] ] static bool GetFoldersInAbsoluteDirectory( const std::string& strDirectory, std::vector< std::string >& vecOut );
+	[ [ nodiscard ] ] static bool GetFilesInAbsoluteDirectory( const std::string& strDirectory, std::vector< std::string >& vecOut, const std::string& strExtension = std::string( ) );
 	/** \brief Reads data from a file. */
 	/** \param strFilename Full path of the file to be read. */
 	/** \param strOut Output for the data of the file to be stored. */
@@ -46,6 +55,7 @@ public:
 				encoded when written. */
 	/** \return Whether or not reading and writing to the file was successful. */
 	static bool AddToAbsoluteFile( const std::string& strFilename, const std::string& strData, bool bEncode = true );
+	static bool HideAbsolutePath( const std::string& strPath );
 	/** \brief Ensures that a directory has proper slashes to be concatenated. */
 	/** \param strDirectory Directory string to be formatted. */
 	static void FormatDirectory( std::string& strDirectory );
@@ -72,14 +82,15 @@ public:
 	/** \param strOut Buffer for the directory to be saved to. */
 	/** \return Whether or not obtaining the directory was successful. */
 	[ [ nodiscard ] ] bool GetInstallDirectory( std::string& strOut );
+	[ [ nodiscard ] ] working_directory_t& GetThreadDirectories( );
+	/** \brief Gets the current working directory. */
+	/** \return Current working directory. */
+	[ [ nodiscard ] ] std::string& GetWorkingDirectory( );
 	/** \brief Changes the current directory. */
 	/** \param strNew New absolute directory. */
 	/** \param zSubDirectories Amount of sub directories within the absolute directory. */
 	/** \param ... Sub directories within the absolute directory */
 	void ChangeWorkingDirectory( std::string strNew, std::size_t zSubDirectories = 0u, ... );
-	/** \brief Gets the current working directory. */
-	/** \return Current working directory. */
-	[ [ nodiscard ] ] std::string GetWorkingDirectory( );
 	/** \brief Converts a relative file to an absolute path. */
 	/** \param strFile Relative filename/path to be converted. */
 	/** \return Absolute file path. */
@@ -103,6 +114,10 @@ public:
 						when written back to the file. */
 	/** \return Whether or not reading and writing to the specified file was successful. */
 	bool AddToFile( const std::string& strFilename, const std::string& strData, bool bEncode = true );
+	[ [ nodiscard ] ] static bool GetDirectoryContents( const std::string& strDirectory, bool bFiles, bool bFolders, std::vector< std::string >& vecOut );
+	[ [ nodiscard ] ] static bool GetFoldersInDirectory( const std::string& strDirectory, std::vector< std::string >& vecOut );
+	[ [ nodiscard ] ] static bool GetFilesInDirectory( const std::string& strDirectory, std::vector< std::string >& vecOut, const std::string& strExtension = std::string( ) );
+	bool HidePath( const std::string& strPath );
 
 	/** \brief Path of the Paladin data folder from \appdata\roaming\ */
 	static std::string strRelativeAppdataDirectory;
