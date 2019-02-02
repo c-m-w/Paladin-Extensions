@@ -3,6 +3,7 @@
 	define( "encryptionKeySize", 32 );
 	define( "initializationVectorSize", 16 );
 	define( "encryptionMethod", "AES-256-CBC" );
+	define( "identifierSize", 16 );
 
 	class Cryptography
 	{
@@ -32,6 +33,11 @@
 			return sha1( $bytes );
 		}
 
+		public function hashFile( $filename ): string
+		{
+			return generateHash( file_get_contents( $filename ) );
+		}
+
 		public function encrypt( $bytes ): string
 		{
 			generateKeys( );
@@ -44,6 +50,11 @@
 			generateKeys( );
 			
 			return openssl_decrypt( $bytes, encryptionMethod, $encryptionKey, 0, $initializationVector );
+		}
+
+		public function generateIdentifier( $id )
+		{
+			return substr( generateHash( $id ), 0, identifierSize );
 		}
 	}
 ?>
