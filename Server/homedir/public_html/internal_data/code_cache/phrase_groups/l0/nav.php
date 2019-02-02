@@ -20,7 +20,7 @@ return array (
   'nav.latestActivity' => 'Latest activity',
   'nav.markForumsRead' => 'Mark forums read',
   'nav.members' => 'Members',
-  'nav.membersActivePlayers' => 'Most active steam players',
+  'nav.membersOwnedGames' => 'Most owned games',
   'nav.mjstKb' => 'Knowledge bases',
   'nav.mjstSupportTicket' => '<font size="3"><i class="fa fa-life-ring" style="padding-right:7px;"></i></font>Support',
   'nav.mjstWatched' => 'Watched',

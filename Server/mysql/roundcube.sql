@@ -37,7 +37,7 @@ CREATE TABLE `users` (
   `failed_login_counter` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `username` (`username`,`mail_host`)
-) ENGINE=InnoDB AUTO_INCREMENT=977 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=985 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -74,7 +74,7 @@ CREATE TABLE `identities` (
   KEY `user_identities_index` (`user_id`,`del`),
   KEY `email_identities_index` (`email`,`del`),
   CONSTRAINT `user_id_fk_identities` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=980 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=988 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -158,7 +158,7 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-01-30  0:00:06
+-- Dump completed on 2019-01-31  0:00:54
 -- MySQL dump 10.16  Distrib 10.1.37-MariaDB, for Linux (x86_64)
 --
 -- Host: localhost    Database: roundcube
@@ -216,4 +216,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-01-30  0:00:06
+-- Dump completed on 2019-01-31  0:00:54

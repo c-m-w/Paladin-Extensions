@@ -363,13 +363,13 @@ return function($__templater, $__selectedNav, array $__vars)
 
 			if ($__vars['xf']['visitor']['user_id']) {
 				$__navTemp = [
-		'title' => \XF::phrase('nav.membersActivePlayers'),
-		'href' => $__templater->fn('link', array('steam/active-players', ), false),
+		'title' => \XF::phrase('nav.membersOwnedGames'),
+		'href' => $__templater->fn('link', array('steam/owned-games', ), false),
 		'attributes' => [],
 	];
 				if ($__navTemp) {
-					$__tree['members']['children']['membersActivePlayers'] = $__navTemp;
-					$__flat['membersActivePlayers'] =& $__tree['members']['children']['membersActivePlayers'];
+					$__tree['members']['children']['membersOwnedGames'] = $__navTemp;
+					$__flat['membersOwnedGames'] =& $__tree['members']['children']['membersOwnedGames'];
 				}
 			}
 
