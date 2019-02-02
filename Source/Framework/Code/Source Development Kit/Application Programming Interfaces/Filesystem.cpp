@@ -99,7 +99,7 @@ bool CFilesystem::CheckAbsoluteFileValidity( const std::string &strFile )
 
 bool CFilesystem::ReadAbsoluteFile( const std::string& strFilename, std::string& strOut, bool bDecode /*= true*/ )
 {
-	if ( !CheckAbsoluteFileValidity( strFilename, std::string( ) ) )
+	if ( !CheckAbsoluteFileValidity( strFilename ) )
 		return false; // todo log
 
 	FILE* pFile = nullptr;
