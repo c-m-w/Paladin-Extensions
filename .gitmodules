@@ -1,3 +1,6 @@
 [submodule "Source/Dependencies/Include/cryptopp"]
 	path = Source/Dependencies/Include/cryptopp
 	url = https://github.com/weidai11/cryptopp
+[submodule "Source/Dependencies/Include/IconFontCppHeaders"]
+	path = Source/Dependencies/Include/IconFontCppHeaders
+	url = https://github.com/juliettef/IconFontCppHeaders
