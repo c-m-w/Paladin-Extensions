@@ -106,7 +106,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 				))) . '</li>
 										' . $__compilerTemp2 . '
 										' . $__compilerTemp3 . '
-										<li><b>' . 'Product' . ':</b> ' . $__templater->escape($__vars['purchase']['Product']['product_title']) . '</li>
+										<li><b>' . 'Extension' . ':</b> ' . $__templater->escape($__vars['purchase']['Product']['product_title']) . '</li>
 										<li><b>' . 'Licensed to' . ':</b>
 											' . $__compilerTemp4 . '
 										</li>

@@ -5,6 +5,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	$__finalCompiled = '';
 	$__finalCompiled .= '/* XF-RTL:disable */
 ' . $__templater->includeTemplate('editor_base.less', $__vars) . '
+' . $__templater->includeTemplate('kl_em_editor.less', $__vars) . '
 /* XF-RTL:enable */
 
 // this allows us to ensure that when we scroll the editor into view, this goes below the fixed header

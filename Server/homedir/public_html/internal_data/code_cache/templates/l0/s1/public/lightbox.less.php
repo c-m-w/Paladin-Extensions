@@ -5,7 +5,14 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	$__finalCompiled = '';
 	$__finalCompiled .= '.lbContainer
 {
-	&.lbContainer--inline
+
+&::after {
+   content: " ";
+   visibility: hidden;
+   display: block;
+   height: 0;
+   clear: both;
+}	&.lbContainer--inline
 	{
 		display: inline-block;
 		max-width: 100%;

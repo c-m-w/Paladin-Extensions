@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cron>
+  <entry entry_id="klEMGoogleFontUpdate" cron_class="KL\EditorManager\Cron\GoogleFonts" cron_method="run" active="1"><![CDATA[{"day_type":"dow","dow":[0],"hours":[0],"minutes":[0]}]]></entry>
+</cron>

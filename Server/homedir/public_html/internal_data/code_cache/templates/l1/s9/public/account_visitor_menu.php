@@ -119,7 +119,14 @@ return array('macros' => array('visitor_panel_row' => function($__templater, arr
 	<li><a href="' . $__templater->fn('link', array('account/likes', ), true) . '" class="menu-linkRow">' . 'Likes received' . '</a></li>
 	<li><a href="' . $__templater->fn('link', array('conversations', ), true) . '" class="menu-linkRow">' . 'Conversations' . '</a></li>
 	<li><a href="' . $__templater->fn('link', array('account/alerts', ), true) . '" class="menu-linkRow">' . 'Alerts' . '</a></li>
-	' . $__templater->includeTemplate('mjst_account_visitor_menu', $__vars) . '
+	' . $__templater->includeTemplate('mjst_account_visitor_menu', $__vars);
+	if ($__templater->method($__vars['xf']['visitor'], 'hasPermission', array('klEM', 'klEMPrivateTemplates', ))) {
+		$__finalCompiled .= '
+<li><a href="' . $__templater->fn('link', array('account/editor-templates/', ), true) . '" class="menu-linkRow">' . 'Editor templates' . '</a></li>
+';
+	}
+	$__finalCompiled .= '
+' . '
 ';
 	if ($__templater->method($__vars['xf']['visitor'], 'hasPermission', array('siropuReferralContests', 'refer', ))) {
 		$__finalCompiled .= '

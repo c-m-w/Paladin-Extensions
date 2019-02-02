@@ -23,7 +23,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 					<li>' . $__templater->fn('username_link', array($__vars['product']['User'], false, array(
 		'defaultname' => $__vars['product']['username'],
 	))) . '</li>
-					<li>' . 'Product' . '</li>
+					<li>' . 'Extension' . '</li>
 					<li>' . $__templater->fn('date_dynamic', array($__vars['product']['product_date'], array(
 	))) . '</li>
 					';

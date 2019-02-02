@@ -12,6 +12,8 @@ return array (
   'permission_interface.generalPermissions' => 'General permissions',
   'permission_interface.history' => 'History',
   'permission_interface.klAMDP' => 'Auto Double Post Merger permissions',
+  'permission_interface.klEM' => 'Editor Manager permissions',
+  'permission_interface.klEMModerator' => 'Editor Manager moderator permissions',
   'permission_interface.mjstKbModeratorPermission' => '[BRST] Knowledge base moderator permissions',
   'permission_interface.mjstKbPermission' => '[BRST] Knowledge base permissions',
   'permission_interface.mjstTicketModeratorPermission' => '[BRST] Support ticket moderator permissions',

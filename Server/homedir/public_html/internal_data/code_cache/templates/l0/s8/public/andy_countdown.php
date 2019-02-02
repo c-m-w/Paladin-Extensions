@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 9bb29b1062157a0b6564034ec8c762d2
+// FROM HASH: d48d3bded3bf3472f6a70dae0273dfed
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -8,7 +8,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 ' . $__templater->includeTemplate('andy_countdown_js', $__vars) . '
 
 <div class="block">
-<div class="block-container block-container-countdown" align="center">
+<div class="block-container block-container-countdown block-body uix_postThreadWidget block-row" align="center">
 	
 ';
 	if ($__vars['link']) {
@@ -30,7 +30,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	}
 	$__finalCompiled .= '
 
-<div class="block-countdown" style="margin-left: -2em; margin-bottom: 1em">
+<div class="block-countdown" align="center" style="margin-bottom: 1em">
 <script type="application/javascript">
 var myCountdown = new Countdown(
 {

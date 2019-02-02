@@ -363,13 +363,13 @@ return function($__templater, $__selectedNav, array $__vars)
 
 			if ($__vars['xf']['visitor']['user_id']) {
 				$__navTemp = [
-		'title' => \XF::phrase('nav.membersActivePlayers'),
-		'href' => $__templater->fn('link', array('steam/active-players', ), false),
+		'title' => \XF::phrase('nav.membersOwnedGames'),
+		'href' => $__templater->fn('link', array('steam/owned-games', ), false),
 		'attributes' => [],
 	];
 				if ($__navTemp) {
-					$__tree['members']['children']['membersActivePlayers'] = $__navTemp;
-					$__flat['membersActivePlayers'] =& $__tree['members']['children']['membersActivePlayers'];
+					$__tree['members']['children']['membersOwnedGames'] = $__navTemp;
+					$__flat['membersOwnedGames'] =& $__tree['members']['children']['membersOwnedGames'];
 				}
 			}
 
@@ -387,14 +387,28 @@ return function($__templater, $__selectedNav, array $__vars)
 			$__flat['xr_pm_products'] =& $__tree['xr_pm_products'];
 			if (empty($__tree['xr_pm_products']['children'])) { $__tree['xr_pm_products']['children'] = []; }
 
-			$__navTemp = [
+			if ((!$__vars['xf']['visitor']['user_id'])) {
+				$__navTemp = [
+		'title' => \XF::phrase('nav.navFAQ'),
+		'href' => $__templater->fn('link', array('threads/2/', ), false),
+		'attributes' => [],
+	];
+				if ($__navTemp) {
+					$__tree['xr_pm_products']['children']['navFAQ'] = $__navTemp;
+					$__flat['navFAQ'] =& $__tree['xr_pm_products']['children']['navFAQ'];
+				}
+			}
+
+			if ($__vars['xf']['visitor']['user_id']) {
+				$__navTemp = [
 		'title' => \XF::phrase('nav.navPaymentSupport'),
 		'href' => $__templater->fn('link', array('support/open?department_id=4/', ), false),
 		'attributes' => [],
 	];
-			if ($__navTemp) {
-				$__tree['xr_pm_products']['children']['navPaymentSupport'] = $__navTemp;
-				$__flat['navPaymentSupport'] =& $__tree['xr_pm_products']['children']['navPaymentSupport'];
+				if ($__navTemp) {
+					$__tree['xr_pm_products']['children']['navPaymentSupport'] = $__navTemp;
+					$__flat['navPaymentSupport'] =& $__tree['xr_pm_products']['children']['navPaymentSupport'];
+				}
 			}
 
 			if ($__vars['xf']['visitor']['user_id']) {

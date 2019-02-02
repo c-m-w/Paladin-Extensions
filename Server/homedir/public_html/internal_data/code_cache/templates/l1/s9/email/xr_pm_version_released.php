@@ -42,6 +42,6 @@ We are emailing to let you know that a new update has been released for <a href=
 	$__finalCompiled .= '
 </div>
 
-<div class="minorText">' . '<a href="' . $__templater->fn('link', array('canonical:email-stop/content', $__vars['receiver'], array('t' => 'xr_pm_product', ), ), true) . '">Unsubscribe from all product updates</a>' . '</div>';
+<div class="minorText">' . '<a href="' . $__templater->fn('link', array('canonical:email-stop/content', $__vars['receiver'], array('t' => 'xr_pm_product', ), ), true) . '">Unsubscribe from all extension updates</a>' . '</div>';
 	return $__finalCompiled;
 });

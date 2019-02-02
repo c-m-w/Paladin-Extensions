@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<template_modifications>
+  <modification type="public" template="PAGE_CONTAINER" modification_key="kl_em_PAGE_CONTAINER" description="Load external fonts." execution_order="1000" enabled="1" action="str_replace">
+    <find><![CDATA[</head>]]></find>
+    <replace><![CDATA[<xf:include template="kl_em_PAGE_CONTAINER" />
+$0]]></replace>
+  </modification>
+  <modification type="public" template="_help_page_bb_codes" modification_key="kl_em_help_page_bb_codes" description="Replace standard BB Code list with editor configuration." execution_order="10" enabled="1" action="preg_replace">
+    <find><![CDATA[/<ul class="listPlain block-body">(.*?)<\/ul>/s]]></find>
+    <replace><![CDATA[<ul class="listPlain block-body">
+<xf:include template="kl_em_help_page_bb_codes" />
+</ul>]]></replace>
+  </modification>
+  <modification type="public" template="account_visitor_menu" modification_key="kl_em_account_visitor_menu" description="Add Editor Templates Link." execution_order="10" enabled="1" action="str_replace">
+    <find><![CDATA[<!--[XF:content_links:bottom]-->]]></find>
+    <replace><![CDATA[<xf:if is="$xf.visitor->hasPermission('klEM', 'klEMPrivateTemplates')">
+<li><a href="{{ link('account/editor-templates/') }}" class="menu-linkRow">{{ phrase('kl_em_editor_templates') }}</a></li>
+</xf:if>
+$0]]></replace>
+  </modification>
+  <modification type="public" template="account_wrapper" modification_key="kl_em_account_wrapper" description="Add Template to list" execution_order="10" enabled="1" action="str_replace">
+    <find><![CDATA[<!--[XF:profile_links:bottom]-->]]></find>
+    <replace><![CDATA[<xf:if is="$xf.visitor->hasPermission('klEM', 'klEMPrivateTemplates')">
+<a class="blockLink {{ $pageSelected == 'editor_templates' ? 'is-selected' : '' }}" href="{{ link('account/editor-templates/') }}">
+	{{ phrase('kl_em_editor_templates') }}
+</a>
+</xf:if>
+$0]]></replace>
+  </modification>
+  <modification type="admin" template="app.less" modification_key="kl_em_app_less" description="Add Editor Manager icon." execution_order="10" enabled="1" action="preg_replace">
+    <find><![CDATA[/$/]]></find>
+    <replace><![CDATA[<xf:include template="kl_em_app.less" />
+$0]]></replace>
+  </modification>
+  <modification type="public" template="bb_code.less" modification_key="kl_em_bb_code_less" description="Include BB Code" execution_order="1000" enabled="1" action="preg_replace">
+    <find><![CDATA[/$/]]></find>
+    <replace><![CDATA[<xf:include template="public:kl_em_bb_code.less" />]]></replace>
+  </modification>
+  <modification type="public" template="bb_code_tag_img" modification_key="kl_em_bb_code_tag_img" execution_order="10" enabled="1" action="str_replace">
+    <find><![CDATA[name="single_image"]]></find>
+    <replace><![CDATA[$0 arg-klEMStyle="{$style}"]]></replace>
+  </modification>
+  <modification type="public" template="editor" modification_key="kl_em_editor" description="Inject Editor Extension Script" execution_order="10" enabled="1" action="preg_replace">
+    <find><![CDATA[/<script(.*?)class="js-editorLanguage"/]]></find>
+    <replace><![CDATA[<xf:include template="kl_em_editor" />
+$0]]></replace>
+  </modification>
+  <modification type="public" template="editor" modification_key="KL_EM_editor_phrases" description="Add phrases to editor setup." execution_order="1000" enabled="1" action="str_replace">
+    <find><![CDATA["__lang end__": ""]]></find>
+    <replace><![CDATA[<xf:include template="kl_em_editor_phrases" />
+$0]]></replace>
+  </modification>
+  <modification type="public" template="editor.less" modification_key="kl_em_editor_less" execution_order="10" enabled="1" action="str_replace">
+    <find><![CDATA[/* XF-RTL:enable */]]></find>
+    <replace><![CDATA[{{ include('kl_em_editor.less') }}
+$0]]></replace>
+  </modification>
+  <modification type="public" template="lightbox.less" modification_key="kl_em_lightbox_less" execution_order="10" enabled="1" action="str_replace">
+    <find><![CDATA[.lbContainer
+{
+]]></find>
+    <replace><![CDATA[$0
+&::after {
+   content: " ";
+   visibility: hidden;
+   display: block;
+   height: 0;
+   clear: both;
+}]]></replace>
+  </modification>
+  <modification type="public" template="lightbox_macros" modification_key="kl_em_lightbox_macros" execution_order="10" enabled="1" action="str_replace">
+    <find><![CDATA[name="single_image"]]></find>
+    <replace><![CDATA[$0 arg-klEMStyle="" ]]></replace>
+  </modification>
+  <modification type="public" template="lightbox_macros" modification_key="kl_em_lightbox_macros_02" execution_order="10" enabled="1" action="preg_replace">
+    <find><![CDATA[/(data-lb-id=\"\{\$id\}\"|alt=\"\{\$alt\}\")/]]></find>
+    <replace><![CDATA[$0 style="{$klEMStyle}"]]></replace>
+  </modification>
+  <modification type="public" template="post_macros" modification_key="kl_em_post_macros" description="Insert hide live refresh script." execution_order="10" enabled="1" action="preg_replace">
+    <find><![CDATA[/<xf:macro name="post".*?>/]]></find>
+    <replace><![CDATA[$0
+<xf:if is="$xf.options.klEMEnabledBBCodes.hide">
+	<xf:js src="editor-manager/hide-refresh.js" addon="KL/EditorManager" />
+</xf:if>]]></replace>
+  </modification>
+  <modification type="public" template="thread_view" modification_key="kl_em_thread_view" execution_order="10" enabled="1" action="preg_replace">
+    <find><![CDATA[/<xf:macro template="quick_reply_macros" name="body".*?>/s]]></find>
+    <replace><![CDATA[$0
+<xf:hiddenval name="klPage" value="{$page}" />]]></replace>
+  </modification>
+</template_modifications>

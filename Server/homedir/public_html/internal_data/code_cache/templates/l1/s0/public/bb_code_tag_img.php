@@ -4,6 +4,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 {
 	$__finalCompiled = '';
 	$__finalCompiled .= $__templater->callMacro('lightbox_macros', 'single_image', array(
+		'klEMStyle' => $__vars['style'],
 		'canViewAttachments' => true,
 		'id' => $__templater->fn('unique_id', array(), false),
 		'src' => $__vars['imageUrl'],

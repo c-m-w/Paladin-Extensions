@@ -39,7 +39,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	if ($__templater->method($__vars['purchase'], 'doesRequireActivation', array())) {
 		$__finalCompiled .= '
 	<div class="blockMessage blockMessage--important">
-		' . 'Before you are able to download this product, you must activate the purchase by <a href="' . $__templater->fn('link', array('products/purchase/activate', $__vars['purchase'], ), true) . '" data-xf-click="overlay">clicking here</a>.' . '
+		' . 'Before you are able to download this extension, you must activate the purchase by <a href="' . $__templater->fn('link', array('products/purchase/activate', $__vars['purchase'], ), true) . '" data-xf-click="overlay">clicking here</a>.' . '
 	</div>
 ';
 	}
@@ -55,7 +55,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	} else if ($__templater->method($__vars['purchase'], 'doesRequireRenewal', array())) {
 		$__finalCompiled .= '
 	<div class="blockMessage blockMessage--important">
-		' . 'This product has expired. You may be missing out on the latest changes. You can renew the purchase by <a href="' . $__templater->fn('link', array('products/purchase/renew', $__vars['purchase'], ), true) . '" data-xf-click="overlay">clicking here</a>.' . '
+		' . 'This extension has expired. You can renew the purchase by <a href="' . $__templater->fn('link', array('products/purchase/renew', $__vars['purchase'], ), true) . '" data-xf-click="overlay">clicking here</a>.' . '
 	</div>
 ';
 	}

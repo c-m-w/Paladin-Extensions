@@ -42,7 +42,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		$__compilerTemp1 .= $__templater->formSelectRow(array(
 			'name' => 'product_id',
 		), $__compilerTemp2, array(
-			'label' => 'Product',
+			'label' => 'Extension',
 		)) . '
 
 				' . $__templater->formTextBoxRow(array(
@@ -58,7 +58,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 				' . $__templater->formRow('
 					<a href="' . $__templater->fn('link', array('product-manager/products/edit', $__vars['purchase']['Product'], ), true) . '">' . $__templater->escape($__vars['purchase']['Product']['product_title']) . '</a>
 				', array(
-			'label' => 'Product',
+			'label' => 'Extension',
 			'rowtype' => 'text',
 		)) . '
 

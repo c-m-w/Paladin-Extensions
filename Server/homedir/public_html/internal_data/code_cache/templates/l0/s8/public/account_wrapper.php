@@ -4,44 +4,52 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 {
 	$__finalCompiled = '';
 	$__compilerTemp1 = '';
-	if ($__templater->method($__vars['xf']['visitor'], 'hasPermission', array('siropuReferralContests', 'refer', ))) {
+	if ($__templater->method($__vars['xf']['visitor'], 'hasPermission', array('klEM', 'klEMPrivateTemplates', ))) {
 		$__compilerTemp1 .= '
+<a class="blockLink ' . (($__vars['pageSelected'] == 'editor_templates') ? 'is-selected' : '') . '" href="' . $__templater->fn('link', array('account/editor-templates/', ), true) . '">
+	' . 'Editor templates' . '
+</a>
+';
+	}
+	$__compilerTemp2 = '';
+	if ($__templater->method($__vars['xf']['visitor'], 'hasPermission', array('siropuReferralContests', 'refer', ))) {
+		$__compilerTemp2 .= '
 	';
 		if ($__vars['xf']['options']['siropuReferralContestsInvitationOnly']) {
-			$__compilerTemp1 .= '
+			$__compilerTemp2 .= '
 		<a class="blockLink ' . (($__vars['pageSelected'] == 'invitations') ? 'is-selected' : '') . '" href="' . ($__templater->method($__vars['xf']['visitor'], 'hasPermission', array('siropuReferralContests', 'createInvitations', )) ? $__templater->fn('link', array('account/invitations/create', ), true) : $__templater->fn('link', array('account/invitations/list', ), true)) . '">
 			' . 'Your invitations' . '
 		</a>
 	';
 		} else {
-			$__compilerTemp1 .= '
+			$__compilerTemp2 .= '
 		<a class="blockLink ' . (($__vars['pageSelected'] == 'referrals') ? 'is-selected' : '') . '" href="' . $__templater->fn('link', array('account/referrals', ), true) . '">
 			' . 'Your referrals' . '
 		</a>
 	';
 		}
-		$__compilerTemp1 .= '
+		$__compilerTemp2 .= '
 ';
 	}
-	$__compilerTemp2 = '';
+	$__compilerTemp3 = '';
 	if ($__templater->method($__vars['xf']['visitor'], 'canEditSignature', array())) {
-		$__compilerTemp2 .= '
+		$__compilerTemp3 .= '
 					<a class="blockLink ' . (($__vars['pageSelected'] == 'signature') ? 'is-selected' : '') . '" href="' . $__templater->fn('link', array('account/signature', ), true) . '">
 						' . 'Signature' . '
 					</a>
 				';
 	}
-	$__compilerTemp3 = '';
+	$__compilerTemp4 = '';
 	if ($__vars['xf']['app']['userUpgradeCount']) {
-		$__compilerTemp3 .= '
+		$__compilerTemp4 .= '
 					<a class="blockLink ' . (($__vars['pageSelected'] == 'upgrades') ? 'is-selected' : '') . '" href="' . $__templater->fn('link', array('account/upgrades', ), true) . '">
 						' . 'Account upgrades' . '
 					</a>
 				';
 	}
-	$__compilerTemp4 = '';
+	$__compilerTemp5 = '';
 	if ($__vars['xf']['app']['connectedAccountCount']) {
-		$__compilerTemp4 .= '
+		$__compilerTemp5 .= '
 					<a class="blockLink ' . (($__vars['pageSelected'] == 'connected_account') ? 'is-selected' : '') . '" href="' . $__templater->fn('link', array('account/connected-accounts', ), true) . '">
 						' . 'Connected accounts' . '
 					</a>
@@ -58,8 +66,9 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 					' . 'Alerts' . '
 				</a>
 				' . '
-				' . '
-' . $__compilerTemp1 . '
+				' . $__compilerTemp1 . '
+' . '
+' . $__compilerTemp2 . '
 			</div>
 
 			<h3 class="block-minorHeader">' . 'Settings' . '</h3>
@@ -77,9 +86,9 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 				<a class="blockLink ' . (($__vars['pageSelected'] == 'preferences') ? 'is-selected' : '') . '" href="' . $__templater->fn('link', array('account/preferences', ), true) . '">
 					' . 'Preferences' . '
 				</a>
-				' . $__compilerTemp2 . '
 				' . $__compilerTemp3 . '
 				' . $__compilerTemp4 . '
+				' . $__compilerTemp5 . '
 				<a class="blockLink ' . (($__vars['pageSelected'] == 'following') ? 'is-selected' : '') . '" href="' . $__templater->fn('link', array('account/following', ), true) . '">
 					' . 'Following' . '
 				</a>

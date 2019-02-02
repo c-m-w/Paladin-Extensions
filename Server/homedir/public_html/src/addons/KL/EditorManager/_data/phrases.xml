@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="utf-8"?>
+<phrases>
+  <phrase title="admin_navigation.em" version_id="0" version_string="0.0.0 Alpha"><![CDATA[Editor Manager]]></phrase>
+  <phrase title="admin_navigation.emBBCode" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[BB codes]]></phrase>
+  <phrase title="admin_navigation.emFonts" version_id="1010070" version_string="1.1.0"><![CDATA[Fonts]]></phrase>
+  <phrase title="admin_navigation.emLayout" version_id="1010070" version_string="1.1.0"><![CDATA[Toolbar layout]]></phrase>
+  <phrase title="admin_navigation.emOptions" version_id="1010070" version_string="1.1.0"><![CDATA[Options]]></phrase>
+  <phrase title="admin_navigation.emTemplates" version_id="1010070" version_string="1.1.0"><![CDATA[Public templates]]></phrase>
+  <phrase title="admin_navigation.klEMAudioProxyLog" version_id="1010033" version_string="1.1.0 Beta 3"><![CDATA[Audio proxy log]]></phrase>
+  <phrase title="admin_navigation.klEMSpecialChars" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[Special characters]]></phrase>
+  <phrase title="admin_navigation.klEMVideoProxyLog" version_id="1010033" version_string="1.1.0 Beta 3"><![CDATA[Video proxy log]]></phrase>
+  <phrase title="cron_entry.klEMGoogleFontUpdate" version_id="1000037" version_string="1.0.0 Beta 7"><![CDATA[[KL] Editor Manager - Update Google Font List]]></phrase>
+  <phrase title="kl_em_activate_special_chars_first" version_id="1000053" version_string="1.0.0 Release Candidate 2"><![CDATA[The special characters button is not enabled in the general editor options. Any changes you make here won't be visible for your users until you activate it.]]></phrase>
+  <phrase title="kl_em_active" version_id="1000032" version_string="1.0.0 Beta 2"><![CDATA[Active]]></phrase>
+  <phrase title="kl_em_add_dropdown" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[Add dropdown]]></phrase>
+  <phrase title="kl_em_add_font" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[Add font]]></phrase>
+  <phrase title="kl_em_add_template" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[Add template]]></phrase>
+  <phrase title="kl_em_aliases" version_id="1010070" version_string="1.1.0"><![CDATA[Aliases]]></phrase>
+  <phrase title="kl_em_align_justify" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[Align justify]]></phrase>
+  <phrase title="kl_em_audio" version_id="1010032" version_string="1.1.0 Beta 2"><![CDATA[Audio]]></phrase>
+  <phrase title="kl_em_audio_proxy_details" version_id="1010033" version_string="1.1.0 Beta 3"><![CDATA[Audio proxy details]]></phrase>
+  <phrase title="kl_em_audio_proxy_log" version_id="1010033" version_string="1.1.0 Beta 3"><![CDATA[Audio proxy log]]></phrase>
+  <phrase title="kl_em_available_buttons" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[Available buttons]]></phrase>
+  <phrase title="kl_em_background_color" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[Background color]]></phrase>
+  <phrase title="kl_em_bb_code_b_u_i_s_desc" version_id="1000033" version_string="1.0.0 Beta 3"><![CDATA[Applies basic formatting to the wrapped text.]]></phrase>
+  <phrase title="kl_em_bb_code_color_font_size_desc" version_id="1000033" version_string="1.0.0 Beta 3"><![CDATA[Applies advanced formatting to the wrapped text.]]></phrase>
+  <phrase title="kl_em_bb_code_help_align_example" version_id="1000033" version_string="1.0.0 Beta 3"><![CDATA[[LEFT]Left-aligned[/LEFT]
+[CENTER]Center-aligned[/CENTER]
+[RIGHT]Right-aligned[/RIGHT]
+[JUSTIFY]This is a justified text block with a long content to demonstrate the justification.[/JUSTIFY]]]></phrase>
+  <phrase title="kl_em_bb_code_help_align_title" version_id="1000033" version_string="1.0.0 Beta 3"><![CDATA[[LEFT], [CENTER], [RIGHT], [JUSTIFY] - Text alignment]]></phrase>
+  <phrase title="kl_em_bb_code_help_audio_desc" version_id="1010033" version_string="1.1.0 Beta 3"><![CDATA[Displays an audio player, using the wrapped text as URL.]]></phrase>
+  <phrase title="kl_em_bb_code_help_audio_title" version_id="1010033" version_string="1.1.0 Beta 3"><![CDATA[[AUDIO] - Audio]]></phrase>
+  <phrase title="kl_em_bb_code_help_bgcolor_example" version_id="1000033" version_string="1.0.0 Beta 3"><![CDATA[This is text with [BGCOLOR=#ffaaaa]red[/BGCOLOR] and [BGCOLOR=#aaaaff]blue[/BGCOLOR] background.]]></phrase>
+  <phrase title="kl_em_bb_code_help_bold_example" version_id="1000033" version_string="1.0.0 Beta 3"><![CDATA[This is [B]bold[/B] text.]]></phrase>
+  <phrase title="kl_em_bb_code_help_color_example" version_id="1000033" version_string="1.0.0 Beta 3"><![CDATA[This is [COLOR=red]red[/COLOR] and [COLOR=#0000cc]blue[/COLOR] text.]]></phrase>
+  <phrase title="kl_em_bb_code_help_font_example" version_id="1000033" version_string="1.0.0 Beta 3"><![CDATA[This is [FONT=Courier New]Courier New[/FONT] text.]]></phrase>
+  <phrase title="kl_em_bb_code_help_hide_desc" version_id="1000033" version_string="1.0.0 Beta 3"><![CDATA[Hide content from users depending on various circumstances. [HIDEREPLY] - Hides content until user has replied to the subject. [HIDETHANKS] - Hides content until user has liked the content. [HIDEREPLYTHANKS] - Hides content until user has replied to the subject or liked the content. [HIDEPOSTS] - Hides content until user has a certain number of posts. [HIDE] - Works like {hide}.]]></phrase>
+  <phrase title="kl_em_bb_code_help_hide_example" version_id="1000033" version_string="1.0.0 Beta 3"><![CDATA[[HIDE]You can view this content.[/HIDE]
+[HIDEREPLY]You can view this content.[/HIDEREPLY]
+[HIDETHANKS]You can view this content.[/HIDETHANKS]
+[HIDEREPLYTHANKS]You can view this content.[/HIDEREPLYTHANKS]
+[HIDEPOSTS]You can view this content.[/HIDEPOSTS]]]></phrase>
+  <phrase title="kl_em_bb_code_help_hide_title" version_id="1000033" version_string="1.0.0 Beta 3"><![CDATA[[HIDE], [HIDEREPLY], [HIDETHANKS], [HIDEPOSTS], [HIDEREPLYPOSTS] - Hide content from users]]></phrase>
+  <phrase title="kl_em_bb_code_help_ispoiler_example" version_id="1000032" version_string="1.0.0 Beta 2"><![CDATA[This is a [ISPOILER]Simple spoiler[/ISPOILER].
+This is a [ISPOILER=Spoiler]with a title[/ISPOILER].]]></phrase>
+  <phrase title="kl_em_bb_code_help_ispoiler_title" version_id="1000032" version_string="1.0.0 Beta 2"><![CDATA[[ISPOILER] - Inline text containing spoilers]]></phrase>
+  <phrase title="kl_em_bb_code_help_italic_example" version_id="1000033" version_string="1.0.0 Beta 3"><![CDATA[This is [I]italic[/I] text.]]></phrase>
+  <phrase title="kl_em_bb_code_help_separator" version_id="1000033" version_string="1.0.0 Beta 3"><![CDATA[,]]></phrase>
+  <phrase title="kl_em_bb_code_help_separator2" version_id="1000033" version_string="1.0.0 Beta 3"><![CDATA[-]]></phrase>
+  <phrase title="kl_em_bb_code_help_size_example" version_id="1000033" version_string="1.0.0 Beta 3"><![CDATA[This is [SIZE=1]small[/SIZE] and [SIZE={max}]big[/SIZE] text.]]></phrase>
+  <phrase title="kl_em_bb_code_help_strike_example" version_id="1000033" version_string="1.0.0 Beta 3"><![CDATA[This is [S]struck-through[/S] text.]]></phrase>
+  <phrase title="kl_em_bb_code_help_sub_example" version_id="1000039" version_string="1.0.0 Beta 7"><![CDATA[This text contains [SUB]subscript[/SUB].]]></phrase>
+  <phrase title="kl_em_bb_code_help_sup_example" version_id="1000039" version_string="1.0.0 Beta 7"><![CDATA[This text contains [SUP]superscript[/SUP].]]></phrase>
+  <phrase title="kl_em_bb_code_help_table_advanced_desc" version_id="1000033" version_string="1.0.0 Beta 3"><![CDATA[Changes vertical align of table cells and table header cells.]]></phrase>
+  <phrase title="kl_em_bb_code_help_table_advanced_example" version_id="1000036" version_string="1.0.0 Beta 6"><![CDATA[[TABLE][TR]
+[TD]1
+2
+3[/TD][TD=top]Top[/TD]
+[TD=middle]Middle[/TD]
+[TD=bottom]Bottom[/TD]
+[/TR][/TABLE]]]></phrase>
+  <phrase title="kl_em_bb_code_help_table_advanced_title" version_id="1000033" version_string="1.0.0 Beta 3"><![CDATA[[TH=<span class="block-textHeader-highlight">vertical align</span>], [TD=<span class="block-textHeader-highlight">vertical align</span>] - Tables (Advanced)]]></phrase>
+  <phrase title="kl_em_bb_code_help_table_classes_desc" version_id="1000036" version_string="1.0.0 Beta 6"><![CDATA[Changes the appearance of tables depending on the classes chosen. Multiple classes can be used, separated by a space.]]></phrase>
+  <phrase title="kl_em_bb_code_help_table_classes_example" version_id="1000054" version_string="1.0.0 Release Candidate 4"><![CDATA[[TABLE=nofullwidth]
+[TR][TD]A table that is not full width[/TD][/TR][/TABLE]
+
+[TABLE=center-nofullwidth]
+[TR][TD]A centered table.[/TD][/TR][/TABLE]
+
+[TABLE=right-nofullwidth]
+[TR][TD]A right aligned table.[/TD][/TR][/TABLE]
+
+[TABLE=noborder]
+[TR][TD]A table with no border.[/TD][/TR][/TABLE]
+
+[TABLE=nobackground]
+[TR][TD]A table that[/TD][/TR][TR][TD]doesn't color rows differently[/TD][/TR][/TABLE]
+
+[TABLE=collapse]
+[TR][TD]A table that[/TD][TD] has non-equal width columns.[/TD][/TR][/TABLE]]]></phrase>
+  <phrase title="kl_em_bb_code_help_table_classes_title" version_id="1000036" version_string="1.0.0 Beta 6"><![CDATA[[TABLE=class] - Tables (Advanced)]]></phrase>
+  <phrase title="kl_em_bb_code_help_table_desc" version_id="1000033" version_string="1.0.0 Beta 3"><![CDATA[Use [TR] tags to start new rows inside a table tag. Use [TD] tags to start new cells inside row tags. Use [TH] to start new table header cells inside table rows.]]></phrase>
+  <phrase title="kl_em_bb_code_help_table_example" version_id="1000033" version_string="1.0.0 Beta 3"><![CDATA[[TABLE]
+[TR]
+[TH]Header 1[/TH]
+[TH]Header 2[/TH]
+[/TR]
+[TR]
+[TD]Cell 1 1[/TD]
+[TD]Cell 1 2[/TD]
+[/TR]
+[TR]
+[TD]Cell 2 1[/TD]
+[TD]Cell 2 2[/TD]
+[/TR]
+[/TABLE]]]></phrase>
+  <phrase title="kl_em_bb_code_help_table_title" version_id="1000033" version_string="1.0.0 Beta 3"><![CDATA[[TABLE], [TR], [TH], [TD] - Tables]]></phrase>
+  <phrase title="kl_em_bb_code_help_underline_example" version_id="1000033" version_string="1.0.0 Beta 3"><![CDATA[This is [U]underlined[/U] text.]]></phrase>
+  <phrase title="kl_em_bb_code_help_video_desc" version_id="1010033" version_string="1.1.0 Beta 3"><![CDATA[Displays a video, using the wrapped text as the URL.]]></phrase>
+  <phrase title="kl_em_bb_code_help_video_example" version_id="1010033" version_string="1.1.0 Beta 3"><![CDATA[[VIDEO]{url}[/VIDEO]
+
+[VIDEO='width:300']{url}[/VIDEO]]]></phrase>
+  <phrase title="kl_em_bb_code_help_video_title" version_id="1010033" version_string="1.1.0 Beta 3"><![CDATA[[VIDEO] - Video]]></phrase>
+  <phrase title="kl_em_bb_code_sub_sup_desc" version_id="1000039" version_string="1.0.0 Beta 7"><![CDATA[Offset wrapped text.]]></phrase>
+  <phrase title="kl_em_bb_codes" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[BB codes]]></phrase>
+  <phrase title="kl_em_bgcolor_code" version_id="1000033" version_string="1.0.0 Beta 3"><![CDATA[[BGCOLOR=<span class="block-textHeader-highlight">color</span>]]]></phrase>
+  <phrase title="kl_em_blacklist" version_id="1000036" version_string="1.0.0 Beta 6"><![CDATA[Blacklist]]></phrase>
+  <phrase title="kl_em_bold" version_id="1000037" version_string="1.0.0 Beta 7"><![CDATA[Bold]]></phrase>
+  <phrase title="kl_em_bold_code" version_id="1000033" version_string="1.0.0 Beta 3"><![CDATA[[B]]]></phrase>
+  <phrase title="kl_em_bottom" version_id="1000031" version_string="1.0.0 Beta 1"><![CDATA[Bottom]]></phrase>
+  <phrase title="kl_em_browser_not_supporting_audio" version_id="1010032" version_string="1.1.0 Beta 2"><![CDATA[Your browser does not support the audio element.]]></phrase>
+  <phrase title="kl_em_browser_not_supporting_video" version_id="1010032" version_string="1.1.0 Beta 2"><![CDATA[Your browser does not support the video tag.]]></phrase>
+  <phrase title="kl_em_characters" version_id="1010070" version_string="1.1.0"><![CDATA[Characters]]></phrase>
+  <phrase title="kl_em_chose_file" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[-Chose file-]]></phrase>
+  <phrase title="kl_em_client" version_id="0" version_string="0.0.0 Alpha"><![CDATA[Clientside]]></phrase>
+  <phrase title="kl_em_client_explanation" version_id="0" version_string="0.0.0 Alpha"><![CDATA[Clientside fonts are fonts, that are already available on your users devices. The advantage is clearly, that they do not need to be downloaded to the device, when the page is loaded. However, this brings a severe disadvantage: If a user does not already have the font, it cannot be rendered for him. If none of the fonts in the font stack is available to him, his system will use the default font instead. It is recommended to carefully consider the font collection before chosing this option.]]></phrase>
+  <phrase title="kl_em_color_code" version_id="1000033" version_string="1.0.0 Beta 3"><![CDATA[[COLOR=<span class="block-textHeader-highlight">color</span>]]]></phrase>
+  <phrase title="kl_em_column" version_id="1000031" version_string="1.0.0 Beta 1"><![CDATA[Column]]></phrase>
+  <phrase title="kl_em_custom_dropdowns" version_id="1000034" version_string="1.0.0 Beta 4"><![CDATA[Dropdowns]]></phrase>
+  <phrase title="kl_em_delete_column" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[Delete column]]></phrase>
+  <phrase title="kl_em_delete_row" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[Delete row]]></phrase>
+  <phrase title="kl_em_disable_smilie_button" version_id="1000039" version_string="1.0.0 Beta 7"><![CDATA[Disable smilie button]]></phrase>
+  <phrase title="kl_em_dropdown_content" version_id="1000034" version_string="1.0.0 Beta 4"><![CDATA[Dropdown content]]></phrase>
+  <phrase title="kl_em_dropdown_edit" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[Edit dropdown]]></phrase>
+  <phrase title="kl_em_edit_font" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[Edit font]]></phrase>
+  <phrase title="kl_em_edit_template" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[Edit template]]></phrase>
+  <phrase title="kl_em_editor_manager_bb_codes" version_id="1010070" version_string="1.1.0"><![CDATA[Editor Manager BB codes]]></phrase>
+  <phrase title="kl_em_editor_templates" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[Editor templates]]></phrase>
+  <phrase title="kl_em_enable_charcounter" version_id="1000036" version_string="1.0.0 Beta 6"><![CDATA[Enable character counter]]></phrase>
+  <phrase title="kl_em_enable_external_font_polling" version_id="1000037" version_string="1.0.0 Beta 7"><![CDATA[Enable external font polling]]></phrase>
+  <phrase title="kl_em_enable_fullscreen_button" version_id="1000039" version_string="1.0.0 Beta 7"><![CDATA[Enable fullscreen button]]></phrase>
+  <phrase title="kl_em_enable_image_align" version_id="1000039" version_string="1.0.0 Beta 7"><![CDATA[Enable image alignment]]></phrase>
+  <phrase title="kl_em_enable_special_characters" version_id="1000039" version_string="1.0.0 Beta 7"><![CDATA[Enable special characters button]]></phrase>
+  <phrase title="kl_em_enabled_bbcodes" version_id="0" version_string="0.0.0 Alpha"><![CDATA[Enabled BB codes]]></phrase>
+  <phrase title="kl_em_export_special_chars" version_id="1010070" version_string="1.1.0"><![CDATA[Export special characters]]></phrase>
+  <phrase title="kl_em_external_font_list_explain" version_id="1000037" version_string="1.0.0 Beta 7"><![CDATA[If whitelist mode is enabled, this is a list of all fonts that can be used by your users via font polling. If blacklist mode is enabled instead, this is a list of all fonts that cannot be used. Separate multiple entries with line breaks.]]></phrase>
+  <phrase title="kl_em_external_font_polling_explain" version_id="1000037" version_string="1.0.0 Beta 7"><![CDATA[If enabled, users with the required permission can use Google Fonts as they wish, which will be loaded when required. This differs from integrated Google Fonts which will be loaded on all XenForo-driven pages.]]></phrase>
+  <phrase title="kl_em_external_fonts" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[External fonts]]></phrase>
+  <phrase title="kl_em_file" version_id="1000031" version_string="1.0.0 Beta 1"><![CDATA[File]]></phrase>
+  <phrase title="kl_em_font" version_id="1000033" version_string="1.0.0 Beta 3"><![CDATA[Font]]></phrase>
+  <phrase title="kl_em_font_code" version_id="1000033" version_string="1.0.0 Beta 3"><![CDATA[[FONT=<span class="block-textHeader-highlight">name</span>]]]></phrase>
+  <phrase title="kl_em_font_family" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[Font family]]></phrase>
+  <phrase title="kl_em_font_id" version_id="0" version_string="0.0.0 Alpha"><![CDATA[Font ID]]></phrase>
+  <phrase title="kl_em_font_preview_sentence" version_id="1000037" version_string="1.0.0 Beta 7"><![CDATA[Pack my box with five dozen liquor jugs.]]></phrase>
+  <phrase title="kl_em_font_sizes" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[Font sizes]]></phrase>
+  <phrase title="kl_em_font_type" version_id="0" version_string="0.0.0 Alpha"><![CDATA[Type]]></phrase>
+  <phrase title="kl_em_font_url" version_id="0" version_string="0.0.0 Alpha"><![CDATA[URL]]></phrase>
+  <phrase title="kl_em_fullscreen" version_id="1000034" version_string="1.0.0 Beta 4"><![CDATA[Fullscreen]]></phrase>
+  <phrase title="kl_em_general_options" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[General options]]></phrase>
+  <phrase title="kl_em_gfont" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[Google font]]></phrase>
+  <phrase title="kl_em_gfont_preview" version_id="1000037" version_string="1.0.0 Beta 7"><![CDATA[Preview]]></phrase>
+  <phrase title="kl_em_google_font" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[Google font]]></phrase>
+  <phrase title="kl_em_google_font_name" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[Font name]]></phrase>
+  <phrase title="kl_em_hidden_content" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[Hidden content]]></phrase>
+  <phrase title="kl_em_hide" version_id="1000032" version_string="1.0.0 Beta 2"><![CDATA[Hide]]></phrase>
+  <phrase title="kl_em_hide_default_option" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[Default hide version]]></phrase>
+  <phrase title="kl_em_hide_number_of_posts" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[Number of posts for post hide]]></phrase>
+  <phrase title="kl_em_hide_posts" version_id="1000032" version_string="1.0.0 Beta 2"><![CDATA[Hide until number of posts]]></phrase>
+  <phrase title="kl_em_hide_reply" version_id="1000032" version_string="1.0.0 Beta 2"><![CDATA[Hide until replied]]></phrase>
+  <phrase title="kl_em_hide_reply_thanks" version_id="1000032" version_string="1.0.0 Beta 2"><![CDATA[Hide until replied or liked]]></phrase>
+  <phrase title="kl_em_hide_thanks" version_id="1000032" version_string="1.0.0 Beta 2"><![CDATA[Hide until liked]]></phrase>
+  <phrase title="kl_em_horizontal_align" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[Horizontal align]]></phrase>
+  <phrase title="kl_em_hoster" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[Hosting service]]></phrase>
+  <phrase title="kl_em_icon" version_id="1000034" version_string="1.0.0 Beta 4"><![CDATA[Icon]]></phrase>
+  <phrase title="kl_em_import_from_library" version_id="1010070" version_string="1.1.0"><![CDATA[Import from library]]></phrase>
+  <phrase title="kl_em_import_special_chars" version_id="1010070" version_string="1.1.0"><![CDATA[Import special characters]]></phrase>
+  <phrase title="kl_em_included_excluded_fonts" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[Included/excluded fonts]]></phrase>
+  <phrase title="kl_em_inline_spoiler" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[Inline spoiler]]></phrase>
+  <phrase title="kl_em_insert_column_after" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[Insert column after]]></phrase>
+  <phrase title="kl_em_insert_column_before" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[Insert column before]]></phrase>
+  <phrase title="kl_em_insert_gfont" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[Insert google font]]></phrase>
+  <phrase title="kl_em_insert_row_above" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[Insert row above]]></phrase>
+  <phrase title="kl_em_insert_row_below" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[Insert row below]]></phrase>
+  <phrase title="kl_em_invalid_file" version_id="1000031" version_string="1.0.0 Beta 1"><![CDATA[Invalid font file selected. Either the file has been deleted from the server or no file has been selected.]]></phrase>
+  <phrase title="kl_em_invalid_service_url" version_id="0" version_string="0.0.0 Alpha"><![CDATA[The URL is invalid. Please ensure to select the right hosting service and ensure that the URL does look like depicted in the example.]]></phrase>
+  <phrase title="kl_em_italic_code" version_id="1000033" version_string="1.0.0 Beta 3"><![CDATA[[I]]]></phrase>
+  <phrase title="kl_em_keep_format_on_delete" version_id="1000036" version_string="1.0.0 Beta 6"><![CDATA[Keep text format on character deletion]]></phrase>
+  <phrase title="kl_em_layout" version_id="1000034" version_string="1.0.0 Beta 4"><![CDATA[Layout]]></phrase>
+  <phrase title="kl_em_layout_explanation" version_id="1000031" version_string="1.0.0 Beta 1"><![CDATA[This page allows you to define the order of buttons, that are shown in your editor toolbar. You may remove any button from any of the four toolbars by dragging it out of the toolbar. You can also add new buttons from the bar above, which holds a list of all available buttons, by dragging them to where you want to have them.]]></phrase>
+  <phrase title="kl_em_many_external_fonts_warning" version_id="1000031" version_string="1.0.0 Beta 1"><![CDATA[You are using a lot of fonts, that are either hosted from your server or external services. This will slow down your page and will have a negative impact on your user experience. You should consider to reduce the number of fonts you host from external sources.]]></phrase>
+  <phrase title="kl_em_middle" version_id="1000031" version_string="1.0.0 Beta 1"><![CDATA[Middle]]></phrase>
+  <phrase title="kl_em_mode" version_id="1000036" version_string="1.0.0 Beta 6"><![CDATA[Mode]]></phrase>
+  <phrase title="kl_em_need_x_more_posts_to_view_content" version_id="1000032" version_string="1.0.0 Beta 2"><![CDATA[You need {needs} more posts to view this content.]]></phrase>
+  <phrase title="kl_em_no_public_templates_yet" version_id="1010070" version_string="1.1.0"><![CDATA[There are no public editor templates yet.]]></phrase>
+  <phrase title="kl_em_not_allowed_to_view_this_content" version_id="1000032" version_string="1.0.0 Beta 2"><![CDATA[You are not allowed to view this content.]]></phrase>
+  <phrase title="kl_em_option_debug_mode_only" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[This option is visible in debug mode only.]]></phrase>
+  <phrase title="kl_em_parse_html" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[ParseHtml]]></phrase>
+  <phrase title="kl_em_paste_plain" version_id="1000039" version_string="1.0.0 Beta 7"><![CDATA[Remove format on paste]]></phrase>
+  <phrase title="kl_em_please_upload_valid_xml_file" version_id="1010070" version_string="1.1.0"><![CDATA[Please upload a valid XML file.]]></phrase>
+  <phrase title="kl_em_position_of_this_item" version_id="1010070" version_string="1.1.0"><![CDATA[The position of this item.]]></phrase>
+  <phrase title="kl_em_proxy_audios" version_id="1010033" version_string="1.1.0 Beta 3"><![CDATA[Proxy audios]]></phrase>
+  <phrase title="kl_em_proxy_videos" version_id="1010033" version_string="1.1.0 Beta 3"><![CDATA[Proxy videos]]></phrase>
+  <phrase title="kl_em_remove_table" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[Remove table]]></phrase>
+  <phrase title="kl_em_row" version_id="1000031" version_string="1.0.0 Beta 1"><![CDATA[Row]]></phrase>
+  <phrase title="kl_em_separator" version_id="0" version_string="0.0.0 Alpha"><![CDATA[Separator]]></phrase>
+  <phrase title="kl_em_size_code" version_id="1000033" version_string="1.0.0 Beta 3"><![CDATA[[SIZE=<span class="block-textHeader-highlight">size</span>]]]></phrase>
+  <phrase title="kl_em_sort_fonts" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[Sort fonts]]></phrase>
+  <phrase title="kl_em_sort_special_chars" version_id="1000039" version_string="1.0.0 Beta 7"><![CDATA[Sort special character categories]]></phrase>
+  <phrase title="kl_em_sort_templates" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[Sort templates]]></phrase>
+  <phrase title="kl_em_special_characters" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[Special characters]]></phrase>
+  <phrase title="kl_em_special_chars" version_id="1000039" version_string="1.0.0 Beta 7"><![CDATA[Special characters]]></phrase>
+  <phrase title="kl_em_special_chars_add" version_id="1000039" version_string="1.0.0 Beta 7"><![CDATA[Add category]]></phrase>
+  <phrase title="kl_em_special_chars_add_character" version_id="1000039" version_string="1.0.0 Beta 7"><![CDATA[Add character]]></phrase>
+  <phrase title="kl_em_special_chars_category_add" version_id="1000039" version_string="1.0.0 Beta 7"><![CDATA[Add category]]></phrase>
+  <phrase title="kl_em_special_chars_category_edit" version_id="1000039" version_string="1.0.0 Beta 7"><![CDATA[Edit category]]></phrase>
+  <phrase title="kl_em_special_chars_char" version_id="1000039" version_string="1.0.0 Beta 7"><![CDATA[Character code]]></phrase>
+  <phrase title="kl_em_special_chars_character_add" version_id="1010070" version_string="1.1.0"><![CDATA[Add character]]></phrase>
+  <phrase title="kl_em_special_chars_character_edit" version_id="1010070" version_string="1.1.0"><![CDATA[Edit character]]></phrase>
+  <phrase title="kl_em_special_chars_description" version_id="1000039" version_string="1.0.0 Beta 7"><![CDATA[Description]]></phrase>
+  <phrase title="kl_em_special_chars_edit_character" version_id="1000039" version_string="1.0.0 Beta 7"><![CDATA[Edit character]]></phrase>
+  <phrase title="kl_em_special_chars_import" version_id="1000039" version_string="1.0.0 Beta 7"><![CDATA[Import]]></phrase>
+  <phrase title="kl_em_special_chars_pre_import_explain" version_id="1010070" version_string="1.1.0"><![CDATA[Use this option to import an XML file containing special character definitions.]]></phrase>
+  <phrase title="kl_em_special_chars_pre_import_library_explain" version_id="1010070" version_string="1.1.0"><![CDATA[Use this option to import from one of the pre-defined libraries.]]></phrase>
+  <phrase title="kl_em_stock_bb_codes" version_id="1010070" version_string="1.1.0"><![CDATA[Stock BB codes]]></phrase>
+  <phrase title="kl_em_struck_through" version_id="1000033" version_string="1.0.0 Beta 3"><![CDATA[Struck-through]]></phrase>
+  <phrase title="kl_em_struck_through_code" version_id="1000033" version_string="1.0.0 Beta 3"><![CDATA[[S]]]></phrase>
+  <phrase title="kl_em_subscript" version_id="1000039" version_string="1.0.0 Beta 7"><![CDATA[Subscript]]></phrase>
+  <phrase title="kl_em_subscript_code" version_id="1000039" version_string="1.0.0 Beta 7"><![CDATA[[SUB]]]></phrase>
+  <phrase title="kl_em_superscript" version_id="1000039" version_string="1.0.0 Beta 7"><![CDATA[Superscript]]></phrase>
+  <phrase title="kl_em_superscript_code" version_id="1000039" version_string="1.0.0 Beta 7"><![CDATA[[SUP]]]></phrase>
+  <phrase title="kl_em_table" version_id="0" version_string="0.0.0 Alpha"><![CDATA[Table]]></phrase>
+  <phrase title="kl_em_table_header" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[Table header]]></phrase>
+  <phrase title="kl_em_templates" version_id="1000032" version_string="1.0.0 Beta 2"><![CDATA[Templates]]></phrase>
+  <phrase title="kl_em_text_align" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[Text align]]></phrase>
+  <phrase title="kl_em_toolbarButtons" version_id="0" version_string="0.0.0 Alpha"><![CDATA[Toolbar (> 1200px)]]></phrase>
+  <phrase title="kl_em_toolbarButtonsMD" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[Medium toolbar (1200 - 992px)]]></phrase>
+  <phrase title="kl_em_toolbarButtonsSM" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[Small toolbar (992 - 768px)]]></phrase>
+  <phrase title="kl_em_toolbarButtonsXS" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[Extra small toolbar (< 768px)]]></phrase>
+  <phrase title="kl_em_top" version_id="1000031" version_string="1.0.0 Beta 1"><![CDATA[Top]]></phrase>
+  <phrase title="kl_em_underline_code" version_id="1000033" version_string="1.0.0 Beta 3"><![CDATA[[U]]]></phrase>
+  <phrase title="kl_em_unlink_all" version_id="1000170" version_string="1.0.1"><![CDATA[Remove all links]]></phrase>
+  <phrase title="kl_em_unlink_all_links" version_id="1000170" version_string="1.0.1"><![CDATA[Remove all links]]></phrase>
+  <phrase title="kl_em_upload" version_id="0" version_string="0.0.0 Alpha"><![CDATA[Serverside]]></phrase>
+  <phrase title="kl_em_upload_explanation" version_id="1000031" version_string="1.0.0 Beta 1"><![CDATA[Serverside fonts are hosted directly from your server. You will have to manually upload these fonts to the <code class="bbCodeInline">data/fonts/</code>-directory inside your XenForo installation. Supported file types are <code class="bbCodeInline">woff2, woff, ttf, otf, eot & svg</code>. It is recommended, to provide a <code class="bbCodeInline">woff2</code> file. Your uploaded files will be matched into a set by the system and will be listed below. Ensure, that they all share the same name in order to have them listed in a single group. You will have to resave the font, if you decide to upload additional file types later on. The filename will match the font family.]]></phrase>
+  <phrase title="kl_em_use_extended_colorpicker" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[Use extended colorpicker]]></phrase>
+  <phrase title="kl_em_vertical_align" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[Vertical align]]></phrase>
+  <phrase title="kl_em_video" version_id="1010032" version_string="1.1.0 Beta 2"><![CDATA[Video]]></phrase>
+  <phrase title="kl_em_video_proxy_details" version_id="1010033" version_string="1.1.0 Beta 3"><![CDATA[Video proxy details]]></phrase>
+  <phrase title="kl_em_video_proxy_log" version_id="1010033" version_string="1.1.0 Beta 3"><![CDATA[Video proxy log]]></phrase>
+  <phrase title="kl_em_web" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[External (web)]]></phrase>
+  <phrase title="kl_em_web_explanation" version_id="0" version_string="0.0.0 Alpha"><![CDATA[External fonts are fonts, that are neither already on your clients device nor hosted on your own server. They are resources, that are located somewhere else on the web. The main advantages of using these fonts are the large choice of available fonts from different hosters, the bandwidth you save by not having to provide them to the users yourself and the likelyhood of those fonts already being in the cache of your users from a different website they visited before.]]></phrase>
+  <phrase title="kl_em_websafe_font_stacks" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[Web safe font stacks]]></phrase>
+  <phrase title="kl_em_websafe_font_stacks_description" version_id="0" version_string="0.0.0 Alpha"><![CDATA[In the following you find a list of font stacks, that are so widely spread, that the likelyhood of one of your users not having the font is very low. Due to this circumstance, they're considered to be <strong>web safe</strong> - safe to be used on your website.]]></phrase>
+  <phrase title="kl_em_where_to_find_the_url" version_id="0" version_string="0.0.0 Alpha"><![CDATA[Where to find the URL:]]></phrase>
+  <phrase title="kl_em_whitelist" version_id="1000036" version_string="1.0.0 Beta 6"><![CDATA[Whitelist]]></phrase>
+  <phrase title="kl_em_you_need_to_like_or_reply_to_this" version_id="1000032" version_string="1.0.0 Beta 2"><![CDATA[You need to like or reply to this in order to see this content.]]></phrase>
+  <phrase title="kl_em_you_need_to_like_this" version_id="1000032" version_string="1.0.0 Beta 2"><![CDATA[You need to like this in order to view this content.]]></phrase>
+  <phrase title="kl_em_you_need_to_reply_to_this" version_id="1000032" version_string="1.0.0 Beta 2"><![CDATA[You need to reply to this in order to see this content.]]></phrase>
+  <phrase title="option.kLEMVideoCacheRefresh" version_id="1010033" version_string="1.1.0 Beta 3"><![CDATA[Video cache refresh]]></phrase>
+  <phrase title="option.klEMAudioCacheRefresh" version_id="1010033" version_string="1.1.0 Beta 3"><![CDATA[Audio cache refresh]]></phrase>
+  <phrase title="option.klEMAudioCacheTTL" version_id="1010033" version_string="1.1.0 Beta 3"><![CDATA[Audio cache lifetime]]></phrase>
+  <phrase title="option.klEMAudioProxyMaxSize" version_id="1010033" version_string="1.1.0 Beta 3"><![CDATA[Audio cache max size]]></phrase>
+  <phrase title="option.klEMColorStep" version_id="1000039" version_string="1.0.0 Beta 7"><![CDATA[Colors per row]]></phrase>
+  <phrase title="option.klEMColors" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[Available colors]]></phrase>
+  <phrase title="option.klEMDefaultHide" version_id="1000037" version_string="1.0.0 Beta 7"><![CDATA[Default hide version]]></phrase>
+  <phrase title="option.klEMEnabledBBCodes" version_id="1000037" version_string="1.0.0 Beta 7"><![CDATA[Enabled BB Codes]]></phrase>
+  <phrase title="option.klEMExternalFontPolling" version_id="1000037" version_string="1.0.0 Beta 7"><![CDATA[Enable external font polling]]></phrase>
+  <phrase title="option.klEMFontSizes" version_id="1000037" version_string="1.0.0 Beta 7"><![CDATA[Pre-defined font sizes]]></phrase>
+  <phrase title="option.klEMGeneralOptions" version_id="1000037" version_string="1.0.0 Beta 7"><![CDATA[General options]]></phrase>
+  <phrase title="option.klEMGoogleApiKey" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[Google fonts API key]]></phrase>
+  <phrase title="option.klEMHexColor" version_id="1010033" version_string="1.1.0 Beta 3"><![CDATA[Enable hex color input]]></phrase>
+  <phrase title="option.klEMHideControllers" version_id="1010033" version_string="1.1.0 Beta 3"><![CDATA[Hide controller]]></phrase>
+  <phrase title="option.klEMImageAlignment" version_id="1010033" version_string="1.1.0 Beta 3"><![CDATA[Enable image alignment]]></phrase>
+  <phrase title="option.klEMImageDimensions" version_id="1010033" version_string="1.1.0 Beta 3"><![CDATA[Enable image resizing]]></phrase>
+  <phrase title="option.klEMLateLoad" version_id="1010033" version_string="1.1.0 Beta 3"><![CDATA[Delay load]]></phrase>
+  <phrase title="option.klEMLayout" version_id="1000291" version_string="1.0.2 Patch Level 1"><![CDATA[Editor toolbar layout]]></phrase>
+  <phrase title="option.klEMMaxFontSize" version_id="1000037" version_string="1.0.0 Beta 7"><![CDATA[Maximum manual font size]]></phrase>
+  <phrase title="option.klEMMinFontSize" version_id="1000037" version_string="1.0.0 Beta 7"><![CDATA[Minimum manual font size]]></phrase>
+  <phrase title="option.klEMProxy" version_id="1010033" version_string="1.1.0 Beta 3"><![CDATA[Video & audio proxy]]></phrase>
+  <phrase title="option.klEMVideoAudioProxyLogLength" version_id="1010033" version_string="1.1.0 Beta 3"><![CDATA[Audio and video proxy log length]]></phrase>
+  <phrase title="option.klEMVideoAudioProxyReferrer" version_id="1010033" version_string="1.1.0 Beta 3"><![CDATA[Log audio and video proxy referrers for x days:]]></phrase>
+  <phrase title="option.klEMVideoCacheTTL" version_id="1010033" version_string="1.1.0 Beta 3"><![CDATA[Video cache lifetime]]></phrase>
+  <phrase title="option.klEMVideoProxyMaxSize" version_id="1010033" version_string="1.1.0 Beta 3"><![CDATA[Video cache max size]]></phrase>
+  <phrase title="option_explain.kLEMVideoCacheRefresh" version_id="1010033" version_string="1.1.0 Beta 3"><![CDATA[If a value greater than 0 is entered, images cached by the video proxy will be refreshed after this many days have passed. This can be used in conjunction with a long cache lifetime to allow videos to be updated periodically while retaining resilience against the video being removed. If a value of 0 is entered, videos will only be updated when the cache entry expires.]]></phrase>
+  <phrase title="option_explain.klEMAudioCacheRefresh" version_id="1010033" version_string="1.1.0 Beta 3"><![CDATA[If a value greater than 0 is entered, audios cached by the audio proxy will be refreshed after this many days have passed. This can be used in conjunction with a long cache lifetime to allow audios to be updated periodically while retaining resilience against the audio being removed. If a value of 0 is entered, audios will only be updated when the cache entry expires.]]></phrase>
+  <phrase title="option_explain.klEMAudioCacheTTL" version_id="1010033" version_string="1.1.0 Beta 3"><![CDATA[Enter the number of days that proxied audios should be retained for, before they are removed from your system. If the audio is re-requested after this time, it will automatically be fetched again. Use 0 to retain the audios indefinitely.]]></phrase>
+  <phrase title="option_explain.klEMAudioProxyMaxSize" version_id="1010033" version_string="1.1.0 Beta 3"><![CDATA[This is the maximum file size for audios that are displayed through the audio proxy system. An audio larger than this will return a placeholder audio instead. You may use 0 to disable the limit.]]></phrase>
+  <phrase title="option_explain.klEMColorStep" version_id="1000039" version_string="1.0.0 Beta 7"><![CDATA[The number of colors per row in the editor color select dropdown.]]></phrase>
+  <phrase title="option_explain.klEMColors" version_id="1010033" version_string="1.1.0 Beta 3"><![CDATA[The set of available colors to pick from using the color picker dropdown. To remove a color, leave the value empty. The REMOVE button will automatically be added to the end of the list.]]></phrase>
+  <phrase title="option_explain.klEMDefaultHide" version_id="1000037" version_string="1.0.0 Beta 7"><![CDATA[The hide-version the default [hide] code will act like.]]></phrase>
+  <phrase title="option_explain.klEMEnabledBBCodes" version_id="1000037" version_string="1.0.0 Beta 7"><![CDATA[]]></phrase>
+  <phrase title="option_explain.klEMExternalFontPolling" version_id="1000037" version_string="1.0.0 Beta 7"><![CDATA[If enabled, users that have been granted the permission will be able to utilize the whole Google Fonts library in their BB code content, no matter if they have been integrated into your web page or not. If they're not already included, they will be loaded on demand.]]></phrase>
+  <phrase title="option_explain.klEMFontSizes" version_id="1000037" version_string="1.0.0 Beta 7"><![CDATA[Available sizes in the editor font size dropdown, separated by comma.]]></phrase>
+  <phrase title="option_explain.klEMGeneralOptions" version_id="1000037" version_string="1.0.0 Beta 7"><![CDATA[]]></phrase>
+  <phrase title="option_explain.klEMGoogleApiKey" version_id="1000037" version_string="1.0.0 Beta 7"><![CDATA[If you enter a Google Font API key here, your board will be able to automatically update the google fonts list by itself once a week and provider your users with suggestions when they search for a google font in the BB Code editor.]]></phrase>
+  <phrase title="option_explain.klEMHexColor" version_id="1010070" version_string="1.1.0"><![CDATA[If enabled, will show a hex color code input, allowing users to chose their own text color.]]></phrase>
+  <phrase title="option_explain.klEMHideControllers" version_id="1010033" version_string="1.1.0 Beta 3"><![CDATA[<strong>This is an advanced option.</strong> It is recommended to only edit it if you know exactly what you're doing. Adding controllers here will not make the hide BB code magically work on non-forum routes, but allows you to add additional controllers from 3rd party add-ons that add functionality to threads where the hide Bb code will not be hidden. One entry per line.]]></phrase>
+  <phrase title="option_explain.klEMImageAlignment" version_id="1010033" version_string="1.1.0 Beta 3"><![CDATA[When enabled, the image Bb Code will support optional parameters that allows people to align the images they include into their posts manually.]]></phrase>
+  <phrase title="option_explain.klEMImageDimensions" version_id="1010033" version_string="1.1.0 Beta 3"><![CDATA[When enabled, the image Bb Code will support optional parameters that allows people to resize the images they include into their posts manually.]]></phrase>
+  <phrase title="option_explain.klEMLateLoad" version_id="1000039" version_string="1.0.0 Beta 7"><![CDATA[If enabled, a placeholder will be shown and the editor will only load, if the user clicks into the placeholder area. This will speed up page load.]]></phrase>
+  <phrase title="option_explain.klEMLayout" version_id="1000037" version_string="1.0.0 Beta 7"><![CDATA[The editor toolbar layout. It is recommended to edit this option from <a href="admin.php?em/layout/">here</a>.]]></phrase>
+  <phrase title="option_explain.klEMMaxFontSize" version_id="1000037" version_string="1.0.0 Beta 7"><![CDATA[The maximum font size that can be specified (in pixel). 0 for no limit.]]></phrase>
+  <phrase title="option_explain.klEMMinFontSize" version_id="1000037" version_string="1.0.0 Beta 7"><![CDATA[The minimum font size that can be specified (in pixel).]]></phrase>
+  <phrase title="option_explain.klEMProxy" version_id="1010033" version_string="1.1.0 Beta 3"><![CDATA[By enabling these options, you may proxy and cache videos and audios posted in messages through your own server, allowing tracking of clicks etc. This is especially important if you are running your site through SSL (HTTPS).]]></phrase>
+  <phrase title="option_explain.klEMVideoAudioProxyLogLength" version_id="1010033" version_string="1.1.0 Beta 3"><![CDATA[This option controls the length of time for which the proxy logs will be maintained after the last request made to an audio or a video. If an entry is not requested for this amount of time, its data (including first request time and total accesses) will be removed. Proxy logs will never be removed unless the audio or video data has been removed (Audio/video cache lifetime). Use 0 to disable pruning of the logs.]]></phrase>
+  <phrase title="option_explain.klEMVideoAudioProxyReferrer" version_id="1010033" version_string="1.1.0 Beta 3"><![CDATA[If enabled, whenever a proxied audio or video is accessed, referrer information will be maintained. This can be viewed in the logs to determine where the audio or video has been mentioned. Use 0 to keep the referrer data forever.]]></phrase>
+  <phrase title="option_explain.klEMVideoCacheTTL" version_id="1010033" version_string="1.1.0 Beta 3"><![CDATA[Enter the number of days that proxied videos should be retained for, before they are removed from your system. If the video is re-requested after this time, it will automatically be fetched again. Use 0 to retain the videos indefinitely.]]></phrase>
+  <phrase title="option_explain.klEMVideoProxyMaxSize" version_id="1010033" version_string="1.1.0 Beta 3"><![CDATA[This is the maximum file size for videos that are displayed through the image proxy system. A video larger than this will return a placeholder video instead. You may use 0 to disable the limit.]]></phrase>
+  <phrase title="option_group.klEM" version_id="1000037" version_string="1.0.0 Beta 7"><![CDATA[Editor & BB code options]]></phrase>
+  <phrase title="option_group_description.klEM" version_id="1000037" version_string="1.0.0 Beta 7"><![CDATA[Options centered around the Froala Editor and the BB code engine.]]></phrase>
+  <phrase title="permission.klEM_klEMBypassHide" version_id="1000032" version_string="1.0.0 Beta 2"><![CDATA[Bypass Hide BB Codes]]></phrase>
+  <phrase title="permission.klEM_klEMHTMLBBC" version_id="1000032" version_string="1.0.0 Beta 2"><![CDATA[Use HTML BB Code]]></phrase>
+  <phrase title="permission.klEM_klEMHidePostCount" version_id="1000032" version_string="1.0.0 Beta 2"><![CDATA[Postcount for hides]]></phrase>
+  <phrase title="permission.klEM_klEMPrivateTemplates" version_id="1000032" version_string="1.0.0 Beta 2"><![CDATA[Create private templates]]></phrase>
+  <phrase title="permission.klEM_klEMPrivateTemplatesMax" version_id="1000032" version_string="1.0.0 Beta 2"><![CDATA[Maximum private templates]]></phrase>
+  <phrase title="permission.klEM_klEMPublicTemplates" version_id="1000032" version_string="1.0.0 Beta 2"><![CDATA[Use public templates]]></phrase>
+  <phrase title="permission.klEM_klEMTemplates" version_id="1000032" version_string="1.0.0 Beta 2"><![CDATA[Use template system]]></phrase>
+  <phrase title="permission.klEM_klEMUseGoogleFonts" version_id="1000036" version_string="1.0.0 Beta 6"><![CDATA[Use all Google Webfonts]]></phrase>
+  <phrase title="permission_interface.klEM" version_id="1000032" version_string="1.0.0 Beta 2"><![CDATA[Editor Manager permissions]]></phrase>
+  <phrase title="permission_interface.klEMModerator" version_id="1000033" version_string="1.0.0 Beta 3"><![CDATA[Editor Manager moderator permissions]]></phrase>
+  <phrase title="style_prop.klEMAudioControls" version_id="1010032" version_string="1.1.0 Beta 2"><![CDATA[BB code block - audio controls]]></phrase>
+  <phrase title="style_prop.klEMCharCounter" version_id="1000170" version_string="1.0.1"><![CDATA[[KL] Editor Manager - Character Counter]]></phrase>
+  <phrase title="style_prop.klEMHideHidden" version_id="1000032" version_string="1.0.0 Beta 2"><![CDATA[BB code block - hide (hidden)]]></phrase>
+  <phrase title="style_prop.klEMHideShown" version_id="1000032" version_string="1.0.0 Beta 2"><![CDATA[BB code block - hide (shown)]]></phrase>
+  <phrase title="style_prop.klEMTableAlternatingCell" version_id="0" version_string="0.0.0 Alpha"><![CDATA[BB code block - table alternating cell]]></phrase>
+  <phrase title="style_prop.klEMTableBlock" version_id="0" version_string="0.0.0 Alpha"><![CDATA[BB code block - table]]></phrase>
+  <phrase title="style_prop.klEMTableCell" version_id="0" version_string="0.0.0 Alpha"><![CDATA[BB code block - table cell]]></phrase>
+  <phrase title="style_prop.klEMTableTH" version_id="0" version_string="0.0.0 Alpha"><![CDATA[BB code block - table header]]></phrase>
+  <phrase title="style_prop.klEMVideoAudioControls" version_id="1010032" version_string="1.1.0 Beta 2"><![CDATA[BB code block - video & audio buttons (hover)]]></phrase>
+  <phrase title="style_prop.klEMVideoAudioProgress" version_id="1010032" version_string="1.1.0 Beta 2"><![CDATA[BB code block - video & audio range slider]]></phrase>
+  <phrase title="style_prop.klEMVideoAudioTooltip" version_id="1010032" version_string="1.1.0 Beta 2"><![CDATA[BB code block - video & audio tooltips]]></phrase>
+  <phrase title="style_prop.klEMVideoControls" version_id="1010032" version_string="1.1.0 Beta 2"><![CDATA[BB code block - video controls]]></phrase>
+  <phrase title="style_prop.klEMiSpoiler" version_id="1010070" version_string="1.1.0"><![CDATA[BB code block - inline spoiler]]></phrase>
+  <phrase title="style_prop.klEMiSpoilerButton" version_id="1000031" version_string="1.0.0 Beta 1"><![CDATA[BB code block - inline spoiler button]]></phrase>
+  <phrase title="style_prop.klEMiSpoilerButtonActive" version_id="1000031" version_string="1.0.0 Beta 1"><![CDATA[BB code block - inline spoiler button (active)]]></phrase>
+  <phrase title="style_prop.klEMiSpoilerButtonIcon" version_id="1000031" version_string="1.0.0 Beta 1"><![CDATA[BB code block - inline spoiler button icon]]></phrase>
+  <phrase title="style_prop.klEMiSpoilerButtonIconActive" version_id="1000031" version_string="1.0.0 Beta 1"><![CDATA[BB code block - inline spoiler button icon (active)]]></phrase>
+  <phrase title="style_prop.klEMiSpoilerButtonTitle" version_id="1000031" version_string="1.0.0 Beta 1"><![CDATA[BB code block - inline spoiler button title]]></phrase>
+  <phrase title="style_prop.klEMiSpoilerContent" version_id="1000031" version_string="1.0.0 Beta 1"><![CDATA[BB code block - inline spoiler content]]></phrase>
+  <phrase title="style_prop.klEMiSpoilerContentActive" version_id="1000031" version_string="1.0.0 Beta 1"><![CDATA[BB code block - inline spoiler content (active)]]></phrase>
+  <phrase title="style_prop_desc.klEMAudioControls" version_id="1010032" version_string="1.1.0 Beta 2"><![CDATA[]]></phrase>
+  <phrase title="style_prop_desc.klEMCharCounter" version_id="1000170" version_string="1.0.1"><![CDATA[Styling properties for the character counter.]]></phrase>
+  <phrase title="style_prop_desc.klEMHideHidden" version_id="1000032" version_string="1.0.0 Beta 2"><![CDATA[Special styling rules for the hide BB codes ([HIDE], [HIDEREPLY], [HIDETHANKS], [HIDEREPLYTHANKS], [HIDEPOSTS]) content in hidden state.]]></phrase>
+  <phrase title="style_prop_desc.klEMHideShown" version_id="1000032" version_string="1.0.0 Beta 2"><![CDATA[Special styling rules for the hide BB codes ([HIDE], [HIDEREPLY], [HIDETHANKS], [HIDEREPLYTHANKS], [HIDEPOSTS]) content in shown state.]]></phrase>
+  <phrase title="style_prop_desc.klEMTableAlternatingCell" version_id="0" version_string="0.0.0 Alpha"><![CDATA[Extra design for the cells in every 2nd row.]]></phrase>
+  <phrase title="style_prop_desc.klEMTableBlock" version_id="0" version_string="0.0.0 Alpha"><![CDATA[Special styling rules for table ([TABLE]) elements.]]></phrase>
+  <phrase title="style_prop_desc.klEMTableCell" version_id="1000031" version_string="1.0.0 Beta 1"><![CDATA[Special styling rules for table cell ([TD], [TH]) elements.]]></phrase>
+  <phrase title="style_prop_desc.klEMTableTH" version_id="1000031" version_string="1.0.0 Beta 1"><![CDATA[Special styling rules for table header cell ([TH]) elements.]]></phrase>
+  <phrase title="style_prop_desc.klEMVideoAudioControls" version_id="1010032" version_string="1.1.0 Beta 2"><![CDATA[]]></phrase>
+  <phrase title="style_prop_desc.klEMVideoAudioProgress" version_id="1010032" version_string="1.1.0 Beta 2"><![CDATA[]]></phrase>
+  <phrase title="style_prop_desc.klEMVideoAudioTooltip" version_id="1010032" version_string="1.1.0 Beta 2"><![CDATA[]]></phrase>
+  <phrase title="style_prop_desc.klEMVideoControls" version_id="1010032" version_string="1.1.0 Beta 2"><![CDATA[]]></phrase>
+  <phrase title="style_prop_desc.klEMiSpoiler" version_id="1010070" version_string="1.1.0"><![CDATA[Special styling rules for the inline spoiler ([ISPOILER]) container.]]></phrase>
+  <phrase title="style_prop_desc.klEMiSpoilerButton" version_id="1000031" version_string="1.0.0 Beta 1"><![CDATA[Special styling rules for the inline spoiler ([ISPOILER]) show/hide toggle button.]]></phrase>
+  <phrase title="style_prop_desc.klEMiSpoilerButtonActive" version_id="1000031" version_string="1.0.0 Beta 1"><![CDATA[Special styling rules for the inline spoiler ([ISPOILER]) show/hide toggle button in active state.]]></phrase>
+  <phrase title="style_prop_desc.klEMiSpoilerButtonIcon" version_id="1000031" version_string="1.0.0 Beta 1"><![CDATA[Special styling rules for the inline spoiler ([ISPOILER]) show/hide toggle button icon.]]></phrase>
+  <phrase title="style_prop_desc.klEMiSpoilerButtonIconActive" version_id="1000031" version_string="1.0.0 Beta 1"><![CDATA[Special styling rules for the inline spoiler ([ISPOILER]) show/hide toggle button icon in active state.]]></phrase>
+  <phrase title="style_prop_desc.klEMiSpoilerButtonTitle" version_id="1000031" version_string="1.0.0 Beta 1"><![CDATA[Special styling rules for the inline spoiler ([ISPOILER]) title.]]></phrase>
+  <phrase title="style_prop_desc.klEMiSpoilerContent" version_id="1000031" version_string="1.0.0 Beta 1"><![CDATA[Special styling rules for the inline spoiler ([ISPOILER]) content.]]></phrase>
+  <phrase title="style_prop_desc.klEMiSpoilerContentActive" version_id="1000031" version_string="1.0.0 Beta 1"><![CDATA[Special styling rules for the inline spoiler ([ISPOILER]) content in active state.]]></phrase>
+</phrases>

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<style_properties>
+  <style_property property_name="klEMAudioControls" group_name="bbCode" title="BB code block - audio controls" property_type="css" display_order="21100" css_components="text,background,border,border_radius,padding,extra">
+    <value>{
+    "color": "@xf-textColorDimmed",
+    "border-radius": "inherit",
+    "padding": "10px"
+}</value>
+  </style_property>
+  <style_property property_name="klEMCharCounter" group_name="rte" title="[KL] Editor Manager - Character Counter" description="Styling properties for the character counter." property_type="css" display_order="1200" css_components="text,background,border,border_radius,padding,extra">
+    <value>{
+    "font-size": "15px",
+    "color": "#ccc",
+    "background-color": "#fff",
+    "border-top-width": "1px",
+    "border-top-color": "#ebebeb",
+    "border-top-left-radius": "2px",
+    "border-top-right-radius": "0",
+    "border-bottom-right-radius": "0",
+    "border-left-width": "1px",
+    "border-left-color": "#ebebeb",
+    "padding": "5px",
+    "extra": "position: absolute;\nbottom: 0;\nright: 0;\ncontent: attr(data-chars);\nfont-family: \"Times New Roman\", Georgia, Serif;\nz-index: 1;\nbackground-clip: padding-box;"
+}</value>
+  </style_property>
+  <style_property property_name="klEMHideHidden" group_name="bbCode" title="BB code block - hide (hidden)" description="Special styling rules for the hide BB codes ([HIDE], [HIDEREPLY], [HIDETHANKS], [HIDEREPLYTHANKS], [HIDEPOSTS]) content in hidden state." property_type="css" display_order="20800" css_components="text,background,border,border_radius,padding,extra">
+    <value>{
+    "border-left-color": "rgb(156, 47, 47)"
+}</value>
+  </style_property>
+  <style_property property_name="klEMHideShown" group_name="bbCode" title="BB code block - hide (shown)" description="Special styling rules for the hide BB codes ([HIDE], [HIDEREPLY], [HIDETHANKS], [HIDEREPLYTHANKS], [HIDEPOSTS]) content in shown state." property_type="css" display_order="20810" css_components="text,background,border,border_radius,padding,extra">
+    <value>{
+    "border-left-color": "rgb(30, 148, 46)"
+}</value>
+  </style_property>
+  <style_property property_name="klEMTableAlternatingCell" group_name="bbCode" title="BB code block - table alternating cell" description="Extra design for the cells in every 2nd row." property_type="css" display_order="20630" css_components="text,background,border,extra">
+    <value>{
+    "background-color": "@xf-contentAltBg"
+}</value>
+  </style_property>
+  <style_property property_name="klEMTableBlock" group_name="bbCode" title="BB code block - table" description="Special styling rules for table ([TABLE]) elements." property_type="css" display_order="20600" css_components="text,background,border,extra">
+    <value>{
+    "extra": "border: none;\nborder-collapse: collapse;\nempty-cells: show;\nmax-width: 100%;"
+}</value>
+  </style_property>
+  <style_property property_name="klEMTableCell" group_name="bbCode" title="BB code block - table cell" description="Special styling rules for table cell ([TD], [TH]) elements." property_type="css" display_order="20620" css_components="text,background,border,extra">
+    <value>{
+    "background-color": "@xf-contentBg",
+    "border-width": "@xf-borderSize",
+    "border-color": "@xf-borderColorLight"
+}</value>
+  </style_property>
+  <style_property property_name="klEMTableTH" group_name="bbCode" title="BB code block - table header" description="Special styling rules for table header cell ([TH]) elements." property_type="css" display_order="20610" css_components="text,background,border,extra">
+    <value>{
+    "background-color": "@xf-contentHighlightBg",
+    "border-bottom-width": "@xf-borderSize",
+    "border-bottom-color": "@xf-borderColorFeature"
+}</value>
+  </style_property>
+  <style_property property_name="klEMVideoAudioControls" group_name="bbCode" title="BB code block - video &amp; audio buttons (hover)" property_type="css" display_order="21005" css_components="text,background">
+    <value>{
+    "color": "@xf-paletteNeutral1",
+    "background-color": "@xf-paletteColor5"
+}</value>
+  </style_property>
+  <style_property property_name="klEMVideoAudioProgress" group_name="bbCode" title="BB code block - video &amp; audio range slider" property_type="css" display_order="21010" css_components="text">
+    <value>{
+    "color": "@xf-paletteColor5"
+}</value>
+  </style_property>
+  <style_property property_name="klEMVideoAudioTooltip" group_name="bbCode" title="BB code block - video &amp; audio tooltips" property_type="css" display_order="21020" css_components="text,background,border,border_radius,padding,extra">
+    <value>{
+    "font-size": "14px",
+    "color": "@xf-paletteNeutral1",
+    "font-weight": "@xf-fontWeightNormal",
+    "background-color": "fade(@xf-paletteNeutral3, 80%)",
+    "border-radius": "3px",
+    "padding-top": "5px",
+    "padding-right": "7.5px",
+    "padding-bottom": "5px",
+    "padding-left": "7.5px",
+    "extra": "bottom: 100%;\nbox-shadow: 0 1px 2px rgba(0, 0, 0, .15);\nline-height: 1.3;\nmargin-bottom: 10px;\nopacity: 0;\npointer-events: none;\nposition: absolute;\ntransform: translate(-50%, 10px) scale(.8);\ntransform-origin: 50% 100%;\ntransition: transform .2s .1s ease, opacity .2s .1s ease;\nwhite-space: nowrap;\nz-index: 2"
+}</value>
+  </style_property>
+  <style_property property_name="klEMVideoControls" group_name="bbCode" title="BB code block - video controls" property_type="css" display_order="21200" css_components="text,background,border,border_radius,padding,extra">
+    <value>{
+    "color": "@xf-paletteNeutral1",
+    "background-color": "linear-gradient(transparent, rgba(0, 0, 0, .7))",
+    "padding-top": "35px",
+    "padding-right": "10px",
+    "padding-bottom": "10px",
+    "padding-left": "10px",
+    "extra": "border-bottom-left-radius: inherit;\nborder-bottom-right-radius: inherit;\nposition: absolute;\nbottom: 0;\nleft: 0;\nright: 0;\ntransition: opacity .4s ease-in-out, transform .4s ease-in-out;\nz-index: 2"
+}</value>
+  </style_property>
+  <style_property property_name="klEMiSpoiler" group_name="bbCode" title="BB code block - inline spoiler" description="Special styling rules for the inline spoiler ([ISPOILER]) container." property_type="css" display_order="20699" css_components="text,background,border,border_radius,padding,extra">
+    <value>{
+    "font-size": "@xf-fontSizeNormal"
+}</value>
+  </style_property>
+  <style_property property_name="klEMiSpoilerButton" group_name="bbCode" title="BB code block - inline spoiler button" description="Special styling rules for the inline spoiler ([ISPOILER]) show/hide toggle button." property_type="css" display_order="20700" css_components="text,background,border,border_radius,padding,extra">
+    <value>{
+    "color": "@xf-paletteNeutral1",
+    "background-color": "@xf-paletteColor5",
+    "border-width": "0",
+    "border-top-left-radius": "5px",
+    "border-bottom-left-radius": "5px",
+    "padding-top": "2px",
+    "padding-right": "5px",
+    "padding-bottom": "2px",
+    "padding-left": "5px"
+}</value>
+  </style_property>
+  <style_property property_name="klEMiSpoilerButtonActive" group_name="bbCode" title="BB code block - inline spoiler button (active)" description="Special styling rules for the inline spoiler ([ISPOILER]) show/hide toggle button in active state." property_type="css" display_order="20710" css_components="text,background,border,padding,extra">
+    <value>[]</value>
+  </style_property>
+  <style_property property_name="klEMiSpoilerButtonIcon" group_name="bbCode" title="BB code block - inline spoiler button icon" description="Special styling rules for the inline spoiler ([ISPOILER]) show/hide toggle button icon." property_type="css" display_order="20720" css_components="text,background,border,padding,extra">
+    <value>{
+    "padding-right": "3px",
+    "extra": "font-family: 'FontAwesome';\ncontent: '\\f070';"
+}</value>
+  </style_property>
+  <style_property property_name="klEMiSpoilerButtonIconActive" group_name="bbCode" title="BB code block - inline spoiler button icon (active)" description="Special styling rules for the inline spoiler ([ISPOILER]) show/hide toggle button icon in active state." property_type="css" display_order="20730" css_components="text,background,border,padding,extra">
+    <value>{
+    "extra": "content: \"\\f06e\";"
+}</value>
+  </style_property>
+  <style_property property_name="klEMiSpoilerButtonTitle" group_name="bbCode" title="BB code block - inline spoiler button title" description="Special styling rules for the inline spoiler ([ISPOILER]) title." property_type="css" display_order="20740" css_components="text,background,border,padding,extra">
+    <value>[]</value>
+  </style_property>
+  <style_property property_name="klEMiSpoilerContent" group_name="bbCode" title="BB code block - inline spoiler content" description="Special styling rules for the inline spoiler ([ISPOILER]) content." property_type="css" display_order="20750" css_components="text,background,border,border_radius,padding,extra">
+    <value>{
+    "color": "@xf-paletteColor5",
+    "background-color": "@xf-paletteColor5",
+    "border-width": "1px",
+    "border-color": "@xf-paletteColor5",
+    "border-top-right-radius": "5px",
+    "border-bottom-right-radius": "5px",
+    "padding-top": "1px",
+    "padding-right": "4px",
+    "padding-bottom": "2.5px",
+    "padding-left": "4px",
+    "extra": "margin-left: -5px;\ntransition: color 250ms, background 250ms;\n-webkit-user-select: none;\n-moz-user-select: none;\n-ms-user-select: none;\nuser-select: none;\ncursor: not-allowed;"
+}</value>
+  </style_property>
+  <style_property property_name="klEMiSpoilerContentActive" group_name="bbCode" title="BB code block - inline spoiler content (active)" description="Special styling rules for the inline spoiler ([ISPOILER]) content in active state." property_type="css" display_order="20760" css_components="text,background,border,padding,extra">
+    <value>{
+    "color": "@xf-textColor",
+    "background-color": "transparent",
+    "extra": "-webkit-user-select: text;\n-moz-user-select: text;\n-ms-user-select: text;\nuser-select: text;\ncursor: auto;"
+}</value>
+  </style_property>
+</style_properties>

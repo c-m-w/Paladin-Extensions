@@ -33,7 +33,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	' . '
 ' . $__templater->includeTemplate('mjst_editor_pre_reply', $__vars) . '
 
-	<script class="js-editorLanguage" type="application/json">
+	' . $__templater->includeTemplate('kl_em_editor', $__vars) . '
+<script class="js-editorLanguage" type="application/json">
 		{
 			"Align Center": "' . $__templater->filter('Align center', array(array('escape', array('json', )),), true) . '",
 			"Align Left": "' . $__templater->filter('Align left', array(array('escape', array('json', )),), true) . '",
@@ -86,7 +87,8 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 			"Ctrl": "' . $__templater->filter('Ctrl', array(array('escape', array('json', )),), true) . '",
 			"Shift": "' . $__templater->filter('Shift', array(array('escape', array('json', )),), true) . '",
 			"Alt": "' . $__templater->filter('Alt', array(array('escape', array('json', )),), true) . '",
-			"__lang end__": ""
+			' . $__templater->includeTemplate('kl_em_editor_phrases', $__vars) . '
+"__lang end__": ""
 		}
 	</script>
 

@@ -1,0 +1,360 @@
+AWSTATS DATA FILE 7.6 (build 20161204)
+# If you remove this file, all statistics for date 201902 will be lost/reset.
+# Last config file used to build this data file was /home/palavpvb/tmp/awstats/ssl/awstats.paladin-extensions.com.conf.
+
+# Position (offset in bytes) in this file for beginning of each section for
+# direct I/O access. If you made changes somewhere in this file, you should
+# also remove completely the MAP section (AWStats will rewrite it at next
+# update).
+BEGIN_MAP 28
+POS_GENERAL 2023                
+POS_TIME 2709                
+POS_VISITOR 3459                
+POS_DAY 4321                
+POS_DOMAIN 4476                
+POS_LOGIN 4746                
+POS_ROBOT 4901                
+POS_WORMS 5220                
+POS_EMAILSENDER 5351                
+POS_EMAILRECEIVER 5494                
+POS_SESSION 5570                
+POS_SIDER 5754                
+POS_FILETYPES 8545                
+POS_DOWNLOADS 8864                
+POS_OS 8961                
+POS_BROWSER 9104                
+POS_SCREENSIZE 9319                
+POS_UNKNOWNREFERER 9393                
+POS_UNKNOWNREFERERBROWSER 9523                
+POS_ORIGIN 9648                
+POS_SEREFERRALS 9786                
+POS_PAGEREFS 9949                
+POS_SEARCHWORDS 10097               
+POS_KEYWORDS 10249               
+POS_MISC 2373                
+POS_ERRORS 10308               
+POS_CLUSTER 4602                
+POS_SIDER_404 10427               
+END_MAP
+
+# LastLine    = Date of last record processed - Last record line number in last log - Last record offset in last log - Last record signature value
+# FirstTime   = Date of first visit for history file
+# LastTime    = Date of last visit for history file
+# LastUpdate  = Date of last update - Nb of parsed records - Nb of parsed old records - Nb of parsed new records - Nb of parsed corrupted - Nb of parsed dropped
+# TotalVisits = Number of visits
+# TotalUnique = Number of unique visitors
+# MonthHostsKnown   = Number of hosts known
+# MonthHostsUnKnown = Number of hosts unknown
+BEGIN_GENERAL 8
+LastLine 20190201071239 8824 3032315 9682934540917
+FirstTime 20190201000000
+LastTime 20190201070658
+LastUpdate 20190201073205 8824 0 8824 0 0
+TotalVisits 21                  
+TotalUnique 18                  
+MonthHostsKnown 0                   
+MonthHostsUnknown 18                  
+END_GENERAL
+
+# Misc ID - Pages - Hits - Bandwidth
+BEGIN_MISC 10
+TotalMisc 0 0 0
+PDFSupport 0 0 0
+QuickTimeSupport 0 0 0
+JavascriptDisabled 0 0 0
+FlashSupport 0 0 0
+RealPlayerSupport 0 0 0
+DirectorSupport 0 0 0
+WindowsMediaPlayerSupport 0 0 0
+JavaEnabled 0 0 0
+AddToFavourites 0 0 0
+END_MISC
+
+# Hour - Pages - Hits - Bandwidth - Not viewed Pages - Not viewed Hits - Not viewed Bandwidth
+BEGIN_TIME 24
+0 220 224 5474362 3 3 9816
+1 2070 2373 57617528 21 25 318176
+2 245 330 12899991 13 16 146668
+3 8 21 1102431 1 3 154416
+4 3 3 369393 4 5 123887
+5 3 3 369393 4 4 12151
+6 4 4 406800 5 6 87745
+7 1 1 123131 1 2 70275
+8 0 0 0 0 0 0
+9 0 0 0 0 0 0
+10 0 0 0 0 0 0
+11 0 0 0 0 0 0
+12 0 0 0 0 0 0
+13 0 0 0 0 0 0
+14 0 0 0 0 0 0
+15 0 0 0 0 0 0
+16 0 0 0 0 0 0
+17 0 0 0 0 0 0
+18 0 0 0 0 0 0
+19 0 0 0 0 0 0
+20 0 0 0 0 0 0
+21 0 0 0 0 0 0
+22 0 0 0 0 0 0
+23 0 0 0 0 0 0
+END_TIME
+
+# Host - Pages - Hits - Bandwidth - Last visit date - [Start date of last visit] - [Last page of last visit]
+# [Start date of last visit] and [Last page of last visit] are saved only if session is not finished
+# The 25 first Hits must be first (order not required for others)
+BEGIN_VISITOR 18
+24.251.180.38 1382 1475 28024145 20190201021623
+96.242.81.114 757 835 12634646 20190201025259
+174.3.135.102 216 233 2460144 20190201015921
+24.77.117.17 82 153 6714586 20190201013729
+98.165.154.197 27 55 5274563 20190201015231
+74.58.53.138 19 67 1299664 20190201024240
+3.80.225.191 12 12 1479311 20190201070658 20190201020656 /
+107.77.223.37 10 29 5035788 20190201013656
+212.252.141.10 10 23 4549895 20190201021205
+24.91.104.97 8 21 4536590 20190201022547
+23.253.119.38 8 8 53378 20190201014743
+104.220.44.96 7 20 4536565 20190201014348
+72.175.116.183 5 18 733038 20190201031058
+18.207.128.94 5 5 373284 20190201014649
+3.93.184.15 3 3 369393 20190201064734 20190201064734 /
+3.92.134.83 1 1 123131 20190201030728
+54.190.153.214 1 1 37407 20190201060055
+3.90.36.255 1 1 125103 20190201012719
+END_VISITOR
+
+# Date - Pages - Hits - Bandwidth - Visits
+BEGIN_DAY 1
+20190201 2554 2959 78363029 21
+END_DAY
+
+# Domain - Pages - Hits - Bandwidth
+# The 25 first Pages must be first (order not required for others)
+BEGIN_DOMAIN 3
+us 2227 2483 63336342
+ca 317 453 10474394
+tr 10 23 4549895
+END_DOMAIN
+
+# Cluster ID - Pages - Hits - Bandwidth
+BEGIN_CLUSTER 0
+END_CLUSTER
+
+# Login - Pages - Hits - Bandwidth - Last visit
+# The 10 first Pages must be first (order not required for others)
+BEGIN_LOGIN 0
+END_LOGIN
+
+# Robot ID - Hits - Bandwidth - Last visit - Hits on robots.txt
+# The 25 first Hits must be first (order not required for others)
+BEGIN_ROBOT 5
+Googlebot/ 8 111888 20190201071239 0
+Baiduspider/ 4 163170 20190201065445 0
+Discordbot/ 3 231126 20190201012615 0
+YandexBot/ 2 20063 20190201062057 0
+SemrushBot/ 1 10202 20190201021954 0
+END_ROBOT
+
+# Worm ID - Hits - Bandwidth - Last visit
+# The 5 first Hits must be first (order not required for others)
+BEGIN_WORMS 0
+END_WORMS
+
+# EMail - Hits - Bandwidth - Last visit
+# The 20 first Hits must be first (order not required for others)
+BEGIN_EMAILSENDER 0
+END_EMAILSENDER
+
+# EMail - Hits - Bandwidth - Last visit
+# The 20 first hits must be first (order not required for others)
+BEGIN_EMAILRECEIVER 0
+END_EMAILRECEIVER
+
+# Session range - Number of visits
+BEGIN_SESSION 5
+5mn-15mn 2
+30s-2mn 1
+0s-30s 10
+2mn-5mn 2
+1h+ 4
+END_SESSION
+
+# URL - Pages - Bandwidth - Entry - Exit
+# The 25 first Pages must be first (order not required for others)
+BEGIN_SIDER 73
+/index.php 1579 186592 1 0
+/css.php 249 5212302 0 0
+/admin.php 162 3578167 0 1
+/ 96 5151818 13 6
+/job.php 86 1191 0 3
+/extensions/ 53 743833 1 1
+/proxy.php 39 29804 0 0
+/extensions/px-csgo.1 38 508226 4 1
+/attachments/csgo-primary-png.61/ 35 21763566 0 2
+/attachments/csgo-secondary-png.73/ 33 12694707 0 0
+/styles/uix_dark/fonts/icons/material-icons/fonts/materialdesignicons-webfont.woff2 16 2006144 0 1
+/members/ 12 161288 0 1
+/account/invitations/create 11 82311 0 1
+/members/skel.2/ 8 66413 0 0
+/attachments/000000-png.67/ 7 11877 0 0
+/account/visitor-menu 6 30346 0 0
+/attachments/000000-png.66/ 6 11877 0 0
+/extensions/px-csgo.1/terms 5 86775 0 0
+/extensions/px-pubg.2 5 70764 0 0
+/extensions/px-rsix.3 5 73397 1 0
+/online/ 5 52932 0 0
+/members/terry-davis.4/ 4 40671 0 0
+/extensions/px-csgo.1/updates 4 50689 0 0
+/extensions/px-csgo.1/product-purchases 4 57422 0 0
+/extensions/px-csgo.1/buy 4 11092 0 0
+/history/ 1 10024 0 0
+/account/account-details 1 17108 0 0
+/register/ 2 23960 0 0
+/countdown/admin 2 25952 0 0
+/search/search 3 462 0 0
+/forums/media.22/ 1 11993 0 0
+/extensions/px-rust.5 2 28790 0 0
+/extensions/categories/game-extensions.1/ 1 12222 0 0
+/threads/cant-buy-pubg-or-rainbow-six.54/ 1 14202 0 0
+/threads/website-launch.6/ 2 37372 0 0
+/forums/announcements.21/ 1 17263 0 0
+/forums/pre-sale-discussion.9/ 3 50249 0 0
+/whats-new/posts/ 1 10082 0 0
+/threads/frequently-asked-questions.2/ 3 57777 0 1
+/members/penguin.10/ 1 3586 0 0
+/extensions/purchase/2/download 2 11871809 0 0
+/whats-new/profile-posts/2/ 1 11346 0 0
+/account/invitations/list 2 26746 0 0
+/countdown/save 2 406 0 0
+/categories/verified-area.23/ 1 13848 0 0
+/whats-new/profile-posts/1/ 1 11348 0 0
+/attachments/000000-png.69/ 3 3959 0 0
+/threads/the-giving-season.58/ 1 23968 0 0
+/forums/news.2/ 2 30602 0 0
+/search/4/ 1 12776 0 0
+/extensions/px-csgo.1/ 2 26674 1 0
+/forums/-/mark-read 1 1195 0 0
+/support/ 4 61425 0 0
+/extensions/px-csgo.1/buy/coupon-checker 4 692 0 0
+/members/naperone.42/ 1 3261 0 0
+/extensions/px-csgo.1/download 2 4214 0 0
+/threads/older-users.35/ 1 14433 0 0
+/login/keep-alive 2 318 0 0
+/threads/posting-your-media.37/ 1 13777 0 0
+/styles/uix_dark/fonts/icons/material-icons/css/materialdesignicons.min.css.map 2 7464 0 0
+/members/bhopfu1.1/ 4 31241 0 0
+/extensions/purchase/2 1 13310 0 0
+/login/ 1 4189 0 0
+/attachments/000000-png.68/ 1 0 0 0
+/members/jorgi.12/ 2 16086 0 0
+/threads/vacnet-proofing.49/ 1 15730 0 0
+/misc/contact/ 1 4409 0 1
+/threads/registration-code.52/ 1 14119 0 0
+/search/ 4 43814 0 0
+/members/driftloom.37/ 2 15932 0 0
+/threads/cs-go-external-extension-launch.45/ 1 19331 0 0
+/countdown/admin/ 1 12976 0 0
+/members/skel.2/about 1 7589 0 0
+END_SIDER
+
+# Files type - Hits - Bandwidth - Bandwidth without compression - Bandwidth after compression
+BEGIN_FILETYPES 14
+php 2115 9008056 0 0
+Unknown 57 12288436 0 0
+png 68 4856724 0 0
+5 2 28790 0 0
+css 15 279540 0 0
+jpg 130 6216704 0 0
+svg 48 79222 0 0
+html 314 41352956 0 0
+woff2 16 2006144 0 0
+js 144 1581810 0 0
+3 5 73397 0 0
+2 5 70764 0 0
+1 38 508226 0 0
+map 2 7464 0 0
+END_FILETYPES
+
+# Downloads - Hits - Bandwidth
+BEGIN_DOWNLOADS 1
+/styles/default/siropu/shoutbox/new.mp3 0 1 2398
+END_DOWNLOADS
+
+# OS ID - Hits
+BEGIN_OS ID - Hits - Pages 5
+ios_iphone 200 97
+linuxandroid 23 10
+Unknown 8 8
+macosx 22 22
+win10 2707 2417
+END_OS
+
+# Browser ID - Hits - Pages
+BEGIN_BROWSER 8
+chrome71.0.3578.98 2639 2397
+firefox66.0 67 19
+Unknown 8 8
+safari 136 78
+chrome72.0.3626.76 23 10
+safari12.0 64 19
+chrome65.0.3325.181 22 22
+chrome66.0.3359.181 1 1
+END_BROWSER
+
+# Screen size - Hits
+BEGIN_SCREENSIZE 0
+END_SCREENSIZE
+
+# Unknown referer OS - Last visit date
+BEGIN_UNKNOWNREFERER 1
+Valve/Steam_HTTP_Client_1.0 20190201014743
+END_UNKNOWNREFERER
+
+# Unknown referer Browser - Last visit date
+BEGIN_UNKNOWNREFERERBROWSER 1
+Valve/Steam_HTTP_Client_1.0 20190201014743
+END_UNKNOWNREFERERBROWSER
+
+# Origin - Pages - Hits 
+BEGIN_ORIGIN 6
+From0 64 66
+From1 2 2
+From2 1 1
+From3 0 0
+From4 2487 2891
+From5 0 0
+END_ORIGIN
+
+# Search engine referers ID - Pages - Hits
+BEGIN_SEREFERRALS 1
+www_google_com 1 1
+END_SEREFERRALS
+
+# External page referers - Pages - Hits
+# The 25 first Pages must be first (order not required for others)
+BEGIN_PAGEREFS 0
+END_PAGEREFS
+
+# Search keyphrases - Number of search
+# The 10 first number of search must be first (order not required for others)
+BEGIN_SEARCHWORDS 0
+END_SEARCHWORDS
+
+# Search keywords - Number of search
+# The 25 first number of search must be first (order not required for others)
+BEGIN_KEYWORDS 0
+END_KEYWORDS
+
+# Errors - Hits - Bandwidth
+BEGIN_ERRORS 4
+303 15 0
+301 16 0
+503 2 76304
+404 7 310381
+END_ERRORS
+
+# URL with 404 errors - Hits - Last URL referrer
+BEGIN_SIDER_404 3
+/robots.txt 5 -
+/extensions/px-rust.5/changelog 1 -
+/extensions/px-rsix.3/changelog 1 https://www.paladin-extensions.com/extensions/
+END_SIDER_404

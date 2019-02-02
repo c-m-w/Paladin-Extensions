@@ -87,7 +87,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 		'name' => 'criteria[product_id]',
 		'value' => $__vars['criteria']['product_id'],
 	), $__compilerTemp1, array(
-		'label' => 'Product',
+		'label' => 'Extension',
 	)) . '
 
 				<hr class="formRowSep" />

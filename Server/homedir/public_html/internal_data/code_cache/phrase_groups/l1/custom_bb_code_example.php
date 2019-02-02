@@ -1,8 +1,8 @@
 <?php
 return array (
   'custom_bb_code_example.automerge' => '',
-  'custom_bb_code_example.fa' => '[FA]fa-star[/FA] - Embed a FontAwesome
-[COLOR=#00b300][FA]fa-check-circle[/FA][/COLOR] - Embed a FontAwesome with color
+  'custom_bb_code_example.fa' => '[FA]fa-star[/FA] - Embed a FontAwesome icon
+[COLOR=#00b300][FA]fa-check-circle[/FA][/COLOR] - Embed a FontAwesome icon with color
 [FA]fa-star fa-2x[/FA] - Enlarge an icon from 1 to 5x
 
 [FA]fa-spinner fa-spin[/FA] - Rotation animation 360°

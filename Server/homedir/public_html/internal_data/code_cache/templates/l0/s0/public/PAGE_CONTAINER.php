@@ -404,6 +404,7 @@ return array('macros' => array('nav_entry' => function($__templater, array $__ar
 	}
 	$__finalCompiled .= '
 	' . $__templater->includeTemplate('google_analytics', $__vars) . '
+' . $__templater->includeTemplate('kl_em_PAGE_CONTAINER', $__vars) . '
 </head>
 <body data-template="' . $__templater->escape($__vars['template']) . '">
 

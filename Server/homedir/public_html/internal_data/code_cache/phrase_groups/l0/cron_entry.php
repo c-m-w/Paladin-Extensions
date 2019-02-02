@@ -13,6 +13,7 @@ return array (
   'cron_entry.feeder' => 'Feeder',
   'cron_entry.fileCheck' => 'Perform file health check',
   'cron_entry.forumStatistics' => 'Rebuild forum statistics',
+  'cron_entry.klEMGoogleFontUpdate' => '[KL] Editor Manager - Update Google Font List',
   'cron_entry.memberStatsCache' => 'Rebuild member stats cache',
   'cron_entry.mjstEscalation' => '[BRST] Escalations',
   'cron_entry.run_successfully' => 'Cron entry was run successfully.',

@@ -2525,6 +2525,7 @@ return array('macros' => array('uix_mainTabComponent' => function($__templater, 
 	$__finalCompiled .= '
 
 	' . $__templater->includeTemplate('page_style', $__vars) . '
+' . $__templater->includeTemplate('kl_em_PAGE_CONTAINER', $__vars) . '
 </head>
 
 <body data-template="' . $__templater->escape($__vars['template']) . '">

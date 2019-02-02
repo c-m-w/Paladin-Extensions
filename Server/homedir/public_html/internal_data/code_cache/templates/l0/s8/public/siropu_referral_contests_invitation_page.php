@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: 82dd9ae92dacd9e22d2f96769b774a2e
+// FROM HASH: 2eb662582bb9043374bd1482cc1cc969
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -23,7 +23,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	$__finalCompiled .= '
 			</div>
 			<div class="block-row">
-				' . $__templater->button('<i class="fa fa-key" aria-hidden="true"></i> ' . 'Click here to register', array(
+				' . $__templater->button('<i class="fa fa-key" style="padding-right:5px" aria-hidden="true"></i> ' . 'Click here to register', array(
 		'href' => $__templater->fn('link', array('register', ), false),
 		'class' => 'button--cta',
 		'overlay' => 'true',

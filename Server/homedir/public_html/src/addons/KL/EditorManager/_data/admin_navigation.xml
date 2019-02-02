@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<admin_navigation>
+  <admin_navigation_entry navigation_id="em" display_order="310" icon="editor-manager" debug_only="0" hide_no_children="1"/>
+  <admin_navigation_entry navigation_id="emBBCode" parent_navigation_id="em" display_order="250" link="em/bb-codes" admin_permission_id="bbCodeSmilie" debug_only="0" hide_no_children="0"/>
+  <admin_navigation_entry navigation_id="emFonts" parent_navigation_id="em" display_order="400" link="em/fonts" admin_permission_id="bbCodeSmilie" debug_only="0" hide_no_children="0"/>
+  <admin_navigation_entry navigation_id="emLayout" parent_navigation_id="em" display_order="300" link="em/layout" admin_permission_id="bbCodeSmilie" debug_only="0" hide_no_children="0"/>
+  <admin_navigation_entry navigation_id="emOptions" parent_navigation_id="em" display_order="200" link="options/groups/klEM/" admin_permission_id="bbCodeSmilie" debug_only="0" hide_no_children="0"/>
+  <admin_navigation_entry navigation_id="emTemplates" parent_navigation_id="em" display_order="500" link="em/templates" admin_permission_id="bbCodeSmilie" debug_only="0" hide_no_children="0"/>
+  <admin_navigation_entry navigation_id="klEMAudioProxyLog" parent_navigation_id="logsContent" display_order="610" link="logs/audio-proxy" admin_permission_id="viewLogs" debug_only="0" hide_no_children="0"/>
+  <admin_navigation_entry navigation_id="klEMSpecialChars" parent_navigation_id="em" display_order="500" link="em/special-chars" admin_permission_id="bbCodeSmilie" debug_only="0" hide_no_children="0"/>
+  <admin_navigation_entry navigation_id="klEMVideoProxyLog" parent_navigation_id="logsContent" display_order="605" link="logs/video-proxy" admin_permission_id="viewLogs" debug_only="0" hide_no_children="0"/>
+</admin_navigation>

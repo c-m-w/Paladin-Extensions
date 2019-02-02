@@ -7,7 +7,7 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	';
 	if ($__vars['purchasable']['purchasable']['purchase_type'] == 'product') {
 		$__finalCompiled .= '
-		' . 'Receipt for your product purchase at ' . $__templater->escape($__vars['xf']['options']['boardTitle']) . '' . '
+		' . 'Receipt for your extension purchase at ' . $__templater->escape($__vars['xf']['options']['boardTitle']) . '' . '
 	';
 	} else if ($__vars['purchasable']['purchasable']['purchase_type'] == 'renewal') {
 		$__finalCompiled .= '
