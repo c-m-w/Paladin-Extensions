@@ -4,10 +4,8 @@
 
 #define XOR( _String ) ( _String )
 
+#include "Development Environment/Build Output Wrapper.hpp"
 #define NO_ENTRY
-#if defined _DEBUG
-	#define ACKNOWLEDGED_ENTRY_WARNING_1
-#endif
 #include "Development Environment/Entry Manager.hpp"
 
 #include "Source Development Kit/Application Programming Interfaces/Utilities.hpp"
