@@ -387,14 +387,28 @@ return function($__templater, $__selectedNav, array $__vars)
 			$__flat['xr_pm_products'] =& $__tree['xr_pm_products'];
 			if (empty($__tree['xr_pm_products']['children'])) { $__tree['xr_pm_products']['children'] = []; }
 
-			$__navTemp = [
+			if ((!$__vars['xf']['visitor']['user_id'])) {
+				$__navTemp = [
+		'title' => \XF::phrase('nav.xr_pm_products_search'),
+		'href' => $__templater->fn('link', array('search', null, array('type' => 'xr_pm_product', ), ), false),
+		'attributes' => [],
+	];
+				if ($__navTemp) {
+					$__tree['xr_pm_products']['children']['xr_pm_products_search'] = $__navTemp;
+					$__flat['xr_pm_products_search'] =& $__tree['xr_pm_products']['children']['xr_pm_products_search'];
+				}
+			}
+
+			if ($__vars['xf']['visitor']['user_id']) {
+				$__navTemp = [
 		'title' => \XF::phrase('nav.navPaymentSupport'),
 		'href' => $__templater->fn('link', array('support/open?department_id=4/', ), false),
 		'attributes' => [],
 	];
-			if ($__navTemp) {
-				$__tree['xr_pm_products']['children']['navPaymentSupport'] = $__navTemp;
-				$__flat['navPaymentSupport'] =& $__tree['xr_pm_products']['children']['navPaymentSupport'];
+				if ($__navTemp) {
+					$__tree['xr_pm_products']['children']['navPaymentSupport'] = $__navTemp;
+					$__flat['navPaymentSupport'] =& $__tree['xr_pm_products']['children']['navPaymentSupport'];
+				}
 			}
 
 			if ($__vars['xf']['visitor']['user_id']) {
