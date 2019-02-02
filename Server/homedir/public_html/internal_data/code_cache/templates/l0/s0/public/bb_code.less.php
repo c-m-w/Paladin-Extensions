@@ -294,6 +294,6 @@ a.bbCodeBlock-sourceJump
 	{
 		margin: .2em 0 0;
 	}
-}';
+}' . $__templater->includeTemplate('public:kl_em_bb_code.less', $__vars);
 	return $__finalCompiled;
 });

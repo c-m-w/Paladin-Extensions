@@ -24,6 +24,7 @@ You may set a user into \'discouraged\' mode by editing their user profile, or d
   'option_group_description.emailOptions' => '',
   'option_group_description.imageLinkProxy' => 'Controls the system for proxying and logging posted links and images',
   'option_group_description.j_email_check' => '',
+  'option_group_description.klEM' => 'Options centered around the Froala Editor and the BB code engine.',
   'option_group_description.kl_amdp' => 'Options related to the double post merger.',
   'option_group_description.lau_settings' => 'Log in to another user\'s account with a click',
   'option_group_description.logging' => 'Options that control what data is logged and how long it is maintained.',

@@ -31,6 +31,7 @@ return array('macros' => array('setup' => function($__templater, array $__argume
 	$__vars = $__templater->setupBaseParamsForMacro($__vars, false);
 	$__finalCompiled = '';
 	$__vars = $__templater->mergeMacroArguments(array(
+		'klEMStyle' => '',
 		'canViewAttachments' => '!',
 		'id' => '!',
 		'src' => '!',
@@ -48,7 +49,7 @@ return array('macros' => array('setup' => function($__templater, array $__argume
 		data-lb-single-image="1"
 		data-lb-container-zoom="' . $__templater->escape($__vars['containerZoom']) . '"
 		data-lb-trigger=".js-lbImage-' . $__templater->escape($__vars['id']) . '"
-		data-lb-id="' . $__templater->escape($__vars['id']) . '">
+		data-lb-id="' . $__templater->escape($__vars['id']) . '" style="' . $__templater->escape($__vars['klEMStyle']) . '">
 		';
 	if ($__vars['containerZoom']) {
 		$__finalCompiled .= '
@@ -56,7 +57,7 @@ return array('macros' => array('setup' => function($__templater, array $__argume
 		';
 	}
 	$__finalCompiled .= '
-		<img src="' . $__templater->escape($__vars['src']) . '" data-url="' . $__templater->escape($__vars['dataUrl']) . '" class="bbImage" data-zoom-target="1" alt="' . $__templater->escape($__vars['alt']) . '" />
+		<img src="' . $__templater->escape($__vars['src']) . '" data-url="' . $__templater->escape($__vars['dataUrl']) . '" class="bbImage" data-zoom-target="1" alt="' . $__templater->escape($__vars['alt']) . '" style="' . $__templater->escape($__vars['klEMStyle']) . '" />
 	</div>
 ';
 	return $__finalCompiled;

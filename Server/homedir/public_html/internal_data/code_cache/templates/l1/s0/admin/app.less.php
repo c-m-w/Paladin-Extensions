@@ -1112,6 +1112,7 @@ html
 	{
 		.m-faContent(@fa-var-file-text, .86em);
 	}
-}';
+}' . $__templater->includeTemplate('kl_em_app.less', $__vars) . '
+';
 	return $__finalCompiled;
 });

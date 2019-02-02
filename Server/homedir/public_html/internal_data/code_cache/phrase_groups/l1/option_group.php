@@ -22,6 +22,7 @@ return array (
   'option_group.emailOptions' => 'Email options',
   'option_group.imageLinkProxy' => 'Image and link proxy',
   'option_group.j_email_check' => '[J] Email Check',
+  'option_group.klEM' => 'Editor & BB code options',
   'option_group.kl_amdp' => '[KL] Auto Merge Double Post',
   'option_group.lau_settings' => 'Login as User (LAU2)',
   'option_group.logging' => 'Logging options',

@@ -652,6 +652,8 @@ return array('macros' => array('thread_status' => function($__templater, array $
 			'lastDate' => $__vars['lastPost']['post_date'],
 			'lastKnownDate' => $__vars['thread']['last_post_date'],
 		), $__vars) . '
+' . $__templater->formHiddenVal('klPage', $__vars['page'], array(
+		)) . '
 			</div>
 		</div>
 	', array(

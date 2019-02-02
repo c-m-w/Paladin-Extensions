@@ -9,6 +9,18 @@ return array('macros' => array('post' => function($__templater, array $__argumen
 		'thread' => '!',
 	), $__arguments, $__vars);
 	$__finalCompiled .= '
+';
+	if ($__vars['xf']['options']['klEMEnabledBBCodes']['hide']) {
+		$__finalCompiled .= '
+	';
+		$__templater->includeJs(array(
+			'src' => 'editor-manager/hide-refresh.js',
+			'addon' => 'KL/EditorManager',
+		));
+		$__finalCompiled .= '
+';
+	}
+	$__finalCompiled .= '
 	';
 	$__templater->includeCss('message.less');
 	$__finalCompiled .= '
