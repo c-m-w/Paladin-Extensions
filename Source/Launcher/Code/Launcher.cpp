@@ -26,10 +26,16 @@ void OnLaunch( )
 
 		if( DRAW.BeginFrame( ) )
 		{
-			auto txtTest = text_t( "test", CDrawing::ROBOTO, 48, 0, 0 );
-			txtTest.Initialize( color_t( { 255, 0, 0, 100 } ), CDrawing::NONE );
+			auto txtTest = text_t( ICON_FA_BOMB, CDrawing::FA, 48, 0, 0 );
+			auto txtTest1 = text_t( "iraq #1", CDrawing::ENVY, 48, 0, 0 );
+			auto txtTest2 = text_t( ICON_FA_BAND_AID, CDrawing::FA, 48, 0, 0 );
+			txtTest.Initialize( color_t( { 0, 0, 0, 255 } ), CDrawing::ICON );
+			txtTest1.Initialize( color_t( { 0, 0, 0, 255 } ), CDrawing::NONE );
+			txtTest2.Initialize( color_t( { 0, 0, 0, 255 } ), CDrawing::ICON );
 			DRAW.DrawPolygon( DRAW.Rectangle( rectangle_t( 0.f, 0.f, 600.f, 600.f ), color_t( 0xFFFFFFFF ) ).GetBuffer( ), true );
 			txtTest.Draw( location_t( 20.f, 10.f ) );
+			txtTest1.Draw( location_t( 120, 80 ) );
+			txtTest2.Draw( location_t( 80, 32 ) );
 			DRAW.EndFrame( );
 		}
 

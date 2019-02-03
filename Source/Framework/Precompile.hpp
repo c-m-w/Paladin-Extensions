@@ -80,3 +80,5 @@
 #else
 #pragma comment( lib, "cryptlib.lib" )
 #endif
+
+#include <IconFontCppHeaders/IconsFontAwesome5.h>

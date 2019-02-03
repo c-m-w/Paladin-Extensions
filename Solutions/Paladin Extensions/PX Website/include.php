@@ -178,9 +178,9 @@
 	function InsertNewHardware( $unique_id, $user_id, $hardware )
 	{
 		global $sql_connection;
-
-		 // Don't break the query line.
-		$sql_connection->query( 'INSERT INTO px_unique_id VALUES ( 0, '
+		
+		 // Don't break the query line.			
+		$sql_connection->query( 'INSERT INTO px_unique_id values(0, ' 
 			. $user_id . ', "'
 			. $hardware[ "cpu" ] . '", "'
 			. $hardware[ "gpu" ] . '", "'
@@ -189,6 +189,19 @@
 			. $hardware[ "os" ] . '", "'
 			. $hardware[ "drive" ] . '", "'
 			. $hardware[ "board" ] . '")' );
+			
+		if ( $unqiue_id == NULL )
+		{			
+			$result = $sql_connection->query( 'SELECT MAX( unique_id ) FROM px_unique_id WHERE user_id = ' . $user_id );
+			
+			if ( $result->num_rows > 0 )
+			{
+				$sql_connection->query( 'UPDATE xf_user_field_value SET field_value = ' . $result->fetch_assoc( )[ 'MAX( unique_id )' ] . ' WHERE user_id = ' . $user_id . ' AND field_id = "unique_id"' );
+				return true;
+			}
+		}
+		
+		return false;
 	}
 
 	function ValidateHardware( $unique_id, $user_id, $hardware )
@@ -205,10 +218,7 @@
 			. '" AND board = "' . $hardware[ "board" ] . '"' );
 
 		if ( $result->num_rows == 0 )
-		{
-			 InsertNewHardware( $unique_id, $user_id, $hardware );
-			 return false;
-		}
+			 return InsertNewHardware( $unique_id, $user_id, $hardware );
 		
 		$row = $result->fetch_assoc( );
 		if ( $row[ "unique_id" ] == $unique_id )

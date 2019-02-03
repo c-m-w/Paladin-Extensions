@@ -316,7 +316,7 @@ IDirect3DTexture9 *CDrawing::CreateTexture( const char *szText, float flSize, st
 		|| vecFonts[ sFont ] == nullptr )
 		return nullptr;
 
-	const auto sLength = strlen( szText );
+	const auto sLength = ffFlags & ICON ? 1 : strlen( szText );
 	const auto dwColor = clrText.GetARGB( );
 	auto &fFont = vecFonts[ sFont ];
 	std::vector< glyph_row_t > vecRows { };
@@ -328,7 +328,23 @@ IDirect3DTexture9 *CDrawing::CreateTexture( const char *szText, float flSize, st
 
 	for ( auto u = 0u; u < sLength; u++ )
 	{
-		const auto iIndex = FT_Get_Char_Index( fFont, szText[ u ] );
+		auto iIndex = 0;
+
+		if( ffFlags & ICON )
+		{
+			char chBuffer[ sizeof( unsigned ) * 2 + 1 ] { };
+			char* pBuffer = nullptr;
+
+			for ( auto i = 0; i < sizeof( unsigned ); i++ )
+				chBuffer[ i ] = '0';
+
+			for ( auto i = sizeof( unsigned ); i < sizeof( unsigned ) * 2; i++ )
+				chBuffer[ i ] = szText[ u * sizeof( unsigned ) + i - sizeof( unsigned ) ];
+
+			iIndex = FT_Get_Char_Index( fFont, strtoul( chBuffer, &pBuffer, 16 ) );
+		}
+		else
+			iIndex = FT_Get_Char_Index( fFont, szText[ u ] );
 
 		if ( iPreviousGlyphIndex != 0 )
 		{
@@ -356,7 +372,7 @@ IDirect3DTexture9 *CDrawing::CreateTexture( const char *szText, float flSize, st
 	for ( auto &row: vecRows )
 	{
 		locDimensions.x = std::max( locDimensions.x, row.locRowSize.x );
-		locDimensions.y += row.locRowSize.y;
+		locDimensions.y += row.locRowSize.y + row.iVerticalOffset;
 	}
 
 	if ( ffFlags & DROPSHADOW )
@@ -390,9 +406,11 @@ IDirect3DTexture9 *CDrawing::CreateTexture( const char *szText, float flSize, st
 					if ( iAlpha <= 0 )
 						continue;
 
-					const auto iByte = int( glCurrent.flHorizontalOffset ) + j + int( i + int( flSize ) - int( glRenderable.bitmap_top ) + 1 ) * int( locDimensions.x );
-					assert( iByte <= int( locDimensions.x * locDimensions.y )
-						&& iByte >= 0 );
+					const auto iByte = int( glCurrent.flHorizontalOffset ) + j + int( i + rowCurrent.iVerticalOffset + int( flSize ) - int( glRenderable.bitmap_top ) + 1 ) * int( locDimensions.x );
+					if ( iByte < 0
+						 || iByte > int( locDimensions.x * locDimensions.y ) )
+						continue;
+
 					pBits[ iByte ] = ( dwColor & 0x00FFFFFF ) | ( iAlpha << 24 );
 				}
 			}
@@ -405,19 +423,19 @@ IDirect3DTexture9 *CDrawing::CreateTexture( const char *szText, float flSize, st
 	{
 		std::vector< int > vecBitsToSet { };
 
-		for ( auto y = 1; y < int( locDimensions.y ) + 1; y++ )
-			for ( auto x = 1; x < int( locDimensions.x ) - 1; x++ )
+		for ( auto y = 0; y < int( locDimensions.y ); y++ )
+			for ( auto x = 0; x < int( locDimensions.x ); x++ )
 			{
-				const auto iTest = ( y - 1 ) * int( locDimensions.x ) + x - 1;
+				const auto iTest = ( y + 1 ) * int( locDimensions.x ) + x + 1;
 				const auto iCurrent = y * int( locDimensions.x ) + x;
 
-				if ( ( pBits[ iTest ] & 0xFF000000 ) >= clrText.a
-					&& ( pBits[ iCurrent ] & 0xFF000000 ) < clrText.a )
+				if ( ( pBits[ iTest ] & 0xFF000000 ) < clrText.a
+					&& ( pBits[ iCurrent ] & 0xFF000000 ) >= clrText.a )
 					vecBitsToSet.emplace_back( iCurrent );
 			}
 
 		for ( auto &iBit: vecBitsToSet )
-			pBits[ iBit ] = dwColor & 0xFF000000;
+			pBits[ iBit ] = 0xFF000000;
 	}
 
 	pReturn->UnlockRect( 0 );
@@ -1054,7 +1072,7 @@ CDrawing::glyph_t::glyph_t( FT_GlyphSlotRec_ glCurrent, float flTotalAdvance, un
 	memcpy( bBitmapBuffer, bData, sDataSize );
 }
 
-CDrawing::glyph_row_t::glyph_row_t( ) : vecGlyphs( { } ), locRowSize( { } )
+CDrawing::glyph_row_t::glyph_row_t( ) : vecGlyphs( { } ), locRowSize( { } ), iVerticalOffset( 0 )
 { }
 
 void CDrawing::glyph_row_t::AddGlyph( FT_GlyphSlotRec_ glCurrent, float flTargetSize )
@@ -1062,7 +1080,11 @@ void CDrawing::glyph_row_t::AddGlyph( FT_GlyphSlotRec_ glCurrent, float flTarget
 	vecGlyphs.emplace_back( glCurrent, locRowSize.x + glCurrent.bitmap_left, glCurrent.bitmap.buffer, ( glCurrent.metrics.height >> 6 ) * ( glCurrent.metrics.width >> 6 ) );
 	locRowSize.x += glCurrent.advance.x >> 6;
 
-	const auto flHeight = glCurrent.bitmap.rows + int( flTargetSize ) - int( glCurrent.bitmap_top ) + 1;
+	const auto iBaselineOffset = int( flTargetSize ) - int( glCurrent.bitmap_top );
+	if ( iBaselineOffset < 0 )
+		iVerticalOffset = std::max( iVerticalOffset, abs( iBaselineOffset ) );
+
+	const auto flHeight = glCurrent.bitmap.rows + iBaselineOffset + 1;
 	if ( flHeight > locRowSize.y )
 		locRowSize.y = flHeight;
 }

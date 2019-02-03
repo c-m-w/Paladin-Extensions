@@ -19,8 +19,11 @@ public:
 
 	enum EFontFlags
 	{
-		NONE = 0 << 0,
-		DROPSHADOW = 1 << 0
+		NONE		= 0 << 0,
+		DROPSHADOW	= 1 << 0,
+		UNDERLINE	= 1 << 1,
+		OUTLINE		= 1 << 2,
+		ICON		= 1 << 3
 	};
 
 private:
@@ -130,6 +133,7 @@ public:
 	{
 		std::vector< glyph_t > vecGlyphs;
 		Utilities::location_t locRowSize;
+		int iVerticalOffset;
 
 		glyph_row_t( );
 

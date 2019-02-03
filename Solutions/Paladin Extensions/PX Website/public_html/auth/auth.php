@@ -37,7 +37,7 @@
 		die( PutLoginAttempt( $user_id, 0, $hardware, ReturnKeys[ "Banned" ] ) );
 
 	 $unique_id = GetUniqueID( $user_id );
-	if ( $unique_id == 0 || $hardware === NULL )
+	if ( $hardware === NULL )
 		die( PutLoginAttempt( $user_id, $unique_id, $hardware, ReturnKeys[ "Hardware Mismatch" ] ) );
 
 	if ( !ValidateHardware( $unique_id, $user_id, $hardware ) )
