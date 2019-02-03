@@ -18,7 +18,7 @@ private:
 
 	constexpr static auto MAX_RETRIES = 5;
 	constexpr static auto MAX_TIMEOUT = 7;
-	static std::vector< illegal_post_data_character_t > vecIllegalCharacters;
+	static inline std::vector< illegal_post_data_character_t > vecIllegalCharacters;
 
 	bool Initialize( ) override;
 

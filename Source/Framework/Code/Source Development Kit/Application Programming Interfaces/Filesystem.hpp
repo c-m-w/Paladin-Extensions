@@ -120,16 +120,16 @@ public:
 	bool HidePath( const std::string& strPath );
 
 	/** \brief Path of the Paladin data folder from \appdata\roaming\ */
-	static std::string strRelativeAppdataDirectory;
+	static inline std::string strRelativeAppdataDirectory;
 	/** \brief Directory of log files relative to the Paladin data folder in appdata. */
-	static std::string strLogDirectory;
+	static inline std::string strLogDirectory;
 	/** \brief Name of the cookie file which stores information pertaining to connection to the site.\n
 				The file is stored in the data folder in appdata. */
-	static std::string strCookieFile;
+	static inline std::string strCookieFile;
 	/** \brief Name of the data file which stores the install directory.\n
 				The file is stored in the data folder in appdata. */
-	static std::string strDataFile;
+	static inline std::string strDataFile;
 	/** \brief Name of the licence file which stores information about the user's credentials.\n
 				The file is stored in the data folder in appdata. */
-	static std::string strLicenseFile;
+	static inline std::string strLicenseFile;
 } inline _Filesystem;

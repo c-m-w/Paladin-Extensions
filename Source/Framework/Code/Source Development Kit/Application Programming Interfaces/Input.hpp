@@ -2,7 +2,7 @@
 
 #pragma once
 
-class CInput: IBase
+class CInput: public IBase
 {
 public:
 
