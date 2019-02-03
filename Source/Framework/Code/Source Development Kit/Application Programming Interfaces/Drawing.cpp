@@ -15,10 +15,39 @@ bool CDrawing::Initialize( )
 			_Log.Log( EPrefix::ERROR, ELocation::DRAWING, XOR( "No render target or device was set!" ) );
 			return false;
 		}
+	}
+	else
+		CreateD3D( );
 
-		return true;
+	if ( !Create( ) )
+		return false;
+
+	if ( FT_Init_FreeType( &libInstance ) != 0
+		 || libInstance == nullptr )
+	{
+		_Log.Log( EPrefix::ERROR, ELocation::DRAWING, XOR( "Unable to initialize FreeType." ) );
+		return false;
 	}
 
+	strFontDirectory				= XOR( R"(C:\Windows\Fonts\)" );
+	strFontFileNames[ TAHOMA ]		= XOR( "tahoma.ttf" );
+	strFontFileNames[ TAHOMA_BOLD ] = XOR( "TahomaBold.ttf" );
+	strFontFileNames[ ROBOTO ]		= XOR( "Roboto.ttf" );
+	strFontFileNames[ ROBOTO_BOLD ] = XOR( "RobotoBold.ttf" );
+	strFontFileNames[ ENVY ]		= XOR( "Envy.ttf" );
+	strFontFileNames[ FA ]			= XOR( "FontAwesome5FreeSolid.ttf" );
+	for( auto& strFont : strFontFileNames )
+		if ( !AddFont( strFont ) )
+		{
+			_Log.Log( EPrefix::ERROR, ELocation::DRAWING, XOR( "Unable to add font %s." ), strFont.c_str( ) );
+			return false;
+		}
+
+	return true;
+}
+
+bool CDrawing::CreateD3D( )
+{
 	if ( ( pD3DInstance = Direct3DCreate9( DIRECT3D_VERSION ) ) == nullptr )
 	{
 		_Log.Log( EPrefix::ERROR, ELocation::DRAWING, XOR( "Unable to create D3D instance." ) );
@@ -177,20 +206,224 @@ bool CDrawing::EndFrame( )
 				_Log.Log( EPrefix::ERROR, ELocation::DRAWING, XOR( "Failed to reset device!" ) );
 				return false;
 			}
-			PostReset( );
+			Create( );
 			return true;
 		}
 
 		_Log.Log( EPrefix::WARNING, ELocation::DRAWING, XOR( "Failed to present scene." ) );
 		return false;
 	}
+
+	return true;
 }
 
-void CDrawing::PreReset( )
-{ }
+bool CDrawing::PreReset( )
+{
+	if( pSprite )
+	{
+		if ( pSprite->Release( ) != D3D_OK )
+		{
+			_Log.Log( EPrefix::ERROR, ELocation::DRAWING, XOR( "Unable to release sprite." ) );
+			return false;
+		}
 
-void CDrawing::PostReset( )
-{ }
+		pSprite = nullptr;
+	}
+
+	if ( pState )
+	{
+		if ( pState->Release( ) != D3D_OK )
+		{
+			_Log.Log( EPrefix::ERROR, ELocation::DRAWING, XOR( "Unable to release state." ) );
+			return false;
+		}
+
+		pState = nullptr;
+	}
+
+	return true;
+}
+
+bool CDrawing::Create( )
+{
+	if ( D3DXCreateSprite( pDevice, &pSprite ) != D3D_OK )
+	{
+		_Log.Log( EPrefix::ERROR, ELocation::DRAWING, XOR( "Unable to create sprite." ) );
+		return false;
+	}
+
+	return true;
+}
+
+bool CDrawing::AddFont( const std::string& strFilename )
+{
+	return libInstance != nullptr
+		&& !FT_New_Face( libInstance, ( strFontDirectory + strFilename ).c_str( ), 0, &vecFonts.emplace_back( ) );
+}
+
+bool CDrawing::RemoveFont( std::size_t sFont )
+{
+	if ( libInstance != nullptr
+		 && FT_Done_Face( vecFonts[ sFont ] ) )
+	{
+		vecFonts.erase( vecFonts.begin( ) + sFont );
+		return true;
+	}
+	return false;
+}
+
+location_t CDrawing::GetTextDimensions( const char * szText, float flSize, std::size_t sFont )
+{
+	if ( libInstance == nullptr
+		 || vecFonts.size( ) <= sFont
+		 || vecFonts[ sFont ] == nullptr )
+		return location_t( );
+
+	auto& fFont = vecFonts[ sFont ];
+	FT_Set_Char_Size( fFont, 0, int( flSize * powf( 2.f, 6.f ) ), 96, 96 );
+	auto flTotalAdvance = 0.f;
+	auto iPreviousGlyphIndex = 0;
+	auto flMaxHeight = -1.f;
+
+	for ( auto u = 0u; u < strlen( szText ); u++ )
+	{
+		const auto iIndex = FT_Get_Char_Index( fFont, szText[ u ] );
+
+		if ( iPreviousGlyphIndex != 0 )
+		{
+			FT_Vector vecDelta;
+			FT_Get_Kerning( fFont, iPreviousGlyphIndex, iIndex, FT_KERNING_DEFAULT, &vecDelta );
+			flTotalAdvance += vecDelta.x >> 6;
+		}
+
+		FT_Load_Glyph( fFont, iIndex, FT_LOAD_DEFAULT );
+		FT_Render_Glyph( fFont->glyph, FT_RENDER_MODE_NORMAL );
+
+		flTotalAdvance += fFont->glyph->advance.x >> 6;
+		iPreviousGlyphIndex = iIndex;
+		const auto flHeight = float( fFont->glyph->metrics.height >> 6 ) + ( flSize - float( fFont->glyph->bitmap_top ) );
+		if ( flHeight > flMaxHeight )
+			flMaxHeight = flHeight;
+	}
+
+	return location_t( flTotalAdvance, flMaxHeight );
+}
+
+IDirect3DTexture9* CDrawing::CreateTexture( const char * szText, float flSize, std::size_t sFont, const color_t& clrText, location_t& locDimensions, EFontFlags ffFlags, float flMaxWidth /*= -1.f*/ )
+{
+	if ( libInstance == nullptr
+		 || vecFonts.size( ) <= sFont
+		 || vecFonts[ sFont ] == nullptr )
+		return nullptr;
+
+	const auto sLength = strlen( szText );
+	const auto dwColor = clrText.GetARGB( );
+	auto& fFont = vecFonts[ sFont ];
+	std::vector< glyph_row_t > vecRows { };
+	auto iPreviousGlyphIndex = 0;
+	auto pCurrentRow = &vecRows.emplace_back( );
+
+	locDimensions = location_t( 0.f, 1.f );
+	FT_Set_Char_Size( fFont, 0, int( flSize * powf( 2.f, 6.f ) ), 96, 96 );
+
+	for ( auto u = 0u; u < sLength; u++ )
+	{
+		const auto iIndex = FT_Get_Char_Index( fFont, szText[ u ] );
+
+		if ( iPreviousGlyphIndex != 0 )
+		{
+			FT_Vector vecDelta;
+			FT_Get_Kerning( fFont, iPreviousGlyphIndex, iIndex, FT_KERNING_DEFAULT, &vecDelta );
+			pCurrentRow->AddKerning( vecDelta.x >> 6 );
+		}
+
+		FT_Load_Glyph( fFont, iIndex, FT_LOAD_DEFAULT );
+		FT_Render_Glyph( fFont->glyph, FT_RENDER_MODE_NORMAL );
+		pCurrentRow->AddGlyph( *fFont->glyph, flSize );
+		iPreviousGlyphIndex = iIndex;
+
+		if ( flMaxWidth != -1.f
+			 && szText[ u ] == ' ' )
+		{
+			std::string strWord = &szText[ u ];
+
+			strWord = strWord.substr( 0, strWord.find( ' ' ) - 1 );
+			if ( GetTextDimensions( strWord.c_str( ), flSize, sFont ).x + pCurrentRow->locRowSize.x > flMaxWidth )
+				pCurrentRow = &vecRows.emplace_back( );
+		}
+	}
+
+	for ( auto& row : vecRows )
+	{
+		locDimensions.x = std::max( locDimensions.x, row.locRowSize.x );
+		locDimensions.y += row.locRowSize.y;
+	}
+
+	if ( ffFlags & DROPSHADOW )
+	{
+		locDimensions.x += 1.f;
+		locDimensions.y += 1.f;
+	}
+
+	IDirect3DTexture9* pReturn = nullptr;
+	D3DLOCKED_RECT recLocked { };
+
+	if ( D3D_OK != D3DXCreateTexture( pDevice, unsigned( locDimensions.x ), unsigned( locDimensions.y ), 1, 0, D3DFMT_A8R8G8B8, D3DPOOL_MANAGED, &pReturn ) )
+		return nullptr;
+
+	pReturn->LockRect( 0, &recLocked, nullptr, 0 );
+	const auto pBits = reinterpret_cast< DWORD* >( recLocked.pBits );
+	auto flVerticalOffset = 0.f;
+
+	for ( auto& rowCurrent : vecRows )
+	{
+		for ( auto& glCurrent : rowCurrent.vecGlyphs )
+		{
+			auto& glRenderable = glCurrent.glGlyph;
+
+			for ( auto i = 0; i < int( glRenderable.bitmap.rows ); i++ )
+			{
+				const auto iWidth = int( glRenderable.bitmap.width );
+				for ( auto j = 0; j < iWidth; j++ )
+				{
+					const auto iAlpha = int( glCurrent.bBitmapBuffer[ j + i * iWidth ] ) - ( UCHAR_MAX - clrText.a );
+					if ( iAlpha <= 0 )
+						continue;
+
+					const auto iByte = int( glCurrent.flHorizontalOffset ) + j + int( i + int( flSize ) - int( glRenderable.bitmap_top ) + 1 ) * int( locDimensions.x );
+					assert( iByte <= int( locDimensions.x * locDimensions.y )
+							&& iByte >= 0 );
+					pBits[ iByte ] = ( dwColor & 0x00FFFFFF ) | ( iAlpha << 24 );
+				}
+			}
+		}
+
+		flVerticalOffset += rowCurrent.locRowSize.y;
+	}
+
+	if ( ffFlags & DROPSHADOW )
+	{
+		std::vector< int > vecBitsToSet { };
+
+		for ( auto y = 1; y < int( locDimensions.y ) + 1; y++ )
+			for ( auto x = 1; x < int( locDimensions.x ) - 1; x++ )
+			{
+				const auto iTest = ( y - 1 ) * int( locDimensions.x ) + x - 1;
+				const auto iCurrent = y * int( locDimensions.x ) + x;
+
+				if ( ( pBits[ iTest ] & 0xFF000000 ) >= clrText.a
+					 && ( pBits[ iCurrent ] & 0xFF000000 ) < clrText.a )
+					vecBitsToSet.emplace_back( iCurrent );
+			}
+
+		for ( auto& iBit : vecBitsToSet )
+			pBits[ iBit ] = dwColor & 0xFF000000;
+	}
+
+	pReturn->UnlockRect( 0 );
+
+	return pReturn;
+}
 
 void CDrawing::Polygon( vertex_t *pVertices, std::size_t sVertices, std::size_t sPrimitives )
 {
@@ -253,7 +486,22 @@ void CDrawing::DrawPolygon( const polygon_buffer_t &pbPolygon, bool bRelease /*=
 		pbPolygon.pVertexBuffer->Release( );
 }
 
-polygon_t Rectangle( rectangle_t recLocation, color_t clrColor )
+void CDrawing::DrawTexture( IDirect3DTexture9 *pTexture, const location_t &locLocation )
+{
+	if ( pTexture == nullptr )
+		throw std::runtime_error( XOR( "Attempting to draw a null texture." ) );
+
+	if ( pSprite->Begin( D3DXSPRITE_ALPHABLEND ) == D3D_OK )
+	{
+		D3DXVECTOR3 vecLocation( roundf( locLocation.x ), roundf( locLocation.y ), 0.f );
+		pSprite->Draw( pTexture, nullptr, nullptr, &vecLocation, 0xFFFFFFFF );
+		pSprite->End( );
+	}
+	else
+		_Log.Log( EPrefix::WARNING, ELocation::DRAWING, XOR( "Unable to begin sprite drawing." ) );
+}
+
+polygon_t CDrawing::Rectangle( rectangle_t recLocation, color_t clrColor )
 {
 	const auto dwColor = clrColor.GetARGB( );
 
@@ -268,7 +516,7 @@ polygon_t Rectangle( rectangle_t recLocation, color_t clrColor )
 	return polygon_t( vtxVertices, 4, 2 );
 }
 
-polygon_t Rectangle( rectangle_t recLocation, color_t* clrColor )
+polygon_t CDrawing::Rectangle( rectangle_t recLocation, color_t* clrColor )
 {
 	vertex_t vtxVertices[ 4 ]
 	{
@@ -283,7 +531,7 @@ polygon_t Rectangle( rectangle_t recLocation, color_t* clrColor )
 
 #define ROUNDING_VERTICES ( std::size_t( ceilf( flRadius / 3.f ) ) )
 
-polygon_t OutlineRectangle( rectangle_t recLocation, color_t clrColor )
+polygon_t CDrawing::OutlineRectangle( rectangle_t recLocation, color_t clrColor )
 {
 	const auto dwColor = clrColor.GetARGB( );
 	polygon_t lstReturn { };
@@ -296,7 +544,7 @@ polygon_t OutlineRectangle( rectangle_t recLocation, color_t clrColor )
 	return lstReturn;
 }
 
-polygon_t RoundedRectangle( rectangle_t recLocation, color_t clrColor, bool* bRounding, float flRounding )
+polygon_t CDrawing::RoundedRectangle( rectangle_t recLocation, color_t clrColor, bool* bRounding, float flRounding )
 {
 	constexpr float ROTATIONS[ rectangle_t::MAX ] { 270.f, 0.f, 90.f, 180.f };
 	const auto flRadius = roundf( std::min( recLocation.flHeight, recLocation.flWidth ) / 2.f * flRounding );
@@ -360,7 +608,7 @@ polygon_t RoundedRectangle( rectangle_t recLocation, color_t clrColor, bool* bRo
 	return polygon_t( &vecVertices[ 0 ], vecVertices.size( ), sPrimitives );
 }
 
-polygon_t OutlineRoundedRectangle( rectangle_t recLocation, color_t clrColor, bool* bRounding, float flRounding )
+polygon_t CDrawing::OutlineRoundedRectangle( rectangle_t recLocation, color_t clrColor, bool* bRounding, float flRounding )
 {
 	constexpr float ROTATIONS[ rectangle_t::MAX ] { 270.f, 0.f, 90.f, 180.f };
 	const auto flRadius = roundf( std::min( recLocation.flHeight, recLocation.flWidth ) / 2.f * flRounding );
@@ -429,7 +677,7 @@ polygon_t OutlineRoundedRectangle( rectangle_t recLocation, color_t clrColor, bo
 	return polReturn;
 }
 
-polygon_t OutlineSpacedRoundedRectangle( rectangle_t recLocation, color_t clrColor, bool* bRounding, float flRounding, float flSpacing )
+polygon_t CDrawing::OutlineSpacedRoundedRectangle( rectangle_t recLocation, color_t clrColor, bool* bRounding, float flRounding, float flSpacing )
 {
 	constexpr float ROTATIONS[ rectangle_t::MAX ] { 270.f, 0.f, 90.f, 180.f };
 	const auto flRadius = roundf( std::min( recLocation.flHeight, recLocation.flWidth ) / 2.f * flRounding );
@@ -501,7 +749,7 @@ polygon_t OutlineSpacedRoundedRectangle( rectangle_t recLocation, color_t clrCol
 	return polReturn;
 }
 
-polygon_t RoundedRectangle( rectangle_t recLocation, color_t* clrColor, bool* bRounding, float flRounding )
+polygon_t CDrawing::RoundedRectangle( rectangle_t recLocation, color_t* clrColor, bool* bRounding, float flRounding )
 {
 	constexpr float ROTATIONS[ rectangle_t::MAX ] { 270.f, 0.f, 90.f, 180.f };
 	const auto flRadius = roundf( std::min( recLocation.flHeight, recLocation.flWidth ) / 2.f * flRounding );
@@ -564,7 +812,7 @@ polygon_t RoundedRectangle( rectangle_t recLocation, color_t* clrColor, bool* bR
 	return polygon_t( vecVertices, sPrimitives );
 }
 
-polygon_t Triangle( location_t locFirst, location_t locSecond, location_t locThird, color_t clrColor )
+polygon_t CDrawing::Triangle( location_t locFirst, location_t locSecond, location_t locThird, color_t clrColor )
 {
 	const auto dwColor = clrColor.GetARGB( );
 
@@ -578,7 +826,7 @@ polygon_t Triangle( location_t locFirst, location_t locSecond, location_t locThi
 	return polygon_t( vtxVertices, 3, 1 );
 }
 
-polygon_t Triangle( triangle_t trLocation, color_t* clrColor )
+polygon_t CDrawing::Triangle( triangle_t trLocation, color_t* clrColor )
 {
 	const auto locTop = trLocation.GetPoint( triangle_t::TOP ),
 		locRight = trLocation.GetPoint( triangle_t::RIGHT ),
@@ -593,7 +841,7 @@ polygon_t Triangle( triangle_t trLocation, color_t* clrColor )
 	return polygon_t( vtxVertices, 3, 1 );
 }
 
-polygon_t Circle( circle_t circle, color_t clrColor, float flStartAngle, float flRatio )
+polygon_t CDrawing::Circle( circle_t circle, color_t clrColor, float flStartAngle, float flRatio )
 {
 	const auto pPoints = circle.GetPoints( flStartAngle, flRatio );
 	const auto dwColor = clrColor.GetARGB( );
@@ -608,7 +856,7 @@ polygon_t Circle( circle_t circle, color_t clrColor, float flStartAngle, float f
 	return polReturn;
 }
 
-polygon_t OutlineCircle( circle_t circle, color_t clrColor, float flStartAngle, float flRatio )
+polygon_t CDrawing::OutlineCircle( circle_t circle, color_t clrColor, float flStartAngle, float flRatio )
 {
 	const auto pPoints = circle.GetPoints( flStartAngle, flRatio );
 	const auto dwColor = clrColor.GetARGB( );
@@ -624,7 +872,7 @@ polygon_t OutlineCircle( circle_t circle, color_t clrColor, float flStartAngle, 
 	return polReturn;
 }
 
-polygon_t Circle( circle_t circle, color_t clrCenter, color_t clrOuter, float flStartAngle, float flRatio )
+polygon_t CDrawing::Circle( circle_t circle, color_t clrCenter, color_t clrOuter, float flStartAngle, float flRatio )
 {
 	const auto pPoints = circle.GetPoints( flStartAngle, flRatio );
 	const auto dwColor = clrOuter.GetARGB( );
@@ -640,7 +888,7 @@ polygon_t Circle( circle_t circle, color_t clrCenter, color_t clrOuter, float fl
 	return polReturn;
 }
 
-polygon_t Circle( circle_t circle, color_t* pColors, float flStartAngle, float flRatio )
+polygon_t CDrawing::Circle( circle_t circle, color_t* pColors, float flStartAngle, float flRatio )
 {
 	const auto pPoints = circle.GetPoints( flStartAngle, flRatio );
 	const auto sPoints = std::size_t( circle.sResolution * flRatio ) + 1u;
@@ -656,7 +904,7 @@ polygon_t Circle( circle_t circle, color_t* pColors, float flStartAngle, float f
 	return polReturn;
 }
 
-polygon_t Line( location_t locStart, location_t locEnd, float flThickness, color_t clrColor )
+polygon_t CDrawing::Line( location_t locStart, location_t locEnd, float flThickness, color_t clrColor )
 {
 	const auto locLength = locEnd - locStart;
 	const auto dwColor = clrColor.GetARGB( );
@@ -801,6 +1049,157 @@ vertex_t *circle_t::GetPoints( float flStartAngle, float flRatio ) const
 	return pReturn;
 }
 
+CDrawing::glyph_t::glyph_t( FT_GlyphSlotRec_ glCurrent, float flTotalAdvance, unsigned char* bData, std::size_t sDataSize ): glGlyph( glCurrent ), flHorizontalOffset( flTotalAdvance ), bBitmapBuffer( new unsigned char[ sDataSize ] )
+{
+	memcpy( bBitmapBuffer, bData, sDataSize );
+}
+
+CDrawing::glyph_row_t::glyph_row_t( ) : vecGlyphs( { } ), locRowSize( { } )
+{ }
+
+void CDrawing::glyph_row_t::AddGlyph( FT_GlyphSlotRec_ glCurrent, float flTargetSize )
+{
+	vecGlyphs.emplace_back( glCurrent, locRowSize.x + glCurrent.bitmap_left, glCurrent.bitmap.buffer, ( glCurrent.metrics.height >> 6 ) * ( glCurrent.metrics.width >> 6 ) );
+	locRowSize.x += glCurrent.advance.x >> 6;
+
+	const auto flHeight = glCurrent.bitmap.rows + int( flTargetSize ) - int( glCurrent.bitmap_top ) + 1;
+	if ( flHeight > locRowSize.y )
+		locRowSize.y = flHeight;
+}
+
+void CDrawing::glyph_row_t::AddKerning( float flMagnitude )
+{
+	locRowSize.x += flMagnitude;
+}
+
+text_t::text_t( ): strText( std::string( ) ), iFont( 0 ), iSize( 0 ), locDimensions( location_t( ) ), pText( nullptr )
+{ }
+
+text_t::text_t( const std::string& _strText, int _iFont, int _iSize, int _iHorizontalAlignment, int _iVerticalAlignment ) : strText( _strText ), iFont( _iFont ), iSize( _iSize ),
+iHorizontalAlignment( _iHorizontalAlignment ), iVerticalAlignment( _iVerticalAlignment ), locDimensions( location_t( ) ), pText( nullptr )
+{ }
+
+text_t::~text_t( )
+{
+	if ( pText )
+	{
+		pText->Release( );
+		pText = nullptr;
+	}
+}
+
+bool text_t::Initialize( const color_t& clrText, EFontFlags ffFlags )
+{
+	if ( pText )
+	{
+		pText->Release( );
+		pText = nullptr;
+	}
+
+	return ( pText = _Drawing.CreateTexture( strText.c_str( ), iSize, iFont, clrText, locDimensions, ffFlags ) ) != nullptr;
+}
+
+void text_t::ChangeText( const text_t& txtNew, const color_t& clrText, EFontFlags ffFlags )
+{
+	if ( pText )
+	{
+		pText->Release( );
+		pText = nullptr;
+	}
+
+	*this = txtNew;
+	Initialize( clrText, ffFlags );
+}
+
+location_t text_t::GetDimensions( ) const
+{
+	return locDimensions;
+}
+
+float text_t::GetWidth( ) const
+{
+	return GetDimensions( ).x;
+}
+
+float text_t::GetHeight( ) const
+{
+	return GetDimensions( ).y;
+}
+
+bool text_t::Initialized( ) const
+{
+	return pText != nullptr;
+}
+
+void text_t::Draw( const location_t& locLocation )
+{
+	if ( pText == nullptr )
+		return;
+
+	_Drawing.DrawTexture( pText, locLocation );
+}
+
+void text_t::Draw( const rectangle_t& recUsableSpace )
+{
+	location_t locLocation { };
+
+	switch ( iHorizontalAlignment )
+	{
+		case LEFT:
+		{
+			locLocation.x = recUsableSpace.x;
+		}
+		break;
+
+		case CENTER:
+		{
+			locLocation.x = recUsableSpace.x + recUsableSpace.flWidth / 2.f - GetWidth( ) / 2.f;
+		}
+		break;
+
+		case RIGHT:
+		{
+			locLocation.x = recUsableSpace.x + recUsableSpace.flWidth - GetWidth( );
+		}
+		break;
+
+		default:
+			return;
+	}
+
+	switch ( iVerticalAlignment )
+	{
+		case TOP:
+		{
+			locLocation.y = recUsableSpace.y;
+		}
+		break;
+
+		case CENTER:
+		{
+			locLocation.y = recUsableSpace.y + recUsableSpace.flHeight / 2.f - GetHeight( ) / 2.f;
+		}
+		break;
+
+		case BOTTOM:
+		{
+			locLocation.y = recUsableSpace.y + recUsableSpace.flHeight - GetHeight( );
+		}
+		break;
+
+		default:
+			return;
+	}
+
+	return Draw( locLocation );
+}
+
+void text_t::Destruct( )
+{
+	pText->Release( );
+	memset( this, 0, sizeof( decltype( *this ) ) );
+}
+
 vertex_t::vertex_t( float x, float y, DWORD _dwColor )
 {
 	flVectors[ 0 ] = x;
@@ -872,11 +1271,11 @@ void polygon_t::Draw( rectangle_t recRelative, color_t clrColor )
 	const auto dwColor = clrColor.GetARGB( );
 	auto vecTemp = vecVertices;
 
-	for each ( auto &vtx in vecTemp )
+	for ( auto& _Vertex : vecTemp )
 	{
-		vtx.flVectors[ 0 ] += recRelative.x;
-		vtx.flVectors[ 1 ] += recRelative.y;
-		vtx.dwColor = dwColor;
+		_Vertex.flVectors[ 0 ] += recRelative.x;
+		_Vertex.flVectors[ 1 ] += recRelative.y;
+		_Vertex.dwColor = dwColor;
 	}
 	_Drawing.Polygon( &vecTemp[ 0 ], vecTemp.size( ), sPrimitives );
 }
@@ -904,10 +1303,10 @@ void polygon_t::Draw( rectangle_t recRelative )
 
 	auto vecTemp = vecVertices;
 
-	for each ( auto &vtx in vecTemp )
+	for ( auto &_Vertex : vecTemp )
 	{
-		vtx.flVectors[ 0 ] += recRelative.x;
-		vtx.flVectors[ 1 ] += recRelative.y;
+		_Vertex.flVectors[ 0 ] += recRelative.x;
+		_Vertex.flVectors[ 1 ] += recRelative.y;
 	}
 	_Drawing.Polygon( &vecTemp[ 0 ], vecTemp.size( ), sPrimitives );
 }

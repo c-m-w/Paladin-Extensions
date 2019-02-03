@@ -109,11 +109,12 @@ bool CFilesystem::CheckAbsoluteDirectoryValidity( const std::string &strDirector
 	FormatDirectory( strFinalDirectory );
 
 	WIN32_FIND_DATA _Data { };
+	SetLastError( ERROR_SUCCESS );
 	const auto hFile = FindFirstFile( strFinalDirectory.c_str( ), &_Data );
 
 	if ( hFile == nullptr
 		|| hFile == INVALID_HANDLE_VALUE )
-		return false; // todo log this
+		return GetLastError( ) == ERROR_FILE_NOT_FOUND;
 
 	FindClose( hFile );
 	return _Data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY != 0;
@@ -206,7 +207,7 @@ bool CFilesystem::ReadAbsoluteFile( const std::string &strFilename, std::string 
 
 	fseek( pFile, 0, SEEK_END ); // todo log, 0 == successful
 	const auto zSize = ftell( pFile );
-	strOut.resize( zSize + 1 );
+	strOut.resize( zSize );
 	rewind( pFile );
 	if ( zSize != fread( &strOut[ 0 ], sizeof( char ), zSize, pFile ) )
 		_Log.Log( EPrefix::WARNING, ELocation::FILESYSTEM, XOR( "Unable to read foretold size of %i in file %s." ), zSize, strFilename.c_str( ) );

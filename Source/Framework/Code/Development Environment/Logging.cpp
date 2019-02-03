@@ -85,7 +85,6 @@ void CLogging::TestWriteToFile( )
 void CLogging::BeginLog( )
 {
 	strBuffer = XOR( "-----[ Log Begin | " ) + GetDatestamp( ) + XOR( " ]-----\n" );
-	WriteToFile( );
 }
 
 void CLogging::EndLog( )
@@ -104,7 +103,7 @@ void CLogging::Log( EPrefix _Prefix, ELocation _Location, const std::string &str
 	if ( !GetInitializationState( ) )
 		return ErrorPopup( ERROR_UNITIALIZED_LOG );
 
-	strBuffer += GetTimestamp( ) + '\t' + strStatusPrefixes[ _Prefix ] + '\t' + strLocations[ _Location ] + strLog + '\n';
+	strBuffer += GetTimestamp( ) + '\t' + strStatusPrefixes[ _Prefix ] + '\t' + strLocations[ _Location ] + '\t' + strLog + '\n';
 	if ( _Prefix == ERROR )
 		Log( INFO, _Location, XOR( "Last error: %i." ), GetLastError( ) );
 }
@@ -123,5 +122,5 @@ void CLogging::Log( EPrefix _Prefix, ELocation _Location, const char *szFormat, 
 		return ErrorPopup( ERROR_FORMAT_VA_FAILED );
 
 	va_end( vaArgs );
-	return Log( _Prefix, _Location, chBuffer );
+	return Log( _Prefix, _Location, std::string( chBuffer ) );
 }

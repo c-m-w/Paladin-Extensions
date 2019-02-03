@@ -19,13 +19,22 @@
 #include "Source Development Kit/Application Programming Interfaces/Window.hpp"
 #include "Source Development Kit/Application Programming Interfaces/Drawing.hpp"
 
-inline bool InitializeFramework( )
+inline bool SetupFramework( )
 {
 	return _Filesystem.Setup( )
 		&& _Log.Setup( )
 		&& _Cryptography.Setup( )
 		&& _Connection.Setup( )
 		&& _Input.Setup( );
+}
+
+inline void ShutdownFramework( )
+{
+	_Input.Shutdown( );
+	_Connection.Shutdown( );
+	_Cryptography.Shutdown( );
+	_Log.Shutdown( );
+	_Filesystem.Shutdown( );
 }
 
 #if defined USE_NAMESPACES
@@ -42,4 +51,5 @@ using namespace Utilities;
 #define LOG ( _Log )
 #define NET ( _Connection )
 #define INPUT ( _Input )
+#define DRAW ( _Drawing )
 #endif

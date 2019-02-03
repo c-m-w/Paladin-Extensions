@@ -20,5 +20,6 @@ public:
 	CWindow( const HWND &hwWindow, WNDPROC _WindowInputProcessor = DefaultWindowInputProcessor );
 	~CWindow( );
 
+	bool PollInput( );
 	HWND GetWindowHandle( );
 };

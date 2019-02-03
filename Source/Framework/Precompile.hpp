@@ -42,6 +42,10 @@
 #pragma comment( lib, "d3dx9.lib" )
 #pragma comment( lib, "d3d9.lib" )
 
+#include <ft2build.h>
+#include FT_FREETYPE_H
+#pragma comment( lib, "freetype255.lib" )
+
 // OpenSSL
 #if defined _DEBUG
 #pragma comment( lib, "libcryptod.lib" )

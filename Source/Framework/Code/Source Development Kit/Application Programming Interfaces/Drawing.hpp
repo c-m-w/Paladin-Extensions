@@ -4,12 +4,32 @@
 
 class CDrawing: public IBase
 {
+public:
+
+	enum EFonts
+	{
+		TAHOMA,
+		TAHOMA_BOLD,
+		ROBOTO,
+		ROBOTO_BOLD,
+		ENVY,
+		FA,
+		FONT_MAX
+	};
+
+	enum EFontFlags
+	{
+		NONE = 0 << 0,
+		DROPSHADOW = 1 << 0
+	};
+
 private:
 
 	static constexpr auto FVF = D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1;
 
 	bool Initialize( ) override;
 
+	bool CreateD3D( );
 	bool CreateState( );
 
 	CWindow *pTarget = nullptr;
@@ -17,6 +37,11 @@ private:
 	D3DPRESENT_PARAMETERS pParameters { };
 	IDirect3DDevice9 *pDevice = nullptr;
 	IDirect3DStateBlock9 *pState = nullptr;
+	ID3DXSprite *pSprite = nullptr;
+	FT_Library libInstance { };
+	std::vector< FT_Face > vecFonts;
+	static inline std::string strFontDirectory { };
+	static inline std::string strFontFileNames[ FONT_MAX ] { };
 
 public:
 
@@ -92,6 +117,57 @@ public:
 		vertex_t *GetPoints( float flStartAngle, float flRatio ) const;
 	};
 
+	struct glyph_t
+	{
+		FT_GlyphSlotRec_ glGlyph { };
+		float flHorizontalOffset = 0.f;
+		unsigned char* bBitmapBuffer = nullptr;
+
+		glyph_t( FT_GlyphSlotRec_ glCurrent, float flTotalAdvance, unsigned char* bData, std::size_t sDataSize );
+	};
+
+	struct glyph_row_t
+	{
+		std::vector< glyph_t > vecGlyphs;
+		Utilities::location_t locRowSize;
+
+		glyph_row_t( );
+
+		void AddGlyph( FT_GlyphSlotRec_ glCurrent, float flTargetSize );
+		void AddKerning( float flMagnitude );
+	};
+
+	struct text_t
+	{
+		enum
+		{
+			LEFT,
+			CENTER,
+			RIGHT,
+			TOP = 0,
+			BOTTOM = 2
+		};
+
+		std::string strText;
+		int iFont, iSize, iHorizontalAlignment, iVerticalAlignment;
+		Utilities::location_t locDimensions;
+		IDirect3DTexture9* pText;
+
+		text_t( );
+		text_t( const std::string& _strText, int iFont, int _iSize, int _iHorizontalAlignment, int _iVerticalAlignment );
+		~text_t( );
+
+		bool Initialize( const color_t& clrText, EFontFlags ffFlags );
+		void ChangeText( const text_t& txtNew, const color_t& clrText, EFontFlags ffFlags );
+		Utilities::vector2_t GetDimensions( ) const;
+		float GetWidth( ) const;
+		float GetHeight( ) const;
+		bool Initialized( ) const;
+		void Draw( const Utilities::location_t& locLocation );
+		void Draw( const rectangle_t& recUsableSpace );
+		void Destruct( );
+	};
+
 	struct polygon_buffer_t
 	{
 		IDirect3DVertexBuffer9 *pVertexBuffer;
@@ -125,12 +201,17 @@ public:
 	bool SetState( );
 	bool BeginFrame( );
 	bool EndFrame( );
-	void PreReset( );
-	void PostReset( );
+	bool PreReset( );
+	bool Create( );
+	bool AddFont( const std::string& strFilename );
+	bool RemoveFont( std::size_t sFont );
 
+	Utilities::location_t GetTextDimensions( const char* szText, float flSize, std::size_t sFont );
+	IDirect3DTexture9* CreateTexture( const char* szText, float flSize, std::size_t sFont, const color_t& clrText, Utilities::location_t& locDimensions, EFontFlags ffFlags, float flMaxWidth = -1.f );
 	void Polygon( vertex_t *pVertices, std::size_t sVertices, std::size_t sPrimitives );
 	IDirect3DVertexBuffer9 *ConstructPolygon( vertex_t *pVertices, std::size_t sVertices );
 	void DrawPolygon( const polygon_buffer_t &pbPolygon, bool bRelease = false );
+	void DrawTexture( IDirect3DTexture9* pTexture, const Utilities::location_t& locLocation );
 
 	polygon_t Rectangle( rectangle_t recLocation, color_t clrColor );
 	polygon_t Rectangle( rectangle_t recLocation, color_t *clrColor/*[LOCATION_MAX]*/ );
@@ -152,5 +233,6 @@ using triangle_t = CDrawing::triangle_t;
 using rectangle_t = CDrawing::rectangle_t;
 using vertex_t = CDrawing::vertex_t;
 using circle_t = CDrawing::circle_t;
+using text_t = CDrawing::text_t;
 using polygon_buffer_t = CDrawing::polygon_buffer_t;
 using polygon_t = CDrawing::polygon_t;

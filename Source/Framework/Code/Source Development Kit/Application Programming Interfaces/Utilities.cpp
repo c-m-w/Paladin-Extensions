@@ -76,8 +76,7 @@ namespace Utilities
 
 	void Pause( moment_t mmtPauseLength )
 	{
-		if ( 0ui64 == mmtPauseLength )
-			return;
+		std::this_thread::sleep_for( std::chrono::milliseconds( mmtPauseLength ) );
 
 		//static const auto NtDelayExecution = static_cast< SWindowsAPI::fnNtDelayExecution >( GetFunctionPointer( SWindowsAPI::NtDelayExecution ) );
 		//if ( nullptr == NtDelayExecution ) // their system must be really messed up if it can't find delay execution

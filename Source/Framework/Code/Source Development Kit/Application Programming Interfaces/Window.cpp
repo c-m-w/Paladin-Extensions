@@ -83,6 +83,23 @@ CWindow::~CWindow( )
 		SetWindowLongPtr( hwHandle, GWLP_WNDPROC, LONG( pOldWindowInputProcessor ) );
 }
 
+bool CWindow::PollInput( )
+{
+	if ( pOldWindowInputProcessor )
+		throw std::runtime_error( XOR( "Attempting to poll a window's input that was not created." ) );
+
+	MSG msgMessage;
+
+	if ( PeekMessage( &msgMessage, nullptr, NULL, NULL, PM_REMOVE ) )
+	{
+		TranslateMessage( &msgMessage );
+		DispatchMessage( &msgMessage );
+		return true;
+	}
+
+	return false;
+}
+
 HWND CWindow::GetWindowHandle( )
 {
 	return hwHandle;
