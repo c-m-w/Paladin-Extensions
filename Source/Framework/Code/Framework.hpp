@@ -14,6 +14,9 @@
 #include "Source Development Kit/Application Programming Interfaces/Filesystem.hpp"
 #include "Development Environment/Logging.hpp"
 #include "Source Development Kit/Application Programming Interfaces/Connectivity.hpp"
+#include "Source Development Kit/Application Programming Interfaces/Input.hpp"
+#include "Source Development Kit/Application Programming Interfaces/Window.hpp"
+#include "Source Development Kit/Application Programming Interfaces/Drawing.hpp"
 
 #if defined USE_NAMESPACES
 using namespace Utilities;
@@ -28,4 +31,5 @@ using namespace Utilities;
 #define FS ( _Filesystem )
 #define LOG ( _Log )
 #define NET ( _Connection )
+#define INPUT ( _Input )
 #endif

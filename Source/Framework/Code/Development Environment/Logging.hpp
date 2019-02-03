@@ -34,6 +34,8 @@ public:
 	{
 		FILESYSTEM,
 		CONNECTIVITY,
+		WINDOW,
+		DRAWING,
 		LOCATION_MAX
 	};
 

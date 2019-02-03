@@ -33,6 +33,15 @@
 
 #undef ERROR
 
+// D3D
+#include <d3d9.h>
+#include <d3dx9core.h>
+#include <d3dx9math.h>
+#include <DirectXMath.h>
+#include <d3dx9tex.h>
+#pragma comment( lib, "d3dx9.lib" )
+#pragma comment( lib, "d3d9.lib" )
+
 #include <curl/include/curl/curl.h>
 #include <cryptopp/base64.h>
 #include <cryptopp/filters.h>

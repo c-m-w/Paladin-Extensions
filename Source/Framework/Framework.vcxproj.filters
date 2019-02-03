@@ -48,6 +48,15 @@
     <ClInclude Include="Code\Development Environment\Build Output Wrapper.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Window.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Input.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Drawing.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Precompile.cpp">
@@ -66,6 +75,15 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Cryptography.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Window.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Input.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Drawing.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

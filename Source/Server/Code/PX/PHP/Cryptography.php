@@ -13,19 +13,19 @@
 
 		function __construct( )
 		{
-			generateKeys( );
+			$this->generateKeys( );
 		}
 
 		private function generateKeys( ): void
 		{
-			if ( time( ) - $lastGenerationTime < generationInterval
-				&& strlen( $encryptionKey ) > 0 && strlen( $initializationVector ) > 0 )
+			if ( time( ) - $this->lastGenerationTime < generationInterval
+				&& strlen( $this->encryptionKey ) > 0 && strlen( $this->initializationVector ) > 0 )
 				return;
 
 			$unhashedKey = ( string )( time( ) / generationInterval );
-			$hash = generateHash( $unhashedKey );
-			$encryptionKey = substr( $hash, 0, encryptionKeySize );
-			$initializationVector = substr( $hash, 0, initializationVectorSize );
+			$hash = $this->generateHash( $unhashedKey );
+			$this->encryptionKey = substr( $hash, 0, encryptionKeySize );
+			$this->initializationVector = substr( $hash, 0, initializationVectorSize );
 		}
 
 		public function generateHash( $bytes ): string
@@ -35,26 +35,26 @@
 
 		public function hashFile( $filename ): string
 		{
-			return generateHash( file_get_contents( $filename ) );
+			return $this->generateHash( file_get_contents( $filename ) );
 		}
 
 		public function encrypt( $bytes ): string
 		{
-			generateKeys( );
+			$this->generateKeys( );
 
-			return openssl_encrypt( $bytes, encryptionMethod, $encryptionKey, 0, $initializationVector );
+			return openssl_encrypt( $bytes, encryptionMethod, $this->encryptionKey, 0, $this->initializationVector );
 		}
 
 		public function decrypt( $bytes ): string
 		{
-			generateKeys( );
-			
-			return openssl_decrypt( $bytes, encryptionMethod, $encryptionKey, 0, $initializationVector );
+			$this->generateKeys( );
+
+			return openssl_decrypt( $bytes, encryptionMethod, $this->encryptionKey, 0, $this->initializationVector );
 		}
 
 		public function generateIdentifier( $id )
 		{
-			return substr( generateHash( $id ), 0, identifierSize );
+			return substr( $this->generateHash( $id ), 0, identifierSize );
 		}
 	}
 ?>

@@ -16,16 +16,18 @@
 		"Staff Success"			=> "7" ) );	// staff member logged in
 	define( "launcherFile", "../Extensions/Launcher.exe" );
 
-	$cryptography	= new Cryptography( );
 	$log			= new Logging( );
+	$cryptography	= new Cryptography( );
 	$sql			= new SQLConnection( );
 
 	class Functionality
 	{
-		$connection_info;
+		private $connection_info;
 
 		public function sanitize( $input ): string
 		{
+            global $sql;
+
 			return $sql->escape( strip_tags( trim( str_replace( unsafeTerms, "", $input ) ) ) );
 		}
 
@@ -34,10 +36,10 @@
 			global $cryptography;
 
 			$accessIdentifier = $cryptography->generateIdentifier( $id );
-			return sanitize( $cryptography->decrypt( $_POST[ $accessIdentifier ] ) );
+			return $this->sanitize( $cryptography->decrypt( $_POST[ $accessIdentifier ] ) );
 		}
 
-		public function exit( $exit_code, $other_data = 'none' ): void
+		public function stopExecution( $exit_code, $other_data = 'none' ): void
 		{
 			global $log;
 			global $cryptography;
@@ -57,17 +59,17 @@
 
 			$response = json_decode( curl_exec( $curl ), true );
 			curl_close( $curl );
-			$connection_info = $response;
+			$this->connection_info = $response;
 		}
 
 		function getServiceProvider( ): string
 		{
-			return $connection_info[ 'isp' ];
+			return $this->connection_info[ 'isp' ];
 		}
 
 		function getCountryCode( ): string
 		{
-			return $connection_info[ 'countryCode' ];
+			return $this->connection_info[ 'countryCode' ];
 		}
 	}
 
@@ -75,21 +77,21 @@
 
 	class Authentication
 	{
-		$user;
-		$key;
-		$hardware;
-		$hash;
-		$xfUser;
-		$unique
+		private $user;
+		private $key;
+		private $hardware;
+		private $hash;
+		private $xfUser;
+		private $unique;
 
-		private function parsePostData( ):
+		private function parsePostData( ): void
 		{
 			global $functionality;
 
-			$user		= $functionality->getPostData( 'id' );
-			$key		= $functionality->getPostData( 'sk' );
-			$hardware	= json_decode( $functionality->getPostData( 'hw' ), true );
-			$hash		= $functionality->getPostData( 'hw' );
+			$this->user		= $functionality->getPostData( 'id' );
+			$this->key		= $functionality->getPostData( 'sk' );
+			$this->hardware	= json_decode( $functionality->getPostData( 'hw' ), true );
+			$this->hash		= $functionality->getPostData( 'hw' );
 		}
 
 		private function validateHash( ): void
@@ -98,10 +100,10 @@
 			global $log;
 			global $functionality;
 
-			if ( $hash != $cryptography->hashFile( launcherFile ) )
+			if ( $this->hash != $cryptography->hashFile( launcherFile ) )
 			{
 				$log->log( 'Hash sent over post data did not match what the server computed.' );
-				$functionality->exit( 'Invalid Hash' );
+				$functionality->stopExecution( 'Invalid Hash' );
 			}
 		}
 
@@ -115,38 +117,39 @@
 			if ( $result->num_rows == 0 )
 			{
 				$log->log( 'Could not find user with id of ' . $user . ' and secret key of ' . $key . ' in table xf_user.' );
-				$functionality->exit( 'Establishing Failure' );
+				$functionality->stopExecution( 'Establishing Failure' );
 			}
 
-			$xfUser = $result->fetch_assoc( );
+			$this->xfUser = $result->fetch_assoc( );
 		}
 
 		private function logAttempt( $exit_code ): void
 		{
 			global $sql;
+            global $functionality;
 
-			if ( $hardware == NULL
-				|| ( $row = $sql->selectRows( 'unique_id', 'px_unique_id', 'user_id = ' . $user_id
-				. ' AND cpu = "' . $hardware[ "cpu" ]
-				. '" AND gpu = "' . $hardware[ "gpu" ]
-				. '" AND display = "' . $hardware[ "display" ]
-				. '" AND pc = "' . $hardware[ "pc" ]
-				. '" AND os = "' . $hardware[ "os" ]
-				, '" AND drive = "' . $hardware[ "drive" ]
-				. '" AND board = "' . $hardware[ "board" ] . '"' ) )->num_rows == 0 )
-				$unique_id = 0;
+			if ( $this->hardware == NULL
+				|| ( $row = $sql->selectRows( 'unique_id', 'px_unique_id', 'user_id = ' . $this->user_id
+				. ' AND cpu = "' . $this->hardware[ "cpu" ]
+				. '" AND gpu = "' . $this->hardware[ "gpu" ]
+				. '" AND display = "' . $this->hardware[ "display" ]
+				. '" AND pc = "' . $this->hardware[ "pc" ]
+				. '" AND os = "' . $this->hardware[ "os" ]
+				, '" AND drive = "' . $this->hardware[ "drive" ]
+				. '" AND board = "' . $this->hardware[ "board" ] . '"' ) )->num_rows == 0 )
+				$this->unique_id = 0;
 			else
-				$unqiue_id = $row->fetch_assoc( )[ 'unique_id' ];
+				$this->unqiue_id = $row->fetch_assoc( )[ 'unique_id' ];
 
-			$sql->insert( 'px_logins', ( int )$user_id . ', '
+			$sql->insert( 'px_logins', ( int )$this->user . ', '
 					. ( int )time( ) . ', '
-					. ( int )$cur_unique_id . ', '
-					. $unique_id . ', "'
-					. ( string )$info[ "ip" ] . '", "'
-					. ( string )$info[ "isp" ] . '", "'
-					. ( string )$info[ "countryCode" ] . '", '
+					. ( int )unique . ', '
+					. $this->unique_id . ', "'
+					. ( string )$_SERVER[ 'REMOTE_ADDR' ] . '", "'
+					. ( string )$functionality->getServiceProvider( ) . '", "'
+					. ( string )$functionality->getCountryCode( ) . '", '
 					. ( int )$exit_code );
-			$functionality->exit( $exit_code, $xfUser[ 'secondary_group_ids' ] )
+			$functionality->stopExecution( $exit_code, $this->xfUser[ 'secondary_group_ids' ] );
 		}
 
 		private function ensureValidUser( ): void
@@ -154,50 +157,50 @@
 			global $sql;
 			global $log;
 
-			if ( $xfUser[ 'is_banned' ] )
-				logAttempt( 'Banned' );
+			if ( $this->xfUser[ 'is_banned' ] )
+				$this->logAttempt( 'Banned' );
 
-			if ( $hardware == NULL )
+			if ( $this->hardware == NULL )
 			{
 				$log->log( 'Invalid hardware was passed through post data.' );
-				logAttempt( 'Hardware Mismatch' );
+				$this->logAttempt( 'Hardware Mismatch' );
 			}
 
 			$result = $sql->selectRows( 'field_value', 'xf_user_field_value', 'field_id = "unique_id" AND user_id = ' . $user );
 			if ( $result->num_rows == 0 )
 			{
 				$log->log( 'Could not obtain unique id from xf_user_field_value. User ID: ' . $user . '.' );
-				logAttempt( 'Establishing Failure' );
+				$this->logAttempt( 'Establishing Failure' );
 			}
 
 			$unique = $result->fetch_assoc( )[ 'field_value' ];
 
-			$result = $sql->selectRows( 'px_unique_id', '*', 'user_id = ' . $user_id
-						. ' AND cpu = "' . $hardware[ "cpu" ]
-						. '" AND gpu = "' . $hardware[ "gpu" ]
-						. '" AND display = "' . $hardware[ "display" ]
-						. '" AND pc = "' . $hardware[ "pc" ]
-						. '" AND os = "' . $hardware[ "os" ]
-						. '" AND drive = "' . $hardware[ "drive" ]
-						. '" AND board = "' . $hardware[ "board" ] . '"' );
+			$result = $sql->selectRows( 'px_unique_id', '*', 'user_id = ' . $this->user
+						. ' AND cpu = "' . $this->hardware[ "cpu" ]
+						. '" AND gpu = "' . $this->hardware[ "gpu" ]
+						. '" AND display = "' . $this->hardware[ "display" ]
+						. '" AND pc = "' . $this->hardware[ "pc" ]
+						. '" AND os = "' . $this->hardware[ "os" ]
+						. '" AND drive = "' . $this->hardware[ "drive" ]
+						. '" AND board = "' . $this->hardware[ "board" ] . '"' );
 			if ( $result->num_rows == 0 )
 			{
 				$sql->insertRow( 'px_unique_id', '0, '
-							. $user_id . ', "'
-							. $hardware[ "cpu" ] . '", "'
-							. $hardware[ "gpu" ] . '", "'
-							. $hardware[ "display" ] . '", "'
-							. $hardware[ "pc" ] . '", "'
-							. $hardware[ "os" ] . '", "'
-							. $hardware[ "drive" ] . '", "'
-							. $hardware[ "board" ] . '")' );
-				logAttempt( 'Hardware Mismatch' );
+							. $this->user . ', "'
+							. $this->hardware[ "cpu" ] . '", "'
+							. $this->hardware[ "gpu" ] . '", "'
+							. $this->hardware[ "display" ] . '", "'
+							. $this->hardware[ "pc" ] . '", "'
+							. $this->hardware[ "os" ] . '", "'
+							. $this->hardware[ "drive" ] . '", "'
+							. $this->hardware[ "board" ] . '")' );
+				$this->logAttempt( 'Hardware Mismatch' );
 			}
 
 			if ( $result->fetch_assoc( )[ 'unique_id' ] != $unique )
 			{
 				$sql->updateRow( 'xf_user_field_value', 'field_value', 0, 'field_id = "unique_id" AND user_id = ' . $user );
-				logAttempt( 'Hardware Mismatch' );
+				$this->logAttempt( 'Hardware Mismatch' );
 			}
 		}
 
@@ -209,24 +212,24 @@
 
 		public function login( ): void
 		{
-			parsePostData( );
-			validateHash( );
-			getUserInformation( );
-			ensureValidUser( );
-			beginSession( );
-			logAttempt( xfUser[ 'is_staff' ] ? 'Staff Success' : 'Success' );
+			$this->parsePostData( );
+			$this->validateHash( );
+			$this->getUserInformation( );
+			$this->ensureValidUser( );
+			$this->beginSession( );
+			$this->logAttempt( xfUser[ 'is_staff' ] ? 'Staff Success' : 'Success' );
 		}
 
-		public function dowload( ): void
+		public function download( ): void
 		{
-		
+
 		}
 
 		public function ban( ): void
 		{
 			global $sql;
 
-			$sql->update(  )
+			$sql->updateRow( 'xf_user', 'is_banned', 1, 'user_id = ' . $this->xfUser[ 'user_id' ] );
 		}
 	}
 
@@ -234,6 +237,9 @@
 
 	function handleRequest( ): void
 	{
+        global $auth;
+        global $functionality;
+
 		$action = $functionality->getPostData( 'action' );
 
 		if ( $action == 'login' )
@@ -242,5 +248,7 @@
 			$auth->download( );
 		if ( $action == 'ban' )
 			$auth->ban( );
+
+        header( "Location: https://www.paladin-extensions.com/error.shtml", true, 301 );
 	}
 ?>

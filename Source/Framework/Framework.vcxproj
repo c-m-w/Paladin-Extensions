@@ -45,8 +45,8 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)Dependencies\Include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)Dependencies\Lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)Dependencies\Include;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)Dependencies\Lib;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Lib\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -100,8 +100,11 @@
     <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Base Interface.hpp" />
     <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Connectivity.hpp" />
     <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Cryptography.hpp" />
+    <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Drawing.hpp" />
     <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Filesystem.hpp" />
+    <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Input.hpp" />
     <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Utilities.hpp" />
+    <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Window.hpp" />
     <ClInclude Include="Precompile.hpp" />
     <ClInclude Include="Code\Framework.hpp" />
   </ItemGroup>
@@ -109,8 +112,11 @@
     <ClCompile Include="Code\Development Environment\Logging.cpp" />
     <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Connectivity.cpp" />
     <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Cryptography.cpp" />
+    <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Drawing.cpp" />
     <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Filesystem.cpp" />
+    <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Input.cpp" />
     <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Utilities.cpp" />
+    <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Window.cpp" />
     <ClCompile Include="Precompile.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

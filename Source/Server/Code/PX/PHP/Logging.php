@@ -5,12 +5,12 @@
 
 		function __construct( )
 		{
-			rawLog( '[Session Begin ' . getDate( ) . ']' );
+			$this->rawLog( "[Session Begin " . $this->getDate( ) . "]" );
 		}
 
 		function __destruct( )
 		{
-			rawLog( '[Session End]' );
+			$this->rawLog( '[Session End]' );
 		}
 
 		private function getDate( ): string
@@ -25,12 +25,12 @@
 
 		private function getLogFile( ): string
 		{
-			return "Logs\\" + strftime( "%Y-%m-%d" );
+			return "Logs/" . strftime( "%Y-%m-%d" );
 		}
 
 		private function rawLog( $message ): void
 		{
-			$logFile = getLogFile( );
+			$logFile = $this->getLogFile( );
 			$currentContents = file_get_contents( $logFile );
 			if( $currentContents === FALSE )
 				$currentContents = '[Log File Begin]' . PHP_EOL;
@@ -41,7 +41,7 @@
 
 		public function log( $message ): void
 		{
-			return rawLog( '[' . getTime( ) . ']\t' . $_SERVER[ 'REMOTE_ADDR' ] . $message );
+			$this->rawLog( '[' . $this->getTime( ) . ']\t' . $_SERVER[ 'REMOTE_ADDR' ] . $message );
 		}
 	}
 ?>
