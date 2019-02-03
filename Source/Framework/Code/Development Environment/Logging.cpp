@@ -89,6 +89,7 @@ void CLogging::BeginLog( )
 
 void CLogging::EndLog( )
 {
+	WriteToFile( );
 	strBuffer += XOR( "-----[ Log End ]-----\n\n" );
 	WriteToFile( );
 }
