@@ -21,7 +21,7 @@ public:
 	public:
 		CKeyState( ) = default;
 
-		CKeyState( const EKeyState& _KeyState )
+		CKeyState( const EKeyState &_KeyState )
 		{
 			ksKeyState = _KeyState;
 		}
@@ -36,22 +36,22 @@ public:
 			return ksKeyState;
 		}
 
-		bool operator==( const bool& rhs ) const
+		bool operator==( const bool &rhs ) const
 		{
 			return bool( *this ) == rhs;
 		}
 
-		bool operator!=( const bool& rhs ) const
+		bool operator!=( const bool &rhs ) const
 		{
 			return !( *this == rhs );
 		}
 
-		bool operator==( const int& rhs ) const
+		bool operator==( const int &rhs ) const
 		{
 			return int( *this ) == rhs;
 		}
 
-		bool operator!=( const int& rhs ) const
+		bool operator!=( const int &rhs ) const
 		{
 			return !( *this == rhs );
 		}
@@ -104,14 +104,14 @@ public:
 	void Shutdown( ) override;
 
 	bool HandleEvent( UINT uMsg, WPARAM wParam, LPARAM lParam );
-	void AddCallback( const key_callback_t &_Callback, const key_t& _Key );
+	void AddCallback( const key_callback_t &_Callback, const key_t &_Key );
 	void AddCallback( const key_typed_callback_t &_Callback );
 	void AddCallback( const global_key_callback_t &_Callback );
 	void AddCallback( const mouse_move_callback_t &_Callback );
 	void AddCallback( const scroll_callback_t &_Callback );
 	CKeyState GetKeyState( const key_t &_KeyCode );
 	Utilities::location_t GetMouseLocation( );
-	Utilities::moment_t GetTimeSinceKeyPress( const key_t& _Key );
+	Utilities::moment_t GetTimeSinceKeyPress( const key_t &_Key );
 } inline _Input;
 
 using CKeyState = CInput::CKeyState;

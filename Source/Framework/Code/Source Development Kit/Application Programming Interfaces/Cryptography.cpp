@@ -9,7 +9,7 @@
 bool CCryptography::Initialize( )
 {
 	if ( GetMoment( ) - mmtLastGenerationTime < GENERATION_INTERVAL
-		 && !strEncryptionKey.empty( ) && !strInitializationVector.empty( ) )
+		&& !strEncryptionKey.empty( ) && !strInitializationVector.empty( ) )
 		return true;
 
 	const auto strUnhashedKey = std::to_string( GetMoment( ) / GENERATION_INTERVAL );

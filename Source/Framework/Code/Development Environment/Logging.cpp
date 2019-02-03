@@ -119,7 +119,7 @@ void CLogging::Log( EPrefix _Prefix, ELocation _Location, const char *szFormat, 
 
 	memset( chBuffer, 0, MAX_LOG_LENGTH );
 	va_start( vaArgs, szFormat );
-	if( _vsnprintf_s( chBuffer, MAX_LOG_LENGTH, szFormat, vaArgs ) == 0 )
+	if ( _vsnprintf_s( chBuffer, MAX_LOG_LENGTH, szFormat, vaArgs ) == 0 )
 		return ErrorPopup( ERROR_FORMAT_VA_FAILED );
 
 	va_end( vaArgs );

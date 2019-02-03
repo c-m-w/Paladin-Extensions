@@ -24,10 +24,10 @@ bool CInput::ProcessKey( key_t _Key, CKeyState _KeyState )
 
 	auto bReturn = false;
 
-	for ( auto fnCallback : vecKeyCallbacks[ _Key ] )
+	for each ( auto fnCallback in vecKeyCallbacks[ _Key ] )
 		bReturn |= fnCallback( _KeyState );
 
-	for ( auto fnCallback : vecGlobalKeyCallbacks )
+	for each ( auto fnCallback in vecGlobalKeyCallbacks )
 		bReturn |= fnCallback( _Key, _KeyState );
 
 	return bReturn;
@@ -84,7 +84,7 @@ bool CInput::ProcessKeyboardMessage( UINT uMsg, WPARAM wParam )
 		case WM_CHAR:
 		{
 			if ( wParam >= ' ' || wParam == VK_BACK )
-				for ( auto& _Callback : vecKeyTypedCallbacks )
+				for each ( auto &_Callback in vecKeyTypedCallbacks )
 					bReturn |= _Callback( wParam );
 		}
 		break;
@@ -104,7 +104,7 @@ bool CInput::HandleEvent( UINT uMsg, WPARAM wParam, LPARAM lParam )
 	if ( uMsg == WM_SIZE && wParam == SIZE_MINIMIZED )
 	{
 		// When the window is minimized, set all the key states to up so that when the window becomes back in focus it won't be fucked up.
-		for ( auto& key : _KeyStates )
+		for each ( auto &key in _KeyStates )
 			key = CKeyState::UP;
 		return false;
 	}
@@ -139,7 +139,7 @@ bool CInput::HandleEvent( UINT uMsg, WPARAM wParam, LPARAM lParam )
 			iMouseX = *reinterpret_cast< short* >( &lParam );
 			iMouseY = *reinterpret_cast< short* >( uintptr_t( &lParam ) + sizeof( short ) );
 
-			for ( auto& _Callback : vecMouseMoveCallbacks )
+			for each ( auto &_Callback in vecMouseMoveCallbacks )
 				bReturn |= _Callback( iMouseX, iMouseY );
 		}
 		break;
@@ -149,7 +149,7 @@ bool CInput::HandleEvent( UINT uMsg, WPARAM wParam, LPARAM lParam )
 			const auto sDelta = GET_WHEEL_DELTA_WPARAM( wParam );
 			const POINT pntMouse { *reinterpret_cast< short* >( &lParam ), *reinterpret_cast< short* >( uintptr_t( &lParam ) + sizeof( short ) ) };
 
-			for ( auto& _Callback : vecScrollCallbacks )
+			for each ( auto &_Callback in vecScrollCallbacks )
 				bReturn |= _Callback( sDelta, pntMouse.x, pntMouse.y );
 		}
 
@@ -160,7 +160,7 @@ bool CInput::HandleEvent( UINT uMsg, WPARAM wParam, LPARAM lParam )
 	return bReturn;
 }
 
-void CInput::AddCallback( const key_callback_t &_Callback, const key_t& _Key )
+void CInput::AddCallback( const key_callback_t &_Callback, const key_t &_Key )
 {
 	vecKeyCallbacks[ _Key ].emplace_back( _Callback );
 }

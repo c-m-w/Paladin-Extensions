@@ -21,7 +21,7 @@ bool CConnectivity::Initialize( )
 		return false;
 	}
 
-	if( ( hConnection = curl_easy_init( ) ) != nullptr )
+	if ( ( hConnection = curl_easy_init( ) ) != nullptr )
 	{
 		_Log.Log( EPrefix::SUCCESS, ELocation::CONNECTIVITY, XOR( "Initialized cURL successfully." ) );
 		vecIllegalCharacters.emplace_back( '&', XOR( "AMP" ) );
@@ -44,14 +44,14 @@ void CConnectivity::Shutdown( )
 
 void CConnectivity::ValidateString( std::string &strToValidate )
 {
-	for ( auto& _IllegalCharacter : vecIllegalCharacters )
+	for each ( auto &_IllegalCharacter in vecIllegalCharacters )
 		_IllegalCharacter.ValidateString( strToValidate );
 }
 
-bool CConnectivity::Request( const std::string &strUniformResourceLocator, std::initializer_list< post_data_t > initData, std::string& strOut, int iRetries /*= 0*/ )
+bool CConnectivity::Request( const std::string &strUniformResourceLocator, std::initializer_list< post_data_t > initData, std::string &strOut, int iRetries /*= 0*/ )
 {
 	std::string strPostData { };
-	for ( auto& _Data : initData )
+	for each ( auto &_Data in initData )
 	{
 		if ( !strPostData.empty( ) )
 			strPostData += '&';
@@ -65,7 +65,7 @@ bool CConnectivity::Request( const std::string &strUniformResourceLocator, std::
 	strErrorBuffer.resize( CURL_ERROR_SIZE );
 	const auto bSetErrorBuffer = SetConnectionParameter( CURLOPT_ERRORBUFFER, &strErrorBuffer[ 0 ] );
 
-	if( !SetConnectionParameter( CURLOPT_URL, strUniformResourceLocator.c_str( ) )
+	if ( !SetConnectionParameter( CURLOPT_URL, strUniformResourceLocator.c_str( ) )
 		|| !SetConnectionParameter( CURLOPT_POST, TRUE )
 		|| !SetConnectionParameter( CURLOPT_POSTFIELDS, strPostData.c_str( ) )
 		|| !SetConnectionParameter( CURLOPT_FOLLOWLOCATION, TRUE )
@@ -86,7 +86,7 @@ bool CConnectivity::Request( const std::string &strUniformResourceLocator, std::
 	}
 
 	const auto _Code = curl_easy_perform( hConnection );
-	if( _Code != CURLE_OK )
+	if ( _Code != CURLE_OK )
 	{
 		_Log.Log( EPrefix::ERROR, ELocation::CONNECTIVITY, XOR( "Failed to perform connection. Error code: %i. Retries: %i." ), _Code, iRetries );
 		if ( bSetErrorBuffer )
@@ -95,7 +95,7 @@ bool CConnectivity::Request( const std::string &strUniformResourceLocator, std::
 		return iRetries < MAX_RETRIES ? Request( strUniformResourceLocator, initData, strOut, iRetries++ ) : false;
 	}
 
-	if( strOut.empty( ) )
+	if ( strOut.empty( ) )
 	{
 		_Log.Log( EPrefix::ERROR, ELocation::CONNECTIVITY, XOR( "Response was empty. Retries: %i." ), _Code, iRetries );
 		if ( bSetErrorBuffer )
@@ -114,7 +114,7 @@ void CConnectivity::illegal_post_data_character_t::ValidateString( std::string &
 {
 	auto zPlace = std::string::npos;
 
-	while( ( zPlace = strToValidate.find( chCharacter ) ) != std::string::npos )
+	while ( ( zPlace = strToValidate.find( chCharacter ) ) != std::string::npos )
 	{
 		strToValidate.erase( strToValidate.begin( ) + zPlace );
 		strToValidate.insert( zPlace, strReplacement );

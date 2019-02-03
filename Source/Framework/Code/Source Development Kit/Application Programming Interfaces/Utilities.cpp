@@ -11,20 +11,20 @@ namespace Utilities
 	location_t::location_t( float _x, float _y ): x( _x ), y( _y )
 	{ }
 
-	location_t location_t::operator-( const location_t& rhs )
+	location_t location_t::operator-( const location_t &rhs )
 	{
 		return location_t( x - rhs.x, y - rhs.y );
 	}
 
-	location_t location_t::operator+( const location_t& rhs )
+	location_t location_t::operator+( const location_t &rhs )
 	{
 		return location_t( x + rhs.x, y + rhs.y );
 	}
 
-	bool location_t::operator!=( const location_t& rhs )
+	bool location_t::operator!=( const location_t &rhs )
 	{
 		return x != rhs.x
-			|| y != rhs.y;
+				|| y != rhs.y;
 	}
 
 	void location_t::Rotate( float flAngle, location_t locRotationPoint )
