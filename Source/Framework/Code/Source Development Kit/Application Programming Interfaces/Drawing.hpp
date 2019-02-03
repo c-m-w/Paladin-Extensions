@@ -2,7 +2,7 @@
 
 #pragma once
 
-class CDrawing: IBase
+class CDrawing: public IBase
 {
 private:
 

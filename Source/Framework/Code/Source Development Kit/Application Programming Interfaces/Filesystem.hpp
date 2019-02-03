@@ -33,6 +33,8 @@ public:
 	/** \param strFile Complete path of a file. */
 	/** \return Whether or not the file exists. */
 	[ [ nodiscard ] ] static bool CheckAbsoluteFileValidity( const std::string& strFile );
+	[ [ nodiscard ] ] static std::string GetAbsoluteContainingDirectory( const std::string& strFile );
+	[ [ nodiscard ] ] static bool EnsureAbsoluteFileDirectoryExists( const std::string& strFilePath );
 	[ [ nodiscard ] ] static bool GetAbsoluteDirectoryContents( const std::string& strDirectory, bool bFiles, bool bFolders, std::vector< std::string >& vecOut );
 	[ [ nodiscard ] ] static bool GetFoldersInAbsoluteDirectory( const std::string& strDirectory, std::vector< std::string >& vecOut );
 	[ [ nodiscard ] ] static bool GetFilesInAbsoluteDirectory( const std::string& strDirectory, std::vector< std::string >& vecOut, const std::string& strExtension = std::string( ) );
@@ -88,9 +90,8 @@ public:
 	[ [ nodiscard ] ] std::string& GetWorkingDirectory( );
 	/** \brief Changes the current directory. */
 	/** \param strNew New absolute directory. */
-	/** \param zSubDirectories Amount of sub directories within the absolute directory. */
-	/** \param ... Sub directories within the absolute directory */
-	void ChangeWorkingDirectory( std::string strNew, std::size_t zSubDirectories = 0u, ... );
+	/** \param initSubDirectories Sub directories within the absolute directory */
+	void ChangeWorkingDirectory( std::string strNew, std::initializer_list< std::string > initSubDirectories = { } );
 	/** \brief Converts a relative file to an absolute path. */
 	/** \param strFile Relative filename/path to be converted. */
 	/** \return Absolute file path. */

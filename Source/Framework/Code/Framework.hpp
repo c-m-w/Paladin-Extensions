@@ -21,8 +21,9 @@
 
 inline bool InitializeFramework( )
 {
-	return _Cryptography.Setup( )
-		&& _Filesystem.Setup( )
+	return _Filesystem.Setup( )
+		&& _Log.Setup( )
+		&& _Cryptography.Setup( )
 		&& _Connection.Setup( )
 		&& _Input.Setup( );
 }

@@ -46,7 +46,7 @@ std::string CLogging::FormatTime( const std::string &strFormat )
 
 std::string CLogging::GetDatestamp( )
 {
-	return FormatTime( strDateFormat );
+	return '[' + FormatTime( strDateFormat ) + ']';
 }
 
 std::string CLogging::GetTimestamp( )

@@ -6,7 +6,7 @@
 #define USE_NAMESPACES
 #include "../../Framework.hpp"
 
-LRESULT CALLBACK WindowProc( HWND wnd, UINT uMessage, WPARAM wParam, LPARAM lParam )
+LRESULT CALLBACK DefaultWindowInputProcessor( HWND wnd, UINT uMessage, WPARAM wParam, LPARAM lParam )
 {
 	switch ( uMessage )
 	{

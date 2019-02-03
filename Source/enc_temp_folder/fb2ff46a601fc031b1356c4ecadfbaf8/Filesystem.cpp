@@ -138,7 +138,7 @@ bool CFilesystem::EnsureAbsoluteFileDirectoryExists( const std::string &strFileP
 	if ( CheckAbsoluteDirectoryValidity( strDirectory ) )
 		return true;
 
-	return CreateDirectory( strDirectory.c_str( ), nullptr ) == TRUE;
+	return CreateDirectory( strFilePath.c_str( ), nullptr ) == TRUE;
 }
 
 bool CFilesystem::GetAbsoluteDirectoryContents( const std::string &strDirectory, bool bFiles, bool bFolders, std::vector< std::string >& vecOut )
@@ -189,30 +189,20 @@ bool CFilesystem::GetFilesInAbsoluteDirectory( const std::string &strDirectory, 
 bool CFilesystem::ReadAbsoluteFile( const std::string& strFilename, std::string& strOut, bool bDecode /*= true*/ )
 {
 	if ( !CheckAbsoluteFileValidity( strFilename ) )
-	{
-		_Log.Log( EPrefix::ERROR, ELocation::FILESYSTEM, XOR( "Reading attempted on non-existent file %s." ), strFilename.c_str( ) );
-		return false;
-	}
+		return false; // todo log
 
 	FILE* pFile = nullptr;
 	if ( fopen_s( &pFile, strFilename.c_str( ), XOR( "rb" ) ) != 0
 		 || pFile == nullptr
 		 || pFile == INVALID_HANDLE_VALUE )
-	{
-		_Log.Log( EPrefix::ERROR, ELocation::FILESYSTEM, XOR( "Unable to open file %s for reading." ), strFilename.c_str( ) );
-		return false;
-	}
+		return false; // todo log
 
 	fseek( pFile, 0, SEEK_END ); // todo log, 0 == successful
 	const auto zSize = ftell( pFile );
 	strOut.resize( zSize + 1 );
 	rewind( pFile );
-	if ( zSize != fread( &strOut[ 0 ], sizeof( char ), zSize, pFile ) )
-		_Log.Log( EPrefix::WARNING, ELocation::FILESYSTEM, XOR( "Unable to read foretold size of %i in file %s." ), zSize, strFilename.c_str( ) );
-
-	if ( fclose( pFile ) == EOF )
-		_Log.Log( EPrefix::WARNING, ELocation::FILESYSTEM, XOR( "Unable to close file %s successfully." ), strFilename.c_str( ) );
-
+	fread( &strOut[ 0 ], sizeof( char ), zSize, pFile ); // todo log, return == zSize
+	fclose( pFile ); // todo log, return == 0 on success, EOF on fail
 	return true;
 }
 
@@ -228,12 +218,8 @@ bool CFilesystem::WriteAbsoluteFile( const std::string& strFilename, const std::
 		return false;
 	}
 
-	if ( fwrite( &strData[ 0 ], sizeof( char ), strData.length( ), pFile ) != strData.length( ) )
-		_Log.Log( EPrefix::WARNING, ELocation::FILESYSTEM, XOR( "Failed to write all of data into file %s." ), strFilename.c_str( ) );
-
-	if ( fclose( pFile ) == EOF )
-		_Log.Log( EPrefix::WARNING, ELocation::FILESYSTEM, XOR( "Failed to close file %s successfully." ), strFilename.c_str( ) ); 
-	
+	fwrite( &strData[ 0 ], sizeof( char ), strData.length( ), pFile ); // todo log, return == strData.length( )
+	fclose( pFile ); // todo log, return == 0 on success, EOF on fail
 	return true;
 }
 
@@ -241,7 +227,7 @@ bool CFilesystem::AddToAbsoluteFile( const std::string &strFilename, const std::
 {
 	std::string strBuffer { };
 	if ( !ReadAbsoluteFile( strFilename, strBuffer, bEncode ) )
-		return false;
+		return false; // todo log
 
 	strBuffer += strData;
 	return WriteAbsoluteFile( strFilename, strBuffer, bEncode );
