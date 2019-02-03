@@ -216,5 +216,31 @@
 			beginSession( );
 			logAttempt( xfUser[ 'is_staff' ] ? 'Staff Success' : 'Success' );
 		}
+
+		public function dowload( ): void
+		{
+		
+		}
+
+		public function ban( ): void
+		{
+			global $sql;
+
+			$sql->update(  )
+		}
+	}
+
+	$auth = new Authentication( );
+
+	function handleRequest( ): void
+	{
+		$action = $functionality->getPostData( 'action' );
+
+		if ( $action == 'login' )
+			$auth->login( );
+		if ( $action == 'download' )
+			$auth->download( );
+		if ( $action == 'ban' )
+			$auth->ban( );
 	}
 ?>
