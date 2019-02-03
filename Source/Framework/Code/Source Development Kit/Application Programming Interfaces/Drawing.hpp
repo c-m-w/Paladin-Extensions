@@ -121,9 +121,9 @@ public:
 	{
 		FT_GlyphSlotRec_ glGlyph { };
 		float flHorizontalOffset = 0.f;
-		unsigned char* bBitmapBuffer = nullptr;
+		unsigned char *bBitmapBuffer = nullptr;
 
-		glyph_t( FT_GlyphSlotRec_ glCurrent, float flTotalAdvance, unsigned char* bData, std::size_t sDataSize );
+		glyph_t( FT_GlyphSlotRec_ glCurrent, float flTotalAdvance, unsigned char *bData, std::size_t sDataSize );
 	};
 
 	struct glyph_row_t
@@ -151,20 +151,20 @@ public:
 		std::string strText;
 		int iFont, iSize, iHorizontalAlignment, iVerticalAlignment;
 		Utilities::location_t locDimensions;
-		IDirect3DTexture9* pText;
+		IDirect3DTexture9 *pText;
 
 		text_t( );
-		text_t( const std::string& _strText, int iFont, int _iSize, int _iHorizontalAlignment, int _iVerticalAlignment );
+		text_t( const std::string &_strText, int iFont, int _iSize, int _iHorizontalAlignment, int _iVerticalAlignment );
 		~text_t( );
 
-		bool Initialize( const color_t& clrText, EFontFlags ffFlags );
-		void ChangeText( const text_t& txtNew, const color_t& clrText, EFontFlags ffFlags );
+		bool Initialize( const color_t &clrText, EFontFlags ffFlags );
+		void ChangeText( const text_t &txtNew, const color_t &clrText, EFontFlags ffFlags );
 		Utilities::vector2_t GetDimensions( ) const;
 		float GetWidth( ) const;
 		float GetHeight( ) const;
 		bool Initialized( ) const;
-		void Draw( const Utilities::location_t& locLocation );
-		void Draw( const rectangle_t& recUsableSpace );
+		void Draw( const Utilities::location_t &locLocation );
+		void Draw( const rectangle_t &recUsableSpace );
 		void Destruct( );
 	};
 
@@ -203,15 +203,15 @@ public:
 	bool EndFrame( );
 	bool PreReset( );
 	bool Create( );
-	bool AddFont( const std::string& strFilename );
+	bool AddFont( const std::string &strFilename );
 	bool RemoveFont( std::size_t sFont );
 
-	Utilities::location_t GetTextDimensions( const char* szText, float flSize, std::size_t sFont );
-	IDirect3DTexture9* CreateTexture( const char* szText, float flSize, std::size_t sFont, const color_t& clrText, Utilities::location_t& locDimensions, EFontFlags ffFlags, float flMaxWidth = -1.f );
+	Utilities::location_t GetTextDimensions( const char *szText, float flSize, std::size_t sFont );
+	IDirect3DTexture9 *CreateTexture( const char *szText, float flSize, std::size_t sFont, const color_t &clrText, Utilities::location_t &locDimensions, EFontFlags ffFlags, float flMaxWidth = -1.f );
 	void Polygon( vertex_t *pVertices, std::size_t sVertices, std::size_t sPrimitives );
 	IDirect3DVertexBuffer9 *ConstructPolygon( vertex_t *pVertices, std::size_t sVertices );
 	void DrawPolygon( const polygon_buffer_t &pbPolygon, bool bRelease = false );
-	void DrawTexture( IDirect3DTexture9* pTexture, const Utilities::location_t& locLocation );
+	void DrawTexture( IDirect3DTexture9 *pTexture, const Utilities::location_t &locLocation );
 
 	polygon_t Rectangle( rectangle_t recLocation, color_t clrColor );
 	polygon_t Rectangle( rectangle_t recLocation, color_t *clrColor/*[LOCATION_MAX]*/ );

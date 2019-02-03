@@ -35,11 +35,11 @@ void CFilesystem::Shutdown( )
 
 std::string CFilesystem::GetAppdataDirectory( )
 {
-	char* szBuffer;
+	char *szBuffer;
 	auto zWrittenBytes = 0u;
 
 	if ( 0 != _dupenv_s( &szBuffer, &zWrittenBytes, XOR( "appdata" ) )
-		 || zWrittenBytes == 0 )
+		|| zWrittenBytes == 0 )
 		_Log.Log( EPrefix::ERROR, ELocation::FILESYSTEM, XOR( "Error retrieving appdata environment directory." ) );
 
 	auto strDirectory = std::string( szBuffer );
@@ -198,8 +198,8 @@ bool CFilesystem::ReadAbsoluteFile( const std::string &strFilename, std::string 
 
 	FILE *pFile = nullptr;
 	if ( fopen_s( &pFile, strFilename.c_str( ), XOR( "rb" ) ) != 0
-		 || pFile == nullptr
-		 || pFile == INVALID_HANDLE_VALUE )
+		|| pFile == nullptr
+		|| pFile == INVALID_HANDLE_VALUE )
 	{
 		_Log.Log( EPrefix::ERROR, ELocation::FILESYSTEM, XOR( "Unable to open file %s for reading." ), strFilename.c_str( ) );
 		return false;
@@ -220,11 +220,11 @@ bool CFilesystem::ReadAbsoluteFile( const std::string &strFilename, std::string 
 
 bool CFilesystem::WriteAbsoluteFile( const std::string &strFilename, const std::string &strData, bool bEncode /*= true*/ )
 {
-	FILE* pFile = nullptr;
+	FILE *pFile = nullptr;
 	if ( EnsureAbsoluteFileDirectoryExists( strFilename )
-		 && fopen_s( &pFile, strFilename.c_str( ), XOR( "w+b" ) ) != 0
-		 || pFile == nullptr
-		 || pFile == INVALID_HANDLE_VALUE )
+		&& fopen_s( &pFile, strFilename.c_str( ), XOR( "w+b" ) ) != 0
+		|| pFile == nullptr
+		|| pFile == INVALID_HANDLE_VALUE )
 	{
 		_Log.Log( EPrefix::WARNING, ELocation::FILESYSTEM, XOR( "Error opening file %s. Error code %i." ), strFilename.c_str( ), errno );
 		return false;
@@ -234,8 +234,8 @@ bool CFilesystem::WriteAbsoluteFile( const std::string &strFilename, const std::
 		_Log.Log( EPrefix::WARNING, ELocation::FILESYSTEM, XOR( "Failed to write all of data into file %s." ), strFilename.c_str( ) );
 
 	if ( fclose( pFile ) == EOF )
-		_Log.Log( EPrefix::WARNING, ELocation::FILESYSTEM, XOR( "Failed to close file %s successfully." ), strFilename.c_str( ) ); 
-	
+		_Log.Log( EPrefix::WARNING, ELocation::FILESYSTEM, XOR( "Failed to close file %s successfully." ), strFilename.c_str( ) );
+
 	return true;
 }
 
@@ -283,12 +283,12 @@ void CFilesystem::FormatDirectory( std::string &strDirectory )
 
 void CFilesystem::ChangeWorkingDirectory( std::string strNew, std::initializer_list< std::string > initSubDirectories /*= { }*/ )
 {
-	auto& strWorkingDirectory = GetWorkingDirectory( );
+	auto &strWorkingDirectory = GetWorkingDirectory( );
 
 	strWorkingDirectory = strNew;
 	FormatDirectory( strWorkingDirectory );
 
-	for( auto strSubDirectory : initSubDirectories )
+	for ( auto strSubDirectory: initSubDirectories )
 	{
 		FormatDirectory( strSubDirectory );
 		strWorkingDirectory += strSubDirectory;

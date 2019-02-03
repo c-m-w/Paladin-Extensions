@@ -8,16 +8,16 @@
 
 bool CLogging::Initialize( )
 {
-	strErrorTime					= XOR( "Error Retrieving Date/Time" );
-	strDateFormat					= XOR( "%B %e, 20%g" );
-	strTimeFormat					= XOR( "%H:%M:%S" );
-	strLogFileFormat				= XOR( "%Y.%m.%d" );
-	strErrorMessage					= XOR( "Contact support if this issue persists." );
-	strStatusPrefixes[ INFO ]		= XOR( "[Info]\t" );
-	strStatusPrefixes[ DEBUG ]		= XOR( "[Debug]\t" );
-	strStatusPrefixes[ SUCCESS ]	= XOR( "[Success]" );
-	strStatusPrefixes[ WARNING ]	= XOR( "[Warning]" );
-	strStatusPrefixes[ ERROR ]		= XOR( "[Error]\t" );
+	strErrorTime = XOR( "Error Retrieving Date/Time" );
+	strDateFormat = XOR( "%B %e, 20%g" );
+	strTimeFormat = XOR( "%H:%M:%S" );
+	strLogFileFormat = XOR( "%Y.%m.%d" );
+	strErrorMessage = XOR( "Contact support if this issue persists." );
+	strStatusPrefixes[ INFO ] = XOR( "[Info]\t" );
+	strStatusPrefixes[ DEBUG ] = XOR( "[Debug]\t" );
+	strStatusPrefixes[ SUCCESS ] = XOR( "[Success]" );
+	strStatusPrefixes[ WARNING ] = XOR( "[Warning]" );
+	strStatusPrefixes[ ERROR ] = XOR( "[Error]\t" );
 	for ( auto i = 0; i < LOCATION_MAX; i++ )
 		strLocations[ i ] = '[' + std::to_string( i ) + ']';
 

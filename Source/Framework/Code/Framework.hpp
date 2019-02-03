@@ -22,10 +22,10 @@
 inline bool SetupFramework( )
 {
 	return _Filesystem.Setup( )
-		&& _Log.Setup( )
-		&& _Cryptography.Setup( )
-		&& _Connection.Setup( )
-		&& _Input.Setup( );
+			&& _Log.Setup( )
+			&& _Cryptography.Setup( )
+			&& _Connection.Setup( )
+			&& _Input.Setup( );
 }
 
 inline void ShutdownFramework( )

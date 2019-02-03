@@ -26,10 +26,10 @@ void OnLaunch( )
 
 		if( DRAW.BeginFrame( ) )
 		{
-			auto txtTest = text_t( "test", CDrawing::ROBOTO, 14, 0, 0 );
-			txtTest.Initialize( color_t( 0xFFFFFFFF ), CDrawing::NONE );
+			auto txtTest = text_t( "test", CDrawing::ROBOTO, 48, 0, 0 );
+			txtTest.Initialize( color_t( { 255, 0, 0, 100 } ), CDrawing::NONE );
+			DRAW.DrawPolygon( DRAW.Rectangle( rectangle_t( 0.f, 0.f, 600.f, 600.f ), color_t( 0xFFFFFFFF ) ).GetBuffer( ), true );
 			txtTest.Draw( location_t( 20.f, 10.f ) );
-			DRAW.DrawPolygon( DRAW.Rectangle( rectangle_t( 50.f, 50.f, 10.f, 90.f ), color_t( 0xFFFFFFFF ) ).GetBuffer( ), true );
 			DRAW.EndFrame( );
 		}
 

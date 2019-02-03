@@ -10,3 +10,6 @@
 [submodule "Source/Dependencies/Include/json"]
 	path = Source/Dependencies/Include/json
 	url = https://github.com/nlohmann/json
+[submodule "Source/Dependencies/Include/freetype-windows-binaries"]
+	path = Source/Dependencies/Include/freetype-windows-binaries
+	url = https://github.com/ubawurinna/freetype-windows-binaries

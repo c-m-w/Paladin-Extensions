@@ -26,8 +26,8 @@ LRESULT CALLBACK DefaultWindowInputProcessor( HWND wnd, UINT uMessage, WPARAM wP
 }
 
 BOOL CALLBACK EnumWindowsProc(
-	_In_ HWND hwnd,
-	_In_ LPARAM lParam
+	_In_		 HWND hwnd,
+				 _In_		 LPARAM lParam
 )
 {
 	DWORD dwProcessID { };

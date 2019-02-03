@@ -44,7 +44,7 @@ void CConnectivity::Shutdown( )
 
 void CConnectivity::ValidateString( std::string &strToValidate )
 {
-	for ( auto &_IllegalCharacter : vecIllegalCharacters )
+	for ( auto &_IllegalCharacter: vecIllegalCharacters )
 		_IllegalCharacter.ValidateString( strToValidate );
 }
 

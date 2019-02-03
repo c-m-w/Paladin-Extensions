@@ -44,7 +44,7 @@
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
-#pragma comment( lib, "freetype255.lib" )
+#pragma comment( lib, "freetype.lib" )
 
 // OpenSSL
 #if defined _DEBUG

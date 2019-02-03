@@ -32,12 +32,12 @@ public:
 	/** \brief Checks whether or not a file exists. */
 	/** \param strFile Complete path of a file. */
 	/** \return Whether or not the file exists. */
-	[ [ nodiscard ] ] static bool CheckAbsoluteFileValidity( const std::string& strFile );
-	[ [ nodiscard ] ] static std::string GetAbsoluteContainingDirectory( const std::string& strFile );
-	[ [ nodiscard ] ] static bool EnsureAbsoluteFileDirectoryExists( const std::string& strFilePath );
-	[ [ nodiscard ] ] static bool GetAbsoluteDirectoryContents( const std::string& strDirectory, bool bFiles, bool bFolders, std::vector< std::string >& vecOut );
-	[ [ nodiscard ] ] static bool GetFoldersInAbsoluteDirectory( const std::string& strDirectory, std::vector< std::string >& vecOut );
-	[ [ nodiscard ] ] static bool GetFilesInAbsoluteDirectory( const std::string& strDirectory, std::vector< std::string >& vecOut, const std::string& strExtension = std::string( ) );
+	[ [ nodiscard ] ] static bool CheckAbsoluteFileValidity( const std::string &strFile );
+	[ [ nodiscard ] ] static std::string GetAbsoluteContainingDirectory( const std::string &strFile );
+	[ [ nodiscard ] ] static bool EnsureAbsoluteFileDirectoryExists( const std::string &strFilePath );
+	[ [ nodiscard ] ] static bool GetAbsoluteDirectoryContents( const std::string &strDirectory, bool bFiles, bool bFolders, std::vector< std::string > &vecOut );
+	[ [ nodiscard ] ] static bool GetFoldersInAbsoluteDirectory( const std::string &strDirectory, std::vector< std::string > &vecOut );
+	[ [ nodiscard ] ] static bool GetFilesInAbsoluteDirectory( const std::string &strDirectory, std::vector< std::string > &vecOut, const std::string &strExtension = std::string( ) );
 	/** \brief Reads data from a file. */
 	/** \param strFilename Full path of the file to be read. */
 	/** \param strOut Output for the data of the file to be stored. */

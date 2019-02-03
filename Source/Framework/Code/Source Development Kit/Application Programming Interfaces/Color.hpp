@@ -14,6 +14,7 @@ enum EColor
 struct color_t
 {
 private:
+
 	union
 	{
 		unsigned u;
@@ -21,29 +22,30 @@ private:
 	} _Data;
 
 public:
+
 	color_t( );
 	color_t( unsigned uData );
 	color_t( std::initializer_list< unsigned char > initData );
 	color_t( std::initializer_list< int > initData );
 	color_t( std::initializer_list< float > initData );
 
-	unsigned char operator[ ]( std::size_t zColor ) const;
-	float operator[ ]( float flColor ) const;
-	bool operator==( const color_t &rhs ) const;
-	bool operator!=( const color_t &rhs ) const;
+	[ [ nodiscard ] ] unsigned char operator[ ]( std::size_t zColor ) const;
+	[ [ nodiscard ] ] float operator[ ]( float flColor ) const;
+	[ [ nodiscard ] ] bool operator==( const color_t &rhs ) const;
+	[ [ nodiscard ] ] bool operator!=( const color_t &rhs ) const;
 	color_t &operator=( const color_t &rhs );
 
-	unsigned GetRGBA( ) const;
+	[ [ nodiscard ] ] unsigned GetRGBA( ) const;
 	unsigned PutRGBA( unsigned uData );
 	__declspec( property( get = GetRGBA, put = PutRGBA ) ) unsigned rgba;
-	unsigned GetARGB( ) const;
+	[ [ nodiscard ] ] unsigned GetARGB( ) const;
 	unsigned PutARGB( unsigned uData );
 	__declspec( property( get = GetARGB, put = PutARGB ) ) unsigned argb;
 
-	unsigned char GetRed( ) const;
-	unsigned char GetGreen( ) const;
-	unsigned char GetBlue( ) const;
-	unsigned char GetAlpha( ) const;
+	[ [ nodiscard ] ] unsigned char GetRed( ) const;
+	[ [ nodiscard ] ] unsigned char GetGreen( ) const;
+	[ [ nodiscard ] ] unsigned char GetBlue( ) const;
+	[ [ nodiscard ] ] unsigned char GetAlpha( ) const;
 	unsigned char PutRed( unsigned char bData );
 	unsigned char PutGreen( unsigned char bData );
 	unsigned char PutBlue( unsigned char bData );
@@ -53,10 +55,10 @@ public:
 	__declspec( property( get = GetBlue, put = PutBlue ) ) unsigned char b;
 	__declspec( property( get = GetAlpha, put = PutAlpha ) ) unsigned char a;
 
-	float GetRedFraction( ) const;
-	float GetGreenFraction( ) const;
-	float GetBlueFraction( ) const;
-	float GetAlphaFraction( ) const;
+	[ [ nodiscard ] ] float GetRedFraction( ) const;
+	[ [ nodiscard ] ] float GetGreenFraction( ) const;
+	[ [ nodiscard ] ] float GetBlueFraction( ) const;
+	[ [ nodiscard ] ] float GetAlphaFraction( ) const;
 	float PutRedFraction( float flData );
 	float PutGreenFraction( float flData );
 	float PutBlueFraction( float flData );
@@ -66,15 +68,15 @@ public:
 	__declspec( property( get = GetBlueFraction, put = PutBlueFraction ) ) float bfl;
 	__declspec( property( get = GetAlphaFraction, put = PutAlphaFraction ) ) float afl;
 
-	void *GetDataPointer( ) const;
+	[ [ nodiscard ] ] void *GetDataPointer( ) const;
 	void *PutDataPointer( void * ) = delete;
 	__declspec( property( get = GetDataPointer, put = PutDataPointer ) ) void *p;
 
-	double Get709Luminance( ) const;
+	[ [ nodiscard ] ] double Get709Luminance( ) const;
 	double Put709Luminance( double ) = delete;
 	__declspec( property( get = Get709Luminance, put = Put709Luminance ) ) double luma;
 
-	double Get601Luminance( ) const;
+	[ [ nodiscard ] ] double Get601Luminance( ) const;
 	double Put601Luminance( double ) = delete;
 	__declspec( property( get = Get601Luminance, put = Put601Luminance ) ) double luma601;
 };
@@ -82,7 +84,8 @@ public:
 class CColor
 {
 public:
-	static color_t GetGradient( color_t clrStart, color_t clrEnd, float flProgress );
+
+	[ [ nodiscard ] ] static color_t GetGradient( color_t clrStart, color_t clrEnd, float flProgress );
 
 	struct sequence_t
 	{
@@ -91,21 +94,23 @@ public:
 	};
 
 private:
+
 	sequence_t pSequences[ 7 ];
 	std::size_t zSequences = 0u;
 	Utilities::moment_t mmtTotalDuration = 0;
 
 public:
+
 	CColor( ) = default;
 	CColor( color_t clrFirstSequence, Utilities::moment_t mmtFirstSequence );
 	CColor( std::vector< sequence_t > vecSequences );
 
-	color_t GetColor( );
+	[ [ nodiscard ] ] color_t GetColor( );
 	void PutColor( ) = delete;
 	__declspec( property( get = GetColor, put = PutColor ) ) color_t clr;
 
-	sequence_t GetSequence( std::size_t zSequence );
-	sequence_t operator[ ]( std::size_t zSequence );
+	[ [ nodiscard ] ] sequence_t GetSequence( std::size_t zSequence );
+	[ [ nodiscard ] ] sequence_t operator[ ]( std::size_t zSequence );
 
 	void PutNewColorSequence( sequence_t seq );
 	CColor &operator<<( sequence_t seq );
