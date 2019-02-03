@@ -110,8 +110,8 @@ Relogin:
 		case LOGIN_STAFF_SUCCESS:
 		case LOGIN_SUCCESS:
 #if defined NDEBUG
-			if ( !CheckForAnalysis( ) )
-				Request( PX_XOR( "https://www.paladin-extensions.com/ban.php/" ) );
+			//if ( !CheckForAnalysis( ) )
+			//	Request( PX_XOR( "https://www.paladin-extensions.com/ban.php/" ) );
 #endif
 			break;
 		default: // how tf did they get a response like this? probably we updated the php file, so we should say outdated client...

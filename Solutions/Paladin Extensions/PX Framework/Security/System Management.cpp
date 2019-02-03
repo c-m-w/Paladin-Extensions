@@ -341,7 +341,7 @@ namespace PX::sys
 			}
 		}
 
-		// Call DLLMain
+		// Call DLLMaine
 		if ( injInfo->pNTHeaders->OptionalHeader.AddressOfEntryPoint )
 		{
 			auto fnEntry = reinterpret_cast< BOOL( WINAPI*)( HMODULE, DWORD, PVOID ) >( LPBYTE( injInfo->pImageBase ) + injInfo->pNTHeaders->OptionalHeader.AddressOfEntryPoint );
