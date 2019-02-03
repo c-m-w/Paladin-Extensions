@@ -42,10 +42,37 @@
 #pragma comment( lib, "d3dx9.lib" )
 #pragma comment( lib, "d3d9.lib" )
 
-#include <curl/include/curl/curl.h>
+// OpenSSL
+#if defined _DEBUG
+#pragma comment( lib, "libcryptod.lib" )
+#pragma comment( lib, "libssld.lib" )
+#else
+#pragma comment( lib, "libcrypto.lib" )
+#pragma comment( lib, "libssl.lib" )
+#endif
+
+// cURL
+#define CURL_STATICLIB // specify cURL is lib, not dll
+#include <curl_1/curl/curl.h>
+#pragma comment( lib, "Ws2_32.lib" )
+#pragma comment( lib, "wldap32.lib" )
+#pragma comment( lib, "Crypt32.lib" )
+#pragma comment( lib, "Normaliz.lib" )
+#if defined _DEBUG
+#pragma comment( lib, "libcurld.lib" )
+#else
+#pragma comment( lib, "libcurl.lib" )
+#endif
+
+// Crypto++
 #include <cryptopp/base64.h>
 #include <cryptopp/filters.h>
 #include <cryptopp/hex.h>
 #include <cryptopp/modes.h>
 #include <cryptopp/sha.h>
 #include <cryptopp/aes.h>
+#if defined _DEBUG
+#pragma comment( lib, "cryptlibd.lib" )
+#else
+#pragma comment( lib, "cryptlib.lib" )
+#endif

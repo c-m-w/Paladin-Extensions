@@ -5,7 +5,7 @@
 /** \brief Provides tools for processing what is communicated through connectivity. */
 class CCryptography: public IBase
 {
-private:
+protected:
 
 	constexpr static auto GENERATION_INTERVAL = 3600000ui64; // 1 hour in milliseconds
 

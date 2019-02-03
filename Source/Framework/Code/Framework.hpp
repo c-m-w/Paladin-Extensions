@@ -19,6 +19,14 @@
 #include "Source Development Kit/Application Programming Interfaces/Window.hpp"
 #include "Source Development Kit/Application Programming Interfaces/Drawing.hpp"
 
+inline bool InitializeFramework( )
+{
+	return _Cryptography.Setup( )
+		&& _Filesystem.Setup( )
+		&& _Connection.Setup( )
+		&& _Input.Setup( );
+}
+
 #if defined USE_NAMESPACES
 using namespace Utilities;
 #endif

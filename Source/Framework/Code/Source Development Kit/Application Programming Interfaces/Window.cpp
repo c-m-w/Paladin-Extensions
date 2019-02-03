@@ -17,7 +17,7 @@ LRESULT CALLBACK WindowProc( HWND wnd, UINT uMessage, WPARAM wParam, LPARAM lPar
 
 		default:
 		{
-			_Input.OnEvent( wnd, uMessage, wParam, lParam );
+			_Input.HandleEvent( uMessage, wParam, lParam );
 		}
 			break;
 	}

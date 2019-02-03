@@ -2,7 +2,7 @@
 
 #pragma once
 
-class CInput: IBase
+class CInput: public IBase
 {
 public:
 
@@ -60,18 +60,18 @@ public:
 	/** \brief Used to hold the virtual key code of a key. */
 	using key_t = unsigned char;
 	/** \brief Callback for when a singular key state is changed.\n
-				The parameter passed is whether or not it is pressed.\n
+				The parameter passed is the state of the key.\n
 				Return true if the input was handled. */
-	using key_callback_t = std::function< bool( bool ) >;
+	using key_callback_t = std::function< bool( CKeyState ) >;
 	/** \brief Callback for when a singular key is typed.\n
 				The parameter passed is the key that was pressed.\n
 				Return true if the input was handled. */
 	using key_typed_callback_t = std::function< bool( key_t ) >;
 	/** \brief Callback for whenever a key state is changed.\n
 				First parameter holds the virtual key code of the key.\n
-				Second parameter is whether or not the key was pressed.\n
+				Second parameter is the state of the key.\n
 				Return true if the input was handled. */
-	using global_key_callback_t = std::function< bool( key_t, bool ) >;
+	using global_key_callback_t = std::function< bool( key_t, CKeyState ) >;
 	/** \brief Callback for when the mouse is moved on the window.\n
 				The parameter is the location that the mouse has moved to.\n
 				Return true if the input was handled. */

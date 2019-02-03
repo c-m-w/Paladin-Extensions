@@ -1,106 +1,37 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
+    <ClCompile Include="Code\Development Environment\Logging.cpp" />
+    <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Color.cpp" />
+    <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Connectivity.cpp" />
+    <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Cryptography.cpp" />
+    <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Drawing.cpp" />
+    <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Filesystem.cpp" />
+    <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Input.cpp" />
+    <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Utilities.cpp" />
+    <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Window.cpp" />
+    <ClCompile Include="Precompile.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Code\Framework.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Precompile.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Code\Development Environment\Standard Library.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Code\Development Environment\Entry Manager.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Connectivity.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Base Interface.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Filesystem.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Code\Development Environment\Logging.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Utilities.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Cryptography.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Code\Development Environment\Build Output Wrapper.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Window.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Input.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Drawing.hpp">
-	  <Filter>Header Files</Filter>
-    <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Color.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
+    <ClInclude Include="Code\Development Environment\Build Output Wrapper.hpp" />
+    <ClInclude Include="Code\Development Environment\Entry Manager.hpp" />
+    <ClInclude Include="Code\Development Environment\Logging.hpp" />
+    <ClInclude Include="Code\Development Environment\Standard Library.hpp" />
+    <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Base Interface.hpp" />
+    <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Color.hpp" />
+    <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Connectivity.hpp" />
+    <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Cryptography.hpp" />
+    <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Drawing.hpp" />
+    <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Filesystem.hpp" />
+    <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Input.hpp" />
+    <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Utilities.hpp" />
+    <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Window.hpp" />
+    <ClInclude Include="Precompile.hpp" />
+    <ClInclude Include="Code\Framework.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Precompile.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Connectivity.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Filesystem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Code\Development Environment\Logging.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Utilities.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Cryptography.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Window.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Input.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Drawing.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Color.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Code\Source Development Kit\Application Programming Interfaces\Utilities.inl">
-      <Filter>Header Files</Filter>
-    </None>
-    <None Include="Code\Source Development Kit\Application Programming Interfaces\Cryptography.inl">
-      <Filter>Header Files</Filter>
-    </None>
-    <None Include="Code\Source Development Kit\Application Programming Interfaces\Connectivity.inl">
-      <Filter>Header Files</Filter>
-    </None>
+    <None Include="Code\Source Development Kit\Application Programming Interfaces\Connectivity.inl" />
+    <None Include="Code\Source Development Kit\Application Programming Interfaces\Cryptography.inl" />
+    <None Include="Code\Source Development Kit\Application Programming Interfaces\Utilities.inl" />
   </ItemGroup>
 </Project>
