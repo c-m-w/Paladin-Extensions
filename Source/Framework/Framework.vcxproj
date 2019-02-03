@@ -95,6 +95,7 @@
   <ItemGroup>
     <ClInclude Include="Code\Development Environment\Build Output Wrapper.hpp" />
     <ClInclude Include="Code\Development Environment\Entry Manager.hpp" />
+    <ClInclude Include="Code\Development Environment\Font Awesome Icons.hpp" />
     <ClInclude Include="Code\Development Environment\Logging.hpp" />
     <ClInclude Include="Code\Development Environment\Standard Library.hpp" />
     <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Base Interface.hpp" />

@@ -28,6 +28,7 @@
     <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Window.hpp" />
     <ClInclude Include="Precompile.hpp" />
     <ClInclude Include="Code\Framework.hpp" />
+    <ClInclude Include="Code\Development Environment\Font Awesome Icons.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Code\Source Development Kit\Application Programming Interfaces\Connectivity.inl" />
