@@ -48,6 +48,9 @@
     <ClInclude Include="Code\Development Environment\Build Output Wrapper.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Color.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Precompile.cpp">
@@ -66,6 +69,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Cryptography.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Color.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

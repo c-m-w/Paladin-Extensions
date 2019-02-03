@@ -9,6 +9,7 @@
 #include "Development Environment/Entry Manager.hpp"
 
 #include "Source Development Kit/Application Programming Interfaces/Utilities.hpp"
+#include "Source Development Kit/Application Programming Interfaces/Color.hpp"
 #include "Source Development Kit/Application Programming Interfaces/Base Interface.hpp"
 #include "Source Development Kit/Application Programming Interfaces/Cryptography.hpp"
 #include "Source Development Kit/Application Programming Interfaces/Filesystem.hpp"
