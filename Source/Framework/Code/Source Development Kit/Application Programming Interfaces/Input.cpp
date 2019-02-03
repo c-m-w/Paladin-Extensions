@@ -61,7 +61,7 @@ bool CInput::ProcessMouseMessage( UINT uMsg, WPARAM wParam )
 			_Key = HIWORD( wParam ) == XBUTTON1 ? VK_XBUTTON1 : VK_XBUTTON2;
 			break;
 		default:
-			return;
+			return false;
 	}
 
 	return ProcessKey( _Key, _KeyState );
@@ -90,7 +90,7 @@ bool CInput::ProcessKeyboardMessage( UINT uMsg, WPARAM wParam )
 		break;
 
 		default:
-			return;
+			return false;
 	}
 
 	return bReturn | ProcessKey( wParam, _KeyState );
