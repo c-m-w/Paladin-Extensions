@@ -15,9 +15,9 @@ namespace Utilities
 		location_t( ) = default;
 		location_t( float _x, float _y );
 
-		location_t operator-( const location_t& rhs );
-		location_t operator+( const location_t& rhs );
-		bool operator!=( const location_t& rhs );
+		location_t operator-( const location_t &rhs );
+		location_t operator+( const location_t &rhs );
+		bool operator!=( const location_t &rhs );
 
 		void Rotate( float flAngle, location_t locRotationPoint );
 		void Invalidate( );

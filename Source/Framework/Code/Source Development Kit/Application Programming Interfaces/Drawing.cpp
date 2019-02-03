@@ -33,7 +33,7 @@ bool CDrawing::Initialize( )
 	pParameters.AutoDepthStencilFormat = D3DFMT_D16;
 	pParameters.PresentationInterval = D3DPRESENT_INTERVAL_ONE;
 
-	if( pD3DInstance->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, pTarget->GetWindowHandle( ), D3DCREATE_SOFTWARE_VERTEXPROCESSING, &pParameters, &pDevice ) != D3D_OK )
+	if ( pD3DInstance->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, pTarget->GetWindowHandle( ), D3DCREATE_SOFTWARE_VERTEXPROCESSING, &pParameters, &pDevice ) != D3D_OK )
 	{
 		pD3DInstance->Release( );
 		_Log.Log( EPrefix::ERROR, ELocation::DRAWING, XOR( "Failed to create D3D device." ) );
@@ -82,7 +82,7 @@ bool CDrawing::CreateState( )
 		return false;
 	};
 
-	if( pState != nullptr )
+	if ( pState != nullptr )
 	{
 		_Log.Log( EPrefix::WARNING, ELocation::DRAWING, XOR( "Attempting to create state when state exists." ) );
 		return false;
@@ -168,7 +168,7 @@ bool CDrawing::EndFrame( )
 	const auto hrPresent = pDevice->Present( nullptr, nullptr, nullptr, nullptr );
 	if ( hrPresent != D3D_OK )
 	{
-		if( hrPresent == D3DERR_DEVICELOST && pDevice->TestCooperativeLevel(  ) == D3DERR_DEVICENOTRESET )
+		if ( hrPresent == D3DERR_DEVICELOST && pDevice->TestCooperativeLevel( ) == D3DERR_DEVICENOTRESET )
 		{
 			_Log.Log( EPrefix::INFO, ELocation::DRAWING, XOR( "Attempting to reset device after being lost." ) );
 			PreReset( );
@@ -180,25 +180,21 @@ bool CDrawing::EndFrame( )
 			PostReset( );
 			return true;
 		}
-		
+
 		_Log.Log( EPrefix::WARNING, ELocation::DRAWING, XOR( "Failed to present scene." ) );
 		return false;
 	}
 }
 
 void CDrawing::PreReset( )
-{
-	
-}
+{ }
 
 void CDrawing::PostReset( )
-{
-	
-}
+{ }
 
-void CDrawing::Polygon( vertex_t* pVertices, std::size_t sVertices, std::size_t sPrimitives )
+void CDrawing::Polygon( vertex_t *pVertices, std::size_t sVertices, std::size_t sPrimitives )
 {
-	IDirect3DVertexBuffer9* pBuffer = nullptr;
+	IDirect3DVertexBuffer9 *pBuffer = nullptr;
 
 	const auto sVertexSize = sizeof( vertex_t ) * sVertices;
 	if ( D3D_OK != pDevice->CreateVertexBuffer( sVertexSize, NULL, FVF, D3DPOOL_DEFAULT, &pBuffer, nullptr ) )
@@ -211,7 +207,7 @@ void CDrawing::Polygon( vertex_t* pVertices, std::size_t sVertices, std::size_t 
 		return;
 	}
 
-	void* pVertexMemory;
+	void *pVertexMemory;
 	pBuffer->Lock( 0, sVertexSize, &pVertexMemory, 0 );
 	memcpy( pVertexMemory, pVertices, sVertexSize );
 	pBuffer->Unlock( );
@@ -227,9 +223,9 @@ void CDrawing::Polygon( vertex_t* pVertices, std::size_t sVertices, std::size_t 
 	pBuffer->Release( );
 }
 
-IDirect3DVertexBuffer9* CDrawing::ConstructPolygon( vertex_t* pVertices, std::size_t sVertices )
+IDirect3DVertexBuffer9 *CDrawing::ConstructPolygon( vertex_t *pVertices, std::size_t sVertices )
 {
-	IDirect3DVertexBuffer9* pBuffer = nullptr;
+	IDirect3DVertexBuffer9 *pBuffer = nullptr;
 
 	const auto sVertexSize = sizeof( vertex_t ) * sVertices;
 	if ( D3D_OK != pDevice->CreateVertexBuffer( sVertexSize, NULL, FVF, D3DPOOL_DEFAULT, &pBuffer, nullptr ) )
@@ -240,7 +236,7 @@ IDirect3DVertexBuffer9* CDrawing::ConstructPolygon( vertex_t* pVertices, std::si
 		return nullptr;
 	}
 
-	void* pVertexMemory;
+	void *pVertexMemory;
 	pBuffer->Lock( 0, sVertexSize, &pVertexMemory, 0 );
 	memcpy( pVertexMemory, pVertices, sVertexSize );
 	pBuffer->Unlock( );
@@ -248,7 +244,7 @@ IDirect3DVertexBuffer9* CDrawing::ConstructPolygon( vertex_t* pVertices, std::si
 	return pBuffer;
 }
 
-void CDrawing::DrawPolygon( const polygon_buffer_t& pbPolygon, bool bRelease /*= false*/ )
+void CDrawing::DrawPolygon( const polygon_buffer_t &pbPolygon, bool bRelease /*= false*/ )
 {
 	if ( D3D_OK == pDevice->SetStreamSource( NULL, pbPolygon.pVertexBuffer, NULL, sizeof( vertex_t ) ) )
 		pDevice->DrawPrimitive( pbPolygon.ptDraw, 0, pbPolygon.sPrimitives );
@@ -303,13 +299,13 @@ rectangle_t::rectangle_t( RECT recNew )
 	*this = rectangle_t( float( recNew.left ), float( recNew.top ), float( recNew.right - recNew.left ), float( recNew.bottom - recNew.top ) );
 }
 
-void rectangle_t::operator+=( const rectangle_t& rhs )
+void rectangle_t::operator+=( const rectangle_t &rhs )
 {
 	x += rhs.x;
 	y += rhs.y;
 }
 
-void rectangle_t::Clamp( const rectangle_t& recClamp )
+void rectangle_t::Clamp( const rectangle_t &recClamp )
 {
 	if ( x < recClamp.x )
 		x = recClamp.x;
@@ -324,20 +320,20 @@ void rectangle_t::Clamp( const rectangle_t& recClamp )
 		flHeight -= 1.f;
 }
 
-bool rectangle_t::LocationInRectangle( const location_t& locLocation ) const
+bool rectangle_t::LocationInRectangle( const location_t &locLocation ) const
 {
 	return locLocation.x >= x
-		&& locLocation.x <= x + flWidth
-		&& locLocation.y >= y
-		&& locLocation.y <= y + flHeight;
+			&& locLocation.x <= x + flWidth
+			&& locLocation.y >= y
+			&& locLocation.y <= y + flHeight;
 }
 
-bool rectangle_t::InRectangle( const rectangle_t& recLocation ) const
+bool rectangle_t::InRectangle( const rectangle_t &recLocation ) const
 {
 	return recLocation.LocationInRectangle( location_t( x, y ) )
-		|| recLocation.LocationInRectangle( location_t( x + flWidth, y ) )
-		|| recLocation.LocationInRectangle( location_t( x + flWidth, y + flHeight ) )
-		|| recLocation.LocationInRectangle( location_t( x, y + flHeight ) );
+			|| recLocation.LocationInRectangle( location_t( x + flWidth, y ) )
+			|| recLocation.LocationInRectangle( location_t( x + flWidth, y + flHeight ) )
+			|| recLocation.LocationInRectangle( location_t( x, y + flHeight ) );
 }
 
 RECT rectangle_t::ToRect( ) const
@@ -348,7 +344,7 @@ RECT rectangle_t::ToRect( ) const
 circle_t::circle_t( location_t _locLocation, float _flRadius, std::size_t _sResolution ): locLocation( _locLocation ), flRadius( _flRadius ), sResolution( _sResolution )
 { }
 
-vertex_t* circle_t::GetPoints( float flStartAngle, float flRatio ) const
+vertex_t *circle_t::GetPoints( float flStartAngle, float flRatio ) const
 {
 	const auto pReturn = new vertex_t[ sResolution + 2u ];
 	const auto flAngle = 360.f * flRatio / float( sResolution );
@@ -382,7 +378,7 @@ vertex_t::vertex_t( float x, float y, DWORD _dwColor )
 	dwColor = _dwColor;
 }
 
-vertex_t vertex_t::operator+( const vertex_t& rhs )
+vertex_t vertex_t::operator+( const vertex_t &rhs )
 {
 	flVectors[ 0 ] += rhs.flVectors[ 0 ];
 	flVectors[ 1 ] += rhs.flVectors[ 1 ];
@@ -409,20 +405,20 @@ void vertex_t::Rotate( float flAngle, D3DXVECTOR2 vecRotationPoint )
 
 vertex_t vertex_t::Round( )
 {
-	for ( auto& vector : flVectors )
+	for each ( auto &vector in flVectors )
 		vector = roundf( vector );
 
 	return *this;
 }
 
-polygon_buffer_t::polygon_buffer_t( IDirect3DVertexBuffer9* _pVertexBuffer, std::size_t _sPrimitives, D3DPRIMITIVETYPE _ptDraw ): pVertexBuffer( _pVertexBuffer ), sPrimitives( _sPrimitives ),
-ptDraw( _ptDraw )
+polygon_buffer_t::polygon_buffer_t( IDirect3DVertexBuffer9 *_pVertexBuffer, std::size_t _sPrimitives, D3DPRIMITIVETYPE _ptDraw ): pVertexBuffer( _pVertexBuffer ), sPrimitives( _sPrimitives ),
+																																  ptDraw( _ptDraw )
 { }
 
-polygon_t::polygon_t( ) : vecVertices( { } ), sPrimitives( 0 )
+polygon_t::polygon_t( ): vecVertices( { } ), sPrimitives( 0 )
 { }
 
-polygon_t::polygon_t( vertex_t* pVertices, std::size_t sVertices, std::size_t _sPrimitives )
+polygon_t::polygon_t( vertex_t *pVertices, std::size_t sVertices, std::size_t _sPrimitives )
 {
 	vecVertices = decltype( vecVertices )( );
 
@@ -444,7 +440,7 @@ void polygon_t::Draw( rectangle_t recRelative, color_t clrColor )
 	const auto dwColor = clrColor.Hex( );
 	auto vecTemp = vecVertices;
 
-	for ( auto& vtx : vecTemp )
+	for each ( auto &vtx in vecTemp )
 	{
 		vtx.flVectors[ 0 ] += recRelative.x;
 		vtx.flVectors[ 1 ] += recRelative.y;
@@ -453,9 +449,9 @@ void polygon_t::Draw( rectangle_t recRelative, color_t clrColor )
 	Polygon( &vecTemp[ 0 ], vecTemp.size( ), sPrimitives );
 }
 
-void polygon_t::Join( const polygon_t& other )
+void polygon_t::Join( const polygon_t &other )
 {
-	for ( auto& vertex : other.vecVertices )
+	for each ( auto &vertex in other.vecVertices )
 		vecVertices.emplace_back( vertex );
 
 	sPrimitives += other.sPrimitives;
@@ -476,7 +472,7 @@ void polygon_t::Draw( rectangle_t recRelative )
 
 	auto vecTemp = vecVertices;
 
-	for ( auto& vtx : vecTemp )
+	for each ( auto &vtx in vecTemp )
 	{
 		vtx.flVectors[ 0 ] += recRelative.x;
 		vtx.flVectors[ 1 ] += recRelative.y;

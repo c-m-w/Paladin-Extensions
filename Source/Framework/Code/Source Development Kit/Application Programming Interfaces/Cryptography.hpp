@@ -43,13 +43,13 @@ public:
 	/**	\param strSubject Text to encode or decode. */
 	/**	\param strOut Output buffer for the encoded or decoded text. */
 	/**	\return Whether or not encoding or decoding the text was sucessful. */
-	template< typename _t > bool Base64( const  std::string &strSubject, std::string& strOut );
+	template< typename _t > bool Base64( const std::string &strSubject, std::string &strOut );
 	/** \brief Encrypts or decrypts text with AES-256-CBC style.\n Requires InitializeEncryption( ) be called beforehand. */
 	/**	\tparam _t Either CryptoPP::CBC_Mode< CryptoPP::AES >::Encryption or CryptoPP::CBC_Mode< CryptoPP::AES >::Decryption, depending on if you wish to encrypt or decrypt text. */
 	/**	\param strPlainText Text to encrypt or decrypt. */
 	/**	\param strOut Output buffer for the encrypted or decrypted text. */
 	/**	\return Whether or not processing the text was successful. */
-	template< typename _t > bool Crypt( const  std::string &strPlainText, std::string& strOut );
+	template< typename _t > bool Crypt( const std::string &strPlainText, std::string &strOut );
 } inline _Cryptography;
 
 using encode_t = CCryptography::encode_t;

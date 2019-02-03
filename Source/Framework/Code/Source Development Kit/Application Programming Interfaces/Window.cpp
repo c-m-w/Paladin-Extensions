@@ -19,14 +19,14 @@ LRESULT CALLBACK WindowProc( HWND wnd, UINT uMessage, WPARAM wParam, LPARAM lPar
 		{
 			_Input.OnEvent( wnd, uMessage, wParam, lParam );
 		}
-		break;
+			break;
 	}
 
 	return DefWindowProc( wnd, uMessage, wParam, lParam );
 }
 
 BOOL CALLBACK EnumWindowsProc(
-	_In_ HWND   hwnd,
+	_In_ HWND hwnd,
 	_In_ LPARAM lParam
 )
 {
@@ -47,10 +47,10 @@ std::vector< HWND > CWindow::GetCurrentProcessWindows( )
 	return vecWindows;
 }
 
-CWindow::CWindow( const std::string& strTitle, const Utilities::vector2_t& vecSize, HINSTANCE hModule, WNDPROC _WindowInputProcessor /*= DefaultWindowInputProcessor*/ ): pOldWindowInputProcessor( nullptr )
+CWindow::CWindow( const std::string &strTitle, const Utilities::vector2_t &vecSize, HINSTANCE hModule, WNDPROC _WindowInputProcessor /*= DefaultWindowInputProcessor*/ ): pOldWindowInputProcessor( nullptr )
 {
 	_WindowInformation = WNDCLASSEX { sizeof _WindowInformation, NULL, _WindowInputProcessor, NULL, NULL, hModule, nullptr, nullptr, nullptr, nullptr, strTitle.c_str( ), nullptr };
-	if( NULL == RegisterClassEx( &_WindowInformation ) )
+	if ( NULL == RegisterClassEx( &_WindowInformation ) )
 	{
 		_Log.Log( EPrefix::ERROR, ELocation::WINDOW, XOR( "Failed to register window class." ) );
 		return;
@@ -59,15 +59,15 @@ CWindow::CWindow( const std::string& strTitle, const Utilities::vector2_t& vecSi
 	const auto vecScreenSize = GetScreenSize( );
 	hwHandle = CreateWindowEx( WS_EX_APPWINDOW, strTitle.c_str( ), strTitle.c_str( ), WS_VISIBLE, int( vecScreenSize.x / 2.f - vecSize.x / 2.f ), int( vecScreenSize.y / 2.f - vecSize.y / 2.f ),
 							   int( vecSize.x ), int( vecSize.y ), nullptr, nullptr, hModule, nullptr );
-	if( nullptr == hwHandle )
+	if ( nullptr == hwHandle )
 	{
 		_Log.Log( EPrefix::ERROR, ELocation::WINDOW, XOR( "Failed to create window." ) );
 		return;
 	}
 
 	if ( TRUE != ShowWindow( hwHandle, SW_SHOWDEFAULT )
-		 || TRUE != SetWindowText( hwHandle, strTitle.c_str( ) )
-		 || TRUE != UpdateWindow( hwHandle ) )
+		|| TRUE != SetWindowText( hwHandle, strTitle.c_str( ) )
+		|| TRUE != UpdateWindow( hwHandle ) )
 		_Log.Log( EPrefix::WARNING, ELocation::WINDOW, XOR( "Setting window attributes failed." ) );
 }
 

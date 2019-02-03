@@ -8,16 +8,16 @@
 
 bool CLogging::Initialize( )
 {
-	strErrorTime					= XOR( "Error Retrieving Date/Time" );
-	strDateFormat					= XOR( "%B %e, 20%g" );
-	strTimeFormat					= XOR( "%H:%M:%S" );
-	strLogFileFormat				= XOR( "%Y-%m-%d" );
-	strErrorMessage					= XOR( "Contact support if this issue persists." );
-	strStatusPrefixes[ INFO ]		= XOR( "[Info]\t" );
-	strStatusPrefixes[ DEBUG ]		= XOR( "[Debug]\t" );
-	strStatusPrefixes[ SUCCESS ]	= XOR( "[Success]" );
-	strStatusPrefixes[ WARNING ]	= XOR( "[Warning]" );
-	strStatusPrefixes[ ERROR ]		= XOR( "[Error]\t" );
+	strErrorTime = XOR( "Error Retrieving Date/Time" );
+	strDateFormat = XOR( "%B %e, 20%g" );
+	strTimeFormat = XOR( "%H:%M:%S" );
+	strLogFileFormat = XOR( "%Y-%m-%d" );
+	strErrorMessage = XOR( "Contact support if this issue persists." );
+	strStatusPrefixes[ INFO ] = XOR( "[Info]\t" );
+	strStatusPrefixes[ DEBUG ] = XOR( "[Debug]\t" );
+	strStatusPrefixes[ SUCCESS ] = XOR( "[Success]" );
+	strStatusPrefixes[ WARNING ] = XOR( "[Warning]" );
+	strStatusPrefixes[ ERROR ] = XOR( "[Error]\t" );
 	for ( auto i = 0; i < LOCATION_MAX; i++ )
 		strLocations[ i ] = '[' + std::to_string( i ) + ']';
 
@@ -119,7 +119,7 @@ void CLogging::Log( EPrefix _Prefix, ELocation _Location, const char *szFormat, 
 
 	memset( chBuffer, 0, MAX_LOG_LENGTH );
 	va_start( vaArgs, szFormat );
-	if( _vsnprintf_s( chBuffer, MAX_LOG_LENGTH, szFormat, vaArgs ) == 0 )
+	if ( _vsnprintf_s( chBuffer, MAX_LOG_LENGTH, szFormat, vaArgs ) == 0 )
 		return ErrorPopup( ERROR_FORMAT_VA_FAILED );
 
 	va_end( vaArgs );

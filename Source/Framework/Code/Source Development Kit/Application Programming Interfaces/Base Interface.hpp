@@ -16,11 +16,12 @@ public:
 
 	IBase( ): bInitialization( false )
 	{ }
+
 	virtual ~IBase( ) = default;
-	IBase( const IBase& ) = delete;
-	IBase( IBase&& ) = delete;
-	IBase& operator=( const IBase& ) = delete;
-	IBase& operator=( IBase&& ) = delete;
+	IBase( const IBase & ) = delete;
+	IBase( IBase && ) = delete;
+	IBase &operator=( const IBase & ) = delete;
+	IBase &operator=( IBase && ) = delete;
 
 	[ [ nodiscard ] ] bool Setup( )
 	{

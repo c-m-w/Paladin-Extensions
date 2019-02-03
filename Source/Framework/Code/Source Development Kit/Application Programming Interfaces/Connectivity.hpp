@@ -11,9 +11,9 @@ private:
 		char chCharacter;
 		std::string strReplacement;
 
-		illegal_post_data_character_t( char _chCharacter, const std::string& _strReplacement );
+		illegal_post_data_character_t( char _chCharacter, const std::string &_strReplacement );
 
-		void ValidateString( std::string& strToValidate );
+		void ValidateString( std::string &strToValidate );
 	};
 
 	constexpr static auto MAX_RETRIES = 5;
@@ -41,7 +41,7 @@ public:
 
 		std::string strIdentifier, strValue;
 
-		post_data_t( const std::string& _strIdentifier, const std::string& _strValue );
+		post_data_t( const std::string &_strIdentifier, const std::string &_strValue );
 
 		std::string FormatString( ) const;
 	};
@@ -50,9 +50,9 @@ public:
 
 	void Shutdown( ) override;
 
-	static void ValidateString( std::string& strToValidate );
+	static void ValidateString( std::string &strToValidate );
 
-	bool Request( const std::string& strUniformResourceLocator, std::initializer_list< post_data_t > initData, std::string& strOut, int iRetries = 0 );
+	bool Request( const std::string &strUniformResourceLocator, std::initializer_list< post_data_t > initData, std::string &strOut, int iRetries = 0 );
 } inline _Connection;
 
 using post_data_t = CConnectivity::post_data_t;

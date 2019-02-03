@@ -2,7 +2,7 @@
 
 #pragma once
 
-template< typename _t > bool CCryptography::Base64( const std::string &strSubject, std::string& strOut )
+template< typename _t > bool CCryptography::Base64( const std::string &strSubject, std::string &strOut )
 {
 	if ( strSubject.empty( ) )
 		return false;
@@ -18,7 +18,7 @@ template< typename _t > bool CCryptography::Base64( const std::string &strSubjec
 	return !strOut.empty( );
 }
 
-template< typename _t > bool CCryptography::Crypt( const std::string &strPlainText, std::string& strOut )
+template< typename _t > bool CCryptography::Crypt( const std::string &strPlainText, std::string &strOut )
 {
 	if ( strPlainText.empty( ) )
 		return false;

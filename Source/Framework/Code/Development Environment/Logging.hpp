@@ -54,7 +54,7 @@ private:
 	/** \brief Converts time since epoch to something that is legible. */
 	/** \param strFormat Format for the time string. */
 	/** \return Formatted time string. */
-	[ [ nodiscard ] ] std::string FormatTime( const std::string& strFormat );
+	[ [ nodiscard ] ] std::string FormatTime( const std::string &strFormat );
 	/** \brief Gets the date for the beginning of a log session. */
 	/** \return Current date. */
 	[ [ nodiscard ] ] std::string GetDatestamp( );
@@ -107,7 +107,7 @@ public:
 	/** \param _Prefix Prefix to denote the severity or status of the event. */
 	/** \param _Location Where the event occurred. */
 	/** \param strLog Text to be logged. */
-	void Log( EPrefix _Prefix, ELocation _Location, const std::string& strLog );
+	void Log( EPrefix _Prefix, ELocation _Location, const std::string &strLog );
 	/** \brief Logs an event to the buffer. */
 	/** \param _Prefix Prefix to denote the severity or status of the event. */
 	/** \param _Location Where the event occurred. */
