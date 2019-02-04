@@ -4,7 +4,6 @@
 
     class ResourceManager
     {
-        private $count;
         private $data;
 
         private function getFilesInDirectory( $directory ): void
@@ -13,49 +12,62 @@
 
             foreach ( $files as $file )
                 if ( !is_dir( realpath( $file ) ) )
-                    $return[ $this->count++ ] = $file;
+                {
+                    $relativeFolder = substr( $directory, strlen( resourceFolder ) - strlen( resourceFolderName ) );
+                    $path = str_replace( '/', '\\', $relativeFolder ) . '\\' . $file;
+                    $filePath = $directory . '/' . $file;
+                    $data = file_get_contents( $filePath );
+                    $this->data[ ] = array( "Path" => $path, "Data" => base64_encode( $data ) );
+                }
         }
 
-        private function getFoldersInDirectory( $directory ): array
+        private function getFoldersInDirectory( $directory )
         {
             $files = scandir( $directory );
             $return = array( );
-            $count = 0;
 
             foreach ( $files as $file )
-                if ( is_dir( realpath( $file ) ) )
-                    $return[ $count++ ] = $file;
+                if ( is_dir( $file ) && $file != '.' && $file != '..' )
+                    $return[ ] = $file;
 
-            return $return;
+            return sizeof( $return ) == 0 ? NULL : $return;
         }
 
         private function getResourceFiles( $directory = resourceFolder ): void
         {
-            $current = realpath( '' );
+            $oldDirectory = realpath( '' );
             chdir( $directory );
-            $this->getFilesInDirectory( $directory );
-            foreach ( $this->getFoldersInDirectory( $directory ) as $folder )
+            if ( $directory == resourceFolder )
             {
-                echo $folder . ' ';
-                $this->getResourceFiles( $folder );
+                $this->count = 0;
+                $this->data = array( );
             }
 
-            chdir( $current );
+            $this->getFilesInDirectory( $directory );
+            $folders = $this->getFoldersInDirectory( $directory );
+            if ( $folders === NULL )
+                return;
+
+            foreach ( $folders as $folder )
+                $this->getResourceFiles( $directory . '/' . $folder );
+
+            chdir( $oldDirectory );
         }
 
         public function getResourceHashes( ): string
         {
-            $this->count = 0;
-            $this->data = array( );
-            return '';
+            $hash = array( );
+
+            $this->getResourceFiles( );
+            foreach ( $this->data as $file )
+                $hash[ ] = array( 'Path' => $file[ 'Path' ], 'Hash' => sha1( base64_decode( $file[ 'Data' ] ) ) );
+
+            return json_encode( $hash );
         }
 
         public function getResourceData( ): string
         {
-            $this->count = 0;
-            $this->data = array( );
             $this->getResourceFiles( );
-
             return json_encode( $this->data );
         }
     }

@@ -3,8 +3,8 @@
   <PropertyGroup>
     <ProjectView>ShowAllFiles</ProjectView>
     <RuntimePath>C:\Program Files (x86)\IIS Express\PHP\v7.2\php.exe</RuntimePath>
-    <SpecificPageValue>Code\public_html\Run.php</SpecificPageValue>
-    <StartAction>StartUrl</StartAction>
+    <SpecificPageValue>Code\public_html\Test.php</SpecificPageValue>
+    <StartAction>SpecificPage</StartAction>
     <StartUrlValue>https://paladin-extensions.com/Run.php</StartUrlValue>
   </PropertyGroup>
 </Project>
