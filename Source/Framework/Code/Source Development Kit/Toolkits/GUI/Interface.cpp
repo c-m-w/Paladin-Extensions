@@ -4,7 +4,7 @@
 
 #define ACKNOWLEDGED_ENTRY_WARNING_1
 #define USE_NAMESPACES
-#include "../../Framework.hpp"
+#include "../../../Framework.hpp"
 
 namespace Interface
 {
@@ -1001,7 +1001,7 @@ namespace Interface
 	{ }
 
 	CHeaderPanel::CHeaderPanel( const char* szTitle, const char* szSubtitle, callback_t _cbMinimize, callback_t _cbClose, const char* szMinimize, const char* szClose ) : IContainer( FLAG_CONTAINER_NONE, padding_t( ), BACKGROUND_DARK ), iIconTexture( ETextures::TEXTURE_LOGO ),
-		imgIcon( iIconTexture ), lblTitle( padding_t( ), new text_t( szTitle, EFont::ROBOTO_BOLD, TITLE_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_NORMAL, EFontFlags::DROPSHADOW ), lblSubtitle( padding_t( ), new text_t( szSubtitle, EFont::ROBOTO, TITLE_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_DARK, EFontFlags::NONE ),
+		imgIcon( iIconTexture ), lblTitle( padding_t( ), new text_t( szTitle, EFont::ROBOTO_BOLD, TITLE_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_NORMAL, EFontFlags::NONE ), lblSubtitle( padding_t( ), new text_t( szSubtitle, EFont::ROBOTO, TITLE_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_DARK, EFontFlags::NONE ),
 		lblMinimize( padding_t( ), new text_t( szMinimize, EFont::FA, WINDOW_ICON_HEIGHT, text_t::CENTER, text_t::TOP ), BLUE, EFontFlags::ICON, _cbMinimize ), lblClose( padding_t( ), new text_t( szClose, EFont::FA, WINDOW_ICON_HEIGHT, text_t::CENTER, text_t::TOP ), BLUE, EFontFlags::ICON, _cbClose ), locDragStart( location_t( ) )
 	{
 		lblTitle.InitializeDrawingInformation( );
@@ -1011,7 +1011,7 @@ namespace Interface
 	}
 
 	CHeaderPanel::CHeaderPanel( const char* szTitle, const char* szSubtitle, const char* szClose ): IContainer( FLAG_CONTAINER_NONE, padding_t( ), BACKGROUND_DARK ), iIconTexture( -1 ),
-		lblTitle( padding_t( ), new text_t( szTitle, EFont::ROBOTO_BOLD, TITLE_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_NORMAL, EFontFlags::DROPSHADOW ),
+		lblTitle( padding_t( ), new text_t( szTitle, EFont::ROBOTO_BOLD, TITLE_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_NORMAL, EFontFlags::NONE ),
 		lblSubtitle( padding_t( ), new text_t( szSubtitle, EFont::ROBOTO, TITLE_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_DARK, EFontFlags::NONE ),
 		lblClose( padding_t( ), new text_t( szClose, EFont::FA, WINDOW_ICON_HEIGHT, text_t::CENTER, text_t::TOP ), BLUE, EFontFlags::ICON, [ & ]( )
 	{
@@ -1441,18 +1441,7 @@ namespace Interface
 		return true;
 	}
 
-	void KeyTyped( unsigned uKey )
-	{
-		if ( _WidgetContext.pActiveWidget )
-			_WidgetContext.pActiveWidget->KeyTyped( uKey );
-	}
-
-	void Scroll( short sDelta, int iMouseX, int iMouseY )
-	{
-		
-	}
-
-	bool Initialize( const char* szResourceDirectory, HWND hwTarget )
+	void InitializeInterface( )
 	{
 		_Input.AddCallback( [ & ]( key_t _Key, CKeyState _KeyState ) // todo return true if processed
 		{
@@ -1587,7 +1576,6 @@ namespace Interface
 
 			return false;
 		});
-		return true;
 	}
 
 	void DrawWindows( )

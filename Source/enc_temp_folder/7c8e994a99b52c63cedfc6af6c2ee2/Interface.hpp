@@ -653,8 +653,7 @@ namespace Interface
 		void Draw( ) override;
 	};
 
-	bool Initialize( const char* szResourceDirectory, HWND hwTarget );
-	void Initialize( IDirect3DDevice9* pNewDevice );
+	void InitializeInterface( );
 	//bool AddFont( font_t fntNew );
 	//bool AddNewFont( const std::string& strFontFilename );
 	//bool AddTexture( texture_t texNew );
@@ -662,9 +661,7 @@ namespace Interface
 	//bool CreateRenderables( );
 	void Shutdown( );
 	bool Recreate( );
-	bool BeginRender( );
 	void DrawWindows( );
-	bool EndRender( );
 	void AddWindow( CWindow* pWindow );
 }
 

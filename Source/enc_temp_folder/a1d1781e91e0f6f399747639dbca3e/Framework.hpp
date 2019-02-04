@@ -19,7 +19,7 @@
 #include "Source Development Kit/Application Programming Interfaces/Window.hpp"
 #include "Development Environment/Font Awesome Icons.hpp"
 #include "Source Development Kit/Application Programming Interfaces/Drawing.hpp"
-#include "Source Development Kit/Toolkits/GUI/Interface.hpp"
+#include "Source Development Kit/Application Programming Interfaces/Interface.hpp"
 
 inline bool SetupFramework( )
 {
