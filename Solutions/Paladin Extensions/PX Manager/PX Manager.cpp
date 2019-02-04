@@ -318,8 +318,6 @@ void PX_API DrawWindow( )
 	InitializeRenderTarget( uDimensions, PX_XOR( L"Paladin Extensions" ) );
 	InitializeUI( PX_XOR( "Manager" ), false );
 
-	DEVMODE pDevMode { };
-	EnumDisplaySettings( nullptr, ENUM_CURRENT_SETTINGS, &pDevMode );
 	while ( !bShouldClose )
 	{
 		const auto mmtStart = GetMoment( );
@@ -327,7 +325,7 @@ void PX_API DrawWindow( )
 			break;
 
 		// todo vsync 1000ull / pDevMode.dmDisplayFrequency - ( GetMoment( ) - mmtStart )
-		Pause( 1ull ); // Refresh the application at the speed of the monitor's refresh rate.
+		Wait( 1ull ); // Refresh the application at the speed of the monitor's refresh rate.
 	}
 }
 

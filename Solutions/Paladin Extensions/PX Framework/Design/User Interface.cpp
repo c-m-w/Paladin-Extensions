@@ -42,6 +42,9 @@ namespace PX::UI
 			fcFontAwesome.merge_mode = 1;
 
 			auto pFont = nk_font_atlas_add_from_file( pAtlas, ( strFontDirectory + strFontFileName ).c_str( ), float( uFontSize ), nullptr );
+			if ( pFont == nullptr )
+				MessageBox( nullptr, ( L"Cannot find font " + string_cast< std::wstring >( strFontFileName ) ).c_str( ), L"Error", MB_OK );
+
 			nk_font_atlas_add_from_file( pAtlas, ( strFontDirectory + PX_XOR( "FontAwesome.ttf" ) ).c_str( ), flFontAwesomeSize, &fcFontAwesome );
 			return pFont;
 		}
@@ -528,6 +531,8 @@ namespace PX::UI
 			if ( bCreatedWindow )
 				recWindow.x = recWindow.y = 0.f;
 
+			//MessageBox( nullptr, ( L"x: " + std::to_wstring( recWindow.x ) + L"\ny: " + std::to_wstring( recWindow.y ) + L"\nwidth: " + std::to_wstring( recWindow.w ) + L"\nheight: " + std::to_wstring( recWindow.h ) ).c_str( ), L"test", 0 );
+
 			if ( nk_begin( pContext, szNuklearWindowTitle, recWindow, NK_WINDOW_NO_SCROLLBAR ) )
 			{
 				if ( !bCreatedWindow )
@@ -536,6 +541,7 @@ namespace PX::UI
 				nk_layout_row_dynamic( pContext, 10, 0 );
 				SetFont( FNT_ROBOTO );
 				SetLayout( );
+
 
 				if ( bDrawComboboxArrow )
 				{
