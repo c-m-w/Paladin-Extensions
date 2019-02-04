@@ -69,6 +69,7 @@ bool CDrawing::CreateD3D( )
 		return false;
 	}
 
+	bReleaseDevice = true;
 	return true;
 }
 
@@ -134,24 +135,41 @@ bool CDrawing::CreateState( )
 	return true;
 }
 
+bool CDrawing::AddTexture( const texture_t &texNew )
+{
+	auto& last = vecTextures.emplace_back( std::pair< texture_t, std::pair< D3DXIMAGE_INFO, IDirect3DTexture9* > >( texNew, std::pair< D3DXIMAGE_INFO, IDirect3DTexture9* >( D3DXIMAGE_INFO( ), nullptr ) ) );
+	return D3D_OK == D3DXCreateTextureFromFileEx( pDevice, last.first.strName.c_str( ), last.first.uWidth, last.first.uHeight, D3DX_FROM_FILE,
+												  D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL, &last.second.first,
+												  nullptr, &last.second.second );
+}
+
 void CDrawing::Shutdown( )
 {
 	PreReset( );
-	if ( pDevice && pTarget )
+	if ( pDevice && bReleaseDevice )
 	{
 		pDevice->Release( );
 		pDevice = nullptr;
 	}
 }
 
-void CDrawing::SetTarget( CWindow *pWindow )
+void CDrawing::SetTarget( CApplicationWindow *pWindow )
 {
 	pTarget = pWindow;
 }
 
 void CDrawing::SetTarget( IDirect3DDevice9 *pNewDevice )
 {
+	D3DDEVICE_CREATION_PARAMETERS _CreationParameters;
+
 	pDevice = pNewDevice;
+	if ( pDevice->GetCreationParameters( &_CreationParameters ) != D3D_OK )
+	{
+		_Log.Log( EPrefix::ERROR, ELocation::DRAWING, XOR( "Unable to get creation parameters of device!" ) );
+		pDevice = nullptr;
+	}
+	else
+		pTarget = std::make_unique< CApplicationWindow >( _CreationParameters.hFocusWindow ).get( );
 }
 
 bool CDrawing::SetState( )
@@ -246,6 +264,63 @@ bool CDrawing::PreReset( )
 
 bool CDrawing::Create( )
 {
+	std::string strResourceDirectory;
+	auto bReturn = true;
+
+	if ( !_Filesystem.GetInstallDirectory( strResourceDirectory ) )
+		return false;
+
+	strResourceDirectory = _Filesystem.ChangeWorkingDirectory( strResourceDirectory, { CFilesystem::strRelativeResourceDirectory } );
+
+	constexpr char FONT_FILENAMES[ FONT_MAX ][ MAX_PATH ] // In C:\\Windows\\Fonts
+	{
+		"tahoma.ttf",
+		"TahomaBold.ttf",
+		"Roboto.ttf",
+		"RobotoBold.ttf",
+		"Envy.ttf",
+		"FontAwesome5FreeSolid.ttf"
+	};
+
+	for ( auto i = 0; i < FONT_MAX && bReturn; i++ )
+		bReturn &= AddFont( FONT_FILENAMES[ i ] );
+
+	constexpr char TEXTURE_FILENAMES[ TEXTURE_MAX ][ MAX_PATH ] // Relative to resources folder
+	{
+		"Cursor\\Arrow.png",
+		"Cursor\\Hand.png",
+		"Cursor\\I Beam.png",
+		"PX Logo.png"
+	};
+
+	constexpr unsigned TEXTURE_DIMENSIONS[ TEXTURE_MAX ][ 2 ]
+	{
+		{ 50, 50 },
+		{ 50, 50 },
+		{ 50, 50 },
+		{ 32, 29 }
+	};
+
+	if ( vecTextures.empty( ) )
+	{
+		for ( auto i = 0; i < TEXTURE_MAX && bReturn; i++ )
+			if ( !( bReturn &= AddTexture( texture_t( TEXTURE_DIMENSIONS[ i ][ 0 ], TEXTURE_DIMENSIONS[ i ][ 1 ], strResourceDirectory + TEXTURE_FILENAMES[ i ] ) ) ) )
+				_Log.Log( EPrefix::ERROR, ELocation::DRAWING, XOR( "Unable to add texture %s." ), TEXTURE_FILENAMES[ i ] );
+	}
+	else
+		for ( auto& texture : vecTextures )
+			if ( !( bReturn &= D3D_OK == D3DXCreateTextureFromFileEx( pDevice, texture.first.strName.c_str( ), texture.first.uWidth, texture.first.uHeight, D3DX_FROM_FILE,
+																	  D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL, &texture.second.first,
+																	  nullptr, &texture.second.second ) ) )
+				_Log.Log( EPrefix::ERROR, ELocation::DRAWING, XOR( "Unable to create texture %s from file." ), texture.first.strName.c_str( ) );
+
+	if ( !bReturn )
+		return bReturn;
+
+	iCursorTextureIndicies[ ARROW ] = TEXTURE_ARROW;
+	iCursorTextureIndicies[ HAND ] = TEXTURE_HAND;
+	iCursorTextureIndicies[ IBEAM ] = TEXTURE_IBEAM;
+
 	if ( D3DXCreateSprite( pDevice, &pSprite ) != D3D_OK )
 	{
 		_Log.Log( EPrefix::ERROR, ELocation::DRAWING, XOR( "Unable to create sprite." ) );
@@ -270,6 +345,76 @@ bool CDrawing::RemoveFont( std::size_t sFont )
 		return true;
 	}
 	return false;
+}
+
+void CDrawing::ApplyCursor( int iCursorType )
+{
+	POINT pntCursor;
+
+	if ( GetCursorPos( &pntCursor ) != TRUE
+		 || ScreenToClient( pTarget->GetWindowHandle( ), &pntCursor ) != TRUE
+		 || pntCursor.x < 0.f || pntCursor.y < 0.f
+		 || pntCursor.x > int( recRenderTarget.flWidth )
+		 || pntCursor.y > int( recRenderTarget.flHeight ) )
+	{
+		while ( ShowCursor( TRUE ) <= 0 );
+		return;
+	}
+
+	while ( ShowCursor( FALSE ) >= 0 );
+	SetCursor( nullptr );
+
+	auto& texMouse = vecTextures[ iCursorTextureIndicies[ iCursorType ] ].first;
+	DrawTexture( iCursorTextureIndicies[ iCursorType ], location_t( pntCursor.x + texMouse.uWidth / 2.f - 50.f, pntCursor.y + texMouse.uHeight / 2.f - 50.f ) );
+}
+
+bool CDrawing::IsAreaVisible( const rectangle_t& recArea )
+{
+	if ( recSource.empty( ) )
+		return true;
+
+	return recArea.InRectangle( recSource.top( ) );
+}
+
+texture_renderable_t& CDrawing::GetTexture( int iTextureID )
+{
+	return vecTextures[ iTextureID ];
+}
+
+void CDrawing::RenderTexture( int iTextureID, const location_t& locTexture )
+{
+	DrawTexture( iTextureID, locTexture );
+}
+
+RECT CDrawing::GetDrawingSpace( )
+{
+	RECT recBuffer { };
+	pDevice->GetScissorRect( &recBuffer );
+	return recBuffer;
+}
+
+void CDrawing::PushDrawingSpace( rectangle_t recSpace )
+{
+	if ( !recSource.empty( ) )
+		recSpace.Clamp( recSource.top( ) );
+	else
+	{
+		RECT recTemp;
+		pDevice->GetScissorRect( &recTemp );
+		recSource.push( rectangle_t( recTemp ) );
+	}
+
+	const auto recNewSource = recSpace.ToRect( );
+	recSource.push( recSpace );
+	pDevice->SetScissorRect( &recNewSource );
+}
+
+void CDrawing::PopDrawingSpace( )
+{
+	recSource.pop( );
+	const auto& recNew = recSource.top( );
+	const auto recNewSource = recNew.ToRect( );
+	pDevice->SetScissorRect( &recNewSource );
 }
 
 location_t CDrawing::GetTextDimensions( const char *szText, float flSize, std::size_t sFont )
@@ -517,6 +662,11 @@ void CDrawing::DrawTexture( IDirect3DTexture9 *pTexture, const location_t &locLo
 	}
 	else
 		_Log.Log( EPrefix::WARNING, ELocation::DRAWING, XOR( "Unable to begin sprite drawing." ) );
+}
+
+void CDrawing::DrawTexture( int iTextureID, const location_t& locLocation )
+{
+	return DrawTexture( vecTextures[ iTextureID ].second.second, locLocation );
 }
 
 polygon_t CDrawing::Rectangle( rectangle_t recLocation, color_t clrColor )
@@ -1340,3 +1490,6 @@ polygon_buffer_t polygon_t::GetBuffer( D3DPRIMITIVETYPE ptDraw /*= D3DPT_TRIANGL
 
 	return polygon_buffer_t( _Drawing.ConstructPolygon( &vecVertices[ 0 ], vecVertices.size( ) ), sPrimitives, ptDraw );
 }
+
+texture_t::texture_t( unsigned _uWidth, unsigned _uHeight, const std::string& _strName ): uWidth( _uWidth ), uHeight( _uHeight ), strName( _strName )
+{ }

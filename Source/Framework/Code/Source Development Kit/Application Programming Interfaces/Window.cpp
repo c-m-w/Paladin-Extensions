@@ -39,7 +39,7 @@ BOOL CALLBACK EnumWindowsProc(
 	return true;
 }
 
-std::vector< HWND > CWindow::GetCurrentProcessWindows( )
+std::vector< HWND > CApplicationWindow::GetCurrentProcessWindows( )
 {
 	std::vector< HWND > vecWindows { };
 
@@ -47,7 +47,7 @@ std::vector< HWND > CWindow::GetCurrentProcessWindows( )
 	return vecWindows;
 }
 
-CWindow::CWindow( const std::string &strTitle, const Utilities::vector2_t &vecSize, HINSTANCE hModule, WNDPROC _WindowInputProcessor /*= DefaultWindowInputProcessor*/ ): pOldWindowInputProcessor( nullptr )
+CApplicationWindow::CApplicationWindow( const std::string &strTitle, const Utilities::vector2_t &vecSize, HINSTANCE hModule, WNDPROC _WindowInputProcessor /*= DefaultWindowInputProcessor*/ ): pOldWindowInputProcessor( nullptr )
 {
 	_WindowInformation = WNDCLASSEX { sizeof _WindowInformation, NULL, _WindowInputProcessor, NULL, NULL, hModule, nullptr, nullptr, nullptr, nullptr, strTitle.c_str( ), nullptr };
 	if ( NULL == RegisterClassEx( &_WindowInformation ) )
@@ -71,19 +71,19 @@ CWindow::CWindow( const std::string &strTitle, const Utilities::vector2_t &vecSi
 		_Log.Log( EPrefix::WARNING, ELocation::WINDOW, XOR( "Setting window attributes failed." ) );
 }
 
-CWindow::CWindow( const HWND &hwWindow, WNDPROC _WindowInputProcessor /*= DefaultWindowInputProcessor*/ ): hwHandle( hwWindow )
+CApplicationWindow::CApplicationWindow( const HWND &hwWindow, WNDPROC _WindowInputProcessor /*= DefaultWindowInputProcessor*/ ): hwHandle( hwWindow )
 {
 	if ( nullptr == ( pOldWindowInputProcessor = WNDPROC( SetWindowLongPtr( hwHandle, GWLP_WNDPROC, LONG( _WindowInputProcessor ) ) ) ) )
 		_Log.Log( EPrefix::ERROR, ELocation::WINDOW, XOR( "Failed to set the new window input processor." ) );
 }
 
-CWindow::~CWindow( )
+CApplicationWindow::~CApplicationWindow( )
 {
 	if ( pOldWindowInputProcessor != nullptr )
 		SetWindowLongPtr( hwHandle, GWLP_WNDPROC, LONG( pOldWindowInputProcessor ) );
 }
 
-bool CWindow::PollInput( )
+bool CApplicationWindow::PollInput( )
 {
 	if ( pOldWindowInputProcessor )
 		throw std::runtime_error( XOR( "Attempting to poll a window's input that was not created." ) );
@@ -100,7 +100,7 @@ bool CWindow::PollInput( )
 	return false;
 }
 
-HWND CWindow::GetWindowHandle( )
+HWND CApplicationWindow::GetWindowHandle( )
 {
 	return hwHandle;
 }

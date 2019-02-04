@@ -4,7 +4,7 @@
 
 LRESULT CALLBACK DefaultWindowInputProcessor( HWND, UINT, WPARAM, LPARAM );
 
-class CWindow
+class CApplicationWindow
 {
 private:
 
@@ -16,9 +16,9 @@ public:
 
 	static std::vector< HWND > GetCurrentProcessWindows( );
 
-	CWindow( const std::string &strTitle, const Utilities::vector2_t &vecSize, HINSTANCE hModule, WNDPROC _WindowInputProcessor = DefaultWindowInputProcessor );
-	CWindow( const HWND &hwWindow, WNDPROC _WindowInputProcessor = DefaultWindowInputProcessor );
-	~CWindow( );
+	CApplicationWindow( const std::string &strTitle, const Utilities::vector2_t &vecSize, HINSTANCE hModule, WNDPROC _WindowInputProcessor = DefaultWindowInputProcessor );
+	CApplicationWindow( const HWND &hwWindow, WNDPROC _WindowInputProcessor = DefaultWindowInputProcessor );
+	~CApplicationWindow( );
 
 	bool PollInput( );
 	HWND GetWindowHandle( );

@@ -91,7 +91,7 @@ public:
 	/** \brief Changes the current directory. */
 	/** \param strNew New absolute directory. */
 	/** \param initSubDirectories Sub directories within the absolute directory */
-	void ChangeWorkingDirectory( std::string strNew, std::initializer_list< std::string > initSubDirectories = { } );
+	std::string ChangeWorkingDirectory( std::string strNew, std::initializer_list< std::string > initSubDirectories = { } );
 	/** \brief Converts a relative file to an absolute path. */
 	/** \param strFile Relative filename/path to be converted. */
 	/** \return Absolute file path. */
@@ -122,6 +122,8 @@ public:
 
 	/** \brief Path of the Paladin data folder from \appdata\roaming\ */
 	static inline std::string strRelativeAppdataDirectory;
+	/** \brief Path of the Paladin resources folder from the install directory. */
+	static inline std::string strRelativeResourceDirectory;
 	/** \brief Directory of log files relative to the Paladin data folder in appdata. */
 	static inline std::string strLogDirectory;
 	/** \brief Name of the cookie file which stores information pertaining to connection to the site.\n

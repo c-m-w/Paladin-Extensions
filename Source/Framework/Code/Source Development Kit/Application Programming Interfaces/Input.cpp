@@ -199,3 +199,9 @@ Utilities::moment_t CInput::GetTimeSinceKeyPress( const key_t &_Key )
 {
 	return GetMoment( ) - mmtLastKeyPressTime[ _Key ];
 }
+
+void CInput::GetMousePos( int &x, int &y )
+{
+	x = iMouseX;
+	y = iMouseY;
+}

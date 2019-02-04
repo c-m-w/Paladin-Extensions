@@ -19,6 +19,7 @@
 #include "Source Development Kit/Application Programming Interfaces/Window.hpp"
 #include "Development Environment/Font Awesome Icons.hpp"
 #include "Source Development Kit/Application Programming Interfaces/Drawing.hpp"
+#include "Source Development Kit/Application Programming Interfaces/Interface.hpp"
 
 inline bool SetupFramework( )
 {
@@ -40,6 +41,7 @@ inline void ShutdownFramework( )
 
 #if defined USE_NAMESPACES
 using namespace Utilities;
+using namespace Interface;
 #endif
 
 #if defined USE_DEFINITIONS

@@ -6,7 +6,9 @@ class CDrawing: public IBase
 {
 public:
 
-	enum EFonts
+	struct texture_t;
+
+	enum EFont
 	{
 		TAHOMA,
 		TAHOMA_BOLD,
@@ -26,6 +28,23 @@ public:
 		ICON		= 1 << 3
 	};
 
+	enum ECursor
+	{
+		ARROW,
+		HAND,
+		IBEAM,
+		CURSOR_MAX
+	};
+
+	enum ETextures
+	{
+		TEXTURE_ARROW,
+		TEXTURE_HAND,
+		TEXTURE_IBEAM,
+		TEXTURE_LOGO,
+		TEXTURE_MAX
+	};
+
 private:
 
 	static constexpr auto FVF = D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1;
@@ -34,13 +53,16 @@ private:
 
 	bool CreateD3D( );
 	bool CreateState( );
+	bool AddTexture( const texture_t& texNew );
 
-	CWindow *pTarget = nullptr;
+	bool bReleaseDevice = false;
+	CApplicationWindow *pTarget = nullptr;
 	IDirect3D9 *pD3DInstance = nullptr;
 	D3DPRESENT_PARAMETERS pParameters { };
 	IDirect3DDevice9 *pDevice = nullptr;
 	IDirect3DStateBlock9 *pState = nullptr;
 	ID3DXSprite *pSprite = nullptr;
+	int iCursorTextureIndicies[ CURSOR_MAX ] { };
 	FT_Library libInstance { };
 	std::vector< FT_Face > vecFonts;
 	static inline std::string strFontDirectory { };
@@ -198,9 +220,28 @@ public:
 		void Draw( rectangle_t recRelative, color_t clrColor );
 	};
 
+	struct texture_t
+	{
+		unsigned uWidth = 0u, uHeight = 0u;
+		std::string strName { };
+
+		texture_t( ) = default;
+		texture_t( unsigned _uWidth, unsigned _uHeight, const std::string& _strName );
+	};
+
+	using texture_renderable_t = std::pair< texture_t, std::pair< D3DXIMAGE_INFO, IDirect3DTexture9* > >;
+
+private:
+
+	std::vector< std::pair< texture_t, std::pair< D3DXIMAGE_INFO, IDirect3DTexture9* > > > vecTextures { };
+	rectangle_t recRenderTarget { };
+	std::stack< rectangle_t > recSource { };
+
+public:
+
 	void Shutdown( ) override;
 
-	void SetTarget( CWindow *pWindow );
+	void SetTarget( CApplicationWindow *pWindow );
 	void SetTarget( IDirect3DDevice9 *pNewDevice );
 	bool SetState( );
 	bool BeginFrame( );
@@ -208,7 +249,14 @@ public:
 	bool PreReset( );
 	bool Create( );
 	bool AddFont( const std::string &strFilename );
-	bool RemoveFont( std::size_t sFont );
+	bool RemoveFont( std::size_t sFont ); 
+	void ApplyCursor( int iCursorType );
+	bool IsAreaVisible( const rectangle_t& recArea );
+	texture_renderable_t& GetTexture( int iTextureID );
+	void RenderTexture( int iTextureID, const Utilities::location_t& locTexture );
+	RECT GetDrawingSpace( );
+	void PushDrawingSpace( rectangle_t recSpace );
+	void PopDrawingSpace( );
 
 	Utilities::location_t GetTextDimensions( const char *szText, float flSize, std::size_t sFont );
 	IDirect3DTexture9 *CreateTexture( const char *szText, float flSize, std::size_t sFont, const color_t &clrText, Utilities::location_t &locDimensions, EFontFlags ffFlags, float flMaxWidth = -1.f );
@@ -216,6 +264,7 @@ public:
 	IDirect3DVertexBuffer9 *ConstructPolygon( vertex_t *pVertices, std::size_t sVertices );
 	void DrawPolygon( const polygon_buffer_t &pbPolygon, bool bRelease = false );
 	void DrawTexture( IDirect3DTexture9 *pTexture, const Utilities::location_t &locLocation );
+	void DrawTexture( int iTextureID, const Utilities::location_t& locLocation );
 
 	polygon_t Rectangle( rectangle_t recLocation, color_t clrColor );
 	polygon_t Rectangle( rectangle_t recLocation, color_t *clrColor/*[LOCATION_MAX]*/ );
@@ -233,6 +282,10 @@ public:
 	polygon_t Line( Utilities::location_t locStart, Utilities::location_t locEnd, float flThickness, color_t clrColor );
 } inline _Drawing;
 
+using EFont = CDrawing::EFont;
+using EFontFlags = CDrawing::EFontFlags;
+using ECursor = CDrawing::ECursor;
+using ETextures = CDrawing::ETextures;
 using triangle_t = CDrawing::triangle_t;
 using rectangle_t = CDrawing::rectangle_t;
 using vertex_t = CDrawing::vertex_t;
@@ -240,3 +293,5 @@ using circle_t = CDrawing::circle_t;
 using text_t = CDrawing::text_t;
 using polygon_buffer_t = CDrawing::polygon_buffer_t;
 using polygon_t = CDrawing::polygon_t;
+using texture_t = CDrawing::texture_t;
+using texture_renderable_t = CDrawing::texture_renderable_t;

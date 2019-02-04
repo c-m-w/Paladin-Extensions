@@ -112,6 +112,7 @@ public:
 	CKeyState GetKeyState( const key_t &_KeyCode );
 	Utilities::location_t GetMouseLocation( );
 	Utilities::moment_t GetTimeSinceKeyPress( const key_t &_Key );
+	void GetMousePos( int& x, int& y );
 } inline _Input;
 
 using CKeyState = CInput::CKeyState;

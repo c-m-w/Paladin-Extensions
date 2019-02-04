@@ -9,6 +9,7 @@
 bool CFilesystem::Initialize( )
 {
 	strRelativeAppdataDirectory = XOR( "PX\\" );
+	strRelativeResourceDirectory = XOR( "Resources\\" );
 	strLogDirectory = XOR( "Logs\\" );
 	strCookieFile = XOR( ".cookie" );
 	strDataFile = XOR( ".data" );
@@ -94,6 +95,8 @@ CFilesystem::working_directory_t &CFilesystem::GetThreadDirectories( )
 
 bool CFilesystem::GetInstallDirectory( std::string &strOut )
 {
+	strOut = R"(C:\Users\Cole\Documents\GitHub\Paladin - Extensions\Solutions\Paladin Extensions)";
+	return true;
 	strOut.clear( );
 	StoreCurrentWorkingDirectory( );
 	ChangeWorkingDirectory( GetAppdataDirectory( ) );
@@ -281,7 +284,7 @@ void CFilesystem::FormatDirectory( std::string &strDirectory )
 			strDirectory.erase( strDirectory.end( ) );
 }
 
-void CFilesystem::ChangeWorkingDirectory( std::string strNew, std::initializer_list< std::string > initSubDirectories /*= { }*/ )
+std::string CFilesystem::ChangeWorkingDirectory( std::string strNew, std::initializer_list< std::string > initSubDirectories /*= { }*/ )
 {
 	auto &strWorkingDirectory = GetWorkingDirectory( );
 
@@ -293,6 +296,8 @@ void CFilesystem::ChangeWorkingDirectory( std::string strNew, std::initializer_l
 		FormatDirectory( strSubDirectory );
 		strWorkingDirectory += strSubDirectory;
 	}
+
+	return strWorkingDirectory;
 }
 
 std::string &CFilesystem::GetWorkingDirectory( )
