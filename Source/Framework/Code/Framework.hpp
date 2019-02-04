@@ -14,12 +14,13 @@
 #include "Source Development Kit/Application Programming Interfaces/Cryptography.hpp"
 #include "Source Development Kit/Application Programming Interfaces/Filesystem.hpp"
 #include "Development Environment/Logging.hpp"
+#include "Source Development Kit/Toolkits/Resource Manager.hpp"
 #include "Source Development Kit/Application Programming Interfaces/Connectivity.hpp"
 #include "Source Development Kit/Application Programming Interfaces/Input.hpp"
 #include "Source Development Kit/Application Programming Interfaces/Window.hpp"
 #include "Development Environment/Font Awesome Icons.hpp"
 #include "Source Development Kit/Application Programming Interfaces/Drawing.hpp"
-#include "Source Development Kit/Toolkits/GUI/Interface.hpp"
+#include "Source Development Kit/Toolkits/Graphical User Interface.hpp"
 
 inline bool SetupFramework( )
 {

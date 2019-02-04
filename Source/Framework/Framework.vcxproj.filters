@@ -11,7 +11,8 @@
     <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Utilities.cpp" />
     <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Window.cpp" />
     <ClCompile Include="Precompile.cpp" />
-    <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\Interface.cpp" />
+    <ClCompile Include="Code\Source Development Kit\Toolkits\Resource Manager.cpp" />
+    <ClCompile Include="Code\Source Development Kit\Toolkits\Graphical User Interface.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\Development Environment\Build Output Wrapper.hpp" />
@@ -30,12 +31,13 @@
     <ClInclude Include="Precompile.hpp" />
     <ClInclude Include="Code\Framework.hpp" />
     <ClInclude Include="Code\Development Environment\Font Awesome Icons.hpp" />
-    <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\Interface.hpp" />
+    <ClInclude Include="Code\Source Development Kit\Toolkits\Resource Manager.hpp" />
+    <ClInclude Include="Code\Source Development Kit\Toolkits\Graphical User Interface.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Code\Source Development Kit\Application Programming Interfaces\Connectivity.inl" />
     <None Include="Code\Source Development Kit\Application Programming Interfaces\Cryptography.inl" />
     <None Include="Code\Source Development Kit\Application Programming Interfaces\Utilities.inl" />
-    <None Include="Code\Source Development Kit\Toolkits\GUI\Interface.inl" />
+    <None Include="Code\Source Development Kit\Toolkits\Graphical User Interface.inl" />
   </ItemGroup>
 </Project>

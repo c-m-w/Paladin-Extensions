@@ -25,9 +25,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Code\public_html\Run.php" />
+    <Compile Include="Code\public_html\Test.php" />
     <Compile Include="Code\PX\PHP\Cryptography.php" />
     <Compile Include="Code\PX\PHP\Functionality.php" />
     <Compile Include="Code\PX\PHP\Logging.php" />
+    <Compile Include="Code\PX\PHP\Resource Manager.php" />
     <Compile Include="Code\PX\PHP\SQL.php" />
   </ItemGroup>
 </Project>
