@@ -54,6 +54,7 @@ private:
 	bool CreateD3D( );
 	bool CreateState( );
 	bool AddTexture( const texture_t& texNew );
+	bool Create( std::string strResourceDirectory );
 
 	bool bReleaseDevice = false;
 	CApplicationWindow *pTarget = nullptr;
@@ -247,7 +248,6 @@ public:
 	bool BeginFrame( );
 	bool EndFrame( );
 	bool PreReset( );
-	bool Create( );
 	bool AddFont( const std::string &strFilename );
 	bool RemoveFont( std::size_t sFont ); 
 	void ApplyCursor( int iCursorType );
@@ -259,7 +259,7 @@ public:
 	void PopDrawingSpace( );
 
 	Utilities::location_t GetTextDimensions( const char *szText, float flSize, std::size_t sFont );
-	IDirect3DTexture9 *CreateTexture( const char *szText, float flSize, std::size_t sFont, const color_t &clrText, Utilities::location_t &locDimensions, EFontFlags ffFlags, float flMaxWidth = -1.f );
+	IDirect3DTexture9 *CreateTextTexture( const char *szText, float flSize, std::size_t sFont, const color_t &clrText, Utilities::location_t &locDimensions, EFontFlags ffFlags, float flMaxWidth = -1.f );
 	void Polygon( vertex_t *pVertices, std::size_t sVertices, std::size_t sPrimitives );
 	IDirect3DVertexBuffer9 *ConstructPolygon( vertex_t *pVertices, std::size_t sVertices );
 	void DrawPolygon( const polygon_buffer_t &pbPolygon, bool bRelease = false );

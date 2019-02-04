@@ -95,7 +95,7 @@ CFilesystem::working_directory_t &CFilesystem::GetThreadDirectories( )
 
 bool CFilesystem::GetInstallDirectory( std::string &strOut )
 {
-	strOut = R"(C:\Users\Cole\Documents\GitHub\Paladin - Extensions\Solutions\Paladin Extensions)";
+	strOut = R"(C:\Users\Cole\Documents\GitHub\Paladin-Extensions\Solutions\Paladin Extensions)";
 	return true;
 	strOut.clear( );
 	StoreCurrentWorkingDirectory( );

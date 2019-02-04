@@ -19,9 +19,6 @@ bool CDrawing::Initialize( )
 	else
 		CreateD3D( );
 
-	if ( !Create( ) )
-		return false;
-
 	if ( FT_Init_FreeType( &libInstance ) != 0
 		|| libInstance == nullptr )
 	{
@@ -29,7 +26,17 @@ bool CDrawing::Initialize( )
 		return false;
 	}
 
-	strFontDirectory = XOR( R"(C:\Windows\Fonts\)" );
+	std::string strResourceDirectory;
+
+	if ( !_Filesystem.GetInstallDirectory( strResourceDirectory ) )
+		return false;
+
+	strResourceDirectory = _Filesystem.ChangeWorkingDirectory( strResourceDirectory, { CFilesystem::strRelativeResourceDirectory } );
+
+	if ( !Create( strResourceDirectory ) )
+		return false;
+
+	strFontDirectory = strResourceDirectory + XOR( "Fonts\\" );
 	strFontFileNames[ TAHOMA ] = XOR( "tahoma.ttf" );
 	strFontFileNames[ TAHOMA_BOLD ] = XOR( "TahomaBold.ttf" );
 	strFontFileNames[ ROBOTO ] = XOR( "Roboto.ttf" );
@@ -224,8 +231,8 @@ bool CDrawing::EndFrame( )
 				_Log.Log( EPrefix::ERROR, ELocation::DRAWING, XOR( "Failed to reset device!" ) );
 				return false;
 			}
-			Create( );
-			return true;
+
+			return Create( { } );
 		}
 
 		_Log.Log( EPrefix::WARNING, ELocation::DRAWING, XOR( "Failed to present scene." ) );
@@ -262,29 +269,8 @@ bool CDrawing::PreReset( )
 	return true;
 }
 
-bool CDrawing::Create( )
+bool CDrawing::Create( std::string strResourceDirectory )
 {
-	std::string strResourceDirectory;
-	auto bReturn = true;
-
-	if ( !_Filesystem.GetInstallDirectory( strResourceDirectory ) )
-		return false;
-
-	strResourceDirectory = _Filesystem.ChangeWorkingDirectory( strResourceDirectory, { CFilesystem::strRelativeResourceDirectory } );
-
-	constexpr char FONT_FILENAMES[ FONT_MAX ][ MAX_PATH ] // In C:\\Windows\\Fonts
-	{
-		"tahoma.ttf",
-		"TahomaBold.ttf",
-		"Roboto.ttf",
-		"RobotoBold.ttf",
-		"Envy.ttf",
-		"FontAwesome5FreeSolid.ttf"
-	};
-
-	for ( auto i = 0; i < FONT_MAX && bReturn; i++ )
-		bReturn &= AddFont( FONT_FILENAMES[ i ] );
-
 	constexpr char TEXTURE_FILENAMES[ TEXTURE_MAX ][ MAX_PATH ] // Relative to resources folder
 	{
 		"Cursor\\Arrow.png",
@@ -301,6 +287,16 @@ bool CDrawing::Create( )
 		{ 32, 29 }
 	};
 
+	if( strResourceDirectory.empty( ) )
+	{
+		if ( !_Filesystem.GetInstallDirectory( strResourceDirectory ) )
+			return false;
+
+		strResourceDirectory = _Filesystem.ChangeWorkingDirectory( strResourceDirectory, { CFilesystem::strRelativeResourceDirectory } );
+	}
+
+	auto bReturn = true;
+
 	if ( vecTextures.empty( ) )
 	{
 		for ( auto i = 0; i < TEXTURE_MAX && bReturn; i++ )
@@ -314,20 +310,15 @@ bool CDrawing::Create( )
 																	  nullptr, &texture.second.second ) ) )
 				_Log.Log( EPrefix::ERROR, ELocation::DRAWING, XOR( "Unable to create texture %s from file." ), texture.first.strName.c_str( ) );
 
-	if ( !bReturn )
-		return bReturn;
 
 	iCursorTextureIndicies[ ARROW ] = TEXTURE_ARROW;
 	iCursorTextureIndicies[ HAND ] = TEXTURE_HAND;
 	iCursorTextureIndicies[ IBEAM ] = TEXTURE_IBEAM;
 
-	if ( D3DXCreateSprite( pDevice, &pSprite ) != D3D_OK )
-	{
+	if ( !( bReturn &= D3DXCreateSprite( pDevice, &pSprite ) == D3D_OK ) )
 		_Log.Log( EPrefix::ERROR, ELocation::DRAWING, XOR( "Unable to create sprite." ) );
-		return false;
-	}
 
-	return true;
+	return bReturn;
 }
 
 bool CDrawing::AddFont( const std::string &strFilename )
@@ -454,7 +445,7 @@ location_t CDrawing::GetTextDimensions( const char *szText, float flSize, std::s
 	return location_t( flTotalAdvance, flMaxHeight );
 }
 
-IDirect3DTexture9 *CDrawing::CreateTexture( const char *szText, float flSize, std::size_t sFont, const color_t &clrText, location_t &locDimensions, EFontFlags ffFlags, float flMaxWidth /*= -1.f*/ )
+IDirect3DTexture9 *CDrawing::CreateTextTexture( const char *szText, float flSize, std::size_t sFont, const color_t &clrText, location_t &locDimensions, EFontFlags ffFlags, float flMaxWidth /*= -1.f*/ )
 {
 	if ( libInstance == nullptr
 		|| vecFonts.size( ) <= sFont
@@ -1268,7 +1259,7 @@ bool text_t::Initialize( const color_t &clrText, EFontFlags ffFlags )
 		pText = nullptr;
 	}
 
-	return ( pText = _Drawing.CreateTexture( strText.c_str( ), iSize, iFont, clrText, locDimensions, ffFlags ) ) != nullptr;
+	return ( pText = _Drawing.CreateTextTexture( strText.c_str( ), iSize, iFont, clrText, locDimensions, ffFlags ) ) != nullptr;
 }
 
 void text_t::ChangeText( const text_t &txtNew, const color_t &clrText, EFontFlags ffFlags )
