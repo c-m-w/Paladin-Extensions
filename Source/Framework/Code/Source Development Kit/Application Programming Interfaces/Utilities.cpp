@@ -69,6 +69,8 @@ namespace Utilities
 
 	moment_t GetMoment( )
 	{
+		return std::chrono::duration_cast< std::chrono::milliseconds >( std::chrono::system_clock::now( ).time_since_epoch( ) ).count( ); // todo @jeremy the other nanosecond thing doesnt work aaaaa
+
 		timespec _Time { };
 		timespec_get( &_Time, TIME_UTC );
 		return _Time.tv_nsec / 100ui64;

@@ -96,7 +96,7 @@ bool CInput::ProcessKeyboardMessage( UINT uMsg, WPARAM wParam )
 	return bReturn | ProcessKey( wParam, _KeyState );
 }
 
-void CInput::Shutdown( )
+void CInput::Uninitialize( )
 { }
 
 bool CInput::HandleEvent( UINT uMsg, WPARAM wParam, LPARAM lParam )

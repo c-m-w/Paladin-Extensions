@@ -8,6 +8,7 @@ class CFilesystem: public IBase
 private:
 
 	bool Initialize( ) override;
+	void Uninitialize( ) override;
 
 	struct working_directory_t
 	{
@@ -22,8 +23,6 @@ private:
 	std::map< DWORD, working_directory_t > _ThreadDirectories { };
 
 public:
-
-	void Shutdown( ) override;
 
 	/** \brief Checks whether or not a directory is present. */
 	/** \param strDirectory Complete directory. */
@@ -80,10 +79,6 @@ public:
 	void StoreCurrentWorkingDirectory( );
 	/** \brief Restores the current working directory that was most recently stored. */
 	void RestoreWorkingDirectory( );
-	/** \brief Gets the directory where Paladin is installed. */
-	/** \param strOut Buffer for the directory to be saved to. */
-	/** \return Whether or not obtaining the directory was successful. */
-	[ [ nodiscard ] ] bool GetInstallDirectory( std::string &strOut );
 	[ [ nodiscard ] ] working_directory_t &GetThreadDirectories( );
 	/** \brief Gets the current working directory. */
 	/** \return Current working directory. */
@@ -92,6 +87,7 @@ public:
 	/** \param strNew New absolute directory. */
 	/** \param initSubDirectories Sub directories within the absolute directory */
 	std::string ChangeWorkingDirectory( std::string strNew, std::initializer_list< std::string > initSubDirectories = { } );
+	void EscapeWorkingDirectory( );
 	/** \brief Converts a relative file to an absolute path. */
 	/** \param strFile Relative filename/path to be converted. */
 	/** \return Absolute file path. */

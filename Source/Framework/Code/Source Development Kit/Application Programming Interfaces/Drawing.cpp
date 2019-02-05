@@ -26,12 +26,7 @@ bool CDrawing::Initialize( )
 		return false;
 	}
 
-	std::string strResourceDirectory;
-
-	if ( !_Filesystem.GetInstallDirectory( strResourceDirectory ) )
-		return false;
-
-	strResourceDirectory = _Filesystem.ChangeWorkingDirectory( strResourceDirectory, { CFilesystem::strRelativeResourceDirectory } );
+	const auto strResourceDirectory = _Filesystem.ChangeWorkingDirectory( CFilesystem::GetAppdataDirectory( ), { CFilesystem::strRelativeResourceDirectory } );
 
 	if ( !Create( strResourceDirectory ) )
 		return false;
@@ -150,7 +145,7 @@ bool CDrawing::AddTexture( const texture_t &texNew )
 												  nullptr, &last.second.second );
 }
 
-void CDrawing::Shutdown( )
+void CDrawing::Uninitialize( )
 {
 	PreReset( );
 	if ( pDevice && bReleaseDevice )
@@ -288,12 +283,7 @@ bool CDrawing::Create( std::string strResourceDirectory )
 	};
 
 	if( strResourceDirectory.empty( ) )
-	{
-		if ( !_Filesystem.GetInstallDirectory( strResourceDirectory ) )
-			return false;
-
-		strResourceDirectory = _Filesystem.ChangeWorkingDirectory( strResourceDirectory, { CFilesystem::strRelativeResourceDirectory } );
-	}
+		strResourceDirectory = strResourceDirectory = _Filesystem.ChangeWorkingDirectory( CFilesystem::GetAppdataDirectory( ), { CFilesystem::strRelativeResourceDirectory } );
 
 	auto bReturn = true;
 

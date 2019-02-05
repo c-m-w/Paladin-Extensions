@@ -6,6 +6,10 @@
 #define USE_NAMESPACES
 #include "../../Framework.hpp"
 
+#define ENSURE_DATA_SET( _PostData )																								\
+	if ( !bPostDataSet[ _PostData ] )																								\
+		throw std::runtime_error( ( XOR( "Post data ID " ) + std::to_string( int( _PostData ) ) + XOR( " not set." ) ).c_str( ) );	\
+
 std::size_t WriteCallback( void *pData, std::size_t zMemberSize, std::size_t zMembers, void *pBuffer )
 {
 	static_cast< std::string* >( pBuffer )->append( reinterpret_cast< char* >( pData ), zMemberSize * zMembers );
@@ -21,15 +25,22 @@ bool CConnectivity::Initialize( )
 		return false;
 	}
 
-	if ( ( hConnection = curl_easy_init( ) ) != nullptr )
+	if ( ( hInstance = curl_easy_init( ) ) != nullptr )
 	{
-		_Log.Log( EPrefix::SUCCESS, ELocation::CONNECTIVITY, XOR( "Initialized cURL successfully." ) );
-		vecIllegalCharacters.emplace_back( '&', XOR( "AMP" ) );
-		vecIllegalCharacters.emplace_back( '=', XOR( "EQUAL" ) );
-		vecIllegalCharacters.emplace_back( '<', XOR( "LESS" ) );
-		vecIllegalCharacters.emplace_back( '>', XOR( "GREATER" ) );
-		vecIllegalCharacters.emplace_back( '\'', XOR( "QUOTE" ) );
-		vecIllegalCharacters.emplace_back( '+', XOR( "PLUS" ) );
+		_Log.Log( EPrefix::SUCCESS, ELocation::CONNECTIVITY,	XOR( "Initialized cURL successfully." ) );
+		strScriptLocator						=				XOR( "https://www.paladin-extensions.com/Run.php" );
+		vecIllegalCharacters.emplace_back( '&',					XOR( "AMP" ) );
+		vecIllegalCharacters.emplace_back( '=',					XOR( "EQUAL" ) );
+		vecIllegalCharacters.emplace_back( '<',					XOR( "LESS" ) );
+		vecIllegalCharacters.emplace_back( '>',					XOR( "GREATER" ) );
+		vecIllegalCharacters.emplace_back( '\'',				XOR( "QUOTE" ) );
+		vecIllegalCharacters.emplace_back( '+',					XOR( "PLUS" ) );
+		strPostDataIdentifiers[ USER_ID ]		=				XOR( "id" );
+		strPostDataIdentifiers[ SECRET_KEY ]	=				XOR( "sk" );
+		strPostDataIdentifiers[ HARDWARE ]		=				XOR( "hw" );
+		strPostDataIdentifiers[ HASH ]			=				XOR( "hash" );
+		strPostDataIdentifiers[ ACTION ]		=				XOR( "action" );
+		memset( bPostDataSet, false, sizeof( bool ) * POST_DATA_MAX );
 		return true;
 	}
 
@@ -37,9 +48,70 @@ bool CConnectivity::Initialize( )
 	return false;
 }
 
-void CConnectivity::Shutdown( )
+void CConnectivity::illegal_post_data_character_t::ValidateString( std::string &strToValidate )
 {
-	return curl_easy_cleanup( hConnection );
+	auto zPlace = std::string::npos;
+
+	while ( ( zPlace = strToValidate.find( chCharacter ) ) != std::string::npos )
+	{
+		strToValidate.erase( strToValidate.begin( ) + zPlace );
+		strToValidate.insert( zPlace, strReplacement );
+	}
+}
+
+std::string CConnectivity::GenerateIdentifier( EPostData _Identifier )
+{
+	auto strReturn = _Cryptography.GenerateHash( strPostDataIdentifiers[ _Identifier ] ).substr( 0, IDENTIFIER_LENGTH );
+	ValidateString( strReturn );
+	return strReturn;
+}
+
+std::string CConnectivity::ProcessValue( const std::string &strValue )
+{
+	std::string strReturn { };
+	if ( _Cryptography.Encrypt( strValue, strReturn ) )
+	{
+		ValidateString( strReturn );
+		return strReturn;
+	}
+
+	return { };
+}
+
+void CConnectivity::ResetConnection( )
+{
+	strCurrentPostData.clear( );
+	curl_easy_reset( hInstance );
+	memset( bPostDataSet, false, sizeof( bool ) * POST_DATA_MAX );
+}
+
+bool CConnectivity::TryConnection( std::string &strOut, std::string* pErrorBuffer, int iRetries /*= 0*/ )
+{
+	const auto _Code = curl_easy_perform( hInstance );
+	if ( _Code != CURLE_OK )
+	{
+		_Log.Log( EPrefix::ERROR, ELocation::CONNECTIVITY, XOR( "Failed to perform connection. Error code: %i. Retries: %i." ), _Code, iRetries );
+		if ( pErrorBuffer != nullptr )
+			_Log.Log( EPrefix::INFO, ELocation::CONNECTIVITY, XOR( "Error message: " ) + *pErrorBuffer );
+
+		return iRetries < MAX_RETRIES ? TryConnection( strOut, pErrorBuffer, iRetries++ ) : false;
+	}
+
+	if ( strOut.empty( ) )
+	{
+		_Log.Log( EPrefix::ERROR, ELocation::CONNECTIVITY, XOR( "Response was empty. Retries: %i." ), _Code, iRetries );
+		if ( pErrorBuffer != nullptr )
+			_Log.Log( EPrefix::INFO, ELocation::CONNECTIVITY, XOR( "Error message: " ) + *pErrorBuffer );
+
+		return iRetries < MAX_RETRIES ? TryConnection( strOut, pErrorBuffer, iRetries++ ) : false;
+	}
+
+	return true;
+}
+
+void CConnectivity::Uninitialize( )
+{
+	return curl_easy_cleanup( hInstance );
 }
 
 void CConnectivity::ValidateString( std::string &strToValidate )
@@ -48,26 +120,51 @@ void CConnectivity::ValidateString( std::string &strToValidate )
 		_IllegalCharacter.ValidateString( strToValidate );
 }
 
-bool CConnectivity::Request( const std::string &strUniformResourceLocator, std::initializer_list< post_data_t > initData, std::string &strOut, int iRetries /*= 0*/ )
+void CConnectivity::AddPostData( EPostData _Identifier, const std::string &strValue )
 {
-	std::string strPostData { };
-	for each ( auto &_Data in initData )
-	{
-		if ( !strPostData.empty( ) )
-			strPostData += '&';
+	if ( !strCurrentPostData.empty( ) )
+		strCurrentPostData += '&';
 
-		strPostData += _Data.FormatString( );
+	strCurrentPostData += GenerateIdentifier( _Identifier ) + '=' + ProcessValue( strValue );
+}
+
+bool CConnectivity::Request( EAction _Action, std::string &strOut )
+{
+	switch ( _Action )
+	{
+		case LOGIN:
+		{
+			ENSURE_DATA_SET( USER_ID )
+			ENSURE_DATA_SET( SECRET_KEY )
+			ENSURE_DATA_SET( HARDWARE )
+			ENSURE_DATA_SET( HASH )
+		}
+		break;
+
+		case DOWNLOAD:
+		case BAN:
+		case GET_RESOURCE_HASH:
+		case GET_RESOURCES:
+			break;
+
+		default:
+			throw std::runtime_error( XOR( "Attempting connection with invalid action." ) );
 	}
 
+	AddPostData( ACTION, std::to_string( int( _Action ) ) );
 	_Filesystem.ChangeWorkingDirectory( CFilesystem::GetAppdataDirectory( ) );
+
 	const auto strCookieFile = _Filesystem.FileToPath( _Filesystem.strCookieFile );
-	std::string strErrorBuffer { };
+	std::string strErrorBuffer;
+
 	strErrorBuffer.resize( CURL_ERROR_SIZE );
 	const auto bSetErrorBuffer = SetConnectionParameter( CURLOPT_ERRORBUFFER, &strErrorBuffer[ 0 ] );
+	if ( !bSetErrorBuffer )
+		_Log.Log( EPrefix::WARNING, ELocation::CONNECTIVITY, XOR( "Unable to set error buffer for cURL." ) );
 
-	if ( !SetConnectionParameter( CURLOPT_URL, strUniformResourceLocator.c_str( ) )
+	if ( !SetConnectionParameter( CURLOPT_URL, strScriptLocator.c_str( ) )
 		|| !SetConnectionParameter( CURLOPT_POST, TRUE )
-		|| !SetConnectionParameter( CURLOPT_POSTFIELDS, strPostData.c_str( ) )
+		|| !SetConnectionParameter( CURLOPT_POSTFIELDS, strCurrentPostData.c_str( ) )
 		|| !SetConnectionParameter( CURLOPT_FOLLOWLOCATION, TRUE )
 		|| !SetConnectionParameter( CURLOPT_COOKIESESSION, TRUE )
 		|| !SetConnectionParameter( CURLOPT_COOKIEFILE, strCookieFile.c_str( ) )
@@ -82,69 +179,14 @@ bool CConnectivity::Request( const std::string &strUniformResourceLocator, std::
 		if ( bSetErrorBuffer )
 			_Log.Log( EPrefix::ERROR, ELocation::CONNECTIVITY, XOR( "Setting cURL parameters failed, message: " ) + strErrorBuffer );
 
+		ResetConnection( );
 		return false;
 	}
 
-	const auto _Code = curl_easy_perform( hConnection );
-	if ( _Code != CURLE_OK )
-	{
-		_Log.Log( EPrefix::ERROR, ELocation::CONNECTIVITY, XOR( "Failed to perform connection. Error code: %i. Retries: %i." ), _Code, iRetries );
-		if ( bSetErrorBuffer )
-			_Log.Log( EPrefix::INFO, ELocation::CONNECTIVITY, XOR( "Error message: " ) + strErrorBuffer );
-
-		return iRetries < MAX_RETRIES ? Request( strUniformResourceLocator, initData, strOut, iRetries++ ) : false;
-	}
-
-	if ( strOut.empty( ) )
-	{
-		_Log.Log( EPrefix::ERROR, ELocation::CONNECTIVITY, XOR( "Response was empty. Retries: %i." ), _Code, iRetries );
-		if ( bSetErrorBuffer )
-			_Log.Log( EPrefix::INFO, ELocation::CONNECTIVITY, XOR( "Error message: " ) + strErrorBuffer );
-
-		return iRetries < MAX_RETRIES ? Request( strUniformResourceLocator, initData, strOut, iRetries++ ) : false;
-	}
-
-	return true;
+	const auto bReturn = TryConnection( strOut, bSetErrorBuffer ? &strErrorBuffer : nullptr );
+	ResetConnection( );
+	return bReturn;
 }
 
 CConnectivity::illegal_post_data_character_t::illegal_post_data_character_t( char _chCharacter, const std::string &_strReplacement ): chCharacter( _chCharacter ), strReplacement( _strReplacement )
 { }
-
-void CConnectivity::illegal_post_data_character_t::ValidateString( std::string &strToValidate )
-{
-	auto zPlace = std::string::npos;
-
-	while ( ( zPlace = strToValidate.find( chCharacter ) ) != std::string::npos )
-	{
-		strToValidate.erase( strToValidate.begin( ) + zPlace );
-		strToValidate.insert( zPlace, strReplacement );
-	}
-}
-
-std::string CConnectivity::post_data_t::GenerateIdentifier( ) const
-{
-	auto strReturn = _Cryptography.GenerateHash( strIdentifier ).substr( 0, IDENTIFIER_LENGTH );
-	ValidateString( strReturn );
-	return strReturn;
-}
-
-std::string CConnectivity::post_data_t::ProcessValue( ) const
-{
-	std::string strReturn { };
-	if ( _Cryptography.Crypt< encrypt_t >( strValue, strReturn ) )
-	{
-		ValidateString( strReturn );
-		return strReturn;
-	}
-
-	return { };
-}
-
-post_data_t::post_data_t( const std::string &_strName, const std::string &_strValue ): strIdentifier( _strName ), strValue( _strValue )
-{ }
-
-std::string post_data_t::FormatString( ) const
-{
-	auto strReturn = GenerateIdentifier( ) + '=' + ProcessValue( );
-	return strReturn;
-}

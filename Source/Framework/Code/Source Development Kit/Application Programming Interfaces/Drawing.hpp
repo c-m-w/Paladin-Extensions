@@ -50,6 +50,7 @@ private:
 	static constexpr auto FVF = D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1;
 
 	bool Initialize( ) override;
+	void Uninitialize( ) override;
 
 	bool CreateD3D( );
 	bool CreateState( );
@@ -239,8 +240,6 @@ private:
 	std::stack< rectangle_t > recSource { };
 
 public:
-
-	void Shutdown( ) override;
 
 	void SetTarget( CApplicationWindow *pWindow );
 	void SetTarget( IDirect3DDevice9 *pNewDevice );

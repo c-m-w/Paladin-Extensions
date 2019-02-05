@@ -19,7 +19,7 @@ bool CCryptography::Initialize( )
 	return !strEncryptionKey.empty( );
 }
 
-void CCryptography::Shutdown( )
+void CCryptography::Uninitialize( )
 { }
 
 std::string CCryptography::GenerateHash( const std::string &strBytes )
@@ -34,4 +34,16 @@ std::string CCryptography::GenerateHash( const std::string &strBytes )
 	hHash.MessageEnd( );
 	std::transform( strOutput.begin( ), strOutput.end( ), strOutput.begin( ), tolower );
 	return strOutput;
+}
+
+bool CCryptography::Encrypt( const std::string &strPlainText, std::string &strCipher )
+{
+	std::string strUnEncoded { };
+	return Crypt< encrypt_t >( strPlainText, strUnEncoded ) && Base64< encode_t >( strUnEncoded, strCipher );
+}
+
+bool CCryptography::Decrypt( const std::string &strCipher, std::string &strPlainText )
+{
+	std::string strDecoded { };
+	return Base64< decode_t >( strCipher, strDecoded ) && Crypt< decrypt_t >( strDecoded, strPlainText );
 }

@@ -10,6 +10,7 @@ protected:
 	constexpr static auto GENERATION_INTERVAL = 3600000ui64; // 1 hour in milliseconds
 
 	bool Initialize( ) override;
+	void Uninitialize( ) override;
 
 	/** \brief Key to encrypt / decrypt with. */
 	std::string strEncryptionKey;
@@ -32,8 +33,6 @@ public:
 
 	CCryptography( ) = default;
 
-	void Shutdown( ) override;
-
 	/** \brief Computes a hash of an array of bytes. */
 	/**	\param strBytes Text to be hashed. */
 	/**	\return Hash of the text. */
@@ -46,10 +45,12 @@ public:
 	template< typename _t > bool Base64( const std::string &strSubject, std::string &strOut );
 	/** \brief Encrypts or decrypts text with AES-256-CBC style.\n Requires InitializeEncryption( ) be called beforehand. */
 	/**	\tparam _t Either CryptoPP::CBC_Mode< CryptoPP::AES >::Encryption or CryptoPP::CBC_Mode< CryptoPP::AES >::Decryption, depending on if you wish to encrypt or decrypt text. */
-	/**	\param strPlainText Text to encrypt or decrypt. */
+	/**	\param strIn Text to encrypt or decrypt. */
 	/**	\param strOut Output buffer for the encrypted or decrypted text. */
 	/**	\return Whether or not processing the text was successful. */
-	template< typename _t > bool Crypt( const std::string &strPlainText, std::string &strOut );
+	template< typename _t > bool Crypt( const std::string &strIn, std::string &strOut );
+	bool Encrypt( const std::string& strPlainText, std::string& strCipher );
+	bool Decrypt( const std::string& strCipher, std::string& strPlainText );
 } inline _Cryptography;
 
 using encode_t = CCryptography::encode_t;

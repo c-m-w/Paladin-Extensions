@@ -14,6 +14,10 @@ bool CFilesystem::Initialize( )
 	strCookieFile = XOR( ".cookie" );
 	strDataFile = XOR( ".data" );
 	strLicenseFile = XOR( ".license" );
+	ChangeWorkingDirectory( GetAppdataDirectory( ) );
+	EscapeWorkingDirectory( );
+	HidePath( strRelativeAppdataDirectory );
+
 	return true;
 }
 
@@ -31,7 +35,7 @@ void CFilesystem::working_directory_t::RestoreWorkingDirectory( )
 	_DirectoryStack.pop( );
 }
 
-void CFilesystem::Shutdown( )
+void CFilesystem::Uninitialize( )
 { }
 
 std::string CFilesystem::GetAppdataDirectory( )
@@ -93,19 +97,6 @@ CFilesystem::working_directory_t &CFilesystem::GetThreadDirectories( )
 	return pSearch->second;
 }
 
-bool CFilesystem::GetInstallDirectory( std::string &strOut )
-{
-	strOut = R"(C:\Users\Cole\Documents\GitHub\Paladin-Extensions\Solutions\Paladin Extensions)";
-	return true;
-	strOut.clear( );
-	StoreCurrentWorkingDirectory( );
-	ChangeWorkingDirectory( GetAppdataDirectory( ) );
-	if ( !ReadFile( strDataFile, strOut, true ) )
-	{ } // todo log
-	RestoreWorkingDirectory( );
-	return !strOut.empty( );
-}
-
 bool CFilesystem::CheckAbsoluteDirectoryValidity( const std::string &strDirectory )
 {
 	auto strFinalDirectory = strDirectory;
@@ -131,18 +122,41 @@ bool CFilesystem::CheckAbsoluteFileValidity( const std::string &strFile )
 
 std::string CFilesystem::GetAbsoluteContainingDirectory( const std::string &strFile )
 {
-	auto strReturn = strFile.substr( 0, strFile.find_last_of( '\\' ) );
+	const auto zPosition = strFile.substr( 0, strFile.length( ) - 1 ).find_last_of( '\\' );
+	auto strReturn = zPosition == std::string::npos ? strFile : strFile.substr( 0, zPosition );
+
 	FormatDirectory( strReturn );
 	return strReturn;
 }
 
 bool CFilesystem::EnsureAbsoluteFileDirectoryExists( const std::string &strFilePath )
 {
-	const auto strDirectory = GetAbsoluteContainingDirectory( strFilePath );
-	if ( CheckAbsoluteDirectoryValidity( strDirectory ) )
+	const auto strBaseDirectory = GetAbsoluteContainingDirectory( strFilePath );
+	if ( CheckAbsoluteDirectoryValidity( strBaseDirectory ) )
 		return true;
 
-	return CreateDirectory( strDirectory.c_str( ), nullptr ) == TRUE;
+	auto strDirectory = strBaseDirectory;
+	std::stack< std::string > _SubDirectories { };
+
+	while ( !CheckAbsoluteDirectoryValidity( strDirectory ) )
+	{
+		auto strLast = strDirectory;
+
+		strDirectory = GetAbsoluteContainingDirectory( strDirectory );
+		strLast = strLast.substr( strDirectory.length( ) );
+		FormatDirectory( strLast );
+		_SubDirectories.push( strLast );
+	}
+
+	while( !_SubDirectories.empty( ) )
+	{
+		strDirectory += _SubDirectories.top( );
+		_SubDirectories.pop( );
+		if ( CreateDirectory( strDirectory.c_str( ), nullptr ) == FALSE )
+			return false;
+	}
+
+	return true;
 }
 
 bool CFilesystem::GetAbsoluteDirectoryContents( const std::string &strDirectory, bool bFiles, bool bFolders, std::vector< std::string > &vecOut )
@@ -161,8 +175,9 @@ bool CFilesystem::GetAbsoluteDirectoryContents( const std::string &strDirectory,
 	vecOut.clear( );
 	do
 	{
-		if ( bFiles && !( _FileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY )
+		if ( ( bFiles && !( _FileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY )
 			|| bFolders && 0 < ( _FileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) )
+			 && strcmp( _FileData.cFileName, XOR( "." ) ) && strcmp( _FileData.cFileName, XOR( ".." ) ) )
 			vecOut.emplace_back( _FileData.cFileName );
 	}
 	while ( FindNextFile( hFile, &_FileData ) == TRUE );
@@ -255,7 +270,6 @@ bool CFilesystem::AddToAbsoluteFile( const std::string &strFilename, const std::
 bool CFilesystem::HideAbsolutePath( const std::string &strPath )
 {
 	auto strFinalPath = strPath;
-	FormatDirectory( strFinalPath );
 
 	if ( SetFileAttributes( strFinalPath.c_str( ), FILE_ATTRIBUTE_HIDDEN ) != TRUE )
 		return false;
@@ -264,11 +278,12 @@ bool CFilesystem::HideAbsolutePath( const std::string &strPath )
 
 	if ( CheckAbsoluteDirectoryValidity( strFinalPath.c_str( ) ) )
 	{
+		FormatDirectory( strFinalPath );
 		std::vector< std::string > vecContents { };
 
 		if ( bReturn &= GetAbsoluteDirectoryContents( strFinalPath, true, true, vecContents ) )
 			for each ( auto &strContent in vecContents )
-				bReturn &= HideAbsolutePath( strContent );
+				bReturn &= HideAbsolutePath( strFinalPath + strContent );
 	}
 
 	return bReturn;
@@ -298,6 +313,11 @@ std::string CFilesystem::ChangeWorkingDirectory( std::string strNew, std::initia
 	}
 
 	return strWorkingDirectory;
+}
+
+void CFilesystem::EscapeWorkingDirectory( )
+{
+	ChangeWorkingDirectory( GetAbsoluteContainingDirectory( GetWorkingDirectory( ) ) );
 }
 
 std::string &CFilesystem::GetWorkingDirectory( )

@@ -94,7 +94,7 @@ void CLogging::EndLog( )
 	WriteToFile( );
 }
 
-void CLogging::Shutdown( )
+void CLogging::Uninitialize( )
 {
 	EndLog( );
 }

@@ -84,6 +84,7 @@ public:
 private:
 
 	bool Initialize( ) override;
+	void Uninitialize( ) override;
 
 	bool ProcessKey( key_t _Key, CKeyState _KeyState );
 	bool ProcessMouseMessage( UINT uMsg, WPARAM wParam );
@@ -100,8 +101,6 @@ private:
 	std::vector< scroll_callback_t > vecScrollCallbacks;
 
 public:
-
-	void Shutdown( ) override;
 
 	bool HandleEvent( UINT uMsg, WPARAM wParam, LPARAM lParam );
 	void AddCallback( const key_callback_t &_Callback, const key_t &_Key );

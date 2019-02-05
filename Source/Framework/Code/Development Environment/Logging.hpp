@@ -33,7 +33,9 @@ public:
 	enum ELocation
 	{
 		FILESYSTEM,
+		CRYPTOGRAPHY,
 		CONNECTIVITY,
+		RESOURCE_MANAGER,
 		WINDOW,
 		DRAWING,
 		LOCATION_MAX
@@ -50,6 +52,7 @@ private:
 	constexpr static auto TIME_STRING_LENGTH = 32u;
 
 	bool Initialize( ) override;
+	void Uninitialize( ) override;
 
 	/** \brief Converts time since epoch to something that is legible. */
 	/** \param strFormat Format for the time string. */
@@ -100,8 +103,6 @@ private:
 public:
 
 	CLogging( ) = default;
-
-	void Shutdown( ) override;
 
 	/** \brief Logs an event to the buffer. */
 	/** \param _Prefix Prefix to denote the severity or status of the event. */

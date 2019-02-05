@@ -22,18 +22,28 @@
 #include "Source Development Kit/Application Programming Interfaces/Drawing.hpp"
 #include "Source Development Kit/Toolkits/Graphical User Interface.hpp"
 
+void ShutdownFramework( );
+
 inline bool SetupFramework( )
 {
-	return _Filesystem.Setup( )
-			&& _Log.Setup( )
-			&& _Cryptography.Setup( )
-			&& _Connection.Setup( )
-			&& _Input.Setup( );
+	if ( !_Filesystem.Setup( )
+		 || !_Log.Setup( )
+		 || !_Cryptography.Setup( )
+		 || !_Connection.Setup( )
+		 || !_ResourceManager.Setup( )
+		 || !_Input.Setup( ) )
+	{
+		ShutdownFramework( );
+		return false;
+	}
+
+	return true;
 }
 
 inline void ShutdownFramework( )
 {
 	_Input.Shutdown( );
+	_ResourceManager.Shutdown( );
 	_Connection.Shutdown( );
 	_Cryptography.Shutdown( );
 	_Log.Shutdown( );

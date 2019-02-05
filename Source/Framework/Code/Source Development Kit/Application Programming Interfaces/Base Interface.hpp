@@ -9,6 +9,7 @@ class IBase
 protected:
 
 	[ [ nodiscard ] ] virtual bool Initialize( ) = 0;
+	virtual void Uninitialize( ) = 0;
 
 	bool bInitialization;
 
@@ -27,7 +28,14 @@ public:
 	{
 		return bInitialization = Initialize( );
 	};
-	virtual void Shutdown( ) = 0;
+
+	void Shutdown( )
+	{
+		if ( bInitialization )
+			Uninitialize( );
+
+		bInitialization = false;
+	}
 
 	bool GetInitializationState( )
 	{

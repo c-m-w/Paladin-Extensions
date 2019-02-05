@@ -68,6 +68,9 @@
 #pragma comment( lib, "libcurl.lib" )
 #endif
 
+// Json for C++
+#include <nlohmann/json.hpp>
+
 // Crypto++
 #include <cryptopp/base64.h>
 #include <cryptopp/filters.h>

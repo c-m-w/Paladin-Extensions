@@ -25,7 +25,7 @@
 
 		private function getLogFile( ): string
 		{
-			return "Logs/" . strftime( "%Y-%m-%d" );
+			return "/home/palavpvb/PX/PHP/Logs/" . strftime( "%Y-%m-%d" );
 		}
 
 		private function rawLog( $message ): void
@@ -41,7 +41,7 @@
 
 		public function log( $message ): void
 		{
-			$this->rawLog( '[' . $this->getTime( ) . ']\t' . $_SERVER[ 'REMOTE_ADDR' ] . $message );
+			$this->rawLog( '[' . $this->getTime( ) . ']        [' . $_SERVER[ 'REMOTE_ADDR' ] . ']        ' . $message );
 		}
 	}
 ?>

@@ -10,5 +10,5 @@ private:
 
 public:
 
-	void Shutdown( ) override;
-};
+	void Uninitialize( ) override;
+} inline _ResourceManager;

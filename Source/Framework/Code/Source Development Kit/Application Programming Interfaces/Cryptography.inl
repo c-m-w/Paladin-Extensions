@@ -18,18 +18,25 @@ template< typename _t > bool CCryptography::Base64( const std::string &strSubjec
 	return !strOut.empty( );
 }
 
-template< typename _t > bool CCryptography::Crypt( const std::string &strPlainText, std::string &strOut )
+template< typename _t > bool CCryptography::Crypt( const std::string &strIn, std::string &strOut )
 {
-	if ( strPlainText.empty( ) )
+	if ( strIn.empty( ) )
 		return false;
 
 	if ( !Initialize( ) )
 		return false;
 
-	_t _Cryption( reinterpret_cast< unsigned char* >( const_cast< char* >( strEncryptionKey.c_str( ) ) ),
-				  strEncryptionKey.length( ), reinterpret_cast< unsigned char* >( const_cast< char* >( strInitializationVector.c_str( ) ) ) );
-	CryptoPP::StringSink _FormatString( strOut );
-	CryptoPP::StreamTransformationFilter _StreamTransform( _Cryption, &_FormatString );
-	CryptoPP::StringSource( strPlainText, true, &_StreamTransform );
+	try
+	{
+		_t _Cryption( reinterpret_cast< unsigned char* >( const_cast< char* >( strEncryptionKey.c_str( ) ) ),
+					  strEncryptionKey.length( ), reinterpret_cast< unsigned char* >( const_cast< char* >( strInitializationVector.c_str( ) ) ) );
+		CryptoPP::StringSource( strIn, true, new	CryptoPP::StreamTransformationFilter( _Cryption, new CryptoPP::StringSink( strOut ) ) );
+	}
+	catch( CryptoPP::InvalidCiphertext& )
+	{
+		_Log.Log( EPrefix::ERROR, ELocation::CRYPTOGRAPHY, XOR( "Invalid cipher text passed to decrypt." ) );
+		return false;
+	}
+
 	return !strOut.empty( );
 }

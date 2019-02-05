@@ -22,7 +22,7 @@
 				&& strlen( $this->encryptionKey ) > 0 && strlen( $this->initializationVector ) > 0 )
 				return;
 
-			$unhashedKey = ( string )( time( ) / generationInterval );
+			$unhashedKey = ( string )( ( int )( time( ) / generationInterval ) );
 			$hash = $this->generateHash( $unhashedKey );
 			$this->encryptionKey = substr( $hash, 0, encryptionKeySize );
 			$this->initializationVector = substr( $hash, 0, initializationVectorSize );

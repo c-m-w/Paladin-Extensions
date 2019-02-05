@@ -2,6 +2,7 @@
 	require 'Cryptography.php';
 	require 'Logging.php';
 	require 'SQL.php';
+    require 'Resource Manager.php';
 
 	define( "unsafeTerms", array(
 		" drop ", " delete ", " select ", " alter ", " table ", " class ",
@@ -14,11 +15,20 @@
 		"Inactive Premium"		=> "5",		// premium time exceeded
 		"Success"				=> "6",		// regular user logged in
 		"Staff Success"			=> "7" ) );	// staff member logged in
+    define( "illegalCharacters", array(
+         "AMP"                  => "&",
+         "EQUAL"                => "=",
+         "LESS"                 => "<",
+         "GREATER"              => ">",
+         "QUOTE"                => "'",
+         "PLUS"                 => "+" ) );
+    define( "actions", array( 'login' => 0, 'download' => 1, 'ban' => 2, 'get_resource_hash' => 3, 'get_resources' => 4 ) );
 	define( "launcherFile", "../Extensions/Launcher.exe" );
 
 	$log			= new Logging( );
 	$cryptography	= new Cryptography( );
 	$sql			= new SQLConnection( );
+    $resources      = new ResourceManager( );
 
 	class Functionality
 	{
@@ -31,12 +41,19 @@
 			return $sql->escape( strip_tags( trim( str_replace( unsafeTerms, "", $input ) ) ) );
 		}
 
-		public function getPostData( $id ): string
+		public function getPostData( $id )
 		{
 			global $cryptography;
 
 			$accessIdentifier = $cryptography->generateIdentifier( $id );
-			return $this->sanitize( $cryptography->decrypt( $_POST[ $accessIdentifier ] ) );
+            if ( !isset( $_POST[ $accessIdentifier ] ) )
+                return FALSE;
+
+            $encryptedValue = $_POST[ $accessIdentifier ];
+            foreach ( illegalCharacters as $word => $char )
+                $encryptedValue = str_replace( $word, $char, $encryptedValue );
+
+			return $cryptography->decrypt( $encryptedValue );
 		}
 
 		public function stopExecution( $exit_code, $other_data = 'none' ): void
@@ -71,6 +88,22 @@
 		{
 			return $this->connection_info[ 'countryCode' ];
 		}
+
+        public function sendResourceHash( ): void
+        {
+            global $cryptography;
+            global $resources;
+
+            die( $cryptography->encrypt( $resources->getResourceHashes( ) ) );
+        }
+
+        public function sendResources( ): void
+        {
+            global $cryptography;
+            global $resources;
+
+            die( $cryptography->encrypt( $resources->getResourceData( ) ) );
+        }
 	}
 
 	$functionality	= new Functionality( );
@@ -113,10 +146,10 @@
 			global $log;
 			global $functionality;
 
-			$result = $sql->selectRows( 'secondary_group_ids, is_banned, is_staff', 'xf_user', 'user_id = ' . $user . ' AND secret_key = "' . $key . '"' );
+			$result = $sql->selectRows( 'secondary_group_ids, is_banned, is_staff', 'xf_user', 'user_id = ' . $this->user . ' AND secret_key = "' . $this->key . '"' );
 			if ( $result->num_rows == 0 )
 			{
-				$log->log( 'Could not find user with id of ' . $user . ' and secret key of ' . $key . ' in table xf_user.' );
+				$log->log( 'Could not find user with id of ' . $this->user . ' and secret key of ' . $this->key . ' in table xf_user.' );
 				$functionality->stopExecution( 'Establishing Failure' );
 			}
 
@@ -166,10 +199,10 @@
 				$this->logAttempt( 'Hardware Mismatch' );
 			}
 
-			$result = $sql->selectRows( 'field_value', 'xf_user_field_value', 'field_id = "unique_id" AND user_id = ' . $user );
+			$result = $sql->selectRows( 'field_value', 'xf_user_field_value', 'field_id = "unique_id" AND user_id = ' . $this->user );
 			if ( $result->num_rows == 0 )
 			{
-				$log->log( 'Could not obtain unique id from xf_user_field_value. User ID: ' . $user . '.' );
+				$log->log( 'Could not obtain unique id from xf_user_field_value. User ID: ' . $this->user . '.' );
 				$this->logAttempt( 'Establishing Failure' );
 			}
 
@@ -199,7 +232,7 @@
 
 			if ( $result->fetch_assoc( )[ 'unique_id' ] != $unique )
 			{
-				$sql->updateRow( 'xf_user_field_value', 'field_value', 0, 'field_id = "unique_id" AND user_id = ' . $user );
+				$sql->updateRow( 'xf_user_field_value', 'field_value', 0, 'field_id = "unique_id" AND user_id = ' . $this->user );
 				$this->logAttempt( 'Hardware Mismatch' );
 			}
 		}
@@ -237,18 +270,26 @@
 
 	function handleRequest( ): void
 	{
+        global $log;
         global $auth;
         global $functionality;
+        global $cryptography;
 
 		$action = $functionality->getPostData( 'action' );
+        if ( $action === FALSE )
+            header( "Location: https://www.paladin-extensions.com/error.shtml", true, 301 );
 
-		if ( $action == 'login' )
+        $log->log( 'Received action ' . $action );
+
+		if ( $action == actions[ 'login' ] )
 			$auth->login( );
-		if ( $action == 'download' )
+		if ( $action == actions[ 'download' ] )
 			$auth->download( );
-		if ( $action == 'ban' )
+		if ( $action == actions[ 'ban' ] )
 			$auth->ban( );
-
-        header( "Location: https://www.paladin-extensions.com/error.shtml", true, 301 );
+        if ( $action == actions[ 'get_resource_hash' ] )
+            $functionality->sendResourceHash( );
+        if ( $action == actions[ 'get_resources' ] )
+            $functionality->sendResources( );
 	}
 ?>

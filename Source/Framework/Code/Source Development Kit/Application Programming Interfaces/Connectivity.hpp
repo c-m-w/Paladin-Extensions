@@ -4,6 +4,18 @@
 
 class CConnectivity: public IBase
 {
+public:
+
+	enum EPostData
+	{
+		USER_ID,
+		SECRET_KEY,
+		HARDWARE,
+		HASH,
+		ACTION,
+		POST_DATA_MAX
+	};
+
 private:
 
 	struct illegal_post_data_character_t
@@ -17,44 +29,46 @@ private:
 	};
 
 	constexpr static auto MAX_RETRIES = 5;
-	constexpr static auto MAX_TIMEOUT = 7;
+	constexpr static auto MAX_TIMEOUT = 7;	
+	constexpr static auto IDENTIFIER_LENGTH = 16;
+
+	static inline std::string strScriptLocator;
 	static inline std::vector< illegal_post_data_character_t > vecIllegalCharacters;
+	static inline std::string strPostDataIdentifiers[ POST_DATA_MAX ];
 
 	bool Initialize( ) override;
+	void Uninitialize( ) override;
 
-	template< typename _t > bool SetConnectionParameter( CURLoption _Option, _t _Value );
+	static void ValidateString( std::string &strToValidate );
 
-	CURL *hConnection;
+	[ [ nodiscard ] ] std::string GenerateIdentifier( EPostData _Identifier );
+	[ [ nodiscard ] ] std::string ProcessValue( const std::string& strValue );
+	template< typename _t >[ [ nodiscard ] ] bool SetConnectionParameter( CURLoption _Option, _t _Value );
+	void ResetConnection( );
+	[ [ nodiscard ] ] bool TryConnection( std::string& strOut, std::string* pErrorBuffer, int iRetries = 0 );
+
+	std::string strCurrentPostData;
+	bool bPostDataSet[ POST_DATA_MAX ];
+	CURL *hInstance;
 
 public:
 
-	struct post_data_t
+	enum EAction
 	{
-	private:
-
-		constexpr static auto IDENTIFIER_LENGTH = 16;
-
-		std::string GenerateIdentifier( ) const;
-		std::string ProcessValue( ) const;
-
-	public:
-
-		std::string strIdentifier, strValue;
-
-		post_data_t( const std::string &_strIdentifier, const std::string &_strValue );
-
-		std::string FormatString( ) const;
+		LOGIN,
+		DOWNLOAD,
+		BAN,
+		GET_RESOURCE_HASH,
+		GET_RESOURCES,
+		ACTION_MAX
 	};
 
 	CConnectivity( ) = default;
 
-	void Shutdown( ) override;
-
-	static void ValidateString( std::string &strToValidate );
-
-	bool Request( const std::string &strUniformResourceLocator, std::initializer_list< post_data_t > initData, std::string &strOut, int iRetries = 0 );
+	void AddPostData( EPostData _Identifier, const std::string& strValue );
+	bool Request( EAction _Action, std::string &strOut );
 } inline _Connection;
 
-using post_data_t = CConnectivity::post_data_t;
+using EAction = CConnectivity::EAction;
 
 #include "Connectivity.inl"
