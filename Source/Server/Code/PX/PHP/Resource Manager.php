@@ -14,7 +14,7 @@
                 if ( !is_dir( realpath( $file ) ) )
                 {
                     $relativeFolder = substr( $directory, strlen( resourceFolder ) - strlen( resourceFolderName ) );
-                    $path = str_replace( '/', '\\', $relativeFolder ) . '\\' . $file;
+                    $path = substr( str_replace( '/', '\\', $relativeFolder ) . '\\' . $file, strlen( resourceFolderName ) + 1 );
                     $filePath = $directory . '/' . $file;
                     $data = file_get_contents( $filePath );
                     $this->data[ ] = array( "Path" => $path, "Data" => base64_encode( $data ) );

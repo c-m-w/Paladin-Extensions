@@ -327,7 +327,11 @@ std::string &CFilesystem::GetWorkingDirectory( )
 
 std::string CFilesystem::FileToPath( const std::string &strFile )
 {
-	return GetWorkingDirectory( ) + strFile;
+	auto strFinalFile = strFile;
+	if ( strFinalFile[ 0 ] == '\\' )
+		strFinalFile.erase( strFinalFile.begin( ) );
+
+	return GetWorkingDirectory( ) + strFinalFile;
 }
 
 bool CFilesystem::ReadFile( const std::string &strFilename, std::string &strOut, bool bDecode /*= true*/ )

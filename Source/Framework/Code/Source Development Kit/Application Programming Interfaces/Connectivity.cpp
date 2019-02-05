@@ -152,9 +152,11 @@ bool CConnectivity::Request( EAction _Action, std::string &strOut )
 	}
 
 	AddPostData( ACTION, std::to_string( int( _Action ) ) );
+	_Filesystem.StoreCurrentWorkingDirectory( );
 	_Filesystem.ChangeWorkingDirectory( CFilesystem::GetAppdataDirectory( ) );
 
 	const auto strCookieFile = _Filesystem.FileToPath( _Filesystem.strCookieFile );
+	_Filesystem.RestoreWorkingDirectory( );
 	std::string strErrorBuffer;
 
 	strErrorBuffer.resize( CURL_ERROR_SIZE );

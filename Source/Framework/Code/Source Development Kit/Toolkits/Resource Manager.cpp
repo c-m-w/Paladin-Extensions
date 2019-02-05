@@ -27,7 +27,7 @@ bool CResourceManager::Initialize( )
 
 	auto bValid = true;
 
-	_Filesystem.ChangeWorkingDirectory( CFilesystem::GetAppdataDirectory( ) );
+	_Filesystem.ChangeWorkingDirectory( CFilesystem::GetAppdataDirectory( ), { CFilesystem::strRelativeResourceDirectory } );
 	try
 	{
 		for ( auto& _File : jsInformation )
@@ -101,7 +101,8 @@ bool CResourceManager::Initialize( )
 		}
 	}
 
-	return true;
+	_Filesystem.EscapeWorkingDirectory( );
+	return _Filesystem.HidePath( CFilesystem::strRelativeResourceDirectory );
 }
 
 void CResourceManager::Uninitialize( )
