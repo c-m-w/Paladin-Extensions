@@ -108,6 +108,7 @@
     <ClInclude Include="Code\Source Development Kit\Toolkits\Graphical User Interface.hpp" />
     <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Utilities.hpp" />
     <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Window.hpp" />
+    <ClInclude Include="Code\Source Development Kit\Toolkits\Memory Manager.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\Resource Manager.hpp" />
     <ClInclude Include="Precompile.hpp" />
     <ClInclude Include="Code\Framework.hpp" />
@@ -123,6 +124,7 @@
     <ClCompile Include="Code\Source Development Kit\Toolkits\Graphical User Interface.cpp" />
     <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Utilities.cpp" />
     <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Window.cpp" />
+    <ClCompile Include="Code\Source Development Kit\Toolkits\Memory Manager.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\Resource Manager.cpp" />
     <ClCompile Include="Precompile.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
