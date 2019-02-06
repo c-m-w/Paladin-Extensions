@@ -15,10 +15,19 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Code\Unit Tests.cpp">
+    <ClCompile Include="..\Framework\Precompile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\Framework\Precompile.cpp">
+    <ClCompile Include="Code\Framework Unit Tests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\Client Unit Tests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\Launcher Unit Tests.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\Setup Unit Tests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

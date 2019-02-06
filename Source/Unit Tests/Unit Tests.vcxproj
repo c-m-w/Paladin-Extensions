@@ -15,7 +15,10 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Code\Unit Tests.cpp" />
+    <ClCompile Include="Code\Client Unit Tests.cpp" />
+    <ClCompile Include="Code\Framework Unit Tests.cpp" />
+    <ClCompile Include="Code\Launcher Unit Tests.cpp" />
+    <ClCompile Include="Code\Setup Unit Tests.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Framework\Precompile.hpp" />
