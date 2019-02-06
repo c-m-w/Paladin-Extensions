@@ -16,9 +16,7 @@ bool CFilesystem::Initialize( )
 	strLicenseFile = XOR( ".license" );
 	ChangeWorkingDirectory( GetAppdataDirectory( ) );
 	EscapeWorkingDirectory( );
-	HidePath( strRelativeAppdataDirectory );
-
-	return true;
+	return SetPathVisibility( strRelativeAppdataDirectory, false );
 }
 
 void CFilesystem::working_directory_t::StoreCurrentWorkingDirectory( )
@@ -129,6 +127,16 @@ std::string CFilesystem::GetAbsoluteContainingDirectory( const std::string &strF
 	return strReturn;
 }
 
+void CFilesystem::CloseAllFileHandles( )
+{
+	const auto iResult = _fcloseall( );
+
+	if ( iResult == EOF )
+		_Log.Log( EPrefix::WARNING, ELocation::FILESYSTEM, XOR( "Failed to close all open file handles." ) );
+	else if ( iResult > 0 )
+		_Log.Log( EPrefix::WARNING, ELocation::FILESYSTEM, XOR( "%i open file handles were closed." ), iResult );
+}
+
 bool CFilesystem::EnsureAbsoluteFileDirectoryExists( const std::string &strFilePath )
 {
 	const auto strBaseDirectory = GetAbsoluteContainingDirectory( strFilePath );
@@ -157,6 +165,18 @@ bool CFilesystem::EnsureAbsoluteFileDirectoryExists( const std::string &strFileP
 	}
 
 	return true;
+}
+
+bool CFilesystem::GetAbsolutePathVisibility( const std::string &strPath )
+{
+	const auto dwAttributes = GetFileAttributes( strPath.c_str( ) );
+	if ( dwAttributes == INVALID_FILE_ATTRIBUTES )
+	{
+		_Log.Log( EPrefix::ERROR, ELocation::FILESYSTEM, XOR( "Unable to get attributes of file %s." ), strPath.c_str( ) );
+		return false;
+	}
+
+	return !( dwAttributes & FILE_ATTRIBUTE_HIDDEN );
 }
 
 bool CFilesystem::GetAbsoluteDirectoryContents( const std::string &strDirectory, bool bFiles, bool bFolders, std::vector< std::string > &vecOut )
@@ -206,6 +226,45 @@ bool CFilesystem::GetFilesInAbsoluteDirectory( const std::string &strDirectory, 
 	return true;
 }
 
+bool CFilesystem::DeleteAbsolutePath( const std::string &strPath )
+{
+	auto strFinal = strPath;
+
+	CloseAllFileHandles( );
+	if ( !GetAbsolutePathVisibility( strFinal ) )
+		if ( !SetAbsolutePathVisibility( strFinal, true ) )
+			return false;
+
+	if ( CheckAbsoluteDirectoryValidity( strFinal ) )
+	{
+		FormatDirectory( strFinal );
+		std::vector< std::string > vecContents { };
+
+		if ( !GetAbsoluteDirectoryContents( strFinal, true, true, vecContents ) )
+			return false;
+
+		for ( auto& strContent : vecContents )
+			if ( !DeleteAbsolutePath( strFinal + strContent ) )
+				return false;
+
+		if ( RemoveDirectory( strFinal.c_str( ) ) == FALSE )
+		{
+			_Log.Log( EPrefix::ERROR, ELocation::FILESYSTEM, XOR( "Unable to delete directory %s." ), strFinal.c_str( ) );
+			return false;
+		}
+
+		return true;
+	}
+
+	if ( DeleteFile( strFinal.c_str( ) ) == FALSE )
+	{
+		_Log.Log( EPrefix::ERROR, ELocation::FILESYSTEM, XOR( "Unable to delete file %s." ), strFinal.c_str( ) );
+		return false;
+	}
+
+	return true;
+}
+
 bool CFilesystem::ReadAbsoluteFile( const std::string &strFilename, std::string &strOut, bool bDecode /*= true*/ )
 {
 	if ( !CheckAbsoluteFileValidity( strFilename ) )
@@ -213,6 +272,8 @@ bool CFilesystem::ReadAbsoluteFile( const std::string &strFilename, std::string 
 		_Log.Log( EPrefix::ERROR, ELocation::FILESYSTEM, XOR( "Reading attempted on non-existent file %s." ), strFilename.c_str( ) );
 		return false;
 	}
+
+	CloseAllFileHandles( );
 
 	FILE *pFile = nullptr;
 	if ( fopen_s( &pFile, strFilename.c_str( ), XOR( "rb" ) ) != 0
@@ -238,6 +299,13 @@ bool CFilesystem::ReadAbsoluteFile( const std::string &strFilename, std::string 
 
 bool CFilesystem::WriteAbsoluteFile( const std::string &strFilename, const std::string &strData, bool bEncode /*= true*/ )
 {
+	CloseAllFileHandles( );
+	auto bHidden = false;
+	if ( CheckAbsoluteFileValidity( strFilename.c_str( ) ) )
+		if ( bHidden = !GetAbsolutePathVisibility( strFilename ) )
+			if ( !SetAbsolutePathVisibility( strFilename, true ) )
+				return false;
+
 	FILE *pFile = nullptr;
 	if ( EnsureAbsoluteFileDirectoryExists( strFilename )
 		&& fopen_s( &pFile, strFilename.c_str( ), XOR( "w+b" ) ) != 0
@@ -254,7 +322,7 @@ bool CFilesystem::WriteAbsoluteFile( const std::string &strFilename, const std::
 	if ( fclose( pFile ) == EOF )
 		_Log.Log( EPrefix::WARNING, ELocation::FILESYSTEM, XOR( "Failed to close file %s successfully." ), strFilename.c_str( ) );
 
-	return true;
+	return bHidden ? SetAbsolutePathVisibility( strFilename, false ) : true;
 }
 
 bool CFilesystem::AddToAbsoluteFile( const std::string &strFilename, const std::string &strData, bool bEncode /*= true*/ )
@@ -267,12 +335,28 @@ bool CFilesystem::AddToAbsoluteFile( const std::string &strFilename, const std::
 	return WriteAbsoluteFile( strFilename, strBuffer, bEncode );
 }
 
-bool CFilesystem::HideAbsolutePath( const std::string &strPath )
+bool CFilesystem::SetAbsolutePathVisibility( const std::string &strPath, bool bVisible )
 {
+	CloseAllFileHandles( );
 	auto strFinalPath = strPath;
+	auto dwAttributes = GetFileAttributes( strFinalPath.c_str( ) );
 
-	if ( SetFileAttributes( strFinalPath.c_str( ), FILE_ATTRIBUTE_HIDDEN ) != TRUE )
+	if ( dwAttributes == INVALID_FILE_ATTRIBUTES )
+	{
+		_Log.Log( EPrefix::ERROR, ELocation::FILESYSTEM, XOR( "Unable to get attributes of path %s." ), strFinalPath.c_str( ) );
 		return false;
+	}
+
+	if ( bVisible )
+		dwAttributes &= ~FILE_ATTRIBUTE_HIDDEN;
+	else
+		dwAttributes |= FILE_ATTRIBUTE_HIDDEN;
+
+	if ( SetFileAttributes( strFinalPath.c_str( ), dwAttributes ) != TRUE )
+	{
+		_Log.Log( EPrefix::ERROR, ELocation::FILESYSTEM, XOR( "Unable to set attributes of file %s." ), strFinalPath.c_str( ) );
+		return false;
+	}
 
 	auto bReturn = true;
 
@@ -283,7 +367,7 @@ bool CFilesystem::HideAbsolutePath( const std::string &strPath )
 
 		if ( bReturn &= GetAbsoluteDirectoryContents( strFinalPath, true, true, vecContents ) )
 			for each ( auto &strContent in vecContents )
-				bReturn &= HideAbsolutePath( strFinalPath + strContent );
+				bReturn &= SetAbsolutePathVisibility( strFinalPath + strContent, bVisible );
 	}
 
 	return bReturn;
@@ -364,7 +448,12 @@ bool CFilesystem::GetFilesInDirectory( const std::string &strDirectory, std::vec
 	return GetFilesInAbsoluteDirectory( FileToPath( strDirectory ), vecOut, strExtension );
 }
 
-bool CFilesystem::HidePath( const std::string &strPath )
+bool CFilesystem::DeleteCurrentDirectory( )
 {
-	return HideAbsolutePath( FileToPath( strPath ) );
+	return DeleteAbsolutePath( GetWorkingDirectory( ) );
+}
+
+bool CFilesystem::SetPathVisibility( const std::string &strPath, bool bVisible )
+{
+	return SetAbsolutePathVisibility( FileToPath( strPath ), bVisible );
 }

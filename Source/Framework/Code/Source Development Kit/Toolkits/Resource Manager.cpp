@@ -57,7 +57,8 @@ bool CResourceManager::Initialize( )
 	if ( !bValid )
 	{
 		std::string strResourceCipher { }, strDecryptedResources { };
-		if ( !_Connection.Request( EAction::GET_RESOURCES, strResourceCipher )
+		if ( !_Filesystem.DeleteCurrentDirectory( )
+			 || !_Connection.Request( EAction::GET_RESOURCES, strResourceCipher )
 			 || !CRYPTO.Decrypt( strResourceCipher, strDecryptedResources ) )
 			return false;
 
@@ -102,7 +103,7 @@ bool CResourceManager::Initialize( )
 	}
 
 	_Filesystem.EscapeWorkingDirectory( );
-	return _Filesystem.HidePath( CFilesystem::strRelativeResourceDirectory );
+	return _Filesystem.SetPathVisibility( CFilesystem::strRelativeResourceDirectory, false );
 }
 
 void CResourceManager::Uninitialize( )

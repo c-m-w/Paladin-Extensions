@@ -33,10 +33,13 @@ public:
 	/** \return Whether or not the file exists. */
 	[ [ nodiscard ] ] static bool CheckAbsoluteFileValidity( const std::string &strFile );
 	[ [ nodiscard ] ] static std::string GetAbsoluteContainingDirectory( const std::string &strFile );
+	static void CloseAllFileHandles( );
 	[ [ nodiscard ] ] static bool EnsureAbsoluteFileDirectoryExists( const std::string &strFilePath );
+	[ [ nodiscard ] ] static bool GetAbsolutePathVisibility( const std::string& strPath );
 	[ [ nodiscard ] ] static bool GetAbsoluteDirectoryContents( const std::string &strDirectory, bool bFiles, bool bFolders, std::vector< std::string > &vecOut );
 	[ [ nodiscard ] ] static bool GetFoldersInAbsoluteDirectory( const std::string &strDirectory, std::vector< std::string > &vecOut );
 	[ [ nodiscard ] ] static bool GetFilesInAbsoluteDirectory( const std::string &strDirectory, std::vector< std::string > &vecOut, const std::string &strExtension = std::string( ) );
+	[ [ nodiscard ] ] static bool DeleteAbsolutePath( const std::string& strPath );
 	/** \brief Reads data from a file. */
 	/** \param strFilename Full path of the file to be read. */
 	/** \param strOut Output for the data of the file to be stored. */
@@ -55,8 +58,8 @@ public:
 	/** \param bEncode Whether or not the file should be Base64 decoded to be read and\n
 				encoded when written. */
 	/** \return Whether or not reading and writing to the file was successful. */
-	static bool AddToAbsoluteFile( const std::string &strFilename, const std::string &strData, bool bEncode = true );
-	static bool HideAbsolutePath( const std::string &strPath );
+	[ [ nodiscard ] ] static bool AddToAbsoluteFile( const std::string &strFilename, const std::string &strData, bool bEncode = true );
+	[ [ nodiscard ] ] static bool SetAbsolutePathVisibility( const std::string &strPath, bool bVisible );
 	/** \brief Ensures that a directory has proper slashes to be concatenated. */
 	/** \param strDirectory Directory string to be formatted. */
 	static void FormatDirectory( std::string &strDirectory );
@@ -114,7 +117,8 @@ public:
 	[ [ nodiscard ] ] bool GetDirectoryContents( const std::string &strDirectory, bool bFiles, bool bFolders, std::vector< std::string > &vecOut );
 	[ [ nodiscard ] ] bool GetFoldersInDirectory( const std::string &strDirectory, std::vector< std::string > &vecOut );
 	[ [ nodiscard ] ] bool GetFilesInDirectory( const std::string &strDirectory, std::vector< std::string > &vecOut, const std::string &strExtension = std::string( ) );
-	bool HidePath( const std::string &strPath );
+	[ [ nodiscard ] ] bool DeleteCurrentDirectory( );
+	[ [ nodiscard ] ] bool SetPathVisibility( const std::string &strPath, bool bVisible );
 
 	/** \brief Path of the Paladin data folder from \appdata\roaming\ */
 	static inline std::string strRelativeAppdataDirectory;
