@@ -1001,9 +1001,9 @@ namespace Interface
 	CHeaderPanel::CHeaderPanel( ): iIconTexture( -1 ), locDragStart( location_t( ) )
 	{ }
 
+	CHeaderPanel::CHeaderPanel( const char *szTitle, const char *szSubtitle, callback_t _cbMinimize, callback_t _cbClose, const char *szMinimize, const char *szClose ) : IContainer( FLAG_CONTAINER_NONE, padding_t( ), BACKGROUND_DARK ), iIconTexture( ETextures::TEXTURE_LOGO ),
 		imgIcon( iIconTexture ), lblTitle( padding_t( ), new text_t( szTitle, EFont::ROBOTO_BOLD, TITLE_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_NORMAL, EFontFlags::NONE ), lblSubtitle( padding_t( ), new text_t( szSubtitle, EFont::ROBOTO, TITLE_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_DARK, EFontFlags::NONE ),
 		lblMinimize( padding_t( ), new text_t( szMinimize, EFont::FA, WINDOW_ICON_HEIGHT, text_t::CENTER, text_t::TOP ), BLUE, EFontFlags::ICON, _cbMinimize ), lblClose( padding_t( ), new text_t( szClose, EFont::FA, WINDOW_ICON_HEIGHT, text_t::CENTER, text_t::TOP ), BLUE, EFontFlags::ICON, _cbClose ), locDragStart( location_t( ) )
-	CHeaderPanel::CHeaderPanel( const char *szTitle, const char *szSubtitle, callback_t _cbMinimize, callback_t _cbClose, const char *szMinimize, const char *szClose ) : IContainer( FLAG_CONTAINER_NONE, padding_t( ), BACKGROUND_DARK ), iIconTexture( ETextures::TEXTURE_LOGO ),
 	{
 		lblTitle.InitializeDrawingInformation( );
 		lblSubtitle.InitializeDrawingInformation( );
@@ -1011,6 +1011,7 @@ namespace Interface
 		lblMinimize.InitializeDrawingInformation( );
 	}
 
+	CHeaderPanel::CHeaderPanel( const char *szTitle, const char *szSubtitle, const char *szClose ): IContainer( FLAG_CONTAINER_NONE, padding_t( ), BACKGROUND_DARK ), iIconTexture( -1 ),
 		lblTitle( padding_t( ), new text_t( szTitle, EFont::ROBOTO_BOLD, TITLE_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_NORMAL, EFontFlags::NONE ),
 		lblSubtitle( padding_t( ), new text_t( szSubtitle, EFont::ROBOTO, TITLE_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_DARK, EFontFlags::NONE ),
 		lblClose( padding_t( ), new text_t( szClose, EFont::FA, WINDOW_ICON_HEIGHT, text_t::CENTER, text_t::TOP ), BLUE, EFontFlags::ICON, [ & ]( )
@@ -1018,7 +1019,6 @@ namespace Interface
 		_WidgetContext.pActiveWidget = nullptr;
 		reinterpret_cast< CWindow* >( pParentContainer->pParentContainer )->ClosePopup( true );
 	} ), locDragStart( location_t( ) )
-	CHeaderPanel::CHeaderPanel( const char *szTitle, const char *szSubtitle, const char *szClose ): IContainer( FLAG_CONTAINER_NONE, padding_t( ), BACKGROUND_DARK ), iIconTexture( -1 ),
 	{
 		lblTitle.InitializeDrawingInformation( );
 		lblSubtitle.InitializeDrawingInformation( );
@@ -1107,15 +1107,15 @@ namespace Interface
 		}
 	}
 
-		pHeader( new CHeaderPanel( szTitle, szSubtitle, _cbMinimize, _cbClose, ICON_FA_MINUS, ICON_FA_TIMES ) ), pPopup( nullptr )
 	CWindow::CWindow( unsigned _wfFlags, rectangle_t _recLocation, const char *szTitle, const char *szSubtitle, callback_t _cbMinimize, callback_t _cbClose ): wfFlags( _wfFlags ), IContainer( FLAG_CONTAINER_NONE, padding_t( ), BACKGROUND_DARK, _recLocation ),
+		pHeader( new CHeaderPanel( szTitle, szSubtitle, _cbMinimize, _cbClose, ICON_FA_MINUS, ICON_FA_TIMES ) ), pPopup( nullptr )
 	{
 		AddRow( row_t( padding_t( ), 40.f ) );
 		AddWidgetToRow( pHeader, recLocation.flWidth, 0 );
 	}
 
-		pHeader( new CHeaderPanel( szTitle, szSubtitle, ICON_FA_TIMES ) ), pPopup( nullptr )
 	CWindow::CWindow( unsigned _wfFlags, rectangle_t _recLocation, const char *szTitle, const char *szSubtitle ): wfFlags( _wfFlags ), IContainer( FLAG_CONTAINER_NONE, padding_t( ), BACKGROUND_DARK, _recLocation ),
+		pHeader( new CHeaderPanel( szTitle, szSubtitle, ICON_FA_TIMES ) ), pPopup( nullptr )
 	{
 		AddRow( row_t( padding_t( ), 40.f ) );
 		AddWidgetToRow( pHeader, recLocation.flWidth, 0 );

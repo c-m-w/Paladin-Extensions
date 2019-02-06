@@ -57,8 +57,8 @@ namespace Interface
 		return true;
 	}
 
-		flMinimum( _flMinimum ), flMaximum( _flMaximum ), flCurrent( _flCurrent )
 	inline CSlider< float >::CSlider( padding_t padBorder, float _flMinimum, float _flMaximum, float _flCurrent ): IWidget( SLIDER, ECursor::HAND, padBorder, BLUE, BLUE, BLUE, DARK_BLUE, BACKGROUND_LIGHT, BACKGROUND_LIGHT, nullptr ),
+		flMinimum( _flMinimum ), flMaximum( _flMaximum ), flCurrent( _flCurrent )
 	{ }
 
 	inline void CSlider< float >::Draw( )
