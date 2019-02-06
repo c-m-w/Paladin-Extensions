@@ -25,7 +25,7 @@ void OnLaunch( )
 	{ } );
 	AddWindow( &wndCurrent );
 
-	while ( !INPUT.GetKeyState( VK_DELETE ) )
+	while ( false && !INPUT.GetKeyState( VK_DELETE ) )
 	{
 		if ( pWindow->PollInput( ) )
 			continue;

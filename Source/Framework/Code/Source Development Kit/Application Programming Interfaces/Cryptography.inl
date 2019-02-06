@@ -18,18 +18,15 @@ template< typename _t > bool CCryptography::Base64( const std::string &strSubjec
 	return !strOut.empty( );
 }
 
-template< typename _t > bool CCryptography::Crypt( const std::string &strIn, std::string &strOut )
+template< typename _t > bool CCryptography::Crypt( const std::string &strIn, std::string &strOut, std::string strKey, std::string strInitVector )
 {
 	if ( strIn.empty( ) )
 		return false;
 
-	if ( !Initialize( ) )
-		return false;
-
 	try
 	{
-		_t _Cryption( reinterpret_cast< unsigned char* >( const_cast< char* >( strEncryptionKey.c_str( ) ) ),
-					  strEncryptionKey.length( ), reinterpret_cast< unsigned char* >( const_cast< char* >( strInitializationVector.c_str( ) ) ) );
+		_t _Cryption( reinterpret_cast< unsigned char* >( const_cast< char* >( strKey.c_str( ) ) ),
+					  strKey.length( ), reinterpret_cast< unsigned char* >( const_cast< char* >( strInitVector.c_str( ) ) ) );
 		CryptoPP::StringSource( strIn, true, new CryptoPP::StreamTransformationFilter( _Cryption, new CryptoPP::StringSink( strOut ) ) );
 	}
 	catch ( CryptoPP::InvalidCiphertext & )

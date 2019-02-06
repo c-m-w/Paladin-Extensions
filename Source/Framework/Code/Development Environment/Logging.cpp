@@ -3,23 +3,34 @@
 #include "Precompile.hpp"
 
 #define ACKNOWLEDGED_ENTRY_WARNING_1
+#define USE_DEFINITIONS
 #define USE_NAMESPACES
 #include "../Framework.hpp"
 
 bool CLogging::Initialize( )
 {
-	strErrorTime = XOR( "Error Retrieving Date/Time" );
-	strDateFormat = XOR( "%B %e, 20%g" );
-	strTimeFormat = XOR( "%H:%M:%S" );
-	strLogFileFormat = XOR( "%Y.%m.%d" );
-	strErrorMessage = XOR( "Contact support if this issue persists." );
-	strStatusPrefixes[ INFO ] = XOR( "[Info]\t" );
-	strStatusPrefixes[ DEBUG ] = XOR( "[Debug]\t" );
-	strStatusPrefixes[ SUCCESS ] = XOR( "[Success]" );
-	strStatusPrefixes[ WARNING ] = XOR( "[Warning]" );
-	strStatusPrefixes[ ERROR ] = XOR( "[Error]\t" );
-	for ( auto i = 0; i < LOCATION_MAX; i++ )
-		strLocations[ i ] = '[' + std::to_string( i ) + ']';
+	strErrorTime						= XOR( "Error Retrieving Date/Time" );
+	strDateFormat						= XOR( "%B %e, 20%g" );
+	strTimeFormat						= XOR( "%H:%M:%S" );
+	strLogFileFormat					= XOR( "%Y.%m.%d" );
+	strErrorMessage						= XOR( "Contact support if this issue persists." );
+	strStatusPrefixes[ INFO ]			= XOR( "[Info]\t" );
+	strStatusPrefixes[ DEBUG ]			= XOR( "[Debug]\t" );
+	strStatusPrefixes[ SUCCESS ]		= XOR( "[Success]" );
+	strStatusPrefixes[ WARNING ]		= XOR( "[Warning]" );
+	strStatusPrefixes[ ERROR ]			= XOR( "[Error]\t" );
+	strLocations[ FILESYSTEM ]			= XOR( "[Filesystem]\t" );
+	strLocations[ CRYPTOGRAPHY ]		= XOR( "[Cryptography]" );
+	strLocations[ CONNECTIVITY ]		= XOR( "[Connectivity]" );
+	strLocations[ RESOURCE_MANAGER ]	= XOR( "[Resources]\t" );
+	strLocations[ WINDOW ]				= XOR( "[Window]\t" );
+	strLocations[ DRAWING ]				= XOR( "[Drawing]\t" );
+
+#if defined _DEBUG
+	for ( auto &strLocation : strLocations )
+		if ( strLocation.empty( ) )
+			throw std::runtime_error( XOR( "Ensure that all location strings are initialized." ) );
+#endif
 
 	for ( auto i = 0; i < ERROR_MAX; i++ )
 		strUnloggableErrorTitles[ i ] = '[' + std::to_string( i ) + ']';
@@ -56,8 +67,24 @@ std::string CLogging::GetTimestamp( )
 
 std::string CLogging::GetCurrentLogFile( )
 {
+#if defined _DEBUG
+	static const auto strLogFile = FormatTime( strLogFileFormat ) + 'd';
+#else
 	static const auto strLogFile = FormatTime( strLogFileFormat );
+#endif
 	return strLogFile;
+}
+
+std::string CLogging::GetLogEncryptionKey( )
+{
+	static const auto strEncryptionKey = CRYPTO.GenerateHash( GetCurrentLogFile( ) ).substr( 0, CCryptography::ENCRYPTION_KEY_SIZE );
+	return strEncryptionKey;
+}
+
+std::string CLogging::GetLogInitializationVector( )
+{
+	static const auto strInitializationVector = GetLogEncryptionKey( ).substr( 0, CCryptography::INITIALIZATION_VECTOR_SIZE );
+	return strInitializationVector;
 }
 
 void CLogging::ErrorPopup( EUnloggableError _ErrorCode )
@@ -69,9 +96,27 @@ void CLogging::WriteToFile( )
 {
 	mmtLastLogWrite = GetMoment( );
 	_Filesystem.ChangeWorkingDirectory( _Filesystem.GetAppdataDirectory( ), { _Filesystem.strLogDirectory } );
+
+#if defined _DEBUG
 	if ( !_Filesystem.AddToFile( GetCurrentLogFile( ), strBuffer ) )
 		if ( !_Filesystem.WriteFile( GetCurrentLogFile( ), strBuffer ) )
 			return ErrorPopup( ERROR_CANNOT_WRITE_LOG );
+#else
+	std::string strDataToWrite { };
+	std::string strEncryptedData { };
+	std::string strFinalData { };
+
+	if ( _Filesystem.ReadFile( GetCurrentLogFile( ), strEncryptedData ) )
+		if ( !CRYPTO.Decrypt( strEncryptedData, strDataToWrite, GetLogEncryptionKey( ), GetLogInitializationVector( ) ) )
+			return ErrorPopup( ERROR_CANNOT_WRITE_LOG );
+
+	strDataToWrite += strBuffer;
+
+	if ( !CRYPTO.Encrypt( strDataToWrite, strFinalData, GetLogEncryptionKey( ), GetLogInitializationVector( ) )
+		 || !_Filesystem.WriteFile( GetCurrentLogFile( ), strFinalData ) )
+		return ErrorPopup( ERROR_CANNOT_WRITE_LOG );
+			
+#endif
 
 	strBuffer.clear( );
 }

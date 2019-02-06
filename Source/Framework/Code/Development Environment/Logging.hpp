@@ -67,6 +67,8 @@ private:
 	/** \brief Gets the filename of the current log file. */
 	/** \return Filename of the current log file. */
 	[ [ nodiscard ] ] std::string GetCurrentLogFile( );
+	[ [ nodiscard ] ] std::string GetLogEncryptionKey( );
+	[ [ nodiscard ] ] std::string GetLogInitializationVector( );
 	/** \brief Writes the log buffer to file. */
 	void WriteToFile( );
 	/** \brief Checks to see if the required amount of time has elapsed to write the\n

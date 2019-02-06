@@ -36,21 +36,21 @@ public:
 	/** \brief Computes a hash of an array of bytes. */
 	/**	\param strBytes Text to be hashed. */
 	/**	\return Hash of the text. */
-	std::string GenerateHash( const std::string &strBytes );
+	[ [ nodiscard ] ] std::string GenerateHash( const std::string &strBytes );
 	/** \brief Base64 encodes or decodes text. */
 	/**	\tparam _t Either CryptoPP::Base64Decoder or CryptoPP::Base64Encoder, depending on if you wish to encode or decode text. */
 	/**	\param strSubject Text to encode or decode. */
 	/**	\param strOut Output buffer for the encoded or decoded text. */
 	/**	\return Whether or not encoding or decoding the text was sucessful. */
-	template< typename _t > bool Base64( const std::string &strSubject, std::string &strOut );
+	template< typename _t > static bool Base64( const std::string &strSubject, std::string &strOut );
 	/** \brief Encrypts or decrypts text with AES-256-CBC style.\n Requires InitializeEncryption( ) be called beforehand. */
 	/**	\tparam _t Either CryptoPP::CBC_Mode< CryptoPP::AES >::Encryption or CryptoPP::CBC_Mode< CryptoPP::AES >::Decryption, depending on if you wish to encrypt or decrypt text. */
 	/**	\param strIn Text to encrypt or decrypt. */
 	/**	\param strOut Output buffer for the encrypted or decrypted text. */
 	/**	\return Whether or not processing the text was successful. */
-	template< typename _t > bool Crypt( const std::string &strIn, std::string &strOut );
-	bool Encrypt( const std::string &strPlainText, std::string &strCipher );
-	bool Decrypt( const std::string &strCipher, std::string &strPlainText );
+	template< typename _t > static bool Crypt( const std::string &strIn, std::string &strOut, std::string strKey, std::string strInitVector );
+	bool Encrypt( const std::string &strPlainText, std::string &strCipher, std::string strKey = std::string( ), std::string strInitVector = std::string( ) );
+	bool Decrypt( const std::string &strCipher, std::string &strPlainText, std::string strKey = std::string( ), std::string strInitVector = std::string( ) );
 } inline _Cryptography;
 
 using encode_t = CCryptography::encode_t;
