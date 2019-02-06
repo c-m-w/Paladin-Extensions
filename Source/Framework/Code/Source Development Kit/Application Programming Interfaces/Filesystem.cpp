@@ -109,7 +109,7 @@ bool CFilesystem::CheckAbsoluteDirectoryValidity( const std::string &strDirector
 		return GetLastError( ) == ERROR_FILE_NOT_FOUND;
 
 	FindClose( hFile );
-	return _Data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY != 0;
+	return ( _Data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) != 0;
 }
 
 bool CFilesystem::CheckAbsoluteFileValidity( const std::string &strFile )
@@ -156,7 +156,7 @@ bool CFilesystem::EnsureAbsoluteFileDirectoryExists( const std::string &strFileP
 		_SubDirectories.push( strLast );
 	}
 
-	while( !_SubDirectories.empty( ) )
+	while ( !_SubDirectories.empty( ) )
 	{
 		strDirectory += _SubDirectories.top( );
 		_SubDirectories.pop( );
@@ -196,8 +196,8 @@ bool CFilesystem::GetAbsoluteDirectoryContents( const std::string &strDirectory,
 	do
 	{
 		if ( ( bFiles && !( _FileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY )
-			|| bFolders && 0 < ( _FileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) )
-			 && strcmp( _FileData.cFileName, XOR( "." ) ) && strcmp( _FileData.cFileName, XOR( ".." ) ) )
+				|| bFolders && 0 < ( _FileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) )
+			&& strcmp( _FileData.cFileName, XOR( "." ) ) && strcmp( _FileData.cFileName, XOR( ".." ) ) )
 			vecOut.emplace_back( _FileData.cFileName );
 	}
 	while ( FindNextFile( hFile, &_FileData ) == TRUE );
@@ -243,7 +243,7 @@ bool CFilesystem::DeleteAbsolutePath( const std::string &strPath )
 		if ( !GetAbsoluteDirectoryContents( strFinal, true, true, vecContents ) )
 			return false;
 
-		for ( auto& strContent : vecContents )
+		for ( auto &strContent: vecContents )
 			if ( !DeleteAbsolutePath( strFinal + strContent ) )
 				return false;
 
@@ -366,7 +366,7 @@ bool CFilesystem::SetAbsolutePathVisibility( const std::string &strPath, bool bV
 		std::vector< std::string > vecContents { };
 
 		if ( bReturn &= GetAbsoluteDirectoryContents( strFinalPath, true, true, vecContents ) )
-			for each ( auto &strContent in vecContents )
+			for ( const auto &strContent: vecContents )
 				bReturn &= SetAbsolutePathVisibility( strFinalPath + strContent, bVisible );
 	}
 

@@ -24,10 +24,10 @@ bool CInput::ProcessKey( key_t _Key, CKeyState _KeyState )
 
 	auto bReturn = false;
 
-	for each ( auto fnCallback in vecKeyCallbacks[ _Key ] )
+	for ( const auto &fnCallback: vecKeyCallbacks[ _Key ] )
 		bReturn |= fnCallback( _KeyState );
 
-	for each ( auto fnCallback in vecGlobalKeyCallbacks )
+	for ( const auto &fnCallback: vecGlobalKeyCallbacks )
 		bReturn |= fnCallback( _Key, _KeyState );
 
 	return bReturn;
@@ -84,7 +84,7 @@ bool CInput::ProcessKeyboardMessage( UINT uMsg, WPARAM wParam )
 		case WM_CHAR:
 		{
 			if ( wParam >= ' ' || wParam == VK_BACK )
-				for each ( auto &_Callback in vecKeyTypedCallbacks )
+				for ( const auto &_Callback: vecKeyTypedCallbacks )
 					bReturn |= _Callback( wParam );
 		}
 		break;
@@ -104,7 +104,7 @@ bool CInput::HandleEvent( UINT uMsg, WPARAM wParam, LPARAM lParam )
 	if ( uMsg == WM_SIZE && wParam == SIZE_MINIMIZED )
 	{
 		// When the window is minimized, set all the key states to up so that when the window becomes back in focus it won't be fucked up.
-		for each ( auto &key in _KeyStates )
+		for ( auto &key: _KeyStates )
 			key = CKeyState::UP;
 		return false;
 	}
@@ -139,7 +139,7 @@ bool CInput::HandleEvent( UINT uMsg, WPARAM wParam, LPARAM lParam )
 			iMouseX = *reinterpret_cast< short* >( &lParam );
 			iMouseY = *reinterpret_cast< short* >( uintptr_t( &lParam ) + sizeof( short ) );
 
-			for each ( auto &_Callback in vecMouseMoveCallbacks )
+			for ( const auto &_Callback: vecMouseMoveCallbacks )
 				bReturn |= _Callback( iMouseX, iMouseY );
 		}
 		break;
@@ -149,7 +149,7 @@ bool CInput::HandleEvent( UINT uMsg, WPARAM wParam, LPARAM lParam )
 			const auto sDelta = GET_WHEEL_DELTA_WPARAM( wParam );
 			const POINT pntMouse { *reinterpret_cast< short* >( &lParam ), *reinterpret_cast< short* >( uintptr_t( &lParam ) + sizeof( short ) ) };
 
-			for each ( auto &_Callback in vecScrollCallbacks )
+			for ( const auto &_Callback: vecScrollCallbacks )
 				bReturn |= _Callback( sDelta, pntMouse.x, pntMouse.y );
 		}
 

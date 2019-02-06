@@ -29,7 +29,7 @@ private:
 	};
 
 	constexpr static auto MAX_RETRIES = 5;
-	constexpr static auto MAX_TIMEOUT = 7;	
+	constexpr static auto MAX_TIMEOUT = 7;
 	constexpr static auto IDENTIFIER_LENGTH = 16;
 
 	static inline std::string strScriptLocator;
@@ -42,10 +42,10 @@ private:
 	static void ValidateString( std::string &strToValidate );
 
 	[ [ nodiscard ] ] std::string GenerateIdentifier( EPostData _Identifier );
-	[ [ nodiscard ] ] std::string ProcessValue( const std::string& strValue );
-	template< typename _t >[ [ nodiscard ] ] bool SetConnectionParameter( CURLoption _Option, _t _Value );
+	[ [ nodiscard ] ] std::string ProcessValue( const std::string &strValue );
+	template< typename _t > [ [ nodiscard ] ] bool SetConnectionParameter( CURLoption _Option, _t _Value );
 	void ResetConnection( );
-	[ [ nodiscard ] ] bool TryConnection( std::string& strOut, std::string* pErrorBuffer, int iRetries = 0 );
+	[ [ nodiscard ] ] bool TryConnection( std::string &strOut, std::string *pErrorBuffer, int iRetries = 0 );
 
 	std::string strCurrentPostData;
 	bool bPostDataSet[ POST_DATA_MAX ];
@@ -65,7 +65,7 @@ public:
 
 	CConnectivity( ) = default;
 
-	void AddPostData( EPostData _Identifier, const std::string& strValue );
+	void AddPostData( EPostData _Identifier, const std::string &strValue );
 	bool Request( EAction _Action, std::string &strOut );
 } inline _Connection;
 

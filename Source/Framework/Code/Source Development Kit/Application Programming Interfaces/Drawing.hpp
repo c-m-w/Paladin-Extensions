@@ -54,7 +54,7 @@ private:
 
 	bool CreateD3D( );
 	bool CreateState( );
-	bool AddTexture( const texture_t& texNew );
+	bool AddTexture( const texture_t &texNew );
 	bool Create( std::string strResourceDirectory );
 
 	bool bReleaseDevice = false;
@@ -228,7 +228,7 @@ public:
 		std::string strName { };
 
 		texture_t( ) = default;
-		texture_t( unsigned _uWidth, unsigned _uHeight, const std::string& _strName );
+		texture_t( unsigned _uWidth, unsigned _uHeight, const std::string &_strName );
 	};
 
 	using texture_renderable_t = std::pair< texture_t, std::pair< D3DXIMAGE_INFO, IDirect3DTexture9* > >;
@@ -248,11 +248,11 @@ public:
 	bool EndFrame( );
 	bool PreReset( );
 	bool AddFont( const std::string &strFilename );
-	bool RemoveFont( std::size_t sFont ); 
+	bool RemoveFont( std::size_t sFont );
 	void ApplyCursor( int iCursorType );
-	bool IsAreaVisible( const rectangle_t& recArea );
-	texture_renderable_t& GetTexture( int iTextureID );
-	void RenderTexture( int iTextureID, const Utilities::location_t& locTexture );
+	bool IsAreaVisible( const rectangle_t &recArea );
+	texture_renderable_t &GetTexture( int iTextureID );
+	void RenderTexture( int iTextureID, const Utilities::location_t &locTexture );
 	RECT GetDrawingSpace( );
 	void PushDrawingSpace( rectangle_t recSpace );
 	void PopDrawingSpace( );
@@ -263,7 +263,7 @@ public:
 	IDirect3DVertexBuffer9 *ConstructPolygon( vertex_t *pVertices, std::size_t sVertices );
 	void DrawPolygon( const polygon_buffer_t &pbPolygon, bool bRelease = false );
 	void DrawTexture( IDirect3DTexture9 *pTexture, const Utilities::location_t &locLocation );
-	void DrawTexture( int iTextureID, const Utilities::location_t& locLocation );
+	void DrawTexture( int iTextureID, const Utilities::location_t &locLocation );
 
 	polygon_t Rectangle( rectangle_t recLocation, color_t clrColor );
 	polygon_t Rectangle( rectangle_t recLocation, color_t *clrColor/*[LOCATION_MAX]*/ );

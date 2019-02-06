@@ -30,11 +30,11 @@ void ShutdownFramework( );
 inline bool SetupFramework( )
 {
 	if ( !_Filesystem.Setup( )
-		 || !_Log.Setup( )
-		 || !_Cryptography.Setup( )
-		 || !_Connection.Setup( )
-		 || !_ResourceManager.Setup( )
-		 || !_Input.Setup( ) )
+		|| !_Log.Setup( )
+		|| !_Cryptography.Setup( )
+		|| !_Connection.Setup( )
+		|| !_ResourceManager.Setup( )
+		|| !_Input.Setup( ) )
 	{
 		ShutdownFramework( );
 		return false;

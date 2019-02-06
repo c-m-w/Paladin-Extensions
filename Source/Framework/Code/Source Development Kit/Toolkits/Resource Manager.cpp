@@ -11,7 +11,7 @@ bool CResourceManager::Initialize( )
 {
 	std::string strHashCipher { }, strDecrypted { };
 	if ( !_Connection.Request( EAction::GET_RESOURCE_HASH, strHashCipher )
-		 || !CRYPTO.Decrypt( strHashCipher, strDecrypted ) )
+		|| !CRYPTO.Decrypt( strHashCipher, strDecrypted ) )
 		return false;
 
 	nlohmann::json jsInformation { };
@@ -19,7 +19,7 @@ bool CResourceManager::Initialize( )
 	{
 		jsInformation = nlohmann::json::parse( strDecrypted );
 	}
-	catch( nlohmann::json::parse_error& )
+	catch ( nlohmann::json::parse_error & )
 	{
 		_Log.Log( EPrefix::ERROR, ELocation::RESOURCE_MANAGER, XOR( "Unable to parse text retrieved for hash comparison of resources." ) );
 		return false;
@@ -30,7 +30,7 @@ bool CResourceManager::Initialize( )
 	_Filesystem.ChangeWorkingDirectory( CFilesystem::GetAppdataDirectory( ), { CFilesystem::strRelativeResourceDirectory } );
 	try
 	{
-		for ( auto& _File : jsInformation )
+		for ( auto &_File: jsInformation )
 		{
 			const auto strFile = _File[ XOR( "Path" ) ].get< std::string >( );
 			std::string strFileData { };
@@ -48,7 +48,7 @@ bool CResourceManager::Initialize( )
 			}
 		}
 	}
-	catch( nlohmann::json::type_error& )
+	catch ( nlohmann::json::type_error & )
 	{
 		_Log.Log( EPrefix::ERROR, ELocation::FILESYSTEM, XOR( "Error while accessing json object while comparing hashes." ) );
 		return false;
@@ -58,25 +58,25 @@ bool CResourceManager::Initialize( )
 	{
 		std::string strResourceCipher { }, strDecryptedResources { };
 		if ( !_Filesystem.DeleteCurrentDirectory( )
-			 || !_Connection.Request( EAction::GET_RESOURCES, strResourceCipher )
-			 || !CRYPTO.Decrypt( strResourceCipher, strDecryptedResources ) )
+			|| !_Connection.Request( EAction::GET_RESOURCES, strResourceCipher )
+			|| !CRYPTO.Decrypt( strResourceCipher, strDecryptedResources ) )
 			return false;
 
 		try
 		{
 			jsInformation = nlohmann::json::parse( strDecryptedResources );
 		}
-		catch ( nlohmann::json::parse_error& )
+		catch ( nlohmann::json::parse_error & )
 		{
 			_Log.Log( EPrefix::ERROR, ELocation::RESOURCE_MANAGER, XOR( "Unable to parse text retrieved for installing resources." ) );
 			return false;
 		}
 		try
 		{
-			for ( auto& _File : jsInformation )
+			for ( auto &_File: jsInformation )
 			{
 				const auto strFile = _File[ XOR( "Path" ) ].get< std::string >( ),
-							strData = _File[ XOR( "Data" ) ].get< std::string >( );
+						   strData = _File[ XOR( "Data" ) ].get< std::string >( );
 				std::string strRawData { };
 
 				if ( strData.empty( ) )
@@ -95,7 +95,7 @@ bool CResourceManager::Initialize( )
 					return false;
 			}
 		}
-		catch( nlohmann::json::type_error& )
+		catch ( nlohmann::json::type_error & )
 		{
 			_Log.Log( EPrefix::ERROR, ELocation::FILESYSTEM, XOR( "Error while accessing json object while installing resources." ) );
 			return false;

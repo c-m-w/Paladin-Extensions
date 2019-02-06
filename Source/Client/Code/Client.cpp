@@ -6,11 +6,7 @@
 #include "../../Framework/Code/Framework.hpp"
 
 void OnAttach( )
-{
-	
-}
+{ }
 
 void OnDetach( )
-{
-	
-}
+{ }

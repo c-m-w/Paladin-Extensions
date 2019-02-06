@@ -11,8 +11,6 @@ namespace Client
 	public:
 
 		TEST_METHOD( no_method )
-		{
-
-		}
+		{ }
 	};
 }

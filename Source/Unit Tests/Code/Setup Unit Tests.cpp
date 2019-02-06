@@ -11,8 +11,6 @@ namespace Setup
 	public:
 
 		TEST_METHOD( no_method )
-		{
-
-		}
+		{ }
 	};
 }

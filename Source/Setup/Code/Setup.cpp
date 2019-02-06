@@ -6,6 +6,4 @@
 #include "../../Framework/Code/Framework.hpp"
 
 void OnLaunch( )
-{
-	
-}
+{ }

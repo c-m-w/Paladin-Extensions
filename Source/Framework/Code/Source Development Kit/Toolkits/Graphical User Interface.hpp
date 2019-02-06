@@ -38,20 +38,20 @@ namespace Interface
 	class CWindow;
 	class CToolTip;
 	typedef std::function< void( ) > callback_t;
-	typedef std::function< void( IWidget* ) > invoke_callback_t;
+	typedef std::function< void( IWidget * ) > invoke_callback_t;
 
 	struct
 	{
 		std::deque< CWindow* > vecWindows { };
-		IWidget* pHoveringWidget = nullptr, *pActiveWidget = nullptr;
-		CWindow* pForegroundWindow = nullptr;
+		IWidget *pHoveringWidget = nullptr, *pActiveWidget = nullptr;
+		CWindow *pForegroundWindow = nullptr;
 		Utilities::location_t locMouse { };
 
-		void BringWidgetContainingWindowToFront( IWidget* pWidget );
-		CWindow* GetForegroundWindow( );
+		void BringWidgetContainingWindowToFront( IWidget *pWidget );
+		CWindow *GetForegroundWindow( );
 		void DoToolTip( );
 		void ApplyCursor( );
-		void UpdateContainerWidgets( IContainer* pContainer );
+		void UpdateContainerWidgets( IContainer *pContainer );
 	} extern _WidgetContext;
 
 	enum
@@ -68,7 +68,7 @@ namespace Interface
 		float flPadding[ POSITION_MAX ];
 
 		padding_t( );
-		padding_t( float* pPadding );
+		padding_t( float *pPadding );
 		padding_t( float flTop, float flRight, float flBottom, float flLeft );
 
 		float Horizontal( );
@@ -82,7 +82,7 @@ namespace Interface
 		padding_t padBorder;
 		float flLeftFill, flRightFill;
 		rectangle_t recLocation;
-		IContainer* pParent;
+		IContainer *pParent;
 		int iRowNumber;
 
 		row_t( );
@@ -106,11 +106,13 @@ namespace Interface
 			DORMANT,
 			STATE_MAX
 		};
+
 		enum
 		{
 			LEFT,
 			RIGHT
 		};
+
 		enum
 		{
 			CONTAINER,
@@ -124,6 +126,7 @@ namespace Interface
 			SCROLLBAR,
 			COMBOBOX
 		};
+
 		static constexpr auto DEFAULT_ALIGNMENT = LEFT;
 
 		int iType, iCursor;
@@ -133,14 +136,14 @@ namespace Interface
 		rectangle_t recLocation;
 		padding_t padBorder;
 		bool bPressing;
-		CToolTip* pToolTip;
-		IWidget* pParentContainer = nullptr;
+		CToolTip *pToolTip;
+		IWidget *pParentContainer = nullptr;
 		int iRow = -1;
 
 		IWidget( ) = default;
-		IWidget( int _iType, int _iCursor, CToolTip* _pToolTip );
-		IWidget( int _iType, int _iCursor, padding_t _padBorder, color_t clrForegroundActive, color_t clrForegroundHover, color_t clrForegroundDormant, color_t clrBackgroundActive, color_t clrBackgroundHover, color_t clrBackgroundDormant, CToolTip* _pToolTip );
-		IWidget( int _iType, int _iCursor, padding_t _padBorder, color_t clrColor, CToolTip* _pToolTip );
+		IWidget( int _iType, int _iCursor, CToolTip *_pToolTip );
+		IWidget( int _iType, int _iCursor, padding_t _padBorder, color_t clrForegroundActive, color_t clrForegroundHover, color_t clrForegroundDormant, color_t clrBackgroundActive, color_t clrBackgroundHover, color_t clrBackgroundDormant, CToolTip *_pToolTip );
+		IWidget( int _iType, int _iCursor, padding_t _padBorder, color_t clrColor, CToolTip *_pToolTip );
 
 		virtual void Initialize( );
 		virtual void NoLongerActive( );
@@ -157,7 +160,7 @@ namespace Interface
 		void PreDraw( );
 		rectangle_t GetAbsoluteLocation( );
 		rectangle_t GetRelativeLocation( );
-		CWindow* GetContainingWindow( );
+		CWindow *GetContainingWindow( );
 		bool IsActive( );
 		void SetActive( );
 		void SetHovered( );
@@ -167,14 +170,14 @@ namespace Interface
 	{
 	public:
 
-		text_t* txtLabel;
+		text_t *txtLabel;
 		EFontFlags ffFlags;
 		callback_t cbOnClick;
 
 		CLabel( ) = default;
-		CLabel( padding_t padBorder, text_t* _txtLabel, color_t clrForegroundActive, color_t clrForegroundHover, color_t clrForegroundDormant, color_t clrBackgroundActive, color_t clrBackgroundHover, color_t clrBackgroundDormant, EFontFlags _ffFlags, callback_t _cbOnClick = nullptr );
-		CLabel( padding_t padBorder, text_t* _txtLabel, color_t clrBackground, color_t clrText, EFontFlags _ffFlags, callback_t _cbOnClick = nullptr );
-		CLabel( padding_t padBorder, text_t* _txtLabel, color_t clrText, EFontFlags _ffFlags, callback_t _cbOnClick = nullptr );
+		CLabel( padding_t padBorder, text_t *_txtLabel, color_t clrForegroundActive, color_t clrForegroundHover, color_t clrForegroundDormant, color_t clrBackgroundActive, color_t clrBackgroundHover, color_t clrBackgroundDormant, EFontFlags _ffFlags, callback_t _cbOnClick = nullptr );
+		CLabel( padding_t padBorder, text_t *_txtLabel, color_t clrBackground, color_t clrText, EFontFlags _ffFlags, callback_t _cbOnClick = nullptr );
+		CLabel( padding_t padBorder, text_t *_txtLabel, color_t clrText, EFontFlags _ffFlags, callback_t _cbOnClick = nullptr );
 
 		void Event( unsigned uKey, CKeyState ksState ) override;
 		void Draw( ) override;
@@ -185,11 +188,11 @@ namespace Interface
 	{
 	public:
 
-		text_t* txtLabel;
+		text_t *txtLabel;
 		invoke_callback_t cbOnClick;
 		int iIndex;
 
-		CButtonLabel( padding_t padBorder, text_t* _txtLabel, color_t clrForegroundActive, color_t clrForegroundHover, color_t clrForegroundDormant, color_t clrBackgroundActive, color_t clrBackgroundHover, color_t clrBackgroundDormant, invoke_callback_t _cbOnClick, int _iIndex );
+		CButtonLabel( padding_t padBorder, text_t *_txtLabel, color_t clrForegroundActive, color_t clrForegroundHover, color_t clrForegroundDormant, color_t clrBackgroundActive, color_t clrBackgroundHover, color_t clrBackgroundDormant, invoke_callback_t _cbOnClick, int _iIndex );
 
 		void Event( unsigned uKey, CKeyState ksState ) override;
 		void Draw( ) override;
@@ -218,11 +221,11 @@ namespace Interface
 
 		constexpr static auto ROUNDING = 0.2f;
 
-		text_t* txtLabel;
+		text_t *txtLabel;
 		int iType;
 		callback_t cbClick;
 
-		CButton( int _iOrientation, const char* szLabel, callback_t cbOnClick, CToolTip* pToolTip = nullptr );
+		CButton( int _iOrientation, const char *szLabel, callback_t cbOnClick, CToolTip *pToolTip = nullptr );
 
 		void InitializeDrawingInformation( ) override;
 		void Event( unsigned uKey, CKeyState ksState ) override;
@@ -266,29 +269,30 @@ namespace Interface
 			FLOAT,
 			MAX
 		};
-		inline static const std::function< bool( char, const char*, int ) > FILTERS[ MAX ]
+
+		inline static const std::function< bool( char, const char *, int ) > FILTERS[ MAX ]
 		{
-			[ ]( char chNewCharacter, const char* szCurrent, int iPosition ) // NONE
+			[ ]( char chNewCharacter, const char *szCurrent, int iPosition ) // NONE
 			{
 				return true;
 			},
-			[ ]( char chNewCharacter, const char* szCurrent, int iPosition ) // LETTER
+			[ ]( char chNewCharacter, const char *szCurrent, int iPosition ) // LETTER
 			{
 				return chNewCharacter >= 'a' && chNewCharacter <= 'z'
-				|| chNewCharacter >= 'A' && chNewCharacter <= 'Z'
-				|| chNewCharacter >= '0' && chNewCharacter <= '9'
-				|| chNewCharacter == ' ';
+						|| chNewCharacter >= 'A' && chNewCharacter <= 'Z'
+						|| chNewCharacter >= '0' && chNewCharacter <= '9'
+						|| chNewCharacter == ' ';
 			},
-			[ ]( char chNewCharacter, const char* szCurrent, int iPosition ) // INTEGER
+			[ ]( char chNewCharacter, const char *szCurrent, int iPosition ) // INTEGER
 			{
 				return chNewCharacter == '-' && iPosition == 0 && strchr( szCurrent, '-' ) == nullptr
-				|| chNewCharacter >= '0' && chNewCharacter <= '9';
+						|| chNewCharacter >= '0' && chNewCharacter <= '9';
 			},
-			[ ]( char chNewCharacter, const char* szCurrent, int iPosition ) // FLOAT
+			[ ]( char chNewCharacter, const char *szCurrent, int iPosition ) // FLOAT
 			{
 				return chNewCharacter == '-' && iPosition == 0 && strchr( szCurrent, '-' ) == nullptr
-					|| chNewCharacter == '.' && strchr( szCurrent, '.' ) == nullptr
-					|| chNewCharacter >= '0' && chNewCharacter <= '9';
+						|| chNewCharacter == '.' && strchr( szCurrent, '.' ) == nullptr
+						|| chNewCharacter >= '0' && chNewCharacter <= '9';
 			}
 		};
 		static constexpr auto ROUND_RATIO = .1f;
@@ -315,12 +319,10 @@ namespace Interface
 		float FloatValue( );
 	};
 
-	template< typename _t >
-	class CSlider: public IWidget
+	template< typename _t > class CSlider: public IWidget
 	{ };
 
-	template< >
-	class CSlider< int >: public IWidget
+	template< > class CSlider< int >: public IWidget
 	{
 	public:
 
@@ -335,8 +337,7 @@ namespace Interface
 		bool Scroll( short sDelta ) override;
 	};
 
-	template< >
-	class CSlider< float >: public IWidget
+	template< > class CSlider< float >: public IWidget
 	{
 	public:
 
@@ -357,9 +358,9 @@ namespace Interface
 
 		static constexpr auto ROUNDING = 0.25f;
 
-		color_t* pColor;
+		color_t *pColor;
 
-		CColorButton( padding_t padBorder, color_t* _pColor );
+		CColorButton( padding_t padBorder, color_t *_pColor );
 
 		void Draw( ) override;
 		void InitializeDrawingInformation( ) override;
@@ -374,7 +375,7 @@ namespace Interface
 		constexpr static auto DEFAULT_SCROLL_FACTOR = 0.4f;
 		constexpr static auto DEFAULT_DURATION = 1500ull;
 		constexpr static auto DEFAULT_WIDTH = 4.f,
-			DEFAULT_PADDING = 4.f;
+							  DEFAULT_PADDING = 4.f;
 
 		CScrollbar( );
 
@@ -396,10 +397,10 @@ namespace Interface
 			TRIANGLE_WIDTH = 8.f,
 			TRIANGLE_HEIGHT = 5.f;
 
-		text_t* txtTitle;
+		text_t *txtTitle;
 		int iValue;
 
-		CCombobox( text_t* _txtTitle, std::initializer_list< text_t* > initOptions );
+		CCombobox( text_t *_txtTitle, std::initializer_list< text_t* > initOptions );
 
 		void Draw( ) override;
 		void InitializeDrawingInformation( ) override;
@@ -437,11 +438,11 @@ namespace Interface
 
 		void AddRow( row_t rowNew );
 		void ClearRow( int iRow );
-		void AddWidgetToRow( IWidget* pWidget, float flWidth, int iRow );
-		void AddWidget( IWidget* pWidget, rectangle_t recRelative );
-		void RemoveWidget( IWidget* pWidget );
+		void AddWidgetToRow( IWidget *pWidget, float flWidth, int iRow );
+		void AddWidget( IWidget *pWidget, rectangle_t recRelative );
+		void RemoveWidget( IWidget *pWidget );
 		void VerticalSpacing( float flAmount );
-		void Popup( CWindow* _pPopup );
+		void Popup( CWindow *_pPopup );
 
 		friend class CScrollbar;
 	};
@@ -461,13 +462,13 @@ namespace Interface
 		CLabel lblSubject;
 		CInputBox inputFile;
 		CButton btnBrowse;
-		const char* szExtension;
+		const char *szExtension;
 
 	public:
 
-		constexpr static char* FILE_EXTENSION_NONE = nullptr;
+		constexpr static char *FILE_EXTENSION_NONE = nullptr;
 
-		CFileSelector( callback_t cbOnFileSelected, const char* szSubject, const char* szFileExtension = FILE_EXTENSION_NONE );
+		CFileSelector( callback_t cbOnFileSelected, const char *szSubject, const char *szFileExtension = FILE_EXTENSION_NONE );
 
 		void Initialize( ) override;
 		void InitializeDrawingInformation( ) override;
@@ -475,8 +476,7 @@ namespace Interface
 		std::string GetFile( );
 	};
 
-	template< typename _t >
-	class CEditLabel: public IContainer
+	template< typename _t > class CEditLabel: public IContainer
 	{
 	public:
 
@@ -487,8 +487,7 @@ namespace Interface
 		CEditLabel( padding_t padBorder, padding_t padText );
 	};
 
-	template< >
-	class CEditLabel< int >: public IContainer
+	template< > class CEditLabel< int >: public IContainer
 	{
 	public:
 
@@ -504,8 +503,7 @@ namespace Interface
 		void Draw( ) override;
 	};
 
-	template< >
-	class CEditLabel< float >: public IContainer
+	template< > class CEditLabel< float >: public IContainer
 	{
 	public:
 
@@ -528,9 +526,9 @@ namespace Interface
 
 		static constexpr auto ROUNDING = 0.05f;
 
-		text_t* txtTitle;
+		text_t *txtTitle;
 
-		CGroupbox( padding_t _padBorder, const char* szTitle );
+		CGroupbox( padding_t _padBorder, const char *szTitle );
 
 		void InitializeDrawingInformation( ) override;
 		void Initialize( ) override;
@@ -542,11 +540,11 @@ namespace Interface
 	public:
 
 		static constexpr auto COLOR_BUTTON_WIDTH = 15.f;
-		bool* pEnabled;
+		bool *pEnabled;
 		CLabel lblIconActive, lblIconDormant, lblLabel;
 		std::vector< CColorButton* > vecColors;
 
-		CCheckbox( padding_t padBorder, const char* szLabel, bool* _pEnabled, std::initializer_list< CColorButton* > l );
+		CCheckbox( padding_t padBorder, const char *szLabel, bool *_pEnabled, std::initializer_list< CColorButton* > l );
 
 		void InitializeDrawingInformation( ) override;
 		void Initialize( ) override;
@@ -563,8 +561,8 @@ namespace Interface
 		Utilities::location_t locDragStart;
 
 		CHeaderPanel( );
-		CHeaderPanel( const char* szTitle, const char* szSubtitle, callback_t _cbMinimize, callback_t _cbClose, const char* szMinimize, const char* szClose );
-		CHeaderPanel( const char* szTitle, const char* szSubtitle, const char* szClose );
+		CHeaderPanel( const char *szTitle, const char *szSubtitle, callback_t _cbMinimize, callback_t _cbClose, const char *szMinimize, const char *szClose );
+		CHeaderPanel( const char *szTitle, const char *szSubtitle, const char *szClose );
 
 		void InitializeDrawingInformation( ) override;
 		void Initialize( ) override;
@@ -590,24 +588,24 @@ namespace Interface
 
 		static constexpr auto WINDOW_ROUNDING = 0.03f;
 		static constexpr auto DEFAULT_FLAGS = FLAG_WINDOW_OUTLINE_COVERED | FLAG_WINDOW_ROUND_CORNERS,
-			POPUP_FLAGS = FLAG_WINDOW_ROUND_CORNERS | FLAG_WINDOW_DIM_BACKGROUND | FLAG_WINDOW_ANCHOR,
-			TOOLTIP_FLAGS = FLAG_WINDOW_OUTLINE_ALWAYS | FLAG_WINDOW_NONBLOCK;
+							  POPUP_FLAGS = FLAG_WINDOW_ROUND_CORNERS | FLAG_WINDOW_DIM_BACKGROUND | FLAG_WINDOW_ANCHOR,
+							  TOOLTIP_FLAGS = FLAG_WINDOW_OUTLINE_ALWAYS | FLAG_WINDOW_NONBLOCK;
 
-		CHeaderPanel* pHeader;
-		CWindow* pPopup;
+		CHeaderPanel *pHeader;
+		CWindow *pPopup;
 		unsigned wfFlags;
 
 		// For regular windows
-		CWindow( unsigned _wfFlags, rectangle_t _recLocation, const char* szTitle, const char* szSubtitle, callback_t _cbMinimize, callback_t _cbClose );
+		CWindow( unsigned _wfFlags, rectangle_t _recLocation, const char *szTitle, const char *szSubtitle, callback_t _cbMinimize, callback_t _cbClose );
 		// For popup windows, no icon, close will be defined to end the popup and minimize will not exist.
-		CWindow( unsigned _wfFlags, rectangle_t _recLocation, const char* szTitle, const char* szSubtitle );
+		CWindow( unsigned _wfFlags, rectangle_t _recLocation, const char *szTitle, const char *szSubtitle );
 		// Comboboxes, tooltips, etc.
 		CWindow( unsigned _wfFlags, rectangle_t _recLocation );
 		~CWindow( );
 
 		void InitializeDrawingInformation( ) override;
 		void Draw( ) override;
-		void Popup( CWindow* _pPopup );
+		void Popup( CWindow *_pPopup );
 		void ClosePopup( bool bResetWidgets );
 		void Pack( );
 	};
@@ -621,7 +619,7 @@ namespace Interface
 
 	public:
 
-		static constexpr char* NO_EXTENSION = nullptr;
+		static constexpr char *NO_EXTENSION = nullptr;
 
 		enum EMode
 		{
@@ -629,8 +627,8 @@ namespace Interface
 			FOLDER
 		};
 
-		CPathExplorer( const char* szSubject, const char* szExtension, callback_t cbOnFileSelected );
-		CPathExplorer( const char* szSubject, callback_t cbOnFolderSelected );
+		CPathExplorer( const char *szSubject, const char *szExtension, callback_t cbOnFileSelected );
+		CPathExplorer( const char *szSubject, callback_t cbOnFolderSelected );
 
 		void InitializeDrawingInformation( ) override;
 		void Draw( ) override;
@@ -647,7 +645,7 @@ namespace Interface
 		std::vector< CLabel > vecText;
 		float flWidgetRatio;
 
-		CToolTip( text_t* _txtToolTip );
+		CToolTip( text_t *_txtToolTip );
 
 		void InitializeDrawingInformation( ) override;
 		void Draw( ) override;
@@ -657,7 +655,7 @@ namespace Interface
 	void Shutdown( );
 	bool Recreate( );
 	void DrawWindows( );
-	void AddWindow( CWindow* pWindow );
+	void AddWindow( CWindow *pWindow );
 }
 
 #include "Graphical User Interface.inl"

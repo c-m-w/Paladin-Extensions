@@ -83,3 +83,8 @@
 #else
 #pragma comment( lib, "cryptlib.lib" )
 #endif
+
+// Compiler
+#pragma warning( pop ) // reset warning level
+#pragma warning( push )
+#pragma warning( disable: 4100 4307 4309 ) // unreferenced parameter; overflow; truncation

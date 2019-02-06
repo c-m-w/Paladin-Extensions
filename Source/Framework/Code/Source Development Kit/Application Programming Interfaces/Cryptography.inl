@@ -30,9 +30,9 @@ template< typename _t > bool CCryptography::Crypt( const std::string &strIn, std
 	{
 		_t _Cryption( reinterpret_cast< unsigned char* >( const_cast< char* >( strEncryptionKey.c_str( ) ) ),
 					  strEncryptionKey.length( ), reinterpret_cast< unsigned char* >( const_cast< char* >( strInitializationVector.c_str( ) ) ) );
-		CryptoPP::StringSource( strIn, true, new	CryptoPP::StreamTransformationFilter( _Cryption, new CryptoPP::StringSink( strOut ) ) );
+		CryptoPP::StringSource( strIn, true, new CryptoPP::StreamTransformationFilter( _Cryption, new CryptoPP::StringSink( strOut ) ) );
 	}
-	catch( CryptoPP::InvalidCiphertext& )
+	catch ( CryptoPP::InvalidCiphertext & )
 	{
 		_Log.Log( EPrefix::ERROR, ELocation::CRYPTOGRAPHY, XOR( "Invalid cipher text passed to decrypt." ) );
 		return false;

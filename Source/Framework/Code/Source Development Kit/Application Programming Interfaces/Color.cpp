@@ -22,7 +22,7 @@ color_t::color_t( std::initializer_list< unsigned char > initData )
 		throw std::runtime_error( XOR( "Invalid array index" ) );
 
 	auto u = 0u;
-	for each ( const auto const &bData in initData )
+	for ( const auto &bData: initData )
 	{
 		_Data.b[ u ] = bData;
 		u++;
@@ -42,7 +42,7 @@ color_t::color_t( std::initializer_list< int > initData )
 		throw std::runtime_error( XOR( "Invalid array index" ) );
 
 	auto u = 0u;
-	for each ( const auto const &iData in initData )
+	for ( const auto &iData: initData )
 	{
 		_Data.b[ u ] = iData;
 		u++;
@@ -57,9 +57,9 @@ color_t::color_t( std::initializer_list< float > initData )
 		throw std::runtime_error( XOR( "Invalid array index" ) );
 
 	auto u = 0u;
-	for each ( const auto const &flData in initData )
+	for ( const auto &flData: initData )
 	{
-		_Data.b[ u ] = flData > 1.f ? flData : flData * 255.f;
+		_Data.b[ u ] = unsigned char( flData > 1.f ? flData : flData * 255.f );
 		u++;
 	}
 	for ( auto uu = 3u; uu >= u + 1; uu-- )
@@ -178,22 +178,22 @@ float color_t::GetAlphaFraction( ) const
 
 float color_t::PutRedFraction( float flData )
 {
-	return _Data.b[ COLOR_RED ] = flData * 255.f;
+	return _Data.b[ COLOR_RED ] = unsigned char( flData * 255.f );
 }
 
 float color_t::PutGreenFraction( float flData )
 {
-	return _Data.b[ COLOR_GREEN ] = flData * 255.f;
+	return _Data.b[ COLOR_GREEN ] = unsigned char( flData * 255.f );
 }
 
 float color_t::PutBlueFraction( float flData )
 {
-	return _Data.b[ COLOR_BLUE ] = flData * 255.f;
+	return _Data.b[ COLOR_BLUE ] = unsigned char( flData * 255.f );
 }
 
 float color_t::PutAlphaFraction( float flData )
 {
-	return _Data.b[ COLOR_ALPHA ] = flData * 255.f;
+	return _Data.b[ COLOR_ALPHA ] = unsigned char( flData * 255.f );
 }
 
 void *color_t::GetDataPointer( ) const
@@ -237,7 +237,7 @@ CColor::CColor( std::vector< sequence_t > vecSequences )
 	zSequences = vecSequences.size( );
 
 	auto u = 0u;
-	for each ( auto &seq in vecSequences )
+	for ( const auto &seq: vecSequences )
 		pSequences[ u ] = seq;
 }
 

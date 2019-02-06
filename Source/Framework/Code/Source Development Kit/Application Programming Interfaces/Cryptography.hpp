@@ -49,8 +49,8 @@ public:
 	/**	\param strOut Output buffer for the encrypted or decrypted text. */
 	/**	\return Whether or not processing the text was successful. */
 	template< typename _t > bool Crypt( const std::string &strIn, std::string &strOut );
-	bool Encrypt( const std::string& strPlainText, std::string& strCipher );
-	bool Decrypt( const std::string& strCipher, std::string& strPlainText );
+	bool Encrypt( const std::string &strPlainText, std::string &strCipher );
+	bool Decrypt( const std::string &strCipher, std::string &strPlainText );
 } inline _Cryptography;
 
 using encode_t = CCryptography::encode_t;

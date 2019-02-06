@@ -10,7 +10,7 @@ namespace Interface
 
 	inline void CSlider< int >::Draw( )
 	{
-		for ( auto& vertex : vecGeometry )
+		for ( auto &vertex: vecGeometry )
 			_Drawing.DrawPolygon( vertex );
 	}
 
@@ -57,13 +57,13 @@ namespace Interface
 		return true;
 	}
 
-	inline CSlider<float>::CSlider( padding_t padBorder, float _flMinimum, float _flMaximum, float _flCurrent ): IWidget( SLIDER, ECursor::HAND, padBorder, BLUE, BLUE, BLUE, DARK_BLUE, BACKGROUND_LIGHT, BACKGROUND_LIGHT, nullptr ),
 		flMinimum( _flMinimum ), flMaximum( _flMaximum ), flCurrent( _flCurrent )
+	inline CSlider< float >::CSlider( padding_t padBorder, float _flMinimum, float _flMaximum, float _flCurrent ): IWidget( SLIDER, ECursor::HAND, padBorder, BLUE, BLUE, BLUE, DARK_BLUE, BACKGROUND_LIGHT, BACKGROUND_LIGHT, nullptr ),
 	{ }
 
 	inline void CSlider< float >::Draw( )
 	{
-		for ( auto& vertex : vecGeometry )
+		for ( auto &vertex: vecGeometry )
 			_Drawing.DrawPolygon( vertex );
 	}
 
@@ -181,14 +181,14 @@ namespace Interface
 		lblDisplay.iCursor = ECursor::HAND;
 	}
 
-	inline void CEditLabel<float>::Initialize( )
+	inline void CEditLabel< float >::Initialize( )
 	{
 		AddRow( row_t( padding_t( ), recLocation.flHeight ) );
 		lblDisplay.padBorder = padding_t( recLocation.flHeight / 2.f - lblDisplay.txtLabel->GetHeight( ) / 2.f, 0.f, 0.f, 3.f );
 		AddWidgetToRow( &lblDisplay, recLocation.flWidth, 0 );
 	}
 
-	inline void CEditLabel<float>::InitializeDrawingInformation( )
+	inline void CEditLabel< float >::InitializeDrawingInformation( )
 	{ }
 
 	inline void CEditLabel< float >::Draw( )

@@ -8,7 +8,7 @@
 
 #define ENSURE_DATA_SET( _PostData )																								\
 	if ( !bPostDataSet[ _PostData ] )																								\
-		throw std::runtime_error( ( XOR( "Post data ID " ) + std::to_string( int( _PostData ) ) + XOR( " not set." ) ).c_str( ) );	\
+		throw std::runtime_error( ( XOR( "Post data ID " ) + std::to_string( int( _PostData ) ) + XOR( " not set." ) ).c_str( ) );
 
 std::size_t WriteCallback( void *pData, std::size_t zMemberSize, std::size_t zMembers, void *pBuffer )
 {
@@ -85,7 +85,7 @@ void CConnectivity::ResetConnection( )
 	memset( bPostDataSet, false, sizeof( bool ) * POST_DATA_MAX );
 }
 
-bool CConnectivity::TryConnection( std::string &strOut, std::string* pErrorBuffer, int iRetries /*= 0*/ )
+bool CConnectivity::TryConnection( std::string &strOut, std::string *pErrorBuffer, int iRetries /*= 0*/ )
 {
 	const auto _Code = curl_easy_perform( hInstance );
 	if ( _Code != CURLE_OK )

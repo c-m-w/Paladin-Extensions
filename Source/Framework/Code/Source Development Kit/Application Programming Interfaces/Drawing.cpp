@@ -139,7 +139,7 @@ bool CDrawing::CreateState( )
 
 bool CDrawing::AddTexture( const texture_t &texNew )
 {
-	auto& last = vecTextures.emplace_back( std::pair< texture_t, std::pair< D3DXIMAGE_INFO, IDirect3DTexture9* > >( texNew, std::pair< D3DXIMAGE_INFO, IDirect3DTexture9* >( D3DXIMAGE_INFO( ), nullptr ) ) );
+	auto &last = vecTextures.emplace_back( std::pair< texture_t, std::pair< D3DXIMAGE_INFO, IDirect3DTexture9* > >( texNew, std::pair< D3DXIMAGE_INFO, IDirect3DTexture9* >( D3DXIMAGE_INFO( ), nullptr ) ) );
 	return D3D_OK == D3DXCreateTextureFromFileEx( pDevice, last.first.strName.c_str( ), last.first.uWidth, last.first.uHeight, D3DX_FROM_FILE,
 												  D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL, &last.second.first,
 												  nullptr, &last.second.second );
@@ -282,7 +282,7 @@ bool CDrawing::Create( std::string strResourceDirectory )
 		{ 32, 29 }
 	};
 
-	if( strResourceDirectory.empty( ) )
+	if ( strResourceDirectory.empty( ) )
 		strResourceDirectory = strResourceDirectory = _Filesystem.ChangeWorkingDirectory( CFilesystem::GetAppdataDirectory( ), { CFilesystem::strRelativeResourceDirectory } );
 
 	auto bReturn = true;
@@ -294,12 +294,11 @@ bool CDrawing::Create( std::string strResourceDirectory )
 				_Log.Log( EPrefix::ERROR, ELocation::DRAWING, XOR( "Unable to add texture %s." ), TEXTURE_FILENAMES[ i ] );
 	}
 	else
-		for ( auto& texture : vecTextures )
+		for ( auto &texture: vecTextures )
 			if ( !( bReturn &= D3D_OK == D3DXCreateTextureFromFileEx( pDevice, texture.first.strName.c_str( ), texture.first.uWidth, texture.first.uHeight, D3DX_FROM_FILE,
 																	  D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL, &texture.second.first,
 																	  nullptr, &texture.second.second ) ) )
 				_Log.Log( EPrefix::ERROR, ELocation::DRAWING, XOR( "Unable to create texture %s from file." ), texture.first.strName.c_str( ) );
-
 
 	iCursorTextureIndicies[ ARROW ] = TEXTURE_ARROW;
 	iCursorTextureIndicies[ HAND ] = TEXTURE_HAND;
@@ -333,10 +332,10 @@ void CDrawing::ApplyCursor( int iCursorType )
 	POINT pntCursor;
 
 	if ( GetCursorPos( &pntCursor ) != TRUE
-		 || ScreenToClient( pTarget->GetWindowHandle( ), &pntCursor ) != TRUE
-		 || pntCursor.x < 0.f || pntCursor.y < 0.f
-		 || pntCursor.x > int( recRenderTarget.flWidth )
-		 || pntCursor.y > int( recRenderTarget.flHeight ) )
+		|| ScreenToClient( pTarget->GetWindowHandle( ), &pntCursor ) != TRUE
+		|| pntCursor.x < 0.f || pntCursor.y < 0.f
+		|| pntCursor.x > int( recRenderTarget.flWidth )
+		|| pntCursor.y > int( recRenderTarget.flHeight ) )
 	{
 		while ( ShowCursor( TRUE ) <= 0 );
 		return;
@@ -345,11 +344,11 @@ void CDrawing::ApplyCursor( int iCursorType )
 	while ( ShowCursor( FALSE ) >= 0 );
 	SetCursor( nullptr );
 
-	auto& texMouse = vecTextures[ iCursorTextureIndicies[ iCursorType ] ].first;
+	auto &texMouse = vecTextures[ iCursorTextureIndicies[ iCursorType ] ].first;
 	DrawTexture( iCursorTextureIndicies[ iCursorType ], location_t( pntCursor.x + texMouse.uWidth / 2.f - 50.f, pntCursor.y + texMouse.uHeight / 2.f - 50.f ) );
 }
 
-bool CDrawing::IsAreaVisible( const rectangle_t& recArea )
+bool CDrawing::IsAreaVisible( const rectangle_t &recArea )
 {
 	if ( recSource.empty( ) )
 		return true;
@@ -357,12 +356,12 @@ bool CDrawing::IsAreaVisible( const rectangle_t& recArea )
 	return recArea.InRectangle( recSource.top( ) );
 }
 
-texture_renderable_t& CDrawing::GetTexture( int iTextureID )
+texture_renderable_t &CDrawing::GetTexture( int iTextureID )
 {
 	return vecTextures[ iTextureID ];
 }
 
-void CDrawing::RenderTexture( int iTextureID, const location_t& locTexture )
+void CDrawing::RenderTexture( int iTextureID, const location_t &locTexture )
 {
 	DrawTexture( iTextureID, locTexture );
 }
@@ -393,7 +392,7 @@ void CDrawing::PushDrawingSpace( rectangle_t recSpace )
 void CDrawing::PopDrawingSpace( )
 {
 	recSource.pop( );
-	const auto& recNew = recSource.top( );
+	const auto &recNew = recSource.top( );
 	const auto recNewSource = recNew.ToRect( );
 	pDevice->SetScissorRect( &recNewSource );
 }
@@ -456,10 +455,10 @@ IDirect3DTexture9 *CDrawing::CreateTextTexture( const char *szText, float flSize
 	{
 		auto iIndex = 0;
 
-		if( ffFlags & ICON )
+		if ( ffFlags & ICON )
 		{
 			char chBuffer[ sizeof( unsigned ) * 2 + 1 ] { };
-			char* pBuffer = nullptr;
+			char *pBuffer = nullptr;
 
 			for ( auto i = 0; i < sizeof( unsigned ); i++ )
 				chBuffer[ i ] = '0';
@@ -534,7 +533,7 @@ IDirect3DTexture9 *CDrawing::CreateTextTexture( const char *szText, float flSize
 
 					const auto iByte = int( glCurrent.flHorizontalOffset ) + j + int( i + rowCurrent.iVerticalOffset + int( flSize ) - int( glRenderable.bitmap_top ) + 1 ) * int( locDimensions.x );
 					if ( iByte < 0
-						 || iByte > int( locDimensions.x * locDimensions.y ) )
+						|| iByte > int( locDimensions.x * locDimensions.y ) )
 						continue;
 
 					pBits[ iByte ] = ( dwColor & 0x00FFFFFF ) | ( iAlpha << 24 );
@@ -645,7 +644,7 @@ void CDrawing::DrawTexture( IDirect3DTexture9 *pTexture, const location_t &locLo
 		_Log.Log( EPrefix::WARNING, ELocation::DRAWING, XOR( "Unable to begin sprite drawing." ) );
 }
 
-void CDrawing::DrawTexture( int iTextureID, const location_t& locLocation )
+void CDrawing::DrawTexture( int iTextureID, const location_t &locLocation )
 {
 	return DrawTexture( vecTextures[ iTextureID ].second.second, locLocation );
 }
@@ -1389,7 +1388,7 @@ void vertex_t::Rotate( float flAngle, D3DXVECTOR2 vecRotationPoint )
 
 vertex_t vertex_t::Round( )
 {
-	for each ( auto &vector in flVectors )
+	for ( auto &vector: flVectors )
 		vector = roundf( vector );
 
 	return *this;
@@ -1435,7 +1434,7 @@ void polygon_t::Draw( rectangle_t recRelative, color_t clrColor )
 
 void polygon_t::Join( const polygon_t &other )
 {
-	for each ( auto &vertex in other.vecVertices )
+	for ( const auto &vertex: other.vecVertices )
 		vecVertices.emplace_back( vertex );
 
 	sPrimitives += other.sPrimitives;
@@ -1472,5 +1471,5 @@ polygon_buffer_t polygon_t::GetBuffer( D3DPRIMITIVETYPE ptDraw /*= D3DPT_TRIANGL
 	return polygon_buffer_t( _Drawing.ConstructPolygon( &vecVertices[ 0 ], vecVertices.size( ) ), sPrimitives, ptDraw );
 }
 
-texture_t::texture_t( unsigned _uWidth, unsigned _uHeight, const std::string& _strName ): uWidth( _uWidth ), uHeight( _uHeight ), strName( _strName )
+texture_t::texture_t( unsigned _uWidth, unsigned _uHeight, const std::string &_strName ): uWidth( _uWidth ), uHeight( _uHeight ), strName( _strName )
 { }

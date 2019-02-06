@@ -10,7 +10,7 @@ namespace Interface
 {
 	decltype( _WidgetContext ) _WidgetContext;
 
-	void decltype( _WidgetContext )::BringWidgetContainingWindowToFront( IWidget* pWidget )
+	void decltype( _WidgetContext )::BringWidgetContainingWindowToFront( IWidget *pWidget )
 	{
 		auto pWindow = reinterpret_cast< CWindow* >( pWidget );
 
@@ -27,7 +27,7 @@ namespace Interface
 		vecWindows.emplace_front( pWindow );
 	}
 
-	CWindow* decltype( _WidgetContext )::GetForegroundWindow( )
+	CWindow *decltype( _WidgetContext )::GetForegroundWindow( )
 	{
 		auto pWindow = vecWindows[ 0 ];
 
@@ -45,7 +45,7 @@ namespace Interface
 		constexpr auto TOOLTIP_WAIT = 1500ull;
 		static auto locOld = locMouse;
 		static auto mmtStart = GetMoment( );
-		static CWindow* pToolTipWindow = nullptr;
+		static CWindow *pToolTipWindow = nullptr;
 
 		if ( locOld != locMouse )
 		{
@@ -61,20 +61,20 @@ namespace Interface
 		}
 
 		if ( GetMoment( ) - mmtStart >= TOOLTIP_WAIT
-			 && pToolTipWindow == nullptr
-			 && pHoveringWidget != nullptr
-			 && pHoveringWidget->uState == IWidget::HOVER
-			 && pHoveringWidget->pToolTip != nullptr )
+			&& pToolTipWindow == nullptr
+			&& pHoveringWidget != nullptr
+			&& pHoveringWidget->uState == IWidget::HOVER
+			&& pHoveringWidget->pToolTip != nullptr )
 		{
 			const auto recWidgetLocation = pHoveringWidget->GetAbsoluteLocation( );
-			auto& recToolTip = pHoveringWidget->pToolTip->recLocation;
+			auto &recToolTip = pHoveringWidget->pToolTip->recLocation;
 
 			pToolTipWindow = pHoveringWidget->GetContainingWindow( );
 			recToolTip.x = std::clamp( recWidgetLocation.x + recWidgetLocation.flWidth / 2.f - pToolTipWindow->recLocation.x - recToolTip.flWidth / 2.f, 0.f, pToolTipWindow->recLocation.flWidth - recToolTip.flWidth );
 			recToolTip.y = std::clamp( recWidgetLocation.y - 25.f - pToolTipWindow->recLocation.y - recToolTip.flHeight / 2.f, 0.f, pToolTipWindow->recLocation.flHeight - recToolTip.flHeight );
 			auto pWindow = new CToolTip { *pHoveringWidget->pToolTip };
 			pWindow->flWidgetRatio = ( recWidgetLocation.x + recWidgetLocation.flWidth / 2.f - pToolTipWindow->recLocation.x ) / recToolTip.flWidth;
-			for ( auto& widget : pWindow->vecWidgets )
+			for ( auto &widget: pWindow->vecWidgets )
 				widget->pParentContainer = pWindow;
 
 			pToolTipWindow->Popup( pWindow );
@@ -85,17 +85,17 @@ namespace Interface
 	{
 		int iTexture = ECursor::ARROW;
 		if ( pHoveringWidget != nullptr
-			 && pHoveringWidget->GetContainingWindow( ) == GetForegroundWindow( ) )
+			&& pHoveringWidget->GetContainingWindow( ) == GetForegroundWindow( ) )
 			iTexture = pHoveringWidget->iCursor;
 
 		_Drawing.ApplyCursor( iTexture );
 	}
 
-	void decltype( _WidgetContext )::UpdateContainerWidgets( IContainer* pContainer )
+	void decltype( _WidgetContext )::UpdateContainerWidgets( IContainer *pContainer )
 	{
 		pContainer->Setup( );
 
-		for ( auto& widget : pContainer->vecWidgets )
+		for ( auto &widget: pContainer->vecWidgets )
 		{
 			if ( widget->iType == IWidget::CONTAINER )
 				UpdateContainerWidgets( reinterpret_cast< IContainer* >( widget ) );
@@ -109,16 +109,16 @@ namespace Interface
 		return false;
 	}
 
-	IWidget::IWidget( int _iType, int _iCursor, CToolTip* _pToolTip ): iType( _iType ), iCursor( _iCursor ), uState( DORMANT ), pToolTip( _pToolTip )
+	IWidget::IWidget( int _iType, int _iCursor, CToolTip *_pToolTip ): iType( _iType ), iCursor( _iCursor ), uState( DORMANT ), pToolTip( _pToolTip )
 	{ }
 
-	IWidget::IWidget( int _iType, int _iCursor, padding_t _padBorder, color_t clrForegroundActive, color_t clrForegroundHover, color_t clrForegroundDormant, color_t clrBackgroundActive, color_t clrBackgroundHover, color_t clrBackgroundDormant, CToolTip* _pToolTip ) :
+	IWidget::IWidget( int _iType, int _iCursor, padding_t _padBorder, color_t clrForegroundActive, color_t clrForegroundHover, color_t clrForegroundDormant, color_t clrBackgroundActive, color_t clrBackgroundHover, color_t clrBackgroundDormant, CToolTip *_pToolTip ) :
 		iType( _iType ), iCursor( _iCursor ), uState( DORMANT ), padBorder( _padBorder ), clrForeground { clrForegroundActive, clrForegroundHover, clrForegroundDormant }, clrBackground { clrBackgroundActive, clrBackgroundHover, clrBackgroundDormant },
 		pCurrentForeground( &clrForeground[ DORMANT ] ), pCurrentBackground( &clrBackground[ DORMANT ] ), iAlignment( DEFAULT_ALIGNMENT ), recLocation( { } ), bPressing( false ), pToolTip( _pToolTip )
 	{ }
 
-	IWidget::IWidget( int _iType, int _iCursor, padding_t _padBorder, color_t clrColor, CToolTip* _pToolTip ) : iType( _iType ), iCursor( _iCursor ), uState( DORMANT ), padBorder( _padBorder ), clrForeground { clrColor, clrColor , clrColor }, clrBackground { clrColor, clrColor, clrColor },
-		pCurrentForeground( &clrForeground[ DORMANT ] ), pCurrentBackground( &clrBackground[ DORMANT ] ), iAlignment( DEFAULT_ALIGNMENT ), recLocation( { } ), bPressing( false ), pToolTip( _pToolTip )
+	IWidget::IWidget( int _iType, int _iCursor, padding_t _padBorder, color_t clrColor, CToolTip *_pToolTip ) : iType( _iType ), iCursor( _iCursor ), uState( DORMANT ), padBorder( _padBorder ), clrForeground { clrColor, clrColor, clrColor }, clrBackground { clrColor, clrColor, clrColor },
+																												pCurrentForeground( &clrForeground[ DORMANT ] ), pCurrentBackground( &clrBackground[ DORMANT ] ), iAlignment( DEFAULT_ALIGNMENT ), recLocation( { } ), bPressing( false ), pToolTip( _pToolTip )
 	{ }
 
 	void IWidget::Initialize( )
@@ -148,7 +148,7 @@ namespace Interface
 
 	void IWidget::Setup( )
 	{
-		for ( auto& vertex : vecGeometry )
+		for ( auto &vertex: vecGeometry )
 			vertex.pVertexBuffer->Release( );
 
 		vecGeometry.clear( );
@@ -172,14 +172,14 @@ namespace Interface
 		const auto recAbsolute = GetAbsoluteLocation( );
 
 		if ( iType == CONTAINER
-			 && reinterpret_cast< IContainer* >( this )->bUpdate )
+			&& reinterpret_cast< IContainer* >( this )->bUpdate )
 		{
 			_WidgetContext.UpdateContainerWidgets( reinterpret_cast< IContainer* >( this ) );
 			reinterpret_cast< IContainer* >( this )->bUpdate = false;
 		}
 
 		if ( iType != SCROLLBAR && !_Drawing.IsAreaVisible( recAbsolute )
-			 || IsCovered( ) )
+			|| IsCovered( ) )
 			return;
 
 		Draw( );
@@ -206,12 +206,12 @@ namespace Interface
 		return rectangle_t( 0.f, 0.f, recLocation.flWidth, recLocation.flHeight );
 	}
 
-	CWindow* IWidget::GetContainingWindow( )
+	CWindow *IWidget::GetContainingWindow( )
 	{
 		auto pWindow = reinterpret_cast< CWindow* >( this );
 		while ( pWindow != decltype( pWindow )( 0xDDDDDDDD )
-				&& pWindow->pParentContainer != nullptr
-				&& pWindow->iType != POPUP )
+			&& pWindow->pParentContainer != nullptr
+			&& pWindow->iType != POPUP )
 			pWindow = decltype( pWindow )( pWindow->pParentContainer );
 
 		return pWindow;
@@ -232,14 +232,14 @@ namespace Interface
 		_WidgetContext.pHoveringWidget = this;
 	}
 
-	CLabel::CLabel( padding_t padBorder, text_t* _txtLabel, color_t clrForegroundActive, color_t clrForegroundHover, color_t clrForegroundDormant, color_t clrBackgroundActive, color_t clrBackgroundHover, color_t clrBackgroundDormant, EFontFlags _ffFlags, callback_t _cbOnClick /*= nullptr*/ ):
+	CLabel::CLabel( padding_t padBorder, text_t *_txtLabel, color_t clrForegroundActive, color_t clrForegroundHover, color_t clrForegroundDormant, color_t clrBackgroundActive, color_t clrBackgroundHover, color_t clrBackgroundDormant, EFontFlags _ffFlags, callback_t _cbOnClick /*= nullptr*/ ):
 		IWidget( LABEL, ECursor::ARROW, padBorder, clrForegroundActive, clrForegroundHover, clrForegroundDormant, clrBackgroundActive, clrBackgroundHover, clrBackgroundDormant, nullptr ), txtLabel( _txtLabel ), ffFlags( _ffFlags ), cbOnClick( _cbOnClick )
 	{ }
 
-	CLabel::CLabel( padding_t padBorder, text_t* _txtLabel, color_t clrBackground, color_t clrText, EFontFlags _ffFlags, callback_t _cbOnClick /*= nullptr*/ ) : IWidget( LABEL, ECursor::ARROW, padBorder, clrText, clrText, clrText, clrBackground, clrBackground, clrBackground, nullptr ), txtLabel( _txtLabel ), ffFlags( _ffFlags ), cbOnClick( _cbOnClick )
+	CLabel::CLabel( padding_t padBorder, text_t *_txtLabel, color_t clrBackground, color_t clrText, EFontFlags _ffFlags, callback_t _cbOnClick /*= nullptr*/ ) : IWidget( LABEL, ECursor::ARROW, padBorder, clrText, clrText, clrText, clrBackground, clrBackground, clrBackground, nullptr ), txtLabel( _txtLabel ), ffFlags( _ffFlags ), cbOnClick( _cbOnClick )
 	{ }
 
-	CLabel::CLabel( padding_t padBorder, text_t* _txtLabel, color_t clrText, EFontFlags _ffFlags, callback_t _cbOnClick /*= nullptr*/ ) : IWidget( LABEL, ECursor::ARROW, padBorder, clrText, clrText, clrText, clrText, clrText, clrText, nullptr ), txtLabel( _txtLabel ), ffFlags( _ffFlags ), cbOnClick( _cbOnClick )
+	CLabel::CLabel( padding_t padBorder, text_t *_txtLabel, color_t clrText, EFontFlags _ffFlags, callback_t _cbOnClick /*= nullptr*/ ) : IWidget( LABEL, ECursor::ARROW, padBorder, clrText, clrText, clrText, clrText, clrText, clrText, nullptr ), txtLabel( _txtLabel ), ffFlags( _ffFlags ), cbOnClick( _cbOnClick )
 	{ }
 
 	void CLabel::Event( unsigned uKey, CKeyState ksState )
@@ -259,7 +259,7 @@ namespace Interface
 		txtLabel->Initialize( *pCurrentForeground, ffFlags );
 	}
 
-	CButtonLabel::CButtonLabel( padding_t padBorder, text_t* _txtLabel, color_t clrForegroundActive, color_t clrForegroundHover, color_t clrForegroundDormant, color_t clrBackgroundActive, color_t clrBackgroundHover, color_t clrBackgroundDormant, invoke_callback_t _cbOnClick, int _iIndex ):
+	CButtonLabel::CButtonLabel( padding_t padBorder, text_t *_txtLabel, color_t clrForegroundActive, color_t clrForegroundHover, color_t clrForegroundDormant, color_t clrBackgroundActive, color_t clrBackgroundHover, color_t clrBackgroundDormant, invoke_callback_t _cbOnClick, int _iIndex ):
 		IWidget( BUTTON, ECursor::HAND, padBorder, clrForegroundActive, clrForegroundHover, clrForegroundDormant, clrBackgroundActive, clrBackgroundHover, clrBackgroundDormant, nullptr ), txtLabel( _txtLabel ), cbOnClick( _cbOnClick ), iIndex( _iIndex )
 	{ }
 
@@ -273,7 +273,7 @@ namespace Interface
 	{
 		const auto recAbsolute = GetAbsoluteLocation( );
 
-		for ( auto& polygon : vecGeometry )
+		for ( auto &polygon: vecGeometry )
 			_Drawing.DrawPolygon( polygon );
 
 		txtLabel->Draw( location_t( recAbsolute.x + 5.f, recAbsolute.y + recLocation.flHeight / 2.f - txtLabel->GetHeight( ) / 2.f ) );
@@ -287,7 +287,7 @@ namespace Interface
 		txtLabel->Initialize( *pCurrentForeground, EFontFlags::NONE );
 	}
 
-	CButton::CButton( int _iOrientation, const char* szLabel, callback_t cbOnClick, CToolTip* pToolTip /*= nullptr*/ ):
+	CButton::CButton( int _iOrientation, const char *szLabel, callback_t cbOnClick, CToolTip *pToolTip /*= nullptr*/ ):
 		IWidget( BUTTON, ECursor::HAND, _iOrientation == CENTER ? padding_t( 0.f, 2.f, 0.f, 2.f ) : padding_t( ), BUTTON_TEXT, BUTTON_TEXT, BUTTON_TEXT, BUTTON_BACKGROUND_ACTIVE, BUTTON_BACKGROUND_HOVER, BUTTON_BACKGROUND_DORMANT, pToolTip ),
 		iType( _iOrientation ), txtLabel( new text_t( szLabel, EFont::ROBOTO, STANDARD_HEIGHT, text_t::CENTER, text_t::CENTER ) ), cbClick( cbOnClick )
 	{ }
@@ -296,7 +296,7 @@ namespace Interface
 	{
 		const auto recAbsolute = GetAbsoluteLocation( );
 
-		for ( auto& object : vecGeometry )
+		for ( auto &object: vecGeometry )
 			_Drawing.DrawPolygon( object );
 
 		txtLabel->Draw( recAbsolute );
@@ -448,7 +448,7 @@ namespace Interface
 		const auto recText = GetTextSpace( );
 		const auto locText = location_t( recText.x, recText.y + recText.flHeight / 2.f - flCharacterHeight / 2.f );
 
-		for ( auto& vertex : vecGeometry )
+		for ( auto &vertex: vecGeometry )
 			_Drawing.DrawPolygon( vertex );
 
 		_Drawing.PushDrawingSpace( recText );
@@ -516,13 +516,12 @@ namespace Interface
 				iPosition = iEnd;
 			}
 		}
-		else
-			if ( FILTERS[ iFilter ]( uKey, strBuffer.c_str( ), std::min( iPosition, iPosition + iSelection ) ) )
-			{
-				RemoveSelected( );
-				ClampSelection( );
-				strBuffer.insert( strBuffer.begin( ) + iPosition++, char( uKey ) );
-			}
+		else if ( FILTERS[ iFilter ]( uKey, strBuffer.c_str( ), std::min( iPosition, iPosition + iSelection ) ) )
+		{
+			RemoveSelected( );
+			ClampSelection( );
+			strBuffer.insert( strBuffer.begin( ) + iPosition++, char( uKey ) );
+		}
 
 		iSelection = 0;
 		CorrectPosition( );
@@ -653,13 +652,13 @@ namespace Interface
 		return std::stof( strBuffer );
 	}
 
-	CColorButton::CColorButton( padding_t padBorder, color_t* _pColor ): IWidget( BUTTON, ECursor::HAND, padBorder, *_pColor, *_pColor, *_pColor, BLUE, BLUE, OUTLINE_LIGHT, nullptr ),
-		pColor( _pColor )
+	CColorButton::CColorButton( padding_t padBorder, color_t *_pColor ): IWidget( BUTTON, ECursor::HAND, padBorder, *_pColor, *_pColor, *_pColor, BLUE, BLUE, OUTLINE_LIGHT, nullptr ),
+																		 pColor( _pColor )
 	{ }
 
 	void CColorButton::Draw( )
 	{
-		for ( auto& vertex : vecGeometry )
+		for ( auto &vertex: vecGeometry )
 			_Drawing.DrawPolygon( vertex );
 	}
 
@@ -677,7 +676,7 @@ namespace Interface
 
 	void CScrollbar::Draw( )
 	{
-		for ( auto& vertex : vecGeometry )
+		for ( auto &vertex: vecGeometry )
 			_Drawing.DrawPolygon( vertex );
 	}
 
@@ -751,14 +750,14 @@ namespace Interface
 		}
 	}
 
-	CCombobox::CCombobox( text_t* _txtTitle, std::initializer_list< text_t* > initOptions ): IWidget( COMBOBOX, ECursor::HAND, padding_t( ), TEXT_NORMAL, TEXT_NORMAL, TEXT_DARK, CLEAR, CLEAR, CLEAR, nullptr ), txtTitle( _txtTitle ), iValue( 0 ), vecText( initOptions ), vecOptions( { } )
+	CCombobox::CCombobox( text_t *_txtTitle, std::initializer_list< text_t* > initOptions ): IWidget( COMBOBOX, ECursor::HAND, padding_t( ), TEXT_NORMAL, TEXT_NORMAL, TEXT_DARK, CLEAR, CLEAR, CLEAR, nullptr ), txtTitle( _txtTitle ), iValue( 0 ), vecText( initOptions ), vecOptions( { } )
 	{ }
 
 	void CCombobox::Draw( )
 	{
 		const auto recAbsolute = GetAbsoluteLocation( );
 
-		for ( auto& vertex : vecGeometry )
+		for ( auto &vertex: vecGeometry )
 			_Drawing.DrawPolygon( vertex );
 
 		txtTitle->Draw( location_t( recAbsolute.x + 5.f, recAbsolute.y + recAbsolute.flHeight / 2.f - txtTitle->GetHeight( ) / 2.f ) );
@@ -786,7 +785,7 @@ namespace Interface
 			recAbsolute.x -= pContainingWindow->recLocation.x;
 			recAbsolute.y -= pContainingWindow->recLocation.y;
 
-			for ( auto& option : vecOptions )
+			for ( auto &option: vecOptions )
 				delete option;
 
 			vecOptions.clear( );
@@ -794,15 +793,17 @@ namespace Interface
 			const auto pPopup = new CWindow( CWindow::FLAG_WINDOW_NONE, rectangle_t( recAbsolute.x, recAbsolute.y + recAbsolute.flHeight + 5.f, recAbsolute.flWidth, vecText.size( ) * 30.f ) );
 			for ( auto u = 0u; u < vecText.size( ); u++ )
 			{
-				auto& lblCurrent = int( u ) == iValue ? vecOptions.emplace_back( new CButtonLabel( padding_t( ), vecText[ u ], BLUE, BLUE, BLUE, BACKGROUND_LIGHT, BACKGROUND_LIGHT, BACKGROUND_DEFAULT, [ & ]( IWidget* pInvokee )
-				{
-					iValue = reinterpret_cast< CButtonLabel* >( pInvokee )->iIndex;
-					reinterpret_cast< CWindow* >( pInvokee->GetContainingWindow( )->pParentContainer )->ClosePopup( true );
-				}, u ) ) : vecOptions.emplace_back( new CButtonLabel( padding_t( ), vecText[ u ], TEXT_NORMAL, TEXT_NORMAL, TEXT_DARK, BACKGROUND_LIGHT, BACKGROUND_LIGHT, BACKGROUND_DEFAULT, [ & ]( IWidget* pInvokee )
-				{
-					iValue = reinterpret_cast< CButtonLabel* >( pInvokee )->iIndex;
-					reinterpret_cast< CWindow* >( pInvokee->GetContainingWindow( )->pParentContainer )->ClosePopup( true );
-				}, u ) );
+				auto &lblCurrent = int( u ) == iValue ?
+									   vecOptions.emplace_back( new CButtonLabel( padding_t( ), vecText[ u ], BLUE, BLUE, BLUE, BACKGROUND_LIGHT, BACKGROUND_LIGHT, BACKGROUND_DEFAULT, [ & ]( IWidget *pInvokee )
+									   {
+										   iValue = reinterpret_cast< CButtonLabel* >( pInvokee )->iIndex;
+										   reinterpret_cast< CWindow* >( pInvokee->GetContainingWindow( )->pParentContainer )->ClosePopup( true );
+									   }, u ) ) :
+									   vecOptions.emplace_back( new CButtonLabel( padding_t( ), vecText[ u ], TEXT_NORMAL, TEXT_NORMAL, TEXT_DARK, BACKGROUND_LIGHT, BACKGROUND_LIGHT, BACKGROUND_DEFAULT, [ & ]( IWidget *pInvokee )
+									   {
+										   iValue = reinterpret_cast< CButtonLabel* >( pInvokee )->iIndex;
+										   reinterpret_cast< CWindow* >( pInvokee->GetContainingWindow( )->pParentContainer )->ClosePopup( true );
+									   }, u ) );
 
 				pPopup->AddRow( row_t( padding_t( ), 30.f ) );
 				pPopup->AddWidgetToRow( lblCurrent, recAbsolute.flWidth, u );
@@ -821,7 +822,7 @@ namespace Interface
 	padding_t::padding_t( ) : flPadding { }
 	{ }
 
-	padding_t::padding_t( float* pPadding )
+	padding_t::padding_t( float *pPadding )
 	{
 		for ( auto i = 0; i < POSITION_MAX; i++ )
 			flPadding[ i ] = pPadding[ i ];
@@ -848,7 +849,7 @@ namespace Interface
 
 		_Drawing.Rectangle( recLocation, clrBackground[ 0 ] );
 
-		for ( auto& pWidget : vecWidgets )
+		for ( auto &pWidget: vecWidgets )
 			pWidget->PreDraw( );
 
 		_Drawing.PopDrawingSpace( );
@@ -893,7 +894,7 @@ namespace Interface
 
 	void CFileSelector::Draw( )
 	{
-		for ( auto& widget : vecWidgets )
+		for ( auto &widget: vecWidgets )
 			widget->PreDraw( );
 	}
 
@@ -902,7 +903,7 @@ namespace Interface
 		return inputFile.StringValue( );
 	}
 
-	CGroupbox::CGroupbox( padding_t _padBorder, const char* szTitle ): IContainer( FLAG_CONTAINER_SCROLLABLE, _padBorder, BACKGROUND_DEFAULT ), txtTitle( new text_t( szTitle, EFont::ROBOTO, STANDARD_HEIGHT, text_t::CENTER, text_t::CENTER ) )
+	CGroupbox::CGroupbox( padding_t _padBorder, const char *szTitle ): IContainer( FLAG_CONTAINER_SCROLLABLE, _padBorder, BACKGROUND_DEFAULT ), txtTitle( new text_t( szTitle, EFont::ROBOTO, STANDARD_HEIGHT, text_t::CENTER, text_t::CENTER ) )
 	{
 		VerticalSpacing( STANDARD_HEIGHT );
 	}
@@ -910,7 +911,7 @@ namespace Interface
 	void CGroupbox::InitializeDrawingInformation( )
 	{
 		const auto recAbsolute = GetAbsoluteLocation( );
-		bool bRounding[ ] { true,true,true,true };
+		bool bRounding[ ] { true, true, true, true };
 		color_t clrBackground[ ] { BACKGROUND_DEFAULT, BACKGROUND_DEFAULT, BACKGROUND_DARK, BACKGROUND_DARK };
 
 		txtTitle->Initialize( TEXT_DARK, EFontFlags::DROPSHADOW );
@@ -929,12 +930,12 @@ namespace Interface
 	{
 		const auto recAbsolute = GetAbsoluteLocation( );
 
-		for ( auto& vertex : vecGeometry )
+		for ( auto &vertex: vecGeometry )
 			_Drawing.DrawPolygon( vertex );
 
 		_Drawing.PushDrawingSpace( rectangle_t( recAbsolute.x, recAbsolute.y + STANDARD_HEIGHT / 2.f, recAbsolute.flWidth, recAbsolute.flHeight - STANDARD_HEIGHT / 2.f ) );
 
-		for ( auto& widget : vecWidgets )
+		for ( auto &widget: vecWidgets )
 			widget->PreDraw( );
 
 		_Drawing.PopDrawingSpace( );
@@ -978,7 +979,7 @@ namespace Interface
 		AddWidgetToRow( pDisplay, lblIconDormant.txtLabel->GetWidth( ), 0 );
 		AddWidgetToRow( &lblLabel, lblLabel.txtLabel->GetWidth( ), 0 );
 
-		for ( auto& color : vecColors )
+		for ( auto &color: vecColors )
 		{
 			color->iAlignment = RIGHT;
 			AddWidgetToRow( color, COLOR_BUTTON_WIDTH, 0 );
@@ -991,7 +992,7 @@ namespace Interface
 
 		_Drawing.PushDrawingSpace( recAbsolute );
 
-		for ( auto& widget : vecWidgets )
+		for ( auto &widget: vecWidgets )
 			widget->PreDraw( );
 
 		_Drawing.PopDrawingSpace( );
@@ -1000,9 +1001,9 @@ namespace Interface
 	CHeaderPanel::CHeaderPanel( ): iIconTexture( -1 ), locDragStart( location_t( ) )
 	{ }
 
-	CHeaderPanel::CHeaderPanel( const char* szTitle, const char* szSubtitle, callback_t _cbMinimize, callback_t _cbClose, const char* szMinimize, const char* szClose ) : IContainer( FLAG_CONTAINER_NONE, padding_t( ), BACKGROUND_DARK ), iIconTexture( ETextures::TEXTURE_LOGO ),
 		imgIcon( iIconTexture ), lblTitle( padding_t( ), new text_t( szTitle, EFont::ROBOTO_BOLD, TITLE_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_NORMAL, EFontFlags::NONE ), lblSubtitle( padding_t( ), new text_t( szSubtitle, EFont::ROBOTO, TITLE_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_DARK, EFontFlags::NONE ),
 		lblMinimize( padding_t( ), new text_t( szMinimize, EFont::FA, WINDOW_ICON_HEIGHT, text_t::CENTER, text_t::TOP ), BLUE, EFontFlags::ICON, _cbMinimize ), lblClose( padding_t( ), new text_t( szClose, EFont::FA, WINDOW_ICON_HEIGHT, text_t::CENTER, text_t::TOP ), BLUE, EFontFlags::ICON, _cbClose ), locDragStart( location_t( ) )
+	CHeaderPanel::CHeaderPanel( const char *szTitle, const char *szSubtitle, callback_t _cbMinimize, callback_t _cbClose, const char *szMinimize, const char *szClose ) : IContainer( FLAG_CONTAINER_NONE, padding_t( ), BACKGROUND_DARK ), iIconTexture( ETextures::TEXTURE_LOGO ),
 	{
 		lblTitle.InitializeDrawingInformation( );
 		lblSubtitle.InitializeDrawingInformation( );
@@ -1010,7 +1011,6 @@ namespace Interface
 		lblMinimize.InitializeDrawingInformation( );
 	}
 
-	CHeaderPanel::CHeaderPanel( const char* szTitle, const char* szSubtitle, const char* szClose ): IContainer( FLAG_CONTAINER_NONE, padding_t( ), BACKGROUND_DARK ), iIconTexture( -1 ),
 		lblTitle( padding_t( ), new text_t( szTitle, EFont::ROBOTO_BOLD, TITLE_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_NORMAL, EFontFlags::NONE ),
 		lblSubtitle( padding_t( ), new text_t( szSubtitle, EFont::ROBOTO, TITLE_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_DARK, EFontFlags::NONE ),
 		lblClose( padding_t( ), new text_t( szClose, EFont::FA, WINDOW_ICON_HEIGHT, text_t::CENTER, text_t::TOP ), BLUE, EFontFlags::ICON, [ & ]( )
@@ -1018,6 +1018,7 @@ namespace Interface
 		_WidgetContext.pActiveWidget = nullptr;
 		reinterpret_cast< CWindow* >( pParentContainer->pParentContainer )->ClosePopup( true );
 	} ), locDragStart( location_t( ) )
+	CHeaderPanel::CHeaderPanel( const char *szTitle, const char *szSubtitle, const char *szClose ): IContainer( FLAG_CONTAINER_NONE, padding_t( ), BACKGROUND_DARK ), iIconTexture( -1 ),
 	{
 		lblTitle.InitializeDrawingInformation( );
 		lblSubtitle.InitializeDrawingInformation( );
@@ -1073,12 +1074,12 @@ namespace Interface
 	{
 		const auto recLocation = GetAbsoluteLocation( );
 
-		for ( auto& vertex : vecGeometry )
+		for ( auto &vertex: vecGeometry )
 			_Drawing.DrawPolygon( vertex );
 
 		_Drawing.PushDrawingSpace( recLocation );
 
-		for ( auto& pWidget : vecWidgets )
+		for ( auto &pWidget: vecWidgets )
 			pWidget->PreDraw( );
 
 		_Drawing.PopDrawingSpace( );
@@ -1106,15 +1107,15 @@ namespace Interface
 		}
 	}
 
-	CWindow::CWindow( unsigned _wfFlags, rectangle_t _recLocation, const char* szTitle, const char* szSubtitle, callback_t _cbMinimize, callback_t _cbClose ): wfFlags( _wfFlags ), IContainer( FLAG_CONTAINER_NONE, padding_t( ), BACKGROUND_DARK, _recLocation ),
 		pHeader( new CHeaderPanel( szTitle, szSubtitle, _cbMinimize, _cbClose, ICON_FA_MINUS, ICON_FA_TIMES ) ), pPopup( nullptr )
+	CWindow::CWindow( unsigned _wfFlags, rectangle_t _recLocation, const char *szTitle, const char *szSubtitle, callback_t _cbMinimize, callback_t _cbClose ): wfFlags( _wfFlags ), IContainer( FLAG_CONTAINER_NONE, padding_t( ), BACKGROUND_DARK, _recLocation ),
 	{
 		AddRow( row_t( padding_t( ), 40.f ) );
 		AddWidgetToRow( pHeader, recLocation.flWidth, 0 );
 	}
 
-	CWindow::CWindow( unsigned _wfFlags, rectangle_t _recLocation, const char* szTitle, const char* szSubtitle ): wfFlags( _wfFlags ), IContainer( FLAG_CONTAINER_NONE, padding_t( ), BACKGROUND_DARK, _recLocation ),
 		pHeader( new CHeaderPanel( szTitle, szSubtitle, ICON_FA_TIMES ) ), pPopup( nullptr )
+	CWindow::CWindow( unsigned _wfFlags, rectangle_t _recLocation, const char *szTitle, const char *szSubtitle ): wfFlags( _wfFlags ), IContainer( FLAG_CONTAINER_NONE, padding_t( ), BACKGROUND_DARK, _recLocation ),
 	{
 		AddRow( row_t( padding_t( ), 40.f ) );
 		AddWidgetToRow( pHeader, recLocation.flWidth, 0 );
@@ -1149,7 +1150,7 @@ namespace Interface
 		_Drawing.PushDrawingSpace( recLocation );
 		_Drawing.DrawPolygon( vecGeometry[ 0 ] );
 
-		for ( auto& pWidget : vecWidgets )
+		for ( auto &pWidget: vecWidgets )
 			pWidget->PreDraw( );
 
 		_Drawing.PopDrawingSpace( );
@@ -1173,7 +1174,7 @@ namespace Interface
 		}
 	}
 
-	void CWindow::Popup( CWindow* _pPopup )
+	void CWindow::Popup( CWindow *_pPopup )
 	{
 		if ( pPopup != nullptr )
 			ClosePopup( !( pPopup->wfFlags & FLAG_WINDOW_NONBLOCK ) );
@@ -1202,7 +1203,7 @@ namespace Interface
 		auto flMaxWidth = 0.f;
 		recLocation.flHeight = 0.f;
 
-		for ( auto& row : vecRows )
+		for ( auto &row: vecRows )
 		{
 			auto flWidth = row.padBorder.Horizontal( );
 			recLocation.flHeight += row.padBorder.Vertical( ) + row.recLocation.flHeight;
@@ -1219,28 +1220,22 @@ namespace Interface
 		recLocation.flWidth = flMaxWidth;
 	}
 
-	CPathExplorer::CPathExplorer( const char* szSubject, const char* szExtension, callback_t cbOnFileSelected ): CWindow( POPUP_FLAGS, rectangle_t( 0.f, 0.f, 500.f, 500.f ), "Select File", szSubject ), strDesiredExtension( szExtension == nullptr ? std::string( ) : szExtension ),
-		cbOnPathSelected( cbOnFileSelected ), iMode( FOLDER )
+	CPathExplorer::CPathExplorer( const char *szSubject, const char *szExtension, callback_t cbOnFileSelected ): CWindow( POPUP_FLAGS, rectangle_t( 0.f, 0.f, 500.f, 500.f ), "Select File", szSubject ), strDesiredExtension( szExtension == nullptr ? std::string( ) : szExtension ),
+																												 cbOnPathSelected( cbOnFileSelected ), iMode( FOLDER )
 	{ }
 
-	CPathExplorer::CPathExplorer( const char* szSubject, callback_t cbOnFolderSelected ) : CWindow( POPUP_FLAGS, rectangle_t( 0.f, 0.f, 500.f, 500.f ), "Select Folder", szSubject ), strDesiredExtension( { } ),
-		cbOnPathSelected( cbOnFolderSelected ), iMode( FOLDER )
+	CPathExplorer::CPathExplorer( const char *szSubject, callback_t cbOnFolderSelected ) : CWindow( POPUP_FLAGS, rectangle_t( 0.f, 0.f, 500.f, 500.f ), "Select Folder", szSubject ), strDesiredExtension( { } ),
+																						   cbOnPathSelected( cbOnFolderSelected ), iMode( FOLDER )
 	{ }
 
 	void CPathExplorer::InitializeDrawingInformation( )
-	{
-
-	}
+	{ }
 
 	void CPathExplorer::Draw( )
-	{
-
-	}
+	{ }
 
 	void CPathExplorer::Initialize( )
-	{
-
-	}
+	{ }
 
 	void CToolTip::InitializeDrawingInformation( )
 	{ }
@@ -1265,18 +1260,18 @@ namespace Interface
 
 		_Drawing.Polygon( vtxBackground, 7, 5 );
 
-		for ( auto& pWidget : vecWidgets )
+		for ( auto &pWidget: vecWidgets )
 			pWidget->PreDraw( );
 
 		_Drawing.PopDrawingSpace( );
 
 		for ( auto i = 0; i < 6; i++ )
 			_Drawing.Line( location_t( vtxBackground[ i ].flVectors[ 0 ], vtxBackground[ i ].flVectors[ 1 ] ), location_t( vtxBackground[ i + 1 ].flVectors[ 0 ], vtxBackground[ i + 1 ].flVectors[ 1 ] ), 1.f, OUTLINE_LIGHT );
-		
+
 		_Drawing.Line( location_t( vtxBackground[ 0 ].flVectors[ 0 ], vtxBackground[ 0 ].flVectors[ 1 ] ), location_t( vtxBackground[ 6 ].flVectors[ 0 ], vtxBackground[ 6 ].flVectors[ 1 ] ), 1.f, OUTLINE_LIGHT );
 	}
 
-	CToolTip::CToolTip( text_t* txtToolTip ): CWindow( TOOLTIP_FLAGS, rectangle_t( ) ), vecText( { } ), flWidgetRatio( 0.f )
+	CToolTip::CToolTip( text_t *txtToolTip ): CWindow( TOOLTIP_FLAGS, rectangle_t( ) ), vecText( { } ), flWidgetRatio( 0.f )
 	{
 		std::size_t sPosition { };
 		auto flWidth = 0.f, flHeight = 0.f;
@@ -1348,13 +1343,13 @@ namespace Interface
 				sStart--;
 			}
 
-		auto& row = vecRows[ iRow ];
+		auto &row = vecRows[ iRow ];
 		row.flLeftFill = row.flRightFill = 0.f;
 	}
 
-	void IContainer::AddWidgetToRow( IWidget* pWidget, float flWidth, int iRow )
+	void IContainer::AddWidgetToRow( IWidget *pWidget, float flWidth, int iRow )
 	{
-		auto& rowCurrent = vecRows[ iRow ];
+		auto &rowCurrent = vecRows[ iRow ];
 		pWidget->pParentContainer = this;
 		pWidget->recLocation.flWidth = flWidth;
 
@@ -1378,7 +1373,7 @@ namespace Interface
 		vecWidgets.emplace_back( pWidget );
 	}
 
-	void IContainer::AddWidget( IWidget* pWidget, rectangle_t recRelative )
+	void IContainer::AddWidget( IWidget *pWidget, rectangle_t recRelative )
 	{
 		pWidget->pParentContainer = this;
 		pWidget->recLocation = recRelative;
@@ -1387,7 +1382,7 @@ namespace Interface
 		vecWidgets.emplace_back( pWidget );
 	}
 
-	void IContainer::RemoveWidget( IWidget* pWidget )
+	void IContainer::RemoveWidget( IWidget *pWidget )
 	{
 		for ( auto u = 0u; u < vecWidgets.size( ); u++ )
 			if ( vecWidgets[ u ] == pWidget )
@@ -1402,7 +1397,7 @@ namespace Interface
 		flUsedVerticalSpace += flAmount;
 	}
 
-	void IContainer::Popup( CWindow* _pPopup )
+	void IContainer::Popup( CWindow *_pPopup )
 	{
 		GetContainingWindow( )->Popup( _pPopup );
 	}
@@ -1410,24 +1405,24 @@ namespace Interface
 	CPanel::CPanel( padding_t padBorder, color_t clrPanel ): IContainer( FLAG_CONTAINER_NONE, padBorder, clrPanel )
 	{ }
 
-	bool UpdateActiveWidget( IWidget* pContainer, const location_t& locMouse )
+	bool UpdateActiveWidget( IWidget *pContainer, const location_t &locMouse )
 	{
-		constexpr auto fnSetWidget = [ & ]( IWidget* pNew )
+		constexpr auto fnSetWidget = [ & ]( IWidget *pNew )
 		{
 			if ( _WidgetContext.pHoveringWidget != nullptr && !_WidgetContext.pHoveringWidget->bPressing )
 				_WidgetContext.pHoveringWidget->ModifyActivity( IWidget::DORMANT );
 
 			_WidgetContext.pHoveringWidget = pNew;
 			if ( !_WidgetContext.pHoveringWidget->bPressing
-				 && ( !_WidgetContext.pActiveWidget || !_WidgetContext.pActiveWidget->bPressing )
-				 && _WidgetContext.pHoveringWidget->GetContainingWindow( ) == _WidgetContext.GetForegroundWindow( ) )
+				&& ( !_WidgetContext.pActiveWidget || !_WidgetContext.pActiveWidget->bPressing )
+				&& _WidgetContext.pHoveringWidget->GetContainingWindow( ) == _WidgetContext.GetForegroundWindow( ) )
 				_WidgetContext.pHoveringWidget->ModifyActivity( IWidget::HOVER );
 		};
 
 		if ( !pContainer->GetAbsoluteLocation( ).LocationInRectangle( locMouse ) )
 			return false;
 
-		for ( auto& widget : reinterpret_cast< IContainer* >( pContainer )->vecWidgets )
+		for ( auto &widget: reinterpret_cast< IContainer* >( pContainer )->vecWidgets )
 			if ( widget->GetAbsoluteLocation( ).LocationInRectangle( locMouse ) )
 			{
 				if ( widget->iType == IWidget::CONTAINER )
@@ -1504,7 +1499,7 @@ namespace Interface
 				_WidgetContext.pActiveWidget->Event( _Key, _KeyState );
 
 			return false;
-		});
+		} );
 
 		_Input.AddCallback( [ & ]( int x, int y )
 		{
@@ -1513,7 +1508,7 @@ namespace Interface
 
 			for ( auto u = 0u; u < _WidgetContext.vecWindows.size( ) && !bFound; u++ )
 			{
-				auto& window = _WidgetContext.vecWindows[ u ];
+				auto &window = _WidgetContext.vecWindows[ u ];
 
 				if ( window->pHeader )
 					window->pHeader->MoveParentWindow( x, y );
@@ -1522,7 +1517,7 @@ namespace Interface
 				while ( pPopup != nullptr )
 				{
 					if ( !( pPopup->wfFlags & CWindow::FLAG_WINDOW_ANCHOR )
-						 && pPopup->pHeader )
+						&& pPopup->pHeader )
 						pPopup->pHeader->MoveParentWindow( x, y );
 
 					pPopup = pPopup->pPopup;
@@ -1548,14 +1543,14 @@ namespace Interface
 				_WidgetContext.pActiveWidget->MouseMove( _WidgetContext.locMouse );
 
 			return false;
-		});
+		} );
 		_Input.AddCallback( [ & ]( key_t _Key )
 		{
 			if ( _WidgetContext.pActiveWidget )
 				_WidgetContext.pActiveWidget->KeyTyped( _Key );
 
 			return false;
-		});
+		} );
 
 		_Input.AddCallback( [ & ]( short sDelta, int iMouseX, int iMouseY )
 		{
@@ -1568,26 +1563,26 @@ namespace Interface
 			while ( pWidget != nullptr )
 			{
 				if ( pWidget->iType == IWidget::CONTAINER
-					 && pWidget->Scroll( sDelta ) )
+					&& pWidget->Scroll( sDelta ) )
 					break;
 
 				pWidget = pWidget->pParentContainer;
 			}
 
 			return false;
-		});
+		} );
 	}
 
 	void DrawWindows( )
 	{
 		for ( auto i = int( _WidgetContext.vecWindows.size( ) ) - 1; i >= 0; i-- )
 		{
-			auto& pWindow = _WidgetContext.vecWindows[ i ];
+			auto &pWindow = _WidgetContext.vecWindows[ i ];
 			pWindow->PreDraw( );
 		}
 
-		auto& pCurrent = _WidgetContext.vecWindows[ 0 ];
-		const auto& recCurrent = pCurrent->GetAbsoluteLocation( );
+		auto &pCurrent = _WidgetContext.vecWindows[ 0 ];
+		const auto &recCurrent = pCurrent->GetAbsoluteLocation( );
 		bool bRounding[ ] { false, false, pCurrent->wfFlags & CWindow::FLAG_WINDOW_ROUND_CORNERS, pCurrent->wfFlags & CWindow::FLAG_WINDOW_ROUND_CORNERS };
 
 		if ( pCurrent->wfFlags & CWindow::FLAG_WINDOW_OUTLINE_COVERED )
@@ -1603,7 +1598,7 @@ namespace Interface
 		_WidgetContext.DoToolTip( );
 	}
 
-	void AddWindow( CWindow* pWindow )
+	void AddWindow( CWindow *pWindow )
 	{
 		pWindow->Setup( );
 		_WidgetContext.vecWindows.emplace_front( pWindow );
