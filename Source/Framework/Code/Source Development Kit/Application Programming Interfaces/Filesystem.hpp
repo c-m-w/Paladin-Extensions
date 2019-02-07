@@ -24,6 +24,7 @@ private:
 
 public:
 
+	[ [ nodiscard ] ] static std::string GetAbsoluteEncryptedFilename( const std::string &strAbsolutePath );
 	/** \brief Checks whether or not a directory is present. */
 	/** \param strDirectory Complete directory. */
 	/** \return Whether or not the directory exists. */
@@ -74,6 +75,7 @@ public:
 	/** \return Current executable directory. */
 	[ [ nodiscard ] ] static std::string GetExecutableDirectory( );
 
+	[ [ nodiscard ] ] std::string GetEncryptedFilename( const std::string& strFile );
 	/** \brief Checks whether or not a directory exists. */
 	/** \param strDirectory Directory name, relative to current working directory. */
 	/** \return Whether or not the directory exists. */

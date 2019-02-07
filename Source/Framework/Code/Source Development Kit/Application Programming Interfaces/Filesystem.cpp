@@ -65,6 +65,11 @@ std::string CFilesystem::GetExecutableDirectory( )
 	return strBuffer.substr( 0, strBuffer.find_last_of( '\\' ) + 1 );
 }
 
+std::string CFilesystem::GetEncryptedFilename( const std::string &strFile )
+{
+	return GetAbsoluteEncryptedFilename( FileToPath( strFile ) );
+}
+
 bool CFilesystem::CheckDirectoryValidity( const std::string &strDirectory )
 {
 	return CheckAbsoluteDirectoryValidity( FileToPath( strDirectory ) );
@@ -97,6 +102,12 @@ CFilesystem::working_directory_t &CFilesystem::GetThreadDirectories( )
 	}
 
 	return pSearch->second;
+}
+
+std::string CFilesystem::GetAbsoluteEncryptedFilename( const std::string &strAbsolutePath )
+{
+	const auto strFile = CRYPTO.GenerateHash( PathToFile( strAbsolutePath ) );
+	return GetAbsoluteContainingDirectory( strAbsolutePath ) + strFile;
 }
 
 bool CFilesystem::CheckAbsoluteDirectoryValidity( const std::string &strDirectory )
@@ -276,6 +287,10 @@ bool CFilesystem::DeleteAbsolutePath( const std::string &strPath )
 
 	if ( DeleteFile( strFinal.c_str( ) ) == FALSE )
 	{
+		const auto strEncryptedFile = GetAbsoluteEncryptedFilename( strPath );
+		if ( CheckAbsoluteFileValidity( strEncryptedFile ) )
+			return DeleteAbsolutePath( strEncryptedFile );
+
 		_Log.Log( EPrefix::ERROR, ELocation::FILESYSTEM, XOR( "Unable to delete file %s." ), strFinal.c_str( ) );
 		return false;
 	}
@@ -288,18 +303,7 @@ bool CFilesystem::ReadAbsoluteFile( const std::string &strFilename, std::string 
 	std::string strFinalFilename { };
 
 	if ( bDecrypt )
-	{
-		if ( !CRYPTO.Encrypt( PathToFile( strFilename ), strFinalFilename, CRYPTO.strStaticEncryptionKey, CRYPTO.strStaticInitializationVector ) )
-		{
-			_Log.Log( EPrefix::WARNING, ELocation::FILESYSTEM, XOR( "Unable to encrypt filename to read file %s." ), strFilename.c_str( ) );
-			return false;
-		}
-
-		while ( strFinalFilename.find( '/' ) != std::string::npos )
-			strFinalFilename[ strFinalFilename.find( '/' ) ] = ' ';
-
-		strFinalFilename = GetAbsoluteContainingDirectory( strFilename ) + strFinalFilename;
-	}
+		strFinalFilename = GetAbsoluteEncryptedFilename( strFilename );
 	else
 		strFinalFilename = strFilename;
 
@@ -332,10 +336,12 @@ bool CFilesystem::ReadAbsoluteFile( const std::string &strFilename, std::string 
 
 	if ( bDecrypt )
 	{
-		const auto strBuffer = strOut;
+		std::string strBuffer;
 
-		if ( !CRYPTO.Decrypt( strBuffer, strOut, CRYPTO.strStaticEncryptionKey, CRYPTO.strStaticInitializationVector ) )
+		if ( !CRYPTO.Decrypt( strOut, strBuffer, CRYPTO.strStaticEncryptionKey, CRYPTO.strStaticInitializationVector ) )
 			_Log.Log( EPrefix::WARNING, ELocation::FILESYSTEM, XOR( "Unable to decrypt file %s." ), strFinalFilename.c_str( ) );
+
+		strOut = strBuffer;
 	}
 
 	return true;
@@ -350,19 +356,11 @@ bool CFilesystem::WriteAbsoluteFile( const std::string &strFilename, const std::
 
 	if ( bEncrypt )
 	{
-		if ( !CRYPTO.Encrypt( strData, strFinalData, CRYPTO.strStaticEncryptionKey, CRYPTO.strStaticInitializationVector ) // todo fix double encrypting
-			 || !CRYPTO.Encrypt( PathToFile( strFilename ), strFinalFilename, CRYPTO.strStaticEncryptionKey, CRYPTO.strStaticInitializationVector ) )
+		strFinalFilename = GetAbsoluteEncryptedFilename( strFilename );
+		if ( !CRYPTO.Encrypt( strData, strFinalData, CRYPTO.strStaticEncryptionKey, CRYPTO.strStaticInitializationVector ) )
 		{
 			_Log.Log( EPrefix::WARNING, ELocation::FILESYSTEM, XOR( "Unable to encrypt data to write to file %s. Writing unencrypted data." ), strFilename.c_str( ) );
 			strFinalData = strData;
-			strFinalFilename = strFilename;
-		}
-		else
-		{
-			while ( strFinalFilename.find( '/' ) != std::string::npos )
-				strFinalFilename[ strFinalFilename.find( '/' ) ] = ' ';
-
-			strFinalFilename = GetAbsoluteContainingDirectory( strFilename ) + strFinalFilename;
 		}
 	}
 	else
@@ -428,6 +426,10 @@ bool CFilesystem::SetAbsolutePathVisibility( const std::string &strPath, bool bV
 
 	if ( dwAttributes == INVALID_FILE_ATTRIBUTES )
 	{
+		const auto strEncryptedFile = GetAbsoluteEncryptedFilename( strPath );
+		if ( CheckAbsoluteFileValidity( strEncryptedFile ) )
+			return SetAbsolutePathVisibility( strEncryptedFile, bVisible );
+
 		_Log.Log( EPrefix::ERROR, ELocation::FILESYSTEM, XOR( "Unable to get attributes of path %s." ), strFinalPath.c_str( ) );
 		return false;
 	}
@@ -439,6 +441,10 @@ bool CFilesystem::SetAbsolutePathVisibility( const std::string &strPath, bool bV
 
 	if ( SetFileAttributes( strFinalPath.c_str( ), dwAttributes ) != TRUE )
 	{
+		const auto strEncryptedFile = GetAbsoluteEncryptedFilename( strPath );
+		if ( CheckAbsoluteFileValidity( strEncryptedFile ) )
+			return SetAbsolutePathVisibility( strEncryptedFile, bVisible );
+
 		_Log.Log( EPrefix::ERROR, ELocation::FILESYSTEM, XOR( "Unable to set attributes of file %s." ), strFinalPath.c_str( ) );
 		return false;
 	}
