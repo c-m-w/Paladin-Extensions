@@ -1,7 +1,7 @@
 1 /home/palavpvb/cache
 1 /home/palavpvb/public_ftp/incoming
 2 /home/palavpvb/public_ftp
-3 /home/palavpvb/.ftp-scan
+4 /home/palavpvb/.ftp-scan
 3 /home/palavpvb/.cagefs/tmp
 65 /home/palavpvb/.cagefs/opt
 24 /home/palavpvb/.cagefs/var
@@ -44,12 +44,12 @@
 158 /home/palavpvb/public_html/data
 6768 /home/palavpvb/public_html/src
 16194 /home/palavpvb/public_html
-68 /home/palavpvb/backups
-44 /home/palavpvb/PX/Resources
+69 /home/palavpvb/backups
+28 /home/palavpvb/PX/Resources
 1 /home/palavpvb/PX/Extensions
-7 /home/palavpvb/PX/PHP
+8 /home/palavpvb/PX/PHP
 1 /home/palavpvb/PX/Extension Data
-54 /home/palavpvb/PX
+39 /home/palavpvb/PX
 8 /home/palavpvb/etc/paladin-extensions.com
 11 /home/palavpvb/etc
 1 /home/palavpvb/.softaculous/tmp
@@ -82,5 +82,5 @@
 7 /home/palavpvb/.cphorde
 1 /home/palavpvb/.ssh
 5 /home/palavpvb/.cl.selector
-16795 /home/palavpvb
-Last modified: Mon Feb  4 05:33:43 EST 2019
+16782 /home/palavpvb
+Last modified: Tue Feb  5 05:33:27 EST 2019
