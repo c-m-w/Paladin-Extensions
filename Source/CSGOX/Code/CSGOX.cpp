@@ -6,7 +6,14 @@
 #include "../../Framework/Code/Framework.hpp"
 
 void OnAttach( )
-{ }
+{
+	if ( !SetupFramework( ) )
+		return;
+
+	ShutdownFramework( );
+}
 
 void OnDetach( )
-{ }
+{
+	
+}

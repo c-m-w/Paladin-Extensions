@@ -13,17 +13,16 @@ bool CLogging::Initialize( )
 	strDateFormat						= XOR( "%B %e, 20%g" );
 	strTimeFormat						= XOR( "%H:%M:%S" );
 	strLogFileFormat					= XOR( "%Y.%m.%d" );
-	strErrorMessage						= XOR( "Contact support if this issue persists." );
 	strStatusPrefixes[ INFO ]			= XOR( "[Info]\t" );
 	strStatusPrefixes[ DEBUG ]			= XOR( "[Debug]\t" );
 	strStatusPrefixes[ SUCCESS ]		= XOR( "[Success]" );
 	strStatusPrefixes[ WARNING ]		= XOR( "[Warning]" );
 	strStatusPrefixes[ ERROR ]			= XOR( "[Error]\t" );
 	strLocations[ FILESYSTEM ]			= XOR( "[Filesystem]\t" );
-	strLocations[ CRYPTOGRAPHY ]		= XOR( "[Cryptography]" );
-	strLocations[ CONNECTIVITY ]		= XOR( "[Connectivity]" );
+	strLocations[ CRYPTOGRAPHY ]		= XOR( "[Cryptography]\t" );
+	strLocations[ CONNECTIVITY ]		= XOR( "[Connectivity]\t" );
 	strLocations[ RESOURCE_MANAGER ]	= XOR( "[Resources]\t" );
-	strLocations[ WINDOW ]				= XOR( "[Window]\t" );
+	strLocations[ WINDOW ]				= XOR( "[Window]\t\t" );
 	strLocations[ DRAWING ]				= XOR( "[Drawing]\t" );
 
 #if defined _DEBUG
@@ -31,10 +30,7 @@ bool CLogging::Initialize( )
 		if ( strLocation.empty( ) )
 			throw std::runtime_error( XOR( "Ensure that all location strings are initialized." ) );
 #endif
-
-	for ( auto i = 0; i < ERROR_MAX; i++ )
-		strUnloggableErrorTitles[ i ] = '[' + std::to_string( i ) + ']';
-
+	
 	BeginLog( );
 	return true;
 }
@@ -89,35 +85,26 @@ std::string CLogging::GetLogInitializationVector( )
 
 void CLogging::ErrorPopup( EUnloggableError _ErrorCode )
 {
-	MessageBox( nullptr, strErrorMessage.c_str( ), strUnloggableErrorTitles[ _ErrorCode ].c_str( ), MB_OK );
+	MessageBox( nullptr, XOR( "Contact support if this issue persists." ), std::to_string( int( _ErrorCode ) ).c_str( ), MB_OK );
 }
 
 void CLogging::WriteToFile( )
 {
 	mmtLastLogWrite = GetMoment( );
+	_Filesystem.StoreCurrentWorkingDirectory( );
 	_Filesystem.ChangeWorkingDirectory( _Filesystem.GetAppdataDirectory( ), { _Filesystem.strLogDirectory } );
 
 #if defined _DEBUG
-	if ( !_Filesystem.AddToFile( GetCurrentLogFile( ), strBuffer ) )
-		if ( !_Filesystem.WriteFile( GetCurrentLogFile( ), strBuffer ) )
+	if ( !_Filesystem.AddToFile( GetCurrentLogFile( ), strBuffer, false ) )
+		if ( !_Filesystem.WriteFile( GetCurrentLogFile( ), strBuffer, false ) )
 			return ErrorPopup( ERROR_CANNOT_WRITE_LOG );
 #else
-	std::string strDataToWrite { };
-	std::string strEncryptedData { };
-	std::string strFinalData { };
-
-	if ( _Filesystem.ReadFile( GetCurrentLogFile( ), strEncryptedData ) )
-		if ( !CRYPTO.Decrypt( strEncryptedData, strDataToWrite, GetLogEncryptionKey( ), GetLogInitializationVector( ) ) )
+	if ( !_Filesystem.AddToFile( GetCurrentLogFile( ), strBuffer, true ) )
+		if ( !_Filesystem.WriteFile( GetCurrentLogFile( ), strBuffer, true ) )
 			return ErrorPopup( ERROR_CANNOT_WRITE_LOG );
-
-	strDataToWrite += strBuffer;
-
-	if ( !CRYPTO.Encrypt( strDataToWrite, strFinalData, GetLogEncryptionKey( ), GetLogInitializationVector( ) )
-		 || !_Filesystem.WriteFile( GetCurrentLogFile( ), strFinalData ) )
-		return ErrorPopup( ERROR_CANNOT_WRITE_LOG );
-			
 #endif
 
+	_Filesystem.RestoreWorkingDirectory( );
 	strBuffer.clear( );
 }
 

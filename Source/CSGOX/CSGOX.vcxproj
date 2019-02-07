@@ -170,6 +170,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Framework\Precompile.hpp" />
+    <ClInclude Include="Code\Source Development Kit\Application Programming Interface\Interfaces\header.h" />
+    <ClInclude Include="Code\Source Development Kit\Application Programming Interface\Types\eader.h" />
+    <ClInclude Include="Code\Source Development Kit\Toolkits\header.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Framework\Framework.vcxproj">

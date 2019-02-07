@@ -26,5 +26,14 @@
     <ClInclude Include="..\Framework\Precompile.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Code\Source Development Kit\Toolkits\header.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Source Development Kit\Application Programming Interface\Types\eader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Source Development Kit\Application Programming Interface\Interfaces\header.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

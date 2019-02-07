@@ -4,6 +4,7 @@
 
 #define ACKNOWLEDGED_ENTRY_WARNING_1
 #define USE_NAMESPACES
+#define USE_DEFINITIONS
 #include "../../Framework.hpp"
 
 #define ENSURE_DATA_SET( _PostData )																								\
@@ -154,9 +155,9 @@ bool CConnectivity::Request( EAction _Action, std::string &strOut )
 	AddPostData( ACTION, std::to_string( int( _Action ) ) );
 	_Filesystem.StoreCurrentWorkingDirectory( );
 	_Filesystem.ChangeWorkingDirectory( CFilesystem::GetAppdataDirectory( ) );
+	_Filesystem.DecryptFile( CFilesystem::strCookieFile );
 
 	const auto strCookieFile = _Filesystem.FileToPath( _Filesystem.strCookieFile );
-	_Filesystem.RestoreWorkingDirectory( );
 	std::string strErrorBuffer;
 
 	strErrorBuffer.resize( CURL_ERROR_SIZE );
@@ -182,11 +183,15 @@ bool CConnectivity::Request( EAction _Action, std::string &strOut )
 			_Log.Log( EPrefix::ERROR, ELocation::CONNECTIVITY, XOR( "Setting cURL parameters failed, message: " ) + strErrorBuffer );
 
 		ResetConnection( );
+		_Filesystem.EncryptFile( CFilesystem::strCookieFile );
+		_Filesystem.RestoreWorkingDirectory( );
 		return false;
 	}
 
 	const auto bReturn = TryConnection( strOut, bSetErrorBuffer ? &strErrorBuffer : nullptr );
 	ResetConnection( );
+	_Filesystem.EncryptFile( CFilesystem::strCookieFile );
+	_Filesystem.RestoreWorkingDirectory( );
 	return bReturn;
 }
 

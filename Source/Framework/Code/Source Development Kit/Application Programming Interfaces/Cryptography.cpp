@@ -36,6 +36,12 @@ bool CCryptography::Initialize( )
 void CCryptography::Uninitialize( )
 { }
 
+CCryptography::CCryptography( ): mmtLastGenerationTime( 0ui64 )
+{
+	strStaticEncryptionKey = XOR( "ExgrEV9yIlF3xgocqy53ipLAwFHuDznk" );
+	strStaticInitializationVector = XOR( "4ZNqNqIaJqZqPJS1" );
+}
+
 std::string CCryptography::GenerateHash( const std::string &strBytes )
 {
 	unsigned char bOutput[ CryptoPP::SHA1::DIGESTSIZE ];
@@ -50,12 +56,44 @@ std::string CCryptography::GenerateHash( const std::string &strBytes )
 	return strOutput;
 }
 
+bool CCryptography::Encode( const std::string &strSubject, std::string &strOut )
+{
+	if ( strSubject.empty( ) )
+		return false;
+
+	auto _Encoder = CryptoPP::Base64Encoder( nullptr, false );
+	_Encoder.Put( reinterpret_cast< unsigned char* >( const_cast< char* >( strSubject.c_str( ) ) ), strSubject.size( ) );
+	_Encoder.MessageEnd( );
+
+	strOut.clear( );
+	const auto uSize = unsigned( _Encoder.MaxRetrievable( ) );
+	strOut.resize( uSize );
+	_Encoder.Get( reinterpret_cast< unsigned char* >( &strOut[ 0 ] ), uSize );
+	return !strOut.empty( );
+}
+
+bool CCryptography::Decode( const std::string &strEncoded, std::string &strOut )
+{
+	if ( strEncoded.empty( ) )
+		return false;
+
+	auto _Decoder = CryptoPP::Base64Decoder( );
+	_Decoder.Put( reinterpret_cast< unsigned char* >( const_cast< char* >( strEncoded.c_str( ) ) ), strEncoded.size( ) );
+	_Decoder.MessageEnd( );
+
+	strOut.clear( );
+	const auto uSize = unsigned( _Decoder.MaxRetrievable( ) );
+	strOut.resize( uSize );
+	_Decoder.Get( reinterpret_cast< unsigned char* >( &strOut[ 0 ] ), uSize );
+	return !strOut.empty( );
+}
+
 bool CCryptography::Encrypt( const std::string &strPlainText, std::string &strCipher, std::string strKey /*= std::string( )*/, std::string strInitVector /*= std::string( )*/ )
 {
 	CRYPTION_INIT
 
 	std::string strUnEncoded { };
-	return Crypt< encrypt_t >( strPlainText, strUnEncoded, strKey, strInitVector ) && Base64< encode_t >( strUnEncoded, strCipher );
+	return Crypt< encrypt_t >( strPlainText, strUnEncoded, strKey, strInitVector ) && Encode( strUnEncoded, strCipher );
 }
 
 bool CCryptography::Decrypt( const std::string &strCipher, std::string &strPlainText, std::string strKey /*= std::string( )*/, std::string strInitVector /*= std::string( )*/ )
@@ -63,5 +101,5 @@ bool CCryptography::Decrypt( const std::string &strCipher, std::string &strPlain
 	CRYPTION_INIT
 
 	std::string strDecoded { };
-	return Base64< decode_t >( strCipher, strDecoded ) && Crypt< decrypt_t >( strDecoded, strPlainText, strKey, strInitVector );
+	return Decode( strCipher, strDecoded ) && Crypt< decrypt_t >( strDecoded, strPlainText, strKey, strInitVector );
 }

@@ -33,33 +33,37 @@ public:
 	/** \return Whether or not the file exists. */
 	[ [ nodiscard ] ] static bool CheckAbsoluteFileValidity( const std::string &strFile );
 	[ [ nodiscard ] ] static std::string GetAbsoluteContainingDirectory( const std::string &strFile );
+	[ [ nodiscard ] ] static std::string PathToFile( const std::string& strPath );
 	static void CloseAllFileHandles( );
 	[ [ nodiscard ] ] static bool EnsureAbsoluteFileDirectoryExists( const std::string &strFilePath );
+	[ [ nodiscard ] ] static bool EnsureAbsoluteDirectoryExists( const std::string& strDirectory );
 	[ [ nodiscard ] ] static bool GetAbsolutePathVisibility( const std::string &strPath );
-	[ [ nodiscard ] ] static bool GetAbsoluteDirectoryContents( const std::string &strDirectory, bool bFiles, bool bFolders, std::vector< std::string > &vecOut );
-	[ [ nodiscard ] ] static bool GetFoldersInAbsoluteDirectory( const std::string &strDirectory, std::vector< std::string > &vecOut );
-	[ [ nodiscard ] ] static bool GetFilesInAbsoluteDirectory( const std::string &strDirectory, std::vector< std::string > &vecOut, const std::string &strExtension = std::string( ) );
-	[ [ nodiscard ] ] static bool DeleteAbsolutePath( const std::string &strPath );
+	static bool GetAbsoluteDirectoryContents( const std::string &strDirectory, bool bFiles, bool bFolders, std::vector< std::string > &vecOut );
+	static bool GetFoldersInAbsoluteDirectory( const std::string &strDirectory, std::vector< std::string > &vecOut );
+	static bool GetFilesInAbsoluteDirectory( const std::string &strDirectory, std::vector< std::string > &vecOut, const std::string &strExtension = std::string( ) );
+	static bool DeleteAbsolutePath( const std::string &strPath );
 	/** \brief Reads data from a file. */
 	/** \param strFilename Full path of the file to be read. */
 	/** \param strOut Output for the data of the file to be stored. */
-	/** \param bDecode Whether or not to Base64 decode the file data. */
+	/** \param bDecrypt Whether or not to Base64 decode the file data. */
 	/** \return Whether or not file reading was successful. */
-	[ [ nodiscard ] ] static bool ReadAbsoluteFile( const std::string &strFilename, std::string &strOut, bool bDecode = true );
+	static bool ReadAbsoluteFile( const std::string &strFilename, std::string &strOut, bool bDecrypt );
 	/** \brief Writes data to a file. */
 	/** \param strFilename Full path of the file to be written to. */
 	/** \param strData Data to be written to the file. */
-	/** \param bEncode Whether or not the Base64 encode the file data. */
+	/** \param bEncrypt Whether or not the Base64 encode the file data. */
 	/** \return Whether or not writing to the file was successful. */
-	static bool WriteAbsoluteFile( const std::string &strFilename, const std::string &strData, bool bEncode = true );
+	static bool WriteAbsoluteFile( const std::string &strFilename, const std::string &strData, bool bEncrypt );
 	/** \brief Adds data to the end of a file. */
 	/** \param strFilename Full path of the file to be written to. */
 	/** \param strData Data to be added to the end of the file. */
-	/** \param bEncode Whether or not the file should be Base64 decoded to be read and\n
+	/** \param bEncrypt Whether or not the file should be Base64 decoded to be read and\n
 				encoded when written. */
 	/** \return Whether or not reading and writing to the file was successful. */
-	[ [ nodiscard ] ] static bool AddToAbsoluteFile( const std::string &strFilename, const std::string &strData, bool bEncode = true );
-	[ [ nodiscard ] ] static bool SetAbsolutePathVisibility( const std::string &strPath, bool bVisible );
+	static bool AddToAbsoluteFile( const std::string &strFilename, const std::string &strData, bool bEncrypt );
+	static bool EncryptAbsoluteFile( const std::string& strFilename );
+	static bool DecryptAbsoluteFile( const std::string& strFilename );
+	static bool SetAbsolutePathVisibility( const std::string &strPath, bool bVisible );
 	/** \brief Ensures that a directory has proper slashes to be concatenated. */
 	/** \param strDirectory Directory string to be formatted. */
 	static void FormatDirectory( std::string &strDirectory );
@@ -98,27 +102,32 @@ public:
 	/** \brief Reads a file's data into a buffer. */
 	/** \param strFilename Name of the file, relative to the current working directory. */
 	/** \param strOut Output for the file contents/ */
-	/** \param bDecode Whether or not to Base64 decode the file's contents. */
+	/** \param bDecrypt Whether or not to Base64 decode the file's contents. */
 	/** \return Whether or not reading the file was successful. */
-	[ [ nodiscard ] ] bool ReadFile( const std::string &strFilename, std::string &strOut, bool bDecode = true );
+	[ [ nodiscard ] ] bool ReadFile( const std::string &strFilename, std::string &strOut, bool bDecrypt );
 	/** \brief Writes data to a file. */
 	/** \param strFilename Name of the file to be written to, relative to the current working directory. */
 	/** \param strData Data to be written to the file. */
-	/** \param bEncode Whether or not to Base64 encode the data written to the file. */
+	/** \param bEncrypt Whether or not to Base64 encode the data written to the file. */
 	/** \return Whether or not writing to the file was successful. */
-	bool WriteFile( const std::string &strFilename, const std::string &strData, bool bEncode = true );
+	bool WriteFile( const std::string &strFilename, const std::string &strData, bool bEncrypt );
 	/** \brief Adds data to the end of a file. */
 	/** \param strFilename Name of the file, relative to the current working directory. */
 	/** \param strData Data to be added to the end of the file. */
 	/** \param bEncode Whether or not to Base64 decode the file when read, and Base64 encode the contents\n
 						when written back to the file. */
 	/** \return Whether or not reading and writing to the specified file was successful. */
-	bool AddToFile( const std::string &strFilename, const std::string &strData, bool bEncode = true );
-	[ [ nodiscard ] ] bool GetDirectoryContents( const std::string &strDirectory, bool bFiles, bool bFolders, std::vector< std::string > &vecOut );
-	[ [ nodiscard ] ] bool GetFoldersInDirectory( const std::string &strDirectory, std::vector< std::string > &vecOut );
-	[ [ nodiscard ] ] bool GetFilesInDirectory( const std::string &strDirectory, std::vector< std::string > &vecOut, const std::string &strExtension = std::string( ) );
-	[ [ nodiscard ] ] bool DeleteCurrentDirectory( );
-	[ [ nodiscard ] ] bool SetPathVisibility( const std::string &strPath, bool bVisible );
+	bool AddToFile( const std::string &strFilename, const std::string &strData, bool bEncode );
+	bool EncryptFile( const std::string& strFilename );
+	bool DecryptFile( const std::string& strFilename );
+	[ [ nodiscard ] ] bool EnsureFileDirectoryExists( const std::string& strFile );
+	[ [ nodiscard ] ] bool EnsureDirectoryExists( const std::string& strDirectory );
+	bool GetDirectoryContents( const std::string &strDirectory, bool bFiles, bool bFolders, std::vector< std::string > &vecOut );
+	bool GetFoldersInDirectory( const std::string &strDirectory, std::vector< std::string > &vecOut );
+	bool GetFilesInDirectory( const std::string &strDirectory, std::vector< std::string > &vecOut, const std::string &strExtension = std::string( ) );
+	bool DeleteCurrentDirectory( );
+	bool DeletePath( const std::string& strRelativePath );
+	bool SetPathVisibility( const std::string &strPath, bool bVisible );
 
 	/** \brief Path of the Paladin data folder from \appdata\roaming\ */
 	static inline std::string strRelativeAppdataDirectory;

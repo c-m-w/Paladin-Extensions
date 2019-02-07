@@ -34,7 +34,7 @@ bool CResourceManager::Initialize( )
 		{
 			const auto strFile = _File[ XOR( "Path" ) ].get< std::string >( );
 			std::string strFileData { };
-			if ( !_Filesystem.ReadFile( strFile, strFileData, false ) )
+			if ( !_Filesystem.ReadFile( strFile, strFileData, true ) )
 			{
 				bValid = false;
 				break;
@@ -85,13 +85,13 @@ bool CResourceManager::Initialize( )
 					return false;
 				}
 
-				if ( !_Cryptography.Base64< decode_t >( strData, strRawData ) )
+				if ( !_Cryptography.Decode( strData, strRawData ) )
 				{
 					_Log.Log( EPrefix::ERROR, ELocation::RESOURCE_MANAGER, XOR( "Unable to un-base64 file %s from json." ), strFile.c_str( ) );
 					return false;
 				}
 
-				if ( !_Filesystem.WriteFile( strFile, strRawData, false ) )
+				if ( !_Filesystem.WriteFile( strFile, strRawData, true ) )
 					return false;
 			}
 		}

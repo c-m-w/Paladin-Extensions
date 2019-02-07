@@ -32,6 +32,8 @@
 #pragma comment( lib, "wbemuuid.lib" )
 
 #undef ERROR
+#undef EncryptFile
+#undef DecryptFile
 
 // D3D
 #include <d3d9.h>

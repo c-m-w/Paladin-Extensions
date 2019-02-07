@@ -88,15 +88,10 @@ private:
 	std::string strTimeFormat;
 	/** \brief Format for the log file name. */
 	std::string strLogFileFormat;
-	/** \brief Error message for the message box when ErrorPopup( ) is called. */
-	std::string strErrorMessage;
 	/** \brief The timestamp of the last time that the buffer was written to file. */
 	Utilities::moment_t mmtLastLogWrite;
 	/** \brief Buffer to store the events in queue to be written to file. */
 	std::string strBuffer;
-	/** \brief Error messages for errors that are unable to be written to the log file.\n
-				They will appear in the title of error message boxes. */
-	std::string strUnloggableErrorTitles[ ERROR_MAX ] { };
 	/** \brief Prefix text for each of the statuses. */
 	std::string strStatusPrefixes[ PREFIX_MAX ] { };
 	/** \brief Locations where events can be logged which correspond with their enumerations in ELocation. */

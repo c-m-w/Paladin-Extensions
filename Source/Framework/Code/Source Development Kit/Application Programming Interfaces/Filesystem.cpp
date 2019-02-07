@@ -4,11 +4,12 @@
 
 #define ACKNOWLEDGED_ENTRY_WARNING_1
 #define USE_NAMESPACES
+#define USE_DEFINITIONS
 #include "../../Framework.hpp"
 
 bool CFilesystem::Initialize( )
 {
-	strRelativeAppdataDirectory = XOR( "PX\\" );
+	strRelativeAppdataDirectory = XOR( "PX_\\" );
 	strRelativeResourceDirectory = XOR( "Resources\\" );
 	strLogDirectory = XOR( "Logs\\" );
 	strCookieFile = XOR( ".cookie" );
@@ -16,6 +17,9 @@ bool CFilesystem::Initialize( )
 	strLicenseFile = XOR( ".license" );
 	ChangeWorkingDirectory( GetAppdataDirectory( ) );
 	EscapeWorkingDirectory( );
+	if ( !EnsureDirectoryExists( strRelativeAppdataDirectory ) )
+		return false;
+
 	return SetPathVisibility( strRelativeAppdataDirectory, false );
 }
 
@@ -127,6 +131,11 @@ std::string CFilesystem::GetAbsoluteContainingDirectory( const std::string &strF
 	return strReturn;
 }
 
+std::string CFilesystem::PathToFile( const std::string &strPath )
+{
+	return strPath.substr( strPath.find_last_of( '\\' ) + 1 );
+}
+
 void CFilesystem::CloseAllFileHandles( )
 {
 	const auto iResult = _fcloseall( );
@@ -165,6 +174,11 @@ bool CFilesystem::EnsureAbsoluteFileDirectoryExists( const std::string &strFileP
 	}
 
 	return true;
+}
+
+bool CFilesystem::EnsureAbsoluteDirectoryExists( const std::string &strDirectory )
+{
+	return EnsureAbsoluteFileDirectoryExists( strDirectory + '.' ); // dummy file
 }
 
 bool CFilesystem::GetAbsolutePathVisibility( const std::string &strPath )
@@ -228,6 +242,10 @@ bool CFilesystem::GetFilesInAbsoluteDirectory( const std::string &strDirectory, 
 
 bool CFilesystem::DeleteAbsolutePath( const std::string &strPath )
 {
+	if ( !CheckAbsoluteDirectoryValidity( strPath )
+		 && !CheckAbsoluteFileValidity( strPath ) )
+		return true;
+
 	auto strFinal = strPath;
 
 	CloseAllFileHandles( );
@@ -265,22 +283,40 @@ bool CFilesystem::DeleteAbsolutePath( const std::string &strPath )
 	return true;
 }
 
-bool CFilesystem::ReadAbsoluteFile( const std::string &strFilename, std::string &strOut, bool bDecode /*= true*/ )
+bool CFilesystem::ReadAbsoluteFile( const std::string &strFilename, std::string &strOut, bool bDecrypt /*= true*/ )
 {
-	if ( !CheckAbsoluteFileValidity( strFilename ) )
+	std::string strFinalFilename { };
+
+	if ( bDecrypt )
 	{
-		_Log.Log( EPrefix::ERROR, ELocation::FILESYSTEM, XOR( "Reading attempted on non-existent file %s." ), strFilename.c_str( ) );
+		if ( !CRYPTO.Encrypt( PathToFile( strFilename ), strFinalFilename, CRYPTO.strStaticEncryptionKey, CRYPTO.strStaticInitializationVector ) )
+		{
+			_Log.Log( EPrefix::WARNING, ELocation::FILESYSTEM, XOR( "Unable to encrypt filename to read file %s." ), strFilename.c_str( ) );
+			return false;
+		}
+
+		while ( strFinalFilename.find( '/' ) != std::string::npos )
+			strFinalFilename[ strFinalFilename.find( '/' ) ] = ' ';
+
+		strFinalFilename = GetAbsoluteContainingDirectory( strFilename ) + strFinalFilename;
+	}
+	else
+		strFinalFilename = strFilename;
+
+	if ( !CheckAbsoluteFileValidity( strFinalFilename ) )
+	{
+		_Log.Log( EPrefix::ERROR, ELocation::FILESYSTEM, XOR( "Reading attempted on non-existent file %s." ), strFinalFilename.c_str( ) );
 		return false;
 	}
 
 	CloseAllFileHandles( );
 
 	FILE *pFile = nullptr;
-	if ( fopen_s( &pFile, strFilename.c_str( ), XOR( "rb" ) ) != 0
+	if ( fopen_s( &pFile, strFinalFilename.c_str( ), XOR( "rb" ) ) != 0
 		|| pFile == nullptr
 		|| pFile == INVALID_HANDLE_VALUE )
 	{
-		_Log.Log( EPrefix::ERROR, ELocation::FILESYSTEM, XOR( "Unable to open file %s for reading." ), strFilename.c_str( ) );
+		_Log.Log( EPrefix::ERROR, ELocation::FILESYSTEM, XOR( "Unable to open file %s for reading." ), strFinalFilename.c_str( ) );
 		return false;
 	}
 
@@ -289,50 +325,99 @@ bool CFilesystem::ReadAbsoluteFile( const std::string &strFilename, std::string 
 	strOut.resize( zSize );
 	rewind( pFile );
 	if ( zSize != fread( &strOut[ 0 ], sizeof( char ), zSize, pFile ) )
-		_Log.Log( EPrefix::WARNING, ELocation::FILESYSTEM, XOR( "Unable to read foretold size of %i in file %s." ), zSize, strFilename.c_str( ) );
+		_Log.Log( EPrefix::WARNING, ELocation::FILESYSTEM, XOR( "Unable to read foretold size of %i in file %s." ), zSize, strFinalFilename.c_str( ) );
 
 	if ( fclose( pFile ) == EOF )
-		_Log.Log( EPrefix::WARNING, ELocation::FILESYSTEM, XOR( "Unable to close file %s successfully." ), strFilename.c_str( ) );
+		_Log.Log( EPrefix::WARNING, ELocation::FILESYSTEM, XOR( "Unable to close file %s successfully." ), strFinalFilename.c_str( ) );
+
+	if ( bDecrypt )
+	{
+		const auto strBuffer = strOut;
+
+		if ( !CRYPTO.Decrypt( strBuffer, strOut, CRYPTO.strStaticEncryptionKey, CRYPTO.strStaticInitializationVector ) )
+			_Log.Log( EPrefix::WARNING, ELocation::FILESYSTEM, XOR( "Unable to decrypt file %s." ), strFinalFilename.c_str( ) );
+	}
 
 	return true;
 }
 
-bool CFilesystem::WriteAbsoluteFile( const std::string &strFilename, const std::string &strData, bool bEncode /*= true*/ )
+bool CFilesystem::WriteAbsoluteFile( const std::string &strFilename, const std::string &strData, bool bEncrypt /*= true*/ )
 {
 	CloseAllFileHandles( );
+
+	std::string strFinalData { };
+	std::string strFinalFilename { };
+
+	if ( bEncrypt )
+	{
+		if ( !CRYPTO.Encrypt( strData, strFinalData, CRYPTO.strStaticEncryptionKey, CRYPTO.strStaticInitializationVector ) // todo fix double encrypting
+			 || !CRYPTO.Encrypt( PathToFile( strFilename ), strFinalFilename, CRYPTO.strStaticEncryptionKey, CRYPTO.strStaticInitializationVector ) )
+		{
+			_Log.Log( EPrefix::WARNING, ELocation::FILESYSTEM, XOR( "Unable to encrypt data to write to file %s. Writing unencrypted data." ), strFilename.c_str( ) );
+			strFinalData = strData;
+			strFinalFilename = strFilename;
+		}
+		else
+		{
+			while ( strFinalFilename.find( '/' ) != std::string::npos )
+				strFinalFilename[ strFinalFilename.find( '/' ) ] = ' ';
+
+			strFinalFilename = GetAbsoluteContainingDirectory( strFilename ) + strFinalFilename;
+		}
+	}
+	else
+	{
+		strFinalData = strData;
+		strFinalFilename = strFilename;
+	}
+
 	auto bHidden = false;
-	if ( CheckAbsoluteFileValidity( strFilename.c_str( ) ) )
-		if ( bHidden = !GetAbsolutePathVisibility( strFilename ) )
-			if ( !SetAbsolutePathVisibility( strFilename, true ) )
+	if ( CheckAbsoluteFileValidity( strFinalFilename.c_str( ) ) )
+		if ( ( bHidden = !GetAbsolutePathVisibility( strFinalFilename ) ) )
+			if ( !SetAbsolutePathVisibility( strFinalFilename, true ) )
 				return false;
 
 	FILE *pFile = nullptr;
-	if ( EnsureAbsoluteFileDirectoryExists( strFilename )
-		&& fopen_s( &pFile, strFilename.c_str( ), XOR( "w+b" ) ) != 0
+	if ( EnsureAbsoluteFileDirectoryExists( strFinalFilename )
+		&& fopen_s( &pFile, strFinalFilename.c_str( ), XOR( "w+b" ) ) != 0
 		|| pFile == nullptr
 		|| pFile == INVALID_HANDLE_VALUE )
 	{
-		_Log.Log( EPrefix::WARNING, ELocation::FILESYSTEM, XOR( "Error opening file %s. Error code %i." ), strFilename.c_str( ), errno );
+		_Log.Log( EPrefix::WARNING, ELocation::FILESYSTEM, XOR( "Error opening file %s. Error code %i." ), strFinalFilename.c_str( ), errno );
 		return false;
 	}
 
-	if ( fwrite( &strData[ 0 ], sizeof( char ), strData.length( ), pFile ) != strData.length( ) )
-		_Log.Log( EPrefix::WARNING, ELocation::FILESYSTEM, XOR( "Failed to write all of data into file %s." ), strFilename.c_str( ) );
+	if ( fwrite( &strFinalData[ 0 ], sizeof( char ), strFinalData.length( ), pFile ) != strFinalData.length( ) )
+		_Log.Log( EPrefix::WARNING, ELocation::FILESYSTEM, XOR( "Failed to write all of data into file %s." ), strFinalFilename.c_str( ) );
 
 	if ( fclose( pFile ) == EOF )
-		_Log.Log( EPrefix::WARNING, ELocation::FILESYSTEM, XOR( "Failed to close file %s successfully." ), strFilename.c_str( ) );
+		_Log.Log( EPrefix::WARNING, ELocation::FILESYSTEM, XOR( "Failed to close file %s successfully." ), strFinalFilename.c_str( ) );
 
-	return bHidden ? SetAbsolutePathVisibility( strFilename, false ) : true;
+	return bHidden ? SetAbsolutePathVisibility( strFinalFilename, false ) : true;
 }
 
-bool CFilesystem::AddToAbsoluteFile( const std::string &strFilename, const std::string &strData, bool bEncode /*= true*/ )
+bool CFilesystem::AddToAbsoluteFile( const std::string &strFilename, const std::string &strData, bool bEncrypt )
 {
 	std::string strBuffer { };
-	if ( !ReadAbsoluteFile( strFilename, strBuffer, bEncode ) )
+	if ( !ReadAbsoluteFile( strFilename, strBuffer, bEncrypt ) )
 		return false;
 
 	strBuffer += strData;
-	return WriteAbsoluteFile( strFilename, strBuffer, bEncode );
+	return WriteAbsoluteFile( strFilename, strBuffer, bEncrypt );
+}
+
+bool CFilesystem::EncryptAbsoluteFile( const std::string &strFilename )
+{
+	std::string strContents;
+	return ReadAbsoluteFile( strFilename, strContents, false )
+		&& WriteAbsoluteFile( strFilename, strContents, true );
+}
+
+bool CFilesystem::DecryptAbsoluteFile( const std::string &strFilename )
+{
+	std::string strContents;
+	return ReadAbsoluteFile( strFilename, strContents, true )
+		&& WriteAbsoluteFile( strFilename, strContents, false );
 }
 
 bool CFilesystem::SetAbsolutePathVisibility( const std::string &strPath, bool bVisible )
@@ -418,19 +503,39 @@ std::string CFilesystem::FileToPath( const std::string &strFile )
 	return GetWorkingDirectory( ) + strFinalFile;
 }
 
-bool CFilesystem::ReadFile( const std::string &strFilename, std::string &strOut, bool bDecode /*= true*/ )
+bool CFilesystem::ReadFile( const std::string &strFilename, std::string &strOut, bool bDecrypt )
 {
-	return ReadAbsoluteFile( FileToPath( strFilename ), strOut, bDecode );
+	return ReadAbsoluteFile( FileToPath( strFilename ), strOut, bDecrypt );
 }
 
-bool CFilesystem::WriteFile( const std::string &strFilename, const std::string &strData, bool bEncode /*= true*/ )
+bool CFilesystem::WriteFile( const std::string &strFilename, const std::string &strData, bool bEncrypt )
 {
-	return WriteAbsoluteFile( FileToPath( strFilename ), strData, bEncode );
+	return WriteAbsoluteFile( FileToPath( strFilename ), strData, bEncrypt );
 }
 
-bool CFilesystem::AddToFile( const std::string &strFilename, const std::string &strData, bool bEncode /*= true*/ )
+bool CFilesystem::AddToFile( const std::string &strFilename, const std::string &strData, bool bEncrypt )
 {
-	return AddToAbsoluteFile( FileToPath( strFilename ), strData, bEncode );
+	return AddToAbsoluteFile( FileToPath( strFilename ), strData, bEncrypt );
+}
+
+bool CFilesystem::EncryptFile( const std::string &strFilename )
+{
+	return EncryptAbsoluteFile( FileToPath( strFilename ) );
+}
+
+bool CFilesystem::DecryptFile( const std::string &strFilename )
+{
+	return DecryptAbsoluteFile( FileToPath( strFilename ) );
+}
+
+bool CFilesystem::EnsureFileDirectoryExists( const std::string &strFile )
+{
+	return EnsureAbsoluteFileDirectoryExists( FileToPath( strFile ) );
+}
+
+bool CFilesystem::EnsureDirectoryExists( const std::string &strDirectory )
+{
+	return EnsureAbsoluteDirectoryExists( FileToPath( strDirectory ) );
 }
 
 bool CFilesystem::GetDirectoryContents( const std::string &strDirectory, bool bFiles, bool bFolders, std::vector< std::string > &vecOut )
@@ -451,6 +556,11 @@ bool CFilesystem::GetFilesInDirectory( const std::string &strDirectory, std::vec
 bool CFilesystem::DeleteCurrentDirectory( )
 {
 	return DeleteAbsolutePath( GetWorkingDirectory( ) );
+}
+
+bool CFilesystem::DeletePath( const std::string &strRelativePath )
+{
+	return DeleteAbsolutePath( FileToPath( strRelativePath ) );
 }
 
 bool CFilesystem::SetPathVisibility( const std::string &strPath, bool bVisible )
