@@ -1,5 +1,5 @@
 <?php
-// FROM HASH: f0a8a1e116855e3d219b15dc22305048
+// FROM HASH: 340a6106c41165f02077b5f6f9396825
 return array('macros' => array(), 'code' => function($__templater, array $__vars)
 {
 	$__finalCompiled = '';
@@ -41,10 +41,6 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 				'_type' => 'cell',
 				'html' => $__templater->fn('date_dynamic', array($__vars['invitation']['invitation_date'], array(
 			))),
-			),
-			array(
-				'_type' => 'cell',
-				'html' => ($__templater->escape($__vars['invitation']['recipient']) ?: '--'),
 			),
 			array(
 				'_type' => 'cell',
@@ -101,10 +97,6 @@ return array('macros' => array(), 'code' => function($__templater, array $__vars
 	), array(array(
 		'_type' => 'cell',
 		'html' => 'Date',
-	),
-	array(
-		'_type' => 'cell',
-		'html' => 'Recipient',
 	),
 	array(
 		'_type' => 'cell',

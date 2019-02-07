@@ -1,0 +1,254 @@
+<?php
+	require 'Cryptography.php';
+	require 'Logging.php';
+	require 'SQL.php';
+
+	define( "unsafeTerms", array(
+		" drop ", " delete ", " select ", " alter ", " table ", " class ",
+		" DROP ", " DELETE ", " SELECT ", " ALTER ", " TABLE ", " CLASS " ) );
+	define( "exitCodes", array(
+		"Establishing Failure"	=> "1",		// Couldn't connect / set up database info or unique id and secret key aren't found / debugger is found
+		"Invalid Hash"			=> "2",
+		"Banned"				=> "3",		// banned login attempt
+		"Hardware Mismatch"		=> "4",
+		"Inactive Premium"		=> "5",		// premium time exceeded
+		"Success"				=> "6",		// regular user logged in
+		"Staff Success"			=> "7" ) );	// staff member logged in
+	define( "launcherFile", "../Extensions/Launcher.exe" );
+
+	$log			= new Logging( );
+	$cryptography	= new Cryptography( );
+	$sql			= new SQLConnection( );
+
+	class Functionality
+	{
+		private $connection_info;
+
+		public function sanitize( $input ): string
+		{
+            global $sql;
+
+			return $sql->escape( strip_tags( trim( str_replace( unsafeTerms, "", $input ) ) ) );
+		}
+
+		public function getPostData( $id ): string
+		{
+			global $cryptography;
+
+			$accessIdentifier = $cryptography->generateIdentifier( $id );
+			return $this->sanitize( $cryptography->decrypt( $_POST[ $accessIdentifier ] ) );
+		}
+
+		public function stopExecution( $exit_code, $other_data = 'none' ): void
+		{
+			global $log;
+			global $cryptography;
+
+			$log->log( 'Exiting with code ' . $exit_code . ' [' . exitCodes[ $exit_code ] . '].' );
+			die( $cryptography->encrypt( json_encode( array( 'Exit Code' => exitCodes[ $exit_code ],
+																'Other Data' => $other_data ) ) ) );
+		}
+
+		function getConnectionInfo( )
+		{
+			$curl = curl_init( );
+
+			curl_setopt( $curl, CURLOPT_URL, "http://v2.api.iphub.info/ip/" . $_SERVER[ "REMOTE_ADDR" ] );
+			curl_setopt( $curl, CURLOPT_RETURNTRANSFER, true );
+			curl_setopt( $curl, CURLOPT_HTTPHEADER, array( "X-Key: MjkxMzpaTFZoNVVjakR2bGU0ZmlucW95WlFrMWhxMmtVMzNlNA==" ) );
+
+			$response = json_decode( curl_exec( $curl ), true );
+			curl_close( $curl );
+			$this->connection_info = $response;
+		}
+
+		function getServiceProvider( ): string
+		{
+			return $this->connection_info[ 'isp' ];
+		}
+
+		function getCountryCode( ): string
+		{
+			return $this->connection_info[ 'countryCode' ];
+		}
+	}
+
+	$functionality	= new Functionality( );
+
+	class Authentication
+	{
+		private $user;
+		private $key;
+		private $hardware;
+		private $hash;
+		private $xfUser;
+		private $unique;
+
+		private function parsePostData( ): void
+		{
+			global $functionality;
+
+			$this->user		= $functionality->getPostData( 'id' );
+			$this->key		= $functionality->getPostData( 'sk' );
+			$this->hardware	= json_decode( $functionality->getPostData( 'hw' ), true );
+			$this->hash		= $functionality->getPostData( 'hw' );
+		}
+
+		private function validateHash( ): void
+		{
+			global $cryptography;
+			global $log;
+			global $functionality;
+
+			if ( $this->hash != $cryptography->hashFile( launcherFile ) )
+			{
+				$log->log( 'Hash sent over post data did not match what the server computed.' );
+				$functionality->stopExecution( 'Invalid Hash' );
+			}
+		}
+
+		private function getUserInformation( ): void
+		{
+			global $sql;
+			global $log;
+			global $functionality;
+
+			$result = $sql->selectRows( 'secondary_group_ids, is_banned, is_staff', 'xf_user', 'user_id = ' . $user . ' AND secret_key = "' . $key . '"' );
+			if ( $result->num_rows == 0 )
+			{
+				$log->log( 'Could not find user with id of ' . $user . ' and secret key of ' . $key . ' in table xf_user.' );
+				$functionality->stopExecution( 'Establishing Failure' );
+			}
+
+			$this->xfUser = $result->fetch_assoc( );
+		}
+
+		private function logAttempt( $exit_code ): void
+		{
+			global $sql;
+            global $functionality;
+
+			if ( $this->hardware == NULL
+				|| ( $row = $sql->selectRows( 'unique_id', 'px_unique_id', 'user_id = ' . $this->user_id
+				. ' AND cpu = "' . $this->hardware[ "cpu" ]
+				. '" AND gpu = "' . $this->hardware[ "gpu" ]
+				. '" AND display = "' . $this->hardware[ "display" ]
+				. '" AND pc = "' . $this->hardware[ "pc" ]
+				. '" AND os = "' . $this->hardware[ "os" ]
+				, '" AND drive = "' . $this->hardware[ "drive" ]
+				. '" AND board = "' . $this->hardware[ "board" ] . '"' ) )->num_rows == 0 )
+				$this->unique_id = 0;
+			else
+				$this->unqiue_id = $row->fetch_assoc( )[ 'unique_id' ];
+
+			$sql->insert( 'px_logins', ( int )$this->user . ', '
+					. ( int )time( ) . ', '
+					. ( int )unique . ', '
+					. $this->unique_id . ', "'
+					. ( string )$_SERVER[ 'REMOTE_ADDR' ] . '", "'
+					. ( string )$functionality->getServiceProvider( ) . '", "'
+					. ( string )$functionality->getCountryCode( ) . '", '
+					. ( int )$exit_code );
+			$functionality->stopExecution( $exit_code, $this->xfUser[ 'secondary_group_ids' ] );
+		}
+
+		private function ensureValidUser( ): void
+		{
+			global $sql;
+			global $log;
+
+			if ( $this->xfUser[ 'is_banned' ] )
+				$this->logAttempt( 'Banned' );
+
+			if ( $this->hardware == NULL )
+			{
+				$log->log( 'Invalid hardware was passed through post data.' );
+				$this->logAttempt( 'Hardware Mismatch' );
+			}
+
+			$result = $sql->selectRows( 'field_value', 'xf_user_field_value', 'field_id = "unique_id" AND user_id = ' . $user );
+			if ( $result->num_rows == 0 )
+			{
+				$log->log( 'Could not obtain unique id from xf_user_field_value. User ID: ' . $user . '.' );
+				$this->logAttempt( 'Establishing Failure' );
+			}
+
+			$unique = $result->fetch_assoc( )[ 'field_value' ];
+
+			$result = $sql->selectRows( 'px_unique_id', '*', 'user_id = ' . $this->user
+						. ' AND cpu = "' . $this->hardware[ "cpu" ]
+						. '" AND gpu = "' . $this->hardware[ "gpu" ]
+						. '" AND display = "' . $this->hardware[ "display" ]
+						. '" AND pc = "' . $this->hardware[ "pc" ]
+						. '" AND os = "' . $this->hardware[ "os" ]
+						. '" AND drive = "' . $this->hardware[ "drive" ]
+						. '" AND board = "' . $this->hardware[ "board" ] . '"' );
+			if ( $result->num_rows == 0 )
+			{
+				$sql->insertRow( 'px_unique_id', '0, '
+							. $this->user . ', "'
+							. $this->hardware[ "cpu" ] . '", "'
+							. $this->hardware[ "gpu" ] . '", "'
+							. $this->hardware[ "display" ] . '", "'
+							. $this->hardware[ "pc" ] . '", "'
+							. $this->hardware[ "os" ] . '", "'
+							. $this->hardware[ "drive" ] . '", "'
+							. $this->hardware[ "board" ] . '")' );
+				$this->logAttempt( 'Hardware Mismatch' );
+			}
+
+			if ( $result->fetch_assoc( )[ 'unique_id' ] != $unique )
+			{
+				$sql->updateRow( 'xf_user_field_value', 'field_value', 0, 'field_id = "unique_id" AND user_id = ' . $user );
+				$this->logAttempt( 'Hardware Mismatch' );
+			}
+		}
+
+		private function beginSession( )
+		{
+			session_start( );
+			$_SESSION[ 'user' ] = xfUser;
+		}
+
+		public function login( ): void
+		{
+			$this->parsePostData( );
+			$this->validateHash( );
+			$this->getUserInformation( );
+			$this->ensureValidUser( );
+			$this->beginSession( );
+			$this->logAttempt( xfUser[ 'is_staff' ] ? 'Staff Success' : 'Success' );
+		}
+
+		public function download( ): void
+		{
+
+		}
+
+		public function ban( ): void
+		{
+			global $sql;
+
+			$sql->updateRow( 'xf_user', 'is_banned', 1, 'user_id = ' . $this->xfUser[ 'user_id' ] );
+		}
+	}
+
+	$auth = new Authentication( );
+
+	function handleRequest( ): void
+	{
+        global $auth;
+        global $functionality;
+
+		$action = $functionality->getPostData( 'action' );
+
+		if ( $action == 'login' )
+			$auth->login( );
+		if ( $action == 'download' )
+			$auth->download( );
+		if ( $action == 'ban' )
+			$auth->ban( );
+
+        header( "Location: https://www.paladin-extensions.com/error.shtml", true, 301 );
+	}
+?>
