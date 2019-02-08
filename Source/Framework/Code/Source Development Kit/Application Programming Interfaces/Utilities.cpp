@@ -67,12 +67,8 @@ namespace Utilities
 		return { float( recDesktop.right - recDesktop.left ), float( recDesktop.bottom - recDesktop.top ) };
 	}
 
-	unsigned __int64 GetMoment( )
+	moment_t GetMoment( )
 	{
-
-
-
-
 		return std::chrono::duration_cast< std::chrono::milliseconds >( std::chrono::system_clock::now( ).time_since_epoch( ) ).count( ); // todo @jeremy the other nanosecond thing doesnt work aaaaa
 
 		timespec _Time { };
@@ -80,7 +76,7 @@ namespace Utilities
 		return _Time.tv_nsec / 100ui64;
 	}
 
-	void Pause( unsigned __int64 mmtPauseLength )
+	void Pause( moment_t mmtPauseLength )
 	{
 		std::this_thread::sleep_for( std::chrono::milliseconds( mmtPauseLength ) );
 

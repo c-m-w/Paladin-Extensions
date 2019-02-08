@@ -89,7 +89,7 @@ private:
 	/** \brief Format for the log file name. */
 	std::string strLogFileFormat;
 	/** \brief The timestamp of the last time that the buffer was written to file. */
-	unsigned __int64 uLastLogWrite;
+	Utilities::moment_t mmtLastLogWrite;
 	/** \brief Buffer to store the events in queue to be written to file. */
 	std::string strBuffer;
 	/** \brief Prefix text for each of the statuses. */

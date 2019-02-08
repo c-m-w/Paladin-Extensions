@@ -4,7 +4,6 @@
 
 #define ACKNOWLEDGED_ENTRY_WARNING_1
 #define USE_NAMESPACES
-#define USE_DEFINITIONS
 #include "../../Framework.hpp"
 
 color_t::color_t( )
@@ -223,10 +222,10 @@ color_t CColor::GetGradient( color_t clrStart, color_t clrEnd, float flProgress 
 	};
 }
 
-CColor::CColor( color_t clrFirstSequence, unsigned __int64 uFirstSequence )
+CColor::CColor( color_t clrFirstSequence, Utilities::moment_t mmtFirstSequence )
 {
 	pSequences[ 0 ].clr = clrFirstSequence;
-	pSequences[ 0 ].uDuration = uFirstSequence;
+	pSequences[ 0 ].mmtDuration = mmtFirstSequence;
 	zSequences = 1;
 }
 
@@ -250,18 +249,18 @@ color_t CColor::GetColor( )
 	if ( zSequences == 1 )
 		return pSequences[ 0 ].clr;
 
-	uTotalDuration = 0;
+	mmtTotalDuration = 0;
 	for ( std::size_t z = 0u; z < zSequences; z++ )
-		uTotalDuration += pSequences[ z ].uDuration;
-	auto uCurrentProgress = T.GetTime( ) / 10000ull % uTotalDuration;
-	auto uPassedProgress = 0ull;
+		mmtTotalDuration += pSequences[ z ].mmtDuration;
+	auto mmtCurrentProgress = GetMoment( ) / 10000ull % mmtTotalDuration;
+	auto mmtPassedProgress = 0ull;
 
 	for ( std::size_t z = 0u; z < zSequences; z++ )
-		if ( pSequences[ z ].uDuration < uCurrentProgress - uPassedProgress )
-			uPassedProgress += pSequences[ z ].uDuration;
+		if ( pSequences[ z ].mmtDuration < mmtCurrentProgress - mmtPassedProgress )
+			mmtPassedProgress += pSequences[ z ].mmtDuration;
 		else
 			return GetGradient( pSequences[ z ].clr, pSequences[ z + 1 != zSequences ? z + 1 : 0 ].clr,
-								float( uCurrentProgress - uPassedProgress ) / float( pSequences[ z ].uDuration ) );
+								float( mmtCurrentProgress - mmtPassedProgress ) / float( pSequences[ z ].mmtDuration ) );
 
 	throw std::runtime_error( XOR( "Invalid array index" ) );
 }
@@ -299,11 +298,11 @@ void CColor::DeleteColorSequence( std::size_t zSequence )
 	for ( auto s = zSequence; s < zSequences - 1; s++ )
 	{
 		pSequences[ s ].clr = pSequences[ s + 1 ].clr;
-		pSequences[ s ].uDuration = pSequences[ s + 1 ].uDuration;
+		pSequences[ s ].mmtDuration = pSequences[ s + 1 ].mmtDuration;
 	}
 
 	pSequences[ zSequences - 1 ].clr = { };
-	pSequences[ zSequences - 1 ].uDuration = { };
+	pSequences[ zSequences - 1 ].mmtDuration = { };
 
 	zSequences--;
 }

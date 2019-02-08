@@ -15,7 +15,6 @@
     <ClCompile Include="Code\Source Development Kit\Toolkits\Graphical User Interface.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\Memory Manager.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\Authentication.cpp" />
-    <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Time.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\Development Environment\Build Output Wrapper.hpp" />
@@ -38,7 +37,6 @@
     <ClInclude Include="Code\Source Development Kit\Toolkits\Graphical User Interface.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\Memory Manager.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\Authentication.hpp" />
-    <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Time.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Code\Source Development Kit\Application Programming Interfaces\Connectivity.inl" />

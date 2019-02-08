@@ -4,7 +4,6 @@
 
 #define ACKNOWLEDGED_ENTRY_WARNING_1
 #define USE_NAMESPACES
-#define USE_DEFINITIONS
 #include "../../Framework.hpp"
 
 namespace Interface
@@ -45,7 +44,7 @@ namespace Interface
 	{
 		constexpr auto TOOLTIP_WAIT = 1500ull;
 		static auto locOld = locMouse;
-		static auto uStart = T.GetTime( );
+		static auto mmtStart = GetMoment( );
 		static CWindow *pToolTipWindow = nullptr;
 
 		if ( locOld != locMouse )
@@ -57,11 +56,11 @@ namespace Interface
 			}
 
 			locOld = locMouse;
-			uStart = T.GetTime( );
+			mmtStart = GetMoment( );
 			return;
 		}
 
-		if ( T.GetTime( ) - uStart >= TOOLTIP_WAIT
+		if ( GetMoment( ) - mmtStart >= TOOLTIP_WAIT
 			&& pToolTipWindow == nullptr
 			&& pHoveringWidget != nullptr
 			&& pHoveringWidget->uState == IWidget::HOVER
@@ -462,7 +461,7 @@ namespace Interface
 		{
 			if ( iSelection == 0 )
 			{
-				if ( T.GetTime( ) % 1000 <= 500ull )
+				if ( GetMoment( ) % 1000 <= 500ull )
 					_Drawing.DrawPolygon( _Drawing.Line( location_t( GetCursorX( ), locText.y + 1.f ), location_t( GetCursorX( ), locText.y + flCharacterHeight + 2.f ), 1.f, BLUE ).GetBuffer( ), true );
 			}
 			else

@@ -38,7 +38,7 @@ bool CLogging::Initialize( )
 std::string CLogging::FormatTime( const std::string &strFormat )
 {
 	char szBuffer[ TIME_STRING_LENGTH ];
-	auto tmNow = time_t( T.GetTime( ) );
+	auto tmNow = time_t( GetMoment( ) );
 	tm tmTime;
 
 	memset( szBuffer, 0, TIME_STRING_LENGTH );
@@ -90,7 +90,7 @@ void CLogging::ErrorPopup( EUnloggableError _ErrorCode )
 
 void CLogging::WriteToFile( )
 {
-	uLastLogWrite = T.GetTime( );
+	mmtLastLogWrite = GetMoment( );
 	_Filesystem.StoreCurrentWorkingDirectory( );
 	_Filesystem.ChangeWorkingDirectory( _Filesystem.GetAppdataDirectory( ), { _Filesystem.strLogDirectory } );
 
@@ -110,7 +110,7 @@ void CLogging::WriteToFile( )
 
 void CLogging::TestWriteToFile( )
 {
-	if ( T.GetTime( ) - uLastLogWrite > WRITE_INTERVAL )
+	if ( GetMoment( ) - mmtLastLogWrite > WRITE_INTERVAL )
 		WriteToFile( );
 }
 

@@ -93,7 +93,7 @@ private:
 	int iMouseX, iMouseY;
 	CKeyState _KeyStates[ UCHAR_MAX ];
 	key_t _LastPressedKey;
-	unsigned __int64 uLastKeyPressTime[ UCHAR_MAX ];
+	Utilities::moment_t mmtLastKeyPressTime[ UCHAR_MAX ];
 	std::vector< key_callback_t > vecKeyCallbacks[ UCHAR_MAX ];
 	std::vector< key_typed_callback_t > vecKeyTypedCallbacks;
 	std::vector< global_key_callback_t > vecGlobalKeyCallbacks;
@@ -110,7 +110,7 @@ public:
 	void AddCallback( const scroll_callback_t &_Callback );
 	CKeyState GetKeyState( const key_t &_KeyCode );
 	Utilities::location_t GetMouseLocation( );
-	unsigned __int64 GetTimeSinceKeyPress( const key_t &_Key );
+	Utilities::moment_t GetTimeSinceKeyPress( const key_t &_Key );
 	void GetMousePos( int &x, int &y );
 } inline _Input;
 

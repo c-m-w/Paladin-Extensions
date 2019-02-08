@@ -4,7 +4,6 @@
 
 #define ACKNOWLEDGED_ENTRY_WARNING_1
 #define USE_NAMESPACES
-#define USE_DEFINITIONS
 #include "../../Framework.hpp"
 
 #define CRYPTION_INIT													\
@@ -23,11 +22,11 @@
 
 bool CCryptography::Initialize( )
 {
-	if ( T.GetTime( ) - uLastGenerationTime < GENERATION_INTERVAL
+	if ( GetMoment( ) - mmtLastGenerationTime < GENERATION_INTERVAL
 		&& !strEncryptionKey.empty( ) && !strInitializationVector.empty( ) )
 		return true;
 
-	const auto strUnhashedKey = std::to_string( T.GetTime( ) / GENERATION_INTERVAL );
+	const auto strUnhashedKey = std::to_string( GetMoment( ) / GENERATION_INTERVAL );
 
 	strEncryptionKey = GenerateHash( strUnhashedKey ).substr( 0, ENCRYPTION_KEY_SIZE );
 	strInitializationVector = strEncryptionKey.substr( 0, INITIALIZATION_VECTOR_SIZE );
@@ -37,7 +36,7 @@ bool CCryptography::Initialize( )
 void CCryptography::Uninitialize( )
 { }
 
-CCryptography::CCryptography( ): uLastGenerationTime( 0ui64 )
+CCryptography::CCryptography( ): mmtLastGenerationTime( 0ui64 )
 {
 	strStaticEncryptionKey = XOR( "ExgrEV9yIlF3xgocqy53ipLAwFHuDznk" );
 	strStaticInitializationVector = XOR( "4ZNqNqIaJqZqPJS1" );
