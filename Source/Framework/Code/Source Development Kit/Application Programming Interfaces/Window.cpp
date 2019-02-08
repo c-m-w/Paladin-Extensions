@@ -110,9 +110,15 @@ bool CApplicationWindow::GetBounds( RECT& recOut )
 	return GetClientRect( hwHandle, &recOut ) != FALSE;
 }
 
-void CApplicationWindow::Move( int iHorizontalAmount, int iVerticalAmount )
+bool CApplicationWindow::Move( int iHorizontalAmount, int iVerticalAmount )
 {
+	if ( iHorizontalAmount == 0 && iVerticalAmount == 0 )
+		return false;
+
 	RECT recCurrent { };
-	GetWindowRect( hwHandle, &recCurrent );
-	SetWindowPos( hwHandle, nullptr, recCurrent.left + iHorizontalAmount, recCurrent.top + iVerticalAmount, 0, 0, SWP_NOSIZE );
+	if ( GetWindowRect( hwHandle, &recCurrent ) == FALSE )
+		return false;
+
+	MoveWindow( hwHandle, recCurrent.left + iHorizontalAmount, recCurrent.top + iVerticalAmount, recCurrent.right - recCurrent.left, recCurrent.bottom - recCurrent.top, FALSE );
+	return true;
 }

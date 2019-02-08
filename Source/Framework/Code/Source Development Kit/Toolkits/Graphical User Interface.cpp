@@ -1515,10 +1515,8 @@ namespace Interface
 					window->pHeader->MoveParentWindow( x, y );
 					if ( window->wfFlags & CWindow::FLAG_WINDOW_MOVE_APPLICATION_WINDOW
 						 && window->pMoveWindow )
-					{
-						window->pMoveWindow->Move( int( window->recLocation.x ), int( window->recLocation.y ) );
-						window->recLocation.x = window->recLocation.y = 0.f;
-					}
+						if ( window->pMoveWindow->Move( int( window->recLocation.x ), int( window->recLocation.y ) ) )
+							window->recLocation.x = window->recLocation.y = 0.f;
 				}
 
 				auto pPopup = window->pPopup;
