@@ -22,4 +22,6 @@ public:
 
 	bool PollInput( );
 	HWND GetWindowHandle( );
+	bool GetBounds( RECT& recOut );
+	void Move( int iHorizontalAmount, int iVerticalAmount );
 };

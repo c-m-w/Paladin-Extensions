@@ -34,6 +34,7 @@ namespace Utilities
 	/** \return Time since epoch in milliseconds. */
 	moment_t GetMoment( );
 	void Pause( moment_t mmtPauseLength = 1ui64 );
+	void OpenLink( const std::string& strLink );
 }
 
 #include "Utilities.inl"

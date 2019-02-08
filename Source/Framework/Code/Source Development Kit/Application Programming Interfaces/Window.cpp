@@ -57,7 +57,7 @@ CApplicationWindow::CApplicationWindow( const std::string &strTitle, const Utili
 	}
 
 	const auto vecScreenSize = GetScreenSize( );
-	hwHandle = CreateWindowEx( WS_EX_APPWINDOW, strTitle.c_str( ), strTitle.c_str( ), WS_VISIBLE, int( vecScreenSize.x / 2.f - vecSize.x / 2.f ), int( vecScreenSize.y / 2.f - vecSize.y / 2.f ),
+	hwHandle = CreateWindowEx( WS_EX_APPWINDOW, strTitle.c_str( ), strTitle.c_str( ), WS_VISIBLE | WS_POPUP, int( vecScreenSize.x / 2.f - vecSize.x / 2.f ), int( vecScreenSize.y / 2.f - vecSize.y / 2.f ),
 							   int( vecSize.x ), int( vecSize.y ), nullptr, nullptr, hModule, nullptr );
 	if ( nullptr == hwHandle )
 	{
@@ -103,4 +103,16 @@ bool CApplicationWindow::PollInput( )
 HWND CApplicationWindow::GetWindowHandle( )
 {
 	return hwHandle;
+}
+
+bool CApplicationWindow::GetBounds( RECT& recOut )
+{
+	return GetClientRect( hwHandle, &recOut ) != FALSE;
+}
+
+void CApplicationWindow::Move( int iHorizontalAmount, int iVerticalAmount )
+{
+	RECT recCurrent { };
+	GetWindowRect( hwHandle, &recCurrent );
+	SetWindowPos( hwHandle, nullptr, recCurrent.left + iHorizontalAmount, recCurrent.top + iVerticalAmount, 0, 0, SWP_NOSIZE );
 }

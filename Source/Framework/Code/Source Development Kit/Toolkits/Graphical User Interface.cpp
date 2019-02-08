@@ -233,13 +233,13 @@ namespace Interface
 	}
 
 	CLabel::CLabel( padding_t padBorder, text_t *_txtLabel, color_t clrForegroundActive, color_t clrForegroundHover, color_t clrForegroundDormant, color_t clrBackgroundActive, color_t clrBackgroundHover, color_t clrBackgroundDormant, EFontFlags _ffFlags, callback_t _cbOnClick /*= nullptr*/ ):
-		IWidget( LABEL, ECursor::ARROW, padBorder, clrForegroundActive, clrForegroundHover, clrForegroundDormant, clrBackgroundActive, clrBackgroundHover, clrBackgroundDormant, nullptr ), txtLabel( _txtLabel ), ffFlags( _ffFlags ), cbOnClick( _cbOnClick )
+		IWidget( LABEL, _cbOnClick == nullptr ? ECursor::ARROW : ECursor::HAND, padBorder, clrForegroundActive, clrForegroundHover, clrForegroundDormant, clrBackgroundActive, clrBackgroundHover, clrBackgroundDormant, nullptr ), txtLabel( _txtLabel ), ffFlags( _ffFlags ), cbOnClick( _cbOnClick )
 	{ }
 
-	CLabel::CLabel( padding_t padBorder, text_t *_txtLabel, color_t clrBackground, color_t clrText, EFontFlags _ffFlags, callback_t _cbOnClick /*= nullptr*/ ) : IWidget( LABEL, ECursor::ARROW, padBorder, clrText, clrText, clrText, clrBackground, clrBackground, clrBackground, nullptr ), txtLabel( _txtLabel ), ffFlags( _ffFlags ), cbOnClick( _cbOnClick )
+	CLabel::CLabel( padding_t padBorder, text_t *_txtLabel, color_t clrBackground, color_t clrText, EFontFlags _ffFlags, callback_t _cbOnClick /*= nullptr*/ ) : IWidget( LABEL, _cbOnClick == nullptr ? ECursor::ARROW : ECursor::HAND, padBorder, clrText, clrText, clrText, clrBackground, clrBackground, clrBackground, nullptr ), txtLabel( _txtLabel ), ffFlags( _ffFlags ), cbOnClick( _cbOnClick )
 	{ }
 
-	CLabel::CLabel( padding_t padBorder, text_t *_txtLabel, color_t clrText, EFontFlags _ffFlags, callback_t _cbOnClick /*= nullptr*/ ) : IWidget( LABEL, ECursor::ARROW, padBorder, clrText, clrText, clrText, clrText, clrText, clrText, nullptr ), txtLabel( _txtLabel ), ffFlags( _ffFlags ), cbOnClick( _cbOnClick )
+	CLabel::CLabel( padding_t padBorder, text_t *_txtLabel, color_t clrText, EFontFlags _ffFlags, callback_t _cbOnClick /*= nullptr*/ ) : IWidget( LABEL, _cbOnClick == nullptr ? ECursor::ARROW : ECursor::HAND, padBorder, clrText, clrText, clrText, clrText, clrText, clrText, nullptr ), txtLabel( _txtLabel ), ffFlags( _ffFlags ), cbOnClick( _cbOnClick )
 	{ }
 
 	void CLabel::Event( unsigned uKey, CKeyState ksState )
@@ -1107,22 +1107,22 @@ namespace Interface
 		}
 	}
 
-	CWindow::CWindow( unsigned _wfFlags, rectangle_t _recLocation, const char *szTitle, const char *szSubtitle, callback_t _cbMinimize, callback_t _cbClose ): wfFlags( _wfFlags ), IContainer( FLAG_CONTAINER_NONE, padding_t( ), BACKGROUND_DARK, _recLocation ),
-		pHeader( new CHeaderPanel( szTitle, szSubtitle, _cbMinimize, _cbClose, ICON_FA_MINUS, ICON_FA_TIMES ) ), pPopup( nullptr )
+	CWindow::CWindow( unsigned _wfFlags, rectangle_t _recLocation, const char *szTitle, const char *szSubtitle, callback_t _cbMinimize, callback_t _cbClose, CApplicationWindow *pWindowToMove /*= nullptr*/ ): wfFlags( _wfFlags ), IContainer( FLAG_CONTAINER_NONE, padding_t( ), BACKGROUND_DARK, _recLocation ),
+		pHeader( new CHeaderPanel( szTitle, szSubtitle, _cbMinimize, _cbClose, ICON_FA_MINUS, ICON_FA_TIMES ) ), pPopup( nullptr ), pMoveWindow( pWindowToMove )
 	{
 		AddRow( row_t( padding_t( ), 40.f ) );
 		AddWidgetToRow( pHeader, recLocation.flWidth, 0 );
 	}
 
 	CWindow::CWindow( unsigned _wfFlags, rectangle_t _recLocation, const char *szTitle, const char *szSubtitle ): wfFlags( _wfFlags ), IContainer( FLAG_CONTAINER_NONE, padding_t( ), BACKGROUND_DARK, _recLocation ),
-		pHeader( new CHeaderPanel( szTitle, szSubtitle, ICON_FA_TIMES ) ), pPopup( nullptr )
+		pHeader( new CHeaderPanel( szTitle, szSubtitle, ICON_FA_TIMES ) ), pPopup( nullptr ), pMoveWindow( nullptr )
 	{
 		AddRow( row_t( padding_t( ), 40.f ) );
 		AddWidgetToRow( pHeader, recLocation.flWidth, 0 );
 	}
 
 	CWindow::CWindow( unsigned _wfFlags, rectangle_t _recLocation ): wfFlags( _wfFlags ), IContainer( FLAG_CONTAINER_NONE, padding_t( ), BACKGROUND_DARK, _recLocation ), pHeader( nullptr ),
-		pPopup( nullptr )
+		pPopup( nullptr ), pMoveWindow( nullptr )
 	{ }
 
 	CWindow::~CWindow( )
@@ -1510,8 +1510,16 @@ namespace Interface
 			{
 				auto &window = _WidgetContext.vecWindows[ u ];
 
-				if ( window->pHeader )
+				if ( window->pHeader && !( window->wfFlags & CWindow::FLAG_WINDOW_ANCHOR ) )
+				{
 					window->pHeader->MoveParentWindow( x, y );
+					if ( window->wfFlags & CWindow::FLAG_WINDOW_MOVE_APPLICATION_WINDOW
+						 && window->pMoveWindow )
+					{
+						window->pMoveWindow->Move( int( window->recLocation.x ), int( window->recLocation.y ) );
+						window->recLocation.x = window->recLocation.y = 0.f;
+					}
+				}
 
 				auto pPopup = window->pPopup;
 				while ( pPopup != nullptr )

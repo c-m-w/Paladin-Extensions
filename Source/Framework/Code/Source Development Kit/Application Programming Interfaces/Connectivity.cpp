@@ -95,7 +95,7 @@ bool CConnectivity::TryConnection( std::string &strOut, std::string *pErrorBuffe
 		if ( pErrorBuffer != nullptr )
 			_Log.Log( EPrefix::INFO, ELocation::CONNECTIVITY, XOR( "Error message: " ) + *pErrorBuffer );
 
-		return iRetries < MAX_RETRIES ? TryConnection( strOut, pErrorBuffer, iRetries++ ) : false;
+		return iRetries < MAX_RETRIES ? TryConnection( strOut, pErrorBuffer, ++iRetries ) : false;
 	}
 
 	if ( strOut.empty( ) )
@@ -104,7 +104,7 @@ bool CConnectivity::TryConnection( std::string &strOut, std::string *pErrorBuffe
 		if ( pErrorBuffer != nullptr )
 			_Log.Log( EPrefix::INFO, ELocation::CONNECTIVITY, XOR( "Error message: " ) + *pErrorBuffer );
 
-		return iRetries < MAX_RETRIES ? TryConnection( strOut, pErrorBuffer, iRetries++ ) : false;
+		return iRetries < MAX_RETRIES ? TryConnection( strOut, pErrorBuffer, ++iRetries ) : false;
 	}
 
 	return true;

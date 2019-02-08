@@ -92,4 +92,9 @@ namespace Utilities
 		//while ( GetMoment( ) < mmtEndTarget )
 		//	NtDelayExecution( FALSE, &liDelayInterval );
 	}
+
+	void OpenLink( const std::string &strLink )
+	{
+		ShellExecute( nullptr, XOR( "open" ), strLink.c_str( ), nullptr, nullptr, SW_SHOWNORMAL );
+	}
 }
