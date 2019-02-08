@@ -7,6 +7,7 @@ namespace Interface
 	constexpr auto TITLE_HEIGHT = 16;
 	constexpr auto WINDOW_ICON_HEIGHT = 18;
 	constexpr auto STANDARD_HEIGHT = 12;
+	constexpr auto SMALL_HEIGHT = 8;
 	constexpr auto CHECKBOX_TEXT_HEIGHT = 11.5f;
 
 	inline const static color_t CLEAR = color_t( { 0, 0, 0, 0 } );
@@ -583,7 +584,8 @@ namespace Interface
 			FLAG_WINDOW_DIM_BACKGROUND = 1 << 2,
 			FLAG_WINDOW_ROUND_CORNERS = 1 << 3,
 			FLAG_WINDOW_ANCHOR = 1 << 4,
-			FLAG_WINDOW_NONBLOCK = 1 << 5
+			FLAG_WINDOW_NONBLOCK = 1 << 5,
+			FLAG_WINDOW_MOVE_APPLICATION_WINDOW = 1 << 6
 		};
 
 		static constexpr auto WINDOW_ROUNDING = 0.03f;
@@ -594,9 +596,10 @@ namespace Interface
 		CHeaderPanel *pHeader;
 		CWindow *pPopup;
 		unsigned wfFlags;
+		CApplicationWindow* pMoveWindow;
 
 		// For regular windows
-		CWindow( unsigned _wfFlags, rectangle_t _recLocation, const char *szTitle, const char *szSubtitle, callback_t _cbMinimize, callback_t _cbClose );
+		CWindow( unsigned _wfFlags, rectangle_t _recLocation, const char *szTitle, const char *szSubtitle, callback_t _cbMinimize, callback_t _cbClose, CApplicationWindow* pWindowToMove = nullptr );
 		// For popup windows, no icon, close will be defined to end the popup and minimize will not exist.
 		CWindow( unsigned _wfFlags, rectangle_t _recLocation, const char *szTitle, const char *szSubtitle );
 		// Comboboxes, tooltips, etc.

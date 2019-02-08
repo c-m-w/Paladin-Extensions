@@ -327,12 +327,14 @@ bool CDrawing::RemoveFont( std::size_t sFont )
 void CDrawing::ApplyCursor( int iCursorType )
 {
 	POINT pntCursor;
+	RECT recWindow;
 
 	if ( GetCursorPos( &pntCursor ) != TRUE
 		|| ScreenToClient( pTarget->GetWindowHandle( ), &pntCursor ) != TRUE
+		|| !pTarget->GetBounds( recWindow )
 		|| pntCursor.x < 0.f || pntCursor.y < 0.f
-		|| pntCursor.x > int( recRenderTarget.flWidth )
-		|| pntCursor.y > int( recRenderTarget.flHeight ) )
+		|| pntCursor.x > int( recWindow.right - recWindow.left )
+		|| pntCursor.y > int( recWindow.bottom - recWindow.top ) )
 	{
 		while ( ShowCursor( TRUE ) <= 0 );
 		return;

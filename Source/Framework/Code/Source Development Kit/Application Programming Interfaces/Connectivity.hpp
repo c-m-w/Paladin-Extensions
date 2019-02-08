@@ -28,8 +28,8 @@ private:
 		void ValidateString( std::string &strToValidate );
 	};
 
-	constexpr static auto MAX_RETRIES = 5;
-	constexpr static auto MAX_TIMEOUT = 7;
+	constexpr static auto MAX_RETRIES = 3;
+	constexpr static auto MAX_TIMEOUT = 15;
 	constexpr static auto IDENTIFIER_LENGTH = 16;
 
 	static inline std::string strScriptLocator;
