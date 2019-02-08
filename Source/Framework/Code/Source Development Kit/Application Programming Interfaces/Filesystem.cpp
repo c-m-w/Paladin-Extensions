@@ -42,27 +42,40 @@ void CFilesystem::Uninitialize( )
 
 std::string CFilesystem::GetAppdataDirectory( )
 {
-	char *szBuffer;
-	auto zWrittenBytes = 0u;
+	static std::string strBuffer { };
 
-	if ( 0 != _dupenv_s( &szBuffer, &zWrittenBytes, XOR( "appdata" ) )
-		|| zWrittenBytes == 0 )
-		_Log.Log( EPrefix::ERROR, ELocation::FILESYSTEM, XOR( "Error retrieving appdata environment directory." ) );
+	if ( strBuffer.empty( ) )
+	{
+		char *szBuffer;
+		auto zWrittenBytes = 0u;
 
-	auto strDirectory = std::string( szBuffer );
-	FormatDirectory( strDirectory );
-	return strDirectory + strRelativeAppdataDirectory;
+		if ( 0 != _dupenv_s( &szBuffer, &zWrittenBytes, XOR( "appdata" ) )
+			 || zWrittenBytes == 0 )
+			_Log.Log( EPrefix::ERROR, ELocation::FILESYSTEM, XOR( "Error retrieving appdata environment directory." ) );
+
+		auto strDirectory = std::string( szBuffer );
+		FormatDirectory( strDirectory );
+		strBuffer = strDirectory + strRelativeAppdataDirectory;
+	}
+
+	return strBuffer;
 }
 
 std::string CFilesystem::GetExecutableDirectory( )
 {
-	char szBuffer[ MAX_PATH ];
-	std::string strBuffer { };
+	static std::string strBuffer { };
 
-	memset( szBuffer, 0, MAX_PATH );
-	GetModuleFileName( nullptr, szBuffer, MAX_PATH ); // should return <= MAX_PATH && != 0
-	strBuffer = szBuffer;
-	return strBuffer.substr( 0, strBuffer.find_last_of( '\\' ) + 1 );
+	if ( strBuffer.empty( ) )
+	{
+		char szBuffer[ MAX_PATH ];
+
+		memset( szBuffer, 0, MAX_PATH );
+		GetModuleFileName( nullptr, szBuffer, MAX_PATH ); // should return <= MAX_PATH && != 0
+		strBuffer = szBuffer;
+		strBuffer = strBuffer.substr( 0, strBuffer.find_last_of( '\\' ) + 1 );
+	}
+
+	return strBuffer;
 }
 
 std::string CFilesystem::GetEncryptedFilename( const std::string &strFile )
