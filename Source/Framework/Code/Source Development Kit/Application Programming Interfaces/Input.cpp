@@ -4,13 +4,14 @@
 
 #define ACKNOWLEDGED_ENTRY_WARNING_1
 #define USE_NAMESPACES
+#define USE_DEFINITIONS
 #include "../../Framework.hpp"
 
 bool CInput::Initialize( )
 {
 	iMouseX = iMouseY = _LastPressedKey = 0;
 	memset( _KeyStates, 0, sizeof( CKeyState ) * UCHAR_MAX );
-	memset( mmtLastKeyPressTime, 0, sizeof( moment_t ) * UCHAR_MAX );
+	memset( uLastKeyPressTime, 0, sizeof( unsigned __int64 ) * UCHAR_MAX );
 	return true;
 }
 
@@ -18,7 +19,7 @@ bool CInput::ProcessKey( key_t _Key, CKeyState _KeyState )
 {
 	if ( ( _KeyStates[ _Key ] = _KeyState ) == true )
 	{
-		mmtLastKeyPressTime[ _Key ] = GetMoment( );
+		uLastKeyPressTime[ _Key ] = T.GetTime( );
 		_LastPressedKey = _Key;
 	}
 
@@ -195,9 +196,9 @@ location_t CInput::GetMouseLocation( )
 	return { float( iMouseX ), float( iMouseY ) };
 }
 
-Utilities::moment_t CInput::GetTimeSinceKeyPress( const key_t &_Key )
+unsigned __int64 CInput::GetTimeSinceKeyPress( const key_t &_Key )
 {
-	return GetMoment( ) - mmtLastKeyPressTime[ _Key ];
+	return T.GetTime( ) - uLastKeyPressTime[ _Key ];
 }
 
 void CInput::GetMousePos( int &x, int &y )

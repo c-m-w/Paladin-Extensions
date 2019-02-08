@@ -17,7 +17,7 @@ protected:
 	/** \brief Initialization vector for encryption. */
 	std::string strInitializationVector;
 	/** \brief Last time that an encryption key was generated. */
-	Utilities::moment_t mmtLastGenerationTime;
+	unsigned __int64 uLastGenerationTime;
 
 public:
 

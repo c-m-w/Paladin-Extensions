@@ -16,6 +16,7 @@
 #include "Source Development Kit/Application Programming Interfaces/Cryptography.hpp"
 #include "Source Development Kit/Application Programming Interfaces/Filesystem.hpp"
 #include "Development Environment/Logging.hpp"
+#include "Source Development Kit/Application Programming Interfaces/Time.hpp"
 #include "Source Development Kit/Toolkits/Memory Manager.hpp"
 #include "Source Development Kit/Application Programming Interfaces/Input.hpp"
 #include "Source Development Kit/Toolkits/Resource Manager.hpp"
@@ -59,6 +60,7 @@ using namespace Interface;
 #endif
 
 #if defined USE_DEFINITIONS
+#define T ( _Time )
 #define CRYPTO ( _Cryptography )
 #define ENCODE( _String ) ( CRYPTO.Base64< encode_t >( _String ) )
 #define DECODE( _String ) ( CRYPTO.Base64< decode_t >( _String ) )

@@ -13,9 +13,10 @@
 #undef _SILENCE_CXX17_UNCAUGHT_EXCEPTION_DEPRECATION_WARNING
 
 // Windows
-#define WIN32_LEAN_AND_MEAN // remove unnecessary includes
+#define VC_EXTRALEAN // remove unnecessary includes
 #define NOMINMAX // disable min/max macros
 #include <Windows.h>
+#pragma comment( lib, "Winmm.lib" )
 #include <tchar.h>
 #include <VersionHelpers.h>
 #include <shellapi.h>

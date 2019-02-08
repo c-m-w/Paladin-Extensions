@@ -90,19 +90,19 @@ public:
 	struct sequence_t
 	{
 		color_t clr { };
-		Utilities::moment_t mmtDuration = 0;
+		unsigned __int64 uDuration = 0;
 	};
 
 private:
 
 	sequence_t pSequences[ 7 ];
 	std::size_t zSequences = 0u;
-	Utilities::moment_t mmtTotalDuration = 0;
+	unsigned __int64 uTotalDuration = 0;
 
 public:
 
 	CColor( ) = default;
-	CColor( color_t clrFirstSequence, Utilities::moment_t mmtFirstSequence );
+	CColor( color_t clrFirstSequence, unsigned __int64 uFirstSequence );
 	CColor( std::vector< sequence_t > vecSequences );
 
 	[ [ nodiscard ] ] color_t GetColor( );
