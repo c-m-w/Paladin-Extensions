@@ -490,17 +490,17 @@ std::string CFilesystem::ChangeWorkingDirectory( std::string strNew, std::initia
 			continue;
 
 		std::vector< std::string > vecSubDirectories { };
-		FormatDirectory( strSubDirectory );
 
 		do
 		{
-			const auto strFolder = strSubDirectory.substr( 0, strSubDirectory.find_first_of( '\\' ) + 1 );
+			auto strFolder = strSubDirectory.substr( 0, strSubDirectory.find_first_of( '\\' ) + 1 );
+			FormatDirectory( strFolder );
 			vecSubDirectories.emplace_back( strFolder );
 			strSubDirectory = strSubDirectory.substr( strFolder.length( ) );
 		} while ( strSubDirectory.find_first_of( '\\' ) != std::string::npos );
 
 		for ( auto &strFolder: vecSubDirectories )
-			strWorkingDirectory += bHashSubDirectories ? CRYPTO.GenerateHash( strFolder ) : strFolder;
+			strWorkingDirectory += bHashSubDirectories ? CRYPTO.GenerateHash( strFolder.substr( 0, strFolder.length( ) - 1 ) ) + '\\' : strFolder;
 	}
 
 	return strWorkingDirectory;

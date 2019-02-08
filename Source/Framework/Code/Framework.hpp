@@ -65,6 +65,7 @@ using namespace Interface;
 #define ENCRYPT( _String ) ( CRYPTO.Crypt< encrypt_t >( _String ) )
 #define DECRYPT( _String ) ( CRYPTO.Crypt< decrypt_t >( _String ) )
 #define FS ( _Filesystem )
+#define RESOURCES ( _ResourceManager )
 #define LOG ( _Log )
 #define NET ( _Connection )
 #define INPUT ( _Input )

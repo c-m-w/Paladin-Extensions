@@ -4,6 +4,7 @@
 
 #define ACKNOWLEDGED_ENTRY_WARNING_1
 #define USE_NAMESPACES
+#define USE_DEFINITIONS
 #include "../../Framework.hpp"
 
 bool CDrawing::Initialize( )
@@ -26,12 +27,10 @@ bool CDrawing::Initialize( )
 		return false;
 	}
 
-	const auto strResourceDirectory = _Filesystem.ChangeWorkingDirectory( CFilesystem::GetAppdataDirectory( ), { CFilesystem::strRelativeResourceDirectory } );
-
-	if ( !Create( strResourceDirectory ) )
+	if ( !Create( ) )
 		return false;
 
-	strFontDirectory = strResourceDirectory + XOR( "Fonts\\" );
+	strFontDirectory = XOR( "Fonts\\" );
 	strFontFileNames[ TAHOMA ] = XOR( "tahoma.ttf" );
 	strFontFileNames[ TAHOMA_BOLD ] = XOR( "TahomaBold.ttf" );
 	strFontFileNames[ ROBOTO ] = XOR( "Roboto.ttf" );
@@ -137,12 +136,9 @@ bool CDrawing::CreateState( )
 	return true;
 }
 
-bool CDrawing::AddTexture( const texture_t &texNew )
+void CDrawing::AddTexture( const texture_t &texNew )
 {
 	auto &last = vecTextures.emplace_back( std::pair< texture_t, std::pair< D3DXIMAGE_INFO, IDirect3DTexture9* > >( texNew, std::pair< D3DXIMAGE_INFO, IDirect3DTexture9* >( D3DXIMAGE_INFO( ), nullptr ) ) );
-	return D3D_OK == D3DXCreateTextureFromFileEx( pDevice, last.first.strName.c_str( ), last.first.uWidth, last.first.uHeight, D3DX_FROM_FILE,
-												  D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL, &last.second.first,
-												  nullptr, &last.second.second );
 }
 
 void CDrawing::Uninitialize( )
@@ -227,7 +223,7 @@ bool CDrawing::EndFrame( )
 				return false;
 			}
 
-			return Create( { } );
+			return Create( );
 		}
 
 		_Log.Log( EPrefix::WARNING, ELocation::DRAWING, XOR( "Failed to present scene." ) );
@@ -264,7 +260,7 @@ bool CDrawing::PreReset( )
 	return true;
 }
 
-bool CDrawing::Create( std::string strResourceDirectory )
+bool CDrawing::Create( )
 {
 	constexpr char TEXTURE_FILENAMES[ TEXTURE_MAX ][ MAX_PATH ] // Relative to resources folder
 	{
@@ -282,23 +278,21 @@ bool CDrawing::Create( std::string strResourceDirectory )
 		{ 32, 29 }
 	};
 
-	if ( strResourceDirectory.empty( ) )
-		strResourceDirectory = strResourceDirectory = _Filesystem.ChangeWorkingDirectory( CFilesystem::GetAppdataDirectory( ), { CFilesystem::strRelativeResourceDirectory } );
-
 	auto bReturn = true;
 
 	if ( vecTextures.empty( ) )
-	{
 		for ( auto i = 0; i < TEXTURE_MAX && bReturn; i++ )
-			if ( !( bReturn &= AddTexture( texture_t( TEXTURE_DIMENSIONS[ i ][ 0 ], TEXTURE_DIMENSIONS[ i ][ 1 ], strResourceDirectory + TEXTURE_FILENAMES[ i ] ) ) ) )
-				_Log.Log( EPrefix::ERROR, ELocation::DRAWING, XOR( "Unable to add texture %s." ), TEXTURE_FILENAMES[ i ] );
+			AddTexture( texture_t( TEXTURE_DIMENSIONS[ i ][ 0 ], TEXTURE_DIMENSIONS[ i ][ 1 ], TEXTURE_FILENAMES[ i ] ) );
+
+	for ( auto &texture : vecTextures )
+	{
+		auto& strTextureData = RESOURCES.GetResource( texture.first.strName );
+
+		if ( !( bReturn &= D3D_OK == D3DXCreateTextureFromFileInMemoryEx( pDevice, &strTextureData[ 0 ], strTextureData.length( ), texture.first.uWidth, texture.first.uHeight, D3DX_FROM_FILE,
+																  D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL, &texture.second.first,
+																  nullptr, &texture.second.second ) ) )
+			_Log.Log( EPrefix::ERROR, ELocation::DRAWING, XOR( "Unable to create texture %s from memory." ), texture.first.strName.c_str( ) );
 	}
-	else
-		for ( auto &texture: vecTextures )
-			if ( !( bReturn &= D3D_OK == D3DXCreateTextureFromFileEx( pDevice, texture.first.strName.c_str( ), texture.first.uWidth, texture.first.uHeight, D3DX_FROM_FILE,
-																	  D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL, &texture.second.first,
-																	  nullptr, &texture.second.second ) ) )
-				_Log.Log( EPrefix::ERROR, ELocation::DRAWING, XOR( "Unable to create texture %s from file." ), texture.first.strName.c_str( ) );
 
 	iCursorTextureIndicies[ ARROW ] = TEXTURE_ARROW;
 	iCursorTextureIndicies[ HAND ] = TEXTURE_HAND;
@@ -312,8 +306,11 @@ bool CDrawing::Create( std::string strResourceDirectory )
 
 bool CDrawing::AddFont( const std::string &strFilename )
 {
+	auto &strData = RESOURCES.GetResource( strFontDirectory + strFilename );
 	return libInstance != nullptr
-			&& !FT_New_Face( libInstance, ( strFontDirectory + strFilename ).c_str( ), 0, &vecFonts.emplace_back( ) );
+		&& !FT_New_Memory_Face( libInstance,
+								reinterpret_cast< FT_Byte* >( const_cast< char* >( &strData[ 0 ] ) ),
+								strData.length( ), 0, &vecFonts.emplace_back( ) );
 }
 
 bool CDrawing::RemoveFont( std::size_t sFont )

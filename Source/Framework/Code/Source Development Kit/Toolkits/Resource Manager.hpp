@@ -7,8 +7,12 @@ class CResourceManager: public IBase
 private:
 
 	bool Initialize( ) override;
+	void Uninitialize( ) override;
+
+	std::map< std::string, std::string > _LoadedResources { };
 
 public:
 
-	void Uninitialize( ) override;
+	std::string& GetResource( const std::string& strRelativePath );
+
 } inline _ResourceManager;

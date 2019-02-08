@@ -54,8 +54,8 @@ private:
 
 	bool CreateD3D( );
 	bool CreateState( );
-	bool AddTexture( const texture_t &texNew );
-	bool Create( std::string strResourceDirectory );
+	void AddTexture( const texture_t &texNew );
+	bool Create( );
 
 	bool bReleaseDevice = false;
 	CApplicationWindow *pTarget = nullptr;

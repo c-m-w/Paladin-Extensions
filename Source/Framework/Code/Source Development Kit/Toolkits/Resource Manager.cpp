@@ -123,3 +123,22 @@ bool CResourceManager::Initialize( )
 
 void CResourceManager::Uninitialize( )
 { }
+
+std::string& CResourceManager::GetResource( const std::string &strRelativePath )
+{
+	const auto pSearch = _LoadedResources.find( strRelativePath );
+	if ( pSearch != _LoadedResources.end( ) )
+		return pSearch->second;
+
+	const auto strPath = _Filesystem.GetAbsoluteContainingDirectory( strRelativePath );
+	std::string strReturn;
+
+	_Filesystem.StoreCurrentWorkingDirectory( );
+	_Filesystem.ChangeWorkingDirectory( _Filesystem.GetAppdataDirectory( ), { _Filesystem.strRelativeResourceDirectory, strPath } );
+	if ( !_Filesystem.ReadFile( CFilesystem::PathToFile( strRelativePath ), strReturn, true ) )
+		throw std::runtime_error( XOR( "Unable to obtain resource " ) + strRelativePath );
+
+	_Filesystem.RestoreWorkingDirectory( );
+	_LoadedResources.insert( std::pair< std::string, std::string >( strRelativePath, strReturn ) );
+	return GetResource( strRelativePath );
+}
