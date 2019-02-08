@@ -136,7 +136,7 @@ bool CFilesystem::CheckAbsoluteFileValidity( const std::string &strFile )
 std::string CFilesystem::GetAbsoluteContainingDirectory( const std::string &strFile )
 {
 	const auto zPosition = strFile.substr( 0, strFile.length( ) - 1 ).find_last_of( '\\' );
-	auto strReturn = zPosition == std::string::npos ? strFile : strFile.substr( 0, zPosition );
+	auto strReturn = zPosition == std::string::npos ? std::string( ) : strFile.substr( 0, zPosition );
 
 	FormatDirectory( strReturn );
 	return strReturn;
@@ -144,6 +144,9 @@ std::string CFilesystem::GetAbsoluteContainingDirectory( const std::string &strF
 
 std::string CFilesystem::PathToFile( const std::string &strPath )
 {
+	if ( strPath.find( '\\' ) == std::string::npos )
+		return strPath;
+
 	return strPath.substr( strPath.find_last_of( '\\' ) + 1 );
 }
 
@@ -474,7 +477,7 @@ void CFilesystem::FormatDirectory( std::string &strDirectory )
 			strDirectory.erase( strDirectory.end( ) );
 }
 
-std::string CFilesystem::ChangeWorkingDirectory( std::string strNew, std::initializer_list< std::string > initSubDirectories /*= { }*/ )
+std::string CFilesystem::ChangeWorkingDirectory( std::string strNew, std::initializer_list< std::string > initSubDirectories /*= { }*/, bool bHashSubDirectories /*= true*/ )
 {
 	auto &strWorkingDirectory = GetWorkingDirectory( );
 
@@ -483,8 +486,21 @@ std::string CFilesystem::ChangeWorkingDirectory( std::string strNew, std::initia
 
 	for ( auto strSubDirectory: initSubDirectories )
 	{
+		if ( strSubDirectory.empty( ) )
+			continue;
+
+		std::vector< std::string > vecSubDirectories { };
 		FormatDirectory( strSubDirectory );
-		strWorkingDirectory += strSubDirectory;
+
+		do
+		{
+			const auto strFolder = strSubDirectory.substr( 0, strSubDirectory.find_first_of( '\\' ) + 1 );
+			vecSubDirectories.emplace_back( strFolder );
+			strSubDirectory = strSubDirectory.substr( strFolder.length( ) );
+		} while ( strSubDirectory.find_first_of( '\\' ) != std::string::npos );
+
+		for ( auto &strFolder: vecSubDirectories )
+			strWorkingDirectory += bHashSubDirectories ? CRYPTO.GenerateHash( strFolder ) : strFolder;
 	}
 
 	return strWorkingDirectory;
@@ -506,6 +522,13 @@ std::string CFilesystem::FileToPath( const std::string &strFile )
 	if ( strFinalFile[ 0 ] == '\\' )
 		strFinalFile.erase( strFinalFile.begin( ) );
 
+	if ( strFinalFile.find( '\\' ) != std::string::npos
+		 && strFinalFile.find( '\\' ) != strFinalFile.length( ) - 1 )
+		throw std::runtime_error( XOR( "Attempting to format a file in a non-current path.\n"
+									   "Change the working directory rather than entering a relative directory;\n"
+									   "You may only modify a file in the current working directory." ) );
+
+	FormatDirectory( GetWorkingDirectory( ) );
 	return GetWorkingDirectory( ) + strFinalFile;
 }
 

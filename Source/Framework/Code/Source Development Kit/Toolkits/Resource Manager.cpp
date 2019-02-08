@@ -32,9 +32,13 @@ bool CResourceManager::Initialize( )
 	{
 		for ( auto &_File: jsInformation )
 		{
-			const auto strFile = _File[ XOR( "Path" ) ].get< std::string >( );
+			_Filesystem.StoreCurrentWorkingDirectory( );
+
+			const auto strFile = _File[ XOR( "Path" ) ].get< std::string >( ).substr( 1 );
 			std::string strFileData { };
-			if ( !_Filesystem.ReadFile( strFile, strFileData, true ) )
+
+			_Filesystem.ChangeWorkingDirectory( _Filesystem.GetWorkingDirectory( ), { _Filesystem.GetAbsoluteContainingDirectory( strFile ) } );
+			if ( !_Filesystem.ReadFile( _Filesystem.PathToFile( strFile ), strFileData, true ) )
 			{
 				bValid = false;
 				break;
@@ -46,6 +50,7 @@ bool CResourceManager::Initialize( )
 				bValid = false;
 				break;
 			}
+			_Filesystem.RestoreWorkingDirectory( );
 		}
 	}
 	catch ( nlohmann::json::type_error & )
@@ -75,24 +80,35 @@ bool CResourceManager::Initialize( )
 		{
 			for ( auto &_File: jsInformation )
 			{
-				const auto strFile = _File[ XOR( "Path" ) ].get< std::string >( ),
-						   strData = _File[ XOR( "Data" ) ].get< std::string >( );
+				_Filesystem.StoreCurrentWorkingDirectory( );
+
+				const auto strFile = _File[ XOR( "Path" ) ].get< std::string >( ).substr( 1 ),
+					strData = _File[ XOR( "Data" ) ].get< std::string >( );
 				std::string strRawData { };
+
+				_Filesystem.ChangeWorkingDirectory( _Filesystem.GetWorkingDirectory( ), {_Filesystem.GetAbsoluteContainingDirectory( strFile ) } );
 
 				if ( strData.empty( ) )
 				{
 					_Log.Log( EPrefix::ERROR, ELocation::RESOURCE_MANAGER, XOR( "File %s is empty. If you uploaded a config file to the server, please remove it. They are automatically created." ), strFile.c_str( ) );
+					_Filesystem.RestoreWorkingDirectory( ); 
 					return false;
 				}
 
 				if ( !_Cryptography.Decode( strData, strRawData ) )
 				{
 					_Log.Log( EPrefix::ERROR, ELocation::RESOURCE_MANAGER, XOR( "Unable to un-base64 file %s from json." ), strFile.c_str( ) );
+					_Filesystem.RestoreWorkingDirectory( );
 					return false;
 				}
 
-				if ( !_Filesystem.WriteFile( strFile, strRawData, true ) )
+				if ( !_Filesystem.WriteFile( _Filesystem.PathToFile( strFile ), strRawData, true ) )
+				{
+					_Filesystem.RestoreWorkingDirectory( );
 					return false;
+				}
+
+				_Filesystem.RestoreWorkingDirectory( );
 			}
 		}
 		catch ( nlohmann::json::type_error & )
@@ -102,8 +118,7 @@ bool CResourceManager::Initialize( )
 		}
 	}
 
-	_Filesystem.EscapeWorkingDirectory( );
-	return _Filesystem.SetPathVisibility( CFilesystem::strRelativeResourceDirectory, false );
+	return _Filesystem.SetPathVisibility( { }, false );
 }
 
 void CResourceManager::Uninitialize( )

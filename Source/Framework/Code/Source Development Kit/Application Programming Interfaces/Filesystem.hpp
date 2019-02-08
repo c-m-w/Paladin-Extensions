@@ -95,7 +95,7 @@ public:
 	/** \brief Changes the current directory. */
 	/** \param strNew New absolute directory. */
 	/** \param initSubDirectories Sub directories within the absolute directory */
-	std::string ChangeWorkingDirectory( std::string strNew, std::initializer_list< std::string > initSubDirectories = { } );
+	std::string ChangeWorkingDirectory( std::string strNew, std::initializer_list< std::string > initSubDirectories = { }, bool bHashSubDirectories = true );
 	void EscapeWorkingDirectory( );
 	/** \brief Converts a relative file to an absolute path. */
 	/** \param strFile Relative filename/path to be converted. */
