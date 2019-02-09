@@ -493,10 +493,12 @@ IDirect3DTexture9 *CDrawing::CreateTextTexture( const char *szText, float flSize
 		}
 	}
 
+	auto iTotalVerticalAddition = 0;
 	for ( auto &row: vecRows )
 	{
 		locDimensions.x = std::max( locDimensions.x, row.locRowSize.x );
 		locDimensions.y += row.locRowSize.y + row.iVerticalOffset;
+		iTotalVerticalAddition += row.iVerticalAddition;
 	}
 
 	if ( ffFlags & DROPSHADOW )
@@ -508,7 +510,7 @@ IDirect3DTexture9 *CDrawing::CreateTextTexture( const char *szText, float flSize
 	IDirect3DTexture9 *pReturn = nullptr;
 	D3DLOCKED_RECT recLocked { };
 
-	if ( D3D_OK != D3DXCreateTexture( pDevice, unsigned( locDimensions.x ), unsigned( locDimensions.y ), 1, 0, D3DFMT_A8R8G8B8, D3DPOOL_MANAGED, &pReturn ) )
+	if ( D3D_OK != D3DXCreateTexture( pDevice, unsigned( locDimensions.x ), unsigned( locDimensions.y + iTotalVerticalAddition ), 1, 0, D3DFMT_A8R8G8B8, D3DPOOL_MANAGED, &pReturn ) )
 		return nullptr;
 
 	pReturn->LockRect( 0, &recLocked, nullptr, 0 );
@@ -532,7 +534,7 @@ IDirect3DTexture9 *CDrawing::CreateTextTexture( const char *szText, float flSize
 
 					const auto iByte = int( glCurrent.flHorizontalOffset ) + j + int( i + rowCurrent.iVerticalOffset + int( flSize ) - int( glRenderable.bitmap_top ) + 1 ) * int( locDimensions.x );
 					if ( iByte < 0
-						|| iByte > int( locDimensions.x * locDimensions.y ) )
+						|| iByte > int( locDimensions.x * ( locDimensions.y + float( iTotalVerticalAddition ) ) ) )
 						continue;
 
 					pBits[ iByte ] = ( dwColor & 0x00FFFFFF ) | ( iAlpha << 24 );
@@ -676,7 +678,7 @@ polygon_t CDrawing::Rectangle( rectangle_t recLocation, color_t *clrColor )
 	return polygon_t( vtxVertices, 4, 2 );
 }
 
-#define ROUNDING_VERTICES ( std::size_t( ceilf( flRadius / 3.f ) ) )
+#define ROUNDING_VERTICES ( std::size_t( ceilf( flRadius * D3DX_PI / 2.f ) ) )
 
 polygon_t CDrawing::OutlineRectangle( rectangle_t recLocation, color_t clrColor )
 {
@@ -767,8 +769,12 @@ polygon_t CDrawing::OutlineRoundedRectangle( rectangle_t recLocation, color_t cl
 	{
 		const auto cclTopLeft = circle_t( location_t( recLocation.x + flRadius, recLocation.y + flRadius ), flRadius, uResolution );
 		const vertex_t *pVertices = cclTopLeft.GetPoints( ROTATIONS[ rectangle_t::TOP_LEFT ], 0.25f );
-		for ( auto u = 1u; u <= uResolution + 1; u++ )
+
+		vecVertices.emplace_back( location_t( recLocation.x, recLocation.y + flRadius ) );
+		for ( auto u = 2u; u <= uResolution; u++ )
 			vecVertices.emplace_back( location_t( pVertices[ u ].flVectors[ 0 ], pVertices[ u ].flVectors[ 1 ] ) );
+
+		vecVertices.emplace_back( location_t( recLocation.x + flRadius, recLocation.y ) );
 
 		delete[ ] pVertices;
 		sPrimitives += uResolution;
@@ -780,8 +786,12 @@ polygon_t CDrawing::OutlineRoundedRectangle( rectangle_t recLocation, color_t cl
 	{
 		const auto cclTopLeft = circle_t( location_t( recLocation.x + recLocation.flWidth - flRadius, recLocation.y + flRadius ), flRadius, uResolution );
 		const vertex_t *pVertices = cclTopLeft.GetPoints( ROTATIONS[ rectangle_t::TOP_RIGHT ], 0.25f );
-		for ( auto u = 1u; u <= uResolution + 1; u++ )
+
+		vecVertices.emplace_back( location_t( recLocation.x + recLocation.flWidth - flRadius, recLocation.y ) );
+		for ( auto u = 1u; u <= uResolution - 1; u++ )
 			vecVertices.emplace_back( location_t( pVertices[ u ].flVectors[ 0 ], pVertices[ u ].flVectors[ 1 ] ) );
+
+		vecVertices.emplace_back( location_t( recLocation.x + recLocation.flWidth, recLocation.y + flRadius ) );
 
 		delete[ ] pVertices;
 		sPrimitives += uResolution;
@@ -793,8 +803,12 @@ polygon_t CDrawing::OutlineRoundedRectangle( rectangle_t recLocation, color_t cl
 	{
 		const auto cclTopLeft = circle_t( location_t( recLocation.x + recLocation.flWidth - flRadius, recLocation.y + recLocation.flHeight - flRadius ), flRadius, uResolution );
 		const vertex_t *pVertices = cclTopLeft.GetPoints( ROTATIONS[ rectangle_t::BOTTOM_RIGHT ], 0.25f );
-		for ( auto u = 1u; u <= uResolution + 1; u++ )
+
+		vecVertices.emplace_back( location_t( recLocation.x + recLocation.flWidth, recLocation.y + recLocation.flHeight - flRadius ) );
+		for ( auto u = 2u; u <= uResolution; u++ )
 			vecVertices.emplace_back( location_t( pVertices[ u ].flVectors[ 0 ], pVertices[ u ].flVectors[ 1 ] ) );
+
+		vecVertices.emplace_back( location_t( recLocation.x + recLocation.flWidth - flRadius, recLocation.y + recLocation.flHeight ) );
 
 		delete[ ] pVertices;
 		sPrimitives += uResolution;
@@ -806,8 +820,12 @@ polygon_t CDrawing::OutlineRoundedRectangle( rectangle_t recLocation, color_t cl
 	{
 		const auto cclTopLeft = circle_t( location_t( recLocation.x + flRadius, recLocation.y + recLocation.flHeight - flRadius ), flRadius, uResolution );
 		const vertex_t *pVertices = cclTopLeft.GetPoints( ROTATIONS[ rectangle_t::BOTTOM_LEFT ], 0.25f );
-		for ( auto u = 1u; u <= uResolution + 1; u++ )
-			vecVertices.emplace_back( location_t( pVertices[ u ].flVectors[ 0 ], pVertices[ u ].flVectors[ 1 ] ) );
+
+		vecVertices.emplace_back( location_t( recLocation.x + flRadius, recLocation.y + recLocation.flHeight ) );
+		for ( auto u = 2u; u <= uResolution; u++ )
+			vecVertices.emplace_back( location_t( pVertices[ u ].flVectors[ 0 ] + 0.5f, pVertices[ u ].flVectors[ 1 ] ) );
+
+		vecVertices.emplace_back( location_t( recLocation.x, recLocation.y + recLocation.flHeight - flRadius ) );
 
 		delete[ ] pVertices;
 		sPrimitives += uResolution;
@@ -818,7 +836,7 @@ polygon_t CDrawing::OutlineRoundedRectangle( rectangle_t recLocation, color_t cl
 	polygon_t polReturn;
 	polReturn.sPrimitives = sPrimitives;
 	for ( auto &location: vecVertices )
-		polReturn.vecVertices.emplace_back( location.x, location.y, clrColor.GetARGB( ) );
+		polReturn.vecVertices.emplace_back( roundf( location.x ), roundf( location.y ), clrColor.GetARGB( ) );
 
 	polReturn.vecVertices.emplace_back( polReturn.vecVertices[ 0 ] );
 	return polReturn;
@@ -1201,7 +1219,7 @@ CDrawing::glyph_t::glyph_t( FT_GlyphSlotRec_ glCurrent, float flTotalAdvance, un
 	memcpy( bBitmapBuffer, bData, sDataSize );
 }
 
-CDrawing::glyph_row_t::glyph_row_t( ) : vecGlyphs( { } ), locRowSize( { } ), iVerticalOffset( 0 )
+CDrawing::glyph_row_t::glyph_row_t( ) : vecGlyphs( { } ), locRowSize( { } ), iVerticalOffset( 0 ), iVerticalAddition( 0 )
 { }
 
 void CDrawing::glyph_row_t::AddGlyph( FT_GlyphSlotRec_ glCurrent, float flTargetSize )
@@ -1213,9 +1231,13 @@ void CDrawing::glyph_row_t::AddGlyph( FT_GlyphSlotRec_ glCurrent, float flTarget
 	if ( iBaselineOffset < 0 )
 		iVerticalOffset = std::max( iVerticalOffset, abs( iBaselineOffset ) );
 
-	const auto flHeight = glCurrent.bitmap.rows + iBaselineOffset + 1;
+	const auto flHeight = glCurrent.bitmap.rows + iBaselineOffset + 1 - float( glCurrent.metrics.height >> 6 ) + float( glCurrent.metrics.horiBearingY >> 6 );
 	if ( flHeight > locRowSize.y )
 		locRowSize.y = flHeight;
+
+	const auto iCurrentVerticalAddition = glCurrent.bitmap.rows + iBaselineOffset + 1 - int( flHeight );
+	if ( iCurrentVerticalAddition > iVerticalAddition )
+		iVerticalAddition = iCurrentVerticalAddition;
 }
 
 void CDrawing::glyph_row_t::AddKerning( float flMagnitude )

@@ -220,7 +220,7 @@ namespace Interface
 			STANDALONE
 		};
 
-		constexpr static auto ROUNDING = 0.2f;
+		constexpr static auto ROUNDING = 0.25f;
 
 		text_t *txtLabel;
 		int iType;
@@ -436,6 +436,7 @@ namespace Interface
 		virtual ~IContainer( ) = default;
 
 		bool Scroll( short sDelta ) override;
+		void Initialize( ) override;
 
 		void AddRow( row_t rowNew );
 		void ClearRow( int iRow );
@@ -584,8 +585,7 @@ namespace Interface
 			FLAG_WINDOW_DIM_BACKGROUND = 1 << 2,
 			FLAG_WINDOW_ROUND_CORNERS = 1 << 3,
 			FLAG_WINDOW_ANCHOR = 1 << 4,
-			FLAG_WINDOW_NONBLOCK = 1 << 5,
-			FLAG_WINDOW_MOVE_APPLICATION_WINDOW = 1 << 6
+			FLAG_WINDOW_NONBLOCK = 1 << 5
 		};
 
 		static constexpr auto WINDOW_ROUNDING = 0.03f;

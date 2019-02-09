@@ -24,4 +24,6 @@ public:
 	HWND GetWindowHandle( );
 	bool GetBounds( RECT& recOut );
 	bool Move( int iHorizontalAmount, int iVerticalAmount );
+	void Hide( );
+	void Show( );
 };

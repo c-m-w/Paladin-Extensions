@@ -24,6 +24,7 @@ bool CLogging::Initialize( )
 	strLocations[ RESOURCE_MANAGER ]	= XOR( "[Resources]\t" );
 	strLocations[ WINDOW ]				= XOR( "[Window]\t\t" );
 	strLocations[ DRAWING ]				= XOR( "[Drawing]\t" );
+	strLocations[ APPLICATION ]			= XOR( "[Application]\t" );
 
 #if defined _DEBUG
 	for ( auto &strLocation : strLocations )
