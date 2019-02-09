@@ -676,7 +676,7 @@ polygon_t CDrawing::Rectangle( rectangle_t recLocation, color_t *clrColor )
 	return polygon_t( vtxVertices, 4, 2 );
 }
 
-#define ROUNDING_VERTICES ( std::size_t( ceilf( flRadius ) ) )
+#define ROUNDING_VERTICES ( std::size_t( ceilf( flRadius * D3DX_PI ) ) )
 
 polygon_t CDrawing::OutlineRectangle( rectangle_t recLocation, color_t clrColor )
 {
@@ -786,7 +786,7 @@ polygon_t CDrawing::OutlineRoundedRectangle( rectangle_t recLocation, color_t cl
 		const vertex_t *pVertices = cclTopLeft.GetPoints( ROTATIONS[ rectangle_t::TOP_RIGHT ], 0.25f );
 
 		vecVertices.emplace_back( location_t( recLocation.x + recLocation.flWidth - flRadius, recLocation.y ) );
-		for ( auto u = 2u; u <= uResolution; u++ )
+		for ( auto u = 1u; u <= uResolution - 1; u++ )
 			vecVertices.emplace_back( location_t( pVertices[ u ].flVectors[ 0 ], pVertices[ u ].flVectors[ 1 ] ) );
 
 		vecVertices.emplace_back( location_t( recLocation.x + recLocation.flWidth, recLocation.y + flRadius ) );
@@ -821,7 +821,7 @@ polygon_t CDrawing::OutlineRoundedRectangle( rectangle_t recLocation, color_t cl
 
 		vecVertices.emplace_back( location_t( recLocation.x + flRadius, recLocation.y + recLocation.flHeight ) );
 		for ( auto u = 2u; u <= uResolution; u++ )
-			vecVertices.emplace_back( location_t( pVertices[ u ].flVectors[ 0 ], pVertices[ u ].flVectors[ 1 ] ) );
+			vecVertices.emplace_back( location_t( pVertices[ u ].flVectors[ 0 ] + 0.5f, pVertices[ u ].flVectors[ 1 ] ) );
 
 		vecVertices.emplace_back( location_t( recLocation.x, recLocation.y + recLocation.flHeight - flRadius ) );
 
