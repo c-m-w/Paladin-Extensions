@@ -13,7 +13,7 @@ bool CDrawing::Initialize( )
 	{
 		if ( pDevice == nullptr )
 		{
-			_Log.Log( EPrefix::ERROR, ELocation::DRAWING, XOR( "No render target or device was set!" ) );
+			LOG.Log( EPrefix::ERROR, ELocation::DRAWING, XOR( "No render target or device was set!" ) );
 			return false;
 		}
 	}
@@ -23,7 +23,7 @@ bool CDrawing::Initialize( )
 	if ( FT_Init_FreeType( &libInstance ) != 0
 		|| libInstance == nullptr )
 	{
-		_Log.Log( EPrefix::ERROR, ELocation::DRAWING, XOR( "Unable to initialize FreeType." ) );
+		LOG.Log( EPrefix::ERROR, ELocation::DRAWING, XOR( "Unable to initialize FreeType." ) );
 		return false;
 	}
 
@@ -40,7 +40,7 @@ bool CDrawing::Initialize( )
 	for ( auto &strFont: strFontFileNames )
 		if ( !AddFont( strFont ) )
 		{
-			_Log.Log( EPrefix::ERROR, ELocation::DRAWING, XOR( "Unable to add font %s." ), strFont.c_str( ) );
+			LOG.Log( EPrefix::ERROR, ELocation::DRAWING, XOR( "Unable to add font %s." ), strFont.c_str( ) );
 			return false;
 		}
 
@@ -51,7 +51,7 @@ bool CDrawing::CreateD3D( )
 {
 	if ( ( pD3DInstance = Direct3DCreate9( DIRECT3D_VERSION ) ) == nullptr )
 	{
-		_Log.Log( EPrefix::ERROR, ELocation::DRAWING, XOR( "Unable to create D3D instance." ) );
+		LOG.Log( EPrefix::ERROR, ELocation::DRAWING, XOR( "Unable to create D3D instance." ) );
 		return false;
 	}
 
@@ -66,7 +66,7 @@ bool CDrawing::CreateD3D( )
 	if ( pD3DInstance->CreateDevice( D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, pTarget->GetWindowHandle( ), D3DCREATE_SOFTWARE_VERTEXPROCESSING, &pParameters, &pDevice ) != D3D_OK )
 	{
 		pD3DInstance->Release( );
-		_Log.Log( EPrefix::ERROR, ELocation::DRAWING, XOR( "Failed to create D3D device." ) );
+		LOG.Log( EPrefix::ERROR, ELocation::DRAWING, XOR( "Failed to create D3D device." ) );
 		return false;
 	}
 
@@ -109,19 +109,19 @@ bool CDrawing::CreateState( )
 			&& pDevice->SetFVF( FVF ) == D3D_OK )
 			return true;
 
-		_Log.Log( EPrefix::ERROR, ELocation::DRAWING, XOR( "Could not set device state." ) );
+		LOG.Log( EPrefix::ERROR, ELocation::DRAWING, XOR( "Could not set device state." ) );
 		return false;
 	};
 
 	if ( pState != nullptr )
 	{
-		_Log.Log( EPrefix::WARNING, ELocation::DRAWING, XOR( "Attempting to create state when state exists." ) );
+		LOG.Log( EPrefix::WARNING, ELocation::DRAWING, XOR( "Attempting to create state when state exists." ) );
 		return false;
 	}
 
 	if ( pDevice->BeginStateBlock( ) != D3D_OK )
 	{
-		_Log.Log( EPrefix::ERROR, ELocation::DRAWING, XOR( "Could not begin state block." ) );
+		LOG.Log( EPrefix::ERROR, ELocation::DRAWING, XOR( "Could not begin state block." ) );
 		fnSetState( );
 		return false;
 	}
@@ -129,7 +129,7 @@ bool CDrawing::CreateState( )
 	fnSetState( );
 	if ( pDevice->EndStateBlock( &pState ) != D3D_OK )
 	{
-		_Log.Log( EPrefix::ERROR, ELocation::DRAWING, XOR( "Could not end state block." ) );
+		LOG.Log( EPrefix::ERROR, ELocation::DRAWING, XOR( "Could not end state block." ) );
 		return false;
 	}
 
@@ -163,7 +163,7 @@ void CDrawing::SetTarget( IDirect3DDevice9 *pNewDevice )
 	pDevice = pNewDevice;
 	if ( pDevice->GetCreationParameters( &_CreationParameters ) != D3D_OK )
 	{
-		_Log.Log( EPrefix::ERROR, ELocation::DRAWING, XOR( "Unable to get creation parameters of device!" ) );
+		LOG.Log( EPrefix::ERROR, ELocation::DRAWING, XOR( "Unable to get creation parameters of device!" ) );
 		pDevice = nullptr;
 	}
 	else
@@ -178,7 +178,7 @@ bool CDrawing::SetState( )
 
 	if ( D3D_OK != pState->Apply( ) )
 	{
-		_Log.Log( EPrefix::WARNING, ELocation::DRAWING, XOR( "Failed to apply state block." ) );
+		LOG.Log( EPrefix::WARNING, ELocation::DRAWING, XOR( "Failed to apply state block." ) );
 		return false;
 	}
 
@@ -191,11 +191,11 @@ bool CDrawing::BeginFrame( )
 		return false;
 
 	if ( D3D_OK != pDevice->Clear( NULL, nullptr, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, NULL, NULL, NULL ) )
-		_Log.Log( EPrefix::WARNING, ELocation::DRAWING, XOR( "Failed to clear device." ) );
+		LOG.Log( EPrefix::WARNING, ELocation::DRAWING, XOR( "Failed to clear device." ) );
 
 	if ( D3D_OK != pDevice->BeginScene( ) )
 	{
-		_Log.Log( EPrefix::WARNING, ELocation::DRAWING, XOR( "Failed to begin scene." ) );
+		LOG.Log( EPrefix::WARNING, ELocation::DRAWING, XOR( "Failed to begin scene." ) );
 		return false;
 	}
 
@@ -206,7 +206,7 @@ bool CDrawing::EndFrame( )
 {
 	if ( pDevice->EndScene( ) != D3D_OK )
 	{
-		_Log.Log( EPrefix::WARNING, ELocation::DRAWING, XOR( "Failed to end scene." ) );
+		LOG.Log( EPrefix::WARNING, ELocation::DRAWING, XOR( "Failed to end scene." ) );
 		return false;
 	}
 
@@ -215,18 +215,18 @@ bool CDrawing::EndFrame( )
 	{
 		if ( hrPresent == D3DERR_DEVICELOST && pDevice->TestCooperativeLevel( ) == D3DERR_DEVICENOTRESET )
 		{
-			_Log.Log( EPrefix::INFO, ELocation::DRAWING, XOR( "Attempting to reset device after being lost." ) );
+			LOG.Log( EPrefix::INFO, ELocation::DRAWING, XOR( "Attempting to reset device after being lost." ) );
 			PreReset( );
 			if ( D3D_OK != pDevice->Reset( &pParameters ) )
 			{
-				_Log.Log( EPrefix::ERROR, ELocation::DRAWING, XOR( "Failed to reset device!" ) );
+				LOG.Log( EPrefix::ERROR, ELocation::DRAWING, XOR( "Failed to reset device!" ) );
 				return false;
 			}
 
 			return Create( );
 		}
 
-		_Log.Log( EPrefix::WARNING, ELocation::DRAWING, XOR( "Failed to present scene." ) );
+		LOG.Log( EPrefix::WARNING, ELocation::DRAWING, XOR( "Failed to present scene." ) );
 		return false;
 	}
 
@@ -239,7 +239,7 @@ bool CDrawing::PreReset( )
 	{
 		if ( pSprite->Release( ) != D3D_OK )
 		{
-			_Log.Log( EPrefix::ERROR, ELocation::DRAWING, XOR( "Unable to release sprite." ) );
+			LOG.Log( EPrefix::ERROR, ELocation::DRAWING, XOR( "Unable to release sprite." ) );
 			return false;
 		}
 
@@ -250,7 +250,7 @@ bool CDrawing::PreReset( )
 	{
 		if ( pState->Release( ) != D3D_OK )
 		{
-			_Log.Log( EPrefix::ERROR, ELocation::DRAWING, XOR( "Unable to release state." ) );
+			LOG.Log( EPrefix::ERROR, ELocation::DRAWING, XOR( "Unable to release state." ) );
 			return false;
 		}
 
@@ -291,7 +291,7 @@ bool CDrawing::Create( )
 		if ( !( bReturn &= D3D_OK == D3DXCreateTextureFromFileInMemoryEx( pDevice, &strTextureData[ 0 ], strTextureData.length( ), texture.first.uWidth, texture.first.uHeight, D3DX_FROM_FILE,
 																  D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL, &texture.second.first,
 																  nullptr, &texture.second.second ) ) )
-			_Log.Log( EPrefix::ERROR, ELocation::DRAWING, XOR( "Unable to create texture %s from memory." ), texture.first.strName.c_str( ) );
+			LOG.Log( EPrefix::ERROR, ELocation::DRAWING, XOR( "Unable to create texture %s from memory." ), texture.first.strName.c_str( ) );
 	}
 
 	iCursorTextureIndicies[ ARROW ] = TEXTURE_ARROW;
@@ -299,7 +299,7 @@ bool CDrawing::Create( )
 	iCursorTextureIndicies[ IBEAM ] = TEXTURE_IBEAM;
 
 	if ( !( bReturn &= D3DXCreateSprite( pDevice, &pSprite ) == D3D_OK ) )
-		_Log.Log( EPrefix::ERROR, ELocation::DRAWING, XOR( "Unable to create sprite." ) );
+		LOG.Log( EPrefix::ERROR, ELocation::DRAWING, XOR( "Unable to create sprite." ) );
 
 	return bReturn;
 }
@@ -640,7 +640,7 @@ void CDrawing::DrawTexture( IDirect3DTexture9 *pTexture, const location_t &locLo
 		pSprite->End( );
 	}
 	else
-		_Log.Log( EPrefix::WARNING, ELocation::DRAWING, XOR( "Unable to begin sprite drawing." ) );
+		LOG.Log( EPrefix::WARNING, ELocation::DRAWING, XOR( "Unable to begin sprite drawing." ) );
 }
 
 void CDrawing::DrawTexture( int iTextureID, const location_t &locLocation )
@@ -1247,7 +1247,7 @@ bool text_t::Initialize( const color_t &clrText, EFontFlags ffFlags )
 		pText = nullptr;
 	}
 
-	return ( pText = _Drawing.CreateTextTexture( strText.c_str( ), iSize, iFont, clrText, locDimensions, ffFlags ) ) != nullptr;
+	return ( pText = DRAW.CreateTextTexture( strText.c_str( ), iSize, iFont, clrText, locDimensions, ffFlags ) ) != nullptr;
 }
 
 void text_t::ChangeText( const text_t &txtNew, const color_t &clrText, EFontFlags ffFlags )
@@ -1287,7 +1287,7 @@ void text_t::Draw( const location_t &locLocation )
 	if ( pText == nullptr )
 		return;
 
-	_Drawing.DrawTexture( pText, locLocation );
+	DRAW.DrawTexture( pText, locLocation );
 }
 
 void text_t::Draw( const rectangle_t &recUsableSpace )
@@ -1428,7 +1428,7 @@ void polygon_t::Draw( rectangle_t recRelative, color_t clrColor )
 		_Vertex.flVectors[ 1 ] += recRelative.y;
 		_Vertex.dwColor = dwColor;
 	}
-	_Drawing.Polygon( &vecTemp[ 0 ], vecTemp.size( ), sPrimitives );
+	DRAW.Polygon( &vecTemp[ 0 ], vecTemp.size( ), sPrimitives );
 }
 
 void polygon_t::Join( const polygon_t &other )
@@ -1444,7 +1444,7 @@ void polygon_t::Draw( )
 	if ( vecVertices.empty( ) )
 		return;
 
-	_Drawing.Polygon( &vecVertices[ 0 ], vecVertices.size( ), sPrimitives );
+	DRAW.Polygon( &vecVertices[ 0 ], vecVertices.size( ), sPrimitives );
 }
 
 void polygon_t::Draw( rectangle_t recRelative )
@@ -1459,7 +1459,7 @@ void polygon_t::Draw( rectangle_t recRelative )
 		_Vertex.flVectors[ 0 ] += recRelative.x;
 		_Vertex.flVectors[ 1 ] += recRelative.y;
 	}
-	_Drawing.Polygon( &vecTemp[ 0 ], vecTemp.size( ), sPrimitives );
+	DRAW.Polygon( &vecTemp[ 0 ], vecTemp.size( ), sPrimitives );
 }
 
 polygon_buffer_t polygon_t::GetBuffer( D3DPRIMITIVETYPE ptDraw /*= D3DPT_TRIANGLEFAN*/ )
@@ -1467,7 +1467,7 @@ polygon_buffer_t polygon_t::GetBuffer( D3DPRIMITIVETYPE ptDraw /*= D3DPT_TRIANGL
 	if ( vecVertices.empty( ) )
 		throw std::runtime_error( XOR( "Attempting to create a buffer from no vertices." ) );
 
-	return polygon_buffer_t( _Drawing.ConstructPolygon( &vecVertices[ 0 ], vecVertices.size( ) ), sPrimitives, ptDraw );
+	return polygon_buffer_t( DRAW.ConstructPolygon( &vecVertices[ 0 ], vecVertices.size( ) ), sPrimitives, ptDraw );
 }
 
 texture_t::texture_t( unsigned _uWidth, unsigned _uHeight, const std::string &_strName ): uWidth( _uWidth ), uHeight( _uHeight ), strName( _strName )

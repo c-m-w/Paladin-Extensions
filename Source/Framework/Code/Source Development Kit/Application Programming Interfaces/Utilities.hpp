@@ -32,8 +32,9 @@ namespace Utilities
 
 	/** \brief Gets the time since epoch in milliseconds. */
 	/** \return Time since epoch in milliseconds. */
-	moment_t GetMoment( );
-	void Pause( moment_t mmtPauseLength = 1ui64 );
+	template< typename _t = std::chrono::milliseconds > [ [ nodiscard ] ] moment_t GetMoment( );
+	void Pause( moment_t mmtPauseLength = ULLONG_MAX );
+
 	void OpenLink( const std::string& strLink );
 }
 

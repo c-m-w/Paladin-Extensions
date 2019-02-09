@@ -4,6 +4,7 @@
 
 #define ACKNOWLEDGED_ENTRY_WARNING_1
 #define USE_NAMESPACES
+#define USE_DEFINITIONS
 #include "../../Framework.hpp"
 
 namespace Interface
@@ -88,7 +89,7 @@ namespace Interface
 			&& pHoveringWidget->GetContainingWindow( ) == GetForegroundWindow( ) )
 			iTexture = pHoveringWidget->iCursor;
 
-		_Drawing.ApplyCursor( iTexture );
+		DRAW.ApplyCursor( iTexture );
 	}
 
 	void decltype( _WidgetContext )::UpdateContainerWidgets( IContainer *pContainer )
@@ -178,7 +179,7 @@ namespace Interface
 			reinterpret_cast< IContainer* >( this )->bUpdate = false;
 		}
 
-		if ( iType != SCROLLBAR && !_Drawing.IsAreaVisible( recAbsolute )
+		if ( iType != SCROLLBAR && !DRAW.IsAreaVisible( recAbsolute )
 			|| IsCovered( ) )
 			return;
 
@@ -274,7 +275,7 @@ namespace Interface
 		const auto recAbsolute = GetAbsoluteLocation( );
 
 		for ( auto &polygon: vecGeometry )
-			_Drawing.DrawPolygon( polygon );
+			DRAW.DrawPolygon( polygon );
 
 		txtLabel->Draw( location_t( recAbsolute.x + 5.f, recAbsolute.y + recLocation.flHeight / 2.f - txtLabel->GetHeight( ) / 2.f ) );
 	}
@@ -283,7 +284,7 @@ namespace Interface
 	{
 		const auto recAbsolute = GetAbsoluteLocation( );
 
-		vecGeometry.emplace_back( _Drawing.Rectangle( recAbsolute, *pCurrentBackground ).GetBuffer( ) );
+		vecGeometry.emplace_back( DRAW.Rectangle( recAbsolute, *pCurrentBackground ).GetBuffer( ) );
 		txtLabel->Initialize( *pCurrentForeground, EFontFlags::NONE );
 	}
 
@@ -297,7 +298,7 @@ namespace Interface
 		const auto recAbsolute = GetAbsoluteLocation( );
 
 		for ( auto &object: vecGeometry )
-			_Drawing.DrawPolygon( object );
+			DRAW.DrawPolygon( object );
 
 		txtLabel->Draw( recAbsolute );
 	}
@@ -307,8 +308,8 @@ namespace Interface
 		const auto recRelative = GetAbsoluteLocation( );
 		bool bCorderRounding[ ] = { iType == LEFT || iType == STANDALONE, iType == RIGHT || iType == STANDALONE, iType == RIGHT || iType == STANDALONE, iType == LEFT || iType == STANDALONE };
 
-		vecGeometry.emplace_back( _Drawing.RoundedRectangle( recRelative, *pCurrentBackground, bCorderRounding, ROUNDING ).GetBuffer( ) );
-		vecGeometry.emplace_back( _Drawing.OutlineRoundedRectangle( recRelative, OUTLINE_DARK, bCorderRounding, ROUNDING ).GetBuffer( D3DPT_LINESTRIP ) );
+		vecGeometry.emplace_back( DRAW.RoundedRectangle( recRelative, *pCurrentBackground, bCorderRounding, ROUNDING ).GetBuffer( ) );
+		vecGeometry.emplace_back( DRAW.OutlineRoundedRectangle( recRelative, OUTLINE_DARK, bCorderRounding, ROUNDING ).GetBuffer( D3DPT_LINESTRIP ) );
 
 		txtLabel->Initialize( *pCurrentForeground, EFontFlags::NONE );
 	}
@@ -325,7 +326,7 @@ namespace Interface
 	void CImage::Draw( )
 	{
 		const auto recLocation = GetAbsoluteLocation( );
-		_Drawing.RenderTexture( iTextureID, location_t( recLocation.x, recLocation.y ) );
+		DRAW.RenderTexture( iTextureID, location_t( recLocation.x, recLocation.y ) );
 	}
 
 	void CImage::InitializeDrawingInformation( )
@@ -439,8 +440,8 @@ namespace Interface
 		bool bCornerRounding[ ] { true, true, true, true };
 		std::vector< polygon_t > vecOutline { };
 
-		vecGeometry.emplace_back( _Drawing.RoundedRectangle( recAbsolute, *pCurrentBackground, bCornerRounding, ROUND_RATIO ).GetBuffer( ) );
-		vecGeometry.emplace_back( _Drawing.OutlineRoundedRectangle( recAbsolute, IsActive( ) ? OUTLINE_LIGHT : OUTLINE_DARK, bCornerRounding, ROUND_RATIO ).GetBuffer( D3DPT_LINESTRIP ) );
+		vecGeometry.emplace_back( DRAW.RoundedRectangle( recAbsolute, *pCurrentBackground, bCornerRounding, ROUND_RATIO ).GetBuffer( ) );
+		vecGeometry.emplace_back( DRAW.OutlineRoundedRectangle( recAbsolute, IsActive( ) ? OUTLINE_LIGHT : OUTLINE_DARK, bCornerRounding, ROUND_RATIO ).GetBuffer( D3DPT_LINESTRIP ) );
 	}
 
 	void CInputBox::Draw( )
@@ -449,9 +450,9 @@ namespace Interface
 		const auto locText = location_t( recText.x, recText.y + recText.flHeight / 2.f - flCharacterHeight / 2.f );
 
 		for ( auto &vertex: vecGeometry )
-			_Drawing.DrawPolygon( vertex );
+			DRAW.DrawPolygon( vertex );
 
-		_Drawing.PushDrawingSpace( recText );
+		DRAW.PushDrawingSpace( recText );
 		auto txtTemp = text_t( strBuffer.substr( iDisplayBegin ), iFont, TEXT_SIZE, text_t::LEFT, text_t::TOP );
 		txtTemp.Initialize( IsActive( ) ? TEXT_NORMAL : TEXT_DARK, EFontFlags::NONE );
 		txtTemp.Draw( locText );
@@ -462,7 +463,7 @@ namespace Interface
 			if ( iSelection == 0 )
 			{
 				if ( GetMoment( ) % 1000 <= 500ull )
-					_Drawing.DrawPolygon( _Drawing.Line( location_t( GetCursorX( ), locText.y + 1.f ), location_t( GetCursorX( ), locText.y + flCharacterHeight + 2.f ), 1.f, BLUE ).GetBuffer( ), true );
+					DRAW.DrawPolygon( DRAW.Line( location_t( GetCursorX( ), locText.y + 1.f ), location_t( GetCursorX( ), locText.y + flCharacterHeight + 2.f ), 1.f, BLUE ).GetBuffer( ), true );
 			}
 			else
 			{
@@ -475,10 +476,10 @@ namespace Interface
 					flEnd = flTemp;
 				}
 
-				_Drawing.DrawPolygon( _Drawing.Rectangle( rectangle_t( flStart, locText.y - 1.f, flWidth, flCharacterHeight + 2.f ), TRANSLUCENT_BLUE ).GetBuffer( ), true );
+				DRAW.DrawPolygon( DRAW.Rectangle( rectangle_t( flStart, locText.y - 1.f, flWidth, flCharacterHeight + 2.f ), TRANSLUCENT_BLUE ).GetBuffer( ), true );
 			}
 		}
-		_Drawing.PopDrawingSpace( );
+		DRAW.PopDrawingSpace( );
 	}
 
 	void CInputBox::MouseMove( location_t locMouse )
@@ -529,8 +530,8 @@ namespace Interface
 
 	void CInputBox::Event( unsigned uKey, CKeyState ksState )
 	{
-		const auto bControl = _Input.GetKeyState( VK_CONTROL ) == true,
-			bShift = _Input.GetKeyState( VK_SHIFT ) == true;
+		const auto bControl = IN.GetKeyState( VK_CONTROL ) == true,
+			bShift = IN.GetKeyState( VK_SHIFT ) == true;
 
 		if ( ksState )
 			switch ( uKey )
@@ -659,7 +660,7 @@ namespace Interface
 	void CColorButton::Draw( )
 	{
 		for ( auto &vertex: vecGeometry )
-			_Drawing.DrawPolygon( vertex );
+			DRAW.DrawPolygon( vertex );
 	}
 
 	void CColorButton::InitializeDrawingInformation( )
@@ -667,8 +668,8 @@ namespace Interface
 		const auto recAbsolute = GetAbsoluteLocation( );
 		bool bRounding[ ] { true, true, true, true };
 
-		vecGeometry.emplace_back( _Drawing.RoundedRectangle( recAbsolute, *pColor, bRounding, ROUNDING ).GetBuffer( ) );
-		vecGeometry.emplace_back( _Drawing.OutlineRoundedRectangle( recAbsolute, *pCurrentBackground, bRounding, ROUNDING ).GetBuffer( D3DPT_LINESTRIP ) );
+		vecGeometry.emplace_back( DRAW.RoundedRectangle( recAbsolute, *pColor, bRounding, ROUNDING ).GetBuffer( ) );
+		vecGeometry.emplace_back( DRAW.OutlineRoundedRectangle( recAbsolute, *pCurrentBackground, bRounding, ROUNDING ).GetBuffer( D3DPT_LINESTRIP ) );
 	}
 
 	CScrollbar::CScrollbar( ): IWidget( SCROLLBAR, ECursor::HAND, nullptr )
@@ -677,7 +678,7 @@ namespace Interface
 	void CScrollbar::Draw( )
 	{
 		for ( auto &vertex: vecGeometry )
-			_Drawing.DrawPolygon( vertex );
+			DRAW.DrawPolygon( vertex );
 	}
 
 	void CScrollbar::InitializeDrawingInformation( )
@@ -691,8 +692,8 @@ namespace Interface
 			flBegin = ( recLocation.flHeight - flScrollbarHeight ) * pContainer->flScrollAmount / ( pContainer->flUsedVerticalSpace - pContainer->recLocation.flHeight );
 		bool bRounding[ ] { true, true, true, true };
 
-		vecGeometry.emplace_back( _Drawing.RoundedRectangle( recLocation, BACKGROUND_DIM, bRounding, 1.f ).GetBuffer( ) );
-		vecGeometry.emplace_back( _Drawing.RoundedRectangle( rectangle_t( recLocation.x, recLocation.y + flBegin, recLocation.flWidth, flScrollbarHeight ), BLUE, bRounding, 1.f ).GetBuffer( ) );
+		vecGeometry.emplace_back( DRAW.RoundedRectangle( recLocation, BACKGROUND_DIM, bRounding, 1.f ).GetBuffer( ) );
+		vecGeometry.emplace_back( DRAW.RoundedRectangle( rectangle_t( recLocation.x, recLocation.y + flBegin, recLocation.flWidth, flScrollbarHeight ), BLUE, bRounding, 1.f ).GetBuffer( ) );
 	}
 
 	void CScrollbar::Event( unsigned uKey, CKeyState ksState )
@@ -758,7 +759,7 @@ namespace Interface
 		const auto recAbsolute = GetAbsoluteLocation( );
 
 		for ( auto &vertex: vecGeometry )
-			_Drawing.DrawPolygon( vertex );
+			DRAW.DrawPolygon( vertex );
 
 		txtTitle->Draw( location_t( recAbsolute.x + 5.f, recAbsolute.y + recAbsolute.flHeight / 2.f - txtTitle->GetHeight( ) / 2.f ) );
 	}
@@ -769,11 +770,11 @@ namespace Interface
 		bool bRounding[ ] { true, true, true, true };
 
 		txtTitle->Initialize( *pCurrentForeground, EFontFlags::NONE );
-		vecGeometry.emplace_back( _Drawing.RoundedRectangle( recAbsolute, *pCurrentBackground, bRounding, ROUNDING ).GetBuffer( ) );
-		vecGeometry.emplace_back( _Drawing.Triangle( location_t( recAbsolute.x + recAbsolute.flWidth - 5.f - TRIANGLE_WIDTH, recAbsolute.y + recAbsolute.flHeight / 2.f - TRIANGLE_HEIGHT / 2.f ),
+		vecGeometry.emplace_back( DRAW.RoundedRectangle( recAbsolute, *pCurrentBackground, bRounding, ROUNDING ).GetBuffer( ) );
+		vecGeometry.emplace_back( DRAW.Triangle( location_t( recAbsolute.x + recAbsolute.flWidth - 5.f - TRIANGLE_WIDTH, recAbsolute.y + recAbsolute.flHeight / 2.f - TRIANGLE_HEIGHT / 2.f ),
 											location_t( recAbsolute.x + recAbsolute.flWidth - 5.f, recAbsolute.y + recAbsolute.flHeight / 2.f - TRIANGLE_HEIGHT / 2.f ),
 											location_t( recAbsolute.x + recAbsolute.flWidth - 5.f - TRIANGLE_WIDTH / 2.f, recAbsolute.y + recAbsolute.flHeight / 2.f + TRIANGLE_HEIGHT / 2.f ), WHITE ).GetBuffer( ) );
-		vecGeometry.emplace_back( _Drawing.OutlineRoundedRectangle( recAbsolute, OUTLINE_LIGHT, bRounding, ROUNDING ).GetBuffer( D3DPT_LINESTRIP ) );
+		vecGeometry.emplace_back( DRAW.OutlineRoundedRectangle( recAbsolute, OUTLINE_LIGHT, bRounding, ROUNDING ).GetBuffer( D3DPT_LINESTRIP ) );
 	}
 
 	void CCombobox::Event( unsigned uKey, CKeyState ksState )
@@ -845,14 +846,14 @@ namespace Interface
 	{
 		const auto recLocation = GetAbsoluteLocation( );
 
-		_Drawing.PushDrawingSpace( recLocation );
+		DRAW.PushDrawingSpace( recLocation );
 
-		_Drawing.Rectangle( recLocation, clrBackground[ 0 ] );
+		DRAW.Rectangle( recLocation, clrBackground[ 0 ] );
 
 		for ( auto &pWidget: vecWidgets )
 			pWidget->PreDraw( );
 
-		_Drawing.PopDrawingSpace( );
+		DRAW.PopDrawingSpace( );
 	}
 
 	void CPanel::InitializeDrawingInformation( )
@@ -917,8 +918,8 @@ namespace Interface
 		txtTitle->Initialize( TEXT_DARK, EFontFlags::DROPSHADOW );
 		const auto flHalfHeight = txtTitle->GetHeight( ) / 2.f;
 
-		vecGeometry.emplace_back( _Drawing.RoundedRectangle( rectangle_t( recAbsolute.x, recAbsolute.y + flHalfHeight, recAbsolute.flWidth, recAbsolute.flHeight - flHalfHeight ), clrBackground, bRounding, ROUNDING ).GetBuffer( ) );
-		vecGeometry.emplace_back( _Drawing.OutlineSpacedRoundedRectangle( rectangle_t( recAbsolute.x, recAbsolute.y + flHalfHeight, recAbsolute.flWidth, recAbsolute.flHeight - flHalfHeight ), OUTLINE_LIGHT, bRounding, ROUNDING, txtTitle->GetWidth( ) ).GetBuffer( D3DPT_LINESTRIP ) );
+		vecGeometry.emplace_back( DRAW.RoundedRectangle( rectangle_t( recAbsolute.x, recAbsolute.y + flHalfHeight, recAbsolute.flWidth, recAbsolute.flHeight - flHalfHeight ), clrBackground, bRounding, ROUNDING ).GetBuffer( ) );
+		vecGeometry.emplace_back( DRAW.OutlineSpacedRoundedRectangle( rectangle_t( recAbsolute.x, recAbsolute.y + flHalfHeight, recAbsolute.flWidth, recAbsolute.flHeight - flHalfHeight ), OUTLINE_LIGHT, bRounding, ROUNDING, txtTitle->GetWidth( ) ).GetBuffer( D3DPT_LINESTRIP ) );
 	}
 
 	void CGroupbox::Initialize( )
@@ -931,14 +932,14 @@ namespace Interface
 		const auto recAbsolute = GetAbsoluteLocation( );
 
 		for ( auto &vertex: vecGeometry )
-			_Drawing.DrawPolygon( vertex );
+			DRAW.DrawPolygon( vertex );
 
-		_Drawing.PushDrawingSpace( rectangle_t( recAbsolute.x, recAbsolute.y + STANDARD_HEIGHT / 2.f, recAbsolute.flWidth, recAbsolute.flHeight - STANDARD_HEIGHT / 2.f ) );
+		DRAW.PushDrawingSpace( rectangle_t( recAbsolute.x, recAbsolute.y + STANDARD_HEIGHT / 2.f, recAbsolute.flWidth, recAbsolute.flHeight - STANDARD_HEIGHT / 2.f ) );
 
 		for ( auto &widget: vecWidgets )
 			widget->PreDraw( );
 
-		_Drawing.PopDrawingSpace( );
+		DRAW.PopDrawingSpace( );
 		txtTitle->Draw( location_t( recAbsolute.x + std::min( recAbsolute.flWidth, recAbsolute.flHeight ) * ROUNDING, recAbsolute.y - 2.f ) );
 	}
 
@@ -990,12 +991,12 @@ namespace Interface
 	{
 		const auto recAbsolute = GetAbsoluteLocation( );
 
-		_Drawing.PushDrawingSpace( recAbsolute );
+		DRAW.PushDrawingSpace( recAbsolute );
 
 		for ( auto &widget: vecWidgets )
 			widget->PreDraw( );
 
-		_Drawing.PopDrawingSpace( );
+		DRAW.PopDrawingSpace( );
 	}
 
 	CHeaderPanel::CHeaderPanel( ): iIconTexture( -1 ), locDragStart( location_t( ) )
@@ -1029,8 +1030,8 @@ namespace Interface
 	{
 		const auto recLocation = GetAbsoluteLocation( );
 
-		vecGeometry.emplace_back( _Drawing.Rectangle( recLocation, *clrBackground ).GetBuffer( ) );
-		vecGeometry.emplace_back( _Drawing.Line( location_t( recLocation.x, recLocation.y + recLocation.flHeight ), location_t( recLocation.x + recLocation.flWidth, recLocation.y + recLocation.flHeight ), 1.f, OUTLINE_LIGHT ).GetBuffer( ) );
+		vecGeometry.emplace_back( DRAW.Rectangle( recLocation, *clrBackground ).GetBuffer( ) );
+		vecGeometry.emplace_back( DRAW.Line( location_t( recLocation.x, recLocation.y + recLocation.flHeight ), location_t( recLocation.x + recLocation.flWidth, recLocation.y + recLocation.flHeight ), 1.f, OUTLINE_LIGHT ).GetBuffer( ) );
 	}
 
 	void CHeaderPanel::Initialize( )
@@ -1039,7 +1040,7 @@ namespace Interface
 		auto flIconPadding = 0.f;
 		if ( iIconTexture > -1 )
 		{
-			texIcon = _Drawing.GetTexture( iIconTexture );
+			texIcon = DRAW.GetTexture( iIconTexture );
 			flIconPadding = 20.f - texIcon.first.uHeight / 2.f;
 		}
 
@@ -1075,14 +1076,14 @@ namespace Interface
 		const auto recLocation = GetAbsoluteLocation( );
 
 		for ( auto &vertex: vecGeometry )
-			_Drawing.DrawPolygon( vertex );
+			DRAW.DrawPolygon( vertex );
 
-		_Drawing.PushDrawingSpace( recLocation );
+		DRAW.PushDrawingSpace( recLocation );
 
 		for ( auto &pWidget: vecWidgets )
 			pWidget->PreDraw( );
 
-		_Drawing.PopDrawingSpace( );
+		DRAW.PopDrawingSpace( );
 	}
 
 	void CHeaderPanel::Event( unsigned uKey, CKeyState ksKeyState )
@@ -1090,7 +1091,7 @@ namespace Interface
 		if ( uKey == VK_LBUTTON && ksKeyState == true )
 		{
 			int x, y;
-			_Input.GetMousePos( x, y );
+			IN.GetMousePos( x, y );
 			locDragStart = location_t( float( x ), float( y ) );
 		}
 	}
@@ -1138,26 +1139,26 @@ namespace Interface
 	{
 		bool bRounding[ ] { false, false, ( wfFlags & FLAG_WINDOW_ROUND_CORNERS ) > 0u, ( wfFlags & FLAG_WINDOW_ROUND_CORNERS ) > 0u };
 
-		vecGeometry.emplace_back( _Drawing.RoundedRectangle( GetAbsoluteLocation( ), *clrBackground, bRounding, WINDOW_ROUNDING ).GetBuffer( ) );
-		vecGeometry.emplace_back( _Drawing.RoundedRectangle( GetAbsoluteLocation( ), BACKGROUND_DIM, bRounding, WINDOW_ROUNDING ).GetBuffer( ) );
-		vecGeometry.emplace_back( _Drawing.OutlineRoundedRectangle( recLocation, OUTLINE_LIGHT, bRounding, WINDOW_ROUNDING ).GetBuffer( D3DPT_LINESTRIP ) );
+		vecGeometry.emplace_back( DRAW.RoundedRectangle( GetAbsoluteLocation( ), *clrBackground, bRounding, WINDOW_ROUNDING ).GetBuffer( ) );
+		vecGeometry.emplace_back( DRAW.RoundedRectangle( GetAbsoluteLocation( ), BACKGROUND_DIM, bRounding, WINDOW_ROUNDING ).GetBuffer( ) );
+		vecGeometry.emplace_back( DRAW.OutlineRoundedRectangle( recLocation, OUTLINE_LIGHT, bRounding, WINDOW_ROUNDING ).GetBuffer( D3DPT_LINESTRIP ) );
 	}
 
 	void CWindow::Draw( )
 	{
 		const auto recLocation = GetAbsoluteLocation( );
 
-		_Drawing.PushDrawingSpace( recLocation );
-		_Drawing.DrawPolygon( vecGeometry[ 0 ] );
+		DRAW.PushDrawingSpace( recLocation );
+		DRAW.DrawPolygon( vecGeometry[ 0 ] );
 
 		for ( auto &pWidget: vecWidgets )
 			pWidget->PreDraw( );
 
-		_Drawing.PopDrawingSpace( );
+		DRAW.PopDrawingSpace( );
 
 		if ( wfFlags & FLAG_WINDOW_OUTLINE_ALWAYS )
 			for ( auto u = 2u; u < vecGeometry.size( ); u++ )
-				_Drawing.DrawPolygon( vecGeometry[ u ] );
+				DRAW.DrawPolygon( vecGeometry[ u ] );
 
 		if ( pPopup != nullptr )
 		{
@@ -1167,7 +1168,7 @@ namespace Interface
 				while ( pParent->pParentContainer != nullptr )
 					pParent = reinterpret_cast< CWindow* >( pParent->pParentContainer );
 
-				_Drawing.DrawPolygon( pParent->vecGeometry[ 1 ] );
+				DRAW.DrawPolygon( pParent->vecGeometry[ 1 ] );
 			}
 
 			pPopup->PreDraw( );
@@ -1245,7 +1246,7 @@ namespace Interface
 		const auto recLocation = GetAbsoluteLocation( );
 		const auto dwBackground = BACKGROUND_DEFAULT.GetARGB( );
 
-		_Drawing.PushDrawingSpace( recLocation );
+		DRAW.PushDrawingSpace( recLocation );
 
 		vertex_t vtxBackground[ ]
 		{
@@ -1258,17 +1259,17 @@ namespace Interface
 			vertex_t( recLocation.x, recLocation.y + recLocation.flHeight, dwBackground )
 		};
 
-		_Drawing.Polygon( vtxBackground, 7, 5 );
+		DRAW.Polygon( vtxBackground, 7, 5 );
 
 		for ( auto &pWidget: vecWidgets )
 			pWidget->PreDraw( );
 
-		_Drawing.PopDrawingSpace( );
+		DRAW.PopDrawingSpace( );
 
 		for ( auto i = 0; i < 6; i++ )
-			_Drawing.Line( location_t( vtxBackground[ i ].flVectors[ 0 ], vtxBackground[ i ].flVectors[ 1 ] ), location_t( vtxBackground[ i + 1 ].flVectors[ 0 ], vtxBackground[ i + 1 ].flVectors[ 1 ] ), 1.f, OUTLINE_LIGHT );
+			DRAW.Line( location_t( vtxBackground[ i ].flVectors[ 0 ], vtxBackground[ i ].flVectors[ 1 ] ), location_t( vtxBackground[ i + 1 ].flVectors[ 0 ], vtxBackground[ i + 1 ].flVectors[ 1 ] ), 1.f, OUTLINE_LIGHT );
 
-		_Drawing.Line( location_t( vtxBackground[ 0 ].flVectors[ 0 ], vtxBackground[ 0 ].flVectors[ 1 ] ), location_t( vtxBackground[ 6 ].flVectors[ 0 ], vtxBackground[ 6 ].flVectors[ 1 ] ), 1.f, OUTLINE_LIGHT );
+		DRAW.Line( location_t( vtxBackground[ 0 ].flVectors[ 0 ], vtxBackground[ 0 ].flVectors[ 1 ] ), location_t( vtxBackground[ 6 ].flVectors[ 0 ], vtxBackground[ 6 ].flVectors[ 1 ] ), 1.f, OUTLINE_LIGHT );
 	}
 
 	CToolTip::CToolTip( text_t *txtToolTip ): CWindow( TOOLTIP_FLAGS, rectangle_t( ) ), vecText( { } ), flWidgetRatio( 0.f )
@@ -1438,7 +1439,7 @@ namespace Interface
 
 	void InitializeInterface( )
 	{
-		_Input.AddCallback( [ & ]( key_t _Key, CKeyState _KeyState ) // todo return true if processed
+		IN.AddCallback( [ & ]( key_t _Key, CKeyState _KeyState ) // todo return true if processed
 		{
 			if ( _Key == VK_LBUTTON )
 			{
@@ -1501,7 +1502,7 @@ namespace Interface
 			return false;
 		} );
 
-		_Input.AddCallback( [ & ]( int x, int y )
+		IN.AddCallback( [ & ]( int x, int y )
 		{
 			_WidgetContext.locMouse = location_t( float( x ), float( y ) );
 			auto bFound = false;
@@ -1550,7 +1551,7 @@ namespace Interface
 
 			return false;
 		} );
-		_Input.AddCallback( [ & ]( key_t _Key )
+		IN.AddCallback( [ & ]( key_t _Key )
 		{
 			if ( _WidgetContext.pActiveWidget )
 				_WidgetContext.pActiveWidget->KeyTyped( _Key );
@@ -1558,7 +1559,7 @@ namespace Interface
 			return false;
 		} );
 
-		_Input.AddCallback( [ & ]( short sDelta, int iMouseX, int iMouseY )
+		IN.AddCallback( [ & ]( short sDelta, int iMouseX, int iMouseY )
 		{
 			if ( _WidgetContext.pActiveWidget )
 				if ( _WidgetContext.pActiveWidget->Scroll( sDelta ) )
@@ -1595,9 +1596,9 @@ namespace Interface
 		{
 			for ( auto i = 1; i < int( _WidgetContext.vecWindows.size( ) ); i++ )
 			{
-				_Drawing.PushDrawingSpace( _WidgetContext.vecWindows[ i ]->GetAbsoluteLocation( ) );
-				_Drawing.DrawPolygon( _Drawing.OutlineRoundedRectangle( recCurrent, OUTLINE_LIGHT, bRounding, CWindow::WINDOW_ROUNDING ).GetBuffer( D3DPT_LINESTRIP ), true );
-				_Drawing.PopDrawingSpace( );
+				DRAW.PushDrawingSpace( _WidgetContext.vecWindows[ i ]->GetAbsoluteLocation( ) );
+				DRAW.DrawPolygon( DRAW.OutlineRoundedRectangle( recCurrent, OUTLINE_LIGHT, bRounding, CWindow::WINDOW_ROUNDING ).GetBuffer( D3DPT_LINESTRIP ), true );
+				DRAW.PopDrawingSpace( );
 			}
 		}
 		_WidgetContext.ApplyCursor( );

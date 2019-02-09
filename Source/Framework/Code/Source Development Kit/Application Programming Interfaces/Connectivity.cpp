@@ -22,13 +22,13 @@ bool CConnectivity::Initialize( )
 	const auto _Code = curl_global_init( CURL_GLOBAL_ALL );
 	if ( _Code != CURLE_OK )
 	{
-		_Log.Log( EPrefix::ERROR, ELocation::CONNECTIVITY, XOR( "Could not global initialize cURL. Error code: %i." ), _Code );
+		LOG.Log( EPrefix::ERROR, ELocation::CONNECTIVITY, XOR( "Could not global initialize cURL. Error code: %i." ), _Code );
 		return false;
 	}
 
 	if ( ( hInstance = curl_easy_init( ) ) != nullptr )
 	{
-		_Log.Log( EPrefix::SUCCESS, ELocation::CONNECTIVITY,	XOR( "Initialized cURL successfully." ) );
+		LOG.Log( EPrefix::SUCCESS, ELocation::CONNECTIVITY,	XOR( "Initialized cURL successfully." ) );
 		strScriptLocator						=				XOR( "https://www.paladin-extensions.com/Run.php" );
 		vecIllegalCharacters.emplace_back( '&',					XOR( "AMP" ) );
 		vecIllegalCharacters.emplace_back( '=',					XOR( "EQUAL" ) );
@@ -45,7 +45,7 @@ bool CConnectivity::Initialize( )
 		return true;
 	}
 
-	_Log.Log( EPrefix::ERROR, ELocation::CONNECTIVITY, XOR( "Could not open a cURL instance." ) );
+	LOG.Log( EPrefix::ERROR, ELocation::CONNECTIVITY, XOR( "Could not open a cURL instance." ) );
 	return false;
 }
 
@@ -62,7 +62,7 @@ void CConnectivity::illegal_post_data_character_t::ValidateString( std::string &
 
 std::string CConnectivity::GenerateIdentifier( EPostData _Identifier )
 {
-	auto strReturn = _Cryptography.GenerateHash( strPostDataIdentifiers[ _Identifier ] ).substr( 0, IDENTIFIER_LENGTH );
+	auto strReturn = CRYPTO.GenerateHash( strPostDataIdentifiers[ _Identifier ] ).substr( 0, IDENTIFIER_LENGTH );
 	ValidateString( strReturn );
 	return strReturn;
 }
@@ -70,7 +70,7 @@ std::string CConnectivity::GenerateIdentifier( EPostData _Identifier )
 std::string CConnectivity::ProcessValue( const std::string &strValue )
 {
 	std::string strReturn { };
-	if ( _Cryptography.Encrypt( strValue, strReturn ) )
+	if ( CRYPTO.Encrypt( strValue, strReturn ) )
 	{
 		ValidateString( strReturn );
 		return strReturn;
@@ -91,18 +91,18 @@ bool CConnectivity::TryConnection( std::string &strOut, std::string *pErrorBuffe
 	const auto _Code = curl_easy_perform( hInstance );
 	if ( _Code != CURLE_OK )
 	{
-		_Log.Log( EPrefix::ERROR, ELocation::CONNECTIVITY, XOR( "Failed to perform connection. Error code: %i. Retries: %i." ), _Code, iRetries );
+		LOG.Log( EPrefix::ERROR, ELocation::CONNECTIVITY, XOR( "Failed to perform connection. Error code: %i. Retries: %i." ), _Code, iRetries );
 		if ( pErrorBuffer != nullptr )
-			_Log.Log( EPrefix::INFO, ELocation::CONNECTIVITY, XOR( "Error message: " ) + *pErrorBuffer );
+			LOG.Log( EPrefix::INFO, ELocation::CONNECTIVITY, XOR( "Error message: " ) + *pErrorBuffer );
 
 		return iRetries < MAX_RETRIES ? TryConnection( strOut, pErrorBuffer, ++iRetries ) : false;
 	}
 
 	if ( strOut.empty( ) )
 	{
-		_Log.Log( EPrefix::ERROR, ELocation::CONNECTIVITY, XOR( "Response was empty. Retries: %i." ), _Code, iRetries );
+		LOG.Log( EPrefix::ERROR, ELocation::CONNECTIVITY, XOR( "Response was empty. Retries: %i." ), _Code, iRetries );
 		if ( pErrorBuffer != nullptr )
-			_Log.Log( EPrefix::INFO, ELocation::CONNECTIVITY, XOR( "Error message: " ) + *pErrorBuffer );
+			LOG.Log( EPrefix::INFO, ELocation::CONNECTIVITY, XOR( "Error message: " ) + *pErrorBuffer );
 
 		return iRetries < MAX_RETRIES ? TryConnection( strOut, pErrorBuffer, ++iRetries ) : false;
 	}
@@ -153,17 +153,17 @@ bool CConnectivity::Request( EAction _Action, std::string &strOut )
 	}
 
 	AddPostData( ACTION, std::to_string( int( _Action ) ) );
-	_Filesystem.StoreCurrentWorkingDirectory( );
-	_Filesystem.ChangeWorkingDirectory( CFilesystem::GetAppdataDirectory( ) );
-	_Filesystem.DecryptFile( CFilesystem::strCookieFile );
+	FS.StoreCurrentWorkingDirectory( );
+	FS.ChangeWorkingDirectory( CFilesystem::GetAppdataDirectory( ) );
+	FS.DecryptFile( CFilesystem::strCookieFile );
 
-	const auto strCookieFile = _Filesystem.FileToPath( _Filesystem.strCookieFile );
+	const auto strCookieFile = FS.FileToPath( FS.strCookieFile );
 	std::string strErrorBuffer;
 
 	strErrorBuffer.resize( CURL_ERROR_SIZE );
 	const auto bSetErrorBuffer = SetConnectionParameter( CURLOPT_ERRORBUFFER, &strErrorBuffer[ 0 ] );
 	if ( !bSetErrorBuffer )
-		_Log.Log( EPrefix::WARNING, ELocation::CONNECTIVITY, XOR( "Unable to set error buffer for cURL." ) );
+		LOG.Log( EPrefix::WARNING, ELocation::CONNECTIVITY, XOR( "Unable to set error buffer for cURL." ) );
 
 	if ( !SetConnectionParameter( CURLOPT_URL, strScriptLocator.c_str( ) )
 		|| !SetConnectionParameter( CURLOPT_POST, TRUE )
@@ -180,18 +180,18 @@ bool CConnectivity::Request( EAction _Action, std::string &strOut )
 		|| !SetConnectionParameter( CURLOPT_SSL_VERIFYPEER, FALSE ) )
 	{
 		if ( bSetErrorBuffer )
-			_Log.Log( EPrefix::ERROR, ELocation::CONNECTIVITY, XOR( "Setting cURL parameters failed, message: " ) + strErrorBuffer );
+			LOG.Log( EPrefix::ERROR, ELocation::CONNECTIVITY, XOR( "Setting cURL parameters failed, message: " ) + strErrorBuffer );
 
 		ResetConnection( );
-		_Filesystem.EncryptFile( CFilesystem::strCookieFile );
-		_Filesystem.RestoreWorkingDirectory( );
+		FS.EncryptFile( CFilesystem::strCookieFile );
+		FS.RestoreWorkingDirectory( );
 		return false;
 	}
 
 	const auto bReturn = TryConnection( strOut, bSetErrorBuffer ? &strErrorBuffer : nullptr );
 	ResetConnection( );
-	_Filesystem.EncryptFile( CFilesystem::strCookieFile );
-	_Filesystem.RestoreWorkingDirectory( );
+	FS.EncryptFile( CFilesystem::strCookieFile );
+	FS.RestoreWorkingDirectory( );
 	return bReturn;
 }
 

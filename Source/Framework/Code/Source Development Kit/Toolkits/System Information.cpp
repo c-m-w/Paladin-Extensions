@@ -1,4 +1,4 @@
-/// Memory Manager.cpp
+/// System Information.cpp
 
 #include "Precompile.hpp"
 
@@ -6,3 +6,4 @@
 #define USE_NAMESPACES
 #define USE_DEFINITIONS
 #include "../../Framework.hpp"
+

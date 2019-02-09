@@ -22,7 +22,7 @@ void OnLaunch( )
 	{
 		auto pWindow = std::make_unique< CApplicationWindow >( CApplicationWindow( XOR( "Launcher" ), { LAUNCHER_WIDTH, LAUNCHER_HEIGHT }, GetModuleHandle( nullptr ) ) );
 		DRAW.SetTarget( pWindow.get( ) );
-		if ( !_Drawing.Setup( ) )
+		if ( !DRAW.Setup( ) )
 			return;
 
 		InitializeInterface( );

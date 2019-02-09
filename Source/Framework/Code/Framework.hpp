@@ -61,15 +61,15 @@ using namespace Interface;
 
 #if defined USE_DEFINITIONS
 #define CRYPTO ( _Cryptography )
-#define ENCODE( _String ) ( CRYPTO.Base64< encode_t >( _String ) )
-#define DECODE( _String ) ( CRYPTO.Base64< decode_t >( _String ) )
+#define ENCODE( _String ) ( CRYPTO.Base64< encode_t >( _String ) ) // todo remove
+#define DECODE( _String ) ( CRYPTO.Base64< decode_t >( _String ) ) // todo remove
 #define ENCRYPT( _String ) ( CRYPTO.Crypt< encrypt_t >( _String ) )
 #define DECRYPT( _String ) ( CRYPTO.Crypt< decrypt_t >( _String ) )
 #define FS ( _Filesystem )
 #define RESOURCES ( _ResourceManager )
 #define LOG ( _Log )
 #define NET ( _Connection )
-#define INPUT ( _Input )
-#define DRAW ( _Drawing )
+#define IN ( _Input )
+#define DRAW ( _Draw )
 #define AUTH  ( _Authentication )
 #endif

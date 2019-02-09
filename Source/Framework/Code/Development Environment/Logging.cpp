@@ -3,8 +3,8 @@
 #include "Precompile.hpp"
 
 #define ACKNOWLEDGED_ENTRY_WARNING_1
-#define USE_DEFINITIONS
 #define USE_NAMESPACES
+#define USE_DEFINITIONS
 #include "../Framework.hpp"
 
 bool CLogging::Initialize( )
@@ -91,20 +91,20 @@ void CLogging::ErrorPopup( EUnloggableError _ErrorCode )
 void CLogging::WriteToFile( )
 {
 	mmtLastLogWrite = GetMoment( );
-	_Filesystem.StoreCurrentWorkingDirectory( );
-	_Filesystem.ChangeWorkingDirectory( _Filesystem.GetAppdataDirectory( ), { _Filesystem.strLogDirectory } );
+	FS.StoreCurrentWorkingDirectory( );
+	FS.ChangeWorkingDirectory( FS.GetAppdataDirectory( ), { FS.strLogDirectory } );
 
 #if defined _DEBUG
-	if ( !_Filesystem.AddToFile( GetCurrentLogFile( ), strBuffer, false ) )
-		if ( !_Filesystem.WriteFile( GetCurrentLogFile( ), strBuffer, false ) )
+	if ( !FS.AddToFile( GetCurrentLogFile( ), strBuffer, false ) )
+		if ( !FS.WriteFile( GetCurrentLogFile( ), strBuffer, false ) )
 			return ErrorPopup( ERROR_CANNOT_WRITE_LOG );
 #else
-	if ( !_Filesystem.AddToFile( GetCurrentLogFile( ), strBuffer, true ) )
-		if ( !_Filesystem.WriteFile( GetCurrentLogFile( ), strBuffer, true ) )
+	if ( !FS.AddToFile( GetCurrentLogFile( ), strBuffer, true ) )
+		if ( !FS.WriteFile( GetCurrentLogFile( ), strBuffer, true ) )
 			return ErrorPopup( ERROR_CANNOT_WRITE_LOG );
 #endif
 
-	_Filesystem.RestoreWorkingDirectory( );
+	FS.RestoreWorkingDirectory( );
 	strBuffer.clear( );
 }
 
