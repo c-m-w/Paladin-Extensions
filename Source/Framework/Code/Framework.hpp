@@ -60,6 +60,7 @@ using namespace Utilities;
 using namespace Interface;
 #endif
 
+// todo cleanup all references to normal class objects and replace with definitions
 #if defined USE_DEFINITIONS
 #define CRYPTO ( _Cryptography )
 #define ENCODE( _String ) ( CRYPTO.Base64< encode_t >( _String ) )
