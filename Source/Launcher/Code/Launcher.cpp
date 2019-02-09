@@ -29,6 +29,8 @@ bool SetupInterface( );
 
 void OnLaunch( )
 {
+	MessageBox( nullptr, ENC( "Test" ), ENC( "Test" ), 0 );
+
 	if ( !SetupFramework( ) )
 		return;
 

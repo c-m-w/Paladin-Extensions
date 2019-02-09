@@ -35,7 +35,7 @@ std::string CSystemInformation::GetDeviceInformation( const bstr_t &bszDevice, c
 
 	IWbemServices *pServices;
 	{
-		auto hrReturn = pLocator->ConnectServer( bstr_t( ENCW( L"ROOT\\CIMV2" ) ), nullptr, nullptr, nullptr,
+		auto hrReturn = pLocator->ConnectServer( bstr_t( ENC( L"ROOT\\CIMV2" ) ), nullptr, nullptr, nullptr,
 												 0, nullptr, nullptr, &pServices );
 		if ( hrReturn != S_OK || pServices == nullptr )
 			return pLocator->Release( ), CoUninitialize( ),
@@ -52,7 +52,7 @@ std::string CSystemInformation::GetDeviceInformation( const bstr_t &bszDevice, c
 
 	IEnumWbemClassObject *pEnumerator;
 	{
-		const auto hrReturn = pServices->ExecQuery( bstr_t( ENCW( L"WQL" ) ), bszDevice,
+		const auto hrReturn = pServices->ExecQuery( bstr_t( ENC( L"WQL" ) ), bszDevice,
 													WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY, nullptr, &pEnumerator );
 		if ( hrReturn != S_OK || pEnumerator == nullptr )
 			return pServices->Release( ), pLocator->Release( ), CoUninitialize( ),
@@ -103,13 +103,13 @@ std::string CSystemInformation::GetDeviceInformation( const bstr_t &bszDevice, c
 nlohmann::json CSystemInformation::GetHardware( )
 {
 	std::string strHardware[ SYS_MAX ];
-	strHardware[ SYS_CPU ] = GetDeviceInformation( ENCW( L"SELECT * FROM Win32_Processor" ) );
-	strHardware[ SYS_GPU ] = GetDeviceInformation( ENCW( L"SELECT * FROM CIM_PCVideoController" ) );
-	strHardware[ SYS_DISPLAY ] = GetDeviceInformation( ENCW( L"SELECT * FROM Win32_DesktopMonitor" ) );
-	strHardware[ SYS_PC ] = GetDeviceInformation( ENCW( L"SELECT * FROM CIM_OperatingSystem" ), ENCW( L"CSName" ) );
-	strHardware[ SYS_OS ] = GetDeviceInformation( ENCW( L"SELECT * FROM CIM_OperatingSystem" ), ENCW( L"Caption" ) );
-	strHardware[ SYS_DRIVE ] = GetDeviceInformation( ENCW( L"SELECT * FROM Win32_DiskDrive" ), ENCW( L"SerialNumber" ) );
-	strHardware[ SYS_BOARD ] = GetDeviceInformation( ENCW( L"SELECT * FROM Win32_BaseBoard" ), ENCW( L"Product" ) );
+	strHardware[ SYS_CPU ] = GetDeviceInformation( ENC( L"SELECT * FROM Win32_Processor" ) );
+	strHardware[ SYS_GPU ] = GetDeviceInformation( ENC( L"SELECT * FROM CIM_PCVideoController" ) );
+	strHardware[ SYS_DISPLAY ] = GetDeviceInformation( ENC( L"SELECT * FROM Win32_DesktopMonitor" ) );
+	strHardware[ SYS_PC ] = GetDeviceInformation( ENC( L"SELECT * FROM CIM_OperatingSystem" ), ENC( L"CSName" ) );
+	strHardware[ SYS_OS ] = GetDeviceInformation( ENC( L"SELECT * FROM CIM_OperatingSystem" ), ENC( L"Caption" ) );
+	strHardware[ SYS_DRIVE ] = GetDeviceInformation( ENC( L"SELECT * FROM Win32_DiskDrive" ), ENC( L"SerialNumber" ) );
+	strHardware[ SYS_BOARD ] = GetDeviceInformation( ENC( L"SELECT * FROM Win32_BaseBoard" ), ENC( L"Product" ) );
 
 	if ( strHardware[ SYS_CPU ].empty( )
 		|| strHardware[ SYS_GPU ].empty( )

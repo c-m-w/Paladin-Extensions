@@ -2,16 +2,15 @@
 
 #pragma once
 
-#define ENC( _String ) VMProtectDecryptStringA( _String )
-#define ENCW( _String ) VMProtectDecryptStringW( _String )
+__forceinline const char *ENC( const char *input )
+{
+	return VMProtectDecryptStringA( input );
+}
 
-//#define ENC( _String ) ( decltype( _String ) )(                          \
-//		std::is_same< decltype( _String ), const char * >::value         \
-//			? VMProtectDecryptStringA( ( const char * )( _String ) )     \
-//			: VMProtectDecryptStringW( ( const wchar_t * )( _String ) ) )
-//
-//
-//#define ENCW( _String ) ENC( _String )
+__forceinline const wchar_t *ENC( const wchar_t *input )
+{
+	return VMProtectDecryptStringW( input );
+}
 
 #include "Development Environment/Build Output Wrapper.hpp"
 #define NO_ENTRY
