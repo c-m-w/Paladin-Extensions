@@ -17,6 +17,7 @@
 #include "Source Development Kit/Application Programming Interfaces/Filesystem.hpp"
 #include "Development Environment/Logging.hpp"
 #include "Source Development Kit/Toolkits/Memory Manager.hpp"
+#include "Source Development Kit/Toolkits/System Information.hpp"
 #include "Source Development Kit/Application Programming Interfaces/Input.hpp"
 #include "Source Development Kit/Toolkits/Resource Manager.hpp"
 
@@ -72,4 +73,5 @@ using namespace Interface;
 #define INPUT ( _Input )
 #define DRAW ( _Drawing )
 #define AUTH  ( _Authentication )
+#define SI ( _SystemInformation )
 #endif

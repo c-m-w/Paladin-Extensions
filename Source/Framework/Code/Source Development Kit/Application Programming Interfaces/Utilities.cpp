@@ -67,32 +67,6 @@ namespace Utilities
 		return { float( recDesktop.right - recDesktop.left ), float( recDesktop.bottom - recDesktop.top ) };
 	}
 
-	moment_t GetMoment( )
-	{
-		return std::chrono::duration_cast< std::chrono::milliseconds >( std::chrono::system_clock::now( ).time_since_epoch( ) ).count( ); // todo @jeremy the other nanosecond thing doesnt work aaaaa
-
-		timespec _Time { };
-		timespec_get( &_Time, TIME_UTC );
-		return _Time.tv_nsec / 100ui64;
-	}
-
-	void Pause( moment_t mmtPauseLength )
-	{
-		std::this_thread::sleep_for( std::chrono::milliseconds( mmtPauseLength ) );
-
-		//static const auto NtDelayExecution = static_cast< SWindowsAPI::fnNtDelayExecution >( GetFunctionPointer( SWindowsAPI::NtDelayExecution ) );
-		//if ( nullptr == NtDelayExecution ) // their system must be really messed up if it can't find delay execution
-		//	return Sleep( DWORD( mmtPauseLength ) );
-		//
-		//const auto mmtEndTarget = GetMoment( ) + mmtPauseLength * 10000ull - 5000ull; // 10,000 is milliseconds to 100 nanoseconds conversion
-		//
-		//LARGE_INTEGER liDelayInterval;
-		//liDelayInterval.QuadPart = -1ll;
-		//
-		//while ( GetMoment( ) < mmtEndTarget )
-		//	NtDelayExecution( FALSE, &liDelayInterval );
-	}
-
 	void OpenLink( const std::string &strLink )
 	{
 		ShellExecute( nullptr, XOR( "open" ), strLink.c_str( ), nullptr, nullptr, SW_SHOWNORMAL );
