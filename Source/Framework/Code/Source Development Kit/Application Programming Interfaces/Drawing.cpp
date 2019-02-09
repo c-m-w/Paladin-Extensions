@@ -676,7 +676,7 @@ polygon_t CDrawing::Rectangle( rectangle_t recLocation, color_t *clrColor )
 	return polygon_t( vtxVertices, 4, 2 );
 }
 
-#define ROUNDING_VERTICES ( std::size_t( ceilf( flRadius / 3.f ) ) )
+#define ROUNDING_VERTICES ( std::size_t( ceilf( flRadius ) ) )
 
 polygon_t CDrawing::OutlineRectangle( rectangle_t recLocation, color_t clrColor )
 {
@@ -767,8 +767,12 @@ polygon_t CDrawing::OutlineRoundedRectangle( rectangle_t recLocation, color_t cl
 	{
 		const auto cclTopLeft = circle_t( location_t( recLocation.x + flRadius, recLocation.y + flRadius ), flRadius, uResolution );
 		const vertex_t *pVertices = cclTopLeft.GetPoints( ROTATIONS[ rectangle_t::TOP_LEFT ], 0.25f );
-		for ( auto u = 1u; u <= uResolution + 1; u++ )
+
+		vecVertices.emplace_back( location_t( recLocation.x, recLocation.y + flRadius ) );
+		for ( auto u = 2u; u <= uResolution; u++ )
 			vecVertices.emplace_back( location_t( pVertices[ u ].flVectors[ 0 ], pVertices[ u ].flVectors[ 1 ] ) );
+
+		vecVertices.emplace_back( location_t( recLocation.x + flRadius, recLocation.y ) );
 
 		delete[ ] pVertices;
 		sPrimitives += uResolution;
@@ -780,8 +784,12 @@ polygon_t CDrawing::OutlineRoundedRectangle( rectangle_t recLocation, color_t cl
 	{
 		const auto cclTopLeft = circle_t( location_t( recLocation.x + recLocation.flWidth - flRadius, recLocation.y + flRadius ), flRadius, uResolution );
 		const vertex_t *pVertices = cclTopLeft.GetPoints( ROTATIONS[ rectangle_t::TOP_RIGHT ], 0.25f );
-		for ( auto u = 1u; u <= uResolution + 1; u++ )
+
+		vecVertices.emplace_back( location_t( recLocation.x + recLocation.flWidth - flRadius, recLocation.y ) );
+		for ( auto u = 2u; u <= uResolution; u++ )
 			vecVertices.emplace_back( location_t( pVertices[ u ].flVectors[ 0 ], pVertices[ u ].flVectors[ 1 ] ) );
+
+		vecVertices.emplace_back( location_t( recLocation.x + recLocation.flWidth, recLocation.y + flRadius ) );
 
 		delete[ ] pVertices;
 		sPrimitives += uResolution;
@@ -793,8 +801,12 @@ polygon_t CDrawing::OutlineRoundedRectangle( rectangle_t recLocation, color_t cl
 	{
 		const auto cclTopLeft = circle_t( location_t( recLocation.x + recLocation.flWidth - flRadius, recLocation.y + recLocation.flHeight - flRadius ), flRadius, uResolution );
 		const vertex_t *pVertices = cclTopLeft.GetPoints( ROTATIONS[ rectangle_t::BOTTOM_RIGHT ], 0.25f );
-		for ( auto u = 1u; u <= uResolution + 1; u++ )
+
+		vecVertices.emplace_back( location_t( recLocation.x + recLocation.flWidth, recLocation.y + recLocation.flHeight - flRadius ) );
+		for ( auto u = 2u; u <= uResolution; u++ )
 			vecVertices.emplace_back( location_t( pVertices[ u ].flVectors[ 0 ], pVertices[ u ].flVectors[ 1 ] ) );
+
+		vecVertices.emplace_back( location_t( recLocation.x + recLocation.flWidth - flRadius, recLocation.y + recLocation.flHeight ) );
 
 		delete[ ] pVertices;
 		sPrimitives += uResolution;
@@ -806,8 +818,12 @@ polygon_t CDrawing::OutlineRoundedRectangle( rectangle_t recLocation, color_t cl
 	{
 		const auto cclTopLeft = circle_t( location_t( recLocation.x + flRadius, recLocation.y + recLocation.flHeight - flRadius ), flRadius, uResolution );
 		const vertex_t *pVertices = cclTopLeft.GetPoints( ROTATIONS[ rectangle_t::BOTTOM_LEFT ], 0.25f );
-		for ( auto u = 1u; u <= uResolution + 1; u++ )
+
+		vecVertices.emplace_back( location_t( recLocation.x + flRadius, recLocation.y + recLocation.flHeight ) );
+		for ( auto u = 2u; u <= uResolution; u++ )
 			vecVertices.emplace_back( location_t( pVertices[ u ].flVectors[ 0 ], pVertices[ u ].flVectors[ 1 ] ) );
+
+		vecVertices.emplace_back( location_t( recLocation.x, recLocation.y + recLocation.flHeight - flRadius ) );
 
 		delete[ ] pVertices;
 		sPrimitives += uResolution;
@@ -818,7 +834,7 @@ polygon_t CDrawing::OutlineRoundedRectangle( rectangle_t recLocation, color_t cl
 	polygon_t polReturn;
 	polReturn.sPrimitives = sPrimitives;
 	for ( auto &location: vecVertices )
-		polReturn.vecVertices.emplace_back( location.x, location.y, clrColor.GetARGB( ) );
+		polReturn.vecVertices.emplace_back( roundf( location.x ), roundf( location.y ), clrColor.GetARGB( ) );
 
 	polReturn.vecVertices.emplace_back( polReturn.vecVertices[ 0 ] );
 	return polReturn;

@@ -1194,7 +1194,6 @@ namespace Interface
 		if ( bResetWidgets )
 			_WidgetContext.pActiveWidget = _WidgetContext.pHoveringWidget = nullptr;
 
-		delete pPopup;
 		pPopup = nullptr;
 	}
 
@@ -1316,11 +1315,17 @@ namespace Interface
 		return cfFlags & FLAG_CONTAINER_SCROLLABLE && sbScrollbar.Scroll( sDelta );
 	}
 
+	void IContainer::Initialize( )
+	{
+		for ( auto& pWidget : vecWidgets )
+		{
+			pWidget->Initialize( );
+			pWidget->Setup( );
+		}
+	}
+
 	void IContainer::AddRow( row_t rowNew )
 	{
-		//for ( auto& row : vecRows )
-		//	rowNew.recLocation.y += row.recLocation.flHeight + row.padBorder.Vertical( );
-
 		rowNew.recLocation.y = flUsedVerticalSpace;
 		rowNew.recLocation.y += rowNew.padBorder.flPadding[ POSITION_TOP ];
 		rowNew.recLocation.x = rowNew.padBorder.flPadding[ POSITION_LEFT ];
@@ -1349,6 +1354,9 @@ namespace Interface
 
 	void IContainer::AddWidgetToRow( IWidget *pWidget, float flWidth, int iRow )
 	{
+		if ( pWidget == nullptr )
+			throw std::runtime_error( XOR( "Adding a nullptr widget." ) );
+
 		auto &rowCurrent = vecRows[ iRow ];
 		pWidget->pParentContainer = this;
 		pWidget->recLocation.flWidth = flWidth;
@@ -1511,13 +1519,7 @@ namespace Interface
 				auto &window = _WidgetContext.vecWindows[ u ];
 
 				if ( window->pHeader && !( window->wfFlags & CWindow::FLAG_WINDOW_ANCHOR ) )
-				{
 					window->pHeader->MoveParentWindow( x, y );
-					if ( window->wfFlags & CWindow::FLAG_WINDOW_MOVE_APPLICATION_WINDOW
-						 && window->pMoveWindow )
-						if ( window->pMoveWindow->Move( int( window->recLocation.x ), int( window->recLocation.y ) ) )
-							window->recLocation.x = window->recLocation.y = 0.f;
-				}
 
 				auto pPopup = window->pPopup;
 				while ( pPopup != nullptr )

@@ -122,3 +122,22 @@ bool CApplicationWindow::Move( int iHorizontalAmount, int iVerticalAmount )
 	MoveWindow( hwHandle, recCurrent.left + iHorizontalAmount, recCurrent.top + iVerticalAmount, recCurrent.right - recCurrent.left, recCurrent.bottom - recCurrent.top, FALSE );
 	return true;
 }
+
+void CApplicationWindow::Hide( )
+{
+	auto lCurrent = GetWindowLong( hwHandle, GWL_STYLE );
+
+	lCurrent &= ~WS_VISIBLE;
+	if ( !SetWindowLong( hwHandle, GWL_STYLE, lCurrent ) == FALSE )
+		_Log.Log( EPrefix::WARNING, ELocation::WINDOW, XOR( "Error setting window long to hide window." ) );
+}
+
+void CApplicationWindow::Show( )
+{
+	auto lCurrent = GetWindowLong( hwHandle, GWL_STYLE );
+
+	lCurrent |= WS_VISIBLE;
+	if ( !SetWindowLong( hwHandle, GWL_STYLE, lCurrent ) == FALSE )
+		_Log.Log( EPrefix::WARNING, ELocation::WINDOW, XOR( "Error setting window long to show window." ) );
+	
+}
