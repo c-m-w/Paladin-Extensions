@@ -21,6 +21,8 @@ public:
 		LOGIN_STAFF_SUCCESS
 	};
 
+	constexpr static auto PURCHASE_KEY_LENGTH = 12;
+
 	bool LicensePresent( );
 	bool CreateLicenseFile( const std::string& strPurchaseKey );
 	[ [ nodiscard ] ] ELoginCode Login( );
