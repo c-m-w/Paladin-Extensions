@@ -221,6 +221,7 @@ namespace Interface
 		};
 
 		constexpr static auto ROUNDING = 0.25f;
+		constexpr static auto TEXT_HEIGHT = 9;
 
 		text_t *txtLabel;
 		int iType;
@@ -277,12 +278,11 @@ namespace Interface
 			{
 				return true;
 			},
-			[ ]( char chNewCharacter, const char *szCurrent, int iPosition ) // LETTER
+			[ ]( char chNewCharacter, const char *szCurrent, int iPosition ) // ALPHANUMERIC
 			{
 				return chNewCharacter >= 'a' && chNewCharacter <= 'z'
 						|| chNewCharacter >= 'A' && chNewCharacter <= 'Z'
-						|| chNewCharacter >= '0' && chNewCharacter <= '9'
-						|| chNewCharacter == ' ';
+						|| chNewCharacter >= '0' && chNewCharacter <= '9';
 			},
 			[ ]( char chNewCharacter, const char *szCurrent, int iPosition ) // INTEGER
 			{

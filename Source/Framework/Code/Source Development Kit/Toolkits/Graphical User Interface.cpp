@@ -288,8 +288,8 @@ namespace Interface
 	}
 
 	CButton::CButton( int _iOrientation, const char *szLabel, callback_t cbOnClick, CToolTip *pToolTip /*= nullptr*/ ):
-		IWidget( BUTTON, ECursor::HAND, _iOrientation == CENTER ? padding_t( 0.f, 2.f, 0.f, 2.f ) : padding_t( ), BUTTON_TEXT, BUTTON_TEXT, BUTTON_TEXT, BUTTON_BACKGROUND_ACTIVE, BUTTON_BACKGROUND_HOVER, BUTTON_BACKGROUND_DORMANT, pToolTip ),
-		iType( _iOrientation ), txtLabel( new text_t( szLabel, EFont::ROBOTO, STANDARD_HEIGHT, text_t::CENTER, text_t::CENTER ) ), cbClick( cbOnClick )
+		IWidget( BUTTON, ECursor::HAND, padding_t( ), BUTTON_TEXT, BUTTON_TEXT, BUTTON_TEXT, BUTTON_BACKGROUND_ACTIVE, BUTTON_BACKGROUND_HOVER, BUTTON_BACKGROUND_DORMANT, pToolTip ),
+		iType( _iOrientation ), txtLabel( new text_t( szLabel, EFont::ROBOTO_BOLD, TEXT_HEIGHT, text_t::CENTER, text_t::CENTER ) ), cbClick( cbOnClick )
 	{ }
 
 	void CButton::Draw( )

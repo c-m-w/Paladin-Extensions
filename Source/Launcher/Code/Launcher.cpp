@@ -144,7 +144,6 @@ bool SetupInterface( )
 			OpenLink( XOR( "https://www.paladin-extensions.com/support/" ) );
 		} );
 
-
 		pInvalidPurchaseKeyPopup->AddRow( row_t( padding_t( 10.f, 0.f, 0.f, 0.f ), STANDARD_HEIGHT ) );
 		pInvalidPurchaseKeyPopup->AddRow( row_t( padding_t( 10.f, 0.f, 0.f, 32.f ), 30.f ) );
 		pInvalidPurchaseKeyPopup->AddWidgetToRow( _InvalidPurchaseKey, POPUP_WIDTH, 1 );
