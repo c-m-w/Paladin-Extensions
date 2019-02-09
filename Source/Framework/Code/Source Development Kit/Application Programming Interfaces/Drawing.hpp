@@ -158,6 +158,7 @@ public:
 		std::vector< glyph_t > vecGlyphs;
 		Utilities::location_t locRowSize;
 		int iVerticalOffset;
+		int iVerticalAddition;
 
 		glyph_row_t( );
 

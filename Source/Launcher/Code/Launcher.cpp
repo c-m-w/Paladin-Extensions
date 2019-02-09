@@ -146,7 +146,7 @@ bool SetupInterface( )
 
 
 		pInvalidPurchaseKeyPopup->AddRow( row_t( padding_t( 10.f, 0.f, 0.f, 0.f ), STANDARD_HEIGHT ) );
-		pInvalidPurchaseKeyPopup->AddRow( row_t( padding_t( 10.f, 0.f, 0.f, 18.f ), 25.f ) );
+		pInvalidPurchaseKeyPopup->AddRow( row_t( padding_t( 10.f, 0.f, 0.f, 32.f ), 30.f ) );
 		pInvalidPurchaseKeyPopup->AddWidgetToRow( _InvalidPurchaseKey, POPUP_WIDTH, 1 );
 		pInvalidPurchaseKeyPopup->AddWidgetToRow( _InvalidPurchaseKeyKeys, 90.f, 2 );
 		pInvalidPurchaseKeyPopup->AddWidgetToRow( _InvalidPurchaseKeyClose, 90.f, 2 );

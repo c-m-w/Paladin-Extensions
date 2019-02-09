@@ -220,7 +220,7 @@ namespace Interface
 			STANDALONE
 		};
 
-		constexpr static auto ROUNDING = 0.2f;
+		constexpr static auto ROUNDING = 0.25f;
 
 		text_t *txtLabel;
 		int iType;
