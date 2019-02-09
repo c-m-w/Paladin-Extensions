@@ -51,7 +51,7 @@ std::string CFilesystem::GetAppdataDirectory( )
 
 		if ( 0 != _dupenv_s( &szBuffer, &zWrittenBytes, XOR( "appdata" ) )
 			 || zWrittenBytes == 0 )
-			LOG.Log( EPrefix::ERROR, ELocation::FILESYSTEM, XOR( "Error retrieving appdata environment directory." ) );
+			_Log.Log( EPrefix::ERROR, ELocation::FILESYSTEM, XOR( "Error retrieving appdata environment directory." ) );
 
 		auto strDirectory = std::string( szBuffer );
 		FormatDirectory( strDirectory );
@@ -168,9 +168,9 @@ void CFilesystem::CloseAllFileHandles( )
 	const auto iResult = _fcloseall( );
 
 	if ( iResult == EOF )
-		LOG.Log( EPrefix::WARNING, ELocation::FILESYSTEM, XOR( "Failed to close all open file handles." ) );
+		_Log.Log( EPrefix::WARNING, ELocation::FILESYSTEM, XOR( "Failed to close all open file handles." ) );
 	else if ( iResult > 0 )
-		LOG.Log( EPrefix::WARNING, ELocation::FILESYSTEM, XOR( "%i open file handles were closed." ), iResult );
+		_Log.Log( EPrefix::WARNING, ELocation::FILESYSTEM, XOR( "%i open file handles were closed." ), iResult );
 }
 
 bool CFilesystem::EnsureAbsoluteFileDirectoryExists( const std::string &strFilePath )
@@ -213,7 +213,7 @@ bool CFilesystem::GetAbsolutePathVisibility( const std::string &strPath )
 	const auto dwAttributes = GetFileAttributes( strPath.c_str( ) );
 	if ( dwAttributes == INVALID_FILE_ATTRIBUTES )
 	{
-		LOG.Log( EPrefix::ERROR, ELocation::FILESYSTEM, XOR( "Unable to get attributes of file %s." ), strPath.c_str( ) );
+		_Log.Log( EPrefix::ERROR, ELocation::FILESYSTEM, XOR( "Unable to get attributes of file %s." ), strPath.c_str( ) );
 		return false;
 	}
 
@@ -294,7 +294,7 @@ bool CFilesystem::DeleteAbsolutePath( const std::string &strPath )
 
 		if ( RemoveDirectory( strFinal.c_str( ) ) == FALSE )
 		{
-			LOG.Log( EPrefix::ERROR, ELocation::FILESYSTEM, XOR( "Unable to delete directory %s." ), strFinal.c_str( ) );
+			_Log.Log( EPrefix::ERROR, ELocation::FILESYSTEM, XOR( "Unable to delete directory %s." ), strFinal.c_str( ) );
 			return false;
 		}
 
@@ -307,7 +307,7 @@ bool CFilesystem::DeleteAbsolutePath( const std::string &strPath )
 		if ( CheckAbsoluteFileValidity( strEncryptedFile ) )
 			return DeleteAbsolutePath( strEncryptedFile );
 
-		LOG.Log( EPrefix::ERROR, ELocation::FILESYSTEM, XOR( "Unable to delete file %s." ), strFinal.c_str( ) );
+		_Log.Log( EPrefix::ERROR, ELocation::FILESYSTEM, XOR( "Unable to delete file %s." ), strFinal.c_str( ) );
 		return false;
 	}
 
@@ -325,7 +325,7 @@ bool CFilesystem::ReadAbsoluteFile( const std::string &strFilename, std::string 
 
 	if ( !CheckAbsoluteFileValidity( strFinalFilename ) )
 	{
-		LOG.Log( EPrefix::ERROR, ELocation::FILESYSTEM, XOR( "Reading attempted on non-existent file %s." ), strFinalFilename.c_str( ) );
+		_Log.Log( EPrefix::ERROR, ELocation::FILESYSTEM, XOR( "Reading attempted on non-existent file %s." ), strFinalFilename.c_str( ) );
 		return false;
 	}
 
@@ -336,7 +336,7 @@ bool CFilesystem::ReadAbsoluteFile( const std::string &strFilename, std::string 
 		|| pFile == nullptr
 		|| pFile == INVALID_HANDLE_VALUE )
 	{
-		LOG.Log( EPrefix::ERROR, ELocation::FILESYSTEM, XOR( "Unable to open file %s for reading." ), strFinalFilename.c_str( ) );
+		_Log.Log( EPrefix::ERROR, ELocation::FILESYSTEM, XOR( "Unable to open file %s for reading." ), strFinalFilename.c_str( ) );
 		return false;
 	}
 
@@ -345,17 +345,17 @@ bool CFilesystem::ReadAbsoluteFile( const std::string &strFilename, std::string 
 	strOut.resize( zSize );
 	rewind( pFile );
 	if ( zSize != fread( &strOut[ 0 ], sizeof( char ), zSize, pFile ) )
-		LOG.Log( EPrefix::WARNING, ELocation::FILESYSTEM, XOR( "Unable to read foretold size of %i in file %s." ), zSize, strFinalFilename.c_str( ) );
+		_Log.Log( EPrefix::WARNING, ELocation::FILESYSTEM, XOR( "Unable to read foretold size of %i in file %s." ), zSize, strFinalFilename.c_str( ) );
 
 	if ( fclose( pFile ) == EOF )
-		LOG.Log( EPrefix::WARNING, ELocation::FILESYSTEM, XOR( "Unable to close file %s successfully." ), strFinalFilename.c_str( ) );
+		_Log.Log( EPrefix::WARNING, ELocation::FILESYSTEM, XOR( "Unable to close file %s successfully." ), strFinalFilename.c_str( ) );
 
 	if ( bDecrypt )
 	{
 		std::string strBuffer;
 
 		if ( !CRYPTO.Decrypt( strOut, strBuffer, CRYPTO.strStaticEncryptionKey, CRYPTO.strStaticInitializationVector ) )
-			LOG.Log( EPrefix::WARNING, ELocation::FILESYSTEM, XOR( "Unable to decrypt file %s." ), strFinalFilename.c_str( ) );
+			_Log.Log( EPrefix::WARNING, ELocation::FILESYSTEM, XOR( "Unable to decrypt file %s." ), strFinalFilename.c_str( ) );
 
 		strOut = strBuffer;
 	}
@@ -375,7 +375,7 @@ bool CFilesystem::WriteAbsoluteFile( const std::string &strFilename, const std::
 		strFinalFilename = GetAbsoluteEncryptedFilename( strFilename );
 		if ( !CRYPTO.Encrypt( strData, strFinalData, CRYPTO.strStaticEncryptionKey, CRYPTO.strStaticInitializationVector ) )
 		{
-			LOG.Log( EPrefix::WARNING, ELocation::FILESYSTEM, XOR( "Unable to encrypt data to write to file %s. Writing unencrypted data." ), strFilename.c_str( ) );
+			_Log.Log( EPrefix::WARNING, ELocation::FILESYSTEM, XOR( "Unable to encrypt data to write to file %s. Writing unencrypted data." ), strFilename.c_str( ) );
 			strFinalData = strData;
 		}
 	}
@@ -397,15 +397,15 @@ bool CFilesystem::WriteAbsoluteFile( const std::string &strFilename, const std::
 		|| pFile == nullptr
 		|| pFile == INVALID_HANDLE_VALUE )
 	{
-		LOG.Log( EPrefix::WARNING, ELocation::FILESYSTEM, XOR( "Error opening file %s. Error code %i." ), strFinalFilename.c_str( ), errno );
+		_Log.Log( EPrefix::WARNING, ELocation::FILESYSTEM, XOR( "Error opening file %s. Error code %i." ), strFinalFilename.c_str( ), errno );
 		return false;
 	}
 
 	if ( fwrite( &strFinalData[ 0 ], sizeof( char ), strFinalData.length( ), pFile ) != strFinalData.length( ) )
-		LOG.Log( EPrefix::WARNING, ELocation::FILESYSTEM, XOR( "Failed to write all of data into file %s." ), strFinalFilename.c_str( ) );
+		_Log.Log( EPrefix::WARNING, ELocation::FILESYSTEM, XOR( "Failed to write all of data into file %s." ), strFinalFilename.c_str( ) );
 
 	if ( fclose( pFile ) == EOF )
-		LOG.Log( EPrefix::WARNING, ELocation::FILESYSTEM, XOR( "Failed to close file %s successfully." ), strFinalFilename.c_str( ) );
+		_Log.Log( EPrefix::WARNING, ELocation::FILESYSTEM, XOR( "Failed to close file %s successfully." ), strFinalFilename.c_str( ) );
 
 	return bHidden ? SetAbsolutePathVisibility( strFinalFilename, false ) : true;
 }
@@ -446,7 +446,7 @@ bool CFilesystem::SetAbsolutePathVisibility( const std::string &strPath, bool bV
 		if ( CheckAbsoluteFileValidity( strEncryptedFile ) )
 			return SetAbsolutePathVisibility( strEncryptedFile, bVisible );
 
-		LOG.Log( EPrefix::ERROR, ELocation::FILESYSTEM, XOR( "Unable to get attributes of path %s." ), strFinalPath.c_str( ) );
+		_Log.Log( EPrefix::ERROR, ELocation::FILESYSTEM, XOR( "Unable to get attributes of path %s." ), strFinalPath.c_str( ) );
 		return false;
 	}
 
@@ -461,7 +461,7 @@ bool CFilesystem::SetAbsolutePathVisibility( const std::string &strPath, bool bV
 		if ( CheckAbsoluteFileValidity( strEncryptedFile ) )
 			return SetAbsolutePathVisibility( strEncryptedFile, bVisible );
 
-		LOG.Log( EPrefix::ERROR, ELocation::FILESYSTEM, XOR( "Unable to set attributes of file %s." ), strFinalPath.c_str( ) );
+		_Log.Log( EPrefix::ERROR, ELocation::FILESYSTEM, XOR( "Unable to set attributes of file %s." ), strFinalPath.c_str( ) );
 		return false;
 	}
 

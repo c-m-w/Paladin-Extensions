@@ -31,6 +31,10 @@
 #include <WbemIdl.h>
 #pragma comment( lib, "wbemuuid.lib" )
 
+#undef ERROR
+#undef EncryptFile
+#undef DecryptFile
+
 // D3D
 #include <d3d9.h>
 #include <d3dx9core.h>
@@ -86,7 +90,3 @@
 #pragma warning( pop ) // reset warning level
 #pragma warning( push )
 #pragma warning( disable: 4100 4307 4309 ) // unreferenced parameter; overflow; truncation
-#undef IN
-#undef ERROR
-#undef EncryptFile
-#undef DecryptFile

@@ -4,7 +4,6 @@
 
 #define ACKNOWLEDGED_ENTRY_WARNING_1
 #define USE_NAMESPACES
-#define USE_DEFINITIONS
 #include "../../Framework.hpp"
 
 LRESULT CALLBACK DefaultWindowInputProcessor( HWND wnd, UINT uMessage, WPARAM wParam, LPARAM lParam )
@@ -18,7 +17,7 @@ LRESULT CALLBACK DefaultWindowInputProcessor( HWND wnd, UINT uMessage, WPARAM wP
 
 		default:
 		{
-			IN.HandleEvent( uMessage, wParam, lParam );
+			_Input.HandleEvent( uMessage, wParam, lParam );
 		}
 			break;
 	}
@@ -53,7 +52,7 @@ CApplicationWindow::CApplicationWindow( const std::string &strTitle, const Utili
 	_WindowInformation = WNDCLASSEX { sizeof _WindowInformation, NULL, _WindowInputProcessor, NULL, NULL, hModule, nullptr, nullptr, nullptr, nullptr, strTitle.c_str( ), nullptr };
 	if ( NULL == RegisterClassEx( &_WindowInformation ) )
 	{
-		LOG.Log( EPrefix::ERROR, ELocation::WINDOW, XOR( "Failed to register window class." ) );
+		_Log.Log( EPrefix::ERROR, ELocation::WINDOW, XOR( "Failed to register window class." ) );
 		return;
 	}
 
@@ -62,20 +61,20 @@ CApplicationWindow::CApplicationWindow( const std::string &strTitle, const Utili
 							   int( vecSize.x ), int( vecSize.y ), nullptr, nullptr, hModule, nullptr );
 	if ( nullptr == hwHandle )
 	{
-		LOG.Log( EPrefix::ERROR, ELocation::WINDOW, XOR( "Failed to create window." ) );
+		_Log.Log( EPrefix::ERROR, ELocation::WINDOW, XOR( "Failed to create window." ) );
 		return;
 	}
 
 	if ( TRUE != ShowWindow( hwHandle, SW_SHOWDEFAULT )
 		|| TRUE != SetWindowText( hwHandle, strTitle.c_str( ) )
 		|| TRUE != UpdateWindow( hwHandle ) )
-		LOG.Log( EPrefix::WARNING, ELocation::WINDOW, XOR( "Setting window attributes failed." ) );
+		_Log.Log( EPrefix::WARNING, ELocation::WINDOW, XOR( "Setting window attributes failed." ) );
 }
 
 CApplicationWindow::CApplicationWindow( const HWND &hwWindow, WNDPROC _WindowInputProcessor /*= DefaultWindowInputProcessor*/ ): hwHandle( hwWindow )
 {
 	if ( nullptr == ( pOldWindowInputProcessor = WNDPROC( SetWindowLongPtr( hwHandle, GWLP_WNDPROC, LONG( _WindowInputProcessor ) ) ) ) )
-		LOG.Log( EPrefix::ERROR, ELocation::WINDOW, XOR( "Failed to set the new window input processor." ) );
+		_Log.Log( EPrefix::ERROR, ELocation::WINDOW, XOR( "Failed to set the new window input processor." ) );
 }
 
 CApplicationWindow::~CApplicationWindow( )

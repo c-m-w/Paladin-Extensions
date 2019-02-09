@@ -279,7 +279,7 @@ public:
 	polygon_t Circle( circle_t circle, color_t clrCenter, color_t clrOuter, float flStartAngle, float flRatio = 1.f );
 	polygon_t Circle( circle_t circle, color_t *pColors, float flStartAngle, float flRatio = 1.f );
 	polygon_t Line( Utilities::location_t locStart, Utilities::location_t locEnd, float flThickness, color_t clrColor );
-} inline _Draw;
+} inline _Drawing;
 
 using EFont = CDrawing::EFont;
 using EFontFlags = CDrawing::EFontFlags;

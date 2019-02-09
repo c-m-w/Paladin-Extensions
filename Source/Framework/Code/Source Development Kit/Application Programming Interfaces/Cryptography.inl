@@ -2,6 +2,8 @@
 
 #pragma once
 
+
+
 template< typename _t > bool CCryptography::Crypt( const std::string &strIn, std::string &strOut, std::string strKey, std::string strInitVector )
 {
 	if ( strIn.empty( ) )

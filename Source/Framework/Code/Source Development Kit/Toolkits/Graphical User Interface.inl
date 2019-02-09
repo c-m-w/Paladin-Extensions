@@ -11,7 +11,7 @@ namespace Interface
 	inline void CSlider< int >::Draw( )
 	{
 		for ( auto &vertex: vecGeometry )
-			_Draw.DrawPolygon( vertex );
+			_Drawing.DrawPolygon( vertex );
 	}
 
 	inline void CSlider< int >::MouseMove( Utilities::location_t locMouse )
@@ -46,8 +46,8 @@ namespace Interface
 		const auto recAbsolute = GetAbsoluteLocation( );
 		const auto y = recAbsolute.y + recAbsolute.flHeight / 2.f;
 
-		vecGeometry.emplace_back( _Draw.Line( Utilities::location_t( recAbsolute.x, y ), Utilities::location_t( recAbsolute.x + recAbsolute.flWidth, y ), 3.f, *pCurrentBackground ).GetBuffer( ) );
-		vecGeometry.emplace_back( _Draw.Circle( circle_t( Utilities::location_t( recAbsolute.x + recAbsolute.flWidth * ( float( iCurrent - iMinimum ) / float( iMaximum - iMinimum ) ), y ), 2.f, 24 ), *pCurrentForeground, 0.f ).GetBuffer( ) );
+		vecGeometry.emplace_back( _Drawing.Line( Utilities::location_t( recAbsolute.x, y ), Utilities::location_t( recAbsolute.x + recAbsolute.flWidth, y ), 3.f, *pCurrentBackground ).GetBuffer( ) );
+		vecGeometry.emplace_back( _Drawing.Circle( circle_t( Utilities::location_t( recAbsolute.x + recAbsolute.flWidth * ( float( iCurrent - iMinimum ) / float( iMaximum - iMinimum ) ), y ), 2.f, 24 ), *pCurrentForeground, 0.f ).GetBuffer( ) );
 	}
 
 	inline bool CSlider< int >::Scroll( short sDelta )
@@ -64,7 +64,7 @@ namespace Interface
 	inline void CSlider< float >::Draw( )
 	{
 		for ( auto &vertex: vecGeometry )
-			_Draw.DrawPolygon( vertex );
+			_Drawing.DrawPolygon( vertex );
 	}
 
 	inline void CSlider< float >::MouseMove( Utilities::location_t locMouse )
@@ -106,8 +106,8 @@ namespace Interface
 		const auto recAbsolute = GetAbsoluteLocation( );
 		const auto y = recAbsolute.y + recAbsolute.flHeight / 2.f;
 
-		vecGeometry.emplace_back( _Draw.Line( Utilities::location_t( recAbsolute.x, y ), Utilities::location_t( recAbsolute.x + recAbsolute.flWidth, y ), 3.f, *pCurrentBackground ).GetBuffer( ) );
-		vecGeometry.emplace_back( _Draw.Circle( circle_t( Utilities::location_t( recAbsolute.x + recAbsolute.flWidth * ( ( flCurrent - flMinimum ) / ( flMaximum - flMinimum ) ), y ), 2.f, 24 ), *pCurrentForeground, 0.f ).GetBuffer( ) );
+		vecGeometry.emplace_back( _Drawing.Line( Utilities::location_t( recAbsolute.x, y ), Utilities::location_t( recAbsolute.x + recAbsolute.flWidth, y ), 3.f, *pCurrentBackground ).GetBuffer( ) );
+		vecGeometry.emplace_back( _Drawing.Circle( circle_t( Utilities::location_t( recAbsolute.x + recAbsolute.flWidth * ( ( flCurrent - flMinimum ) / ( flMaximum - flMinimum ) ), y ), 2.f, 24 ), *pCurrentForeground, 0.f ).GetBuffer( ) );
 	}
 
 	inline CEditLabel< int >::CEditLabel( padding_t _padBorder, padding_t padText, int iFont, int iStartValue ): IContainer( FLAG_CONTAINER_NONE, _padBorder, CLEAR ), lblDisplay( padText, new text_t( std::string( ), iFont, 14, text_t::LEFT, text_t::TOP ), TEXT_NORMAL, TEXT_NORMAL, TEXT_DARK, CLEAR, CLEAR, CLEAR, EFontFlags::NONE, [ & ]( )
