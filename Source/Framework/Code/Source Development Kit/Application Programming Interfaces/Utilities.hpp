@@ -5,7 +5,7 @@
 /** \brief Contains utilities to be used in other areas of the framework / other projects. */
 namespace Utilities
 {
-	/** \brief Datatype to store time. */
+	/** \brief Datatype to store time. Maximum precision is tenths of microseconds */
 	using moment_t = unsigned __int64;
 
 	struct location_t
@@ -30,10 +30,12 @@ namespace Utilities
 
 	vector2_t GetScreenSize( );
 
-	/** \brief Gets the time since epoch in milliseconds. */
-	/** \return Time since epoch in milliseconds. */
+
+	/** \brief Gets the time since UNIX epoch */
+	/** \return Time since epoch to the tenth of a microsecond. */
 	moment_t GetMoment( );
-	void Pause( moment_t mmtPauseLength = 1ui64 );
+	void Wait( moment_t mmtWaitLength = 0ui64 );
+	void Pause( moment_t mmtPauseLength = ULLONG_MAX );
 	void OpenLink( const std::string& strLink );
 }
 

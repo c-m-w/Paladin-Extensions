@@ -21,13 +21,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -111,6 +111,7 @@
     <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Window.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\Memory Manager.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\Resource Manager.hpp" />
+    <ClInclude Include="Code\Source Development Kit\Toolkits\System Manager.hpp" />
     <ClInclude Include="Precompile.hpp" />
     <ClInclude Include="Code\Framework.hpp" />
   </ItemGroup>
@@ -128,6 +129,7 @@
     <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Window.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\Memory Manager.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\Resource Manager.cpp" />
+    <ClCompile Include="Code\Source Development Kit\Toolkits\System Manager.cpp" />
     <ClCompile Include="Precompile.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

@@ -88,7 +88,7 @@ void OnLaunch( )
 				DRAW.EndFrame( );
 			}
 
-			Pause( );
+			Wait( );
 		}
 
 		pWindow.release( );
