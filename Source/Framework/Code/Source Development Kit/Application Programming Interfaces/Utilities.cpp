@@ -69,45 +69,28 @@ namespace Utilities
 
 	moment_t GetMoment( )
 	{
-		auto iFileTime = 0i64;
-		GetSystemTimePreciseAsFileTime( reinterpret_cast< PFILETIME >( &iFileTime ) );
-		return iFileTime - 116444736000000000ui64;
+		return std::chrono::duration_cast< std::chrono::milliseconds >( std::chrono::system_clock::now( ).time_since_epoch( ) ).count( ); // todo @jeremy the other nanosecond thing doesnt work aaaaa
+
+		timespec _Time { };
+		timespec_get( &_Time, TIME_UTC );
+		return _Time.tv_nsec / 100ui64;
 	}
 
-	void Wait( moment_t mmtWaitLength /*= 0ui64*/ )
+	void Pause( moment_t mmtPauseLength )
 	{
-		if ( mmtWaitLength == 0 )
-			return;
-		if ( mmtWaitLength == ULLONG_MAX )
-			Sleep( ULLONG_MAX );
+		std::this_thread::sleep_for( std::chrono::milliseconds( mmtPauseLength ) );
 
-		HANDLE hTimer = nullptr;
-		if ( ( hTimer = CreateWaitableTimer( nullptr, TRUE, nullptr ) ) == nullptr )
-			return std::this_thread::sleep_for( std::chrono::nanoseconds( mmtWaitLength * 100 ) ); // todo log
-
-		LARGE_INTEGER li;
-		li.QuadPart = -__int64( mmtWaitLength );
-		if ( SetWaitableTimer( hTimer, &li, 0, nullptr, nullptr, FALSE ) == 0 )
-		{
-			if ( CloseHandle( hTimer ) == 0 )
-				return std::this_thread::sleep_for( std::chrono::nanoseconds( mmtWaitLength * 100 ) ); // todo log
-			return std::this_thread::sleep_for( std::chrono::nanoseconds( mmtWaitLength * 100 ) ); // todo log
-		}
-
-		if ( WaitForSingleObject( hTimer, INFINITE ) != WAIT_TIMEOUT )
-		{
-			if ( CloseHandle( hTimer ) == 0 )
-				return std::this_thread::sleep_for( std::chrono::nanoseconds( mmtWaitLength * 100 ) ); // todo log
-			return std::this_thread::sleep_for( std::chrono::nanoseconds( mmtWaitLength * 100 ) );	 // todo log
-		}
-
-		if ( CloseHandle( hTimer ) == 0 )
-			; // todo log
-	}
-
-	void Pause( moment_t mmtPauseLength /*= ULLONG_MAX*/ )
-	{
-		Sleep( mmtPauseLength / 10000 );
+		//static const auto NtDelayExecution = static_cast< SWindowsAPI::fnNtDelayExecution >( GetFunctionPointer( SWindowsAPI::NtDelayExecution ) );
+		//if ( nullptr == NtDelayExecution ) // their system must be really messed up if it can't find delay execution
+		//	return Sleep( DWORD( mmtPauseLength ) );
+		//
+		//const auto mmtEndTarget = GetMoment( ) + mmtPauseLength * 10000ull - 5000ull; // 10,000 is milliseconds to 100 nanoseconds conversion
+		//
+		//LARGE_INTEGER liDelayInterval;
+		//liDelayInterval.QuadPart = -1ll;
+		//
+		//while ( GetMoment( ) < mmtEndTarget )
+		//	NtDelayExecution( FALSE, &liDelayInterval );
 	}
 
 	void OpenLink( const std::string &strLink )
