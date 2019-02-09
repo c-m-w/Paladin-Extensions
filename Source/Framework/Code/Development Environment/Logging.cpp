@@ -9,29 +9,29 @@
 
 bool CLogging::Initialize( )
 {
-	strErrorTime						= XOR( "Error Retrieving Date/Time" );
-	strDateFormat						= XOR( "%B %e, 20%g" );
-	strTimeFormat						= XOR( "%H:%M:%S" );
-	strLogFileFormat					= XOR( "%Y.%m.%d" );
-	strStatusPrefixes[ INFO ]			= XOR( "[Info]\t" );
-	strStatusPrefixes[ DEBUG ]			= XOR( "[Debug]\t" );
-	strStatusPrefixes[ SUCCESS ]		= XOR( "[Success]" );
-	strStatusPrefixes[ WARNING ]		= XOR( "[Warning]" );
-	strStatusPrefixes[ ERROR ]			= XOR( "[Error]\t" );
-	strLocations[ FILESYSTEM ]			= XOR( "[Filesystem]\t" );
-	strLocations[ CRYPTOGRAPHY ]		= XOR( "[Cryptography]\t" );
-	strLocations[ CONNECTIVITY ]		= XOR( "[Connectivity]\t" );
-	strLocations[ RESOURCE_MANAGER ]	= XOR( "[Resources]\t" );
-	strLocations[ WINDOW ]				= XOR( "[Window]\t\t" );
-	strLocations[ DRAWING ]				= XOR( "[Drawing]\t" );
-	strLocations[ SYSTEM_INFORMATION ]  = XOR( "[System]\t" );
-	strLocations[ MEMORY_MANAGER ]      = XOR( "[Memory]\t" );
-	strLocations[ APPLICATION ]			= XOR( "[Application]\t" );
+	strErrorTime						= ENC( "Error Retrieving Date/Time" );
+	strDateFormat						= ENC( "%B %e, 20%g" );
+	strTimeFormat						= ENC( "%H:%M:%S" );
+	strLogFileFormat					= ENC( "%Y.%m.%d" );
+	strStatusPrefixes[ INFO ]			= ENC( "[Info]\t" );
+	strStatusPrefixes[ DEBUG ]			= ENC( "[Debug]\t" );
+	strStatusPrefixes[ SUCCESS ]		= ENC( "[Success]" );
+	strStatusPrefixes[ WARNING ]		= ENC( "[Warning]" );
+	strStatusPrefixes[ ERROR ]			= ENC( "[Error]\t" );
+	strLocations[ FILESYSTEM ]			= ENC( "[Filesystem]\t" );
+	strLocations[ CRYPTOGRAPHY ]		= ENC( "[Cryptography]\t" );
+	strLocations[ CONNECTIVITY ]		= ENC( "[Connectivity]\t" );
+	strLocations[ RESOURCE_MANAGER ]	= ENC( "[Resources]\t" );
+	strLocations[ WINDOW ]				= ENC( "[Window]\t\t" );
+	strLocations[ DRAWING ]				= ENC( "[Drawing]\t" );
+	strLocations[ SYSTEM_INFORMATION ]  = ENC( "[System]\t" );
+	strLocations[ MEMORY_MANAGER ]      = ENC( "[Memory]\t" );
+	strLocations[ APPLICATION ]			= ENC( "[Application]\t" );
 
 #if defined _DEBUG
 	for ( auto &strLocation : strLocations )
 		if ( strLocation.empty( ) )
-			throw std::runtime_error( XOR( "Ensure that all location strings are initialized." ) );
+			throw std::runtime_error( ENC( "Ensure that all location strings are initialized." ) );
 #endif
 	
 	BeginLog( );
@@ -88,7 +88,7 @@ std::string CLogging::GetLogInitializationVector( )
 
 void CLogging::ErrorPopup( EUnloggableError _ErrorCode )
 {
-	MessageBox( nullptr, XOR( "Contact support if this issue persists." ), std::to_string( int( _ErrorCode ) ).c_str( ), MB_OK );
+	MessageBox( nullptr, ENC( "Contact support if this issue persists." ), std::to_string( int( _ErrorCode ) ).c_str( ), MB_OK );
 }
 
 void CLogging::WriteToFile( )
@@ -119,13 +119,13 @@ void CLogging::TestWriteToFile( )
 
 void CLogging::BeginLog( )
 {
-	strBuffer = XOR( "-----[ Log Begin | " ) + GetDatestamp( ) + XOR( " ]-----\n" );
+	strBuffer = ENC( "-----[ Log Begin | " ) + GetDatestamp( ) + ENC( " ]-----\n" );
 }
 
 void CLogging::EndLog( )
 {
 	WriteToFile( );
-	strBuffer += XOR( "-----[ Log End ]-----\n\n" );
+	strBuffer += ENC( "-----[ Log End ]-----\n\n" );
 	WriteToFile( );
 }
 
@@ -141,7 +141,7 @@ void CLogging::Log( EPrefix _Prefix, ELocation _Location, const std::string &str
 
 	strBuffer += GetTimestamp( ) + '\t' + strStatusPrefixes[ _Prefix ] + '\t' + strLocations[ _Location ] + '\t' + strLog + '\n';
 	if ( _Prefix == ERROR )
-		Log( INFO, _Location, XOR( "Last error: %i." ), GetLastError( ) );
+		Log( INFO, _Location, ENC( "Last error: %i." ), GetLastError( ) );
 }
 
 void CLogging::Log( EPrefix _Prefix, ELocation _Location, const char *szFormat, ... )

@@ -16,10 +16,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "VMProtect", "VMProtect", "{
 		VMProtect\Client.dll.vmp = VMProtect\Client.dll.vmp
 		VMProtect\CSGOX.dll.vmp = VMProtect\CSGOX.dll.vmp
 		VMProtect\Launcher.exe.vmp = VMProtect\Launcher.exe.vmp
-		VMProtect\Setup.exe.vmp = VMProtect\Setup.exe.vmp
 	EndProjectSection
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Setup", "Setup\Setup.vcxproj", "{D70344AC-B5A0-4A46-8322-7FDBAD6D91BE}"
 EndProject
 Project("{A0786B88-2ADB-4C21-ABE8-AA2D79766269}") = "Server", "Server\Server.phpproj", "{499E932C-7298-4C74-B807-3B6668922B40}"
 EndProject
@@ -67,14 +64,6 @@ Global
 		{CEC80218-9FEC-4969-BA32-8AD892E3F9A3}.Release|x64.ActiveCfg = Release|Win32
 		{CEC80218-9FEC-4969-BA32-8AD892E3F9A3}.Release|x86.ActiveCfg = Release|Win32
 		{CEC80218-9FEC-4969-BA32-8AD892E3F9A3}.Release|x86.Build.0 = Release|Win32
-		{D70344AC-B5A0-4A46-8322-7FDBAD6D91BE}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{D70344AC-B5A0-4A46-8322-7FDBAD6D91BE}.Debug|x64.ActiveCfg = Debug|Win32
-		{D70344AC-B5A0-4A46-8322-7FDBAD6D91BE}.Debug|x86.ActiveCfg = Debug|Win32
-		{D70344AC-B5A0-4A46-8322-7FDBAD6D91BE}.Debug|x86.Build.0 = Debug|Win32
-		{D70344AC-B5A0-4A46-8322-7FDBAD6D91BE}.Release|Any CPU.ActiveCfg = Release|Win32
-		{D70344AC-B5A0-4A46-8322-7FDBAD6D91BE}.Release|x64.ActiveCfg = Release|Win32
-		{D70344AC-B5A0-4A46-8322-7FDBAD6D91BE}.Release|x86.ActiveCfg = Release|Win32
-		{D70344AC-B5A0-4A46-8322-7FDBAD6D91BE}.Release|x86.Build.0 = Release|Win32
 		{499E932C-7298-4C74-B807-3B6668922B40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{499E932C-7298-4C74-B807-3B6668922B40}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{499E932C-7298-4C74-B807-3B6668922B40}.Debug|x86.ActiveCfg = Debug|Any CPU

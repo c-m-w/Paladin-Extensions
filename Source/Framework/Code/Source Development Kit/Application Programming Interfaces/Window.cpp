@@ -52,7 +52,7 @@ CApplicationWindow::CApplicationWindow( const std::string &strTitle, const Utili
 	_WindowInformation = WNDCLASSEX { sizeof _WindowInformation, NULL, _WindowInputProcessor, NULL, NULL, hModule, nullptr, nullptr, nullptr, nullptr, strTitle.c_str( ), nullptr };
 	if ( NULL == RegisterClassEx( &_WindowInformation ) )
 	{
-		_Log.Log( EPrefix::ERROR, ELocation::WINDOW, XOR( "Failed to register window class." ) );
+		_Log.Log( EPrefix::ERROR, ELocation::WINDOW, ENC( "Failed to register window class." ) );
 		return;
 	}
 
@@ -61,20 +61,20 @@ CApplicationWindow::CApplicationWindow( const std::string &strTitle, const Utili
 							   int( vecSize.x ), int( vecSize.y ), nullptr, nullptr, hModule, nullptr );
 	if ( nullptr == hwHandle )
 	{
-		_Log.Log( EPrefix::ERROR, ELocation::WINDOW, XOR( "Failed to create window." ) );
+		_Log.Log( EPrefix::ERROR, ELocation::WINDOW, ENC( "Failed to create window." ) );
 		return;
 	}
 
 	if ( TRUE != ShowWindow( hwHandle, SW_SHOWDEFAULT )
 		|| TRUE != SetWindowText( hwHandle, strTitle.c_str( ) )
 		|| TRUE != UpdateWindow( hwHandle ) )
-		_Log.Log( EPrefix::WARNING, ELocation::WINDOW, XOR( "Setting window attributes failed." ) );
+		_Log.Log( EPrefix::WARNING, ELocation::WINDOW, ENC( "Setting window attributes failed." ) );
 }
 
 CApplicationWindow::CApplicationWindow( const HWND &hwWindow, WNDPROC _WindowInputProcessor /*= DefaultWindowInputProcessor*/ ): hwHandle( hwWindow )
 {
 	if ( nullptr == ( pOldWindowInputProcessor = WNDPROC( SetWindowLongPtr( hwHandle, GWLP_WNDPROC, LONG( _WindowInputProcessor ) ) ) ) )
-		_Log.Log( EPrefix::ERROR, ELocation::WINDOW, XOR( "Failed to set the new window input processor." ) );
+		_Log.Log( EPrefix::ERROR, ELocation::WINDOW, ENC( "Failed to set the new window input processor." ) );
 }
 
 CApplicationWindow::~CApplicationWindow( )
@@ -86,7 +86,7 @@ CApplicationWindow::~CApplicationWindow( )
 bool CApplicationWindow::PollInput( )
 {
 	if ( pOldWindowInputProcessor )
-		throw std::runtime_error( XOR( "Attempting to poll a window's input that was not created." ) );
+		throw std::runtime_error( ENC( "Attempting to poll a window's input that was not created." ) );
 
 	MSG msgMessage;
 
@@ -129,7 +129,7 @@ void CApplicationWindow::Hide( )
 
 	lCurrent &= ~WS_VISIBLE;
 	if ( !SetWindowLong( hwHandle, GWL_STYLE, lCurrent ) == FALSE )
-		_Log.Log( EPrefix::WARNING, ELocation::WINDOW, XOR( "Error setting window long to hide window." ) );
+		_Log.Log( EPrefix::WARNING, ELocation::WINDOW, ENC( "Error setting window long to hide window." ) );
 }
 
 void CApplicationWindow::Show( )
@@ -138,6 +138,6 @@ void CApplicationWindow::Show( )
 
 	lCurrent |= WS_VISIBLE;
 	if ( !SetWindowLong( hwHandle, GWL_STYLE, lCurrent ) == FALSE )
-		_Log.Log( EPrefix::WARNING, ELocation::WINDOW, XOR( "Error setting window long to show window." ) );
+		_Log.Log( EPrefix::WARNING, ELocation::WINDOW, ENC( "Error setting window long to show window." ) );
 	
 }

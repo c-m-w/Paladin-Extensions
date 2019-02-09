@@ -70,7 +70,7 @@ void OnLaunch( )
 			default:
 			{
 				bExit = true;
-				_Log.Log( EPrefix::ERROR, ELocation::APPLICATION, XOR( "Invalid login code received." ) );
+				_Log.Log( EPrefix::ERROR, ELocation::APPLICATION, ENC( "Invalid login code received." ) );
 			}
 		}
 
@@ -106,7 +106,7 @@ void OnLaunch( )
 
 bool SetupInterface( )
 {
-	pApplicationWindow = new CApplicationWindow( XOR( "Launcher" ), { LAUNCHER_WIDTH, LAUNCHER_HEIGHT }, GetModuleHandle( nullptr ) );
+	pApplicationWindow = new CApplicationWindow( ENC( "Launcher" ), { LAUNCHER_WIDTH, LAUNCHER_HEIGHT }, GetModuleHandle( nullptr ) );
 	pApplicationWindow->Hide( );
 	DRAW.SetTarget( pApplicationWindow );
 	if ( !_Drawing.Setup( ) )
@@ -114,7 +114,7 @@ bool SetupInterface( )
 
 	InitializeInterface( );
 
-	pErrorWindow = new CWindow( CWindow::FLAG_WINDOW_ANCHOR, rectangle_t( -1.f, -1.f, LAUNCHER_WIDTH + 1.f, LAUNCHER_HEIGHT + 1.f ), XOR( "Paladin Extensions" ), XOR( "Launcher" ), [ & ]( )
+	pErrorWindow = new CWindow( CWindow::FLAG_WINDOW_ANCHOR, rectangle_t( -1.f, -1.f, LAUNCHER_WIDTH + 1.f, LAUNCHER_HEIGHT + 1.f ), ENC( "Paladin Extensions" ), ENC( "Launcher" ), [ & ]( )
 	{ }, [ & ]( )
 	{
 		bExit = true;
@@ -129,19 +129,19 @@ bool SetupInterface( )
 	_InvalidHardware = new CPanel( padding_t( ), BACKGROUND_DARK );
 
 	{
-		pInvalidPurchaseKeyPopup = new CWindow( CWindow::POPUP_FLAGS, rectangle_t( 0.f, 0.f, POPUP_WIDTH, POPUP_HEIGHT ), XOR( "Error" ), XOR( "Invalid Key" ) );
-		_InvalidPurchaseKey = new CLabel( padding_t( ), new text_t( XOR( "You have entered an invalid purchase key." ), EFont::ROBOTO, STANDARD_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_DARK, EFontFlags::NONE );
-		_InvalidPurchaseKeyKeys = new CButton( CButton::LEFT, XOR( "Purchases" ), [ & ]( )
+		pInvalidPurchaseKeyPopup = new CWindow( CWindow::POPUP_FLAGS, rectangle_t( 0.f, 0.f, POPUP_WIDTH, POPUP_HEIGHT ), ENC( "Error" ), ENC( "Invalid Key" ) );
+		_InvalidPurchaseKey = new CLabel( padding_t( ), new text_t( ENC( "You have entered an invalid purchase key." ), EFont::ROBOTO, STANDARD_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_DARK, EFontFlags::NONE );
+		_InvalidPurchaseKeyKeys = new CButton( CButton::LEFT, ENC( "Purchases" ), [ & ]( )
 		{
-			OpenLink( XOR( "https://www.paladin-extensions.com/extensions/purchases" ) );
+			OpenLink( ENC( "https://www.paladin-extensions.com/extensions/purchases" ) );
 		} );
-		_InvalidPurchaseKeyClose = new CButton( CButton::CENTER, XOR( "Close" ), [ & ]( )
+		_InvalidPurchaseKeyClose = new CButton( CButton::CENTER, ENC( "Close" ), [ & ]( )
 		{
 			pErrorWindow->ClosePopup( false );
 		} );
-		_InvalidPurchaseKeySupport = new CButton( CButton::RIGHT, XOR( "Support" ), [ & ]( )
+		_InvalidPurchaseKeySupport = new CButton( CButton::RIGHT, ENC( "Support" ), [ & ]( )
 		{
-			OpenLink( XOR( "https://www.paladin-extensions.com/support/" ) );
+			OpenLink( ENC( "https://www.paladin-extensions.com/support/" ) );
 		} );
 
 
@@ -154,11 +154,11 @@ bool SetupInterface( )
 	}
 
 	{
-		_ConnectionErrorTop = new CLabel( padding_t( ), new text_t( XOR( "Connection to the Paladin Extensions website failed." ), EFont::ROBOTO, STANDARD_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_DARK, EFontFlags::NONE );
-		_ConnectionErrorCenter = new CLabel( padding_t( ), new text_t( XOR( "Ensure there is no program interfering with the connection and try again." ), EFont::ROBOTO, STANDARD_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_DARK, EFontFlags::NONE );
-		_ConnectionErrorLink = new CLabel( padding_t( ), new text_t( XOR( "If this issue persists, click here for support." ), EFont::ROBOTO, SMALL_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_NORMAL, TEXT_NORMAL, TEXT_DARK, CLEAR, CLEAR, CLEAR, EFontFlags::NONE, [ & ]( )
+		_ConnectionErrorTop = new CLabel( padding_t( ), new text_t( ENC( "Connection to the Paladin Extensions website failed." ), EFont::ROBOTO, STANDARD_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_DARK, EFontFlags::NONE );
+		_ConnectionErrorCenter = new CLabel( padding_t( ), new text_t( ENC( "Ensure there is no program interfering with the connection and try again." ), EFont::ROBOTO, STANDARD_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_DARK, EFontFlags::NONE );
+		_ConnectionErrorLink = new CLabel( padding_t( ), new text_t( ENC( "If this issue persists, click here for support." ), EFont::ROBOTO, SMALL_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_NORMAL, TEXT_NORMAL, TEXT_DARK, CLEAR, CLEAR, CLEAR, EFontFlags::NONE, [ & ]( )
 		{
-			OpenLink( XOR( "https://www.paladin-extensions.com/support/" ) );
+			OpenLink( ENC( "https://www.paladin-extensions.com/support/" ) );
 		} );
 
 		_ConnectionError->AddRow( row_t( padding_t( 73.f, 0.f, 0.f, 0.f ), STANDARD_HEIGHT ) );
@@ -170,11 +170,11 @@ bool SetupInterface( )
 	}
 
 	{
-		_InvalidLicenseTop = new CLabel( padding_t( ), new text_t( XOR( "Your license does not exist locally or cannot be located." ), EFont::ROBOTO, STANDARD_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_DARK, EFontFlags::NONE );
-		_InvalidLicenseCenter = new CLabel( padding_t( ), new text_t( XOR( "Please enter one of your purchase keys." ), EFont::ROBOTO, STANDARD_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_DARK, EFontFlags::NONE );
-		_InvalidLicenseLink = new CLabel( padding_t( ), new text_t( XOR( "Click here to view your purchase keys." ), EFont::ROBOTO, SMALL_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_NORMAL, TEXT_NORMAL, TEXT_DARK, CLEAR, CLEAR, CLEAR, EFontFlags::NONE, [ & ]( )
+		_InvalidLicenseTop = new CLabel( padding_t( ), new text_t( ENC( "Your license does not exist locally or cannot be located." ), EFont::ROBOTO, STANDARD_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_DARK, EFontFlags::NONE );
+		_InvalidLicenseCenter = new CLabel( padding_t( ), new text_t( ENC( "Please enter one of your purchase keys." ), EFont::ROBOTO, STANDARD_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_DARK, EFontFlags::NONE );
+		_InvalidLicenseLink = new CLabel( padding_t( ), new text_t( ENC( "Click here to view your purchase keys." ), EFont::ROBOTO, SMALL_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_NORMAL, TEXT_NORMAL, TEXT_DARK, CLEAR, CLEAR, CLEAR, EFontFlags::NONE, [ & ]( )
 		{
-			OpenLink( XOR( "https://www.paladin-extensions.com/extensions/purchases" ) );
+			OpenLink( ENC( "https://www.paladin-extensions.com/extensions/purchases" ) );
 		} );
 		_InvalidLicensePurchaseKey = new CInputBox( padding_t( ), padding_t( 0.f, 5.f, 0.f, 5.f ), EFont::ENVY, CInputBox::ALPHANUMERIC, "", [ & ]( )
 		{
@@ -183,7 +183,7 @@ bool SetupInterface( )
 
 			bRetryConnection = true;
 		} );
-		_InvalidLicenseSubmit = new CButton( CButton::STANDALONE, XOR( "Submit" ), [ & ]( )
+		_InvalidLicenseSubmit = new CButton( CButton::STANDALONE, ENC( "Submit" ), [ & ]( )
 		{
 			if ( !AUTH.CreateLicenseFile( _InvalidLicensePurchaseKey->StringValue( ) ) )
 				pErrorWindow->Popup( pInvalidPurchaseKeyPopup );
@@ -204,10 +204,10 @@ bool SetupInterface( )
 	}
 
 	{
-		_InvalidHardwareTop = new CLabel( padding_t( ), new text_t( XOR( "There was an issue validating your hardware identity with the server." ), EFont::ROBOTO, STANDARD_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_DARK, EFontFlags::NONE );
-		_InvalidHardwareLink = new CLabel( padding_t( ), new text_t( XOR( "Click here to request a hardware identification reset." ), EFont::ROBOTO, SMALL_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_NORMAL, TEXT_NORMAL, TEXT_DARK, CLEAR, CLEAR, CLEAR, EFontFlags::NONE, [ & ]( )
+		_InvalidHardwareTop = new CLabel( padding_t( ), new text_t( ENC( "There was an issue validating your hardware identity with the server." ), EFont::ROBOTO, STANDARD_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_DARK, EFontFlags::NONE );
+		_InvalidHardwareLink = new CLabel( padding_t( ), new text_t( ENC( "Click here to request a hardware identification reset." ), EFont::ROBOTO, SMALL_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_NORMAL, TEXT_NORMAL, TEXT_DARK, CLEAR, CLEAR, CLEAR, EFontFlags::NONE, [ & ]( )
 		{
-			OpenLink( XOR( "https://www.paladin-extensions.com/support/" ) );
+			OpenLink( ENC( "https://www.paladin-extensions.com/support/" ) );
 		} );
 
 		_InvalidHardware->AddRow( row_t( padding_t( 10.f, 0.f, 0.f, 0.f ), STANDARD_HEIGHT ) );

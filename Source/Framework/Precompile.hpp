@@ -7,6 +7,9 @@
 #include <codeanalysis/warnings.h>
 #pragma warning( disable: ALL_CODE_ANALYSIS_WARNINGS )
 
+// VMProtect
+#include <VMProtect/VMProtectSDK.h>
+
 // Standard C++
 #define _SILENCE_CXX17_UNCAUGHT_EXCEPTION_DEPRECATION_WARNING // crypto++
 #include "Code/Development Environment/Standard Library.hpp"

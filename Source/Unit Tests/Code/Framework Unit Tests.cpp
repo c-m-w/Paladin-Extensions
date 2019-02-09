@@ -14,7 +14,9 @@ namespace Framework
 	TEST_CLASS( Development_Environment )
 	{
 		TEST_METHOD( Logging ) // todo unit test
-		{ }
+		{
+
+		}
 	};
 
 	namespace Source_Development_Kit

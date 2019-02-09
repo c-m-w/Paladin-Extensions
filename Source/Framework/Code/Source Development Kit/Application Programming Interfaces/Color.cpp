@@ -19,7 +19,7 @@ color_t::color_t( unsigned uData )
 color_t::color_t( std::initializer_list< unsigned char > initData )
 {
 	if ( initData.size( ) == 0 || initData.size( ) > 4 )
-		throw std::runtime_error( XOR( "Invalid array index" ) );
+		throw std::runtime_error( ENC( "Invalid array index" ) );
 
 	auto u = 0u;
 	for ( const auto &bData: initData )
@@ -39,7 +39,7 @@ color_t::color_t( std::initializer_list< int > initData )
 		return;
 	}
 	if ( initData.size( ) > 4 )
-		throw std::runtime_error( XOR( "Invalid array index" ) );
+		throw std::runtime_error( ENC( "Invalid array index" ) );
 
 	auto u = 0u;
 	for ( const auto &iData: initData )
@@ -54,7 +54,7 @@ color_t::color_t( std::initializer_list< int > initData )
 color_t::color_t( std::initializer_list< float > initData )
 {
 	if ( initData.size( ) == 0 || initData.size( ) > 4 )
-		throw std::runtime_error( XOR( "Invalid array index" ) );
+		throw std::runtime_error( ENC( "Invalid array index" ) );
 
 	auto u = 0u;
 	for ( const auto &flData: initData )
@@ -69,14 +69,14 @@ color_t::color_t( std::initializer_list< float > initData )
 unsigned char color_t::operator[]( std::size_t zColor ) const
 {
 	if ( zColor > 3.f )
-		throw std::runtime_error( XOR( "Invalid array index" ) );
+		throw std::runtime_error( ENC( "Invalid array index" ) );
 	return _Data.b[ zColor ];
 }
 
 float color_t::operator[]( float flColor ) const
 {
 	if ( flColor < 0.f || flColor > 3.f )
-		throw std::runtime_error( XOR( "Invalid array index" ) );
+		throw std::runtime_error( ENC( "Invalid array index" ) );
 	return float( _Data.b[ int( floorf( flColor ) ) ] ) / 255.f;
 }
 
@@ -232,7 +232,7 @@ CColor::CColor( color_t clrFirstSequence, Utilities::moment_t mmtFirstSequence )
 CColor::CColor( std::vector< sequence_t > vecSequences )
 {
 	if ( vecSequences.empty( ) )
-		throw std::runtime_error( XOR( "Invalid array index" ) );
+		throw std::runtime_error( ENC( "Invalid array index" ) );
 
 	zSequences = vecSequences.size( );
 
@@ -244,7 +244,7 @@ CColor::CColor( std::vector< sequence_t > vecSequences )
 color_t CColor::GetColor( )
 {
 	if ( zSequences == 0 )
-		throw std::runtime_error( XOR( "Invalid array index" ) );
+		throw std::runtime_error( ENC( "Invalid array index" ) );
 
 	if ( zSequences == 1 )
 		return pSequences[ 0 ].clr;
@@ -262,13 +262,13 @@ color_t CColor::GetColor( )
 			return GetGradient( pSequences[ z ].clr, pSequences[ z + 1 != zSequences ? z + 1 : 0 ].clr,
 								float( mmtCurrentProgress - mmtPassedProgress ) / float( pSequences[ z ].mmtDuration ) );
 
-	throw std::runtime_error( XOR( "Invalid array index" ) );
+	throw std::runtime_error( ENC( "Invalid array index" ) );
 }
 
 CColor::sequence_t CColor::GetSequence( std::size_t zSequence )
 {
 	if ( zSequences <= zSequence )
-		throw std::runtime_error( XOR( "Invalid array index" ) );
+		throw std::runtime_error( ENC( "Invalid array index" ) );
 
 	return pSequences[ zSequence ];
 }

@@ -4,7 +4,7 @@
 
 class CSystemInformation
 {
-	std::string GetDeviceInformation( const bstr_t& bszDevice, const wchar_t *wszDeviceProperty = XOR( L"Name" ) );
+	std::string GetDeviceInformation( const bstr_t& bszDevice, const wchar_t *wszDeviceProperty = ENCW( L"Name" ) );
 
 	enum
 	{

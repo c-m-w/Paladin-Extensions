@@ -18,7 +18,7 @@
 																		\
 	if ( strKey.length( ) != ENCRYPTION_KEY_SIZE						\
 		 || strInitVector.length( ) != INITIALIZATION_VECTOR_SIZE )		\
-		throw std::runtime_error( XOR( "Invalid key sizes." ) );
+		throw std::runtime_error( ENC( "Invalid key sizes." ) );
 
 bool CCryptography::Initialize( )
 {
@@ -38,8 +38,8 @@ void CCryptography::Uninitialize( )
 
 CCryptography::CCryptography( ): mmtLastGenerationTime( 0ui64 )
 {
-	strStaticEncryptionKey = XOR( "ExgrEV9yIlF3xgocqy53ipLAwFHuDznk" );
-	strStaticInitializationVector = XOR( "4ZNqNqIaJqZqPJS1" );
+	strStaticEncryptionKey = ENC( "ExgrEV9yIlF3xgocqy53ipLAwFHuDznk" );
+	strStaticInitializationVector = ENC( "4ZNqNqIaJqZqPJS1" );
 }
 
 std::string CCryptography::GenerateHash( const std::string &strBytes )

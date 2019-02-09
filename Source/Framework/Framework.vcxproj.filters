@@ -15,7 +15,6 @@
     <ClCompile Include="Code\Source Development Kit\Toolkits\Graphical User Interface.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\Memory Manager.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\Authentication.cpp" />
-    <ClCompile Include="Code\Development Environment\Analysis Protection.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\System Information.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -39,7 +38,6 @@
     <ClInclude Include="Code\Source Development Kit\Toolkits\Graphical User Interface.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\Memory Manager.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\Authentication.hpp" />
-    <ClInclude Include="Code\Development Environment\Analysis Protection.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\System Information.hpp" />
   </ItemGroup>
   <ItemGroup>

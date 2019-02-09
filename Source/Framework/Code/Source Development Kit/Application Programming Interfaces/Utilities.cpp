@@ -69,6 +69,6 @@ namespace Utilities
 
 	void OpenLink( const std::string &strLink )
 	{
-		ShellExecute( nullptr, XOR( "open" ), strLink.c_str( ), nullptr, nullptr, SW_SHOWNORMAL );
+		ShellExecute( nullptr, ENC( "open" ), strLink.c_str( ), nullptr, nullptr, SW_SHOWNORMAL );
 	}
 }

@@ -2,7 +2,16 @@
 
 #pragma once
 
-#define XOR( _String ) ( _String )
+#define ENC( _String ) VMProtectDecryptStringA( _String )
+#define ENCW( _String ) VMProtectDecryptStringW( _String )
+
+//#define ENC( _String ) ( decltype( _String ) )(                          \
+//		std::is_same< decltype( _String ), const char * >::value         \
+//			? VMProtectDecryptStringA( ( const char * )( _String ) )     \
+//			: VMProtectDecryptStringW( ( const wchar_t * )( _String ) ) )
+//
+//
+//#define ENCW( _String ) ENC( _String )
 
 #include "Development Environment/Build Output Wrapper.hpp"
 #define NO_ENTRY
@@ -16,7 +25,6 @@
 #include "Source Development Kit/Application Programming Interfaces/Cryptography.hpp"
 #include "Source Development Kit/Application Programming Interfaces/Filesystem.hpp"
 #include "Development Environment/Logging.hpp"
-#include "Development Environment/Analysis Protection.hpp"
 #include "Source Development Kit/Toolkits/System Information.hpp"
 #include "Source Development Kit/Toolkits/Memory Manager.hpp"
 #include "Source Development Kit/Application Programming Interfaces/Input.hpp"

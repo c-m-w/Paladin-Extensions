@@ -21,7 +21,7 @@ bool CResourceManager::Initialize( )
 	}
 	catch ( nlohmann::json::parse_error & )
 	{
-		_Log.Log( EPrefix::ERROR, ELocation::RESOURCE_MANAGER, XOR( "Unable to parse text retrieved for hash comparison of resources." ) );
+		_Log.Log( EPrefix::ERROR, ELocation::RESOURCE_MANAGER, ENC( "Unable to parse text retrieved for hash comparison of resources." ) );
 		return false;
 	}
 
@@ -34,7 +34,7 @@ bool CResourceManager::Initialize( )
 		{
 			_Filesystem.StoreCurrentWorkingDirectory( );
 
-			const auto strFile = _File[ XOR( "Path" ) ].get< std::string >( ).substr( 1 );
+			const auto strFile = _File[ ENC( "Path" ) ].get< std::string >( ).substr( 1 );
 			std::string strFileData { };
 
 			_Filesystem.ChangeWorkingDirectory( _Filesystem.GetWorkingDirectory( ), { _Filesystem.GetAbsoluteContainingDirectory( strFile ) } );
@@ -44,9 +44,9 @@ bool CResourceManager::Initialize( )
 				break;
 			}
 
-			if ( _File[ XOR( "Hash" ) ].get< std::string >( ) != _Cryptography.GenerateHash( strFileData ) )
+			if ( _File[ ENC( "Hash" ) ].get< std::string >( ) != _Cryptography.GenerateHash( strFileData ) )
 			{
-				_Log.Log( EPrefix::WARNING, ELocation::FILESYSTEM, XOR( "Hash of file %s does not match." ), strFile.c_str( ) );
+				_Log.Log( EPrefix::WARNING, ELocation::FILESYSTEM, ENC( "Hash of file %s does not match." ), strFile.c_str( ) );
 				bValid = false;
 				break;
 			}
@@ -55,7 +55,7 @@ bool CResourceManager::Initialize( )
 	}
 	catch ( nlohmann::json::type_error & )
 	{
-		_Log.Log( EPrefix::ERROR, ELocation::FILESYSTEM, XOR( "Error while accessing json object while comparing hashes." ) );
+		_Log.Log( EPrefix::ERROR, ELocation::FILESYSTEM, ENC( "Error while accessing json object while comparing hashes." ) );
 		return false;
 	}
 
@@ -73,7 +73,7 @@ bool CResourceManager::Initialize( )
 		}
 		catch ( nlohmann::json::parse_error & )
 		{
-			_Log.Log( EPrefix::ERROR, ELocation::RESOURCE_MANAGER, XOR( "Unable to parse text retrieved for installing resources." ) );
+			_Log.Log( EPrefix::ERROR, ELocation::RESOURCE_MANAGER, ENC( "Unable to parse text retrieved for installing resources." ) );
 			return false;
 		}
 		try
@@ -82,22 +82,22 @@ bool CResourceManager::Initialize( )
 			{
 				_Filesystem.StoreCurrentWorkingDirectory( );
 
-				const auto strFile = _File[ XOR( "Path" ) ].get< std::string >( ).substr( 1 ),
-					strData = _File[ XOR( "Data" ) ].get< std::string >( );
+				const auto strFile = _File[ ENC( "Path" ) ].get< std::string >( ).substr( 1 ),
+					strData = _File[ ENC( "Data" ) ].get< std::string >( );
 				std::string strRawData { };
 
 				_Filesystem.ChangeWorkingDirectory( _Filesystem.GetWorkingDirectory( ), {_Filesystem.GetAbsoluteContainingDirectory( strFile ) } );
 
 				if ( strData.empty( ) )
 				{
-					_Log.Log( EPrefix::ERROR, ELocation::RESOURCE_MANAGER, XOR( "File %s is empty. If you uploaded a config file to the server, please remove it. They are automatically created." ), strFile.c_str( ) );
+					_Log.Log( EPrefix::ERROR, ELocation::RESOURCE_MANAGER, ENC( "File %s is empty. If you uploaded a config file to the server, please remove it. They are automatically created." ), strFile.c_str( ) );
 					_Filesystem.RestoreWorkingDirectory( ); 
 					return false;
 				}
 
 				if ( !_Cryptography.Decode( strData, strRawData ) )
 				{
-					_Log.Log( EPrefix::ERROR, ELocation::RESOURCE_MANAGER, XOR( "Unable to un-base64 file %s from json." ), strFile.c_str( ) );
+					_Log.Log( EPrefix::ERROR, ELocation::RESOURCE_MANAGER, ENC( "Unable to un-base64 file %s from json." ), strFile.c_str( ) );
 					_Filesystem.RestoreWorkingDirectory( );
 					return false;
 				}
@@ -113,7 +113,7 @@ bool CResourceManager::Initialize( )
 		}
 		catch ( nlohmann::json::type_error & )
 		{
-			_Log.Log( EPrefix::ERROR, ELocation::FILESYSTEM, XOR( "Error while accessing json object while installing resources." ) );
+			_Log.Log( EPrefix::ERROR, ELocation::FILESYSTEM, ENC( "Error while accessing json object while installing resources." ) );
 			return false;
 		}
 	}
@@ -136,7 +136,7 @@ std::string& CResourceManager::GetResource( const std::string &strRelativePath )
 	_Filesystem.StoreCurrentWorkingDirectory( );
 	_Filesystem.ChangeWorkingDirectory( _Filesystem.GetAppdataDirectory( ), { _Filesystem.strRelativeResourceDirectory, strPath } );
 	if ( !_Filesystem.ReadFile( CFilesystem::PathToFile( strRelativePath ), strReturn, true ) )
-		throw std::runtime_error( XOR( "Unable to obtain resource " ) + strRelativePath );
+		throw std::runtime_error( ENC( "Unable to obtain resource " ) + strRelativePath );
 
 	_Filesystem.RestoreWorkingDirectory( );
 	_LoadedResources.insert( std::pair< std::string, std::string >( strRelativePath, strReturn ) );

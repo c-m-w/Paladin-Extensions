@@ -19,14 +19,14 @@ void OnLaunch( );
 int main( )
 {
 	SetLastError( 0u );
-	HANDLE hMutex = CreateMutex( NULL, FALSE, XOR( StringizeValue( __TIMESTAMP__ ) ) );
+	HANDLE hMutex = CreateMutex( NULL, FALSE, ENC( StringizeValue( __TIMESTAMP__ ) ) );
 	if ( hMutex == NULL || GetLastError( ) == ERROR_ALREADY_EXISTS )
 		return 0;
 
 #if defined _DEBUG
 	FILE *pConsoleOutput;
 	AllocConsole( );
-	if ( freopen_s( &pConsoleOutput, XOR( "CONOUT$" ), XOR( "w" ), stdout ) != 0
+	if ( freopen_s( &pConsoleOutput, ENC( "CONOUT$" ), ENC( "w" ), stdout ) != 0
 		 || pConsoleOutput == nullptr )
 		return pConsoleOutput ? CloseHandle( pConsoleOutput ) != 0 : 0;
 #endif
@@ -57,7 +57,7 @@ WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR 
 _In_ int nCmdShow )
 {
 	SetLastError( 0u );
-	HANDLE hMutex = CreateMutex( NULL, FALSE, XOR( StringizeValue( __TIMESTAMP__ ) ) );
+	HANDLE hMutex = CreateMutex( NULL, FALSE, ENC( StringizeValue( __TIMESTAMP__ ) ) );
 	if ( hMutex == NULL )
 		return 0;
 
@@ -67,7 +67,7 @@ _In_ int nCmdShow )
 #if defined _DEBUG
 	FILE *pConsoleOutput;
 	AllocConsole( );
-	if ( freopen_s( &pConsoleOutput, XOR( "CONOUT$" ), XOR( "w" ), stdout ) != 0 || pConsoleOutput == nullptr )
+	if ( freopen_s( &pConsoleOutput, ENC( "CONOUT$" ), ENC( "w" ), stdout ) != 0 || pConsoleOutput == nullptr )
 		return pConsoleOutput ? CloseHandle( pConsoleOutput ) != 0 : 0;
 #endif
 
@@ -109,7 +109,7 @@ BOOL WINAPI DllMain( _In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID 
 		case DLL_PROCESS_ATTACH:
 		{
 			SetLastError( 0u );
-			HANDLE hMutex = CreateMutex( NULL, FALSE, XOR( StringizeValue( __TIMESTAMP__ ) ) );
+			HANDLE hMutex = CreateMutex( NULL, FALSE, ENC( StringizeValue( __TIMESTAMP__ ) ) );
 			if ( hMutex == NULL || GetLastError( ) == ERROR_ALREADY_EXISTS )
 				return FALSE;
 
@@ -124,7 +124,7 @@ BOOL WINAPI DllMain( _In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID 
 #if defined _DEBUG
 			FILE *pConsoleOutput;
 			AllocConsole( );
-			if ( freopen_s( &pConsoleOutput, XOR( "CONOUT$" ), XOR( "w" ), stdout ) != 0 || pConsoleOutput == nullptr )
+			if ( freopen_s( &pConsoleOutput, ENC( "CONOUT$" ), ENC( "w" ), stdout ) != 0 || pConsoleOutput == nullptr )
 			{
 				if ( pConsoleOutput )
 					CloseHandle( pConsoleOutput );

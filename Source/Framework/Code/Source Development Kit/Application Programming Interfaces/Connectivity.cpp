@@ -9,7 +9,7 @@
 
 #define ENSURE_DATA_SET( _PostData )																								\
 	if ( !bPostDataSet[ _PostData ] )																								\
-		throw std::runtime_error( ( XOR( "Post data ID " ) + std::to_string( int( _PostData ) ) + XOR( " not set." ) ).c_str( ) );
+		throw std::runtime_error( ( ENC( "Post data ID " ) + std::to_string( int( _PostData ) ) + ENC( " not set." ) ).c_str( ) );
 
 std::size_t WriteCallback( void *pData, std::size_t zMemberSize, std::size_t zMembers, void *pBuffer )
 {
@@ -22,30 +22,30 @@ bool CConnectivity::Initialize( )
 	const auto _Code = curl_global_init( CURL_GLOBAL_ALL );
 	if ( _Code != CURLE_OK )
 	{
-		_Log.Log( EPrefix::ERROR, ELocation::CONNECTIVITY, XOR( "Could not global initialize cURL. Error code: %i." ), _Code );
+		_Log.Log( EPrefix::ERROR, ELocation::CONNECTIVITY, ENC( "Could not global initialize cURL. Error code: %i." ), _Code );
 		return false;
 	}
 
 	if ( ( hInstance = curl_easy_init( ) ) != nullptr )
 	{
-		_Log.Log( EPrefix::SUCCESS, ELocation::CONNECTIVITY,	XOR( "Initialized cURL successfully." ) );
-		strScriptLocator						=				XOR( "https://www.paladin-extensions.com/Run.php" );
-		vecIllegalCharacters.emplace_back( '&',					XOR( "AMP" ) );
-		vecIllegalCharacters.emplace_back( '=',					XOR( "EQUAL" ) );
-		vecIllegalCharacters.emplace_back( '<',					XOR( "LESS" ) );
-		vecIllegalCharacters.emplace_back( '>',					XOR( "GREATER" ) );
-		vecIllegalCharacters.emplace_back( '\'',				XOR( "QUOTE" ) );
-		vecIllegalCharacters.emplace_back( '+',					XOR( "PLUS" ) );
-		strPostDataIdentifiers[ USER_ID ]		=				XOR( "id" );
-		strPostDataIdentifiers[ SECRET_KEY ]	=				XOR( "sk" );
-		strPostDataIdentifiers[ HARDWARE ]		=				XOR( "hw" );
-		strPostDataIdentifiers[ HASH ]			=				XOR( "hash" );
-		strPostDataIdentifiers[ ACTION ]		=				XOR( "action" );
+		_Log.Log( EPrefix::SUCCESS, ELocation::CONNECTIVITY,	ENC( "Initialized cURL successfully." ) );
+		strScriptLocator						=				ENC( "https://www.paladin-extensions.com/Run.php" );
+		vecIllegalCharacters.emplace_back( '&',					ENC( "AMP" ) );
+		vecIllegalCharacters.emplace_back( '=',					ENC( "EQUAL" ) );
+		vecIllegalCharacters.emplace_back( '<',					ENC( "LESS" ) );
+		vecIllegalCharacters.emplace_back( '>',					ENC( "GREATER" ) );
+		vecIllegalCharacters.emplace_back( '\'',				ENC( "QUOTE" ) );
+		vecIllegalCharacters.emplace_back( '+',					ENC( "PLUS" ) );
+		strPostDataIdentifiers[ USER_ID ]		=				ENC( "id" );
+		strPostDataIdentifiers[ SECRET_KEY ]	=				ENC( "sk" );
+		strPostDataIdentifiers[ HARDWARE ]		=				ENC( "hw" );
+		strPostDataIdentifiers[ HASH ]			=				ENC( "hash" );
+		strPostDataIdentifiers[ ACTION ]		=				ENC( "action" );
 		memset( bPostDataSet, false, sizeof( bool ) * POST_DATA_MAX );
 		return true;
 	}
 
-	_Log.Log( EPrefix::ERROR, ELocation::CONNECTIVITY, XOR( "Could not open a cURL instance." ) );
+	_Log.Log( EPrefix::ERROR, ELocation::CONNECTIVITY, ENC( "Could not open a cURL instance." ) );
 	return false;
 }
 
@@ -91,18 +91,18 @@ bool CConnectivity::TryConnection( std::string &strOut, std::string *pErrorBuffe
 	const auto _Code = curl_easy_perform( hInstance );
 	if ( _Code != CURLE_OK )
 	{
-		_Log.Log( EPrefix::ERROR, ELocation::CONNECTIVITY, XOR( "Failed to perform connection. Error code: %i. Retries: %i." ), _Code, iRetries );
+		_Log.Log( EPrefix::ERROR, ELocation::CONNECTIVITY, ENC( "Failed to perform connection. Error code: %i. Retries: %i." ), _Code, iRetries );
 		if ( pErrorBuffer != nullptr )
-			_Log.Log( EPrefix::INFO, ELocation::CONNECTIVITY, XOR( "Error message: " ) + *pErrorBuffer );
+			_Log.Log( EPrefix::INFO, ELocation::CONNECTIVITY, ENC( "Error message: " ) + *pErrorBuffer );
 
 		return iRetries < MAX_RETRIES ? TryConnection( strOut, pErrorBuffer, ++iRetries ) : false;
 	}
 
 	if ( strOut.empty( ) )
 	{
-		_Log.Log( EPrefix::ERROR, ELocation::CONNECTIVITY, XOR( "Response was empty. Retries: %i." ), _Code, iRetries );
+		_Log.Log( EPrefix::ERROR, ELocation::CONNECTIVITY, ENC( "Response was empty. Retries: %i." ), _Code, iRetries );
 		if ( pErrorBuffer != nullptr )
-			_Log.Log( EPrefix::INFO, ELocation::CONNECTIVITY, XOR( "Error message: " ) + *pErrorBuffer );
+			_Log.Log( EPrefix::INFO, ELocation::CONNECTIVITY, ENC( "Error message: " ) + *pErrorBuffer );
 
 		return iRetries < MAX_RETRIES ? TryConnection( strOut, pErrorBuffer, ++iRetries ) : false;
 	}
@@ -149,7 +149,7 @@ bool CConnectivity::Request( EAction _Action, std::string &strOut )
 			break;
 
 		default:
-			throw std::runtime_error( XOR( "Attempting connection with invalid action." ) );
+			throw std::runtime_error( ENC( "Attempting connection with invalid action." ) );
 	}
 
 	AddPostData( ACTION, std::to_string( int( _Action ) ) );
@@ -163,7 +163,7 @@ bool CConnectivity::Request( EAction _Action, std::string &strOut )
 	strErrorBuffer.resize( CURL_ERROR_SIZE );
 	const auto bSetErrorBuffer = SetConnectionParameter( CURLOPT_ERRORBUFFER, &strErrorBuffer[ 0 ] );
 	if ( !bSetErrorBuffer )
-		_Log.Log( EPrefix::WARNING, ELocation::CONNECTIVITY, XOR( "Unable to set error buffer for cURL." ) );
+		_Log.Log( EPrefix::WARNING, ELocation::CONNECTIVITY, ENC( "Unable to set error buffer for cURL." ) );
 
 	if ( !SetConnectionParameter( CURLOPT_URL, strScriptLocator.c_str( ) )
 		|| !SetConnectionParameter( CURLOPT_POST, TRUE )
@@ -180,7 +180,7 @@ bool CConnectivity::Request( EAction _Action, std::string &strOut )
 		|| !SetConnectionParameter( CURLOPT_SSL_VERIFYPEER, FALSE ) )
 	{
 		if ( bSetErrorBuffer )
-			_Log.Log( EPrefix::ERROR, ELocation::CONNECTIVITY, XOR( "Setting cURL parameters failed, message: " ) + strErrorBuffer );
+			_Log.Log( EPrefix::ERROR, ELocation::CONNECTIVITY, ENC( "Setting cURL parameters failed, message: " ) + strErrorBuffer );
 
 		ResetConnection( );
 		_Filesystem.EncryptFile( CFilesystem::strCookieFile );

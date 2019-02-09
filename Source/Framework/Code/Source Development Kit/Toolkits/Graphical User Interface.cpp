@@ -1355,7 +1355,7 @@ namespace Interface
 	void IContainer::AddWidgetToRow( IWidget *pWidget, float flWidth, int iRow )
 	{
 		if ( pWidget == nullptr )
-			throw std::runtime_error( XOR( "Adding a nullptr widget." ) );
+			throw std::runtime_error( ENC( "Adding a nullptr widget." ) );
 
 		auto &rowCurrent = vecRows[ iRow ];
 		pWidget->pParentContainer = this;

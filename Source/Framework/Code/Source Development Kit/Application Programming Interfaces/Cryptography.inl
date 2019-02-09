@@ -17,7 +17,7 @@ template< typename _t > bool CCryptography::Crypt( const std::string &strIn, std
 	}
 	catch ( CryptoPP::InvalidCiphertext & )
 	{
-		_Log.Log( EPrefix::ERROR, ELocation::CRYPTOGRAPHY, XOR( "Invalid cipher text passed to decrypt." ) );
+		_Log.Log( EPrefix::ERROR, ELocation::CRYPTOGRAPHY, ENC( "Invalid cipher text passed to decrypt." ) );
 		return false;
 	}
 
