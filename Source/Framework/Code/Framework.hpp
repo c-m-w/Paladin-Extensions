@@ -16,8 +16,9 @@
 #include "Source Development Kit/Application Programming Interfaces/Cryptography.hpp"
 #include "Source Development Kit/Application Programming Interfaces/Filesystem.hpp"
 #include "Development Environment/Logging.hpp"
-#include "Source Development Kit/Toolkits/Memory Manager.hpp"
+#include "Development Environment/Analysis Protection.hpp"
 #include "Source Development Kit/Toolkits/System Information.hpp"
+#include "Source Development Kit/Toolkits/Memory Manager.hpp"
 #include "Source Development Kit/Application Programming Interfaces/Input.hpp"
 #include "Source Development Kit/Toolkits/Resource Manager.hpp"
 
