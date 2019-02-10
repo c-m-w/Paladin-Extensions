@@ -11,23 +11,26 @@ private:
 	bool bLoggedIn = false;
 
 	bool GetHardware( std::string &strOut );
-	__declspec( noreturn ) void Uninstall( );
+	__declspec( noreturn ) void UnsafeUninstall( );
+	bool Uninstall( );
 
 public:
 
 	enum ELoginCode
 	{
 		CONNECTION_ERROR,
-		INVALID_LICENSE,
+		SERVER_ERROR,
+		SERVER_CONNECTION_ERROR,
+		BANNED,
+		INVALID_KEY,
 		INVALID_HARDWARE,
-		LOGIN_SUCCESS,
-		LOGIN_STAFF_SUCCESS
+		SUCCESS,
+		STAFF_SUCCESS
 	};
 
 	constexpr static auto PURCHASE_KEY_LENGTH = 12;
 
-	bool LicensePresent( );
-	bool CreateLicenseFile( const std::string& strPurchaseKey );
+	bool CreateLicenseFile( std::string strPurchaseKey );
 	[ [ nodiscard ] ] ELoginCode Login( );
 	bool AttemptUninstall( );
 } inline _Authentication;

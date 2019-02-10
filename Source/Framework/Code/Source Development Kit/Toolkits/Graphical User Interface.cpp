@@ -1028,9 +1028,13 @@ namespace Interface
 	void CHeaderPanel::InitializeDrawingInformation( )
 	{
 		const auto recLocation = GetAbsoluteLocation( );
+		polygon_t polLine;
+		polLine.vecVertices.emplace_back( recLocation.x, recLocation.y + recLocation.flHeight, OUTLINE_LIGHT.GetARGB( ) );
+		polLine.vecVertices.emplace_back( recLocation.x + recLocation.flWidth, recLocation.y + recLocation.flHeight, OUTLINE_LIGHT.GetARGB( ) );
+		polLine.sPrimitives = 1;
 
 		vecGeometry.emplace_back( _Drawing.Rectangle( recLocation, *clrBackground ).GetBuffer( ) );
-		vecGeometry.emplace_back( _Drawing.Line( location_t( recLocation.x, recLocation.y + recLocation.flHeight ), location_t( recLocation.x + recLocation.flWidth, recLocation.y + recLocation.flHeight ), 1.f, OUTLINE_LIGHT ).GetBuffer( ) );
+		vecGeometry.emplace_back( polLine.GetBuffer( D3DPT_LINESTRIP ) );
 	}
 
 	void CHeaderPanel::Initialize( )
@@ -1181,7 +1185,9 @@ namespace Interface
 
 		_pPopup->pParentContainer = this;
 		if ( _pPopup->wfFlags & FLAG_WINDOW_ANCHOR )
-			_pPopup->recLocation = rectangle_t( recLocation.flWidth / 2.f - _pPopup->recLocation.flWidth / 2.f, recLocation.flHeight / 2.f - _pPopup->recLocation.flHeight / 2.f, _pPopup->recLocation.flWidth, _pPopup->recLocation.flHeight );
+			_pPopup->recLocation = rectangle_t( roundf( recLocation.flWidth / 2.f - _pPopup->recLocation.flWidth / 2.f ), 
+												roundf( recLocation.flHeight / 2.f - _pPopup->recLocation.flHeight / 2.f ),
+												_pPopup->recLocation.flWidth, _pPopup->recLocation.flHeight );
 
 		_pPopup->iType = POPUP;
 		_WidgetContext.UpdateContainerWidgets( _pPopup );

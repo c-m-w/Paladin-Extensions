@@ -37,19 +37,63 @@ bool CAuthentication::GetHardware( std::string &strOut )
 	}.dump( ) ), true;
 }
 
-bool CAuthentication::LicensePresent( )
+bool CAuthentication::CreateLicenseFile( std::string strPurchaseKey )
 {
-	return false;
-}
+	std::transform( strPurchaseKey.begin( ), strPurchaseKey.end( ), strPurchaseKey.begin( ), toupper );
 
-bool CAuthentication::CreateLicenseFile( const std::string &strPurchaseKey )
-{
-	return false;	
+	_Filesystem.StoreCurrentWorkingDirectory( );
+	_Filesystem.ChangeWorkingDirectory( _Filesystem.GetAppdataDirectory( ) );
+	const auto bReturn = _Filesystem.WriteFile( _Filesystem.strLicenseFile, strPurchaseKey, true );
+	_Filesystem.RestoreWorkingDirectory( );
+	return bReturn;
 }
 
 ELoginCode CAuthentication::Login( )
 {
-	return CONNECTION_ERROR;
+	std::string strPurchaseKey { }, strHardware { }, strResponse { };
+	_Filesystem.StoreCurrentWorkingDirectory( );
+	_Filesystem.ChangeWorkingDirectory( _Filesystem.GetAppdataDirectory( ) );
+	if ( !_Filesystem.ReadFile( _Filesystem.strLicenseFile, strPurchaseKey, true ) )
+		return _Filesystem.RestoreWorkingDirectory( ), INVALID_KEY;
+
+	if ( !GetHardware( strHardware ) )
+		return _Filesystem.RestoreWorkingDirectory( ), CONNECTION_ERROR;
+
+	NET.AddPostData( EPostData::PURCHASE_KEY, strPurchaseKey );
+	NET.AddPostData( EPostData::HARDWARE, strHardware );
+	if ( !NET.Request( EAction::LOGIN, strResponse ) )
+		return _Filesystem.RestoreWorkingDirectory( ), CONNECTION_ERROR;
+
+	ELoginCode _Return;
+	try
+	{
+		auto jsResponse = nlohmann::json::parse( strResponse );
+		const auto strBuffer = jsResponse[ "Exit Code" ].get< std::string >( );
+		_Return = ELoginCode( std::stoi( strBuffer ) );
+	}
+	catch( nlohmann::json::parse_error &e )
+	{
+		_Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Unable to parse response from login. Message: %s." ), e.what( ) );
+		return _Filesystem.RestoreWorkingDirectory( ), SERVER_ERROR;
+	}
+	catch( nlohmann::json::type_error &e )
+	{
+		_Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Unable to obtain string value of the exit code. Message: %s." ), e.what( ) );
+		return _Filesystem.RestoreWorkingDirectory( ), SERVER_ERROR;
+	}
+	catch( std::invalid_argument &e )
+	{
+		_Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Unable to convert string login code to an integer. Message: %s." ), e.what( ) );
+		return _Filesystem.RestoreWorkingDirectory( ), SERVER_ERROR;
+	}
+	catch( std::out_of_range &e )
+	{
+		_Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Unable to convert string login code to an integer. Message: %s." ), e.what( ) );
+		return _Filesystem.RestoreWorkingDirectory( ), SERVER_ERROR;
+	}
+
+	_Log.Log( EPrefix::INFO, ELocation::AUTHENTICATION, ENC( "Received login code of %i." ), _Return );
+	return _Filesystem.RestoreWorkingDirectory( ), _Return;
 }
 
 bool CAuthentication::AttemptUninstall( )

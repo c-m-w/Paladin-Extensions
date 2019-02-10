@@ -271,7 +271,11 @@ bool CFilesystem::DeleteAbsolutePath( const std::string &strPath )
 {
 	if ( !CheckAbsoluteDirectoryValidity( strPath )
 		 && !CheckAbsoluteFileValidity( strPath ) )
-		return true;
+	{
+		const auto strEncryptedPath = GetAbsoluteEncryptedFilename( strPath );
+		return CheckAbsoluteDirectoryValidity( strEncryptedPath ) || CheckAbsoluteFileValidity( strEncryptedPath ) ?
+			DeleteAbsolutePath( strEncryptedPath ) : true;
+	}
 
 	auto strFinal = strPath;
 

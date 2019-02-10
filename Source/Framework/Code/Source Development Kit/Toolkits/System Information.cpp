@@ -7,7 +7,7 @@
 #define USE_DEFINITIONS
 #include "../../Framework.hpp"
 
-CSystemInformation::device_info_t::device_info_t( std::string *pValue, const std::wstring &wstrDevice, const std::wstring &wstrProperty ): pValue( pValue ), wstrDevice( wstrDevice ), wstrProperty( wstrProperty )
+device_info_t::device_info_t( std::string *pValue, const std::wstring &wstrDevice, const std::wstring &wstrProperty ): pValue( pValue ), wstrDevice( wstrDevice ), wstrProperty( wstrProperty )
 { }
 
 void CSystemInformation::AddDeviceToQueue( const device_info_t &_DeviceInfo )

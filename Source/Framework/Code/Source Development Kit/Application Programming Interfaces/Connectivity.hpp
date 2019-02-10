@@ -8,10 +8,8 @@ public:
 
 	enum EPostData
 	{
-		USER_ID,
-		SECRET_KEY,
+		PURCHASE_KEY,
 		HARDWARE,
-		HASH,
 		ACTION,
 		POST_DATA_MAX
 	};
@@ -69,6 +67,7 @@ public:
 	bool Request( EAction _Action, std::string &strOut );
 } inline _Connection;
 
+using EPostData = CConnectivity::EPostData;
 using EAction = CConnectivity::EAction;
 
 #include "Connectivity.inl"

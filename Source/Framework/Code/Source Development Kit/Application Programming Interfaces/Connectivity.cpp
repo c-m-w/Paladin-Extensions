@@ -36,10 +36,8 @@ bool CConnectivity::Initialize( )
 		vecIllegalCharacters.emplace_back( '>',					ENC( "GREATER" ) );
 		vecIllegalCharacters.emplace_back( '\'',				ENC( "QUOTE" ) );
 		vecIllegalCharacters.emplace_back( '+',					ENC( "PLUS" ) );
-		strPostDataIdentifiers[ USER_ID ]		=				ENC( "id" );
-		strPostDataIdentifiers[ SECRET_KEY ]	=				ENC( "sk" );
+		strPostDataIdentifiers[ PURCHASE_KEY ]	=				ENC( "key" );
 		strPostDataIdentifiers[ HARDWARE ]		=				ENC( "hw" );
-		strPostDataIdentifiers[ HASH ]			=				ENC( "hash" );
 		strPostDataIdentifiers[ ACTION ]		=				ENC( "action" );
 		memset( bPostDataSet, false, sizeof( bool ) * POST_DATA_MAX );
 		return true;
@@ -135,10 +133,8 @@ bool CConnectivity::Request( EAction _Action, std::string &strOut )
 	{
 		case LOGIN:
 		{
-			ENSURE_DATA_SET( USER_ID )
-			ENSURE_DATA_SET( SECRET_KEY )
+			ENSURE_DATA_SET( PURCHASE_KEY )
 			ENSURE_DATA_SET( HARDWARE )
-			ENSURE_DATA_SET( HASH )
 		}
 		break;
 

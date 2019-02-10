@@ -43,4 +43,4 @@ public:
 	friend class CMemoryManager;
 } inline _SystemInformation;
 
-using CSystemInformation::ESystemInformation;
+using ESystemInformation = CSystemInformation::ESystemInformation;

@@ -40,12 +40,14 @@ bool CResourceManager::Initialize( )
 			_Filesystem.ChangeWorkingDirectory( _Filesystem.GetWorkingDirectory( ), { _Filesystem.GetAbsoluteContainingDirectory( strFile ) } );
 			if ( !_Filesystem.ReadFile( _Filesystem.PathToFile( strFile ), strFileData, true ) )
 			{
+				_Filesystem.RestoreWorkingDirectory( );
 				bValid = false;
 				break;
 			}
 
 			if ( _File[ ENC( "Hash" ) ].get< std::string >( ) != _Cryptography.GenerateHash( strFileData ) )
 			{
+				_Filesystem.RestoreWorkingDirectory( );
 				_Log.Log( EPrefix::WARNING, ELocation::FILESYSTEM, ENC( "Hash of file %s does not match." ), strFile.c_str( ) );
 				bValid = false;
 				break;

@@ -16,14 +16,17 @@ auto bExit = false, bRetryConnection = false;
 
 CApplicationWindow *pApplicationWindow;
 CWindow *pErrorWindow, *pInvalidPurchaseKeyPopup;
-CLabel *_InvalidPurchaseKey;
+CLabel *_InvalidPurchaseKeyTop, *_InvalidPurchaseKeyCenter, *_InvalidPurchaseKeyBottom;
 CButton *_InvalidPurchaseKeyKeys, *_InvalidPurchaseKeyClose, *_InvalidPurchaseKeySupport;
-CPanel *_ConnectionError, *_InvalidLicense, *_InvalidHardware;
+CPanel *_ConnectionError, *_ServerError, *_Banned, *_InvalidKey, *_InvalidHardware, *_Success;
 CLabel *_ConnectionErrorTop, *_ConnectionErrorCenter, *_ConnectionErrorLink;
-CLabel *_InvalidLicenseTop, *_InvalidLicenseCenter, *_InvalidLicenseLink;
-CInputBox *_InvalidLicensePurchaseKey;
-CButton *_InvalidLicenseSubmit;
+CLabel *_ServerErrorTop, *_ServerErrorCenter;
+CLabel *_BannedText;
+CLabel *_InvalidKeyTop, *_InvalidKeyCenter, *_InvalidKeyLink;
+CInputBox *_InvalidKeyPurchaseKey;
+CButton *_InvalidKeySubmit;
 CLabel *_InvalidHardwareTop, *_InvalidHardwareLink;
+CLabel *_SuccessTop, *_SuccessBottom;
 
 bool SetupInterface( );
 
@@ -35,7 +38,7 @@ void OnLaunch( )
 	constexpr auto fnAttemptLogin = [ ]( ELoginCode& _Result ) -> void
 	{
 		static CPanel* pnlToSet = nullptr;
-		_Result = /*AUTH.Login( )*/ ELoginCode::INVALID_LICENSE;
+		_Result = AUTH.Login( );
 		bRetryConnection = false;
 
 		if ( pnlToSet != nullptr )
@@ -51,9 +54,21 @@ void OnLaunch( )
 			}
 			break;
 
-			case ELoginCode::INVALID_LICENSE:
+			case ELoginCode::SERVER_ERROR:
 			{
-				pnlToSet = _InvalidLicense;
+				pnlToSet = _ServerError;
+			}
+			break;
+
+			case ELoginCode::BANNED:
+			{
+				pnlToSet = _Banned;
+			}
+			break;
+
+			case ELoginCode::INVALID_KEY:
+			{
+				pnlToSet = _InvalidKey;
 			}
 			break;
 
@@ -63,14 +78,17 @@ void OnLaunch( )
 			}
 			break;
 
-			case ELoginCode::LOGIN_SUCCESS:
-			case ELoginCode::LOGIN_STAFF_SUCCESS:
-				return;
+			case ELoginCode::SUCCESS:
+			case ELoginCode::STAFF_SUCCESS:
+			{
+				pnlToSet = _Success;
+			}
+			break;
 
 			default:
 			{
 				bExit = true;
-				_Log.Log( EPrefix::ERROR, ELocation::APPLICATION, ENC( "Invalid login code received." ) );
+				_Log.Log( EPrefix::ERROR, ELocation::APPLICATION, ENC( "Invalid login code received." ) ), throw std::runtime_error( ENC( "There has been an invalid response from the server." ) );
 			}
 		}
 
@@ -125,12 +143,17 @@ bool SetupInterface( )
 	pErrorWindow->AddRow( row_t( padding_t( ), LAUNCHER_HEIGHT ) );
 
 	_ConnectionError = new CPanel( padding_t( ), BACKGROUND_DARK );
-	_InvalidLicense = new CPanel( padding_t( ), BACKGROUND_DARK );
+	_ServerError = new CPanel( padding_t( ), BACKGROUND_DARK );
+	_Banned = new CPanel( padding_t( ), BACKGROUND_DARK );
+	_InvalidKey = new CPanel( padding_t( ), BACKGROUND_DARK );
 	_InvalidHardware = new CPanel( padding_t( ), BACKGROUND_DARK );
+	_Success = new CPanel( padding_t( ), BACKGROUND_DARK );
 
 	{
 		pInvalidPurchaseKeyPopup = new CWindow( CWindow::POPUP_FLAGS, rectangle_t( 0.f, 0.f, POPUP_WIDTH, POPUP_HEIGHT ), ENC( "Error" ), ENC( "Invalid Key" ) );
-		_InvalidPurchaseKey = new CLabel( padding_t( ), new text_t( ENC( "You have entered an invalid purchase key." ), EFont::ROBOTO, STANDARD_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_DARK, EFontFlags::NONE );
+		_InvalidPurchaseKeyTop = new CLabel( padding_t( ), new text_t( ENC( "There was an issue creating your license file." ), EFont::ROBOTO, STANDARD_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_DARK, EFontFlags::NONE );
+		_InvalidPurchaseKeyCenter = new CLabel( padding_t( ), new text_t( ENC( "Ensure the key you entered is valid." ), EFont::ROBOTO, STANDARD_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_DARK, EFontFlags::NONE );
+		_InvalidPurchaseKeyBottom = new CLabel( padding_t( ), new text_t( ENC( "Contact support if this issue persists." ), EFont::ROBOTO, STANDARD_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_DARK, EFontFlags::NONE );
 		_InvalidPurchaseKeyKeys = new CButton( CButton::LEFT, ENC( "Purchases" ), [ & ]( )
 		{
 			OpenLink( ENC( "https://www.paladin-extensions.com/extensions/purchases" ) );
@@ -145,11 +168,15 @@ bool SetupInterface( )
 		} );
 
 		pInvalidPurchaseKeyPopup->AddRow( row_t( padding_t( 10.f, 0.f, 0.f, 0.f ), STANDARD_HEIGHT ) );
+		pInvalidPurchaseKeyPopup->AddRow( row_t( padding_t( 10.f, 0.f, 0.f, 0.f ), STANDARD_HEIGHT ) );
+		pInvalidPurchaseKeyPopup->AddRow( row_t( padding_t( 10.f, 0.f, 0.f, 0.f ), STANDARD_HEIGHT ) );
 		pInvalidPurchaseKeyPopup->AddRow( row_t( padding_t( 10.f, 0.f, 0.f, 32.f ), 30.f ) );
-		pInvalidPurchaseKeyPopup->AddWidgetToRow( _InvalidPurchaseKey, POPUP_WIDTH, 1 );
-		pInvalidPurchaseKeyPopup->AddWidgetToRow( _InvalidPurchaseKeyKeys, 90.f, 2 );
-		pInvalidPurchaseKeyPopup->AddWidgetToRow( _InvalidPurchaseKeyClose, 90.f, 2 );
-		pInvalidPurchaseKeyPopup->AddWidgetToRow( _InvalidPurchaseKeySupport, 90.f, 2 );
+		pInvalidPurchaseKeyPopup->AddWidgetToRow( _InvalidPurchaseKeyTop, POPUP_WIDTH, 1 );
+		pInvalidPurchaseKeyPopup->AddWidgetToRow( _InvalidPurchaseKeyCenter, POPUP_WIDTH, 2 );
+		pInvalidPurchaseKeyPopup->AddWidgetToRow( _InvalidPurchaseKeyBottom, POPUP_WIDTH, 3 );
+		pInvalidPurchaseKeyPopup->AddWidgetToRow( _InvalidPurchaseKeyKeys, 90.f, 4 );
+		pInvalidPurchaseKeyPopup->AddWidgetToRow( _InvalidPurchaseKeyClose, 90.f, 4 );
+		pInvalidPurchaseKeyPopup->AddWidgetToRow( _InvalidPurchaseKeySupport, 90.f, 4 );
 	}
 
 	{
@@ -169,37 +196,54 @@ bool SetupInterface( )
 	}
 
 	{
-		_InvalidLicenseTop = new CLabel( padding_t( ), new text_t( ENC( "Your license does not exist locally or cannot be located." ), EFont::ROBOTO, STANDARD_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_DARK, EFontFlags::NONE );
-		_InvalidLicenseCenter = new CLabel( padding_t( ), new text_t( ENC( "Please enter one of your purchase keys." ), EFont::ROBOTO, STANDARD_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_DARK, EFontFlags::NONE );
-		_InvalidLicenseLink = new CLabel( padding_t( ), new text_t( ENC( "Click here to view your purchase keys." ), EFont::ROBOTO, SMALL_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_NORMAL, TEXT_NORMAL, TEXT_DARK, CLEAR, CLEAR, CLEAR, EFontFlags::NONE, [ & ]( )
+		_ServerErrorTop = new CLabel( padding_t( ), new text_t( ENC( "There has been an error with the Paladin Extensions website." ), EFont::ROBOTO, STANDARD_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_DARK, EFontFlags::NONE );
+		_ServerErrorCenter = new CLabel( padding_t( ), new text_t( ENC( "Please notify a staff member as soon as possible." ), EFont::ROBOTO, STANDARD_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_DARK, EFontFlags::NONE );
+
+		_ServerError->AddRow( row_t( padding_t( 73.f, 0.f, 0.f, 0.f ), STANDARD_HEIGHT ) );
+		_ServerError->AddRow( row_t( padding_t( 10.f, 0.f, 0.f, 0.f ), STANDARD_HEIGHT ) );
+		_ServerError->AddWidgetToRow( _ServerErrorTop, LAUNCHER_WIDTH, 0 );
+		_ServerError->AddWidgetToRow( _ServerErrorCenter, LAUNCHER_WIDTH, 1 );
+	}
+
+	{
+		_BannedText = new CLabel( padding_t( ), new text_t( ENC( "You are banned and may not use Paladin Extensions' software." ), EFont::ROBOTO, STANDARD_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_DARK, EFontFlags::NONE );
+
+		_Banned->AddRow( row_t( padding_t( 73.f, 0.f, 0.f, 0.f ), STANDARD_HEIGHT ) );
+		_Banned->AddWidgetToRow( _BannedText, LAUNCHER_WIDTH, 0 );
+	}
+
+	{
+		_InvalidKeyTop = new CLabel( padding_t( ), new text_t( ENC( "Your license does not exist locally or cannot be located." ), EFont::ROBOTO, STANDARD_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_DARK, EFontFlags::NONE );
+		_InvalidKeyCenter = new CLabel( padding_t( ), new text_t( ENC( "Please enter one of your purchase keys." ), EFont::ROBOTO, STANDARD_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_DARK, EFontFlags::NONE );
+		_InvalidKeyLink = new CLabel( padding_t( ), new text_t( ENC( "Click here to view your purchase keys." ), EFont::ROBOTO, SMALL_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_NORMAL, TEXT_NORMAL, TEXT_DARK, CLEAR, CLEAR, CLEAR, EFontFlags::NONE, [ & ]( )
 		{
 			OpenLink( ENC( "https://www.paladin-extensions.com/extensions/purchases" ) );
 		} );
-		_InvalidLicensePurchaseKey = new CInputBox( padding_t( ), padding_t( 0.f, 5.f, 0.f, 5.f ), EFont::ENVY, CInputBox::ALPHANUMERIC, "", [ & ]( )
+		_InvalidKeyPurchaseKey = new CInputBox( padding_t( ), padding_t( 0.f, 5.f, 0.f, 5.f ), EFont::ENVY, CInputBox::ALPHANUMERIC, "", [ & ]( )
 		{
-			if ( !AUTH.CreateLicenseFile( _InvalidLicensePurchaseKey->StringValue( ) ) )
+			if ( !AUTH.CreateLicenseFile( _InvalidKeyPurchaseKey->StringValue( ) ) )
 				pErrorWindow->Popup( pInvalidPurchaseKeyPopup );
-
-			bRetryConnection = true;
+			else
+				bRetryConnection = true;
 		} );
-		_InvalidLicenseSubmit = new CButton( CButton::STANDALONE, ENC( "Submit" ), [ & ]( )
+		_InvalidKeySubmit = new CButton( CButton::STANDALONE, ENC( "Submit" ), [ & ]( )
 		{
-			if ( !AUTH.CreateLicenseFile( _InvalidLicensePurchaseKey->StringValue( ) ) )
+			if ( !AUTH.CreateLicenseFile( _InvalidKeyPurchaseKey->StringValue( ) ) )
 				pErrorWindow->Popup( pInvalidPurchaseKeyPopup );
-
-			bRetryConnection = true;
+			else
+				bRetryConnection = true;
 		} );
 
-		_InvalidLicense->AddRow( row_t( padding_t( 10.f, 0.f, 0.f, 0.f ), STANDARD_HEIGHT ) );
-		_InvalidLicense->AddRow( row_t( padding_t( 10.f, 0.f, 0.f, 0.f ), STANDARD_HEIGHT ) );
-		_InvalidLicense->AddRow( row_t( padding_t( 10.f, 0.f, 0.f, 0.f ), STANDARD_HEIGHT ) );
-		_InvalidLicense->AddRow( row_t( padding_t( 10.f, 0.f, 0.f, LAUNCHER_WIDTH / 2.f - INPUT_WIDTH / 2.f ), 30.f ) );
-		_InvalidLicense->AddRow( row_t( padding_t( 10.f, 0.f, 0.f, LAUNCHER_WIDTH / 2.f - INPUT_WIDTH / 2.f ), 25.f ) );
-		_InvalidLicense->AddWidgetToRow( _InvalidLicenseTop, LAUNCHER_WIDTH, 0 );
-		_InvalidLicense->AddWidgetToRow( _InvalidLicenseCenter, LAUNCHER_WIDTH, 1 );
-		_InvalidLicense->AddWidgetToRow( _InvalidLicenseLink, LAUNCHER_WIDTH, 2 );
-		_InvalidLicense->AddWidgetToRow( _InvalidLicensePurchaseKey, INPUT_WIDTH, 3 );
-		_InvalidLicense->AddWidgetToRow( _InvalidLicenseSubmit, INPUT_WIDTH, 4 );
+		_InvalidKey->AddRow( row_t( padding_t( 10.f, 0.f, 0.f, 0.f ), STANDARD_HEIGHT ) );
+		_InvalidKey->AddRow( row_t( padding_t( 10.f, 0.f, 0.f, 0.f ), STANDARD_HEIGHT ) );
+		_InvalidKey->AddRow( row_t( padding_t( 10.f, 0.f, 0.f, 0.f ), STANDARD_HEIGHT ) );
+		_InvalidKey->AddRow( row_t( padding_t( 10.f, 0.f, 0.f, LAUNCHER_WIDTH / 2.f - INPUT_WIDTH / 2.f ), 30.f ) );
+		_InvalidKey->AddRow( row_t( padding_t( 10.f, 0.f, 0.f, LAUNCHER_WIDTH / 2.f - INPUT_WIDTH / 2.f ), 25.f ) );
+		_InvalidKey->AddWidgetToRow( _InvalidKeyTop, LAUNCHER_WIDTH, 0 );
+		_InvalidKey->AddWidgetToRow( _InvalidKeyCenter, LAUNCHER_WIDTH, 1 );
+		_InvalidKey->AddWidgetToRow( _InvalidKeyLink, LAUNCHER_WIDTH, 2 );
+		_InvalidKey->AddWidgetToRow( _InvalidKeyPurchaseKey, INPUT_WIDTH, 3 );
+		_InvalidKey->AddWidgetToRow( _InvalidKeySubmit, INPUT_WIDTH, 4 );
 	}
 
 	{
@@ -213,6 +257,16 @@ bool SetupInterface( )
 		_InvalidHardware->AddRow( row_t( padding_t( 10.f, 0.f, 0.f, 0.f ), STANDARD_HEIGHT ) );
 		_InvalidHardware->AddWidgetToRow( _InvalidHardwareTop, LAUNCHER_WIDTH, 0 );
 		_InvalidHardware->AddWidgetToRow( _InvalidHardwareLink, LAUNCHER_WIDTH, 1 );
+	}
+
+	{
+		_SuccessTop = new CLabel( padding_t( ), new text_t( ENC( "You have been logged in successfully." ), EFont::ROBOTO, STANDARD_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_DARK, EFontFlags::NONE );
+		_SuccessBottom = new CLabel( padding_t( ), new text_t( ENC( "Please wait momentarily." ), EFont::ROBOTO, STANDARD_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_DARK, EFontFlags::NONE );
+
+		_Success->AddRow( row_t( padding_t( 10.f, 0.f, 0.f, 0.f ), STANDARD_HEIGHT ) );
+		_Success->AddRow( row_t( padding_t( 10.f, 0.f, 0.f, 0.f ), STANDARD_HEIGHT ) );
+		_Success->AddWidgetToRow( _SuccessTop, LAUNCHER_WIDTH, 0 );
+		_Success->AddWidgetToRow( _SuccessBottom, LAUNCHER_WIDTH, 1 );
 	}
 
 	return true;

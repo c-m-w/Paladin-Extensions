@@ -7,14 +7,13 @@
 	define( "unsafeTerms", array(
 		" drop ", " delete ", " select ", " alter ", " table ", " class ",
 		" DROP ", " DELETE ", " SELECT ", " ALTER ", " TABLE ", " CLASS " ) );
-	define( "exitCodes", array(
-		"Establishing Failure"	=> "1",		// Couldn't connect / set up database info or unique id and secret key aren't found / debugger is found
-		"Invalid Hash"			=> "2",
-		"Banned"				=> "3",		// banned login attempt
-		"Hardware Mismatch"		=> "4",
-		"Inactive Premium"		=> "5",		// premium time exceeded
-		"Success"				=> "6",		// regular user logged in
-		"Staff Success"			=> "7" ) );	// staff member logged in
+    define( "exitCodes", array(
+         "Server Error"     => "1",
+         "Banned"           => "2",
+         "Invalid Key"      => "3",
+         "Invalid Hardware" => "4",
+         "Success"          => "5",
+         "Staff Success"    => "6" ) );
     define( "illegalCharacters", array(
          "AMP"                  => "&",
          "EQUAL"                => "=",
@@ -68,6 +67,8 @@
 
 		function getConnectionInfo( )
 		{
+            global $log;
+
 			$curl = curl_init( );
 
 			curl_setopt( $curl, CURLOPT_URL, "http://v2.api.iphub.info/ip/" . $_SERVER[ "REMOTE_ADDR" ] );
@@ -75,6 +76,12 @@
 			curl_setopt( $curl, CURLOPT_HTTPHEADER, array( "X-Key: MjkxMzpaTFZoNVVjakR2bGU0ZmlucW95WlFrMWhxMmtVMzNlNA==" ) );
 
 			$response = json_decode( curl_exec( $curl ), true );
+            if ( $response === NULL )
+            {
+                $log->log( 'Response from iphub was invalid. Could not decode json. Response: ' . $response . '.' );
+                $this->stopExecution( 'Server Error' );
+            }
+
 			curl_close( $curl );
 			$this->connection_info = $response;
 		}
@@ -113,7 +120,6 @@
 		private $user;
 		private $key;
 		private $hardware;
-		private $hash;
 		private $xfUser;
 		private $unique;
 
@@ -121,23 +127,8 @@
 		{
 			global $functionality;
 
-			$this->user		= $functionality->getPostData( 'id' );
-			$this->key		= $functionality->getPostData( 'sk' );
+			$this->key		= $functionality->getPostData( 'key' );
 			$this->hardware	= json_decode( $functionality->getPostData( 'hw' ), true );
-			$this->hash		= $functionality->getPostData( 'hw' );
-		}
-
-		private function validateHash( ): void
-		{
-			global $cryptography;
-			global $log;
-			global $functionality;
-
-			if ( $this->hash != $cryptography->hashFile( launcherFile ) )
-			{
-				$log->log( 'Hash sent over post data did not match what the server computed.' );
-				$functionality->stopExecution( 'Invalid Hash' );
-			}
 		}
 
 		private function getUserInformation( ): void
@@ -146,11 +137,19 @@
 			global $log;
 			global $functionality;
 
-			$result = $sql->selectRows( 'secondary_group_ids, is_banned, is_staff', 'xf_user', 'user_id = ' . $this->user . ' AND secret_key = "' . $this->key . '"' );
+			$result = $sql->selectRows( 'user_id', 'xf_xr_pm_product_purchase', 'purchase_key = "' . $this->key . '"' );
+            if ( $result->num_rows == 0 )
+            {
+                $log->log( 'Could not find purchase key of ' . $this->key . ' in table xf_xr_pm_product_purchase.' );
+                $functionality->stopExecution( 'Invalid Key' );
+            }
+
+            $this->user = $result->fetch_assoc( )[ 'user_id' ];
+			$result = $sql->selectRows( 'secondary_group_ids, is_banned, is_staff', 'xf_user', 'user_id = ' . $this->user );
 			if ( $result->num_rows == 0 )
 			{
-				$log->log( 'Could not find user with id of ' . $this->user . ' and secret key of ' . $this->key . ' in table xf_user.' );
-				$functionality->stopExecution( 'Establishing Failure' );
+				$log->log( 'Could not find user with id of ' . $this->user . ' in table xf_user.' );
+				$functionality->stopExecution( 'Server Error' );
 			}
 
 			$this->xfUser = $result->fetch_assoc( );
@@ -196,7 +195,7 @@
 			if ( $this->hardware == NULL )
 			{
 				$log->log( 'Invalid hardware was passed through post data.' );
-				$this->logAttempt( 'Hardware Mismatch' );
+				$this->logAttempt( 'Invalid Hardware' );
 			}
 
 			$result = $sql->selectRows( 'field_value', 'xf_user_field_value', 'field_id = "unique_id" AND user_id = ' . $this->user );
@@ -233,7 +232,7 @@
 			if ( $result->fetch_assoc( )[ 'unique_id' ] != $unique )
 			{
 				$sql->updateRow( 'xf_user_field_value', 'field_value', 0, 'field_id = "unique_id" AND user_id = ' . $this->user );
-				$this->logAttempt( 'Hardware Mismatch' );
+				$this->logAttempt( 'Invalid Hardware' );
 			}
 		}
 
