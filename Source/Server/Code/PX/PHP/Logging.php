@@ -10,7 +10,7 @@
 
 		function __destruct( )
 		{
-			$this->rawLog( '[Session End]' );
+			$this->rawLog( '[Session End]' . PHP_EOL );
 		}
 
 		private function getDate( ): string

@@ -21,7 +21,7 @@ bool CAuthentication::GetHardware( std::string &strOut )
 	if ( !SI.ProcessQueue( ) )
 		return false;
 
-	for each ( auto &strDevice in strHardware )
+	for ( auto &strDevice: strHardware )
 		if ( strDevice.length( ) > MAX_HARDWARE_LENGTH )
 			strDevice = strDevice.substr( 0, MAX_HARDWARE_LENGTH );
 
@@ -50,7 +50,8 @@ bool CAuthentication::CreateLicenseFile( std::string strPurchaseKey )
 
 ELoginCode CAuthentication::Login( )
 {
-	std::string strPurchaseKey { }, strHardware { }, strResponse { };
+	std::string strPurchaseKey { }, strHardware { }, strResponse { }, strDecryptedResponse { };
+
 	_Filesystem.StoreCurrentWorkingDirectory( );
 	_Filesystem.ChangeWorkingDirectory( _Filesystem.GetAppdataDirectory( ) );
 	if ( !_Filesystem.ReadFile( _Filesystem.strLicenseFile, strPurchaseKey, true ) )
@@ -61,13 +62,14 @@ ELoginCode CAuthentication::Login( )
 
 	NET.AddPostData( EPostData::PURCHASE_KEY, strPurchaseKey );
 	NET.AddPostData( EPostData::HARDWARE, strHardware );
-	if ( !NET.Request( EAction::LOGIN, strResponse ) )
+	if ( !NET.Request( EAction::LOGIN, strResponse ) 
+		 || !CRYPTO.Decrypt( strResponse, strDecryptedResponse ) )
 		return _Filesystem.RestoreWorkingDirectory( ), CONNECTION_ERROR;
 
 	ELoginCode _Return;
 	try
 	{
-		auto jsResponse = nlohmann::json::parse( strResponse );
+		auto jsResponse = nlohmann::json::parse( strDecryptedResponse );
 		const auto strBuffer = jsResponse[ "Exit Code" ].get< std::string >( );
 		_Return = ELoginCode( std::stoi( strBuffer ) );
 	}

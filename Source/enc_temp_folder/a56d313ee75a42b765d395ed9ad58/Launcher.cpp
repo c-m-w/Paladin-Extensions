@@ -22,7 +22,7 @@ CPanel *_ConnectionError, *_ServerError, *_Banned, *_InvalidKey, *_InvalidHardwa
 CLabel *_ConnectionErrorTop, *_ConnectionErrorCenter, *_ConnectionErrorLink;
 CLabel *_ServerErrorTop, *_ServerErrorCenter;
 CLabel *_BannedText;
-CLabel *_InvalidKeyText, *_InvalidKeyLink;
+CLabel *_InvalidKeyTop, *_InvalidKeyCenter, *_InvalidKeyLink;
 CInputBox *_InvalidKeyPurchaseKey;
 CButton *_InvalidKeySubmit;
 CLabel *_InvalidHardwareTop, *_InvalidHardwareLink;
@@ -151,7 +151,7 @@ bool SetupInterface( )
 
 	{
 		pInvalidPurchaseKeyPopup = new CWindow( CWindow::POPUP_FLAGS, rectangle_t( 0.f, 0.f, POPUP_WIDTH, POPUP_HEIGHT ), ENC( "Error" ), ENC( "Invalid Key" ) );
-		_InvalidPurchaseKeyTop = new CLabel( padding_t( ), new text_t( ENC( "There was an issue validating your purchase key." ), EFont::ROBOTO, STANDARD_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_DARK, EFontFlags::NONE );
+		_InvalidPurchaseKeyTop = new CLabel( padding_t( ), new text_t( ENC( "There was an issue creating your license file." ), EFont::ROBOTO, STANDARD_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_DARK, EFontFlags::NONE );
 		_InvalidPurchaseKeyCenter = new CLabel( padding_t( ), new text_t( ENC( "Ensure the key you entered is valid." ), EFont::ROBOTO, STANDARD_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_DARK, EFontFlags::NONE );
 		_InvalidPurchaseKeyBottom = new CLabel( padding_t( ), new text_t( ENC( "Contact support if this issue persists." ), EFont::ROBOTO, STANDARD_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_DARK, EFontFlags::NONE );
 		_InvalidPurchaseKeyKeys = new CButton( CButton::LEFT, ENC( "Purchases" ), [ & ]( )
@@ -181,7 +181,7 @@ bool SetupInterface( )
 
 	{
 		_ConnectionErrorTop = new CLabel( padding_t( ), new text_t( ENC( "Connection to the Paladin Extensions website failed." ), EFont::ROBOTO, STANDARD_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_DARK, EFontFlags::NONE );
-		_ConnectionErrorCenter = new CLabel( padding_t( ), new text_t( ENC( "Ensure there are no programs interfering with the connection and try again." ), EFont::ROBOTO, STANDARD_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_DARK, EFontFlags::NONE );
+		_ConnectionErrorCenter = new CLabel( padding_t( ), new text_t( ENC( "Ensure there is no program interfering with the connection and try again." ), EFont::ROBOTO, STANDARD_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_DARK, EFontFlags::NONE );
 		_ConnectionErrorLink = new CLabel( padding_t( ), new text_t( ENC( "If this issue persists, click here for support." ), EFont::ROBOTO, SMALL_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_NORMAL, TEXT_NORMAL, TEXT_DARK, CLEAR, CLEAR, CLEAR, EFontFlags::NONE, [ & ]( )
 		{
 			OpenLink( ENC( "https://www.paladin-extensions.com/support/" ) );
@@ -213,7 +213,8 @@ bool SetupInterface( )
 	}
 
 	{
-		_InvalidKeyText = new CLabel( padding_t( ), new text_t( ENC( "Please enter one of your purchase keys." ), EFont::ROBOTO, STANDARD_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_DARK, EFontFlags::NONE );
+		_InvalidKeyTop = new CLabel( padding_t( ), new text_t( ENC( "Your license does not exist locally or cannot be located." ), EFont::ROBOTO, STANDARD_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_DARK, EFontFlags::NONE );
+		_InvalidKeyCenter = new CLabel( padding_t( ), new text_t( ENC( "Please enter one of your purchase keys." ), EFont::ROBOTO, STANDARD_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_DARK, EFontFlags::NONE );
 		_InvalidKeyLink = new CLabel( padding_t( ), new text_t( ENC( "Click here to view your purchase keys." ), EFont::ROBOTO, SMALL_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_NORMAL, TEXT_NORMAL, TEXT_DARK, CLEAR, CLEAR, CLEAR, EFontFlags::NONE, [ & ]( )
 		{
 			OpenLink( ENC( "https://www.paladin-extensions.com/extensions/purchases" ) );
@@ -235,12 +236,14 @@ bool SetupInterface( )
 
 		_InvalidKey->AddRow( row_t( padding_t( 10.f, 0.f, 0.f, 0.f ), STANDARD_HEIGHT ) );
 		_InvalidKey->AddRow( row_t( padding_t( 10.f, 0.f, 0.f, 0.f ), STANDARD_HEIGHT ) );
+		_InvalidKey->AddRow( row_t( padding_t( 10.f, 0.f, 0.f, 0.f ), STANDARD_HEIGHT ) );
 		_InvalidKey->AddRow( row_t( padding_t( 10.f, 0.f, 0.f, LAUNCHER_WIDTH / 2.f - INPUT_WIDTH / 2.f ), 30.f ) );
 		_InvalidKey->AddRow( row_t( padding_t( 10.f, 0.f, 0.f, LAUNCHER_WIDTH / 2.f - INPUT_WIDTH / 2.f ), 25.f ) );
-		_InvalidKey->AddWidgetToRow( _InvalidKeyText, LAUNCHER_WIDTH, 0 );
-		_InvalidKey->AddWidgetToRow( _InvalidKeyLink, LAUNCHER_WIDTH, 1 );
-		_InvalidKey->AddWidgetToRow( _InvalidKeyPurchaseKey, INPUT_WIDTH, 2 );
-		_InvalidKey->AddWidgetToRow( _InvalidKeySubmit, INPUT_WIDTH, 3 );
+		_InvalidKey->AddWidgetToRow( _InvalidKeyTop, LAUNCHER_WIDTH, 0 );
+		_InvalidKey->AddWidgetToRow( _InvalidKeyCenter, LAUNCHER_WIDTH, 1 );
+		_InvalidKey->AddWidgetToRow( _InvalidKeyLink, LAUNCHER_WIDTH, 2 );
+		_InvalidKey->AddWidgetToRow( _InvalidKeyPurchaseKey, INPUT_WIDTH, 3 );
+		_InvalidKey->AddWidgetToRow( _InvalidKeySubmit, INPUT_WIDTH, 4 );
 	}
 
 	{

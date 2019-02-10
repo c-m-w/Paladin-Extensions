@@ -125,6 +125,7 @@ void CConnectivity::AddPostData( EPostData _Identifier, const std::string &strVa
 		strCurrentPostData += '&';
 
 	strCurrentPostData += GenerateIdentifier( _Identifier ) + '=' + ProcessValue( strValue );
+	bPostDataSet[ int( _Identifier ) ] = true;
 }
 
 bool CConnectivity::Request( EAction _Action, std::string &strOut )
@@ -133,7 +134,7 @@ bool CConnectivity::Request( EAction _Action, std::string &strOut )
 	{
 		case LOGIN:
 		{
-			ENSURE_DATA_SET( PURCHASE_KEY )
+			if ( !bPostDataSet[ PURCHASE_KEY ] ) throw std::runtime_error( ( ENC( "Post data ID " ) + std::to_string( int( PURCHASE_KEY ) ) + ENC( " not set." ) ).c_str( ) );
 			ENSURE_DATA_SET( HARDWARE )
 		}
 		break;

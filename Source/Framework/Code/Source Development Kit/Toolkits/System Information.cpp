@@ -77,32 +77,36 @@ bool CSystemInformation::ProcessQueue( )
 			IWbemClassObject *pClassObject = nullptr;
 			ULONG uReturn;
 			auto hrReturn = pEnumerator->Next( WBEM_INFINITE, 1, &pClassObject, &uReturn );
+			if ( uReturn == 0 )
+				break;
+
 			if ( hrReturn != S_OK )
 			{
-				pEnumerator->Release( ), pServices->Release( ), pLocator->Release( ), CoUninitialize( ),
+				pEnumerator->Release( ),
 					_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_INFORMATION,
 							  ENC( "Couldn't iterate through device information. Error %i." ), hrReturn );
 				break;
 			}
-			if ( uReturn == 0 )
-				break;
 
 			VARIANT vtProp;
 			hrReturn = pClassObject->Get( _DeviceInformation.wstrProperty.c_str( ), 0, &vtProp, nullptr, nullptr );
 			if ( hrReturn != S_OK )
 			{
-				pClassObject->Release( ), pEnumerator->Release( ), pServices->Release( ), pLocator->Release( ), CoUninitialize( ),
+				pClassObject->Release( ), pEnumerator->Release( ),
 					_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_INFORMATION,
 							  ENC( "Couldn't iterate through device information. Error %i." ), hrReturn );
 				break;
 			}
-			// review uncomment
-			//*_DeviceInformation.pValue += string_cast< std::string >( vtProp.bstrVal ) + '\n';
+
+			if ( !_DeviceInformation.pValue->empty( ) )
+				*_DeviceInformation.pValue += '\n';
+
+			*_DeviceInformation.pValue += string_cast< std::string >( std::wstring( vtProp.bstrVal ) );
 
 			hrReturn = VariantClear( &vtProp );
 			if ( hrReturn != S_OK )
 			{
-				pClassObject->Release( ), pEnumerator->Release( ), pServices->Release( ), pLocator->Release( ), CoUninitialize( ),
+				pClassObject->Release( ), pEnumerator->Release( ),
 					_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_INFORMATION,
 							  ENC( "Couldn't clear device information prop. Error %i." ), hrReturn );
 				break;
@@ -111,9 +115,9 @@ bool CSystemInformation::ProcessQueue( )
 		}
 
 		//review uncomment
-		//if ( _DeviceInformation.pValue->empty( ) )
-		//	_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_INFORMATION, ENC( "Unable to get device information. Device: %s. Property: %s." ),
-		//			  string_cast< std::string >( _DeviceInformation.wstrDevice ).c_str( ), string_cast< std::string >( _DeviceInformation.wstrProperty ).c_str( ) );
+		if ( _DeviceInformation.pValue->empty( ) )
+			_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_INFORMATION, ENC( "Unable to get device information. Device: %s. Property: %s." ),
+					  string_cast< std::string >( _DeviceInformation.wstrDevice ).c_str( ), string_cast< std::string >( _DeviceInformation.wstrProperty ).c_str( ) );
 
 		pEnumerator->Release( );
 	}

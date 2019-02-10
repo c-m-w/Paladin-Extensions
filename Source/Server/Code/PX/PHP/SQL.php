@@ -19,6 +19,11 @@
 			return $this->sqlConnection->escape_string( $string );
 		}
 
+        public function queryCommand( $query )
+        {
+            return $this->sqlConnection->query( $query );
+        }
+
 		public function selectRows( $rows, $table, $conditions )
 		{
 			return $this->sqlConnection->query( 'SELECT ' . $rows . ' FROM ' . $table . ' WHERE ' . $conditions );

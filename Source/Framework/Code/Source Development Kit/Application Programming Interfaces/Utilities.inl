@@ -19,18 +19,18 @@ namespace Utilities
 	{
 		using char_trait_t = char;
 
-		static int ConvertStringBytes( const int iCodePage, const char* szFromString, const int iFromStringLength, wchar_t* wszToString, const int iToStringLength )
+		static int ConvertStringBytes( const char* szFromString, const int iFromStringLength, wchar_t* wszToString, const int iToStringLength )
 		{
-			return MultiByteToWideChar( iCodePage, 0, szFromString, iFromStringLength, wszToString, iToStringLength );
+			return MultiByteToWideChar( 0, 0, szFromString, iFromStringLength, wszToString, iToStringLength );
 		}
 	};
 	template< > struct AStringTraits< std::wstring >
 	{
 		using char_trait_t = wchar_t;
 
-		static int ConvertStringBytes( const int iCodePage, const wchar_t* wszFromString, const int iFromStringLength, char* szToString, const int iToStringLength )
+		static int ConvertStringBytes( const wchar_t* wszFromString, const int iFromStringLength, char* szToString, const int iToStringLength )
 		{
-			return WideCharToMultiByte( iCodePage, 0, wszFromString, iFromStringLength, szToString, iToStringLength, nullptr, nullptr );
+			return WideCharToMultiByte( 0, 0, wszFromString, iFromStringLength, szToString, iToStringLength, nullptr, nullptr );
 		}
 	};
 
@@ -38,17 +38,18 @@ namespace Utilities
 	{
 		static _To Cast( const _From &_strSource )
 		{
-			int iLength = AStringTraits< _From >::ConvertStringBytes( CP_ACP, _strSource.data( ), _strSource.length( ), nullptr, 0 );
+			int iLength = AStringTraits< _From >::ConvertStringBytes( _strSource.data( ), _strSource.length( ), nullptr, 0 );
 			if ( iLength == 0 )
 				return _To( );
 
-			std::vector< typename AStringTraits< _To >::char_trait_t > iCastBuffer( iLength + 1 );
+			std::vector< typename AStringTraits< _To >::char_trait_t > iCastBuffer( iLength );
 
-			AStringTraits< _From >::ConvertStringBytes( CP_ACP, _strSource.data( ), _strSource.length( ), &iCastBuffer[ 0 ], iLength );
+			AStringTraits< _From >::ConvertStringBytes( _strSource.data( ), _strSource.length( ), &iCastBuffer[ 0 ], iLength );
 
 			return _To( iCastBuffer.begin( ), iCastBuffer.end( ) );
 		}
 	};
+
 	template< typename _t > struct AStringCastImplementation< _t, _t >
 	{
 		static _t Cast( const _t &_strSource )

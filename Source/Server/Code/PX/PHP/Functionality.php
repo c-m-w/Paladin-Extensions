@@ -88,11 +88,17 @@
 
 		function getServiceProvider( ): string
 		{
+            if ( $this->connection_info == NULL )
+                $this->getConnectionInfo( );
+
 			return $this->connection_info[ 'isp' ];
 		}
 
 		function getCountryCode( ): string
 		{
+            if ( $this->connection_info == NULL )
+                $this->getConnectionInfo( );
+
 			return $this->connection_info[ 'countryCode' ];
 		}
 
@@ -118,6 +124,7 @@
 	class Authentication
 	{
 		private $user;
+        private $unique_id;
 		private $key;
 		private $hardware;
 		private $xfUser;
@@ -160,27 +167,31 @@
 			global $sql;
             global $functionality;
 
-			if ( $this->hardware == NULL
-				|| ( $row = $sql->selectRows( 'unique_id', 'px_unique_id', 'user_id = ' . $this->user_id
-				. ' AND cpu = "' . $this->hardware[ "cpu" ]
-				. '" AND gpu = "' . $this->hardware[ "gpu" ]
-				. '" AND display = "' . $this->hardware[ "display" ]
-				. '" AND pc = "' . $this->hardware[ "pc" ]
-				. '" AND os = "' . $this->hardware[ "os" ]
-				, '" AND drive = "' . $this->hardware[ "drive" ]
-				. '" AND board = "' . $this->hardware[ "board" ] . '"' ) )->num_rows == 0 )
-				$this->unique_id = 0;
-			else
-				$this->unqiue_id = $row->fetch_assoc( )[ 'unique_id' ];
+            $attempted_unique_id = 0;
+			if ( $this->hardware != NULL )
+            {
+                $result = $sql->queryCommand( 'select unqiue_id from px_unique_id where user_id = ' . $this->user
+				. ' and cpu = "' .      $this->hardware[ "cpu" ]
+				. '" and gpu = "' .     $this->hardware[ "gpu" ]
+				. '" and display = "' . $this->hardware[ "display" ]
+				. '" and pc = "' .      $this->hardware[ "pc" ]
+				. '" and os = "' .      $this->hardware[ "os" ]
+				. '" and drive = "' .   $this->hardware[ "drive" ]
+				. '" and board = "' .   $this->hardware[ "board" ] . '"' );
 
-			$sql->insert( 'px_logins', ( int )$this->user . ', '
+                if ( $result != FALSE
+                    && $result->num_rows != 0 )
+                    $attempted_unique_id = $result->fetch_assoc( )[ 'unique_id' ];
+            }
+
+			$sql->queryCommand( 'insert into px_logins values( ' . ( int )$this->user . ', '
 					. ( int )time( ) . ', '
-					. ( int )unique . ', '
+					. ( int )$attempted_unique_id . ', '
 					. $this->unique_id . ', "'
 					. ( string )$_SERVER[ 'REMOTE_ADDR' ] . '", "'
 					. ( string )$functionality->getServiceProvider( ) . '", "'
 					. ( string )$functionality->getCountryCode( ) . '", '
-					. ( int )$exit_code );
+					. ( int )$exit_code . ')' );
 			$functionality->stopExecution( $exit_code, $this->xfUser[ 'secondary_group_ids' ] );
 		}
 
@@ -198,7 +209,7 @@
 				$this->logAttempt( 'Invalid Hardware' );
 			}
 
-			$result = $sql->selectRows( 'field_value', 'xf_user_field_value', 'field_id = "unique_id" AND user_id = ' . $this->user );
+			$result = $sql->queryCommand( 'select field_value from xf_user_field_value where field_id = "unique_id" AND user_id = ' . $this->user );
 			if ( $result->num_rows == 0 )
 			{
 				$log->log( 'Could not obtain unique id from xf_user_field_value. User ID: ' . $this->user . '.' );
@@ -207,7 +218,7 @@
 
 			$unique = $result->fetch_assoc( )[ 'field_value' ];
 
-			$result = $sql->selectRows( 'px_unique_id', '*', 'user_id = ' . $this->user
+			$result = $sql->queryCommand( 'select * from px_unique_id where user_id = ' . $this->user
 						. ' AND cpu = "' . $this->hardware[ "cpu" ]
 						. '" AND gpu = "' . $this->hardware[ "gpu" ]
 						. '" AND display = "' . $this->hardware[ "display" ]
@@ -217,7 +228,7 @@
 						. '" AND board = "' . $this->hardware[ "board" ] . '"' );
 			if ( $result->num_rows == 0 )
 			{
-				$sql->insertRow( 'px_unique_id', '0, '
+				$sql->queryCommand( 'insert into px_unique_id values( 0, '
 							. $this->user . ', "'
 							. $this->hardware[ "cpu" ] . '", "'
 							. $this->hardware[ "gpu" ] . '", "'
@@ -231,7 +242,7 @@
 
 			if ( $result->fetch_assoc( )[ 'unique_id' ] != $unique )
 			{
-				$sql->updateRow( 'xf_user_field_value', 'field_value', 0, 'field_id = "unique_id" AND user_id = ' . $this->user );
+				$sql->queryCommand( 'update xf_user_field_value set field_value = 0 where field_id = "unique_id" AND user_id = ' . $this->user );
 				$this->logAttempt( 'Invalid Hardware' );
 			}
 		}
@@ -239,17 +250,16 @@
 		private function beginSession( )
 		{
 			session_start( );
-			$_SESSION[ 'user' ] = xfUser;
+			$_SESSION[ 'user' ] = $this->xfUser;
 		}
 
 		public function login( ): void
 		{
 			$this->parsePostData( );
-			$this->validateHash( );
 			$this->getUserInformation( );
 			$this->ensureValidUser( );
 			$this->beginSession( );
-			$this->logAttempt( xfUser[ 'is_staff' ] ? 'Staff Success' : 'Success' );
+			$this->logAttempt( $this->xfUser[ 'is_staff' ] ? 'Staff Success' : 'Success' );
 		}
 
 		public function download( ): void
