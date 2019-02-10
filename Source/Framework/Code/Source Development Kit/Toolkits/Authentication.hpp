@@ -6,8 +6,11 @@ class CAuthentication
 {
 private:
 
+	constexpr static auto MAX_HARDWARE_LENGTH = 100;
+
 	bool bLoggedIn = false;
 
+	bool GetHardware( std::string &strOut );
 	__declspec( noreturn ) void Uninstall( );
 
 public:

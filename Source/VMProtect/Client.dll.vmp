@@ -10,6 +10,111 @@
         <Folders />
         <Procedures>
             <Procedure MapAddress="_DllMain@12" Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;ExgrEV9yIlF3xgocqy53ipLAwFHuDznk&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;4ZNqNqIaJqZqPJS1&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;&quot;Sat Feb  9 16:14:06 2019&quot;&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;test&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Invalid key sizes.&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Invalid cipher text passed to decrypt.&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Invalid array index&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;PX_\&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Resources\&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Logs\&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;.cookie&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;.data&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;.license&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;appdata&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Error retrieving appdata environment directory.&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Failed to close all open file handles.&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;%i open file handles were closed.&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;.&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;..&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Unable to get attributes of file %s.&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Unable to delete file %s.&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Unable to delete directory %s.&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Reading attempted on non-existent file %s.&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;rb&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Unable to read foretold size of %i in file %s.&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Unable to close file %s successfully.&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Unable to decrypt file %s.&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Unable to open file %s for reading.&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Unable to encrypt data to write to file %s. Writing unencrypted data.&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;w+b&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Failed to write all of data into file %s.&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Failed to close file %s successfully.&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Error opening file %s. Error code %i.&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Unable to get attributes of path %s.&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Attempting to format a file in a non-current path.&#x0A;Change the working directory rather than entering a relative directory;&#x0A;You may only modify a file in the current working directory.&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Error Retrieving Date/Time&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;%B %e, 20%g&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;%H:%M:%S&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;%Y.%m.%d&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;[Info]&#x09;&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;[Debug]&#x09;&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;[Success]&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;[Warning]&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;[Error]&#x09;&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;[Filesystem]&#x09;&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;[Cryptography]&#x09;&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;[Connectivity]&#x09;&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;[Resources]&#x09;&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;[Window]&#x09;&#x09;&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;[Drawing]&#x09;&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;[System]&#x09;&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;[Memory]&#x09;&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;[Application]&#x09;&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Contact support if this issue persists.&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;-----[ Log Begin | &quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot; ]-----&#x0A;&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;-----[ Log End ]-----&#x0A;&#x0A;&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Last error: %i.&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Path&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Hash&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Hash of file %s does not match.&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Error while accessing json object while installing resources.&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Unable to parse text retrieved for installing resources.&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Error while accessing json object while comparing hashes.&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Unable to parse text retrieved for hash comparison of resources.&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Unable to obtain resource &quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Could not global initialize cURL. Error code: %i.&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Initialized cURL successfully.&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;https://www.paladin-extensions.com/Run.php&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;AMP&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;EQUAL&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;LESS&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;GREATER&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;QUOTE&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;PLUS&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;id&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;sk&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;hw&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;hash&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;action&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Could not open a cURL instance.&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Failed to perform connection. Error code: %i. Retries: %i.&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Error message: &quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Response was empty. Retries: %i.&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Unable to set error buffer for cURL.&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Setting cURL parameters failed, message: &quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Attempted to set connection parameter without initializing cURL.&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Failed to set cURL parameter %i. Error code: %i.&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;No render target or device was set!&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Unable to create D3D instance.&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Failed to create D3D device.&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Fonts\&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;tahoma.ttf&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;TahomaBold.ttf&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Roboto.ttf&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;RobotoBold.ttf&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Envy.ttf&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;FontAwesome5FreeSolid.ttf&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Unable to initialize FreeType.&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Unable to add font %s.&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Unable to release sprite.&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Unable to create texture %s from memory.&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Unable to create sprite.&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Unable to set attributes of file %s.&quot;' Options="0" CompilationType="2" />
+            <Procedure MapAddress='string &quot;Unable to release state.&quot;' Options="0" CompilationType="2" />
         </Procedures>
         <Objects />
     </Protection>

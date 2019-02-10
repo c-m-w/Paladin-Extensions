@@ -24,8 +24,8 @@ bool CLogging::Initialize( )
 	strLocations[ RESOURCE_MANAGER ]	= ENC( "[Resources]\t" );
 	strLocations[ WINDOW ]				= ENC( "[Window]\t\t" );
 	strLocations[ DRAWING ]				= ENC( "[Drawing]\t" );
-	strLocations[ SYSTEM_INFORMATION ]  = ENC( "[System]\t" );
-	strLocations[ MEMORY_MANAGER ]      = ENC( "[Memory]\t" );
+	strLocations[ SYSTEM_INFORMATION ]  = ENC( "[System]\t\t" );
+	strLocations[ MEMORY_MANAGER ]      = ENC( "[Memory]\t\t" );
 	strLocations[ APPLICATION ]			= ENC( "[Application]\t" );
 
 #if defined _DEBUG

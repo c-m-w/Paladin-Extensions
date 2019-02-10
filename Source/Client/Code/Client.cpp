@@ -6,7 +6,9 @@
 #include "../../Framework/Code/Framework.hpp"
 
 void OnAttach( )
-{ }
+{
+	MessageBox( nullptr, ENC( "test" ), ENC( "test" ), 0 );
+}
 
 void OnDetach( )
 { }

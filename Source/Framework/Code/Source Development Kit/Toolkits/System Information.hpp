@@ -2,11 +2,29 @@
 
 #pragma once
 
+struct device_info_t
+{
+	const static inline std::wstring wstrCommand = ENC( L"SELECT * FROM " );
+
+	std::string *pValue;
+	const std::wstring wstrDevice, wstrProperty;
+
+	device_info_t( std::string *pValue, const std::wstring &wstrDevice, const std::wstring &wstrProperty = ENC( L"Name" ) );
+};
+
 class CSystemInformation
 {
 private:
 
-	enum
+	std::vector< device_info_t > vecInformation;
+
+	[ [ nodiscard ] ] static bool GetProcessThreads( DWORD dwProcessID, std::vector< DWORD >& vecOut );
+	[ [ nodiscard ] ] static bool GetProcessID( const std::string &strExecutableName, DWORD& dwOut );
+	static bool ElevateProcess( HANDLE hProcess = GetCurrentProcess( ) );
+
+public:
+
+	enum ESystemInformation
 	{
 		SYS_CPU,
 		SYS_GPU,
@@ -18,13 +36,11 @@ private:
 		SYS_MAX
 	};
 
-	std::string GetDeviceInformation( const bstr_t& bszDevice, const wchar_t *wszDeviceProperty = ENC( L"Name" ) );
-
-public:
-
-	nlohmann::json GetHardware( );
-	[ [ nodiscard ] ] static bool GetProcessThreads( DWORD dwProcessID, std::vector< DWORD >& vecOut );
-	[ [ nodiscard ] ] static bool GetProcessID( const std::string &strExecutableName, DWORD& dwOut );
+	void AddDeviceToQueue( const device_info_t& _DeviceInfo );
+	bool ProcessQueue( );
 	static void TerminateProcessByID( DWORD dwProcessID );
-	static bool ElevateProcess( HANDLE hProcess = GetCurrentProcess( ) );
+
+	friend class CMemoryManager;
 } inline _SystemInformation;
+
+using CSystemInformation::ESystemInformation;
