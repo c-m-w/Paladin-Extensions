@@ -14,43 +14,66 @@ namespace Utilities
 		std::this_thread::sleep_for( _t( mmtPauseLength ) );
 	}
 
+	template< typename _t > struct AStringTraits;
+	template< > struct AStringTraits< std::string >
+	{
+		using char_trait_t = char;
+
+		static int ConvertStringBytes( const int iCodePage, const char* szFromString, const int iFromStringLength, wchar_t* wszToString, const int iToStringLength )
+		{
+			return MultiByteToWideChar( iCodePage, 0, szFromString, iFromStringLength, wszToString, iToStringLength );
+		}
+	};
+	template< > struct AStringTraits< std::wstring >
+	{
+		using char_trait_t = wchar_t;
+
+		static int ConvertStringBytes( const int iCodePage, const wchar_t* wszFromString, const int iFromStringLength, char* szToString, const int iToStringLength )
+		{
+			return WideCharToMultiByte( iCodePage, 0, wszFromString, iFromStringLength, szToString, iToStringLength, nullptr, nullptr );
+		}
+	};
+
 	template< typename _To, typename _From > struct AStringCastImplementation
 	{
-		static _To Cast( const _From& _Source )
+		static _To Cast( const _From &_strSource )
 		{
-			return _To( _Source.begin( ), _Source.end( ) );
+			int iLength = AStringTraits< _From >::ConvertStringBytes( CP_ACP, _strSource.data( ), _strSource.length( ), nullptr, 0 );
+			if ( iLength == 0 )
+				return _To( );
+
+			std::vector< typename AStringTraits< _To >::char_trait_t > iCastBuffer( iLength + 1 );
+
+			AStringTraits< _From >::ConvertStringBytes( CP_ACP, _strSource.data( ), _strSource.length( ), &iCastBuffer[ 0 ], iLength );
+
+			return _To( iCastBuffer.begin( ), iCastBuffer.end( ) );
+		}
+	};
+	template< typename _t > struct AStringCastImplementation< _t, _t >
+	{
+		static _t Cast( const _t &_strSource )
+		{
+			return _strSource;
 		}
 	};
 
-	template< typename _From > struct AStringCastImplementation< _From, _From >
+	template< typename _t > struct ACharacterTraits;
+	template< > struct ACharacterTraits< const char * >
 	{
-		static const _From& Cast( const _From& _Source )
-		{
-			return _Source;
-		}
+		using string_trait_t = std::string;
+	};
+	template< > struct ACharacterTraits< const wchar_t * >
+	{
+		using string_trait_t = std::string;
 	};
 
-	template< typename > struct AStringTypeOfCharacter;
-#define IMPLEMENT_STRING_TYPE_OF_CHARACTER( _t )                                              \
-	template< > struct AStringTypeOfCharacter< _t >                                           \
-	{                                                                                         \
-		typedef std::basic_string< _t, std::char_traits< _t >, std::allocator< _t > > wrap_t; \
-	}
-	IMPLEMENT_STRING_TYPE_OF_CHARACTER( const char* );
-	IMPLEMENT_STRING_TYPE_OF_CHARACTER( const char16_t* );
-	IMPLEMENT_STRING_TYPE_OF_CHARACTER( const char32_t* );
-	IMPLEMENT_STRING_TYPE_OF_CHARACTER( const wchar_t* );
-	IMPLEMENT_STRING_TYPE_OF_CHARACTER( const unsigned char* );
-#undef IMPLEMENT_STRING_TYPE_OF_CHARACTER
-
-	template< typename _To, typename _From > _To string_cast( const _From& _Source )
+	template< typename _To, typename _From > _To string_cast( const _From &_strSource )
 	{
-		return AStringCastImplementation< _To, _From >::Cast( _Source );
+		return AStringCastImplementation< _To, _From >::Cast( _strSource );
 	}
-
-	template< typename _To, typename _From > _To string_cast( _From* _Source )
+	template< typename _To, typename _From > _To string_cast( _From *_szSource )
 	{
-		return string_cast< _To >( _Source );
+		return AStringCastImplementation< _To, typename ACharacterTraits< const _From* >::string_trait_t >::Cast( _szSource );
 	}
 
 #define BYTE_STRING( _ch )                                          \

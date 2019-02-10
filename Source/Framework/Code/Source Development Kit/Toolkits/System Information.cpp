@@ -96,7 +96,8 @@ bool CSystemInformation::ProcessQueue( )
 							  ENC( "Couldn't iterate through device information. Error %i." ), hrReturn );
 				break;
 			}
-			*_DeviceInformation.pValue += string_cast< std::string >( vtProp.bstrVal ) + '\n';
+			// review uncomment
+			//*_DeviceInformation.pValue += string_cast< std::string >( vtProp.bstrVal ) + '\n';
 
 			hrReturn = VariantClear( &vtProp );
 			if ( hrReturn != S_OK )
@@ -109,9 +110,10 @@ bool CSystemInformation::ProcessQueue( )
 			pClassObject->Release( );
 		}
 
-		if ( _DeviceInformation.pValue->empty( ) )
-			_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_INFORMATION, ENC( "Unable to get device information. Device: %s. Property: %s." ),
-					  string_cast< std::string >( _DeviceInformation.wstrDevice ).c_str( ), string_cast< std::string >( _DeviceInformation.wstrProperty ).c_str( ) );
+		//review uncomment
+		//if ( _DeviceInformation.pValue->empty( ) )
+		//	_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_INFORMATION, ENC( "Unable to get device information. Device: %s. Property: %s." ),
+		//			  string_cast< std::string >( _DeviceInformation.wstrDevice ).c_str( ), string_cast< std::string >( _DeviceInformation.wstrProperty ).c_str( ) );
 
 		pEnumerator->Release( );
 	}
