@@ -140,6 +140,7 @@
     <None Include="Code\Source Development Kit\Application Programming Interfaces\Cryptography.inl" />
     <None Include="Code\Source Development Kit\Toolkits\Graphical User Interface.inl" />
     <None Include="Code\Source Development Kit\Application Programming Interfaces\Utilities.inl" />
+    <None Include="Code\Source Development Kit\Toolkits\Memory Manager.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

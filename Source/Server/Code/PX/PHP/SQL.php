@@ -1,5 +1,5 @@
 <?php
-	include '../../public_html/src/config.php';
+    include '/home/palavpvb/public_html/src/config.php';
 
 	class SQLConnection
 	{

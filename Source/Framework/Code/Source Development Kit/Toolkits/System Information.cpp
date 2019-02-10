@@ -136,3 +136,85 @@ nlohmann::json CSystemInformation::GetHardware( )
 		{ ENC( "board" ), strHardware[ SYS_BOARD ] }
 	};
 }
+
+bool CSystemInformation::GetProcessThreads( DWORD dwProcessID, std::vector< DWORD >& vecOut )
+{
+	if ( dwProcessID == 0
+		 || dwProcessID == UINT_MAX )
+	{
+		_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_INFORMATION, ENC( "Invalid process ID passed to GetProcessThreads( )." ) );
+		return { };
+	}
+
+	const auto hSnapshot = CreateToolhelp32Snapshot( TH32CS_SNAPTHREAD, NULL );
+	vecOut.clear( );
+
+	if ( hSnapshot == INVALID_HANDLE_VALUE
+		 || hSnapshot == nullptr )
+		return _Log.Log( EPrefix::WARNING, ELocation::SYSTEM_INFORMATION, ENC( "Unable to get system threads." ) ), false;
+
+	auto bReturn = true;
+	THREADENTRY32 _CurrentThread { sizeof( THREADENTRY32 ) };
+
+	if ( Thread32First( hSnapshot, &_CurrentThread ) != TRUE )
+	{
+		_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_INFORMATION, ENC( "Unable to get information of first thread." ) );
+		bReturn = false;
+	}
+	else
+		do
+		{
+			if ( _CurrentThread.th32OwnerProcessID == dwProcessID )
+				vecOut.emplace_back( _CurrentThread.th32ThreadID );
+
+		} while ( Thread32Next( hSnapshot, &_CurrentThread ) == TRUE );
+
+	if ( CloseHandle( hSnapshot ) == FALSE )
+		_Log.Log( EPrefix::WARNING, ELocation::SYSTEM_INFORMATION, ENC( "Unable to close process thread snapshot properly." ) );
+
+	return bReturn && !vecOut.empty( );
+}
+
+bool CSystemInformation::GetProcessID( const std::string &strExecutableName, DWORD& dwOut )
+{
+	const auto hSnapshot = CreateToolhelp32Snapshot( TH32CS_SNAPPROCESS, NULL );
+	dwOut = 0;
+
+	if ( hSnapshot == INVALID_HANDLE_VALUE
+		 || hSnapshot == nullptr )
+	{
+		_Log.Log( EPrefix::WARNING, ELocation::SYSTEM_INFORMATION, ENC( "Unable to get processes." ) );
+		return false;
+	}
+
+	auto bReturn = true;
+	PROCESSENTRY32 _CurrentProcess { sizeof( PROCESSENTRY32 ) };
+	if ( Process32First( hSnapshot, &_CurrentProcess ) != TRUE )
+	{
+		_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_INFORMATION, ENC( "Unable to find first process." ) );
+		bReturn = false;
+	}
+	else
+		do
+		{
+			if ( _CurrentProcess.szExeFile == strExecutableName )
+				dwOut = _CurrentProcess.th32ProcessID;
+
+		} while ( Process32Next( hSnapshot, &_CurrentProcess ) == TRUE
+				  && dwOut == 0 );
+
+	if ( CloseHandle( hSnapshot ) == FALSE )
+		_Log.Log( EPrefix::WARNING, ELocation::SYSTEM_INFORMATION, ENC( "Unable to close process thread snapshot properly." ) );
+
+	return bReturn && dwOut != NULL;
+}
+
+void CSystemInformation::TerminateProcessByID( DWORD dwProcessID )
+{
+	
+}
+
+bool CSystemInformation::ElevateProcess( HANDLE hProcess )
+{
+	return false;
+}

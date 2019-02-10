@@ -34,7 +34,7 @@ bool CResourceManager::Initialize( )
 		{
 			_Filesystem.StoreCurrentWorkingDirectory( );
 
-			const auto strFile = _File[ ENC( "Path" ) ].get< std::string >( ).substr( 1 );
+			const auto strFile = _File[ ENC( "Path" ) ].get< std::string >( );
 			std::string strFileData { };
 
 			_Filesystem.ChangeWorkingDirectory( _Filesystem.GetWorkingDirectory( ), { _Filesystem.GetAbsoluteContainingDirectory( strFile ) } );
@@ -82,11 +82,11 @@ bool CResourceManager::Initialize( )
 			{
 				_Filesystem.StoreCurrentWorkingDirectory( );
 
-				const auto strFile = _File[ ENC( "Path" ) ].get< std::string >( ).substr( 1 ),
+				const auto strFile = _File[ ENC( "Path" ) ].get< std::string >( ),
 					strData = _File[ ENC( "Data" ) ].get< std::string >( );
 				std::string strRawData { };
 
-				_Filesystem.ChangeWorkingDirectory( _Filesystem.GetWorkingDirectory( ), {_Filesystem.GetAbsoluteContainingDirectory( strFile ) } );
+				_Filesystem.ChangeWorkingDirectory( _Filesystem.GetWorkingDirectory( ), { _Filesystem.GetAbsoluteContainingDirectory( strFile ) } );
 
 				if ( strData.empty( ) )
 				{

@@ -4,7 +4,7 @@
 
 class CSystemInformation
 {
-	std::string GetDeviceInformation( const bstr_t& bszDevice, const wchar_t *wszDeviceProperty = ENC( L"Name" ) );
+private:
 
 	enum
 	{
@@ -17,9 +17,14 @@ class CSystemInformation
 		SYS_BOARD,
 		SYS_MAX
 	};
+
+	std::string GetDeviceInformation( const bstr_t& bszDevice, const wchar_t *wszDeviceProperty = ENC( L"Name" ) );
+
 public:
+
 	nlohmann::json GetHardware( );
-	static DWORD GetProcessID( const std::string& strExecutableName );
+	[ [ nodiscard ] ] static bool GetProcessThreads( DWORD dwProcessID, std::vector< DWORD >& vecOut );
+	[ [ nodiscard ] ] static bool GetProcessID( const std::string &strExecutableName, DWORD& dwOut );
 	static void TerminateProcessByID( DWORD dwProcessID );
 	static bool ElevateProcess( HANDLE hProcess = GetCurrentProcess( ) );
 } inline _SystemInformation;
