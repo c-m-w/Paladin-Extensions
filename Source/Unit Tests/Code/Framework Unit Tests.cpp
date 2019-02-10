@@ -41,32 +41,48 @@ namespace Framework
 				{
 					const auto sz = "`1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./~!@#$%^&*()_+QWERTYUIOP{}|ASDFGHJKL:\"ZXCVBNM<>?\n\t\0";
 					const auto wsz = L"`1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./~!@#$%^&*()_+QWERTYUIOP{}|ASDFGHJKL:\"ZXCVBNM<>?\n\t\0";
+					const auto bsz = "`1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./~!@#$%^&*()_+QWERTYUIOP{}|ASDFGHJKL:\"ZXCVBNM<>?\n\t\0"_b;
 
-					const std::basic_string< char, std::char_traits< char >, std::allocator< char > > str = sz;
-					const std::basic_string< wchar_t, std::char_traits< wchar_t >, std::allocator< wchar_t > > wstr = wsz;
+					const std::string str = sz;
+					const std::wstring wstr = wsz;
+					const std::bstring bstr = bsz;
 
 					// const char *
 					{
 						Assert::IsTrue( string_cast< std::string >( sz ) == sz, L"\"""const char *""\" to \"std::string\" cast check failed)" );
 						Assert::IsTrue( string_cast< std::wstring >( sz ) == wsz, L"\"""const char *""\" to \"std::wstring\" cast check failed)" );
-					};
+						Assert::IsTrue( string_cast< std::bstring >( sz ) == bsz, L"\"""const char *""\" to \"std::bstring\" cast check failed)" );
+					}
 					// const wchar_t *
 					{
 						Assert::IsTrue( string_cast< std::string >( wsz ) == sz, L"\"""const wchar_t *""\" to \"std::string\" cast check failed)" );
 						Assert::IsTrue( string_cast< std::wstring >( wsz ) == wsz, L"\"""const wchar_t *""\" to \"std::wstring\" cast check failed)" );
-					
-					};
-					//
+						Assert::IsTrue( string_cast< std::bstring >( wsz ) == bsz, L"\"""const wchar_t *""\" to \"std::bstring\" cast check failed)" );
+					}
+					// const unsigned char *
+					{
+						Assert::IsTrue( string_cast< std::string >( bsz ) == sz, L"\"""const unsigned *""\" to \"std::string\" cast check failed)" );
+						Assert::IsTrue( string_cast< std::wstring >( bsz ) == wsz, L"\"""const unsigned *""\" to \"std::wstring\" cast check failed)" );
+						Assert::IsTrue( string_cast< std::bstring >( bsz ) == bsz, L"\"""const unsigned *""\" to \"std::bstring\" cast check failed)" );
+					}
 					// std::string
 					{
 						Assert::IsTrue( string_cast< std::string >( str ) == sz, L"\"""std::string""\" to \"std::string\" cast check failed)" );
 						Assert::IsTrue( string_cast< std::wstring >( str ) == wsz, L"\"""std::string""\" to \"wcstr_t\" cast check failed)" );
-					};
+						Assert::IsTrue( string_cast< std::bstring >( str ) == bsz, L"\"""std::string""\" to \"std::bstring\" cast check failed)" );
+					}
 					// std::wstring
 					{
-						Assert::IsTrue( string_cast< std::string >( str ) == sz, L"\"""std::wstring""\" to \"std::string\" cast check failed)" );
+						Assert::IsTrue( string_cast< std::string >( wstr ) == sz, L"\"""std::wstring""\" to \"std::string\" cast check failed)" );
 						Assert::IsTrue( string_cast< std::wstring >( wstr ) == wsz, L"\"""std::wstring""\" to \"std::wstring\" cast check failed)" );
-					};
+						Assert::IsTrue( string_cast< std::bstring >( wstr ) == bsz, L"\"""std::wstring""\" to \"std::bstring\" cast check failed)" );
+					}
+					// std::bstring
+					{
+						Assert::IsTrue( string_cast< std::string >( bstr ) == sz, L"\"""std::bstring""\" to \"std::string\" cast check failed)" );
+						Assert::IsTrue( string_cast< std::wstring >( bstr ) == wsz, L"\"""std::bstring""\" to \"std::wstring\" cast check failed)" );
+						Assert::IsTrue( string_cast< std::bstring >( bstr ) == bsz, L"\"""std::bstring""\" to \"std::bstring\" cast check failed)" );
+					}
 				}
 			};
 		};

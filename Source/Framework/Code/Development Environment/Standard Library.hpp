@@ -80,6 +80,10 @@
 #include <string_view>
 #include <charconv>
 #endif
+namespace std
+{
+	using bstring = basic_string< unsigned char, char_traits< unsigned char >, allocator< unsigned char > >;
+}
 
 // Containers library
 #include <array>
