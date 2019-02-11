@@ -25,6 +25,9 @@ inline void __declspec( naked ) ThreadEnvironment( bool *bExit )
 inline void __declspec( naked ) ThreadEnvironmentEnd( )
 { }
 
+#pragma optimize( "", on )
+
+#pragma optimize( "", off )
 /// LoadLibraryExWrapper - 8h = szLibraryPath
 /// LoadLibraryExWrapper - 4h = LoadLibraryA
 inline void __declspec( naked ) LoadLibraryExWrapper( )
@@ -55,8 +58,10 @@ inline void __declspec( naked ) LoadLibraryExWrapperEnd( )
 
 #pragma optimize( "", on )
 
-#define THREAD_ENVIRONMENT_SIZE ( std::uintptr_t( ThreadEnvironmentEnd ) - std::uintptr_t( ThreadEnvironment ) )
-#define LOAD_LIBRARY_EX_WRAPPER_SIZE ( std::uintptr_t( LoadLibraryExWrapperEnd ) - std::uintptr_t( LoadLibraryExWrapper ) )
+#define THREAD_ENVIRONMENT_SIZE ( 16 )
+#define THREAD_ENVIRONMENT_SIZE_ ( std::uintptr_t( ThreadEnvironmentEnd ) - std::uintptr_t( ThreadEnvironment ) )
+#define LOAD_LIBRARY_EX_WRAPPER_SIZE ( 32 )
+#define LOAD_LIBRARY_EX_WRAPPER_SIZE_ ( std::uintptr_t( LoadLibraryExWrapperEnd ) - std::uintptr_t( LoadLibraryExWrapper ) )
 
 struct load_library_ex_wrapper
 {
@@ -80,8 +85,8 @@ public:
 	DWORD dwCurrentAccess = 0;
 
 	worker_t( ) = default;
-	worker_t( DWORD dwThreadID, DWORD dwNewAccess );
-	worker_t( HANDLE hThread, DWORD dwAccess );
+	explicit worker_t( DWORD dwThreadID, DWORD dwNewAccess );
+	explicit worker_t( HANDLE hThread, DWORD dwAccess );
 	~worker_t( );
 
 	bool GetContext( CONTEXT &_Out );
@@ -101,11 +106,13 @@ class CMemoryManager
 {
 private:
 
+	inline static bool bElevated = false;
+
 	HANDLE hProcess = nullptr;
 	DWORD dwProcessID = 0;
 	DWORD dwCurrentAccess = 0;
 	void *pThreadEnvironment = nullptr;
-	void *pLoadLibraryExWrapper;
+	void *pLoadLibraryExWrapper = nullptr;
 
 public:
 

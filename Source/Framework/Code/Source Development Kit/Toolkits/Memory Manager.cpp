@@ -49,15 +49,17 @@ worker_t::~worker_t( )
 
 bool worker_t::GetContext( CONTEXT &_Out )
 {
+	_Out.ContextFlags = CONTEXT_FULL;
 	if ( !( dwCurrentAccess & THREAD_GET_CONTEXT ) )
 		_Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Attempting to get context of thread with insufficient handle privileges." ) );
 
 	return GetThreadContext( hThread, &_Out ) == FALSE ?
-		_Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to get context of thread." ) ), false : true;
+		( _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to get context of thread." ) ), false ) : true;
 }
 
 bool worker_t::SetContext( CONTEXT &_New )
 {
+	_New.ContextFlags = CONTEXT_FULL;
 	if ( !( dwCurrentAccess & THREAD_GET_CONTEXT ) )
 		_Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Attempting to set context of thread with insufficient handle privileges." ) );
 
@@ -91,8 +93,7 @@ bool worker_t::Suspend( )
 	if ( !( dwCurrentAccess & THREAD_SUSPEND_RESUME ) )
 		_Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Attempting to suspend a thread without sufficient handle privileges." ) );
 
-	return SuspendThread( hThread ) == DWORD( -1 ) ? 
-		_Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to suspend thread." ) ), false : bSuspended = true, true;
+	return SuspendThread( hThread ) == UINT_MAX ? ( _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to suspend thread." ) ), false ) : ( bSuspended = true, true );
 }
 
 bool worker_t::Resume( )
@@ -158,6 +159,9 @@ bool worker_t::WaitForExecutionFinish( DWORD dwTime )
 
 bool CMemoryManager::SetProcess( const std::string &strExecutable, DWORD dwAccess )
 {
+	if ( !bElevated && !( bElevated = SI.ElevateProcess( ) ) )
+		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Cannot elevate current process." ) ), false;
+
 	if ( hProcess != nullptr )
 		if ( CloseHandle( hProcess ) == FALSE )
 			_Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Unable to close old process handle." ) );
@@ -195,12 +199,13 @@ bool CMemoryManager::CreateWorker( worker_t &_Worker, void *&pExit )
 		_Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Insufficient privileges to create a thread." ) );
 
 	if ( !pThreadEnvironment )
-		if ( !AllocateMemory( pThreadEnvironment, THREAD_ENVIRONMENT_SIZE, PAGE_EXECUTE_READWRITE ) )
+		if ( !AllocateMemory( pThreadEnvironment, THREAD_ENVIRONMENT_SIZE, PAGE_EXECUTE_READWRITE )
+			 || !Write( pThreadEnvironment, ThreadEnvironment, THREAD_ENVIRONMENT_SIZE ) )
 			 return false;
 
 	DWORD dwThreadID;
 	_Worker = worker_t( CreateRemoteThread( hProcess, nullptr, NULL, LPTHREAD_START_ROUTINE( pThreadEnvironment ), pExit, NULL, &dwThreadID ), THREAD_ALL_ACCESS );
-	return _Worker.Valid( ) ? true : _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to create a worker." ) ), false;
+	return _Worker.Valid( ) ? true : ( _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to create a worker." ) ), false );
 }
 
 bool CMemoryManager::FindWorker( worker_t &_Worker, DWORD dwHandleAccess, void *&pExit )
@@ -209,27 +214,32 @@ bool CMemoryManager::FindWorker( worker_t &_Worker, DWORD dwHandleAccess, void *
 	if ( !SI.GetProcessThreads( dwProcessID, vecThreads ) )
 		return false;
 
+	if ( !pThreadEnvironment )
+		if ( !AllocateMemory( pThreadEnvironment, THREAD_ENVIRONMENT_SIZE, PAGE_EXECUTE_READWRITE )
+			 || !Write( pThreadEnvironment, ThreadEnvironment, THREAD_ENVIRONMENT_SIZE ) )
+			return false;
+
 	_Worker = worker_t( vecThreads[ 0 ], dwHandleAccess );
 	return _Worker.Valid( ) && _Worker.SimulateFunctionCall( pThreadEnvironment, pExit );
 
-	if ( !_Worker.Valid( )
-		 || !_Worker.Suspend( ) )
-		return false;
-
-	CONTEXT _ThreadContext;
-	if ( !_Worker.GetContext( _ThreadContext ) )
-		return false;
-
-	_ThreadContext.Esp -= sizeof( bool * );
-	if ( !Write< void * >( reinterpret_cast< void* >( _ThreadContext.Esp ), pExit ) )
-		return false;
-
-	_ThreadContext.Esp -= sizeof( void * );
-	if ( !Write< DWORD >( reinterpret_cast< void* >( _ThreadContext.Esp ), _ThreadContext.Eip ) )
-		return false;
-
-	_ThreadContext.Esp = DWORD( pThreadEnvironment );
-	return _Worker.SetContext( _ThreadContext ) && _Worker.Resume( );
+	//if ( !_Worker.Valid( )
+	//	 || !_Worker.Suspend( ) )
+	//	return false;
+	//
+	//CONTEXT _ThreadContext;
+	//if ( !_Worker.GetContext( _ThreadContext ) )
+	//	return false;
+	//
+	//_ThreadContext.Esp -= sizeof( bool * );
+	//if ( !Write< void * >( reinterpret_cast< void* >( _ThreadContext.Esp ), pExit ) )
+	//	return false;
+	//
+	//_ThreadContext.Esp -= sizeof( void * );
+	//if ( !Write< DWORD >( reinterpret_cast< void* >( _ThreadContext.Esp ), _ThreadContext.Eip ) )
+	//	return false;
+	//
+	//_ThreadContext.Esp = DWORD( pThreadEnvironment );
+	//return _Worker.SetContext( _ThreadContext ) && _Worker.Resume( );
 }
 
 bool CMemoryManager::Read( void* pAddress, void* pOut, std::size_t zSize )
@@ -294,6 +304,7 @@ bool CMemoryManager::WipeMemory( void *pAddress, std::size_t zSize )
 	const auto bReturn = Write( pAddress, pMemory, zSize );
 	delete[ ] pMemory;
 	return bReturn;
+	return true;
 }
 
 bool CMemoryManager::FreeMemory( void *pAddress )
@@ -309,8 +320,11 @@ bool CMemoryManager::LoadLibraryEx( const std::string &strPath, bool bUseExistin
 	worker_t _Worker;
 	void *pExit = nullptr;
 
+	if ( LOAD_LIBRARY_EX_WRAPPER_SIZE_ != LOAD_LIBRARY_EX_WRAPPER_SIZE )
+		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "LOAD_LIBRARY_EX_WRAPPER_SIZE needs to be updated." ) ), false;
+
 	if ( !pLoadLibraryExWrapper )
-		if ( !AllocateMemory( pLoadLibraryExWrapper, LOAD_LIBRARY_EX_WRAPPER_SIZE, PAGE_EXECUTE_READWRITE ) )
+		if ( !AllocateMemory( pLoadLibraryExWrapper, sizeof ( load_library_ex_wrapper ), PAGE_EXECUTE_READWRITE ) )
 			return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to allocate memory for LoadLibraryExWrapper." ) ), false;
 
 	if ( !AllocateMemory( pExit, sizeof( bool ), PAGE_READWRITE ) )
@@ -321,16 +335,19 @@ bool CMemoryManager::LoadLibraryEx( const std::string &strPath, bool bUseExistin
 
 	load_library_ex_wrapper _WrapperData;
 
-	_WrapperData.szLibraryPath = reinterpret_cast< const char * >( std::uintptr_t( pLoadLibraryExWrapper ) + sizeof( void * ) + LOAD_LIBRARY_EX_WRAPPER_SIZE );
-	if ( !Write( _WrapperData.szLibraryPath, &strPath[ 0 ], strPath.length( ) * sizeof( char ) ) )
+	_WrapperData.szLibraryPath = reinterpret_cast< const char * >( std::uintptr_t( pLoadLibraryExWrapper ) + sizeof( void * ) * 2 + LOAD_LIBRARY_EX_WRAPPER_SIZE );
+	if ( !Write( pLoadLibraryExWrapper, _WrapperData.szLibraryPath )
+		 || !Write( reinterpret_cast< void * >( const_cast< char * >( _WrapperData.szLibraryPath ) ),
+					reinterpret_cast< void * >( const_cast< char * >( &strPath[ 0 ] ) ), strPath.length( ) * sizeof( char ) ) )
 		return false;
 
 	_WrapperData.pLoadLibrary = reinterpret_cast< decltype( _WrapperData.pLoadLibrary ) >( LoadLibraryA );
-	if ( !Write( pLoadLibraryExWrapper, _WrapperData ) )
+	if ( !Write( reinterpret_cast< void * >( std::uintptr_t( pLoadLibraryExWrapper ) + sizeof( void * ) ), _WrapperData.pLoadLibrary )
+		 || !Write( reinterpret_cast< void * >( std::uintptr_t( pLoadLibraryExWrapper ) + sizeof( void * ) * 2 ),
+					reinterpret_cast< void * >( _WrapperData.bLoadLibraryExWrapper ), LOAD_LIBRARY_EX_WRAPPER_SIZE ) )
 		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to write load library wrapper data to memory." ) ), false;
 
-	return _Worker.SimulateFunctionCall( reinterpret_cast< void * >(
-		std::uintptr_t( pLoadLibraryExWrapper ) + std::uintptr_t( &_WrapperData.bLoadLibraryExWrapper )
-		- std::uintptr_t( _WrapperData.szLibraryPath ) ), nullptr ) && Write( pExit, true )
+	auto b = true;
+	return _Worker.SimulateFunctionCall( reinterpret_cast< void * >( std::uintptr_t( pLoadLibraryExWrapper ) + sizeof( void * ) * 2 ), nullptr ) && Write( pExit, b )
 		&& bUseExistingThread ? _Worker.WaitForExecutionFinish( INFINITE ) : true;
 }

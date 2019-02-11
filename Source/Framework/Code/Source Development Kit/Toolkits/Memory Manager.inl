@@ -9,5 +9,5 @@ template< typename _t > bool CMemoryManager::Read( void* pAddress, _t& _Out )
 
 template< typename _t > bool CMemoryManager::Write( void* pAddress, _t& _Value )
 {
-	return Write( pAddress, &_Value, sizeof( _t ) );
+	return Write( pAddress, reinterpret_cast< void * >( &_Value ), sizeof( _t ) );
 }
