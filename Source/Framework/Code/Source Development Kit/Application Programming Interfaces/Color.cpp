@@ -18,17 +18,20 @@ color_t::color_t( unsigned uData )
 
 color_t::color_t( std::initializer_list< unsigned char > initData )
 {
-	if ( initData.size( ) == 0 || initData.size( ) > 4 )
+	if ( initData.size( ) == 0 )
+	{
+		memset( &_Data, 0xFFFFFFFFui32, sizeof _Data );
+		return;
+	}
+	if ( initData.size( ) > 4 )
 		throw std::runtime_error( ENC( "Invalid array index" ) );
 
-	auto u = 0u;
-	for ( const auto &bData: initData )
-	{
-		_Data.b[ u ] = bData;
-		u++;
-	}
-	for ( auto uu = 3u; uu >= u + 1; uu-- )
-		_Data.b[ uu ] = UCHAR_MAX;
+	auto u = COLOR_MAX - 1;
+	for ( const auto& bData : initData )
+		_Data.b[ u-- ] = bData;
+
+	for ( ; u >= 0; u-- )
+		_Data.b[ u ] = UCHAR_MAX;
 }
 
 color_t::color_t( std::initializer_list< int > initData )
@@ -41,29 +44,30 @@ color_t::color_t( std::initializer_list< int > initData )
 	if ( initData.size( ) > 4 )
 		throw std::runtime_error( ENC( "Invalid array index" ) );
 
-	auto u = 0u;
-	for ( const auto &iData: initData )
-	{
-		_Data.b[ u ] = iData;
-		u++;
-	}
-	for ( auto uu = 3u; uu >= u + 1; uu-- )
-		_Data.b[ uu ] = UCHAR_MAX;
+	auto u = COLOR_MAX - 1;
+	for ( const auto& iData: initData )
+		_Data.b[ u-- ] = unsigned char( iData );
+
+	for ( ; u >= 0; u-- )
+		_Data.b[ u ] = UCHAR_MAX;
 }
 
 color_t::color_t( std::initializer_list< float > initData )
 {
-	if ( initData.size( ) == 0 || initData.size( ) > 4 )
+	if ( initData.size( ) == 0 )
+	{
+		memset( &_Data, 0xFFFFFFFFui32, sizeof _Data );
+		return;
+	}
+	if ( initData.size( ) > 4 )
 		throw std::runtime_error( ENC( "Invalid array index" ) );
 
-	auto u = 0u;
+	auto u = COLOR_MAX - 1;
 	for ( const auto &flData: initData )
-	{
-		_Data.b[ u ] = unsigned char( flData > 1.f ? flData : flData * 255.f );
-		u++;
-	}
-	for ( auto uu = 3u; uu >= u + 1; uu-- )
-		_Data.b[ uu ] = UCHAR_MAX;
+		_Data.b[ u-- ] = unsigned char( flData * 255.f );
+
+	for ( ; u >= 0; u-- )
+		_Data.b[ u ] = UCHAR_MAX;
 }
 
 unsigned char color_t::operator[]( std::size_t zColor ) const
@@ -71,6 +75,13 @@ unsigned char color_t::operator[]( std::size_t zColor ) const
 	if ( zColor > 3.f )
 		throw std::runtime_error( ENC( "Invalid array index" ) );
 	return _Data.b[ zColor ];
+}
+
+unsigned char color_t::operator[]( int iColor ) const
+{
+	if ( iColor > 3.f )
+		throw std::runtime_error( ENC( "Invalid array index" ) );
+	return _Data.b[ iColor ];
 }
 
 float color_t::operator[]( float flColor ) const
@@ -178,22 +189,22 @@ float color_t::GetAlphaFraction( ) const
 
 float color_t::PutRedFraction( float flData )
 {
-	return _Data.b[ COLOR_RED ] = unsigned char( flData * 255.f );
+	return ( _Data.b[ COLOR_RED ] = unsigned char( flData * 255.f ) ) / 255.f;
 }
 
 float color_t::PutGreenFraction( float flData )
 {
-	return _Data.b[ COLOR_GREEN ] = unsigned char( flData * 255.f );
+	return (_Data.b[ COLOR_GREEN ] = unsigned char( flData * 255.f ) ) /255.f;
 }
 
 float color_t::PutBlueFraction( float flData )
 {
-	return _Data.b[ COLOR_BLUE ] = unsigned char( flData * 255.f );
+	return (_Data.b[ COLOR_BLUE ] = unsigned char( flData * 255.f )) / 255.f;
 }
 
 float color_t::PutAlphaFraction( float flData )
 {
-	return _Data.b[ COLOR_ALPHA ] = unsigned char( flData * 255.f );
+	return (_Data.b[ COLOR_ALPHA ] = unsigned char( flData * 255.f )) / 255.f;
 }
 
 void *color_t::GetDataPointer( ) const
@@ -203,12 +214,12 @@ void *color_t::GetDataPointer( ) const
 
 double color_t::Get709Luminance( ) const
 {
-	return _Data.b[ COLOR_ALPHA ] * ( 0.2126 * _Data.b[ COLOR_RED ] + 0.7152 * _Data.b[ COLOR_GREEN ] + 0.0722 * _Data.b[ COLOR_BLUE ] );
+	return _Data.b[ COLOR_ALPHA ] / UCHAR_MAX * ( 0.2126 * _Data.b[ COLOR_RED ] + 0.7152 * _Data.b[ COLOR_GREEN ] + 0.0722 * _Data.b[ COLOR_BLUE ] );
 }
 
 double color_t::Get601Luminance( ) const
 {
-	return _Data.b[ COLOR_ALPHA ] * ( 0.299 * _Data.b[ COLOR_RED ] + 0.587 * _Data.b[ COLOR_GREEN ] + 0.114 * _Data.b[ COLOR_BLUE ] );
+	return _Data.b[ COLOR_ALPHA ] / UCHAR_MAX * ( 0.299 * _Data.b[ COLOR_RED ] + 0.587 * _Data.b[ COLOR_GREEN ] + 0.114 * _Data.b[ COLOR_BLUE ] );
 }
 
 color_t CColor::GetGradient( color_t clrStart, color_t clrEnd, float flProgress )
@@ -238,7 +249,7 @@ CColor::CColor( std::vector< sequence_t > vecSequences )
 
 	auto u = 0u;
 	for ( const auto &seq: vecSequences )
-		pSequences[ u ] = seq;
+		pSequences[ u++ ] = seq;
 }
 
 color_t CColor::GetColor( )
@@ -273,7 +284,7 @@ CColor::sequence_t CColor::GetSequence( std::size_t zSequence )
 	return pSequences[ zSequence ];
 }
 
-CColor::sequence_t CColor::operator[]( std::size_t zSequence )
+CColor::sequence_t CColor::operator[ ]( std::size_t zSequence )
 {
 	return GetSequence( zSequence );
 }

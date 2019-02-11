@@ -156,7 +156,7 @@ bool SetupInterface( )
 		_InvalidPurchaseKeyBottom = new CLabel( padding_t( ), new text_t( ENC( "Contact support if this issue persists." ), EFont::ROBOTO, STANDARD_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_DARK, EFontFlags::NONE );
 		_InvalidPurchaseKeyKeys = new CButton( CButton::LEFT, ENC( "Purchases" ), [ & ]( )
 		{
-			OpenLink( ENC( "https://www.paladin-extensions.com/extensions/purchases" ) );
+			_SystemInformation.OpenLink( ENC( "https://www.paladin-extensions.com/extensions/purchases" ) );
 		} );
 		_InvalidPurchaseKeyClose = new CButton( CButton::CENTER, ENC( "Close" ), [ & ]( )
 		{
@@ -164,7 +164,7 @@ bool SetupInterface( )
 		} );
 		_InvalidPurchaseKeySupport = new CButton( CButton::RIGHT, ENC( "Support" ), [ & ]( )
 		{
-			OpenLink( ENC( "https://www.paladin-extensions.com/support/" ) );
+			_SystemInformation.OpenLink( ENC( "https://www.paladin-extensions.com/support/" ) );
 		} );
 
 		pInvalidPurchaseKeyPopup->AddRow( row_t( padding_t( 10.f, 0.f, 0.f, 0.f ), STANDARD_HEIGHT ) );
@@ -184,7 +184,7 @@ bool SetupInterface( )
 		_ConnectionErrorCenter = new CLabel( padding_t( ), new text_t( ENC( "Ensure there are no programs interfering with the connection and try again." ), EFont::ROBOTO, STANDARD_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_DARK, EFontFlags::NONE );
 		_ConnectionErrorLink = new CLabel( padding_t( ), new text_t( ENC( "If this issue persists, click here for support." ), EFont::ROBOTO, SMALL_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_NORMAL, TEXT_NORMAL, TEXT_DARK, CLEAR, CLEAR, CLEAR, EFontFlags::NONE, [ & ]( )
 		{
-			OpenLink( ENC( "https://www.paladin-extensions.com/support/" ) );
+			_SystemInformation.OpenLink( ENC( "https://www.paladin-extensions.com/support/" ) );
 		} );
 
 		_ConnectionError->AddRow( row_t( padding_t( 73.f, 0.f, 0.f, 0.f ), STANDARD_HEIGHT ) );
@@ -216,7 +216,7 @@ bool SetupInterface( )
 		_InvalidKeyText = new CLabel( padding_t( ), new text_t( ENC( "Please enter one of your purchase keys." ), EFont::ROBOTO, STANDARD_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_DARK, EFontFlags::NONE );
 		_InvalidKeyLink = new CLabel( padding_t( ), new text_t( ENC( "Click here to view your purchase keys." ), EFont::ROBOTO, SMALL_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_NORMAL, TEXT_NORMAL, TEXT_DARK, CLEAR, CLEAR, CLEAR, EFontFlags::NONE, [ & ]( )
 		{
-			OpenLink( ENC( "https://www.paladin-extensions.com/extensions/purchases" ) );
+			_SystemInformation.OpenLink( ENC( "https://www.paladin-extensions.com/extensions/purchases" ) );
 		} );
 		_InvalidKeyPurchaseKey = new CInputBox( padding_t( ), padding_t( 0.f, 5.f, 0.f, 5.f ), EFont::ENVY, CInputBox::ALPHANUMERIC, "", [ & ]( )
 		{
@@ -247,7 +247,7 @@ bool SetupInterface( )
 		_InvalidHardwareTop = new CLabel( padding_t( ), new text_t( ENC( "There was an issue validating your hardware identity with the server." ), EFont::ROBOTO, STANDARD_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_DARK, EFontFlags::NONE );
 		_InvalidHardwareLink = new CLabel( padding_t( ), new text_t( ENC( "Click here to request a hardware identification reset." ), EFont::ROBOTO, SMALL_HEIGHT, text_t::CENTER, text_t::CENTER ), TEXT_NORMAL, TEXT_NORMAL, TEXT_DARK, CLEAR, CLEAR, CLEAR, EFontFlags::NONE, [ & ]( )
 		{
-			OpenLink( ENC( "https://www.paladin-extensions.com/support/" ) );
+			_SystemInformation.OpenLink( ENC( "https://www.paladin-extensions.com/support/" ) );
 		} );
 
 		_InvalidHardware->AddRow( row_t( padding_t( 10.f, 0.f, 0.f, 0.f ), STANDARD_HEIGHT ) );

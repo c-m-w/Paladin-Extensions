@@ -57,18 +57,4 @@ namespace Utilities
 	{
 		return D3DXToDegree( atanf( y / x ) );
 	}
-
-	vector2_t GetScreenSize( )
-	{
-		const auto hwDesktop = GetDesktopWindow( );
-		RECT recDesktop { };
-
-		GetWindowRect( hwDesktop, &recDesktop );
-		return { float( recDesktop.right - recDesktop.left ), float( recDesktop.bottom - recDesktop.top ) };
-	}
-
-	void OpenLink( const std::string &strLink )
-	{
-		ShellExecute( nullptr, ENC( "open" ), strLink.c_str( ), nullptr, nullptr, SW_SHOWNORMAL );
-	}
 }

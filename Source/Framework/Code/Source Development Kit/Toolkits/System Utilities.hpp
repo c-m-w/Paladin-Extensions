@@ -1,4 +1,4 @@
-/// System Information.hpp
+/// System Utilities.hpp
 
 #pragma once
 
@@ -35,6 +35,9 @@ public:
 		SYS_BOARD,
 		SYS_MAX
 	};
+
+	Utilities::vector2_t GetScreenSize( ); // todo move to system information
+	void OpenLink( const std::string& strLink ); // todo move somewhere more fitting
 
 	void AddDeviceToQueue( const device_info_t& _DeviceInfo );
 	bool ProcessQueue( );

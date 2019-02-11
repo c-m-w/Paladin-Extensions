@@ -4,10 +4,10 @@
 
 enum EColor
 {
-	COLOR_RED,
-	COLOR_GREEN,
-	COLOR_BLUE,
 	COLOR_ALPHA,
+	COLOR_BLUE,
+	COLOR_GREEN,
+	COLOR_RED,
 	COLOR_MAX
 };
 
@@ -30,6 +30,7 @@ public:
 	color_t( std::initializer_list< float > initData );
 
 	[ [ nodiscard ] ] unsigned char operator[ ]( std::size_t zColor ) const;
+	[ [ nodiscard ] ] unsigned char operator[ ]( int iColor ) const;
 	[ [ nodiscard ] ] float operator[ ]( float flColor ) const;
 	[ [ nodiscard ] ] bool operator==( const color_t &rhs ) const;
 	[ [ nodiscard ] ] bool operator!=( const color_t &rhs ) const;
@@ -117,3 +118,5 @@ public:
 	void DeleteColorSequence( std::size_t zSequence );
 	CColor &operator>>( std::size_t zSequence );
 };
+
+using sequence_t = CColor::sequence_t;

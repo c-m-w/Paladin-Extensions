@@ -24,7 +24,7 @@ __forceinline const wchar_t *ENC( const wchar_t *input )
 #include "Source Development Kit/Application Programming Interfaces/Cryptography.hpp"
 #include "Source Development Kit/Application Programming Interfaces/Filesystem.hpp"
 #include "Development Environment/Logging.hpp"
-#include "Source Development Kit/Toolkits/System Information.hpp"
+#include "Source Development Kit/Toolkits/System Utilities.hpp"
 #include "Source Development Kit/Toolkits/Memory Manager.hpp"
 #include "Source Development Kit/Application Programming Interfaces/Input.hpp"
 #include "Source Development Kit/Toolkits/Resource Manager.hpp"

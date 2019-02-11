@@ -28,9 +28,6 @@ namespace Utilities
 
 	using vector2_t = location_t;
 
-	vector2_t GetScreenSize( ); // todo move to system information
-	void OpenLink( const std::string& strLink ); // todo move somewhere more fitting
-
 	/** \brief Gets the time since epoch in milliseconds. */
 	/** \return Time since epoch in milliseconds. */
 	template< typename _t = std::chrono::milliseconds >moment_t GetMoment( );

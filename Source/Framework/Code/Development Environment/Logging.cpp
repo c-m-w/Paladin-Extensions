@@ -140,9 +140,15 @@ void CLogging::Log( EPrefix _Prefix, ELocation _Location, const std::string &str
 	if ( !GetInitializationState( ) )
 		return ErrorPopup( ERROR_UNITIALIZED_LOG );
 
-	strBuffer += GetTimestamp( ) + '\t' + strStatusPrefixes[ _Prefix ] + '\t' + strLocations[ _Location ] + '\t' + strLog + '\n';
+	const auto strFormattedLog = GetTimestamp( ) + '\t' + strStatusPrefixes[ _Prefix ] + '\t' + strLocations[ _Location ] + '\t' + strLog + '\n';
+
+	strBuffer += strFormattedLog;
 	if ( _Prefix == ERROR )
 		Log( INFO, _Location, ENC( "Last error: %i." ), GetLastError( ) );
+
+#if defined _DEBUG
+	printf( strFormattedLog.c_str( ) );
+#endif
 }
 
 void CLogging::Log( EPrefix _Prefix, ELocation _Location, const char *szFormat, ... )
