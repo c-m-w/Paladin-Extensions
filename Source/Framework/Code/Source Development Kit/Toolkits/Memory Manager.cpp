@@ -7,6 +7,11 @@
 #define USE_DEFINITIONS
 #include "../../Framework.hpp"
 
+load_library_ex_wrapper::load_library_ex_wrapper( )
+{
+	memcpy( bLoadLibraryExWrapper, LoadLibraryExWrapper, LOAD_LIBRARY_EX_WRAPPER_SIZE );
+}
+
 worker_t::worker_t( DWORD dwThreadID, DWORD dwNewAccess ): dwThreadID( dwThreadID ), dwCurrentAccess( dwNewAccess )
 {
 	if ( dwThreadID == 0 )
@@ -32,6 +37,14 @@ worker_t::worker_t( HANDLE hThread, DWORD dwAccess ): hThread( hThread ), dwCurr
 	dwThreadID = GetThreadId( hThread );
 	if ( dwThreadID == 0 )
 		_Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Unable to get thread id from handle %08X." ), hThread );
+}
+
+worker_t::~worker_t( )
+{
+	if ( bSuspended )
+		Resume( );
+
+	CloseHandle( hThread );
 }
 
 bool worker_t::GetContext( CONTEXT &_Out )
@@ -115,6 +128,29 @@ bool worker_t::SetInstructionPointer( void *pNew )
 	return GetContext( _Thread ) ? ( _Thread.Eip = DWORD( pNew ), SetContext( _Thread ) ? true : false ) : false;
 }
 
+bool worker_t::SimulateFunctionCall( void *pFunction, void *pParameter )
+{
+	CONTEXT _ThreadContext;
+
+	if ( !Suspend( )
+		 || !GetContext( _ThreadContext ) )
+		return false;
+
+	if ( pParameter != nullptr )
+	{
+		_ThreadContext.Esp -= sizeof( void * );
+		if ( !_MemoryManager.Write< void * >( reinterpret_cast< void* >( _ThreadContext.Esp ), pParameter ) )
+			return false;
+	}
+
+	_ThreadContext.Esp -= sizeof( void * );
+	if ( !_MemoryManager.Write< DWORD >( reinterpret_cast< void* >( _ThreadContext.Esp ), _ThreadContext.Eip ) )
+		return false;
+
+	_ThreadContext.Eip = DWORD( pFunction );
+	return SetContext( _ThreadContext ) && Resume( );
+}
+
 bool worker_t::WaitForExecutionFinish( DWORD dwTime )
 {
 	return WaitForSingleObject( hThread, dwTime ) == WAIT_OBJECT_0 ? true : _Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Waiting for thread signal state failed." ) ), false;
@@ -136,6 +172,7 @@ bool CMemoryManager::SetProcess( const std::string &strExecutable, DWORD dwAcces
 
 	hProcess = nullptr;
 	pThreadEnvironment = nullptr;
+	pLoadLibraryExWrapper = nullptr;
 
 	if ( dwAccess == NULL )
 		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Access to open executable %s is invalid." ), strExecutable.c_str( ) ), false;
@@ -173,6 +210,8 @@ bool CMemoryManager::FindWorker( worker_t &_Worker, DWORD dwHandleAccess, void *
 		return false;
 
 	_Worker = worker_t( vecThreads[ 0 ], dwHandleAccess );
+	return _Worker.Valid( ) && _Worker.SimulateFunctionCall( pThreadEnvironment, pExit );
+
 	if ( !_Worker.Valid( )
 		 || !_Worker.Suspend( ) )
 		return false;
@@ -280,5 +319,18 @@ bool CMemoryManager::LoadLibraryEx( const std::string &strPath, bool bUseExistin
 	if( !( bUseExistingThread ? FindWorker( _Worker, THREAD_ALL_ACCESS, pExit ) : CreateWorker( _Worker, pExit ) ) )
 		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to get worker thread to load library." ) ), false;
 
-	return false;
+	load_library_ex_wrapper _WrapperData;
+
+	_WrapperData.szLibraryPath = reinterpret_cast< const char * >( std::uintptr_t( pLoadLibraryExWrapper ) + sizeof( void * ) + LOAD_LIBRARY_EX_WRAPPER_SIZE );
+	if ( !Write( _WrapperData.szLibraryPath, &strPath[ 0 ], strPath.length( ) * sizeof( char ) ) )
+		return false;
+
+	_WrapperData.pLoadLibrary = reinterpret_cast< decltype( _WrapperData.pLoadLibrary ) >( LoadLibraryA );
+	if ( !Write( pLoadLibraryExWrapper, _WrapperData ) )
+		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to write load library wrapper data to memory." ) ), false;
+
+	return _Worker.SimulateFunctionCall( reinterpret_cast< void * >(
+		std::uintptr_t( pLoadLibraryExWrapper ) + std::uintptr_t( &_WrapperData.bLoadLibraryExWrapper )
+		- std::uintptr_t( _WrapperData.szLibraryPath ) ), nullptr ) && Write( pExit, true )
+		&& bUseExistingThread ? _Worker.WaitForExecutionFinish( INFINITE ) : true;
 }

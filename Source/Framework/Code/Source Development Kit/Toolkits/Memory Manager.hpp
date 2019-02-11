@@ -38,7 +38,7 @@ inline void __declspec( naked ) LoadLibraryExWrapper( )
 
 		Prepare:
 
-			mov		eax, esp
+			mov		eax, [ esp ]
 			sub		eax, 0xE
 			push	eax
 			add		eax, 4
@@ -58,6 +58,15 @@ inline void __declspec( naked ) LoadLibraryExWrapperEnd( )
 #define THREAD_ENVIRONMENT_SIZE ( std::uintptr_t( ThreadEnvironmentEnd ) - std::uintptr_t( ThreadEnvironment ) )
 #define LOAD_LIBRARY_EX_WRAPPER_SIZE ( std::uintptr_t( LoadLibraryExWrapperEnd ) - std::uintptr_t( LoadLibraryExWrapper ) )
 
+struct load_library_ex_wrapper
+{
+	const char *szLibraryPath = nullptr;
+	void *pLoadLibrary = nullptr;
+	unsigned char bLoadLibraryExWrapper[ LOAD_LIBRARY_EX_WRAPPER_SIZE ];
+
+	load_library_ex_wrapper( );
+};
+
 struct worker_t
 {
 private:
@@ -73,6 +82,7 @@ public:
 	worker_t( ) = default;
 	worker_t( DWORD dwThreadID, DWORD dwNewAccess );
 	worker_t( HANDLE hThread, DWORD dwAccess );
+	~worker_t( );
 
 	bool GetContext( CONTEXT &_Out );
 	bool SetContext( CONTEXT &_New );
@@ -83,6 +93,7 @@ public:
 	bool Terminate( DWORD dwExitCode = EXIT_SUCCESS );
 	bool GetInstructionPointer( void *&pOut );
 	bool SetInstructionPointer( void *pNew );
+	bool SimulateFunctionCall( void *pFunction, void *pParameter );
 	bool WaitForExecutionFinish( DWORD dwTime = INFINITE );
 };
 
@@ -94,7 +105,7 @@ private:
 	DWORD dwProcessID = 0;
 	DWORD dwCurrentAccess = 0;
 	void *pThreadEnvironment = nullptr;
-	void *pLoadLibraryExWrapper = nullptr;
+	void *pLoadLibraryExWrapper;
 
 public:
 
@@ -110,6 +121,6 @@ public:
 	bool WipeMemory( void *pAddress, std::size_t zSize );
 	bool FreeMemory( void *pAddress );
 	bool LoadLibraryEx( const std::string &strPath, bool bUseExistingThread );
-};
+} inline _MemoryManager;
 
 #include "Memory Manager.inl"

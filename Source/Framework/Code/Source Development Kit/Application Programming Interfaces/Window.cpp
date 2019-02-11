@@ -73,7 +73,8 @@ CApplicationWindow::CApplicationWindow( const std::string &strTitle, const Utili
 
 CApplicationWindow::CApplicationWindow( const HWND &hwWindow, WNDPROC _WindowInputProcessor /*= DefaultWindowInputProcessor*/ ): hwHandle( hwWindow )
 {
-	if ( nullptr == ( pOldWindowInputProcessor = WNDPROC( SetWindowLongPtr( hwHandle, GWLP_WNDPROC, LONG( _WindowInputProcessor ) ) ) ) )
+	if ( _WindowInputProcessor != nullptr
+		 && nullptr == ( pOldWindowInputProcessor = WNDPROC( SetWindowLongPtr( hwHandle, GWLP_WNDPROC, LONG( _WindowInputProcessor ) ) ) ) )
 		_Log.Log( EPrefix::ERROR, ELocation::WINDOW, ENC( "Failed to set the new window input processor." ) );
 }
 
@@ -119,8 +120,21 @@ bool CApplicationWindow::Move( int iHorizontalAmount, int iVerticalAmount )
 	if ( GetWindowRect( hwHandle, &recCurrent ) == FALSE )
 		return false;
 
-	MoveWindow( hwHandle, recCurrent.left + iHorizontalAmount, recCurrent.top + iVerticalAmount, recCurrent.right - recCurrent.left, recCurrent.bottom - recCurrent.top, FALSE );
-	return true;
+	return MoveWindow( hwHandle, recCurrent.left + iHorizontalAmount, recCurrent.top + iVerticalAmount, recCurrent.right - recCurrent.left, recCurrent.bottom - recCurrent.top, FALSE ) != FALSE;
+}
+
+bool CApplicationWindow::Resize( int iWidth, int iHeight )
+{
+	RECT recCurrent;
+	if ( GetWindowRect( hwHandle, &recCurrent ) == FALSE )
+		return false;
+
+	return MoveWindow( hwHandle, recCurrent.left, recCurrent.top, iWidth, iHeight, TRUE ) != FALSE;
+}
+
+bool CApplicationWindow::SetTitle( const std::string &strTitle )
+{
+	return SetWindowText( hwHandle, strTitle.c_str( ) ) != FALSE;
 }
 
 void CApplicationWindow::Hide( )
