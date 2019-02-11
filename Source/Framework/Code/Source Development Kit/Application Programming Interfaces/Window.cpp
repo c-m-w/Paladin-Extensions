@@ -56,7 +56,7 @@ CApplicationWindow::CApplicationWindow( const std::string &strTitle, const Utili
 		return;
 	}
 
-	const auto vecScreenSize = GetScreenSize( );
+	const auto vecScreenSize = _SystemInformation.GetScreenSize( );
 	hwHandle = CreateWindowEx( WS_EX_APPWINDOW, strTitle.c_str( ), strTitle.c_str( ), WS_VISIBLE | WS_POPUP, int( vecScreenSize.x / 2.f - vecSize.x / 2.f ), int( vecScreenSize.y / 2.f - vecSize.y / 2.f ),
 							   int( vecSize.x ), int( vecSize.y ), nullptr, nullptr, hModule, nullptr );
 	if ( nullptr == hwHandle )

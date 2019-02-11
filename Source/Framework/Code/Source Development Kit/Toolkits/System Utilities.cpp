@@ -1,4 +1,4 @@
-/// System Information.cpp
+/// System Utilities.cpp
 
 #include "Precompile.hpp"
 
@@ -209,4 +209,18 @@ void CSystemInformation::TerminateProcessByID( DWORD dwProcessID )
 bool CSystemInformation::ElevateProcess( HANDLE hProcess )
 {
 	return false;
+}
+
+vector2_t CSystemInformation::GetScreenSize( )
+{
+	const auto hwDesktop = GetDesktopWindow( );
+	RECT recDesktop { };
+
+	GetWindowRect( hwDesktop, &recDesktop );
+	return { float( recDesktop.right - recDesktop.left ), float( recDesktop.bottom - recDesktop.top ) };
+}
+
+void CSystemInformation::OpenLink( const std::string & strLink )
+{
+	ShellExecute( nullptr, ENC( "open" ), strLink.c_str( ), nullptr, nullptr, SW_SHOWNORMAL );
 }

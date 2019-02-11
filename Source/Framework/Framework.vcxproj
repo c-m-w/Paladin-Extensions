@@ -113,7 +113,7 @@
     <ClInclude Include="Code\Source Development Kit\Toolkits\Resource Manager.hpp" />
     <ClInclude Include="Precompile.hpp" />
     <ClInclude Include="Code\Framework.hpp" />
-    <ClInclude Include="Code\Source Development Kit\Toolkits\System Information.hpp" />
+    <ClInclude Include="Code\Source Development Kit\Toolkits\System Utilities.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Code\Development Environment\Logging.cpp" />
@@ -133,7 +133,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Code\Source Development Kit\Toolkits\System Information.cpp" />
+    <ClCompile Include="Code\Source Development Kit\Toolkits\System Utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Code\Source Development Kit\Application Programming Interfaces\Connectivity.inl" />
