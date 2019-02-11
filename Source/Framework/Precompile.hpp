@@ -37,6 +37,7 @@
 #undef ERROR
 #undef EncryptFile
 #undef DecryptFile
+#undef LoadLibraryEx
 
 // D3D
 #include <d3d9.h>
