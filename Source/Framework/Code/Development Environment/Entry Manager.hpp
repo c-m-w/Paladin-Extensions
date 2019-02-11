@@ -24,27 +24,11 @@ int main( )
 		return 0;
 
 #if defined _DEBUG
-	FILE * pConsoleOutput;
+	FILE *pConsoleOutput;
 	AllocConsole( );
 	if ( freopen_s( &pConsoleOutput, ENC( "CONOUT$" ), ENC( "w" ), stdout ) != 0
 		 || pConsoleOutput == nullptr )
 		return pConsoleOutput ? CloseHandle( pConsoleOutput ) != 0 : 0;
-
-	{
-		SetConsoleTitle( ENC( "Paladin Extensions" ) );
-
-		auto hwndConsole = GetConsoleWindow( );
-		MoveWindow( hwndConsole, 300, 300, 700, 300, false );
-		EnableMenuItem( GetSystemMenu( hwndConsole, false ), SC_CLOSE, MF_GRAYED );
-		SetWindowLong( hwndConsole, GWL_STYLE, GetWindowLong( hwndConsole, GWL_STYLE ) & ~SC_CLOSE & ~WS_MAXIMIZEBOX & ~WS_SIZEBOX );
-
-		HANDLE hConsole = GetStdHandle( STD_OUTPUT_HANDLE );
-
-		CONSOLE_CURSOR_INFO cci { 25, false };
-		SetConsoleCursorInfo( hConsole, &cci );
-
-		CloseHandle( hConsole );
-	}
 #endif
 
 	OnLaunch( );
@@ -77,31 +61,14 @@ _In_ int nCmdShow )
 	if ( hMutex == NULL )
 		return 0;
 
-	if ( hInstance&& hInstance != INVALID_HANDLE_VALUE )
+	if ( hInstance && hInstance != INVALID_HANDLE_VALUE )
 		hinstWin = hInstance;
 
 #if defined _DEBUG
-
-	FILE * pConsoleOutput;
+	FILE *pConsoleOutput;
 	AllocConsole( );
 	if ( freopen_s( &pConsoleOutput, ENC( "CONOUT$" ), ENC( "w" ), stdout ) != 0 || pConsoleOutput == nullptr )
 		return pConsoleOutput ? CloseHandle( pConsoleOutput ) != 0 : 0;
-
-	{
-		SetConsoleTitle( ENC( "Paladin Extensions" ) );
-
-		auto hwndConsole = GetConsoleWindow( );
-		MoveWindow( hwndConsole, 300, 300, 700, 300, false );
-		EnableMenuItem( GetSystemMenu( hwndConsole, false ), SC_CLOSE, MF_GRAYED );
-		SetWindowLong( hwndConsole, GWL_STYLE, GetWindowLong( hwndConsole, GWL_STYLE ) & ~SC_CLOSE & ~WS_MAXIMIZEBOX & ~WS_SIZEBOX );
-
-		HANDLE hConsole = GetStdHandle( STD_OUTPUT_HANDLE );
-
-		CONSOLE_CURSOR_INFO cci { 25, false };
-		SetConsoleCursorInfo( hConsole, &cci );
-
-		CloseHandle( hConsole );
-	}
 #endif
 
 	OnLaunch( );
@@ -146,7 +113,7 @@ BOOL WINAPI DllMain( _In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID 
 			if ( hMutex == NULL || GetLastError( ) == ERROR_ALREADY_EXISTS )
 				return FALSE;
 
-			if ( hinstDLL&& hinstDLL != INVALID_HANDLE_VALUE )
+			if ( hinstDLL && hinstDLL != INVALID_HANDLE_VALUE )
 #if !defined _DEBUG
 				if ( DisableThreadLibraryCalls( hinstDll = hinstDLL ) == 0 )
 					return FALSE;
@@ -155,30 +122,13 @@ BOOL WINAPI DllMain( _In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID 
 #endif
 
 #if defined _DEBUG
-			FILE* pConsoleOutput;
+			FILE *pConsoleOutput;
 			AllocConsole( );
 			if ( freopen_s( &pConsoleOutput, ENC( "CONOUT$" ), ENC( "w" ), stdout ) != 0 || pConsoleOutput == nullptr )
 			{
 				if ( pConsoleOutput )
 					CloseHandle( pConsoleOutput );
 				return FALSE;
-			}
-
-			{
-				SetConsoleTitle( ENC( "Paladin Extensions" ) );
-
-				auto hwndConsole = GetConsoleWindow( );
-				MoveWindow( hwndConsole, 300, 300, 1000, 300, TRUE );
-
-				HANDLE hConsole = GetStdHandle( STD_OUTPUT_HANDLE );
-
-				CONSOLE_CURSOR_INFO cci { 25, false };
-				SetConsoleCursorInfo( hConsole, &cci );
-
-				CloseHandle( hConsole );
-
-				EnableMenuItem( GetSystemMenu( hwndConsole, FALSE ), SC_CLOSE, MF_GRAYED );
-				SetWindowLong( hwndConsole, GWL_STYLE, GetWindowLong( hwndConsole, GWL_STYLE ) & ~SC_CLOSE & ~WS_MAXIMIZEBOX & ~WS_SIZEBOX );
 			}
 #endif
 
