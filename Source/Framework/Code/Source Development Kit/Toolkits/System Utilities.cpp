@@ -206,9 +206,46 @@ void CSystemInformation::TerminateProcessByID( DWORD dwProcessID )
 	
 }
 
-bool CSystemInformation::ElevateProcess( HANDLE hProcess )
+bool CSystemInformation::ElevateProcess( HANDLE hProcess /*= GetCurrentProcess( )*/ )
 {
-	return false;
+	HANDLE hTokenSelf { };
+	TOKEN_ELEVATION teSelf { };
+	DWORD dwReturnLength;
+
+	if ( FALSE == OpenProcessToken( hProcess, TOKEN_QUERY | TOKEN_ADJUST_PRIVILEGES, &hTokenSelf )
+		 || !hTokenSelf
+		 || FALSE == GetTokenInformation( hTokenSelf, TokenElevation, &teSelf, sizeof( TOKEN_ELEVATION ), &dwReturnLength ) )
+	{
+		hTokenSelf && CloseHandle( hTokenSelf );
+		return false;
+	}
+
+	TOKEN_PRIVILEGES tpNewDebug { };
+	TOKEN_PRIVILEGES tpNewShutdown { };
+
+	tpNewDebug.PrivilegeCount = 1;
+	tpNewShutdown.PrivilegeCount = 1;
+
+	tpNewDebug.Privileges[ 0 ].Attributes = SE_PRIVILEGE_ENABLED;
+	tpNewShutdown.Privileges[ 0 ].Attributes = SE_PRIVILEGE_ENABLED;
+
+	if ( FALSE == LookupPrivilegeValue( nullptr, SE_DEBUG_NAME, &tpNewDebug.Privileges[ 0 ].Luid )
+		 || FALSE == LookupPrivilegeValue( nullptr, SE_SHUTDOWN_NAME, &tpNewShutdown.Privileges[ 0 ].Luid )
+		 || FALSE == AdjustTokenPrivileges( hTokenSelf, FALSE, &tpNewDebug, 0, nullptr, nullptr )
+		 || FALSE == AdjustTokenPrivileges( hTokenSelf, FALSE, &tpNewShutdown, 0, nullptr, nullptr ) )
+	{
+		hTokenSelf && CloseHandle( hTokenSelf );
+		return false;
+	}
+
+	if ( FALSE == GetTokenInformation( hTokenSelf, TokenElevation, &teSelf, sizeof( TOKEN_ELEVATION ), &dwReturnLength )
+		 || FALSE == teSelf.TokenIsElevated )
+	{
+		hTokenSelf && CloseHandle( hTokenSelf );
+		return false;
+	}
+
+	return true;
 }
 
 vector2_t CSystemInformation::GetScreenSize( )

@@ -24,6 +24,8 @@ public:
 	HWND GetWindowHandle( );
 	bool GetBounds( RECT& recOut );
 	bool Move( int iHorizontalAmount, int iVerticalAmount );
+	bool Resize( int iWidth, int iHeight );
+	bool SetTitle( const std::string &strTitle );
 	void Hide( );
 	void Show( );
 };

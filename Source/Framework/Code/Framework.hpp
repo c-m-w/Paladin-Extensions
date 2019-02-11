@@ -35,10 +35,19 @@ __forceinline const wchar_t *ENC( const wchar_t *input )
 #include "Source Development Kit/Toolkits/Graphical User Interface.hpp"
 #include "Source Development Kit/Toolkits/Authentication.hpp"
 
+#if defined _DEBUG
+inline CApplicationWindow *pConsoleWindow;
+#endif
+
 void ShutdownFramework( );
 
 inline bool SetupFramework( )
 {
+#if defined _DEBUG
+	pConsoleWindow = new CApplicationWindow( GetConsoleWindow( ), nullptr );
+	pConsoleWindow->Resize( 1200, 600 );
+	pConsoleWindow->SetTitle( ENC( "Paladin Extensions Debug Console" ) );
+#endif
 	if ( !_Filesystem.Setup( )
 		|| !_Log.Setup( )
 		|| !_Cryptography.Setup( )
@@ -61,6 +70,9 @@ inline void ShutdownFramework( )
 	_Cryptography.Shutdown( );
 	_Log.Shutdown( );
 	_Filesystem.Shutdown( );
+#if defined _DEBUG
+	delete pConsoleWindow;
+#endif
 }
 
 #if defined USE_NAMESPACES
@@ -83,4 +95,5 @@ using namespace Interface;
 #define DRAW ( _Drawing )
 #define AUTH  ( _Authentication )
 #define SI ( _SystemInformation )
+#define MEM ( _MemoryManager )
 #endif

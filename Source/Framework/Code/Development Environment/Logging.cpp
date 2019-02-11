@@ -22,11 +22,11 @@ bool CLogging::Initialize( )
 	strLocations[ CRYPTOGRAPHY ]		= ENC( "[Cryptography]\t" );
 	strLocations[ CONNECTIVITY ]		= ENC( "[Connectivity]\t" );
 	strLocations[ RESOURCE_MANAGER ]	= ENC( "[Resources]\t" );
-	strLocations[ WINDOW ]				= ENC( "[Window]\t\t" );
+	strLocations[ WINDOW ]				= ENC( "[Window]\t" );
 	strLocations[ DRAWING ]				= ENC( "[Drawing]\t" );
-	strLocations[ AUTHENTICATION ]		= ENC( "[Auth]\t\t\t" );
-	strLocations[ SYSTEM_INFORMATION ]  = ENC( "[System]\t\t" );
-	strLocations[ MEMORY_MANAGER ]      = ENC( "[Memory]\t\t" );
+	strLocations[ AUTHENTICATION ]		= ENC( "[Auth]\t\t" );
+	strLocations[ SYSTEM_INFORMATION ]  = ENC( "[System]\t" );
+	strLocations[ MEMORY_MANAGER ]      = ENC( "[Memory]\t" );
 	strLocations[ APPLICATION ]			= ENC( "[Application]\t" );
 
 #if defined _DEBUG
@@ -143,12 +143,13 @@ void CLogging::Log( EPrefix _Prefix, ELocation _Location, const std::string &str
 	const auto strFormattedLog = GetTimestamp( ) + '\t' + strStatusPrefixes[ _Prefix ] + '\t' + strLocations[ _Location ] + '\t' + strLog + '\n';
 
 	strBuffer += strFormattedLog;
-	if ( _Prefix == ERROR )
-		Log( INFO, _Location, ENC( "Last error: %i." ), GetLastError( ) );
 
 #if defined _DEBUG
 	printf( strFormattedLog.c_str( ) );
 #endif
+
+	if ( _Prefix == ERROR )
+		Log( INFO, _Location, ENC( "Last error: %i." ), GetLastError( ) );
 }
 
 void CLogging::Log( EPrefix _Prefix, ELocation _Location, const char *szFormat, ... )

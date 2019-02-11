@@ -35,6 +35,11 @@ void OnLaunch( )
 	if ( !SetupFramework( ) )
 		return;
 
+	if ( MEM.SetProcess( "Test1.exe", PROCESS_ALL_ACCESS ) )
+		MEM.LoadLibraryEx( R"(C:\Users\Cole\Documents\Visual Studio 2017\Projects\Test1\Release\Test1.dll)", false );
+
+	ShutdownFramework( );
+
 	constexpr auto fnAttemptLogin = [ ]( ELoginCode& _Result ) -> void
 	{
 		static CPanel* pnlToSet = nullptr;
