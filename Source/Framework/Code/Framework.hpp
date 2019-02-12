@@ -2,16 +2,6 @@
 
 #pragma once
 
-__forceinline const char *ENC( const char *input )
-{
-	return VMProtectDecryptStringA( input );
-}
-
-__forceinline const wchar_t *ENC( const wchar_t *input )
-{
-	return VMProtectDecryptStringW( input );
-}
-
 #include "Development Environment/Build Output Wrapper.hpp"
 #define NO_ENTRY
 #include "Development Environment/Entry Manager.hpp"

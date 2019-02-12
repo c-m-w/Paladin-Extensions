@@ -4,7 +4,7 @@
 
 // Compiler
 #pragma warning( push, 0 ) // warning level set to 0
-#include <codeanalysis/warnings.h>
+#include <CodeAnalysis/Warnings.h>
 #pragma warning( disable: ALL_CODE_ANALYSIS_WARNINGS )
 
 // VMProtect

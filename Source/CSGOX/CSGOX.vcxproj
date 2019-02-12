@@ -175,6 +175,9 @@
     <ClInclude Include="Code\Source Development Kit\Toolkits\header.h" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\CSGO SDK\CSGO SDK.vcxproj">
+      <Project>{09490215-55d2-4a3d-be81-40167e089761}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\Framework\Framework.vcxproj">
       <Project>{e8104b83-4e8a-4a91-bb3a-c8b17ed45acf}</Project>
     </ProjectReference>

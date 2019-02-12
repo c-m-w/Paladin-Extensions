@@ -100,3 +100,13 @@ VMP_IMPORT int VMP_API VMProtectGetOfflineDeactivationString(const char *serial,
 #ifdef __cplusplus
 }
 #endif
+
+__forceinline const char* ENC( const char* input )
+{
+	return VMProtectDecryptStringA( input );
+}
+
+__forceinline const wchar_t* ENC( const wchar_t* input )
+{
+	return VMProtectDecryptStringW( input );
+}
