@@ -25,7 +25,7 @@ bool CLogging::Initialize( )
 	strLocations[ WINDOW ]				= ENC( "[Window]\t" );
 	strLocations[ DRAWING ]				= ENC( "[Drawing]\t" );
 	strLocations[ AUTHENTICATION ]		= ENC( "[Auth]\t\t" );
-	strLocations[ SYSTEM_INFORMATION ]  = ENC( "[System]\t" );
+	strLocations[ SYSTEM_UTILITIES ]  = ENC( "[System]\t" );
 	strLocations[ MEMORY_MANAGER ]      = ENC( "[Memory]\t" );
 	strLocations[ APPLICATION ]			= ENC( "[Application]\t" );
 

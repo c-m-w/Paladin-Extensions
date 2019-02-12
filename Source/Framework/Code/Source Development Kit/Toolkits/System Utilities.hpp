@@ -36,8 +36,10 @@ public:
 		SYS_MAX
 	};
 
-	Utilities::vector2_t GetScreenSize( ); // todo move to system information
-	void OpenLink( const std::string& strLink ); // todo move somewhere more fitting
+	Utilities::vector2_t GetScreenSize( );
+	void OpenLink( const std::string& strLink );
+	bool GetClipboardData( std::string& strOut );
+	bool SetClipboardData( const std::string& strIn );
 
 	void AddDeviceToQueue( const device_info_t& _DeviceInfo );
 	bool ProcessQueue( );

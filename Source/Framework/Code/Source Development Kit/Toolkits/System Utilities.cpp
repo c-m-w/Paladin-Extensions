@@ -20,7 +20,7 @@ bool CSystemInformation::ProcessQueue( )
 	{
 		const auto hrReturn = CoInitialize( nullptr );
 		if ( hrReturn != S_OK && hrReturn != S_FALSE )
-			return _Log.Log( EPrefix::ERROR, ELocation::SYSTEM_INFORMATION,
+			return _Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES,
 							 ENC( "Couldn't initialize COM library for device information retrieval. Error %i." ), hrReturn ), false;
 	}
 
@@ -28,7 +28,7 @@ bool CSystemInformation::ProcessQueue( )
 		const auto hrReturn = CoInitializeSecurity( nullptr, -1, nullptr, nullptr, RPC_C_AUTHN_LEVEL_DEFAULT,
 													RPC_C_IMP_LEVEL_IMPERSONATE, nullptr, EOAC_NONE, nullptr );
 		if ( hrReturn != S_OK && hrReturn != RPC_E_TOO_LATE )
-			return CoUninitialize( ), _Log.Log( EPrefix::ERROR, ELocation::SYSTEM_INFORMATION,
+			return CoUninitialize( ), _Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES,
 												ENC( "Couldn't set security for device information retrieval. Error %i." ), hrReturn ), false;
 	}
 
@@ -37,7 +37,7 @@ bool CSystemInformation::ProcessQueue( )
 		const auto hrReturn = CoCreateInstance( CLSID_WbemLocator, nullptr, CLSCTX_INPROC_SERVER,
 												IID_IWbemLocator, reinterpret_cast< LPVOID* >( &pLocator ) );
 		if ( hrReturn != S_OK || pLocator == nullptr )
-			return CoUninitialize( ), _Log.Log( EPrefix::ERROR, ELocation::SYSTEM_INFORMATION,
+			return CoUninitialize( ), _Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES,
 												ENC( "Couldn't create locator object for device information retrieval. Error %i." ), hrReturn ), false;
 	}
 
@@ -47,14 +47,14 @@ bool CSystemInformation::ProcessQueue( )
 												 0, nullptr, nullptr, &pServices );
 		if ( hrReturn != S_OK || pServices == nullptr )
 			return pLocator->Release( ), CoUninitialize( ),
-					_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_INFORMATION,
+					_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES,
 							  ENC( "Couldn't connect DCOM to WMI for device information retrieval. Error %i." ), hrReturn ), false;
 
 		hrReturn = CoSetProxyBlanket( pServices, RPC_C_AUTHN_WINNT, RPC_C_AUTHZ_NONE, nullptr, RPC_C_AUTHN_LEVEL_CALL,
 									  RPC_C_IMP_LEVEL_IMPERSONATE, nullptr, EOAC_NONE );
 		if ( hrReturn != S_OK )
 			return pServices->Release( ), pLocator->Release( ), CoUninitialize( ),
-					_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_INFORMATION,
+					_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES,
 							  ENC( "Couldn't set authentication information on proxy for device information retrieval. Error %i." ), hrReturn ), false;
 	}
 
@@ -68,7 +68,7 @@ bool CSystemInformation::ProcessQueue( )
 														WBEM_FLAG_FORWARD_ONLY | WBEM_FLAG_RETURN_IMMEDIATELY, nullptr, &pEnumerator );
 			if ( hrReturn != S_OK || pEnumerator == nullptr )
 				return pServices->Release( ), pLocator->Release( ), CoUninitialize( ),
-				_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_INFORMATION,
+				_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES,
 						  ENC( "Couldn't set authentication information on proxy for device information retrieval. Error %i." ), hrReturn ), false;
 		}
 
@@ -83,7 +83,7 @@ bool CSystemInformation::ProcessQueue( )
 			if ( hrReturn != S_OK )
 			{
 				pEnumerator->Release( ),
-					_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_INFORMATION,
+					_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES,
 							  ENC( "Couldn't iterate through device information. Error %i." ), hrReturn );
 				break;
 			}
@@ -93,7 +93,7 @@ bool CSystemInformation::ProcessQueue( )
 			if ( hrReturn != S_OK )
 			{
 				pClassObject->Release( ), pEnumerator->Release( ),
-					_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_INFORMATION,
+					_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES,
 							  ENC( "Couldn't iterate through device information. Error %i." ), hrReturn );
 				break;
 			}
@@ -107,21 +107,20 @@ bool CSystemInformation::ProcessQueue( )
 			if ( hrReturn != S_OK )
 			{
 				pClassObject->Release( ), pEnumerator->Release( ),
-					_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_INFORMATION,
+					_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES,
 							  ENC( "Couldn't clear device information prop. Error %i." ), hrReturn );
 				break;
 			}
 			pClassObject->Release( );
 		}
 
-		//review uncomment
 		if ( _DeviceInformation.pValue->empty( ) )
-			_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_INFORMATION, ENC( "Unable to get device information. Device: %s. Property: %s." ),
+			_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES, ENC( "Unable to get device information. Device: %s. Property: %s." ),
 					  string_cast< std::string >( _DeviceInformation.wstrDevice ).c_str( ), string_cast< std::string >( _DeviceInformation.wstrProperty ).c_str( ) );
 
 		pEnumerator->Release( );
 	}
-	pServices->Release( );
+	pServices->Release( ); // todo probably should check the returns of release and uninits
 	pLocator->Release( );
 	CoUninitialize( );
 
@@ -133,24 +132,21 @@ bool CSystemInformation::GetProcessThreads( DWORD dwProcessID, std::vector< DWOR
 {
 	if ( dwProcessID == 0
 		 || dwProcessID == UINT_MAX )
-	{
-		_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_INFORMATION, ENC( "Invalid process ID passed to GetProcessThreads( )." ) );
-		return { };
-	}
+		return _Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES, ENC( "Invalid process ID passed to GetProcessThreads( )." ) ), false;
 
 	const auto hSnapshot = CreateToolhelp32Snapshot( TH32CS_SNAPTHREAD, NULL );
 	vecOut.clear( );
 
 	if ( hSnapshot == INVALID_HANDLE_VALUE
 		 || hSnapshot == nullptr )
-		return _Log.Log( EPrefix::WARNING, ELocation::SYSTEM_INFORMATION, ENC( "Unable to get system threads." ) ), false;
+		return _Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES, ENC( "Unable to get system threads." ) ), false;
 
 	auto bReturn = true;
 	THREADENTRY32 _CurrentThread { sizeof( THREADENTRY32 ) };
 
 	if ( Thread32First( hSnapshot, &_CurrentThread ) != TRUE )
 	{
-		_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_INFORMATION, ENC( "Unable to get information of first thread." ) );
+		_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES, ENC( "Unable to get information of first thread." ) );
 		bReturn = false;
 	}
 	else
@@ -162,7 +158,7 @@ bool CSystemInformation::GetProcessThreads( DWORD dwProcessID, std::vector< DWOR
 		} while ( Thread32Next( hSnapshot, &_CurrentThread ) == TRUE );
 
 	if ( CloseHandle( hSnapshot ) == FALSE )
-		_Log.Log( EPrefix::WARNING, ELocation::SYSTEM_INFORMATION, ENC( "Unable to close process thread snapshot properly." ) );
+		_Log.Log( EPrefix::WARNING, ELocation::SYSTEM_UTILITIES, ENC( "Unable to close process thread snapshot properly." ) );
 
 	return bReturn && !vecOut.empty( );
 }
@@ -174,16 +170,13 @@ bool CSystemInformation::GetProcessID( const std::string &strExecutableName, DWO
 
 	if ( hSnapshot == INVALID_HANDLE_VALUE
 		 || hSnapshot == nullptr )
-	{
-		_Log.Log( EPrefix::WARNING, ELocation::SYSTEM_INFORMATION, ENC( "Unable to get processes." ) );
-		return false;
-	}
+		return _Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES, ENC( "Unable to get processes." ) ), false;
 
 	auto bReturn = true;
 	PROCESSENTRY32 _CurrentProcess { sizeof( PROCESSENTRY32 ) };
 	if ( Process32First( hSnapshot, &_CurrentProcess ) != TRUE )
 	{
-		_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_INFORMATION, ENC( "Unable to find first process." ) );
+		_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES, ENC( "Unable to find first process." ) );
 		bReturn = false;
 	}
 	else
@@ -191,12 +184,11 @@ bool CSystemInformation::GetProcessID( const std::string &strExecutableName, DWO
 		{
 			if ( _CurrentProcess.szExeFile == strExecutableName )
 				dwOut = _CurrentProcess.th32ProcessID;
-
 		} while ( Process32Next( hSnapshot, &_CurrentProcess ) == TRUE
 				  && dwOut == 0 );
 
 	if ( CloseHandle( hSnapshot ) == FALSE )
-		_Log.Log( EPrefix::WARNING, ELocation::SYSTEM_INFORMATION, ENC( "Unable to close process thread snapshot properly." ) );
+		_Log.Log( EPrefix::WARNING, ELocation::SYSTEM_UTILITIES, ENC( "Unable to close process thread snapshot properly." ) );
 
 	return bReturn && dwOut != NULL;
 }
@@ -215,10 +207,7 @@ bool CSystemInformation::ElevateProcess( HANDLE hProcess /*= GetCurrentProcess( 
 	if ( FALSE == OpenProcessToken( hProcess, TOKEN_QUERY | TOKEN_ADJUST_PRIVILEGES, &hTokenSelf )
 		 || !hTokenSelf
 		 || FALSE == GetTokenInformation( hTokenSelf, TokenElevation, &teSelf, sizeof( TOKEN_ELEVATION ), &dwReturnLength ) )
-	{
-		hTokenSelf && CloseHandle( hTokenSelf );
-		return false;
-	}
+		return hTokenSelf && CloseHandle( hTokenSelf ), false;
 
 	TOKEN_PRIVILEGES tpNewDebug { };
 	TOKEN_PRIVILEGES tpNewShutdown { };
@@ -233,17 +222,11 @@ bool CSystemInformation::ElevateProcess( HANDLE hProcess /*= GetCurrentProcess( 
 		 || FALSE == LookupPrivilegeValue( nullptr, SE_SHUTDOWN_NAME, &tpNewShutdown.Privileges[ 0 ].Luid )
 		 || FALSE == AdjustTokenPrivileges( hTokenSelf, FALSE, &tpNewDebug, 0, nullptr, nullptr )
 		 || FALSE == AdjustTokenPrivileges( hTokenSelf, FALSE, &tpNewShutdown, 0, nullptr, nullptr ) )
-	{
-		hTokenSelf && CloseHandle( hTokenSelf );
-		return false;
-	}
+		return hTokenSelf&& CloseHandle( hTokenSelf ), false;
 
 	if ( FALSE == GetTokenInformation( hTokenSelf, TokenElevation, &teSelf, sizeof( TOKEN_ELEVATION ), &dwReturnLength )
 		 || FALSE == teSelf.TokenIsElevated )
-	{
-		hTokenSelf && CloseHandle( hTokenSelf );
-		return false;
-	}
+		return hTokenSelf && CloseHandle( hTokenSelf ), false;
 
 	return true;
 }
@@ -260,4 +243,72 @@ vector2_t CSystemInformation::GetScreenSize( )
 void CSystemInformation::OpenLink( const std::string & strLink )
 {
 	ShellExecute( nullptr, ENC( "open" ), strLink.c_str( ), nullptr, nullptr, SW_SHOWNORMAL );
+}
+
+bool CSystemInformation::GetClipboardData( std::string &strOut )
+{
+	if ( OpenClipboard( nullptr ) == 0 )
+		return _Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES, ENC( "Failed to open clipboard for copying." ) ), false;
+
+	const auto hClipboard =	::GetClipboardData( CF_TEXT );
+	if ( hClipboard == nullptr )
+	{
+		_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES, ENC( "Failed to get global memory for clipboard data." ) );
+		if ( CloseClipboard( ) == 0 )
+			_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES, ENC( "Failed to close clipboard after error." ) );
+		return false;
+	}
+
+	strOut = static_cast< char* >( hClipboard );
+
+	if ( CloseClipboard( ) == 0 )
+		_Log.Log( EPrefix::WARNING, ELocation::SYSTEM_UTILITIES, ENC( "Failed to close clipboard after error." ) );
+	return true;
+}
+
+bool CSystemInformation::SetClipboardData( const std::string& strIn )
+{
+	if ( OpenClipboard( nullptr ) == 0 )
+		return _Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES, ENC( "Failed to open clipboard for copying." ) ), false;
+
+	if ( EmptyClipboard( ) == 0 )
+	{
+		_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES, ENC( "Failed to empty clipboard for copying." ) );
+		if ( CloseClipboard( ) == 0 )
+			_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES, ENC( "Failed to close clipboard after error." ) );
+		return false;
+	}
+
+	const auto hClipboard = GlobalAlloc( GMEM_FIXED, strIn.length( ) );
+	if ( hClipboard == nullptr )
+	{
+		_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES, ENC( "Failed to create global memory for clipboard data." ) );
+		if ( CloseClipboard( ) == 0 )
+			_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES, ENC( "Failed to close clipboard after error." ) );
+		return false;
+	}
+
+	if ( strcpy_s( static_cast< char* >( hClipboard ), strIn.length( ), strIn.c_str( ) ) != 0 )
+	{
+		_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES, ENC( "Failed to copy desired clipboard data to global clipboard memory." ) );
+		if ( GlobalFree( hClipboard ) != nullptr )
+			_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES, ENC( "Failed to free global memory for clipboard data." ) );
+		if ( CloseClipboard( ) == 0 )
+			_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES, ENC( "Failed to close clipboard after error." ) );
+		return false;
+	}
+
+	if ( ::SetClipboardData( CF_TEXT, hClipboard ) == nullptr )
+	{
+		_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES, ENC( "Failed to set clipboard data." ) );
+		if ( GlobalFree( hClipboard ) != nullptr )
+			_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES, ENC( "Failed to free global memory for clipboard data." ) );
+		if ( CloseClipboard( ) != 0 )
+			_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES, ENC( "Failed to close clipboard after error." ) );
+		return false;
+	}
+
+	if ( CloseClipboard( ) == 0 )
+		_Log.Log( EPrefix::WARNING, ELocation::SYSTEM_UTILITIES, ENC( "Failed to close clipboard after error." ) );
+	return true;
 }
