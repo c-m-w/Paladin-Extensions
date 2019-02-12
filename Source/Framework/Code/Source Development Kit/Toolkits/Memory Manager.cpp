@@ -39,14 +39,6 @@ worker_t::worker_t( HANDLE hThread, DWORD dwAccess ): hThread( hThread ), dwCurr
 		_Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Unable to get thread id from handle %08X." ), hThread );
 }
 
-worker_t::~worker_t( )
-{
-	if ( bSuspended )
-		Resume( );
-
-	CloseHandle( hThread );
-}
-
 bool worker_t::GetContext( CONTEXT &_Out )
 {
 	_Out.ContextFlags = CONTEXT_FULL;
@@ -129,24 +121,14 @@ bool worker_t::SetInstructionPointer( void *pNew )
 	return GetContext( _Thread ) ? ( _Thread.Eip = DWORD( pNew ), SetContext( _Thread ) ? true : false ) : false;
 }
 
-bool worker_t::SimulateFunctionCall( void *pFunction, void *pParameter )
+bool worker_t::SimulateFunctionCall( void *pFunction )
 {
 	CONTEXT _ThreadContext;
 
 	if ( !Suspend( )
-		 || !GetContext( _ThreadContext ) )
-		return false;
-
-	if ( pParameter != nullptr )
-	{
-		_ThreadContext.Esp -= sizeof( void * );
-		if ( !_MemoryManager.Write< void * >( reinterpret_cast< void* >( _ThreadContext.Esp ), pParameter ) )
-			return false;
-	}
-
-	_ThreadContext.Esp -= sizeof( void * );
-	if ( !_MemoryManager.Write< DWORD >( reinterpret_cast< void* >( _ThreadContext.Esp ), _ThreadContext.Eip ) )
-		return false;
+		 || !GetContext( _ThreadContext )
+		 || !Push( _ThreadContext.Eip ) )
+		return Resume( ), false;
 
 	_ThreadContext.Eip = DWORD( pFunction );
 	return SetContext( _ThreadContext ) && Resume( );
@@ -205,7 +187,7 @@ bool CMemoryManager::CreateWorker( worker_t &_Worker, void *&pExit )
 
 	DWORD dwThreadID;
 	_Worker = worker_t( CreateRemoteThread( hProcess, nullptr, NULL, LPTHREAD_START_ROUTINE( pThreadEnvironment ), pExit, NULL, &dwThreadID ), THREAD_ALL_ACCESS );
-	return _Worker.Valid( ) ? true : ( _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to create a worker." ) ), false );
+	return _Worker.Valid( ) && _Worker.Resume( ) ? true : ( _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to create a worker." ) ), false );
 }
 
 bool CMemoryManager::FindWorker( worker_t &_Worker, DWORD dwHandleAccess, void *&pExit )
@@ -220,26 +202,7 @@ bool CMemoryManager::FindWorker( worker_t &_Worker, DWORD dwHandleAccess, void *
 			return false;
 
 	_Worker = worker_t( vecThreads[ 0 ], dwHandleAccess );
-	return _Worker.Valid( ) && _Worker.SimulateFunctionCall( pThreadEnvironment, pExit );
-
-	//if ( !_Worker.Valid( )
-	//	 || !_Worker.Suspend( ) )
-	//	return false;
-	//
-	//CONTEXT _ThreadContext;
-	//if ( !_Worker.GetContext( _ThreadContext ) )
-	//	return false;
-	//
-	//_ThreadContext.Esp -= sizeof( bool * );
-	//if ( !Write< void * >( reinterpret_cast< void* >( _ThreadContext.Esp ), pExit ) )
-	//	return false;
-	//
-	//_ThreadContext.Esp -= sizeof( void * );
-	//if ( !Write< DWORD >( reinterpret_cast< void* >( _ThreadContext.Esp ), _ThreadContext.Eip ) )
-	//	return false;
-	//
-	//_ThreadContext.Esp = DWORD( pThreadEnvironment );
-	//return _Worker.SetContext( _ThreadContext ) && _Worker.Resume( );
+	return _Worker.Valid( ) && _Worker.Push( pExit ) && _Worker.SimulateFunctionCall( pThreadEnvironment );
 }
 
 bool CMemoryManager::Read( void* pAddress, void* pOut, std::size_t zSize )
@@ -315,7 +278,7 @@ bool CMemoryManager::FreeMemory( void *pAddress )
 	return VirtualFreeEx( hProcess, pAddress, 0, MEM_RELEASE ) == FALSE ? _Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Unable to release memory." ) ), false : true;
 }
 
-bool CMemoryManager::LoadLibraryEx( const std::string &strPath, bool bUseExistingThread )
+bool CMemoryManager::LoadLibraryEx( const std::string &strPath, bool bUseExistingThread, HMODULE *pModuleHandle /*= nullptr*/ )
 {
 	worker_t _Worker;
 	void *pExit = nullptr;
@@ -347,7 +310,16 @@ bool CMemoryManager::LoadLibraryEx( const std::string &strPath, bool bUseExistin
 					reinterpret_cast< void * >( _WrapperData.bLoadLibraryExWrapper ), LOAD_LIBRARY_EX_WRAPPER_SIZE ) )
 		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to write load library wrapper data to memory." ) ), false;
 
-	auto b = true;
-	return _Worker.SimulateFunctionCall( reinterpret_cast< void * >( std::uintptr_t( pLoadLibraryExWrapper ) + sizeof( void * ) * 2 ), nullptr ) && Write( pExit, b )
-		&& bUseExistingThread ? _Worker.WaitForExecutionFinish( INFINITE ) : true;
+	if ( !_Worker.SimulateFunctionCall( reinterpret_cast< void * >( std::uintptr_t( pLoadLibraryExWrapper ) + sizeof( void * ) * 2 ) ) )
+		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to call the LoadLibraryExWrapper shellcode." ) ), false;
+
+	CONTEXT _ThreadContext;
+	do
+	{
+		if ( !_Worker.GetContext( _ThreadContext ) )
+			return false;
+
+	} while ( _ThreadContext.Ecx != DONE_LOADING_LIBRARY );
+
+	return Write( pExit, true )	&& ( bUseExistingThread ? true : ( _Worker.WaitForExecutionFinish( INFINITE ), true ) );
 }

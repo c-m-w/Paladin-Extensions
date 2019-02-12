@@ -27,6 +27,8 @@ inline void __declspec( naked ) ThreadEnvironmentEnd( )
 
 #pragma optimize( "", on )
 
+#define DONE_LOADING_LIBRARY ( 0xDEADBEEF )
+
 #pragma optimize( "", off )
 /// LoadLibraryExWrapper - 8h = szLibraryPath
 /// LoadLibraryExWrapper - 4h = LoadLibraryA
@@ -37,18 +39,19 @@ inline void __declspec( naked ) LoadLibraryExWrapper( )
 		pushad
 		pushfd
 
-		call Prepare
+		call	Prepare
 
 		Prepare:
 
-			mov		eax, [ esp ]
-			sub		eax, 0xE
-			push	eax
-			add		eax, 4
-			call	eax
+			mov		eax,	[ esp ]
+			sub		eax,	0xF
+			push	dword ptr[ eax ]
+			add		eax,	4
+			call	[ eax ]
 
 		popad
 		popfd
+		mov		ecx, DONE_LOADING_LIBRARY
 		ret
 	}
 }
@@ -87,7 +90,6 @@ public:
 	worker_t( ) = default;
 	explicit worker_t( DWORD dwThreadID, DWORD dwNewAccess );
 	explicit worker_t( HANDLE hThread, DWORD dwAccess );
-	~worker_t( );
 
 	bool GetContext( CONTEXT &_Out );
 	bool SetContext( CONTEXT &_New );
@@ -98,8 +100,10 @@ public:
 	bool Terminate( DWORD dwExitCode = EXIT_SUCCESS );
 	bool GetInstructionPointer( void *&pOut );
 	bool SetInstructionPointer( void *pNew );
-	bool SimulateFunctionCall( void *pFunction, void *pParameter );
+	bool SimulateFunctionCall( void *pFunction );
 	bool WaitForExecutionFinish( DWORD dwTime = INFINITE );
+	template< typename _t > bool Push( _t _Value );
+	template< typename _t > bool Pop( _t &_Out );
 };
 
 class CMemoryManager
@@ -121,13 +125,13 @@ public:
 	bool FindWorker( worker_t &_Worker, DWORD dwHandleAccess, void *&pExit );
 
 	bool Read( void* pAddress, void* pOut, std::size_t zSize );
-	template< typename _t > bool Read( void* pAddress, _t& _Out );
+	template< typename _t > bool Read( void* pAddress, _t _Out );
 	bool Write( void* pAddress, void* pValue, std::size_t zSize );
-	template< typename _t > bool Write( void* pAddress, _t& _Value );
+	template< typename _t > bool Write( void* pAddress, _t _Value );
 	bool AllocateMemory( void *&pAddress, std::size_t zSize, DWORD dwAccess );
 	bool WipeMemory( void *pAddress, std::size_t zSize );
 	bool FreeMemory( void *pAddress );
-	bool LoadLibraryEx( const std::string &strPath, bool bUseExistingThread );
+	bool LoadLibraryEx( const std::string &strPath, bool bUseExistingThread, HMODULE *pModuleHandle = nullptr );
 } inline _MemoryManager;
 
 #include "Memory Manager.inl"
