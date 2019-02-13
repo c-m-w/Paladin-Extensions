@@ -16,9 +16,11 @@ class CSystemInformation
 {
 private:
 
+	using thread_list_t = std::vector< std::pair< DWORD, DWORD > >;
+
 	std::vector< device_info_t > vecInformation;
 
-	[ [ nodiscard ] ] static bool GetProcessThreads( DWORD dwProcessID, std::vector< DWORD >& vecOut );
+	[ [ nodiscard ] ] static bool GetProcessThreads( DWORD dwProcessID, thread_list_t& _Out );
 	[ [ nodiscard ] ] static bool GetProcessID( const std::string &strExecutableName, DWORD& dwOut );
 	static bool ElevateProcess( HANDLE hProcess = GetCurrentProcess( ) );
 

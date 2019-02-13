@@ -15,7 +15,8 @@ template< typename _t > bool worker_t::Push( _t _Value )
 		return false;
 
 	_ThreadContext.Esp -= sizeof( _t );
-	return _MemoryManager.Write( reinterpret_cast< void * >( _ThreadContext.Esp ), _Value ) && SetContext( _ThreadContext );
+	return _MemoryManager.Write( reinterpret_cast< void * >( _ThreadContext.Esp ), _Value )
+		&& SetContext( _ThreadContext );
 }
 
 template< typename _t > bool worker_t::Pop( _t &_Out )

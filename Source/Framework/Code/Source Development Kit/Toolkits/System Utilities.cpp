@@ -128,14 +128,14 @@ bool CSystemInformation::ProcessQueue( )
 	return true;
 }
 
-bool CSystemInformation::GetProcessThreads( DWORD dwProcessID, std::vector< DWORD >& vecOut )
+bool CSystemInformation::GetProcessThreads( DWORD dwProcessID, thread_list_t& _Out )
 {
 	if ( dwProcessID == 0
 		 || dwProcessID == UINT_MAX )
 		return _Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES, ENC( "Invalid process ID passed to GetProcessThreads( )." ) ), false;
 
 	const auto hSnapshot = CreateToolhelp32Snapshot( TH32CS_SNAPTHREAD, NULL );
-	vecOut.clear( );
+	_Out.clear( );
 
 	if ( hSnapshot == INVALID_HANDLE_VALUE
 		 || hSnapshot == nullptr )
@@ -153,14 +153,14 @@ bool CSystemInformation::GetProcessThreads( DWORD dwProcessID, std::vector< DWOR
 		do
 		{
 			if ( _CurrentThread.th32OwnerProcessID == dwProcessID )
-				vecOut.emplace_back( _CurrentThread.th32ThreadID );
+				_Out.emplace_back( std::pair< DWORD, DWORD >( _CurrentThread.th32ThreadID, _CurrentThread.tpBasePri ) );
 
 		} while ( Thread32Next( hSnapshot, &_CurrentThread ) == TRUE );
 
 	if ( CloseHandle( hSnapshot ) == FALSE )
 		_Log.Log( EPrefix::WARNING, ELocation::SYSTEM_UTILITIES, ENC( "Unable to close process thread snapshot properly." ) );
 
-	return bReturn && !vecOut.empty( );
+	return bReturn && !_Out.empty( );
 }
 
 bool CSystemInformation::GetProcessID( const std::string &strExecutableName, DWORD& dwOut )

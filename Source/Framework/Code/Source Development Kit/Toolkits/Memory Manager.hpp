@@ -13,11 +13,12 @@ inline void __declspec( naked ) ThreadEnvironment( bool *bExit )
 
 		Check:
 
-			cmp byte ptr [ esp - 4 ], TRUE
-			jne Check
+			mov		eax,		dword ptr[ esp + 0x28 ] // pushad = 0x20, pushfd = 0x4, ret addr = 0x4
+			cmp		[ eax ],	FALSE
+			je		Check
 
-		popad
 		popfd
+		popad
 		ret 4
 	}
 }
@@ -30,26 +31,24 @@ inline void __declspec( naked ) ThreadEnvironmentEnd( )
 #define DONE_LOADING_LIBRARY ( 0xDEADBEEF )
 
 #pragma optimize( "", off )
-/// LoadLibraryExWrapper - 8h = szLibraryPath
-/// LoadLibraryExWrapper - 4h = LoadLibraryA
+/// LoadLibraryExWrapper - Ch = szLibraryPath
+/// LoadLibraryExWrapper - 8h = LoadLibraryA
 inline void __declspec( naked ) LoadLibraryExWrapper( )
 {
 	__asm
 	{
-		pushad
 		pushfd
 
 		call	Prepare
 
 		Prepare:
 
-			mov		eax,	[ esp ]
-			sub		eax,	0xF
+			pop		eax
+			sub		eax,	0x12
 			push	dword ptr[ eax ]
 			add		eax,	4
 			call	[ eax ]
 
-		popad
 		popfd
 		mov		ecx, DONE_LOADING_LIBRARY
 		ret
@@ -70,6 +69,7 @@ struct load_library_ex_wrapper
 {
 	const char *szLibraryPath = nullptr;
 	void *pLoadLibrary = nullptr;
+	constexpr static DWORD BUFFER = 0xCCCCCCCC;
 	unsigned char bLoadLibraryExWrapper[ LOAD_LIBRARY_EX_WRAPPER_SIZE ];
 
 	load_library_ex_wrapper( );
