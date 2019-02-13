@@ -50,15 +50,10 @@
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
-#pragma comment( lib, "freetype.lib" )
-
-// OpenSSL
 #if defined _DEBUG
-#pragma comment( lib, "libcryptod.lib" )
-#pragma comment( lib, "libssld.lib" )
+#pragma comment( lib, "freetyped.lib" )
 #else
-#pragma comment( lib, "libcrypto.lib" )
-#pragma comment( lib, "libssl.lib" )
+#pragma comment( lib, "freetype.lib" )
 #endif
 
 // cURL
