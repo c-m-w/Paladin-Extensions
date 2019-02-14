@@ -200,7 +200,7 @@ bool CMemoryManager::FindWorker( worker_t &_Worker, DWORD dwHandleAccess, void *
 
 	auto dwThreadID = _Threads.front( ).first, dwPriority = _Threads.front( ).second;
 	for ( auto &_Thread : _Threads )
-		if ( _Thread.second > dwPriority )
+		if ( _Thread.second < dwPriority )
 			dwThreadID = _Thread.first, dwPriority = _Thread.second;
 
 	if ( !pThreadEnvironment )
