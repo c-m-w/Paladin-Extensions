@@ -7,7 +7,7 @@
 #define USE_DEFINITIONS
 #include "../../Framework.hpp"
 
-load_library_ex_wrapper::load_library_ex_wrapper( )
+load_library_ex_wrapper_t::load_library_ex_wrapper_t( )
 {
 	memcpy( bLoadLibraryExWrapper, LoadLibraryExWrapper, LOAD_LIBRARY_EX_WRAPPER_SIZE );
 }
@@ -139,6 +139,66 @@ bool worker_t::SimulateFunctionCall( void *pFunction )
 bool worker_t::WaitForExecutionFinish( DWORD dwTime )
 {
 	return WaitForSingleObject( hThread, dwTime ) == WAIT_OBJECT_0 ? true : _Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Waiting for thread signal state failed." ) ), false;
+}
+
+image_info_t::image_info_t( void *pData ): pData( pData )
+{ }
+
+bool image_info_t::ValidImage( )
+{
+	return GetOperatingSystemHeader( )->e_magic == IMAGE_DOS_SIGNATURE
+		&& GetNewTechnologyHeaders( )->Signature == IMAGE_NT_SIGNATURE
+		&& ( GetNewTechnologyHeaders( )->FileHeader.Characteristics & IMAGE_FILE_DLL ) != NULL;
+}
+
+std::size_t image_info_t::GetImageSize( )
+{
+	return GetNewTechnologyHeaders( )->OptionalHeader.SizeOfImage;
+}
+
+std::size_t image_info_t::GetHeaderSize( )
+{
+	return GetNewTechnologyHeaders( )->OptionalHeader.SizeOfHeaders;
+}
+
+std::size_t image_info_t::GetSectionCount( )
+{
+	return GetNewTechnologyHeaders( )->FileHeader.NumberOfSections;
+}
+
+IMAGE_DOS_HEADER *image_info_t::GetOperatingSystemHeader( )
+{
+	return reinterpret_cast< IMAGE_DOS_HEADER * >( pData );
+}
+
+IMAGE_NT_HEADERS *image_info_t::GetNewTechnologyHeaders( void *pImageBase /*= nullptr*/ )
+{
+	return reinterpret_cast< IMAGE_NT_HEADERS * >( ( pImageBase == nullptr ? std::uintptr_t( pData ) : std::uintptr_t( pImageBase ) ) + GetOperatingSystemHeader( )->e_lfanew );
+}
+
+IMAGE_SECTION_HEADER *image_info_t::GetSectionHeader( std::size_t zSection )
+{
+	if ( zSection >= GetSectionCount( ) )
+		_Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Invalid section header index." ) ), zSection = GetSectionCount( ) - 1;
+
+	return &reinterpret_cast< IMAGE_SECTION_HEADER * >( std::uintptr_t( GetNewTechnologyHeaders( ) ) + sizeof( IMAGE_NT_HEADERS ) )[ zSection ];
+}
+
+IMAGE_BASE_RELOCATION *image_info_t::GetBaseRelocation( void *pImageBase /*= nullptr*/ )
+{
+	return reinterpret_cast< IMAGE_BASE_RELOCATION * >( ( pImageBase == nullptr ? std::uintptr_t( pData ) : std::uintptr_t( pImageBase ) ) +
+														GetNewTechnologyHeaders( pImageBase )->OptionalHeader.DataDirectory[ IMAGE_DIRECTORY_ENTRY_BASERELOC ].VirtualAddress );
+}
+
+void *image_info_t::GetBlock( std::size_t zBlock, void *pImageBase /*= nullptr*/ )
+{
+	return reinterpret_cast< void ** >( std::uintptr_t( GetBaseRelocation( pImageBase ) ) + sizeof( IMAGE_BASE_RELOCATION ) )[ zBlock ];
+}
+
+IMAGE_IMPORT_DESCRIPTOR *image_info_t::GetImportDescriptor( void *pImageBase /*= nullptr*/ )
+{
+	return reinterpret_cast< IMAGE_IMPORT_DESCRIPTOR * >( ( pImageBase == nullptr ? std::uintptr_t( pData ) : std::uintptr_t( pImageBase ) ) +
+														GetNewTechnologyHeaders( pImageBase )->OptionalHeader.DataDirectory[ IMAGE_DIRECTORY_ENTRY_IMPORT ].VirtualAddress );
 }
 
 bool CMemoryManager::SetProcess( const std::string &strExecutable, DWORD dwAccess )
@@ -293,42 +353,42 @@ bool CMemoryManager::LoadLibraryEx( const std::string &strPath, bool bUseExistin
 		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "LOAD_LIBRARY_EX_WRAPPER_SIZE needs to be updated." ) ), false;
 
 	if ( !pLoadLibraryExWrapper )
-		if ( !AllocateMemory( pLoadLibraryExWrapper, sizeof ( load_library_ex_wrapper ), PAGE_EXECUTE_READWRITE ) )
+		if ( !AllocateMemory( pLoadLibraryExWrapper, sizeof ( load_library_ex_wrapper_t ), PAGE_EXECUTE_READWRITE ) )
 			return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to allocate memory for LoadLibraryExWrapper." ) ), false;
 
 	if ( !AllocateMemory( pExit, sizeof( bool ), PAGE_READWRITE ) )
 		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to allocate memory for exiting." ) ), false;
 
 	if( !( bUseExistingThread ? FindWorker( _Worker, THREAD_ALL_ACCESS, pExit ) : CreateWorker( _Worker, pExit ) ) )
-		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to get worker thread to load library." ) ), false;
+		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to get worker thread to load library." ) ), FreeMemory( pExit ), false;
 
-	load_library_ex_wrapper _WrapperData;
+	load_library_ex_wrapper_t _WrapperData;
 
 	_WrapperData.szLibraryPath = reinterpret_cast< const char * >( std::uintptr_t( pLoadLibraryExWrapper ) + sizeof( void * ) * 3 + LOAD_LIBRARY_EX_WRAPPER_SIZE );
 	if ( !Write( pLoadLibraryExWrapper, _WrapperData.szLibraryPath )
 		 || !Write( reinterpret_cast< void * >( const_cast< char * >( _WrapperData.szLibraryPath ) ),
 					reinterpret_cast< void * >( const_cast< char * >( &strPath[ 0 ] ) ), strPath.length( ) * sizeof( char ) ) )
-		return false;
+		return FreeMemory( pExit ), false;
 
 	_WrapperData.pLoadLibrary = reinterpret_cast< decltype( _WrapperData.pLoadLibrary ) >( LoadLibraryA );
 	if ( !Write( reinterpret_cast< void * >( std::uintptr_t( pLoadLibraryExWrapper ) + sizeof( void * ) ), _WrapperData.pLoadLibrary )
 		 || !Write( reinterpret_cast< void * >( std::uintptr_t( pLoadLibraryExWrapper ) + sizeof( void * ) * 2 ), _WrapperData.BUFFER )
 		 || !Write( reinterpret_cast< void * >( std::uintptr_t( pLoadLibraryExWrapper ) + sizeof( void * ) * 3 ),
 					reinterpret_cast< void * >( _WrapperData.bLoadLibraryExWrapper ), LOAD_LIBRARY_EX_WRAPPER_SIZE ) )
-		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to write load library wrapper data to memory." ) ), false;
+		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to write load library wrapper data to memory." ) ), FreeMemory( pExit ), false;
 
 	if ( !_Worker.SimulateFunctionCall( reinterpret_cast< void * >( std::uintptr_t( pLoadLibraryExWrapper ) + sizeof( void * ) * 3 ) ) )
-		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to call the LoadLibraryExWrapper shellcode." ) ), false;
+		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to call the LoadLibraryExWrapper shellcode." ) ), FreeMemory( pExit ), false;
 
 	auto mmtWaitStart = GetMoment( );
 	CONTEXT _ThreadContext;
 	do
 	{
 		if ( !_Worker.GetContext( _ThreadContext ) )
-			return false;
+			return FreeMemory( pExit ), false;
 
 		if ( GetMoment( ) - mmtWaitStart >= MAX_LIBRARY_LOAD_TIME )
-			return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Waiting for ECX signal timed out while loading library." ) ), false;
+			return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Waiting for ECX signal timed out while loading library." ) ), FreeMemory( pExit ), false;
 
 		Pause( 50ui64 );
 	} while ( _ThreadContext.Ecx != DONE_LOADING_LIBRARY );
@@ -345,19 +405,97 @@ bool CMemoryManager::LoadLibraryEx( const std::string &strPath, bool bUseExistin
 		do
 		{
 			if ( !_Worker.GetContext( _ThreadContext ) )
-				return false;
+				return FreeMemory( pExit ), false;
 
 			if ( GetMoment( ) - mmtWaitStart >= MAX_LIBRARY_LOAD_TIME )
-				return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Waiting for thread execution to resume timed out." ) ), false;
+				return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Waiting for thread execution to resume timed out." ) ), FreeMemory( pExit ), false;
 
 			Pause( 50ui64 );
 		} while ( _ThreadContext.Eip >= std::uintptr_t( pThreadEnvironment )
 				  && _ThreadContext.Eip <= std::uintptr_t( pThreadEnvironment ) + THREAD_ENVIRONMENT_SIZE
 				  || _ThreadContext.Eip >= std::uintptr_t( pLoadLibraryExWrapper )
-				  && _ThreadContext.Eip <= std::uintptr_t( pLoadLibraryExWrapper ) + sizeof( load_library_ex_wrapper ) );
+				  && _ThreadContext.Eip <= std::uintptr_t( pLoadLibraryExWrapper ) + sizeof( load_library_ex_wrapper_t ) );
+
+		bSuccess &= _Worker.Close( );
 	}
 	else
 		_Worker.WaitForExecutionFinish( INFINITE );
 
 	return FreeMemory( pExit ) && bSuccess;
+}
+
+bool CMemoryManager::ManuallyLoadLibraryEx( const std::string &strData, bool bUseExistingThread, HMODULE *pModuleHandle /*= nullptr*/  )
+{
+	image_info_t _Image( reinterpret_cast< void * >( const_cast< char * >( &strData[ 0 ] ) ) );
+	worker_t _Worker;
+	void *pExit = nullptr, *pImage = nullptr;
+
+	const auto fnCleanup = [ & ]( ) -> void
+	{
+		if ( pExit )
+			FreeMemory( pExit );
+
+		if ( pImage )
+			FreeMemory( pImage );
+
+		pExit = pImage = nullptr;
+
+		if ( _Worker.Valid( ) )
+			_Worker.Close( );
+	};
+
+	if ( !_Image.ValidImage( ) )
+		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Invalid image passed to ManuallyLoadLibraryEx." ) ), false;
+
+	if ( !AllocateMemory( pExit, sizeof( bool ), PAGE_READWRITE ) )
+		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to allocate memory for exiting." ) ), false;
+
+	if ( !AllocateMemory( pImage, _Image.GetImageSize( ), PAGE_EXECUTE_READWRITE ) )
+		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to allocate memory for image." ) ), fnCleanup( ), false;
+
+	if ( !( bUseExistingThread ? FindWorker( _Worker, THREAD_ALL_ACCESS, pExit ) : CreateWorker( _Worker, pExit ) ) )
+		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to get worker thread to load library." ) ), fnCleanup( ), false;
+
+	if ( !Write( pImage, _Image.pData, _Image.GetHeaderSize( ) ) )
+		return fnCleanup( ), false;
+
+	for ( auto i = 0; i < _Image.GetSectionCount( ); i++ )
+	{
+		auto pSectionHeader = _Image.GetSectionHeader( i );
+		if ( !Write( reinterpret_cast< void * >( std::uintptr_t( pImage ) + pSectionHeader->VirtualAddress ), 
+					 reinterpret_cast< void * >( std::uintptr_t( _Image.pData ) + pSectionHeader->PointerToRawData ), pSectionHeader->SizeOfRawData ) )
+			return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to write section %i into memory." ), i ), fnCleanup( ), false;
+	}
+
+	const auto zRelocationAmount = std::uintptr_t( _Image.pData ) - _Image.GetNewTechnologyHeaders( )->OptionalHeader.ImageBase;
+
+	for ( auto p = _Image.GetBaseRelocation( ); p->VirtualAddress != NULL; p = reinterpret_cast< decltype( p ) >( std::uintptr_t( p ) + p->SizeOfBlock ) )
+	{
+		if ( p->SizeOfBlock < sizeof( IMAGE_BASE_RELOCATION ) )
+			continue;
+
+		const auto zBlocks = ( p->SizeOfBlock - sizeof( IMAGE_BASE_RELOCATION ) ) / sizeof( WORD );
+		void *pBlock = _Image.GetBlock( 0 );
+
+		for ( auto z = 0u; z < zBlocks; z++, pBlock = _Image.GetBlock( z ) )
+		{
+			if ( pBlock == nullptr )
+				continue;
+
+			const auto pRelocatee = reinterpret_cast< void ** >( std::uintptr_t( pImage ) + p->VirtualAddress + std::uintptr_t( pBlock ) );
+			void *pCurrent = nullptr;
+			if ( !Read( pRelocatee, &pCurrent )
+				 || !Write( pRelocatee, std::uintptr_t( pCurrent ) + std::uintptr_t( zRelocationAmount ) ) )
+				return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to relocate block %i." ), z ), fnCleanup( ), false;
+		}
+	}
+
+	if ( !_Worker.Push( nullptr )
+		 || !_Worker.Push( DLL_PROCESS_ATTACH )
+		 || !_Worker.Push( pImage )
+		 || !_Worker.SimulateFunctionCall( reinterpret_cast< void * >( std::uintptr_t( pImage ) + _Image.GetNewTechnologyHeaders( )->OptionalHeader.AddressOfEntryPoint ) ) )
+		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to call entry point." ) ), fnCleanup( ), false;
+
+
+	return true;
 }

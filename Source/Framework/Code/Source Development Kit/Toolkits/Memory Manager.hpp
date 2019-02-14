@@ -64,14 +64,14 @@ inline void __declspec( naked ) LoadLibraryExWrapperEnd( )
 #define LOAD_LIBRARY_EX_WRAPPER_SIZE ( 32 )
 #define LOAD_LIBRARY_EX_WRAPPER_SIZE_ ( std::uintptr_t( LoadLibraryExWrapperEnd ) - std::uintptr_t( LoadLibraryExWrapper ) )
 
-struct load_library_ex_wrapper
+struct load_library_ex_wrapper_t
 {
 	const char *szLibraryPath = nullptr;
 	void *pLoadLibrary = nullptr;
 	constexpr static DWORD BUFFER = 0xCCCCCCCC;
 	unsigned char bLoadLibraryExWrapper[ LOAD_LIBRARY_EX_WRAPPER_SIZE ];
 
-	load_library_ex_wrapper( );
+	load_library_ex_wrapper_t( );
 };
 
 struct worker_t
@@ -105,6 +105,24 @@ public:
 	template< typename _t > bool Pop( _t &_Out );
 };
 
+struct image_info_t
+{
+	void *pData;
+
+	image_info_t( void *pData );
+
+	bool ValidImage( );
+	std::size_t GetImageSize( );
+	std::size_t GetHeaderSize( );
+	std::size_t GetSectionCount( );
+	IMAGE_DOS_HEADER *GetOperatingSystemHeader( );
+	IMAGE_NT_HEADERS *GetNewTechnologyHeaders( void *pImageBase = nullptr );
+	IMAGE_SECTION_HEADER *GetSectionHeader( std::size_t zSection );
+	IMAGE_BASE_RELOCATION *GetBaseRelocation( void *pImageBase = nullptr );
+	void *GetBlock( std::size_t zBlock, void *pImageBase = nullptr );
+	IMAGE_IMPORT_DESCRIPTOR *GetImportDescriptor( void *pImageBase = nullptr );
+};
+
 class CMemoryManager
 {
 private:
@@ -133,6 +151,7 @@ public:
 	bool WipeMemory( void *pAddress, std::size_t zSize );
 	bool FreeMemory( void *pAddress );
 	bool LoadLibraryEx( const std::string &strPath, bool bUseExistingThread, HMODULE *pModuleHandle = nullptr );
+	bool ManuallyLoadLibraryEx( const std::string &strData, bool bUseExistingThread, HMODULE *pModuleHandle = nullptr );
 } inline _MemoryManager;
 
 #include "Memory Manager.inl"
