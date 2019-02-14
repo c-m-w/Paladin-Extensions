@@ -36,7 +36,7 @@ template< typename _t > bool worker_t::Pop( _t &_Out )
 	return SetContext( _ThreadContext );
 }
 
-template< typename _t > bool CMemoryManager::Read( void* pAddress, _t _Out )
+template< typename _t > bool CMemoryManager::Read( void* pAddress, _t &_Out )
 {
 	return Read( pAddress, &_Out, sizeof( _t ) );
 }

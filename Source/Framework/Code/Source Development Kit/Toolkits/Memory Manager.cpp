@@ -96,7 +96,7 @@ bool worker_t::Resume( )
 	if ( !( dwCurrentAccess & THREAD_SUSPEND_RESUME ) )
 		_Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Attempting to resume a thread without sufficient handle privileges." ) );
 
-	return ResumeThread( hThread ) == DWORD( -1 ) ?
+	return ResumeThread( hThread ) == UINT_MAX ?
 		_Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to resume thread." ) ), false : bSuspended = false, true;
 }
 
@@ -182,17 +182,6 @@ IMAGE_SECTION_HEADER *image_info_t::GetSectionHeader( std::size_t zSection )
 		_Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Invalid section header index." ) ), zSection = GetSectionCount( ) - 1;
 
 	return &reinterpret_cast< IMAGE_SECTION_HEADER * >( std::uintptr_t( GetNewTechnologyHeaders( ) ) + sizeof( IMAGE_NT_HEADERS ) )[ zSection ];
-}
-
-IMAGE_BASE_RELOCATION *image_info_t::GetBaseRelocation( void *pImageBase /*= nullptr*/ )
-{
-	return reinterpret_cast< IMAGE_BASE_RELOCATION * >( ( pImageBase == nullptr ? std::uintptr_t( pData ) : std::uintptr_t( pImageBase ) ) +
-														GetNewTechnologyHeaders( pImageBase )->OptionalHeader.DataDirectory[ IMAGE_DIRECTORY_ENTRY_BASERELOC ].VirtualAddress );
-}
-
-void *image_info_t::GetBlock( std::size_t zBlock, void *pImageBase /*= nullptr*/ )
-{
-	return reinterpret_cast< void ** >( std::uintptr_t( GetBaseRelocation( pImageBase ) ) + sizeof( IMAGE_BASE_RELOCATION ) )[ zBlock ];
 }
 
 IMAGE_IMPORT_DESCRIPTOR *image_info_t::GetImportDescriptor( void *pImageBase /*= nullptr*/ )
@@ -467,26 +456,37 @@ bool CMemoryManager::ManuallyLoadLibraryEx( const std::string &strData, bool bUs
 			return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to write section %i into memory." ), i ), fnCleanup( ), false;
 	}
 
-	const auto zRelocationAmount = std::uintptr_t( _Image.pData ) - _Image.GetNewTechnologyHeaders( )->OptionalHeader.ImageBase;
+	const auto pNewTechnologyHeaders = _Image.GetNewTechnologyHeaders( pImage );
+	IMAGE_NT_HEADERS _Headers;
+	if ( !MEM.Read( pNewTechnologyHeaders, _Headers ) )
+		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to read NT headers." ) ), fnCleanup( ), false;
 
-	for ( auto p = _Image.GetBaseRelocation( ); p->VirtualAddress != NULL; p = reinterpret_cast< decltype( p ) >( std::uintptr_t( p ) + p->SizeOfBlock ) )
+	const auto zRelocationAmount = std::uintptr_t( pImage ) - _Headers.OptionalHeader.ImageBase;
+
+	IMAGE_BASE_RELOCATION _Relocation;
+	for ( auto p = reinterpret_cast< void * >( std::uintptr_t( pImage ) + _Image.GetNewTechnologyHeaders( )->OptionalHeader.DataDirectory[ IMAGE_DIRECTORY_ENTRY_BASERELOC ].VirtualAddress ); 
+		  Read( p, _Relocation ) && _Relocation.VirtualAddress != NULL;
+		  p = reinterpret_cast< void * >( std::uintptr_t( p ) + _Relocation.SizeOfBlock ) )
 	{
-		if ( p->SizeOfBlock < sizeof( IMAGE_BASE_RELOCATION ) )
+		if ( _Relocation.SizeOfBlock < sizeof( IMAGE_BASE_RELOCATION ) )
 			continue;
 
-		const auto zBlocks = ( p->SizeOfBlock - sizeof( IMAGE_BASE_RELOCATION ) ) / sizeof( WORD );
-		void *pBlock = _Image.GetBlock( 0 );
+		const auto zBlocks = ( _Relocation.SizeOfBlock - sizeof( IMAGE_BASE_RELOCATION ) ) / sizeof( WORD );
+		auto pBlocks = reinterpret_cast< void * >( std::uintptr_t( p ) + sizeof( IMAGE_BASE_RELOCATION ) );
 
-		for ( auto z = 0u; z < zBlocks; z++, pBlock = _Image.GetBlock( z ) )
+		for ( auto z = 0u; z < zBlocks; z++ )
 		{
-			if ( pBlock == nullptr )
+			void *pBlock = nullptr;
+			if ( !MEM.Read( reinterpret_cast< void * >( std::uintptr_t( pBlocks ) + sizeof( void * ) * z ), pBlock )
+				 || pBlock == nullptr )
 				continue;
 
-			const auto pRelocatee = reinterpret_cast< void ** >( std::uintptr_t( pImage ) + p->VirtualAddress + std::uintptr_t( pBlock ) );
-			void *pCurrent = nullptr;
-			if ( !Read( pRelocatee, &pCurrent )
-				 || !Write( pRelocatee, std::uintptr_t( pCurrent ) + std::uintptr_t( zRelocationAmount ) ) )
-				return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to relocate block %i." ), z ), fnCleanup( ), false;
+			auto pAddressRelocatable = reinterpret_cast< void* >( std::uintptr_t( pImage ) + _Relocation.VirtualAddress + std::uintptr_t( pBlock ) );
+			void *pCurrentValue = nullptr;
+			if ( !MEM.Read( pAddressRelocatable, pCurrentValue ) )
+				continue;
+
+			MEM.Write( pAddressRelocatable, std::uintptr_t( pCurrentValue ) + zRelocationAmount );
 		}
 	}
 

@@ -118,8 +118,6 @@ struct image_info_t
 	IMAGE_DOS_HEADER *GetOperatingSystemHeader( );
 	IMAGE_NT_HEADERS *GetNewTechnologyHeaders( void *pImageBase = nullptr );
 	IMAGE_SECTION_HEADER *GetSectionHeader( std::size_t zSection );
-	IMAGE_BASE_RELOCATION *GetBaseRelocation( void *pImageBase = nullptr );
-	void *GetBlock( std::size_t zBlock, void *pImageBase = nullptr );
 	IMAGE_IMPORT_DESCRIPTOR *GetImportDescriptor( void *pImageBase = nullptr );
 };
 
@@ -144,7 +142,7 @@ public:
 	bool FindWorker( worker_t &_Worker, DWORD dwHandleAccess, void *&pExit );
 
 	bool Read( void* pAddress, void* pOut, std::size_t zSize );
-	template< typename _t > bool Read( void* pAddress, _t _Out );
+	template< typename _t > bool Read( void* pAddress, _t &_Out );
 	bool Write( void* pAddress, void* pValue, std::size_t zSize );
 	template< typename _t > bool Write( void* pAddress, _t _Value );
 	bool AllocateMemory( void *&pAddress, std::size_t zSize, DWORD dwAccess );
