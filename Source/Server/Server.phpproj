@@ -21,6 +21,7 @@
     <DBGpProxyPort>9001</DBGpProxyPort>
     <PublishBeforeDebugProfile>PX</PublishBeforeDebugProfile>
     <WebRoot>/homedir/public_html</WebRoot>
+    <DebugPathMapping>Code;/homedir</DebugPathMapping>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <IncludeDebugInformation>true</IncludeDebugInformation>
