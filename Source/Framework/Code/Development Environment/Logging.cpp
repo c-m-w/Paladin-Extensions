@@ -9,26 +9,6 @@
 
 bool CLogging::Initialize( )
 {
-	strErrorTime						= ENC( "Error Retrieving Date/Time" );
-	strDateFormat						= ENC( "%B %e, 20%g" );
-	strTimeFormat						= ENC( "%H:%M:%S" );
-	strLogFileFormat					= ENC( "%Y.%m.%d" );
-	strStatusPrefixes[ INFO ]			= ENC( "[Info]\t" );
-	strStatusPrefixes[ DEBUG ]			= ENC( "[Debug]\t" );
-	strStatusPrefixes[ SUCCESS ]		= ENC( "[Success]" );
-	strStatusPrefixes[ WARNING ]		= ENC( "[Warning]" );
-	strStatusPrefixes[ ERROR ]			= ENC( "[Error]\t" );
-	strLocations[ FILESYSTEM ]			= ENC( "[Filesystem]\t" );
-	strLocations[ CRYPTOGRAPHY ]		= ENC( "[Cryptography]\t" );
-	strLocations[ CONNECTIVITY ]		= ENC( "[Connectivity]\t" );
-	strLocations[ RESOURCE_MANAGER ]	= ENC( "[Resources]\t" );
-	strLocations[ WINDOW ]				= ENC( "[Window]\t" );
-	strLocations[ DRAWING ]				= ENC( "[Drawing]\t" );
-	strLocations[ AUTHENTICATION ]		= ENC( "[Auth]\t\t" );
-	strLocations[ SYSTEM_UTILITIES ]  = ENC( "[System]\t" );
-	strLocations[ MEMORY_MANAGER ]      = ENC( "[Memory]\t" );
-	strLocations[ APPLICATION ]			= ENC( "[Application]\t" );
-
 #if defined _DEBUG
 	for ( auto &strLocation : strLocations )
 		if ( strLocation.empty( ) )
@@ -87,9 +67,22 @@ std::string CLogging::GetLogInitializationVector( )
 	return strInitializationVector;
 }
 
-void CLogging::ErrorPopup( EUnloggableError _ErrorCode )
+void CLogging::HandleUnloggableError( EUnloggableError _ErrorCode )
 {
-	MessageBox( nullptr, ENC( "Contact support if this issue persists." ), std::to_string( int( _ErrorCode ) ).c_str( ), MB_OK );
+	if ( _ErrorCode == ERROR_CANNOT_WRITE_LOG )
+	{
+		std::string strEncryptedBuffer { };
+		if ( CRYPTO.Encrypt( strBuffer, strEncryptedBuffer, CRYPTO.strStaticEncryptionKey, CRYPTO.strStaticInitializationVector )
+			 && SI.SetClipboardData( strEncryptedBuffer ) )
+		{
+			MessageBox( nullptr, ENC( "An error log has been copied to your clipboard. If this issue persists,\n"
+									"please open a support ticket with the copied error log in the appropriate box." ),ENC( "Error" ), MB_OK );
+			return;
+		}
+	}
+
+	MessageBox( nullptr, ENC( "An error has occurred. If this issue persists, please contact\n"
+								"support and include a screenshot of this message box."), std::to_string( int( _ErrorCode ) ).c_str( ), MB_OK );
 }
 
 void CLogging::WriteToFile( )
@@ -101,7 +94,7 @@ void CLogging::WriteToFile( )
 #if defined _DEBUG
 	if ( !_Filesystem.AddToFile( GetCurrentLogFile( ), strBuffer, false ) )
 		if ( !_Filesystem.WriteFile( GetCurrentLogFile( ), strBuffer, false ) )
-			return ErrorPopup( ERROR_CANNOT_WRITE_LOG );
+			return HandleUnloggableError( ERROR_CANNOT_WRITE_LOG );
 #else
 	if ( !_Filesystem.AddToFile( GetCurrentLogFile( ), strBuffer, true ) )
 		if ( !_Filesystem.WriteFile( GetCurrentLogFile( ), strBuffer, true ) )
@@ -138,7 +131,7 @@ void CLogging::Uninitialize( )
 void CLogging::Log( EPrefix _Prefix, ELocation _Location, const std::string &strLog )
 {
 	if ( !GetInitializationState( ) )
-		return ErrorPopup( ERROR_UNITIALIZED_LOG );
+		return HandleUnloggableError( ERROR_UNITIALIZED_LOG );
 
 	const auto strFormattedLog = GetTimestamp( ) + '\t' + strStatusPrefixes[ _Prefix ] + '\t' + strLocations[ _Location ] + '\t' + strLog + '\n';
 
@@ -155,7 +148,7 @@ void CLogging::Log( EPrefix _Prefix, ELocation _Location, const std::string &str
 void CLogging::Log( EPrefix _Prefix, ELocation _Location, const char *szFormat, ... )
 {
 	if ( !GetInitializationState( ) )
-		return ErrorPopup( ERROR_UNITIALIZED_LOG );
+		return HandleUnloggableError( ERROR_UNITIALIZED_LOG );
 
 	va_list vaArgs;
 	char chBuffer[ MAX_LOG_LENGTH ];
@@ -163,7 +156,7 @@ void CLogging::Log( EPrefix _Prefix, ELocation _Location, const char *szFormat, 
 	memset( chBuffer, 0, MAX_LOG_LENGTH );
 	va_start( vaArgs, szFormat );
 	if ( _vsnprintf_s( chBuffer, MAX_LOG_LENGTH, szFormat, vaArgs ) == 0 )
-		return ErrorPopup( ERROR_FORMAT_VA_FAILED );
+		return HandleUnloggableError( ERROR_FORMAT_VA_FAILED );
 
 	va_end( vaArgs );
 	return Log( _Prefix, _Location, std::string( chBuffer ) );
