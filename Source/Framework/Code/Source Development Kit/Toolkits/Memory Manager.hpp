@@ -59,10 +59,81 @@ inline void __declspec( naked ) LoadLibraryExWrapperEnd( )
 
 #pragma optimize( "", on )
 
+#pragma optimize( "", off )
+
+inline void RelocateImageBase( void *pImage )
+{
+	const auto pOperatingSystemHeaders = reinterpret_cast< IMAGE_DOS_HEADER * >( pImage );
+	const auto pNewTechnologyHeaders = reinterpret_cast< IMAGE_NT_HEADERS * >( std::uintptr_t( pImage ) + pOperatingSystemHeaders->e_lfanew );
+	const auto zRelocationDifference = std::uintptr_t( pImage ) - pNewTechnologyHeaders->OptionalHeader.ImageBase;
+	
+	for ( auto p = reinterpret_cast< IMAGE_BASE_RELOCATION * >( std::uintptr_t( pImage ) + pNewTechnologyHeaders->OptionalHeader.DataDirectory[ IMAGE_DIRECTORY_ENTRY_BASERELOC ].VirtualAddress );
+		p->VirtualAddress != NULL;
+		p = reinterpret_cast< IMAGE_BASE_RELOCATION * >( std::uintptr_t( p ) + p->SizeOfBlock ) )
+	{
+		const auto zBlockCount = ( p->SizeOfBlock - sizeof( IMAGE_BASE_RELOCATION ) ) / sizeof( WORD ); // sizeof( BLOCK )
+		if ( zBlockCount == 0 )
+			continue;
+
+		const auto pBlocks = reinterpret_cast< void ** >( std::uintptr_t( p ) + sizeof( IMAGE_BASE_RELOCATION ) );
+		for ( auto z = 0u; z < zBlockCount; z++ )
+			if ( pBlocks[ z ] != nullptr )
+				*reinterpret_cast< void ** >( std::uintptr_t( pImage ) + p->VirtualAddress + pBlocks[ z ] ) += zRelocationDifference;
+	}
+}
+
+inline void RelocateImageBaseEnd( )
+{ }
+
+#pragma optimize( "", on )
+
+#pragma optimize( "", off )
+
+inline BOOL LoadDependencies( void *pImage, void *pGetProcAddress, void *pLoadLibrary )
+{
+	const auto pOperatingSystemHeaders = reinterpret_cast< IMAGE_DOS_HEADER * >( pImage );
+	const auto pNewTechnologyHeaders = reinterpret_cast< IMAGE_NT_HEADERS * >( std::uintptr_t( pImage ) + pOperatingSystemHeaders->e_lfanew );
+
+	for ( auto p = reinterpret_cast< IMAGE_IMPORT_DESCRIPTOR * >( std::uintptr_t( pImage ) + pNewTechnologyHeaders->OptionalHeader.DataDirectory[ IMAGE_DIRECTORY_ENTRY_IMPORT ].VirtualAddress );
+		  p->Characteristics != NULL;
+		  p = reinterpret_cast< IMAGE_IMPORT_DESCRIPTOR * >( std::uintptr_t( p ) + sizeof( IMAGE_IMPORT_DESCRIPTOR ) ) )
+	{
+		const auto hCurrent = reinterpret_cast< HMODULE( __stdcall * )( const char * ) >( pLoadLibrary )( reinterpret_cast< const char * >( std::uintptr_t( pImage ) + p->Name ) );
+		if ( hCurrent == nullptr )
+			return FALSE;
+
+		for ( auto pOriginal = reinterpret_cast< IMAGE_THUNK_DATA * >( std::uintptr_t( pImage ) + p->OriginalFirstThunk ),
+			  pNew = reinterpret_cast< IMAGE_THUNK_DATA * >( std::uintptr_t( pImage ) + p->FirstThunk );
+			  pOriginal->u1.AddressOfData != NULL; 
+			  pOriginal = reinterpret_cast< IMAGE_THUNK_DATA * >( std::uintptr_t( pOriginal ) + sizeof( IMAGE_THUNK_DATA ) ),
+			  pNew = reinterpret_cast< IMAGE_THUNK_DATA * >( std::uintptr_t( pNew ) + sizeof( IMAGE_THUNK_DATA ) ) )
+		{
+			const auto szImport = reinterpret_cast< const char * >( pOriginal->u1.Ordinal & IMAGE_ORDINAL_FLAG ? pOriginal->u1.Ordinal & 0xFFFF
+															  : reinterpret_cast< IMAGE_IMPORT_BY_NAME * >( std::uintptr_t( pImage ) + pOriginal->u1.AddressOfData )->Name );
+			const auto pImport = reinterpret_cast< FARPROC( __stdcall * )( HMODULE, const char * ) >( pGetProcAddress )( hCurrent, szImport );
+			if ( pImport == nullptr )
+				return FALSE;
+
+			pNew->u1.Function = std::uintptr_t( pImport );
+		}
+	}
+
+	return TRUE;
+}
+
+inline void LoadDependenciesEnd( )
+{ }
+
+#pragma optimize( "", on )
+
 #define THREAD_ENVIRONMENT_SIZE ( 16 )
 #define THREAD_ENVIRONMENT_SIZE_ ( std::uintptr_t( ThreadEnvironmentEnd ) - std::uintptr_t( ThreadEnvironment ) )
 #define LOAD_LIBRARY_EX_WRAPPER_SIZE ( 32 )
 #define LOAD_LIBRARY_EX_WRAPPER_SIZE_ ( std::uintptr_t( LoadLibraryExWrapperEnd ) - std::uintptr_t( LoadLibraryExWrapper ) )
+#define RELOCATE_IMAGE_BASE_SIZE ( 0 )
+#define RELOCATE_IMAGE_BASE_SIZE_ ( std::uintptr_t( RelocateImageBaseEnd ) - std::uintptr_t( RelocateImageBase ) )
+#define LOAD_DEPENDENCIES_SIZE ( 0 )
+#define LOAD_DEPENDENCIES_SIZE_ ( std::uintptr_t( LoadDependenciesEnd ) - std::uintptr_t( LoadDependencies ) )
 
 struct load_library_ex_wrapper_t
 {
@@ -134,6 +205,7 @@ private:
 	DWORD dwCurrentAccess = 0;
 	void *pThreadEnvironment = nullptr;
 	void *pLoadLibraryExWrapper = nullptr;
+	void *pManualMapFunctions = nullptr;
 
 public:
 
