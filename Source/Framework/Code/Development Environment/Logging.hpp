@@ -85,21 +85,40 @@ private:
 	void EndLog( );
 
 	/** \brief Date or time to be displayed if the format cannot be processed. */
-	std::string strErrorTime;
+	const static inline std::string strErrorTime = ENC( "Error Retrieving Date/Time" );
 	/** \brief Time for displaying the date. */
-	std::string strDateFormat;
+	const static inline std::string strDateFormat = ENC( "%B %e, 20%g" );
 	/** \brief Format for displaying the time. */
-	std::string strTimeFormat;
+	const static inline std::string strTimeFormat = ENC( "%H:%M:%S" );
 	/** \brief Format for the log file name. */
-	std::string strLogFileFormat;
+	const static inline std::string strLogFileFormat = ENC( "%Y.%m.%d" );
+	/** \brief Prefix text for each of the statuses. */
+	const static inline std::string strStatusPrefixes[ PREFIX_MAX ]
+	{
+		ENC( "[Info]\t" ),
+		ENC( "[Debug]\t" ),
+		ENC( "[Success]" ),
+		ENC( "[Warning]" ),
+		ENC( "[Error]\t" )
+	};
+	/** \brief Locations where events can be logged which correspond with their enumerations in ELocation. */
+	const static inline std::string strLocations[ LOCATION_MAX ]
+	{
+		ENC( "[Filesystem]\t" ),
+		ENC( "[Cryptography]\t" ),
+		ENC( "[Connectivity]\t" ),
+		ENC( "[Resources]\t" ),
+		ENC( "[Window]\t" ),
+		ENC( "[Drawing]\t" ),
+		ENC( "[Auth]\t\t" ),
+		ENC( "[System]\t" ),
+		ENC( "[Memory]\t" ),
+		ENC( "[Application]\t" )
+	};
 	/** \brief The timestamp of the last time that the buffer was written to file. */
 	Utilities::moment_t mmtLastLogWrite;
 	/** \brief Buffer to store the events in queue to be written to file. */
 	std::string strBuffer;
-	/** \brief Prefix text for each of the statuses. */
-	std::string strStatusPrefixes[ PREFIX_MAX ] { };
-	/** \brief Locations where events can be logged which correspond with their enumerations in ELocation. */
-	std::string strLocations[ LOCATION_MAX ] { };
 
 public:
 
@@ -120,7 +139,7 @@ public:
 				written to the log file for whatever reason. The error code will be\n
 				displayed in the title of the messagebox. */
 	/** \param _ErrorCode Code to indicate what went wrong. */
-	void ErrorPopup( EUnloggableError _ErrorCode );
+	void HandleUnloggableError( EUnloggableError _ErrorCode );
 } inline _Log;
 
 using EUnloggableError = CLogging::EUnloggableError;

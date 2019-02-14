@@ -13,8 +13,8 @@ inline void __declspec( naked ) ThreadEnvironment( bool *bExit )
 
 		Check:
 
-			mov		eax,		dword ptr[ esp + 0x28 ] // pushad = 0x20, pushfd = 0x4, ret addr = 0x4
-			cmp		[ eax ],	FALSE
+			mov		edx,		dword ptr[ esp + 0x28 ]
+			cmp		[ edx ],	FALSE
 			je		Check
 
 		popfd
@@ -31,8 +31,7 @@ inline void __declspec( naked ) ThreadEnvironmentEnd( )
 #define DONE_LOADING_LIBRARY ( 0xDEADBEEF )
 
 #pragma optimize( "", off )
-/// LoadLibraryExWrapper - Ch = szLibraryPath
-/// LoadLibraryExWrapper - 8h = LoadLibraryA
+
 inline void __declspec( naked ) LoadLibraryExWrapper( )
 {
 	__asm
@@ -109,6 +108,8 @@ public:
 class CMemoryManager
 {
 private:
+
+	constexpr static auto MAX_LIBRARY_LOAD_TIME = 10000ui64;
 
 	inline static bool bElevated = false;
 

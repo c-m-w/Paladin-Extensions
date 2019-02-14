@@ -198,11 +198,10 @@ bool CMemoryManager::FindWorker( worker_t &_Worker, DWORD dwHandleAccess, void *
 	if ( !SI.GetProcessThreads( dwProcessID, _Threads ) )
 		return false;
 
-	auto dwThreadID = _Threads.front( ).first, dwThreadPriority = _Threads.front( ).second;
-
-	for ( auto& _Thread : _Threads )
-		if ( _Thread.second < dwThreadPriority )
-			dwThreadID = _Thread.first, dwThreadPriority = _Thread.second;
+	auto dwThreadID = _Threads.front( ).first, dwPriority = _Threads.front( ).second;
+	for ( auto &_Thread : _Threads )
+		if ( _Thread.second > dwPriority )
+			dwThreadID = _Thread.first, dwPriority = _Thread.second;
 
 	if ( !pThreadEnvironment )
 		if ( !AllocateMemory( pThreadEnvironment, THREAD_ENVIRONMENT_SIZE, PAGE_EXECUTE_READWRITE )
@@ -210,7 +209,7 @@ bool CMemoryManager::FindWorker( worker_t &_Worker, DWORD dwHandleAccess, void *
 			return false;
 
 	_Worker = worker_t( dwThreadID, dwHandleAccess );
-	return _Worker.Valid( ) && _Worker.Suspend( ) && _Worker.Push( pExit ) && _Worker.SimulateFunctionCall( pThreadEnvironment );
+	return _Worker.Valid( ) && _Worker.Suspend( ) && _Worker.Push( pExit ) && _Worker.SimulateFunctionCall( pThreadEnvironment ) && _Worker.Resume( );
 }
 
 bool CMemoryManager::Read( void* pAddress, void* pOut, std::size_t zSize )
@@ -321,13 +320,44 @@ bool CMemoryManager::LoadLibraryEx( const std::string &strPath, bool bUseExistin
 	if ( !_Worker.SimulateFunctionCall( reinterpret_cast< void * >( std::uintptr_t( pLoadLibraryExWrapper ) + sizeof( void * ) * 3 ) ) )
 		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to call the LoadLibraryExWrapper shellcode." ) ), false;
 
+	auto mmtWaitStart = GetMoment( );
 	CONTEXT _ThreadContext;
 	do
 	{
 		if ( !_Worker.GetContext( _ThreadContext ) )
 			return false;
 
+		if ( GetMoment( ) - mmtWaitStart >= MAX_LIBRARY_LOAD_TIME )
+			return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Waiting for ECX signal timed out while loading library." ) ), false;
+
+		Pause( 50ui64 );
 	} while ( _ThreadContext.Ecx != DONE_LOADING_LIBRARY );
 
-	return Write( pExit, true )	&& ( bUseExistingThread ? true : ( _Worker.WaitForExecutionFinish( INFINITE ), true ) );
+	if ( pModuleHandle != nullptr )
+		*pModuleHandle = HMODULE( _ThreadContext.Eax );
+
+	auto bSuccess = _ThreadContext.Eax != NULL;
+	bSuccess &= Write( pExit, true );
+
+	if ( bUseExistingThread )
+	{
+		mmtWaitStart = GetMoment( );
+		do
+		{
+			if ( !_Worker.GetContext( _ThreadContext ) )
+				return false;
+
+			if ( GetMoment( ) - mmtWaitStart >= MAX_LIBRARY_LOAD_TIME )
+				return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Waiting for thread execution to resume timed out." ) ), false;
+
+			Pause( 50ui64 );
+		} while ( _ThreadContext.Eip >= std::uintptr_t( pThreadEnvironment )
+				  && _ThreadContext.Eip <= std::uintptr_t( pThreadEnvironment ) + THREAD_ENVIRONMENT_SIZE
+				  || _ThreadContext.Eip >= std::uintptr_t( pLoadLibraryExWrapper )
+				  && _ThreadContext.Eip <= std::uintptr_t( pLoadLibraryExWrapper ) + sizeof( load_library_ex_wrapper ) );
+	}
+	else
+		_Worker.WaitForExecutionFinish( INFINITE );
+
+	return FreeMemory( pExit ) && bSuccess;
 }
