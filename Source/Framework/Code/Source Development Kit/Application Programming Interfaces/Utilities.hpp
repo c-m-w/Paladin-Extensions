@@ -30,8 +30,10 @@ namespace Utilities
 
 	/** \brief Gets the time since epoch in milliseconds. */
 	/** \return Time since epoch in milliseconds. */
-	template< typename _t = std::chrono::milliseconds >moment_t GetMoment( );
-	template< typename _t = std::chrono::milliseconds >void Pause( moment_t mmtPauseLength = 1ui64 );
+	template< typename _t = std::chrono::milliseconds > moment_t GetMoment( );
+	template< typename _t = std::chrono::milliseconds > void Pause( moment_t mmtPauseLength = 1ui64 );
+
+	std::vector< unsigned char > GetBytes( void *pAddress, std::size_t zBytes );
 
 	/** \brief Supports any combination of static string casting conversion of "std::basic_string< _ch, char_traits< _ch >, allocator< _ch > >" */
 	/** \tparam _To Desired string type */

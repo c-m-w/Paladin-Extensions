@@ -9,7 +9,7 @@
 
 bool CLogging::Initialize( )
 {
-#if defined _DEBUG
+#if defined _DEBUG || true
 	for ( auto &strLocation : strLocations )
 		if ( strLocation.empty( ) )
 			throw std::runtime_error( ENC( "Ensure that all location strings are initialized." ) );
@@ -47,7 +47,7 @@ std::string CLogging::GetTimestamp( )
 
 std::string CLogging::GetCurrentLogFile( )
 {
-#if defined _DEBUG
+#if defined _DEBUG || true
 	static const auto strLogFile = FormatTime( strLogFileFormat ) + 'd';
 #else
 	static const auto strLogFile = FormatTime( strLogFileFormat );
@@ -91,14 +91,14 @@ void CLogging::WriteToFile( )
 	_Filesystem.StoreCurrentWorkingDirectory( );
 	_Filesystem.ChangeWorkingDirectory( _Filesystem.GetAppdataDirectory( ), { _Filesystem.strLogDirectory } );
 
-#if defined _DEBUG
+#if defined _DEBUG || true
 	if ( !_Filesystem.AddToFile( GetCurrentLogFile( ), strBuffer, false ) )
 		if ( !_Filesystem.WriteFile( GetCurrentLogFile( ), strBuffer, false ) )
 			return HandleUnloggableError( ERROR_CANNOT_WRITE_LOG );
 #else
 	if ( !_Filesystem.AddToFile( GetCurrentLogFile( ), strBuffer, true ) )
 		if ( !_Filesystem.WriteFile( GetCurrentLogFile( ), strBuffer, true ) )
-			return ErrorPopup( ERROR_CANNOT_WRITE_LOG );
+			return HandleUnloggableError( ERROR_CANNOT_WRITE_LOG );
 #endif
 
 	_Filesystem.RestoreWorkingDirectory( );

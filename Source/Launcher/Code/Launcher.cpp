@@ -41,7 +41,8 @@ void OnLaunch( )
 
 		_Filesystem.ReadAbsoluteFile( R"(C:\Users\Cole\Documents\Visual Studio 2017\Projects\Test1\Release\Test1.dll)", strData, false );
 		//MEM.LoadLibraryEx( R"(C:\Users\Cole\Documents\Visual Studio 2017\Projects\Test1\Release\Test1.dll)", true );
-		MEM.ManuallyLoadLibraryEx( strData, false );
+		//MEM.ManuallyLoadLibraryEx( strData, false );
+		MEM.ManuallyLoadLibrary( strData );
 	}
 
 	ShutdownFramework( );

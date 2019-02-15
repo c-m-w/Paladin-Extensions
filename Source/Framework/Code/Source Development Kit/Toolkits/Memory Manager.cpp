@@ -126,7 +126,7 @@ bool worker_t::SimulateFunctionCall( void *pFunction )
 	void *pInstructionPointer;
 	CONTEXT _ThreadContext;
 
-	if ( !Suspend( )
+	if ( !bSuspended && !Suspend( )
 		 || !GetInstructionPointer( pInstructionPointer )
 		 || !Push( pInstructionPointer )
 		 || !GetContext( _ThreadContext ) )
@@ -134,6 +134,16 @@ bool worker_t::SimulateFunctionCall( void *pFunction )
 
 	_ThreadContext.Eip = DWORD( pFunction );
 	return SetContext( _ThreadContext ) && Resume( );
+}
+
+bool worker_t::ExecutingFunction( void *pFunction, std::size_t zFunctionSize )
+{
+	CONTEXT _ThreadContext;
+	if ( !GetContext( _ThreadContext ) )
+		return false;
+
+	return _ThreadContext.Eip >= std::uintptr_t( pFunction )
+		&& _ThreadContext.Eip <= std::uintptr_t( pFunction ) + zFunctionSize;
 }
 
 bool worker_t::WaitForExecutionFinish( DWORD dwTime )
@@ -249,7 +259,7 @@ bool CMemoryManager::FindWorker( worker_t &_Worker, DWORD dwHandleAccess, void *
 
 	auto dwThreadID = _Threads.front( ).first, dwPriority = _Threads.front( ).second;
 	for ( auto &_Thread : _Threads )
-		if ( _Thread.second < dwPriority )
+		if ( _Thread.second > dwPriority )
 			dwThreadID = _Thread.first, dwPriority = _Thread.second;
 
 	if ( !pThreadEnvironment )
@@ -413,6 +423,41 @@ bool CMemoryManager::LoadLibraryEx( const std::string &strPath, bool bUseExistin
 	return FreeMemory( pExit ) && bSuccess;
 }
 
+bool CMemoryManager::ManuallyLoadLibrary( const std::string &strData, HMODULE *pModuleHandle /*= nullptr*/ )
+{
+	image_info_t _Image( reinterpret_cast< void * >( const_cast< char * >( &strData[ 0 ] ) ) );
+	const auto zImage = _Image.GetImageSize( );
+	DWORD dwBuffer;
+	unsigned char *pImage = nullptr;
+
+	if ( !_Image.ValidImage( ) )
+		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Invalid image passed to ManuallyLoadLibrary." ) ), delete[ ] pImage, false;
+
+	pImage = new unsigned char[ zImage ];
+	VirtualProtect( pImage, zImage, PAGE_EXECUTE_READWRITE, &dwBuffer );
+	memcpy( pImage, _Image.pData, _Image.GetHeaderSize( ) );
+
+	for ( auto i = 0; i < _Image.GetSectionCount( ); i++ )
+	{
+		auto pSectionHeader = _Image.GetSectionHeader( i );
+		memcpy( reinterpret_cast< void * >( std::uintptr_t( pImage ) + pSectionHeader->VirtualAddress ),
+				reinterpret_cast< void * >( std::uintptr_t( _Image.pData ) + pSectionHeader->PointerToRawData ), pSectionHeader->SizeOfRawData );
+	}
+
+	RelocateImageBase( pImage );
+	if ( !LoadDependencies( pImage, GetProcAddress, LoadLibraryA ) )
+		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to load image dependencies." ) ), delete[ ] pImage, false;
+
+	const auto pEntryPoint = reinterpret_cast< BOOL( WINAPI * )( HMODULE, DWORD, void * ) >( std::uintptr_t( pImage ) + _Image.GetNewTechnologyHeaders( )->OptionalHeader.AddressOfEntryPoint );
+	MessageBox( nullptr, std::to_string( (DWORD)pEntryPoint ).c_str( ), "", 0 );
+	const auto bSuccess = pEntryPoint( HMODULE( pImage ), DLL_PROCESS_ATTACH, nullptr ) == TRUE;
+
+	if ( bSuccess && pModuleHandle != nullptr )
+		*pModuleHandle = HMODULE( pImage );
+
+	return bSuccess;
+}
+
 bool CMemoryManager::ManuallyLoadLibraryEx( const std::string &strData, bool bUseExistingThread, HMODULE *pModuleHandle /*= nullptr*/  )
 {
 	image_info_t _Image( reinterpret_cast< void * >( const_cast< char * >( &strData[ 0 ] ) ) );
@@ -433,8 +478,25 @@ bool CMemoryManager::ManuallyLoadLibraryEx( const std::string &strData, bool bUs
 			_Worker.Close( );
 	};
 
+	//volatile auto j = RELOCATE_IMAGE_BASE_SIZE_;
+	//volatile auto i = LOAD_DEPENDENCIES_SIZE_;
+
+	//if ( RELOCATE_IMAGE_BASE_SIZE != RELOCATE_IMAGE_BASE_SIZE_ )
+	//	return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "RELOCATE_IMAGE_BASE_SIZE needs to be updated." ) ), false;
+	//
+	//if ( LOAD_DEPENDENCIES_SIZE != LOAD_DEPENDENCIES_SIZE_ )
+	//	return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "LOAD_DEPENDENCIES_SIZE needs to be updated." ) ), false;
+
 	if ( !_Image.ValidImage( ) )
 		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Invalid image passed to ManuallyLoadLibraryEx." ) ), false;
+
+	if ( !pManualMapFunctions )
+		if ( !AllocateMemory( pManualMapFunctions, LOAD_DEPENDENCIES_SIZE + RELOCATE_IMAGE_BASE_SIZE, PAGE_EXECUTE_READWRITE ) )
+			return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to create memory for functions to manually map image." ) ), false;
+
+	if ( !Write( pManualMapFunctions, reinterpret_cast< void * >( RELOCATE_IMAGE_BASE ), RELOCATE_IMAGE_BASE_SIZE )
+		 || !Write( reinterpret_cast< void * >( std::uintptr_t( pManualMapFunctions ) + RELOCATE_IMAGE_BASE_SIZE ), reinterpret_cast< void * >( LOAD_DEPENDENCIES ), LOAD_DEPENDENCIES_SIZE ) )
+		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to write functions for manually mapping image into memory." ) ), false;
 
 	if ( !AllocateMemory( pExit, sizeof( bool ), PAGE_READWRITE ) )
 		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to allocate memory for exiting." ) ), false;
@@ -456,39 +518,27 @@ bool CMemoryManager::ManuallyLoadLibraryEx( const std::string &strData, bool bUs
 			return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to write section %i into memory." ), i ), fnCleanup( ), false;
 	}
 
-	const auto pNewTechnologyHeaders = _Image.GetNewTechnologyHeaders( pImage );
-	IMAGE_NT_HEADERS _Headers;
-	if ( !MEM.Read( pNewTechnologyHeaders, _Headers ) )
-		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to read NT headers." ) ), fnCleanup( ), false;
+	if ( !_Worker.Suspend( )
+		 || !_Worker.Push( pImage )
+		 || !_Worker.SimulateFunctionCall( pManualMapFunctions ) )
+		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to call RelocateImageBase." ) ), fnCleanup( ), false;
 
-	const auto zRelocationAmount = std::uintptr_t( pImage ) - _Headers.OptionalHeader.ImageBase;
+	while ( !_Worker.ExecutingFunction( pThreadEnvironment, THREAD_ENVIRONMENT_SIZE ) )
+		Pause( 50ui64 );
 
-	IMAGE_BASE_RELOCATION _Relocation;
-	for ( auto p = reinterpret_cast< void * >( std::uintptr_t( pImage ) + _Image.GetNewTechnologyHeaders( )->OptionalHeader.DataDirectory[ IMAGE_DIRECTORY_ENTRY_BASERELOC ].VirtualAddress ); 
-		  Read( p, _Relocation ) && _Relocation.VirtualAddress != NULL;
-		  p = reinterpret_cast< void * >( std::uintptr_t( p ) + _Relocation.SizeOfBlock ) )
-	{
-		if ( _Relocation.SizeOfBlock < sizeof( IMAGE_BASE_RELOCATION ) )
-			continue;
+	if ( !_Worker.Push( LoadLibraryA )
+		 || !_Worker.Push( GetProcAddress )
+		 || !_Worker.Push( pImage )
+		 || !_Worker.SimulateFunctionCall( reinterpret_cast< void * >( std::uintptr_t( pManualMapFunctions ) + RELOCATE_IMAGE_BASE_SIZE ) ) )
+		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to call LoadDependencies." ) ), fnCleanup( ), false;
 
-		const auto zBlocks = ( _Relocation.SizeOfBlock - sizeof( IMAGE_BASE_RELOCATION ) ) / sizeof( WORD );
-		auto pBlocks = reinterpret_cast< void * >( std::uintptr_t( p ) + sizeof( IMAGE_BASE_RELOCATION ) );
+	while ( _Worker.ExecutingFunction( reinterpret_cast< void * >( std::uintptr_t( pManualMapFunctions ) + RELOCATE_IMAGE_BASE_SIZE ), LOAD_DEPENDENCIES_SIZE ) )
+		Pause( 50ui64 );
 
-		for ( auto z = 0u; z < zBlocks; z++ )
-		{
-			void *pBlock = nullptr;
-			if ( !MEM.Read( reinterpret_cast< void * >( std::uintptr_t( pBlocks ) + sizeof( void * ) * z ), pBlock )
-				 || pBlock == nullptr )
-				continue;
-
-			auto pAddressRelocatable = reinterpret_cast< void* >( std::uintptr_t( pImage ) + _Relocation.VirtualAddress + std::uintptr_t( pBlock ) );
-			void *pCurrentValue = nullptr;
-			if ( !MEM.Read( pAddressRelocatable, pCurrentValue ) )
-				continue;
-
-			MEM.Write( pAddressRelocatable, std::uintptr_t( pCurrentValue ) + zRelocationAmount );
-		}
-	}
+	CONTEXT _ThreadContext;
+	if ( !_Worker.GetContext( _ThreadContext )
+		 || _ThreadContext.Eax != TRUE )
+		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Failed to load dependencies." ) ), fnCleanup( ), false;
 
 	if ( !_Worker.Push( nullptr )
 		 || !_Worker.Push( DLL_PROCESS_ATTACH )
@@ -496,6 +546,22 @@ bool CMemoryManager::ManuallyLoadLibraryEx( const std::string &strData, bool bUs
 		 || !_Worker.SimulateFunctionCall( reinterpret_cast< void * >( std::uintptr_t( pImage ) + _Image.GetNewTechnologyHeaders( )->OptionalHeader.AddressOfEntryPoint ) ) )
 		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to call entry point." ) ), fnCleanup( ), false;
 
+	while ( !_Worker.ExecutingFunction( pThreadEnvironment, THREAD_ENVIRONMENT_SIZE ) )
+		Pause( 50ui64 );
 
-	return true;
+	if ( !_Worker.GetContext( _ThreadContext ) )
+		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Failed to get thread context to see if image loaded successfully." ) ), fnCleanup( ), false;
+
+	const auto bReturn = _ThreadContext.Eax == TRUE;
+	if ( !Write( pExit, true ) )
+		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to signal thread to exit." ) ), fnCleanup( ), false;
+
+	while ( _Worker.ExecutingFunction( pThreadEnvironment, THREAD_ENVIRONMENT_SIZE ) )
+		Pause( 50ui64 );
+
+	if ( !bReturn )
+		_Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "DLLMain didn't return true." ) );
+
+	fnCleanup( );
+	return bReturn;
 }
