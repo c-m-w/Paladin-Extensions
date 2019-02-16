@@ -57,13 +57,4 @@ namespace Utilities
 	{
 		return D3DXToDegree( atanf( y / x ) );
 	}
-
-	std::vector< unsigned char > GetBytes( void *pAddress, std::size_t zBytes )
-	{
-		std::vector< unsigned char > vecOut { };
-		for ( auto z = 0u; z < zBytes; z++ )
-			vecOut.emplace_back( *reinterpret_cast< unsigned char * >( std::uintptr_t( pAddress ) + z ) );
-
-		return vecOut;
-	}
 }

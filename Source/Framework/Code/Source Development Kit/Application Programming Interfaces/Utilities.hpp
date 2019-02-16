@@ -37,11 +37,6 @@ namespace Utilities
 	/** \param mmtPauseLength Length to pause in specified duration */
 	template< typename _t = std::chrono::milliseconds >void Pause( moment_t mmtPauseLength = 1ui64 );
 
-	/** \brief Reads memory region as bytes */
-	/** \param zBytes Length to read */
-	/** \return Bytes read as vector. */
-	std::vector< unsigned char > GetBytes( void *pAddress, std::size_t zBytes );
-
 	/** \brief Supports any combination of static string casting conversion of "std::basic_string< _ch, char_traits< _ch >, allocator< _ch > >" */
 	/** \tparam _To Desired string type */
 	/** \tparam _From Current string */
