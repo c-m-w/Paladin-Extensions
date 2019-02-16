@@ -200,6 +200,29 @@ IMAGE_IMPORT_DESCRIPTOR *image_info_t::GetImportDescriptor( void *pImageBase /*=
 														GetNewTechnologyHeaders( pImageBase )->OptionalHeader.DataDirectory[ IMAGE_DIRECTORY_ENTRY_IMPORT ].VirtualAddress );
 }
 
+CMemoryManager::pattern_t CMemoryManager::ParsePattern( const std::string &strPattern )
+{
+	auto strModifiable = strPattern;
+	pattern_t _Return;
+
+	do
+	{
+		auto &_Byte = _Return.emplace_back( );
+		while ( strModifiable.front( ) == ' ' )
+			strModifiable.erase( strModifiable.begin( ) );
+
+		if ( strModifiable.front( ) == '?' )
+			_Byte = UNKNOWN_BYTE;
+		else
+			_Byte = strtoul( strModifiable.substr( 0, 2 ).c_str( ), nullptr, 16 );
+
+		while ( strModifiable.front( ) != ' ' )
+			strModifiable.erase( strModifiable.begin( ) );
+	} while ( !strPattern.empty( ) );
+
+	return _Return;
+}
+
 bool CMemoryManager::SetProcess( const std::string &strExecutable, DWORD dwAccess )
 {
 	if ( !bElevated && !( bElevated = SI.ElevateProcess( ) ) )
@@ -248,7 +271,13 @@ bool CMemoryManager::CreateWorker( worker_t &_Worker, void *&pExit )
 
 	DWORD dwThreadID;
 	_Worker = worker_t( CreateRemoteThread( hProcess, nullptr, NULL, LPTHREAD_START_ROUTINE( pThreadEnvironment ), pExit, NULL, &dwThreadID ), THREAD_ALL_ACCESS );
-	return _Worker.Valid( ) ? true : ( _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to create a worker." ) ), false );
+	if ( !_Worker.Valid( ) )
+		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to create a worker." ) ), false;
+
+	while ( !_Worker.ExecutingFunction( pThreadEnvironment, THREAD_ENVIRONMENT_SIZE ) )
+		Pause( 10ui64 );
+
+	return true;
 }
 
 bool CMemoryManager::FindWorker( worker_t &_Worker, DWORD dwHandleAccess, void *&pExit )
@@ -449,7 +478,6 @@ bool CMemoryManager::ManuallyLoadLibrary( const std::string &strData, HMODULE *p
 		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to load image dependencies." ) ), delete[ ] pImage, false;
 
 	const auto pEntryPoint = reinterpret_cast< BOOL( WINAPI * )( HMODULE, DWORD, void * ) >( std::uintptr_t( pImage ) + _Image.GetNewTechnologyHeaders( )->OptionalHeader.AddressOfEntryPoint );
-	MessageBox( nullptr, std::to_string( (DWORD)pEntryPoint ).c_str( ), "", 0 );
 	const auto bSuccess = pEntryPoint( HMODULE( pImage ), DLL_PROCESS_ATTACH, nullptr ) == TRUE;
 
 	if ( bSuccess && pModuleHandle != nullptr )
@@ -458,7 +486,30 @@ bool CMemoryManager::ManuallyLoadLibrary( const std::string &strData, HMODULE *p
 	return bSuccess;
 }
 
-bool CMemoryManager::ManuallyLoadLibraryEx( const std::string &strData, bool bUseExistingThread, HMODULE *pModuleHandle /*= nullptr*/  )
+void *CMemoryManager::FindPattern( HMODULE hLocation, const std::string &strPattern )
+{
+	const auto _Pattern = ParsePattern( strPattern );
+	auto _Image = image_info_t( hLocation );
+
+	if ( !_Image.ValidImage( ) )
+		return nullptr;
+
+	for ( auto u = std::uintptr_t( hLocation ), uSequence = 0u; u < std::uintptr_t( hLocation ) + _Image.GetImageSize( ); u++ )
+	{
+		if ( _Pattern[ uSequence ] == UNKNOWN_BYTE
+			 || _Pattern[ uSequence ] == *reinterpret_cast< unsigned char * >( u ) )
+			uSequence++;
+		else
+			u -= uSequence, uSequence = 0;
+
+		if ( uSequence == _Pattern.size( ) )
+			return reinterpret_cast< void * >( u - uSequence );
+	}
+
+	return nullptr;
+}
+
+bool CMemoryManager::ManuallyLoadLibraryEx( const std::string &strData, bool bUseExistingThread, bool bEraseHeaders, bool bEraseDiscardableSections, HMODULE *pModuleHandle /*= nullptr*/  )
 {
 	image_info_t _Image( reinterpret_cast< void * >( const_cast< char * >( &strData[ 0 ] ) ) );
 	worker_t _Worker;
@@ -478,15 +529,6 @@ bool CMemoryManager::ManuallyLoadLibraryEx( const std::string &strData, bool bUs
 			_Worker.Close( );
 	};
 
-	//volatile auto j = RELOCATE_IMAGE_BASE_SIZE_;
-	//volatile auto i = LOAD_DEPENDENCIES_SIZE_;
-
-	//if ( RELOCATE_IMAGE_BASE_SIZE != RELOCATE_IMAGE_BASE_SIZE_ )
-	//	return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "RELOCATE_IMAGE_BASE_SIZE needs to be updated." ) ), false;
-	//
-	//if ( LOAD_DEPENDENCIES_SIZE != LOAD_DEPENDENCIES_SIZE_ )
-	//	return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "LOAD_DEPENDENCIES_SIZE needs to be updated." ) ), false;
-
 	if ( !_Image.ValidImage( ) )
 		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Invalid image passed to ManuallyLoadLibraryEx." ) ), false;
 
@@ -504,9 +546,6 @@ bool CMemoryManager::ManuallyLoadLibraryEx( const std::string &strData, bool bUs
 	if ( !AllocateMemory( pImage, _Image.GetImageSize( ), PAGE_EXECUTE_READWRITE ) )
 		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to allocate memory for image." ) ), fnCleanup( ), false;
 
-	if ( !( bUseExistingThread ? FindWorker( _Worker, THREAD_ALL_ACCESS, pExit ) : CreateWorker( _Worker, pExit ) ) )
-		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to get worker thread to load library." ) ), fnCleanup( ), false;
-
 	if ( !Write( pImage, _Image.pData, _Image.GetHeaderSize( ) ) )
 		return fnCleanup( ), false;
 
@@ -518,6 +557,9 @@ bool CMemoryManager::ManuallyLoadLibraryEx( const std::string &strData, bool bUs
 			return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to write section %i into memory." ), i ), fnCleanup( ), false;
 	}
 
+	if ( !( bUseExistingThread ? FindWorker( _Worker, THREAD_ALL_ACCESS, pExit ) : CreateWorker( _Worker, pExit ) ) )
+		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to get worker thread to load library." ) ), fnCleanup( ), false;
+
 	if ( !_Worker.Suspend( )
 		 || !_Worker.Push( pImage )
 		 || !_Worker.SimulateFunctionCall( pManualMapFunctions ) )
@@ -526,7 +568,8 @@ bool CMemoryManager::ManuallyLoadLibraryEx( const std::string &strData, bool bUs
 	while ( !_Worker.ExecutingFunction( pThreadEnvironment, THREAD_ENVIRONMENT_SIZE ) )
 		Pause( 50ui64 );
 
-	if ( !_Worker.Push( LoadLibraryA )
+	if ( !_Worker.Suspend( )
+		 || !_Worker.Push( LoadLibraryA )
 		 || !_Worker.Push( GetProcAddress )
 		 || !_Worker.Push( pImage )
 		 || !_Worker.SimulateFunctionCall( reinterpret_cast< void * >( std::uintptr_t( pManualMapFunctions ) + RELOCATE_IMAGE_BASE_SIZE ) ) )
@@ -540,7 +583,8 @@ bool CMemoryManager::ManuallyLoadLibraryEx( const std::string &strData, bool bUs
 		 || _ThreadContext.Eax != TRUE )
 		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Failed to load dependencies." ) ), fnCleanup( ), false;
 
-	if ( !_Worker.Push( nullptr )
+	if ( !_Worker.Suspend( )
+		 || !_Worker.Push( nullptr )
 		 || !_Worker.Push( DLL_PROCESS_ATTACH )
 		 || !_Worker.Push( pImage )
 		 || !_Worker.SimulateFunctionCall( reinterpret_cast< void * >( std::uintptr_t( pImage ) + _Image.GetNewTechnologyHeaders( )->OptionalHeader.AddressOfEntryPoint ) ) )
@@ -561,6 +605,18 @@ bool CMemoryManager::ManuallyLoadLibraryEx( const std::string &strData, bool bUs
 
 	if ( !bReturn )
 		_Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "DLLMain didn't return true." ) );
+
+	if ( bEraseHeaders && !WipeMemory( pImage, _Image.GetHeaderSize( ) ) )
+		_Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Failed to erase headers." ) );
+
+	if ( bEraseDiscardableSections )
+		for ( auto i = 0; i < _Image.GetSectionCount( ); i++ )
+		{
+			auto pSectionHeader = _Image.GetSectionHeader( i );
+			if ( ( pSectionHeader->Characteristics & IMAGE_SCN_MEM_DISCARDABLE ) != NULL )
+				if ( !WipeMemory( reinterpret_cast< void * >( std::uintptr_t( pImage ) + pSectionHeader->VirtualAddress ), pSectionHeader->SizeOfRawData ) )
+					_Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Failed to wipe section %i." ), i );
+		}
 
 	fnCleanup( );
 	return bReturn;

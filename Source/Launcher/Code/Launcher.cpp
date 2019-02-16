@@ -39,9 +39,9 @@ void OnLaunch( )
 	{
 		std::string strData { };
 
-		_Filesystem.ReadAbsoluteFile( R"(C:\Users\Cole\Documents\Visual Studio 2017\Projects\Test1\Release\Test1.dll)", strData, false );
+		_Filesystem.ReadAbsoluteFile( R"(C:\Users\Cole\Desktop\Test.dll)", strData, false );
 		//MEM.LoadLibraryEx( R"(C:\Users\Cole\Documents\Visual Studio 2017\Projects\Test1\Release\Test1.dll)", true );
-		//MEM.ManuallyLoadLibraryEx( strData, false );
+		MEM.ManuallyLoadLibraryEx( strData, true, true, true );
 		MEM.ManuallyLoadLibrary( strData );
 	}
 
