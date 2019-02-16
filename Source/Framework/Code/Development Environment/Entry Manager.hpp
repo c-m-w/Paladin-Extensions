@@ -114,7 +114,7 @@ BOOL WINAPI DllMain( _In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID 
 				return FALSE;
 
 			if ( hinstDLL && hinstDLL != INVALID_HANDLE_VALUE )
-#if !defined _DEBUG
+#if defined _DEBUG
 				if ( DisableThreadLibraryCalls( hinstDll = hinstDLL ) == 0 )
 					return FALSE;
 #else
