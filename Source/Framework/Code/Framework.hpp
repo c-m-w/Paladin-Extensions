@@ -6,7 +6,8 @@
 #define NO_ENTRY
 #include "Development Environment/Entry Manager.hpp"
 
-#include "Development Environment/Font Awesome Icons.hpp"
+#include "Development Environment/Icon Font Definitions/Font Awesome Icons.hpp"
+#include "Development Environment/Icon Font Definitions/Material Design Icons.hpp"
 #include "Source Development Kit/Application Programming Interfaces/Utilities.hpp"
 #include "Source Development Kit/Application Programming Interfaces/Color.hpp"
 #include "Source Development Kit/Application Programming Interfaces/Base Interface.hpp"

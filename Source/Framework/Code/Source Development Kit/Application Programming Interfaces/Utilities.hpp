@@ -29,8 +29,12 @@ namespace Utilities
 	using vector2_t = location_t;
 
 	/** \brief Gets the time since epoch in milliseconds. */
-	/** \return Time since epoch in milliseconds. */
+	/** \tparam _t Duration type to return time in (nanoseconds highest supported) */
+	/** \return Time since epoch in specified duration. */
 	template< typename _t = std::chrono::milliseconds >moment_t GetMoment( );
+	/** \brief Suspends current thread execution */
+	/** \tparam _t Duration type to pause (nanoseconds highest supported) */
+	/** \param mmtPauseLength Length to pause in specified duration */
 	template< typename _t = std::chrono::milliseconds >void Pause( moment_t mmtPauseLength = 1ui64 );
 
 	/** \brief Supports any combination of static string casting conversion of "std::basic_string< _ch, char_traits< _ch >, allocator< _ch > >" */

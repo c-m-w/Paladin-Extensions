@@ -279,7 +279,7 @@ bool CSystemInformation::SetClipboardData( const std::string& strIn )
 		return false;
 	}
 
-	const auto hClipboard = GlobalAlloc( GMEM_FIXED, strIn.length( ) );
+	const auto hClipboard = GlobalAlloc( GMEM_FIXED, strIn.length( ) + 1 );
 	if ( hClipboard == nullptr )
 	{
 		_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES, ENC( "Failed to create global memory for clipboard data." ) );
@@ -288,7 +288,7 @@ bool CSystemInformation::SetClipboardData( const std::string& strIn )
 		return false;
 	}
 
-	if ( strcpy_s( static_cast< char* >( hClipboard ), strIn.length( ), strIn.c_str( ) ) != 0 )
+	if ( strcpy_s( static_cast< char* >( hClipboard ), strIn.length( ) + 1, strIn.c_str( ) ) != 0 )
 	{
 		_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES, ENC( "Failed to copy desired clipboard data to global clipboard memory." ) );
 		if ( GlobalFree( hClipboard ) != nullptr )

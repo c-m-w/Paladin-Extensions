@@ -1,3 +1,5 @@
+/// Font Awesome Icons.hpp
+
 #pragma once
 
 #define ICON_MIN_FA 0xf000

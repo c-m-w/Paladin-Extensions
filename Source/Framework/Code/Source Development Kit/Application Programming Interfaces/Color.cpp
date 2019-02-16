@@ -11,9 +11,9 @@ color_t::color_t( )
 	memset( &_Data, 0xFFFFFFFFui32, sizeof _Data );
 }
 
-color_t::color_t( unsigned uData )
+color_t::color_t( unsigned uRGBA )
 {
-	_Data.u = uData;
+	_Data.u = uRGBA;
 }
 
 color_t::color_t( std::initializer_list< unsigned char > initData )
@@ -70,11 +70,11 @@ color_t::color_t( std::initializer_list< float > initData )
 		_Data.b[ u ] = UCHAR_MAX;
 }
 
-unsigned char color_t::operator[]( std::size_t zColor ) const
+unsigned char color_t::operator[]( EColor enumColor ) const
 {
-	if ( zColor > 3.f )
+	if ( enumColor == COLOR_MAX )
 		throw std::runtime_error( ENC( "Invalid array index" ) );
-	return _Data.b[ zColor ];
+	return _Data.b[ enumColor ];
 }
 
 unsigned char color_t::operator[]( int iColor ) const
@@ -222,14 +222,14 @@ double color_t::Get601Luminance( ) const
 	return _Data.b[ COLOR_ALPHA ] / UCHAR_MAX * ( 0.299 * _Data.b[ COLOR_RED ] + 0.587 * _Data.b[ COLOR_GREEN ] + 0.114 * _Data.b[ COLOR_BLUE ] );
 }
 
-color_t CColor::GetGradient( color_t clrStart, color_t clrEnd, float flProgress )
+color_t CColor::GetGradient( color_t clrStart, color_t clrEnd, double dbProgress )
 {
 	return
 	{
-		clrStart.r + unsigned char( ( clrEnd.r - clrStart.r ) * flProgress ),
-		clrStart.g + unsigned char( ( clrEnd.g - clrStart.g ) * flProgress ),
-		clrStart.b + unsigned char( ( clrEnd.b - clrStart.b ) * flProgress ),
-		clrStart.a + unsigned char( ( clrEnd.a - clrStart.a ) * flProgress )
+		clrStart.r + unsigned char( ( clrEnd.r - clrStart.r ) * dbProgress ),
+		clrStart.g + unsigned char( ( clrEnd.g - clrStart.g ) * dbProgress ),
+		clrStart.b + unsigned char( ( clrEnd.b - clrStart.b ) * dbProgress ),
+		clrStart.a + unsigned char( ( clrEnd.a - clrStart.a ) * dbProgress )
 	};
 }
 

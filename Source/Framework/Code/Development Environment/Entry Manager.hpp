@@ -9,7 +9,7 @@
 #elif defined NO_ENTRY && !defined STD_ENTRY && !defined WIN_ENTRY && !defined DLL_ENTRY
 
 #if defined _DEBUG && !defined ACKNOWLEDGED_ENTRY_WARNING_1
-#pragma message( WARNING( WENTRY1, You must manage console output yourself. Use '#define ACKNOWLEDGED_ENTRY_WARNING_1' to stop printing this message. ) )
+#pragma message( WARNING( WENTRY1, You must manage console output yourself. Use '#define ACKNOWLEDGED_ENTRY_WARNING_1' to stop printing this warning. ) )
 #endif
 
 #elif defined STD_ENTRY && !defined WIN_ENTRY && !defined DLL_ENTRY
@@ -84,7 +84,7 @@ _In_ int nCmdShow )
 
 #elif !defined STD_ENTRY && !defined WIN_ENTRY && defined DLL_ENTRY
 
-// TDOD when we're injected, we should get the region of memory that we are in order to clear it when we unload
+// TODO when we're injected, we should get the region of memory that we are in order to clear it when we unload
 
 void OnAttach( );
 void OnDetach( );

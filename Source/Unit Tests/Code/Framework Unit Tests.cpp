@@ -230,6 +230,20 @@ namespace Framework
 				{
 					//Assert::AreEqual( AUTH.GetHardware( )[ "cpu" ].get< std::string >( ).c_str( ), "hello" );
 				}
+
+				TEST_METHOD( Clipboard_Manager )
+				{
+					std::string strBuffer[ ] { "First Data Set", "" };
+
+					SI.SetClipboardData( strBuffer[ 0 ] );
+					SI.GetClipboardData( strBuffer[ 1 ] );
+					Assert::AreEqual( strBuffer[ 0 ], strBuffer[ 1 ] );
+
+					strBuffer[ 0 ] = "Second Data Set";
+					SI.SetClipboardData( strBuffer[ 0 ] );
+					SI.GetClipboardData( strBuffer[ 1 ] );
+					Assert::AreEqual( strBuffer[ 0 ], strBuffer[ 1 ] );
+				}
 			};
 		};
 	}
