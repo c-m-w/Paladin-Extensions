@@ -46,6 +46,13 @@ void LoadManager( )
 #endif
 }
 
+
+DWORD WINAPI test( _In_ LPVOID lpParameter )
+{
+	__asm mov eax, 0xDEADBEEF
+	return 0;
+}
+
 void PX_API OnLaunch( )
 {
 	// todo check hash to that of the servers.

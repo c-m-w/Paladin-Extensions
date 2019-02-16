@@ -28,7 +28,7 @@ namespace Utilities
 
 	using vector2_t = location_t;
 
-	/** \brief Gets the time since epoch in milliseconds. */
+	/** \brief Gets the time since epoch */
 	/** \tparam _t Duration type to return time in (nanoseconds highest supported) */
 	/** \return Time since epoch in specified duration. */
 	template< typename _t = std::chrono::milliseconds >moment_t GetMoment( );
@@ -37,14 +37,21 @@ namespace Utilities
 	/** \param mmtPauseLength Length to pause in specified duration */
 	template< typename _t = std::chrono::milliseconds >void Pause( moment_t mmtPauseLength = 1ui64 );
 
+	/** \brief Reads memory region as bytes */
+	/** \param zBytes Length to read */
+	/** \return Bytes read as vector. */
+	std::vector< unsigned char > GetBytes( void *pAddress, std::size_t zBytes );
+
 	/** \brief Supports any combination of static string casting conversion of "std::basic_string< _ch, char_traits< _ch >, allocator< _ch > >" */
 	/** \tparam _To Desired string type */
 	/** \tparam _From Current string */
+	/** \param _From String to convert */
 	/** \return Converted string in desired type */
 	template< typename _To, typename _From > _To string_cast( const _From& );
 	/** \brief Supports any combination of string casting conversion of "_ch" and to "std::basic_string< _ch, char_traits< _ch >, allocator< _ch > >" */
 	/** \tparam _To Desired string type */
 	/** \tparam _From Current string */
+	/** \param _From String to convert */
 	/** \return Converted string in desired type */
 	template< typename _To, typename _From > _To string_cast( _From* );
 
@@ -84,7 +91,6 @@ namespace Utilities
 	/** \param zSize Length of array */
 	/** \return unsigned char version of array */
 	const unsigned char* operator""_b( const wchar_t *wszSource, std::size_t zSize );
-
 }
 
 #include "Utilities.inl"
