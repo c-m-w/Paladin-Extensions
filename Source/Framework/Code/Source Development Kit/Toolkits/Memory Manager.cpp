@@ -231,25 +231,29 @@ bool CMemoryManager::Initialize( )
 		return false;
 
 	const auto _Version = SI.GetOperatingSystemVersion( );
-	auto bCouldRetry = false;
-	std::string strPattern { };
 
 	if ( _Version == ESystemVersion::W10_PREVIEW
 		 || _Version == ESystemVersion::W10_REDSTONE_CREATORS_OCTOBER_1809
 		 || _Version == ESystemVersion::W10_REDSTONE_CREATORS_APRIL_1803
 		 || _Version == ESystemVersion::W10_REDSTONE_CREATORS_FALL_1709 )
-		strPattern = ENC( "53 56 57 8D 45 F8 8B FA" );
+	{
+		pInsertInvertedFunctionTable = reinterpret_cast< void * >( std::uintptr_t( FindPattern( hNewTechnologyModule, ENC( "53 56 57 8D 45 F8 8B FA" ) ) ) - 7 );
+		pInvertedFunctionTable = FindPattern( hNewTechnologyModule, ENC( "33 F6 46 3B C6" ) );
+		if ( pInvertedFunctionTable != nullptr )
+			pInvertedFunctionTable = *reinterpret_cast< void ** >( std::uintptr_t( pInvertedFunctionTable ) - 0x1A );
+	}
 	else if ( _Version == ESystemVersion::W10_REDSTONE_CREATORS_1703 )
-		strPattern = ENC( "8D 45 F0 89 55 F8 50 8D 55 F4" );
+	{
+		pInsertInvertedFunctionTable = FindPattern( hNewTechnologyModule, ENC( "8D 45 F0 89 55 F8 50 8D 55 F4" ) );
+		pInvertedFunctionTable = pInsertInvertedFunctionTable;
+	}
 	else
-		bCouldRetry = true, strPattern = ENC( "53 56 57 8B DA 8B F9 50" );
+	{
+		pInsertInvertedFunctionTable = FindPattern( hNewTechnologyModule, ENC( "53 56 57 8B DA 8B F9 50" ) );
+		pInvertedFunctionTable = pInsertInvertedFunctionTable;
+	}
 
-	if ( ( pInsertInvertedFunctionTable = FindPattern( hNewTechnologyModule, strPattern ) ) == nullptr
-		 && bCouldRetry 
-		 && ( pInsertInvertedFunctionTable = FindPattern( hNewTechnologyModule, ENC( "8D 45 F4 89 55 F8 50 8D 55 FC" ) ) ) == nullptr )
-		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Failed to find RtlInsertInvertedFunctionTable." ) ), false;
-
-	return true;
+	return pInsertInvertedFunctionTable != nullptr && pInvertedFunctionTable != nullptr;
 }
 
 void CMemoryManager::Uninitialize( )
@@ -541,7 +545,7 @@ void *CMemoryManager::FindPattern( HMODULE hLocation, const std::string &strPatt
 	return nullptr;
 }
 
-bool CMemoryManager::ManuallyLoadLibraryEx( const std::string &strData, bool bUseExistingThread, bool bEraseHeaders, bool bEraseDiscardableSections, HMODULE *pModuleHandle /*= nullptr*/  )
+bool CMemoryManager::ManuallyLoadLibraryEx( const std::string &strData, bool bUseExistingThread, bool bEnableExceptions, bool bEraseHeaders, bool bEraseDiscardableSections, HMODULE *pModuleHandle /*= nullptr*/  )
 {
 	image_info_t _Image( reinterpret_cast< void * >( const_cast< char * >( &strData[ 0 ] ) ) );
 	worker_t _Worker;
@@ -614,6 +618,38 @@ bool CMemoryManager::ManuallyLoadLibraryEx( const std::string &strData, bool bUs
 	if ( !_Worker.GetContext( _ThreadContext )
 		 || _ThreadContext.Eax != TRUE )
 		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Failed to load dependencies." ) ), fnCleanup( ), false;
+
+	if ( bEnableExceptions )
+	{
+		CONTEXT _Context;
+		auto _Table = _RTL_INVERTED_FUNCTION_TABLE< DWORD >( );
+		auto bCustomHandler = true;
+
+		if ( !_Worker.Suspend( )
+			 || !_Worker.GetContext( _Context ) )
+			return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Failed to suspend thread and get context." ) ), fnCleanup( ), false;
+
+		_Context.Ecx = std::uintptr_t( pImage );
+		_Context.Edx = _Image.GetImageSize( );
+
+		if ( !_Worker.SetContext( _Context )
+			 || !_Worker.SimulateFunctionCall( pInsertInvertedFunctionTable ) )
+			return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Failed to call RtlInsertInvertedFunctionTable." ) ), fnCleanup( ), false;
+
+		while ( !_Worker.ExecutingFunction( pThreadEnvironment, THREAD_ENVIRONMENT_SIZE ) )
+			Pause( 50ui64 );
+
+		if ( !Read( pInvertedFunctionTable, _Table ) )
+			return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to read function table." ) ), fnCleanup( ), false;
+
+		for ( auto i = 0; i < _Table.Count && bCustomHandler; i++ )
+			if ( _Table.Entries[ i ].ImageBase == std::uintptr_t( pImage )
+				 && _Table.Entries[ i ].SizeOfTable > 0 )
+				bCustomHandler = false;
+
+		if ( bCustomHandler )
+			return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "SafeSEH is not enabled for this image, cannot load." ) ), fnCleanup( ), false;
+	}
 
 	if ( !_Worker.Suspend( )
 		 || !_Worker.Push( nullptr )

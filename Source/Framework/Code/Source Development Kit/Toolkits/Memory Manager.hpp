@@ -201,6 +201,25 @@ struct image_info_t
 	IMAGE_IMPORT_DESCRIPTOR *GetImportDescriptor( void *pImageBase = nullptr );
 };
 
+template< typename T >
+struct _RTL_INVERTED_FUNCTION_TABLE_ENTRY
+{
+	T     ExceptionDirectory;
+	T     ImageBase;
+	uint32_t ImageSize;
+	uint32_t SizeOfTable;
+};
+
+template< typename T >
+struct _RTL_INVERTED_FUNCTION_TABLE
+{
+	ULONG Count;
+	ULONG MaxCount;
+	ULONG Epoch;
+	UCHAR Overflow;
+	_RTL_INVERTED_FUNCTION_TABLE_ENTRY< T > Entries[ 0x200 ];
+};
+
 class CMemoryManager: public IBase
 {
 private:
@@ -216,7 +235,7 @@ private:
 	void Uninitialize( ) override;
 
 	inline static bool bElevated = false;
-	inline static void *pInsertInvertedFunctionTable = nullptr;
+	inline static void *pInsertInvertedFunctionTable = nullptr, *pInvertedFunctionTable;
 
 	HANDLE hProcess = nullptr;
 	DWORD dwProcessID = 0;
@@ -242,7 +261,7 @@ public:
 	bool WipeMemory( void *pAddress, std::size_t zSize );
 	bool FreeMemory( void *pAddress );
 	bool LoadLibraryEx( const std::string &strPath, bool bUseExistingThread, HMODULE *pModuleHandle = nullptr );
-	bool ManuallyLoadLibraryEx( const std::string &strData, bool bUseExistingThread, bool bEraseHeaders, bool bEraseDiscardableSections, HMODULE *pModuleHandle = nullptr );
+	bool ManuallyLoadLibraryEx( const std::string &strData, bool bUseExistingThread, bool bEnableExceptions, bool bEraseHeaders, bool bEraseDiscardableSections, HMODULE *pModuleHandle = nullptr );
 } inline _MemoryManager;
 
 #include "Memory Manager.inl"
