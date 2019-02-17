@@ -34,27 +34,33 @@ void ShutdownFramework( );
 
 inline bool SetupFramework( )
 {
+	static auto bInitializedOnce = false;
+	if ( bInitializedOnce )
+		throw std::runtime_error( ENC( "Initializing framework twice." ) );
+
 #if defined _DEBUG
 	pConsoleWindow = new CApplicationWindow( GetConsoleWindow( ), nullptr );
 	pConsoleWindow->Resize( 1200, 600 );
 	pConsoleWindow->SetTitle( ENC( "Paladin Extensions Debug Console" ) );
 #endif
 	if ( !_Filesystem.Setup( )
-		|| !_Log.Setup( )
-		|| !_Cryptography.Setup( )
-		|| !_Connection.Setup( )
-		|| !_ResourceManager.Setup( )
-		|| !_Input.Setup( ) )
+		 || !_Log.Setup( )
+		 || !_Cryptography.Setup( )
+		 || !_Connection.Setup( )
+		 || !_ResourceManager.Setup( )
+		 || !_Input.Setup( )
+		 || !_MemoryManager.Setup( ) )
 	{
 		ShutdownFramework( );
 		return false;
 	}
 
-	return true;
+	return bInitializedOnce = true, true;
 }
 
 inline void ShutdownFramework( )
 {
+	_MemoryManager.Shutdown( );
 	_Input.Shutdown( );
 	_ResourceManager.Shutdown( );
 	_Connection.Shutdown( );

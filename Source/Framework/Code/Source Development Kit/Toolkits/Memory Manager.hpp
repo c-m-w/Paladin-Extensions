@@ -201,7 +201,7 @@ struct image_info_t
 	IMAGE_IMPORT_DESCRIPTOR *GetImportDescriptor( void *pImageBase = nullptr );
 };
 
-class CMemoryManager
+class CMemoryManager: public IBase
 {
 private:
 
@@ -212,7 +212,11 @@ private:
 
 	static pattern_t ParsePattern( const std::string &strPattern );
 
+	bool Initialize( ) override;
+	void Uninitialize( ) override;
+
 	inline static bool bElevated = false;
+	inline static void *pInsertInvertedFunctionTable = nullptr;
 
 	HANDLE hProcess = nullptr;
 	DWORD dwProcessID = 0;

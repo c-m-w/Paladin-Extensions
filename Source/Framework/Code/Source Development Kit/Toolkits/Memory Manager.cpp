@@ -216,12 +216,44 @@ CMemoryManager::pattern_t CMemoryManager::ParsePattern( const std::string &strPa
 		else
 			_Byte = strtoul( strModifiable.substr( 0, 2 ).c_str( ), nullptr, 16 );
 
-		while ( strModifiable.front( ) != ' ' )
+		while ( !strModifiable.empty( )
+				&& strModifiable.front( ) != ' ' )
 			strModifiable.erase( strModifiable.begin( ) );
-	} while ( !strPattern.empty( ) );
+	} while ( !strModifiable.empty( ) );
 
 	return _Return;
 }
+
+bool CMemoryManager::Initialize( )
+{
+	const auto hNewTechnologyModule = GetModuleHandle( ENC( "ntdll.dll" ) );
+	if ( hNewTechnologyModule == nullptr )
+		return false;
+
+	const auto _Version = SI.GetOperatingSystemVersion( );
+	auto bCouldRetry = false;
+	std::string strPattern { };
+
+	if ( _Version == ESystemVersion::W10_PREVIEW
+		 || _Version == ESystemVersion::W10_REDSTONE_CREATORS_OCTOBER_1809
+		 || _Version == ESystemVersion::W10_REDSTONE_CREATORS_APRIL_1803
+		 || _Version == ESystemVersion::W10_REDSTONE_CREATORS_FALL_1709 )
+		strPattern = ENC( "53 56 57 8D 45 F8 8B FA" );
+	else if ( _Version == ESystemVersion::W10_REDSTONE_CREATORS_1703 )
+		strPattern = ENC( "8D 45 F0 89 55 F8 50 8D 55 F4" );
+	else
+		bCouldRetry = true, strPattern = ENC( "53 56 57 8B DA 8B F9 50" );
+
+	if ( ( pInsertInvertedFunctionTable = FindPattern( hNewTechnologyModule, strPattern ) ) == nullptr
+		 && bCouldRetry 
+		 && ( pInsertInvertedFunctionTable = FindPattern( hNewTechnologyModule, ENC( "8D 45 F4 89 55 F8 50 8D 55 FC" ) ) ) == nullptr )
+		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Failed to find RtlInsertInvertedFunctionTable." ) ), false;
+
+	return true;
+}
+
+void CMemoryManager::Uninitialize( )
+{ }
 
 bool CMemoryManager::SetProcess( const std::string &strExecutable, DWORD dwAccess )
 {
