@@ -16,7 +16,7 @@
 #undef _SILENCE_CXX17_UNCAUGHT_EXCEPTION_DEPRECATION_WARNING
 
 // Windows
-#define WIN32_LEAN_AND_MEAN // remove unnecessary includes
+#define VC_EXTRALEAN // remove unnecessary includes
 #define NOMINMAX // disable min/max macros
 #include <Windows.h>
 #include <tchar.h>
@@ -33,6 +33,22 @@
 #include <comdef.h>
 #include <WbemIdl.h>
 #pragma comment( lib, "wbemuuid.lib" )
+
+// Driver Development Kit
+extern "C"
+{
+	NTSYSAPI
+		NTSTATUS
+		NTAPI
+		RtlGetVersion(
+			_Out_
+			_At_( lpVersionInformation->dwOSVersionInfoSize, _Pre_ _Valid_ )
+			_When_( lpVersionInformation->dwOSVersionInfoSize == sizeof( RTL_OSVERSIONINFOEXW ),
+					_At_( ( PRTL_OSVERSIONINFOEXW )lpVersionInformation, _Out_ ) )
+			PRTL_OSVERSIONINFOW lpVersionInformation
+		);
+}
+#pragma comment( lib, "ntdll.lib" )
 
 #undef ERROR
 #undef EncryptFile

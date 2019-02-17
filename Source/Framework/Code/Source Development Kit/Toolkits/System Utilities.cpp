@@ -231,6 +231,40 @@ bool CSystemInformation::ElevateProcess( HANDLE hProcess /*= GetCurrentProcess( 
 	return true;
 }
 
+CSystemInformation::ESystemVersion CSystemInformation::GetOperatingSystemVersion( )
+{
+	if ( !IsWindows8OrGreater( ) )
+		throw std::runtime_error( ENC( "This program cannot run on your version of Windows." ) );
+
+	RTL_OSVERSIONINFOW _OperatingSystemVersionInformation = { };
+	if ( RtlGetVersion( &_OperatingSystemVersionInformation ) != STATUS_SUCCESS )
+		throw std::runtime_error( ENC( "This program cannot run on a corrupted operating system." ) );
+
+	if ( _OperatingSystemVersionInformation.dwBuildNumber >= BUILD_PREVIEW )
+		return W10_PREVIEW;
+
+	if ( _OperatingSystemVersionInformation.dwBuildNumber >= BUILD_REDSTONE_CREATORS_OCTOBER_1809 )
+		return W10_REDSTONE_CREATORS_OCTOBER_1809;
+
+	if ( _OperatingSystemVersionInformation.dwBuildNumber >= BUILD_REDSTONE_CREATORS_APRIL_1803 )
+		return W10_REDSTONE_CREATORS_APRIL_1803;
+
+	if ( _OperatingSystemVersionInformation.dwBuildNumber >= BUILD_REDSTONE_CREATORS_FALL_1709 )
+		return W10_REDSTONE_CREATORS_FALL_1709;
+
+	if ( _OperatingSystemVersionInformation.dwBuildNumber >= BUILD_REDSTONE_CREATORS_1703 )
+		return W10_REDSTONE_CREATORS_1703;
+
+	if ( _OperatingSystemVersionInformation.dwBuildNumber >= BUILD_REDSTONE_ANNIVERSARY_1607 )
+		return W10_REDSTONE_ANNIVERSARY_1607;
+
+	if ( _OperatingSystemVersionInformation.dwBuildNumber >= BUILD_REDSTONE_NOVEMBER_1511 )
+		return W10_REDSTONE_NOVEMBER_1511;
+
+	if ( _OperatingSystemVersionInformation.dwBuildNumber >= BUILD_INITIAL_1507 )
+		return W10_INITIAL_1507;
+}
+
 vector2_t CSystemInformation::GetScreenSize( )
 {
 	const auto hwDesktop = GetDesktopWindow( );

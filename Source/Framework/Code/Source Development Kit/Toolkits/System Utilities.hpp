@@ -57,6 +57,50 @@ public:
 		SYS_MAX
 	};
 
+	// todo clean up this crap
+	enum ESystemBuild
+	{
+		BUILD_UNKNOWN,									// XP, Vista, 7, 8, 8.1, or Server
+		BUILD_INITIAL_1507 = 10240,						// Initial 10 Build
+		BUILD_REDSTONE_NOVEMBER_1511 = 10586,			// Redstone November Build
+		BUILD_REDSTONE_ANNIVERSARY_1607 = 14393,		// Redstone Anniversary Build
+		BUILD_REDSTONE_CREATORS_1703 = 15063,			// Redstone Creators Build
+		BUILD_REDSTONE_CREATORS_FALL_1709 = 16299,		// Redstone Creators Update 1 Build
+		BUILD_REDSTONE_CREATORS_APRIL_1803 = 17134,		// Redstone Creators Update 2 Build
+		BUILD_REDSTONE_CREATORS_OCTOBER_1809 = 17763,	// Redstone Creators Update 3 Build
+		BUILD_PREVIEW = 18334,							// Codename 19H1/Preview Build
+	};
+
+	enum ESystemVersion
+	{
+		W_UNKNOWN,							// Unknown W version
+		WSERVER,							// Initial Server
+		WXP,								// Initial XP
+		WXP1,								// XP Service Pack 1
+		WXP2,								// XP Service Pack 2
+		WXP3,								// XP Service Pack 3
+		WVISTA,								// Initial Vista
+		WVISTA1,							// Vista Service Pack 1
+		WVISTA2,							// Vista Service Pack 2
+		W7,									// Initial 7
+		W71,								// 7 Service Pack 1
+		W8,									// Initial 8
+		W81,								// 8.1
+		W10_INITIAL_1507,					// Initial Release
+		W10_REDSTONE_NOVEMBER_1511,			// Redstone November Release
+		W10_REDSTONE_ANNIVERSARY_1607,		// Redstone Anniversary Release
+		W10_REDSTONE_CREATORS_1703,			// Redstone Creators Release
+		W10_REDSTONE_CREATORS_FALL_1709,	// Redstone Creators Update 1 Release
+		W10_REDSTONE_CREATORS_APRIL_1803,	// Redstone Creators Update 2 Release
+		W10_REDSTONE_CREATORS_OCTOBER_1809,	// Redstone Creators Update 3 Release
+		W10_19H1_1903,						// Codename 19H1 Release
+		W10_PREVIEW							// Preview version of W10
+	};
+
+	/** \brief Gets the operating system version */
+	/** \return Version found */
+	ESystemVersion GetOperatingSystemVersion( );
+
 	/** \brief Queries screen size of main display */
 	/** \return Screen size */
 	Utilities::vector2_t GetScreenSize( );
@@ -86,3 +130,5 @@ public:
 } inline _SystemInformation;
 
 using ESystemInformation = CSystemInformation::ESystemInformation;
+using ESystemBuild = CSystemInformation::ESystemBuild;
+using ESystemVersion = CSystemInformation::ESystemVersion;
