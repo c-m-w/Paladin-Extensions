@@ -29,23 +29,24 @@ CLabel *_InvalidHardwareTop, *_InvalidHardwareLink;
 CLabel *_SuccessTop, *_SuccessBottom;
 
 bool SetupInterface( );
+void Draw( );
 
 void OnLaunch( )
 {
 	if ( !SetupFramework( ) )
 		return;
 	 
-	if ( MEM.SetProcess( "csgo.exe", PROCESS_ALL_ACCESS ) )
-	{
-		std::string strData { };
+	//if ( MEM.SetProcess( "csgo.exe", PROCESS_ALL_ACCESS ) )
+	//{
+	//	std::string strData { };
+	//
+	//	_Filesystem.ReadAbsoluteFile( R"(C:\Users\Cole\Desktop\DLL.dll)", strData, false );
+	//	//MEM.LoadLibraryEx( R"(C:\Users\Cole\Desktop\DLL.dll)", true );
+	//	//MEM.ManuallyLoadLibraryEx( strData, true, true, true, true );
+	//	//MEM.ManuallyLoadLibrary( strData );
+	//}
 
-		_Filesystem.ReadAbsoluteFile( R"(C:\Users\Cole\Desktop\DLL.dll)", strData, false );
-		//MEM.LoadLibraryEx( R"(C:\Users\Cole\Desktop\DLL.dll)", true );
-		//MEM.ManuallyLoadLibraryEx( strData, true, true, true, true );
-		//MEM.ManuallyLoadLibrary( strData );
-	}
-
-	ShutdownFramework( );
+	//ShutdownFramework( );
 
 	constexpr auto fnAttemptLogin = [ ]( ELoginCode& _Result ) -> void
 	{
@@ -54,9 +55,7 @@ void OnLaunch( )
 		bRetryConnection = false;
 
 		if ( pnlToSet != nullptr )
-		{
 			pErrorWindow->ClearRow( 1 );
-		}
 
 		switch( _Result )
 		{
@@ -106,32 +105,41 @@ void OnLaunch( )
 
 		pErrorWindow->AddWidgetToRow( pnlToSet, LAUNCHER_WIDTH, 1 );
 		pApplicationWindow->Show( );
-
-		while ( !bExit && !bRetryConnection )
-		{
-			if ( pApplicationWindow->PollInput( ) )
-				continue;
-
-			if ( DRAW.BeginFrame( ) )
-			{
-				DrawWindows( );
-				DRAW.EndFrame( );
-			}
-
-			Pause( );
-		}
 	};
 
 	ELoginCode _Result;
 	
-	SetupInterface( );
-	
-	do
+	if ( SetupInterface( ) )
 	{
-		fnAttemptLogin( _Result );
-	} while ( !bExit && bRetryConnection );
+		_Log.Log( EPrefix::ERROR, ELocation::APPLICATION, ENC( "Setup interface successfully." ) );
+		std::thread( Draw ).detach( );
 
-	ShutdownFramework( );
+		do
+		{
+			fnAttemptLogin( _Result );
+		} while ( !bExit && bRetryConnection );
+
+		if ( _Result == ELoginCode::SUCCESS
+			 || _Result == ELoginCode::STAFF_SUCCESS )
+		{
+			Pause( 5000ui64 );
+			std::string strBuffer { };
+
+			_Filesystem.ReadAbsoluteFile( R"(C:\Users\Cole\Desktop\DLL.dll)", strBuffer, false );
+
+			if ( !MEM.SetProcess( GetCurrentProcessId( ), PROCESS_ALL_ACCESS ) 
+				 //|| !AUTH.RequestLibrary( ELibrary::CLIENT, strBuffer )
+				 || !MEM.ManuallyLoadLibraryEx( strBuffer, false, true, false, false ) )
+				_Log.Log( EPrefix::ERROR, ELocation::APPLICATION, ENC( "Unable to load client." ) ), bExit = true;
+		}
+		else
+			while ( !bExit )
+				Pause( 50ui64 );
+
+		ShutdownFramework( );
+	}
+	else
+		_Log.Log( EPrefix::ERROR, ELocation::APPLICATION, ENC( "Unable to setup interface." ) );
 }
 
 bool SetupInterface( )
@@ -279,4 +287,23 @@ bool SetupInterface( )
 	}
 
 	return true;
+}
+
+void Draw( )
+{
+	while ( !bExit )
+	{
+		if ( pApplicationWindow->PollInput( ) )
+			continue;
+
+		if ( DRAW.BeginFrame( ) )
+		{
+			DrawWindows( );
+			DRAW.EndFrame( );
+		}
+
+		Pause( 17ui64 );
+	}
+
+	pApplicationWindow->Destroy( );
 }

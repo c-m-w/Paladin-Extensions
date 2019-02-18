@@ -15,6 +15,12 @@ LRESULT CALLBACK DefaultWindowInputProcessor( HWND wnd, UINT uMessage, WPARAM wP
 			return TRUE;
 		}
 
+		case WM_KILLFOCUS:
+		{
+			while ( ShowCursor( TRUE ) <= 0 );
+			return TRUE;
+		}
+
 		default:
 		{
 			_Input.HandleEvent( uMessage, wParam, lParam );
@@ -154,4 +160,13 @@ void CApplicationWindow::Show( )
 	if ( !SetWindowLong( hwHandle, GWL_STYLE, lCurrent ) == FALSE )
 		_Log.Log( EPrefix::WARNING, ELocation::WINDOW, ENC( "Error setting window long to show window." ) );
 	
+}
+
+void CApplicationWindow::Destroy( )
+{
+	if ( UnregisterClass( _WindowInformation.lpszClassName, _WindowInformation.hInstance ) == FALSE )
+		_Log.Log( EPrefix::ERROR, ELocation::WINDOW, ENC( "Unable to unregister window." ) );
+
+	if ( DestroyWindow( hwHandle ) == FALSE )
+		_Log.Log( EPrefix::ERROR, ELocation::WINDOW, ENC( "Unable to destroy window." ) );
 }

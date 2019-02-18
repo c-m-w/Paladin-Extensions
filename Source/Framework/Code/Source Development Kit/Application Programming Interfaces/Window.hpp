@@ -28,4 +28,5 @@ public:
 	bool SetTitle( const std::string &strTitle );
 	void Hide( );
 	void Show( );
+	void Destroy( );
 };

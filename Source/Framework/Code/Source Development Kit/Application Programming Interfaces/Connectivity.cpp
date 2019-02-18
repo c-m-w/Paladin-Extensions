@@ -134,13 +134,19 @@ bool CConnectivity::Request( EAction _Action, std::string &strOut )
 	{
 		case LOGIN:
 		{
-			if ( !bPostDataSet[ PURCHASE_KEY ] ) throw std::runtime_error( ( ENC( "Post data ID " ) + std::to_string( int( PURCHASE_KEY ) ) + ENC( " not set." ) ).c_str( ) );
+			ENSURE_DATA_SET( PURCHASE_KEY );
 			ENSURE_DATA_SET( HARDWARE )
 		}
 		break;
 
+		case GET_LIBRARY:
+		case GET_INFORMATION:
+		{
+			ENSURE_DATA_SET( LIBRARY )
+		}
+		break;
+
 		case GET_SHELLCODE:
-		case DOWNLOAD:
 		case BAN:
 		case GET_RESOURCE_HASH:
 		case GET_RESOURCES:

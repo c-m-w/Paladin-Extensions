@@ -324,8 +324,12 @@ void *CMemoryManager::GetShellcodeLocation( EShellcode _Shellcode )
 	}
 }
 
-bool CMemoryManager::SetProcess( const std::string &strExecutable, DWORD dwAccess )
+
+bool CMemoryManager::SetProcess( DWORD dwNewProcessID, DWORD dwAccess )
 {
+	if ( dwNewProcessID == NULL )
+		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Invalid process ID passed to SetProcess." ) ), false;
+
 	if ( !bElevated && !( bElevated = SI.ElevateProcess( ) ) )
 		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Cannot elevate current process." ) ), false;
 
@@ -339,20 +343,27 @@ bool CMemoryManager::SetProcess( const std::string &strExecutable, DWORD dwAcces
 
 	hProcess = nullptr;
 	pShellcode = nullptr;
+	dwProcessID = dwNewProcessID;
 
 	if ( dwAccess == NULL )
-		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Access to open executable %s is invalid." ), strExecutable.c_str( ) ), false;
-
-	if ( !SI.GetProcessID( strExecutable, dwProcessID ) )
-		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to get process id of executable %s." ), strExecutable.c_str( ) ), false;
+		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Access to open executable process is invalid." ) ), false;
 
 	hProcess = OpenProcess( dwAccess, FALSE, dwProcessID );
 	if ( hProcess == nullptr
 		 || hProcess == INVALID_HANDLE_VALUE )
-		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to open process handle of executable %s." ), strExecutable.c_str( ) ), false;
+		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to open process handle of executable." ) ), false;
 
 	dwCurrentAccess = dwAccess;
 	return true;
+}
+
+bool CMemoryManager::SetProcess( const std::string &strExecutable, DWORD dwAccess )
+{
+	DWORD dwNewProcessID;
+	if ( !SI.GetProcessID( strExecutable, dwNewProcessID ) )
+		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to get process id of executable %s." ), strExecutable.c_str( ) ), false;
+
+	return SetProcess( dwNewProcessID, dwAccess );
 }
 
 bool CMemoryManager::CreateWorker( worker_t &_Worker, void *&pExit )

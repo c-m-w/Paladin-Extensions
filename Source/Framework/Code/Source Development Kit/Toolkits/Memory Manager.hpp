@@ -274,6 +274,7 @@ public:
 
 	static void *FindPattern( HMODULE hLocation, const std::string &strPattern );
 
+	bool SetProcess( DWORD dwProcessID, DWORD dwAccess );
 	bool SetProcess( const std::string &strExecutable, DWORD dwAccess );
 	bool CreateWorker( worker_t &_Worker, void *&pExit );
 	bool FindWorker( worker_t &_Worker, DWORD dwHandleAccess, void *&pExit );

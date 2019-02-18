@@ -7,28 +7,6 @@
 #define USE_DEFINITIONS
 #include "../../Framework.hpp"
 
-#if defined _DEBUG
-
-std::string CAuthentication::CreateShellcodeFile( )
-{
-	const auto fnInsertShellcode = [ ]( nlohmann::json &_Out, unsigned char *pBytes, std::size_t zSize )
-	{
-		_Out[ ENC( "Size" ) ] = zSize;
-		for ( auto z = 0u; z < zSize; z++ )
-			_Out[ ENC( "Bytes" ) ][ z ] = pBytes[ z ];
-	};
-
-	nlohmann::json _Return;
-	fnInsertShellcode( _Return[ ENC( "ThreadEnvironment" ) ], bThreadEnvironment, zThreadEnvironment );
-	fnInsertShellcode( _Return[ ENC( "LoadLibraryExWrapper" ) ], bLoadLibraryExWrapper, zLoadLibraryExWrapper );
-	fnInsertShellcode( _Return[ ENC( "RelocateImageBase" ) ], bRelocateImageBase, zRelocateImageBase );
-	fnInsertShellcode( _Return[ ENC( "LoadDependencies" ) ], bLoadDependencies, zLoadDependencies );
-
-	return _Return.dump( 4 );
-}
-
-#endif
-
 bool CAuthentication::GetHardware( std::string &strOut )
 {
 	std::string strHardware[ ESystemInformation::SYS_MAX ];
@@ -59,6 +37,28 @@ bool CAuthentication::GetHardware( std::string &strOut )
 	}.dump( ) ), true;
 }
 
+#if defined _DEBUG
+
+std::string CAuthentication::CreateShellcodeFile( )
+{
+	const auto fnInsertShellcode = [ ]( nlohmann::json &_Out, unsigned char *pBytes, std::size_t zSize )
+	{
+		_Out[ CRYPTO.GenerateHash( ENC( "Size" ) ) ] = zSize;
+		for ( auto z = 0u; z < zSize; z++ )
+			_Out[ CRYPTO.GenerateHash( ENC( "Bytes" ) ) ][ z ] = pBytes[ z ];
+	};
+
+	nlohmann::json _Return;
+	fnInsertShellcode( _Return[ CRYPTO.GenerateHash( ENC( "ThreadEnvironment" ) ) ], bThreadEnvironment, zThreadEnvironment );
+	fnInsertShellcode( _Return[ CRYPTO.GenerateHash( ENC( "LoadLibraryExWrapper" ) ) ], bLoadLibraryExWrapper, zLoadLibraryExWrapper );
+	fnInsertShellcode( _Return[ CRYPTO.GenerateHash( ENC( "RelocateImageBase" ) ) ], bRelocateImageBase, zRelocateImageBase );
+	fnInsertShellcode( _Return[ CRYPTO.GenerateHash( ENC( "LoadDependencies" ) ) ], bLoadDependencies, zLoadDependencies );
+
+	return _Return.dump( 4 );
+}
+
+#endif
+
 bool CAuthentication::CreateLicenseFile( std::string strPurchaseKey )
 {
 	std::transform( strPurchaseKey.begin( ), strPurchaseKey.end( ), strPurchaseKey.begin( ), toupper );
@@ -88,12 +88,13 @@ ELoginCode CAuthentication::Login( )
 		 || !CRYPTO.Decrypt( strResponse, strDecryptedResponse ) )
 		return _Filesystem.RestoreWorkingDirectory( ), CONNECTION_ERROR;
 
-	ELoginCode _Return;
+	ERequestCode _Return;
 	try
 	{
 		auto jsResponse = nlohmann::json::parse( strDecryptedResponse );
-		const auto strBuffer = jsResponse[ "Exit Code" ].get< std::string >( );
-		_Return = ELoginCode( std::stoi( strBuffer ) );
+		const auto strBuffer = jsResponse[ ENC( "Exit Code" ) ].get< std::string >( );
+		_Return = ERequestCode( std::stoi( strBuffer ) );
+		bLoggedIn = _Return == SUCCESS || _Return == STAFF_SUCCESS;
 	}
 	catch( nlohmann::json::parse_error &e )
 	{
@@ -133,24 +134,35 @@ bool CAuthentication::RequestShellcode( unsigned char **pThreadEnvironment, unsi
 
 	try
 	{
-		const auto fnLoadShellcode = [ & ]( nlohmann::json _Source, unsigned char *pOut, std::size_t &zSize ) -> bool
+		const auto fnLoadShellcode = [ & ]( nlohmann::json _Source, unsigned char **pOut, std::size_t &zSize ) -> bool
 		{
-			zSize = _Source[ ENC( "Size" ) ].get< std::size_t >( );
+			zSize = _Source[ CRYPTO.GenerateHash( ENC( "Size" ) ) ].get< std::size_t >( );
 			if ( zSize == 0 )
 				return _Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Invalid shellcode size." ) ), false;
 
-			pOut = new unsigned char[ zSize ];
+			*pOut = new unsigned char[ zSize ];
 			for ( auto z = 0u; z < zSize; z++ )
-				pOut[ z ] = _Source[ ENC( "Bytes" ) ][ z ].get< unsigned char >( );
+				( *pOut )[ z ] = _Source[ CRYPTO.GenerateHash( ENC( "Bytes" ) ) ][ z ].get< unsigned char >( );
 
 			return true;
 		};
 
-		auto _Shellcode = nlohmann::json::parse( strDecryptedResponse );
-		return fnLoadShellcode( _Shellcode[ ENC( "ThreadEnvironment" ) ], *pThreadEnvironment, *pThreadEnvironmentSize )
-				&& fnLoadShellcode( _Shellcode[ ENC( "LoadLibraryExWrapper" ) ], *pLoadLibraryExWrapper, *pLoadLibraryExWrapperSize )
-				&& fnLoadShellcode( _Shellcode[ ENC( "RelocateImageBase" ) ], *pRelocateImageBase, *pRelocateImageBaseSize )
-				&& fnLoadShellcode( _Shellcode[ ENC( "LoadDependencies" ) ], *pLoadDependencies, *pLoadDependenciesSize );
+		auto _Response = nlohmann::json::parse( strDecryptedResponse );
+		const auto _Return = ERequestCode( std::stoi( _Response[ ENC( "Exit Code" ) ].get< std::string >( ) ) );
+
+		if ( _Return != SUCCESS && _Return != STAFF_SUCCESS
+			 || _Response[ ENC( "Other Data" ) ].get< std::string >( ) == NO_OTHER_DATA )
+			return _Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Shellcode request failed. This may be due to an invalid session from attempted authentication bypass." ) ), false;
+
+		std::string strShellcode { };
+		if ( !CRYPTO.Decrypt( _Response[ ENC( "Other Data" ) ].get< std::string >( ), strShellcode ) )
+			return _Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Unable to decrypt shellcode." ) ), false;
+
+		auto _Shellcode = nlohmann::json::parse( strShellcode );
+		return fnLoadShellcode( _Shellcode[ CRYPTO.GenerateHash( ENC( "ThreadEnvironment" ) ) ], pThreadEnvironment, *pThreadEnvironmentSize )
+				&& fnLoadShellcode( _Shellcode[ CRYPTO.GenerateHash( ENC( "LoadLibraryExWrapper" ) ) ], pLoadLibraryExWrapper, *pLoadLibraryExWrapperSize )
+				&& fnLoadShellcode( _Shellcode[ CRYPTO.GenerateHash( ENC( "RelocateImageBase" ) ) ], pRelocateImageBase, *pRelocateImageBaseSize )
+				&& fnLoadShellcode( _Shellcode[ CRYPTO.GenerateHash( ENC( "LoadDependencies" ) ) ], pLoadDependencies, *pLoadDependenciesSize );
 	}
 	catch ( nlohmann::json::parse_error &e )
 	{
@@ -160,6 +172,81 @@ bool CAuthentication::RequestShellcode( unsigned char **pThreadEnvironment, unsi
 	catch ( nlohmann::json::type_error &e )
 	{
 		_Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Unable to access shellcode member. Message: %s." ), e.what( ) );
+		return false;
+	}
+}
+
+bool CAuthentication::RequestLibrary( ELibrary _Library, std::string &strOut )
+{
+	if ( !bLoggedIn )
+		return _Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Attempting to request a library without logging in first." ) ), false;
+
+	std::string strLibrary { }, strDecryptedLibrary { };
+
+	NET.AddPostData( EPostData::LIBRARY, std::to_string( int( _Library ) ) );
+	if ( !NET.Request( EAction::GET_LIBRARY, strLibrary )
+		 || !CRYPTO.Decrypt( strLibrary, strDecryptedLibrary ) )
+		return _Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Unable to receive or decrypt library %i." ), _Library ), false;
+
+	try
+	{
+		auto _Response = nlohmann::json::parse( strDecryptedLibrary );
+		const auto _Return = ERequestCode( std::stoi( _Response[ ENC( "Exit Code" ) ].get< std::string >( ) ) );
+
+		if ( _Return != SUCCESS && _Return != STAFF_SUCCESS
+			 || _Response[ "Other Data" ].get< std::string >( ) == NO_OTHER_DATA )
+			return _Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Library request failed. This may be due to an invalid session from attempted authentication bypass." ) ), false;
+
+		std::string strData { };
+		if ( !CRYPTO.Decrypt( _Response[ ENC( "Other Data" ) ].get< std::string >( ), strData ) )
+			return _Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Failed to decrypt library data." ) ), false;
+
+		auto _Data = nlohmann::json::parse( strData );
+
+		const auto strEncryptedSectionCount = _Data[ CRYPTO.GenerateHash( ENC( "Count" ) ) ].get< std::string >( ),
+			strEncryptedSectionOrder = _Data[ CRYPTO.GenerateHash( ENC( "Order" ) ) ].get< std::string >( );
+		std::string strSectionCount, strSectionOrder;
+
+		if ( !CRYPTO.Decrypt( strEncryptedSectionCount, strSectionCount )
+			 || !CRYPTO.Decrypt( strEncryptedSectionOrder, strSectionOrder ) )
+			return _Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Unable to parse library information." ) ), false;
+
+		const auto zSectionCount = std::stoi( strSectionCount );
+
+		if ( zSectionCount == NULL
+			 || strSectionOrder.length( ) != zSectionCount )
+			return _Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Numerical library information was invalid." ) ), false;
+
+		strOut.clear( );
+		for ( auto z = 0u; z < zSectionCount; z++ )
+		{
+			std::string strDecryptedSection;
+			if ( !CRYPTO.Decrypt( _Data[ CRYPTO.GenerateHash( ENC( "Sections" ) ) ][ z ].get< std::string >( ), strDecryptedSection ) )
+				return _Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Unable to decrypt library section." ) ), false;
+
+			strOut += strDecryptedSection;
+		}
+
+		return !strOut.empty( );
+	}
+	catch ( nlohmann::json::parse_error &e )
+	{
+		_Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Unable to parse response from requesting library. Message: %s." ), e.what( ) );
+		return false;
+	}
+	catch ( nlohmann::json::type_error &e )
+	{
+		_Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Unable to access library member. Message: %s." ), e.what( ) );
+		return false;
+	}
+	catch( std::invalid_argument &e )
+	{
+		_Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Could not convert string to int. Message: %s." ), e.what( ) );
+		return false;
+	}
+	catch ( std::out_of_range &e )
+	{
+		_Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "String to int value out of range. Message: %s." ), e.what( ) );
 		return false;
 	}
 }

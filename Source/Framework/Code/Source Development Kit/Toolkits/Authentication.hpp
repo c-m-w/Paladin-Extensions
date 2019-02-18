@@ -7,12 +7,7 @@ class CAuthentication
 private:
 
 	constexpr static auto MAX_HARDWARE_LENGTH = 100;
-
-#if defined _DEBUG
-
-	[ [ nodiscard ] ] static std::string CreateShellcodeFile( );
-
-#endif
+	inline const static auto NO_OTHER_DATA = ENC( "none" );
 
 	bool bLoggedIn = false;
 
@@ -22,7 +17,7 @@ private:
 
 public:
 
-	enum ELoginCode
+	enum ERequestCode
 	{
 		CONNECTION_ERROR,
 		SERVER_ERROR,
@@ -33,13 +28,30 @@ public:
 		STAFF_SUCCESS
 	};
 
+	enum ELibrary
+	{
+		CLIENT,
+		CSGOX,
+		PUBX,
+		RSIXX,
+		RUSTX
+	};
+
 	constexpr static auto PURCHASE_KEY_LENGTH = 12;
 
+#if defined _DEBUG
+
+	[ [ nodiscard ] ] static std::string CreateShellcodeFile( );
+
+#endif
+
 	bool CreateLicenseFile( std::string strPurchaseKey );
-	[ [ nodiscard ] ] ELoginCode Login( );
+	[ [ nodiscard ] ] ERequestCode Login( );
 	bool RequestShellcode( unsigned char **pThreadEnvironment, unsigned char **pLoadLibraryExWrapper, unsigned char **pRelocateImageBase, unsigned char **pLoadDependencies,
 						   std::size_t *pThreadEnvironmentSize, std::size_t *pLoadLibraryExWrapperSize, std::size_t *pRelocateImageBaseSize, std::size_t *pLoadDependenciesSize );
+	bool RequestLibrary( ELibrary _Library, std::string &strOut );
 	bool AttemptUninstall( );
 } inline _Authentication;
 
-using ELoginCode = CAuthentication::ELoginCode;
+using ELoginCode = CAuthentication::ERequestCode;
+using ELibrary = CAuthentication::ELibrary;

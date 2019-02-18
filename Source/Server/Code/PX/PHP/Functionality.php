@@ -21,8 +21,12 @@
          "GREATER"              => ">",
          "QUOTE"                => "'",
          "PLUS"                 => "+" ) );
-    define( "actions", array( 'login' => 0, 'get_shellcode' => 1, 'download' => 2, 'ban' => 3, 'get_resource_hash' => 4, 'get_resources' => 5 ) );
-	define( "launcherFile", "../Extensions/Launcher.exe" );
+    define( "actions", array( 'login' => 0, 'get_shellcode' => 1, 'get_library' => 2, 'get_information' => 3, 'ban' => 4, 'get_resource_hash' => 5, 'get_resources' => 6 ) );
+    define( "libararyDirectory", "/home/palavpvb/PX/Libraries/" );
+    define( "libraries", array( 'PX Client.dll', 'PX CSGO.dll', 'PX PUBG.dll', 'PX RSIX.dll', 'PX RUST.dll' ) );
+    define( "dataDirectory", '/home/palavpvb/PX/Data/' );
+    define( 'shellcodeDataFile', 'Shellcode.px' );
+    define( 'extensionData', array(  ) );
 
 	$log			= new Logging( );
 	$cryptography	= new Cryptography( );
@@ -130,7 +134,7 @@
 		private $xfUser;
 		private $unique;
 
-		private function parsePostData( ): void
+		private function parseLoginData( ): void
 		{
 			global $functionality;
 
@@ -253,19 +257,53 @@
 			$_SESSION[ 'user' ] = $this->xfUser;
 		}
 
+        private function sessionValid( ): bool
+        {
+            session_start( );
+            return isset( $_SESSION[ 'user' ] ) && $_SESSION[ 'user' ] != NULL;
+        }
+
 		public function login( ): void
 		{
-			$this->parsePostData( );
+			$this->parseLoginData( );
 			$this->getUserInformation( );
 			$this->ensureValidUser( );
 			$this->beginSession( );
 			$this->logAttempt( $this->xfUser[ 'is_staff' ] ? 'Staff Success' : 'Success' );
 		}
 
-		public function download( ): void
+        public function getShellcode( ): void
+        {
+            global $functionality;
+            global $log;
+            global $cryptography;
+
+            if ( !$this->sessionValid( ) )
+            {
+                $log->log( 'Attempting to get shellcode without a valid session. Could possibly be someone attempting to bypass authentication.' );
+                $functionality->stopExecution( 'Server Error' );
+            }
+
+            $shellcode = file_get_contents( dataDirectory . shellcodeDataFile );
+
+            if ( $shellcode === FALSE )
+            {
+                $log->log( 'Failed to read shellcode file.' );
+                $functionality->stopExecution( 'Server Error' );
+            }
+
+            $functionality->stopExecution( 'Success', $cryptography->encrypt( $shellcode ) );
+        }
+
+		public function getLibrary( ): void
 		{
 
 		}
+
+        public function getInformation( ): void
+        {
+
+        }
 
 		public function ban( ): void
 		{
@@ -292,12 +330,19 @@
 
 		if ( $action == actions[ 'login' ] )
 			$auth->login( );
+
+        if ( $action == actions[ 'get_shellcode' ] )
+            $auth->getShellcode( );
+
 		if ( $action == actions[ 'download' ] )
 			$auth->download( );
+
 		if ( $action == actions[ 'ban' ] )
 			$auth->ban( );
+
         if ( $action == actions[ 'get_resource_hash' ] )
             $functionality->sendResourceHash( );
+
         if ( $action == actions[ 'get_resources' ] )
             $functionality->sendResources( );
 	}
