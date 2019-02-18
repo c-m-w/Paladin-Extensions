@@ -229,10 +229,6 @@ private:
 		LOAD_DEPENDENCIES
 	};
 
-	using pattern_t = std::vector< __int16 >;
-
-	static pattern_t ParsePattern( const std::string &strPattern );
-
 	bool Initialize( ) override;
 	void Uninitialize( ) override;
 
@@ -256,7 +252,25 @@ private:
 	DWORD dwCurrentAccess = 0;
 	void *pShellcode = nullptr;
 
+	using pattern_t = std::vector< __int16 >;
+
+	static pattern_t ParsePattern( const std::string& strPattern );
+
+	struct pattern_queue_member_t
+	{
+		pattern_t _Pattern;
+		unsigned uProgress;
+		void* pStartLocation;
+		pattern_queue_member_t( pattern_t _Pattern ): _Pattern( _Pattern )
+		{ }
+	};
+
+	std::vector< pattern_queue_member_t > vecPatternQueue;
+
 public:
+
+	void AddPatternToScanQueue( const std::string& strPattern );
+	void FindQueuedPatterns( std::vector< void* >& vecPatterns );
 
 	static void *FindPattern( HMODULE hLocation, const std::string &strPattern );
 

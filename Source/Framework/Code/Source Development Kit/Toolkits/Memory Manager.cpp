@@ -512,6 +512,17 @@ bool CMemoryManager::LoadLibraryEx( const std::string &strPath, bool bUseExistin
 	return FreeMemory( pExit ) && FreeMemory( pLibraryName ) && bSuccess;
 }
 
+void CMemoryManager::AddPatternToScanQueue( const std::string &strPattern )
+{
+	vecPatternQueue.emplace_back( ParsePattern( strPattern ) );
+}
+
+void CMemoryManager::FindQueuedPatterns( std::vector<void *> &vecPatterns )
+{
+	// if pattern is failed to be found, it's emplaced back as nullptr
+	// at each byte we scan, we check our progress for each pattern queue member and see if the match. if not, set uprogress 0
+}
+
 void *CMemoryManager::FindPattern( HMODULE hLocation, const std::string &strPattern )
 {
 	const auto _Pattern = ParsePattern( strPattern );

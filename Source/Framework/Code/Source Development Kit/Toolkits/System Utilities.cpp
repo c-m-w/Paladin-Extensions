@@ -233,6 +233,10 @@ bool CSystemInformation::ElevateProcess( HANDLE hProcess /*= GetCurrentProcess( 
 
 CSystemInformation::ESystemVersion CSystemInformation::GetOperatingSystemVersion( )
 {
+	static ESystemVersion enumResult = W_UNKNOWN;
+	if ( enumResult != W_UNKNOWN )
+		return enumResult;
+
 	if ( !IsWindows8OrGreater( ) )
 		throw std::runtime_error( ENC( "This program cannot run on your version of Windows." ) );
 
@@ -241,28 +245,30 @@ CSystemInformation::ESystemVersion CSystemInformation::GetOperatingSystemVersion
 		throw std::runtime_error( ENC( "This program cannot run on a corrupted operating system." ) );
 
 	if ( _OperatingSystemVersionInformation.dwBuildNumber >= BUILD_PREVIEW )
-		return W10_PREVIEW;
+		return enumResult = W10_PREVIEW;
 
 	if ( _OperatingSystemVersionInformation.dwBuildNumber >= BUILD_REDSTONE_CREATORS_OCTOBER_1809 )
-		return W10_REDSTONE_CREATORS_OCTOBER_1809;
+		return enumResult = W10_REDSTONE_CREATORS_OCTOBER_1809;
 
 	if ( _OperatingSystemVersionInformation.dwBuildNumber >= BUILD_REDSTONE_CREATORS_APRIL_1803 )
-		return W10_REDSTONE_CREATORS_APRIL_1803;
+		return enumResult = W10_REDSTONE_CREATORS_APRIL_1803;
 
 	if ( _OperatingSystemVersionInformation.dwBuildNumber >= BUILD_REDSTONE_CREATORS_FALL_1709 )
-		return W10_REDSTONE_CREATORS_FALL_1709;
+		return enumResult = W10_REDSTONE_CREATORS_FALL_1709;
 
 	if ( _OperatingSystemVersionInformation.dwBuildNumber >= BUILD_REDSTONE_CREATORS_1703 )
-		return W10_REDSTONE_CREATORS_1703;
+		return enumResult = W10_REDSTONE_CREATORS_1703;
 
 	if ( _OperatingSystemVersionInformation.dwBuildNumber >= BUILD_REDSTONE_ANNIVERSARY_1607 )
-		return W10_REDSTONE_ANNIVERSARY_1607;
+		return enumResult = W10_REDSTONE_ANNIVERSARY_1607;
 
 	if ( _OperatingSystemVersionInformation.dwBuildNumber >= BUILD_REDSTONE_NOVEMBER_1511 )
-		return W10_REDSTONE_NOVEMBER_1511;
+		return enumResult = W10_REDSTONE_NOVEMBER_1511;
 
 	if ( _OperatingSystemVersionInformation.dwBuildNumber >= BUILD_INITIAL_1507 )
-		return W10_INITIAL_1507;
+		return enumResult = W10_INITIAL_1507;
+
+	throw std::runtime_error( ENC( "This program cannot run on your version of Windows." ) );
 }
 
 vector2_t CSystemInformation::GetScreenSize( )
