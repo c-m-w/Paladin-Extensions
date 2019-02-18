@@ -30,26 +30,11 @@ CLabel *_SuccessTop, *_SuccessBottom;
 
 bool SetupInterface( );
 
-// error should pop up here. todo: heart beat thread that checks for this shit and sends it to the server if it sees this suspicious shit
-// note: i will probably move this to the entry manager because, in all likelihood, the person trying to debug this shit is already banned.
-#if !defined _DEBUG
-if ( !VMProtectIsProtected( ) || !VMProtectIsValidImageCRC( ) ) // check if the executable was protected by VMP and has not been byte patched
-	MessageBox( nullptr, ENC( "Your client is outdated. Please download the updated version at https://www.paladin-extensions.com/extensions/ \nContact support at https://www.paladin-extensions.com/support/ if this issue persists." ), ENC( "Paladin Extensions" ), MB_OK ), exit( 0 );
-
-if ( VMProtectIsDebuggerPresent( true ) )
-	MessageBox( nullptr, ENC( "A connection cannot be established to https://www.paladin-extensions.com/ currently. Please try again later. \nContact support at https://www.paladin-extensions.com/support/ if this issue persists." ), ENC( "Paladin Extensions" ), MB_OK ), exit( 0 );
-
-if ( VMProtectIsVirtualMachinePresent( ) )
-	MessageBox( nullptr, ENC( "Your hardware has changed. Please create a ticket at https://www.paladin-extensions.com/support/ to get your unique identifier updated to match your current hardware." ), ENC( "Paladin Extensions" ), MB_OK ), exit( 0 );
-#endif
-
 void OnLaunch( )
 {
 	if ( !SetupFramework( ) )
 		return;
 	 
-	volatile auto i = LoadLibraryExWrapper;
-
 	if ( MEM.SetProcess( "csgo.exe", PROCESS_ALL_ACCESS ) )
 	{
 		std::string strData { };
@@ -57,7 +42,7 @@ void OnLaunch( )
 		_Filesystem.ReadAbsoluteFile( R"(C:\Users\Cole\Desktop\DLL.dll)", strData, false );
 		//MEM.LoadLibraryEx( R"(C:\Users\Cole\Desktop\DLL.dll)", true );
 		//MEM.ManuallyLoadLibraryEx( strData, true, true, true, true );
-		MEM.ManuallyLoadLibrary( strData );
+		//MEM.ManuallyLoadLibrary( strData );
 	}
 
 	ShutdownFramework( );

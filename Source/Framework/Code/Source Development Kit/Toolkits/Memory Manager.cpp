@@ -239,13 +239,18 @@ bool CMemoryManager::Initialize( )
 	}
 	else if ( _Version == ESystemVersion::W10_REDSTONE_CREATORS_1703 )
 	{
-		pInsertInvertedFunctionTable = FindPattern( hNewTechnologyModule, ENC( "8D 45 F0 89 55 F8 50 8D 55 F4" ) );
-		pInvertedFunctionTable = pInsertInvertedFunctionTable;
+		pInsertInvertedFunctionTable = reinterpret_cast< void * >( std::uintptr_t( FindPattern( hNewTechnologyModule, ENC( "8D 45 F0 89 55 F8 50 8D 55 F4" ) ) ) - 10 );
+		if ( pInsertInvertedFunctionTable != nullptr )
+			pInvertedFunctionTable = *reinterpret_cast< void ** >( std::uintptr_t( pInsertInvertedFunctionTable ) + 0x57 );
 	}
 	else
 	{
 		pInsertInvertedFunctionTable = FindPattern( hNewTechnologyModule, ENC( "53 56 57 8B DA 8B F9 50" ) );
-		pInvertedFunctionTable = pInsertInvertedFunctionTable;
+		if ( pInsertInvertedFunctionTable != nullptr )
+			pInvertedFunctionTable = *reinterpret_cast< void ** >( std::uintptr_t( pInsertInvertedFunctionTable ) +
+																   _Version == ESystemVersion::W10_INITIAL_1507
+																   || _Version == ESystemVersion::W10_REDSTONE_NOVEMBER_1511
+																   || _Version == ESystemVersion::W10_REDSTONE_ANNIVERSARY_1607 ? 0x2B : 0x2C );
 	}
 
 	return pInsertInvertedFunctionTable != nullptr && pInvertedFunctionTable != nullptr;
