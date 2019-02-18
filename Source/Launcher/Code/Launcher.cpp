@@ -100,7 +100,7 @@ void OnLaunch( )
 			default:
 			{
 				bExit = true;
-				_Log.Log( EPrefix::ERROR, ELocation::APPLICATION, ENC( "Invalid login code received." ) ), throw std::runtime_error( ENC( "There has been an invalid response from the server." ) );
+				_Log.Log( EPrefix::ERROR, ELocation::APPLICATION, ENC( "Invalid login code received." ) ), throw std::runtime_error( ENC( "Invalid server communication." ) );
 			}
 		}
 
