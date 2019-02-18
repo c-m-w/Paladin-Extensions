@@ -54,6 +54,7 @@ public:
 	enum EAction
 	{
 		LOGIN,
+		GET_SHELLCODE,
 		DOWNLOAD,
 		BAN,
 		GET_RESOURCE_HASH,

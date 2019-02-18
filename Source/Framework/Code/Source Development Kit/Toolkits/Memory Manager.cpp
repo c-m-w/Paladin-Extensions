@@ -7,11 +7,6 @@
 #define USE_DEFINITIONS
 #include "../../Framework.hpp"
 
-load_library_ex_wrapper_t::load_library_ex_wrapper_t( )
-{
-	memcpy( bLoadLibraryExWrapper, LoadLibraryExWrapper, LOAD_LIBRARY_EX_WRAPPER_SIZE );
-}
-
 worker_t::worker_t( DWORD dwThreadID, DWORD dwNewAccess ): dwThreadID( dwThreadID ), dwCurrentAccess( dwNewAccess )
 {
 	if ( dwThreadID == 0 )
@@ -143,7 +138,7 @@ bool worker_t::ExecutingFunction( void *pFunction, std::size_t zFunctionSize )
 		return false;
 
 	return _ThreadContext.Eip >= std::uintptr_t( pFunction )
-		&& _ThreadContext.Eip <= std::uintptr_t( pFunction ) + zFunctionSize;
+		&& _ThreadContext.Eip < std::uintptr_t( pFunction ) + zFunctionSize;
 }
 
 bool worker_t::WaitForExecutionFinish( DWORD dwTime )
@@ -257,7 +252,72 @@ bool CMemoryManager::Initialize( )
 }
 
 void CMemoryManager::Uninitialize( )
-{ }
+{
+#if !defined _DEBUG
+
+	if ( bThreadEnvironment != nullptr )
+		delete[ ] bThreadEnvironment;
+
+	if ( bLoadLibraryExWrapper != nullptr )
+		delete[ ] bLoadLibraryExWrapper;
+
+	if ( bRelocateImageBase != nullptr )
+		delete[ ] bRelocateImageBase;
+
+	if ( bLoadDependencies != nullptr )
+		delete[ ] bLoadDependencies;
+
+#endif
+}
+
+bool CMemoryManager::EnsureShellcodeValidity( )
+{
+	if ( bThreadEnvironment == nullptr
+		 || bLoadLibraryExWrapper == nullptr
+		 || bRelocateImageBase == nullptr
+		 || bLoadDependencies == nullptr )
+		if ( !AUTH.RequestShellcode( reinterpret_cast< unsigned char ** >( &bThreadEnvironment ), reinterpret_cast< unsigned char ** >( &bLoadLibraryExWrapper ),
+									 reinterpret_cast< unsigned char ** >( &bRelocateImageBase ), reinterpret_cast< unsigned char ** >( &bLoadDependencies ),
+									 &zThreadEnvironment, &zLoadLibraryExWrapper, &zRelocateImageBase, &zLoadDependencies ) )
+			return false;
+
+	if ( pShellcode == nullptr )
+	{
+		if ( !AllocateMemory( pShellcode, zThreadEnvironment + zLoadLibraryExWrapper + zRelocateImageBase + zLoadDependencies, PAGE_EXECUTE_READWRITE )
+			 || !Write( pThreadEnvironment, bThreadEnvironment, zThreadEnvironment )
+			 || !Write( pLoadLibraryExWrapper, bLoadLibraryExWrapper, zLoadLibraryExWrapper )
+			 || !Write( pRelocateImageBase, bRelocateImageBase, zRelocateImageBase )
+			 || !Write( pLoadDependencies, bLoadDependencies, zLoadDependencies ) )
+			return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Failed to allocate and write shellcode to memory." ) ), false;
+
+	}
+
+	return true;
+}
+
+void *CMemoryManager::GetShellcodeLocation( EShellcode _Shellcode )
+{
+	if ( pShellcode == nullptr )
+		return _Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Attempting to get shellcode location of %i without initializing it." ), _Shellcode ), nullptr;
+
+	switch( _Shellcode )
+	{
+		case THREAD_ENVIRONMENT:
+			return pShellcode;
+
+		case LOAD_LIBRARY_EX_WRAPPER:
+			return reinterpret_cast< void * >( std::uintptr_t( pShellcode ) + zThreadEnvironment );
+
+		case RELOCATE_IMAGE_BASE:
+			return reinterpret_cast< void * >( std::uintptr_t( pShellcode ) + zThreadEnvironment + zLoadLibraryExWrapper );
+
+		case LOAD_DEPENDENCIES:
+			return reinterpret_cast< void * >( std::uintptr_t( pShellcode ) + zThreadEnvironment + zLoadLibraryExWrapper + zRelocateImageBase );
+
+		default:
+			return nullptr;
+	}
+}
 
 bool CMemoryManager::SetProcess( const std::string &strExecutable, DWORD dwAccess )
 {
@@ -268,17 +328,12 @@ bool CMemoryManager::SetProcess( const std::string &strExecutable, DWORD dwAcces
 		if ( CloseHandle( hProcess ) == FALSE )
 			_Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Unable to close old process handle." ) );
 
-	if ( pThreadEnvironment != nullptr )
-		if ( !FreeMemory( pThreadEnvironment ) )
-			_Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Unable to free ThreadEnvironment memory." ) );
-
-	if ( pLoadLibraryExWrapper != nullptr )
-		if ( !FreeMemory( pLoadLibraryExWrapper ) )
-			_Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Unable to free LoadLibraryExWrapper memory." ) );
+	if ( pShellcode != nullptr )
+		if ( !FreeMemory( pShellcode ) )
+			_Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Unable to free shellcode memory." ) );
 
 	hProcess = nullptr;
-	pThreadEnvironment = nullptr;
-	pLoadLibraryExWrapper = nullptr;
+	pShellcode = nullptr;
 
 	if ( dwAccess == NULL )
 		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Access to open executable %s is invalid." ), strExecutable.c_str( ) ), false;
@@ -296,21 +351,19 @@ bool CMemoryManager::SetProcess( const std::string &strExecutable, DWORD dwAcces
 }
 
 bool CMemoryManager::CreateWorker( worker_t &_Worker, void *&pExit )
-{	
+{
+	if ( !EnsureShellcodeValidity( ) )
+		return false;
+
 	if ( !( dwCurrentAccess & PROCESS_CREATE_THREAD ) )
 		_Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Insufficient privileges to create a thread." ) );
-
-	if ( !pThreadEnvironment )
-		if ( !AllocateMemory( pThreadEnvironment, THREAD_ENVIRONMENT_SIZE, PAGE_EXECUTE_READWRITE )
-			 || !Write( pThreadEnvironment, ThreadEnvironment, THREAD_ENVIRONMENT_SIZE ) )
-			 return false;
 
 	DWORD dwThreadID;
 	_Worker = worker_t( CreateRemoteThread( hProcess, nullptr, NULL, LPTHREAD_START_ROUTINE( pThreadEnvironment ), pExit, NULL, &dwThreadID ), THREAD_ALL_ACCESS );
 	if ( !_Worker.Valid( ) )
 		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to create a worker." ) ), false;
 
-	while ( !_Worker.ExecutingFunction( pThreadEnvironment, THREAD_ENVIRONMENT_SIZE ) )
+	while ( !_Worker.ExecutingFunction( pThreadEnvironment, zThreadEnvironment ) )
 		Pause( 10ui64 );
 
 	return true;
@@ -318,6 +371,9 @@ bool CMemoryManager::CreateWorker( worker_t &_Worker, void *&pExit )
 
 bool CMemoryManager::FindWorker( worker_t &_Worker, DWORD dwHandleAccess, void *&pExit )
 {
+	if ( !EnsureShellcodeValidity( ) )
+		return false;
+
 	CSystemInformation::thread_list_t _Threads { };
 	if ( !SI.GetProcessThreads( dwProcessID, _Threads ) )
 		return false;
@@ -326,11 +382,6 @@ bool CMemoryManager::FindWorker( worker_t &_Worker, DWORD dwHandleAccess, void *
 	for ( auto &_Thread : _Threads )
 		if ( _Thread.second > dwPriority )
 			dwThreadID = _Thread.first, dwPriority = _Thread.second;
-
-	if ( !pThreadEnvironment )
-		if ( !AllocateMemory( pThreadEnvironment, THREAD_ENVIRONMENT_SIZE, PAGE_EXECUTE_READWRITE )
-			 || !Write( pThreadEnvironment, ThreadEnvironment, THREAD_ENVIRONMENT_SIZE ) )
-			return false;
 
 	_Worker = worker_t( dwThreadID, dwHandleAccess );
 	return _Worker.Valid( ) && _Worker.Suspend( ) && _Worker.Push( pExit ) && _Worker.SimulateFunctionCall( pThreadEnvironment ) && _Worker.Resume( );
@@ -410,52 +461,37 @@ bool CMemoryManager::FreeMemory( void *pAddress )
 
 bool CMemoryManager::LoadLibraryEx( const std::string &strPath, bool bUseExistingThread, HMODULE *pModuleHandle /*= nullptr*/ )
 {
+	if ( !EnsureShellcodeValidity( ) )
+		return false;
+
 	worker_t _Worker;
 	void *pExit = nullptr;
-
-	if ( LOAD_LIBRARY_EX_WRAPPER_SIZE_ != LOAD_LIBRARY_EX_WRAPPER_SIZE )
-		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "LOAD_LIBRARY_EX_WRAPPER_SIZE needs to be updated." ) ), false;
-
-	if ( !pLoadLibraryExWrapper )
-		if ( !AllocateMemory( pLoadLibraryExWrapper, sizeof ( load_library_ex_wrapper_t ), PAGE_EXECUTE_READWRITE ) )
-			return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to allocate memory for LoadLibraryExWrapper." ) ), false;
+	void *pLibraryName = nullptr;
 
 	if ( !AllocateMemory( pExit, sizeof( bool ), PAGE_READWRITE ) )
 		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to allocate memory for exiting." ) ), false;
 
+	if ( !AllocateMemory( pLibraryName, strPath.length( ) * sizeof( char ), PAGE_READWRITE ) )
+		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to allocate memory for library name." ) ), FreeMemory( pExit ), false;
+
 	if( !( bUseExistingThread ? FindWorker( _Worker, THREAD_ALL_ACCESS, pExit ) : CreateWorker( _Worker, pExit ) ) )
-		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to get worker thread to load library." ) ), FreeMemory( pExit ), false;
+		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to get worker thread to load library." ) ), FreeMemory( pExit ), FreeMemory( pLibraryName ), false;
 
-	load_library_ex_wrapper_t _WrapperData;
-
-	_WrapperData.szLibraryPath = reinterpret_cast< const char * >( std::uintptr_t( pLoadLibraryExWrapper ) + sizeof( void * ) * 3 + LOAD_LIBRARY_EX_WRAPPER_SIZE );
-	if ( !Write( pLoadLibraryExWrapper, _WrapperData.szLibraryPath )
-		 || !Write( reinterpret_cast< void * >( const_cast< char * >( _WrapperData.szLibraryPath ) ),
-					reinterpret_cast< void * >( const_cast< char * >( &strPath[ 0 ] ) ), strPath.length( ) * sizeof( char ) ) )
+	if ( !Write( pLibraryName, const_cast< char * >( &strPath[ 0 ] ), strPath.length( ) ) )
 		return FreeMemory( pExit ), false;
 
-	_WrapperData.pLoadLibrary = reinterpret_cast< decltype( _WrapperData.pLoadLibrary ) >( LoadLibraryA );
-	if ( !Write( reinterpret_cast< void * >( std::uintptr_t( pLoadLibraryExWrapper ) + sizeof( void * ) ), _WrapperData.pLoadLibrary )
-		 || !Write( reinterpret_cast< void * >( std::uintptr_t( pLoadLibraryExWrapper ) + sizeof( void * ) * 2 ), _WrapperData.BUFFER )
-		 || !Write( reinterpret_cast< void * >( std::uintptr_t( pLoadLibraryExWrapper ) + sizeof( void * ) * 3 ),
-					reinterpret_cast< void * >( _WrapperData.bLoadLibraryExWrapper ), LOAD_LIBRARY_EX_WRAPPER_SIZE ) )
-		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to write load library wrapper data to memory." ) ), FreeMemory( pExit ), false;
+	if ( !_Worker.Suspend( ) 
+		 || !_Worker.Push( LoadLibraryA )
+		 || !_Worker.Push( pLibraryName )
+		 || !_Worker.SimulateFunctionCall( pLoadLibraryExWrapper ) )
+		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to call the LoadLibraryExWrapper shellcode." ) ), FreeMemory( pExit ), FreeMemory( pLibraryName ), false;
 
-	if ( !_Worker.SimulateFunctionCall( reinterpret_cast< void * >( std::uintptr_t( pLoadLibraryExWrapper ) + sizeof( void * ) * 3 ) ) )
-		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to call the LoadLibraryExWrapper shellcode." ) ), FreeMemory( pExit ), false;
-
-	auto mmtWaitStart = GetMoment( );
-	CONTEXT _ThreadContext;
-	do
-	{
-		if ( !_Worker.GetContext( _ThreadContext ) )
-			return FreeMemory( pExit ), false;
-
-		if ( GetMoment( ) - mmtWaitStart >= MAX_LIBRARY_LOAD_TIME )
-			return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Waiting for ECX signal timed out while loading library." ) ), FreeMemory( pExit ), false;
-
+	while ( !_Worker.ExecutingFunction( pThreadEnvironment, zThreadEnvironment ) )
 		Pause( 50ui64 );
-	} while ( _ThreadContext.Ecx != DONE_LOADING_LIBRARY );
+
+	CONTEXT _ThreadContext;
+	if ( !_Worker.GetContext( _ThreadContext ) )
+		return FreeMemory( pExit ), FreeMemory( pLibraryName ), false;
 
 	if ( pModuleHandle != nullptr )
 		*pModuleHandle = HMODULE( _ThreadContext.Eax );
@@ -465,61 +501,15 @@ bool CMemoryManager::LoadLibraryEx( const std::string &strPath, bool bUseExistin
 
 	if ( bUseExistingThread )
 	{
-		mmtWaitStart = GetMoment( );
-		do
-		{
-			if ( !_Worker.GetContext( _ThreadContext ) )
-				return FreeMemory( pExit ), false;
-
-			if ( GetMoment( ) - mmtWaitStart >= MAX_LIBRARY_LOAD_TIME )
-				return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Waiting for thread execution to resume timed out." ) ), FreeMemory( pExit ), false;
-
+		while ( _Worker.ExecutingFunction( pThreadEnvironment, zThreadEnvironment ) )
 			Pause( 50ui64 );
-		} while ( _ThreadContext.Eip >= std::uintptr_t( pThreadEnvironment )
-				  && _ThreadContext.Eip <= std::uintptr_t( pThreadEnvironment ) + THREAD_ENVIRONMENT_SIZE
-				  || _ThreadContext.Eip >= std::uintptr_t( pLoadLibraryExWrapper )
-				  && _ThreadContext.Eip <= std::uintptr_t( pLoadLibraryExWrapper ) + sizeof( load_library_ex_wrapper_t ) );
 
 		bSuccess &= _Worker.Close( );
 	}
 	else
 		_Worker.WaitForExecutionFinish( INFINITE );
 
-	return FreeMemory( pExit ) && bSuccess;
-}
-
-bool CMemoryManager::ManuallyLoadLibrary( const std::string &strData, HMODULE *pModuleHandle /*= nullptr*/ )
-{
-	image_info_t _Image( reinterpret_cast< void * >( const_cast< char * >( &strData[ 0 ] ) ) );
-	const auto zImage = _Image.GetImageSize( );
-	DWORD dwBuffer;
-	unsigned char *pImage = nullptr;
-
-	if ( !_Image.ValidImage( ) )
-		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Invalid image passed to ManuallyLoadLibrary." ) ), delete[ ] pImage, false;
-
-	pImage = new unsigned char[ zImage ];
-	VirtualProtect( pImage, zImage, PAGE_EXECUTE_READWRITE, &dwBuffer );
-	memcpy( pImage, _Image.pData, _Image.GetHeaderSize( ) );
-
-	for ( auto i = 0; i < _Image.GetSectionCount( ); i++ )
-	{
-		auto pSectionHeader = _Image.GetSectionHeader( i );
-		memcpy( reinterpret_cast< void * >( std::uintptr_t( pImage ) + pSectionHeader->VirtualAddress ),
-				reinterpret_cast< void * >( std::uintptr_t( _Image.pData ) + pSectionHeader->PointerToRawData ), pSectionHeader->SizeOfRawData );
-	}
-
-	RelocateImageBase( pImage );
-	if ( !LoadDependencies( pImage, GetProcAddress, LoadLibraryA ) )
-		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to load image dependencies." ) ), delete[ ] pImage, false;
-
-	const auto pEntryPoint = reinterpret_cast< BOOL( WINAPI * )( HMODULE, DWORD, void * ) >( std::uintptr_t( pImage ) + _Image.GetNewTechnologyHeaders( )->OptionalHeader.AddressOfEntryPoint );
-	const auto bSuccess = pEntryPoint( HMODULE( pImage ), DLL_PROCESS_ATTACH, nullptr ) == TRUE;
-
-	if ( bSuccess && pModuleHandle != nullptr )
-		*pModuleHandle = HMODULE( pImage );
-
-	return bSuccess;
+	return FreeMemory( pExit ) && FreeMemory( pLibraryName ) && bSuccess;
 }
 
 void *CMemoryManager::FindPattern( HMODULE hLocation, const std::string &strPattern )
@@ -545,8 +535,48 @@ void *CMemoryManager::FindPattern( HMODULE hLocation, const std::string &strPatt
 	return nullptr;
 }
 
+//bool CMemoryManager::ManuallyLoadLibrary( const std::string &strData, HMODULE *pModuleHandle /*= nullptr*/ )
+//{
+//	if ( !EnsureShellcodeValidity( ) )
+//		return false;
+//
+//	image_info_t _Image( reinterpret_cast< void * >( const_cast< char * >( &strData[ 0 ] ) ) );
+//	const auto zImage = _Image.GetImageSize( );
+//	DWORD dwBuffer;
+//	unsigned char *pImage = nullptr;
+//
+//	if ( !_Image.ValidImage( ) )
+//		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Invalid image passed to ManuallyLoadLibrary." ) ), delete[ ] pImage, false;
+//
+//	pImage = new unsigned char[ zImage ];
+//	VirtualProtect( pImage, zImage, PAGE_EXECUTE_READWRITE, &dwBuffer );
+//	memcpy( pImage, _Image.pData, _Image.GetHeaderSize( ) );
+//
+//	for ( auto i = 0; i < _Image.GetSectionCount( ); i++ )
+//	{
+//		auto pSectionHeader = _Image.GetSectionHeader( i );
+//		memcpy( reinterpret_cast< void * >( std::uintptr_t( pImage ) + pSectionHeader->VirtualAddress ),
+//				reinterpret_cast< void * >( std::uintptr_t( _Image.pData ) + pSectionHeader->PointerToRawData ), pSectionHeader->SizeOfRawData );
+//	}
+//
+//	RelocateImageBase( pImage );
+//	if ( !LoadDependencies( pImage, GetProcAddress, LoadLibraryA ) )
+//		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to load image dependencies." ) ), delete[ ] pImage, false;
+//
+//	const auto pEntryPoint = reinterpret_cast< BOOL( WINAPI * )( HMODULE, DWORD, void * ) >( std::uintptr_t( pImage ) + _Image.GetNewTechnologyHeaders( )->OptionalHeader.AddressOfEntryPoint );
+//	const auto bSuccess = pEntryPoint( HMODULE( pImage ), DLL_PROCESS_ATTACH, nullptr ) == TRUE;
+//
+//	if ( bSuccess && pModuleHandle != nullptr )
+//		*pModuleHandle = HMODULE( pImage );
+//
+//	return bSuccess;
+//}
+
 bool CMemoryManager::ManuallyLoadLibraryEx( const std::string &strData, bool bUseExistingThread, bool bEnableExceptions, bool bEraseHeaders, bool bEraseDiscardableSections, HMODULE *pModuleHandle /*= nullptr*/  )
 {
+	if ( !EnsureShellcodeValidity( ) )
+		return false;
+
 	image_info_t _Image( reinterpret_cast< void * >( const_cast< char * >( &strData[ 0 ] ) ) );
 	worker_t _Worker;
 	void *pExit = nullptr, *pImage = nullptr;
@@ -567,14 +597,6 @@ bool CMemoryManager::ManuallyLoadLibraryEx( const std::string &strData, bool bUs
 
 	if ( !_Image.ValidImage( ) )
 		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Invalid image passed to ManuallyLoadLibraryEx." ) ), false;
-
-	if ( !pManualMapFunctions )
-		if ( !AllocateMemory( pManualMapFunctions, LOAD_DEPENDENCIES_SIZE + RELOCATE_IMAGE_BASE_SIZE, PAGE_EXECUTE_READWRITE ) )
-			return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to create memory for functions to manually map image." ) ), false;
-
-	if ( !Write( pManualMapFunctions, reinterpret_cast< void * >( RELOCATE_IMAGE_BASE ), RELOCATE_IMAGE_BASE_SIZE )
-		 || !Write( reinterpret_cast< void * >( std::uintptr_t( pManualMapFunctions ) + RELOCATE_IMAGE_BASE_SIZE ), reinterpret_cast< void * >( LOAD_DEPENDENCIES ), LOAD_DEPENDENCIES_SIZE ) )
-		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to write functions for manually mapping image into memory." ) ), false;
 
 	if ( !AllocateMemory( pExit, sizeof( bool ), PAGE_READWRITE ) )
 		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to allocate memory for exiting." ) ), false;
@@ -598,20 +620,20 @@ bool CMemoryManager::ManuallyLoadLibraryEx( const std::string &strData, bool bUs
 
 	if ( !_Worker.Suspend( )
 		 || !_Worker.Push( pImage )
-		 || !_Worker.SimulateFunctionCall( pManualMapFunctions ) )
+		 || !_Worker.SimulateFunctionCall( pRelocateImageBase ) )
 		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to call RelocateImageBase." ) ), fnCleanup( ), false;
 
-	while ( !_Worker.ExecutingFunction( pThreadEnvironment, THREAD_ENVIRONMENT_SIZE ) )
+	while ( !_Worker.ExecutingFunction( pThreadEnvironment, zThreadEnvironment ) )
 		Pause( 50ui64 );
 
 	if ( !_Worker.Suspend( )
 		 || !_Worker.Push( LoadLibraryA )
 		 || !_Worker.Push( GetProcAddress )
 		 || !_Worker.Push( pImage )
-		 || !_Worker.SimulateFunctionCall( reinterpret_cast< void * >( std::uintptr_t( pManualMapFunctions ) + RELOCATE_IMAGE_BASE_SIZE ) ) )
+		 || !_Worker.SimulateFunctionCall( pLoadDependencies ) )
 		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to call LoadDependencies." ) ), fnCleanup( ), false;
 
-	while ( _Worker.ExecutingFunction( reinterpret_cast< void * >( std::uintptr_t( pManualMapFunctions ) + RELOCATE_IMAGE_BASE_SIZE ), LOAD_DEPENDENCIES_SIZE ) )
+	while ( _Worker.ExecutingFunction( pLoadDependencies, zLoadDependencies ) )
 		Pause( 50ui64 );
 
 	CONTEXT _ThreadContext;
@@ -636,7 +658,7 @@ bool CMemoryManager::ManuallyLoadLibraryEx( const std::string &strData, bool bUs
 			 || !_Worker.SimulateFunctionCall( pInsertInvertedFunctionTable ) )
 			return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Failed to call RtlInsertInvertedFunctionTable." ) ), fnCleanup( ), false;
 
-		while ( !_Worker.ExecutingFunction( pThreadEnvironment, THREAD_ENVIRONMENT_SIZE ) )
+		while ( !_Worker.ExecutingFunction( pThreadEnvironment, zThreadEnvironment ) )
 			Pause( 50ui64 );
 
 		if ( !Read( pInvertedFunctionTable, _Table ) )
@@ -658,7 +680,7 @@ bool CMemoryManager::ManuallyLoadLibraryEx( const std::string &strData, bool bUs
 		 || !_Worker.SimulateFunctionCall( reinterpret_cast< void * >( std::uintptr_t( pImage ) + _Image.GetNewTechnologyHeaders( )->OptionalHeader.AddressOfEntryPoint ) ) )
 		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to call entry point." ) ), fnCleanup( ), false;
 
-	while ( !_Worker.ExecutingFunction( pThreadEnvironment, THREAD_ENVIRONMENT_SIZE ) )
+	while ( !_Worker.ExecutingFunction( pThreadEnvironment, zThreadEnvironment ) )
 		Pause( 50ui64 );
 
 	if ( !_Worker.GetContext( _ThreadContext ) )
@@ -668,8 +690,12 @@ bool CMemoryManager::ManuallyLoadLibraryEx( const std::string &strData, bool bUs
 	if ( !Write( pExit, true ) )
 		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to signal thread to exit." ) ), fnCleanup( ), false;
 
-	while ( _Worker.ExecutingFunction( pThreadEnvironment, THREAD_ENVIRONMENT_SIZE ) )
+	while ( _Worker.ExecutingFunction( pThreadEnvironment, zThreadEnvironment ) )
 		Pause( 50ui64 );
+
+	if ( bUseExistingThread )
+		if ( !_Worker.Close( ) )
+			_Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Failed to close worker." ) );
 
 	if ( !bReturn )
 		_Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "DLLMain didn't return true." ) );
@@ -680,7 +706,7 @@ bool CMemoryManager::ManuallyLoadLibraryEx( const std::string &strData, bool bUs
 	if ( bEraseDiscardableSections )
 		for ( auto i = 0; i < _Image.GetSectionCount( ); i++ )
 		{
-			auto pSectionHeader = _Image.GetSectionHeader( i );
+			const auto pSectionHeader = _Image.GetSectionHeader( i );
 			if ( ( pSectionHeader->Characteristics & IMAGE_SCN_MEM_DISCARDABLE ) != NULL )
 				if ( !WipeMemory( reinterpret_cast< void * >( std::uintptr_t( pImage ) + pSectionHeader->VirtualAddress ), pSectionHeader->SizeOfRawData ) )
 					_Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Failed to wipe section %i." ), i );

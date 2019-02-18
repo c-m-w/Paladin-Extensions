@@ -21,7 +21,7 @@
          "GREATER"              => ">",
          "QUOTE"                => "'",
          "PLUS"                 => "+" ) );
-    define( "actions", array( 'login' => 0, 'download' => 1, 'ban' => 2, 'get_resource_hash' => 3, 'get_resources' => 4 ) );
+    define( "actions", array( 'login' => 0, 'get_shellcode' => 1, 'download' => 2, 'ban' => 3, 'get_resource_hash' => 4, 'get_resources' => 5 ) );
 	define( "launcherFile", "../Extensions/Launcher.exe" );
 
 	$log			= new Logging( );

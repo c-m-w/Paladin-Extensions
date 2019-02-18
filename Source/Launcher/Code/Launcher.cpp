@@ -47,15 +47,17 @@ void OnLaunch( )
 {
 	if ( !SetupFramework( ) )
 		return;
+	 
+	volatile auto i = LoadLibraryExWrapper;
 
 	if ( MEM.SetProcess( "csgo.exe", PROCESS_ALL_ACCESS ) )
 	{
 		std::string strData { };
 
 		_Filesystem.ReadAbsoluteFile( R"(C:\Users\Cole\Desktop\DLL.dll)", strData, false );
-		//MEM.LoadLibraryEx( R"(C:\Users\Cole\Documents\Visual Studio 2017\Projects\Test1\Release\Test1.dll)", true );
-		MEM.ManuallyLoadLibraryEx( strData, true, true, true, true );
-		//MEM.ManuallyLoadLibrary( strData );
+		//MEM.LoadLibraryEx( R"(C:\Users\Cole\Desktop\DLL.dll)", true );
+		//MEM.ManuallyLoadLibraryEx( strData, true, true, true, true );
+		MEM.ManuallyLoadLibrary( strData );
 	}
 
 	ShutdownFramework( );

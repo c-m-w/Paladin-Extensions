@@ -48,7 +48,7 @@ bool CResourceManager::Initialize( )
 			if ( _File[ ENC( "Hash" ) ].get< std::string >( ) != _Cryptography.GenerateHash( strFileData ) )
 			{
 				_Filesystem.RestoreWorkingDirectory( );
-				_Log.Log( EPrefix::WARNING, ELocation::FILESYSTEM, ENC( "Hash of file %s does not match." ), strFile.c_str( ) );
+				_Log.Log( EPrefix::WARNING, ELocation::RESOURCE_MANAGER, ENC( "Hash of file %s does not match." ), strFile.c_str( ) );
 				bValid = false;
 				break;
 			}
@@ -57,7 +57,7 @@ bool CResourceManager::Initialize( )
 	}
 	catch ( nlohmann::json::type_error & )
 	{
-		_Log.Log( EPrefix::ERROR, ELocation::FILESYSTEM, ENC( "Error while accessing json object while comparing hashes." ) );
+		_Log.Log( EPrefix::ERROR, ELocation::RESOURCE_MANAGER, ENC( "Error while accessing json object while comparing hashes." ) );
 		return false;
 	}
 

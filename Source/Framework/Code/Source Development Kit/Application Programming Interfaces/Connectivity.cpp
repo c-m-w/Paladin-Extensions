@@ -139,6 +139,7 @@ bool CConnectivity::Request( EAction _Action, std::string &strOut )
 		}
 		break;
 
+		case GET_SHELLCODE:
 		case DOWNLOAD:
 		case BAN:
 		case GET_RESOURCE_HASH:

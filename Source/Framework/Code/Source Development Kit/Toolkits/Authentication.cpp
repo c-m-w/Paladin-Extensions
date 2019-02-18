@@ -7,6 +7,28 @@
 #define USE_DEFINITIONS
 #include "../../Framework.hpp"
 
+#if defined _DEBUG
+
+std::string CAuthentication::CreateShellcodeFile( )
+{
+	const auto fnInsertShellcode = [ ]( nlohmann::json &_Out, unsigned char *pBytes, std::size_t zSize )
+	{
+		_Out[ ENC( "Size" ) ] = zSize;
+		for ( auto z = 0u; z < zSize; z++ )
+			_Out[ ENC( "Bytes" ) ][ z ] = pBytes[ z ];
+	};
+
+	nlohmann::json _Return;
+	fnInsertShellcode( _Return[ ENC( "ThreadEnvironment" ) ], bThreadEnvironment, zThreadEnvironment );
+	fnInsertShellcode( _Return[ ENC( "LoadLibraryExWrapper" ) ], bLoadLibraryExWrapper, zLoadLibraryExWrapper );
+	fnInsertShellcode( _Return[ ENC( "RelocateImageBase" ) ], bRelocateImageBase, zRelocateImageBase );
+	fnInsertShellcode( _Return[ ENC( "LoadDependencies" ) ], bLoadDependencies, zLoadDependencies );
+
+	return _Return.dump( 4 );
+}
+
+#endif
+
 bool CAuthentication::GetHardware( std::string &strOut )
 {
 	std::string strHardware[ ESystemInformation::SYS_MAX ];
@@ -96,6 +118,50 @@ ELoginCode CAuthentication::Login( )
 
 	_Log.Log( EPrefix::INFO, ELocation::AUTHENTICATION, ENC( "Received login code of %i." ), _Return );
 	return _Filesystem.RestoreWorkingDirectory( ), _Return;
+}
+
+bool CAuthentication::RequestShellcode( unsigned char **pThreadEnvironment, unsigned char **pLoadLibraryExWrapper, unsigned char **pRelocateImageBase, unsigned char **pLoadDependencies,
+										std::size_t *pThreadEnvironmentSize, std::size_t *pLoadLibraryExWrapperSize, std::size_t *pRelocateImageBaseSize, std::size_t *pLoadDependenciesSize )
+{
+	if ( !bLoggedIn )
+		return _Log.Log( EPrefix::WARNING, ELocation::AUTHENTICATION, ENC( "Calling RequestShellcode without loggin in first." ) ), false;
+
+	std::string strResponse { }, strDecryptedResponse { };
+	if ( !NET.Request( EAction::GET_SHELLCODE, strResponse )
+		 || !CRYPTO.Decrypt( strResponse, strDecryptedResponse ) )
+		return _Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Obtaining shellcode failed." ) ), false;
+
+	try
+	{
+		const auto fnLoadShellcode = [ & ]( nlohmann::json _Source, unsigned char *pOut, std::size_t &zSize ) -> bool
+		{
+			zSize = _Source[ ENC( "Size" ) ].get< std::size_t >( );
+			if ( zSize == 0 )
+				return _Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Invalid shellcode size." ) ), false;
+
+			pOut = new unsigned char[ zSize ];
+			for ( auto z = 0u; z < zSize; z++ )
+				pOut[ z ] = _Source[ ENC( "Bytes" ) ][ z ].get< unsigned char >( );
+
+			return true;
+		};
+
+		auto _Shellcode = nlohmann::json::parse( strDecryptedResponse );
+		return fnLoadShellcode( _Shellcode[ ENC( "ThreadEnvironment" ) ], *pThreadEnvironment, *pThreadEnvironmentSize )
+				&& fnLoadShellcode( _Shellcode[ ENC( "LoadLibraryExWrapper" ) ], *pLoadLibraryExWrapper, *pLoadLibraryExWrapperSize )
+				&& fnLoadShellcode( _Shellcode[ ENC( "RelocateImageBase" ) ], *pRelocateImageBase, *pRelocateImageBaseSize )
+				&& fnLoadShellcode( _Shellcode[ ENC( "LoadDependencies" ) ], *pLoadDependencies, *pLoadDependenciesSize );
+	}
+	catch ( nlohmann::json::parse_error &e )
+	{
+		_Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Unable to parse response from requesting shellcode. Message: %s." ), e.what( ) );
+		return false;
+	}
+	catch ( nlohmann::json::type_error &e )
+	{
+		_Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Unable to access shellcode member. Message: %s." ), e.what( ) );
+		return false;
+	}
 }
 
 bool CAuthentication::AttemptUninstall( )
