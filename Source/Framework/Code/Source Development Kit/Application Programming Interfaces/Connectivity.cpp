@@ -9,7 +9,7 @@
 
 #define ENSURE_DATA_SET( _PostData )																								\
 	if ( !bPostDataSet[ _PostData ] )																								\
-		throw std::runtime_error( ( ENC( "Post data ID " ) + std::to_string( int( _PostData ) ) + ENC( " not set." ) ).c_str( ) );
+		throw std::runtime_error( ( ENC( "Post data " ) + std::to_string( int( _PostData ) ) + ENC( " not set." ) ).c_str( ) )
 
 std::size_t WriteCallback( void *pData, std::size_t zMemberSize, std::size_t zMembers, void *pBuffer )
 {
@@ -134,8 +134,8 @@ bool CConnectivity::Request( EAction _Action, std::string &strOut )
 	{
 		case LOGIN:
 		{
-			if ( !bPostDataSet[ PURCHASE_KEY ] ) throw std::runtime_error( ( ENC( "Post data ID " ) + std::to_string( int( PURCHASE_KEY ) ) + ENC( " not set." ) ).c_str( ) );
-			ENSURE_DATA_SET( HARDWARE )
+			ENSURE_DATA_SET( PURCHASE_KEY );
+			ENSURE_DATA_SET( HARDWARE );
 		}
 		break;
 
@@ -146,7 +146,7 @@ bool CConnectivity::Request( EAction _Action, std::string &strOut )
 			break;
 
 		default:
-			throw std::runtime_error( ENC( "Attempting connection with invalid action." ) );
+			throw std::runtime_error( ENC( "Invalid connection action." ) );
 	}
 
 	AddPostData( ACTION, std::to_string( int( _Action ) ) );

@@ -87,7 +87,7 @@ CApplicationWindow::~CApplicationWindow( )
 bool CApplicationWindow::PollInput( )
 {
 	if ( pOldWindowInputProcessor )
-		throw std::runtime_error( ENC( "Attempting to poll a window's input that was not created." ) );
+		throw std::runtime_error( ENC( "Polling input from non-existent window." ) );
 
 	MSG msgMessage;
 

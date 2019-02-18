@@ -633,7 +633,7 @@ void CDrawing::DrawPolygon( const polygon_buffer_t &pbPolygon, bool bRelease /*=
 void CDrawing::DrawTexture( IDirect3DTexture9 *pTexture, const location_t &locLocation )
 {
 	if ( pTexture == nullptr )
-		throw std::runtime_error( ENC( "Attempting to draw a null texture." ) );
+		throw std::runtime_error( ENC( "Invalid drawing texture." ) );
 
 	if ( pSprite->Begin( D3DXSPRITE_ALPHABLEND ) == D3D_OK )
 	{
@@ -1487,7 +1487,7 @@ void polygon_t::Draw( rectangle_t recRelative )
 polygon_buffer_t polygon_t::GetBuffer( D3DPRIMITIVETYPE ptDraw /*= D3DPT_TRIANGLEFAN*/ )
 {
 	if ( vecVertices.empty( ) )
-		throw std::runtime_error( ENC( "Attempting to create a buffer from no vertices." ) );
+		throw std::runtime_error( ENC( "Invalid buffer vertices." ) );
 
 	return polygon_buffer_t( _Drawing.ConstructPolygon( &vecVertices[ 0 ], vecVertices.size( ) ), sPrimitives, ptDraw );
 }

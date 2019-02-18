@@ -36,7 +36,7 @@ inline bool SetupFramework( )
 {
 	static auto bInitializedOnce = false;
 	if ( bInitializedOnce )
-		throw std::runtime_error( ENC( "Initializing framework twice." ) );
+		throw std::runtime_error( ENC( "Multiple instances of the same process are conflicting with each other." ) );
 
 #if defined _DEBUG
 	pConsoleWindow = new CApplicationWindow( GetConsoleWindow( ), nullptr );
