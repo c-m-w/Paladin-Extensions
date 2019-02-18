@@ -21,18 +21,42 @@
     <ClCompile Include="..\Framework\Precompile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Code\Source Development Kit\Toolkits\Features\Combat\Aim Assistance.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\Source Development Kit\Toolkits\Features\Combat\Combat.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\Source Development Kit\Application Programming Interface\Link.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Framework\Precompile.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Code\Source Development Kit\Toolkits\header.h">
+    <ClInclude Include="Code\Source Development Kit\Toolkits\Features\Miscellaneous\Miscellaneous.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Code\Source Development Kit\Application Programming Interface\Types\eader.h">
+    <ClInclude Include="Code\Source Development Kit\Toolkits\Features\Features.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Code\Source Development Kit\Application Programming Interface\Interfaces\header.h">
+    <ClInclude Include="Code\Source Development Kit\Toolkits\Features\Combat\Combat.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Source Development Kit\Toolkits\Features\Awareness\Awareness.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Source Development Kit\Toolkits\Features\Features Context.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Source Development Kit\Toolkits\Features\Settings\Settings.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Source Development Kit\Toolkits\Features\Combat\Aim Assistance.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Source Development Kit\Application Programming Interface\Link.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
