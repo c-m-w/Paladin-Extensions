@@ -138,7 +138,7 @@ std::string& CResourceManager::GetResource( const std::string &strRelativePath )
 	_Filesystem.StoreCurrentWorkingDirectory( );
 	_Filesystem.ChangeWorkingDirectory( _Filesystem.GetAppdataDirectory( ), { _Filesystem.strRelativeResourceDirectory, strPath } );
 	if ( !_Filesystem.ReadFile( CFilesystem::PathToFile( strRelativePath ), strReturn, true ) )
-		throw std::runtime_error( ENC( "Unable to retrieve resource " ) + strRelativePath );
+		throw std::runtime_error( ENC( "Unable to obtain resource " ) + strRelativePath );
 
 	_Filesystem.RestoreWorkingDirectory( );
 	_LoadedResources.insert( std::pair< std::string, std::string >( strRelativePath, strReturn ) );
