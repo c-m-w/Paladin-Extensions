@@ -125,10 +125,8 @@ void OnLaunch( )
 			Pause( 5000ui64 );
 			std::string strBuffer { };
 
-			_Filesystem.ReadAbsoluteFile( R"(C:\Users\Cole\Desktop\DLL.dll)", strBuffer, false );
-
 			if ( !MEM.SetProcess( GetCurrentProcessId( ), PROCESS_ALL_ACCESS ) 
-				 //|| !AUTH.RequestLibrary( ELibrary::CLIENT, strBuffer )
+				 || !AUTH.RequestLibrary( ELibrary::CLIENT, strBuffer )
 				 || !MEM.ManuallyLoadLibraryEx( strBuffer, false, true, false, false ) )
 				_Log.Log( EPrefix::ERROR, ELocation::APPLICATION, ENC( "Unable to load client." ) ), bExit = true;
 		}

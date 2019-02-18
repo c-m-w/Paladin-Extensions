@@ -11,6 +11,7 @@ public:
 		PURCHASE_KEY,
 		HARDWARE,
 		LIBRARY,
+		BAN_REASON,
 		ACTION,
 		POST_DATA_MAX
 	};

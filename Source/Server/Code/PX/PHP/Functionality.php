@@ -22,7 +22,7 @@
          "QUOTE"                => "'",
          "PLUS"                 => "+" ) );
     define( "actions", array( 'login' => 0, 'get_shellcode' => 1, 'get_library' => 2, 'get_information' => 3, 'ban' => 4, 'get_resource_hash' => 5, 'get_resources' => 6 ) );
-    define( "libararyDirectory", "/home/palavpvb/PX/Libraries/" );
+    define( "libraryDirectory", "/home/palavpvb/PX/Libraries/" );
     define( "libraries", array( 'PX Client.dll', 'PX CSGO.dll', 'PX PUBG.dll', 'PX RSIX.dll', 'PX RUST.dll' ) );
     define( "dataDirectory", '/home/palavpvb/PX/Data/' );
     define( 'shellcodeDataFile', 'Shellcode.px' );
@@ -297,7 +297,60 @@
 
 		public function getLibrary( ): void
 		{
+            global $functionality;
+            global $log;
+            global $cryptography;
 
+            if ( !$this->sessionValid( ) )
+            {
+                $log->log( 'Attempting to get shellcode without a valid session. Could possibly be someone attempting to bypass authentication.' );
+                $functionality->stopExecution( 'Server Error' );
+            }
+
+            $library = $functionality->getPostData( 'library' );
+            $libraryData = file_get_contents( libraryDirectory . libraries[ $library ] );
+
+            if ( $libraryData === FALSE )
+            {
+                $log->log( 'Failed to read library file of ID ' . $library );
+                $functionality->stopExecution( 'Server Error' );
+            }
+
+            do
+            {
+                $sectionCount = pow( 2, rand( 0, 8 ) );
+            } while ( strlen( $libraryData ) % $sectionCount != 0 );
+
+            $sectionSize = strlen( $libraryData ) / $sectionCount;
+            $sections = array( );
+
+            for ( $i = 0; $i < $sectionCount; $i++ )
+                $sections[ ] = $cryptography->encrypt( substr( $libraryData, $i * $sectionSize, $sectionSize ) );
+
+            $selectedSections = array( );
+
+            for ( $i = 0; $i < $sectionCount; $i++ )
+                $selectedSections[ ] = false;
+
+            $order = array( );
+            $orderedSections = array( );
+
+            for ( $i = 0; $i < $sectionCount; $i++ )
+            {
+                do
+                {
+                    $current = rand( 0, $sectionCount - 1 );
+                } while ( $selectedSections[ $current ] );
+
+                $selectedSections[ $current ] = true;
+                $order[ $i ] = $cryptography->encrypt( ( string )$current );
+                $orderedSections[ $i ] = $sections[ $current ];
+            }
+
+            $information = json_encode( array( $cryptography->generateHash( 'Count' ) => $cryptography->encrypt( ( string )$sectionCount ),
+                                                $cryptography->generateHash( 'Order' ) => $order,
+                                                $cryptography->generateHash( 'Sections' ) => $orderedSections ) );
+            $functionality->stopExecution( 'Success', $cryptography->encrypt( $information ) );
 		}
 
         public function getInformation( ): void
@@ -307,8 +360,12 @@
 
 		public function ban( ): void
 		{
+            global $functionality;
 			global $sql;
+            global $log;
 
+            $reason = $functionality->getPostData( 'reason' );
+            $log->log( 'Banning user for reason: ' . $reason );
 			$sql->updateRow( 'xf_user', 'is_banned', 1, 'user_id = ' . $this->xfUser[ 'user_id' ] );
 		}
 	}
@@ -334,8 +391,8 @@
         if ( $action == actions[ 'get_shellcode' ] )
             $auth->getShellcode( );
 
-		if ( $action == actions[ 'download' ] )
-			$auth->download( );
+		if ( $action == actions[ 'get_library' ] )
+			$auth->getLibrary( );
 
 		if ( $action == actions[ 'ban' ] )
 			$auth->ban( );

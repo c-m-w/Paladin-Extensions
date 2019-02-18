@@ -146,8 +146,12 @@ bool CConnectivity::Request( EAction _Action, std::string &strOut )
 		}
 		break;
 
-		case GET_SHELLCODE:
 		case BAN:
+		{
+			ENSURE_DATA_SET( BAN_REASON )
+		}
+		break;
+		case GET_SHELLCODE:
 		case GET_RESOURCE_HASH:
 		case GET_RESOURCES:
 			break;

@@ -203,29 +203,37 @@ bool CAuthentication::RequestLibrary( ELibrary _Library, std::string &strOut )
 
 		auto _Data = nlohmann::json::parse( strData );
 
-		const auto strEncryptedSectionCount = _Data[ CRYPTO.GenerateHash( ENC( "Count" ) ) ].get< std::string >( ),
-			strEncryptedSectionOrder = _Data[ CRYPTO.GenerateHash( ENC( "Order" ) ) ].get< std::string >( );
-		std::string strSectionCount, strSectionOrder;
+		const auto strEncryptedSectionCount = _Data[ CRYPTO.GenerateHash( ENC( "Count" ) ) ].get< std::string >( );
+		std::string strSectionCount;
 
-		if ( !CRYPTO.Decrypt( strEncryptedSectionCount, strSectionCount )
-			 || !CRYPTO.Decrypt( strEncryptedSectionOrder, strSectionOrder ) )
+		if ( !CRYPTO.Decrypt( strEncryptedSectionCount, strSectionCount ) )
 			return _Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Unable to parse library information." ) ), false;
 
 		const auto zSectionCount = std::stoi( strSectionCount );
 
-		if ( zSectionCount == NULL
-			 || strSectionOrder.length( ) != zSectionCount )
+		if ( zSectionCount == NULL )
 			return _Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Numerical library information was invalid." ) ), false;
 
-		strOut.clear( );
+		std::vector< std::string > vecSections( zSectionCount );
 		for ( auto z = 0u; z < zSectionCount; z++ )
 		{
+			std::string strCurrentIndex { };
+			if ( !CRYPTO.Decrypt( _Data[ CRYPTO.GenerateHash( ENC( "Order" ) ) ][ z ].get< std::string >( ), strCurrentIndex ) )
+				return _Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Unable to decrypt index of section %i." ), z ), false;
+
+			const auto iCurrentIndex = std::stoi( strCurrentIndex );
+
 			std::string strDecryptedSection;
 			if ( !CRYPTO.Decrypt( _Data[ CRYPTO.GenerateHash( ENC( "Sections" ) ) ][ z ].get< std::string >( ), strDecryptedSection ) )
 				return _Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Unable to decrypt library section." ) ), false;
 
-			strOut += strDecryptedSection;
+			vecSections[ iCurrentIndex ] = strDecryptedSection;
 		}
+
+		strOut.clear( );
+
+		for ( auto &strSection : vecSections )
+			strOut += strSection;
 
 		return !strOut.empty( );
 	}
