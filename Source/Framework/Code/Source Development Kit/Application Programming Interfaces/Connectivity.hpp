@@ -12,6 +12,7 @@ public:
 		HARDWARE,
 		LIBRARY,
 		BAN_REASON,
+		PROCESS_LIST,
 		ACTION,
 		POST_DATA_MAX
 	};

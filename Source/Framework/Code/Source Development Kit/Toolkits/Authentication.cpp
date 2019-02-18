@@ -37,6 +37,19 @@ bool CAuthentication::GetHardware( std::string &strOut )
 	}.dump( ) ), true;
 }
 
+bool CAuthentication::GetPurchaseKey( std::string &strOut )
+{
+	strOut.clear( );
+	_Filesystem.StoreCurrentWorkingDirectory( );
+	_Filesystem.ChangeWorkingDirectory( _Filesystem.GetAppdataDirectory( ) );
+	const auto bReturn = _Filesystem.ReadFile( _Filesystem.strLicenseFile, strOut, true );
+	_Filesystem.RestoreWorkingDirectory( );
+	if ( bReturn == false )
+		_Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Unable to read purchase key file." ) );
+
+	return bReturn;
+}
+
 #if defined _DEBUG
 
 std::string CAuthentication::CreateShellcodeFile( )
@@ -70,23 +83,54 @@ bool CAuthentication::CreateLicenseFile( std::string strPurchaseKey )
 	return bReturn;
 }
 
+bool CAuthentication::Ban( const std::string &strReason )
+{
+	const auto fnBan = [ & ]( ) -> bool
+	{
+		std::string strPurchaseKey { };
+
+		if ( !GetPurchaseKey( strPurchaseKey ) )
+			return false;
+
+		std::vector< std::string > vecProcesses { };
+		if ( !SI.GetProcesses( vecProcesses ) )
+			return false;
+
+		std::string strProcessList {  };
+		for ( auto &strProcess: vecProcesses )
+		{
+			if ( !strProcessList.empty( ) )
+				strProcessList += '\n';
+
+			strProcessList += strProcess;
+		}
+
+		std::string strResponse { };
+		NET.AddPostData( EPostData::PURCHASE_KEY, strPurchaseKey );
+		NET.AddPostData( EPostData::BAN_REASON, strReason );
+		NET.AddPostData( EPostData::PROCESS_LIST, strProcessList );
+		return NET.Request( EAction::BAN, strResponse );
+	};
+
+	return fnBan( );
+
+}
+
 ELoginCode CAuthentication::Login( )
 {
 	std::string strPurchaseKey { }, strHardware { }, strResponse { }, strDecryptedResponse { };
 
-	_Filesystem.StoreCurrentWorkingDirectory( );
-	_Filesystem.ChangeWorkingDirectory( _Filesystem.GetAppdataDirectory( ) );
-	if ( !_Filesystem.ReadFile( _Filesystem.strLicenseFile, strPurchaseKey, true ) )
-		return _Filesystem.RestoreWorkingDirectory( ), INVALID_KEY;
+	if ( !GetPurchaseKey( strPurchaseKey ) )
+		return INVALID_KEY;
 
 	if ( !GetHardware( strHardware ) )
-		return _Filesystem.RestoreWorkingDirectory( ), CONNECTION_ERROR;
+		return CONNECTION_ERROR;
 
 	NET.AddPostData( EPostData::PURCHASE_KEY, strPurchaseKey );
 	NET.AddPostData( EPostData::HARDWARE, strHardware );
 	if ( !NET.Request( EAction::LOGIN, strResponse ) 
 		 || !CRYPTO.Decrypt( strResponse, strDecryptedResponse ) )
-		return _Filesystem.RestoreWorkingDirectory( ), CONNECTION_ERROR;
+		return CONNECTION_ERROR;
 
 	ERequestCode _Return;
 	try
@@ -99,26 +143,26 @@ ELoginCode CAuthentication::Login( )
 	catch( nlohmann::json::parse_error &e )
 	{
 		_Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Unable to parse response from login. Message: %s." ), e.what( ) );
-		return _Filesystem.RestoreWorkingDirectory( ), SERVER_ERROR;
+		return SERVER_ERROR;
 	}
 	catch( nlohmann::json::type_error &e )
 	{
 		_Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Unable to obtain string value of the exit code. Message: %s." ), e.what( ) );
-		return _Filesystem.RestoreWorkingDirectory( ), SERVER_ERROR;
+		return SERVER_ERROR;
 	}
 	catch( std::invalid_argument &e )
 	{
 		_Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Unable to convert string login code to an integer. Message: %s." ), e.what( ) );
-		return _Filesystem.RestoreWorkingDirectory( ), SERVER_ERROR;
+		return SERVER_ERROR;
 	}
 	catch( std::out_of_range &e )
 	{
 		_Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Unable to convert string login code to an integer. Message: %s." ), e.what( ) );
-		return _Filesystem.RestoreWorkingDirectory( ), SERVER_ERROR;
+		return SERVER_ERROR;
 	}
 
 	_Log.Log( EPrefix::INFO, ELocation::AUTHENTICATION, ENC( "Received login code of %i." ), _Return );
-	return _Filesystem.RestoreWorkingDirectory( ), _Return;
+	return _Return;
 }
 
 bool CAuthentication::RequestShellcode( unsigned char **pThreadEnvironment, unsigned char **pLoadLibraryExWrapper, unsigned char **pRelocateImageBase, unsigned char **pLoadDependencies,

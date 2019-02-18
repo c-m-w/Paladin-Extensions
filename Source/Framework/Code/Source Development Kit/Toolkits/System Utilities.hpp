@@ -125,6 +125,8 @@ public:
 	/** \brief Terminates a process */
 	/** \param dwProcessID Identifer of process to terminate */
 	static void TerminateProcessByID( DWORD dwProcessID );
+	static bool GetProcesses( std::vector< std::string > &vecOut );
+	static bool GetProgramList( std::vector< std::string > &vecOut );
 
 	friend class CMemoryManager;
 } inline _SystemInformation;

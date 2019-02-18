@@ -198,6 +198,38 @@ void CSystemInformation::TerminateProcessByID( DWORD dwProcessID )
 	
 }
 
+bool CSystemInformation::GetProcesses( std::vector< std::string > &vecOut )
+{
+	const auto hSnapshot = CreateToolhelp32Snapshot( TH32CS_SNAPPROCESS, NULL );
+
+	if ( hSnapshot == INVALID_HANDLE_VALUE
+		 || hSnapshot == nullptr )
+		return _Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES, ENC( "Unable to get processes." ) ), false;
+
+	auto bReturn = true;
+	PROCESSENTRY32 _CurrentProcess { sizeof( PROCESSENTRY32 ) };
+	if ( Process32First( hSnapshot, &_CurrentProcess ) != TRUE )
+	{
+		_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES, ENC( "Unable to find first process." ) );
+		bReturn = false;
+	}
+	else
+		do
+		{
+			vecOut.emplace_back( _CurrentProcess.szExeFile );
+		} while ( Process32Next( hSnapshot, &_CurrentProcess ) == TRUE );
+
+	if ( CloseHandle( hSnapshot ) == FALSE )
+		_Log.Log( EPrefix::WARNING, ELocation::SYSTEM_UTILITIES, ENC( "Unable to close process thread snapshot properly." ) );
+
+	return bReturn && !vecOut.empty( );
+}
+
+bool CSystemInformation::GetProgramList( std::vector< std::string > &vecOut )
+{
+	return false;
+}
+
 bool CSystemInformation::ElevateProcess( HANDLE hProcess /*= GetCurrentProcess( )*/ )
 {
 	HANDLE hTokenSelf { };

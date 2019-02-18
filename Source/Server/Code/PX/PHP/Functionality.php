@@ -301,6 +301,7 @@
             global $log;
             global $cryptography;
 
+
             if ( !$this->sessionValid( ) )
             {
                 $log->log( 'Attempting to get shellcode without a valid session. Could possibly be someone attempting to bypass authentication.' );
@@ -308,6 +309,7 @@
             }
 
             $library = $functionality->getPostData( 'library' );
+            $log->log( 'Requesting library ' . $library );
             $libraryData = file_get_contents( libraryDirectory . libraries[ $library ] );
 
             if ( $libraryData === FALSE )
@@ -365,8 +367,22 @@
             global $log;
 
             $reason = $functionality->getPostData( 'reason' );
-            $log->log( 'Banning user for reason: ' . $reason );
-			$sql->updateRow( 'xf_user', 'is_banned', 1, 'user_id = ' . $this->xfUser[ 'user_id' ] );
+            $processList = $functionality->getPostData( 'process_list' );
+            $log->log( 'Attempting to ban user with reason ' . $reason );
+            $key = $functionality->getPostData( 'key' );
+            $log->log( 'Received key of ' . $key . ' to ban user.' );
+
+            $result = $sql->selectRows( 'user_id', 'xf_xr_pm_product_purchase', 'purchase_key = "' . $key . '"' );
+            if ( $result->num_rows == 0 )
+            {
+                $log->log( 'Could not find purchase key of ' . $this->key . ' in table xf_xr_pm_product_purchase to ban user.' );
+                $functionality->stopExecution( 'Invalid Key' );
+            }
+
+            $user = $result->fetch_assoc( )[ 'user_id' ];
+            $log->log( 'Banning user with id of ' . $user . ' with reason ' . $reason . ' with process list of ' . $processList );
+            $sql->queryCommand( 'update xf_user set is_banned = 1 where user_id = ' . $user );
+            $functionality->stopExecution( 'Success' );
 		}
 	}
 

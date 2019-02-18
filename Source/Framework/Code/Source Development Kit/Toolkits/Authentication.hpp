@@ -12,6 +12,7 @@ private:
 	bool bLoggedIn = false;
 
 	bool GetHardware( std::string &strOut );
+	bool GetPurchaseKey( std::string &strOut );
 	__declspec( noreturn ) void UnsafeUninstall( );
 	bool Uninstall( );
 
@@ -46,6 +47,7 @@ public:
 #endif
 
 	bool CreateLicenseFile( std::string strPurchaseKey );
+	bool Ban( const std::string &strReason );
 	[ [ nodiscard ] ] ERequestCode Login( );
 	bool RequestShellcode( unsigned char **pThreadEnvironment, unsigned char **pLoadLibraryExWrapper, unsigned char **pRelocateImageBase, unsigned char **pLoadDependencies,
 						   std::size_t *pThreadEnvironmentSize, std::size_t *pLoadLibraryExWrapperSize, std::size_t *pRelocateImageBaseSize, std::size_t *pLoadDependenciesSize );

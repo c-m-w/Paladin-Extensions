@@ -38,6 +38,9 @@ bool CConnectivity::Initialize( )
 		vecIllegalCharacters.emplace_back( '+',					ENC( "PLUS" ) );
 		strPostDataIdentifiers[ PURCHASE_KEY ]	=				ENC( "key" );
 		strPostDataIdentifiers[ HARDWARE ]		=				ENC( "hw" );
+		strPostDataIdentifiers[ LIBRARY ]		=				ENC( "library" );
+		strPostDataIdentifiers[ BAN_REASON ]	=				ENC( "reason" );
+		strPostDataIdentifiers[ PROCESS_LIST ]	=				ENC( "process_list" );
 		strPostDataIdentifiers[ ACTION ]		=				ENC( "action" );
 		memset( bPostDataSet, false, sizeof( bool ) * POST_DATA_MAX );
 		return true;
@@ -148,9 +151,12 @@ bool CConnectivity::Request( EAction _Action, std::string &strOut )
 
 		case BAN:
 		{
+			ENSURE_DATA_SET( PURCHASE_KEY )
 			ENSURE_DATA_SET( BAN_REASON )
+			ENSURE_DATA_SET( PROCESS_LIST )
 		}
 		break;
+
 		case GET_SHELLCODE:
 		case GET_RESOURCE_HASH:
 		case GET_RESOURCES:
