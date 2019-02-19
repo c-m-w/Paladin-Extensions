@@ -232,9 +232,6 @@ bool CMemoryManager::Initialize( )
 		 || _Version == ESystemVersion::W10_REDSTONE_CREATORS_APRIL_1803
 		 || _Version == ESystemVersion::W10_REDSTONE_CREATORS_FALL_1709 )
 	{
-		std::vector< void * > vecMen;
-		AddPatternToScanQueue( ENC( "53 56 57 8D 45 F8 8B FA" ) );
-		FindQueuedPatterns( hNewTechnologyModule, vecMen );
 		pInsertInvertedFunctionTable = reinterpret_cast< void * >( std::uintptr_t( FindPattern( hNewTechnologyModule, ENC( "53 56 57 8D 45 F8 8B FA" ) ) ) - 7 );
 		pInvertedFunctionTable = FindPattern( hNewTechnologyModule, ENC( "33 F6 46 3B C6" ) );
 		if ( pInvertedFunctionTable != nullptr )
@@ -248,6 +245,11 @@ bool CMemoryManager::Initialize( )
 	}
 	else
 	{
+		auto expected = FindPattern( hNewTechnologyModule, ENC( "53 56 57 8B DA 8B F9 50" ) );
+		std::vector< void* > vecMen;
+		AddPatternToScanQueue( ENC( "53 56 57 8D 45 F8 8B FA" ) );
+		FindQueuedPatterns( hNewTechnologyModule, vecMen );
+		auto actual = vecMen[ 0 ];
 		pInsertInvertedFunctionTable = reinterpret_cast< void* >( std::uintptr_t( FindPattern( hNewTechnologyModule, ENC( "53 56 57 8B DA 8B F9 50" ) ) ) - 10 );
 		if ( pInsertInvertedFunctionTable != nullptr )
 			pInvertedFunctionTable = *reinterpret_cast< void ** >( std::uintptr_t( pInsertInvertedFunctionTable ) +
@@ -550,34 +552,31 @@ void CMemoryManager::FindQueuedPatterns( HMODULE hLocation, std::vector<void *> 
 	{
 		for ( auto& _Pattern: vecPatternQueue )
 		{
-			not_bob:
-			if ( _Pattern.uProgress == _Pattern._Pattern.size( ) )
+ScanSizeofSignature:
+			if ( _Pattern.uProgress == _Pattern._Pattern.size( ) - 1 )
 				continue;
 
 			if ( _Pattern.pStartLocation == nullptr )
 				_Pattern.pStartLocation = reinterpret_cast< void* >( pAddress ), _Pattern.uProgress = 0u;
 
-			bob:
-
 			if ( _Pattern._Pattern[ _Pattern.uProgress ] == UNKNOWN_BYTE
-				 || _Pattern._Pattern[ _Pattern.uProgress ] == *reinterpret_cast< unsigned char* >( pAddress ) )
+				 || _Pattern._Pattern[ _Pattern.uProgress ] == *reinterpret_cast< unsigned char* >( pAddress + _Pattern.uProgress ) )
 			{
 				_Pattern.uProgress++;
-				goto bob;
+				goto ScanSizeofSignature;
 			}
-			goto not_bob;
+			_Pattern.pStartLocation = nullptr;
 		}
 	}
 
 	for ( auto& _Pattern: vecPatternQueue )
 	{
-		using brutal_unrecoverable_error = std::runtime_error;
-
 		if ( std::uintptr_t( _Pattern.pStartLocation ) >= std::uintptr_t( hLocation ) + _Image.GetImageSize( ) - _Pattern._Pattern.size( ) )
-			throw brutal_unrecoverable_error( ENC( "found no pattern aaa " ) );
+			throw std::runtime_error( ENC( "Memory unexpected" ) );
 
 		vecPatterns.emplace_back( _Pattern.pStartLocation );
 	}
+	vecPatternQueue.clear( );
 }
 
 void *CMemoryManager::FindPattern( HMODULE hLocation, const std::string &strPattern )
