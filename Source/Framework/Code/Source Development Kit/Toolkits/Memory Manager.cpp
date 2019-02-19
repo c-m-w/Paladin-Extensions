@@ -232,6 +232,9 @@ bool CMemoryManager::Initialize( )
 		 || _Version == ESystemVersion::W10_REDSTONE_CREATORS_APRIL_1803
 		 || _Version == ESystemVersion::W10_REDSTONE_CREATORS_FALL_1709 )
 	{
+		std::vector< void * > vecMen;
+		AddPatternToScanQueue( ENC( "53 56 57 8D 45 F8 8B FA" ) );
+		FindQueuedPatterns( hNewTechnologyModule, vecMen );
 		pInsertInvertedFunctionTable = reinterpret_cast< void * >( std::uintptr_t( FindPattern( hNewTechnologyModule, ENC( "53 56 57 8D 45 F8 8B FA" ) ) ) - 7 );
 		pInvertedFunctionTable = FindPattern( hNewTechnologyModule, ENC( "33 F6 46 3B C6" ) );
 		if ( pInvertedFunctionTable != nullptr )
@@ -547,32 +550,31 @@ void CMemoryManager::FindQueuedPatterns( HMODULE hLocation, std::vector<void *> 
 	{
 		for ( auto& _Pattern: vecPatternQueue )
 		{
+			not_bob:
 			if ( _Pattern.uProgress == _Pattern._Pattern.size( ) )
 				continue;
 
 			if ( _Pattern.pStartLocation == nullptr )
 				_Pattern.pStartLocation = reinterpret_cast< void* >( pAddress ), _Pattern.uProgress = 0u;
 
+			bob:
+
 			if ( _Pattern._Pattern[ _Pattern.uProgress ] == UNKNOWN_BYTE
 				 || _Pattern._Pattern[ _Pattern.uProgress ] == *reinterpret_cast< unsigned char* >( pAddress ) )
-				_Pattern.uProgress++;
-			else
 			{
-				_Pattern.uProgress = 0u;
-				while( std::uintptr_t( _Pattern.pStartLocation++ ) <= pAddress )
-				{
-					if ( _Pattern._Pattern[ _Pattern.uProgress ] == UNKNOWN_BYTE
-						 || _Pattern._Pattern[ _Pattern.uProgress ] == *reinterpret_cast< unsigned char* >( pAddress ) )
-						_Pattern.uProgress++;
-				}				
+				_Pattern.uProgress++;
+				goto bob;
 			}
+			goto not_bob;
 		}
 	}
 
 	for ( auto& _Pattern: vecPatternQueue )
 	{
+		using brutal_unrecoverable_error = std::runtime_error;
+
 		if ( std::uintptr_t( _Pattern.pStartLocation ) >= std::uintptr_t( hLocation ) + _Image.GetImageSize( ) - _Pattern._Pattern.size( ) )
-			throw std::exception( ENC( "found no pattern aaa " ) );
+			throw brutal_unrecoverable_error( ENC( "found no pattern aaa " ) );
 
 		vecPatterns.emplace_back( _Pattern.pStartLocation );
 	}

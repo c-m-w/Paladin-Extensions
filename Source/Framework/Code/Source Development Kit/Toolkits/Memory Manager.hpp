@@ -231,8 +231,8 @@ private:
 	struct pattern_queue_member_t
 	{
 		pattern_t _Pattern;
-		unsigned uProgress;
-		void* pStartLocation;
+		unsigned uProgress = 0;
+		void* pStartLocation = nullptr;
 		pattern_queue_member_t( pattern_t _Pattern ): _Pattern( _Pattern )
 		{ }
 	};
