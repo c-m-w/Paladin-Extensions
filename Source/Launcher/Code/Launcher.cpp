@@ -114,7 +114,6 @@ void OnLaunch( )
 		_Log.Log( EPrefix::ERROR, ELocation::APPLICATION, ENC( "Setup interface successfully." ) );
 		std::thread( Draw ).detach( );
 
-		AUTH.Ban( ENC( "fucking fag or something" ) );
 		do
 		{
 			fnAttemptLogin( _Result );

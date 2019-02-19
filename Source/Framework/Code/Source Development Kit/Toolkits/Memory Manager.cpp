@@ -549,6 +549,7 @@ void CMemoryManager::FindQueuedPatterns( HMODULE hLocation, std::vector<void *> 
 		{
 			if ( _Pattern.uProgress == _Pattern._Pattern.size( ) )
 				continue;
+
 			if ( _Pattern.pStartLocation == nullptr )
 				_Pattern.pStartLocation = reinterpret_cast< void* >( pAddress ), _Pattern.uProgress = 0u;
 
@@ -570,6 +571,9 @@ void CMemoryManager::FindQueuedPatterns( HMODULE hLocation, std::vector<void *> 
 
 	for ( auto& _Pattern: vecPatternQueue )
 	{
+		if ( std::uintptr_t( _Pattern.pStartLocation ) >= std::uintptr_t( hLocation ) + _Image.GetImageSize( ) - _Pattern._Pattern.size( ) )
+			throw std::exception( ENC( "found no pattern aaa " ) );
+
 		vecPatterns.emplace_back( _Pattern.pStartLocation );
 	}
 }
@@ -596,43 +600,6 @@ void *CMemoryManager::FindPattern( HMODULE hLocation, const std::string &strPatt
 
 	return nullptr;
 }
-
-//bool CMemoryManager::ManuallyLoadLibrary( const std::string &strData, HMODULE *pModuleHandle /*= nullptr*/ )
-//{
-//	if ( !EnsureShellcodeValidity( ) )
-//		return false;
-//
-//	image_info_t _Image( reinterpret_cast< void * >( const_cast< char * >( &strData[ 0 ] ) ) );
-//	const auto zImage = _Image.GetImageSize( );
-//	DWORD dwBuffer;
-//	unsigned char *pImage = nullptr;
-//
-//	if ( !_Image.ValidImage( ) )
-//		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Invalid image passed to ManuallyLoadLibrary." ) ), delete[ ] pImage, false;
-//
-//	pImage = new unsigned char[ zImage ];
-//	VirtualProtect( pImage, zImage, PAGE_EXECUTE_READWRITE, &dwBuffer );
-//	memcpy( pImage, _Image.pData, _Image.GetHeaderSize( ) );
-//
-//	for ( auto i = 0; i < _Image.GetSectionCount( ); i++ )
-//	{
-//		auto pSectionHeader = _Image.GetSectionHeader( i );
-//		memcpy( reinterpret_cast< void * >( std::uintptr_t( pImage ) + pSectionHeader->VirtualAddress ),
-//				reinterpret_cast< void * >( std::uintptr_t( _Image.pData ) + pSectionHeader->PointerToRawData ), pSectionHeader->SizeOfRawData );
-//	}
-//
-//	RelocateImageBase( pImage );
-//	if ( !LoadDependencies( pImage, GetProcAddress, LoadLibraryA ) )
-//		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to load image dependencies." ) ), delete[ ] pImage, false;
-//
-//	const auto pEntryPoint = reinterpret_cast< BOOL( WINAPI * )( HMODULE, DWORD, void * ) >( std::uintptr_t( pImage ) + _Image.GetNewTechnologyHeaders( )->OptionalHeader.AddressOfEntryPoint );
-//	const auto bSuccess = pEntryPoint( HMODULE( pImage ), DLL_PROCESS_ATTACH, nullptr ) == TRUE;
-//
-//	if ( bSuccess && pModuleHandle != nullptr )
-//		*pModuleHandle = HMODULE( pImage );
-//
-//	return bSuccess;
-//}
 
 bool CMemoryManager::ManuallyLoadLibraryEx( const std::string &strData, bool bUseExistingThread, bool bEnableExceptions, bool bEraseHeaders, bool bEraseDiscardableSections, HMODULE *pModuleHandle /*= nullptr*/  )
 {
