@@ -152,7 +152,7 @@
             if ( $result->num_rows == 0 )
             {
                 $log->log( 'Could not find purchase key of ' . $this->key . ' in table xf_xr_pm_product_purchase.' );
-                $functionality->stopExecution( 'Invalid Key' );
+                $this->logAttempt( 'Invalid Key' );
             }
 
             $this->user = $result->fetch_assoc( )[ 'user_id' ];
@@ -160,7 +160,7 @@
 			if ( $result->num_rows == 0 )
 			{
 				$log->log( 'Could not find user with id of ' . $this->user . ' in table xf_user.' );
-				$functionality->stopExecution( 'Server Error' );
+				$this->logAttempt( 'Server Error' );
 			}
 
 			$this->xfUser = $result->fetch_assoc( );
@@ -195,7 +195,7 @@
 					. ( string )$_SERVER[ 'REMOTE_ADDR' ] . '", "'
 					. ( string )$functionality->getServiceProvider( ) . '", "'
 					. ( string )$functionality->getCountryCode( ) . '", '
-					. ( int )$exit_code . ')' );
+					. ( int )exitCodes[ $exit_code ] . ')' );
 			$functionality->stopExecution( $exit_code, $this->xfUser[ 'secondary_group_ids' ] );
 		}
 
