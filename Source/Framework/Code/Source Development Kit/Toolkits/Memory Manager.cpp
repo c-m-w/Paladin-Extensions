@@ -245,12 +245,12 @@ bool CMemoryManager::Initialize( )
 	}
 	else
 	{
-		pInsertInvertedFunctionTable = FindPattern( hNewTechnologyModule, ENC( "53 56 57 8B DA 8B F9 50" ) );
+		pInsertInvertedFunctionTable = reinterpret_cast< void* >( std::uintptr_t( FindPattern( hNewTechnologyModule, ENC( "53 56 57 8B DA 8B F9 50" ) ) ) - 10 );
 		if ( pInsertInvertedFunctionTable != nullptr )
 			pInvertedFunctionTable = *reinterpret_cast< void ** >( std::uintptr_t( pInsertInvertedFunctionTable ) +
-																   _Version == ESystemVersion::W10_INITIAL_1507
-																   || _Version == ESystemVersion::W10_REDSTONE_NOVEMBER_1511
-																   || _Version == ESystemVersion::W10_REDSTONE_ANNIVERSARY_1607 ? 0x2B : 0x2C );
+																   ( _Version == ESystemVersion::W10_INITIAL_1507
+																	 || _Version == ESystemVersion::W10_REDSTONE_NOVEMBER_1511
+																	 || _Version == ESystemVersion::W10_REDSTONE_ANNIVERSARY_1607 ? 0xB5 : 0xB6 ) );
 	}
 
 	return pInsertInvertedFunctionTable != nullptr && pInvertedFunctionTable != nullptr;
@@ -533,10 +533,45 @@ void CMemoryManager::AddPatternToScanQueue( const std::string &strPattern )
 	vecPatternQueue.emplace_back( ParsePattern( strPattern ) );
 }
 
-void CMemoryManager::FindQueuedPatterns( std::vector<void *> &vecPatterns )
+void CMemoryManager::FindQueuedPatterns( HMODULE hLocation, std::vector<void *> &vecPatterns )
 {
+
 	// if pattern is failed to be found, it's emplaced back as nullptr
 	// at each byte we scan, we check our progress for each pattern queue member and see if the match. if not, set uprogress 0
+
+	auto _Image = image_info_t( hLocation );
+	if ( !_Image.ValidImage( ) )
+		return vecPatterns.clear( );
+
+	for ( auto pAddress = std::uintptr_t( hLocation ); pAddress < std::uintptr_t( hLocation ) + _Image.GetImageSize( ); pAddress++ )
+	{
+		for ( auto& _Pattern: vecPatternQueue )
+		{
+			if ( _Pattern.uProgress == _Pattern._Pattern.size( ) )
+				continue;
+			if ( _Pattern.pStartLocation == nullptr )
+				_Pattern.pStartLocation = reinterpret_cast< void* >( pAddress ), _Pattern.uProgress = 0u;
+
+			if ( _Pattern._Pattern[ _Pattern.uProgress ] == UNKNOWN_BYTE
+				 || _Pattern._Pattern[ _Pattern.uProgress ] == *reinterpret_cast< unsigned char* >( pAddress ) )
+				_Pattern.uProgress++;
+			else
+			{
+				_Pattern.uProgress = 0u;
+				while( std::uintptr_t( _Pattern.pStartLocation++ ) <= pAddress )
+				{
+					if ( _Pattern._Pattern[ _Pattern.uProgress ] == UNKNOWN_BYTE
+						 || _Pattern._Pattern[ _Pattern.uProgress ] == *reinterpret_cast< unsigned char* >( pAddress ) )
+						_Pattern.uProgress++;
+				}				
+			}
+		}
+	}
+
+	for ( auto& _Pattern: vecPatternQueue )
+	{
+		vecPatterns.emplace_back( _Pattern.pStartLocation );
+	}
 }
 
 void *CMemoryManager::FindPattern( HMODULE hLocation, const std::string &strPattern )

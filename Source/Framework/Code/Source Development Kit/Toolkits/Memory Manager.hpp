@@ -270,7 +270,7 @@ private:
 public:
 
 	void AddPatternToScanQueue( const std::string& strPattern );
-	void FindQueuedPatterns( std::vector< void* >& vecPatterns );
+	void FindQueuedPatterns( HMODULE hLocation, std::vector< void* >& vecPatterns );
 
 	static void *FindPattern( HMODULE hLocation, const std::string &strPattern );
 
