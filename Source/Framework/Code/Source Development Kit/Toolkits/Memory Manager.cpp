@@ -197,21 +197,18 @@ IMAGE_IMPORT_DESCRIPTOR *image_info_t::GetImportDescriptor( void *pImageBase /*=
 
 CMemoryManager::pattern_t::pattern_t( std::string strPattern )
 {
+	const auto pLast = &strPattern.back( ) + 1;
+	auto pEnd = &strPattern.front( );
+
 	do
 	{
 		auto& _Byte = vecPatternAsBytes.emplace_back( );
-		while ( strPattern.front( ) == ' ' )
-			strPattern.erase( strPattern.begin( ) );
 
-		if ( strPattern.front( ) == '?' )
-			_Byte = UNKNOWN_BYTE;
+		if ( *pEnd == '?' )
+			_Byte = UNKNOWN_BYTE, pEnd++;
 		else
-			_Byte = strtoul( strPattern.substr( 0, 2 ).c_str( ), nullptr, 16 );
-
-		while ( !strPattern.empty( )
-				&& strPattern.front( ) != ' ' )
-			strPattern.erase( strPattern.begin( ) );
-	} while ( !strPattern.empty( ) );
+			_Byte = strtoul( pEnd, &pEnd, 16 );
+	} while ( pEnd != pLast );
 }
 
 std::vector<short> & CMemoryManager::pattern_t::operator()( )
