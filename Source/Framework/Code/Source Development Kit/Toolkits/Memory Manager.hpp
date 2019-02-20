@@ -224,25 +224,33 @@ private:
 	DWORD dwCurrentAccess = 0;
 	void *pShellcode = nullptr;
 
-	using pattern_t = std::vector< __int16 >;
+	struct pattern_t
+	{
+	private:
+		std::vector< __int16 > vecPatternAsBytes;
+	public:
+		pattern_t( std::string strPattern );
+		std::vector< __int16 >& operator( )( );
+		bool bDone = false;
+	};
 
 	static pattern_t ParsePattern( const std::string& strPattern );
 
-	struct pattern_queue_member_t
-	{
-		pattern_t _Pattern;
-		unsigned uProgress = 0;
-		void* pStartLocation = nullptr;
-		pattern_queue_member_t( pattern_t _Pattern ): _Pattern( _Pattern )
-		{ }
-	};
+	//struct pattern_queue_member_t
+	//{
+	//	pattern_t _Pattern;
+	//	unsigned uProgress = 0;
+	//	void* pStartLocation = nullptr;
+	//	pattern_queue_member_t( pattern_t _Pattern ): _Pattern( _Pattern )
+	//	{ }
+	//};
 
-	std::vector< pattern_queue_member_t > vecPatternQueue;
+	//std::vector< pattern_queue_member_t > vecPatternQueue;
 
 public:
 
-	void AddPatternToScanQueue( const std::string& strPattern );
-	void FindQueuedPatterns( HMODULE hLocation, std::vector< void* >& vecPatterns );
+	//void AddPatternToScanQueue( const std::string& strPattern );
+	bool FindPatterns( HMODULE hModule, std::vector< pattern_t > vecPatternsIn, std::vector< void* >& vecLocationsOut );
 
 	static void *FindPattern( HMODULE hLocation, const std::string &strPattern );
 

@@ -195,28 +195,33 @@ IMAGE_IMPORT_DESCRIPTOR *image_info_t::GetImportDescriptor( void *pImageBase /*=
 														GetNewTechnologyHeaders( pImageBase )->OptionalHeader.DataDirectory[ IMAGE_DIRECTORY_ENTRY_IMPORT ].VirtualAddress );
 }
 
-CMemoryManager::pattern_t CMemoryManager::ParsePattern( const std::string &strPattern )
+CMemoryManager::pattern_t::pattern_t( std::string strPattern )
 {
-	auto strModifiable = strPattern;
-	pattern_t _Return;
-
 	do
 	{
-		auto &_Byte = _Return.emplace_back( );
-		while ( strModifiable.front( ) == ' ' )
-			strModifiable.erase( strModifiable.begin( ) );
+		auto& _Byte = vecPatternAsBytes.emplace_back( );
+		while ( strPattern.front( ) == ' ' )
+			strPattern.erase( strPattern.begin( ) );
 
-		if ( strModifiable.front( ) == '?' )
+		if ( strPattern.front( ) == '?' )
 			_Byte = UNKNOWN_BYTE;
 		else
-			_Byte = strtoul( strModifiable.substr( 0, 2 ).c_str( ), nullptr, 16 );
+			_Byte = strtoul( strPattern.substr( 0, 2 ).c_str( ), nullptr, 16 );
 
-		while ( !strModifiable.empty( )
-				&& strModifiable.front( ) != ' ' )
-			strModifiable.erase( strModifiable.begin( ) );
-	} while ( !strModifiable.empty( ) );
+		while ( !strPattern.empty( )
+				&& strPattern.front( ) != ' ' )
+			strPattern.erase( strPattern.begin( ) );
+	} while ( !strPattern.empty( ) );
+}
 
-	return _Return;
+std::vector<short> & CMemoryManager::pattern_t::operator()( )
+{
+	return vecPatternAsBytes;
+}
+
+CMemoryManager::pattern_t CMemoryManager::ParsePattern( const std::string &strPattern )
+{
+	return pattern_t( strPattern );
 }
 
 bool CMemoryManager::Initialize( )
@@ -246,10 +251,11 @@ bool CMemoryManager::Initialize( )
 	else
 	{
 		auto expected = FindPattern( hNewTechnologyModule, ENC( "53 56 57 8B DA 8B F9 50" ) );
-		std::vector< void* > vecMen;
-		AddPatternToScanQueue( ENC( "53 56 57 8D 45 F8 8B FA" ) );
-		FindQueuedPatterns( hNewTechnologyModule, vecMen );
-		auto actual = vecMen[ 0 ];
+		
+		std::vector< void* > vecAddresses;
+
+		FindPatterns( hNewTechnologyModule, { pattern_t( ENC( "53 56 57 8B DA 8B F9 50" ) ) }, vecAddresses );
+		auto actual = vecAddresses[ 0 ];
 		pInsertInvertedFunctionTable = reinterpret_cast< void* >( std::uintptr_t( FindPattern( hNewTechnologyModule, ENC( "53 56 57 8B DA 8B F9 50" ) ) ) - 10 );
 		if ( pInsertInvertedFunctionTable != nullptr )
 			pInvertedFunctionTable = *reinterpret_cast< void ** >( std::uintptr_t( pInsertInvertedFunctionTable ) +
@@ -533,55 +539,119 @@ bool CMemoryManager::LoadLibraryEx( const std::string &strPath, bool bUseExistin
 	return FreeMemory( pExit ) && FreeMemory( pLibraryName ) && bSuccess;
 }
 
-void CMemoryManager::AddPatternToScanQueue( const std::string &strPattern )
+//void CMemoryManager::AddPatternToScanQueue( const std::string &strPattern )
+//{
+//	vecPatternQueue.emplace_back( ParsePattern( strPattern ) );
+//}
+
+// false means couldnt pattern scan or couldnt find 1 or more patterns
+bool CMemoryManager::FindPatterns( HMODULE hModule, std::vector< pattern_t > vecPatternsIn, std::vector< void* >& vecLocationsOut )
 {
-	vecPatternQueue.emplace_back( ParsePattern( strPattern ) );
-}
+	if ( vecPatternsIn.size( ) == 0 )
+		return _Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Empty pattern vector passed to FindPatterns." ) ), false;
 
-void CMemoryManager::FindQueuedPatterns( HMODULE hLocation, std::vector<void *> &vecPatterns )
-{
-
-	// if pattern is failed to be found, it's emplaced back as nullptr
-	// at each byte we scan, we check our progress for each pattern queue member and see if the match. if not, set uprogress 0
-
-	auto _Image = image_info_t( hLocation );
+	auto _Image = image_info_t( hModule );
 	if ( !_Image.ValidImage( ) )
-		return vecPatterns.clear( );
+		return _Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Invalid image passed to FindPatterns." ) ), false;
 
-	for ( auto pAddress = std::uintptr_t( hLocation ); pAddress < std::uintptr_t( hLocation ) + _Image.GetImageSize( ); pAddress++ )
+	vecLocationsOut.resize( vecLocationsOut.size( ) + vecPatternsIn.size( ) );
+
+	for ( auto pAddress = reinterpret_cast< std::uintptr_t >( hModule ); pAddress < reinterpret_cast< std::uintptr_t >( hModule ) + _Image.GetImageSize( ); pAddress++ )
 	{
-		for ( auto& _Pattern: vecPatternQueue )
+		auto iDone = 0u;
+		for ( auto uPattern = 0u; uPattern < vecPatternsIn.size( ); uPattern++ )
 		{
-ScanSizeofSignature:
-			if ( _Pattern.uProgress == _Pattern._Pattern.size( ) - 1 )
+			if ( vecPatternsIn[ uPattern ].bDone )
 				continue;
-
-			if ( _Pattern.pStartLocation == nullptr )
-				_Pattern.pStartLocation = reinterpret_cast< void* >( pAddress ), _Pattern.uProgress = 0u;
-
-			if ( _Pattern._Pattern[ _Pattern.uProgress ] == UNKNOWN_BYTE
-				 || _Pattern._Pattern[ _Pattern.uProgress ] == *reinterpret_cast< unsigned char* >( pAddress + _Pattern.uProgress ) )
+			
+			iDone++;
+			for ( auto uProgress = 0u; uProgress == vecPatternsIn[ uPattern ]( ).size( )
+				  || vecPatternsIn[ uPattern ]( )[ uProgress ] == UNKNOWN_BYTE
+				  || vecPatternsIn[ uPattern ]( )[ uProgress ] == *reinterpret_cast< unsigned char* >( pAddress + uProgress ); uProgress++ )
 			{
-				_Pattern.uProgress++;
-				goto ScanSizeofSignature;
+				if ( uProgress == vecPatternsIn[ uPattern ]( ).size( ) )
+				{
+					vecPatternsIn[ uPattern ].bDone = true;
+					vecLocationsOut[ uPattern ] = reinterpret_cast< void* >( pAddress );
+					iDone--;
+					break;
+				}
 			}
-			_Pattern.pStartLocation = nullptr;
 		}
+		if ( iDone == 0 )
+			break;
 	}
 
-	for ( auto& _Pattern: vecPatternQueue )
+	for ( auto u = 0u; u < vecPatternsIn.size();u++ )
 	{
-		if ( std::uintptr_t( _Pattern.pStartLocation ) >= std::uintptr_t( hLocation ) + _Image.GetImageSize( ) - _Pattern._Pattern.size( ) )
-			throw std::runtime_error( ENC( "Memory unexpected" ) );
-
-		vecPatterns.emplace_back( _Pattern.pStartLocation );
+		if ( vecPatternsIn[u].bDone == false )
+			return _Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Couldn't find pattern %i" ), u ), false;
 	}
-	vecPatternQueue.clear( );
+	return true;
 }
+
+//void CMemoryManager::FindQueuedPatterns( HMODULE hLocation, std::vector<void *> &vecPatterns )
+//{
+//
+//	// if pattern is failed to be found, it's emplaced back as nullptr
+//	// at each byte we scan, we check our progress for each pattern queue member and see if the match. if not, set uprogress 0
+//
+//	// todo .text only
+//	// todo remove from queue once done.
+//
+//	auto _Image = image_info_t( hLocation );
+//	if ( !_Image.ValidImage( ) )
+//		return vecPatterns.clear( ), _Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Invalid image passed to FindQueuedPatterns." ) );
+//
+//	for ( auto pAddress = reinterpret_cast< std::uintptr_t >( hLocation ); pAddress < reinterpret_cast< std::uintptr_t >( hLocation ) + _Image.GetImageSize( ); pAddress++ )
+//	{
+//		for ( auto u = 0u; u < vecPatternQueue.size(  ); u++ )
+//		{
+//			vecPatternQueue[ u ].pStartLocation = reinterpret_cast< void* >( pAddress );
+//			vecPatternQueue[ u ].uProgress = 0;
+//
+//			while ( vecPatternQueue[ u ].uProgress < vecPatternQueue[ u ]._Pattern.size( )
+//				 || vecPatternQueue[ u ]._Pattern[ vecPatternQueue[ u ].uProgress ] == UNKNOWN_BYTE
+//				 || vecPatternQueue[ u ]._Pattern[ vecPatternQueue[ u ].uProgress ] == *reinterpret_cast< unsigned char* >( pAddress + vecPatternQueue[ u ].uProgress ) )
+//			{
+//				vecPatternQueue[ u ].uProgress++;
+//			}
+//		}
+//
+//
+//		for ( auto& _Pattern: vecPatternQueue )
+//		{
+//ScanSizeofSignature:
+//			if ( _Pattern.uProgress >= _Pattern._Pattern.size( ) )
+//				continue;
+//
+//			if ( _Pattern.pStartLocation == nullptr )
+//				_Pattern.pStartLocation = reinterpret_cast< void* >( pAddress ), _Pattern.uProgress = 0u;
+//
+//			if ( _Pattern._Pattern[ _Pattern.uProgress ] == UNKNOWN_BYTE
+//				 || _Pattern._Pattern[ _Pattern.uProgress ] == *reinterpret_cast< unsigned char* >( pAddress + _Pattern.uProgress ) )
+//			{
+//				_Pattern.uProgress++;
+//				goto ScanSizeofSignature;
+//			}
+//			_Pattern.pStartLocation = nullptr;
+//		}
+//	}
+//
+//	for ( auto& _Pattern: vecPatternQueue )
+//	{
+//		if ( _Pattern.pStartLocation == nullptr
+//			 || std::uintptr_t( _Pattern.pStartLocation ) >= std::uintptr_t( hLocation ) + _Image.GetImageSize( ) - _Pattern._Pattern.size( ) - 1)
+//			throw std::runtime_error( ENC( "Memory unexpected" ) );
+//
+//		vecPatterns.emplace_back( _Pattern.pStartLocation );
+//	}
+//	vecPatternQueue.clear( );
+//}
 
 void *CMemoryManager::FindPattern( HMODULE hLocation, const std::string &strPattern )
 {
-	const auto _Pattern = ParsePattern( strPattern );
+	auto _Pattern = ParsePattern( strPattern );
 	auto _Image = image_info_t( hLocation );
 
 	if ( !_Image.ValidImage( ) )
@@ -589,13 +659,13 @@ void *CMemoryManager::FindPattern( HMODULE hLocation, const std::string &strPatt
 
 	for ( auto u = std::uintptr_t( hLocation ), uSequence = 0u; u < std::uintptr_t( hLocation ) + _Image.GetImageSize( ); u++ )
 	{
-		if ( _Pattern[ uSequence ] == UNKNOWN_BYTE
-			 || _Pattern[ uSequence ] == *reinterpret_cast< unsigned char * >( u ) )
+		if ( _Pattern()[ uSequence ] == UNKNOWN_BYTE
+			 || _Pattern()[ uSequence ] == *reinterpret_cast< unsigned char * >( u ) )
 			uSequence++;
 		else
 			u -= uSequence, uSequence = 0;
 
-		if ( uSequence == _Pattern.size( ) )
+		if ( uSequence == _Pattern().size( ) )
 			return reinterpret_cast< void * >( u - uSequence );
 	}
 
