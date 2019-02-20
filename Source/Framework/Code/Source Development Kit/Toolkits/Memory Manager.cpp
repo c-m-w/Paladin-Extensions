@@ -237,31 +237,34 @@ bool CMemoryManager::Initialize( )
 		 || _Version == ESystemVersion::W10_REDSTONE_CREATORS_APRIL_1803
 		 || _Version == ESystemVersion::W10_REDSTONE_CREATORS_FALL_1709 )
 	{
-		pInsertInvertedFunctionTable = reinterpret_cast< void * >( std::uintptr_t( FindPattern( hNewTechnologyModule, ENC( "53 56 57 8D 45 F8 8B FA" ) ) ) - 7 );
+		pInsertInvertedFunctionTable = reinterpret_cast< void * >( std::uintptr_t( FindPattern( hNewTechnologyModule, ENC( "53 56 57 8D 45 F8 8B FA" ) ) ) - 8 );
 		pInvertedFunctionTable = FindPattern( hNewTechnologyModule, ENC( "33 F6 46 3B C6" ) );
 		if ( pInvertedFunctionTable != nullptr )
-			pInvertedFunctionTable = *reinterpret_cast< void ** >( std::uintptr_t( pInvertedFunctionTable ) - 0x1A );
+			pInvertedFunctionTable = *reinterpret_cast< void ** >( std::uintptr_t( pInvertedFunctionTable ) - 0x1B );
 	}
 	else if ( _Version == ESystemVersion::W10_REDSTONE_CREATORS_1703 )
 	{
-		pInsertInvertedFunctionTable = reinterpret_cast< void * >( std::uintptr_t( FindPattern( hNewTechnologyModule, ENC( "8D 45 F0 89 55 F8 50 8D 55 F4" ) ) ) - 10 );
+		MessageBox( nullptr, "here", "", 0 );
+		pInsertInvertedFunctionTable = reinterpret_cast< void * >( std::uintptr_t( FindPattern( hNewTechnologyModule, ENC( "8D 45 F0 89 55 F8 50 8D 55 F4" ) ) ) - 0xB );
 		if ( pInsertInvertedFunctionTable != nullptr )
 			pInvertedFunctionTable = *reinterpret_cast< void ** >( std::uintptr_t( pInsertInvertedFunctionTable ) + 0x57 );
+
+		std::stringstream test;
+		test << std::hex << pInsertInvertedFunctionTable << " " << pInvertedFunctionTable;
+		MessageBox( nullptr, test.str( ).c_str( ), "", 0 );
 	}
 	else
 	{
-		auto expected = FindPattern( hNewTechnologyModule, ENC( "53 56 57 8B DA 8B F9 50" ) );
-		
-		std::vector< void* > vecAddresses;
+		std::vector< void * > vecAddresses;
 
 		FindPatterns( hNewTechnologyModule, { pattern_t( ENC( "53 56 57 8B DA 8B F9 50" ) ) }, vecAddresses );
 		auto actual = vecAddresses[ 0 ];
-		pInsertInvertedFunctionTable = reinterpret_cast< void* >( std::uintptr_t( FindPattern( hNewTechnologyModule, ENC( "53 56 57 8B DA 8B F9 50" ) ) ) - 10 );
+		pInsertInvertedFunctionTable = reinterpret_cast< void* >( std::uintptr_t( FindPattern( hNewTechnologyModule, ENC( "53 56 57 8B DA 8B F9 50" ) ) ) - 0xA );
 		if ( pInsertInvertedFunctionTable != nullptr )
 			pInvertedFunctionTable = *reinterpret_cast< void ** >( std::uintptr_t( pInsertInvertedFunctionTable ) +
 																   ( _Version == ESystemVersion::W10_INITIAL_1507
 																	 || _Version == ESystemVersion::W10_REDSTONE_NOVEMBER_1511
-																	 || _Version == ESystemVersion::W10_REDSTONE_ANNIVERSARY_1607 ? 0xB5 : 0xB6 ) );
+																	 || _Version == ESystemVersion::W10_REDSTONE_ANNIVERSARY_1607 ? 0xB4 : 0xB5 ) );
 	}
 
 	return pInsertInvertedFunctionTable != nullptr && pInvertedFunctionTable != nullptr;
@@ -659,14 +662,14 @@ void *CMemoryManager::FindPattern( HMODULE hLocation, const std::string &strPatt
 
 	for ( auto u = std::uintptr_t( hLocation ), uSequence = 0u; u < std::uintptr_t( hLocation ) + _Image.GetImageSize( ); u++ )
 	{
-		if ( _Pattern()[ uSequence ] == UNKNOWN_BYTE
-			 || _Pattern()[ uSequence ] == *reinterpret_cast< unsigned char * >( u ) )
+		if ( uSequence == _Pattern( ).size( ) )
+			return reinterpret_cast< void * >( u - uSequence );
+
+		if ( _Pattern( )[ uSequence ] == UNKNOWN_BYTE
+			 || _Pattern( )[ uSequence ] == *reinterpret_cast< unsigned char * >( u ) )
 			uSequence++;
 		else
 			u -= uSequence, uSequence = 0;
-
-		if ( uSequence == _Pattern().size( ) )
-			return reinterpret_cast< void * >( u - uSequence );
 	}
 
 	return nullptr;
