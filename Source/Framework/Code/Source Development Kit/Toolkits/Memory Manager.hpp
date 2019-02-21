@@ -191,7 +191,6 @@ class CMemoryManager: public IBase
 private:
 
 	constexpr static auto MAX_LIBRARY_LOAD_TIME = 10000ui64;
-	constexpr static auto UNKNOWN_BYTE = -1i16;
 
 	enum EShellcode
 	{
@@ -199,6 +198,28 @@ private:
 		LOAD_LIBRARY_EX_WRAPPER,
 		RELOCATE_IMAGE_BASE,
 		LOAD_DEPENDENCIES
+	};
+
+	struct pattern_t
+	{
+	private:
+
+		constexpr static auto UNKNOWN_BYTE = -1i16;
+
+		std::vector< __int16 > vecPattern;
+		void **pOutput;
+		std::ptrdiff_t ptrOffset;
+		std::function< void( ) > fnOnFound;
+		unsigned uProgress = 0u;
+		int iRelative = 0;
+
+	public:
+
+		static std::vector< __int16 > ParsePattern( const std::string &strPattern );
+
+		pattern_t( const std::string &strPattern, void **pOutput, std::ptrdiff_t ptrOffset, std::function< void( ) > fnOnFound = nullptr );
+
+		friend class CMemoryManager;
 	};
 
 	bool Initialize( ) override;
@@ -223,27 +244,13 @@ private:
 	DWORD dwProcessID = 0;
 	DWORD dwCurrentAccess = 0;
 	void *pShellcode = nullptr;
-
-	struct pattern_t
-	{
-	private:
-
-		std::vector< __int16 > vecPatternAsBytes;
-
-	public:
-
-		pattern_t( std::string strPattern );
-
-		std::vector< __int16 > &operator( )( );
-
-		bool bDone = false;
-	};
-
-	static pattern_t ParsePattern( const std::string& strPattern );
+	std::map< HMODULE, std::vector< pattern_t > > _PatternsToFind;
 
 public:
 
-	bool FindPatterns( HMODULE hModule, std::vector< pattern_t > vecPatternsIn, std::vector< void* >& vecLocationsOut );
+	bool AddPattern( const std::string &strModule, const pattern_t &_Pattern );
+	bool AddPattern( HMODULE hModule, const pattern_t &_Pattern );
+	bool FindPatterns( );
 
 	static void *FindPattern( HMODULE hLocation, const std::string &strPattern );
 

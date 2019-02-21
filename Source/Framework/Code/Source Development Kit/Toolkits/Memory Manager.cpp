@@ -195,31 +195,28 @@ IMAGE_IMPORT_DESCRIPTOR *image_info_t::GetImportDescriptor( void *pImageBase /*=
 														GetNewTechnologyHeaders( pImageBase )->OptionalHeader.DataDirectory[ IMAGE_DIRECTORY_ENTRY_IMPORT ].VirtualAddress );
 }
 
-CMemoryManager::pattern_t::pattern_t( std::string strPattern )
+std::vector< __int16 > CMemoryManager::pattern_t::ParsePattern( const std::string &strPattern )
 {
 	const auto pLast = &strPattern.back( ) + 1;
-	auto pEnd = &strPattern.front( );
+	auto pEnd = const_cast< char * >( &strPattern.front( ) );
+	std::vector< __int16 > vecReturn { };
 
 	do
 	{
-		auto& _Byte = vecPatternAsBytes.emplace_back( );
+		auto& _Byte = vecReturn.emplace_back( );
 
 		if ( *pEnd == '?' )
 			_Byte = UNKNOWN_BYTE, pEnd++;
 		else
 			_Byte = strtoul( pEnd, &pEnd, 16 );
 	} while ( pEnd != pLast );
+
+	return vecReturn;
 }
 
-std::vector<short> & CMemoryManager::pattern_t::operator()( )
-{
-	return vecPatternAsBytes;
-}
-
-CMemoryManager::pattern_t CMemoryManager::ParsePattern( const std::string &strPattern )
-{
-	return pattern_t( strPattern );
-}
+CMemoryManager::pattern_t::pattern_t( const std::string &strPattern, void **pOutput, std::ptrdiff_t ptrOffset, std::function< void( ) > fnOnFound /*= nullptr*/ ):
+	vecPattern( ParsePattern( strPattern ) ), pOutput( pOutput ), ptrOffset( ptrOffset ), fnOnFound( fnOnFound )
+{ }
 
 bool CMemoryManager::Initialize( )
 {
@@ -233,38 +230,29 @@ bool CMemoryManager::Initialize( )
 		 || _Version == ESystemVersion::W10_REDSTONE_CREATORS_OCTOBER_1809
 		 || _Version == ESystemVersion::W10_REDSTONE_CREATORS_APRIL_1803
 		 || _Version == ESystemVersion::W10_REDSTONE_CREATORS_FALL_1709 )
-	{
-		pInsertInvertedFunctionTable = reinterpret_cast< void * >( std::uintptr_t( FindPattern( hNewTechnologyModule, ENC( "53 56 57 8D 45 F8 8B FA" ) ) ) - 8 );
-		pInvertedFunctionTable = FindPattern( hNewTechnologyModule, ENC( "33 F6 46 3B C6" ) );
-		if ( pInvertedFunctionTable != nullptr )
-			pInvertedFunctionTable = *reinterpret_cast< void ** >( std::uintptr_t( pInvertedFunctionTable ) - 0x1B );
-	}
-	else if ( _Version == ESystemVersion::W10_REDSTONE_CREATORS_1703 )
-	{
-		MessageBox( nullptr, "here", "", 0 );
-		pInsertInvertedFunctionTable = reinterpret_cast< void * >( std::uintptr_t( FindPattern( hNewTechnologyModule, ENC( "8D 45 F0 89 55 F8 50 8D 55 F4" ) ) ) - 0xB );
-		if ( pInsertInvertedFunctionTable != nullptr )
-			pInvertedFunctionTable = *reinterpret_cast< void ** >( std::uintptr_t( pInsertInvertedFunctionTable ) + 0x57 );
+		return AddPattern( hNewTechnologyModule, pattern_t( ENC( "53 56 57 8D 45 F8 8B FA" ), &pInsertInvertedFunctionTable, -8 ) )
+			&& AddPattern( hNewTechnologyModule, pattern_t( ENC( "33 F6 46 3B C6" ), &pInvertedFunctionTable, -0x1B, [ ]( )
+		{
+			pInvertedFunctionTable = *reinterpret_cast< void ** >( pInvertedFunctionTable );
+		} ) )
+			&& FindPatterns( );
 
-		std::stringstream test;
-		test << std::hex << pInsertInvertedFunctionTable << " " << pInvertedFunctionTable;
-		MessageBox( nullptr, test.str( ).c_str( ), "", 0 );
-	}
-	else
+	if ( _Version == ESystemVersion::W10_REDSTONE_CREATORS_1703 )
+		return AddPattern( hNewTechnologyModule, pattern_t( ENC( "8D 45 F0 89 55 F8 50 8D 55 F4" ), &pInsertInvertedFunctionTable, -0xB, [ ]( )
 	{
-		std::vector< void * > vecAddresses;
+		pInvertedFunctionTable = *reinterpret_cast< void ** >( std::uintptr_t( pInsertInvertedFunctionTable ) + 0x57 );
+	} ) )
+		&& FindPatterns( );
 
-		FindPatterns( hNewTechnologyModule, { pattern_t( ENC( "53 56 57 8B DA 8B F9 50" ) ) }, vecAddresses );
-		auto actual = vecAddresses[ 0 ];
-		pInsertInvertedFunctionTable = reinterpret_cast< void* >( std::uintptr_t( FindPattern( hNewTechnologyModule, ENC( "53 56 57 8B DA 8B F9 50" ) ) ) - 0xA );
-		if ( pInsertInvertedFunctionTable != nullptr )
-			pInvertedFunctionTable = *reinterpret_cast< void ** >( std::uintptr_t( pInsertInvertedFunctionTable ) +
+
+	return AddPattern( hNewTechnologyModule, pattern_t( ENC( "53 56 57 8B DA 8B F9 50" ), &pInsertInvertedFunctionTable, -0xA, [ _Version ]( )
+	{
+		pInvertedFunctionTable = *reinterpret_cast< void ** >( std::uintptr_t( pInsertInvertedFunctionTable ) +
 																   ( _Version == ESystemVersion::W10_INITIAL_1507
-																	 || _Version == ESystemVersion::W10_REDSTONE_NOVEMBER_1511
-																	 || _Version == ESystemVersion::W10_REDSTONE_ANNIVERSARY_1607 ? 0xB4 : 0xB5 ) );
-	}
-
-	return pInsertInvertedFunctionTable != nullptr && pInvertedFunctionTable != nullptr;
+																	  || _Version == ESystemVersion::W10_REDSTONE_NOVEMBER_1511
+																	  || _Version == ESystemVersion::W10_REDSTONE_ANNIVERSARY_1607 ? 0xB4 : 0xB5 ) );
+	} ) )
+		&& FindPatterns( );
 }
 
 void CMemoryManager::Uninitialize( )
@@ -539,138 +527,117 @@ bool CMemoryManager::LoadLibraryEx( const std::string &strPath, bool bUseExistin
 	return FreeMemory( pExit ) && FreeMemory( pLibraryName ) && bSuccess;
 }
 
-//void CMemoryManager::AddPatternToScanQueue( const std::string &strPattern )
-//{
-//	vecPatternQueue.emplace_back( ParsePattern( strPattern ) );
-//}
-
-// false means couldnt pattern scan or couldnt find 1 or more patterns
-bool CMemoryManager::FindPatterns( HMODULE hModule, std::vector< pattern_t > vecPatternsIn, std::vector< void* >& vecLocationsOut )
+bool CMemoryManager::AddPattern( const std::string &strModule, const pattern_t &_Pattern )
 {
-	if ( vecPatternsIn.size( ) == 0 )
-		return _Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Empty pattern vector passed to FindPatterns." ) ), false;
+	const auto hModule = GetModuleHandle( strModule.c_str( ) );
+	if ( hModule == nullptr )
+		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to get handle of module %s." ), strModule.c_str( ) ), false;
 
-	auto _Image = image_info_t( hModule );
-	if ( !_Image.ValidImage( ) )
-		return _Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Invalid image passed to FindPatterns." ) ), false;
+	return AddPattern( hModule, _Pattern );
+}
 
-	vecLocationsOut.resize( vecLocationsOut.size( ) + vecPatternsIn.size( ) );
+bool CMemoryManager::AddPattern( HMODULE hModule, const pattern_t &_Pattern )
+{
+	if ( hModule == nullptr
+		 || !image_info_t( hModule ).ValidImage( ) )
+		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Invalid module passed to AddPattern" ) ), false;
 
-	for ( auto pAddress = reinterpret_cast< std::uintptr_t >( hModule ); pAddress < reinterpret_cast< std::uintptr_t >( hModule ) + _Image.GetImageSize( ); pAddress++ )
-	{
-		auto iDone = 0u;
-		for ( auto uPattern = 0u; uPattern < vecPatternsIn.size( ); uPattern++ )
-		{
-			if ( vecPatternsIn[ uPattern ].bDone )
-				continue;
-			
-			iDone++;
-			for ( auto uProgress = 0u; uProgress == vecPatternsIn[ uPattern ]( ).size( )
-				  || vecPatternsIn[ uPattern ]( )[ uProgress ] == UNKNOWN_BYTE
-				  || vecPatternsIn[ uPattern ]( )[ uProgress ] == *reinterpret_cast< unsigned char* >( pAddress + uProgress ); uProgress++ )
-			{
-				if ( uProgress == vecPatternsIn[ uPattern ]( ).size( ) )
-				{
-					vecPatternsIn[ uPattern ].bDone = true;
-					vecLocationsOut[ uPattern ] = reinterpret_cast< void* >( pAddress );
-					iDone--;
-					break;
-				}
-			}
-		}
-		if ( iDone == 0 )
-			break;
-	}
+	const auto pInstance = _PatternsToFind.find( hModule );
+	if ( pInstance == _PatternsToFind.end( ) )
+		return _PatternsToFind.insert( std::pair< HMODULE, std::vector< pattern_t > >( hModule, { } ) ), AddPattern( hModule, _Pattern );
 
-	for ( auto u = 0u; u < vecPatternsIn.size();u++ )
-	{
-		if ( vecPatternsIn[u].bDone == false )
-			return _Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Couldn't find pattern %i" ), u ), false;
-	}
+	pInstance->second.emplace_back( _Pattern );
 	return true;
 }
 
-//void CMemoryManager::FindQueuedPatterns( HMODULE hLocation, std::vector<void *> &vecPatterns )
-//{
-//
-//	// if pattern is failed to be found, it's emplaced back as nullptr
-//	// at each byte we scan, we check our progress for each pattern queue member and see if the match. if not, set uprogress 0
-//
-//	// todo .text only
-//	// todo remove from queue once done.
-//
-//	auto _Image = image_info_t( hLocation );
-//	if ( !_Image.ValidImage( ) )
-//		return vecPatterns.clear( ), _Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Invalid image passed to FindQueuedPatterns." ) );
-//
-//	for ( auto pAddress = reinterpret_cast< std::uintptr_t >( hLocation ); pAddress < reinterpret_cast< std::uintptr_t >( hLocation ) + _Image.GetImageSize( ); pAddress++ )
-//	{
-//		for ( auto u = 0u; u < vecPatternQueue.size(  ); u++ )
-//		{
-//			vecPatternQueue[ u ].pStartLocation = reinterpret_cast< void* >( pAddress );
-//			vecPatternQueue[ u ].uProgress = 0;
-//
-//			while ( vecPatternQueue[ u ].uProgress < vecPatternQueue[ u ]._Pattern.size( )
-//				 || vecPatternQueue[ u ]._Pattern[ vecPatternQueue[ u ].uProgress ] == UNKNOWN_BYTE
-//				 || vecPatternQueue[ u ]._Pattern[ vecPatternQueue[ u ].uProgress ] == *reinterpret_cast< unsigned char* >( pAddress + vecPatternQueue[ u ].uProgress ) )
-//			{
-//				vecPatternQueue[ u ].uProgress++;
-//			}
-//		}
-//
-//
-//		for ( auto& _Pattern: vecPatternQueue )
-//		{
-//ScanSizeofSignature:
-//			if ( _Pattern.uProgress >= _Pattern._Pattern.size( ) )
-//				continue;
-//
-//			if ( _Pattern.pStartLocation == nullptr )
-//				_Pattern.pStartLocation = reinterpret_cast< void* >( pAddress ), _Pattern.uProgress = 0u;
-//
-//			if ( _Pattern._Pattern[ _Pattern.uProgress ] == UNKNOWN_BYTE
-//				 || _Pattern._Pattern[ _Pattern.uProgress ] == *reinterpret_cast< unsigned char* >( pAddress + _Pattern.uProgress ) )
-//			{
-//				_Pattern.uProgress++;
-//				goto ScanSizeofSignature;
-//			}
-//			_Pattern.pStartLocation = nullptr;
-//		}
-//	}
-//
-//	for ( auto& _Pattern: vecPatternQueue )
-//	{
-//		if ( _Pattern.pStartLocation == nullptr
-//			 || std::uintptr_t( _Pattern.pStartLocation ) >= std::uintptr_t( hLocation ) + _Image.GetImageSize( ) - _Pattern._Pattern.size( ) - 1)
-//			throw std::runtime_error( ENC( "Memory unexpected" ) );
-//
-//		vecPatterns.emplace_back( _Pattern.pStartLocation );
-//	}
-//	vecPatternQueue.clear( );
-//}
-
-void *CMemoryManager::FindPattern( HMODULE hLocation, const std::string &strPattern )
+bool CMemoryManager::FindPatterns( )
 {
-	auto _Pattern = ParsePattern( strPattern );
-	auto _Image = image_info_t( hLocation );
-
-	if ( !_Image.ValidImage( ) )
-		return nullptr;
-
-	for ( auto u = std::uintptr_t( hLocation ), uSequence = 0u; u < std::uintptr_t( hLocation ) + _Image.GetImageSize( ); u++ )
+	for ( auto &_Patterns: _PatternsToFind )
 	{
-		if ( uSequence == _Pattern( ).size( ) )
-			return reinterpret_cast< void * >( u - uSequence );
+		auto _Module = image_info_t( _Patterns.first );
+		std::vector< std::pair< unsigned char *, std::size_t > > vecSectionsToScan { };
 
-		if ( _Pattern( )[ uSequence ] == UNKNOWN_BYTE
-			 || _Pattern( )[ uSequence ] == *reinterpret_cast< unsigned char * >( u ) )
-			uSequence++;
-		else
-			u -= uSequence, uSequence = 0;
+		for ( auto i = 0; i < _Module.GetSectionCount( ); i++ )
+		{
+			const auto _Header = _Module.GetSectionHeader( i );
+			if ( ( _Header->Characteristics & ( IMAGE_SCN_CNT_CODE | IMAGE_SCN_MEM_EXECUTE | IMAGE_SCN_MEM_READ ) ) > 0
+				 && ( _Header->Characteristics & IMAGE_SCN_MEM_WRITE ) == 0 )
+				vecSectionsToScan.emplace_back( std::pair< unsigned char *, std::size_t >( reinterpret_cast< unsigned char * >( std::uintptr_t( _Patterns.first ) + _Header->VirtualAddress ),
+												_Header->SizeOfRawData ) );
+		}
+
+		if ( vecSectionsToScan.empty( ) )
+			return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to find sections to pattern scan." ) ), false;
+
+		for ( auto &_Section: vecSectionsToScan )
+			for ( auto p = _Section.first; p < decltype( p )( std::uintptr_t( _Section.first ) + _Section.second ); p++ )
+			{
+				for ( auto u = 0u; u < _Patterns.second.size( ); u++ )
+				{
+					constexpr auto fnTestByte = [ ]( unsigned &uProgress, __int16 sTest, unsigned char *pCurrentByte, int &iRelative )
+					{
+						if ( sTest == pattern_t::UNKNOWN_BYTE
+							 || sTest == *( pCurrentByte + iRelative ) )
+							uProgress++;
+						else
+							iRelative -= uProgress, uProgress = 0;
+					};
+
+					auto &_Current = _Patterns.second[ u ];
+					do
+					{
+						if ( _Current.vecPattern[ _Current.uProgress ] == pattern_t::UNKNOWN_BYTE
+							 || _Current.vecPattern[ _Current.uProgress ] == *( p + _Current.iRelative ) )
+							_Current.uProgress++;
+						else
+							_Current.iRelative -= int( _Current.uProgress ), _Current.uProgress = 0;
+
+						if ( _Current.uProgress == _Current.vecPattern.size( ) )
+						{
+							*_Current.pOutput = reinterpret_cast< void * >( p + _Current.iRelative - _Current.uProgress + _Current.ptrOffset + 1 );
+							if ( _Current.fnOnFound )
+								_Current.fnOnFound( );
+
+							_Patterns.second.erase( _Patterns.second.begin( ) + u );
+							u--;
+						}
+
+						if ( _Current.iRelative > 0 )
+							_Current.iRelative--;
+
+					} while ( _Current.iRelative > 0 );
+				}
+			}
+
+		if ( !_Patterns.second.empty( ) )
+			return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to find all patterns." ) ), false;
 	}
 
-	return nullptr;
+	return true;
 }
+
+//void *CMemoryManager::FindPattern( HMODULE hLocation, const std::string &strPattern )
+//{
+//	auto _Pattern = pattern_t::ParsePattern( strPattern );
+//	auto _Image = image_info_t( hLocation );
+//
+//	if ( !_Image.ValidImage( ) )
+//		return nullptr;
+//
+//	for ( auto u = std::uintptr_t( hLocation ), uSequence = 0u; u < std::uintptr_t( hLocation ) + _Image.GetImageSize( ); u++ )
+//	{
+//		if ( uSequence == _Pattern( ).size( ) )
+//			return reinterpret_cast< void * >( u - uSequence );
+//
+//		if ( _Pattern( )[ uSequence ] == pattern_t::UNKNOWN_BYTE
+//			 || _Pattern( )[ uSequence ] == *reinterpret_cast< unsigned char * >( u ) )
+//			uSequence++;
+//		else
+//			u -= uSequence, uSequence = 0;
+//	}
+//
+//	return nullptr;
+//}
 
 bool CMemoryManager::ManuallyLoadLibraryEx( const std::string &strData, bool bUseExistingThread, bool bEnableExceptions, bool bEraseHeaders, bool bEraseDiscardableSections, HMODULE *pModuleHandle /*= nullptr*/  )
 {
