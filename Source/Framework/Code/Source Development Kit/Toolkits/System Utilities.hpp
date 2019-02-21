@@ -54,8 +54,7 @@ public:
 		SYS_OS,
 		SYS_DRIVE,
 		SYS_BOARD,
-		SYS_SOFT,
-		SYS_VMP,
+		SYS_HASH,
 		SYS_MAX
 	};
 
@@ -124,6 +123,8 @@ public:
 	/** \brief Processes queue of devices to retrieve information for */
 	/** \return Success of queue process */
 	bool ProcessQueue( );
+	bool GetProgramList( std::string &strOut );
+	[ [ nodiscard ] ] std::string GetHardwareHash( );
 	/** \brief Terminates a process */
 	/** \param dwProcessID Identifer of process to terminate */
 	static void TerminateProcessByID( DWORD dwProcessID );

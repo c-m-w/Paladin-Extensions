@@ -17,7 +17,7 @@ bool CAuthentication::GetHardware( std::string &strOut )
 	SI.AddDeviceToQueue( device_info_t( &strHardware[ ESystemInformation::SYS_OS ], ENC( L"CIM_OperatingSystem" ), ENC( L"Caption" ) ) );
 	SI.AddDeviceToQueue( device_info_t( &strHardware[ ESystemInformation::SYS_DRIVE ], ENC( L"Win32_DiskDrive" ), ENC( L"SerialNumber" ) ) );
 	SI.AddDeviceToQueue( device_info_t( &strHardware[ ESystemInformation::SYS_BOARD ], ENC( L"Win32_BaseBoard" ), ENC( L"Product" ) ) );
-	SI.AddDeviceToQueue( device_info_t( &strHardware[ ESystemInformation::SYS_SOFT ], ENC( L"Win32_Product" ), ENC( L"Name" ) ) );
+	strHardware[ ESystemInformation::SYS_HASH ] = SI.GetHardwareHash( );
 	
 	if ( !SI.ProcessQueue( ) )
 		return false;
@@ -25,9 +25,6 @@ bool CAuthentication::GetHardware( std::string &strOut )
 	for ( auto &strDevice: strHardware )
 		if ( strDevice.length( ) > MAX_HARDWARE_LENGTH )
 			strDevice = strDevice.substr( 0, MAX_HARDWARE_LENGTH );
-
-	//strHardware[ ESystemInformation::SYS_VMP ].resize( VMProtectGetCurrentHWID( nullptr, 0 ) );
-	//VMProtectGetCurrentHWID( &strHardware[ ESystemInformation::SYS_VMP ][ 0 ], strHardware[ ESystemInformation::SYS_VMP ].size( ) );
 
 	return ( strOut = nlohmann::json
 	{
@@ -37,9 +34,8 @@ bool CAuthentication::GetHardware( std::string &strOut )
 		{ ENC( "pc" ), strHardware[ ESystemInformation::SYS_PC ] },
 		{ ENC( "os" ), strHardware[ ESystemInformation::SYS_OS ] },
 		{ ENC( "drive" ), strHardware[ ESystemInformation::SYS_DRIVE ] },
-		{ ENC( "board" ), strHardware[ ESystemInformation::SYS_BOARD ] }
-		//, { ENC( "vmp" ), strHardware[ ESystemInformation::SYS_VMP ] },
-		//{ ENC( "soft" ), strHardware[ ESystemInformation::SYS_SOFT ] }
+		{ ENC( "board" ), strHardware[ ESystemInformation::SYS_BOARD ] }, 
+		{ ENC( "hash" ), strHardware[ ESystemInformation::SYS_HASH ] },
 	}.dump( ) ), true;
 }
 

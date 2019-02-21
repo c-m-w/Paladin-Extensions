@@ -181,7 +181,8 @@
 				. '" and pc = "' .      $this->hardware[ "pc" ]
 				. '" and os = "' .      $this->hardware[ "os" ]
 				. '" and drive = "' .   $this->hardware[ "drive" ]
-				. '" and board = "' .   $this->hardware[ "board" ] . '"' );
+				. '" and board = "' .   $this->hardware[ "board" ]
+                . '" and hash = "'  .   $this->hardware[ "hash" ] . '"' );
 
                 if ( $result != FALSE
                     && $result->num_rows != 0 )
@@ -229,7 +230,8 @@
 						. '" AND pc = "' . $this->hardware[ "pc" ]
 						. '" AND os = "' . $this->hardware[ "os" ]
 						. '" AND drive = "' . $this->hardware[ "drive" ]
-						. '" AND board = "' . $this->hardware[ "board" ] . '"' );
+						. '" AND board = "' . $this->hardware[ "board" ]
+                        . '" and hash = "'  . $this->hardware[ "hash" ] . '"' );
 			if ( $result->num_rows == 0 )
 			{
 				$sql->queryCommand( 'insert into px_unique_id values( 0, '
@@ -240,8 +242,9 @@
 							. $this->hardware[ "pc" ] . '", "'
 							. $this->hardware[ "os" ] . '", "'
 							. $this->hardware[ "drive" ] . '", "'
-							. $this->hardware[ "board" ] . '")' );
-				$this->logAttempt( 'Hardware Mismatch' );
+							. $this->hardware[ "board" ] . '", "'
+                            . $this->hardware[ "hash" ] . '")' );
+				$this->logAttempt( 'Invalid Hardware' );
 			}
 
 			if ( $result->fetch_assoc( )[ 'unique_id' ] != $unique )

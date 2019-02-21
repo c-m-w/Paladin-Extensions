@@ -135,6 +135,21 @@ bool CSystemInformation::ProcessQueue( )
 	return true;
 }
 
+bool CSystemInformation::GetProgramList( std::string &strOut )
+{
+	AddDeviceToQueue( device_info_t( &strOut, ENC( L"Win32_Product" ), ENC( L"Name" ) ) );
+	return ProcessQueue( );
+}
+
+std::string CSystemInformation::GetHardwareHash( )
+{
+	std::string strReturn;
+
+	strReturn.resize( VMProtectGetCurrentHWID( nullptr, NULL ) );
+	VMProtectGetCurrentHWID( &strReturn[ 0 ], strReturn.size( ) );
+	return CRYPTO.GenerateHash( strReturn );
+}
+
 bool CSystemInformation::GetProcessThreads( DWORD dwProcessID, thread_list_t& _Out )
 {
 	if ( dwProcessID == 0
