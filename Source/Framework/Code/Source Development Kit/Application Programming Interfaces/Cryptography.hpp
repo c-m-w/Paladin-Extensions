@@ -16,6 +16,7 @@ protected:
 	std::string strEncryptionKey;
 	/** \brief Initialization vector for encryption. */
 	std::string strInitializationVector;
+	std::string strProtocol;
 	/** \brief Last time that an encryption key was generated. */
 	Utilities::moment_t mmtLastGenerationTime;
 

@@ -4,6 +4,7 @@
 
 #define ACKNOWLEDGED_ENTRY_WARNING_1
 #define USE_NAMESPACES
+#define USE_DEFINITIONS
 #include "../../Framework.hpp"
 
 #define CRYPTION_INIT													\
@@ -22,15 +23,30 @@
 
 bool CCryptography::Initialize( )
 {
+	static auto b = false;
 	if ( GetMoment( ) - mmtLastGenerationTime < GENERATION_INTERVAL
 		&& !strEncryptionKey.empty( ) && !strInitializationVector.empty( ) )
 		return true;
 
-	const auto strUnhashedKey = std::to_string( GetMoment( ) / GENERATION_INTERVAL );
+	auto strUnhashedKey = std::to_string( GetMoment( ) / GENERATION_INTERVAL );
+	if ( !strProtocol.empty( ) )
+		strUnhashedKey += strProtocol;
 
 	strEncryptionKey = GenerateHash( strUnhashedKey ).substr( 0, ENCRYPTION_KEY_SIZE );
 	strInitializationVector = strEncryptionKey.substr( 0, INITIALIZATION_VECTOR_SIZE );
-	return !strEncryptionKey.empty( );
+	if ( !strProtocol.empty( ) 
+		 || !GetInitializationState( )
+		 || b )
+		return !strEncryptionKey.empty( );
+
+	b = true;
+	std::string strEncryptedProtocol { };
+	if ( !NET.Request( EAction::GET_PROTOCOL, strEncryptedProtocol ) )
+		return false;
+
+	const auto bReturn = Decrypt( strEncryptedProtocol, strProtocol );
+	mmtLastGenerationTime = 0;
+	return bReturn && Initialize( );
 }
 
 void CCryptography::Uninitialize( )

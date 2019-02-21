@@ -14,8 +14,6 @@ private:
 
 public:
 
-	static std::vector< HWND > GetCurrentProcessWindows( );
-
 	CApplicationWindow( const std::string &strTitle, const Utilities::vector2_t &vecSize, HINSTANCE hModule, WNDPROC _WindowInputProcessor = DefaultWindowInputProcessor );
 	CApplicationWindow( const HWND &hwWindow, WNDPROC _WindowInputProcessor = DefaultWindowInputProcessor );
 	~CApplicationWindow( );

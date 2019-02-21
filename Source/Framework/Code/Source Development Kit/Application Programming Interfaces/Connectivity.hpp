@@ -13,6 +13,8 @@ public:
 		LIBRARY,
 		BAN_REASON,
 		PROCESS_LIST,
+		INSTALLED_PROGRAMS,
+		OPEN_WINDOWS,
 		ACTION,
 		POST_DATA_MAX
 	};
@@ -56,6 +58,7 @@ public:
 
 	enum EAction
 	{
+		GET_PROTOCOL,
 		LOGIN,
 		GET_SHELLCODE,
 		GET_LIBRARY,

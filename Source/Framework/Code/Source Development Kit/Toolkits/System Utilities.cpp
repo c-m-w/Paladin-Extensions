@@ -215,6 +215,37 @@ bool CSystemInformation::GetProcessID( const std::string &strExecutableName, DWO
 	return bReturn && dwOut != NULL;
 }
 
+bool CSystemInformation::GetExecutableByProcessID( DWORD dwProcessID, std::string &strOut )
+{
+	const auto hSnapshot = CreateToolhelp32Snapshot( TH32CS_SNAPPROCESS, NULL );
+	strOut.clear( );
+
+	if ( hSnapshot == INVALID_HANDLE_VALUE
+		 || hSnapshot == nullptr )
+		return _Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES, ENC( "Unable to get processes." ) ), false;
+
+	auto bReturn = true;
+	PROCESSENTRY32 _CurrentProcess { sizeof( PROCESSENTRY32 ) };
+	if ( Process32First( hSnapshot, &_CurrentProcess ) != TRUE )
+	{
+		_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES, ENC( "Unable to find first process." ) );
+		bReturn = false;
+	}
+	else
+		do
+		{
+			if ( _CurrentProcess.th32ProcessID == dwProcessID )
+				strOut = _CurrentProcess.szExeFile;
+
+		} while ( Process32Next( hSnapshot, &_CurrentProcess ) == TRUE
+				  && strOut.empty( ) );
+
+	if ( CloseHandle( hSnapshot ) == FALSE )
+		_Log.Log( EPrefix::WARNING, ELocation::SYSTEM_UTILITIES, ENC( "Unable to close process thread snapshot properly." ) );
+
+	return bReturn && !strOut.empty( );
+}
+
 void CSystemInformation::TerminateProcessByID( DWORD dwProcessID )
 {
 	
@@ -250,6 +281,67 @@ bool CSystemInformation::GetProcesses( std::vector< std::string > &vecOut )
 bool CSystemInformation::GetProgramList( std::vector< std::string > &vecOut )
 {
 	return false;
+}
+
+BOOL CALLBACK EnumWindowsProc(
+	_In_		 HWND hwnd,
+	_In_		 LPARAM lParam
+)
+{
+	const auto lStyle = GetWindowLong( hwnd, GWL_STYLE );
+	if ( ( lStyle & WS_VISIBLE ) > 0 )
+		reinterpret_cast< std::vector< HWND >* >( lParam )->emplace_back( hwnd );
+
+	return true;
+}
+
+std::vector< HWND > CSystemInformation::GetOpenWindows( )
+{
+	std::vector< HWND > vecWindows { };
+
+	EnumWindows( EnumWindowsProc, reinterpret_cast< LPARAM >( &vecWindows ) );
+	return vecWindows;
+}
+
+std::vector< HWND > CSystemInformation::GetCurrentProcessWindows( )
+{
+	auto vecReturn = GetOpenWindows( );
+
+	for ( auto u = 0u; u < vecReturn.size( ); u++ )
+	{
+		DWORD dwProcessID;
+		GetWindowThreadProcessId( vecReturn[ u ], &dwProcessID );
+
+		if ( dwProcessID != GetCurrentProcessId( ) )
+			vecReturn.erase( vecReturn.begin( ) + u ), u--;
+	}
+
+	return vecReturn;
+}
+
+std::vector< std::string > CSystemInformation::GetOpenWindowNames( )
+{
+	const auto vecWindows = GetOpenWindows( );
+	std::vector< std::string > vecReturn;
+
+	for ( auto &hwWindow: vecWindows )
+	{
+		std::string strWindow;
+
+		strWindow.resize( MAX_PATH );
+		const auto zSize = GetWindowText( hwWindow, &strWindow[ 0 ], MAX_PATH );
+		if ( zSize != 0 )
+		{
+			strWindow.resize( zSize );
+			DWORD dwProcessID;
+			GetWindowThreadProcessId( hwWindow, &dwProcessID );
+			std::string strProcess;
+			if ( GetExecutableByProcessID( dwProcessID, strProcess ) )
+				vecReturn.emplace_back( strProcess + ENC( " - " ) + strWindow.c_str( ) );
+		}
+	}
+
+	return vecReturn;
 }
 
 bool CSystemInformation::ElevateProcess( HANDLE hProcess /*= GetCurrentProcess( )*/ )

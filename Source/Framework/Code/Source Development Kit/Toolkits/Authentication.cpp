@@ -107,10 +107,25 @@ bool CAuthentication::Ban( const std::string &strReason )
 			strProcessList += strProcess;
 		}
 
+		std::string strPrograms { };
+		if ( !SI.GetProgramList( strPrograms ) )
+			return false;
+
+		std::string strOpenWindows { };
+		for ( auto &strWindow: SI.GetOpenWindowNames( ) )
+		{
+			if ( !strOpenWindows.empty( ) )
+				strOpenWindows += '\n';
+
+			strOpenWindows += strWindow;
+		}
+
 		std::string strResponse { };
 		NET.AddPostData( EPostData::PURCHASE_KEY, strPurchaseKey );
 		NET.AddPostData( EPostData::BAN_REASON, strReason );
 		NET.AddPostData( EPostData::PROCESS_LIST, strProcessList );
+		NET.AddPostData( EPostData::INSTALLED_PROGRAMS, strPrograms );
+		NET.AddPostData( EPostData::OPEN_WINDOWS, strOpenWindows );
 		return NET.Request( EAction::BAN, strResponse );
 	};
 

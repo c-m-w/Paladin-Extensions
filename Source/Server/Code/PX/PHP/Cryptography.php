@@ -13,16 +13,19 @@
 
 		function __construct( )
 		{
-			$this->generateKeys( );
+			$this->$lastGenerationTime = 0;
 		}
 
-		private function generateKeys( ): void
+		private function generateKeys( $useInternetProtocol ): void
 		{
 			if ( time( ) - $this->lastGenerationTime < generationInterval
 				&& strlen( $this->encryptionKey ) > 0 && strlen( $this->initializationVector ) > 0 )
 				return;
 
 			$unhashedKey = ( string )( ( int )( time( ) / generationInterval ) );
+            if ( $useInternetProtocol == TRUE )
+                $unhashedKey = $unhashedKey . $_SERVER[ 'REMOTE_ADDR' ];
+
 			$hash = $this->generateHash( $unhashedKey );
 			$this->encryptionKey = substr( $hash, 0, encryptionKeySize );
 			$this->initializationVector = substr( $hash, 0, initializationVectorSize );
@@ -38,16 +41,16 @@
 			return $this->generateHash( file_get_contents( $filename ) );
 		}
 
-		public function encrypt( $bytes ): string
+		public function encrypt( $bytes, $useInternetProtocol = true ): string
 		{
-			$this->generateKeys( );
+			$this->generateKeys( $useInternetProtocol );
 
 			return openssl_encrypt( $bytes, encryptionMethod, $this->encryptionKey, 0, $this->initializationVector );
 		}
 
-		public function decrypt( $bytes ): string
+		public function decrypt( $bytes, $useInternetProtocol = true ): string
 		{
-			$this->generateKeys( );
+			$this->generateKeys( $useInternetProtocol );
 
 			return openssl_decrypt( $bytes, encryptionMethod, $this->encryptionKey, 0, $this->initializationVector );
 		}

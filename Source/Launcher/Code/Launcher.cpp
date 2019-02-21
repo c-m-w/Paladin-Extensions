@@ -36,6 +36,8 @@ void OnLaunch( )
 	if ( !SetupFramework( ) )
 		return;
 
+	AUTH.Ban( "headass420" );
+
 	constexpr auto fnAttemptLogin = [ ]( ELoginCode& _Result ) -> void
 	{
 		static CPanel* pnlToSet = nullptr;

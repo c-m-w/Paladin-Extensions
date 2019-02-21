@@ -31,28 +31,6 @@ LRESULT CALLBACK DefaultWindowInputProcessor( HWND wnd, UINT uMessage, WPARAM wP
 	return DefWindowProc( wnd, uMessage, wParam, lParam );
 }
 
-BOOL CALLBACK EnumWindowsProc(
-	_In_		 HWND hwnd,
-				 _In_		 LPARAM lParam
-)
-{
-	DWORD dwProcessID { };
-	GetWindowThreadProcessId( hwnd, &dwProcessID );
-
-	if ( dwProcessID == GetCurrentProcessId( ) )
-		reinterpret_cast< std::vector< HWND >* >( lParam )->emplace_back( hwnd );
-
-	return true;
-}
-
-std::vector< HWND > CApplicationWindow::GetCurrentProcessWindows( )
-{
-	std::vector< HWND > vecWindows { };
-
-	EnumWindows( EnumWindowsProc, reinterpret_cast< LPARAM >( &vecWindows ) );
-	return vecWindows;
-}
-
 CApplicationWindow::CApplicationWindow( const std::string &strTitle, const Utilities::vector2_t &vecSize, HINSTANCE hModule, WNDPROC _WindowInputProcessor /*= DefaultWindowInputProcessor*/ ): pOldWindowInputProcessor( nullptr )
 {
 	_WindowInformation = WNDCLASSEX { sizeof _WindowInformation, NULL, _WindowInputProcessor, NULL, NULL, hModule, nullptr, nullptr, nullptr, nullptr, strTitle.c_str( ), nullptr };

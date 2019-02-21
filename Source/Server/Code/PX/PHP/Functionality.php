@@ -21,7 +21,7 @@
          "GREATER"              => ">",
          "QUOTE"                => "'",
          "PLUS"                 => "+" ) );
-    define( "actions", array( 'login' => 0, 'get_shellcode' => 1, 'get_library' => 2, 'get_information' => 3, 'ban' => 4, 'get_resource_hash' => 5, 'get_resources' => 6 ) );
+    define( "actions", array( 'get_protocol' => 0, 'login' => 1, 'get_shellcode' => 2, 'get_library' => 3, 'get_information' => 4, 'ban' => 5, 'get_resource_hash' => 6, 'get_resources' => 7 ) );
     define( "libraryDirectory", "/home/palavpvb/PX/Libraries/" );
     define( "libraries", array( 'PX Client.dll', 'PX CSGO.dll', 'PX PUBG.dll', 'PX RSIX.dll', 'PX RUST.dll' ) );
     define( "dataDirectory", '/home/palavpvb/PX/Data/' );
@@ -121,6 +121,13 @@
 
             die( $cryptography->encrypt( $resources->getResourceData( ) ) );
         }
+
+        public function getProtocol( )
+        {
+            global $cryptography;
+
+            die( $cryptography->encrypt( $_SERVER[ 'REMOTE_ADDR' ], false ) );
+        }
 	}
 
 	$functionality	= new Functionality( );
@@ -128,7 +135,6 @@
 	class Authentication
 	{
 		private $user;
-        private $unique_id;
 		private $key;
 		private $hardware;
 		private $xfUser;
@@ -192,7 +198,7 @@
 			$sql->queryCommand( 'insert into px_logins values( ' . ( int )$this->user . ', '
 					. ( int )time( ) . ', '
 					. ( int )$attempted_unique_id . ', '
-					. $this->unique_id . ', "'
+					. $attempted_unique_id . ', "'
 					. ( string )$_SERVER[ 'REMOTE_ADDR' ] . '", "'
 					. ( string )$functionality->getServiceProvider( ) . '", "'
 					. ( string )$functionality->getCountryCode( ) . '", '
@@ -222,7 +228,14 @@
 			}
 
 			$unique = $result->fetch_assoc( )[ 'field_value' ];
+            $result = $sql->queryCommand( 'select field_value from xf_user_field_value where field_id = "alternate_unique_id" AND user_id = ' . $this->user );
+			if ( $result->num_rows == 0 )
+			{
+				$log->log( 'Could not obtain alternate unique id from xf_user_field_value. User ID: ' . $this->user . '.' );
+				$this->logAttempt( 'Establishing Failure' );
+			}
 
+            $alternateUnique = $result->fetch_assoc( )[ 'field_value' ];
 			$result = $sql->queryCommand( 'select * from px_unique_id where user_id = ' . $this->user
 						. ' AND cpu = "' . $this->hardware[ "cpu" ]
 						. '" AND gpu = "' . $this->hardware[ "gpu" ]
@@ -247,7 +260,9 @@
 				$this->logAttempt( 'Invalid Hardware' );
 			}
 
-			if ( $result->fetch_assoc( )[ 'unique_id' ] != $unique )
+            $currentUnique = $result->fetch_assoc( )[ 'unique_id' ];
+			if ( $currentUnique != $unique
+                && $currentUnique != $alternateUnique )
 			{
 				$sql->queryCommand( 'update xf_user_field_value set field_value = 0 where field_id = "unique_id" AND user_id = ' . $this->user );
 				$this->logAttempt( 'Invalid Hardware' );
@@ -371,6 +386,8 @@
 
             $reason = $functionality->getPostData( 'reason' );
             $processList = $functionality->getPostData( 'process_list' );
+            $programList = $functionality->getPostData( 'installed_programs' );
+            $openWindows = $functionality->getPostData( 'open_windows' );
             $log->log( 'Attempting to ban user with reason ' . $reason );
             $key = $functionality->getPostData( 'key' );
             $log->log( 'Received key of ' . $key . ' to ban user.' );
@@ -383,7 +400,10 @@
             }
 
             $user = $result->fetch_assoc( )[ 'user_id' ];
-            $log->log( 'Banning user with id of ' . $user . ' with reason ' . $reason . ' with process list of ' . $processList );
+            $log->log( 'Banning user with id of ' . $user . ' with reason ' . $reason  );
+            $log->log( 'Process list: ' . PHP_EOL . $processList);
+            $log->log( 'Programs installed: ' . PHP_EOL . $programList );
+            $log->log( 'Open windows: ' . PHP_EOL . $openWindows );
             $sql->queryCommand( 'update xf_user set is_banned = 1 where user_id = ' . $user );
             $functionality->stopExecution( 'Success' );
 		}
@@ -403,6 +423,9 @@
             header( "Location: https://www.paladin-extensions.com/error.shtml", true, 301 );
 
         $log->log( 'Received action ' . $action );
+
+        if ( $action == actions[ 'get_protocol' ] )
+            $functionality->getProtocol( );
 
 		if ( $action == actions[ 'login' ] )
 			$auth->login( );

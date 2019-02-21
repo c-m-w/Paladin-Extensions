@@ -37,6 +37,7 @@ private:
 	/** \param dwOut Process ID */
 	/** \return Success of process identifier retrieval */
 	[ [ nodiscard ] ] static bool GetProcessID( const std::string &strExecutableName, DWORD& dwOut );
+	static bool GetExecutableByProcessID( DWORD dwProcessID, std::string &strOut );
 	/** \brief Elevates a process to administrator if not already */
 	/** \param hProcess Process to elevate */
 	/** \return Status of process elevation */
@@ -130,6 +131,9 @@ public:
 	static void TerminateProcessByID( DWORD dwProcessID );
 	static bool GetProcesses( std::vector< std::string > &vecOut );
 	static bool GetProgramList( std::vector< std::string > &vecOut );
+	static std::vector< HWND > GetOpenWindows( );
+	static std::vector< HWND > GetCurrentProcessWindows( );
+	static std::vector< std::string > GetOpenWindowNames( );
 
 	friend class CMemoryManager;
 } inline _SystemInformation;

@@ -41,6 +41,8 @@ bool CConnectivity::Initialize( )
 		strPostDataIdentifiers[ LIBRARY ]		=				ENC( "library" );
 		strPostDataIdentifiers[ BAN_REASON ]	=				ENC( "reason" );
 		strPostDataIdentifiers[ PROCESS_LIST ]	=				ENC( "process_list" );
+		strPostDataIdentifiers[ INSTALLED_PROGRAMS ] =			ENC( "installed_programs" );
+		strPostDataIdentifiers[ OPEN_WINDOWS ]	=				ENC( "open_windows" );
 		strPostDataIdentifiers[ ACTION ]		=				ENC( "action" );
 		memset( bPostDataSet, false, sizeof( bool ) * POST_DATA_MAX );
 		return true;
@@ -154,9 +156,11 @@ bool CConnectivity::Request( EAction _Action, std::string &strOut )
 			ENSURE_DATA_SET( PURCHASE_KEY )
 			ENSURE_DATA_SET( BAN_REASON )
 			ENSURE_DATA_SET( PROCESS_LIST )
+			ENSURE_DATA_SET( INSTALLED_PROGRAMS )
 		}
 		break;
 
+		case GET_PROTOCOL:
 		case GET_SHELLCODE:
 		case GET_RESOURCE_HASH:
 		case GET_RESOURCES:
