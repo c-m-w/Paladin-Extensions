@@ -54,6 +54,8 @@ public:
 		SYS_OS,
 		SYS_DRIVE,
 		SYS_BOARD,
+		SYS_SOFT,
+		SYS_VMP,
 		SYS_MAX
 	};
 

@@ -88,7 +88,7 @@ bool CSystemInformation::ProcessQueue( )
 				break;
 			}
 
-			VARIANT vtProp;
+			VARIANT vtProp { };
 			hrReturn = pClassObject->Get( _DeviceInformation.wstrProperty.c_str( ), 0, &vtProp, nullptr, nullptr );
 			if ( hrReturn != S_OK )
 			{
@@ -96,6 +96,13 @@ bool CSystemInformation::ProcessQueue( )
 					_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES,
 							  ENC( "Couldn't iterate through device information. Error %i." ), hrReturn );
 				break;
+			}
+			if ( vtProp.bstrVal == nullptr || reinterpret_cast< std::uintptr_t >( vtProp.bstrVal ) == 0x5 )
+			{
+				pClassObject->Release( ),
+					_Log.Log( EPrefix::WARNING, ELocation::SYSTEM_UTILITIES,
+							  ENC( "Prop didn't exist." ), hrReturn );
+				continue;
 			}
 
 			if ( !_DeviceInformation.pValue->empty( ) )
