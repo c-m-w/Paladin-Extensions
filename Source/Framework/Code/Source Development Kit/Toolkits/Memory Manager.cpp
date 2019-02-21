@@ -245,12 +245,12 @@ bool CMemoryManager::Initialize( )
 		&& FindPatterns( );
 
 
-	return AddPattern( hNewTechnologyModule, pattern_t( ENC( "53 56 57 8B DA 8B F9 50" ), &pInsertInvertedFunctionTable, -0xA, [ _Version ]( )
+	return AddPattern( hNewTechnologyModule, pattern_t( ENC( "53 56 57 8B DA 8B F9 50" ), &pInsertInvertedFunctionTable, -0xB, [ _Version ]( )
 	{
 		pInvertedFunctionTable = *reinterpret_cast< void ** >( std::uintptr_t( pInsertInvertedFunctionTable ) +
 																   ( _Version == ESystemVersion::W10_INITIAL_1507
 																	  || _Version == ESystemVersion::W10_REDSTONE_NOVEMBER_1511
-																	  || _Version == ESystemVersion::W10_REDSTONE_ANNIVERSARY_1607 ? 0xB4 : 0xB5 ) );
+																	  || _Version == ESystemVersion::W10_REDSTONE_ANNIVERSARY_1607 ? 0xB5 : 0xB6 ) );
 	} ) )
 		&& FindPatterns( );
 }
