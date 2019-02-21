@@ -20,8 +20,8 @@
     <DBGpProxyEnabled>false</DBGpProxyEnabled>
     <DBGpProxyPort>9001</DBGpProxyPort>
     <PublishBeforeDebugProfile>PX</PublishBeforeDebugProfile>
-    <WebRoot>/homedir/public_html</WebRoot>
-    <DebugPathMapping>Code;/homedir</DebugPathMapping>
+    <WebRoot>/home/palavpvb</WebRoot>
+    <DebugPathMapping>Code/;/</DebugPathMapping>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <IncludeDebugInformation>true</IncludeDebugInformation>
