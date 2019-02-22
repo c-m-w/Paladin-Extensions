@@ -152,8 +152,7 @@ image_info_t::image_info_t( void *pData ): pData( pData )
 bool image_info_t::ValidImage( )
 {
 	return GetOperatingSystemHeader( )->e_magic == IMAGE_DOS_SIGNATURE
-		&& GetNewTechnologyHeaders( )->Signature == IMAGE_NT_SIGNATURE
-		&& ( GetNewTechnologyHeaders( )->FileHeader.Characteristics & IMAGE_FILE_DLL ) != NULL;
+		&& GetNewTechnologyHeaders( )->Signature == IMAGE_NT_SIGNATURE;
 }
 
 std::size_t image_info_t::GetImageSize( )
@@ -525,6 +524,61 @@ bool CMemoryManager::LoadLibraryEx( const std::string &strPath, bool bUseExistin
 		_Worker.WaitForExecutionFinish( INFINITE );
 
 	return FreeMemory( pExit ) && FreeMemory( pLibraryName ) && bSuccess;
+}
+
+bool CMemoryManager::IsExecutableCode( void *pAddress )
+{
+	if ( pAddress == nullptr )
+		return false;
+
+	MEMORY_BASIC_INFORMATION _Memory;
+	return VirtualQuery( pAddress, &_Memory, sizeof( MEMORY_BASIC_INFORMATION ) ) > 0
+		&& _Memory.RegionSize > 0
+		&& ( _Memory.Protect & PAGE_EXECUTE_READ ) > 0
+		&& ( _Memory.Protect & ( PAGE_GUARD | PAGE_NOACCESS ) ) == 0;
+}
+
+void *CMemoryManager::FindFreeMemory( HMODULE hModule, std::size_t zMinimumSize, DWORD dwAccess, void *pStart /*= nullptr*/ )
+{
+	auto _Image = image_info_t( hModule );
+
+	if ( !_Image.ValidImage( ) )
+		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Invalid module passed to FindFreeMemory." ) ), nullptr;
+
+	if ( pStart != nullptr )
+		if ( std::uintptr_t( pStart ) > std::uintptr_t( hModule ) + _Image.GetImageSize( ) )
+			return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Invalid start address passed to FindFreeMemory." ) ), nullptr;
+
+	std::size_t zRegionSize = 0, zCurrentSize = 0;
+	for ( auto p = reinterpret_cast< unsigned char * >( pStart == nullptr ? std::uintptr_t( hModule ) + _Image.GetHeaderSize( ) : std::uintptr_t( pStart ) );
+		  std::uintptr_t( p ) < std::uintptr_t( hModule ) + _Image.GetImageSize( ); p++, zRegionSize-- )
+	{
+		if ( zRegionSize == 0 )
+		{
+			MEMORY_BASIC_INFORMATION _Region;
+
+			do
+			{
+				if ( VirtualQuery( p, &_Region, sizeof( MEMORY_BASIC_INFORMATION ) ) == 0
+					 || _Region.RegionSize < zMinimumSize
+					 || ( _Region.Protect & dwAccess ) == 0
+					 || ( _Region.Protect & ~dwAccess ) != 0 )
+					p += _Region.RegionSize, zCurrentSize = 0;
+				else
+					zRegionSize = _Region.RegionSize;
+			} while ( zRegionSize == 0 );
+		}
+
+		if ( *p == NULL )
+			zCurrentSize++;
+		else
+			zCurrentSize = 0;
+
+		if ( zCurrentSize >= zMinimumSize )
+			return p - zMinimumSize + 1;
+	}
+
+	return nullptr;
 }
 
 bool CMemoryManager::AddPattern( const std::string &strModule, const pattern_t &_Pattern )

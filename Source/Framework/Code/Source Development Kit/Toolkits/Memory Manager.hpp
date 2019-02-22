@@ -248,11 +248,12 @@ private:
 
 public:
 
+	static bool IsExecutableCode( void *pAddress );
+	static void *FindFreeMemory( HMODULE hModule, std::size_t zMinimumSize, DWORD dwAccess, void *pStart = nullptr );
+
 	bool AddPattern( const std::string &strModule, const pattern_t &_Pattern );
 	bool AddPattern( HMODULE hModule, const pattern_t &_Pattern );
 	bool FindPatterns( );
-
-	static void *FindPattern( HMODULE hLocation, const std::string &strPattern );
 
 	bool SetProcess( DWORD dwProcessID, DWORD dwAccess );
 	bool SetProcess( const std::string &strExecutable, DWORD dwAccess );

@@ -33,10 +33,10 @@ void Draw( );
 
 void OnLaunch( )
 {
+	const auto test = MEM.FindFreeMemory( GetModuleHandle( nullptr ), 24, PAGE_EXECUTE_READ );
+
 	if ( !SetupFramework( ) )
 		return;
-
-	AUTH.Ban( "headass420" );
 
 	constexpr auto fnAttemptLogin = [ ]( ELoginCode& _Result ) -> void
 	{
