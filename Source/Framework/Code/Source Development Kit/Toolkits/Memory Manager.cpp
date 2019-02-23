@@ -326,16 +326,18 @@ bool CMemoryManager::EnsureShellcodeValidity( )
 									 &zThreadEnvironment, &zLoadLibraryExWrapper, &zRelocateImageBase, &zLoadDependencies ) )
 			return false;
 
+	return true;
+}
+
+bool CMemoryManager::EnsureShellcodePresence( )
+{
 	if ( pShellcode == nullptr )
-	{
 		if ( !AllocateMemory( pShellcode, zThreadEnvironment + zLoadLibraryExWrapper + zRelocateImageBase + zLoadDependencies, PAGE_EXECUTE_READWRITE )
 			 || !Write( pThreadEnvironment, bThreadEnvironment, zThreadEnvironment )
 			 || !Write( pLoadLibraryExWrapper, bLoadLibraryExWrapper, zLoadLibraryExWrapper )
 			 || !Write( pRelocateImageBase, bRelocateImageBase, zRelocateImageBase )
 			 || !Write( pLoadDependencies, bLoadDependencies, zLoadDependencies ) )
 			return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Failed to allocate and write shellcode to memory." ) ), false;
-
-	}
 
 	return true;
 }
@@ -411,7 +413,8 @@ bool CMemoryManager::SetProcess( const std::string &strExecutable, DWORD dwAcces
 
 bool CMemoryManager::CreateWorker( worker_t &_Worker, void *&pExit )
 {
-	if ( !EnsureShellcodeValidity( ) )
+	if ( !EnsureShellcodeValidity( )
+		 || !EnsureShellcodePresence( ) )
 		return false;
 
 	if ( !( dwCurrentAccess & PROCESS_CREATE_THREAD ) )
@@ -430,7 +433,8 @@ bool CMemoryManager::CreateWorker( worker_t &_Worker, void *&pExit )
 
 bool CMemoryManager::FindWorker( worker_t &_Worker, DWORD dwHandleAccess, void *&pExit )
 {
-	if ( !EnsureShellcodeValidity( ) )
+	if ( !EnsureShellcodeValidity( )
+		 || !EnsureShellcodePresence( ) )
 		return false;
 
 	CSystemInformation::thread_list_t _Threads { };
@@ -520,7 +524,8 @@ bool CMemoryManager::FreeMemory( void *pAddress )
 
 bool CMemoryManager::LoadLibraryEx( const std::string &strPath, bool bUseExistingThread, HMODULE *pModuleHandle /*= nullptr*/ )
 {
-	if ( !EnsureShellcodeValidity( ) )
+	if ( !EnsureShellcodeValidity( )
+		 || !EnsureShellcodePresence( ) )
 		return false;
 
 	worker_t _Worker;
@@ -645,6 +650,20 @@ HMODULE CMemoryManager::GetOrigin( void *pAddress )
 	return nullptr;
 }
 
+std::size_t CMemoryManager::GetPageSize( )
+{
+	static std::size_t zPage = 0;
+
+	if ( zPage == 0 )
+	{
+		SYSTEM_INFO _Info;
+		GetSystemInfo( &_Info );
+		zPage = _Info.dwPageSize;
+	}
+
+	return zPage;
+}
+
 bool CMemoryManager::AddPattern( const std::string &strModule, const pattern_t &_Pattern )
 {
 	const auto hModule = GetModuleHandle( strModule.c_str( ) );
@@ -759,7 +778,8 @@ bool CMemoryManager::FindPatterns( )
 
 bool CMemoryManager::ManuallyLoadLibraryEx( const std::string &strData, bool bUseExistingThread, bool bEnableExceptions, bool bEraseHeaders, bool bEraseDiscardableSections, HMODULE *pModuleHandle /*= nullptr*/  )
 {
-	if ( !EnsureShellcodeValidity( ) )
+	if ( !EnsureShellcodeValidity( )
+		 || !EnsureShellcodePresence( ) )
 		return false;
 
 	image_info_t _Image( reinterpret_cast< void * >( const_cast< char * >( &strData[ 0 ] ) ) );

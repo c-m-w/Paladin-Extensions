@@ -31,10 +31,39 @@ CLabel *_SuccessTop, *_SuccessBottom;
 bool SetupInterface( );
 void Draw( );
 
+class itest
+{
+public:
+
+	virtual void mb( ) = 0;
+};
+
+class test: public itest
+{
+public:
+
+	inline void mb( ) override
+	{
+		MessageBoxA( nullptr, "", "", 0 );
+	}
+};
+
+void mb( void *, void * )
+{
+	return;
+}
+
 void OnLaunch( )
 {
 	if ( !SetupFramework( ) )
 		return;
+
+	CVirtualTableHook hk;
+	test t;
+	itest *p = &t;
+	hk.Attach( p );
+	hk.Replace( 0u, (void*)mb );
+	p->mb( );
 
 	constexpr auto fnAttemptLogin = [ ]( ELoginCode& _Result ) -> void
 	{

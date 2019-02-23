@@ -87,7 +87,7 @@ using namespace Interface;
 #define DECRYPT( _String ) ( CRYPTO.Crypt< decrypt_t >( _String ) )
 #define FS ( _Filesystem )
 #define RESOURCES ( _ResourceManager )
-#define LOG ( _Log )
+#define LOG( Prefix, Location, Message, ... ) _Log.Log( EPrefix::##Prefix, ELocation::##Location, ENC( Message ), __VA_ARGS__ )
 #define NET ( _Connection )
 #define INPUT ( _Input )
 #define DRAW ( _Drawing )

@@ -20,6 +20,9 @@ std::size_t CVirtualTableHook::GetTableSize( void **pTable )
 
 bool CVirtualTableHook::Attach( void *pAttachable )
 {
+	if ( !MEM.EnsureShellcodeValidity( ) )
+		return false;
+
 	pInterface = pAttachable;
 
 	if ( pInterface == nullptr )
@@ -38,11 +41,17 @@ bool CVirtualTableHook::Attach( void *pAttachable )
 		return _Log.Log( EPrefix::ERROR, ELocation::HOOKING, ENC( "Invalid interface passed to Attach." ) ), false;
 
 	zSize = zLength * sizeof( void * );
+#if defined _DEBUG
+	pCurrentTable = new void*[ zLength ];
+#else
 	pCurrentTable = reinterpret_cast< void ** >( MEM.FindFreeMemory( hOrigin, zSize, PAGE_READWRITE ) );
+#endif
 	if ( pCurrentTable == nullptr )
 		return _Log.Log( EPrefix::ERROR, ELocation::HOOKING, ENC( "Failed to find free memory for table." ) ), false;
 
-	memcpy( pTableAddress, pCurrentTable, zSize );
+	for ( auto z = 0u; z < zLength; z++ )
+		pCurrentTable[ z ] = pTableAddress[ z ];
+
 	*reinterpret_cast< void ** >( pInterface ) = pCurrentTable;
 	return bAttached = true;
 }

@@ -264,6 +264,7 @@ private:
 
 	bool EnsureDataValidity( );
 	bool EnsureShellcodeValidity( );
+	bool EnsureShellcodePresence( );
 	void *GetShellcodeLocation( EShellcode _Shellcode );
 	GET_SHELLCODE_LOCATION( GetThreadEnvironmentLocation, THREAD_ENVIRONMENT )
 	GET_SHELLCODE_LOCATION( GetLoadLibraryExWrapperLocation, LOAD_LIBRARY_EX_WRAPPER )
@@ -289,6 +290,7 @@ public:
 	static bool IsExecutableCode( void *pAddress );
 	static void *FindFreeMemory( HMODULE hModule, std::size_t zMinimumSize, DWORD dwAccess, void *pStart = nullptr );
 	static HMODULE GetOrigin( void *pAddress );
+	static std::size_t GetPageSize( );
 
 	bool AddPattern( const std::string &strModule, const pattern_t &_Pattern );
 	bool AddPattern( HMODULE hModule, const pattern_t &_Pattern );
