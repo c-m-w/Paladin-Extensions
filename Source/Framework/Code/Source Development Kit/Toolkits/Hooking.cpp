@@ -52,6 +52,11 @@ void CVirtualTableHook::Detach( )
 	if ( bAttached )
 	{
 		*reinterpret_cast< void ** >( pInterface ) = pOldTable;
+#if !defined _DEBUG
+		for ( auto z = 0u; z < zLength; z++ )
+			if ( pOldTable[ z ] != pCurrentTable[ z ] )
+				memset( pCurrentTable[ z ], 0, zTrampolineStub );
+#endif
 		memset( pCurrentTable, 0, zSize );
 		*this = CVirtualTableHook( );
 	}
