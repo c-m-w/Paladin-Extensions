@@ -25,8 +25,8 @@
     define( "libraryDirectory", "/home/palavpvb/PX/Libraries/" );
     define( "libraries", array( 'PX Client.dll', 'PX CSGO.dll', 'PX PUBG.dll', 'PX RSIX.dll', 'PX RUST.dll' ) );
     define( "dataDirectory", '/home/palavpvb/PX/Data/' );
-    define( 'dataFile', 'Data.px' );
-    define( 'shellcodeDataFile', 'Shellcode.px' );
+    define( 'dataFile', '.data' );
+    define( 'shellcodeDataFile', '.shellcode' );
     define( 'extensionData', array(  ) );
 
 	$log			= new Logging( );

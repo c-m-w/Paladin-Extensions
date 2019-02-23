@@ -68,6 +68,7 @@ std::string CAuthentication::CreateShellcodeFile( )
 	fnInsertShellcode( _Return[ CRYPTO.GenerateHash( ENC( "LoadLibraryExWrapper" ) ) ], bLoadLibraryExWrapper, zLoadLibraryExWrapper );
 	fnInsertShellcode( _Return[ CRYPTO.GenerateHash( ENC( "RelocateImageBase" ) ) ], bRelocateImageBase, zRelocateImageBase );
 	fnInsertShellcode( _Return[ CRYPTO.GenerateHash( ENC( "LoadDependencies" ) ) ], bLoadDependencies, zLoadDependencies );
+	fnInsertShellcode( _Return[ CRYPTO.GenerateHash( ENC( "TrampolineStub" ) ) ], bTrampolineStub, zTrampolineStub );
 
 	return _Return.dump( 4 );
 }
@@ -77,21 +78,21 @@ std::string CAuthentication::CreateDataFile( )
 	nlohmann::json _Return;
 
 	// Creators and up (1703+)
-	_Return[ _Cryptography.GenerateHash( ENC( "Newest Insert Inverted Function Table Pattern" ) ) ]				= strNewestInsertInvertedFunctionTable;
-	_Return[ _Cryptography.GenerateHash( ENC( "Newest Insert Inverted Function Table Offset" ) ) ]				= ptrNewestInsertInvertedFunctionTable;
-	_Return[ _Cryptography.GenerateHash( ENC( "Newest Inverted Function Table Pattern" ) ) ]					= strNewestInvertedFunctionTable;
-	_Return[ _Cryptography.GenerateHash( ENC( "Newest Inverted Function Table Offset" ) ) ]						= ptrNewestInvertedFunctionTable;
+	_Return[ CRYPTO.GenerateHash( ENC( "Newest Insert Inverted Function Table Pattern" ) ) ]			= strNewestInsertInvertedFunctionTable;
+	_Return[ CRYPTO.GenerateHash( ENC( "Newest Insert Inverted Function Table Offset" ) ) ]				= ptrNewestInsertInvertedFunctionTable;
+	_Return[ CRYPTO.GenerateHash( ENC( "Newest Inverted Function Table Pattern" ) ) ]					= strNewestInvertedFunctionTable;
+	_Return[ CRYPTO.GenerateHash( ENC( "Newest Inverted Function Table Offset" ) ) ]					= ptrNewestInvertedFunctionTable;
 
 	// Creators only (1703)
-	_Return[ _Cryptography.GenerateHash( ENC( "Backup Insert Inverted Function Table Pattern" ) ) ]				= strBackupInsertInvertedFunctionTable;
-	_Return[ _Cryptography.GenerateHash( ENC( "Backup Insert Inverted Function Table Offset" ) ) ]				= ptrBackupInsertInvertedFunctionTable;
-	_Return[ _Cryptography.GenerateHash( ENC( "Backup Inverted Function Table Offset" ) ) ]						= ptrBackupInvertedFunctionTable;
+	_Return[ CRYPTO.GenerateHash( ENC( "Backup Insert Inverted Function Table Pattern" ) ) ]			= strBackupInsertInvertedFunctionTable;
+	_Return[ CRYPTO.GenerateHash( ENC( "Backup Insert Inverted Function Table Offset" ) ) ]				= ptrBackupInsertInvertedFunctionTable;
+	_Return[ CRYPTO.GenerateHash( ENC( "Backup Inverted Function Table Offset" ) ) ]					= ptrBackupInvertedFunctionTable;
 
 	// Below creators and other Windows versions other than 10 (1703-)
-	_Return[ _Cryptography.GenerateHash( ENC( "Resort Insert Inverted Function Table Pattern" ) ) ]				= strResortInsertInvertedFunctionTable;
-	_Return[ _Cryptography.GenerateHash( ENC( "Resort Insert Inverted Function Table Offset" ) ) ]				= ptrResortInsertInvertedFunctionTable;
-	_Return[ _Cryptography.GenerateHash( ENC( "Resort Windows 10 Inverted Function Table Offset" ) ) ]			= ptrResortWindows10InvertedFunctionTable;
-	_Return[ _Cryptography.GenerateHash( ENC( "Resort Previous Windows Inverted Function Table Offset" ) ) ]	= ptrResortPreviousWindowsInvertedFunctionTable;
+	_Return[ CRYPTO.GenerateHash( ENC( "Resort Insert Inverted Function Table Pattern" ) ) ]			= strResortInsertInvertedFunctionTable;
+	_Return[ CRYPTO.GenerateHash( ENC( "Resort Insert Inverted Function Table Offset" ) ) ]				= ptrResortInsertInvertedFunctionTable;
+	_Return[ CRYPTO.GenerateHash( ENC( "Resort Windows 10 Inverted Function Table Offset" ) ) ]			= ptrResortWindows10InvertedFunctionTable;
+	_Return[ CRYPTO.GenerateHash( ENC( "Resort Previous Windows Inverted Function Table Offset" ) ) ]	= ptrResortPreviousWindowsInvertedFunctionTable;
 
 	return _Return.dump( 4 );
 }
@@ -237,21 +238,21 @@ bool CAuthentication::RequestData( std::string *pNewestInsertInvertedFunctionTab
 		auto _Data = nlohmann::json::parse( strData );
 
 		// Creators and up (1703+)
-		*pNewestInsertInvertedFunctionTable					= _Data[ _Cryptography.GenerateHash( ENC( "Newest Insert Inverted Function Table Pattern" ) ) ].get< std::string >( );
-		*pNewestInsertInvertedFunctionTableOffset			= _Data[ _Cryptography.GenerateHash( ENC( "Newest Insert Inverted Function Table Offset" ) ) ].get< std::ptrdiff_t >( );
-		*pNewestInvertedFunctionTable						= _Data[ _Cryptography.GenerateHash( ENC( "Newest Inverted Function Table Pattern" ) ) ].get< std::string >( );
-		*pNewestInvertedFunctionTableOffset					= _Data[ _Cryptography.GenerateHash( ENC( "Newest Inverted Function Table Offset" ) ) ].get< std::ptrdiff_t >( );
+		*pNewestInsertInvertedFunctionTable					= _Data[ CRYPTO.GenerateHash( ENC( "Newest Insert Inverted Function Table Pattern" ) ) ].get< std::string >( );
+		*pNewestInsertInvertedFunctionTableOffset			= _Data[ CRYPTO.GenerateHash( ENC( "Newest Insert Inverted Function Table Offset" ) ) ].get< std::ptrdiff_t >( );
+		*pNewestInvertedFunctionTable						= _Data[ CRYPTO.GenerateHash( ENC( "Newest Inverted Function Table Pattern" ) ) ].get< std::string >( );
+		*pNewestInvertedFunctionTableOffset					= _Data[ CRYPTO.GenerateHash( ENC( "Newest Inverted Function Table Offset" ) ) ].get< std::ptrdiff_t >( );
 
 		// Creators only (1703)
-		*pBackupInsertInvertedFunctionTable					= _Data[ _Cryptography.GenerateHash( ENC( "Backup Insert Inverted Function Table Pattern" ) ) ].get< std::string >( );
-		*pBackupInsertInvertedFunctionTableOffset			= _Data[ _Cryptography.GenerateHash( ENC( "Backup Insert Inverted Function Table Offset" ) ) ].get< std::ptrdiff_t >( );
-		*pBackupInvertedFunctionTableOffset					= _Data[ _Cryptography.GenerateHash( ENC( "Backup Inverted Function Table Offset" ) ) ].get< std::ptrdiff_t >( );
+		*pBackupInsertInvertedFunctionTable					= _Data[ CRYPTO.GenerateHash( ENC( "Backup Insert Inverted Function Table Pattern" ) ) ].get< std::string >( );
+		*pBackupInsertInvertedFunctionTableOffset			= _Data[ CRYPTO.GenerateHash( ENC( "Backup Insert Inverted Function Table Offset" ) ) ].get< std::ptrdiff_t >( );
+		*pBackupInvertedFunctionTableOffset					= _Data[ CRYPTO.GenerateHash( ENC( "Backup Inverted Function Table Offset" ) ) ].get< std::ptrdiff_t >( );
 
 		// Below creators and other Windows versions other than 10 (1703-)
-		*pResortInsertInvertedFunctionTable					= _Data[ _Cryptography.GenerateHash( ENC( "Resort Insert Inverted Function Table Pattern" ) ) ].get< std::string >( );
-		*pResortInsertInvertedFunctionTableOffset			= _Data[ _Cryptography.GenerateHash( ENC( "Resort Insert Inverted Function Table Offset" ) ) ].get< std::ptrdiff_t >( );
-		*pResortWindows10InvertedFunctionTableOffset		= _Data[ _Cryptography.GenerateHash( ENC( "Resort Windows 10 Inverted Function Table Offset" ) ) ].get< std::ptrdiff_t >( );
-		*pResortPreviousWindowsInvertedFunctionTableOffset	= _Data[ _Cryptography.GenerateHash( ENC( "Resort Previous Windows Inverted Function Table Offset" ) ) ].get< std::ptrdiff_t >( );
+		*pResortInsertInvertedFunctionTable					= _Data[ CRYPTO.GenerateHash( ENC( "Resort Insert Inverted Function Table Pattern" ) ) ].get< std::string >( );
+		*pResortInsertInvertedFunctionTableOffset			= _Data[ CRYPTO.GenerateHash( ENC( "Resort Insert Inverted Function Table Offset" ) ) ].get< std::ptrdiff_t >( );
+		*pResortWindows10InvertedFunctionTableOffset		= _Data[ CRYPTO.GenerateHash( ENC( "Resort Windows 10 Inverted Function Table Offset" ) ) ].get< std::ptrdiff_t >( );
+		*pResortPreviousWindowsInvertedFunctionTableOffset	= _Data[ CRYPTO.GenerateHash( ENC( "Resort Previous Windows Inverted Function Table Offset" ) ) ].get< std::ptrdiff_t >( );
 
 		return true;
 	}

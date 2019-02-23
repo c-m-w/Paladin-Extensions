@@ -128,6 +128,7 @@
     <ClCompile Include="Code\Source Development Kit\Toolkits\Graphical User Interface.cpp" />
     <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Utilities.cpp" />
     <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Window.cpp" />
+    <ClCompile Include="Code\Source Development Kit\Toolkits\Hooking.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\Memory Manager.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\Resource Manager.cpp" />
     <ClCompile Include="Precompile.cpp">
@@ -141,6 +142,7 @@
     <None Include="Code\Source Development Kit\Application Programming Interfaces\Cryptography.inl" />
     <None Include="Code\Source Development Kit\Toolkits\Graphical User Interface.inl" />
     <None Include="Code\Source Development Kit\Application Programming Interfaces\Utilities.inl" />
+    <None Include="Code\Source Development Kit\Toolkits\Hooking.hpp" />
     <None Include="Code\Source Development Kit\Toolkits\Memory Manager.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

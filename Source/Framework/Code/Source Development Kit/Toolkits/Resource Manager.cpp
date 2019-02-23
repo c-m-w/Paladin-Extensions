@@ -55,9 +55,9 @@ bool CResourceManager::Initialize( )
 			_Filesystem.RestoreWorkingDirectory( );
 		}
 	}
-	catch ( nlohmann::json::type_error & )
+	catch ( nlohmann::json::type_error &e )
 	{
-		_Log.Log( EPrefix::ERROR, ELocation::RESOURCE_MANAGER, ENC( "Error while accessing json object while comparing hashes." ) );
+		_Log.Log( EPrefix::ERROR, ELocation::RESOURCE_MANAGER, ENC( "Error while accessing json object while comparing hashes. Message: %s." ), e.what( ) );
 		return false;
 	}
 
@@ -113,9 +113,9 @@ bool CResourceManager::Initialize( )
 				_Filesystem.RestoreWorkingDirectory( );
 			}
 		}
-		catch ( nlohmann::json::type_error & )
+		catch ( nlohmann::json::type_error &e )
 		{
-			_Log.Log( EPrefix::ERROR, ELocation::FILESYSTEM, ENC( "Error while accessing json object while installing resources." ) );
+			_Log.Log( EPrefix::ERROR, ELocation::FILESYSTEM, ENC( "Error while accessing json object while installing resources. Message: %s." ), e.what( ) );
 			return false;
 		}
 	}

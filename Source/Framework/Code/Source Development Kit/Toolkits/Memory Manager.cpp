@@ -626,6 +626,25 @@ void *CMemoryManager::FindFreeMemory( HMODULE hModule, std::size_t zMinimumSize,
 	return nullptr;
 }
 
+HMODULE CMemoryManager::GetOrigin( void *pAddress )
+{
+	std::vector< HMODULE > vecModules { };
+
+	if ( !SI.GetModules( GetCurrentProcessId( ), vecModules ) )
+		return nullptr;
+
+	for ( auto &hModule: vecModules )
+	{
+		auto _Info = image_info_t( hModule );
+
+		if ( std::uintptr_t( pAddress ) >= std::uintptr_t( hModule )
+			 && std::uintptr_t( pAddress ) <= std::uintptr_t( hModule ) + _Info.GetImageSize( ) )
+			return hModule;
+	}
+
+	return nullptr;
+}
+
 bool CMemoryManager::AddPattern( const std::string &strModule, const pattern_t &_Pattern )
 {
 	const auto hModule = GetModuleHandle( strModule.c_str( ) );

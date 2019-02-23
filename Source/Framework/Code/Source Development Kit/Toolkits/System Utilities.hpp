@@ -134,6 +134,7 @@ public:
 	static std::vector< HWND > GetOpenWindows( );
 	static std::vector< HWND > GetCurrentProcessWindows( );
 	static std::vector< std::string > GetOpenWindowNames( );
+	static bool GetModules( DWORD dwProcessID, std::vector< HMODULE > &vecOut );
 
 	friend class CMemoryManager;
 } inline _SystemInformation;

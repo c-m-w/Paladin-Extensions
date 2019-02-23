@@ -41,6 +41,7 @@ public:
 		AUTHENTICATION,
 		SYSTEM_UTILITIES,
 		MEMORY_MANAGER,
+		HOOKING,
 		APPLICATION,
 		LOCATION_MAX
 	};
@@ -113,6 +114,7 @@ private:
 		ENC( "[Auth]\t\t" ),
 		ENC( "[System]\t" ),
 		ENC( "[Memory]\t" ),
+		ENC( "[Hooking]\t" ),
 		ENC( "[Application]\t" )
 	};
 	/** \brief The timestamp of the last time that the buffer was written to file. */

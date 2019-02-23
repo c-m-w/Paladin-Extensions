@@ -273,7 +273,7 @@ bool CSystemInformation::GetProcesses( std::vector< std::string > &vecOut )
 		} while ( Process32Next( hSnapshot, &_CurrentProcess ) == TRUE );
 
 	if ( CloseHandle( hSnapshot ) == FALSE )
-		_Log.Log( EPrefix::WARNING, ELocation::SYSTEM_UTILITIES, ENC( "Unable to close process thread snapshot properly." ) );
+		_Log.Log( EPrefix::WARNING, ELocation::SYSTEM_UTILITIES, ENC( "Unable to close process process snapshot properly." ) );
 
 	return bReturn && !vecOut.empty( );
 }
@@ -342,6 +342,34 @@ std::vector< std::string > CSystemInformation::GetOpenWindowNames( )
 	}
 
 	return vecReturn;
+}
+
+bool CSystemInformation::GetModules( DWORD dwProcessID, std::vector< HMODULE > &vecOut )
+{
+	const auto hSnapshot = CreateToolhelp32Snapshot( TH32CS_SNAPMODULE, dwProcessID );
+
+	vecOut.clear( );
+	if ( hSnapshot == INVALID_HANDLE_VALUE
+		 || hSnapshot == nullptr )
+		return _Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES, ENC( "Unable to get modules." ) ), false;
+
+	auto bReturn = true;
+	MODULEENTRY32 _Module { sizeof( MODULEENTRY32 ) };
+	if ( Module32First( hSnapshot, &_Module ) != TRUE )
+	{
+		_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES, ENC( "Unable to find first module." ) );
+		bReturn = false;
+	}
+	else
+		do
+		{
+			vecOut.emplace_back( _Module.hModule );
+		} while ( Module32Next( hSnapshot, &_Module ) == TRUE );
+
+	if ( CloseHandle( hSnapshot ) == FALSE )
+		_Log.Log( EPrefix::WARNING, ELocation::SYSTEM_UTILITIES, ENC( "Unable to close process module snapshot properly." ) );
+
+	return bReturn && !vecOut.empty( );
 }
 
 bool CSystemInformation::ElevateProcess( HANDLE hProcess /*= GetCurrentProcess( )*/ )
