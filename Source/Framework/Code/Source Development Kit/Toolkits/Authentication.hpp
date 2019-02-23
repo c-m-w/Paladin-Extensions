@@ -43,12 +43,17 @@ public:
 #if defined _DEBUG
 
 	[ [ nodiscard ] ] static std::string CreateShellcodeFile( );
+	[ [ nodiscard ] ] static std::string CreateDataFile( );
 
 #endif
 
 	bool CreateLicenseFile( std::string strPurchaseKey );
 	bool Ban( const std::string &strReason );
 	[ [ nodiscard ] ] ERequestCode Login( );
+	bool RequestData( std::string *pNewestInsertInvertedFunctionTable, std::ptrdiff_t *pNewestInsertInvertedFunctionTableOffset, std::string *pNewestInvertedFunctionTable,
+					  std::ptrdiff_t *pNewestInvertedFunctionTableOffset, std::string *pBackupInsertInvertedFunctionTable, std::ptrdiff_t *pBackupInsertInvertedFunctionTableOffset,
+					  std::ptrdiff_t *pBackupInvertedFunctionTableOffset, std::string *pResortInsertInvertedFunctionTable, std::ptrdiff_t *pResortInsertInvertedFunctionTableOffset,
+					  std::ptrdiff_t *pResortWindows10InvertedFunctionTableOffset, std::ptrdiff_t *pResortPreviousWindowsInvertedFunctionTableOffset );
 	bool RequestShellcode( unsigned char **pThreadEnvironment, unsigned char **pLoadLibraryExWrapper, unsigned char **pRelocateImageBase, unsigned char **pLoadDependencies,
 						   std::size_t *pThreadEnvironmentSize, std::size_t *pLoadLibraryExWrapperSize, std::size_t *pRelocateImageBaseSize, std::size_t *pLoadDependenciesSize );
 	bool RequestLibrary( ELibrary _Library, std::string &strOut );

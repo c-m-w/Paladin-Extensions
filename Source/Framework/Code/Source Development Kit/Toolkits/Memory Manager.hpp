@@ -101,6 +101,18 @@ inline std::size_t zLoadLibraryExWrapper	= 19;
 inline std::size_t zRelocateImageBase		= 225;
 inline std::size_t zLoadDependencies		= 251;
 
+inline std::string strNewestInsertInvertedFunctionTable = ENC( "53 56 57 8D 45 F8 8B FA" );
+inline std::ptrdiff_t ptrNewestInsertInvertedFunctionTable = -8;
+inline std::string strNewestInvertedFunctionTable = ENC( "33 F6 46 3B C6" );
+inline std::ptrdiff_t ptrNewestInvertedFunctionTable = -0x1B;
+inline std::string strBackupInsertInvertedFunctionTable = ENC( "8D 45 F0 89 55 F8 50 8D 55 F4" );
+inline std::ptrdiff_t ptrBackupInsertInvertedFunctionTable = -0xB,
+						ptrBackupInvertedFunctionTable = 0x57;
+inline std::string strResortInsertInvertedFunctionTable = ENC( "53 56 57 8B DA 8B F9 50" );
+inline std::ptrdiff_t ptrResortInsertInvertedFunctionTable = -0xB;
+inline std::ptrdiff_t ptrResortWindows10InvertedFunctionTable = 0xB5,
+						ptrResortPreviousWindowsInvertedFunctionTable = 0xB6;
+
 #else
 
 inline unsigned char *bThreadEnvironment	= nullptr;
@@ -112,6 +124,18 @@ inline std::size_t zThreadEnvironment		= 0;
 inline std::size_t zLoadLibraryExWrapper	= 0;
 inline std::size_t zRelocateImageBase		= 0;
 inline std::size_t zLoadDependencies		= 0;
+
+inline std::string strNewestInsertInvertedFunctionTable;
+inline std::ptrdiff_t ptrNewestInsertInvertedFunctionTable = 0;
+inline std::string strNewestInvertedFunctionTable;
+inline std::ptrdiff_t ptrNewestInvertedFunctionTable = 0;
+inline std::string strBackupInsertInvertedFunctionTable;
+inline std::ptrdiff_t ptrBackupInsertInvertedFunctionTable = 0,
+						ptrBackupInvertedFunctionTable = 0;
+inline std::string strResortInsertInvertedFunctionTable;
+inline std::ptrdiff_t ptrResortInsertInvertedFunctionTable = 0;
+inline std::ptrdiff_t ptrResortWindows10InvertedFunctionTable = 0,
+						ptrResortPreviousWindowsInvertedFunctionTable = 0;
 
 #endif
 
@@ -225,6 +249,7 @@ private:
 	bool Initialize( ) override;
 	void Uninitialize( ) override;
 
+	bool EnsureDataValidity( );
 	bool EnsureShellcodeValidity( );
 	void *GetShellcodeLocation( EShellcode _Shellcode );
 	GET_SHELLCODE_LOCATION( GetThreadEnvironmentLocation, THREAD_ENVIRONMENT )

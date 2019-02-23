@@ -72,6 +72,30 @@ std::string CAuthentication::CreateShellcodeFile( )
 	return _Return.dump( 4 );
 }
 
+std::string CAuthentication::CreateDataFile( )
+{
+	nlohmann::json _Return;
+
+	// Creators and up (1703+)
+	_Return[ _Cryptography.GenerateHash( ENC( "Newest Insert Inverted Function Table Pattern" ) ) ]				= strNewestInsertInvertedFunctionTable;
+	_Return[ _Cryptography.GenerateHash( ENC( "Newest Insert Inverted Function Table Offset" ) ) ]				= ptrNewestInsertInvertedFunctionTable;
+	_Return[ _Cryptography.GenerateHash( ENC( "Newest Inverted Function Table Pattern" ) ) ]					= strNewestInvertedFunctionTable;
+	_Return[ _Cryptography.GenerateHash( ENC( "Newest Inverted Function Table Offset" ) ) ]						= ptrNewestInvertedFunctionTable;
+
+	// Creators only (1703)
+	_Return[ _Cryptography.GenerateHash( ENC( "Backup Insert Inverted Function Table Pattern" ) ) ]				= strBackupInsertInvertedFunctionTable;
+	_Return[ _Cryptography.GenerateHash( ENC( "Backup Insert Inverted Function Table Offset" ) ) ]				= ptrBackupInsertInvertedFunctionTable;
+	_Return[ _Cryptography.GenerateHash( ENC( "Backup Inverted Function Table Offset" ) ) ]						= ptrBackupInvertedFunctionTable;
+
+	// Below creators and other Windows versions other than 10 (1703-)
+	_Return[ _Cryptography.GenerateHash( ENC( "Resort Insert Inverted Function Table Pattern" ) ) ]				= strResortInsertInvertedFunctionTable;
+	_Return[ _Cryptography.GenerateHash( ENC( "Resort Insert Inverted Function Table Offset" ) ) ]				= ptrResortInsertInvertedFunctionTable;
+	_Return[ _Cryptography.GenerateHash( ENC( "Resort Windows 10 Inverted Function Table Offset" ) ) ]			= ptrResortWindows10InvertedFunctionTable;
+	_Return[ _Cryptography.GenerateHash( ENC( "Resort Previous Windows Inverted Function Table Offset" ) ) ]	= ptrResortPreviousWindowsInvertedFunctionTable;
+
+	return _Return.dump( 4 );
+}
+
 #endif
 
 bool CAuthentication::CreateLicenseFile( std::string strPurchaseKey )
@@ -180,6 +204,67 @@ ELoginCode CAuthentication::Login( )
 
 	_Log.Log( EPrefix::INFO, ELocation::AUTHENTICATION, ENC( "Received login code of %i." ), _Return );
 	return _Return;
+}
+
+bool CAuthentication::RequestData( std::string *pNewestInsertInvertedFunctionTable, std::ptrdiff_t *pNewestInsertInvertedFunctionTableOffset, 
+								   std::string *pNewestInvertedFunctionTable, std::ptrdiff_t *pNewestInvertedFunctionTableOffset, 
+								   std::string *pBackupInsertInvertedFunctionTable, std::ptrdiff_t *pBackupInsertInvertedFunctionTableOffset, 
+								   std::ptrdiff_t *pBackupInvertedFunctionTableOffset, std::string *pResortInsertInvertedFunctionTable,
+								   std::ptrdiff_t *pResortInsertInvertedFunctionTableOffset, std::ptrdiff_t *pResortWindows10InvertedFunctionTableOffset, 
+								   std::ptrdiff_t *pResortPreviousWindowsInvertedFunctionTableOffset )
+{
+	if ( !bLoggedIn )
+		return _Log.Log( EPrefix::WARNING, ELocation::AUTHENTICATION, ENC( "Calling RequestData without loggin in first." ) ), false;
+
+	std::string strResponse { }, strDecryptedResponse { };
+	if ( !NET.Request( EAction::GET_DATA, strResponse )
+		 || !CRYPTO.Decrypt( strResponse, strDecryptedResponse ) )
+		return _Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Obtaining shellcode failed." ) ), false;
+
+	try
+	{
+		auto _Response = nlohmann::json::parse( strDecryptedResponse );
+		const auto _Return = ERequestCode( std::stoi( _Response[ ENC( "Exit Code" ) ].get< std::string >( ) ) );
+
+		if ( _Return != SUCCESS && _Return != STAFF_SUCCESS
+			 || _Response[ ENC( "Other Data" ) ].get< std::string >( ) == NO_OTHER_DATA )
+			return _Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Shellcode request failed. This may be due to an invalid session from attempted authentication bypass." ) ), false;
+
+		std::string strData { };
+		if ( !CRYPTO.Decrypt( _Response[ ENC( "Other Data" ) ].get< std::string >( ), strData ) )
+			return _Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Unable to decrypt shellcode." ) ), false;
+
+		auto _Data = nlohmann::json::parse( strData );
+
+		// Creators and up (1703+)
+		*pNewestInsertInvertedFunctionTable					= _Data[ _Cryptography.GenerateHash( ENC( "Newest Insert Inverted Function Table Pattern" ) ) ].get< std::string >( );
+		*pNewestInsertInvertedFunctionTableOffset			= _Data[ _Cryptography.GenerateHash( ENC( "Newest Insert Inverted Function Table Offset" ) ) ].get< std::ptrdiff_t >( );
+		*pNewestInvertedFunctionTable						= _Data[ _Cryptography.GenerateHash( ENC( "Newest Inverted Function Table Pattern" ) ) ].get< std::string >( );
+		*pNewestInvertedFunctionTableOffset					= _Data[ _Cryptography.GenerateHash( ENC( "Newest Inverted Function Table Offset" ) ) ].get< std::ptrdiff_t >( );
+
+		// Creators only (1703)
+		*pBackupInsertInvertedFunctionTable					= _Data[ _Cryptography.GenerateHash( ENC( "Backup Insert Inverted Function Table Pattern" ) ) ].get< std::string >( );
+		*pBackupInsertInvertedFunctionTableOffset			= _Data[ _Cryptography.GenerateHash( ENC( "Backup Insert Inverted Function Table Offset" ) ) ].get< std::ptrdiff_t >( );
+		*pBackupInvertedFunctionTableOffset					= _Data[ _Cryptography.GenerateHash( ENC( "Backup Inverted Function Table Offset" ) ) ].get< std::ptrdiff_t >( );
+
+		// Below creators and other Windows versions other than 10 (1703-)
+		*pResortInsertInvertedFunctionTable					= _Data[ _Cryptography.GenerateHash( ENC( "Resort Insert Inverted Function Table Pattern" ) ) ].get< std::string >( );
+		*pResortInsertInvertedFunctionTableOffset			= _Data[ _Cryptography.GenerateHash( ENC( "Resort Insert Inverted Function Table Offset" ) ) ].get< std::ptrdiff_t >( );
+		*pResortWindows10InvertedFunctionTableOffset		= _Data[ _Cryptography.GenerateHash( ENC( "Resort Windows 10 Inverted Function Table Offset" ) ) ].get< std::ptrdiff_t >( );
+		*pResortPreviousWindowsInvertedFunctionTableOffset	= _Data[ _Cryptography.GenerateHash( ENC( "Resort Previous Windows Inverted Function Table Offset" ) ) ].get< std::ptrdiff_t >( );
+
+		return true;
+	}
+	catch ( nlohmann::json::parse_error &e )
+	{
+		_Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Unable to parse response from requesting data. Message: %s." ), e.what( ) );
+		return false;
+	}
+	catch ( nlohmann::json::type_error &e )
+	{
+		_Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Unable to access data member. Message: %s." ), e.what( ) );
+		return false;
+	}
 }
 
 bool CAuthentication::RequestShellcode( unsigned char **pThreadEnvironment, unsigned char **pLoadLibraryExWrapper, unsigned char **pRelocateImageBase, unsigned char **pLoadDependencies,

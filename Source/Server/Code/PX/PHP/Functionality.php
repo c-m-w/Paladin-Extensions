@@ -21,10 +21,11 @@
          "GREATER"              => ">",
          "QUOTE"                => "'",
          "PLUS"                 => "+" ) );
-    define( "actions", array( 'get_protocol' => 0, 'login' => 1, 'get_shellcode' => 2, 'get_library' => 3, 'get_information' => 4, 'ban' => 5, 'get_resource_hash' => 6, 'get_resources' => 7 ) );
+    define( "actions", array( 'get_protocol' => 0, 'login' => 1, 'get_data' => 2, 'get_shellcode' => 3, 'get_library' => 4, 'get_information' => 5, 'ban' => 6, 'get_resource_hash' => 7, 'get_resources' => 8 ) );
     define( "libraryDirectory", "/home/palavpvb/PX/Libraries/" );
     define( "libraries", array( 'PX Client.dll', 'PX CSGO.dll', 'PX PUBG.dll', 'PX RSIX.dll', 'PX RUST.dll' ) );
     define( "dataDirectory", '/home/palavpvb/PX/Data/' );
+    define( 'dataFile', 'Data.px' );
     define( 'shellcodeDataFile', 'Shellcode.px' );
     define( 'extensionData', array(  ) );
 
@@ -290,6 +291,29 @@
 			$this->logAttempt( $this->xfUser[ 'is_staff' ] ? 'Staff Success' : 'Success' );
 		}
 
+        public function getData( ): void
+        {
+            global $functionality;
+            global $log;
+            global $cryptography;
+
+            if ( !$this->sessionValid( ) )
+            {
+                $log->log( 'Attempting to get data without a valid session. Could possibly be someone attempting to bypass authentication.' );
+                $functionality->stopExecution( 'Server Error' );
+            }
+
+            $data = file_get_contents( dataDirectory . dataFile );
+
+            if ( $data === FALSE )
+            {
+                $log->log( 'Failed to read data file.' );
+                $functionality->stopExecution( 'Server Error' );
+            }
+
+            $functionality->stopExecution( 'Success', $cryptography->encrypt( $data ) );
+        }
+
         public function getShellcode( ): void
         {
             global $functionality;
@@ -429,6 +453,9 @@
 
 		if ( $action == actions[ 'login' ] )
 			$auth->login( );
+
+        if ( $action == actions[ 'get_data' ] )
+            $auth->getData( );
 
         if ( $action == actions[ 'get_shellcode' ] )
             $auth->getShellcode( );

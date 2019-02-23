@@ -161,6 +161,7 @@ bool CConnectivity::Request( EAction _Action, std::string &strOut )
 		break;
 
 		case GET_PROTOCOL:
+		case GET_DATA:
 		case GET_SHELLCODE:
 		case GET_RESOURCE_HASH:
 		case GET_RESOURCES:

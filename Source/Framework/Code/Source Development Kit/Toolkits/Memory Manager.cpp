@@ -219,39 +219,7 @@ CMemoryManager::pattern_t::pattern_t( const std::string &strPattern, void **pOut
 
 bool CMemoryManager::Initialize( )
 {
-	const auto hNewTechnologyModule = GetModuleHandle( ENC( "ntdll.dll" ) );
-	if ( hNewTechnologyModule == nullptr )
-		return false;
-
-	const auto _Version = SI.GetOperatingSystemVersion( );
-
-	if ( _Version == ESystemVersion::W10_PREVIEW
-		 || _Version == ESystemVersion::W10_REDSTONE_CREATORS_OCTOBER_1809
-		 || _Version == ESystemVersion::W10_REDSTONE_CREATORS_APRIL_1803
-		 || _Version == ESystemVersion::W10_REDSTONE_CREATORS_FALL_1709 )
-		return AddPattern( hNewTechnologyModule, pattern_t( ENC( "53 56 57 8D 45 F8 8B FA" ), &pInsertInvertedFunctionTable, -8 ) )
-			&& AddPattern( hNewTechnologyModule, pattern_t( ENC( "33 F6 46 3B C6" ), &pInvertedFunctionTable, -0x1B, [ ]( )
-		{
-			pInvertedFunctionTable = *reinterpret_cast< void ** >( pInvertedFunctionTable );
-		} ) )
-			&& FindPatterns( );
-
-	if ( _Version == ESystemVersion::W10_REDSTONE_CREATORS_1703 )
-		return AddPattern( hNewTechnologyModule, pattern_t( ENC( "8D 45 F0 89 55 F8 50 8D 55 F4" ), &pInsertInvertedFunctionTable, -0xB, [ ]( )
-	{
-		pInvertedFunctionTable = *reinterpret_cast< void ** >( std::uintptr_t( pInsertInvertedFunctionTable ) + 0x57 );
-	} ) )
-		&& FindPatterns( );
-
-
-	return AddPattern( hNewTechnologyModule, pattern_t( ENC( "53 56 57 8B DA 8B F9 50" ), &pInsertInvertedFunctionTable, -0xB, [ _Version ]( )
-	{
-		pInvertedFunctionTable = *reinterpret_cast< void ** >( std::uintptr_t( pInsertInvertedFunctionTable ) +
-																   ( _Version == ESystemVersion::W10_INITIAL_1507
-																	  || _Version == ESystemVersion::W10_REDSTONE_NOVEMBER_1511
-																	  || _Version == ESystemVersion::W10_REDSTONE_ANNIVERSARY_1607 ? 0xB5 : 0xB6 ) );
-	} ) )
-		&& FindPatterns( );
+	return true;
 }
 
 void CMemoryManager::Uninitialize( )
@@ -271,6 +239,80 @@ void CMemoryManager::Uninitialize( )
 		delete[ ] bLoadDependencies;
 
 #endif
+}
+
+bool CMemoryManager::EnsureDataValidity( )
+{
+	if ( pInsertInvertedFunctionTable != nullptr
+		 && pInvertedFunctionTable != nullptr )
+		return true;
+
+	if ( strNewestInsertInvertedFunctionTable.empty( )
+		 || ptrNewestInsertInvertedFunctionTable == 0
+		 || strNewestInvertedFunctionTable.empty( )
+		 || ptrNewestInvertedFunctionTable == 0
+		 || strBackupInsertInvertedFunctionTable.empty( )
+		 || ptrBackupInsertInvertedFunctionTable == 0
+		 || ptrBackupInvertedFunctionTable == 0
+		 || strResortInsertInvertedFunctionTable.empty( )
+		 || ptrResortInsertInvertedFunctionTable == 0
+		 || ptrResortWindows10InvertedFunctionTable == 0
+		 || ptrResortPreviousWindowsInvertedFunctionTable == 0 )
+		if ( !AUTH.RequestData( &strNewestInsertInvertedFunctionTable, &ptrNewestInsertInvertedFunctionTable, &strNewestInvertedFunctionTable, &ptrNewestInvertedFunctionTable,
+								&strBackupInsertInvertedFunctionTable, &ptrBackupInsertInvertedFunctionTable, &ptrBackupInvertedFunctionTable , &strResortInsertInvertedFunctionTable, 
+								&ptrResortInsertInvertedFunctionTable, &ptrResortWindows10InvertedFunctionTable, &ptrResortPreviousWindowsInvertedFunctionTable ) )
+			return false;
+
+	const auto hNewTechnologyModule = GetModuleHandle( ENC( "ntdll.dll" ) );
+	if ( hNewTechnologyModule == nullptr )
+		return false;
+
+	const auto _Version = SI.GetOperatingSystemVersion( );
+	auto bInitializedData = false;
+
+	if ( _Version == ESystemVersion::W10_PREVIEW
+		 || _Version == ESystemVersion::W10_REDSTONE_CREATORS_OCTOBER_1809
+		 || _Version == ESystemVersion::W10_REDSTONE_CREATORS_APRIL_1803
+		 || _Version == ESystemVersion::W10_REDSTONE_CREATORS_FALL_1709 )
+		bInitializedData = AddPattern( hNewTechnologyModule, pattern_t( strNewestInsertInvertedFunctionTable, &pInsertInvertedFunctionTable, ptrNewestInsertInvertedFunctionTable ) )
+		&& AddPattern( hNewTechnologyModule, pattern_t( strNewestInvertedFunctionTable, &pInvertedFunctionTable, ptrNewestInvertedFunctionTable, [ ]( )
+	{
+		pInvertedFunctionTable = *reinterpret_cast< void ** >( pInvertedFunctionTable );
+	} ) )
+		&& FindPatterns( );
+	else if ( _Version == ESystemVersion::W10_REDSTONE_CREATORS_1703 )
+		bInitializedData = AddPattern( hNewTechnologyModule, pattern_t( strBackupInsertInvertedFunctionTable, &pInsertInvertedFunctionTable, ptrBackupInsertInvertedFunctionTable, [ ]( )
+	{
+		pInvertedFunctionTable = *reinterpret_cast< void ** >( std::uintptr_t( pInsertInvertedFunctionTable ) + ptrBackupInvertedFunctionTable );
+	} ) )
+		&& FindPatterns( );
+	else
+		bInitializedData = AddPattern( hNewTechnologyModule, pattern_t( strResortInsertInvertedFunctionTable, &pInsertInvertedFunctionTable, ptrResortInsertInvertedFunctionTable, [ _Version ]( )
+	{
+		pInvertedFunctionTable = *reinterpret_cast< void ** >( std::uintptr_t( pInsertInvertedFunctionTable ) +
+			( _Version == ESystemVersion::W10_INITIAL_1507
+			  || _Version == ESystemVersion::W10_REDSTONE_NOVEMBER_1511
+			  || _Version == ESystemVersion::W10_REDSTONE_ANNIVERSARY_1607 ? ptrResortWindows10InvertedFunctionTable : ptrResortPreviousWindowsInvertedFunctionTable ) );
+	} ) )
+		&& FindPatterns( );
+
+	if ( !bInitializedData )
+		_Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to find patterns required." ) );
+
+	// clear all this garbage from memory
+	strNewestInsertInvertedFunctionTable.clear( );
+	ptrNewestInsertInvertedFunctionTable = 0;
+	strNewestInvertedFunctionTable.clear( );
+	ptrNewestInvertedFunctionTable = 0;
+	strBackupInsertInvertedFunctionTable.clear( );
+	ptrBackupInsertInvertedFunctionTable = 0;
+	ptrBackupInvertedFunctionTable = 0;
+	strResortInsertInvertedFunctionTable.clear( );
+	ptrResortInsertInvertedFunctionTable = 0;
+	ptrResortWindows10InvertedFunctionTable = 0;
+	ptrResortPreviousWindowsInvertedFunctionTable = 0;
+
+	return bInitializedData;
 }
 
 bool CMemoryManager::EnsureShellcodeValidity( )
@@ -325,6 +367,9 @@ void *CMemoryManager::GetShellcodeLocation( EShellcode _Shellcode )
 
 bool CMemoryManager::SetProcess( DWORD dwNewProcessID, DWORD dwAccess )
 {
+	if ( !EnsureDataValidity( ) )
+		return false;
+
 	if ( dwNewProcessID == NULL )
 		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Invalid process ID passed to SetProcess." ) ), false;
 
