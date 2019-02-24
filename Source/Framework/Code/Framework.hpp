@@ -16,8 +16,8 @@
 #include "Source Development Kit/Application Programming Interfaces/Filesystem.hpp"
 #include "Development Environment/Logging.hpp"
 #include "Source Development Kit/Toolkits/System Utilities.hpp"
-#include "Source Development Kit/Toolkits/Hooking.hpp"
 #include "Source Development Kit/Toolkits/Memory Manager.hpp"
+#include "Source Development Kit/Toolkits/Hooking.hpp"
 #include "Source Development Kit/Application Programming Interfaces/Input.hpp"
 #include "Source Development Kit/Toolkits/Resource Manager.hpp"
 

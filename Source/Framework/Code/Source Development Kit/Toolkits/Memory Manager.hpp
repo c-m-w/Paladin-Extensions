@@ -186,12 +186,19 @@ public:
 	bool WaitForExecutionFinish( DWORD dwTime = INFINITE );
 	template< typename _t > bool Push( _t _Value );
 	template< typename _t > bool Pop( _t &_Out );
+
+	friend class CMemoryManager;
 };
 
 struct image_info_t
 {
-	void *pData;
+private:
 
+	void *pData = nullptr;
+
+public:
+
+	image_info_t( ) = default;
 	image_info_t( void *pData );
 
 	bool ValidImage( );
@@ -199,9 +206,16 @@ struct image_info_t
 	std::size_t GetHeaderSize( );
 	std::size_t GetSectionCount( );
 	IMAGE_DOS_HEADER *GetOperatingSystemHeader( );
-	IMAGE_NT_HEADERS *GetNewTechnologyHeaders( void *pImageBase = nullptr );
+	IMAGE_NT_HEADERS *GetNewTechnologyHeaders( );
 	IMAGE_SECTION_HEADER *GetSectionHeader( std::size_t zSection );
-	IMAGE_IMPORT_DESCRIPTOR *GetImportDescriptor( void *pImageBase = nullptr );
+	IMAGE_IMPORT_DESCRIPTOR *GetFirstImport( );
+	IMAGE_IMPORT_DESCRIPTOR *GetNextImport( IMAGE_IMPORT_DESCRIPTOR *pCurrent );
+	IMAGE_IMPORT_DESCRIPTOR *GetImportDescriptor( HMODULE hExporter );
+	const char *GetImportName( IMAGE_THUNK_DATA *pData );
+	IMAGE_THUNK_DATA *FindImport( HMODULE hExporter, void *pImport );
+	IMAGE_THUNK_DATA *FindImport( HMODULE hExporter, const std::string &strImport );
+
+	friend class CMemoryManager;
 };
 
 template< typename T >

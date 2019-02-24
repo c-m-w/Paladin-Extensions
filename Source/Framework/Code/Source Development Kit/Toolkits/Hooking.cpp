@@ -119,3 +119,90 @@ void *CVirtualTableHook::GetOriginalFunction( std::size_t zIndex )
 
 	return pTableAddress[ zIndex ];
 }
+
+bool CImportHook::PatchAddress( void **pAddress, void *pValue )
+{
+	DWORD dwOld;
+	if ( VirtualProtect( pAddress, sizeof( void * ), PAGE_READWRITE, &dwOld ) == FALSE )
+		return LOG( ERROR, HOOKING, "Unable to virtual protect address for writing." ), false;
+
+	*pAddress = pValue;
+	return VirtualProtect( pAddress, sizeof( IMAGE_THUNK_DATA ), dwOld, &dwOld ) != FALSE;
+}
+
+bool CImportHook::Attach( HMODULE hImportee )
+{
+	return ( _Importee = image_info_t( hImportee ) ).ValidImage( );
+}
+
+bool CImportHook::Detach( )
+{
+	const auto bReturn = RevertAllPatches( );
+	*this = CImportHook( );
+	return bReturn;
+}
+
+bool CImportHook::PatchImport( HMODULE hExporter, const std::string &strImportName, void *pPatch )
+{
+	auto _Origin = image_info_t( hExporter );
+
+	if ( !_Origin.ValidImage( )
+		 || !_Importee.ValidImage( ) )
+		return LOG( WARNING, HOOKING, "Invalid image(s) passed to PatchImport." ), false;
+
+	const auto pImportData = _Importee.FindImport( hExporter, strImportName );
+	if ( pImportData == nullptr )
+		return LOG( WARNING, HOOKING, "Unable to find import data of import %s.", strImportName.c_str( ) ), false;
+
+	auto pSearch = _Patches.find( hExporter );
+	if ( pSearch == _Patches.end( ) )
+		_Patches.insert( { hExporter, { } } ), pSearch = _Patches.find( hExporter );
+
+	pSearch->second.emplace_back( patched_import_t { strImportName, reinterpret_cast< void ** >( &pImportData->u1.Function ), reinterpret_cast< void * >( pImportData->u1.Function ) } );
+	return PatchAddress( reinterpret_cast< void ** >( &pImportData->u1.Function ), pPatch );
+}
+
+void *CImportHook::GetOriginalImport( HMODULE hExporter, const std::string &strImportName )
+{
+	const auto pSearch = _Patches.find( hExporter );
+	if ( pSearch == _Patches.end( ) )
+		return nullptr;
+
+	for ( auto &_Patch : pSearch->second )
+		if ( _Patch.strImport == strImportName )
+			return _Patch.pOriginal;
+
+	return nullptr;
+}
+
+bool CImportHook::RevertPatch( HMODULE hExporter, const std::string &strImportName )
+{
+	const auto pSearch = _Patches.find( hExporter );
+	if ( pSearch == _Patches.end( ) )
+		return false;
+
+	for ( auto u = 0u; u < pSearch->second.size( ); u++ )
+		if ( pSearch->second[ u ].strImport == strImportName )
+		{
+			if ( !PatchAddress( pSearch->second[ u ].pPatchedFunction, pSearch->second[ u ].pOriginal ) )
+				return false;
+
+			return pSearch->second.erase( pSearch->second.begin( ) + u ), true;
+		}
+
+	return false;
+}
+
+bool CImportHook::RevertAllPatches( )
+{
+	for ( auto &_Patch : _Patches )
+	{
+		for ( auto &__Patch : _Patch.second )
+			if ( !PatchAddress( __Patch.pPatchedFunction, __Patch.pOriginal ) )
+				return false;
+
+		_Patch.second.clear( );
+	}
+
+	return true;
+}

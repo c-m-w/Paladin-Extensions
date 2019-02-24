@@ -175,9 +175,9 @@ IMAGE_DOS_HEADER *image_info_t::GetOperatingSystemHeader( )
 	return reinterpret_cast< IMAGE_DOS_HEADER * >( pData );
 }
 
-IMAGE_NT_HEADERS *image_info_t::GetNewTechnologyHeaders( void *pImageBase /*= nullptr*/ )
+IMAGE_NT_HEADERS *image_info_t::GetNewTechnologyHeaders( )
 {
-	return reinterpret_cast< IMAGE_NT_HEADERS * >( ( pImageBase == nullptr ? std::uintptr_t( pData ) : std::uintptr_t( pImageBase ) ) + GetOperatingSystemHeader( )->e_lfanew );
+	return reinterpret_cast< IMAGE_NT_HEADERS * >( std::uintptr_t( pData ) + GetOperatingSystemHeader( )->e_lfanew );
 }
 
 IMAGE_SECTION_HEADER *image_info_t::GetSectionHeader( std::size_t zSection )
@@ -188,10 +188,67 @@ IMAGE_SECTION_HEADER *image_info_t::GetSectionHeader( std::size_t zSection )
 	return &reinterpret_cast< IMAGE_SECTION_HEADER * >( std::uintptr_t( GetNewTechnologyHeaders( ) ) + sizeof( IMAGE_NT_HEADERS ) )[ zSection ];
 }
 
-IMAGE_IMPORT_DESCRIPTOR *image_info_t::GetImportDescriptor( void *pImageBase /*= nullptr*/ )
+IMAGE_IMPORT_DESCRIPTOR *image_info_t::GetFirstImport( )
 {
-	return reinterpret_cast< IMAGE_IMPORT_DESCRIPTOR * >( ( pImageBase == nullptr ? std::uintptr_t( pData ) : std::uintptr_t( pImageBase ) ) +
-														GetNewTechnologyHeaders( pImageBase )->OptionalHeader.DataDirectory[ IMAGE_DIRECTORY_ENTRY_IMPORT ].VirtualAddress );
+	return reinterpret_cast< IMAGE_IMPORT_DESCRIPTOR * >( std::uintptr_t( pData ) + GetNewTechnologyHeaders( )->OptionalHeader.DataDirectory[ IMAGE_DIRECTORY_ENTRY_IMPORT ].VirtualAddress );
+}
+
+IMAGE_IMPORT_DESCRIPTOR *image_info_t::GetNextImport( IMAGE_IMPORT_DESCRIPTOR *pCurrent )
+{
+	const auto pReturn = reinterpret_cast< IMAGE_IMPORT_DESCRIPTOR * >( std::uintptr_t( pCurrent ) + sizeof( IMAGE_IMPORT_DESCRIPTOR ) );
+	return pReturn->Characteristics == NULL ? nullptr : pReturn;
+}
+
+IMAGE_IMPORT_DESCRIPTOR *image_info_t::GetImportDescriptor( HMODULE hExporter )
+{
+	for ( auto p = GetFirstImport( ); p != nullptr; p = GetNextImport( p ) )
+		if ( GetModuleHandle( reinterpret_cast< const char * >( std::uintptr_t( pData ) + p->Name ) ) == hExporter )
+			return p;
+
+	return nullptr;
+}
+
+const char *image_info_t::GetImportName( IMAGE_THUNK_DATA *pImportData )
+{
+	return reinterpret_cast< const char * >( ( pImportData->u1.Ordinal & IMAGE_ORDINAL_FLAG ) > 0 ? reinterpret_cast< void * >( pImportData->u1.Ordinal & 0xFFFF )
+															: reinterpret_cast< IMAGE_IMPORT_BY_NAME * >( std::uintptr_t( pData ) + pImportData->u1.AddressOfData )->Name );
+}
+
+IMAGE_THUNK_DATA *image_info_t::FindImport( HMODULE hExporter, void *pImport )
+{
+	const auto pDescriptor = GetImportDescriptor( hExporter );
+	if ( pDescriptor == nullptr )
+		return nullptr;
+
+	for ( auto p = reinterpret_cast< IMAGE_THUNK_DATA * >( std::uintptr_t( pData ) + pDescriptor->FirstThunk );
+		  p != nullptr && p->u1.AddressOfData != NULL;
+		  p = reinterpret_cast< IMAGE_THUNK_DATA * >( std::uintptr_t( p ) + sizeof( IMAGE_THUNK_DATA ) ) )
+		if ( p->u1.Function == std::uintptr_t( pImport ) )
+			return p;
+
+	return nullptr;
+}
+
+IMAGE_THUNK_DATA *image_info_t::FindImport( HMODULE hExporter, const std::string &strImport )
+{
+	const auto pDescriptor = GetImportDescriptor( hExporter );
+	if ( pDescriptor == nullptr )
+		return nullptr;
+
+	auto _Exporter = image_info_t( hExporter );
+
+	for ( auto p = reinterpret_cast< IMAGE_THUNK_DATA * >( std::uintptr_t( pData ) + pDescriptor->FirstThunk ),
+		  _p = reinterpret_cast< IMAGE_THUNK_DATA * >( std::uintptr_t( pData ) + pDescriptor->OriginalFirstThunk );
+		  p != nullptr && p->u1.AddressOfData != NULL && _p != nullptr && _p->u1.AddressOfData != NULL;
+		  p = reinterpret_cast< IMAGE_THUNK_DATA * >( std::uintptr_t( p ) + sizeof( IMAGE_THUNK_DATA ) ),
+		  _p = reinterpret_cast< IMAGE_THUNK_DATA * >( std::uintptr_t( _p ) + sizeof( IMAGE_THUNK_DATA ) ) )
+	{
+		const auto szImport = GetImportName( _p );
+		if ( szImport == strImport )
+			return p;
+	}
+
+	return nullptr;
 }
 
 std::vector< __int16 > CMemoryManager::pattern_t::ParsePattern( const std::string &strPattern )

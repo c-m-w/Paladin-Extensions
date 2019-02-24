@@ -30,3 +30,28 @@ public:
 	bool Replace( void *pReplacee, void *pReplacement );
 	void *GetOriginalFunction( std::size_t zIndex );
 };
+
+class CImportHook
+{
+private:
+
+	struct patched_import_t
+	{
+		std::string strImport { };
+		void **pPatchedFunction = nullptr, *pOriginal = nullptr;
+	};
+
+	image_info_t _Importee { };
+	std::map< HMODULE, std::vector< patched_import_t > > _Patches { };
+
+	bool PatchAddress( void **pAddress, void *pValue );
+
+public:
+
+	bool Attach( HMODULE hImportee );
+	bool Detach( );
+	bool PatchImport( HMODULE hExporter, const std::string &strImportName, void *pPatch );
+	void *GetOriginalImport( HMODULE hExporter, const std::string &strImportName );
+	bool RevertPatch( HMODULE hExporter, const std::string &strImportName );
+	bool RevertAllPatches( );
+};
