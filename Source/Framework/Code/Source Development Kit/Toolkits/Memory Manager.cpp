@@ -919,6 +919,7 @@ bool CMemoryManager::ManuallyLoadLibraryEx( const std::string &strData, bool bUs
 				 && _Table.Entries[ i ].SizeOfTable > 0 )
 				bFoundHandler = true;
 
+		if ( !bFoundHandler )
 		{
 			if ( !_Worker.Suspend( )
 				 || !_Worker.GetContext( _Context ) )
