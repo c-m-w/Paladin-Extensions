@@ -43,12 +43,19 @@ DWORD WINAPI mb( HWND hw, const char *subj, const char *title, DWORD flags )
 
 void OnLaunch( )
 {
-	CExceptionHook hk;
-	hk.Attach( do_mb, mb );
-	do_mb( nullptr, "test", "test", 0 );
-
 	if ( !SetupFramework( ) )
 		return;
+
+	if ( MEM.SetProcess( GetCurrentProcessId(), PROCESS_ALL_ACCESS ) )
+	{
+		std::string strTrue, strFalse;
+
+		_Filesystem.ReadAbsoluteFile( R"(C:\Users\Cole\Desktop\DLL True.dll)", strTrue, false );
+		_Filesystem.ReadAbsoluteFile( R"(C:\Users\Cole\Desktop\DLL False.dll)", strFalse, false );
+
+		//MEM.ManuallyLoadLibraryEx( strTrue, false, true, true, true );
+		MEM.ManuallyLoadLibraryEx( strFalse, false, true, true, true );
+	}
 
 	constexpr auto fnAttemptLogin = [ ]( ELoginCode& _Result ) -> void
 	{

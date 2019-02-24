@@ -142,7 +142,7 @@ void CLogging::Log( EPrefix _Prefix, ELocation _Location, const std::string &str
 #endif
 
 	if ( _Prefix == ERROR )
-		Log( INFO, _Location, ENC( "Last error: %i." ), GetLastError( ) );
+		Log( INFO, _Location, ENC( "Last error: %i." ), GetLastError( ) ), SetLastError( ERROR_SUCCESS );
 }
 
 void CLogging::Log( EPrefix _Prefix, ELocation _Location, const char *szFormat, ... )

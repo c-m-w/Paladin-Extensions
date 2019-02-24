@@ -905,23 +905,11 @@ bool CMemoryManager::ManuallyLoadLibraryEx( const std::string &strData, bool bUs
 
 	if ( bEnableExceptions )
 	{
+
 		CONTEXT _Context;
 		auto _Table = _RTL_INVERTED_FUNCTION_TABLE< DWORD >( );
+		auto bFoundHandler = false;
 		auto bCustomHandler = true;
-
-		if ( !_Worker.Suspend( )
-			 || !_Worker.GetContext( _Context ) )
-			return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Failed to suspend thread and get context." ) ), fnCleanup( ), false;
-
-		_Context.Ecx = std::uintptr_t( pImage );
-		_Context.Edx = _Image.GetImageSize( );
-
-		if ( !_Worker.SetContext( _Context )
-			 || !_Worker.SimulateFunctionCall( pInsertInvertedFunctionTable ) )
-			return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Failed to call RtlInsertInvertedFunctionTable." ) ), fnCleanup( ), false;
-
-		while ( !_Worker.ExecutingFunction( pThreadEnvironment, zThreadEnvironment ) )
-			Pause( 50ui64 );
 
 		if ( !Read( pInvertedFunctionTable, _Table ) )
 			return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to read function table." ) ), fnCleanup( ), false;
@@ -929,10 +917,34 @@ bool CMemoryManager::ManuallyLoadLibraryEx( const std::string &strData, bool bUs
 		for ( auto i = 0; i < _Table.Count && bCustomHandler; i++ )
 			if ( _Table.Entries[ i ].ImageBase == std::uintptr_t( pImage )
 				 && _Table.Entries[ i ].SizeOfTable > 0 )
-				bCustomHandler = false;
+				bFoundHandler = true;
 
-		if ( bCustomHandler )
-			return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "SafeSEH is not enabled for this image, cannot load." ) ), fnCleanup( ), false;
+		{
+			if ( !_Worker.Suspend( )
+				 || !_Worker.GetContext( _Context ) )
+				return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Failed to suspend thread and get context." ) ), fnCleanup( ), false;
+
+			_Context.Ecx = std::uintptr_t( pImage );
+			_Context.Edx = _Image.GetImageSize( );
+
+			if ( !_Worker.SetContext( _Context )
+				 || !_Worker.SimulateFunctionCall( pInsertInvertedFunctionTable ) )
+				return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Failed to call RtlInsertInvertedFunctionTable." ) ), fnCleanup( ), false;
+
+			while ( !_Worker.ExecutingFunction( pThreadEnvironment, zThreadEnvironment ) )
+				Pause( 50ui64 );
+
+			if ( !Read( pInvertedFunctionTable, _Table ) )
+				return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to read function table." ) ), fnCleanup( ), false;
+
+			for ( auto i = 0; i < _Table.Count && bCustomHandler; i++ )
+				if ( _Table.Entries[ i ].ImageBase == std::uintptr_t( pImage )
+					 && _Table.Entries[ i ].SizeOfTable > 0 )
+					bCustomHandler = false;
+
+			if ( bCustomHandler )
+				return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "SafeSEH is not enabled for this image, cannot load." ) ), fnCleanup( ), false;
+		}
 	}
 
 	if ( !_Worker.Suspend( )
@@ -940,7 +952,7 @@ bool CMemoryManager::ManuallyLoadLibraryEx( const std::string &strData, bool bUs
 		 || !_Worker.Push( DLL_PROCESS_ATTACH )
 		 || !_Worker.Push( pImage )
 		 || !_Worker.SimulateFunctionCall( reinterpret_cast< void * >( std::uintptr_t( pImage ) + _Image.GetNewTechnologyHeaders( )->OptionalHeader.AddressOfEntryPoint ) ) )
-		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to call entry point." ) ), fnCleanup( ), false;
+		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to call entry point with message DLL_PROCESS_ATTACH." ) ), fnCleanup( ), false;
 
 	while ( !_Worker.ExecutingFunction( pThreadEnvironment, zThreadEnvironment ) )
 		Pause( 50ui64 );
@@ -949,30 +961,40 @@ bool CMemoryManager::ManuallyLoadLibraryEx( const std::string &strData, bool bUs
 		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Failed to get thread context to see if image loaded successfully." ) ), fnCleanup( ), false;
 
 	const auto bReturn = _ThreadContext.Eax == TRUE;
+
 	if ( !Write( pExit, true ) )
 		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to signal thread to exit." ) ), fnCleanup( ), false;
 
-	while ( _Worker.ExecutingFunction( pThreadEnvironment, zThreadEnvironment ) )
-		Pause( 50ui64 );
-
 	if ( bUseExistingThread )
-		if ( !_Worker.Close( ) )
-			_Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Failed to close worker." ) );
+	{
+		while ( _Worker.ExecutingFunction( pThreadEnvironment, zThreadEnvironment ) )
+			Pause( 50ui64 );
 
-	if ( !bReturn )
-		_Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "DLLMain didn't return true." ) );
+		if ( bUseExistingThread )
+			if ( !_Worker.Close( ) )
+				_Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Failed to close worker." ) );
+	}
+	else
+		if ( !_Worker.WaitForExecutionFinish( INFINITE ) )
+			_Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Failed to wait for worker to close." ) );
 
-	if ( bEraseHeaders && !WipeMemory( pImage, _Image.GetHeaderSize( ) ) )
-		_Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Failed to erase headers." ) );
+	if ( bReturn )
+	{
+		if ( bEraseHeaders && !WipeMemory( pImage, _Image.GetHeaderSize( ) ) )
+			_Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Failed to erase headers." ) );
 
-	if ( bEraseDiscardableSections )
-		for ( auto i = 0; i < _Image.GetSectionCount( ); i++ )
-		{
-			const auto pSectionHeader = _Image.GetSectionHeader( i );
-			if ( ( pSectionHeader->Characteristics & IMAGE_SCN_MEM_DISCARDABLE ) != NULL )
-				if ( !WipeMemory( reinterpret_cast< void * >( std::uintptr_t( pImage ) + pSectionHeader->VirtualAddress ), pSectionHeader->SizeOfRawData ) )
-					_Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Failed to wipe section %i." ), i );
-		}
+		if ( bEraseDiscardableSections )
+			for ( auto i = 0; i < _Image.GetSectionCount( ); i++ )
+			{
+				const auto pSectionHeader = _Image.GetSectionHeader( i );
+				if ( ( pSectionHeader->Characteristics & IMAGE_SCN_MEM_DISCARDABLE ) != NULL )
+					if ( !WipeMemory( reinterpret_cast< void * >( std::uintptr_t( pImage ) + pSectionHeader->VirtualAddress ), pSectionHeader->SizeOfRawData ) )
+						_Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Failed to wipe section %i." ), i );
+			}
+	}
+	else
+		if ( !WipeMemory( pImage, _Image.GetImageSize( ) ) )
+			_Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Unable to wipe image from memory after entry point returned false." ) );
 
 	fnCleanup( );
 	return bReturn;
