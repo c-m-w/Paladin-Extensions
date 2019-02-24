@@ -5,15 +5,15 @@
 #define DLL_ENTRY
 #include "../../Framework/Code/Framework.hpp"
 
-void OnAttach( )
+BOOL OnAttach( )
 {
 	if ( !SetupFramework( ) )
-		return;
+		return FALSE;
 
-	ShutdownFramework( );
+	return TRUE;
 }
 
 void OnDetach( )
 {
-	
+	ShutdownFramework( );
 }

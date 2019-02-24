@@ -86,7 +86,7 @@ _In_ int nCmdShow )
 
 // TODO when we're injected, we should get the region of memory that we are in order to clear it when we unload
 
-void OnAttach( );
+BOOL OnAttach( );
 void OnDetach( );
 
 inline HINSTANCE hinstDll;
@@ -96,8 +96,7 @@ namespace
 {
 	DWORD WINAPI ThreadProc( _In_ LPVOID lpParameter )
 	{
-		OnAttach( );
-		return TRUE;
+		return OnAttach( );
 	}
 }
 #endif
@@ -136,8 +135,7 @@ BOOL WINAPI DllMain( _In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID 
 			HANDLE hThreadProc = CreateThread( nullptr, 0, ThreadProc, lpvReserved, 0, nullptr );
 			return hThreadProc != nullptr;
 #else
-			OnAttach( );
-			return TRUE;
+			return OnAttach( );
 #endif
 		}
 		case DLL_PROCESS_DETACH:
