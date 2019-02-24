@@ -76,7 +76,7 @@ void CLogging::HandleUnloggableError( EUnloggableError _ErrorCode )
 			 && SI.SetClipboardData( strEncryptedBuffer ) )
 		{
 			MessageBox( nullptr, ENC( "An error log has been copied to your clipboard. If this issue persists,\n"
-									"please open a support ticket with the copied error log in the appropriate box." ),ENC( "Error" ), MB_OK );
+									"please open a support ticket with the copied error log in the appropriate box." ), ENC( "Error" ), MB_OK );
 			return;
 		}
 	}

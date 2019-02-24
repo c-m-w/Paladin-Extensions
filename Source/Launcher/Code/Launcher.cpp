@@ -46,16 +46,7 @@ void OnLaunch( )
 	if ( !SetupFramework( ) )
 		return;
 
-	if ( MEM.SetProcess( GetCurrentProcessId(), PROCESS_ALL_ACCESS ) )
-	{
-		std::string strTrue, strFalse;
-
-		_Filesystem.ReadAbsoluteFile( R"(C:\Users\Cole\Desktop\DLL True.dll)", strTrue, false );
-		_Filesystem.ReadAbsoluteFile( R"(C:\Users\Cole\Desktop\DLL False.dll)", strFalse, false );
-
-		//MEM.ManuallyLoadLibraryEx( strTrue, false, true, true, true );
-		MEM.ManuallyLoadLibraryEx( strFalse, false, true, true, true );
-	}
+	auto str = image_info_t( GetModuleHandle( nullptr ) ).GenerateUniqueHash( );
 
 	constexpr auto fnAttemptLogin = [ ]( ELoginCode& _Result ) -> void
 	{

@@ -214,6 +214,7 @@ public:
 	const char *GetImportName( IMAGE_THUNK_DATA *pData );
 	IMAGE_THUNK_DATA *FindImport( HMODULE hExporter, void *pImport );
 	IMAGE_THUNK_DATA *FindImport( HMODULE hExporter, const std::string &strImport );
+	std::string GenerateUniqueHash( );
 
 	friend class CMemoryManager;
 };

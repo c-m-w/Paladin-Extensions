@@ -235,8 +235,6 @@ IMAGE_THUNK_DATA *image_info_t::FindImport( HMODULE hExporter, const std::string
 	if ( pDescriptor == nullptr )
 		return nullptr;
 
-	auto _Exporter = image_info_t( hExporter );
-
 	for ( auto p = reinterpret_cast< IMAGE_THUNK_DATA * >( std::uintptr_t( pData ) + pDescriptor->FirstThunk ),
 		  _p = reinterpret_cast< IMAGE_THUNK_DATA * >( std::uintptr_t( pData ) + pDescriptor->OriginalFirstThunk );
 		  p != nullptr && p->u1.AddressOfData != NULL && _p != nullptr && _p->u1.AddressOfData != NULL;
@@ -249,6 +247,54 @@ IMAGE_THUNK_DATA *image_info_t::FindImport( HMODULE hExporter, const std::string
 	}
 
 	return nullptr;
+}
+
+std::string image_info_t::GenerateUniqueHash( )
+{
+	const auto zSections = GetSectionCount( );
+	const auto pNewTechnologyHeaders = GetNewTechnologyHeaders( );
+	nlohmann::json _Information { };
+
+	_Information[ ENC( "Header Size" ) ] = GetHeaderSize( );
+	_Information[ ENC( "Section Count" ) ] = zSections;
+	_Information[ ENC( "Symbol Count" ) ] = pNewTechnologyHeaders->FileHeader.NumberOfSymbols;
+	_Information[ ENC( "PE Offset" ) ] = GetOperatingSystemHeader( )->e_lfanew;
+	_Information[ ENC( "Magic" ) ] = pNewTechnologyHeaders->OptionalHeader.Magic;
+	_Information[ ENC( "Major Linker Version" ) ] = pNewTechnologyHeaders->OptionalHeader.MajorLinkerVersion;
+	_Information[ ENC( "Minor Linker Version" ) ] = pNewTechnologyHeaders->OptionalHeader.MinorLinkerVersion;
+	_Information[ ENC( "Entry Point RVA" ) ] = pNewTechnologyHeaders->OptionalHeader.AddressOfEntryPoint;
+	_Information[ ENC( "Code RVA" ) ] = pNewTechnologyHeaders->OptionalHeader.BaseOfCode;
+	_Information[ ENC( "Data RVA" ) ] = pNewTechnologyHeaders->OptionalHeader.BaseOfData;
+	_Information[ ENC( "Major OS Version" ) ] = pNewTechnologyHeaders->OptionalHeader.MajorOperatingSystemVersion;
+	_Information[ ENC( "Minor OS Version" ) ] = pNewTechnologyHeaders->OptionalHeader.MinorOperatingSystemVersion;
+	_Information[ ENC( "Subsystem" ) ] = pNewTechnologyHeaders->OptionalHeader.Subsystem;
+
+	for ( auto z = 0u; z < zSections; z++ )
+	{
+		const auto pSectionHeader = GetSectionHeader( z );
+		const auto strName = std::string( reinterpret_cast< const char * >( pSectionHeader->Name ) ).substr( 0, IMAGE_SIZEOF_SHORT_NAME );
+
+		_Information[ strName ][ ENC( "RVA" ) ] = pSectionHeader->VirtualAddress;
+		_Information[ strName ][ ENC( "Characteristics" ) ] = pSectionHeader->Characteristics;
+	}
+
+	for ( auto p = GetFirstImport( ); p != nullptr; p = GetNextImport( p ) )
+	{
+		const auto strModule = std::string( reinterpret_cast< const char * >( std::uintptr_t( pData ) + p->Name ) );
+		if ( strModule == ENC( "OLEAUT32.dll" ) ) // after this module it just turns into reading access violation autism
+			break;
+
+		auto i = 0;
+		for ( auto q = reinterpret_cast< IMAGE_THUNK_DATA * >( std::uintptr_t( pData ) + p->OriginalFirstThunk );
+			  q != nullptr && q->u1.AddressOfData != NULL;
+			  q = reinterpret_cast< IMAGE_THUNK_DATA * >( std::uintptr_t( q ) + sizeof( IMAGE_THUNK_DATA ) ), i++ )
+		{
+			const auto strImport = std::string( GetImportName( q ) );
+			_Information[ ENC( "Imports" ) ][ strModule ][ i ] = strImport;
+		}
+	}
+
+	return CRYPTO.GenerateHash( _Information.dump( ) );
 }
 
 std::vector< __int16 > CMemoryManager::pattern_t::ParsePattern( const std::string &strPattern )
