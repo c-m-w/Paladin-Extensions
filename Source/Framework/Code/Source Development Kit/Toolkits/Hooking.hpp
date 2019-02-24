@@ -41,6 +41,7 @@ private:
 		void **pPatchedFunction = nullptr, *pOriginal = nullptr;
 	};
 
+	bool bAttached = false;
 	image_info_t _Importee { };
 	std::map< HMODULE, std::vector< patched_import_t > > _Patches { };
 
@@ -54,4 +55,29 @@ public:
 	void *GetOriginalImport( HMODULE hExporter, const std::string &strImportName );
 	bool RevertPatch( HMODULE hExporter, const std::string &strImportName );
 	bool RevertAllPatches( );
+};
+
+class CExceptionHook
+{
+private:
+
+	static constexpr auto PROTECTION = PAGE_EXECUTE | PAGE_GUARD;
+	static constexpr auto STEP_OVER = 0x100;
+
+	static inline std::vector< std::pair< void *, void * > > vecHooks { };
+	static inline void *pHandlerHandle = nullptr;
+
+	bool bAttached = false;
+	DWORD dwOldProtection = PAGE_NOACCESS;
+	void *pProtectedArea = nullptr, *pHook = nullptr;
+
+public:
+
+	static bool AddHandler( );
+	static bool RemoveHandler( );
+
+	bool Attach( void *pFunction, void *pCallback );
+	bool Detach( );
+
+	friend DWORD ExceptionHandler( EXCEPTION_POINTERS *pRecord );
 };

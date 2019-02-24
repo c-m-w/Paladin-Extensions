@@ -132,18 +132,28 @@ bool CImportHook::PatchAddress( void **pAddress, void *pValue )
 
 bool CImportHook::Attach( HMODULE hImportee )
 {
-	return ( _Importee = image_info_t( hImportee ) ).ValidImage( );
+	return bAttached = ( _Importee = image_info_t( hImportee ) ).ValidImage( );
 }
 
 bool CImportHook::Detach( )
 {
-	const auto bReturn = RevertAllPatches( );
-	*this = CImportHook( );
+	auto bReturn = true;
+
+	if ( bAttached )
+	{
+		bReturn &= RevertAllPatches( );
+		*this = CImportHook( );
+	}
+
+	bAttached = false;
 	return bReturn;
 }
 
 bool CImportHook::PatchImport( HMODULE hExporter, const std::string &strImportName, void *pPatch )
 {
+	if ( !bAttached )
+		return LOG( WARNING, HOOKING, "Attempting to patch import without attaching to a module beforehand." ), false;
+
 	auto _Origin = image_info_t( hExporter );
 
 	if ( !_Origin.ValidImage( )
@@ -164,6 +174,9 @@ bool CImportHook::PatchImport( HMODULE hExporter, const std::string &strImportNa
 
 void *CImportHook::GetOriginalImport( HMODULE hExporter, const std::string &strImportName )
 {
+	if ( !bAttached )
+		return LOG( WARNING, HOOKING, "Attempting to get original import without attaching to a module beforehand." ), nullptr;
+
 	const auto pSearch = _Patches.find( hExporter );
 	if ( pSearch == _Patches.end( ) )
 		return nullptr;
@@ -177,6 +190,9 @@ void *CImportHook::GetOriginalImport( HMODULE hExporter, const std::string &strI
 
 bool CImportHook::RevertPatch( HMODULE hExporter, const std::string &strImportName )
 {
+	if ( !bAttached )
+		return LOG( WARNING, HOOKING, "Attempting to revert patch without attaching to a module beforehand." ), nullptr;
+
 	const auto pSearch = _Patches.find( hExporter );
 	if ( pSearch == _Patches.end( ) )
 		return false;
@@ -195,6 +211,9 @@ bool CImportHook::RevertPatch( HMODULE hExporter, const std::string &strImportNa
 
 bool CImportHook::RevertAllPatches( )
 {
+	if ( !bAttached )
+		return LOG( WARNING, HOOKING, "Attempting to revert all patches without attaching to a module beforehand." ), nullptr;
+
 	for ( auto &_Patch : _Patches )
 	{
 		for ( auto &__Patch : _Patch.second )
@@ -205,4 +224,87 @@ bool CImportHook::RevertAllPatches( )
 	}
 
 	return true;
+}
+
+DWORD ExceptionHandler( EXCEPTION_POINTERS *pRecord )
+{
+	switch( pRecord->ExceptionRecord->ExceptionCode )
+	{
+		case STATUS_GUARD_PAGE_VIOLATION:
+		{
+			for ( auto &_Hook : CExceptionHook::vecHooks )
+				if ( std::uintptr_t( _Hook.first ) == pRecord->ContextRecord->Eip )
+				{
+					pRecord->ContextRecord->Eip = std::uintptr_t( _Hook.second );
+					break;
+				}
+
+			return pRecord->ContextRecord->EFlags |= CExceptionHook::STEP_OVER, EXCEPTION_CONTINUE_EXECUTION;
+		}
+
+		case STATUS_SINGLE_STEP:
+		{
+			DWORD dwBuffer;
+			if ( VirtualProtect( reinterpret_cast< void * >( pRecord->ContextRecord->Eip ), 1, CExceptionHook::PROTECTION, &dwBuffer ) == FALSE )
+				LOG( ERROR, HOOKING, "Unable to re-guard page." );
+
+			return EXCEPTION_CONTINUE_EXECUTION;
+		}
+
+		default:
+			return EXCEPTION_CONTINUE_SEARCH;
+	}
+}
+
+bool CExceptionHook::AddHandler( )
+{
+	if ( pHandlerHandle != nullptr )
+		return true;
+
+	if ( ( pHandlerHandle = AddVectoredExceptionHandler( 1, PVECTORED_EXCEPTION_HANDLER( ExceptionHandler ) ) ) == nullptr )
+		return LOG( ERROR, HOOKING, "Unable to add exception handler." ), false;
+
+	return true;
+}
+
+bool CExceptionHook::RemoveHandler( )
+{
+	if ( pHandlerHandle == nullptr )
+		return true;
+
+	if ( RemoveVectoredExceptionHandler( pHandlerHandle ) == FALSE )
+		LOG( ERROR, HOOKING, "Unable to remove exception handler." );
+	else
+		pHandlerHandle = nullptr;
+
+	return pHandlerHandle == nullptr;
+}
+
+bool CExceptionHook::Attach( void *pFunction, void *pCallback )
+{
+	if ( !AddHandler( ) )
+		return false;
+
+	for ( auto &_Hook : vecHooks )
+		if ( _Hook.first == pFunction )
+			return false;
+
+	if ( VirtualProtect( pFunction, 1, PROTECTION, &dwOldProtection ) == FALSE )
+		return LOG( ERROR, HOOKING, "Unable to protect function with PAGE_GUARD." ), false;
+
+	pProtectedArea = pFunction;
+	vecHooks.emplace_back( std::pair< void *, void * >( pProtectedArea, pCallback ) );
+	return true;
+}
+
+bool CExceptionHook::Detach( )
+{
+	if ( VirtualProtect( pProtectedArea, 1, dwOldProtection, &dwOldProtection ) == FALSE )
+		return LOG( ERROR, HOOKING, "Unable to restore page protection." ), false;
+
+	for ( auto u = 0u; u < vecHooks.size( ); u++ )
+		if ( vecHooks[ u ].second == pHook )
+			return vecHooks.erase( vecHooks.begin( ) + u ), *this = CExceptionHook( ), true;
+
+	return false;
 }

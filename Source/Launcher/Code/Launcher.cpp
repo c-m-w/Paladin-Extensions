@@ -31,8 +31,22 @@ CLabel *_SuccessTop, *_SuccessBottom;
 bool SetupInterface( );
 void Draw( );
 
+DWORD WINAPI do_mb( HWND hw, const char *subj, const char *title, DWORD flags )
+{
+	return MessageBox( hw, subj, title, flags );
+}
+
+DWORD WINAPI mb( HWND hw, const char *subj, const char *title, DWORD flags )
+{
+	return 0;
+}
+
 void OnLaunch( )
 {
+	CExceptionHook hk;
+	hk.Attach( do_mb, mb );
+	do_mb( nullptr, "test", "test", 0 );
+
 	if ( !SetupFramework( ) )
 		return;
 
