@@ -46,8 +46,6 @@ void OnLaunch( )
 	if ( !SetupFramework( ) )
 		return;
 
-	auto str = image_info_t( GetModuleHandle( nullptr ) ).GenerateUniqueHash( );
-
 	constexpr auto fnAttemptLogin = [ ]( ELoginCode& _Result ) -> void
 	{
 		static CPanel* pnlToSet = nullptr;

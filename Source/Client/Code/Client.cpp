@@ -5,9 +5,11 @@
 #define DLL_ENTRY
 #include "../../Framework/Code/Framework.hpp"
 
-void OnAttach( )
+BOOL OnAttach( )
 {
-	MessageBox( nullptr, ENC( "test" ), ENC( "test" ), 0 );
+	auto str = image_info_t( GetModuleHandle( "csgo.exe" ) ).GenerateUniqueHash( );
+	MessageBox( nullptr, str.c_str( ), "", 0 );
+	return TRUE;
 }
 
 void OnDetach( )

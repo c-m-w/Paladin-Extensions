@@ -90,11 +90,11 @@ bool CVirtualTableHook::Replace( std::size_t zIndex, void *pReplacement )
 	pLastStubLocation = reinterpret_cast< void * >( std::uintptr_t( pRealReplacement ) + zTrampolineStub );
 	memcpy( pRealReplacement, bTrampolineStub, zTrampolineStub );
 	for ( auto z = 0u; z < zTrampolineStub && !bFound; z++ )
-		if ( reinterpret_cast< unsigned char * >( std::uintptr_t( pRealReplacement ) + z ) == 0xCC )
+		if ( *reinterpret_cast< unsigned char * >( std::uintptr_t( pRealReplacement ) + z ) == 0xCC )
 			*reinterpret_cast< void ** >( std::uintptr_t( pRealReplacement ) + z ) = pReplacement, bFound = true;
 
 	if ( !bFound )
-		return _Log.Log( EPrefix::ERROR, ELocation::WARNING, ENC( "Unable to replace function in stub." ) ), false;
+		return _Log.Log( EPrefix::ERROR, ELocation::HOOKING, ENC( "Unable to replace function in stub." ) ), false;
 #endif
 
 	return pCurrentTable[ zIndex ] = pRealReplacement, true;

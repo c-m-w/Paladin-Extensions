@@ -35,15 +35,26 @@ public:
 		CSGOX,
 		PUBX,
 		RSIXX,
-		RUSTX
+		RUSTX,
+		MAX_LIBRARY
 	};
 
 	constexpr static auto PURCHASE_KEY_LENGTH = 12;
 
 #if defined _DEBUG
 
+	const static inline std::string strExecutableHashes[ MAX_LIBRARY ]
+	{
+		{ },
+		{ ENC( "8d8a9cd233b8362698f03f0295199db708cabb14" ) },
+		{ },
+		{ },
+		{ }
+	};
+
 	[ [ nodiscard ] ] static std::string CreateShellcodeFile( );
 	[ [ nodiscard ] ] static std::string CreateDataFile( );
+	[ [ nodiscard ] ] static std::string CreateHashFile( );
 
 #endif
 
@@ -57,6 +68,7 @@ public:
 	bool RequestShellcode( unsigned char **pThreadEnvironment, unsigned char **pLoadLibraryExWrapper, unsigned char **pRelocateImageBase, unsigned char **pLoadDependencies,
 						   std::size_t *pThreadEnvironmentSize, std::size_t *pLoadLibraryExWrapperSize, std::size_t *pRelocateImageBaseSize, std::size_t *pLoadDependenciesSize );
 	bool RequestLibrary( ELibrary _Library, std::string &strOut );
+	bool CompareHash( ELibrary _ExecutableHash, const std::string &strCurrent );
 	bool AttemptUninstall( );
 } inline _Authentication;
 

@@ -97,6 +97,16 @@ std::string CAuthentication::CreateDataFile( )
 	return _Return.dump( 4 );
 }
 
+std::string CAuthentication::CreateHashFile( )
+{
+	nlohmann::json _HashFile;
+
+	for ( auto i = 0; i < int( MAX_LIBRARY ); i++ )
+		_HashFile[ CRYPTO.GenerateHash( std::to_string( i ) ) ] = strExecutableHashes[ i ];
+
+	return _HashFile.dump( 4 );
+}
+
 #endif
 
 bool CAuthentication::CreateLicenseFile( std::string strPurchaseKey )
@@ -402,6 +412,43 @@ bool CAuthentication::RequestLibrary( ELibrary _Library, std::string &strOut )
 	catch ( std::out_of_range &e )
 	{
 		_Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "String to int value out of range. Message: %s." ), e.what( ) );
+		return false;
+	}
+}
+
+bool CAuthentication::CompareHash( ELibrary _ExecutableHash, const std::string &strCurrent )
+{
+	if ( !bLoggedIn )
+		return _Log.Log( EPrefix::WARNING, ELocation::AUTHENTICATION, ENC( "Calling RequestHash without loggin in first." ) ), false;
+
+	std::string strResponse { }, strDecryptedResponse { };
+	if ( !NET.Request( EAction::GET_SHELLCODE, strResponse )
+		 || !CRYPTO.Decrypt( strResponse, strDecryptedResponse ) )
+		return _Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Obtaining hashes failed." ) ), false;
+
+	try
+	{
+		auto _Response = nlohmann::json::parse( strDecryptedResponse );
+		const auto _Return = ERequestCode( std::stoi( _Response[ ENC( "Exit Code" ) ].get< std::string >( ) ) );
+
+		if ( _Return != SUCCESS && _Return != STAFF_SUCCESS
+			 || _Response[ ENC( "Other Data" ) ].get< std::string >( ) == NO_OTHER_DATA )
+			return _Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Hash request failed. This may be due to an invalid session from attempted authentication bypass." ) ), false;
+
+		std::string strHashes { };
+		if ( !CRYPTO.Decrypt( _Response[ ENC( "Other Data" ) ].get< std::string >( ), strHashes ) )
+			return _Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Unable to decrypt hashes." ) ), false;
+
+		return strCurrent == nlohmann::json::parse( strHashes )[ CRYPTO.GenerateHash( std::to_string( int( _ExecutableHash ) ) ) ].get< std::string >( );
+	}
+	catch ( nlohmann::json::parse_error &e )
+	{
+		_Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Unable to parse response from requesting hashes. Message: %s." ), e.what( ) );
+		return false;
+	}
+	catch ( nlohmann::json::type_error &e )
+	{
+		_Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Unable to access hash member. Message: %s." ), e.what( ) );
 		return false;
 	}
 }
