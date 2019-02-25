@@ -34,7 +34,7 @@ bool CVirtualTableHook::Attach( void *pAttachable )
 
 	hOrigin = MEM.GetOrigin( pTableAddress );
 	if ( hOrigin == nullptr )
-		return _Log.Log( EPrefix::ERROR, ELocation::HOOKING, ENC( "Unable to fild module of origin for table." ) ), false;
+		return _Log.Log( EPrefix::ERROR, ELocation::HOOKING, ENC( "Unable to find module of origin for table." ) ), false;
 
 	zLength = GetTableSize( pTableAddress );
 	if ( zLength == 0 )
