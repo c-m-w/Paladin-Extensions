@@ -208,10 +208,15 @@ IMAGE_IMPORT_DESCRIPTOR *image_info_t::GetImportDescriptor( HMODULE hExporter )
 	return nullptr;
 }
 
-const char *image_info_t::GetImportName( IMAGE_THUNK_DATA *pImportData )
+bool image_info_t::GetImportName( IMAGE_THUNK_DATA *pImportData, std::string &strOut )
 {
-	return reinterpret_cast< const char * >( ( pImportData->u1.Ordinal & IMAGE_ORDINAL_FLAG ) > 0 ? reinterpret_cast< void * >( pImportData->u1.Ordinal & 0xFFFF )
+	const auto szImport = reinterpret_cast< const char * >( ( pImportData->u1.Ordinal & IMAGE_ORDINAL_FLAG ) > 0 ? reinterpret_cast< void * >( pImportData->u1.Ordinal & 0xFFFF )
 															: reinterpret_cast< IMAGE_IMPORT_BY_NAME * >( std::uintptr_t( pData ) + pImportData->u1.AddressOfData )->Name );
+	if ( std::uintptr_t( szImport ) >= std::uintptr_t( pData )
+		 && std::uintptr_t( szImport ) <= std::uintptr_t( pData ) + GetImageSize( ) )
+		 return strOut = szImport, true;
+
+	return false;
 }
 
 IMAGE_THUNK_DATA *image_info_t::FindImport( HMODULE hExporter, void *pImport )
@@ -241,8 +246,11 @@ IMAGE_THUNK_DATA *image_info_t::FindImport( HMODULE hExporter, const std::string
 		  p = reinterpret_cast< IMAGE_THUNK_DATA * >( std::uintptr_t( p ) + sizeof( IMAGE_THUNK_DATA ) ),
 		  _p = reinterpret_cast< IMAGE_THUNK_DATA * >( std::uintptr_t( _p ) + sizeof( IMAGE_THUNK_DATA ) ) )
 	{
-		const auto szImport = GetImportName( _p );
-		if ( szImport == strImport )
+		std::string strCurrentImport;
+		if ( !GetImportName( _p, strCurrentImport ) )
+			continue;
+
+		if ( strCurrentImport == strImport )
 			return p;
 	}
 
@@ -255,19 +263,19 @@ std::string image_info_t::GenerateUniqueHash( )
 	const auto pNewTechnologyHeaders = GetNewTechnologyHeaders( );
 	nlohmann::json _Information { };
 
-	_Information[ ENC( "Header Size" ) ] = GetHeaderSize( );
-	_Information[ ENC( "Section Count" ) ] = zSections;
-	_Information[ ENC( "Symbol Count" ) ] = pNewTechnologyHeaders->FileHeader.NumberOfSymbols;
-	_Information[ ENC( "PE Offset" ) ] = GetOperatingSystemHeader( )->e_lfanew;
-	_Information[ ENC( "Magic" ) ] = pNewTechnologyHeaders->OptionalHeader.Magic;
-	_Information[ ENC( "Major Linker Version" ) ] = pNewTechnologyHeaders->OptionalHeader.MajorLinkerVersion;
-	_Information[ ENC( "Minor Linker Version" ) ] = pNewTechnologyHeaders->OptionalHeader.MinorLinkerVersion;
-	_Information[ ENC( "Entry Point RVA" ) ] = pNewTechnologyHeaders->OptionalHeader.AddressOfEntryPoint;
-	_Information[ ENC( "Code RVA" ) ] = pNewTechnologyHeaders->OptionalHeader.BaseOfCode;
-	_Information[ ENC( "Data RVA" ) ] = pNewTechnologyHeaders->OptionalHeader.BaseOfData;
-	_Information[ ENC( "Major OS Version" ) ] = pNewTechnologyHeaders->OptionalHeader.MajorOperatingSystemVersion;
-	_Information[ ENC( "Minor OS Version" ) ] = pNewTechnologyHeaders->OptionalHeader.MinorOperatingSystemVersion;
-	_Information[ ENC( "Subsystem" ) ] = pNewTechnologyHeaders->OptionalHeader.Subsystem;
+	_Information[ ENC( "Header Size" ) ]			= GetHeaderSize( );
+	_Information[ ENC( "Section Count" ) ]			= zSections;
+	_Information[ ENC( "Symbol Count" ) ]			= pNewTechnologyHeaders->FileHeader.NumberOfSymbols;
+	_Information[ ENC( "PE Offset" ) ]				= GetOperatingSystemHeader( )->e_lfanew;
+	_Information[ ENC( "Magic" ) ]					= pNewTechnologyHeaders->OptionalHeader.Magic;
+	_Information[ ENC( "Major Linker Version" ) ]	= pNewTechnologyHeaders->OptionalHeader.MajorLinkerVersion;
+	_Information[ ENC( "Minor Linker Version" ) ]	= pNewTechnologyHeaders->OptionalHeader.MinorLinkerVersion;
+	_Information[ ENC( "Entry Point RVA" ) ]		= pNewTechnologyHeaders->OptionalHeader.AddressOfEntryPoint;
+	_Information[ ENC( "Code RVA" ) ]				= pNewTechnologyHeaders->OptionalHeader.BaseOfCode;
+	_Information[ ENC( "Data RVA" ) ]				= pNewTechnologyHeaders->OptionalHeader.BaseOfData;
+	_Information[ ENC( "Major OS Version" ) ]		= pNewTechnologyHeaders->OptionalHeader.MajorOperatingSystemVersion;
+	_Information[ ENC( "Minor OS Version" ) ]		= pNewTechnologyHeaders->OptionalHeader.MinorOperatingSystemVersion;
+	_Information[ ENC( "Subsystem" ) ]				= pNewTechnologyHeaders->OptionalHeader.Subsystem;
 
 	for ( auto z = 0u; z < zSections; z++ )
 	{
@@ -281,15 +289,16 @@ std::string image_info_t::GenerateUniqueHash( )
 	for ( auto p = GetFirstImport( ); p != nullptr; p = GetNextImport( p ) )
 	{
 		const auto strModule = std::string( reinterpret_cast< const char * >( std::uintptr_t( pData ) + p->Name ) );
-		if ( strModule == ENC( "OLEAUT32.dll" ) ) // after this module it just turns into reading access violation autism
-			break;
 
 		auto i = 0;
 		for ( auto q = reinterpret_cast< IMAGE_THUNK_DATA * >( std::uintptr_t( pData ) + p->OriginalFirstThunk );
 			  q != nullptr && q->u1.AddressOfData != NULL;
 			  q = reinterpret_cast< IMAGE_THUNK_DATA * >( std::uintptr_t( q ) + sizeof( IMAGE_THUNK_DATA ) ), i++ )
 		{
-			const auto strImport = std::string( GetImportName( q ) );
+			std::string strImport;
+			if ( !GetImportName( q, strImport ) )
+				continue;
+
 			_Information[ ENC( "Imports" ) ][ strModule ][ i ] = strImport;
 		}
 	}

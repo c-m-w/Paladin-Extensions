@@ -211,7 +211,7 @@ public:
 	IMAGE_IMPORT_DESCRIPTOR *GetFirstImport( );
 	IMAGE_IMPORT_DESCRIPTOR *GetNextImport( IMAGE_IMPORT_DESCRIPTOR *pCurrent );
 	IMAGE_IMPORT_DESCRIPTOR *GetImportDescriptor( HMODULE hExporter );
-	const char *GetImportName( IMAGE_THUNK_DATA *pData );
+	bool GetImportName( IMAGE_THUNK_DATA *pImportData, std::string &strOut );
 	IMAGE_THUNK_DATA *FindImport( HMODULE hExporter, void *pImport );
 	IMAGE_THUNK_DATA *FindImport( HMODULE hExporter, const std::string &strImport );
 	std::string GenerateUniqueHash( );
