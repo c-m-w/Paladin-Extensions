@@ -422,7 +422,7 @@ bool CAuthentication::CompareHash( ELibrary _ExecutableHash, const std::string &
 		return _Log.Log( EPrefix::WARNING, ELocation::AUTHENTICATION, ENC( "Calling RequestHash without loggin in first." ) ), false;
 
 	std::string strResponse { }, strDecryptedResponse { };
-	if ( !NET.Request( EAction::GET_SHELLCODE, strResponse )
+	if ( !NET.Request( EAction::GET_HASHES, strResponse )
 		 || !CRYPTO.Decrypt( strResponse, strDecryptedResponse ) )
 		return _Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Obtaining hashes failed." ) ), false;
 

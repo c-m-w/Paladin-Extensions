@@ -21,12 +21,13 @@
          "GREATER"              => ">",
          "QUOTE"                => "'",
          "PLUS"                 => "+" ) );
-    define( "actions", array( 'get_protocol' => 0, 'login' => 1, 'get_data' => 2, 'get_shellcode' => 3, 'get_library' => 4, 'get_information' => 5, 'ban' => 6, 'get_resource_hash' => 7, 'get_resources' => 8 ) );
+    define( "actions", array( 'get_protocol' => 0, 'login' => 1, 'get_data' => 2, 'get_shellcode' => 3, 'get_library' => 4, 'get_hashes' => 5, 'get_information' => 6, 'ban' => 7, 'get_resource_hash' => 8, 'get_resources' => 9 ) );
     define( "libraryDirectory", "/home/palavpvb/PX/Libraries/" );
     define( "libraries", array( 'PX Client.dll', 'PX CSGO.dll', 'PX PUBG.dll', 'PX RSIX.dll', 'PX RUST.dll' ) );
     define( "dataDirectory", '/home/palavpvb/PX/Data/' );
     define( 'dataFile', '.data' );
     define( 'shellcodeDataFile', '.shellcode' );
+    define( 'hashDataFile', '.hashes' );
     define( 'extensionData', array(  ) );
 
 	$log			= new Logging( );
@@ -397,6 +398,29 @@
             $functionality->stopExecution( 'Success', $cryptography->encrypt( $information ) );
 		}
 
+        public function getHashes( ): void
+        {
+            global $functionality;
+            global $log;
+            global $cryptography;
+
+            if ( !$this->sessionValid( ) )
+            {
+                $log->log( 'Attempting to get hashes without a valid session. Could possibly be someone attempting to bypass authentication.' );
+                $functionality->stopExecution( 'Server Error' );
+            }
+
+            $hashes = file_get_contents( dataDirectory . hashDataFile );
+
+            if ( $hashes === FALSE )
+            {
+                $log->log( 'Failed to read hash file.' );
+                $functionality->stopExecution( 'Server Error' );
+            }
+
+            $functionality->stopExecution( 'Success', $cryptography->encrypt( $hashes ) );
+        }
+
         public function getInformation( ): void
         {
 
@@ -462,6 +486,9 @@
 
 		if ( $action == actions[ 'get_library' ] )
 			$auth->getLibrary( );
+
+        if ( $action == actions[ 'get_hashes' ] )
+            $auth->getHashes( );
 
 		if ( $action == actions[ 'ban' ] )
 			$auth->ban( );
