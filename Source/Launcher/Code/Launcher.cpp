@@ -31,18 +31,31 @@ CLabel *_SuccessTop, *_SuccessBottom;
 bool SetupInterface( );
 void Draw( );
 
-DWORD WINAPI do_mb( HWND hw, const char *subj, const char *title, DWORD flags )
+CPatchHook hk;
+
+int print( const char * msg )
 {
-	return MessageBox( hw, subj, title, flags );
+	printf( msg );
+	return 42;
 }
 
-DWORD WINAPI mb( HWND hw, const char *subj, const char *title, DWORD flags )
+int print_hooked( const char* )
 {
-	return 0;
+	if ( hk.Unpatch( ) )
+	{
+		print( "new message that is hooked" );
+		hk.Patch( print, print_hooked );
+		return 4;
+	}
+
+	return -6;
 }
 
 void OnLaunch( )
 {
+	hk.Patch( print, print_hooked );
+	printf( "%i", print( "printed_message" ) );
+
 	if ( !SetupFramework( ) )
 		return;
 

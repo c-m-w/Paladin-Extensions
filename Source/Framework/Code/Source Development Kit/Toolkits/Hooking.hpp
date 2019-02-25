@@ -81,3 +81,23 @@ public:
 
 	friend DWORD ExceptionHandler( EXCEPTION_POINTERS *pRecord );
 };
+
+class CPatchHook
+{
+private:
+
+	static constexpr unsigned char CALL_OPCODE = 0xE8;
+	static constexpr auto CALL_SIZE = 5;
+
+	static inline std::map< void *, void * > _PatchedFunctions { };
+	bool bPatched = false;
+	std::vector< unsigned char > vecOldBytes { };
+	void *pPatchedData = nullptr;
+
+public:
+
+	bool Patch( void *pFunction, void *pHook );
+	bool Unpatch( );
+
+	friend void *__stdcall FindHook( void *pFunction );
+};

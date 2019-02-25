@@ -308,3 +308,65 @@ bool CExceptionHook::Detach( )
 
 	return false;
 }
+
+void *__stdcall FindHook( void *pFunction )
+{
+	const auto pSearch = CPatchHook::_PatchedFunctions.find( reinterpret_cast< void * >( std::uintptr_t( pFunction ) - CPatchHook::CALL_SIZE ) );
+	if ( pSearch == CPatchHook::_PatchedFunctions.end( ) )
+		return nullptr;
+
+	return pSearch->second;
+}
+
+void __declspec( naked ) HookProxy( )
+{
+	__asm
+	{
+		call	FindHook
+		cmp		eax, 0
+		jnz		JumpToHook
+		ret		// mega crash
+
+		JumpToHook:
+
+			jmp		eax
+	}
+}
+
+bool CPatchHook::Patch( void *pFunction, void *pHook )
+{
+	if ( bPatched )
+		return true;
+
+	const auto pRelative = reinterpret_cast< void * >( std::uintptr_t( HookProxy ) - ( std::uintptr_t( pFunction ) + CALL_SIZE ) );
+	DWORD dwOld;
+
+	if ( VirtualProtect( pFunction, CALL_SIZE, PAGE_EXECUTE_READWRITE, &dwOld ) == FALSE )
+		return LOG( ERROR, HOOKING, "Unable to protect function to patch." ), false;
+
+	vecOldBytes.resize( CALL_SIZE );
+	memcpy( &vecOldBytes[ 0 ], pFunction, CALL_SIZE );
+	*reinterpret_cast< unsigned char* >( pFunction ) = CALL_OPCODE;
+	*reinterpret_cast< void ** >( std::uintptr_t( pFunction ) + sizeof( unsigned char ) ) = pRelative;
+
+	bPatched = VirtualProtect( pFunction, CALL_SIZE, dwOld, &dwOld ) != FALSE;
+	if ( bPatched )
+		_PatchedFunctions.insert( { pFunction, pHook } );
+
+	pPatchedData = pFunction;
+	return bPatched;
+}
+
+bool CPatchHook::Unpatch( )
+{
+	if ( !bPatched )
+		return true;
+
+	DWORD dwOld;
+
+	if ( VirtualProtect( pPatchedData, CALL_SIZE, PAGE_EXECUTE_READWRITE, &dwOld ) == FALSE )
+		return LOG( ERROR, HOOKING, "Unable to protect function to patch." ), false;
+
+	memcpy( pPatchedData, &vecOldBytes[ 0 ], CALL_SIZE );
+	return ( bPatched = !( VirtualProtect( pPatchedData, CALL_SIZE, dwOld, &dwOld ) != FALSE ) ) == false;
+}
