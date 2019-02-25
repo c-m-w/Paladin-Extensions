@@ -13,12 +13,12 @@ protected:
 	void Uninitialize( ) override;
 
 	/** \brief Key to encrypt / decrypt with. */
-	std::string strEncryptionKey;
+	std::string strEncryptionKey { };
 	/** \brief Initialization vector for encryption. */
-	std::string strInitializationVector;
-	std::string strProtocol;
+	std::string strInitializationVector { };
+	std::string strProtocol { };
 	/** \brief Last time that an encryption key was generated. */
-	Utilities::moment_t mmtLastGenerationTime;
+	Utilities::moment_t mmtLastGenerationTime = 0ui64;
 
 public:
 
@@ -30,11 +30,9 @@ public:
 	/** \brief Size of initialization vector in bytes. */
 	constexpr static auto INITIALIZATION_VECTOR_SIZE = 16;
 	/** \brief Encryption key that is to be used to encrypt things such as licence files. */
-	inline static std::string strStaticEncryptionKey;
+	inline static std::string strStaticEncryptionKey = ENC( "ExgrEV9yIlF3xgocqy53ipLAwFHuDznk" );
 	/** \brief Initialization vector that is to be used to encrypt things such as licence files. */
-	inline static std::string strStaticInitializationVector;
-
-	CCryptography( );
+	inline static std::string strStaticInitializationVector = ENC( "4ZNqNqIaJqZqPJS1" );
 
 	/** \brief Computes a hash of an array of bytes. */
 	/**	\param strBytes Text to be hashed. */

@@ -52,12 +52,6 @@ bool CCryptography::Initialize( )
 void CCryptography::Uninitialize( )
 { }
 
-CCryptography::CCryptography( ): mmtLastGenerationTime( 0ui64 )
-{
-	strStaticEncryptionKey = ENC( "ExgrEV9yIlF3xgocqy53ipLAwFHuDznk" );
-	strStaticInitializationVector = ENC( "4ZNqNqIaJqZqPJS1" );
-}
-
 std::string CCryptography::GenerateHash( const std::string &strBytes )
 {
 	unsigned char bOutput[ CryptoPP::SHA1::DIGESTSIZE ];
