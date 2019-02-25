@@ -56,7 +56,10 @@ private:
 	/** \brief Length of the buffer for formatting time. */
 	constexpr static auto TIME_STRING_LENGTH = 32u;
 
+	/** \brief Initializes the CLogging class. */
+	/** \return Whether or not initialization was successful. */
 	bool Initialize( ) override;
+	/** \brief Uninitializes the CLogging class. */
 	void Uninitialize( ) override;
 
 	/** \brief Converts time since epoch to something that is legible. */
@@ -118,13 +121,11 @@ private:
 		ENC( "[Application]\t" )
 	};
 	/** \brief The timestamp of the last time that the buffer was written to file. */
-	Utilities::moment_t mmtLastLogWrite;
+	Utilities::moment_t mmtLastLogWrite { };
 	/** \brief Buffer to store the events in queue to be written to file. */
-	std::string strBuffer;
+	std::string strBuffer { };
 
 public:
-
-	CLogging( ) = default;
 
 	/** \brief Logs an event to the buffer. */
 	/** \param _Prefix Prefix to denote the severity or status of the event. */

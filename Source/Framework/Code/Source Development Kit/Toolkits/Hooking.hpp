@@ -2,32 +2,59 @@
 
 #pragma once
 
+/** \brief Tool for modifying virtual table functions to detour them. */
 class CVirtualTableHook
 {
 private:
 
+	/** \brief Whether or not it is currently attached\n 
+				to a virtual function table. */
 	bool bAttached = false;
-	void *pInterface = nullptr,
-		**pTableAddress = nullptr,
-		**pOldTable = nullptr,
-		**pCurrentTable = nullptr;
+	/** \brief The interface that is being detoured. */
+	void *pInterface = nullptr;
+	/** \brief Address of the original virtual function table. */
+	void **pTableAddress = nullptr;
+	/** \brief Address of the current virtual function table. */
+	void **pCurrentTable = nullptr;
 	HMODULE hOrigin = nullptr;
 	std::size_t zLength, zSize;
 
 #if !defined _DEBUG
 
+	/** \brief Address of the last stub that was found. */
 	void *pLastStubLocation = nullptr;
 
 #endif
 
 public:
 
+	/** \brief Gets the size of a virtual function table. */
+	/** \param pTable Address of the table to be analyzed. */
+	/** \return How many functions are contained in the table. */
 	static std::size_t GetTableSize( void **pTable );
 
+	/** \brief Attaches to an interface to prepare for detouring functions. */
+	/** \param pInterface The interface that is to be attached to. */
+	/** \return Whether or not attaching was successful. */
 	bool Attach( void *pInterface );
+	/** \brief Detaches from an interface and no longer detours functions. */
 	void Detach( );
+	/** \brief Replaces a function at a specified index with another. */
+	/** \param zIndex Index of the function to be replaced. */
+	/** \param pReplacement The new function that should be detoured to. */
+	/** \return Whether or not detouring the function was successful. */
 	bool Replace( std::size_t zIndex, void *pReplacement );
+	/** \brief Replaces a function with a specified address in the table with another.\n 
+				The table will be searched until the index of the function is determined, at\n 
+				which point it is detoured. */
+	/** \param pReplacee The function address that is to be replaced. */
+	/** \param pReplacement The function address that is to replace the other. */
+	/** \return Whether or not detouring the function was successful. */
 	bool Replace( void *pReplacee, void *pReplacement );
+	/** \brief Obtains the address of the original function at a specified index\n 
+				so that it is able to be called after it is detoured. */
+	/** \param zIndex The index of the function. */
+	/** \return The address of the original function. */
 	void *GetOriginalFunction( std::size_t zIndex );
 };
 
