@@ -23,6 +23,7 @@ protected:
 	virtual ~IBase( ) = default;
 
 public:
+
 	IBase( const IBase & ) = delete;
 	IBase( IBase && ) = delete;
 	IBase &operator=( const IBase & ) = delete;
