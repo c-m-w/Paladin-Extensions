@@ -17,12 +17,12 @@ protected:
 	/** \brief Whether or not the class has been initialized. */
 	bool bInitialized;
 
-public:
-
 	IBase( ): bInitialized( false )
 	{ }
 
 	virtual ~IBase( ) = default;
+
+public:
 	IBase( const IBase & ) = delete;
 	IBase( IBase && ) = delete;
 	IBase &operator=( const IBase & ) = delete;

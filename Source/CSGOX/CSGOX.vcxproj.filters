@@ -59,5 +59,8 @@
     <ClInclude Include="Code\Source Development Kit\Application Programming Interface\Link.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Code\CSGOX.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

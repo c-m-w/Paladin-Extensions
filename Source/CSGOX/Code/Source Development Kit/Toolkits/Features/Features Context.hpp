@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "../../Application Programming Interface/Link.hpp"
+#include "../../../CSGOX.hpp"
 
 struct IAwarenessContext
 {

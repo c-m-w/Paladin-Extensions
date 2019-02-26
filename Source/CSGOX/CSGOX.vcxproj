@@ -173,6 +173,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Framework\Precompile.hpp" />
+    <ClInclude Include="Code\CSGOX.hpp" />
     <ClInclude Include="Code\Source Development Kit\Application Programming Interface\Link.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\Features\Awareness\Awareness.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\Features\Combat\Aim Assistance.hpp" />
