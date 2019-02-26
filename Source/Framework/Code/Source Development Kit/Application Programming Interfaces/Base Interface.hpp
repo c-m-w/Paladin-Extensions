@@ -15,11 +15,11 @@ protected:
 	virtual void Uninitialize( ) = 0;
 
 	/** \brief Whether or not the class has been initialized. */
-	bool bInitialization;
+	bool bInitialized;
 
 public:
 
-	IBase( ): bInitialization( false )
+	IBase( ): bInitialized( false )
 	{ }
 
 	virtual ~IBase( ) = default;
@@ -32,22 +32,22 @@ public:
 	/** \return Whether or not initialization was successful. */
 	[ [ nodiscard ] ] bool Setup( )
 	{
-		return bInitialization = Initialize( );
+		return bInitialized = Initialize( );
 	};
 
 	/** \brief Shuts down implementing class from public use. */
 	void Shutdown( )
 	{
-		if ( bInitialization )
+		if ( bInitialized )
 			Uninitialize( );
 
-		bInitialization = false;
+		bInitialized = false;
 	}
 
 	/** \brief Gets information about the initialization state of the implementing class. */
 	/** \return Whether or not the implementing class is initialized. */
-	bool GetInitializationState( )
+	bool GetInitializationState( ) const
 	{
-		return bInitialization;
+		return bInitialized;
 	}
 };
