@@ -252,6 +252,7 @@ private:
 		LOAD_DEPENDENCIES
 	};
 
+public:
 	struct pattern_t
 	{
 	private:
@@ -274,6 +275,7 @@ private:
 		friend class CMemoryManager;
 	};
 
+private:
 	bool Initialize( ) override;
 	void Uninitialize( ) override;
 
