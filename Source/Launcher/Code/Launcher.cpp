@@ -31,30 +31,18 @@ CLabel *_SuccessTop, *_SuccessBottom;
 bool SetupInterface( );
 void Draw( );
 
-CPatchHook hk;
-
-int print( const char * msg )
+DWORD WINAPI test( HWND, const char* sz, const char *sz1, int i )
 {
-	printf( msg );
-	return 42;
-}
-
-int print_hooked( const char* )
-{
-	if ( hk.Unpatch( ) )
-	{
-		print( "new message that is hooked" );
-		hk.Patch( print, print_hooked );
-		return 4;
-	}
-
-	return -6;
+	return 0;
 }
 
 void OnLaunch( )
 {
-	hk.Patch( print, print_hooked );
-	printf( "%i", print( "printed_message" ) );
+	CExportHook hk;
+	hk.Attach( GetModuleHandle( "USER32.dll" ) );
+	hk.PatchExport( std::string( "MessageBoxA" ), test );
+	reinterpret_cast< decltype( MessageBoxA )* >( GetProcAddress( GetModuleHandle( "USER32.dll" ), "MessageBoxA" ) )( nullptr, "test", "test", 0 );
+	MessageBox( nullptr, nullptr, nullptr, 0 );
 
 	if ( !SetupFramework( ) )
 		return;

@@ -201,6 +201,8 @@ public:
 	image_info_t( ) = default;
 	image_info_t( void *pData );
 
+	operator HMODULE( );
+
 	bool ValidImage( );
 	std::size_t GetImageSize( );
 	std::size_t GetHeaderSize( );
@@ -211,6 +213,7 @@ public:
 	IMAGE_IMPORT_DESCRIPTOR *GetFirstImport( );
 	IMAGE_IMPORT_DESCRIPTOR *GetNextImport( IMAGE_IMPORT_DESCRIPTOR *pCurrent );
 	IMAGE_IMPORT_DESCRIPTOR *GetImportDescriptor( HMODULE hExporter );
+	IMAGE_EXPORT_DIRECTORY *GetExports( );
 	bool GetImportName( IMAGE_THUNK_DATA *pImportData, std::string &strOut );
 	IMAGE_THUNK_DATA *FindImport( HMODULE hExporter, void *pImport );
 	IMAGE_THUNK_DATA *FindImport( HMODULE hExporter, const std::string &strImport );

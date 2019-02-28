@@ -132,7 +132,7 @@ bool CImportHook::PatchAddress( void **pAddress, void *pValue )
 
 bool CImportHook::Attach( HMODULE hImportee )
 {
-	return bAttached = ( _Importee = image_info_t( hImportee ) ).ValidImage( );
+	return bAttached || ( bAttached = ( _Importee = image_info_t( hImportee ) ).ValidImage( ) );
 }
 
 bool CImportHook::Detach( )
@@ -222,6 +222,134 @@ bool CImportHook::RevertAllPatches( )
 
 		_Patch.second.clear( );
 	}
+
+	return true;
+}
+
+bool CExportHook::Attach( HMODULE hExporter )
+{
+	if ( bAttached || !( bAttached = ( _Exporter = image_info_t( hExporter ) ).ValidImage( ) ) )
+		return bAttached;
+
+	const auto pExports = _Exporter.GetExports( );
+	for ( auto i = 0; i < pExports->NumberOfFunctions; i++ )
+		vecOldExports.emplace_back( reinterpret_cast< void ** >( std::uintptr_t( hExporter ) + pExports->AddressOfFunctions )[ i ] );
+
+	return true;
+}
+
+bool CExportHook::Detach( )
+{
+	auto bReturn = true;
+
+	if ( bAttached )
+	{
+		bReturn &= RevertAllPatches( );
+		*this = CExportHook( );
+	}
+
+	bAttached = false;
+	return bReturn;
+}
+
+bool CExportHook::PatchExport( void *pFunction, void *pPatch )
+{
+	if ( !bAttached )
+		return LOG( WARNING, HOOKING, "Attempting to patch export without attaching to a module beforehand." ), false;
+
+	const auto pExports = _Exporter.GetExports( );
+
+	for ( auto i = 0; i < pExports->NumberOfFunctions; i++ )
+	{
+		auto &ptrRelativeAddress = reinterpret_cast< std::uintptr_t * >( std::uintptr_t( HMODULE( _Exporter ) ) + pExports->AddressOfFunctions )[ i ];
+		auto pCurrent = reinterpret_cast< void * >( std::uintptr_t( HMODULE( _Exporter ) ) + ptrRelativeAddress );
+		if ( pCurrent == pFunction )
+		{
+			DWORD dwOld;
+			if ( VirtualProtect( &ptrRelativeAddress, sizeof( void * ), PAGE_READWRITE, &dwOld ) == FALSE )
+				return LOG( ERROR, HOOKING, "Unable to virtual protect address for writing." ), false;
+
+			ptrRelativeAddress = std::uintptr_t( pPatch ) - std::uintptr_t( HMODULE( _Exporter ) );
+			return VirtualProtect( &ptrRelativeAddress, sizeof( void * ), dwOld, &dwOld ) != FALSE;
+		}
+	}
+
+	return false;
+}
+
+bool CExportHook::PatchExport( const std::string &strExportName, void *pPatch )
+{
+	if ( !bAttached )
+		return LOG( WARNING, HOOKING, "Attempting to patch export without attaching to a module beforehand." ), false;
+
+	const auto pExports = _Exporter.GetExports( );
+	void *pFunction = nullptr;
+
+	for ( auto i = 0; i < pExports->NumberOfNames && pFunction == nullptr; i++ )
+		if ( reinterpret_cast< const char * >( std::uintptr_t( HMODULE( _Exporter ) ) + reinterpret_cast< std::uintptr_t * >( std::uintptr_t( HMODULE( _Exporter ) ) + pExports->AddressOfNames )[ i ] ) == strExportName )
+		{
+			const auto pFunctions = reinterpret_cast< std::uintptr_t * >( std::uintptr_t( HMODULE( _Exporter ) ) + pExports->AddressOfFunctions );
+			const auto iOrdinalIndex = reinterpret_cast< short * >( std::uintptr_t( HMODULE( _Exporter ) ) + pExports->AddressOfNameOrdinals )[ i ];
+			pFunction = reinterpret_cast< void * >( std::uintptr_t( HMODULE( _Exporter ) ) + pFunctions[ iOrdinalIndex ] );
+		}
+
+	if ( pFunction == nullptr )
+		LOG( WARNING, HOOKING, "Unable to find function %s in export table.", strExportName.c_str( ) );
+
+	return pFunction != nullptr && PatchExport( pFunction, pPatch );
+}
+
+void *CExportHook::GetOriginalExport( const std::string &strExportName )
+{
+	if ( !bAttached )
+		return LOG( WARNING, HOOKING, "Attempting to get original export without first attaching." ), nullptr;
+
+	const auto pExports = _Exporter.GetExports( );
+	void *pFunction = nullptr;
+
+	for ( auto i = 0; i < pExports->NumberOfNames && pFunction == nullptr; i++ )
+		if ( reinterpret_cast< const char * >( std::uintptr_t( HMODULE( _Exporter ) ) + reinterpret_cast< std::uintptr_t * >( std::uintptr_t( HMODULE( _Exporter ) ) + pExports->AddressOfNames )[ i ] ) == strExportName )
+			return vecOldExports[ i ];
+
+	return nullptr;
+}
+
+bool CExportHook::RevertPatch( void *pOriginal )
+{
+	if ( !bAttached )
+		return LOG( WARNING, HOOKING, "Attempting to get revert patch without first attaching." ), nullptr;
+
+	const auto pExports = _Exporter.GetExports( );
+
+	for ( auto u = 0u; u < vecOldExports.size(); u++ )
+		if ( vecOldExports[ u ] == pOriginal )
+		{
+			reinterpret_cast< std::uintptr_t * >( std::uintptr_t( HMODULE( _Exporter ) ) + pExports->AddressOfFunctions )[ u ] = std::uintptr_t( vecOldExports[ u ] ) - std::uintptr_t( HMODULE( _Exporter ) );
+			return true;
+		}
+
+	return false;
+}
+
+bool CExportHook::RevertPatch( const std::string &strExportName )
+{
+	if ( !bAttached )
+		return LOG( WARNING, HOOKING, "Attempting to get revert patch without first attaching." ), nullptr;
+
+	const auto pExports = _Exporter.GetExports( );
+
+	for ( auto i = 0; i < pExports->NumberOfNames; i++ )
+		if ( reinterpret_cast< const char * >( std::uintptr_t( HMODULE( _Exporter ) ) + reinterpret_cast< std::uintptr_t * >( std::uintptr_t( HMODULE( _Exporter ) ) + pExports->AddressOfNames )[ i ] ) == strExportName )
+			return RevertPatch( vecOldExports[ i ] );
+
+	return false;
+}
+
+bool CExportHook::RevertAllPatches( )
+{
+	for ( auto &pFunction : vecOldExports )
+		if ( !RevertPatch( pFunction ) )
+			return false;
 
 	return true;
 }

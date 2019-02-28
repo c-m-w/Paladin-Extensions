@@ -84,6 +84,26 @@ public:
 	bool RevertAllPatches( );
 };
 
+class CExportHook
+{
+private:
+
+	bool bAttached = false;
+	std::vector< void * > vecOldExports { };
+	image_info_t _Exporter { };
+
+public:
+
+	bool Attach( HMODULE hExporter );
+	bool Detach( );
+	bool PatchExport( void *pFunction, void *pPatch );
+	bool PatchExport( const std::string &strExportName, void *pPatch );
+	void *GetOriginalExport( const std::string &strExportName );
+	bool RevertPatch( void *pOriginal );
+	bool RevertPatch( const std::string &strExportName );
+	bool RevertAllPatches( );
+};
+
 class CExceptionHook
 {
 private:
