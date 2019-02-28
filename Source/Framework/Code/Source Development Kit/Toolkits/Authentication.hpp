@@ -107,17 +107,6 @@ public:
 	[ [ nodiscard ] ] ERequestCode Login( );
 	/** \brief Requests required data for runtime from the server. The user must be logged\n 
 				in before this function is called or it will fail. */
-	/** \param pNewestInsertInvertedFunctionTable - */
-	/** \param pNewestInsertInvertedFunctionTableOffset - */
-	/** \param pNewestInvertedFunctionTable - */
-	/** \param pNewestInvertedFunctionTableOffset - */
-	/** \param pBackupInsertInvertedFunctionTable - */
-	/** \param pBackupInsertInvertedFunctionTableOffset - */
-	/** \param pBackupInvertedFunctionTableOffset - */
-	/** \param pResortInsertInvertedFunctionTable - */
-	/** \param pResortInsertInvertedFunctionTableOffset - */
-	/** \param pResortWindows10InvertedFunctionTableOffset - */
-	/** \param pResortPreviousWindowsInvertedFunctionTableOffset - */
 	/** \return Whether or not requesting and obtaining the data was successful. */
 	bool RequestData( std::string *pNewestInsertInvertedFunctionTable, std::ptrdiff_t *pNewestInsertInvertedFunctionTableOffset, std::string *pNewestInvertedFunctionTable,
 					  std::ptrdiff_t *pNewestInvertedFunctionTableOffset, std::string *pBackupInsertInvertedFunctionTable, std::ptrdiff_t *pBackupInsertInvertedFunctionTableOffset,
@@ -125,14 +114,6 @@ public:
 					  std::ptrdiff_t *pResortWindows10InvertedFunctionTableOffset, std::ptrdiff_t *pResortPreviousWindowsInvertedFunctionTableOffset );
 	/** \brief Requests shellcode from the server that is required for loading images\n 
 				into memory. */
-	/** \param pThreadEnvironment - */
-	/** \param pLoadLibraryExWrapper - */
-	/** \param pRelocateImageBase - */
-	/** \param pLoadDependencies - */
-	/** \param pThreadEnvironmentSize - */
-	/** \param pLoadLibraryExWrapperSize - */
-	/** \param pRelocateImageBaseSize - */
-	/** \param pLoadDependenciesSize - */
 	/** \return Whether or not requesting and obtaining the shellcode was successful. */
 	bool RequestShellcode( unsigned char **pThreadEnvironment, unsigned char **pLoadLibraryExWrapper, unsigned char **pRelocateImageBase, unsigned char **pLoadDependencies,
 						   std::size_t *pThreadEnvironmentSize, std::size_t *pLoadLibraryExWrapperSize, std::size_t *pRelocateImageBaseSize, std::size_t *pLoadDependenciesSize );

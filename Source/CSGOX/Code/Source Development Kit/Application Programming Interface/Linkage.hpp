@@ -4,7 +4,7 @@
 
 #include "../../CSGO SDK/Code/Inclusion.hpp"
 
-// todo get most stuff from server
+// todo get most stuff from server @not jeremy
 /** \brief Will link the regions of memory from our reconstruction of the SDK to the live runtime memory */
 namespace Linkage
 {
