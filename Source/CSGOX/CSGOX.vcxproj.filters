@@ -27,7 +27,7 @@
     <ClCompile Include="Code\Source Development Kit\Toolkits\Features\Combat\Combat.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Code\Source Development Kit\Application Programming Interface\Link.cpp">
+    <ClCompile Include="Code\Source Development Kit\Application Programming Interface\Linkage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -56,10 +56,10 @@
     <ClInclude Include="Code\Source Development Kit\Toolkits\Features\Combat\Aim Assistance.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Code\Source Development Kit\Application Programming Interface\Link.hpp">
+    <ClInclude Include="Code\CSGOX.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Code\CSGOX.hpp">
+    <ClInclude Include="Code\Source Development Kit\Application Programming Interface\Linkage.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

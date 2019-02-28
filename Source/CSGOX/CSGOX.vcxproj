@@ -167,14 +167,14 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Code\CSGOX.cpp" />
-    <ClCompile Include="Code\Source Development Kit\Application Programming Interface\Link.cpp" />
+    <ClCompile Include="Code\Source Development Kit\Application Programming Interface\Linkage.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\Features\Combat\Aim Assistance.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\Features\Combat\Combat.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Framework\Precompile.hpp" />
     <ClInclude Include="Code\CSGOX.hpp" />
-    <ClInclude Include="Code\Source Development Kit\Application Programming Interface\Link.hpp" />
+    <ClInclude Include="Code\Source Development Kit\Application Programming Interface\Linkage.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\Features\Awareness\Awareness.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\Features\Combat\Aim Assistance.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\Features\Combat\Combat.hpp" />
