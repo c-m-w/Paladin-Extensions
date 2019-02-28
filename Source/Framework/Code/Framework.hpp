@@ -18,7 +18,7 @@
 #include "Source Development Kit/Toolkits/System Utilities.hpp"
 #include "Source Development Kit/Toolkits/Memory Manager.hpp"
 #include "Source Development Kit/Toolkits/Hooking.hpp"
-#include "Source Development Kit/Application Programming Interfaces/Input.hpp"
+#include "Source Development Kit/Application Programming Interfaces/Input Handler.hpp"
 #include "Source Development Kit/Toolkits/Resource Manager.hpp"
 
 #include "Source Development Kit/Application Programming Interfaces/Connectivity.hpp"

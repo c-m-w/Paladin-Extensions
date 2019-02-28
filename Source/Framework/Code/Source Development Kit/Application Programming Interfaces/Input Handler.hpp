@@ -2,7 +2,7 @@
 
 #pragma once
 
-class CInput: public IBase
+class CInputHandler: public IBase
 {
 public:
 
@@ -114,8 +114,8 @@ public:
 	void GetMousePos( int &x, int &y );
 } inline _Input;
 
-using CKeyState = CInput::CKeyState;
-using key_t = CInput::key_t;
-using key_callback_t = CInput::key_callback_t;
-using key_typed_callback_t = CInput::key_typed_callback_t;
-using global_key_callback_t = CInput::global_key_callback_t;
+using CKeyState = CInputHandler::CKeyState;
+using key_t = CInputHandler::key_t;
+using key_callback_t = CInputHandler::key_callback_t;
+using key_typed_callback_t = CInputHandler::key_typed_callback_t;
+using global_key_callback_t = CInputHandler::global_key_callback_t;

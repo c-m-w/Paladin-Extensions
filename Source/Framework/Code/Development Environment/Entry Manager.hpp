@@ -16,6 +16,7 @@
 
 void OnLaunch( );
 
+#if defined ENTRY_SOURCE
 int main( )
 {
 	SetLastError( 0u );
@@ -41,6 +42,7 @@ int main( )
 	CloseHandle( hMutex );
 	return 0;
 }
+#endif
 
 #elif !defined STD_ENTRY && defined WIN_ENTRY && !defined DLL_ENTRY
 
@@ -48,6 +50,7 @@ void OnLaunch( );
 
 inline HINSTANCE hinstWin;
 
+#if defined ENTRY_SOURCE
 int APIENTRY
 #if defined UNICODE
 wWinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPWSTR lpCmdLine,
@@ -81,6 +84,7 @@ _In_ int nCmdShow )
 	CloseHandle( hMutex );
 	return 0;
 }
+#endif
 
 #elif !defined STD_ENTRY && !defined WIN_ENTRY && defined DLL_ENTRY
 
@@ -91,6 +95,7 @@ void OnDetach( );
 
 inline HINSTANCE hinstDll;
 
+#if defined ENTRY_SOURCE
 #if defined _DEBUG
 namespace
 {
@@ -145,6 +150,7 @@ BOOL WINAPI DllMain( _In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID 
 			return TRUE;
 	}
 }
+#endif
 
 #else
 

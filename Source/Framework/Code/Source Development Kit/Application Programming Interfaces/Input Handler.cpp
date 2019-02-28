@@ -6,7 +6,7 @@
 #define USE_NAMESPACES
 #include "../../Framework.hpp"
 
-bool CInput::Initialize( )
+bool CInputHandler::Initialize( )
 {
 	iMouseX = iMouseY = _LastPressedKey = 0;
 	memset( _KeyStates, 0, sizeof( CKeyState ) * UCHAR_MAX );
@@ -14,7 +14,7 @@ bool CInput::Initialize( )
 	return true;
 }
 
-bool CInput::ProcessKey( key_t _Key, CKeyState _KeyState )
+bool CInputHandler::ProcessKey( key_t _Key, CKeyState _KeyState )
 {
 	if ( ( _KeyStates[ _Key ] = _KeyState ) == true )
 	{
@@ -33,7 +33,7 @@ bool CInput::ProcessKey( key_t _Key, CKeyState _KeyState )
 	return bReturn;
 }
 
-bool CInput::ProcessMouseMessage( UINT uMsg, WPARAM wParam )
+bool CInputHandler::ProcessMouseMessage( UINT uMsg, WPARAM wParam )
 {
 	key_t _Key = 0;
 	auto _KeyState = CKeyState::UP;
@@ -67,7 +67,7 @@ bool CInput::ProcessMouseMessage( UINT uMsg, WPARAM wParam )
 	return ProcessKey( _Key, _KeyState );
 }
 
-bool CInput::ProcessKeyboardMessage( UINT uMsg, WPARAM wParam )
+bool CInputHandler::ProcessKeyboardMessage( UINT uMsg, WPARAM wParam )
 {
 	auto bReturn = false;
 	auto _KeyState = CKeyState::UP;
@@ -96,10 +96,10 @@ bool CInput::ProcessKeyboardMessage( UINT uMsg, WPARAM wParam )
 	return bReturn | ProcessKey( wParam, _KeyState );
 }
 
-void CInput::Uninitialize( )
+void CInputHandler::Uninitialize( )
 { }
 
-bool CInput::HandleEvent( UINT uMsg, WPARAM wParam, LPARAM lParam )
+bool CInputHandler::HandleEvent( UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
 	if ( uMsg == WM_SIZE && wParam == SIZE_MINIMIZED )
 	{
@@ -160,47 +160,47 @@ bool CInput::HandleEvent( UINT uMsg, WPARAM wParam, LPARAM lParam )
 	return bReturn;
 }
 
-void CInput::AddCallback( const key_callback_t &_Callback, const key_t &_Key )
+void CInputHandler::AddCallback( const key_callback_t &_Callback, const key_t &_Key )
 {
 	vecKeyCallbacks[ _Key ].emplace_back( _Callback );
 }
 
-void CInput::AddCallback( const key_typed_callback_t &_Callback )
+void CInputHandler::AddCallback( const key_typed_callback_t &_Callback )
 {
 	vecKeyTypedCallbacks.emplace_back( _Callback );
 }
 
-void CInput::AddCallback( const global_key_callback_t &_Callback )
+void CInputHandler::AddCallback( const global_key_callback_t &_Callback )
 {
 	vecGlobalKeyCallbacks.emplace_back( _Callback );
 }
 
-void CInput::AddCallback( const mouse_move_callback_t &_Callback )
+void CInputHandler::AddCallback( const mouse_move_callback_t &_Callback )
 {
 	vecMouseMoveCallbacks.emplace_back( _Callback );
 }
 
-void CInput::AddCallback( const scroll_callback_t &_Callback )
+void CInputHandler::AddCallback( const scroll_callback_t &_Callback )
 {
 	vecScrollCallbacks.emplace_back( _Callback );
 }
 
-CKeyState CInput::GetKeyState( const key_t &_KeyCode )
+CKeyState CInputHandler::GetKeyState( const key_t &_KeyCode )
 {
 	return _KeyStates[ _KeyCode ];
 }
 
-location_t CInput::GetMouseLocation( )
+location_t CInputHandler::GetMouseLocation( )
 {
 	return { float( iMouseX ), float( iMouseY ) };
 }
 
-Utilities::moment_t CInput::GetTimeSinceKeyPress( const key_t &_Key )
+Utilities::moment_t CInputHandler::GetTimeSinceKeyPress( const key_t &_Key )
 {
 	return GetMoment( ) - mmtLastKeyPressTime[ _Key ];
 }
 
-void CInput::GetMousePos( int &x, int &y )
+void CInputHandler::GetMousePos( int &x, int &y )
 {
 	x = iMouseX;
 	y = iMouseY;

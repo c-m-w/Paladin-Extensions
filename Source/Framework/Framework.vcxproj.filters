@@ -7,7 +7,6 @@
     <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Cryptography.cpp" />
     <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Drawing.cpp" />
     <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Filesystem.cpp" />
-    <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Input.cpp" />
     <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Utilities.cpp" />
     <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Window.cpp" />
     <ClCompile Include="Precompile.cpp" />
@@ -17,6 +16,7 @@
     <ClCompile Include="Code\Source Development Kit\Toolkits\Authentication.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\System Utilities.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\Hooking.cpp" />
+    <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Input Handler.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\Development Environment\Build Output Wrapper.hpp" />
@@ -29,7 +29,6 @@
     <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Cryptography.hpp" />
     <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Drawing.hpp" />
     <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Filesystem.hpp" />
-    <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Input.hpp" />
     <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Utilities.hpp" />
     <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Window.hpp" />
     <ClInclude Include="Precompile.hpp" />
@@ -41,6 +40,7 @@
     <ClInclude Include="Code\Source Development Kit\Toolkits\System Utilities.hpp" />
     <ClInclude Include="Code\Development Environment\Icon Font Definitions\Material Design Icons.hpp" />
     <ClInclude Include="Code\Development Environment\Icon Font Definitions\Font Awesome Icons.hpp" />
+    <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Input Handler.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Code\Source Development Kit\Application Programming Interfaces\Connectivity.inl" />

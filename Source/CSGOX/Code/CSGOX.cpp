@@ -2,10 +2,8 @@
 
 #include "Precompile.hpp"
 
-#define DLL_ENTRY
-#define USE_NAMESPACES
-#define USE_DEFINITIONS
-#include "../../Framework/Code/Framework.hpp"
+#define ENTRY_SOURCE
+#include "CSGOX.hpp"
 
 BOOL OnAttach( )
 {
