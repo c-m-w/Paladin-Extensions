@@ -31,16 +31,10 @@ CLabel *_SuccessTop, *_SuccessBottom;
 bool SetupInterface( );
 void Draw( );
 
-DWORD WINAPI test( HWND, const char* sz, const char *sz1, int i )
-{
-	return 0;
-}
-
 void OnLaunch( )
 {
 	CExportHook hk;
-	hk.Attach( GetModuleHandle( "USER32.dll" ) );
-	hk.PatchExport( std::string( "MessageBoxA" ), test );
+	hk.Attach( GetModuleHandle( "d3d9.dll" ) );
 	reinterpret_cast< decltype( MessageBoxA )* >( GetProcAddress( GetModuleHandle( "USER32.dll" ), "MessageBoxA" ) )( nullptr, "test", "test", 0 );
 	MessageBox( nullptr, nullptr, nullptr, 0 );
 

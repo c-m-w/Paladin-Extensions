@@ -262,8 +262,8 @@ bool CExportHook::PatchExport( void *pFunction, void *pPatch )
 	for ( auto i = 0; i < pExports->NumberOfFunctions; i++ )
 	{
 		auto &ptrRelativeAddress = reinterpret_cast< std::uintptr_t * >( std::uintptr_t( HMODULE( _Exporter ) ) + pExports->AddressOfFunctions )[ i ];
-		auto pCurrent = reinterpret_cast< void * >( std::uintptr_t( HMODULE( _Exporter ) ) + ptrRelativeAddress );
-		if ( pCurrent == pFunction )
+		const auto pCurrent = std::uintptr_t( HMODULE( _Exporter ) ) + ptrRelativeAddress;
+		if ( pCurrent == std::uintptr_t( pFunction ) )
 		{
 			DWORD dwOld;
 			if ( VirtualProtect( &ptrRelativeAddress, sizeof( void * ), PAGE_READWRITE, &dwOld ) == FALSE )
@@ -324,8 +324,13 @@ bool CExportHook::RevertPatch( void *pOriginal )
 	for ( auto u = 0u; u < vecOldExports.size(); u++ )
 		if ( vecOldExports[ u ] == pOriginal )
 		{
-			reinterpret_cast< std::uintptr_t * >( std::uintptr_t( HMODULE( _Exporter ) ) + pExports->AddressOfFunctions )[ u ] = std::uintptr_t( vecOldExports[ u ] ) - std::uintptr_t( HMODULE( _Exporter ) );
-			return true;
+			auto &ptrRelativeAddress = reinterpret_cast< std::uintptr_t * >( std::uintptr_t( HMODULE( _Exporter ) ) + pExports->AddressOfFunctions )[ u ];
+			DWORD dwOld;
+			if ( VirtualProtect( &ptrRelativeAddress, sizeof( void * ), PAGE_READWRITE, &dwOld ) == FALSE )
+				return LOG( ERROR, HOOKING, "Unable to virtual protect address for writing." ), false;
+
+			ptrRelativeAddress = std::uintptr_t( vecOldExports[ u ] ) - std::uintptr_t( HMODULE( _Exporter ) );
+			return VirtualProtect( &ptrRelativeAddress, sizeof( void * ), dwOld, &dwOld ) != FALSE;
 		}
 
 	return false;
