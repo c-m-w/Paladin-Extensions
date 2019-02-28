@@ -149,6 +149,11 @@ bool worker_t::WaitForExecutionFinish( DWORD dwTime )
 image_info_t::image_info_t( void *pData ): pData( pData )
 { }
 
+image_info_t::operator HMODULE( )
+{
+	return HMODULE( pData );
+}
+
 bool image_info_t::ValidImage( )
 {
 	return GetOperatingSystemHeader( )->e_magic == IMAGE_DOS_SIGNATURE
@@ -206,6 +211,11 @@ IMAGE_IMPORT_DESCRIPTOR *image_info_t::GetImportDescriptor( HMODULE hExporter )
 			return p;
 
 	return nullptr;
+}
+
+IMAGE_EXPORT_DIRECTORY *image_info_t::GetExports( )
+{
+	return reinterpret_cast< IMAGE_EXPORT_DIRECTORY * >( std::uintptr_t( pData ) + GetNewTechnologyHeaders( )->OptionalHeader.DataDirectory[ IMAGE_DIRECTORY_ENTRY_EXPORT ].VirtualAddress );
 }
 
 bool image_info_t::GetImportName( IMAGE_THUNK_DATA *pImportData, std::string &strOut )
