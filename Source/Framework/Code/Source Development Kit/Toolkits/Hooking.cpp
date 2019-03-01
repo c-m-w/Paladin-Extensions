@@ -444,8 +444,8 @@ bool CExceptionHook::Detach( )
 
 void *__stdcall FindHook( void *pFunction )
 {
-	const auto pSearch = CPatchHook::_PatchedFunctions.find( reinterpret_cast< void * >( std::uintptr_t( pFunction ) - CPatchHook::CALL_SIZE ) );
-	if ( pSearch == CPatchHook::_PatchedFunctions.end( ) )
+	const auto pSearch = _PatchedFunctions.find( reinterpret_cast< void * >( std::uintptr_t( pFunction ) - CPatchHook::CALL_SIZE ) );
+	if ( pSearch == _PatchedFunctions.end( ) )
 		return nullptr;
 
 	return pSearch->second;
@@ -465,6 +465,8 @@ void __declspec( naked ) HookProxy( )
 			jmp		eax
 	}
 }
+
+std::map< void *, void * > _PatchedFunctions { };
 
 bool CPatchHook::Patch( void *pFunction, void *pHook )
 {

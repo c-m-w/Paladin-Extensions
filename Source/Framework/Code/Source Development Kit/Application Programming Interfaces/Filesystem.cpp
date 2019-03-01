@@ -620,3 +620,5 @@ bool CFilesystem::SetPathVisibility( const std::string &strPath, bool bVisible )
 {
 	return SetAbsolutePathVisibility( FileToPath( strPath ), bVisible );
 }
+
+CFilesystem _Filesystem;

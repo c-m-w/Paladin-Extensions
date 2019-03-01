@@ -129,6 +129,8 @@ public:
 	friend DWORD ExceptionHandler( EXCEPTION_POINTERS *pRecord );
 };
 
+extern std::map< void *, void * > _PatchedFunctions;
+
 class CPatchHook
 {
 private:
@@ -136,7 +138,6 @@ private:
 	static constexpr unsigned char CALL_OPCODE = 0xE8;
 	static constexpr auto CALL_SIZE = 5;
 
-	static inline std::map< void *, void * > _PatchedFunctions { };
 	bool bPatched = false;
 	std::vector< unsigned char > vecOldBytes { };
 	void *pPatchedData = nullptr;

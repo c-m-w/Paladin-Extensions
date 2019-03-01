@@ -48,7 +48,7 @@ public:
 	template< typename _t > static bool Crypt( const std::string &strIn, std::string &strOut, std::string strKey, std::string strInitVector );
 	bool Encrypt( const std::string &strPlainText, std::string &strCipher, std::string strKey = std::string( ), std::string strInitVector = std::string( ) );
 	bool Decrypt( const std::string &strCipher, std::string &strPlainText, std::string strKey = std::string( ), std::string strInitVector = std::string( ) );
-} inline _Cryptography;
+} extern _Cryptography;
 
 using encrypt_t = CCryptography::encrypt_t;
 using decrypt_t = CCryptography::decrypt_t;

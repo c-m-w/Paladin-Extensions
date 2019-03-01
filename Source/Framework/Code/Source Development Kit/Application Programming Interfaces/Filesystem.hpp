@@ -147,4 +147,4 @@ public:
 	/** \brief Name of the licence file which stores information about the user's credentials.\n
 				The file is stored in the data folder in appdata. */
 	static inline std::string strLicenseFile;
-} inline _Filesystem;
+} extern _Filesystem;

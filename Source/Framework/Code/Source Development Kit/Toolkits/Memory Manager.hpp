@@ -339,7 +339,7 @@ public:
 	bool ManuallyLoadLibraryEx( const std::string &strData, bool bUseExistingThread, bool bEnableExceptions, bool bEraseHeaders, bool bEraseDiscardableSections, HMODULE *pModuleHandle = nullptr );
 
 	friend class CVirtualTableHook;
-} inline _MemoryManager;
+} extern _MemoryManager;
 
 using pattern_t = CMemoryManager::pattern_t;
 

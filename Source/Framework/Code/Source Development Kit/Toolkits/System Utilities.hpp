@@ -138,7 +138,7 @@ public:
 	static bool GetModules( DWORD dwProcessID, std::vector< HMODULE > &vecOut );
 
 	friend class CMemoryManager;
-} inline _SystemInformation;
+} extern _SystemInformation;
 
 using ESystemInformation = CSystemInformation::ESystemInformation;
 using ESystemBuild = CSystemInformation::ESystemBuild;

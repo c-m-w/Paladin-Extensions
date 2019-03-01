@@ -1092,3 +1092,5 @@ bool CMemoryManager::ManuallyLoadLibraryEx( const std::string &strData, bool bUs
 	fnCleanup( );
 	return bReturn;
 }
+
+CMemoryManager _MemoryManager;

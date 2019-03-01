@@ -216,3 +216,5 @@ bool CConnectivity::Request( EAction _Action, std::string &strOut )
 
 CConnectivity::illegal_post_data_character_t::illegal_post_data_character_t( char _chCharacter, const std::string &_strReplacement ): chCharacter( _chCharacter ), strReplacement( _strReplacement )
 { }
+
+CConnectivity _Connection;

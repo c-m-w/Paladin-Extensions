@@ -15,4 +15,4 @@ public:
 
 	std::string& GetResource( const std::string& strRelativePath );
 
-} inline _ResourceManager;
+} extern _ResourceManager;

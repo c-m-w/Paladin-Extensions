@@ -113,3 +113,5 @@ bool CCryptography::Decrypt( const std::string &strCipher, std::string &strPlain
 	std::string strDecoded { };
 	return Decode( strCipher, strDecoded ) && Crypt< decrypt_t >( strDecoded, strPlainText, strKey, strInitVector );
 }
+
+CCryptography _Cryptography;

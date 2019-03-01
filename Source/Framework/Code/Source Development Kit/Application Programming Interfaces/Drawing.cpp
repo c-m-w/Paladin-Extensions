@@ -1494,3 +1494,5 @@ polygon_buffer_t polygon_t::GetBuffer( D3DPRIMITIVETYPE ptDraw /*= D3DPT_TRIANGL
 
 texture_t::texture_t( unsigned _uWidth, unsigned _uHeight, const std::string &_strName ): uWidth( _uWidth ), uHeight( _uHeight ), strName( _strName )
 { }
+
+CDrawing _Drawing;

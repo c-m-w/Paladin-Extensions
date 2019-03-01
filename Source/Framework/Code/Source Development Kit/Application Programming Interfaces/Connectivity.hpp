@@ -130,7 +130,7 @@ public:
 	/** \param strOut What the server's response is. */
 	/** \return Whether or not the request was successful. */
 	bool Request( EAction _Action, std::string &strOut );
-} inline _Connection;
+} extern _Connection;
 
 using EPostData = CConnectivity::EPostData;
 using EAction = CConnectivity::EAction;

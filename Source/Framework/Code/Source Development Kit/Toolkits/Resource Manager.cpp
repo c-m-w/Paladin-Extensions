@@ -144,3 +144,5 @@ std::string& CResourceManager::GetResource( const std::string &strRelativePath )
 	_LoadedResources.insert( std::pair< std::string, std::string >( strRelativePath, strReturn ) );
 	return GetResource( strRelativePath );
 }
+
+CResourceManager _ResourceManager;

@@ -133,7 +133,7 @@ public:
 				including the current executable. */
 	/** \return Whether or not uninstalling was successful. */
 	bool AttemptUninstall( );
-} inline _Authentication;
+} extern _Authentication;
 
 using ELoginCode = CAuthentication::ELoginCode;
 using ELibrary = CAuthentication::ELibrary;

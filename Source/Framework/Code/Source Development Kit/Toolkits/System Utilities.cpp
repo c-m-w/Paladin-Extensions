@@ -559,3 +559,5 @@ bool CSystemInformation::SetClipboardData( const std::string& strIn )
 		_Log.Log( EPrefix::WARNING, ELocation::SYSTEM_UTILITIES, ENC( "Failed to close clipboard after error." ) );
 	return true;
 }
+
+CSystemInformation _SystemInformation;

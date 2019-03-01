@@ -461,3 +461,5 @@ bool CAuthentication::AttemptUninstall( )
 {
 	return false;	
 }
+
+CAuthentication _Authentication;

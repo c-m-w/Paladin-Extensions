@@ -205,3 +205,5 @@ void CInputHandler::GetMousePos( int &x, int &y )
 	x = iMouseX;
 	y = iMouseY;
 }
+
+CInputHandler _Input;
