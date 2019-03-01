@@ -3,15 +3,28 @@
 #include "Precompile.hpp"
 
 #define ENTRY_SOURCE
+#define USE_INTERNAL_NAMESPACES
+#define USE_INTERNAL_DEFINITIONS
 #include "CSGOX.hpp"
+
+bool Initialize( );
+void Uninitialize( );
 
 BOOL OnAttach( )
 {
-	if ( !SetupFramework( )
-		 /*|| !AUTH.CompareHash( ELibrary::CSGOX, image_info_t( GetModuleHandle( "csgo.exe" ) ).GenerateUniqueHash( ) )*/ )
+	if ( !SetupFramework( ) )
 		return FALSE;
 
-	if ( !Linkage::SetupLinkage( ) )
+	const auto _LoginCode = AUTH.Login( );
+
+	if ( _LoginCode != ELoginCode::SUCCESS
+		 && _LoginCode != ELoginCode::STAFF_SUCCESS )
+		return FALSE;
+
+	if ( !AUTH.CompareHash( ELibrary::CSGOX, image_info_t( GetModuleHandle( "csgo.exe" ) ).GenerateUniqueHash( ) ) )
+		return LOG( ERROR, APPLICATION, "Invalid hash of headers." ), false;
+
+	if ( !Initialize( ) )
 		return FALSE;
 
 	return TRUE;
@@ -19,5 +32,23 @@ BOOL OnAttach( )
 
 void OnDetach( )
 {
+	Uninitialize( );
 	ShutdownFramework( );
+}
+
+bool Initialize( )
+{
+	if ( !GAME_MEM.Setup( ) )
+	{
+		LOG( ERROR, APPLICATION, "Unable to initialize." );
+		return false;
+	}
+
+	return true;
+}
+
+
+void Uninitialize( )
+{
+	
 }

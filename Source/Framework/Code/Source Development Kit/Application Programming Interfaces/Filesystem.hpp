@@ -35,6 +35,7 @@ public:
 	[ [ nodiscard ] ] static bool CheckAbsoluteFileValidity( const std::string &strFile );
 	[ [ nodiscard ] ] static std::string GetAbsoluteContainingDirectory( const std::string &strFile );
 	[ [ nodiscard ] ] static std::string PathToFile( const std::string& strPath );
+	[ [ nodiscard ] ] static std::string PathToDirectory( const std::string &strPath );
 	static void CloseAllFileHandles( );
 	[ [ nodiscard ] ] static bool EnsureAbsoluteFileDirectoryExists( const std::string &strFilePath );
 	[ [ nodiscard ] ] static bool EnsureAbsoluteDirectoryExists( const std::string& strDirectory );

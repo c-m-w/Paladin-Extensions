@@ -31,7 +31,7 @@ private:
 public:
 
 	/** \brief Codes that can be returned from the server when sending a request. */
-	enum ERequestCode
+	enum ELoginCode
 	{
 		CONNECTION_ERROR,
 		SERVER_ERROR,
@@ -104,7 +104,7 @@ public:
 	/** \brief Logs the user in and begins a PHP cookie session to be able to request\n 
 				data from the website. */
 	/** \return The status of the login. */
-	[ [ nodiscard ] ] ERequestCode Login( );
+	[ [ nodiscard ] ] ELoginCode Login( );
 	/** \brief Requests required data for runtime from the server. The user must be logged\n 
 				in before this function is called or it will fail. */
 	/** \return Whether or not requesting and obtaining the data was successful. */
@@ -135,5 +135,5 @@ public:
 	bool AttemptUninstall( );
 } inline _Authentication;
 
-using ELoginCode = CAuthentication::ERequestCode;
+using ELoginCode = CAuthentication::ELoginCode;
 using ELibrary = CAuthentication::ELibrary;

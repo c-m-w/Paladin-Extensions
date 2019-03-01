@@ -149,43 +149,48 @@ bool worker_t::WaitForExecutionFinish( DWORD dwTime )
 image_info_t::image_info_t( void *pData ): pData( pData )
 { }
 
-image_info_t::operator HMODULE( )
+image_info_t::operator HMODULE( ) const
 {
 	return HMODULE( pData );
 }
 
-bool image_info_t::ValidImage( )
+image_info_t::operator bool( ) const
+{
+	return pData != nullptr && ValidImage( );
+}
+
+bool image_info_t::ValidImage( ) const
 {
 	return GetOperatingSystemHeader( )->e_magic == IMAGE_DOS_SIGNATURE
 		&& GetNewTechnologyHeaders( )->Signature == IMAGE_NT_SIGNATURE;
 }
 
-std::size_t image_info_t::GetImageSize( )
+std::size_t image_info_t::GetImageSize( ) const
 {
 	return GetNewTechnologyHeaders( )->OptionalHeader.SizeOfImage;
 }
 
-std::size_t image_info_t::GetHeaderSize( )
+std::size_t image_info_t::GetHeaderSize( ) const
 {
 	return GetNewTechnologyHeaders( )->OptionalHeader.SizeOfHeaders;
 }
 
-std::size_t image_info_t::GetSectionCount( )
+std::size_t image_info_t::GetSectionCount( ) const
 {
 	return GetNewTechnologyHeaders( )->FileHeader.NumberOfSections;
 }
 
-IMAGE_DOS_HEADER *image_info_t::GetOperatingSystemHeader( )
+IMAGE_DOS_HEADER *image_info_t::GetOperatingSystemHeader( ) const
 {
-	return reinterpret_cast< IMAGE_DOS_HEADER * >( pData );
+	return const_cast< IMAGE_DOS_HEADER * >( reinterpret_cast< const IMAGE_DOS_HEADER * >( pData ) );
 }
 
-IMAGE_NT_HEADERS *image_info_t::GetNewTechnologyHeaders( )
+IMAGE_NT_HEADERS *image_info_t::GetNewTechnologyHeaders( ) const
 {
 	return reinterpret_cast< IMAGE_NT_HEADERS * >( std::uintptr_t( pData ) + GetOperatingSystemHeader( )->e_lfanew );
 }
 
-IMAGE_SECTION_HEADER *image_info_t::GetSectionHeader( std::size_t zSection )
+IMAGE_SECTION_HEADER *image_info_t::GetSectionHeader( std::size_t zSection ) const
 {
 	if ( zSection >= GetSectionCount( ) )
 		_Log.Log( EPrefix::WARNING, ELocation::MEMORY_MANAGER, ENC( "Invalid section header index." ) ), zSection = GetSectionCount( ) - 1;
@@ -193,18 +198,18 @@ IMAGE_SECTION_HEADER *image_info_t::GetSectionHeader( std::size_t zSection )
 	return &reinterpret_cast< IMAGE_SECTION_HEADER * >( std::uintptr_t( GetNewTechnologyHeaders( ) ) + sizeof( IMAGE_NT_HEADERS ) )[ zSection ];
 }
 
-IMAGE_IMPORT_DESCRIPTOR *image_info_t::GetFirstImport( )
+IMAGE_IMPORT_DESCRIPTOR *image_info_t::GetFirstImport( ) const
 {
 	return reinterpret_cast< IMAGE_IMPORT_DESCRIPTOR * >( std::uintptr_t( pData ) + GetNewTechnologyHeaders( )->OptionalHeader.DataDirectory[ IMAGE_DIRECTORY_ENTRY_IMPORT ].VirtualAddress );
 }
 
-IMAGE_IMPORT_DESCRIPTOR *image_info_t::GetNextImport( IMAGE_IMPORT_DESCRIPTOR *pCurrent )
+IMAGE_IMPORT_DESCRIPTOR *image_info_t::GetNextImport( IMAGE_IMPORT_DESCRIPTOR *pCurrent ) const
 {
 	const auto pReturn = reinterpret_cast< IMAGE_IMPORT_DESCRIPTOR * >( std::uintptr_t( pCurrent ) + sizeof( IMAGE_IMPORT_DESCRIPTOR ) );
 	return pReturn->Characteristics == NULL ? nullptr : pReturn;
 }
 
-IMAGE_IMPORT_DESCRIPTOR *image_info_t::GetImportDescriptor( HMODULE hExporter )
+IMAGE_IMPORT_DESCRIPTOR *image_info_t::GetImportDescriptor( HMODULE hExporter ) const
 {
 	for ( auto p = GetFirstImport( ); p != nullptr; p = GetNextImport( p ) )
 		if ( GetModuleHandle( reinterpret_cast< const char * >( std::uintptr_t( pData ) + p->Name ) ) == hExporter )
@@ -213,12 +218,12 @@ IMAGE_IMPORT_DESCRIPTOR *image_info_t::GetImportDescriptor( HMODULE hExporter )
 	return nullptr;
 }
 
-IMAGE_EXPORT_DIRECTORY *image_info_t::GetExports( )
+IMAGE_EXPORT_DIRECTORY *image_info_t::GetExports( ) const
 {
 	return reinterpret_cast< IMAGE_EXPORT_DIRECTORY * >( std::uintptr_t( pData ) + GetNewTechnologyHeaders( )->OptionalHeader.DataDirectory[ IMAGE_DIRECTORY_ENTRY_EXPORT ].VirtualAddress );
 }
 
-bool image_info_t::GetImportName( IMAGE_THUNK_DATA *pImportData, std::string &strOut )
+bool image_info_t::GetImportName( IMAGE_THUNK_DATA *pImportData, std::string &strOut ) const
 {
 	const auto szImport = reinterpret_cast< const char * >( ( pImportData->u1.Ordinal & IMAGE_ORDINAL_FLAG ) > 0 ? reinterpret_cast< void * >( pImportData->u1.Ordinal & 0xFFFF )
 															: reinterpret_cast< IMAGE_IMPORT_BY_NAME * >( std::uintptr_t( pData ) + pImportData->u1.AddressOfData )->Name );
@@ -229,7 +234,7 @@ bool image_info_t::GetImportName( IMAGE_THUNK_DATA *pImportData, std::string &st
 	return false;
 }
 
-IMAGE_THUNK_DATA *image_info_t::FindImport( HMODULE hExporter, void *pImport )
+IMAGE_THUNK_DATA *image_info_t::FindImport( HMODULE hExporter, void *pImport ) const
 {
 	const auto pDescriptor = GetImportDescriptor( hExporter );
 	if ( pDescriptor == nullptr )
@@ -244,7 +249,7 @@ IMAGE_THUNK_DATA *image_info_t::FindImport( HMODULE hExporter, void *pImport )
 	return nullptr;
 }
 
-IMAGE_THUNK_DATA *image_info_t::FindImport( HMODULE hExporter, const std::string &strImport )
+IMAGE_THUNK_DATA *image_info_t::FindImport( HMODULE hExporter, const std::string &strImport ) const
 {
 	const auto pDescriptor = GetImportDescriptor( hExporter );
 	if ( pDescriptor == nullptr )
@@ -267,7 +272,7 @@ IMAGE_THUNK_DATA *image_info_t::FindImport( HMODULE hExporter, const std::string
 	return nullptr;
 }
 
-std::string image_info_t::GenerateUniqueHash( )
+std::string image_info_t::GenerateUniqueHash( ) const
 {
 	const auto zSections = GetSectionCount( );
 	const auto pNewTechnologyHeaders = GetNewTechnologyHeaders( );
@@ -340,6 +345,25 @@ std::vector< __int16 > CMemoryManager::pattern_t::ParsePattern( const std::strin
 CMemoryManager::pattern_t::pattern_t( const std::string &strPattern, void **pOutput, std::ptrdiff_t ptrOffset, std::function< void( ) > fnOnFound /*= nullptr*/ ):
 	vecPattern( ParsePattern( strPattern ) ), pOutput( pOutput ), ptrOffset( ptrOffset ), fnOnFound( fnOnFound )
 { }
+
+CMemoryManager::pattern_t::pattern_t( const nlohmann::json &_Data, void **pOutput, std::function< void( ) > fnOnFound /*= nullptr*/ ):
+	pOutput( pOutput ), fnOnFound( fnOnFound )
+{
+	try
+	{
+		vecPattern = ParsePattern( _Data[ ENC( "Pattern" ) ].get< std::string >( ) );
+		ptrOffset = _Data[ ENC( "Offset" ) ].get< std::ptrdiff_t >( );
+	}
+	catch( nlohmann::json::type_error &e )
+	{
+		LOG( ERROR, MEMORY_MANAGER, "Unable to parse pattern data. Message: %s.", e.what( ) );
+	}
+}
+
+bool CMemoryManager::pattern_t::Valid( ) const
+{
+	return !vecPattern.empty( ) && pOutput != nullptr;
+}
 
 bool CMemoryManager::Initialize( )
 {
@@ -800,8 +824,9 @@ bool CMemoryManager::AddPattern( const std::string &strModule, const pattern_t &
 bool CMemoryManager::AddPattern( HMODULE hModule, const pattern_t &_Pattern )
 {
 	if ( hModule == nullptr
-		 || !image_info_t( hModule ).ValidImage( ) )
-		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Invalid module passed to AddPattern" ) ), false;
+		 || !image_info_t( hModule ).ValidImage( )
+		 || !_Pattern.Valid( ) )
+		return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Invalid module passed to AddPattern." ) ), false;
 
 	const auto pInstance = _PatternsToFind.find( hModule );
 	if ( pInstance == _PatternsToFind.end( ) )

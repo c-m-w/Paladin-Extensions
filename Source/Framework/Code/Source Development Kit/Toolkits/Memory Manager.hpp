@@ -201,23 +201,24 @@ public:
 	image_info_t( ) = default;
 	image_info_t( void *pData );
 
-	operator HMODULE( );
+	operator HMODULE( ) const;
+	operator bool( ) const;
 
-	bool ValidImage( );
-	std::size_t GetImageSize( );
-	std::size_t GetHeaderSize( );
-	std::size_t GetSectionCount( );
-	IMAGE_DOS_HEADER *GetOperatingSystemHeader( );
-	IMAGE_NT_HEADERS *GetNewTechnologyHeaders( );
-	IMAGE_SECTION_HEADER *GetSectionHeader( std::size_t zSection );
-	IMAGE_IMPORT_DESCRIPTOR *GetFirstImport( );
-	IMAGE_IMPORT_DESCRIPTOR *GetNextImport( IMAGE_IMPORT_DESCRIPTOR *pCurrent );
-	IMAGE_IMPORT_DESCRIPTOR *GetImportDescriptor( HMODULE hExporter );
-	IMAGE_EXPORT_DIRECTORY *GetExports( );
-	bool GetImportName( IMAGE_THUNK_DATA *pImportData, std::string &strOut );
-	IMAGE_THUNK_DATA *FindImport( HMODULE hExporter, void *pImport );
-	IMAGE_THUNK_DATA *FindImport( HMODULE hExporter, const std::string &strImport );
-	std::string GenerateUniqueHash( );
+	bool ValidImage( ) const;
+	std::size_t GetImageSize( ) const;
+	std::size_t GetHeaderSize( ) const;
+	std::size_t GetSectionCount( ) const;
+	IMAGE_DOS_HEADER *GetOperatingSystemHeader( ) const;
+	IMAGE_NT_HEADERS *GetNewTechnologyHeaders( ) const;
+	IMAGE_SECTION_HEADER *GetSectionHeader( std::size_t zSection ) const;
+	IMAGE_IMPORT_DESCRIPTOR *GetFirstImport( ) const;
+	IMAGE_IMPORT_DESCRIPTOR *GetNextImport( IMAGE_IMPORT_DESCRIPTOR *pCurrent ) const;
+	IMAGE_IMPORT_DESCRIPTOR *GetImportDescriptor( HMODULE hExporter ) const;
+	IMAGE_EXPORT_DIRECTORY *GetExports( ) const;
+	bool GetImportName( IMAGE_THUNK_DATA *pImportData, std::string &strOut ) const;
+	IMAGE_THUNK_DATA *FindImport( HMODULE hExporter, void *pImport ) const;
+	IMAGE_THUNK_DATA *FindImport( HMODULE hExporter, const std::string &strImport ) const;
+	std::string GenerateUniqueHash( ) const;
 
 	friend class CMemoryManager;
 };
@@ -256,16 +257,17 @@ private:
 	};
 
 public:
+
 	struct pattern_t
 	{
 	private:
 
 		constexpr static auto UNKNOWN_BYTE = -1i16;
 
-		std::vector< __int16 > vecPattern;
-		void **pOutput;
-		std::ptrdiff_t ptrOffset;
-		std::function< void( ) > fnOnFound;
+		std::vector< __int16 > vecPattern { };
+		void **pOutput = nullptr;
+		std::ptrdiff_t ptrOffset = 0;
+		std::function< void( ) > fnOnFound = nullptr;
 		unsigned uProgress = 0u;
 		int iRelative = 0;
 
@@ -273,12 +275,17 @@ public:
 
 		static std::vector< __int16 > ParsePattern( const std::string &strPattern );
 
+		pattern_t( ) = default;
 		pattern_t( const std::string &strPattern, void **pOutput, std::ptrdiff_t ptrOffset, std::function< void( ) > fnOnFound = nullptr );
+		pattern_t( const nlohmann::json &_Data, void **pOutput, std::function< void( ) > fnOnFound = nullptr );
+
+		bool Valid( ) const;
 
 		friend class CMemoryManager;
 	};
 
 private:
+
 	bool Initialize( ) override;
 	void Uninitialize( ) override;
 
@@ -333,5 +340,7 @@ public:
 
 	friend class CVirtualTableHook;
 } inline _MemoryManager;
+
+using pattern_t = CMemoryManager::pattern_t;
 
 #include "Memory Manager.inl"

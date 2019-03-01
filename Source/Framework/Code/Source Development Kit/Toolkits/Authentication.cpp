@@ -184,12 +184,12 @@ ELoginCode CAuthentication::Login( )
 		 || !CRYPTO.Decrypt( strResponse, strDecryptedResponse ) )
 		return CONNECTION_ERROR;
 
-	ERequestCode _Return;
+	ELoginCode _Return;
 	try
 	{
 		auto jsResponse = nlohmann::json::parse( strDecryptedResponse );
 		const auto strBuffer = jsResponse[ ENC( "Exit Code" ) ].get< std::string >( );
-		_Return = ERequestCode( std::stoi( strBuffer ) );
+		_Return = ELoginCode( std::stoi( strBuffer ) );
 		bLoggedIn = _Return == SUCCESS || _Return == STAFF_SUCCESS;
 	}
 	catch( nlohmann::json::parse_error &e )
@@ -235,7 +235,7 @@ bool CAuthentication::RequestData( std::string *pNewestInsertInvertedFunctionTab
 	try
 	{
 		auto _Response = nlohmann::json::parse( strDecryptedResponse );
-		const auto _Return = ERequestCode( std::stoi( _Response[ ENC( "Exit Code" ) ].get< std::string >( ) ) );
+		const auto _Return = ELoginCode( std::stoi( _Response[ ENC( "Exit Code" ) ].get< std::string >( ) ) );
 
 		if ( _Return != SUCCESS && _Return != STAFF_SUCCESS
 			 || _Response[ ENC( "Other Data" ) ].get< std::string >( ) == NO_OTHER_DATA )
@@ -305,7 +305,7 @@ bool CAuthentication::RequestShellcode( unsigned char **pThreadEnvironment, unsi
 		};
 
 		auto _Response = nlohmann::json::parse( strDecryptedResponse );
-		const auto _Return = ERequestCode( std::stoi( _Response[ ENC( "Exit Code" ) ].get< std::string >( ) ) );
+		const auto _Return = ELoginCode( std::stoi( _Response[ ENC( "Exit Code" ) ].get< std::string >( ) ) );
 
 		if ( _Return != SUCCESS && _Return != STAFF_SUCCESS
 			 || _Response[ ENC( "Other Data" ) ].get< std::string >( ) == NO_OTHER_DATA )
@@ -348,7 +348,7 @@ bool CAuthentication::RequestLibrary( ELibrary _Library, std::string &strOut )
 	try
 	{
 		auto _Response = nlohmann::json::parse( strDecryptedLibrary );
-		const auto _Return = ERequestCode( std::stoi( _Response[ ENC( "Exit Code" ) ].get< std::string >( ) ) );
+		const auto _Return = ELoginCode( std::stoi( _Response[ ENC( "Exit Code" ) ].get< std::string >( ) ) );
 
 		if ( _Return != SUCCESS && _Return != STAFF_SUCCESS
 			 || _Response[ "Other Data" ].get< std::string >( ) == NO_OTHER_DATA )
@@ -421,6 +421,10 @@ bool CAuthentication::CompareHash( ELibrary _ExecutableHash, const std::string &
 	if ( !bLoggedIn )
 		return _Log.Log( EPrefix::WARNING, ELocation::AUTHENTICATION, ENC( "Calling RequestHash without loggin in first." ) ), false;
 
+#if defined _DEBUG
+	return true;
+#endif
+
 	std::string strResponse { }, strDecryptedResponse { };
 	if ( !NET.Request( EAction::GET_HASHES, strResponse )
 		 || !CRYPTO.Decrypt( strResponse, strDecryptedResponse ) )
@@ -429,7 +433,7 @@ bool CAuthentication::CompareHash( ELibrary _ExecutableHash, const std::string &
 	try
 	{
 		auto _Response = nlohmann::json::parse( strDecryptedResponse );
-		const auto _Return = ERequestCode( std::stoi( _Response[ ENC( "Exit Code" ) ].get< std::string >( ) ) );
+		const auto _Return = ELoginCode( std::stoi( _Response[ ENC( "Exit Code" ) ].get< std::string >( ) ) );
 
 		if ( _Return != SUCCESS && _Return != STAFF_SUCCESS
 			 || _Response[ ENC( "Other Data" ) ].get< std::string >( ) == NO_OTHER_DATA )

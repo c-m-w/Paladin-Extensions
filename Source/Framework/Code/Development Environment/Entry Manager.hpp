@@ -101,19 +101,23 @@ namespace
 {
 	DWORD WINAPI ThreadProc( _In_ LPVOID lpParameter )
 	{
-		return OnAttach( );
+		FreeLibraryAndExitThread( hinstDll, OnAttach( ) );
 	}
 }
 #endif
 
 BOOL WINAPI DllMain( _In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID lpvReserved )
 {
+	static HANDLE hMutex = NULL;
+#if defined _DEBUG
+	FILE *pConsoleOutput = nullptr;
+#endif
 	switch ( fdwReason )
 	{
 		case DLL_PROCESS_ATTACH:
 		{
 			SetLastError( 0u );
-			HANDLE hMutex = CreateMutex( NULL, FALSE, ENC( StringizeValue( __TIMESTAMP__ ) ) );
+			hMutex = CreateMutex( NULL, FALSE, ENC( StringizeValue( __TIMESTAMP__ ) ) );
 			if ( hMutex == NULL || GetLastError( ) == ERROR_ALREADY_EXISTS )
 				return FALSE;
 
@@ -126,7 +130,6 @@ BOOL WINAPI DllMain( _In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID 
 #endif
 
 #if defined _DEBUG
-			FILE *pConsoleOutput;
 			AllocConsole( );
 			if ( freopen_s( &pConsoleOutput, ENC( "CONOUT$" ), ENC( "w" ), stdout ) != 0 || pConsoleOutput == nullptr )
 			{
@@ -144,7 +147,12 @@ BOOL WINAPI DllMain( _In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID 
 #endif
 		}
 		case DLL_PROCESS_DETACH:
-			OnDetach( );
+			OnDetach( );/*
+#if defined _DEBUG
+			FreeConsole( );
+			fclose( pConsoleOutput );
+#endif			
+			CloseHandle( hMutex );*/
 			return TRUE;
 		default:
 			return TRUE;

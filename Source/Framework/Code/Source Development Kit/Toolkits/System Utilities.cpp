@@ -283,6 +283,39 @@ bool CSystemInformation::GetProgramList( std::vector< std::string > &vecOut )
 	return false;
 }
 
+bool CSystemInformation::GetExecutablePath( const std::string &strExecutableName, std::string &strOut )
+{
+	DWORD dwProcessID;
+	if ( !GetProcessID( strExecutableName, dwProcessID ) )
+		return false;
+
+	const auto hSnapshot = CreateToolhelp32Snapshot( TH32CS_SNAPMODULE, dwProcessID );
+
+	if ( hSnapshot == INVALID_HANDLE_VALUE
+		 || hSnapshot == nullptr )
+		return _Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES, ENC( "Unable to get modules." ) ), false;
+
+	strOut.clear( );
+	auto bReturn = true;
+	MODULEENTRY32 _Module { sizeof( MODULEENTRY32 ) };
+	if ( Module32First( hSnapshot, &_Module ) != TRUE )
+	{
+		_Log.Log( EPrefix::ERROR, ELocation::SYSTEM_UTILITIES, ENC( "Unable to find first module." ) );
+		bReturn = false;
+	}
+	else
+		do
+		{
+			if ( _Module.szModule == strExecutableName )
+				strOut = FS.PathToDirectory( _Module.szExePath );
+		} while ( Module32Next( hSnapshot, &_Module ) == TRUE && strOut.empty( ) );
+
+	if ( CloseHandle( hSnapshot ) == FALSE )
+		_Log.Log( EPrefix::WARNING, ELocation::SYSTEM_UTILITIES, ENC( "Unable to close process module snapshot properly." ) );
+
+	return bReturn && !strOut.empty( );
+}
+
 BOOL CALLBACK EnumWindowsProc(
 	_In_		 HWND hwnd,
 	_In_		 LPARAM lParam

@@ -163,6 +163,13 @@ std::string CFilesystem::PathToFile( const std::string &strPath )
 	return strPath.substr( strPath.find_last_of( '\\' ) + 1 );
 }
 
+std::string CFilesystem::PathToDirectory( const std::string &strPath )
+{
+	auto strFormatted = strPath.substr( 0, strPath.find_last_of( '\\' ) );
+	FormatDirectory( strFormatted );
+	return strFormatted;
+}
+
 void CFilesystem::CloseAllFileHandles( )
 {
 	const auto iResult = _fcloseall( );

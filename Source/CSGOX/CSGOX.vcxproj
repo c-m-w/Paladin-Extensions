@@ -167,14 +167,101 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Code\CSGOX.cpp" />
-    <ClCompile Include="Code\Source Development Kit\Application Programming Interface\Linkage.cpp" />
+    <ClCompile Include="Code\Development Environment\Memory.cpp" />
+    <ClCompile Include="Code\Development Environment\Valve\Math\Vector2D.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Code\Development Environment\Valve\Math\Vector4D.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Code\Development Environment\Valve\Math\VMatrix.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Code\Development Environment\Valve\Types\characterset.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Code\Development Environment\Valve\Types\checksum_crc.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Code\Development Environment\Valve\Types\checksum_md5.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Code\Development Environment\Valve\Types\Color.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Code\Development Environment\Valve\Types\UtlBuffer.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Code\Development Environment\Valve\Types\UtlString.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="Code\Source Development Kit\Toolkits\Features\Combat\Aim Assistance.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\Features\Combat\Combat.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Framework\Precompile.hpp" />
     <ClInclude Include="Code\CSGOX.hpp" />
-    <ClInclude Include="Code\Source Development Kit\Application Programming Interface\Linkage.hpp" />
+    <ClInclude Include="Code\Development Environment\Memory.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Interfaces\CClientState.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Interfaces\CInput.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Interfaces\IAppSystem.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Interfaces\IBaseClientDll.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Interfaces\IBaseInterface.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Interfaces\IClientEntity.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Interfaces\IClientEntityList.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Interfaces\IClientMode.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Interfaces\IClientNetworkable.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Interfaces\IClientRenderable.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Interfaces\IClientThinkable.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Interfaces\IClientUnknown.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Interfaces\ICollideable.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Interfaces\IConVar.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Interfaces\ICVar.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Interfaces\IEngineSound.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Interfaces\IEngineTrace.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Interfaces\IFileSystem.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Interfaces\IGameEventManager.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Interfaces\IGameMovement.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Interfaces\IInputSystem.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Interfaces\ILocalize.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Interfaces\IMaterialSystem.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Interfaces\IMoveHelper.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Interfaces\IPanel.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Interfaces\IPrediction.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Interfaces\IRefCounted.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Interfaces\ISurface.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Interfaces\IVEngineClient.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Interfaces\IViewRenderBeams.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Interfaces\IVModelInfoClient.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Interfaces\IVModelRender.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Interfaces\IVRenderView.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Math\QAngle.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Math\Vector.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Math\Vector2D.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Math\Vector4D.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Math\VMatrix.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Types\CBaseHandle.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Types\CCSWeaponInfo.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Types\CGlobalVars.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Types\CHandle.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Types\characterset.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Types\checksum_crc.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Types\checksum_md5.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Types\ClientClass.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Types\Color.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Types\CUserCmd.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Types\Enumerations.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Types\GlowOutlineEffect.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Types\IHandleEntity.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Types\PaintKit.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Types\platform.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Types\Recv.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Types\Studio.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Types\UtlBuffer.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Types\UtlMemory.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Types\UtlString.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Types\UtlVector.hpp" />
+    <ClInclude Include="Code\Development Environment\Valve\Valve.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\Features\Awareness\Awareness.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\Features\Combat\Aim Assistance.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\Features\Combat\Combat.hpp" />
