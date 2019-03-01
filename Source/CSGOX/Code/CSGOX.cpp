@@ -8,7 +8,10 @@
 BOOL OnAttach( )
 {
 	if ( !SetupFramework( )
-		 || !AUTH.CompareHash( ELibrary::CSGOX, image_info_t( GetModuleHandle( "csgo.exe" ) ).GenerateUniqueHash( ) ) )
+		 /*|| !AUTH.CompareHash( ELibrary::CSGOX, image_info_t( GetModuleHandle( "csgo.exe" ) ).GenerateUniqueHash( ) )*/ )
+		return FALSE;
+
+	if ( !Linkage::SetupLinkage( ) )
 		return FALSE;
 
 	return TRUE;

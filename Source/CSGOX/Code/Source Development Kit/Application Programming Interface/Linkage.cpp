@@ -11,7 +11,7 @@ bool Linkage::SetupLinkage( )
 
 	for ( auto z = 0; z < Interfaces::INTERFACES_MAX; z++ )
 		Interfaces::_InterfacesContext[ z ].strPattern = ENC( "A1 ? ? ? ? 50 8B 08 FF 51 0C" ),
-		Interfaces::_InterfacesContext[ z ].enumModule = Modules::D3D9;
+		Interfaces::_InterfacesContext[ z ].enumModule = Modules::MODULES_SHADERAPIDX9;
 
 	for ( auto z = 0u; z < Indices::INDICES_MAX; z++ )
 		Indices::pIndices[ z ].get() = 0u;
@@ -40,13 +40,16 @@ bool Linkage::Modules::LinkModules( )
 
 bool Linkage::Interfaces::LinkInterfaces( )
 {
-	for ( std::size_t z = Modules::INTERFACEABLE_MODULES; z < Modules::MODULES_MAX; z++ )
+	for ( std::size_t z = Modules::MODULES_INTERFACEABLE_MODULES; z < Modules::MODULES_MAX; z++ )
 		if ( nullptr == ( fnCreateInterface[ z ] = reinterpret_cast< CreateInterfaceFn >( GetProcAddress( Modules::hBases[ z ], ENC( "CreateInterface" ) ) ) ) )
 			return LOG( ERROR, APPLICATION, "Couldn't create get CreateInterface in %s.", Modules::szModuleNames[ z ] ), false;
 
 	for ( auto z = 0u; z < INTERFACES_MAX; z++ )
 		MEM.AddPattern( Modules::hBases[ int( _InterfacesContext[ z ].enumModule ) ],
-						CMemoryManager::pattern_t ( _InterfacesContext[ z ].strPattern, reinterpret_cast<void**>(&pInterfaces[ z ]), 0 ) );
+						CMemoryManager::pattern_t( _InterfacesContext[ z ].strPattern, reinterpret_cast< void** >( &pDevice ), Offsets::pOffsets[ z ], [ ]( )
+	{
+		pDevice = **reinterpret_cast< decltype( pDevice ) * * >( pDevice );
+	} ) );
 
 	MEM.FindPatterns( );
 	return true;
@@ -54,10 +57,14 @@ bool Linkage::Interfaces::LinkInterfaces( )
 
 bool Linkage::Hooks::SetupHooks( )
 {
-	return hkDirectXDevice.Attach( nullptr );
+	for ( auto z = 0u; z < HOOKS_MAX; z++ )
+		if ( !pHooks[ z ].get( ).Attach( Interfaces::pInterfaces[ z ] ) )
+			return false;
+	return true;
 }
 
 void Linkage::Hooks::DestroyHooks( )
 {
-	hkDirectXDevice.Detach( );
+	for ( auto& hk: pHooks )
+		hk.get( ).Detach( );
 }

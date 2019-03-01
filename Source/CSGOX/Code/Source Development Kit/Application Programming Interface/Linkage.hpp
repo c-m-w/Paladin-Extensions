@@ -17,23 +17,23 @@ namespace Linkage
 
 		enum
 		{
-			D3D9,
+			MODULES_SHADERAPIDX9,
 
-			INTERFACEABLE_MODULES,
+			MODULES_INTERFACEABLE_MODULES,
 			// bin
-			ENGINE = INTERFACEABLE_MODULES,
-			VGUI2,
-			VGUIMATSURFACE,
+			MODULES_ENGINE = MODULES_INTERFACEABLE_MODULES,
+			MODULES_VGUI2,
+			MODULES_VGUIMATSURFACE,
 
 			// csgo/bin
-			CLIENT,
+			MODULES_CLIENT,
 
 			MODULES_MAX
 		};
 
 		inline const char* szModuleNames[ MODULES_MAX ]
 		{
-			ENC( "d3d9.dll" ),
+			ENC( "shaderapidx9.dll" ),
 
 			ENC( "engine.dll" ),
 			ENC( "vgui2.dll" ),
@@ -70,7 +70,13 @@ namespace Linkage
 
 		enum
 		{
-			DEVICE,
+			INTERFACES_DEVICE,
+			INTERFACES_CLIENT_BASE,
+			INTERFACES_CLIENT_MODE,
+			INTERFACES_PANEL,
+			INTERFACES_MODEL_RENDER,
+			INTERFACES_VIEW_RENDER,
+			INTERFACES_ENGINE_SOUND,
 			INTERFACES_MAX
 		};
 
@@ -81,10 +87,22 @@ namespace Linkage
 		} inline _InterfacesContext[ INTERFACES_MAX ];
 
 		inline IDirect3DDevice9* pDevice = nullptr;
+		inline IBaseClientDLL* pClientBase = nullptr;
+		inline IClientMode* pClientMode = nullptr;
+		inline IPanel* pPanel = nullptr;
+		inline IVModelRender* pModelRender = nullptr;
+		inline IVRenderView* pEngineRenderView = nullptr;
+		inline IEngineSound* pEngineSound = nullptr;
 
-		inline std::array< std::reference_wrapper< void * >, INTERFACES_MAX > pInterfaces
+		inline std::array< std::reference_wrapper< void* >, INTERFACES_MAX > pInterfaces
 		{
-			*reinterpret_cast< void ** >( &pDevice )
+			*reinterpret_cast< void** >( &pDevice ),
+			*reinterpret_cast< void** >( &pClientBase ),
+			*reinterpret_cast< void** >( &pClientMode ),
+			*reinterpret_cast< void** >( &pPanel ),
+			*reinterpret_cast< void** >( &pModelRender ),
+			*reinterpret_cast< void** >( &pEngineRenderView ),
+			*reinterpret_cast< void** >( &pEngineSound )
 		};
 	}
 
@@ -92,8 +110,8 @@ namespace Linkage
 	{
 		enum
 		{
-			ZFOO,
-			ZBAR,
+			INDICES_ZFOO,
+			INDICES_ZBAR,
 			INDICES_MAX
 		};
 		inline std::size_t zFoo,
@@ -110,17 +128,27 @@ namespace Linkage
 	{
 		enum
 		{
-			DFOO,
-			DBAR,
+			OFFSETS_DFOO,
+			OFFSETS_DBAR,
+			asdf,
+			fdsa
+			,fdsaff,
+			fdsza,
+			fdsaa,
 			OFFSETS_MAX
 		};
-		inline std::ptrdiff_t dFoo,
-			dBar;
+		inline std::ptrdiff_t dFoo = 1,
+			dBar = 1;
 
 		inline std::array< std::reference_wrapper< std::ptrdiff_t>, OFFSETS_MAX > pOffsets
 		{
 			dFoo,
-			dBar
+			dBar,
+			dFoo,
+			dBar,
+			dFoo,
+			dBar,
+			dFoo,
 		};
 	}
 
@@ -129,7 +157,19 @@ namespace Linkage
 		bool SetupHooks( );
 		void DestroyHooks( );
 
-		inline CImportHook hkDirectXDevice;
+		enum
+		{
+			HOOKS_DIRECTX_DEVICE,
+			HOOKS_CLIENT_BASE,
+			HOOKS_CLIENT_MODE,
+			HOOKS_PANEL,
+			HOOKS_MODEL_RENDER,
+			HOOKS_VIEW_RENDER,
+			HOOKS_ENGINE_SOUND,
+			HOOKS_MAX
+		};
+
+		inline CVirtualTableHook hkDirectXDevice;
 		HRESULT __stdcall BeginScene( IDirect3DDevice9* pThis );
 		HRESULT __stdcall EndScene( IDirect3DDevice9* pThis );
 		HRESULT __stdcall Reset( IDirect3DDevice9* pThis, D3DPRESENT_PARAMETERS* pParams );
@@ -156,5 +196,16 @@ namespace Linkage
 
 		inline CVirtualTableHook hkEngineSound;
 		void __stdcall EmitSoundATT( IRecipientFilter& filter, int iEntIndex, int iChannel, const char* pSoundEntry, unsigned int nSoundEntryHash, const char* pSample, float flVolume, float flAttenuation, int nSeed, int iFlags, int iPitch, const Vector* pOrigin, const Vector* pDirection, CUtlVector< Vector >* pUtlVecOrigins, bool bUpdatePositions, float soundtime, int speakerentity, void* pUnknown );
+
+		inline std::array< std::reference_wrapper< CVirtualTableHook >, HOOKS_MAX > pHooks
+		{
+			hkDirectXDevice,
+			hkClientBase,
+			hkClientMode,
+			hkPanel,
+			hkModelRender,
+			hkViewRender,
+			hkEngineSound,
+		};
 	}
 }
