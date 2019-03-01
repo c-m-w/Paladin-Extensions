@@ -3,6 +3,7 @@
 #include "Precompile.hpp"
 
 #define WIN_ENTRY
+#define ENTRY_SOURCE
 #define USE_NAMESPACES
 #define USE_DEFINITIONS
 #include "../../Framework/Code/Framework.hpp"
@@ -33,13 +34,10 @@ void Draw( );
 
 void OnLaunch( )
 {
-	CExportHook hk;
-	hk.Attach( GetModuleHandle( "d3d9.dll" ) );
-	reinterpret_cast< decltype( MessageBoxA )* >( GetProcAddress( GetModuleHandle( "USER32.dll" ), "MessageBoxA" ) )( nullptr, "test", "test", 0 );
-	MessageBox( nullptr, nullptr, nullptr, 0 );
-
 	if ( !SetupFramework( ) )
 		return;
+
+	return ShutdownFramework( );
 
 	constexpr auto fnAttemptLogin = [ ]( ELoginCode& _Result ) -> void
 	{
