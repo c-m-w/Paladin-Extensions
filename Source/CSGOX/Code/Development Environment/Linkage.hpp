@@ -30,7 +30,7 @@ namespace Modules
 		CreateInterfaceFn _CreateInterface = nullptr;
 
 		operator HMODULE( ) const;
-		void *operator( )( const char *szInterface ) const;
+		template< typename _t > bool operator( )( const char *szInterface, _t *pOutput ) const;
 
 		bool Valid( );
 	};
@@ -53,6 +53,8 @@ namespace Modules
 namespace Interfaces
 {
 	inline IDirect3DDevice9 *pDevice = nullptr;
+	inline IBaseClientDLL *pClientBase = nullptr;
+	inline IVEngineClient *pEngineClient = nullptr;
 }
 
 class CLinkage: public IBase
@@ -83,11 +85,22 @@ public:
 		ENC( "filesystem_stdio.dll" )
 	};
 
+	static inline char *szClientBaseVersion = nullptr,
+						*szEngineClientVersion = nullptr;
+
 	static inline void *pReset = nullptr,
 		*pBeginScene = nullptr,
 		*pEndScene = nullptr;
-
-	static inline pattern_t _DevicePattern = pattern_t( ENC( "A1 ? ? ? ? 50 8B 08 FF 51 0C" ), reinterpret_cast< void ** >( &Interfaces::pDevice ), 1, [ & ]( )
+	
+	static inline pattern_t _ClientBaseVersion = pattern_t( ENC( "68 ? ? ? ? FF 12 8B 07" ), &szClientBaseVersion, 1, [ & ]( )
+	{
+		szClientBaseVersion = *reinterpret_cast< decltype( szClientBaseVersion )* >( szClientBaseVersion );
+	} );
+	static inline pattern_t _EngineClientVersion = pattern_t( ENC( "6A 00 68 ? ? ? ? FF D6 83 C4 0C" ), &szEngineClientVersion, 3, [ & ]( )
+	{
+		szEngineClientVersion = *reinterpret_cast< decltype( szEngineClientVersion )* >( szEngineClientVersion );
+	} );
+	static inline pattern_t _DevicePattern = pattern_t( ENC( "A1 ? ? ? ? 50 8B 08 FF 51 0C" ), &Interfaces::pDevice, 1, [ & ]( )
 	{
 		Interfaces::pDevice = **reinterpret_cast< decltype( Interfaces::pDevice )** >( Interfaces::pDevice );
 	} );
@@ -97,5 +110,9 @@ public:
 
 #else
 
+
+
 #endif
 } inline _Linker;
+
+#include "Linkage.inl"

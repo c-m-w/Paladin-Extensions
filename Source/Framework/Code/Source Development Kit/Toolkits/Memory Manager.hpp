@@ -276,7 +276,7 @@ public:
 		static std::vector< __int16 > ParsePattern( const std::string &strPattern );
 
 		pattern_t( ) = default;
-		pattern_t( const std::string &strPattern, void **pOutput, std::ptrdiff_t ptrOffset, std::function< void( ) > fnOnFound = nullptr );
+		template< typename _t > pattern_t( const std::string &strPattern, _t *pOutput, std::ptrdiff_t ptrOffset, std::function< void( ) > fnOnFound = nullptr );
 		pattern_t( const nlohmann::json &_Data, void **pOutput, std::function< void( ) > fnOnFound = nullptr );
 
 		bool Valid( ) const;

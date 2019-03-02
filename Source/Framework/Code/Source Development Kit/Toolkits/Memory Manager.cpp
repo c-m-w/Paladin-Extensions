@@ -343,10 +343,6 @@ std::vector< __int16 > CMemoryManager::pattern_t::ParsePattern( const std::strin
 	return vecReturn;
 }
 
-CMemoryManager::pattern_t::pattern_t( const std::string &strPattern, void **pOutput, std::ptrdiff_t ptrOffset, std::function< void( ) > fnOnFound /*= nullptr*/ ):
-	vecPattern( ParsePattern( strPattern ) ), pOutput( pOutput ), ptrOffset( ptrOffset ), fnOnFound( fnOnFound )
-{ }
-
 CMemoryManager::pattern_t::pattern_t( const nlohmann::json &_Data, void **pOutput, std::function< void( ) > fnOnFound /*= nullptr*/ ):
 	pOutput( pOutput ), fnOnFound( fnOnFound )
 {

@@ -36,6 +36,10 @@ template< typename _t > bool worker_t::Pop( _t &_Out )
 	return SetContext( _ThreadContext );
 }
 
+template< typename _t > pattern_t::pattern_t( const std::string &strPattern, _t *pOutput, std::ptrdiff_t ptrOffset, std::function< void( ) > fnOnFound /*= nullptr*/ ) :
+	vecPattern( ParsePattern( strPattern ) ), pOutput( decltype( this->pOutput )( pOutput ) ), ptrOffset( ptrOffset ), fnOnFound( fnOnFound )
+{ }
+
 template< typename _t > bool CMemoryManager::Read( void* pAddress, _t &_Out )
 {
 	return Read( pAddress, &_Out, sizeof( _t ) );
