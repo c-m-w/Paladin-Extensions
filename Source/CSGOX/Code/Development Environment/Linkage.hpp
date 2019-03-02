@@ -98,4 +98,4 @@ public:
 #else
 
 #endif
-} inline _GameMemory;
+} inline _Linker;

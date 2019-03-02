@@ -41,7 +41,7 @@ void OnDetach( )
 
 bool Initialize( )
 {
-	if ( !GAME_MEM.Setup( )
+	if ( !LINK.Setup( )
 		 || !HOOKS.Setup( ) )
 	{
 		LOG( ERROR, APPLICATION, "Unable to initialize." );
@@ -55,5 +55,5 @@ bool Initialize( )
 void Uninitialize( )
 {
 	HOOKS.Shutdown( );
-	GAME_MEM.Shutdown( );
+	LINK.Shutdown( );
 }

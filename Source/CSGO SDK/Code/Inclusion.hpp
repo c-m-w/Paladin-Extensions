@@ -1,4 +1,4 @@
-﻿/// Valve.hpp
+﻿/// Inclusion.hpp
 
 #pragma once
 
@@ -15,7 +15,7 @@
 #include "Types/checksum_md5.hpp"
 #include "Types/ClientClass.hpp"
 #include "Types/Color.hpp"
-//#include "Types/ConVar.hpp"
+#include "Types/ConVar.hpp"
 #include "Types/CUserCmd.hpp"
 #include "Types/Enumerations.hpp"
 #include "Types/GlowOutlineEffect.hpp"

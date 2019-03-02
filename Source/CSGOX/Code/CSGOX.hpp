@@ -7,7 +7,7 @@
 #define USE_DEFINITIONS
 #include "../../Framework/Code/Framework.hpp"
 
-#include "Development Environment/Memory.hpp"
+#include "Development Environment/Linkage.hpp"
 #include "Development Environment/Hooks.hpp"
 
 #if defined USE_INTERNAL_NAMESPACES
@@ -16,6 +16,6 @@ using namespace Interfaces;
 #endif
 
 #if defined USE_INTERNAL_DEFINITIONS
-#define GAME_MEM ( _GameMemory )
+#define LINK ( _Linker )
 #define HOOKS ( _Hooks )
 #endif

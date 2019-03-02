@@ -110,7 +110,7 @@ BOOL WINAPI DllMain( _In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID 
 {
 	static HANDLE hMutex = NULL;
 #if defined _DEBUG
-	FILE *pConsoleOutput = nullptr;
+	static FILE *pConsoleOutput = nullptr;
 #endif
 	switch ( fdwReason )
 	{
