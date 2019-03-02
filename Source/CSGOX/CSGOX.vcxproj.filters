@@ -57,6 +57,9 @@
     <ClCompile Include="Code\Development Environment\Memory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Code\Development Environment\Hooks.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Framework\Precompile.hpp">
@@ -267,6 +270,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Code\Development Environment\Memory.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Development Environment\Hooks.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

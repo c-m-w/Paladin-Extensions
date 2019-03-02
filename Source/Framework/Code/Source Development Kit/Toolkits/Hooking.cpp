@@ -32,7 +32,7 @@ bool CVirtualTableHook::Attach( void *pAttachable )
 	if ( pTableAddress == nullptr )
 		return _Log.Log( EPrefix::ERROR, ELocation::HOOKING, ENC( "Invalid interface passed to Attach." ) ), false;
 
-	hOrigin = MEM.GetOrigin( pTableAddress );
+	hOrigin = MEM.GetOrigin( *pTableAddress );
 	if ( hOrigin == nullptr )
 		return _Log.Log( EPrefix::ERROR, ELocation::HOOKING, ENC( "Unable to find module of origin for table." ) ), false;
 

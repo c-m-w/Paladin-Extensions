@@ -8,6 +8,7 @@
 #include "../../Framework/Code/Framework.hpp"
 
 #include "Development Environment/Memory.hpp"
+#include "Development Environment/Hooks.hpp"
 
 #if defined USE_INTERNAL_NAMESPACES
 using namespace Modules;
@@ -16,4 +17,5 @@ using namespace Interfaces;
 
 #if defined USE_INTERNAL_DEFINITIONS
 #define GAME_MEM ( _GameMemory )
+#define HOOKS ( _Hooks )
 #endif

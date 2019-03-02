@@ -331,10 +331,11 @@ std::vector< __int16 > CMemoryManager::pattern_t::ParsePattern( const std::strin
 	{
 		auto& _Byte = vecReturn.emplace_back( );
 
+		if ( *pEnd == ' ' )
+			pEnd++;
+
 		if ( *pEnd == '?' )
 			_Byte = UNKNOWN_BYTE, pEnd++;
-		else if ( *pEnd == ' ' )
-			pEnd++, vecReturn.erase( vecReturn.end( ) - 1 );
 		else
 			_Byte = strtoul( pEnd, &pEnd, 16 );
 	} while ( pEnd != pLast );

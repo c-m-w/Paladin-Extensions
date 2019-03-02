@@ -27,6 +27,9 @@ BOOL OnAttach( )
 	if ( !Initialize( ) )
 		return FALSE;
 
+	while ( true )
+		Pause( 1 );
+
 	return TRUE;
 }
 
@@ -38,7 +41,8 @@ void OnDetach( )
 
 bool Initialize( )
 {
-	if ( !GAME_MEM.Setup( ) )
+	if ( !GAME_MEM.Setup( )
+		 || !HOOKS.Setup( ) )
 	{
 		LOG( ERROR, APPLICATION, "Unable to initialize." );
 		return false;
@@ -50,5 +54,6 @@ bool Initialize( )
 
 void Uninitialize( )
 {
-	
+	HOOKS.Shutdown( );
+	GAME_MEM.Shutdown( );
 }

@@ -167,6 +167,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Code\CSGOX.cpp" />
+    <ClCompile Include="Code\Development Environment\Hooks.cpp" />
     <ClCompile Include="Code\Development Environment\Memory.cpp" />
     <ClCompile Include="Code\Development Environment\Valve\Math\Vector2D.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
@@ -201,6 +202,7 @@
   <ItemGroup>
     <ClInclude Include="..\Framework\Precompile.hpp" />
     <ClInclude Include="Code\CSGOX.hpp" />
+    <ClInclude Include="Code\Development Environment\Hooks.hpp" />
     <ClInclude Include="Code\Development Environment\Memory.hpp" />
     <ClInclude Include="Code\Development Environment\Valve\Interfaces\CClientState.hpp" />
     <ClInclude Include="Code\Development Environment\Valve\Interfaces\CInput.hpp" />

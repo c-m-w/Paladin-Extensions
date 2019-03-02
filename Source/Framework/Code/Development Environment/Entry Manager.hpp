@@ -147,12 +147,12 @@ BOOL WINAPI DllMain( _In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID 
 #endif
 		}
 		case DLL_PROCESS_DETACH:
-			OnDetach( );/*
+			OnDetach( );
 #if defined _DEBUG
 			FreeConsole( );
 			fclose( pConsoleOutput );
 #endif			
-			CloseHandle( hMutex );*/
+			CloseHandle( hMutex );
 			return TRUE;
 		default:
 			return TRUE;
