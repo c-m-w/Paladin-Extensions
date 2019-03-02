@@ -86,7 +86,8 @@ public:
 	};
 
 	static inline char *szClientBaseVersion = nullptr,
-						*szEngineClientVersion = nullptr;
+					   *szEngineClientVersion = nullptr,
+					   *szEngineSoundClientVersion = nullptr;
 
 	static inline void *pReset = nullptr,
 		*pBeginScene = nullptr,
@@ -100,6 +101,10 @@ public:
 	{
 		szEngineClientVersion = *reinterpret_cast< decltype( szEngineClientVersion )* >( szEngineClientVersion );
 	} );
+	static inline pattern_t _EngineSoundClientVersion = pattern_t( ENC( "08 6A 00 68 ? ? ? ? FF D6 6A" ), &szEngineSoundClientVersion, 4, [ & ]()
+	{
+		szEngineSoundClientVersion = *reinterpret_cast< decltype( szEngineSoundClientVersion )* >( szEngineSoundClientVersion );
+	});
 	static inline pattern_t _DevicePattern = pattern_t( ENC( "A1 ? ? ? ? 50 8B 08 FF 51 0C" ), &Interfaces::pDevice, 1, [ & ]( )
 	{
 		Interfaces::pDevice = **reinterpret_cast< decltype( Interfaces::pDevice )** >( Interfaces::pDevice );

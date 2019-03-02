@@ -35,6 +35,7 @@ bool CLinkage::Initialize( )
 
 	if ( !MEM.AddPattern( _Client, _ClientBaseVersion )
 		 || !MEM.AddPattern( _Client, _EngineClientVersion )
+		 || !MEM.AddPattern( _Client, _EngineSoundClientVersion )
 		 || !MEM.AddPattern( _Direct3DAPI, _DevicePattern )
 		 || !MEM.AddPattern( _Direct3D, _ResetPattern )
 		 || !MEM.AddPattern( _Direct3D, _BeginScenePattern )
