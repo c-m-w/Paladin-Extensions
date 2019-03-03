@@ -1,8 +1,8 @@
-/// Combat.cpp
+﻿/// Automation.cpp
 
 #include "Precompile.hpp"
 
 #include "../../../../CSGOX.hpp"
 
-void ICombatContextInternal::foo( )
+void CAutomation::flee( )
 { }

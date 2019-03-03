@@ -1,8 +1,5 @@
-/// Combat.cpp
+﻿/// Awareness.cpp
 
 #include "Precompile.hpp"
 
 #include "../../../../CSGOX.hpp"
-
-void ICombatContextInternal::foo( )
-{ }

@@ -2,10 +2,9 @@
 
 #pragma once
 
-#include "../Features Context.hpp"
-
 struct IAwarenessContextInternal: IAwarenessContext
 {
+	void flee() override;
 	void foo( ) override;
 	void* quid;
 };

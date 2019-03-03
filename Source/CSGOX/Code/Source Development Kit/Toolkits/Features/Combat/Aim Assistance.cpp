@@ -2,7 +2,12 @@
 
 #include "Precompile.hpp"
 
-#include "Aim Assistance.hpp"
+#include "../../../../CSGOX.hpp"
+
+void CAimAssistance::flee( )
+{
+	
+}
 
 void CAimAssistance::AimAtTarget( )
 {

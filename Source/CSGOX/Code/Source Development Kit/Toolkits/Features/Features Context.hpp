@@ -2,22 +2,26 @@
 
 #pragma once
 
-#include "../../../CSGOX.hpp"
-
-struct IAwarenessContext
+struct IBaseContext
 {
-	virtual void foo( );
+	virtual void flee( ) = 0;
+	CBasePlayer* pLocalPlayer;
+};
+
+struct IAwarenessContext: IBaseContext
+{
+	virtual void foo( ) = 0;
 	void* bar;
 };
 
-struct ICombatContext
+struct ICombatContext: IBaseContext
 {
-	virtual void foo( );
+	virtual void foo( ) = 0;
 	void* bar;
 };
 
-struct IMiscellaneousContext
+struct IMiscellaneousContext: IBaseContext
 {
-	virtual void foo( );
+	virtual void foo( ) = 0;
 	void* bar;
 };

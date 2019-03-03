@@ -2,10 +2,9 @@
 
 #pragma once
 
-#include "Combat.hpp"
-
 class CAimAssistance: ICombatContextInternal
 {
+	void flee( ) override;
 	int bone;
 	void AimAtTarget( );
-};
+} inline _AimAssistance;

@@ -27,10 +27,22 @@
     <ClCompile Include="Code\Source Development Kit\Toolkits\Features\Combat\Combat.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Code\Development Environment\Hooks.cpp">
+    <ClCompile Include="Code\Development Environment\Linkage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Code\Development Environment\Linkage.cpp">
+    <ClCompile Include="Code\Source Development Kit\Application Programming Interface\Hooks.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\Source Development Kit\Toolkits\Features\Awareness\Awareness.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\Source Development Kit\Toolkits\Features\Miscellaneous\Miscellaneous.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\Source Development Kit\Toolkits\Features\Settings\Settings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Code\Source Development Kit\Toolkits\Features\Miscellaneous\Automation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -62,10 +74,13 @@
     <ClInclude Include="Code\CSGOX.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Code\Development Environment\Hooks.hpp">
+    <ClInclude Include="Code\Development Environment\Linkage.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Code\Development Environment\Linkage.hpp">
+    <ClInclude Include="Code\Source Development Kit\Application Programming Interface\Hooks.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Source Development Kit\Toolkits\Features\Miscellaneous\Automation.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

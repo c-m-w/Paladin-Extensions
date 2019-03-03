@@ -2,8 +2,6 @@
 
 #pragma once
 
-#include "../Features Context.hpp"
-
 struct ICombatContextInternal: ICombatContext
 {
 	void foo( ) override;
@@ -15,5 +13,3 @@ struct ICombatContextInternal: ICombatContext
 	};
 	void GetNearestTarget( ETargetPriorities enumPriority );
 };
-
-#include "Aim Assistance.hpp"

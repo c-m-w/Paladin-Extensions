@@ -4,7 +4,7 @@
 
 #define USE_INTERNAL_NAMESPACES
 #define USE_INTERNAL_DEFINITIONS
-#include "../CSGOX.hpp"
+#include "../../CSGOX.hpp"
 
 #define GET_MEMBER_ADDRESS( Variable, Member )		\
 	__asm mov eax, Member							\
