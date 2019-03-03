@@ -857,23 +857,24 @@ bool CMemoryManager::FindPatterns( )
 			{
 				for ( auto u = 0u; u < _Patterns.second.size( ); u++ )
 				{
-					constexpr auto fnTestByte = [ ]( unsigned &uProgress, __int16 sTest, unsigned char *pCurrentByte, int &iRelative )
-					{
-						if ( sTest == pattern_t::UNKNOWN_BYTE
-							 || sTest == *( pCurrentByte + iRelative ) )
-							uProgress++;
-						else
-							iRelative -= uProgress, uProgress = 0;
-					};
-
 					auto &_Current = _Patterns.second[ u ];
 					do
 					{
 						if ( _Current.vecPattern[ _Current.uProgress ] == pattern_t::UNKNOWN_BYTE
 							 || _Current.vecPattern[ _Current.uProgress ] == *( p + _Current.iRelative ) )
-							_Current.uProgress++;
+						{
+							if ( ++_Current.uProgress > 1
+								 && _Current.ptrFistByte == 0
+								 && *( p + _Current.iRelative ) == _Current.vecPattern.front( ) )
+								_Current.ptrFistByte = decltype( _Current.ptrFistByte )( p );
+						}
 						else
-							_Current.iRelative -= int( _Current.uProgress ), _Current.uProgress = 0;
+						{
+							if ( _Current.ptrFistByte != 0 )
+								_Current.iRelative -= decltype( _Current.ptrFistByte )( p ) - _Current.ptrFistByte;
+
+							_Current.uProgress = _Current.ptrFistByte = 0;
+						}
 
 						if ( _Current.uProgress == _Current.vecPattern.size( ) )
 						{
@@ -885,10 +886,10 @@ bool CMemoryManager::FindPatterns( )
 							u--;
 						}
 
-						if ( _Current.iRelative > 0 )
-							_Current.iRelative--;
+						if ( _Current.iRelative < 0 )
+							_Current.iRelative++;
 
-					} while ( _Current.iRelative > 0 );
+					} while ( _Current.iRelative < 0 );
 				}
 			}
 
