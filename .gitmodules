@@ -1,12 +1,15 @@
 [submodule "Source/Dependencies/Include/cryptopp"]
 	path = Source/Dependencies/Include/cryptopp
 	url = https://github.com/weidai11/cryptopp
+
 [submodule "Source/Dependencies/Include/curl"]
 	path = Source/Dependencies/Include/curl
 	url = https://github.com/curl/curl
+
 [submodule "Source/Dependencies/Include/json"]
 	path = Source/Dependencies/Include/json
 	url = https://github.com/nlohmann/json
+
 [submodule "Source/Dependencies/Include/freetype-windows-binaries"]
 	path = Source/Dependencies/Include/freetype-windows-binaries
 	url = https://github.com/ubawurinna/freetype-windows-binaries
