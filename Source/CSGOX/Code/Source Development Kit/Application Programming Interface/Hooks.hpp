@@ -18,6 +18,10 @@ public:
 		bool Initialize( ) override;
 		void Uninitialize( ) override;
 
+		static inline void *pReset = nullptr,
+			*pBeginScene = nullptr,
+			*pEndScene = nullptr;
+
 	public:
 
 		CDeviceHook( ) = default;

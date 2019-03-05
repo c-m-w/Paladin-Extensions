@@ -270,7 +270,7 @@ public:
 		std::function< void( ) > fnOnFound = nullptr;
 		unsigned uProgress = 0u;
 		int iRelative = 0;
-		std::uintptr_t ptrFistByte = 0;
+		std::uintptr_t ptrFirstByte = 0;
 
 	public:
 

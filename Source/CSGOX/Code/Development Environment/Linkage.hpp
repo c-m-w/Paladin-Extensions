@@ -88,10 +88,6 @@ public:
 	static inline char *szClientBaseVersion = nullptr,
 					   *szEngineClientVersion = nullptr,
 					   *szEngineSoundClientVersion = nullptr;
-
-	static inline void *pReset = nullptr,
-		*pBeginScene = nullptr,
-		*pEndScene = nullptr;
 	
 	static inline pattern_t _ClientBaseVersion = pattern_t( ENC( "68 ? ? ? ? FF 12 8B 07" ), &szClientBaseVersion, 1, [ & ]( )
 	{
@@ -109,9 +105,9 @@ public:
 	{
 		Interfaces::pDevice = **reinterpret_cast< decltype( Interfaces::pDevice )** >( Interfaces::pDevice );
 	} );
-	static inline pattern_t _ResetPattern = pattern_t( ENC( "CC E9 ? ? ? ? 83 E4 F8 81 EC" ), &pReset, 1 );
-	static inline pattern_t _BeginScenePattern = pattern_t( ENC( "5F 5E EB CA CC" ), &pBeginScene, 5 );
-	static inline pattern_t _EndScenePattern = pattern_t( ENC( "CC CC 6A 18 B8 ? ? ? ? E8 ? ? ? ? 8B 7D 08 8B DF" ), &pEndScene, 2 );
+	static inline constexpr auto zReset = 16u,
+		zBeginScene = 41u,
+		zEndScene = 42u;
 
 #else
 

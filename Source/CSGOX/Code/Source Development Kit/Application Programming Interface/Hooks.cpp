@@ -31,9 +31,9 @@ bool CHooks::CDeviceHook::Initialize( )
 	GET_MEMBER_ADDRESS( pReplacementEndScene, EndScene )
 
 	return Attach( pDevice )
-		&& Replace( LINK.pReset, pReplacementReset )
-		&& Replace( LINK.pBeginScene, pReplacementBeginScene )
-		&& Replace( LINK.pEndScene, pReplacementEndScene );
+		&& Replace( pReset = GetOriginalFunction( LINK.zReset ), pReplacementReset )
+		&& Replace( pBeginScene = GetOriginalFunction( LINK.zBeginScene ), pReplacementBeginScene )
+		&& Replace( pEndScene = GetOriginalFunction( LINK.zEndScene ), pReplacementEndScene );
 }
 
 void CHooks::CDeviceHook::Uninitialize( )
@@ -43,17 +43,17 @@ void CHooks::CDeviceHook::Uninitialize( )
 
 HRESULT CHooks::CDeviceHook::Reset( D3DPRESENT_PARAMETERS *pPresentationParameters )
 {
-	return reinterpret_cast< HRESULT( __stdcall * )( void *, D3DPRESENT_PARAMETERS * ) >( LINK.pReset )( this, pPresentationParameters );
+	return reinterpret_cast< HRESULT( __stdcall * )( void *, D3DPRESENT_PARAMETERS * ) >( pReset )( this, pPresentationParameters );
 }
 
 HRESULT CHooks::CDeviceHook::BeginScene( )
 {
-	return reinterpret_cast< HRESULT( __stdcall * )( void * ) >( LINK.pBeginScene )( this );
+	return reinterpret_cast< HRESULT( __stdcall * )( void * ) >( pBeginScene )( this );
 }
 
 HRESULT CHooks::CDeviceHook::EndScene( )
 {
-	return reinterpret_cast< HRESULT( __stdcall * )( void * ) >( LINK.pEndScene )( this );
+	return reinterpret_cast< HRESULT( __stdcall * )( void * ) >( pEndScene )( this );
 }
 
 CHooks _Hooks;

@@ -853,7 +853,8 @@ bool CMemoryManager::FindPatterns( )
 			return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to find sections to pattern scan." ) ), false;
 
 		for ( auto &_Section: vecSectionsToScan )
-			for ( auto p = _Section.first; p < decltype( p )( std::uintptr_t( _Section.first ) + _Section.second ); p++ )
+			for ( auto p = _Section.first, f = decltype( p )( std::uintptr_t( _Section.first ) + _Section.second );
+				  p < f && !_Patterns.second.empty( ); p++ )
 			{
 				for ( auto u = 0u; u < _Patterns.second.size( ); u++ )
 				{
@@ -864,16 +865,19 @@ bool CMemoryManager::FindPatterns( )
 							 || _Current.vecPattern[ _Current.uProgress ] == *( p + _Current.iRelative ) )
 						{
 							if ( ++_Current.uProgress > 1
-								 && _Current.ptrFistByte == 0
+								 && _Current.ptrFirstByte == 0
 								 && *( p + _Current.iRelative ) == _Current.vecPattern.front( ) )
-								_Current.ptrFistByte = decltype( _Current.ptrFistByte )( p );
+								_Current.ptrFirstByte = decltype( _Current.ptrFirstByte )( p );
+							else if ( _Current.ptrFirstByte != 0 
+									  && _Current.vecPattern[ std::uintptr_t( p ) - _Current.ptrFirstByte ] != *( p + _Current.iRelative ) )
+								_Current.ptrFirstByte = 0;
 						}
 						else
 						{
-							if ( _Current.ptrFistByte != 0 )
-								_Current.iRelative -= decltype( _Current.ptrFistByte )( p ) - _Current.ptrFistByte;
+							if ( _Current.ptrFirstByte != 0 )
+								_Current.iRelative -= decltype( _Current.ptrFirstByte )( p ) - _Current.ptrFirstByte;
 
-							_Current.uProgress = _Current.ptrFistByte = 0;
+							_Current.uProgress = _Current.ptrFirstByte = 0;
 						}
 
 						if ( _Current.uProgress == _Current.vecPattern.size( ) )
@@ -889,7 +893,7 @@ bool CMemoryManager::FindPatterns( )
 						if ( _Current.iRelative < 0 )
 							_Current.iRelative++;
 
-					} while ( _Current.iRelative < 0 );
+					} while ( p == f - 1 && _Current.iRelative < 0 );
 				}
 			}
 

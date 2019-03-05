@@ -37,9 +37,6 @@ bool CLinkage::Initialize( )
 		 || !MEM.AddPattern( _Client, _EngineClientVersion )
 		 || !MEM.AddPattern( _Client, _EngineSoundClientVersion )
 		 || !MEM.AddPattern( _Direct3DAPI, _DevicePattern )
-		 || !MEM.AddPattern( _Direct3D, _ResetPattern )
-		 || !MEM.AddPattern( _Direct3D, _BeginScenePattern )
-		 || !MEM.AddPattern( _Direct3D, _EndScenePattern )
 		 || !MEM.FindPatterns( ) )
 		return LOG( ERROR, APPLICATION, "Unable to find patterns." ), false;
 
