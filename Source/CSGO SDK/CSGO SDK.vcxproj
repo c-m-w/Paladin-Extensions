@@ -46,7 +46,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)Dependencies\Include\json\include\;$(SolutionDir)Dependencies\Include\;$(SolutionDir)Dependencies\Include\freetype-windows-binaries\include\;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\;$(DDK_INC_PATH);$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\User\Documents\GitHub\Paladin-Extensions\Source\CSGO SDK\Code;$(SolutionDir)Dependencies\Include\json\include\;$(SolutionDir)Dependencies\Include\;$(SolutionDir)Dependencies\Include\freetype-windows-binaries\include\;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\;$(DDK_INC_PATH);$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Dependencies\Lib\;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Lib\x86\;$(DDK_LIB_PATH);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -86,79 +86,53 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Code\Inclusion.hpp" />
-    <ClInclude Include="Code\Interfaces\CClientState.hpp" />
-    <ClInclude Include="Code\Interfaces\CInput.hpp" />
-    <ClInclude Include="Code\Interfaces\IAppSystem.hpp" />
-    <ClInclude Include="Code\Interfaces\IBaseClientDll.hpp" />
-    <ClInclude Include="Code\Interfaces\IBaseInterface.hpp" />
-    <ClInclude Include="Code\Interfaces\IClientEntity.hpp" />
-    <ClInclude Include="Code\Interfaces\IClientEntityList.hpp" />
-    <ClInclude Include="Code\Interfaces\IClientMode.hpp" />
-    <ClInclude Include="Code\Interfaces\IClientNetworkable.hpp" />
-    <ClInclude Include="Code\Interfaces\IClientRenderable.hpp" />
-    <ClInclude Include="Code\Interfaces\IClientThinkable.hpp" />
-    <ClInclude Include="Code\Interfaces\IClientUnknown.hpp" />
-    <ClInclude Include="Code\Interfaces\ICollideable.hpp" />
-    <ClInclude Include="Code\Interfaces\IConVar.hpp" />
-    <ClInclude Include="Code\Interfaces\ICVar.hpp" />
-    <ClInclude Include="Code\Interfaces\IEngineSound.hpp" />
-    <ClInclude Include="Code\Interfaces\IEngineTrace.hpp" />
-    <ClInclude Include="Code\Interfaces\IFileSystem.hpp" />
-    <ClInclude Include="Code\Interfaces\IGameEventManager.hpp" />
-    <ClInclude Include="Code\Interfaces\IGameMovement.hpp" />
-    <ClInclude Include="Code\Interfaces\IInputSystem.hpp" />
-    <ClInclude Include="Code\Interfaces\ILocalize.hpp" />
-    <ClInclude Include="Code\Interfaces\IMaterialSystem.hpp" />
-    <ClInclude Include="Code\Interfaces\IMoveHelper.hpp" />
-    <ClInclude Include="Code\Interfaces\IPanel.hpp" />
-    <ClInclude Include="Code\Interfaces\IPrediction.hpp" />
-    <ClInclude Include="Code\Interfaces\IRefCounted.hpp" />
-    <ClInclude Include="Code\Interfaces\ISurface.hpp" />
-    <ClInclude Include="Code\Interfaces\IVEngineClient.hpp" />
-    <ClInclude Include="Code\Interfaces\IViewRenderBeams.hpp" />
-    <ClInclude Include="Code\Interfaces\IVModelInfoClient.hpp" />
-    <ClInclude Include="Code\Interfaces\IVModelRender.hpp" />
-    <ClInclude Include="Code\Interfaces\IVRenderView.hpp" />
-    <ClInclude Include="Code\Math\QAngle.hpp" />
-    <ClInclude Include="Code\Math\Vector.hpp" />
-    <ClInclude Include="Code\Math\Vector2D.hpp" />
-    <ClInclude Include="Code\Math\Vector4D.hpp" />
-    <ClInclude Include="Code\Math\VMatrix.hpp" />
-    <ClInclude Include="Code\Types\CBaseHandle.hpp" />
-    <ClInclude Include="Code\Types\CCSWeaponInfo.hpp" />
-    <ClInclude Include="Code\Types\CGlobalVars.hpp" />
-    <ClInclude Include="Code\Types\CHandle.hpp" />
-    <ClInclude Include="Code\Types\characterset.hpp" />
-    <ClInclude Include="Code\Types\checksum_crc.hpp" />
-    <ClInclude Include="Code\Types\checksum_md5.hpp" />
-    <ClInclude Include="Code\Types\ClientClass.hpp" />
-    <ClInclude Include="Code\Types\Color.hpp" />
-    <ClInclude Include="Code\Types\ConVar.hpp" />
-    <ClInclude Include="Code\Types\CUserCmd.hpp" />
-    <ClInclude Include="Code\Types\Enumerations.hpp" />
-    <ClInclude Include="Code\Types\GlowOutlineEffect.hpp" />
-    <ClInclude Include="Code\Types\IHandleEntity.hpp" />
-    <ClInclude Include="Code\Types\PaintKit.hpp" />
-    <ClInclude Include="Code\Types\platform.hpp" />
-    <ClInclude Include="Code\Types\Recv.hpp" />
-    <ClInclude Include="Code\Types\Studio.hpp" />
-    <ClInclude Include="Code\Types\UtlBuffer.hpp" />
-    <ClInclude Include="Code\Types\UtlMemory.hpp" />
-    <ClInclude Include="Code\Types\UtlString.hpp" />
-    <ClInclude Include="Code\Types\UtlVector.hpp" />
+    <ClInclude Include="Code\appframework\IAppSystem.h" />
+    <ClInclude Include="Code\CNetChannel Extended.hpp" />
+    <ClInclude Include="Code\mathlib\mathlib.h" />
+    <ClInclude Include="Code\mathlib\math_pfns.h" />
+    <ClInclude Include="Code\mathlib\vector.h" />
+    <ClInclude Include="Code\mathlib\vector2d.h" />
+    <ClInclude Include="Code\networksystem\inetworksystem.h" />
+    <ClInclude Include="Code\networksystem\netchannel.h" />
+    <ClInclude Include="Code\networksystem\sm_Protocol.h" />
+    <ClInclude Include="Code\public\inetchannel.h" />
+    <ClInclude Include="Code\public\inetchannelinfo.h" />
+    <ClInclude Include="Code\tier0\annotations.h" />
+    <ClInclude Include="Code\tier0\basetypes.h" />
+    <ClInclude Include="Code\tier0\commonmacros.h" />
+    <ClInclude Include="Code\tier0\dbg.h" />
+    <ClInclude Include="Code\tier0\dbgflag.h" />
+    <ClInclude Include="Code\tier0\fasttimer.h" />
+    <ClInclude Include="Code\tier0\mem.h" />
+    <ClInclude Include="Code\tier0\memalloc.h" />
+    <ClInclude Include="Code\tier0\memdbgoff.h" />
+    <ClInclude Include="Code\tier0\memdbgon.h" />
+    <ClInclude Include="Code\tier0\platform.h" />
+    <ClInclude Include="Code\tier0\protected_things.h" />
+    <ClInclude Include="Code\tier0\threadtools.h" />
+    <ClInclude Include="Code\tier0\tslist.h" />
+    <ClInclude Include="Code\tier0\valve_minmax_on.h" />
+    <ClInclude Include="Code\tier0\valve_off.h" />
+    <ClInclude Include="Code\tier0\valve_on.h" />
+    <ClInclude Include="Code\tier0\vcrmode.h" />
+    <ClInclude Include="Code\tier0\vcr_shared.h" />
+    <ClInclude Include="Code\tier0\wchartypes.h" />
+    <ClInclude Include="Code\tier0\xbox_codeline_defines.h" />
+    <ClInclude Include="Code\tier1\bitbuf.h" />
+    <ClInclude Include="Code\CSGO SDK.hpp" />
+    <ClInclude Include="Code\tier1\interface.h" />
+    <ClInclude Include="Code\tier1\mempool.h" />
+    <ClInclude Include="Code\tier1\netadr.h" />
+    <ClInclude Include="Code\tier1\strtools.h" />
+    <ClInclude Include="Code\tier1\utlblockmemory.h" />
+    <ClInclude Include="Code\tier1\utlfixedmemory.h" />
+    <ClInclude Include="Code\tier1\utlmemory.h" />
+    <ClInclude Include="Code\tier1\utlrbtree.h" />
+    <ClInclude Include="Code\tier1\utlvector.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Code\Math\Vector2D.cpp" />
-    <ClCompile Include="Code\Math\Vector4D.cpp" />
-    <ClCompile Include="Code\Math\VMatrix.cpp" />
-    <ClCompile Include="Code\Types\characterset.cpp" />
-    <ClCompile Include="Code\Types\checksum_crc.cpp" />
-    <ClCompile Include="Code\Types\checksum_md5.cpp" />
-    <ClCompile Include="Code\Types\Color.cpp" />
-    <ClCompile Include="Code\Types\ConVar.cpp" />
-    <ClCompile Include="Code\Types\UtlBuffer.cpp" />
-    <ClCompile Include="Code\Types\UtlString.cpp" />
+    <ClCompile Include="Code\CNetChannel Extended.cpp" />
+    <ClCompile Include="Code\Source.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
