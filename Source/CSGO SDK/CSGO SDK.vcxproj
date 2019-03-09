@@ -46,7 +46,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>C:\Users\User\Documents\GitHub\Paladin-Extensions\Source\CSGO SDK\Code;$(SolutionDir)Dependencies\Include\json\include\;$(SolutionDir)Dependencies\Include\;$(SolutionDir)Dependencies\Include\freetype-windows-binaries\include\;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\;$(DDK_INC_PATH);$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\User\Documents\GitHub\Paladin-Extensions\Source\CSGO SDK\Code;$(SolutionDir)Dependencies\Include\json\include\;$(SolutionDir)Dependencies\Include\;$(SolutionDir)Dependencies\Include\freetype-windows-binaries\include\;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\;$(DDK_INC_PATH);C:\Users\User\Documents\GitHub\Paladin-Extensions\Source\CSGO SDK\Code\public;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Dependencies\Lib\;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Lib\x86\;$(DDK_LIB_PATH);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -92,11 +92,23 @@
     <ClInclude Include="Code\mathlib\math_pfns.h" />
     <ClInclude Include="Code\mathlib\vector.h" />
     <ClInclude Include="Code\mathlib\vector2d.h" />
+    <ClInclude Include="Code\networksystem\inetworkmessage.h" />
     <ClInclude Include="Code\networksystem\inetworksystem.h" />
     <ClInclude Include="Code\networksystem\netchannel.h" />
-    <ClInclude Include="Code\networksystem\sm_Protocol.h" />
+    <ClInclude Include="Code\networksystem\networkclient.h" />
+    <ClInclude Include="Code\networksystem\networkserver.h" />
+    <ClInclude Include="Code\networksystem\networksystem.h" />
+    <ClInclude Include="Code\networksystem\sm_protocol.h" />
+    <ClInclude Include="Code\networksystem\udp_process.h" />
+    <ClInclude Include="Code\networksystem\udp_socket.h" />
+    <ClInclude Include="Code\public\Color.h" />
+    <ClInclude Include="Code\public\datamap.h" />
+    <ClInclude Include="Code\public\filesystem.h" />
+    <ClInclude Include="Code\public\filesystem_passthru.h" />
+    <ClInclude Include="Code\public\icvar.h" />
     <ClInclude Include="Code\public\inetchannel.h" />
     <ClInclude Include="Code\public\inetchannelinfo.h" />
+    <ClInclude Include="Code\public\unitlib\unitlib.h" />
     <ClInclude Include="Code\tier0\annotations.h" />
     <ClInclude Include="Code\tier0\basetypes.h" />
     <ClInclude Include="Code\tier0\commonmacros.h" />
@@ -120,18 +132,34 @@
     <ClInclude Include="Code\tier0\xbox_codeline_defines.h" />
     <ClInclude Include="Code\tier1\bitbuf.h" />
     <ClInclude Include="Code\CSGO SDK.hpp" />
+    <ClInclude Include="Code\tier1\byteswap.h" />
+    <ClInclude Include="Code\tier1\checksum_crc.h" />
+    <ClInclude Include="Code\tier1\convar.h" />
+    <ClInclude Include="Code\tier1\iconvar.h" />
     <ClInclude Include="Code\tier1\interface.h" />
     <ClInclude Include="Code\tier1\mempool.h" />
     <ClInclude Include="Code\tier1\netadr.h" />
+    <ClInclude Include="Code\tier1\stringpool.h" />
     <ClInclude Include="Code\tier1\strtools.h" />
+    <ClInclude Include="Code\tier1\tier1.h" />
     <ClInclude Include="Code\tier1\utlblockmemory.h" />
+    <ClInclude Include="Code\tier1\utlbuffer.h" />
     <ClInclude Include="Code\tier1\utlfixedmemory.h" />
+    <ClInclude Include="Code\tier1\utllinkedlist.h" />
     <ClInclude Include="Code\tier1\utlmemory.h" />
+    <ClInclude Include="Code\tier1\utlqueue.h" />
     <ClInclude Include="Code\tier1\utlrbtree.h" />
+    <ClInclude Include="Code\tier1\utlstring.h" />
+    <ClInclude Include="Code\tier1\utlsymbol.h" />
     <ClInclude Include="Code\tier1\utlvector.h" />
+    <ClInclude Include="Code\tier2\tier2.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Code\CNetChannel Extended.cpp" />
+    <ClCompile Include="Code\mathlib\vector.cpp" />
+    <ClCompile Include="Code\networksystem\netchannel.cpp" />
+    <ClCompile Include="Code\networksystem\networksystem.cpp" />
+    <ClCompile Include="Code\networksystem\udp_socket.cpp" />
     <ClCompile Include="Code\Source.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
