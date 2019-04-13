@@ -15,7 +15,7 @@
     <ProjectGuid>{09490215-55D2-4A3D-BE81-40167E089761}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>CSGOSDK</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
     <ProjectName>CSGOX SDK</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -28,7 +28,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
@@ -51,7 +51,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)Dependencies\Include\json\include\;$(SolutionDir)Dependencies\Include\;$(SolutionDir)Dependencies\Include\freetype-windows-binaries\include\;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\;$(DDK_INC_PATH);$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Dependencies\Include\json\include\;$(SolutionDir)Dependencies\Include\;$(SolutionDir)Dependencies\Include\freetype-windows-binaries\include\;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\;$(DDK_INC_PATH);$(ProjectDir)Code\public;$(ProjectDir)Code\public\tier0;$(ProjectDir)Code\public\tier1;$(ProjectDir)Code\public\tier2;$(ProjectDir)Code\public\tier3;$(ProjectDir)Code\common;$(ProjectDir)Code\game\shared;$(ProjectDir)Code\game\client;$(ProjectDir)Code\game\server;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Dependencies\Lib\;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Lib\x86\;$(DDK_LIB_PATH);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -86,80 +86,231 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Code\appframework\IAppSystem.h" />
-    <ClInclude Include="Code\CNetChannel Extended.hpp" />
-    <ClInclude Include="Code\mathlib\mathlib.h" />
-    <ClInclude Include="Code\mathlib\math_pfns.h" />
-    <ClInclude Include="Code\mathlib\vector.h" />
-    <ClInclude Include="Code\mathlib\vector2d.h" />
-    <ClInclude Include="Code\networksystem\inetworkmessage.h" />
+    <ClInclude Include="Code\common\xbox\xboxstubs.h" />
+    <ClInclude Include="Code\game\client\cdll_client_int.h" />
+    <ClInclude Include="Code\game\client\cdll_util.h" />
+    <ClInclude Include="Code\game\client\cliententitylist.h" />
+    <ClInclude Include="Code\game\client\clientleafsystem.h" />
+    <ClInclude Include="Code\game\client\client_thinklist.h" />
+    <ClInclude Include="Code\game\client\c_baseentity.h" />
+    <ClInclude Include="Code\game\client\c_pixel_visibility.h" />
+    <ClInclude Include="Code\game\client\glow_outline_effect.h" />
+    <ClInclude Include="Code\game\client\iclassmap.h" />
+    <ClInclude Include="Code\game\client\icliententityinternal.h" />
+    <ClInclude Include="Code\game\client\iclientshadowmgr.h" />
+    <ClInclude Include="Code\game\client\particledraw.h" />
+    <ClInclude Include="Code\game\client\particlemgr.h" />
+    <ClInclude Include="Code\game\client\particlesphererenderer.h" />
+    <ClInclude Include="Code\game\client\particles_new.h" />
+    <ClInclude Include="Code\game\client\particles_simple.h" />
+    <ClInclude Include="Code\game\client\particle_iterators.h" />
+    <ClInclude Include="Code\game\client\particle_util.h" />
+    <ClInclude Include="Code\game\client\recvproxy.h" />
+    <ClInclude Include="Code\game\client\timedevent.h" />
+    <ClInclude Include="Code\game\server\sendproxy.h" />
+    <ClInclude Include="Code\game\shared\collisionproperty.h" />
+    <ClInclude Include="Code\game\shared\cstrike\cs_weapon_parse.h" />
+    <ClInclude Include="Code\game\shared\ehandle.h" />
+    <ClInclude Include="Code\game\shared\entitylist_base.h" />
+    <ClInclude Include="Code\game\shared\groundlink.h" />
+    <ClInclude Include="Code\game\shared\igamesystem.h" />
+    <ClInclude Include="Code\game\shared\imovehelper.h" />
+    <ClInclude Include="Code\game\shared\particle_parse.h" />
+    <ClInclude Include="Code\game\shared\particle_property.h" />
+    <ClInclude Include="Code\game\shared\particle_property_inlines.h" />
+    <ClInclude Include="Code\game\shared\predictableid.h" />
+    <ClInclude Include="Code\game\shared\predictable_entity.h" />
+    <ClInclude Include="Code\game\shared\predictioncopy.h" />
+    <ClInclude Include="Code\game\shared\shareddefs.h" />
+    <ClInclude Include="Code\game\shared\sharedvar.h" />
+    <ClInclude Include="Code\game\shared\shared_classnames.h" />
+    <ClInclude Include="Code\game\shared\touchlink.h" />
+    <ClInclude Include="Code\game\shared\usercmd.h" />
+    <ClInclude Include="Code\game\shared\vscript_shared.h" />
+    <ClInclude Include="Code\game\shared\weapon_parse.h" />
     <ClInclude Include="Code\networksystem\inetworksystem.h" />
     <ClInclude Include="Code\networksystem\netchannel.h" />
-    <ClInclude Include="Code\networksystem\networkclient.h" />
-    <ClInclude Include="Code\networksystem\networkserver.h" />
-    <ClInclude Include="Code\networksystem\networksystem.h" />
-    <ClInclude Include="Code\networksystem\sm_protocol.h" />
-    <ClInclude Include="Code\networksystem\udp_process.h" />
-    <ClInclude Include="Code\networksystem\udp_socket.h" />
+    <ClInclude Include="Code\networksystem\sm_Protocol.h" />
+    <ClInclude Include="Code\public\appframework\IAppSystem.h" />
+    <ClInclude Include="Code\CNetChannel Extended.hpp" />
+    <ClInclude Include="Code\public\basehandle.h" />
+    <ClInclude Include="Code\public\bitmap\imageformat.h" />
+    <ClInclude Include="Code\public\bittools.h" />
+    <ClInclude Include="Code\public\bitvec.h" />
+    <ClInclude Include="Code\public\bspfile.h" />
+    <ClInclude Include="Code\public\bspflags.h" />
+    <ClInclude Include="Code\public\cdll_int.h" />
+    <ClInclude Include="Code\public\client_class.h" />
+    <ClInclude Include="Code\public\client_render_handle.h" />
+    <ClInclude Include="Code\public\cmodel.h" />
     <ClInclude Include="Code\public\Color.h" />
+    <ClInclude Include="Code\public\const.h" />
+    <ClInclude Include="Code\public\datacache\idatacache.h" />
+    <ClInclude Include="Code\public\datacache\imdlcache.h" />
     <ClInclude Include="Code\public\datamap.h" />
+    <ClInclude Include="Code\public\datamodel\dmattributetypes.h" />
+    <ClInclude Include="Code\public\datamodel\dmelementhandle.h" />
+    <ClInclude Include="Code\public\dmxloader\dmxattribute.h" />
+    <ClInclude Include="Code\public\dmxloader\dmxelement.h" />
+    <ClInclude Include="Code\public\dmxloader\dmxloader.h" />
+    <ClInclude Include="Code\public\dt_common.h" />
+    <ClInclude Include="Code\public\dt_recv.h" />
+    <ClInclude Include="Code\public\dt_send.h" />
+    <ClInclude Include="Code\public\edict.h" />
+    <ClInclude Include="Code\public\eiface.h" />
+    <ClInclude Include="Code\public\engine\IClientLeafSystem.h" />
+    <ClInclude Include="Code\public\engine\ICollideable.h" />
+    <ClInclude Include="Code\public\engine\iserverplugin.h" />
+    <ClInclude Include="Code\public\engine\ishadowmgr.h" />
+    <ClInclude Include="Code\public\engine\ivmodelinfo.h" />
+    <ClInclude Include="Code\public\engine\ivmodelrender.h" />
     <ClInclude Include="Code\public\filesystem.h" />
     <ClInclude Include="Code\public\filesystem_passthru.h" />
+    <ClInclude Include="Code\public\gametrace.h" />
+    <ClInclude Include="Code\public\globalvars_base.h" />
+    <ClInclude Include="Code\public\iclient.h" />
+    <ClInclude Include="Code\public\icliententity.h" />
+    <ClInclude Include="Code\public\icliententitylist.h" />
+    <ClInclude Include="Code\public\iclientnetworkable.h" />
+    <ClInclude Include="Code\public\iclientrenderable.h" />
+    <ClInclude Include="Code\public\iclientthinkable.h" />
+    <ClInclude Include="Code\public\iclientunknown.h" />
     <ClInclude Include="Code\public\icvar.h" />
-    <ClInclude Include="Code\public\inetchannel.h" />
-    <ClInclude Include="Code\public\inetchannelinfo.h" />
-    <ClInclude Include="Code\public\unitlib\unitlib.h" />
-    <ClInclude Include="Code\tier0\annotations.h" />
-    <ClInclude Include="Code\tier0\basetypes.h" />
-    <ClInclude Include="Code\tier0\commonmacros.h" />
-    <ClInclude Include="Code\tier0\dbg.h" />
-    <ClInclude Include="Code\tier0\dbgflag.h" />
-    <ClInclude Include="Code\tier0\fasttimer.h" />
-    <ClInclude Include="Code\tier0\mem.h" />
-    <ClInclude Include="Code\tier0\memalloc.h" />
-    <ClInclude Include="Code\tier0\memdbgoff.h" />
-    <ClInclude Include="Code\tier0\memdbgon.h" />
-    <ClInclude Include="Code\tier0\platform.h" />
-    <ClInclude Include="Code\tier0\protected_things.h" />
-    <ClInclude Include="Code\tier0\threadtools.h" />
-    <ClInclude Include="Code\tier0\tslist.h" />
-    <ClInclude Include="Code\tier0\valve_minmax_on.h" />
-    <ClInclude Include="Code\tier0\valve_off.h" />
-    <ClInclude Include="Code\tier0\valve_on.h" />
-    <ClInclude Include="Code\tier0\vcrmode.h" />
-    <ClInclude Include="Code\tier0\vcr_shared.h" />
-    <ClInclude Include="Code\tier0\wchartypes.h" />
-    <ClInclude Include="Code\tier0\xbox_codeline_defines.h" />
-    <ClInclude Include="Code\tier1\bitbuf.h" />
+    <ClInclude Include="Code\public\ihandleentity.h" />
+    <ClInclude Include="Code\public\inetmsghandler.h" />
+    <ClInclude Include="Code\public\inputsystem\ButtonCode.h" />
+    <ClInclude Include="Code\public\inputsystem\InputEnums.h" />
+    <ClInclude Include="Code\public\interfaces\interfaces.h" />
+    <ClInclude Include="Code\public\isaverestore.h" />
+    <ClInclude Include="Code\public\iserverentity.h" />
+    <ClInclude Include="Code\public\iservernetworkable.h" />
+    <ClInclude Include="Code\public\iserverunknown.h" />
+    <ClInclude Include="Code\public\ispatialpartition.h" />
+    <ClInclude Include="Code\public\ispsharedmemory.h" />
+    <ClInclude Include="Code\public\istudiorender.h" />
+    <ClInclude Include="Code\public\ivrenderview.h" />
+    <ClInclude Include="Code\public\localflexcontroller.h" />
+    <ClInclude Include="Code\public\materialsystem\deformations.h" />
+    <ClInclude Include="Code\public\materialsystem\IColorCorrection.h" />
+    <ClInclude Include="Code\public\materialsystem\imaterial.h" />
+    <ClInclude Include="Code\public\materialsystem\imaterialsystem.h" />
+    <ClInclude Include="Code\public\materialsystem\imaterialsystemhardwareconfig.h" />
+    <ClInclude Include="Code\public\materialsystem\imesh.h" />
+    <ClInclude Include="Code\public\materialsystem\itexture.h" />
+    <ClInclude Include="Code\public\materialsystem\MaterialSystemUtil.h" />
+    <ClInclude Include="Code\public\materialsystem\meshreader.h" />
+    <ClInclude Include="Code\public\mathlib\bumpvects.h" />
+    <ClInclude Include="Code\public\mathlib\compressed_light_cube.h" />
+    <ClInclude Include="Code\public\mathlib\compressed_vector.h" />
+    <ClInclude Include="Code\public\mathlib\lightdesc.h" />
+    <ClInclude Include="Code\public\mathlib\mathlib.h" />
+    <ClInclude Include="Code\public\mathlib\math_pfns.h" />
+    <ClInclude Include="Code\public\mathlib\ssemath.h" />
+    <ClInclude Include="Code\public\mathlib\vector.h" />
+    <ClInclude Include="Code\public\mathlib\vector2d.h" />
+    <ClInclude Include="Code\public\mathlib\vector4d.h" />
+    <ClInclude Include="Code\public\mathlib\vmatrix.h" />
+    <ClInclude Include="Code\public\mathlib\vplane.h" />
+    <ClInclude Include="Code\public\networksystem\inetworksystem.h" />
+    <ClInclude Include="Code\public\networksystem\sm_protocol.h" />
+    <ClInclude Include="Code\public\networkvar.h" />
+    <ClInclude Include="Code\public\particles\particles.h" />
+    <ClInclude Include="Code\public\raytrace.h" />
+    <ClInclude Include="Code\public\shake.h" />
+    <ClInclude Include="Code\public\smartptr.h" />
+    <ClInclude Include="Code\public\soundflags.h" />
+    <ClInclude Include="Code\public\string_t.h" />
+    <ClInclude Include="Code\public\studio.h" />
+    <ClInclude Include="Code\public\texture_group_names.h" />
+    <ClInclude Include="Code\public\tier0\annotations.h" />
+    <ClInclude Include="Code\public\tier0\basetypes.h" />
+    <ClInclude Include="Code\public\tier0\commonmacros.h" />
+    <ClInclude Include="Code\public\tier0\dbg.h" />
+    <ClInclude Include="Code\public\tier0\dbgflag.h" />
+    <ClInclude Include="Code\public\tier0\fasttimer.h" />
+    <ClInclude Include="Code\public\tier0\icommandline.h" />
+    <ClInclude Include="Code\public\tier0\l2cache.h" />
+    <ClInclude Include="Code\public\tier0\logging.h" />
+    <ClInclude Include="Code\public\tier0\mem.h" />
+    <ClInclude Include="Code\public\tier0\memalloc.h" />
+    <ClInclude Include="Code\public\tier0\memdbgoff.h" />
+    <ClInclude Include="Code\public\tier0\memdbgon.h" />
+    <ClInclude Include="Code\public\tier0\platform.h" />
+    <ClInclude Include="Code\public\tier0\protected_things.h" />
+    <ClInclude Include="Code\public\tier0\threadtools.h" />
+    <ClInclude Include="Code\public\tier0\tslist.h" />
+    <ClInclude Include="Code\public\tier0\valve_minmax_on.h" />
+    <ClInclude Include="Code\public\tier0\valve_off.h" />
+    <ClInclude Include="Code\public\tier0\valve_on.h" />
+    <ClInclude Include="Code\public\tier0\vcrmode.h" />
+    <ClInclude Include="Code\public\tier0\vcr_shared.h" />
+    <ClInclude Include="Code\public\tier0\vprof.h" />
+    <ClInclude Include="Code\public\tier0\wchartypes.h" />
+    <ClInclude Include="Code\public\tier0\win32consoleio.h" />
+    <ClInclude Include="Code\public\tier0\xbox_codeline_defines.h" />
+    <ClInclude Include="Code\public\tier1\bitbuf.h" />
     <ClInclude Include="Code\CSGO SDK.hpp" />
-    <ClInclude Include="Code\tier1\byteswap.h" />
-    <ClInclude Include="Code\tier1\checksum_crc.h" />
-    <ClInclude Include="Code\tier1\convar.h" />
-    <ClInclude Include="Code\tier1\iconvar.h" />
-    <ClInclude Include="Code\tier1\interface.h" />
-    <ClInclude Include="Code\tier1\mempool.h" />
-    <ClInclude Include="Code\tier1\netadr.h" />
-    <ClInclude Include="Code\tier1\stringpool.h" />
-    <ClInclude Include="Code\tier1\strtools.h" />
-    <ClInclude Include="Code\tier1\tier1.h" />
-    <ClInclude Include="Code\tier1\utlblockmemory.h" />
-    <ClInclude Include="Code\tier1\utlbuffer.h" />
-    <ClInclude Include="Code\tier1\utlfixedmemory.h" />
-    <ClInclude Include="Code\tier1\utllinkedlist.h" />
-    <ClInclude Include="Code\tier1\utlmemory.h" />
-    <ClInclude Include="Code\tier1\utlqueue.h" />
-    <ClInclude Include="Code\tier1\utlrbtree.h" />
-    <ClInclude Include="Code\tier1\utlstring.h" />
-    <ClInclude Include="Code\tier1\utlsymbol.h" />
-    <ClInclude Include="Code\tier1\utlvector.h" />
-    <ClInclude Include="Code\tier2\tier2.h" />
+    <ClInclude Include="Code\public\tier1\byteswap.h" />
+    <ClInclude Include="Code\public\tier1\characterset.h" />
+    <ClInclude Include="Code\public\tier1\checksum_crc.h" />
+    <ClInclude Include="Code\public\tier1\checksum_md5.h" />
+    <ClInclude Include="Code\public\tier1\convar.h" />
+    <ClInclude Include="Code\public\tier1\exprevaluator.h" />
+    <ClInclude Include="Code\public\tier1\functors.h" />
+    <ClInclude Include="Code\public\tier1\generichash.h" />
+    <ClInclude Include="Code\public\tier1\iconvar.h" />
+    <ClInclude Include="Code\public\tier1\interface.h" />
+    <ClInclude Include="Code\public\tier1\interpolatedvar.h" />
+    <ClInclude Include="Code\public\tier1\KeyValues.h" />
+    <ClInclude Include="Code\public\tier1\lerp_functions.h" />
+    <ClInclude Include="Code\public\tier1\mempool.h" />
+    <ClInclude Include="Code\public\tier1\netadr.h" />
+    <ClInclude Include="Code\public\tier1\rangecheckedvar.h" />
+    <ClInclude Include="Code\public\tier1\refcount.h" />
+    <ClInclude Include="Code\public\tier1\stringpool.h" />
+    <ClInclude Include="Code\public\tier1\strtools.h" />
+    <ClInclude Include="Code\public\tier1\tier1.h" />
+    <ClInclude Include="Code\public\tier1\timeutils.h" />
+    <ClInclude Include="Code\public\tier1\uniqueid.h" />
+    <ClInclude Include="Code\public\tier1\utlblockmemory.h" />
+    <ClInclude Include="Code\public\tier1\utlbuffer.h" />
+    <ClInclude Include="Code\public\tier1\utldict.h" />
+    <ClInclude Include="Code\public\tier1\utlenvelope.h" />
+    <ClInclude Include="Code\public\tier1\utlfixedmemory.h" />
+    <ClInclude Include="Code\public\tier1\utlhash.h" />
+    <ClInclude Include="Code\public\tier1\utlintrusivelist.h" />
+    <ClInclude Include="Code\public\tier1\utllinkedlist.h" />
+    <ClInclude Include="Code\public\tier1\utlmap.h" />
+    <ClInclude Include="Code\public\tier1\utlmemory.h" />
+    <ClInclude Include="Code\public\tier1\utlobjectreference.h" />
+    <ClInclude Include="Code\public\tier1\utlqueue.h" />
+    <ClInclude Include="Code\public\tier1\utlrbtree.h" />
+    <ClInclude Include="Code\public\tier1\utlsoacontainer.h" />
+    <ClInclude Include="Code\public\tier1\UtlSortVector.h" />
+    <ClInclude Include="Code\public\tier1\utlstack.h" />
+    <ClInclude Include="Code\public\tier1\utlstring.h" />
+    <ClInclude Include="Code\public\tier1\UtlStringMap.h" />
+    <ClInclude Include="Code\public\tier1\utlsymbol.h" />
+    <ClInclude Include="Code\public\tier1\utlsymbollarge.h" />
+    <ClInclude Include="Code\public\tier1\utltshash.h" />
+    <ClInclude Include="Code\public\tier1\utlvector.h" />
+    <ClInclude Include="Code\public\tier2\meshutils.h" />
+    <ClInclude Include="Code\public\tier2\tier2.h" />
+    <ClInclude Include="Code\public\tier2\tier2_logging.h" />
+    <ClInclude Include="Code\public\tier3\tier3.h" />
+    <ClInclude Include="Code\public\toolframework\itoolentity.h" />
+    <ClInclude Include="Code\public\trace.h" />
+    <ClInclude Include="Code\public\unitlib\unitlib.h" />
+    <ClInclude Include="Code\public\vcollide.h" />
+    <ClInclude Include="Code\public\vscript\ivscript.h" />
+    <ClInclude Include="Code\public\vscript\vscript_templates.h" />
+    <ClInclude Include="Code\public\vstdlib\random.h" />
+    <ClInclude Include="Code\public\vstdlib\vstdlib.h" />
+    <ClInclude Include="Code\public\vtf\vtf.h" />
+    <ClInclude Include="Code\public\zip_uncompressed.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Code\CNetChannel Extended.cpp" />
-    <ClCompile Include="Code\mathlib\vector.cpp" />
-    <ClCompile Include="Code\networksystem\netchannel.cpp" />
-    <ClCompile Include="Code\networksystem\networksystem.cpp" />
-    <ClCompile Include="Code\networksystem\udp_socket.cpp" />
     <ClCompile Include="Code\Source.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

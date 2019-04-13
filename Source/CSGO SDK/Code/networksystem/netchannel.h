@@ -1,4 +1,4 @@
-﻿//====== Copyright � 1996-2005, Valve Corporation, All rights reserved. =======
+//====== Copyright � 1996-2005, Valve Corporation, All rights reserved. =======
 //
 // Purpose: 
 //
@@ -80,27 +80,7 @@ protected:
 
 
 
-class INetChannelHandler
-{
-public:
-	virtual	~INetChannelHandler( void ) {};
-
-	virtual void ConnectionStart(INetChannel *chan) = 0;	// called first time network channel is established
-
-	virtual void ConnectionClosing(const char *reason) = 0; // network channel is being closed by remote site
-
-	virtual void ConnectionCrashed(const char *reason) = 0; // network error occured
-
-	virtual void PacketStart(int incoming_sequence, int outgoing_acknowledged) = 0;	// called each time a new packet arrived
-
-	virtual void PacketEnd( void ) = 0; // all messages has been parsed
-
-	virtual void FileRequested(const char *fileName, unsigned int transferID) = 0; // other side request a file for download
-
-	virtual void FileReceived(const char *fileName, unsigned int transferID) = 0; // we received a file
-	
-	virtual void FileDenied(const char *fileName, unsigned int transferID) = 0;	// a file request was denied by other side
-};
+class INetChannelHandler;
 
 
 // server to client

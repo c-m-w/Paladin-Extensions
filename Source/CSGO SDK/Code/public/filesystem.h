@@ -355,11 +355,6 @@ struct FileAsyncRequest_t
 	FSAllocFunc_t			pfnAlloc;			// custom allocator. can be null. not compatible with FSASYNC_FLAGS_FREEDATAPTR
 };
 
-struct MD5Value_t
-{
-	unsigned char bits[16];
-};
-
 struct FileHash_t
 {
 	int m_eFileHashType;

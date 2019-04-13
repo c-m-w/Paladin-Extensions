@@ -1,4 +1,4 @@
-﻿//===== Copyright � 1996-2005, Valve Corporation, All rights reserved. ======//
+//===== Copyright � 1996-2005, Valve Corporation, All rights reserved. ======//
 //
 // Purpose: 
 //
@@ -202,8 +202,10 @@ inline ConCommandBase * ICvar::Iterator::Get( void )
 // These global names are defined by tier1.h, duplicated here so you
 // don't have to include tier1.h
 //-----------------------------------------------------------------------------
-extern ICvar *cvar;
-extern ICvar *g_pCVar;
+
+// These are marked DLL_EXPORT for Linux.
+DECLARE_TIER1_INTERFACE( ICvar, cvar );
+DECLARE_TIER1_INTERFACE( ICvar, g_pCVar );
 
 
 #endif // ICVAR_H

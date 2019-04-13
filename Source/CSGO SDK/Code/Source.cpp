@@ -1,6 +1,6 @@
-// here, we include files and compile the lib to see if everything is ok. also, testing members in functions and whatnot might help.
+#include "CSGO SDK.hpp"
 
-#include "networksystem/netchannel.h"
+// here, we include files and compile the lib to see if everything is ok. also, testing members in functions and whatnot might help.
 
 CNetChannel test;
 
@@ -10,8 +10,6 @@ void Test()
 }
 
 // here, we test our extensions of classes
-
-#include "CSGO SDK.hpp"
 
 EXTENDED_SDK_CLASS( CNetChannel ) test2;
 
