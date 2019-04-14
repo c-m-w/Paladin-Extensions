@@ -1,6 +1,10 @@
 /// CSGO SDK.hpp
 
 #pragma once
+#pragma warning( push, 0 )
+#include <CodeAnalysis/Warnings.h>
+#pragma warning( disable: ALL_CODE_ANALYSIS_WARNINGS )
+#include "../../Framework/Code/Development Environment/Assembly ON.inl"
 
 // note: some (read "many") includes are here twice. this is just so the includes line up with how they were in the old sdk
 // i'll remove it once this sdk is fully done
@@ -18,6 +22,7 @@
 #include "public/tier0/annotations.h"
 #include "public/tier1/UtlSortVector.h"
 #include "public/tier1/checksum_md5.h"
+#include "public/tier1/mempool.h"
 #include "public/bitvec.h"
 #include "game/shared/shareddefs.h"
 #include "game/shared/predictable_entity.h"
@@ -57,77 +62,51 @@
 #include "public/const.h" // MoveType_t
 // } Enumerations
 #include "game/client/glow_outline_effect.h" // GlowOutlineEffect
-//#include ".h" // IHandleEntity
-//#include ".h" // PaintKit
-//#include ".h" // platform
-//#include ".h" // Recv
-//#include ".h" // Studio
-//#include ".h" // UtlBuffer
-//#include ".h" // UtlMemory
-//#include ".h" // UtlString
-//#include ".h" // UtlVector
+#include "public/ihandleentity.h" // IHandleEntity
+//#include ".h" // PaintKit -- todo: see line 49
+#include "public/tier0/platform.h" // platform
+#include "public/dt_recv.h" // Recv
+#include "public/studio.h" // Studio
+#include "public/tier1/utlbuffer.h" // UtlBuffer
+#include "public/tier1/utlmemory.h" // UtlMemory
+#include "public/tier1/utlstring.h" // UtlString
+#include "public/tier1/utlvector.h" // UtlVector
 
 // Interfaces
 #include "networksystem/netchannel.h"
-
-// todo:
-//	* types
-//		x CBaseHandle
-//		x CCSWeaponInfo
-//		x CGlobalVars
-//		x CHandle
-//		x characterset
-//		x checksum_crc
-//		x checksum_md5
-//		x ClientClass
-//		x Color
-//		x ConVar
-//		x CUserCmd
-//		x Enumerations
-//		x GlowOutlineEffect
-//		o IHandleEntity
-//		o PaintKit
-//		o platform
-//		o Recv
-//		o Studio
-//		o UtlBuffer
-//		o UtlMemory
-//		o UtlString
-//		o UtlVector
-//	* interfaces
-//		o CClientState
-//		o CInput
-//		o IAppSystem
-//		o IBaseClientDll
-//		o IBaseInterface
-//		o IClientEntity
-//		o IClientEntityList
-//		o IClientMode
-//		o IClientNetworkable
-//		o IClientRenderable
-//		o IClientThinkable
-//		o IClientUnknown
-//		o ICollideable
-//		o IConVar
-//		o ICVar
-//		o IEngineSound
-//		o IEngineTrace
-//		o IFileSystem
-//		o IGameEventManager
-//		o IGameMovement
-//		o IInputSystem
-//		o ILocalize
-//		o IMaterialSystem
-//		o IMoveHelper
-//		o IVEngineClient
-//		o IViewRenderBeams
-//		o IPanel
-//		o IPrediction
-//		o IRefCounted
-//		o ISurface
-//		o IVRenderView
-//		o IVModelInfoClient
-//		o IVModelRender
+#include "engine/client.h" // CClientState
+#include "game/client/input.h" // CInput
+#include "public/appframework/IAppSystem.h" // IAppSystem
+#include "public/cdll_int.h" // IBaseClientDll
+#include "public/tier1/interface.h" // IBaseInterface
+#include "public/icliententity.h" // IClientEntity
+#include "public/icliententitylist.h" // IClientEntityList
+#include "game/client/iclientmode.h" // IClientMode
+#include "public/iclientnetworkable.h" // IClientNetworkable
+#include "public/iclientrenderable.h" // IClientRenderable
+#include "public/iclientthinkable.h" // IClientThinkable
+#include "public/iclientunknown.h" // IClientUnknown
+#include "public/engine/ICollideable.h" // ICollideable
+#include "public/tier1/iconvar.h" // IConVar
+#include "public/icvar.h" // ICVar
+#include "public/engine/IEngineSound.h" // IEngineSound
+#include "public/engine/IEngineTrace.h" // IEngineTrace
+#include "public/filesystem.h" // IFileSystem
+#include "public/igameevents.h" // IGameEventManager
+#include "game/shared/igamemovement.h" // IGameMovement
+#include "public/inputsystem/iinputsystem.h" // IInputSystem
+#include "public/localize/ilocalize.h" // ILocalize
+#include "public/materialsystem/imaterialsystem.h" // IMaterialSystem
+#include "game/shared/imovehelper.h" // IMoveHelper
+#include "public/cdll_int.h" // IVEngineClient
+#include "game/client/iviewrender_beams.h" // IViewRenderBeams
+#include "public/vgui/IPanel.h" // IPanel
+#include "public/iprediction.h" // IPrediction
+#include "public/tier1/refcount.h" // IRefCounted
+#include "vgui/ISurface.h" // ISurface
+#include "public/ivrenderview.h" // IVRenderView
+#include "public/engine/ivmodelinfo.h" // IVModelInfoClient
+#include "public/engine/ivmodelrender.h" // IVModelRender
 
 // Extension of SDK
 #define EXTEND_SDK_CLASS( CClassName ) class PX_##CClassName: public CClassName
@@ -135,3 +114,6 @@
 #define EXTEND_SDK_STRUCT( SStructName ) class PX_##SStructName: public SStructName
 #define EXTENDED_SDK_STRUCT( SStructName ) PX_##SStructName
 #include "CNetChannel Extended.hpp"
+
+#include "../../Framework/Code/Development Environment/Assembly OFF.inl"
+#pragma warning( pop )

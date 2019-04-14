@@ -49,5 +49,7 @@
     <None Include="Code\Source Development Kit\Toolkits\Graphical User Interface.inl" />
     <None Include="Code\Source Development Kit\Toolkits\Memory Manager.inl" />
     <None Include="Code\Source Development Kit\Toolkits\Hooking.hpp" />
+    <None Include="Code\Development Environment\Assembly ON.inl" />
+    <None Include="Code\Development Environment\Assembly OFF.inl" />
   </ItemGroup>
 </Project>

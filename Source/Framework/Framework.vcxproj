@@ -138,6 +138,8 @@
     <ClCompile Include="Code\Source Development Kit\Toolkits\System Utilities.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Code\Development Environment\Assembly OFF.inl" />
+    <None Include="Code\Development Environment\Assembly ON.inl" />
     <None Include="Code\Source Development Kit\Application Programming Interfaces\Connectivity.inl" />
     <None Include="Code\Source Development Kit\Application Programming Interfaces\Cryptography.inl" />
     <None Include="Code\Source Development Kit\Toolkits\Graphical User Interface.inl" />

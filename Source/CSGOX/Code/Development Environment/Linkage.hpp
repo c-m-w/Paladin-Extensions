@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "../../CSGO SDK/Code/Inclusion.hpp"
+#include "../../CSGO SDK/Code/CSGO SDK.hpp"
 
 namespace Modules
 {
@@ -57,6 +57,8 @@ namespace Interfaces
 	inline IVEngineClient *pEngineClient = nullptr;
 }
 
+// todo Clean this up because ew #ifdef _DEBUG
+
 class CLinkage: public IBase
 {
 private:
@@ -66,10 +68,14 @@ private:
 
 public:
 
-#if defined _DEBUG
 
-	static inline std::string strCreateInterfaceImport	= ENC( "CreateInterface" );
+	static inline std::string strCreateInterfaceImport
+#if defined _DEBUG
+	= ENC( "CreateInterface" )
+#endif
+	;
 	static inline std::string strModules[ Modules::MODULE_MAX ]
+#if defined _DEBUG
 	{
 		ENC( "client_panorama.dll" ),
 		ENC( "engine.dll" ),		
@@ -83,37 +89,62 @@ public:
 		ENC( "vstdlib.dll" ),
 		ENC( "localize.dll" ),
 		ENC( "filesystem_stdio.dll" )
-	};
+	}
+#endif
+	;
 
 	static inline char *szClientBaseVersion = nullptr,
 					   *szEngineClientVersion = nullptr,
 					   *szEngineSoundClientVersion = nullptr;
 	
-	static inline pattern_t _ClientBaseVersion = pattern_t( ENC( "68 ? ? ? ? FF 12 8B 07" ), &szClientBaseVersion, 1, [ & ]( )
+	static inline pattern_t _ClientBaseVersion
+#if defined _DEBUG
+	= pattern_t( ENC( "68 ? ? ? ? FF 12 8B 07" ), &szClientBaseVersion, 1, [ & ]( )
 	{
 		szClientBaseVersion = *reinterpret_cast< decltype( szClientBaseVersion )* >( szClientBaseVersion );
-	} );
-	static inline pattern_t _EngineClientVersion = pattern_t( ENC( "6A 00 68 ? ? ? ? FF D6 83 C4 0C" ), &szEngineClientVersion, 3, [ & ]( )
+	} )
+#endif
+	;
+	static inline pattern_t _EngineClientVersion
+#if defined _DEBUG
+	= pattern_t( ENC( "6A 00 68 ? ? ? ? FF D6 83 C4 0C" ), &szEngineClientVersion, 3, [ & ]( )
 	{
 		szEngineClientVersion = *reinterpret_cast< decltype( szEngineClientVersion )* >( szEngineClientVersion );
-	} );
-	static inline pattern_t _EngineSoundClientVersion = pattern_t( ENC( "08 6A 00 68 ? ? ? ? FF D6 6A" ), &szEngineSoundClientVersion, 4, [ & ]()
+	} )
+#endif
+	;
+	static inline pattern_t _EngineSoundClientVersion
+#if defined _DEBUG
+	= pattern_t( ENC( "08 6A 00 68 ? ? ? ? FF D6 6A" ), &szEngineSoundClientVersion, 4, [ & ]()
 	{
 		szEngineSoundClientVersion = *reinterpret_cast< decltype( szEngineSoundClientVersion )* >( szEngineSoundClientVersion );
-	});
-	static inline pattern_t _DevicePattern = pattern_t( ENC( "A1 ? ? ? ? 50 8B 08 FF 51 0C" ), &Interfaces::pDevice, 1, [ & ]( )
+	})
+#endif
+	;
+	static inline pattern_t _DevicePattern
+#if defined _DEBUG
+	= pattern_t( ENC( "A1 ? ? ? ? 50 8B 08 FF 51 0C" ), &Interfaces::pDevice, 1, [ & ]( )
 	{
 		Interfaces::pDevice = **reinterpret_cast< decltype( Interfaces::pDevice )** >( Interfaces::pDevice );
-	} );
-	static inline constexpr auto zReset = 16u,
-		zBeginScene = 41u,
-		zEndScene = 42u;
-
-#else
-
-
-
+	} )
 #endif
+	;
+	static inline unsigned zReset
+#if defined _DEBUG
+	= 16u
+#endif
+	,
+		zBeginScene
+#if defined _DEBUG
+	= 41u
+#endif
+	,
+		zEndScene
+#if defined _DEBUG
+	= 42u
+#endif
+	;
+
 } inline _Linker;
 
 #include "Linkage.inl"

@@ -13,9 +13,9 @@
 #pragma once
 #endif
 
-#ifdef _INC_TCHAR
-#error ("Must include tier0 type headers before tchar.h")
-#endif
+//#ifdef _INC_TCHAR
+//#error ("Must include tier0 type headers before tchar.h")
+//#endif
 
 // Temporarily turn off Valve defines
 #include "tier0/valve_off.h"
