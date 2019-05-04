@@ -45,6 +45,15 @@ public:
 		TEXTURE_MAX
 	};
 
+	enum ETextAlignment
+	{
+		LEFT,
+		CENTER,
+		RIGHT,
+		TOP = 0,
+		BOTTOM = 2
+	};
+
 private:
 
 	static constexpr auto FVF = D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1;
@@ -83,18 +92,35 @@ public:
 			MAX
 		};
 
-		float x, y, flWidth, flHeight;
+		Utilities::vector2_t vecLocation { }, vecSize { };
+		double dWidth = 0.0, dHeight = 0.0;
 
 		explicit rectangle_t( ) = default;
-		explicit rectangle_t( float _x, float _y, float _flWidth, float _flHeight );
+		explicit rectangle_t( double x, double y, double dWidth, double dHeight );
 		explicit rectangle_t( RECT recNew );
 
 		void operator+=( const rectangle_t &rhs );
+		void operator-=( const rectangle_t &rhs );
+		void operator*=( double rhs );
+		void operator/=( double rhs );
 
+		double GetX( );
+		double GetY( );
+		double GetW( );
+		double GetH( );
+		void PutX( double x );
+		void PutY( double y );
+		void PutW( double w );
+		void PutH( double h );
 		void Clamp( const rectangle_t &recClamp );
 		bool LocationInRectangle( const Utilities::vector2_t &vecLocation ) const;
 		bool InRectangle( const rectangle_t &recLocation ) const;
 		RECT ToRect( ) const;
+
+		__declspec( property( get = GetX, put = PutX ) ) double x;
+		__declspec( property( get = GetY, put = PutY ) ) double y;
+		__declspec( property( get = GetW, put = PutW ) ) double w;
+		__declspec( property( get = GetH, put = PutH ) ) double h;
 	};
 
 	struct vertex_t
@@ -124,6 +150,80 @@ public:
 		vertex_t *GetPoints( float flStartAngle, float flRatio ) const;
 	};
 
+	class IBaseDrawable
+	{
+	protected:
+
+		bool bCreated = false;
+
+	public:
+
+		virtual bool Create( )	= 0;
+		virtual void Draw( )	= 0;
+		virtual void Destroy( )	= 0;
+	};
+
+	template< typename _t >
+	class CDrawable< _t > : public IBaseDrawable
+	{ };
+
+	template< >
+	class CDrawable< vertex_t > : public IBaseDrawable
+	{
+	private:
+
+		std::vector< vertex_t > vecVertices { };
+		std::size_t zPrimitives = 0;
+		D3DPRIMITIVETYPE _DrawType = D3DPT_TRIANGLESTRIP;
+		IDirect3DVertexBuffer9* pVertexBuffer = nullptr;
+
+	public:
+
+		CDrawable( vertex_t* pVertices, std::size_t zVertices, std::size_t zPrimitives, D3DPRIMITIVETYPE _DrawType );
+		CDrawable( std::vector< vertex_t > vecVertices, std::size_t zPrimitives, D3DPRIMITIVETYPE _DrawType );
+
+		bool Create( ) override;
+		void Draw( ) override;
+		void Destroy( ) override;
+	};
+
+	template< >
+	class CDrawable< std::string > : public IBaseDrawable
+	{
+	private:
+
+		std::string strText { };
+		int iFont = 0, iSize = 0, iHorizontalAlignment = 0, iVerticalAlignment = 0;
+		Utilities::vector2_t vecDimensions;
+		IDirect3DTexture9* pTexture = nullptr;
+
+	public:
+
+		CDrawable( const std::string &strText, int iFont, int iSize, int iHorizontalAlignment, int iVerticalAlignment );
+
+		bool Create( ) override;
+		void Draw( ) override;
+		void Destroy( ) override;
+	};
+
+	/// TODO IMAGE clASS
+	//template< >
+	//class CDrawable< IDirect3DTexture9* > : public IBaseDrawable
+	//{
+	//private:
+	//
+	//	IDirect3DTexture9* pTexture = nullptr;
+	//
+	//public:
+	//
+	//	CDrawable( vertex_t* pVertices, std::size_t zVertices, std::size_t zPrimitives );
+	//	CDrawable( std::vector< vertex_t > vecVertices, std::size_t zPrimitives );
+	//
+	//	void Create( ) override;
+	//	void Draw( ) override;
+	//	void Destroy( ) override;
+	//};
+
 	struct glyph_t
 	{
 		FT_GlyphSlotRec_ glGlyph { };
@@ -148,14 +248,6 @@ public:
 
 	struct text_t
 	{
-		enum
-		{
-			LEFT,
-			CENTER,
-			RIGHT,
-			TOP = 0,
-			BOTTOM = 2
-		};
 
 		std::string strText;
 		int iFont, iSize, iHorizontalAlignment, iVerticalAlignment;
@@ -175,15 +267,6 @@ public:
 		void Draw( const Utilities::vector2_t &vecLocation );
 		void Draw( const rectangle_t &recUsableSpace );
 		void Destruct( );
-	};
-
-	struct polygon_buffer_t
-	{
-		IDirect3DVertexBuffer9 *pVertexBuffer;
-		std::size_t sPrimitives;
-		D3DPRIMITIVETYPE ptDraw;
-
-		polygon_buffer_t( IDirect3DVertexBuffer9 *_pVertexBuffer, std::size_t _sPrimitives, D3DPRIMITIVETYPE _ptDraw );
 	};
 
 	struct polygon_t
@@ -242,7 +325,6 @@ public:
 	IDirect3DTexture9 *CreateTextTexture( const char *szText, float flSize, std::size_t sFont, const color_t &clrText, Utilities::vector2_t &vecDimensions, EFontFlags ffFlags, float flMaxWidth = -1.f );
 	void Polygon( vertex_t *pVertices, std::size_t sVertices, std::size_t sPrimitives );
 	IDirect3DVertexBuffer9 *ConstructPolygon( vertex_t *pVertices, std::size_t sVertices );
-	void DrawPolygon( const polygon_buffer_t &pbPolygon, bool bRelease = false );
 	void DrawTexture( IDirect3DTexture9 *pTexture, const Utilities::vector2_t &vecLocation );
 	void DrawTexture( int iTextureID, Utilities::vector2_t vecLocation );
 
@@ -265,6 +347,7 @@ using EFont = CDrawing::EFont;
 using EFontFlags = CDrawing::EFontFlags;
 using ECursor = CDrawing::ECursor;
 using ETextures = CDrawing::ETextures;
+using ETextAlignment = CDrawing::ETextAlignment;
 using rectangle_t = CDrawing::rectangle_t;
 using vertex_t = CDrawing::vertex_t;
 using circle_t = CDrawing::circle_t;
@@ -273,3 +356,5 @@ using polygon_buffer_t = CDrawing::polygon_buffer_t;
 using polygon_t = CDrawing::polygon_t;
 using texture_t = CDrawing::texture_t;
 using texture_renderable_t = CDrawing::texture_renderable_t;
+
+#include "Drawing.inl"

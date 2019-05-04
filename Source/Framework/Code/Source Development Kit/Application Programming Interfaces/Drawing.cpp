@@ -488,7 +488,7 @@ IDirect3DTexture9 *CDrawing::CreateTextTexture( const char *szText, float flSize
 			std::string strWord = &szText[ u ];
 
 			strWord = strWord.substr( 0, strWord.find( ' ' ) - 1 );
-			if ( GetTextDimensions( strWord.c_str( ), flSize, sFont ).x + pCurrentRow->locRowSize.x > flMaxWidth )
+			if ( GetTextDimensions( strWord.c_str( ), flSize, sFont ).x + pCurrentRow->vecRowSize.x > flMaxWidth )
 				pCurrentRow = &vecRows.emplace_back( );
 		}
 	}
@@ -496,8 +496,8 @@ IDirect3DTexture9 *CDrawing::CreateTextTexture( const char *szText, float flSize
 	auto iTotalVerticalAddition = 0;
 	for ( auto &row: vecRows )
 	{
-		vecDimensions.x = std::max( vecDimensions.x, row.locRowSize.x );
-		vecDimensions.y += row.locRowSize.y + row.iVerticalOffset;
+		vecDimensions.x = std::max( vecDimensions.x, row.vecRowSize.x );
+		vecDimensions.y += row.vecRowSize.y + row.iVerticalOffset;
 		iTotalVerticalAddition += row.iVerticalAddition;
 	}
 
@@ -542,7 +542,7 @@ IDirect3DTexture9 *CDrawing::CreateTextTexture( const char *szText, float flSize
 			}
 		}
 
-		flVerticalOffset += rowCurrent.locRowSize.y;
+		flVerticalOffset += rowCurrent.vecRowSize.y;
 	}
 
 	if ( ffFlags & DROPSHADOW )
@@ -621,14 +621,6 @@ IDirect3DVertexBuffer9 *CDrawing::ConstructPolygon( vertex_t *pVertices, std::si
 	return pBuffer;
 }
 
-void CDrawing::DrawPolygon( const polygon_buffer_t &pbPolygon, bool bRelease /*= false*/ )
-{
-	if ( D3D_OK == pDevice->SetStreamSource( NULL, pbPolygon.pVertexBuffer, NULL, sizeof( vertex_t ) ) )
-		pDevice->DrawPrimitive( pbPolygon.ptDraw, 0, pbPolygon.sPrimitives );
-
-	if ( bRelease )
-		pbPolygon.pVertexBuffer->Release( );
-}
 
 void CDrawing::DrawTexture( IDirect3DTexture9 *pTexture, vector2_t vecLocation )
 {
@@ -1070,7 +1062,7 @@ polygon_t CDrawing::Line( vector2_t locStart, vector2_t locEnd, float flThicknes
 	return polygon_t( vtxVertices, 4, 2 );
 }
 
-rectangle_t::rectangle_t( float _x, float _y, float _flWidth, float _flHeight ): x( _x ), y( _y ), flWidth( _flWidth ), flHeight( _flHeight )
+rectangle_t::rectangle_t( double x, double y, double dWidth, double dHeight ): x( x ), y( y ), dWidth( v ), dHeight( dHeight )
 { }
 
 rectangle_t::rectangle_t( RECT recNew )
@@ -1082,6 +1074,64 @@ void rectangle_t::operator+=( const rectangle_t &rhs )
 {
 	x += rhs.x;
 	y += rhs.y;
+}
+
+void CDrawing::rectangle_t::operator-=( const rectangle_t &rhs )
+{
+	x -= rhs.x;
+	y -= rhs.y;
+}
+
+void CDrawing::rectangle_t::operator*=( double rhs )
+{
+	x *= rhs;
+	y *= rhs;
+}
+
+void CDrawing::rectangle_t::operator/=( double rhs )
+{
+	x /= rhs;
+	y /= rhs;
+}
+
+double CDrawing::rectangle_t::GetX( )
+{
+	return vecLocation.x;
+}
+
+double CDrawing::rectangle_t::GetY( )
+{
+	return vecLocation.y;
+}
+
+double CDrawing::rectangle_t::GetW( )
+{
+	return vecSize.x;
+}
+
+double CDrawing::rectangle_t::GetH( )
+{
+	return vecSize.y;
+}
+
+void CDrawing::rectangle_t::PutX( double x )
+{
+	vecLocation.x = x;
+}
+
+void CDrawing::rectangle_t::PutY( double y )
+{
+	vecLocation.y = y;
+}
+
+void CDrawing::rectangle_t::PutW( double w )
+{
+	vecSize.x = w;
+}
+
+void CDrawing::rectangle_t::PutH( double h )
+{
+	vecSize.y = h;
 }
 
 void rectangle_t::Clamp( const rectangle_t &recClamp )
@@ -1120,14 +1170,14 @@ RECT rectangle_t::ToRect( ) const
 	return { int( x ), int( y ), int( x + flWidth ), int( y + flHeight ) };
 }
 
-circle_t::circle_t( vector2_t _locLocation, float _flRadius, std::size_t _sResolution ): locLocation( _locLocation ), flRadius( _flRadius ), sResolution( _sResolution )
+circle_t::circle_t( vector2_t _locLocation, float _flRadius, std::size_t _sResolution ): vecLocation( _locLocation ), flRadius( _flRadius ), sResolution( _sResolution )
 { }
 
 vertex_t *circle_t::GetPoints( float flStartAngle, float flRatio ) const
 {
 	const auto pReturn = new vertex_t[ sResolution + 2u ];
 	const auto flAngle = 360.f * flRatio / float( sResolution );
-	const auto vecRotationPoint = D3DXVECTOR2( locLocation.x, locLocation.y );
+	const auto vecRotationPoint = D3DXVECTOR2( vecLocation.x, vecLocation.y );
 	auto locCurrent = vecLocation;
 
 	pReturn[ 0 ] = vertex_t( locCurrent.x, locCurrent.y, NULL ).Round( );
@@ -1179,7 +1229,7 @@ void CDrawing::glyph_row_t::AddKerning( float flMagnitude )
 	vecRowSize.x += flMagnitude;
 }
 
-text_t::text_t( ): strText( std::string( ) ), iFont( 0 ), iSize( 0 ), vecDimensions(  )( vector2_t( ) ), pText( nullptr )
+text_t::text_t( ): strText( std::string( ) ), iFont( 0 ), iSize( 0 ), vecDimensions( vector2_t( ) ), pText( nullptr )
 { }
 
 text_t::text_t( const std::string &_strText, int _iFont, int _iSize, int _iHorizontalAlignment, int _iVerticalAlignment ) : strText( _strText ), iFont( _iFont ), iSize( _iSize ),

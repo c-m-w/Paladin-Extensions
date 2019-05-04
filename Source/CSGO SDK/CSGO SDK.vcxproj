@@ -15,7 +15,7 @@
     <ProjectGuid>{09490215-55D2-4A3D-BE81-40167E089761}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>CSGOSDK</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
     <ProjectName>CSGO SDK</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />

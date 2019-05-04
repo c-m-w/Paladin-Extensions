@@ -51,5 +51,6 @@
     <None Include="Code\Source Development Kit\Toolkits\Hooking.hpp" />
     <None Include="Code\Development Environment\Assembly ON.inl" />
     <None Include="Code\Development Environment\Assembly OFF.inl" />
+    <None Include="Code\Source Development Kit\Application Programming Interfaces\Drawing.inl" />
   </ItemGroup>
 </Project>
