@@ -190,9 +190,9 @@ CKeyState CInputHandler::GetKeyState( const key_t &_KeyCode )
 	return _KeyStates[ _KeyCode ];
 }
 
-location_t CInputHandler::GetMouseLocation( )
+vector2_t CInputHandler::GetMouseLocation( )
 {
-	return { float( iMouseX ), float( iMouseY ) };
+	return { double( iMouseX ), double( iMouseY ) };
 }
 
 Utilities::moment_t CInputHandler::GetTimeSinceKeyPress( const key_t &_Key )

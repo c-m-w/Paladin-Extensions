@@ -109,7 +109,7 @@ public:
 	void AddCallback( const mouse_move_callback_t &_Callback );
 	void AddCallback( const scroll_callback_t &_Callback );
 	CKeyState GetKeyState( const key_t &_KeyCode );
-	Utilities::location_t GetMouseLocation( );
+	Utilities::vector2_t GetMouseLocation( );
 	Utilities::moment_t GetTimeSinceKeyPress( const key_t &_Key );
 	void GetMousePos( int &x, int &y );
 } extern _Input;

@@ -72,26 +72,6 @@ private:
 
 public:
 
-	struct triangle_t
-	{
-		enum
-		{
-			TOP,
-			RIGHT,
-			LEFT,
-			MAX
-		};
-
-		Utilities::location_t locLocation;
-		float flBaseLength;
-		float flRotation;
-
-		triangle_t( ) = default;
-		triangle_t( Utilities::location_t _locLocation, float _flBaseLength, float _flRotation );
-
-		Utilities::location_t GetPoint( int iPoint );
-	};
-
 	struct rectangle_t
 	{
 		enum
@@ -112,7 +92,7 @@ public:
 		void operator+=( const rectangle_t &rhs );
 
 		void Clamp( const rectangle_t &recClamp );
-		bool LocationInRectangle( const Utilities::location_t &locLocation ) const;
+		bool LocationInRectangle( const Utilities::vector2_t &vecLocation ) const;
 		bool InRectangle( const rectangle_t &recLocation ) const;
 		RECT ToRect( ) const;
 	};
@@ -134,12 +114,12 @@ public:
 
 	struct circle_t
 	{
-		Utilities::location_t locLocation;
+		Utilities::vector2_t vecLocation;
 		float flRadius;
 		std::size_t sResolution;
 
 		circle_t( ) = default;
-		circle_t( Utilities::location_t _locLocation, float _flRadius, std::size_t _sResolution );
+		circle_t( Utilities::vector2_t vecLocation, float flRadius, std::size_t sResolution );
 
 		vertex_t *GetPoints( float flStartAngle, float flRatio ) const;
 	};
@@ -156,7 +136,7 @@ public:
 	struct glyph_row_t
 	{
 		std::vector< glyph_t > vecGlyphs;
-		Utilities::location_t locRowSize;
+		Utilities::vector2_t vecRowSize;
 		int iVerticalOffset;
 		int iVerticalAddition;
 
@@ -179,7 +159,7 @@ public:
 
 		std::string strText;
 		int iFont, iSize, iHorizontalAlignment, iVerticalAlignment;
-		Utilities::location_t locDimensions;
+		Utilities::vector2_t vecDimensions;
 		IDirect3DTexture9 *pText;
 
 		text_t( );
@@ -192,7 +172,7 @@ public:
 		float GetWidth( ) const;
 		float GetHeight( ) const;
 		bool Initialized( ) const;
-		void Draw( const Utilities::location_t &locLocation );
+		void Draw( const Utilities::vector2_t &vecLocation );
 		void Draw( const rectangle_t &recUsableSpace );
 		void Destruct( );
 	};
@@ -253,18 +233,18 @@ public:
 	void ApplyCursor( int iCursorType );
 	bool IsAreaVisible( const rectangle_t &recArea );
 	texture_renderable_t &GetTexture( int iTextureID );
-	void RenderTexture( int iTextureID, const Utilities::location_t &locTexture );
+	void RenderTexture( int iTextureID, const Utilities::vector2_t &vecTexture );
 	RECT GetDrawingSpace( );
 	void PushDrawingSpace( rectangle_t recSpace );
 	void PopDrawingSpace( );
 
-	Utilities::location_t GetTextDimensions( const char *szText, float flSize, std::size_t sFont );
-	IDirect3DTexture9 *CreateTextTexture( const char *szText, float flSize, std::size_t sFont, const color_t &clrText, Utilities::location_t &locDimensions, EFontFlags ffFlags, float flMaxWidth = -1.f );
+	Utilities::vector2_t GetTextDimensions( const char *szText, float flSize, std::size_t sFont );
+	IDirect3DTexture9 *CreateTextTexture( const char *szText, float flSize, std::size_t sFont, const color_t &clrText, Utilities::vector2_t &vecDimensions, EFontFlags ffFlags, float flMaxWidth = -1.f );
 	void Polygon( vertex_t *pVertices, std::size_t sVertices, std::size_t sPrimitives );
 	IDirect3DVertexBuffer9 *ConstructPolygon( vertex_t *pVertices, std::size_t sVertices );
 	void DrawPolygon( const polygon_buffer_t &pbPolygon, bool bRelease = false );
-	void DrawTexture( IDirect3DTexture9 *pTexture, const Utilities::location_t &locLocation );
-	void DrawTexture( int iTextureID, const Utilities::location_t &locLocation );
+	void DrawTexture( IDirect3DTexture9 *pTexture, const Utilities::vector2_t &vecLocation );
+	void DrawTexture( int iTextureID, Utilities::vector2_t vecLocation );
 
 	polygon_t Rectangle( rectangle_t recLocation, color_t clrColor );
 	polygon_t Rectangle( rectangle_t recLocation, color_t *clrColor/*[LOCATION_MAX]*/ );
@@ -273,20 +253,18 @@ public:
 	polygon_t OutlineRoundedRectangle( rectangle_t recLocation, color_t clrColor, bool *bRounding/*[ LOCATION_MAX ]*/, float flRounding );
 	polygon_t OutlineSpacedRoundedRectangle( rectangle_t recLocation, color_t clrColor, bool *bRounding, float flRounding, float flSpacing );
 	polygon_t RoundedRectangle( rectangle_t recLocation, color_t *clrColor/*[LOCATION_MAX]*/, bool *bRounding/*[ LOCATION_MAX ]*/, float flRounding );
-	polygon_t Triangle( Utilities::location_t locFirst, Utilities::location_t locSecond, Utilities::location_t locThird, color_t clrColor );
-	polygon_t Triangle( triangle_t trLocation, color_t *clrColor/*[triangle_t::MAX]*/ );
+	polygon_t Triangle( Utilities::vector2_t vecFirst, Utilities::vector2_t vecSecond, Utilities::vector2_t vecThird, color_t clrColor );
 	polygon_t Circle( circle_t circle, color_t clrColor, float flStartAngle, float flRatio = 1.f );
 	polygon_t OutlineCircle( circle_t circle, color_t clrColor, float flStartAngle, float flRatio = 1.f );
 	polygon_t Circle( circle_t circle, color_t clrCenter, color_t clrOuter, float flStartAngle, float flRatio = 1.f );
 	polygon_t Circle( circle_t circle, color_t *pColors, float flStartAngle, float flRatio = 1.f );
-	polygon_t Line( Utilities::location_t locStart, Utilities::location_t locEnd, float flThickness, color_t clrColor );
+	polygon_t Line( Utilities::vector2_t vecStart, Utilities::vector2_t vecEnd, float flThickness, color_t clrColor );
 } extern _Drawing;
 
 using EFont = CDrawing::EFont;
 using EFontFlags = CDrawing::EFontFlags;
 using ECursor = CDrawing::ECursor;
 using ETextures = CDrawing::ETextures;
-using triangle_t = CDrawing::triangle_t;
 using rectangle_t = CDrawing::rectangle_t;
 using vertex_t = CDrawing::vertex_t;
 using circle_t = CDrawing::circle_t;

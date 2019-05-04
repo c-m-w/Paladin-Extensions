@@ -8,25 +8,57 @@ namespace Utilities
 	/** \brief Datatype to store time. */
 	using moment_t = unsigned __int64;
 
-	struct location_t
+	struct vector3_t;
+
+	struct vector2_t
 	{
-		float x, y;
+		constexpr static auto PI = 3.1415926535897932;
+		double x = 0.0, y = 0.0;
 
-		location_t( ) = default;
-		location_t( float _x, float _y );
+		vector2_t( ) = default;
+		vector2_t( double x, double y );
+		~vector2_t( ) = default;
 
-		location_t operator-( const location_t &rhs );
-		location_t operator+( const location_t &rhs );
-		bool operator!=( const location_t &rhs );
+		explicit operator vector3_t( );
+		explicit operator D3DXVECTOR2( );
+		explicit operator double( );
+		vector2_t operator+( double rhs );
+		vector2_t operator-( double rhs );
+		vector2_t operator*( double rhs );
+		vector2_t operator/( double rhs );
+		vector2_t operator^( double rhs );
 
-		void Rotate( float flAngle, location_t locRotationPoint );
+		double Length( );
+		void Round( );
+		double Angle( ) const;
+		void Rotate( float flAngle, vector2_t vecRotationPoint );
 		void Invalidate( );
 		bool Valid( ) const;
-		float Length( ) const;
-		float Angle( ) const;
 	};
 
-	using vector2_t = location_t;
+	struct vector3_t
+	{
+		double x = 0.0, y = 0.0, z = 0.0;
+
+		vector3_t( ) = default;
+		vector3_t( double x, double y, double z );
+		~vector3_t( ) = default;
+
+		explicit operator vector2_t( );
+		explicit operator D3DXVECTOR3( );
+		explicit operator double( );
+		vector3_t operator+( double rhs );
+		vector3_t operator-( double rhs );
+		vector3_t operator*( double rhs );
+		vector3_t operator/( double rhs );
+		vector3_t operator^( double rhs );
+
+		double Length( );
+		void Round( );
+		vector2_t Angle( ) const;
+		void Invalidate( );
+		bool Valid( ) const;
+	};
 
 	/** \brief Gets the time since epoch */
 	/** \tparam _t Duration type to return time in (nanoseconds highest supported) */
