@@ -93,7 +93,6 @@ public:
 		};
 
 		Utilities::vector2_t vecLocation { }, vecSize { };
-		double dWidth = 0.0, dHeight = 0.0;
 
 		explicit rectangle_t( ) = default;
 		explicit rectangle_t( double x, double y, double dWidth, double dHeight );
@@ -191,7 +190,7 @@ public:
 
 		std::vector< vertex_t > vecVertices { };
 		std::size_t zPrimitives = 0;
-		D3DPRIMITIVETYPE _DrawType = D3DPT_TRIANGLESTRIP;
+		D3DPRIMITIVETYPE _DrawType = D3DPT_TRIANGLEFAN;
 		IDirect3DVertexBuffer9* pVertexBuffer = nullptr;
 
 	public:

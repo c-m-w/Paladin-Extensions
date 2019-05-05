@@ -18,7 +18,7 @@ inline bool CDrawing::CDrawable<CDrawing::vertex_t>::Create( )
 	if ( bCreated )
 		return true;
 
-	return bCreated = _Drawing.ConstructPolygon( &vecVertices[ 0 ], vecVertices.size( ) ) != nullptr;
+	return bCreated = ( pVertexBuffer = _Drawing.ConstructPolygon( &vecVertices[ 0 ], vecVertices.size( ) ) ) != nullptr;
 }
 
 inline void CDrawing::CDrawable< CDrawing::vertex_t >::Draw( )
@@ -48,13 +48,13 @@ inline void CDrawing::CDrawable<CDrawing::vertex_t>::SetDrawingType( D3DPRIMITIV
 inline void CDrawing::CDrawable<CDrawing::vertex_t>::Rectangle( rectangle_t recLocation, color_t clrColor )
 {
 	const auto dwColor = clrColor.GetARGB( );
-	
+
 	vecVertices = decltype( vecVertices )
 	{
 		vertex_t( recLocation.x, recLocation.y, dwColor ),
-		vertex_t( recLocation.x + recLocation.w, recLocation.y, dwColor ),
-		vertex_t( recLocation.x + recLocation.w, recLocation.y + recLocation.h, dwColor ),
-		vertex_t( recLocation.x, recLocation.y + recLocation.h, dwColor )
+			vertex_t( recLocation.x + recLocation.w, recLocation.y, dwColor ),
+			vertex_t( recLocation.x + recLocation.w, recLocation.y + recLocation.h, dwColor ),
+			vertex_t( recLocation.x, recLocation.y + recLocation.h, dwColor )
 	};
 	zPrimitives = 2;
 

@@ -262,6 +262,9 @@ bool CDrawing::PreReset( )
 		pState = nullptr;
 	}
 
+	for ( auto& pDrawable : vecDrawables )
+		pDrawable->Destroy( );
+
 	return true;
 }
 
@@ -342,8 +345,8 @@ void CDrawing::ApplyCursor( int iCursorType )
 	SetCursor( nullptr );
 
 	auto &texMouse = vecTextures[ iCursorTextureIndicies[ iCursorType ] ];
-	texMouse->SetDrawingLocation( vector2_t( pntCursor.x + texMouse->_TextureInfo.vecDimensions.x / 2.f - 50.f,
-		pntCursor.y + texMouse->_TextureInfo.vecDimensions.y / 2.f - 50.f ) );
+	texMouse->SetDrawingLocation( vector2_t( pntCursor.x + texMouse->_TextureInfo.vecDimensions.x / 2.0 - 50.0,
+		pntCursor.y + texMouse->_TextureInfo.vecDimensions.y / 2.0 - 50.0 ) );
 	texMouse->Draw( );
 }
 
@@ -726,7 +729,7 @@ void CDrawing::DrawTexture( IDirect3DTexture9 *pTexture, vector2_t vecLocation )
 //	return polygon_t( vtxVertices, 4, 2 );
 //}
 
-rectangle_t::rectangle_t( double x, double y, double dWidth, double dHeight ): vecLocation( x, y ), dWidth( dWidth ), dHeight( dHeight )
+rectangle_t::rectangle_t( double x, double y, double dWidth, double dHeight ): vecLocation( x, y ), vecSize( dWidth, dHeight )
 { }
 
 rectangle_t::rectangle_t( RECT recNew )
