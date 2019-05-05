@@ -12,17 +12,17 @@ namespace Utilities
 		x( x ), y( y )
 	{ }
 
-	vector2_t::operator vector3_t( )
+	vector2_t::operator vector3_t( ) const
 	{
 		return vector3_t( x, y, 0.0 );
 	}
 
-	vector2_t::operator D3DXVECTOR2( )
+	vector2_t::operator D3DXVECTOR2( ) const
 	{
 		return D3DXVECTOR2( float( x ), float( y ) );
 	}
 
-	vector2_t::operator double( )
+	vector2_t::operator double( ) const
 	{
 		return Length( );
 	}
@@ -55,6 +55,34 @@ namespace Utilities
 		return *this;
 	}
 
+	vector2_t vector2_t::operator+( const vector2_t &rhs )
+	{
+		x += rhs.x;
+		y += rhs.y;
+		return *this;
+	}
+
+	vector2_t vector2_t::operator-( const vector2_t &rhs )
+	{
+		x -= rhs.x;
+		y -= rhs.y;
+		return *this;
+	}
+
+	vector2_t vector2_t::operator*( const vector2_t &rhs )
+	{
+		x *= rhs.x;
+		y *= rhs.y;
+		return *this;
+	}
+
+	vector2_t vector2_t::operator/( const vector2_t &rhs )
+	{
+		x /= rhs.x;
+		y /= rhs.y;
+		return *this;
+	}
+
 	vector2_t vector2_t::operator^( double rhs )
 	{
 		x += rhs;
@@ -62,7 +90,7 @@ namespace Utilities
 		return *this;
 	}
 
-	double vector2_t::Length( )
+	double vector2_t::Length( ) const
 	{
 		return std::sqrt( std::pow( x, 2.0 ) + std::pow( y, 2.0 ) );
 	}
@@ -103,17 +131,17 @@ namespace Utilities
 		x( x ), y( y ), z( z )
 	{ }
 
-	vector3_t::operator vector2_t( )
+	vector3_t::operator vector2_t( ) const
 	{
 		return vector2_t( x, y );
 	}
 
-	vector3_t::operator D3DXVECTOR3( )
+	vector3_t::operator D3DXVECTOR3( ) const
 	{
 		return D3DXVECTOR3( float( x ), float( y ), float( z ) );
 	}
 
-	vector3_t::operator double( )
+	vector3_t::operator double( ) const
 	{
 		return Length( );
 	}
@@ -150,6 +178,38 @@ namespace Utilities
 		return *this;
 	}
 
+	vector3_t vector3_t::operator+( const vector3_t &rhs )
+	{
+		x += rhs.x;
+		y += rhs.y;
+		z += rhs.z;
+		return *this;
+	}
+
+	vector3_t vector3_t::operator-( const vector3_t &rhs )
+	{
+		x -= rhs.x;
+		y -= rhs.y;
+		z -= rhs.z;
+		return *this;
+	}
+
+	vector3_t vector3_t::operator*( const vector3_t &rhs )
+	{
+		x *= rhs.x;
+		y *= rhs.y;
+		z *= rhs.z;
+		return *this;
+	}
+
+	vector3_t vector3_t::operator/( const vector3_t &rhs )
+	{
+		x /= rhs.x;
+		y /= rhs.y;
+		z /= rhs.z;
+		return *this;
+	}
+
 	vector3_t vector3_t::operator^( double rhs )
 	{
 		x = pow( x, rhs );
@@ -158,7 +218,7 @@ namespace Utilities
 		return *this;
 	}
 
-	double vector3_t::Length( )
+	double vector3_t::Length( ) const
 	{
 		return sqrt( double( this->operator vector2_t( ) ) + pow( z, 2.0 ) );
 	}

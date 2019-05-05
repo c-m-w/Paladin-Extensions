@@ -19,16 +19,20 @@ namespace Utilities
 		vector2_t( double x, double y );
 		~vector2_t( ) = default;
 
-		explicit operator vector3_t( );
-		explicit operator D3DXVECTOR2( );
-		explicit operator double( );
+		explicit operator vector3_t( ) const;
+		explicit operator D3DXVECTOR2( ) const;
+		explicit operator double( ) const;
 		vector2_t operator+( double rhs );
 		vector2_t operator-( double rhs );
 		vector2_t operator*( double rhs );
 		vector2_t operator/( double rhs );
+		vector2_t operator+( const vector2_t& rhs );
+		vector2_t operator-( const vector2_t& rhs );
+		vector2_t operator*( const vector2_t& rhs );
+		vector2_t operator/( const vector2_t& rhs );
 		vector2_t operator^( double rhs );
 
-		double Length( );
+		double Length( ) const;
 		void Round( );
 		double Angle( ) const;
 		void Rotate( float flAngle, vector2_t vecRotationPoint );
@@ -44,16 +48,20 @@ namespace Utilities
 		vector3_t( double x, double y, double z );
 		~vector3_t( ) = default;
 
-		explicit operator vector2_t( );
-		explicit operator D3DXVECTOR3( );
-		explicit operator double( );
+		explicit operator vector2_t( ) const;
+		explicit operator D3DXVECTOR3( ) const;
+		explicit operator double( ) const;
 		vector3_t operator+( double rhs );
 		vector3_t operator-( double rhs );
 		vector3_t operator*( double rhs );
 		vector3_t operator/( double rhs );
+		vector3_t operator+( const vector3_t& rhs );
+		vector3_t operator-( const vector3_t& rhs );
+		vector3_t operator*( const vector3_t& rhs );
+		vector3_t operator/( const vector3_t& rhs );
 		vector3_t operator^( double rhs );
 
-		double Length( );
+		double Length( ) const;
 		void Round( );
 		vector2_t Angle( ) const;
 		void Invalidate( );

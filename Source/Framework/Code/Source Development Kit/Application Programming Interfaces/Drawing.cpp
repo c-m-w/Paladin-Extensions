@@ -138,7 +138,12 @@ bool CDrawing::CreateState( )
 
 void CDrawing::AddTexture( const texture_t &texNew )
 {
-	auto &last = vecTextures.emplace_back( std::pair< texture_t, std::pair< D3DXIMAGE_INFO, IDirect3DTexture9* > >( texNew, std::pair< D3DXIMAGE_INFO, IDirect3DTexture9* >( D3DXIMAGE_INFO( ), nullptr ) ) );
+	auto _New = new CDrawable< texture_t >( texNew );
+
+	if ( !RegisterDrawable( _New ) )
+		delete _New;
+	else
+		vecDrawables.emplace_back( _New );
 }
 
 void CDrawing::Uninitialize( )
@@ -270,29 +275,22 @@ bool CDrawing::Create( )
 		"PX Logo.png"
 	};
 
-	constexpr unsigned TEXTURE_DIMENSIONS[ TEXTURE_MAX ][ 2 ]
+	constexpr double TEXTURE_DIMENSIONS[ TEXTURE_MAX ][ 2 ]
 	{
-		{ 50, 50 },
-		{ 50, 50 },
-		{ 50, 50 },
-		{ 32, 29 }
+		{ 50.0, 50.0 },
+		{ 50.0, 50.0 },
+		{ 50.0, 50.0 },
+		{ 32.0, 29.0 }
 	};
 
 	auto bReturn = true;
 
 	if ( vecTextures.empty( ) )
 		for ( auto i = 0; i < TEXTURE_MAX && bReturn; i++ )
-			AddTexture( texture_t( TEXTURE_DIMENSIONS[ i ][ 0 ], TEXTURE_DIMENSIONS[ i ][ 1 ], TEXTURE_FILENAMES[ i ] ) );
+			AddTexture( texture_t( { TEXTURE_DIMENSIONS[ i ][ 0 ], TEXTURE_DIMENSIONS[ i ][ 1 ] }, TEXTURE_FILENAMES[ i ] ) );
 
 	for ( auto &texture : vecTextures )
-	{
-		auto& strTextureData = RESOURCES.GetResource( texture.first.strName );
-
-		if ( !( bReturn &= D3D_OK == D3DXCreateTextureFromFileInMemoryEx( pDevice, &strTextureData[ 0 ], strTextureData.length( ), texture.first.uWidth, texture.first.uHeight, D3DX_FROM_FILE,
-																  D3DUSAGE_DYNAMIC, D3DFMT_FROM_FILE, D3DPOOL_DEFAULT, D3DX_DEFAULT, D3DX_DEFAULT, NULL, &texture.second.first,
-																  nullptr, &texture.second.second ) ) )
-			_Log.Log( EPrefix::ERROR, ELocation::DRAWING, ENC( "Unable to create texture %s from memory." ), texture.first.strName.c_str( ) );
-	}
+		bReturn &= texture->Create( );
 
 	iCursorTextureIndicies[ ARROW ] = TEXTURE_ARROW;
 	iCursorTextureIndicies[ HAND ] = TEXTURE_HAND;
@@ -343,8 +341,10 @@ void CDrawing::ApplyCursor( int iCursorType )
 	while ( ShowCursor( FALSE ) >= 0 );
 	SetCursor( nullptr );
 
-	auto &texMouse = vecTextures[ iCursorTextureIndicies[ iCursorType ] ].first;
-	DrawTexture( iCursorTextureIndicies[ iCursorType ], vector2_t( pntCursor.x + texMouse.uWidth / 2.f - 50.f, pntCursor.y + texMouse.uHeight / 2.f - 50.f ) );
+	auto &texMouse = vecTextures[ iCursorTextureIndicies[ iCursorType ] ];
+	texMouse->SetDrawingLocation( vector2_t( pntCursor.x + texMouse->_TextureInfo.vecDimensions.x / 2.f - 50.f,
+		pntCursor.y + texMouse->_TextureInfo.vecDimensions.y / 2.f - 50.f ) );
+	texMouse->Draw( );
 }
 
 bool CDrawing::IsAreaVisible( const rectangle_t &recArea )
@@ -355,14 +355,9 @@ bool CDrawing::IsAreaVisible( const rectangle_t &recArea )
 	return recArea.InRectangle( recSource.top( ) );
 }
 
-texture_renderable_t &CDrawing::GetTexture( int iTextureID )
+CDrawing::CDrawable< texture_t >* CDrawing::GetTexture( int iTextureID )
 {
 	return vecTextures[ iTextureID ];
-}
-
-void CDrawing::RenderTexture( int iTextureID, const vector2_t &locTexture )
-{
-	DrawTexture( iTextureID, locTexture );
 }
 
 RECT CDrawing::GetDrawingSpace( )
@@ -394,6 +389,28 @@ void CDrawing::PopDrawingSpace( )
 	const auto &recNew = recSource.top( );
 	const auto recNewSource = recNew.ToRect( );
 	pDevice->SetScissorRect( &recNewSource );
+}
+
+bool CDrawing::RegisterDrawable( IBaseDrawable *pDrawable )
+{
+	if ( pDrawable == nullptr )
+		return false;
+
+	for ( auto& pIteration : vecDrawables )
+		if ( pIteration == pDrawable )
+			return false;
+
+	vecDrawables.emplace_back( pDrawable );
+	return true;
+}
+
+bool CDrawing::UnregisterDrawable( IBaseDrawable *pDrawable )
+{
+	for ( auto z = 0u; z < vecDrawables.size( ); z++ )
+		if ( vecDrawables[ z ] == pDrawable )
+			return vecDrawables.erase( vecDrawables.begin( ) + z ), true;
+
+	return false;
 }
 
 vector2_t CDrawing::GetTextDimensions( const char *szText, float flSize, std::size_t sFont )
@@ -621,448 +638,95 @@ IDirect3DVertexBuffer9 *CDrawing::ConstructPolygon( vertex_t *pVertices, std::si
 	return pBuffer;
 }
 
-
 void CDrawing::DrawTexture( IDirect3DTexture9 *pTexture, vector2_t vecLocation )
 {
 	if ( pTexture == nullptr )
-		throw std::runtime_error( ENC( "Invalid drawing texture." ) );
-
-	if ( pSprite->Begin( D3DXSPRITE_ALPHABLEND ) == D3D_OK )
-	{
-		vecLocation.Round( );
-		D3DXVECTOR3 vecLocation( vector3_t( vecLocation ) );
-		pSprite->Draw( pTexture, nullptr, nullptr, &vecLocation, 0xFFFFFFFF );
-		pSprite->End( );
-	}
+		_Log.Log( EPrefix::WARNING, ELocation::DRAWING, "Invalid texture to draw." );
 	else
-		_Log.Log( EPrefix::WARNING, ELocation::DRAWING, ENC( "Unable to begin sprite drawing." ) );
-}
-
-void CDrawing::DrawTexture( int iTextureID, const vector2_t &vecLocation )
-{
-	return DrawTexture( vecTextures[ iTextureID ].second.second, vecLocation );
-}
-
-polygon_t CDrawing::Rectangle( rectangle_t recLocation, color_t clrColor )
-{
-	const auto dwColor = clrColor.GetARGB( );
-
-	vertex_t vtxVertices[ 4 ]
 	{
-		vertex_t( recLocation.x, recLocation.y, dwColor ),
-		vertex_t( recLocation.x + recLocation.flWidth, recLocation.y, dwColor ),
-		vertex_t( recLocation.x + recLocation.flWidth, recLocation.y + recLocation.flHeight, dwColor ),
-		vertex_t( recLocation.x, recLocation.y + recLocation.flHeight, dwColor )
-	};
-
-	return polygon_t( vtxVertices, 4, 2 );
-}
-
-polygon_t CDrawing::Rectangle( rectangle_t recLocation, color_t *clrColor )
-{
-	vertex_t vtxVertices[ 4 ]
-	{
-		vertex_t( recLocation.x, recLocation.y, clrColor[ rectangle_t::TOP_LEFT ].GetARGB( ) ),
-		vertex_t( recLocation.x + recLocation.flWidth, recLocation.y, clrColor[ rectangle_t::TOP_RIGHT ].GetARGB( ) ),
-		vertex_t( recLocation.x + recLocation.flWidth, recLocation.y + recLocation.flHeight, clrColor[ rectangle_t::BOTTOM_RIGHT ].GetARGB( ) ),
-		vertex_t( recLocation.x, recLocation.y + recLocation.flHeight, clrColor[ rectangle_t::BOTTOM_LEFT ].GetARGB( ) )
-	};
-
-	return polygon_t( vtxVertices, 4, 2 );
-}
-
-#define ROUNDING_VERTICES ( std::size_t( ceilf( flRadius * D3DX_PI / 2.f ) ) )
-
-polygon_t CDrawing::OutlineRectangle( rectangle_t recLocation, color_t clrColor )
-{
-	const auto dwColor = clrColor.GetARGB( );
-	polygon_t lstReturn { };
-
-	lstReturn.vecVertices.emplace_back( recLocation.x, recLocation.y, dwColor );
-	lstReturn.vecVertices.emplace_back( recLocation.x + recLocation.flWidth, recLocation.y, dwColor );
-	lstReturn.vecVertices.emplace_back( recLocation.x + recLocation.flWidth, recLocation.y + recLocation.flHeight, dwColor );
-	lstReturn.vecVertices.emplace_back( recLocation.x, recLocation.y + recLocation.flHeight, dwColor );
-
-	return lstReturn;
-}
-
-polygon_t CDrawing::RoundedRectangle( rectangle_t recLocation, color_t clrColor, bool *bRounding, float flRounding )
-{
-	constexpr float ROTATIONS[ rectangle_t::MAX ] { 270.f, 0.f, 90.f, 180.f };
-	const auto flRadius = roundf( std::min( recLocation.flHeight, recLocation.flWidth ) / 2.f * flRounding );
-	const auto uResolution = ROUNDING_VERTICES;
-	const auto dwColor = clrColor.GetARGB( );
-	std::vector< vertex_t > vecVertices { };
-	auto sPrimitives { 2u };
-
-	if ( bRounding[ rectangle_t::TOP_LEFT ] )
-	{
-		const auto cclTopLeft = circle_t( vector2_t( recLocation.x + flRadius, recLocation.y + flRadius ), flRadius, uResolution );
-		const vertex_t *pVertices = cclTopLeft.GetPoints( ROTATIONS[ rectangle_t::TOP_LEFT ], 0.25f );
-		for ( auto u = 1u; u <= uResolution + 1; u++ )
-			vecVertices.emplace_back( vertex_t( pVertices[ u ].flVectors[ 0 ], pVertices[ u ].flVectors[ 1 ], dwColor ) );
-
-		delete[ ] pVertices;
-		sPrimitives += uResolution;
-	}
-	else
-		vecVertices.emplace_back( recLocation.x, recLocation.y, dwColor );
-
-	if ( bRounding[ rectangle_t::TOP_RIGHT ] )
-	{
-		const auto cclTopLeft = circle_t( vector2_t( recLocation.x + recLocation.flWidth - flRadius, recLocation.y + flRadius ), flRadius, uResolution );
-		const vertex_t *pVertices = cclTopLeft.GetPoints( ROTATIONS[ rectangle_t::TOP_RIGHT ], 0.25f );
-		for ( auto u = 1u; u <= uResolution + 1; u++ )
-			vecVertices.emplace_back( vertex_t( pVertices[ u ].flVectors[ 0 ], pVertices[ u ].flVectors[ 1 ], dwColor ) );
-
-		delete[ ] pVertices;
-		sPrimitives += uResolution;
-	}
-	else
-		vecVertices.emplace_back( recLocation.x + recLocation.flWidth, recLocation.y, dwColor );
-
-	if ( bRounding[ rectangle_t::BOTTOM_RIGHT ] )
-	{
-		const auto cclTopLeft = circle_t( vector2_t( recLocation.x + recLocation.flWidth - flRadius, recLocation.y + recLocation.flHeight - flRadius ), flRadius, uResolution );
-		const vertex_t *pVertices = cclTopLeft.GetPoints( ROTATIONS[ rectangle_t::BOTTOM_RIGHT ], 0.25f );
-		for ( auto u = 1u; u <= uResolution + 1; u++ )
-			vecVertices.emplace_back( vertex_t( pVertices[ u ].flVectors[ 0 ], pVertices[ u ].flVectors[ 1 ], dwColor ) );
-
-		delete[ ] pVertices;
-		sPrimitives += uResolution;
-	}
-	else
-		vecVertices.emplace_back( recLocation.x + recLocation.flWidth, recLocation.y + recLocation.flHeight, dwColor );
-
-	if ( bRounding[ rectangle_t::BOTTOM_LEFT ] )
-	{
-		const auto cclTopLeft = circle_t( vector2_t( recLocation.x + flRadius, recLocation.y + recLocation.flHeight - flRadius ), flRadius, uResolution );
-		const vertex_t *pVertices = cclTopLeft.GetPoints( ROTATIONS[ rectangle_t::BOTTOM_LEFT ], 0.25f );
-		for ( auto u = 1u; u <= uResolution + 1; u++ )
-			vecVertices.emplace_back( vertex_t( pVertices[ u ].flVectors[ 0 ], pVertices[ u ].flVectors[ 1 ], dwColor ) );
-
-		delete[ ] pVertices;
-		sPrimitives += uResolution;
-	}
-	else
-		vecVertices.emplace_back( recLocation.x, recLocation.y + recLocation.flHeight, dwColor );
-
-	return polygon_t( &vecVertices[ 0 ], vecVertices.size( ), sPrimitives );
-}
-
-polygon_t CDrawing::OutlineRoundedRectangle( rectangle_t recLocation, color_t clrColor, bool *bRounding, float flRounding )
-{
-	constexpr float ROTATIONS[ rectangle_t::MAX ] { 270.f, 0.f, 90.f, 180.f };
-	const auto flRadius = roundf( std::min( recLocation.flHeight, recLocation.flWidth ) / 2.f * flRounding );
-	const auto uResolution = ROUNDING_VERTICES;
-	std::vector< vector2_t > vecVertices { };
-	auto sPrimitives { 4u };
-
-	if ( bRounding[ rectangle_t::TOP_LEFT ] )
-	{
-		const auto cclTopLeft = circle_t( vector2_t( recLocation.x + flRadius, recLocation.y + flRadius ), flRadius, uResolution );
-		const vertex_t *pVertices = cclTopLeft.GetPoints( ROTATIONS[ rectangle_t::TOP_LEFT ], 0.25f );
-
-		vecVertices.emplace_back( vector2_t( recLocation.x, recLocation.y + flRadius ) );
-		for ( auto u = 2u; u <= uResolution; u++ )
-			vecVertices.emplace_back( vector2_t( pVertices[ u ].flVectors[ 0 ], pVertices[ u ].flVectors[ 1 ] ) );
-
-		vecVertices.emplace_back( vector2_t( recLocation.x + flRadius, recLocation.y ) );
-
-		delete[ ] pVertices;
-		sPrimitives += uResolution;
-	}
-	else
-		vecVertices.emplace_back( recLocation.x, recLocation.y );
-
-	if ( bRounding[ rectangle_t::TOP_RIGHT ] )
-	{
-		const auto cclTopLeft = circle_t( vector2_t( recLocation.x + recLocation.flWidth - flRadius, recLocation.y + flRadius ), flRadius, uResolution );
-		const vertex_t *pVertices = cclTopLeft.GetPoints( ROTATIONS[ rectangle_t::TOP_RIGHT ], 0.25f );
-
-		vecVertices.emplace_back( vector2_t( recLocation.x + recLocation.flWidth - flRadius, recLocation.y ) );
-		for ( auto u = 1u; u <= uResolution - 1; u++ )
-			vecVertices.emplace_back( vector2_t( pVertices[ u ].flVectors[ 0 ], pVertices[ u ].flVectors[ 1 ] ) );
-
-		vecVertices.emplace_back( vector2_t( recLocation.x + recLocation.flWidth, recLocation.y + flRadius ) );
-
-		delete[ ] pVertices;
-		sPrimitives += uResolution;
-	}
-	else
-		vecVertices.emplace_back( recLocation.x + recLocation.flWidth, recLocation.y );
-
-	if ( bRounding[ rectangle_t::BOTTOM_RIGHT ] )
-	{
-		const auto cclTopLeft = circle_t( vector2_t( recLocation.x + recLocation.flWidth - flRadius, recLocation.y + recLocation.flHeight - flRadius ), flRadius, uResolution );
-		const vertex_t *pVertices = cclTopLeft.GetPoints( ROTATIONS[ rectangle_t::BOTTOM_RIGHT ], 0.25f );
-
-		vecVertices.emplace_back( vector2_t( recLocation.x + recLocation.flWidth, recLocation.y + recLocation.flHeight - flRadius ) );
-		for ( auto u = 2u; u <= uResolution; u++ )
-			vecVertices.emplace_back( vector2_t( pVertices[ u ].flVectors[ 0 ], pVertices[ u ].flVectors[ 1 ] ) );
-
-		vecVertices.emplace_back( vector2_t( recLocation.x + recLocation.flWidth - flRadius, recLocation.y + recLocation.flHeight ) );
-
-		delete[ ] pVertices;
-		sPrimitives += uResolution;
-	}
-	else
-		vecVertices.emplace_back( recLocation.x + recLocation.flWidth, recLocation.y + recLocation.flHeight );
-
-	if ( bRounding[ rectangle_t::BOTTOM_LEFT ] )
-	{
-		const auto cclTopLeft = circle_t( vector2_t( recLocation.x + flRadius, recLocation.y + recLocation.flHeight - flRadius ), flRadius, uResolution );
-		const vertex_t *pVertices = cclTopLeft.GetPoints( ROTATIONS[ rectangle_t::BOTTOM_LEFT ], 0.25f );
-
-		vecVertices.emplace_back( vector2_t( recLocation.x + flRadius, recLocation.y + recLocation.flHeight ) );
-		for ( auto u = 2u; u <= uResolution; u++ )
-			vecVertices.emplace_back( vector2_t( pVertices[ u ].flVectors[ 0 ] + 0.5f, pVertices[ u ].flVectors[ 1 ] ) );
-
-		vecVertices.emplace_back( vector2_t( recLocation.x, recLocation.y + recLocation.flHeight - flRadius ) );
-
-		delete[ ] pVertices;
-		sPrimitives += uResolution;
-	}
-	else
-		vecVertices.emplace_back( recLocation.x, recLocation.y + recLocation.flHeight );
-
-	polygon_t polReturn;
-	polReturn.sPrimitives = sPrimitives;
-	for ( auto &location: vecVertices )
-		polReturn.vecVertices.emplace_back( roundf( location.x ), roundf( location.y ), clrColor.GetARGB( ) );
-
-	polReturn.vecVertices.emplace_back( polReturn.vecVertices[ 0 ] );
-	return polReturn;
-}
-
-polygon_t CDrawing::OutlineSpacedRoundedRectangle( rectangle_t recLocation, color_t clrColor, bool *bRounding, float flRounding, float flSpacing )
-{
-	constexpr float ROTATIONS[ rectangle_t::MAX ] { 270.f, 0.f, 90.f, 180.f };
-	const auto flRadius = roundf( std::min( recLocation.flHeight, recLocation.flWidth ) / 2.f * flRounding );
-	const auto uResolution = ROUNDING_VERTICES;
-	std::vector< vector2_t > vecVertices { };
-	auto sPrimitives { 5u };
-
-	vecVertices.emplace_back( recLocation.x + std::min( recLocation.flHeight, recLocation.flWidth ) * flRounding, recLocation.y );
-
-	if ( bRounding[ rectangle_t::TOP_LEFT ] )
-	{
-		const auto cclTopLeft = circle_t( vector2_t( recLocation.x + flRadius, recLocation.y + flRadius ), flRadius, uResolution );
-		const vertex_t *pVertices = cclTopLeft.GetPoints( ROTATIONS[ rectangle_t::TOP_LEFT ], 0.25f );
-		for ( auto u = uResolution + 1; u >= 1; u-- )
-			vecVertices.emplace_back( vector2_t( pVertices[ u ].flVectors[ 0 ], pVertices[ u ].flVectors[ 1 ] ) );
-
-		delete[ ] pVertices;
-		sPrimitives += uResolution;
-	}
-	else
-		vecVertices.emplace_back( recLocation.x, recLocation.y );
-
-	if ( bRounding[ rectangle_t::BOTTOM_LEFT ] )
-	{
-		const auto cclTopLeft = circle_t( vector2_t( recLocation.x + flRadius, recLocation.y + recLocation.flHeight - flRadius ), flRadius, uResolution );
-		const vertex_t *pVertices = cclTopLeft.GetPoints( ROTATIONS[ rectangle_t::BOTTOM_LEFT ], 0.25f );
-		for ( auto u = uResolution + 1; u >= 1; u-- )
-			vecVertices.emplace_back( vector2_t( pVertices[ u ].flVectors[ 0 ], pVertices[ u ].flVectors[ 1 ] ) );
-
-		delete[ ] pVertices;
-		sPrimitives += uResolution;
-	}
-	else
-		vecVertices.emplace_back( recLocation.x, recLocation.y + recLocation.flHeight );
-
-	if ( bRounding[ rectangle_t::BOTTOM_RIGHT ] )
-	{
-		const auto cclTopLeft = circle_t( vector2_t( recLocation.x + recLocation.flWidth - flRadius, recLocation.y + recLocation.flHeight - flRadius ), flRadius, uResolution );
-		const vertex_t *pVertices = cclTopLeft.GetPoints( ROTATIONS[ rectangle_t::BOTTOM_RIGHT ], 0.25f );
-		for ( auto u = uResolution + 1; u >= 1; u-- )
-			vecVertices.emplace_back( vector2_t( pVertices[ u ].flVectors[ 0 ], pVertices[ u ].flVectors[ 1 ] ) );
-
-		delete[ ] pVertices;
-		sPrimitives += uResolution;
-	}
-	else
-		vecVertices.emplace_back( recLocation.x + recLocation.flWidth, recLocation.y + recLocation.flHeight );
-
-	if ( bRounding[ rectangle_t::TOP_RIGHT ] )
-	{
-		const auto cclTopLeft = circle_t( vector2_t( recLocation.x + recLocation.flWidth - flRadius, recLocation.y + flRadius ), flRadius, uResolution );
-		const vertex_t *pVertices = cclTopLeft.GetPoints( ROTATIONS[ rectangle_t::TOP_RIGHT ], 0.25f );
-		for ( auto u = uResolution + 1; u >= 1; u-- )
-			vecVertices.emplace_back( vector2_t( pVertices[ u ].flVectors[ 0 ], pVertices[ u ].flVectors[ 1 ] ) );
-
-		delete[ ] pVertices;
-		sPrimitives += uResolution;
-	}
-	else
-		vecVertices.emplace_back( recLocation.x + recLocation.flWidth, recLocation.y );
-
-	const auto dwColor = clrColor.GetARGB( );
-	polygon_t polReturn;
-	polReturn.sPrimitives = sPrimitives;
-	for ( auto &location: vecVertices )
-		polReturn.vecVertices.emplace_back( location.x, location.y, dwColor );
-
-	polReturn.vecVertices.emplace_back( vertex_t( polReturn.vecVertices[ 0 ].flVectors[ 0 ] + flSpacing, polReturn.vecVertices[ 0 ].flVectors[ 1 ], dwColor ) );
-	return polReturn;
-}
-
-polygon_t CDrawing::RoundedRectangle( rectangle_t recLocation, color_t *clrColor, bool *bRounding, float flRounding )
-{
-	constexpr float ROTATIONS[ rectangle_t::MAX ] { 270.f, 0.f, 90.f, 180.f };
-	const auto flRadius = roundf( std::min( recLocation.flHeight, recLocation.flWidth ) / 2.f * flRounding );
-	const auto uResolution = ROUNDING_VERTICES;
-	std::vector< vertex_t > vecVertices { };
-	auto sPrimitives { 2u };
-
-	if ( bRounding[ rectangle_t::TOP_LEFT ] )
-	{
-		const auto cclTopLeft = circle_t( vector2_t( recLocation.x + flRadius, recLocation.y + flRadius ), flRadius, uResolution );
-		auto pVertices = cclTopLeft.GetPoints( ROTATIONS[ rectangle_t::TOP_LEFT ], 0.25f );
-		for ( auto u = 1u; u <= uResolution + 1; u++ )
-			vecVertices.emplace_back( vertex_t( pVertices[ u ].flVectors[ 0 ], pVertices[ u ].flVectors[ 1 ], clrColor[ rectangle_t::TOP_LEFT ].GetARGB( ) ) );
-
-		delete[ ] pVertices;
-		sPrimitives += uResolution;
-	}
-	else
-		vecVertices.emplace_back( recLocation.x, recLocation.y, clrColor[ rectangle_t::TOP_LEFT ].GetARGB( ) );
-
-	if ( bRounding[ rectangle_t::TOP_RIGHT ] )
-	{
-		const auto cclTopLeft = circle_t( vector2_t( recLocation.x + recLocation.flWidth - flRadius, recLocation.y + flRadius ), flRadius, uResolution );
-		const vertex_t *pVertices = cclTopLeft.GetPoints( ROTATIONS[ rectangle_t::TOP_RIGHT ], 0.25f );
-		for ( auto u = 1u; u <= uResolution + 1; u++ )
-			vecVertices.emplace_back( vertex_t( pVertices[ u ].flVectors[ 0 ], pVertices[ u ].flVectors[ 1 ], clrColor[ rectangle_t::TOP_RIGHT ].GetARGB( ) ) );
-
-		delete[ ] pVertices;
-		sPrimitives += uResolution;
-	}
-	else
-		vecVertices.emplace_back( recLocation.x + recLocation.flWidth, recLocation.y, clrColor[ rectangle_t::TOP_RIGHT ].GetARGB( ) );
-
-	if ( bRounding[ rectangle_t::BOTTOM_RIGHT ] )
-	{
-		const auto cclTopLeft = circle_t( vector2_t( recLocation.x + recLocation.flWidth - flRadius, recLocation.y + recLocation.flHeight - flRadius ), flRadius, uResolution );
-		const vertex_t *pVertices = cclTopLeft.GetPoints( ROTATIONS[ rectangle_t::BOTTOM_RIGHT ], 0.25f );
-		for ( auto u = 1u; u <= uResolution + 1; u++ )
-			vecVertices.emplace_back( vertex_t( pVertices[ u ].flVectors[ 0 ], pVertices[ u ].flVectors[ 1 ], clrColor[ rectangle_t::BOTTOM_RIGHT ].GetARGB( ) ) );
-
-		delete[ ] pVertices;
-		sPrimitives += uResolution;
-	}
-	else
-		vecVertices.emplace_back( recLocation.x + recLocation.flWidth, recLocation.y + recLocation.flHeight, clrColor[ rectangle_t::BOTTOM_RIGHT ].GetARGB( ) );
-
-	if ( bRounding[ rectangle_t::BOTTOM_LEFT ] )
-	{
-		const auto cclTopLeft = circle_t( vector2_t( recLocation.x + flRadius, recLocation.y + recLocation.flHeight - flRadius ), flRadius, uResolution );
-		const vertex_t *pVertices = cclTopLeft.GetPoints( ROTATIONS[ rectangle_t::BOTTOM_LEFT ], 0.25f );
-		for ( auto u = 1u; u <= uResolution + 1; u++ )
-			vecVertices.emplace_back( vertex_t( pVertices[ u ].flVectors[ 0 ], pVertices[ u ].flVectors[ 1 ], clrColor[ rectangle_t::BOTTOM_LEFT ].GetARGB( ) ) );
-
-		delete[ ] pVertices;
-		sPrimitives += uResolution;
-	}
-	else
-		vecVertices.emplace_back( recLocation.x, recLocation.y + recLocation.flHeight, clrColor[ rectangle_t::BOTTOM_LEFT ].GetARGB( ) );
-
-	return polygon_t( vecVertices, sPrimitives );
-}
-
-polygon_t CDrawing::Circle( circle_t circle, color_t clrColor, float flStartAngle, float flRatio )
-{
-	const auto pPoints = circle.GetPoints( flStartAngle, flRatio );
-	const auto dwColor = clrColor.GetARGB( );
-
-	for ( auto u = 0u; u < circle.sResolution + 2u; u++ )
-		pPoints[ u ].dwColor = dwColor;
-
-	const auto polReturn = polygon_t( pPoints, circle.sResolution + 2u, circle.sResolution );
-
-	delete[ ] pPoints;
-
-	return polReturn;
-}
-
-polygon_t CDrawing::OutlineCircle( circle_t circle, color_t clrColor, float flStartAngle, float flRatio )
-{
-	const auto pPoints = circle.GetPoints( flStartAngle, flRatio );
-	const auto dwColor = clrColor.GetARGB( );
-	polygon_t polReturn;
-
-	for ( auto u = 1u; u <= circle.sResolution + 1u; u++ )
-		polReturn.vecVertices.emplace_back( pPoints[ u ].flVectors[ 0 ], pPoints[ u ].flVectors[ 1 ], dwColor );
-
-	polReturn.vecVertices.emplace_back( pPoints[ 1 ].flVectors[ 0 ], pPoints[ 1 ].flVectors[ 1 ], dwColor );
-
-	delete[ ] pPoints;
-
-	return polReturn;
-}
-
-polygon_t CDrawing::Circle( circle_t circle, color_t clrCenter, color_t clrOuter, float flStartAngle, float flRatio )
-{
-	const auto pPoints = circle.GetPoints( flStartAngle, flRatio );
-	const auto dwColor = clrOuter.GetARGB( );
-
-	pPoints[ 0 ].dwColor = clrCenter.GetARGB( );
-	for ( auto u = 1u; u < circle.sResolution + 2u; u++ )
-		pPoints[ u ].dwColor = dwColor;
-
-	const auto polReturn = polygon_t( pPoints, circle.sResolution + 2u, circle.sResolution );
-
-	delete[ ] pPoints;
-
-	return polReturn;
-}
-
-polygon_t CDrawing::Circle( circle_t circle, color_t *pColors, float flStartAngle, float flRatio )
-{
-	const auto pPoints = circle.GetPoints( flStartAngle, flRatio );
-	const auto sPoints = std::size_t( circle.sResolution * flRatio ) + 1u;
-
-	for ( auto u = 0u; u <= circle.sResolution + 1u; u++ )
-		pPoints[ u ].dwColor = pColors[ u ].GetARGB( );
-	pPoints[ 1 ].dwColor = pPoints[ sPoints ].dwColor;
-
-	const auto polReturn = polygon_t( pPoints, circle.sResolution + 2u, circle.sResolution );
-
-	delete[ ] pPoints;
-
-	return polReturn;
-}
-
-polygon_t CDrawing::Line( vector2_t locStart, vector2_t locEnd, float flThickness, color_t clrColor )
-{
-	const auto locLength = locEnd - locStart;
-	const auto dwColor = clrColor.GetARGB( );
-	const auto flLength = locLength.Length( );
-	const auto vecRotationPoint = D3DXVECTOR2( locStart );
-	auto flRotation = locLength.Angle( );
-	vertex_t vtxVertices[ ]
-	{
-		vertex_t( locStart.x, locStart.y - flThickness / 2.f, dwColor ),
-		vertex_t( locStart.x + flLength, locStart.y - flThickness / 2.f, dwColor ),
-		vertex_t( locStart.x + flLength, locStart.y + flThickness / 2.f, dwColor ),
-		vertex_t( locStart.x, locStart.y + flThickness / 2.f, dwColor )
-	};
-
-	if ( locLength.x < 0.f )
-	{
-		if ( locLength.y < 0.f || locLength.y == 0.f )
-			flRotation += 180.f;
+		if ( _Drawing.pSprite->Begin( D3DXSPRITE_ALPHABLEND ) == D3D_OK )
+		{
+			vecLocation.Round( );
+			auto vecNewLocation = D3DXVECTOR3( vector3_t( vecLocation ) );
+			pSprite->Draw( pTexture, nullptr, nullptr, &vecNewLocation, 0xFFFFFFFF );
+			pSprite->End( );
+		}
 		else
-			flRotation = 180.f - fabsf( flRotation );
+			_Log.Log( EPrefix::WARNING, ELocation::DRAWING, ENC( "Unable to begin sprite drawing." ) );
 	}
-
-	for ( auto &vertex: vtxVertices )
-		vertex.Rotate( flRotation, vecRotationPoint );
-
-	return polygon_t( vtxVertices, 4, 2 );
 }
 
-rectangle_t::rectangle_t( double x, double y, double dWidth, double dHeight ): x( x ), y( y ), dWidth( v ), dHeight( dHeight )
+//polygon_t CDrawing::Rectangle( rectangle_t recLocation, color_t clrColor )
+//{
+//	const auto dwColor = clrColor.GetARGB( );
+//
+//	vertex_t vtxVertices[ 4 ]
+//	{
+//		vertex_t( recLocation.x, recLocation.y, dwColor ),
+//		vertex_t( recLocation.x + recLocation.w, recLocation.y, dwColor ),
+//		vertex_t( recLocation.x + recLocation.w, recLocation.y + recLocation.h, dwColor ),
+//		vertex_t( recLocation.x, recLocation.y + recLocation.h, dwColor )
+//	};
+//
+//	return polygon_t( vtxVertices, 4, 2 );
+//}
+//
+//polygon_t CDrawing::Rectangle( rectangle_t recLocation, color_t *clrColor )
+//{
+//	vertex_t vtxVertices[ 4 ]
+//	{
+//		vertex_t( recLocation.x, recLocation.y, clrColor[ rectangle_t::TOP_LEFT ].GetARGB( ) ),
+//		vertex_t( recLocation.x + recLocation.w, recLocation.y, clrColor[ rectangle_t::TOP_RIGHT ].GetARGB( ) ),
+//		vertex_t( recLocation.x + recLocation.w, recLocation.y + recLocation.h, clrColor[ rectangle_t::BOTTOM_RIGHT ].GetARGB( ) ),
+//		vertex_t( recLocation.x, recLocation.y + recLocation.h, clrColor[ rectangle_t::BOTTOM_LEFT ].GetARGB( ) )
+//	};
+//
+//	return polygon_t( vtxVertices, 4, 2 );
+//}
+//
+//polygon_t CDrawing::OutlineRectangle( rectangle_t recLocation, color_t clrColor )
+//{
+//	const auto dwColor = clrColor.GetARGB( );
+//	polygon_t lstReturn { };
+//
+//	lstReturn.vecVertices.emplace_back( recLocation.x, recLocation.y, dwColor );
+//	lstReturn.vecVertices.emplace_back( recLocation.x + recLocation.w, recLocation.y, dwColor );
+//	lstReturn.vecVertices.emplace_back( recLocation.x + recLocation.w, recLocation.y + recLocation.h, dwColor );
+//	lstReturn.vecVertices.emplace_back( recLocation.x, recLocation.y + recLocation.h, dwColor );
+//
+//	return lstReturn;
+//}
+//
+//polygon_t CDrawing::Line( vector2_t locStart, vector2_t locEnd, float flThickness, color_t clrColor )
+//{
+//	const auto locLength = locEnd - locStart;
+//	const auto dwColor = clrColor.GetARGB( );
+//	const auto flLength = locLength.Length( );
+//	const auto vecRotationPoint = D3DXVECTOR2( locStart );
+//	auto flRotation = locLength.Angle( );
+//	vertex_t vtxVertices[ ]
+//	{
+//		vertex_t( locStart.x, locStart.y - flThickness / 2.f, dwColor ),
+//		vertex_t( locStart.x + flLength, locStart.y - flThickness / 2.f, dwColor ),
+//		vertex_t( locStart.x + flLength, locStart.y + flThickness / 2.f, dwColor ),
+//		vertex_t( locStart.x, locStart.y + flThickness / 2.f, dwColor )
+//	};
+//
+//	if ( locLength.x < 0.f )
+//	{
+//		if ( locLength.y < 0.f || locLength.y == 0.f )
+//			flRotation += 180.f;
+//		else
+//			flRotation = 180.f - fabsf( flRotation );
+//	}
+//
+//	for ( auto &vertex: vtxVertices )
+//		vertex.Rotate( flRotation, vecRotationPoint );
+//
+//	return polygon_t( vtxVertices, 4, 2 );
+//}
+
+rectangle_t::rectangle_t( double x, double y, double dWidth, double dHeight ): vecLocation( x, y ), dWidth( dWidth ), dHeight( dHeight )
 { }
 
 rectangle_t::rectangle_t( RECT recNew )
@@ -1094,22 +758,22 @@ void CDrawing::rectangle_t::operator/=( double rhs )
 	y /= rhs;
 }
 
-double CDrawing::rectangle_t::GetX( )
+double CDrawing::rectangle_t::GetX( ) const
 {
 	return vecLocation.x;
 }
 
-double CDrawing::rectangle_t::GetY( )
+double CDrawing::rectangle_t::GetY( ) const
 {
 	return vecLocation.y;
 }
 
-double CDrawing::rectangle_t::GetW( )
+double CDrawing::rectangle_t::GetW( ) const
 {
 	return vecSize.x;
 }
 
-double CDrawing::rectangle_t::GetH( )
+double CDrawing::rectangle_t::GetH( ) const
 {
 	return vecSize.y;
 }
@@ -1142,60 +806,32 @@ void rectangle_t::Clamp( const rectangle_t &recClamp )
 	if ( y < recClamp.y )
 		y = recClamp.y;
 
-	while ( x + flWidth > recClamp.x + recClamp.flWidth )
-		flWidth -= 1.f;
+	while ( x + w > recClamp.x + recClamp.w )
+		w -= 1.0;
 
-	while ( y + flHeight > recClamp.y + recClamp.flHeight )
-		flHeight -= 1.f;
+	while ( y + h > recClamp.y + recClamp.h )
+		h -= 1.0;
 }
 
 bool rectangle_t::LocationInRectangle( const vector2_t &locLocation ) const
 {
 	return locLocation.x >= x
-			&& locLocation.x <= x + flWidth
+			&& locLocation.x <= x + w
 			&& locLocation.y >= y
-			&& locLocation.y <= y + flHeight;
+			&& locLocation.y <= y + h;
 }
 
 bool rectangle_t::InRectangle( const rectangle_t &recLocation ) const
 {
 	return recLocation.LocationInRectangle( vector2_t( x, y ) )
-			|| recLocation.LocationInRectangle( vector2_t( x + flWidth, y ) )
-			|| recLocation.LocationInRectangle( vector2_t( x + flWidth, y + flHeight ) )
-			|| recLocation.LocationInRectangle( vector2_t( x, y + flHeight ) );
+			|| recLocation.LocationInRectangle( vector2_t( x + w, y ) )
+			|| recLocation.LocationInRectangle( vector2_t( x + w, y + h ) )
+			|| recLocation.LocationInRectangle( vector2_t( x, y + h ) );
 }
 
 RECT rectangle_t::ToRect( ) const
 {
-	return { int( x ), int( y ), int( x + flWidth ), int( y + flHeight ) };
-}
-
-circle_t::circle_t( vector2_t _locLocation, float _flRadius, std::size_t _sResolution ): vecLocation( _locLocation ), flRadius( _flRadius ), sResolution( _sResolution )
-{ }
-
-vertex_t *circle_t::GetPoints( float flStartAngle, float flRatio ) const
-{
-	const auto pReturn = new vertex_t[ sResolution + 2u ];
-	const auto flAngle = 360.f * flRatio / float( sResolution );
-	const auto vecRotationPoint = D3DXVECTOR2( vecLocation.x, vecLocation.y );
-	auto locCurrent = vecLocation;
-
-	pReturn[ 0 ] = vertex_t( locCurrent.x, locCurrent.y, NULL ).Round( );
-	locCurrent.y -= flRadius;
-	if ( flStartAngle != 0.f )
-		locCurrent.Rotate( flStartAngle, vecLocation );
-
-	pReturn[ 1 ] = vertex_t( locCurrent.x, locCurrent.y, NULL ).Round( );
-	for ( auto u = 2u; u <= sResolution; u++ )
-	{
-		pReturn[ u ] = pReturn[ 1 ];
-		pReturn[ u ].Rotate( flAngle * float( u - 1 ), vecRotationPoint );
-		pReturn[ u ].Round( );
-	}
-	pReturn[ sResolution + 1u ] = pReturn[ 1 ];
-	pReturn[ sResolution + 1u ].Rotate( 360.f * flRatio, vecRotationPoint );
-
-	return pReturn;
+	return { int( x ), int( y ), int( x + w ), int( y + h ) };
 }
 
 CDrawing::glyph_t::glyph_t( FT_GlyphSlotRec_ glCurrent, float flTotalAdvance, unsigned char *bData, std::size_t sDataSize ): glGlyph( glCurrent ), flHorizontalOffset( flTotalAdvance ), bBitmapBuffer( new unsigned char[ sDataSize ] )
@@ -1310,13 +946,13 @@ void text_t::Draw( const rectangle_t &recUsableSpace )
 
 		case CENTER:
 		{
-			locLocation.x = recUsableSpace.x + recUsableSpace.flWidth / 2.f - GetWidth( ) / 2.f;
+			locLocation.x = recUsableSpace.x + recUsableSpace.w / 2.0 - GetWidth( ) / 2.0;
 		}
 		break;
 
 		case RIGHT:
 		{
-			locLocation.x = recUsableSpace.x + recUsableSpace.flWidth - GetWidth( );
+			locLocation.x = recUsableSpace.x + recUsableSpace.w - GetWidth( );
 		}
 		break;
 
@@ -1334,13 +970,13 @@ void text_t::Draw( const rectangle_t &recUsableSpace )
 
 		case CENTER:
 		{
-			locLocation.y = recUsableSpace.y + recUsableSpace.flHeight / 2.f - GetHeight( ) / 2.f;
+			locLocation.y = recUsableSpace.y + recUsableSpace.h / 2.0 - GetHeight( ) / 2.0;
 		}
 		break;
 
 		case BOTTOM:
 		{
-			locLocation.y = recUsableSpace.y + recUsableSpace.flHeight - GetHeight( );
+			locLocation.y = recUsableSpace.y + recUsableSpace.h - GetHeight( );
 		}
 		break;
 
@@ -1399,84 +1035,7 @@ vertex_t vertex_t::Round( )
 	return *this;
 }
 
-polygon_buffer_t::polygon_buffer_t( IDirect3DVertexBuffer9 *_pVertexBuffer, std::size_t _sPrimitives, D3DPRIMITIVETYPE _ptDraw ): pVertexBuffer( _pVertexBuffer ), sPrimitives( _sPrimitives ),
-																																  ptDraw( _ptDraw )
-{ }
-
-polygon_t::polygon_t( ): vecVertices( { } ), sPrimitives( 0 )
-{ }
-
-polygon_t::polygon_t( vertex_t *pVertices, std::size_t sVertices, std::size_t _sPrimitives )
-{
-	vecVertices = decltype( vecVertices )( );
-
-	for ( auto u = 0u; u < sVertices; u++ )
-		vecVertices.emplace_back( pVertices[ u ] );
-
-	sPrimitives = _sPrimitives;
-}
-
-polygon_t::polygon_t( std::vector< vertex_t > _vecVertices, std::size_t _sPrimitives ):
-	vecVertices( _vecVertices ), sPrimitives( _sPrimitives )
-{ }
-
-void polygon_t::Draw( rectangle_t recRelative, color_t clrColor )
-{
-	if ( vecVertices.empty( ) )
-		return;
-
-	const auto dwColor = clrColor.GetARGB( );
-	auto vecTemp = vecVertices;
-
-	for ( auto &_Vertex: vecTemp )
-	{
-		_Vertex.flVectors[ 0 ] += recRelative.x;
-		_Vertex.flVectors[ 1 ] += recRelative.y;
-		_Vertex.dwColor = dwColor;
-	}
-	_Drawing.Polygon( &vecTemp[ 0 ], vecTemp.size( ), sPrimitives );
-}
-
-void polygon_t::Join( const polygon_t &other )
-{
-	for ( const auto &vertex: other.vecVertices )
-		vecVertices.emplace_back( vertex );
-
-	sPrimitives += other.sPrimitives;
-}
-
-void polygon_t::Draw( )
-{
-	if ( vecVertices.empty( ) )
-		return;
-
-	_Drawing.Polygon( &vecVertices[ 0 ], vecVertices.size( ), sPrimitives );
-}
-
-void polygon_t::Draw( rectangle_t recRelative )
-{
-	if ( vecVertices.empty( ) )
-		return;
-
-	auto vecTemp = vecVertices;
-
-	for ( auto &_Vertex: vecTemp )
-	{
-		_Vertex.flVectors[ 0 ] += recRelative.x;
-		_Vertex.flVectors[ 1 ] += recRelative.y;
-	}
-	_Drawing.Polygon( &vecTemp[ 0 ], vecTemp.size( ), sPrimitives );
-}
-
-polygon_buffer_t polygon_t::GetBuffer( D3DPRIMITIVETYPE ptDraw /*= D3DPT_TRIANGLEFAN*/ )
-{
-	if ( vecVertices.empty( ) )
-		throw std::runtime_error( ENC( "Invalid buffer vertices." ) );
-
-	return polygon_buffer_t( _Drawing.ConstructPolygon( &vecVertices[ 0 ], vecVertices.size( ) ), sPrimitives, ptDraw );
-}
-
-texture_t::texture_t( unsigned _uWidth, unsigned _uHeight, const std::string &_strName ): uWidth( _uWidth ), uHeight( _uHeight ), strName( _strName )
+texture_t::texture_t( vector2_t vecDimensions, const std::string &_strName ): vecDimensions( vecDimensions ), strFileName( _strName )
 { }
 
 CDrawing _Drawing;

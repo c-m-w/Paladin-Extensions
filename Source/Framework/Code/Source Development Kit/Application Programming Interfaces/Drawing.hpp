@@ -104,10 +104,10 @@ public:
 		void operator*=( double rhs );
 		void operator/=( double rhs );
 
-		double GetX( );
-		double GetY( );
-		double GetW( );
-		double GetH( );
+		double GetX( ) const;
+		double GetY( ) const;
+		double GetW( ) const;
+		double GetH( ) const;
 		void PutX( double x );
 		void PutY( double y );
 		void PutW( double w );
@@ -150,6 +150,15 @@ public:
 		vertex_t *GetPoints( float flStartAngle, float flRatio ) const;
 	};
 
+	struct texture_t
+	{
+		Utilities::vector2_t vecDimensions { };
+		std::string strFileName { };
+
+		texture_t( ) = default;
+		texture_t( Utilities::vector2_t vecDimensions, const std::string &strFileName );
+	};
+
 	class IBaseDrawable
 	{
 	protected:
@@ -161,11 +170,19 @@ public:
 		virtual bool Create( )	= 0;
 		virtual void Draw( )	= 0;
 		virtual void Destroy( )	= 0;
+		
+		friend class CDrawing;
 	};
 
 	template< typename _t >
-	class CDrawable< _t > : public IBaseDrawable
-	{ };
+	class CDrawable : public IBaseDrawable
+	{
+	public:
+
+		bool Create( ) override;
+		void Draw( ) override;
+		void Destroy( ) override;
+	};
 
 	template< >
 	class CDrawable< vertex_t > : public IBaseDrawable
@@ -179,12 +196,19 @@ public:
 
 	public:
 
-		CDrawable( vertex_t* pVertices, std::size_t zVertices, std::size_t zPrimitives, D3DPRIMITIVETYPE _DrawType );
-		CDrawable( std::vector< vertex_t > vecVertices, std::size_t zPrimitives, D3DPRIMITIVETYPE _DrawType );
+		CDrawable( ) = default;
 
 		bool Create( ) override;
 		void Draw( ) override;
 		void Destroy( ) override;
+
+		void SetDrawingType( D3DPRIMITIVETYPE _New );
+		void Rectangle( rectangle_t recLocation, color_t clrColor );
+		void Rectangle( rectangle_t recLocation, color_t *clrColor/*[LOCATION_MAX]*/ );
+		void OutlineRectangle( rectangle_t recLocation, color_t clrColor );
+		void Line( Utilities::vector2_t vecStart, Utilities::vector2_t vecEnd, float flThickness, color_t clrColor );
+
+		friend class CDrawing;
 	};
 
 	template< >
@@ -194,35 +218,50 @@ public:
 
 		std::string strText { };
 		int iFont = 0, iSize = 0, iHorizontalAlignment = 0, iVerticalAlignment = 0;
-		Utilities::vector2_t vecDimensions;
+		color_t clrText { };
+		EFontFlags ffFlags = NONE;
+		Utilities::vector2_t vecDimensions { }, vecDrawingLocation { };
 		IDirect3DTexture9* pTexture = nullptr;
 
 	public:
 
-		CDrawable( const std::string &strText, int iFont, int iSize, int iHorizontalAlignment, int iVerticalAlignment );
+		CDrawable( const std::string &strText, int iFont, int iSize, int iHorizontalAlignment, int iVerticalAlignment, const color_t& clrText, EFontFlags ffFlags );
 
 		bool Create( ) override;
 		void Draw( ) override;
 		void Destroy( ) override;
+
+		void SetDrawingLocation( const Utilities::vector2_t& vecNew );
+		void SetDrawingLocation( const rectangle_t& recUsableSpace );
+		void SetColor( const color_t& clrNew );
+		double GetWidth( );
+		double GetHeight( );
+
+		friend class CDrawing;
 	};
 
-	/// TODO IMAGE clASS
-	//template< >
-	//class CDrawable< IDirect3DTexture9* > : public IBaseDrawable
-	//{
-	//private:
-	//
-	//	IDirect3DTexture9* pTexture = nullptr;
-	//
-	//public:
-	//
-	//	CDrawable( vertex_t* pVertices, std::size_t zVertices, std::size_t zPrimitives );
-	//	CDrawable( std::vector< vertex_t > vecVertices, std::size_t zPrimitives );
-	//
-	//	void Create( ) override;
-	//	void Draw( ) override;
-	//	void Destroy( ) override;
-	//};
+	template< >
+	class CDrawable< texture_t > : public IBaseDrawable
+	{
+	private:
+
+		texture_t _TextureInfo { };
+		Utilities::vector2_t vecDrawingLocation { };
+		IDirect3DTexture9 *pTexture = nullptr;
+		D3DXIMAGE_INFO _ImageInfo { };
+
+	public:
+
+		CDrawable( const texture_t &_TextureInfo );
+
+		bool Create( ) override;
+		void Draw( ) override;
+		void Destroy( ) override;
+
+		void SetDrawingLocation( const Utilities::vector2_t& vecNew );
+
+		friend class CDrawing;
+	};
 
 	struct glyph_t
 	{
@@ -269,37 +308,10 @@ public:
 		void Destruct( );
 	};
 
-	struct polygon_t
-	{
-		std::vector< vertex_t > vecVertices;
-		std::size_t sPrimitives;
-
-		polygon_t( );
-		polygon_t( vertex_t *pVertices, std::size_t sVertices, std::size_t _sPrimitives );
-		polygon_t( std::vector< vertex_t > _vecVertices, std::size_t _sPrimitives );
-
-		void Join( const polygon_t &other );
-
-		void Draw( );
-		void Draw( rectangle_t recRelative );
-		polygon_buffer_t GetBuffer( D3DPRIMITIVETYPE ptDraw = D3DPT_TRIANGLEFAN );
-		void Draw( rectangle_t recRelative, color_t clrColor );
-	};
-
-	struct texture_t
-	{
-		unsigned uWidth = 0u, uHeight = 0u;
-		std::string strName { };
-
-		texture_t( ) = default;
-		texture_t( unsigned _uWidth, unsigned _uHeight, const std::string &_strName );
-	};
-
-	using texture_renderable_t = std::pair< texture_t, std::pair< D3DXIMAGE_INFO, IDirect3DTexture9* > >;
-
 private:
 
-	std::vector< std::pair< texture_t, std::pair< D3DXIMAGE_INFO, IDirect3DTexture9* > > > vecTextures { };
+	std::vector< IBaseDrawable* > vecDrawables { };
+	std::vector< CDrawable< texture_t >* > vecTextures { };
 	rectangle_t recRenderTarget { };
 	std::stack< rectangle_t > recSource { };
 
@@ -315,32 +327,18 @@ public:
 	bool RemoveFont( std::size_t sFont );
 	void ApplyCursor( int iCursorType );
 	bool IsAreaVisible( const rectangle_t &recArea );
-	texture_renderable_t &GetTexture( int iTextureID );
-	void RenderTexture( int iTextureID, const Utilities::vector2_t &vecTexture );
+	CDrawable< texture_t >* GetTexture( int iTextureID );
 	RECT GetDrawingSpace( );
 	void PushDrawingSpace( rectangle_t recSpace );
 	void PopDrawingSpace( );
+	bool RegisterDrawable( IBaseDrawable* pDrawable );
+	bool UnregisterDrawable( IBaseDrawable* pDrawable );
 
 	Utilities::vector2_t GetTextDimensions( const char *szText, float flSize, std::size_t sFont );
 	IDirect3DTexture9 *CreateTextTexture( const char *szText, float flSize, std::size_t sFont, const color_t &clrText, Utilities::vector2_t &vecDimensions, EFontFlags ffFlags, float flMaxWidth = -1.f );
 	void Polygon( vertex_t *pVertices, std::size_t sVertices, std::size_t sPrimitives );
 	IDirect3DVertexBuffer9 *ConstructPolygon( vertex_t *pVertices, std::size_t sVertices );
-	void DrawTexture( IDirect3DTexture9 *pTexture, const Utilities::vector2_t &vecLocation );
-	void DrawTexture( int iTextureID, Utilities::vector2_t vecLocation );
-
-	polygon_t Rectangle( rectangle_t recLocation, color_t clrColor );
-	polygon_t Rectangle( rectangle_t recLocation, color_t *clrColor/*[LOCATION_MAX]*/ );
-	polygon_t OutlineRectangle( rectangle_t recLocation, color_t clrColor );
-	polygon_t RoundedRectangle( rectangle_t recLocation, color_t clrColor, bool *bRounding/*[ LOCATION_MAX ]*/, float flRounding );
-	polygon_t OutlineRoundedRectangle( rectangle_t recLocation, color_t clrColor, bool *bRounding/*[ LOCATION_MAX ]*/, float flRounding );
-	polygon_t OutlineSpacedRoundedRectangle( rectangle_t recLocation, color_t clrColor, bool *bRounding, float flRounding, float flSpacing );
-	polygon_t RoundedRectangle( rectangle_t recLocation, color_t *clrColor/*[LOCATION_MAX]*/, bool *bRounding/*[ LOCATION_MAX ]*/, float flRounding );
-	polygon_t Triangle( Utilities::vector2_t vecFirst, Utilities::vector2_t vecSecond, Utilities::vector2_t vecThird, color_t clrColor );
-	polygon_t Circle( circle_t circle, color_t clrColor, float flStartAngle, float flRatio = 1.f );
-	polygon_t OutlineCircle( circle_t circle, color_t clrColor, float flStartAngle, float flRatio = 1.f );
-	polygon_t Circle( circle_t circle, color_t clrCenter, color_t clrOuter, float flStartAngle, float flRatio = 1.f );
-	polygon_t Circle( circle_t circle, color_t *pColors, float flStartAngle, float flRatio = 1.f );
-	polygon_t Line( Utilities::vector2_t vecStart, Utilities::vector2_t vecEnd, float flThickness, color_t clrColor );
+	void DrawTexture( IDirect3DTexture9 *pTexture, Utilities::vector2_t vecLocation );
 } extern _Drawing;
 
 using EFont = CDrawing::EFont;
@@ -352,9 +350,6 @@ using rectangle_t = CDrawing::rectangle_t;
 using vertex_t = CDrawing::vertex_t;
 using circle_t = CDrawing::circle_t;
 using text_t = CDrawing::text_t;
-using polygon_buffer_t = CDrawing::polygon_buffer_t;
-using polygon_t = CDrawing::polygon_t;
 using texture_t = CDrawing::texture_t;
-using texture_renderable_t = CDrawing::texture_renderable_t;
 
 #include "Drawing.inl"
