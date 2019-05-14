@@ -244,4 +244,26 @@ namespace Utilities
 	{
 		return !std::isnan( x ) && !std::isnan( y ) && !std::isnan( z );
 	}
+
+	vector2_t InchesToPixels( const vector2_t& vecInches )
+	{
+		static vector2_t vecDPI { };
+
+		if ( vecDPI.x == 0.0 || vecDPI.y == 0.0 )
+		{
+			ID2D1Factory* pFactory = nullptr;
+			auto flDPIX = 0.f, flDPIY = 0.f;
+
+			if ( !SUCCEEDED( D2D1CreateFactory( D2D1_FACTORY_TYPE_SINGLE_THREADED, &pFactory ) ) )
+				throw std::runtime_error( ENC( "Unable to get DPI." ) );
+			
+			pFactory->GetDesktopDpi( &flDPIX, &flDPIY );
+			pFactory->Release( );
+
+			vecDPI.x = double( flDPIX );
+			vecDPI.y = double( flDPIY );
+		}
+
+		return vecDPI * vecInches;
+	}
 }

@@ -68,6 +68,8 @@ namespace Utilities
 		bool Valid( ) const;
 	};
 
+	vector2_t InchesToPixels( const vector2_t& vecInches );
+
 	/** \brief Gets the time since epoch */
 	/** \tparam _t Duration type to return time in (nanoseconds highest supported) */
 	/** \return Time since epoch in specified duration. */

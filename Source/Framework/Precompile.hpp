@@ -55,7 +55,8 @@ extern "C"
 #undef DecryptFile
 #undef LoadLibraryEx
 
-// D3D
+// DirectX
+#include <D2D1.h>
 #include <d3d9.h>
 #include <d3dx9core.h>
 #include <d3dx9math.h>
@@ -64,11 +65,12 @@ extern "C"
 #include <D3D11.h>
 #include <D3DX11.h>
 #include <D3DX10.h>
+#pragma comment( lib, "d2d1.lib" )
 #pragma comment( lib, "d3dx9.lib" )
 #pragma comment( lib, "d3d9.lib" )
-#pragma comment(lib, "d3d11.lib")
-#pragma comment(lib, "d3dx11.lib")
-#pragma comment(lib, "d3dx10.lib")
+#pragma comment( lib, "d3d11.lib" )
+#pragma comment( lib, "d3dx11.lib" )
+#pragma comment( lib, "d3dx10.lib" )
 
 #include <ft2build.h>
 #include FT_FREETYPE_H
