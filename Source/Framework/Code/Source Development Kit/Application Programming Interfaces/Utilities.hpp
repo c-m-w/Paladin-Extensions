@@ -32,12 +32,12 @@ namespace Utilities
 		vector2_t operator/( const vector2_t& rhs );
 		vector2_t operator^( double rhs );
 
-		double Length( ) const;
+		[ [ nodiscard ] ] double Length( ) const;
 		void Round( );
-		double Angle( ) const;
-		void Rotate( float flAngle, vector2_t vecRotationPoint );
+		[ [ nodiscard ] ] double Angle( ) const;
+		void Rotate( double dAngle, const vector2_t& vecRotationPoint );
 		void Invalidate( );
-		bool Valid( ) const;
+		[ [ nodiscard ] ] bool Valid( ) const;
 	};
 
 	struct vector3_t

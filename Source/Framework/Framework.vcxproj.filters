@@ -5,7 +5,6 @@
     <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Color.cpp" />
     <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Connectivity.cpp" />
     <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Cryptography.cpp" />
-    <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Drawing.cpp" />
     <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Filesystem.cpp" />
     <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Utilities.cpp" />
     <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Window.cpp" />
@@ -17,6 +16,8 @@
     <ClCompile Include="Code\Source Development Kit\Toolkits\System Utilities.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\Hooking.cpp" />
     <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Input Handler.cpp" />
+    <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Drawing\Drawing.cpp" />
+    <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Drawing\Shaders.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\Development Environment\Build Output Wrapper.hpp" />
@@ -27,11 +28,9 @@
     <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Color.hpp" />
     <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Connectivity.hpp" />
     <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Cryptography.hpp" />
-    <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Drawing.hpp" />
     <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Filesystem.hpp" />
     <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Utilities.hpp" />
     <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Window.hpp" />
-    <ClInclude Include="Precompile.hpp" />
     <ClInclude Include="Code\Framework.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\Resource Manager.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\Graphical User Interface.hpp" />
@@ -41,6 +40,9 @@
     <ClInclude Include="Code\Development Environment\Icon Font Definitions\Material Design Icons.hpp" />
     <ClInclude Include="Code\Development Environment\Icon Font Definitions\Font Awesome Icons.hpp" />
     <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Input Handler.hpp" />
+    <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Drawing\Drawing.hpp" />
+    <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Drawing\Shaders.hpp" />
+    <ClInclude Include="Precompile.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Code\Source Development Kit\Application Programming Interfaces\Connectivity.inl" />
@@ -51,6 +53,6 @@
     <None Include="Code\Source Development Kit\Toolkits\Hooking.hpp" />
     <None Include="Code\Development Environment\Assembly ON.inl" />
     <None Include="Code\Development Environment\Assembly OFF.inl" />
-    <None Include="Code\Source Development Kit\Application Programming Interfaces\Drawing.inl" />
+    <None Include="Code\Source Development Kit\Application Programming Interfaces\Drawing\Drawing.inl" />
   </ItemGroup>
 </Project>

@@ -21,7 +21,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
@@ -103,25 +103,27 @@
     <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Color.hpp" />
     <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Connectivity.hpp" />
     <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Cryptography.hpp" />
-    <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Drawing.hpp" />
+    <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Drawing\Drawing.hpp" />
     <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Filesystem.hpp" />
     <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Input Handler.hpp" />
+    <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Drawing\Shaders.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\Authentication.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\Graphical User Interface.hpp" />
     <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Utilities.hpp" />
     <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Window.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\Memory Manager.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\Resource Manager.hpp" />
-    <ClInclude Include="Precompile.hpp" />
     <ClInclude Include="Code\Framework.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\System Utilities.hpp" />
+    <ClInclude Include="Precompile.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Code\Development Environment\Logging.cpp" />
     <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Color.cpp" />
     <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Connectivity.cpp" />
     <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Cryptography.cpp" />
-    <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Drawing.cpp" />
+    <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Drawing\Drawing.cpp" />
+    <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Drawing\Shaders.cpp" />
     <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Filesystem.cpp" />
     <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Input Handler.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\Authentication.cpp" />
@@ -142,7 +144,7 @@
     <None Include="Code\Development Environment\Assembly ON.inl" />
     <None Include="Code\Source Development Kit\Application Programming Interfaces\Connectivity.inl" />
     <None Include="Code\Source Development Kit\Application Programming Interfaces\Cryptography.inl" />
-    <None Include="Code\Source Development Kit\Application Programming Interfaces\Drawing.inl" />
+    <None Include="Code\Source Development Kit\Application Programming Interfaces\Drawing\Drawing.inl" />
     <None Include="Code\Source Development Kit\Toolkits\Graphical User Interface.inl" />
     <None Include="Code\Source Development Kit\Application Programming Interfaces\Utilities.inl" />
     <None Include="Code\Source Development Kit\Toolkits\Hooking.hpp" />

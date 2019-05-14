@@ -124,7 +124,7 @@ bool SetupInterface( )
 {
 	pApplicationWindow = new CApplicationWindow( ENC( "Launcher" ), { LAUNCHER_WIDTH, LAUNCHER_HEIGHT }, GetModuleHandle( nullptr ) );
 	pApplicationWindow->Show( );
-	DRAW.SetTarget( pApplicationWindow );
+	DRAW.ChangeTarget( pApplicationWindow );
 	if ( !_Drawing.Setup( ) )
 		return false;
 
@@ -269,27 +269,26 @@ bool SetupInterface( )
 
 void Draw( )
 {
-	CDrawing::CDrawable< vertex_t > *pRectangle = new CDrawing::CDrawable< vertex_t >( );
+	auto pRectangle = new CDrawable< vertex_t >( );
 	color_t clr[ ]
 	{
-		0xFF0000FF,
-		0x00FF00FF,
-		0x0000FFFF,
-		0xFFFFFFFF
+		color_t( { 255, 0, 0, 255 } ),
+		color_t( { 0, 255, 0, 255 } ),
+		color_t( { 0, 0, 255, 255 } ),
+		color_t( { 0, 255, 0, 255 } ),
 	};
-	pRectangle->Rectangle( rectangle_t( 0, 0, 500, 200 ), clr );
+	pRectangle->Rectangle( rectangle_t( 10, 10, 50, 50 ), clr );
+	pRectangle->Line( { 0, 0 }, { 100, 200 }, 2.0, { { 255, 255, 255, 255 } } );
 
 	while ( !bExit )
 	{
 		if ( pApplicationWindow->PollInput( ) )
 			continue;
 
-		if ( DRAW.BeginFrame( ) )
-		{
-			pRectangle->Draw( );
-			//DrawWindows( );
-			DRAW.EndFrame( );
-		}
+		DRAW.BeginFrame( );
+		pRectangle->Draw( );
+		//DrawWindows( );
+		DRAW.EndFrame( );
 
 		Pause( 17ui64 );
 	}

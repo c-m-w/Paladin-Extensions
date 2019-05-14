@@ -61,8 +61,14 @@ extern "C"
 #include <d3dx9math.h>
 #include <DirectXMath.h>
 #include <d3dx9tex.h>
+#include <D3D11.h>
+#include <D3DX11.h>
+#include <D3DX10.h>
 #pragma comment( lib, "d3dx9.lib" )
 #pragma comment( lib, "d3d9.lib" )
+#pragma comment(lib, "d3d11.lib")
+#pragma comment(lib, "d3dx11.lib")
+#pragma comment(lib, "d3dx10.lib")
 
 #include <ft2build.h>
 #include FT_FREETYPE_H

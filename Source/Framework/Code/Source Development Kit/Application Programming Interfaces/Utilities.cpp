@@ -103,14 +103,14 @@ namespace Utilities
 
 	double vector2_t::Angle( ) const
 	{
-		return atan2( y, x );
+		return atan2( y, x ) * 180.0 / PI;
 	}
 
-	void vector2_t::Rotate( float flAngle, vector2_t vecRotationPoint )
+	void vector2_t::Rotate( double dAngle, const vector2_t& vecRotationPoint )
 	{
-		const auto dRadians = flAngle / 180.0 * PI;
-		const auto dSin = sin( dRadians );
-		const auto dCos = cos( dRadians );
+		const auto dRadians = dAngle / 180.0 * PI;
+		const auto dSin = std::sin( dRadians );
+		const auto dCos = std::cos( dRadians );
 		const vector2_t vecRelative { x - vecRotationPoint.x, y - vecRotationPoint.y };
 
 		x = vecRelative.x * dCos - vecRelative.y * dSin + vecRotationPoint.x;
