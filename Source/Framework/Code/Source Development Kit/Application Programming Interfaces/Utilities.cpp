@@ -90,6 +90,29 @@ namespace Utilities
 		return *this;
 	}
 
+	std::vector< vector2_t > vector2_t::GetCirclePoints( double dbRadius, std::size_t zResolution, double dbStartAngle /*= 0.0*/, double dbRatio /*= 1.0*/ )
+	{
+		if ( zResolution <= 2 || dbRatio > 1.0 || dbRatio <= 0.0 )
+			throw std::runtime_error( ENC( "this shouldnt happen" ) );
+
+		const auto dbRotation = 360.0 * dbRatio / double( zResolution );
+		auto dbTotal = 0.0;
+		vector2_t vecStart { 0.0, -dbRadius };
+		std::vector< vector2_t > vecReturn { };
+		vecReturn.resize( zResolution );
+		if ( dbStartAngle != 0.0 )
+			vecStart.Rotate( dbStartAngle, { } );
+
+		for ( auto z = 0u; z < zResolution; z++ )
+		{
+			vecReturn[ z ] = vecStart;
+			vecReturn[ z ].Rotate( dbTotal, { } );
+			dbTotal += dbRotation;
+		}
+
+		return vecReturn;
+	}
+
 	double vector2_t::Length( ) const
 	{
 		return std::sqrt( std::pow( x, 2.0 ) + std::pow( y, 2.0 ) );

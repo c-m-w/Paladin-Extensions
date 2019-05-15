@@ -269,7 +269,7 @@ bool SetupInterface( )
 
 void Draw( )
 {
-	auto pRectangle = new CDrawable< vertex_t >( );
+	auto pDrawable = new CDrawable< vertex_t >( );
 	color_t clr[ ]
 	{
 		color_t( { 255, 0, 0, 255 } ),
@@ -277,8 +277,9 @@ void Draw( )
 		color_t( { 0, 0, 255, 255 } ),
 		color_t( { 0, 255, 0, 255 } ),
 	};
-	pRectangle->Rectangle( rectangle_t( 10, 10, 50, 50 ), clr );
-	pRectangle->Line( { 0, 0 }, { 100, 200 }, 2.0, { { 255, 255, 255, 255 } } );
+	//pDrawable->Rectangle( rectangle_t( 10, 10, 50, 50 ), clr );
+	//pDrawable->Line( { 0, 0 }, { 100, 200 }, 2.0, { { 255, 255, 255, 255 } } );
+	pDrawable->Circle( { 100, 100 }, 40, color_t( { 255, 255, 255, 255 } ), color_t( { 255, 255, 255, 0 } ) );
 
 	while ( !bExit )
 	{
@@ -286,7 +287,7 @@ void Draw( )
 			continue;
 
 		DRAW.BeginFrame( );
-		pRectangle->Draw( );
+		pDrawable->Draw( );
 		//DrawWindows( );
 		DRAW.EndFrame( );
 

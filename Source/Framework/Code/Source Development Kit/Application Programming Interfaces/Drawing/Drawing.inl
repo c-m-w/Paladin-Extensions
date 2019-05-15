@@ -82,14 +82,13 @@ inline void CDrawable< vertex_t >::RemoveTexture( )
 
 inline void CDrawable< vertex_t >::Rectangle( rectangle_t recLocation, color_t clrColor )
 {
-	const auto dwColor = clrColor.GetARGB( );
 
 	vecVertices =
 	{
-		vertex_t( { recLocation.x, recLocation.y + recLocation.h }, dwColor ),
-		vertex_t( { recLocation.x, recLocation.y }, dwColor ),
-		vertex_t( { recLocation.x + recLocation.w, recLocation.y }, dwColor ),
-		vertex_t( { recLocation.x + recLocation.w, recLocation.y + recLocation.h }, dwColor )
+		vertex_t( { recLocation.x, recLocation.y + recLocation.h }, clrColor ),
+		vertex_t( { recLocation.x, recLocation.y }, clrColor ),
+		vertex_t( { recLocation.x + recLocation.w, recLocation.y }, clrColor ),
+		vertex_t( { recLocation.x + recLocation.w, recLocation.y + recLocation.h }, clrColor )
 	};
 	vecIndices =
 	{
@@ -124,7 +123,7 @@ inline void CDrawable< vertex_t >::Line( Utilities::vector2_t vecStart, Utilitie
 	const auto vecLength = vecEnd - vecStart;
 	const auto dwColor = clrColor.GetARGB( );
 	const auto dLength = vecLength.Length( );
-	auto dRotation = vecLength.Angle( );
+	const auto dRotation = vecLength.Angle( );
 	
 	vecVertices = decltype( vecVertices )
 	{
@@ -138,4 +137,40 @@ inline void CDrawable< vertex_t >::Line( Utilities::vector2_t vecStart, Utilitie
 		_Vertex.Rotate( dRotation, vecStart );
 
 	Destroy( );
+}
+
+inline void CDrawable< vertex_t >::Circle( const Utilities::vector2_t& vecCenter, double dbRadius, color_t clrColor, std::size_t zResolution /*= 0*/ )
+{
+	if ( zResolution <= 2u )
+		zResolution = std::size_t( std::round( dbRadius * 2.0 * Utilities::vector2_t::PI ) );
+
+	auto vecPoints = Utilities::vector2_t::GetCirclePoints( dbRadius, zResolution );
+	const auto zSize = vecPoints.size( );
+
+	vecVertices.clear( );
+	vecIndices.clear( );
+	vecVertices.emplace_back( vertex_t::PixelToRatio( vecCenter ), clrColor );
+	vecVertices.emplace_back( vertex_t::PixelToRatio( vecPoints[ 0 ] + vecCenter ), clrColor );
+
+	for ( auto z = 1u; z < zSize; z++ )
+	{
+		vecVertices.emplace_back( vertex_t::PixelToRatio( vecPoints[ z ] + vecCenter ), clrColor );
+		vecIndices.emplace_back( 0 );
+		vecIndices.emplace_back( z - 1 );
+		vecIndices.emplace_back( z );
+	}
+
+	vecVertices.emplace_back( vecVertices.front( ) );
+	vecIndices.emplace_back( 0 );
+	vecIndices.emplace_back( 1 );
+	vecIndices.emplace_back( zSize - 1 );
+
+	Destroy( );
+}
+
+inline void CDrawable< vertex_t >::Circle( const Utilities::vector2_t& vecCenter, double dbRadius, color_t clrPerimeter, color_t clrCenter, std::size_t zResolution /*= 0*/ )
+{
+	Circle( vecCenter, dbRadius, clrPerimeter, zResolution );
+	auto& _Vertex = vecVertices.front( );
+	_Vertex = vertex_t( { _Vertex.x, _Vertex.y }, clrCenter );
 }

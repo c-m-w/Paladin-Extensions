@@ -109,8 +109,9 @@ public:
 	void RemoveTexture( );
 	void Rectangle( rectangle_t recLocation, color_t clrColor );
 	void Rectangle( rectangle_t recLocation, color_t* clrColor/*[LOCATION_MAX]*/ );
-	void OutlineRectangle( rectangle_t recLocation, color_t clrColor );
 	void Line( Utilities::vector2_t vecStart, Utilities::vector2_t vecEnd, double dThickness, color_t clrColor );
+	void Circle( const Utilities::vector2_t& vecCenter, double dbRadius, color_t clrColor, std::size_t zResolution = 0 );
+	void Circle( const Utilities::vector2_t& vecCenter, double dbRadius, color_t clrPerimeter, color_t clrCenter, std::size_t zResolution = 0 );
 
 	friend class CDrawing;
 };

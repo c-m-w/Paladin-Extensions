@@ -32,6 +32,8 @@ namespace Utilities
 		vector2_t operator/( const vector2_t& rhs );
 		vector2_t operator^( double rhs );
 
+		static std::vector< vector2_t > GetCirclePoints( double dbRadius, std::size_t zResolution, double dbStartAngle = 0.0, double dbRatio = 1.0 );
+
 		[ [ nodiscard ] ] double Length( ) const;
 		void Round( );
 		[ [ nodiscard ] ] double Angle( ) const;
