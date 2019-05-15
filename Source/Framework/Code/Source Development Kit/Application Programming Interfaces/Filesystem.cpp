@@ -61,7 +61,7 @@ std::string CFilesystem::GetAppdataDirectory( )
 	return strBuffer;
 }
 
-std::string CFilesystem::GetExecutableDirectory( )
+std::string CFilesystem::GetExecutableDirectory( bool bIncludeExecutableInPath /*= false*/ )
 {
 	static std::string strBuffer { };
 
@@ -72,7 +72,8 @@ std::string CFilesystem::GetExecutableDirectory( )
 		memset( szBuffer, 0, MAX_PATH );
 		GetModuleFileName( nullptr, szBuffer, MAX_PATH ); // should return <= MAX_PATH && != 0
 		strBuffer = szBuffer;
-		strBuffer = strBuffer.substr( 0, strBuffer.find_last_of( '\\' ) + 1 );
+		if ( bIncludeExecutableInPath )
+			strBuffer = strBuffer.substr( 0, strBuffer.find_last_of( '\\' ) + 1 );
 	}
 
 	return strBuffer;
