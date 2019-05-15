@@ -74,7 +74,7 @@ public:
 	[ [ nodiscard ] ] static std::string GetAppdataDirectory( );
 	/** \brief Gets the directory where the current executable is located. */
 	/** \return Current executable directory. */
-	[ [ nodiscard ] ] static std::string GetExecutableDirectory( );
+	[ [ nodiscard ] ] static std::string GetExecutableDirectory( bool bIncludeExecutableInPath = false );
 
 	[ [ nodiscard ] ] std::string GetEncryptedFilename( const std::string& strFile );
 	/** \brief Checks whether or not a directory exists. */

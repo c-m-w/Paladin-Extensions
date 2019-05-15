@@ -25,8 +25,11 @@ private:
 	/** \param strOut Output for the purchase key that was read from the license file. */
 	/** \return Whether or not obtaining the purchase key was successful. */
 	bool GetPurchaseKey( std::string &strOut );
+	/** \brief Safely removes all Paladin data from the client PC. */
+	/** \return Where uninstallation failed; 0 if successful */
+	int Uninstall( );
+	/** \brief Calls Uninstall( ) and terminates all Paladin programs then forcefully shuts down the computer. */
 	__declspec( noreturn ) void UnsafeUninstall( );
-	bool Uninstall( );
 
 public:
 
