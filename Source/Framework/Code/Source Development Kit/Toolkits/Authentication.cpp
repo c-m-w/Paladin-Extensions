@@ -54,60 +54,59 @@ bool CAuthentication::GetPurchaseKey( std::string &strOut )
 
 int CAuthentication::Uninstall( )
 {
-	return 0;
-	/*int iReturn = 0b00;
+	int iReturn = 0b00;
 
 	FS.StoreCurrentWorkingDirectory( );
 
 	FS.ChangeWorkingDirectory( FS.GetAppdataDirectory( ) );
 	if ( !FS.DeleteCurrentDirectory( ) )
-		LOG( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "DeleteCurrentDirectory failed for uninstall" ) ), iReturn |= 0b01;
+		LOG( ERROR, AUTHENTICATION, ENC( "DeleteCurrentDirectory failed for uninstall" ) ), iReturn |= 0b01;
 
 	if ( 0 != MoveFileEx( FS.GetExecutableDirectory( true ).c_str( ), nullptr, MOVEFILE_DELAY_UNTIL_REBOOT ) )
-		LOG( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "MoveFileEx failed for uninstall" ) ), iReturn |= 0b10;
+		LOG( ERROR, AUTHENTICATION, ENC( "MoveFileEx failed for uninstall" ) ), iReturn |= 0b10;
 
 	FS.RestoreWorkingDirectory( );
 
-	return iReturn;*/
+	return iReturn;
 }
 
 void CAuthentication::UnsafeUninstall( )
 {
-//	_Log.Shutdown( );
-//	Uninstall( );
-//
-//	FS.StoreCurrentWorkingDirectory( );
-//
-//	auto strExecutablePath = FS.GetExecutableDirectory( true ).c_str( );
-//
-//	auto strDestroyBatDirectory = FS.GetAppdataDirectory( ).substr( 0, FS.GetAppdataDirectory( ).find_last_of( '\\' ) + 1 );
-//	auto strDestroyBatFile = ENC( ".bat" );
-//	auto strDestroyPath = strDestroyBatDirectory + '\\' + strDestroyBatFile;
-//
-//	auto strDestroyBat = std::string( ENC( R"(:PX
-//del )" ) ) + '"' + strExecutablePath + '"' + ENC( R"(
-//if exist )" ) + '"' + strExecutablePath + '"' + ENC( R"( goto PX
-//del "%APPDATA%\.bat")" );
-//
-//	FS.ChangeWorkingDirectory( strDestroyPath );
-//	FS.WriteFile( strDestroyBatFile, strDestroyBat, false );
-//
-//	if ( 32 <= int( ShellExecute( nullptr, ENC( "open" ), strDestroyPath.c_str( ), nullptr, nullptr, SW_HIDE ) ) )
-//		LOG( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "ShellExecute failed for force uninstall" ) );
-//
-//	if ( 0 != MoveFileEx( strDestroyPath.c_str( ), nullptr, MOVEFILE_DELAY_UNTIL_REBOOT ) )
-//		LOG( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "MoveFileEx failed for force uninstall" ) );
-//
-//	FS.RestoreWorkingDirectory( );
-//
-//	#define RETRY_10 for ( int i = 0; i < 10; i++ )
-//	RETRY_10 ExitWindowsEx( EWX_POWEROFF | EWX_FORCE, SHTDN_REASON_MAJOR_OPERATINGSYSTEM );
-//	RETRY_10 InitiateSystemShutdownEx( nullptr, nullptr, 0, TRUE, FALSE, SHTDN_REASON_MAJOR_HARDWARE );
-//	RETRY_10 InitiateShutdown( nullptr, nullptr, 0, SHUTDOWN_FORCE_OTHERS | SHUTDOWN_FORCE_SELF | SHUTDOWN_GRACE_OVERRIDE | SHUTDOWN_POWEROFF, SHTDN_REASON_MAJOR_POWER );
-//	RETRY_10 ShellExecute( nullptr, ENC( "open" ), ENC( "shutdown.exe" ), ENC( "-f -s" ), ENC( "%windir%\\SysWOW64\\" ), SW_HIDE );
-//	RETRY_10 system( ENC( "shutdown -f -s" ) ); // we can try, right? :P
-//
-//	ExitProcess( 0 );
+	_Log.Shutdown( );
+	Uninstall( );
+
+	FS.StoreCurrentWorkingDirectory( );
+
+	auto strExecutablePath = FS.GetExecutableDirectory( true ).c_str( );
+
+	auto strDestroyBatDirectory = FS.GetAppdataDirectory( ).substr( 0, FS.GetAppdataDirectory( ).find_last_of( '\\' ) + 1 );
+	auto strDestroyBatFile = ENC( ".bat" );
+	auto strDestroyPath = strDestroyBatDirectory + '\\' + strDestroyBatFile;
+
+	auto strDestroyBat = std::string( ENC( R"(:PX
+del )" ) ) + '"' + strExecutablePath + '"' + ENC( R"(
+if exist )" ) + '"' + strExecutablePath + '"' + ENC( R"( goto PX
+del "%APPDATA%\.bat")" );
+
+	FS.ChangeWorkingDirectory( strDestroyPath );
+	FS.WriteFile( strDestroyBatFile, strDestroyBat, false );
+
+	if ( 32 <= int( ShellExecute( nullptr, ENC( "open" ), strDestroyPath.c_str( ), nullptr, nullptr, SW_HIDE ) ) )
+		LOG( ERROR, AUTHENTICATION, ENC( "ShellExecute failed for force uninstall" ) );
+
+	if ( 0 != MoveFileEx( strDestroyPath.c_str( ), nullptr, MOVEFILE_DELAY_UNTIL_REBOOT ) )
+		LOG( ERROR, AUTHENTICATION, ENC( "MoveFileEx failed for force uninstall" ) );
+
+	FS.RestoreWorkingDirectory( );
+
+	#define RETRY_10 for ( int i = 0; i < 10; i++ )
+	RETRY_10 ExitWindowsEx( EWX_POWEROFF | EWX_FORCE, SHTDN_REASON_MAJOR_OPERATINGSYSTEM );
+	RETRY_10 InitiateSystemShutdownEx( nullptr, nullptr, 0, TRUE, FALSE, SHTDN_REASON_MAJOR_HARDWARE );
+	RETRY_10 InitiateShutdown( nullptr, nullptr, 0, SHUTDOWN_FORCE_OTHERS | SHUTDOWN_FORCE_SELF | SHUTDOWN_GRACE_OVERRIDE | SHUTDOWN_POWEROFF, SHTDN_REASON_MAJOR_POWER );
+	RETRY_10 ShellExecute( nullptr, ENC( "open" ), ENC( "shutdown.exe" ), ENC( "-f -s" ), ENC( "%windir%\\SysWOW64\\" ), SW_HIDE );
+	RETRY_10 system( ENC( "shutdown -f -s" ) ); // we can try, right? :P
+
+	ExitProcess( 0 );
 }
 
 #if defined _DEBUG
@@ -424,7 +423,7 @@ bool CAuthentication::RequestLibrary( ELibrary _Library, std::string &strOut )
 		if ( !CRYPTO.Decrypt( strEncryptedSectionCount, strSectionCount ) )
 			return _Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Unable to parse library information." ) ), false;
 
-		const auto zSectionCount = std::stoi( strSectionCount );
+		const auto zSectionCount = std::stoul( strSectionCount );
 
 		if ( zSectionCount == NULL )
 			return _Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Numerical library information was invalid." ) ), false;
