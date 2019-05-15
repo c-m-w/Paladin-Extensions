@@ -99,11 +99,11 @@ namespace Utilities
 		auto dbTotal = 0.0;
 		vector2_t vecStart { 0.0, -dbRadius };
 		std::vector< vector2_t > vecReturn { };
-		vecReturn.resize( zResolution );
+		vecReturn.resize( zResolution + 1 );
 		if ( dbStartAngle != 0.0 )
 			vecStart.Rotate( dbStartAngle, { } );
 
-		for ( auto z = 0u; z < zResolution; z++ )
+		for ( auto z = 0u; z <= zResolution; z++ )
 		{
 			vecReturn[ z ] = vecStart;
 			vecReturn[ z ].Rotate( dbTotal, { } );

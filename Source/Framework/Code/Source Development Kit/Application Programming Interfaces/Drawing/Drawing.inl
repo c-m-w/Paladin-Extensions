@@ -82,7 +82,6 @@ inline void CDrawable< vertex_t >::RemoveTexture( )
 
 inline void CDrawable< vertex_t >::Rectangle( rectangle_t recLocation, color_t clrColor )
 {
-
 	vecVertices =
 	{
 		vertex_t( { recLocation.x, recLocation.y + recLocation.h }, clrColor ),
@@ -101,7 +100,6 @@ inline void CDrawable< vertex_t >::Rectangle( rectangle_t recLocation, color_t c
 
 inline void CDrawable< vertex_t >::Rectangle( rectangle_t recLocation, color_t *clrColor )
 {
-	auto test = vertex_t::RatioToPixel( { -0.964285731, 0.923076928 } );
 	vecVertices =
 	{
 		vertex_t( vertex_t::PixelToRatio( { recLocation.x, recLocation.y } ), clrColor[ rectangle_t::TOP_LEFT ] ),
@@ -116,6 +114,12 @@ inline void CDrawable< vertex_t >::Rectangle( rectangle_t recLocation, color_t *
 	};
 
 	Destroy( );
+}
+
+inline void CDrawable< vertex_t >::RoundedRectangle( rectangle_t recLocation, bool bLeftRounding, bool bRightRounding, color_t clrColor, double dbRoundingWidth )
+{
+	const auto vecBase = Utilities::vector2_t::GetCirclePoints( dbRoundingWidth, std::size_t( dbRoundingWidth ), 0.0, 0.25 );
+
 }
 
 inline void CDrawable< vertex_t >::Line( Utilities::vector2_t vecStart, Utilities::vector2_t vecEnd, double dThickness, color_t clrColor )
