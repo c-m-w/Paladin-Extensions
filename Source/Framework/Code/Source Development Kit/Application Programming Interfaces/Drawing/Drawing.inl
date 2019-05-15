@@ -68,10 +68,15 @@ inline void CDrawable< vertex_t >::SetDrawingType( D3D_PRIMITIVE_TOPOLOGY _New )
 	_Topology = _New;
 }
 
-inline void CDrawable< vertex_t >::AddTexture( const std::string &strResourceName )
+inline void CDrawable< vertex_t >::SetTexture( const std::string &strResourceName )
 {
-	const auto pResourceData = &_ResourceManager.GetResource( strResourceName )[ 0 ];
-	//...
+	const auto& strData = _ResourceManager.GetResource( strResourceName );
+
+	if ( pTexture != nullptr )
+		pTexture->Release( );
+
+	pTexture = nullptr;
+	D3DX11CreateShaderResourceViewFromMemory( _Drawing.pDevice, &strData[ 0 ], strData.size( ), nullptr, nullptr, &pTexture, nullptr );
 }
 
 inline void CDrawable< vertex_t >::RemoveTexture( )
@@ -84,15 +89,15 @@ inline void CDrawable< vertex_t >::Rectangle( rectangle_t recLocation, color_t c
 {
 	vecVertices =
 	{
-		vertex_t( { recLocation.x, recLocation.y + recLocation.h }, clrColor ),
-		vertex_t( { recLocation.x, recLocation.y }, clrColor ),
-		vertex_t( { recLocation.x + recLocation.w, recLocation.y }, clrColor ),
-		vertex_t( { recLocation.x + recLocation.w, recLocation.y + recLocation.h }, clrColor )
+		vertex_t( vertex_t::PixelToRatio( { recLocation.x, recLocation.y } ), { 0.0, 0.0 }, clrColor ),
+		vertex_t( vertex_t::PixelToRatio( { recLocation.x + recLocation.w, recLocation.y } ), { 1.0, 0.0 }, clrColor ),
+		vertex_t( vertex_t::PixelToRatio( { recLocation.x + recLocation.w, recLocation.y + recLocation.h } ), { 1.0, 1.0 }, clrColor ),
+		vertex_t( vertex_t::PixelToRatio( { recLocation.x, recLocation.y + recLocation.h } ), { 0.0, 1.0 }, clrColor )
 	};
 	vecIndices =
 	{
-		0, 1, 2,
-		0, 2, 3
+		3, 0, 1,
+		3, 2, 1
 	};
 
 	Destroy( );

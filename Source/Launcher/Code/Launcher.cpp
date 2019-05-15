@@ -277,9 +277,10 @@ void Draw( )
 		color_t( { 0, 0, 255, 255 } ),
 		color_t( { 0, 255, 0, 255 } ),
 	};
-	//pDrawable->Rectangle( rectangle_t( 10, 10, 50, 50 ), clr );
+	pDrawable->Rectangle( rectangle_t( 20, 10, 150, 300 ), color_t( { 255, 255, 255, 255 } ) );
 	//pDrawable->Line( { 0, 0 }, { 100, 200 }, 2.0, { { 255, 255, 255, 255 } } );
-	pDrawable->Circle( { 100, 100 }, 40, color_t( { 255, 255, 255, 255 } ), color_t( { 255, 255, 255, 0 } ) );
+	//pDrawable->Circle( { 100, 100 }, 40, color_t( { 255, 255, 255, 255 } ) );
+	pDrawable->SetTexture( "PX Loading.png" );
 
 	while ( !bExit )
 	{

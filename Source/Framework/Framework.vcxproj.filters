@@ -18,6 +18,7 @@
     <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Input Handler.cpp" />
     <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Drawing\Drawing.cpp" />
     <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Drawing\Shaders.cpp" />
+    <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Drawing\Font Manager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\Development Environment\Build Output Wrapper.hpp" />
@@ -43,6 +44,7 @@
     <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Drawing\Drawing.hpp" />
     <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Drawing\Shaders.hpp" />
     <ClInclude Include="Precompile.hpp" />
+    <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Drawing\Font Manager.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Code\Source Development Kit\Application Programming Interfaces\Connectivity.inl" />

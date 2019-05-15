@@ -45,7 +45,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)Dependencies\Include\json\include\;$(SolutionDir)Dependencies\Include\;$(SolutionDir)Dependencies\Include\freetype\;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\;C:\Program Files (x86)\Windows Kits\10\Include\10.0.14393.0\km;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Dependencies\Include\json\include\;$(SolutionDir)Dependencies\Include\;$(SolutionDir)Dependencies\Include\ft 2.1\;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\;C:\Program Files (x86)\Windows Kits\10\Include\10.0.14393.0\km;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Dependencies\Lib\;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Lib\x86\;C:\Program Files (x86)\Windows Kits\10\Lib\10.0.14393.0\km\x86;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -104,6 +104,7 @@
     <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Connectivity.hpp" />
     <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Cryptography.hpp" />
     <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Drawing\Drawing.hpp" />
+    <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Drawing\Font Manager.hpp" />
     <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Filesystem.hpp" />
     <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Input Handler.hpp" />
     <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Drawing\Shaders.hpp" />
@@ -123,6 +124,7 @@
     <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Connectivity.cpp" />
     <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Cryptography.cpp" />
     <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Drawing\Drawing.cpp" />
+    <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Drawing\Font Manager.cpp" />
     <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Drawing\Shaders.cpp" />
     <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Filesystem.cpp" />
     <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Input Handler.cpp" />

@@ -73,7 +73,7 @@ extern "C"
 #pragma comment( lib, "d3dx10.lib" )
 
 #include <ft2build.h>
-#include FT_FREETYPE_H
+#include <freetype/freetype.h>
 #pragma comment( lib, "freetype.lib" )
 
 // OpenSSL

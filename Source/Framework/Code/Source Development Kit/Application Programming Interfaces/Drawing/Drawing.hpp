@@ -105,7 +105,7 @@ public:
 	void Destroy( ) override;
 
 	void SetDrawingType( D3D_PRIMITIVE_TOPOLOGY _New );
-	void AddTexture( const std::string& strResourceName );
+	void SetTexture( const std::string& strResourceName );
 	void RemoveTexture( );
 	void Rectangle( rectangle_t recLocation, color_t clrColor );
 	void Rectangle( rectangle_t recLocation, color_t* clrColor/*[LOCATION_MAX]*/ );

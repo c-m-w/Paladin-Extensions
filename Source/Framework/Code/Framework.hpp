@@ -24,6 +24,7 @@
 #include "Source Development Kit/Application Programming Interfaces/Connectivity.hpp"
 #include "Source Development Kit/Application Programming Interfaces/Window.hpp"
 #include "Source Development Kit/Application Programming Interfaces/Drawing/Shaders.hpp"
+#include "Source Development Kit/Application Programming Interfaces/Drawing/Font Manager.hpp"
 #include "Source Development Kit/Application Programming Interfaces/Drawing/Drawing.hpp"
 #include "Source Development Kit/Toolkits/Graphical User Interface.hpp"
 #include "Source Development Kit/Toolkits/Authentication.hpp"
