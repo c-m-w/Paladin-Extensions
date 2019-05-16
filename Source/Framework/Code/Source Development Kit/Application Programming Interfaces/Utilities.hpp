@@ -22,15 +22,22 @@ namespace Utilities
 		explicit operator vector3_t( ) const;
 		explicit operator D3DXVECTOR2( ) const;
 		explicit operator double( ) const;
-		vector2_t operator+( double rhs );
-		vector2_t operator-( double rhs );
-		vector2_t operator*( double rhs );
-		vector2_t operator/( double rhs );
-		vector2_t operator+( const vector2_t& rhs );
-		vector2_t operator-( const vector2_t& rhs );
-		vector2_t operator*( const vector2_t& rhs );
-		vector2_t operator/( const vector2_t& rhs );
-		vector2_t operator^( double rhs );
+		vector2_t operator+( double rhs ) const;
+		vector2_t operator-( double rhs ) const;
+		vector2_t operator*( double rhs ) const;
+		vector2_t operator/( double rhs ) const;
+		vector2_t operator+=( double rhs );
+		vector2_t operator-=( double rhs );
+		vector2_t operator*=( double rhs );
+		vector2_t operator/=( double rhs );
+		vector2_t operator+( const vector2_t& rhs ) const;
+		vector2_t operator-( const vector2_t& rhs ) const;
+		vector2_t operator*( const vector2_t& rhs ) const;
+		vector2_t operator/( const vector2_t& rhs ) const;
+		vector2_t operator+=( const vector2_t& rhs );
+		vector2_t operator-=( const vector2_t& rhs );
+		vector2_t operator*=( const vector2_t& rhs );
+		vector2_t operator/=( const vector2_t& rhs );
 
 		static std::vector< vector2_t > GetCirclePoints( double dbRadius, std::size_t zResolution, double dbStartAngle = 0.0, double dbRatio = 1.0 );
 
@@ -53,15 +60,22 @@ namespace Utilities
 		explicit operator vector2_t( ) const;
 		explicit operator D3DXVECTOR3( ) const;
 		explicit operator double( ) const;
-		vector3_t operator+( double rhs );
-		vector3_t operator-( double rhs );
-		vector3_t operator*( double rhs );
-		vector3_t operator/( double rhs );
-		vector3_t operator+( const vector3_t& rhs );
-		vector3_t operator-( const vector3_t& rhs );
-		vector3_t operator*( const vector3_t& rhs );
-		vector3_t operator/( const vector3_t& rhs );
-		vector3_t operator^( double rhs );
+		vector3_t operator+( double rhs ) const;
+		vector3_t operator-( double rhs ) const;
+		vector3_t operator*( double rhs ) const;
+		vector3_t operator/( double rhs ) const;
+		vector3_t operator+=( double rhs );
+		vector3_t operator-=( double rhs );
+		vector3_t operator*=( double rhs );
+		vector3_t operator/=( double rhs );
+		vector3_t operator+( const vector3_t& rhs ) const;
+		vector3_t operator-( const vector3_t& rhs ) const;
+		vector3_t operator*( const vector3_t& rhs ) const;
+		vector3_t operator/( const vector3_t& rhs ) const;
+		vector3_t operator+=( const vector3_t& rhs );
+		vector3_t operator-=( const vector3_t& rhs );
+		vector3_t operator*=( const vector3_t& rhs );
+		vector3_t operator/=( const vector3_t& rhs );
 
 		double Length( ) const;
 		void Round( );
@@ -70,6 +84,7 @@ namespace Utilities
 		bool Valid( ) const;
 	};
 
+	vector2_t GetScreenDPI( );
 	vector2_t InchesToPixels( const vector2_t& vecInches );
 
 	/** \brief Gets the time since epoch */

@@ -269,6 +269,7 @@ bool SetupInterface( )
 
 void Draw( )
 {
+	FONTS.CreateBitmap( "head", FONT_ROBOTO, 16 );
 	auto pDrawable = new CDrawable< vertex_t >( );
 	color_t clr[ ]
 	{

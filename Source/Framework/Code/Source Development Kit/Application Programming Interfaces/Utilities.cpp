@@ -27,66 +27,99 @@ namespace Utilities
 		return Length( );
 	}
 
-	vector2_t vector2_t::operator+( double rhs )
+	vector2_t vector2_t::operator+( double rhs ) const
+	{
+		return { x + rhs, y + rhs };
+	}
+
+	vector2_t vector2_t::operator-( double rhs ) const
+	{
+		return { x - rhs, y - rhs };
+	}
+
+	vector2_t vector2_t::operator*( double rhs ) const
+	{
+		return { x * rhs, y * rhs };
+	}
+
+	vector2_t vector2_t::operator/( double rhs ) const
+	{
+		return { x / rhs, y / rhs };
+	}
+
+	vector2_t vector2_t::operator+=( double rhs )
 	{
 		x += rhs;
 		y += rhs;
 		return *this;
 	}
 
-	vector2_t vector2_t::operator-( double rhs )
+	vector2_t vector2_t::operator-=( double rhs )
 	{
 		x -= rhs;
 		y -= rhs;
 		return *this;
 	}
 
-	vector2_t vector2_t::operator*( double rhs )
+	vector2_t vector2_t::operator*=( double rhs )
 	{
 		x *= rhs;
 		y *= rhs;
 		return *this;
 	}
 
-	vector2_t vector2_t::operator/( double rhs )
+	vector2_t vector2_t::operator/=( double rhs )
 	{
-		x = pow( x, rhs );
-		y = pow( y, rhs );
+		x /= rhs;
+		y /= rhs;
 		return *this;
 	}
 
-	vector2_t vector2_t::operator+( const vector2_t &rhs )
+	vector2_t vector2_t::operator+( const vector2_t &rhs ) const
+	{
+		return { x + rhs.x, y + rhs.y };
+	}
+
+	vector2_t vector2_t::operator-( const vector2_t &rhs ) const
+	{
+		return { x - rhs.x, y - rhs.y };
+	}
+
+	vector2_t vector2_t::operator*( const vector2_t &rhs ) const
+	{
+		return { x * rhs.x, y * rhs.y };
+	}
+
+	vector2_t vector2_t::operator/( const vector2_t &rhs ) const
+	{
+		return { x / rhs.x, y / rhs.y };
+	}
+
+	vector2_t vector2_t::operator+=( const vector2_t &rhs )
 	{
 		x += rhs.x;
 		y += rhs.y;
 		return *this;
 	}
 
-	vector2_t vector2_t::operator-( const vector2_t &rhs )
+	vector2_t vector2_t::operator-=( const vector2_t &rhs )
 	{
 		x -= rhs.x;
 		y -= rhs.y;
 		return *this;
 	}
 
-	vector2_t vector2_t::operator*( const vector2_t &rhs )
+	vector2_t vector2_t::operator*=( const vector2_t &rhs )
 	{
 		x *= rhs.x;
 		y *= rhs.y;
 		return *this;
 	}
 
-	vector2_t vector2_t::operator/( const vector2_t &rhs )
+	vector2_t vector2_t::operator/=( const vector2_t &rhs )
 	{
 		x /= rhs.x;
 		y /= rhs.y;
-		return *this;
-	}
-
-	vector2_t vector2_t::operator^( double rhs )
-	{
-		x += rhs;
-		y += rhs;
 		return *this;
 	}
 
@@ -169,7 +202,27 @@ namespace Utilities
 		return Length( );
 	}
 
-	vector3_t vector3_t::operator+( double rhs )
+	vector3_t vector3_t::operator+( double rhs ) const
+	{
+		return { x + rhs, y + rhs, z + rhs };
+	}
+
+	vector3_t vector3_t::operator-( double rhs ) const
+	{
+		return { x - rhs, y - rhs, z - rhs };
+	}
+
+	vector3_t vector3_t::operator*( double rhs ) const
+	{
+		return { x * rhs, y * rhs, z * rhs };
+	}
+
+	vector3_t vector3_t::operator/( double rhs ) const
+	{
+		return { x / rhs, y / rhs, z / rhs };
+	}
+
+	vector3_t vector3_t::operator+=( double rhs )
 	{
 		x += rhs;
 		y += rhs;
@@ -177,7 +230,7 @@ namespace Utilities
 		return *this;
 	}
 
-	vector3_t vector3_t::operator-( double rhs )
+	vector3_t vector3_t::operator-=( double rhs )
 	{
 		x -= rhs;
 		y -= rhs;
@@ -185,7 +238,7 @@ namespace Utilities
 		return *this;
 	}
 
-	vector3_t vector3_t::operator*( double rhs )
+	vector3_t vector3_t::operator*=( double rhs )
 	{
 		x *= rhs;
 		y *= rhs;
@@ -193,7 +246,7 @@ namespace Utilities
 		return *this;
 	}
 
-	vector3_t vector3_t::operator/( double rhs )
+	vector3_t vector3_t::operator/=( double rhs )
 	{
 		x /= rhs;
 		y /= rhs;
@@ -201,7 +254,27 @@ namespace Utilities
 		return *this;
 	}
 
-	vector3_t vector3_t::operator+( const vector3_t &rhs )
+	vector3_t vector3_t::operator+( const vector3_t &rhs ) const
+	{
+		return { x + rhs.x, y + rhs.y, z + rhs.z };
+	}
+
+	vector3_t vector3_t::operator-( const vector3_t &rhs ) const
+	{
+		return { x - rhs.x, y - rhs.y, z - rhs.z };
+	}
+
+	vector3_t vector3_t::operator*( const vector3_t &rhs ) const
+	{
+		return { x * rhs.x, y * rhs.y, z * rhs.z };
+	}
+
+	vector3_t vector3_t::operator/( const vector3_t &rhs ) const
+	{
+		return { x / rhs.x, y / rhs.y, z / rhs.z };
+	}
+
+	vector3_t vector3_t::operator+=( const vector3_t &rhs )
 	{
 		x += rhs.x;
 		y += rhs.y;
@@ -209,7 +282,7 @@ namespace Utilities
 		return *this;
 	}
 
-	vector3_t vector3_t::operator-( const vector3_t &rhs )
+	vector3_t vector3_t::operator-=( const vector3_t &rhs )
 	{
 		x -= rhs.x;
 		y -= rhs.y;
@@ -217,7 +290,7 @@ namespace Utilities
 		return *this;
 	}
 
-	vector3_t vector3_t::operator*( const vector3_t &rhs )
+	vector3_t vector3_t::operator*=( const vector3_t &rhs )
 	{
 		x *= rhs.x;
 		y *= rhs.y;
@@ -225,19 +298,11 @@ namespace Utilities
 		return *this;
 	}
 
-	vector3_t vector3_t::operator/( const vector3_t &rhs )
+	vector3_t vector3_t::operator/=( const vector3_t &rhs )
 	{
 		x /= rhs.x;
 		y /= rhs.y;
 		z /= rhs.z;
-		return *this;
-	}
-
-	vector3_t vector3_t::operator^( double rhs )
-	{
-		x = pow( x, rhs );
-		y = pow( y, rhs );
-		z = pow( z, rhs );
 		return *this;
 	}
 
@@ -268,7 +333,7 @@ namespace Utilities
 		return !std::isnan( x ) && !std::isnan( y ) && !std::isnan( z );
 	}
 
-	vector2_t InchesToPixels( const vector2_t& vecInches )
+	vector2_t GetScreenDPI( )
 	{
 		static vector2_t vecDPI { };
 
@@ -279,7 +344,7 @@ namespace Utilities
 
 			if ( !SUCCEEDED( D2D1CreateFactory( D2D1_FACTORY_TYPE_SINGLE_THREADED, &pFactory ) ) )
 				throw std::runtime_error( ENC( "Unable to get DPI." ) );
-			
+
 			pFactory->GetDesktopDpi( &flDPIX, &flDPIY );
 			pFactory->Release( );
 
@@ -287,6 +352,11 @@ namespace Utilities
 			vecDPI.y = double( flDPIY );
 		}
 
-		return vecDPI * vecInches;
+		return vecDPI;
+	}
+
+	vector2_t InchesToPixels( const vector2_t& vecInches )
+	{
+		return GetScreenDPI( ) * vecInches;
 	}
 }

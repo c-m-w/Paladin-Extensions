@@ -92,6 +92,7 @@ using namespace Interface;
 #define LOG( Prefix, Location, Message, ... ) _Log.Log( EPrefix::##Prefix, ELocation::##Location, ENC( Message ), __VA_ARGS__ )
 #define NET ( _Connection )
 #define INPUT ( _Input )
+#define FONTS ( _FontManager )
 #define DRAW ( _Drawing )
 #define AUTH  ( _Authentication )
 #define SI ( _SystemInformation )

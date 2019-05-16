@@ -188,7 +188,7 @@ bool CDrawing::Initialize( )
 													D3D11_SDK_VERSION, &_SwapChainDescription, &pSwapChain, &pDevice, nullptr, &pContext ) ) )
 		return LOG( ERROR, DRAWING, "Unable to create swap chain." ), false;
 
-	return Create( );
+	return Create( ) && FONTS.Setup( );
 }
 
 void CDrawing::Uninitialize( )

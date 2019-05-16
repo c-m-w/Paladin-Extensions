@@ -18,10 +18,14 @@ struct bitmap_t
 	std::vector< unsigned char > vecBytes { };
 	Utilities::vector2_t vecSize { };
 
-	bitmap_t( unsigned char* pData, std::size_t zData, const Utilities::vector2_t& vecSize );
+	bitmap_t( ) = default;
+	bitmap_t( unsigned char* pData, const Utilities::vector2_t& vecSize );
 	bitmap_t( const std::vector< unsigned char >& vecBytes, const Utilities::vector2_t& vecSize );
+	bitmap_t( const Utilities::vector2_t& vecSize );
 
-	[[nodiscard]] std::size_t GetBitIndex( unsigned x, unsigned y ) const;
+	[ [ nodiscard ] ] std::size_t GetBitIndex( unsigned x, unsigned y ) const;
+	void Resize( const Utilities::vector2_t& vecNewSize );
+	void Insert( const Utilities::vector2_t& vecLocation, const bitmap_t& _Other );
 	void ConcatenateHorizontal( const bitmap_t& _Other );
 	void ConcatenateVertical( const bitmap_t& _Other );
 };
@@ -56,6 +60,6 @@ private:
 
 public:
 
+	bitmap_t CreateBitmap( char* szText, EFont _Font, double dbSize );
 	Utilities::vector2_t CalculateTextSize( char* szText, EFont _Font, double dbSize );
-	bitmap_t CreateBitmap( char* szText, EFont _Font, double dbSize, color_t clrText );
-};
+} inline _FontManager;
