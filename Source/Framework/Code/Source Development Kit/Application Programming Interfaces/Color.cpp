@@ -127,6 +127,16 @@ unsigned color_t::PutARGB( unsigned uData )
 	return _Data.u = uData & 0xFF000000 | ( uData & 0x00FF0000 ) << 8 | ( uData & 0x0000FF00 ) << 16 | ( uData & 0x000000FF ) << 24;
 }
 
+unsigned color_t::GetABGR( ) const
+{
+	return _Data.b[ COLOR_ALPHA ] << 24 | _Data.b[ COLOR_BLUE ] << 16 | _Data.b[ COLOR_GREEN ] << 8 | _Data.b[ COLOR_RED ];
+}
+
+unsigned color_t::PutABGR( unsigned uData )
+{
+	return _Data.u = uData & 0xFF000000 | ( uData & 0x00FF0000 ) << 8 | ( uData & 0x0000FF00 ) << 16 | ( uData & 0x000000FF ) << 24;
+}
+
 unsigned char color_t::GetRed( ) const
 {
 	return _Data.b[ COLOR_RED ];

@@ -24,6 +24,7 @@ struct bitmap_t
 	bitmap_t( const Utilities::vector2_t& vecSize );
 
 	[ [ nodiscard ] ] std::size_t GetBitIndex( unsigned x, unsigned y ) const;
+	[[ nodiscard ]] std::vector< DWORD > GetColoredBitmapBytes( DWORD dwARGB ) const;
 	void Resize( const Utilities::vector2_t& vecNewSize );
 	void Insert( Utilities::vector2_t vecLocation, const bitmap_t& _Other );
 	void ConcatenateHorizontal( const bitmap_t& _Other );

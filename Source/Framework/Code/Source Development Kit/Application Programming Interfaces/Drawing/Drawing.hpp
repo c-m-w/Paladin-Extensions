@@ -106,6 +106,7 @@ public:
 
 	void SetDrawingType( D3D_PRIMITIVE_TOPOLOGY _New );
 	void SetTexture( const std::string& strResourceName );
+	void SetTexture( const bitmap_t& _Bitmap, const color_t& clrText );
 	void RemoveTexture( );
 	void Rectangle( rectangle_t recLocation, color_t clrColor );
 	void Rectangle( rectangle_t recLocation, color_t* clrColor/*[LOCATION_MAX]*/ );

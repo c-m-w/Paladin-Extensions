@@ -269,18 +269,7 @@ bool SetupInterface( )
 
 void Draw( )
 {
-	auto test = FONTS.CreateBitmap( "MEN420", FONT_ROBOTO, 64 );
-
-	for ( auto y = 0; y < ( int )test.vecSize.y; y++ )
-	{
-		for ( auto x = 0; x < ( int )test.vecSize.x; x++ )
-			std::cout << ( ( test.vecBytes[ y * ( int )test.vecSize.x + x ] > 0 ) ? 'X' : '_' );
-
-		std::cout << std::endl;
-	}
-	test.Clip( );
-
-	std::cout << "CLIPPED " << std::endl;
+	auto test = FONTS.CreateBitmap( "abcdefghjijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789", FONT_TAHOMA, 16 );
 
 	for ( auto y = 0; y < ( int )test.vecSize.y; y++ )
 	{
@@ -299,9 +288,8 @@ void Draw( )
 		color_t( { 0, 255, 0, 255 } ),
 	};
 	pDrawable->Rectangle( rectangle_t( 20, 10, 150, 300 ), color_t( { 255, 255, 255, 255 } ) );
-	//pDrawable->Line( { 0, 0 }, { 100, 200 }, 2.0, { { 255, 255, 255, 255 } } );
-	//pDrawable->Circle( { 100, 100 }, 40, color_t( { 255, 255, 255, 255 } ) );
 	pDrawable->SetTexture( "PX Loading.png" );
+	pDrawable->SetTexture( test, color_t( { 0xFF, 0xFF, 0xFF, 0xFF } ) );
 
 	while ( !bExit )
 	{

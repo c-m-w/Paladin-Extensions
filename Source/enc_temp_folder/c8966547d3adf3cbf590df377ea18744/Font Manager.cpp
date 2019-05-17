@@ -290,7 +290,7 @@ bitmap_t CFontManager::CreateBitmap( char *szText, EFont _Font, double dbSize )
 		uPreviousIndex = _CurrentFont->glyph->glyph_index;
 	}
 
-	_Return.Clip( );
+	//_Return.Clip( );
 	return _Return;
 }
 

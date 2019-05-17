@@ -79,6 +79,41 @@ inline void CDrawable< vertex_t >::SetTexture( const std::string &strResourceNam
 	D3DX11CreateShaderResourceViewFromMemory( _Drawing.pDevice, &strData[ 0 ], strData.size( ), nullptr, nullptr, &pTexture, nullptr );
 }
 
+inline void CDrawable< vertex_t >::SetTexture( const bitmap_t& _Bitmap, const color_t& clrText )
+{
+	const auto vecBytes = _Bitmap.GetColoredBitmapBytes( clrText.GetRGBA( ) );
+	D3D11_TEXTURE2D_DESC _TextureDescription { };
+	D3D11_SUBRESOURCE_DATA _ResourceData { };
+	ID3D11Texture2D* pBufferTexture = nullptr;
+	D3D11_SHADER_RESOURCE_VIEW_DESC _ShaderResourceViewDescription { };
+
+	_TextureDescription.Width = std::size_t( _Bitmap.vecSize.x );
+	_TextureDescription.Height = std::size_t( _Bitmap.vecSize.y );
+	_TextureDescription.MipLevels = 1;
+	_TextureDescription.ArraySize = 1;
+	_TextureDescription.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	_TextureDescription.SampleDesc.Count = 1;
+	_TextureDescription.SampleDesc.Quality = 0;
+	_TextureDescription.Usage = D3D11_USAGE_DEFAULT;
+	_TextureDescription.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+	_TextureDescription.CPUAccessFlags = 0;
+	_TextureDescription.MiscFlags = 0;
+
+	_ResourceData.pSysMem = &vecBytes[ 0 ];
+	_ResourceData.SysMemPitch = std::size_t( _Bitmap.vecSize.x ) * sizeof( DWORD );
+	_ResourceData.SysMemSlicePitch = vecBytes.size( ) * sizeof( DWORD );
+
+	_Drawing.pDevice->CreateTexture2D( &_TextureDescription, &_ResourceData, &pBufferTexture );
+
+	_ShaderResourceViewDescription.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	_ShaderResourceViewDescription.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	_ShaderResourceViewDescription.Texture2D.MostDetailedMip = 0;
+	_ShaderResourceViewDescription.Texture2D.MipLevels = 1;
+
+	_Drawing.pDevice->CreateShaderResourceView( pBufferTexture, &_ShaderResourceViewDescription, &pTexture );
+	Rectangle( rectangle_t { 0, 0, _Bitmap.vecSize.x , _Bitmap.vecSize.y }, color_t { 255, 255, 255, 255 } );
+}
+
 inline void CDrawable< vertex_t >::RemoveTexture( )
 {
 	pTexture->Release( );

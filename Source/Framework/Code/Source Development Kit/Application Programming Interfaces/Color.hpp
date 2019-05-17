@@ -74,6 +74,10 @@ public:
 	unsigned PutARGB( unsigned uData );
 	/** \brief Color data as ARGB */
 	__declspec( property( get = GetARGB, put = PutARGB ) ) unsigned argb;
+	[[ nodiscard ]] unsigned GetABGR( ) const;
+	unsigned PutABGR( unsigned uData );
+	/** \brief Color data as ARGB */
+	__declspec( property( get = GetARGB, put = PutARGB ) ) unsigned ABGR;
 
 	[ [ nodiscard ] ] unsigned char GetRed( ) const;
 	[ [ nodiscard ] ] unsigned char GetGreen( ) const;
