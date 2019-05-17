@@ -269,7 +269,27 @@ bool SetupInterface( )
 
 void Draw( )
 {
-	FONTS.CreateBitmap( "head", FONT_ROBOTO, 16 );
+	auto test = FONTS.CreateBitmap( "MEN420", FONT_ROBOTO, 64 );
+
+	for ( auto y = 0; y < ( int )test.vecSize.y; y++ )
+	{
+		for ( auto x = 0; x < ( int )test.vecSize.x; x++ )
+			std::cout << ( ( test.vecBytes[ y * ( int )test.vecSize.x + x ] > 0 ) ? 'X' : '_' );
+
+		std::cout << std::endl;
+	}
+	test.Clip( );
+
+	std::cout << "CLIPPED " << std::endl;
+
+	for ( auto y = 0; y < ( int )test.vecSize.y; y++ )
+	{
+		for ( auto x = 0; x < ( int )test.vecSize.x; x++ )
+			std::cout << ( ( test.vecBytes[ y * ( int )test.vecSize.x + x ] > 0 ) ? 'X' : '_' );
+
+		std::cout << std::endl;
+	}
+
 	auto pDrawable = new CDrawable< vertex_t >( );
 	color_t clr[ ]
 	{

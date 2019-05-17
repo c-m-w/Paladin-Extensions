@@ -39,6 +39,7 @@ void bitmap_t::Resize( const vector2_t &vecNewSize )
 	const auto _OldBitmap = *this;
 
 	vecSize = vecNewSize;
+	vecBytes.clear( );
 	vecBytes.resize( std::size_t( vecSize.x * vecSize.y ) );
 
 	for ( auto y = 0u; y < std::size_t( vecSize.y )
@@ -48,7 +49,7 @@ void bitmap_t::Resize( const vector2_t &vecNewSize )
 			vecBytes[ GetBitIndex( x, y ) ] = _OldBitmap.vecBytes[ _OldBitmap.GetBitIndex( x, y ) ];
 }
 
-void bitmap_t::Insert( const vector2_t &vecLocation, const bitmap_t &_Other )
+void bitmap_t::Insert( vector2_t vecLocation, const bitmap_t &_Other )
 {
 	vector2_t vecDifference { vecSize.x - ( vecLocation.x + _Other.vecSize.x ), vecSize.y - ( vecLocation.y + _Other.vecSize.y ) };
 
@@ -81,6 +82,105 @@ void bitmap_t::ConcatenateHorizontal( const bitmap_t& _Other )
 void bitmap_t::ConcatenateVertical( const bitmap_t & _Other )
 {
 	Insert( { 0.0, vecSize.y }, _Other );
+}
+
+void bitmap_t::ShiftUpward( unsigned uMagnitude )
+{
+	const auto _OldBitmap = *this;
+	memset( &vecBytes[ 0 ], 0, vecBytes.size( ) );
+
+	if ( uMagnitude >= std::size_t( vecSize.y ) )
+		return;
+
+	for ( auto y = uMagnitude; y < std::size_t( vecSize.y ); y++ )
+		for ( auto x = 0u; x < std::size_t( vecSize.x ); x++ )
+			vecBytes[ GetBitIndex( x, y - uMagnitude ) ] = _OldBitmap.vecBytes[ _OldBitmap.GetBitIndex( x, y ) ];
+}
+
+void bitmap_t::ShiftDownward( unsigned uMagnitude )
+{
+	const auto _OldBitmap = *this;
+	memset( &vecBytes[ 0 ], 0, vecBytes.size( ) );
+
+	if ( uMagnitude >= std::size_t( vecSize.y ) )
+		return;
+
+	for ( auto y = std::size_t( vecSize.y ) - 1; y >= uMagnitude; y-- )
+		for ( auto x = 0u; x < std::size_t( vecSize.x ); x++ )
+			vecBytes[ GetBitIndex( x, y ) ] = _OldBitmap.vecBytes[ _OldBitmap.GetBitIndex( x, y - uMagnitude ) ];
+}
+
+void bitmap_t::ShiftLeftward( unsigned uMagnitude )
+{
+	const auto _OldBitmap = *this;
+	memset( &vecBytes[ 0 ], 0, vecBytes.size( ) );
+
+	if ( uMagnitude >= std::size_t( vecSize.x ) )
+		return;
+
+	for ( auto x = uMagnitude; x < std::size_t( vecSize.x ); x++ )
+		for ( auto y = 0u; y < std::size_t( vecSize.y ); y++ )
+			vecBytes[ GetBitIndex( x - uMagnitude, y ) ] = _OldBitmap.vecBytes[ _OldBitmap.GetBitIndex( x, y ) ];
+}
+
+void bitmap_t::ShiftRightward( unsigned uMagnitude )
+{
+	const auto _OldBitmap = *this;
+	memset( &vecBytes[ 0 ], 0, vecBytes.size( ) );
+
+	if ( uMagnitude >= std::size_t( vecSize.x ) )
+		return;
+
+	for ( auto x = std::size_t( vecSize.x ) - 1; x <= uMagnitude; x-- )
+		for ( auto y = 0u; y < std::size_t( vecSize.y ); y++ )
+			vecBytes[ GetBitIndex( x, y ) ] = _OldBitmap.vecBytes[ _OldBitmap.GetBitIndex( x - uMagnitude, y ) ];
+}
+
+bool bitmap_t::VerticalRowEmpty( unsigned uRow )
+{
+	if ( uRow >= std::size_t( vecSize.x ) )
+		return false;
+
+	auto bReturn = true;
+
+	for ( auto y = 0u; y < std::size_t( vecSize.y )
+		  && bReturn; y++ )
+		bReturn &= !vecBytes[ GetBitIndex( uRow, y ) ];
+
+	return bReturn;
+}
+
+bool bitmap_t::HorizontalRowEmpty( unsigned uRow )
+{
+	if ( uRow >= std::size_t( vecSize.y ) )
+		return false;
+
+	auto bReturn = true;
+
+	for ( auto x = 0u; x < std::size_t( vecSize.x )
+		  && bReturn; x++ )
+		bReturn &= !vecBytes[ GetBitIndex( x, uRow ) ];
+
+	return bReturn;
+}
+
+void bitmap_t::Clip( )
+{
+	auto uVerticalClipping = 0u, uHorizontalClipping = 0u;
+
+	while ( VerticalRowEmpty( 0 ) )
+		ShiftLeftward( 1 ), uHorizontalClipping++;
+
+	while ( VerticalRowEmpty( std::size_t( vecSize.x ) - uHorizontalClipping - 1) )
+		uHorizontalClipping++;
+
+	while ( HorizontalRowEmpty( 0 ) )
+		ShiftUpward( 1 ), uVerticalClipping;
+
+	while ( HorizontalRowEmpty( std::size_t( vecSize.y ) - uVerticalClipping - 1 ) )
+		uVerticalClipping++;
+
+	Resize( vecSize - vector2_t( double( uHorizontalClipping ), double( uVerticalClipping ) ) );
 }
 
 bool CFontManager::Initialize( )
@@ -133,6 +233,7 @@ bitmap_t CFontManager::CreateBitmap( char *szText, EFont _Font, double dbSize )
 	const auto vecDPI = GetScreenDPI( );
 	bitmap_t _Return { };
 	auto uAdvance = 0u, uPreviousIndex = 0u;
+	auto dbVerticalOffset = 0.0;
 
 	_CurrentFont = _Fonts[ _Font ];
 	FT_Set_Char_Size( _CurrentFont, 0, std::size_t( dbSize ) << 6, int( vecDPI.x ), int( vecDPI.y ) );
@@ -145,19 +246,25 @@ bitmap_t CFontManager::CreateBitmap( char *szText, EFont _Font, double dbSize )
 		if ( uPreviousIndex != 0u )
 			FT_Get_Kerning( _CurrentFont, uPreviousIndex, _CurrentFont->glyph->glyph_index, FT_KERNING_DEFAULT, &vecKerning );
 
-		_Return.Insert( { double( uAdvance + ( vecKerning.x >> 6 ) ), dbSize - double( _CurrentFont->glyph->bitmap_top ) }, 
-						{ _CurrentFont->glyph->bitmap.buffer, { double( _CurrentFont->glyph->bitmap.width ), double( _CurrentFont->glyph->bitmap.rows ) } } );
+		uAdvance += vecKerning.x >> 6;
+		if ( _CurrentFont->glyph->bitmap.buffer != nullptr )
+		{
+			auto dbCurrentVerticalOffset = dbSize - double( _CurrentFont->glyph->bitmap_top ) + dbVerticalOffset;
+
+			if ( dbCurrentVerticalOffset < 0.0 )
+			{
+				dbCurrentVerticalOffset *= -1.0;
+				dbVerticalOffset += dbCurrentVerticalOffset;
+				_Return.Resize( { _Return.vecSize.x, _Return.vecSize.y + dbCurrentVerticalOffset } );
+				_Return.ShiftDownward( std::size_t( dbCurrentVerticalOffset ) );
+			}
+
+			_Return.Insert( { double( uAdvance + _CurrentFont->glyph->bitmap_left ), dbCurrentVerticalOffset },
+							{ _CurrentFont->glyph->bitmap.buffer, { double( _CurrentFont->glyph->bitmap.width ), double( _CurrentFont->glyph->bitmap.rows ) } } );
+		}
 
 		uAdvance += _CurrentFont->glyph->advance.x >> 6;
 		uPreviousIndex = _CurrentFont->glyph->glyph_index;
-	}
-
-	for ( auto y = 0; y < (int)_Return.vecSize.y; y++ )
-	{
-		for ( auto x = 0; x < (int) _Return.vecSize.x; x++ )
-			std::cout << ( _Return.vecBytes[ y * (int)_Return.vecSize.x + x ] > 0 ) ? '8' : '0';
-
-		std::cout << std::endl;
 	}
 
 	return _Return;

@@ -25,9 +25,16 @@ struct bitmap_t
 
 	[ [ nodiscard ] ] std::size_t GetBitIndex( unsigned x, unsigned y ) const;
 	void Resize( const Utilities::vector2_t& vecNewSize );
-	void Insert( const Utilities::vector2_t& vecLocation, const bitmap_t& _Other );
+	void Insert( Utilities::vector2_t vecLocation, const bitmap_t& _Other );
 	void ConcatenateHorizontal( const bitmap_t& _Other );
 	void ConcatenateVertical( const bitmap_t& _Other );
+	void ShiftUpward( unsigned uMagnitude );
+	void ShiftDownward( unsigned uMagnitude );
+	void ShiftLeftward( unsigned uMagnitude );
+	void ShiftRightward( unsigned uMagnitude );
+	bool VerticalRowEmpty( unsigned uRow );
+	bool HorizontalRowEmpty( unsigned uRow );
+	void Clip( );
 };
 
 struct glyph_t
