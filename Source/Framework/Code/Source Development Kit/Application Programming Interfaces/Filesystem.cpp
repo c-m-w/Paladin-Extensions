@@ -72,7 +72,7 @@ std::string CFilesystem::GetExecutableDirectory( bool bIncludeExecutableInPath /
 		memset( szBuffer, 0, MAX_PATH );
 		GetModuleFileName( nullptr, szBuffer, MAX_PATH ); // should return <= MAX_PATH && != 0
 		strBuffer = szBuffer;
-		if ( bIncludeExecutableInPath )
+		if ( !bIncludeExecutableInPath )
 			strBuffer = strBuffer.substr( 0, strBuffer.find_last_of( '\\' ) + 1 );
 	}
 

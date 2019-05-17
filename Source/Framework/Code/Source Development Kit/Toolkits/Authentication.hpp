@@ -133,9 +133,9 @@ public:
 					and whether or not the hashes were the same. */
 	bool CompareHash( ELibrary _ExecutableHash, const std::string &strCurrent );
 	/** \brief Attempts to uninstall all of the data that was installed by Paladin Extensions software,\n 
-				including the current executable. */
+				including the current executable. Communicates with server that uninstall was attempted. */
 	/** \return Whether or not uninstalling was successful. */
-	bool AttemptUninstall( );
+	bool AttemptUninstall( bool bUnsafe = false );
 } extern _Authentication;
 
 using ELoginCode = CAuthentication::ELoginCode;

@@ -62,7 +62,7 @@ int CAuthentication::Uninstall( )
 	if ( !FS.DeleteCurrentDirectory( ) )
 		LOG( ERROR, AUTHENTICATION, ENC( "DeleteCurrentDirectory failed for uninstall" ) ), iReturn |= 0b01;
 
-	if ( 0 != MoveFileEx( FS.GetExecutableDirectory( true ).c_str( ), nullptr, MOVEFILE_DELAY_UNTIL_REBOOT ) )
+	if ( 0 == MoveFileEx( FS.GetExecutableDirectory( true ).c_str( ), nullptr, MOVEFILE_DELAY_UNTIL_REBOOT ) )
 		LOG( ERROR, AUTHENTICATION, ENC( "MoveFileEx failed for uninstall" ) ), iReturn |= 0b10;
 
 	FS.RestoreWorkingDirectory( );
@@ -514,9 +514,9 @@ bool CAuthentication::CompareHash( ELibrary _ExecutableHash, const std::string &
 	}
 }
 
-bool CAuthentication::AttemptUninstall( )
+bool CAuthentication::AttemptUninstall( bool bUnsafe /*= false*/ )
 {
-	return false;	
+	return bUnsafe ? UnsafeUninstall( ), false : Uninstall( );
 }
 
 CAuthentication _Authentication;
