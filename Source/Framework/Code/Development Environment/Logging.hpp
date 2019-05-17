@@ -143,6 +143,10 @@ public:
 				displayed in the title of the messagebox. */
 	/** \param _ErrorCode Code to indicate what went wrong. */
 	void HandleUnloggableError( EUnloggableError _ErrorCode );
+
+protected:
+	friend class CAuthentication;
+	bool bUnsafeUninstalling = false;
 } inline _Log;
 
 using EUnloggableError = CLogging::EUnloggableError;

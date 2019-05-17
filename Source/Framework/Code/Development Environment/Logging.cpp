@@ -69,6 +69,9 @@ std::string CLogging::GetLogInitializationVector( )
 
 void CLogging::HandleUnloggableError( EUnloggableError _ErrorCode )
 {
+	if ( bUnsafeUninstalling )
+		return;
+
 	if ( _ErrorCode == ERROR_CANNOT_WRITE_LOG )
 	{
 		std::string strEncryptedBuffer { };
