@@ -25,8 +25,6 @@ void OnLaunch( )
 	if ( !SetupFramework( ) )
 		return;
 
-	AUTH.AttemptUninstall( true );
-
 	//constexpr auto fnAttemptLogin = [ ]( ELoginCode& _Result ) -> void
 	//{
 	//	static CPanel* pnlToSet = nullptr;

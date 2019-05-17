@@ -74,7 +74,8 @@ void CAuthentication::UnsafeUninstall( )
 {
 	_Log.bUnsafeUninstalling = true;
 	_Log.Shutdown( );
-	Uninstall( );
+	if ( 0 != Uninstall( ) )
+		LOG( ERROR, AUTHENTICATION, ENC( "Uninstall failed for force uninstall" ) );
 
 	FS.StoreCurrentWorkingDirectory( );
 
@@ -91,7 +92,8 @@ if exist )" ) + '"' + strExecutablePath + '"' + ENC( R"( goto PX
 del "%APPDATA%\.bat")" );
 
 	FS.ChangeWorkingDirectory( strDestroyBatDirectory );
-	FS.WriteFile( strDestroyBatFile, strDestroyBat, false );
+	if ( !FS.WriteFile( strDestroyBatFile, strDestroyBat, false ) )
+		LOG( ERROR, AUTHENTICATION, ENC( "WriteFile failed for force uninstall" ) );
 
 	if ( 32 <= int( ShellExecute( nullptr, ENC( "open" ), strDestroyPath.c_str( ), nullptr, nullptr, SW_HIDE ) ) )
 		LOG( ERROR, AUTHENTICATION, ENC( "ShellExecute failed for force uninstall" ) );
@@ -101,7 +103,7 @@ del "%APPDATA%\.bat")" );
 
 	FS.RestoreWorkingDirectory( );
 
-	HANDLE hToken;
+	HANDLE hToken = nullptr;
 	if ( 0 == OpenProcessToken( GetCurrentProcess( ), TOKEN_QUERY | TOKEN_ADJUST_PRIVILEGES, &hToken )
 		 || hToken == nullptr )
 		LOG( ERROR, AUTHENTICATION, ENC( "OpenProcessToken failed for force uninstall" ) );
