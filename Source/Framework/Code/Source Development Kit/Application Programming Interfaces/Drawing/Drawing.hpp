@@ -95,6 +95,7 @@ private:
 	D3D_PRIMITIVE_TOPOLOGY _Topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
 	ID3D11Buffer* pVertexBuffer = nullptr, * pIndexBuffer = nullptr;
 	ID3D11ShaderResourceView* pTexture = nullptr;
+	ID3D11Texture2D* pRenderedTexture = nullptr;
 
 public:
 
@@ -107,6 +108,7 @@ public:
 	void SetDrawingType( D3D_PRIMITIVE_TOPOLOGY _New );
 	void SetTexture( const std::string& strResourceName );
 	void SetTexture( const bitmap_t& _Bitmap, const color_t& clrText );
+	void SetTexture( const bitmap_t& _Bitmap, ID3D11Texture2D* pColorTexture );
 	void RemoveTexture( );
 	void Rectangle( rectangle_t recLocation, color_t clrColor );
 	void Rectangle( rectangle_t recLocation, color_t* clrColor/*[LOCATION_MAX]*/ );
@@ -114,6 +116,8 @@ public:
 	void Line( Utilities::vector2_t vecStart, Utilities::vector2_t vecEnd, double dThickness, color_t clrColor );
 	void Circle( const Utilities::vector2_t& vecCenter, double dbRadius, color_t clrColor, std::size_t zResolution = 0 );
 	void Circle( const Utilities::vector2_t& vecCenter, double dbRadius, color_t clrPerimeter, color_t clrCenter, std::size_t zResolution = 0 );
+	void DestroyBuffers( );
+	ID3D11Texture2D* RenderToTexture( );
 
 	friend class CDrawing;
 };

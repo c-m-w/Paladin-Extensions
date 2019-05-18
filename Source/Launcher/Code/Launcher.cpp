@@ -287,9 +287,8 @@ void Draw( )
 		color_t( { 0, 0, 255, 255 } ),
 		color_t( { 0, 255, 0, 255 } ),
 	};
-	pDrawable->Rectangle( rectangle_t( 20, 10, 150, 300 ), color_t( { 255, 255, 255, 255 } ) );
-	pDrawable->SetTexture( "PX Loading.png" );
-	pDrawable->SetTexture( test, color_t( { 0xFF, 0xFF, 0xFF, 0xFF } ) );
+	pDrawable->Rectangle( rectangle_t( 0, 0, test.vecSize.x, test.vecSize.y ), color_t( { 255, 255, 255, 255 } ) );
+	pDrawable->SetTexture( test, pDrawable->RenderToTexture( ) );
 
 	while ( !bExit )
 	{

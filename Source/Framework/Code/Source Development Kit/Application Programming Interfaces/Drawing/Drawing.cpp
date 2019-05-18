@@ -215,6 +215,7 @@ void CDrawing::Uninitialize( )
 
 void CDrawing::BeginFrame( )
 {
+	pContext->OMSetRenderTargets( 1, &pRenderTargetView, pDepthStencilView );
 	pContext->PSSetSamplers( 0, 1, &pSamplerState );
 	pContext->VSSetShader( pVertexShader, nullptr, 0 );
 	pContext->IASetInputLayout( pVertexLayout );

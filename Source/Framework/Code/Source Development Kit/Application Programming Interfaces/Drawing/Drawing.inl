@@ -55,11 +55,30 @@ inline void CDrawable< vertex_t >::Draw( )
 
 inline void CDrawable< vertex_t >::Destroy( )
 {
-	if ( !bCreated )
-		return;
+	if ( pVertexBuffer != nullptr )
+	{
+		pVertexBuffer->Release( );
+		pVertexBuffer = nullptr;
+	}
 
-	pVertexBuffer->Release( );
-	pVertexBuffer = nullptr;
+	if ( pIndexBuffer != nullptr )
+	{
+		pIndexBuffer->Release( );
+		pIndexBuffer = nullptr;
+	}
+
+	if ( pTexture != nullptr )
+	{
+		pTexture->Release( );
+		pTexture = nullptr;
+	}
+
+	if ( pRenderedTexture != nullptr )
+	{
+		pRenderedTexture->Release( );
+		pRenderedTexture = nullptr;
+	}
+
 	bCreated = false;
 }
 
@@ -114,6 +133,65 @@ inline void CDrawable< vertex_t >::SetTexture( const bitmap_t& _Bitmap, const co
 	Rectangle( rectangle_t { 0, 0, _Bitmap.vecSize.x , _Bitmap.vecSize.y }, color_t { 255, 255, 255, 255 } );
 }
 
+inline void CDrawable< vertex_t >::SetTexture( const bitmap_t& _Bitmap, ID3D11Texture2D* pColorTexture )
+{
+	return;
+	auto vecBytes = _Bitmap.GetColoredBitmapBytes( 0xFFFFFFFF );
+	D3D11_TEXTURE2D_DESC _ColorTextureDescription { };
+	D3D11_MAPPED_SUBRESOURCE _TextureData { };
+	D3D11_TEXTURE2D_DESC _TextureDescription { };
+	D3D11_SUBRESOURCE_DATA _ResourceData { };
+	ID3D11Texture2D* pBufferTexture = nullptr;
+	D3D11_SHADER_RESOURCE_VIEW_DESC _ShaderResourceViewDescription { };
+
+	pColorTexture->GetDesc( &_ColorTextureDescription );
+
+	if ( _ColorTextureDescription.Width != std::size_t( _Bitmap.vecSize.x )
+		 || _ColorTextureDescription.Height != std::size_t( _Bitmap.vecSize.y ) )
+		return;
+
+	//_ColorTextureDescription.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+	//_ColorTextureDescription.Usage = D3D11_USAGE_DYNAMIC;
+	//_ColorTextureDescription.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	auto hr = _Drawing.pContext->Map( pColorTexture, 0, D3D11_MAP_WRITE_DISCARD, 0, &_TextureData );
+
+	for ( auto z = 0u; z < vecBytes.size( ); z++ )
+	{
+		const auto dwARGB = reinterpret_cast< DWORD* >( _TextureData.pData )[ z ];
+		const auto bAlpha = unsigned char( double( vecBytes[ z ] ) / 255.0 * ( dwARGB & 0xFF ) );
+		if ( bAlpha > 0 )
+			vecBytes[ z ] = ( dwARGB & 0x00FFFFFF ) | ( bAlpha << 24 );
+	}
+
+	_Drawing.pContext->Unmap( pColorTexture, 0 );
+
+	_TextureDescription.Width = std::size_t( _Bitmap.vecSize.x );
+	_TextureDescription.Height = std::size_t( _Bitmap.vecSize.y );
+	_TextureDescription.MipLevels = 1;
+	_TextureDescription.ArraySize = 1;
+	_TextureDescription.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	_TextureDescription.SampleDesc.Count = 1;
+	_TextureDescription.SampleDesc.Quality = 0;
+	_TextureDescription.Usage = D3D11_USAGE_DEFAULT;
+	_TextureDescription.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+	_TextureDescription.CPUAccessFlags = 0;
+	_TextureDescription.MiscFlags = 0;
+
+	_ResourceData.pSysMem = &vecBytes[ 0 ];
+	_ResourceData.SysMemPitch = std::size_t( _Bitmap.vecSize.x ) * sizeof( DWORD );
+	_ResourceData.SysMemSlicePitch = vecBytes.size( ) * sizeof( DWORD );
+
+	_Drawing.pDevice->CreateTexture2D( &_TextureDescription, &_ResourceData, &pBufferTexture );
+
+	_ShaderResourceViewDescription.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	_ShaderResourceViewDescription.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	_ShaderResourceViewDescription.Texture2D.MostDetailedMip = 0;
+	_ShaderResourceViewDescription.Texture2D.MipLevels = 1;
+
+	_Drawing.pDevice->CreateShaderResourceView( pBufferTexture, &_ShaderResourceViewDescription, &pTexture );
+	Rectangle( rectangle_t { 0, 0, _Bitmap.vecSize.x , _Bitmap.vecSize.y }, color_t { 255, 255, 255, 255 } );
+}
+
 inline void CDrawable< vertex_t >::RemoveTexture( )
 {
 	pTexture->Release( );
@@ -135,7 +213,7 @@ inline void CDrawable< vertex_t >::Rectangle( rectangle_t recLocation, color_t c
 		3, 2, 1
 	};
 
-	Destroy( );
+	DestroyBuffers( );
 }
 
 inline void CDrawable< vertex_t >::Rectangle( rectangle_t recLocation, color_t *clrColor )
@@ -153,7 +231,7 @@ inline void CDrawable< vertex_t >::Rectangle( rectangle_t recLocation, color_t *
 		3, 2, 1
 	};
 
-	Destroy( );
+	DestroyBuffers( );
 }
 
 inline void CDrawable< vertex_t >::RoundedRectangle( rectangle_t recLocation, bool bLeftRounding, bool bRightRounding, color_t clrColor, double dbRoundingWidth )
@@ -180,7 +258,7 @@ inline void CDrawable< vertex_t >::Line( Utilities::vector2_t vecStart, Utilitie
 	for ( auto &_Vertex: vecVertices )
 		_Vertex.Rotate( dRotation, vecStart );
 
-	Destroy( );
+	DestroyBuffers( );
 }
 
 inline void CDrawable< vertex_t >::Circle( const Utilities::vector2_t& vecCenter, double dbRadius, color_t clrColor, std::size_t zResolution /*= 0*/ )
@@ -209,7 +287,7 @@ inline void CDrawable< vertex_t >::Circle( const Utilities::vector2_t& vecCenter
 	vecIndices.emplace_back( 1 );
 	vecIndices.emplace_back( zSize - 1 );
 
-	Destroy( );
+	DestroyBuffers( );
 }
 
 inline void CDrawable< vertex_t >::Circle( const Utilities::vector2_t& vecCenter, double dbRadius, color_t clrPerimeter, color_t clrCenter, std::size_t zResolution /*= 0*/ )
@@ -218,3 +296,81 @@ inline void CDrawable< vertex_t >::Circle( const Utilities::vector2_t& vecCenter
 	auto& _Vertex = vecVertices.front( );
 	_Vertex = vertex_t( { _Vertex.x, _Vertex.y }, clrCenter );
 }
+
+inline void CDrawable< vertex_t >::DestroyBuffers( )
+{
+	if ( pVertexBuffer != nullptr )
+	{
+		pVertexBuffer->Release( );
+		pVertexBuffer = nullptr;
+	}
+
+	if ( pIndexBuffer != nullptr )
+	{
+		pIndexBuffer->Release( );
+		pIndexBuffer = nullptr;
+	}
+}
+
+inline ID3D11Texture2D *CDrawable< vertex_t >::RenderToTexture( )
+{
+	if ( pRenderedTexture )
+		return pRenderedTexture;
+
+	Utilities::vector2_t vecMin { DBL_MAX, DBL_MAX }, vecMax { };
+	D3D11_TEXTURE2D_DESC _TextureBufferDescription { }, _TextureDescription { };
+	ID3D11Texture2D* pRenderedTextureBuffer = nullptr;
+	D3D11_RENDER_TARGET_VIEW_DESC _RenderTargetViewDescription { };
+	ID3D11RenderTargetView* pNewRenderTarget = nullptr;
+
+	for ( auto& _Vertex : vecVertices )
+	{
+		const auto vecLocation = vertex_t::RatioToPixel( { double( _Vertex.x ), double( _Vertex.y ) } );
+
+		vecMin.x = std::min( vecMin.x, vecLocation.x );
+		vecMin.y = std::min( vecMin.y, vecLocation.y );
+		vecMax.x = std::max( vecMax.x, vecLocation.x );
+		vecMax.y = std::max( vecMax.y, vecLocation.y );
+	}
+
+	_TextureBufferDescription.Width = int( vecMax.x - vecMin.x );
+	_TextureBufferDescription.Height = int( vecMax.y - vecMin.y );
+	_TextureBufferDescription.MipLevels = 1;
+	_TextureBufferDescription.ArraySize = 1;
+	_TextureBufferDescription.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	_TextureBufferDescription.SampleDesc.Count = 1;
+	_TextureBufferDescription.SampleDesc.Quality = 0;
+	_TextureBufferDescription.Usage = D3D11_USAGE_DEFAULT;
+	_TextureBufferDescription.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+	_TextureBufferDescription.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
+	_TextureBufferDescription.MiscFlags = 0;
+
+	_TextureDescription.Width = int( vecMax.x - vecMin.x );
+	_TextureDescription.Height = int( vecMax.y - vecMin.y );
+	_TextureDescription.MipLevels = 1;
+	_TextureDescription.ArraySize = 1;
+	_TextureDescription.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	_TextureDescription.SampleDesc.Count = 1;
+	_TextureDescription.SampleDesc.Quality = 0;
+	_TextureDescription.Usage = D3D11_USAGE_DYNAMIC;
+	_TextureDescription.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+	_TextureDescription.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	_TextureDescription.MiscFlags = 0;
+
+	_RenderTargetViewDescription.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	_RenderTargetViewDescription.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+	_RenderTargetViewDescription.Texture2D.MipSlice = 0;
+
+	_Drawing.pDevice->CreateTexture2D( &_TextureBufferDescription, nullptr, &pRenderedTextureBuffer );
+	_Drawing.pDevice->CreateTexture2D( &_TextureDescription, nullptr, &pRenderedTexture );
+	_Drawing.pDevice->CreateRenderTargetView( pRenderedTextureBuffer, nullptr, &pNewRenderTarget );
+	_Drawing.pContext->OMSetRenderTargets( 1, &pNewRenderTarget, _Drawing.pDepthStencilView );
+	_Drawing.pContext->ClearRenderTargetView( pNewRenderTarget, D3DXCOLOR( 0.f, 0.f, 0.f, 0.f ) );
+	Draw( );
+	_Drawing.pContext->OMSetRenderTargets( 1, &_Drawing.pRenderTargetView, _Drawing.pDepthStencilView );
+	_Drawing.pContext->CopyResource( pRenderedTexture, pRenderedTextureBuffer );
+	pNewRenderTarget->Release( );
+
+	return pRenderedTexture;
+}
+
