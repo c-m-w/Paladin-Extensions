@@ -98,6 +98,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>Precompile.hpp</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>$(SolutionDir)CSGO SDK\Code\public;$(SolutionDir)CSGO SDK\Code\public\tier0;$(SolutionDir)CSGO SDK\Code\public\tier1;$(SolutionDir)CSGO SDK\Code\public\tier2;$(SolutionDir)CSGO SDK\Code\public\tier3;$(SolutionDir)CSGO SDK\Code\common;$(SolutionDir)CSGO SDK\Code\game\shared;$(SolutionDir)CSGO SDK\Code\game\client;$(SolutionDir)CSGO SDK\Code\game\server;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -173,6 +174,7 @@
     <ClCompile Include="Code\Source Development Kit\Toolkits\Features\Awareness\Awareness.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\Features\Combat\Aim Assistance.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\Features\Combat\Combat.cpp" />
+    <ClCompile Include="Code\Source Development Kit\Toolkits\Features\Combat\Trigger Automation.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\Features\Miscellaneous\Automation.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\Features\Miscellaneous\Miscellaneous.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\Features\Settings\Settings.cpp" />
@@ -185,6 +187,7 @@
     <ClInclude Include="Code\Source Development Kit\Toolkits\Features\Awareness\Awareness.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\Features\Combat\Aim Assistance.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\Features\Combat\Combat.hpp" />
+    <ClInclude Include="Code\Source Development Kit\Toolkits\Features\Combat\Trigger Automation.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\Features\Features Context.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\Features\Features.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\Features\Miscellaneous\Automation.hpp" />

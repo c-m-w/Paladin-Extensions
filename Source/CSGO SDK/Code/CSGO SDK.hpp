@@ -13,6 +13,11 @@
 #define COMPILER_MSVC 1
 #define COMPILER_MSVC32 1
 #define CLIENT_DLL
+#if defined _DEBUG
+#undef _DEBUG
+#define NDEBUG
+#define REDEFINE_DEBUG
+#endif
 
 // for some reason, other files below do NOT include this section of files, but reference them. they are manually included here to compile.
 // todo: look into it more. it's likely that those files im including actually need to be included after something else. perhaps an _on file?
@@ -108,6 +113,10 @@
 #include "public/engine/ivmodelinfo.h" // IVModelInfoClient
 #include "public/engine/ivmodelrender.h" // IVModelRender
 
+#if defined REDEFINE_DEBUG
+#undef NDEBUG
+#define _DEBUG
+#endif
 // Extension of SDK
 #define EXTEND_SDK_CLASS( CClassName ) class PX_##CClassName: public CClassName
 #define EXTENDED_SDK_CLASS( CClassName ) PX_##CClassName

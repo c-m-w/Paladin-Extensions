@@ -10,6 +10,7 @@
 #include "Miscellaneous/Automation.hpp"
 
 #include "Combat/Combat.hpp"
+#include "Combat/Trigger Automation.hpp"
 #include "Combat/Aim Assistance.hpp"
 
 #include "Awareness/Awareness.hpp"
