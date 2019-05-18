@@ -135,7 +135,6 @@ inline void CDrawable< vertex_t >::SetTexture( const bitmap_t& _Bitmap, const co
 
 inline void CDrawable< vertex_t >::SetTexture( const bitmap_t& _Bitmap, ID3D11Texture2D* pColorTexture )
 {
-	return;
 	auto vecBytes = _Bitmap.GetColoredBitmapBytes( 0xFFFFFFFF );
 	D3D11_TEXTURE2D_DESC _ColorTextureDescription { };
 	D3D11_MAPPED_SUBRESOURCE _TextureData { };
@@ -153,7 +152,7 @@ inline void CDrawable< vertex_t >::SetTexture( const bitmap_t& _Bitmap, ID3D11Te
 	//_ColorTextureDescription.BindFlags = D3D11_BIND_SHADER_RESOURCE;
 	//_ColorTextureDescription.Usage = D3D11_USAGE_DYNAMIC;
 	//_ColorTextureDescription.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-	auto hr = _Drawing.pContext->Map( pColorTexture, 0, D3D11_MAP_WRITE_DISCARD, 0, &_TextureData );
+	auto hr = _Drawing.pContext->Map( pColorTexture, 0, D3D11_MAP_READ, 0, &_TextureData );
 
 	for ( auto z = 0u; z < vecBytes.size( ); z++ )
 	{
@@ -310,6 +309,8 @@ inline void CDrawable< vertex_t >::DestroyBuffers( )
 		pIndexBuffer->Release( );
 		pIndexBuffer = nullptr;
 	}
+
+	bCreated = false;
 }
 
 inline ID3D11Texture2D *CDrawable< vertex_t >::RenderToTexture( )
@@ -341,7 +342,7 @@ inline ID3D11Texture2D *CDrawable< vertex_t >::RenderToTexture( )
 	_TextureBufferDescription.SampleDesc.Count = 1;
 	_TextureBufferDescription.SampleDesc.Quality = 0;
 	_TextureBufferDescription.Usage = D3D11_USAGE_DEFAULT;
-	_TextureBufferDescription.BindFlags = D3D11_BIND_RENDER_TARGET | D3D11_BIND_SHADER_RESOURCE;
+	_TextureBufferDescription.BindFlags = D3D11_BIND_RENDER_TARGET;
 	_TextureBufferDescription.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
 	_TextureBufferDescription.MiscFlags = 0;
 
@@ -352,9 +353,9 @@ inline ID3D11Texture2D *CDrawable< vertex_t >::RenderToTexture( )
 	_TextureDescription.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	_TextureDescription.SampleDesc.Count = 1;
 	_TextureDescription.SampleDesc.Quality = 0;
-	_TextureDescription.Usage = D3D11_USAGE_DYNAMIC;
-	_TextureDescription.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-	_TextureDescription.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	_TextureDescription.Usage = D3D11_USAGE_STAGING;
+	_TextureDescription.BindFlags = 0;
+	_TextureDescription.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
 	_TextureDescription.MiscFlags = 0;
 
 	_RenderTargetViewDescription.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;

@@ -294,6 +294,8 @@ bool CDrawing::Create( )
 	if ( !SUCCEEDED( pDevice->CreateSamplerState( &_SamplerDescription, &pSamplerState ) ) )
 		return LOG( ERROR, DRAWING, "Unable to create sampler state." ), false;
 
+	pContext->PSSetSamplers( 0, 1, &pSamplerState );
+
 	_BlendStateDescription.AlphaToCoverageEnable = FALSE;
 	_BlendStateDescription.RenderTarget[ 0 ].BlendEnable = TRUE;
 	_BlendStateDescription.RenderTarget[ 0 ].SrcBlend = D3D11_BLEND_SRC_ALPHA;
@@ -313,9 +315,12 @@ bool CDrawing::Create( )
 	D3DX11CompileFromMemory( pShaderData, zShaderData, nullptr, nullptr, nullptr, ENC( "StandardPixelShader" ), ENC( "ps_4_0" ), 0, 0, nullptr, &pStandardPixelShaderBuffer, nullptr, nullptr );
 	D3DX11CompileFromMemory( pShaderData, zShaderData, nullptr, nullptr, nullptr, ENC( "TexturedPixelShader" ), ENC( "ps_4_0" ), 0, 0, nullptr, &pTexturedPixelShaderBuffer, nullptr, nullptr );
 	pDevice->CreateVertexShader( pVertexShaderBuffer->GetBufferPointer( ), pVertexShaderBuffer->GetBufferSize( ), nullptr, &pVertexShader );
+	pContext->VSSetShader( pVertexShader, nullptr, 0 );
 	pDevice->CreatePixelShader( pStandardPixelShaderBuffer->GetBufferPointer( ), pStandardPixelShaderBuffer->GetBufferSize( ), nullptr, &pStandardPixelShader );
 	pDevice->CreatePixelShader( pTexturedPixelShaderBuffer->GetBufferPointer( ), pTexturedPixelShaderBuffer->GetBufferSize( ), nullptr, &pTexturedPixelShader );
+	pContext->PSSetShader( pStandardPixelShader, nullptr, 0 );
 	pDevice->CreateInputLayout( _Layout, ARRAYSIZE( _Layout ), pVertexShaderBuffer->GetBufferPointer( ), pVertexShaderBuffer->GetBufferSize( ), &pVertexLayout );
+	pContext->IASetInputLayout( pVertexLayout );
 
 	_RasterizerDescription.FillMode = D3D11_FILL_SOLID;
 	_RasterizerDescription.CullMode = D3D11_CULL_NONE;
