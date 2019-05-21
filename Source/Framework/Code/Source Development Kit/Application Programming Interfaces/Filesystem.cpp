@@ -64,7 +64,7 @@ std::string CFilesystem::GetAppdataDirectory( )
 std::string CFilesystem::GetExecutableDirectory( bool bIncludeExecutableInPath /*= false*/ )
 {
 	static std::string strBuffer { };
-	static bool bLastCall = false;
+	static auto bLastCall = false;
 
 	if ( strBuffer.empty( ) || bLastCall != bIncludeExecutableInPath )
 	{
