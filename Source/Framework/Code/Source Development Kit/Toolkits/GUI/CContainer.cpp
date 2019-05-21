@@ -49,6 +49,7 @@ void CRow::AdjustWidgetPositions( )
 	for ( auto& pWidget : vecWidgets[ ALIGNMENT_CENTER ] )
 		dbCenterWidgetWidth += pWidget->GetNetWidth( );
 
+	dbCenterWidgetWidth -= vecWidgets[ ALIGNMENT_CENTER ][ 0 ]->GetPadding( ).x;
 	const auto dbCenterStart = std::round( recLocation.w / 2.0 - dbCenterWidgetWidth / 2.0 );
 
 	for ( auto& pWidget : vecWidgets[ ALIGNMENT_CENTER ] )
