@@ -6,7 +6,8 @@
 
 void CAimAssistance::flee( )
 {
-	
+	if ( !pLocalPlayer )
+		return;
 }
 
 void CAimAssistance::AimAtTarget( )

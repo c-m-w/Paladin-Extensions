@@ -113,6 +113,10 @@
 #include "public/engine/ivmodelinfo.h" // IVModelInfoClient
 #include "public/engine/ivmodelrender.h" // IVModelRender
 
+// Other
+#include "game/shared/baseentity_shared.h"
+#include "game/shared/baseplayer_shared.h"
+
 #if defined REDEFINE_DEBUG
 #undef NDEBUG
 #define _DEBUG
