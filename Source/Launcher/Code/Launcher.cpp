@@ -269,7 +269,7 @@ bool SetupInterface( )
 
 void Draw( )
 {
-	auto test = FONTS.CreateBitmap( "_________", FONT_ROBOTO, 50 );
+	auto test = FONTS.CreateBitmap( "testing", FONT_ENVY, 8 );
 
 	for ( auto y = 0; y < ( int )test.vecSize.y; y++ )
 	{
@@ -280,6 +280,7 @@ void Draw( )
 	}
 
 	auto pDrawable = new CDrawable( );
+	bool b[ 4 ] { false, true, true, false };
 	color_t clr[ ]
 	{
 		color_t( { 255, 0, 0, 255 } ),
@@ -287,10 +288,11 @@ void Draw( )
 		color_t( { 0, 0, 255, 255 } ),
 		color_t( { 255, 255, 255, 255 } ),
 	};
-	pDrawable->Rectangle( rectangle_t( 0, 0, test.vecSize.x, test.vecSize.y ), clr );
+	//pDrawable->Rectangle( rectangle_t( 0, 0, test.vecSize.x, test.vecSize.y ), clr );
+	pDrawable->RoundedRectangle( rectangle_t( 20, 20, 50, 70 ), b, clr, color_t { 255, 255, 255, 255 }, 0.2 );
 	//pDrawable->SetTexture( test, pDrawable->RenderToTexture( ) );
 	//pDrawable->SetTexture( "PX Logo.png" );
-	pDrawable->SetTexture( test, "temp.png" );
+	//pDrawable->SetTexture( test, color_t { 255, 255, 255, 255 } );
 
 	while ( !bExit )
 	{

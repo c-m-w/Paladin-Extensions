@@ -178,6 +178,10 @@ bool CDrawable::Create( )
 	if ( bCreated )
 		return true;
 
+	if ( vecVertices.empty( )
+		 || vecIndices.empty( ) )
+		return LOG( WARNING, DRAWING, "Attempting to create drawable when vertices / indices have not been set." ), false;
+
 	D3D11_BUFFER_DESC _VertexBufferDescription { }, _IndexBufferDescription { };
 	D3D11_SUBRESOURCE_DATA _VertexBufferData { }, _IndexBufferData { };
 
@@ -186,16 +190,22 @@ bool CDrawable::Create( )
 	_VertexBufferDescription.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	_VertexBufferDescription.CPUAccessFlags = 0;
 	_VertexBufferDescription.MiscFlags = 0;
+	_VertexBufferData.pSysMem = &vecVertices[ 0 ];
+
 	_IndexBufferDescription.Usage = D3D11_USAGE_DEFAULT;
 	_IndexBufferDescription.ByteWidth = sizeof( unsigned ) * vecIndices.size( );
 	_IndexBufferDescription.BindFlags = D3D11_BIND_INDEX_BUFFER;
 	_IndexBufferDescription.CPUAccessFlags = 0;
 	_IndexBufferDescription.MiscFlags = 0;
-	_VertexBufferData.pSysMem = &vecVertices[ 0 ];
 	_IndexBufferData.pSysMem = &vecIndices[ 0 ];
 
-	return bCreated = SUCCEEDED( _Drawing.pDevice->CreateBuffer( &_VertexBufferDescription, &_VertexBufferData, &pVertexBuffer ) )
+	bCreated = SUCCEEDED( _Drawing.pDevice->CreateBuffer( &_VertexBufferDescription, &_VertexBufferData, &pVertexBuffer ) )
 		&& SUCCEEDED( _Drawing.pDevice->CreateBuffer( &_IndexBufferDescription, &_IndexBufferData, &pIndexBuffer ) );
+
+	if ( !bCreated )
+		LOG( WARNING, DRAWING, "Unable to create vertex / index buffer for drawable." ), Destroy( );
+
+	return bCreated;
 }
 
 void CDrawable::Draw( )
@@ -255,24 +265,36 @@ void CDrawable::SetTexture( const std::string& strResourceName )
 		pTexture->Release( );
 
 	pTexture = nullptr;
-	D3DX11CreateShaderResourceViewFromMemory( _Drawing.pDevice, &strData[ 0 ], strData.size( ), nullptr, nullptr, &pTexture, nullptr );
+	if ( !SUCCEEDED( D3DX11CreateShaderResourceViewFromMemory( _Drawing.pDevice, &strData[ 0 ], strData.size( ), nullptr, nullptr, &pTexture, nullptr ) ) )
+		LOG( WARNING, DRAWING, "Could not create SRV from resource." );
 }
 
-void CDrawable::SetTexture( ID3D11Texture2D * pNewTexture )
+void CDrawable::SetTexture( ID3D11Texture2D* pNewTexture )
 {
+	if ( pNewTexture == nullptr )
+		return LOG( WARNING, DRAWING, "Invalid texture passed to SetTexture( )." );
+
 	if ( pTexture != nullptr )
 		pTexture->Release( );
 
 	D3D11_TEXTURE2D_DESC _TextureDescription { };
+	ID3D11Texture2D* pBufferTexture = nullptr;
 	D3D11_SHADER_RESOURCE_VIEW_DESC _ShaderResourceViewDescription { };
+
+	pNewTexture->GetDesc( &_TextureDescription );
+	_TextureDescription.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+	_TextureDescription.Usage = D3D11_USAGE_DEFAULT;
+	_TextureDescription.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
+	if ( !SUCCEEDED( _Drawing.pDevice->CreateTexture2D( &_TextureDescription, nullptr, &pBufferTexture ) ) )
+		return LOG( WARNING, DRAWING, "Unable to create buffer texture to copy contents to to create SRV." );
 
 	_ShaderResourceViewDescription.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	_ShaderResourceViewDescription.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
 	_ShaderResourceViewDescription.Texture2D.MostDetailedMip = 0;
 	_ShaderResourceViewDescription.Texture2D.MipLevels = 1;
-	_Drawing.pDevice->CreateShaderResourceView( pNewTexture, &_ShaderResourceViewDescription, &pTexture );
+	if ( !SUCCEEDED( _Drawing.pDevice->CreateShaderResourceView( pBufferTexture, &_ShaderResourceViewDescription, &pTexture ) ) )
+		LOG( WARNING, DRAWING, "Could not create SRV from texture." );
 }
-
 
 void CDrawable::SetTexture( const bitmap_t & _Bitmap, const color_t & clrText )
 {
@@ -288,7 +310,6 @@ void CDrawable::SetTexture( const bitmap_t & _Bitmap, const color_t & clrText )
 	_TextureDescription.ArraySize = 1;
 	_TextureDescription.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	_TextureDescription.SampleDesc.Count = 1;
-	_TextureDescription.SampleDesc.Quality = 0;
 	_TextureDescription.Usage = D3D11_USAGE_DEFAULT;
 	_TextureDescription.BindFlags = D3D11_BIND_SHADER_RESOURCE;
 	_TextureDescription.CPUAccessFlags = 0;
@@ -320,6 +341,9 @@ void CDrawable::SetTexture( const bitmap_t & _Bitmap, ID3D11Texture2D* pColorTex
 	ID3D11Texture2D* pBufferTexture = nullptr;
 	D3D11_SHADER_RESOURCE_VIEW_DESC _ShaderResourceViewDescription { };
 
+	if ( pColorTexture == nullptr )
+		return LOG( WARNING, DRAWING, "Invalid texture passed to SetTexture( )." );
+
 	pColorTexture->GetDesc( &_ColorTextureDescription );
 
 	if ( _ColorTextureDescription.Width < std::size_t( _Bitmap.vecSize.x )
@@ -329,9 +353,12 @@ void CDrawable::SetTexture( const bitmap_t & _Bitmap, ID3D11Texture2D* pColorTex
 	_ColorTextureDescription.BindFlags = 0;
 	_ColorTextureDescription.Usage = D3D11_USAGE_STAGING;
 	_ColorTextureDescription.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
-	_Drawing.pDevice->CreateTexture2D( &_ColorTextureDescription, nullptr, &pCopiedTexture );
+	if ( !SUCCEEDED( _Drawing.pDevice->CreateTexture2D( &_ColorTextureDescription, nullptr, &pCopiedTexture ) ) )
+		return LOG( WARNING, DRAWING, "Unable to create texture to copy contents to." );
+
 	_Drawing.pContext->CopyResource( pCopiedTexture, pColorTexture );
-	auto hr = _Drawing.pContext->Map( pCopiedTexture, 0, D3D11_MAP_READ, 0, &_TextureData );
+	if ( !SUCCEEDED( _Drawing.pContext->Map( pCopiedTexture, 0, D3D11_MAP_READ, 0, &_TextureData ) ) )
+		return LOG( WARNING, DRAWING, "Unable to map texture contents." ), pCopiedTexture->Release( ), void( );
 
 	for ( auto y = 0u; y < std::size_t( _Bitmap.vecSize.y ); y++ )
 		for ( auto x = 0u; x < std::size_t( _Bitmap.vecSize.x ); x++ )
@@ -351,7 +378,6 @@ void CDrawable::SetTexture( const bitmap_t & _Bitmap, ID3D11Texture2D* pColorTex
 	_TextureDescription.ArraySize = 1;
 	_TextureDescription.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	_TextureDescription.SampleDesc.Count = 1;
-	_TextureDescription.SampleDesc.Quality = 0;
 	_TextureDescription.Usage = D3D11_USAGE_DEFAULT;
 	_TextureDescription.BindFlags = D3D11_BIND_SHADER_RESOURCE;
 	_TextureDescription.CPUAccessFlags = 0;
@@ -361,14 +387,17 @@ void CDrawable::SetTexture( const bitmap_t & _Bitmap, ID3D11Texture2D* pColorTex
 	_ResourceData.SysMemPitch = std::size_t( _Bitmap.vecSize.x ) * sizeof( DWORD );
 	_ResourceData.SysMemSlicePitch = vecBytes.size( ) * sizeof( DWORD );
 
-	_Drawing.pDevice->CreateTexture2D( &_TextureDescription, &_ResourceData, &pBufferTexture );
+	if ( SUCCEEDED( _Drawing.pDevice->CreateTexture2D( &_TextureDescription, &_ResourceData, &pBufferTexture ) ) )
+		return LOG( WARNING, DRAWING, "Unable to create texture for text." );
 
 	_ShaderResourceViewDescription.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	_ShaderResourceViewDescription.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
 	_ShaderResourceViewDescription.Texture2D.MostDetailedMip = 0;
 	_ShaderResourceViewDescription.Texture2D.MipLevels = 1;
 
-	_Drawing.pDevice->CreateShaderResourceView( pBufferTexture, &_ShaderResourceViewDescription, &pTexture );
+	if ( !SUCCEEDED( _Drawing.pDevice->CreateShaderResourceView( pBufferTexture, &_ShaderResourceViewDescription, &pTexture ) ) )
+		return LOG( WARNING, DRAWING, "Unable to create SRV for text." ), pBufferTexture->Release( ), void( );
+
 	Rectangle( rectangle_t { 0, 0, _Bitmap.vecSize.x , _Bitmap.vecSize.y }, color_t { 255, 255, 255, 255 } );
 }
 
@@ -378,10 +407,15 @@ void CDrawable::SetTexture( const bitmap_t &_Bitmap, const std::string &strResou
 	ID3D11ShaderResourceView* pTemporaryTexture = nullptr;
 	ID3D11Resource* pTextureData = nullptr;
 
+	if ( strData.empty( ) )
+		return;
+
 	if ( pTexture != nullptr )
 		pTexture->Release( );
 
-	D3DX11CreateShaderResourceViewFromMemory( _Drawing.pDevice, &strData[ 0 ], strData.size( ), nullptr, nullptr, &pTemporaryTexture, nullptr );
+	if ( !SUCCEEDED( D3DX11CreateShaderResourceViewFromMemory( _Drawing.pDevice, &strData[ 0 ], strData.size( ), nullptr, nullptr, &pTemporaryTexture, nullptr ) ) )
+		return LOG( WARNING, DRAWING, "Unable to create texture from resource to apply to bitmap." );
+
 	pTemporaryTexture->GetResource( &pTextureData );
 	SetTexture( _Bitmap, reinterpret_cast< ID3D11Texture2D* >( pTextureData ) );
 	pTemporaryTexture->Release( );
@@ -429,13 +463,152 @@ void CDrawable::Rectangle( rectangle_t recLocation, color_t * clrColor )
 	DestroyBuffers( );
 }
 
-void CDrawable::RoundedRectangle( rectangle_t recLocation, bool bLeftRounding, bool bRightRounding, color_t clrColor, double dbRoundingWidth )
+void CDrawable::RoundedRectangle( rectangle_t recLocation, color_t clrColor, double dbRoundingRatio )
 {
-	const auto vecBase = Utilities::vector2_t::GetCirclePoints( dbRoundingWidth, std::size_t( dbRoundingWidth ), 0.0, 0.25 );
-
+	return RoundedRectangle( recLocation, clrColor, clrColor, dbRoundingRatio );
 }
 
-void CDrawable::Line( Utilities::vector2_t vecStart, Utilities::vector2_t vecEnd, double dThickness, color_t clrColor )
+void CDrawable::RoundedRectangle( rectangle_t recLocation, color_t clrColor, color_t clrCenter, double dbRoundingRatio )
+{
+	bool bRounding[ ] { true, true, true, true };
+
+	return RoundedRectangle( recLocation, bRounding, clrColor, clrCenter, dbRoundingRatio );
+}
+
+void CDrawable::RoundedRectangle( rectangle_t recLocation, color_t *clrColor/*[ rectangle_t::MAX ]*/, color_t clrCenter, double dbRoundingRatio )
+{
+	bool bRounding[ ] { true, true, true, true };
+
+	return RoundedRectangle( recLocation, bRounding, clrColor, clrCenter, dbRoundingRatio );
+}
+
+void CDrawable::RoundedRectangle( rectangle_t recLocation, bool *bCornerRounding, color_t clrColor, double dbRoundingRatio )
+{
+	return RoundedRectangle( recLocation, bCornerRounding, clrColor, clrColor, dbRoundingRatio );
+}
+
+void CDrawable::RoundedRectangle( rectangle_t recLocation, bool* bCornerRounding/*[ rectangle_t::MAX ]*/, color_t clrColor, color_t clrCenter, double dbRoundingRatio )
+{
+	color_t clrRectangle[ ] { clrColor, clrColor, clrColor, clrColor };
+
+	return RoundedRectangle( recLocation, bCornerRounding, clrRectangle, clrCenter, dbRoundingRatio );
+}
+
+void CDrawable::RoundedRectangle( rectangle_t recLocation, bool *bCornerRounding/*[ rectangle_t::MAX ]*/, color_t *clrColor/*[ rectangle_t::MAX ]*/, color_t clrCenter, double dbRoundingRatio )
+{
+	if ( dbRoundingRatio < 0.0
+		 || dbRoundingRatio > 1.0 )
+		return LOG( WARNING, DRAWING, "Invalid rounding ratio passed to RoundedRectangle( )." );
+
+	const auto dbRoundingWidth = std::min( recLocation.w, recLocation.h ) * dbRoundingRatio;
+	auto vecBase = vector2_t::GetCirclePoints( dbRoundingWidth, std::size_t( dbRoundingWidth * vector2_t::PI ), -90.0, 0.25 );
+	vecVertices.clear( );
+	vecIndices.clear( );
+	vecVertices.emplace_back( vertex_t( vertex_t::PixelToRatio( recLocation.vecLocation + recLocation.vecSize / 2.0 ), { 0.5, 0.5 }, clrCenter ) );
+
+	for ( auto i = 0; i < rectangle_t::MAX; i++ )
+	{
+		if ( bCornerRounding[ i ] )
+		{
+			auto vecAddition = recLocation.vecLocation;
+
+			switch( i )
+			{
+				case rectangle_t::TOP_LEFT:
+				{
+					vecAddition += dbRoundingWidth;
+					break;
+				}
+
+				case rectangle_t::TOP_RIGHT:
+				{
+					vecAddition.x += recLocation.w - dbRoundingWidth;
+					vecAddition.y += dbRoundingWidth;
+					break;
+				}
+
+				case rectangle_t::BOTTOM_RIGHT:
+				{
+					vecAddition -= dbRoundingWidth;
+					vecAddition += recLocation.vecSize;
+					break;
+				}
+
+				case rectangle_t::BOTTOM_LEFT:
+				{
+					vecAddition.x += dbRoundingWidth;
+					vecAddition.y += recLocation.h - dbRoundingWidth;
+					break;
+				}
+
+				default:
+					break;
+			}
+
+			for ( auto& vecPoint : vecBase )
+			{
+				const auto vecFinalPoint = vecPoint + vecAddition;
+				vecVertices.emplace_back( vertex_t( vertex_t::PixelToRatio( vecFinalPoint ), 
+													{ ( vecFinalPoint.x - recLocation.x ) / recLocation.w, ( vecFinalPoint.y - recLocation.y ) / recLocation.h }, clrColor[ i ] ) );
+			}
+		}
+		else
+		{
+			vertex_t _New { };
+
+			switch ( i )
+			{
+				case rectangle_t::TOP_LEFT:
+				{
+					_New = { vertex_t::PixelToRatio( { recLocation.x, recLocation.y } ), { 0.0, 0.0 }, clrColor[ i ] };
+					break;
+				}
+
+				case rectangle_t::TOP_RIGHT:
+				{
+					_New = { vertex_t::PixelToRatio( { recLocation.x + recLocation.w, recLocation.y } ), { 1.0, 0.0 }, clrColor[ i ] };
+					break;
+				}
+
+				case rectangle_t::BOTTOM_RIGHT:
+				{
+					_New = { vertex_t::PixelToRatio( recLocation.vecLocation + recLocation.vecSize ), { 1.0, 1.0 }, clrColor[ i ] };
+					break;
+				}
+
+				case rectangle_t::BOTTOM_LEFT:
+				{
+					_New = { vertex_t::PixelToRatio( { recLocation.x, recLocation.y + recLocation.h } ), { 0.0, 1.0 }, clrColor[ i ] };
+					break;
+				}
+
+				default:
+					break;
+			}
+
+			vecVertices.emplace_back( _New );
+		}
+
+		for ( auto& vecPoint : vecBase )
+			vecPoint.Rotate( 90.0, { 0.0, 0.0 } );
+	}
+
+	const auto zSize = vecVertices.size( );
+	for ( auto z = 1u; z < zSize - 1; z++ )
+	{
+		vecIndices.emplace_back( 0 );
+		vecIndices.emplace_back( z );
+		vecIndices.emplace_back( z + 1 );
+	}
+
+	vecIndices.emplace_back( 0 );
+	vecIndices.emplace_back( zSize - 1 );
+	vecIndices.emplace_back( 1 );
+
+	DestroyBuffers( );
+}
+
+void CDrawable::Line( vector2_t vecStart, vector2_t vecEnd, double dThickness, color_t clrColor )
 {
 	const auto vecLength = vecEnd - vecStart;
 	const auto dwColor = clrColor.GetARGB( );
@@ -445,9 +618,9 @@ void CDrawable::Line( Utilities::vector2_t vecStart, Utilities::vector2_t vecEnd
 	vecVertices = decltype( vecVertices )
 	{
 		vertex_t( vertex_t::PixelToRatio( { vecStart.x, vecStart.y - dThickness / 2.0 } ), dwColor ),
-			vertex_t( vertex_t::PixelToRatio( { vecStart.x + dLength, vecStart.y - dThickness / 2.0 } ), dwColor ),
-			vertex_t( vertex_t::PixelToRatio( { vecStart.x + dLength, vecStart.y + dThickness / 2.0 } ), dwColor ),
-			vertex_t( vertex_t::PixelToRatio( { vecStart.x, vecStart.y + dThickness / 2.0 } ), dwColor )
+		vertex_t( vertex_t::PixelToRatio( { vecStart.x + dLength, vecStart.y - dThickness / 2.0 } ), dwColor ),
+		vertex_t( vertex_t::PixelToRatio( { vecStart.x + dLength, vecStart.y + dThickness / 2.0 } ), dwColor ),
+		vertex_t( vertex_t::PixelToRatio( { vecStart.x, vecStart.y + dThickness / 2.0 } ), dwColor )
 	};
 
 	for ( auto& _Vertex : vecVertices )
@@ -456,12 +629,12 @@ void CDrawable::Line( Utilities::vector2_t vecStart, Utilities::vector2_t vecEnd
 	DestroyBuffers( );
 }
 
-void CDrawable::Circle( const Utilities::vector2_t& vecCenter, double dbRadius, color_t clrColor, std::size_t zResolution /*= 0*/ )
+void CDrawable::Circle( const vector2_t& vecCenter, double dbRadius, color_t clrColor, std::size_t zResolution /*= 0*/ )
 {
 	if ( zResolution <= 2u )
-		zResolution = std::size_t( std::round( dbRadius * 2.0 * Utilities::vector2_t::PI ) );
+		zResolution = std::size_t( std::round( dbRadius * 2.0 * vector2_t::PI ) );
 
-	auto vecPoints = Utilities::vector2_t::GetCirclePoints( dbRadius, zResolution );
+	auto vecPoints = vector2_t::GetCirclePoints( dbRadius, zResolution );
 	const auto zSize = vecPoints.size( );
 
 	vecVertices.clear( );
@@ -506,15 +679,24 @@ void CDrawable::DestroyBuffers( )
 		pIndexBuffer = nullptr;
 	}
 
+	if ( pRenderedTexture != nullptr )
+	{
+		pRenderedTexture->Release( );
+		pRenderedTexture = nullptr;
+	}
+
 	bCreated = false;
 }
 
 ID3D11Texture2D* CDrawable::RenderToTexture( )
 {
+	if ( !bCreated )
+		return LOG( WARNING, DRAWING, "Attempting to render to texture without creating shape beforehand." ), nullptr;
+
 	if ( pRenderedTexture )
 		return pRenderedTexture;
 
-	Utilities::vector2_t vecMin { DBL_MAX, DBL_MAX }, vecMax { };
+	vector2_t vecMin { DBL_MAX, DBL_MAX }, vecMax { };
 	D3D11_TEXTURE2D_DESC _TextureBufferDescription { }, _TextureDescription { };
 	ID3D11Texture2D* pRenderedTextureBuffer = nullptr;
 	D3D11_RENDER_TARGET_VIEW_DESC _RenderTargetViewDescription { };
@@ -536,7 +718,6 @@ ID3D11Texture2D* CDrawable::RenderToTexture( )
 	_TextureBufferDescription.ArraySize = 1;
 	_TextureBufferDescription.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	_TextureBufferDescription.SampleDesc.Count = 1;
-	_TextureBufferDescription.SampleDesc.Quality = 0;
 	_TextureBufferDescription.Usage = D3D11_USAGE_DEFAULT;
 	_TextureBufferDescription.BindFlags = D3D11_BIND_RENDER_TARGET;
 	_TextureBufferDescription.CPUAccessFlags = 0;
@@ -548,7 +729,6 @@ ID3D11Texture2D* CDrawable::RenderToTexture( )
 	_TextureDescription.ArraySize = 1;
 	_TextureDescription.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	_TextureDescription.SampleDesc.Count = 1;
-	_TextureDescription.SampleDesc.Quality = 0;
 	_TextureDescription.Usage = D3D11_USAGE_DEFAULT;
 	_TextureDescription.BindFlags = 0;
 	_TextureDescription.CPUAccessFlags = 0;
@@ -558,9 +738,15 @@ ID3D11Texture2D* CDrawable::RenderToTexture( )
 	_RenderTargetViewDescription.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
 	_RenderTargetViewDescription.Texture2D.MipSlice = 0;
 
-	_Drawing.pDevice->CreateTexture2D( &_TextureBufferDescription, nullptr, &pRenderedTextureBuffer );
-	_Drawing.pDevice->CreateTexture2D( &_TextureDescription, nullptr, &pRenderedTexture );
-	_Drawing.pDevice->CreateRenderTargetView( pRenderedTextureBuffer, &_RenderTargetViewDescription, &pNewRenderTarget );
+	if ( !SUCCEEDED( _Drawing.pDevice->CreateTexture2D( &_TextureBufferDescription, nullptr, &pRenderedTextureBuffer ) ) )
+		return LOG( WARNING, DRAWING, "Unable to create texture to render to." ), nullptr;
+
+	if ( !SUCCEEDED( _Drawing.pDevice->CreateTexture2D( &_TextureDescription, nullptr, &pRenderedTexture ) ) )
+		return LOG( WARNING, DRAWING, "Unable to create texture to transfer render contents to." ), pRenderedTextureBuffer->Release( ), nullptr;
+
+	if ( !SUCCEEDED( _Drawing.pDevice->CreateRenderTargetView( pRenderedTextureBuffer, &_RenderTargetViewDescription, &pNewRenderTarget ) ) )
+		return LOG( WARNING, DRAWING, "Unable to create render target view for rendering to texture." ), pRenderedTexture->Release( ), pRenderedTextureBuffer->Release( ), pRenderedTexture = nullptr;
+
 	_Drawing.pContext->OMSetRenderTargets( 1, &pNewRenderTarget, nullptr );
 	_Drawing.pContext->ClearRenderTargetView( pNewRenderTarget, D3DXCOLOR( 0.f, 0.f, 0.f, 0.f ) );
 	Draw( );
@@ -594,8 +780,7 @@ bool CDrawing::Initialize( )
 	_BackBufferDescription.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED;
 	_BackBufferDescription.Scaling = DXGI_MODE_SCALING_STRETCHED;
 	_SwapChainDescription.BufferDesc = _BackBufferDescription;
-	_SwapChainDescription.SampleDesc.Count = 4;
-	_SwapChainDescription.SampleDesc.Quality = 16;
+	_SwapChainDescription.SampleDesc = GetMaxSamplerQuality( );
 	_SwapChainDescription.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
 	_SwapChainDescription.BufferCount = 2;
 	_SwapChainDescription.OutputWindow = pTarget->GetWindowHandle( );
@@ -686,8 +871,7 @@ bool CDrawing::Create( )
 	_DepthStencilDescription.MipLevels = 1;
 	_DepthStencilDescription.ArraySize = 1;
 	_DepthStencilDescription.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-	_DepthStencilDescription.SampleDesc.Count = 4;
-	_DepthStencilDescription.SampleDesc.Quality = 16;
+	_DepthStencilDescription.SampleDesc = GetMaxSamplerQuality( );
 	_DepthStencilDescription.Usage = D3D11_USAGE_DEFAULT;
 	_DepthStencilDescription.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 	_DepthStencilDescription.CPUAccessFlags = 0;
@@ -729,22 +913,30 @@ bool CDrawing::Create( )
 
 	pContext->OMSetBlendState( pBlendState, D3DXCOLOR( 0.f, 0.f, 0.f, 0.f ), 0xFFFFFFFF );
 
-	D3DX11CompileFromMemory( pShaderData, zShaderData, nullptr, nullptr, nullptr, ENC( "StandardVertexShader" ), ENC( "vs_4_0" ), 0, 0, nullptr, &pVertexShaderBuffer, nullptr, nullptr );
-	D3DX11CompileFromMemory( pShaderData, zShaderData, nullptr, nullptr, nullptr, ENC( "StandardPixelShader" ), ENC( "ps_4_0" ), 0, 0, nullptr, &pStandardPixelShaderBuffer, nullptr, nullptr );
-	D3DX11CompileFromMemory( pShaderData, zShaderData, nullptr, nullptr, nullptr, ENC( "TexturedPixelShader" ), ENC( "ps_4_0" ), 0, 0, nullptr, &pTexturedPixelShaderBuffer, nullptr, nullptr );
-	pDevice->CreateVertexShader( pVertexShaderBuffer->GetBufferPointer( ), pVertexShaderBuffer->GetBufferSize( ), nullptr, &pVertexShader );
+	if ( !SUCCEEDED( D3DX11CompileFromMemory( pShaderData, zShaderData, nullptr, nullptr, nullptr, ENC( "StandardVertexShader" ), ENC( "vs_4_0" ), 0, 0, nullptr, &pVertexShaderBuffer, nullptr, nullptr ) )
+		 || !SUCCEEDED( D3DX11CompileFromMemory( pShaderData, zShaderData, nullptr, nullptr, nullptr, ENC( "StandardPixelShader" ), ENC( "ps_4_0" ), 0, 0, nullptr, &pStandardPixelShaderBuffer, nullptr, nullptr ) )
+		 || !SUCCEEDED( D3DX11CompileFromMemory( pShaderData, zShaderData, nullptr, nullptr, nullptr, ENC( "TexturedPixelShader" ), ENC( "ps_4_0" ), 0, 0, nullptr, &pTexturedPixelShaderBuffer, nullptr, nullptr ) ) )
+		return LOG( ERROR, DRAWING, "Unable to compile vertex or pixel shaders." ), false;
+
+	if ( !SUCCEEDED( pDevice->CreateVertexShader( pVertexShaderBuffer->GetBufferPointer( ), pVertexShaderBuffer->GetBufferSize( ), nullptr, &pVertexShader ) )
+		 || !SUCCEEDED( pDevice->CreatePixelShader( pStandardPixelShaderBuffer->GetBufferPointer( ), pStandardPixelShaderBuffer->GetBufferSize( ), nullptr, &pStandardPixelShader ) )
+		 || !SUCCEEDED( pDevice->CreatePixelShader( pTexturedPixelShaderBuffer->GetBufferPointer( ), pTexturedPixelShaderBuffer->GetBufferSize( ), nullptr, &pTexturedPixelShader ) ) )
+		return LOG( ERROR, DRAWING, "Unable to create vertex or pixel shaders." ), false;
+
 	pContext->VSSetShader( pVertexShader, nullptr, 0 );
-	pDevice->CreatePixelShader( pStandardPixelShaderBuffer->GetBufferPointer( ), pStandardPixelShaderBuffer->GetBufferSize( ), nullptr, &pStandardPixelShader );
-	pDevice->CreatePixelShader( pTexturedPixelShaderBuffer->GetBufferPointer( ), pTexturedPixelShaderBuffer->GetBufferSize( ), nullptr, &pTexturedPixelShader );
 	pContext->PSSetShader( pStandardPixelShader, nullptr, 0 );
-	pDevice->CreateInputLayout( _Layout, ARRAYSIZE( _Layout ), pVertexShaderBuffer->GetBufferPointer( ), pVertexShaderBuffer->GetBufferSize( ), &pVertexLayout );
+	if ( !SUCCEEDED( pDevice->CreateInputLayout( _Layout, ARRAYSIZE( _Layout ), pVertexShaderBuffer->GetBufferPointer( ), pVertexShaderBuffer->GetBufferSize( ), &pVertexLayout ) ) )
+		return LOG( ERROR, DRAWING, "Unable to create input layout." ), false;
+
 	pContext->IASetInputLayout( pVertexLayout );
 
 	_RasterizerDescription.FillMode = D3D11_FILL_SOLID;
 	_RasterizerDescription.CullMode = D3D11_CULL_NONE;
 	_RasterizerDescription.MultisampleEnable = TRUE;
 	_RasterizerDescription.AntialiasedLineEnable = TRUE;
-	pDevice->CreateRasterizerState( &_RasterizerDescription, &pRasterizer );
+	if ( !SUCCEEDED( pDevice->CreateRasterizerState( &_RasterizerDescription, &pRasterizer ) ) )
+		return LOG( ERROR, DRAWING, "Unable to create rasterizer state." ), false;
+
 	pContext->RSSetState( pRasterizer );
 
 	_Viewport.TopLeftX = 0;
@@ -854,6 +1046,19 @@ bool CDrawing::UnregisterDrawable( CDrawable*pDrawable )
 			return vecDrawables.erase( vecDrawables.begin( ) + z ), true;
 
 	return false;
+}
+
+DXGI_SAMPLE_DESC CDrawing::GetMaxSamplerQuality( )
+{
+	if ( pDevice == nullptr )
+		return { SAMPLER_SAMPLES, SAMPLER_QUALITY_DEFAULT };
+
+	auto uQuality = 0u;
+
+	if ( SUCCEEDED( pDevice->CheckMultisampleQualityLevels( DXGI_FORMAT_R8G8B8A8_UNORM, SAMPLER_SAMPLES, &uQuality ) ) )
+		return { SAMPLER_SAMPLES, uQuality - 1 };
+
+	return { SAMPLER_SAMPLES, SAMPLER_QUALITY_DEFAULT };
 }
 
 CDrawing _Drawing;
