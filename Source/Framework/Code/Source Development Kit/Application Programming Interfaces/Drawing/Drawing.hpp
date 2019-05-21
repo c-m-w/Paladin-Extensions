@@ -20,6 +20,10 @@ struct rectangle_t
 	explicit rectangle_t( RECT recNew );
 
 	rectangle_t& operator=( const RECT& rhs );
+	rectangle_t operator+( const rectangle_t& rhs );
+	rectangle_t operator-( const rectangle_t& rhs );
+	rectangle_t operator*( const rectangle_t& rhs );
+	rectangle_t operator/( const rectangle_t& rhs );
 	void operator+=( const rectangle_t& rhs );
 	void operator-=( const rectangle_t& rhs );
 	void operator*=( double rhs );
@@ -60,36 +64,11 @@ struct vertex_t
 	void Rotate( double dAngle, const Utilities::vector2_t& vecRotationPoint );
 };
 
-class IBaseDrawable
-{
-protected:
-
-	bool bCreated = false;
-
-public:
-
-	virtual bool Create( ) = 0;
-	virtual void Draw( ) = 0;
-	virtual void Destroy( ) = 0;
-
-	friend class CDrawing;
-};
-
-template< typename _t >
-class CDrawable: public IBaseDrawable
-{
-public:
-
-	bool Create( ) override;
-	void Draw( ) override;
-	void Destroy( ) override;
-};
-
-template< >
-class CDrawable< vertex_t >: public IBaseDrawable
+class CDrawable
 {
 private:
 
+	bool bCreated = false;
 	std::vector< vertex_t > vecVertices { };
 	std::vector< unsigned > vecIndices { };
 	D3D_PRIMITIVE_TOPOLOGY _Topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
@@ -101,12 +80,12 @@ public:
 
 	CDrawable( ) = default;
 
-	bool Create( ) override;
-	void Draw( ) override;
-	void Destroy( ) override;
-
+	bool Create( );
+	void Draw( );
+	void Destroy( );
 	void SetDrawingType( D3D_PRIMITIVE_TOPOLOGY _New );
 	void SetTexture( const std::string& strResourceName );
+	void SetTexture( ID3D11Texture2D* pTexture );
 	void SetTexture( const bitmap_t& _Bitmap, const color_t& clrText );
 	void SetTexture( const bitmap_t& _Bitmap, ID3D11Texture2D* pColorTexture );
 	void RemoveTexture( );
@@ -148,7 +127,7 @@ private:
 	ID3D11InputLayout*		pVertexLayout				= nullptr;
 	ID3D11RasterizerState*	pRasterizer					= nullptr;
 
-	std::vector< IBaseDrawable* > vecDrawables { };
+	std::vector< CDrawable* > vecDrawables { };
 	rectangle_t recRenderTarget { };
 	std::stack< rectangle_t > recSource { };
 
@@ -160,11 +139,9 @@ public:
 	void BeginFrame( );
 	bool EndFrame( );
 	bool IsAreaVisible( const rectangle_t &recArea );
-	bool RegisterDrawable( IBaseDrawable* pDrawable );
-	bool UnregisterDrawable( IBaseDrawable* pDrawable );
+	bool RegisterDrawable( CDrawable* pDrawable );
+	bool UnregisterDrawable( CDrawable* pDrawable );
 
 	friend struct vertex_t;
-	friend class CDrawable< vertex_t >;
+	friend class CDrawable;
 } extern _Drawing;
-
-#include "Drawing.inl"

@@ -279,7 +279,7 @@ void Draw( )
 		std::cout << std::endl;
 	}
 
-	auto pDrawable = new CDrawable< vertex_t >( );
+	auto pDrawable = new CDrawable( );
 	color_t clr[ ]
 	{
 		color_t( { 255, 0, 0, 255 } ),
@@ -287,7 +287,9 @@ void Draw( )
 		color_t( { 0, 0, 255, 255 } ),
 		color_t( { 0, 255, 0, 255 } ),
 	};
-	pDrawable->Rectangle( rectangle_t( 0, 0, test.vecSize.x, test.vecSize.y ), color_t( { 255, 255, 255, 255 } ) );
+	pDrawable->Rectangle( rectangle_t( 0, 0, test.vecSize.x, test.vecSize.y ), color_t( { 105, 255, 255, 255 } ) );
+	//pDrawable->SetTexture( test, pDrawable->RenderToTexture( ) );
+	//pDrawable->SetTexture( "PX Logo.png" );
 	pDrawable->SetTexture( test, pDrawable->RenderToTexture( ) );
 
 	while ( !bExit )

@@ -2,14 +2,23 @@
 
 #pragma once
 
+#include "IDrawable.hpp"
+#include "IInteractable.hpp"
+#include "IWidget.hpp"
+#include "CContainer.hpp"
+
+class CGUI
+{
+private:
+
+	std::deque< 
+
+public:
+
+};
+
 namespace Interface
 {
-	constexpr auto TITLE_HEIGHT = 16;
-	constexpr auto WINDOW_ICON_HEIGHT = 18;
-	constexpr auto STANDARD_HEIGHT = 12;
-	constexpr auto SMALL_HEIGHT = 8;
-	constexpr auto CHECKBOX_TEXT_HEIGHT = 11.5f;
-
 	inline const static color_t CLEAR = color_t( { 0, 0, 0, 0 } );
 	inline const static color_t WHITE = color_t( { 255, 255, 255, 255 } );
 	inline const static color_t SHADOW = color_t( { 0, 0, 0, 100 } );
@@ -33,4 +42,6 @@ namespace Interface
 	inline const static color_t BUTTON_BACKGROUND_ACTIVE = color_t( { 33, 150, 243, 51 } );
 	static auto NO_CALLBACK = [ & ]( )
 	{ };
+
+
 }

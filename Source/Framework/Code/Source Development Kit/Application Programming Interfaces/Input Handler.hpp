@@ -2,85 +2,83 @@
 
 #pragma once
 
-class CInputHandler: public IBase
+class CKeyState
 {
 public:
-
-	class CKeyState
+	enum EKeyState
 	{
-	public:
-		enum EKeyState
-		{
-			UP,
-			DOWN
-		};
-
-	private:
-		EKeyState ksKeyState;
-
-	public:
-		CKeyState( ) = default;
-
-		CKeyState( const EKeyState &_KeyState )
-		{
-			ksKeyState = _KeyState;
-		}
-
-		explicit operator bool( ) const
-		{
-			return ksKeyState == DOWN;
-		}
-
-		explicit operator int( ) const
-		{
-			return ksKeyState;
-		}
-
-		bool operator==( const bool &rhs ) const
-		{
-			return bool( *this ) == rhs;
-		}
-
-		bool operator!=( const bool &rhs ) const
-		{
-			return !( *this == rhs );
-		}
-
-		bool operator==( const int &rhs ) const
-		{
-			return int( *this ) == rhs;
-		}
-
-		bool operator!=( const int &rhs ) const
-		{
-			return !( *this == rhs );
-		}
+		UP,
+		DOWN
 	};
 
-	/** \brief Used to hold the virtual key code of a key. */
-	using key_t = unsigned char;
-	/** \brief Callback for when a singular key state is changed.\n
-				The parameter passed is the state of the key.\n
-				Return true if the input was handled. */
-	using key_callback_t = std::function< bool( CKeyState ) >;
-	/** \brief Callback for when a singular key is typed.\n
-				The parameter passed is the key that was pressed.\n
-				Return true if the input was handled. */
-	using key_typed_callback_t = std::function< bool( key_t ) >;
-	/** \brief Callback for whenever a key state is changed.\n
-				First parameter holds the virtual key code of the key.\n
-				Second parameter is the state of the key.\n
-				Return true if the input was handled. */
-	using global_key_callback_t = std::function< bool( key_t, CKeyState ) >;
-	/** \brief Callback for when the mouse is moved on the window.\n
-				The parameter is the location that the mouse has moved to.\n
-				Return true if the input was handled. */
-	using mouse_move_callback_t = std::function< bool( int, int ) >;
-	/** \brief Callback for when the mouse wheel is scrolled on the window.\n
-				Parameters are respectively the scroll delta and location of scroll.\n
-				Return true if the input was handled. */
-	using scroll_callback_t = std::function< bool( short, int, int ) >;
+private:
+	EKeyState ksKeyState;
 
+public:
+	CKeyState( ) = default;
+
+	CKeyState( const EKeyState& _KeyState )
+	{
+		ksKeyState = _KeyState;
+	}
+
+	explicit operator bool( ) const
+	{
+		return ksKeyState == DOWN;
+	}
+
+	explicit operator int( ) const
+	{
+		return ksKeyState;
+	}
+
+	bool operator==( const bool& rhs ) const
+	{
+		return bool( *this ) == rhs;
+	}
+
+	bool operator!=( const bool& rhs ) const
+	{
+		return !( *this == rhs );
+	}
+
+	bool operator==( const int& rhs ) const
+	{
+		return int( *this ) == rhs;
+	}
+
+	bool operator!=( const int& rhs ) const
+	{
+		return !( *this == rhs );
+	}
+};
+
+/** \brief Used to hold the virtual key code of a key. */
+using key_t = unsigned char;
+/** \brief Callback for when a singular key state is changed.\n
+			The parameter passed is the state of the key.\n
+			Return true if the input was handled. */
+using key_callback_t = std::function< bool( CKeyState ) >;
+/** \brief Callback for when a singular key is typed.\n
+			The parameter passed is the key that was pressed.\n
+			Return true if the input was handled. */
+using key_typed_callback_t = std::function< bool( key_t ) >;
+/** \brief Callback for whenever a key state is changed.\n
+			First parameter holds the virtual key code of the key.\n
+			Second parameter is the state of the key.\n
+			Return true if the input was handled. */
+using global_key_callback_t = std::function< bool( key_t, CKeyState ) >;
+/** \brief Callback for when the mouse is moved on the window.\n
+			The parameter is the location that the mouse has moved to.\n
+			Return true if the input was handled. */
+using mouse_move_callback_t = std::function< bool( int, int ) >;
+/** \brief Callback for when the mouse wheel is scrolled on the window.\n
+			Parameters are respectively the scroll delta and location of scroll.\n
+			Return true if the input was handled. */
+using scroll_callback_t = std::function< bool( short, int, int ) >;
+
+class CInputHandler: public IBase
+{
 private:
 
 	bool Initialize( ) override;
@@ -113,9 +111,3 @@ public:
 	Utilities::moment_t GetTimeSinceKeyPress( const key_t &_Key );
 	void GetMousePos( int &x, int &y );
 } extern _Input;
-
-using CKeyState = CInputHandler::CKeyState;
-using key_t = CInputHandler::key_t;
-using key_callback_t = CInputHandler::key_callback_t;
-using key_typed_callback_t = CInputHandler::key_typed_callback_t;
-using global_key_callback_t = CInputHandler::global_key_callback_t;
