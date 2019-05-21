@@ -269,7 +269,7 @@ bool SetupInterface( )
 
 void Draw( )
 {
-	auto test = FONTS.CreateBitmap( "abcdefghjijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ123456789", FONT_TAHOMA, 16 );
+	auto test = FONTS.CreateBitmap( "men can be hot but sometimes not", FONT_ROBOTO, 27 );
 
 	for ( auto y = 0; y < ( int )test.vecSize.y; y++ )
 	{
@@ -285,9 +285,9 @@ void Draw( )
 		color_t( { 255, 0, 0, 255 } ),
 		color_t( { 0, 255, 0, 255 } ),
 		color_t( { 0, 0, 255, 255 } ),
-		color_t( { 0, 255, 0, 255 } ),
+		color_t( { 255, 255, 255, 255 } ),
 	};
-	pDrawable->Rectangle( rectangle_t( 0, 0, test.vecSize.x, test.vecSize.y ), color_t( { 105, 255, 255, 255 } ) );
+	pDrawable->Rectangle( rectangle_t( 0, 0, test.vecSize.x, test.vecSize.y ), clr );
 	//pDrawable->SetTexture( test, pDrawable->RenderToTexture( ) );
 	//pDrawable->SetTexture( "PX Logo.png" );
 	pDrawable->SetTexture( test, pDrawable->RenderToTexture( ) );

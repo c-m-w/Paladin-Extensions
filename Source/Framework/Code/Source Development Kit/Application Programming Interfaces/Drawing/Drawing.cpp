@@ -314,7 +314,7 @@ void CDrawable::SetTexture( const bitmap_t & _Bitmap, const color_t & clrText )
 	Rectangle( rectangle_t { 0, 0, _Bitmap.vecSize.x , _Bitmap.vecSize.y }, color_t { 255, 255, 255, 255 } );
 }
 
-void CDrawable::SetTexture( const bitmap_t & _Bitmap, ID3D11Texture2D * pColorTexture )
+void CDrawable::SetTexture( const bitmap_t & _Bitmap, ID3D11Texture2D* pColorTexture )
 {
 	auto vecBytes = _Bitmap.GetColoredBitmapBytes( 0xFFFFFFFF );
 	D3D11_TEXTURE2D_DESC _ColorTextureDescription { };
@@ -338,13 +338,14 @@ void CDrawable::SetTexture( const bitmap_t & _Bitmap, ID3D11Texture2D * pColorTe
 	_Drawing.pContext->CopyResource( pCopiedTexture, pColorTexture );
 	auto hr = _Drawing.pContext->Map( pCopiedTexture, 0, D3D11_MAP_READ, 0, &_TextureData );
 
-	for ( auto z = 0u; z < vecBytes.size( ); z++ )
-	{
-		const auto dwARGB = reinterpret_cast< DWORD* >( _TextureData.pData )[ z ];
-		const auto bAlpha = unsigned char( double( vecBytes[ z ] ) / 255.0 * ( dwARGB & 0xFF ) );
-		if ( bAlpha > 0 )
-			vecBytes[ z ] = ( dwARGB & 0x00FFFFFF ) | ( bAlpha << 24 );
-	}
+	for ( auto y = 0u; y < std::size_t( _Bitmap.vecSize.y ); y++ )
+		for ( auto x = 0u; x < std::size_t( _Bitmap.vecSize.x ); x++ )
+		{
+			const auto dwABGR = reinterpret_cast< DWORD* >( _TextureData.pData )[ y * _TextureData.RowPitch / sizeof( DWORD ) + x ];
+			auto& dwCurrent = vecBytes[ _Bitmap.GetBitIndex( x, y ) ];
+			const auto bAlpha = unsigned char( double( dwCurrent >> 24 & 0xFF ) / 255.0 * double( dwABGR >> 24 ) );
+			dwCurrent = dwABGR & 0x00FFFFFF | bAlpha << 24;
+		}
 
 	_Drawing.pContext->Unmap( pCopiedTexture, 0 );
 	pCopiedTexture->Release( );
@@ -550,7 +551,7 @@ ID3D11Texture2D* CDrawable::RenderToTexture( )
 	_Drawing.pDevice->CreateTexture2D( &_TextureBufferDescription, nullptr, &pRenderedTextureBuffer );
 	_Drawing.pDevice->CreateTexture2D( &_TextureDescription, nullptr, &pRenderedTexture );
 	_Drawing.pDevice->CreateRenderTargetView( pRenderedTextureBuffer, &_RenderTargetViewDescription, &pNewRenderTarget );
-	_Drawing.pContext->OMSetRenderTargets( 1, &pNewRenderTarget, _Drawing.pDepthStencilView );
+	_Drawing.pContext->OMSetRenderTargets( 1, &pNewRenderTarget, nullptr );
 	_Drawing.pContext->ClearRenderTargetView( pNewRenderTarget, D3DXCOLOR( 0.f, 0.f, 0.f, 0.f ) );
 	Draw( );
 	_Drawing.pContext->CopyResource( pRenderedTexture, pRenderedTextureBuffer );
@@ -708,7 +709,7 @@ bool CDrawing::Create( )
 	_BlendStateDescription.RenderTarget[ 0 ].SrcBlend = D3D11_BLEND_SRC_ALPHA;
 	_BlendStateDescription.RenderTarget[ 0 ].DestBlend = D3D11_BLEND_INV_SRC_ALPHA;
 	_BlendStateDescription.RenderTarget[ 0 ].BlendOp = D3D11_BLEND_OP_ADD;
-	_BlendStateDescription.RenderTarget[ 0 ].SrcBlendAlpha = D3D11_BLEND_INV_SRC_ALPHA;
+	_BlendStateDescription.RenderTarget[ 0 ].SrcBlendAlpha = D3D11_BLEND_ONE;
 	_BlendStateDescription.RenderTarget[ 0 ].DestBlendAlpha = D3D11_BLEND_ZERO;
 	_BlendStateDescription.RenderTarget[ 0 ].BlendOpAlpha = D3D11_BLEND_OP_ADD;
 	_BlendStateDescription.RenderTarget[ 0 ].RenderTargetWriteMask = D3D11_COLOR_WRITE_ENABLE_ALL;
