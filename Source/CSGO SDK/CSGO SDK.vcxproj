@@ -46,12 +46,12 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(SolutionDir)Dependencies\Include\json\include\;$(SolutionDir)Dependencies\Include\;$(SolutionDir)Dependencies\Include\freetype-windows-binaries\include\;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\;$(DDK_INC_PATH);$(SolutionDir)CSGO SDK\Code\public;$(SolutionDir)CSGO SDK\Code\public\tier0;$(SolutionDir)CSGO SDK\Code\public\tier1;$(SolutionDir)CSGO SDK\Code\public\tier2;$(SolutionDir)CSGO SDK\Code\public\tier3;$(SolutionDir)CSGO SDK\Code\common;$(SolutionDir)CSGO SDK\Code\game\shared;$(SolutionDir)CSGO SDK\Code\game\client;$(SolutionDir)CSGO SDK\Code\game\server;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Dependencies\Include\json\include\;$(SolutionDir)Dependencies\Include\;$(SolutionDir)Dependencies\Include\freetype-windows-binaries\include\;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\;$(DDK_INC_PATH);$(SolutionDir)CSGO SDK\Code\public;$(SolutionDir)CSGO SDK\Code\public\tier0;$(SolutionDir)CSGO SDK\Code\public\tier1;$(SolutionDir)CSGO SDK\Code\public\tier2;$(SolutionDir)CSGO SDK\Code\public\tier3;$(SolutionDir)CSGO SDK\Code\common;$(SolutionDir)CSGO SDK\Code\game\shared;$(SolutionDir)CSGO SDK\Code\game\client;$(SolutionDir)CSGO SDK\Code\game\server;$(SolutionDir)CSGO SDK\Code\game\shared\cstrike;$(SolutionDir)CSGO SDK\Code\game\client\cstrike;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Dependencies\Lib\;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Lib\x86\;$(DDK_LIB_PATH);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(SolutionDir)Dependencies\Include\json\include\;$(SolutionDir)Dependencies\Include\;$(SolutionDir)Dependencies\Include\freetype-windows-binaries\include\;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\;$(DDK_INC_PATH);$(SolutionDir)CSGO SDK\Code\public;$(SolutionDir)CSGO SDK\Code\public\tier0;$(SolutionDir)CSGO SDK\Code\public\tier1;$(SolutionDir)CSGO SDK\Code\public\tier2;$(SolutionDir)CSGO SDK\Code\public\tier3;$(SolutionDir)CSGO SDK\Code\common;$(SolutionDir)CSGO SDK\Code\game\shared;$(SolutionDir)CSGO SDK\Code\game\client;$(SolutionDir)CSGO SDK\Code\game\server;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)Dependencies\Include\json\include\;$(SolutionDir)Dependencies\Include\;$(SolutionDir)Dependencies\Include\freetype-windows-binaries\include\;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\;$(DDK_INC_PATH);$(SolutionDir)CSGO SDK\Code\public;$(SolutionDir)CSGO SDK\Code\public\tier0;$(SolutionDir)CSGO SDK\Code\public\tier1;$(SolutionDir)CSGO SDK\Code\public\tier2;$(SolutionDir)CSGO SDK\Code\public\tier3;$(SolutionDir)CSGO SDK\Code\common;$(SolutionDir)CSGO SDK\Code\game\shared;$(SolutionDir)CSGO SDK\Code\game\client;$(SolutionDir)CSGO SDK\Code\game\server;$(SolutionDir)CSGO SDK\Code\game\shared\cstrike;$(SolutionDir)CSGO SDK\Code\game\client\cstrike;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)Dependencies\Lib\;C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Lib\x86\;$(DDK_LIB_PATH);$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -87,6 +87,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Code\CCSPlayer Extended.hpp" />
     <ClInclude Include="Code\common\protocol.h" />
     <ClInclude Include="Code\common\qlimits.h" />
     <ClInclude Include="Code\common\vgui_surfacelib\ifontsurface.h" />
@@ -102,6 +103,7 @@
     <ClInclude Include="Code\engine\host.h" />
     <ClInclude Include="Code\engine\precache.h" />
     <ClInclude Include="Code\game\client\animationlayer.h" />
+    <ClInclude Include="Code\game\client\beamdraw.h" />
     <ClInclude Include="Code\game\client\bone_merge_cache.h" />
     <ClInclude Include="Code\game\client\cdll_client_int.h" />
     <ClInclude Include="Code\game\client\cdll_util.h" />
@@ -109,6 +111,7 @@
     <ClInclude Include="Code\game\client\clientleafsystem.h" />
     <ClInclude Include="Code\game\client\client_thinklist.h" />
     <ClInclude Include="Code\game\client\colorcorrectionmgr.h" />
+    <ClInclude Include="Code\game\client\cstrike\c_cs_player.h" />
     <ClInclude Include="Code\game\client\c_baseanimating.h" />
     <ClInclude Include="Code\game\client\c_baseanimatingoverlay.h" />
     <ClInclude Include="Code\game\client\c_basecombatcharacter.h" />
@@ -149,11 +152,18 @@
     <ClInclude Include="Code\game\server\timedeventmgr.h" />
     <ClInclude Include="Code\game\server\vscript_server.h" />
     <ClInclude Include="Code\game\shared\ai_activity.h" />
+    <ClInclude Include="Code\game\shared\basecombatweapon_shared.h" />
     <ClInclude Include="Code\game\shared\baseentity_shared.h" />
+    <ClInclude Include="Code\game\shared\baseparticleentity.h" />
     <ClInclude Include="Code\game\shared\baseplayer_shared.h" />
+    <ClInclude Include="Code\game\shared\baseviewmodel_shared.h" />
+    <ClInclude Include="Code\game\shared\base_playeranimstate.h" />
     <ClInclude Include="Code\game\shared\beam_flags.h" />
     <ClInclude Include="Code\game\shared\collisionproperty.h" />
+    <ClInclude Include="Code\game\shared\cstrike\cs_playeranimstate.h" />
     <ClInclude Include="Code\game\shared\cstrike\cs_weapon_parse.h" />
+    <ClInclude Include="Code\game\shared\cstrike\weapon_csbase.h" />
+    <ClInclude Include="Code\game\shared\cs_shareddefs.h" />
     <ClInclude Include="Code\game\shared\ehandle.h" />
     <ClInclude Include="Code\game\shared\entitylist_base.h" />
     <ClInclude Include="Code\game\shared\groundlink.h" />
@@ -161,6 +171,7 @@
     <ClInclude Include="Code\game\shared\igamemovement.h" />
     <ClInclude Include="Code\game\shared\igamesystem.h" />
     <ClInclude Include="Code\game\shared\imovehelper.h" />
+    <ClInclude Include="Code\game\shared\iplayeranimstate.h" />
     <ClInclude Include="Code\game\shared\iscenetokenprocessor.h" />
     <ClInclude Include="Code\game\shared\particle_parse.h" />
     <ClInclude Include="Code\game\shared\particle_property.h" />
@@ -174,13 +185,17 @@
     <ClInclude Include="Code\game\shared\sceneentity_shared.h" />
     <ClInclude Include="Code\game\shared\sequence_transitioner.h" />
     <ClInclude Include="Code\game\shared\shareddefs.h" />
+    <ClInclude Include="Code\game\shared\sharedInterface.h" />
     <ClInclude Include="Code\game\shared\sharedvar.h" />
     <ClInclude Include="Code\game\shared\shared_classnames.h" />
     <ClInclude Include="Code\game\shared\tempentity.h" />
     <ClInclude Include="Code\game\shared\touchlink.h" />
     <ClInclude Include="Code\game\shared\usercmd.h" />
+    <ClInclude Include="Code\game\shared\util_shared.h" />
+    <ClInclude Include="Code\game\shared\viewport_panel_names.h" />
     <ClInclude Include="Code\game\shared\vscript_shared.h" />
     <ClInclude Include="Code\game\shared\weapon_parse.h" />
+    <ClInclude Include="Code\game\shared\weapon_proficiency.h" />
     <ClInclude Include="Code\networksystem\inetworksystem.h" />
     <ClInclude Include="Code\networksystem\netchannel.h" />
     <ClInclude Include="Code\networksystem\sm_Protocol.h" />
@@ -219,6 +234,7 @@
     <ClInclude Include="Code\public\engine\IEngineTrace.h" />
     <ClInclude Include="Code\public\engine\iserverplugin.h" />
     <ClInclude Include="Code\public\engine\ishadowmgr.h" />
+    <ClInclude Include="Code\public\engine\IStaticPropMgr.h" />
     <ClInclude Include="Code\public\engine\ivmodelinfo.h" />
     <ClInclude Include="Code\public\engine\ivmodelrender.h" />
     <ClInclude Include="Code\public\engine\SndInfo.h" />
@@ -226,6 +242,7 @@
     <ClInclude Include="Code\public\filesystem.h" />
     <ClInclude Include="Code\public\filesystem_passthru.h" />
     <ClInclude Include="Code\public\gametrace.h" />
+    <ClInclude Include="Code\public\game\client\iviewport.h" />
     <ClInclude Include="Code\public\globalvars_base.h" />
     <ClInclude Include="Code\public\iclient.h" />
     <ClInclude Include="Code\public\icliententity.h" />
@@ -368,6 +385,7 @@
     <ClInclude Include="Code\public\tier1\utlsymbollarge.h" />
     <ClInclude Include="Code\public\tier1\utltshash.h" />
     <ClInclude Include="Code\public\tier1\utlvector.h" />
+    <ClInclude Include="Code\public\tier2\beamsegdraw.h" />
     <ClInclude Include="Code\public\tier2\meshutils.h" />
     <ClInclude Include="Code\public\tier2\tier2.h" />
     <ClInclude Include="Code\public\tier2\tier2_logging.h" />
@@ -398,6 +416,7 @@
     <ClInclude Include="Code\public\zip_uncompressed.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Code\CCSPlayer Extended.cpp" />
     <ClCompile Include="Code\CNetChannel Extended.cpp" />
     <ClCompile Include="Code\Source.cpp" />
   </ItemGroup>

@@ -1,4 +1,4 @@
-/// CNetChannelExtended.hpp
+/// CNetChannel Extended.hpp
 
 #pragma once
 

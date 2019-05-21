@@ -115,7 +115,11 @@
 
 // Other
 #include "game/shared/baseentity_shared.h"
+#include "game/shared/basecombatweapon_shared.h"
 #include "game/shared/baseplayer_shared.h"
+#include "game/shared/cstrike/weapon_csbase.h"
+#include "game/shared/util_shared.h"
+#include "game/client/cstrike/c_cs_player.h"
 
 #if defined REDEFINE_DEBUG
 #undef NDEBUG
@@ -127,6 +131,7 @@
 #define EXTEND_SDK_STRUCT( SStructName ) class PX_##SStructName: public SStructName
 #define EXTENDED_SDK_STRUCT( SStructName ) PX_##SStructName
 #include "CNetChannel Extended.hpp"
+#include "CCSPlayer Extended.hpp"
 
 #include "../../Framework/Code/Development Environment/Assembly OFF.inl"
 #pragma warning( pop )

@@ -98,7 +98,7 @@
       <LanguageStandard>stdcpp17</LanguageStandard>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>Precompile.hpp</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(SolutionDir)CSGO SDK\Code\public;$(SolutionDir)CSGO SDK\Code\public\tier0;$(SolutionDir)CSGO SDK\Code\public\tier1;$(SolutionDir)CSGO SDK\Code\public\tier2;$(SolutionDir)CSGO SDK\Code\public\tier3;$(SolutionDir)CSGO SDK\Code\common;$(SolutionDir)CSGO SDK\Code\game\shared;$(SolutionDir)CSGO SDK\Code\game\client;$(SolutionDir)CSGO SDK\Code\game\server;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)CSGO SDK\Code\public;$(SolutionDir)CSGO SDK\Code\public\tier0;$(SolutionDir)CSGO SDK\Code\public\tier1;$(SolutionDir)CSGO SDK\Code\public\tier2;$(SolutionDir)CSGO SDK\Code\public\tier3;$(SolutionDir)CSGO SDK\Code\common;$(SolutionDir)CSGO SDK\Code\game\shared;$(SolutionDir)CSGO SDK\Code\game\client;$(SolutionDir)CSGO SDK\Code\game\server;$(SolutionDir)CSGO SDK\Code\game\shared\cstrike;$(SolutionDir)CSGO SDK\Code\game\client\cstrike;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -134,7 +134,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>Precompile.hpp</PrecompiledHeaderFile>
       <EnablePREfast>true</EnablePREfast>
-      <AdditionalIncludeDirectories>$(SolutionDir)CSGO SDK\Code\public;$(SolutionDir)CSGO SDK\Code\public\tier0;$(SolutionDir)CSGO SDK\Code\public\tier1;$(SolutionDir)CSGO SDK\Code\public\tier2;$(SolutionDir)CSGO SDK\Code\public\tier3;$(SolutionDir)CSGO SDK\Code\common;$(SolutionDir)CSGO SDK\Code\game\shared;$(SolutionDir)CSGO SDK\Code\game\client;$(SolutionDir)CSGO SDK\Code\game\server;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)CSGO SDK\Code\public;$(SolutionDir)CSGO SDK\Code\public\tier0;$(SolutionDir)CSGO SDK\Code\public\tier1;$(SolutionDir)CSGO SDK\Code\public\tier2;$(SolutionDir)CSGO SDK\Code\public\tier3;$(SolutionDir)CSGO SDK\Code\common;$(SolutionDir)CSGO SDK\Code\game\shared;$(SolutionDir)CSGO SDK\Code\game\client;$(SolutionDir)CSGO SDK\Code\game\server;$(SolutionDir)CSGO SDK\Code\game\shared\cstrike;$(SolutionDir)CSGO SDK\Code\game\client\cstrike;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

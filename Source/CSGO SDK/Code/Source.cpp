@@ -17,3 +17,10 @@ void Test2()
 {
 	auto bob = test2.OurCustomNetChannelFunction();
 }
+
+EXTENDED_SDK_CLASS( CCSPlayer ) test3;
+
+void Test3()
+{
+	test3.IsVulnerable( );
+}

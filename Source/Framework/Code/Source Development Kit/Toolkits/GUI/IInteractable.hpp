@@ -11,7 +11,7 @@ enum EState
 	/** \brief Not being interacted with. */
 	STATE_DORMANT,
 	/** \brief Last interacted with. */
-	STATE_ACTIVE,
+	STATE_ACTIVED,
 	/** \brief Currently being hovered. */
 	STATE_HOVERING,
 	/** \brief Currently being clicked. */

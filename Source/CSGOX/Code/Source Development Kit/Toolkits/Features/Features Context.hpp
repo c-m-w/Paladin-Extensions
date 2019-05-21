@@ -5,7 +5,7 @@
 struct IBaseContext
 {
 	virtual void flee( ) = 0;
-	CBasePlayer* pLocalPlayer;
+	EXTENDED_SDK_CLASS( CCSPlayer )* pLocalPlayer;
 };
 
 struct IAwarenessContext: IBaseContext
