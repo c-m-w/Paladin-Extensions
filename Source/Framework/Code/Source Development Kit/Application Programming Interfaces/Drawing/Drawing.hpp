@@ -85,9 +85,10 @@ public:
 	void Destroy( );
 	void SetDrawingType( D3D_PRIMITIVE_TOPOLOGY _New );
 	void SetTexture( const std::string& strResourceName );
-	void SetTexture( ID3D11Texture2D* pTexture );
+	void SetTexture( ID3D11Texture2D* pNewTexture );
 	void SetTexture( const bitmap_t& _Bitmap, const color_t& clrText );
 	void SetTexture( const bitmap_t& _Bitmap, ID3D11Texture2D* pColorTexture );
+	void SetTexture( const bitmap_t& _Bitmap, const std::string& strResourceName );
 	void RemoveTexture( );
 	void Rectangle( rectangle_t recLocation, color_t clrColor );
 	void Rectangle( rectangle_t recLocation, color_t* clrColor/*[LOCATION_MAX]*/ );

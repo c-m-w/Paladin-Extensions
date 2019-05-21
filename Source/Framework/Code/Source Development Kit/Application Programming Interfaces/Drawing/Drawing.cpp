@@ -258,24 +258,19 @@ void CDrawable::SetTexture( const std::string& strResourceName )
 	D3DX11CreateShaderResourceViewFromMemory( _Drawing.pDevice, &strData[ 0 ], strData.size( ), nullptr, nullptr, &pTexture, nullptr );
 }
 
-void CDrawable::SetTexture( ID3D11Texture2D * pTexture )
+void CDrawable::SetTexture( ID3D11Texture2D * pNewTexture )
 {
+	if ( pTexture != nullptr )
+		pTexture->Release( );
+
 	D3D11_TEXTURE2D_DESC _TextureDescription { };
-	ID3D11Texture2D* pNewTexture = nullptr;
 	D3D11_SHADER_RESOURCE_VIEW_DESC _ShaderResourceViewDescription { };
 
-	//pTexture->GetDesc( &_TextureDescription );
-	//_TextureDescription.Usage = D3D11_USAGE_DEFAULT;
-	//_TextureDescription.BindFlags = D3D11_BIND_SHADER_RESOURCE;
-	//
-	//_Drawing.pDevice->CreateTexture2D( &_TextureDescription, nullptr, &pNewTexture );
-	//
-	//_Drawing.pContext->CopyResource( pNewTexture, pTexture );
 	_ShaderResourceViewDescription.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	_ShaderResourceViewDescription.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
 	_ShaderResourceViewDescription.Texture2D.MostDetailedMip = 0;
 	_ShaderResourceViewDescription.Texture2D.MipLevels = 1;
-	_Drawing.pDevice->CreateShaderResourceView( pTexture, &_ShaderResourceViewDescription, &this->pTexture );
+	_Drawing.pDevice->CreateShaderResourceView( pNewTexture, &_ShaderResourceViewDescription, &pTexture );
 }
 
 
@@ -375,6 +370,21 @@ void CDrawable::SetTexture( const bitmap_t & _Bitmap, ID3D11Texture2D* pColorTex
 
 	_Drawing.pDevice->CreateShaderResourceView( pBufferTexture, &_ShaderResourceViewDescription, &pTexture );
 	Rectangle( rectangle_t { 0, 0, _Bitmap.vecSize.x , _Bitmap.vecSize.y }, color_t { 255, 255, 255, 255 } );
+}
+
+void CDrawable::SetTexture( const bitmap_t &_Bitmap, const std::string &strResourceName )
+{
+	const auto& strData = _ResourceManager.GetResource( strResourceName );
+	ID3D11ShaderResourceView* pTemporaryTexture = nullptr;
+	ID3D11Resource* pTextureData = nullptr;
+
+	if ( pTexture != nullptr )
+		pTexture->Release( );
+
+	D3DX11CreateShaderResourceViewFromMemory( _Drawing.pDevice, &strData[ 0 ], strData.size( ), nullptr, nullptr, &pTemporaryTexture, nullptr );
+	pTemporaryTexture->GetResource( &pTextureData );
+	SetTexture( _Bitmap, reinterpret_cast< ID3D11Texture2D* >( pTextureData ) );
+	pTemporaryTexture->Release( );
 }
 
 void CDrawable::RemoveTexture( )

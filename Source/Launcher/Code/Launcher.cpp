@@ -269,7 +269,7 @@ bool SetupInterface( )
 
 void Draw( )
 {
-	auto test = FONTS.CreateBitmap( "men can be hot but sometimes not", FONT_ROBOTO, 27 );
+	auto test = FONTS.CreateBitmap( "_________", FONT_ROBOTO, 50 );
 
 	for ( auto y = 0; y < ( int )test.vecSize.y; y++ )
 	{
@@ -290,7 +290,7 @@ void Draw( )
 	pDrawable->Rectangle( rectangle_t( 0, 0, test.vecSize.x, test.vecSize.y ), clr );
 	//pDrawable->SetTexture( test, pDrawable->RenderToTexture( ) );
 	//pDrawable->SetTexture( "PX Logo.png" );
-	pDrawable->SetTexture( test, pDrawable->RenderToTexture( ) );
+	pDrawable->SetTexture( test, "temp.png" );
 
 	while ( !bExit )
 	{
