@@ -15,7 +15,7 @@
     <PHPDevAutoPort>true</PHPDevAutoPort>
     <CustomServerUrl>https://www.paladin-extensions.com</CustomServerUrl>
     <CustomXdebugPort>9000</CustomXdebugPort>
-    <PublishEvent>BeforeRun</PublishEvent>
+    <PublishEvent>None</PublishEvent>
     <DebugMappingMethod>Manual</DebugMappingMethod>
     <DBGpProxyEnabled>false</DBGpProxyEnabled>
     <DBGpProxyPort>9001</DBGpProxyPort>

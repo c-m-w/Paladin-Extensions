@@ -4,7 +4,7 @@
     <ProjectView>ShowAllFiles</ProjectView>
     <RuntimePath>C:\Program Files (x86)\IIS Express\PHP\v7.2\php.exe</RuntimePath>
     <SpecificPageValue>Test.php</SpecificPageValue>
-    <StartAction>StartUrl</StartAction>
+    <StartAction>DontOpenPage</StartAction>
     <StartUrlValue>https://paladin-extensions.com/Test.php</StartUrlValue>
     <NameOfLastUsedPHPPublishProfile>PX</NameOfLastUsedPHPPublishProfile>
   </PropertyGroup>

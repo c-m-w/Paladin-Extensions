@@ -2,11 +2,8 @@
 
 #include "Precompile.hpp"
 
-#define WIN_ENTRY
 #define ENTRY_SOURCE
-#define USE_NAMESPACES
-#define USE_DEFINITIONS
-#include "../../Framework/Code/Framework.hpp"
+#include "Launcher.hpp"
 
 constexpr auto LAUNCHER_WIDTH = 560.f,
 LAUNCHER_HEIGHT = 260.f,
