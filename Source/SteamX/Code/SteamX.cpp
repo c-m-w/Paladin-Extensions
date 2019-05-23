@@ -5,49 +5,87 @@
 #define ENTRY_SOURCE
 #include "SteamX.hpp"
 
-// https://developer.valvesoftware.com/wiki/Command_Line_Options#Steam_.28Windows.29
-// -login Username Password
-// -applaunch 730
-// -shutdown
-// -silent
+//	Note:																				\
+	https://developer.valvesoftware.com/wiki/Command_Line_Options#Steam_.28Windows.29	\
+	-login Username Password															\
+	-applaunch 730																		\
+	-shutdown																			\
+	-silent																				\
 
-// Computer\HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Valve\Steam
-//     InstallPath key
-// Computer\HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Valve\Steam\NSIS
-//     Path key
+//	Note:																				\
+	Computer\HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Valve\Steam						\
+		InstallPath key																	\
+	Computer\HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Valve\Steam\NSIS					\
+		Path key																		\
 
-// todo find where steam guard 2fa session is stored and save it so we can have multiple sessions
+// Todo: find where steam guard 2fa session is stored and save it so we can have multiple sessions
+// Todo: possibly get logins from the server? this way nothing is stored client side and is safe in case they get a RAT
+// Todo: safety of winapi funcs and comparison of [0] and [1] to see if at least 1 has a steam path, and if both do, that they are the same
+// Todo: actually check that the exe's are there and at least probably a real size/a sig identifying it as steam is in there, this way we can make sure there is no app trying to steal steam accounts (i.e. RAT)
 
-void OnLaunch( )
+std::string GetSteamExecutablePath( bool bAllowExceptions = true )
 {
-	// todo safety and comparison of [0] and [1] to see if at least 1 has a steam path, and if both do, that they are the same
-
-	std::string strSteamPath[ 2 ] { { }, { } };
+	std::string strSteamInstallPath, strSteamNSISPath;
 
 	{
 		HKEY hKey;
 		RegOpenKeyEx( HKEY_LOCAL_MACHINE, ENC( R"(SOFTWARE\WOW6432Node\Valve\Steam)" ), 0, KEY_READ, &hKey );
 
-		strSteamPath[ 0 ] = ENC( "InstallPath" );
-		strSteamPath[ 0 ].resize( 512 );
-		RegQueryValueEx( hKey, strSteamPath[ 0 ].c_str( ), nullptr, nullptr, reinterpret_cast< LPBYTE >( &strSteamPath[ 0 ][ 0 ] ), new DWORD( strSteamPath[ 0 ].size( ) ) );
+		strSteamInstallPath = ENC( "InstallPath" );
+		strSteamInstallPath.resize( 512 );
+		RegQueryValueEx( hKey, strSteamInstallPath.c_str( ), nullptr, nullptr, reinterpret_cast< LPBYTE >( &strSteamInstallPath[ 0 ] ), new DWORD( strSteamInstallPath.size( ) ) );
 
-		strSteamPath[ 0 ] = strSteamPath[ 0 ].c_str( ); // do not remove, we need to free the extra mem of the 512 allocated
-		strSteamPath[ 0 ] += ENC( "\\Steam.exe" );
+		strSteamInstallPath = strSteamInstallPath.c_str( ); // do not remove, we need to free the extra mem of the 512 allocated
+		strSteamInstallPath += ENC( "\\Steam.exe" );
 	}
 
+	if ( !bAllowExceptions )
+		return strSteamInstallPath;
 	{
 		HKEY hKey;
 		RegOpenKeyEx( HKEY_LOCAL_MACHINE, ENC( R"(SOFTWARE\WOW6432Node\Valve\Steam\NSIS)" ), 0, KEY_READ, &hKey );
 
-		strSteamPath[ 1 ] = ENC( "Path" );
-		strSteamPath[ 1 ].resize( 512 );
-		RegQueryValueEx( hKey, strSteamPath[ 1 ].c_str( ), nullptr, nullptr, reinterpret_cast< LPBYTE >( &strSteamPath[ 1 ][ 0 ] ), new DWORD( strSteamPath[ 1 ].size( ) ) );
+		strSteamNSISPath = ENC( "Path" );
+		strSteamNSISPath.resize( 512 );
+		RegQueryValueEx( hKey, strSteamNSISPath.c_str( ), nullptr, nullptr, reinterpret_cast< LPBYTE >( &strSteamNSISPath[ 0 ] ), new DWORD( strSteamNSISPath.size( ) ) );
 
-		strSteamPath[ 1 ] = strSteamPath[ 1 ].c_str( ); // do not remove, we need to free the extra mem of the 512 allocated
-		strSteamPath[ 1 ] += ENC( "\\Steam.exe" );
+		strSteamNSISPath = strSteamNSISPath.c_str( ); // do not remove, we need to free the extra mem of the 512 allocated
+		strSteamNSISPath += ENC( "\\Steam.exe" );
 	}
 
-	MessageBox( nullptr, strSteamPath[ 0 ].c_str( ), "Steam/Install Path", 0 );
-	MessageBox( nullptr, strSteamPath[ 1 ].c_str( ), "Steam/NSIS/Path", 0 );
+	if ( strSteamInstallPath == strSteamNSISPath )
+		return strSteamInstallPath;
+	throw std::runtime_error( ENC( "Installation directory mismatch" ) );
+}
+
+void OnLaunch( )
+{
+	std::string strArguments[ ] { ENC( "-shutdown" ), ENC( "-login gaben@valvesoftware.com moolyftw" ) };
+	auto strBuffer = GetSteamExecutablePath( false );
+	int a[ ] { strBuffer.size( ) + 1, 0 };
+	const char* strSteamPath = new char[ a[0] ];
+	for ( int i = 0; i < a[0]; i++ ) // this cancer code is brought to you buy C++ automatic string copy destruction.
+		const_cast< char* >( strSteamPath )[ i ] = strBuffer[ i ];
+	a[ 1 ] = std::string( strSteamPath ).find_last_of( "\\" ) + 1;
+	const char* strSteamDirectory = new char[ a[1] ];
+	for ( int i = 0; i < a[1]; i++ )
+		const_cast< char* >( strSteamDirectory )[ i ] = strSteamPath[ i ];
+	const_cast< char* >( strSteamDirectory )[ a[ 1 ] ] = 0;
+
+	STARTUPINFO si { sizeof( STARTUPINFO ) };
+	PROCESS_INFORMATION pi { };
+	if ( 0 == CreateProcess( strSteamPath, &strArguments[ 0 ][1], nullptr, nullptr, FALSE, 0u, nullptr, strSteamDirectory, &si, &pi ) )
+		MessageBox( 0, std::to_string( GetLastError( ) ).c_str( ), 0, 0 );
+	CloseHandle( pi.hProcess );
+	CloseHandle( pi.hThread );
+
+	try
+	{
+		delete[ ] strSteamDirectory;
+		delete[ ] strSteamPath;
+	}
+	catch(... )
+	{
+		
+	}
 }
