@@ -119,12 +119,12 @@ void rectangle_t::Clamp( const rectangle_t & recClamp )
 		h -= 1.0;
 }
 
-bool rectangle_t::LocationInRectangle( const vector2_t & locLocation ) const
+bool rectangle_t::LocationInRectangle( const vector2_t & vecLocation ) const
 {
-	return locLocation.x >= x
-		&& locLocation.x <= x + w
-		&& locLocation.y >= y
-		&& locLocation.y <= y + h;
+	return vecLocation.x >= x
+		&& vecLocation.x <= x + w
+		&& vecLocation.y >= y
+		&& vecLocation.y <= y + h;
 }
 
 bool rectangle_t::InRectangle( const rectangle_t & recLocation ) const
@@ -429,12 +429,25 @@ void CDrawable::RemoveTexture( )
 
 void CDrawable::Rectangle( rectangle_t recLocation, color_t clrColor )
 {
+	color_t clrRectangle[ ]
+	{
+		clrColor,
+		clrColor,
+		clrColor,
+		clrColor
+	};
+
+	return Rectangle( recLocation, clrRectangle );
+}
+
+void CDrawable::Rectangle( rectangle_t recLocation, color_t * clrColor )
+{
 	vecVertices =
 	{
-		vertex_t( vertex_t::PixelToRatio( { recLocation.x, recLocation.y } ), { 0.0, 0.0 }, clrColor ),
-		vertex_t( vertex_t::PixelToRatio( { recLocation.x + recLocation.w, recLocation.y } ), { 1.0, 0.0 }, clrColor ),
-		vertex_t( vertex_t::PixelToRatio( { recLocation.x + recLocation.w, recLocation.y + recLocation.h } ), { 1.0, 1.0 }, clrColor ),
-		vertex_t( vertex_t::PixelToRatio( { recLocation.x, recLocation.y + recLocation.h } ), { 0.0, 1.0 }, clrColor )
+		vertex_t( vertex_t::PixelToRatio( { recLocation.x, recLocation.y } ), { 0.0, 0.0 }, clrColor[ rectangle_t::TOP_LEFT ] ),
+		vertex_t( vertex_t::PixelToRatio( { recLocation.x + recLocation.w, recLocation.y } ), { 1.0, 0.0 }, clrColor[ rectangle_t::TOP_RIGHT ] ),
+		vertex_t( vertex_t::PixelToRatio( { recLocation.x + recLocation.w, recLocation.y + recLocation.h } ), { 1.0, 1.0 }, clrColor[ rectangle_t::BOTTOM_RIGHT ] ),
+		vertex_t( vertex_t::PixelToRatio( { recLocation.x, recLocation.y + recLocation.h } ), { 0.0, 1.0 }, clrColor[ rectangle_t::BOTTOM_LEFT ] )
 	};
 	vecIndices =
 	{
@@ -445,19 +458,35 @@ void CDrawable::Rectangle( rectangle_t recLocation, color_t clrColor )
 	DestroyBuffers( );
 }
 
-void CDrawable::Rectangle( rectangle_t recLocation, color_t * clrColor )
+void CDrawable::Rectangle( rectangle_t recLocation, color_t clrColor, color_t clrCenter )
+{
+	color_t clrPerimeter[ ]
+	{
+		clrColor,
+		clrColor,
+		clrColor,
+		clrColor
+	};
+
+	return Rectangle( recLocation, clrPerimeter, clrCenter );
+}
+
+void CDrawable::Rectangle( rectangle_t recLocation, color_t *clrColor, color_t clrCenter )
 {
 	vecVertices =
 	{
-		vertex_t( vertex_t::PixelToRatio( { recLocation.x, recLocation.y } ), clrColor[ rectangle_t::TOP_LEFT ] ),
-		vertex_t( vertex_t::PixelToRatio( { recLocation.x + recLocation.w, recLocation.y } ), clrColor[ rectangle_t::TOP_RIGHT ] ),
-		vertex_t( vertex_t::PixelToRatio( { recLocation.x + recLocation.w, recLocation.y + recLocation.h } ), clrColor[ rectangle_t::BOTTOM_RIGHT ] ),
-		vertex_t( vertex_t::PixelToRatio( { recLocation.x, recLocation.y + recLocation.h } ), clrColor[ rectangle_t::BOTTOM_LEFT ] )
+		vertex_t( vertex_t::PixelToRatio( { recLocation.x + recLocation.w / 2.0, recLocation.y + recLocation.h / 2.0 } ), { 0.5, 0.5 }, clrCenter ),
+		vertex_t( vertex_t::PixelToRatio( { recLocation.x, recLocation.y } ), { 0.0, 0.0 }, clrColor[ rectangle_t::TOP_LEFT ] ),
+		vertex_t( vertex_t::PixelToRatio( { recLocation.x + recLocation.w, recLocation.y } ), { 1.0, 0.0 }, clrColor[ rectangle_t::TOP_RIGHT ] ),
+		vertex_t( vertex_t::PixelToRatio( { recLocation.x + recLocation.w, recLocation.y + recLocation.h } ), { 1.0, 1.0 }, clrColor[ rectangle_t::BOTTOM_RIGHT ] ),
+		vertex_t( vertex_t::PixelToRatio( { recLocation.x, recLocation.y + recLocation.h } ), { 0.0, 1.0 }, clrColor[ rectangle_t::BOTTOM_LEFT ] )
 	};
 	vecIndices =
 	{
-		3, 0, 1,
-		3, 2, 1
+		0, 1, 2,
+		0, 2, 3,
+		0, 3, 4,
+		0, 4, 1
 	};
 
 	DestroyBuffers( );
@@ -610,21 +639,39 @@ void CDrawable::RoundedRectangle( rectangle_t recLocation, bool *bCornerRounding
 
 void CDrawable::Line( vector2_t vecStart, vector2_t vecEnd, double dThickness, color_t clrColor )
 {
+	return Line( vecStart, vecEnd, dThickness, clrColor, clrColor );
+}
+
+void CDrawable::Line( vector2_t vecStart, vector2_t vecEnd, double dThickness, color_t clrBegin, color_t clrEnd )
+{
 	const auto vecLength = vecEnd - vecStart;
-	const auto dwColor = clrColor.GetARGB( );
 	const auto dLength = vecLength.Length( );
 	const auto dRotation = vecLength.Angle( );
 
-	vecVertices = decltype( vecVertices )
+	vector2_t vecTemp[ ]
 	{
-		vertex_t( vertex_t::PixelToRatio( { vecStart.x, vecStart.y - dThickness / 2.0 } ), dwColor ),
-		vertex_t( vertex_t::PixelToRatio( { vecStart.x + dLength, vecStart.y - dThickness / 2.0 } ), dwColor ),
-		vertex_t( vertex_t::PixelToRatio( { vecStart.x + dLength, vecStart.y + dThickness / 2.0 } ), dwColor ),
-		vertex_t( vertex_t::PixelToRatio( { vecStart.x, vecStart.y + dThickness / 2.0 } ), dwColor )
+		{ vecStart.x, vecStart.y - dThickness / 2.0 },
+		{ vecStart.x + dLength, vecStart.y - dThickness / 2.0 },
+		{ vecStart.x + dLength, vecStart.y + dThickness / 2.0 },
+		{ vecStart.x, vecStart.y + dThickness / 2.0 }
 	};
 
-	for ( auto& _Vertex : vecVertices )
-		_Vertex.Rotate( dRotation, vecStart );
+	for ( auto& vecPoint : vecTemp )
+		vecPoint.Rotate( dRotation, vecStart );
+
+	vecVertices = decltype( vecVertices )
+	{
+		vertex_t( vertex_t::PixelToRatio( vecTemp[ 0 ] ), { 0.0, 0.0 }, clrBegin ),
+		vertex_t( vertex_t::PixelToRatio( vecTemp[ 1 ] ), { 1.0, 0.0 }, clrEnd ),
+		vertex_t( vertex_t::PixelToRatio( vecTemp[ 2 ] ), { 1.0, 1.0 }, clrEnd ),
+		vertex_t( vertex_t::PixelToRatio( vecTemp[ 3 ] ), { 0.0, 1.0 }, clrBegin )
+	};
+
+	vecIndices =
+	{
+		0, 1, 2,
+		0, 2, 3
+	};
 
 	DestroyBuffers( );
 }
@@ -639,12 +686,12 @@ void CDrawable::Circle( const vector2_t& vecCenter, double dbRadius, color_t clr
 
 	vecVertices.clear( );
 	vecIndices.clear( );
-	vecVertices.emplace_back( vertex_t::PixelToRatio( vecCenter ), clrColor );
-	vecVertices.emplace_back( vertex_t::PixelToRatio( vecPoints[ 0 ] + vecCenter ), clrColor );
+	vecVertices.emplace_back( vertex_t( vertex_t::PixelToRatio( vecCenter ), { 0.5, 0.5 }, clrColor ) );
+	vecVertices.emplace_back( vertex_t( vertex_t::PixelToRatio( vecPoints[ 0 ] + vecCenter ), ( vecPoints[ 0 ] + dbRadius ) / ( 2.0 * dbRadius ), clrColor ) );
 
 	for ( auto z = 1u; z < zSize; z++ )
 	{
-		vecVertices.emplace_back( vertex_t::PixelToRatio( vecPoints[ z ] + vecCenter ), clrColor );
+		vecVertices.emplace_back( vertex_t( vertex_t::PixelToRatio( vecPoints[ z ] + vecCenter ), ( vecPoints[ z ] + dbRadius ) / ( 2.0 * dbRadius ), clrColor ) );
 		vecIndices.emplace_back( 0 );
 		vecIndices.emplace_back( z - 1 );
 		vecIndices.emplace_back( z );

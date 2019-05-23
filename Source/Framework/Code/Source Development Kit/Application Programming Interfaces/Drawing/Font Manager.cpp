@@ -41,7 +41,7 @@ std::vector< DWORD > bitmap_t::GetColoredBitmapBytes( DWORD dwARGB ) const
 	vecBitmap.resize( vecBytes.size( ) );
 	for ( auto z = 0u; z < vecBitmap.size( ); z++ )
 	{
-		const auto bAlpha = unsigned char( double( vecBytes[ z ] ) / 255.0 * ( dwARGB & 0xFF ) );
+		const auto bAlpha = unsigned char( double( vecBytes[ z ] ) / 255.0 * double( dwARGB & 0xFF ) );
 		if ( bAlpha > 0 )
 			vecBitmap[ z ] = ( dwARGB & 0x00FFFFFF ) | ( bAlpha << 24 );
 	}

@@ -280,15 +280,17 @@ void Draw( )
 	bool b[ 4 ] { false, true, true, false };
 	color_t clr[ ]
 	{
+		color_t( { 0, 255, 0, 255 } ),
 		color_t( { 255, 0, 0, 255 } ),
 		color_t( { 0, 255, 0, 255 } ),
-		color_t( { 0, 0, 255, 255 } ),
-		color_t( { 255, 255, 255, 255 } ),
+		color_t( { 255, 0, 0, 255 } ),
 	};
-	//pDrawable->Rectangle( rectangle_t( 0, 0, test.vecSize.x, test.vecSize.y ), clr );
-	pDrawable->RoundedRectangle( rectangle_t( 20, 20, 50, 70 ), b, clr, color_t { 255, 255, 255, 255 }, 0.2 );
+	//pDrawable->Rectangle( rectangle_t( 0, 0, 200, 100 ), clr, color_t { 0, 0, 255, 255 } );
+	//pDrawable->Line( { 5.0, 10.0 }, { 100.0, 50.0 }, 2.0, clr[ 0 ], clr[ 1 ] );
+	pDrawable->Circle( { 100, 100 }, 50, { 255, 255, 255 ,255 } );
+	//pDrawable->RoundedRectangle( rectangle_t( 20, 20, 50, 70 ), b, clr, color_t { 255, 255, 255, 255 }, 0.2 );
 	//pDrawable->SetTexture( test, pDrawable->RenderToTexture( ) );
-	//pDrawable->SetTexture( "PX Logo.png" );
+	pDrawable->SetTexture( "PX Loading.png" );
 	//pDrawable->SetTexture( test, color_t { 255, 255, 255, 255 } );
 
 	while ( !bExit )

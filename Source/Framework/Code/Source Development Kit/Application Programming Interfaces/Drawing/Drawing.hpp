@@ -92,6 +92,8 @@ public:
 	void RemoveTexture( );
 	void Rectangle( rectangle_t recLocation, color_t clrColor );
 	void Rectangle( rectangle_t recLocation, color_t* clrColor/*[LOCATION_MAX]*/ );
+	void Rectangle( rectangle_t recLocation, color_t clrColor, color_t clrCenter );
+	void Rectangle( rectangle_t recLocation, color_t* clrColor/*[LOCATION_MAX]*/, color_t clrCenter );
 	void RoundedRectangle( rectangle_t recLocation, color_t clrColor, double dbRoundingRatio );
 	void RoundedRectangle( rectangle_t recLocation, color_t clrColor, color_t clrCenter, double dbRoundingRatio );
 	void RoundedRectangle( rectangle_t recLocation, color_t* clrColor/*[ rectangle_t::MAX ]*/, color_t clrCenter, double dbRoundingRatio );
@@ -99,6 +101,7 @@ public:
 	void RoundedRectangle( rectangle_t recLocation, bool* bCornerRounding/*[ rectangle_t::MAX ]*/, color_t clrColor, color_t clrCenter, double dbRoundingRatio );
 	void RoundedRectangle( rectangle_t recLocation, bool* bCornerRounding/*[ rectangle_t::MAX ]*/, color_t* clrColor/*[ rectangle_t::MAX ]*/, color_t clrCenter, double dbRoundingRatio );
 	void Line( Utilities::vector2_t vecStart, Utilities::vector2_t vecEnd, double dThickness, color_t clrColor );
+	void Line( Utilities::vector2_t vecStart, Utilities::vector2_t vecEnd, double dThickness, color_t clrBegin, color_t clrEnd );
 	void Circle( const Utilities::vector2_t& vecCenter, double dbRadius, color_t clrColor, std::size_t zResolution = 0 );
 	void Circle( const Utilities::vector2_t& vecCenter, double dbRadius, color_t clrPerimeter, color_t clrCenter, std::size_t zResolution = 0 );
 	void DestroyBuffers( );

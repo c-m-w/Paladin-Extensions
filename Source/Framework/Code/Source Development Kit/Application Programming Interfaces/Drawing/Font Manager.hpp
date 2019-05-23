@@ -38,11 +38,6 @@ struct bitmap_t
 	void Clip( );
 };
 
-struct glyph_t
-{
-	
-};
-
 class CFontManager: public IBase
 {
 private:
