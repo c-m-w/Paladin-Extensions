@@ -2,10 +2,10 @@
 
 #pragma once
 
-#include "IDrawable.hpp"
 #include "IInteractable.hpp"
 #include "IWidget.hpp"
 #include "CContainer.hpp"
+#include "IRow.hpp"
 
 class CGUI
 {

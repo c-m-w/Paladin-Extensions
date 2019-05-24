@@ -18,5 +18,5 @@ protected:
 public:
 
 
-	friend class CRow;
+	friend class CHorizontalRow;
 };

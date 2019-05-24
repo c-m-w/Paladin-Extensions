@@ -6,9 +6,78 @@
 #define USE_NAMESPACES
 #include "../../../Framework.hpp"
 
-IInteractable::IInteractable( const rectangle_t &recLocation ) :
-	IDrawable( recLocation )
+padding_t::padding_t( double dbTop, double dbLeft ) :
+	vecData( dbTop, dbLeft )
 { }
+
+padding_t::padding_t( vector2_t& vecPadding ) :
+	vecData( vecPadding )
+{ }
+
+double padding_t::GetHorizontalPadding( )
+{
+	return vecData.x;
+}
+
+void padding_t::PutHorizontalPadding( double dbHorizontal )
+{
+	vecData.x = dbHorizontal;
+}
+
+double padding_t::GetVerticalPadding( )
+{
+	return vecData.y;
+}
+
+void padding_t::PutVerticalPadding( double dbVertical )
+{
+	vecData.y = dbVertical;
+}
+
+IInteractable::IInteractable( const vector2_t &vecSize ) :
+	recLocation( 0.0, 0.0, vecSize.x, vecSize.y )
+{ }
+
+IInteractable::IInteractable( const padding_t &_Padding ) :
+	_Padding( _Padding )
+{ }
+
+IInteractable::IInteractable( const vector2_t& vecSize, const padding_t& _Padding ) :
+	recLocation( 0.0, 0.0, vecSize.x, vecSize.y ), _Padding( _Padding )
+{ }
+
+void IInteractable::Initialize( CContainer *pNewParent, const rectangle_t &recNewLocation )
+{
+	pParent = pNewParent;
+	recLocation = recNewLocation;
+}
+
+void IInteractable::Initialize( CContainer *pNewParent, const vector2_t &vecNewLocation )
+{
+	pParent = pNewParent;
+	recLocation.vecLocation = vecNewLocation;
+}
+
+rectangle_t IInteractable::GetLocation( )
+{
+	return { recLocation.x + vecRelative.x, recLocation.y + vecRelative.y, recLocation.w, recLocation.h };
+}
+
+vector2_t IInteractable::GetSize( )
+{
+	return recLocation.vecSize;
+}
+
+void IInteractable::PreCreateDrawables( )
+{
+	vecDrawables.clear( );
+	CreateDrawables( );
+}
+
+void IInteractable::SetLocation( const vector2_t& vecNew )
+{
+	recLocation.vecLocation = vecNew;
+}
 
 void IInteractable::PreStateChange( )
 {
@@ -24,14 +93,20 @@ rectangle_t IInteractable::GetAbsoluteLocation( )
 	return GetLocation( );
 }
 
-vector2_t IInteractable::GetPadding( )
+padding_t IInteractable::GetPadding( )
 {
-	return vecPadding;
+	return _Padding;
 }
 
-double IInteractable::GetNetWidth( )
+vector2_t IInteractable::GetNetSize( )
 {
-	return GetPadding( ).x + GetSize( ).x;
+	return _Padding.vecData + recLocation.vecSize;
+}
+
+void IInteractable::Draw( )
+{
+	for ( auto& pDrawable : vecDrawables )
+		pDrawable->Draw( );
 }
 
 void IInteractable::OnStateChange( )

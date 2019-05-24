@@ -19,10 +19,10 @@
     <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Drawing\Shaders.cpp" />
     <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Drawing\Font Manager.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\GUI.cpp" />
-    <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\IDrawable.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\IInteractable.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\CContainer.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\IWidget.cpp" />
+    <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\IRow.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\Development Environment\Build Output Wrapper.hpp" />
@@ -49,10 +49,10 @@
     <ClInclude Include="Precompile.hpp" />
     <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Drawing\Font Manager.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\GUI.hpp" />
-    <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\IDrawable.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\IInteractable.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\CContainer.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\IWidget.hpp" />
+    <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\IRow.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Code\Source Development Kit\Application Programming Interfaces\Connectivity.inl" />

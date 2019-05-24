@@ -15,9 +15,9 @@ struct rectangle_t
 
 	Utilities::vector2_t vecLocation { }, vecSize { };
 
-	explicit rectangle_t( ) = default;
-	explicit rectangle_t( double x, double y, double w, double h );
-	explicit rectangle_t( RECT recNew );
+	rectangle_t( ) = default;
+	rectangle_t( double x, double y, double w, double h );
+	rectangle_t( RECT recNew );
 
 	rectangle_t& operator=( const RECT& rhs );
 	rectangle_t operator+( const rectangle_t& rhs );
