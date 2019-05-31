@@ -442,20 +442,23 @@ void CDrawable::Rectangle( rectangle_t recLocation, color_t clrColor )
 
 void CDrawable::Rectangle( rectangle_t recLocation, color_t * clrColor )
 {
-	vecVertices =
+	decltype( vecVertices ) vecProposedVertices { };
+	decltype( vecIndices ) vecProposedIndicies { };
+
+	vecProposedVertices =
 	{
 		vertex_t( vertex_t::PixelToRatio( { recLocation.x, recLocation.y } ), { 0.0, 0.0 }, clrColor[ rectangle_t::TOP_LEFT ] ),
 		vertex_t( vertex_t::PixelToRatio( { recLocation.x + recLocation.w, recLocation.y } ), { 1.0, 0.0 }, clrColor[ rectangle_t::TOP_RIGHT ] ),
 		vertex_t( vertex_t::PixelToRatio( { recLocation.x + recLocation.w, recLocation.y + recLocation.h } ), { 1.0, 1.0 }, clrColor[ rectangle_t::BOTTOM_RIGHT ] ),
 		vertex_t( vertex_t::PixelToRatio( { recLocation.x, recLocation.y + recLocation.h } ), { 0.0, 1.0 }, clrColor[ rectangle_t::BOTTOM_LEFT ] )
 	};
-	vecIndices =
+	vecProposedIndicies =
 	{
 		3, 0, 1,
 		3, 2, 1
 	};
 
-	DestroyBuffers( );
+	PostShapeChange( vecProposedVertices, vecProposedIndicies );
 }
 
 void CDrawable::Rectangle( rectangle_t recLocation, color_t clrColor, color_t clrCenter )
@@ -473,7 +476,10 @@ void CDrawable::Rectangle( rectangle_t recLocation, color_t clrColor, color_t cl
 
 void CDrawable::Rectangle( rectangle_t recLocation, color_t *clrColor, color_t clrCenter )
 {
-	vecVertices =
+	decltype( vecVertices ) vecProposedVertices { };
+	decltype( vecIndices ) vecProposedIndicies { };
+
+	vecProposedVertices =
 	{
 		vertex_t( vertex_t::PixelToRatio( { recLocation.x + recLocation.w / 2.0, recLocation.y + recLocation.h / 2.0 } ), { 0.5, 0.5 }, clrCenter ),
 		vertex_t( vertex_t::PixelToRatio( { recLocation.x, recLocation.y } ), { 0.0, 0.0 }, clrColor[ rectangle_t::TOP_LEFT ] ),
@@ -481,7 +487,7 @@ void CDrawable::Rectangle( rectangle_t recLocation, color_t *clrColor, color_t c
 		vertex_t( vertex_t::PixelToRatio( { recLocation.x + recLocation.w, recLocation.y + recLocation.h } ), { 1.0, 1.0 }, clrColor[ rectangle_t::BOTTOM_RIGHT ] ),
 		vertex_t( vertex_t::PixelToRatio( { recLocation.x, recLocation.y + recLocation.h } ), { 0.0, 1.0 }, clrColor[ rectangle_t::BOTTOM_LEFT ] )
 	};
-	vecIndices =
+	vecProposedIndicies =
 	{
 		0, 1, 2,
 		0, 2, 3,
@@ -489,7 +495,7 @@ void CDrawable::Rectangle( rectangle_t recLocation, color_t *clrColor, color_t c
 		0, 4, 1
 	};
 
-	DestroyBuffers( );
+	PostShapeChange( vecProposedVertices, vecProposedIndicies );
 }
 
 void CDrawable::RoundedRectangle( rectangle_t recLocation, color_t clrColor, double dbRoundingRatio )
@@ -525,15 +531,16 @@ void CDrawable::RoundedRectangle( rectangle_t recLocation, bool* bCornerRounding
 
 void CDrawable::RoundedRectangle( rectangle_t recLocation, bool *bCornerRounding/*[ rectangle_t::MAX ]*/, color_t *clrColor/*[ rectangle_t::MAX ]*/, color_t clrCenter, double dbRoundingRatio )
 {
+	decltype( vecVertices ) vecProposedVertices { };
+	decltype( vecIndices ) vecProposedIndicies { };
+
 	if ( dbRoundingRatio < 0.0
 		 || dbRoundingRatio > 1.0 )
 		return LOG( WARNING, DRAWING, "Invalid rounding ratio passed to RoundedRectangle( )." );
 
 	const auto dbRoundingWidth = std::min( recLocation.w, recLocation.h ) * dbRoundingRatio;
 	auto vecBase = vector2_t::GetCirclePoints( dbRoundingWidth, std::size_t( dbRoundingWidth * vector2_t::PI ), -90.0, 0.25 );
-	vecVertices.clear( );
-	vecIndices.clear( );
-	vecVertices.emplace_back( vertex_t( vertex_t::PixelToRatio( recLocation.vecLocation + recLocation.vecSize / 2.0 ), { 0.5, 0.5 }, clrCenter ) );
+	vecProposedVertices.emplace_back( vertex_t( vertex_t::PixelToRatio( recLocation.vecLocation + recLocation.vecSize / 2.0 ), { 0.5, 0.5 }, clrCenter ) );
 
 	for ( auto i = 0; i < rectangle_t::MAX; i++ )
 	{
@@ -577,7 +584,7 @@ void CDrawable::RoundedRectangle( rectangle_t recLocation, bool *bCornerRounding
 			for ( auto& vecPoint : vecBase )
 			{
 				const auto vecFinalPoint = vecPoint + vecAddition;
-				vecVertices.emplace_back( vertex_t( vertex_t::PixelToRatio( vecFinalPoint ), 
+				vecProposedVertices.emplace_back( vertex_t( vertex_t::PixelToRatio( vecFinalPoint ),
 													{ ( vecFinalPoint.x - recLocation.x ) / recLocation.w, ( vecFinalPoint.y - recLocation.y ) / recLocation.h }, clrColor[ i ] ) );
 			}
 		}
@@ -615,26 +622,26 @@ void CDrawable::RoundedRectangle( rectangle_t recLocation, bool *bCornerRounding
 					break;
 			}
 
-			vecVertices.emplace_back( _New );
+			vecProposedVertices.emplace_back( _New );
 		}
 
 		for ( auto& vecPoint : vecBase )
 			vecPoint.Rotate( 90.0, { 0.0, 0.0 } );
 	}
 
-	const auto zSize = vecVertices.size( );
+	const auto zSize = vecProposedVertices.size( );
 	for ( auto z = 1u; z < zSize - 1; z++ )
 	{
-		vecIndices.emplace_back( 0 );
-		vecIndices.emplace_back( z );
-		vecIndices.emplace_back( z + 1 );
+		vecProposedIndicies.emplace_back( 0 );
+		vecProposedIndicies.emplace_back( z );
+		vecProposedIndicies.emplace_back( z + 1 );
 	}
 
-	vecIndices.emplace_back( 0 );
-	vecIndices.emplace_back( zSize - 1 );
-	vecIndices.emplace_back( 1 );
+	vecProposedIndicies.emplace_back( 0 );
+	vecProposedIndicies.emplace_back( zSize - 1 );
+	vecProposedIndicies.emplace_back( 1 );
 
-	DestroyBuffers( );
+	PostShapeChange( vecProposedVertices, vecProposedIndicies );
 }
 
 void CDrawable::Line( vector2_t vecStart, vector2_t vecEnd, double dThickness, color_t clrColor )
@@ -644,6 +651,9 @@ void CDrawable::Line( vector2_t vecStart, vector2_t vecEnd, double dThickness, c
 
 void CDrawable::Line( vector2_t vecStart, vector2_t vecEnd, double dThickness, color_t clrBegin, color_t clrEnd )
 {
+	decltype( vecVertices ) vecProposedVertices { };
+	decltype( vecIndices ) vecProposedIndicies { };
+
 	const auto vecLength = vecEnd - vecStart;
 	const auto dLength = vecLength.Length( );
 	const auto dRotation = vecLength.Angle( );
@@ -659,7 +669,7 @@ void CDrawable::Line( vector2_t vecStart, vector2_t vecEnd, double dThickness, c
 	for ( auto& vecPoint : vecTemp )
 		vecPoint.Rotate( dRotation, vecStart );
 
-	vecVertices = decltype( vecVertices )
+	vecProposedVertices = decltype( vecVertices )
 	{
 		vertex_t( vertex_t::PixelToRatio( vecTemp[ 0 ] ), { 0.0, 0.0 }, clrBegin ),
 		vertex_t( vertex_t::PixelToRatio( vecTemp[ 1 ] ), { 1.0, 0.0 }, clrEnd ),
@@ -667,42 +677,43 @@ void CDrawable::Line( vector2_t vecStart, vector2_t vecEnd, double dThickness, c
 		vertex_t( vertex_t::PixelToRatio( vecTemp[ 3 ] ), { 0.0, 1.0 }, clrBegin )
 	};
 
-	vecIndices =
+	vecProposedIndicies =
 	{
 		0, 1, 2,
 		0, 2, 3
 	};
 
-	DestroyBuffers( );
+	PostShapeChange( vecProposedVertices, vecProposedIndicies );
 }
 
 void CDrawable::Circle( const vector2_t& vecCenter, double dbRadius, color_t clrColor, std::size_t zResolution /*= 0*/ )
 {
+	decltype( vecVertices ) vecProposedVertices { };
+	decltype( vecIndices ) vecProposedIndicies { };
+
 	if ( zResolution <= 2u )
 		zResolution = std::size_t( std::round( dbRadius * 2.0 * vector2_t::PI ) );
 
 	auto vecPoints = vector2_t::GetCirclePoints( dbRadius, zResolution );
 	const auto zSize = vecPoints.size( );
 
-	vecVertices.clear( );
-	vecIndices.clear( );
-	vecVertices.emplace_back( vertex_t( vertex_t::PixelToRatio( vecCenter ), { 0.5, 0.5 }, clrColor ) );
-	vecVertices.emplace_back( vertex_t( vertex_t::PixelToRatio( vecPoints[ 0 ] + vecCenter ), ( vecPoints[ 0 ] + dbRadius ) / ( 2.0 * dbRadius ), clrColor ) );
+	vecProposedVertices.emplace_back( vertex_t( vertex_t::PixelToRatio( vecCenter ), { 0.5, 0.5 }, clrColor ) );
+	vecProposedVertices.emplace_back( vertex_t( vertex_t::PixelToRatio( vecPoints[ 0 ] + vecCenter ), ( vecPoints[ 0 ] + dbRadius ) / ( 2.0 * dbRadius ), clrColor ) );
 
 	for ( auto z = 1u; z < zSize; z++ )
 	{
-		vecVertices.emplace_back( vertex_t( vertex_t::PixelToRatio( vecPoints[ z ] + vecCenter ), ( vecPoints[ z ] + dbRadius ) / ( 2.0 * dbRadius ), clrColor ) );
-		vecIndices.emplace_back( 0 );
-		vecIndices.emplace_back( z - 1 );
-		vecIndices.emplace_back( z );
+		vecProposedVertices.emplace_back( vertex_t( vertex_t::PixelToRatio( vecPoints[ z ] + vecCenter ), ( vecPoints[ z ] + dbRadius ) / ( 2.0 * dbRadius ), clrColor ) );
+		vecProposedIndicies.emplace_back( 0 );
+		vecProposedIndicies.emplace_back( z - 1 );
+		vecProposedIndicies.emplace_back( z );
 	}
 
-	vecVertices.emplace_back( vecVertices.front( ) );
-	vecIndices.emplace_back( 0 );
-	vecIndices.emplace_back( 1 );
-	vecIndices.emplace_back( zSize - 1 );
+	vecProposedVertices.emplace_back( vecProposedVertices.front( ) );
+	vecProposedIndicies.emplace_back( 0 );
+	vecProposedIndicies.emplace_back( 1 );
+	vecProposedIndicies.emplace_back( zSize - 1 );
 
-	DestroyBuffers( );
+	PostShapeChange( vecProposedVertices, vecProposedIndicies );
 }
 
 void CDrawable::Circle( const Utilities::vector2_t & vecCenter, double dbRadius, color_t clrPerimeter, color_t clrCenter, std::size_t zResolution /*= 0*/ )
@@ -712,8 +723,18 @@ void CDrawable::Circle( const Utilities::vector2_t & vecCenter, double dbRadius,
 	_Vertex = vertex_t( { _Vertex.x, _Vertex.y }, clrCenter );
 }
 
-void CDrawable::DestroyBuffers( )
+void CDrawable::PostShapeChange( const decltype( vecVertices )& vecProposedVertices, const decltype( vecIndices )& vecProposedIndices )
 {
+	const auto uNewVertexHash = CRYPTO.GenerateNumericHash( &vecProposedVertices[ 0 ], sizeof( vertex_t ) * vecProposedVertices.size( ) ),
+		uNewIndexHash = CRYPTO.GenerateNumericHash( &vecProposedIndices[ 0 ], sizeof( unsigned ) * vecProposedIndices.size( ) );
+
+	if ( uNewVertexHash == uVertexHash
+		 && uNewIndexHash == uIndexHash )
+		return;
+
+	uVertexHash = uNewVertexHash, uIndexHash = uNewIndexHash;
+	vecVertices = vecProposedVertices, vecIndices = vecProposedIndices;
+
 	if ( pVertexBuffer != nullptr )
 	{
 		pVertexBuffer->Release( );

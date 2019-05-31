@@ -69,6 +69,7 @@ class CDrawable
 private:
 
 	bool bCreated = false;
+	unsigned uVertexHash = 0u, uIndexHash = 0u;
 	std::vector< vertex_t > vecVertices { };
 	std::vector< unsigned > vecIndices { };
 	D3D_PRIMITIVE_TOPOLOGY _Topology = D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
@@ -104,7 +105,7 @@ public:
 	void Line( Utilities::vector2_t vecStart, Utilities::vector2_t vecEnd, double dThickness, color_t clrBegin, color_t clrEnd );
 	void Circle( const Utilities::vector2_t& vecCenter, double dbRadius, color_t clrColor, std::size_t zResolution = 0 );
 	void Circle( const Utilities::vector2_t& vecCenter, double dbRadius, color_t clrPerimeter, color_t clrCenter, std::size_t zResolution = 0 );
-	void DestroyBuffers( );
+	void PostShapeChange( const decltype( vecVertices )& vecProposedVertices, const decltype( vecIndices )& vecProposedIndices );
 	ID3D11Texture2D* RenderToTexture( );
 
 	friend class CDrawing;

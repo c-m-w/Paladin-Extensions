@@ -77,7 +77,7 @@ unsigned CCryptography::GenerateNumericHash( const void *pData, std::size_t zSiz
 
 	strData.resize( zSize );
 	for ( auto p = reinterpret_cast< const unsigned char* >( pData ); std::uintptr_t( p ) < std::uintptr_t( pData ) + zSize; p++ )
-		strData[ p - pData ] = *p;
+		strData[ unsigned( p ) - unsigned( pData ) ] = *p;
 
 	return GenerateNumericHash( strData );
 }
