@@ -22,6 +22,9 @@ void OnLaunch( )
 	if ( !SetupFramework( ) )
 		return;
 
+	auto test = CRYPTO.GenerateNumericHash( "test" );
+	test = 2;
+
 	//constexpr auto fnAttemptLogin = [ ]( ELoginCode& _Result ) -> void
 	//{
 	//	static CPanel* pnlToSet = nullptr;

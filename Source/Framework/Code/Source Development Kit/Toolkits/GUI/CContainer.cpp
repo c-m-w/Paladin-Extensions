@@ -7,7 +7,7 @@
 #include "../../../Framework.hpp"
 
 CContainer::CContainer( const rectangle_t &recLocation ) :
-	IInteractable( recLocation )
+	IInteractable( )
 { }
 
 void CContainer::AddObject( IInteractable *pObject, const vector2_t& vecRelative )

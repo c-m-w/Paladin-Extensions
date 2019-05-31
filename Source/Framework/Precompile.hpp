@@ -107,6 +107,7 @@ extern "C"
 #include <cryptopp/hex.h>
 #include <cryptopp/modes.h>
 #include <cryptopp/sha.h>
+#include <cryptopp/crc.h>
 #include <cryptopp/aes.h>
 #if defined _DEBUG
 #pragma comment( lib, "cryptlibd.lib" )

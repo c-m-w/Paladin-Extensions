@@ -29,7 +29,8 @@ protected:
 
 public:
 
-	IRow( ) = default;
+	IRow( const rectangle_t& recLocation );
+	virtual ~IRow( ) = default;
 
 	virtual void AddWidget( IWidget* pWidget ) = 0;
 	virtual void RemoveWidget( IWidget* pWidget ) = 0;

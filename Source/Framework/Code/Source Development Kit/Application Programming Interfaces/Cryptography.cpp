@@ -52,18 +52,23 @@ bool CCryptography::Initialize( )
 void CCryptography::Uninitialize( )
 { }
 
-std::string CCryptography::GenerateHash( const std::string &strBytes )
+unsigned CCryptography::GenerateNumericHash( const std::string &strBytes )
 {
-	unsigned char bOutput[ CryptoPP::SHA1::DIGESTSIZE ];
-	CryptoPP::SHA1( ).CalculateDigest( bOutput, reinterpret_cast< unsigned char* >( const_cast< char* >( strBytes.c_str( ) ) ), strBytes.length( ) );
-	CryptoPP::HexEncoder hHash;
-	std::string strOutput;
+	auto strOutput = GenerateHash< CryptoPP::CRC32 >( strBytes ).substr( 0, 8 );
+	auto uReturn = 0u;
 
-	hHash.Attach( new CryptoPP::StringSink( strOutput ) );
-	hHash.Put( bOutput, sizeof( unsigned char[ CryptoPP::SHA1::DIGESTSIZE ] ) );
-	hHash.MessageEnd( );
-	std::transform( strOutput.begin( ), strOutput.end( ), strOutput.begin( ), tolower );
-	return strOutput;
+	try
+	{
+		char* pBuffer = nullptr;
+
+		uReturn = std::strtoul( &strOutput[0], &pBuffer, 16 );
+	}
+	catch( std::out_of_range& e )
+	{
+		LOG( WARNING, CRYPTOGRAPHY, "Unable to get value of CRC32 hash. Message: %s.", e.what( ) );
+	}
+
+	return uReturn;
 }
 
 bool CCryptography::Encode( const std::string &strSubject, std::string &strOut )

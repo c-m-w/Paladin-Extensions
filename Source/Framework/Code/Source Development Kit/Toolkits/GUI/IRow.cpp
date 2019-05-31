@@ -6,6 +6,10 @@
 #define USE_NAMESPACES
 #include "../../../Framework.hpp"
 
+IRow::IRow( const rectangle_t &recLocation ) :
+	CContainer( recLocation )
+{ }
+
 std::vector<IInteractable*> CHorizontalRow::GetWidgets( )
 {
 	std::vector< IInteractable* > vecReturn { };
@@ -62,8 +66,8 @@ void CHorizontalRow::AdjustWidgetPositions( )
 			vecWidgets[ i ][ j ]->PreCreateDrawables( );
 }
 
-CHorizontalRow::CHorizontalRow( const rectangle_t & recLocation ):
-	CContainer( recLocation )
+CHorizontalRow::CHorizontalRow( const rectangle_t& recLocation ):
+	IRow( recLocation )
 { }
 
 void CHorizontalRow::AddWidget( IWidget * pWidget )
@@ -148,7 +152,8 @@ void CVerticalRow::AdjustWidgetPositions( )
 			vecWidgets[ i ][ j ]->PreCreateDrawables( );
 }
 
-CVerticalRow::CVerticalRow( const rectangle_t &recLocation )
+CVerticalRow::CVerticalRow( const rectangle_t &recLocation ) :
+	IRow( recLocation )
 {}
 
 void CVerticalRow::AddWidget( IWidget *pWidget )

@@ -41,6 +41,7 @@ protected:
 
 	CContainer* pParent = nullptr;
 	rectangle_t recLocation { };
+	double dbTransparency = 0.0;
 	Utilities::vector2_t vecRelative { };
 	padding_t _Padding { };
 	std::vector< CDrawable* > vecDrawables { };
@@ -75,4 +76,3 @@ public:
 	virtual void OnKeyTyped( char chCharacter, CKeyState _State );
 	virtual void OnScroll( int iScrollAmount );
 };
-
