@@ -4,9 +4,9 @@
 
 template< typename _t /*= CryptoPP::SHA1*/ > std::string CCryptography::GenerateHash( const std::string& strBytes )
 {
-	unsigned char bOutput[ CryptoPP::SHA1::DIGESTSIZE ];
-	std::string strOutput;
-	CryptoPP::HexEncoder hHash;
+	unsigned char bOutput[ CryptoPP::SHA1::DIGESTSIZE ] { };
+	std::string strOutput { };
+	CryptoPP::HexEncoder hHash { };
 
 	_t( ).CalculateDigest( bOutput, reinterpret_cast< unsigned char* >( const_cast< char* >( strBytes.c_str( ) ) ), strBytes.length( ) );
 	hHash.Attach( new CryptoPP::StringSink( strOutput ) );
