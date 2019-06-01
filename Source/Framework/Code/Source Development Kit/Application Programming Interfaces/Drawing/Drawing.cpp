@@ -387,7 +387,7 @@ void CDrawable::SetTexture( const bitmap_t & _Bitmap, ID3D11Texture2D* pColorTex
 	_ResourceData.SysMemPitch = std::size_t( _Bitmap.vecSize.x ) * sizeof( DWORD );
 	_ResourceData.SysMemSlicePitch = vecBytes.size( ) * sizeof( DWORD );
 
-	if ( SUCCEEDED( _Drawing.pDevice->CreateTexture2D( &_TextureDescription, &_ResourceData, &pBufferTexture ) ) )
+	if ( !SUCCEEDED( _Drawing.pDevice->CreateTexture2D( &_TextureDescription, &_ResourceData, &pBufferTexture ) ) )
 		return LOG( WARNING, DRAWING, "Unable to create texture for text." );
 
 	_ShaderResourceViewDescription.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
@@ -758,7 +758,7 @@ void CDrawable::PostShapeChange( const decltype( vecVertices )& vecProposedVerti
 
 ID3D11Texture2D* CDrawable::RenderToTexture( )
 {
-	if ( !bCreated )
+	if ( !Create( ) )
 		return LOG( WARNING, DRAWING, "Attempting to render to texture without creating shape beforehand." ), nullptr;
 
 	if ( pRenderedTexture )

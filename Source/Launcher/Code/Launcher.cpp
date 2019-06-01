@@ -22,9 +22,6 @@ void OnLaunch( )
 	if ( !SetupFramework( ) )
 		return;
 
-	auto test = CRYPTO.GenerateNumericHash( "test" );
-	test = 2;
-
 	//constexpr auto fnAttemptLogin = [ ]( ELoginCode& _Result ) -> void
 	//{
 	//	static CPanel* pnlToSet = nullptr;
@@ -269,7 +266,7 @@ bool SetupInterface( )
 
 void Draw( )
 {
-	auto test = FONTS.CreateBitmap( "testing", FONT_ENVY, 8 );
+	auto test = FONTS.CreateBitmap( "testing", FONT_ENVY, 16, 45.0 );
 
 	for ( auto y = 0; y < ( int )test.vecSize.y; y++ )
 	{
@@ -288,18 +285,25 @@ void Draw( )
 		color_t( { 0, 255, 0, 255 } ),
 		color_t( { 255, 0, 0, 255 } ),
 	};
-	//pDrawable->Rectangle( rectangle_t( 0, 0, 200, 100 ), clr, color_t { 0, 0, 255, 255 } );
+	//pDrawable->Rectangle( rectangle_t( 0, 0, test.vecSize.x, test.vecSize.y ), clr, color_t { 0, 0, 255, 255 } );
 	//pDrawable->Line( { 5.0, 10.0 }, { 100.0, 50.0 }, 2.0, clr[ 0 ], clr[ 1 ] );
-	pDrawable->Circle( { 100, 100 }, 50, { 255, 255, 255 ,255 } );
+	//pDrawable->Circle( { 100, 100 }, 50, { 255, 255, 255 ,255 } );
 	//pDrawable->RoundedRectangle( rectangle_t( 20, 20, 50, 70 ), b, clr, color_t { 255, 255, 255, 255 }, 0.2 );
-	//pDrawable->SetTexture( test, pDrawable->RenderToTexture( ) );
-	pDrawable->SetTexture( "PX Loading.png" );
+	pDrawable->SetTexture( test, color_t { 255, 255, 255, 255 } );
+	//pDrawable->SetTexture( "PX Loading.png" );
 	//pDrawable->SetTexture( test, color_t { 255, 255, 255, 255 } );
+
+	static double dbRotation = 0.0;
 
 	while ( !bExit )
 	{
 		if ( pApplicationWindow->PollInput( ) )
 			continue;
+
+		dbRotation += 3.0;
+
+		test = FONTS.CreateBitmap( "testing", FONT_ENVY, 16, dbRotation );
+		pDrawable->SetTexture( test, color_t { 255, 255, 255, 255 } );
 
 		DRAW.BeginFrame( );
 		pDrawable->Draw( );

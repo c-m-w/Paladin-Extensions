@@ -63,6 +63,6 @@ private:
 
 public:
 
-	bitmap_t CreateBitmap( char* szText, EFont _Font, double dbSize );
-	Utilities::vector2_t CalculateTextSize( char* szText, EFont _Font, double dbSize );
+	bitmap_t CreateBitmap( char* szText, EFont _Font, double dbSize, double dbRotation );
+	Utilities::vector2_t CalculateTextSize( char* szText, EFont _Font, double dbSize, double dbRotation );
 } inline _FontManager;
