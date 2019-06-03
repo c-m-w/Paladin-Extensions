@@ -5,6 +5,8 @@
 #define ACKNOWLEDGED_ENTRY_WARNING_1
 #define USE_NAMESPACES
 #define USE_DEFINITIONS
+#define NANOSVG_IMPLEMENTATION
+#define NANOSVGRAST_IMPLEMENTATION
 #include "../../../Framework.hpp"
 
 rectangle_t::rectangle_t( double x, double y, double w, double h ): vecLocation( x, y ), vecSize( w, h )
@@ -261,12 +263,74 @@ void CDrawable::SetTexture( const std::string& strResourceName )
 {
 	const auto& strData = _ResourceManager.GetResource( strResourceName );
 
+	if ( strData.empty( ) )
+		return;
+
 	if ( pTexture != nullptr )
 		pTexture->Release( );
 
 	pTexture = nullptr;
 	if ( !SUCCEEDED( D3DX11CreateShaderResourceViewFromMemory( _Drawing.pDevice, &strData[ 0 ], strData.size( ), nullptr, nullptr, &pTexture, nullptr ) ) )
 		LOG( WARNING, DRAWING, "Could not create SRV from resource." );
+}
+
+void CDrawable::SetTexture( const std::string &strSVGResourceName, const Utilities::vector2_t &vecSize )
+{
+	auto& strData = _ResourceManager.GetResource( strSVGResourceName );
+
+	if ( strData.empty( ) )
+		return;
+
+	const auto pImage = nsvgParse( &strData[ 0 ], ENC( "px" ), GetScreenDPI( ).x );
+
+	if ( pImage == nullptr )
+		return LOG( WARNING, DRAWING, "Unable to parse SVG image %s.", strSVGResourceName.c_str( ) );
+
+	const auto pRasterizer = nsvgCreateRasterizer( );
+
+	if ( pRasterizer == nullptr )
+		return LOG( WARNING, DRAWING, "Unable to initialize SVG rasterizer." ), nsvgDelete( pImage );
+
+	const auto zImageData = unsigned( std::round( vecSize.x * vecSize.y ) ) * sizeof( DWORD );
+	const auto bImageData = new unsigned char[ zImageData ];
+	D3D11_TEXTURE2D_DESC _TextureDescription { };
+	D3D11_SUBRESOURCE_DATA _ResourceData { };
+	ID3D11Texture2D* pBufferTexture = nullptr;
+	D3D11_SHADER_RESOURCE_VIEW_DESC _ShaderResourceViewDescription { };
+
+	memset( bImageData, 0, zImageData );
+	nsvgRasterize( pRasterizer, pImage, 0.f, 0.f, 1.f, bImageData, int( vecSize.x ), int( vecSize.y ), int( vecSize.x ) * sizeof( unsigned ) );
+	nsvgDelete( pImage );
+	nsvgDeleteRasterizer( pRasterizer );
+
+	_TextureDescription.Width = std::size_t( vecSize.x );
+	_TextureDescription.Height = std::size_t( vecSize.y );
+	_TextureDescription.MipLevels = 1;
+	_TextureDescription.ArraySize = 1;
+	_TextureDescription.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	_TextureDescription.SampleDesc.Count = 1;
+	_TextureDescription.Usage = D3D11_USAGE_DEFAULT;
+	_TextureDescription.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+	_TextureDescription.CPUAccessFlags = 0;
+	_TextureDescription.MiscFlags = 0;
+
+	_ResourceData.pSysMem = bImageData;
+	_ResourceData.SysMemPitch = std::size_t( vecSize.x ) * sizeof( DWORD );
+	_ResourceData.SysMemSlicePitch = zImageData;
+
+	_Drawing.pDevice->CreateTexture2D( &_TextureDescription, &_ResourceData, &pBufferTexture );
+
+	_ShaderResourceViewDescription.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	_ShaderResourceViewDescription.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	_ShaderResourceViewDescription.Texture2D.MostDetailedMip = 0;
+	_ShaderResourceViewDescription.Texture2D.MipLevels = 1;
+
+	if ( pTexture != nullptr )
+		pTexture->Release( );
+
+	_Drawing.pDevice->CreateShaderResourceView( pBufferTexture, &_ShaderResourceViewDescription, &pTexture );
+
+	delete[ ] bImageData;
 }
 
 void CDrawable::SetTexture( ID3D11Texture2D* pNewTexture )

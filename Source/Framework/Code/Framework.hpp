@@ -6,6 +6,9 @@
 #define NO_ENTRY
 #include "Development Environment/Entry Manager.hpp"
 
+#include <nanosvg/src/nanosvg.h>
+#include <nanosvg/src/nanosvgrast.h>
+
 #include "Development Environment/Icon Font Definitions/Font Awesome Icons.hpp"
 #include "Development Environment/Icon Font Definitions/Material Design Icons.hpp"
 #include "Source Development Kit/Application Programming Interfaces/Utilities.hpp"

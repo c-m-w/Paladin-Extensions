@@ -13,3 +13,6 @@
 [submodule "Source/Dependencies/Include/freetype-windows-binaries"]
 	path = Source/Dependencies/Include/freetype-windows-binaries
 	url = https://github.com/ubawurinna/freetype-windows-binaries
+[submodule "Source/Dependencies/Include/nanosvg"]
+	path = Source/Dependencies/Include/nanosvg
+	url = https://github.com/memononen/nanosvg

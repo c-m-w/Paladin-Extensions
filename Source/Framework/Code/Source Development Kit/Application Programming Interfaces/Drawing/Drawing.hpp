@@ -80,12 +80,13 @@ private:
 public:
 
 	CDrawable( ) = default;
-
+	
 	bool Create( );
 	void Draw( );
 	void Destroy( );
 	void SetDrawingType( D3D_PRIMITIVE_TOPOLOGY _New );
 	void SetTexture( const std::string& strResourceName );
+	void SetTexture( const std::string& strSVGResourceName, const Utilities::vector2_t& vecSize );
 	void SetTexture( ID3D11Texture2D* pNewTexture );
 	void SetTexture( const bitmap_t& _Bitmap, const color_t& clrText );
 	void SetTexture( const bitmap_t& _Bitmap, ID3D11Texture2D* pColorTexture );
