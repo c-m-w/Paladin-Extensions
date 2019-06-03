@@ -244,28 +244,33 @@ char* CFontManager::RenderGlyph( char* szText )
 	return szText + 1;
 }
 
-bitmap_t CFontManager::CreateBitmap( char *szText, EFont _Font, double dbSize, double dbRotation )
+bitmap_t CFontManager::CreateBitmap( char *szText, EFont _Font, double dbSize, double dbRotation /*= 0.0*/ )
 {
 	const auto vecDPI = GetScreenDPI( );
 	FT_Matrix _RotationMatrix { };
 	bitmap_t _Return { };
 	auto uAdvance = 0u, uPreviousIndex = 0u;
+	vector2_t vecOffset { };
 	auto dbVerticalOffset = 0.0;
 
 	dbRotation /= 180.0;
 	dbRotation *= vector2_t::PI;
 	_CurrentFont = _Fonts[ _Font ];
-	_RotationMatrix.xx = FT_Fixed( cos( dbRotation ) * 0x10000 );
-	_RotationMatrix.xy = FT_Fixed( -sin( dbRotation ) * 0x10000 );
-	_RotationMatrix.yx = FT_Fixed( sin( dbRotation ) * 0x10000 );
-	_RotationMatrix.yy = FT_Fixed( cos( dbRotation ) * 0x10000 );
 
+	if ( dbRotation != 0.0 )
+	{
+		_RotationMatrix.xx = FT_Fixed( cos( dbRotation ) * 0x10000 );
+		_RotationMatrix.xy = FT_Fixed( -sin( dbRotation ) * 0x10000 );
+		_RotationMatrix.yx = FT_Fixed( sin( dbRotation ) * 0x10000 );
+		_RotationMatrix.yy = FT_Fixed( cos( dbRotation ) * 0x10000 );
+	}
+
+	FT_Set_Transform( _CurrentFont, dbRotation == 0.0 ? nullptr : &_RotationMatrix, nullptr );
 	FT_Set_Char_Size( _CurrentFont, 0, std::size_t( dbSize ) << 6, int( vecDPI.x ), int( vecDPI.y ) );
 
 	while ( *szText != 0 )
 	{
 		FT_Vector vecKerning { };
-		FT_Set_Transform( _CurrentFont, &_RotationMatrix, nullptr );
 		szText = RenderGlyph( szText );
 
 		if ( uPreviousIndex != 0u )
@@ -281,7 +286,7 @@ bitmap_t CFontManager::CreateBitmap( char *szText, EFont _Font, double dbSize, d
 			{
 				_Return.Resize( { _Return.vecSize.x - dbHorizontalLocation, _Return.vecSize.y } );
 				dbHorizontalLocation *= -1.0;
-				uAdvance += dbHorizontalLocation;
+				uAdvance += dbHorizontalLocation * 2.0;
 			}
 
 			if ( dbCurrentVerticalOffset < 0.0 )
@@ -294,7 +299,20 @@ bitmap_t CFontManager::CreateBitmap( char *szText, EFont _Font, double dbSize, d
 
 			_Return.Insert( { dbHorizontalLocation, dbCurrentVerticalOffset },
 							{ _CurrentFont->glyph->bitmap.buffer, { double( _CurrentFont->glyph->bitmap.width ), double( _CurrentFont->glyph->bitmap.rows ) } } );
-			uAdvance += std::max( int( _CurrentFont->glyph->advance.x >> 6 ), int( dbHorizontalLocation ) - int( uAdvance ) + int( _CurrentFont->bbox.xMax - _CurrentFont->bbox.xMin >> 6 ) );
+			if ( dbRotation == 0.0 )
+				uAdvance += _CurrentFont->glyph->advance.x >> 6;
+			else
+			{
+				FT_Set_Transform( _CurrentFont, nullptr, nullptr );
+				szText = RenderGlyph( --szText );
+				FT_Set_Transform( _CurrentFont, &_RotationMatrix, nullptr );
+
+				const auto vecReference = vector2_t( double( _CurrentFont->glyph->bitmap.width ) / 2.0, double( _CurrentFont->glyph->bitmap.rows ) / 2.0 );
+				const auto dbRatio = sin( atan2( vecReference.x, vecReference.y ) + dbRotation );
+				const auto dbExtensionWidth = dbRatio * vecReference.Length( );
+
+				uAdvance += ( _CurrentFont->glyph->advance.x >> 6 ) + unsigned( std::round( ( dbExtensionWidth - vecReference.x ) * 2.0 ) );
+			}
 			uPreviousIndex = _CurrentFont->glyph->glyph_index;
 		}
 	}
@@ -303,7 +321,7 @@ bitmap_t CFontManager::CreateBitmap( char *szText, EFont _Font, double dbSize, d
 	return _Return;
 }
 
-vector2_t CFontManager::CalculateTextSize( char* szText, EFont _Font, double dbSize, double dbRotation )
+vector2_t CFontManager::CalculateTextSize( char* szText, EFont _Font, double dbSize, double dbRotation /*= 0.0*/ )
 {
 	return CreateBitmap( szText, _Font, dbSize, dbRotation ).vecSize;
 }

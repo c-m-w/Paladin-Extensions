@@ -266,7 +266,7 @@ bool SetupInterface( )
 
 void Draw( )
 {
-	auto test = FONTS.CreateBitmap( "testing", FONT_ENVY, 16, 45.0 );
+	auto test = FONTS.CreateBitmap( "testing", FONT_ENVY, 16 );
 
 	for ( auto y = 0; y < ( int )test.vecSize.y; y++ )
 	{
@@ -293,24 +293,16 @@ void Draw( )
 	//pDrawable->SetTexture( "PX Loading.png" );
 	//pDrawable->SetTexture( test, color_t { 255, 255, 255, 255 } );
 
-	static double dbRotation = 0.0;
-
 	while ( !bExit )
 	{
 		if ( pApplicationWindow->PollInput( ) )
 			continue;
-
-		dbRotation += 3.0;
-
-		test = FONTS.CreateBitmap( "testing", FONT_ENVY, 16, dbRotation );
-		pDrawable->SetTexture( test, color_t { 255, 255, 255, 255 } );
-
 		DRAW.BeginFrame( );
 		pDrawable->Draw( );
 		//DrawWindows( );
 		DRAW.EndFrame( );
 
-		Pause( 17ui64 );
+		//Pause( 17ui64 );
 	}
 
 	pApplicationWindow->Destroy( );
