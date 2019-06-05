@@ -22,60 +22,6 @@ void OnLaunch( )
 	if ( !SetupFramework( ) )
 		return;
 
-
-
-
-
-
-	FS.ChangeWorkingDirectory( R"(D:\Downloads\)" );
-
-	std::vector< std::string > _Folders;
-	FS.GetFoldersInDirectory( "AAA CSGO SDKs", _Folders );
-
-	for ( auto i = 0u; i < _Folders.size( ); i++ )
-	{
-		std::vector< std::string > _Buffer;
-		FS.GetFoldersInDirectory( "AAA CSGO SDKs\\" + _Folders[ i ], _Buffer );
-		for ( auto& _Folder: _Buffer )
-			_Folders.emplace_back( _Folders[ i ] + "\\" + _Folder );
-
-		std::vector< std::string > _Files;
-		FS.GetFilesInDirectory( "AAA CSGO SDKs\\" + _Folders[ i ], _Files );
-
-		for ( auto ii = 0u; ii < _Files.size( ); ii++ )
-		{
-			if ( _Files[ ii ].find_last_of( "." ) == std::string::npos )
-				continue;
-
-			auto strExtension = _Files[ ii ].substr( _Files[ ii ].find_last_of( "." ), _Files[ ii ].length( ) );
-			if ( strExtension == ".h"
-				 || strExtension == ".c"
-				 || strExtension == ".hpp"
-				 || strExtension == ".cpp" )
-			{
-				_Files.erase( _Files.begin( ) + ii );
-				ii--;
-			}
-		}
-
-		for ( auto strFile: _Files )
-		{
-			strFile = "AAA CSGO SDKs\\" + _Folders[ i ] + "\\" + strFile;
-			FS.DeletePath( strFile );
-		}
-	}
-
-
-
-
-
-
-
-
-
-
-	return;
-
 	//constexpr auto fnAttemptLogin = [ ]( ELoginCode& _Result ) -> void
 	//{
 	//	static CPanel* pnlToSet = nullptr;
