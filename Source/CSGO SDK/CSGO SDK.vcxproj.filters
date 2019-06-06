@@ -27224,7 +27224,7 @@
     <ClCompile Include="Code\Valve\engine\console.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Code\Valve\engine\cvar.cpp">
+    <ClCompile Include="Code\Valve\engine\cvar_engine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Code\Valve\engine\debug_leafvis.cpp">
@@ -27236,7 +27236,7 @@
     <ClCompile Include="Code\Valve\engine\decal_clip.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Code\Valve\engine\decals.cpp">
+    <ClCompile Include="Code\Valve\engine\decals_engine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Code\Valve\engine\demofile.cpp">
@@ -27452,7 +27452,7 @@
     <ClCompile Include="Code\Valve\engine\matsys_interface.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Code\Valve\engine\mem.cpp">
+    <ClCompile Include="Code\Valve\engine\mem_engine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Code\Valve\engine\mem_fgets.cpp">
@@ -27645,9 +27645,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Code\Valve\engine\tmessage.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Code\Valve\engine\toolframework.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Code\Valve\engine\traceinit.cpp">

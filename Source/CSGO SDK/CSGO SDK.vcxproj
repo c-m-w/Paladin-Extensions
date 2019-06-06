@@ -9121,10 +9121,10 @@
     <ClCompile Include="Code\Valve\engine\colorcorrectionpanel.cpp" />
     <ClCompile Include="Code\Valve\engine\common.cpp" />
     <ClCompile Include="Code\Valve\engine\console.cpp" />
-    <ClCompile Include="Code\Valve\engine\cvar.cpp" />
+    <ClCompile Include="Code\Valve\engine\cvar_engine.cpp" />
     <ClCompile Include="Code\Valve\engine\debugoverlay.cpp" />
     <ClCompile Include="Code\Valve\engine\debug_leafvis.cpp" />
-    <ClCompile Include="Code\Valve\engine\decals.cpp" />
+    <ClCompile Include="Code\Valve\engine\decals_engine.cpp" />
     <ClCompile Include="Code\Valve\engine\decal_clip.cpp" />
     <ClCompile Include="Code\Valve\engine\demofile.cpp" />
     <ClCompile Include="Code\Valve\engine\DevShotGenerator.cpp" />
@@ -9197,7 +9197,7 @@
     <ClCompile Include="Code\Valve\engine\matchmakingshared.cpp" />
     <ClCompile Include="Code\Valve\engine\materialproxyfactory.cpp" />
     <ClCompile Include="Code\Valve\engine\matsys_interface.cpp" />
-    <ClCompile Include="Code\Valve\engine\mem.cpp" />
+    <ClCompile Include="Code\Valve\engine\mem_engine.cpp" />
     <ClCompile Include="Code\Valve\engine\mem_fgets.cpp" />
     <ClCompile Include="Code\Valve\engine\ModelInfo.cpp" />
     <ClCompile Include="Code\Valve\engine\modelloader.cpp" />
@@ -9262,7 +9262,6 @@
     <ClCompile Include="Code\Valve\engine\sys_mainwind.cpp" />
     <ClCompile Include="Code\Valve\engine\testscriptmgr.cpp" />
     <ClCompile Include="Code\Valve\engine\tmessage.cpp" />
-    <ClCompile Include="Code\Valve\engine\toolframework.cpp" />
     <ClCompile Include="Code\Valve\engine\traceinit.cpp" />
     <ClCompile Include="Code\Valve\engine\vengineserver_impl.cpp" />
     <ClCompile Include="Code\Valve\engine\vgui_askconnectpanel.cpp" />
