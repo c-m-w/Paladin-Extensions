@@ -22,69 +22,6 @@ void OnLaunch( )
 	if ( !SetupFramework( ) )
 		return;
 
-
-
-
-
-
-
-
-
-
-	FS.ChangeWorkingDirectory( R"(C:\Users\Jeremiah\Documents\Paladin-Extensions\Source\CSGO SDK\Code\)" );
-
-	std::vector< std::string > _Folders;
-	FS.GetFoldersInDirectory( "Valve", _Folders );
-	std::vector< std::string > _Files;
-	std::vector< std::string > _DuplicateFiles;
-
-	for ( auto i = 0u; i < _Folders.size( ); i++ )
-	{
-		std::vector< std::string > _Buffer;
-
-		FS.GetFoldersInDirectory( "Valve\\" + _Folders[ i ], _Buffer );
-		for ( auto& _Folder: _Buffer )
-			_Folders.emplace_back( _Folders[ i ] + "\\" + _Folder );
-
-		FS.GetFilesInDirectory( "Valve\\" + _Folders[ i ], _Buffer );
-		for ( auto& _File: _Buffer )
-			_Files.emplace_back( _Folders[ i ] + "\\" + _File );
-	}
-
-	for ( int i = 0; i < _Files.size( ); i++ )
-	{
-		for ( int ii = 0; ii < _Files.size( ); ii++ )
-		{
-			if ( i == ii || _Files[i] == _Files[ii] )
-				continue;
-
-			if ( _Files[ i ].substr( _Files[ i ].find_last_of( "\\" ), _Files[ i ].length( ) ) ==
-				 _Files[ ii ].substr( _Files[ ii ].find_last_of( "\\" ), _Files[ ii ].length( ) ) )
-				_DuplicateFiles.emplace_back( _Files[ i ] + "\t\t|\t\t" +_Files[ ii ] );
-		}
-	}
-
-	_Folders.clear( );
-	_Files.clear( );
-
-	system( "clear" );
-
-	FS.ChangeWorkingDirectory( R"(C:\Users\Jeremiah\Desktop\)" );
-	std::string hi;
-	{
-		std::stringstream ss;
-		for ( auto& _File : _DuplicateFiles )
-			ss << _File << "\n";
-		hi = ss.str( ) + "\0";
-	}
-	FS.WriteFile( "dups.txt", hi, false );
-
-	Pause( 30000 );
-
-
-
-	return;
-
 	//constexpr auto fnAttemptLogin = [ ]( ELoginCode& _Result ) -> void
 	//{
 	//	static CPanel* pnlToSet = nullptr;
