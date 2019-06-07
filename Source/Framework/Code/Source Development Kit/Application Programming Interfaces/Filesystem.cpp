@@ -550,11 +550,11 @@ std::string CFilesystem::FileToPath( const std::string &strFile )
 	if ( strFinalFile[ 0 ] == '\\' )
 		strFinalFile.erase( strFinalFile.begin( ) );
 
-	//if ( strFinalFile.find( '\\' ) != std::string::npos
-	//	 && strFinalFile.find( '\\' ) != strFinalFile.length( ) - 1 )
-	//	throw std::runtime_error( ENC( "Cannot format a file in a non-current path."
-	//								 /*"Change the working directory rather than entering a relative directory;\n"
-	//								   "You may only modify a file in the current working directory."*/ ) );
+	if ( strFinalFile.find( '\\' ) != std::string::npos
+		 && strFinalFile.find( '\\' ) != strFinalFile.length( ) - 1 )
+		throw std::runtime_error( ENC( "Cannot format a file in a non-current path."
+									 /*"Change the working directory rather than entering a relative directory;\n"
+									   "You may only modify a file in the current working directory."*/ ) );
 
 	FormatDirectory( GetWorkingDirectory( ) );
 	return GetWorkingDirectory( ) + strFinalFile;

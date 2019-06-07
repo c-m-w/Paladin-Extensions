@@ -22,36 +22,6 @@ void OnLaunch( )
 	if ( !SetupFramework( ) )
 		return;
 
-
-
-	//$(SolutionDir)CSGO SDK\Code\Valve\...;
-
-	std::vector< std::string > _Folders;
-
-	FS.ChangeWorkingDirectory( R"(C:\Users\Jeremiah\Documents\Paladin-Extensions\Source\CSGO SDK\Code\)" );
-	FS.GetFoldersInDirectory( "Valve", _Folders );
-
-	for ( auto i = 0u; i < _Folders.size( ); i++ )
-	{
-		std::vector< std::string > _Buffer;
-
-		FS.GetFoldersInDirectory( "Valve\\" + _Folders[ i ], _Buffer );
-		for ( auto& _Folder : _Buffer )
-			_Folders.emplace_back( _Folders[ i ] + "\\" + _Folder );
-	}
-
-	std::stringstream ss;
-	for ( auto& _Folder : _Folders )
-		ss << R"($(SolutionDir)CSGO SDK\Code\)" << _Folder << ";";
-	ss << "\0";
-
-	FS.ChangeWorkingDirectory( R"(C:\Users\Jeremiah\Desktop\)" );
-	FS.WriteFile( "dups.txt", ss.str( ), false );
-
-	return;
-
-	
-
 	//constexpr auto fnAttemptLogin = [ ]( ELoginCode& _Result ) -> void
 	//{
 	//	static CPanel* pnlToSet = nullptr;
