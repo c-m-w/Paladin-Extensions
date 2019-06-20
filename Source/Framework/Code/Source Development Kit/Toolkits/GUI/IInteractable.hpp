@@ -4,19 +4,29 @@
 
 #include "GUI.hpp"
 
-class CContainer;
+class IContainer;
+
+enum EInteractableType
+{
+	INTERACTABLE_NONE,
+	INTERACTABLE_CONTAINER,
+	INTERACTABLE_WIDGET
+};
 
 enum EState
 {
-	/** \brief Not being interacted with. */
-	STATE_DORMANT,
+	STATE_NONE,
 	/** \brief Last interacted with. */
-	STATE_ACTIVED,
+	STATE_ACTIVATED	= 1 << 0,
 	/** \brief Currently being hovered. */
-	STATE_HOVERING,
+	STATE_HOVERING	= 1 << 1,
 	/** \brief Currently being clicked. */
-	STATE_CLICKING
+	STATE_CLICKING	= 1 << 2
 };
+
+EState operator|( EState lhs, EState rhs );
+EState operator&( EState lhs, EState rhs );
+EState operator~( EState rhs );
 
 struct padding_t
 {
@@ -39,30 +49,33 @@ class IInteractable
 {
 protected:
 
-	CContainer* pParent = nullptr;
+	IContainer* pParent = nullptr;
+	EInteractableType _Type = INTERACTABLE_NONE;
 	rectangle_t recLocation { };
 	double dbTransparency = 0.0;
 	Utilities::vector2_t vecRelative { };
 	padding_t _Padding { };
 	std::vector< CDrawable* > vecDrawables { };
-	EState _State = STATE_DORMANT;
+	EState _State = STATE_NONE;
 	std::string strToolTip { };
 
 public:
 
 	IInteractable( ) = default;
-	explicit IInteractable( const Utilities::vector2_t& vecSize );
-	explicit IInteractable( const padding_t& _Padding );
-	explicit IInteractable( const Utilities::vector2_t& vecSize, const padding_t& _Padding );
+	explicit IInteractable( EInteractableType _Type, const Utilities::vector2_t& vecSize );
+	explicit IInteractable( EInteractableType _Type, const padding_t& _Padding );
+	explicit IInteractable( EInteractableType _Type, const Utilities::vector2_t& vecSize, const padding_t& _Padding );
 	virtual ~IInteractable( ) = default;
 
-	void Initialize( CContainer* pNewParent, const rectangle_t& recNewLocation );
-	void Initialize( CContainer* pNewParent, const Utilities::vector2_t& vecNewLocation );
+	bool IsInteractableType( EInteractableType _TestType );
+	void Initialize( IContainer* pNewParent, const rectangle_t& recNewLocation );
+	void Initialize( IContainer* pNewParent, const Utilities::vector2_t& vecNewLocation );
 	rectangle_t GetLocation( );
 	Utilities::vector2_t GetSize( );
 	void PreCreateDrawables( );
 	void SetLocation( const Utilities::vector2_t& vecNew );
-	void PreStateChange( );
+	void AddState( EState _NewState );
+	void RemoveState( EState _NewState );
 	rectangle_t GetAbsoluteLocation( );
 	padding_t GetPadding( );
 	Utilities::vector2_t GetNetSize( );
@@ -73,6 +86,6 @@ public:
 	virtual void OnClick( CKeyState _State );
 	virtual void OnRightClick( CKeyState _State );
 	virtual void OnKeyPress( key_t _Code, CKeyState _State );
-	virtual void OnKeyTyped( char chCharacter, CKeyState _State );
+	virtual void OnKeyTyped( char chCharacter );
 	virtual void OnScroll( int iScrollAmount );
 };

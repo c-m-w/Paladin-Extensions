@@ -4,18 +4,33 @@
 
 #include "IInteractable.hpp"
 #include "IWidget.hpp"
-#include "CContainer.hpp"
+#include "IContainer.hpp"
 #include "IRow.hpp"
+#include "CWindow.hpp"
 
 class CGUI
 {
 private:
 
-	std::deque< int > t;
+	bool bAddedCallbacks = false;
+	bool bActive = true;
+	std::deque< CWindow* > vecWindows { };
+	IInteractable* pActiveInteractable = nullptr;
+	IInteractable* pHoveredInteractable = nullptr;
+
+	IInteractable* GetHoveredInteractable( IContainer* pContainer = nullptr );
+	void FindHoveredInteractable( );
+	void ResetActiveInteractable( );
 
 public:
 
-};
+	void Setup( );
+	void AddWindow( CWindow* pWindow );
+	void RemoveWindow( CWindow* pWindow );
+	void Draw( );
+	void Deactivate( );
+	void Activate( );
+} inline _GUI;
 
 namespace Interface
 {

@@ -7,16 +7,16 @@
 #include "../../../Framework.hpp"
 
 IRow::IRow( const rectangle_t &recLocation ) :
-	CContainer( recLocation )
+	IContainer( recLocation )
 { }
 
 std::vector<IInteractable*> CHorizontalRow::GetWidgets( )
 {
 	std::vector< IInteractable* > vecReturn { };
 
-	for ( auto u = 0u; u < vecObjects.size( ); u++ )
+	for ( auto u = 0u; u < vecInteractables.size( ); u++ )
 		if ( vecObjectAlignments[ u ] == _CurrentAlignment )
-			vecReturn.emplace_back( vecObjects[ u ] );
+			vecReturn.emplace_back( vecInteractables[ u ] );
 
 	return vecReturn;
 }
@@ -72,16 +72,16 @@ CHorizontalRow::CHorizontalRow( const rectangle_t& recLocation ):
 
 void CHorizontalRow::AddWidget( IWidget * pWidget )
 {
-	vecObjects.emplace_back( pWidget );
+	vecInteractables.emplace_back( pWidget );
 	vecObjectAlignments.emplace_back( _CurrentAlignment );
 	AdjustWidgetPositions( );
 }
 
 void CHorizontalRow::RemoveWidget( IWidget* pWidget )
 {
-	for ( auto u = 0u; u < vecObjects.size( ); u++ )
-		if ( vecObjects[ u ] == pWidget )
-			return vecObjects.erase( vecObjects.begin( ) + u ), vecObjectAlignments.erase( vecObjectAlignments.begin( ) + u ), void( );
+	for ( auto u = 0u; u < vecInteractables.size( ); u++ )
+		if ( vecInteractables[ u ] == pWidget )
+			return vecInteractables.erase( vecInteractables.begin( ) + u ), vecObjectAlignments.erase( vecObjectAlignments.begin( ) + u ), void( );
 }
 
 bool CHorizontalRow::Overfilled( )
@@ -98,9 +98,9 @@ std::vector<IInteractable *> CVerticalRow::GetWidgets( )
 {
 	std::vector< IInteractable* > vecReturn { };
 
-	for ( auto u = 0u; u < vecObjects.size( ); u++ )
+	for ( auto u = 0u; u < vecInteractables.size( ); u++ )
 		if ( vecObjectAlignments[ u ] == _CurrentAlignment )
-			vecReturn.emplace_back( vecObjects[ u ] );
+			vecReturn.emplace_back( vecInteractables[ u ] );
 
 	return vecReturn;
 }
@@ -158,16 +158,16 @@ CVerticalRow::CVerticalRow( const rectangle_t &recLocation ) :
 
 void CVerticalRow::AddWidget( IWidget *pWidget )
 {
-	vecObjects.emplace_back( pWidget );
+	vecInteractables.emplace_back( pWidget );
 	vecObjectAlignments.emplace_back( _CurrentAlignment );
 	AdjustWidgetPositions( );
 }
 
 void CVerticalRow::RemoveWidget( IWidget *pWidget )
 {
-	for ( auto u = 0u; u < vecObjects.size( ); u++ )
-		if ( vecObjects[ u ] == pWidget )
-			return vecObjects.erase( vecObjects.begin( ) + u ), vecObjectAlignments.erase( vecObjectAlignments.begin( ) + u ), void( );
+	for ( auto u = 0u; u < vecInteractables.size( ); u++ )
+		if ( vecInteractables[ u ] == pWidget )
+			return vecInteractables.erase( vecInteractables.begin( ) + u ), vecObjectAlignments.erase( vecObjectAlignments.begin( ) + u ), void( );
 }
 
 bool CVerticalRow::Overfilled( )

@@ -6,6 +6,21 @@
 #define USE_NAMESPACES
 #include "../../../Framework.hpp"
 
+EState operator|( EState lhs, EState rhs )
+{
+	return EState( int( lhs ) | int( rhs ) );
+}
+
+EState operator&( EState lhs, EState rhs )
+{
+	return EState( int( lhs ) & int( rhs ) );
+}
+
+EState operator~( EState rhs )
+{
+	return EState( ~int( rhs ) );
+}
+
 padding_t::padding_t( double dbTop, double dbLeft ) :
 	vecData( dbTop, dbLeft )
 { }
@@ -34,25 +49,30 @@ void padding_t::PutVerticalPadding( double dbVertical )
 	vecData.y = dbVertical;
 }
 
-IInteractable::IInteractable( const vector2_t &vecSize ) :
-	recLocation( 0.0, 0.0, vecSize.x, vecSize.y )
+IInteractable::IInteractable( EInteractableType _Type, const vector2_t &vecSize ) :
+	_Type( _Type ), recLocation( 0.0, 0.0, vecSize.x, vecSize.y )
 { }
 
-IInteractable::IInteractable( const padding_t &_Padding ) :
-	_Padding( _Padding )
+IInteractable::IInteractable( EInteractableType _Type, const padding_t &_Padding ) :
+	_Type( _Type ), _Padding( _Padding )
 { }
 
-IInteractable::IInteractable( const vector2_t& vecSize, const padding_t& _Padding ) :
-	recLocation( 0.0, 0.0, vecSize.x, vecSize.y ), _Padding( _Padding )
+IInteractable::IInteractable( EInteractableType _Type, const vector2_t& vecSize, const padding_t& _Padding ) :
+	_Type( _Type ), recLocation( 0.0, 0.0, vecSize.x, vecSize.y ), _Padding( _Padding )
 { }
 
-void IInteractable::Initialize( CContainer *pNewParent, const rectangle_t &recNewLocation )
+bool IInteractable::IsInteractableType( EInteractableType _TestType )
+{
+	return _Type == _TestType;
+}
+
+void IInteractable::Initialize( IContainer *pNewParent, const rectangle_t &recNewLocation )
 {
 	pParent = pNewParent;
 	recLocation = recNewLocation;
 }
 
-void IInteractable::Initialize( CContainer *pNewParent, const vector2_t &vecNewLocation )
+void IInteractable::Initialize( IContainer *pNewParent, const vector2_t &vecNewLocation )
 {
 	pParent = pNewParent;
 	recLocation.vecLocation = vecNewLocation;
@@ -79,8 +99,16 @@ void IInteractable::SetLocation( const vector2_t& vecNew )
 	recLocation.vecLocation = vecNew;
 }
 
-void IInteractable::PreStateChange( )
+void IInteractable::AddState( EState _NewState )
 {
+	_State = _State | _NewState;
+	PreCreateDrawables( );
+	OnStateChange( );
+}
+
+void IInteractable::RemoveState( EState _NewState )
+{
+	_State = _State & ~_NewState;
 	PreCreateDrawables( );
 	OnStateChange( );
 }
@@ -121,7 +149,7 @@ void IInteractable::OnRightClick( CKeyState _State )
 void IInteractable::OnKeyPress( key_t _Code, CKeyState _State )
 { }
 
-void IInteractable::OnKeyTyped( char chCharacter, CKeyState _State )
+void IInteractable::OnKeyTyped( char chCharacter )
 { }
 
 void IInteractable::OnScroll( int iScrollAmount )
