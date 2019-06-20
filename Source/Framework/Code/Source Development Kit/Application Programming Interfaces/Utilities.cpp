@@ -333,6 +333,78 @@ namespace Utilities
 		return !std::isnan( x ) && !std::isnan( y ) && !std::isnan( z );
 	}
 
+	timer_t::timer_t( moment_t mmtLength ):
+		mmtLength( mmtLength )
+	{ }
+
+	timer_t::timer_t( moment_t mmtLength, ETimerBehaviour _EndBehaviour ) :
+		mmtLength( mmtLength ), _EndBehaviour( _EndBehaviour )
+	{ }
+
+	void timer_t::Stop( )
+	{
+		mmtPauseTime = GetMoment( );
+		bPaused = true;
+	}
+
+	void timer_t::Start( )
+	{
+		if ( mmtStart == 0 )
+			mmtStart = GetMoment( );
+		else
+			mmtStart += GetRatio( ) * mmtLength;
+
+		bPaused = false;
+	}
+
+	void timer_t::Reset( )
+	{
+		mmtStart = 0;
+		bPaused = true;
+	}
+
+	void timer_t::SetLength( moment_t mmtNewLength )
+	{
+		mmtLength = mmtNewLength;
+	}
+
+	double timer_t::GetRatio( ) const
+	{
+		if ( mmtStart == 0 )
+			return 0.0;
+
+		const auto mmtCurrent = GetMoment( ) - mmtStart;
+
+		if ( mmtCurrent <= mmtLength )
+			return double( mmtCurrent ) / double( mmtLength );
+
+		switch( _EndBehaviour )
+		{
+			case BEHAVIOUR_CLAMP:
+			{
+				return 1.0;
+			}
+
+			case BEHAVIOUR_REFLECT:
+			{
+				const auto iReflections = moment_t( mmtCurrent / mmtLength );
+				const auto dbRatio = double( mmtCurrent % mmtLength ) / double( mmtLength );
+
+				return iReflections % 2 == 1 ? 1.0 - dbRatio : dbRatio;
+			}
+
+			case BEHAVIOUR_RESTART:
+			{
+				return double( mmtCurrent % mmtLength ) / double( mmtLength );
+			}
+
+			default:
+			{
+				return 0.0;
+			}
+		}
+	}
+
 	vector2_t GetScreenDPI( )
 	{
 		static vector2_t vecDPI { };
@@ -358,5 +430,73 @@ namespace Utilities
 	vector2_t InchesToPixels( const vector2_t& vecInches )
 	{
 		return GetScreenDPI( ) * vecInches;
+	}
+
+	double EaseIn( EEaseType _Type, const timer_t &_Timer )
+	{
+		return EaseIn( _Type, _Timer.GetRatio( ) );
+	}
+
+	double EaseIn( EEaseType _Type, double dRatio )
+	{
+		dRatio = std::clamp( dRatio, 0.0, 1.0 );
+
+		switch( _Type )
+		{
+			case EASE_SINE1:
+			{
+				return sin( vector2_t::PI / 2 * dRatio );
+			}
+
+			case EASE_SINE2:
+			{
+				return 0.5 * sin( vector2_t::PI * ( dRatio - 0.5 ) ) + 0.5;
+			}
+
+			case EASE_INVSINE1:
+			{
+				return asin( dRatio ) * 2.0 / vector2_t::PI;
+			}
+
+			case EASE_INVSINE2:
+			{
+				return asin( 2.0 * ( dRatio - 0.5 ) ) / vector2_t::PI + 0.5;
+			}
+
+			case EASE_RADICAL:
+			{
+				return pow( dRatio, 1.0 / 3.0 );
+			}
+
+			case EASE_BOUNCE:
+			{
+				return -abs( cos( vector2_t::PI * pow( 5.0, 1.06 * dRatio ) ) ) / pow( 75.0, dRatio ) + 1.0;
+			}
+
+			case EASE_ELASTIC:
+			{
+				return sin( 10 * vector2_t::PI * dRatio ) / ( 1.75 * pow( 75.0, dRatio ) ) + 1;
+			}
+
+			case EASE_OVER_BACK:
+			{
+				return pow( dRatio, 0.5 ) / ( 1.3 * pow( 3.0, dRatio - 1.0 ) ) + 1.0 - 1.0 / 1.3;
+			}
+
+			default:
+			{
+				return 0.0;
+			}
+		}
+	}
+
+	double EaseOut( EEaseType _Type, const timer_t &_Timer )
+	{
+		return EaseOut( _Type, _Timer.GetRatio( ) );
+	}
+
+	double EaseOut( EEaseType _Type, double dRatio )
+	{
+		return 1.0 - EaseIn( _Type, dRatio );
 	}
 }

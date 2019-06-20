@@ -84,8 +84,52 @@ namespace Utilities
 		bool Valid( ) const;
 	};
 
+	enum ETimerBehaviour
+	{
+		BEHAVIOUR_CLAMP,
+		BEHAVIOUR_REFLECT,
+		BEHAVIOUR_RESTART,
+		BEHAVIOUR_MAX
+	};
+
+	struct timer_t
+	{
+		moment_t mmtStart = 0ui64;
+		moment_t mmtLength = 1ui64;
+		moment_t mmtPauseTime = 0ui64;
+		ETimerBehaviour _EndBehaviour = BEHAVIOUR_CLAMP;
+		bool bPaused = false;
+
+		timer_t( moment_t mmtLength );
+		timer_t( moment_t mmtLength, ETimerBehaviour _EndBehaviour );
+
+		void Stop( );
+		void Start( );
+		void Reset( );
+		void SetLength( moment_t mmtNewLength );
+		[ [ nodiscard ] ] double GetRatio( ) const;
+	};
+
+	// https://www.desmos.com/calculator/qycrrzyzko
+	enum EEaseType
+	{
+		EASE_SINE1,
+		EASE_SINE2,
+		EASE_INVSINE1,
+		EASE_INVSINE2,
+		EASE_RADICAL,
+		EASE_BOUNCE,
+		EASE_ELASTIC,
+		EASE_OVER_BACK,
+		EASE_MAX
+	};
+
 	vector2_t GetScreenDPI( );
 	vector2_t InchesToPixels( const vector2_t& vecInches );
+	double EaseIn( EEaseType _Type, const timer_t& _Timer );
+	double EaseIn( EEaseType _Type, double dRatio );
+	double EaseOut( EEaseType _Type, const timer_t& _Timer );
+	double EaseOut( EEaseType _Type, double dRatio );
 
 	/** \brief Gets the time since epoch */
 	/** \tparam _t Duration type to return time in (nanoseconds highest supported) */
