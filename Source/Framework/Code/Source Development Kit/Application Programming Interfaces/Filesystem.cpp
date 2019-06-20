@@ -357,7 +357,7 @@ bool CFilesystem::ReadAbsoluteFile( const std::string &strFilename, std::string 
 
 	fseek( pFile, 0, SEEK_END ); // todo log, 0 == successful
 	const auto zSize = ftell( pFile );
-	strOut.resize( zSize );
+	strOut.resize( zSize + 1 );
 	rewind( pFile );
 	if ( zSize != fread( &strOut[ 0 ], sizeof( char ), zSize, pFile ) )
 		_Log.Log( EPrefix::WARNING, ELocation::FILESYSTEM, ENC( "Unable to read foretold size of %i in file %s." ), zSize, strFinalFilename.c_str( ) );
