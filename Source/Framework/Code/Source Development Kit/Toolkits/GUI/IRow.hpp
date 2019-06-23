@@ -29,7 +29,7 @@ protected:
 
 public:
 
-	IRow( const rectangle_t& recLocation );
+	IRow( ) = default;
 	virtual ~IRow( ) = default;
 
 	virtual void AddWidget( IWidget* pWidget ) = 0;
@@ -50,7 +50,7 @@ private:
 
 public:
 
-	CHorizontalRow( const rectangle_t& recLocation );
+	CHorizontalRow( ) = default;
 
 	void AddWidget( IWidget* pWidget ) override;
 	void RemoveWidget( IWidget* pWidget ) override;
@@ -72,7 +72,7 @@ private:
 
 public:
 
-	CVerticalRow( const rectangle_t& recLocation );
+	CVerticalRow( ) = default;
 
 	void AddWidget( IWidget* pWidget ) override;
 	void RemoveWidget( IWidget* pWidget ) override;

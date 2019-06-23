@@ -445,22 +445,22 @@ namespace Utilities
 		{
 			case EASE_SINE1:
 			{
-				return sin( vector2_t::PI / 2 * dRatio );
+				return sin( PI / 2 * dRatio );
 			}
 
 			case EASE_SINE2:
 			{
-				return 0.5 * sin( vector2_t::PI * ( dRatio - 0.5 ) ) + 0.5;
+				return 0.5 * sin( PI * ( dRatio - 0.5 ) ) + 0.5;
 			}
 
 			case EASE_INVSINE1:
 			{
-				return asin( dRatio ) * 2.0 / vector2_t::PI;
+				return asin( dRatio ) * 2.0 / PI;
 			}
 
 			case EASE_INVSINE2:
 			{
-				return asin( 2.0 * ( dRatio - 0.5 ) ) / vector2_t::PI + 0.5;
+				return asin( 2.0 * ( dRatio - 0.5 ) ) / PI + 0.5;
 			}
 
 			case EASE_RADICAL:
@@ -470,12 +470,12 @@ namespace Utilities
 
 			case EASE_BOUNCE:
 			{
-				return -abs( cos( vector2_t::PI * pow( 5.0, 1.06 * dRatio ) ) ) / pow( 75.0, dRatio ) + 1.0;
+				return -abs( cos( PI * pow( 5.0, 1.06 * dRatio ) ) ) / pow( 75.0, dRatio ) + 1.0;
 			}
 
 			case EASE_ELASTIC:
 			{
-				return sin( 10 * vector2_t::PI * dRatio ) / ( 1.75 * pow( 75.0, dRatio ) ) + 1;
+				return sin( 10 * PI * dRatio ) / ( 1.75 * pow( 75.0, dRatio ) ) + 1;
 			}
 
 			case EASE_OVER_BACK:

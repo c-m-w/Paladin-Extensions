@@ -266,8 +266,14 @@ bool SetupInterface( )
 
 void Draw( )
 {
+	//auto first = new CDrawable( );
+	//auto second = new CDrawable( );
+   
+	//first->Rectangle( { 0.0, 0, 200, 100 }, 0xFFFFFFFF );
+	//second->Rectangle( { 20, 20, 50, 50 }, 0xFF0000FF );
 	_GUI.Setup( );
-	auto window = new CWindow( WINDOW_NONE, { 0, 0, 200, 200 } );
+	auto window = new CWindow( { 0, 0, 200, 200 } );
+	window->ShowIcon( );
 	_GUI.AddWindow( window );
 
 	while ( !bExit )
@@ -276,6 +282,8 @@ void Draw( )
 			continue;
 
 		DRAW.BeginFrame( );
+		//second->Draw( );
+		//first->Draw( );
 		_GUI.Draw( );
 		//DrawWindows( );
 		DRAW.EndFrame( );

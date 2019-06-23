@@ -11,12 +11,13 @@ private:
 	void Draw( ) override;
 
 protected:
+
 	std::vector< IInteractable* > vecInteractables { };
 	unsigned uScrollAmount = 0u;
 
 public:
 
-	IContainer( const rectangle_t& recLocation );
+	IContainer( );
 
 	void AddObject( IInteractable* pObject, const Utilities::vector2_t& vecRelative );
 	const std::vector< IInteractable* >& GetContainedInteractables( );

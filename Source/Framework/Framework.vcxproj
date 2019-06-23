@@ -109,6 +109,9 @@
     <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Input Handler.hpp" />
     <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Drawing\Shaders.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\Authentication.hpp" />
+    <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\CImage.hpp" />
+    <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\CVectorGraphic.hpp" />
+    <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\CWindowHeader.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\IContainer.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\CWindow.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\IRow.hpp" />
@@ -134,6 +137,9 @@
     <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Filesystem.cpp" />
     <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Input Handler.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\Authentication.cpp" />
+    <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\CImage.cpp" />
+    <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\CVectorGraphic.cpp" />
+    <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\CWindowHeader.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\IContainer.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\CWindow.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\IRow.cpp" />

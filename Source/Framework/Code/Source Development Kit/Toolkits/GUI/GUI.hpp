@@ -6,6 +6,9 @@
 #include "IWidget.hpp"
 #include "IContainer.hpp"
 #include "IRow.hpp"
+#include "CImage.hpp"
+#include "CVectorGraphic.hpp"
+#include "CWindowHeader.hpp"
 #include "CWindow.hpp"
 
 class CGUI

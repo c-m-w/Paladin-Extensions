@@ -6,9 +6,16 @@
 #define USE_NAMESPACES
 #include "../../../Framework.hpp"
 
-CWindow::CWindow( EWindowFlags _Flags, const rectangle_t& recLocation ) :
-	IContainer( recLocation ), _Flags( _Flags )
-{ }
+CWindow::CWindow( const rectangle_t& recLocation )
+{
+	SetLocation( recLocation.vecLocation );
+	SetSize( recLocation.vecSize );
+}
+
+void CWindow::ShowIcon( )
+{
+	bUseIcon = true;
+}
 
 void CWindow::SetTitle( const std::string& strNewTitle )
 {
@@ -18,6 +25,20 @@ void CWindow::SetTitle( const std::string& strNewTitle )
 void CWindow::SetSubtitle( const std::string& strNewSubtitle )
 {
 	strSubtitle = strNewSubtitle;
+}
+
+void CWindow::SetCloseCallback( callback_t _OnCloseCallback )
+{
+	_OnClose = _OnCloseCallback;
+}
+
+void CWindow::Initialize( )
+{
+	const auto recLocation = GetAbsoluteLocation( );
+	const auto pWindowHeader = new CWindowHeader( bUseIcon, strTitle, strSubtitle, _OnClose );
+
+	pWindowHeader->SetSize( { recLocation.w, CWindowHeader::HEIGHT } );
+	AddObject( pWindowHeader, { } );
 }
 
 void CWindow::CreateDrawables( )

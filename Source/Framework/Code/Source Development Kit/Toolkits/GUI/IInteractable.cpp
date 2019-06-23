@@ -49,16 +49,8 @@ void padding_t::PutVerticalPadding( double dbVertical )
 	vecData.y = dbVertical;
 }
 
-IInteractable::IInteractable( EInteractableType _Type, const vector2_t &vecSize ) :
-	_Type( _Type ), recLocation( 0.0, 0.0, vecSize.x, vecSize.y )
-{ }
-
-IInteractable::IInteractable( EInteractableType _Type, const padding_t &_Padding ) :
-	_Type( _Type ), _Padding( _Padding )
-{ }
-
-IInteractable::IInteractable( EInteractableType _Type, const vector2_t& vecSize, const padding_t& _Padding ) :
-	_Type( _Type ), recLocation( 0.0, 0.0, vecSize.x, vecSize.y ), _Padding( _Padding )
+IInteractable::IInteractable( EInteractableType _Type ) :
+	_Type( _Type )
 { }
 
 bool IInteractable::IsInteractableType( EInteractableType _TestType )
@@ -90,6 +82,12 @@ vector2_t IInteractable::GetSize( )
 
 void IInteractable::PreCreateDrawables( )
 {
+	if ( !bSetSize )
+		throw std::runtime_error( ENC( "Size not set on interactable before attempting to create drawables." ) );
+
+	if ( !bInitialized )
+		Initialize( ), bInitialized = true;
+
 	for ( auto& pDrawable : vecDrawables )
 		if ( !_Drawing.UnregisterDrawable( pDrawable ) )
 			throw std::runtime_error( ENC( "Unable to unregister drawables." ) );
@@ -116,6 +114,16 @@ void IInteractable::PreDraw( )
 void IInteractable::SetLocation( const vector2_t& vecNew )
 {
 	recLocation.vecLocation = vecNew;
+	if ( bInitialized )
+		PreCreateDrawables( );
+}
+
+void IInteractable::SetSize( const vector2_t &vecSize )
+{
+	bSetSize = true;
+	recLocation.vecSize = vecSize;
+	if ( bInitialized )
+		PreCreateDrawables( );
 }
 
 void IInteractable::AddState( EState _NewState )
@@ -149,6 +157,12 @@ vector2_t IInteractable::GetNetSize( )
 {
 	return _Padding.vecData + recLocation.vecSize;
 }
+
+void IInteractable::Initialize( )
+{ }
+
+void IInteractable::CreateDrawables( )
+{ }
 
 void IInteractable::Draw( )
 {

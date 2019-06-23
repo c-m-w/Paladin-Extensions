@@ -6,7 +6,10 @@
 
 enum EWidget
 {
-	WIDGET_NONE
+	WIDGET_NONE,
+	WIDGET_IMAGE,
+	WIDGET_VECTOR_GRAPHIC,
+	WIDGET_MAX
 };
 
 class IWidget: public IInteractable
@@ -17,6 +20,8 @@ protected:
 
 public:
 
+	IWidget( EWidget _Type );
 
 	friend class CHorizontalRow;
+	friend class CVerticalRow;
 };

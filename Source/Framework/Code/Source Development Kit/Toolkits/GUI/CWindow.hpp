@@ -2,29 +2,23 @@
 
 #pragma once
 
-enum EWindowFlags
-{
-	WINDOW_NONE,
-	WINDOW_HEADER	= 1 << 0,
-	WINDOW_SUBTITLE	= 1 << 1,
-	WINDOW_ICON		= 1 << 2,
-	WINDOW_CLOSABLE	= 1 << 3,
-	WINDOW_MAX
-};
-
 class CWindow: public IContainer
 {
 private:
 
+	bool bUseIcon = false;
 	std::string strTitle { };
 	std::string strSubtitle { };
-	EWindowFlags _Flags = WINDOW_NONE;
+	Utilities::callback_t _OnClose = nullptr;
 
 public:
 
-	CWindow( EWindowFlags _Flags, const rectangle_t& recLocation );
+	CWindow( const rectangle_t& recLocation );
 
+	void ShowIcon( );
 	void SetTitle( const std::string& strNewTitle );
 	void SetSubtitle( const std::string& strNewSubtitle );
+	void SetCloseCallback( Utilities::callback_t _OnCloseCallback );
+	void Initialize( ) override;
 	void CreateDrawables( ) override;
 };

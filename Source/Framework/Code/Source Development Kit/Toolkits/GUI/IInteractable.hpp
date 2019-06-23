@@ -49,13 +49,14 @@ class IInteractable
 {
 protected:
 
-	virtual void CreateDrawables( ) = 0;
+	virtual void CreateDrawables( );
 	virtual void Draw( );
 
 	IContainer* pParent = nullptr;
 	EInteractableType _Type = INTERACTABLE_NONE;
+	bool bSetSize = false;
+	bool bInitialized = false;
 	rectangle_t recLocation { };
-	double dbTransparency = 0.0;
 	Utilities::vector2_t vecRelative { };
 	padding_t _Padding { };
 	std::vector< CDrawable* > vecDrawables { };
@@ -64,12 +65,11 @@ protected:
 
 public:
 
-	IInteractable( ) = default;
-	explicit IInteractable( EInteractableType _Type, const Utilities::vector2_t& vecSize );
-	explicit IInteractable( EInteractableType _Type, const padding_t& _Padding );
-	explicit IInteractable( EInteractableType _Type, const Utilities::vector2_t& vecSize, const padding_t& _Padding );
+	explicit IInteractable( EInteractableType _Type );
 	virtual ~IInteractable( ) = default;
 
+	void SetLocation( const Utilities::vector2_t& vecLocation );
+	void SetSize( const Utilities::vector2_t& vecSize );
 	bool IsInteractableType( EInteractableType _TestType );
 	void Initialize( IContainer* pNewParent, const rectangle_t& recNewLocation );
 	void Initialize( IContainer* pNewParent, const Utilities::vector2_t& vecNewLocation );
@@ -77,13 +77,13 @@ public:
 	Utilities::vector2_t GetSize( );
 	void PreCreateDrawables( );
 	void PreDraw( );
-	void SetLocation( const Utilities::vector2_t& vecNew );
 	void AddState( EState _NewState );
 	void RemoveState( EState _NewState );
 	rectangle_t GetAbsoluteLocation( );
 	padding_t GetPadding( );
 	Utilities::vector2_t GetNetSize( );
 
+	virtual void Initialize( );
 	virtual void OnStateChange( );
 	virtual void OnClick( CKeyState _State );
 	virtual void OnRightClick( CKeyState _State );

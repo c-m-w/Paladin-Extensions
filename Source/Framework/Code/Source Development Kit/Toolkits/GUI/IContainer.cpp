@@ -8,18 +8,16 @@
 
 void IContainer::Draw( )
 {
-	for ( auto& pDrawable : vecDrawables )
-		pDrawable->Draw( );
-
 	for ( auto& pObject : vecInteractables )
 		pObject->PreDraw( );
+
+	for ( auto& pDrawable : vecDrawables )
+		pDrawable->Draw( );
 }
 
-IContainer::IContainer( const rectangle_t &recLocation ) :
-	IInteractable( INTERACTABLE_CONTAINER, recLocation.vecSize )
-{
-	SetLocation( recLocation.vecLocation );
-}
+IContainer::IContainer( ):
+	IInteractable( INTERACTABLE_CONTAINER )
+{ }
 
 void IContainer::AddObject( IInteractable *pObject, const vector2_t& vecRelative )
 {

@@ -254,7 +254,7 @@ bitmap_t CFontManager::CreateBitmap( char *szText, EFont _Font, double dbSize, d
 	auto dbVerticalOffset = 0.0;
 
 	dbRotation /= 180.0;
-	dbRotation *= vector2_t::PI;
+	dbRotation *= PI;
 	_CurrentFont = _Fonts[ _Font ];
 
 	if ( dbRotation != 0.0 )

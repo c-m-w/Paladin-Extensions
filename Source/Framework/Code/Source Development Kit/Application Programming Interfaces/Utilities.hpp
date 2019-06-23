@@ -5,14 +5,15 @@
 /** \brief Contains utilities to be used in other areas of the framework / other projects. */
 namespace Utilities
 {
+	constexpr auto PI = 3.1415926535897932;
 	/** \brief Datatype to store time. */
 	using moment_t = unsigned __int64;
+	using callback_t = std::function< void( ) >;
 
 	struct vector3_t;
 
 	struct vector2_t
 	{
-		constexpr static auto PI = 3.1415926535897932;
 		double x = 0.0, y = 0.0;
 
 		vector2_t( ) = default;

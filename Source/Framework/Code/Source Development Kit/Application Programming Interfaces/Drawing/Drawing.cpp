@@ -303,24 +303,44 @@ void CDrawable::SetTexture( const std::string &strSVGResourceName, vector2_t vec
 
 	const auto zImageData = unsigned( std::round( vecSize.x * vecSize.y ) ) * sizeof( DWORD );
 	const auto bImageData = new unsigned char[ zImageData ];
+	D3D11_TEXTURE2D_DESC _TextureDescription { };
+	D3D11_SUBRESOURCE_DATA _ResourceData { };
+	ID3D11Texture2D* pBufferTexture = nullptr;
+	D3D11_SHADER_RESOURCE_VIEW_DESC _ShaderResourceViewDescription { };
 
 	memset( bImageData, 0, zImageData );
 	nsvgRasterize( pRasterizer, pImage, 0.f, 0.f, vecScale.x, bImageData, int( vecSize.x ), int( vecSize.y ), int( vecSize.x ) * sizeof( unsigned ) );
 	nsvgDelete( pImage );
 	nsvgDeleteRasterizer( pRasterizer );
 
-	auto iSize = 0;
-	const auto pFormattedImageData = stbi_write_png_to_mem( bImageData, int( vecSize.x ) * 4, int( vecSize.x ), int( vecSize.y ), sizeof( unsigned ), &iSize );
-	delete[ ] bImageData;
+	_TextureDescription.Width = std::size_t( vecSize.x );
+	_TextureDescription.Height = std::size_t( vecSize.y );
+	_TextureDescription.MipLevels = 1;
+	_TextureDescription.ArraySize = 1;
+	_TextureDescription.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	_TextureDescription.SampleDesc.Count = 1;
+	_TextureDescription.Usage = D3D11_USAGE_DEFAULT;
+	_TextureDescription.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+	_TextureDescription.CPUAccessFlags = 0;
+	_TextureDescription.MiscFlags = 0;
+
+	_ResourceData.pSysMem = bImageData;
+	_ResourceData.SysMemPitch = std::size_t( vecSize.x ) * sizeof( DWORD );
+	_ResourceData.SysMemSlicePitch = zImageData;
+
+	_Drawing.pDevice->CreateTexture2D( &_TextureDescription, &_ResourceData, &pBufferTexture );
+
+	_ShaderResourceViewDescription.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	_ShaderResourceViewDescription.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+	_ShaderResourceViewDescription.Texture2D.MostDetailedMip = 0;
+	_ShaderResourceViewDescription.Texture2D.MipLevels = 1;
 
 	if ( pTexture != nullptr )
 		pTexture->Release( );
 
-	pTexture = nullptr;
-	if ( !SUCCEEDED( D3DX11CreateShaderResourceViewFromMemory( _Drawing.pDevice, pFormattedImageData, iSize, nullptr, nullptr, &pTexture, nullptr ) ) )
-		LOG( WARNING, DRAWING, "Could not create SRV from resource." );
+	_Drawing.pDevice->CreateShaderResourceView( pBufferTexture, &_ShaderResourceViewDescription, &pTexture );
 
-	delete[ ] pFormattedImageData;
+	delete[ ] bImageData;
 }
 
 void CDrawable::SetTexture( ID3D11Texture2D* pNewTexture )
@@ -593,7 +613,7 @@ void CDrawable::RoundedRectangle( rectangle_t recLocation, bool *bCornerRounding
 		return LOG( WARNING, DRAWING, "Invalid rounding ratio passed to RoundedRectangle( )." );
 
 	const auto dbRoundingWidth = std::min( recLocation.w, recLocation.h ) * dbRoundingRatio;
-	auto vecBase = vector2_t::GetCirclePoints( dbRoundingWidth, std::size_t( dbRoundingWidth * vector2_t::PI ), -90.0, 0.25 );
+	auto vecBase = vector2_t::GetCirclePoints( dbRoundingWidth, std::size_t( dbRoundingWidth * PI ), -90.0, 0.25 );
 	vecProposedVertices.emplace_back( vertex_t( vertex_t::PixelToRatio( recLocation.vecLocation + recLocation.vecSize / 2.0 ), { 0.5, 0.5 }, clrCenter ) );
 
 	for ( auto i = 0; i < rectangle_t::MAX; i++ )
@@ -746,7 +766,7 @@ void CDrawable::Circle( const vector2_t& vecCenter, double dbRadius, color_t clr
 	decltype( vecIndices ) vecProposedIndicies { };
 
 	if ( zResolution <= 2u )
-		zResolution = std::size_t( std::round( dbRadius * 2.0 * vector2_t::PI ) );
+		zResolution = std::size_t( std::round( dbRadius * 2.0 * PI ) );
 
 	auto vecPoints = vector2_t::GetCirclePoints( dbRadius, zResolution );
 	const auto zSize = vecPoints.size( );

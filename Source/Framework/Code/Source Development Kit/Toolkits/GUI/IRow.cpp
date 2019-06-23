@@ -6,10 +6,6 @@
 #define USE_NAMESPACES
 #include "../../../Framework.hpp"
 
-IRow::IRow( const rectangle_t &recLocation ) :
-	IContainer( recLocation )
-{ }
-
 std::vector<IInteractable*> CHorizontalRow::GetWidgets( )
 {
 	std::vector< IInteractable* > vecReturn { };
@@ -41,7 +37,9 @@ void CHorizontalRow::AdjustWidgetPositions( )
 	for ( auto& pWidget : vecWidgets[ HALIGNMENT_CENTER ] )
 		dbCenterWidgetWidth += pWidget->GetNetSize( ).x;
 
-	dbCenterWidgetWidth -= vecWidgets[ HALIGNMENT_CENTER ][ 0 ]->GetPadding( ).h;
+	if ( !vecWidgets[ HALIGNMENT_CENTER ].empty( ) )
+		dbCenterWidgetWidth -= vecWidgets[ HALIGNMENT_CENTER ][ 0 ]->GetPadding( ).h;
+
 	const auto dbCenterStart = std::round( recLocation.w / 2.0 - dbCenterWidgetWidth / 2.0 );
 
 	for ( auto& pWidget : vecWidgets[ HALIGNMENT_CENTER ] )
@@ -65,10 +63,6 @@ void CHorizontalRow::AdjustWidgetPositions( )
 		for ( auto j = 0u; j < vecWidgets[ i ].size( ); j++ )
 			vecWidgets[ i ][ j ]->PreCreateDrawables( );
 }
-
-CHorizontalRow::CHorizontalRow( const rectangle_t& recLocation ):
-	IRow( recLocation )
-{ }
 
 void CHorizontalRow::AddWidget( IWidget * pWidget )
 {
@@ -151,10 +145,6 @@ void CVerticalRow::AdjustWidgetPositions( )
 		for ( auto j = 0u; j < vecWidgets[ i ].size( ); j++ )
 			vecWidgets[ i ][ j ]->PreCreateDrawables( );
 }
-
-CVerticalRow::CVerticalRow( const rectangle_t &recLocation ) :
-	IRow( recLocation )
-{}
 
 void CVerticalRow::AddWidget( IWidget *pWidget )
 {
