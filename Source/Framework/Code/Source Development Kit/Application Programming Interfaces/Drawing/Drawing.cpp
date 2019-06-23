@@ -938,6 +938,13 @@ void CDrawing::Uninitialize( )
 	}
 }
 
+void CDrawing::SetDrawingSpace( const rectangle_t &recSpace )
+{
+	D3D11_RECT recNewSpace { int( recSpace.x ), int( recSpace.y ), int( recSpace.x + recSpace.w ), int( recSpace.y + recSpace.h ) };
+
+	pContext->RSSetScissorRects( 1, &recNewSpace );
+}
+
 void CDrawing::BeginFrame( )
 {
 	pContext->OMSetRenderTargets( 1, &pRenderTargetView, pDepthStencilView );
@@ -954,6 +961,21 @@ bool CDrawing::EndFrame( )
 		return LOG( WARNING, DRAWING, "Failed to present." ), false;
 
 	return true;
+}
+
+void CDrawing::PushDrawingSpace( const rectangle_t &recSpace )
+{
+	SetDrawingSpace( recSpace );
+	stkSource.push( recSpace );
+}
+
+void CDrawing::PopDrawingSpace( )
+{
+	if ( stkSource.empty( ) )
+		return;
+
+	stkSource.pop( );
+	SetDrawingSpace( stkSource.top( ) );
 }
 
 bool CDrawing::ChangeTarget( CApplicationWindow *pNewTarget )
@@ -1054,6 +1076,7 @@ bool CDrawing::Create( )
 
 	_RasterizerDescription.FillMode = D3D11_FILL_SOLID;
 	_RasterizerDescription.CullMode = D3D11_CULL_NONE;
+	_RasterizerDescription.ScissorEnable = TRUE;
 	_RasterizerDescription.MultisampleEnable = TRUE;
 	_RasterizerDescription.AntialiasedLineEnable = TRUE;
 	if ( !SUCCEEDED( pDevice->CreateRasterizerState( &_RasterizerDescription, &pRasterizer ) ) )
@@ -1061,14 +1084,15 @@ bool CDrawing::Create( )
 
 	pContext->RSSetState( pRasterizer );
 
-	_Viewport.TopLeftX = 0;
-	_Viewport.TopLeftY = 0;
+	_Viewport.TopLeftX = float( recRenderTarget.x );
+	_Viewport.TopLeftY = float( recRenderTarget.y );
 	_Viewport.Width = float( recRenderTarget.w );
 	_Viewport.Height = float( recRenderTarget.h );
 	_Viewport.MinDepth = 0.f;
 	_Viewport.MaxDepth = 0.f;
 
 	pContext->RSSetViewports( 1, &_Viewport );
+	PushDrawingSpace( recRenderTarget );
 
 	auto bReturn = true;
 
@@ -1142,10 +1166,10 @@ bool CDrawing::Destroy( )
 
 bool CDrawing::IsAreaVisible( const rectangle_t &recArea )
 {
-	if ( recSource.empty( ) )
+	if ( stkSource.empty( ) )
 		return true;
 
-	return recArea.InRectangle( recSource.top( ) );
+	return recArea.InRectangle( stkSource.top( ) );
 }
 
 bool CDrawing::RegisterDrawable( CDrawable*pDrawable )

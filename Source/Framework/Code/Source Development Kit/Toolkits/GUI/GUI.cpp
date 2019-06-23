@@ -165,7 +165,7 @@ void CGUI::RemoveWindow( CWindow *pWindow )
 void CGUI::Draw( )
 {
 	for ( auto i = int( vecWindows.size( ) ) - 1; i >= 0; i-- )
-		vecWindows[ i ]->Draw( );
+		vecWindows[ i ]->PreDraw( );
 }
 
 void CGUI::Deactivate( )

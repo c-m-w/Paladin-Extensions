@@ -6,6 +6,15 @@
 #define USE_NAMESPACES
 #include "../../../Framework.hpp"
 
+void IContainer::Draw( )
+{
+	for ( auto& pDrawable : vecDrawables )
+		pDrawable->Draw( );
+
+	for ( auto& pObject : vecInteractables )
+		pObject->PreDraw( );
+}
+
 IContainer::IContainer( const rectangle_t &recLocation ) :
 	IInteractable( INTERACTABLE_CONTAINER, recLocation.vecSize )
 {
@@ -22,13 +31,4 @@ void IContainer::AddObject( IInteractable *pObject, const vector2_t& vecRelative
 const std::vector<IInteractable *> & IContainer::GetContainedInteractables( )
 {
 	return vecInteractables;
-}
-
-void IContainer::Draw( )
-{
-	for ( auto& pDrawable : vecDrawables )
-		pDrawable->Draw( );
-
-	for ( auto& pObject : vecInteractables )
-		pObject->Draw( );
 }

@@ -122,6 +122,8 @@ private:
 	bool Initialize( ) override;
 	void Uninitialize( ) override;
 
+	void SetDrawingSpace( const rectangle_t& recSpace );
+
 	CApplicationWindow* pTarget = nullptr;
 
 	IDXGISwapChain*			pSwapChain					= nullptr;
@@ -143,7 +145,7 @@ private:
 
 	std::vector< CDrawable* > vecDrawables { };
 	rectangle_t recRenderTarget { };
-	std::stack< rectangle_t > recSource { };
+	std::stack< rectangle_t > stkSource { };
 
 public:
 
@@ -152,6 +154,8 @@ public:
 	bool Destroy( );
 	void BeginFrame( );
 	bool EndFrame( );
+	void PushDrawingSpace( const rectangle_t& recSpace );
+	void PopDrawingSpace( );
 	bool IsAreaVisible( const rectangle_t &recArea );
 	bool RegisterDrawable( CDrawable* pDrawable );
 	bool UnregisterDrawable( CDrawable* pDrawable );

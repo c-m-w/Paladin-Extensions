@@ -90,8 +90,27 @@ vector2_t IInteractable::GetSize( )
 
 void IInteractable::PreCreateDrawables( )
 {
+	for ( auto& pDrawable : vecDrawables )
+		if ( !_Drawing.UnregisterDrawable( pDrawable ) )
+			throw std::runtime_error( ENC( "Unable to unregister drawables." ) );
+
 	vecDrawables.clear( );
 	CreateDrawables( );
+	for ( auto& pDrawable : vecDrawables )
+		if ( !_Drawing.RegisterDrawable( pDrawable ) )
+			throw std::runtime_error( ENC( "Unable to register drawables." ) );
+}
+
+void IInteractable::PreDraw( )
+{
+	const auto recLocation = GetAbsoluteLocation( );
+
+	if ( !_Drawing.IsAreaVisible( recLocation ) )
+		return;
+
+	_Drawing.PushDrawingSpace( recLocation );
+	Draw( );
+	_Drawing.PopDrawingSpace( );
 }
 
 void IInteractable::SetLocation( const vector2_t& vecNew )

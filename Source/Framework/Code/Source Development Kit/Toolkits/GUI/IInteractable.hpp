@@ -49,6 +49,9 @@ class IInteractable
 {
 protected:
 
+	virtual void CreateDrawables( ) = 0;
+	virtual void Draw( );
+
 	IContainer* pParent = nullptr;
 	EInteractableType _Type = INTERACTABLE_NONE;
 	rectangle_t recLocation { };
@@ -73,6 +76,7 @@ public:
 	rectangle_t GetLocation( );
 	Utilities::vector2_t GetSize( );
 	void PreCreateDrawables( );
+	void PreDraw( );
 	void SetLocation( const Utilities::vector2_t& vecNew );
 	void AddState( EState _NewState );
 	void RemoveState( EState _NewState );
@@ -80,8 +84,6 @@ public:
 	padding_t GetPadding( );
 	Utilities::vector2_t GetNetSize( );
 
-	virtual void CreateDrawables( ) = 0;
-	virtual void Draw( );
 	virtual void OnStateChange( );
 	virtual void OnClick( CKeyState _State );
 	virtual void OnRightClick( CKeyState _State );
