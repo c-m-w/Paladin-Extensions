@@ -16,7 +16,6 @@ private:
 public:
 
 	constexpr static auto HEIGHT = 40;
-	constexpr static auto UNDERLINE_HEIGHT = 1;
 	constexpr static auto ICON_SIZE = 40;
 	constexpr static auto TEXT_HEIGHT = 16;
 

@@ -19,6 +19,7 @@ std::vector<IInteractable*> CHorizontalRow::GetWidgets( )
 
 void CHorizontalRow::AdjustWidgetPositions( )
 {
+	const auto _Alignment = _CurrentAlignment;
 	const std::vector< IInteractable* > vecWidgets[ HALIGNMENT_MAX ] 
 	{ 
 		( SetAlignment( HALIGNMENT_LEFT ), GetWidgets( ) ),
@@ -61,13 +62,16 @@ void CHorizontalRow::AdjustWidgetPositions( )
 
 	for ( auto i = 0; i < HALIGNMENT_MAX; i++ )
 		for ( auto j = 0u; j < vecWidgets[ i ].size( ); j++ )
-			vecWidgets[ i ][ j ]->PreCreateDrawables( );
+			vecWidgets[ i ][ j ]->SetSize( { vecWidgets[ i ][ j ]->GetSize( ).x, recLocation.h - vecWidgets[ i ][ j ]->GetPadding( ).v } ), vecWidgets[ i ][ j ]->PreCreateDrawables( );
+
+	SetAlignment( _Alignment );
 }
 
-void CHorizontalRow::AddWidget( IWidget * pWidget )
+void CHorizontalRow::AddWidget( IWidget * pWidget, double dWidth )
 {
 	vecInteractables.emplace_back( pWidget );
 	vecObjectAlignments.emplace_back( _CurrentAlignment );
+	pWidget->SetSize( { dWidth, 0.0 } );
 	AdjustWidgetPositions( );
 }
 
@@ -101,6 +105,7 @@ std::vector<IInteractable *> CVerticalRow::GetWidgets( )
 
 void CVerticalRow::AdjustWidgetPositions( )
 {
+	const auto _Alignment = _CurrentAlignment;
 	const std::vector< IInteractable* > vecWidgets[ HALIGNMENT_MAX ]
 	{
 		( SetAlignment( VALIGNMENT_TOP ), GetWidgets( ) ),
@@ -143,13 +148,16 @@ void CVerticalRow::AdjustWidgetPositions( )
 
 	for ( auto i = 0; i < HALIGNMENT_MAX; i++ )
 		for ( auto j = 0u; j < vecWidgets[ i ].size( ); j++ )
-			vecWidgets[ i ][ j ]->PreCreateDrawables( );
+			vecWidgets[ i ][ j ]->SetSize( { recLocation.w - vecWidgets[ i ][ j ]->GetPadding( ).h, vecWidgets[ i ][ j ]->GetSize( ).y } ), vecWidgets[ i ][ j ]->PreCreateDrawables( );
+
+	SetAlignment( _Alignment );
 }
 
-void CVerticalRow::AddWidget( IWidget *pWidget )
+void CVerticalRow::AddWidget( IWidget *pWidget, double dHeight )
 {
 	vecInteractables.emplace_back( pWidget );
 	vecObjectAlignments.emplace_back( _CurrentAlignment );
+	pWidget->SetSize( { 0.0, dHeight } );
 	AdjustWidgetPositions( );
 }
 

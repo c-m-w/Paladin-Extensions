@@ -21,8 +21,8 @@ EState operator~( EState rhs )
 	return EState( ~int( rhs ) );
 }
 
-padding_t::padding_t( double dbTop, double dbLeft ) :
-	vecData( dbTop, dbLeft )
+padding_t::padding_t( double dbTop, double d ) :
+	vecData( dbTop, d )
 { }
 
 padding_t::padding_t( vector2_t& vecPadding ) :
@@ -49,9 +49,14 @@ void padding_t::PutVerticalPadding( double dbVertical )
 	vecData.y = dbVertical;
 }
 
-IInteractable::IInteractable( EInteractableType _Type ) :
-	_Type( _Type )
+IInteractable::IInteractable( unsigned uObjectSize, EInteractableType _Type ) :
+	uObjectSize( uObjectSize ), _Type( _Type )
 { }
+
+IInteractable::~IInteractable( )
+{
+	delete pHash;
+}
 
 bool IInteractable::IsInteractableType( EInteractableType _TestType )
 {
@@ -101,6 +106,14 @@ void IInteractable::PreCreateDrawables( )
 
 void IInteractable::PreDraw( )
 {
+	const auto uHash = _Cryptography.GenerateNumericHash( this, uObjectSize );
+
+	if ( uHash != *pHash )
+	{
+		PreCreateDrawables( );
+		*pHash = uHash;
+	}
+
 	const auto recLocation = GetAbsoluteLocation( );
 
 	if ( !_Drawing.IsAreaVisible( recLocation ) )
@@ -124,6 +137,11 @@ void IInteractable::SetSize( const vector2_t &vecSize )
 	recLocation.vecSize = vecSize;
 	if ( bInitialized )
 		PreCreateDrawables( );
+}
+
+void IInteractable::SetPadding( const padding_t &_NewPadding )
+{
+	_Padding = _NewPadding;
 }
 
 void IInteractable::AddState( EState _NewState )
@@ -156,6 +174,11 @@ padding_t IInteractable::GetPadding( )
 vector2_t IInteractable::GetNetSize( )
 {
 	return _Padding.vecData + recLocation.vecSize;
+}
+
+auto IInteractable::size( ) -> unsigned
+{
+	return sizeof( *this );
 }
 
 void IInteractable::Initialize( )

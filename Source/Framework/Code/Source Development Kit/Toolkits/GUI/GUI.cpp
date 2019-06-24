@@ -53,6 +53,26 @@ void CGUI::ResetActiveInteractable( )
 	pActiveInteractable = nullptr;
 }
 
+void CGUI::DrawCursor( ECursorType _Cursor )
+{
+	// temp until svg
+	constexpr char* CURSOR_PATHS[ 3 ]
+	{
+		R"(Cursor\Arrow.png)",
+		R"(Cursor\Hand.png)",
+		R"(Cursor\I Beam.png)"
+	};
+	constexpr auto CURSOR_SIZE = 50.0;
+	const auto vecMouseLocation = _Input.GetMouseLocation( );
+	const auto pCursor = new CDrawable( );
+
+	pCursor->Rectangle( { vecMouseLocation.x - CURSOR_SIZE / 2.0, vecMouseLocation.y - CURSOR_SIZE / 2.0, CURSOR_SIZE, CURSOR_SIZE }, 0xFFFFFFFF );
+	pCursor->SetTexture( CURSOR_PATHS[ _Cursor ] );
+	pCursor->Draw( );
+	pCursor->Destroy( );
+	delete pCursor;
+}
+
 void CGUI::Setup( )
 {
 	if ( bAddedCallbacks )
@@ -164,13 +184,23 @@ void CGUI::RemoveWindow( CWindow *pWindow )
 
 void CGUI::Draw( )
 {
+	SetCursor( nullptr );
+	while ( ShowCursor( FALSE ) > 0 );
+
 	for ( auto i = int( vecWindows.size( ) ) - 1; i >= 0; i-- )
 		vecWindows[ i ]->PreDraw( );
+
+	if ( pHoveredInteractable != nullptr )
+		if ( pHoveredInteractable->IsInteractableType( INTERACTABLE_WIDGET ) )
+			return DrawCursor( reinterpret_cast< IWidget* >( pHoveredInteractable )->GetCursorType( ) );
+
+	DrawCursor( CURSOR_ARROW );
 }
 
 void CGUI::Deactivate( )
 {
 	bActive = false;
+	while ( ShowCursor( TRUE ) <= 0 );
 }
 
 void CGUI::Activate( )

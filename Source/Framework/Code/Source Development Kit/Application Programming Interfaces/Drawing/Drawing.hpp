@@ -2,6 +2,16 @@
 
 #pragma once
 
+enum EAlignment
+{
+	ALIGNMENT_TOP,
+	ALIGNMENT_CENTER,
+	ALIGNMENT_BOTTOM,
+	ALIGNMENT_LEFT = 0,
+	ALIGNMENT_RIGHT = 2,
+	ALIGNMENT_MAX
+};
+
 struct rectangle_t
 {
 	enum
@@ -17,6 +27,7 @@ struct rectangle_t
 
 	rectangle_t( ) = default;
 	rectangle_t( double x, double y, double w, double h );
+	rectangle_t( const Utilities::vector2_t& vecLocation, const Utilities::vector2_t& vecSize );
 	rectangle_t( RECT recNew );
 
 	rectangle_t& operator=( const RECT& rhs );
@@ -41,6 +52,7 @@ struct rectangle_t
 	[[ nodiscard ]] bool LocationInRectangle( const Utilities::vector2_t& vecLocation ) const;
 	[[ nodiscard ]] bool InRectangle( const rectangle_t& recLocation ) const;
 	[[ nodiscard ]] RECT ToRect( ) const;
+	[[ nodiscard ]] Utilities::vector2_t FindSpace( const Utilities::vector2_t& vecTargetSize, EAlignment _Horizontal, EAlignment _Vertical ) const;
 
 	__declspec( property( get = GetX, put = PutX ) ) double x;
 	__declspec( property( get = GetY, put = PutY ) ) double y;
@@ -123,6 +135,7 @@ private:
 	void Uninitialize( ) override;
 
 	void SetDrawingSpace( const rectangle_t& recSpace );
+	NSVGimage* GetSVG( const std::string& strResourcePath );
 
 	CApplicationWindow* pTarget = nullptr;
 
@@ -132,6 +145,7 @@ private:
 	ID3D11RenderTargetView* pRenderTargetView			= nullptr;
 	ID3D11Texture2D*		pDepthStencilBuffer			= nullptr;
 	ID3D11DepthStencilView* pDepthStencilView			= nullptr;
+	ID3D11DepthStencilState*pDepthStencilState			= nullptr;
 	ID3D11SamplerState*		pSamplerState				= nullptr;
 	ID3D11BlendState*		pBlendState					= nullptr;
 	ID3D10Blob*				pVertexShaderBuffer			= nullptr;
@@ -146,6 +160,7 @@ private:
 	std::vector< CDrawable* > vecDrawables { };
 	rectangle_t recRenderTarget { };
 	std::stack< rectangle_t > stkSource { };
+	std::map< unsigned, NSVGimage* > _Images { };
 
 public:
 
@@ -160,6 +175,7 @@ public:
 	bool RegisterDrawable( CDrawable* pDrawable );
 	bool UnregisterDrawable( CDrawable* pDrawable );
 	DXGI_SAMPLE_DESC GetMaxSamplerQuality( );
+	bool ValidLocation( const Utilities::vector2_t& vecLocation );
 
 	friend struct vertex_t;
 	friend class CDrawable;

@@ -16,5 +16,5 @@ void CVectorGraphic::CreateDrawables( )
 }
 
 CVectorGraphic::CVectorGraphic( const std::string& strResourceName ) :
-	IWidget( WIDGET_VECTOR_GRAPHIC ), strResourceName( strResourceName )
+	IWidget( WIDGET_VECTOR_GRAPHIC, CURSOR_ARROW ), strResourceName( strResourceName )
 { }

@@ -7,6 +7,7 @@
 #include "IContainer.hpp"
 #include "IRow.hpp"
 #include "CImage.hpp"
+#include "CText.hpp"
 #include "CVectorGraphic.hpp"
 #include "CWindowHeader.hpp"
 #include "CWindow.hpp"
@@ -24,6 +25,7 @@ private:
 	IInteractable* GetHoveredInteractable( IContainer* pContainer = nullptr );
 	void FindHoveredInteractable( );
 	void ResetActiveInteractable( );
+	void DrawCursor( ECursorType _Cursor );
 
 public:
 
@@ -33,6 +35,7 @@ public:
 	void Draw( );
 	void Deactivate( );
 	void Activate( );
+
 } inline _GUI;
 
 namespace Interface
@@ -48,7 +51,7 @@ namespace Interface
 	inline const static color_t OUTLINE_DARK = color_t( { 56, 60, 64, 255 } );
 	inline const static color_t OUTLINE_LIGHT = color_t( { 73, 76, 83, 255 } );
 	inline const static color_t TEXT_NORMAL = color_t( { 255, 255, 255, 255 } );
-	inline const static color_t TEXT_DARK = color_t( { 175, 180, 187, 255 } );
+	inline const static color_t TEXT_DARK = color_t( { 175, 180, 187, 210 } );
 	inline const static color_t BLUE = color_t( { 34, 145, 232, 255 } );
 	inline const static color_t TRANSLUCENT_BLUE = color_t( { 34, 145, 232, 100 } );
 	inline const static color_t VIVID_BLUE = color_t( { 13, 59, 95, 255 } );

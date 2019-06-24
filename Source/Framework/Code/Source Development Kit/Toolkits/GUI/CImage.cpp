@@ -15,5 +15,5 @@ void CImage::CreateDrawables( )
 }
 
 CImage::CImage( const std::string& strResourceName ):
-	IWidget( WIDGET_IMAGE ), strResourceName( strResourceName )
+	IWidget( WIDGET_IMAGE, CURSOR_ARROW ), strResourceName( strResourceName )
 { }

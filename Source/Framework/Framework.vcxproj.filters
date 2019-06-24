@@ -27,6 +27,7 @@
     <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\CWindowHeader.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\CImage.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\CVectorGraphic.cpp" />
+    <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\CText.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\Development Environment\Build Output Wrapper.hpp" />
@@ -61,6 +62,7 @@
     <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\CWindowHeader.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\CImage.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\CVectorGraphic.hpp" />
+    <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\CText.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Code\Source Development Kit\Application Programming Interfaces\Connectivity.inl" />

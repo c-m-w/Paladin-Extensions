@@ -265,15 +265,12 @@ bool SetupInterface( )
 }
 
 void Draw( )
-{
-	//auto first = new CDrawable( );
-	//auto second = new CDrawable( );
-   
-	//first->Rectangle( { 0.0, 0, 200, 100 }, 0xFFFFFFFF );
-	//second->Rectangle( { 20, 20, 50, 50 }, 0xFF0000FF );
+{   
 	_GUI.Setup( );
-	auto window = new CWindow( { 0, 0, 200, 200 } );
+	auto window = new CWindow( { 0, 0, 350, 250 } );
 	window->ShowIcon( );
+	window->SetTitle( "Paladin Extensions" );
+	window->SetSubtitle( "Launcher" );
 	_GUI.AddWindow( window );
 
 	while ( !bExit )
@@ -281,14 +278,19 @@ void Draw( )
 		if ( pApplicationWindow->PollInput( ) )
 			continue;
 
+		const auto mmtNow = GetMoment( );
+
 		DRAW.BeginFrame( );
-		//second->Draw( );
 		//first->Draw( );
+		//second->Draw( );
 		_GUI.Draw( );
-		//DrawWindows( );
 		DRAW.EndFrame( );
 
-		//Pause( 17ui64 );
+		const auto mmtDifference = GetMoment( ) - mmtNow;
+		if ( mmtDifference > 1000.0 / 60.0 )
+			continue;
+
+		Pause( 1000.0 / 60.0 - mmtDifference );
 	}
 
 	pApplicationWindow->Destroy( );

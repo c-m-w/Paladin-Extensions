@@ -8,15 +8,15 @@
 
 void IContainer::Draw( )
 {
-	for ( auto& pObject : vecInteractables )
-		pObject->PreDraw( );
-
 	for ( auto& pDrawable : vecDrawables )
 		pDrawable->Draw( );
+
+	for ( auto& pObject : vecInteractables )
+		pObject->PreDraw( );
 }
 
 IContainer::IContainer( ):
-	IInteractable( INTERACTABLE_CONTAINER )
+	IInteractable( 1, INTERACTABLE_CONTAINER )
 { }
 
 void IContainer::AddObject( IInteractable *pObject, const vector2_t& vecRelative )

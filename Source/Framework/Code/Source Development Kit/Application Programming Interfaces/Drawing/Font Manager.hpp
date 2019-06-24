@@ -9,7 +9,6 @@ enum EFont
 	FONT_ROBOTO,
 	FONT_ROBOTO_BOLD,
 	FONT_ENVY,
-	FONT_ICON,
 	FONT_MAX
 };
 
@@ -42,8 +41,6 @@ class CFontManager: public IBase
 {
 private:
 
-	constexpr static unsigned short ICON_SIGNATURE = 0xFF69;
-
 	bool Initialize( ) override;
 	void Uninitialize( ) override;
 
@@ -55,14 +52,13 @@ private:
 		ENC( "Fonts\\Tahoma Bold.ttf" ),
 		ENC( "Fonts\\Roboto.ttf" ),
 		ENC( "Fonts\\Roboto Bold.ttf" ),
-		ENC( "Fonts\\Envy.ttf" ),
-		ENC( "Fonts\\Icon.ttf" )
+		ENC( "Fonts\\Envy.ttf" )
 	};
 	FT_Library _Instance = nullptr;
 	FT_Face _Fonts[ FONT_MAX ] { }, _CurrentFont { };
 
 public:
 
-	bitmap_t CreateBitmap( char* szText, EFont _Font, double dbSize, double dbRotation = 0.0 );
-	Utilities::vector2_t CalculateTextSize( char* szText, EFont _Font, double dbSize, double dbRotation = 0.0 );
+	bitmap_t CreateBitmap( char* szText, EFont _Font, double dbSize );
+	Utilities::vector2_t CalculateTextSize( char* szText, EFont _Font, double dbSize );
 } inline _FontManager;

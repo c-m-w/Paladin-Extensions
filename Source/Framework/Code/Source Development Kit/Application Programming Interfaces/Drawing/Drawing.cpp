@@ -10,7 +10,12 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "../../../Framework.hpp"
 
-rectangle_t::rectangle_t( double x, double y, double w, double h ): vecLocation( x, y ), vecSize( w, h )
+rectangle_t::rectangle_t( double x, double y, double w, double h ) :
+	vecLocation( x, y ), vecSize( w, h )
+{ }
+
+rectangle_t::rectangle_t( const vector2_t &vecLocation, const vector2_t &vecSize ) :
+	vecLocation( vecLocation ), vecSize( vecSize )
 { }
 
 rectangle_t::rectangle_t( RECT recNew )
@@ -143,6 +148,60 @@ RECT rectangle_t::ToRect( ) const
 	return { int( x ), int( y ), int( x + w ), int( y + h ) };
 }
 
+vector2_t rectangle_t::FindSpace( const vector2_t &vecTargetSize, EAlignment _Horizontal, EAlignment _Vertical ) const
+{
+	if ( vecTargetSize.x > vecSize.x
+		 || vecTargetSize.y > vecSize.y )
+		return { };
+
+	vector2_t vecReturn { };
+
+	if ( vecTargetSize.x != vecSize.x )
+		switch( _Horizontal )
+		{
+			case ALIGNMENT_LEFT:
+				break;
+
+			case ALIGNMENT_CENTER:
+			{
+				vecReturn.x = vecSize.x / 2.0 - vecTargetSize.x / 2.0;
+			}
+			break;
+
+			case ALIGNMENT_RIGHT:
+			{
+				vecReturn.x = vecSize.x - vecTargetSize.x;
+			}
+			break;
+
+			default:
+				break;
+		}
+
+	if ( vecTargetSize.y != vecSize.y )
+		switch( _Vertical )
+		{
+			case ALIGNMENT_TOP:
+				break;
+
+			case ALIGNMENT_CENTER:
+			{
+				vecReturn.y = vecSize.y / 2.0 - vecTargetSize.y / 2.0;
+			}
+			break;
+
+			case ALIGNMENT_BOTTOM:
+			{
+				vecReturn.y = vecSize.y - vecTargetSize.y;
+			}
+			break;
+
+			default:
+				break;
+		}
+
+	return vecReturn + vecLocation;
+}
 
 vector2_t vertex_t::PixelToRatio( const vector2_t & vecLocation )
 {
@@ -277,15 +336,10 @@ void CDrawable::SetTexture( const std::string& strResourceName )
 
 void CDrawable::SetTexture( const std::string &strSVGResourceName, vector2_t vecSize )
 {
-	auto& strData = _ResourceManager.GetResource( strSVGResourceName );
-
-	if ( strData.empty( ) )
-		return;
-
-	const auto pImage = nsvgParse( &strData[ 0 ], ENC( "px" ), GetScreenDPI( ).x );
+	const auto pImage = _Drawing.GetSVG( strSVGResourceName );
 
 	if ( pImage == nullptr )
-		return LOG( WARNING, DRAWING, "Unable to parse SVG image %s.", strSVGResourceName.c_str( ) );
+		return;
 
 	const auto pRasterizer = nsvgCreateRasterizer( );
 
@@ -310,7 +364,6 @@ void CDrawable::SetTexture( const std::string &strSVGResourceName, vector2_t vec
 
 	memset( bImageData, 0, zImageData );
 	nsvgRasterize( pRasterizer, pImage, 0.f, 0.f, vecScale.x, bImageData, int( vecSize.x ), int( vecSize.y ), int( vecSize.x ) * sizeof( unsigned ) );
-	nsvgDelete( pImage );
 	nsvgDeleteRasterizer( pRasterizer );
 
 	_TextureDescription.Width = std::size_t( vecSize.x );
@@ -328,7 +381,8 @@ void CDrawable::SetTexture( const std::string &strSVGResourceName, vector2_t vec
 	_ResourceData.SysMemPitch = std::size_t( vecSize.x ) * sizeof( DWORD );
 	_ResourceData.SysMemSlicePitch = zImageData;
 
-	_Drawing.pDevice->CreateTexture2D( &_TextureDescription, &_ResourceData, &pBufferTexture );
+	if ( !SUCCEEDED( _Drawing.pDevice->CreateTexture2D( &_TextureDescription, &_ResourceData, &pBufferTexture ) ) )
+		LOG( WARNING, DRAWING, "Failed to create texture to copy SVG contents into." );
 
 	_ShaderResourceViewDescription.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	_ShaderResourceViewDescription.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
@@ -338,7 +392,8 @@ void CDrawable::SetTexture( const std::string &strSVGResourceName, vector2_t vec
 	if ( pTexture != nullptr )
 		pTexture->Release( );
 
-	_Drawing.pDevice->CreateShaderResourceView( pBufferTexture, &_ShaderResourceViewDescription, &pTexture );
+	if ( !SUCCEEDED( _Drawing.pDevice->CreateShaderResourceView( pBufferTexture, &_ShaderResourceViewDescription, &pTexture ) ) )
+		LOG( WARNING, DRAWING, "Failed to create SRV from SVG." );
 
 	delete[ ] bImageData;
 }
@@ -372,7 +427,7 @@ void CDrawable::SetTexture( ID3D11Texture2D* pNewTexture )
 
 void CDrawable::SetTexture( const bitmap_t & _Bitmap, const color_t & clrText )
 {
-	const auto vecBytes = _Bitmap.GetColoredBitmapBytes( clrText.GetRGBA( ) );
+	const auto vecBytes = _Bitmap.GetColoredBitmapBytes( clrText.GetARGB( ) );
 	D3D11_TEXTURE2D_DESC _TextureDescription { };
 	D3D11_SUBRESOURCE_DATA _ResourceData { };
 	ID3D11Texture2D* pBufferTexture = nullptr;
@@ -401,7 +456,6 @@ void CDrawable::SetTexture( const bitmap_t & _Bitmap, const color_t & clrText )
 	_ShaderResourceViewDescription.Texture2D.MipLevels = 1;
 
 	_Drawing.pDevice->CreateShaderResourceView( pBufferTexture, &_ShaderResourceViewDescription, &pTexture );
-	Rectangle( rectangle_t { 0, 0, _Bitmap.vecSize.x , _Bitmap.vecSize.y }, color_t { 255, 255, 255, 255 } );
 }
 
 void CDrawable::SetTexture( const bitmap_t & _Bitmap, ID3D11Texture2D* pColorTexture )
@@ -956,6 +1010,11 @@ void CDrawing::Uninitialize( )
 		pSwapChain->Release( );
 		pSwapChain = nullptr;
 	}
+
+	for ( auto& _Image : _Images )
+		nsvgDelete( _Image.second );
+
+	_Images.clear( );
 }
 
 void CDrawing::SetDrawingSpace( const rectangle_t &recSpace )
@@ -963,6 +1022,30 @@ void CDrawing::SetDrawingSpace( const rectangle_t &recSpace )
 	D3D11_RECT recNewSpace { int( recSpace.x ), int( recSpace.y ), int( recSpace.x + recSpace.w ), int( recSpace.y + recSpace.h ) };
 
 	pContext->RSSetScissorRects( 1, &recNewSpace );
+}
+
+NSVGimage* CDrawing::GetSVG( const std::string &strResourcePath )
+{
+	const auto uHash = CRYPTO.GenerateNumericHash( strResourcePath );
+
+	const auto pSearch = _Images.find( uHash );
+	if ( pSearch == _Images.end( ) )
+	{
+		auto strImageData = RESOURCES.GetResource( strResourcePath );
+
+		if ( strImageData.empty( ) )
+			return nullptr;
+
+		const auto pImage = nsvgParse( &strImageData[ 0 ], ENC( "px" ), GetScreenDPI( ).x );
+
+		if ( pImage == nullptr )
+			return LOG( ERROR, DRAWING, "Unable to parse SVG with path %s.", strResourcePath.c_str( ) ), nullptr;
+
+		_Images.insert( { uHash, pImage } );
+		return GetSVG( strResourcePath );
+	}
+
+	return pSearch->second;
 }
 
 void CDrawing::BeginFrame( )
@@ -1011,7 +1094,8 @@ bool CDrawing::Create( )
 	const auto zShaderData = strShaderData.size( );
 	ID3D11Texture2D* pBackBufferTexture = nullptr;
 	D3D11_SAMPLER_DESC _SamplerDescription { };
-	D3D11_TEXTURE2D_DESC _DepthStencilDescription { };
+	D3D11_TEXTURE2D_DESC _DepthStencilTextureDescription { };
+	D3D11_DEPTH_STENCIL_DESC _DepthStencilDescription { };
 	D3D11_BLEND_DESC _BlendStateDescription { };
 	D3D11_INPUT_ELEMENT_DESC _Layout[ ] =
 	{
@@ -1030,24 +1114,44 @@ bool CDrawing::Create( )
 
 	pBackBufferTexture->Release( );
 
-	_DepthStencilDescription.Width = unsigned( recRenderTarget.w );
-	_DepthStencilDescription.Height = unsigned( recRenderTarget.h );
-	_DepthStencilDescription.MipLevels = 1;
-	_DepthStencilDescription.ArraySize = 1;
-	_DepthStencilDescription.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
-	_DepthStencilDescription.SampleDesc = GetMaxSamplerQuality( );
-	_DepthStencilDescription.Usage = D3D11_USAGE_DEFAULT;
-	_DepthStencilDescription.BindFlags = D3D11_BIND_DEPTH_STENCIL;
-	_DepthStencilDescription.CPUAccessFlags = 0;
-	_DepthStencilDescription.MiscFlags = 0;
+	_DepthStencilTextureDescription.Width = unsigned( recRenderTarget.w );
+	_DepthStencilTextureDescription.Height = unsigned( recRenderTarget.h );
+	_DepthStencilTextureDescription.MipLevels = 1;
+	_DepthStencilTextureDescription.ArraySize = 1;
+	_DepthStencilTextureDescription.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;
+	_DepthStencilTextureDescription.SampleDesc = GetMaxSamplerQuality( );
+	_DepthStencilTextureDescription.Usage = D3D11_USAGE_DEFAULT;
+	_DepthStencilTextureDescription.BindFlags = D3D11_BIND_DEPTH_STENCIL;
+	_DepthStencilTextureDescription.CPUAccessFlags = 0;
+	_DepthStencilTextureDescription.MiscFlags = 0;
 
-	if ( !SUCCEEDED( pDevice->CreateTexture2D( &_DepthStencilDescription, nullptr, &pDepthStencilBuffer ) ) )
+	if ( !SUCCEEDED( pDevice->CreateTexture2D( &_DepthStencilTextureDescription, nullptr, &pDepthStencilBuffer ) ) )
 		return LOG( ERROR, DRAWING, "Unable to create texture for depth stencil buffer." ), false;
 
 	if ( !SUCCEEDED( pDevice->CreateDepthStencilView( pDepthStencilBuffer, nullptr, &pDepthStencilView ) ) )
 		return LOG( ERROR, DRAWING, "Unable to create depth stencil view." ), false;
 
 	pContext->OMSetRenderTargets( 1, &pRenderTargetView, pDepthStencilView );
+
+	_DepthStencilDescription.DepthEnable = TRUE;
+	_DepthStencilDescription.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
+	_DepthStencilDescription.DepthFunc = D3D11_COMPARISON_ALWAYS;
+	_DepthStencilDescription.StencilEnable = TRUE;
+	_DepthStencilDescription.StencilReadMask = 0xFF;
+	_DepthStencilDescription.StencilWriteMask = 0xFF;
+	_DepthStencilDescription.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+	_DepthStencilDescription.FrontFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP;
+	_DepthStencilDescription.FrontFace.StencilPassOp = D3D11_STENCIL_OP_INCR_SAT;
+	_DepthStencilDescription.FrontFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
+	_DepthStencilDescription.BackFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
+	_DepthStencilDescription.BackFace.StencilDepthFailOp = D3D11_STENCIL_OP_KEEP;
+	_DepthStencilDescription.BackFace.StencilPassOp = D3D11_STENCIL_OP_KEEP;
+	_DepthStencilDescription.BackFace.StencilFunc = D3D11_COMPARISON_NEVER;
+
+	if ( !SUCCEEDED( pDevice->CreateDepthStencilState( &_DepthStencilDescription, &pDepthStencilState ) ) )
+		return LOG( ERROR, DRAWING, "Unable to create depth stencil state." ), false;
+
+	pContext->OMSetDepthStencilState( pDepthStencilState, 0 );
 
 	_SamplerDescription.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
 	_SamplerDescription.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
@@ -1142,6 +1246,12 @@ bool CDrawing::Destroy( )
 		pDepthStencilView = nullptr;
 	}
 
+	if ( pDepthStencilState )
+	{
+		pDepthStencilState->Release( );
+		pDepthStencilState = nullptr;
+	}
+
 	if ( pSamplerState )
 	{
 		pSamplerState->Release( );
@@ -1225,6 +1335,11 @@ DXGI_SAMPLE_DESC CDrawing::GetMaxSamplerQuality( )
 		return { SAMPLER_SAMPLES, uQuality - 1 };
 
 	return { SAMPLER_SAMPLES, SAMPLER_QUALITY_DEFAULT };
+}
+
+bool CDrawing::ValidLocation( const vector2_t &vecLocation )
+{
+	return recRenderTarget.LocationInRectangle( vecLocation );
 }
 
 CDrawing _Drawing;

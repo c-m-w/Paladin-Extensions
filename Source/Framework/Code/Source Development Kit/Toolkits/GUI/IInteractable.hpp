@@ -33,7 +33,7 @@ struct padding_t
 	Utilities::vector2_t vecData { };
 
 	padding_t( ) = default;
-	padding_t( double dbTop, double dbLeft );
+	padding_t( double dLeft, double dTop );
 	padding_t( Utilities::vector2_t& vecPadding );
 
 	double GetHorizontalPadding( );
@@ -52,6 +52,8 @@ protected:
 	virtual void CreateDrawables( );
 	virtual void Draw( );
 
+	unsigned* pHash = new unsigned { 0 };
+	unsigned uObjectSize = 0u;
 	IContainer* pParent = nullptr;
 	EInteractableType _Type = INTERACTABLE_NONE;
 	bool bSetSize = false;
@@ -65,11 +67,12 @@ protected:
 
 public:
 
-	explicit IInteractable( EInteractableType _Type );
-	virtual ~IInteractable( ) = default;
+	explicit IInteractable( unsigned uObjectSize, EInteractableType _Type );
+	virtual ~IInteractable( );
 
 	void SetLocation( const Utilities::vector2_t& vecLocation );
 	void SetSize( const Utilities::vector2_t& vecSize );
+	void SetPadding( const padding_t& _NewPadding );
 	bool IsInteractableType( EInteractableType _TestType );
 	void Initialize( IContainer* pNewParent, const rectangle_t& recNewLocation );
 	void Initialize( IContainer* pNewParent, const Utilities::vector2_t& vecNewLocation );
@@ -82,6 +85,8 @@ public:
 	rectangle_t GetAbsoluteLocation( );
 	padding_t GetPadding( );
 	Utilities::vector2_t GetNetSize( );
+
+	auto size( ) -> unsigned;
 
 	virtual void Initialize( );
 	virtual void OnStateChange( );
