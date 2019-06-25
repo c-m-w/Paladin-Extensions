@@ -74,6 +74,7 @@ void CHorizontalRow::AddWidget( IWidget * pWidget )
 	vecInteractables.emplace_back( pWidget );
 	vecObjectAlignments.emplace_back( _CurrentAlignment );
 	AdjustWidgetPositions( );
+	pWidget->SetParent( this );
 }
 
 void CHorizontalRow::RemoveWidget( IWidget* pWidget )
@@ -159,6 +160,7 @@ void CVerticalRow::AddWidget( IWidget *pWidget )
 	vecInteractables.emplace_back( pWidget );
 	vecObjectAlignments.emplace_back( _CurrentAlignment );
 	AdjustWidgetPositions( );
+	pWidget->SetParent( this );
 }
 
 void CVerticalRow::RemoveWidget( IWidget *pWidget )

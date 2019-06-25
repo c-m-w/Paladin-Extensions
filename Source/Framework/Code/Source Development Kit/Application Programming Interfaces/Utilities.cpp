@@ -369,7 +369,24 @@ namespace Utilities
 
 	void timer_t::SetLength( moment_t mmtNewLength )
 	{
+		const auto dRatio = GetRatio( );
+		mmtStart += ( 1.0 - dRatio ) * ( double( mmtNewLength ) - double( mmtLength ) );
 		mmtLength = mmtNewLength;
+	}
+
+	void timer_t::SetRatio( double dRatio )
+	{
+		mmtStart = mmtStart + mmtLength * dRatio;
+	}
+
+	bool timer_t::Running( ) const
+	{
+		return !bPaused;
+	}
+
+	bool timer_t::Finished( ) const
+	{
+		return GetMoment( ) > mmtStart + mmtLength;
 	}
 
 	double timer_t::GetRatio( ) const

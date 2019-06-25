@@ -2,6 +2,8 @@
 
 #pragma once
 
+#define STATE_INTERACTED { STATE_ACTIVATED, STATE_HOVERING, STATE_CLICKING, STATE_ACTIVATED | STATE_HOVERING, STATE_CLICKING | STATE_HOVERING, STATE_ACTIVATED | STATE_CLICKING, STATE_ACTIVATED | STATE_HOVERING | STATE_CLICKING }
+
 #include "GUI.hpp"
 
 class IContainer;
@@ -23,7 +25,13 @@ enum EState
 	STATE_CLICKING	= 1 << 2
 };
 
-#define STATE_INTERACTED { STATE_ACTIVATED, STATE_HOVERING, STATE_CLICKING, STATE_ACTIVATED | STATE_HOVERING, STATE_CLICKING | STATE_HOVERING, STATE_ACTIVATED | STATE_CLICKING, STATE_ACTIVATED | STATE_HOVERING | STATE_CLICKING }
+enum EColorIndex
+{
+	COLOR_INDEX_PRIMARY,
+	COLOR_INDEX_SECONDARY,
+	COLOR_INDEX_TERTIARY,
+	COLOR_INDEX_MAX
+};
 
 EState operator|( EState lhs, EState rhs );
 EState operator&( EState lhs, EState rhs );
@@ -62,22 +70,33 @@ protected:
 	rectangle_t recLocation { };
 	Utilities::vector2_t vecRelative { };
 	padding_t _Padding { };
-	std::map< EState, color_t > _Colors { { STATE_DORMANT, 0xFFFFFFFF } };
+	Utilities::EEaseType _ColorEaseType = DEFAULT_COLOR_CHANGE_EASING;
+	Utilities::timer_t _ColorChangeTimer = Utilities::timer_t( DEFAULT_COLOR_CHANGE_TIME );
+	color_t clrPrevious[ COLOR_INDEX_MAX ] { };
+	std::map< EState, color_t > _Colors[ COLOR_INDEX_MAX ] { };
 	std::vector< CDrawable* > vecDrawables { };
 	EState _State = STATE_DORMANT;
 	std::string strToolTip { };
 
 public:
 
+	constexpr static auto DEFAULT_COLOR = 0xFFFFFFFF;
+	constexpr static auto DEFAULT_COLOR_CHANGE_TIME = 250u;
+	constexpr static auto DEFAULT_COLOR_CHANGE_EASING = Utilities::EASE_SINE2;
+
 	explicit IInteractable( unsigned uObjectSize, EInteractableType _Type );
 	virtual ~IInteractable( );
 
+	void SetParent( IContainer* pNewParent );
 	void SetLocation( const Utilities::vector2_t& vecNew );
 	void SetSize( const Utilities::vector2_t& vecSize );
 	void SetPadding( const padding_t& _NewPadding );
-	void SetColor( EState _ColorState, const color_t& clrState );
-	void SetColor( std::initializer_list< EState > _ColorStates, const color_t& clrState );
-	color_t GetCurrentColor( );
+	void SetColorChangeTime( unsigned uNewTime );
+	void SetColorChangeEaseType( Utilities::EEaseType _NewEaseType );
+	void SetColor( EColorIndex _ColorIndex, EState _ColorState, const color_t& clrState );
+	void SetColor( EColorIndex _ColorIndex, std::initializer_list< EState > _ColorStates, const color_t& clrState );
+	color_t GetCurrentColor( EColorIndex _ColorIndex );
+	void DoColorChangeBehaviour( );
 	bool IsInteractableType( EInteractableType _TestType );
 	void Initialize( IContainer* pNewParent, const rectangle_t& recNewLocation );
 	void Initialize( IContainer* pNewParent, const Utilities::vector2_t& vecNewLocation );

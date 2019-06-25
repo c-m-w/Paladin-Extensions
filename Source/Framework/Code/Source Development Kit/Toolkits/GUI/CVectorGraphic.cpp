@@ -11,7 +11,7 @@ void CVectorGraphic::CreateDrawables( )
 	const auto pDrawable = vecDrawables.emplace_back( new CDrawable( ) );
 	const auto recLocation = GetAbsoluteLocation( );
 
-	pDrawable->Rectangle( recLocation, GetCurrentColor( ) );
+	pDrawable->Rectangle( recLocation, GetCurrentColor( COLOR_INDEX_PRIMARY ) );
 	pDrawable->SetTexture( strResourceName, recLocation.vecSize );
 }
 

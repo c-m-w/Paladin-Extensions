@@ -10,7 +10,7 @@ void CImage::CreateDrawables( )
 {
 	const auto pDrawable = vecDrawables.emplace_back( new CDrawable( ) );
 
-	pDrawable->Rectangle( GetAbsoluteLocation( ), 0xFFFFFFFF );
+	pDrawable->Rectangle( GetAbsoluteLocation( ), GetCurrentColor( COLOR_INDEX_PRIMARY ) );
 	pDrawable->SetTexture( strResourceName );
 }
 

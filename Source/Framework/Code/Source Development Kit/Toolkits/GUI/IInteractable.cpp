@@ -51,11 +51,19 @@ void padding_t::PutVerticalPadding( double dbVertical )
 
 IInteractable::IInteractable( unsigned uObjectSize, EInteractableType _Type ) :
 	uObjectSize( uObjectSize ), _Type( _Type )
-{ }
+{
+	for ( int i = COLOR_INDEX_PRIMARY; i != COLOR_INDEX_MAX; i++ )
+		SetColor( EColorIndex( i ), STATE_DORMANT, DEFAULT_COLOR );
+}
 
 IInteractable::~IInteractable( )
 {
 	delete pHash;
+}
+
+void IInteractable::SetParent( IContainer *pNewParent )
+{
+	pParent = pNewParent;
 }
 
 bool IInteractable::IsInteractableType( EInteractableType _TestType )
@@ -114,6 +122,16 @@ void IInteractable::PreDraw( )
 		*pHash = uHash;
 	}
 
+	if ( _ColorChangeTimer.Running( ) )
+	{
+		if ( _ColorChangeTimer.Finished( ) )
+			_ColorChangeTimer.Reset( );
+		else
+			PreCreateDrawables( );
+
+		*pHash = _Cryptography.GenerateNumericHash( this, uObjectSize );
+	}
+
 	const auto recLocation = GetAbsoluteLocation( );
 
 	if ( !_Drawing.IsAreaVisible( recLocation ) )
@@ -144,31 +162,51 @@ void IInteractable::SetPadding( const padding_t &_NewPadding )
 	_Padding = _NewPadding;
 }
 
-void IInteractable::SetColor( EState _ColorState, const color_t &clrState )
+void IInteractable::SetColorChangeTime( unsigned uNewTime )
 {
-	const auto pSearch = _Colors.find( _ColorState );
+	_ColorChangeTimer.SetLength( uNewTime );
+}
 
-	if ( pSearch != _Colors.end( ) )
+void IInteractable::SetColorChangeEaseType( EEaseType _NewEaseType )
+{
+	_ColorEaseType = _NewEaseType;
+}
+
+void IInteractable::SetColor( EColorIndex _ColorIndex, EState _ColorState, const color_t &clrState )
+{
+	const auto pSearch = _Colors[ _ColorIndex ].find( _ColorState );
+
+	if ( pSearch != _Colors[ _ColorIndex ].end( ) )
 		pSearch->second = clrState;
 	else
-		_Colors.insert( { _ColorState, clrState } );
+		_Colors[ _ColorIndex ].insert( { _ColorState, clrState } );
 }
 
-void IInteractable::SetColor( std::initializer_list< EState > _ColorStates, const color_t &clrState )
+void IInteractable::SetColor( EColorIndex _ColorIndex, std::initializer_list< EState > _ColorStates, const color_t &clrState )
 {
 	for ( auto _ColorState : _ColorStates )
-		SetColor( _ColorState, clrState );
+		SetColor( _ColorIndex, _ColorState, clrState );
 }
 
-color_t IInteractable::GetCurrentColor( )
+color_t IInteractable::GetCurrentColor( EColorIndex _ColorIndex )
 {
-	const auto pSearch = _Colors.find( _State );
+	const auto pSearch = _Colors[ _ColorIndex ].find( _State );
+	const auto _Color = pSearch == _Colors[ _ColorIndex ].end( ) ? _Colors[ _ColorIndex ].find( STATE_DORMANT )->second : pSearch->second;
 
-	return pSearch == _Colors.end( ) ? _Colors.find( STATE_DORMANT )->second : pSearch->second;
+	return _ColorChangeTimer.Running( ) ? CColor::GetGradient( clrPrevious[ _ColorIndex ], _Color, EaseIn( _ColorEaseType, _ColorChangeTimer ) ) : _Color;
+}
+
+void IInteractable::DoColorChangeBehaviour( )
+{
+	for ( int i = COLOR_INDEX_PRIMARY; i != COLOR_INDEX_MAX; i++ )
+		clrPrevious[ i ] = GetCurrentColor( EColorIndex( i ) );
+
+	_ColorChangeTimer.Reset( ), _ColorChangeTimer.Start( );
 }
 
 void IInteractable::AddState( EState _NewState )
 {
+	DoColorChangeBehaviour( );
 	_State = _State | _NewState;
 	PreCreateDrawables( );
 	OnStateChange( );
@@ -176,6 +214,7 @@ void IInteractable::AddState( EState _NewState )
 
 void IInteractable::RemoveState( EState _NewState )
 {
+	DoColorChangeBehaviour( );
 	_State = _State & ~_NewState;
 	PreCreateDrawables( );
 	OnStateChange( );
@@ -198,6 +237,7 @@ vector2_t IInteractable::GetNetSize( )
 {
 	return _Padding.vecData + recLocation.vecSize;
 }
+
 
 void IInteractable::Initialize( )
 { }

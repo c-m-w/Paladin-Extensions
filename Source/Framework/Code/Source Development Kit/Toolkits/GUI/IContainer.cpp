@@ -24,6 +24,7 @@ void IContainer::AddObject( IInteractable *pObject, const vector2_t& vecRelative
 	vecInteractables.emplace_back( pObject );
 	pObject->SetLocation( vecRelative );
 	pObject->PreCreateDrawables( );
+	pObject->SetParent( this );
 }
 
 const std::vector<IInteractable *> & IContainer::GetContainedInteractables( )

@@ -100,7 +100,7 @@ namespace Utilities
 		moment_t mmtLength = 1ui64;
 		moment_t mmtPauseTime = 0ui64;
 		ETimerBehaviour _EndBehaviour = BEHAVIOUR_CLAMP;
-		bool bPaused = false;
+		bool bPaused = true;
 
 		timer_t( moment_t mmtLength );
 		timer_t( moment_t mmtLength, ETimerBehaviour _EndBehaviour );
@@ -109,6 +109,9 @@ namespace Utilities
 		void Start( );
 		void Reset( );
 		void SetLength( moment_t mmtNewLength );
+		void SetRatio( double dRatio );
+		[ [ nodiscard ] ] bool Running( ) const;
+		[ [ nodiscard ] ] bool Finished( ) const;
 		[ [ nodiscard ] ] double GetRatio( ) const;
 	};
 

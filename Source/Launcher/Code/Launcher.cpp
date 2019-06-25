@@ -269,7 +269,7 @@ void Draw( )
 	LoadCursorFromFileA( nullptr );
 	_GUI.Setup( );
 	auto window = new CWindow( { 0, 0, 450, 250 } );
-	window->SetColor( STATE_HOVERING, 0xFFFFFFFF );
+	window->SetColor( COLOR_INDEX_PRIMARY, STATE_HOVERING, 0xFFFFFFFF );
 	window->ShowIcon( );
 	window->SetTitle( "Paladin Extensions" );
 	window->SetSubtitle( "Launcher" );

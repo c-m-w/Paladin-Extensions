@@ -16,20 +16,28 @@ class CGUI
 {
 private:
 
-	bool bAddedCallbacks = false;
+	bool bSetup = false;
 	bool bActive = true;
 	std::deque< CWindow* > vecWindows { };
 	IInteractable* pActiveInteractable = nullptr;
 	IInteractable* pHoveredInteractable = nullptr;
+	CDrawable* pCursors[ CURSOR_MAX ] { };
+	ECursorType _CurrentCursor = CURSOR_NONE;
+	ECursorType _NextCursor = CURSOR_NONE;
+	Utilities::timer_t _CursorFade = Utilities::timer_t( DEFAULT_CURSOR_FADE_TIME );
 
 	IInteractable* GetHoveredInteractable( IContainer* pContainer = nullptr );
 	void FindHoveredInteractable( );
 	void ResetActiveInteractable( );
+	void DrawCursor( ECursorType _Cursor, double dAlpha );
 	void DrawCursor( ECursorType _Cursor );
 
 public:
 
+	constexpr static auto DEFAULT_CURSOR_FADE_TIME = 250u;
+
 	void Setup( );
+	void Shutdown( );
 	void AddWindow( CWindow* pWindow );
 	void RemoveWindow( CWindow* pWindow );
 	void Draw( );

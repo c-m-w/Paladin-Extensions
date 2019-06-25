@@ -13,7 +13,7 @@ void CText::CreateDrawables( )
 	const auto vecLocation = recLocation.FindSpace( _Bitmap.vecSize, _Horizontal, _Vertical );
 
 	pText->Rectangle( { vecLocation, _Bitmap.vecSize }, 0xFFFFFFFF );
-	pText->SetTexture( _Bitmap, GetCurrentColor( ) );
+	pText->SetTexture( _Bitmap, GetCurrentColor( COLOR_INDEX_PRIMARY ) );
 }
 
 void CText::InitializeText( )

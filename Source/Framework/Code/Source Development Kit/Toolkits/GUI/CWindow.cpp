@@ -48,16 +48,5 @@ void CWindow::Initialize( )
 
 void CWindow::CreateDrawables( )
 {
-	color_t clrColor = BACKGROUND_DARK;
-	vecDrawables.emplace_back( new CDrawable( ) );
-
-
-	if ( _State & STATE_CLICKING )
-		clrColor = BLUE;
-	else if ( _State & STATE_ACTIVATED )
-		clrColor = DARK_BLUE;
-	else if ( _State & STATE_HOVERING )
-		clrColor = BACKGROUND_LIGHT;
-
-	vecDrawables.back( )->Rectangle( GetAbsoluteLocation( ), clrColor );
+	vecDrawables.emplace_back( new CDrawable( ) )->Rectangle( GetAbsoluteLocation( ), BACKGROUND_DARK );
 }

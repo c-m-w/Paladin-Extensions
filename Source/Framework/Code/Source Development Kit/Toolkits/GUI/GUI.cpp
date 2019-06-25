@@ -53,30 +53,44 @@ void CGUI::ResetActiveInteractable( )
 	pActiveInteractable = nullptr;
 }
 
-void CGUI::DrawCursor( ECursorType _Cursor )
+void CGUI::DrawCursor( ECursorType _Cursor, double dAlpha )
 {
-	// temp until svg
-	constexpr char* CURSOR_PATHS[ 3 ]
-	{
-		R"(Cursor\Arrow.png)",
-		R"(Cursor\Hand.png)",
-		R"(Cursor\I Beam.png)"
-	};
 	constexpr auto CURSOR_SIZE = 50.0;
 	const auto vecMouseLocation = _Input.GetMouseLocation( );
-	const auto pCursor = new CDrawable( );
 
-	pCursor->Rectangle( { vecMouseLocation.x - CURSOR_SIZE / 2.0, vecMouseLocation.y - CURSOR_SIZE / 2.0, CURSOR_SIZE, CURSOR_SIZE }, 0xFFFFFFFF );
-	pCursor->SetTexture( CURSOR_PATHS[ _Cursor ] );
-	pCursor->Draw( );
-	pCursor->Destroy( );
-	delete pCursor;
+	if ( _Cursor == CURSOR_NONE )
+		return;
+
+	pCursors[ _Cursor ]->Rectangle( { vecMouseLocation.x - CURSOR_SIZE / 2.0, vecMouseLocation.y - CURSOR_SIZE / 2.0, CURSOR_SIZE, CURSOR_SIZE }, 0xFFFFFF00 | unsigned char( 255 * dAlpha ) );
+	pCursors[ _Cursor ]->Draw( );
+}
+
+void CGUI::DrawCursor( ECursorType _Cursor )
+{
+	if ( _CursorFade.Finished( ) && _CursorFade.Running( ) )
+		_CursorFade.Reset( ), _CurrentCursor = _NextCursor, _NextCursor = CURSOR_NONE;
+
+	if ( _Cursor != _CurrentCursor && !_CursorFade.Running( ) )
+		_NextCursor = _Cursor, _CursorFade.Start( ), DrawCursor( _Cursor );
+	else
+		if ( _CursorFade.Running( ) )
+			DrawCursor( _CurrentCursor, EaseOut( EASE_SINE2, _CursorFade ) ), DrawCursor( _NextCursor, EaseIn( EASE_SINE2, _CursorFade ) );
+		else
+			DrawCursor( _CurrentCursor, 1.0 );
 }
 
 void CGUI::Setup( )
 {
-	if ( bAddedCallbacks )
+	if ( bSetup )
 		return;
+
+	constexpr char* CURSOR_PATHS[ 4 ]
+	{
+		nullptr,
+		R"(Cursor\Arrow.png)",
+		R"(Cursor\Hand.png)",
+		R"(Cursor\I Beam.png)"
+	};
 
 	_Input.AddCallback( [ & ]( CKeyState _State )
 	{
@@ -157,7 +171,26 @@ void CGUI::Setup( )
 
 	} );
 
-	bAddedCallbacks = true;
+	for ( int i = CURSOR_ARROW; i != CURSOR_MAX; i++ )
+	{
+		pCursors[ i ] = new CDrawable( );
+		_Drawing.RegisterDrawable( pCursors[ i ] );
+		pCursors[ i ]->SetTexture( CURSOR_PATHS[ i ] );
+	}
+
+	bSetup = true;
+}
+
+void CGUI::Shutdown( )
+{
+	bSetup = false;
+
+	for ( int i = CURSOR_ARROW; i != CURSOR_MAX; i++ )
+	{
+		_Drawing.UnregisterDrawable( pCursors[ i ] );
+		delete pCursors[ i ];
+		pCursors[ i ] = nullptr;
+	}
 }
 
 void CGUI::AddWindow( CWindow* pWindow )

@@ -48,7 +48,7 @@ void CWindowHeader::Initialize( )
 		pTitle->SetAlignment( ALIGNMENT_LEFT, ALIGNMENT_CENTER );
 		pTitle->SetSize( { pTitle->GetTextSize( ).x, pRow->GetSize( ).y } );
 		pTitle->SetPadding( { 5.0, 0.0 } );
-		pTitle->SetColor( STATE_DORMANT, TEXT_NORMAL );
+		pTitle->SetColor( COLOR_INDEX_PRIMARY, STATE_DORMANT, TEXT_NORMAL );
 		pRow->AddWidget( pTitle );
 	}
 
@@ -62,7 +62,7 @@ void CWindowHeader::Initialize( )
 		pSubtitle->SetAlignment( ALIGNMENT_LEFT, ALIGNMENT_CENTER );
 		pSubtitle->SetSize( { pSubtitle->GetTextSize( ).x, pRow->GetSize( ).y } );
 		pSubtitle->SetPadding( { 5.0, 0.0 } );
-		pSubtitle->SetColor( STATE_DORMANT, TEXT_DARK );
+		pSubtitle->SetColor( COLOR_INDEX_PRIMARY, STATE_DORMANT, TEXT_DARK );
 		pRow->AddWidget( pSubtitle );
 	}
 
@@ -74,23 +74,24 @@ void CWindowHeader::Initialize( )
 
 		pMinimize->SetSize( { 20, 20 } );
 		pMinimize->SetResourceName( ENC( R"(Icons\Minus.svg)" ) );
-		pMinimize->SetColor( STATE_DORMANT, BLUE );
-		pMinimize->SetColor( STATE_INTERACTED, DARK_BLUE );
+		pMinimize->SetColor( COLOR_INDEX_PRIMARY, STATE_DORMANT, BLUE );
+		pMinimize->SetColor( COLOR_INDEX_PRIMARY, STATE_INTERACTED, DARK_BLUE );
 		pMinimize->SetPadding( { 5.0, pRow->GetSize( ).y / 2.0 - 10.0 } );
+		pMinimize->SetCallback( _OnMinimize );
 		pRow->AddWidget( pMinimize );
 	}
 
 	if ( _OnClose )
 	{
 
-		const auto pMinimize = new CVectorGraphic( );
+		const auto pClose = new CVectorGraphic( );
 
-		pMinimize->SetSize( { 20, 20 } );
-		pMinimize->SetResourceName( ENC( R"(Icons\Times.svg)" ) );
-		pMinimize->SetColor( STATE_DORMANT, BLUE );
-		pMinimize->SetColor( STATE_HOVERING, DARK_BLUE );
-		pMinimize->SetColor( STATE_INTERACTED, DARK_BLUE );
-		pMinimize->SetPadding( { 5.0, pRow->GetSize( ).y / 2.0 - 10.0 } );
-		pRow->AddWidget( pMinimize );
+		pClose->SetSize( { 20, 20 } );
+		pClose->SetResourceName( ENC( R"(Icons\Times.svg)" ) );
+		pClose->SetColor( COLOR_INDEX_PRIMARY, STATE_DORMANT, BLUE );
+		pClose->SetColor( COLOR_INDEX_PRIMARY, STATE_INTERACTED, DARK_BLUE );
+		pClose->SetPadding( { 5.0, pRow->GetSize( ).y / 2.0 - 10.0 } );
+		pClose->SetCallback( _OnClose );
+		pRow->AddWidget( pClose );
 	}
 }
