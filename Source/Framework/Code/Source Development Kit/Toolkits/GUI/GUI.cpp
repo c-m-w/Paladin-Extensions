@@ -190,6 +190,9 @@ void CGUI::Draw( )
 	for ( auto i = int( vecWindows.size( ) ) - 1; i >= 0; i-- )
 		vecWindows[ i ]->PreDraw( );
 
+	if ( !_Drawing.GetTarget( )->CursorOnWindow( ) )
+		return;
+
 	if ( pHoveredInteractable != nullptr )
 		if ( pHoveredInteractable->IsInteractableType( INTERACTABLE_WIDGET ) )
 			return DrawCursor( reinterpret_cast< IWidget* >( pHoveredInteractable )->GetCursorType( ) );

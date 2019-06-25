@@ -13,7 +13,7 @@
 
 		function __construct( )
 		{
-			$this->$lastGenerationTime = 0;
+			$this->lastGenerationTime = 0;
 		}
 
 		private function generateKeys( $useInternetProtocol ): void

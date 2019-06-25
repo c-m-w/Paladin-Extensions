@@ -11,10 +11,16 @@ void CVectorGraphic::CreateDrawables( )
 	const auto pDrawable = vecDrawables.emplace_back( new CDrawable( ) );
 	const auto recLocation = GetAbsoluteLocation( );
 
-	pDrawable->Rectangle( recLocation, 0xFFFFFFFF );
+	pDrawable->Rectangle( recLocation, GetCurrentColor( ) );
 	pDrawable->SetTexture( strResourceName, recLocation.vecSize );
 }
 
-CVectorGraphic::CVectorGraphic( const std::string& strResourceName ) :
-	IWidget( WIDGET_VECTOR_GRAPHIC, CURSOR_ARROW ), strResourceName( strResourceName )
+void CVectorGraphic::SetResourceName( const std::string &strNewResourceName )
+{
+	if ( _ResourceManager.ResourceExists( strNewResourceName ) )
+		strResourceName = strNewResourceName;
+}
+
+CVectorGraphic::CVectorGraphic( ) :
+	IWidget( WIDGET_VECTOR_GRAPHIC, CURSOR_ARROW )
 { }

@@ -15,14 +15,15 @@ enum EInteractableType
 
 enum EState
 {
-	STATE_NONE,
-	/** \brief Last interacted with. */
+	STATE_DORMANT	= 0,
 	STATE_ACTIVATED	= 1 << 0,
 	/** \brief Currently being hovered. */
 	STATE_HOVERING	= 1 << 1,
 	/** \brief Currently being clicked. */
 	STATE_CLICKING	= 1 << 2
 };
+
+#define STATE_INTERACTED { STATE_ACTIVATED, STATE_HOVERING, STATE_CLICKING, STATE_ACTIVATED | STATE_HOVERING, STATE_CLICKING | STATE_HOVERING, STATE_ACTIVATED | STATE_CLICKING, STATE_ACTIVATED | STATE_HOVERING | STATE_CLICKING }
 
 EState operator|( EState lhs, EState rhs );
 EState operator&( EState lhs, EState rhs );
@@ -33,7 +34,7 @@ struct padding_t
 	Utilities::vector2_t vecData { };
 
 	padding_t( ) = default;
-	padding_t( double dLeft, double dTop );
+	padding_t( double dHorizontal, double dVertical );
 	padding_t( Utilities::vector2_t& vecPadding );
 
 	double GetHorizontalPadding( );
@@ -61,8 +62,9 @@ protected:
 	rectangle_t recLocation { };
 	Utilities::vector2_t vecRelative { };
 	padding_t _Padding { };
+	std::map< EState, color_t > _Colors { { STATE_DORMANT, 0xFFFFFFFF } };
 	std::vector< CDrawable* > vecDrawables { };
-	EState _State = STATE_NONE;
+	EState _State = STATE_DORMANT;
 	std::string strToolTip { };
 
 public:
@@ -70,9 +72,12 @@ public:
 	explicit IInteractable( unsigned uObjectSize, EInteractableType _Type );
 	virtual ~IInteractable( );
 
-	void SetLocation( const Utilities::vector2_t& vecLocation );
+	void SetLocation( const Utilities::vector2_t& vecNew );
 	void SetSize( const Utilities::vector2_t& vecSize );
 	void SetPadding( const padding_t& _NewPadding );
+	void SetColor( EState _ColorState, const color_t& clrState );
+	void SetColor( std::initializer_list< EState > _ColorStates, const color_t& clrState );
+	color_t GetCurrentColor( );
 	bool IsInteractableType( EInteractableType _TestType );
 	void Initialize( IContainer* pNewParent, const rectangle_t& recNewLocation );
 	void Initialize( IContainer* pNewParent, const Utilities::vector2_t& vecNewLocation );
@@ -85,8 +90,6 @@ public:
 	rectangle_t GetAbsoluteLocation( );
 	padding_t GetPadding( );
 	Utilities::vector2_t GetNetSize( );
-
-	auto size( ) -> unsigned;
 
 	virtual void Initialize( );
 	virtual void OnStateChange( );

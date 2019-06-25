@@ -15,7 +15,6 @@ private:
 	double dSize = 6.0;
 	EAlignment _Horizontal = ALIGNMENT_LEFT;
 	EAlignment _Vertical = ALIGNMENT_TOP;
-	color_t clrText = 0xFFFFFFFF;
 	bitmap_t _Bitmap { };
 
 public:
@@ -26,6 +25,5 @@ public:
 	void SetFont( EFont _NewFont );
 	void SetHeight( double dNewSize );
 	void SetAlignment( EAlignment _NewHorizontal, EAlignment _NewVertical );
-	void SetColor( const color_t& clrNewText );
 	Utilities::vector2_t GetTextSize( );
 };

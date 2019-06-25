@@ -144,6 +144,29 @@ void IInteractable::SetPadding( const padding_t &_NewPadding )
 	_Padding = _NewPadding;
 }
 
+void IInteractable::SetColor( EState _ColorState, const color_t &clrState )
+{
+	const auto pSearch = _Colors.find( _ColorState );
+
+	if ( pSearch != _Colors.end( ) )
+		pSearch->second = clrState;
+	else
+		_Colors.insert( { _ColorState, clrState } );
+}
+
+void IInteractable::SetColor( std::initializer_list< EState > _ColorStates, const color_t &clrState )
+{
+	for ( auto _ColorState : _ColorStates )
+		SetColor( _ColorState, clrState );
+}
+
+color_t IInteractable::GetCurrentColor( )
+{
+	const auto pSearch = _Colors.find( _State );
+
+	return pSearch == _Colors.end( ) ? _Colors.find( STATE_DORMANT )->second : pSearch->second;
+}
+
 void IInteractable::AddState( EState _NewState )
 {
 	_State = _State | _NewState;
@@ -174,11 +197,6 @@ padding_t IInteractable::GetPadding( )
 vector2_t IInteractable::GetNetSize( )
 {
 	return _Padding.vecData + recLocation.vecSize;
-}
-
-auto IInteractable::size( ) -> unsigned
-{
-	return sizeof( *this );
 }
 
 void IInteractable::Initialize( )

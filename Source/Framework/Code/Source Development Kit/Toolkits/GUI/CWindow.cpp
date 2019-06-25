@@ -27,6 +27,11 @@ void CWindow::SetSubtitle( const std::string& strNewSubtitle )
 	strSubtitle = strNewSubtitle;
 }
 
+void CWindow::SetMinimizeCallback( callback_t _OnMinimizeCallback )
+{
+	_OnMinimize = _OnMinimizeCallback;
+}
+
 void CWindow::SetCloseCallback( callback_t _OnCloseCallback )
 {
 	_OnClose = _OnCloseCallback;
@@ -35,7 +40,7 @@ void CWindow::SetCloseCallback( callback_t _OnCloseCallback )
 void CWindow::Initialize( )
 {
 	const auto recLocation = GetAbsoluteLocation( );
-	const auto pWindowHeader = new CWindowHeader( bUseIcon, strTitle, strSubtitle, _OnClose );
+	const auto pWindowHeader = new CWindowHeader( bUseIcon, strTitle, strSubtitle, _OnMinimize, _OnClose );
 
 	pWindowHeader->SetSize( { recLocation.w, CWindowHeader::HEIGHT } );
 	AddObject( pWindowHeader, { } );

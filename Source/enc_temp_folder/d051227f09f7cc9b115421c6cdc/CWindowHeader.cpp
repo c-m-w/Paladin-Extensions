@@ -89,7 +89,6 @@ void CWindowHeader::Initialize( )
 		pMinimize->SetResourceName( ENC( R"(Icons\Times.svg)" ) );
 		pMinimize->SetColor( STATE_DORMANT, BLUE );
 		pMinimize->SetColor( STATE_HOVERING, DARK_BLUE );
-		pMinimize->SetColor( STATE_INTERACTED, DARK_BLUE );
 		pMinimize->SetPadding( { 5.0, pRow->GetSize( ).y / 2.0 - 10.0 } );
 		pRow->AddWidget( pMinimize );
 	}

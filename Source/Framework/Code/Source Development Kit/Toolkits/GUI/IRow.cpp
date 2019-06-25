@@ -54,24 +54,25 @@ void CHorizontalRow::AdjustWidgetPositions( )
 		dbFill[ HALIGNMENT_CENTER ] += vecPadding.h + pWidget->GetSize( ).x;
 	}
 
-	for ( auto& pWidget : vecWidgets[ HALIGNMENT_RIGHT ] )
+	for ( auto i = int( vecWidgets[ HALIGNMENT_RIGHT ].size( ) ) - 1; i >= 0; i-- )
 	{
-		pWidget->SetLocation( { recLocation.w - dbFill[ HALIGNMENT_RIGHT ] - pWidget->GetPadding( ).h, pWidget->GetPadding( ).v } );
-		dbFill[ HALIGNMENT_RIGHT ] += GetNetSize( ).x;
+		auto& pWidget = vecWidgets[ HALIGNMENT_RIGHT ][ i ];
+
+		pWidget->SetLocation( { recLocation.w - dbFill[ HALIGNMENT_RIGHT ] - pWidget->GetNetSize( ).x, pWidget->GetPadding( ).v } );
+		dbFill[ HALIGNMENT_RIGHT ] += pWidget->GetNetSize( ).x;
 	}
 
 	for ( auto i = 0; i < HALIGNMENT_MAX; i++ )
 		for ( auto j = 0u; j < vecWidgets[ i ].size( ); j++ )
-			vecWidgets[ i ][ j ]->SetSize( { vecWidgets[ i ][ j ]->GetSize( ).x, recLocation.h - vecWidgets[ i ][ j ]->GetPadding( ).v } ), vecWidgets[ i ][ j ]->PreCreateDrawables( );
+			vecWidgets[ i ][ j ]->PreCreateDrawables( );
 
 	SetAlignment( _Alignment );
 }
 
-void CHorizontalRow::AddWidget( IWidget * pWidget, double dWidth )
+void CHorizontalRow::AddWidget( IWidget * pWidget )
 {
 	vecInteractables.emplace_back( pWidget );
 	vecObjectAlignments.emplace_back( _CurrentAlignment );
-	pWidget->SetSize( { dWidth, 0.0 } );
 	AdjustWidgetPositions( );
 }
 
@@ -148,16 +149,15 @@ void CVerticalRow::AdjustWidgetPositions( )
 
 	for ( auto i = 0; i < HALIGNMENT_MAX; i++ )
 		for ( auto j = 0u; j < vecWidgets[ i ].size( ); j++ )
-			vecWidgets[ i ][ j ]->SetSize( { recLocation.w - vecWidgets[ i ][ j ]->GetPadding( ).h, vecWidgets[ i ][ j ]->GetSize( ).y } ), vecWidgets[ i ][ j ]->PreCreateDrawables( );
+			vecWidgets[ i ][ j ]->PreCreateDrawables( );
 
 	SetAlignment( _Alignment );
 }
 
-void CVerticalRow::AddWidget( IWidget *pWidget, double dHeight )
+void CVerticalRow::AddWidget( IWidget *pWidget )
 {
 	vecInteractables.emplace_back( pWidget );
 	vecObjectAlignments.emplace_back( _CurrentAlignment );
-	pWidget->SetSize( { 0.0, dHeight } );
 	AdjustWidgetPositions( );
 }
 

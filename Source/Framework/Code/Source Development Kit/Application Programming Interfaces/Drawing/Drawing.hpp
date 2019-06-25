@@ -176,6 +176,7 @@ public:
 	bool UnregisterDrawable( CDrawable* pDrawable );
 	DXGI_SAMPLE_DESC GetMaxSamplerQuality( );
 	bool ValidLocation( const Utilities::vector2_t& vecLocation );
+	CApplicationWindow* GetTarget( );
 
 	friend struct vertex_t;
 	friend class CDrawable;

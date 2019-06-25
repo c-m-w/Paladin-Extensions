@@ -145,4 +145,9 @@ std::string& CResourceManager::GetResource( const std::string &strRelativePath )
 	return GetResource( strRelativePath );
 }
 
+bool CResourceManager::ResourceExists( const std::string &strRelativePath )
+{
+	return !GetResource( strRelativePath ).empty( );
+}
+
 CResourceManager _ResourceManager;

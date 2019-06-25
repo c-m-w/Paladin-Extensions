@@ -32,7 +32,7 @@ public:
 	IRow( ) = default;
 	virtual ~IRow( ) = default;
 
-	virtual void AddWidget( IWidget* pWidget, double dSize ) = 0;
+	virtual void AddWidget( IWidget* pWidget ) = 0;
 	virtual void RemoveWidget( IWidget* pWidget ) = 0;
 	virtual bool Overfilled( ) = 0;
 };
@@ -52,7 +52,7 @@ public:
 
 	CHorizontalRow( ) = default;
 
-	void AddWidget( IWidget* pWidget, double dWidth ) override;
+	void AddWidget( IWidget* pWidget ) override;
 	void RemoveWidget( IWidget* pWidget ) override;
 	bool Overfilled( ) override;
 
@@ -74,7 +74,7 @@ public:
 
 	CVerticalRow( ) = default;
 
-	void AddWidget( IWidget* pWidget, double dHeight ) override;
+	void AddWidget( IWidget* pWidget ) override;
 	void RemoveWidget( IWidget* pWidget ) override;
 	bool Overfilled( ) override;
 

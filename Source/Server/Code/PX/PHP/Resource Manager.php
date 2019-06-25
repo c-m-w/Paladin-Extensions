@@ -11,7 +11,7 @@
             $files = scandir( $directory );
 
             foreach ( $files as $file )
-                if ( !is_dir( realpath( $file ) ) )
+				if ( !is_dir( $directory . '/' . $file ) )
                 {
                     $relativeFolder = substr( $directory, strlen( resourceFolder ) - strlen( resourceFolderName ) );
                     $path = substr( str_replace( '/', '\\', $relativeFolder ) . '\\' . $file, strlen( resourceFolderName ) + 1 );
@@ -39,6 +39,7 @@
             chdir( $directory );
             if ( $directory == resourceFolder )
             {
+				// Reset everything
                 $this->count = 0;
                 $this->data = array( );
             }

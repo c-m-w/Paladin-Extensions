@@ -8,9 +8,11 @@ private:
 
 	void CreateDrawables( ) override;
 
-	std::string strResourceName { };
+	std::string strResourceName = ENC( "PX Logo.svg" );
 
 public:
 
-	CVectorGraphic( const std::string& strResourceName );
+	CVectorGraphic( );
+
+	void SetResourceName( const std::string& strNewResourceName );
 };

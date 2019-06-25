@@ -18,6 +18,7 @@ namespace Utilities
 
 		vector2_t( ) = default;
 		vector2_t( double x, double y );
+		vector2_t( POINT p );
 		~vector2_t( ) = default;
 
 		explicit operator vector3_t( ) const;

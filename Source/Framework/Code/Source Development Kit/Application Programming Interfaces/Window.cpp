@@ -148,3 +148,16 @@ void CApplicationWindow::Destroy( )
 	if ( DestroyWindow( hwHandle ) == FALSE )
 		_Log.Log( EPrefix::ERROR, ELocation::WINDOW, ENC( "Unable to destroy window." ) );
 }
+
+bool CApplicationWindow::CursorOnWindow( )
+{
+	RECT recCurrent { };
+	POINT pntCursor { };
+
+	if ( GetWindowRect( hwHandle, &recCurrent ) == FALSE
+		 || GetCursorPos( &pntCursor ) == FALSE )
+		return false;
+
+	const rectangle_t recBounds { recCurrent };
+	return recBounds.LocationInRectangle( pntCursor );
+}

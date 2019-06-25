@@ -27,4 +27,5 @@ public:
 	void Hide( );
 	void Show( );
 	void Destroy( );
+	bool CursorOnWindow( );
 };

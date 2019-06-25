@@ -1342,4 +1342,9 @@ bool CDrawing::ValidLocation( const vector2_t &vecLocation )
 	return recRenderTarget.LocationInRectangle( vecLocation );
 }
 
+CApplicationWindow* CDrawing::GetTarget( )
+{
+	return pTarget;
+}
+
 CDrawing _Drawing;

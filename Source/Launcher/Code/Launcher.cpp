@@ -266,11 +266,17 @@ bool SetupInterface( )
 
 void Draw( )
 {   
+	LoadCursorFromFileA( nullptr );
 	_GUI.Setup( );
-	auto window = new CWindow( { 0, 0, 350, 250 } );
+	auto window = new CWindow( { 0, 0, 450, 250 } );
+	window->SetColor( STATE_HOVERING, 0xFFFFFFFF );
 	window->ShowIcon( );
 	window->SetTitle( "Paladin Extensions" );
 	window->SetSubtitle( "Launcher" );
+	window->SetMinimizeCallback( [ & ]( )
+	{ } );
+	window->SetCloseCallback( [ & ]( )
+	{ } );
 	_GUI.AddWindow( window );
 
 	while ( !bExit )

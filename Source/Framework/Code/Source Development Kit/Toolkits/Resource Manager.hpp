@@ -14,5 +14,6 @@ private:
 public:
 
 	std::string& GetResource( const std::string& strRelativePath );
+	bool ResourceExists( const std::string& strRelativePath );
 
 } extern _ResourceManager;

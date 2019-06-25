@@ -12,6 +12,10 @@ namespace Utilities
 		x( x ), y( y )
 	{ }
 
+	vector2_t::vector2_t( POINT p ) :
+		x( p.x ), y( p.y )
+	{ }
+
 	vector2_t::operator vector3_t( ) const
 	{
 		return vector3_t( x, y, 0.0 );
