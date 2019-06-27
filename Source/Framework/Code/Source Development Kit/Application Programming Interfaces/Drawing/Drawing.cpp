@@ -127,6 +127,16 @@ void rectangle_t::Clamp( const rectangle_t & recClamp )
 		h -= 1.0;
 }
 
+rectangle_t rectangle_t::ToPixels( ) const
+{
+	return { vecLocation.ToPixels( ), vecSize.ToPixels( ) };
+}
+
+rectangle_t rectangle_t::ToInches( ) const
+{
+	return { vecLocation.ToInches( ), vecSize.ToInches( ) };
+}
+
 bool rectangle_t::LocationInRectangle( const vector2_t & vecLocation ) const
 {
 	return vecLocation.x >= x
@@ -347,13 +357,18 @@ void CDrawable::SetTexture( const std::string &strSVGResourceName, vector2_t vec
 		return LOG( WARNING, DRAWING, "Unable to initialize SVG rasterizer." ), nsvgDelete( pImage );
 
 	if ( vecSize.x == 0.0
-		 || vecSize.y == 0.0 )
+		 && vecSize.y == 0.0 )
 		vecSize = { double( pImage->width ), double( pImage->height ) };
 
 	auto vecScale = vector2_t { vecSize.x / double( pImage->width ), vecSize.y / double( pImage->height ) };
 
 	if ( vecScale.x != vecScale.y )
-		vecSize.y = double( pImage->height ) * ( vecScale.y = vecScale.x );
+	{
+		if ( vecScale.x == 0.0 )
+			vecSize.x = double( pImage->width ) * ( vecScale.x = vecScale.y );
+		else
+			vecSize.y = double( pImage->height ) * ( vecScale.y = vecScale.x );
+	}
 
 	const auto zImageData = unsigned( std::round( vecSize.x * vecSize.y ) ) * sizeof( DWORD );
 	const auto bImageData = new unsigned char[ zImageData ];

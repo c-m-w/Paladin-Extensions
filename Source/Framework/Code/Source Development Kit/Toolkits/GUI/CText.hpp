@@ -12,7 +12,7 @@ private:
 
 	std::string strText = ENC( "Default Text" );
 	EFont _Font = FONT_TAHOMA;
-	double dSize = 6.0;
+	double dSize = 0.0625;
 	EAlignment _Horizontal = ALIGNMENT_LEFT;
 	EAlignment _Vertical = ALIGNMENT_TOP;
 	bitmap_t _Bitmap { };

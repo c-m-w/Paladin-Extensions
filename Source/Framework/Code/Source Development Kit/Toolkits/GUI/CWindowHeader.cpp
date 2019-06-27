@@ -27,7 +27,7 @@ void CWindowHeader::Initialize( )
 	const auto recLocation = GetAbsoluteLocation( );
 	const auto pRow = new CHorizontalRow( );
 
-	pRow->SetSize( recLocation.vecSize );
+	pRow->SetSize( recLocation.vecSize.ToInches( ) );
 	AddObject( pRow, { } );
 	if ( bUseIcon )
 	{
@@ -44,10 +44,10 @@ void CWindowHeader::Initialize( )
 
 		pTitle->SetText( strTitle );
 		pTitle->SetFont( FONT_ROBOTO_BOLD );
-		pTitle->SetHeight( 16.0 );
+		pTitle->SetHeight( 1.0 / 6.0 );
 		pTitle->SetAlignment( ALIGNMENT_LEFT, ALIGNMENT_CENTER );
-		pTitle->SetSize( { pTitle->GetTextSize( ).x, pRow->GetSize( ).y } );
-		pTitle->SetPadding( { 5.0, 0.0 } );
+		pTitle->SetSize( { pTitle->GetTextSize( ).ToInches( ).x, pRow->GetSize( ).y } );
+		pTitle->SetPadding( { 0.05, 0.0 } );
 		pTitle->SetColor( COLOR_INDEX_PRIMARY, STATE_DORMANT, TEXT_NORMAL );
 		pRow->AddWidget( pTitle );
 	}
@@ -58,10 +58,10 @@ void CWindowHeader::Initialize( )
 
 		pSubtitle->SetText( strSubtitle );
 		pSubtitle->SetFont( FONT_ROBOTO );
-		pSubtitle->SetHeight( 16.0 );
+		pSubtitle->SetHeight( 1.0 / 6.0 );
 		pSubtitle->SetAlignment( ALIGNMENT_LEFT, ALIGNMENT_CENTER );
-		pSubtitle->SetSize( { pSubtitle->GetTextSize( ).x, pRow->GetSize( ).y } );
-		pSubtitle->SetPadding( { 5.0, 0.0 } );
+		pSubtitle->SetSize( { pSubtitle->GetTextSize( ).ToInches( ).x, pRow->GetSize( ).y } );
+		pSubtitle->SetPadding( { 0.05, 0.0 } );
 		pSubtitle->SetColor( COLOR_INDEX_PRIMARY, STATE_DORMANT, TEXT_DARK );
 		pRow->AddWidget( pSubtitle );
 	}
@@ -72,11 +72,11 @@ void CWindowHeader::Initialize( )
 	{
 		const auto pMinimize = new CVectorGraphic( );
 
-		pMinimize->SetSize( { 20, 20 } );
+		pMinimize->SetSize( { 0.20833333333, 0.20833333333 } );
 		pMinimize->SetResourceName( ENC( R"(Icons\Minus.svg)" ) );
 		pMinimize->SetColor( COLOR_INDEX_PRIMARY, STATE_DORMANT, BLUE );
 		pMinimize->SetColor( COLOR_INDEX_PRIMARY, STATE_INTERACTED, DARK_BLUE );
-		pMinimize->SetPadding( { 5.0, pRow->GetSize( ).y / 2.0 - 10.0 } );
+		pMinimize->SetPadding( { 0.05, pRow->GetSize( ).y / 2.0 - 0.10416666666 } );
 		pMinimize->SetCallback( _OnMinimize );
 		pRow->AddWidget( pMinimize );
 	}
@@ -86,11 +86,11 @@ void CWindowHeader::Initialize( )
 
 		const auto pClose = new CVectorGraphic( );
 
-		pClose->SetSize( { 20, 20 } );
+		pClose->SetSize( { 0.20833333333, 0.20833333333 } );
 		pClose->SetResourceName( ENC( R"(Icons\Times.svg)" ) );
 		pClose->SetColor( COLOR_INDEX_PRIMARY, STATE_DORMANT, BLUE );
 		pClose->SetColor( COLOR_INDEX_PRIMARY, STATE_INTERACTED, DARK_BLUE );
-		pClose->SetPadding( { 5.0, pRow->GetSize( ).y / 2.0 - 10.0 } );
+		pClose->SetPadding( { 0.05, pRow->GetSize( ).y / 2.0 - 0.10416666666 } );
 		pClose->SetCallback( _OnClose );
 		pRow->AddWidget( pClose );
 	}

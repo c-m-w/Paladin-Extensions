@@ -42,7 +42,7 @@ void CWindow::Initialize( )
 	const auto recLocation = GetAbsoluteLocation( );
 	const auto pWindowHeader = new CWindowHeader( bUseIcon, strTitle, strSubtitle, _OnMinimize, _OnClose );
 
-	pWindowHeader->SetSize( { recLocation.w, CWindowHeader::HEIGHT } );
+	pWindowHeader->SetSize( { PixelsToInches( recLocation.w ), CWindowHeader::HEIGHT } );
 	AddObject( pWindowHeader, { } );
 }
 

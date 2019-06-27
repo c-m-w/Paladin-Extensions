@@ -55,13 +55,13 @@ void CGUI::ResetActiveInteractable( )
 
 void CGUI::DrawCursor( ECursorType _Cursor, double dAlpha )
 {
-	constexpr auto CURSOR_SIZE = 50.0;
+	constexpr auto CURSOR_SIZE = 0.52083333333;
 	const auto vecMouseLocation = _Input.GetMouseLocation( );
 
 	if ( _Cursor == CURSOR_NONE )
 		return;
 
-	pCursors[ _Cursor ]->Rectangle( { vecMouseLocation.x - CURSOR_SIZE / 2.0, vecMouseLocation.y - CURSOR_SIZE / 2.0, CURSOR_SIZE, CURSOR_SIZE }, 0xFFFFFF00 | unsigned char( 255 * dAlpha ) );
+	pCursors[ _Cursor ]->Rectangle( { vecMouseLocation.x - InchesToPixels( CURSOR_SIZE ) / 2.0, vecMouseLocation.y - InchesToPixels( CURSOR_SIZE ) / 2.0, InchesToPixels( CURSOR_SIZE ), InchesToPixels( CURSOR_SIZE ) }, 0xFFFFFF00 | unsigned char( 255 * dAlpha ) );
 	pCursors[ _Cursor ]->Draw( );
 }
 
@@ -87,9 +87,9 @@ void CGUI::Setup( )
 	constexpr char* CURSOR_PATHS[ 4 ]
 	{
 		nullptr,
-		R"(Cursor\Arrow.png)",
-		R"(Cursor\Hand.png)",
-		R"(Cursor\I Beam.png)"
+		R"(Cursor\Arrow.svg)",
+		R"(Cursor\Hand.svg)",
+		R"(Cursor\I Beam.svg)"
 	};
 
 	_Input.AddCallback( [ & ]( CKeyState _State )
@@ -175,7 +175,7 @@ void CGUI::Setup( )
 	{
 		pCursors[ i ] = new CDrawable( );
 		_Drawing.RegisterDrawable( pCursors[ i ] );
-		pCursors[ i ]->SetTexture( CURSOR_PATHS[ i ] );
+		pCursors[ i ]->SetTexture( CURSOR_PATHS[ i ], InchesToPixels( { 0.41666666666666, 0.41666666666666 } ) );
 	}
 
 	bSetup = true;

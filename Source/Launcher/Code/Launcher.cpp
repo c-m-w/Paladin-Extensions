@@ -5,11 +5,8 @@
 #define ENTRY_SOURCE
 #include "Launcher.hpp"
 
-constexpr auto LAUNCHER_WIDTH = 560.f,
-LAUNCHER_HEIGHT = 260.f,
-POPUP_WIDTH = 340.f,
-POPUP_HEIGHT = 160.f,
-INPUT_WIDTH = 200.f;
+constexpr auto LAUNCHER_WIDTH = 6.0,
+LAUNCHER_HEIGHT = 2.7;
 auto bExit = false, bRetryConnection = false;
 
 CApplicationWindow *pApplicationWindow;
@@ -119,7 +116,7 @@ void OnLaunch( )
 
 bool SetupInterface( )
 {
-	pApplicationWindow = new CApplicationWindow( ENC( "Launcher" ), { LAUNCHER_WIDTH, LAUNCHER_HEIGHT }, GetModuleHandle( nullptr ) );
+	pApplicationWindow = new CApplicationWindow( ENC( "Launcher" ), InchesToPixels( { LAUNCHER_WIDTH, LAUNCHER_HEIGHT } ), GetModuleHandle( nullptr ) );
 	pApplicationWindow->Show( );
 	DRAW.ChangeTarget( pApplicationWindow );
 	if ( !_Drawing.Setup( ) )
@@ -268,7 +265,7 @@ void Draw( )
 {   
 	LoadCursorFromFileA( nullptr );
 	_GUI.Setup( );
-	auto window = new CWindow( { 0, 0, 450, 250 } );
+	auto window = new CWindow( { 0, 0, 5.0, 2.6 } );
 	window->SetColor( COLOR_INDEX_PRIMARY, STATE_HOVERING, 0xFFFFFFFF );
 	window->ShowIcon( );
 	window->SetTitle( "Paladin Extensions" );

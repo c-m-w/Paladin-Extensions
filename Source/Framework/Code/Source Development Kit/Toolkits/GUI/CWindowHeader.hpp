@@ -16,9 +16,9 @@ private:
 
 public:
 
-	constexpr static auto HEIGHT = 40;
-	constexpr static auto ICON_SIZE = 40;
-	constexpr static auto TEXT_HEIGHT = 16;
+	constexpr static auto HEIGHT = 0.4167;
+	constexpr static auto ICON_SIZE = 0.4167;
+	constexpr static auto TEXT_HEIGHT = 1.0 / 6.0;
 
 	CWindowHeader( bool bUseIcon, const std::string& strTitle, const std::string& strSubtitle, const Utilities::callback_t& _OnMinimize, const Utilities::callback_t& _OnClose );
 

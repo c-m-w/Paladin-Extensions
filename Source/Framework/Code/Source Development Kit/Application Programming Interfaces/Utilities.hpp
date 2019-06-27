@@ -43,6 +43,8 @@ namespace Utilities
 
 		static std::vector< vector2_t > GetCirclePoints( double dbRadius, std::size_t zResolution, double dbStartAngle = 0.0, double dbRatio = 1.0 );
 
+		[ [ nodiscard ] ] vector2_t ToPixels( ) const;
+		[[ nodiscard ]] vector2_t ToInches( ) const;
 		[ [ nodiscard ] ] double Length( ) const;
 		void Round( );
 		[ [ nodiscard ] ] double Angle( ) const;
@@ -130,7 +132,10 @@ namespace Utilities
 	};
 
 	vector2_t GetScreenDPI( );
+	double InchesToPixels( double dInches );
+	double PixelsToInches( double dPixels );
 	vector2_t InchesToPixels( const vector2_t& vecInches );
+	vector2_t PixelsToInches( const vector2_t& vecPixels );
 	double EaseIn( EEaseType _Type, const timer_t& _Timer );
 	double EaseIn( EEaseType _Type, double dRatio );
 	double EaseOut( EEaseType _Type, const timer_t& _Timer );

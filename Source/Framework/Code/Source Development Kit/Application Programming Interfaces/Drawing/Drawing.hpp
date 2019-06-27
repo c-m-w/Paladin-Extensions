@@ -49,6 +49,8 @@ struct rectangle_t
 	void PutW( double w );
 	void PutH( double h );
 	void Clamp( const rectangle_t& recClamp );
+	[ [ nodiscard ] ] rectangle_t ToPixels( ) const;
+	[[ nodiscard ]] rectangle_t ToInches( ) const;
 	[[ nodiscard ]] bool LocationInRectangle( const Utilities::vector2_t& vecLocation ) const;
 	[[ nodiscard ]] bool InRectangle( const rectangle_t& recLocation ) const;
 	[[ nodiscard ]] RECT ToRect( ) const;

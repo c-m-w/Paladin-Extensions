@@ -150,6 +150,16 @@ namespace Utilities
 		return vecReturn;
 	}
 
+	vector2_t vector2_t::ToPixels( ) const
+	{
+		return InchesToPixels( *this );
+	}
+
+	vector2_t vector2_t::ToInches( ) const
+	{
+		return PixelsToInches( *this );
+	}
+
 	double vector2_t::Length( ) const
 	{
 		return std::sqrt( std::pow( x, 2.0 ) + std::pow( y, 2.0 ) );
@@ -448,9 +458,26 @@ namespace Utilities
 		return vecDPI;
 	}
 
+	double InchesToPixels( double dInches )
+	{
+		return GetScreenDPI( ).x * dInches;
+	}
+
+	double PixelsToInches( double dPixels )
+	{
+		return dPixels / GetScreenDPI( ).x;
+	}
+
 	vector2_t InchesToPixels( const vector2_t& vecInches )
 	{
-		return GetScreenDPI( ) * vecInches;
+		auto vecReturn = GetScreenDPI( ) * vecInches;
+		vecReturn.Round( );
+		return vecReturn;
+	}
+
+	vector2_t PixelsToInches( const vector2_t &vecPixels )
+	{
+		return vecPixels / GetScreenDPI( );
 	}
 
 	double EaseIn( EEaseType _Type, const timer_t &_Timer )

@@ -223,9 +223,9 @@ void IInteractable::RemoveState( EState _NewState )
 rectangle_t IInteractable::GetAbsoluteLocation( )
 {
 	if ( pParent != nullptr )
-		return GetLocation( ) + pParent->GetLocation( );
+		return GetLocation( ).ToPixels( ) + pParent->GetAbsoluteLocation( );
 
-	return GetLocation( );
+	return GetLocation( ).ToPixels( );
 }
 
 padding_t IInteractable::GetPadding( )

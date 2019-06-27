@@ -18,7 +18,7 @@ void CText::CreateDrawables( )
 
 void CText::InitializeText( )
 {
-	_Bitmap = _FontManager.CreateBitmap( &strText[ 0 ], _Font, dSize );
+	_Bitmap = _FontManager.CreateBitmap( &strText[ 0 ], _Font, InchesToPixels( dSize ) );
 }
 
 CText::CText( ) :
@@ -44,9 +44,6 @@ void CText::SetFont( EFont _NewFont )
 
 void CText::SetHeight( double dNewSize )
 {
-	if ( dNewSize < 1.0 )
-		throw std::runtime_error( ENC( "Invalid text size." ) );
-
 	dSize = dNewSize;
 	InitializeText( );
 }
