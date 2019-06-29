@@ -109,6 +109,7 @@
     <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Input Handler.hpp" />
     <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Drawing\Shaders.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\Authentication.hpp" />
+    <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\CGroupButton.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\CImage.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\CText.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\CVectorGraphic.hpp" />
@@ -138,6 +139,7 @@
     <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Filesystem.cpp" />
     <ClCompile Include="Code\Source Development Kit\Application Programming Interfaces\Input Handler.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\Authentication.cpp" />
+    <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\CGroupButton.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\CImage.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\CText.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\CVectorGraphic.cpp" />

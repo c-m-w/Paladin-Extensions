@@ -6,6 +6,7 @@
 #include "IWidget.hpp"
 #include "IContainer.hpp"
 #include "IRow.hpp"
+#include "CGroupButton.hpp"
 #include "CImage.hpp"
 #include "CText.hpp"
 #include "CVectorGraphic.hpp"

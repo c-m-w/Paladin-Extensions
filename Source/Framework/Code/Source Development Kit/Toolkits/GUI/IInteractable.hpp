@@ -67,6 +67,7 @@ protected:
 	EInteractableType _Type = INTERACTABLE_NONE;
 	bool bSetSize = false;
 	bool bInitialized = false;
+	bool bCombineStateColors = false;
 	rectangle_t recLocation { };
 	Utilities::vector2_t vecRelative { };
 	padding_t _Padding { };

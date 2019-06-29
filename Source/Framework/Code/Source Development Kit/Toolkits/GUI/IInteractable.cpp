@@ -190,7 +190,8 @@ void IInteractable::SetColor( EColorIndex _ColorIndex, std::initializer_list< ES
 
 color_t IInteractable::GetCurrentColor( EColorIndex _ColorIndex )
 {
-	const auto pSearch = _Colors[ _ColorIndex ].find( _State );
+	const auto _ColorState = bCombineStateColors ? _State : ( _State & STATE_CLICKING ? STATE_CLICKING : ( _State & STATE_HOVERING ? STATE_HOVERING : ( _State & STATE_ACTIVATED ? STATE_ACTIVATED : STATE_DORMANT ) ) );
+	const auto pSearch = _Colors[ _ColorIndex ].find( _ColorState );
 	const auto _Color = pSearch == _Colors[ _ColorIndex ].end( ) ? _Colors[ _ColorIndex ].find( STATE_DORMANT )->second : pSearch->second;
 
 	return _ColorChangeTimer.Running( ) ? CColor::GetGradient( clrPrevious[ _ColorIndex ], _Color, EaseIn( _ColorEaseType, _ColorChangeTimer ) ) : _Color;

@@ -327,6 +327,7 @@ void CDrawable::Destroy( )
 void CDrawable::SetDrawingType( D3D_PRIMITIVE_TOPOLOGY _New )
 {
 	_Topology = _New;
+	bFillDrawing = _Topology == D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST || _Topology == D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
 }
 
 void CDrawable::SetTexture( const std::string& strResourceName )
@@ -442,7 +443,7 @@ void CDrawable::SetTexture( ID3D11Texture2D* pNewTexture )
 
 void CDrawable::SetTexture( const bitmap_t & _Bitmap, const color_t & clrText )
 {
-	const auto vecBytes = _Bitmap.GetColoredBitmapBytes( clrText.GetARGB( ) );
+	const auto vecBytes = _Bitmap.GetColoredBitmapBytes( clrText.GetRBGA( ) );
 	D3D11_TEXTURE2D_DESC _TextureDescription { };
 	D3D11_SUBRESOURCE_DATA _ResourceData { };
 	ID3D11Texture2D* pBufferTexture = nullptr;
@@ -683,7 +684,8 @@ void CDrawable::RoundedRectangle( rectangle_t recLocation, bool *bCornerRounding
 
 	const auto dbRoundingWidth = std::min( recLocation.w, recLocation.h ) * dbRoundingRatio;
 	auto vecBase = vector2_t::GetCirclePoints( dbRoundingWidth, std::size_t( dbRoundingWidth * PI ), -90.0, 0.25 );
-	vecProposedVertices.emplace_back( vertex_t( vertex_t::PixelToRatio( recLocation.vecLocation + recLocation.vecSize / 2.0 ), { 0.5, 0.5 }, clrCenter ) );
+	if ( bFillDrawing )
+		vecProposedVertices.emplace_back( vertex_t( vertex_t::PixelToRatio( recLocation.vecLocation + recLocation.vecSize / 2.0 ), { 0.5, 0.5 }, clrCenter ) );
 
 	for ( auto i = 0; i < rectangle_t::MAX; i++ )
 	{
@@ -772,15 +774,21 @@ void CDrawable::RoundedRectangle( rectangle_t recLocation, bool *bCornerRounding
 			vecPoint.Rotate( 90.0, { 0.0, 0.0 } );
 	}
 
+	vecProposedVertices.emplace_back( vecProposedVertices[ 1 ] );
+
 	const auto zSize = vecProposedVertices.size( );
 	for ( auto z = 1u; z < zSize - 1; z++ )
 	{
-		vecProposedIndicies.emplace_back( 0 );
+		if ( bFillDrawing )
+			vecProposedIndicies.emplace_back( 0 );
+
 		vecProposedIndicies.emplace_back( z );
 		vecProposedIndicies.emplace_back( z + 1 );
 	}
 
-	vecProposedIndicies.emplace_back( 0 );
+	if ( bFillDrawing )
+		vecProposedIndicies.emplace_back( 0 );
+
 	vecProposedIndicies.emplace_back( zSize - 1 );
 	vecProposedIndicies.emplace_back( 1 );
 

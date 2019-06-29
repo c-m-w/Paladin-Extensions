@@ -263,8 +263,11 @@ bool SetupInterface( )
 
 void Draw( )
 {   
-	LoadCursorFromFileA( nullptr );
 	_GUI.Setup( );
+	auto button = new CGroupButton( );
+	button->SetText( "button text test" );
+	button->SetSize( { 200.0 / 96.0, 30.0 / 96.0 } );
+	button->SetType( BUTTON_LEFT );
 	auto window = new CWindow( { 0, 0, 5.0, 2.6 } );
 	window->SetColor( COLOR_INDEX_PRIMARY, STATE_HOVERING, 0xFFFFFFFF );
 	window->ShowIcon( );
@@ -274,6 +277,7 @@ void Draw( )
 	{ } );
 	window->SetCloseCallback( [ & ]( )
 	{ } );
+	window->AddObject( button, { 10.0 / 96.0, 90.0 / 96.0 } );
 	_GUI.AddWindow( window );
 
 	while ( !bExit )

@@ -34,16 +34,16 @@ std::size_t bitmap_t::GetBitIndex( unsigned x, unsigned y ) const
 	return y * std::size_t( vecSize.x ) + x;
 }
 
-std::vector< DWORD > bitmap_t::GetColoredBitmapBytes( DWORD dwARGB ) const
+std::vector< DWORD > bitmap_t::GetColoredBitmapBytes( DWORD dwRBGA ) const
 {
 	std::vector< DWORD > vecBitmap { };
 
 	vecBitmap.resize( vecBytes.size( ) );
 	for ( auto z = 0u; z < vecBitmap.size( ); z++ )
 	{
-		const auto bAlpha = unsigned char( double( vecBytes[ z ] ) / 255.0 * double( dwARGB & 0xFF ) );
+		const auto bAlpha = unsigned char( double( vecBytes[ z ] ) / 255.0 * double( ( dwRBGA & 0xFF000000 ) >> 24 ) );
 		if ( bAlpha > 0 )
-			vecBitmap[ z ] = ( dwARGB & 0x00FFFFFF ) | ( bAlpha << 24 );
+			vecBitmap[ z ] = ( dwRBGA & 0x00FFFFFF ) | ( bAlpha << 24 );
 	}
 	
 	return vecBitmap;
@@ -272,7 +272,8 @@ bitmap_t CFontManager::CreateBitmap( char *szText, EFont _Font, double dbSize)
 				dbCurrentVerticalOffset *= -1.0;
 				dbVerticalOffset += dbCurrentVerticalOffset;
 				_Return.Resize( { _Return.vecSize.x, _Return.vecSize.y + dbCurrentVerticalOffset } );
-				_Return.ShiftDownward( std::size_t( dbCurrentVerticalOffset ) );
+				if ( uPreviousIndex )
+					_Return.ShiftDownward( std::size_t( dbCurrentVerticalOffset ) );
 			}
 
 			_Return.Insert( { dbHorizontalLocation, dbCurrentVerticalOffset },

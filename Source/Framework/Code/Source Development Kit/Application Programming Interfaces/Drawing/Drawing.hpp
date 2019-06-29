@@ -83,6 +83,7 @@ class CDrawable
 private:
 
 	bool bCreated = false;
+	bool bFillDrawing = true;
 	unsigned uVertexHash = 0u, uIndexHash = 0u;
 	std::vector< vertex_t > vecVertices { };
 	std::vector< unsigned > vecIndices { };
