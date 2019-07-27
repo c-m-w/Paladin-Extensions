@@ -20,6 +20,7 @@ public:
 	IContainer( );
 
 	void AddObject( IInteractable* pObject, const Utilities::vector2_t& vecRelative );
+	void RemoveObject( IInteractable* pObject );
 	const std::vector< IInteractable* >& GetContainedInteractables( );
 };
 

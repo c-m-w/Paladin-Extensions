@@ -262,12 +262,16 @@ bool SetupInterface( )
 }
 
 void Draw( )
-{   
+{
+	bool temp = false;
 	_GUI.Setup( );
-	auto button = new CGroupButton( );
+	auto button = new CButton( );
 	button->SetText( "button text test" );
 	button->SetSize( { 200.0 / 96.0, 30.0 / 96.0 } );
-	button->SetType( BUTTON_LEFT );
+	auto checkbox = new CCheckbox( );
+	checkbox->SetSubject( "fuckrape_city-420??" );
+	checkbox->SetVariable( &temp );
+	checkbox->SetSize( checkbox->CalculateRequiredSpace( ) );
 	auto window = new CWindow( { 0, 0, 5.0, 2.6 } );
 	window->SetColor( COLOR_INDEX_PRIMARY, STATE_HOVERING, 0xFFFFFFFF );
 	window->ShowIcon( );
@@ -278,6 +282,7 @@ void Draw( )
 	window->SetCloseCallback( [ & ]( )
 	{ } );
 	window->AddObject( button, { 10.0 / 96.0, 90.0 / 96.0 } );
+	window->AddObject( checkbox, { 50.0 / 96.0, 160.0 / 96.0 } );
 	_GUI.AddWindow( window );
 
 	while ( !bExit )

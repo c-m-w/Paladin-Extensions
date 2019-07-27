@@ -54,12 +54,108 @@ struct padding_t
 	__declspec( property( get = GetVerticalPadding, put = PutVerticalPadding ) ) double v;
 };
 
+template < typename _t >
+struct animated_value_t
+{
+	using value_change_t = std::function< void( void* ) >;
+	constexpr static auto DEFAULT_ANIMATION_TIME = 125ull;
+
+	_t* pValue = nullptr;
+	bool bCombineStates = false;
+	Utilities::timer_t _Timer = Utilities::timer_t( DEFAULT_ANIMATION_TIME );
+	Utilities::EEaseType _EaseType = Utilities::EASE_SINE2;
+	std::map< EState, _t > _Values { { STATE_DORMANT, { } } };
+	_t _NextValue { }, _CurrentValue { };
+	value_change_t _OnUpdate = nullptr;
+
+	animated_value_t( _t* pValue ):
+		pValue( pValue )
+	{ }
+
+	void SetCombineStates( bool bNewCombineStates )
+	{
+		bCombineStates = bNewCombineStates;
+	}
+
+	void SetAnimationTime( Utilities::moment_t mmtNewAnimationTime )
+	{
+		_Timer.SetLength( mmtNewAnimationTime );
+	}
+
+	void SetEaseType( Utilities::EEaseType _NewEaseType )
+	{
+		_EaseType = _NewEaseType;
+	}
+
+	void SetUpdateCallback( value_change_t _NewOnUpdate )
+	{
+		_OnUpdate = _NewOnUpdate;
+	}
+
+	EState GetSearchState( EState _State )
+	{
+		return bCombineStates ? _State : _State & STATE_CLICKING ? STATE_CLICKING : _State & STATE_HOVERING ? STATE_HOVERING : _State & STATE_ACTIVATED ? STATE_ACTIVATED : STATE_DORMANT;
+	}
+
+	void SetStateValue( EState _State, _t _StateValue )
+	{
+		const auto pSearch = _Values.find( GetSearchState( _State ) );
+
+		if ( pSearch != _Values.end( ) )
+			pSearch->second = _StateValue;
+		else
+			_Values.insert( { _State, _StateValue } );
+	}
+
+	_t GetStateValue( EState _State )
+	{
+		const auto pSearch = _Values.find( GetSearchState( _State ) );
+
+		return pSearch == _Values.end( ) ? _Values.find( STATE_DORMANT )->second : pSearch->second;
+	}
+
+	void OnStateChange( EState _State )
+	{
+		_t _StateValue = GetStateValue( _State );
+
+		if ( _Timer.Running( ) )
+			_CurrentValue = GetCurrentValue( );
+
+		_NextValue = _StateValue;
+		_Timer.Reset( );
+		_Timer.Start( );
+	}
+
+	void Update( )
+	{
+		*pValue = GetCurrentValue( );
+
+		if ( _Timer.Running( ) )
+		{
+			if ( _Timer.Finished( ) )
+				_CurrentValue = _NextValue, _NextValue = _t( ), _Timer.Reset( );
+
+			if ( _OnUpdate )
+				_OnUpdate( pValue );
+		}
+	}
+
+	_t GetCurrentValue( )
+	{
+		if ( !_Timer.Running( ) )
+			return _CurrentValue;
+
+		return _NextValue * EaseIn( _EaseType, _Timer ) + _CurrentValue * EaseOut( _EaseType, _Timer );
+	}
+};
+
 class IInteractable
 {
 protected:
 
 	virtual void CreateDrawables( );
 	virtual void Draw( );
+	void UpdateAnimatedValues( );
 
 	unsigned* pHash = new unsigned { 0 };
 	unsigned uObjectSize = 0u;
@@ -69,7 +165,8 @@ protected:
 	bool bInitialized = false;
 	bool bCombineStateColors = false;
 	rectangle_t recLocation { };
-	Utilities::vector2_t vecRelative { };
+	Utilities::vector2_t vecRelativeLocation { };
+	Utilities::vector2_t vecRelativeSize { };
 	padding_t _Padding { };
 	Utilities::EEaseType _ColorEaseType = DEFAULT_COLOR_CHANGE_EASING;
 	Utilities::timer_t _ColorChangeTimer = Utilities::timer_t( DEFAULT_COLOR_CHANGE_TIME );
@@ -77,6 +174,8 @@ protected:
 	std::map< EState, color_t > _Colors[ COLOR_INDEX_MAX ] { };
 	std::vector< CDrawable* > vecDrawables { };
 	EState _State = STATE_DORMANT;
+	std::vector< animated_value_t< Utilities::vector2_t >* > vecAnimatedVectors { };
+	std::vector< animated_value_t< double >* > vecAnimatedDoubles { };
 	std::string strToolTip { };
 
 public:
@@ -97,12 +196,15 @@ public:
 	void SetColor( EColorIndex _ColorIndex, EState _ColorState, const color_t& clrState );
 	void SetColor( EColorIndex _ColorIndex, std::initializer_list< EState > _ColorStates, const color_t& clrState );
 	color_t GetCurrentColor( EColorIndex _ColorIndex );
-	void DoColorChangeBehaviour( );
+	void DoColorAnimations( );
+	void DoStateAnimations( );
 	bool IsInteractableType( EInteractableType _TestType );
 	void Initialize( IContainer* pNewParent, const rectangle_t& recNewLocation );
 	void Initialize( IContainer* pNewParent, const Utilities::vector2_t& vecNewLocation );
 	rectangle_t GetLocation( );
 	Utilities::vector2_t GetSize( );
+	Utilities::vector2_t& GetRelativeSize( );
+	Utilities::vector2_t& GetRelativeLocation( );
 	void PreCreateDrawables( );
 	void PreDraw( );
 	void AddState( EState _NewState );
@@ -110,6 +212,9 @@ public:
 	rectangle_t GetAbsoluteLocation( );
 	padding_t GetPadding( );
 	Utilities::vector2_t GetNetSize( );
+	void AddAnimatedValue( animated_value_t< Utilities::vector2_t >* pValue );
+	void AddAnimatedValue( animated_value_t< double >* pValue );
+	std::pair< std::vector< animated_value_t< Utilities::vector2_t >* >, std::vector< animated_value_t< double >* > > GetAnimatedValues( );
 
 	virtual void Initialize( );
 	virtual void OnStateChange( );

@@ -31,6 +31,11 @@ namespace Utilities
 		return Length( );
 	}
 
+	bool vector2_t::operator==( const vector2_t &rhs ) const
+	{
+		return x == rhs.x && y == rhs.y;
+	}
+
 	vector2_t vector2_t::operator+( double rhs ) const
 	{
 		return { x + rhs, y + rhs };
@@ -387,6 +392,11 @@ namespace Utilities
 	void timer_t::SetRatio( double dRatio )
 	{
 		mmtStart = mmtStart + mmtLength * dRatio;
+	}
+
+	void timer_t::SetEndBehaviour( ETimerBehaviour _NewEndBehaviour )
+	{
+		_EndBehaviour = _NewEndBehaviour;
 	}
 
 	bool timer_t::Running( ) const

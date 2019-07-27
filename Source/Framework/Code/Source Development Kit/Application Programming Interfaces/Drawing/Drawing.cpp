@@ -324,6 +324,16 @@ void CDrawable::Destroy( )
 	bCreated = false;
 }
 
+void CDrawable::SetRotation( double dNewRotation )
+{
+	dRotation = dNewRotation;
+}
+
+void CDrawable::SetRotationPoint( const vector2_t &vecNewRotationPoint )
+{
+	vecRotationPoint = vecNewRotationPoint;
+}
+
 void CDrawable::SetDrawingType( D3D_PRIMITIVE_TOPOLOGY _New )
 {
 	_Topology = _New;
@@ -588,13 +598,32 @@ void CDrawable::Rectangle( rectangle_t recLocation, color_t * clrColor )
 {
 	decltype( vecVertices ) vecProposedVertices { };
 	decltype( vecIndices ) vecProposedIndicies { };
+	vector2_t vecPoints[ 4 ] { };
+
+	if ( dRotation == 0.0 )
+	{
+		vecPoints[ 0 ] = { recLocation.x, recLocation.y };
+		vecPoints[ 1 ] = { recLocation.x + recLocation.w, recLocation.y };
+		vecPoints[ 2 ] = { recLocation.x + recLocation.w, recLocation.y + recLocation.h };
+		vecPoints[ 3 ] = { recLocation.x, recLocation.y + recLocation.h };
+	}
+	else
+	{
+		vecPoints[ 0 ] = { 0.0, 0.0 };
+		vecPoints[ 1 ] = { recLocation.w, 0.0 };
+		vecPoints[ 2 ] = { recLocation.w, recLocation.h };
+		vecPoints[ 3 ] = { 0.0, recLocation.h };
+
+		for ( auto &vecPoint : vecPoints )
+			vecPoint.Rotate( dRotation, vecRotationPoint ), vecPoint += recLocation.vecLocation;
+	}
 
 	vecProposedVertices =
 	{
-		vertex_t( vertex_t::PixelToRatio( { recLocation.x, recLocation.y } ), { 0.0, 0.0 }, clrColor[ rectangle_t::TOP_LEFT ] ),
-		vertex_t( vertex_t::PixelToRatio( { recLocation.x + recLocation.w, recLocation.y } ), { 1.0, 0.0 }, clrColor[ rectangle_t::TOP_RIGHT ] ),
-		vertex_t( vertex_t::PixelToRatio( { recLocation.x + recLocation.w, recLocation.y + recLocation.h } ), { 1.0, 1.0 }, clrColor[ rectangle_t::BOTTOM_RIGHT ] ),
-		vertex_t( vertex_t::PixelToRatio( { recLocation.x, recLocation.y + recLocation.h } ), { 0.0, 1.0 }, clrColor[ rectangle_t::BOTTOM_LEFT ] )
+		vertex_t( vertex_t::PixelToRatio( vecPoints[ 0 ] ), { 0.0, 0.0 }, clrColor[ rectangle_t::TOP_LEFT ] ),
+		vertex_t( vertex_t::PixelToRatio( vecPoints[ 1 ] ), { 1.0, 0.0 }, clrColor[ rectangle_t::TOP_RIGHT ] ),
+		vertex_t( vertex_t::PixelToRatio( vecPoints[ 2 ] ), { 1.0, 1.0 }, clrColor[ rectangle_t::BOTTOM_RIGHT ] ),
+		vertex_t( vertex_t::PixelToRatio( vecPoints[ 3 ] ), { 0.0, 1.0 }, clrColor[ rectangle_t::BOTTOM_LEFT ] )
 	};
 	vecProposedIndicies =
 	{
@@ -622,14 +651,35 @@ void CDrawable::Rectangle( rectangle_t recLocation, color_t *clrColor, color_t c
 {
 	decltype( vecVertices ) vecProposedVertices { };
 	decltype( vecIndices ) vecProposedIndicies { };
+	vector2_t vecPoints[ 5 ] { };
+
+	if ( dRotation == 0.0 )
+	{
+		vecPoints[ 0 ] = { recLocation.x + recLocation.w / 2.0, recLocation.y + recLocation.h / 2.0 };
+		vecPoints[ 1 ] = { recLocation.x, recLocation.y };
+		vecPoints[ 2 ] = { recLocation.x + recLocation.w, recLocation.y };
+		vecPoints[ 3 ] = { recLocation.x + recLocation.w, recLocation.y + recLocation.h };
+		vecPoints[ 5 ] = { recLocation.x, recLocation.y + recLocation.h };
+	}
+	else
+	{
+		vecPoints[ 0 ] = { recLocation.w / 2.0, recLocation.h / 2.0 };
+		vecPoints[ 1 ] = { 0.0, 0.0 };
+		vecPoints[ 2 ] = { recLocation.w, 0.0 };
+		vecPoints[ 3 ] = { recLocation.w, recLocation.h };
+		vecPoints[ 5 ] = { 0.0, recLocation.h };
+
+		for ( auto &vecPoint : vecPoints )
+			vecPoint.Rotate( dRotation, vecRotationPoint ), vecPoint += recLocation.vecLocation;
+	}
 
 	vecProposedVertices =
 	{
-		vertex_t( vertex_t::PixelToRatio( { recLocation.x + recLocation.w / 2.0, recLocation.y + recLocation.h / 2.0 } ), { 0.5, 0.5 }, clrCenter ),
-		vertex_t( vertex_t::PixelToRatio( { recLocation.x, recLocation.y } ), { 0.0, 0.0 }, clrColor[ rectangle_t::TOP_LEFT ] ),
-		vertex_t( vertex_t::PixelToRatio( { recLocation.x + recLocation.w, recLocation.y } ), { 1.0, 0.0 }, clrColor[ rectangle_t::TOP_RIGHT ] ),
-		vertex_t( vertex_t::PixelToRatio( { recLocation.x + recLocation.w, recLocation.y + recLocation.h } ), { 1.0, 1.0 }, clrColor[ rectangle_t::BOTTOM_RIGHT ] ),
-		vertex_t( vertex_t::PixelToRatio( { recLocation.x, recLocation.y + recLocation.h } ), { 0.0, 1.0 }, clrColor[ rectangle_t::BOTTOM_LEFT ] )
+		vertex_t( vertex_t::PixelToRatio( vecPoints[ 0 ] ), { 0.5, 0.5 }, clrCenter								),
+		vertex_t( vertex_t::PixelToRatio( vecPoints[ 1 ] ), { 0.0, 0.0 }, clrColor[ rectangle_t::TOP_LEFT ]		),
+		vertex_t( vertex_t::PixelToRatio( vecPoints[ 2 ] ), { 1.0, 0.0 }, clrColor[ rectangle_t::TOP_RIGHT ]	),
+		vertex_t( vertex_t::PixelToRatio( vecPoints[ 3 ] ), { 1.0, 1.0 }, clrColor[ rectangle_t::BOTTOM_RIGHT ] ),
+		vertex_t( vertex_t::PixelToRatio( vecPoints[ 4 ] ), { 0.0, 1.0 }, clrColor[ rectangle_t::BOTTOM_LEFT ]	)
 	};
 	vecProposedIndicies =
 	{

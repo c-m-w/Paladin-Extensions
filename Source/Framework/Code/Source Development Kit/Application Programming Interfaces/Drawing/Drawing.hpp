@@ -84,6 +84,8 @@ private:
 
 	bool bCreated = false;
 	bool bFillDrawing = true;
+	double dRotation = 0.0;
+	Utilities::vector2_t vecRotationPoint { };
 	unsigned uVertexHash = 0u, uIndexHash = 0u;
 	std::vector< vertex_t > vecVertices { };
 	std::vector< unsigned > vecIndices { };
@@ -99,6 +101,8 @@ public:
 	bool Create( );
 	void Draw( );
 	void Destroy( );
+	void SetRotation( double dNewRotation );
+	void SetRotationPoint( const Utilities::vector2_t& vecNewRotationPoint );
 	void SetDrawingType( D3D_PRIMITIVE_TOPOLOGY _New );
 	void SetTexture( const std::string& strResourceName );
 	void SetTexture( const std::string& strSVGResourceName, Utilities::vector2_t vecSize );

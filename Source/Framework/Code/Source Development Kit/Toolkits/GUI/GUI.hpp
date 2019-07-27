@@ -6,10 +6,12 @@
 #include "IWidget.hpp"
 #include "IContainer.hpp"
 #include "IRow.hpp"
+#include "CButton.hpp"
 #include "CGroupButton.hpp"
 #include "CImage.hpp"
 #include "CText.hpp"
 #include "CVectorGraphic.hpp"
+#include "CCheckbox.hpp"
 #include "CWindowHeader.hpp"
 #include "CWindow.hpp"
 
@@ -45,6 +47,7 @@ public:
 	void Deactivate( );
 	void Activate( );
 
+	friend class IInteractable;
 } inline _GUI;
 
 namespace Interface

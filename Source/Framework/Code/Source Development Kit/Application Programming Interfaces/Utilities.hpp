@@ -24,6 +24,7 @@ namespace Utilities
 		explicit operator vector3_t( ) const;
 		explicit operator D3DXVECTOR2( ) const;
 		explicit operator double( ) const;
+		bool operator==( const vector2_t& rhs ) const;
 		vector2_t operator+( double rhs ) const;
 		vector2_t operator-( double rhs ) const;
 		vector2_t operator*( double rhs ) const;
@@ -112,6 +113,7 @@ namespace Utilities
 		void Reset( );
 		void SetLength( moment_t mmtNewLength );
 		void SetRatio( double dRatio );
+		void SetEndBehaviour( ETimerBehaviour _NewEndBehaviour );
 		[ [ nodiscard ] ] bool Running( ) const;
 		[ [ nodiscard ] ] bool Finished( ) const;
 		[ [ nodiscard ] ] double GetRatio( ) const;

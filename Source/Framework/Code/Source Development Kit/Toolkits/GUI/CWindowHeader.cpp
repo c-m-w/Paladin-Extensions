@@ -22,6 +22,21 @@ CWindowHeader::CWindowHeader( bool bUseIcon, const std::string& strTitle, const 
 	bUseIcon( bUseIcon ), strTitle( strTitle ), strSubtitle( strSubtitle ), _OnMinimize( _OnMinimize ), _OnClose( _OnClose )
 { }
 
+CWindowHeader::~CWindowHeader( )
+{
+	if ( pMinimizeSizeAnimation )
+	{
+		delete pMinimizeSizeAnimation;
+		pMinimizeSizeAnimation = nullptr;
+	}
+
+	if ( pCloseSizeAnimation )
+	{
+		delete pCloseSizeAnimation;
+		pCloseSizeAnimation = nullptr;
+	}
+}
+
 void CWindowHeader::Initialize( )
 {
 	const auto recLocation = GetAbsoluteLocation( );
@@ -71,13 +86,17 @@ void CWindowHeader::Initialize( )
 	if ( _OnMinimize )
 	{
 		const auto pMinimize = new CVectorGraphic( );
-
+		
+		pMinimizeSizeAnimation = new animated_value_t< vector2_t >( &pMinimize->GetRelativeSize( ) );
+		pMinimizeSizeAnimation->SetStateValue( STATE_HOVERING, { 0.0625, 0.0625 } );
+		pMinimizeSizeAnimation->SetStateValue( STATE_CLICKING, { 0.0625, 0.0625 } );
 		pMinimize->SetSize( { 0.20833333333, 0.20833333333 } );
 		pMinimize->SetResourceName( ENC( R"(Icons\Minus.svg)" ) );
 		pMinimize->SetColor( COLOR_INDEX_PRIMARY, STATE_DORMANT, BLUE );
 		pMinimize->SetColor( COLOR_INDEX_PRIMARY, STATE_INTERACTED, DARK_BLUE );
 		pMinimize->SetPadding( { 0.05, pRow->GetSize( ).y / 2.0 - 0.10416666666 } );
 		pMinimize->SetCallback( _OnMinimize );
+		pMinimize->AddAnimatedValue( pMinimizeSizeAnimation );
 		pRow->AddWidget( pMinimize );
 	}
 
@@ -86,12 +105,16 @@ void CWindowHeader::Initialize( )
 
 		const auto pClose = new CVectorGraphic( );
 
+		pCloseSizeAnimation = new animated_value_t< vector2_t >( &pClose->GetRelativeSize( ) );
+		pCloseSizeAnimation->SetStateValue( STATE_HOVERING, { 0.0625, 0.0625 } );
+		pCloseSizeAnimation->SetStateValue( STATE_CLICKING, { 0.0625, 0.0625 } );
 		pClose->SetSize( { 0.20833333333, 0.20833333333 } );
 		pClose->SetResourceName( ENC( R"(Icons\Times.svg)" ) );
 		pClose->SetColor( COLOR_INDEX_PRIMARY, STATE_DORMANT, BLUE );
 		pClose->SetColor( COLOR_INDEX_PRIMARY, STATE_INTERACTED, DARK_BLUE );
 		pClose->SetPadding( { 0.05, pRow->GetSize( ).y / 2.0 - 0.10416666666 } );
 		pClose->SetCallback( _OnClose );
+		pClose->AddAnimatedValue( pCloseSizeAnimation );
 		pRow->AddWidget( pClose );
 	}
 }

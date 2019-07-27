@@ -13,6 +13,8 @@ private:
 	std::string strSubtitle { };
 	Utilities::callback_t _OnMinimize { };
 	Utilities::callback_t _OnClose { };
+	animated_value_t< Utilities::vector2_t >* pMinimizeSizeAnimation = nullptr;
+	animated_value_t< Utilities::vector2_t >* pCloseSizeAnimation = nullptr;
 
 public:
 
@@ -21,6 +23,7 @@ public:
 	constexpr static auto TEXT_HEIGHT = 1.0 / 6.0;
 
 	CWindowHeader( bool bUseIcon, const std::string& strTitle, const std::string& strSubtitle, const Utilities::callback_t& _OnMinimize, const Utilities::callback_t& _OnClose );
+	~CWindowHeader( );
 
 	void Initialize( ) override;
 };

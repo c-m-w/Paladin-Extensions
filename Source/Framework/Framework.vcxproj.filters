@@ -29,6 +29,8 @@
     <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\CVectorGraphic.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\CText.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\CGroupButton.cpp" />
+    <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\CButton.cpp" />
+    <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\CCheckbox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\Development Environment\Build Output Wrapper.hpp" />
@@ -52,7 +54,6 @@
     <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Input Handler.hpp" />
     <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Drawing\Drawing.hpp" />
     <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Drawing\Shaders.hpp" />
-    <ClInclude Include="Precompile.hpp" />
     <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Drawing\Font Manager.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\GUI.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\IInteractable.hpp" />
@@ -65,6 +66,9 @@
     <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\CVectorGraphic.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\CText.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\CGroupButton.hpp" />
+    <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\CButton.hpp" />
+    <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\CCheckbox.hpp" />
+    <ClInclude Include="Precompile.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Code\Source Development Kit\Application Programming Interfaces\Connectivity.inl" />

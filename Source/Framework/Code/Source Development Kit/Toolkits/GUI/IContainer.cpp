@@ -27,6 +27,13 @@ void IContainer::AddObject( IInteractable *pObject, const vector2_t& vecRelative
 	pObject->SetParent( this );
 }
 
+void IContainer::RemoveObject( IInteractable *pObject )
+{
+	for ( auto z = 0u; z < vecInteractables.size( ); z++ )
+		if ( vecInteractables[ z ] == pObject )
+			return vecInteractables.erase( vecInteractables.begin( ) + z ), void( );
+}
+
 const std::vector<IInteractable *> & IContainer::GetContainedInteractables( )
 {
 	return vecInteractables;

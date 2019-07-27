@@ -115,11 +115,12 @@ void bitmap_t::ShiftUpward( unsigned uMagnitude )
 
 void bitmap_t::ShiftDownward( unsigned uMagnitude )
 {
+	if ( uMagnitude >= std::size_t( vecSize.y )
+		 || uMagnitude == 0 )
+		return;
+
 	const auto _OldBitmap = *this;
 	memset( &vecBytes[ 0 ], 0, vecBytes.size( ) );
-
-	if ( uMagnitude >= std::size_t( vecSize.y ) )
-		return;
 
 	for ( auto y = std::size_t( vecSize.y ) - 1; y >= uMagnitude; y-- )
 		for ( auto x = 0u; x < std::size_t( vecSize.x ); x++ )

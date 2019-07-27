@@ -12,7 +12,8 @@ constexpr unsigned WIDGET_SIZES[ WIDGET_MAX ]
 	sizeof( CImage ),
 	sizeof( CVectorGraphic ),
 	sizeof( CText ),
-	sizeof( CGroupButton )
+	sizeof( CGroupButton ),
+	sizeof( CButton )
 };
 
 IWidget::IWidget( EWidget _Type, ECursorType _Cursor ) :
