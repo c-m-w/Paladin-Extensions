@@ -206,23 +206,33 @@ bool CFontManager::Initialize( )
 		return LOG( ERROR, DRAWING, "Unable to initialize freetype." ), false;
 
 	for ( auto i = 0; i < FONT_MAX; i++ )
-	{
-		const auto& strFont = strFonts[ i ];
-		const auto& strData = RESOURCES.GetResource( strFont );
-		if ( strData.empty( ) )
-			return LOG( ERROR, DRAWING, "Unable to get font %s.", strFont.c_str( ) ), false;
+		for ( auto u = 0; u < WEIGHT_MAX; u++ )
+			for ( auto b = 0; b < 2; b++ )
+			{
+				auto strFontDirectory = strRelativeFontDirectory + strFontDirectories[ i ] + strWeightTitles[ u ];
 
-		if ( FT_New_Memory_Face( _Instance, reinterpret_cast< unsigned char* >( const_cast< char* >( &strData[ 0 ] ) ), strData.size( ), 0, &_Fonts[ i ] ) != 0 )
-			return LOG( ERROR, DRAWING, "UNable to add font %s.", strFont.c_str( ) ), false;
-	}
+				if ( b )
+					strFontDirectory += strItalicizedSuffix;
+
+				strFontDirectory += strFontFileExtension;
+				const auto& strData = RESOURCES.GetResource( strFontDirectory );
+
+				if ( strData.empty( ) )
+					return LOG( ERROR, DRAWING, "Unable to get font %s. Italicized: %i.", ( strFontDirectories[ i ] + strWeightTitles[ u ] ).c_str( ), b ), false;
+
+				if ( FT_New_Memory_Face( _Instance, reinterpret_cast< unsigned char* >( const_cast< char* >( &strData[ 0 ] ) ), strData.size( ), 0, &_Fonts[ i ][ u ][ b ] ) != 0 )
+					return LOG( ERROR, DRAWING, "Unable to add font %s. Italicized: %i.", ( strFontDirectories[ i ] + strWeightTitles[ u ] ).c_str( ), b ), false;
+			}
 
 	return true;
 }
 
 void CFontManager::Uninitialize( )
 {
-	for ( auto& _Face : _Fonts )
-		FT_Done_Face( _Face );
+	for ( auto& _Font : _Fonts )
+		for ( auto& _Weights : _Font )
+			for ( auto& _Face : _Weights )
+				FT_Done_Face( _Face );
 
 	FT_Done_FreeType( _Instance );
 }
@@ -236,14 +246,14 @@ char* CFontManager::RenderGlyph( char* szText )
 	return szText + 1;
 }
 
-bitmap_t CFontManager::CreateBitmap( char *szText, EFont _Font, double dbSize )
+bitmap_t CFontManager::CreateBitmap( char* szText, EFont _Font, EFontWeight _Weight, bool bItalic, double dbSize )
 {
 	const auto vecDPI = GetScreenDPI( );
 	bitmap_t _Return { };
 	auto uAdvance = 0u, uPreviousIndex = 0u;
 	auto dbVerticalOffset = 0.0;
 
-	_CurrentFont = _Fonts[ _Font ];
+	_CurrentFont = _Fonts[ _Font ][ _Weight ][ bItalic ];
 
 	FT_Set_Char_Size( _CurrentFont, 0, std::size_t( dbSize ) << 6, int( vecDPI.x ), int( vecDPI.y ) );
 
@@ -267,7 +277,7 @@ bitmap_t CFontManager::CreateBitmap( char *szText, EFont _Font, double dbSize )
 				dbHorizontalLocation *= -1.0;
 				uAdvance += dbHorizontalLocation * 2.0;
 			}
-
+			
 			if ( dbCurrentVerticalOffset < 0.0 )
 			{
 				dbCurrentVerticalOffset *= -1.0;
@@ -288,7 +298,7 @@ bitmap_t CFontManager::CreateBitmap( char *szText, EFont _Font, double dbSize )
 	return _Return;
 }
 
-vector2_t CFontManager::CalculateTextSize( char* szText, EFont _Font, double dbSize )
+vector2_t CFontManager::CalculateTextSize( char* szText, EFont _Font, EFontWeight _Weight, bool bItalic, double dbSize )
 {
-	return CreateBitmap( szText, _Font, dbSize ).vecSize;
+	return CreateBitmap( szText, _Font, _Weight, bItalic, dbSize ).vecSize;
 }

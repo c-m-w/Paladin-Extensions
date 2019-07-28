@@ -18,7 +18,7 @@ void CText::CreateDrawables( )
 
 void CText::InitializeText( )
 {
-	_Bitmap = _FontManager.CreateBitmap( &strText[ 0 ], _Font, InchesToPixels( dSize ) );
+	_Bitmap = _FontManager.CreateBitmap( &strText[ 0 ], _Font, _Weight, bItalic, InchesToPixels( dSize ) );
 }
 
 CText::CText( ) :
@@ -40,6 +40,16 @@ void CText::SetFont( EFont _NewFont )
 {
 	_Font = _NewFont;
 	InitializeText( );
+}
+
+void CText::SetWeight( EFontWeight _NewWeight )
+{
+	_Weight = _NewWeight;
+}
+
+void CText::SetItalic( bool bNewItalic )
+{
+	bItalic = bNewItalic;
 }
 
 void CText::SetHeight( double dNewSize )

@@ -58,7 +58,8 @@ void CWindowHeader::Initialize( )
 		const auto pTitle = new CText( );
 
 		pTitle->SetText( strTitle );
-		pTitle->SetFont( FONT_ROBOTO_BOLD );
+		pTitle->SetFont( FONT_ROBOTO );
+		pTitle->SetWeight( WEIGHT_BOLD );
 		pTitle->SetHeight( 1.0 / 6.0 );
 		pTitle->SetAlignment( ALIGNMENT_LEFT, ALIGNMENT_CENTER );
 		pTitle->SetSize( { pTitle->GetTextSize( ).ToInches( ).x, pRow->GetSize( ).y } );

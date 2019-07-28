@@ -5,8 +5,8 @@
 #define ENTRY_SOURCE
 #include "Launcher.hpp"
 
-constexpr auto LAUNCHER_WIDTH = 6.0,
-LAUNCHER_HEIGHT = 2.7;
+constexpr auto LAUNCHER_WIDTH = 18.0,
+LAUNCHER_HEIGHT = 10.0;
 auto bExit = false, bRetryConnection = false;
 
 CApplicationWindow *pApplicationWindow;
@@ -264,7 +264,7 @@ bool SetupInterface( )
 void Draw( )
 {
 	auto text = new CDrawable( );
-	auto textbmp = _FontManager.CreateBitmap( "text_test", FONT_ROBOTO, 8.0 );
+	auto textbmp = _FontManager.CreateBitmap( "text_test", FONT_ROBOTO, WEIGHT_LIGHT, true, 12.0 );
 	text->Rectangle( { { 302, 130 }, textbmp.vecSize }, color_t( 0xFFFFFFFF ) );
 	text->SetTexture( textbmp, 0xFFFFFFFF );
 
@@ -277,8 +277,7 @@ void Draw( )
 	checkbox->SetSubject( "fuckrape_city-420??" );
 	checkbox->SetVariable( &temp );
 	checkbox->SetSize( checkbox->CalculateRequiredSpace( ) );
-	auto window = new CWindow( { 0, 0, 5.0, 2.6 } );
-	window->SetColor( COLOR_INDEX_PRIMARY, STATE_HOVERING, 0xFFFFFFFF );
+	auto window = new CWindow( { 0, 0, 15.0, 7.5 } );
 	window->ShowIcon( );
 	window->SetTitle( "Paladin Extensions" );
 	window->SetSubtitle( "Launcher" );

@@ -1,13 +1,16 @@
-/// IContainer.hpp
+/// CContainer.hpp
 
 #pragma once
 
 #include "GUI.hpp"
 
-class IContainer: public IInteractable
+class CContainer: public IInteractable
 {
 private:
 
+	bool bDrawBackground = false;
+
+	void CreateDrawables( ) override;
 	void Draw( ) override;
 
 protected:
@@ -17,8 +20,9 @@ protected:
 
 public:
 
-	IContainer( );
+	CContainer( );
 
+	void DrawBackground( );
 	void AddObject( IInteractable* pObject, const Utilities::vector2_t& vecRelative );
 	void RemoveObject( IInteractable* pObject );
 	const std::vector< IInteractable* >& GetContainedInteractables( );

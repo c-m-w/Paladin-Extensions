@@ -116,7 +116,7 @@
     <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\CText.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\CVectorGraphic.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\CWindowHeader.hpp" />
-    <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\IContainer.hpp" />
+    <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\CContainer.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\CWindow.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\IRow.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\GUI.hpp" />
@@ -148,7 +148,7 @@
     <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\CText.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\CVectorGraphic.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\CWindowHeader.cpp" />
-    <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\IContainer.cpp" />
+    <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\CContainer.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\CWindow.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\IRow.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\GUI.cpp" />
@@ -170,6 +170,7 @@
     <None Include="Code\Development Environment\Assembly ON.inl" />
     <None Include="Code\Source Development Kit\Application Programming Interfaces\Connectivity.inl" />
     <None Include="Code\Source Development Kit\Application Programming Interfaces\Cryptography.inl" />
+    <None Include="Code\Source Development Kit\Application Programming Interfaces\Input Handler.inl" />
     <None Include="Code\Source Development Kit\Application Programming Interfaces\Utilities.inl" />
     <None Include="Code\Source Development Kit\Toolkits\Hooking.hpp" />
     <None Include="Code\Source Development Kit\Toolkits\Memory Manager.inl" />

@@ -21,7 +21,7 @@ void CButton::CreateDrawables( )
 
 void CButton::CreateTextBitmap( )
 {
-	_TextBitmap = _FontManager.CreateBitmap( &strText[ 0 ], FONT_ROBOTO, InchesToPixels( TEXT_HEIGHT ) );
+	_TextBitmap = _FontManager.CreateBitmap( &strText[ 0 ], FONT_ROBOTO, WEIGHT_REGULAR, false, InchesToPixels( TEXT_HEIGHT ) );
 }
 
 CButton::CButton( ) :

@@ -77,6 +77,32 @@ using mouse_move_callback_t = std::function< bool( int, int ) >;
 			Return true if the input was handled. */
 using scroll_callback_t = std::function< bool( short, int, int ) >;
 
+struct callbacks_t
+{
+private:
+
+	std::vector< key_callback_t > vecKeyCallbacks[ UCHAR_MAX ] { };
+	std::vector< key_typed_callback_t > vecKeyTypedCallbacks { };
+	std::vector< global_key_callback_t > vecGlobalKeyCallbacks { };
+	std::vector< mouse_move_callback_t > vecMouseMoveCallbacks { };
+	std::vector< scroll_callback_t > vecScrollCallbacks { };
+
+public:
+
+	void AddCallback( const key_callback_t& _Callback, const key_t& _Key );
+	void AddCallback( const key_typed_callback_t& _Callback );
+	void AddCallback( const global_key_callback_t& _Callback );
+	void AddCallback( const mouse_move_callback_t& _Callback );
+	void AddCallback( const scroll_callback_t& _Callback );
+
+	std::vector< key_callback_t >& GetCallbacks( const key_t& _Key );
+	template< typename _t > std::vector< _t >& GetCallbacks( );
+	template< > std::vector< key_typed_callback_t >& GetCallbacks( );
+	template< > std::vector< global_key_callback_t >& GetCallbacks( );
+	template< > std::vector< mouse_move_callback_t >& GetCallbacks( );
+	template< > std::vector< scroll_callback_t >& GetCallbacks( );
+};
+
 class CInputHandler: public IBase
 {
 private:
@@ -92,22 +118,17 @@ private:
 	CKeyState _KeyStates[ UCHAR_MAX ];
 	key_t _LastPressedKey;
 	Utilities::moment_t mmtLastKeyPressTime[ UCHAR_MAX ];
-	std::vector< key_callback_t > vecKeyCallbacks[ UCHAR_MAX ];
-	std::vector< key_typed_callback_t > vecKeyTypedCallbacks;
-	std::vector< global_key_callback_t > vecGlobalKeyCallbacks;
-	std::vector< mouse_move_callback_t > vecMouseMoveCallbacks;
-	std::vector< scroll_callback_t > vecScrollCallbacks;
+	callbacks_t _Callbacks { };
 
 public:
 
 	bool HandleEvent( UINT uMsg, WPARAM wParam, LPARAM lParam );
 	void AddCallback( const key_callback_t &_Callback, const key_t &_Key );
-	void AddCallback( const key_typed_callback_t &_Callback );
-	void AddCallback( const global_key_callback_t &_Callback );
-	void AddCallback( const mouse_move_callback_t &_Callback );
-	void AddCallback( const scroll_callback_t &_Callback );
+	template< typename _t > void AddCallback( _t _Callback );
 	CKeyState GetKeyState( const key_t &_KeyCode );
 	Utilities::vector2_t GetMouseLocation( );
 	Utilities::moment_t GetTimeSinceKeyPress( const key_t &_Key );
 	void GetMousePos( int &x, int &y );
 } extern _Input;
+
+#include "Input Handler.inl"

@@ -37,7 +37,7 @@ void CCheckbox::Initialize( )
 	pSubject->SetFont( FONT );
 	pSubject->SetSize( pSubject->GetTextSize( ) );
 	pSubject->SetColor( COLOR_INDEX_PRIMARY, STATE_DORMANT, TEXT_DARK );
-	AddObject( pSubject, { recLocation.h + SPACING, 0.0 } );
+	AddObject( pSubject, { recLocation.h + SPACING, ( ICON_HEIGHT - TEXT_HEIGHT ) / 2.0 } );
 	AddObject( pIcon, { } );
 }
 
@@ -56,6 +56,6 @@ void CCheckbox::SetVariable( bool* pNewEnabled )
 
 vector2_t CCheckbox::CalculateRequiredSpace( )
 {
-	return { ICON_HEIGHT + SPACING + _FontManager.CreateBitmap( &strSubject[0], FONT, TEXT_HEIGHT ).vecSize.x, ICON_HEIGHT };
+	return { ICON_HEIGHT + SPACING + _FontManager.CreateBitmap( &strSubject[0], FONT, WEIGHT_REGULAR, false, TEXT_HEIGHT ).vecSize.x, ICON_HEIGHT };
 }
 

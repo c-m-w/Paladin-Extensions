@@ -1,4 +1,4 @@
-/// IContainer.cpp
+/// CContainer.cpp
 
 #include "Precompile.hpp"
 
@@ -6,7 +6,13 @@
 #define USE_NAMESPACES
 #include "../../../Framework.hpp"
 
-void IContainer::Draw( )
+void CContainer::CreateDrawables( )
+{
+	if ( bDrawBackground )
+		vecDrawables.emplace_back( new CDrawable( ) )->Rectangle( GetAbsoluteLocation( ), GetCurrentColor( COLOR_INDEX_PRIMARY ) );
+}
+
+void CContainer::Draw( )
 {
 	for ( auto& pDrawable : vecDrawables )
 		pDrawable->Draw( );
@@ -15,11 +21,16 @@ void IContainer::Draw( )
 		pObject->PreDraw( );
 }
 
-IContainer::IContainer( ):
+CContainer::CContainer( ):
 	IInteractable( 1, INTERACTABLE_CONTAINER )
 { }
 
-void IContainer::AddObject( IInteractable *pObject, const vector2_t& vecRelative )
+void CContainer::DrawBackground( )
+{
+	bDrawBackground = true;
+}
+
+void CContainer::AddObject( IInteractable *pObject, const vector2_t& vecRelative )
 {
 	vecInteractables.emplace_back( pObject );
 	pObject->SetLocation( vecRelative );
@@ -27,14 +38,14 @@ void IContainer::AddObject( IInteractable *pObject, const vector2_t& vecRelative
 	pObject->SetParent( this );
 }
 
-void IContainer::RemoveObject( IInteractable *pObject )
+void CContainer::RemoveObject( IInteractable *pObject )
 {
 	for ( auto z = 0u; z < vecInteractables.size( ); z++ )
 		if ( vecInteractables[ z ] == pObject )
 			return vecInteractables.erase( vecInteractables.begin( ) + z ), void( );
 }
 
-const std::vector<IInteractable *> & IContainer::GetContainedInteractables( )
+const std::vector<IInteractable *> & CContainer::GetContainedInteractables( )
 {
 	return vecInteractables;
 }

@@ -24,7 +24,7 @@ void CGroupButton::CreateDrawables( )
 
 void CGroupButton::CreateTextBitmap( )
 {
-	_TextBitmap = _FontManager.CreateBitmap( &strText[ 0 ], FONT, InchesToPixels( TEXT_HEIGHT ) );
+	_TextBitmap = _FontManager.CreateBitmap( &strText[ 0 ], FONT, WEIGHT_REGULAR, false, InchesToPixels( TEXT_HEIGHT ) );
 }
 
 CGroupButton::CGroupButton( ) :

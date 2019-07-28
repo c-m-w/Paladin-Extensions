@@ -4,7 +4,7 @@
 
 #include "IInteractable.hpp"
 #include "IWidget.hpp"
-#include "IContainer.hpp"
+#include "CContainer.hpp"
 #include "IRow.hpp"
 #include "CButton.hpp"
 #include "CGroupButton.hpp"
@@ -29,7 +29,7 @@ private:
 	ECursorType _NextCursor = CURSOR_NONE;
 	Utilities::timer_t _CursorFade = Utilities::timer_t( DEFAULT_CURSOR_FADE_TIME );
 
-	IInteractable* GetHoveredInteractable( IContainer* pContainer = nullptr );
+	IInteractable* GetHoveredInteractable( CContainer* pContainer = nullptr );
 	void FindHoveredInteractable( );
 	void ResetActiveInteractable( );
 	void DrawCursor( ECursorType _Cursor, double dAlpha );

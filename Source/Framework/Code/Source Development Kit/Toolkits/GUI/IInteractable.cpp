@@ -70,7 +70,7 @@ IInteractable::~IInteractable( )
 	delete pHash;
 }
 
-void IInteractable::SetParent( IContainer *pNewParent )
+void IInteractable::SetParent( CContainer *pNewParent )
 {
 	pParent = pNewParent;
 }
@@ -80,13 +80,13 @@ bool IInteractable::IsInteractableType( EInteractableType _TestType )
 	return _Type == _TestType;
 }
 
-void IInteractable::Initialize( IContainer *pNewParent, const rectangle_t &recNewLocation )
+void IInteractable::Initialize( CContainer *pNewParent, const rectangle_t &recNewLocation )
 {
 	pParent = pNewParent;
 	recLocation = recNewLocation;
 }
 
-void IInteractable::Initialize( IContainer *pNewParent, const vector2_t &vecNewLocation )
+void IInteractable::Initialize( CContainer *pNewParent, const vector2_t &vecNewLocation )
 {
 	pParent = pNewParent;
 	recLocation.vecLocation = vecNewLocation;
@@ -287,6 +287,11 @@ void IInteractable::AddAnimatedValue( animated_value_t< double > *pValue )
 std::pair< std::vector< animated_value_t< vector2_t >* >, std::vector< animated_value_t< double >* > > IInteractable::GetAnimatedValues( )
 {
 	return { vecAnimatedVectors, vecAnimatedDoubles };
+}
+
+callbacks_t & IInteractable::GetCallbacks( )
+{
+	return _Callbacks;
 }
 
 void IInteractable::Initialize( )

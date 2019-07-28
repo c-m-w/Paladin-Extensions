@@ -6,7 +6,7 @@
 #define USE_NAMESPACES
 #include "../../../Framework.hpp"
 
-IInteractable* CGUI::GetHoveredInteractable( IContainer* pContainer /*= nullptr*/ )
+IInteractable* CGUI::GetHoveredInteractable( CContainer* pContainer /*= nullptr*/ )
 {
 	if ( pContainer == nullptr )
 	{
@@ -20,7 +20,7 @@ IInteractable* CGUI::GetHoveredInteractable( IContainer* pContainer /*= nullptr*
 		if ( pInteractable->GetAbsoluteLocation( ).LocationInRectangle( _Input.GetMouseLocation( ) ) )
 		{
 			if ( pInteractable->IsInteractableType( INTERACTABLE_CONTAINER ) )
-				return GetHoveredInteractable( reinterpret_cast< IContainer* >( pInteractable ) );
+				return GetHoveredInteractable( reinterpret_cast< CContainer* >( pInteractable ) );
 
 			return pInteractable;
 		}

@@ -20,7 +20,7 @@ enum EVerticalAlignment
 	VALIGNMENT_MAX
 };
 
-class IRow: public IContainer
+class IRow: public CContainer
 {
 protected:
 

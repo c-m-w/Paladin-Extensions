@@ -2,7 +2,7 @@
 
 #pragma once
 
-class CWindowHeader: public IContainer
+class CWindowHeader: public CContainer
 {
 private:
 

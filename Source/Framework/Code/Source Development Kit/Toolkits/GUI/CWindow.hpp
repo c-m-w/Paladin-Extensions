@@ -2,7 +2,7 @@
 
 #pragma once
 
-class CWindow: public IContainer
+class CWindow: public CContainer
 {
 private:
 
@@ -11,6 +11,9 @@ private:
 	std::string strSubtitle { };
 	Utilities::callback_t _OnMinimize = nullptr;
 	Utilities::callback_t _OnClose = nullptr;
+	CContainer* pPopupContainer = nullptr;
+	CWindow* pPopup = nullptr;
+	bool bCanClosePopup = false;
 
 public:
 
@@ -21,6 +24,7 @@ public:
 	void SetSubtitle( const std::string& strNewSubtitle );
 	void SetMinimizeCallback( Utilities::callback_t _OnMinimizeCallback );
 	void SetCloseCallback( Utilities::callback_t _OnCloseCallback );
+	void Popup( CWindow* pNewPopup, bool bNewCanClosePopup );
+	void ClosePopup( );
 	void Initialize( ) override;
-	void CreateDrawables( ) override;
 };

@@ -6,6 +6,36 @@
 #define USE_NAMESPACES
 #include "../../Framework.hpp"
 
+void callbacks_t::AddCallback( const key_callback_t& _Callback, const key_t& _Key )
+{
+	vecKeyCallbacks[ _Key ].emplace_back( _Callback );
+}
+
+void callbacks_t::AddCallback( const key_typed_callback_t& _Callback )
+{
+	vecKeyTypedCallbacks.emplace_back( _Callback );
+}
+
+void callbacks_t::AddCallback( const global_key_callback_t& _Callback )
+{
+	vecGlobalKeyCallbacks.emplace_back( _Callback );
+}
+
+void callbacks_t::AddCallback( const mouse_move_callback_t& _Callback )
+{
+	vecMouseMoveCallbacks.emplace_back( _Callback );
+}
+
+void callbacks_t::AddCallback( const scroll_callback_t& _Callback )
+{
+	vecScrollCallbacks.emplace_back( _Callback );
+}
+
+std::vector< key_callback_t >& callbacks_t::GetCallbacks( const key_t& _Key )
+{
+	return vecKeyCallbacks[ _Key ];
+}
+
 bool CInputHandler::Initialize( )
 {
 	iMouseX = iMouseY = _LastPressedKey = 0;
@@ -24,10 +54,10 @@ bool CInputHandler::ProcessKey( key_t _Key, CKeyState _KeyState )
 
 	auto bReturn = false;
 
-	for ( const auto &fnCallback: vecKeyCallbacks[ _Key ] )
+	for ( const auto &fnCallback: _Callbacks.GetCallbacks( _Key ) )
 		bReturn |= fnCallback( _KeyState );
 
-	for ( const auto &fnCallback: vecGlobalKeyCallbacks )
+	for ( const auto &fnCallback: _Callbacks.GetCallbacks< global_key_callback_t >( ) )
 		bReturn |= fnCallback( _Key, _KeyState );
 
 	return bReturn;
@@ -84,7 +114,7 @@ bool CInputHandler::ProcessKeyboardMessage( UINT uMsg, WPARAM wParam )
 		case WM_CHAR:
 		{
 			if ( wParam >= ' ' || wParam == VK_BACK )
-				for ( const auto &_Callback: vecKeyTypedCallbacks )
+				for ( const auto &_Callback: _Callbacks.GetCallbacks< key_typed_callback_t >( ) )
 					bReturn |= _Callback( wParam );
 		}
 		break;
@@ -139,7 +169,7 @@ bool CInputHandler::HandleEvent( UINT uMsg, WPARAM wParam, LPARAM lParam )
 			iMouseX = *reinterpret_cast< short* >( &lParam );
 			iMouseY = *reinterpret_cast< short* >( uintptr_t( &lParam ) + sizeof( short ) );
 
-			for ( const auto &_Callback: vecMouseMoveCallbacks )
+			for ( const auto &_Callback: _Callbacks.GetCallbacks< mouse_move_callback_t >( ) )
 				bReturn |= _Callback( iMouseX, iMouseY );
 		}
 		break;
@@ -149,7 +179,7 @@ bool CInputHandler::HandleEvent( UINT uMsg, WPARAM wParam, LPARAM lParam )
 			const auto sDelta = GET_WHEEL_DELTA_WPARAM( wParam );
 			const POINT pntMouse { *reinterpret_cast< short* >( &lParam ), *reinterpret_cast< short* >( uintptr_t( &lParam ) + sizeof( short ) ) };
 
-			for ( const auto &_Callback: vecScrollCallbacks )
+			for ( const auto &_Callback: _Callbacks.GetCallbacks< scroll_callback_t >( ) )
 				bReturn |= _Callback( sDelta, pntMouse.x, pntMouse.y );
 		}
 
@@ -162,27 +192,7 @@ bool CInputHandler::HandleEvent( UINT uMsg, WPARAM wParam, LPARAM lParam )
 
 void CInputHandler::AddCallback( const key_callback_t &_Callback, const key_t &_Key )
 {
-	vecKeyCallbacks[ _Key ].emplace_back( _Callback );
-}
-
-void CInputHandler::AddCallback( const key_typed_callback_t &_Callback )
-{
-	vecKeyTypedCallbacks.emplace_back( _Callback );
-}
-
-void CInputHandler::AddCallback( const global_key_callback_t &_Callback )
-{
-	vecGlobalKeyCallbacks.emplace_back( _Callback );
-}
-
-void CInputHandler::AddCallback( const mouse_move_callback_t &_Callback )
-{
-	vecMouseMoveCallbacks.emplace_back( _Callback );
-}
-
-void CInputHandler::AddCallback( const scroll_callback_t &_Callback )
-{
-	vecScrollCallbacks.emplace_back( _Callback );
+	_Callbacks.AddCallback( _Callback, _Key );
 }
 
 CKeyState CInputHandler::GetKeyState( const key_t &_KeyCode )
@@ -195,7 +205,7 @@ vector2_t CInputHandler::GetMouseLocation( )
 	return { double( iMouseX ), double( iMouseY ) };
 }
 
-Utilities::moment_t CInputHandler::GetTimeSinceKeyPress( const key_t &_Key )
+moment_t CInputHandler::GetTimeSinceKeyPress( const key_t &_Key )
 {
 	return GetMoment( ) - mmtLastKeyPressTime[ _Key ];
 }

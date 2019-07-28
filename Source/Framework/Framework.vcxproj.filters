@@ -23,7 +23,6 @@
     <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\IWidget.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\IRow.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\CWindow.cpp" />
-    <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\IContainer.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\CWindowHeader.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\CImage.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\CVectorGraphic.cpp" />
@@ -31,6 +30,7 @@
     <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\CGroupButton.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\CButton.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\CCheckbox.cpp" />
+    <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\CContainer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\Development Environment\Build Output Wrapper.hpp" />
@@ -60,7 +60,6 @@
     <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\IWidget.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\IRow.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\CWindow.hpp" />
-    <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\IContainer.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\CWindowHeader.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\CImage.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\CVectorGraphic.hpp" />
@@ -69,6 +68,7 @@
     <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\CButton.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\CCheckbox.hpp" />
     <ClInclude Include="Precompile.hpp" />
+    <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\CContainer.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Code\Source Development Kit\Application Programming Interfaces\Connectivity.inl" />
@@ -78,5 +78,6 @@
     <None Include="Code\Source Development Kit\Toolkits\Hooking.hpp" />
     <None Include="Code\Development Environment\Assembly ON.inl" />
     <None Include="Code\Development Environment\Assembly OFF.inl" />
+    <None Include="Code\Source Development Kit\Application Programming Interfaces\Input Handler.inl" />
   </ItemGroup>
 </Project>

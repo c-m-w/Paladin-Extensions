@@ -6,7 +6,7 @@
 
 #include "GUI.hpp"
 
-class IContainer;
+class CContainer;
 
 enum EInteractableType
 {
@@ -159,7 +159,7 @@ protected:
 
 	unsigned* pHash = new unsigned { 0 };
 	unsigned uObjectSize = 0u;
-	IContainer* pParent = nullptr;
+	CContainer* pParent = nullptr;
 	EInteractableType _Type = INTERACTABLE_NONE;
 	bool bSetSize = false;
 	bool bInitialized = false;
@@ -171,12 +171,13 @@ protected:
 	Utilities::EEaseType _ColorEaseType = DEFAULT_COLOR_CHANGE_EASING;
 	Utilities::timer_t _ColorChangeTimer = Utilities::timer_t( DEFAULT_COLOR_CHANGE_TIME );
 	color_t clrPrevious[ COLOR_INDEX_MAX ] { };
-	std::map< EState, color_t > _Colors[ COLOR_INDEX_MAX ] { };
+	std::map< EState, color_t > _Colors[ COLOR_INDEX_MAX ];
 	std::vector< CDrawable* > vecDrawables { };
 	EState _State = STATE_DORMANT;
 	std::vector< animated_value_t< Utilities::vector2_t >* > vecAnimatedVectors { };
 	std::vector< animated_value_t< double >* > vecAnimatedDoubles { };
 	std::string strToolTip { };
+	callbacks_t _Callbacks { };
 
 public:
 
@@ -187,7 +188,7 @@ public:
 	explicit IInteractable( unsigned uObjectSize, EInteractableType _Type );
 	virtual ~IInteractable( );
 
-	void SetParent( IContainer* pNewParent );
+	void SetParent( CContainer* pNewParent );
 	void SetLocation( const Utilities::vector2_t& vecNew );
 	void SetSize( const Utilities::vector2_t& vecSize );
 	void SetPadding( const padding_t& _NewPadding );
@@ -199,8 +200,8 @@ public:
 	void DoColorAnimations( );
 	void DoStateAnimations( );
 	bool IsInteractableType( EInteractableType _TestType );
-	void Initialize( IContainer* pNewParent, const rectangle_t& recNewLocation );
-	void Initialize( IContainer* pNewParent, const Utilities::vector2_t& vecNewLocation );
+	void Initialize( CContainer* pNewParent, const rectangle_t& recNewLocation );
+	void Initialize( CContainer* pNewParent, const Utilities::vector2_t& vecNewLocation );
 	rectangle_t GetLocation( );
 	Utilities::vector2_t GetSize( );
 	Utilities::vector2_t& GetRelativeSize( );
@@ -215,6 +216,7 @@ public:
 	void AddAnimatedValue( animated_value_t< Utilities::vector2_t >* pValue );
 	void AddAnimatedValue( animated_value_t< double >* pValue );
 	std::pair< std::vector< animated_value_t< Utilities::vector2_t >* >, std::vector< animated_value_t< double >* > > GetAnimatedValues( );
+	callbacks_t& GetCallbacks( );
 
 	virtual void Initialize( );
 	virtual void OnStateChange( );

@@ -4,12 +4,20 @@
 
 enum EFont
 {
-	FONT_TAHOMA,
-	FONT_TAHOMA_BOLD,
+	FONT_OPEN_SANS,
 	FONT_ROBOTO,
-	FONT_ROBOTO_BOLD,
-	FONT_ENVY,
+	FONT_ROBOTO_MONO,
 	FONT_MAX
+};
+
+enum EFontWeight
+{
+	WEIGHT_THIN,
+	WEIGHT_LIGHT,
+	WEIGHT_REGULAR,
+	WEIGHT_MEDIUM,
+	WEIGHT_BOLD,
+	WEIGHT_MAX
 };
 
 struct bitmap_t
@@ -46,19 +54,28 @@ private:
 
 	char* RenderGlyph( char* szText );
 
-	const std::string strFonts[ FONT_MAX ]
+	const std::string strRelativeFontDirectory = ENC( "Fonts\\" );
+	const std::string strFontDirectories[ FONT_MAX ]
 	{
-		ENC( "Fonts\\Tahoma.ttf" ),
-		ENC( "Fonts\\Tahoma Bold.ttf" ),
-		ENC( "Fonts\\Roboto.ttf" ),
-		ENC( "Fonts\\Roboto Bold.ttf" ),
-		ENC( "Fonts\\Envy.ttf" )
+		ENC( "Open Sans\\" ),
+		ENC( "Roboto\\" ),
+		ENC( "Roboto Mono\\" )
 	};
+	const std::string strWeightTitles[ WEIGHT_MAX ]
+	{
+		ENC( "Thin" ),
+		ENC( "Light" ),
+		ENC( "Regular" ),
+		ENC( "Medium" ),
+		ENC( "Bold" )
+	};
+	const std::string strItalicizedSuffix = ENC( "Italic" );
+	const std::string strFontFileExtension = ENC( ".ttf" );
 	FT_Library _Instance = nullptr;
-	FT_Face _Fonts[ FONT_MAX ] { }, _CurrentFont { };
+	FT_Face _Fonts[ FONT_MAX ][ WEIGHT_MAX ][ 2 ] { }, _CurrentFont { };
 
 public:
 
-	bitmap_t CreateBitmap( char* szText, EFont _Font, double dbSize );
-	Utilities::vector2_t CalculateTextSize( char* szText, EFont _Font, double dbSize );
+	bitmap_t CreateBitmap( char* szText, EFont _Font, EFontWeight _Weight, bool bItalic, double dbSize );
+	Utilities::vector2_t CalculateTextSize( char* szText, EFont _Font, EFontWeight _Weight, bool bItalic, double dbSize );
 } inline _FontManager;
