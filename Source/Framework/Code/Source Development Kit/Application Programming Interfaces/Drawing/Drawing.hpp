@@ -84,6 +84,7 @@ private:
 
 	bool bCreated = false;
 	bool bFillDrawing = true;
+	bool bAntiAlias = true;
 	double dRotation = 0.0;
 	Utilities::vector2_t vecRotationPoint { };
 	unsigned uVertexHash = 0u, uIndexHash = 0u;
@@ -104,6 +105,7 @@ public:
 	void SetRotation( double dNewRotation );
 	void SetRotationPoint( const Utilities::vector2_t& vecNewRotationPoint );
 	void SetDrawingType( D3D_PRIMITIVE_TOPOLOGY _New );
+	void SetAntiAlias( bool bNewAntiAlias );
 	void SetTexture( const std::string& strResourceName );
 	void SetTexture( const std::string& strSVGResourceName, Utilities::vector2_t vecSize );
 	void SetTexture( ID3D11Texture2D* pNewTexture );

@@ -15,7 +15,7 @@ private:
 
 public:
 
-	static constexpr auto TEXT_HEIGHT = 0.11458333333;
+	static constexpr auto TEXT_HEIGHT = 6.0 / 96.0;
 	static constexpr auto ICON_HEIGHT = 0.125;
 	static constexpr auto SPACING = 0.05208333333;
 	static constexpr auto FONT = FONT_ROBOTO;

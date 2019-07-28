@@ -263,6 +263,11 @@ bool SetupInterface( )
 
 void Draw( )
 {
+	auto text = new CDrawable( );
+	auto textbmp = _FontManager.CreateBitmap( "text_test", FONT_ROBOTO, 8.0 );
+	text->Rectangle( { { 302, 130 }, textbmp.vecSize }, color_t( 0xFFFFFFFF ) );
+	text->SetTexture( textbmp, 0xFFFFFFFF );
+
 	bool temp = false;
 	_GUI.Setup( );
 	auto button = new CButton( );
@@ -296,6 +301,7 @@ void Draw( )
 		//first->Draw( );
 		//second->Draw( );
 		_GUI.Draw( );
+		text->Draw( );
 		DRAW.EndFrame( );
 
 		const auto mmtDifference = GetMoment( ) - mmtNow;

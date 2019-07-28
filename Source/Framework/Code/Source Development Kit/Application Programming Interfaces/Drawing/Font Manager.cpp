@@ -236,7 +236,7 @@ char* CFontManager::RenderGlyph( char* szText )
 	return szText + 1;
 }
 
-bitmap_t CFontManager::CreateBitmap( char *szText, EFont _Font, double dbSize)
+bitmap_t CFontManager::CreateBitmap( char *szText, EFont _Font, double dbSize )
 {
 	const auto vecDPI = GetScreenDPI( );
 	bitmap_t _Return { };

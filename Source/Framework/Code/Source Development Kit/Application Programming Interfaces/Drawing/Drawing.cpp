@@ -340,6 +340,11 @@ void CDrawable::SetDrawingType( D3D_PRIMITIVE_TOPOLOGY _New )
 	bFillDrawing = _Topology == D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST || _Topology == D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP;
 }
 
+void CDrawable::SetAntiAlias( bool bNewAntiAlias )
+{
+	bAntiAlias = bNewAntiAlias;
+}
+
 void CDrawable::SetTexture( const std::string& strResourceName )
 {
 	const auto& strData = _ResourceManager.GetResource( strResourceName );
