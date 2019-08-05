@@ -14,7 +14,8 @@
 #endif
 
 #ifdef _INC_TCHAR
-#error ("Must include tier0 type headers before tchar.h")
+//todo: commented out because fuck valve
+//#error ("Must include tier0 type headers before tchar.h")
 #endif
 
 // Temporarily turn off Valve defines

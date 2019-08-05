@@ -790,7 +790,7 @@ public:
 	// Is this a submodel of the world ( *1 etc. in name ) ( brush models only )
 	virtual bool					IsSubModel( void );
 	// Deal with EF_* flags
-	virtual bool					CreateLightEffects( void );
+	virtual void					CreateLightEffects( void );
 
 	void							AddToAimEntsList();
 	void							RemoveFromAimEntsList();

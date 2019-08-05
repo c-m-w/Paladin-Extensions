@@ -2,8 +2,6 @@
 
 #pragma once
 
-#include "../../CSGO SDK/Code/CSGO SDK.hpp"
-
 namespace Modules
 {
 	enum

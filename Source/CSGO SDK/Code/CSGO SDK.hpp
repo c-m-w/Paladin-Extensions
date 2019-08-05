@@ -18,7 +18,7 @@
 
 // for some reason, other files below do NOT include this section of files, but reference them. they are manually included here to compile.
 // todo: look into it more. it's likely that those files im including actually need to be included after something else. perhaps an _on file?
-//#include <winnt.h>
+#include <Windows.h>
 //#include "public/interfaces/interfaces.h" // todo: ensure this is a valve file // todo: all of these classes/interfaces need to be updated to the latest version of the game. probably dont work
 //#include "public/tier0/platform.h"
 #include "public/tier0/annotations.h"
@@ -27,6 +27,7 @@
 #include "public/tier1/mempool.h"
 #include "public/bitvec.h"
 #include "game/shared/shareddefs.h"
+#include "string_t.h"
 #include "game/shared/predictable_entity.h"
 //#include "game/shared/predictioncopy.h"
 #include "game/client/c_baseentity.h" // todo: should update this

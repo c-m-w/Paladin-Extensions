@@ -91,6 +91,11 @@
     <ClInclude Include="Code\CNetChannel Extended.hpp" />
     <ClInclude Include="Code\CSGO SDK.hpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Code\CCSPlayer Extended.cpp" />
+    <ClCompile Include="Code\CNetChannel Extended.cpp" />
+    <ClCompile Include="Code\Source.cpp" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -7,6 +7,8 @@
 #define USE_DEFINITIONS
 #include "../../Framework/Code/Framework.hpp"
 
+#include "../../CSGO SDK/Code/CSGO SDK.hpp"
+
 #include "Development Environment/Linkage.hpp"
 #include "Source Development Kit/Application Programming Interface/Hooks.hpp"
 

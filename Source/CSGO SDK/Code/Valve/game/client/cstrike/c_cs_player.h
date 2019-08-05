@@ -42,7 +42,7 @@ public:
 	C_CSPlayer();
 	~C_CSPlayer();
 
-	virtual void Simulate();
+	virtual bool Simulate();
 
 	bool HasDefuser() const;
 

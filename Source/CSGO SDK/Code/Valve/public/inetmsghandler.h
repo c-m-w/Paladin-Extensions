@@ -178,13 +178,5 @@ public:
 	PROCESS_SVC_MESSAGE( CmdKeyValues ) = 0;
 };
 
-class IConnectionlessPacketHandler
-{
-public:
-	virtual	~IConnectionlessPacketHandler( void ) {};
-
-	virtual bool ProcessConnectionlessPacket( netpacket_t *packet ) = 0;	// process a connectionless packet
-};
-
 
 #endif // INETMSGHANDLER_H

@@ -255,6 +255,18 @@ private:
 	// Set to false when we first connect to a server and true later on before we
 	// respond to a new whitelist.
 	bool		m_bMarkedCRCsUnverified;
+
+	// TODO: PALADIN APPENDED
+	void INetChannelHandler::ConnectionStop(void) override;
+	void INetChannelHandler::FileRequested(const char *,unsigned int,bool) override;
+	void INetChannelHandler::FileReceived(const char *,unsigned int,bool) override;
+	void INetChannelHandler::FileDenied(const char *,unsigned int,bool) override;
+	void INetChannelHandler::FileSent(const char *,unsigned int,bool) override;
+	bool INetChannelHandler::ChangeSplitscreenUser(int) override;
+	bool IConnectionlessPacketHandler::ProcessConnectionlessPacket(CNetPacket *) override;
+	bool INetMessageHandler::ProcessSplitScreenUser(NET_SplitScreenUser *) override;
+	bool IServerMessageHandler::ProcessSplitScreen(SVC_SplitScreen *) override;
+	bool IServerMessageHandler::ProcessCmdKeyValues(SVC_CmdKeyValues *) override;
 };  //CClientState
 
 extern	CClientState	cl;

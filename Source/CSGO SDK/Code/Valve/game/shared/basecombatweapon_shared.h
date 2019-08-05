@@ -144,7 +144,7 @@ public:
 	// Get unique weapon ID
 	// FIXMEL4DTOMAINMERGE
 	// We might have to disable this code in main until we refactor all weapons to use this system, as it's a pretty good perf boost
-	virtual int GetWeaponID( void ) const		{ return 0; }
+	virtual CSWeaponID GetWeaponID( void ) const		{ return WEAPON_NONE; }
 
 
 	virtual bool			IsBaseCombatWeapon( void ) const { return true; }
