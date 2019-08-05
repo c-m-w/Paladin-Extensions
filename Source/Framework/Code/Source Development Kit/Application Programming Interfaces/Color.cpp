@@ -232,14 +232,17 @@ double color_t::Get601Luminance( ) const
 	return _Data.b[ COLOR_ALPHA ] / UCHAR_MAX * ( 0.299 * _Data.b[ COLOR_RED ] + 0.587 * _Data.b[ COLOR_GREEN ] + 0.114 * _Data.b[ COLOR_BLUE ] );
 }
 
-color_t CColor::GetGradient( color_t clrStart, color_t clrEnd, double dbProgress )
+color_t CColor::GetGradient( color_t clrStart, color_t clrEnd, double dbProgress, EEaseType _StartEase /*= Utilities::EASE_LINEAR*/, EEaseType _EndEase /*= Utilities::EASE_LINEAR*/ )
 {
+	const auto dbStartProgress = EaseOut( _StartEase, dbProgress );
+	const auto dbEndProgress = EaseIn( _EndEase, dbProgress );
+
 	return
 	{
-		clrStart.r + unsigned char( ( clrEnd.r - clrStart.r ) * dbProgress ),
-		clrStart.g + unsigned char( ( clrEnd.g - clrStart.g ) * dbProgress ),
-		clrStart.b + unsigned char( ( clrEnd.b - clrStart.b ) * dbProgress ),
-		clrStart.a + unsigned char( ( clrEnd.a - clrStart.a ) * dbProgress )
+		unsigned char( clrStart.r * dbStartProgress + clrEnd.r * dbEndProgress ),
+		unsigned char( clrStart.g * dbStartProgress + clrEnd.g * dbEndProgress ),
+		unsigned char( clrStart.b * dbStartProgress + clrEnd.b * dbEndProgress ),
+		unsigned char( clrStart.a * dbStartProgress + clrEnd.a * dbEndProgress )
 	};
 }
 
@@ -271,17 +274,19 @@ color_t CColor::GetColor( )
 		return pSequences[ 0 ].clr;
 
 	mmtTotalDuration = 0;
-	for ( std::size_t z = 0u; z < zSequences; z++ )
+
+	for ( auto z = 0u; z < zSequences; z++ )
 		mmtTotalDuration += pSequences[ z ].mmtDuration;
-	auto mmtCurrentProgress = GetMoment( ) / 10000ull % mmtTotalDuration;
+
+	const auto mmtCurrentProgress = GetMoment( ) / 10000ull % mmtTotalDuration;
 	auto mmtPassedProgress = 0ull;
 
-	for ( std::size_t z = 0u; z < zSequences; z++ )
+	for ( auto z = 0u, u = z + 1; z < zSequences; z++, u = z + 1 != zSequences ? z + 1 : 0 )
 		if ( pSequences[ z ].mmtDuration < mmtCurrentProgress - mmtPassedProgress )
 			mmtPassedProgress += pSequences[ z ].mmtDuration;
 		else
-			return GetGradient( pSequences[ z ].clr, pSequences[ z + 1 != zSequences ? z + 1 : 0 ].clr,
-								float( mmtCurrentProgress - mmtPassedProgress ) / float( pSequences[ z ].mmtDuration ) );
+			return GetGradient( pSequences[ z ].clr, pSequences[ u ].clr,
+								float( mmtCurrentProgress - mmtPassedProgress ) / float( pSequences[ z ].mmtDuration ), pSequences[ z ]._Ease, pSequences[ u ]._Ease );
 
 	throw std::runtime_error( ENC( "Invalid array index" ) );
 }

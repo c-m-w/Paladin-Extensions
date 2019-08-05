@@ -12,6 +12,7 @@ enum EWidget
 	WIDGET_TEXT,
 	WIDGET_GROUP_BUTTON,
 	WIDGET_BUTTON,
+	WIDGET_SCROLLBAR,
 	WIDGET_MAX
 };
 
@@ -30,16 +31,12 @@ protected:
 
 	EWidget _Type = WIDGET_NONE;
 	ECursorType _Cursor = CURSOR_ARROW;
-	Utilities::callback_t _OnClick = nullptr;
 
 public:
 
 	IWidget( EWidget _Type, ECursorType _Cursor );
 
-	void OnClick( CKeyState _State ) override;
 	bool IsWidgetType( EWidget _TestType );
 	ECursorType GetCursorType( );
 	void SetCursorType( ECursorType _NewCursor );
-	void SetCallback( Utilities::callback_t _NewOnClick );
-	virtual void OnWidgetClick( );
 };

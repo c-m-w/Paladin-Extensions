@@ -25,6 +25,8 @@ namespace Utilities
 		explicit operator D3DXVECTOR2( ) const;
 		explicit operator double( ) const;
 		bool operator==( const vector2_t& rhs ) const;
+		bool operator!=( const vector2_t& rhs ) const;
+		bool operator!( ) const;
 		vector2_t operator+( double rhs ) const;
 		vector2_t operator-( double rhs ) const;
 		vector2_t operator*( double rhs ) const;
@@ -122,6 +124,7 @@ namespace Utilities
 	// https://www.desmos.com/calculator/qycrrzyzko
 	enum EEaseType
 	{
+		EASE_LINEAR,
 		EASE_SINE1,
 		EASE_SINE2,
 		EASE_INVSINE1,

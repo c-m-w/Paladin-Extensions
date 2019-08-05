@@ -13,14 +13,17 @@ void CWindowHeader::CreateDrawables( )
 	const auto pLine = vecDrawables.emplace_back( new CDrawable( ) );
 	const auto dTop = recLocation.y + recLocation.h;
 
-	pBackground->Rectangle( recLocation, BACKGROUND_DARK );
-	pLine->Line( { recLocation.x, dTop }, { recLocation.x + recLocation.w, dTop }, 0, OUTLINE_LIGHT );
+	pBackground->Rectangle( recLocation, GetCurrentColor( COLOR_INDEX_PRIMARY ) );
+	pLine->Line( { recLocation.x, dTop }, { recLocation.x + recLocation.w, dTop }, 0, GetCurrentColor( COLOR_INDEX_SECONDARY ) );
 	pLine->SetDrawingType( D3D10_PRIMITIVE_TOPOLOGY_LINESTRIP );
 }
 
 CWindowHeader::CWindowHeader( bool bUseIcon, const std::string& strTitle, const std::string& strSubtitle, const callback_t& _OnMinimize, const callback_t& _OnClose ) :
 	bUseIcon( bUseIcon ), strTitle( strTitle ), strSubtitle( strSubtitle ), _OnMinimize( _OnMinimize ), _OnClose( _OnClose )
-{ }
+{
+	SetColor( COLOR_INDEX_PRIMARY, STATE_DORMANT, BACKGROUND_DARK );
+	SetColor( COLOR_INDEX_SECONDARY, STATE_DORMANT, OUTLINE_LIGHT );
+}
 
 CWindowHeader::~CWindowHeader( )
 {
@@ -96,7 +99,7 @@ void CWindowHeader::Initialize( )
 		pMinimize->SetColor( COLOR_INDEX_PRIMARY, STATE_DORMANT, BLUE );
 		pMinimize->SetColor( COLOR_INDEX_PRIMARY, STATE_INTERACTED, DARK_BLUE );
 		pMinimize->SetPadding( { 0.05, pRow->GetSize( ).y / 2.0 - 0.10416666666 } );
-		pMinimize->SetCallback( _OnMinimize );
+		//pMinimize->SetCallback( _OnMinimize );
 		pMinimize->AddAnimatedValue( pMinimizeSizeAnimation );
 		pRow->AddWidget( pMinimize );
 	}
@@ -114,7 +117,7 @@ void CWindowHeader::Initialize( )
 		pClose->SetColor( COLOR_INDEX_PRIMARY, STATE_DORMANT, BLUE );
 		pClose->SetColor( COLOR_INDEX_PRIMARY, STATE_INTERACTED, DARK_BLUE );
 		pClose->SetPadding( { 0.05, pRow->GetSize( ).y / 2.0 - 0.10416666666 } );
-		pClose->SetCallback( _OnClose );
+		//pClose->SetCallback( _OnClose );
 		pClose->AddAnimatedValue( pCloseSizeAnimation );
 		pRow->AddWidget( pClose );
 	}

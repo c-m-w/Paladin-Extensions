@@ -16,14 +16,20 @@ IInteractable* CGUI::GetHoveredInteractable( CContainer* pContainer /*= nullptr*
 		pContainer = vecWindows.front( );
 	}
 
-	for ( auto& pInteractable : pContainer->GetContainedInteractables( ) )
-		if ( pInteractable->GetAbsoluteLocation( ).LocationInRectangle( _Input.GetMouseLocation( ) ) )
+	const auto vecInteractables = pContainer->GetContainedInteractables( );
+
+	for ( auto i = int( vecInteractables.size( ) ) - 1; i >= 0; i-- )
+	{
+		const auto pInteractable = vecInteractables[ i ];
+
+		if ( pInteractable->GetHitbox( ).LocationInRectangle( _Input.GetMouseLocation( ) ) )
 		{
 			if ( pInteractable->IsInteractableType( INTERACTABLE_CONTAINER ) )
 				return GetHoveredInteractable( reinterpret_cast< CContainer* >( pInteractable ) );
 
 			return pInteractable;
 		}
+	}
 
 	if ( pContainer->GetAbsoluteLocation( ).LocationInRectangle( _Input.GetMouseLocation( ) ) )
 		return pContainer;
@@ -79,6 +85,17 @@ void CGUI::DrawCursor( ECursorType _Cursor )
 			DrawCursor( _CurrentCursor, 1.0 );
 }
 
+void CGUI::NotifyContainer( CContainer *pContainer )
+{
+	for ( auto& pInteractable : pContainer->GetContainedInteractables( ) )
+	{
+		pInteractable->NewFrame( );
+
+		if ( pInteractable->IsInteractableType( INTERACTABLE_CONTAINER ) )
+			NotifyContainer( reinterpret_cast< CContainer* >( pInteractable ) );
+	}
+}
+
 void CGUI::Setup( )
 {
 	if ( bSetup )
@@ -111,7 +128,12 @@ void CGUI::Setup( )
 			pActiveInteractable->RemoveState( STATE_CLICKING );
 
 		if ( pHoveredInteractable )
+		{
 			pHoveredInteractable->OnClick( _State );
+
+			for ( auto& _Callback : pHoveredInteractable->GetCallbacks( ).GetCallbacks( VK_LBUTTON ) )
+				_Callback( _State );
+		}
 
 		return true;
 	}, VK_LBUTTON );
@@ -122,7 +144,12 @@ void CGUI::Setup( )
 			return false;
 
 		if ( pHoveredInteractable )
+		{
 			pHoveredInteractable->OnRightClick( _State );
+
+			for ( auto& _Callback : pHoveredInteractable->GetCallbacks( ).GetCallbacks( VK_RBUTTON ) )
+				_Callback( _State );
+		}
 
 		return true;
 	}, VK_RBUTTON );
@@ -133,7 +160,17 @@ void CGUI::Setup( )
 			return false;
 
 		if ( pActiveInteractable )
+		{
 			pActiveInteractable->OnKeyPress( _Key, _State );
+
+			if ( _Key != VK_RBUTTON 
+				 && _Key != VK_LBUTTON )
+				for ( auto& _Callback : pActiveInteractable->GetCallbacks( ).GetCallbacks( _Key ) )
+					_Callback( _State );
+
+			for ( auto& _Callback : pActiveInteractable->GetCallbacks( ).GetCallbacks< global_key_callback_t >( ) )
+				_Callback( _Key, _State );
+		}
 
 		return true;
 	} );
@@ -144,7 +181,12 @@ void CGUI::Setup( )
 			return false;
 
 		if ( pActiveInteractable )
+		{
 			pActiveInteractable->OnKeyTyped( _Key );
+
+			for ( auto& _Callback : pHoveredInteractable->GetCallbacks( ).GetCallbacks< key_typed_callback_t >( ) )
+				_Callback( _Key );
+		}
 
 		return true;
 	} );
@@ -155,7 +197,15 @@ void CGUI::Setup( )
 			return false;
 
 		if ( pHoveredInteractable )
-			pHoveredInteractable->OnScroll( _ScrollAmount );
+		{
+			auto pInteractable = pHoveredInteractable;
+
+			while ( !pInteractable->OnScroll( int( _ScrollAmount ) ) && pInteractable->GetParent( ) )
+				pInteractable = pInteractable->GetParent( );
+
+			for ( auto& _Callback : pInteractable->GetCallbacks( ).GetCallbacks< scroll_callback_t >( ) )
+				_Callback( _ScrollAmount, iMouseX, iMouseY );
+		}
 
 		return true;
 	} );
@@ -166,6 +216,9 @@ void CGUI::Setup( )
 			return false;
 
 		FindHoveredInteractable( );
+		if ( pActiveInteractable
+			 && pActiveInteractable->HasState( STATE_CLICKING ) )
+			pActiveInteractable->OnMouseMove( vector2_t( double( iMouseX ), double( iMouseY ) ) );
 
 		return true;
 
@@ -221,7 +274,7 @@ void CGUI::Draw( )
 	while ( ShowCursor( FALSE ) > 0 );
 
 	for ( auto i = int( vecWindows.size( ) ) - 1; i >= 0; i-- )
-		vecWindows[ i ]->PreDraw( );
+		NotifyContainer( vecWindows[ i ] ), vecWindows[ i ]->PreDraw( );
 
 	if ( !_Drawing.GetTarget( )->CursorOnWindow( ) )
 		return;
@@ -244,7 +297,13 @@ void CGUI::Activate( )
 	bActive = true;
 }
 
-namespace Interface
+void CGUI::FreeInteractable( IInteractable *pInteractable )
 {
-	
+	if ( pActiveInteractable == pInteractable )
+		pActiveInteractable = nullptr;
+
+	if ( pHoveredInteractable == pInteractable )
+		FindHoveredInteractable( );
+
+	delete pInteractable;
 }

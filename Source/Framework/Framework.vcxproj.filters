@@ -31,6 +31,7 @@
     <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\CButton.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\CCheckbox.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\CContainer.cpp" />
+    <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\CScrollbar.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\Development Environment\Build Output Wrapper.hpp" />
@@ -69,6 +70,7 @@
     <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\CCheckbox.hpp" />
     <ClInclude Include="Precompile.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\CContainer.hpp" />
+    <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\CScrollbar.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Code\Source Development Kit\Application Programming Interfaces\Connectivity.inl" />

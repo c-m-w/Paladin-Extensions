@@ -6,6 +6,11 @@
 #define USE_NAMESPACES
 #include "../../../Framework.hpp"
 
+void CButton::SetDefaultSize( )
+{
+	SetSize( PixelsToInches( _TextBitmap.vecSize ) + TEXT_SPACING * 2.0 );
+}
+
 void CButton::CreateDrawables( )
 {
 	const auto recLocation = GetAbsoluteLocation( );
@@ -21,7 +26,7 @@ void CButton::CreateDrawables( )
 
 void CButton::CreateTextBitmap( )
 {
-	_TextBitmap = _FontManager.CreateBitmap( &strText[ 0 ], FONT_ROBOTO, WEIGHT_REGULAR, false, InchesToPixels( TEXT_HEIGHT ) );
+	_TextBitmap = _FontManager.CreateBitmap( &strText[ 0 ], FONT, FONT_WEIGHT, false, InchesToPixels( TEXT_HEIGHT ) );
 }
 
 CButton::CButton( ) :
@@ -29,13 +34,13 @@ CButton::CButton( ) :
 {
 	CreateTextBitmap( );
 	SetColor( COLOR_INDEX_PRIMARY, STATE_DORMANT, TEXT_NORMAL );
-	SetColor( COLOR_INDEX_SECONDARY, STATE_DORMANT, VIVID_BLUE );
-	SetColor( COLOR_INDEX_SECONDARY, STATE_HOVERING, VIVID_BLUE_ACTIVE );
-	SetColor( COLOR_INDEX_SECONDARY, STATE_CLICKING, VIVID_BLUE_ACTIVE );
+	SetColor( COLOR_INDEX_SECONDARY, STATE_DORMANT, LIGHT_BLUE );
+	SetColor( COLOR_INDEX_SECONDARY, STATE_HOVERING, LIGHT_BLUE_ACTIVE );
+	SetColor( COLOR_INDEX_SECONDARY, STATE_CLICKING, LIGHT_BLUE_ACTIVE );
 
-	_SizeAnimation->SetStateValue( STATE_HOVERING, { 0.0625, 0.0625 } );
-	_SizeAnimation->SetStateValue( STATE_CLICKING, { 0.0625, 0.0625 } );
-	_LocationAnimation->SetStateValue( STATE_CLICKING, { 0.04166666666, 0.04166666666 } );
+	_SizeAnimation->SetStateValue( STATE_HOVERING, { 0.02083333333, 0.02083333333 } );
+	_SizeAnimation->SetStateValue( STATE_CLICKING, { 0.02083333333, 0.02083333333 } );
+	_LocationAnimation->SetStateValue( STATE_CLICKING, { 0.01041666666, 0.01041666666 } );
 	_LocationAnimation->SetAnimationTime( LOCATION_ANIMATION_TIME );
 	AddAnimatedValue( _SizeAnimation );
 	AddAnimatedValue( _LocationAnimation );
@@ -43,6 +48,8 @@ CButton::CButton( ) :
 
 void CButton::SetText( const std::string& strNewText )
 {
-	strText = strNewText;
+	strText.clear( );
+	bCreateDrawables = true;
+	std::transform( strNewText.begin( ), strNewText.end( ), std::back_inserter( strText ), toupper );
 	CreateTextBitmap( );
 }

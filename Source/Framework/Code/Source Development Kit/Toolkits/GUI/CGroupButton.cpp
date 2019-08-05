@@ -6,6 +6,11 @@
 #define USE_NAMESPACES
 #include "../../../Framework.hpp"
 
+void CGroupButton::SetDefaultSize( )
+{
+	SetSize( PixelsToInches( _TextBitmap.vecSize ) + TEXT_SPACING * 2.0 );
+}
+
 void CGroupButton::CreateDrawables( )
 {
 	const auto recLocation = GetAbsoluteLocation( );
@@ -48,9 +53,11 @@ void CGroupButton::SetText( const std::string& strNewText )
 {
 	strText = strNewText;
 	CreateTextBitmap( );
+	bCreateDrawables = true;
 }
 
 void CGroupButton::SetType( EButtonType _NewType )
 {
 	_Type = _NewType;
+	bCreateDrawables = true;
 }

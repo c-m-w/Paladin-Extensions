@@ -139,13 +139,14 @@ public:
 	/** \param clrEnd Color that gradient ends at */
 	/** \param dbProgress Progress to end */
 	/** \return Color at specified progress */
-	[ [ nodiscard ] ] static color_t GetGradient( color_t clrStart, color_t clrEnd, double dbProgress );
+	[ [ nodiscard ] ] static color_t GetGradient( color_t clrStart, color_t clrEnd, double dbProgress, Utilities::EEaseType _StartEase = Utilities::EASE_LINEAR, Utilities::EEaseType _EndEase = Utilities::EASE_LINEAR );
 
 	/** \brief Structure to contain data of one sequence */
 	struct sequence_t
 	{
 		color_t clr { };
 		Utilities::moment_t mmtDuration = 0;
+		Utilities::EEaseType _Ease = Utilities::EASE_LINEAR;
 	};
 
 private:

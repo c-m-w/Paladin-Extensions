@@ -12,11 +12,17 @@ void CCheckbox::Initialize( )
 	pSubject = new CText( );
 
 	pIcon->SetResourceName( pEnabled && *pEnabled ? strEnabledIcon : strDisabledIcon );
-	pIcon->SetCallback( [ & ]( )
+	pIcon->GetCallbacks( ).AddCallback( [ & ]( CKeyState _State )
 	{
+		if ( !_State )
+			return false;
+
 		if ( pEnabled != nullptr )
 			*pEnabled = !*pEnabled, pIcon->SetColor( COLOR_INDEX_PRIMARY, STATE_DORMANT, *pEnabled ? DARK_BLUE : TEXT_DARK ), pIcon->SetColor( COLOR_INDEX_PRIMARY, STATE_HOVERING, *pEnabled ? BLUE : TEXT_NORMAL ), pIcon->SetColor( COLOR_INDEX_PRIMARY, STATE_CLICKING, *pEnabled ? BLUE : TEXT_NORMAL );
-	} );
+
+		return true;
+	}, VK_LBUTTON );
+	pIcon->SetCursorType( CURSOR_HAND );
 	pIcon->SetSize( { recLocation.h, recLocation.h } );
 	pIcon->SetColor( COLOR_INDEX_PRIMARY, STATE_DORMANT, pEnabled && *pEnabled ? DARK_BLUE : TEXT_DARK );
 	pIcon->SetColor( COLOR_INDEX_PRIMARY, STATE_HOVERING, pEnabled && *pEnabled ? BLUE : TEXT_NORMAL );
@@ -44,6 +50,7 @@ void CCheckbox::Initialize( )
 void CCheckbox::SetSubject( const std::string& strNewSubject )
 {
 	strSubject = strNewSubject;
+	bCreateDrawables = true;
 
 	if ( pSubject )
 		pSubject->SetText( strSubject );
@@ -56,6 +63,6 @@ void CCheckbox::SetVariable( bool* pNewEnabled )
 
 vector2_t CCheckbox::CalculateRequiredSpace( )
 {
-	return { ICON_HEIGHT + SPACING + _FontManager.CreateBitmap( &strSubject[0], FONT, WEIGHT_REGULAR, false, TEXT_HEIGHT ).vecSize.x, ICON_HEIGHT };
+	return { ICON_HEIGHT + SPACING + PixelsToInches( _FontManager.CreateBitmap( &strSubject[ 0 ], FONT, WEIGHT_REGULAR, false, TEXT_HEIGHT ).vecSize.x ), ICON_HEIGHT };
 }
 

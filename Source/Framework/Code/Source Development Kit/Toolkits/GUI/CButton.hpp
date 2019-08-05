@@ -6,6 +6,7 @@ class CButton: public IWidget
 {
 private:
 
+	void SetDefaultSize( ) override;
 	void CreateDrawables( ) override;
 	void CreateTextBitmap( );
 
@@ -16,8 +17,10 @@ private:
 
 public:
 
-	static constexpr auto TEXT_HEIGHT = 0.125;
+	static constexpr auto TEXT_HEIGHT = 0.10416666666;
+	static constexpr auto TEXT_SPACING = 0.10416666666;
 	static constexpr auto FONT = FONT_ROBOTO;
+	static constexpr auto FONT_WEIGHT = WEIGHT_BOLD;
 	static constexpr auto ROUNDING = 0.2;
 	static constexpr auto LOCATION_ANIMATION_TIME = 50ull;
 

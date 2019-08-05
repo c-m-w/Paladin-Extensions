@@ -36,6 +36,16 @@ namespace Utilities
 		return x == rhs.x && y == rhs.y;
 	}
 
+	bool vector2_t::operator!=( const vector2_t &rhs ) const
+	{
+		return rhs.x != x || rhs.y != y;
+	}
+
+	bool vector2_t::operator!( ) const
+	{
+		return x == 0.0 && y == 0.0;
+	}
+
 	vector2_t vector2_t::operator+( double rhs ) const
 	{
 		return { x + rhs, y + rhs };
@@ -501,6 +511,11 @@ namespace Utilities
 
 		switch( _Type )
 		{
+			case EASE_LINEAR:
+			{
+				return dRatio;
+			}
+
 			case EASE_SINE1:
 			{
 				return sin( PI / 2 * dRatio );

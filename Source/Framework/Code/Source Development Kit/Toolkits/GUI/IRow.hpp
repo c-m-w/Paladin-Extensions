@@ -24,6 +24,9 @@ class IRow: public CContainer
 {
 protected:
 
+	double dbAlignmentGap = 0.0;
+	double dbAlignmentGapAddition = 0.0;
+
 	virtual void AdjustWidgetPositions( ) = 0;
 	virtual std::vector< IInteractable* > GetWidgets( ) = 0;
 
@@ -32,9 +35,11 @@ public:
 	IRow( ) = default;
 	virtual ~IRow( ) = default;
 
+	void SetAlignmentGap( double dbNewAlignmentGap );
 	virtual void AddWidget( IWidget* pWidget ) = 0;
 	virtual void RemoveWidget( IWidget* pWidget ) = 0;
 	virtual bool Overfilled( ) = 0;
+	virtual void Clamp( ) = 0;
 };
 
 class CHorizontalRow: public IRow
@@ -45,6 +50,7 @@ private:
 	double dbFill[ HALIGNMENT_MAX ] { };
 	std::vector< EHorizontalAlignment > vecObjectAlignments { };
 
+	void SetDefaultSize( ) override;
 	std::vector< IInteractable* > GetWidgets( ) override;
 	void AdjustWidgetPositions( ) override;
 
@@ -55,6 +61,7 @@ public:
 	void AddWidget( IWidget* pWidget ) override;
 	void RemoveWidget( IWidget* pWidget ) override;
 	bool Overfilled( ) override;
+	void Clamp( ) override;
 
 	void SetAlignment( EHorizontalAlignment _NewAlignment );
 };
@@ -77,6 +84,7 @@ public:
 	void AddWidget( IWidget* pWidget ) override;
 	void RemoveWidget( IWidget* pWidget ) override;
 	bool Overfilled( ) override;
+	void Clamp( ) override;
 
 	void SetAlignment( EVerticalAlignment _NewAlignment );
 };

@@ -82,7 +82,6 @@ inline void ShutdownFramework( )
 
 #if defined USE_NAMESPACES
 using namespace Utilities;
-using namespace Interface;
 #endif
 
 // todo cleanup all references to normal class objects and replace with definitions

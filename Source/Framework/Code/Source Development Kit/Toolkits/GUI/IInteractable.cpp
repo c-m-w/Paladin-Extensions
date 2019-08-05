@@ -52,27 +52,83 @@ void padding_t::PutVerticalPadding( double dbVertical )
 void IInteractable::UpdateAnimatedValues( )
 {
 	for ( auto& pAnimatedVector : vecAnimatedVectors )
-		pAnimatedVector->Update( );
+		bCreateDrawables |= pAnimatedVector->Update( );
 
 	for ( auto& pAnimatedDouble : vecAnimatedDoubles )
-		pAnimatedDouble->Update( );
+		bCreateDrawables |= pAnimatedDouble->Update( );
 }
 
-IInteractable::IInteractable( unsigned uObjectSize, EInteractableType _Type ) :
-	uObjectSize( uObjectSize ), _Type( _Type )
+double IInteractable::CalculateAlphaRatio( )
+{
+	auto dbReturn = 1.0;
+	auto pCurrent = pParent;
+
+	if ( _Type == INTERACTABLE_CONTAINER )
+		dbReturn *= reinterpret_cast< CContainer* >( this )->GetAlphaRatio( );
+
+	while ( pCurrent != nullptr )
+		dbReturn *= reinterpret_cast< CContainer* >( pCurrent )->CalculateAlphaRatio( ), pCurrent = pCurrent->pParent;
+
+	return dbReturn;
+}
+
+void IInteractable::UpdateContainerContents( CContainer *pContainer )
+{
+	for ( auto& pInteractable : pContainer->GetContainedInteractables(  ) )
+	{
+		pInteractable->PreCreateDrawables( );
+		if ( pInteractable->IsInteractableType( INTERACTABLE_CONTAINER ) )
+			UpdateContainerContents( reinterpret_cast< CContainer* >( pInteractable ) );
+	}
+}
+
+IInteractable::IInteractable( EInteractableType _Type ) :
+	_Type( _Type )
 {
 	for ( int i = COLOR_INDEX_PRIMARY; i != COLOR_INDEX_MAX; i++ )
 		SetColor( EColorIndex( i ), STATE_DORMANT, DEFAULT_COLOR );
 }
 
 IInteractable::~IInteractable( )
-{
-	delete pHash;
-}
+{ }
 
 void IInteractable::SetParent( CContainer *pNewParent )
 {
+	if ( !pNewParent->IsInteractableType( INTERACTABLE_CONTAINER ) )
+		throw std::runtime_error( ENC( "Parent type must be container." ) );
+
 	pParent = pNewParent;
+}
+
+CContainer* IInteractable::GetParent( )
+{
+	return reinterpret_cast< CContainer* >( pParent );
+}
+
+rectangle_t IInteractable::GetHitbox( )
+{
+	auto pHitbox = GetAbsoluteLocation( );
+	auto pParentIterator = pParent;
+
+	while ( pParentIterator )
+	{
+		if ( pParentIterator->GetStrictBounds( ) )
+			pHitbox.Clamp( pParentIterator->GetAbsoluteLocation( ) );
+
+		pParentIterator = pParentIterator->pParent;
+	}
+
+	return pHitbox;
+}
+
+void IInteractable::SetScrollImmune( bool bNewScrollImmune )
+{
+	bScrollImmune = bNewScrollImmune;
+}
+
+bool IInteractable::GetScrollImmune( )
+{
+	return bScrollImmune;
 }
 
 bool IInteractable::IsInteractableType( EInteractableType _TestType )
@@ -84,25 +140,47 @@ void IInteractable::Initialize( CContainer *pNewParent, const rectangle_t &recNe
 {
 	pParent = pNewParent;
 	recLocation = recNewLocation;
+	bCreateDrawables = true;
 }
 
 void IInteractable::Initialize( CContainer *pNewParent, const vector2_t &vecNewLocation )
 {
 	pParent = pNewParent;
 	recLocation.vecLocation = vecNewLocation;
+	bCreateDrawables = true;
 }
 
 rectangle_t IInteractable::GetLocation( )
 {
 	auto vecRoundedRelativeSize = InchesToPixels( vecRelativeSize ) / 2.0;
+	rectangle_t recReturn { };
+	
 	vecRoundedRelativeSize.Round( );
 	vecRoundedRelativeSize = PixelsToInches( vecRoundedRelativeSize );
+	recReturn = rectangle_t { recLocation.x + vecRelativeLocation.x - vecRoundedRelativeSize.x, recLocation.y + vecRelativeLocation.y - vecRoundedRelativeSize.y, recLocation.w + vecRoundedRelativeSize.x * 2.0, recLocation.h + vecRoundedRelativeSize.y * 2.0 };
 
-	return { recLocation.x + vecRelativeLocation.x - vecRoundedRelativeSize.x, recLocation.y + vecRelativeLocation.y - vecRoundedRelativeSize.y, recLocation.w + vecRoundedRelativeSize.x * 2.0, recLocation.h + vecRoundedRelativeSize.y * 2.0 };
+	if ( pParent != nullptr
+		 && !GetScrollImmune( ) )
+	{
+		const auto vecScrollLocationOffset = reinterpret_cast< CContainer* >( pParent )->GetScrollOffset( );
+
+		recReturn.x -= vecScrollLocationOffset.x;
+		recReturn.y -= vecScrollLocationOffset.y;
+	}
+
+	return recReturn;
 }
 
 vector2_t IInteractable::GetSize( )
 {
+	if ( !bSetSize )
+	{
+		SetDefaultSize( );
+
+		if ( !bSetSize )
+			throw std::runtime_error( ENC( "Set interactable size before attempting to retrieve size." ) );
+	}
+
 	return recLocation.vecSize + vecRelativeSize;
 }
 
@@ -119,7 +197,12 @@ vector2_t& IInteractable::GetRelativeLocation( )
 void IInteractable::PreCreateDrawables( )
 {
 	if ( !bSetSize )
-		throw std::runtime_error( ENC( "Size not set on interactable before attempting to create drawables." ) );
+	{
+		SetDefaultSize( );
+
+		if ( !bSetSize )
+			throw std::runtime_error( ENC( "Size not set on interactable before attempting to create drawables." ) );
+	}
 
 	if ( !bInitialized )
 		Initialize( ), bInitialized = true;
@@ -138,12 +221,15 @@ void IInteractable::PreCreateDrawables( )
 void IInteractable::PreDraw( )
 {
 	UpdateAnimatedValues( );
-	const auto uHash = _Cryptography.GenerateNumericHash( this, uObjectSize );
 
-	if ( uHash != *pHash )
+	if ( bCreateDrawables )
 	{
 		PreCreateDrawables( );
-		*pHash = uHash;
+
+		if ( _Type == INTERACTABLE_CONTAINER )
+			UpdateContainerContents( reinterpret_cast< CContainer* >( this ) );
+
+		bCreateDrawables = false;
 	}
 
 	if ( _ColorChangeTimer.Running( ) )
@@ -152,16 +238,14 @@ void IInteractable::PreDraw( )
 			_ColorChangeTimer.Reset( );
 		else
 			PreCreateDrawables( );
-
-		*pHash = _Cryptography.GenerateNumericHash( this, uObjectSize );
 	}
 
-	const auto recLocation = GetAbsoluteLocation( );
+	const auto recHitbox = GetHitbox( );
 
-	//if ( !_Drawing.IsAreaVisible( recLocation ) ) /// TODO: this is broken
-	//	return;
+	if ( !_Drawing.IsAreaVisible( recHitbox ) ) /// TODO: this is broken
+		return;
 
-	_Drawing.PushDrawingSpace( recLocation );
+	_Drawing.PushDrawingSpace( recHitbox );
 	Draw( );
 	_Drawing.PopDrawingSpace( );
 }
@@ -176,6 +260,7 @@ void IInteractable::SetLocation( const vector2_t& vecNew )
 void IInteractable::SetSize( const vector2_t &vecSize )
 {
 	bSetSize = true;
+	bCreateDrawables = true;
 	recLocation.vecSize = vecSize;
 	if ( bInitialized )
 		_GUI.FindHoveredInteractable( ), PreCreateDrawables( );
@@ -184,6 +269,7 @@ void IInteractable::SetSize( const vector2_t &vecSize )
 void IInteractable::SetPadding( const padding_t &_NewPadding )
 {
 	_Padding = _NewPadding;
+	bCreateDrawables = true;
 }
 
 void IInteractable::SetColorChangeTime( unsigned uNewTime )
@@ -217,8 +303,10 @@ color_t IInteractable::GetCurrentColor( EColorIndex _ColorIndex )
 	const auto _ColorState = bCombineStateColors ? _State : ( _State & STATE_CLICKING ? STATE_CLICKING : ( _State & STATE_HOVERING ? STATE_HOVERING : ( _State & STATE_ACTIVATED ? STATE_ACTIVATED : STATE_DORMANT ) ) );
 	const auto pSearch = _Colors[ _ColorIndex ].find( _ColorState );
 	const auto _Color = pSearch == _Colors[ _ColorIndex ].end( ) ? _Colors[ _ColorIndex ].find( STATE_DORMANT )->second : pSearch->second;
+	auto _Return = _ColorChangeTimer.Running( ) ? CColor::GetGradient( clrPrevious[ _ColorIndex ], _Color, EaseIn( _ColorEaseType, _ColorChangeTimer ) ) : _Color;
+	_Return.a *= CalculateAlphaRatio( );
 
-	return _ColorChangeTimer.Running( ) ? CColor::GetGradient( clrPrevious[ _ColorIndex ], _Color, EaseIn( _ColorEaseType, _ColorChangeTimer ) ) : _Color;
+	return _Return;
 }
 
 void IInteractable::DoColorAnimations( )
@@ -256,6 +344,11 @@ void IInteractable::RemoveState( EState _NewState )
 	OnStateChange( );
 }
 
+bool IInteractable::HasState( EState _TestState )
+{
+	return _State & _TestState;
+}
+
 rectangle_t IInteractable::GetAbsoluteLocation( )
 {
 	if ( pParent != nullptr )
@@ -271,7 +364,7 @@ padding_t IInteractable::GetPadding( )
 
 vector2_t IInteractable::GetNetSize( )
 {
-	return _Padding.vecData + recLocation.vecSize;
+	return _Padding.vecData + GetSize( );
 }
 
 void IInteractable::AddAnimatedValue( animated_value_t< vector2_t > *pValue )
@@ -284,6 +377,20 @@ void IInteractable::AddAnimatedValue( animated_value_t< double > *pValue )
 	vecAnimatedDoubles.emplace_back( pValue );
 }
 
+void IInteractable::RemoveAnimatedValue( animated_value_t< vector2_t > *pValue )
+{
+	for ( auto u = 0u; u < vecAnimatedVectors.size( ); u++ )
+		if ( vecAnimatedVectors[ u ] == pValue )
+			vecAnimatedVectors.erase( vecAnimatedVectors.begin( ) + u );
+}
+
+void IInteractable::RemoveAnimatedValue( animated_value_t< double > *pValue )
+{
+	for ( auto u = 0u; u < vecAnimatedDoubles.size( ); u++ )
+		if ( vecAnimatedDoubles[ u ] == pValue )
+			vecAnimatedDoubles.erase( vecAnimatedDoubles.begin( ) + u );
+}
+
 std::pair< std::vector< animated_value_t< vector2_t >* >, std::vector< animated_value_t< double >* > > IInteractable::GetAnimatedValues( )
 {
 	return { vecAnimatedVectors, vecAnimatedDoubles };
@@ -294,7 +401,13 @@ callbacks_t & IInteractable::GetCallbacks( )
 	return _Callbacks;
 }
 
+void IInteractable::SetDefaultSize( )
+{ }
+
 void IInteractable::Initialize( )
+{ }
+
+void IInteractable::NewFrame( )
 { }
 
 void IInteractable::CreateDrawables( )
@@ -321,5 +434,10 @@ void IInteractable::OnKeyPress( key_t _Code, CKeyState _State )
 void IInteractable::OnKeyTyped( char chCharacter )
 { }
 
-void IInteractable::OnScroll( int iScrollAmount )
+bool IInteractable::OnScroll( int iScrollAmount )
+{
+	return false;
+}
+
+void IInteractable::OnMouseMove( const vector2_t &vecMouseLocation )
 { }

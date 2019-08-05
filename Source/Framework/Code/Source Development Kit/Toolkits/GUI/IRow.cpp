@@ -6,6 +6,46 @@
 #define USE_NAMESPACES
 #include "../../../Framework.hpp"
 
+void IRow::SetAlignmentGap( double dbNewAlignmentGap )
+{
+	dbAlignmentGap = dbNewAlignmentGap;
+	if ( bSetSize )
+		SetDefaultSize( );
+}
+
+void CHorizontalRow::SetDefaultSize( )
+{
+	const std::vector< IInteractable* > vecWidgets[ HALIGNMENT_MAX ]
+	{
+		( SetAlignment( HALIGNMENT_LEFT ), GetWidgets( ) ),
+		( SetAlignment( HALIGNMENT_CENTER ), GetWidgets( ) ),
+		( SetAlignment( HALIGNMENT_RIGHT ), GetWidgets( ) )
+	};
+
+	auto iAlignmentsFilled = 0;
+	vector2_t vecNewSize { };
+
+	for ( auto& _Interactables : vecWidgets )
+	{
+		if ( !_Interactables.empty( ) )
+			iAlignmentsFilled++;
+
+		for ( auto& _Interactable : _Interactables )
+		{
+			const auto vecNetSize = _Interactable->GetNetSize( );
+
+			vecNewSize.y = std::max( vecNewSize.y, vecNetSize.y );
+			vecNewSize.x += vecNetSize.x;
+		}
+	}
+
+	dbAlignmentGapAddition = ( iAlignmentsFilled - 1 ) * dbAlignmentGap;
+	vecNewSize.x += dbAlignmentGapAddition;
+
+	SetSize( vecNewSize );
+	AdjustWidgetPositions( );
+}
+
 std::vector<IInteractable*> CHorizontalRow::GetWidgets( )
 {
 	std::vector< IInteractable* > vecReturn { };
@@ -41,7 +81,10 @@ void CHorizontalRow::AdjustWidgetPositions( )
 	if ( !vecWidgets[ HALIGNMENT_CENTER ].empty( ) )
 		dbCenterWidgetWidth -= vecWidgets[ HALIGNMENT_CENTER ][ 0 ]->GetPadding( ).h;
 
-	const auto dbCenterStart = std::round( recLocation.w / 2.0 - dbCenterWidgetWidth / 2.0 );
+	auto dbCenterStart = PixelsToInches( InchesToPixels( ( recLocation.w - dbAlignmentGapAddition ) / 2.0 ) - InchesToPixels( dbCenterWidgetWidth / 2.0 ) );
+
+	if ( !vecWidgets[ HALIGNMENT_LEFT ].empty( ) )
+		dbCenterStart += dbAlignmentGap;
 
 	for ( auto& pWidget : vecWidgets[ HALIGNMENT_CENTER ] )
 	{
@@ -53,6 +96,8 @@ void CHorizontalRow::AdjustWidgetPositions( )
 		pWidget->SetLocation( { dbCenterStart + vecPadding.h, vecPadding.v } );
 		dbFill[ HALIGNMENT_CENTER ] += vecPadding.h + pWidget->GetSize( ).x;
 	}
+
+	const auto dbRightAlignmentStart = recLocation.w - dbAlignmentGapAddition + ( !vecWidgets[ HALIGNMENT_LEFT ].empty( ) || !vecWidgets[ HALIGNMENT_CENTER ].empty( ) ? dbAlignmentGap : 0.0 );
 
 	for ( auto i = int( vecWidgets[ HALIGNMENT_RIGHT ].size( ) ) - 1; i >= 0; i-- )
 	{
@@ -87,6 +132,15 @@ void CHorizontalRow::RemoveWidget( IWidget* pWidget )
 bool CHorizontalRow::Overfilled( )
 {
 	return dbFill[ HALIGNMENT_LEFT ] + dbFill[ HALIGNMENT_CENTER ] + dbFill[ HALIGNMENT_RIGHT ] > GetAbsoluteLocation( ).w;
+}
+
+void CHorizontalRow::Clamp( )
+{
+	if ( !bSetSize )
+		SetDefaultSize( );
+
+	for ( auto& pInteractable : vecInteractables )
+		pInteractable->SetSize( { pInteractable->GetSize( ).x, pInteractable->GetSize( ).y + GetSize( ).y - pInteractable->GetNetSize( ).y } );
 }
 
 void CHorizontalRow::SetAlignment( EHorizontalAlignment _NewAlignment )
@@ -129,7 +183,7 @@ void CVerticalRow::AdjustWidgetPositions( )
 	if ( dbCenterWidgetHeight > 0.0 )
 		dbCenterWidgetHeight -= vecWidgets[ VALIGNMENT_CENTER ][ 0 ]->GetPadding( ).v;
 
-	const auto dbCenterStart = std::round( recLocation.h / 2.0 - dbCenterWidgetHeight / 2.0 );
+	const auto dbCenterStart = PixelsToInches( std::round( InchesToPixels( recLocation.h / 2.0 - dbCenterWidgetHeight / 2.0 ) ) );
 
 	for ( auto& pWidget : vecWidgets[ VALIGNMENT_CENTER ] )
 	{
@@ -173,6 +227,15 @@ void CVerticalRow::RemoveWidget( IWidget *pWidget )
 bool CVerticalRow::Overfilled( )
 {
 	return dbFill[ VALIGNMENT_TOP ] + dbFill[ VALIGNMENT_CENTER ] + dbFill[ VALIGNMENT_BOTTOM ] > GetAbsoluteLocation( ).w;
+}
+
+void CVerticalRow::Clamp( )
+{
+	if ( !bSetSize )
+		SetDefaultSize( );
+
+	for ( auto& pInteractable : vecInteractables )
+		pInteractable->SetSize( { pInteractable->GetSize( ).x + GetSize( ).x - pInteractable->GetNetSize( ).x, pInteractable->GetSize( ).y } );
 }
 
 void CVerticalRow::SetAlignment( EVerticalAlignment _NewAlignment )

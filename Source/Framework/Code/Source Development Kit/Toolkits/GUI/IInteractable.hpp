@@ -69,7 +69,7 @@ struct animated_value_t
 	value_change_t _OnUpdate = nullptr;
 
 	animated_value_t( _t* pValue ):
-		pValue( pValue )
+		pValue( pValue ), _CurrentValue( *pValue )
 	{ }
 
 	void SetCombineStates( bool bNewCombineStates )
@@ -126,7 +126,15 @@ struct animated_value_t
 		_Timer.Start( );
 	}
 
-	void Update( )
+	void AnimateValue( _t _Next, _t _Current )
+	{
+		_CurrentValue = _Current;
+		_NextValue = _Next;
+		_Timer.Reset( );
+		_Timer.Start( );
+	}
+
+	bool Update( )
 	{
 		*pValue = GetCurrentValue( );
 
@@ -137,7 +145,11 @@ struct animated_value_t
 
 			if ( _OnUpdate )
 				_OnUpdate( pValue );
+
+			return true;
 		}
+
+		return false;
 	}
 
 	_t GetCurrentValue( )
@@ -156,14 +168,16 @@ protected:
 	virtual void CreateDrawables( );
 	virtual void Draw( );
 	void UpdateAnimatedValues( );
+	double CalculateAlphaRatio( );
 
-	unsigned* pHash = new unsigned { 0 };
+	bool bCreateDrawables = true;
 	unsigned uObjectSize = 0u;
 	CContainer* pParent = nullptr;
 	EInteractableType _Type = INTERACTABLE_NONE;
 	bool bSetSize = false;
 	bool bInitialized = false;
 	bool bCombineStateColors = false;
+	bool bScrollImmune = false;
 	rectangle_t recLocation { };
 	Utilities::vector2_t vecRelativeLocation { };
 	Utilities::vector2_t vecRelativeSize { };
@@ -185,10 +199,16 @@ public:
 	constexpr static auto DEFAULT_COLOR_CHANGE_TIME = 250u;
 	constexpr static auto DEFAULT_COLOR_CHANGE_EASING = Utilities::EASE_SINE2;
 
-	explicit IInteractable( unsigned uObjectSize, EInteractableType _Type );
+	static void UpdateContainerContents( CContainer* pContainer );
+
+	explicit IInteractable( EInteractableType _Type );
 	virtual ~IInteractable( );
 
 	void SetParent( CContainer* pNewParent );
+	CContainer* GetParent( );
+	rectangle_t GetHitbox( );
+	void SetScrollImmune( bool bNewScrollImmune );
+	bool GetScrollImmune( );
 	void SetLocation( const Utilities::vector2_t& vecNew );
 	void SetSize( const Utilities::vector2_t& vecSize );
 	void SetPadding( const padding_t& _NewPadding );
@@ -210,19 +230,25 @@ public:
 	void PreDraw( );
 	void AddState( EState _NewState );
 	void RemoveState( EState _NewState );
+	bool HasState( EState _TestState );
 	rectangle_t GetAbsoluteLocation( );
 	padding_t GetPadding( );
 	Utilities::vector2_t GetNetSize( );
 	void AddAnimatedValue( animated_value_t< Utilities::vector2_t >* pValue );
 	void AddAnimatedValue( animated_value_t< double >* pValue );
+	void RemoveAnimatedValue( animated_value_t< Utilities::vector2_t >* pValue );
+	void RemoveAnimatedValue( animated_value_t< double >* pValue );
 	std::pair< std::vector< animated_value_t< Utilities::vector2_t >* >, std::vector< animated_value_t< double >* > > GetAnimatedValues( );
 	callbacks_t& GetCallbacks( );
 
+	virtual void SetDefaultSize( );
 	virtual void Initialize( );
+	virtual void NewFrame( );
 	virtual void OnStateChange( );
 	virtual void OnClick( CKeyState _State );
 	virtual void OnRightClick( CKeyState _State );
 	virtual void OnKeyPress( key_t _Code, CKeyState _State );
 	virtual void OnKeyTyped( char chCharacter );
-	virtual void OnScroll( int iScrollAmount );
+	virtual bool OnScroll( int iScrollAmount );
+	virtual void OnMouseMove( const Utilities::vector2_t& vecMouseLocation );
 };

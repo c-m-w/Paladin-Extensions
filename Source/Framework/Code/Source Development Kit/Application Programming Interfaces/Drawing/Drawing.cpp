@@ -120,11 +120,11 @@ void rectangle_t::Clamp( const rectangle_t & recClamp )
 	if ( y < recClamp.y )
 		y = recClamp.y;
 
-	while ( x + w > recClamp.x + recClamp.w )
-		w -= 1.0;
+	if ( x + w > recClamp.x + recClamp.w )
+		w = recClamp.x + recClamp.w - x;
 
-	while ( y + h > recClamp.y + recClamp.h )
-		h -= 1.0;
+	if ( y + h > recClamp.y + recClamp.h )
+		h = recClamp.y + recClamp.h - y;
 }
 
 rectangle_t rectangle_t::ToPixels( ) const
@@ -150,7 +150,9 @@ bool rectangle_t::InRectangle( const rectangle_t & recLocation ) const
 	return recLocation.LocationInRectangle( vector2_t( x, y ) )
 		|| recLocation.LocationInRectangle( vector2_t( x + w, y ) )
 		|| recLocation.LocationInRectangle( vector2_t( x + w, y + h ) )
-		|| recLocation.LocationInRectangle( vector2_t( x, y + h ) );
+		|| recLocation.LocationInRectangle( vector2_t( x, y + h ) )
+		|| x < recLocation.x && x + w > recLocation.x + recLocation.w
+		|| y < recLocation.y && y + h > recLocation.y + recLocation.h;
 }
 
 RECT rectangle_t::ToRect( ) const
@@ -829,7 +831,7 @@ void CDrawable::RoundedRectangle( rectangle_t recLocation, bool *bCornerRounding
 			vecPoint.Rotate( 90.0, { 0.0, 0.0 } );
 	}
 
-	vecProposedVertices.emplace_back( vecProposedVertices[ 1 ] );
+	vecProposedVertices.emplace_back( vecProposedVertices[ bFillDrawing ] );
 
 	const auto zSize = vecProposedVertices.size( );
 	for ( auto z = 1u; z < zSize - 1; z++ )
