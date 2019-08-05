@@ -14,13 +14,12 @@ namespace PX::Information::NetworkedVariableManager
 	}
 }
 
-
 inline IHandleEntity *CBaseHandle::Get( ) const
 {
 	return Interfaces::pEntityList->GetClientEntityFromHandle( *this );
 }
 
-namespace PX::Tools
+namespace Utilities
 {
 	class CBasePlayer;
 	class CBaseEntity;
@@ -76,13 +75,13 @@ namespace PX::Tools
 	class CEconomyItemView
 	{
 	public:
-		PX_NETVAR_REFERENCE( int32_t, m_bInitialized,ENC( "DT_BaseAttributableItem" ), ENC( "m_bInitialized" ) );
-		PX_NETVAR_REFERENCE( int16_t, m_iItemDefinitionIndex,ENC( "DT_BaseAttributableItem" ), ENC( "m_iItemDefinitionIndex" ) );
-		PX_NETVAR_REFERENCE( int32_t, m_iEntityLevel,ENC( "DT_BaseAttributableItem" ), ENC( "m_iEntityLevel" ) );
-		PX_NETVAR_REFERENCE( int32_t, m_iAccountID,ENC( "DT_BaseAttributableItem" ), ENC( "m_iAccountID" ) );
-		PX_NETVAR_REFERENCE( int32_t, m_iItemIDLow,ENC( "DT_BaseAttributableItem" ), ENC( "m_iItemIDLow" ) );
-		PX_NETVAR_REFERENCE( int32_t, m_iItemIDHigh,ENC( "DT_BaseAttributableItem" ), ENC( "m_iItemIDHigh" ) );
-		PX_NETVAR_REFERENCE( int32_t, m_iEntityQuality,ENC( "DT_BaseAttributableItem" ), ENC( "m_iEntityQuality" ) );
+		NETVAR_REFERENCE( int32_t, m_bInitialized,ENC( "DT_BaseAttributableItem" ), ENC( "m_bInitialized" ) );
+		NETVAR_REFERENCE( int16_t, m_iItemDefinitionIndex,ENC( "DT_BaseAttributableItem" ), ENC( "m_iItemDefinitionIndex" ) );
+		NETVAR_REFERENCE( int32_t, m_iEntityLevel,ENC( "DT_BaseAttributableItem" ), ENC( "m_iEntityLevel" ) );
+		NETVAR_REFERENCE( int32_t, m_iAccountID,ENC( "DT_BaseAttributableItem" ), ENC( "m_iAccountID" ) );
+		NETVAR_REFERENCE( int32_t, m_iItemIDLow,ENC( "DT_BaseAttributableItem" ), ENC( "m_iItemIDLow" ) );
+		NETVAR_REFERENCE( int32_t, m_iItemIDHigh,ENC( "DT_BaseAttributableItem" ), ENC( "m_iItemIDHigh" ) );
+		NETVAR_REFERENCE( int32_t, m_iEntityQuality,ENC( "DT_BaseAttributableItem" ), ENC( "m_iEntityQuality" ) );
 
 		CUtlVector< IRefCounted* > *m_CustomMaterials( )
 		{
@@ -102,23 +101,23 @@ namespace PX::Tools
 	{
 	public:
 
-		PX_NETVAR_REFERENCE( bool, m_bUseCustomAutoExposureMin, ENC( "DT_EnvTonemapController" ), ENC( "m_bUseCustomAutoExposureMin" ) );
-		PX_NETVAR_REFERENCE( bool, m_bUseCustomAutoExposureMax, ENC( "DT_EnvTonemapController" ), ENC( "m_bUseCustomAutoExposureMax" ) );
-		PX_NETVAR_REFERENCE( float, m_flCustomAutoExposureMin, ENC( "DT_EnvTonemapController" ), ENC( "m_flCustomAutoExposureMin" ) );
-		PX_NETVAR_REFERENCE( float, m_flCustomAutoExposureMax, ENC( "DT_EnvTonemapController" ), ENC( "m_flCustomAutoExposureMax" ) );
+		NETVAR_REFERENCE( bool, m_bUseCustomAutoExposureMin, ENC( "DT_EnvTonemapController" ), ENC( "m_bUseCustomAutoExposureMin" ) );
+		NETVAR_REFERENCE( bool, m_bUseCustomAutoExposureMax, ENC( "DT_EnvTonemapController" ), ENC( "m_bUseCustomAutoExposureMax" ) );
+		NETVAR_REFERENCE( float, m_flCustomAutoExposureMin, ENC( "DT_EnvTonemapController" ), ENC( "m_flCustomAutoExposureMin" ) );
+		NETVAR_REFERENCE( float, m_flCustomAutoExposureMax, ENC( "DT_EnvTonemapController" ), ENC( "m_flCustomAutoExposureMax" ) );
 	};
 
 	class CBaseEntity: public IClientEntity
 	{
 	public:
-		PX_NETVAR_REFERENCE( int32_t, m_iTeamNum,ENC( "DT_BaseEntity" ), ENC( "m_iTeamNum" ) );
-		PX_NETVAR_REFERENCE( Vector, m_vecOrigin,ENC( "DT_BaseEntity" ), ENC( "m_vecOrigin" ) );
-		PX_NETVAR_REFERENCE( bool, m_bShouldGlow,ENC( "DT_DynamicProp" ), ENC( "m_bShouldGlow" ) );
-		PX_NETVAR_REFERENCE( CBasePlayer*, m_hOwnerEntity,ENC( "DT_BaseEntity" ), ENC( "m_hOwnerEntity" ) );
-		PX_NETVAR_REFERENCE( float, m_flSimulationTime,ENC( "DT_BaseEntity" ), ENC( "m_flSimulationTime" ) );
-		PX_NETVAR_REFERENCE_OFFSET( matrix3x4_t, m_rgflCoordinateFrame, ENC( "DT_BaseEntity" ), ENC( "m_CollisionGroup" ), -int( 0x30 ) );
-		PX_NETVAR_REFERENCE_OFFSET( int32_t, GetIndex, ENC( "CBaseEntity" ), ENC( "m_bIsAutoaimTarget" ), 0x4 );
-		PX_NETVAR_REFERENCE( int32_t, movetype, ENC( "DT_BaseEntity" ), ENC( "movetype" ) );
+		NETVAR_REFERENCE( int32_t, m_iTeamNum,ENC( "DT_BaseEntity" ), ENC( "m_iTeamNum" ) );
+		NETVAR_REFERENCE( Vector, m_vecOrigin,ENC( "DT_BaseEntity" ), ENC( "m_vecOrigin" ) );
+		NETVAR_REFERENCE( bool, m_bShouldGlow,ENC( "DT_DynamicProp" ), ENC( "m_bShouldGlow" ) );
+		NETVAR_REFERENCE( CBasePlayer*, m_hOwnerEntity,ENC( "DT_BaseEntity" ), ENC( "m_hOwnerEntity" ) );
+		NETVAR_REFERENCE( float, m_flSimulationTime,ENC( "DT_BaseEntity" ), ENC( "m_flSimulationTime" ) );
+		NETVAR_REFERENCE_OFFSET( matrix3x4_t, m_rgflCoordinateFrame, ENC( "DT_BaseEntity" ), ENC( "m_CollisionGroup" ), -int( 0x30 ) );
+		NETVAR_REFERENCE_OFFSET( int32_t, GetIndex, ENC( "CBaseEntity" ), ENC( "m_bIsAutoaimTarget" ), 0x4 );
+		NETVAR_REFERENCE( int32_t, movetype, ENC( "DT_BaseEntity" ), ENC( "movetype" ) );
 
 		bool IsPlayer( );
 		bool IsWeapon( );
@@ -134,14 +133,14 @@ namespace PX::Tools
 	class CBaseAttributableItem: public CBaseEntity
 	{
 	public:
-		PX_NETVAR_REFERENCE( uint64_t, m_OriginalOwnerXuid,ENC( "DT_BaseAttributableItem" ), ENC( "m_OriginalOwnerXuidLow" ) );
-		PX_NETVAR_REFERENCE( int32_t, m_OriginalOwnerXuidLow,ENC( "DT_BaseAttributableItem" ), ENC( "m_OriginalOwnerXuidLow" ) );
-		PX_NETVAR_REFERENCE( int32_t, m_OriginalOwnerXuidHigh,ENC( "DT_BaseAttributableItem" ), ENC( "m_OriginalOwnerXuidHigh" ) );
-		PX_NETVAR_REFERENCE( int32_t, m_nFallbackStatTrak,ENC( "DT_BaseAttributableItem" ), ENC( "m_nFallbackStatTrak" ) );
-		PX_NETVAR_REFERENCE( int32_t, m_nFallbackPaintKit,ENC( "DT_BaseAttributableItem" ), ENC( "m_nFallbackPaintKit" ) );
-		PX_NETVAR_REFERENCE( int32_t, m_nFallbackSeed,ENC( "DT_BaseAttributableItem" ), ENC( "m_nFallbackSeed" ) );
-		PX_NETVAR_REFERENCE( float_t, m_flFallbackWear,ENC( "DT_BaseAttributableItem" ), ENC( "m_flFallbackWear" ) );
-		PX_NETVAR_REFERENCE( char*, m_szCustomName, ENC( "DT_BaseAttributableItem" ), ENC( "m_szCustomName" ) );
+		NETVAR_REFERENCE( uint64_t, m_OriginalOwnerXuid,ENC( "DT_BaseAttributableItem" ), ENC( "m_OriginalOwnerXuidLow" ) );
+		NETVAR_REFERENCE( int32_t, m_OriginalOwnerXuidLow,ENC( "DT_BaseAttributableItem" ), ENC( "m_OriginalOwnerXuidLow" ) );
+		NETVAR_REFERENCE( int32_t, m_OriginalOwnerXuidHigh,ENC( "DT_BaseAttributableItem" ), ENC( "m_OriginalOwnerXuidHigh" ) );
+		NETVAR_REFERENCE( int32_t, m_nFallbackStatTrak,ENC( "DT_BaseAttributableItem" ), ENC( "m_nFallbackStatTrak" ) );
+		NETVAR_REFERENCE( int32_t, m_nFallbackPaintKit,ENC( "DT_BaseAttributableItem" ), ENC( "m_nFallbackPaintKit" ) );
+		NETVAR_REFERENCE( int32_t, m_nFallbackSeed,ENC( "DT_BaseAttributableItem" ), ENC( "m_nFallbackSeed" ) );
+		NETVAR_REFERENCE( float_t, m_flFallbackWear,ENC( "DT_BaseAttributableItem" ), ENC( "m_flFallbackWear" ) );
+		NETVAR_REFERENCE( char*, m_szCustomName, ENC( "DT_BaseAttributableItem" ), ENC( "m_szCustomName" ) );
 
 		CEconomyItemView *m_Item( );
 	};
@@ -149,11 +148,11 @@ namespace PX::Tools
 	class CBaseCombatWeapon: public CBaseAttributableItem
 	{
 	public:
-		PX_NETVAR_REFERENCE( float_t, m_flNextPrimaryAttack,ENC( "DT_BaseCombatWeapon" ), ENC( "m_flNextPrimaryAttack" ) );
-		PX_NETVAR_REFERENCE( float_t, m_flNextSecondaryAttack,ENC( "DT_BaseCombatWeapon" ), ENC( "m_flNextSecondaryAttack" ) );
-		PX_NETVAR_REFERENCE( int32_t, m_iClip1,ENC( "DT_BaseCombatWeapon" ), ENC( "m_iClip1" ) );
-		PX_NETVAR_REFERENCE( int32_t, m_iClip2,ENC( "DT_BaseCombatWeapon" ), ENC( "m_iClip2" ) );
-		PX_NETVAR_REFERENCE( float_t, m_flRecoilIndex,ENC( "DT_WeaponCSBase" ), ENC( "m_flRecoilIndex" ) );/*
+		NETVAR_REFERENCE( float_t, m_flNextPrimaryAttack,ENC( "DT_BaseCombatWeapon" ), ENC( "m_flNextPrimaryAttack" ) );
+		NETVAR_REFERENCE( float_t, m_flNextSecondaryAttack,ENC( "DT_BaseCombatWeapon" ), ENC( "m_flNextSecondaryAttack" ) );
+		NETVAR_REFERENCE( int32_t, m_iClip1,ENC( "DT_BaseCombatWeapon" ), ENC( "m_iClip1" ) );
+		NETVAR_REFERENCE( int32_t, m_iClip2,ENC( "DT_BaseCombatWeapon" ), ENC( "m_iClip2" ) );
+		NETVAR_REFERENCE( float_t, m_flRecoilIndex,ENC( "DT_WeaponCSBase" ), ENC( "m_flRecoilIndex" ) );/*
 
 		CUtlVector< IRefCounted* > *m_CustomMaterials( )
 		{
@@ -187,44 +186,44 @@ namespace PX::Tools
 	class CBaseViewModel: public CBaseEntity
 	{
 	public:
-		PX_NETVAR_REFERENCE( int32_t, m_nModelIndex, ENC( "DT_BaseViewModel" ), ENC( "m_nModelIndex" ) );
-		PX_NETVAR_REFERENCE( int32_t, m_nWorldModelIndex, ENC( "DT_BaseViewModel" ), ENC( "m_nWorldModelIndex" ) );
-		PX_NETVAR_REFERENCE( int32_t, m_nViewModelIndex,ENC( "DT_BaseViewModel" ), ENC( "m_nViewModelIndex" ) );
-		PX_NETVAR_REFERENCE( CHandle<CBaseCombatWeapon>, m_hWeapon,ENC( "DT_BaseViewModel" ), ENC( "m_hWeapon" ) );
-		PX_NETVAR_REFERENCE( CHandle<CBasePlayer>, m_hOwner,ENC( "DT_BaseViewModel" ), ENC( "m_hOwner" ) );
+		NETVAR_REFERENCE( int32_t, m_nModelIndex, ENC( "DT_BaseViewModel" ), ENC( "m_nModelIndex" ) );
+		NETVAR_REFERENCE( int32_t, m_nWorldModelIndex, ENC( "DT_BaseViewModel" ), ENC( "m_nWorldModelIndex" ) );
+		NETVAR_REFERENCE( int32_t, m_nViewModelIndex,ENC( "DT_BaseViewModel" ), ENC( "m_nViewModelIndex" ) );
+		NETVAR_REFERENCE( CHandle<CBaseCombatWeapon>, m_hWeapon,ENC( "DT_BaseViewModel" ), ENC( "m_hWeapon" ) );
+		NETVAR_REFERENCE( CHandle<CBasePlayer>, m_hOwner,ENC( "DT_BaseViewModel" ), ENC( "m_hOwner" ) );
 	};
 
 	class CBasePlayer: public CBaseEntity
 	{
 	public:
-		PX_NETVAR_REFERENCE( bool, m_bHasDefuser,ENC( "DT_CSPlayer" ), ENC( "m_bHasDefuser" ) );
-		PX_NETVAR_REFERENCE( bool, m_bGunGameImmunity,ENC( "DT_CSPlayer" ), ENC( "m_bGunGameImmunity" ) );
-		PX_NETVAR_REFERENCE( int32_t, m_iShotsFired,ENC( "DT_CSPlayer" ), ENC( "m_iShotsFired" ) );
-		PX_NETVAR_REFERENCE( QAngle, m_angEyeAngles,ENC( "DT_CSPlayer" ), ENC( "m_angEyeAngles[0]" ) );
-		PX_NETVAR_REFERENCE( int, m_ArmorValue,ENC( "DT_CSPlayer" ), ENC( "m_ArmorValue" ) );
-		PX_NETVAR_REFERENCE( bool, m_bHasHelmet,ENC( "DT_CSPlayer" ), ENC( "m_bHasHelmet" ) );
-		PX_NETVAR_REFERENCE( bool, m_bIsScoped,ENC( "DT_CSPlayer" ), ENC( "m_bIsScoped" ) );;
-		PX_NETVAR_REFERENCE( float, m_flLowerBodyYawTarget,ENC( "DT_CSPlayer" ), ENC( "m_flLowerBodyYawTarget" ) );
-		PX_NETVAR_REFERENCE( float, m_flFlashDuration,ENC( "DT_CSPlayer" ), ENC( "m_flFlashDuration" ) );
-		PX_NETVAR_REFERENCE( float, m_flFlashMaxAlpha,ENC( "DT_CSPlayer" ), ENC( "m_flFlashMaxAlpha" ) );
-		PX_NETVAR_REFERENCE( int, m_totalHitsOnServer,ENC( "DT_CSPlayer" ), ENC( "m_totalHitsOnServer" ) );
-		PX_NETVAR_REFERENCE( int32_t, m_iHealth,ENC( "DT_BasePlayer" ), ENC( "m_iHealth" ) );
-		PX_NETVAR_REFERENCE( int32_t, m_lifeState,ENC( "DT_BasePlayer" ), ENC( "m_lifeState" ) );
-		PX_NETVAR_REFERENCE( int32_t, m_fFlags,ENC( "DT_BasePlayer" ), ENC( "m_fFlags" ) );
-		PX_NETVAR_REFERENCE( int32_t, m_nTickBase,ENC( "DT_BasePlayer" ), ENC( "m_nTickBase" ) );
-		PX_NETVAR_REFERENCE( Vector, m_vecViewOffset,ENC( "DT_BasePlayer" ), ENC( "m_vecViewOffset[0]" ) );
-		PX_NETVAR_REFERENCE( QAngle, m_viewPunchAngle,ENC( "DT_BasePlayer" ), ENC( "m_viewPunchAngle" ) );
-		PX_NETVAR_REFERENCE( QAngle, m_aimPunchAngle,ENC( "DT_BasePlayer" ), ENC( "m_aimPunchAngle" ) );
-		PX_NETVAR_REFERENCE( CHandle<CBaseViewModel>, m_hViewModel,ENC( "DT_BasePlayer" ), ENC( "m_hViewModel[0]" ) );
-		PX_NETVAR_REFERENCE( Vector, m_vecVelocity,ENC( "DT_BasePlayer" ), ENC( "m_vecVelocity[0]" ) );
-		PX_NETVAR_REFERENCE( float, m_flMaxspeed,ENC( "DT_BasePlayer" ), ENC( "m_flMaxspeed" ) );
-		PX_NETVAR_REFERENCE( CHandle<CBasePlayer>, m_hObserverTarget,ENC( "DT_BasePlayer" ), ENC( "m_hObserverTarget" ) );
-		PX_NETVAR_REFERENCE( int, m_iObserverMode,ENC( "DT_BasePlayer" ), ENC( "m_iObserverMode" ) );
-		PX_NETVAR_REFERENCE( CHandle< CBaseCombatWeapon >, m_hActiveWeapon,ENC( "DT_BaseCombatCharacter" ), ENC( "m_hActiveWeapon" ) );
-		PX_NETVAR_POINTER( CHandle< CBaseCombatWeapon >, m_hMyWeapons,ENC( "DT_BaseCombatCharacter" ), ENC( "m_hMyWeapons" ) );
-		PX_NETVAR_POINTER( CHandle<CBaseAttributableItem>, m_hMyWearables, ENC( "DT_BaseCombatCharacter" ), ENC( "m_hMyWearables" ) );
-		PX_NETVAR_POINTER( bool, m_bSpotted, ENC( "DT_CSPlayerResource" ), ENC( "m_bSpotted" ) );
-		PX_NETVAR_REFERENCE_OFFSET( CUserCmd*, m_pCurrentCommand, ENC( "DT_BasePlayer" ), ENC( "m_hConstraintEntity" ), -int( 0xC ) );
+		NETVAR_REFERENCE( bool, m_bHasDefuser,ENC( "DT_CSPlayer" ), ENC( "m_bHasDefuser" ) );
+		NETVAR_REFERENCE( bool, m_bGunGameImmunity,ENC( "DT_CSPlayer" ), ENC( "m_bGunGameImmunity" ) );
+		NETVAR_REFERENCE( int32_t, m_iShotsFired,ENC( "DT_CSPlayer" ), ENC( "m_iShotsFired" ) );
+		NETVAR_REFERENCE( QAngle, m_angEyeAngles,ENC( "DT_CSPlayer" ), ENC( "m_angEyeAngles[0]" ) );
+		NETVAR_REFERENCE( int, m_ArmorValue,ENC( "DT_CSPlayer" ), ENC( "m_ArmorValue" ) );
+		NETVAR_REFERENCE( bool, m_bHasHelmet,ENC( "DT_CSPlayer" ), ENC( "m_bHasHelmet" ) );
+		NETVAR_REFERENCE( bool, m_bIsScoped,ENC( "DT_CSPlayer" ), ENC( "m_bIsScoped" ) );;
+		NETVAR_REFERENCE( float, m_flLowerBodyYawTarget,ENC( "DT_CSPlayer" ), ENC( "m_flLowerBodyYawTarget" ) );
+		NETVAR_REFERENCE( float, m_flFlashDuration,ENC( "DT_CSPlayer" ), ENC( "m_flFlashDuration" ) );
+		NETVAR_REFERENCE( float, m_flFlashMaxAlpha,ENC( "DT_CSPlayer" ), ENC( "m_flFlashMaxAlpha" ) );
+		NETVAR_REFERENCE( int, m_totalHitsOnServer,ENC( "DT_CSPlayer" ), ENC( "m_totalHitsOnServer" ) );
+		NETVAR_REFERENCE( int32_t, m_iHealth,ENC( "DT_BasePlayer" ), ENC( "m_iHealth" ) );
+		NETVAR_REFERENCE( int32_t, m_lifeState,ENC( "DT_BasePlayer" ), ENC( "m_lifeState" ) );
+		NETVAR_REFERENCE( int32_t, m_fFlags,ENC( "DT_BasePlayer" ), ENC( "m_fFlags" ) );
+		NETVAR_REFERENCE( int32_t, m_nTickBase,ENC( "DT_BasePlayer" ), ENC( "m_nTickBase" ) );
+		NETVAR_REFERENCE( Vector, m_vecViewOffset,ENC( "DT_BasePlayer" ), ENC( "m_vecViewOffset[0]" ) );
+		NETVAR_REFERENCE( QAngle, m_viewPunchAngle,ENC( "DT_BasePlayer" ), ENC( "m_viewPunchAngle" ) );
+		NETVAR_REFERENCE( QAngle, m_aimPunchAngle,ENC( "DT_BasePlayer" ), ENC( "m_aimPunchAngle" ) );
+		NETVAR_REFERENCE( CHandle<CBaseViewModel>, m_hViewModel,ENC( "DT_BasePlayer" ), ENC( "m_hViewModel[0]" ) );
+		NETVAR_REFERENCE( Vector, m_vecVelocity,ENC( "DT_BasePlayer" ), ENC( "m_vecVelocity[0]" ) );
+		NETVAR_REFERENCE( float, m_flMaxspeed,ENC( "DT_BasePlayer" ), ENC( "m_flMaxspeed" ) );
+		NETVAR_REFERENCE( CHandle<CBasePlayer>, m_hObserverTarget,ENC( "DT_BasePlayer" ), ENC( "m_hObserverTarget" ) );
+		NETVAR_REFERENCE( int, m_iObserverMode,ENC( "DT_BasePlayer" ), ENC( "m_iObserverMode" ) );
+		NETVAR_REFERENCE( CHandle< CBaseCombatWeapon >, m_hActiveWeapon,ENC( "DT_BaseCombatCharacter" ), ENC( "m_hActiveWeapon" ) );
+		NETVAR_POINTER( CHandle< CBaseCombatWeapon >, m_hMyWeapons,ENC( "DT_BaseCombatCharacter" ), ENC( "m_hMyWeapons" ) );
+		NETVAR_POINTER( CHandle<CBaseAttributableItem>, m_hMyWearables, ENC( "DT_BaseCombatCharacter" ), ENC( "m_hMyWearables" ) );
+		NETVAR_POINTER( bool, m_bSpotted, ENC( "DT_CSPlayerResource" ), ENC( "m_bSpotted" ) );
+		NETVAR_REFERENCE_OFFSET( CUserCmd*, m_pCurrentCommand, ENC( "DT_BasePlayer" ), ENC( "m_hConstraintEntity" ), -int( 0xC ) );
 
 		bool IsAlive( );
 		bool IsLocalPlayer( );
@@ -242,12 +241,12 @@ namespace PX::Tools
 	class CPlantedC4
 	{
 	public:
-		PX_NETVAR_REFERENCE( bool, m_bBombTicking,ENC( "DT_PlantedC4" ), ENC( "m_bBombTicking" ) );
-		PX_NETVAR_REFERENCE( bool, m_bBombDefused,ENC( "DT_PlantedC4" ), ENC( "m_bBombDefused" ) );
-		PX_NETVAR_REFERENCE( float, m_flC4Blow,ENC( "DT_PlantedC4" ), ENC( "m_flC4Blow" ) );
-		PX_NETVAR_REFERENCE( float, m_flTimerLength,ENC( "DT_PlantedC4" ), ENC( "m_flTimerLength" ) );
-		PX_NETVAR_REFERENCE( float, m_flDefuseLength,ENC( "DT_PlantedC4" ), ENC( "m_flDefuseLength" ) );
-		PX_NETVAR_REFERENCE( float, m_flDefuseCountDown,ENC( "DT_PlantedC4" ), ENC( "m_flDefuseCountDown" ) );
-		PX_NETVAR_REFERENCE( CHandle< CBasePlayer >, m_hBombDefuser,ENC( "DT_PlantedC4" ), ENC( "m_hBombDefuser" ) );
+		NETVAR_REFERENCE( bool, m_bBombTicking,ENC( "DT_PlantedC4" ), ENC( "m_bBombTicking" ) );
+		NETVAR_REFERENCE( bool, m_bBombDefused,ENC( "DT_PlantedC4" ), ENC( "m_bBombDefused" ) );
+		NETVAR_REFERENCE( float, m_flC4Blow,ENC( "DT_PlantedC4" ), ENC( "m_flC4Blow" ) );
+		NETVAR_REFERENCE( float, m_flTimerLength,ENC( "DT_PlantedC4" ), ENC( "m_flTimerLength" ) );
+		NETVAR_REFERENCE( float, m_flDefuseLength,ENC( "DT_PlantedC4" ), ENC( "m_flDefuseLength" ) );
+		NETVAR_REFERENCE( float, m_flDefuseCountDown,ENC( "DT_PlantedC4" ), ENC( "m_flDefuseCountDown" ) );
+		NETVAR_REFERENCE( CHandle< CBasePlayer >, m_hBombDefuser,ENC( "DT_PlantedC4" ), ENC( "m_hBombDefuser" ) );
 	};
 }

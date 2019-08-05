@@ -22,7 +22,7 @@ bool Modules::module_info_t::Valid( )
 
 using namespace Interfaces;
 
-namespace PX::Tools
+namespace Utilities
 {
 	VMatrix vmMatrix;
 	CUserCmd cmdLast;

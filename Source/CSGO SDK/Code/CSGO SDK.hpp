@@ -4,7 +4,6 @@
 
 #pragma warning( push, 0 )
 #pragma warning( disable: ALL_CODE_ANALYSIS_WARNINGS )
-#include "../../Framework/Code/Framework.hpp"
 #include "Definitions.hpp"
 
 #include "Valve/Types/Types.hpp"
@@ -15,6 +14,32 @@
 
 namespace Linkage
 {
+
+
+	static inline std::string strCreateInterfaceImport
+#if defined _DEBUG
+		= ENC( "CreateInterface" )
+#endif
+		;
+	static inline std::string strModules[ Modules::MODULE_MAX ]
+#if defined _DEBUG
+	{
+		ENC( "client_panorama.dll" ),
+		ENC( "engine.dll" ),
+		ENC( "d3d9.dll" ),
+		ENC( "shaderapidx9.dll" ),
+		ENC( "GameOverlayRenderer.dll" ),
+		ENC( "vguimatsurface.dll" ),
+		ENC( "vgui2.dll" ),
+		ENC( "inputsystem.dll" ),
+		ENC( "materialsystem.dll" ),
+		ENC( "vstdlib.dll" ),
+		ENC( "localize.dll" ),
+		ENC( "filesystem_stdio.dll" )
+	}
+#endif
+	;
+
 	static inline char* szClientBaseVersion = nullptr,
 		* szEngineClientVersion = nullptr,
 		* szEngineSoundClientVersion = nullptr;

@@ -12,9 +12,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\Definitions.hpp" />
-    <ClInclude Include="Code\SDK.hpp" />
+    <ClInclude Include="Code\Memory.hpp" />
+    <ClInclude Include="Code\CSGO SDK.hpp" />
     <ClInclude Include="Code\Tools.hpp" />
-    <ClInclude Include="Code\Types.hpp" />
     <ClInclude Include="Code\Valve\Interfaces\CClientState.hpp" />
     <ClInclude Include="Code\Valve\Interfaces\CInput.hpp" />
     <ClInclude Include="Code\Valve\Interfaces\IAppSystem.hpp" />
@@ -80,6 +80,7 @@
     <ClInclude Include="Code\Valve\Types\UtlVector.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Code\Memory.cpp" />
     <ClCompile Include="Code\Tools.cpp" />
     <ClCompile Include="Code\Valve\Math\Vector2D.cpp" />
     <ClCompile Include="Code\Valve\Math\Vector4D.cpp" />
@@ -91,6 +92,11 @@
     <ClCompile Include="Code\Valve\Types\ConVar.cpp" />
     <ClCompile Include="Code\Valve\Types\UtlBuffer.cpp" />
     <ClCompile Include="Code\Valve\Types\UtlString.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Framework\Framework.vcxproj">
+      <Project>{e8104b83-4e8a-4a91-bb3a-c8b17ed45acf}</Project>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
