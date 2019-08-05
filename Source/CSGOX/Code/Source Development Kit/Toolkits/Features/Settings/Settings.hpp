@@ -1,3 +1,0 @@
-/// Settings.hpp
-
-#pragma once

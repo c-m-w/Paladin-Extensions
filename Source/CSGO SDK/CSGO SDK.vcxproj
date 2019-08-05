@@ -10,6 +10,88 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Code\Definitions.hpp" />
+    <ClInclude Include="Code\SDK.hpp" />
+    <ClInclude Include="Code\Tools.hpp" />
+    <ClInclude Include="Code\Types.hpp" />
+    <ClInclude Include="Code\Valve\Interfaces\CClientState.hpp" />
+    <ClInclude Include="Code\Valve\Interfaces\CInput.hpp" />
+    <ClInclude Include="Code\Valve\Interfaces\IAppSystem.hpp" />
+    <ClInclude Include="Code\Valve\Interfaces\IBaseClientDll.hpp" />
+    <ClInclude Include="Code\Valve\Interfaces\IBaseInterface.hpp" />
+    <ClInclude Include="Code\Valve\Interfaces\IClientEntity.hpp" />
+    <ClInclude Include="Code\Valve\Interfaces\IClientEntityList.hpp" />
+    <ClInclude Include="Code\Valve\Interfaces\IClientMode.hpp" />
+    <ClInclude Include="Code\Valve\Interfaces\IClientNetworkable.hpp" />
+    <ClInclude Include="Code\Valve\Interfaces\IClientRenderable.hpp" />
+    <ClInclude Include="Code\Valve\Interfaces\IClientThinkable.hpp" />
+    <ClInclude Include="Code\Valve\Interfaces\IClientUnknown.hpp" />
+    <ClInclude Include="Code\Valve\Interfaces\ICollideable.hpp" />
+    <ClInclude Include="Code\Valve\Interfaces\IConVar.hpp" />
+    <ClInclude Include="Code\Valve\Interfaces\ICVar.hpp" />
+    <ClInclude Include="Code\Valve\Interfaces\IEngineSound.hpp" />
+    <ClInclude Include="Code\Valve\Interfaces\IEngineTrace.hpp" />
+    <ClInclude Include="Code\Valve\Interfaces\IFileSystem.hpp" />
+    <ClInclude Include="Code\Valve\Interfaces\IGameEventManager.hpp" />
+    <ClInclude Include="Code\Valve\Interfaces\IGameMovement.hpp" />
+    <ClInclude Include="Code\Valve\Interfaces\IInputSystem.hpp" />
+    <ClInclude Include="Code\Valve\Interfaces\ILocalize.hpp" />
+    <ClInclude Include="Code\Valve\Interfaces\IMaterialSystem.hpp" />
+    <ClInclude Include="Code\Valve\Interfaces\IMoveHelper.hpp" />
+    <ClInclude Include="Code\Valve\Interfaces\Interfaces.hpp" />
+    <ClInclude Include="Code\Valve\Interfaces\IPanel.hpp" />
+    <ClInclude Include="Code\Valve\Interfaces\IPrediction.hpp" />
+    <ClInclude Include="Code\Valve\Interfaces\IRefCounted.hpp" />
+    <ClInclude Include="Code\Valve\Interfaces\ISurface.hpp" />
+    <ClInclude Include="Code\Valve\Interfaces\IVEngineClient.hpp" />
+    <ClInclude Include="Code\Valve\Interfaces\IViewRenderBeams.hpp" />
+    <ClInclude Include="Code\Valve\Interfaces\IVModelInfoClient.hpp" />
+    <ClInclude Include="Code\Valve\Interfaces\IVModelRender.hpp" />
+    <ClInclude Include="Code\Valve\Interfaces\IVRenderView.hpp" />
+    <ClInclude Include="Code\Valve\Math\Math.hpp" />
+    <ClInclude Include="Code\Valve\Math\QAngle.hpp" />
+    <ClInclude Include="Code\Valve\Math\Vector.hpp" />
+    <ClInclude Include="Code\Valve\Math\Vector2D.hpp" />
+    <ClInclude Include="Code\Valve\Math\Vector4D.hpp" />
+    <ClInclude Include="Code\Valve\Math\VMatrix.hpp" />
+    <ClInclude Include="Code\Valve\Types\CBaseHandle.hpp" />
+    <ClInclude Include="Code\Valve\Types\CCSWeaponInfo.hpp" />
+    <ClInclude Include="Code\Valve\Types\CGlobalVars.hpp" />
+    <ClInclude Include="Code\Valve\Types\CHandle.hpp" />
+    <ClInclude Include="Code\Valve\Types\characterset.hpp" />
+    <ClInclude Include="Code\Valve\Types\checksum_crc.hpp" />
+    <ClInclude Include="Code\Valve\Types\checksum_md5.hpp" />
+    <ClInclude Include="Code\Valve\Types\ClientClass.hpp" />
+    <ClInclude Include="Code\Valve\Types\Color.hpp" />
+    <ClInclude Include="Code\Valve\Types\ConVar.hpp" />
+    <ClInclude Include="Code\Valve\Types\CUserCmd.hpp" />
+    <ClInclude Include="Code\Valve\Types\Enumerations.hpp" />
+    <ClInclude Include="Code\Valve\Types\GlowOutlineEffect.hpp" />
+    <ClInclude Include="Code\Valve\Types\IHandleEntity.hpp" />
+    <ClInclude Include="Code\Valve\Types\PaintKit.hpp" />
+    <ClInclude Include="Code\Valve\Types\platform.hpp" />
+    <ClInclude Include="Code\Valve\Types\Recv.hpp" />
+    <ClInclude Include="Code\Valve\Types\Studio.hpp" />
+    <ClInclude Include="Code\Valve\Types\Types.hpp" />
+    <ClInclude Include="Code\Valve\Types\UtlBuffer.hpp" />
+    <ClInclude Include="Code\Valve\Types\UtlMemory.hpp" />
+    <ClInclude Include="Code\Valve\Types\UtlString.hpp" />
+    <ClInclude Include="Code\Valve\Types\UtlVector.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Code\Tools.cpp" />
+    <ClCompile Include="Code\Valve\Math\Vector2D.cpp" />
+    <ClCompile Include="Code\Valve\Math\Vector4D.cpp" />
+    <ClCompile Include="Code\Valve\Math\VMatrix.cpp" />
+    <ClCompile Include="Code\Valve\Types\characterset.cpp" />
+    <ClCompile Include="Code\Valve\Types\checksum_crc.cpp" />
+    <ClCompile Include="Code\Valve\Types\checksum_md5.cpp" />
+    <ClCompile Include="Code\Valve\Types\Color.cpp" />
+    <ClCompile Include="Code\Valve\Types\ConVar.cpp" />
+    <ClCompile Include="Code\Valve\Types\UtlBuffer.cpp" />
+    <ClCompile Include="Code\Valve\Types\UtlString.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
     <ProjectGuid>{09490215-55D2-4A3D-BE81-40167E089761}</ProjectGuid>
@@ -86,11 +168,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClInclude Include="Code\CCSPlayer Extended.hpp" />
-    <ClInclude Include="Code\CNetChannel Extended.hpp" />
-    <ClInclude Include="Code\CSGO SDK.hpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
