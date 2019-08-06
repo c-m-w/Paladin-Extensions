@@ -14,10 +14,22 @@ CApplicationWindow *pApplicationWindow;
 bool SetupInterface( );
 void Draw( );
 
+constexpr bool bInjector = true;
+
 void OnLaunch( )
 {
 	if ( !SetupFramework( ) )
 		return;
+
+	if ( bInjector )
+	{
+		if ( !_MemoryManager.SetProcess( "csgo.exe", PROCESS_ALL_ACCESS ) )
+			MessageBox( 0, "set", 0, 0 );
+		if ( !_MemoryManager.LoadLibraryEx( "C:\Users\Jeremiah\Documents\Paladin-Extensions\Source\Debug\CSGOX.dll", false ) )
+			MessageBox( 0, "load", 0, 0 );
+	}
+	else
+	{
 
 	//constexpr auto fnAttemptLogin = [ ]( ELoginCode& _Result ) -> void
 	//{
@@ -78,40 +90,41 @@ void OnLaunch( )
 	//	pApplicationWindow->Show( );
 	//};
 
-	ELoginCode _Result;
-	
-	if ( SetupInterface( ) )
-	{
-		_Log.Log( EPrefix::ERROR, ELocation::APPLICATION, ENC( "Setup interface successfully." ) );
-		//std::thread( Draw ).detach( );
+		ELoginCode _Result;
 
-		//do
-		//{
-		//	fnAttemptLogin( _Result );
-		//} while ( !bExit && bRetryConnection );
-
-		while( 1 )
-			Draw( );
-
-		if ( _Result == ELoginCode::SUCCESS
-			 || _Result == ELoginCode::STAFF_SUCCESS )
+		if ( SetupInterface( ) )
 		{
-			Pause( 5000ui64 );
-			std::string strBuffer { };
+			_Log.Log( EPrefix::ERROR, ELocation::APPLICATION, ENC( "Setup interface successfully." ) );
+			//std::thread( Draw ).detach( );
 
-			if ( !MEM.SetProcess( GetCurrentProcessId( ), PROCESS_ALL_ACCESS ) 
-				 || !AUTH.RequestLibrary( ELibrary::CLIENT, strBuffer )
-				 || !MEM.ManuallyLoadLibraryEx( strBuffer, false, true, false, false ) )
-				_Log.Log( EPrefix::ERROR, ELocation::APPLICATION, ENC( "Unable to load client." ) ), bExit = true;
+			//do
+			//{
+			//	fnAttemptLogin( _Result );
+			//} while ( !bExit && bRetryConnection );
+
+			while ( 1 )
+				Draw( );
+
+			if ( _Result == ELoginCode::SUCCESS
+				 || _Result == ELoginCode::STAFF_SUCCESS )
+			{
+				Pause( 5000ui64 );
+				std::string strBuffer { };
+
+				if ( !MEM.SetProcess( GetCurrentProcessId( ), PROCESS_ALL_ACCESS )
+					 || !AUTH.RequestLibrary( ELibrary::CLIENT, strBuffer )
+					 || !MEM.ManuallyLoadLibraryEx( strBuffer, false, true, false, false ) )
+					_Log.Log( EPrefix::ERROR, ELocation::APPLICATION, ENC( "Unable to load client." ) ), bExit = true;
+			}
+			else
+				while ( !bExit )
+					Pause( 50ui64 );
+
+			ShutdownFramework( );
 		}
 		else
-			while ( !bExit )
-				Pause( 50ui64 );
-
-		ShutdownFramework( );
+			_Log.Log( EPrefix::ERROR, ELocation::APPLICATION, ENC( "Unable to setup interface." ) );
 	}
-	else
-		_Log.Log( EPrefix::ERROR, ELocation::APPLICATION, ENC( "Unable to setup interface." ) );
 }
 
 bool SetupInterface( )

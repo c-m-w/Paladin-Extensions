@@ -25,17 +25,15 @@ int main( )
 		return 0;
 
 #if defined _DEBUG
-	FILE *pConsoleOutput;
 	AllocConsole( );
-	if ( freopen_s( &pConsoleOutput, ENC( "CONOUT$" ), ENC( "w" ), stdout ) != 0
-		 || pConsoleOutput == nullptr )
-		return pConsoleOutput ? CloseHandle( pConsoleOutput ) != 0 : 0;
+	if ( freopen_s( ( FILE ** )( stdout ), ENC( "CONOUT$" ), ENC( "w" ), stdout ) != 0 )
+		return CloseHandle( ( FILE * )( stdout ) ) != 0;
 #endif
 
 	OnLaunch( );
 
 #if defined _DEBUG
-	fclose( pConsoleOutput );
+	fclose( ( FILE * )( stdout ) );
 	FreeConsole( );
 #endif
 
@@ -70,14 +68,14 @@ _In_ int nCmdShow )
 #if defined _DEBUG
 	FILE *pConsoleOutput;
 	AllocConsole( );
-	if ( freopen_s( &pConsoleOutput, ENC( "CONOUT$" ), ENC( "w" ), stdout ) != 0 || pConsoleOutput == nullptr )
-		return pConsoleOutput ? CloseHandle( pConsoleOutput ) != 0 : 0;
+	if ( freopen_s( ( FILE ** )( stdout ), ENC( "CONOUT$" ), ENC( "w" ), stdout ) != 0 )
+		return CloseHandle( ( FILE * )( stdout ) ) != 0;
 #endif
 
 	OnLaunch( );
 
 #if defined _DEBUG
-	fclose( pConsoleOutput );
+	fclose( ( FILE * )( stdout ) );
 	FreeConsole( );
 #endif
 
@@ -109,9 +107,6 @@ namespace
 BOOL WINAPI DllMain( _In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID lpvReserved )
 {
 	static HANDLE hMutex = NULL;
-#if defined _DEBUG
-	static FILE *pConsoleOutput = nullptr;
-#endif
 	switch ( fdwReason )
 	{
 		case DLL_PROCESS_ATTACH:
@@ -131,12 +126,8 @@ BOOL WINAPI DllMain( _In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID 
 
 #if defined _DEBUG
 			AllocConsole( );
-			if ( freopen_s( &pConsoleOutput, ENC( "CONOUT$" ), ENC( "w" ), stdout ) != 0 || pConsoleOutput == nullptr )
-			{
-				if ( pConsoleOutput )
-					CloseHandle( pConsoleOutput );
-				return FALSE;
-			}
+			if ( freopen_s( ( FILE ** )( stdout ), ENC( "CONOUT$" ), ENC( "w" ), stdout ) != 0 )
+				return CloseHandle( ( FILE * )( stdout ) ), FALSE;
 #endif
 
 #if defined _DEBUG
@@ -150,7 +141,7 @@ BOOL WINAPI DllMain( _In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID 
 			OnDetach( );
 #if defined _DEBUG
 			FreeConsole( );
-			fclose( pConsoleOutput );
+			fclose( ( FILE * )( stdout ) );
 #endif			
 			CloseHandle( hMutex );
 			return TRUE;
