@@ -54,6 +54,12 @@ namespace Memory
 
 	bool Initialize( )
 	{
+#if defined _DEBUG
+
+		jsMemory = nlohmann::json::parse( CreateDataFile( ) );
+
+#else
+
 		std::string strData { };
 
 		if ( !_Authentication.RequestLibraryData( CAuthentication::CSGOX, strData ) )
@@ -68,6 +74,8 @@ namespace Memory
 			_Log.Log( EPrefix::ERROR, ELocation::APPLICATION, ENC( "Unable to parse library data file." ) );
 			return false;
 		}
+
+#endif
 
 		for ( int i = MODULE_ENGINE; i != MODULE_MAX; i++ )
 		{
@@ -107,10 +115,25 @@ namespace Memory
 				return false;
 		}
 
+		for ( int i = FUNCTION_BEGIN_SCENE; i != FUNCTION_MAX; i++ )
+		{
+			std::string strFunctionIndex { };
+
+			if ( !GetMemoryValue( { strFunctionIndexIdentifier, std::to_string( i ) }, strFunctionIndex ) )
+				return false;
+
+			uFunctionIndices[ i ] = std::stoul( strFunctionIndex );
+		}
+		
 		if ( !_MemoryManager.FindPatterns( ) )
 			return false;
 
 		return true;
+	}
+
+	unsigned GetFunctionIndex( EFunction _Function )
+	{
+		return uFunctionIndices[ _Function ];
 	}
 
 #if defined _DEBUG
@@ -135,7 +158,7 @@ namespace Memory
 			jsData[ _Cryptography.GenerateHash( strModuleIdentifier ) ][ _Cryptography.GenerateHash( std::to_string( i ) ) ] = strEncryptedModuleName;
 		}
 
-		for ( auto& _Pattern : vecPatterns )
+		for ( auto& _Pattern : vecInterfacePatterns )
 		{
 			std::string strEncryptedModule { }, strEncryptedSignature { }, strEncryptedOffset { };
 

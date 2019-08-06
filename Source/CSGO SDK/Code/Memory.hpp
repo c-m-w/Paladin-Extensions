@@ -76,7 +76,7 @@ namespace Memory
 		INTERFACE_MAX
 	};
 
-	enum EFunctions
+	enum EFunction
 	{
 		FUNCTION_BEGIN_SCENE,
 		FUNCTION_END_SCENE,
@@ -141,6 +141,8 @@ namespace Memory
 	inline IViewRenderBeams*& pRenderBeams			= *reinterpret_cast< IViewRenderBeams** >( pInterfaces[ INTERFACE_RENDER_BEAMS ] );
 	inline IFileSystem*& pFileSystem				= *reinterpret_cast< IFileSystem** >( &pInterfaces[ INTERFACE_FILE_SYSTEM ] );
 
+	unsigned uFunctionIndices[ FUNCTION_MAX ] { };
+
 	inline std::vector< networked_variable_table_t > vecNetworkedVariables { };
 
 	inline const std::string strCreateInterfaceIdentifier = ENC( "Create Interface Import" );
@@ -185,7 +187,7 @@ namespace Memory
 		ENC( "filesystem_stdio.dll" )
 	};
 
-	inline const std::vector< pattern_info_t > vecPatterns
+	inline const std::vector< pattern_info_t > vecInterfacePatterns
 	{
 		{ INTERFACE_GLOBAL_VARS, MODULE_CLIENT, ENC( "A1 ? ? ? ? 5E 8B 40 10" ), 1 },
 		{ INTERFACE_CLIENT_STATE, MODULE_ENGINE, ENC( "A1 ? ? ? ? 8B 80 ? ? ? ? C3" ), 1 },
@@ -217,7 +219,7 @@ namespace Memory
 		{ INTERFACE_ENGINE_SOUND, MODULE_ENGINE, ENC( "IEngineSoundClient003" ) },
 		{ INTERFACE_FILE_SYSTEM, MODULE_FILESYSTEM, ENC( "VFileSystem017" ) }
 	};
-	inline const std::vector< std::pair< EFunctions, unsigned > > vecFunctionIndices
+	inline const std::vector< std::pair< EFunction, unsigned > > vecFunctionIndices
 	{
 		{ FUNCTION_BEGIN_SCENE, 41 },
 		{ FUNCTION_END_SCENE, 42 },
@@ -244,5 +246,6 @@ namespace Memory
 #endif
 
 	bool Initialize( );
+	unsigned GetFunctionIndex( EFunction _Function );
 	std::uintptr_t FindOffset( const char* szTable, const char* szVariable );
 }

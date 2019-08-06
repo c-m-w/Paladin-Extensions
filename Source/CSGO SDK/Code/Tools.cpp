@@ -382,20 +382,20 @@ namespace Utilities
 
 	bool CBaseEntity::IsPlayer( )
 	{
-		return reinterpret_cast< bool( __thiscall*)( CBaseEntity * ) >( ( *reinterpret_cast< void*** >( this ) )[ uIsPlayer ] )( this );
+		return reinterpret_cast< bool( __thiscall*)( CBaseEntity * ) >( ( *reinterpret_cast< void*** >( this ) )[ GetFunctionIndex( FUNCTION_IS_PLAYER ) ] )( this );
 	}
 
 	bool CBaseEntity::IsWeapon( )
 	{
-		return reinterpret_cast< bool( __thiscall*)( CBaseEntity * ) >( ( *reinterpret_cast< void*** >( this ) )[ uIsWeapon ] )( this );
+		return reinterpret_cast< bool( __thiscall*)( CBaseEntity * ) >( ( *reinterpret_cast< void*** >( this ) )[ GetFunctionIndex( FUNCTION_IS_WEAPON ) ] )( this );
 	}
 
-	void CBaseEntity::SetABSOrigin( Vector &vecOrigin )
-	{
-		static auto ptrSetABSOrigin = mClient.FindPattern( jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Signatures" ) ][ ENC( "Set ABS Origin" ) ].get< std::string >( ) )
-				+ jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Offsets" ) ][ ENC( "Set ABS Origin" ) ].get< int >( );
-		return reinterpret_cast< void( __thiscall*)( CBaseEntity *, Vector & ) >( ptrSetABSOrigin )( this, vecOrigin );
-	}
+	//void CBaseEntity::SetABSOrigin( Vector &vecOrigin )
+	//{
+	//	static auto ptrSetABSOrigin = mClient.FindPattern( jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Signatures" ) ][ ENC( "Set ABS Origin" ) ].get< std::string >( ) )
+	//			+ jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Offsets" ) ][ ENC( "Set ABS Origin" ) ].get< int >( );
+	//	return reinterpret_cast< void( __thiscall*)( CBaseEntity *, Vector & ) >( ptrSetABSOrigin )( this, vecOrigin );
+	//}
 
 	bool CBaseEntity::IsPlantedC4( )
 	{
@@ -418,17 +418,17 @@ namespace Utilities
 				|| iClassID == ClassID_CSmokeGrenade;
 	}
 
-	float CBaseEntity::GetBombTimer( )
-	{
-		const auto flTimer = *reinterpret_cast< float* >( this + Offsets::ptrBombTimer ) - pGlobalVariables->m_flCurrentTime;
-		return flTimer > 0.f ? flTimer : 0.f;
-	}
-
-	float CBaseEntity::GetDefuseTimer( )
-	{
-		const auto flTimer = *reinterpret_cast< float* >( this + Offsets::ptrDefuseTimer ) - pGlobalVariables->m_flCurrentTime;
-		return flTimer > 0.f ? flTimer : 0.f;
-	}
+	//float CBaseEntity::GetBombTimer( )
+	//{
+	//	const auto flTimer = *reinterpret_cast< float* >( this + Offsets::ptrBombTimer ) - pGlobalVariables->m_flCurrentTime;
+	//	return flTimer > 0.f ? flTimer : 0.f;
+	//}
+	//
+	//float CBaseEntity::GetDefuseTimer( )
+	//{
+	//	const auto flTimer = *reinterpret_cast< float* >( this + Offsets::ptrDefuseTimer ) - pGlobalVariables->m_flCurrentTime;
+	//	return flTimer > 0.f ? flTimer : 0.f;
+	//}
 
 	Vector *CBaseEntity::BoundingBox( )
 	{
@@ -470,12 +470,12 @@ namespace Utilities
 		return reinterpret_cast< CEconomyItemView* >( this );
 	}
 
-	CCSWeaponInfo *CBaseCombatWeapon::GetCSWeaponData( )
-	{
-		static auto ptrGetCSWeaponData = mClient.FindPattern( jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Signatures" ) ][ ENC( "Get CS Weapon Data" ) ].get< str_t >( ) )
-				+ jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Offsets" ) ][ ENC( "Get CS Weapon Data" ) ].get< int >( );
-		return reinterpret_cast< CCSWeaponInfo*( __thiscall*)( CBaseCombatWeapon * ) >( ptrGetCSWeaponData )( this );
-	}
+	//CCSWeaponInfo *CBaseCombatWeapon::GetCSWeaponData( )
+	//{
+	//	static auto ptrGetCSWeaponData = mClient.FindPattern( jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Signatures" ) ][ ENC( "Get CS Weapon Data" ) ].get< str_t >( ) )
+	//			+ jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Offsets" ) ][ ENC( "Get CS Weapon Data" ) ].get< int >( );
+	//	return reinterpret_cast< CCSWeaponInfo*( __thiscall*)( CBaseCombatWeapon * ) >( ptrGetCSWeaponData )( this );
+	//}
 
 	bool CBaseCombatWeapon::HasBullets( )
 	{
@@ -521,26 +521,26 @@ namespace Utilities
 		return GetCSWeaponData( )->WeaponType == WEAPONTYPE_SNIPER_RIFLE;
 	}
 
-	bool CBaseCombatWeapon::IsReloading( )
-	{
-		static auto ptrIsReloading = *reinterpret_cast< ptr_t* >( mClient.FindPattern( jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Signatures" ) ][ ENC( "Is Reloading" ) ].get< str_t >( ) )
-			+ jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Offsets" ) ][ ENC( "Is Reloading" ) ].get< int >( ) );
-		return *reinterpret_cast< bool* >( ptr_t( this ) + ptrIsReloading );
-	}
+	//bool CBaseCombatWeapon::IsReloading( )
+	//{
+	//	static auto ptrIsReloading = *reinterpret_cast< ptr_t* >( mClient.FindPattern( jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Signatures" ) ][ ENC( "Is Reloading" ) ].get< str_t >( ) )
+	//		+ jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Offsets" ) ][ ENC( "Is Reloading" ) ].get< int >( ) );
+	//	return *reinterpret_cast< bool* >( ptr_t( this ) + ptrIsReloading );
+	//}
 
 	float CBaseCombatWeapon::GetInaccuracy( )
 	{
-		return reinterpret_cast< float( __thiscall*)( CBaseCombatWeapon * ) >( ( *reinterpret_cast< void*** >( this ) )[ uGetInaccuracy ] )( this );
+		return reinterpret_cast< float( __thiscall*)( CBaseCombatWeapon * ) >( ( *reinterpret_cast< void*** >( this ) )[ GetFunctionIndex( FUNCTION_GET_INACCURACY ) ] )( this );
 	}
 
 	float CBaseCombatWeapon::GetSpread( )
 	{
-		return reinterpret_cast< float( __thiscall*)( CBaseCombatWeapon * ) >( ( *reinterpret_cast< void*** >( this ) )[ uGetSpread ] )( this );
+		return reinterpret_cast< float( __thiscall*)( CBaseCombatWeapon * ) >( ( *reinterpret_cast< void*** >( this ) )[ GetFunctionIndex( FUNCTION_GET_SPREAD ) ] )( this );
 	}
 
 	void CBaseCombatWeapon::UpdateAccuracyPenalty( )
 	{
-		return reinterpret_cast< void( __thiscall*)( CBaseCombatWeapon * ) >( ( *reinterpret_cast< void*** >( this ) )[ uUpdateAccuracyPenalty ] )( this );
+		return reinterpret_cast< void( __thiscall*)( CBaseCombatWeapon * ) >( ( *reinterpret_cast< void*** >( this ) )[ GetFunctionIndex( FUNCTION_UPDATE_ACCURACY_PENALTY ) ] )( this );
 	}
 
 	float CBaseCombatWeapon::GetNextShotTime( )
@@ -582,7 +582,7 @@ namespace Utilities
 
 		tfFilter.pSkip = this;
 		rRay.Init( vecStart, vecPosition );
-		pEngineTrace->TraceRay( rRay, PX_MASK_VISIBLE, &tfFilter, &gtRay );
+		pEngineTrace->TraceRay( rRay, MASK_VISIBLE, &tfFilter, &gtRay );
 
 		return gtRay.fraction == 1.f || gtRay.hit_entity == pEntity;
 	}
