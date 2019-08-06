@@ -145,7 +145,7 @@ bool CConnectivity::Request( EAction _Action, std::string &strOut )
 		break;
 
 		case GET_LIBRARY:
-		case GET_INFORMATION:
+		case GET_LIBRARY_DATA:
 		{
 			ENSURE_DATA_SET( LIBRARY )
 		}

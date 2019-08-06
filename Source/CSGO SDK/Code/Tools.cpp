@@ -2,25 +2,7 @@
 
 #include "../../Framework/Precompile.hpp"
 #include "../../Framework/Code/Framework.hpp"
-#include "SDK.hpp"
-
-Modules::module_info_t::operator HMODULE( ) const
-{
-	return _Module;
-}
-
-bool Modules::module_info_t::Valid( )
-{
-	if ( !_Module )
-		return false;
-
-	if ( _CreateInterface == nullptr )
-		_CreateInterface = decltype( _CreateInterface )( GetProcAddress( _Module, Linkage::strCreateInterfaceImport.c_str( ) ) );
-
-	return true;
-}
-
-using namespace Interfaces;
+#include "CSGO SDK.hpp"
 
 namespace Utilities
 {
@@ -109,27 +91,27 @@ namespace Utilities
 		return pRecoilFactor != nullptr ? pRecoilFactor->GetFloat( ) : 2.f;
 	}
 
-	bool LineGoesThroughSmoke( Vector vecStartPos, Vector vecEndPos )
-	{
-		static auto ptrLineGoesThroughSmoke = Modules::_Client.FindPattern( jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Signatures" ) ][ ENC( "Line Goes Through Smoke" ) ].get< str_t >( ) )
-				+ jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Offsets" ) ][ ENC( "Line Goes Through Smoke" ) ].get< int >( );
-		return reinterpret_cast< bool( __cdecl*)( Vector, Vector ) >( ptrLineGoesThroughSmoke )( vecStartPos, vecEndPos );
-	}
-
-	void SetClantag( cstr_t szTag )
-	{
-		static auto ptrSetClantag = Modules::_Engine.FindPattern( jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Signatures" ) ][ ENC( "Set Clantag" ) ].get< str_t >( ) )
-				+ jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Offsets" ) ][ ENC( "Set Clantag" ) ].get< int >( );
-		reinterpret_cast< int( __fastcall*)( const char *, const char * ) >( ptrSetClantag )( szTag, szTag );
-	}
-
-	void RevealRanks( )
-	{
-		static auto ptrRevealRanks = Modules::_Client.FindPattern( jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Signatures" ) ][ ENC( "Reveal Ranks" ) ].get< str_t >( ) )
-				+ jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Offsets" ) ][ ENC( "Reveal Ranks" ) ].get< int >( );
-		static int iBuffer[ ] { 0, 0, 0 };
-		reinterpret_cast< char( __cdecl*)( int * ) >( ptrRevealRanks )( iBuffer );
-	}
+	//bool LineGoesThroughSmoke( Vector vecStartPos, Vector vecEndPos )
+	//{
+	//	static auto ptrLineGoesThroughSmoke = Modules::_Client.FindPattern( jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Signatures" ) ][ ENC( "Line Goes Through Smoke" ) ].get< str_t >( ) )
+	//			+ jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Offsets" ) ][ ENC( "Line Goes Through Smoke" ) ].get< int >( );
+	//	return reinterpret_cast< bool( __cdecl*)( Vector, Vector ) >( ptrLineGoesThroughSmoke )( vecStartPos, vecEndPos );
+	//}
+	//
+	//void SetClantag( cstr_t szTag )
+	//{
+	//	static auto ptrSetClantag = Modules::_Engine.FindPattern( jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Signatures" ) ][ ENC( "Set Clantag" ) ].get< str_t >( ) )
+	//			+ jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Offsets" ) ][ ENC( "Set Clantag" ) ].get< int >( );
+	//	reinterpret_cast< int( __fastcall*)( const char *, const char * ) >( ptrSetClantag )( szTag, szTag );
+	//}
+	//
+	//void RevealRanks( )
+	//{
+	//	static auto ptrRevealRanks = Modules::_Client.FindPattern( jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Signatures" ) ][ ENC( "Reveal Ranks" ) ].get< str_t >( ) )
+	//			+ jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Offsets" ) ][ ENC( "Reveal Ranks" ) ].get< int >( );
+	//	static int iBuffer[ ] { 0, 0, 0 };
+	//	reinterpret_cast< char( __cdecl*)( int * ) >( ptrRevealRanks )( iBuffer );
+	//}
 
 	void ClampAngles( QAngle &qAngles )
 	{
@@ -138,12 +120,12 @@ namespace Utilities
 			|| isinf( qAngles.pitch ) || isinf( qAngles.yaw ) || isinf( qAngles.roll ) )
 			return ( void )( qAngles.pitch = 0.f, qAngles.yaw = 0.f, qAngles.roll = 0.f );
 
-		qAngles.pitch = std::clamp( qAngles.pitch, PX_MIN_PITCH, PX_MAX_PITCH );
+		qAngles.pitch = std::clamp( qAngles.pitch, MIN_PITCH, MAX_PITCH );
 
 		// orient horizontal axis into valid ranges
-		qAngles.yaw -= copysign( floorf( ( fabsf( qAngles.yaw ) + PX_REVOLUTION / 2.f ) / PX_REVOLUTION ) * PX_REVOLUTION, qAngles.yaw );
+		qAngles.yaw -= copysign( floorf( ( fabsf( qAngles.yaw ) + REVOLUTION / 2.f ) / REVOLUTION ) * REVOLUTION, qAngles.yaw );
 
-		qAngles.roll = std::clamp( qAngles.roll, PX_MIN_ROLL, PX_MAX_ROLL );
+		qAngles.roll = std::clamp( qAngles.roll, MIN_ROLL, MAX_ROLL );
 	}
 
 	void ClampAngles( Vector &vecAngles )
@@ -153,15 +135,15 @@ namespace Utilities
 			|| isinf( vecAngles.x ) || isinf( vecAngles.y ) || isinf( vecAngles.z ) )
 			return ( void )( vecAngles.x = 0.f, vecAngles.y = 0.f, vecAngles.z = 0.f );
 
-		vecAngles.x = std::clamp( vecAngles.x, PX_MIN_PITCH, PX_MAX_PITCH );
+		vecAngles.x = std::clamp( vecAngles.x, MIN_PITCH, MAX_PITCH );
 
 		// orient horizontal axis into valid ranges
-		vecAngles.y -= copysign( floorf( ( fabsf( vecAngles.y ) + PX_REVOLUTION / 2.f ) / PX_REVOLUTION ) * PX_REVOLUTION, vecAngles.y );
+		vecAngles.y -= copysign( floorf( ( fabsf( vecAngles.y ) + REVOLUTION / 2.f ) / REVOLUTION ) * REVOLUTION, vecAngles.y );
 
-		vecAngles.z = std::clamp( vecAngles.z, PX_MIN_ROLL, PX_MAX_ROLL );
+		vecAngles.z = std::clamp( vecAngles.z, MIN_ROLL, MAX_ROLL );
 	}
 
-	void HumanizeAngles( QAngle &qAngles, player_ptr_t pLocalPlayer )
+	void HumanizeAngles( QAngle &qAngles, CBasePlayer* pLocalPlayer )
 	{
 		// test for input validity
 		if ( isnan( qAngles.pitch ) || isnan( qAngles.yaw ) || isnan( qAngles.roll )
@@ -175,8 +157,8 @@ namespace Utilities
 		angDelta.roll = 0.f;
 		const auto flDelta = sqrtf( powf( angDelta.pitch, 2.f ) + powf( angDelta.yaw, 2.f ) );
 
-		if ( flDelta > PX_MAX_ANGLE_DELTA )
-			angDelta *= PX_MAX_ANGLE_DELTA / flDelta;
+		if ( flDelta > MAX_ANGLE_DELTA )
+			angDelta *= MAX_ANGLE_DELTA / flDelta;
 
 		// assure delta is divisible by current sensitivity
 		static auto sensitivity = pConVar->FindVar( ENC( "sensitivity" ) );
@@ -196,7 +178,7 @@ namespace Utilities
 		return ( void )( qAngles = angView + angDelta, qAngles.roll = pClientState->viewangles.z );
 	}
 
-	void HumanizeAngles( Vector &vecAngles, player_ptr_t pLocalPlayer )
+	void HumanizeAngles( Vector &vecAngles, CBasePlayer* pLocalPlayer )
 	{
 		if ( isnan( vecAngles.x ) || isnan( vecAngles.y ) || isnan( vecAngles.z )
 			|| isinf( vecAngles.x ) || isinf( vecAngles.y ) || isinf( vecAngles.z ) )
@@ -213,8 +195,8 @@ namespace Utilities
 		vecDelta.z = 0.f;
 		auto flDelta = sqrtf( powf( vecDelta.x, 2.f ) * powf( vecDelta.y, 2.f ) );
 
-		if ( flDelta > PX_MAX_ANGLE_DELTA )
-			vecDelta *= PX_MAX_ANGLE_DELTA / flDelta;
+		if ( flDelta > MAX_ANGLE_DELTA )
+			vecDelta *= MAX_ANGLE_DELTA / flDelta;
 
 		// assure delta is divisible by current sensitivity
 		static auto sensitivity = pConVar->FindVar( ENC( "sensitivity" ) );
@@ -638,7 +620,7 @@ namespace Utilities
 		vecEnd += GetViewPosition( );
 		tfFilter.pSkip = this;
 		rRay.Init( GetViewPosition( ), vecEnd );
-		pEngineTrace->TraceRay( rRay, PX_MASK_VISIBLE, &tfFilter, &gtRay );
+		pEngineTrace->TraceRay( rRay, MASK_VISIBLE, &tfFilter, &gtRay );
 		return gtRay;
 	}
 

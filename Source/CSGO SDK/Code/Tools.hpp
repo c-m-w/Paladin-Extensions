@@ -16,7 +16,7 @@ namespace PX::Information::NetworkedVariableManager
 
 inline IHandleEntity *CBaseHandle::Get( ) const
 {
-	return Interfaces::pEntityList->GetClientEntityFromHandle( *this );
+	return pEntityList->GetClientEntityFromHandle( *this );
 }
 
 namespace Utilities

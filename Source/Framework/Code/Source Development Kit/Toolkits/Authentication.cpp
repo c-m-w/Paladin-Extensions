@@ -497,6 +497,39 @@ bool CAuthentication::RequestLibrary( ELibrary _Library, std::string &strOut )
 	}
 }
 
+bool CAuthentication::RequestLibraryData( ELibrary _Library, std::string &strOut )
+{
+	if ( !bLoggedIn )
+		return _Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Attempting to request a library without logging in first." ) ), false;
+
+	std::string strLibraryData { }, strDecryptedLibraryData { };
+
+	NET.AddPostData( EPostData::LIBRARY, std::to_string( int( _Library ) ) );
+	if ( !NET.Request( EAction::GET_LIBRARY_DATA, strLibraryData )
+		 || !CRYPTO.Decrypt( strLibraryData, strDecryptedLibraryData ) )
+		return _Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Unable to receive or decrypt library data with ID %i." ), _Library ), false;
+
+	try
+	{
+		auto _Response = nlohmann::json::parse( strDecryptedLibraryData );
+		const auto _Return = ELoginCode( std::stoi( _Response[ ENC( "Exit Code" ) ].get< std::string >( ) ) );
+
+		if ( _Return != SUCCESS && _Return != STAFF_SUCCESS
+			 || _Response[ "Other Data" ].get< std::string >( ) == NO_OTHER_DATA )
+			return _Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Library request failed. This may be due to an invalid session from attempted authentication bypass." ) ), false;
+
+		if ( !CRYPTO.Decrypt( _Response[ "Other Data" ].get< std::string >( ), strOut ) )
+			return _Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Failed to decrypt library data data." ) ), false;
+	}
+	catch( nlohmann::json::parse_error& e )
+	{
+		_Log.Log( EPrefix::ERROR, ELocation::AUTHENTICATION, ENC( "Unable to parse response from requesting library data. Message: %s." ), e.what( ) );
+		return false;
+	}
+
+	return true;
+}
+
 bool CAuthentication::CompareHash( ELibrary _ExecutableHash, const std::string &strCurrent )
 {
 	if ( !bLoggedIn )

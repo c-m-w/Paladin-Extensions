@@ -21,13 +21,14 @@
          "GREATER"              => ">",
          "QUOTE"                => "'",
          "PLUS"                 => "+" ) );
-    define( "actions", array( 'get_protocol' => 0, 'login' => 1, 'get_data' => 2, 'get_shellcode' => 3, 'get_library' => 4, 'get_hashes' => 5, 'get_information' => 6, 'ban' => 7, 'get_resource_hash' => 8, 'get_resources' => 9 ) );
+    define( "actions", array( 'get_protocol' => 0, 'login' => 1, 'get_data' => 2, 'get_shellcode' => 3, 'get_library' => 4, 'get_library_data' => 5, 'get_hashes' => 5, 'get_information' => 6, 'ban' => 7, 'get_resource_hash' => 8, 'get_resources' => 9 ) );
     define( "libraryDirectory", "/home/palavpvb/PX/Libraries/" );
     define( "libraries", array( 'PX Client.dll', 'PX CSGO.dll', 'PX PUBG.dll', 'PX RSIX.dll', 'PX RUST.dll' ) );
     define( "dataDirectory", '/home/palavpvb/PX/Data/' );
     define( 'dataFile', '.data' );
     define( 'shellcodeDataFile', '.shellcode' );
     define( 'hashDataFile', '.hashes' );
+	define( 'libraryDataFiles', array( '', '.csgo', '.pubg', '.rsix', '.rust' ) );
     define( 'extensionData', array(  ) );
 
 	$log			= new Logging( );
@@ -343,8 +344,7 @@
             global $functionality;
             global $log;
             global $cryptography;
-
-
+			
             if ( !$this->sessionValid( ) )
             {
                 $log->log( 'Attempting to get shellcode without a valid session. Could possibly be someone attempting to bypass authentication.' );
@@ -396,6 +396,32 @@
                                                 $cryptography->generateHash( 'Order' ) => $order,
                                                 $cryptography->generateHash( 'Sections' ) => $orderedSections ) );
             $functionality->stopExecution( 'Success', $cryptography->encrypt( $information ) );
+		}
+
+
+		public function getLibraryData( ): void
+		{
+            global $functionality;
+            global $log;
+            global $cryptography;
+			
+            if ( !$this->sessionValid( ) )
+            {
+                $log->log( 'Attempting to get shellcode without a valid session. Could possibly be someone attempting to bypass authentication.' );
+                $functionality->stopExecution( 'Server Error' );
+            }
+
+            $library = $functionality->getPostData( 'library' );
+            $log->log( 'Requesting library data with ID of ' . $library );
+            $libraryDataData = file_get_contents( dataDirectory . libraryDataFiles[ $library ] );
+			
+            if ( $libraryDataData === FALSE )
+            {
+                $log->log( 'Failed to read library data file of ID ' . $library );
+                $functionality->stopExecution( 'Server Error' );
+            }
+			
+            $functionality->stopExecution( 'Success', $cryptography->encrypt( libraryDataData ) );
 		}
 
         public function getHashes( ): void
@@ -486,6 +512,9 @@
 
 		if ( $action == actions[ 'get_library' ] )
 			$auth->getLibrary( );
+		
+		if ( $action == actions[ 'get_library_data' ] )
+			$auth->getLibraryData( );
 
         if ( $action == actions[ 'get_hashes' ] )
             $auth->getHashes( );
