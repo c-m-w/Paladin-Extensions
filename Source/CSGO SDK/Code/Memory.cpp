@@ -13,12 +13,12 @@ namespace Memory
 	{
 		auto jsSearch = jsMemory;
 
-		for ( auto& strLevel : initLevels )
+		for ( auto& strLevel : initLevels )	
 			jsSearch = jsSearch[ _Cryptography.GenerateHash( strLevel ) ];
 
 		try
 		{
-			if ( !_Cryptography.Decrypt( jsSearch.get< std::string >( ), strOut ) )
+			if ( !_Cryptography.Decrypt( jsSearch.get< std::string >( ), strOut, _Cryptography.strStaticEncryptionKey, _Cryptography.strStaticInitializationVector ) )
 				return false;
 		}
 		catch( nlohmann::json::type_error& e )
@@ -92,6 +92,9 @@ namespace Memory
 
 		for ( int i = INTERFACE_GLOBAL_VARS; i != INTERFACE_MAX; i++ )
 		{
+			if ( i == INTERFACE_CLIENT_MODE )
+				continue;
+
 			std::string strModule { }, strSignature { }, strOffset { };
 
 			if ( !GetMemoryValue( { strPatternIdentifier, std::to_string( i ), strModuleIdentifier }, strModule )
@@ -101,11 +104,13 @@ namespace Memory
 				std::string strVersion { };
 
 				if ( !GetMemoryValue( { strVersionIdentifier, std::to_string( i ), strModuleIdentifier }, strModule )
-					 || !GetMemoryValue( { strVersionIdentifier, std::to_string( i ) }, strVersion ) )
+					 || !GetMemoryValue( { strVersionIdentifier, std::to_string( i ), strVersionIdentifier }, strVersion ) )
 					return false;
 
 				if ( !_Modules[ std::stoi( strModule ) ]( strVersion.c_str( ), &pInterfaces[ i ] ) )
 					return false;
+
+				continue;
 			}
 
 			const auto _Module = _Modules[ std::stoi( strModule ) ];
@@ -127,6 +132,15 @@ namespace Memory
 		
 		if ( !_MemoryManager.FindPatterns( ) )
 			return false;
+
+		pGlobalVariables = **reinterpret_cast< CGlobalVarsBase * ** >( pGlobalVariables );
+		pClientState = **reinterpret_cast< CClientState * ** >( pClientState );
+		pDevice = **reinterpret_cast< IDirect3DDevice9 * ** >( pDevice );
+		pGlowObjectManager = *reinterpret_cast< CGlowObjectManager * * >( pGlowObjectManager );
+		pInput = *reinterpret_cast< CInput * * >( pInput );
+		pMoveHelper = **reinterpret_cast< IMoveHelperServer * ** >( pMoveHelper );
+		pRenderBeams = *reinterpret_cast< IViewRenderBeams * * >( pRenderBeams );
+		pClientMode = **reinterpret_cast< IClientMode * ** >( ( *reinterpret_cast< std::uintptr_t * * >( pClientBase ) )[ 10 ] + 5 );
 
 		return true;
 	}
@@ -183,7 +197,7 @@ namespace Memory
 				return { };
 
 			jsData[ _Cryptography.GenerateHash( strVersionIdentifier ) ][ _Cryptography.GenerateHash( std::to_string( _Version._Interface ) ) ][ _Cryptography.GenerateHash( strModuleIdentifier ) ] = strEncryptedModule;
-			jsData[ _Cryptography.GenerateHash( strVersionIdentifier ) ][ _Cryptography.GenerateHash( std::to_string( _Version._Interface ) ) ] = strEncryptedVersion;
+			jsData[ _Cryptography.GenerateHash( strVersionIdentifier ) ][ _Cryptography.GenerateHash( std::to_string( _Version._Interface ) ) ][ _Cryptography.GenerateHash( strVersionIdentifier ) ] = strEncryptedVersion;
 		}
 
 		for ( auto& _FunctionIndex : vecFunctionIndices )

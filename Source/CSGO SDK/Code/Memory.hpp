@@ -125,31 +125,31 @@ namespace Memory
 	inline module_info_t& mFileSystem = _Modules[ MODULE_FILESYSTEM ];
 
 	inline void* pInterfaces[ INTERFACE_MAX ] { };
-	inline CGlobalVarsBase*& pGlobalVariables		= *reinterpret_cast< CGlobalVarsBase** >( pInterfaces[ INTERFACE_GLOBAL_VARS ] );
-	inline CClientState*& pClientState				= *reinterpret_cast< CClientState** >( pInterfaces[ INTERFACE_CLIENT_STATE ] );
-	inline IDirect3DDevice9*& pDevice				= *reinterpret_cast< IDirect3DDevice9** >( pInterfaces[ INTERFACE_DEVICE ] );
-	inline IBaseClientDLL*& pClientBase				= *reinterpret_cast< IBaseClientDLL** >( pInterfaces[ INTERFACE_CLIENT_BASE ] );
+	inline CGlobalVarsBase*& pGlobalVariables		= *reinterpret_cast< CGlobalVarsBase** >( &pInterfaces[ INTERFACE_GLOBAL_VARS ] );
+	inline CClientState*& pClientState				= *reinterpret_cast< CClientState** >( &pInterfaces[ INTERFACE_CLIENT_STATE ] );
+	inline IDirect3DDevice9*& pDevice				= *reinterpret_cast< IDirect3DDevice9** >( &pInterfaces[ INTERFACE_DEVICE ] );
+	inline IBaseClientDLL*& pClientBase				= *reinterpret_cast< IBaseClientDLL** >( &pInterfaces[ INTERFACE_CLIENT_BASE ] );
 	inline IClientMode*& pClientMode				= *reinterpret_cast< IClientMode** >( &pInterfaces[ INTERFACE_CLIENT_MODE ] );
-	inline CGlowObjectManager*& pGlowObjectManager	= *reinterpret_cast< CGlowObjectManager** >( pInterfaces[ INTERFACE_GLOW_OBJECT_MANAGER ] );
-	inline IInputSystem*& pInputSystem				= *reinterpret_cast< IInputSystem** >( pInterfaces[ INTERFACE_INPUT_SYSTEM ] );
-	inline IVEngineClient*& pEngineClient			= *reinterpret_cast< IVEngineClient** >( pInterfaces[ INTERFACE_ENGINE_CLIENT ] );
+	inline CGlowObjectManager*& pGlowObjectManager	= *reinterpret_cast< CGlowObjectManager** >( &pInterfaces[ INTERFACE_GLOW_OBJECT_MANAGER ] );
+	inline IInputSystem*& pInputSystem				= *reinterpret_cast< IInputSystem** >( &pInterfaces[ INTERFACE_INPUT_SYSTEM ] );
+	inline IVEngineClient*& pEngineClient			= *reinterpret_cast< IVEngineClient** >( &pInterfaces[ INTERFACE_ENGINE_CLIENT ] );
 	inline ISurface*& pSurface						= *reinterpret_cast< ISurface** >( &pInterfaces[ INTERFACE_SURFACE ] );
 	inline IPanel*& pPanel							= *reinterpret_cast< IPanel** >( &pInterfaces[ INTERFACE_PANEL ] );
-	inline IClientEntityList*& pEntityList			= *reinterpret_cast< IClientEntityList** >( pInterfaces[ INTERFACE_ENTITY_LIST ] );
-	inline IEngineTrace*& pEngineTrace				= *reinterpret_cast< IEngineTrace** >( pInterfaces[ INTERFACE_ENGINE_TRACE ] );
-	inline IVModelInfoClient*& pModelInfo			= *reinterpret_cast< IVModelInfoClient** >( pInterfaces[ INTERFACE_MODEL_INFO ] );
+	inline IClientEntityList*& pEntityList			= *reinterpret_cast< IClientEntityList** >( &pInterfaces[ INTERFACE_ENTITY_LIST ] );
+	inline IEngineTrace*& pEngineTrace				= *reinterpret_cast< IEngineTrace** >( &pInterfaces[ INTERFACE_ENGINE_TRACE ] );
+	inline IVModelInfoClient*& pModelInfo			= *reinterpret_cast< IVModelInfoClient** >( &pInterfaces[ INTERFACE_MODEL_INFO ] );
 	inline CInput*& pInput							= *reinterpret_cast< CInput** >( &pInterfaces[ INTERFACE_INPUT ] );
-	inline IVModelRender*& pModelRender				= *reinterpret_cast< IVModelRender** >( pInterfaces[ INTERFACE_MODEL_RENDER ] );
-	inline IMaterialSystem*& pMaterialSystem		= *reinterpret_cast< IMaterialSystem** >( pInterfaces[ INTERFACE_MATERIAL_SYSTEM ] );
-	inline IVRenderView*& pEngineRenderView			= *reinterpret_cast< IVRenderView** >( pInterfaces[ INTERFACE_ENGINE_RENDER_VIEW ] );
+	inline IVModelRender*& pModelRender				= *reinterpret_cast< IVModelRender** >( &pInterfaces[ INTERFACE_MODEL_RENDER ] );
+	inline IMaterialSystem*& pMaterialSystem		= *reinterpret_cast< IMaterialSystem** >( &pInterfaces[ INTERFACE_MATERIAL_SYSTEM ] );
+	inline IVRenderView*& pEngineRenderView			= *reinterpret_cast< IVRenderView** >( &pInterfaces[ INTERFACE_ENGINE_RENDER_VIEW ] );
 	inline ICvar*& pConVar							= *reinterpret_cast< ICvar** >( &pInterfaces[ INTERFACE_CONVAR ] );
 	inline ILocalize*& pLocalize					= *reinterpret_cast< ILocalize** >( &pInterfaces[ INTERFACE_LOCALIZE ] );
-	inline IGameEventManager2*& pEvents				= *reinterpret_cast< IGameEventManager2** >( pInterfaces[ INTERFACE_EVENTS ] );
-	inline IMoveHelperServer*& pMoveHelper			= *reinterpret_cast< IMoveHelperServer** >( pInterfaces[ INTERFACE_MOVE_HELPER ] );
-	inline IGameMovement*& pGameMovement			= *reinterpret_cast< IGameMovement** >( pInterfaces[ INTERFACE_GAME_MOVEMENT ] );
+	inline IGameEventManager2*& pEvents				= *reinterpret_cast< IGameEventManager2** >( &pInterfaces[ INTERFACE_EVENTS ] );
+	inline IMoveHelperServer*& pMoveHelper			= *reinterpret_cast< IMoveHelperServer** >( &pInterfaces[ INTERFACE_MOVE_HELPER ] );
+	inline IGameMovement*& pGameMovement			= *reinterpret_cast< IGameMovement** >( &pInterfaces[ INTERFACE_GAME_MOVEMENT ] );
 	inline IPrediction*& pPrediction				= *reinterpret_cast< IPrediction** >( &pInterfaces[ INTERFACE_PREDICTION ] );
-	inline IEngineSound*& pEngineSound				= *reinterpret_cast< IEngineSound** >( pInterfaces[ INTERFACE_ENGINE_SOUND ] );
-	inline IViewRenderBeams*& pRenderBeams			= *reinterpret_cast< IViewRenderBeams** >( pInterfaces[ INTERFACE_RENDER_BEAMS ] );
+	inline IEngineSound*& pEngineSound				= *reinterpret_cast< IEngineSound** >( &pInterfaces[ INTERFACE_ENGINE_SOUND ] );
+	inline IViewRenderBeams*& pRenderBeams			= *reinterpret_cast< IViewRenderBeams** >( &pInterfaces[ INTERFACE_RENDER_BEAMS ] );
 	inline IFileSystem*& pFileSystem				= *reinterpret_cast< IFileSystem** >( &pInterfaces[ INTERFACE_FILE_SYSTEM ] );
 
 	inline unsigned uFunctionIndices[ FUNCTION_MAX ] { };
@@ -203,7 +203,6 @@ namespace Memory
 		{ INTERFACE_GLOBAL_VARS, MODULE_CLIENT, ENC( "A1 ? ? ? ? 5E 8B 40 10" ), 1 },
 		{ INTERFACE_CLIENT_STATE, MODULE_ENGINE, ENC( "A1 ? ? ? ? 8B 80 ? ? ? ? C3" ), 1 },
 		{ INTERFACE_DEVICE, MODULE_D3D9, ENC( "A1 ? ? ? ? 50 8B 08 FF 51 0C" ), 1 },
-		{ INTERFACE_CLIENT_MODE, MODULE_CLIENT, ENC( "A1 ? ? ? ? 8B 80 ? ? ? ? 5D" ), 1 },
 		{ INTERFACE_GLOW_OBJECT_MANAGER, MODULE_CLIENT, ENC( "0F 11 05 ? ? ? ? 83 C8 01" ), 1 },
 		{ INTERFACE_INPUT, MODULE_CLIENT, ENC( "B9 ? ? ? ? 8B 40 38 FF D0 84 C0 0F 85" ), 1 },
 		{ INTERFACE_MOVE_HELPER, MODULE_CLIENT, ENC( "8B 0D ? ? ? ? 8B 46 08 68" ), 2 },
