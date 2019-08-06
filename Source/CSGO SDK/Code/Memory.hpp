@@ -15,6 +15,17 @@ namespace Memory
 		bool Valid( );
 	};
 
+	template< typename _t > bool module_info_t::operator()( const char *szInterface, _t *pOutput ) const
+	{
+		if ( _CreateInterface == nullptr )
+			return false;
+
+		if ( ( *reinterpret_cast< void** >( pOutput ) = _CreateInterface( szInterface, nullptr ) ) == nullptr )
+			return false;
+
+		return true;
+	}
+
 	struct networked_variable_table_t
 	{
 		const char* szName = nullptr;
@@ -141,7 +152,7 @@ namespace Memory
 	inline IViewRenderBeams*& pRenderBeams			= *reinterpret_cast< IViewRenderBeams** >( pInterfaces[ INTERFACE_RENDER_BEAMS ] );
 	inline IFileSystem*& pFileSystem				= *reinterpret_cast< IFileSystem** >( &pInterfaces[ INTERFACE_FILE_SYSTEM ] );
 
-	unsigned uFunctionIndices[ FUNCTION_MAX ] { };
+	inline unsigned uFunctionIndices[ FUNCTION_MAX ] { };
 
 	inline std::vector< networked_variable_table_t > vecNetworkedVariables { };
 
@@ -245,7 +256,7 @@ namespace Memory
 	std::string CreateDataFile( );
 #endif
 
-	bool Initialize( );
+	bool InitializeMemory( );
 	unsigned GetFunctionIndex( EFunction _Function );
 	std::uintptr_t FindOffset( const char* szTable, const char* szVariable );
 }

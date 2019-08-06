@@ -170,13 +170,11 @@
     </ClCompile>
     <ClCompile Include="Code\CSGOX.cpp" />
     <ClCompile Include="Code\Source Development Kit\Application Programming Interface\Hooks.cpp" />
-    <ClCompile Include="Code\Development Environment\Linkage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Framework\Precompile.hpp" />
     <ClInclude Include="Code\CSGOX.hpp" />
     <ClInclude Include="Code\Source Development Kit\Application Programming Interface\Hooks.hpp" />
-    <ClInclude Include="Code\Development Environment\Linkage.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CSGO SDK\CSGO SDK.vcxproj">
@@ -185,9 +183,6 @@
     <ProjectReference Include="..\Framework\Framework.vcxproj">
       <Project>{e8104b83-4e8a-4a91-bb3a-c8b17ed45acf}</Project>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Code\Development Environment\Linkage.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

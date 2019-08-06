@@ -52,7 +52,7 @@ namespace Memory
 		return true;
 	}
 
-	bool Initialize( )
+	bool InitializeMemory( )
 	{
 #if defined _DEBUG
 

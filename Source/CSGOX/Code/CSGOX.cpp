@@ -24,7 +24,7 @@ BOOL OnAttach( )
 	if ( !AUTH.CompareHash( ELibrary::CSGOX, image_info_t( GetModuleHandle( "csgo.exe" ) ).GenerateUniqueHash( ) ) )
 		return LOG( ERROR, APPLICATION, "Invalid hash of headers." ), false;
 
-	if ( !Initialize( ) )
+	if ( !InitializeMemory( ) )
 		return FALSE;
 
 	while ( true )
@@ -41,8 +41,7 @@ void OnDetach( )
 
 bool Initialize( )
 {
-	if ( !LINK.Setup( )
-		 || !HOOKS.Setup( ) )
+	if ( InitializeMemory( ) || !HOOKS.Setup( ) )
 	{
 		LOG( ERROR, APPLICATION, "Unable to initialize." );
 		return false;
@@ -55,5 +54,4 @@ bool Initialize( )
 void Uninitialize( )
 {
 	HOOKS.Shutdown( );
-	LINK.Shutdown( );
 }

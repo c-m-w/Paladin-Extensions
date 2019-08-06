@@ -5,15 +5,6 @@
 // SDK functions
 struct bezier_order_t;
 
-namespace PX::Information::NetworkedVariableManager
-{
-	// todo
-	int FindOffset( const char *bob, const char *boob )
-	{
-		return 0;
-	}
-}
-
 inline IHandleEntity *CBaseHandle::Get( ) const
 {
 	return pEntityList->GetClientEntityFromHandle( *this );

@@ -21,9 +21,6 @@
     <ClCompile Include="..\Framework\Precompile.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Code\Development Environment\Linkage.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Code\Source Development Kit\Application Programming Interface\Hooks.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -35,16 +32,8 @@
     <ClInclude Include="Code\CSGOX.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Code\Development Environment\Linkage.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Code\Source Development Kit\Application Programming Interface\Hooks.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Code\Development Environment\Linkage.inl">
-      <Filter>Header Files</Filter>
-    </None>
   </ItemGroup>
 </Project>

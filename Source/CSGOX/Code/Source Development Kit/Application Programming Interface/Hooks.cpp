@@ -31,9 +31,9 @@ bool CHooks::CDeviceHook::Initialize( )
 	GET_MEMBER_ADDRESS( pReplacementEndScene, EndScene )
 
 	return Attach( pDevice )
-		&& Replace( pReset = GetOriginalFunction( Linkage::zReset ), pReplacementReset )
-		&& Replace( pBeginScene = GetOriginalFunction( Linkage::zBeginScene ), pReplacementBeginScene )
-		&& Replace( pEndScene = GetOriginalFunction( Linkage::zEndScene ), pReplacementEndScene );
+		&& Replace( pReset = GetOriginalFunction( GetFunctionIndex( FUNCTION_RESET ) ), pReplacementReset )
+		&& Replace( pBeginScene = GetOriginalFunction( GetFunctionIndex( FUNCTION_BEGIN_SCENE ) ), pReplacementBeginScene )
+		&& Replace( pEndScene = GetOriginalFunction( GetFunctionIndex( FUNCTION_END_SCENE ) ), pReplacementEndScene );
 }
 
 void CHooks::CDeviceHook::Uninitialize( )
