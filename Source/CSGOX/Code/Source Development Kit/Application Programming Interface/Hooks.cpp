@@ -12,7 +12,8 @@
 
 bool CHooks::Initialize( )
 {
-	return _Device.Setup( );
+	return _Device.Setup( )
+		&& _ClientMode.Setup( );
 }
 
 void CHooks::Uninitialize( )
@@ -54,6 +55,34 @@ HRESULT CHooks::CDeviceHook::BeginScene( )
 HRESULT CHooks::CDeviceHook::EndScene( )
 {
 	return reinterpret_cast< HRESULT( __stdcall * )( void * ) >( pEndScene )( this );
+}
+
+bool CHooks::CClientModeHook::Initialize( )
+{
+	void *pReplacementCreateMove = nullptr;
+
+	GET_MEMBER_ADDRESS( pReplacementCreateMove, CreateMove )
+
+	return Attach( pDevice )
+			&& Replace( pCreateMove = GetOriginalFunction( GetFunctionIndex( FUNCTION_CREATE_MOVE ) ), pReplacementCreateMove );
+}
+
+void CHooks::CClientModeHook::Uninitialize( )
+{
+	Detach( );
+}
+
+void CHooks::CClientModeHook::CreateMove( int iSequence, float flInputSampleFrametime, bool bActive )
+{
+	for ( auto &fnBeginCreateMove: vecBeginCreateMove )
+		fnBeginCreateMove( );
+
+	/*auto _Return = */reinterpret_cast< void( __stdcall * )( void *, int, float, bool ) >( pCreateMove )( this, iSequence, flInputSampleFrametime, bActive );
+
+	for ( auto &fnEndCreateMove: vecEndCreateMove )
+		fnEndCreateMove( );
+
+	return /*_Return*/;
 }
 
 CHooks _Hooks;

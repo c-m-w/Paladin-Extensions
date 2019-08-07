@@ -9,6 +9,8 @@
 
 #include "../../CSGO SDK/Code/CSGO SDK.hpp"
 
+#include "Source Development Kit/Toolkits/Features/Hook.hpp"
+
 #include "Source Development Kit/Application Programming Interface/Hooks.hpp"
 
 #if defined USE_INTERNAL_DEFINITIONS

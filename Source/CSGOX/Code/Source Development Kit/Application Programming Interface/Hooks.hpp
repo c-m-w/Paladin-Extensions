@@ -31,4 +31,21 @@ public:
 		HRESULT __stdcall BeginScene( );
 		HRESULT __stdcall EndScene( );
 	} _Device;
+
+	class CClientModeHook: public IBase, public CVirtualTableHook
+	{
+	private:
+
+		bool Initialize( ) override;
+		void Uninitialize( ) override;
+
+		static inline void *pCreateMove  = nullptr;
+
+	public:
+
+		CClientModeHook( ) = default;
+		~CClientModeHook( ) = default;
+
+		void __stdcall CreateMove( int iSequence, float flInputSampleFrametime, bool bActive );
+	} _ClientMode;
 } extern _Hooks;
