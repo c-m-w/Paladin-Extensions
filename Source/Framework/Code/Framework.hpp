@@ -16,6 +16,7 @@
 #include "Source Development Kit/Application Programming Interfaces/Utilities.hpp"
 #include "Source Development Kit/Application Programming Interfaces/Color.hpp"
 #include "Source Development Kit/Application Programming Interfaces/Base Interface.hpp"
+#include "Source Development Kit/Application Programming Interfaces/Temporary Pointer.hpp"
 
 #include "Development Environment/Logging.hpp"
 #include "Source Development Kit/Application Programming Interfaces/Cryptography.hpp"

@@ -108,6 +108,7 @@
     <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Filesystem.hpp" />
     <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Input Handler.hpp" />
     <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Drawing\Shaders.hpp" />
+    <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Temporary Pointer.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\Authentication.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\CButton.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\CCheckbox.hpp" />

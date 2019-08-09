@@ -71,6 +71,7 @@
     <ClInclude Include="Precompile.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\CContainer.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\CScrollbar.hpp" />
+    <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Temporary Pointer.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Code\Source Development Kit\Application Programming Interfaces\Connectivity.inl" />

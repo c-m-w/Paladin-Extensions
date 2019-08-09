@@ -74,13 +74,14 @@ void CHooks::CClientModeHook::Uninitialize( )
 
 void CHooks::CClientModeHook::CreateMove( int iSequence, float flInputSampleFrametime, bool bActive )
 {
-	for ( auto &fnBeginCreateMove: vecBeginCreateMove )
-		fnBeginCreateMove( );
+	SCreateMoveContext _Context { GetLocalPlayer( ), GetUserCmd( iSequence ) };
+	for ( auto &fnHook: listBeginHook[ FUNCTION_CREATE_MOVE ] )
+		fnHook( &_Context );
 
 	/*auto _Return = */reinterpret_cast< void( __stdcall * )( void *, int, float, bool ) >( pCreateMove )( this, iSequence, flInputSampleFrametime, bActive );
 
-	for ( auto &fnEndCreateMove: vecEndCreateMove )
-		fnEndCreateMove( );
+	for ( auto &fnHook: listEndHook[ FUNCTION_CREATE_MOVE ] )
+		fnHook( &_Context );
 
 	return /*_Return*/;
 }
