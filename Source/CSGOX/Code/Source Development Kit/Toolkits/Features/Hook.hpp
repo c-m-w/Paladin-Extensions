@@ -2,8 +2,8 @@
 
 #pragma once
 
-inline std::list< std::function< void( void * ) > > listBeginHook[ FUNCTION_MAX ] { };
-inline std::list< std::function< void( void * ) > > listEndHook[ FUNCTION_MAX ] { };
+inline std::vector< std::function< void( void * ) > > vecBeginHook[ FUNCTION_MAX ] { };
+inline std::vector< std::function< void( void * ) > > vecEndHook[ FUNCTION_MAX ] { };
 
 template < EFunction enumHook, typename _tContext >
 class IFeatureBase
@@ -11,14 +11,14 @@ class IFeatureBase
 protected:
 	enum
 	{
-		INACTIVE,
+		ACTIVE,
 		TOGGLE_ACTIVATION,
 		HOLD_TO_ACTIVATE,
 		HOLD_TO_DEACTIVATE,
 		SET_TO_ACTIVE,
 		SET_TO_INACTIVE
 	};
-	using keybind_t = std::pair< key_t, decltype( INACTIVE ) >;
+	using keybind_t = std::pair< key_t, decltype( ACTIVE ) >;
 	using keybinds_t = std::vector< keybind_t >;
 	virtual void Begin( _tContext& _Context ) = 0;
 	virtual void End( _tContext& _Context ) = 0;
@@ -30,6 +30,11 @@ public:
 		{
 			switch ( _Key.second )
 			{
+				case ACTIVE:
+				{
+					bKeyActive = true;
+					break;
+				}
 				case TOGGLE_ACTIVATION:
 				{
 					static bool bLastActivationState = false;
@@ -37,6 +42,7 @@ public:
 						bLastActivationState = !bLastActivationState;
 					if ( bLastActivationState )
 						bKeyActive = true;
+					break;
 				}
 				case HOLD_TO_ACTIVATE:
 				{
@@ -44,6 +50,7 @@ public:
 						bKeyActive = true;
 					else
 						bKeyActive = false;
+					break;
 				}
 				case HOLD_TO_DEACTIVATE:
 				{
@@ -51,16 +58,19 @@ public:
 						bKeyActive = false;
 					else
 						bKeyActive = true;
+					break;
 				}
 				case SET_TO_ACTIVE:
 				{
 					if ( GetKeyState( _Key.first ) )
 						bKeyActive = true;
+					break;
 				}
 				case SET_TO_INACTIVE:
 				{
 					if ( GetKeyState( _Key.first ) )
 						bKeyActive = false;
+					break;
 				}
 				default:
 				{
@@ -82,23 +92,23 @@ protected:
 	IFeatureBase( )
 	{		
 		if ( nullptr != Begin )
-			listBeginHook[ enumHook ].emplace_back( Begin );
+			vecBeginHook[ enumHook ].emplace_back( Begin );
 		if ( nullptr != End )
-			listBeginHook[ enumHook ].emplace_back( End );
+			vecBeginHook[ enumHook ].emplace_back( End );
 	}
 	~IFeatureBase( )
 	{
 		int i;
 		if ( i = 0, Begin )
-			for ( auto &fnHook: listBeginHook[ enumHook ] )
+			for ( auto &fnHook: vecBeginHook[ enumHook ] )
 				if ( Begin == fnHook )
-					listBeginHook[ enumHook ].erase( listBeginHook[ enumHook ].begin( ) + i );
+					vecBeginHook[ enumHook ].erase( vecBeginHook[ enumHook ].begin( ) + i );
 				else
 					i++;
 		if ( i = 0, End )
-			for ( auto& fnHook : listEndHook[ enumHook ] )
+			for ( auto& fnHook : vecEndHook[ enumHook ] )
 				if ( End == fnHook )
-					listEndHook[ enumHook ].erase( listEndHook[ enumHook ].begin( ) + i );
+					vecEndHook[ enumHook ].erase( vecEndHook[ enumHook ].begin( ) + i );
 				else
 					i++;
 	}
@@ -115,14 +125,14 @@ class ACombatFeatureBase: public IFeatureBase< FUNCTION_CREATE_MOVE, SCreateMove
 public:
 	keybinds_t _Keys;
 protected:
-	virtual int BezierStuff( int time ); // virtual because some features may want to change how a function works (
+	virtual int BezierStuff( int time ); // virtual because some features may want to change how a function works (not this function specifically because im sure it wont change)
 	// here we put the context for shit that'll go between each instance of a combat feature. maybe even some functions
 };
 
 class AAimAssistanceBase: public ACombatFeatureBase
 {
 protected:
-	virtual int GetNearestBasedEntityID( ); // maybe they wanna do it based on real distance and not crosshair or smth
+	virtual int GetNearestEntityID( ); // maybe they wanna do it based on real distance and not crosshair or smth
 };
 
 class CAimAssistance final: public AAimAssistanceBase
@@ -165,9 +175,10 @@ private:
 		if ( pLocalPlayer->m_fFlags( ) & FL_ONGROUND )
 			return ( void )( pCommand->buttons |= IN_JUMP );
 
+		static unsigned __int8 uExtraJumps = 0ui8;
 		const auto& zvel = pLocalPlayer->m_vecVelocity( ).z;
-		if ( ( zvel < 0.f && bJumpBeforeHopping )
-			 || ( zvel > 0.f && bJumpAfterHopping ) )
+		if ( ( ( zvel < 0.f && bJumpBeforeHopping ) && uExtraJumps < u8MaximumExtraJumps / 2 ) // we want to split the number of extra jumps to before and after the jump for extra legit
+			 || ( ( zvel > 0.f && bJumpAfterHopping ) && uExtraJumps < u8MaximumExtraJumps ) )
 		{
 			Ray_t rRay;
 			const auto vecOrigin = pLocalPlayer->m_vecOrigin( );
@@ -180,8 +191,33 @@ private:
 			pEngineTrace->TraceRay( rRay, MASK_PLAYERSOLID, &tfFilter, &gtRay );
 
 			if ( gtRay.fraction > ( 2.f / 16.f ) && gtRay.fraction < 1.f )
-				return ( void )( pCommand->buttons |= IN_JUMP );
+				return ( void )( uExtraJumps++, pCommand->buttons |= IN_JUMP );
 		}
 		pCommand->buttons &= ~IN_JUMP;
+	}
+};
+
+class CStaminaBugAutomation final: public AMovementFeatureBase
+{
+private:
+	void End( SCreateMoveContext& _Context ) override
+	{
+		auto& pLocalPlayer = _Context.pLocalPlayer;
+		auto& pCommand = _Context.pCommand;
+
+		if ( nullptr == pLocalPlayer || nullptr == pCommand )
+			return;
+
+		if ( !KeybindActiveState( _Keys ) )
+			return;
+
+		//Prediction::Start( pLocalPlayer, pCommand );
+		//if ( _Context.pLocalPlayer->m_fFlags( ) & FL_ONGROUND )
+		//	return ( void )( Prediction::End( pLocalPlayer ), pCommand->buttons &= ~IN_DUCK );
+		//Prediction::Start( pLocalPlayer, pCommand );
+		//if ( _Context.pLocalPlayer->m_fFlags( ) & FL_ONGROUND )
+		//	return ( void )( Prediction::End( pLocalPlayer ), Prediction::End( pLocalPlayer ), pCommand->buttons |= IN_DUCK );
+		//Prediction::End( pLocalPlayer );
+		//Prediction::End( pLocalPlayer );
 	}
 };

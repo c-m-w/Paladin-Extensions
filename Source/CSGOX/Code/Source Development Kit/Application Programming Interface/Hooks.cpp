@@ -75,12 +75,14 @@ void CHooks::CClientModeHook::Uninitialize( )
 void CHooks::CClientModeHook::CreateMove( int iSequence, float flInputSampleFrametime, bool bActive )
 {
 	SCreateMoveContext _Context { GetLocalPlayer( ), GetUserCmd( iSequence ) };
-	for ( auto &fnHook: listBeginHook[ FUNCTION_CREATE_MOVE ] )
+	for ( auto &fnHook: vecBeginHook[ FUNCTION_CREATE_MOVE ] )
 		fnHook( &_Context );
 
 	/*auto _Return = */reinterpret_cast< void( __stdcall * )( void *, int, float, bool ) >( pCreateMove )( this, iSequence, flInputSampleFrametime, bActive );
 
-	for ( auto &fnHook: listEndHook[ FUNCTION_CREATE_MOVE ] )
+	// todo engine prediction here so endhook works on future info
+	
+	for ( auto &fnHook: vecEndHook[ FUNCTION_CREATE_MOVE ] )
 		fnHook( &_Context );
 
 	return /*_Return*/;
