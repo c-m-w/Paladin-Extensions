@@ -141,7 +141,10 @@ protected:
 		PRIORITY_MAX
 	};
 	virtual bool MeetsActivationRequirements( int iEntityID ) = 0;
-	virtual int GetPriorityEntityID( decltype( auto ) enumPriorityType = FIRST_IN_LIST ); // maybe they wanna do it based on real distance and not crosshair or smth
+	virtual int GetPriorityEntityID( decltype( PRIORITY_MAX ) enumPriorityType = FIRST_IN_LIST ) // maybe they wanna do it based on real distance and not crosshair or smth
+	{
+		
+	}
 };
 
 class CAimAssistance final: public AAimAssistanceBase
@@ -173,7 +176,7 @@ class CAimAssistance final: public AAimAssistanceBase
 public:
 	std::vector< int > vecHitboxes;
 	float flFieldOfView;
-	decltype( auto ) enumPriorities[ PRIORITY_MAX ] { NEAREST_TO_CROSSHAIR, NEAREST_BY_DISTANCE, FIRST_IN_LIST };
+	decltype( PRIORITY_MAX ) enumPriorities[ PRIORITY_MAX ] { NEAREST_TO_CROSSHAIR, NEAREST_BY_DISTANCE, FIRST_IN_LIST };
 };
 
 class AMovementFeatureBase: public IFeatureBase< FUNCTION_CREATE_MOVE, SCreateMoveContext >
