@@ -91,27 +91,28 @@ namespace Utilities
 		return pRecoilFactor != nullptr ? pRecoilFactor->GetFloat( ) : 2.f;
 	}
 
-	//bool LineGoesThroughSmoke( Vector vecStartPos, Vector vecEndPos )
-	//{
-	//	static auto ptrLineGoesThroughSmoke = Modules::_Client.FindPattern( jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Signatures" ) ][ ENC( "Line Goes Through Smoke" ) ].get< str_t >( ) )
-	//			+ jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Offsets" ) ][ ENC( "Line Goes Through Smoke" ) ].get< int >( );
-	//	return reinterpret_cast< bool( __cdecl*)( Vector, Vector ) >( ptrLineGoesThroughSmoke )( vecStartPos, vecEndPos );
-	//}
-	//
-	//void SetClantag( cstr_t szTag )
-	//{
-	//	static auto ptrSetClantag = Modules::_Engine.FindPattern( jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Signatures" ) ][ ENC( "Set Clantag" ) ].get< str_t >( ) )
-	//			+ jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Offsets" ) ][ ENC( "Set Clantag" ) ].get< int >( );
-	//	reinterpret_cast< int( __fastcall*)( const char *, const char * ) >( ptrSetClantag )( szTag, szTag );
-	//}
-	//
-	//void RevealRanks( )
-	//{
-	//	static auto ptrRevealRanks = Modules::_Client.FindPattern( jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Signatures" ) ][ ENC( "Reveal Ranks" ) ].get< str_t >( ) )
-	//			+ jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Offsets" ) ][ ENC( "Reveal Ranks" ) ].get< int >( );
-	//	static int iBuffer[ ] { 0, 0, 0 };
-	//	reinterpret_cast< char( __cdecl*)( int * ) >( ptrRevealRanks )( iBuffer );
-	//}
+	bool LineGoesThroughSmoke( Vector vecStartPos, Vector vecEndPos )
+	{
+		//static auto ptrLineGoesThroughSmoke = Modules::_Client.FindPattern( jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Signatures" ) ][ ENC( "Line Goes Through Smoke" ) ].get< str_t >( ) )
+		//		+ jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Offsets" ) ][ ENC( "Line Goes Through Smoke" ) ].get< int >( );
+		//return reinterpret_cast< bool( __cdecl*)( Vector, Vector ) >( ptrLineGoesThroughSmoke )( vecStartPos, vecEndPos );
+		return false;
+	}
+	
+	void SetClantag( const char *szTag )
+	{
+		//static auto ptrSetClantag = Modules::_Engine.FindPattern( jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Signatures" ) ][ ENC( "Set Clantag" ) ].get< str_t >( ) )
+		//		+ jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Offsets" ) ][ ENC( "Set Clantag" ) ].get< int >( );
+		//reinterpret_cast< int( __fastcall*)( const char *, const char * ) >( ptrSetClantag )( szTag, szTag );
+	}
+	
+	void RevealRanks( )
+	{
+		//static auto ptrRevealRanks = Modules::_Client.FindPattern( jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Signatures" ) ][ ENC( "Reveal Ranks" ) ].get< str_t >( ) )
+		//		+ jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Offsets" ) ][ ENC( "Reveal Ranks" ) ].get< int >( );
+		//static int iBuffer[ ] { 0, 0, 0 };
+		//reinterpret_cast< char( __cdecl*)( int * ) >( ptrRevealRanks )( iBuffer );
+	}
 
 	void ClampAngles( QAngle &qAngles )
 	{
@@ -470,12 +471,13 @@ namespace Utilities
 		return reinterpret_cast< CEconomyItemView* >( this );
 	}
 
-	//CCSWeaponInfo *CBaseCombatWeapon::GetCSWeaponData( )
-	//{
-	//	static auto ptrGetCSWeaponData = mClient.FindPattern( jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Signatures" ) ][ ENC( "Get CS Weapon Data" ) ].get< str_t >( ) )
-	//			+ jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Offsets" ) ][ ENC( "Get CS Weapon Data" ) ].get< int >( );
-	//	return reinterpret_cast< CCSWeaponInfo*( __thiscall*)( CBaseCombatWeapon * ) >( ptrGetCSWeaponData )( this );
-	//}
+	CCSWeaponInfo *CBaseCombatWeapon::GetCSWeaponData( )
+	{
+		//static auto ptrGetCSWeaponData = mClient.FindPattern( jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Signatures" ) ][ ENC( "Get CS Weapon Data" ) ].get< str_t >( ) )
+		//		+ jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Offsets" ) ][ ENC( "Get CS Weapon Data" ) ].get< int >( );
+		//return reinterpret_cast< CCSWeaponInfo*( __thiscall*)( CBaseCombatWeapon * ) >( ptrGetCSWeaponData )( this );
+		return nullptr;
+	}
 
 	bool CBaseCombatWeapon::HasBullets( )
 	{
@@ -521,12 +523,13 @@ namespace Utilities
 		return GetCSWeaponData( )->WeaponType == WEAPONTYPE_SNIPER_RIFLE;
 	}
 
-	//bool CBaseCombatWeapon::IsReloading( )
-	//{
-	//	static auto ptrIsReloading = *reinterpret_cast< ptr_t* >( mClient.FindPattern( jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Signatures" ) ][ ENC( "Is Reloading" ) ].get< str_t >( ) )
-	//		+ jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Offsets" ) ][ ENC( "Is Reloading" ) ].get< int >( ) );
-	//	return *reinterpret_cast< bool* >( ptr_t( this ) + ptrIsReloading );
-	//}
+	bool CBaseCombatWeapon::IsReloading( )
+	{
+		//static auto ptrIsReloading = *reinterpret_cast< ptr_t* >( mClient.FindPattern( jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Signatures" ) ][ ENC( "Is Reloading" ) ].get< str_t >( ) )
+		//	+ jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Offsets" ) ][ ENC( "Is Reloading" ) ].get< int >( ) );
+		//return *reinterpret_cast< bool* >( ptr_t( this ) + ptrIsReloading );
+		return false;
+	}
 
 	float CBaseCombatWeapon::GetInaccuracy( )
 	{

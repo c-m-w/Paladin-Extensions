@@ -2,8 +2,6 @@
 
 #pragma once
 
-#include "Temporary Configuration.hpp"
-
 inline std::list< std::function< void( void * ) > > listBeginHook[ FUNCTION_MAX ] { };
 inline std::list< std::function< void( void * ) > > listEndHook[ FUNCTION_MAX ] { };
 
