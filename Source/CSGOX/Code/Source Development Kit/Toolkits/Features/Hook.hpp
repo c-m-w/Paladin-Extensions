@@ -178,7 +178,7 @@ private:
 		static unsigned __int8 uExtraJumps = 0ui8;
 		const auto& zvel = pLocalPlayer->m_vecVelocity( ).z;
 		if ( ( ( zvel < 0.f && bJumpBeforeHopping ) && uExtraJumps < u8MaximumExtraJumps / 2 ) // we want to split the number of extra jumps to before and after the jump for extra legit
-			 || ( ( zvel > 0.f && bJumpAfterHopping ) && uExtraJumps < u8MaximumExtraJumps ) )
+			 || ( ( zvel > 0.f && bJumpAfterHopping ) && uExtraJumps <= u8MaximumExtraJumps ) )
 		{
 			Ray_t rRay;
 			const auto vecOrigin = pLocalPlayer->m_vecOrigin( );
@@ -190,9 +190,15 @@ private:
 			CGameTrace gtRay;
 			pEngineTrace->TraceRay( rRay, MASK_PLAYERSOLID, &tfFilter, &gtRay );
 
-			if ( gtRay.fraction > ( 2.f / 16.f ) && gtRay.fraction < 1.f )
+			if ( zvel > 0.f && !( gtRay.fraction < 1.f ) )
+				return ( void )( uExtraJumps = 0ui8, pCommand->buttons &= ~IN_JUMP );
+
+			if ( gtRay.fraction > ( 2.f / 16.f ) )
 				return ( void )( uExtraJumps++, pCommand->buttons |= IN_JUMP );
 		}
+		else if ( zvel >= 0.f && !bJumpAfterHopping )
+			uExtraJumps = 0ui8;
+
 		pCommand->buttons &= ~IN_JUMP;
 	}
 };

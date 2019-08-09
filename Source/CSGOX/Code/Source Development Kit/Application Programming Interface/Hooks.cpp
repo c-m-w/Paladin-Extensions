@@ -79,8 +79,6 @@ void CHooks::CClientModeHook::CreateMove( int iSequence, float flInputSampleFram
 		fnHook( &_Context );
 
 	/*auto _Return = */reinterpret_cast< void( __stdcall * )( void *, int, float, bool ) >( pCreateMove )( this, iSequence, flInputSampleFrametime, bActive );
-
-	// todo engine prediction here so endhook works on future info
 	
 	for ( auto &fnHook: vecEndHook[ FUNCTION_CREATE_MOVE ] )
 		fnHook( &_Context );
