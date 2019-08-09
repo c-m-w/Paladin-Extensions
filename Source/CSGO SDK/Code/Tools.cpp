@@ -93,25 +93,19 @@ namespace Utilities
 
 	bool LineGoesThroughSmoke( Vector vecStartPos, Vector vecEndPos )
 	{
-		//static auto ptrLineGoesThroughSmoke = Modules::_Client.FindPattern( jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Signatures" ) ][ ENC( "Line Goes Through Smoke" ) ].get< str_t >( ) )
-		//		+ jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Offsets" ) ][ ENC( "Line Goes Through Smoke" ) ].get< int >( );
-		//return reinterpret_cast< bool( __cdecl*)( Vector, Vector ) >( ptrLineGoesThroughSmoke )( vecStartPos, vecEndPos );
+		return reinterpret_cast< bool( __cdecl*)( Vector, Vector ) >( pPointers[ SIGNATURE_LINE_GOES_THROUGH_SMOKE ] )( vecStartPos, vecEndPos );
 		return false;
 	}
 	
 	void SetClantag( const char *szTag )
 	{
-		//static auto ptrSetClantag = Modules::_Engine.FindPattern( jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Signatures" ) ][ ENC( "Set Clantag" ) ].get< str_t >( ) )
-		//		+ jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Offsets" ) ][ ENC( "Set Clantag" ) ].get< int >( );
-		//reinterpret_cast< int( __fastcall*)( const char *, const char * ) >( ptrSetClantag )( szTag, szTag );
+		reinterpret_cast< int( __fastcall*)( const char *, const char * ) >( pPointers[ SIGNATURE_SET_CLAN_TAG ] )( szTag, szTag );
 	}
 	
 	void RevealRanks( )
 	{
-		//static auto ptrRevealRanks = Modules::_Client.FindPattern( jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Signatures" ) ][ ENC( "Reveal Ranks" ) ].get< str_t >( ) )
-		//		+ jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Offsets" ) ][ ENC( "Reveal Ranks" ) ].get< int >( );
-		//static int iBuffer[ ] { 0, 0, 0 };
-		//reinterpret_cast< char( __cdecl*)( int * ) >( ptrRevealRanks )( iBuffer );
+		static int iBuffer[ ] { 0, 0, 0 };
+		reinterpret_cast< char( __cdecl*)( int * ) >( pPointers[ SIGNATURE_REVEAL_RANKS ] )( iBuffer );
 	}
 
 	void ClampAngles( QAngle &qAngles )
@@ -391,12 +385,10 @@ namespace Utilities
 		return reinterpret_cast< bool( __thiscall*)( CBaseEntity * ) >( ( *reinterpret_cast< void*** >( this ) )[ GetFunctionIndex( FUNCTION_IS_WEAPON ) ] )( this );
 	}
 
-	//void CBaseEntity::SetABSOrigin( Vector &vecOrigin )
-	//{
-	//	static auto ptrSetABSOrigin = mClient.FindPattern( jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Signatures" ) ][ ENC( "Set ABS Origin" ) ].get< std::string >( ) )
-	//			+ jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Offsets" ) ][ ENC( "Set ABS Origin" ) ].get< int >( );
-	//	return reinterpret_cast< void( __thiscall*)( CBaseEntity *, Vector & ) >( ptrSetABSOrigin )( this, vecOrigin );
-	//}
+	void CBaseEntity::SetABSOrigin( Vector &vecOrigin )
+	{
+		return reinterpret_cast< void( __thiscall*)( CBaseEntity *, Vector & ) >( pPointers[ SET_ABS_ORIGIN ] )( this, vecOrigin );
+	}
 
 	bool CBaseEntity::IsPlantedC4( )
 	{
@@ -473,10 +465,7 @@ namespace Utilities
 
 	CCSWeaponInfo *CBaseCombatWeapon::GetCSWeaponData( )
 	{
-		//static auto ptrGetCSWeaponData = mClient.FindPattern( jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Signatures" ) ][ ENC( "Get CS Weapon Data" ) ].get< str_t >( ) )
-		//		+ jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Offsets" ) ][ ENC( "Get CS Weapon Data" ) ].get< int >( );
-		//return reinterpret_cast< CCSWeaponInfo*( __thiscall*)( CBaseCombatWeapon * ) >( ptrGetCSWeaponData )( this );
-		return nullptr;
+		return reinterpret_cast< CCSWeaponInfo*( __thiscall*)( CBaseCombatWeapon * ) >( pPointers[ SIGNATURE_GET_WEAPON_DATA ] )( this );
 	}
 
 	bool CBaseCombatWeapon::HasBullets( )
@@ -525,10 +514,7 @@ namespace Utilities
 
 	bool CBaseCombatWeapon::IsReloading( )
 	{
-		//static auto ptrIsReloading = *reinterpret_cast< ptr_t* >( mClient.FindPattern( jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Signatures" ) ][ ENC( "Is Reloading" ) ].get< str_t >( ) )
-		//	+ jsMemoryInformation[ ENC( "Patterns" ) ][ ENC( "Offsets" ) ][ ENC( "Is Reloading" ) ].get< int >( ) );
-		//return *reinterpret_cast< bool* >( ptr_t( this ) + ptrIsReloading );
-		return false;
+		return *reinterpret_cast< bool* >( std::uintptr_t( this ) + *reinterpret_cast< std::uintptr_t* >( pPointers[ SIGNATURE_IS_RELOADING ] ) );
 	}
 
 	float CBaseCombatWeapon::GetInaccuracy( )

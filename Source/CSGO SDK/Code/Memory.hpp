@@ -15,7 +15,7 @@ namespace Memory
 		bool Valid( );
 	};
 
-	template< typename _t > bool module_info_t::operator()( const char *szInterface, _t *pOutput ) const
+	template< typename _t > bool module_info_t::operator( )( const char *szInterface, _t *pOutput ) const
 	{
 		if ( _CreateInterface == nullptr )
 			return false;
@@ -40,7 +40,7 @@ namespace Memory
 		{ }
 	};
 
-	enum EModule
+	enum EModules
 	{
 		MODULE_ENGINE,
 		MODULE_CLIENT,
@@ -56,7 +56,7 @@ namespace Memory
 		MODULE_MAX
 	};
 
-	enum EInterface
+	enum EInterfaces
 	{
 		INTERFACE_GLOBAL_VARS,
 		INTERFACE_CLIENT_STATE,
@@ -87,7 +87,18 @@ namespace Memory
 		INTERFACE_MAX
 	};
 
-	enum EFunction
+	enum ESignatures
+	{
+		SIGNATURE_LINE_GOES_THROUGH_SMOKE,
+		SIGNATURE_SET_CLAN_TAG,
+		SIGNATURE_REVEAL_RANKS,
+		SIGNATURE_SET_ABS_ORIGIN,
+		SIGNATURE_GET_WEAPON_DATA,
+		SIGNATURE_IS_RELOADING,
+		SIGNATURE_MAX
+	};
+
+	enum EFunctions
 	{
 		FUNCTION_BEGIN_SCENE,
 		FUNCTION_END_SCENE,
@@ -152,6 +163,8 @@ namespace Memory
 	inline IViewRenderBeams*& pRenderBeams			= *reinterpret_cast< IViewRenderBeams** >( &pInterfaces[ INTERFACE_RENDER_BEAMS ] );
 	inline IFileSystem*& pFileSystem				= *reinterpret_cast< IFileSystem** >( &pInterfaces[ INTERFACE_FILE_SYSTEM ] );
 
+	inline void* pPointers[ SIGNATURE_MAX ];
+
 	inline unsigned uFunctionIndices[ FUNCTION_MAX ] { };
 
 	inline std::vector< networked_variable_table_t > vecNetworkedVariables { };
@@ -166,18 +179,19 @@ namespace Memory
 
 #if defined _DEBUG
 
+	template< typename _t >
 	struct pattern_info_t
 	{
-		EInterface _Interface = INTERFACE_GLOBAL_VARS;
-		EModule _Module = MODULE_ENGINE;
+		_t _Owner { };
+		EModules _Module = MODULE_ENGINE;
 		std::string strPattern { };
 		std::uintptr_t ptrOffset = 0u;
 	};
 
 	struct version_info_t
 	{
-		EInterface _Interface = INTERFACE_GLOBAL_VARS;
-		EModule _Module = MODULE_ENGINE;
+		EInterfaces _Interface = INTERFACE_GLOBAL_VARS;
+		EModules _Module = MODULE_ENGINE;
 		std::string strVersion { };
 	};
 
@@ -198,7 +212,7 @@ namespace Memory
 		ENC( "filesystem_stdio.dll" )
 	};
 
-	inline const std::vector< pattern_info_t > vecInterfacePatterns
+	inline const std::vector< pattern_info_t< EInterfaces > > vecInterfacePatterns
 	{
 		{ INTERFACE_GLOBAL_VARS, MODULE_CLIENT, ENC( "A1 ? ? ? ? 5E 8B 40 10" ), 1 },
 		{ INTERFACE_CLIENT_STATE, MODULE_ENGINE, ENC( "A1 ? ? ? ? 8B 80 ? ? ? ? C3" ), 1 },
@@ -207,6 +221,15 @@ namespace Memory
 		{ INTERFACE_INPUT, MODULE_CLIENT, ENC( "B9 ? ? ? ? 8B 40 38 FF D0 84 C0 0F 85" ), 1 },
 		{ INTERFACE_MOVE_HELPER, MODULE_CLIENT, ENC( "8B 0D ? ? ? ? 8B 46 08 68" ), 2 },
 		{ INTERFACE_RENDER_BEAMS, MODULE_CLIENT, ENC( "B9 ? ? ? ? A1 ? ? ? ? FF 10 A1 ? ? ? ? B9" ), 1 }
+	};
+	inline const std::vector< pattern_info_t< ESignatures > > vecPointerPatterns
+	{
+		{ SIGNATURE_LINE_GOES_THROUGH_SMOKE, MODULE_CLIENT, ENC( "55 8B EC 83 EC 08 8B 15 ? ? ? ? 0F 57 C0" ), 0 },
+		{ SIGNATURE_SET_CLAN_TAG, MODULE_ENGINE, ENC( "53 56 57 8B DA 8B F9 FF 15" ), 0 },
+		{ SIGNATURE_REVEAL_RANKS, MODULE_CLIENT, ENC( "55 8B EC 8B 0D ? ? ? ? 68" ), 0 },
+		{ SIGNATURE_SET_ABS_ORIGIN, MODULE_CLIENT, ENC( "55 8B EC 83 E4 F8 51 53 56 57 8B F1 E8" ), 0 },
+		{ SIGNATURE_GET_WEAPON_DATA, MODULE_CLIENT, ENC( "55 8B EC 81 EC ? ? ? ? 53 8B D9 56 57 8D 8B" ), 0 },
+		{ SIGNATURE_IS_RELOADING, MODULE_CLIENT, ENC( "C6 87 ? ? ? ? ? 8B 06 8B CE FF 90 ? ? ? ? 5E" ), 2 },
 	};
 	inline const std::vector< version_info_t > vecVersions
 	{
@@ -229,7 +252,7 @@ namespace Memory
 		{ INTERFACE_ENGINE_SOUND, MODULE_ENGINE, ENC( "IEngineSoundClient003" ) },
 		{ INTERFACE_FILE_SYSTEM, MODULE_FILESYSTEM, ENC( "VFileSystem017" ) }
 	};
-	inline const std::vector< std::pair< EFunction, unsigned > > vecFunctionIndices
+	inline const std::vector< std::pair< EFunctions, unsigned > > vecFunctionIndices
 	{
 		{ FUNCTION_BEGIN_SCENE, 41 },
 		{ FUNCTION_END_SCENE, 42 },
@@ -256,6 +279,7 @@ namespace Memory
 #endif
 
 	bool InitializeMemory( );
-	unsigned GetFunctionIndex( EFunction _Function );
+	unsigned GetFunctionIndex( EFunctions _Function );
+	void* GetSignaturePointer( ESignatures _Signature );
 	std::uintptr_t FindOffset( const char* szTable, const char* szVariable );
 }

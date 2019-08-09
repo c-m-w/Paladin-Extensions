@@ -120,6 +120,17 @@ namespace Memory
 				return false;
 		}
 
+		for ( int i = SIGNATURE_LINE_GOES_THROUGH_SMOKE; i != SIGNATURE_MAX; i++ )
+		{
+			std::string strModule { }, strSignature { }, strOffset { };
+
+			const auto _Module = _Modules[ std::stoi( strModule ) ];
+			const auto ptrOffset = std::stoi( strOffset );
+
+			if ( !_MemoryManager.AddPattern( _Module, pattern_t( strSignature, reinterpret_cast< unsigned* >( &pPointers[ i ] ), ptrOffset ) ) )
+				return false;
+		}
+
 		for ( int i = FUNCTION_BEGIN_SCENE; i != FUNCTION_MAX; i++ )
 		{
 			std::string strFunctionIndex { };
@@ -145,9 +156,14 @@ namespace Memory
 		return true;
 	}
 
-	unsigned GetFunctionIndex( EFunction _Function )
+	unsigned GetFunctionIndex( EFunctions _Function )
 	{
 		return uFunctionIndices[ _Function ];
+	}
+
+	void * GetSignaturePointer( ESignatures _Signature )
+	{
+		return pPointers[ _Signature ];
 	}
 
 #if defined _DEBUG
@@ -181,7 +197,23 @@ namespace Memory
 				 || !_Cryptography.Encrypt( std::to_string( _Pattern.ptrOffset ), strEncryptedOffset, _Cryptography.strStaticEncryptionKey, _Cryptography.strStaticInitializationVector ) )
 				return { };
 
-			auto& jsPatternInfo = jsData[ _Cryptography.GenerateHash( strPatternIdentifier ) ][ _Cryptography.GenerateHash( std::to_string( _Pattern._Interface ) ) ];
+			auto& jsPatternInfo = jsData[ _Cryptography.GenerateHash( strPatternIdentifier ) ][ _Cryptography.GenerateHash( std::to_string( _Pattern._Owner ) ) ];
+
+			jsPatternInfo[ _Cryptography.GenerateHash( strModuleIdentifier ) ] = strEncryptedModule;
+			jsPatternInfo[ _Cryptography.GenerateHash( strSignatureIdentifier ) ] = strEncryptedSignature;
+			jsPatternInfo[ _Cryptography.GenerateHash( strSignatureOffsetIdentifier ) ] = strEncryptedOffset;
+		}
+
+		for ( auto& _Pattern : vecPointerPatterns )
+		{
+			std::string strEncryptedModule { }, strEncryptedSignature { }, strEncryptedOffset { };
+
+			if ( !_Cryptography.Encrypt( std::to_string( _Pattern._Module ), strEncryptedModule, _Cryptography.strStaticEncryptionKey, _Cryptography.strStaticInitializationVector )
+				 || !_Cryptography.Encrypt( _Pattern.strPattern, strEncryptedSignature, _Cryptography.strStaticEncryptionKey, _Cryptography.strStaticInitializationVector )
+				 || !_Cryptography.Encrypt( std::to_string( _Pattern.ptrOffset ), strEncryptedOffset, _Cryptography.strStaticEncryptionKey, _Cryptography.strStaticInitializationVector ) )
+				return { };
+
+			auto& jsPatternInfo = jsData[ _Cryptography.GenerateHash( strPatternIdentifier ) ][ _Cryptography.GenerateHash( std::to_string( _Pattern._Owner ) ) ];
 
 			jsPatternInfo[ _Cryptography.GenerateHash( strModuleIdentifier ) ] = strEncryptedModule;
 			jsPatternInfo[ _Cryptography.GenerateHash( strSignatureIdentifier ) ] = strEncryptedSignature;

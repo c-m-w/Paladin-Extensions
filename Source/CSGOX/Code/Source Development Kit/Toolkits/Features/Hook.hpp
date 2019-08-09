@@ -5,7 +5,7 @@
 inline std::vector< std::function< void( void * ) > > vecBeginHook[ FUNCTION_MAX ] { };
 inline std::vector< std::function< void( void * ) > > vecEndHook[ FUNCTION_MAX ] { };
 
-template < EFunction enumHook, typename _tContext >
+template < EFunctions enumHook, typename _tContext >
 class IFeatureBase
 {
 protected:
