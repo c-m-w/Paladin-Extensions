@@ -20,6 +20,9 @@ protected:
 	};
 	using keybind_t = std::pair< key_t, decltype( ACTIVE ) >;
 	using keybinds_t = std::vector< keybind_t >;
+public:
+	keybinds_t _Keys;
+protected:
 	virtual void Begin( _tContext& _Context ) = 0;
 	virtual void End( _tContext& _Context ) = 0;
 public:
@@ -122,8 +125,6 @@ struct SCreateMoveContext
 
 class ACombatFeatureBase: public IFeatureBase< FUNCTION_CREATE_MOVE, SCreateMoveContext >
 {
-public:
-	keybinds_t _Keys;
 protected:
 	virtual int BezierStuff( int time ); // virtual because some features may want to change how a function works (not this function specifically because im sure it wont change)
 	// here we put the context for shit that'll go between each instance of a combat feature. maybe even some functions
@@ -132,18 +133,52 @@ protected:
 class AAimAssistanceBase: public ACombatFeatureBase
 {
 protected:
-	virtual int GetNearestEntityID( ); // maybe they wanna do it based on real distance and not crosshair or smth
+	enum
+	{
+		FIRST_IN_LIST,
+		NEAREST_TO_CROSSHAIR,
+		NEAREST_BY_DISTANCE,
+		PRIORITY_MAX
+	};
+	virtual bool MeetsActivationRequirements( int iEntityID ) = 0;
+	virtual int GetPriorityEntityID( decltype( auto ) enumPriorityType = FIRST_IN_LIST ); // maybe they wanna do it based on real distance and not crosshair or smth
 };
 
 class CAimAssistance final: public AAimAssistanceBase
 {
+	bool MeetsActivationRequirements( int iEntityID ) override
+	{
+		auto &_Entity = *reinterpret_cast< CBasePlayer* >( pEntityList->GetClientEntity( iEntityID ) );
+		return _Entity.IsPlayer( )
+		&& _Entity.IsAlive( );
+		//&& VecAngle( _Entity.GetHitboxPosition( each vecHitboxes ) ) < flFOVadfsfadfasdfasdfasdf
+	}
+	void Begin( SCreateMoveContext& _Context ) override
+	{
+		auto& pLocalPlayer = _Context.pLocalPlayer;
+		auto& pCommand = _Context.pCommand;
 
+		if ( nullptr == pLocalPlayer || nullptr == pCommand )
+			return;
+
+		if ( !KeybindActiveState( _Keys ) )
+			return;
+
+		int iEntityID = 0;
+		for ( int i = 0; iEntityID == 0 && i < PRIORITY_MAX; i++ )
+			iEntityID = GetPriorityEntityID( enumPriorities[ i ] );
+		if ( iEntityID == 0 )
+			return;
+	}
+public:
+	std::vector< int > vecHitboxes;
+	float flFieldOfView;
+	decltype( auto ) enumPriorities[ PRIORITY_MAX ] { NEAREST_TO_CROSSHAIR, NEAREST_BY_DISTANCE, FIRST_IN_LIST };
 };
 
 class AMovementFeatureBase: public IFeatureBase< FUNCTION_CREATE_MOVE, SCreateMoveContext >
 {
-public:
-	keybinds_t _Keys;
+
 };
 
 class CJumpAutomation final: public AMovementFeatureBase
