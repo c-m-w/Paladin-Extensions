@@ -214,7 +214,7 @@ namespace Memory
 
 	inline const std::vector< pattern_info_t< EInterfaces > > vecInterfacePatterns
 	{
-		{ INTERFACE_GLOBAL_VARS, MODULE_CLIENT, ENC( "A1 ? ? ? ? 5E 8B 40 10" ), 1 },
+		{ INTERFACE_GLOBAL_VARS, MODULE_CLIENT, ENC( "68 ? ? ? ? 68 ? ? ? ? FF 50 08 85 C0" ), 1 },
 		{ INTERFACE_CLIENT_STATE, MODULE_ENGINE, ENC( "A1 ? ? ? ? 8B 80 ? ? ? ? C3" ), 1 },
 		{ INTERFACE_DEVICE, MODULE_D3D9, ENC( "A1 ? ? ? ? 50 8B 08 FF 51 0C" ), 1 },
 		{ INTERFACE_GLOW_OBJECT_MANAGER, MODULE_CLIENT, ENC( "0F 11 05 ? ? ? ? 83 C8 01" ), 1 },
