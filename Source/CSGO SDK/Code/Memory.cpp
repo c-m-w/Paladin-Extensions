@@ -124,6 +124,11 @@ namespace Memory
 		{
 			std::string strModule { }, strSignature { }, strOffset { };
 
+			if ( !GetMemoryValue( { strPatternIdentifier, std::to_string( i ), strModuleIdentifier }, strModule )
+				 || !GetMemoryValue( { strPatternIdentifier, std::to_string( i ), strSignatureIdentifier }, strSignature )
+				 || !GetMemoryValue( { strPatternIdentifier, std::to_string( i ), strSignatureOffsetIdentifier }, strOffset ) )
+				return false;
+
 			const auto _Module = _Modules[ std::stoi( strModule ) ];
 			const auto ptrOffset = std::stoi( strOffset );
 
