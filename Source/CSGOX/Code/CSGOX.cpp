@@ -14,19 +14,21 @@ BOOL OnAttach( )
 {
 	if ( !SetupFramework( ) )
 		return FALSE;
-
+	
 	const auto _LoginCode = AUTH.Login( );
 
 	if ( _LoginCode != ELoginCode::SUCCESS
 		 && _LoginCode != ELoginCode::STAFF_SUCCESS )
 		return FALSE;
 
-	if ( !AUTH.CompareHash( ELibrary::CSGOX, image_info_t( GetModuleHandle( "csgo.exe" ) ).GenerateUniqueHash( ) ) )
-		return LOG( ERROR, APPLICATION, "Invalid hash of headers." ), false;
+	if ( !AUTH.CompareHash( ELibrary::CSGOX, image_info_t( GetModuleHandle( ENC( "csgo.exe" ) ) ).GenerateUniqueHash( ) ) )
+		return LOG( ERROR, APPLICATION, ENC( "Invalid hash of headers." ) ), false;
 
 	if ( !Initialize( ) )
 		return FALSE;
-
+	
+	CJumpAutomation bhop;
+	
 	while ( true )
 		Pause( 1 );
 
@@ -43,7 +45,7 @@ bool Initialize( )
 {
 	if ( !InitializeMemory( ) || !HOOKS.Setup( ) )
 	{
-		LOG( ERROR, APPLICATION, "Unable to initialize." );
+		LOG( ERROR, APPLICATION, ENC( "Unable to initialize." ) );
 		return false;
 	}
 

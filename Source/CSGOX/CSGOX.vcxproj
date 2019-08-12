@@ -175,7 +175,7 @@
     <ClInclude Include="..\Framework\Precompile.hpp" />
     <ClInclude Include="Code\CSGOX.hpp" />
     <ClInclude Include="Code\Source Development Kit\Application Programming Interface\Hooks.hpp" />
-    <ClInclude Include="Code\Source Development Kit\Toolkits\Features\Hook.hpp" />
+    <ClInclude Include="Code\Source Development Kit\Toolkits\Features.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CSGO SDK\CSGO SDK.vcxproj">

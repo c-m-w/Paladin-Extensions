@@ -2,8 +2,8 @@
 
 #pragma once
 
-inline std::vector< std::function< void( void * ) > > vecBeginHook[ FUNCTION_MAX ] { };
-inline std::vector< std::function< void( void * ) > > vecEndHook[ FUNCTION_MAX ] { };
+inline std::vector< void * > vecBeginHook[ FUNCTION_MAX ] { };
+inline std::vector< void * > vecEndHook[ FUNCTION_MAX ] { };
 
 // nothing that inherits an interface should be a feature directly.
 // it should inherit an abstract class first
@@ -97,26 +97,28 @@ public:
 protected:
 	IFeatureBase( )
 	{
-		if ( nullptr != Begin )
-			vecBeginHook[ enumHook ].emplace_back( Begin );
-		if ( nullptr != End )
-			vecBeginHook[ enumHook ].emplace_back( End );
+		vecBeginHook[ enumHook ].emplace_back( **reinterpret_cast< void *** >( this ) );
+		vecEndHook[ enumHook ].emplace_back( **reinterpret_cast< void *** >( reinterpret_cast< std::uintptr_t* >( this ) + 1 ) );
 	}
 	~IFeatureBase( )
-	{
-		int i;
-		if ( i = 0, Begin )
-			for ( auto &fnHook: vecBeginHook[ enumHook ] )
-				if ( Begin == fnHook )
-					vecBeginHook[ enumHook ].erase( vecBeginHook[ enumHook ].begin( ) + i );
-				else
-					i++;
-		if ( i = 0, End )
-			for ( auto& fnHook : vecEndHook[ enumHook ] )
-				if ( End == fnHook )
-					vecEndHook[ enumHook ].erase( vecEndHook[ enumHook ].begin( ) + i );
-				else
-					i++;
+	{		
+		for ( std::size_t z = 0u; z < vecBeginHook[ enumHook ].size( ); z++ )
+		{			
+			if ( **reinterpret_cast< void*** >( this ) == vecBeginHook[ enumHook ][ z ] )
+			{
+				vecBeginHook[ enumHook ].erase( vecBeginHook[ enumHook ].begin( ) + z );
+				z--;
+			}
+		}
+		
+		for ( std::size_t z = 0u; z < vecEndHook[ enumHook ].size( ); z++ )
+		{
+			if ( **reinterpret_cast< void *** >( reinterpret_cast< std::uintptr_t* >( this ) + 1 ) == vecEndHook[ enumHook ][ z ] )
+			{
+				vecEndHook[ enumHook ].erase( vecEndHook[ enumHook ].begin( ) + z );
+				z--;
+			}
+		}
 	}
 };
 
@@ -148,9 +150,55 @@ protected:
 	{
 		
 	}
+	virtual void CompensateRecoil( )
+	{
+		
+	}
 public:
 	float flFieldOfView; // in degrees
 	decltype( PRIORITY_MAX ) enumPriorities[ PRIORITY_MAX ] { NEAREST_TO_CROSSHAIR, NEAREST_BY_DISTANCE, FIRST_IN_LIST }; // targeting priority
+	std::vector< int > vecHitboxes; // allowed hitboxes, in order of targeting preference if all in activation
+};
+
+class CAutonomousTrigger final: public AAimAssistanceBase
+{
+	bool MeetsActivationRequirements( int iEntityID ) override
+	{
+		auto &_Entity = *reinterpret_cast< CBasePlayer* >( pEntityList->GetClientEntity( iEntityID ) );
+		if ( _Entity.IsPlayer( )
+		&& _Entity.IsAlive( ) )
+			return false;
+		//	for ( auto &iHitbox: vecHitboxes )
+		//		if ( iHitbox == _Entity.GetHitboxPosition(  ))
+		//&& VecAngle( _Entity.GetHitboxPosition( each vecHitboxes ) ) // we want our crosshair position to overlap a hitbox 
+	}
+	
+	void Begin( SCreateMoveContext& _Context ) override
+	{
+		auto& pLocalPlayer = _Context.pLocalPlayer;
+		auto& pCommand = _Context.pCommand;
+
+		if ( nullptr == pLocalPlayer || nullptr == pCommand )
+			return;
+
+		if ( pCommand->buttons & IN_ATTACK
+			 || !KeybindActiveState( _Keys ) )
+			return;
+
+		auto &_Trace = pLocalPlayer->TraceRayFromView( );
+		if ( !_Trace.DidHit( ) )
+			return;
+
+		if ( !MeetsActivationRequirements( _Trace.GetEntityIndex( ) ))
+			return;
+		
+		pCommand->buttons |= IN_ATTACK;
+	}
+	void End( SCreateMoveContext& _Context ) override
+	{
+		
+	}
+public:
 	std::vector< int > vecHitboxes; // allowed hitboxes, in order of targeting preference if all in activation
 };
 
@@ -179,6 +227,10 @@ class CAimAssistance final: public AAimAssistanceBase
 			iEntityID = GetPriorityEntityID( enumPriorities[ i ] );
 		if ( iEntityID == 0 )
 			return;
+	}
+	void End( SCreateMoveContext& _Context ) override
+	{
+		
 	}
 };
 
@@ -223,6 +275,10 @@ class CFlashUtility: public AEnvironmentFeatureBase
 
 		pLocalPlayer->m_flFlashMaxAlpha( ) = 255.f * ( flFlashDuration - ( flFlashTime - flFullFlashTime ) > 0.f ? flFullFlashMaximum : flPartialFlashMaximum );
 	}
+	void End( SCreateMoveContext& _Context ) override
+	{
+		
+	}
 public:
 	float flFullFlashMaximum = 1.f;
 	float flPartialFlashMaximum = 1.f;
@@ -248,12 +304,17 @@ class CTriggerAutomation final: public AMovementFeatureBase
 		
 		pCommand->buttons = pLocalPlayer->m_hActiveWeapon( )->CanFire( ) ? ( pCommand->buttons | IN_ATTACK ) : ( pCommand->buttons & ~IN_ATTACK );
 	}
+	void End( SCreateMoveContext& _Context ) override
+	{
+		
+	}
 };
 
 class CJumpAutomation final: public AMovementFeatureBase
 {
 public:
 	bool bUseJumpButton = true;
+	unsigned __int8 u8JumpChance = 100ui8;
 	unsigned __int8 u8MaximumExtraJumps = 7ui8;
 	bool bJumpBeforeHopping = true;
 	bool bJumpAfterHopping = true;
@@ -277,12 +338,16 @@ private:
 		}
 
 		if ( pLocalPlayer->m_fFlags( ) & FL_ONGROUND )
-			return ( void )( pCommand->buttons |= IN_JUMP );
-
-		static unsigned __int8 uExtraJumps = 0ui8;
+		{
+			if ( pGlobalVariables->m_iTickCount % 100 < u8JumpChance )
+				pCommand->buttons |= IN_JUMP;
+			return;
+		}
+		
+		static auto u8ExtraJumps = 0ui8;
 		const auto& zvel = pLocalPlayer->m_vecVelocity( ).z;
-		if ( ( ( zvel < 0.f && bJumpBeforeHopping ) && uExtraJumps < u8MaximumExtraJumps / 2 ) // we want to split the number of extra jumps to before and after the jump for extra legit
-			 || ( ( zvel > 0.f && bJumpAfterHopping ) && uExtraJumps <= u8MaximumExtraJumps ) )
+		if ( ( ( zvel < 0.f && bJumpBeforeHopping ) && u8ExtraJumps < u8MaximumExtraJumps / 2 ) // we want to split the number of extra jumps to before and after the jump for extra legit
+			 || ( ( zvel > 0.f && bJumpAfterHopping ) && u8ExtraJumps <= u8MaximumExtraJumps ) )
 		{
 			Ray_t rRay;
 			const auto vecOrigin = pLocalPlayer->m_vecOrigin( );
@@ -295,21 +360,28 @@ private:
 			pEngineTrace->TraceRay( rRay, MASK_PLAYERSOLID, &tfFilter, &gtRay );
 
 			if ( zvel > 0.f && !( gtRay.fraction < 1.f ) )
-				return ( void )( uExtraJumps = 0ui8, pCommand->buttons &= ~IN_JUMP );
+				return ( void )( u8ExtraJumps = 0ui8, pCommand->buttons &= ~IN_JUMP );
 
 			if ( gtRay.fraction > ( 2.f / 16.f ) )
-				return ( void )( uExtraJumps++, pCommand->buttons |= IN_JUMP );
+				return ( void )( u8ExtraJumps++, pCommand->buttons |= IN_JUMP );
 		}
 		else if ( zvel >= 0.f && !bJumpAfterHopping )
-			uExtraJumps = 0ui8;
+			u8ExtraJumps = 0ui8;
 
 		pCommand->buttons &= ~IN_JUMP;
+	}
+	void End( SCreateMoveContext& _Context ) override
+	{
+		
 	}
 };
 
 class CStaminaBugAutomation final: public AMovementFeatureBase
 {
-private:
+	void Begin( SCreateMoveContext& _Context ) override
+	{
+		
+	}
 	void End( SCreateMoveContext& _Context ) override
 	{
 		auto& pLocalPlayer = _Context.pLocalPlayer;
@@ -317,8 +389,9 @@ private:
 
 		if ( nullptr == pLocalPlayer || nullptr == pCommand )
 			return;
-
-		if ( !KeybindActiveState( _Keys ) )
+		
+		if ( !( ( bUseJumpButton && pCommand->buttons & IN_DUCK )
+				|| ( KeybindActiveState( _Keys ) ) ) )
 			return;
 
 		//Prediction::Start( pLocalPlayer, pCommand );
@@ -330,4 +403,6 @@ private:
 		//Prediction::End( pLocalPlayer );
 		//Prediction::End( pLocalPlayer );
 	}
+public:
+	bool bUseJumpButton = true;
 };

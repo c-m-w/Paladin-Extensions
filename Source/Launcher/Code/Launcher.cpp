@@ -25,7 +25,7 @@ void OnLaunch( )
 	{
 		if ( !_MemoryManager.SetProcess( "csgo.exe", PROCESS_ALL_ACCESS ) )
 			MessageBox( 0, "set", 0, 0 );
-		if ( !_MemoryManager.LoadLibraryEx( "C:\Users\Jeremiah\Documents\Paladin-Extensions\Source\Debug\CSGOX.dll", false ) )
+		if ( !_MemoryManager.LoadLibraryEx( R"(D:\Jeremiah\Documents\Paladin-Extensions\Source\Debug)", false ) )
 			MessageBox( 0, "load", 0, 0 );
 	}
 	else

@@ -2,6 +2,13 @@
 
 #pragma once
 
+template< typename... _Parameter >
+union UFunction
+{
+	void ( *fn )( _Parameter... );
+	void *p;
+};
+
 template < typename _t >
 class temp_ptr
 {
