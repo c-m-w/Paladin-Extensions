@@ -387,7 +387,7 @@ namespace Utilities
 
 	void CBaseEntity::SetABSOrigin( Vector &vecOrigin )
 	{
-		return reinterpret_cast< void( __thiscall*)( CBaseEntity *, Vector & ) >( pPointers[ SET_ABS_ORIGIN ] )( this, vecOrigin );
+		return reinterpret_cast< void( __thiscall*)( CBaseEntity *, Vector & ) >( pPointers[ SIGNATURE_SET_ABS_ORIGIN ] )( this, vecOrigin );
 	}
 
 	bool CBaseEntity::IsPlantedC4( )
