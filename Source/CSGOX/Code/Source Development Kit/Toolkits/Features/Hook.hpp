@@ -5,6 +5,9 @@
 inline std::vector< std::function< void( void * ) > > vecBeginHook[ FUNCTION_MAX ] { };
 inline std::vector< std::function< void( void * ) > > vecEndHook[ FUNCTION_MAX ] { };
 
+// nothing that inherits an interface should be a feature directly.
+// it should inherit an abstract class first
+
 template < EFunctions enumHook, typename _tContext >
 class IFeatureBase
 {
@@ -93,7 +96,7 @@ public:
 	}
 protected:
 	IFeatureBase( )
-	{		
+	{
 		if ( nullptr != Begin )
 			vecBeginHook[ enumHook ].emplace_back( Begin );
 		if ( nullptr != End )
@@ -123,14 +126,14 @@ struct SCreateMoveContext
 	CUserCmd* pCommand;
 };
 
-class ACombatFeatureBase: public IFeatureBase< FUNCTION_CREATE_MOVE, SCreateMoveContext >
+class ICombatFeatureBase: public IFeatureBase< FUNCTION_CREATE_MOVE, SCreateMoveContext >
 {
 protected:
 	virtual int BezierStuff( int time ); // virtual because some features may want to change how a function works (not this function specifically because im sure it wont change)
 	// here we put the context for shit that'll go between each instance of a combat feature. maybe even some functions
 };
 
-class AAimAssistanceBase: public ACombatFeatureBase
+class AAimAssistanceBase: public ICombatFeatureBase
 {
 protected:
 	enum
@@ -145,6 +148,10 @@ protected:
 	{
 		
 	}
+public:
+	float flFieldOfView; // in degrees
+	decltype( PRIORITY_MAX ) enumPriorities[ PRIORITY_MAX ] { NEAREST_TO_CROSSHAIR, NEAREST_BY_DISTANCE, FIRST_IN_LIST }; // targeting priority
+	std::vector< int > vecHitboxes; // allowed hitboxes, in order of targeting preference if all in activation
 };
 
 class CAimAssistance final: public AAimAssistanceBase
@@ -173,15 +180,74 @@ class CAimAssistance final: public AAimAssistanceBase
 		if ( iEntityID == 0 )
 			return;
 	}
-public:
-	std::vector< int > vecHitboxes;
-	float flFieldOfView;
-	decltype( PRIORITY_MAX ) enumPriorities[ PRIORITY_MAX ] { NEAREST_TO_CROSSHAIR, NEAREST_BY_DISTANCE, FIRST_IN_LIST };
 };
 
-class AMovementFeatureBase: public IFeatureBase< FUNCTION_CREATE_MOVE, SCreateMoveContext >
+class IMiscellaneousFeatureBase: public IFeatureBase< FUNCTION_CREATE_MOVE, SCreateMoveContext >
+{
+	
+};
+
+class AEnvironmentFeatureBase: public IMiscellaneousFeatureBase
 {
 
+};
+
+class CFlashUtility: public AEnvironmentFeatureBase
+{
+	void Begin( SCreateMoveContext& _Context ) override
+	{
+		auto& pLocalPlayer = _Context.pLocalPlayer;
+		auto& pCommand = _Context.pCommand;
+
+		if ( nullptr == pLocalPlayer || nullptr == pCommand )
+			return;
+
+		if ( !KeybindActiveState( _Keys ) )
+			return;
+		
+		auto &flFlashDuration = pLocalPlayer->m_flFlashDuration( );
+
+		static auto flFullFlashTime = 0.f, flFlashTime = 0.f;
+		if ( flFlashDuration <= 0.f )
+			return ( void )( flFullFlashTime = flFlashTime = 0.f );
+		if ( flFullFlashTime == 0.f || flFlashTime == 0.f )
+			return;
+		if ( flFlashDuration < 1.f )
+			flFullFlashTime = 0.09f, flFlashTime = 0.95f;
+		else if ( flFlashDuration < 2.f )
+			flFullFlashTime = 0.09f, flFlashTime = 1.96f;
+		else if ( flFlashDuration < 3.5f )
+			flFullFlashTime = 0.46f, flFlashTime = 3.41f;
+		else
+			flFullFlashTime = 1.89f, flFlashTime = 4.88f;
+
+		pLocalPlayer->m_flFlashMaxAlpha( ) = 255.f * ( flFlashDuration - ( flFlashTime - flFullFlashTime ) > 0.f ? flFullFlashMaximum : flPartialFlashMaximum );
+	}
+public:
+	float flFullFlashMaximum = 1.f;
+	float flPartialFlashMaximum = 1.f;
+};
+
+class AMovementFeatureBase: public IMiscellaneousFeatureBase
+{
+
+};
+
+class CTriggerAutomation final: public AMovementFeatureBase
+{
+	void Begin( SCreateMoveContext& _Context ) override
+	{
+		auto& pLocalPlayer = _Context.pLocalPlayer;
+		auto& pCommand = _Context.pCommand;
+
+		if ( nullptr == pLocalPlayer || nullptr == pCommand )
+			return;
+
+		if ( !KeybindActiveState( _Keys ) )
+			return;
+		
+		pCommand->buttons = pLocalPlayer->m_hActiveWeapon( )->CanFire( ) ? ( pCommand->buttons | IN_ATTACK ) : ( pCommand->buttons & ~IN_ATTACK );
+	}
 };
 
 class CJumpAutomation final: public AMovementFeatureBase
