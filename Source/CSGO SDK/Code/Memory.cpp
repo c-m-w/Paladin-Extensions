@@ -149,7 +149,7 @@ namespace Memory
 		if ( !_MemoryManager.FindPatterns( ) )
 			return false;
 
-		pGlobalVariables = **reinterpret_cast< CGlobalVarsBase * ** >( pGlobalVariables );
+		pGlobalVariables = **reinterpret_cast< CGlobalVarsBase*** >( ( *reinterpret_cast< uintptr_t** >( pGlobalVariables ) [ 0 ] + 27 ) );
 		pClientState = **reinterpret_cast< CClientState * ** >( pClientState );
 		pDevice = **reinterpret_cast< IDirect3DDevice9 * ** >( pDevice );
 		pGlowObjectManager = *reinterpret_cast< CGlowObjectManager * * >( pGlowObjectManager );
