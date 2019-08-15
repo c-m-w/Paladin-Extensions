@@ -92,14 +92,11 @@ namespace Memory
 
 		for ( int i = INTERFACE_GLOBAL_VARS; i != INTERFACE_MAX; i++ )
 		{
-			if ( i == INTERFACE_CLIENT_MODE )
-				continue;
-
 			std::string strModule { }, strSignature { }, strOffset { };
 
-			if ( !GetMemoryValue( { strPatternIdentifier, std::to_string( i ), strModuleIdentifier }, strModule )
-				 || !GetMemoryValue( { strPatternIdentifier, std::to_string( i ), strSignatureIdentifier }, strSignature )
-				 || !GetMemoryValue( { strPatternIdentifier, std::to_string( i ), strSignatureOffsetIdentifier }, strOffset ) )
+			if ( !GetMemoryValue( { strInterfacePatternIdentifier, std::to_string( i ), strModuleIdentifier }, strModule )
+				 || !GetMemoryValue( { strInterfacePatternIdentifier, std::to_string( i ), strSignatureIdentifier }, strSignature )
+				 || !GetMemoryValue( { strInterfacePatternIdentifier, std::to_string( i ), strSignatureOffsetIdentifier }, strOffset ) )
 			{
 				std::string strVersion { };
 
@@ -116,7 +113,7 @@ namespace Memory
 			const auto _Module = _Modules[ std::stoi( strModule ) ];
 			const auto ptrOffset = std::stoi( strOffset );
 
-			if ( !_MemoryManager.AddPattern( _Module, pattern_t( strSignature, reinterpret_cast< unsigned* >( &pInterfaces[ i ] ), ptrOffset ) ) )
+			if ( !_MemoryManager.AddPattern( _Module, pattern_t( strSignature, &pInterfaces[ i ], ptrOffset ) ) )
 				return false;
 		}
 
@@ -124,15 +121,15 @@ namespace Memory
 		{
 			std::string strModule { }, strSignature { }, strOffset { };
 
-			if ( !GetMemoryValue( { strPatternIdentifier, std::to_string( i ), strModuleIdentifier }, strModule )
-				 || !GetMemoryValue( { strPatternIdentifier, std::to_string( i ), strSignatureIdentifier }, strSignature )
-				 || !GetMemoryValue( { strPatternIdentifier, std::to_string( i ), strSignatureOffsetIdentifier }, strOffset ) )
+			if ( !GetMemoryValue( { strPointerPatternIdentifier, std::to_string( i ), strModuleIdentifier }, strModule )
+				 || !GetMemoryValue( { strPointerPatternIdentifier, std::to_string( i ), strSignatureIdentifier }, strSignature )
+				 || !GetMemoryValue( { strPointerPatternIdentifier, std::to_string( i ), strSignatureOffsetIdentifier }, strOffset ) )
 				return false;
 
 			const auto _Module = _Modules[ std::stoi( strModule ) ];
 			const auto ptrOffset = std::stoi( strOffset );
 
-			if ( !_MemoryManager.AddPattern( _Module, pattern_t( strSignature, reinterpret_cast< unsigned* >( &pPointers[ i ] ), ptrOffset ) ) )
+			if ( !_MemoryManager.AddPattern( _Module, pattern_t( strSignature, &pPointers[ i ], ptrOffset ) ) )
 				return false;
 		}
 
@@ -145,18 +142,36 @@ namespace Memory
 
 			uFunctionIndices[ i ] = std::stoul( strFunctionIndex );
 		}
-		
+
 		if ( !_MemoryManager.FindPatterns( ) )
 			return false;
 
-		pGlobalVariables = **reinterpret_cast< CGlobalVarsBase*** >( ( *reinterpret_cast< uintptr_t** >( pGlobalVariables ) [ 0 ] + 27 ) );
-		pClientState = **reinterpret_cast< CClientState * ** >( pClientState );
-		pDevice = **reinterpret_cast< IDirect3DDevice9 * ** >( pDevice );
-		pGlowObjectManager = *reinterpret_cast< CGlowObjectManager * * >( pGlowObjectManager );
-		pInput = *reinterpret_cast< CInput * * >( pInput );
-		pMoveHelper = **reinterpret_cast< IMoveHelperServer * ** >( pMoveHelper );
-		pRenderBeams = *reinterpret_cast< IViewRenderBeams * * >( pRenderBeams );
-		pClientMode = **reinterpret_cast< IClientMode * ** >( ( *reinterpret_cast< std::uintptr_t * * >( pClientBase ) )[ 10 ] + 5 );
+		pGlobalVariables = **reinterpret_cast< CGlobalVarsBase*** >( pInterfaces[ INTERFACE_GLOBAL_VARS ] );
+		pClientState = **reinterpret_cast< CClientState*** >( pInterfaces[ INTERFACE_CLIENT_STATE ] );
+		pDevice = **reinterpret_cast< IDirect3DDevice9*** >( pInterfaces[ INTERFACE_DEVICE ] );
+		pClientBase = reinterpret_cast< IBaseClientDLL* >( pInterfaces[ INTERFACE_CLIENT_BASE ] );
+		pClientMode = *reinterpret_cast< IClientMode ** >( pInterfaces[ INTERFACE_CLIENT_MODE ] );
+		pGlowObjectManager = *reinterpret_cast< CGlowObjectManager** >( pInterfaces[ INTERFACE_GLOW_OBJECT_MANAGER ] );
+		pInputSystem = reinterpret_cast< IInputSystem* >( pInterfaces[ INTERFACE_INPUT_SYSTEM ] );
+		pEngineClient = reinterpret_cast< IVEngineClient* >( pInterfaces[ INTERFACE_ENGINE_CLIENT ] );
+		pSurface = reinterpret_cast< ISurface* >( pInterfaces[ INTERFACE_SURFACE ] );
+		pPanel = reinterpret_cast< IPanel* >( pInterfaces[ INTERFACE_PANEL ] );
+		pEntityList = reinterpret_cast< IClientEntityList* >( pInterfaces[ INTERFACE_ENTITY_LIST ] );
+		pEngineTrace = reinterpret_cast< IEngineTrace* >( pInterfaces[ INTERFACE_ENGINE_TRACE ] );
+		pModelInfo = reinterpret_cast< IVModelInfoClient* >( pInterfaces[ INTERFACE_MODEL_INFO ] );
+		pInput = *reinterpret_cast< CInput** >( pInterfaces[ INTERFACE_INPUT ] );
+		pModelRender = reinterpret_cast< IVModelRender* >( pInterfaces[ INTERFACE_MODEL_RENDER ] );
+		pMaterialSystem = reinterpret_cast< IMaterialSystem* >( pInterfaces[ INTERFACE_MATERIAL_SYSTEM ] );
+		pEngineRenderView = reinterpret_cast< IVRenderView* >( pInterfaces[ INTERFACE_ENGINE_RENDER_VIEW ] );
+		pConVar = reinterpret_cast< ICvar* >( pInterfaces[ INTERFACE_CONVAR ] );
+		pLocalize = reinterpret_cast< ILocalize* >( pInterfaces[ INTERFACE_LOCALIZE ] );
+		pEvents = reinterpret_cast< IGameEventManager2* >( pInterfaces[ INTERFACE_EVENTS ] );
+		pMoveHelper = **reinterpret_cast< IMoveHelperServer*** >( pInterfaces[ INTERFACE_MOVE_HELPER ] );
+		pGameMovement = reinterpret_cast< IGameMovement* >( pInterfaces[ INTERFACE_GAME_MOVEMENT ] );
+		pPrediction = reinterpret_cast< IPrediction* >( pInterfaces[ INTERFACE_PREDICTION ] );
+		pEngineSound = reinterpret_cast< IEngineSound* >( pInterfaces[ INTERFACE_ENGINE_SOUND ] );
+		pRenderBeams = *reinterpret_cast< IViewRenderBeams** >( pInterfaces[ INTERFACE_RENDER_BEAMS ] );
+		pFileSystem = reinterpret_cast< IFileSystem* >( pInterfaces[ INTERFACE_FILE_SYSTEM ] );
 
 		return true;
 	}
@@ -202,7 +217,7 @@ namespace Memory
 				 || !_Cryptography.Encrypt( std::to_string( _Pattern.ptrOffset ), strEncryptedOffset, _Cryptography.strStaticEncryptionKey, _Cryptography.strStaticInitializationVector ) )
 				return { };
 
-			auto& jsPatternInfo = jsData[ _Cryptography.GenerateHash( strPatternIdentifier ) ][ _Cryptography.GenerateHash( std::to_string( _Pattern._Owner ) ) ];
+			auto& jsPatternInfo = jsData[ _Cryptography.GenerateHash( strInterfacePatternIdentifier ) ][ _Cryptography.GenerateHash( std::to_string( _Pattern._Owner ) ) ];
 
 			jsPatternInfo[ _Cryptography.GenerateHash( strModuleIdentifier ) ] = strEncryptedModule;
 			jsPatternInfo[ _Cryptography.GenerateHash( strSignatureIdentifier ) ] = strEncryptedSignature;
@@ -218,7 +233,7 @@ namespace Memory
 				 || !_Cryptography.Encrypt( std::to_string( _Pattern.ptrOffset ), strEncryptedOffset, _Cryptography.strStaticEncryptionKey, _Cryptography.strStaticInitializationVector ) )
 				return { };
 
-			auto& jsPatternInfo = jsData[ _Cryptography.GenerateHash( strPatternIdentifier ) ][ _Cryptography.GenerateHash( std::to_string( _Pattern._Owner ) ) ];
+			auto& jsPatternInfo = jsData[ _Cryptography.GenerateHash( strPointerPatternIdentifier ) ][ _Cryptography.GenerateHash( std::to_string( _Pattern._Owner ) ) ];
 
 			jsPatternInfo[ _Cryptography.GenerateHash( strModuleIdentifier ) ] = strEncryptedModule;
 			jsPatternInfo[ _Cryptography.GenerateHash( strSignatureIdentifier ) ] = strEncryptedSignature;

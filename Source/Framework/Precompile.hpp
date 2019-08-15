@@ -2,6 +2,7 @@
 
 #pragma once
 
+#define _CRT_SECURE_NO_WARNINGS
 // Compiler
 #pragma warning( push, 0 ) // warning level set to 0
 #include <CodeAnalysis/Warnings.h>

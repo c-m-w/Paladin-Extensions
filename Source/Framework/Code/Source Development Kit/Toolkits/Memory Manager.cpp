@@ -845,10 +845,10 @@ bool CMemoryManager::FindPatterns( )
 			const auto _Header = _Module.GetSectionHeader( i );
 			if ( ( _Header->Characteristics & ( IMAGE_SCN_CNT_CODE | IMAGE_SCN_MEM_EXECUTE | IMAGE_SCN_MEM_READ ) ) > 0
 				 && ( _Header->Characteristics & IMAGE_SCN_MEM_WRITE ) == 0 )
-				vecSectionsToScan.emplace_back( std::pair< unsigned char *, std::size_t >( reinterpret_cast< unsigned char * >( std::uintptr_t( _Patterns.first ) + _Header->VirtualAddress ),
-												_Header->SizeOfRawData ) );
+				vecSectionsToScan.emplace_back( std::pair< unsigned char*, std::size_t >( reinterpret_cast< unsigned char* >( std::uintptr_t( _Patterns.first ) + _Header->VirtualAddress ),
+																						  _Header->SizeOfRawData ) );
 		}
-
+		
 		if ( vecSectionsToScan.empty( ) )
 			return _Log.Log( EPrefix::ERROR, ELocation::MEMORY_MANAGER, ENC( "Unable to find sections to pattern scan." ) ), false;
 
@@ -904,28 +904,28 @@ bool CMemoryManager::FindPatterns( )
 	return true;
 }
 
-//void *CMemoryManager::FindPattern( HMODULE hLocation, const std::string &strPattern )
-//{
-//	auto _Pattern = pattern_t::ParsePattern( strPattern );
-//	auto _Image = image_info_t( hLocation );
-//
-//	if ( !_Image.ValidImage( ) )
-//		return nullptr;
-//
-//	for ( auto u = std::uintptr_t( hLocation ), uSequence = 0u; u < std::uintptr_t( hLocation ) + _Image.GetImageSize( ); u++ )
-//	{
-//		if ( uSequence == _Pattern( ).size( ) )
-//			return reinterpret_cast< void * >( u - uSequence );
-//
-//		if ( _Pattern( )[ uSequence ] == pattern_t::UNKNOWN_BYTE
-//			 || _Pattern( )[ uSequence ] == *reinterpret_cast< unsigned char * >( u ) )
-//			uSequence++;
-//		else
-//			u -= uSequence, uSequence = 0;
-//	}
-//
-//	return nullptr;
-//}
+bool CMemoryManager::FindPattern( HMODULE hLocation, const std::string &strPattern, std::ptrdiff_t ptrOffset, void*& pOutput )
+{
+	auto _Pattern = pattern_t::ParsePattern( strPattern );
+	auto _Image = image_info_t( hLocation );
+
+	if ( !_Image.ValidImage( ) )
+		return false;
+
+	for ( auto u = std::uintptr_t( hLocation ), uSequence = 0u; u < std::uintptr_t( hLocation ) + _Image.GetImageSize( ); u++ )
+	{
+		if ( uSequence == _Pattern.size( ) )
+			return pOutput = reinterpret_cast< void * >( u - uSequence + ptrOffset ), true;
+
+		if ( _Pattern[ uSequence ] == pattern_t::UNKNOWN_BYTE
+			 || _Pattern[ uSequence ] == *reinterpret_cast< unsigned char * >( u ) )
+			uSequence++;
+		else
+			u -= uSequence, uSequence = 0;
+	}
+
+	return false;
+}
 
 bool CMemoryManager::ManuallyLoadLibraryEx( const std::string &strData, bool bUseExistingThread, bool bEnableExceptions, bool bEraseHeaders, bool bEraseDiscardableSections, HMODULE *pModuleHandle /*= nullptr*/  )
 {

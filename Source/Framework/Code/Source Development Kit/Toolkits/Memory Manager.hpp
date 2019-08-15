@@ -323,6 +323,7 @@ public:
 	bool AddPattern( const std::string &strModule, const pattern_t &_Pattern );
 	bool AddPattern( HMODULE hModule, const pattern_t &_Pattern );
 	bool FindPatterns( );
+	bool FindPattern( HMODULE hLocation, const std::string& strPattern, std::ptrdiff_t ptrOffset, void*& pOutput );
 
 	bool SetProcess( DWORD dwProcessID, DWORD dwAccess );
 	bool SetProcess( const std::string &strExecutable, DWORD dwAccess );
