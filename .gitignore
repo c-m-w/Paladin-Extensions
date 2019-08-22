@@ -67,6 +67,7 @@ Source/VMProtect/*.exe
 Source/VMProtect/*.dll
 Source/VMProtect/*.map
 
+!/Source/Debug/VMProtectSDK32.dll
 !/Server/
 !/Server/*
 !/Server/**/*
