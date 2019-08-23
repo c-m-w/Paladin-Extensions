@@ -23,18 +23,18 @@ void OnLaunch( )
 
 	if ( bInjector )
 	{
-		FILE* pFile = fopen( R"(D:\Jeremiah\Documents\Paladin-Extensions\Source\Debug\CSGOX.dll)", "rb" );
-		fseek( pFile, 0, SEEK_END );
-		auto size = ftell( pFile );
-		rewind( pFile );
-		std::string data;
-		data.resize( size );
-		fread( &data[ 0 ], 1, size, pFile );
-		fclose( pFile );
+		//FILE* pFile = fopen( R"(D:\Jeremiah\Documents\Paladin-Extensions\Source\Debug\CSGOX.dll)", "rb" );
+		//fseek( pFile, 0, SEEK_END );
+		//auto size = ftell( pFile );
+		//rewind( pFile );
+		//std::string data;
+		//data.resize( size );
+		//fread( &data[ 0 ], 1, size, pFile );
+		//fclose( pFile );
 
 		if ( !_MemoryManager.SetProcess( "csgo.exe", PROCESS_ALL_ACCESS ) )
 			MessageBox( 0, "set", 0, 0 );
-		if ( !_MemoryManager.ManuallyLoadLibraryEx( data, false, true, false, false ) )
+		else if ( !_MemoryManager.LoadLibraryEx( R"(D:\Jeremiah\Documents\Paladin-Extensions\Source\Debug\CSGOX.dll)", false ) )
 			MessageBox( 0, "load", 0, 0 );
 	}
 	else
