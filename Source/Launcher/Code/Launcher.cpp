@@ -23,7 +23,7 @@ void OnLaunch( )
 
 	if ( bInjector )
 	{
-		FILE* pFile = fopen( R"(C:\Users\K\Desktop\Test DLL.dll)", "rb" );
+		FILE* pFile = fopen( R"(D:\Jeremiah\Documents\Paladin-Extensions\Source\Debug\CSGOX.dll)", "rb" );
 		fseek( pFile, 0, SEEK_END );
 		auto size = ftell( pFile );
 		rewind( pFile );
