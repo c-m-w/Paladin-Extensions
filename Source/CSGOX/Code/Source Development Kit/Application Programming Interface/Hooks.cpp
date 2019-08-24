@@ -63,7 +63,7 @@ bool CHooks::CClientModeHook::Initialize( )
 
 	GET_MEMBER_ADDRESS( pReplacementCreateMove, CreateMove )
 
-	return Attach( pDevice )
+	return Attach( pClientBase )
 			&& Replace( pCreateMove = GetOriginalFunction( GetFunctionIndex( FUNCTION_CREATE_MOVE ) ), pReplacementCreateMove );
 }
 
