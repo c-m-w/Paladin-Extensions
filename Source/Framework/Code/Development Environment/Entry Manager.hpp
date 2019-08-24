@@ -139,6 +139,7 @@ BOOL WINAPI DllMain( _In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID 
 		}
 		case DLL_PROCESS_DETACH:
 			OnDetach( );
+		// todo: safety
 #if defined _DEBUG
 			FreeConsole( );
 			fclose( ( FILE * )( stdout ) );
