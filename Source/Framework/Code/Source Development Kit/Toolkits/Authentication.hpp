@@ -36,13 +36,15 @@ public:
 	/** \brief Codes that can be returned from the server when sending a request. */
 	enum ELoginCode
 	{
+		NONE = -1,
 		CONNECTION_ERROR,
 		SERVER_ERROR,
 		BANNED,
 		INVALID_KEY,
 		INVALID_HARDWARE,
 		SUCCESS,
-		STAFF_SUCCESS
+		STAFF_SUCCESS,
+		MAX_LOGIN_CODE
 	};
 
 	/** \brief Enumeration for each of the libraries that can be requested / information for them. */

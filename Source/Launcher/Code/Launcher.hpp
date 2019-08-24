@@ -6,3 +6,5 @@
 #define USE_NAMESPACES
 #define USE_DEFINITIONS
 #include "../../Framework/Code/Framework.hpp"
+
+#include "Functionality.hpp"

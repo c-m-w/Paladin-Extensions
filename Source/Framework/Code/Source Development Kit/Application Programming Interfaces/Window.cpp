@@ -161,3 +161,8 @@ bool CApplicationWindow::CursorOnWindow( )
 	const rectangle_t recBounds { recCurrent };
 	return recBounds.LocationInRectangle( pntCursor );
 }
+
+void CApplicationWindow::Minimize( )
+{
+	ShowWindow( hwHandle, SW_MINIMIZE );
+}

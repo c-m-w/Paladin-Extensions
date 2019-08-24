@@ -16,6 +16,11 @@ void CText::CreateDrawables( )
 	pText->SetTexture( _Bitmap, GetCurrentColor( COLOR_INDEX_PRIMARY ) );
 }
 
+void CText::SetDefaultSize( )
+{
+	SetSize( GetTextSize( ) );
+}
+
 void CText::InitializeText( )
 {
 	bCreateDrawables = true;

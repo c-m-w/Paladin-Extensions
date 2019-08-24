@@ -28,4 +28,5 @@ public:
 	void Show( );
 	void Destroy( );
 	bool CursorOnWindow( );
+	void Minimize( );
 };

@@ -107,7 +107,8 @@ public:
 	void SetDrawingType( D3D_PRIMITIVE_TOPOLOGY _New );
 	void SetAntiAlias( bool bNewAntiAlias );
 	void SetTexture( const std::string& strResourceName );
-	void SetTexture( const std::string& strSVGResourceName, Utilities::vector2_t vecSize );
+	void SetTexture( const std::string& strSVGResourceName, Utilities::vector2_t vecSize, unsigned char** bImageDataOutput = nullptr );
+	void SetTexture( unsigned char* bBitmap, Utilities::vector2_t vecSize );
 	void SetTexture( ID3D11Texture2D* pNewTexture );
 	void SetTexture( const bitmap_t& _Bitmap, const color_t& clrText );
 	void SetTexture( const bitmap_t& _Bitmap, ID3D11Texture2D* pColorTexture );
