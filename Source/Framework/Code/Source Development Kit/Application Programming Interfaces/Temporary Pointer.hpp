@@ -2,10 +2,10 @@
 
 #pragma once
 
-template< typename... _Parameter >
-union UFunction
+template< typename _Context >
+union UHookCallback
 {
-	void ( __cdecl *fn )( void* pThis, _Parameter... );
+	void ( __cdecl *fn )( void *pThis, _Context* );
 	void *p;
 };
 
