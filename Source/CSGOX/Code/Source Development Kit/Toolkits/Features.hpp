@@ -2,8 +2,10 @@
 
 #pragma once
 
-inline std::vector< void * > vecBeginHook[ FUNCTION_MAX ] { };
-inline std::vector< void * > vecEndHook[ FUNCTION_MAX ] { };
+// function, this
+inline std::vector< std::pair< void *, void * > > vecBeginHook[ FUNCTION_MAX ] { };
+// function, this
+inline std::vector< std::pair< void *, void * > > vecEndHook[ FUNCTION_MAX ] { };
 
 // nothing that inherits an interface should be a feature directly.
 // it should inherit an abstract class first
@@ -26,8 +28,8 @@ protected:
 public:
 	keybinds_t _Keys;
 protected:
-	virtual void Begin( _tContext& _Context ) = 0;
-	virtual void End( _tContext& _Context ) = 0;
+	virtual void __cdecl Begin( _tContext& _Context ) = 0;
+	virtual void __cdecl End( _tContext& _Context ) = 0;
 public:
 	static bool KeybindActiveState( const keybinds_t& _Keys )
 	{
@@ -97,14 +99,14 @@ public:
 protected:
 	IFeatureBase( )
 	{
-		vecBeginHook[ enumHook ].emplace_back( **reinterpret_cast< void *** >( this ) );
-		vecEndHook[ enumHook ].emplace_back( **reinterpret_cast< void *** >( reinterpret_cast< std::uintptr_t* >( this ) + 1 ) );
+		vecBeginHook[ enumHook ].emplace_back( **reinterpret_cast< void *** >( this ), this );
+		vecEndHook[ enumHook ].emplace_back( **reinterpret_cast< void *** >( reinterpret_cast< std::uintptr_t* >( this ) + 1 ), this );
 	}
 	~IFeatureBase( )
 	{		
 		for ( std::size_t z = 0u; z < vecBeginHook[ enumHook ].size( ); z++ )
 		{			
-			if ( **reinterpret_cast< void*** >( this ) == vecBeginHook[ enumHook ][ z ] )
+			if ( **reinterpret_cast< void*** >( this ) == vecBeginHook[ enumHook ][ z ].first )
 			{
 				vecBeginHook[ enumHook ].erase( vecBeginHook[ enumHook ].begin( ) + z );
 				z--;
@@ -113,7 +115,7 @@ protected:
 		
 		for ( std::size_t z = 0u; z < vecEndHook[ enumHook ].size( ); z++ )
 		{
-			if ( **reinterpret_cast< void *** >( reinterpret_cast< std::uintptr_t* >( this ) + 1 ) == vecEndHook[ enumHook ][ z ] )
+			if ( **reinterpret_cast< void *** >( reinterpret_cast< std::uintptr_t* >( this ) + 1 ) == vecEndHook[ enumHook ][ z ].first )
 			{
 				vecEndHook[ enumHook ].erase( vecEndHook[ enumHook ].begin( ) + z );
 				z--;
@@ -173,7 +175,7 @@ class CAutonomousTrigger final: public AAimAssistanceBase
 		//&& VecAngle( _Entity.GetHitboxPosition( each vecHitboxes ) ) // we want our crosshair position to overlap a hitbox 
 	}
 	
-	void Begin( SCreateMoveContext& _Context ) override
+	void __cdecl Begin( SCreateMoveContext& _Context ) override
 	{
 		auto& pLocalPlayer = _Context.pLocalPlayer;
 		auto& pCommand = _Context.pCommand;
@@ -194,7 +196,7 @@ class CAutonomousTrigger final: public AAimAssistanceBase
 		
 		pCommand->buttons |= IN_ATTACK;
 	}
-	void End( SCreateMoveContext& _Context ) override
+	void __cdecl End( SCreateMoveContext& _Context ) override
 	{
 		
 	}
@@ -211,7 +213,7 @@ class CAimAssistance final: public AAimAssistanceBase
 		&& _Entity.IsAlive( );
 		//&& VecAngle( _Entity.GetHitboxPosition( each vecHitboxes ) ) < flFOVadfsfadfasdfasdfasdf
 	}
-	void Begin( SCreateMoveContext& _Context ) override
+	void __cdecl Begin( SCreateMoveContext& _Context ) override
 	{
 		auto& pLocalPlayer = _Context.pLocalPlayer;
 		auto& pCommand = _Context.pCommand;
@@ -228,7 +230,7 @@ class CAimAssistance final: public AAimAssistanceBase
 		if ( iEntityID == 0 )
 			return;
 	}
-	void End( SCreateMoveContext& _Context ) override
+	void __cdecl End( SCreateMoveContext& _Context ) override
 	{
 		
 	}
@@ -246,7 +248,7 @@ class AEnvironmentFeatureBase: public IMiscellaneousFeatureBase
 
 class CFlashUtility: public AEnvironmentFeatureBase
 {
-	void Begin( SCreateMoveContext& _Context ) override
+	void __cdecl Begin( SCreateMoveContext& _Context ) override
 	{
 		auto& pLocalPlayer = _Context.pLocalPlayer;
 		auto& pCommand = _Context.pCommand;
@@ -275,7 +277,7 @@ class CFlashUtility: public AEnvironmentFeatureBase
 
 		pLocalPlayer->m_flFlashMaxAlpha( ) = 255.f * ( flFlashDuration - ( flFlashTime - flFullFlashTime ) > 0.f ? flFullFlashMaximum : flPartialFlashMaximum );
 	}
-	void End( SCreateMoveContext& _Context ) override
+	void __cdecl End( SCreateMoveContext& _Context ) override
 	{
 		
 	}
@@ -291,7 +293,7 @@ class AMovementFeatureBase: public IMiscellaneousFeatureBase
 
 class CTriggerAutomation final: public AMovementFeatureBase
 {
-	void Begin( SCreateMoveContext& _Context ) override
+	void __cdecl Begin( SCreateMoveContext& _Context ) override
 	{
 		auto& pLocalPlayer = _Context.pLocalPlayer;
 		auto& pCommand = _Context.pCommand;
@@ -304,7 +306,7 @@ class CTriggerAutomation final: public AMovementFeatureBase
 		
 		pCommand->buttons = pLocalPlayer->m_hActiveWeapon( )->CanFire( ) ? ( pCommand->buttons | IN_ATTACK ) : ( pCommand->buttons & ~IN_ATTACK );
 	}
-	void End( SCreateMoveContext& _Context ) override
+	void __cdecl End( SCreateMoveContext& _Context ) override
 	{
 		
 	}
@@ -319,7 +321,7 @@ public:
 	bool bJumpBeforeHopping = true;
 	bool bJumpAfterHopping = true;
 private:
-	void Begin( SCreateMoveContext& _Context ) override
+	void __cdecl Begin( SCreateMoveContext& _Context ) override
 	{
 		auto& pLocalPlayer = _Context.pLocalPlayer;
 		auto& pCommand = _Context.pCommand;
@@ -370,7 +372,7 @@ private:
 
 		pCommand->buttons &= ~IN_JUMP;
 	}
-	void End( SCreateMoveContext& _Context ) override
+	void __cdecl End( SCreateMoveContext& _Context ) override
 	{
 		
 	}
@@ -378,11 +380,11 @@ private:
 
 class CStaminaBugAutomation final: public AMovementFeatureBase
 {
-	void Begin( SCreateMoveContext& _Context ) override
+	void __cdecl Begin( SCreateMoveContext& _Context ) override
 	{
 		
 	}
-	void End( SCreateMoveContext& _Context ) override
+	void __cdecl End( SCreateMoveContext& _Context ) override
 	{
 		auto& pLocalPlayer = _Context.pLocalPlayer;
 		auto& pCommand = _Context.pCommand;

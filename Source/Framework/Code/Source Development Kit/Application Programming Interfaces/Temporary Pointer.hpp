@@ -5,7 +5,7 @@
 template< typename... _Parameter >
 union UFunction
 {
-	void ( *fn )( _Parameter... );
+	void ( __cdecl *fn )( void* pThis, _Parameter... );
 	void *p;
 };
 
