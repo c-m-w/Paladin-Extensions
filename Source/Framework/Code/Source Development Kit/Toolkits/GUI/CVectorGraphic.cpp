@@ -12,13 +12,16 @@ void CVectorGraphic::CreateDrawables( )
 	const auto recLocation = GetAbsoluteLocation( );
 
 	pDrawable->Rectangle( recLocation, GetCurrentColor( COLOR_INDEX_PRIMARY ) );
-	pDrawable->SetTexture( strResourceName, recLocation.vecSize );
+	if ( !bImageData )
+		pDrawable->SetTexture( strResourceName, recLocation.vecSize, &bImageData );
+	else
+		pDrawable->SetTexture( bImageData, recLocation.vecSize );
 }
 
 void CVectorGraphic::SetResourceName( const std::string &strNewResourceName )
 {
 	if ( _ResourceManager.ResourceExists( strNewResourceName ) )
-		strResourceName = strNewResourceName;
+		strResourceName = strNewResourceName, delete[ ] bImageData, bImageData = nullptr;
 }
 
 CVectorGraphic::CVectorGraphic( ) :

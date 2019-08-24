@@ -401,7 +401,7 @@ namespace Utilities
 
 	void timer_t::SetRatio( double dRatio )
 	{
-		mmtStart = mmtStart + mmtLength * dRatio;
+		mmtStart = mmtStart + moment_t( double( mmtLength ) * dRatio );
 	}
 
 	void timer_t::SetEndBehaviour( ETimerBehaviour _NewEndBehaviour )

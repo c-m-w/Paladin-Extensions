@@ -362,7 +362,7 @@ void CDrawable::SetTexture( const std::string& strResourceName )
 		LOG( WARNING, DRAWING, "Could not create SRV from resource." );
 }
 
-void CDrawable::SetTexture( const std::string &strSVGResourceName, vector2_t vecSize )
+void CDrawable::SetTexture( const std::string &strSVGResourceName, vector2_t vecSize, unsigned char** bImageDataOutput /*= nullptr*/ )
 {
 	const auto pImage = _Drawing.GetSVG( strSVGResourceName );
 
@@ -390,14 +390,25 @@ void CDrawable::SetTexture( const std::string &strSVGResourceName, vector2_t vec
 
 	const auto zImageData = unsigned( std::round( vecSize.x * vecSize.y ) ) * sizeof( DWORD );
 	const auto bImageData = new unsigned char[ zImageData ];
-	D3D11_TEXTURE2D_DESC _TextureDescription { };
-	D3D11_SUBRESOURCE_DATA _ResourceData { };
-	ID3D11Texture2D* pBufferTexture = nullptr;
-	D3D11_SHADER_RESOURCE_VIEW_DESC _ShaderResourceViewDescription { };
 
 	memset( bImageData, 0, zImageData );
 	nsvgRasterize( pRasterizer, pImage, 0.f, 0.f, vecScale.x, bImageData, int( vecSize.x ), int( vecSize.y ), int( vecSize.x ) * sizeof( unsigned ) );
 	nsvgDeleteRasterizer( pRasterizer );
+
+	SetTexture( bImageData, vecSize );
+
+	if ( !bImageDataOutput )
+		delete[ ] bImageData;
+	else
+		*bImageDataOutput = bImageData;
+}
+
+void CDrawable::SetTexture( unsigned char *bBitmap, vector2_t vecSize )
+{
+	D3D11_TEXTURE2D_DESC _TextureDescription { };
+	D3D11_SUBRESOURCE_DATA _ResourceData { };
+	ID3D11Texture2D* pBufferTexture = nullptr;
+	D3D11_SHADER_RESOURCE_VIEW_DESC _ShaderResourceViewDescription { };
 
 	_TextureDescription.Width = std::size_t( vecSize.x );
 	_TextureDescription.Height = std::size_t( vecSize.y );
@@ -410,12 +421,12 @@ void CDrawable::SetTexture( const std::string &strSVGResourceName, vector2_t vec
 	_TextureDescription.CPUAccessFlags = 0;
 	_TextureDescription.MiscFlags = 0;
 
-	_ResourceData.pSysMem = bImageData;
+	_ResourceData.pSysMem = bBitmap;
 	_ResourceData.SysMemPitch = std::size_t( vecSize.x ) * sizeof( DWORD );
-	_ResourceData.SysMemSlicePitch = zImageData;
+	_ResourceData.SysMemSlicePitch = unsigned( std::round( vecSize.x * vecSize.y ) ) * sizeof( unsigned );
 
 	if ( !SUCCEEDED( _Drawing.pDevice->CreateTexture2D( &_TextureDescription, &_ResourceData, &pBufferTexture ) ) )
-		LOG( WARNING, DRAWING, "Failed to create texture to copy SVG contents into." );
+		LOG( WARNING, DRAWING, "Failed to create texture to copy bitmap contents into." );
 
 	_ShaderResourceViewDescription.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
 	_ShaderResourceViewDescription.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
@@ -426,9 +437,7 @@ void CDrawable::SetTexture( const std::string &strSVGResourceName, vector2_t vec
 		pTexture->Release( );
 
 	if ( !SUCCEEDED( _Drawing.pDevice->CreateShaderResourceView( pBufferTexture, &_ShaderResourceViewDescription, &pTexture ) ) )
-		LOG( WARNING, DRAWING, "Failed to create SRV from SVG." );
-
-	delete[ ] bImageData;
+		LOG( WARNING, DRAWING, "Failed to create SRV from bitmap." );
 }
 
 void CDrawable::SetTexture( ID3D11Texture2D* pNewTexture )

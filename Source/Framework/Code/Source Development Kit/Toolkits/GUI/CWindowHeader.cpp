@@ -99,8 +99,15 @@ void CWindowHeader::Initialize( )
 		pMinimize->SetColor( COLOR_INDEX_PRIMARY, STATE_DORMANT, BLUE );
 		pMinimize->SetColor( COLOR_INDEX_PRIMARY, STATE_INTERACTED, DARK_BLUE );
 		pMinimize->SetPadding( { 0.05, pRow->GetSize( ).y / 2.0 - 0.10416666666 } );
-		//pMinimize->SetCallback( _OnMinimize );
+		pMinimize->GetCallbacks( ).AddCallback( [ & ]( CKeyState _State )
+		{
+			if ( _State )
+				_OnMinimize( );
+
+			return true;
+		}, VK_LBUTTON );
 		pMinimize->AddAnimatedValue( pMinimizeSizeAnimation );
+		pMinimize->SetCursorType( CURSOR_HAND );
 		pRow->AddWidget( pMinimize );
 	}
 
@@ -117,8 +124,15 @@ void CWindowHeader::Initialize( )
 		pClose->SetColor( COLOR_INDEX_PRIMARY, STATE_DORMANT, BLUE );
 		pClose->SetColor( COLOR_INDEX_PRIMARY, STATE_INTERACTED, DARK_BLUE );
 		pClose->SetPadding( { 0.05, pRow->GetSize( ).y / 2.0 - 0.10416666666 } );
-		//pClose->SetCallback( _OnClose );
+		pClose->GetCallbacks( ).AddCallback( [ & ]( CKeyState _State )
+		{
+			if ( _State )
+				_OnClose( );
+
+			return true;
+		}, VK_LBUTTON );
 		pClose->AddAnimatedValue( pCloseSizeAnimation );
+		pClose->SetCursorType( CURSOR_HAND );
 		pRow->AddWidget( pClose );
 	}
 }

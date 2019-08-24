@@ -7,6 +7,7 @@ class CText: public IWidget
 private:
 
 	void CreateDrawables( ) override;
+	void SetDefaultSize( ) override;
 
 	void InitializeText( );
 

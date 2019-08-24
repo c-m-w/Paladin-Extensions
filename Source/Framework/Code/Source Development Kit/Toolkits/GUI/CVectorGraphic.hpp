@@ -9,6 +9,7 @@ private:
 	void CreateDrawables( ) override;
 
 	std::string strResourceName = ENC( "PX Logo.svg" );
+	unsigned char* bImageData = nullptr;
 
 public:
 
