@@ -283,5 +283,6 @@ namespace Memory
 	bool InitializeMemory( );
 	unsigned GetFunctionIndex( EFunctions _Function );
 	void* GetSignaturePointer( ESignatures _Signature );
+	std::uintptr_t FindOffset( networked_variable_table_t& _Table, const char* szVariable );
 	std::uintptr_t FindOffset( const char* szTable, const char* szVariable );
 }

@@ -52,6 +52,39 @@ namespace Memory
 		return true;
 	}
 
+	bool FindNetworkedVariables( )
+	{
+		std::function< networked_variable_table_t( RecvTable * pTable ) > fnParseTable = [ & ]( RecvTable* pTable )
+		{
+			networked_variable_table_t _Current( pTable->m_pNetTableName );
+
+			for ( auto i = 0; i < pTable->m_nProps; i++ )
+			{
+				const auto pProp = &pTable->m_pProps[ i ];
+				if ( nullptr == pProp
+					 || std::isdigit( pProp->m_pVarName[ 0 ] )
+					 || !strcmp( pProp->m_pVarName, ENC( "baseclass" ) ) )
+					continue;
+				if ( pProp->m_RecvType == DPT_DataTable && pProp->m_pDataTable != nullptr )
+				{
+					_Current.vecChildTables.emplace_back( fnParseTable( pProp->m_pDataTable ) );
+					_Current.vecChildTables.back( ).ptrOffset = pProp->m_Offset;
+					_Current.vecChildTables.back( ).pProp = pProp;
+				}
+				else
+					_Current.vecChildProps.emplace_back( pProp );
+			}
+
+			return _Current;
+		};
+
+		for ( auto pClass = pClientBase->GetAllClasses( ); nullptr != pClass; pClass = pClass->m_pNext )
+			if ( pClass->m_pRecvTable )
+				vecNetworkedVariables.push_back( fnParseTable( pClass->m_pRecvTable ) );
+
+		return !vecNetworkedVariables.empty( );
+	}
+
 	bool InitializeMemory( )
 	{
 #if defined _DEBUG
@@ -173,7 +206,7 @@ namespace Memory
 		pRenderBeams = *reinterpret_cast< IViewRenderBeams** >( pInterfaces[ INTERFACE_RENDER_BEAMS ] );
 		pFileSystem = reinterpret_cast< IFileSystem* >( pInterfaces[ INTERFACE_FILE_SYSTEM ] );
 
-		return true;
+		return FindNetworkedVariables( );
 	}
 
 	unsigned GetFunctionIndex( EFunctions _Function )
@@ -184,6 +217,39 @@ namespace Memory
 	void * GetSignaturePointer( ESignatures _Signature )
 	{
 		return pPointers[ _Signature ];
+	}
+
+	std::uintptr_t FindOffset( networked_variable_table_t& _Table, const char* szVariable )
+	{
+		for ( auto& pProp : _Table.vecChildProps )
+			if ( !strcmp( pProp->m_pVarName, szVariable ) )
+				return _Table.ptrOffset + pProp->m_Offset;
+
+		for ( networked_variable_table_t pChild : _Table.vecChildTables )
+		{
+			auto ptrPropOffset = FindOffset( pChild, szVariable );
+			if ( ptrPropOffset != 0 )
+				return _Table.ptrOffset + ptrPropOffset;
+		}
+
+		for ( auto& pChild : _Table.vecChildTables )
+			if ( !strcmp( pChild.pProp->m_pVarName, szVariable ) )
+				return _Table.ptrOffset + pChild.ptrOffset;
+
+		return 0u;
+	}
+
+	std::uintptr_t FindOffset( const char* szTable, const char* szVariable )
+	{
+		for each ( auto pTable in vecNetworkedVariables )
+			if ( !strcmp( pTable.szName, szTable ) )
+			{
+				const auto ptrResult = FindOffset( pTable, szVariable );
+				if ( 0u != ptrResult )
+					return ptrResult;
+			}
+
+		return 0u;
 	}
 
 #if defined _DEBUG
