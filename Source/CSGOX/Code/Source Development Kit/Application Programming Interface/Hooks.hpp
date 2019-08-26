@@ -46,6 +46,6 @@ public:
 		CClientModeHook( ) = default;
 		~CClientModeHook( ) = default;
 
-		void __stdcall CreateMove( int iSequence, float flInputSampleFrametime, bool bActive );
+		bool __thiscall CreateMove( float flInputSampleFrametime, CUserCmd* pUserCommands );
 	} _ClientMode;
 } extern _Hooks;

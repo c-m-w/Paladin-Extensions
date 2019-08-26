@@ -2,10 +2,10 @@
 
 #pragma once
 
-// function, this
-inline std::vector< std::pair< void *, void * > > vecBeginHook[ FUNCTION_MAX ] { };
-// function, this
-inline std::vector< std::pair< void *, void * > > vecEndHook[ FUNCTION_MAX ] { };
+// interface, index
+inline std::vector< std::pair< void *, std::size_t > > vecBeginHook[ FUNCTION_MAX ] { };
+// interface, index
+inline std::vector< std::pair< void *, std::size_t > > vecEndHook[ FUNCTION_MAX ] { };
 
 // nothing that inherits an interface should be a feature directly.
 // it should inherit an abstract class first
@@ -99,8 +99,8 @@ public:
 protected:
 	IFeatureBase( )
 	{
-		vecBeginHook[ enumHook ].emplace_back( **reinterpret_cast< void *** >( this ), this );
-		vecEndHook[ enumHook ].emplace_back( **reinterpret_cast< void *** >( reinterpret_cast< std::uintptr_t* >( this ) + 1 ), this );
+		vecBeginHook[ enumHook ].emplace_back( this, 0 );
+		vecEndHook[ enumHook ].emplace_back( this, 1 );
 	}
 	~IFeatureBase( )
 	{		

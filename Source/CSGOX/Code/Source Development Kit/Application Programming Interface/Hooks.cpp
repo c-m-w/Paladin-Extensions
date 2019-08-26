@@ -63,7 +63,7 @@ bool CHooks::CClientModeHook::Initialize( )
 
 	GET_MEMBER_ADDRESS( pReplacementCreateMove, CreateMove )
 
-	return Attach( pClientBase )
+	return Attach( pClientMode )
 			&& Replace( pCreateMove = GetOriginalFunction( GetFunctionIndex( FUNCTION_CREATE_MOVE ) ), pReplacementCreateMove );
 }
 
@@ -72,27 +72,27 @@ void CHooks::CClientModeHook::Uninitialize( )
 	Detach( );
 }
 
-void CHooks::CClientModeHook::CreateMove( int iSequence, float flInputSampleFrametime, bool bActive )
+bool CHooks::CClientModeHook::CreateMove( float flInputSampleFrametime, CUserCmd* pUserCommands )
 {
-	SCreateMoveContext _Context { GetLocalPlayer( ), GetUserCmd( iSequence ) };
+	SCreateMoveContext _Context { GetLocalPlayer( ), pUserCommands };
 
 	for ( auto &_2Hook: vecBeginHook[ FUNCTION_CREATE_MOVE ] )
 	{
 		UHookCallback< SCreateMoveContext > _Hook;
-		_Hook.p = _2Hook.first;
-		_Hook.fn( _2Hook.second, &_Context );
+		_Hook.p = ( *reinterpret_cast< void*** >( _2Hook.first ) )[ _2Hook.second ];
+		_Hook.fn( _2Hook.first, &_Context );
 	}
 
-	/*auto _Return = */reinterpret_cast< void( __stdcall * )( void *, int, float, bool ) >( pCreateMove )( this, iSequence, flInputSampleFrametime, bActive );
+	auto _Return = reinterpret_cast< bool( __thiscall * )( void *, float, CUserCmd* ) >( pCreateMove )( this, flInputSampleFrametime, pUserCommands );
 	
 	for ( auto &_2Hook: vecEndHook[ FUNCTION_CREATE_MOVE ] )
 	{
 		UHookCallback< SCreateMoveContext > _Hook;
-		_Hook.p = _2Hook.first;
-		_Hook.fn( _2Hook.second, &_Context );
+		_Hook.p = ( *reinterpret_cast< void*** >( _2Hook.first ) )[ _2Hook.second ];
+		_Hook.fn( _2Hook.first, &_Context );
 	}
 
-	return /*_Return*/;
+	return _Return;
 }
 
 CHooks _Hooks;
