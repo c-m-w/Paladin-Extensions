@@ -20,7 +20,6 @@ void OnLaunch( )
 		MessageBox( 0, "mm.lle", 0, 0 );
 }
 
-
 void OnLaunchOriginal( )
 {
 	if ( !SetupFramework( )

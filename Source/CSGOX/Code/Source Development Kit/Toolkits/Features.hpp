@@ -13,7 +13,7 @@ inline std::vector< std::pair< void *, std::size_t > > vecEndHook[ FUNCTION_MAX 
 template < EFunctions enumHook, typename _tContext >
 class IFeatureBase
 {
-protected:
+public:
 	enum
 	{
 		ACTIVE,
@@ -23,10 +23,11 @@ protected:
 		SET_TO_ACTIVE,
 		SET_TO_INACTIVE
 	};
+protected:
 	using keybind_t = std::pair< key_t, decltype( ACTIVE ) >;
 	using keybinds_t = std::vector< keybind_t >;
 public:
-	keybinds_t _Keys;
+	keybinds_t _Keys; // todo: this should be feature-based. not all features need a keybind.
 protected:
 	virtual void __cdecl Begin( _tContext* _Context ) = 0;
 	virtual void __cdecl End( _tContext* _Context ) = 0;
@@ -46,7 +47,7 @@ public:
 				case TOGGLE_ACTIVATION:
 				{
 					static bool bLastActivationState = false;
-					if ( GetKeyState( _Key.first ) )
+					if ( _Input.GetKeyState( _Key.first ) )
 						bLastActivationState = !bLastActivationState;
 					if ( bLastActivationState )
 						bKeyActive = true;
@@ -54,7 +55,7 @@ public:
 				}
 				case HOLD_TO_ACTIVATE:
 				{
-					if ( GetKeyState( _Key.first ) )
+					if (  _Input.GetKeyState( _Key.first ) )
 						bKeyActive = true;
 					else
 						bKeyActive = false;
@@ -62,7 +63,7 @@ public:
 				}
 				case HOLD_TO_DEACTIVATE:
 				{
-					if ( GetKeyState( _Key.first ) )
+					if (  _Input.GetKeyState( _Key.first ) )
 						bKeyActive = false;
 					else
 						bKeyActive = true;
@@ -70,13 +71,13 @@ public:
 				}
 				case SET_TO_ACTIVE:
 				{
-					if ( GetKeyState( _Key.first ) )
+					if (  _Input.GetKeyState( _Key.first ) )
 						bKeyActive = true;
 					break;
 				}
 				case SET_TO_INACTIVE:
 				{
-					if ( GetKeyState( _Key.first ) )
+					if (  _Input.GetKeyState( _Key.first ) )
 						bKeyActive = false;
 					break;
 				}
@@ -87,11 +88,12 @@ public:
 		}
 		return bKeyActive;
 	}
-	static bool AddKeybind( const keybind_t _NewKey, const keybinds_t& _Keys )
+	static bool AddKeybind( const keybind_t _NewKey, keybinds_t& _Keys )
 	{
-		for ( auto& _Key : _Keys )
+		for ( auto& _Key: _Keys )
 		{
-			if ( _Key.first == _NewKey.first )
+			if ( _Key.first != key_t( 0ui8 )
+				 && _Key.first == _NewKey.first )
 				return false;
 		}
 		return _Keys.emplace_back( _NewKey ), true;
@@ -133,7 +135,7 @@ struct SCreateMoveContext
 class ICombatFeatureBase: public IFeatureBase< FUNCTION_CREATE_MOVE, SCreateMoveContext >
 {
 protected:
-	virtual int BezierStuff( int time ); // virtual because some features may want to change how a function works (not this function specifically because im sure it wont change)
+	virtual int BezierStuff( int time ) { return 0; }; // virtual because some features may want to change how a function works (not this function specifically because im sure it wont change)
 	// here we put the context for shit that'll go between each instance of a combat feature. maybe even some functions
 };
 
@@ -150,7 +152,7 @@ protected:
 	virtual bool MeetsActivationRequirements( int iEntityID ) = 0;
 	virtual int GetPriorityEntityID( decltype( PRIORITY_MAX ) enumPriorityType = FIRST_IN_LIST ) // maybe they wanna do it based on real distance and not crosshair or smth
 	{
-		
+		return 0;
 	}
 	virtual void CompensateRecoil( )
 	{
@@ -167,8 +169,9 @@ class CAutonomousTrigger final: public AAimAssistanceBase
 	bool MeetsActivationRequirements( int iEntityID ) override
 	{
 		auto &_Entity = *reinterpret_cast< CBasePlayer* >( pEntityList->GetClientEntity( iEntityID ) );
-		if ( _Entity.IsPlayer( )
-		&& _Entity.IsAlive( ) )
+		if ( nullptr == &_Entity
+			|| !_Entity.IsPlayer( )
+			|| !_Entity.IsAlive( ) )
 			return false;
 		//	for ( auto &iHitbox: vecHitboxes )
 		//		if ( iHitbox == _Entity.GetHitboxPosition(  ))
@@ -191,10 +194,11 @@ class CAutonomousTrigger final: public AAimAssistanceBase
 		if ( !_Trace.DidHit( ) )
 			return;
 
-		if ( !MeetsActivationRequirements( _Trace.GetEntityIndex( ) ))
+		if ( !MeetsActivationRequirements( _Trace.hit_entity->EntIndex( ) ))
 			return;
-		
-		pCommand->buttons |= IN_ATTACK;
+
+		if ( pLocalPlayer->m_hActiveWeapon( )->CanFire( ) )
+			pCommand->buttons |= IN_ATTACK;
 	}
 	void __cdecl End( SCreateMoveContext* _Context ) override
 	{
@@ -263,9 +267,7 @@ class CFlashUtility: public AEnvironmentFeatureBase
 
 		static auto flFullFlashTime = 0.f, flFlashTime = 0.f;
 		if ( flFlashDuration <= 0.f )
-			return ( void )( flFullFlashTime = flFlashTime = 0.f );
-		if ( flFullFlashTime == 0.f || flFlashTime == 0.f )
-			return;
+			return ( void )( pLocalPlayer->m_flFlashMaxAlpha( ) = 255.f, flFullFlashTime = flFlashTime = 0.f );
 		if ( flFlashDuration < 1.f )
 			flFullFlashTime = 0.09f, flFlashTime = 0.95f;
 		else if ( flFlashDuration < 2.f )
@@ -282,8 +284,8 @@ class CFlashUtility: public AEnvironmentFeatureBase
 		
 	}
 public:
-	float flFullFlashMaximum = 1.f;
-	float flPartialFlashMaximum = 1.f;
+	float flFullFlashMaximum = 0.8f;
+	float flPartialFlashMaximum = 0.25f;
 };
 
 class AMovementFeatureBase: public IMiscellaneousFeatureBase
@@ -303,8 +305,12 @@ class CTriggerAutomation final: public AMovementFeatureBase
 
 		if ( !KeybindActiveState( _Keys ) )
 			return;
+
+		auto& hActiveWeapon = pLocalPlayer->m_hActiveWeapon( );
+		if ( nullptr == &hActiveWeapon )
+			return;
 		
-		pCommand->buttons = pLocalPlayer->m_hActiveWeapon( )->CanFire( ) ? ( pCommand->buttons | IN_ATTACK ) : ( pCommand->buttons & ~IN_ATTACK );
+		pCommand->buttons = hActiveWeapon->CanFire( ) ? ( pCommand->buttons | IN_ATTACK ) : ( pCommand->buttons & ~IN_ATTACK );
 	}
 	void __cdecl End( SCreateMoveContext* _Context ) override
 	{
@@ -335,7 +341,7 @@ private:
 
 		{
 			const auto& movetype = pLocalPlayer->movetype( );
-			if ( movetype != MOVETYPE_NOCLIP && movetype != MOVETYPE_LADDER ) // don't change anything in these states
+			if ( movetype == MOVETYPE_NOCLIP || movetype == MOVETYPE_LADDER ) // don't change anything in these states
 				return; // do not unset +jump because they may want to jump off a ladder or smth.
 		}
 
@@ -397,7 +403,7 @@ class CStaminaBugAutomation final: public AMovementFeatureBase
 			return;
 
 		//Prediction::Start( pLocalPlayer, pCommand );
-		//if ( _Context.pLocalPlayer->m_fFlags( ) & FL_ONGROUND )
+		//if ( _Context.pLocalPlayer->m_fFlags( ) & w )
 		//	return ( void )( Prediction::End( pLocalPlayer ), pCommand->buttons &= ~IN_DUCK );
 		//Prediction::Start( pLocalPlayer, pCommand );
 		//if ( _Context.pLocalPlayer->m_fFlags( ) & FL_ONGROUND )

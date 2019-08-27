@@ -7,6 +7,7 @@
 #define USE_INTERNAL_DEFINITIONS
 #include "CSGOX.hpp"
 
+CApplicationWindow *pWindow;
 bool Initialize( );
 void Uninitialize( );
 
@@ -14,7 +15,7 @@ BOOL OnAttach( )
 {
 	if ( !SetupFramework( ) )
 		return FALSE;
-	
+
 	const auto _LoginCode = AUTH.Login( );
 
 	if ( _LoginCode != ELoginCode::SUCCESS
@@ -26,9 +27,19 @@ BOOL OnAttach( )
 
 	if ( !Initialize( ) )
 		return FALSE;
+
+	pWindow = new CApplicationWindow( FindWindow( nullptr, "Counter-Strike: Global Offensive") );
 	
 	CJumpAutomation bhop;
-	
+	CAutonomousTrigger trigger;
+	trigger.AddKeybind( { VK_XBUTTON1, trigger.HOLD_TO_ACTIVATE }, trigger._Keys );
+	CFlashUtility noflash;
+	noflash.AddKeybind( { key_t( 0ui8 ), noflash.ACTIVE }, noflash._Keys );
+	CTriggerAutomation autopistol;
+	autopistol.AddKeybind( { VK_LBUTTON, autopistol.HOLD_TO_ACTIVATE }, autopistol._Keys );
+	CStaminaBugAutomation jumpbug;
+	jumpbug.AddKeybind( { VkKeyScan( 'b' ), jumpbug.HOLD_TO_ACTIVATE }, jumpbug._Keys );
+
 	while ( true )
 		Pause( 1 );
 
