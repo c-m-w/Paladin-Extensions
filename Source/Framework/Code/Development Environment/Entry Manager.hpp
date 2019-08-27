@@ -20,7 +20,7 @@ void OnLaunch( );
 int main( )
 {
 	SetLastError( 0u );
-	HANDLE hMutex = CreateMutex( NULL, FALSE, ENC( StringizeValue( __TIMESTAMP__ ) ) );
+	HANDLE hMutex = CreateMutex( NULL, FALSE, ENC( StringizeValue( PROJECT_NAME ) StringizeValue( __TIMESTAMP__ ) ) );
 	if ( hMutex == NULL || GetLastError( ) == ERROR_ALREADY_EXISTS )
 		return 0;
 
@@ -58,7 +58,7 @@ WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPSTR 
 _In_ int nCmdShow )
 {
 	SetLastError( 0u );
-	HANDLE hMutex = CreateMutex( NULL, FALSE, ENC( StringizeValue( __TIMESTAMP__ ) ) );
+	HANDLE hMutex = CreateMutex( NULL, FALSE, ENC( StringizeValue( PROJECT_NAME ) StringizeValue( __TIMESTAMP__ ) ) );
 	if ( hMutex == NULL )
 		return 0;
 
@@ -112,7 +112,7 @@ BOOL WINAPI DllMain( _In_ HINSTANCE hinstDLL, _In_ DWORD fdwReason, _In_ LPVOID 
 		case DLL_PROCESS_ATTACH:
 		{
 			SetLastError( 0u );
-			hMutex = CreateMutex( NULL, FALSE, ENC( StringizeValue( __TIMESTAMP__ ) ) );
+			hMutex = CreateMutex( NULL, FALSE, ENC( StringizeValue( PROJECT_NAME ) StringizeValue( __TIMESTAMP__ ) ) );
 			if ( hMutex == NULL || GetLastError( ) == ERROR_ALREADY_EXISTS )
 				return FALSE;
 
