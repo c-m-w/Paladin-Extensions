@@ -28,7 +28,10 @@ LRESULT CALLBACK DefaultWindowInputProcessor( HWND wnd, UINT uMessage, WPARAM wP
 			break;
 	}
 
-	return DefWindowProc( wnd, uMessage, wParam, lParam );
+	const auto pSearch = CApplicationWindow::_HookedWindowProcessors.find( wnd );
+	
+	return pSearch == CApplicationWindow::_HookedWindowProcessors.end( )
+			? DefWindowProc( wnd, uMessage, wParam, lParam ) : CallWindowProc( reinterpret_cast< WNDPROC >( pSearch->second ), wnd, uMessage, wParam, lParam );
 }
 
 CApplicationWindow::CApplicationWindow( const std::string &strTitle, const Utilities::vector2_t &vecSize, HINSTANCE hModule, WNDPROC _WindowInputProcessor /*= DefaultWindowInputProcessor*/ ): pOldWindowInputProcessor( nullptr )
@@ -60,12 +63,17 @@ CApplicationWindow::CApplicationWindow( const HWND &hwWindow, WNDPROC _WindowInp
 	if ( _WindowInputProcessor != nullptr
 		 && nullptr == ( pOldWindowInputProcessor = WNDPROC( SetWindowLongPtr( hwHandle, GWLP_WNDPROC, LONG( _WindowInputProcessor ) ) ) ) )
 		_Log.Log( EPrefix::ERROR, ELocation::WINDOW, ENC( "Failed to set the new window input processor." ) );
+	else
+		_HookedWindowProcessors.insert( { hwWindow, pOldWindowInputProcessor } );
 }
 
 CApplicationWindow::~CApplicationWindow( )
 {
 	if ( pOldWindowInputProcessor != nullptr )
+	{
 		SetWindowLongPtr( hwHandle, GWLP_WNDPROC, LONG( pOldWindowInputProcessor ) );
+		_HookedWindowProcessors.erase( hwHandle );
+	}
 }
 
 bool CApplicationWindow::PollInput( )

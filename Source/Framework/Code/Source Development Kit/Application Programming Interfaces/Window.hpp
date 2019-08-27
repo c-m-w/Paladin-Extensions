@@ -11,9 +11,10 @@ private:
 	WNDCLASSEX _WindowInformation { };
 	HWND hwHandle;
 	void *pOldWindowInputProcessor;
+	static inline std::map< HWND, void* > _HookedWindowProcessors { };
 
 public:
-
+	
 	CApplicationWindow( const std::string &strTitle, const Utilities::vector2_t &vecSize, HINSTANCE hModule, WNDPROC _WindowInputProcessor = DefaultWindowInputProcessor );
 	CApplicationWindow( const HWND &hwWindow, WNDPROC _WindowInputProcessor = DefaultWindowInputProcessor );
 	~CApplicationWindow( );
@@ -29,4 +30,6 @@ public:
 	void Destroy( );
 	bool CursorOnWindow( );
 	void Minimize( );
+
+	friend LRESULT CALLBACK DefaultWindowInputProcessor( HWND, UINT, WPARAM, LPARAM );
 };
