@@ -10,6 +10,16 @@ inline std::vector< std::pair< void *, std::size_t > > vecEndHook[ FUNCTION_MAX 
 // nothing that inherits an interface should be a feature directly.
 // it should inherit an abstract class first
 
+// note: most important features
+//     psilent
+//     obs proof backtrack
+//     obs proof enemy + item chams
+//     bhop
+//     stamina bug
+//     edge jump
+//     auto pistol
+//     skin changer
+
 template < EFunctions enumHook, typename _tContext >
 class IFeatureBase
 {
@@ -397,8 +407,11 @@ class CStaminaBugAutomation final: public AMovementFeatureBase
 
 		if ( nullptr == pLocalPlayer || nullptr == pCommand )
 			return;
+
+		if ( bDisableWhenManuallyDucking && pCommand->buttons & IN_DUCK )
+			return;
 		
-		if ( !( ( bUseJumpButton && pCommand->buttons & IN_DUCK )
+		if ( !( ( bUseDuckButton && pCommand->buttons & IN_DUCK )
 				|| ( KeybindActiveState( _Keys ) ) ) )
 			return;
 
@@ -412,5 +425,6 @@ class CStaminaBugAutomation final: public AMovementFeatureBase
 		//Prediction::End( pLocalPlayer );
 	}
 public:
-	bool bUseJumpButton = true;
+	bool bUseDuckButton = true;
+	bool bDisableWhenManuallyDucking = true;
 };
