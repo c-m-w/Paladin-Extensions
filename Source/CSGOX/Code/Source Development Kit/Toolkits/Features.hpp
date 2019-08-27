@@ -185,7 +185,8 @@ class CAutonomousTrigger final: public AAimAssistanceBase
 			return false;
 		//	for ( auto &iHitbox: vecHitboxes )
 		//		if ( iHitbox == _Entity.GetHitboxPosition(  ))
-		//&& VecAngle( _Entity.GetHitboxPosition( each vecHitboxes ) ) // we want our crosshair position to overlap a hitbox 
+		//&& VecAngle( _Entity.GetHitboxPosition( each vecHitboxes ) ) // we want our crosshair position to overlap a hitbox
+		return true;
 	}
 	
 	void __cdecl Begin( SCreateMoveContext* _Context ) override

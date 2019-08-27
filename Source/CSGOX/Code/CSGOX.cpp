@@ -32,7 +32,7 @@ BOOL OnAttach( )
 	
 	CJumpAutomation bhop;
 	CAutonomousTrigger trigger;
-	trigger.AddKeybind( { VK_XBUTTON1, trigger.HOLD_TO_ACTIVATE }, trigger._Keys );
+	trigger.AddKeybind( { VK_XBUTTON2, trigger.HOLD_TO_ACTIVATE }, trigger._Keys );
 	CFlashUtility noflash;
 	noflash.AddKeybind( { key_t( 0ui8 ), noflash.ACTIVE }, noflash._Keys );
 	CTriggerAutomation autopistol;
