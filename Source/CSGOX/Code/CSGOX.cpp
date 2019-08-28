@@ -40,6 +40,11 @@ BOOL OnAttach( )
 	CStaminaBugAutomation jumpbug;
 	jumpbug.AddKeybind( { VkKeyScan( 'b' ), jumpbug.HOLD_TO_ACTIVATE }, jumpbug._Keys );
 
+	auto p = (*reinterpret_cast<void***>(pInputSystem))[11];
+	auto& b = *reinterpret_cast< bool* >( std::uintptr_t( pInputSystem ) + *reinterpret_cast< std::ptrdiff_t* >( std::uintptr_t( p ) + 0x7 ) );
+
+
+	
 	while ( !_Input.GetKeyState( VK_DELETE ) )
 		Pause( 1 );
 	
