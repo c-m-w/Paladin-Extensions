@@ -14,6 +14,7 @@
 #include "CVectorGraphic.hpp"
 #include "CCheckbox.hpp"
 #include "CWindowHeader.hpp"
+#include "CInputBox.hpp"
 #include "CWindow.hpp"
 
 class CGUI

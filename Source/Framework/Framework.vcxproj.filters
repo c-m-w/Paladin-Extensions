@@ -32,6 +32,7 @@
     <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\CCheckbox.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\CContainer.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\CScrollbar.cpp" />
+    <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\CInputBox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Code\Development Environment\Build Output Wrapper.hpp" />
@@ -72,6 +73,7 @@
     <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\CContainer.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\CScrollbar.hpp" />
     <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Temporary Pointer.hpp" />
+    <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\CInputBox.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Code\Source Development Kit\Application Programming Interfaces\Connectivity.inl" />

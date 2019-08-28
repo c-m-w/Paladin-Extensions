@@ -114,6 +114,7 @@
     <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\CCheckbox.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\CGroupButton.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\CImage.hpp" />
+    <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\CInputBox.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\CText.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\CVectorGraphic.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\CWindowHeader.hpp" />
@@ -147,6 +148,7 @@
     <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\CCheckbox.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\CGroupButton.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\CImage.cpp" />
+    <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\CInputBox.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\CText.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\CVectorGraphic.cpp" />
     <ClCompile Include="Code\Source Development Kit\Toolkits\GUI\CWindowHeader.cpp" />

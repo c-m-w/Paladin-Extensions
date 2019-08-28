@@ -12,6 +12,18 @@ private:
 	CVectorGraphic* pLoadingLogo = nullptr;
 	timer_t _LogoAlphaTimer = timer_t( FADE_TIME, BEHAVIOUR_REFLECT );
 	CContainer* pLoginCodeContainers[ CAuthentication::MAX_LOGIN_CODE ] { };
+	CText* pConnectionErrorNotificationTop = nullptr;
+	CText* pConnectionErrorNotificationBottom = nullptr;
+	CText* pServerErrorNotificationTop = nullptr;
+	CText* pServerErrorNotificationBottom = nullptr;
+	CText* pBannedNotificationTop = nullptr;
+	CText* pBannedNotificationBottom = nullptr;
+	CText* pInvalidKeyNotificationTop = nullptr;
+	CText* pInvalidKeyNotificationBottom = nullptr;
+	CText* pInvalidHardwareNotificationTop = nullptr;
+	CText* pInvalidHardwareNotificationBottom = nullptr;
+	CText* pLoginNotificationTop = nullptr;
+	CText* pLoginNotificationBottom = nullptr;
 	CText* pStaffLoginNotificationTop = nullptr;
 	CText* pStaffLoginNotificationBottom = nullptr;
 	CContainer** pCurrentContainer = nullptr, **pLastContainer = nullptr;
@@ -26,7 +38,6 @@ private:
 	bool Initialize( ) override;
 	void Uninitialize( ) override;
 
-	double GetLogoAlphaRatio( );
 	void ChangeCurrentContainer( CContainer*& pNew );
 	void CheckContainerAnimation( );
 
