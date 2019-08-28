@@ -159,7 +159,7 @@ protected:
 		NEAREST_BY_DISTANCE,
 		PRIORITY_MAX
 	};
-	virtual bool MeetsActivationRequirements( int iEntityID ) = 0;
+	virtual bool MeetsActivationRequirements( CBaseEntity& _Entity  ) = 0;
 	virtual int GetPriorityEntityID( decltype( PRIORITY_MAX ) enumPriorityType = FIRST_IN_LIST ) // maybe they wanna do it based on real distance and not crosshair or smth
 	{
 		return 0;
@@ -176,12 +176,12 @@ public:
 
 class CAutonomousTrigger final: public AAimAssistanceBase
 {
-	bool MeetsActivationRequirements( int iEntityID ) override
+	bool MeetsActivationRequirements( CBaseEntity& _Entity ) override
 	{
-		auto &_Entity = *reinterpret_cast< CBasePlayer* >( pEntityList->GetClientEntity( iEntityID ) );
-		if ( nullptr == &_Entity
-			|| !_Entity.IsPlayer( )
-			|| !_Entity.IsAlive( ) )
+		auto &_Player = reinterpret_cast< CBasePlayer& >( _Entity );
+		volatile auto sz = _Player.GetPlayerInformation(  ).szName;
+		if ( !_Player.IsPlayer( )
+			|| !_Player.IsAlive( ) )
 			return false;
 		//	for ( auto &iHitbox: vecHitboxes )
 		//		if ( iHitbox == _Entity.GetHitboxPosition(  ))
@@ -200,12 +200,13 @@ class CAutonomousTrigger final: public AAimAssistanceBase
 		if ( pCommand->buttons & IN_ATTACK
 			 || !KeybindActiveState( _Keys ) )
 			return;
-
-		auto &_Trace = pLocalPlayer->TraceRayFromView( );
-		if ( !_Trace.DidHit( ) )
+		
+		auto &_Trace = pLocalPlayer->TraceRayFromView( _Context->pCommand );
+		if ( !_Trace.DidHit( )
+			 || _Trace.hit_entity == nullptr )
 			return;
-
-		if ( !MeetsActivationRequirements( _Trace.hit_entity->EntIndex( ) ))
+		
+		if ( !MeetsActivationRequirements( *reinterpret_cast< CBaseEntity* >( _Trace.hit_entity ) ) )
 			return;
 
 		if ( pLocalPlayer->m_hActiveWeapon( )->CanFire( ) )
@@ -221,11 +222,11 @@ public:
 
 class CAimAssistance final: public AAimAssistanceBase
 {
-	bool MeetsActivationRequirements( int iEntityID ) override
+	bool MeetsActivationRequirements( CBaseEntity& _Entity ) override
 	{
-		auto &_Entity = *reinterpret_cast< CBasePlayer* >( pEntityList->GetClientEntity( iEntityID ) );
-		return _Entity.IsPlayer( )
-		&& _Entity.IsAlive( );
+		auto &_Player = reinterpret_cast< CBasePlayer& >( _Entity );
+		return _Player.IsPlayer( )
+		&& _Player.IsAlive( );
 		//&& VecAngle( _Entity.GetHitboxPosition( each vecHitboxes ) ) < flFOVadfsfadfasdfasdfasdf
 	}
 	void __cdecl Begin( SCreateMoveContext* _Context ) override

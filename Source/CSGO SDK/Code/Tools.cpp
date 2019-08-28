@@ -549,7 +549,8 @@ namespace Utilities
 
 	Vector CBasePlayer::GetViewPosition( )
 	{
-		return m_vecOrigin( ) + m_vecViewOffset( );
+		Vector vecReturn { };
+		return *( *reinterpret_cast< Vector*( __thiscall*** )( void*, Vector* ) >( this ) )[ GetFunctionIndex( FUNCTION_GET_VIEW_POSITION ) ]( this, &vecReturn );
 	}
 
 	player_info_t CBasePlayer::GetPlayerInformation( )
@@ -609,7 +610,7 @@ namespace Utilities
 		vecEnd += GetViewPosition( );
 		tfFilter.pSkip = this;
 		rRay.Init( GetViewPosition( ), vecEnd );
-		pEngineTrace->TraceRay( rRay, MASK_VISIBLE, &tfFilter, &gtRay );
+		pEngineTrace->TraceRay( rRay, MASK_SHOT | CONTENTS_GRATE, &tfFilter, &gtRay );
 		return gtRay;
 	}
 

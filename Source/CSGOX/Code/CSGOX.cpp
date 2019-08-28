@@ -40,10 +40,10 @@ BOOL OnAttach( )
 	CStaminaBugAutomation jumpbug;
 	jumpbug.AddKeybind( { VkKeyScan( 'b' ), jumpbug.HOLD_TO_ACTIVATE }, jumpbug._Keys );
 
-	while ( true )
+	while ( !_Input.GetKeyState( VK_DELETE ) )
 		Pause( 1 );
-
-	return TRUE;
+	
+	FreeLibraryAndExitThread( GetModuleHandle( nullptr ), TRUE );
 }
 
 void OnDetach( )
