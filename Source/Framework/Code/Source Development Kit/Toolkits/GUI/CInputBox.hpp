@@ -40,7 +40,7 @@ public:
 	static constexpr auto FONT_WEIGHT = WEIGHT_REGULAR;
 	static constexpr auto ROUNDING = 0.1;
 
-	static constexpr auto FILTERS[ 4 ]
+	static inline std::function< bool( char ) > FILTERS[ 4 ]
 	{
 		[ ]( char chCharacter ) // FILTER_LETTERS
 		{
@@ -71,4 +71,6 @@ public:
 	void NewCharacter( char chInsertion );
 	void SetMaxLength( std::size_t zNewLength );
 	void OnKeyTyped( char chCharacter ) override;
+	void OnCopy( ) override;
+	void OnPaste( ) override;
 };

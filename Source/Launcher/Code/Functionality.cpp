@@ -106,6 +106,13 @@ bool CFunctionality::Initialize( )
 	pInvalidKeyNotificationBottom->SetWeight( WEIGHT_LIGHT );
 	pInvalidKeyNotificationBottom->SetHeight( 1.0 / 6.0 );
 	pLoginCodeContainers[ ELoginCode::INVALID_KEY ]->AddObject( pInvalidKeyNotificationBottom, { pLoginCodeContainers[ ELoginCode::INVALID_KEY ]->GetSize( ).x / 2.0 - PixelsToInches( pInvalidKeyNotificationBottom->GetTextSize( ).x ) / 2.0, 1.0 + PixelsToInches( pInvalidKeyNotificationTop->GetSize( ).y ) + 0.05208333333 } );
+
+	pInvalidKeyInput = new CInputBox( );
+	pInvalidKeyInput->AddFilter( CInputBox::FILTER_LETTERS );
+	pInvalidKeyInput->AddFilter( CInputBox::FILTER_NUMERIC );
+	pInvalidKeyInput->SetMaxLength( AUTH.PURCHASE_KEY_LENGTH );
+	pInvalidKeyInput->SetSize( { 1.0, 0.26041666666 } );
+	pLoginCodeContainers[ ELoginCode::INVALID_KEY ]->AddObject( pInvalidKeyInput, { pLoginCodeContainers[ ELoginCode::INVALID_KEY ]->GetSize( ).x / 2.0 - pInvalidKeyInput->GetSize( ).x / 2.0, pInvalidKeyNotificationBottom->GetLocation( ).y + 0.05208333333 } );
 	
 	pInvalidHardwareNotificationTop = new CText( );
 	pInvalidHardwareNotificationTop->SetColor( COLOR_INDEX_PRIMARY, STATE_DORMANT, BLUE );
@@ -171,10 +178,6 @@ void CFunctionality::ChangeCurrentContainer( CContainer*& pNew )
 
 	if ( pLastContainerLocation )
 	{
-		( *pLastContainer )->RemoveAnimatedValue( pLastContainerLocation );
-		( *pCurrentContainer )->RemoveAnimatedValue( pNextContainerLocation );
-		( *pCurrentContainer )->RemoveAnimatedValue( pNextContainerAlphaFade );
-
 		delete pLastContainerLocation;
 		pLastContainerLocation = nullptr;
 		delete pNextContainerLocation;
@@ -225,7 +228,7 @@ void CFunctionality::Run( )
 {
 	Pause( 2500ull );
 
-	_LoginCode = AUTH.Login( );
+	_LoginCode = /*AUTH.Login( )*/ ELoginCode::INVALID_KEY;
 	bConnected = true;
 }
 
@@ -237,14 +240,15 @@ void CFunctionality::DrawLoop( )
 			continue;
 		
 		const auto mmtNow = GetMoment( );
-		
-		if ( bConnected 
-			 && &pWaitingContainer == pCurrentContainer 
-			 && _LogoAlphaTimer.GetRatio( ) <= 1.0 / FPS )
-			ChangeCurrentContainer( pLoginCodeContainers[ _LoginCode ] ), bLogoFaded = true, pWaitingContainer->GetAlphaRatio( ) = 0.0;
-		else if ( !bLogoFaded )
-			pWaitingContainer->GetAlphaRatio( ) = _LogoAlphaTimer.GetRatio( ), IInteractable::UpdateContainerContents( pWaitingContainer );
 
+		if ( &pWaitingContainer == pCurrentContainer )
+		{
+			if ( bConnected 
+			 && _LogoAlphaTimer.GetRatio( ) <= 1.0 / FPS )
+				ChangeCurrentContainer( pLoginCodeContainers[ _LoginCode ] ), bLogoFaded = true, pWaitingContainer->GetAlphaRatio( ) = 0.0;
+			else if ( !bLogoFaded )
+				pWaitingContainer->GetAlphaRatio( ) = _LogoAlphaTimer.GetRatio( ), IInteractable::UpdateContainerContents( pWaitingContainer );
+		}
 		CheckContainerAnimation( );
 
 		DRAW.BeginFrame( );

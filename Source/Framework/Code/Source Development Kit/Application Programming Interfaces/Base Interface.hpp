@@ -47,7 +47,7 @@ public:
 
 	/** \brief Gets information about the initialization state of the implementing class. */
 	/** \return Whether or not the implementing class is initialized. */
-	bool GetInitializationState( ) const
+	[ [ nodiscard ] ] bool GetInitializationState( ) const
 	{
 		return bInitialized;
 	}

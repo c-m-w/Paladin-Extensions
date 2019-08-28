@@ -251,4 +251,6 @@ public:
 	virtual void OnKeyTyped( char chCharacter );
 	virtual bool OnScroll( int iScrollAmount );
 	virtual void OnMouseMove( const Utilities::vector2_t& vecMouseLocation );
+	virtual void OnCopy( );
+	virtual void OnPaste( );
 };

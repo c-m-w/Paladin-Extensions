@@ -7,7 +7,15 @@
 #include "../../../Framework.hpp"
 
 void CInputBox::CreateDrawables( )
-{}
+{
+	const auto recLocation = GetAbsoluteLocation( );
+	const auto pFill = vecDrawables.emplace_back( new CDrawable( ) );
+	const auto pOutline = vecDrawables.emplace_back( new CDrawable( ) );
+
+	pFill->RoundedRectangle( recLocation, GetCurrentColor( COLOR_INDEX_SECONDARY ), ROUNDING );
+	pOutline->SetDrawingType( D3D11_PRIMITIVE_TOPOLOGY_LINELIST );
+	pOutline->RoundedRectangle( recLocation, GetCurrentColor( COLOR_INDEX_TERTIARY ), ROUNDING );
+}
 
 CInputBox::CInputBox( ) :
 	IWidget( WIDGET_BUTTON, CURSOR_IBEAM )
@@ -20,7 +28,10 @@ CInputBox::CInputBox( ) :
 	SetColor( COLOR_INDEX_SECONDARY, STATE_ACTIVATED, BACKGROUND_DEFAULT );
 	SetColor( COLOR_INDEX_SECONDARY, STATE_HOVERING, BACKGROUND_DEFAULT );
 	SetColor( COLOR_INDEX_SECONDARY, STATE_CLICKING, BACKGROUND_DEFAULT );
-	SetColor( COLOR_INDEX_TERTIARY, STATE_DORMANT, BLUE );
+	SetColor( COLOR_INDEX_TERTIARY, STATE_DORMANT, OUTLINE_DARK );
+	SetColor( COLOR_INDEX_TERTIARY, STATE_ACTIVATED, OUTLINE_LIGHT );
+	SetColor( COLOR_INDEX_TERTIARY, STATE_HOVERING, OUTLINE_LIGHT );
+	SetColor( COLOR_INDEX_TERTIARY, STATE_CLICKING, OUTLINE_LIGHT );
 }
 
 void CInputBox::AddFilter( EFilter _NewFilter )
@@ -56,4 +67,13 @@ void CInputBox::OnKeyTyped( char chCharacter )
 		 || _CurrentFilter & FILTER_SPECIAL_CHARACTERS && FILTERS[ int( log( double( FILTER_SPECIAL_CHARACTERS ) ) / log( 2.0 ) ) ]( chCharacter )
 		 || _CurrentFilter & FILTER_SPECIAL_CHARACTERS && FILTERS[ int( log( double( FILTER_SPACE ) ) / log( 2.0 ) ) ]( chCharacter ) )
 		NewCharacter( chCharacter );
+}
+
+void CInputBox::OnCopy( )
+{
+}
+
+void CInputBox::OnPaste( )
+{
+	
 }

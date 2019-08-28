@@ -17,9 +17,8 @@ void CButton::CreateDrawables( )
 	const auto pFill = vecDrawables.emplace_back( new CDrawable( ) );
 	const auto pText = vecDrawables.emplace_back( new CDrawable( ) );
 	const auto vecLocation = recLocation.FindSpace( _TextBitmap.vecSize, ALIGNMENT_CENTER, ALIGNMENT_CENTER );
-	bool bRounding[ ] { true, true, true, true };
 
-	pFill->RoundedRectangle( recLocation, bRounding, GetCurrentColor( COLOR_INDEX_SECONDARY ), ROUNDING );
+	pFill->RoundedRectangle( recLocation, GetCurrentColor( COLOR_INDEX_SECONDARY ), ROUNDING );
 	pText->Rectangle( { vecLocation, _TextBitmap.vecSize }, 0xFFFFFFFF );
 	pText->SetTexture( _TextBitmap, GetCurrentColor( COLOR_INDEX_PRIMARY ) );
 }

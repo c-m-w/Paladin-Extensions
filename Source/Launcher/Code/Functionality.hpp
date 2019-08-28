@@ -20,6 +20,7 @@ private:
 	CText* pBannedNotificationBottom = nullptr;
 	CText* pInvalidKeyNotificationTop = nullptr;
 	CText* pInvalidKeyNotificationBottom = nullptr;
+	CInputBox* pInvalidKeyInput = nullptr;
 	CText* pInvalidHardwareNotificationTop = nullptr;
 	CText* pInvalidHardwareNotificationBottom = nullptr;
 	CText* pLoginNotificationTop = nullptr;

@@ -52,10 +52,22 @@ void padding_t::PutVerticalPadding( double dbVertical )
 void IInteractable::UpdateAnimatedValues( )
 {
 	for ( auto& pAnimatedVector : vecAnimatedVectors )
+	{
 		bCreateDrawables |= pAnimatedVector->Update( );
 
+		if ( pAnimatedVector->_Timer.Finished( ) 
+			 && pAnimatedVector->_Timer._EndBehaviour == BEHAVIOUR_CLAMP )
+			RemoveAnimatedValue( pAnimatedVector );
+	}
+
 	for ( auto& pAnimatedDouble : vecAnimatedDoubles )
+	{
 		bCreateDrawables |= pAnimatedDouble->Update( );
+		
+		if ( pAnimatedDouble->_Timer.Finished( ) 
+			 && pAnimatedDouble->_Timer._EndBehaviour == BEHAVIOUR_CLAMP )
+			RemoveAnimatedValue( pAnimatedDouble );
+	}
 }
 
 double IInteractable::CalculateAlphaRatio( )
@@ -440,4 +452,10 @@ bool IInteractable::OnScroll( int iScrollAmount )
 }
 
 void IInteractable::OnMouseMove( const vector2_t &vecMouseLocation )
+{ }
+
+void IInteractable::OnCopy( )
+{ }
+
+void IInteractable::OnPaste( )
 { }
