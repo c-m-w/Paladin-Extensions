@@ -12,8 +12,9 @@ void CVectorGraphic::CreateDrawables( )
 	const auto recLocation = GetAbsoluteLocation( );
 
 	pDrawable->Rectangle( recLocation, GetCurrentColor( COLOR_INDEX_PRIMARY ) );
-	if ( !bImageData )
-		pDrawable->SetTexture( strResourceName, recLocation.vecSize, &bImageData );
+	if ( !bImageData
+		 || recLocation.vecSize != vecStoredImageSize )
+		pDrawable->SetTexture( strResourceName, recLocation.vecSize, &bImageData ), vecStoredImageSize = recLocation.vecSize;
 	else
 		pDrawable->SetTexture( bImageData, recLocation.vecSize );
 }

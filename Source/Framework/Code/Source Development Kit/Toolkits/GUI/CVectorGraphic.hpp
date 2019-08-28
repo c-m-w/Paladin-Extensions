@@ -10,6 +10,7 @@ private:
 
 	std::string strResourceName = ENC( "PX Logo.svg" );
 	unsigned char* bImageData = nullptr;
+	Utilities::vector2_t vecStoredImageSize { };
 
 public:
 

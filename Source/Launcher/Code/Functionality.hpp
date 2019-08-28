@@ -11,8 +11,6 @@ private:
 	CContainer* pWaitingContainer = nullptr;
 	CVectorGraphic* pLoadingLogo = nullptr;
 	timer_t _LogoAlphaTimer = timer_t( FADE_TIME, BEHAVIOUR_REFLECT );
-	timer_t _LogoAlphaTimerEnd = timer_t( FADE_TIME, BEHAVIOUR_CLAMP );
-	timer_t* pCurrentTimer = &_LogoAlphaTimer;
 	CContainer* pLoginCodeContainers[ CAuthentication::MAX_LOGIN_CODE ] { };
 	CText* pStaffLoginNotificationTop = nullptr;
 	CText* pStaffLoginNotificationBottom = nullptr;
@@ -23,6 +21,7 @@ private:
 	moment_t mmtContainerChangeTime = 0ull;
 	bool bConnected = false;
 	bool bExit = false;
+	bool bLogoFaded = false;
 
 	bool Initialize( ) override;
 	void Uninitialize( ) override;

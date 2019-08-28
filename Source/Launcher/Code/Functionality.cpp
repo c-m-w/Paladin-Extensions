@@ -68,14 +68,6 @@ void CFunctionality::Uninitialize( )
 	delete pApplicationWindow;
 }
 
-double CFunctionality::GetLogoAlphaRatio( )
-{
-	if ( pCurrentTimer == &_LogoAlphaTimer )
-		return pCurrentTimer->GetRatio( );
-
-	return 1.0 - pCurrentTimer->GetRatio( );
-}
-
 void CFunctionality::ChangeCurrentContainer( CContainer*& pNew )
 {
 	if ( mmtContainerChangeTime != 0ull ) // not done animating out
@@ -145,32 +137,17 @@ void CFunctionality::DrawLoop( )
 {
 	while ( !bExit )
 	{
-		const auto mmtNow = GetMoment( );
-
 		if ( pApplicationWindow->PollInput( ) )
 			continue;
-
+		
+		const auto mmtNow = GetMoment( );
+		
 		if ( bConnected 
 			 && &pWaitingContainer == pCurrentContainer 
-			 && pCurrentTimer == &_LogoAlphaTimerEnd 
-			 && pCurrentTimer->GetRatio( ) == 1.0 )
-			ChangeCurrentContainer( pLoginCodeContainers[ _LoginCode ] );
-		else
-		{
-			if ( bConnected
-				 && pCurrentTimer != &_LogoAlphaTimerEnd )
-			{
-				_LogoAlphaTimer.SetEndBehaviour( BEHAVIOUR_CLAMP );
-
-				if ( _LogoAlphaTimer.GetRatio( ) == 1.0 )
-				{
-					pCurrentTimer = &_LogoAlphaTimerEnd;
-					pCurrentTimer->Start( );
-				}
-			}
-
-			pWaitingContainer->GetAlphaRatio( ) = GetLogoAlphaRatio( ), IInteractable::UpdateContainerContents( pWaitingContainer );
-		}
+			 && _LogoAlphaTimer.GetRatio( ) <= 1.0 / FPS )
+			ChangeCurrentContainer( pLoginCodeContainers[ _LoginCode ] ), bLogoFaded = true, pWaitingContainer->GetAlphaRatio( ) = 0.0;
+		else if ( !bLogoFaded )
+			pWaitingContainer->GetAlphaRatio( ) = _LogoAlphaTimer.GetRatio( ), IInteractable::UpdateContainerContents( pWaitingContainer );
 
 		CheckContainerAnimation( );
 

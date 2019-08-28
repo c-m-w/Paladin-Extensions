@@ -10,27 +10,15 @@ void CallRun( );
 void CallDrawLoop( );
 
 void OnLaunch( )
-{	
-	if ( !SetupFramework( ) )
-		return;
-	
-	if ( !_MemoryManager.SetProcess( "csgo.exe", PROCESS_ALL_ACCESS ) )
-		MessageBox( 0, "mm.sp", 0, 0 );
-	else if ( !_MemoryManager.LoadLibraryEx( R"(C:\Users\Cole\Documents\GitHub\Paladin-Extensions\Source\Debug\CSGOX.dll)", false ) )
-		MessageBox( 0, "mm.lle", 0, 0 );
-}
-
-void OnLaunchOriginal( )
 {
 	if ( !SetupFramework( )
 		 || !_Functionality.Setup( ) )
 		return;
 
-	std::thread tDraw( CallDrawLoop );
-	tDraw.detach( );
-
 	std::thread tRun( CallRun );
 	tRun.detach( );
+
+	_Functionality.DrawLoop( );
 
 	while ( 1 )
 		Pause( 1 );
