@@ -14,10 +14,10 @@ inline std::vector< std::pair< void *, std::size_t > > vecEndHook[ FUNCTION_MAX 
 //     psilent
 //     obs proof backtrack
 //     obs proof enemy + item chams
-//     bhop
+//     - bhop
 //     stamina bug
 //     edge jump
-//     auto pistol
+//     X auto pistol
 //     skin changer
 
 template < EFunctions enumHook, typename _tContext >
@@ -201,7 +201,7 @@ class CAutonomousTrigger final: public AAimAssistanceBase
 			 || !KeybindActiveState( _Keys ) )
 			return;
 		
-		auto &_Trace = pLocalPlayer->TraceRayFromView( _Context->pCommand );
+		auto &_Trace = pLocalPlayer->TraceRayFromView( _Context->pCommand ); // todo, add reocil to current view angle
 		if ( !_Trace.DidHit( )
 			 || _Trace.hit_entity == nullptr )
 			return;
@@ -336,6 +336,7 @@ public:
 	bool bUseJumpButton = true;
 	unsigned __int8 u8JumpChance = 100ui8;
 	unsigned __int8 u8MaximumExtraJumps = 7ui8;
+	float flExtraJumpWindow = 0.25f;
 	bool bJumpBeforeHopping = true;
 	bool bJumpAfterHopping = true;
 private:
@@ -358,20 +359,22 @@ private:
 		}
 
 		if ( pLocalPlayer->m_fFlags( ) & FL_ONGROUND )
-		{
-			if ( pGlobalVariables->m_iTickCount % 100 < u8JumpChance )
-				pCommand->buttons |= IN_JUMP;
-			return;
-		}
-		
+			return ( void )( pCommand->buttons = 
+				( pGlobalVariables->m_iTickCount % 100 < u8JumpChance ) 
+					? ( pCommand->buttons | IN_JUMP ) 
+					: ( pCommand->buttons & ~IN_JUMP ) );
+
 		static auto u8ExtraJumps = 0ui8;
 		const auto& zvel = pLocalPlayer->m_vecVelocity( ).z;
+		
+		// it would be better to see if the ground is getting closer with a trace ray rather than checking zvelocity
+		// this way we can still do a bhop before jumping if the user is bhopping up hill
 		if ( ( ( zvel < 0.f && bJumpBeforeHopping ) && u8ExtraJumps < u8MaximumExtraJumps / 2 ) // we want to split the number of extra jumps to before and after the jump for extra legit
 			 || ( ( zvel > 0.f && bJumpAfterHopping ) && u8ExtraJumps <= u8MaximumExtraJumps ) )
 		{
 			Ray_t rRay;
 			const auto vecOrigin = pLocalPlayer->m_vecOrigin( );
-			rRay.Init( vecOrigin, vecOrigin + Vector( 0, 0, -( abs( zvel ) * pGlobalVariables->m_flIntervalPerTick * 16 ) ) ); // 16 indicates number of ticks to check for scroll before landing
+			rRay.Init( vecOrigin, vecOrigin + Vector( 0, 0, -( abs( zvel ) * ( ( 1.f / flExtraJumpWindow ) / pGlobalVariables->m_flIntervalPerTick ) ) ) );
 
 			CTraceFilter tfFilter;
 			tfFilter.pSkip = pLocalPlayer;
@@ -382,12 +385,11 @@ private:
 			if ( zvel > 0.f && !( gtRay.fraction < 1.f ) )
 				return ( void )( u8ExtraJumps = 0ui8, pCommand->buttons &= ~IN_JUMP );
 
-			if ( gtRay.fraction > ( 2.f / 16.f ) )
-				return ( void )( u8ExtraJumps++, pCommand->buttons |= IN_JUMP );
+			if ( gtRay.fraction < 1.f && gtRay.fraction > pGlobalVariables->m_flIntervalPerTick )
+				return ( void )( u8ExtraJumps++, _Log.Log( EPrefix::INFO, ELocation::APPLICATION, "Extra Jump" ), pCommand->buttons |= IN_JUMP );
 		}
 		else if ( zvel >= 0.f && !bJumpAfterHopping )
 			u8ExtraJumps = 0ui8;
-
 		pCommand->buttons &= ~IN_JUMP;
 	}
 	void __cdecl End( SCreateMoveContext* _Context ) override
