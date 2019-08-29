@@ -18,7 +18,7 @@ void CText::CreateDrawables( )
 
 void CText::SetDefaultSize( )
 {
-	SetSize( GetTextSize( ) );
+	SetSize( PixelsToInches( GetTextSize( ) ) );
 }
 
 void CText::InitializeText( )

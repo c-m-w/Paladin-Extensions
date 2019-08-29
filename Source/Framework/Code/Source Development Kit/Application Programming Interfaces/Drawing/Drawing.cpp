@@ -388,7 +388,7 @@ void CDrawable::SetTexture( const std::string &strSVGResourceName, vector2_t vec
 			vecSize.y = double( pImage->height ) * ( vecScale.y = vecScale.x );
 	}
 
-	const auto zImageData = unsigned( std::round( vecSize.x * vecSize.y ) ) * sizeof( DWORD );
+	const auto zImageData = unsigned( std::round( vecSize.x * ( vecSize.y + 1.0 ) ) ) * sizeof( DWORD );
 	const auto bImageData = new unsigned char[ zImageData ];
 
 	memset( bImageData, 0, zImageData );

@@ -36,9 +36,10 @@ private:
 public:
 	
 	static constexpr auto TEXT_HEIGHT = 0.125;
+	static constexpr auto PADDING = 0.03125;
 	static constexpr auto FONT = FONT_ROBOTO_MONO;
 	static constexpr auto FONT_WEIGHT = WEIGHT_REGULAR;
-	static constexpr auto ROUNDING = 0.1;
+	static constexpr auto ROUNDING = 0.25;
 
 	static inline std::function< bool( char ) > FILTERS[ 4 ]
 	{
