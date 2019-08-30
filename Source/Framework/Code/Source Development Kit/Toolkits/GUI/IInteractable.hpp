@@ -62,6 +62,7 @@ struct animated_value_t
 
 	_t* pValue = nullptr;
 	bool bCombineStates = false;
+	bool bIgnoreStateChanges = false;
 	Utilities::timer_t _Timer = Utilities::timer_t( DEFAULT_ANIMATION_TIME );
 	Utilities::EEaseType _EaseType = Utilities::EASE_SINE2;
 	std::map< EState, _t > _Values { { STATE_DORMANT, { } } };
@@ -77,6 +78,11 @@ struct animated_value_t
 		bCombineStates = bNewCombineStates;
 	}
 
+	void IgnoreStateChanges( bool bNewIgnoreStateChanges )
+	{
+		bIgnoreStateChanges = bNewIgnoreStateChanges;
+	}
+	
 	void SetAnimationTime( Utilities::moment_t mmtNewAnimationTime )
 	{
 		_Timer.SetLength( mmtNewAnimationTime );
@@ -116,6 +122,9 @@ struct animated_value_t
 
 	void OnStateChange( EState _State )
 	{
+		if ( bIgnoreStateChanges )
+			return;
+		
 		_t _StateValue = GetStateValue( _State );
 
 		if ( _Timer.Running( ) )

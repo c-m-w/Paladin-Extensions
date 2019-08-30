@@ -57,7 +57,7 @@ bool CFunctionality::Initialize( )
 	pConnectionErrorNotificationBottom->SetFont( FONT_ROBOTO );
 	pConnectionErrorNotificationBottom->SetWeight( WEIGHT_LIGHT );
 	pConnectionErrorNotificationBottom->SetHeight( 1.0 / 6.0 );
-	pLoginCodeContainers[ ELoginCode::CONNECTION_ERROR ]->AddObject( pConnectionErrorNotificationBottom, { pLoginCodeContainers[ ELoginCode::CONNECTION_ERROR ]->GetSize( ).x / 2.0 - PixelsToInches( pConnectionErrorNotificationBottom->GetTextSize( ).x ) / 2.0, 1.0 + PixelsToInches( pConnectionErrorNotificationTop->GetSize( ).y ) + 0.05208333333 } );
+	pLoginCodeContainers[ ELoginCode::CONNECTION_ERROR ]->AddObject( pConnectionErrorNotificationBottom, { pLoginCodeContainers[ ELoginCode::CONNECTION_ERROR ]->GetSize( ).x / 2.0 - PixelsToInches( pConnectionErrorNotificationBottom->GetTextSize( ).x ) / 2.0, 1.0 + pConnectionErrorNotificationTop->GetSize( ).y + 0.05208333333 } );
 	
 	pServerErrorNotificationTop = new CText( );
 	pServerErrorNotificationTop->SetColor( COLOR_INDEX_PRIMARY, STATE_DORMANT, BLUE );
@@ -73,7 +73,7 @@ bool CFunctionality::Initialize( )
 	pServerErrorNotificationBottom->SetFont( FONT_ROBOTO );
 	pServerErrorNotificationBottom->SetWeight( WEIGHT_LIGHT );
 	pServerErrorNotificationBottom->SetHeight( 1.0 / 6.0 );
-	pLoginCodeContainers[ ELoginCode::SERVER_ERROR ]->AddObject( pServerErrorNotificationBottom, { pLoginCodeContainers[ ELoginCode::SERVER_ERROR ]->GetSize( ).x / 2.0 - PixelsToInches( pServerErrorNotificationBottom->GetTextSize( ).x ) / 2.0, 1.0 + PixelsToInches( pServerErrorNotificationTop->GetSize( ).y ) + 0.05208333333 } );
+	pLoginCodeContainers[ ELoginCode::SERVER_ERROR ]->AddObject( pServerErrorNotificationBottom, { pLoginCodeContainers[ ELoginCode::SERVER_ERROR ]->GetSize( ).x / 2.0 - PixelsToInches( pServerErrorNotificationBottom->GetTextSize( ).x ) / 2.0, 1.0 + pServerErrorNotificationTop->GetSize( ).y + 0.05208333333 } );
 	
 	pBannedNotificationTop = new CText( );
 	pBannedNotificationTop->SetColor( COLOR_INDEX_PRIMARY, STATE_DORMANT, BLUE );
@@ -89,11 +89,11 @@ bool CFunctionality::Initialize( )
 	pBannedNotificationBottom->SetFont( FONT_ROBOTO );
 	pBannedNotificationBottom->SetWeight( WEIGHT_LIGHT );
 	pBannedNotificationBottom->SetHeight( 1.0 / 6.0 );
-	pLoginCodeContainers[ ELoginCode::BANNED ]->AddObject( pBannedNotificationBottom, { pLoginCodeContainers[ ELoginCode::BANNED ]->GetSize( ).x / 2.0 - PixelsToInches( pBannedNotificationBottom->GetTextSize( ).x ) / 2.0, 1.0 + PixelsToInches( pBannedNotificationTop->GetSize( ).y ) + 0.05208333333 } );
+	pLoginCodeContainers[ ELoginCode::BANNED ]->AddObject( pBannedNotificationBottom, { pLoginCodeContainers[ ELoginCode::BANNED ]->GetSize( ).x / 2.0 - PixelsToInches( pBannedNotificationBottom->GetTextSize( ).x ) / 2.0, 1.0 + pBannedNotificationTop->GetSize( ).y + 0.05208333333 } );
 	
 	pInvalidKeyNotificationTop = new CText( );
 	pInvalidKeyNotificationTop->SetColor( COLOR_INDEX_PRIMARY, STATE_DORMANT, BLUE );
-	pInvalidKeyNotificationTop->SetText( ENC( "Your recorded purchase key seems to be invalid." ) );
+	pInvalidKeyNotificationTop->SetText( ENC( "Your license appears to be invalid." ) );
 	pInvalidKeyNotificationTop->SetFont( FONT_ROBOTO );
 	pInvalidKeyNotificationTop->SetWeight( WEIGHT_MEDIUM );
 	pInvalidKeyNotificationTop->SetHeight( 1.0 / 6.0 );
@@ -101,18 +101,18 @@ bool CFunctionality::Initialize( )
 
 	pInvalidKeyNotificationBottom = new CText( );
 	pInvalidKeyNotificationBottom->SetColor( COLOR_INDEX_PRIMARY, STATE_DORMANT, BLUE );
-	pInvalidKeyNotificationBottom->SetText( ENC( "Please enter a purchase key below (which one does not matter)." ) );
+	pInvalidKeyNotificationBottom->SetText( ENC( "Please enter a purchase key below." ) );
 	pInvalidKeyNotificationBottom->SetFont( FONT_ROBOTO );
 	pInvalidKeyNotificationBottom->SetWeight( WEIGHT_LIGHT );
 	pInvalidKeyNotificationBottom->SetHeight( 1.0 / 6.0 );
-	pLoginCodeContainers[ ELoginCode::INVALID_KEY ]->AddObject( pInvalidKeyNotificationBottom, { pLoginCodeContainers[ ELoginCode::INVALID_KEY ]->GetSize( ).x / 2.0 - PixelsToInches( pInvalidKeyNotificationBottom->GetTextSize( ).x ) / 2.0, 1.0 + PixelsToInches( pInvalidKeyNotificationTop->GetSize( ).y ) + 0.05208333333 } );
+	pLoginCodeContainers[ ELoginCode::INVALID_KEY ]->AddObject( pInvalidKeyNotificationBottom, { pLoginCodeContainers[ ELoginCode::INVALID_KEY ]->GetSize( ).x / 2.0 - PixelsToInches( pInvalidKeyNotificationBottom->GetTextSize( ).x ) / 2.0, 1.0 + pInvalidKeyNotificationTop->GetSize( ).y + 0.05208333333 } );
 
 	pInvalidKeyInput = new CInputBox( );
 	pInvalidKeyInput->AddFilter( CInputBox::FILTER_LETTERS );
 	pInvalidKeyInput->AddFilter( CInputBox::FILTER_NUMERIC );
 	pInvalidKeyInput->SetMaxLength( AUTH.PURCHASE_KEY_LENGTH );
-	pInvalidKeyInput->SetSize( { 1.0, 0.26041666666 } );
-	pLoginCodeContainers[ ELoginCode::INVALID_KEY ]->AddObject( pInvalidKeyInput, { pLoginCodeContainers[ ELoginCode::INVALID_KEY ]->GetSize( ).x / 2.0 - pInvalidKeyInput->GetSize( ).x / 2.0, pInvalidKeyNotificationBottom->GetLocation( ).y + 0.05208333333 } );
+	pInvalidKeyInput->SetSize( { 2.0, 0.26041666666 } );
+	pLoginCodeContainers[ ELoginCode::INVALID_KEY ]->AddObject( pInvalidKeyInput, { pLoginCodeContainers[ ELoginCode::INVALID_KEY ]->GetSize( ).x / 2.0 - pInvalidKeyInput->GetSize( ).x / 2.0, pInvalidKeyNotificationBottom->GetLocation( ).y + pInvalidKeyNotificationBottom->GetSize( ).y + 0.05208333333 } );
 	
 	pInvalidHardwareNotificationTop = new CText( );
 	pInvalidHardwareNotificationTop->SetColor( COLOR_INDEX_PRIMARY, STATE_DORMANT, BLUE );
@@ -128,7 +128,7 @@ bool CFunctionality::Initialize( )
 	pInvalidHardwareNotificationBottom->SetFont( FONT_ROBOTO );
 	pInvalidHardwareNotificationBottom->SetWeight( WEIGHT_LIGHT );
 	pInvalidHardwareNotificationBottom->SetHeight( 1.0 / 6.0 );
-	pLoginCodeContainers[ ELoginCode::INVALID_HARDWARE ]->AddObject( pInvalidHardwareNotificationBottom, { pLoginCodeContainers[ ELoginCode::INVALID_HARDWARE ]->GetSize( ).x / 2.0 - PixelsToInches( pInvalidHardwareNotificationBottom->GetTextSize( ).x ) / 2.0, 1.0 + PixelsToInches( pInvalidHardwareNotificationTop->GetSize( ).y ) + 0.05208333333 } );
+	pLoginCodeContainers[ ELoginCode::INVALID_HARDWARE ]->AddObject( pInvalidHardwareNotificationBottom, { pLoginCodeContainers[ ELoginCode::INVALID_HARDWARE ]->GetSize( ).x / 2.0 - PixelsToInches( pInvalidHardwareNotificationBottom->GetTextSize( ).x ) / 2.0, 1.0 + pInvalidHardwareNotificationTop->GetSize( ).y + 0.05208333333 } );
 	
 	pLoginNotificationTop = new CText( );
 	pLoginNotificationTop->SetColor( COLOR_INDEX_PRIMARY, STATE_DORMANT, BLUE );
@@ -144,7 +144,7 @@ bool CFunctionality::Initialize( )
 	pLoginNotificationBottom->SetFont( FONT_ROBOTO );
 	pLoginNotificationBottom->SetWeight( WEIGHT_LIGHT );
 	pLoginNotificationBottom->SetHeight( 1.0 / 6.0 );
-	pLoginCodeContainers[ ELoginCode::SUCCESS ]->AddObject( pLoginNotificationBottom, { pLoginCodeContainers[ ELoginCode::SUCCESS ]->GetSize( ).x / 2.0 - PixelsToInches( pLoginNotificationBottom->GetTextSize( ).x ) / 2.0, 1.0 + PixelsToInches( pLoginNotificationTop->GetSize( ).y ) + 0.05208333333 } );
+	pLoginCodeContainers[ ELoginCode::SUCCESS ]->AddObject( pLoginNotificationBottom, { pLoginCodeContainers[ ELoginCode::SUCCESS ]->GetSize( ).x / 2.0 - PixelsToInches( pLoginNotificationBottom->GetTextSize( ).x ) / 2.0, 1.0 + pLoginNotificationTop->GetSize( ).y + 0.05208333333 } );
 
 	pStaffLoginNotificationTop = new CText( );
 	pStaffLoginNotificationTop->SetColor( COLOR_INDEX_PRIMARY, STATE_DORMANT, BLUE );
@@ -160,7 +160,7 @@ bool CFunctionality::Initialize( )
 	pStaffLoginNotificationBottom->SetFont( FONT_ROBOTO );
 	pStaffLoginNotificationBottom->SetWeight( WEIGHT_LIGHT );
 	pStaffLoginNotificationBottom->SetHeight( 1.0 / 6.0 );
-	pLoginCodeContainers[ ELoginCode::STAFF_SUCCESS ]->AddObject( pStaffLoginNotificationBottom, { pLoginCodeContainers[ ELoginCode::STAFF_SUCCESS ]->GetSize( ).x / 2.0 - PixelsToInches( pStaffLoginNotificationBottom->GetTextSize( ).x ) / 2.0, 1.0 + PixelsToInches( pStaffLoginNotificationTop->GetSize( ).y ) + 0.05208333333 } );
+	pLoginCodeContainers[ ELoginCode::STAFF_SUCCESS ]->AddObject( pStaffLoginNotificationBottom, { pLoginCodeContainers[ ELoginCode::STAFF_SUCCESS ]->GetSize( ).x / 2.0 - PixelsToInches( pStaffLoginNotificationBottom->GetTextSize( ).x ) / 2.0, 1.0 + pStaffLoginNotificationTop->GetSize( ).y + 0.05208333333 } );
 
 	return true;
 }
@@ -194,18 +194,21 @@ void CFunctionality::ChangeCurrentContainer( CContainer*& pNew )
 	if ( pLastContainer )
 	{
 		pLastContainerLocation = new animated_value_t< vector2_t >( &( *pLastContainer )->GetRelativeLocation( ) );
+		pLastContainerLocation->IgnoreStateChanges( true );
 		pLastContainerLocation->SetAnimationTime( ANIMATION_TIME );
 		pLastContainerLocation->SetEaseType( ANIMATION_EASE_OUT );
 		pLastContainerLocation->AnimateValue( { -LAUNCHER_WIDTH, 0.0 }, { } );
 		( *pLastContainer )->AddAnimatedValue( pLastContainerLocation );
 
 		pNextContainerLocation = new animated_value_t< vector2_t >( &( *pCurrentContainer )->GetRelativeLocation( ) );
+		pNextContainerLocation->IgnoreStateChanges( true );
 		pNextContainerLocation->SetAnimationTime( ANIMATION_TIME );
 		pNextContainerLocation->SetEaseType( ANIMATION_EASE_IN );
 		pNextContainerLocation->AnimateValue( { }, { LAUNCHER_WIDTH, 0.0 } );
 		( *pCurrentContainer )->AddAnimatedValue( pNextContainerLocation );
 
 		pNextContainerAlphaFade = new animated_value_t< double >( &( *pCurrentContainer )->GetAlphaRatio( ) );
+		pNextContainerAlphaFade->IgnoreStateChanges( true );
 		pNextContainerAlphaFade->SetAnimationTime( ANIMATION_TIME );
 		pNextContainerAlphaFade->SetEaseType( ANIMATION_EASE_IN );
 		pNextContainerAlphaFade->AnimateValue( 1.0, 0.0 );
@@ -249,8 +252,9 @@ void CFunctionality::DrawLoop( )
 			else if ( !bLogoFaded )
 				pWaitingContainer->GetAlphaRatio( ) = _LogoAlphaTimer.GetRatio( ), IInteractable::UpdateContainerContents( pWaitingContainer );
 		}
+		
 		CheckContainerAnimation( );
-
+		
 		DRAW.BeginFrame( );
 		_GUI.Draw( );
 		DRAW.EndFrame( );
