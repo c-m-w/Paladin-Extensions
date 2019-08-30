@@ -11,7 +11,7 @@ inline std::vector< std::pair< void *, std::size_t > > vecEndHook[ FUNCTION_MAX 
 // it should inherit an abstract class first
 
 // note: most important features
-//     psilent
+//     - psilent
 //     obs proof backtrack
 //     obs proof enemy + item chams
 //     - bhop
@@ -159,10 +159,50 @@ protected:
 		NEAREST_BY_DISTANCE,
 		PRIORITY_MAX
 	};
-	virtual bool MeetsActivationRequirements( CBaseEntity& _Entity  ) = 0;
+	virtual bool MeetsActivationRequirements( CBaseEntity& _Entity ) = 0;
 	virtual int GetPriorityEntityID( decltype( PRIORITY_MAX ) enumPriorityType = FIRST_IN_LIST ) // maybe they wanna do it based on real distance and not crosshair or smth
 	{
-		return 0;
+		std::vector< int > vecPossibleEntities;
+		for ( int i = 0; i < pGlobalVariables->m_iMaxClients; i++ )
+			if ( MeetsActivationRequirements( *reinterpret_cast< CBasePlayer * >( pEntityList->GetClientEntity( i ) ) ) )
+				vecPossibleEntities.emplace_back( i );
+
+		if ( vecPossibleEntities.size( ) == 0 )
+			return 0;
+		
+		switch( enumPriorityType )
+		{
+			case FIRST_IN_LIST:
+				return vecPossibleEntities[ 0 ];
+			case NEAREST_TO_CROSSHAIR:
+			{
+				auto pLocalPlayer = GetLocalPlayer( );
+				if ( nullptr == pLocalPlayer )
+					return vecPossibleEntities[ 0 ];
+				auto& _LocalPlayer = *pLocalPlayer;
+				
+				auto flNearest = FLT_MAX;
+				// todo need VectorAngle
+				throw 1;
+			}
+			case NEAREST_BY_DISTANCE:
+			{
+				auto pLocalPlayer = GetLocalPlayer( );
+				if ( nullptr == pLocalPlayer )
+					return vecPossibleEntities[ 0 ];
+				auto& _LocalPlayer = *pLocalPlayer;
+				
+				std::pair< int, float > flNearest { 0, FLT_MAX };
+				for ( auto& i : vecPossibleEntities )
+				{
+					auto& _Entity = *reinterpret_cast< CBasePlayer * >( pEntityList->GetClientEntity( i ) );
+					auto flDelta = _LocalPlayer.m_vecOrigin( ).DistTo( _Entity.m_vecOrigin( ) );
+					if ( flNearest.second > flDelta )
+						flNearest = { i, flDelta };
+				}
+				return flNearest.first;
+			}
+		}
 	}
 	virtual void CompensateRecoil( )
 	{
@@ -174,7 +214,7 @@ public:
 	std::vector< int > vecHitboxes; // allowed hitboxes, in order of targeting preference if all in activation
 };
 
-class CAutonomousTrigger final: public AAimAssistanceBase
+class CAutonomousTrigger final: public AAimAssistanceBase // todo: autonomous trigger should really be merged with Aimbot and just have an auto-shoot option
 {
 	bool MeetsActivationRequirements( CBaseEntity& _Entity ) override
 	{
@@ -222,12 +262,18 @@ public:
 
 class CAimAssistance final: public AAimAssistanceBase
 {
+	int iTargetHitbox = 0;
 	bool MeetsActivationRequirements( CBaseEntity& _Entity ) override
 	{
 		auto &_Player = reinterpret_cast< CBasePlayer& >( _Entity );
-		return _Player.IsPlayer( )
-		&& _Player.IsAlive( );
-		//&& VecAngle( _Entity.GetHitboxPosition( each vecHitboxes ) ) < flFOVadfsfadfasdfasdfasdf
+		volatile auto sz = _Player.GetPlayerInformation(  ).szName;
+		if ( !_Player.IsPlayer( )
+			|| !_Player.IsAlive( ) )
+			return false;
+		//	for ( auto &iHitbox: vecHitboxes )
+		//		if ( iHitbox == _Entity.GetHitboxPosition(  ))
+		//&& VecAngle( _Entity.GetHitboxPosition( each vecHitboxes ) ) // we want our crosshair position to overlap a hitbox
+		return true;
 	}
 	void __cdecl Begin( SCreateMoveContext* _Context ) override
 	{
@@ -235,16 +281,34 @@ class CAimAssistance final: public AAimAssistanceBase
 		auto& pCommand = _Context->pCommand;
 
 		if ( nullptr == pLocalPlayer || nullptr == pCommand )
-			return;
+			return ( void )( iTargetHitbox = 0 );
 
 		if ( !KeybindActiveState( _Keys ) )
-			return;
+			return ( void )( iTargetHitbox = 0 );
 
 		int iEntityID = 0;
 		for ( int i = 0; iEntityID == 0 && i < PRIORITY_MAX; i++ )
 			iEntityID = GetPriorityEntityID( enumPriorities[ i ] );
 		if ( iEntityID == 0 )
-			return;
+			return ( void )( iTargetHitbox = 0 );
+		
+		auto& _Target = *reinterpret_cast< CBasePlayer * >( pEntityList->GetClientEntity( iEntityID ) );
+
+		// convert iTargetHitbox to vector location
+		// convert vecTargetHitbox to angle with VectorAngle
+		if ( pCommand->buttons & IN_ATTACK )
+		{
+			auto& wep = pLocalPlayer->m_hActiveWeapon( );
+			if ( nullptr == wep )
+				return ( void )( iTargetHitbox = 0 );
+			
+			if ( !wep->CanFire( ) )
+				return ( void )( iTargetHitbox = 0, pCommand->buttons &= ~IN_ATTACK );
+			
+			// set angTargetHitbox as current viewangle
+			
+			iTargetHitbox = 0;
+		}
 	}
 	void __cdecl End( SCreateMoveContext* _Context ) override
 	{
