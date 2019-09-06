@@ -326,7 +326,7 @@ class AEnvironmentFeatureBase: public IMiscellaneousFeatureBase
 
 };
 
-class CFlashUtility: public AEnvironmentFeatureBase
+class CFlashUtility final: public AEnvironmentFeatureBase
 {
 	void __cdecl Begin( SCreateMoveContext* _Context ) override
 	{
