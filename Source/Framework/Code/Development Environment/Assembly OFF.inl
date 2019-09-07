@@ -1,3 +1,5 @@
+/// Assembly OFF.inl
+
 #ifdef ASM_REDEFINE_and
 #define and &&
 #undef ASM_REDEFINE_and

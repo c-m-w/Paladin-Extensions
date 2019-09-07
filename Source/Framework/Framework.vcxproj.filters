@@ -74,6 +74,7 @@
     <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\CScrollbar.hpp" />
     <ClInclude Include="Code\Source Development Kit\Application Programming Interfaces\Temporary Pointer.hpp" />
     <ClInclude Include="Code\Source Development Kit\Toolkits\GUI\CInputBox.hpp" />
+    <ClInclude Include="Code\Development Environment\Enumeration Iteration.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Code\Source Development Kit\Application Programming Interfaces\Connectivity.inl" />

@@ -95,6 +95,7 @@
   <ItemGroup>
     <ClInclude Include="Code\Development Environment\Build Output Wrapper.hpp" />
     <ClInclude Include="Code\Development Environment\Entry Manager.hpp" />
+    <ClInclude Include="Code\Development Environment\Enumeration Iteration.hpp" />
     <ClInclude Include="Code\Development Environment\Icon Font Definitions\Font Awesome Icons.hpp" />
     <ClInclude Include="Code\Development Environment\Logging.hpp" />
     <ClInclude Include="Code\Development Environment\Icon Font Definitions\Material Design Icons.hpp" />
