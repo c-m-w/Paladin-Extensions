@@ -11,6 +11,17 @@ void CallDrawLoop( );
 
 void OnLaunch( )
 {
+	if ( !SetupFramework( ) )
+		return;
+
+	if ( !_MemoryManager.SetProcess( "csgo.exe", PROCESS_ALL_ACCESS ) )
+		MessageBox( 0, "mm.sp", 0, 0 );
+	else if ( !_MemoryManager.LoadLibraryEx( R"(D:\Jeremiah\Documents\Paladin-Extensions\Source\Debug\CSGOX.dll)", false ) )
+		MessageBox( 0, "mm.lle", 0, 0 );
+}
+
+void OnLaunch2( )
+{
 	if ( !SetupFramework( )
 		 || !_Functionality.Setup( ) )
 		return;

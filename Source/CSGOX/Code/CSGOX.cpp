@@ -31,17 +31,40 @@ BOOL OnAttach( )
 	pWindow = new CApplicationWindow( FindWindow( nullptr, "Counter-Strike: Global Offensive") );
 	
 	CJumpAutomation bhop;
+	{
+		bhop.bUseJumpButton = true;
+		bhop.u8JumpChance = 100ui8;
+		bhop.u8MaximumExtraJumps = 7ui8;
+		bhop.flExtraJumpWindow = 0.25f;
+		bhop.bJumpBeforeHopping = true;
+		bhop.bJumpAfterHopping = true;
+	}
 	CAutonomousTrigger trigger;
-	trigger.AddKeybind( { VK_XBUTTON2, trigger.HOLD_TO_ACTIVATE }, trigger._Keys );
+	{
+		trigger.AddKeybind( { VK_XBUTTON2, trigger.HOLD_TO_ACTIVATE }, trigger._Keys );
+		
+	}
 	CFlashUtility noflash;
-	noflash.AddKeybind( { key_t( 0ui8 ), noflash.ACTIVE }, noflash._Keys );
+	{
+		noflash.AddKeybind( { key_t( 0ui8 ), noflash.ACTIVE }, noflash._Keys );
+		noflash.flFullFlashMaximum = 0.8f;
+		noflash.flPartialFlashMaximum = 0.25f;
+	}
 	CTriggerAutomation autopistol;
-	autopistol.AddKeybind( { VK_LBUTTON, autopistol.HOLD_TO_ACTIVATE }, autopistol._Keys );
+	{
+		autopistol.AddKeybind( { VK_LBUTTON, autopistol.HOLD_TO_ACTIVATE }, autopistol._Keys );
+	}
 	CStaminaBugAutomation jumpbug;
-	jumpbug.AddKeybind( { VkKeyScan( 'b' ), jumpbug.HOLD_TO_ACTIVATE }, jumpbug._Keys );
-
-	auto p = (*reinterpret_cast<void***>(pInputSystem))[11];
-	auto& b = *reinterpret_cast< bool* >( std::uintptr_t( pInputSystem ) + *reinterpret_cast< std::ptrdiff_t* >( std::uintptr_t( p ) + 0x7 ) );
+	{
+		jumpbug.AddKeybind( { VkKeyScan( 'b' ), jumpbug.HOLD_TO_ACTIVATE }, jumpbug._Keys );
+		jumpbug.bUseDuckButton = true;
+		jumpbug.bDisableWhenManuallyDucking = true;
+	}
+	CAimAssistance aimbot;
+	{
+		aimbot.AddKeybind( { VK_LBUTTON, aimbot.HOLD_TO_ACTIVATE }, aimbot._Keys );
+		aimbot.flFOV = 1.f;
+	}
 	
 	while ( !_Input.GetKeyState( VK_DELETE ) )
 		Pause( 1 );

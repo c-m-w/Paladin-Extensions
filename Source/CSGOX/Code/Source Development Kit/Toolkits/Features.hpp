@@ -164,7 +164,7 @@ protected:
 	{
 		std::vector< int > vecPossibleEntities;
 		for ( int i = 0; i < pGlobalVariables->m_iMaxClients; i++ )
-			if ( MeetsActivationRequirements( _Context, *reinterpret_cast< CBasePlayer * >( pEntityList->GetClientEntity( i ) ) ) )
+			if ( MeetsActivationRequirements( _Context, *(CBaseEntity*)pEntityList->GetClientEntity( i ) ) )
 				vecPossibleEntities.emplace_back( i );
 
 		if ( vecPossibleEntities.size( ) == 0 )
@@ -176,10 +176,8 @@ protected:
 				return MeetsActivationRequirements( _Context,  *reinterpret_cast< CBasePlayer * >( pEntityList->GetClientEntity( vecPossibleEntities[ 0 ] ) ) ), vecPossibleEntities[ 0 ];
 			case NEAREST_TO_CROSSHAIR:
 			{
-				auto pLocalPlayer = GetLocalPlayer( );
-				if ( nullptr == pLocalPlayer )
-				return MeetsActivationRequirements( _Context,  *reinterpret_cast< CBasePlayer * >( pEntityList->GetClientEntity( vecPossibleEntities[ 0 ] ) ) ), vecPossibleEntities[ 0 ];
-				auto& _LocalPlayer = *pLocalPlayer;
+				auto& _LocalPlayer = *_Context.pLocalPlayer;
+
 				
 				auto flNearest = FLT_MAX;
 				// todo need VectorAngle
@@ -187,10 +185,7 @@ protected:
 			}
 			case NEAREST_BY_DISTANCE:
 			{
-				auto pLocalPlayer = GetLocalPlayer( );
-				if ( nullptr == pLocalPlayer )
-				return MeetsActivationRequirements( _Context,  *reinterpret_cast< CBasePlayer * >( pEntityList->GetClientEntity( vecPossibleEntities[ 0 ] ) ) ), vecPossibleEntities[ 0 ];
-				auto& _LocalPlayer = *pLocalPlayer;
+				auto& _LocalPlayer = *_Context.pLocalPlayer;
 				
 				std::pair< int, float > flNearest { 0, FLT_MAX };
 				for ( auto& i: vecPossibleEntities )
@@ -210,13 +205,14 @@ protected:
 	}
 public:
 	float flFieldOfView; // in degrees
-	decltype( PRIORITY_MAX ) enumPriorities[ PRIORITY_MAX ] { NEAREST_TO_CROSSHAIR, NEAREST_BY_DISTANCE, FIRST_IN_LIST }; // targeting priority
+	decltype( PRIORITY_MAX ) enumPriorities[ PRIORITY_MAX ] { FIRST_IN_LIST, NEAREST_BY_DISTANCE, NEAREST_TO_CROSSHAIR }; //{ NEAREST_TO_CROSSHAIR, NEAREST_BY_DISTANCE, FIRST_IN_LIST }; // targeting priority
 	std::vector< int > vecHitboxes; // allowed hitboxes, in order of targeting preference if all in activation
 };
 
 class CAutonomousTrigger final: public AAimAssistanceBase // todo: autonomous trigger should really be merged with Aimbot and just have an auto-shoot option
+// todo hitboxes activation
 {
-	bool MeetsActivationRequirements( CBaseEntity& _Entity ) override
+	bool MeetsActivationRequirements( SCreateMoveContext& _Context, CBaseEntity& _Entity ) override
 	{
 		auto &_Player = reinterpret_cast< CBasePlayer& >( _Entity );
 		volatile auto sz = _Player.GetPlayerInformation(  ).szName;
@@ -246,7 +242,7 @@ class CAutonomousTrigger final: public AAimAssistanceBase // todo: autonomous tr
 			 || _Trace.hit_entity == nullptr )
 			return;
 		
-		if ( !MeetsActivationRequirements( *reinterpret_cast< CBaseEntity* >( _Trace.hit_entity ) ) )
+		if ( !MeetsActivationRequirements( *_Context, *reinterpret_cast< CBaseEntity* >( _Trace.hit_entity ) ) )
 			return;
 
 		if ( pLocalPlayer->m_hActiveWeapon( )->CanFire( ) )
@@ -266,7 +262,8 @@ class CAimAssistance final: public AAimAssistanceBase
 	bool MeetsActivationRequirements( SCreateMoveContext& _Context, CBaseEntity& _Entity ) override
 	{
 		auto &_Player = reinterpret_cast< CBasePlayer& >( _Entity );
-		volatile auto sz = _Player.GetPlayerInformation(  ).szName;
+		if ( nullptr == &_Entity )
+			return false;
 		if ( !_Player.IsPlayer( )
 			|| !_Player.IsAlive( ) )
 			return false;
@@ -289,18 +286,19 @@ class CAimAssistance final: public AAimAssistanceBase
 		if ( nullptr == pLocalPlayer || nullptr == pCommand )
 			return ( void )( iTargetHitbox = 0 );
 
+		pCommand->viewangles -= pLocalPlayer->m_aimPunchAngle( );
 		static QAngle old_viewangles { 0.f, 0.f, 0.f };
 		if ( !old_viewangles.IsZero( .1f ) )
 			pCommand->viewangles = old_viewangles;
 		
 		if ( !KeybindActiveState( _Keys ) )
-			return iTargetHitbox = 0, old_viewangles.Init( 0.f, 0.f, 0.f );
+			return pCommand->viewangles += pLocalPlayer->m_aimPunchAngle( ), iTargetHitbox = 0, old_viewangles.Init( 0.f, 0.f, 0.f );
 
 		int iEntityID = 0;
 		for ( int i = 0; iEntityID == 0 && i < PRIORITY_MAX; i++ )
 			iEntityID = GetPriorityEntityID( *_Context, enumPriorities[ i ] );
 		if ( iEntityID == 0 )
-			return iTargetHitbox = 0, old_viewangles.Init( 0.f, 0.f, 0.f );
+			return pCommand->viewangles += pLocalPlayer->m_aimPunchAngle( ), iTargetHitbox = 0, old_viewangles.Init( 0.f, 0.f, 0.f );
 		
 		auto& _Target = *reinterpret_cast< CBasePlayer * >( pEntityList->GetClientEntity( iEntityID ) );
 
@@ -308,14 +306,14 @@ class CAimAssistance final: public AAimAssistanceBase
 		{
 			auto& wep = pLocalPlayer->m_hActiveWeapon( );
 			if ( nullptr == wep )
-				return iTargetHitbox = 0, old_viewangles.Init( 0.f, 0.f, 0.f );
+				return pCommand->viewangles += pLocalPlayer->m_aimPunchAngle( ), iTargetHitbox = 0, old_viewangles.Init( 0.f, 0.f, 0.f );
 			
 			if ( !wep->CanFire( ) )
-				return iTargetHitbox = 0, pCommand->buttons &= ~IN_ATTACK, old_viewangles.Init( 0.f, 0.f, 0.f );
+				return pCommand->viewangles += pLocalPlayer->m_aimPunchAngle( ), iTargetHitbox = 0, pCommand->buttons &= ~IN_ATTACK, old_viewangles.Init( 0.f, 0.f, 0.f );
 
-			auto angAtHitbox = CalculateAngle( pLocalPlayer, &_Target, iTargetHitbox, pCommand, nullptr ); // note: pcmd is not used. dunno why its a param
+			auto angAtHitbox = CalculateAngle( pLocalPlayer, &_Target, iTargetHitbox, pCommand, nullptr ) - pLocalPlayer->m_aimPunchAngle( ); // note: pcmd is not used. dunno why its a param
 			ClampAngles( angAtHitbox );
-			old_viewangles = pCommand->viewangles;
+			old_viewangles = pCommand->viewangles + pLocalPlayer->m_aimPunchAngle( );
 			pCommand->viewangles = angAtHitbox;
 			
 			iTargetHitbox = 0;
@@ -326,7 +324,7 @@ class CAimAssistance final: public AAimAssistanceBase
 		
 	}
 public:
-	float flFOV = 1.f;
+	float flFOV;
 };
 
 class IMiscellaneousFeatureBase: public IFeatureBase< FUNCTION_CREATE_MOVE, SCreateMoveContext >
@@ -373,8 +371,8 @@ class CFlashUtility final: public AEnvironmentFeatureBase
 		
 	}
 public:
-	float flFullFlashMaximum = 0.8f;
-	float flPartialFlashMaximum = 0.25f;
+	float flFullFlashMaximum;
+	float flPartialFlashMaximum;
 };
 
 class AMovementFeatureBase: public IMiscellaneousFeatureBase
@@ -410,12 +408,12 @@ class CTriggerAutomation final: public AMovementFeatureBase
 class CJumpAutomation final: public AMovementFeatureBase
 {
 public:
-	bool bUseJumpButton = true;
-	unsigned __int8 u8JumpChance = 100ui8;
-	unsigned __int8 u8MaximumExtraJumps = 7ui8;
-	float flExtraJumpWindow = 0.25f;
-	bool bJumpBeforeHopping = true;
-	bool bJumpAfterHopping = true;
+	bool bUseJumpButton;
+	unsigned __int8 u8JumpChance;
+	unsigned __int8 u8MaximumExtraJumps;
+	float flExtraJumpWindow;
+	bool bJumpBeforeHopping;
+	bool bJumpAfterHopping;
 private:
 	void __cdecl Begin( SCreateMoveContext* _Context ) override
 	{
@@ -506,6 +504,6 @@ class CStaminaBugAutomation final: public AMovementFeatureBase
 		//Prediction::End( pLocalPlayer );
 	}
 public:
-	bool bUseDuckButton = true;
-	bool bDisableWhenManuallyDucking = true;
+	bool bUseDuckButton;
+	bool bDisableWhenManuallyDucking;
 };
