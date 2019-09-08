@@ -63,7 +63,7 @@ BOOL OnAttach( )
 	CAimAssistance aimbot;
 	{
 		aimbot.AddKeybind( { VK_LBUTTON, aimbot.HOLD_TO_ACTIVATE }, aimbot._Keys );
-		aimbot.flFOV = 1.f;
+		aimbot.flFieldOfView = 10.f;
 	}
 	
 	while ( !_Input.GetKeyState( VK_DELETE ) )

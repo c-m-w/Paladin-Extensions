@@ -15,11 +15,12 @@ inline std::vector< std::pair< void *, std::size_t > > vecEndHook[ FUNCTION_MAX 
 //     obs proof backtrack
 //     obs proof enemy + item chams
 //     - bhop
-//     stamina bug
-//     edge jump
+//     - stamina bug
+//     - edge jump
 //     X auto pistol
 //     skin changer
 
+// done
 template < EFunctions enumHook, typename _tContext >
 class IFeatureBase
 {
@@ -136,6 +137,7 @@ protected:
 	}
 };
 
+// done
 struct SCreateMoveContext
 {
 	/*CCSPlayer*/CBasePlayer* pLocalPlayer;
@@ -159,12 +161,12 @@ protected:
 		NEAREST_BY_DISTANCE,
 		PRIORITY_MAX
 	};
-	virtual bool MeetsActivationRequirements( SCreateMoveContext &_Context, CBaseEntity& _Entity ) = 0;
-	virtual int GetPriorityEntityID( SCreateMoveContext &_Context, decltype( PRIORITY_MAX ) enumPriorityType = FIRST_IN_LIST ) // maybe they wanna do it based on real distance and not crosshair or smth
+	virtual bool MeetsActivationRequirements( SCreateMoveContext &_Context, CBaseEntity& _Entity, QAngle &aiming ) = 0;
+	virtual int GetPriorityEntityID( SCreateMoveContext &_Context, QAngle& aiming, decltype( PRIORITY_MAX ) enumPriorityType = FIRST_IN_LIST ) // maybe they wanna do it based on real distance and not crosshair or smth
 	{
 		std::vector< int > vecPossibleEntities;
 		for ( int i = 0; i < pGlobalVariables->m_iMaxClients; i++ )
-			if ( MeetsActivationRequirements( _Context, *(CBaseEntity*)pEntityList->GetClientEntity( i ) ) )
+			if ( MeetsActivationRequirements( _Context, *(CBaseEntity*)pEntityList->GetClientEntity( i ), aiming ) )
 				vecPossibleEntities.emplace_back( i );
 
 		if ( vecPossibleEntities.size( ) == 0 )
@@ -173,15 +175,25 @@ protected:
 		switch( enumPriorityType )
 		{
 			case FIRST_IN_LIST:
-				return MeetsActivationRequirements( _Context,  *reinterpret_cast< CBasePlayer * >( pEntityList->GetClientEntity( vecPossibleEntities[ 0 ] ) ) ), vecPossibleEntities[ 0 ];
+				return MeetsActivationRequirements( _Context,  *reinterpret_cast< CBasePlayer * >( pEntityList->GetClientEntity( vecPossibleEntities[ 0 ] ) ), aiming ), vecPossibleEntities[ 0 ];
 			case NEAREST_TO_CROSSHAIR:
 			{
 				auto& _LocalPlayer = *_Context.pLocalPlayer;
 
-				
-				auto flNearest = FLT_MAX;
-				// todo need VectorAngle
-				throw 1;
+				struct
+				{ int first; EHitbox second; float third; }
+				flFavoriteEntity { -1, HITBOX_MAX, FLT_MAX };
+				for ( auto& i: vecPossibleEntities )
+				{
+					auto& _Entity = *reinterpret_cast< CBasePlayer * >( pEntityList->GetClientEntity( i ) );
+					for_enum( EHitbox, enumHitbox, EHitbox( 0 ), HITBOX_MAX )
+					{
+						auto fl=CalculateCrosshairDistance( _Context.pLocalPlayer, &_Entity, enumHitbox, _Context.pCommand, false );
+						if ( fl < flFieldOfView && flFavoriteEntity.third > fl )
+							flFavoriteEntity = { i, enumHitbox, fl };
+					}
+				}
+				return MeetsActivationRequirements( _Context,  *reinterpret_cast< CBasePlayer * >( pEntityList->GetClientEntity( flFavoriteEntity.first ) ), aiming ), flFavoriteEntity.first;
 			}
 			case NEAREST_BY_DISTANCE:
 			{
@@ -195,7 +207,7 @@ protected:
 					if ( flNearest.second > flDelta )
 						flNearest = { i, flDelta };
 				}
-				return MeetsActivationRequirements( _Context,  *reinterpret_cast< CBasePlayer * >( pEntityList->GetClientEntity( flNearest.first ) ) ), flNearest.first;
+				return MeetsActivationRequirements( _Context,  *reinterpret_cast< CBasePlayer * >( pEntityList->GetClientEntity( flNearest.first ) ), aiming ), flNearest.first;
 			}
 		}
 	}
@@ -205,14 +217,14 @@ protected:
 	}
 public:
 	float flFieldOfView; // in degrees
-	decltype( PRIORITY_MAX ) enumPriorities[ PRIORITY_MAX ] { FIRST_IN_LIST, NEAREST_BY_DISTANCE, NEAREST_TO_CROSSHAIR }; //{ NEAREST_TO_CROSSHAIR, NEAREST_BY_DISTANCE, FIRST_IN_LIST }; // targeting priority
+	decltype( PRIORITY_MAX ) enumPriorities[ PRIORITY_MAX ] { NEAREST_TO_CROSSHAIR, NEAREST_BY_DISTANCE, FIRST_IN_LIST }; //{ NEAREST_TO_CROSSHAIR, NEAREST_BY_DISTANCE, FIRST_IN_LIST }; // targeting priority
 	std::vector< int > vecHitboxes; // allowed hitboxes, in order of targeting preference if all in activation
 };
 
 class CAutonomousTrigger final: public AAimAssistanceBase // todo: autonomous trigger should really be merged with Aimbot and just have an auto-shoot option
 // todo hitboxes activation
 {
-	bool MeetsActivationRequirements( SCreateMoveContext& _Context, CBaseEntity& _Entity ) override
+	bool MeetsActivationRequirements( SCreateMoveContext& _Context, CBaseEntity& _Entity, QAngle& aiming ) override
 	{
 		auto &_Player = reinterpret_cast< CBasePlayer& >( _Entity );
 		volatile auto sz = _Player.GetPlayerInformation(  ).szName;
@@ -242,7 +254,7 @@ class CAutonomousTrigger final: public AAimAssistanceBase // todo: autonomous tr
 			 || _Trace.hit_entity == nullptr )
 			return;
 		
-		if ( !MeetsActivationRequirements( *_Context, *reinterpret_cast< CBaseEntity* >( _Trace.hit_entity ) ) )
+		if ( !MeetsActivationRequirements( *_Context, *reinterpret_cast< CBaseEntity* >( _Trace.hit_entity ), pCommand->viewangles ) )
 			return;
 
 		if ( pLocalPlayer->m_hActiveWeapon( )->CanFire( ) )
@@ -259,7 +271,7 @@ public:
 class CAimAssistance final: public AAimAssistanceBase
 {
 	int iTargetHitbox = 0;
-	bool MeetsActivationRequirements( SCreateMoveContext& _Context, CBaseEntity& _Entity ) override
+	bool MeetsActivationRequirements( SCreateMoveContext& _Context, CBaseEntity& _Entity, QAngle& aiming ) override
 	{
 		auto &_Player = reinterpret_cast< CBasePlayer& >( _Entity );
 		if ( nullptr == &_Entity )
@@ -268,55 +280,67 @@ class CAimAssistance final: public AAimAssistanceBase
 			|| !_Player.IsAlive( ) )
 			return false;
 
-		float flSmallestDelta = FLT_MAX;
+		/*float flSmallestDelta = FLT_MAX;*/
 		for_enum( EHitbox, enumHitbox, EHitbox( 0 ), HITBOX_MAX ) // we can add priority hitboxes to this, but i figure the order of the enum is already pretty good.
 		{
-			auto flFOVDelta = ( _Context.pCommand->viewangles - CalculateAngle( _Context.pLocalPlayer, &_Player, iTargetHitbox, _Context.pCommand, nullptr ) ).Length( );
-			if ( flSmallestDelta > flFOVDelta && flFOVDelta < flFOV )
-				return iTargetHitbox = enumHitbox, flSmallestDelta = flFOVDelta, true;
+			auto flFOVDelta = ( aiming - CalculateAngle( _Context.pLocalPlayer, &_Player, enumHitbox, _Context.pCommand, nullptr ) ).Length( );
+			if ( /*flSmallestDelta > flFOVDelta &&*/ flFOVDelta < flFieldOfView )
+				return iTargetHitbox = enumHitbox, /*flSmallestDelta = flFOVDelta,*/ true; // if we want hitbox priorities, DO NOT RETURN HERE
 		}
 		
-		return true;
+		return iTargetHitbox = -1, false;
 	}
-	void __cdecl Begin( SCreateMoveContext* _Context ) override
+	void __cdecl Begin( SCreateMoveContext* _Context ) override // psilent
 	{
+		// shorten reference to context variables
 		auto& pLocalPlayer = _Context->pLocalPlayer;
 		auto& pCommand = _Context->pCommand;
 
+		// check setup
 		if ( nullptr == pLocalPlayer || nullptr == pCommand )
-			return ( void )( iTargetHitbox = 0 );
+			return;
 
-		pCommand->viewangles -= pLocalPlayer->m_aimPunchAngle( );
+		// if we already moved angles last tick, we need to move back
 		static QAngle old_viewangles { 0.f, 0.f, 0.f };
 		if ( !old_viewangles.IsZero( .1f ) )
-			pCommand->viewangles = old_viewangles;
-		
-		if ( !KeybindActiveState( _Keys ) )
-			return pCommand->viewangles += pLocalPlayer->m_aimPunchAngle( ), iTargetHitbox = 0, old_viewangles.Init( 0.f, 0.f, 0.f );
+			return pCommand->viewangles = old_viewangles, old_viewangles.Init( 0.f, 0.f, 0.f );
 
+		// check for aimbot key
+		if ( !KeybindActiveState( _Keys ) )
+			return;
+
+		// compensate for recoil now so we don't need to do fov checks with recoil in mind
+		QAngle buf = pCommand->viewangles - ( pLocalPlayer->m_aimPunchAngle( ) * GetRecoilScale( ) );
+		ClampAngles( buf );
+				
+		// iterate through entities, find highest priority and their target hitbox.
 		int iEntityID = 0;
 		for ( int i = 0; iEntityID == 0 && i < PRIORITY_MAX; i++ )
-			iEntityID = GetPriorityEntityID( *_Context, enumPriorities[ i ] );
+			iEntityID = GetPriorityEntityID( *_Context, buf, enumPriorities[ i ] );
 		if ( iEntityID == 0 )
-			return pCommand->viewangles += pLocalPlayer->m_aimPunchAngle( ), iTargetHitbox = 0, old_viewangles.Init( 0.f, 0.f, 0.f );
+			return;
 		
 		auto& _Target = *reinterpret_cast< CBasePlayer * >( pEntityList->GetClientEntity( iEntityID ) );
 
-		if ( pCommand->buttons & IN_ATTACK )
+		if ( pCommand->buttons & IN_ATTACK ) // todo revolver check
 		{
+			// validate weapon can fire this tick so we aren't just randomly snapping
 			auto& wep = pLocalPlayer->m_hActiveWeapon( );
-			if ( nullptr == wep )
-				return pCommand->viewangles += pLocalPlayer->m_aimPunchAngle( ), iTargetHitbox = 0, old_viewangles.Init( 0.f, 0.f, 0.f );
+			if ( iTargetHitbox == -1 || nullptr == wep )
+				return;
 			
 			if ( !wep->CanFire( ) )
-				return pCommand->viewangles += pLocalPlayer->m_aimPunchAngle( ), iTargetHitbox = 0, pCommand->buttons &= ~IN_ATTACK, old_viewangles.Init( 0.f, 0.f, 0.f );
+				return;
 
+			// compensate for recoil because calculate angle doesn't consider it
+			// this is intentional incase we want to change recoil control based on user settings
 			auto angAtHitbox = CalculateAngle( pLocalPlayer, &_Target, iTargetHitbox, pCommand, nullptr ) - pLocalPlayer->m_aimPunchAngle( ); // note: pcmd is not used. dunno why its a param
-			ClampAngles( angAtHitbox );
-			old_viewangles = pCommand->viewangles + pLocalPlayer->m_aimPunchAngle( );
+			ClampAngles( angAtHitbox ); // safety
+			if ( ( buf - angAtHitbox ).Length( ) > flFieldOfView )
+				return;
+			old_viewangles = pCommand->viewangles; // save for restore
 			pCommand->viewangles = angAtHitbox;
-			
-			iTargetHitbox = 0;
+			iTargetHitbox = -1; // next tick, we want to recheck our target hitbox
 		}
 	}
 	void __cdecl End( SCreateMoveContext* _Context ) override
@@ -324,7 +348,6 @@ class CAimAssistance final: public AAimAssistanceBase
 		
 	}
 public:
-	float flFOV;
 };
 
 class IMiscellaneousFeatureBase: public IFeatureBase< FUNCTION_CREATE_MOVE, SCreateMoveContext >

@@ -475,6 +475,7 @@ namespace Utilities
 
 	bool CBaseCombatWeapon::CanFire( )
 	{
+		// todo check if weapon is being pulled out or if it's a revolver and it's slowly shooting
 		return HasBullets( ) && m_flNextPrimaryAttack( ) <= pGlobalVariables->m_flCurrentTime;
 	}
 
