@@ -333,7 +333,7 @@ namespace Utilities
 		const auto fl2DDistance = sqrt( pow( vecRelative.x, 2.f ) + pow( vecRelative.y, 2.f ) );
 		QAngle qReturn;
 
-		qReturn.pitch = atan2( vecRelative.z, fl2DDistance ) * -180.f / D3DX_PI;
+		qReturn.pitch = atan2( vecRelative.z, fl2DDistance ) * -180.f / D3DX_PI; // could just use vecRelative.Length( )
 		qReturn.yaw = atan2( vecRelative.y, vecRelative.x ) * 180.f / D3DX_PI;
 		qReturn.roll = 0.f;
 		return qReturn;
