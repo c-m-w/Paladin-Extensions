@@ -11,14 +11,14 @@ inline std::vector< std::pair< void *, std::size_t > > vecEndHook[ FUNCTION_MAX 
 // it should inherit an abstract class first
 
 // note: most important features
-//     - psilent
-//     obs proof backtrack
-//     obs proof enemy + item chams
-//     - bhop
-//     - stamina bug
-//     - edge jump
+//     + psilent
+//     - obs proof backtrack
+//     - obs proof enemy + item chams
+//     + bhop
+//     * stamina bug
+//     * edge jump
 //     X auto pistol
-//     skin changer
+//     _ skin changer
 
 // done
 template < EFunctions enumHook, typename _tContext >
@@ -137,18 +137,43 @@ protected:
 	}
 };
 
-struct SEndScene
+struct SDrawContext
 {
 	
 };
 
-class CChams final: public IFeatureBase< FUNCTION_END_SCENE, SEndScene >
+class CChams final: public IFeatureBase< FUNCTION_DRAW_PRIMITIVE, SDrawContext >
 {
-	void __cdecl Begin( SEndScene* _Context ) override // chams
+	void __cdecl Begin( SDrawContext* _Context ) override
 	{
 		
 	}
-	void __cdecl End( SEndScene* _Context ) override
+	void __cdecl End( SDrawContext* _Context ) override
+	{ }
+};
+
+class CGlow final: public IFeatureBase< FUNCTION_DRAW_PRIMITIVE, SDrawContext >
+{
+	void __cdecl Begin( SDrawContext* _Context ) override
+	{
+		
+	}
+	void __cdecl End( SDrawContext* _Context ) override
+	{ }
+};
+
+struct SPresentContext
+{
+	
+};
+
+class CDrawTextures final: public IFeatureBase< FUNCTION_PRESENT, SPresentContext >
+{
+	void __cdecl Begin( SPresentContext* _Context ) override
+	{
+		
+	}
+	void __cdecl End( SPresentContext* _Context ) override
 	{ }
 };
 

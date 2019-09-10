@@ -47,6 +47,52 @@ HRESULT CHooks::CDeviceHook::Reset( D3DPRESENT_PARAMETERS *pPresentationParamete
 	return reinterpret_cast< HRESULT( __stdcall * )( void *, D3DPRESENT_PARAMETERS * ) >( pReset )( this, pPresentationParameters );
 }
 
+HRESULT CHooks::CDeviceHook::Present( const RECT *pSourceRect, const RECT *pDestRect, HWND hDestWindowOverride, const RGNDATA *pDirtyRegion )
+{
+	SPresentContext _Context { };
+
+	for ( auto &_2Hook: vecBeginHook[ FUNCTION_PRESENT ] )
+	{
+		UHookCallback< SPresentContext > _Hook;
+		_Hook.p = ( *reinterpret_cast< void*** >( _2Hook.first ) )[ _2Hook.second ];
+		_Hook.fn( _2Hook.first, &_Context );
+	}
+
+	auto _Return = reinterpret_cast< bool( __thiscall * )( void *, const RECT *, const RECT *, HWND , const RGNDATA * ) >( pPresent )( this, pSourceRect, pDestRect, hDestWindowOverride, pDirtyRegion );
+	
+	for ( auto &_2Hook: vecEndHook[ FUNCTION_PRESENT ] )
+	{
+		UHookCallback< SPresentContext > _Hook;
+		_Hook.p = ( *reinterpret_cast< void*** >( _2Hook.first ) )[ _2Hook.second ];
+		_Hook.fn( _2Hook.first, &_Context );
+	}
+
+	return _Return;
+}
+
+HRESULT CHooks::CDeviceHook::DrawPrimitive( D3DPRIMITIVETYPE PrimitiveType, UINT StartVertex, UINT PrimitiveCount )
+{
+	SDrawContext _Context { };
+
+	for ( auto &_2Hook: vecBeginHook[ FUNCTION_DRAW_PRIMITIVE ] )
+	{
+		UHookCallback< SDrawContext > _Hook;
+		_Hook.p = ( *reinterpret_cast< void*** >( _2Hook.first ) )[ _2Hook.second ];
+		_Hook.fn( _2Hook.first, &_Context );
+	}
+
+	auto _Return = reinterpret_cast< bool( __thiscall * )( void *, D3DPRIMITIVETYPE, UINT, UINT ) >( pDrawPrimitive )( this, PrimitiveType, StartVertex, PrimitiveCount );
+	
+	for ( auto &_2Hook: vecEndHook[ FUNCTION_PRESENT ] )
+	{
+		UHookCallback< SDrawContext > _Hook;
+		_Hook.p = ( *reinterpret_cast< void*** >( _2Hook.first ) )[ _2Hook.second ];
+		_Hook.fn( _2Hook.first, &_Context );
+	}
+
+	return _Return;
+}
+
 HRESULT CHooks::CDeviceHook::BeginScene( )
 {
 	return reinterpret_cast< HRESULT( __stdcall * )( void * ) >( pBeginScene )( this );

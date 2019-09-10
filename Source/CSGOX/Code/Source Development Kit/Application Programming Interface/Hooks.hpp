@@ -20,7 +20,9 @@ public:
 
 		static inline void *pReset = nullptr,
 			*pBeginScene = nullptr,
-			*pEndScene = nullptr;
+			*pEndScene = nullptr,
+			*pPresent = nullptr,
+			*pDrawPrimitive = nullptr;
 
 	public:
 
@@ -28,6 +30,8 @@ public:
 		~CDeviceHook( ) = default;
 
 		HRESULT __stdcall Reset( D3DPRESENT_PARAMETERS *pPresentationParameters );
+		HRESULT __stdcall Present( const RECT* pSourceRect, const RECT* pDestRect, HWND hDestWindowOverride, const RGNDATA* pDirtyRegion );
+		HRESULT __stdcall DrawPrimitive( D3DPRIMITIVETYPE PrimitiveType, UINT StartVertex, UINT PrimitiveCount );
 		HRESULT __stdcall BeginScene( );
 		HRESULT __stdcall EndScene( );
 	} _Device;
