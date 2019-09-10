@@ -142,6 +142,199 @@ struct SDrawContext
 	
 };
 
+struct STargetEntityFilter
+{
+	
+	enum // filter
+	{
+		unfiltered = -1,
+		player,
+		creature, // chicken
+		weapon,
+		projectile
+	} entity_type = unfiltered;
+	int get_entity_type( CBaseEntity& entity )
+	{
+		if ( entity.IsPlayer( ) )
+			return player;
+		if ( false )
+			return creature;
+		if ( entity.IsWeapon( ) )
+			return weapon;
+		if ( false )
+			return projectile;
+		return unfiltered;
+	}
+	
+	enum // player filter
+	{
+		teamless = -1,
+		terrorists,
+		counter_terrorists,
+		other
+	} team;
+	int get_team( CBasePlayer& entity )
+	{
+		if ( get_entity_type( entity ) != player )
+			return teamless;
+		switch ( entity.m_iTeamNum( ) )
+		{
+			case 2:
+				return terrorists;
+			case 3:
+				return counter_terrorists;
+			default:
+				return other;
+		}
+	}
+
+	enum // weapon filter
+	{
+		groupless = -1,
+		knife,
+		pistol,
+		smg,
+		shotgun,
+		lmg,
+		rifle,
+		sniper,
+		autosniper,
+		gear
+	} weapon_group = groupless;
+	int get_weapon_group( CBasePlayer& entity )
+	{
+		if ( get_entity_type( entity ) != weapon )
+			return groupless;
+		/* todo */
+	}
+	
+	enum // guns + players
+	{
+		uncounted = -1,
+		minority, // < 50
+		majority // > 50
+	} ammo = uncounted, armor = uncounted;
+	int get_ammo( CBaseEntity& entity )
+	{
+		switch ( get_entity_type( entity ) )
+		{
+			case player:
+			{
+				auto& wep = reinterpret_cast< CBasePlayer* >( &entity )->m_hActiveWeapon( );
+				if ( wep == nullptr )
+					return uncounted;
+				return wep->m_iClip1( );
+			}
+			case weapon:
+			{
+				//todo add imaxclip1
+				//return reinterpret_cast< CBaseCombatWeapon* >( &entity )->m_iMaxClip1( );
+			}
+			default:
+				return uncounted;
+		}
+	}
+	int get_armor( CBasePlayer& entity )
+	{
+		if ( get_entity_type( entity ) != player )
+			return uncounted;
+		return entity.m_ArmorValue( );
+	}
+
+	enum // players
+	{
+		unknown = -1,
+		no_armor,
+		half_armor,
+		head_plus_armor
+	} armor_type;
+	int get_armor_type( CBasePlayer& entity )
+	{
+		if ( get_entity_type( entity ) != player )
+			return unknown;
+		//??? todo
+	}
+	
+	enum // players
+	{
+		every = -1,
+		away, // we're at least 90 degrees away
+		toward // we're at most 90 degrees away
+	} direction = every;
+	int get_direction( CBasePlayer& local, CBasePlayer& entity )
+	{
+		if ( get_entity_type( entity ) != player )
+			return every;
+		return 90.f < ( CalculateAngle( local.GetViewPosition( ), entity.GetHitboxPosition( HITBOX_HEAD ) ) - entity.m_angEyeAngles( ) ).Length( )
+			? away
+			: toward;
+	}
+	
+	enum // players
+	{
+		indifferent = -1,
+		invulnerable, // weapon out
+		vulnerable, // reloading, weaponless, flashed
+		unaware // fully flashed
+	} vulnerability = indifferent;
+	int get_vulnerability( CBasePlayer& entity )
+	{
+		if ( get_entity_type( entity ) != player )
+			return indifferent;
+		if ( entity.m_flFlashDuration( ) )
+			return unaware; // todo something smart like CFlashUtility
+		const auto &hActiveWeapon = entity.m_hActiveWeapon( );
+		if ( hActiveWeapon )
+		{
+			if ( !hActiveWeapon->HasBullets( ) )
+				return vulnerable;
+			const auto iWeaponType = hActiveWeapon->GetCSWeaponData( )->WeaponType;
+			if ( (iWeaponType == ITEM_WEAPON_SSG08
+				 || iWeaponType == ITEM_WEAPON_AWP ) && !hActiveWeapon->CanFire( ))
+				return vulnerable;
+			if ( iWeaponType == ITEM_NONE // no weapon (tpose)
+					|| iWeaponType > ITEM_WEAPON_SSG08 // useless weapon/nade
+					&& iWeaponType < ITEM_WEAPON_M4A1S // useless weapon/nade
+					|| iWeaponType > ITEM_WEAPON_TACTICALAWARENESSGRENADE ) // knife/glove/other
+				return vulnerable;
+		}
+		return invulnerable;
+	}
+	
+	enum // players
+	{
+		all = -1,
+		soundless, // no sound
+		sound, // any sound
+		loud // shooting
+	} noise = all;
+	int get_noise( CBasePlayer& entity )
+	{
+		// todo no idea
+	}
+
+	enum // players
+	{
+		any = -1,
+		full, // standing still
+		quick_regain, // moving
+		inaccurate // in air
+	} accuracy = any;
+	int get_accuracy( CBasePlayer& entity )
+	{
+		if ( get_entity_type( entity ) != player )
+			return any;
+		
+		if ( !( entity.m_fFlags( ) & FL_ONGROUND ) )
+			return inaccurate;
+
+		if ( entity.m_vecVelocity( ).Length( ) > 40.f )
+			return quick_regain;
+
+		return full;
+	}
+};
+
 class CChams final: public IFeatureBase< FUNCTION_DRAW_PRIMITIVE, SDrawContext >
 {
 	void __cdecl Begin( SDrawContext* _Context ) override
