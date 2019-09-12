@@ -12,8 +12,8 @@ inline std::vector< std::pair< void *, std::size_t > > vecEndHook[ FUNCTION_MAX 
 
 // note: most important features
 //     + psilent
-//     - obs proof backtrack
-//     - obs proof enemy + item chams
+//     _ obs proof backtrack
+//     - obs proof enemy + item chams/glow
 //     + bhop
 //     * stamina bug
 //     * edge jump
@@ -481,8 +481,12 @@ class CAutonomousTrigger final: public AAimAssistanceBase // todo: autonomous tr
 		if ( pCommand->buttons & IN_ATTACK
 			 || !KeybindActiveState( _Keys ) )
 			return;
+
+		const auto old_angles = _Context->pCommand->viewangles;
+		_Context->pCommand->viewangles -= pLocalPlayer->m_aimPunchAngle( ) * GetRecoilScale( );
+		auto &_Trace = pLocalPlayer->TraceRayFromView( _Context->pCommand );
+		_Context->pCommand->viewangles = old_angles;
 		
-		auto &_Trace = pLocalPlayer->TraceRayFromView( _Context->pCommand ); // todo, add reocil to current view angle
 		if ( !_Trace.DidHit( )
 			 || _Trace.hit_entity == nullptr )
 			return;
@@ -508,6 +512,8 @@ class CAimAssistance final: public AAimAssistanceBase
 	{
 		auto &_Player = reinterpret_cast< CBasePlayer& >( _Entity );
 		if ( nullptr == &_Entity )
+			return false;
+		if ( _Context.pLocalPlayer == &_Player )
 			return false;
 		if ( !_Player.IsPlayer( )
 			|| !_Player.IsAlive( ) )
@@ -551,7 +557,7 @@ class CAimAssistance final: public AAimAssistanceBase
 			if ( !wep->CanFire( ) || !( pCommand->buttons & IN_ATTACK ) ) // todo revolver check
 				return;
 		}
-						
+
 		// iterate through entities, find highest priority and their target hitbox.
 		int iEntityID = 0;
 		for ( int i = 0; iEntityID == 0 && i < PRIORITY_MAX; i++ )
@@ -563,10 +569,23 @@ class CAimAssistance final: public AAimAssistanceBase
 
 		// compensate for recoil because calculate angle doesn't consider it
 		// this is intentional in case we want to change recoil control based on user settings
-		auto angAtHitbox = CalculateAngle( pLocalPlayer, &_Target, iTargetHitbox, pCommand, nullptr ) - pLocalPlayer->m_aimPunchAngle( ); // note: pcmd is not used. dunno why its a param
-		ClampAngles( angAtHitbox ); // safety
-		old_viewangles = pCommand->viewangles; // save for restore
-		pCommand->viewangles = angAtHitbox;
+		static int iShouldShoot;
+		static QAngle angAtHitbox;
+		if ( iShouldShoot == 0 )
+		{
+			angAtHitbox = CalculateAngle( pLocalPlayer, &_Target, iTargetHitbox, pCommand, nullptr ) - pLocalPlayer->m_aimPunchAngle( ) * GetRecoilScale( ); // note: pcmd is not used. dunno why its a param
+			ClampAngles( angAtHitbox ); // safety
+			iShouldShoot++;
+		}
+		else
+		{
+			old_viewangles = pCommand->viewangles; // save for restore
+			pCommand->viewangles = angAtHitbox;
+			if ( iShouldShoot == 2 )
+				iShouldShoot = 0;
+			else
+				iShouldShoot++;
+		}
 	}
 	void __cdecl End( SCreateMoveContext* _Context ) override
 	{
