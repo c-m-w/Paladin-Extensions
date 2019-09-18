@@ -10,8 +10,9 @@ inline std::vector< std::pair< void *, std::size_t > > vecEndHook[ FUNCTION_MAX 
 // nothing that inherits an interface should be a feature directly.
 // it should inherit an abstract class first
 
-// note: most important features
+// todo note: most important features
 //     + psilent
+//     + stop trigger (sets sens to 0 on player kill with trigger for 3/4 second after kill)
 //     _ obs proof backtrack
 //     - obs proof enemy + item chams/glow
 //     + bhop
@@ -19,6 +20,130 @@ inline std::vector< std::pair< void *, std::size_t > > vecEndHook[ FUNCTION_MAX 
 //     * edge jump
 //     X auto pistol
 //     _ skin changer
+
+/* this code is based on my following pseudocode concept for a feature system. this code is not my desired implementation of the feature system, but this is just beta code :p
+
+context< hook_fn >
+struct context< fn_create_move >
+    pointer local_player
+    pointer cmd_stream
+
+abstract class feature_base< fn_none >
+    protected alias bind_t
+    protected is_active( activation_keys )
+    protected virtual thread_proc( ) = nullptr
+    constructor( )
+        create.new_thread( thread_proc )
+
+abstract class feature_base< hook_fn >
+    protected alias context< hook_fn > as context
+    protected alias bind_t
+    protected alias color_t
+    protected is_active( activation_keys )
+        for each key in activation_keys
+            switch key.activation
+                case ALWAYS
+                    return true
+                case ...
+    protected virtual pre_hook_fn( context ) = nullptr
+    protected virtual post_hook_fn( context ) = nullptr
+
+interface config_base
+    private byte[ ] convert_to_bytes< type >( type object )
+        return ( &object )[ sizeof object ]
+    private byte[ ] convert_to_bytes< color_t >( color_t colors )
+        if colors.sequences == 0
+            return "{ }"_b
+        if colors.sequences == 1
+            return ( &colors[ 0 ].rgba )[ 4 bytes ]
+        return { for each { ( &colors[ each ].rgba )[ 4 bytes ], ( &colors[ each ].length ) } }
+    private byte[ ] convert_to_bytes< bind_t >( bind_t binds )
+        for each bind in binds
+            if bind.type == active
+                return "{ true }"
+            else
+                byte return[ for each counter ] = bind.type
+                byte return[ for each max + for each counter ] = bind.vkey
+    public dump( )
+        dump = begin_feature_marker
+        dump += colors_marker + convert_to_bytes( get_colors( ) )
+        dump += binds_marker + convert_to_bytes( get_binds( ) )
+        dump += members_marker + members_to_save_as_bytes( )
+    protected pure virtual color_t[ ] get_colors( )
+    protected pure virtual bind_t[ ] get_binds( )
+    protected pure virtual byte[ ] members_to_save_as_bytes( )
+
+// first member of config must be an array of two bools which describes if activation_keys and color_stream exists
+// member after config_struct of config class must always be activation_keys if the feature can be activated by a key
+// member after activation_keys (or color_struct if activation_keys isn’t a member) of config class must always be color_stream if the feature uses colors
+class config_data< config >
+    data data
+    process_keys( activation_keys )
+        data << &activation_keys // shrinks data into a less large format
+    process_colors( color_stream )
+        data << &color_stream // shrinks data into a less large format
+    constructor( cfg )
+        diffptr offset = 0
+        if cfg.config_struct[ 0 ]
+            process_keys( cfg.activation_keys )
+            offset += sizeof bool + sizeof bind_t
+        if cfg.config_struct[ 1 ]
+            process_keys( cfg.color_stream )
+            offset += sizeof bool + sizeof color_t
+        data << &cfg + offset
+
+interface event_base
+    public struct config
+        vector< pair< function pointer ( returns bool ), event_call_stack_trigger_signature > > event_should_trigger
+        vector< function pointer > ( void )( event_callback )
+    event( call_stack, event_should_trigger, event_callback )
+        if event_should_trigger.event_call_stack_trigger_signature.signature_matches( call_stack )
+            event_callback( )
+
+class bhop inherits feature_base< fn_create_move >
+    public struct config cfg
+        const bool[ 2 ] config_struct = true, false
+        bind_t activation_keys
+        bool activate_with_jump_buttons
+        bool add_early_jumps
+        bool add_late_jumps
+        percent miss
+    can_jump( player )
+    will_be_on_ground( ticks )
+    pre_hook_fn( context ) override
+        if will_be_on_ground( 0 )
+            static tick last_tick_on_ground = globalvars.tick_count
+        if not is_active( cfg.activation_keys ) or not context.cmd_stream.buttons & IN_JUMP
+            return
+        if can_jump( context.local_player ) and random( 100% ) > cfg.miss
+            return void context.cmd_stream.buttons |= IN_JUMP
+        if add_early_jumps and will_be_on_ground( ticks_per_second / 4 ) and globalvars.tick_count % 2
+            return void context.cmd_stream.buttons |= IN_JUMP
+        else if add_early_jumps
+            return void context.cmd_stream.buttons &= ~IN_JUMP
+        if add_late_jumps and last_ground_tick < ticks_per_second / 4 and globalvars.tick_count % 2
+            return void context.cmd_stream.buttons |= IN_JUMP
+        else if add_late_jumps
+            return void context.cmd_stream.buttons &= ~IN_JUMP
+bhop friend stamina_bug
+
+class stamina_bug inherits feature_base< fn_create_move >
+    public struct config cfg
+        const bool[ 2 ] config_struct = true, false
+        bind_t activation_keys
+        bool only_if_already_crouched
+    pre_hook_fn( context ) override
+        if will_be_on_ground( 0 )
+            static tick last_tick_on_ground = globalvars.tick_count
+        if only_if_already_crouched and not context.cmd_stream.buttons & IN_DUCK
+            return
+        if not is_active( cfg.activation_keys )
+            return
+        if will_be_on_ground( 1 )
+            return void context.cmd_stream.buttons &= ~IN_DUCK
+        if not only_if_already_crouched and not context.cmd_stream.buttons & IN_DUCK and will_be_on_ground( 2 )
+            return void context.cmd_stream.buttons |= IN_DUCK
+*/
 
 // done
 template < EFunctions enumHook, typename _tContext >
@@ -335,6 +460,7 @@ struct STargetEntityFilter
 	}
 };
 
+// todo https://www.unknowncheats.me/forum/1960243-post4.html
 class CChams final: public IFeatureBase< FUNCTION_DRAW_PRIMITIVE, SDrawContext >
 {
 	void __cdecl Begin( SDrawContext* _Context ) override
@@ -345,6 +471,7 @@ class CChams final: public IFeatureBase< FUNCTION_DRAW_PRIMITIVE, SDrawContext >
 	{ }
 };
 
+// todo https://www.unknowncheats.me/forum/2197432-post19.html
 class CGlow final: public IFeatureBase< FUNCTION_DRAW_PRIMITIVE, SDrawContext >
 {
 	void __cdecl Begin( SDrawContext* _Context ) override
@@ -773,4 +900,98 @@ class CStaminaBugAutomation final: public AMovementFeatureBase
 public:
 	bool bUseDuckButton;
 	bool bDisableWhenManuallyDucking;
+};
+
+struct SFrameStageNotifyContext
+{
+	/*CCSPlayer*/CBasePlayer* pLocalPlayer;
+	CUserCmd* pCommand;
+	ClientFrameStage_t _FrameStage;
+};
+
+// todo https://www.unknowncheats.me/forum/counterstrike-global-offensive/225472-instant-weapon-paintkit-update-fullupdate.html
+// todo force update
+class CInventoryManager final: public IFeatureBase< FUNCTION_FRAME_STAGE_NOTIFY, SFrameStageNotifyContext >
+{
+	int kills_to_save = 0;
+	
+	void __cdecl Begin( SFrameStageNotifyContext* _Context ) override
+	{
+		if ( !bEquipped )
+			return;
+
+		if ( _Context->_FrameStage != FRAME_NET_UPDATE_POSTDATAUPDATE_START )
+			return;
+		
+		// todo
+		//kills_to_save = _Context->pLocalPlayer->m_iKills( );
+		
+		if ( !_Context->pLocalPlayer->IsAlive( ) )
+			return;
+			
+		auto weps = _Context->pLocalPlayer->m_hMyWeapons( );
+		if ( nullptr == weps )
+			return;
+
+		for ( int i = 0; auto &wep = weps[ i ]; i++ )
+		{
+			if ( wep->m_nFallbackPaintKit( ) == iSkin )
+				continue;
+				
+			if ( enumWeapon != wep->m_Item( )->m_iItemDefinitionIndex( ) )
+				switch ( wep->m_Item( )->m_iItemDefinitionIndex( ) )
+				{
+					case ITEM_WEAPON_KNIFE_BAYONET:
+					case ITEM_WEAPON_KNIFE_FLIP:
+					case ITEM_WEAPON_KNIFE_GUT:
+					case ITEM_WEAPON_KNIFE_KARAMBIT:
+					case ITEM_WEAPON_KNIFE_M9_BAYONET:
+					case ITEM_WEAPON_KNIFE_TACTICAL:
+					case ITEM_WEAPON_KNIFE_FALCHION:
+					case ITEM_WEAPON_KNIFE_SURVIVAL_BOWIE:
+					case ITEM_WEAPON_KNIFE_BUTTERFLY:
+					case ITEM_WEAPON_KNIFE_SHADOW_DAGGERS:
+					case ITEM_WEAPON_KNIFE_URSUS:
+					case ITEM_WEAPON_KNIFE_NAVAJA:
+					case ITEM_WEAPON_KNIFE_STILLETTO:
+					case ITEM_WEAPON_KNIFE_TALON:
+						wep->m_Item(  )->m_iItemDefinitionIndex(  ) = enumWeapon;
+					default:
+						continue;
+				}
+
+			wep->m_OriginalOwnerXuidHigh( ) = _Context->pLocalPlayer->GetPlayerInformation( ).xuid_high;
+			wep->m_OriginalOwnerXuidLow( ) = _Context->pLocalPlayer->GetPlayerInformation( ).xuid_low;
+				
+			wep->m_nFallbackPaintKit( ) = iSkin;
+			wep->m_flFallbackWear( ) = flExterior;
+			wep->m_nFallbackSeed( ) = iSeed;
+			if ( iStatTrak.second > -1 )
+				wep->m_nFallbackStatTrak( ) = /*iStatTrak.first ? iStatTrak.second + _Context->pLocalPlayer->m_iKills :*/ iStatTrak.second;
+
+			wep->m_Item(  )->m_iEntityQuality(  ) = enumItemQuality;
+				
+			if ( !strNametag.empty( ) )
+				wep->m_szCustomName( ) = &strNametag[ 0 ];
+
+			// todo stickers
+		}
+	}
+	void __cdecl End( SFrameStageNotifyContext* _Context ) override
+	{ }
+	~CInventoryManager( )
+	{
+		if ( iStatTrak.first )
+			iStatTrak.second += kills_to_save;
+	}
+public:
+	bool bEquipped;
+	int iSkin;
+	float flExterior;
+	int iSeed;
+	EItemDefinitionIndex enumWeapon;
+	EItemQuality enumItemQuality;
+	std::string strNametag; // empty string indicates disabled
+	std::pair< bool /*bLiveTracking*/, int /*iStatTrakCount*/ > iStatTrak; // -1 indicates disabled
+	std::vector< int > vecStickers;
 };
