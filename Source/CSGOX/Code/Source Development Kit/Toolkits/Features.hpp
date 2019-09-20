@@ -11,11 +11,11 @@ inline std::vector< std::pair< void *, std::size_t > > vecEndHook[ FUNCTION_MAX 
 // it should inherit an abstract class first
 
 // todo note: most important features
+//     X auto pistol																				Jeremy
 //     + psilent																					Jeremy
 //     + stop trigger (sets sens to 0 on player kill with trigger for 3/4 second after kill)		Jeremy
-//     X auto pistol																				Jeremy
 //     + bhop																						Jeremy
-//     + skin changer																				Jeremy
+//     + skin changer																				Jeremy (features)/Cole (hook+m_iKills)
 //     _ obs proof backtrack																		Jeremy/Cole
 //     _ obs proof enemy + item chams/glow															Cole
 //     _ rest of gui/notification system															Cole
@@ -488,6 +488,11 @@ struct SPresentContext
 	
 };
 
+class CNotificationSystem final: public IFeatureBase< FUNCTION_PRESENT, SPresentContext >
+{
+	
+};
+
 class CDrawTextures final: public IFeatureBase< FUNCTION_PRESENT, SPresentContext >
 {
 	void __cdecl Begin( SPresentContext* _Context ) override
@@ -503,6 +508,7 @@ struct SCreateMoveContext
 {
 	/*CCSPlayer*/CBasePlayer* pLocalPlayer;
 	CUserCmd* pCommand;
+	CVerifiedUserCmd* pVerifiedCommand;
 };
 
 class ICombatFeatureBase: public IFeatureBase< FUNCTION_CREATE_MOVE, SCreateMoveContext >
@@ -572,7 +578,8 @@ protected:
 			}
 		}
 	}
-	virtual void CompensateRecoil( )
+	// todo https://www.unknowncheats.me/forum/cs-go-releases/276638-backtrack-triggerbot.html
+	virtual void Backtrack( )
 	{
 		
 	}
@@ -597,7 +604,7 @@ class CAutonomousTrigger final: public AAimAssistanceBase // todo: autonomous tr
 		//&& VecAngle( _Entity.GetHitboxPosition( each vecHitboxes ) ) // we want our crosshair position to overlap a hitbox
 		return true;
 	}
-	
+	bool bFired;
 	void __cdecl Begin( SCreateMoveContext* _Context ) override
 	{
 		auto& pLocalPlayer = _Context->pLocalPlayer;
@@ -624,12 +631,28 @@ class CAutonomousTrigger final: public AAimAssistanceBase // todo: autonomous tr
 
 		if ( pLocalPlayer->m_hActiveWeapon( )->CanFire( ) )
 			pCommand->buttons |= IN_ATTACK;
+		bFired = true;
 	}
 	void __cdecl End( SCreateMoveContext* _Context ) override
 	{
+		if ( !bFired || !bSetSensToZeroOnFire )
+			return;
+
+		//static auto pVarSensitivity = pConVar->FindCommand( ENC( "sensitivity" ) );
+		//static auto flSensitivity = pVarSensitivity->GetValueAsFloat( );
 		
+		if ( KeybindActiveState( _Keys ) )
+		{
+			//pVarSensitivity.SetValueAsFloat( flSensitivity / 2 );
+		}
+		else
+		{
+			//pVarSensitivity.SetValueAsFloat( flSensitivity );
+			bFired = false;
+		}
 	}
 public:
+	bool bSetSensToZeroOnFire = true;
 	std::vector< int > vecHitboxes; // allowed hitboxes, in order of targeting preference if all in activation
 };
 
@@ -657,6 +680,7 @@ class CAimAssistance final: public AAimAssistanceBase
 		
 		return iTargetHitbox = -1, false;
 	}
+	QAngle old_viewangles { 0.f, 0.f, 0.f };
 	void __cdecl Begin( SCreateMoveContext* _Context ) override // psilent
 	{
 		// shorten reference to context variables
@@ -668,21 +692,21 @@ class CAimAssistance final: public AAimAssistanceBase
 			return;
 
 		// if we already moved angles last tick, we need to move back
-		static QAngle old_viewangles { 0.f, 0.f, 0.f };
 		if ( !old_viewangles.IsZero( .1f ) )
-			return pCommand->viewangles = old_viewangles, old_viewangles.Init( 0.f, 0.f, 0.f );
+			return old_viewangles.Init( 0.f, 0.f, 0.f );
 
 		// check for aimbot key
 		if ( !KeybindActiveState( _Keys ) )
 			return;
-
+		
 		{
 			// validate weapon can fire this tick so we aren't just randomly snapping
 			auto& wep = pLocalPlayer->m_hActiveWeapon( );
 			if ( nullptr == wep )
 				return;
+			
 			// todo remove check for IN_ATTACK and just assign it if they want it to automatically shoot like some psilent trigger
-			if ( !wep->CanFire( ) || !( pCommand->buttons & IN_ATTACK ) ) // todo revolver check
+			if ( !wep->CanFire( ) || ( !bAutofire && !( pCommand->buttons & IN_ATTACK ) ) ) // todo revolver check
 				return;
 		}
 
@@ -697,29 +721,22 @@ class CAimAssistance final: public AAimAssistanceBase
 
 		// compensate for recoil because calculate angle doesn't consider it
 		// this is intentional in case we want to change recoil control based on user settings
-		static int iShouldShoot;
-		static QAngle angAtHitbox;
-		if ( iShouldShoot == 0 )
-		{
-			angAtHitbox = CalculateAngle( pLocalPlayer, &_Target, iTargetHitbox, pCommand, nullptr ) - pLocalPlayer->m_aimPunchAngle( ) * GetRecoilScale( ); // note: pcmd is not used. dunno why its a param
-			ClampAngles( angAtHitbox ); // safety
-			iShouldShoot++;
-		}
-		else
-		{
-			old_viewangles = pCommand->viewangles; // save for restore
-			pCommand->viewangles = angAtHitbox;
-			if ( iShouldShoot == 2 )
-				iShouldShoot = 0;
-			else
-				iShouldShoot++;
-		}
+		QAngle angAtHitbox = CalculateAngle( pLocalPlayer, &_Target, iTargetHitbox, pCommand, nullptr ) - pLocalPlayer->m_aimPunchAngle( ) * GetRecoilScale( ); // note: pcmd is not used. dunno why its a param
+		ClampAngles( angAtHitbox ); // safety
+		
+		old_viewangles = pCommand->viewangles; // save for restore
+		pCommand->viewangles = angAtHitbox;
+
+		if ( bAutofire )
+			pCommand->buttons |= IN_ATTACK;
 	}
 	void __cdecl End( SCreateMoveContext* _Context ) override
 	{
-		
+		if ( !old_viewangles.IsZero( .1f ) )
+			return ( void )( _Context->pCommand->viewangles = old_viewangles ); 
 	}
 public:
+	bool bAutofire = false;
 };
 
 class IMiscellaneousFeatureBase: public IFeatureBase< FUNCTION_CREATE_MOVE, SCreateMoveContext >

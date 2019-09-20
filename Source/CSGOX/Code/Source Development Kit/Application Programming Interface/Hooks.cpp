@@ -118,9 +118,14 @@ void CHooks::CClientModeHook::Uninitialize( )
 	Detach( );
 }
 
-bool CHooks::CClientModeHook::CreateMove( float flInputSampleFrametime, CUserCmd* pUserCommands )
+bool CHooks::CClientModeHook::CreateMove( int iSequenceNumber, float flInputSampleFrametime, bool bActive )
 {
-	SCreateMoveContext _Context { GetLocalPlayer( ), pUserCommands };
+	SCreateMoveContext _Context
+	{
+		GetLocalPlayer( ),
+		&( *( CUserCmd** )( ( DWORD )pInput + 0xEC ) )[ iSequenceNumber % 150 ],
+		&( *( CVerifiedUserCmd** )( ( DWORD )pInput + 0xF0 ) )[ iSequenceNumber % 150 ]
+	};
 
 	for ( auto &_2Hook: vecBeginHook[ FUNCTION_CREATE_MOVE ] )
 	{
@@ -129,7 +134,7 @@ bool CHooks::CClientModeHook::CreateMove( float flInputSampleFrametime, CUserCmd
 		_Hook.fn( _2Hook.first, &_Context );
 	}
 
-	auto _Return = reinterpret_cast< bool( __thiscall * )( void *, float, CUserCmd* ) >( pCreateMove )( this, flInputSampleFrametime, pUserCommands );
+	auto _Return = reinterpret_cast< bool( __thiscall * )( void *, int, float, bool ) >( pCreateMove )( this, iSequenceNumber, flInputSampleFrametime, bActive );
 	
 	for ( auto &_2Hook: vecEndHook[ FUNCTION_CREATE_MOVE ] )
 	{
