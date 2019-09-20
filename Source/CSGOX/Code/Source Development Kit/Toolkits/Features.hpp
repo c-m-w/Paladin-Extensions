@@ -11,15 +11,16 @@ inline std::vector< std::pair< void *, std::size_t > > vecEndHook[ FUNCTION_MAX 
 // it should inherit an abstract class first
 
 // todo note: most important features
-//     + psilent
-//     + stop trigger (sets sens to 0 on player kill with trigger for 3/4 second after kill)
-//     _ obs proof backtrack
-//     - obs proof enemy + item chams/glow
-//     + bhop
-//     * stamina bug
-//     * edge jump
-//     X auto pistol
-//     _ skin changer
+//     + psilent																					Jeremy
+//     + stop trigger (sets sens to 0 on player kill with trigger for 3/4 second after kill)		Jeremy
+//     X auto pistol																				Jeremy
+//     + bhop																						Jeremy
+//     + skin changer																				Jeremy
+//     _ obs proof backtrack																		Jeremy/Cole
+//     _ obs proof enemy + item chams/glow															Cole
+//     _ rest of gui/notification system															Cole
+//     * stamina abuse																				Cole (engine prediction)
+//     * edge jump																					Cole (engine prediction)
 
 /* this code is based on my following pseudocode concept for a feature system. this code is not my desired implementation of the feature system, but this is just beta code :p
 
