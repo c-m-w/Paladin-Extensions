@@ -241,3 +241,9 @@ namespace Utilities
 		NETVAR_REFERENCE( CHandle< CBasePlayer >, m_hBombDefuser,ENC( "DT_PlantedC4" ), ENC( "m_hBombDefuser" ) );
 	};
 }
+
+#include "Valve/Attributes.hpp"
+#include "Valve/C_EconItemView.h"
+#include "Valve/CEconItem.hpp"
+#include "Valve/CSharedObjectTypeCache.hpp"
+#include "Valve/CPlayerInventory.hpp"

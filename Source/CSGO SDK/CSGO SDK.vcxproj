@@ -15,8 +15,13 @@
     <ClInclude Include="Code\Memory.hpp" />
     <ClInclude Include="Code\CSGO SDK.hpp" />
     <ClInclude Include="Code\Tools.hpp" />
+    <ClInclude Include="Code\Valve\Attributes.hpp" />
     <ClInclude Include="Code\Valve\Interfaces\CClientState.hpp" />
+    <ClInclude Include="Code\Valve\CEconItem.hpp" />
     <ClInclude Include="Code\Valve\Interfaces\CInput.hpp" />
+    <ClInclude Include="Code\Valve\CPlayerInventory.hpp" />
+    <ClInclude Include="Code\Valve\CSharedObjectTypeCache.hpp" />
+    <ClInclude Include="Code\Valve\C_EconItemView.h" />
     <ClInclude Include="Code\Valve\Interfaces\IAppSystem.hpp" />
     <ClInclude Include="Code\Valve\Interfaces\IBaseClientDll.hpp" />
     <ClInclude Include="Code\Valve\Interfaces\IBaseInterface.hpp" />

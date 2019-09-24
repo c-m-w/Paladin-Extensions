@@ -216,6 +216,21 @@
     <ClInclude Include="Code\CSGO SDK.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Code\Valve\CPlayerInventory.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Valve\CSharedObjectTypeCache.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Valve\CEconItem.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Valve\C_EconItemView.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Code\Valve\Attributes.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Code\Valve\Math\Vector2D.cpp">
