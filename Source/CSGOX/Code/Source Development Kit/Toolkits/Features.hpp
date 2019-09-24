@@ -927,13 +927,49 @@ struct SFrameStageNotifyContext
 	ClientFrameStage_t _FrameStage;
 };
 
+// todo https://www.unknowncheats.me/forum/counterstrike-global-offensive/271136-inventory-changer-protobuf.html
 // todo https://www.unknowncheats.me/forum/counterstrike-global-offensive/225472-instant-weapon-paintkit-update-fullupdate.html
 // todo force update
 class CInventoryManager final: public IFeatureBase< FUNCTION_FRAME_STAGE_NOTIFY, SFrameStageNotifyContext >
 {
 	int kills_to_save = 0;
-	
-	void __cdecl Begin( SFrameStageNotifyContext* _Context ) override
+	static CPlayerInventory *pInventory;
+	CEconItem *pThisItem;
+
+	CInventoryManager( )
+	{
+		// note PASTIN BOIS
+		//pInventory = **reinterpret_cast< CPlayerInventory*** >( nullptr );//Pattern::FindSignature("client.dll", "8B 3D ? ? ? ? 85 FF 74 1A") + 0x2);
+		//
+		//if ( enumWeapon == ITEM_NONE )
+		//	return;
+		//
+		//{
+		//	//static auto fnCreateSharedObjectSubclass_EconItem_ = reinterpret_cast< CEconItem*(__stdcall*)( ) >( *reinterpret_cast< uintptr_t* >( Pattern::FindSignature( "client.dll", "C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? E8 ? ? ? ? 83 F8 FF 75 09 8D 45 E4 50 E8 ? ? ? ? 8D 45 E4 C7 45 ? ? ? ? ? 50 C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? E8 ? ? ? ? 83 F8 FF 75 09 8D 45 E4 50 E8 ? ? ? ? 8D 45 E4 C7 45 ? ? ? ? ? 50 C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? E8 ? ? ? ? 83 F8 FF 75 09 8D 45 E4 50 E8 ? ? ? ? 8D 45 E4 C7 45 ? ? ? ? ? 50 C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? E8 ? ? ? ? 83 F8 FF 75 09 8D 45 E4 50 E8 ? ? ? ? 8D 45 E4" ) + 3 ) );
+		//	//pThisItem = fnCreateSharedObjectSubclass_EconItem_( );
+		//}
+		//
+		////*pThisItem->GetAccountID( ) = pInventory->GetSteamID( );
+		////*pThisItem->GetDefIndex( ) = 1;
+		////*pThisItem->GetItemID( ) = rand( ) % 50000 + 1;
+		////*pThisItem->GetInventory( ) = 1;
+		////*pThisItem->GetFlags( ) = 0;
+		////*pThisItem->GetOriginalID( ) = 0;
+		//////pThisItem->AddSticker(0, 4, 0, 1, 1);
+		////if ( iStatTrak.second >= 0 )
+		////	pThisItem->SetStatTrak( iStatTrak.second );
+		////pThisItem->SetPaintKit( iSkin );
+		////pThisItem->SetPaintSeed( iSeed );
+		////pThisItem->SetPaintWear( flExterior );
+		////pThisItem->SetOrigin( 8 );
+		//////pThisItem->SetRarity(ITEM_RARITY_MYTHICAL);
+		////pThisItem->SetLevel( 1 );
+		////pThisItem->SetInUse( bEquipped );
+		////
+		////pInventory->AddEconItem( pThisItem, 1, 0, 1 );
+	}
+
+	void __cdecl Begin( SFrameStageNotifyContext *_Context ) override
 	{
 		if ( !bEquipped )
 			return;
@@ -943,10 +979,10 @@ class CInventoryManager final: public IFeatureBase< FUNCTION_FRAME_STAGE_NOTIFY,
 		
 		// todo
 		//kills_to_save = _Context->pLocalPlayer->m_iKills( );
-		
+
 		if ( !_Context->pLocalPlayer->IsAlive( ) )
 			return;
-			
+
 		auto weps = _Context->pLocalPlayer->m_hMyWeapons( );
 		if ( nullptr == weps )
 			return;
@@ -955,7 +991,7 @@ class CInventoryManager final: public IFeatureBase< FUNCTION_FRAME_STAGE_NOTIFY,
 		{
 			if ( wep->m_nFallbackPaintKit( ) == iSkin )
 				continue;
-				
+
 			if ( enumWeapon != wep->m_Item( )->m_iItemDefinitionIndex( ) )
 				switch ( wep->m_Item( )->m_iItemDefinitionIndex( ) )
 				{
@@ -973,28 +1009,29 @@ class CInventoryManager final: public IFeatureBase< FUNCTION_FRAME_STAGE_NOTIFY,
 					case ITEM_WEAPON_KNIFE_NAVAJA:
 					case ITEM_WEAPON_KNIFE_STILLETTO:
 					case ITEM_WEAPON_KNIFE_TALON:
-						wep->m_Item(  )->m_iItemDefinitionIndex(  ) = enumWeapon;
+						wep->m_Item( )->m_iItemDefinitionIndex( ) = enumWeapon;
 					default:
 						continue;
 				}
 
 			wep->m_OriginalOwnerXuidHigh( ) = _Context->pLocalPlayer->GetPlayerInformation( ).xuid_high;
 			wep->m_OriginalOwnerXuidLow( ) = _Context->pLocalPlayer->GetPlayerInformation( ).xuid_low;
-				
+
 			wep->m_nFallbackPaintKit( ) = iSkin;
 			wep->m_flFallbackWear( ) = flExterior;
 			wep->m_nFallbackSeed( ) = iSeed;
 			if ( iStatTrak.second > -1 )
 				wep->m_nFallbackStatTrak( ) = /*iStatTrak.first ? iStatTrak.second + _Context->pLocalPlayer->m_iKills :*/ iStatTrak.second;
 
-			wep->m_Item(  )->m_iEntityQuality(  ) = enumItemQuality;
-				
+			wep->m_Item( )->m_iEntityQuality( ) = enumItemQuality;
+
 			if ( !strNametag.empty( ) )
 				wep->m_szCustomName( ) = &strNametag[ 0 ];
 
 			// todo stickers
 		}
 	}
+
 	void __cdecl End( SFrameStageNotifyContext* _Context ) override
 	{ }
 	~CInventoryManager( )
@@ -1012,4 +1049,8 @@ public:
 	std::string strNametag; // empty string indicates disabled
 	std::pair< bool /*bLiveTracking*/, int /*iStatTrakCount*/ > iStatTrak; // -1 indicates disabled
 	std::vector< int > vecStickers;
+	void UpdateInventory( ) // must be called after modifying the config
+	{
+		
+	}
 };
