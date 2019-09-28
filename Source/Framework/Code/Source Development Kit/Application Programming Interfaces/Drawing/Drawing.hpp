@@ -153,6 +153,9 @@ private:
 	ID3D11Device*			pDevice						= nullptr;
 	ID3D11DeviceContext*	pContext					= nullptr;
 	ID3D11RenderTargetView* pRenderTargetView			= nullptr;
+	ID3D11RenderTargetView* pSecondaryRenderTargetView	= nullptr;
+	ID3D11Texture2D*		pRenderedTextureBuffer		= nullptr;
+	ID3D11Texture2D*		pBackBufferTexture			= nullptr;
 	ID3D11Texture2D*		pDepthStencilBuffer			= nullptr;
 	ID3D11DepthStencilView* pDepthStencilView			= nullptr;
 	ID3D11DepthStencilState*pDepthStencilState			= nullptr;
@@ -178,7 +181,11 @@ public:
 	bool Create( );
 	bool Destroy( );
 	void BeginFrame( );
-	bool EndFrame( );
+	bool EndFrame( );	
+	bool BeginRenderingToTexture( );
+	ID3D11Texture2D* EndRenderingToTexture( );
+	bool ConvertTexture( IDirect3DDevice9* pD3D9Device, IDirect3DTexture9** pDestination, ID3D11Texture2D *pSource );
+	const char* GetTextureContents( ID3D11Texture2D* pTexture );
 	void PushDrawingSpace( const rectangle_t& recSpace );
 	void PopDrawingSpace( );
 	bool IsAreaVisible( const rectangle_t &recArea );

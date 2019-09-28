@@ -27,8 +27,6 @@ BOOL OnAttach( )
 
 	if ( !Initialize( ) )
 		return FALSE;
-
-	pWindow = new CApplicationWindow( FindWindow( nullptr, "Counter-Strike: Global Offensive") );
 	
 	CJumpAutomation bhop;
 	{
@@ -80,6 +78,18 @@ void OnDetach( )
 
 bool Initialize( )
 {
+	pWindow = new CApplicationWindow( FindWindow( nullptr, "Counter-Strike: Global Offensive") );
+
+	if ( !DRAW.ChangeTarget( pWindow ) )
+		return false;
+
+	_GUI.Setup( );
+	static auto test = new CWindow ({ 0, 0, 5, 5 } );
+	test->SetTitle( "test" );
+	test->ShowIcon();
+	_GUI.AddWindow( test);
+	
+	
 	if ( !InitializeMemory( ) || !HOOKS.Setup( ) )
 	{
 		LOG( ERROR, APPLICATION, ENC( "Unable to initialize." ) );

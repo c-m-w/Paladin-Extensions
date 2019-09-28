@@ -237,6 +237,9 @@ void CFunctionality::Run( )
 
 void CFunctionality::DrawLoop( )
 {
+	auto test = new CDrawable();
+	test->Rectangle( { 0, 0, InchesToPixels( LAUNCHER_WIDTH ), InchesToPixels( LAUNCHER_HEIGHT ) }, 0xFF0000FF );
+	
 	while ( !bExit )
 	{
 		if ( pApplicationWindow->PollInput( ) )
@@ -257,12 +260,16 @@ void CFunctionality::DrawLoop( )
 		
 		DRAW.BeginFrame( );
 		_GUI.Draw( );
+		test->Draw();
 		DRAW.EndFrame( );
-
+		
+		
 		const auto mmtDifference = GetMoment( ) - mmtNow;
 		if ( mmtDifference > 1000.0 / FPS )
 			continue;
 
 		Pause( 1000.0 / 60.0 - mmtDifference );
 	}
+
+	delete test;
 }

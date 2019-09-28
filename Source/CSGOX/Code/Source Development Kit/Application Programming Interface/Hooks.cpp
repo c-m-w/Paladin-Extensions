@@ -10,6 +10,8 @@
 	__asm mov eax, Member							\
 	__asm mov Variable, eax
 
+LPD3DXSPRITE pSprite = nullptr;
+
 bool CHooks::Initialize( )
 {
 	return _Device.Setup( )
@@ -26,7 +28,7 @@ bool CHooks::CDeviceHook::Initialize( )
 	void *pReplacementReset = nullptr,
 		*pReplacementBeginScene = nullptr,
 		*pReplacementEndScene = nullptr;
-
+	
 	GET_MEMBER_ADDRESS( pReplacementReset, Reset )
 	GET_MEMBER_ADDRESS( pReplacementBeginScene, BeginScene )
 	GET_MEMBER_ADDRESS( pReplacementEndScene, EndScene )
@@ -100,6 +102,29 @@ HRESULT CHooks::CDeviceHook::BeginScene( )
 
 HRESULT CHooks::CDeviceHook::EndScene( )
 {
+	IDirect3DTexture9* pTexture = nullptr;
+	
+	DRAW.BeginFrame( );
+	DRAW.BeginRenderingToTexture( );
+	auto test = new CDrawable( );
+	test->Rectangle( { 0, 0, 1280, 720 }, { 255, 255 ,255, 255 } );
+	test->Draw();
+	delete test;
+	_GUI.Draw( );
+	auto JeremyShouldDoSomeFUckingWorkBecauseWeOnlyHAve3DaysLeft420420 = DRAW.EndRenderingToTexture( );
+	DRAW.ConvertTexture( pDevice, &pTexture, JeremyShouldDoSomeFUckingWorkBecauseWeOnlyHAve3DaysLeft420420 );
+	JeremyShouldDoSomeFUckingWorkBecauseWeOnlyHAve3DaysLeft420420->Release();
+	
+	
+	if ( !pSprite )
+		D3DXCreateSprite( pDevice, &pSprite );
+
+	auto began = pSprite->Begin( D3DXSPRITE_ALPHABLEND ) == D3D_OK;
+	auto code = pSprite->Draw( pTexture, nullptr, nullptr, nullptr, 0xFFFFFFFF );
+	pSprite->End();
+	auto invalidcall = code == D3DERR_INVALIDCALL;
+	pTexture->Release();
+	
 	return reinterpret_cast< HRESULT( __stdcall * )( void * ) >( pEndScene )( this );
 }
 
@@ -123,8 +148,8 @@ bool CHooks::CClientModeHook::CreateMove( int iSequenceNumber, float flInputSamp
 	SCreateMoveContext _Context
 	{
 		GetLocalPlayer( ),
-		&( *( CUserCmd** )( ( DWORD )pInput + 0xEC ) )[ iSequenceNumber % 150 ],
-		&( *( CVerifiedUserCmd** )( ( DWORD )pInput + 0xF0 ) )[ iSequenceNumber % 150 ]
+		pInput->GetUserCmd( iSequenceNumber ),
+		pInput->GetVerifiedCmd( iSequenceNumber )
 	};
 
 	for ( auto &_2Hook: vecBeginHook[ FUNCTION_CREATE_MOVE ] )

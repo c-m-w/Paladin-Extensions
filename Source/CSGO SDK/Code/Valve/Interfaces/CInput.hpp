@@ -47,3 +47,13 @@ public:
 	CUserCmd *m_pCommands;                    //0xF4
 	CVerifiedUserCmd *m_pVerifiedCommands;            //0xF8
 };
+
+inline CUserCmd * CInput::GetUserCmd( int sequence_number )
+{
+	return &m_pCommands[ sequence_number % MULTIPLAYER_BACKUP ];
+}
+
+inline CVerifiedUserCmd * CInput::GetVerifiedCmd( int sequence_number )
+{
+	return &m_pVerifiedCommands[ sequence_number % MULTIPLAYER_BACKUP ];
+}
