@@ -1139,7 +1139,6 @@ NSVGimage* CDrawing::GetSVG( const std::string &strResourcePath )
 
 void CDrawing::BeginFrame( )
 {
-	pContext->OMSetRenderTargets( 1, &pRenderTargetView, pDepthStencilView );
 	pContext->PSSetSamplers( 0, 1, &pSamplerState );
 	pContext->VSSetShader( pVertexShader, nullptr, 0 );
 	pContext->IASetInputLayout( pVertexLayout );
@@ -1150,9 +1149,117 @@ void CDrawing::BeginFrame( )
 bool CDrawing::EndFrame( )
 {
 	if ( !SUCCEEDED( pSwapChain->Present( 0, 0 ) ) )
-		return LOG( WARNING, DRAWING, "Failed to present." ), false;
-
+		return LOG( WARNING, DRAWING, "Failed to present." ), false;	
+	
 	return true;
+}
+
+bool CDrawing::BeginRenderingToTexture( )
+{
+	if ( pSecondaryRenderTargetView )
+		return false;
+	
+	D3D11_TEXTURE2D_DESC _TextureBufferDescription { };
+	D3D11_RENDER_TARGET_VIEW_DESC _RenderTargetViewDescription { };
+	
+	_TextureBufferDescription.Width = int( recRenderTarget.w );
+	_TextureBufferDescription.Height = int( recRenderTarget.h );
+	_TextureBufferDescription.MipLevels = 1;
+	_TextureBufferDescription.ArraySize = 1;
+	_TextureBufferDescription.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	_TextureBufferDescription.SampleDesc.Count = 1;
+	_TextureBufferDescription.Usage = D3D11_USAGE_DEFAULT;
+	_TextureBufferDescription.BindFlags = D3D11_BIND_RENDER_TARGET;
+	_TextureBufferDescription.CPUAccessFlags = 0;
+	_TextureBufferDescription.MiscFlags = 0;
+
+	_RenderTargetViewDescription.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	_RenderTargetViewDescription.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D;
+	_RenderTargetViewDescription.Texture2D.MipSlice = 0;
+
+	if ( !SUCCEEDED( _Drawing.pDevice->CreateTexture2D( &_TextureBufferDescription, nullptr, &pRenderedTextureBuffer ) ) )
+		return LOG( WARNING, DRAWING, "Unable to create texture to render to." ), false;
+	
+	if ( !SUCCEEDED( _Drawing.pDevice->CreateRenderTargetView( pRenderedTextureBuffer, &_RenderTargetViewDescription, &pSecondaryRenderTargetView ) ) )
+		return LOG( WARNING, DRAWING, "Unable to create render target view for rendering to texture." ), pRenderedTextureBuffer->Release( ), false;
+	
+	_Drawing.pContext->OMSetRenderTargets( 1, &pSecondaryRenderTargetView, nullptr );
+	_Drawing.pContext->ClearRenderTargetView( pSecondaryRenderTargetView, D3DXCOLOR( 0.f, 0.f, 0.f, 0.f ) );
+	
+	return true;
+}
+
+ID3D11Texture2D * CDrawing::EndRenderingToTexture( )
+{
+	if ( !pSecondaryRenderTargetView )
+		return nullptr;
+
+	D3D11_TEXTURE2D_DESC _TextureDescription { };
+	ID3D11Texture2D* pRenderedTexture = nullptr;
+	
+	_TextureDescription.Width = int( recRenderTarget.w );
+	_TextureDescription.Height = int( recRenderTarget.h );
+	_TextureDescription.MipLevels = 1;
+	_TextureDescription.ArraySize = 1;
+	_TextureDescription.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	_TextureDescription.SampleDesc.Count = 1;
+	_TextureDescription.Usage = D3D11_USAGE_DEFAULT;
+	_TextureDescription.BindFlags = 0;
+	_TextureDescription.CPUAccessFlags = 0;
+	_TextureDescription.MiscFlags = 0;
+	
+	if ( !SUCCEEDED( _Drawing.pDevice->CreateTexture2D( &_TextureDescription, nullptr, &pRenderedTexture ) ) )
+		return LOG( WARNING, DRAWING, "Unable to create texture to transfer render contents to." ), nullptr;
+	
+	_Drawing.pContext->CopyResource( pRenderedTexture, pRenderedTextureBuffer );
+	_Drawing.pContext->OMSetRenderTargets( 1, &pRenderTargetView, _Drawing.pDepthStencilView );
+	pSecondaryRenderTargetView->Release( );
+	pSecondaryRenderTargetView = nullptr;
+	
+	return pRenderedTexture;
+}
+
+bool CDrawing::ConvertTexture( IDirect3DDevice9* pD3D9Device, IDirect3DTexture9 **pDestination, ID3D11Texture2D *pSource )
+{
+	if ( pD3D9Device->CreateTexture( recRenderTarget.w, recRenderTarget.h, 1, 0, D3DFMT_A8R8G8B8, D3DPOOL_DEFAULT, pDestination, nullptr ) != D3D_OK )
+		return LOG( WARNING, DRAWING, "Cannot create D3D9 texture." ), false;
+
+	const auto szBytes = GetTextureContents( pSource );
+	D3DLOCKED_RECT recLocked { };
+	
+	auto test = ( *pDestination )->LockRect( 0, &recLocked, nullptr, 0 );
+	memcpy( recLocked.pBits, szBytes, unsigned( recRenderTarget.w * recRenderTarget.h ) * sizeof( unsigned ) );
+	( *pDestination )->UnlockRect( 0 );
+	
+	delete[] szBytes;
+	return true;
+}
+
+const char * CDrawing::GetTextureContents( ID3D11Texture2D *pTexture )
+{
+	D3D11_TEXTURE2D_DESC _TextureDescription { };
+	ID3D11Texture2D* pCopiedTexture = nullptr;
+	D3D11_MAPPED_SUBRESOURCE _TextureData { };
+	
+	pTexture->GetDesc( &_TextureDescription );
+	_TextureDescription.BindFlags = 0;
+	_TextureDescription.Usage = D3D11_USAGE_STAGING;
+	_TextureDescription.CPUAccessFlags = D3D11_CPU_ACCESS_READ;
+	if ( !SUCCEEDED( _Drawing.pDevice->CreateTexture2D( &_TextureDescription, nullptr, &pCopiedTexture ) ) )
+		return LOG( WARNING, DRAWING, "Unable to create texture." ), nullptr;
+
+	_Drawing.pContext->CopyResource( pCopiedTexture, pTexture );
+	if ( !SUCCEEDED( _Drawing.pContext->Map( pCopiedTexture, 0, D3D11_MAP_READ, 0, &_TextureData ) ) )
+		return LOG( WARNING, DRAWING, "Unable to map texture contents." ), pTexture->Release( ), nullptr;
+
+	const auto zSize = _TextureDescription.Height * _TextureDescription.Width * sizeof( unsigned );
+	const auto szReturn = new char[ zSize ];
+	memcpy( szReturn, _TextureData.pData, zSize );
+	
+	_Drawing.pContext->Unmap( pCopiedTexture, 0 );
+	pCopiedTexture->Release( );
+
+	return szReturn;
 }
 
 void CDrawing::PushDrawingSpace( const rectangle_t &recSpace )
@@ -1181,7 +1288,6 @@ bool CDrawing::Create( )
 	const auto strShaderData = GetShaderData( );
 	const auto pShaderData = &strShaderData[ 0 ];
 	const auto zShaderData = strShaderData.size( );
-	ID3D11Texture2D* pBackBufferTexture = nullptr;
 	D3D11_SAMPLER_DESC _SamplerDescription { };
 	D3D11_TEXTURE2D_DESC _DepthStencilTextureDescription { };
 	D3D11_DEPTH_STENCIL_DESC _DepthStencilDescription { };
@@ -1200,9 +1306,9 @@ bool CDrawing::Create( )
 
 	if ( !SUCCEEDED( pDevice->CreateRenderTargetView( pBackBufferTexture, nullptr, &pRenderTargetView ) ) )
 		return LOG( ERROR, DRAWING, "Unable to create render target view." ), false;
-
-	pBackBufferTexture->Release( );
-
+	
+	pBackBufferTexture->Release();
+	
 	_DepthStencilTextureDescription.Width = unsigned( recRenderTarget.w );
 	_DepthStencilTextureDescription.Height = unsigned( recRenderTarget.h );
 	_DepthStencilTextureDescription.MipLevels = 1;
