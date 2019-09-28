@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<code_event_listeners>
-  <listener event_id="entity_structure" execute_order="10" callback_class="KL\EditorManager\Listener\EntityStructure" callback_method="bbCode" active="1" hint="XF:BbCode" description="XF:BbCode"/>
-  <listener event_id="templater_template_pre_render" execute_order="10" callback_class="KL\EditorManager\Listener\TemplaterTemplatePreRender" callback_method="editor" active="1" hint="public:editor" description="public:editor"/>
-  <listener event_id="templater_template_pre_render" execute_order="10" callback_class="KL\EditorManager\Listener\TemplaterTemplatePreRender" callback_method="helpPageBbCode" active="1" hint="public:_help_page_bb_codes" description="public:_help_page_bb_codes"/>
-  <listener event_id="templater_template_pre_render" execute_order="10" callback_class="KL\EditorManager\Listener\TemplaterTemplatePreRender" callback_method="klEmAvailableColors" active="1" hint="admin:kl_em_option_available_colors" description="admin:kl_em_option_available_colors"/>
-  <listener event_id="templater_template_pre_render" execute_order="10" callback_class="KL\EditorManager\Listener\TemplaterTemplatePreRender" callback_method="pageContainer" active="1" hint="public:PAGE_CONTAINER" description="public:PAGE_CONTAINER"/>
-</code_event_listeners>

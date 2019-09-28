@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<permissions>
-  <permission permission_group_id="forum" permission_id="nf_gift" permission_type="flag" interface_group_id="forumPermissions" display_order="6"/>
-  <permission permission_group_id="general" permission_id="nf_gift" permission_type="flag" interface_group_id="generalPermissions" display_order="52"/>
-  <permission permission_group_id="nfCalendar" permission_id="nf_gift" permission_type="flag" interface_group_id="nfCalendarPermissions" display_order="300"/>
-  <permission permission_group_id="profilePost" permission_id="nf_gift" permission_type="flag" interface_group_id="profilePostPermissions" display_order="16"/>
-  <permission permission_group_id="xengallery" permission_id="nf_gift" permission_type="flag" interface_group_id="xengalleryMediaPermissions" display_order="37"/>
-</permissions>

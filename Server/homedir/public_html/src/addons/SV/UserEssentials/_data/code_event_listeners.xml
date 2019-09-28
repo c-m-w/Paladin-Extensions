@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<code_event_listeners>
-  <listener event_id="user_content_change_init" execute_order="10" callback_class="SV\UserEssentials\Listener" callback_method="userContentChangeInit" active="1" description="Updates tables when user IDs and usernames change"/>
-  <listener event_id="user_delete_clean_init" execute_order="10" callback_class="SV\UserEssentials\Listener" callback_method="userDeleteCleanInit" active="1" description="Cleans up tables when users are deleted"/>
-  <listener event_id="user_merge_combine" execute_order="10" callback_class="SV\UserEssentials\Listener" callback_method="userMergeCombine" active="1" description="Logs a user name change when users are merged"/>
-  <listener event_id="visitor_setup" execute_order="10" callback_class="SV\UserEssentials\Listener" callback_method="visitorSetup" active="1" description="Sets options from custom user fields."/>
-</code_event_listeners>

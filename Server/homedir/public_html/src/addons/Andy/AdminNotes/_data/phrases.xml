@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<phrases>
-  <phrase title="adminnotes_admin_notes" version_id="10" version_string="1.0"><![CDATA[Admin notes]]></phrase>
-  <phrase title="option.adminNotesNotes" version_id="10" version_string="1.0"><![CDATA[Notes]]></phrase>
-  <phrase title="option_explain.adminNotesNotes" version_id="10" version_string="1.0"><![CDATA[Notes here will be displayed in the Admin Control Panel home page. You may use HTML.]]></phrase>
-  <phrase title="option_group.adminNotes" version_id="10" version_string="1.0"><![CDATA[Admin notes]]></phrase>
-  <phrase title="option_group_description.adminNotes" version_id="10" version_string="1.0"><![CDATA[Options here control the Admin notes add-on.]]></phrase>
-</phrases>

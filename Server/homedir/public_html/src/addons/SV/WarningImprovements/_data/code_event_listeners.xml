@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<code_event_listeners>
-  <listener event_id="visitor_setup" execute_order="10" callback_class="SV\WarningImprovements\Listener" callback_method="visitorsetup" active="1" description="Expire warning on visit if they are known to be pending"/>
-</code_event_listeners>

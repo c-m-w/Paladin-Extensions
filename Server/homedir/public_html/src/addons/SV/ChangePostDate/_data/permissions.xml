@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<permissions>
-  <permission permission_group_id="forum" permission_id="SV_ChangePostDate" permission_type="flag" depend_permission_id="editAnyPost" interface_group_id="forumModeratorPermissions" display_order="204"/>
-</permissions>

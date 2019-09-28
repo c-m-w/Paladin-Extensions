@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<code_event_listeners>
-  <listener event_id="entity_structure" execute_order="10" callback_class="\ThemeHouse\Bookmarks\Listener\EntityStructure" callback_method="xfmgMediaItem" active="1" hint="XFMG\Entity\MediaItem" description="XFMG\Entity\MediaItem"/>
-  <listener event_id="entity_structure" execute_order="10" callback_class="\ThemeHouse\Bookmarks\Listener\EntityStructure" callback_method="xfNode" active="1" hint="XF\Entity\Node" description="XF\Entity\Node"/>
-  <listener event_id="entity_structure" execute_order="10" callback_class="\ThemeHouse\Bookmarks\Listener\EntityStructure" callback_method="xfPost" active="1" hint="XF\Entity\Post" description="XF\Entity\Post"/>
-  <listener event_id="entity_structure" execute_order="10" callback_class="\ThemeHouse\Bookmarks\Listener\EntityStructure" callback_method="xfThread" active="1" hint="XF\Entity\Thread" description="XF\Entity\Thread"/>
-</code_event_listeners>

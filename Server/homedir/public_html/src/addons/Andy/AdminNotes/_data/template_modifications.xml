@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<template_modifications>
-  <modification type="admin" template="index" modification_key="adminNotes_index" description="adminNotes_index" execution_order="10" enabled="1" action="str_replace">
-    <find><![CDATA[<xf:if is="$stats is not empty AND $xf.visitor.hasAdminPermission('viewStatistics')">]]></find>
-    <replace><![CDATA[<xf:include template="andy_admin_notes" />
-$0]]></replace>
-  </modification>
-</template_modifications>

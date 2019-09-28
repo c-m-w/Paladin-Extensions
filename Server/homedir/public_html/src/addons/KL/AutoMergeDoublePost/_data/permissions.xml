@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<permissions>
-  <permission permission_group_id="forum" permission_id="klAMDPBypassMerge" permission_type="flag" interface_group_id="klAMDP" display_order="100002"/>
-  <permission permission_group_id="forum" permission_id="klAMDPMergeTime" permission_type="integer" interface_group_id="klAMDP" display_order="10000"/>
-</permissions>

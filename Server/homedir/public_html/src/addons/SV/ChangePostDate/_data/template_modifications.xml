@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<template_modifications>
-  <modification type="public" template="inline_mod_controls_post" modification_key="sv_changepost_date_inline_mod_controls_post" execution_order="10" enabled="1" action="preg_replace">
-    <find><![CDATA[#(\s*)(<option value="deselect)#si]]></find>
-    <replace><![CDATA[$1<xen:if is="{$inlineModOptions.datechange}"><option value="datechange">{xen:phrase sv_change_post_date}...</option></xen:if>
-$1$2]]></replace>
-  </modification>
-</template_modifications>

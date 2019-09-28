@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<permissions>
-  <permission permission_group_id="EWRdiscord" permission_id="botPost" permission_type="flag" interface_group_id="EWRdiscord" display_order="9"/>
-  <permission permission_group_id="EWRdiscord" permission_id="viewCrate" permission_type="flag" interface_group_id="EWRdiscord" display_order="2"/>
-  <permission permission_group_id="EWRdiscord" permission_id="viewDiscord" permission_type="flag" interface_group_id="EWRdiscord" display_order="1"/>
-</permissions>

@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<navigation>
-  <navigation_entry navigation_id="history" parent_navigation_id="forums" display_order="1100" navigation_type_id="basic" enabled="1"><![CDATA[{"link":"{{ link('history') }}","display_condition":"$xf.visitor.hasPermission('history', 'view')","extra_attributes":[]}]]></navigation_entry>
-</navigation>

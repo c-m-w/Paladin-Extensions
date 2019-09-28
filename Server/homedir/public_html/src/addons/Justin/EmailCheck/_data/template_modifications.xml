@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<template_modifications>
-  <modification type="public" template="PAGE_CONTAINER" modification_key="j_email_check_branding" execution_order="10" enabled="1" action="str_replace">
-    <find><![CDATA[{{ phrase('extra_copyright') }}]]></find>
-    <replace><![CDATA[| <a href="http://www.mpm.pm/" title="XenForo Add-ons" target="_blank" class="u-concealed">Email Check by MPM.PM</a>
-]]></replace>
-  </modification>
-</template_modifications>

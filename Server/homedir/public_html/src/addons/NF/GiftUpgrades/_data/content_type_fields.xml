@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<content_type_fields>
-  <field content_type="nixfifty_gift_upgrade" field_name="stats_handler_class">NF\GiftUpgrades\Stats\GiftUpgrade</field>
-</content_type_fields>

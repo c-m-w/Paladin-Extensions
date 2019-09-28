@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<cron>
-  <entry entry_id="xr_pm_expiry" cron_class="XR\PM\Cron\Expiry" cron_method="expire" active="1"><![CDATA[{"day_type":"dom","dom":[-1],"hours":[-1],"minutes":[2,12,22,32,42,52]}]]></entry>
-</cron>

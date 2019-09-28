@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<content_type_fields>
-  <field content_type="resource_title" field_name="edit_history_handler_class">SV\TitleEditHistory\EditHistory\ResourceItem</field>
-  <field content_type="resource_title" field_name="entity">XFRM:ResourceItem</field>
-  <field content_type="thread_title" field_name="edit_history_handler_class">SV\TitleEditHistory\EditHistory\Thread</field>
-  <field content_type="thread_title" field_name="entity">XF:Thread</field>
-</content_type_fields>

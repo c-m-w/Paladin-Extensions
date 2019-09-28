@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<navigation>
-  <navigation_entry navigation_id="siropuReferralContests" display_order="1000" navigation_type_id="basic" enabled="1"><![CDATA[{"link":"{{ link('referral-contests') }}","display_condition":"$xf.visitor.hasPermission('siropuReferralContests', 'viewContests')","extra_attributes":[]}]]></navigation_entry>
-</navigation>

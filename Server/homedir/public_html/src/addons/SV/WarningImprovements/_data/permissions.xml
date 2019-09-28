@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<permissions>
-  <permission permission_group_id="general" permission_id="sv_editWarningActions" permission_type="flag" interface_group_id="generalModeratorPermissions" display_order="260"/>
-  <permission permission_group_id="general" permission_id="sv_showAllWarningActions" permission_type="flag" interface_group_id="generalModeratorPermissions" display_order="270"/>
-  <permission permission_group_id="general" permission_id="sv_viewWarningActions" permission_type="flag" interface_group_id="generalModeratorPermissions" display_order="250"/>
-  <permission permission_group_id="general" permission_id="viewWarning_issuer" permission_type="flag" interface_group_id="generalPermissions" display_order="11005"/>
-</permissions>

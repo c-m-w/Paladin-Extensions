@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<phrases>
-  <phrase title="option.xc_captcha_login_enable_captcha" version_id="2000000" version_string="2.0.0"><![CDATA[Enable captcha for each connection]]></phrase>
-  <phrase title="option.xc_captcha_login_enable_captcha_admin" version_id="2000000" version_string="2.0.0"><![CDATA[Activate the captcha to connect to the admin panel]]></phrase>
-  <phrase title="option_explain.xc_captcha_login_enable_captcha" version_id="2000000" version_string="2.0.0"><![CDATA[]]></phrase>
-  <phrase title="option_explain.xc_captcha_login_enable_captcha_admin" version_id="2000000" version_string="2.0.0"><![CDATA[]]></phrase>
-  <phrase title="option_group.xc_captcha_login" version_id="2000000" version_string="2.0.0"><![CDATA[[XenConcept] Captcha login]]></phrase>
-  <phrase title="option_group_description.xc_captcha_login" version_id="2000000" version_string="2.0.0"><![CDATA[]]></phrase>
-</phrases>

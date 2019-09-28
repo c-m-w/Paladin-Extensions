@@ -1,1 +1,0 @@
-CREATE USER "palavpvb" WITH PASSWORD E'md5c65e786956a128c8fecd85dbda9e400c';

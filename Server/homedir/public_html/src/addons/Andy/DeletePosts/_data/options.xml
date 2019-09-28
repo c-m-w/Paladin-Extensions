@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<options>
-  <option option_id="deletePostsLimit" edit_format="spinbox" data_type="numeric">
-    <default_value>1000</default_value>
-    <edit_format_params>min=1</edit_format_params>
-    <relation group_id="deletePosts" display_order="1"/>
-  </option>
-</options>

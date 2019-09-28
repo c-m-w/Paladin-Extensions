@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<routes>
-  <route route_type="admin" route_prefix="logs" sub_name="aed-logs" format="aed-logs/:int&lt;error_id&gt;/" controller="xenMade\AED:AEDLog" context="aedLog"/>
-</routes>

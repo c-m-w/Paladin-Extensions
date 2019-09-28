@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<content_type_fields>
-  <field content_type="node" field_name="entity">XF:Node</field>
-  <field content_type="node" field_name="th_bookmark_handler_class">ThemeHouse\Bookmarks\BookmarkHandler\Node</field>
-  <field content_type="post" field_name="th_bookmark_handler_class">ThemeHouse\Bookmarks\BookmarkHandler\Post</field>
-  <field content_type="resource" field_name="th_bookmark_handler_class">ThemeHouse\Bookmarks\BookmarkHandler\ResourceItem</field>
-  <field content_type="thread" field_name="th_bookmark_handler_class">ThemeHouse\Bookmarks\BookmarkHandler\Thread</field>
-  <field content_type="xfmg_media" field_name="th_bookmark_handler_class">ThemeHouse\Bookmarks\BookmarkHandler\MediaItem</field>
-</content_type_fields>

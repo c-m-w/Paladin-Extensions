@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<routes>
-  <route route_type="admin" route_prefix="logs" sub_name="login-attempt" format="login-attempt/:int&lt;attempt_id&gt;/" controller="XF:Log" context="sv_ue_loginAttemptLog" action_prefix="loginAttempt"/>
-  <route route_type="admin" route_prefix="logs" sub_name="user" format="user/:int&lt;user_log_id&gt;/" controller="XF:Log" context="sv_ue_userLog" action_prefix="user"/>
-</routes>

@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<permissions>
-  <permission permission_group_id="forum" permission_id="changePostAuthor" permission_type="flag" interface_group_id="forumModeratorPermissions" display_order="405"/>
-  <permission permission_group_id="forum" permission_id="changeThreadAuthor" permission_type="flag" interface_group_id="forumModeratorPermissions" display_order="400"/>
-  <permission permission_group_id="profilePost" permission_id="changeProfilePostAuthor" permission_type="flag" interface_group_id="profilePostModeratorPermissions" display_order="200"/>
-  <permission permission_group_id="xfmg" permission_id="changeAlbumOwner" permission_type="flag" interface_group_id="xfmgAlbumModerator" display_order="200"/>
-  <permission permission_group_id="xfmg" permission_id="changeCommentAuthor" permission_type="flag" interface_group_id="xfmgCommentModerator" display_order="200"/>
-  <permission permission_group_id="xfmg" permission_id="changeMediaOwner" permission_type="flag" interface_group_id="xfmgMediaModerator" display_order="200"/>
-</permissions>

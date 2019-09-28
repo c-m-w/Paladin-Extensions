@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<cron>
-  <entry entry_id="ewrDiscord" cron_class="EWR\Discord\Cron\Sync" cron_method="syncDiscord" active="1"><![CDATA[{"day_type":"dom","dom":[-1],"hours":[-1],"minutes":[2,7,12,17,22,27,32,37,42,47,52,57]}]]></entry>
-</cron>

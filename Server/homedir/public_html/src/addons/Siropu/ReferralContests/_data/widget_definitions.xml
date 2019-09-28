@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<widget_definitions>
-  <widget_definition definition_id="siropu_referral_contests" definition_class="Siropu\ReferralContests\Widget\Contest"/>
-  <widget_definition definition_id="siropu_referral_link" definition_class="Siropu\ReferralContests\Widget\ReferralLink"/>
-  <widget_definition definition_id="siropu_referral_top_ref" definition_class="Siropu\ReferralContests\Widget\TopReferrers"/>
-</widget_definitions>

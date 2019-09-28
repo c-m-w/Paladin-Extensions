@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<permissions>
-  <permission permission_group_id="th_bookmarks" permission_id="canBookmark" permission_type="flag" interface_group_id="th_bookmarks" display_order="1"/>
-</permissions>

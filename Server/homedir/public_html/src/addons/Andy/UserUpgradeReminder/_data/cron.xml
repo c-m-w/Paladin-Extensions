@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<cron>
-  <entry entry_id="UserUpgradeReminder" cron_class="Andy\UserUpgradeReminder\XF\Cron\UserUpgradeReminder" cron_method="runUserUpgradeReminder" active="1"><![CDATA[{"day_type":"dom","dom":[-1],"hours":[9],"minutes":[0]}]]></entry>
-</cron>
