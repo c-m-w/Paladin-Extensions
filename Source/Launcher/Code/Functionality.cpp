@@ -113,6 +113,17 @@ bool CFunctionality::Initialize( )
 	pInvalidKeyInput->SetMaxLength( AUTH.PURCHASE_KEY_LENGTH );
 	pInvalidKeyInput->SetSize( { 2.0, 0.26041666666 } );
 	pLoginCodeContainers[ ELoginCode::INVALID_KEY ]->AddObject( pInvalidKeyInput, { pLoginCodeContainers[ ELoginCode::INVALID_KEY ]->GetSize( ).x / 2.0 - pInvalidKeyInput->GetSize( ).x / 2.0, pInvalidKeyNotificationBottom->GetLocation( ).y + pInvalidKeyNotificationBottom->GetSize( ).y + 0.05208333333 } );
+
+	pInvalidKeyEnterKey = new CButton( );
+	pInvalidKeyEnterKey->SetText( "continue" );
+	pInvalidKeyEnterKey->GetCallbacks( ).AddCallback( [ & ]( CKeyState _State )
+	{
+		if ( _State && AUTH.CreateLicenseFile( pInvalidKeyInput->GetBuffer( ) ) )
+			exit( -1 );
+
+		return false;
+	}, VK_LBUTTON );
+	pLoginCodeContainers[ ELoginCode::INVALID_KEY ]->AddObject( pInvalidKeyEnterKey, { pLoginCodeContainers[ ELoginCode::INVALID_KEY ]->GetSize( ).x / 2.0 - pInvalidKeyEnterKey->GetSize( ).x / 2.0, pInvalidKeyInput->GetLocation( ).y + pInvalidKeyInput->GetSize( ).y + 0.05208333333 } );
 	
 	pInvalidHardwareNotificationTop = new CText( );
 	pInvalidHardwareNotificationTop->SetColor( COLOR_INDEX_PRIMARY, STATE_DORMANT, BLUE );
@@ -231,7 +242,7 @@ void CFunctionality::Run( )
 {
 	Pause( 2500ull );
 
-	_LoginCode = /*AUTH.Login( )*/ ELoginCode::INVALID_KEY;
+	_LoginCode = AUTH.Login( );
 	bConnected = true;
 }
 

@@ -44,7 +44,7 @@ public:
 	static inline std::function< bool( char ) > FILTERS[ 4 ]
 	{
 		[ ]( char chCharacter ) // FILTER_LETTERS
-		{
+		{ 
 			return chCharacter >= 'A' && chCharacter <= 'Z'
 				|| chCharacter >= 'a' || chCharacter <= 'z';
 		},
@@ -71,6 +71,7 @@ public:
 	void RemoveFilter( EFilter _FilterToRemove );
 	void NewCharacter( char chInsertion );
 	void SetMaxLength( std::size_t zNewLength );
+	std::string GetBuffer( );
 	void OnKeyTyped( char chCharacter ) override;
 	void OnCopy( ) override;
 	void OnPaste( ) override;

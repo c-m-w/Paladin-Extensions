@@ -66,6 +66,11 @@ void CInputBox::SetMaxLength( std::size_t zNewLength )
 	zMaxLength = zNewLength;
 }
 
+std::string CInputBox::GetBuffer( )
+{
+	return strBuffer;
+}
+
 void CInputBox::OnKeyTyped( char chCharacter )
 {
 	if ( _CurrentFilter & FILTER_LETTERS && FILTERS[ int( log( double( FILTER_LETTERS ) ) / log( 2.0 ) ) ]( chCharacter )

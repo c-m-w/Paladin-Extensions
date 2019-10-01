@@ -21,6 +21,7 @@ private:
 	CText* pInvalidKeyNotificationTop = nullptr;
 	CText* pInvalidKeyNotificationBottom = nullptr;
 	CInputBox* pInvalidKeyInput = nullptr;
+	CButton* pInvalidKeyEnterKey = nullptr;
 	CText* pInvalidHardwareNotificationTop = nullptr;
 	CText* pInvalidHardwareNotificationBottom = nullptr;
 	CText* pLoginNotificationTop = nullptr;
