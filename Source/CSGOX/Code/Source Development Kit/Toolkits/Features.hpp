@@ -2,6 +2,8 @@
 
 #pragma once
 
+// NOTE: IFeatureBase should have the ability to hook multiple functions
+
 // interface, index
 inline std::vector< std::pair< void *, std::size_t > > vecBeginHook[ FUNCTION_MAX ] { };
 // interface, index
@@ -470,6 +472,8 @@ class CChams final: public IFeatureBase< FUNCTION_DRAW_PRIMITIVE, SDrawContext >
 	}
 	void __cdecl End( SDrawContext* _Context ) override
 	{ }
+public:
+	color_t clr;
 };
 
 // todo https://www.unknowncheats.me/forum/2197432-post19.html
@@ -481,14 +485,11 @@ class CGlow final: public IFeatureBase< FUNCTION_DRAW_PRIMITIVE, SDrawContext >
 	}
 	void __cdecl End( SDrawContext* _Context ) override
 	{ }
+public:
+	color_t clr;
 };
 
 struct SPresentContext
-{
-	
-};
-
-class CNotificationSystem final: public IFeatureBase< FUNCTION_PRESENT, SPresentContext >
 {
 	
 };
@@ -509,6 +510,139 @@ struct SCreateMoveContext
 	/*CCSPlayer*/CBasePlayer* pLocalPlayer;
 	CUserCmd* pCommand;
 	CVerifiedUserCmd* pVerifiedCommand;
+};
+
+class CNotificationSystem final: public IFeatureBase< FUNCTION_PRESENT, SPresentContext >
+{
+	
+	void __cdecl Begin( SPresentContext* _Context ) override
+	{
+		collect.notif_category = notif_category;
+		collect.strNotifMessageFormat = strNotifMessageFormat;
+
+		
+	}
+	
+	void __cdecl End( SPresentContext* _Context ) override
+	{
+		
+	}
+	
+	class CCollectInformation final: public IFeatureBase< FUNCTION_CREATE_MOVE, SCreateMoveContext >
+	{		
+		void __cdecl Begin( SCreateMoveContext* _Context ) override
+		{
+			static bool bDontCheck = false;
+			if ( !Notification.empty( ) || bDontCheck )
+				return; // we haven't pushed our last notification yet, let's wait a bit so we dont rape with notifications!
+			
+			switch ( notif_category )
+			{
+				case notif_message:
+				{
+					static bool bCouldveFired;
+					static int iTotalHits = 0;
+					auto wep = _Context->pLocalPlayer->m_hActiveWeapon( );
+					if ( wep )
+					{
+						if ( wep->CanFire( ) )
+							bCouldveFired = true;
+						else
+						{
+							if ( bCouldveFired && iTotalHits == _Context->pLocalPlayer->m_totalHitsOnServer( ) )
+								Notification = "Missed shot!";
+						}
+					}
+					iTotalHits = _Context->pLocalPlayer->m_totalHitsOnServer( );
+					break;
+				}
+
+				case notif_warning:
+				{
+					int players = 0;
+					for ( int i = 1; i < pGlobalVariables->m_iMaxClients; i++ )
+					{
+						auto p = pEntityList->GetClientEntity( i );
+						if ( p && static_cast< CBaseEntity* >( p )->IsPlayer( ) )
+							players++;
+					}
+					if ( players > 10 )
+						Notification = strNotifMessageFormat + " may be using up a lot of resources! Consider turning it off for better performance.";
+					break;
+				}
+
+				case notif_errror:
+				{
+					//https://developer.valvesoftware.com/wiki/CSGO_Game_Mode_Commands
+					static auto pGameType = pConVar->FindCommand( ENC( "game_type" ) );
+					static auto pGameMode = pConVar->FindCommand( ENC( "game_mode" ) );
+					if ( ( pGameType->GetValueAsInteger( ) == 0 && pGameMode->GetValueAsInteger( ) == 1 ) // Competitive
+						 || ( pGameType->GetValueAsInteger( ) == 0 && pGameMode->GetValueAsInteger( ) == 2 ) // Wingman
+						 || ( pGameType->GetValueAsInteger( ) == 6 && pGameMode->GetValueAsInteger( ) == 0 ) // Danger Zone
+						 )
+						Notification = "Overwatched game modes are unsafe with this config!";
+					break;
+				}
+
+				case notif_special_player:
+				{
+					static int old_players = 0;
+					int players = 0;
+					for ( int i = 1; i < pGlobalVariables->m_iMaxClients; i++ )
+					{
+						auto p = pEntityList->GetClientEntity( i );
+						if ( p && static_cast< CBaseEntity* >( p )->IsPlayer( ) )
+							players++;
+					}
+					if ( players != old_players )
+						Notification = "A user has either connected or disconnected.";
+					break;
+				}
+				// good enough for now lol
+				case notif_special_item:
+				{
+					break;
+				}
+				case notif_special_object:
+				{
+					break;
+				}
+				case notif_special_economy:
+				{
+					break;
+				}
+			}
+
+			if ( !Notification.empty( ) && bOneTimeCheck )
+				bDontCheck = true;
+		}
+		void __cdecl End( SCreateMoveContext* _Context ) override
+		{
+			
+		}
+	public:
+		bool bOneTimeCheck;
+		int notif_category;
+		std::string strNotifMessageFormat;
+
+		std::string Notification;
+	}
+	collect; // this might fuck with our shit... class within class. how the vtables are gonna get fukt is unknown
+	
+public:
+	enum
+	{
+		notif_message, // missed shot due to spread
+		notif_warning, // this feature is using up a lot of resources! consider turning it off for better performance
+		notif_errror, // this config contains features that could cause you to be overwatch banned!
+		              // that config is outdated!
+		notif_special_player, // someone left!
+		notif_special_item, // there is an awp near you!
+		notif_special_object, // bomb is planted at B!
+		notif_special_economy, // someone purhcased something!
+	} volatile notif_category;
+	std::string strNotifTitle; // = "Item Purchase"
+	std::string strNotifMessageFormat; // = "%player purchased %item!"
 };
 
 class ICombatFeatureBase: public IFeatureBase< FUNCTION_CREATE_MOVE, SCreateMoveContext >
@@ -638,16 +772,16 @@ class CAutonomousTrigger final: public AAimAssistanceBase // todo: autonomous tr
 		if ( !bFired || !bSetSensToZeroOnFire )
 			return;
 
-		//static auto pVarSensitivity = pConVar->FindCommand( ENC( "sensitivity" ) );
-		//static auto flSensitivity = pVarSensitivity->GetValueAsFloat( );
+		static auto pVarSensitivity = pConVar->FindCommand( ENC( "sensitivity" ) );
+		static auto flSensitivity = pVarSensitivity->GetValueAsFloat( );
 		
 		if ( KeybindActiveState( _Keys ) )
 		{
-			//pVarSensitivity.SetValueAsFloat( flSensitivity / 2 );
+			pVarSensitivity.SetValueAsFloat( flSensitivity / 2 );
 		}
 		else
 		{
-			//pVarSensitivity.SetValueAsFloat( flSensitivity );
+			pVarSensitivity.SetValueAsFloat( flSensitivity );
 			bFired = false;
 		}
 	}
@@ -692,7 +826,7 @@ class CAimAssistance final: public AAimAssistanceBase
 			return;
 
 		// if we already moved angles last tick, we need to move back
-		if ( !old_viewangles.IsZero( .1f ) )
+		if ( !old_viewangles.IsZero( ) )
 			return old_viewangles.Init( 0.f, 0.f, 0.f );
 
 		// check for aimbot key
@@ -732,7 +866,7 @@ class CAimAssistance final: public AAimAssistanceBase
 	}
 	void __cdecl End( SCreateMoveContext* _Context ) override
 	{
-		if ( !old_viewangles.IsZero( .1f ) )
+		if ( !old_viewangles.IsZero( ) )
 			return ( void )( _Context->pCommand->viewangles = old_viewangles ); 
 	}
 public:
@@ -935,40 +1069,7 @@ class CInventoryManager final: public IFeatureBase< FUNCTION_FRAME_STAGE_NOTIFY,
 	int kills_to_save = 0;
 	static CPlayerInventory *pInventory;
 	CEconItem *pThisItem;
-
-	CInventoryManager( )
-	{
-		// note PASTIN BOIS
-		//pInventory = **reinterpret_cast< CPlayerInventory*** >( nullptr );//Pattern::FindSignature("client.dll", "8B 3D ? ? ? ? 85 FF 74 1A") + 0x2);
-		//
-		//if ( enumWeapon == ITEM_NONE )
-		//	return;
-		//
-		//{
-		//	//static auto fnCreateSharedObjectSubclass_EconItem_ = reinterpret_cast< CEconItem*(__stdcall*)( ) >( *reinterpret_cast< uintptr_t* >( Pattern::FindSignature( "client.dll", "C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? E8 ? ? ? ? 83 F8 FF 75 09 8D 45 E4 50 E8 ? ? ? ? 8D 45 E4 C7 45 ? ? ? ? ? 50 C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? E8 ? ? ? ? 83 F8 FF 75 09 8D 45 E4 50 E8 ? ? ? ? 8D 45 E4 C7 45 ? ? ? ? ? 50 C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? E8 ? ? ? ? 83 F8 FF 75 09 8D 45 E4 50 E8 ? ? ? ? 8D 45 E4 C7 45 ? ? ? ? ? 50 C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? E8 ? ? ? ? 83 F8 FF 75 09 8D 45 E4 50 E8 ? ? ? ? 8D 45 E4" ) + 3 ) );
-		//	//pThisItem = fnCreateSharedObjectSubclass_EconItem_( );
-		//}
-		//
-		////*pThisItem->GetAccountID( ) = pInventory->GetSteamID( );
-		////*pThisItem->GetDefIndex( ) = 1;
-		////*pThisItem->GetItemID( ) = rand( ) % 50000 + 1;
-		////*pThisItem->GetInventory( ) = 1;
-		////*pThisItem->GetFlags( ) = 0;
-		////*pThisItem->GetOriginalID( ) = 0;
-		//////pThisItem->AddSticker(0, 4, 0, 1, 1);
-		////if ( iStatTrak.second >= 0 )
-		////	pThisItem->SetStatTrak( iStatTrak.second );
-		////pThisItem->SetPaintKit( iSkin );
-		////pThisItem->SetPaintSeed( iSeed );
-		////pThisItem->SetPaintWear( flExterior );
-		////pThisItem->SetOrigin( 8 );
-		//////pThisItem->SetRarity(ITEM_RARITY_MYTHICAL);
-		////pThisItem->SetLevel( 1 );
-		////pThisItem->SetInUse( bEquipped );
-		////
-		////pInventory->AddEconItem( pThisItem, 1, 0, 1 );
-	}
-
+	
 	void __cdecl Begin( SFrameStageNotifyContext *_Context ) override
 	{
 		if ( !bEquipped )
@@ -978,7 +1079,7 @@ class CInventoryManager final: public IFeatureBase< FUNCTION_FRAME_STAGE_NOTIFY,
 			return;
 		
 		// todo
-		//kills_to_save = _Context->pLocalPlayer->m_iKills( );
+		kills_to_save = _Context->pLocalPlayer->m_iKills( );
 
 		if ( !_Context->pLocalPlayer->IsAlive( ) )
 			return;
@@ -1034,11 +1135,6 @@ class CInventoryManager final: public IFeatureBase< FUNCTION_FRAME_STAGE_NOTIFY,
 
 	void __cdecl End( SFrameStageNotifyContext* _Context ) override
 	{ }
-	~CInventoryManager( )
-	{
-		if ( iStatTrak.first )
-			iStatTrak.second += kills_to_save;
-	}
 public:
 	bool bEquipped;
 	int iSkin;
@@ -1052,5 +1148,43 @@ public:
 	void UpdateInventory( ) // must be called after modifying the config
 	{
 		
+	}
+	
+	CInventoryManager( )
+	{
+		// note PASTIN BOIS
+		//pInventory = **reinterpret_cast< CPlayerInventory*** >( nullptr );//Pattern::FindSignature("client.dll", "8B 3D ? ? ? ? 85 FF 74 1A") + 0x2);
+		//
+		//if ( enumWeapon == ITEM_NONE )
+		//	return;
+		//
+		//{
+		//	//static auto fnCreateSharedObjectSubclass_EconItem_ = reinterpret_cast< CEconItem*(__stdcall*)( ) >( *reinterpret_cast< uintptr_t* >( Pattern::FindSignature( "client.dll", "C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? E8 ? ? ? ? 83 F8 FF 75 09 8D 45 E4 50 E8 ? ? ? ? 8D 45 E4 C7 45 ? ? ? ? ? 50 C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? E8 ? ? ? ? 83 F8 FF 75 09 8D 45 E4 50 E8 ? ? ? ? 8D 45 E4 C7 45 ? ? ? ? ? 50 C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? E8 ? ? ? ? 83 F8 FF 75 09 8D 45 E4 50 E8 ? ? ? ? 8D 45 E4 C7 45 ? ? ? ? ? 50 C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? C7 45 ? ? ? ? ? E8 ? ? ? ? 83 F8 FF 75 09 8D 45 E4 50 E8 ? ? ? ? 8D 45 E4" ) + 3 ) );
+		//	//pThisItem = fnCreateSharedObjectSubclass_EconItem_( );
+		//}
+		//
+		////*pThisItem->GetAccountID( ) = pInventory->GetSteamID( );
+		////*pThisItem->GetDefIndex( ) = 1;
+		////*pThisItem->GetItemID( ) = rand( ) % 50000 + 1;
+		////*pThisItem->GetInventory( ) = 1;
+		////*pThisItem->GetFlags( ) = 0;
+		////*pThisItem->GetOriginalID( ) = 0;
+		//////pThisItem->AddSticker(0, 4, 0, 1, 1);
+		////if ( iStatTrak.second >= 0 )
+		////	pThisItem->SetStatTrak( iStatTrak.second );
+		////pThisItem->SetPaintKit( iSkin );
+		////pThisItem->SetPaintSeed( iSeed );
+		////pThisItem->SetPaintWear( flExterior );
+		////pThisItem->SetOrigin( 8 );
+		//////pThisItem->SetRarity(ITEM_RARITY_MYTHICAL);
+		////pThisItem->SetLevel( 1 );
+		////pThisItem->SetInUse( bEquipped );
+		////
+		////pInventory->AddEconItem( pThisItem, 1, 0, 1 );
+	}
+	~CInventoryManager( )
+	{
+		if ( iStatTrak.first )
+			iStatTrak.second += kills_to_save;
 	}
 };

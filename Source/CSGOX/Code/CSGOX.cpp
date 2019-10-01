@@ -27,42 +27,60 @@ BOOL OnAttach( )
 
 	if ( !Initialize( ) )
 		return FALSE;
-	
-	CJumpAutomation bhop;
+
+	CChams cham;
 	{
-		bhop.bUseJumpButton = true;
-		bhop.u8JumpChance = 100ui8;
-		bhop.u8MaximumExtraJumps = 7ui8;
-		bhop.flExtraJumpWindow = 0.25f;
-		bhop.bJumpBeforeHopping = true;
-		bhop.bJumpAfterHopping = true;
+
 	}
-	CAutonomousTrigger trigger;
+	CGlow glow;
 	{
-		trigger.AddKeybind( { VK_XBUTTON2, trigger.HOLD_TO_ACTIVATE }, trigger._Keys );
 		
 	}
+	CNotificationSystem notif;
+	{
+		
+	}
+	//CAutonomousTrigger trigger;
+	//{
+	//	trigger.AddKeybind( { VK_XBUTTON2, trigger.HOLD_TO_ACTIVATE }, trigger._Keys );
+	//	
+	//}
+	//CAimAssistance aimbot;
+	//{
+	//	aimbot.AddKeybind( { VK_LBUTTON, aimbot.HOLD_TO_ACTIVATE }, aimbot._Keys );
+	//	aimbot.flFieldOfView = 10.f;
+	//}
 	CFlashUtility noflash;
 	{
 		noflash.AddKeybind( { key_t( 0ui8 ), noflash.ACTIVE }, noflash._Keys );
 		noflash.flFullFlashMaximum = 0.8f;
 		noflash.flPartialFlashMaximum = 0.25f;
 	}
-	CTriggerAutomation autopistol;
+	//CTriggerAutomation autopistol;
+	//{
+	//	autopistol.AddKeybind( { VK_LBUTTON, autopistol.HOLD_TO_ACTIVATE }, autopistol._Keys );
+	//}
+	//CJumpAutomation bhop;
+	//{
+	//	bhop.bUseJumpButton = true;
+	//	bhop.u8JumpChance = 100ui8;
+	//	bhop.u8MaximumExtraJumps = 7ui8;
+	//	bhop.flExtraJumpWindow = 0.25f;
+	//	bhop.bJumpBeforeHopping = true;
+	//	bhop.bJumpAfterHopping = true;
+	//}
+	//CStaminaBugAutomation jumpbug;
+	//{
+	//	jumpbug.AddKeybind( { VkKeyScan( 'b' ), jumpbug.HOLD_TO_ACTIVATE }, jumpbug._Keys );
+	//	jumpbug.bUseDuckButton = true;
+	//	jumpbug.bDisableWhenManuallyDucking = true;
+	//}
+	CInventoryManager inv;
 	{
-		autopistol.AddKeybind( { VK_LBUTTON, autopistol.HOLD_TO_ACTIVATE }, autopistol._Keys );
+		
 	}
-	CStaminaBugAutomation jumpbug;
-	{
-		jumpbug.AddKeybind( { VkKeyScan( 'b' ), jumpbug.HOLD_TO_ACTIVATE }, jumpbug._Keys );
-		jumpbug.bUseDuckButton = true;
-		jumpbug.bDisableWhenManuallyDucking = true;
-	}
-	CAimAssistance aimbot;
-	{
-		aimbot.AddKeybind( { VK_LBUTTON, aimbot.HOLD_TO_ACTIVATE }, aimbot._Keys );
-		aimbot.flFieldOfView = 10.f;
-	}
+	
+	
 	
 	while ( !_Input.GetKeyState( VK_DELETE ) )
 		Pause( 1 );
