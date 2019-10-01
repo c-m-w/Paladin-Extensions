@@ -260,7 +260,7 @@ void CFunctionality::DrawLoop( )
 		
 		DRAW.BeginFrame( );
 		_GUI.Draw( );
-		test->Draw();
+		//test->Draw();
 		DRAW.EndFrame( );
 		
 		

@@ -165,8 +165,18 @@ void CGUI::Setup( )
 
 			if ( _Key != VK_RBUTTON 
 				 && _Key != VK_LBUTTON )
+			{
+				if ( _Input.GetKeyState( VK_CONTROL ) )
+				{
+					if ( _Key == 'C' )
+						pActiveInteractable->OnCopy( );
+					else if ( _Key == 'V' )
+						pActiveInteractable->OnPaste( );
+				}
+				
 				for ( auto& _Callback : pActiveInteractable->GetCallbacks( ).GetCallbacks( _Key ) )
 					_Callback( _State );
+			}
 
 			for ( auto& _Callback : pActiveInteractable->GetCallbacks( ).GetCallbacks< global_key_callback_t >( ) )
 				_Callback( _Key, _State );

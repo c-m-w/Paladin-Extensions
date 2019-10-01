@@ -15,6 +15,9 @@ void CInputBox::CreateDrawables( )
 	pFill->RoundedRectangle( recLocation, GetCurrentColor( COLOR_INDEX_SECONDARY ), ROUNDING );
 	pOutline->SetDrawingType( D3D11_PRIMITIVE_TOPOLOGY_LINELIST );
 	pOutline->RoundedRectangle( recLocation, GetCurrentColor( COLOR_INDEX_TERTIARY ), ROUNDING );
+
+	if ( !strBuffer.empty( ) )
+		vecDrawables.emplace_back( new CDrawable( ) )->Rectangle( recLocation, 0xFFFFFFFF ), vecDrawables.back( )->SetTexture( _FontManager.CreateBitmap( &strBuffer[ 0 ], FONT, FONT_WEIGHT, false, InchesToPixels( TEXT_HEIGHT ) ), GetCurrentColor( COLOR_INDEX_PRIMARY ) );
 }
 
 CInputBox::CInputBox( ) :
@@ -53,6 +56,9 @@ void CInputBox::NewCharacter( char chInsertion )
 		strBuffer.insert( strBuffer.begin( ) + uInsertionPoint, chInsertion );
 	else
 		strBuffer[ uInsertionPoint ] = chInsertion;
+
+	uInsertionPoint++;
+	PreCreateDrawables( );
 }
 
 void CInputBox::SetMaxLength( std::size_t zNewLength )
@@ -71,6 +77,7 @@ void CInputBox::OnKeyTyped( char chCharacter )
 
 void CInputBox::OnCopy( )
 {
+	MessageBox( nullptr, strBuffer.c_str( ), "menfuck", 0);
 }
 
 void CInputBox::OnPaste( )
