@@ -272,7 +272,6 @@ struct SDrawContext
 
 struct STargetEntityFilter
 {
-	
 	enum // filter
 	{
 		unfiltered = -1,
@@ -300,7 +299,7 @@ struct STargetEntityFilter
 		terrorists,
 		counter_terrorists,
 		other
-	} team;
+	} team = teamless;
 	int get_team( CBasePlayer& entity )
 	{
 		if ( get_entity_type( entity ) != player )
@@ -329,10 +328,11 @@ struct STargetEntityFilter
 		autosniper,
 		gear
 	} weapon_group = groupless;
-	int get_weapon_group( CBasePlayer& entity )
+	int get_weapon_group( CBaseCombatWeapon& entity )
 	{
 		if ( get_entity_type( entity ) != weapon )
 			return groupless;
+		return groupless;
 		/* todo */
 	}
 	
@@ -351,7 +351,7 @@ struct STargetEntityFilter
 				auto& wep = reinterpret_cast< CBasePlayer* >( &entity )->m_hActiveWeapon( );
 				if ( wep == nullptr )
 					return uncounted;
-				return wep->m_iClip1( );
+				return wep->m_iClip1( ) > 50 ? majority : minority;
 			}
 			case weapon:
 			{
@@ -361,12 +361,13 @@ struct STargetEntityFilter
 			default:
 				return uncounted;
 		}
+		return uncounted;
 	}
 	int get_armor( CBasePlayer& entity )
 	{
 		if ( get_entity_type( entity ) != player )
 			return uncounted;
-		return entity.m_ArmorValue( );
+		return entity.m_ArmorValue( ) > 50 ? majority : minority;
 	}
 
 	enum // players
@@ -375,11 +376,12 @@ struct STargetEntityFilter
 		no_armor,
 		half_armor,
 		head_plus_armor
-	} armor_type;
+	} armor_type = unknown;
 	int get_armor_type( CBasePlayer& entity )
 	{
 		if ( get_entity_type( entity ) != player )
 			return unknown;
+		return unknown;
 		//??? todo
 	}
 	
@@ -439,6 +441,7 @@ struct STargetEntityFilter
 	int get_noise( CBasePlayer& entity )
 	{
 		// todo no idea
+		return all;
 	}
 
 	enum // players
@@ -461,6 +464,59 @@ struct STargetEntityFilter
 
 		return full;
 	}
+
+	bool operator==( CBaseEntity& pEntity )
+	{
+		// NO DATA VALIDATION OR SANITY CHECKS.
+		// YOU COULD PUT A COUNTER TERRORIST CHICKEN AND THIS FUNCTION DOESN'T CARE
+		// SANITY MUST BE DONE IN THE GUI
+		
+		if ( entity_type != unfiltered )
+			if ( entity_type != get_entity_type( pEntity ) )
+				return false;
+
+		if ( team != teamless )
+			if ( team != get_team( *reinterpret_cast<CBasePlayer*>(&pEntity) ) )
+				return false;
+		
+		if ( weapon_group != groupless )
+			if ( weapon_group != get_weapon_group( *reinterpret_cast<CBaseCombatWeapon*>(&pEntity) ) )
+				return false;
+		
+		if ( ammo != uncounted )
+			if ( ammo != get_ammo( pEntity ) )
+				return false;
+		
+		if ( armor != uncounted )
+			if ( armor != get_armor(  *reinterpret_cast<CBasePlayer*>(&pEntity) ) )
+				return false;
+
+		if ( armor_type != unknown )
+			if ( armor_type != get_armor_type(  *reinterpret_cast<CBasePlayer*>(&pEntity)))
+				return false;
+		
+		if ( direction != every )
+			if ( direction != get_direction( *GetLocalPlayer( ), *reinterpret_cast<CBasePlayer*>(&pEntity) ))
+				return false;
+		
+		if ( vulnerability != indifferent )
+			if ( vulnerability != get_vulnerability(  *reinterpret_cast<CBasePlayer*>(&pEntity) ))
+				return false;
+		
+		if ( noise != all )
+			if ( noise != get_noise(  *reinterpret_cast<CBasePlayer*>(&pEntity) ))
+				return false;
+		
+		if ( accuracy != any )
+			if ( accuracy != get_accuracy(  *reinterpret_cast<CBasePlayer*>(&pEntity) ) )
+				return false;
+
+		return true;
+	}
+	bool operator!=( CBaseEntity& pEntity )
+	{
+		return !( *this == pEntity );
+	}
 };
 
 // todo https://www.unknowncheats.me/forum/1960243-post4.html
@@ -473,7 +529,8 @@ class CChams final: public IFeatureBase< FUNCTION_DRAW_PRIMITIVE, SDrawContext >
 	void __cdecl End( SDrawContext* _Context ) override
 	{ }
 public:
-	color_t clr;
+	CColor clr;
+	STargetEntityFilter preference;
 };
 
 // todo https://www.unknowncheats.me/forum/2197432-post19.html
@@ -481,12 +538,40 @@ class CGlow final: public IFeatureBase< FUNCTION_DRAW_PRIMITIVE, SDrawContext >
 {
 	void __cdecl Begin( SDrawContext* _Context ) override
 	{
-		
+		for ( int i = 1; i < pGlobalVariables->m_iMaxClients;i++)
+		{
+			auto ent = pEntityList->GetClientEntity( i );
+			if ( preference == *static_cast< CBasePlayer* >( ent ) )
+			{
+				for ( int index = 0; index < pGlowObjectManager->m_GlowObjectDefinitions.Count( ); index++ )
+				{
+					if ( !pGlowObjectManager->m_GlowObjectDefinitions[ i ].IsUnused( ) && pGlowObjectManager->m_GlowObjectDefinitions[ i ].m_pEntity == ent )
+					{
+						auto color = clr.GetColor(  );
+						pGlowObjectManager->m_GlowObjectDefinitions[ i ].m_flRed = color.rfl;
+						pGlowObjectManager->m_GlowObjectDefinitions[ i ].m_flGreen = color.gfl;
+						pGlowObjectManager->m_GlowObjectDefinitions[ i ].m_flBlue = color.bfl;
+						pGlowObjectManager->m_GlowObjectDefinitions[ i ].m_flAlpha = color.afl;
+						pGlowObjectManager->m_GlowObjectDefinitions[ i ].m_flFullBloomAmount =     flFullBloomAmount;
+						pGlowObjectManager->m_GlowObjectDefinitions[ i ].m_bRenderWhenOccluded =   bRenderWhenOccluded;
+						pGlowObjectManager->m_GlowObjectDefinitions[ i ].m_bRenderWhenUnoccluded = bRenderWhenUnoccluded;
+						pGlowObjectManager->m_GlowObjectDefinitions[ i ].m_bFullBloomRender =	   bFullBloomRender;
+						pGlowObjectManager->m_GlowObjectDefinitions[ i ].m_nGlowStyle =			   nGlowStyle;
+					}
+				}
+			}
+		}
 	}
 	void __cdecl End( SDrawContext* _Context ) override
 	{ }
 public:
-	color_t clr;
+	CColor clr;
+	float flFullBloomAmount;
+	bool  bRenderWhenOccluded;
+	bool  bRenderWhenUnoccluded;
+	bool  bFullBloomRender;
+	int   nGlowStyle;
+	STargetEntityFilter preference;
 };
 
 struct SPresentContext

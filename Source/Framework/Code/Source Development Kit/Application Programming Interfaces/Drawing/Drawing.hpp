@@ -138,8 +138,8 @@ class CDrawing: public IBase
 {
 private:
 
-	constexpr static auto SAMPLER_SAMPLES = 4;
-	constexpr static auto SAMPLER_QUALITY_DEFAULT = 16;
+	constexpr static auto SAMPLER_SAMPLES = 1;
+	constexpr static auto SAMPLER_QUALITY_DEFAULT = 0;
 
 	bool Initialize( ) override;
 	void Uninitialize( ) override;

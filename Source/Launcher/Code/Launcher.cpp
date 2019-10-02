@@ -9,6 +9,8 @@ void Draw( );
 void CallRun( );
 void CallDrawLoop( );
 
+// todo check VMP debug checks and shit
+
 void OnLaunch( )
 {
 	if ( !SetupFramework( )

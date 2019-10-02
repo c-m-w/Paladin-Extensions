@@ -1526,8 +1526,8 @@ DXGI_SAMPLE_DESC CDrawing::GetMaxSamplerQuality( )
 
 	auto uQuality = 0u;
 
-	if ( SUCCEEDED( pDevice->CheckMultisampleQualityLevels( DXGI_FORMAT_R8G8B8A8_UNORM, SAMPLER_SAMPLES, &uQuality ) ) )
-		return { SAMPLER_SAMPLES, uQuality - 1 };
+	//if ( SUCCEEDED( pDevice->CheckMultisampleQualityLevels( DXGI_FORMAT_R8G8B8A8_UNORM, SAMPLER_SAMPLES, &uQuality ) ) )
+	//	return { SAMPLER_SAMPLES, uQuality - 1 };
 
 	return { SAMPLER_SAMPLES, SAMPLER_QUALITY_DEFAULT };
 }

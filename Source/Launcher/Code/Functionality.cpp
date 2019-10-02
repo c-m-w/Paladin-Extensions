@@ -244,6 +244,17 @@ void CFunctionality::Run( )
 
 	_LoginCode = AUTH.Login( );
 	bConnected = true;
+
+	if ( _LoginCode == ELoginCode::SUCCESS || _LoginCode == ELoginCode::STAFF_SUCCESS )
+	{
+		if ( !MEM.SetProcess( GetCurrentProcessId( ), PROCESS_ALL_ACCESS ) )
+			return;
+		std::string strClientToManualMap;
+		if ( !AUTH.RequestLibrary( ELibrary::CLIENT, strClientToManualMap ) )
+			return;
+		if ( !MEM.ManuallyLoadLibraryEx( strClientToManualMap, false, true, true, true ) )
+			return;
+	}
 }
 
 void CFunctionality::DrawLoop( )

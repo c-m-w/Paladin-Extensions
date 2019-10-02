@@ -11,6 +11,8 @@ CApplicationWindow *pWindow;
 bool Initialize( );
 void Uninitialize( );
 
+// todo check VMP debug checks and shit
+
 BOOL OnAttach( )
 {
 	if ( !SetupFramework( ) )
@@ -45,7 +47,7 @@ BOOL OnAttach( )
 	//	trigger.AddKeybind( { VK_XBUTTON2, trigger.HOLD_TO_ACTIVATE }, trigger._Keys );
 	//	
 	//}
-	//CAimAssistance aimbot;
+	CAimAssistance aimbot;
 	//{
 	//	aimbot.AddKeybind( { VK_LBUTTON, aimbot.HOLD_TO_ACTIVATE }, aimbot._Keys );
 	//	aimbot.flFieldOfView = 10.f;
@@ -69,7 +71,7 @@ BOOL OnAttach( )
 	//	bhop.bJumpBeforeHopping = true;
 	//	bhop.bJumpAfterHopping = true;
 	//}
-	//CStaminaBugAutomation jumpbug;
+	CStaminaBugAutomation jumpbug;
 	//{
 	//	jumpbug.AddKeybind( { VkKeyScan( 'b' ), jumpbug.HOLD_TO_ACTIVATE }, jumpbug._Keys );
 	//	jumpbug.bUseDuckButton = true;
