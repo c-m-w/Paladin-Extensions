@@ -245,6 +245,8 @@ void CFunctionality::Run( )
 	_LoginCode = AUTH.Login( );
 	bConnected = true;
 
+	VMPAUTH( );
+
 	if ( _LoginCode == ELoginCode::SUCCESS || _LoginCode == ELoginCode::STAFF_SUCCESS )
 	{
 		if ( !MEM.SetProcess( GetCurrentProcessId( ), PROCESS_ALL_ACCESS ) )

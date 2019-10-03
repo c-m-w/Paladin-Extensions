@@ -17,16 +17,16 @@ BOOL OnAttach( )
 {
 	if ( !SetupFramework( ) )
 		return FALSE;
-
+	
 	const auto _LoginCode = AUTH.Login( );
+	if ( _LoginCode != ELoginCode::SUCCESS && _LoginCode != ELoginCode::STAFF_SUCCESS )
+		AUTH.AttemptUninstall( true );
 
-	if ( _LoginCode != ELoginCode::SUCCESS
-		 && _LoginCode != ELoginCode::STAFF_SUCCESS )
-		return FALSE;
+	VMPAUTH( );
 
 	if ( !AUTH.CompareHash( ELibrary::CSGOX, image_info_t( GetModuleHandle( ENC( "csgo.exe" ) ) ).GenerateUniqueHash( ) ) )
 		return LOG( ERROR, APPLICATION, ENC( "Invalid hash of headers." ) ), false;
-
+	
 	if ( !Initialize( ) )
 		return FALSE;
 

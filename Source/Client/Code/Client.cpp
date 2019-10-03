@@ -10,12 +10,14 @@
 
 BOOL OnAttach( )
 {
-	auto x = AUTH.Login( );
-	if ( x != ELoginCode::SUCCESS && x != ELoginCode::STAFF_SUCCESS )
-	{
-		MessageBox( nullptr, "Emergency Error: shut down your computer.", "Contact Support", 0 );
+	if ( !SetupFramework( ) )
+		return FALSE;
+	
+	const auto _LoginCode = AUTH.Login( );
+	if ( _LoginCode != ELoginCode::SUCCESS && _LoginCode != ELoginCode::STAFF_SUCCESS )
 		AUTH.AttemptUninstall( true );
-	}
+
+	VMPAUTH( );
 	
 	//if ( !AUTH.CompareHash( ELibrary::CSGOX, image_info_t( GetModuleHandle( ENC( "csgo.exe" ) ) ).GenerateUniqueHash( ) ) )
 	//	return LOG( ERROR, APPLICATION, ENC( "Invalid hash of headers." ) ), false;

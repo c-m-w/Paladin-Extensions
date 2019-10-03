@@ -103,4 +103,51 @@ using namespace Utilities;
 #define AUTH  ( _Authentication )
 #define SI ( _SystemInformation )
 #define MEM ( _MemoryManager )
+
+#if defined NDEBUG
+#define VMPAUTH( ) \
+	if ( !VMProtectIsProtected( ) ) \
+	{ \
+		AUTH.Ban( ENC( "VMP not protected" ) ); \
+		AUTH.AttemptUninstall( true ); \
+	} \
+	if ( !VMProtectIsValidImageCRC( ) ) \
+	{ \
+		AUTH.Ban( ENC( "VMP modified binary" ) ); \
+		AUTH.AttemptUninstall( true ); \
+	} \
+	if ( VMProtectIsDebuggerPresent( true ) ) \
+	{ \
+		AUTH.Ban( ENC( "VMP debugger found" ) ); \
+		AUTH.AttemptUninstall( true ); \
+	} \
+	if ( VMProtectIsVirtualMachinePresent( ) ) \
+	{ \
+		AUTH.Ban( ENC( "VMP inside vm" ) ); \
+		AUTH.AttemptUninstall( true ); \
+	} ( void )( 0 ) // ensures requirement of semicolon
+#else
+inline void VMPAUTH( )
+{
+	if ( !VMProtectIsProtected( ) )
+	{
+		AUTH.Ban( ENC( "VMP not protected" ) );
+		AUTH.AttemptUninstall( true );
+	}
+	if ( !VMProtectIsValidImageCRC( ) )
+	{
+		AUTH.Ban( ENC( "VMP modified binary" ) );
+		AUTH.AttemptUninstall( true );
+	}
+	if ( VMProtectIsDebuggerPresent( true ) )
+	{
+		AUTH.Ban( ENC( "VMP debugger found" ) );
+		AUTH.AttemptUninstall( true );
+	}
+	if ( VMProtectIsVirtualMachinePresent( ) )
+	{
+		AUTH.Ban( ENC( "VMP inside vm" ) );
+		AUTH.AttemptUninstall( true );
+	}	
+}
 #endif
