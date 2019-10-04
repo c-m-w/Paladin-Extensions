@@ -1,5 +1,9 @@
 #pragma once
 
+namespace Utilities {
+	class CBasePlayer;
+}
+
 namespace PX
 {
 	namespace Tools
@@ -53,5 +57,5 @@ public:
 class IMoveHelperServer: public IMoveHelper
 {
 public:
-	virtual void SetHost( PX::Tools::CBasePlayer *host ) = 0;
+	virtual void SetHost( Utilities::CBasePlayer *host ) = 0;
 };

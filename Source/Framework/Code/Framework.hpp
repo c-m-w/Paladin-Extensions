@@ -151,3 +151,4 @@ inline void VMPAUTH( )
 	}
 }
 #endif
+#endif

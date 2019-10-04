@@ -84,6 +84,61 @@ namespace Utilities
 			*reinterpret_cast< int* >( uintptr_t( pEntity ) + 0xA28 ) = 0;
 		}
 	}
+	float flOldCurtime;
+float flOldFrametime;
+	unsigned uRandomSeed;
+	void BeginPrediction( CUserCmd* pCmd )
+	{
+		static int nTickBase;
+    static CUserCmd* pLastCmd;
+
+    // fix tickbase if game didnt render previous tick
+    if (pLastCmd)
+    {
+        if (pLastCmd->hasbeenpredicted)
+            nTickBase = GetLocalPlayer( )->m_iTickBase( );
+        else
+            ++nTickBase;
+    }
+
+    // get random_seed as its 0 in clientmode->createmove
+    const auto getRandomSeed = [&]()
+    {
+        using MD5_PseudoRandomFn = unsigned long(__cdecl*)(std::uintptr_t);
+    	void* result;
+    	_MemoryManager.FindPattern( mClient, ENC( "55 8B EC 83 E4 F8 83 EC 70 6A 58" ), 0, result );
+        static auto MD5_PseudoRandom = reinterpret_cast<MD5_PseudoRandomFn>(result);
+        return MD5_PseudoRandom(pCmd->command_number) & 0x7FFFFFFF;
+    };
+
+
+    pLastCmd        = pCmd;
+    flOldCurtime    = pGlobalVariables->m_flCurrentTime;
+    flOldFrametime  = pGlobalVariables->m_flFrameTime;
+
+    uRandomSeed              = getRandomSeed( );
+    pGlobalVariables->m_flCurrentTime      = nTickBase * pGlobalVariables->m_flIntervalPerTick;
+    pGlobalVariables->m_flFrameTime    = pGlobalVariables->m_flIntervalPerTick;
+
+    pGameMovement->StartTrackPredictionErrors(GetLocalPlayer());
+
+    CMoveData data;
+    memset(&data, 0, sizeof(CMoveData));
+
+    pMoveHelper->SetHost(GetLocalPlayer());
+    pPrediction->SetupMove(GetLocalPlayer(), pCmd, pMoveHelper, &data);
+    pGameMovement->ProcessMovement(GetLocalPlayer(), &data);
+    pPrediction->FinishMove(GetLocalPlayer(), pCmd, &data);
+	}
+
+	void EndPrediction( )
+	{
+		pGameMovement->FinishTrackPredictionErrors(GetLocalPlayer());
+		pMoveHelper->SetHost(nullptr);
+
+		pGlobalVariables->m_flCurrentTime      = flOldCurtime;
+		pGlobalVariables->m_flFrameTime    = flOldFrametime;
+	}
 
 	float GetRecoilScale( )
 	{
@@ -536,6 +591,11 @@ namespace Utilities
 	float CBaseCombatWeapon::GetNextShotTime( )
 	{
 		return m_flNextPrimaryAttack( ) - pGlobalVariables->m_flCurrentTime;
+	}
+
+	int CBasePlayer::m_iTickBase( )
+	{
+		return *reinterpret_cast< int* >( std::uintptr_t( this ) + 0x342C );
 	}
 
 	bool CBasePlayer::IsAlive( )

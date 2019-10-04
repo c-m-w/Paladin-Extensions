@@ -23,6 +23,8 @@ namespace Utilities
 	CRC32_t GetCmdHash( CUserCmd *pCmd );
 	bool ValidPlayer( void *pEntity );
 	void RepairBoneRendering( );
+	void BeginPrediction( CUserCmd* pCmd );
+	void EndPrediction();
 
 	// CVars
 	float GetRecoilScale( );
@@ -215,6 +217,7 @@ namespace Utilities
 		NETVAR_POINTER( CHandle<CBaseAttributableItem>, m_hMyWearables, ENC( "DT_BaseCombatCharacter" ), ENC( "m_hMyWearables" ) );
 		NETVAR_POINTER( bool, m_bSpotted, ENC( "DT_CSPlayerResource" ), ENC( "m_bSpotted" ) );
 		NETVAR_REFERENCE_OFFSET( CUserCmd*, m_pCurrentCommand, ENC( "DT_BasePlayer" ), ENC( "m_hConstraintEntity" ), -int( 0xC ) );
+		int m_iTickBase( );
 
 		bool IsAlive( );
 		bool IsLocalPlayer( );
