@@ -23,6 +23,8 @@ namespace Utilities
 	CRC32_t GetCmdHash( CUserCmd *pCmd );
 	bool ValidPlayer( void *pEntity );
 	void RepairBoneRendering( );
+	void BeginPrediction();
+	void EndPrediction();
 
 	// CVars
 	float GetRecoilScale( );
